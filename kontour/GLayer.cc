@@ -182,7 +182,7 @@ void GLayer::deleteObject(GObject *obj)
   }
 }
 
-GObject *GLayer::findContainingObject(int x, int y)
+GObject *GLayer::findContainingObject(double x, double y)
 {
   /*
     We are looking for the most relevant object, that means the object

@@ -504,7 +504,7 @@ void GPage::drawContentsInRegion(QPainter &p, const KoRect &r, bool withBasePoin
   }
 }
 
-void GPage::invalidateClipRegions ()
+void GPage::invalidateClipRegions()
 {
   for (QPtrListIterator<GLayer> li(layers); li.current(); ++li)
   {
@@ -525,7 +525,7 @@ void GPage::invalidateClipRegions ()
  * the object in <tt>obj</tt> and the index of the nearest point in
  * <tt>pidx</tt>.
  */
-bool GPage::findNearestObject (const QString &otype, int x, int y,
+bool GPage::findNearestObject(const QString &otype, int x, int y,
                                    double max_dist, GObject*& obj,
                                    int& pidx, bool all)
 {
@@ -558,7 +558,7 @@ bool GPage::findNearestObject (const QString &otype, int x, int y,
   return obj != 0L;
 }
 
-GObject *GPage::findContainingObject(int x, int y)
+GObject *GPage::findContainingObject(double x, double y)
 {
   GObject *result = 0L;
   /*

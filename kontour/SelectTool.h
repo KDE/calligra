@@ -55,7 +55,7 @@ private:
 private:
   enum State{ S_Init, S_Rubberband, S_Pick, S_RotateSelect, S_Translate, S_Scale, S_Shear, S_Rotate, S_DragHorizHelpline, S_DragVertHelpline, S_MoveRotCenter};
   State state;
-  enum CursorType{ C_Arrow, C_Size, C_Move, C_Rotate, C_Horiz, C_Vert};
+  enum CursorType{ C_Arrow, C_Size, C_Move, C_Shear, C_Rotate, C_Horiz, C_Vert};
   CursorType ctype;
   QPoint p1;
   QRect r;

@@ -582,10 +582,11 @@ void Ruler::drawNum(QPainter &p, int x, int y, int a, bool orient)
   if(a < 0)
     a = -a;
   num.setNum(a);
+  int l = num.length();
   if(orient)
-    x -= 7;
+    x -= 4 * l;
   else
-    y -= 8;
+    y -= 4 * l;
 
   for(unsigned int k = 0; k < num.length(); k++)
   {

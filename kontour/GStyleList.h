@@ -52,7 +52,8 @@ public:
 
 private:
   QDict<GStyle> list;
-  
+
+  int mNum;
   int mCur;
   GStyle *mCurStyle;          //current style
 };

@@ -90,7 +90,7 @@ public:
   /**
    * 
    */
-  GObject *findContainingObject(int x, int y);
+  GObject *findContainingObject(double x, double y);
   
   int findIndexOfObject(GObject *obj);
   void insertObjectAtIndex(GObject *obj, unsigned int idx);

@@ -243,6 +243,8 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
     {
       if(ctype == C_Move)
         state = S_MoveRotCenter;
+      else if(ctype == C_Shear)
+        state = S_Shear;
     }
     else
     {
@@ -250,47 +252,36 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
       if(hmask)
       {
         oldmask = hmask;
-	if(oldmask == Kontour::HPos_Center)
+	if(oldmask == Kontour::HPos_Center && ctype != C_Move)
 	{
-	  if(ctype != C_Move)
-          {
-            canvas->setCursor(Qt::SizeAllCursor);
-            ctype = C_Move;
-          }
+          canvas->setCursor(Qt::SizeAllCursor);
+          ctype = C_Move;
 	  return;
 	}
-        if(ctype != C_Size)
-        {
-          ctype = C_Size;
-          switch(oldmask)
-          {
-          case(Kontour::HPos_Left | Kontour::HPos_Top):
-            canvas->setCursor(Qt::sizeFDiagCursor);
-            break;
-          case(Kontour::HPos_Top):
-            canvas->setCursor(Qt::sizeVerCursor);
-            break;
-          case(Kontour::HPos_Top | Kontour::HPos_Right):
-            canvas->setCursor(Qt::sizeBDiagCursor);
-            break;
-          case(Kontour::HPos_Right):
-            canvas->setCursor(Qt::sizeHorCursor);
-            break;
-          case(Kontour::HPos_Right | Kontour::HPos_Bottom):
-            canvas->setCursor(Qt::sizeFDiagCursor);
-            break;
-          case(Kontour::HPos_Bottom):
-            canvas->setCursor(Qt::sizeVerCursor);
-            break;
-          case(Kontour::HPos_Bottom | Kontour::HPos_Left):
-            canvas->setCursor(Qt::sizeBDiagCursor);
-            break;
-          case(Kontour::HPos_Left):
-            canvas->setCursor(Qt::sizeHorCursor);
-             break;
-	  }
-        }
-	return;
+	else if(oldmask == Kontour::HPos_Top && ctype != C_Shear)
+	{
+	  canvas->setCursor(Qt::sizeHorCursor);
+          ctype = C_Shear;
+	  return;
+	}
+	else if(oldmask == Kontour::HPos_Bottom && ctype != C_Shear)
+	{
+	  canvas->setCursor(Qt::sizeHorCursor);
+          ctype = C_Shear;
+	  return;
+	}
+	else if(oldmask == Kontour::HPos_Left && ctype != C_Shear)
+	{
+	  canvas->setCursor(Qt::sizeVerCursor);
+          ctype = C_Shear;
+	  return;
+	}
+	else if(oldmask == Kontour::HPos_Right && ctype != C_Shear)
+	{
+	  canvas->setCursor(Qt::sizeVerCursor);
+          ctype = C_Shear;
+	  return;
+	}
       }
       if(ctype != C_Arrow)
       {
@@ -431,7 +422,7 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
   }
   else if(state == S_RotateSelect)
   {
-    if(ctype == C_Size)
+    if(ctype == C_Shear)
     {
       page->handle().mode(Handle::HMode_Default);
       page->updateSelection();
@@ -475,6 +466,13 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
       scale(page, oldmask, xoff, yoff, true, true);
     else
       scale(page, oldmask, xoff, yoff, false, true);
+  }
+  else if(state == S_Shear)
+  {
+    state = S_RotateSelect;
+//    mode = Handle::HMode_Rotate;
+//    canvas->snapPositionToGrid (xpos, ypos);
+    shear(page, oldmask, xpos - p1.x(), ypos - p1.y(), true);
   }
 }
 
@@ -650,26 +648,30 @@ void SelectTool::scale(GPage *page, int mask, double dx, double dy, bool type, b
 
 void SelectTool::shear(GPage *page, int mask, double dx, double dy, bool permanent)
 {
-  /*Rect& r = origbox;
-  float sx = 0.0, sy = 0.0;
-  if (mask == Handle::HPos_Top)
-    sx = -dx / r.width ();
-  else if (mask == Handle::HPos_Bottom)
-    sx = dx / r.width ();
-  else if (mask == Handle::HPos_Left)
-    sy = -dy / r.height ();
-  else if (mask == Handle::HPos_Right)
-    sy = dy / r.height ();
+  KoRect origbox = page->boundingBoxForSelection();
+  double sx = 0.0;
+  double sy = 0.0;
+  if(mask == Kontour::HPos_Top)
+    sx = -dx / origbox.width();
+  else if(mask == Kontour::HPos_Bottom)
+    sx = dx / origbox.width();
+  else if(mask == Kontour::HPos_Left)
+    sy = -dy / origbox.height();
+  else if(mask == Kontour::HPos_Right)
+    sy = dy / origbox.height();
 
-  if (permanent) {
-      QListIterator<GObject> it(doc->activePage()->getSelection());
-      for( ; it.current(); ++it)
-          (*it)->setWorkInProgress(false);
-      ShearCmd *cmd = new ShearCmd (doc, rotCenter, sx, sy);
-      history->addCommand (cmd, true);
+  if(permanent)
+  {
+    QListIterator<GObject> it(page->getSelection());
+    for(; it.current(); ++it)
+      (*it)->setWorkInProgress(false);
+    KontourDocument *doc = (KontourDocument *)toolController()->view()->koDocument();
+    ShearCmd *cmd = new ShearCmd(page->document(), page->handle().rotCenter(), sx, sy);
+    doc->history()->addCommand(cmd);
   }
-  else {
-    QWMatrix m1, m2, m3;
+  else
+  {
+/*    QWMatrix m1, m2, m3;
 
     m1.translate (-rotCenter.x (), -rotCenter.y ());
     m2.shear (sx, sy);
@@ -682,15 +684,16 @@ void SelectTool::shear(GPage *page, int mask, double dx, double dy, bool permane
       (*it)->ttransform (m1);
       (*it)->ttransform (m2);
       (*it)->ttransform (m3, true);
-    }
+    }*/
   }
-  msgbuf=i18n("Shear");
-  msgbuf+=" [";
-  msgbuf+=QString::number(sx * 100.0, 'f', 3);
-  msgbuf+=QString(" %, ");
-  msgbuf+=QString::number(sy * 100.0, 'f', 3);
-  msgbuf+=QString(" %]");
-  m_toolController->emitModeSelected (m_id,msgbuf);*/
+
+  QString msgbuf = i18n("Shear");
+  msgbuf += " [";
+  msgbuf += QString::number(sx * 100.0, 'f', 3);
+  msgbuf += QString(" %, ");
+  msgbuf += QString::number(sy * 100.0, 'f', 3);
+  msgbuf += QString(" %]");
+  toolController()->view()->setStatus(msgbuf);
 }
 
 void SelectTool::rotate(GPage *page, double dx, double dy, double xp, double yp, bool permanent)

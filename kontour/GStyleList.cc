@@ -38,6 +38,7 @@ GStyleList::GStyleList()
   list.insert(i18n("default"), st);
   mCurStyle = st;
   mCur = 0;
+  mNum = 1;
 }
 
 GStyleList::GStyleList(const QDomElement &sl)
@@ -77,8 +78,9 @@ QStringList *GStyleList::stringList()
 void GStyleList::addStyle()
 {
   GStyle *st = new GStyle();
-  list.insert(i18n("new"), st);
+  list.insert(i18n("style #%1").arg(mNum), st);
   mCurStyle = st;
+  mNum++;
 }
 
 void GStyleList::deleteStyle()

@@ -186,4 +186,3 @@ void Handle::drawArrow(QPainter &p, int x, int y, ArrowDirection d)
   pt.translate(x, y);
   p.drawPolygon(pt);
 }
-
