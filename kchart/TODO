@@ -122,8 +122,8 @@ Item								   Prio Status
     - Line3d		UGLY!!  Disabled			     S1 done
     - Parameter3d	OK					     S1 done
     - Parameter (Axes)	Ugly -> OK				     S1 done
-    - ParameterPie	Ugly					     S1 --
-    - ParameterPolar	Ugly					     S1 --
+    - ParameterPie	Ugly -> OK				     S1 done
+    - ParameterPolar	Ugly -> OK				     S1 done
     - Pie		Remove?					     S1 --
     - SubtypeChartPage						     S1 --
   + Check handling of defaults.					      1 DONE

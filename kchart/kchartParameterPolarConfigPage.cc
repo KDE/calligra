@@ -33,6 +33,7 @@
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
+#include <qvbuttongroup.h>
 
 #include "kchart_params.h"
 
@@ -43,32 +44,20 @@ KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* pa
                                                             QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    QGridLayout *grid1 = new QGridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
-    QGroupBox* gb3 = new QGroupBox( i18n( "Parameter" ), this );
-    QGridLayout *grid3 = new QGridLayout(gb3,8,2,KDialog::marginHint(), KDialog::spacingHint());
+    QVBoxLayout *grid1 = new QVBoxLayout(this);
+    QVButtonGroup* gb = new QVButtonGroup( i18n( "Parameter" ), this );
+    grid1->addWidget(gb);
 
-    polarMarker=new QCheckBox(i18n("Polar marker"),gb3);
-    grid3->addWidget(polarMarker,2,0);
+    polarMarker=new QCheckBox(i18n("Polar marker"), gb);
+    showCircularLabel = new QCheckBox(i18n("Show circular label"), gb);
 
-    showCircularLabel=new QCheckBox(i18n("Show circular label"),gb3);
-    grid3->addWidget(showCircularLabel,3,0);
+    QLabel *label = new QLabel( i18n( "Zero degree position:" ), gb );
+    angle = new QSpinBox(-359, 359, 1, gb);
 
-    QLabel *label = new QLabel( i18n( "Zero degree position:" ), gb3 );
-    label->resize( label->sizeHint() );
-    grid3->addWidget( label,4,0);
+    label=new QLabel(i18n("Line width:"), gb);
+    lineWidth=new QSpinBox(gb);
 
-    angle = new QSpinBox(-359, 359, 1, gb3);
-    angle->resize(100, angle->sizeHint().height() );
-    grid3->addWidget( angle,5,0);
-
-    label=new QLabel(i18n("Line width:"),gb3);
-    label->resize(label->sizeHint());
-    grid3->addWidget(label,6,0);
-
-    lineWidth=new QSpinBox(gb3);
-    grid3->addWidget(lineWidth,7,0);
-
-    grid1->addWidget(gb3,0,0);
+    grid1->activate();
 }
 
 
