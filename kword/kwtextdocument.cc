@@ -28,6 +28,7 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+#include "kwloadinginfo.h"
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textfs->kWordDocument(), fc, formatter, false ), m_textfs( textfs )
@@ -61,6 +62,15 @@ KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
 {
     //kdDebug(32500)<<" KoTextDocument::deleteTextCommand************\n";
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
+}
+
+void KWTextDocument::appendBookmark( KoTextParag* parag, int pos, KoTextParag* endParag, int endPos, const QString& name )
+{
+    // The OASIS format is cool. No need to store the bookmarks until end of loading (e.g. KWLoadingInfo)
+    // We can "resolve" them right away.
+    m_textfs->kWordDocument()->insertBookMark( name, static_cast<KWTextParag *>( parag ),
+                                               static_cast<KWTextParag *>( endParag ),
+                                               m_textfs, pos, endPos );
 }
 
 bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& context,
@@ -110,10 +120,45 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
             }
             return true;
         }
-        else
+        else if ( tagName == "text:bookmark" ) // this is an empty element
         {
-             // TODO
+            // the number of <PARAGRAPH> tags in the frameset element is the parag id
+            // (-1 for starting at 0, +1 since not written yet)
+            appendBookmark( parag, pos, parag, pos, tag.attribute( "text:name" ) );
+            return true;
         }
+        else if ( tagName == "text:bookmark-start" ) {
+            KWLoadingInfo* loadingInfo = m_textfs->kWordDocument()->loadingInfo();
+            loadingInfo->m_bookmarkStarts.insert( tag.attribute( "text:name" ),
+                                                  KWLoadingInfo::BookmarkStart( this, parag, pos ) );
+            return true;
+        }
+        else if ( textFoo && tagName == "text:bookmark-end" ) {
+            KWLoadingInfo* loadingInfo = m_textfs->kWordDocument()->loadingInfo();
+            QString bkName = tag.attribute( "text:name" );
+            KWLoadingInfo::BookmarkStartsMap::iterator it = loadingInfo->m_bookmarkStarts.find( bkName );
+            if ( it == loadingInfo->m_bookmarkStarts.end() ) { // bookmark end without start. This seems to happen..
+                // insert simple bookmark then
+                appendBookmark( parag, pos, parag, pos, tag.attribute( "text:name" ) );
+            } else {
+                if ( (*it).doc != this ) {
+                    // Oh tell me this never happens...
+                    kdWarning(32500) << "Cross-frameset bookmark! Not supported." << endl;
+                } else {
+                    appendBookmark( (*it).parag, (*it).pos, parag, pos, it.key() );
+                }
+                loadingInfo->m_bookmarkStarts.remove( it );
+            }
+            return true;
+        }
+#if 0 // TODO Implement loading of footnotes/endnotes
+        else if ( tagName == "text:footnote" || tagName == "text:endnote" )
+        {
+            textData = '#'; // anchor placeholder
+            importFootnote( doc, tag, outputFormats, pos, tagName );
+            return true;
+        }
+#endif
     }
     else // non "text:" tags
     {
@@ -136,48 +181,6 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
             return true;
         }
     }
-
-#if 0 // TODO Implement loading of following Oasis tags
-    if ( textFoo &&
-         ( tagName == "text:footnote" || tagName == "text:endnote" ) )
-    {
-        textData = '#'; // anchor placeholder
-        importFootnote( doc, ts, outputFormats, pos, tagName );
-        // do me last, combination of variable and frameset.
-    }
-    else if ( textFoo && tagName == "text:bookmark" )
-    {
-        // the number of <PARAGRAPH> tags in the frameset element is the parag id
-        // (-1 for starting at 0, +1 since not written yet)
-        Q_ASSERT( !m_currentFrameset.isNull() );
-        appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
-                        pos, ts.attribute( "text:name" ) );
-    }
-    else if ( textFoo && tagName == "text:bookmark-start" ) {
-        m_bookmarkStarts.insert( ts.attribute( "text:name" ),
-                                 BookmarkStart( m_currentFrameset.attribute( "name" ),
-                                                numberOfParagraphs( m_currentFrameset ),
-                                                pos ) );
-    }
-    else if ( textFoo && tagName == "text:bookmark-end" ) {
-        QString bkName = ts.attribute( "text:name" );
-        BookmarkStartsMap::iterator it = m_bookmarkStarts.find( bkName );
-        if ( it == m_bookmarkStarts.end() ) { // bookmark end without start. This seems to happen..
-            // insert simple bookmark then
-            appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
-                            pos, ts.attribute( "text:name" ) );
-        } else {
-            if ( (*it).frameSetName != m_currentFrameset.attribute( "name" ) ) {
-                // Oh tell me this never happens...
-                kdWarning(32500) << "Cross-frameset bookmark! Not supported." << endl;
-            } else {
-                appendBookmark( doc, (*it).paragId, (*it).pos,
-                                numberOfParagraphs( m_currentFrameset ), pos, it.key() );
-            }
-            m_bookmarkStarts.remove( it );
-        }
-    }
-#endif
     return false;
 }
 
