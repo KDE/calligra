@@ -303,6 +303,7 @@ void KWStyleManager::addStyle() {
 void KWStyleManager::deleteStyle() {
 
     unsigned int cur = getStyleByName(m_stylesList->currentText());
+    unsigned int curItem=m_stylesList->currentItem();
     KWStyle *s = m_changedStyles.at(cur);
     ASSERT( s == m_currentStyle );
     delete s;
@@ -312,8 +313,8 @@ void KWStyleManager::deleteStyle() {
 
     // Done with noSignals still false, so that when m_stylesList changes the current item
     // we display it automatically
-    m_stylesList->removeItem(cur);
-    m_styleCombo->removeItem(cur);
+    m_stylesList->removeItem(curItem);
+    m_styleCombo->removeItem(curItem);
     //if(cur > m_stylesList->count())
     //    cur--;
     numStyles--;
