@@ -1085,6 +1085,7 @@ public:
 
     QRect rect() const;
     void setHeight( int h ) { r.setHeight( h ); }
+    void setWidth( int w ) { r.setWidth( w ); }
     void show();
     void hide();
     bool isVisible() const { return visible; }
