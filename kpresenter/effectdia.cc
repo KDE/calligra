@@ -33,6 +33,7 @@
 
 #include <klocale.h>
 #include <kbuttonbox.h>
+#include <knuminput.h>
 
 /******************************************************************/
 /* class EffectDia                                                */
@@ -112,13 +113,26 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
         }
     }
 
+    QLabel *lTimerOfAppear = new QLabel( i18n( "Timer of the object:" ), grp1 );
+    lTimerOfAppear->setAlignment( AlignVCenter );
+    upperRow->addWidget(lTimerOfAppear, 3, 0);
+
+    timerOfAppear = new KIntNumInput( obj->getAppearTimer(), grp1 );
+    timerOfAppear->setRange( 1, 600, 1 );
+    timerOfAppear->setSuffix( i18n( " seconds" ) );
+    upperRow->addWidget(timerOfAppear, 3, 1);
+
+    if ( view->kPresenterDoc()->spManualSwitch() )
+        timerOfAppear->setEnabled( false );
+
+
     disappear = new QCheckBox( i18n( "Disappear" ), this );
     disappear->setChecked( obj->getDisappear() );
     topLayout->addWidget(disappear);
 
     QGroupBox *grp2 = new QGroupBox(i18n( "Disappear" ), this);
     topLayout->addWidget(grp2);
-    QGridLayout *lowerRow = new QGridLayout(grp2, 2, 1, 15);
+    QGridLayout *lowerRow = new QGridLayout(grp2, 3, 1, 15);
 
     lDisappear = new QLabel( i18n( "Number: " ), grp2 );
     lDisappear->setAlignment( AlignVCenter );
@@ -148,6 +162,19 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     cDisappear->insertItem( i18n( "Wipe to the bottom" ) );
     cDisappear->setCurrentItem( static_cast<int>( obj->getEffect3() ) );
     lowerRow->addWidget(cDisappear, 1, 1);
+
+    QLabel *lTimerOfDisappear = new QLabel( i18n( "Timer of the object:" ), grp2 );
+    lTimerOfDisappear->setAlignment( AlignVCenter );
+    lowerRow->addWidget(lTimerOfDisappear, 2, 0);
+
+    timerOfDisappear = new KIntNumInput( obj->getDisappearTimer(), grp2 );
+    timerOfDisappear->setRange( 1, 600, 1 );
+    timerOfDisappear->setSuffix( i18n( " seconds" ) );
+    lowerRow->addWidget(timerOfDisappear, 2, 1);
+
+    if ( view->kPresenterDoc()->spManualSwitch() )
+        timerOfDisappear->setEnabled( false );
+
 
     KButtonBox *bb = new KButtonBox(this);
     bb->addStretch();
@@ -186,6 +213,8 @@ void EffectDia::slotEffectDiaOk()
 	e.effect2 = o->getEffect2();
 	e.effect3 = o->getEffect3();
 	e.disappear = o->getDisappear();
+	e.appearTimer = o->getAppearTimer();
+	e.disappearTimer = o->getDisappearTimer();
 	oldEffects << e;
     }
 
@@ -196,6 +225,8 @@ void EffectDia::slotEffectDiaOk()
     eff.effect2 = ( Effect2 )cEffect2->currentItem();
     eff.effect3 = ( Effect3 )cDisappear->currentItem();
     eff.disappear = disappear->isChecked();
+    eff.appearTimer = timerOfAppear->value();
+    eff.disappearTimer = timerOfDisappear->value();
 
     EffectCmd *effectCmd = new EffectCmd( i18n( "Assign Object Effects" ), objs,
 					  oldEffects, eff );
@@ -216,6 +247,9 @@ void EffectDia::disappearChanged()
 {
     cDisappear->setEnabled( disappear->isChecked() );
     eDisappear->setEnabled( disappear->isChecked() );
+
+    if ( !view->kPresenterDoc()->spManualSwitch() )
+        timerOfDisappear->setEnabled( disappear->isChecked() );
 }
 
 /*================================================================*/

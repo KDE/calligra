@@ -34,7 +34,7 @@ class KPresenterDoc;
 class QRadioButton;
 class QComboBox;
 class QCheckBox;
-class QSpinBox;
+class KIntNumInput;
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -49,28 +49,30 @@ public:
     // constructor - destructor
     PgConfDia( QWidget* parent, const char* name,
                bool infLoop, bool swMan, int pgNum,
-               PageEffect pageEffect, PresSpeed presSpeed );
+               PageEffect pageEffect, PresSpeed presSpeed, int pageTimer );
     bool getInfinitLoop();
     bool getManualSwitch();
     PageEffect getPageEffect();
     PresSpeed getPresSpeed();
+    int getPageTimer();
 
 protected:
     QButtonGroup *general, *page, *slides;
     QCheckBox *infinitLoop, *manualSwitch;
     QRadioButton *slidesAll, *slidesCurrent, *slidesSelected;
-    QLabel *label1, *label2, *label3, *label4;
+    QLabel *label1, *label2, *label3;
     QPushButton *cancelBut, *okBut;
     QComboBox *effectCombo;
-    QSpinBox *speedSpinBox;
     QVBoxLayout *back;
     QListView *lSlides;
+    KIntNumInput *timerOfPage, *speedOfObject;
 
 public slots:
     void confDiaOk() { emit pgConfDiaOk(); }
 
 protected slots:
     void presSlidesChanged( int );
+    void slotManualSwitch(); 
 
 signals:
     void pgConfDiaOk();

@@ -1024,7 +1024,8 @@ void KPresenterView::screenConfigPages()
     pgConfDia = new PgConfDia( this, "PageConfig", kPresenterDoc()->spInfinitLoop(),
 			       kPresenterDoc()->spManualSwitch(), getCurrPgNum(),
 			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageEffect(),
-			       kPresenterDoc()->getPresSpeed() );
+			       kPresenterDoc()->getPresSpeed(),
+			       kPresenterDoc()->backgroundList()->at( getCurrPgNum() - 1 )->getPageTimer() );
     pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screen Presentations" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
     pgConfDia->show();
@@ -1136,10 +1137,11 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
             page->repaint( false );
 
             if ( automaticScreenPresFirstTimer ) {
-                connect( &automaticScreenPresSpeed, SIGNAL( timeout() ), SLOT( doAutomaticScreenPres() ) );
+                connect( &automaticScreenPresTimer, SIGNAL( timeout() ), SLOT( doAutomaticScreenPres() ) );
                 automaticScreenPresTime.start();
                 automaticScreenPresWaitTime = 0;
-                automaticScreenPresSpeed.start( kPresenterDoc()->getPresSpeed()*1000 );
+                setCurrentTimer( 1 );
+                automaticScreenPresTimer.start( currentTimer );
                 automaticScreenPresFirstTimer = false;
             }
             else
@@ -1154,6 +1156,7 @@ void KPresenterView::screenStop()
     if ( presStarted ) {
 	continuePres = false;
 	exitPres = true;
+        page->setNextPageTimer( true );
         page->showNormal();
         page->hide();
         page->reparent( pageBase, 0, QPoint( 0, 0 ), true );
@@ -1209,8 +1212,10 @@ void KPresenterView::screenFirst()
 void KPresenterView::screenPrev()
 {
     if ( presStarted ) {
-        if ( !kPresenterDoc()->spManualSwitch() )
-            autoScreenPresReStartTimer();
+        if ( !kPresenterDoc()->spManualSwitch() ) {
+            setCurrentTimer( 1 );
+            page->setNextPageTimer( true );
+        }
 	if ( page->pPrev( true ) ) {
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, page->presFakt(), false );
 	    yOffset = ( page->presPage() - 1 ) * pgRect.height();
@@ -1232,8 +1237,6 @@ void KPresenterView::screenPrev()
 void KPresenterView::screenNext()
 {
     if ( presStarted ) {
-        if ( !kPresenterDoc()->spManualSwitch() )
-            autoScreenPresReStartTimer();
 	if ( page->pNext( true ) ) {
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, page->presFakt(), false );
 	    yOffset = ( page->presPage() - 1 ) * pgRect.height();
@@ -1241,6 +1244,11 @@ void KPresenterView::screenNext()
 		yOffset -= ( page->height() - pgRect.height() ) / 2;
 	    page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
 	    page->setFocus();
+
+            if ( !kPresenterDoc()->spManualSwitch() ) {
+                setCurrentTimer( 1 );
+                page->setNextPageTimer( true );
+            }
 	} else {
 	    page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
 	    page->setFocus();
@@ -2639,11 +2647,14 @@ void KPresenterView::pgConfOk()
     PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Page for Screen Presentations" ),
 					  pgConfDia->getManualSwitch(), pgConfDia->getInfinitLoop(),
 					  pgConfDia->getPageEffect(), pgConfDia->getPresSpeed(),
+					  pgConfDia->getPageTimer(),
 					  kPresenterDoc()->spManualSwitch(),
 					  kPresenterDoc()->spInfinitLoop(),
 					  kPresenterDoc()->backgroundList()->
 					  at( getCurrPgNum() - 1 )->getPageEffect(),
 					  kPresenterDoc()->getPresSpeed(),
+					  kPresenterDoc()->backgroundList()->
+					  at( getCurrPgNum() - 1 )->getPageTimer(),
 					  kPresenterDoc(), getCurrPgNum() - 1 );
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );
@@ -3036,7 +3047,8 @@ void KPresenterView::doAutomaticScreenPres()
     else if ( !continuePres && kPresenterDoc()->spInfinitLoop() ) {
         continuePres = true;
         page->gotoPage( 1 ); // return to first page.
-        autoScreenPresReStartTimer();
+        setCurrentTimer( 1 );
+        page->setNextPageTimer( true );
     }
     else if ( !continuePres ) {
         screenStop();
@@ -3594,21 +3606,26 @@ void KPresenterView::autoScreenPresReStartTimer()
 {
     automaticScreenPresTime.start();
     automaticScreenPresWaitTime = 0;
-    automaticScreenPresSpeed.changeInterval( kPresenterDoc()->getPresSpeed()*1000 );
+    automaticScreenPresTimer.changeInterval( currentTimer );
 }
 
 void KPresenterView::autoScreenPresIntervalTimer()
 {
     automaticScreenPresTime.restart();
-    automaticScreenPresSpeed.changeInterval( kPresenterDoc()->getPresSpeed()*1000 - automaticScreenPresWaitTime );
+    automaticScreenPresTimer.changeInterval( currentTimer - automaticScreenPresWaitTime );
 }
 
 void KPresenterView::autoScreenPresStopTimer()
 {
-    automaticScreenPresSpeed.stop();
+    automaticScreenPresTimer.stop();
     automaticScreenPresWaitTime += automaticScreenPresTime.elapsed();
 }
 
+void KPresenterView::setCurrentTimer( int _currentTimer )
+{
+    currentTimer = _currentTimer * 1000;
+    autoScreenPresReStartTimer();
+}
 
 void KPresenterView::insertSpecialChar()
 {

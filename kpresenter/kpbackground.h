@@ -70,6 +70,8 @@ public:
     void setBackClipart(  const QString &_filename, QDateTime _lastModified );
     void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
+    void setPageTimer( int _pageTimer )
+    { pageTimer = _pageTimer; }
 
     void setBgSize( QSize _size, bool visible = true );
 
@@ -96,6 +98,8 @@ public:
     { return xfactor; }
     int getBackYFactor() const
     { return yfactor; }
+    int getPageTimer() const
+    { return pageTimer; }
 
     QSize getSize() const
     { return ext; }
@@ -122,6 +126,7 @@ protected:
     PageEffect pageEffect;
     bool unbalanced;
     int xfactor, yfactor;
+    int pageTimer;
 
     KPImage backImage;
     KPImageCollection *imageCollection;

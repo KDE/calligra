@@ -29,10 +29,10 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qheader.h>
-#include <qspinbox.h>
 
 #include <klocale.h>
 #include <kbuttonbox.h>
+#include <knuminput.h>
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -41,7 +41,7 @@
 /*================================================================*/
 PgConfDia::PgConfDia( QWidget* parent, const char* name,
                       bool infLoop, bool swMan, int pgNum, PageEffect pageEffect,
-                      PresSpeed presSpeed )
+                      PresSpeed presSpeed, int pageTimer )
     : QDialog( parent, name, true )
 {
     QVBoxLayout *back = new QVBoxLayout( this );
@@ -56,11 +56,11 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
 
     manualSwitch = new QCheckBox( i18n( "&Manual switch to next step" ), general );
     manualSwitch->setChecked( swMan );
+    connect( manualSwitch, SIGNAL( clicked() ), this, SLOT( slotManualSwitch() ) );
 
-    label4 = new QLabel( i18n( "Speed of the presentation:" ), general );
-
-    speedSpinBox = new QSpinBox( general, "speedSpinBox" );
-    speedSpinBox->setValue( presSpeed );
+    speedOfObject = new KIntNumInput( presSpeed, general );
+    speedOfObject->setRange( 1, 10, 1 );
+    speedOfObject->setLabel( i18n( "Effect speed of the object and page:" ) );
 
     back->addWidget(general);
 
@@ -86,6 +86,14 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     effectCombo->insertItem( i18n( "Surround 1" ) );
     effectCombo->insertItem( i18n( "Fly away 1" ) );
     effectCombo->setCurrentItem( static_cast<int>( pageEffect ) );
+
+    timerOfPage = new KIntNumInput( pageTimer, page );
+    timerOfPage->setRange( 1, 600, 1 );
+    timerOfPage->setLabel( i18n( "Timer of the page:" ) );
+    timerOfPage->setSuffix( i18n( " seconds" ) );
+
+    if ( swMan )
+        timerOfPage->setEnabled( false );
 
     back->addWidget(page);
 
@@ -158,7 +166,22 @@ PageEffect PgConfDia::getPageEffect()
 /*================================================================*/
 PresSpeed PgConfDia::getPresSpeed()
 {
-    return speedSpinBox->value();
+    return speedOfObject->value();
+}
+
+/*================================================================*/
+int PgConfDia::getPageTimer()
+{
+    return timerOfPage->value();
+}
+
+/*================================================================*/
+void PgConfDia::slotManualSwitch()
+{
+    if ( manualSwitch->isChecked() )
+        timerOfPage->setEnabled( false );
+    else
+        timerOfPage->setEnabled( true );
 }
 
 #include <pgconfdia.moc>

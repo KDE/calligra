@@ -289,6 +289,7 @@ public:
 	Effect2 effect2;
 	Effect3 effect3;
 	bool disappear;
+	int appearTimer, disappearTimer;
     };
 
     EffectCmd( QString _name, const QPtrList<KPObject> &_objs,
@@ -509,9 +510,9 @@ class PgConfCmd : public KCommand
 {
 public:
     PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
-               PageEffect _pageEffect, PresSpeed _presSpeed,
+               PageEffect _pageEffect, PresSpeed _presSpeed, int _pageTimer,
                bool _oldManualSwitch, bool _oldInfinitLoop,
-               PageEffect _oldPageEffect, PresSpeed _oldPresSpeed,
+               PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
                KPresenterDoc *_doc, int _pgNum );
 
     virtual void execute();
@@ -522,6 +523,7 @@ protected:
     bool infinitLoop, oldInfinitLoop;
     PageEffect pageEffect, oldPageEffect;
     PresSpeed presSpeed, oldPresSpeed;
+    int pageTimer, oldPageTimer;
     int pgNum;
     KPresenterDoc *doc;
 

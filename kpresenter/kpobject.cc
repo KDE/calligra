@@ -78,6 +78,8 @@ KPObject::KPObject()
     effect2 = EF2_NONE;
     effect3 = EF3_NONE;
     disappear = false;
+    appearTimer = 1;
+    disappearTimer = 1;
     angle = 0.0;
     shadowDirection = SD_RIGHT_BOTTOM;
     shadowDistance = 0;
@@ -138,6 +140,13 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc )
         elem.setAttribute(attrNum, disappearNum);
         fragment.appendChild(elem);
     }
+    if(appearTimer!=1 || disappearTimer!=1) {
+        elem=doc.createElement("TIMER");
+        elem.setAttribute("appearTimer", appearTimer);
+        elem.setAttribute("disappearTimer", disappearTimer);
+        fragment.appendChild(elem);
+    }
+
     return fragment;
 }
 
@@ -208,6 +217,17 @@ void KPObject::load(const QDomElement &element) {
         effect3=EF3_NONE;
         disappear=false;
         disappearNum=1;
+    }
+    e=element.namedItem("TIMER").toElement();
+    if(!e.isNull()) {
+        if(e.hasAttribute("appearTimer"))
+            appearTimer = e.attribute("appearTimer").toInt();
+        if(e.hasAttribute("disappearTimer"))
+            disappearTimer = e.attribute("disappearTimer").toInt();
+    }
+    else {
+        appearTimer = 1;
+        disappearTimer = 1;
     }
 }
 

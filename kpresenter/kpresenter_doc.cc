@@ -1296,6 +1296,13 @@ void KPresenterDoc::setPageEffect( unsigned int pageNum, PageEffect pageEffect )
 	backgroundList()->at( pageNum )->setPageEffect( pageEffect );
 }
 
+/*========================== set page timer =====================*/
+void KPresenterDoc::setPageTimer( unsigned int pageNum, int pageTimer )
+{
+    if ( pageNum < _backgroundList.count() )
+        backgroundList()->at( pageNum )->setPageTimer( pageTimer );
+}
+
 /*===================== set pen and brush ========================*/
 bool KPresenterDoc::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft, QColor g1, QColor g2,
 				 BCType gt, bool unbalanced, int xfactor, int yfactor, bool sticky )
@@ -2045,6 +2052,15 @@ PageEffect KPresenterDoc::getPageEffect( unsigned int pageNum )
 	return backgroundList()->at( pageNum )->getPageEffect();
 
     return PEF_NONE;
+}
+
+/*=============================================================*/
+int KPresenterDoc::getPageTimer( unsigned int pageNum )
+{
+    if ( pageNum < _backgroundList.count() )
+        return backgroundList()->at( pageNum )->getPageTimer();
+
+    return 1;
 }
 
 /*=============================================================*/

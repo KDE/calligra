@@ -55,6 +55,7 @@ KPBackGround::KPBackGround( KPImageCollection *_imageCollection, KPGradientColle
     unbalanced = false;
     xfactor = 100;
     yfactor = 100;
+    pageTimer = 1;
 
     imageCollection = _imageCollection;
     gradientCollection = _gradientCollection;
@@ -227,6 +228,12 @@ QDomElement KPBackGround::save( QDomDocument &doc )
         page.appendChild(element);
     }
 
+    if ( pageTimer != 1 ) {
+        element = doc.createElement( "PGTIMER" );
+        element.setAttribute( "timer", pageTimer );
+        page.appendChild( element );
+    }
+
     return page;
 }
 
@@ -375,6 +382,13 @@ void KPBackGround::load( const QDomElement &element )
             //                                            clipartCollection->tmpTime() ) );
             backClipart = clipartCollection->loadClipart( _fileName ); // load from disk !
         }
+    }
+    e=element.namedItem("PGTIMER").toElement();
+    if(!e.isNull()) {
+        int timer = 1;
+        if(e.hasAttribute("timer"))
+            timer=e.attribute("timer").toInt();
+        setPageTimer(timer);
     }
 }
 

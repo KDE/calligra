@@ -55,6 +55,8 @@ public:
     virtual void setDisappear( bool b );
     virtual void setDisappearNum( int num );
     virtual void setEffect3( Effect3 _effect3);
+    virtual void setAppearTimer( int _appearTimer );
+    virtual void setDisappearTimer( int _disappearTimer );
 
     virtual ObjType getType() const
     { return OT_GROUP; }

@@ -85,6 +85,10 @@ public:
     { disappearNum = num; }
     virtual void setEffect3( Effect3 _effect3)
     { effect3 = _effect3; }
+    virtual void setAppearTimer( int _appearTimer )
+    { appearTimer = _appearTimer; }
+    virtual void setDisappearTimer( int _disappearTimer )
+    { disappearTimer = _disappearTimer; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc );
     virtual void load(const QDomElement &element);
@@ -112,6 +116,10 @@ public:
     { return effect2; }
     virtual Effect3 getEffect3() const
     { return effect3; }
+    virtual int getAppearTimer() const
+    { return appearTimer; }
+    virtual int getDisappearTimer() const
+    { return disappearTimer; }
     virtual int getPresNum() const
     { return presNum; }
     virtual int getSubPresSteps() const
@@ -195,6 +203,7 @@ protected:
     Effect effect;
     Effect2 effect2;
     Effect3 effect3;
+    int appearTimer, disappearTimer;
     int presNum, disappearNum;
 
     bool disappear:1;

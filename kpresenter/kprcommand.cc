@@ -458,6 +458,8 @@ void EffectCmd::execute()
 	object->setDisappear( newEffect.disappear );
 	object->setEffect3( newEffect.effect3 );
 	object->setDisappearNum( newEffect.disappearNum );
+	object->setAppearTimer( newEffect.appearTimer );
+	object->setDisappearTimer( newEffect.disappearTimer );
     }
 }
 
@@ -474,6 +476,8 @@ void EffectCmd::unexecute()
 	object->setDisappear( oldEffects[ i ].disappear );
 	object->setEffect3( oldEffects[ i ].effect3 );
 	object->setDisappearNum( oldEffects[ i ].disappearNum );
+	object->setAppearTimer( oldEffects[ i ].appearTimer );
+	object->setDisappearTimer( oldEffects[ i ].disappearTimer );
     }
 }
 
@@ -1174,9 +1178,9 @@ void PenBrushCmd::unexecute()
 
 /*================================================================*/
 PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
-                      PageEffect _pageEffect, PresSpeed _presSpeed,
+                      PageEffect _pageEffect, PresSpeed _presSpeed, int _pageTimer,
                       bool _oldManualSwitch, bool _oldInfinitLoop,
-                      PageEffect _oldPageEffect, PresSpeed _oldPresSpeed,
+                      PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, int _oldPageTimer,
                       KPresenterDoc *_doc, int _pgNum )
     : KCommand( _name )
 {
@@ -1184,10 +1188,12 @@ PgConfCmd::PgConfCmd( QString _name, bool _manualSwitch, bool _infinitLoop,
     infinitLoop = _infinitLoop;
     pageEffect = _pageEffect;
     presSpeed = _presSpeed;
+    pageTimer = _pageTimer;
     oldManualSwitch = _oldManualSwitch;
     oldInfinitLoop = _oldInfinitLoop;
     oldPageEffect = _oldPageEffect;
     oldPresSpeed = _oldPresSpeed;
+    oldPageTimer = _oldPageTimer;
     doc = _doc;
     pgNum = _pgNum;
 }
@@ -1199,6 +1205,7 @@ void PgConfCmd::execute()
     doc->setInfinitLoop( infinitLoop );
     doc->setPageEffect( pgNum, pageEffect );
     doc->setPresSpeed( presSpeed );
+    doc->setPageTimer( pgNum, pageTimer );
 }
 
 /*================================================================*/
@@ -1208,6 +1215,7 @@ void PgConfCmd::unexecute()
     doc->setInfinitLoop( oldInfinitLoop );
     doc->setPageEffect( pgNum, oldPageEffect );
     doc->setPresSpeed( oldPresSpeed );
+    doc->setPageTimer( pgNum, oldPageTimer );
 }
 
 /******************************************************************/

@@ -32,6 +32,7 @@ class QCheckBox;
 class QBoxLayout;
 class QResizeEvent;
 class KPObject;
+class KIntNumInput;
 
 /******************************************************************/
 /* class EffectDia                                                */
@@ -56,6 +57,7 @@ protected:
     QPushButton *cancelBut, *okBut;
     QCheckBox *disappear;
     QBoxLayout *topLayout;
+    KIntNumInput *timerOfAppear, *timerOfDisappear;
 
     KPresenterView *view;
     QPtrList<KPObject> objs;

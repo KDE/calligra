@@ -360,6 +360,30 @@ void KPGroupObject::setEffect3( Effect3 _effect3)
 }
 
 /*================================================================*/
+void KPGroupObject::setAppearTimer( int _appearTimer )
+{
+    KPObject::setAppearTimer( _appearTimer );
+
+    if ( !updateObjs )
+        return;
+
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->setAppearTimer( _appearTimer );
+}
+
+/*================================================================*/
+void KPGroupObject::setDisappearTimer( int _disappearTimer )
+{
+    KPObject::setDisappearTimer( _disappearTimer );
+
+    if ( !updateObjs )
+        return;
+
+    for ( unsigned int i = 0; i < objects.count(); i++ )
+        objects.at( i )->setDisappearTimer( _disappearTimer );
+}
+
+/*================================================================*/
 void KPGroupObject::zoom( float _fakt )
 {
     KPObject::zoom( _fakt );

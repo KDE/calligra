@@ -96,6 +96,8 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
         keepRatio = false;
         mouseSelectedObject = false;
         selectedObjectPosition = -1;
+        nextPageTimer = true;
+        drawLineInDrawMode = false;
     } else {
         view = 0;
         hide();
@@ -479,7 +481,7 @@ void Page::mousePressEvent( QMouseEvent *e )
                 setCursor( blankCursor );
             } else {
                 if ( drawMode )
-                {}
+                    drawLineInDrawMode = true;
                 else
                     view->screenNext();
             }
@@ -527,6 +529,11 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
     if ( e->button() != LeftButton ) {
         ratio = 0.0;
         keepRatio = false;
+        return;
+    }
+
+    if ( drawMode ) {
+        drawLineInDrawMode = false;
         return;
     }
 
@@ -1085,7 +1092,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 	    } break;
 	    }
 	}
-    } else if ( !editMode && drawMode ) {
+    } else if ( !editMode && drawMode && drawLineInDrawMode ) {
 	QPainter p;
 	p.begin( this );
 	p.setPen( view->kPresenterDoc()->presPen() );
@@ -1151,7 +1158,7 @@ void Page::mouseDoubleClickEvent( QMouseEvent *e )
 /*====================== mouse wheel event =========================*/
 void Page::wheelEvent( QWheelEvent *e )
 {
-    if ( !editMode ) {
+    if ( !editMode && !drawMode ) {
         if ( e->delta() == -120 )     // wheel down
             view->screenNext();
         else if ( e->delta() == 120 ) // wheel up
@@ -1860,6 +1867,14 @@ bool Page::pNext( bool )
     QValueList<int>::Iterator test(  slideListIterator );
     if ( ++test != slideList.end() )
     {
+        if ( !spManualSwitch() && nextPageTimer ) {
+            QValueList<int>::Iterator it( slideListIterator );
+            view->setCurrentTimer( backgroundList()->at( (*it) - 1 )->getPageTimer() );
+            nextPageTimer = false;
+
+            return false;
+        }
+
         QPixmap _pix1( QApplication::desktop()->width(), QApplication::desktop()->height() );
         drawPageInPix( _pix1, diffy() );
 
@@ -1885,7 +1900,14 @@ bool Page::pNext( bool )
 
         QValueList<int>::Iterator it( slideListIterator );
         --it;
+
+        if ( !spManualSwitch() )
+            view->autoScreenPresStopTimer();
+
         changePages( _pix1, _pix2, backgroundList()->at( ( *it ) - 1 )->getPageEffect() );
+
+        if ( !spManualSwitch() )
+            view->autoScreenPresReStartTimer();
 
         return true;
     }
@@ -2480,6 +2502,7 @@ void Page::doObjEffects()
     int w_pos1 = 0, h_pos1;
     bool effects = false;
     bool nothingHappens = false;
+    int timer = 0;
     if ( !drawn )
         bitBlt( &screen_orig, 0, 0, this, 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
     QPixmap *screen = new QPixmap( screen_orig );
@@ -2491,6 +2514,9 @@ void Page::doObjEffects()
         if ( getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage )
              && kpobject->getPresNum() == static_cast<int>( currPresStep ) )
         {
+            if ( !spManualSwitch() )
+                timer = kpobject->getAppearTimer();
+
             if ( kpobject->getEffect() != EF_NONE )
             {
                 _objList.append( kpobject );
@@ -2553,6 +2579,9 @@ void Page::doObjEffects()
         else if ( getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage )
                   && kpobject->getDisappear() && kpobject->getDisappearNum() == static_cast<int>( currPresStep ) )
         {
+            if ( !spManualSwitch() )
+                timer = kpobject->getDisappearTimer();
+
             if ( kpobject->getEffect3() != EF3_NONE )
             {
                 _objList.append( kpobject );
@@ -2561,7 +2590,7 @@ void Page::doObjEffects()
                 QRect br = kpobject->getBoundingRect( 0, 0 );
                 x = br.x(); y = br.y(); w = br.width(); h = br.height();
 
-                switch ( kpobject->getEffect() )
+                switch ( kpobject->getEffect3() )
                 {
                 case EF3_GO_LEFT:
                     x_pos1 = QMAX( x_pos1, x - diffx() + w );
@@ -2616,6 +2645,9 @@ void Page::doObjEffects()
 
     if ( effects )
     {
+        if ( !spManualSwitch() && timer > 0 )
+            view->autoScreenPresStopTimer();
+
         _step_width = static_cast<int>( ( static_cast<float>( kapp->desktop()->width() ) / objSpeedFakt() ) );
         _step_height = static_cast<int>( ( static_cast<float>( kapp->desktop()->height() ) / objSpeedFakt() ) );
         _steps1 = x_pos1 > y_pos1 ? x_pos1 / _step_width : y_pos1 / _step_height;
@@ -3040,6 +3072,9 @@ void Page::doObjEffects()
         p.end();
         bitBlt( this, 0, 0, screen );
     }
+
+    if ( !spManualSwitch() && timer > 0 )
+        view->setCurrentTimer( timer );
 
     delete screen;
 }
@@ -3470,8 +3505,10 @@ void Page::slotGotoPage()
     pg = KPGotoPage::gotoPage( view->kPresenterDoc(), _presFakt, slideList, pg, this );
     gotoPage( pg );
 
-    if ( !spManualSwitch() )
-        view->autoScreenPresReStartTimer();
+    if ( !spManualSwitch() ) {
+        view->setCurrentTimer( 1 );
+        setNextPageTimer( true );
+    }
 }
 
 /*================================================================*/

@@ -376,6 +376,7 @@ public:
     void autoScreenPresReStartTimer();
     void autoScreenPresIntervalTimer();
     void autoScreenPresStopTimer();
+    void setCurrentTimer( int _currentTimer );
 
     void showCounter( KoParagCounter &c );
 
@@ -659,10 +660,12 @@ private:
     KAction *actionFormatParag;
 
 
-    QTimer automaticScreenPresSpeed;
+    QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;
     int automaticScreenPresWaitTime;
     bool automaticScreenPresFirstTimer;
+    int currentTimer;
+
     KoCharSelectDia *m_specialCharDlg;
     
     QStringList m_ignoreWord;

@@ -265,6 +265,9 @@ public:
     PresSpeed getPresSpeed() const { return presSpeed; }
     void setPresSpeed( PresSpeed _presSpeed ) { presSpeed = _presSpeed; }
 
+    void setPageTimer( unsigned int, int );
+    int getPageTimer( unsigned int );
+
     int getLeftBorder();
     int getTopBorder();
     int getBottomBorder();

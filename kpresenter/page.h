@@ -100,6 +100,7 @@ public:
     void stopScreenPresentation();
     bool pNext( bool );
     bool pPrev( bool );
+    void setNextPageTimer( bool _nextPageTimer ) { nextPageTimer = _nextPageTimer; }
 
     unsigned int presPage() const { return currPresPage; } // 1 based
     int presStep() const { return currPresStep; }
@@ -275,6 +276,7 @@ private:
     bool fillBlack;
     KPresenterView *view;
     bool editMode, goingBack, drawMode;
+    bool drawLineInDrawMode;
     bool mouseSelectedObject;
     unsigned int currPresPage, currPresStep, subPresStep;
     unsigned int oldPresPage, oldPresStep, oldSubPresStep;
@@ -311,6 +313,8 @@ private:
     void raiseObject();
     void lowerObject();
     int selectedObjectPosition;
+
+    bool nextPageTimer;
 
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
