@@ -2274,7 +2274,10 @@ void KSpreadCell::paintBackground( QPainter& painter, const KoRect &cellRect,
 
   // Determine the correct background color
   if ( selected )
-    painter.setBackgroundColor( defaultColorGroup.highlight() );
+  {
+    QColor c = defaultColorGroup.highlight().light();
+    painter.setBackgroundColor( c );
+  }
   else {
     QColor bg( backgroundColor );
 
