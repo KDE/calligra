@@ -108,7 +108,7 @@
  ## The executable
 --- koffice/kword/Makefile.am	2002/07/14 12:01:51	1.188
 +++ koffice/kword/Makefile.am	2002/09/08 00:33:40
-@@ -62,7 +62,7 @@ kwmailmerge_servicetypedir=$(kde_service
+@@ -63,7 +63,7 @@ kwmailmerge_servicetypedir=$(kde_service
  
  ## The kdeinit loadable module
  kword_la_SOURCES = main.cc
