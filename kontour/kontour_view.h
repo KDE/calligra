@@ -191,12 +191,13 @@ private:
   QLabel *mSBState;
 
   /* Panels */
-  LayerPanel   *mLayerPanel;
-  PaintPanel   *mPaintPanel;
-  QDockWindow  *mPaintDock;
-  OutlinePanel *mOutlinePanel;
-  QDockWindow  *mOutlineDock;
-  TransformPanel *mTransformPanel;
+  LayerPanel      *mLayerPanel;
+  PaintPanel      *mPaintPanel;
+  QDockWindow     *mLayerWin;
+  QDockWindow     *mPaintDock;
+  OutlinePanel    *mOutlinePanel;
+  QDockWindow     *mOutlineDock;
+  TransformPanel  *mTransformPanel;
 
   // Actions
   KAction *m_copy;

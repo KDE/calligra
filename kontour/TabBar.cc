@@ -44,8 +44,8 @@
 #include "GPage.h"
 #include "kontour_factory.h"
 
-TabBar::TabBar(QWidget *parent, KontourView *view)
-:QWidget(parent)
+TabBar::TabBar(QWidget *parent, KontourView *view):
+QWidget(parent)
 {
   mView = view;
   mPopupMenu = 0L;
@@ -359,7 +359,7 @@ void TabBar::mouseReleaseEvent( QMouseEvent* _ev )
   }
 }
 
-void TabBar::mouseMoveEvent( QMouseEvent* _ev )
+void TabBar::mouseMoveEvent(QMouseEvent *ev)
 {
   if(!doc->document()->isReadWrite())
     return;
@@ -370,7 +370,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
   QPainter painter;
   painter.begin( this );
 
-    if ( _ev->pos().x() > size().width() )
+    if(ev->pos().x() > size().width())
     {
 /*      int i = tabsList.count();
       if ( activeTab != i && m_moveTab != i && activeTab != i - 1 )
@@ -399,7 +399,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
 
         if ( i >= leftTab )
         {
-          if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
+          if ( x <= ev->pos().x() && ev->pos().x() <= x + 20 + text_width )
           {
             if ( ( activeTab != i && activeTab != i - 1 && m_moveTab != i ) || m_moveTabFlag == moveTabAfter )
             {
@@ -420,7 +420,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
       }
       --i;
 
-      if ( x + 10 <= _ev->pos().x() && _ev->pos().x() < size().width() )
+      if ( x + 10 <= ev->pos().x() && ev->pos().x() < size().width() )
       {
         if ( activeTab != i && m_moveTabFlag != moveTabAfter )
         {
@@ -433,7 +433,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* _ev )
   painter.end();
 }
 
-void TabBar::mouseDoubleClickEvent( QMouseEvent*  )
+void TabBar::mouseDoubleClickEvent(QMouseEvent *)
 {
   if(!doc->document()->isReadWrite())
     return;

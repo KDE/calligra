@@ -341,12 +341,12 @@ void KontourView::setupCanvas()
 void KontourView::setupPanels()
 {
   /* Layer panel */
-  QDockWindow *win = new QDockWindow();
-  win->setResizeEnabled(true);
-  mLayerPanel = new LayerPanel(activeDocument(), win);
-  win->setWidget(mLayerPanel);
+  mLayerWin = new QDockWindow();
+  mLayerWin->setResizeEnabled(true);
+  mLayerPanel = new LayerPanel(activeDocument(), mLayerWin);
+  mLayerWin->setWidget(mLayerPanel);
   connect(activeDocument(), SIGNAL(updateLayerView()), mLayerPanel, SLOT(updatePanel()));
-  mRightDock->moveDockWindow(win);
+  mRightDock->moveDockWindow(mLayerWin);
 
   /* Paint properties panel */
   mPaintDock = new QDockWindow();
@@ -444,10 +444,18 @@ void KontourView::readConfigAfter()
 {
   KConfig *config = KontourFactory::global()->config();
 
+  config->setGroup("General");
   QValueList<int> s;
   s << config->readNumEntry("LeftSide", -1);
   s << config->readNumEntry("RightSide", 200);
   mSplitView->setSizes(s);
+
+  config->setGroup("Panels");
+  int w;
+  int h;
+  w = config->readNumEntry("LayerPanelWidth", 210);
+  h = config->readNumEntry("LayerPanelHeight", 140);
+  mLayerWin->resize(w, h);
 }
 
 void KontourView::writeConfig()
@@ -481,10 +489,13 @@ void KontourView::writeConfig()
     config->writeEntry("DefaultUnit", "cicero");
     break;
   }
-
   QValueList<int> s = mSplitView->sizes();
   config->writeEntry("LeftSide", s[0]);
   config->writeEntry("RightSide", s[1]);
+
+  config->setGroup("Panels");
+  config->writeEntry("LayerPanelWidth", mLayerWin->width());
+  config->writeEntry("LayerPanelHeight", mLayerWin->height());
 
 /* config->setGroup("Panels");
    config->writeEntry("Enabled",m_showLayers->isChecked());

@@ -42,10 +42,10 @@
 #include "GStyle.h"
 #include "BrushCells.h"
 
-#define JOIN_WIDTH  30
-#define JOIN_HEIGHT 30
-#define CAP_WIDTH   30
-#define CAP_HEIGHT  30
+#define JOIN_WIDTH  20
+#define JOIN_HEIGHT 20
+#define CAP_WIDTH   20
+#define CAP_HEIGHT  20
 
 PaintPanel::PaintPanel(QWidget *parent, const char *name):
 QTabWidget(parent, name)
@@ -68,14 +68,12 @@ QTabWidget(parent, name)
   connect(this, SIGNAL(colorChanged(const KoColor &)), mPaintPanel, SLOT(slotChangeColor(const KoColor &)));
   insertTab(mPaintPanel, i18n("Color"));
 
-  QGroupBox *pattern = new QGroupBox(1, Qt::Vertical, this);
+/*  QGroupBox *pattern = new QGroupBox(1, Qt::Vertical, this);
   QBoxLayout *box2 = new QBoxLayout(pattern, QBoxLayout::Down);
   BrushCells *brushCells = new BrushCells(pattern);
   connect(brushCells, SIGNAL(brushChanged(Qt::BrushStyle)), this, SIGNAL(changeBrushStyle(Qt::BrushStyle)));
   box2->addWidget(brushCells);
-  insertTab(pattern, i18n("Pattern"));
-
-
+  insertTab(pattern, i18n("Pattern"));*/
   connect(mPaintingBox, SIGNAL(activated(int)), this, SLOT(activate(int)));
 }
 

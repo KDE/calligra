@@ -168,21 +168,22 @@ void OptionsDialog::createBGWidget(QWidget* parent)
   layout->addWidget(bgbutton);
 }
 
-/*Grid*/
+/* Grid */
 
-void OptionsDialog::createGridWidget (QWidget* parent)
+void OptionsDialog::createGridWidget(QWidget *parent)
 {
-  QGridLayout *layout=new QGridLayout(parent, 3, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
+  QGridLayout *layout = new QGridLayout(parent, 3, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-  QGroupBox *box=new QGroupBox(i18n("Distance"), parent);
+  QGroupBox *box = new QGroupBox(i18n("Distance"), parent);
   layout->addMultiCellWidget(box, 0, 0, 0, 1);
 
-  QBoxLayout *vboxlayout=new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
-  vboxlayout->addSpacing(box->fontMetrics().height()/2);
-  QGridLayout *grid=new QGridLayout(vboxlayout, 2, 2);
-  QLabel* label = new QLabel(i18n("Horizontally"), box);
-  grid->addWidget(label, 0, 0);
+  QBoxLayout *vboxlayout = new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
+  vboxlayout->addSpacing(box->fontMetrics().height() / 2);
 
+  QGridLayout *grid = new QGridLayout(vboxlayout, 2, 2);
+
+  QLabel *label = new QLabel(i18n("Horizontally"), box);
+  grid->addWidget(label, 0, 0);
   hspinbox = new UnitBox(box);
   hspinbox->setPrecision(3);
   hspinbox->setRange(0, 1000);
@@ -192,7 +193,6 @@ void OptionsDialog::createGridWidget (QWidget* parent)
 
   label = new QLabel(i18n("Vertically"), box);
   grid->addWidget(label, 1, 0);
-
   vspinbox = new UnitBox(box);
   vspinbox->setPrecision(3);
   vspinbox->setRange(0, 1000);
