@@ -170,7 +170,7 @@ bool KSpreadDoc::hasToWriteMultipart()
 bool KSpreadDoc::save( QIODevice* dev, KOStore::Store_ptr, const char* format )
 {
   QDomDocument doc( "spreadsheet" );
-  doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\"" ) );
+  doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
   QDomElement spread = doc.createElement( "spreadsheet" );
   spread.setAttribute( "author", "Torben Weis" );
   spread.setAttribute( "email", "weis@kde.org" );
@@ -589,7 +589,7 @@ void KSpreadDoc::initInterpreter()
   m_pInterpreter = new KSpreadInterpreter( this );
 
   // #### do not know the locate stuff is correct
-  
+
   QString koffice_global_path = locate("data", "/koffice/scripts");
   //koffice_global_path += "/koffice/scripts";
   m_pInterpreter->addSearchPath( koffice_global_path );
