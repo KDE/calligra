@@ -111,6 +111,12 @@ BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
                 break;
             }
         }
+        if (row == 0) {
+            BasicElement* element = getParent();
+            element->moveLeft(cursor, this);
+            handled = true;
+            return element;
+        }
         row--;
 
         BasicElement* element = getElement(row, column);

@@ -105,14 +105,14 @@ BasicElement* IndexElement::goToPos(FormulaCursor* cursor, bool& handled,
         // the positions after the left indexes
         if (dx < content->getX()+content->getWidth()) {
             if (dy < content->getY()) {
-                if (hasUpperLeft()) {
+                if (hasUpperLeft() && (dx > upperLeft->getX())) {
                     upperLeft->moveLeft(cursor, this);
                     handled = true;
                     return upperLeft;
                 }
             }
             else if (dy > content->getY()+content->getHeight()) {
-                if (hasLowerLeft()) {
+                if (hasLowerLeft() && (dx > lowerLeft->getX())) {
                     lowerLeft->moveLeft(cursor, this);
                     handled = true;
                     return lowerLeft;

@@ -138,12 +138,20 @@ void FormulaCursor::moveEnd(int flag)
 }
 
 
-void FormulaCursor::mousePress(const QPoint& pos, int)
+void FormulaCursor::mousePress(const QPoint& pos, int flag)
 {
-    setSelection(false);
     FormulaElement* formula = getElement()->formula();
     formula->goToPos(this, pos);
-    setMark(getPos());
+    if (flag & SelectMovement) {
+        setSelection(true);
+        if (getMark() == -1) {
+            setMark(getPos());
+        }
+    }
+    else {
+        setSelection(false);
+        setMark(getPos());
+    }
 }
 
 void FormulaCursor::mouseMove(const QPoint& point, int)
@@ -183,19 +191,20 @@ void FormulaCursor::mouseMove(const QPoint& point, int)
             element->selectChild(this, markChild);
             mark = getMark();
         }
-        if (pos > mark) {
-            if (markChild != 0) {
-                //mark--;
+        if (pos == mark) {
+            if ((posChild == 0) && (markChild != 0)) {
+                mark++;
+            }
+            else if ((posChild != 0) && (markChild == 0)) {
+                mark--;
             }
         }
-        else {
+        else if (pos < mark) {
             if (posChild != 0) {
-                //pos--;
+                pos--;
             }
         }
         setTo(element, pos, mark);
-        //setPos(pos);
-        //setMark(mark);
     }
 }
 
