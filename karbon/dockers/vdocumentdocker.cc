@@ -289,8 +289,8 @@ VDocumentTab::slotCommandExecuted()
  *  Layers tab                                                           *
  *************************************************************************/
 
-VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object, uint key )
-	: QListViewItem( parent, 0L ), m_object( object ), m_key( key )
+VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object, VDocument *doc, uint key )
+	: QListViewItem( parent, 0L ), m_object( object ), m_document( doc ), m_key( key )
 {
 	update();
 	if( dynamic_cast<VGroup *>( object ) )
@@ -299,12 +299,12 @@ VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object
 		VObjectListIterator itr = dynamic_cast<VGroup *>( object )->objects();
 		for( ; itr.current();++itr, objcount++ )
 			if( itr.current()->state() != VObject::deleted )
-				new VObjectListViewItem( this, itr.current(), objcount );
+				new VObjectListViewItem( this, itr.current(), m_document, objcount );
 	}
 }
 
 QString
-VObjectListViewItem::key( int column, bool ascending ) const
+VObjectListViewItem::key( int, bool ) const
 {
 	return QString( "%1" ).arg( m_key );
 }
@@ -328,7 +328,7 @@ VObjectListViewItem::update()
 	m_object->draw( &p );
 	p.end();
 
-	VSelectionDescription selectionDesc;
+	VSelectionDescription selectionDesc( m_document );
 	selectionDesc.visit( *m_object );
 	setText( 0, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
 	if( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked )
@@ -340,15 +340,15 @@ VObjectListViewItem::update()
 }
 
 
-VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer )
-	: QCheckListItem( parent, 0L, CheckBox ), m_layer( layer )
+VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer, VDocument *doc )
+	: QCheckListItem( parent, 0L, CheckBox ), m_layer( layer ), m_document( doc)
 {
 	update();
 	VObjectListIterator itr = layer->objects();
 	uint objcount = 1;
 	for( ; itr.current();++itr, objcount++ )
 		if( itr.current()->state() != VObject::deleted )
-			new VObjectListViewItem( this, itr.current(), objcount );
+			new VObjectListViewItem( this, itr.current(), m_document, objcount );
 
 } // VLayerListViewItem::VLayerListViewItem
 
@@ -530,17 +530,31 @@ VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
 void
 VLayersTab::renameLayer( QListViewItem* item, const QPoint&, int col )
 {
-	if ( ( item ) && col == 2 )
+	if ( ( item ) && col == 0 )
 	{
-		VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( m_layersListView->selectedItem() );
-		if( !layerItem ) return;
 		bool ok = true;
-		QString name = QInputDialog::getText( i18n( "Current Layer" ), i18n( "Change the name of the current layer:" ),
-																QLineEdit::Normal, layerItem->layer()->name(), &ok, this );
-		if (ok)
+		VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( m_layersListView->selectedItem() );
+		if( !layerItem )
 		{
-			layerItem->layer()->setName( name );
-			layerItem->update();
+			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
+			VObject *obj = objectItem->object();
+			QString name = QInputDialog::getText( i18n( "Current object" ), i18n( "Change the name of the object:" ),
+																	QLineEdit::Normal, obj->name( m_document ), &ok, this );
+			if( ok )
+			{
+				m_document->setObjectName( obj, (char *)name.latin1() );
+				objectItem->update();
+			}
+		}
+		else
+		{
+			QString name = QInputDialog::getText( i18n( "Current Layer" ), i18n( "Change the name of the current layer:" ),
+																	QLineEdit::Normal, layerItem->layer()->name(), &ok, this );
+			if( ok )
+			{
+				layerItem->layer()->setName( name );
+				layerItem->update();
+			}
 		}
 	}
 } // VLayersTab::renameLayer
@@ -657,7 +671,7 @@ VLayersTab::updateLayers()
 	{
 		if ( vector[i]->state() != VObject::deleted )
 		{
-			item = new VLayerListViewItem( m_layersListView, vector[i] );
+			item = new VLayerListViewItem( m_layersListView, vector[i], m_document );
 			item->setOpen( true );
 		}
 	}

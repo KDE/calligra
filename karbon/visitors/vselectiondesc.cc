@@ -20,6 +20,7 @@
 #include "vselectiondesc.h"
 #include "vselection.h"
 #include "vgroup.h"
+#include "vcomposite.h"
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -33,10 +34,10 @@ VSelectionDescription::visitVSelection( VSelection& selection )
 }
 
 void
-VSelectionDescription::visitVComposite( VComposite& )
+VSelectionDescription::visitVComposite( VComposite& composite )
 {
 	m_desc = QString( i18n( "1 composite path" ) );
-	m_shortdesc = QString( i18n( "path" ) );
+	m_shortdesc = composite.name( m_document ) ? QString( composite.name( m_document ) ) : QString( i18n( "path" ) );
 }
 
 void

@@ -26,6 +26,7 @@
 #include <dcopobject.h>
 
 class QDomElement;
+class VDocument;
 class VFill;
 class VPainter;
 class VStroke;
@@ -149,6 +150,8 @@ public:
 	 * of oldObject.
 	 */
 	virtual void insertInfrontOf( VObject* /*newObject*/, VObject* /*oldObject*/ ) { }
+
+	virtual char *name( VDocument *doc ) const;
 
 protected:
 	/// Bounding box.

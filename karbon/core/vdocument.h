@@ -25,6 +25,7 @@
 
 #include <qstring.h>
 #include <qptrlist.h>
+#include <qptrdict.h>
 
 #include "vobject.h"
 
@@ -186,6 +187,9 @@ public:
 	 */
 	void append( VObject* object );
 
+	char *objectName( VObject *obj ) const { return m_objectNames[ obj ]; }
+	void setObjectName( VObject *obj, char *name ) { m_objectNames.insert( obj, name ); }
+
 private:
 	/**
 	 * Document width.
@@ -225,6 +229,8 @@ private:
 	QString m_editor;
 	/// The syntax version.
 	QString m_syntaxVersion;
+
+	QPtrDict<char>	m_objectNames;
 };
 
 #endif

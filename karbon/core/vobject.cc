@@ -19,6 +19,7 @@
 
 #include <qdom.h>
 
+#include "vdocument.h"
 #include "vfill.h"
 #include "vobject.h"
 #include "vobject_iface.h"
@@ -110,5 +111,12 @@ VObject::load( const QDomElement& element )
 	{
 		m_fill->load( element );
 	}
+}
+
+char *
+VObject::name( VDocument *doc ) const
+{
+	VObject *obj = this;
+	return doc->objectName( obj );
 }
 

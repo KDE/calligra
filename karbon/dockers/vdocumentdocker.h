@@ -94,7 +94,7 @@ class VDocumentTab : public QWidget
 class VLayerListViewItem : public QCheckListItem
 {
 public:
-	VLayerListViewItem( QListView* parent, VLayer* layer );
+	VLayerListViewItem( QListView* parent, VLayer* layer, VDocument *doc );
 
 	VLayer* layer() { return m_layer; }
 	int pos();
@@ -104,21 +104,23 @@ protected:
 	virtual void stateChange( bool on );
 
 private:
-	VLayer*      m_layer;
+	VLayer		*m_layer;
+	VDocument	*m_document;
 }; // VLayerListViewItem
 
 class VObjectListViewItem : public QListViewItem
 {
 public:
-	VObjectListViewItem( QListViewItem* parent, VObject* object, uint key );
+	VObjectListViewItem( QListViewItem* parent, VObject* object, VDocument *doc, uint key );
 
 	VObject* object() { return m_object; }
 	void update();
 	virtual QString key( int column, bool ascending ) const;
 
 private:
-	VObject	*m_object;
-	uint	 m_key;
+	VObject		*m_object;
+	VDocument	*m_document;
+	uint		 m_key;
 };
 
 class VLayersTab : public QWidget
