@@ -1,0 +1,11 @@
+1. Add USE_QT option to build a QT version of the library
+2. Add options to FormulaAsText function. e.g. optionRemoveAt to
+make removal of leading @ on functions optional.
+3. Split classes into individual files
+4. Add missing functions to FormulaAsText
+5. Add dmalloc option
+6. Add more record types
+7. Add output functionality so that Quattro Pro files can be created
+as well as read.
+8. Add test program
+9. Port to other platforms?

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=Quattro Pro Import Filter for KSpread
+Export=application/x-kspread
+ExportDescription=KSpread
+Import=application/x-quattropro
+ImportDescription=Quattro Pro File
+Implemented=kodocument
+X-KDE-Library=libqproimport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter

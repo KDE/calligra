@@ -1,0 +1,33 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(qpro/record.h)
+
+AC_CONFIG_AUX_DIR(config)
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(libqpro, 0.1)
+
+dnl Checks for programs.
+AC_PROG_CXX
+AM_PROG_LIBTOOL
+
+dnl Checks for libraries.
+
+dnl Checks for header files.
+AC_HEADER_STDC
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_C_INLINE
+
+dnl Checks for library functions.
+
+dnl Extra macros
+
+dnl change default prefix from /usr/local to /usr
+dnl don't know if this is the right way to do this, but it seems to work :)
+ac_default_prefix=/usr
+
+dnl Xsed="sed -e s/^X//"
+dnl LTLIBOBJS=`echo X"$LIBOBJS" | \$Xsed -e "s,\. [^.]* ,.lo,g;s,\.[^.]*$,.lo,"
+dnl AC_SUBST(LTLIBOBJS)
+
+AC_OUTPUT(Makefile qpro/Makefile src/Makefile)
