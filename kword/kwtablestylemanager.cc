@@ -430,7 +430,6 @@ void KWTableStyleManager::importFromFile()
     KWImportFrameTableStyleDia dia( m_doc, lst, KWImportFrameTableStyleDia::TableStyle, this, 0 );
     if ( dia.listOfTableStyleImported().count() > 0 && dia.exec() ) {
         QPtrList<KWTableStyle> list = dia.listOfTableStyleImported();
-        kdDebug()<<" list.count() :"<<list.count()<<endl;
         addStyle( list);
     }
 }
@@ -444,6 +443,7 @@ void KWTableStyleManager::addStyle(const QPtrList<KWTableStyle> &listStyle )
     {
         noSignals=true;
         m_stylesList->insertItem( style.current()->translatedName() );
+        m_styleOrder<<style.current()->name();
         m_tableStyles.append( new KWTableStyleListItem( 0L,new KWTableStyle(*style.current())) );
         noSignals=false;
 

@@ -360,6 +360,7 @@ void KWFrameStyleManager::addStyle(const QPtrList<KWFrameStyle> &listStyle )
         noSignals=true;
         m_stylesList->insertItem( style.current()->translatedName() );
         m_frameStyles.append( new KWFrameStyleListItem( 0L,new KWFrameStyle(*style.current())) );
+        m_styleOrder<<style.current()->name();
         noSignals=false;
 
     }
