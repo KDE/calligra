@@ -1358,8 +1358,8 @@ void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVis
     int lineY;
     // Cursor height, in pixels
     int cursorHeight = zh->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
-    QPoint iPoint( topLeft.x() - cursor->totalOffsetX() + cursor->x(),
-                   topLeft.y() - cursor->totalOffsetY() + lineY );
+    QPoint iPoint( topLeft.x() + cursor->x(),
+                   topLeft.y() + lineY );
     // from now on, iPoint will be in pixels
     iPoint = zh->layoutUnitToPixel( iPoint );
 
@@ -1905,11 +1905,11 @@ void KPTextView::ensureCursorVisible()
     kpTextObject()->textObject()->ensureFormatted( parag );
     KoTextStringChar *chr = parag->at( cursor()->index() );
     int h = parag->lineHeightOfChar( cursor()->index() );
-    int x = parag->rect().x() + chr->x + cursor()->offsetX();
+    int x = parag->rect().x() + chr->x;
     int y = 0; int dummy;
 
     parag->lineHeightOfChar( cursor()->index(), &dummy, &y );
-    y += parag->rect().y() + cursor()->offsetY();
+    y += parag->rect().y();
     int w = 1;
     KPresenterDoc *doc= m_kptextobj->kPresenterDocument();
     KoPoint pt= kpTextObject()->getOrig();
