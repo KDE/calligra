@@ -199,6 +199,8 @@ k_dcop:
 
     void updateHelpPoint( int idx, double posX, double posY );
     void addHelpPoint( double posX, double posY );
+
+    //return false when index doesn't exist
     bool removeHelpPoint( int index );
 
 private:

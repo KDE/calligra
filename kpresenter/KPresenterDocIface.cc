@@ -690,17 +690,29 @@ void KPresenterDocIface::setHelpLineToFront( bool _front )
 
 void KPresenterDocIface::updateHelpPoint( int idx, double posX, double posY )
 {
+    if( idx < 0)
+        return;
     doc->updateHelpPoint( idx, KoPoint( posX, posY ));
+    if( showHelplines() )
+        doc->repaint( false);
+
 }
 
 void KPresenterDocIface::addHelpPoint( double posX, double posY )
 {
     doc->addHelpPoint( KoPoint( posX, posY ));
+    if( showHelplines() )
+        doc->repaint( false);
 }
 
 bool KPresenterDocIface::removeHelpPoint( int index )
 {
+    if( index < 0 || index >= doc->helpPoints().count() )
+        return false;
+
     doc->removeHelpPoint( index );
+    if( showHelplines() )
+        doc->repaint( false);
     return true;
 }
 
