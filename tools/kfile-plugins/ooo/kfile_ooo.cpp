@@ -65,11 +65,16 @@ static const char * const mimetypes[] =
   "application/vnd.sun.xml.writer", "application/vnd.sun.xml.writer.global",
   "application/vnd.sun.xml.writer.math",
   "application/vnd.sun.xml.writer.template",
-  "application/vnd.oasis.openoffice.drawing",
-  "application/vnd.oasis.openoffice.presentation",
-  "application/vnd.oasis.openoffice.spreadsheet",
-  "application/vnd.oasis.openoffice.text",
-  "application/vnd.oasis.openoffice.formula",
+  "application/vnd.oasis.opendocument.chart",
+  "application/vnd.oasis.opendocument.formula",
+  "application/vnd.oasis.opendocument.graphics",
+  "application/vnd.oasis.opendocument.graphics-template",
+  "application/vnd.oasis.opendocument.presentation",
+  "application/vnd.oasis.opendocument.presentation-template",
+  "application/vnd.oasis.opendocument.spreadsheet",
+  "application/vnd.oasis.opendocument.spreadsheet-template",
+  "application/vnd.oasis.opendocument.text",
+  "application/vnd.oasis.opendocument.text-template",
   0};
 
 static const char * const Advanced[] =
