@@ -224,6 +224,8 @@ private:
 	KToggleAction *m_setFontBold;
 	KToggleAction *m_setFontItalic;
 	KToggleAction *m_setUnderline;
+	KAction *m_groupObjects;
+	KAction *m_ungroupObjects;
 	//KSelectColorAction *m_setTextColor;
 
 	// view:

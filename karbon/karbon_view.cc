@@ -930,10 +930,10 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "Send to &Back" ), 0, QKeySequence("Shift+PgDown"), this,
 		SLOT( selectionSendToBack() ), actionCollection(), "object_move_tobottom" );
-	new KAction(
+	m_groupObjects = new KAction(
 		i18n( "&Group Objects" ), "group", QKeySequence("Ctrl+G"), this,
 		SLOT( groupSelection() ), actionCollection(), "selection_group" );
-	new KAction(
+	m_ungroupObjects = new KAction(
 		i18n( "&Ungroup Objects" ), "ungroup", QKeySequence("Ctrl+U"), this,
 		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	new KAction(
@@ -1233,8 +1233,12 @@ KarbonView::configure()
 void
 KarbonView::selectionChanged()
 {
-	if( part()->document().selection()->objects().count() > 0)
+	int count = part()->document().selection()->objects().count();
+	if( count > 0)
 	{
+		VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
+		m_groupObjects->setEnabled( !group && ( count > 1 ) );
+		m_ungroupObjects->setEnabled( group && ( count == 1 )  );
 		m_strokeFillPreview->update( *part()->document().selection()->objects().getFirst()->stroke(),
 												*part()->document().selection()->objects().getFirst()->fill() );
 		part()->document().selection()->setStroke( *( part()->document().selection()->objects().getFirst()->stroke() ) );
@@ -1261,6 +1265,8 @@ KarbonView::selectionChanged()
 		m_setLineWidth->setEnabled( false );
 		m_objectDlg->reset();
 		m_objectDlg->disable();
+		m_groupObjects->setEnabled( false );
+		m_ungroupObjects->setEnabled( false );
 	}
 }
 
