@@ -38,6 +38,7 @@
 #include <knuminput.h>
 #include <kcompletion.h>
 #include <kconfig.h>
+#include <klineeditdlg.h>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -167,9 +168,9 @@ void KoAutoFormatExceptionWidget::slotExceptionListSelected()
 /* Class: KoAutoFormatDia                                         */
 /******************************************************************/
 
-KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name, 
+KoAutoFormatDia::KoAutoFormatDia( QWidget *parent, const char *name,
       KoAutoFormat * autoFormat )
-    : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel | User1, Ok, 
+    : KDialogBase( Tabbed, i18n("Autocorrection"), Ok | Cancel | User1, Ok,
       parent, name, true, true, KGuiItem( i18n( "&Reset" ), "undo" )),
       oSimpleBegin( autoFormat->getConfigTypographicSimpleQuotes().begin ),
       oSimpleEnd( autoFormat->getConfigTypographicSimpleQuotes().end ),
@@ -214,9 +215,9 @@ void KoAutoFormatDia::setupTab1()
             KDialog::spacingHint());
 
     cbUpperCase = new QCheckBox( tab1 );
-    cbUpperCase->setText( i18n( 
+    cbUpperCase->setText( i18n(
             "Convert &first letter of a sentence automatically to uppercase\n"
-            "(e.g. \"my house. in this town\" to \"my house. In this town\")" 
+            "(e.g. \"my house. in this town\" to \"my house. In this town\")"
             ) );
     QWhatsThis::add( cbUpperCase, i18n(
             "Detect when a new sentence is started and always ensure that"
@@ -226,7 +227,7 @@ void KoAutoFormatDia::setupTab1()
 
 
     cbUpperUpper = new QCheckBox( tab1 );
-    cbUpperUpper->setText( i18n( 
+    cbUpperUpper->setText( i18n(
             "Convert &two uppercase characters to one uppercase and one"
             " lowercase character.\n (e.g. PErfect to Perfect)" ) );
     QWhatsThis::add( cbUpperUpper, i18n(
@@ -255,7 +256,7 @@ void KoAutoFormatDia::setupTab1()
     vbox->addWidget(cbIgnoreDoubleSpace);
 
     cbRemoveSpaceBeginEndLine=new QCheckBox( tab1 );
-    cbRemoveSpaceBeginEndLine->setText( i18n( 
+    cbRemoveSpaceBeginEndLine->setText( i18n(
             "R&emove spaces at the beginning and end of paragraphs" ) );
     QWhatsThis::add( cbRemoveSpaceBeginEndLine, i18n(
             "Keep correct formatting and indenting of sentences by "
@@ -265,7 +266,7 @@ void KoAutoFormatDia::setupTab1()
     vbox->addWidget(cbRemoveSpaceBeginEndLine);
 
     cbAutoChangeFormat=new QCheckBox( tab1 );
-    cbAutoChangeFormat->setText( i18n( 
+    cbAutoChangeFormat->setText( i18n(
             "Automatically do &bold and underline formatting") );
     QWhatsThis::add( cbAutoChangeFormat, i18n(
             "When you use _underline_ or *bold*, the text between the "
@@ -275,7 +276,7 @@ void KoAutoFormatDia::setupTab1()
     vbox->addWidget(cbAutoChangeFormat);
 
     cbAutoReplaceNumber=new QCheckBox( tab1 );
-    cbAutoReplaceNumber->setText( i18n( 
+    cbAutoReplaceNumber->setText( i18n(
             "We add the 1/2 char at the %1", "Re&place 1/2... with %1..." )
             .arg( QString( "½" ) ) );
     QWhatsThis::add( cbAutoReplaceNumber, i18n(
@@ -285,7 +286,7 @@ void KoAutoFormatDia::setupTab1()
     vbox->addWidget(cbAutoReplaceNumber);
 
     cbUseNumberStyle=new QCheckBox( tab1 );
-    cbUseNumberStyle->setText( i18n( 
+    cbUseNumberStyle->setText( i18n(
             "Use &auto-numbering for numbered paragraphs" ) );
     QWhatsThis::add( cbUseNumberStyle, i18n(
             "When typing '1)' or similar in front of a paragraph, "
@@ -302,7 +303,7 @@ void KoAutoFormatDia::setupTab1()
     vbox->addWidget(cbAutoSuperScript);
 
     cbUseBulletStyle=new QCheckBox( tab1 );
-    cbUseBulletStyle->setText( i18n( 
+    cbUseBulletStyle->setText( i18n(
             "Use l&ist-formatting for bulleted paragraphs" ) );
     QWhatsThis::add( cbUseBulletStyle, i18n(
             "When typing '*' or '-' in front of a paragraph, automatically "
@@ -310,7 +311,7 @@ void KoAutoFormatDia::setupTab1()
             "formatting means that a correct bullet is used to draw the list."
             ) );
 
-    connect( cbUseBulletStyle, SIGNAL( toggled( bool ) ), 
+    connect( cbUseBulletStyle, SIGNAL( toggled( bool ) ),
             SLOT( slotBulletStyleToggled( bool ) ) );
 
     vbox->addWidget(cbUseBulletStyle);
@@ -337,7 +338,7 @@ void KoAutoFormatDia::setupTab1()
     initTab1();
 
     connect( pbBulletStyle, SIGNAL( clicked() ), SLOT( chooseBulletStyle() ) );
-    connect( pbDefaultBulletStyle, SIGNAL( clicked()), 
+    connect( pbDefaultBulletStyle, SIGNAL( clicked()),
             SLOT( defaultBulletStyle() ) );
 }
 
@@ -368,11 +369,11 @@ void KoAutoFormatDia::setupTab2()
 {
     tab2 = addPage( i18n( "Custom Quotes" ) );
 
-    QVBoxLayout *vbox = new QVBoxLayout(tab2, KDialog::marginHint(), 
+    QVBoxLayout *vbox = new QVBoxLayout(tab2, KDialog::marginHint(),
             KDialog::spacingHint());
 
     cbTypographicDoubleQuotes = new QCheckBox( tab2 );
-    cbTypographicDoubleQuotes->setText( i18n( 
+    cbTypographicDoubleQuotes->setText( i18n(
             "Replace &double quotes with typographical quotes" ) );
 
     connect( cbTypographicDoubleQuotes,SIGNAL(toggled ( bool)),
@@ -407,7 +408,7 @@ void KoAutoFormatDia::setupTab2()
     vbox->addItem( hbox );
 
     cbTypographicSimpleQuotes = new QCheckBox( tab2 );
-    cbTypographicSimpleQuotes->setText( i18n( 
+    cbTypographicSimpleQuotes->setText( i18n(
             "Replace &single quotes with typographical quotes" ) );
 
     connect( cbTypographicSimpleQuotes,SIGNAL(toggled ( bool)),
@@ -559,7 +560,7 @@ void KoAutoFormatDia::setupTab4()
             KDialog::spacingHint());
 
     abbreviation=new KoAutoFormatExceptionWidget(tab4,
-            i18n("Do not treat as the end of a sentence:"), 
+            i18n("Do not treat as the end of a sentence:"),
             m_autoFormat.listException(),
             m_autoFormat.getConfigIncludeAbbreviation() , true);
 
@@ -869,16 +870,16 @@ void KoAutoFormatDia::slotChangeStateDouble(bool b)
 /* Class: KoCompletionDia                                         */
 /******************************************************************/
 
-KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, 
+KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name,
       KoAutoFormat * autoFormat )
-    : KDialogBase( parent, name , true, i18n( "Completion" ), Ok|Cancel|User1, 
+    : KDialogBase( parent, name , true, i18n( "Completion" ), Ok|Cancel|User1,
       Ok, true, KGuiItem( i18n( "&Reset" ), "undo" ) ),
       m_autoFormat( *autoFormat ),
       m_docAutoFormat( autoFormat )
 {
     setup();
     slotResetConf();
-    setInitialSize( QSize( 400, 400 ) );
+    setInitialSize( QSize( 500, 400 ) );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotResetConf()));
 }
 
@@ -896,6 +897,8 @@ void KoCompletionDia::setup()
     connect( m_lbListCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
     connect( m_lbListCompletion, SIGNAL( highlighted ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
 
+    pbAddCompletionEntry = new QPushButton( i18n("Add Completion Entry"), page);
+    connect( pbAddCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotAddCompletionEntry()));
 
     pbRemoveCompletionEntry = new QPushButton(i18n( "R&emove Completion Entry"), page  );
     connect( pbRemoveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotRemoveCompletionEntry()));
@@ -942,6 +945,19 @@ void KoCompletionDia::slotSaveCompletionEntry()
     KMessageBox::information( this, i18n(
             "Completion list saved.\nIt will be used for all documents "
             "from now on."), i18n("Completion List Saved") );
+}
+
+void KoCompletionDia::slotAddCompletionEntry()
+{
+    bool ok;
+    QString newWord = KLineEditDlg::getText( i18n("Add Completion Entry:"),QString::null, &ok, this );
+    if ( ok )
+    {
+        m_listCompletion.append( newWord );
+        m_lbListCompletion->insertItem( newWord );
+        pbRemoveCompletionEntry->setEnabled( true );
+
+    }
 }
 
 void KoCompletionDia::slotOk()

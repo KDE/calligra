@@ -171,6 +171,7 @@ protected slots:
     void slotRemoveCompletionEntry();
     void slotCompletionWordSelected( const QString & );
     void slotSaveCompletionEntry();
+    void slotAddCompletionEntry();
     void slotResetConf();
     bool applyConfig();
 
@@ -183,6 +184,7 @@ protected:
     QCheckBox *cbAllowCompletion, *cbAppendSpace, *cbAddCompletionWord;
     QPushButton *pbRemoveCompletionEntry;
     QPushButton *pbSaveCompletionEntry;
+    QPushButton *pbAddCompletionEntry;
     QListBox *m_lbListCompletion;
     KIntNumInput *m_minWordLength;
     KIntNumInput *m_maxNbWordCompletion;
