@@ -169,7 +169,10 @@ void
 PropertyEditor::slotEditorAccept(PropertyEditorEditor *editor)
 {
 	emit itemRenamed(m_editItem);
-	editor->hide();
+	if(m_currentEditor)
+	{
+		m_currentEditor->hide();
+	}
 }
 
 void
