@@ -88,8 +88,6 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
 
   m_pAccel = new KAccel(this);
 
-  QWidget::setFocusPolicy(QWidget::StrongFocus);
-
   m_pDoc->addHTMLView(this);
 
   QObject::connect(this, SIGNAL(setTitle(const char *)),
@@ -371,7 +369,19 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
 
   m_vMenuBar = OpenPartsUI::MenuBar::_duplicate(menuBar);
   menuBar->connect("highlighted", this, "statusCallback");
+
+  menuBar->setFileMenu( menuBar->insertMenu(i18n("&File"), m_vMenuFile, -1, -1) );
+
+  pix = OPUIUtils::convertPixmap(ICON("filenew.xpm"));
+  m_vMenuFile->insertItem6( pix, i18n("&New Window"), this, "slotNewWindow", CTRL + Key_N, ID_NEWWINDOW, -1 );
+
+  pix = OPUIUtils::convertPixmap(ICON("go-url3.xpm"));
+  m_vMenuFile->insertItem6( pix, i18n("Open &URL..."), this, "slotOpenURLDlg", CTRL + Key_U, ID_OPENURL, -1 );
   
+  m_vMenuFile->insertSeparator( -1 );
+
+  m_vMenuFile->insertItem4( i18n("Close"), this, "slotClose", CTRL + Key_W, ID_CLOSE, -1 );
+        
   menuBar->insertMenu(i18n("&Edit"), m_vMenuEdit, -1, -1);
 
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
@@ -392,7 +402,7 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
   menuBar->insertMenu(i18n("Bookmarks"), m_vMenuBookmarks, -1, -1);
   
   m_vMenuBar->connect("activated", this, "slotBookmarkSelected");
-
+  
   m_vMenuBookmarks->insertItem4(i18n("Add Bookmark"), this, "addBookmark", 0, ID_BOOKMARKS_ADD, -1);
   m_vMenuBookmarks->insertItem4(i18n("Edit Bookmarks"), this, "editBookmarks", 0, ID_BOOKMARKS_EDIT, -1);
   m_vMenuBookmarks->insertSeparator(-1);
@@ -522,6 +532,18 @@ void KoHTMLView::slotMoveEnd(KoFrame *frame)
   KoHTMLFrame *f = (KoHTMLFrame *)frame;
   
   m_pDoc->changeChildGeometry(f->getChild(), f->partGeometry());
+}
+
+void KoHTMLView::slotNewWindow()
+{
+  KoHTMLShell *m_pShell = new KoHTMLShell;
+  m_pShell->show();
+  m_pShell->newDocument();
+}
+
+void KoHTMLView::slotClose()
+{
+  //TODO
 }
 
 void KoHTMLView::editCopy()

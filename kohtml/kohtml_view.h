@@ -79,6 +79,9 @@ public:
 
   virtual void cleanUp();
 
+  virtual void slotNewWindow();
+  virtual void slotClose();
+  
   virtual void editCopy();
   virtual void editHTMLCode();
   virtual void editSettings();
@@ -150,8 +153,9 @@ protected:
   virtual void updateHistory(bool enableBack, bool enableForward);
 
   KAccel *m_pAccel;
-  
+
   OpenPartsUI::MenuBar_var m_vMenuBar;
+  OpenPartsUI::Menu_var m_vMenuFile;
   OpenPartsUI::Menu_var m_vMenuEdit;
   OpenPartsUI::Menu_var m_vMenuEdit_Insert;
   CORBA::Long m_idMenuEdit_Copy;
@@ -207,6 +211,8 @@ protected:
   static const int ID_RELOAD                 = 14;
   static const int ID_STOP                   = 15;
   static const int ID_OPENURL                = 16;
+  static const int ID_NEWWINDOW              = 17;
+  static const int ID_CLOSE                  = 18;
 
   KoHTMLDoc *m_pDoc;
 

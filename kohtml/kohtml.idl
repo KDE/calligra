@@ -33,6 +33,9 @@ module KoHTML
 {
 	interface KoHTMLView : KOffice::View
 	{
+	        slot void slotNewWindow();
+		slot void slotClose();
+
 		slot void editCopy();
 		slot void editHTMLCode();
 		slot void editSettings();
