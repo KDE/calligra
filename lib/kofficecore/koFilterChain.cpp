@@ -24,84 +24,150 @@
 
 namespace KOffice {
 
-    Edge::Edge(Vertex* vertex, unsigned int weight) : m_vertex(vertex), m_weight(weight) {
+    Edge::Edge( Vertex* vertex, const QString& libName, unsigned int weight ) :
+        m_vertex( vertex ), m_libName( libName ), m_weight( weight )
+    {
     }
 
-    void Edge::relax(unsigned int vertexWeight, PriorityQueue<Vertex>& queue) {
-        if(!m_vertex)
+    void Edge::relax( unsigned int vertexWeight, PriorityQueue<Vertex>& queue )
+    {
+        if ( !m_vertex )
             return;
-        m_vertex->setKey(vertexWeight+m_weight);
-        queue.keyDecreased(m_vertex); // maintain the heap property
+        m_vertex->setKey( vertexWeight + m_weight );
+        queue.keyDecreased( m_vertex ); // maintain the heap property
     }
 
-    void Edge::dump(const QCString& indent) const {
-        if(m_vertex)
+    void Edge::dump( const QCString& indent ) const
+    {
+        if ( m_vertex )
             kdDebug() << indent << "Edge -> '" << m_vertex->mimeType() << "' (" << m_weight << ")" << endl;
         else
             kdDebug() << indent << "Edge -> '(null)' (" << m_weight << ")" << endl;
     }
 
 
-    Vertex::Vertex(const QCString& mimeType) : m_predecessor(0), m_mimeType(mimeType),
-        m_weight(UINT_MAX), m_index(-1) {
-        m_edges.setAutoDelete(true);  // we take ownership of added edges
+    Vertex::Vertex( const QCString& mimeType ) : m_predecessor( 0 ), m_mimeType( mimeType ),
+        m_weight( UINT_MAX ), m_index( -1 )
+    {
+        m_edges.setAutoDelete( true );  // we take ownership of added edges
     }
 
-    void Vertex::addEdge(const Edge* edge) {
-        if(!edge || edge->weight()==0)
+    void Vertex::addEdge( const Edge* edge )
+    {
+        if ( !edge || edge->weight()==0)
             return;
         m_edges.append(edge);
     }
 
-    const Edge* Vertex::findEdge(const Vertex* vertex) const {
-        if(!vertex)
+    const Edge* Vertex::findEdge( const Vertex* vertex ) const
+    {
+        if ( !vertex )
             return 0;
-        QPtrListIterator<Edge> it(m_edges);
-        for( ; it.current(); ++it) {
-            if(it.current()->vertex()==vertex)
-                return it.current();
+        const Edge* edge = 0;
+        QPtrListIterator<Edge> it( m_edges );
+        for ( ; it.current(); ++it ) {
+            if ( it.current()->vertex() == vertex ) {
+                edge = it.current(); // we found an edge...
+                ++it;
+                break;
+            }
         }
-        return 0; // not found here...
+
+        // Okay, we didn't find any matching edge
+        if ( !edge )
+            return 0;
+
+        // Apparently we found one - is there a lighter one left?
+        for ( ; it.current(); ++it ) {
+            if ( it.current()->vertex() == vertex &&
+                 it.current()->weight() < edge->weight() )
+                edge = it.current(); // we found a lighter one.. keep on trying
+        }
+        return edge;
     }
 
-    void Vertex::relaxVertices(PriorityQueue<Vertex>& queue) {
-        for(Edge *e=m_edges.first(); e; e=m_edges.next())
-            e->relax(m_weight, queue);
+    void Vertex::relaxVertices( PriorityQueue<Vertex>& queue )
+    {
+        for ( Edge *e = m_edges.first(); e; e = m_edges.next() )
+            e->relax( m_weight, queue );
     }
 
-    void Vertex::dump(const QCString& indent) const {
+    void Vertex::dump( const QCString& indent ) const
+    {
         kdDebug() << indent << "Vertex: " << m_mimeType << " (" << m_weight << "):" << endl;
-        QCString i(indent+"   ");
-        QPtrListIterator<Edge> it(m_edges);
-        for( ; it.current(); ++it)
-            it.current()->dump(i);
+        QCString i( indent + "   " );
+        QPtrListIterator<Edge> it( m_edges );
+        for ( ; it.current(); ++it )
+            it.current()->dump( i );
     }
 
 
-    Graph::Graph(const QCString& from) : m_from(from), m_graphValid(false) {
-        m_vertices.setAutoDelete(true);
+    Graph::Graph( const QCString& from ) : m_vertices( 42 ), m_from( from ), m_graphValid( false )
+    {
+        m_vertices.setAutoDelete( true );
         buildGraph();
     }
 
-    void Graph::buildGraph() {
-        QValueList<KoFilterEntry> filters=KoFilterEntry::query(); // no constraint here - we want *all* :)
-        kdDebug() << "##### found: " << filters.count() << endl;
+    void Graph::buildGraph()
+    {
+        QValueList<KoFilterEntry> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
+        QValueList<KoFilterEntry>::ConstIterator it = filters.begin();
+        QValueList<KoFilterEntry>::ConstIterator end = filters.end();
+        for ( ; it!=end; ++it ) {
+            // First add the "starting points" to the dict
+            QStringList::ConstIterator importIt = ( *it ).import.begin();
+            QStringList::ConstIterator importEnd = ( *it ).import.end();
+            for ( ; importIt!=importEnd; ++importIt ) {
+                QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
+                // already there?
+                if ( !m_vertices[ key ] )
+                    m_vertices.insert( key, new Vertex( key ) );
+            }
+
+            // Now add end vertices (if neccessary) and create edges from
+            // the start vertex
+            QStringList::ConstIterator exportIt = ( *it ).export_.begin();
+            QStringList::ConstIterator exportEnd = ( *it ).export_.end();
+            for ( ; exportIt!=exportEnd; ++exportIt ) {
+                // First make sure the export vertex is in place
+                QCString key = ( *exportIt ).latin1();  // latin1 is okay here
+                Vertex* exp = m_vertices[ key ];
+                if ( !exp ) {
+                    exp = new Vertex( key );
+                    m_vertices.insert( key, exp );
+                }
+                // Then create the appropriate edges
+                importIt = ( *it ).import.begin();
+                KService::Ptr service( ( *it ).service() );
+                QString library;
+                if ( service )
+                    library = service->library();
+                int weight = ( *it ).weight;
+                for ( ; importIt!=importEnd; ++importIt ) {
+                    Vertex* imp = m_vertices[ ( *importIt ).latin1() ]; // has to exist
+                    imp->addEdge( new Edge( exp, library, weight ) );
+                }
+            }
+        }
     }
 
-    void Graph::dumpAll() const {
+    void Graph::dumpAll() const
+    {
         dumpQueue();
         dumpDict();
     }
 
-    void Graph::dumpQueue() const {
+    void Graph::dumpQueue() const
+    {
         m_queue.dump();
     }
 
-    void Graph::dumpDict() const {
+    void Graph::dumpDict() const
+    {
         kdDebug() << "+++++++++ Graph::dumpDict +++++++++" << endl;
-        QAsciiDictIterator<Vertex> it(m_vertices);
-        for( ; it.current(); ++it)
-            it.current()->dump("   ");
+        QAsciiDictIterator<Vertex> it( m_vertices );
+        for ( ; it.current(); ++it )
+            it.current()->dump( "   " );
         kdDebug() << "+++++++++ Graph::dumpDict (done) +++++++++" << endl;
     }
 

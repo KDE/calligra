@@ -36,10 +36,11 @@ namespace KOffice {
 
     public:
         // creates a new edge to "vertex" with the given service (=filter).
-        Edge(Vertex* vertex, unsigned int weight);
+        Edge( Vertex* vertex, const QString& libName, unsigned int weight );
         ~Edge() {}
 
         unsigned int weight() const { return m_weight; }
+        QString libName() const { return m_libName; }
         const Vertex* vertex() const { return m_vertex; }
 
         // Relaxes the "connected" vertex (i.e. the weight of the
@@ -47,16 +48,17 @@ namespace KOffice {
         // As this will only be called once we calculate the weight
         // of the edge "on the fly"
         // Note: We have to pass the queue as we have to call keyDecreased :}
-        void relax(unsigned int vertexWeight, PriorityQueue<Vertex>& queue);
+        void relax( unsigned int vertexWeight, PriorityQueue<Vertex>& queue );
 
         // debugging
-        void dump(const QCString& indent) const;
+        void dump( const QCString& indent ) const;
 
     private:
-        Edge(const Edge& rhs);
-        Edge& operator=(const Edge& rhs);
+        Edge( const Edge& rhs );
+        Edge& operator=( const Edge& rhs );
 
         Vertex* m_vertex;
+        QString m_libName;
         unsigned int m_weight;
     };
 
@@ -64,40 +66,40 @@ namespace KOffice {
     class Vertex {
 
     public:
-        Vertex(const QCString& mimeType);
+        Vertex( const QCString& mimeType );
         ~Vertex() {}
 
         QCString mimeType() const { return m_mimeType; }
 
         // current "weight" of the vertex - will be "relaxed" when
         // running the shortest path algorithm
-        void setKey(unsigned int key) { if(m_weight > key) m_weight=key; }
+        void setKey( unsigned int key ) { if ( m_weight > key ) m_weight=key; }
         unsigned int key() const { return m_weight; }
 
         // Position in the heap, needed for a fast keyDecreased operation
-        void setIndex(int index) { m_index=index; }
+        void setIndex( int index ) { m_index=index; }
         int index() const { return m_index; }
 
         // predecessor on the way from the source to the destination,
         // needed for the shortest path algorithm
-        void setPredecessor(const Vertex* predecessor) { m_predecessor=predecessor; }
+        void setPredecessor( const Vertex* predecessor ) { m_predecessor=predecessor; }
         const Vertex* predecessor() const { return m_predecessor; }
 
         // Adds an outgoing edge to the vertex, transfers ownership
-        void addEdge(const Edge* edge);
-        // Finds the edge pointing to the given vertex, if any (0 if not found)
-        const Edge* findEdge(const Vertex* vertex) const;
+        void addEdge( const Edge* edge );
+        // Finds the lightest(!) edge pointing to the given vertex, if any (0 if not found)
+        const Edge* findEdge( const Vertex* vertex ) const;
 
         // This method is called when we need to relax all "our" edges.
         // We need to pass the queue as we have to notify it about key changes - ugly :(
-        void relaxVertices(PriorityQueue<Vertex>& queue);
+        void relaxVertices( PriorityQueue<Vertex>& queue );
 
         // debugging
-        void dump(const QCString& indent) const;
+        void dump( const QCString& indent ) const;
 
     private:
-        Vertex(const Vertex& rhs);
-        Vertex& operator=(const Vertex& rhs);
+        Vertex( const Vertex& rhs );
+        Vertex& operator=( const Vertex& rhs );
 
         QPtrList<Edge> m_edges;
         const Vertex* m_predecessor;
@@ -110,7 +112,7 @@ namespace KOffice {
     class Graph {
 
     public:
-        Graph(const QCString& from);
+        Graph( const QCString& from );
         ~Graph() {}
 
         bool isValid() const { return m_graphValid; }
@@ -121,8 +123,8 @@ namespace KOffice {
         void dumpDict() const;
 
     private:
-        Graph(const Graph& rhs);
-        Graph& operator=(const Graph& rhs);
+        Graph( const Graph& rhs );
+        Graph& operator=( const Graph& rhs );
 
         void buildGraph();
 
@@ -142,9 +144,9 @@ public:
     // find a better name for the enum
     enum Status { OK, StupidError, FileNotFound };
 
-    KoFilterChain(KoFilterManager* manager);
-    KoFilterChain(const KoFilterChain& rhs);
-    KoFilterChain& operator=(const KoFilterChain& rhs);
+    KoFilterChain( KoFilterManager* manager );
+    KoFilterChain( const KoFilterChain& rhs );
+    KoFilterChain& operator=( const KoFilterChain& rhs );
     ~KoFilterChain();
 
     // starts the filtering process
@@ -153,6 +155,5 @@ public:
 private:
     //Q(Value?)List<filter>...
 };
-
 
 #endif // __koffice_filter_chain_h__
