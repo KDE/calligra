@@ -332,12 +332,14 @@ void KivioChangeStencilHAlignmentCommand::execute()
 {
     m_stencil->setHTextAlign( newAlign );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeStencilHAlignmentCommand::unexecute()
 {
     m_stencil->setHTextAlign( oldAlign );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 KivioChangeStencilVAlignmentCommand::KivioChangeStencilVAlignmentCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldAlign,  int _newAlign)
@@ -357,12 +359,14 @@ void KivioChangeStencilVAlignmentCommand::execute()
 {
     m_stencil->setHTextAlign( newAlign );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeStencilVAlignmentCommand::unexecute()
 {
     m_stencil->setHTextAlign( oldAlign );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 
@@ -383,12 +387,14 @@ void KivioChangeStencilFontCommand::execute()
 {
     m_stencil->setTextFont( newFont );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeStencilFontCommand::unexecute()
 {
     m_stencil->setTextFont( oldFont );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 KivioChangeStencilTextColorCommand::KivioChangeStencilTextColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor &_oldColor,  const QColor & _newColor)
@@ -408,12 +414,14 @@ void KivioChangeStencilTextColorCommand::execute()
 {
     m_stencil->setTextColor( newColor );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeStencilTextColorCommand::unexecute()
 {
     m_stencil->setTextColor( oldColor );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 
@@ -434,10 +442,12 @@ void KivioChangeLineWidthCommand::execute()
 {
     m_stencil->setLineWidth( newValue );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeLineWidthCommand::unexecute()
 {
     m_stencil->setLineWidth( oldValue );
     m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
