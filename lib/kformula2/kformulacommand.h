@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -123,7 +123,7 @@ protected:
     KFormulaContainer* getDocument() const { return doc; }
 
     // I would prefer to have private attributes.
-    
+
     /**
      * the list where all elements are stored that are removed
      * from the tree. Nearly each command needs it.
@@ -131,14 +131,14 @@ protected:
     QList<BasicElement> removedList;
 
 private:
-    
+
     void destroyUndoCursor() { delete undocursor; undocursor = 0; }
 
     /**
      * Saves the cursor that is used to execute the command.
      */
     void setExecuteCursor(FormulaCursor* cursor);
-    
+
     /**
      * Cursor position before the command execution.
      */
@@ -167,7 +167,7 @@ class KFCAdd : public KFormulaCommand
 public:
 
     KFCAdd(const QString &name, KFormulaContainer* document);
-    
+
     virtual void execute();
     virtual void unexecute();
 
@@ -191,12 +191,12 @@ public:
      */
     KFCRemoveSelection(KFormulaContainer* document,
                        BasicElement::Direction dir = BasicElement::beforeCursor);
- 
+
     virtual void execute();
     virtual void unexecute();
 
 private:
-    BasicElement::Direction dir;   
+    BasicElement::Direction dir;
 };
 
 
@@ -210,7 +210,7 @@ public:
 
     KFCReplace(const QString &name, KFormulaContainer* document);
     ~KFCReplace();
-    
+
     virtual void execute();
     virtual void unexecute();
 
@@ -218,7 +218,7 @@ private:
 
     /**
      * The command that needs to be executed first if there is a selection.
-     */ 
+     */
     KFCRemoveSelection* removeSelection;
 };
 
@@ -236,7 +236,7 @@ public:
      */
     KFCRemove(KFormulaContainer* document, BasicElement::Direction dir);
     ~KFCRemove();
-    
+
     virtual void execute();
     virtual void unexecute();
 
@@ -254,7 +254,7 @@ private:
      */
     FormulaCursor::CursorData* simpleRemoveCursor;
 
-    BasicElement::Direction dir;   
+    BasicElement::Direction dir;
 };
 
 
@@ -271,7 +271,7 @@ public:
     virtual void unexecute();
 
     virtual bool isSenseless() { return element == 0; }
-    
+
 private:
     BasicElement* element;
 
@@ -293,7 +293,7 @@ public:
     virtual void unexecute();
 
     void setElement(BasicElement* e) { element = e; }
-    
+
 private:
 
     /**
@@ -348,7 +348,7 @@ public:
 
     virtual void execute();
     virtual void unexecute();
-    
+
 private:
     KFCAddGenericIndex addIndex;
 };

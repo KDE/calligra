@@ -218,13 +218,13 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
 
     if (!isEmpty()) {
         int mySize = parentSize - relativeSize;
-        uint count = children.count();
-        for (uint i = 0; i < count; i++) {
-            BasicElement* child = children.at(i);
-            if (!child->isPhantom()) {
-                child->draw(painter, r, context, mySize, myPos);
-            }
-            // Debug
+	
+	BasicElement* child;
+	for ( child=children.first(); child!=0; child=children.next() ){
+	    if (!child->isPhantom()) {
+		child->draw(painter, r, context, mySize, myPos);
+	    }
+	    // Debug
             //painter.setPen(Qt::green);
             //painter.drawRect(parentOrigin.x() + getX(), parentOrigin.y() + getY(),
             //                 getWidth(), getHeight());

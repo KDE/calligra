@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -31,7 +31,6 @@
  */
 class MatrixElement : public BasicElement {
 public:
-
     MatrixElement(uint rows = 1, uint columns = 1, BasicElement* parent = 0);
     ~MatrixElement();
 
@@ -50,7 +49,7 @@ public:
     // fonts, spaces and such.
     // It is essential to calculate elements size with the same context
     // before you draw.
-    
+
     /**
      * Calculates our width and height and
      * our children's parentPosition.
@@ -66,15 +65,15 @@ public:
                       const ContextStyle& context,
                       int parentSize, const QPoint& parentOrigin);
 
-    
+
     // navigation
-    // 
+    //
     // The elements are responsible to handle cursor movement themselves.
     // To do this they need to know the direction the cursor moves and
     // the element it comes from.
     //
     // The cursor might be in normal or in selection mode.
-    
+
     /**
      * Enters this element while moving to the left starting inside
      * the element `from'. Searches for a cursor position inside
@@ -109,12 +108,18 @@ public:
      */
     virtual void goInside(FormulaCursor* cursor);
 
+    /**
+     * We define the Main Child of a matrix to be the first row/column.
+     **/
+    // If there is a main child we must provide the insert/remove semantics.
+    //virtual SequenceElement* getMainChild();
+
     // Save&load
     //virtual QDomElement getElementDom(QDomDocument *doc);
     //virtual bool buildFromDom(QDomElement *elem);
 
     /**
-     * @returns the latex representation of the element and 
+     * @returns the latex representation of the element and
      * of the element's children
      */
     virtual QString toLatex();
@@ -122,17 +127,17 @@ public:
 protected:
 
     //Save/load support
-    
+
     /**
      * Returns the tag name of this element type.
      */
     virtual QString getTagName() const { return "MATRIX"; }
-    
+
     /**
      * Appends our attributes to the dom element.
      */
     virtual void writeDom(QDomElement& element);
-    
+
     /**
      * Reads our attributes from the element.
      * Returns false if it failed.
@@ -145,7 +150,7 @@ protected:
      * Returns false if it failed.
      */
     virtual bool readContentFromDom(QDomNode& node);
-    
+
 private:
 
     uint getRows() { return content.count(); }
@@ -160,7 +165,7 @@ private:
      * Returns true if the element was found. false otherwise.
      */
     bool searchElement(BasicElement* element, uint& row, uint& column);
-        
+
     /**
      * The elements we contain.
      */

@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -38,7 +38,7 @@ class KFormulaWidget;
  */
 class KFormulaDocument : public QObject {
     Q_OBJECT
-    
+
 public:
 
     /**
@@ -55,7 +55,7 @@ public:
      * @param history the undo stack to use. Creates its own if zero.
      */
     KFormulaDocument(KCommandHistory* history = 0);
-    
+
     ~KFormulaDocument();
 
     /**
@@ -68,7 +68,7 @@ public:
      * Make sure to recalc all formulas after you called this.
      */
     void setResolution(double zX, double zY) { contextStyle.setResolution(zX, zY); }
-    
+
     /**
      * Creates a new formula. The whole idea of the formula document
      * is to contain formulas.
@@ -109,6 +109,7 @@ public:
     KAction* getAddProductAction()       { return addProductAction; }
     KAction* getAddIntegralAction()      { return addIntegralAction; }
     KAction* getAddMatrixAction()        { return addMatrixAction; }
+    KAction* getAddOneByTwoMatrixAction(){ return addOneByTwoMatrixAction; }
     KAction* getAddUpperLeftAction()     { return addUpperLeftAction; }
     KAction* getAddLowerLeftAction()     { return addLowerLeftAction; }
     KAction* getAddUpperRightAction()    { return addUpperRightAction; }
@@ -136,6 +137,7 @@ public slots:
     void addProduct();
     void addSum();
     void addMatrix();
+    void addOneByTwoMatrix();
     void addLowerLeftIndex();
     void addUpperLeftIndex();
     void addLowerRightIndex();
@@ -159,9 +161,9 @@ private:
      * @returns whether we have a formula that can get requests.
      */
     bool hasFormula();
-    
+
     // We know our actions, maybe a client is interessted...
-    
+
     KAction* addBracketAction;
     KAction* addSBracketAction;
     KAction* addCBracketAction;
@@ -172,6 +174,7 @@ private:
     KAction* addProductAction;
     KAction* addIntegralAction;
     KAction* addMatrixAction;
+    KAction* addOneByTwoMatrixAction;
     KAction* addUpperLeftAction;
     KAction* addLowerLeftAction;
     KAction* addUpperRightAction;
@@ -186,7 +189,7 @@ private:
 
     char leftBracketChar;
     char rightBracketChar;
-    
+
     /**
      * The active formula.
      */

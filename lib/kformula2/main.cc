@@ -35,7 +35,7 @@ protected:
 void TestWidget::keyPressEvent(QKeyEvent* event)
 {
     KFormulaContainer* document = getDocument();
-    
+
     //int action = event->key();
     int state = event->state();
     //MoveFlag flag = movementFlag(state);
@@ -48,6 +48,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_4: document->addRoot(); return;
             case Qt::Key_5: document->addFraction(); return;
             case Qt::Key_6: document->addMatrix(); return;
+	    case Qt::Key_7: document->addOneByTwoMatrix(); return;
             case Qt::Key_A: slotSelectAll(); return;
             case Qt::Key_C: document->copy(); return;
             case Qt::Key_D: document->replaceElementWithMainChild(BasicElement::afterCursor); return;
@@ -85,7 +86,7 @@ void ScrollView::addChild(KFormulaWidget* c, int x, int y)
     connect(child, SIGNAL(cursorChanged(bool, bool)),
             this, SLOT(cursorChanged(bool, bool)));
 }
-    
+
 void ScrollView::focusInEvent(QFocusEvent*)
 {
     if (child != 0) child->setFocus();
@@ -152,13 +153,13 @@ int main(int argc, char** argv)
 
     // to keep things interessting
     mw2a->setReadOnly(true);
-    
+
     int result = app.exec();
 
     delete container2;
     delete container1;
     delete document;
-    
+
     int destruct = BasicElement::getEvilDestructionCount();
     if (destruct != 0) {
         cerr << "BasicElement::EvilDestructionCount: " << destruct << endl;

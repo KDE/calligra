@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -66,7 +66,7 @@ public:
      *                 we only store a reference to it.
      */
     KFormulaContainer(KFormulaDocument* doc);
-    
+
     ~KFormulaContainer();
 
     /**
@@ -103,9 +103,9 @@ public:
      * the formula.
      * @return the content of the formula as a
      * QDomDocument.
-     */ 
+     */
     QDomDocument domData();
-    
+
     /**
      * Save function.
      * Save the formula into the specified file.
@@ -138,7 +138,7 @@ public:
     /**
      * @retruns a tex string for the formula
      */
-    QString texString(); 
+    QString texString();
 
     /**
      * Prints the formula.
@@ -158,7 +158,7 @@ public:
      * request any change from the formula.
      */
     void setActiveCursor(FormulaCursor* cursor);
-    
+
     /**
      * @returns the formula's size.
      */
@@ -178,7 +178,7 @@ public:
      * Recalc the formula.
      */
     void recalc();
-    
+
     /**
      * @returns true if there is no element.
      */
@@ -201,7 +201,7 @@ signals:
      * The cursor has been moved because of a change at the formula.
      */
     void cursorChanged(FormulaCursor* cursor);
-    
+
     /**
      * The formula has changed and needs to be redrawn.
      */
@@ -216,16 +216,16 @@ signals:
      * Tells the cursors that we have just loaded a new formula.
      */
     void formulaLoaded(FormulaElement*);
-    
+
     /**
      * A command has been executed.
      */
     void commandExecuted();
-    
-public slots:    
+
+public slots:
 
     // There are a lot of thing we can do with the formula.
-    
+
     void addText(QChar ch);
 
     void addLineBreak();
@@ -237,7 +237,7 @@ public slots:
     void addLineBracket()   { addBracket('|', '|'); }
     void addCornerBracket() { addBracket('<', '>'); }
     void addRoundBracket()  { addBracket('(', ')'); }
-    
+
     void addFraction();
     void addRoot();
 
@@ -247,6 +247,11 @@ public slots:
     void addSum()      { addSymbol(Sum); }
 
     void addMatrix(int rows, int columns);
+
+    /**
+     * Adds a one by two matrix (one column, two rows)
+     **/
+    void addOneByTwoMatrix();
 
     /**
      * Asks for a matrix size and inserts it.
@@ -286,9 +291,9 @@ public slots:
      * Adds an upper index to the current element if possible.
      */
     void addGenericUpperIndex();
-    
+
     void remove(BasicElement::Direction = BasicElement::beforeCursor);
-    
+
     void replaceElementWithMainChild(BasicElement::Direction = BasicElement::beforeCursor);
 
     /**
@@ -300,7 +305,7 @@ public slots:
      * Converts the current character into a greek letter.
      */
     void makeGreek();
-    
+
     /**
      * Insert data from the clipboard.
      */
@@ -319,7 +324,7 @@ public slots:
 protected:
 
     KCommandHistory* getHistory() const;
-    
+
 private:
 
     /**
@@ -344,7 +349,7 @@ private:
      * If true we need to recalc the formula.
      */
     bool dirty;
-    
+
     /**
      * The element tree's root.
      */
@@ -364,7 +369,7 @@ private:
      * The document we belong to.
      */
     KFormulaDocument* document;
-    
+
     // debug
     friend class TestFormulaCursor;
     friend class TestIndexElement;

@@ -239,6 +239,16 @@ void KFormulaContainer::addMatrix(int rows, int columns)
     execute(command);
 }
 
+
+void KFormulaContainer::addOneByTwoMatrix()
+{
+    if (!hasValidCursor())
+        return;
+    KFCAddReplacing* command = new KFCAddReplacing(i18n("Add 1x2 matrix"), this);
+    command->setElement(new MatrixElement(2,1));
+    execute(command);
+}
+
 void KFormulaContainer::addMatrix()
 {
     MatrixDialog* dialog = new MatrixDialog(0);

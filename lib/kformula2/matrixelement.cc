@@ -22,6 +22,7 @@
 #include <qarray.h>
 #include <qpainter.h>
 
+#include "formulaelement.h"
 #include "formulacursor.h"
 #include "matrixelement.h"
 #include "sequenceelement.h"
@@ -388,6 +389,13 @@ void MatrixElement::goInside(FormulaCursor* cursor)
 {
     getElement(0, 0)->goInside(cursor);
 }
+
+
+// If there is a main child we must provide the insert/remove semantics.
+// SequenceElement* MatrixElement::getMainChild()
+// {
+//     return content.at(0)->at(0);
+// }
 
 
 bool MatrixElement::searchElement(BasicElement* element, uint& row, uint& column)

@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -80,7 +80,7 @@ void KFormulaCommand::setUnexecuteCursor(FormulaCursor* cursor)
 }
 
 
-// ******  Generic Add command 
+// ******  Generic Add command
 
 KFCAdd::KFCAdd(const QString &name, KFormulaContainer *document)
         : KFormulaCommand(name, document)
@@ -109,7 +109,7 @@ void KFCAdd::unexecute()
 
 
 
-// ******  Remove selection command 
+// ******  Remove selection command
 
 KFCRemoveSelection::KFCRemoveSelection(KFormulaContainer *document,
                                        BasicElement::Direction direction)
@@ -145,7 +145,7 @@ KFCReplace::~KFCReplace()
 {
     delete removeSelection;
 }
-    
+
 void KFCReplace::execute()
 {
     if (getActiveCursor()->isSelection() && (removeSelection == 0)) {
@@ -199,7 +199,7 @@ void KFCRemove::unexecute()
     if (element != 0) {
         cursor->replaceSelectionWith(element);
         element = 0;
-        
+
         cursor->setCursorData(simpleRemoveCursor);
         delete simpleRemoveCursor;
         simpleRemoveCursor = 0;
@@ -243,7 +243,7 @@ void KFCRemoveEnclosing::unexecute()
 }
 
 
-// ******  Add root, bracket etc command 
+// ******  Add root, bracket etc command
 
 KFCAddReplacing::KFCAddReplacing(const QString &name, KFormulaContainer* document)
         : KFormulaCommand(name, document), element(0)
@@ -276,7 +276,7 @@ void KFCAddReplacing::unexecute()
 }
 
 
-// ******  Add matrix command 
+// ******  Add matrix command
 
 KFCAddMatrix::KFCAddMatrix(KFormulaContainer* document, int r, int c)
         : KFCReplace(i18n("Add matrix"), document)
@@ -291,6 +291,7 @@ void KFCAddMatrix::execute()
     FormulaCursor* cursor = getActiveCursor();
     cursor->goInsideElement(matrix);
 }
+
 
 // ******  Add index command
 

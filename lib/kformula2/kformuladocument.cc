@@ -6,12 +6,12 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -35,7 +35,7 @@ KFormulaDocument::KFormulaDocument(KActionCollection* collection,
 {
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
-    
+
     if (his == 0) {
         history = new KCommandHistory(collection);
         ownHistory = true;
@@ -143,6 +143,13 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                     this, SLOT(addMatrix()),
                                     collection, "formula_addmatrix");
 
+    addOneByTwoMatrixAction   = new KAction(i18n("Add 1x2 matrix"),
+                                    "one_by_two_matrix",
+                                    0,
+                                    this, SLOT(addOneByTwoMatrix()),
+                                    collection, "formula_add_one_by_two_matrix");
+
+     
     addUpperLeftAction  = new KAction(i18n("Add upper left index"),
                                       "lsup",
                                       0,
@@ -182,7 +189,7 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                   CTRL + Key_G,
                                   this, SLOT(makeGreek()),
                                   collection, "formula_makegreek");
-    
+
     QStringList delimiter;
     delimiter.append(QString("("));
     delimiter.append(QString("["));
@@ -307,6 +314,14 @@ void KFormulaDocument::addMatrix()
         formula->addMatrix();
     }
 }
+
+void KFormulaDocument::addOneByTwoMatrix()
+{
+    if (hasFormula()) {
+	formula->addOneByTwoMatrix();
+    }
+}
+
 
 void KFormulaDocument::addLowerLeftIndex()
 {
