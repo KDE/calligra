@@ -23,6 +23,7 @@ public:
 	virtual void resize( int w, int h );
 	virtual void begin();
 	virtual void end();
+	virtual void blit( const QRect & ) {}
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & );

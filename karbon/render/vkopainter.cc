@@ -107,6 +107,15 @@ VKoPainter::end()
 }
 
 void
+VKoPainter::blit( const QRect &r )
+{
+	QPixmap pix( m_width, m_height );
+	xlib_draw_rgb_32_image( pix.handle(), gc, r.x(), r.y(), r.width(), r.height(),
+							XLIB_RGB_DITHER_NONE, m_buffer + (r.x() * 4) + (r.y() *  m_width * 4), m_width * 4 );
+	bitBlt( m_target, r.x(), r.y(), &pix, r.x(), r.y(), r.width(), r.height() );
+}
+
+void
 VKoPainter::setWorldMatrix( const QWMatrix &mat )
 {
 	m_matrix = mat;

@@ -15,6 +15,7 @@ class QWidget;
 class QColor;
 class QPen;
 class QBrush;
+class QRect;
 
 class VStroke;
 class VFill;
@@ -31,6 +32,7 @@ public:
 	virtual void resize( int w, int h ) = 0;
 	virtual void begin() = 0;
 	virtual void end() = 0;
+	virtual void blit( const QRect & ) = 0;
 
 	// matrix manipulation
 	virtual void setWorldMatrix( const QWMatrix & ) = 0;
