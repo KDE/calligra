@@ -2439,10 +2439,11 @@ void KWView::changeZoomMenu( int zoom )
     QStringList lst;
     if(zoom>0)
     {
+        if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
+            lst << i18n( "Zoom to Width" );
+
         if ( state )
         {
-            if( lst.contains( i18n( "Zoom to Width" ) ) == 0 )
-                lst << i18n( "Zoom to Width" );
             if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
                 lst << i18n( "Zoom to Whole Page" );
         }
@@ -2473,11 +2474,12 @@ void KWView::changeZoomMenu( int zoom )
     }
     else
     {
+        lst << i18n( "Zoom to Width" );
         if ( state )
         {
-            lst << i18n( "Zoom to Width" );
             lst << i18n( "Zoom to Whole Page" );
         }
+
         lst << "33%";
         lst << "50%";
         lst << "75%";
