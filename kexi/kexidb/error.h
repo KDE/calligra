@@ -21,6 +21,10 @@
 #ifndef _KEXI_ERROR_H_
 #define _KEXI_ERROR_H_
 
+#include <qstring.h>
+
+/*! KexiDB error codes */
+
 #define ERR_NONE 0
 #define ERR_NO_NAME_SPECIFIED 9 //! used when name (e.g. for database) was not specified
 #define ERR_DRIVERMANAGER 10
@@ -49,4 +53,33 @@
 #define ERR_UPDATE_NULL_PKEY_FIELD 190 //!< null pkey field
 
 #define ERR_OTHER 0xffff //!< use this if you have not (yet?) the name for given error 
+
+
+namespace KexiDB {
+
+/*! This class contains a result information 
+ for various data manipulation operations, like cell/row updating/inserting. */
+class KEXIDATATABLE_EXPORT ResultInfo
+{
+	public:
+		ResultInfo()
+		{
+			success = true;
+			column = -1;
+		}
+		/*! Clears informatiuon to default values. */
+		void clear() {
+			success = true;
+			column = -1;
+			msg = QString::null;
+			desc = QString::null;
+		}
+	bool success; //!< result of the operation, true by default
+	QString msg, desc; //!< error message and detailed description, both empty by default
+	int column; //!< faulty column, -1 (the default) means: there is no faulty column
+};
+
+}
+
 #endif
+
