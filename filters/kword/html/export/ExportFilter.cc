@@ -588,9 +588,10 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
             }
             m_inList=false;
         }
-        if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
+        if ( (layout.counter.numbering == CounterData::NUM_CHAPTER) 
+            && (layout.counter.depth<6) )
         {
-            strTag=QString("h%1").arg(layout.counter.depth + 1);
+            strTag=QString("h%1").arg(layout.counter.depth + 1); // H1 ... H6
         }
         else
         {
@@ -839,8 +840,9 @@ bool HtmlWorker::doFullDefineStyle(LayoutData& layout)
 {
     kdDebug(30503) << "Style: " << layout.styleName << endl;
 
-    if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
-    {
+    if ( (layout.counter.numbering == CounterData::NUM_CHAPTER)
+        && (layout.counter.depth<6) )
+    {   // H1 ... H6
         *m_streamOut << "H" << QString::number(layout.counter.depth+1,10);
     }
 
