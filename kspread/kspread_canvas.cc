@@ -846,17 +846,7 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
   QRect newCellArea;
   KSpreadCell* destinationCell = table->cellAt(cell);
 
-  if (destinationCell->isObscuringForced() ||
-      (destinationCell->isObscured() && selectionInfo()->singleCellSelection()))
-  {
-    destinationCell = destinationCell->obscuringCells().getFirst();
-    newCellArea = QRect(QPoint(destinationCell->column(),
-                               destinationCell->row()), cell);
-  }
-  else
-  {
-    newCellArea = QRect(cell, cell);
-  }
+  newCellArea = QRect(cell, cell);
 
   if (m_bChoose)
   {
@@ -886,8 +876,8 @@ void KSpreadCanvas::extendCurrentSelection(QPoint cell)
     if (newSelection.width() == 1 && newSelection.height() == 1)
     {
       KSpreadCell* testCell = table->cellAt(newSelection.topLeft());
-      newSelection.setRight(testCell->column() + testCell->extraXCells());
-      newSelection.setBottom(testCell->row() + testCell->extraYCells());
+      newSelection.setRight(newSelection.left() + testCell->extraXCells());
+      newSelection.setBottom(newSelection.top() + testCell->extraYCells());
     }
     selectionInfo()->setSelection(newSelection, cell, table);
   }
