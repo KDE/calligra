@@ -2259,6 +2259,8 @@ public:
   unsigned parentStyle;
   unsigned horizontalAlignment;
   unsigned verticalAlignment;
+  unsigned rotationAngle;
+  bool stackedLetters;
 };
 
 XFRecord::XFRecord():  Record()
@@ -2271,6 +2273,8 @@ XFRecord::XFRecord():  Record()
   d->parentStyle = 0;
   d->horizontalAlignment = Left;
   d->verticalAlignment = VCentered;
+  d->rotationAngle = 0;
+  d->stackedLetters = 0;
 }
 
 XFRecord::~XFRecord()
@@ -2293,6 +2297,8 @@ XFRecord& XFRecord::operator=( const XFRecord& xf )
   d->parentStyle         = xf.parentStyle();
   d->horizontalAlignment = xf.horizontalAlignment();
   d->verticalAlignment   = xf.verticalAlignment();
+  d->rotationAngle       = xf.rotationAngle();
+  d->stackedLetters      = xf.stackedLetters();
   return *this;
 }
 
@@ -2397,6 +2403,26 @@ const char* XFRecord::verticalAlignmentAsString() const
   return result;
 }
 
+unsigned XFRecord::rotationAngle() const
+{
+  return d->rotationAngle;
+}
+
+void XFRecord::setRotationAngle( unsigned angle )
+{
+  d->rotationAngle = angle;
+}
+
+bool XFRecord::stackedLetters() const
+{
+  return d->stackedLetters;
+}
+
+void XFRecord::setStackedLetters( bool stacked )
+{
+  d->stackedLetters = stacked;
+}
+
 void XFRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 20 ) return;
@@ -2414,12 +2440,18 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
   setHorizontalAlignment( align & 0x07 );
   setVerticalAlignment( align >> 4 );
   
+  unsigned angle = data[7];
+  setRotationAngle( ( angle != 255 ) ? ( angle & 0x7f ) : 0 );
+  setStackedLetters( angle == 255 ); 
 }
 
 void XFRecord::dump( std::ostream& out ) const
 {
   out << "XF" << std::endl;
-  out << " Hor-Align : " << horizontalAlignmentAsString() << std::endl;
+  out << "       Hor-Align : " << horizontalAlignmentAsString() << std::endl;
+  out << "       Ver-Align : " << verticalAlignmentAsString() << std::endl;
+  out << "       Rotation  : " << rotationAngle() << std::endl;
+  out << " Stacked Letters : " << ( stackedLetters() ? "yes" : "no" ) << std::endl;
 }
 
 //=============================================

@@ -2289,6 +2289,39 @@ public:
   const char* verticalAlignmentAsString() const; 
   
   /**
+   * Returns the rotation angle of the text. If it is between 1 to 90,
+   * the text is rotated 1 to 90 degrees counterclockwise. If it is between
+   * 91 to 180, the text is rotated 1 to 90 degrees clockwise.
+   *
+   * \sa setRotationAngle
+   */
+  unsigned rotationAngle() const;
+  
+  /**
+   * Sets the rotation angle of the text. If it is between 1 to 90,
+   * the text is rotated 1 to 90 degrees counterclockwise. If it is between
+   * 91 to 180, the text is rotated 1 to 90 degrees clockwise.
+   *
+   * \sa setRotationAngle
+   */
+  void setRotationAngle( unsigned angle );
+  
+  /**
+   * Returns true if the letters for text are not rotated, but
+   * instead stacked top-to-bottom.
+   *
+   * \sa setStackedLetters
+   */
+  bool stackedLetters() const;
+  
+  /**
+   * Sets whether the letters for text should be stacked top-to-bottom.
+   *
+   * \sa stackedLetters
+   */
+  void setStackedLetters( bool stacked );
+  
+  /**
    \reimpl
    */
   virtual const char* name(){ return "XF"; }
