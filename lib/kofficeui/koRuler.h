@@ -86,7 +86,7 @@ class KoRulerPrivate;
  * KoRuler is the horizontal or vertical ruler, to be used around
  * the drawing area of most KOffice programs.
  *
- * It shows the graduated ruler with numbering, in any of the 3 base units (mm/pt/inch),
+ * It shows the graduated ruler with numbering, in any of the base units (like mm/pt/inch),
  * and supports zooming, tabulators, paragraph indents, showing the mouse position, etc.
  *
  * It also offers a popupmenu upon right-clicking, for changing the unit,
@@ -112,8 +112,9 @@ public:
     ~KoRuler();
 
     /**
-     * Set the unit to be used. Currently supported are "mm", "pt" and "inch".
-     * You should use the KoUnit::Unit variant instead.
+     * Set the unit to be used. The unit is specified using text as defined in KoUnit, for
+	 * example "mm", "pt" or "inch".
+	 * You should use the KoUnit::Unit variant instead.
      */
     void setUnit( const QString& unit );
     /**
