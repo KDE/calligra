@@ -27,7 +27,7 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <klibloader.h>
 #include <kservice.h>
 #include <kmessagebox.h>
@@ -375,7 +375,7 @@ void KoShellWindow::slotFileOpen()
 void KoShellWindow::slotFileClose()
 {
   // reimplemented to avoid closing the window when we have docs opened
-  
+
   // No docs at all ?
   if ( m_lstPages.count() == 0 )
     close(); // close window
@@ -435,10 +435,10 @@ bool KoShellWindow::queryClose()
   {
       currentDoc = (*m_activePage).m_pDoc;
       currentViews.append((*m_activePage).m_pView);
-    
+
       // This one is called by slotFileQuit and by the X button.
       // We have to check for unsaved docs...
-      
+
       QValueList<Page>::Iterator it = m_lstPages.begin();
       for( ; it != m_lstPages.end(); ++it )
       {
