@@ -186,26 +186,32 @@ FormManager::loadForm()
 void
 FormManager::saveForm()
 {
-	FormIO::saveForm(activeForm());
+	if (activeForm())
+		FormIO::saveForm(activeForm());
 }
 
 bool
 FormManager::isTopLevel(QWidget *w)
 {
-	return (w->parentWidget() == m_workspace);
+	return (w && w->parentWidget() == m_workspace);
 }
 
 void
 FormManager::deleteWidget()
 {
-	activeForm()->activeContainer()->deleteItem();
+	if (activeForm() && activeForm()->activeContainer())
+		activeForm()->activeContainer()->deleteItem();
 }
 
 void
 FormManager::copyWidget()
 {
+	if (!activeForm() || !activeForm()->objectTree())
+		return;
 	QWidget *w = activeForm()->selectedWidget();
 	ObjectTreeItem *it = activeForm()->objectTree()->lookup(w->name());
+	if (!it)
+		return;
 	if(!m_domDoc.firstChild().isNull())
 		m_domDoc.removeChild(m_domDoc.firstChild());
 	QDomElement parent = m_domDoc.toElement();
@@ -240,7 +246,8 @@ FormManager::setInsertPoint(const QPoint &p)
 void
 FormManager::debugTree()
 {
-	activeForm()->objectTree()->debug();
+	if (activeForm() && activeForm()->objectTree())
+		activeForm()->objectTree()->debug();
 }
 
 }

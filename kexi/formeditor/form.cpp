@@ -110,6 +110,8 @@ Container*
 Form::activeContainer()
 {
 	ObjectTreeItem *it = m_topTree->lookup(m_selWidget->name());
+	if (!it)
+		return 0;
 	if(it->container())
 		return it->container();
 	else
@@ -119,6 +121,8 @@ Form::activeContainer()
 void
 Form::pasteWidget(QDomElement &widg, QPoint pos)
 {
+	if (!activeContainer())
+		return;
 	fixNames(widg);
 	if(!pos.isNull())
 		fixPos(widg, pos);
