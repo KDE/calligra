@@ -72,8 +72,8 @@ protected:
     void leftDoubleClick(QPoint);
 
     bool startResizing(QPoint);
-    bool startDragging(QPoint);
-    bool startCustomDragging(QPoint);
+    bool startDragging(QPoint, bool);
+    bool startCustomDragging(QPoint, bool);
     bool startRubberBanding(QPoint);
 
     void continueDragging(QPoint);

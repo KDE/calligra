@@ -69,7 +69,7 @@ public:
     bool loadXML( const QDomElement & );
     QDomElement saveXML( QDomDocument & );
 
-    KivioStencil *checkForStencil( KivioPoint *, int *, float );
+    KivioStencil *checkForStencil( KivioPoint *, int *, float, bool );
 
     void printContent( KivioPainter& painter );
     void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0, float zoom );

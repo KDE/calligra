@@ -125,7 +125,7 @@ public:
   int generateStencilIds( int );
 
 
-  KivioStencil *checkForStencil( KivioPoint *, int *, float);
+  KivioStencil *checkForStencil( KivioPoint *, int *, float, bool);
 
 
   KivioLayer *curLayer() { return m_pCurLayer; }

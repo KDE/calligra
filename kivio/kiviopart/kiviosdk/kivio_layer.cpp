@@ -315,7 +315,7 @@ void KivioLayer::paintSelectionHandles( KivioPainter& painter, const QRect&, boo
     }
 }
 
-KivioStencil *KivioLayer::checkForStencil( KivioPoint *pPoint, int *collisionType, float threshhold )
+KivioStencil *KivioLayer::checkForStencil( KivioPoint *pPoint, int *collisionType, float threshhold, bool selectedOnly )
 {
     KivioStencil *pStencil;
     int colType;
@@ -323,12 +323,18 @@ KivioStencil *KivioLayer::checkForStencil( KivioPoint *pPoint, int *collisionTyp
     pStencil = m_pStencilList->last();
     while( pStencil )
     {
-        if( (colType = pStencil->checkForCollision( pPoint, threshhold )) != kctNone )
-        {
-            // Assign the collision type and return
-            *collisionType = colType;
-            return pStencil;
-        }
+       // If we are only supposed to check the selected stencils, then only do that.  Otherwise
+       // check them all.
+       if( (selectedOnly==true && pStencil->isSelected()==true) ||
+	   (selectedOnly==false) )
+       {
+	  if( (colType = pStencil->checkForCollision( pPoint, threshhold )) != kctNone )
+	  {
+	     // Assign the collision type and return
+	     *collisionType = colType;
+	     return pStencil;
+	  }
+       }
 
         pStencil = m_pStencilList->prev();
     }

@@ -165,8 +165,8 @@ void SelectTool::mousePress(QPoint pos)
     m_lastPoint = m_pCanvas->mapFromScreen(pos);
     m_origPoint = m_lastPoint;
 
-    // Check if we nailed a custom drag point
-    if( startCustomDragging(pos)==true )
+    // Check if we nailed a custom drag point on a selected stencil
+    if( startCustomDragging(pos, true)==true )
     {
         m_mode = stmCustomDragging;
         return;
@@ -179,8 +179,23 @@ void SelectTool::mousePress(QPoint pos)
         return;
     }
 
+
+    // Check if we nailed a custom drag point on any other stencil
+    if( startCustomDragging(pos, false)==true )
+    {
+       m_mode = stmCustomDragging;
+       return;
+    }
+
+    // Check if we can drag a stencil (only the selected stencils first)
+    if( startDragging(pos, true)==true )
+    {
+        m_mode = stmDragging;
+        return;
+    }
+
     // Check if we can drag a stencil
-    if( startDragging(pos)==true )
+    if( startDragging(pos, false)==true )
     {
         m_mode = stmDragging;
         return;
@@ -214,7 +229,7 @@ bool SelectTool::startRubberBanding(QPoint pos)
 /**
  * Tests if we can start dragging a stencil.
  */
-bool SelectTool::startDragging(QPoint pos)
+bool SelectTool::startDragging(QPoint pos, bool onlySelected)
 {
     KivioPage *pPage = m_pCanvas->activePage();
     KivioPoint kPoint;
@@ -228,7 +243,7 @@ bool SelectTool::startDragging(QPoint pos)
 
     kPoint.set( pagePoint.x, pagePoint.y );
 
-    pStencil = pPage->checkForStencil( &kPoint, &colType, threshhold );
+    pStencil = pPage->checkForStencil( &kPoint, &colType, threshhold, onlySelected );
 
     if( !pStencil )
         return false;
@@ -283,7 +298,7 @@ bool SelectTool::startDragging(QPoint pos)
     return true;
 }
 
-bool SelectTool::startCustomDragging(QPoint pos)
+bool SelectTool::startCustomDragging(QPoint pos, bool selectedOnly )
 {
     KivioPage *pPage = m_pCanvas->activePage();
     KivioPoint kPoint;
@@ -294,7 +309,7 @@ bool SelectTool::startCustomDragging(QPoint pos)
 
     kPoint.set( pagePoint.x, pagePoint.y );
 
-    pStencil = pPage->checkForStencil( &kPoint, &colType, 0.0 );
+    pStencil = pPage->checkForStencil( &kPoint, &colType, 0.0, selectedOnly );
 
     if( !pStencil || colType < kctCustom )
         return false;
@@ -677,10 +692,15 @@ void SelectTool::changeMouseCursor(QPoint pos)
 {
     TKPoint pagePoint = m_pCanvas->mapFromScreen(pos);
     KivioStencil *pStencil;
+    KivioPoint col;
+    float threshhold = 4.0 / m_pCanvas->zoom();
     int cursorType;
+    int colType;
 
     float x = pagePoint.x;
     float y = pagePoint.y;
+
+    col.set(x,y);
 
     // Iterate through all the selected stencils
     pStencil = m_pCanvas->activePage()->selectedStencils()->first();
@@ -728,7 +748,7 @@ void SelectTool::changeMouseCursor(QPoint pos)
                 float threshhold =  4.0 / m_pCanvas->zoom();
 
                 col.set(x,y);
-                if( pStencil->checkForCollision( &col, threshhold )==true )
+                if( pStencil->checkForCollision( &col, threshhold )!= kctNone )
                 {
                     m_pCanvas->setCursor( sizeAllCursor );
                     return;
