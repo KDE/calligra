@@ -1107,9 +1107,7 @@ void Page::keyPressEvent( QKeyEvent *e )
 	}
         else if ( m_currentTextObjectView )
         {
-            //kdDebug()<<"m_currentTextObjectView :"<<m_currentTextObjectView<<endl;
             m_currentTextObjectView->keyPressEvent( e );
-            //QApplication::sendEvent( dynamic_cast<KPTextObject*>( objectList()->at( editNum ) )->textObjectView(), e );
         }
     } else if ( mouseSelectedObject ) {
 	if ( e->state() & ControlButton ) {
@@ -3735,7 +3733,11 @@ void Page::exitEditMode()
         editNum = -1;
         if ( kpobject->getType() == OT_TEXT ) {
             //KPTextObject * kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-            m_currentTextObjectView=0L;
+            if(m_currentTextObjectView)
+            {
+                m_currentTextObjectView->clearSelection();
+                m_currentTextObjectView=0L;
+            }
             //kptextobject->deactivate( view->kPresenterDoc() );
             //kptextobject->textObjectView()->clearFocus();
 #if 0

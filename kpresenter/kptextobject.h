@@ -143,6 +143,8 @@ public:
     void dragMoveEvent( QDragMoveEvent *, const QPoint & );
     void dragLeaveEvent( QDragLeaveEvent * );
 
+    void clearSelection();
+
 public slots:
     void cut();
     void copy();

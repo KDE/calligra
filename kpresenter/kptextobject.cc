@@ -646,3 +646,11 @@ void KPTextView::keyPressEvent( QKeyEvent *e )
 {
     handleKeyPressEvent(e);
 }
+
+void KPTextView::clearSelection()
+{
+    if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+    {
+        textDocument()->removeSelection(QTextDocument::Standard );
+    }
+}
