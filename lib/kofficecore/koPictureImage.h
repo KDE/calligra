@@ -91,6 +91,11 @@ public:
     // No idea why it is a mutable, but as it was in KoImage I suppose that there is a reason.
     mutable QPixmap m_cachedPixmap;
     QSize m_cachedSize;
+    /**
+     * true, if the last cached image was done using fast mode.
+     * false, if the last cached image was done using slow mode.
+     */
+    bool m_cacheIsInFastMode;
 };
 
 #endif /* __koPictureImage_h__ */

@@ -31,7 +31,7 @@
 #include "koPictureBase.h"
 #include "koPictureImage.h"
 
-KoPictureImage::KoPictureImage(void)
+KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
 {
 }
 
@@ -56,9 +56,13 @@ bool KoPictureImage::isNull(void) const
 
 void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
 {
-    if (size==m_cachedSize)
+    if ((size==m_cachedSize)
+        && ((fastMode) || (!m_cacheIsInFastMode)))
     {
         // The cached pixmap has already the right size
+        // and:
+        // - we are in fast mode (We do not care if the re-size was done slowly previously)
+        // - the re-size was already done in slow mode
         return;
     }
 
@@ -70,13 +74,16 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
         s_useSlowResizeMode = group.readNumEntry( "HighResolution", 1 );
     }
     if ( s_useSlowResizeMode == 0 )
-        fastMode = true;
+    {
+        fastMode = true; // The user has forbidden to use slow mode!
+    }
 
     QImage image;
     // Use QImage::scale if we have fastMode==true
     if ( fastMode )
     {
         image = m_originalImage.smoothScale( size );
+        m_cacheIsInFastMode=true;
     }
     else
     {
@@ -100,6 +107,7 @@ void KoPictureImage::scaleAndCreatePixmap(const QSize& size, bool fastMode)
             //kdDebug() << "fixing size to " << size.width() << "x" << size.height() << endl;
         }
         QApplication::restoreOverrideCursor();
+        m_cacheIsInFastMode=false;
     }
 
     // Now create and cache the new pixmap
@@ -124,7 +132,9 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
         painter.save();
         painter.translate( x, y );
         painter.scale( xScale, yScale );
-         // Note that sx, sy, sw and sh are unused in this case. Not a problem, since it's about printing.
+        // Note that sx, sy, sw and sh are unused in this case. Not a problem, since it's about printing.
+        // Note 2: we do not cache the QPixmap. As we are printing, the next time we will probably
+        //   need again the screen version.
         painter.drawPixmap(0, 0, QPixmap(m_originalImage));
         painter.restore();
 
@@ -133,10 +143,8 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     {
         QSize screenSize( width, height );
         //kdDebug() << "KoPictureImage::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
-        if  (screenSize!=m_cachedSize)
-        {
-            scaleAndCreatePixmap(screenSize);
-        }
+        
+        scaleAndCreatePixmap(screenSize, fastMode);
 
         // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawPixmap
         // translates it to the (x,y) point -> we need (x+sx, y+sy).
