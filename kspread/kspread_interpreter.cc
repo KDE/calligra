@@ -953,7 +953,7 @@ static bool kspreadfunc_join_helper( KSContext& context, QValueList<KSValue::Ptr
     else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
       tmp+= (*it)->stringValue();
     else if( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
-      tmp+= tmp2.setNum((*it)->doubleValue());
+      tmp+= KGlobal::locale()->formatNumber((*it)->doubleValue());
     else
       return false;
   }
@@ -2512,15 +2512,16 @@ static QString kspreadfunc_create_complex( double real,double imag )
   QString tmp,tmp2;
   if(imag ==0)
         {
-        tmp=tmp.setNum( real);
-        return tmp;
+        return KGlobal::locale()->formatNumber( real);
         }
   if(real!=0)
-        tmp=tmp.setNum(real);
-  if (imag >0)
-        tmp=tmp+"+"+tmp2.setNum(imag)+"i";
+        tmp=KGlobal::locale()->formatNumber(real);
   else
-        tmp=tmp+tmp2.setNum(imag)+"i";
+	return KGlobal::locale()->formatNumber(imag)+"i";
+  if (imag >0)
+        tmp=tmp+"+"+KGlobal::locale()->formatNumber(imag)+"i";
+  else
+        tmp=tmp+KGlobal::locale()->formatNumber(imag)+"i";
   return tmp;
 
 }
@@ -2544,7 +2545,7 @@ static bool kspreadfunc_complex( KSContext& context )
         }
   QString tmp=kspreadfunc_create_complex(args[0]->doubleValue(),args[1]->doubleValue());
   bool ok;
-  double result=tmp.toDouble(&ok);
+  double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
         {
         context.setValue( new KSValue(result));
@@ -2587,7 +2588,7 @@ else  if( tmp.length()==2 )
         else if(tmp[0].isDigit())
                 { //5i
                 ok=true;
-                return tmp.left(1).toDouble();
+                return KGlobal::locale()->readNumber(tmp.left(1));
                 }
         else
                 {
@@ -2613,7 +2614,7 @@ else
                         else
                                 {
                                 tmpStr=tmp.mid(pos2,(pos1-pos2));
-                                val=tmpStr.toDouble(&ok);
+                                val=KGlobal::locale()->readNumber(tmpStr, &ok);
                                 if(!ok)
                                         val=0;
                                 return val;
@@ -2629,7 +2630,7 @@ else
                         else
                                 {
                                 tmpStr=tmp.mid(pos2,(pos1-pos2));
-                                val=tmpStr.toDouble(&ok);
+                                val=KGlobal::locale()->readNumber(tmpStr, &ok);
                                 if(!ok)
                                         val=0;
                                 return val;
@@ -2638,7 +2639,7 @@ else
                 else
                         {//15.55i
                         tmpStr=tmp.left(pos1);
-                        val=tmpStr.toDouble(&ok);
+                        val=KGlobal::locale()->readNumber(tmpStr, &ok);
                         if(!ok)
                                 val=0;
                         return val;
@@ -2660,7 +2661,7 @@ static bool kspreadfunc_complex_imag( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp=tmp.setNum( args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         {
@@ -2685,7 +2686,7 @@ QString tmp=str;
 QString tmpStr;
 if((pos1=tmp.find('i'))==-1)
         { //12.5
-        val=tmp.toDouble(&ok);
+        val=KGlobal::locale()->readNumber(tmp, &ok);
         if(!ok)
                 val=0;
         return val;
@@ -2695,7 +2696,7 @@ else
         if((pos2=tmp.findRev('-'))!=-1 && pos2!=0)
                 {
                 tmpStr=tmp.left(pos2);
-                val=tmpStr.toDouble(&ok);
+                val=KGlobal::locale()->readNumber(tmpStr, &ok);
                 if(!ok)
                         val=0;
                 return val;
@@ -2703,7 +2704,7 @@ else
         else if((pos2=tmp.findRev('+'))!=-1)
                 {
                 tmpStr=tmp.left(pos2);
-                val=tmpStr.toDouble(&ok);
+                val=KGlobal::locale()->readNumber(tmpStr, &ok);
                 if(!ok)
                         val=0;
                 return val;
@@ -2730,7 +2731,7 @@ static bool kspreadfunc_complex_real( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp=tmp.setNum( args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         tmp=args[0]->stringValue();
@@ -2790,7 +2791,7 @@ static bool kspreadfunc_imsum( KSContext& context )
   bool b = kspreadfunc_imsum_helper( context, context.value()->listValue(), result );
   bool ok;
   QString tmp;
-  double val=result.toDouble(&ok);
+  double val=KGlobal::locale()->readNumber(result, &ok);
   if(ok&&b)
         context.setValue( new KSValue( val ) );
   else if ( b )
@@ -2856,7 +2857,7 @@ static bool kspreadfunc_imsub( KSContext& context )
   bool b = kspreadfunc_imsub_helper( context, context.value()->listValue(), result );
   bool ok;
   QString tmp;
-  double val=result.toDouble(&ok);
+  double val=KGlobal::locale()->readNumber(result, &ok);
   if(ok&&b)
         context.setValue( new KSValue( val ) );
   else if ( b )
@@ -2923,7 +2924,7 @@ static bool kspreadfunc_improduct( KSContext& context )
   bool b = kspreadfunc_improduct_helper( context, context.value()->listValue(), result );
   bool ok;
   QString tmp;
-  double val=result.toDouble(&ok);
+  double val=KGlobal::locale()->readNumber(result, &ok);
   if(ok&&b)
         context.setValue( new KSValue( val ) );
   else if ( b )
@@ -2944,7 +2945,7 @@ static bool kspreadfunc_imconjugate( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp= tmp.setNum(args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         {
@@ -2965,7 +2966,7 @@ static bool kspreadfunc_imconjugate( KSContext& context )
         }
   tmp=kspreadfunc_create_complex(real,-imag);
 
-  double result=tmp.toDouble(&ok);
+  double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
         {
         context.setValue( new KSValue(result));
@@ -2987,7 +2988,7 @@ static bool kspreadfunc_imargument( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp= tmp.setNum(args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         {
@@ -3029,7 +3030,7 @@ static bool kspreadfunc_imabs( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp= tmp.setNum(args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         {
@@ -3066,7 +3067,7 @@ static bool kspreadfunc_imcos( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp= tmp.setNum(args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         {
@@ -3091,7 +3092,7 @@ static bool kspreadfunc_imcos( KSContext& context )
 
   tmp=kspreadfunc_create_complex(real_res,-imag_res);
 
-  double result=tmp.toDouble(&ok);
+  double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
         {
         context.setValue( new KSValue(result));
@@ -3113,7 +3114,7 @@ static bool kspreadfunc_imsin( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp= tmp.setNum(args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         {
@@ -3138,7 +3139,7 @@ static bool kspreadfunc_imsin( KSContext& context )
 
   tmp=kspreadfunc_create_complex(real_res,imag_res);
 
-  double result=tmp.toDouble(&ok);
+  double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
         {
         context.setValue( new KSValue(result));
@@ -3160,7 +3161,7 @@ static bool kspreadfunc_imln( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp= tmp.setNum(args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         {
@@ -3186,7 +3187,7 @@ static bool kspreadfunc_imln( KSContext& context )
   double imag_res=atan(imag/real);
   tmp=kspreadfunc_create_complex(real_res,imag_res);
 
-  double result=tmp.toDouble(&ok);
+  double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
         {
         context.setValue( new KSValue(result));
@@ -3207,7 +3208,7 @@ static bool kspreadfunc_imexp( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp= tmp.setNum(args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         {
@@ -3232,7 +3233,7 @@ static bool kspreadfunc_imexp( KSContext& context )
 
   tmp=kspreadfunc_create_complex(real_res,imag_res);
 
-  double result=tmp.toDouble(&ok);
+  double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
         {
         context.setValue( new KSValue(result));
@@ -3254,7 +3255,7 @@ static bool kspreadfunc_imsqrt( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp= tmp.setNum(args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         {
@@ -3281,7 +3282,7 @@ static bool kspreadfunc_imsqrt( KSContext& context )
 
   tmp=kspreadfunc_create_complex(real_res,imag_res);
 
-  double result=tmp.toDouble(&ok);
+  double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
         {
         context.setValue( new KSValue(result));
@@ -3303,7 +3304,7 @@ static bool kspreadfunc_impower( KSContext& context )
         {
         if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
                 return false;
-        tmp= tmp.setNum(args[0]->doubleValue());
+        tmp=KGlobal::locale()->formatNumber(args[0]->doubleValue());
         }
   else
         {
@@ -3334,7 +3335,7 @@ static bool kspreadfunc_impower( KSContext& context )
 
   tmp=kspreadfunc_create_complex(real_res,imag_res);
 
-  double result=tmp.toDouble(&ok);
+  double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
         {
         context.setValue( new KSValue(result));
@@ -3403,7 +3404,7 @@ static bool kspreadfunc_imdiv( KSContext& context )
   bool b = kspreadfunc_imdiv_helper( context, context.value()->listValue(), result );
   bool ok;
   QString tmp;
-  double val=result.toDouble(&ok);
+  double val=KGlobal::locale()->readNumber(result, &ok);
   if(ok&&b)
         context.setValue( new KSValue( val ) );
   else if ( b )
@@ -4214,7 +4215,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
     }
 
     if ( cell->isDefault())
-      context.setValue( new KSValue(  /*KSValue::Empty*/ 0.0 ) );
+      context.setValue( new KSValue(  KSValue::Empty /*0.0*/ ) );
     else if(cell->isObscured() && cell->isObscuringForced())
       context.setValue( new KSValue( 0.0 ) );
     else if ( cell->isValue() )
@@ -4226,7 +4227,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
     else if ( cell->isDate() )
       context.setValue( new KSValue( cell->valueDate() ) );
     else if ( cell->valueString().isEmpty() )
-      context.setValue( new KSValue( 0.0  /*KSValue::Empty*/ ) );
+      context.setValue( new KSValue( /*0.0*/  KSValue::Empty ) );
     else
       context.setValue( new KSValue( cell->valueString() ) );
     return true;
@@ -4267,7 +4268,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
         }
 
         if ( cell->isDefault() )
-          c = new KSValue( 0.0 /*KSValue::Empty*/);
+          c = new KSValue( /*0.0*/ KSValue::Empty);
         else if ( cell->isValue() )
           c = new KSValue( cell->valueDouble() );
         else if ( cell->isBool() )
@@ -4277,7 +4278,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
         else if ( cell->isTime() )
           c = new KSValue( cell->valueTime() );
         else if ( cell->valueString().isEmpty() )
-          c = new KSValue( 0.0 /*KSValue::Empty*/ );
+          c = new KSValue( /*0.0*/ KSValue::Empty );
         else
           c = new KSValue( cell->valueString() );
         if ( !(cell->isObscured() && cell->isObscuringForced()) )
