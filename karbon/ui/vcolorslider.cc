@@ -42,6 +42,8 @@ void VColorSlider::init()
 	setValue(0);
 	setMinValue(0);
 	setMaxValue(255);
+	connect( mSpinBox, SIGNAL( valueChanged ( int )), this, SLOT( updateFromSpinBox( int ) ) );
+	connect( mSelector, SIGNAL( valueChanged ( int )), this, SLOT( updateFromSpinBox( int ) ) );
 	layout->activate();
 }
 
@@ -79,6 +81,24 @@ void VColorSlider::setMaxValue( int value )
 int VColorSlider::value()
 {
 	return( mSpinBox->value() );
+}
+
+void VColorSlider::updateFromSpinBox( int value )
+{
+	if ( value != mSelector->value() )
+	{
+		mSelector->setValue( value );
+		emit valueChanged( value );
+	}
+}
+
+void VColorSlider::updateFromSelector( int value )
+{
+	if ( value != mSpinBox->value() )
+	{
+		mSpinBox->setValue( value );
+		emit valueChanged( value );
+	}
 }
 
 VColorSlider::~VColorSlider() { }

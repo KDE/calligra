@@ -36,6 +36,13 @@ private:
 	QLabel *mLabel;
 	QSpinBox *mSpinBox;
 	KGradientSelector *mSelector;
+
+signals:
+	void valueChanged( int value );
+
+private slots:
+	void updateFromSpinBox( int );
+	void updateFromSelector( int );
 };
 
 #endif
