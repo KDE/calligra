@@ -635,6 +635,11 @@ protected:
      * The parse tree of the real formula (e.g: "=A1*A2").
      */
     KSParseNode* m_pCode;
+
+    /**
+     * A pointer to the decimal separator
+     */
+    static char decimal_point;
 };
 
 #endif

@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <math.h>
+#include <locale.h> // for localeconv
 
 #include <qpainter.h>
 #include <qdrawutl.h>
@@ -47,6 +48,8 @@
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
 #define DO_UPDATE m_pTable->emit_updateCell( this, m_iColumn, m_iRow )
+
+char KSpreadCell::decimal_point = '\0';
 
 /*****************************************************************************
  *
@@ -678,6 +681,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
   }
   else if ( m_bValue )
   {
+    // First get some locale information
+    if (!decimal_point)
+    { // (decimal_point is static)
+      decimal_point = *(localeconv()->decimal_point);
+      debug( "decimal_point is '%c'", decimal_point );
+    }
+
     QString f2;
 
     char buff[ 1024 ];
@@ -692,7 +702,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       f2 += "+";
     if ( precision() != -1 )
     {
-      sprintf( buff, ".%i", precision() );
+      sprintf( buff, ".%i", precision() ); // '.' is expected by sprintf, whatever the locale
       f2 += buff;
     }
     f2 += "f";
@@ -707,7 +717,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       {
 	if ( buff[ i - 1 ] == '0' )
 	  i--;
-	else if ( buff[ i - 1 ] == '.' )
+	else if ( buff[ i - 1 ] == decimal_point )
 	{
 	  bend = TRUE;
 	  i--;
@@ -1833,9 +1843,8 @@ void KSpreadCell::incPrecision()
   {
     const char *val = valueString();
     int len = strlen( val );
-    // TODO: Watch for "," in germany
     int pos = 0;
-    while( val[pos] && val[pos] != '.' ) pos++;
+    while( val[pos] && val[pos] != decimal_point ) pos++;
     if ( pos == len )
       m_iPrecision = 1;
     else
@@ -1858,9 +1867,8 @@ void KSpreadCell::decPrecision()
   {
     const char *val = valueString();
     int len = strlen( val );
-    // TODO: Watch for "," in germany
     int pos = 0;
-    while( val[pos] && val[pos] != '.' ) pos++;
+    while( val[pos] && val[pos] != decimal_point ) pos++;
     if ( pos == len )
       return;
     m_iPrecision = len - pos - 2;
@@ -2124,16 +2132,16 @@ void KSpreadCell::checkValue()
     }
     m_bBool = false;
 
-    // Test wether it is a numeric value
+    // Test whether it is a numeric value
     m_bValue = TRUE;
     bool point = FALSE;
     if ( *p == '+' || *p == '-' )
 	p++;
     while ( *p != 0 && m_bValue )
     {
-	if ( *p == ',' || *p == '.' )
+	if ( *p == ',' || *p == '.' || *p == decimal_point )
 	{
-	    // Only one point or comma is allowed
+	    // Only one decimal point is allowed
 	    if ( point )
 	      m_bValue = FALSE;
 	    else
