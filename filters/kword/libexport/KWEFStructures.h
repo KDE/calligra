@@ -191,7 +191,7 @@ public:
     {
         NUM_LIST    = 0,   // Numbered as a list item
         NUM_CHAPTER = 1,   // Numbered as a heading
-        NUM_NONE    = 2   // No counter (-1 would be nicer)
+        NUM_NONE    = 2    // No counter
     };
 
     enum Style
@@ -222,25 +222,50 @@ public:
 };
 
 
+// Border
+class BorderData
+{
+public:
+    BorderData() : style(0), width(0.0) {}
+public:
+    QColor color;
+    int style;
+    double width;
+};
+
 // Paragraph layout
 class LayoutData
 {
 public:
-    LayoutData():indentFirst(0.0), indentLeft(0.0), indentRight(0.0), marginBottom(0.0), marginTop(0.0),
-        lineSpacingType(10), lineSpacing(0.0), pageBreakBefore(false), pageBreakAfter(false)
+    LayoutData():indentFirst(0.0), indentLeft(-1.0), indentRight(-1.0), marginTop(-1.0), marginBottom(-1.0),
+        lineSpacingType(10), lineSpacing(0.0), pageBreakBefore(false), pageBreakAfter(false),
+        shadowDistance(0.0), shadowDirection(0)
         { }
 
     QString     styleName;
-    QString     alignment;
+    QString     styleFollowing;
+    QString     alignment;      // left, right, center, justify
     CounterData counter;
     FormatData  formatData;
-    double      indentFirst, indentLeft, indentRight, marginBottom, marginTop;
+    double      indentFirst;    // indentation correction of first line (can be negative!)
+    double      indentLeft;     // left indentation (a negative value means invalid)
+    double      indentRight;    // right indentation (a negative value means invalid)
+    double      marginTop;      // space before the paragraph  (a negative value means invalid)
+    double      marginBottom;   // space after the paragraph (a negative value means invalid)
 
-    int         lineSpacingType; // 0=custom, 10=one line, 15=one and half lines, 20= 2 lines
-    double      lineSpacing; // Space between lines in pt, if lineSpacingType==0
+    int         lineSpacingType;// 0=custom, 10=one line, 15=one and half lines, 20= 2 lines
+    double      lineSpacing;    // Space between lines in pt, if lineSpacingType==0
 
-    bool pageBreakBefore, pageBreakAfter;
-    QString tabulator;
+    bool        pageBreakBefore;
+    bool        pageBreakAfter;
+    QString     tabulator;      // tabulator in AbiWord format
+    double      shadowDistance; // distance of <SHADOW>
+    int         shadowDirection;// direction of <SHADOW>
+    QColor      shadowColor;    // red, green, blue of <SHADOW>
+    BorderData  leftBorder;
+    BorderData  rightBorder;
+    BorderData  topBorder;
+    BorderData  bottomBorder;
 };
 
 

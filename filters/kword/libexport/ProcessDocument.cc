@@ -500,6 +500,48 @@ static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, KWEFKWordLe
 }
 
 
+static void ProcessShadowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+
+    int red=0;
+    int green=0;
+    int blue=0;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "distance", "double", &layout->shadowDistance );
+    attrProcessingList << AttrProcessing ( "position", "int",    &layout->shadowDirection );
+    attrProcessingList << AttrProcessing ( "red",      "int",    &red   );
+    attrProcessingList << AttrProcessing ( "green",    "int",    &green );
+    attrProcessingList << AttrProcessing ( "blue",     "int",    &blue  );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    layout->shadowColor.setRgb(red,green,blue);
+
+    AllowNoSubtags (myNode);
+}
+
+void ProcessAnyBorderTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
+{
+    BorderData *border =  static_cast <BorderData*> (tagData);
+
+    int red=0;
+    int green=0;
+    int blue=0;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "red",   "int",    &red   );
+    attrProcessingList << AttrProcessing ( "green", "int",    &green );
+    attrProcessingList << AttrProcessing ( "blue",  "int",    &blue  );
+    attrProcessingList << AttrProcessing ( "style", "double", &border->style );
+    attrProcessingList << AttrProcessing ( "width", "int",    &border->width );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    border->color.setRgb(red,green,blue);
+
+    AllowNoSubtags (myNode);
+}
+
 void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 // Processes <LAYOUT> and <STYLE>
 {
@@ -512,20 +554,20 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     QString lineSpacing;
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "NAME",         ProcessStringValueTag,       &layout->styleName           );
-    tagProcessingList << TagProcessing ( "FOLLOWING",    NULL,                        NULL                         );
+    tagProcessingList << TagProcessing ( "FOLLOWING",    ProcessStringValueTag,       &layout->styleFollowing      );
     tagProcessingList << TagProcessing ( "FLOW",         ProcessStringAlignTag,       &layout->alignment           );
     tagProcessingList << TagProcessing ( "INDENTS",      ProcessIndentsTag,           (void *) layout              );
     tagProcessingList << TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,      (void *) layout              );
     tagProcessingList << TagProcessing ( "LINESPACING",  ProcessStringValueTag,       &lineSpacing                 );
     tagProcessingList << TagProcessing ( "PAGEBREAKING", ProcessLineBreakingTag,      (void *) layout              );
-    tagProcessingList << TagProcessing ( "LEFTBORDER",   NULL,                        NULL                         );
-    tagProcessingList << TagProcessing ( "RIGHTBORDER",  NULL,                        NULL                         );
-    tagProcessingList << TagProcessing ( "TOPBORDER",    NULL,                        NULL                         );
-    tagProcessingList << TagProcessing ( "BOTTOMBORDER", NULL,                        NULL                         );
+    tagProcessingList << TagProcessing ( "LEFTBORDER",   ProcessAnyBorderTag,         &layout->leftBorder          );
+    tagProcessingList << TagProcessing ( "RIGHTBORDER",  ProcessAnyBorderTag,         &layout->rightBorder         );
+    tagProcessingList << TagProcessing ( "TOPBORDER",    ProcessAnyBorderTag,         &layout->topBorder           );
+    tagProcessingList << TagProcessing ( "BOTTOMBORDER", ProcessAnyBorderTag,         &layout->bottomBorder        );
     tagProcessingList << TagProcessing ( "COUNTER",      ProcessCounterTag,           (void *) &layout->counter    );
     tagProcessingList << TagProcessing ( "FORMAT",       ProcessFormatTag,            (void *) &formatDataList     );
     tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   (void *) &layout->tabulator  );
-    tagProcessingList << TagProcessing ( "SHADOW",       NULL,                        NULL                         );
+    tagProcessingList << TagProcessing ( "SHADOW",       ProcessShadowTag,            layout                       );
     ProcessSubtags (myNode, tagProcessingList, leader);
 
 
