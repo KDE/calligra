@@ -3764,7 +3764,12 @@ void KSpreadView::setSelectionAngle( int angle )
 
 void KSpreadView::mergeCell()
 {
-  if ( !d->activeSheet )
+  // sanity check
+  if( !d->activeSheet )
+    return;    
+  if( d->activeSheet->isProtected() )
+    return;
+  if( d->doc->workbook()->isProtected() )
     return;
     
   if ( ( util_isRowSelected( selection() ) )
