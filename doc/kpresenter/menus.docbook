@@ -182,8 +182,8 @@ Menu</phrase></textobject>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
 </shortcut>
-<guimenu><accel>F</accel>ile</guimenu>
-<guimenuitem><accel>N</accel>ew</guimenuitem>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -635,8 +635,8 @@ so you can work on more than one slide at a time.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>V</accel>iew</guimenu>
-<guimenuitem><accel>C</accel>lose All Views</guimenuitem>
+<guimenu>View</guimenu>
+<guimenuitem>Close All Views</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -784,7 +784,7 @@ format, which is common on &Windows;.
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu><accel>I</accel>nsert</guimenu>
+<guimenu>Insert</guimenu>
 <guimenuitem>Scan Image...</guimenuitem>
 </menuchoice>
 </term>

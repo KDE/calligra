@@ -1,10 +1,9 @@
 <?xml version="1.0" ?>
-<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&kformula;">
+  <!ENTITY package "koffice">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
   <!ENTITY % addindex "IGNORE">
-  
-  
 ]>
 
 <book lang="&language;">
@@ -21,10 +20,17 @@
 <address><email>ulrich.kuettler@gmx.de</email></address>
 </affiliation>
 </author>
+
+<author>
+<firstname>Jonathan</firstname>
+<surname>Drews</surname>
+<affiliation>
+<address><email>j.e.drews@att.net</email></address>
+</affiliation>
+</author>
+
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
-
-
 
 <legalnotice>&FDLNotice;</legalnotice>
 
@@ -35,7 +41,7 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 (Major.minor.lesser), it could be used by automation scripts -->
 
 <date>2002-02-19</date>
-<releaseinfo>0.00.02</releaseinfo>
+<releaseinfo>0.00.30</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -45,10 +51,10 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 </para>
 </abstract>
 
-
 <keywordset>
 <keyword>KDE</keyword>
-<keyword>Kapp</keyword>
+<keyword>Koffice</keyword>
+<keyword>kformula</keyword>
 </keywordset>
 
 </bookinfo>
@@ -57,9 +63,11 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 <title>Introduction</title>
 <para>&kformula; is used to write formulas. It doesn't evaluate
 anything. All it does is printing them.</para> 
+
 <para>&kformula; was designed for your editing pleasure. It makes it
 delightful to enter greek letter, fractions and all the stuff that
 makes a formula look like, hmm, a formula.</para> 
+
 <para>But most of the time you won't want to use &kformula; itself.
 Instead you might choose to use it from within &kword; or any other
 &koffice; application. That is &kformula; is not a useful application
@@ -68,9 +76,6 @@ you've fallen in love with.</para>
 
 <para>But don't fear! Where ever &kformula; gets embedded, it will
 behave the same. So this documentation applies anyway.</para>
-
-&underFDL;
-&underGPL;
 
 </chapter>
 
@@ -87,32 +92,36 @@ list. What's the one we've just seen.</para>
 
 <para>Writing a formula means to fill the empty list with letters,
 figures and mathematical symbols. That is straightforward: use your
-keyboard. As soon as you type something the "empty" symbol will vanish
-and you will see whatever you have inserted instead. New characters
-are always put at the current cursor position.</para>
+keyboard. As soon as you type something the <guiicon>empty</guiicon>
+symbol will vanish and you will see whatever you have inserted
+instead. New characters are always put at the current cursor
+position.</para>
 
-<para>There is a toolbar called "Add" that allows you to create more
-complex elements. There are indexes, fractions, roots and
+<para>There is a toolbar called <quote>Add</quote> that allows you to
+create more complex elements. There are indexes, fractions, roots and
 matrices. Just to name name a few. All those elements consist of at
-least one list, you can move the cursor into and insert new stuff.</para>
+least one list, you can move the cursor into and insert new
+stuff.</para>
 
 <para>A special feature is the name insertion. When you type a
-backslash ('\') you get a new empty list right away. But this one is
-special. It uses a different font and is meant to insert things like
-function names. There is, however, a second idea here. Your keyboard
-only has a limited number of keys. The wealth of mathematical symbols
-on the other side is overwhelming. To get one of those you can type
-its name and press the space key afterwards. The name you typed will
-be replaced by the symbol then. By the way, normally the space key
-means "get out of here", that is move the cursor to the containing
-list.
+backslash (<literal>\</literal>) you get a new empty list right
+away, but this one is special. It uses a different font and is meant
+to insert things like function names. There is, however, a second idea
+here. Your keyboard only has a limited number of keys. The wealth of
+mathematical symbols on the other side is overwhelming. To get one of
+those you can type its name and press the space key afterwards. The
+name you typed will be replaced by the symbol then. By the way,
+normally the space key means <quote>get out of here</quote>, that is move the
+cursor to the containing list.
 </para>
 
 <para>Another thing you might want to insert are spaces. We all know,
 printing formulae is all about the right spacing. And you can do just
-that using the "name list". Simply type the chars ',' or '&gt;' or ';'
-to get a small, medium or thick space respectively. You also might
-type the word 'quad' and the space you get will be even wider.</para>
+that using the <quote>name list</quote>. Simply type the chars
+<literal>,</literal> or <literal>&gt;</literal> or
+<literal>;</literal> to get a small, medium or thick space
+respectively. You also might type the word <literal>quad</literal> and
+the space you get will be even wider.</para>
 
 </chapter>
 
@@ -133,10 +142,39 @@ type the word 'quad' and the space you get will be even wider.</para>
 
 <chapter id="configuration">
 <title>User configuration</title>
-<para>Did you find "Settings/Configure KFormula..."?</para>
+<para>Did you find
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+KFormula...</guimenuitem></menuchoice>?</para>
+</chapter>
+
+<chapter id="credits-and-licenses">
+<title>Credits and Licenses</title>
+
+<para>&kformula; is copyright Andrea Rizzi
+<email>rizzi@kde.org</email> Ulrich Kuettler
+<email>ulrich.kuettler@mailbox.tu-dresden.de</email></para>
+
+<para>&kformula; documentation is copyright 2001-2002 Ulrich Kuettler and
+Jonathan Drews <email>j.e.drews@att.net</email></para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;
+&underGPL;
+
 </chapter>
 
 &documentation.index; 
+
+<appendix id="installation">
+<title>Installation</title>
+
+&install.intro.documentation;
+
+&install.compile.documentation;
+
+</appendix>
+
 </book>
 <!--
 Local Variables:
