@@ -1,1 +1,0 @@
-shlibs:Depends=kdelibs3 (>= 4:2.1-20001216-0), koffice-libs (>= 2.1-0), libc6 (>= 2.1.97), libjpeg62, libpng2, libqt2.2 (>= 2:2.2.3-0) | libqt2.2-gl (>= 2:2.2.3-0), libstdc++2.10-glibc2.2, xlibs (>= 4.0.1-11), zlib1g (>= 1:1.1.3)
