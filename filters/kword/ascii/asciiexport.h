@@ -25,7 +25,6 @@
 #include <qfile.h>
 #include <qobject.h>
 
-#include <kdebug.h>
 #include <koFilter.h>
 #include <koTarStore.h>
 

@@ -19,6 +19,7 @@
 
 #include <asciiimport.h>
 #include <asciiimport.moc>
+#include <kdebug.h>
 
 ASCIIImport::ASCIIImport(KoFilter *parent, QString name) :
                      KoFilter(parent, name) {
@@ -32,7 +33,7 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-        kdebug(KDEBUG_ERROR, 31000, "Unable to open input file!");
+        kDebugError( 31502, "Unable to open input file!");
         in.close();
         return false;
     }
@@ -82,7 +83,7 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
 
     KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
     if(!out.open("root", "")) {
-        kdebug(KDEBUG_ERROR, 31000, "Unable to open output file!");
+        kDebugError( 31502, "Unable to open output file!");
         in.close();
         out.close();
         delete [] buffer;
