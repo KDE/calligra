@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=KformEditor
+Exec=kformeditor
+CORBAExec=kformeditor --server
+Comment=Image processing application
+Comment[de]=Programm zur Bildverarbeitung
+MimeType=application/x-kformeditor;image/gif
+X-KDE-RepoIds=IDL:KformEditor/DocumentFactory:1.0#KformEditor
+X-KDE-ActivationMode=shared
+Type=OpenPart
+Icon=image.xpm
+MiniIcon=image.xpm
+ServiceTypes=KOfficeDocument

@@ -1,3 +1,3 @@
 
-SUBDIRS = kformviewer
+SUBDIRS = kformviewer kformeditor
 
