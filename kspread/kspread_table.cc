@@ -6810,12 +6810,12 @@ bool KSpreadTable::loadXML( const QDomElement& table )
     }
     if( table.hasAttribute( "printCommentIndicator" ) )
     {
-        m_bPrintGrid = (int)table.attribute("printCommentIndicator").toInt( &ok );
+        m_bPrintCommentIndicator = (int)table.attribute("printCommentIndicator").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "printFormulaIndicator" ) )
     {
-        m_bPrintGrid = (int)table.attribute("printFormulaIndicator").toInt( &ok );
+        m_bPrintFormulaIndicator = (int)table.attribute("printFormulaIndicator").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( table.hasAttribute( "hide" ) )
