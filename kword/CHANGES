@@ -1647,3 +1647,7 @@ Reggie, 28.11.1999
 Reggie, 9.12.1999:
 ----------------
 - Got rid of a shortcut which was used 3 times :-) (ALT + C)
+- Implemented choosing fot through the menu using the KFontDialog
+- The few unimplemented menu entries popup a message box with the info, that
+  this entry is unimplemented
+- Fixed creating table of contents

@@ -72,6 +72,7 @@
 #include <kaction.h>
 #include <kimgio.h>
 #include <kcoloractions.h>
+#include <kfontdialog.h>
 #include <kstddirs.h>
 
 #include <stdlib.h>
@@ -1218,11 +1219,17 @@ void KWordView::insertPicture()
 /*===============================================================*/
 void KWordView::insertClipart()
 {
+    QMessageBox::information( this, i18n( "Not implemented" ), 
+			      i18n( "Inserting cliparts is currently not implemented!" ),
+			      i18n( "OK" ) );
 }
 
 /*===============================================================*/
 void KWordView::insertSpecialChar()
 {
+    QMessageBox::information( this, i18n( "Not implemented" ), 
+			      i18n( "Inserting special characters is currently not implemented!" ),
+			      i18n( "OK" ) );
 }
 
 /*===============================================================*/
@@ -1295,11 +1302,42 @@ void KWordView::insertFootNoteEndNote()
 void KWordView::insertContents()
 {
     m_pKWordDoc->createContents();
+    gui->getPaperWidget()->recalcWholeText();
+    gui->getPaperWidget()->repaintScreen( FALSE );
 }
 
 /*===============================================================*/
 void KWordView::formatFont()
 {
+    QFont tmpFont = tbFont;
+
+    if ( KFontDialog::getFont( tmpFont ) ) {
+	tbFont = tmpFont;
+	format.setUserFont( m_pKWordDoc->findUserFont( tbFont.family() ) );
+	format.setPTFontSize( tbFont.pointSize() );
+	format.setWeight( tbFont.weight() );
+	format.setItalic( tbFont.italic() );
+	format.setUnderline( tbFont.underline() );
+ 	( (KFontAction*)actionFormatFontFamily )->blockSignals( TRUE );
+ 	( (KFontAction*)actionFormatFontFamily )->setFont( tbFont.family() );
+ 	( (KFontAction*)actionFormatFontFamily )->blockSignals( FALSE );
+ 	( (KFontSizeAction*)actionFormatFontSize )->blockSignals( TRUE );
+ 	( (KFontSizeAction*)actionFormatFontSize )->setFontSize( tbFont.pointSize() );
+ 	( (KFontSizeAction*)actionFormatFontSize )->blockSignals( FALSE );
+ 	( (KToggleAction*)actionFormatBold )->blockSignals( TRUE );
+ 	( (KToggleAction*)actionFormatBold )->setChecked( tbFont.bold() );
+ 	( (KToggleAction*)actionFormatBold )->blockSignals( FALSE );
+ 	( (KToggleAction*)actionFormatItalic )->blockSignals( TRUE );
+ 	( (KToggleAction*)actionFormatItalic )->setChecked( tbFont.italic() );
+ 	( (KToggleAction*)actionFormatItalic )->blockSignals( FALSE );
+ 	( (KToggleAction*)actionFormatUnderline )->blockSignals( TRUE );
+ 	( (KToggleAction*)actionFormatUnderline )->setChecked( tbFont.underline() );
+ 	( (KToggleAction*)actionFormatUnderline )->blockSignals( FALSE );
+	if ( gui ) {
+	    gui->getPaperWidget()->formatChanged( format );
+	    gui->getPaperWidget()->setFocus();
+	}
+    }
 }
 
 /*===============================================================*/
