@@ -547,7 +547,7 @@ protected:
 class KWChangeVariableSettingsCommand : public KNamedCommand
 {
 public:
-    enum VariableProperties { VS_DISPLAYLINK, VS_UNDERLINELINK, VS_DISPLAYCOMMENT};
+    enum VariableProperties { VS_DISPLAYLINK, VS_UNDERLINELINK, VS_DISPLAYCOMMENT, VS_DISPLAYFIELDCODE};
     KWChangeVariableSettingsCommand( const QString &name, KWDocument *_doc, bool _oldDisplay, bool _newDisplay, VariableProperties _type);
     ~KWChangeVariableSettingsCommand(){}
 

@@ -475,6 +475,10 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     m_displayComment=new QCheckBox(i18n("Display c&omments"),gbMiscGroup);
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
 
+    m_displayFieldCode=new QCheckBox(i18n("Display Field Code"),gbMiscGroup);
+    m_displayFieldCode->setChecked(doc->getVariableCollection()->variableSetting()->displayFiedCode());
+
+
     QVGroupBox* gbViewFormatting = new QVGroupBox( i18n("View Formatting"), box, "view_formatting" );
     gbViewFormatting->setMargin( 10 );
     gbViewFormatting->setInsideSpacing( KDialog::spacingHint() );
@@ -572,6 +576,18 @@ KCommand *ConfigureMiscPage::apply()
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
+    b=m_displayFieldCode->isChecked();
+    if(doc->getVariableCollection()->variableSetting()->displayFiedCode()!=b)
+    {
+        if(!macroCmd)
+        {
+            macroCmd=new KMacroCommand(i18n("Change Display Field Code Command"));
+        }
+        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change Display Field Code Command"), doc, doc->getVariableCollection()->variableSetting()->displayComment() ,b, KWChangeVariableSettingsCommand::VS_DISPLAYFIELDCODE);
+        cmd->execute();
+        macroCmd->addCommand(cmd);
+    }
+
     bool state =m_cbViewFormattingEndParag->isChecked();
     bool needRepaint = false;
     if ( state != m_oldFormattingEndParag )

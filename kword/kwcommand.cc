@@ -1431,6 +1431,10 @@ void KWChangeVariableSettingsCommand::changeValue( bool b )
         m_doc->getVariableCollection()->variableSetting()->setDisplayComment(b);
         m_doc->recalcVariables( VT_NOTE );
         break;
+    case VS_DISPLAYFIELDCODE:
+        m_doc->getVariableCollection()->variableSetting()->setDisplayFiedCode(b);
+        m_doc->recalcVariables( VT_ALL );
+
     }
 }
 
