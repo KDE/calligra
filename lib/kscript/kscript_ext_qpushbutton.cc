@@ -12,7 +12,7 @@
 #define CHECK_LEFTEXPR( context, name ) if ( context.leftExpr() ) return KSObject::member( context, name );
 #define SET_PROP( __n, __expr, __t ) if ( name == __n ) { CHECKTYPE( context, v, __t ); __expr; }
 
-KSClass_QPushButton::KSClass_QPushButton( KSModule* m ) : KSScriptClass( m, "QPushbutton", 0 )
+KSClass_QPushButton::KSClass_QPushButton( KSModule* m ) : KSScriptClass( m, "QPushButton", 0 )
 {
   nameSpace()->insert( "QPushButton", new KSValue( (KSBuiltinMethod)&KSObject_QPushButton::ksQPushButton ) );
   nameSpace()->insert( "show", new KSValue( (KSBuiltinMethod)&KSObject_QPushButton::ksQPushButton_show ) );
