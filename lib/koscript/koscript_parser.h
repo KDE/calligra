@@ -9,7 +9,7 @@ class KSParseNode;
 class KSContext;
 class KLocale;
 
-extern KSParser *theParser;  // Defined in parser.cc
+extern KSParser *theParser;  // Defined in koscript_parser.cc
 extern int yyparse();      // Defined through yacc.y
 
 class KSParser
