@@ -15,7 +15,8 @@ class BasicElement;
 #include <koDocument.h>
 
 
-class KFormulaDoc :    virtual public KoDocument,public KFormulaContainer
+//class KFormulaDoc :    virtual public KoDocument,public KFormulaContainer
+class KFormulaDoc :    public KoDocument,public KFormulaContainer
 
 {
     Q_OBJECT
