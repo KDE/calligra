@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 	if (args->count() >= 1)
 	{
             for (int i = 0; i < args->count(); i++)
-		v->loadUIFile(args->arg(i));
+		v->loadUIFile(args->cwd() + "/" + args->arg(i));
         }
         args->clear();
     }
