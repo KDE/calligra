@@ -1,4 +1,4 @@
-SUBDIRS = Dia Flowcharting Electrical
+SUBDIRS = Dia Flowcharting #Electrical
 
 
 
