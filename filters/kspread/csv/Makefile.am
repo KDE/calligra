@@ -10,7 +10,7 @@ libcsvexport.la libcsvexport_test.la
 
 libcsvfilter_la_SOURCES = csvfilter.cc xmltree.cc csvfilter_factory.cc
 libcsvfilter_la_LDFLAGS	= -module -avoid-version -no-undefined
-libcsvfilter_la_LIBADD  = $(KOFFICE_LIBS)
+libcsvfilter_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspread.la
 
 libcsvfilterdia_la_SOURCES = csvfilterdia.cc csvfilterdia_factory.cc
 libcsvfilterdia_la_LDFLAGS = -module -avoid-version -no-undefined
