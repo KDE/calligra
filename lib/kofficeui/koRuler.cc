@@ -884,6 +884,7 @@ void KoRuler::handleDoubleClick()
             d->removeTab.type = T_INVALID;
             d->currTab.type = T_INVALID;
             emit tabListChanged( d->tabList );
+            setCursor( ArrowCursor );
             update();
             // --- we didn't click on a tab, fall out to indents test ---
         } else if ( d->action == A_TAB ) {
@@ -892,7 +893,7 @@ void KoRuler::handleDoubleClick()
             return;
         }
     } 
-	 
+
     // When Binary Compatibility is broken this will hopefully emit a
     // doubleClicked(int) to differentiate between double-clicking an
     // indent and double-clicking the ruler
@@ -903,8 +904,9 @@ void KoRuler::handleDoubleClick()
             return;
         }
     }
-        
-    // Double-click nothing
+
+    // Double-clicked nothing
+    d->action = A_NONE;
     emit doubleClicked(); // usually page layout dialog
 }
 
