@@ -43,21 +43,21 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
     if( ( _chart->params()->chartType() == KDChartParams::Bar &&
           _chart->params()->barChartSubType() == KDChartParams::BarNormal ) ||
         ( _chart->params()->chartType() == KDChartParams::Line &&
-          _chart->params()->lineChartSubType() == KDChartParams::LineNormal ) &&
+          _chart->params()->lineChartSubType() == KDChartParams::LineNormal ) ||
         ( _chart->params()->chartType() == KDChartParams::Area &&
           _chart->params()->areaChartSubType() == KDChartParams::AreaNormal ) )
         normal->setChecked( true );
     else if( ( _chart->params()->chartType() == KDChartParams::Bar &&
           _chart->params()->barChartSubType() == KDChartParams::BarStacked ) ||
         ( _chart->params()->chartType() == KDChartParams::Line &&
-          _chart->params()->lineChartSubType() == KDChartParams::LineStacked ) &&
+          _chart->params()->lineChartSubType() == KDChartParams::LineStacked ) ||
         ( _chart->params()->chartType() == KDChartParams::Area &&
           _chart->params()->areaChartSubType() == KDChartParams::AreaStacked ) )
         stacked->setChecked( true );
     else if( ( _chart->params()->chartType() == KDChartParams::Bar &&
           _chart->params()->barChartSubType() == KDChartParams::BarPercent ) ||
         ( _chart->params()->chartType() == KDChartParams::Line &&
-          _chart->params()->lineChartSubType() == KDChartParams::LinePercent ) &&
+          _chart->params()->lineChartSubType() == KDChartParams::LinePercent ) ||
         ( _chart->params()->chartType() == KDChartParams::Area &&
           _chart->params()->areaChartSubType() == KDChartParams::AreaPercent ) )
         percent->setChecked( true );
