@@ -1140,10 +1140,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         drawLineInDrawMode = false;
         return;
     }
-    int mx = applyGridOnPosX( contentsPoint.x());
-    int my = applyGridOnPosY( contentsPoint.y());
-    firstX = applyGridOnPosX( firstX);
-    firstY = applyGridOnPosX( firstY);
+    bool state = m_view->kPresenterDoc()->snapToGrid();
+    int mx = state ? applyGridOnPosX( contentsPoint.x()) : contentsPoint.x();
+    int my = state ? applyGridOnPosY( contentsPoint.y()) : contentsPoint.y();
+    firstX = state ? applyGridOnPosX( firstX) : firstX;
+    firstY = state ? applyGridOnPosY( firstY) : firstY;
     QPtrList<KPObject> _objects;
     _objects.setAutoDelete( false );
     KPObject *kpobject = 0;
@@ -1583,13 +1584,19 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	} else if ( mousePressed ) {
 	    int mx = e->x()+diffx();
 	    int my = e->y()+diffy();
-            mx = applyGridOnPosX( mx );
-            my = applyGridOnPosY( my );
+            if ( m_view->kPresenterDoc()->snapToGrid() )
+            {
+                mx = applyGridOnPosX( mx );
+                my = applyGridOnPosY( my );
+            }
 	    switch ( toolEditMode ) {
 	    case TEM_MOUSE: {
 		drawContour = TRUE;
-                oldMx = applyGridOnPosX( oldMx );
-                oldMy = applyGridOnPosY( oldMy );
+                if ( m_view->kPresenterDoc()->snapToGrid() )
+                {
+                    oldMx = applyGridOnPosX( oldMx );
+                    oldMy = applyGridOnPosY( oldMy );
+                }
 
 		if ( modType == MT_NONE ) {
                     if ( m_tmpVertHelpline !=-1 || m_tmpHorizHelpline !=-1)
@@ -7589,8 +7596,17 @@ void KPrCanvas::layout()
 
 QPoint KPrCanvas::applyGrid( const QPoint &pos,bool offset )
 {
+    bool state =m_view->kPresenterDoc()->snapToGrid();
+    if (  !state && offset )
+        return pos;
+
     double gridX = m_view->kPresenterDoc()->getGridX();
     double gridY = m_view->kPresenterDoc()->getGridY();
+    if ( !state && ! offset )
+    {
+        gridX = 1.0;
+        gridY = 1.0;
+    }
     KoPoint newPos;
     if (offset )
         newPos = m_view->kPresenterDoc()->zoomHandler()->unzoomPoint( pos+QPoint(diffx(),diffy()) );

@@ -788,3 +788,13 @@ void KPresenterDocIface::setTxtBackCol( const QColor &c )
 {
     doc->setTxtBackCol( c );
 }
+
+bool KPresenterDocIface::snapToGrid() const
+{
+    return doc->snapToGrid();
+}
+
+void KPresenterDocIface::setSnapToGrid( bool _b )
+{
+    doc->setSnapToGrid( _b );
+}

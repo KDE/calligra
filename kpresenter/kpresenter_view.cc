@@ -2341,6 +2341,10 @@ void KPresenterView::setupActions()
                                           this, SLOT( viewGridToFront() ),
                                           actionCollection(), "view_gridtofront" );
 
+    actionViewSnapToGrid= new KToggleAction( i18n( "Snap To Grid" ), 0,
+                                          this, SLOT(viewSnapToGrid() ),
+                                          actionCollection(), "view_snaptogrid" );
+
     actionViewHelpLineToFront= new KToggleAction( i18n( "HelpLine to Front" ), 0,
                                           this, SLOT( viewHelpLineToFront() ),
                                           actionCollection(), "view_helplinetofront" );
@@ -5899,6 +5903,7 @@ void KPresenterView::updateGridButton()
 {
     actionViewShowGrid->setChecked( m_pKPresenterDoc->showGrid() );
     actionViewGridToFront->setChecked ( m_pKPresenterDoc->gridToFront() );
+    actionViewSnapToGrid->setChecked ( m_pKPresenterDoc->snapToGrid() );
 }
 
 void KPresenterView::refreshRuler( bool state )
@@ -6411,5 +6416,11 @@ void KPresenterView::openPopupMenuCloseObject( const QPoint &_point )
     static_cast<QPopupMenu*>(factory()->container("closed_popup",this))->popup(_point);
 }
 
+void KPresenterView::viewSnapToGrid()
+{
+    m_pKPresenterDoc->setSnapToGrid( actionViewSnapToGrid->isChecked() );
+    m_pKPresenterDoc->setModified( true );
+    m_pKPresenterDoc->updateGridButton();
+}
 
 #include <kpresenter_view.moc>

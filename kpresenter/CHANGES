@@ -45,3 +45,4 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Moved default-settings for rectangles, pies and polygons to
   'Settings' -> 'Configure KPresenter'
 - Now we can change grid color
+- Add option to "Snap to grid"

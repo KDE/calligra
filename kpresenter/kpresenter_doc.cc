@@ -194,6 +194,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bShowGrid = false;
     m_bGridToFont = false;
 
+    m_bSnapToGrid= false;
+
     usedSoundFile = QStringList();
     haveNotOwnDiskSoundFile = QStringList();
 
@@ -298,6 +300,7 @@ void KPresenterDoc::saveConfig()
     config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
     config->writeEntry( "ShowGrid" , m_bShowGrid );
     config->writeEntry( "GridToFront" , m_bGridToFont );
+    config->writeEntry( "SnapToGrid" , m_bSnapToGrid );
     config->writeEntry( "ResolutionX", m_gridX );
     config->writeEntry( "ResolutionY", m_gridY );
     config->writeEntry( "HelpLineToFront" , m_bHelplinesToFront );
@@ -320,6 +323,7 @@ void KPresenterDoc::initConfig()
         setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
         setShowGrid( config->readBoolEntry( "ShowGrid" , false ));
         setGridToFront(  config->readBoolEntry( "GridToFront" , false ));
+        setSnapToGrid( config->readBoolEntry( "SnapToGrid", true ));
         setGridX( config->readDoubleNumEntry( "ResolutionX", MM_TO_POINT( 10.0 ) ));
         setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 10.0 ) ));
 

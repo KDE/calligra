@@ -230,6 +230,9 @@ k_dcop:
     QColor txtBackCol() const;
     void setTxtBackCol( const QColor &c );
 
+    bool snapToGrid() const;
+    void setSnapToGrid( bool _b );
+
 private:
     KPresenterDoc *doc;
 

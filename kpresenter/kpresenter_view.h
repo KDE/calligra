@@ -165,7 +165,7 @@ public slots:
     void viewGrid();
 
     void viewGridToFront();
-
+    void viewSnapToGrid();
     void viewHelpLineToFront();
 
     // insert menu
@@ -779,6 +779,7 @@ private:
     KToggleAction *actionViewShowHelpLine;
 
     KToggleAction *actionViewShowGrid;
+    KToggleAction *actionViewSnapToGrid;
     KToggleAction *actionViewGridToFront;
     KToggleAction *actionViewHelpLineToFront;
 
