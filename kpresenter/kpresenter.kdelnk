@@ -1,0 +1,11 @@
+# KDE Config File
+[KDE Desktop Entry]
+Name=KPresenter
+Exec=/usr/src/koffice2/kpresenter/kpresenter --server
+Comment=Reggie's Presentation Software
+MimeTypes=application/x-kpresenter,
+RepoID=IDL:KPresenter/Factory:1.0,
+ActivationMode=shared
+Type=OpenPart
+Icon=kpresenter.xpm
+MiniIcon=kpresenter.xpm
