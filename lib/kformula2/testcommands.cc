@@ -72,8 +72,6 @@ Test* TestCommands::suite()
                                                 &TestCommands::testCompacting));
     suite->addTest(new TestCaller<TestCommands>("testAddOneByTwoMatrix",
                                                 &TestCommands::testAddOneByTwoMatrix));
-    suite->addTest(new TestCaller<TestCommands>("testIndexElementMoves",
-                                                &TestCommands::testIndexElementMoves));
     return suite;
 }
 
@@ -235,21 +233,4 @@ void TestCommands::testAddOneByTwoMatrix()
     assert(rootElement->countChildren() == 6);
     document->redo();
     assert(rootElement->countChildren() == 1);
-}
-
-
-void TestCommands::testIndexElementMoves()
-{
-    cursor->moveHome(SelectMovement);
-    container->setActiveCursor(cursor);
-    container->addText('x');
-    container->addGenericLowerIndex();
-    cursor->moveUp();
-    container->addGenericUpperIndex();
-    cursor->moveDown();
-
-    cursor->moveUp();
-    cursor->moveRight();
-    cursor->moveDown();
-    cursor->moveLeft();
 }

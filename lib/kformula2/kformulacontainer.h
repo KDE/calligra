@@ -142,6 +142,11 @@ public:
     QString texString();
 
     /**
+     * Tries to read a formula string from the other lib.
+     */
+    bool importOldText(QString text);
+    
+    /**
      * Prints the formula.
      */
     void print(KPrinter& printer);

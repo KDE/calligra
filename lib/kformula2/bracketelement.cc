@@ -293,7 +293,7 @@ void BracketElement::writeDom(QDomElement& element)
 
     QDomDocument doc = element.ownerDocument();
 
-    QDomElement con = element.ownerDocument().createElement("CONTENT");
+    QDomElement con = doc.createElement("CONTENT");
     con.appendChild(content->getElementDom(doc));
     element.appendChild(con);
 }

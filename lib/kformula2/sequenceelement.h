@@ -247,7 +247,6 @@ public:
      */
     virtual QString toLatex();
 
-
 protected:
 
     //Save/load support

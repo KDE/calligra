@@ -308,8 +308,8 @@ void IndexElement::calcSizes(const ContextStyle& contextStyle,  ContextStyle::Te
         urOffset = QMAX(urMidline, urHeight-content->getMidline());
 
         // the lower half
-        llOffset = llMidline < (content->getHeight() - content->getMidline()) ? (content->getHeight() - llMidline) : content->getHeight() - content->getMidline();
-        lrOffset = lrMidline < (content->getHeight() - content->getMidline()) ? (content->getHeight() - lrMidline) : content->getHeight() - content->getMidline();
+        llOffset = QMAX(content->getHeight()-llMidline, content->getMidline());
+        lrOffset = QMAX(content->getHeight()-lrMidline, content->getMidline());
     }
     int height = QMAX(umHeight, QMAX(ulOffset, urOffset));
 
@@ -1094,37 +1094,51 @@ bool IndexElement::readContentFromDom(QDomNode& node)
     }
     node = node.nextSibling();
 
-    upperLeft = buildChild(node, "UPPERLEFT");
-    if (upperLeft != 0) {
+    bool upperLeftRead = false;
+    bool upperMiddleRead = false;
+    bool upperRightRead = false;
+    bool lowerLeftRead = false;
+    bool lowerMiddleRead = false;
+    bool lowerRightRead = false;
+    
+    while (!node.isNull() &&
+           !(upperLeftRead && upperMiddleRead && upperRightRead &&
+             lowerLeftRead && lowerMiddleRead && lowerRightRead)) {
+
+        if (!upperLeftRead && (node.nodeName().upper() == "UPPERLEFT")) {
+            upperLeft = buildChild(node, "UPPERLEFT");
+            upperLeftRead = upperLeft != 0;
+        }
+
+        if (!upperMiddleRead && (node.nodeName().upper() == "UPPERMIDDLE")) {
+            upperMiddle = buildChild(node, "UPPERMIDDLE");
+            upperMiddleRead = upperMiddle != 0;
+        }
+
+        if (!upperRightRead && (node.nodeName().upper() == "UPPERRIGHT")) {
+            upperRight = buildChild(node, "UPPERRIGHT");
+            upperRightRead = upperRight != 0;
+        }
+
+        if (!lowerLeftRead && (node.nodeName().upper() == "LOWERLEFT")) {
+            lowerLeft = buildChild(node, "LOWERLEFT");
+            lowerLeftRead = lowerLeft != 0;
+        }
+
+        if (!lowerMiddleRead && (node.nodeName().upper() == "LOWERMIDDLE")) {
+            lowerMiddle = buildChild(node, "LOWERMIDDLE");
+            lowerMiddleRead = lowerMiddle != 0;
+        }
+
+        if (!lowerRightRead && (node.nodeName().upper() == "LOWERRIGHT")) {
+            lowerRight = buildChild(node, "LOWERRIGHT");
+            lowerRightRead = lowerRight != 0;
+        }
+    
         node = node.nextSibling();
     }
-
-    upperMiddle = buildChild(node, "UPPERMIDDLE");
-    if (upperMiddle != 0) {
-        node = node.nextSibling();
-    }
-
-    upperRight = buildChild(node, "UPPERRIGHT");
-    if (upperRight != 0) {
-        node = node.nextSibling();
-    }
-
-    lowerLeft = buildChild(node, "LOWERLEFT");
-    if (lowerLeft != 0) {
-        node = node.nextSibling();
-    }
-
-    lowerMiddle = buildChild(node, "LOWERMIDDLE");
-    if (lowerMiddle != 0) {
-        node = node.nextSibling();
-    }
-
-    lowerRight = buildChild(node, "LOWERRIGHT");
-    if (lowerRight != 0) {
-        node = node.nextSibling();
-    }
-
-    return true;
+    return upperLeftRead || upperMiddleRead || upperRightRead ||
+        lowerLeftRead || lowerMiddleRead || lowerRightRead;
 }
 
 ElementIndexPtr IndexElement::getIndex(int position)

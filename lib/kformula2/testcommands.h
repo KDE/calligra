@@ -35,7 +35,6 @@ private:
     void testFractionBug();
     void testCompacting();
     void testAddOneByTwoMatrix();
-    void testIndexElementMoves();
 
     KCommandHistory* history;
     KFormulaDocument* document;

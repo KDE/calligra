@@ -3,10 +3,13 @@
 #include <memory>
 
 #include <qaccel.h>
+#include <qfile.h>
 #include <qlayout.h>
 #include <qlist.h>
 #include <qmainwindow.h>
 #include <qpainter.h>
+#include <qstring.h>
+#include <qtextstream.h>
 #include <qwidget.h>
 
 #include <kapp.h>
@@ -29,6 +32,9 @@ public:
 
 protected:
     virtual void keyPressEvent(QKeyEvent* event);
+
+private:
+    void importOld(QString file);
 };
 
 
@@ -49,6 +55,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_5: document->addFraction(); return;
             case Qt::Key_6: document->addMatrix(); return;
 	    case Qt::Key_7: document->addOneByTwoMatrix(); return;
+            case Qt::Key_0: importOld("oldformula"); return;
             case Qt::Key_A: slotSelectAll(); return;
             case Qt::Key_C: document->copy(); return;
             case Qt::Key_D: document->replaceElementWithMainChild(BasicElement::afterCursor); return;
@@ -71,6 +78,23 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
     }
 
     KFormulaWidget::keyPressEvent(event);
+}
+
+
+void TestWidget::importOld(QString file)
+{
+    slotSelectAll();
+    getDocument()->cut();
+    
+    QFile f(file);
+    if (!f.open(IO_ReadOnly)) {
+        cerr << "Error opening file" << endl;
+        return;
+    }
+    QTextStream stream(&f);
+    stream.setEncoding(QTextStream::Unicode);
+    QString text = stream.readLine();
+    getDocument()->importOldText(text);
 }
 
 

@@ -38,6 +38,7 @@
 #include "fractionelement.h"
 #include "indexelement.h"
 #include "kformulacommand.h"
+#include "kformulacompatibility.h"
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
 #include "kformulamathmlread.h"
@@ -674,6 +675,16 @@ void KFormulaContainer::print(KPrinter& printer)
 QString KFormulaContainer::texString()
 {
     return rootElement->toLatex();
+}
+
+
+bool KFormulaContainer::importOldText(QString text)
+{
+    KFormulaCompatibility converter;
+    QDomDocument doc = converter.buildDOM(text);
+    //QCString data = doc.toCString();
+    //cerr << (const char *)data << endl;
+    return load(doc);
 }
 
 #include "kformulacontainer.moc"

@@ -388,28 +388,6 @@ void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
 }
 
 
-void Artwork::drawIntegral(QPainter& painter, const ContextStyle& style, int x, int y, int size)
-{
-    QPointArray a;
-    //size = size * 4 / 3;
-    a.setPoints(12,
-		size / 4 - size / 16 + size / 24, 0,                     // 1
-		size / 4 + size / 16 + size / 24, -size + size / 16,     // 2
-		size / 2 - size / 16 + size / 24, -size,                 // 3
-		size / 2 + size / 24 + size / 24, -size + size / 8,      // 4
-		size / 2 - size / 16 + size / 24, -size + size / 16,     // 5
-		size / 4 + size / 12 + size / 24, -size + size / 8,      // 6
-		size / 4 + size / 16 + size / 24, 0,                     // 7
-		size / 4 - size / 16 + size / 24, size - size / 16,      // 8
-		size / 16 + size / 24, size,                             // 9
-		0, size - size / 8,                                      // 10
-		size / 16 + size / 24, size - size / 16,                 // 11
-		size / 4 - size / 12 + size / 24, size - size / 8);      // 12
-    a.translate(x, y);
-    painter.setBrush(style.getDefaultColor());
-    painter.drawPolygon(a);
-}
-
 void Artwork::drawCharacter(QPainter& painter, const ContextStyle& style, int x, int y, QChar ch)
 {
     QFont f = style.getSymbolFont();
@@ -424,17 +402,6 @@ void Artwork::drawCharacter(QPainter& painter, const ContextStyle& style, int x,
     //painter.drawRect(bound);
     //painter.drawRect(x, y, getWidth(), getHeight());
     //cerr << bound.x() << " " << bound.y() << " " << bound.width() << " " << bound.height() << endl;
-}
-
-void Artwork::drawArrow(QPainter& painter, int x, int y, int size)
-{
-    painter.setPen(QPen(Qt::black, size / 8));
-    painter.drawLine(x, y, x + size, y);
-    painter.drawLine(x + size - size / 16, y,
-                     x + size - size / 16 - size / 4, y - size / 4);
-    painter.drawLine(x + size - size / 16, y,
-                     x + size - size / 16 - size / 4, y + size / 4);
-    painter.setPen(QPen(Qt::black, 1));
 }
 
 

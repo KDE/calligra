@@ -610,7 +610,7 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
     delete content;
     content = buildChild(node, "CONTENT");
     if (content == 0) {
-        cerr << "Empty content in BracketElement.\n";
+        cerr << "Empty content in SymbolElement.\n";
         return false;
     }
     node = node.nextSibling();

@@ -64,14 +64,9 @@ public:
     SymbolType getType() const { return type; }
     void setType(SymbolType t) { type = t; }
     
-protected:
-
-    void drawIntegral(QPainter& painter, const ContextStyle& style, int x, int y, int size);
-    void drawArrow(QPainter& painter, int x, int y, int size);
+private:
 
     void drawCharacter(QPainter& painter, const ContextStyle& style, int x, int y, QChar ch);
-
-private:
 
     bool doSimpleRoundBracket(const ContextStyle& style, int height);
     bool doSimpleSquareBracket(const ContextStyle& style, int height);
