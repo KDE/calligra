@@ -40,6 +40,7 @@ public:
     ~KWFrameStyleCollection();
 
     const QPtrList<KWFrameStyle> & frameStyleList() const { return m_styleList; }
+    void clear();
 
     /**
      * find frame style based on the untranslated name @p name

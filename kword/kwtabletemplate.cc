@@ -42,10 +42,15 @@ KWTableTemplateCollection::KWTableTemplateCollection()
 KWTableTemplateCollection::~KWTableTemplateCollection()
 {
     //kdDebug() << "KWTableTemplateCollection::destructor" << endl;
+    clear();
+}
+
+void KWTableTemplateCollection::clear()
+{
     m_templateList.setAutoDelete( true );
     m_templateList.clear();
-
     m_deletedTemplates.clear();
+    m_lastTemplate = 0;
 }
 
 KWTableTemplate* KWTableTemplateCollection::findTableTemplate( const QString & _name )

@@ -41,9 +41,15 @@ KWFrameStyleCollection::KWFrameStyleCollection()
 
 KWFrameStyleCollection::~KWFrameStyleCollection()
 {
+    clear();
+}
+
+void KWFrameStyleCollection::clear()
+{
     m_styleList.setAutoDelete( true );
     m_styleList.clear();
     m_deletedStyles.clear();
+    m_lastStyle = 0L;
 }
 
 KWFrameStyle* KWFrameStyleCollection::findStyleShortCut( const QString & _shortCut )

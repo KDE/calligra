@@ -273,26 +273,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     //kdDebug() << "Default font: requested family: " << m_defaultFont.family() << endl;
     //kdDebug() << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
 
-    // Some simple import filters don't define any style,
-    // so let's have a Standard style at least
-    KoParagStyle * standardStyle = new KoParagStyle( "Standard" ); // This gets translated later on
-    //kdDebug() << "KWDocument::KWDocument creating standardStyle " << standardStyle << endl;
-    standardStyle->format().setFont( m_defaultFont );
-    m_styleColl->addStyleTemplate( standardStyle );
-
-    // And let's do the same for framestyles
-    KWFrameStyle * standardFrameStyle = new KWFrameStyle( "Plain" );
-    standardFrameStyle->setBackgroundColor(Qt::white);
-    standardFrameStyle->setTopBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
-    standardFrameStyle->setRightBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
-    standardFrameStyle->setLeftBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
-    standardFrameStyle->setBottomBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
-    m_frameStyleColl->addFrameStyleTemplate( standardFrameStyle );
-
-    // And let's do the same for tablestyles
-    KWTableStyle *standardTableStyle = new KWTableStyle( "Plain", standardStyle, standardFrameStyle );
-    m_tableStyleColl->addTableStyleTemplate( standardTableStyle );
-
     if ( name )
         dcopObject();
     connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
@@ -1042,26 +1022,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
+    clear();
     kdDebug(32001) << "KWDocument::loadOasis" << endl;
-    m_pictureMap.clear();
-    m_textImageRequests.clear();
-    m_pictureRequests.clear();
-    m_anchorRequests.clear();
-    m_footnoteVarRequests.clear();
-    m_spellListIgnoreAll.clear();
-
-    m_pageColumns.columns = 1;
-    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
-
-    m_pageHeaderFooter.header = HF_SAME;
-    m_pageHeaderFooter.footer = HF_SAME;
-    m_pageHeaderFooter.ptHeaderBodySpacing = 10;
-    m_pageHeaderFooter.ptFooterBodySpacing = 10;
-    m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
-    m_varFormatCollection->clear();
-
-    m_pages = 1;
-    m_bHasEndNotes = false;
 
     KoColumns __columns;
     __columns.columns = 1;
@@ -1312,19 +1274,15 @@ void KWDocument::loadOasisHeaderFooter( const QDomElement& headerFooter, bool ha
         m_footerVisible = true;
 }
 
-bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
+// called before loading
+void KWDocument::clear()
 {
-    QTime dt;
-    dt.start();
-    emit sigProgress( 0 );
-    kdDebug(32001) << "KWDocument::loadXML" << endl;
     m_pictureMap.clear();
     m_textImageRequests.clear();
     m_pictureRequests.clear();
     m_anchorRequests.clear();
     m_footnoteVarRequests.clear();
     m_spellListIgnoreAll.clear();
-
     m_pageColumns.columns = 1;
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 
@@ -1333,10 +1291,48 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_pageHeaderFooter.ptHeaderBodySpacing = 10;
     m_pageHeaderFooter.ptFooterBodySpacing = 10;
     m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
-    m_varFormatCollection->clear();
-
+    m_pageColumns.columns = 1;
+    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
     m_pages = 1;
     m_bHasEndNotes = false;
+
+    m_varColl->clear();
+    m_pictureCollection->clear();
+    m_varFormatCollection->clear();
+
+    m_styleColl->clear();
+    m_frameStyleColl->clear();
+    m_tableStyleColl->clear();
+    m_tableTemplateColl->clear();
+
+    // Some simple import filters don't define any style,
+    // so let's have a Standard style at least
+    KoParagStyle * standardStyle = new KoParagStyle( "Standard" ); // This gets translated later on
+    //kdDebug() << "KWDocument::KWDocument creating standardStyle " << standardStyle << endl;
+    standardStyle->format().setFont( m_defaultFont );
+    m_styleColl->addStyleTemplate( standardStyle );
+
+    // And let's do the same for framestyles
+    KWFrameStyle * standardFrameStyle = new KWFrameStyle( "Plain" );
+    standardFrameStyle->setBackgroundColor(Qt::white);
+    standardFrameStyle->setTopBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
+    standardFrameStyle->setRightBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
+    standardFrameStyle->setLeftBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
+    standardFrameStyle->setBottomBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
+    m_frameStyleColl->addFrameStyleTemplate( standardFrameStyle );
+
+    // And let's do the same for tablestyles
+    KWTableStyle *standardTableStyle = new KWTableStyle( "Plain", standardStyle, standardFrameStyle );
+    m_tableStyleColl->addTableStyleTemplate( standardTableStyle );
+}
+
+bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
+{
+    QTime dt;
+    dt.start();
+    emit sigProgress( 0 );
+    kdDebug(32001) << "KWDocument::loadXML" << endl;
+    clear();
 
     KoPageLayout __pgLayout;
     KoColumns __columns;

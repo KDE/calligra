@@ -39,6 +39,7 @@ public:
     KWTableTemplateCollection();
     ~KWTableTemplateCollection();
     const QPtrList<KWTableTemplate> & tableTemplateList() const { return m_templateList; }
+    void clear();
 
     KWTableTemplate* findTableTemplate( const QString & name );
     /**

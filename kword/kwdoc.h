@@ -864,6 +864,7 @@ protected:
     void loadOasisIgnoreList( const KoOasisSettings& settings );
 
 private:
+    void clear();
     void endOfLoading();
     //private helper functions for frameUnderMouse
     /** return the top-most frame under mouse, using nPoint, always returns the first found. */

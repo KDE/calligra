@@ -41,9 +41,15 @@ KWTableStyleCollection::KWTableStyleCollection()
 
 KWTableStyleCollection::~KWTableStyleCollection()
 {
+    clear();
+}
+
+void KWTableStyleCollection::clear()
+{
     m_styleList.setAutoDelete( true );
     m_styleList.clear();
     m_deletedStyles.clear();
+    m_lastStyle = 0L;
 }
 
 KWTableStyle* KWTableStyleCollection::findTableStyle( const QString & _name )

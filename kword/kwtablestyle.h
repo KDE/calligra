@@ -41,6 +41,7 @@ public:
     KWTableStyleCollection();
     ~KWTableStyleCollection();
     const QPtrList<KWTableStyle> & tableStyleList() const { return m_styleList; }
+    void clear();
 
     /**
      * find table style based on the untranslated name @p name
