@@ -66,6 +66,7 @@
 
 #include <ktempfile.h>
 #include <kapp.h>
+#include <kdebug.h>
 #include <kfiledialog.h>
 #include <kstdaction.h>
 #include <klocale.h>
