@@ -127,20 +127,38 @@ bool KoShellWindow::openDocument( const KURL & url )
   m_recent->addURL( url );
 
   KoDocument* newdoc = m_documentEntry.createDoc();
-  bool ret;
-  QObject::connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+  connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+  connect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
+  connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
   if ( !newdoc || !newdoc->openURL( url ) )
   {
       delete newdoc;
-      ret = false;
-  } else {
-      partManager()->addPart( newdoc, false );
-      setRootDocument( newdoc );
-      ret = true;
+      return false;
   }
-  QObject::disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+  return true;
+}
 
-  return ret;
+// Separate from openDocument to handle async loading (remote URLs)
+void KoShellWindow::slotKSLoadCompleted()
+{
+    KoDocument* newdoc = (KoDocument *)(sender());
+    partManager()->addPart( newdoc, false );
+    setRootDocument( newdoc );
+    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
+    disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
+    return true;
+}
+
+void KoMainWindow::slotKSLoadCanceled( const QString & errMsg )
+{
+    KMessageBox::error( this, errMsg );
+    // ... can't delete the document, it's the one who emitted the signal...
+
+    KoDocument* newdoc = (KoDocument *)(sender());
+    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
+    disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
 }
 
 void KoShellWindow::setRootDocument( KoDocument * doc )
@@ -321,6 +339,7 @@ void KoShellWindow::closeDocument()
   assert( rootDocument() == (*m_activePage).m_pDoc );
 
   // First do the standard queryClose
+  kdDebug() << "KoShellWindow::closeDocument calling standard queryClose" << endl;
   if ( KoMainWindow::queryClose() )
   {
     kdDebug() << "Ok for closing document" << endl;

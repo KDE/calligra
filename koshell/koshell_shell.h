@@ -66,6 +66,9 @@ protected slots:
 
   void slotKoolBar( int _grp, int _item );
 
+  void slotKSLoadCompleted();
+  void slotKSLoadCanceled (const QString &);
+
 protected:
 
   virtual bool queryClose();
