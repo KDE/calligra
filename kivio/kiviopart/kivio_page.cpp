@@ -51,6 +51,7 @@
 #include <koxmlwriter.h>
 #include <koStore.h>
 #include <koOasisStyles.h>
+#include <koGenStyles.h>
 
 #include "kivio_page.h"
 #include "kivio_map.h"
@@ -180,7 +181,7 @@ QDomElement KivioPage::save( QDomDocument& doc )
     return page;
 }
 
-void KivioPage::saveOasis(KoStore* store, KoXmlWriter* docWriter)
+void KivioPage::saveOasis(KoStore* store, KoXmlWriter* docWriter, KoGenStyles* styles)
 {
   docWriter->startElement("draw:page");
   docWriter->addAttribute("draw:name", m_strName);
@@ -188,7 +189,14 @@ void KivioPage::saveOasis(KoStore* store, KoXmlWriter* docWriter)
   if(m_pPageLayout == Kivio::Config::defaultPageLayout()) {
     docWriter->addAttribute("draw:master-page-name", "Standard");
   } else {
-    docWriter->addAttribute("draw:master-page-name", m_strName + "MasterPage");
+    KoGenStyle pageLayout = Kivio::savePageLayout(m_pPageLayout);
+    QString layoutName = styles->lookup(pageLayout, "PL");
+    
+    KoGenStyle masterPage(KoGenStyle::STYLE_MASTER);
+    masterPage.addAttribute("style:page-layout-name", layoutName);
+    QString masterName = styles->lookup(masterPage, "MP");
+    
+    docWriter->addAttribute("draw:master-page-name", masterName);
   }
   
   // TODO OASIS: Save guidelines!
@@ -202,23 +210,6 @@ void KivioPage::saveOasis(KoStore* store, KoXmlWriter* docWriter)
   }
   
   docWriter->endElement(); // draw:page
-}
-
-void KivioPage::saveLayout(KoXmlWriter* styleWriter)
-{
-  if(m_pPageLayout != Kivio::Config::defaultPageLayout()) {
-    Kivio::savePageLayout(styleWriter, m_pPageLayout, m_strName + "PageLayout");
-  }
-}
-
-void KivioPage::saveMasterPage(KoXmlWriter* styleWriter)
-{
-  if(m_pPageLayout != Kivio::Config::defaultPageLayout()) {
-    styleWriter->startElement("style:master-page");
-    styleWriter->addAttribute("style:name", m_strName + "MasterPage");
-    styleWriter->addAttribute("style:page-layout-name", m_strName + "PageLayout");
-    styleWriter->endElement(); // style:master-page
-  }
 }
 
 QDomElement KivioPage::saveLayout( QDomDocument &doc )

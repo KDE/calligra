@@ -25,6 +25,7 @@ class KivioDoc;
 
 class KoStore;
 class KoXmlWriter;
+class KoGenStyles;
 
 class QDomElement;
 class QDomDocument;
@@ -52,11 +53,8 @@ class KivioMap : public QObject
     virtual ~KivioMap();
   
     QDomElement save( QDomDocument& doc );
-    void saveOasis(KoStore* store, KoXmlWriter* docWriter);
+    void saveOasis(KoStore* store, KoXmlWriter* docWriter, KoGenStyles* styles);
     bool loadXML( const QDomElement& mymap );
-    
-    void saveLayouts(KoXmlWriter* styleWriter);
-    void saveMasterPages(KoXmlWriter* styleWriter);
   
     /**
     * @param _page becomes added to the map.

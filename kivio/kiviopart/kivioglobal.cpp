@@ -27,7 +27,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <koxmlwriter.h>
+#include <koGenStyles.h>
 
 #include "kivio_common.h"
 #include "kivio_settings.h"
@@ -51,20 +51,18 @@ void Kivio::savePageLayout(QDomElement& e, KoPageLayout layout)
   XmlWriteString(e, "orientation", Kivio::orientationString(layout.orientation));
 }
   
-void Kivio::savePageLayout(KoXmlWriter* styleWriter, KoPageLayout layout, const QString& name)
+KoGenStyle Kivio::savePageLayout(KoPageLayout layout)
 {
-  styleWriter->startElement("style:page-layout");
-  styleWriter->addAttribute("style:name", name);
-  styleWriter->startElement("style:page-layout-properties");
-  styleWriter->addAttributePt("fo:page-width", layout.ptWidth);
-  styleWriter->addAttributePt("fo:page-height", layout.ptHeight);
-  styleWriter->addAttributePt("fo:margin-left", layout.ptLeft);
-  styleWriter->addAttributePt("fo:margin-right", layout.ptRight);
-  styleWriter->addAttributePt("fo:margin-top", layout.ptTop);
-  styleWriter->addAttributePt("fo:margin-bottom", layout.ptBottom);
-  styleWriter->addAttribute("style:print-orientation", (layout.orientation == PG_LANDSCAPE ? "landscape" : "portrait"));
-  styleWriter->endElement(); // style:page-layout-properties
-  styleWriter->endElement(); // style:page-layout
+  KoGenStyle style(KoGenStyle::STYLE_PAGELAYOUT);
+  style.addPropertyPt("fo:page-width", layout.ptWidth);
+  style.addPropertyPt("fo:page-height", layout.ptHeight);
+  style.addPropertyPt("fo:margin-left", layout.ptLeft);
+  style.addPropertyPt("fo:margin-right", layout.ptRight);
+  style.addPropertyPt("fo:margin-top", layout.ptTop);
+  style.addPropertyPt("fo:margin-bottom", layout.ptBottom);
+  style.addProperty("style:print-orientation", (layout.orientation == PG_LANDSCAPE ? "landscape" : "portrait"));
+  
+  return style;
 }
 
 KoPageLayout Kivio::loadPageLayout(const QDomElement& e)

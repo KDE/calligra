@@ -82,6 +82,7 @@
 #include <kglobal.h>
 #include <kocommandhistory.h>
 #include <koxmlwriter.h>
+#include <koGenStyles.h>
 
 //using namespace std;
 
@@ -268,35 +269,13 @@ QDomDocument KivioDoc::saveXML()
 bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
 {
   KoStoreDevice storeDev(store);
+  KoGenStyles styles;
   
-  if(!store->open("styles.xml")) {
-    return false;
-  }
-  
-  KoXmlWriter styleWriter(&storeDev, "office:document-styles");
-  
-  styleWriter.startElement("office:automatic-styles");
-  Kivio::savePageLayout(&styleWriter, Kivio::Config::defaultPageLayout(), "StandardPageLayout");
-  m_pMap->saveLayouts(&styleWriter); // Save layouts for pages thst don't use StandardPageLayout
-  styleWriter.endElement(); // office:automatic-styles
-  
-  styleWriter.startElement("office:master-styles");
-  // Save standard master page
-  styleWriter.startElement("style:master-page");
-  styleWriter.addAttribute("style:name", "Standard");
-  styleWriter.addAttribute("style:page-layout-name", "StandardPageLayout");
-  styleWriter.endElement(); // style:master-page
-  m_pMap->saveMasterPages(&styleWriter); // Save master pages for pages thst don't use Standard
-  styleWriter.endElement(); // office:master-styles
-  
-  styleWriter.endElement(); // Root element
-  styleWriter.endDocument();
-  
-  if(!store->close()) {
-    return false;
-  }
-
-  manifestWriter->addManifestEntry("styles.xml", "text/xml");
+  KoGenStyle pageLayout = Kivio::savePageLayout(Kivio::Config::defaultPageLayout());
+  QString layoutName = styles.lookup(pageLayout, "PL");
+  KoGenStyle masterPage(KoGenStyle::STYLE_MASTER);
+  masterPage.addAttribute("style:page-layout-name", layoutName);
+  styles.lookup(masterPage, "Standard");
   
   if(!store->open("content.xml")) {
     return false;
@@ -307,7 +286,7 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
   docWriter.startElement("office:body");
   docWriter.startElement("office:drawing");
   
-  m_pMap->saveOasis(store, &docWriter); // Save contents
+  m_pMap->saveOasis(store, &docWriter, &styles); // Save contents
   
   docWriter.endElement(); // office:drawing
   docWriter.endElement(); // office:body
@@ -319,6 +298,41 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
   }
   
   manifestWriter->addManifestEntry("content.xml", "text/xml");
+  
+  if(!store->open("styles.xml")) {
+    return false;
+  }
+  
+  KoXmlWriter styleWriter(&storeDev, "office:document-styles");
+  
+  QValueList<KoGenStyles::NamedStyle> styleList = styles.styles(KoGenStyle::STYLE_PAGELAYOUT);
+  QValueList<KoGenStyles::NamedStyle>::const_iterator it = styleList.begin();
+  styleWriter.startElement("office:automatic-styles");
+  
+  for ( ; it != styleList.end(); ++it) {
+    (*it).style->writeStyle(&styleWriter, styles, "style:page-layout", (*it).name, "style:page-layout-properties");
+  }
+  
+  styleWriter.endElement(); // office:automatic-styles
+  
+  styleList = styles.styles(KoGenStyle::STYLE_MASTER);
+  it = styleList.begin();
+  styleWriter.startElement("office:master-styles");
+  
+  for ( ; it != styleList.end(); ++it) {
+    (*it).style->writeStyle(&styleWriter, styles, "style:master-page", (*it).name, "");
+  }
+  
+  styleWriter.endElement(); // office:master-styles
+  
+  styleWriter.endElement(); // Root element
+  styleWriter.endDocument();
+  
+  if(!store->close()) {
+    return false;
+  }
+
+  manifestWriter->addManifestEntry("styles.xml", "text/xml");
   
   setModified(false);
   return true;

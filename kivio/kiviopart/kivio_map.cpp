@@ -22,6 +22,7 @@
 
 #include <koStore.h>
 #include <koxmlwriter.h>
+#include <koGenStyles.h>
 
 #include "kivio_map.h"
 #include "kivio_doc.h"
@@ -118,13 +119,13 @@ QDomElement KivioMap::save( QDomDocument& doc )
   return mymap;
 }
 
-void KivioMap::saveOasis(KoStore* store, KoXmlWriter* docWriter)
+void KivioMap::saveOasis(KoStore* store, KoXmlWriter* docWriter, KoGenStyles* styles)
 {
   QPtrListIterator<KivioPage> it(m_lstPages);
   
   for( ; it.current(); ++it )
   {
-    it.current()->saveOasis(store, docWriter);
+    it.current()->saveOasis(store, docWriter, styles);
   }
 }
 
@@ -221,24 +222,4 @@ QStringList KivioMap::hiddenPages() const
   }
   
   return pages;
-}
-
-void KivioMap::saveLayouts(KoXmlWriter* styleWriter)
-{
-  QPtrListIterator<KivioPage> it(m_lstPages);
-  
-  for( ; it.current(); ++it )
-  {
-    it.current()->saveLayout(styleWriter);
-  }
-}
-
-void KivioMap::saveMasterPages(KoXmlWriter* styleWriter)
-{
-  QPtrListIterator<KivioPage> it(m_lstPages);
-  
-  for( ; it.current(); ++it )
-  {
-    it.current()->saveMasterPage(styleWriter);
-  }
 }

@@ -27,7 +27,7 @@
 class QDomElement;
 class QPixmap;
 class QString;
-class KoXmlWriter;
+class KoGenStyle;
 
 namespace Kivio
 {
@@ -35,7 +35,7 @@ namespace Kivio
    * Save a page layout to a QDomElement
    */
   void savePageLayout(QDomElement& e, KoPageLayout layout);
-  void savePageLayout(KoXmlWriter* styleWriter, KoPageLayout layout, const QString& name);
+  KoGenStyle savePageLayout(KoPageLayout layout);
   /**
    * Load a page layout from a QDomElement
    */
