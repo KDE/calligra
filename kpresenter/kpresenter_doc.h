@@ -192,7 +192,7 @@ public:
     void setPresPen( QPen p ) {_presPen = p; }
 
     void restoreBackground( KPrPage * );
-    void loadPastedObjs( const QString &in, KPrPage* _page );
+    KCommand * loadPastedObjs( const QString &in, KPrPage* _page );
 
     void deSelectAllObj();
     void deSelectObj(KPObject *obj);
@@ -448,7 +448,7 @@ protected:
 
     void loadBackground( const QDomElement &element );
     void loadHelpLines( const QDomElement &element );
-    void loadObjects( const QDomElement &element,bool paste=false );
+    KCommand * loadObjects( const QDomElement &element,bool paste=false );
     void loadTitle( const QDomElement &element );
     void loadNote( const QDomElement &element );
     void loadUsedSoundFileFromXML( const QDomElement &element );

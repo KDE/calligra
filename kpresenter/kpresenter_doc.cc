@@ -1112,7 +1112,10 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 #if 0
             lastObj = _objectList->count() - 1;
 #endif
-            loadObjects(elem);
+            //don't add command we don't paste object
+            KCommand * cmd =loadObjects(elem);
+            if ( cmd )
+                delete cmd;
         } else if(elem.tagName()=="INFINITLOOP") {
             if(_clean) {
                 if(elem.hasAttribute("value"))
@@ -1209,7 +1212,7 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
 }
 
 /*========================= load objects =========================*/
-void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
+KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
 {
     ObjType t = OT_LINE;
     QDomElement obj=element.firstChild().toElement();
@@ -1578,10 +1581,13 @@ void KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
     if ( createMacro )
     {
         macro->execute();
-        addCommand( macro );
+        return macro;
     }
     else
+    {
         delete macro;
+        return 0L;
+    }
 }
 
 /*========================= load page title =========================*/
@@ -2097,7 +2103,7 @@ void KPresenterDoc::restoreBackground( KPrPage *page )
 }
 
 /*==================== load pasted objects ==============================*/
-void KPresenterDoc::loadPastedObjs( const QString &in,KPrPage* _page )
+KCommand * KPresenterDoc::loadPastedObjs( const QString &in,KPrPage* _page )
 {
     QDomDocument doc;
     doc.setContent( in );
@@ -2107,7 +2113,7 @@ void KPresenterDoc::loadPastedObjs( const QString &in,KPrPage* _page )
     // DOC
     if (document.tagName()!="DOC") {
         kdError() << "Missing DOC" << endl;
-        return;
+        return 0L;
     }
 
     bool ok = false;
@@ -2116,13 +2122,14 @@ void KPresenterDoc::loadPastedObjs( const QString &in,KPrPage* _page )
         ok=true;
 
     if ( !ok )
-        return;
+        return 0L;
     m_pageWhereLoadObject=_page;
-    loadObjects(document,true);
+    KCommand *cmd = loadObjects(document,true);
     m_pageWhereLoadObject=0L;
 
     repaint( false );
     setModified( true );
+    return cmd;
 }
 
 /*================= deselect all objs ===========================*/

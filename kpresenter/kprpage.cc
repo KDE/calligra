@@ -174,7 +174,10 @@ void KPrPage::pasteObjs( const QByteArray & data )
     int num = m_objectList.count();
     QString clip_str = QString::fromUtf8( data );
     if ( clip_str.isEmpty() ) return;
-    m_doc->loadPastedObjs( clip_str,this );
+    KCommand *cmd = m_doc->loadPastedObjs( clip_str,this );
+    if (cmd )
+        m_doc->addCommand( cmd );
+
     //move and select all new pasted in objects
     KPObject *_tempObj;
     for (_tempObj = m_objectList.at(num); _tempObj; _tempObj = m_objectList.next()) {
