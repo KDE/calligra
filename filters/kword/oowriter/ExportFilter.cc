@@ -172,7 +172,11 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
     //zipWriteData(" xmlns:form=\"http://openoffice.org/2000/form\"");
     //zipWriteData(" xmlns:script=\"http://openoffice.org/2000/script\"");
 
-    zipWriteData(" office:class=\"text\" office:version=\"1.0\"");
+    zipWriteData(" office:class=\"text\"");
+
+    // We are using an (OASIS) )extension compared to version 1.0, so we cannot write the version string.
+    // (We do not even write it for context.xml and meta.xml, as OOWriter 1.0..1 does not like it in this case.)
+    //zipWriteData("office:version=\"1.0\"");
 
     zipWriteData(">\n");
 }
