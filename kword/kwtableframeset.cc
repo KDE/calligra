@@ -1388,7 +1388,71 @@ void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyReg
 void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode, KWCanvas *canvas )
 {
     painter.save();
+    QPen previewLinePen( lightGray ); // TODO use qcolorgroup
+    QColor defaultBorderColor = KoTextFormat::defaultTextColor( &painter );
+    const int minborder = 1;
+    bool drawPreviewLines = !(painter.device()->devType() == QInternal::Printer ||
+         !canvas || !canvas->gui()->getView()->viewFrameBorders());
 
+//for(unsigned int i=0;i<m_colPositions.count();kdDebug() <<"col " << i++ << ": " << m_colPositions[i] << endl);
+//for(unsigned int i=0;i<m_rowPositions.count();kdDebug() <<"row " << i++ << ": " << m_rowPositions[i] << endl);
+
+    unsigned int row=0;
+    QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
+    for (unsigned int i=0 ; i <= m_rowPositions.count() ; i++) {
+        //kdDebug() << "row: " << row << endl;
+        bool bottom=false; // use bottom border of cell.
+        if(pageBound!=m_pageBoundaries.end() && (*pageBound) == row || i == m_rowPositions.count()-1)
+            bottom=true;
+
+        KoBorder *border=0;
+        double startPos =0;
+        for(unsigned int col=0; col <= getCols();) {
+            Cell *cell = getCell(bottom?row-1:row, col);
+
+            if(col > 0 && (cell && cell->frame(0)->topBorder()!=*border || col == getCols())) {
+                double y = m_doc->zoomItY(m_rowPositions[row]);
+                QPoint topLeft = viewMode->normalToView(QPoint(m_doc->zoomItX(startPos), y));
+                QPoint bottomRight = viewMode->normalToView(QPoint(m_doc->zoomItX(m_colPositions[col]), y));
+                QRect line = viewMode->normalToView(QRect(topLeft, bottomRight));
+                if((border->ptWidth > 0 || drawPreviewLines) && crect.intersects( line )) {
+                    //if(border->ptWidth <= 0) kdDebug() << "preview line" << endl;
+                    if(border->ptWidth <= 0)
+                        painter.setPen( previewLinePen );
+                    else {
+                        int borderWidth = KoBorder::zoomWidthY( border->ptWidth, m_doc, minborder );
+                        painter.setPen( KoBorder::borderPen( *border, borderWidth, defaultBorderColor ) );
+                    }
+                    //kdDebug() << "Paint: painter.drawLine( " << line.left() << ","  << line.top() << "," <<  line.right() << ","  << line.top() << ")\n";
+                    painter.drawLine( line.left(), line.top(), line.right(), line.top());
+                }
+
+                // reset startPos
+                startPos = 0;
+            }
+            if(cell && startPos==0) {
+                startPos = m_colPositions[col];
+                if(bottom) 
+                    border=&(cell->frame(0)->bottomBorder());
+                else
+                    border=&(cell->frame(0)->topBorder());
+            }
+            col+=cell?cell->m_cols:1;
+        }
+        if(pageBound!=m_pageBoundaries.end() && (*pageBound) == row)
+            pageBound++;
+        else 
+            row++;
+    }
+
+/*
+    for every col
+        // zelfde als rows. 
+
+*/
+    
+
+#if 0
     // We need 'i'
     //QPtrListIterator<KWFrame> frameIt = frameIterator();
     //for ( ; frameIt.current(); ++frameIt )
@@ -1419,7 +1483,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         QRect rect( viewMode->normalToView( m_doc->zoomRect( *theFrame ) ) );
         // Set the background color.
         QBrush bgBrush( theFrame->backgroundColor() );
-	bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), &painter ) );
+        bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), &painter ) );
         painter.setBrush( bgBrush );
 
         // Draw default borders using view settings...
@@ -1440,7 +1504,6 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         //         theFrame->topBorder(), theFrame->bottomBorder(),
         //         1, viewSetting );
 
-        const int minborder = 1;
 
         // ###### We'll need some code to ensure that this->rightborder == cell_on_right->leftborder etc.
         KoBorder topBorder = theFrame->topBorder();
@@ -1493,6 +1556,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
             painter.drawLine( x, rect.top()-topBorderWidth, x, rect.bottom()+bottomBorderWidth );
         }
     }
+#endif
     painter.restore();
 }
 
@@ -1500,7 +1564,6 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
                                     QColorGroup & cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode * viewMode, KWCanvas *canvas )
 {
-    drawBorders( *painter, crect, viewMode, canvas );
     for (unsigned int i=0; i < m_cells.count() ; i++)
     {
         if (edit)
@@ -1514,7 +1577,7 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
         }
         m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged, 0L, viewMode, canvas );
     }
-
+    drawBorders( *painter, crect, viewMode, canvas );
 }
 
 void KWTableFrameSet::zoom( bool forPrint ) {
