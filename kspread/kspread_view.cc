@@ -568,7 +568,7 @@ void KSpreadView::initializeAreaOperationActions()
   m_consolidate = new KAction( i18n("Consolidate..."), 0, this,
                                SLOT( consolidate() ), actionCollection(),
                                "consolidate" );
-  m_consolidate->setToolTip(""); /* TODO -- what does this do? */
+  m_consolidate->setToolTip("Create a region of summary data from a group of similar regions.");
 
 }
 
