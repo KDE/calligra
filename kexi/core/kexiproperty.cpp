@@ -653,3 +653,10 @@ KexiProperty::format(const QVariant &v)
 	}
 }
 
+// TMP
+void
+KexiProperty::execute(const QString &value)
+{
+	emit m_buf->propertyExecuted(*m_buf, *this, value);
+}
+

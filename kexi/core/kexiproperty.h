@@ -195,6 +195,8 @@ class KEXICORE_EXPORT KexiProperty
 		void  setPixmapName(const QString &name) { m_pixmapName = name; }
 		QString  pixmapName() { return m_pixmapName; }
 
+		void execute(const QString &value); // TMP
+
 		void debug();
 	protected:
 		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue),

@@ -72,6 +72,8 @@ KFMView::KFMView()
 #endif
 
 	manager->createActions(actionCollection(), this);
+	connect(manager, SIGNAL(createFormSlot(Form*, const QString &, const QString &)),
+	   this, SLOT(slotCreateFormSlot(Form*, const QString&, const QString &)) );
 
 	createGUI("kfmui.rc", true);
 	setXMLFile("kfmui.rc", true);
@@ -91,6 +93,13 @@ void
 KFMView::loadUIFile(const QString &filename)
 {
 	manager->loadForm(false, filename);
+}
+
+void
+KFMView::slotCreateFormSlot(KFormDesigner::Form *form, const QString &widget, const QString &signal)
+{
+	kdDebug() << "KFMView::slotCreateFormSlot()  The user wants to create a slot on Form " << form->toplevelContainer()->widget()->name() <<
+	 " for widget " << widget << " connected to signal " << signal << endl;
 }
 
 KFMView::~KFMView()

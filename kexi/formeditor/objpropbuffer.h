@@ -83,6 +83,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		//! This slot is called when the watched widget is destroyed. Resets the buffer.
 		void    widgetDestroyed();
 		void    storePixmapName(KexiPropertyBuffer &, KexiProperty &);
+		void    slotPropertyExecuted(KexiPropertyBuffer &, KexiProperty &, const QString&); // TMP
 
 	signals:
 		/*! This signal is emitted when the name of the widget is modified. \a oldname is the name of the widget before the

@@ -119,6 +119,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		    the widget specific part is added (menu from the factory and buddy selection). */
 		void  createContextMenu(QWidget *w, Container *container, bool enableRemove);
 
+		void  emitCreateSlot(const QString &widget, const QString &value) { emit createFormSlot(m_active, widget, value); }
+
 	public slots:
 		/*! Creates a new blank Form with default class top widget (ie QWidget). The new Form is shown and becomes
 		   the active Form.
@@ -179,6 +181,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void deleteWidgetLaterTimeout();
 		/*! Slot called when a buddy is choosed in the buddy list. Sets the label buddy. */
 		void buddyChoosed(int id);
+		void menuSignalChoosed(int id);
 		void slotStyle();
 
 		void layoutHBox();
@@ -195,6 +198,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void bufferSwitched(KexiPropertyBuffer *buff);
 		/*! This signal is emitted when any change is made to the Form \a form, so it will need to be saved. */
 		void dirty(KFormDesigner::Form *form);
+
+		void createFormSlot(Form *form, const QString &widget, const QString &signal);
 
 	private:
 		// Enum for menu items indexes

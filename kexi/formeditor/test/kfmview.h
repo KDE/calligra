@@ -15,6 +15,8 @@ namespace KFormDesigner {
 class FormManager;
 }
 
+using KFormDesigner::Form;
+
 class KFMView : public KMainWindow
 {
 	Q_OBJECT
@@ -27,6 +29,7 @@ class KFMView : public KMainWindow
 
 	public slots:
 		void slotPreviewForm();
+		void slotCreateFormSlot(Form *form, const QString &widget, const QString &signal);
 
 	private:
 		QWorkspace  *w;

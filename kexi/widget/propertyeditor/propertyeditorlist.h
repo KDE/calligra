@@ -32,23 +32,24 @@ class KComboBox;
 class QStringList;
 class KexiProperty;
 class KListBox;
+class QToolButton;
 
 class KEXIPROPERTYEDITOR_EXPORT PropComboBox : public KComboBox
 {
 	Q_OBJECT
-	
+
 	public:
 		PropComboBox(QWidget *parent, bool multi);
 		~PropComboBox() {;}
-		
+
 		virtual bool eventFilter(QObject *o, QEvent *e);
 		void setSelected(const QStringList &list);
 		QStringList getSelected();
-	
+
 	public slots:
 		void updateEdit();
 		void hideList();
-		
+
 	protected:
 		KListBox *m_listbox;
 		bool m_eventFilterEnabled : 1;
@@ -64,14 +65,16 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEdito
 
 		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
-		
+
 		void setList(QStringList l);
 
 	protected slots:
 		void valueChanged();
+		void itemExecuted();
 
 	protected:
 		PropComboBox		*m_combo;
+		QToolButton		*m_button;
 };
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorMultiList : public KexiPropertySubEditor
@@ -84,7 +87,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorMultiList : public KexiPropertySub
 
 		virtual QVariant	value();
 		virtual	void 		setValue(const QVariant &value);
-		
+
 		void setList(QStringList l);
 
 	protected slots:

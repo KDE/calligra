@@ -20,7 +20,10 @@
 #include <klocale.h>
 #include <qstringlist.h>
 #include <qcursor.h>
+#include <qhbox.h>
+#include <qtoolbutton.h>
 #include <klistbox.h>
+#include <kiconloader.h>
 #include <kdebug.h>
 
 #include "propertyeditorlist.h"
@@ -72,7 +75,7 @@ PropComboBox::eventFilter(QObject *o, QEvent *e)
 			setSelected(QStringList::split("|",s));
 		}
 	}
-	
+
 	return KComboBox::eventFilter(o, e);
 }
 
@@ -128,12 +131,25 @@ PropComboBox::hideList()
 PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
-	m_combo = new PropComboBox(this, false);
+	QHBox *box = new QHBox(this);
 
+	m_combo = new PropComboBox(box, false);
 	m_combo->setGeometry(frameGeometry());
 	m_combo->setEditable(true);
 	m_combo->setInsertionPolicy(QComboBox::NoInsertion);
 	m_combo->setAutoCompletion(true);
+	m_combo->setMinimumSize(10, 0); // to allow the combo to be resized to a small size
+
+	// TMP
+	if(m_property->name() == "signals")
+	{
+		kdDebug() << "Creating a buton " << endl;
+		m_button = new QToolButton(box);
+		m_button->setIconSet(SmallIconSet("goto"));
+		m_button->setFixedWidth(height());
+		connect(m_button, SIGNAL(clicked()), this, SLOT(itemExecuted()));
+	}
+
 	if(m_property->names() && m_property->keys())
 	{
 		m_combo->insertStringList(*(m_property->names()));
@@ -145,9 +161,9 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, 
 			comp->insertItems(*(m_property->names()));
 		}
 	}
-	m_combo->show();
 
-	setWidget(m_combo);
+	setWidget(box); // TMP
+	//setWidget(m_combo);
 	connect(m_combo, SIGNAL(activated(int)), SLOT(valueChanged()));
 }
 
@@ -189,16 +205,23 @@ PropertyEditorList::valueChanged()
 	emit changed(this);
 }
 
+// TMP! until we have custom editors
+void
+PropertyEditorList::itemExecuted()
+{
+	m_property->execute(m_combo->currentText());
+}
+
 //Multiple selection editor (for OR'ed values)
 
 PropertyEditorMultiList::PropertyEditorMultiList(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
 	m_combo = new PropComboBox(this, true);
-
 	m_combo->setGeometry(frameGeometry());
 	m_combo->setInsertionPolicy(QComboBox::NoInsertion);
 	m_combo->setAutoCompletion(true);
+
 //	if(property->list())
 	if(m_property->names() && m_property->keys())
 	{
@@ -271,7 +294,7 @@ PropertyEditorCursor::PropertyEditorCursor(QWidget *parent, KexiProperty *proper
 	m_combo->insertItem(i18n("Pointing Hand"), Qt::PointingHandCursor);
 	m_combo->insertItem(i18n("Forbidden"), Qt::ForbiddenCursor);
 	m_combo->insertItem(i18n("What's this"), Qt::WhatsThisCursor);
-	
+
 	m_combo->setCurrentItem(property->value().toCursor().shape());
 }
 

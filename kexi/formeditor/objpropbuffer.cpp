@@ -54,6 +54,8 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 	connect(this, SIGNAL(propertyReset(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotResetProperty(KexiPropertyBuffer&, KexiProperty&)));
 	connect(this, SIGNAL(collectionItemChoosed(KexiPropertyBuffer &, KexiProperty &)), this,
 	    SLOT(storePixmapName(KexiPropertyBuffer &, KexiProperty &)));
+	connect(this, SIGNAL(propertyExecuted(KexiPropertyBuffer &, KexiProperty &, const QString&)), this,  // TMP
+	    SLOT(slotPropertyExecuted(KexiPropertyBuffer &, KexiProperty &, const QString&)));
 }
 
 void
@@ -68,6 +70,8 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &, KexiProperty &pro
 	if(property == "name")
 		emit nameChanged(m_widget->name(), value.toString());
 
+	if(property == "signals")
+		return;
 	if((property == "hAlign") || (property == "vAlign") || (property == "wordbreak"))
 	{
 		saveAlignProperty(property);
@@ -139,6 +143,15 @@ ObjectPropertyBuffer::slotResetProperty(KexiPropertyBuffer &, KexiProperty &prop
 		if(tree->modifProp()->contains(prop.name()))
 			w->setProperty(prop.name(), tree->modifProp()->find(prop.name()).data());
 	}
+}
+
+void
+ObjectPropertyBuffer::slotPropertyExecuted(KexiPropertyBuffer &buf, KexiProperty &prop, const QString &value)
+{
+	if( (&buf != this) || (prop.name() != "signals") )
+		return;
+
+	m_manager->emitCreateSlot(m_widget->name(), value);
 }
 
 void
@@ -219,6 +232,14 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 		if(!tree)  return;
 		updateOldValue(tree, meta->name()); // update the KexiProperty.oldValue using the value in modifProp
 	}
+
+	// add the signals property
+	QStrList strlist = m_widget->metaObject()->signalNames(true);
+	QStrListIterator strIt(strlist);
+	QStringList list;
+	for(; strIt.current() != 0; ++strIt)
+		list.append(*strIt);
+	add(new KexiProperty("signals", "", list, descList(list), i18n("Events")));
 
 	if(m_manager->activeForm())
 	{

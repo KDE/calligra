@@ -25,6 +25,8 @@
 #include <qlabel.h>
 #include <qobjectlist.h>
 #include <qstylefactory.h>
+#include <qmetaobject.h>
+
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kpopupmenu.h>
@@ -566,12 +568,24 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 		connect(sub, SIGNAL(activated(int)), this, SLOT(buddyChoosed(int)));
 	}
 
+	// We create the signals menu
+	KPopupMenu *sigMenu = new KPopupMenu();
+	QStrList list = w->metaObject()->signalNames(true);
+	QStrListIterator it(list);
+	for(; it.current() != 0; ++it)
+		sigMenu->insertItem(*it);
+	int sigid = m_popup->insertItem(SmallIconSet(""), i18n("Events"), sigMenu);
+	if(list.isEmpty())
+		m_popup->setItemEnabled(sigid, false);
+	connect(sigMenu, SIGNAL(activated(int)), this, SLOT(menuSignalChoosed(int)));
+
 	m_insertPoint = container->widget()->mapFromGlobal(QCursor::pos());
 	m_popup->exec(QCursor::pos());
 	m_insertPoint = QPoint();
 
 	m_popup->removeItem(id);
 	m_popup->removeItem(subid);
+	m_popup->removeItem(sigid);
 }
 
 void
@@ -591,6 +605,14 @@ FormManager::buddyChoosed(int id)
 	if(!item || !item->widget())
 		return;
 	label->setBuddy(item->widget());
+}
+
+void
+FormManager::menuSignalChoosed(int id)
+{
+	if(!m_menuWidget)
+		return;
+	emit(createFormSlot(m_active, m_menuWidget->name(), m_popup->text(id)));
 }
 
 void

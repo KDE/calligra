@@ -100,6 +100,9 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public KexiProperty::
 		//! This signal is emitted when the user chooses an item in the PixmapCollection
 		void collectionItemChoosed(KexiPropertyBuffer &buf, KexiProperty &property);
 
+		// TMP until we have custom editors
+		void propertyExecuted(KexiPropertyBuffer &buf, KexiProperty &prop, const QString &value);
+
 		void destroying();
 
 	protected:
