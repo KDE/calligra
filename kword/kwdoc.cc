@@ -161,7 +161,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     // Get default font from KDE
     m_defaultFont = KGlobalSettings::generalFont();
     KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
-    m_fontList = 0L;
 
     // Set no-op initial values (for setZoomAndResolution)
     m_zoomedResolutionX = 1;
@@ -756,7 +755,6 @@ KWDocument::~KWDocument()
     delete m_autoFormat;
     delete m_formulaDocument;
     delete m_commandHistory;
-    delete m_fontList;
 }
 
 /*================================================================*/
@@ -1826,16 +1824,6 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
     emit sig_insertObject( ch, frameset );
 
     frameChanged( frame ); // repaint etc.
-}
-
-QStringList KWDocument::fontList()
-{
-    if ( !m_fontList )
-    {
-        m_fontList = new QStringList;
-        KFontChooser::getFontList(*m_fontList, false);
-    }
-    return *m_fontList;
 }
 
 KWStyle* KWDocument::findStyle( const QString & _name )

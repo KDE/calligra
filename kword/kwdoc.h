@@ -223,7 +223,6 @@ public:
     KWStyle* styleAt( int i ) { return m_styleList.at(i); }
 
     QFont defaultFont() const { return m_defaultFont; }
-    QStringList fontList();
 
     int getPages() const { return m_pages; }
     //void setPages( int _pages ) { m_pages = _pages;  }
@@ -556,7 +555,6 @@ private:
     KSpellConfig *m_pKSpellConfig;
 
     QFont m_defaultFont;
-    QStringList * m_fontList;
     bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
 
     // The document that is used by all formulas

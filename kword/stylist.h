@@ -50,7 +50,7 @@ class KWStyleManager : public QDialog
     Q_OBJECT
 
 public:
-    KWStyleManager( QWidget *_parent, KWDocument *_doc, QStringList _fontList );
+    KWStyleManager( QWidget *_parent, KWDocument *_doc );
 
     class basicTab : public QWidget {
         public:
@@ -70,7 +70,6 @@ public:
 
 protected:
     KWDocument *m_doc;
-    QStringList m_fontList;
 
     void setupWidget();
     void addGeneralTab();

@@ -61,10 +61,9 @@
 */
 
 /*================================================================*/
-KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc, QStringList _fontList )
+KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     : QDialog(_parent, "Stylist", true) {
     setWFlags(getWFlags() || WDestructiveClose);
-    m_fontList = _fontList;
     m_doc = _doc;
     m_currentStyle =0L;
     noSignals=true;
@@ -416,7 +415,7 @@ void KWStyleEditor::changeSpacing() {
         delete paragDia;
         paragDia = 0;
     }
-    paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING, doc );
+    paragDia = new KWParagDia( this, "", KWParagDia::PD_SPACING, doc );
     paragDia->setCaption( i18n( "Paragraph Spacing" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setSpaceBeforeParag( style->paragLayout().margins[QStyleSheetItem::MarginTop] );
@@ -434,7 +433,7 @@ void KWStyleEditor::changeAlign() {
         delete paragDia;
         paragDia = 0;
     }
-    paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_ALIGN, doc );
+    paragDia = new KWParagDia( this, "", KWParagDia::PD_ALIGN, doc );
     paragDia->setCaption( i18n( "Paragraph Alignment" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setAlign( style->paragLayout().alignment );
@@ -447,7 +446,7 @@ void KWStyleEditor::changeBorders() {
         delete paragDia;
         paragDia = 0;
     }
-    paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_BORDERS, doc );
+    paragDia = new KWParagDia( this, "", KWParagDia::PD_BORDERS, doc );
     paragDia->setCaption( i18n( "Paragraph Borders" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setLeftBorder( style->paragLayout().leftBorder );
@@ -464,7 +463,7 @@ void KWStyleEditor::changeNumbering() {
         delete paragDia;
         paragDia = 0;
     }
-    paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_NUMBERING, doc );
+    paragDia = new KWParagDia( this, "", KWParagDia::PD_NUMBERING, doc );
     paragDia->setCaption( i18n( "Numbering" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     if ( !style->paragLayout().counter )
@@ -479,7 +478,7 @@ void KWStyleEditor::changeTabulators() {
         delete paragDia;
         paragDia = 0;
     }
-    paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_TABS, doc );
+    paragDia = new KWParagDia( this, "", KWParagDia::PD_TABS, doc );
     paragDia->setCaption( i18n( "Tabulators" ) );
     connect( paragDia, SIGNAL( okClicked() ), this, SLOT( paragDiaOk() ) );
     paragDia->setTabList( style->paragLayout().tabList() );

@@ -24,6 +24,7 @@
 #include <qstringlist.h>
 #include <qlist.h>
 #include <koRuler.h>
+#include <kwunit.h>
 
 #include "kwtextparag.h"
 #include "counter.h"
@@ -50,10 +51,83 @@ class QPushButton;
 class QRadioButton;
 class QWidget;
 
-/******************************************************************/
-/* Class: KWParagDia                                              */
-/******************************************************************/
+/**
+ * This is the base class for any widget [usually used in a tab]
+ * that handles modifying a part of a KWParagLayout.
+ * Used by the paragraph dialog (this file) and by the style editor.
+ */
+class KWParagLayoutWidget : public QWidget
+{
+public:
+    // Constructor: parent widget, flag (PD_SOMETHING) and name
+    KWParagLayoutWidget( int flag, QWidget * parent, const char * name = 0 )
+        : QWidget( parent, name ), m_flag( flag )
+    {
+    }
+    virtual ~KWParagLayoutWidget() {}
 
+    // Display settings, from the paragLayout
+    virtual void display( const KWParagLayout & lay ) = 0;
+
+    // Save the settings, into the paragLayout
+    // This is only used by the stylist, not by paragdia (which needs undo/redo, applying partially etc.)
+    virtual void save( KWParagLayout & lay ) = 0;
+
+    // Return true if the settings where modified
+    // ## maybe too global, but how to do it differently? We'll see if we need this.
+    //virtual bool isModified() = 0;
+
+    // Return the part of the paraglayout that this widget cares about
+    int flag() const { return m_flag; }
+
+private:
+    int m_flag;
+};
+
+/**
+ * The widget for editing idents and spacings
+ */
+class KWIndentSpacingWidget : public KWParagLayoutWidget
+{
+    Q_OBJECT
+public:
+    KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * parent, const char * name = 0 );
+    virtual ~KWIndentSpacingWidget() {}
+
+    virtual void display( const KWParagLayout & lay );
+    virtual void save( KWParagLayout & lay );
+    //virtual bool isModified();
+
+    double leftIndent() const;
+    double rightIndent() const;
+    double firstLineIndent() const;
+    double spaceBeforeParag() const;
+    double spaceAfterParag() const;
+    double lineSpacing() const;
+    bool linesTogether() const;
+
+private slots:
+    void leftChanged( const QString & );
+    void rightChanged( const QString & );
+    void firstChanged( const QString & );
+    void spacingActivated( int );
+    void spacingChanged( const QString & );
+    void beforeChanged( const QString & );
+    void afterChanged( const QString & );
+private:
+    QLineEdit *eLeft, *eRight, *eFirstLine, *eBefore, *eAfter, *eSpacing;
+    QComboBox *cSpacing;
+    QCheckBox *cEndOfFramePage;
+    KWPagePreview *prev1;
+    KWUnit::Unit m_unit;
+};
+
+/**
+ * The complete(*) dialog for changing attributes of a paragraph
+ *
+ * (*) the flags (to only show parts of it) have been kept just in case
+ * but are not currently used.
+ */
 class KWParagDia : public KDialogBase
 {
     Q_OBJECT
@@ -65,32 +139,22 @@ public:
     static const int PD_NUMBERING = 8;
     static const int PD_TABS = 16;
 
-    KWParagDia( QWidget*, const char*, QStringList _fontList, int _flags, KWDocument *_doc );
+    KWParagDia( QWidget*, const char*, int _flags, KWDocument *_doc );
     ~KWParagDia();
 
     int getFlags() { return flags; }
 
-    // Set values (in pt)
-    void setLeftIndent( double _left );
-    void setRightIndent( double _right );
-    void setFirstLineIndent( double _first );
-    void setSpaceAfterParag( double _after );
-    void setSpaceBeforeParag( double _before );
-    void setLineSpacing( double _spacing );
-
-    void setAlign( int align );
-
-    void setTabList( const KoTabulatorList & tabList );
-
     // Get values (in pt)
-    double leftIndent() const;
-    double rightIndent() const;
-    double firstLineIndent() const;
-    double spaceBeforeParag() const;
-    double spaceAfterParag() const;
-    double lineSpacing() const;
+    double leftIndent() const { return m_indentSpacingWidget->leftIndent(); }
+    double rightIndent() const { return m_indentSpacingWidget->rightIndent(); }
+    double firstLineIndent() const { return m_indentSpacingWidget->firstLineIndent(); }
+    double spaceBeforeParag() const { return m_indentSpacingWidget->spaceBeforeParag(); }
+    double spaceAfterParag() const { return m_indentSpacingWidget->spaceAfterParag(); }
+    double lineSpacing() const { return m_indentSpacingWidget->lineSpacing(); }
+    bool linesTogether() const { return m_indentSpacingWidget->linesTogether(); }
 
     int align() const;
+    void setAlign( int align );
 
     Border leftBorder() const { return m_leftBorder; }
     void setLeftBorder( Border _leftBorder ) { m_leftBorder = _leftBorder; updateBorders(); }
@@ -105,18 +169,12 @@ public:
     Counter counter() const { return m_counter; }
 
     void setParagLayout( const KWParagLayout & lay );
-    void setPageBreaking( bool b);
-
 
     KoTabulatorList tabListTabulator() const { return _tabList; }
-
+    void setTabList( const KoTabulatorList & tabList );
 
     bool isAlignChanged() const {return oldLayout.alignment!=align();}
     bool listTabulatorChanged() const {return oldLayout.tabList()!=tabListTabulator();}
-
-    bool linesTogether() const ;
-
-    bool isPageBreakingChanged() const { return  m_bPageBreakingChanged;}
 
     bool isLineSpacingChanged() const {return oldLayout.lineSpacing!=lineSpacing();}
     bool isLeftMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginLeft]!=leftIndent(); }
@@ -124,6 +182,7 @@ public:
     bool isFirstLineChanged() const {return oldLayout.margins[ QStyleSheetItem::MarginFirstLine]!=firstLineIndent();}
     bool isSpaceBeforeChanged() const { return oldLayout.margins[QStyleSheetItem::MarginTop]!=spaceBeforeParag();}
     bool isSpaceAfterChanged() const {return oldLayout.margins[QStyleSheetItem::MarginBottom]!=spaceAfterParag();}
+    bool isPageBreakingChanged() const { return oldLayout.linesTogether!=linesTogether(); }
     bool isBulletChanged() const;
 
     bool isBorderChanged() const { return (oldLayout.leftBorder!=leftBorder() ||
@@ -134,7 +193,6 @@ public:
     void setAfterInitBorder(bool _b){m_bAfterInitBorder=_b;}
     void changeKWSpinboxType();
 protected:
-    void setupTab1();
     void setupTab2();
     void setupTab3();
     void setupTab4();
@@ -144,6 +202,9 @@ protected:
     void setActiveItem(double value);
     bool findExistingValue(double val);
 //    void enableUIForCounterType();
+
+private:
+    KWIndentSpacingWidget * m_indentSpacingWidget;
 
     // Tab4 data.
     QButtonGroup *gNumbering;
@@ -156,17 +217,11 @@ protected:
     QPushButton *bBullets;
     QSpinBox *sDepth;
 
-    QGridLayout *indentGrid, *spacingGrid,
-        *pSpaceGrid, *tabGrid, *endFramePageGrid;
-    QLineEdit *eLeft, *eRight, *eFirstLine, *eSpacing, *eBefore, *eAfter, *eTabPos;
-    QLabel *lLeft, *lRight, *lFirstLine, *lBefore, *lAfter, *lAlign, *lStyle, *lWidth, *lColor;
-    QGroupBox *indentFrame, *spacingFrame, *pSpaceFrame, *gText, *endFramePage;
-    QComboBox *cSpacing, *cStyle, *cWidth;
+    QLineEdit *eTabPos;
+    QGroupBox *gText;
 
-    QCheckBox *cEndOfFramePage;
-
+    QComboBox *cWidth, *cStyle;
     QRadioButton *rLeft, *rCenter, *rRight, *rJustify;
-    KWPagePreview *prev1;
     KWPagePreview2 *prev2;
     QPushButton *bLeft, *bRight, *bTop, *bBottom, *bFont, *bAdd, *bDel, *bModify;
     KWBorderPreview *prev3;
@@ -181,23 +236,14 @@ protected:
     Border m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
     int flags;
     Counter m_counter;
-    QStringList fontList;
     KWDocument *doc;
     KoTabulatorList _tabList;
     KWParagLayout oldLayout;
 
     bool m_bAfterInitBorder;
-    bool m_bPageBreakingChanged;
 
 protected slots:
     void slotPressEvent(QMouseEvent *_ev);
-    void leftChanged( const QString & );
-    void rightChanged( const QString & );
-    void firstChanged( const QString & );
-    void spacingActivated( int );
-    void spacingChanged( const QString & );
-    void beforeChanged( const QString & );
-    void afterChanged( const QString & );
     void alignLeft();
     void alignCenter();
     void alignRight();
@@ -224,7 +270,6 @@ protected slots:
     void modifyClicked();
     void delClicked();
     void slotDoubleClicked( QListBoxItem * );
-    void slotEndOfFramePageChanged();
 };
 
 #endif

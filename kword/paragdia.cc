@@ -349,20 +349,292 @@ void KWNumPreview::drawContents( QPainter* )
 {
 }
 
+
+KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * parent, const char * name )
+        : KWParagLayoutWidget( KWParagDia::PD_SPACING, parent, name ), m_unit( unit )
+{
+    QString unitName = KWUnit::unitName( m_unit );
+    QGridLayout *grid = new QGridLayout( parent, 5, 2, 15, 7 );
+
+    // --------------- indent ---------------
+    QGroupBox * indentFrame = new QGroupBox( i18n( "Indent" ), parent );
+    QGridLayout * indentGrid = new QGridLayout( indentFrame, 4, 2, 15, 7 );
+
+    QLabel * lLeft = new QLabel( i18n("Left ( %1 ):").arg(unitName), indentFrame );
+    lLeft->setAlignment( AlignRight );
+    indentGrid->addWidget( lLeft, 1, 0 );
+
+    eLeft = new QLineEdit( indentFrame );
+    eLeft->setValidator( new QDoubleValidator( eLeft ) );
+    eLeft->setText( i18n("0.00") );
+    eLeft->setMaxLength( 5 );
+    eLeft->setEchoMode( QLineEdit::Normal );
+    eLeft->setFrame( true );
+    indentGrid->addWidget( eLeft, 1, 1 );
+    connect( eLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( leftChanged( const QString & ) ) );
+
+    QLabel * lRight = new QLabel( i18n("Right ( %1 ):").arg(unitName), indentFrame );
+    lRight->setAlignment( AlignRight );
+    indentGrid->addWidget( lRight, 2, 0 );
+
+    eRight = new QLineEdit( indentFrame );
+    eRight->setValidator( new QDoubleValidator( eRight ) );
+    eRight->setText( i18n("0.00") );
+    eRight->setMaxLength( 5 );
+    eRight->setEchoMode( QLineEdit::Normal );
+    eRight->setFrame( true );
+    indentGrid->addWidget( eRight, 2, 1 );
+    connect( eRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( rightChanged( const QString & ) ) );
+
+    QLabel * lFirstLine = new QLabel( i18n("First Line ( %1 ):").arg(unitName), indentFrame );
+    lFirstLine->setAlignment( AlignRight );
+    indentGrid->addWidget( lFirstLine, 3, 0 );
+
+    eFirstLine = new QLineEdit( indentFrame );
+    eFirstLine->setValidator( new QDoubleValidator( eFirstLine ) );
+    eFirstLine->setText( i18n("0.00") );
+    eFirstLine->setMaxLength( 5 );
+    eFirstLine->setEchoMode( QLineEdit::Normal );
+    eFirstLine->setFrame( true );
+    connect( eFirstLine, SIGNAL( textChanged( const QString & ) ), this, SLOT( firstChanged( const QString & ) ) );
+    indentGrid->addWidget( eFirstLine, 3, 1 );
+
+     // grid row spacing
+    indentGrid->addRowSpacing( 0, 5 );
+    grid->addWidget( indentFrame, 0, 0 );
+
+    // --------------- line spacing ---------------
+    QGroupBox * spacingFrame = new QGroupBox( i18n( "Line Spacing" ), parent );
+    QGridLayout * spacingGrid = new QGridLayout( spacingFrame, 3, 1, 15, 7 );
+
+    cSpacing = new QComboBox( false, spacingFrame, "" );
+    cSpacing->insertItem( i18n( "0.5 lines" ) );
+    cSpacing->insertItem( i18n( "1.0 line" ) );
+    cSpacing->insertItem( i18n( "1.5 lines" ) );
+    cSpacing->insertItem( i18n( "2.0 lines" ) );
+    cSpacing->insertItem( i18n( "Space ( %1 )" ).arg(unitName) );
+    connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
+    spacingGrid->addWidget( cSpacing, 1, 0 );
+
+    eSpacing = new QLineEdit( spacingFrame );
+    eSpacing->setValidator( new QDoubleValidator( eSpacing ) );
+    eSpacing->setText( i18n("0") );
+    eSpacing->setMaxLength( 2 );
+    eSpacing->setEchoMode( QLineEdit::Normal );
+    eSpacing->setFrame( true );
+    connect( eSpacing, SIGNAL( textChanged( const QString & ) ), this, SLOT( spacingChanged( const QString & ) ) );
+    spacingGrid->addWidget( eSpacing, 2, 0 );
+
+    // grid row spacing
+    spacingGrid->addRowSpacing( 0, 5 );
+    grid->addWidget( spacingFrame, 2, 0 );
+
+    cSpacing->setCurrentItem( 4 );
+    cSpacing->setEnabled( false ); // TODO: handle 0.5 lines, 1 line etc
+    eSpacing->setEnabled( true );
+
+    //
+    // --------------- End of page /frame ---------------
+    QGroupBox * endFramePage = new QGroupBox( i18n( "Behaviour at end of frame/page" ), parent );
+    QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 3, 2, 15, 7 );
+
+    cEndOfFramePage = new QCheckBox( i18n("Keep lines together"),endFramePage);
+    endFramePageGrid->addWidget(cEndOfFramePage,0,0);
+    endFramePageGrid->addRowSpacing( 0, 5 );
+    grid->addWidget( endFramePage, 1, 0 );
+
+    // --------------- paragraph spacing ---------------
+    QGroupBox * pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), parent );
+    QGridLayout * pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2, 15, 7 );
+
+    QLabel * lBefore = new QLabel( i18n("Before ( %1 ):").arg(unitName), pSpaceFrame );
+    lBefore->setAlignment( AlignRight );
+    pSpaceGrid->addWidget( lBefore, 1, 0 );
+
+    eBefore = new QLineEdit( pSpaceFrame );
+    eBefore->setValidator( new QDoubleValidator( eBefore ) );
+    eBefore->setText( i18n("0.00") );
+    eBefore->setMaxLength( 5 );
+    eBefore->setEchoMode( QLineEdit::Normal );
+    eBefore->setFrame( true );
+    connect( eBefore, SIGNAL( textChanged( const QString & ) ), this, SLOT( beforeChanged( const QString & ) ) );
+    pSpaceGrid->addWidget( eBefore, 1, 1 );
+
+    QLabel * lAfter = new QLabel( i18n("After ( %1 ):").arg(unitName), pSpaceFrame );
+    lAfter->setAlignment( AlignRight );
+    pSpaceGrid->addWidget( lAfter, 2, 0 );
+
+    eAfter = new QLineEdit( pSpaceFrame );
+    eAfter->setValidator( new QDoubleValidator( eAfter ) );
+    eAfter->setText( i18n("0.00") );
+    eAfter->setMaxLength( 5 );
+    eAfter->setEchoMode( QLineEdit::Normal );
+    eAfter->setFrame( true );
+    connect( eAfter, SIGNAL( textChanged( const QString & ) ), this, SLOT( afterChanged( const QString & ) ) );
+    pSpaceGrid->addWidget( eAfter, 2, 1 );
+
+    // grid row spacing
+    pSpaceGrid->addRowSpacing( 0, 5 );
+    grid->addWidget( pSpaceFrame, 3, 0 );
+
+    // --------------- preview --------------------
+    prev1 = new KWPagePreview( parent );
+    grid->addMultiCellWidget( prev1, 0, 4, 1, 1 );
+
+    grid->setColStretch( 1, 1 );
+    grid->setRowStretch( 4, 1 );
+}
+
+double KWIndentSpacingWidget::leftIndent() const
+{
+    return KWUnit::fromUserValue( QMAX(eLeft->text().toDouble(),0), m_unit );
+}
+
+double KWIndentSpacingWidget::rightIndent() const
+{
+    return KWUnit::fromUserValue( QMAX(eRight->text().toDouble(),0), m_unit );
+}
+
+double KWIndentSpacingWidget::firstLineIndent() const
+{
+    return KWUnit::fromUserValue( eFirstLine->text().toDouble(), m_unit );
+}
+
+double KWIndentSpacingWidget::spaceBeforeParag() const
+{
+    return KWUnit::fromUserValue( QMAX(eBefore->text().toDouble(),0), m_unit );
+}
+
+double KWIndentSpacingWidget::spaceAfterParag() const
+{
+    return KWUnit::fromUserValue( QMAX(eAfter->text().toDouble(),0), m_unit );
+}
+
+double KWIndentSpacingWidget::lineSpacing() const
+{
+    return KWUnit::fromUserValue( QMAX(eSpacing->text().toDouble(),0), m_unit );
+}
+
+bool KWIndentSpacingWidget::linesTogether() const
+{
+    return cEndOfFramePage->isChecked();
+}
+
+void KWIndentSpacingWidget::display( const KWParagLayout & lay )
+{
+    double _left = lay.margins[QStyleSheetItem::MarginLeft];
+    QString str = QString::number( KWUnit::userValue( _left, m_unit ) );
+    eLeft->setText( str );
+    prev1->setLeft( _left );
+
+    double _right = lay.margins[QStyleSheetItem::MarginRight];
+    str = QString::number( KWUnit::userValue( _right, m_unit )  );
+    eRight->setText( str );
+    prev1->setRight( _right );
+
+    double _first = lay.margins[QStyleSheetItem::MarginFirstLine];
+    str = QString::number( KWUnit::userValue( _first, m_unit )  );
+    eFirstLine->setText( str );
+    prev1->setFirst( _first  );
+
+    double _before = lay.margins[QStyleSheetItem::MarginTop];
+    str = QString::number( KWUnit::userValue( _before, m_unit ) );
+    eBefore->setText( str );
+    prev1->setBefore( _before );
+
+    double _after = lay.margins[QStyleSheetItem::MarginBottom];
+    str = QString::number( KWUnit::userValue( _after, m_unit ) );
+    eAfter->setText( str );
+    prev1->setAfter( _after );
+
+    double _spacing = lay.lineSpacing;
+    str = QString::number( KWUnit::userValue( _spacing, m_unit ) );
+    eSpacing->setText( str );
+    prev1->setSpacing( _spacing );
+
+    cEndOfFramePage->setChecked( lay.linesTogether );
+    // ## preview support for end-of-frame ?
+}
+
+void KWIndentSpacingWidget::save( KWParagLayout & lay )
+{
+    lay.margins[QStyleSheetItem::MarginLeft] = leftIndent();
+    lay.margins[QStyleSheetItem::MarginRight] = rightIndent();
+    lay.margins[QStyleSheetItem::MarginFirstLine] = firstLineIndent();
+    lay.margins[QStyleSheetItem::MarginTop] = spaceBeforeParag();
+    lay.margins[QStyleSheetItem::MarginBottom] = spaceAfterParag();
+    lay.linesTogether = linesTogether();
+}
+
+void KWIndentSpacingWidget::leftChanged( const QString & _text )
+{
+    prev1->setLeft( _text.toDouble() );
+}
+
+void KWIndentSpacingWidget::rightChanged( const QString & _text )
+{
+    prev1->setRight( _text.toDouble() );
+}
+
+void KWIndentSpacingWidget::firstChanged( const QString & _text )
+{
+    prev1->setFirst( _text.toDouble() );
+}
+
+void KWIndentSpacingWidget::spacingActivated( int _index )
+{
+    if ( _index == 4 ) {
+        eSpacing->setEnabled( true );
+        eSpacing->setText( "12.0" );
+        eSpacing->setFocus();
+    } else {
+        eSpacing->setEnabled( false );
+        switch ( _index ) {
+        case 0: eSpacing->setText( "14.0" );
+            break;
+        case 1: eSpacing->setText( "28.0" );
+            break;
+        case 2: eSpacing->setText( "42.0" );
+            break;
+        case 3: eSpacing->setText( "56.0" );
+            break;
+        }
+    }
+    prev1->setSpacing( eSpacing->text().toDouble() );
+}
+
+void KWIndentSpacingWidget::spacingChanged( const QString & _text )
+{
+    prev1->setSpacing( _text.toDouble() );
+}
+
+void KWIndentSpacingWidget::beforeChanged( const QString & _text )
+{
+    prev1->setBefore( _text.toDouble() );
+}
+
+void KWIndentSpacingWidget::afterChanged( const QString & _text )
+{
+    prev1->setAfter( _text.toDouble() );
+}
+
+
 /******************************************************************/
 /* Class: KWParagDia                                              */
 /******************************************************************/
 
 /*================================================================*/
-KWParagDia::KWParagDia( QWidget* parent, const char* name, QStringList _fontList,
+KWParagDia::KWParagDia( QWidget* parent, const char* name,
                         int _flags, KWDocument *_doc )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
     flags = _flags;
-    fontList = _fontList;
     doc = _doc;
     if ( _flags & PD_SPACING )
-        setupTab1();
+    {
+        QWidget *tab = addPage( i18n( "Indent and Spacing" ) );
+        m_indentSpacingWidget = new KWIndentSpacingWidget( doc->getUnit(), tab, "indent-spacing" );
+    }
     if ( _flags & PD_ALIGN )
         setupTab2();
     if ( _flags & PD_BORDERS )
@@ -377,56 +649,6 @@ KWParagDia::KWParagDia( QWidget* parent, const char* name, QStringList _fontList
 /*================================================================*/
 KWParagDia::~KWParagDia()
 {
-}
-
-/*================================================================*/
-void KWParagDia::setLeftIndent( double _left )
-{
-    kdDebug() << "KWParagDia::setLeftIndent pt=" << _left << endl;
-    QString str = QString::number( KWUnit::userValue( _left, doc->getUnit() ) );
-    eLeft->setText( str );
-    prev1->setLeft( _left );
-}
-
-/*================================================================*/
-void KWParagDia::setRightIndent( double _right )
-{
-    kdDebug() << "KWParagDia::setRightIndent pt=" << _right << endl;
-    QString str = QString::number( KWUnit::userValue( _right, doc->getUnit() )  );
-    eRight->setText( str );
-    prev1->setRight( _right );
-}
-
-/*================================================================*/
-void KWParagDia::setFirstLineIndent( double _first )
-{
-    QString str = QString::number( KWUnit::userValue( _first, doc->getUnit() )  );
-    eFirstLine->setText( str );
-    prev1->setFirst( _first  );
-}
-
-/*================================================================*/
-void KWParagDia::setSpaceBeforeParag( double _before )
-{
-    QString str = QString::number( KWUnit::userValue( _before, doc->getUnit() ) );
-    eBefore->setText( str );
-    prev1->setBefore( _before );
-}
-
-/*================================================================*/
-void KWParagDia::setSpaceAfterParag( double _after )
-{
-    QString str = QString::number( KWUnit::userValue( _after, doc->getUnit() ) );
-    eAfter->setText( str );
-    prev1->setAfter( _after );
-}
-
-/*================================================================*/
-void KWParagDia::setLineSpacing( double _spacing )
-{
-    QString str = QString::number( KWUnit::userValue( _spacing, doc->getUnit() ) );
-    eSpacing->setText( str );
-    prev1->setSpacing( _spacing );
 }
 
 /*================================================================*/
@@ -452,11 +674,6 @@ void KWParagDia::setAlign( int align )
     }
 }
 
-void KWParagDia::setPageBreaking( bool b)
-{
-    cEndOfFramePage->setChecked(b);
-}
-
 /*================================================================*/
 int KWParagDia::align() const
 {
@@ -469,150 +686,12 @@ int KWParagDia::align() const
 }
 
 /*================================================================*/
-void KWParagDia::setupTab1()
-{
-    QWidget *tab = addPage( i18n( "Indent and Spacing" ) );
-    QGridLayout *grid = new QGridLayout( tab, 5, 2, 15, 7 );
-
-    // --------------- indent ---------------
-    indentFrame = new QGroupBox( i18n( "Indent" ), tab );
-    indentGrid = new QGridLayout( indentFrame, 4, 2, 15, 7 );
-
-    lLeft = new QLabel( i18n("Left ( %1 ):").arg(doc->getUnitName()), indentFrame );
-    lLeft->setAlignment( AlignRight );
-    indentGrid->addWidget( lLeft, 1, 0 );
-
-    eLeft = new QLineEdit( indentFrame );
-    eLeft->setValidator( new QDoubleValidator( eLeft ) );
-    eLeft->setText( i18n("0.00") );
-    eLeft->setMaxLength( 5 );
-    eLeft->setEchoMode( QLineEdit::Normal );
-    eLeft->setFrame( true );
-    indentGrid->addWidget( eLeft, 1, 1 );
-    connect( eLeft, SIGNAL( textChanged( const QString & ) ), this, SLOT( leftChanged( const QString & ) ) );
-
-    lRight = new QLabel( i18n("Right ( %1 ):").arg(doc->getUnitName()), indentFrame );
-    lRight->setAlignment( AlignRight );
-    indentGrid->addWidget( lRight, 2, 0 );
-
-    eRight = new QLineEdit( indentFrame );
-    eRight->setValidator( new QDoubleValidator( eRight ) );
-    eRight->setText( i18n("0.00") );
-    eRight->setMaxLength( 5 );
-    eRight->setEchoMode( QLineEdit::Normal );
-    eRight->setFrame( true );
-    indentGrid->addWidget( eRight, 2, 1 );
-    connect( eRight, SIGNAL( textChanged( const QString & ) ), this, SLOT( rightChanged( const QString & ) ) );
-
-    lFirstLine = new QLabel( i18n("First Line ( %1 ):").arg(doc->getUnitName()), indentFrame );
-    lFirstLine->setAlignment( AlignRight );
-    indentGrid->addWidget( lFirstLine, 3, 0 );
-
-    eFirstLine = new QLineEdit( indentFrame );
-    eFirstLine->setValidator( new QDoubleValidator( eFirstLine ) );
-    eFirstLine->setText( i18n("0.00") );
-    eFirstLine->setMaxLength( 5 );
-    eFirstLine->setEchoMode( QLineEdit::Normal );
-    eFirstLine->setFrame( true );
-    connect( eFirstLine, SIGNAL( textChanged( const QString & ) ), this, SLOT( firstChanged( const QString & ) ) );
-    indentGrid->addWidget( eFirstLine, 3, 1 );
-
-     // grid row spacing
-    indentGrid->addRowSpacing( 0, 5 );
-    grid->addWidget( indentFrame, 0, 0 );
-
-    // --------------- spacing ---------------
-    spacingFrame = new QGroupBox( i18n( "Line Spacing" ), tab );
-    spacingGrid = new QGridLayout( spacingFrame, 3, 1, 15, 7 );
-
-    cSpacing = new QComboBox( false, spacingFrame, "" );
-    cSpacing->insertItem( i18n( "0.5 lines" ) );
-    cSpacing->insertItem( i18n( "1.0 line" ) );
-    cSpacing->insertItem( i18n( "1.5 lines" ) );
-    cSpacing->insertItem( i18n( "2.0 lines" ) );
-    cSpacing->insertItem( i18n( "Space ( %1 )" ).arg(doc->getUnitName()) );
-    connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
-    spacingGrid->addWidget( cSpacing, 1, 0 );
-
-    eSpacing = new QLineEdit( spacingFrame );
-    eSpacing->setValidator( new QDoubleValidator( eSpacing ) );
-    eSpacing->setText( i18n("0") );
-    eSpacing->setMaxLength( 2 );
-    eSpacing->setEchoMode( QLineEdit::Normal );
-    eSpacing->setFrame( true );
-    connect( eSpacing, SIGNAL( textChanged( const QString & ) ), this, SLOT( spacingChanged( const QString & ) ) );
-    spacingGrid->addWidget( eSpacing, 2, 0 );
-
-// grid row spacing
-    spacingGrid->addRowSpacing( 0, 5 );
-    grid->addWidget( spacingFrame, 2, 0 );
-
-    cSpacing->setCurrentItem( 4 );
-    cSpacing->setEnabled( false ); // TODO: handle 0.5 lines, 1 line etc
-    eSpacing->setEnabled( true );
-
-    //
-    // --------------- End of page /frame ---------------
-    endFramePage = new QGroupBox( i18n( "Behaviour at end of frame/page" ), tab );
-    endFramePageGrid = new QGridLayout( endFramePage, 3, 2, 15, 7 );
-
-    cEndOfFramePage=new QCheckBox( i18n("Keep lines together"),endFramePage);
-    endFramePageGrid->addWidget(cEndOfFramePage,0,0);
-    endFramePageGrid->addRowSpacing( 0, 5 );
-    grid->addWidget( endFramePage, 1, 0 );
-    connect(cEndOfFramePage,SIGNAL(clicked()),this,SLOT(slotEndOfFramePageChanged()));
-
-    // --------------- paragraph spacing ---------------
-    pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), tab );
-    pSpaceGrid = new QGridLayout( pSpaceFrame, 3, 2, 15, 7 );
-
-    lBefore = new QLabel( i18n("Before ( %1 ):").arg(doc->getUnitName()), pSpaceFrame );
-    lBefore->setAlignment( AlignRight );
-    pSpaceGrid->addWidget( lBefore, 1, 0 );
-
-    eBefore = new QLineEdit( pSpaceFrame );
-    eBefore->setValidator( new QDoubleValidator( eBefore ) );
-    eBefore->setText( i18n("0.00") );
-    eBefore->setMaxLength( 5 );
-    eBefore->setEchoMode( QLineEdit::Normal );
-    eBefore->setFrame( true );
-    connect( eBefore, SIGNAL( textChanged( const QString & ) ), this, SLOT( beforeChanged( const QString & ) ) );
-    pSpaceGrid->addWidget( eBefore, 1, 1 );
-
-    lAfter = new QLabel( i18n("After ( %1 ):").arg(doc->getUnitName()), pSpaceFrame );
-    lAfter->setAlignment( AlignRight );
-    pSpaceGrid->addWidget( lAfter, 2, 0 );
-
-    eAfter = new QLineEdit( pSpaceFrame );
-    eAfter->setValidator( new QDoubleValidator( eAfter ) );
-    eAfter->setText( i18n("0.00") );
-    eAfter->setMaxLength( 5 );
-    eAfter->setEchoMode( QLineEdit::Normal );
-    eAfter->setFrame( true );
-    connect( eAfter, SIGNAL( textChanged( const QString & ) ), this, SLOT( afterChanged( const QString & ) ) );
-    pSpaceGrid->addWidget( eAfter, 2, 1 );
-
-    // grid row spacing
-    pSpaceGrid->addRowSpacing( 0, 5 );
-    grid->addWidget( pSpaceFrame, 3, 0 );
-
-    // --------------- preview --------------------
-    prev1 = new KWPagePreview( tab );
-    grid->addMultiCellWidget( prev1, 0, 4, 1, 1 );
-
-    grid->setColStretch( 1, 1 );
-    grid->setRowStretch( 4, 1 );
-
-    m_bPageBreakingChanged=false;
-}
-
-/*================================================================*/
 void KWParagDia::setupTab2()
 {
     QWidget *tab = addPage( i18n( "Aligns" ) );
     QGridLayout *grid = new QGridLayout( tab, 6, 2, 15, 7 );
 
-    lAlign = new QLabel( i18n( "Align:" ), tab );
+    QLabel * lAlign = new QLabel( i18n( "Align:" ), tab );
     grid->addWidget( lAlign, 0, 0 );
 
     rLeft = new QRadioButton( i18n( "Left" ), tab );
@@ -649,7 +728,7 @@ void KWParagDia::setupTab3()
     QWidget *tab = addPage( i18n( "Borders" ) );
     QGridLayout *grid = new QGridLayout( tab, 8, 2, 15, 7 );
 
-    lStyle = new QLabel( i18n( "Style:" ), tab );
+    QLabel * lStyle = new QLabel( i18n( "Style:" ), tab );
     grid->addWidget( lStyle, 0, 0 );
 
     cStyle = new QComboBox( false, tab );
@@ -661,7 +740,7 @@ void KWParagDia::setupTab3()
     grid->addWidget( cStyle, 1, 0 );
     connect( cStyle, SIGNAL( activated( const QString & ) ), this, SLOT( brdStyleChanged( const QString & ) ) );
 
-    lWidth = new QLabel( i18n( "Width:" ), tab );
+    QLabel * lWidth = new QLabel( i18n( "Width:" ), tab );
     grid->addWidget( lWidth, 2, 0 );
 
     cWidth = new QComboBox( false, tab );
@@ -670,7 +749,7 @@ void KWParagDia::setupTab3()
     grid->addWidget( cWidth, 3, 0 );
     connect( cWidth, SIGNAL( activated( const QString & ) ), this, SLOT( brdWidthChanged( const QString & ) ) );
 
-    lColor = new QLabel( i18n( "Color:" ), tab );
+    QLabel * lColor = new QLabel( i18n( "Color:" ), tab );
     grid->addWidget( lColor, 4, 0 );
 
     bColor = new KColorButton( tab );
@@ -975,7 +1054,7 @@ void KWParagDia::setupTab5()
     grid->addWidget( lTabs, 3, 0 );
 
     g3 = new QButtonGroup( "", tab );
-    tabGrid = new QGridLayout( g3, 5, 1, 15, 7 );
+    QGridLayout * tabGrid = new QGridLayout( g3, 5, 1, 15, 7 );
     g3->setExclusive( true );
 
     rtLeft = new QRadioButton( i18n( "Left" ), g3 );
@@ -1172,65 +1251,6 @@ void KWParagDia::updateBorders()
     prev3->setRightBorder( m_rightBorder );
     prev3->setTopBorder( m_topBorder );
     prev3->setBottomBorder( m_bottomBorder );
-}
-
-/*================================================================*/
-void KWParagDia::leftChanged( const QString & _text )
-{
-    prev1->setLeft( _text.toDouble() );
-}
-
-/*================================================================*/
-void KWParagDia::rightChanged( const QString & _text )
-{
-  prev1->setRight( _text.toDouble() );
-}
-
-/*================================================================*/
-void KWParagDia::firstChanged( const QString & _text )
-{
-    prev1->setFirst( _text.toDouble() );
-}
-
-/*================================================================*/
-void KWParagDia::spacingActivated( int _index )
-{
-    if ( _index == 4 ) {
-        eSpacing->setEnabled( true );
-        eSpacing->setText( "12.0" );
-        eSpacing->setFocus();
-    } else {
-        eSpacing->setEnabled( false );
-        switch ( _index ) {
-        case 0: eSpacing->setText( "14.0" );
-            break;
-        case 1: eSpacing->setText( "28.0" );
-            break;
-        case 2: eSpacing->setText( "42.0" );
-            break;
-        case 3: eSpacing->setText( "56.0" );
-            break;
-        }
-    }
-    prev1->setSpacing( eSpacing->text().toDouble() );
-}
-
-/*================================================================*/
-void KWParagDia::spacingChanged( const QString & _text )
-{
-    prev1->setSpacing( _text.toDouble() );
-}
-
-/*================================================================*/
-void KWParagDia::beforeChanged( const QString & _text )
-{
-    prev1->setBefore( _text.toDouble() );
-}
-
-/*================================================================*/
-void KWParagDia::afterChanged( const QString & _text )
-{
-    prev1->setAfter( _text.toDouble() );
 }
 
 /*================================================================*/
@@ -1499,42 +1519,6 @@ void KWParagDia::setTabList( const KoTabulatorList & tabList )
         lTabs->insertItem( QString::number( KWUnit::userValue( (*it).ptPos, unit ) ) );
 }
 
-/*================================================================*/
-double KWParagDia::leftIndent() const
-{
-    return KWUnit::fromUserValue( QMAX(eLeft->text().toDouble(),0), doc->getUnit() );
-}
-
-/*================================================================*/
-double KWParagDia::rightIndent() const
-{
-    return KWUnit::fromUserValue( QMAX(eRight->text().toDouble(),0), doc->getUnit() );
-}
-
-/*================================================================*/
-double KWParagDia::firstLineIndent() const
-{
-    return KWUnit::fromUserValue( eFirstLine->text().toDouble(), doc->getUnit() );
-}
-
-/*================================================================*/
-double KWParagDia::spaceBeforeParag() const
-{
-    return KWUnit::fromUserValue( QMAX(eBefore->text().toDouble(),0), doc->getUnit() );
-}
-
-/*================================================================*/
-double KWParagDia::spaceAfterParag() const
-{
-    return KWUnit::fromUserValue( QMAX(eAfter->text().toDouble(),0), doc->getUnit() );
-}
-
-/*================================================================*/
-double KWParagDia::lineSpacing() const
-{
-    return KWUnit::fromUserValue( QMAX(eSpacing->text().toDouble(),0), doc->getUnit() );
-}
-
 bool KWParagDia::isBulletChanged() const
 {
 #if 0 // doesn't compile
@@ -1546,24 +1530,12 @@ bool KWParagDia::isBulletChanged() const
     return true; // unused anyway
 }
 
-bool KWParagDia::linesTogether() const
-{
-    return  cEndOfFramePage->isChecked();
-}
-
-void KWParagDia::slotEndOfFramePageChanged()
-{
-    m_bPageBreakingChanged=true;
-}
-
 void KWParagDia::setParagLayout( const KWParagLayout & lay )
 {
     setAlign( lay.alignment );
-    setFirstLineIndent( lay.margins[QStyleSheetItem::MarginFirstLine] );
-    setLeftIndent( lay.margins[QStyleSheetItem::MarginLeft] );
-    setRightIndent( lay.margins[QStyleSheetItem::MarginRight] );
-    setSpaceBeforeParag( lay.margins[QStyleSheetItem::MarginTop] );
-    setSpaceAfterParag( lay.margins[QStyleSheetItem::MarginBottom] );
+
+    m_indentSpacingWidget->display( lay );
+
     if ( lay.counter )
         setCounter( *lay.counter );
     else
@@ -1571,13 +1543,11 @@ void KWParagDia::setParagLayout( const KWParagLayout & lay )
         numTypeChanged( Counter::NUM_NONE );
         gNumbering->setButton(Counter::NUM_NONE );
     }
-    setLineSpacing( lay.lineSpacing );
     setLeftBorder( lay.leftBorder );
     setRightBorder( lay.rightBorder );
     setTopBorder( lay.topBorder );
     setBottomBorder( lay.bottomBorder );
     setTabList( lay.tabList() );
-    setPageBreaking( lay.linesTogether);
     oldLayout=lay;
     //setTabList( lay.ParagLayout->getTabList );
     //border init it's necessary to allow left border works

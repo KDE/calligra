@@ -1467,7 +1467,7 @@ void KWView::formatParagraph()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
-        KWParagDia *paragDia = new KWParagDia( this, "", doc->fontList(),
+        KWParagDia *paragDia = new KWParagDia( this, "",
                                                KWParagDia::PD_SPACING | KWParagDia::PD_ALIGN |
                                                KWParagDia::PD_BORDERS |
                                                KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, doc );
@@ -1608,7 +1608,7 @@ void KWView::extraAutoFormat()
 
 void KWView::extraStylist()
 {
-    KWStyleManager * styleManager = new KWStyleManager( this, doc, doc->fontList() );
+    KWStyleManager * styleManager = new KWStyleManager( this, doc );
     styleManager->setCaption( i18n( "Stylist" ) );
     styleManager->show();
     delete styleManager;
