@@ -437,10 +437,10 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 		// Close the current destination
 		(this->*destination.destproc)(0L);
                 //kdDebug(30515) << "Closing destination... " << destinationStack.count() << endl;
-                if ( destinationStack.count() <= 1 )
+                if ( destinationStack.count() <= 0 )
                 {
-                    kdWarning(30515) << "Destination stack is nearly empty! Document might be buggy!" << endl;
-                    destination = destinationStack.top(); // Try to save what can still be saved!
+                    kdWarning(30515) << "Destination stack is empty! Document might be buggy!" << endl;
+                    // Keep the destination to save what can still be saved!
                 }
                 else
                 {
