@@ -39,14 +39,14 @@ XSLTExport::XSLTExport(KoFilter *, const char *, const QStringList&) :
 KoFilter::ConversionStatus XSLTExport::convert( const QCString& from, const QCString& to )
 {
     QString config;
-	kdDebug() << "In my filter" << endl;
+    kdDebug() << "In my filter" << endl;
     if(from != "application/x-kword" &&
 		from != "application/x-kontour" && from != "application/x-kspread" &&
 		from != "application/x-kivio" && from != "application/x-kchart" &&
 		from != "application/x-kpresenter")
         return KoFilter::NotImplemented;
-	kdDebug() << "filter accepted" << endl;
-    KoStore in = KoStore(QString(m_chain->inputFile()), KoStore::Read);
+    kdDebug() << "filter accepted" << endl;
+    KoStore in(QString(m_chain->inputFile()), KoStore::Read);
     if(!in.open("root")) {
         kdError(30503) << "Unable to open input file!" << endl;
         in.close();
@@ -57,9 +57,9 @@ KoFilter::ConversionStatus XSLTExport::convert( const QCString& from, const QCSt
     in.close();
 
 
-	XSLTExportDia* dialog = new XSLTExportDia(in, from, 0, "Exportation", true);
+    XSLTExportDia* dialog = new XSLTExportDia(&in, from, 0, "Exportation", true);
     dialog->setOutputFile(m_chain->outputFile());
-	dialog->exec();
-	delete dialog;
+    dialog->exec();
+    delete dialog;
     return KoFilter::OK;
 }

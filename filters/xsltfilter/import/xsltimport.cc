@@ -46,7 +46,7 @@ KoFilter::ConversionStatus XSLTImport::convert( const QCString& from, const QCSt
 		to != "application/x-kpresenter")
         return KoFilter::NotImplemented;
 
-    KoStore out = KoStore(QString(m_chain->outputFile()), KoStore::Write);
+    KoStore out(QString(m_chain->outputFile()), KoStore::Write);
     if(!out.open("root"))
 	{
         kdError(30503) << "Unable to create output file!" << endl;
@@ -56,7 +56,7 @@ KoFilter::ConversionStatus XSLTImport::convert( const QCString& from, const QCSt
     /* input file Reading */
     out.close();
 	kdDebug() << "here" << endl;
-    XSLTImportDia* dialog = new XSLTImportDia(out, to, 0, "Importation", true);
+    XSLTImportDia* dialog = new XSLTImportDia(&out, to, 0, "Importation", true);
     dialog->setInputFile(m_chain->inputFile());
 
     dialog->exec();

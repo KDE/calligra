@@ -25,7 +25,7 @@
 #include "xsltdialog.h"
 
 class XSLTImportDia : public XSLTDialog
-{ 
+{
     Q_OBJECT
 
 	QString _fileIn;
@@ -36,7 +36,7 @@ class XSLTImportDia : public XSLTDialog
 	QCString _format;
 
 public:
-    XSLTImportDia( const KoStore&, const QCString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    XSLTImportDia(KoStore*, const QCString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~XSLTImportDia();
 
 	void setInputFile(QString file)  { _fileIn = file; }

@@ -33,17 +33,17 @@
 #include <kdebug.h>
 #include <xsltproc.h>
 
-/* 
- *  Constructs a XSLTExportDia which is a child of 'parent', with the 
+/*
+ *  Constructs a XSLTExportDia which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-XSLTExportDia::XSLTExportDia(const KoStore& in, const QCString &format, QWidget* parent,  const char* name, bool modal, WFlags fl )
+XSLTExportDia::XSLTExportDia(KoStore* in, const QCString &format, QWidget* parent,  const char* name, bool modal, WFlags fl )
     : XSLTDialog( parent, name, modal, fl )
 {
-	_in = new KoStore(in);
+	_in = in;
 	_format = format;
 	setCaption(i18n("Export XSLT Configuration"));
 	_config = new KConfig("xsltdialog");
@@ -57,12 +57,12 @@ XSLTExportDia::XSLTExportDia(const KoStore& in, const QCString &format, QWidget*
 	}
 }
 
-/*  
+/*
  *  Destroys the object and frees any allocated resources
  */
 XSLTExportDia::~XSLTExportDia()
 {
-	delete _in;
+    //delete _in;
 	delete _config;
 }
 /**
@@ -82,7 +82,7 @@ void XSLTExportDia::cancelSlot()
  */
 void XSLTExportDia::chooseSlot()
 {
-	
+
 	/* Use dir from currently selected file */
     QString dir = QString::null;
     if ( _currentFile.isLocalFile() && QFile::exists( _currentFile.path() ) )
@@ -157,12 +157,12 @@ void XSLTExportDia::okSlot()
 	{
 		/* Remove the older stylesheet used */
 		_recentList.pop_back();
-		
+
 		/* Add the new */
 		_recentList.prepend(stylesheet);
-		
+
 		/* Save the new list */
-		
+
 	}
 
 	/* Save the input file in a temp file */

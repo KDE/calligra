@@ -26,7 +26,7 @@
 #include "xsltdialog.h"
 
 class XSLTExportDia : public XSLTDialog
-{ 
+{
     Q_OBJECT
 
 	QString _fileIn;
@@ -39,7 +39,7 @@ class XSLTExportDia : public XSLTDialog
 	QStringList _recentList;
 
 public:
-    XSLTExportDia( const KoStore&, const QCString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    XSLTExportDia( KoStore*, const QCString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~XSLTExportDia();
 
 	void setInputFile(QString file)  { _fileIn = file; }
