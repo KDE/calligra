@@ -1570,3 +1570,7 @@ Reggie, 3.10.1999:
 - Implemented saving and loading serial letter db => serial letters are
   useable now in KWord :-)
 - Fixes
+
+Reggie, 4.10.1999:
+--------------
+- More work on spellchecking, works now somehow

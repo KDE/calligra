@@ -494,6 +494,7 @@ protected:
 
     KWParag *currParag;
     int currFrameSetNum;
+    int lastTextPos;
     OpenPartsUI::BarPosition oldFramePos, oldTextPos;
 
     KWordShell *shell;
