@@ -118,7 +118,6 @@ private:
 
     myFile olefile;
     int numPic;                      // for the "unique name generation"
-    int m_nextPart;
     KLaola *docfile;                 // used to split up the OLE 2 file
 
     // Needed for the template method callback savePartContents

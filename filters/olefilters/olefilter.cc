@@ -29,17 +29,13 @@ DESCRIPTION
 #include <ktempfile.h>
 #include <kgenericfactory.h>
 #include <kmimetype.h>
-#include <koFilterManager.h>
 #include <koFilterChain.h>
-#include <koQueryTrader.h>
 #include <koDocumentInfo.h>
 
 #include <excelfilter.h>
 #include <powerpointfilter.h>
 #include <wordfilter.h>
 #include <myfile.h>
-
-#include <unistd.h>
 
 class OLEFilterFactory : KGenericFactory<OLEFilter, KoFilter>
 {
@@ -56,7 +52,7 @@ protected:
 K_EXPORT_COMPONENT_FACTORY( libolefilter, OLEFilterFactory() );
 
 OLEFilter::OLEFilter(KoFilter *, const char *, const QStringList&) :
-                     KoEmbeddingFilter(), numPic( 0 ), m_nextPart( 0 ),
+                     KoEmbeddingFilter(), numPic( 0 ),
                      docfile( 0 ), m_embeddeeData( 0 ),
                      m_embeddeeLength( 0 ), success( true )
 {
