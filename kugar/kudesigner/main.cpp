@@ -37,7 +37,6 @@ int main( int argc, char **argv )
     KLocale::setMainCatalogue("kugar");
     KCmdLineArgs::init( argc, argv, newKudesignerAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
-    KoApplication::addCmdLineOptions();
     KoApplication app;
 
     app.dcopClient()->attach();

@@ -42,7 +42,6 @@ int main( int argc, char **argv )
 
     KCmdLineArgs::init( argc, argv, newKivioAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
-    KoApplication::addCmdLineOptions();
 
     KoApplication app;
 

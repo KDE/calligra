@@ -41,7 +41,6 @@ int main(int argc, char **argv)
 {
   KCmdLineArgs::init(argc, argv, newKontourAboutData());
   KCmdLineArgs::addCmdLineOptions(options);
-  KoApplication::addCmdLineOptions();
 
   KoApplication app;
   app.dcopClient()->attach();
