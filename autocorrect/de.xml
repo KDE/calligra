@@ -9,11 +9,20 @@
   <item find="ADNERS" replace="anders" />
   <item find="ARBIETE" replace="arbeite" />
   <item find="AWR" replace="war" />
+  <item find="Adnere" replace="andere" />
+  <item find="Adners" replace="anders" />
+  <item find="Arbiete" replace="arbeite" />
+  <item find="Awr" replace="war" />
   <item find="BEKANT" replace="bekannt" />
   <item find="BELÄSTIGNUG" replace="Belästigung" />
   <item find="BEREIS" replace="bereits" />
   <item find="BERIETS" replace="bereits" />
   <item find="BUCHSTBAE" replace="Buchstabe" />
+  <item find="Bekant" replace="bekannt" />
+  <item find="Belästignug" replace="Belästigung" />
+  <item find="Bereis" replace="bereits" />
+  <item find="Beriets" replace="bereits" />
+  <item find="Buchstbae" replace="Buchstabe" />
   <item find="DACHET" replace="dachte" />
   <item find="DASELBE" replace="dasselbe" />
   <item find="DEI" replace="die" />
@@ -22,8 +31,18 @@
   <item find="DOCKUMENT" replace="Dokument" />
   <item find="DRE" replace="der" />
   <item find="DSA" replace="das" />
+  <item find="Dachet" replace="dachte" />
+  <item find="Daselbe" replace="dasselbe" />
+  <item find="Dei" replace="die" />
+  <item find="Deis" replace="dies" />
+  <item find="Dekne" replace="denke" />
+  <item find="Dockument" replace="Dokument" />
+  <item find="Dre" replace="der" />
+  <item find="Dsa" replace="das" />
   <item find="DÄHMLICH" replace="dämlich" />
   <item find="DßA" replace="daß" />
+  <item find="Dßa" replace="daß" />
+  <item find="Dähmlich" replace="dämlich" />
   <item find="EDR" replace="der" />
   <item find="EMFEHLEN" replace="empfehlen" />
   <item find="ENTWICKLUGN" replace="Entwicklung" />
@@ -32,6 +51,14 @@
   <item find="EREICHT" replace="erreicht" />
   <item find="ERHLATEN" replace="erhalten" />
   <item find="ERTS" replace="erst" />
+  <item find="Edr" replace="der" />
+  <item find="Emfehlen" replace="empfehlen" />
+  <item find="Entwicklugn" replace="Entwicklung" />
+  <item find="Enwicklung" replace="Entwicklung" />
+  <item find="Ereichen" replace="erreichen" />
+  <item find="Ereicht" replace="erreicht" />
+  <item find="Erhlaten" replace="erhalten" />
+  <item find="Erts" replace="erst" />
   <item find="FINDN" replace="finden" />
   <item find="FNADEN" replace="fanden" />
   <item find="FNESTER" replace="Fenster" />
@@ -41,6 +68,15 @@
   <item find="FREUDNE" replace="Freunde" />
   <item find="FRIMA" replace="Firma" />
   <item find="FSAT" replace="fast" />
+  <item find="Findn" replace="finden" />
+  <item find="Fnaden" replace="fanden" />
+  <item find="Fnester" replace="Fenster" />
+  <item find="Follgende" replace="folgende" />
+  <item find="Fra" replace="Frau" />
+  <item find="Fragn" replace="fragen" />
+  <item find="Freudne" replace="Freunde" />
+  <item find="Frima" replace="Firma" />
+  <item find="Fsat" replace="fast" />
   <item find="GECHICHTE" replace="Geschichte" />
   <item find="GEHN" replace="gehen" />
   <item find="GEHTS" replace="geht's" />
@@ -49,18 +85,38 @@
   <item find="GESHICHTE" replace="Geschichte" />
   <item find="GIBTS" replace="gibt's" />
   <item find="GNAZ" replace="ganz" />
+  <item find="Gechichte" replace="Geschichte" />
+  <item find="Gehn" replace="gehen" />
+  <item find="Gehts" replace="geht's" />
+  <item find="Geidcht" replace="Gedicht" />
+  <item find="Geschichtne" replace="Geschichten" />
+  <item find="Geshichte" replace="Geschichte" />
+  <item find="Gibts" replace="gibt's" />
+  <item find="Gnaz" replace="ganz" />
   <item find="HABN" replace="haben" />
   <item find="HBE" replace="habe" />
   <item find="HUETE" replace="heute" />
+  <item find="Habn" replace="haben" />
+  <item find="Hbe" replace="habe" />
+  <item find="Huete" replace="heute" />
   <item find="IEN" replace="ein" />
   <item find="IENIGE" replace="einige" />
   <item find="IERONISCH" replace="ironisch" />
   <item find="IHC" replace="ich" />
   <item find="INTRIEGE" replace="Intrige" />
   <item find="IRES" replace="ihres" />
+  <item find="Ien" replace="ein" />
+  <item find="Ienige" replace="einige" />
+  <item find="Ieronisch" replace="ironisch" />
+  <item find="Ihc" replace="ich" />
+  <item find="Intriege" replace="Intrige" />
+  <item find="Ires" replace="ihres" />
   <item find="JARE" replace="Jahre" />
   <item find="JETTZ" replace="jetzt" />
   <item find="JEZT" replace="jetzt" />
+  <item find="Jare" replace="Jahre" />
+  <item find="Jettz" replace="jetzt" />
+  <item find="Jezt" replace="jetzt" />
   <item find="KIEN" replace="kein" />
   <item find="KIENE" replace="keine" />
   <item find="KIENSE" replace="keines" />
@@ -68,40 +124,170 @@
   <item find="KNAN" replace="kann" />
   <item find="KOPEI" replace="Kopie" />
   <item find="KRES" replace="Kreis" />
+  <item find="Kien" replace="kein" />
+  <item find="Kiene" replace="keine" />
+  <item find="Kiense" replace="keines" />
+  <item find="Klra" replace="klar" />
+  <item find="Knan" replace="kann" />
+  <item find="Kopei" replace="Kopie" />
+  <item find="Kres" replace="Kreis" />
   <item find="KÖNTE" replace="könnte" />
+  <item find="Könte" replace="könnte" />
   <item find="LEBN" replace="leben" />
   <item find="LEISTNUG" replace="Leistung" />
   <item find="LIZENTZ" replace="Lizenz" />
   <item find="LUETE" replace="Leute" />
+  <item find="Lebn" replace="leben" />
+  <item find="Leistnug" replace="Leistung" />
+  <item find="Lizentz" replace="Lizenz" />
+  <item find="Luete" replace="Leute" />
   <item find="M2" replace="m²" />
   <item find="M3" replace="m³" />
   <item find="MACHN" replace="machen" />
   <item find="MFG" replace="Mit freundlichen Grüßen" />
   <item find="MTI" replace="mit" />
+  <item find="Machn" replace="machen" />
+  <item find="Mti" replace="mit" />
   <item find="NCIHT" replace="nicht" />
+  <item find="Nciht" replace="nicht" />
   <item find="NÄHMLICH" replace="nämlich" />
+  <item find="Nähmlich" replace="nämlich" />
   <item find="OFENBAR" replace="offenbar" />
+  <item find="Ofenbar" replace="offenbar" />
   <item find="PIKNIK" replace="Picknick" />
   <item find="PORBLEM" replace="Problem" />
+  <item find="Piknik" replace="Picknick" />
+  <item find="Porblem" replace="Problem" />
   <item find="RECHNUG" replace="Rechnung" />
   <item find="RHYTMUS" replace="Rhythmus" />
+  <item find="Rechnug" replace="Rechnung" />
+  <item find="Rhytmus" replace="Rhythmus" />
   <item find="SAHCE" replace="Sache" />
   <item find="SEPERAT" replace="separat" />
   <item find="SERH" replace="sehr" />
   <item find="SGDH" replace="Sehr geehrte Damen und Herren" />
   <item find="SIEN" replace="sein" />
+  <item find="Sahce" replace="Sache" />
+  <item find="Seperat" replace="separat" />
+  <item find="Serh" replace="sehr" />
+  <item find="Sien" replace="sein" />
   <item find="UAS" replace="aus" />
   <item find="UDN" replace="und" />
   <item find="UMZUFRIEDEN" replace="unzufrieden" />
+  <item find="Uas" replace="aus" />
+  <item find="Udn" replace="und" />
+  <item find="Umzufrieden" replace="unzufrieden" />
   <item find="VEILLEICHT" replace="vielleicht" />
   <item find="VIELEICHT" replace="vielleicht" />
   <item find="VORANG" replace="Vorrang" />
+  <item find="Veilleicht" replace="vielleicht" />
+  <item find="Vieleicht" replace="vielleicht" />
+  <item find="Vorang" replace="Vorrang" />
   <item find="WEDRE" replace="werde" />
   <item find="WIRDS" replace="wird's" />
   <item find="WROT" replace="Wort" />
+  <item find="Wedre" replace="werde" />
+  <item find="Wirds" replace="wird's" />
+  <item find="Wrot" replace="Wort" />
   <item find="WÜDRE" replace="würde" />
+  <item find="Wüdre" replace="würde" />
   <item find="ZITE" replace="Zeit" />
+  <item find="Zite" replace="Zeit" />
+  <item find="adnere" replace="andere" />
+  <item find="adners" replace="anders" />
+  <item find="arbiete" replace="arbeite" />
+  <item find="awr" replace="war" />
+  <item find="bekant" replace="bekannt" />
+  <item find="belästignug" replace="Belästigung" />
+  <item find="bereis" replace="bereits" />
+  <item find="beriets" replace="bereits" />
+  <item find="buchstbae" replace="Buchstabe" />
+  <item find="dachet" replace="dachte" />
+  <item find="daselbe" replace="dasselbe" />
+  <item find="dei" replace="die" />
+  <item find="deis" replace="dies" />
+  <item find="dekne" replace="denke" />
+  <item find="dockument" replace="Dokument" />
+  <item find="dre" replace="der" />
+  <item find="dsa" replace="das" />
+  <item find="dßa" replace="daß" />
+  <item find="dähmlich" replace="dämlich" />
+  <item find="edr" replace="der" />
+  <item find="emfehlen" replace="empfehlen" />
+  <item find="entwicklugn" replace="Entwicklung" />
+  <item find="enwicklung" replace="Entwicklung" />
+  <item find="ereichen" replace="erreichen" />
+  <item find="ereicht" replace="erreicht" />
+  <item find="erhlaten" replace="erhalten" />
+  <item find="erts" replace="erst" />
+  <item find="findn" replace="finden" />
+  <item find="fnaden" replace="fanden" />
+  <item find="fnester" replace="Fenster" />
+  <item find="follgende" replace="folgende" />
+  <item find="fra" replace="Frau" />
+  <item find="fragn" replace="fragen" />
+  <item find="freudne" replace="Freunde" />
+  <item find="frima" replace="Firma" />
+  <item find="fsat" replace="fast" />
+  <item find="gechichte" replace="Geschichte" />
+  <item find="gehn" replace="gehen" />
+  <item find="gehts" replace="geht's" />
+  <item find="geidcht" replace="Gedicht" />
+  <item find="geschichtne" replace="Geschichten" />
+  <item find="geshichte" replace="Geschichte" />
+  <item find="gibts" replace="gibt's" />
+  <item find="gnaz" replace="ganz" />
+  <item find="habn" replace="haben" />
+  <item find="hbe" replace="habe" />
+  <item find="huete" replace="heute" />
+  <item find="ien" replace="ein" />
+  <item find="ienige" replace="einige" />
+  <item find="ieronisch" replace="ironisch" />
+  <item find="ihc" replace="ich" />
+  <item find="intriege" replace="Intrige" />
+  <item find="ires" replace="ihres" />
+  <item find="jare" replace="Jahre" />
+  <item find="jettz" replace="jetzt" />
+  <item find="jezt" replace="jetzt" />
+  <item find="kien" replace="kein" />
+  <item find="kiene" replace="keine" />
+  <item find="kiense" replace="keines" />
+  <item find="klra" replace="klar" />
+  <item find="knan" replace="kann" />
+  <item find="kopei" replace="Kopie" />
+  <item find="kres" replace="Kreis" />
+  <item find="könte" replace="könnte" />
+  <item find="lebn" replace="leben" />
+  <item find="leistnug" replace="Leistung" />
+  <item find="lizentz" replace="Lizenz" />
+  <item find="luete" replace="Leute" />
+  <item find="machn" replace="machen" />
+  <item find="mti" replace="mit" />
+  <item find="nciht" replace="nicht" />
+  <item find="nähmlich" replace="nämlich" />
+  <item find="ofenbar" replace="offenbar" />
+  <item find="piknik" replace="Picknick" />
+  <item find="porblem" replace="Problem" />
+  <item find="rechnug" replace="Rechnung" />
+  <item find="rhytmus" replace="Rhythmus" />
+  <item find="sahce" replace="Sache" />
+  <item find="seperat" replace="separat" />
+  <item find="serh" replace="sehr" />
+  <item find="sien" replace="sein" />
+  <item find="uas" replace="aus" />
+  <item find="udn" replace="und" />
+  <item find="umzufrieden" replace="unzufrieden" />
+  <item find="veilleicht" replace="vielleicht" />
+  <item find="vieleicht" replace="vielleicht" />
+  <item find="vorang" replace="Vorrang" />
+  <item find="wedre" replace="werde" />
+  <item find="wirds" replace="wird's" />
+  <item find="wrot" replace="Wort" />
+  <item find="wüdre" replace="würde" />
+  <item find="zite" replace="Zeit" />
   <item find="ÄNLICH" replace="ähnlich" />
+  <item find="Änlich" replace="ähnlich" />
+  <item find="änlich" replace="ähnlich" />
  </items>
  <UpperCaseExceptions>
   <word exception="fkt." />
