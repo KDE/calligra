@@ -878,7 +878,7 @@ void KPresenterDoc::saveUsedSoundFileToStore( KoStore *_store, QStringList _list
 /*========================== load ===============================*/
 bool KPresenterDoc::loadChildren( KoStore* _store )
 {
-    if ( objStartY == 0 ) // Don't do this when inserting a template or a page...
+    if ( objStartY == 0 && _clean) // Don't do this when inserting a template or a page...
     {
       QPtrListIterator<KoDocumentChild> it( children() );
       for( ; it.current(); ++it ) {
