@@ -1263,14 +1263,24 @@ tristate Connection::dropTable( KexiDB::TableSchema* tableSchema )
 	if (!tableSchema)
 		return false;
 
+	QString errmsg(i18n("Table \"%1\" cannot be removed.\n"));
+	//be sure that we handle the correct TableSchema object:
+	if (tableSchema->id() < 0 
+		|| this->tableSchema(tableSchema->name())!=tableSchema
+		|| this->tableSchema(tableSchema->id())!=tableSchema)
+	{
+		setError(ERR_OBJECT_NOT_EXISTING, errmsg.arg(tableSchema->name())
+			+i18n("Unexpected name or identifier."));
+		return false;
+	}
+
 	tristate res = closeAllTableSchemaChangeListeners(*tableSchema);
 	if (true!=res)
 		return res;
 
 	//sanity checks:
 	if (m_driver->isSystemObjectName( tableSchema->name() )) {
-		setError(ERR_SYSTEM_NAME_RESERVED, i18n("Table \"%1\" cannot be removed.")
-			.arg(tableSchema->name()) + "<br>" + d->strItIsASystemObject());
+		setError(ERR_SYSTEM_NAME_RESERVED, errmsg.arg(tableSchema->name()) + d->strItIsASystemObject());
 		return false;
 	}
 
@@ -1827,7 +1837,7 @@ bool Connection::loadObjectSchemaData( int objectID, SchemaData &sdata )
 bool Connection::loadObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata )
 {
 	RowData data;
-	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_type=%1 and lower(o_name)=%2")
+	if (!querySingleRecord(QString::fromLatin1("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_type=%1 and lower(o_name)=%2")
 		.arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName.lower())), data))
 		return false;
 	return setupObjectSchemaData( data, sdata );
@@ -1838,6 +1848,17 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 	TableSchema *ts = m_tables_byname["kexi__objects"];
 	if (!ts)
 		return false;
+	if (newObject) {
+		int existingID;
+		if (querySingleNumber(QString::fromLatin1("select o_id from kexi__objects where o_type=%1 and lower(o_name)=%2")
+			.arg(sdata.type()).arg(m_driver->valueToSQL(Field::Text, sdata.name().lower())), existingID))
+		{
+			//we already have stored a schema data with the same name and type: 
+			//just update it's properties as it would be existing object
+			sdata.m_id = existingID;
+			newObject = false;
+		}
+	}
 	if (newObject) {
 		FieldList *fl;
 		bool ok;
