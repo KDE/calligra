@@ -26,6 +26,7 @@
 #include <koDocument.h>
 #include <koQueryTypes.h>
 
+#include "formats.h"
 #include "kimage_shell.h"
 #include "kimage_main.h"
 #include "kimage_doc.h"
@@ -75,6 +76,9 @@ void KImageApp::start()
 
 int main( int argc, char** argv )
 {
+  FormatManager* formatManager;
+  formatManager = new FormatManager();
+
   KImageAutoLoader loader( "IDL:KImage/DocumentFactory:1.0", "KImage" );
 
   KImageApp app( argc, argv );

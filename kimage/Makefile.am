@@ -8,17 +8,36 @@ LDADD = $(LIB_KOFFICEUI) $(LIB_KIMGIO) -lkparts -lkpartsui -lkom -lmico2.2.3
 
 bin_PROGRAMS = kimage.bin
 
-kimage_bin_SOURCES = kimage_main.cc kimage_shell.cc kimage_doc.cc \
-                     kimage.cc kimage_view.cc preferencesdlg.cc \
-                     kinputdialog.cc kintegerinputdialog.cc
+kimage_bin_SOURCES = \
+    kimage_main.cc \
+    kimage_shell.cc \
+    kimage_doc.cc \
+    kimage.cc \
+    kimage_view.cc \
+    preferencesdlg.cc \
+    kinputdialog.cc \
+    kintegerinputdialog.cc \
+    formats.cc
 
-noinst_HEADERS = kimage_main.h kimage_shell.h kimage_doc.h \
-                 kimage.h kimage_view.h preferencesdlg.h \
-                 kinputdialog.h kintegerinputdialog.h
+noinst_HEADERS = \
+    kimage_main.h \
+    kimage_shell.h \
+    kimage_doc.h \
+    kimage.h \
+    kimage_view.h \
+    preferencesdlg.h \
+    kinputdialog.h \
+    kintegerinputdialog.h \
+    formats.h
 
-METASOURCES = kimage_main.moc kimage_shell.moc kimage_doc.moc \
-              kimage_view.moc preferencesdlg.moc kinputdialog.moc \
-              kintegerinputdialog.moc
+METASOURCES = \
+    kimage_main.moc \
+    kimage_shell.moc \
+    kimage_doc.moc \
+    kimage_view.moc \
+    preferencesdlg.moc \
+    kinputdialog.moc \
+    kintegerinputdialog.moc
 
 idl_DATA = kimage.idl
 idl_HEADERS = kimage.h
@@ -54,3 +73,4 @@ kimage_view.cc: kimage.h
 preferencesdlg.cc: preferencesdlg.h
 kinputdialog.cc: kinputdialog.h
 kintegerinputdialog.cc: kintegerinputdialog.h
+formats.cc: formats.h
