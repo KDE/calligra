@@ -71,7 +71,7 @@ public:
     int availableHeight() const;
 
     // Return true if the last frame is empty
-    bool isLastFrameEmpty();
+    bool isFrameEmpty( KWFrame * frame );
     virtual bool canRemovePage( int num );
 
     // Views notify the KWTextFrameSet of which area of the text

@@ -437,6 +437,7 @@ void KWDocument::recalcFrames()
 
         // Determine number of pages - first from the text frames
         m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) );
+        //kdDebug() << "KWDocument::recalcFrames frms(" << frms << ") / columns(" << m_pageColumns.columns << ") = " << m_pages << endl;
         // Then from the other frames ( frameset-num > 0 )
         double maxBottom = 0;
         for (int m = getNumFrameSets() - 1; m > 0; m-- )
@@ -452,7 +453,7 @@ void KWDocument::recalcFrames()
             }
         }
         int pages2 = static_cast<int>( ceil( maxBottom / ptPaperHeight() ) );
-        kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << " ptPaperHeight=" << ptPaperHeight() << endl;
+        //kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << " ptPaperHeight=" << ptPaperHeight() << endl;
 
         m_pages = QMAX( pages2, m_pages );
         if ( m_pages != oldPages )
@@ -1983,7 +1984,7 @@ bool KWDocument::canRemovePage( int num )
 
 void KWDocument::removePage( int num )
 {
-    //kdDebug() << "KWDocument::removePage " << num << endl;
+    kdDebug() << "KWDocument::removePage " << num << endl;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -1991,12 +1992,16 @@ void KWDocument::removePage( int num )
         if ( frameSet->getFrameInfo() != FI_BODY )
             continue;
         QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
+        QList<KWFrame> toDelete;
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frm = frameIt.current();
             if ( frm->pageNum() == num )
-                frameSet->delFrame( frm, true );
+                toDelete.append( frm ); // Can't remove the frame here, it screws up the iterator -> toDelete
         }
+        QListIterator<KWFrame> delIt( toDelete );
+        for ( ; delIt.current(); ++delIt )
+            frameSet->delFrame( delIt.current(), true );
     }
     m_pages--;
     //kdDebug() << "KWDocument::removePage -- -> " << m_pages << endl;

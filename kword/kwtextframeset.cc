@@ -1365,22 +1365,11 @@ void KWTextFrameSet::formatMore()
         if ( frames.count() > 1 && !lastFormatted && !isAHeader() && !isAFooter()
              && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
         {
+#ifdef DEBUG_FORMAT_MORE
             kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << bottom << ", " << m_availableHeight << ") , trying to remove last frame" << endl;
+#endif
             int lastPage = m_doc->getPages() - 1;
             // Last frame is empty -> try removing last page, and more if necessary
-#if 0
-            while ( lastPage > 0 && frames.count() > 1 && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
-            {
-                lastPage = m_doc->getPages()-1;
-                if(m_doc->canRemovePage(lastPage)) {
-kdDebug() << "Deleting page: " << lastPage<< "\n";
-                    m_doc->removePage( lastPage );
-                } else if(m_doc->processingType() == KWDocument::WP && m_doc->getFrameSet(0) == this) {
-                    break;
-                } else
-                    delFrame(frames.last());
-            }
-#endif
             // Second try, without hacks :)
             while ( lastPage > 0 && m_doc->canRemovePage( lastPage ) )
             {
@@ -1400,12 +1389,21 @@ kdDebug() << "Deleting page: " << lastPage<< "\n";
     }
 }
 
-bool KWTextFrameSet::isLastFrameEmpty()
+bool KWTextFrameSet::isFrameEmpty( KWFrame * frame )
 {
     QTextParag * lastParag = textdoc->lastParag();
     ensureFormatted( lastParag );
     int bottom = lastParag->rect().top() + lastParag->rect().height();
-    return bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() );
+    int totalHeight = 0;
+    QListIterator<KWFrame> frameIt( frameIterator() );
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        if ( frameIt.current() == frame )
+            return bottom < totalHeight;
+        totalHeight += kWordDocument()->zoomItY( frameIt.current()->height() );
+    }
+    kdWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << frame << " which isn't a child of ours!" << endl;
+    return false;
 }
 
 bool KWTextFrameSet::canRemovePage( int num )
@@ -1417,9 +1415,11 @@ bool KWTextFrameSet::canRemovePage( int num )
         KWFrame * frame = frameIt.current();
         if ( frame->pageNum() == num )
         {
-            bool isEmpty = ( frame == frames.last() && isLastFrameEmpty() );
+            bool isEmpty = isFrameEmpty( frame );
+#ifdef DEBUG_FORMAT_MORE
             kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage"
                       << " found a frame on page " << num << " empty:" << isEmpty << endl;
+#endif
             // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
             if ( !copyFrame && !isEmpty )
                 return false;
