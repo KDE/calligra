@@ -602,3 +602,8 @@ Reggie, 21.12.1999:
 ---------------
 - When deleting a page recalc page numbers in textobjs correctly
 - When creating a template only save really used pixmaps
+
+Reggie, 28.12.1999:
+---------------
+- Big speed improvement when inserting new slides into an already
+  quite big presentation

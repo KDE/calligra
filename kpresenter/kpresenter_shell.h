@@ -39,7 +39,7 @@ public:
 public slots:
     void slotFilePrint();
     void slotHelpAbout();
-    
+
 protected:
     virtual QString configFile() const;
     virtual KoDocument* createDoc();

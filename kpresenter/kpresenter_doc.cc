@@ -508,7 +508,8 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
     pixmapCollectionNames.clear();
     clipartCollectionKeys.clear();
     clipartCollectionNames.clear();
-
+    lastObj = -1;
+    
     // clean
     if ( _clean ) {
 	//KoPageLayout __pgLayout;
@@ -744,6 +745,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
 	    for( ; it != lst.end(); it++ ) {
 	    }
+	    lastObj = _objectList->count() - 1;
 	    loadObjects( parser, lst );
 	} else if ( name == "INFINITLOOP" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -920,18 +922,23 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
     if ( !_store ) {
 	if ( _clean )
 	    setPageLayout( __pgLayout, 0, 0 );
-	else
-	    setPageLayout( _pageLayout, 0, 0 );
-
+ 	else {
+	    QRect r = getPageSize( 0, 0, 0 );
+	    _backgroundList.last()->setSize( r.width(), r.height() );
+	    _backgroundList.last()->restore();
+	}
+	
 	_pixmapCollection.setAllowChangeRef( true );
 	_pixmapCollection.getPixmapDataCollection().setAllowChangeRef( true );
 
 	KPObject *kpobject = 0L;
 	for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() ) {
-	    if ( kpobject->getType() == OT_PICTURE )
-		dynamic_cast<KPPixmapObject*>( kpobject )->reload();
-	    else if ( kpobject->getType() == OT_TEXT )
+	    if ( kpobject->getType() == OT_PICTURE ) {
+		if ( _clean || _objectList->findRef( kpobject ) > lastObj )
+		    dynamic_cast<KPPixmapObject*>( kpobject )->reload();
+	    } else if ( kpobject->getType() == OT_TEXT ) {
 		dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( this );
+	    }
 	}
     }
 
@@ -1181,14 +1188,18 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 
 	if ( _clean )
 	    setPageLayout( __pgLayout, 0, 0 );
-	else
-	    setPageLayout( _pageLayout, 0, 0 );
+ 	else {
+	    QRect r = getPageSize( 0, 0, 0 );
+	    _backgroundList.last()->setSize( r.width(), r.height() );
+	    _backgroundList.last()->restore();
+	}
 	
-	KPObject *kpobject = 0L;
+	KPObject *kpobject = 0;
 	for ( kpobject = _objectList->first(); kpobject; kpobject = _objectList->next() ) {
-	    if ( kpobject->getType() == OT_PICTURE )
-		dynamic_cast<KPPixmapObject*>( kpobject )->reload();
-	    else if ( kpobject->getType() == OT_CLIPART )
+	    if ( kpobject->getType() == OT_PICTURE ) {
+		if ( _clean || _objectList->findRef( kpobject ) > lastObj )
+		    dynamic_cast<KPPixmapObject*>( kpobject )->reload();
+	    } else if ( kpobject->getType() == OT_CLIPART )
 		dynamic_cast<KPClipartObject*>( kpobject )->reload();
 	    else if ( kpobject->getType() == OT_TEXT )
 		dynamic_cast<KPTextObject*>( kpobject )->recalcPageNum( this );
@@ -1297,6 +1308,9 @@ void KPresenterDoc::changeChildGeometry( KPresenterChild *_child, const QRect& _
 /*===================== set page layout ==========================*/
 void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 {
+//     if ( _pageLayout == pgLayout )
+// 	return;
+    
     _pageLayout = pgLayout;
     QRect r = getPageSize( 0, diffx, diffy );
 
@@ -3276,7 +3290,7 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 	_backgroundList.insert( _page, kpbackground );
 	setURL( QString::null );
     }
-
+    
     repaint( false );
 }
 

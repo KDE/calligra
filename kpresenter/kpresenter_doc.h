@@ -440,7 +440,8 @@ protected:
     QValueList<KPClipartCollection::Key> clipartCollectionKeys;
     QStringList pixmapCollectionNames, clipartCollectionNames;
     KoPageLayout __pgLayout;
-
+    int lastObj;
+    
     QString urlIntern;
 
     PresentSlides presentSlides;
