@@ -59,12 +59,12 @@ height(
 }
 
 
-VSegment::VSegment( int degree )
+VSegment::VSegment( unsigned short degree )
 {
 	m_degree = degree;
 
 	m_nodes = new VNodeData[ m_degree ];
-	for( int i = 0; i < m_degree; ++i )
+	for( unsigned short i = 0; i < m_degree; ++i )
 		selectPoint( i );
 
 	m_type = begin;
@@ -72,6 +72,7 @@ VSegment::VSegment( int degree )
 
 	m_prev = 0L;
 	m_next = 0L;
+	kdDebug() << "Size f seg : " << sizeof(*this) << endl;
 }
 
 VSegment::VSegment( const VSegment& segment )
@@ -89,7 +90,7 @@ VSegment::VSegment( const VSegment& segment )
 	m_next = segment.m_next;
 
 	// Copy points.
-	for( int i = 0; i < degree(); ++i )
+	for( unsigned short i = 0; i < degree(); ++i )
 	{
 		setPoint( i, segment.point( i ) );
 		selectPoint( i, segment.pointIsSelected( i ) );
@@ -102,7 +103,7 @@ VSegment::~VSegment()
 }
 
 void
-VSegment::setDegree( int degree )
+VSegment::setDegree( unsigned short degree )
 {
 	// Do nothing if old and new degrees are identical.
 	if( m_degree == degree )
@@ -121,7 +122,7 @@ VSegment::setDegree( int degree )
 void
 VSegment::draw( VPainter* painter ) const
 {
-	if( state() == deleted )
+	if( state() == deleted && !type() == curve )
 		return;
 
 
@@ -154,7 +155,7 @@ VSegment::isFlat( double flatness ) const
 	{
 		bool flat = false;
 
-		for( int i = 0; i < degree() - 1; ++i )
+		for( unsigned short i = 0; i < degree() - 1; ++i )
 		{
 			flat =
 				height( prev()->knot(), point( i ), knot() ) / chordLength()
@@ -217,16 +218,16 @@ VSegment::pointDerivativesAt( double t, KoPoint* p,
 
 	q[ 0 ] = prev()->knot();
 
-	for( int i = 0; i < degree(); ++i )
+	for( unsigned short i = 0; i < degree(); ++i )
 	{
 		q[ i + 1 ] = point( i );
 	}
 
 
 	// The De Casteljau algorithm.
-	for( int j = 1; j <= degree(); ++j )
+	for( unsigned short j = 1; j <= degree(); ++j )
 	{
-		for( int i = 0; i <= degree() - j; ++i )
+		for( unsigned short i = 0; i <= degree() - j; ++i )
 		{
 			q[ i ] = ( 1.0 - t ) * q[ i ] + t * q[ i + 1 ];
 		}
@@ -410,7 +411,7 @@ VSegment::polyLength() const
 	double length = sqrt( d * d );
 
 	// Iterate over remaining points.
-	for( int i = 1; i < degree(); ++i )
+	for( unsigned short i = 1; i < degree(); ++i )
 	{
 		d = point( i ) - point( i - 1 );
 		length += sqrt( d * d );
@@ -531,7 +532,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 	c[ 0 ] = prev()->knot() - p;
 
-	for( int i = 0; i < degree(); ++i )
+	for( unsigned short i = 0; i < degree(); ++i )
 	{
 		c[ i + 1 ] = point( i ) - p;
 	}
@@ -542,7 +543,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 	d[ 0 ] = point( 0 ) - prev()->knot();
 
-	for( int j = 0; j < degree() - 1; ++j )
+	for( unsigned short j = 0; j < degree() - 1; ++j )
 	{
 		d[ j + 1 ] = point( j + 1 ) - point( j );
 	}
@@ -551,9 +552,9 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	// Calculate the z_{ij}.
 	double* z = new double[ degree() * ( degree() + 1 ) ];
 
-	for( int j = 0; j < degree(); ++j )
+	for( unsigned short j = 0; j < degree(); ++j )
 	{
-		for( int i = 0; i <= degree(); ++i )
+		for( unsigned short i = 0; i <= degree(); ++i )
 		{
 			z[ j * ( degree() + 1 ) + i ] =
 				VGlobal::binomialCoeff( degree(), i ) *
@@ -566,9 +567,9 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	// Calculate the dot products of c_i and d_i.
 	double* products = new double[ degree() * ( degree() + 1 ) ];
 
-	for( int j = 0; j < degree(); ++j )
+	for( unsigned short j = 0; j < degree(); ++j )
 	{
-		for( int i = 0; i <= degree(); ++i )
+		for( unsigned short i = 0; i <= degree(); ++i )
 		{
 			products[ j * ( degree() + 1 ) + i ] =
 				d[ j ] * c[ i ];
@@ -586,7 +587,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	// Set up control points in the ( u, f(u) )-plane.
 	newCurve.append( new VSegment( 2 * degree() ) );
 
-	for( int u = 1; u <= 2 * degree(); ++u )
+	for( unsigned short u = 1; u <= 2 * degree(); ++u )
 	{
 		newCurve.current()->setPoint(
 			u - 1,
@@ -596,7 +597,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	}
 
 	// Set f(u)-values.
-	for( int k = 0; k < 2 * degree() - 1; ++k )
+	for( unsigned short k = 0; k < 2 * degree() - 1; ++k )
 	{
 		int min = QMIN( k, degree() );
 
@@ -687,7 +688,7 @@ VSegment::signChanges() const
 
 	// Check how many times the control polygon crosses the
 	// y=0 axis.
-	for( int i = 1; i <= degree(); ++i )
+	for( unsigned short i = 1; i <= degree(); ++i )
 	{
 		oldSign = sign;
 		sign = VGlobal::sign( point( i - 1 ).y() );
@@ -749,7 +750,7 @@ VSegment::boundingBox() const
 	}
 
 
-	for( int i = 0; i < degree() - 1; ++i )
+	for( unsigned short i = 0; i < degree() - 1; ++i )
 	{
 		if( point( i ).x() < rect.left() )
 			rect.setLeft( point( i ).x() );
@@ -810,16 +811,16 @@ VSegment::splitAt( double t )
 
 	q[ 0 ] = prev()->knot();
 
-	for( int i = 0; i < degree(); ++i )
+	for( unsigned short i = 0; i < degree(); ++i )
 	{
 		q[ i + 1 ] = point( i );
 	}
 
 
 	// The De Casteljau algorithm.
-	for( int j = 1; j <= degree(); ++j )
+	for( unsigned short j = 1; j <= degree(); ++j )
 	{
-		for( int i = 0; i <= degree() - j; ++i )
+		for( unsigned short i = 0; i <= degree() - j; ++i )
 		{
 			q[ i ] = ( 1.0 - t ) * q[ i ] + t * q[ i + 1 ];
 		}
@@ -829,7 +830,7 @@ VSegment::splitAt( double t )
 	}
 
 	// Modify the current segment (no need to modify the knot though).
-	for( int i = 1; i < degree(); ++i )
+	for( unsigned short i = 1; i < degree(); ++i )
 	{
 		setPoint( i - 1, q[ i ] );
 	}
@@ -895,7 +896,7 @@ VSegment::nodeNear( const KoPoint& p, double isNearRange ) const
 {
 	int index = 0;
 
-	for( int i = 0; i < degree(); ++i )
+	for( unsigned short i = 0; i < degree(); ++i )
 	{
 		if( point( 0 ).isNear( p, isNearRange ) )
 		{
@@ -926,7 +927,7 @@ VSegment::revert() const
 
 
 	// Swap points.
-	for( int i = 0; i < degree() - 1; ++i )
+	for( unsigned short i = 0; i < degree() - 1; ++i )
 	{
 		segment->setPoint( i, point( degree() - 2 - i ) );
 	}
@@ -977,7 +978,7 @@ VSegment::transform( const QWMatrix& m )
 	{
 		if( knotIsSelected() )
 		{
-			for( int i = 0; i < degree(); ++i )
+			for( unsigned short i = 0; i < degree(); ++i )
 				setPoint( i, point( i ).transform( m ) );
 		}
 		else if( pointIsSelected( 0 ) )

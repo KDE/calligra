@@ -75,7 +75,7 @@ public:
 	};
 
 
-	VSegment( int degree = 3 );
+	VSegment( unsigned short degree = 3 );
 
 	VSegment( const VSegment& segment );
 
@@ -85,7 +85,7 @@ public:
 	 * Returns the segment's degree, which is identical to the number of node data.
 	 * For cubic beziers it is "three" and "one" for lines.
 	 */
-	int degree() const
+	unsigned short degree() const
 	{
 		return m_degree;
 	}
@@ -94,7 +94,7 @@ public:
 	 * Sets the segment's degree and thus resizes the array of node data. All old node data
 	 * are lost. You will have to backup them on your own.
 	 */
-	void setDegree( int degree );
+	void setDegree( unsigned short degree );
 
 
 	/**
@@ -371,17 +371,17 @@ private:
 	/**
 	 * The segment degree. For (cubic) beziers "three", "one" for lines.
 	 */
-	int m_degree;
+	unsigned short m_degree : 6;
+
+	/**
+	 * The segment state.
+	 */
+	VState m_state : 2;
 
 	/**
 	 * The segment type.
 	 */
 	VSegmentType m_type;
-
-	/**
-	 * The segment state.
-	 */
-	VState m_state;
 
 
 	/**
