@@ -123,7 +123,7 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction,
         {
             if ( !ret.isEmpty() )
                 ret += "\n";
-            QString patterns = t->patterns().join(";");
+            QString patterns = t->patterns().join(" ");
             ret += patterns;
             ret += "|";
             if ( direction == Import )
