@@ -13,12 +13,14 @@ noinst_LTLIBRARIES = \
 libtests_la_SOURCES = \
 	tester.cc \
 	testrunner.cc \
-	value_tester.cc
+	value_tester.cc \
+	formula_tester.cc
 
 noinst_HEADERS = \
 	tester.h \
 	testrunner.h \
-	value_tester.h
+	value_tester.h \
+	formula_tester.h
         
 METASOURCES = AUTO
 

@@ -30,6 +30,7 @@
 
 #include "tester.h"
 #include "value_tester.h"
+#include "formula_tester.h"
 
 namespace KSpread
 {
@@ -78,6 +79,7 @@ TestRunner::TestRunner():
   
   // add all tests here !!
   addTester( new ValueTester() );
+  addTester( new FormulaParserTester() );
 }
 
 TestRunner::~TestRunner()
@@ -112,7 +114,7 @@ void TestRunner::runTest()
         d->logView->append( errorList[k] );
     }
     else
-      d->logView->append( QString( "%1 tests, everything is OK." ).arg( tester->count() ) );
+      d->logView->append( QString( "%1 tests, everything is OK. ").arg( tester->count() ) );
       
     d->logView->append( "Test finished." );
   }
