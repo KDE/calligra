@@ -1638,7 +1638,6 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  return;
       }
 
-
   // Always accept so that events are not
   // passed to the parent.
   _ev->accept();
@@ -1951,9 +1950,17 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      return;
 		  if ( m_bChoose && chooseMarkerColumn() == 1 )
 		      return;
-                  int col = table->getFirstCellRow(markerRow())->column();
-                  while ( table->cellAt(col, markerRow())->isEmpty() )
-                    col = table->getNextCellRight( col, markerRow() )->column();
+                  KSpreadCell * cell = table->getFirstCellRow(markerRow());
+                  int col = ( cell ? cell->column() : 1 );
+                  if (col > 1)
+                  {
+                    cell = table->cellAt(col, markerRow());
+                    while ( cell && cell->isEmpty() && col > 1 )
+                    {
+                      col = cell->column();
+                      cell = table->getNextCellLeft( col, markerRow() );
+                    }
+                  }
                   if ( col == markerColumn() )
                     col = 1;
 		  if ( m_bChoose )
@@ -1979,7 +1986,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
           {
               int maxCol = table->maxColumn();
               int row    = markerRow();
-              int max    = -1;
+              int max    = markerColumn();
               int i;
 
               // we have to check every cell, cause there might
@@ -1995,8 +2002,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
                   }
               }
 
-              if (max == -1)
+              if ( max == markerColumn() )
+              {
+                  gotoLocation( KS_colMax, row, 0, make_select, true, true );
                   return;
+              }
 
               if ( m_bChoose )
                   chooseGotoLocation( max, markerRow(), 0, make_select );
@@ -2373,6 +2383,8 @@ void KSpreadCanvas::convertToMoney( KSpreadCell * cell )
 
 void KSpreadCanvas::convertToTime( KSpreadCell * cell )
 {
+  if ( cell->isDefault() || cell->isEmpty() )
+    return;
   if ( cell->isDate() )
     cell->setValue( getDouble( cell ) );
 
@@ -2387,6 +2399,8 @@ void KSpreadCanvas::convertToTime( KSpreadCell * cell )
 
 void KSpreadCanvas::convertToDate( KSpreadCell * cell )
 {
+  if ( cell->isDefault() || cell->isEmpty() )
+    return;
   if ( cell->isTime() )
     cell->setValue( getDouble( cell ) );
 
@@ -2737,6 +2751,8 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
     } // for left .. right
   } // for top .. bottom
   table->updateView(rect);
+  _ev->accept();
+
   return true;
 }
 
@@ -2820,7 +2836,6 @@ void KSpreadCanvas::deleteEditor( bool saveChanges )
 
   if (newHeight != -1)
       m_pView->vBorderWidget()->resizeRow(newHeight, row, true);
-
 
   setFocus();
 }
