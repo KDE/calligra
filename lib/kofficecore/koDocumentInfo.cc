@@ -219,7 +219,7 @@ bool KoDocumentInfoAuthor::saveOasis( KoXmlWriter &xmlWriter )
 
 bool KoDocumentInfoAuthor::loadOasis( const QDomNode& metaDoc )
 {
-    QDomElement e = metaDoc.namedItem( "dc:creator" ).toElement();
+    QDomElement e = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "creator" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         m_fullName = e.text();
@@ -455,12 +455,12 @@ bool KoDocumentInfoAbout::saveOasis( KoXmlWriter &xmlWriter )
 
 bool KoDocumentInfoAbout::loadOasis( const QDomNode& metaDoc )
 {
-    QDomElement e  = metaDoc.namedItem( "dc:title" ).toElement();
+    QDomElement e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "title" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         m_title = e.text();
     }
-    e  = metaDoc.namedItem( "dc:description" ).toElement();
+    e  = KoDom::namedItemNS( metaDoc, KoXmlNS::dc, "description" );
     if ( !e.isNull() && !e.text().isEmpty() )
     {
         m_abstract = e.text();

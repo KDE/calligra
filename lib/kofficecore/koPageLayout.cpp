@@ -24,6 +24,8 @@
 #include <kprinter.h>
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kodom.h>
+#include <koxmlns.h>
 #include <qdom.h>
 
 // paper formats ( mm )
@@ -57,19 +59,19 @@ KoGenStyle KoPageLayout::saveOasis() const
 
 void KoPageLayout::loadOasis(const QDomElement &style)
 {
-    QDomElement properties( style.namedItem( "style:page-layout-properties" ).toElement() );
+    QDomElement properties( KoDom::namedItemNS( style, KoXmlNS::style, "page-layout-properties" ) );
     if ( !properties.isNull() )
     {
-        ptWidth = KoUnit::parseValue(properties.attribute( "fo:page-width" ) );
-        ptHeight = KoUnit::parseValue(properties.attribute( "fo:page-height" ) );
-        if (properties.attribute("style:print-orientation")=="portrait")
+        ptWidth = KoUnit::parseValue(properties.attributeNS( KoXmlNS::fo, "page-width", QString::null ) );
+        ptHeight = KoUnit::parseValue(properties.attributeNS( KoXmlNS::fo, "page-height", QString::null ) );
+        if (properties.attributeNS( KoXmlNS::style, "print-orientation", QString::null)=="portrait")
             orientation=PG_PORTRAIT;
         else
             orientation=PG_LANDSCAPE;
-        ptRight = KoUnit::parseValue( properties.attribute( "fo:margin-right" ) );
-        ptBottom = KoUnit::parseValue( properties.attribute( "fo:margin-bottom" ) );
-        ptLeft = KoUnit::parseValue( properties.attribute( "fo:margin-left" ) );
-        ptTop = KoUnit::parseValue( properties.attribute( "fo:margin-top" ) );
+        ptRight = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-right", QString::null ) );
+        ptBottom = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-bottom", QString::null ) );
+        ptLeft = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-left", QString::null ) );
+        ptTop = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "margin-top", QString::null ) );
         // guessFormat takes millimeters
         if ( orientation == PG_LANDSCAPE )
             format = KoPageFormat::guessFormat( POINT_TO_MM(ptHeight), POINT_TO_MM(ptWidth) );

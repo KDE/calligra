@@ -204,7 +204,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
             format += shortForm ? "ddd" : "dddd";
         } else if ( localName == "month" ) {
             // TODO the spec has a strange mention of number:format-source
-            if ( e.attribute( "number:textual" ) == "true" ) {
+            if ( e.attributeNS( KoXmlNS::number, "textual", QString::null ) == "true" ) {
                 format += shortForm ? "MMM" : "MMMM";
             } else { // month number
                 format += shortForm ? "M" : "MM";

@@ -124,6 +124,7 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
         parentStyle = styles.style( m_parentName );
         if ( parentStyle && m_familyName.isEmpty() ) {
             // get family from parent style, just in case
+            // Note: this is saving code, don't convert to attributeNS!
             const_cast<KoGenStyle *>( this )->
                 m_familyName = parentStyle->attribute( "style:family" ).latin1();
         }

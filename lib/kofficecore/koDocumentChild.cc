@@ -21,6 +21,7 @@
 #include <koDocument.h>
 #include <koQueryTrader.h>
 #include <koxmlwriter.h>
+#include <koxmlns.h>
 #include <koUnit.h>
 
 #include <kparts/partmanager.h>
@@ -117,10 +118,10 @@ KoDocument *KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
 void KoDocumentChild::loadOasis( const QDomElement &element )
 {
     int x, y, w, h;
-    x = KoUnit::parseValue( element.attribute( "svg:x" ) );
-    y = KoUnit::parseValue( element.attribute( "svg:y" ) );
-    w = KoUnit::parseValue( element.attribute( "svg:with" ) );
-    h = KoUnit::parseValue( element.attribute( "svg:height" ) );
+    x = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) );
+    y = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) );
+    w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "with", QString::null ) );
+    h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
     m_tmpGeometry = QRect(x, y, w, h);
     setGeometry(m_tmpGeometry);
 }
