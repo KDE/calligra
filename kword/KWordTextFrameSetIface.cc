@@ -290,3 +290,18 @@ void KWordTextFrameSetIface::setWordByWord( bool _b )
     KCommand *cmd=m_frametext->textObject()->setWordByWordCommand(_b );
     delete cmd;
 }
+
+QString KWordTextFrameSetIface::fontAttibute()const
+{
+    return KoTextFormat::attributeFontToString( m_frametext->textObject()->fontAttribute() );
+}
+
+QString KWordTextFrameSetIface::underlineLineStyle() const
+{
+    return KoTextFormat::underlineStyleToString( m_frametext->textObject()->underlineLineStyle() );
+}
+
+QString KWordTextFrameSetIface::strikeOutLineStyle()const
+{
+    return KoTextFormat::strikeOutStyleToString( m_frametext->textObject()->strikeOutLineStyle() );
+}

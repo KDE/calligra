@@ -88,6 +88,12 @@ k_dcop:
     bool wordByWord() const;
     void setWordByWord( bool _b );
 
+    QString fontAttibute()const;
+
+    QString underlineLineStyle() const;
+    QString strikeOutLineStyle()const;
+
+
 private:
     KWTextFrameSet *m_frametext;
 
