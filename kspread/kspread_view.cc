@@ -813,9 +813,8 @@ void KSpreadView::startKSpell()
                                      SLOT( spellCheckerReady() ), 
                                      m_pDoc->getKSpellConfig() );
 
-  // not implemented yet
-  //    m_spell.kspell->setIgnoreUpperWords(m_pDoc->dontCheckUpperWord());
-  //    m_spell.kspell->setIgnoreTitleCase(m_pDoc->dontCheckTitleCase());
+  m_spell.kspell->setIgnoreUpperWords(m_pDoc->dontCheckUpperWord());
+  m_spell.kspell->setIgnoreTitleCase(m_pDoc->dontCheckTitleCase());
   
   QObject::connect( m_spell.kspell, SIGNAL( death() ),
                     this, SLOT( spellCheckerFinished() ) );
@@ -1083,8 +1082,6 @@ void KSpreadView::spellCheckerDone( const QString & )
 
 void KSpreadView::spellCheckerFinished()
 {
-  kdDebug() << " SpellCheck finished" << endl;
-
   if (m_pCanvas)
     m_pCanvas->setCursor( ArrowCursor );
 

@@ -332,6 +332,12 @@ public:
   void setKSpellConfig(KSpellConfig _kspell);
   KSpellConfig * getKSpellConfig() {return m_pKSpellConfig;}
 
+  bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
+  void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord = _b; }
+  
+  bool dontCheckTitleCase() const { return  m_bDontCheckTitleCase; }
+  void setDontCheckTitleCase(bool _b) { m_bDontCheckTitleCase = _b; }
+
   /**
    * show/hide status bar
    */
@@ -589,7 +595,10 @@ protected:
   bool m_bShowStatusBar;
 
   bool m_bDelayCalculation;
+
   KSpellConfig *m_pKSpellConfig;
+  bool m_bDontCheckUpperWord;
+  bool m_bDontCheckTitleCase;
 
 };
 

@@ -124,6 +124,9 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_bShowFormulaBar=true;
   m_bShowStatusBar=true;
   m_pKSpellConfig=0;
+
+  m_bDontCheckUpperWord=false;
+  m_bDontCheckTitleCase=false;
 }
 
 bool KSpreadDoc::initDoc()
@@ -181,6 +184,9 @@ void KSpreadDoc::initConfig()
         ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
         ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
         setKSpellConfig(ksconfig);
+
+        setDontCheckUpperWord(config->readBoolEntry("KSpell_IgnoreUppercaseWords", false));
+        setDontCheckTitleCase(config->readBoolEntry("KSpell_IgnoreTitleCaseWords", false));
     }
 }
 

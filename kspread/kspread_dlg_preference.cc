@@ -830,12 +830,25 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *na
 
   config = KSpreadFactory::global()->config();
   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Spelling"), box, "GroupBox" );
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1, KDialog::marginHint()+10, KDialog::spacingHint());
+  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,4,1, KDialog::marginHint()+10, KDialog::spacingHint());
   grid1->addRowSpacing( 0, KDialog::marginHint() + 5 );
-  grid1->setRowStretch( 7, 10 );
+  grid1->setRowStretch( 4, 10 );
 
   _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L ,m_pView->doc()->getKSpellConfig(), false );
-  grid1->addWidget(_spellConfig,0,0);
+  grid1->addWidget(_spellConfig,1,0);
+
+  m_dontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),tmpQGroupBox);
+  grid1->addWidget(m_dontCheckUpperWord,2,0);
+
+  m_dontCheckTitleCase= new QCheckBox(i18n("Ignore title case words"),tmpQGroupBox);
+  grid1->addWidget(m_dontCheckTitleCase,3,0);
+
+  if( config->hasGroup("KSpell kspread") )
+  {
+    config->setGroup( "KSpell kspread" );
+    m_dontCheckUpperWord->setChecked(config->readBoolEntry("KSpell_IgnoreUppercaseWords", false));
+    m_dontCheckTitleCase->setChecked(config->readBoolEntry("KSpell_IgnoreTitleCaseWords", false));
+  }
 }
 
 void configureSpellPage::apply()
@@ -847,6 +860,15 @@ void configureSpellPage::apply()
   config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
+
+  bool state = m_dontCheckUpperWord->isChecked();
+  m_pView->doc()->setDontCheckUpperWord(state);
+  config->writeEntry ("KSpell_IgnoreUppercaseWords", (int) state );
+
+  state = m_dontCheckTitleCase->isChecked();
+  m_pView->doc()->setDontCheckTitleCase(state);
+  config->writeEntry ("KSpell_IgnoreTitleCaseWords", (int) state );
+
   m_pView->doc()->setKSpellConfig(*_spellConfig);
 }
 

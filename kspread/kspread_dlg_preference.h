@@ -160,9 +160,11 @@ public:
   void apply();
   void slotDefault();
 protected:
-  KSpreadView* m_pView;
+  KSpreadView * m_pView;
   KSpellConfig * _spellConfig;
-  KConfig* config;
+  KConfig * config;
+  QCheckBox * m_dontCheckUpperWord;
+  QCheckBox * m_dontCheckTitleCase;
 } ;
 
 class KSpreadpreference : public KDialogBase
