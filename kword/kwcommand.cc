@@ -1007,9 +1007,12 @@ void KWDeleteFrameCommand::unexecute()
     KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
     if ( textfs )
         textfs->textObject()->formatMore();
-    frameSet->kWordDocument()->frameChanged( frame );
-    frameSet->kWordDocument()->refreshDocStructure(frameSet->type());
-    frameSet->kWordDocument()->updateRulerFrameStartEnd();
+    KWDocument* doc = frameSet->kWordDocument();
+    doc->frameChanged( frame );
+    // could have been the last frame on a page, so undeleting it needs to recreate the page
+    doc->recalcFrames( frame->pageNum() );
+    doc->refreshDocStructure(frameSet->type());
+    doc->updateRulerFrameStartEnd();
 }
 
 KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWFrame * frame ) :
