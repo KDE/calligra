@@ -196,7 +196,7 @@ KoMainWindow::~KoMainWindow()
     // -> We aren't allowed to delete the (embedded) document!
     // This has to be checked from queryClose, too :)
     if ( d->m_rootDoc && d->m_rootDoc->viewCount() == 0 &&
-	 !(d->m_rootDoc->parent() && d->m_rootDoc->parent()->inherits( "KoDocument" )))
+	 !d->m_rootDoc->isEmbedded())
     {
         kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
         delete d->m_rootDoc;
@@ -427,7 +427,7 @@ bool KoMainWindow::queryClose()
 
   // see DTOR for a descr. for the 2nd test
   if ( rootDocument()->isModified() &&
-       !(rootDocument()->parent() && rootDocument()->parent()->inherits( "KoDocument" )))
+       !rootDocument()->isEmbedded())
   {
       int res = KMessageBox::warningYesNoCancel( 0L,
                     i18n( "The document has been modified\nDo you want to save it ?" ));

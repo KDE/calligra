@@ -83,6 +83,11 @@ public:
    * in the constructor.
    */
   bool singleViewMode() const;
+    
+  /**
+   * Is the document embedded?
+   */
+  const bool isEmbedded() const;
 
   // ######## Where and why is this needed ?
   // Well, normally all the KOffice apps define the actions in the

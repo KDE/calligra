@@ -157,6 +157,10 @@ bool KoDocument::singleViewMode() const
   return d->m_bSingleViewMode;
 }
 
+const bool KoDocument::isEmbedded() const {
+  return parent() && parent()->inherits( "KoDocument" );
+}
+
 bool KoDocument::saveFile()
 {
   kdDebug(30003) << "KoDocument::saveFile()" << endl;
