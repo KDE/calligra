@@ -2650,10 +2650,9 @@ KPTextObject* KPresenterDoc::nextTextFrameSet(KPTextObject *obj)
         KPTextView * edit = m_kpresenterView->getCanvas()->currentTextObjectView();
         if(edit)
         {
-            if(edit->kpTextObject()!=obj)
-                obj->textObject()->setNeedSpellCheck(false);
-            else
-                active=true;
+            active=(edit->kpTextObject()==obj);
+            if(active)
+                obj->textObject()->setNeedSpellCheck(true);
         }
 
         QPtrList<KPTextObject> objlist;
