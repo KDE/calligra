@@ -22,7 +22,6 @@
 
 #include <handlers.h>
 #include <functor.h>
-#include <functordata.h>
 
 #include <qstring.h>
 #include <qdom.h>
@@ -50,7 +49,7 @@ public:
     virtual void startBody();
     virtual void endBody();
 
-    virtual void startHeader( unsigned char type );
+    virtual void startHeader( wvWare::HeaderData::Type type );
     virtual void endHeader();
 
     bool parse();

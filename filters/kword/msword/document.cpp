@@ -209,7 +209,7 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
     // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }
 
-void Document::startHeader( unsigned char type )
+void Document::startHeader( wvWare::HeaderData::Type type )
 {
     kdDebug() << k_funcinfo << type << endl;
     // Werner says the headers are always emitted in the order of the Type enum.
