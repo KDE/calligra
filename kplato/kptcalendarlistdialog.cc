@@ -138,7 +138,7 @@ public:
 };
 
 KPTCalendarListDialog::KPTCalendarListDialog(KPTProject &p, QWidget *parent, const char *name)
-    : KDialogBase( Swallow, i18n("Calendars Settings"), Ok|Cancel, Ok, parent, name, true, true),
+    : KDialogBase( Swallow, i18n("Calendar's Settings"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
     dia = new KPTCalendarListDialogImpl(this);
