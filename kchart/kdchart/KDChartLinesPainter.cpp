@@ -112,6 +112,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
     const KDChartParams::ChartType params_chartType
         = paint2nd ? params()->additionalChartType()
         : params()->chartType();
+    const bool showThreeDLines = !isArea && params()->threeDLines();
 
     enum { Normal, Stacked, Percent } mode;
     if (    (    ( params_chartType             == KDChartParams::Line )
@@ -271,7 +272,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
                 // For 2D lines, we need two points (that lie
                 // behind each other on the Z axis). For 2D lines and
                 // areas, we need only one point.
-                if( !isArea && params()->threeDLines() ) {
+                if( showThreeDLines ) {
                     points[0]->setPoint( point, project( p.x(), p.y(),
                                                          (datasetStart+dataset)*params()->threeDLineDepth() ) );
                     points[1]->setPoint( point, project( p.x(), p.y(),
@@ -358,7 +359,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
                                        params()->outlineDataLineWidth() ) );
             } else {
                 // line
-                if( params()->threeDLines() ) {
+                if( showThreeDLines ) {
                     // draw the line with the data color brush and the
                     // outline data pen if it is 3D
                     painter->setBrush( params()->dataColor( dataset ) );
@@ -376,7 +377,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
             // Do not draw the contour line if this is the last row in a
             // percent chart.
             if ( mode != Percent || dataset != datasetEnd )
-                if( params()->threeDLines() ) {
+                if( showThreeDLines ) {
                     // A 3D line needs to be drawn piece-wise
                     for ( int value = 0; value < numValues-1; value++ ) {
                         QPointArray segment( 4 );
@@ -395,7 +396,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
         points[0]->resize( point );
         previousPoints = points[0]->copy();
     }
-    
+
     painter->translate( - _dataRect.x(), - _dataRect.y() );
 }
 
