@@ -100,6 +100,9 @@ void Counter::load( QDomElement & element )
 {
     m_numbering = static_cast<Numbering>( element.attribute("numberingtype", "2").toInt() );
     m_style = static_cast<Style>( element.attribute("type").toInt() );
+    // Old docs have this:
+    if ( m_numbering == NUM_LIST && m_style == STYLE_NONE )
+        m_numbering = NUM_NONE;
     m_depth = element.attribute("depth").toInt();
     m_customBullet.character = QChar( element.attribute("bullet").toInt() );
     m_prefix = correctQString( element.attribute("lefttext") );
