@@ -115,7 +115,7 @@ void PopulateProperties(StackItem* stackItem,
     QString strFontFamily=abiPropsMap["font-family"].getValue();
     if (!strFontFamily.isEmpty())
     {
-        // TODO: transform the font-family in a font we have on the system on which KWord runs.
+        // TODO: transform the font-family in a font that we have on the system on which KWord runs.
         stackItem->fontName=strFontFamily;
     }
 }
@@ -130,42 +130,30 @@ void AddFormat(QDomElement& formatElementOut, StackItem* stackItem, QDomDocument
         formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
-    if (stackItem->fontSize)
+    if (stackItem->fontSize>0)
     {
         element=mainDocument.createElement("SIZE");
         element.setAttribute("value",stackItem->fontSize);
         formatElementOut.appendChild(element); //Append to <FORMAT>
     }
 
-    if (stackItem->italic)
-    {
-        element=mainDocument.createElement("ITALIC");
-        element.setAttribute("value",1);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
+    element=mainDocument.createElement("ITALIC");
+    element.setAttribute("value",stackItem->italic?1:0);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    if (stackItem->bold)
-    {
-        element=mainDocument.createElement("WEIGHT");
-        element.setAttribute("value",75);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
+    element=mainDocument.createElement("WEIGHT");
+    element.setAttribute("value",stackItem->bold?75:50);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
+    
+    element=mainDocument.createElement("UNDERLINE");
+    element.setAttribute("value",stackItem->underline?1:0);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    if (stackItem->underline)
-    {
-        element=mainDocument.createElement("UNDERLINE");
-        element.setAttribute("value",1);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
+    element=mainDocument.createElement("STRIKEOUT");
+    element.setAttribute("value",stackItem->strikeout?1:0);
+    formatElementOut.appendChild(element); //Append to <FORMAT>
 
-    if (stackItem->strikeout)
-    {
-        element=mainDocument.createElement("STRIKEOUT");
-        element.setAttribute("value",1);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->textPosition)
+    if ((stackItem->textPosition>=0) && (stackItem->textPosition<=2))
     {
         element=mainDocument.createElement("VERTALIGN");
         element.setAttribute("value",stackItem->textPosition);
