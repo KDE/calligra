@@ -459,6 +459,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                         if ( !frameAnchor ) {
                             *paraList << createTableMgr( grpMgr );
                             frameAnchor = &paraList->last().formattingList.first().frameAnchor;
+                            leader->m_unanchoredFramesets.append( grpMgr );
                         }
 
                         frameAnchor->type = 6;
@@ -518,6 +519,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             else
             {
                 kdWarning (30508) << "ProcessFramesetTag: Couldn't find anchor " << leader->m_currentFramesetName << endl;
+                leader->m_unanchoredFramesets.append( leader->m_currentFramesetName );
             }
 
             break;
@@ -784,7 +786,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
 
     KoPictureKey key;
 
-    // Let KoPicture do most of the loading
+    // Let KoPictureKey do most of the loading
     key.loadAttributes(myNode.toElement());
     const QString name(myNode.toElement().attribute("name"));
 
@@ -1272,6 +1274,13 @@ bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData>& paraList)
     if (!doCloseTextFrameSet())
         return false;
 
+    kdDebug(30520) << "Unachored Framesets : START" << endl;
+    QStringList::ConstIterator it;
+    for ( it = m_unanchoredFramesets.begin(); it != m_unanchoredFramesets.end(); ++it )
+    {
+        kdDebug(30520) << (*it) << endl;
+    }
+    kdDebug(30520) << "Unachored Framesets : END" << endl;
     return true;
 }
 

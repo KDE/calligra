@@ -102,6 +102,7 @@ class KWEFKWordLeader
         QMap<QString,int> m_paraCountMap;
         /// List of bookmarks
         QValueList<Bookmark> m_bookmarkList;
+        QStringList m_unanchoredFramesets; ///< List of framesets where an anchor was searched but not found (DEBUG)
 
     private:
         KoFilterChain* m_chain;
