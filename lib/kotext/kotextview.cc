@@ -329,8 +329,8 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
                     if( !doIgnoreDoubleSpace( p, m_cursor->index()-1, text[ text.length() - 1 ] ) )
                     {
                         insertText( text );
-
-                        doAutoFormat( m_cursor, p, m_cursor->index() - 1, text[ text.length() - 1 ] );
+                        // Don't use 'p' past this point. If we replaced a selection, p could have been deleted (#48999)
+                        doAutoFormat( m_cursor, m_cursor->parag(), m_cursor->index() - 1, text[ text.length() - 1 ] );
                     }
                 }
                 break;
