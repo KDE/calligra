@@ -8,12 +8,24 @@
 
 #include <qdockwindow.h>
 
+class QSpinBox;
+class KColorPatch;
+class KoMainWindow;
+class KoView;
+
 class VColorPanel : public QDockWindow
 {
   Q_OBJECT
 public:
-  VColorPanel(QWidget *parent = 0L, const char *name = 0L);
-  void stateOfButton();
+ 	 VColorPanel( KoView* parent = 0L, const char* name = 0L );
+  
+private:
+	QTabWidget* mTabWidget;
+	QWidget* mRGBWidget;
+	QSpinBox* mRed;
+	QSpinBox* mGreen;
+	QSpinBox* mBlue;
+	KColorPatch* mColorPreview;
 };
 
 #endif
