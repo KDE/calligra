@@ -59,6 +59,7 @@ TODO: change texts in projectwizard to more descriptive:
 
 TODO: [complexity=small] add dynamic resize for dict members like Connection::m_tables
 TODO: [complexity=big] make KexiDB really ASYNC, multithreaded!
+TODO: [complexity=big] add command line kexi tools
 
 TODO(GUI):
 -add "Change data source" button in project wizard
@@ -96,7 +97,9 @@ KexiDB::Connection:
 
 - Connection::destroy() instead of Connection::disconnect() should be called 
   from xxxxConnection subclasses.
-
+- ~TableSchema calls Connection::removeMe() so it is removed from tables list if needed
+- ordering in Field object added
+  
 2003-10-07
 - KexiDB::QueryAsterisk class introduced to define select queries with asterisks, like
  "staff.*" in "SELECT staff.*, cars.model from staff, cars WHERE staff.car = cars.number"
