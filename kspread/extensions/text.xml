@@ -377,6 +377,7 @@
 	<Syntax>RIGHT(text;length)</Syntax>
 	<Example>RIGHT("hello";2) returns "lo"</Example>
 	<Example>RIGHT("KSpread";10) returns "KSpread"</Example>
+	<Example>RIGHT("KSpread") returns "d"</Example>
         <Related>LEFT</Related>
         <Related>MID</Related>
       </Help>
@@ -398,6 +399,7 @@
 	<Syntax>LEFT(text;length)</Syntax>
 	<Example>LEFT("hello";2) returns "he"</Example>
 	<Example>LEFT("KSpread";10) returns "KSpread"</Example>
+	<Example>LEFT("KSpread") returns "K"</Example>
         <Related>RIGHT</Related>
         <Related>MID</Related>
       </Help>

@@ -302,18 +302,28 @@ bool kspreadfunc_left( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-    if ( !KSUtil::checkArgumentsCount( context, 2, "left", true ) )
+    bool hasNoSecondParam = KSUtil::checkArgumentsCount( context, 1, "left", false );
+
+    if ( !KSUtil::checkArgumentsCount( context, 2, "left", false ) &&
+		 !hasNoSecondParam)
       return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
       return false;
-    int nb;
-    if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
-      nb = (int) args[1]->doubleValue();
-    else if( KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-      nb = args[1]->intValue();
-    else
-      return false;
+
+	int nb;
+
+	if(hasNoSecondParam)
+		nb = 1;
+	else
+	{
+	    if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
+	      nb = (int) args[1]->doubleValue();
+    	else if( KSUtil::checkType( context, args[1], KSValue::IntType, false ) )
+	      nb = args[1]->intValue();
+	    else
+		  return false;
+	}
 
     QString tmp = args[0]->stringValue().left(nb);
     context.setValue( new KSValue( tmp ) );
@@ -489,18 +499,28 @@ bool kspreadfunc_right( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-    if ( !KSUtil::checkArgumentsCount( context, 2, "right", true ) )
+	bool hasNoSecondParam = KSUtil::checkArgumentsCount( context, 1, "right", false );
+	
+    if ( !KSUtil::checkArgumentsCount( context, 2, "right", false ) &&
+		 !hasNoSecondParam)
       return false;
 
     if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
       return false;
+
     int nb;
-    if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
-      nb = (int) args[1]->doubleValue();
-    else if( KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
-      nb = args[1]->intValue();
-    else
-      return false;
+
+	if(hasNoSecondParam)
+		nb = 1;
+	else
+	{
+	    if( KSUtil::checkType( context, args[1], KSValue::DoubleType, false ) )
+    	  nb = (int) args[1]->doubleValue();
+	    else if( KSUtil::checkType( context, args[1], KSValue::IntType, false ) )
+    	  nb = args[1]->intValue();
+	    else
+		  return false;
+	}
 
     QString tmp = args[0]->stringValue().right(nb);
     context.setValue( new KSValue(tmp));
