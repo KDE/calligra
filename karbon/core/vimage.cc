@@ -29,7 +29,10 @@ VImage::VImage( VObject *parent, const QString &fname ) : VObject( parent ), m_i
 
 VImage::VImage( const VImage &other ) : VObject( other )
 {
-	m_image			= 0L;
+	if( other.m_image )
+		m_image = new QImage( *other.m_image );
+	else
+		m_image			= 0L;
 	m_fname			= other.m_fname;
 	m_boundingBox	= other.m_boundingBox;
 }
@@ -43,9 +46,10 @@ void
 VImage::draw( VPainter *painter, const KoRect * ) const
 {
 	kdDebug() << "VImage::draw" << endl;
-	/*if( state() == edit )
+	if( state() == edit )
 	{
-		KoRect bbox = m_boundingBox.transform( m_matrix );
+		KoRect bbox = m_boundingBox;//.transform( m_matrix );
+		kdDebug() << "m_boundingBox : " << m_boundingBox << endl;
 	    painter->moveTo( bbox.topLeft() );
 	    painter->lineTo( bbox.topRight() );
 	    painter->lineTo( bbox.bottomRight() );
@@ -58,7 +62,7 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 		painter->setBrush( Qt::NoBrush );
 		painter->strokePath();
 		return;
-	}*/
+	}
 
 	//painter->setWorldMatrix( m_matrix );
 
@@ -73,8 +77,8 @@ VImage::transform( const QWMatrix& m )
 {
 	m_matrix *= m;
 	kdDebug() << "dx : " << m.dx() << ", dy : " << m.dy() << endl;
-	//m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
-	//m_boundingBox = m_boundingBox.transform( m );
+	m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
+	m_boundingBox = m_boundingBox.transform( m );
 }
 
 VObject *

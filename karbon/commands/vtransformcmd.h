@@ -45,6 +45,7 @@ public:
 	virtual void visitVComposite( VComposite& composite );
 	virtual void visitVPath( VPath& path );
 	virtual void visitVText( VText& text );
+	virtual void visitVImage( VImage& img );
 
 	void setMatrix( const QWMatrix& m )
 	{

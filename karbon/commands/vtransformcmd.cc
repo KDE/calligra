@@ -26,6 +26,7 @@
 #include "vsegment.h"
 #include "vselection.h"
 #include "vtext.h"
+#include "vimage.h"
 #include "vtransformcmd.h"
 #include "vstroke.h"
 #include "vfill.h"
@@ -138,6 +139,11 @@ VTransformCmd::visitVText( VText& text )
 	text.invalidateBoundingBox();
 }
 
+void
+VTransformCmd::visitVImage( VImage &img )
+{
+	img.transform( m_mat );
+}
 
 VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2 )
 		: VTransformCmd( doc, i18n( "Translate Objects" ), "14_select" )
