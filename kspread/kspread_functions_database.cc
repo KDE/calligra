@@ -232,9 +232,11 @@ void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const &
       kdDebug() << "Cell: " << c+left << ", " << r << ", Str: "
                 << table->cellAt( c + left, r )->strOutText() << ", index: " << list[c] << endl;
 
-      getCond( cond, table->cellAt( c + left, r )->strOutText() );
-
-      criteria->append( cond );
+      if( !table->cellAt( c + left,r )->isEmpty() )
+      {
+        getCond( cond, table->cellAt( c + left, r )->strOutText() );
+        criteria->append( cond );
+      }
     }
 
     result->append( criteria );
