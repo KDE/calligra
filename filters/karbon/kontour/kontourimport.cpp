@@ -115,6 +115,7 @@ void KontourImport::convert()
 			y = point.attribute( "y" ).toInt();
 			kdDebug() << "MoveTo: " << "x: " << x << "; y: " << y << endl;
 			path->moveTo( KoPoint( x, y ) );
+			point = point.nextSibling().toElement();
 			for( ; !point.isNull(); point = point.nextSibling().toElement() )
 			{
 				x = point.attribute( "x" ).toInt();
@@ -122,8 +123,8 @@ void KontourImport::convert()
 				kdDebug() << "LineTo: " << "x: " << x << "; y: " << y << endl;
 				path->lineTo( KoPoint( x, y ) );
 			}
-		path->close();
-		m_document.append( path );	
+			path->close();
+			m_document.append( path );	
 		}
 	}
 	
