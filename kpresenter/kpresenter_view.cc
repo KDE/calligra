@@ -3261,6 +3261,7 @@ void KPresenterView::objectSelectedChanged()
 
     actionBrushColor->setEnabled(state && state2); // no brush button for objects that don't support it
     actionExtraPenBrush->setEnabled(state && !headerfooterselected);
+    actionExtraProperties->setEnabled(state && !headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
     actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
 
