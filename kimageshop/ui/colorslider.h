@@ -1,5 +1,5 @@
 /*
- *  colorslider.h - part of KImageShop
+ *  colorslider.h - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter
  *
@@ -29,60 +29,64 @@ class SliderWidget;
 
 class ColorSlider : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
  
- public:
-  ColorSlider(QWidget *parent = 0L);
-  virtual ~ColorSlider();
+    public:
+        ColorSlider(QWidget *parent = 0L, int _colorSliderType = 0);
+        virtual ~ColorSlider();
 
-  int minValue();
-  int maxValue();
+        int minValue();
+        int maxValue();
 
- protected:
-  virtual void resizeEvent (QResizeEvent *);
-  virtual void mousePressEvent (QMouseEvent *);
+    protected:
+        virtual void resizeEvent (QResizeEvent *);
+        virtual void mousePressEvent (QMouseEvent *);
   
- public slots:
-  void slotSetColor1(const QColor&);
-  void slotSetColor2(const QColor&);
+    public slots:
+        void slotSetColor1(const QColor&);
+        void slotSetColor2(const QColor&);
+        void slotSetHue(int _hue);
+        void slotSetSaturation(int _sat);
+        void slotSetVal(int _val);
 
-  void slotSetValue(int);
-  void slotSetRange(int min, int max);
+        void slotSetValue(int);
+        void slotSetRange(int min, int max);
   
- protected slots:
-  void slotSliderMoved(int);
-  void slotFrameClicked(const QPoint&);
+    protected slots:
+        void slotSliderMoved(int);
+        void slotFrameClicked(const QPoint&);
 
- signals:
-  void colorSelected(const QColor&);
-  void valueChanged(int);
+    signals:
+        void colorSelected(const QColor&);
+        void valueChanged(int);
 
- protected:
-  SliderWidget *m_pSlider;
-  ColorFrame   *m_pColorFrame;
-  int           m_min, m_max;
-  int           m_value;
+    protected:
+        SliderWidget    *m_pSlider;
+        ColorFrame      *m_pColorFrame;
+        int             m_ColorSliderType;
+        int             m_min, m_max;
+        int             m_value;
 };
 
 class SliderWidget : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
  
- public:
-  SliderWidget(QWidget *parent = 0L);
+    public:
+        SliderWidget(QWidget *parent = 0L);
 
- protected:
-  virtual void mousePressEvent (QMouseEvent *); 
-  virtual void mouseReleaseEvent (QMouseEvent *); 
-  virtual void mouseMoveEvent (QMouseEvent *);
-  virtual void paintEvent (QPaintEvent *);
+    protected:
+        virtual void mousePressEvent (QMouseEvent *); 
+        virtual void mouseReleaseEvent (QMouseEvent *); 
+        virtual void mouseMoveEvent (QMouseEvent *);
+        virtual void paintEvent (QPaintEvent *);
   
- signals:
-  void  positionChanged(int);
+    signals:
+        void  positionChanged(int);
 
- protected:
-  bool   m_dragging;
-  QPoint m_myPos;
+    protected:
+        bool   m_dragging;
+        QPoint m_myPos;
 };
 
 #endif
