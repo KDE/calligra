@@ -168,8 +168,6 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     lay1->setMargin( 20 );
     lay1->setSpacing( 10 );
 
-    int oldRastX = m_pView->kPresenterDoc()->rastX();
-    int oldRastY = m_pView->kPresenterDoc()->rastY();
 
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
@@ -188,16 +186,6 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     showStatusBar->setChecked(oldShowStatusBar);
     lay1->addWidget(showStatusBar);
 
-
-    eRastX = new KIntNumInput( oldRastX, tmpQGroupBox );
-    eRastX->setRange( 1, 400, 1 );
-    eRastX->setLabel( i18n("Horizontal Raster: ") );
-    lay1->addWidget( eRastX );
-
-    eRastY = new KIntNumInput( oldRastY, tmpQGroupBox );
-    eRastY->setRange( 1, 400, 1 );
-    eRastY->setLabel( i18n("Vertical Raster: ") );
-    lay1->addWidget( eRastY );
 
     recentFiles=new KIntNumInput( oldNbRecentFiles, tmpQGroupBox );
     recentFiles->setRange(1, 20, 1);
@@ -222,22 +210,12 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
 
 void configureInterfacePage::apply()
 {
-    unsigned int rastX = eRastX->value();
-    unsigned int rastY = eRastY->value();
     bool ruler=showRuler->isChecked();
     bool statusBar=showStatusBar->isChecked();
 
     KPresenterDoc * doc = m_pView->kPresenterDoc();
 
     config->setGroup( "Interface" );
-    if( rastX != oldRastX || rastY != oldRastY ) {
-        config->writeEntry( "RastX", rastX );
-        config->writeEntry( "RastY", rastY );
-        doc->setRasters( rastX, rastY, true );
-        doc->repaint( false );
-        oldRastX=rastX;
-        oldRastY=rastY;
-    }
 
     double newIndent = KoUnit::ptFromUnit( indent->value(), doc->getUnit() );
     if( newIndent != doc->getIndentValue() )
@@ -274,8 +252,6 @@ void configureInterfacePage::apply()
 
 void configureInterfacePage::slotDefault()
 {
-    eRastX->setValue( 10 );
-    eRastY->setValue( 10 );
     double newIndent = KoUnit::ptToUnit( MM_TO_POINT( 10 ), m_pView->kPresenterDoc()->getUnit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
@@ -553,8 +529,7 @@ void ConfigureMiscPage::apply()
     if(macroCmd)
         doc->addCommand(macroCmd);
 
-    doc->setGridX( KoUnit::ptFromUnit( resolutionX->value(), doc->getUnit() ));
-    doc->setGridY( KoUnit::ptFromUnit( resolutionY->value(), doc->getUnit() ));
+    doc->setGridValue( KoUnit::ptFromUnit( resolutionX->value(), doc->getUnit() ), KoUnit::ptFromUnit( resolutionY->value(), doc->getUnit() ), true);
     doc->repaint( false );
 }
 

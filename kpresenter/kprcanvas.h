@@ -292,6 +292,7 @@ public:
     KCommand *setProtectContent( bool b );
     void closeObject(bool _close);
     void layout();
+
 public slots:
     void exitEditMode();
 
@@ -392,8 +393,6 @@ protected:
     void setupMenus();
 
     unsigned int currPgNum() const;
-    unsigned int rastX() const;
-    unsigned int rastY() const;
     QColor txtBackCol() const;
     bool spInfinitLoop() const;
     bool spManualSwitch() const;
@@ -475,6 +474,10 @@ private:
     bool checkCurrentTextEdit( KPTextObject * textObj );
 
     void rectSymetricalObjet();
+    QPoint applyGrid( const QPoint &pos,bool offset );
+    int applyGridOnPosX( int pos );
+    int applyGridOnPosY( int pos );
+
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }

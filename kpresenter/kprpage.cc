@@ -1471,8 +1471,8 @@ void KPrPage::insertClipart( const QString &filename )
     kdDebug(33001) << "KPresenterDoc::insertClipart key=" << key.toString() << endl;
 
     KPClipartObject *kpclipartobject = new KPClipartObject(m_doc->getClipartCollection() , key );
-    double x=m_doc->zoomHandler()->unzoomItX(10)/m_doc->zoomHandler()->unzoomItX(m_doc->rastX())*m_doc->zoomHandler()->unzoomItX(m_doc->rastX());
-    double y=m_doc->zoomHandler()->unzoomItY(10)/m_doc->zoomHandler()->unzoomItY(m_doc->rastY())*m_doc->zoomHandler()->unzoomItY(m_doc->rastY());
+    double x=(m_doc->zoomHandler()->unzoomItX(10)/m_doc->getGridX())*m_doc->getGridX();
+    double y=(m_doc->zoomHandler()->unzoomItY(10)/m_doc->getGridY())*m_doc->getGridY();
     kpclipartobject->setOrig( x, y);
     kpclipartobject->setSize( m_doc->zoomHandler()->unzoomItX(150), m_doc->zoomHandler()->unzoomItY(150) );
     kpclipartobject->setSelected( true );
@@ -2786,7 +2786,7 @@ void KPrPage::insertPicture( const QString &filename, int _x , int _y )
     double x=m_doc->zoomHandler()->unzoomItX(_x);
     double y=m_doc->zoomHandler()->unzoomItY(_y);
 
-    kppixmapobject->setOrig( (   x  / m_doc->zoomHandler()->unzoomItX(m_doc->rastX()) ) * m_doc->zoomHandler()->unzoomItX(m_doc->rastX()), ( y  / m_doc->zoomHandler()->unzoomItY(m_doc->rastY()) ) * m_doc->zoomHandler()->unzoomItY(m_doc->rastY() ));
+    kppixmapobject->setOrig( (   x  / m_doc->getGridX() ) * m_doc->getGridX(), ( y  / m_doc->getGridY() ) * m_doc->getGridY());
     kppixmapobject->setSelected( true );
 
     kppixmapobject->setSize( m_doc->zoomHandler()->unzoomItX( 10 ),m_doc->zoomHandler()->unzoomItY( 10 ) );
@@ -3032,7 +3032,7 @@ void KPrPage::completeLoading( bool _clean, int lastObj )
 
 
 /*====================== replace objects =========================*/
-KCommand * KPrPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol )
+KCommand * KPrPage::replaceObjs( bool createUndoRedo, double _orastX,double _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol )
 {
     KPObject *kpobject = 0;
     double ox, oy;
@@ -3044,15 +3044,14 @@ KCommand * KPrPage::replaceObjs( bool createUndoRedo, unsigned int _orastX,unsig
 	kpobject = m_objectList.at( i );
 	ox = kpobject->getOrig().x();
 	oy = kpobject->getOrig().y();
-	ox = ( ox / m_doc->zoomHandler()->unzoomItX(m_doc->rastX()) ) * m_doc->zoomHandler()->unzoomItX(m_doc->rastX());
-	oy = ( oy / m_doc->zoomHandler()->unzoomItY(m_doc->rastY()) ) * m_doc->zoomHandler()->unzoomItY(m_doc->rastY());
+	ox = static_cast<int>(( ox / m_doc->getGridX() )) * m_doc->getGridX();
+	oy = static_cast<int>(( oy / m_doc->getGridY() )) * m_doc->getGridY();
 
 	_diffs.append( KoPoint( ox - kpobject->getOrig().x(), oy - kpobject->getOrig().y() ) );
 	_objects.append( kpobject );
     }
 
-    SetOptionsCmd *setOptionsCmd = new SetOptionsCmd( i18n( "Set new options" ), _diffs, _objects, m_doc->rastX(), m_doc->rastY(),
-						      _orastX, _orastY, _txtBackCol, _otxtBackCol, m_doc );
+    SetOptionsCmd *setOptionsCmd = new SetOptionsCmd( i18n( "Set new options" ), _diffs, _objects, m_doc->getGridX(), m_doc->getGridY(),_orastX, _orastY, _txtBackCol, _otxtBackCol, m_doc );
     if ( createUndoRedo )
         return setOptionsCmd;
 

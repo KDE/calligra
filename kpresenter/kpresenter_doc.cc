@@ -179,12 +179,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _spManualSwitch = true;
     _showPresentationDuration = false;
     tmpSoundFileList = QPtrList<KTempFile>();
-    _rastX = 10;
-    _rastY = 10;
     _xRnd = 20;
     _yRnd = 20;
-    _orastX = 10;
-    _orastY = 10;
     _txtBackCol = lightGray;
     _otxtBackCol = lightGray;
     m_pKSpellConfig=0;
@@ -314,8 +310,6 @@ void KPresenterDoc::initConfig()
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
-        _rastX = config->readNumEntry( "RastX", 10 );
-        _rastY = config->readNumEntry( "RastY", 10 );
         // Config-file value in mm, default 10 pt
         double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
         setIndentValue(indent);
@@ -501,8 +495,6 @@ QDomDocument KPresenterDoc::saveXML()
         emit sigProgress( 5 );
 
     QDomElement element=doc.createElement("BACKGROUND");
-    element.setAttribute("rastX", _rastX);
-    element.setAttribute("rastY", _rastY);
 #if 0
     element.setAttribute("color", _txtBackCol.name());
 #endif
@@ -950,8 +942,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         _spInfinitLoop = false;
         _spManualSwitch = true;
         _showPresentationDuration = false;
-        _rastX = 20;
-        _rastY = 20;
         _xRnd = 20;
         _yRnd = 20;
         //_txtBackCol = white;
@@ -1088,10 +1078,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         }
         else if(elem.tagName()=="BACKGROUND") {
             int red=0, green=0, blue=0;
-            if(elem.hasAttribute("rastX"))
-                _rastX = elem.attribute("rastX").toInt();
-            if(elem.hasAttribute("rastY"))
-                _rastY = elem.attribute("rastY").toInt();
             if(elem.hasAttribute("xRnd"))
                 _xRnd = elem.attribute("xRnd").toInt();
             if(elem.hasAttribute("yRnd"))
@@ -1223,9 +1209,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         emit sigProgress( childCount * ( 70/childTotalCount ) + 15 );
         childCount += 1;
     }
-
-    if ( _rastX == 0 ) _rastX = 10;
-    if ( _rastY == 0 ) _rastY = 10;
 
     if(activePage!=-1)
         m_initialActivePage=m_pageList.at(activePage);
@@ -1906,12 +1889,12 @@ void KPresenterDoc::initEmpty()
 }
 
 /*======================= set rasters ===========================*/
-void KPresenterDoc::setRasters( unsigned int rx, unsigned int ry, bool _replace )
+void KPresenterDoc::setGridValue( double _x, double _y, bool _replace )
 {
-    _orastX = _rastX;
-    _orastY = _rastY;
-    _rastX = rx;
-    _rastY = ry;
+    oldGridX = m_gridX;
+    oldGridY = m_gridY;
+    m_gridX=_x;
+    m_gridY=_y;
     if ( _replace )
       replaceObjs();
 }
@@ -2144,12 +2127,14 @@ void KPresenterDoc::replaceObjs( bool createUndoRedo )
     QPtrListIterator<KPrPage> oIt(m_pageList);
     for (; oIt.current(); ++oIt )
       {
-        KCommand *cmd=oIt.current()->replaceObjs( createUndoRedo, _orastX,_orastY,_txtBackCol, _otxtBackCol);
+        KCommand *cmd=oIt.current()->replaceObjs( createUndoRedo, oldGridX,oldGridY,_txtBackCol, _otxtBackCol);
         if(cmd && createUndoRedo)
         {
             macroCmd->addCommand(cmd);
             addMacroCommand=true;
         }
+        else
+            delete cmd;
     }
     if(addMacroCommand)
     {

@@ -139,11 +139,7 @@ public:
 
     void insertObjectInPage(double offset, KPObject *_obj);
 
-    // get - set raster
-    unsigned int rastX() const { return _rastX; }
-    unsigned int rastY() const { return _rastY; }
-
-    void setRasters( unsigned int rx, unsigned int ry, bool _replace = true );
+    void setGridValue( double rx, double ry, bool _replace = true );
 
     // get - set options for editmodi
     QColor txtBackCol() const { return _txtBackCol; }
@@ -472,7 +468,6 @@ protected:
     bool _spInfinitLoop, _spManualSwitch, _showPresentationDuration;
 
     // options
-    int _rastX, _rastY;
     int _xRnd, _yRnd;
 
     // options for editmode
@@ -482,7 +477,6 @@ protected:
     bool _clean;
     int objStartY, objStartNum;
 
-    int _orastX, _orastY;
     PresSpeed presSpeed;
 
     QPen _presPen;
@@ -549,6 +543,8 @@ private:
 
     double m_gridX;
     double m_gridY;
+    double oldGridX;
+    double oldGridY;
 
     KPresenterView *m_kpresenterView;;
     KPrPage *m_initialActivePage;

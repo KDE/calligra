@@ -106,14 +106,18 @@ void ShadowCmd::unexecute()
 
 /*======================== constructor ===========================*/
 SetOptionsCmd::SetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs, QPtrList<KPObject> &_objects,
-                              int _rastX, int _rastY, int _orastX, int _orastY,
+                              double _gridX, double _gridY, double _oldGridX, double _oldGridY,
                               const QColor &_txtBackCol, const QColor &_otxtBackCol, KPresenterDoc *_doc )
-    : KNamedCommand( _name ), diffs( _diffs ), objects( _objects ), txtBackCol( _txtBackCol ), otxtBackCol( _otxtBackCol )
+    : KNamedCommand( _name ),
+      diffs( _diffs ),
+      objects( _objects ),
+      txtBackCol( _txtBackCol ),
+      otxtBackCol( _otxtBackCol )
 {
-    rastX = _rastX;
-    rastY = _rastY;
-    orastX = _orastX;
-    orastY = _orastY;
+    gridX = _gridX;
+    gridY = _gridY;
+    oldGridX = _oldGridX;
+    oldGridY = _oldGridY;
     doc = _doc;
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
@@ -135,7 +139,7 @@ void SetOptionsCmd::execute()
     for ( unsigned int i = 0; i < objects.count(); i++ )
         objects.at( i )->moveBy( *diffs.at( i ) );
 
-    doc->setRasters( rastX, rastY, false );
+    doc->setGridValue( gridX, gridY, false );
     doc->setTxtBackCol( txtBackCol );
     doc->repaint( false );
 }
@@ -145,8 +149,8 @@ void SetOptionsCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
         objects.at( i )->moveBy( -(*diffs.at( i )).x(), -(*diffs.at( i )).y() );
+    doc->setGridValue( oldGridX, oldGridY, false );
 
-    doc->setRasters( orastX, orastY, false );
     doc->setTxtBackCol( otxtBackCol );
     doc->repaint( false );
 }

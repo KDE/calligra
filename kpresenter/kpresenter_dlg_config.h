@@ -40,10 +40,7 @@ public:
     void slotDefault();
 private:
     KPresenterView* m_pView;
-    KIntNumInput* eRastX,*eRastY;
     KConfig* config;
-    unsigned int oldRastX;
-    unsigned int oldRastY;
     int oldNbRecentFiles;
     KDoubleNumInput* indent;
     KIntNumInput* recentFiles;
