@@ -325,7 +325,9 @@ VObjectListViewItem::update()
 	selectionDesc.visit( *m_object );
 	setText( 0, QString( "%1" ).arg( selectionDesc.shortDescription() ) );
 	if( m_object->state() == VObject::normal_locked || m_object->state() == VObject::hidden_locked )
-		setPixmap( 1, QPixmap( il.iconPath( "lock.png", KIcon::Small ) ) );
+		setPixmap( 1, QPixmap( il.iconPath( "locked.png", KIcon::Small ) ) );
+	else
+		setPixmap( 1, QPixmap( il.iconPath( "unlocked.png", KIcon::Small ) ) );
 	setPixmap( 2, QPixmap( il.iconPath( ( m_object->state() == VObject::hidden || m_object->state() == VObject::hidden_locked ? "14_layer_novisible.png" : "14_layer_visible.png" ), KIcon::Small ) ) );
 	setPixmap( 0, preview );
 }

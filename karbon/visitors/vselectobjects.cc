@@ -27,8 +27,9 @@
 void
 VSelectObjects::visitVComposite( VComposite& composite )
 {
-	// Never select a deleted object.
-	if( composite.state() == VObject::deleted )
+	// Never select a deleted, locked or hidden object.
+	if( composite.state() > VObject::normal &&
+		composite.state() < VObject::selected )
 		return;
 
 	if( m_rect.isEmpty() ) // in this mode everything is selected
@@ -115,8 +116,9 @@ VSelectObjects::visitVComposite( VComposite& composite )
 void
 VSelectObjects::visitVObject( VObject& object )
 {
-	// Never select a deleted object
-	if( object.state() == VObject::deleted )
+	// Never select a deleted, locked or hidden object.
+	if( object.state() > VObject::normal &&
+		object.state() < VObject::selected )
 		return;
 
 	if( !m_rect.isEmpty() )
