@@ -54,8 +54,6 @@
 
 // Dialogs.
 #include "vconfiguredlg.h"
-#include "vfilldlg.h"
-#include "vstrokedlg.h"
 
 // Dockers.
 #include "vcolordocker.h"
@@ -659,32 +657,6 @@ KarbonView::zoomChanged()
 	m_canvas->viewport()->setFocus();
 
 	emit zoomChanged( zoomFactor );
-}
-
-void
-KarbonView::solidFillClicked()
-{
-	if( shell() && shell()->rootView() == this )
-	{
-		VFillDlg * dialog = new VFillDlg( part() );
-		connect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
-		dialog->exec();
-		delete dialog;
-		disconnect( dialog, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
-	}
-}
-
-void
-KarbonView::strokeClicked()
-{
-	if( shell() && shell()->rootView() == this )
-	{
-		VStrokeDlg * dialog = new VStrokeDlg( part() );
-		connect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
-		dialog->exec();
-		delete dialog;
-		disconnect( dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
-	}
 }
 
 void

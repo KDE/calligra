@@ -166,8 +166,6 @@ protected slots:
 //	void viewHistory();
 
 	// Toolbox dialogs.
-	void solidFillClicked();
-	void strokeClicked();
 	void slotStrokeChanged( const VStroke& );
 	void slotFillChanged( const VFill & );
 	void slotJoinStyleClicked();
