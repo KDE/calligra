@@ -69,6 +69,7 @@ bool KChartPart::initDoc()
 
 void KChartPart::initRandomData()
 {
+    kdDebug()<<"KChartPart::initRandomData()\n";
     // fill cells
     int col,row;
     // initialize some data, if there is none
@@ -416,6 +417,8 @@ bool KChartPart::loadData( const QDomDocument& doc, KoChart::Data& currentData )
     }
     kdDebug(35001) << rows << " x " << cols << endl;
     currentData.expand(rows, cols);
+    currentData.setUsedCols( cols );
+    currentData.setUsedRows( rows );
     kdDebug(35001) << "Expanded!" << endl;
     QDomNode n = data.firstChild();
     //QArray<int> tmpExp(rows*cols);
