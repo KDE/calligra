@@ -1122,7 +1122,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
         // ### TODO: this probably sets garbage as alpha
         //preview.setAlphaBuffer( true );
     }
-    m_store->open("Thumbnails/Thumbnail.png");
+    m_store->open("Thumbnails/thumbnail.png");
     KoStoreDevice io ( m_store );
     io.open( IO_WriteOnly );  // ### TODO: check error!
     preview.save( &io, "PNG" ); // ### TODO What is -9 in quality terms?
