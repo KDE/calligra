@@ -47,15 +47,6 @@ class KoApplication : public KApplication
     Q_OBJECT
 
 public:
-
-    /**
-     * Adds command line options specific for KoApplication.
-     *
-     * Should be called before calling KoApplication constructor
-     * and start().
-     */
-    static void addCmdLineOptions();
-
     /**
      * Creates an application object, adds some standard directories and
      * initializes kimgio.
@@ -83,6 +74,7 @@ public:
     virtual bool start();
 
 private:
+    bool initHack();
     KoApplicationIface *m_appIface;  // to avoid a leak
 };
 

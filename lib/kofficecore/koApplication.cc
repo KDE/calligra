@@ -41,7 +41,7 @@ static const KCmdLineOptions options[]=
 };
 
 KoApplication::KoApplication()
-        : KApplication()
+        : KApplication( initHack() )
 {
     // Install the libkoffice* translations
     KGlobal::locale()->insertCatalogue("koffice");
@@ -59,9 +59,11 @@ KoApplication::KoApplication()
     dcopClient()->setDefaultObject( m_appIface->objId() );
 }
 
-void KoApplication::addCmdLineOptions()
+// This gets called before entering KApplication::KApplication
+bool KoApplication::initHack()
 {
     KCmdLineArgs::addCmdLineOptions( options, I18N_NOOP("KOffice"), "koffice", "kde" );
+    return true;
 }
 
 bool KoApplication::start()
