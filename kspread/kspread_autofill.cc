@@ -274,10 +274,10 @@ AutoFillSequence::AutoFillSequence( KSpreadCell *_cell )
     {
         if ( floor( _cell->valueDouble() ) == _cell->valueDouble() )
         {
-            sequence.append( new AutoFillSequenceItem( (int)_cell->valueDouble() ) );
+            sequence.append( new AutoFillSequenceItem( (int)_cell->valueDouble()) );
         }
         else
-            sequence.append( new AutoFillSequenceItem( _cell->valueDouble() ) );
+            sequence.append( new AutoFillSequenceItem(_cell->valueDouble() ) );
     }
     else if ( !_cell->text().isEmpty() )
         sequence.append( new AutoFillSequenceItem( _cell->text() ) );
@@ -462,6 +462,7 @@ void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell
     // area.
     KSpreadCell *cell = _destList.first();
     unsigned int s = 0;
+    unsigned int incre=1;
     while ( cell )
     {
         if ( s == _srcList.count() )
@@ -474,6 +475,14 @@ void KSpreadTable::fillSequence( QList<KSpreadCell>& _srcList, QList<KSpreadCell
                 QString d = _srcList.at( s )->encodeFormular();
                 cell->setCellText( cell->decodeFormular( d.latin1() ), true );
             }
+            else if(_srcList.at( s )->isValue() && _srcList.count()==1)
+                {
+                double val=(_srcList.at( s )->valueDouble())+incre;
+                incre++;
+                QString tmp;
+                tmp=tmp.setNum(val);
+                cell->setCellText( tmp, true );
+                }
             else
                 cell->setCellText( _srcList.at( s )->text(), true );
         }
