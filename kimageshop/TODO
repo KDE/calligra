@@ -1,0 +1,8 @@
+Current todo list: (add ideas here :-)
+
+- paint on/move linked layers
+- color buttons (fore-/background) + color dialog
+- extend brushtool to use foreground color
+- implement pen tool (paint a line using the foreground color)
+- implement selections
+- extend layerdialog
