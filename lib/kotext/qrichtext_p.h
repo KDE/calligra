@@ -1236,9 +1236,9 @@ public:
 
     void setFormat( int index, int len, KoTextFormat *f, bool useCollection = TRUE, int flags = -1 );
 
-    void setAlignment( int a );
-    void setAlignmentDirect( int a ) { align = a; }
-    int alignment() const;
+    void setAlignment( uint a );
+    void setAlignmentDirect( uint a ) { align = a; }
+    uint alignment() const;
 
     virtual void paint( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
                        int clipx, int clipy, int clipw, int cliph ); // kotextparag.cc
@@ -1344,7 +1344,7 @@ private:
     uint breakable : 1;
     uint isBr : 1;
     uint movedDown : 1;
-    int align : 4;
+    uint align : 4;
     short int m_lineChanged;
     int state, id;
     KoTextString *str;
@@ -1943,7 +1943,7 @@ inline KoTextDocument *KoTextParag::document() const
     return doc;
 }
 
-inline void KoTextParag::setAlignment( int a )
+inline void KoTextParag::setAlignment( uint a )
 {
     if ( a == align )
 	return;

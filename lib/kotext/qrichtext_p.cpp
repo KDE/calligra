@@ -287,7 +287,7 @@ void KoTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
     bl = ( *it )->baseLine;
 }
 
-int KoTextParag::alignment() const
+uint KoTextParag::alignment() const
 {
     return align;
 }
