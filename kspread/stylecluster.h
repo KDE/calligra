@@ -82,9 +82,16 @@ class KSPREAD_EXPORT StyleCluster : public QObject
     //To be written
     //friend class StyleManipulator;
     friend class StyleClusterTester;
+    /**
+     * An internally used function.  Takes a list of quads, each one being a child of the
+     * one underneath it, with the last one being a pointer to m_topQuad.
+     * Then it goes up this list and checks whether it can be simplified, and
+     * does so if it's possible.
+     * 
+     * @param path This stack will be destroyed in this function. Make a copy if you want to keep it.
+     */
+    void simplify( QValueStack<StyleClusterQuad**> &path );
 
-    void simplify(  QValueStack<StyleClusterQuad**> path );
-    
     /**
      * Return the quad being used at x,y.
      */

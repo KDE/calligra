@@ -75,15 +75,16 @@ class StyleClusterQuad
 
     /**
      * Returns the number of m_{top,bottom}{left,right} pointers that are null
+     * Does not use the isSimple variable, so safe to call if isSimple is
+     * invalid.
      */
     int numNullChildren();
 
-  
-    typedef enum { Simple = 0, Quad = 1} QuadType;
-    
-    QuadType m_type;
-  
-        
+    /**
+     * Are the following 4 pointers all null?  For speed efficency.. I hope.
+     */
+    bool m_isSimple;
+
     StyleClusterQuad* m_topLeft;
     StyleClusterQuad* m_topRight;
     StyleClusterQuad* m_bottomLeft;
@@ -96,6 +97,7 @@ class StyleClusterQuad
 KSpreadStyle *StyleClusterQuad::getStyle() {
   return m_style;
 }
+
 void StyleClusterQuad::setStyle(KSpreadStyle * style) {
   if(m_style && m_style->release()) {
     delete m_style;
@@ -104,11 +106,10 @@ void StyleClusterQuad::setStyle(KSpreadStyle * style) {
   if(m_style)
     m_style->addRef();
 }
-    
 
 StyleClusterQuad::StyleClusterQuad()
 : m_style(NULL),
-  m_type(Simple),
+  m_isSimple(true),
   m_topLeft(NULL),
   m_topRight(NULL),
   m_bottomLeft(NULL),
@@ -124,7 +125,7 @@ StyleClusterQuad::~StyleClusterQuad()
     m_style = NULL;
   }
   
-  if (m_type == Quad)
+  if (!m_isSimple) //there are non-null pointers
   {
     if (m_topLeft)
       delete m_topLeft;
@@ -134,8 +135,8 @@ StyleClusterQuad::~StyleClusterQuad()
       delete m_bottomLeft;
     if (m_bottomRight)
       delete m_bottomRight;
+    m_topLeft = m_topRight = m_bottomLeft = m_bottomRight = 0;
   }
-  m_topLeft = m_topRight = m_bottomLeft = m_bottomRight = 0;
 }
 
 int StyleClusterQuad::numNullChildren() {
@@ -180,14 +181,10 @@ void StyleCluster::setStyle( int x, int y, KSpreadStyle * style)
   int x_offset = 0;
   int y_offset = 0;
   int quad_size = KS_Max_Quad;
-  
-  if( m_topQuad->m_type == StyleClusterQuad::Simple ) { 
-    if( style == m_topQuad->getStyle() )
+
+  if( m_topQuad->m_isSimple && style == m_topQuad->getStyle() )
       return;
-    else
-      m_topQuad->m_type = StyleClusterQuad::Quad;
-  }
-  
+
   //let's keep track of the path we went down, so we can go up as well
   // note that we store pointers to pointers 
   QValueStack<StyleClusterQuad**> path;
@@ -196,8 +193,6 @@ void StyleCluster::setStyle( int x, int y, KSpreadStyle * style)
   {
     Q_ASSERT (current_node);
     Q_ASSERT( *current_node);
-    //The below should be true.  It is obviously true from the code, so feel free to comment out
-    Q_ASSERT( (*current_node)->m_type == StyleClusterQuad::Quad );
     Q_ASSERT( quad_size > 0); // we can't have a quad of width 1!
 
     // For the next few lines, 'quad_size' is the size of the child node - i.e. the new current_node
@@ -228,18 +223,15 @@ void StyleCluster::setStyle( int x, int y, KSpreadStyle * style)
     }
     
     //quad_size is now the size (size of width, and size of height) of current_node
-    
-    //Now we have gone down one step.  The parent is a quad, but the current node
-    //may be null, in which case our style is the style of the parent, or it's Simple,
+    //Now we have gone down one step.  The current node may be null, in which case
+    //our style is the style of the parent, or it's Simple,
     //in which case we need to check whether we to subdivide, or it's a quad, in which case
     //we don't do anything until we loop again around this while loop and go down into that quad.
     
-    if( !*current_node ) { // We know the parent is a Quad now
+    if( !*current_node ) { 
       //Okay, so we are using the style of the parent.
       //If we are not down to a single cell, then we will have to create a quad for current node,
       //and go down into it continously until there are no more quads to create.
-      
-      Q_ASSERT( last_node->m_type == StyleClusterQuad::Quad );
       
       //The whole of this section is already this style.  No need to do anything.
       if( style == last_node->getStyle() ) return;
@@ -254,120 +246,89 @@ void StyleCluster::setStyle( int x, int y, KSpreadStyle * style)
 
 	  last_node->setStyle(style);
 	  simplify(path);
+          Q_ASSERT( !last_node->m_isSimple);
 	} else {  //someone else in the parent is using the style info in parent, so we have to create our own child
-          (*current_node) = new StyleClusterQuad(); //defaults to a Simple
+          (*current_node) = new StyleClusterQuad();
           (*current_node)->setStyle(style);
+          last_node->m_isSimple = false; //Make sure the parent knows it has a non-null child now.
 	}
         return;
       }
       
-      *current_node = new StyleClusterQuad(); //defaults to a Simple
+      *current_node = new StyleClusterQuad();
       (*current_node)->setStyle(last_node->getStyle());
-
-      //we will go into this next time round the loop
-      // so make it a quad
-      (*current_node)->m_type = StyleClusterQuad::Quad;
-
+      last_node->m_isSimple = false; //Make sure the parent knows it has a non-null child now.
+      
       if(last_node->numNullChildren() == 0) {
         last_node->setStyle(0); //nothing is using this anymore
       }
-
-    } else if( (*current_node)->m_type == StyleClusterQuad::Simple ) { 
-      if( style == (*current_node)->getStyle() )
-        return;
-      if(quad_size == 1) {
-	
-        //So we are a simple cell
-	//
-        if( last_node->getStyle() == style) {
-          delete (*current_node);  //style is released in the destructor
-          *current_node = NULL;
-          //Now it may be that there are no other children in the last_node, so the style is for all 4 of its children quads
-	  
-	  simplify(path);
-        
-	} else if (last_node->getStyle() == 0) {
-	  //We are the _only_ child that is Simple.  Can't happen for quad_size==1
-	  Q_ASSERT(false);
-	  return;
-	} else { 
-	  //The style on the parent differs from us, so there's nothing more we can do
-          (*current_node)->setStyle(style);
-	}
-	return; //we are on quad_size ==1, so a single cell. no point continuing.	
-      }
-      //else make this a quad, and go inside it
-      (*current_node)->m_type = StyleClusterQuad::Quad;
-    } // else it's a quad, and we will go into it on the next time round the while loop
+    }
   }
   
   return;
   
 }
 
-/*
- * Take a range 
- */
-//void StyleCluster::rect( QRect range) {
-//}
-
-void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> path ) { 
+void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> &path ) { 
   StyleClusterQuad** current_node;
   StyleClusterQuad* last_node = NULL;
 
-  if( path.isEmpty()) return;
-  current_node = path.pop();
-  if( !path.isEmpty() && path.top())
-    last_node = *(path.top());
+  while (true) {
   
-  Q_ASSERT( current_node && *current_node);
-
-  if((*current_node)->m_bottomLeft && (*current_node)->m_bottomLeft->m_type == StyleClusterQuad::Simple && (*current_node)->m_bottomLeft->getStyle() == (*current_node)->getStyle()) {
-    delete (*current_node)->m_bottomLeft;
-    (*current_node)->m_bottomLeft = 0;
-  }
-  if((*current_node)->m_bottomRight && (*current_node)->m_bottomRight->m_type == StyleClusterQuad::Simple && (*current_node)->m_bottomRight->getStyle() == (*current_node)->getStyle()) {
-    delete (*current_node)->m_bottomRight;
-    (*current_node)->m_bottomRight = 0;
-  }
-  if((*current_node)->m_topLeft && (*current_node)->m_topLeft->m_type == StyleClusterQuad::Simple && (*current_node)->m_topLeft->getStyle() == (*current_node)->getStyle()) {
-    delete (*current_node)->m_topLeft;
-    (*current_node)->m_topLeft = 0;
-  }
-  if((*current_node)->m_topRight && (*current_node)->m_topRight->m_type == StyleClusterQuad::Simple && (*current_node)->m_topRight->getStyle() == (*current_node)->getStyle()) {
-    delete (*current_node)->m_topRight;
-    (*current_node)->m_topRight = 0;
-  }
-
-  
-  if((*current_node)->numNullChildren() == 4) { //we can simplify - all children in the quad are pointing to use.
-    (*current_node)->m_type = StyleClusterQuad::Simple;
-	  
-    if(!last_node) {
-      
-      Q_ASSERT( m_topQuad == *current_node );
-
-      return;
+    if( path.isEmpty()) return;
+    current_node = path.pop();
+    if( !path.isEmpty() && path.top())
+        last_node = *(path.top());
+    
+    Q_ASSERT( current_node && *current_node);
+    
+    if((*current_node)->m_bottomLeft && (*current_node)->m_bottomLeft->m_isSimple && (*current_node)->m_bottomLeft->getStyle() == (*current_node)->getStyle()) {
+        delete (*current_node)->m_bottomLeft;
+        (*current_node)->m_bottomLeft = 0;
     }
-    if(last_node->getStyle() == (*current_node)->getStyle()) {
-      //Parent has the same style, so delete us, then go back up recursively
-      delete (*current_node);
-      *current_node = 0;
-      simplify(path);
-    } else if(last_node->getStyle() == 0 ) {
-      //the parent has only quads, and we are now the only simple one
-      //so delete us, and set the style for the parent
-      last_node->setStyle( (*current_node)->getStyle() );
-      delete (*current_node);
-      *current_node = 0; 
-    } else if(last_node->numNullChildren() == 0) {
-      //The style in the parent is different, but we are the only one using that style
-      last_node->setStyle( (*current_node)->getStyle() );
-      delete (*current_node);
-      (*current_node) = 0;
-      simplify(path);
-    } else {
-      //The style in the parent is different, and it has children using that style, so there is nothing we can do.
+    if((*current_node)->m_bottomRight && (*current_node)->m_bottomRight->m_isSimple && (*current_node)->m_bottomRight->getStyle() == (*current_node)->getStyle()) {
+        delete (*current_node)->m_bottomRight;
+        (*current_node)->m_bottomRight = 0;
+    }
+    if((*current_node)->m_topLeft && (*current_node)->m_topLeft->m_isSimple && (*current_node)->m_topLeft->getStyle() == (*current_node)->getStyle()) {
+        delete (*current_node)->m_topLeft;
+        (*current_node)->m_topLeft = 0;
+    }
+    if((*current_node)->m_topRight && (*current_node)->m_topRight->m_isSimple && (*current_node)->m_topRight->getStyle() == (*current_node)->getStyle()) {
+        delete (*current_node)->m_topRight;
+        (*current_node)->m_topRight = 0;
+    }
+    
+    
+    if((*current_node)->numNullChildren() == 4) { //we can simplify - all children in the quad are pointing to use.
+      (*current_node)->m_isSimple = true;
+            
+      if(!last_node) {
+        
+        Q_ASSERT( m_topQuad == *current_node );
+    
+        return;
+      }
+      if(last_node->getStyle() == (*current_node)->getStyle()) {
+        //Parent has the same style, so delete us, then go back up recursively
+        delete (*current_node);
+        *current_node = 0;
+      } else if(last_node->getStyle() == 0 ) {
+        //the parent has only quads, and we are now the only simple one
+        //so delete us, and set the style for the parent
+        last_node->setStyle( (*current_node)->getStyle() );
+        delete (*current_node);
+        *current_node = 0; 
+        return;
+      } else if(last_node->numNullChildren() == 0) {
+        //The style in the parent is different, but we are the only one using that style
+        last_node->setStyle( (*current_node)->getStyle() );
+        delete (*current_node);
+        (*current_node) = 0;
+      } else {
+        //The style in the parent is different, and it has children using that style, so there is nothing we can do.
+        return;
+      }
     }
   }
 }
@@ -389,7 +350,7 @@ StyleClusterQuad* StyleCluster::lookupNode(int x, int y) {
   int y_offset = 0;
   int quad_size = KS_Max_Quad;
   
-  while ( current_node && current_node->m_type != StyleClusterQuad::Simple )
+  while ( current_node && !current_node->m_isSimple )
   {
     last_node = current_node;
     quad_size /= 2;
