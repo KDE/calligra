@@ -893,7 +893,7 @@ KarbonView::initActions()
 		i18n( "&Ungroup Objects" ), "ungroup", QKeySequence( "Ctrl+U" ), this,
 		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	m_closePath = new KAction(
-		i18n( "&Close path" ), "closepath", 0 /*QKeySequence( "Ctrl+U" )*/, this,
+		i18n( "&Close Path" ), "closepath", 0 /*QKeySequence( "Ctrl+U" )*/, this,
 		SLOT( closePath() ), actionCollection(), "close_path" );
 	// object <-----
 

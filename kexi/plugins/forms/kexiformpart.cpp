@@ -91,7 +91,7 @@ void KexiFormPart::initActions()
 	createSharedAction(Kexi::DesignViewMode, i18n("Bring Widget to Front"), "raise", 0, "formpart_format_raise");
 	createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), "lower", 0, "formpart_format_lower");
 
-	KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets position"), "aopos2grid", 0, "formpart_align_menu", "KActionMenu");
+	KAction *action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"), "aopos2grid", 0, "formpart_align_menu", "KActionMenu");
 	KActionMenu *menu = static_cast<KActionMenu*>(action);
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Left"), "aoleft", 0, "formpart_align_to_left") );
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Right"), "aoright", 0, "formpart_align_to_right") );
@@ -99,7 +99,7 @@ void KexiFormPart::initActions()
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Bottom"), "aobottom", 0, "formpart_align_to_bottom") );
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Grid"), "aopos2grid", 0, "formpart_align_to_grid") );
 
-	action = createSharedAction(Kexi::DesignViewMode, i18n("Adjust Widgets size"), "aogrid", 0, "formpart_adjust_size_menu", "KActionMenu");
+	action = createSharedAction(Kexi::DesignViewMode, i18n("Adjust Widgets Size"), "aogrid", 0, "formpart_adjust_size_menu", "KActionMenu");
 	menu = static_cast<KActionMenu*>(action);
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Fit"), "aofit", 0, "formpart_adjust_to_fit") );
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Grid"), "aogrid", 0, "formpart_adjust_size_grid") );

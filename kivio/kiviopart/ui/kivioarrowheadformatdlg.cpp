@@ -47,7 +47,7 @@ void KivioArrowHeadFormatDlg::init()
   setMainWidget(mainWidget);
   QGridLayout* gl = new QGridLayout(mainWidget, 2, 1, KDialog::marginHint(), KDialog::spacingHint());
 
-  QGroupBox* startGBox = new QGroupBox(2, Qt::Horizontal, i18n("Arrowhead At Origin"), mainWidget);
+  QGroupBox* startGBox = new QGroupBox(2, Qt::Horizontal, i18n("Arrowhead at Origin"), mainWidget);
   QLabel* startAHTypeLbl = new QLabel(i18n("&Type:"), startGBox);
   m_startAHTypeCBox = new KComboBox(startGBox);
   loadArrowHeads(m_startAHTypeCBox, false);
@@ -59,7 +59,7 @@ void KivioArrowHeadFormatDlg::init()
   m_startAHHeightUSBox = new KoUnitDoubleSpinBox(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   startAHHeightLbl->setBuddy(m_startAHHeightUSBox);
 
-  QGroupBox* endGBox = new QGroupBox(2, Qt::Horizontal, i18n("Arrowhead At End"), mainWidget);
+  QGroupBox* endGBox = new QGroupBox(2, Qt::Horizontal, i18n("Arrowhead at End"), mainWidget);
   QLabel* endAHTypeLbl = new QLabel(i18n("T&ype:"), endGBox);
   m_endAHTypeCBox = new KComboBox(endGBox);
   loadArrowHeads(m_endAHTypeCBox, true);

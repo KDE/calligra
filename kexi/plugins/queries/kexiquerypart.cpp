@@ -95,9 +95,9 @@ void KexiQueryPart::initInstanceActions( int mode, KActionCollection *col )
 	else if (mode==Kexi::DesignViewMode) {
 	}
 	else if (mode==Kexi::TextViewMode) {
-//		new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()), col, "querypart_check_query");
+//		new KAction(i18n("Check Query"), "test_it", 0, this, SLOT(slotCheckQuery()), col, "querypart_check_query");
 
-//TODO		new KAction(i18n("Execute query"), "?????", 0, this, SLOT(checkQuery()), col, "querypart_execute_query");
+//TODO		new KAction(i18n("Execute Query"), "?????", 0, this, SLOT(checkQuery()), col, "querypart_execute_query");
 	}
 }
 #endif
@@ -107,7 +107,7 @@ void KexiQueryPart::initActions()
 //	new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()), 
 //		m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");
 
-	KAction *a = createSharedAction(Kexi::TextViewMode, i18n("Check query"), "test_it", 
+	KAction *a = createSharedAction(Kexi::TextViewMode, i18n("Check Query"), "test_it", 
 		CTRL|Key_Return, "querypart_check_query");
 	a->setToolTip(i18n("Check query"));
 	a->setWhatsThis(i18n("Checks query for validity."));

@@ -360,8 +360,8 @@ PixmapCollectionEditor::displayMenu(QIconViewItem *it, const QPoint &p)
 {
 	if(!it) return;
 	KPopupMenu *menu = new KPopupMenu();
-	menu->insertItem(SmallIconSet("edit"), i18n("Rename item"), this, SLOT(renameItem()));
-	menu->insertItem(SmallIconSet("remove"), i18n("Remove item"), this, SLOT(removeItem()));
+	menu->insertItem(SmallIconSet("edit"), i18n("Rename Item"), this, SLOT(renameItem()));
+	menu->insertItem(SmallIconSet("remove"), i18n("Remove Item"), this, SLOT(removeItem()));
 	menu->exec(p);
 }
 

@@ -46,7 +46,7 @@ namespace KFormDesigner {
 ///////////// The dialog to edit or add/remove connections //////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 ConnectionDialog::ConnectionDialog(QWidget *parent)
-: KDialogBase(parent, "connections_dialog", true, i18n("Edit Form connections"), Ok|Cancel|Details, Ok, false), m_buffer(0)
+: KDialogBase(parent, "connections_dialog", true, i18n("Edit Form Connections"), Ok|Cancel|Details, Ok, false), m_buffer(0)
 {
 	QFrame *frame = makeMainWidget();
 	QHBoxLayout *layout = new QHBoxLayout(frame, 0, 6);

@@ -105,7 +105,7 @@ void KWMailMergeKSpreadConfig::initGUI()
   _urlRequester = new KURLRequester( page );
   layout->addWidget( _urlRequester, 0, 1 );
 
-  label = new QLabel( i18n( "Page Number:" ), page );
+  label = new QLabel( i18n( "Page number:" ), page );
   layout->addWidget( label, 1, 0 );
 
   _pageNumber = new KComboBox( page );
