@@ -161,7 +161,7 @@
       <Help>
 	<Text>The TRIM() function returns text with only single spaces between words.</Text>
 	<Syntax>TRIM(text)</Syntax>
-	<Example>TRIM(" hello    KSpread   ") returns hello KSpread</Example>
+	<Example>TRIM(" hello    KSpread   ") returns "hello KSpread"</Example>
       </Help>
     </Function>
 

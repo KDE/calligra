@@ -215,7 +215,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The MEDIAN() function calculates the median of all the values given as parameters. You can calculate the median of a range like MEDIAN(A1:B5) or a list of values like MEDIAN(12; 5; 12.5). Blank cells will be considered as a zero, and cells with text will be ignored</Text>
+	<Text>The MEDIAN() function calculates the median of all the values given as parameters. You can calculate the median of a range like MEDIAN(A1:B5) or a list of values like MEDIAN(12; 5; 12.5). Blank cells will be considered as a zero, and cells with text will be ignored.</Text>
 	<Syntax>MEDIAN(value;value;...)</Syntax>
 	<Example>MEDIAN(12; 5; 5.5) equals 5.5</Example>
 	<Example>MEDIAN(12; 7; 8;2) equals 7.5</Example>
