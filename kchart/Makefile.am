@@ -80,7 +80,7 @@ kdelnk_DATA = kchart.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
 # SUBDIRS =  . plugins pics dtd toolbar
-SUBDIRS =  kdchart . toolbar pics
+SUBDIRS =  kdchart . toolbar pics templates
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kchart_aboutdata.h kdchart/*.cpp -o $(podir)/kchart.pot

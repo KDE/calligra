@@ -16,6 +16,8 @@
 #include <kglobal.h>
 #include <kdebug.h> // "ported" to kdDebug(35001)
 
+#include <koTemplateChooseDia.h>
+
 #include "kchart_params.h"
 #include "kdchart/KDChart.h"
 
@@ -53,7 +55,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
     setInstance( KChartFactory::global(), false );
 
     (void)new WizardExt( this );
-    initDoc(KoDocument::InitDocAppStarting);
+    initDoc(KoDocument::InitDocEmpty);
     m_bCanChangeValue=true;
 
     // Display parameters
@@ -74,17 +76,93 @@ KChartPart::~KChartPart()
 bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
     // Initialize the parameter set for this chart document
+    kdDebug(35001) << "================================================================" << endl;
     kdDebug(35001) << "InitDOC" << endl;
+    kdDebug(35001) << "================================================================" << endl;
 
-    // Create the chart parameters and let the default be a bar chart
-    // with 3D looks.
-    m_params = new KChartParams();
-    m_params->setThreeDBars( true );
+    QString f;
 
-    // Handle data in rows per default.
-    m_auxiliary.m_dataDirection = KChartAuxiliary::DataRows;
+    // Init some members that need it.  
+    {
+	// Create the chart parameters and let the default be a bar chart
+	// with 3D looks.
+	m_params = new KChartParams();
+	m_params->setChartType( KDChartParams::Bar );
+	m_params->setBarChartSubType( KDChartParams::BarNormal );
+	//m_params->setThreeDBars( true );
 
-    return TRUE;
+	// Handle data in rows per default.
+	m_auxiliary.m_dataDirection = KChartAuxiliary::DataRows;
+    }
+
+    // Mark the document as empty.
+    if (flags == KoDocument::InitDocEmpty) {
+	initNullChart();
+
+	resetURL();
+	setEmpty();
+	//initConfig();
+        //d->styleManager->createBuiltinStyles();
+	return true;
+    }
+
+    KoTemplateChooseDia::ReturnType ret;
+    KoTemplateChooseDia::DialogType dlgtype;
+    if (flags == KoDocument::InitDocFileNew )
+	dlgtype = KoTemplateChooseDia::OnlyTemplates;
+    else
+	dlgtype = KoTemplateChooseDia::Everything;
+    ret = KoTemplateChooseDia::choose( KChartFactory::global(), f,
+                                       dlgtype, "kchart_template", 
+				       parentWidget );
+
+    if ( ret == KoTemplateChooseDia::File ) {
+	KURL url( f );
+	return openURL( url );
+    }
+    else if ( ret == KoTemplateChooseDia::Empty ) {
+	initNullChart();
+
+	resetURL();
+	setEmpty();
+	//initConfig();
+        //d->styleManager->createBuiltinStyles();
+	return true;
+    }
+    else if ( ret == KoTemplateChooseDia::Template ) {
+        QFileInfo fileInfo( f );
+        QString fileName( fileInfo.dirPath( true ) + "/" +
+            fileInfo.baseName() + ".chrt" );
+
+        resetURL();
+        loadNativeFormat( fileName );
+        setEmpty();
+        //initConfig();
+        return true;
+    }
+
+    return false;
+}
+
+
+// This method creates the simplest chart imaginable:
+// Data size 1x1, empty, no headers
+//
+void KChartPart::initNullChart()
+{
+    // Fill cells with data if there is none.
+    kdDebug(35001) << "Initialize null chart." << endl;
+
+    m_currentData.expand(1, 1);
+    m_currentData.setUsedRows( 1 );
+    m_currentData.setUsedCols( 1 );
+
+    KoChart::Value t( (double) 0 );
+    m_currentData.setCell(0, 0, t);
+
+    // Fill column and row labels.
+    m_colLabels << QString("");
+    m_rowLabels << QString("");
 }
 
 

@@ -1,5 +1,12 @@
 2005-03-23  Inge Wallin  <inge@lysator.liu.se>
 
+	Implement wish 45358: KChart start up dialog?
+	* kchart_part.cc (initNullChart): New method
+	(initDoc): Call KoTemplateChooseDia().
+	* kchart_view.cc (KChartView): Don't initialize the standard chart.
+
+	----------------------------------------------------------------
+
 	Start with some simple support for templates.
 	* templates: new directory
 	* templates/Makefile.am: new file

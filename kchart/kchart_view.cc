@@ -138,7 +138,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 #if 0
     createTempData();
 #else
-    ((KChartPart*)koDocument())->initTestChart();
+    //((KChartPart*)koDocument())->initTestChart();
 #endif
 
     updateGuiTypeOfChart();

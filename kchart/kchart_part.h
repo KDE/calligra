@@ -75,6 +75,7 @@ public:
     bool  canChangeValue()   const             { return m_bCanChangeValue; }
     virtual void  setCanChangeValue(bool b )   { m_bCanChangeValue = b;    }
 
+    void  initNullChart();
     void  initTestChart();
 
 signals:
