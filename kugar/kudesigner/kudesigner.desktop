@@ -1,0 +1,12 @@
+# KDE Config File
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Exec=kudesigner
+Icon=kudesigner
+DocPath=kudesigner/index.html
+Terminal=0
+Name=Kugar Designer
+Comment=Report Designer
+Comment[ru]=Дизайнер отчетов
+Comment[uk]=Дизайнер звітів
