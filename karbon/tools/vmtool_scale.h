@@ -11,7 +11,7 @@
 class KarbonPart;
 class KarbonView;
 
-// A singleton state to select object(s)
+// A singleton state to scale object(s)
 
 class VMToolScale : public VTool
 {

@@ -16,35 +16,35 @@ class QWMatrix;
 class VMCmdTransform : public VCommand
 {
 public:
-	VMCmdTransform( KarbonPart* part, QPtrList<VObject> objects, const QWMatrix &mat );
+	VMCmdTransform( KarbonPart* part, const VObjectList& objects, const QWMatrix &mat );
 	virtual ~VMCmdTransform() {}
 
 	virtual void execute();
 	virtual void unexecute();
 
 protected:
-	VMCmdTransform( KarbonPart* part, QPtrList<VObject> objects, const QString &name );
+	VMCmdTransform( KarbonPart* part, const VObjectList& objects, const QString &name );
 
-	QPtrList<VObject> m_objects;
+	VObjectList m_objects;
 	QWMatrix m_mat;
 };
 
 class VMCmdTranslate : public VMCmdTransform
 {
 public:
-	VMCmdTranslate( KarbonPart* part, QPtrList<VObject> objects, double d1, double d2 );
+	VMCmdTranslate( KarbonPart* part, const VObjectList& objects, double d1, double d2 );
 };
 
 class VMCmdScale : public VMCmdTransform
 {
 public:
-	VMCmdScale( KarbonPart* part, QPtrList<VObject> objects, const QPoint &p, double s1, double s2 );
+	VMCmdScale( KarbonPart* part, const VObjectList& objects, const QPoint &p, double s1, double s2 );
 };
 
 class VMCmdRotate : public VMCmdTransform
 {
 public:
-	VMCmdRotate( KarbonPart* part, QPtrList<VObject> objects, const QPoint &p, double angle );
+	VMCmdRotate( KarbonPart* part, const VObjectList& objects, const QPoint &p, double angle );
 };
 
 #endif

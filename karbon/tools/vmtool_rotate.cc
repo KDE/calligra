@@ -8,12 +8,11 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
+#include "vglobal.h"
 #include "vmtool_rotate.h"
 #include "vmcmd_transform.h"
 
 #include <math.h>
-
-const double deg2rad = 0.017453292519943295769;    // pi/180
 
 VMToolRotate* VMToolRotate::s_instance = 0L;
 
@@ -53,7 +52,7 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 		mat.translate( m_fp.x(), m_fp.y() );
 		m_angle = atan2( m_lp.y() - m_fp.y(), m_lp.x() - m_fp.x() );
 		//m_angle += M_PI / 2;
-		mat.rotate( m_angle / deg2rad );
+		mat.rotate( m_angle / VGlobal::pi_180 );
 		mat.translate( - m_fp.x(), - m_fp.y() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
@@ -119,7 +118,7 @@ VMToolRotate::eventFilter( KarbonView* view, QEvent* event )
 		part()->addCommand(
 			new VMCmdRotate(
 				part(),
-				part()->selection(), m_fp, m_angle / deg2rad ),
+				part()->selection(), m_fp, m_angle / VGlobal::pi_180 ),
 			true );
 
 //			part()->repaintAllViews();

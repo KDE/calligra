@@ -33,7 +33,7 @@ public:
 	virtual QDomDocument saveXML();
 
 	// manipulate selection:
-	const VObjectList& selection() const { return m_selection; }	// r/o access
+	const VObjectList& selection() const { return m_selection; }
 	void selectObject( VObject& object, bool exclusive = false );
 	void deselectObject( VObject& object );
 	void selectObjectsWithinRect( const QRect& rect,
