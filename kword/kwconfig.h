@@ -76,6 +76,7 @@ private:
     KWView* m_pView;
     KConfig* config;
     QComboBox *m_unit;
+    KDoubleNumInput* columnSpacing;
     int m_oldUnit;
 };
 

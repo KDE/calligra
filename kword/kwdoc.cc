@@ -162,7 +162,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_iNbPagePerRow = 4;
     m_maxRecentFiles = 10;
-
+    m_defaultColumnSpacing=3;
     m_bShowRuler = true;
 
     m_viewFormattingChars = false;
@@ -320,7 +320,7 @@ bool KWDocument::initDoc()
     m_pages = 1;
 
     m_pageColumns.columns = 1;
-    m_pageColumns.ptColumnSpacing = s_defaultColumnSpacing;
+    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
@@ -368,6 +368,7 @@ void KWDocument::initUnit()
     {
         config->setGroup( "Misc" );
         setUnit(KWUnit::unit( config->readEntry("Units",KWUnit::unitName(KWUnit::U_MM  ))));
+         setDefaultColumnSpacing((int)config->readDoubleNumEntry("ColumnSpacing",3));
     }
 }
 
@@ -377,7 +378,7 @@ void KWDocument::initEmpty()
     m_pages = 1;
 
     m_pageColumns.columns = 1;
-    m_pageColumns.ptColumnSpacing = s_defaultColumnSpacing;
+    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
@@ -988,7 +989,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_pageLayout.unit = PG_MM;
 
     m_pageColumns.columns = 1;
-    m_pageColumns.ptColumnSpacing = s_defaultColumnSpacing;
+    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;

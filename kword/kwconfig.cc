@@ -102,7 +102,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
   grid1->setRowStretch( 4, 10 );
   _spellConfig = new KSpellConfig(tmpQGroupBox, 0L, m_pView->kWordDocument()->getKSpellConfig(), false );
   grid1->addWidget(_spellConfig,1,0);
-#ifdef KSPELL_HAS_IGNORE_UPPER_WORD
+
   _dontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),tmpQGroupBox);
   grid1->addWidget(_dontCheckUpperWord,2,0);
 
@@ -115,7 +115,7 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
         _dontCheckUpperWord->setChecked(config->readBoolEntry("KSpell_dont_check_upper_word",false));
         _dontCheckTilteCase->setChecked(config->readBoolEntry("KSpell_dont_check_title_case",false));
     }
-#endif
+
 }
 
 void ConfigureSpellPage::apply()
@@ -130,7 +130,6 @@ void ConfigureSpellPage::apply()
 
   m_pView->kWordDocument()->setKSpellConfig(*_spellConfig);
 
-#ifdef KSPELL_HAS_IGNORE_UPPER_WORD
   bool state=_dontCheckUpperWord->isChecked();
   config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
   m_pView->kWordDocument()->setDontCheckUpperWord(state);
@@ -138,7 +137,6 @@ void ConfigureSpellPage::apply()
   state=_dontCheckTilteCase->isChecked();
   config->writeEntry("KSpell_dont_check_title_case",(int)state);
   m_pView->kWordDocument()->setDontCheckTitleCase(state);
-#endif
 }
 
 void ConfigureSpellPage::slotDefault()
@@ -149,10 +147,9 @@ void ConfigureSpellPage::slotDefault()
     _spellConfig->setDictFromList( FALSE);
     _spellConfig->setEncoding (KS_E_ASCII);
     _spellConfig->setClient (KS_CLIENT_ISPELL);
-#ifdef KSPELL_HAS_IGNORE_UPPER_WORD
     _dontCheckUpperWord->setChecked(false);
     _dontCheckTilteCase->setChecked(false);
-#endif
+
 }
 
 ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char *name )
@@ -325,11 +322,14 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
 
     QGridLayout *grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
+    double ptColumnSpacing=3;
+
     QString unitType=KWUnit::unitName(unit);
     if( config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
         unitType=config->readEntry("Units",unitType);
+        ptColumnSpacing=config->readDoubleNumEntry("ColumnSpacing",ptColumnSpacing);
     }
 
     QLabel *unitLabel= new QLabel(i18n("Unit:"),tmpQGroupBox);
@@ -358,6 +358,13 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
 
     grid->addWidget(m_unit,1,0);
 
+    QString suffix = unitType.prepend(' ');
+    columnSpacing=new KDoubleNumInput( KWUnit::userValue( ptColumnSpacing, unit ), tmpQGroupBox );
+    columnSpacing->setRange(0.1, 50, 0.1);
+    columnSpacing->setFormat( "%.1f" );
+    columnSpacing->setSuffix( suffix );
+    columnSpacing->setLabel(i18n("Default Column Spacing:"));
+    grid->addWidget(columnSpacing,2,0);
 }
 
 void ConfigureMiscPage::apply()
@@ -381,6 +388,14 @@ void ConfigureMiscPage::apply()
 
         config->writeEntry("Units",unitName);
     }
+    KWDocument * doc = m_pView->kWordDocument();
+    int colSpacing=(int)KWUnit::fromUserValue( columnSpacing->value(), doc->getUnit() );
+    if(colSpacing!=doc->defaultColumnSpacing())
+    {
+        config->writeEntry( "ColumnSpacing",colSpacing , true, false, 'g', DBL_DIG /* 6 is not enough */ );
+        doc->setDefaultColumnSpacing(colSpacing);
+    }
+
 }
 
 void ConfigureMiscPage::slotDefault()

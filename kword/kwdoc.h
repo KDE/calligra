@@ -452,6 +452,8 @@ public:
     void setChangeLastModeView(const QString &_mode){ m_lastModeView=_mode;}
     const QString & ChangeLastModeView() {return m_lastModeView;}
 
+    int defaultColumnSpacing(){ return m_defaultColumnSpacing ;}
+    void setDefaultColumnSpacing(int _val){m_defaultColumnSpacing=_val;}
     /**
      * @returns the document for the formulas
      */
@@ -615,8 +617,7 @@ private:
     int m_iNbPagePerRow;
     int m_maxRecentFiles;
 
-    // Maybe the default value should be configurable and saved somehow?
-    static const unsigned int s_defaultColumnSpacing = 3;
+    int m_defaultColumnSpacing;
 
     bool m_hasTOC;
 
