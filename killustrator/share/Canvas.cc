@@ -681,41 +681,46 @@ void Canvas::snapPositionToGrid (float& x, float& y) {
   }
 }
 
-void Canvas::drawGrid (QPainter& p) {
-  float h, v;
-  float hd = hGridDistance * zoomFactor;
-  float vd = vGridDistance * zoomFactor;
-  QPen pen1 (mGridColor, 0);
+void Canvas::drawGrid (QPainter& p)
+{
+   float h, v;
+   float hd = hGridDistance * zoomFactor;
+   float vd = vGridDistance * zoomFactor;
+   QPen pen1 (mGridColor, 0);
 
-  p.save ();
-  p.setPen (pen1);
-  h = ((width() - actualPaperSizePt().width())/2 - xPaper) % (int)hd;
-  for (; h < width(); h += hd) {
-    int hi = qRound (h);
-    p.drawLine (hi, 0, hi, height());
-  }
+   p.save ();
+   p.setPen (pen1);
+   h = ((width() - actualPaperSizePt().width())/2 - xPaper) % (int)hd;
+   for (; h < width(); h += hd)
+   {
+      int hi = qRound (h);
+      p.drawLine (hi, 0, hi, height());
+   }
   
-  v = ((height() - actualPaperSizePt().height())/2 - yPaper) % (int)vd;
+   v = ((height() - actualPaperSizePt().height())/2 - yPaper) % (int)vd;
   
-  for (; v < height() ; v += vd) {
-    int vi = qRound (v);
-    p.drawLine (0, vi, width(), vi);
-  }
-  p.restore ();
+   for (; v < height() ; v += vd)
+   {
+      int vi = qRound (v);
+      p.drawLine (0, vi, width(), vi);
+   }
+   p.restore ();
 }
 
-void Canvas::readGridProperties () {
+void Canvas::readGridProperties ()
+{
    kdDebug()<<"Canvas::readGridProps()"<<endl;
   KConfig* config = kapp->config ();
-  QString oldgroup = config->group ();
 
   config->setGroup ("Grid");
 
   vGridDistance = (float) config->readDoubleNumEntry ("vGridDistance", 50.0);
   hGridDistance = (float) config->readDoubleNumEntry ("hGridDistance", 50.0);
   gridIsOn = config->readBoolEntry ("showGrid", false);
-  gridSnapIsOn = config->readBoolEntry ("snapTopGrid", false);
+  gridSnapIsOn = config->readBoolEntry ("snapToGrid", false);
   mGridColor = config->readColorEntry ("GridColor", &mGridColor);
+  //kdDebug()<<"vGridDistance: "<<vGridDistance<<endl;
+  //kdDebug()<<"hGridDistance: "<<hGridDistance<<endl;
 
   config->setGroup ("Helplines");
   helplinesAreOn = config->readBoolEntry ("showHelplines");
@@ -727,7 +732,6 @@ void Canvas::saveGridProperties ()
 {
    kdDebug()<<"Canvas::saveGridProps()"<<endl;
   KConfig* config = kapp->config ();
-  QString oldgroup = config->group ();
 
   config->setGroup ("Grid");
 
@@ -736,12 +740,13 @@ void Canvas::saveGridProperties ()
   config->writeEntry ("showGrid", gridIsOn);
   config->writeEntry ("snapTopGrid", gridSnapIsOn);
   config->writeEntry ("GridColor", mGridColor);
+  //kdDebug()<<"vGridDistance: "<<vGridDistance<<endl;
+  //kdDebug()<<"hGridDistance: "<<hGridDistance<<endl;
   
   config->setGroup ("Helplines");
   config->writeEntry ("showHelplines", helplinesAreOn);
   config->writeEntry ("snapTopHelplines", helplinesSnapIsOn);
 
-  config->setGroup (oldgroup);
   config->sync ();
 }
 
