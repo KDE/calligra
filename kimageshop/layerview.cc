@@ -95,7 +95,7 @@ void LayerView::paintCell( QPainter* _painter, int _row, int )
 {
   if( _row == m_selected )
   {
-    _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, blue );
+    _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, gray);
   }
 
   if( m_doc->layerList().at( _row )->isVisible() )

@@ -275,11 +275,25 @@ void KFloatingDialog::paintEvent(QPaintEvent *e)
     }
 	// plain
 	else
-   {
-	   p.setBackgroundColor(hasFocus() ? kapp->activeTitleColor() 
-							: kapp->inactiveTitleColor());
-	   p.eraseRect(r);
-   }
+	{
+		p.setBackgroundColor(hasFocus() ? kapp->activeTitleColor() 
+							 : kapp->inactiveTitleColor());
+		p.eraseRect(r);
+	}
+	
+	// paint caption
+	p.setPen(hasFocus() ? kapp->activeTextColor() : kapp->inactiveTextColor());
+
+	// FIXME: we need a global KIS config class that provides for example a KIS-global small font
+    // p.setFont(tinyFont);
+
+	// adjust cliprect (don't draw caption text under the buttons)
+	r.setRight(r.width() - 41);
+	p.setClipRect(r);
+	p.drawText(r.x(), r.y() + (r.height()-p.fontMetrics().height())/2+p.fontMetrics().ascent(),
+			   QString(" ")+caption()+" ");
+
+	// TODO: Should we add title animation? ;-)
 	
 	p.setClipping(false);
 	p.end();

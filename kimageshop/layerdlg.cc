@@ -108,6 +108,7 @@ ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name
 LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_name, WFlags _flags )
   : KFloatingTabDialog(_parent, _name)
 {
+  setCaption("Layers&Channels");
   if( !m_eyeIcon )
   {
     QString _icon = locate( "appdata", "pics/eye.png" );

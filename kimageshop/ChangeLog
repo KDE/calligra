@@ -1,3 +1,18 @@
+1999-08-18  Matthias Elter  <me@kde.org>
+
+	* KFD
+	Fixed most of the remaining KFD problems.
+	KFD focus handling and minimizing work now.
+	KFD's are now recognized by the WM.
+	Draw caption in KFD's title bar.
+	
+	* LayerView
+	Changed the highlight color to gray as blue or anything else does not alwas
+	fit to the KDE global titlebar colors.
+
+	* BrushesDialog and LayerDialog
+	added setCaption().
+
 Wed Aug 18 01:05:01 1999  Carsten Pfeiffer  <pfeiffer@kde.org>
 
 	* kfloatingdialog.cc (paintEvent): 
