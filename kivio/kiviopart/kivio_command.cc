@@ -149,3 +149,8 @@ void KivioAddStencilCommand::unexecute()
     m_stencil->unselect();
     m_page->doc()->slotSelectionChanged();
 }
+
+KivioRemoveStencilCommand::KivioRemoveStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil )
+    : KivioAddStencilCommand(_name, _page, _layer, _stencil )
+{
+}

@@ -107,5 +107,16 @@ protected:
 };
 
 
+class KivioRemoveStencilCommand : public KivioAddStencilCommand
+{
+public:
+    KivioRemoveStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil );
+    ~KivioRemoveStencilCommand() {}
+
+    void execute() { KivioAddStencilCommand::unexecute(); }
+    void unexecute() { KivioAddStencilCommand::execute(); }
+};
+
+
 #endif
 

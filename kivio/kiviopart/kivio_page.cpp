@@ -642,6 +642,8 @@ void KivioPage::deleteSelectedStencils()
     // Iterate through all items in the selection list
     m_lstSelection.first();
     pStencil = m_lstSelection.take();
+    KMacroCommand *macro = new KMacroCommand( i18n("Remove Stencil"));
+    bool createMacro = false;
     while( pStencil )
     {
         /*
@@ -663,14 +665,24 @@ void KivioPage::deleteSelectedStencils()
             pLayer = m_lstLayers.next();
         }
         */
-
+/*
         if( m_pCurLayer->removeStencil( pStencil ) == false )
         {
 	   kdDebug() << "KivioPage::deleteSelectedStencils() - Failed to locate a selected stencil in the current layer" << endl;
         }
-
+*/
+        KivioRemoveStencilCommand *cmd =new KivioRemoveStencilCommand(i18n("Remove Stencil"), this,  m_pCurLayer , pStencil );
+        createMacro = true;
+        macro->addCommand( cmd);
         pStencil = m_lstSelection.take();
     }
+    if ( createMacro )
+    {
+        macro->execute();
+        m_pDoc->addCommand( macro );
+    }
+    else
+        delete macro;
 }
 
 void KivioPage::groupSelectedStencils()
