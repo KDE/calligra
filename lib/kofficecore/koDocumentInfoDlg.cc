@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Simon Hausmann <hausmann@kde.org>
+   Copyright (C) 2000 Simon Hausmann <hausmann@kde.org>
 
    $Id$
-   
+
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
    License as published by the Free Software Foundation; either
@@ -61,7 +61,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
 {
   d = new KoDocumentInfoDlgPrivate;
   d->m_info = docInfo;
-  
+
   QStringList pages = docInfo->pages();
   QStringList::ConstIterator it = pages.begin();
   QStringList::ConstIterator end = pages.end();
@@ -73,7 +73,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
     else if ( pg->inherits( "KoDocumentInfoAbout" ) )
       addAboutPage( static_cast<KoDocumentInfoAbout *>( pg ) );
   }
-  
+
   adjustSize();
 }
 
@@ -85,45 +85,45 @@ KoDocumentInfoDlg::~KoDocumentInfoDlg()
 void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
 {
   QGrid *grid = addGridPage( 2, QGrid::Horizontal, i18n( "Author" ) );
-  
+
   (void) new QLabel( i18n( "Full Name :" ), grid );
   d->m_leFullName = new QLineEdit( authorInfo->fullName(), grid );
-  
+
   (void) new QLabel( i18n( "Title :" ), grid );
   d->m_leAuthorTitle = new QLineEdit( authorInfo->title(), grid );
-  
+
   (void) new QLabel( i18n( "Company :" ), grid );
   d->m_leCompany = new QLineEdit( authorInfo->company(), grid );
-  
+
   (void) new QLabel( i18n( "EMail :" ), grid );
   d->m_leEmail = new QLineEdit( authorInfo->email(), grid );
-  
+
   (void) new QLabel( i18n( "Telephone :" ), grid );
   d->m_leTelephone = new QLineEdit( authorInfo->telephone(), grid );
-  
+
   (void) new QLabel( i18n( "Fax :" ), grid );
   d->m_leFax = new QLineEdit( authorInfo->fax(), grid );
-  
+
   (void) new QLabel( i18n( "Country :" ), grid );
   d->m_leCountry = new QLineEdit( authorInfo->country(), grid );
-  
+
   (void) new QLabel( i18n( "Postal Code :" ), grid );
   d->m_lePostalCode = new QLineEdit( authorInfo->postalCode(), grid );
-  
+
   (void) new QLabel( i18n( "City :" ), grid );
   d->m_leCity = new QLineEdit( authorInfo->city(), grid );
-  
+
   (void) new QLabel( i18n( "Street :" ), grid );
   d->m_leStreet = new QLineEdit( authorInfo->street(), grid );
-} 
+}
 
 void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 {
   QGrid *grid = addGridPage( 2, QGrid::Horizontal, i18n( "About" ) );
-  
+
   (void) new QLabel( i18n( "Title :" ), grid );
   d->m_leDocTitle = new QLineEdit( aboutInfo->title(), grid );
-  
+
   (void) new QLabel( i18n( "Abstract :" ), grid );
   d->m_meAbstract = new QMultiLineEdit( grid );
   d->m_meAbstract->setText( aboutInfo->abstract() );

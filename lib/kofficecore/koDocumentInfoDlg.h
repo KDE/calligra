@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Simon Hausmann <hausmann@kde.org>
+   Copyright (C) 2000 Simon Hausmann <hausmann@kde.org>
 
    $Id$
 
