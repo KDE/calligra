@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="66">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="67">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -31,9 +31,6 @@
   <Separator/>
   <Action name="show_docstruct"/>
   <Action name="show_ruler"/>
-  <Separator/>
-  <Action name="view_header"/>
-  <Action name="view_footer"/>
   <Separator/>
   <Action name="view_zoom"/>
  </Menu>
@@ -77,6 +74,9 @@
     <Action name="formula_insertsymbol"/>
     <Action name="formula_syntaxhighlighting"/>
  </Menu>
+  <Separator/>
+  <Action name="format_header"/>
+  <Action name="format_footer"/>
  </Menu>
  <Menu name="frames"><text>Fra&amp;mes</text>
   <Action name="format_frameset"/>

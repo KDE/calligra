@@ -464,15 +464,15 @@ void KWView::setupActions()
     actionViewFrameBorders->setToolTip( i18n( "Turns the border display on and off." ) );
     actionViewFrameBorders->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
 
-    actionViewHeader = new KToggleAction( i18n( "&Header" ), 0,
+    actionViewHeader = new KToggleAction( i18n( "Show &Header" ), 0,
                                           this, SLOT( viewHeader() ),
-                                          actionCollection(), "view_header" );
+                                          actionCollection(), "format_header" );
     actionViewHeader->setToolTip( i18n( "Shows and hides header display." ) );
     actionViewHeader->setWhatsThis( i18n( "Selecting this option toggles the display of headers in KWord.<br><br>Headers are special frames at the top of each page which can contain page numbers or other information." ) );
 
-    actionViewFooter = new KToggleAction( i18n( "Foo&ter" ), 0,
+    actionViewFooter = new KToggleAction( i18n( "Show Foo&ter" ), 0,
                                           this, SLOT( viewFooter() ),
-                                          actionCollection(), "view_footer" );
+                                          actionCollection(), "format_footer" );
     actionViewFooter->setToolTip( i18n( "Shows and hides footer display." ) );
     actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
 
@@ -6096,9 +6096,17 @@ void KWGUI::reorganize()
         space=0;
     }
 
-    if(view->kWordDocument()->showdocStruct())
-        docStruct->show();
-    else
+    if(view->kWordDocument()->showdocStruct()) {
+        if(docStruct->isHidden()) {
+            docStruct->show();
+            if(panner->sizes()[0] < 50) {
+                QValueList<int> sizes;
+                sizes.append(100);
+                sizes.append(panner->sizes()[0] + panner->sizes()[1] - 100);
+                panner->setSizes(sizes);
+            }
+        }
+    } else
         docStruct->hide();
 
     if( view->statusBar())
