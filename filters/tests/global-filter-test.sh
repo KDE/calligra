@@ -67,6 +67,7 @@ case "$1" in
             ascii)
             newextension=txt
             newmimetype=text/plain
+	    ;;
 	    *)
 	    printf "Usage: %s {kspread|kword|kpresenter} <file name> {rtf|amipro|oowriter|latex|paldoc|abiword|wml|wordperfect|ascii}\n" "$0"
 	    exit 1;
