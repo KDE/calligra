@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,7 +20,6 @@
 
 #include "koPictureFilePreview.h"
 #include "koPictureFilePreview.moc"
-#include <koClipartCollection.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kurl.h>
@@ -27,10 +27,11 @@
 #include <qlayout.h>
 #include <qfileinfo.h>
 #include <qpainter.h>
-#include <qpicture.h>
 #include <qscrollview.h>
 
 #include <kdebug.h>
+
+#include <koPicture.h>
 
 /**
  * This class implements the actual widget that shows the image.
@@ -51,25 +52,23 @@ public:
 	viewport()->repaint( false );
     }
 
-    void setClipart( const QString &s ) {
-        QPicture pic;
-        if ( KoClipartCollection::loadFromFile( s, &pic ) )
+    void setClipart( const QString &s )
+    {
+        KoPicture picture;
+        if (picture.loadFromFile(s))
         {
- 	    pixmap = QPixmap( 200, 200 );
- 	    QPainter p;
+            pixmap = QPixmap( 200, 200 );
+            pixmap.fill( Qt::white );
 
- 	    p.begin( &pixmap );
- 	    p.setBackgroundColor( Qt::white );
- 	    pixmap.fill( Qt::white );
+            QPainter p;
+            p.begin( &pixmap );
+            p.setBackgroundColor( Qt::white );
 
-            QRect br = pic.boundingRect();
-            if ( br.width() && br.height() )
-                p.scale( (double)pixmap.width() / (double)br.width(), (double)pixmap.height() / (double)br.height() );
- 	    p.drawPicture( pic );
- 	    p.end();
- 	    resizeContents( pixmap.width(), pixmap.height() );
- 	    viewport()->repaint( false );
- 	}
+            picture.draw(p, 0, 0, pixmap.width(), pixmap.height());
+            p.end();
+            resizeContents( pixmap.width(), pixmap.height() );
+            viewport()->repaint( false );
+        }
     }
 
     void drawContents( QPainter *p, int, int, int, int ) {
@@ -95,7 +94,9 @@ void KoPictureFilePreview::showPreview( const KURL &u )
 	QString path = u.path();
 	QFileInfo fi( path );
         // ## TODO use KMimeType::findByURL
-	if ( fi.extension().lower() == "wmf" || fi.extension().lower() == "emf" || fi.extension().lower() == "svg")
+    QString extension( fi.extension().lower() );
+	if ( extension == "wmf" || extension == "emf"
+        || extension == "svg" || extension == "qpic")
 	    m_widget->setClipart( path );
 	else {
 	    QPixmap pix( path );
@@ -122,5 +123,6 @@ QStringList KoPictureFilePreview::clipartMimeTypes()
     QStringList lst;
     lst << "image/svg+xml";
     lst << "image/x-wmf";
+    // TODO; image/x-qpicture
     return lst;
 }
