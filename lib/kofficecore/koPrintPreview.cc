@@ -38,32 +38,31 @@
 void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QString & tmpFile )
 {
     KTrader::OfferList offers = KTrader::self()->query("application/postscript", "'KParts/ReadOnlyPart' in ServiceTypes");
-    //QWidget *contents = new QWidget(&dialog);
-    //QGridLayout *grid1 = new QGridLayout(contents,10,3,15,7);
 
     // Try to find a postscript component first
     KLibFactory *factory = 0;
     KParts::ReadOnlyPart *m_pPartPreview=0;
     KTrader::OfferList::Iterator it(offers.begin());
     for( ; it != offers.end(); ++it)
-	{
-	  KService::Ptr ptr = (*it);
-	  factory = KLibLoader::self()->factory( ptr->library().latin1() );
-	  if (factory)
-	    {
-              KDialogBase dialog( parent, "preview", true, i18n("Preview"), KDialogBase::Ok);
-	      m_pPartPreview = static_cast<KParts::ReadOnlyPart *>(factory->create(&dialog, ptr->name().latin1(), "KParts::ReadOnlyPart"));
-	      //grid1->addMultiCellWidget(m_pPartPreview->widget(),0,8,0,2);
+    {
+        KService::Ptr ptr = (*it);
+        factory = KLibLoader::self()->factory( ptr->library().latin1() );
+        if (factory)
+        {
+            KDialogBase dialog( parent, "preview", true, i18n("Preview"), KDialogBase::Ok);
+            m_pPartPreview = static_cast<KParts::ReadOnlyPart *>(factory->create(&dialog, ptr->name().latin1(), "KParts::ReadOnlyPart"));
+            if ( m_pPartPreview )
+            {
+                m_pPartPreview->openURL( tmpFile );
+                dialog.setMainWidget(m_pPartPreview->widget());
+                dialog.setInitialSize(QSize(700,500));
+                dialog.exec();
 
-	      m_pPartPreview->openURL( tmpFile );
-	      dialog.setMainWidget(m_pPartPreview->widget());
-	      //dialog.resize(500,300);
-	      dialog.exec();
-
-              unlink( QFile::encodeName(tmpFile) );
-	      return;
-	    }
-	}
+                unlink( QFile::encodeName(tmpFile) );
+                return;
+            }
+        }
+    }
     // No component worked, or the query returned none -> run separate application
     KRun::runURL(tmpFile,"application/postscript");
     // Note: the temp file won't be deleted :(
