@@ -299,7 +299,9 @@ void bookmarkLinkPage::setBookmarkList(const QStringList & bkmlist)
 {
     m_hrefName->clear();
     m_hrefName->insertStringList(bkmlist, 0);
-    m_hrefName->setEditable(true);
+    if ( bkmlist.isEmpty())
+        m_linkName->setEnabled( false);
+    //m_hrefName->setEditable(true);
 }
 
 QString bookmarkLinkPage::linkName()const
