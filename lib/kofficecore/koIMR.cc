@@ -19,6 +19,10 @@
 
 #include "koIMR.h"
 
+#include <qmsgbox.h>
+#include <klocale.h>
+#include <kapp.h>
+
 #include <op_app.h>
 
 /**
@@ -131,4 +135,32 @@ CORBA::Object_ptr imr_activate( const char *_server, CORBA::ImplRepository_ptr _
     obj->_non_existent ();
 
     return CORBA::Object::_duplicate( obj );
+}
+
+OPParts::Document_ptr imr_newdoc( const char *_part_name )
+{
+  CORBA::Object_var obj = imr_activate( _part_name );
+  if ( CORBA::is_nil( obj ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n("Could not start server %s" ), _part_name );
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
+    return 0L;
+  }
+  
+  // Narrow by hand
+  CORBA::Object_ptr p2 = obj;
+  OPParts::Factory_ptr factory_stub = new OPParts::Factory_stub;
+  factory_stub->CORBA::Object::operator=( *p2 );
+  OPParts::Factory_var factory = factory_stub;
+  assert( !CORBA::is_nil( factory ) );
+  CORBA::Object_var v = factory->create();
+  
+  // Narrow by hand
+  CORBA::Object_ptr p = v;
+  OPParts::Document_ptr doc_stub = new OPParts::Document_stub;
+  doc_stub->CORBA::Object::operator=( *p );
+  OPParts::Document_ptr doc = doc_stub;
+
+  return doc;
 }
