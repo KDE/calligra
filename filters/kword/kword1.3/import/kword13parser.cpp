@@ -21,6 +21,7 @@
 
 #include <kdebug.h>
 
+#include "kword13formatone.h"
 #include "kword13layout.h"
 #include "kword13frameset.h"
 #include "kword13document.h"
@@ -55,22 +56,45 @@ KWord13Parser::~KWord13Parser( void )
 bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem)
 {
     // ### TODO: check status
-    if ( m_currentFormat )
+    if ( stackItem->elementType == ElementTypeLayoutFormatOne )
     {
+        if ( ! m_currentLayout )
+        {
+             kdError(30520) << "No current LAYOUT for storing FORMAT property: " << name << endl;
+             return false;
+        }
+        for (int i = 0; i < attributes.count(); ++i )
+        {
+            QString attrName ( name );
+            attrName += ':';
+            attrName += attributes.qName( i );
+            m_currentLayout->m_format.m_properties[ attrName ] = attributes.value( i );
+            kdDebug(30520) << "Format Property (for LAYOUT): " << attrName << " = " << attributes.value( i ) << endl;
+        }
+        stackItem->elementType = ElementTypeEmpty;
+        return true;
+    }
+    else if ( stackItem->elementType == ElementTypeFormatOne )
+    {
+        if ( ! m_currentFormat )
+        {
+             kdError(30520) << "No current FORMAT for storing FORMAT property: " << name << endl;
+             return false;
+        }
         for (int i = 0; i < attributes.count(); ++i )
         {
             QString attrName ( name );
             attrName += ':';
             attrName += attributes.qName( i );
             m_currentFormat->m_properties[ attrName ] = attributes.value( i );
-            kdDebug(30520) << "Format Property: " << attrName << " = " << attributes.value( i ) << endl;
+            kdDebug(30520) << "Format Property (for FORMATS): " << attrName << " = " << attributes.value( i ) << endl;
         }
         stackItem->elementType = ElementTypeEmpty;
         return true;
     }
     else
     {
-        kdError(30520) << "No current layout for storing property: " << name << endl;
+        kdError(30520) << "Wrong parents for FORMAT property: " << name << endl;
         return false;
     }
 }
@@ -116,9 +140,37 @@ bool KWord13Parser::startElementName( const QString&, const QXmlAttributes& attr
     return  true;
 }
 
+bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
+{
+    // ### TODO: check parent?
+    if ( stackItem->elementType == ElementTypeIgnore )
+    {
+        return true;
+    }
+    else if ( stackItem->elementType == ElementTypeLayout )
+    {
+        stackItem->elementType = ElementTypeLayoutFormatOne;
+        return true; // Everything is done directly on the layout
+    }
+        
+    stackItem->elementType = ElementTypeFormatOne;
+    
+    if ( m_currentFormat )
+    {
+        // Delete an eventually already existing paragraph (should not happen)
+        kdWarning(30520) << "Current 'format one' already defined!" << endl;
+        delete m_currentFormat;
+    }
+    
+    // ### TODO: something else must be done, as the can be many <FORMAT> kinds (and not only of id="1")
+    m_currentFormat = new KWord13FormatOne;
+        
+    return true;    
+}
+
 bool KWord13Parser::startElementLayout( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
 {
-    // ##TODO: check parent?
+    // ### TODO: check parent?
     if ( stackItem->elementType == ElementTypeIgnore )
     {
         return true;
@@ -135,7 +187,7 @@ bool KWord13Parser::startElementLayout( const QString&, const QXmlAttributes& at
     
     m_currentLayout = new KWord13Layout;
     m_currentLayout->m_outline = ( attributes.value( "outline" ) == "true" );
-    
+        
     return true;    
 }
 
@@ -344,6 +396,10 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
     {
         success = startElementParagraph( name, attributes, stackItem );
     }
+    else if ( name == "FORMAT" )
+    {
+        success = startElementFormat( name, attributes, stackItem );
+    }
     else if (name == "LAYOUT" )
     {
         success = startElementLayout( name, attributes, stackItem );
@@ -424,6 +480,13 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
         }
         delete m_currentParagraph;
         m_currentParagraph = 0;
+    }
+    else if ( name == "FORMAT" )
+    {
+        // ### TODO: do something with the collected information
+        delete m_currentFormat;
+        m_currentFormat = 0;
+        success = true;
     }
     else if ( name == "LAYOUT" )
     {

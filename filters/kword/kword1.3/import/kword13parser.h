@@ -36,7 +36,7 @@ class KWord13FormatOne;
 /**
  * Type of element
  *
- * Note: we do not care of the tags: \<FRAMESETS\>, \<STYLES\>
+ * Note: we do not care of the tags: \<FRAMESETS\>, \<STYLES\>, \<FORMATS\>
  */
 enum StackItemElementType
 {
@@ -50,7 +50,9 @@ enum StackItemElementType
     ElementTypeUnknownFrameset, ///< a \<FRAMESET\> which is not supported
     ElementTypeParagraph,   ///< \<PARAGRAPH\>
     ElementTypeText,        ///< \<TEXT\>
-    ElementTypeLayout      ///< \<STYLE\> and \<LAYOUT\>
+    ElementTypeLayout,      ///< \<STYLE\> and \<LAYOUT\>
+    ElementTypeFormatOne,    ///< \<FORMATS id="1"\>, not child of \<LAYOUT\>
+    ElementTypeLayoutFormatOne    ///< \<FORMATS id="1"\> as child of \<LAYOUT\>
 };
 
 class StackItem
@@ -90,6 +92,8 @@ protected:
     bool startElementLayoutProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem);
     /// Process \<NAME\>
     bool startElementName( const QString&, const QXmlAttributes& attributes, StackItem *stackItem );
+    /// Process \<FORMAT\>
+    bool startElementFormat( const QString&, const QXmlAttributes& attributes, StackItem *stackItem );
     /// Process \<LAYOUT\> and \<STYLE\>
     bool startElementLayout( const QString&, const QXmlAttributes&, StackItem *stackItem );
     /// Process \<PARAGRAPH\>
