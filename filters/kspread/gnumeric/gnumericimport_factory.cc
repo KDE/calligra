@@ -44,7 +44,7 @@ GNUMERICFilterFactory::~GNUMERICFilterFactory()
     delete s_global;
 }
 
-QObject* GNUMERICFilterFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* GNUMERICFilterFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -52,7 +52,6 @@ QObject* GNUMERICFilterFactory::create( QObject* parent, const char* name, const
 	    return 0L;
     }
     GNUMERICFilter *f = new GNUMERICFilter( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

@@ -51,7 +51,7 @@ XFIGImportFactory::~XFIGImportFactory()
     s_global = 0L;
 }
 
-QObject *XFIGImportFactory::create(
+QObject *XFIGImportFactory::createObject(
     QObject *parent,
     const char *name,
     const char*,
@@ -63,7 +63,6 @@ QObject *XFIGImportFactory::create(
 	    return 0L;
     }
     XFIGImport *f = new XFIGImport((KoFilter*)parent, name);
-    emit objectCreated(f);
     return f;
 }
 

@@ -51,7 +51,7 @@ WMFImportFactory::~WMFImportFactory()
     s_global = 0L;
 }
 
-QObject *WMFImportFactory::create(
+QObject *WMFImportFactory::createObject(
     QObject *parent,
     const char *name,
     const char*,
@@ -63,7 +63,6 @@ QObject *WMFImportFactory::create(
 	    return 0L;
     }
     WMFImport *f = new WMFImport((KoFilter*)parent, name);
-    emit objectCreated(f);
     return f;
 }
 

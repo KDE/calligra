@@ -46,7 +46,7 @@ KprKwordFactory::~KprKwordFactory()
     s_global = 0L;
 }
 
-QObject* KprKwordFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* KprKwordFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -54,7 +54,6 @@ QObject* KprKwordFactory::create( QObject* parent, const char* name, const char*
 	    return 0L;
     }
     KprKword *f = new KprKword( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

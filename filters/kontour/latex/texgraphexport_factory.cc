@@ -45,7 +45,7 @@ TEXGRAPHExportFactory::~TEXGRAPHExportFactory()
     delete s_global;
 }
 
-QObject* TEXGRAPHExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* TEXGRAPHExportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -53,7 +53,6 @@ QObject* TEXGRAPHExportFactory::create( QObject* parent, const char* name, const
 	    return 0L;
     }
     TEXGRAPHExport *f = new TEXGRAPHExport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

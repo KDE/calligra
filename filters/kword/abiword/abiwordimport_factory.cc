@@ -57,7 +57,7 @@ ABIWORDImportFactory::~ABIWORDImportFactory()
     s_global = 0L;
 }
 
-QObject* ABIWORDImportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* ABIWORDImportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -65,7 +65,6 @@ QObject* ABIWORDImportFactory::create( QObject* parent, const char* name, const 
 	    return 0L;
     }
     ABIWORDImport *f = new ABIWORDImport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

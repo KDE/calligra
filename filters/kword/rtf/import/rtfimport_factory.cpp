@@ -44,7 +44,7 @@ RTFImportFactory::~RTFImportFactory()
     delete s_global;
 }
 
-QObject* RTFImportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* RTFImportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -52,7 +52,6 @@ QObject* RTFImportFactory::create( QObject* parent, const char* name, const char
 	    return 0L;
     }
     RTFImport *f = new RTFImport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

@@ -46,7 +46,7 @@ HTMLImportFactory::~HTMLImportFactory()
     s_global = 0L;
 }
 
-QObject* HTMLImportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* HTMLImportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -54,7 +54,6 @@ QObject* HTMLImportFactory::create( QObject* parent, const char* name, const cha
 	    return 0L;
     }
     HTMLImport *f = new HTMLImport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

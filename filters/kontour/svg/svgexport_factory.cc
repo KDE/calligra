@@ -45,7 +45,7 @@ SVGExportFactory::~SVGExportFactory()
     s_global = 0L;
 }
 
-QObject* SVGExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* SVGExportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -53,7 +53,6 @@ QObject* SVGExportFactory::create( QObject* parent, const char* name, const char
 	    return 0L;
     }
     SVGExport *f = new SVGExport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

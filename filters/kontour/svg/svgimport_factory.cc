@@ -51,7 +51,7 @@ SVGImportFactory::~SVGImportFactory()
     s_global = 0L;
 }
 
-QObject *SVGImportFactory::create(
+QObject *SVGImportFactory::createObject(
     QObject *parent,
     const char *name,
     const char*,
@@ -63,7 +63,6 @@ QObject *SVGImportFactory::create(
 	    return 0L;
     }
     SVGImport *f = new SVGImport((KoFilter*)parent, name);
-    emit objectCreated(f);
     return f;
 }
 

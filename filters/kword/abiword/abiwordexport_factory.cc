@@ -57,7 +57,7 @@ ABIWORDExportFactory::~ABIWORDExportFactory()
     s_global = 0L;
 }
 
-QObject* ABIWORDExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* ABIWORDExportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -65,7 +65,6 @@ QObject* ABIWORDExportFactory::create( QObject* parent, const char* name, const 
 	    return 0L;
     }
     ABIWORDExport *f = new ABIWORDExport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

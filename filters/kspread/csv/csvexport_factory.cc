@@ -48,7 +48,7 @@ CSVExportFactory::~CSVExportFactory()
     s_global = 0L;
 }
 
-QObject* CSVExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* CSVExportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -56,7 +56,6 @@ QObject* CSVExportFactory::create( QObject* parent, const char* name, const char
 	    return 0L;
     }
     CSVExport *f = new CSVExport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

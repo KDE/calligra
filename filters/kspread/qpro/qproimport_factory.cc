@@ -44,7 +44,7 @@ QpImportFactory::~QpImportFactory()
     delete s_global;
 }
 
-QObject* QpImportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* QpImportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -52,7 +52,6 @@ QObject* QpImportFactory::create( QObject* parent, const char* name, const char*
 	    return 0L;
     }
     QpImport *f = new QpImport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

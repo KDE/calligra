@@ -46,7 +46,7 @@ ASCIIImportFactory::~ASCIIImportFactory()
     s_global = 0L;
 }
 
-QObject* ASCIIImportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* ASCIIImportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -54,7 +54,6 @@ QObject* ASCIIImportFactory::create( QObject* parent, const char* name, const ch
 	    return 0L;
     }
     ASCIIImport *f = new ASCIIImport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

@@ -47,7 +47,7 @@ WPImportFactory::~WPImportFactory()
     s_global = 0L;
 }
 
-QObject* WPImportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* WPImportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -55,7 +55,6 @@ QObject* WPImportFactory::create( QObject* parent, const char* name, const char*
 	    return 0L;
     }
     WPImport *f = new WPImport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

@@ -46,7 +46,7 @@ ASCIIExportFactory::~ASCIIExportFactory()
     s_global = 0L;
 }
 
-QObject* ASCIIExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* ASCIIExportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -54,7 +54,6 @@ QObject* ASCIIExportFactory::create( QObject* parent, const char* name, const ch
 	    return 0L;
     }
     ASCIIExport *f = new ASCIIExport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

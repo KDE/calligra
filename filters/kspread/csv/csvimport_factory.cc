@@ -48,7 +48,7 @@ CSVFilterFactory::~CSVFilterFactory()
     s_global = 0L;
 }
 
-QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* CSVFilterFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -56,7 +56,6 @@ QObject* CSVFilterFactory::create( QObject* parent, const char* name, const char
 	    return 0L;
     }
     CSVFilter *f = new CSVFilter( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

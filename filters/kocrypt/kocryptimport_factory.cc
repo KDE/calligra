@@ -45,7 +45,7 @@ KoCryptImportFactory::~KoCryptImportFactory()
     s_global = 0L;
 }
 
-QObject* KoCryptImportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* KoCryptImportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -53,7 +53,6 @@ QObject* KoCryptImportFactory::create( QObject* parent, const char* name, const 
 	    return 0L;
     }
     KoCryptImport *f = new KoCryptImport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

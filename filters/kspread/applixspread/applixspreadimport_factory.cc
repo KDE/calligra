@@ -46,7 +46,7 @@ APPLIXSPREADImportFactory::~APPLIXSPREADImportFactory()
     s_global = 0L;
 }
 
-QObject* APPLIXSPREADImportFactory::create (QObject* parent, const char* name, const char*, const QStringList & )
+QObject* APPLIXSPREADImportFactory::createObject(QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -54,7 +54,6 @@ QObject* APPLIXSPREADImportFactory::create (QObject* parent, const char* name, c
 	    return 0L;
     }
     APPLIXSPREADImport *f = new APPLIXSPREADImport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

@@ -46,7 +46,7 @@ WPExportFactory::~WPExportFactory()
     s_global = 0L;
 }
 
-QObject* WPExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* WPExportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -54,7 +54,6 @@ QObject* WPExportFactory::create( QObject* parent, const char* name, const char*
 	    return 0L;
     }
     WPExport *f = new WPExport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

@@ -45,7 +45,7 @@ LATEXExportFactory::~LATEXExportFactory()
     delete s_global;
 }
 
-QObject* LATEXExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* LATEXExportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -53,7 +53,6 @@ QObject* LATEXExportFactory::create( QObject* parent, const char* name, const ch
 	    return 0L;
     }
     LATEXExport *f = new LATEXExport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

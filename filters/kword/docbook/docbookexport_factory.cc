@@ -46,7 +46,7 @@ DocBookExportFactory::~DocBookExportFactory()
     s_global = 0L;
 }
 
-QObject* DocBookExportFactory::create( QObject* parent, const char* name, const char*, const QStringList & )
+QObject* DocBookExportFactory::createObject( QObject* parent, const char* name, const char*, const QStringList & )
 {
     if ( parent && !parent->inherits("KoFilter") )
     {
@@ -54,7 +54,6 @@ QObject* DocBookExportFactory::create( QObject* parent, const char* name, const 
 	    return 0L;
     }
     DocBookExport *f = new DocBookExport( (KoFilter*)parent, name );
-    emit objectCreated(f);
     return f;
 }
 

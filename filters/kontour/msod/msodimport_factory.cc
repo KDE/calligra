@@ -51,7 +51,7 @@ MSODImportFactory::~MSODImportFactory()
     s_global = 0L;
 }
 
-QObject *MSODImportFactory::create(
+QObject *MSODImportFactory::createObject(
     QObject *parent,
     const char *name,
     const char*,
@@ -63,7 +63,6 @@ QObject *MSODImportFactory::create(
 	    return 0L;
     }
     MSODImport *f = new MSODImport((KoFilter*)parent, name);
-    emit objectCreated(f);
     return f;
 }
 
