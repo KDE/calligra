@@ -69,6 +69,7 @@ bool convert( const KURL & uIn, const QString & inputFormat, const KURL & uOut, 
             QObject::disconnect(filter, SIGNAL(sigProgress(int)), &progressObj, SLOT(slotProgress(int)));
             delete filter;
         }
+        i++;
     }
 
     return ok;
