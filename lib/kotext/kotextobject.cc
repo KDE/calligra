@@ -82,6 +82,9 @@ void KoTextObject::init()
 
 KoTextObject::~KoTextObject()
 {
+    // Avoid crash in KoTextString::clear -> accessing deleted format collection,
+    // if ~UndoRedoInfo still has a string to clear.
+    undoRedoInfo.clear();
     delete textdoc; textdoc = 0;
     delete d;
 }
