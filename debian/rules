@@ -68,6 +68,13 @@ install-stamp: build
 	-mv $(tmp)/usr/bin/kprconverter.pl.new $(tmp)/usr/bin/kprconverter.pl
 	-chmod 755 $(tmp)/usr/bin/kprconverter.pl
 
+	# Sort out this mess where kivio wants to installed a shared library
+	# in /usr/share with the wrong extension.
+	# We'll put a symlink in kivio.links.
+	$(INSTALL_DIR) $(tmp)/usr/lib/kivio
+	-mv $(tmp)/usr/share/apps/kivio/autoloadStencils/straight_connector.ksp \
+		$(tmp)/usr/lib/kivio/libstraight_connector.so
+
 	perl -w admin/debianrules cleanup
 
 	for i in `find debian/ -type l -name "common"`; do \
