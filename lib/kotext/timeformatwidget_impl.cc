@@ -118,5 +118,5 @@ QString TimeFormatWidget::resultString()
 
 int TimeFormatWidget::correctValue()
 {
-    return KIntNumInput1->value();
+    return KIntNumInput1->value()*60;
 }
