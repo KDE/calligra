@@ -32,8 +32,8 @@ libkspreadcalc_la_METASOURCES = configdlg.moc \
 			    kcalc.moc \
 			    main.moc
 
-kdelnk_DATA = kspreadcalc.desktop
-kdelnkdir = $(kde_appsdir)/KOffice
+desktop_DATA = kspreadcalc.desktop
+desktopdir = $(kde_servicesdir)
 
 SUBDIRS = pics
 
