@@ -230,6 +230,68 @@ private:
 };
 
 /**
+ * Defines border information for cell.
+ * 
+ */
+
+class FormatBorder
+{
+public:
+
+  /**
+   * Creates a default border information.
+   */
+  FormatBorder();
+  
+  /**
+   * Destroys the border information
+   */
+  ~FormatBorder();
+  
+  /**
+   * Creates a copy of border information.
+   */
+  FormatBorder( const FormatBorder& );
+  
+  /**
+   * Assigns from another border information.
+   */
+  FormatBorder& operator=( const FormatBorder& );
+  
+  /**
+   * Assigns from another border information.
+   */
+  FormatBorder& assign( const FormatBorder& );
+  
+  /**
+   * Returns true if it is a default border information.
+   */
+  bool isNull() const;
+  
+  unsigned leftBorderStyle() const;
+  
+  void setLeftBorderStyle( unsigned s );
+  
+  unsigned rightBorderStyle() const;
+  
+  void setRightBorderStyle( unsigned s );
+    
+  unsigned topBorderStyle() const;
+  
+  void setTopBorderStyle( unsigned s );
+  
+  unsigned bottomBorderStyle() const;
+  
+  void setBottomBorderStyle( unsigned s );
+        
+private:  
+  class Private;
+  Private *d;
+};  
+
+
+
+/**
  * Defines format of cell.
  *
  * Class Format defines possible formatting for use in cells or ranges.

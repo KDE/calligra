@@ -250,6 +250,102 @@ void FormatAlignment::setAlignY( unsigned ya )
   d->null = false;
 }
 
+class FormatBorder::Private
+{
+public:
+  bool null;
+  unsigned leftBorderStyle;
+  unsigned rightBorderStyle;
+  unsigned topBorderStyle;
+  unsigned bottomBorderStyle;
+};
+
+// constructor
+FormatBorder::FormatBorder()
+{
+  d                    = new FormatBorder::Private;
+  d->null              = true;
+  d->leftBorderStyle   = 0;
+  d->rightBorderStyle  = 0;
+  d->topBorderStyle    = 0;
+  d->bottomBorderStyle = 0;
+}
+
+// destructor
+FormatBorder::~FormatBorder()
+{
+  delete d;
+}
+
+// copy constructor
+FormatBorder::FormatBorder( const FormatBorder& border )
+{
+  d = new FormatBorder::Private;
+  assign( border );
+}
+
+// assignment operator
+FormatBorder& FormatBorder::operator=( const FormatBorder& border )
+{
+  return assign( border );
+}
+
+// assign from another alignment
+FormatBorder& FormatBorder::assign( const FormatBorder& border )
+{
+  d->null   = border.isNull();
+  d->leftBorderStyle   = border.leftBorderStyle();
+  d->rightBorderStyle  = border.rightBorderStyle();
+  d->topBorderStyle    = border.topBorderStyle();
+  d->bottomBorderStyle = border.bottomBorderStyle();
+  return *this;
+}
+
+bool FormatBorder::isNull() const
+{
+  return d->null;
+}
+
+unsigned FormatBorder::leftBorderStyle() const
+{
+  return d->leftBorderStyle;
+}
+
+void FormatBorder::setLeftBorderStyle( unsigned s )
+{
+  d->leftBorderStyle = s;
+}
+
+unsigned FormatBorder::rightBorderStyle() const
+{
+  return d->rightBorderStyle;
+}
+
+void FormatBorder::setRightBorderStyle( unsigned s )
+{
+  d->rightBorderStyle = s;
+}
+
+unsigned FormatBorder::topBorderStyle() const
+{
+  return d->topBorderStyle;
+}
+
+void FormatBorder::setTopBorderStyle( unsigned s )
+{
+  d->topBorderStyle = s;
+}
+
+unsigned FormatBorder::bottomBorderStyle() const
+{
+  return d->bottomBorderStyle;
+}
+
+void FormatBorder::setBottomBorderStyle( unsigned s )
+{
+  d->bottomBorderStyle = s;
+}
+
 // helper class for Format class
 class Format::Private
 {
