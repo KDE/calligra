@@ -49,6 +49,7 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 	m_undoing = false;
 
 	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotChangeProperty(KexiPropertyBuffer&, KexiProperty&)));
+	connect(this, SIGNAL(propertyReset(KexiPropertyBuffer&, KexiProperty&)), this, SLOT(slotResetProperty(KexiPropertyBuffer&, KexiProperty&)));
 }
 
 void
@@ -100,11 +101,28 @@ ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty 
 
 			for(w = m_widgets.first(); w; w = m_widgets.next())
 			{
-				kdDebug() << "saving property for widget " << w->name() << endl;
+				ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
+				if((*this)[property]->changed())
+					tree->addModProperty(property, w->property(property.latin1()));
+
 				w->setProperty(property.latin1(), value);
 				emit propertyChanged((QObject*)w, property, value);
 			}
 		}
+	}
+}
+
+void
+ObjectPropertyBuffer::slotResetProperty(KexiPropertyBuffer &buff, KexiProperty &prop)
+{
+	if(!m_multiple)
+		return;
+
+	for(QWidget *w = m_widgets.first(); w; w = m_widgets.next())
+	{
+		ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(w->name());
+		if(tree->modifProp()->contains(prop.name()))
+			w->setProperty(prop.name().latin1(), tree->modifProp()->find(prop.name()).data());
 	}
 }
 
@@ -288,7 +306,7 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 void
 ObjectPropertyBuffer::checkModifiedProp()
 {
-	if(m_object)
+	if(m_object && m_multiple)
 	{
 		if(!m_manager->activeForm())
 			return;

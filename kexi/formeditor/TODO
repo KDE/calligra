@@ -43,3 +43,4 @@
 * QByteArray methods in FormIO (3/01/04)
 * Undo support(3/05/04)
 * Alignment and layout properties also support old values (3/06/04)
+* Better handling of multiple widgets in ObjectPropertyBuffer : each widget has its own old value, so reset will act as expected (3/07/04)
