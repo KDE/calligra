@@ -1483,110 +1483,44 @@ void RTFImport::insertDateTime( RTFProperty *property )
  */
 void RTFImport::addDateTime( const QString& format, const bool isDate, RTFFormat& fmt )
 {
-    DomNode node;
+    bool asDate=isDate; // Should the variable be a date variable?
+    QString kwordFormat(format);
     if (format.isEmpty())
     {
         if (isDate)
-        {
-            node.clear(7);
-            node.addNode("DATE");
-            node.setAttribute("year", 0);
-            node.setAttribute("month", 0);
-            node.setAttribute("day", 0);
-            node.setAttribute("fix", 0);
-            node.closeNode("DATE");
-            addVariable(node, 0, "DATElocale", &fmt);
-        }
+            kwordFormat = "DATElocale";
         else
-        {
-            node.clear(7);
-            node.addNode("TIME");
-            node.setAttribute("hour", 0);
-            node.setAttribute("minute", 0);
-            node.setAttribute("second", 0);
-            node.setAttribute("fix", 0);
-            node.closeNode("TIME");
-            addVariable(node, 2, "TIMElocale", &fmt);
-        }
-        return;
+            kwordFormat = "TIMElocale";
     }
-
-    QString key;
-    int type=-1; // -1: start, 0: date, 2: time
-    for(unsigned int k=0;k<format.length();k++)
+    else if (!isDate)
     {
-        if((format[k]=='y')||(format[k]=='M')||(format[k]=='d'))
-        {
-            if(type==0)//we have date already
-            {
-                key+=format[k];
-            }
-            else if(type==2)//we had time and we want date
-            {
-                //finish time
-                addVariable(node, type, key.utf8(), &fmt);
-                type=-1;
-            }
-            if(type==-1) //start date
-            {
-                node.clear(7);
-                node.addNode("DATE");
-                node.setAttribute("year", 0);
-                node.setAttribute("month", 0);
-                node.setAttribute("day", 0);
-                node.setAttribute("fix", 0);
-                node.closeNode("DATE");
-                key="DATE0"; // ### TODO: is 0 needed?
-                key+=format[k];
-                type=0;
-            }
-        }
-        else if((format[k]=='H')||(format[k]=='h')||(format[k]=='m')||(format[k]=='s')) // ### TODO: ap
-        {
-            if(type==2)//we have time already
-            {
-                key+=format[k].lower();
-            }
-            else if(type==0)//we had date and we want time
-            {
-                //finish time
-                addVariable(node, type, key.utf8(), &fmt);
-                type=-1;
-            }
-            if(type==-1) //start time
-            {
-                node.clear(7);
-                node.addNode("TIME");
-                node.setAttribute("hour", 0);
-                node.setAttribute("minute", 0);
-                node.setAttribute("second", 0);
-                node.setAttribute("fix", 0);
-                node.closeNode("TIME");
-                type=2;
-                key="TIME";
-                key+=format[k].lower();
-            }
-        }
-        else
-        {
-            if(type==-1)
-            {
-                node.clear(7);
-                node.addNode("DATE");
-                node.setAttribute("year", 0);
-                node.setAttribute("month", 0);
-                node.setAttribute("day", 0);
-                node.setAttribute("fix", 0);
-                node.closeNode("DATE");
-                type=0;
-                key="DATE0";  // ### TODO: is 0 needed?
-            }
-            key+=format[k];
-        }
+        // It is a time with a specified format, so check if it is really a time
+        // (as in KWord 1.3, a date can have a time format but a time cannot have a date format
+        const QRegExp regexp ("[yMd]"); // any date format character?
+        asDate = (regexp.search(format)>-1);  // if yes, then it is a date
     }
-    if(type>=0)
+    DomNode node;
+    if (asDate)
     {
-        addVariable( node, type, key.utf8(), &fmt );
+        node.clear(7);
+        node.addNode("DATE");
+        node.setAttribute("year", 0);
+        node.setAttribute("month", 0);
+        node.setAttribute("day", 0);
+        node.setAttribute("fix", 0);
+        node.closeNode("DATE");
+        addVariable(node, 0, kwordFormat.utf8(), &fmt);
+    }
+    else
+    {
+        node.clear(7);
+        node.addNode("TIME");
+        node.setAttribute("hour", 0);
+        node.setAttribute("minute", 0);
+        node.setAttribute("second", 0);
+        node.setAttribute("fix", 0);
+        node.closeNode("TIME");
+        addVariable(node, 2, kwordFormat.utf8(), &fmt);
     }
 }
 
