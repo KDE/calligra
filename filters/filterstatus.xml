@@ -161,7 +161,7 @@
             </filter>
             <filter id="kword_mswrite" webcvspath="koffice/filters/kword/mswrite">
                 <title xml:lang="en_us">MS Write</title>
-                <stat import="twostars" export="none"/>
+                <stat import="twostars" export="planned"/>
             </filter>
             <filter id="kword_palmdoc" webcvspath="koffice/filters/kword/palmdoc">
                 <title xml:lang="en_us">Palmdoc</title>
