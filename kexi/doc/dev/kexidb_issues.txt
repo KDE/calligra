@@ -107,8 +107,8 @@ kexi__fields
 
 //This table contains global (predefined or not) properties for this database
 kexi__db
-	property varchar(32),
-	value varchar
+	db_property varchar(32),
+	db_value varchar
 	
 //Predefined properties stored in kexi__db:
 property="version", value=<version>
