@@ -52,7 +52,7 @@
 KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
 	KexiDB::TableSchema *table, const char *name)
  : KexiDataTable(win, parent, name, false/*not db-aware*/)
- , m_table(table) //orig table
+// , m_table(table) //orig table
  , m_dontAskOnStoreData(false)
 {
 	init();
@@ -65,7 +65,6 @@ KexiAlterTableDialog::~KexiAlterTableDialog()
 
 void KexiAlterTableDialog::init()
 {
-
 	m_data = new KexiTableViewData();
 	m_data->setInsertingEnabled( false );
 	KexiTableViewColumn *col = new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text);
@@ -155,13 +154,13 @@ void KexiAlterTableDialog::initData()
 	//add column data
 	m_data->clear();
 	int tableFieldCount = 0;
-	if (m_table) {
-		tableFieldCount = m_table->fieldCount();
+	if (tempData()->table) {
+		tableFieldCount = tempData()->table->fieldCount();
 		m_buffers->clear(tableFieldCount);
 
 		for(int i=0; i < tableFieldCount; i++)
 		{
-			KexiDB::Field *field = m_table->field(i);
+			KexiDB::Field *field = tempData()->table->field(i);
 			KexiTableItem *item = new KexiTableItem(0);
 			item->push_back(QVariant(field->name()));
 			item->push_back(QVariant(field->typeGroup()-1)); //-1 because type groups are counted from 1
@@ -314,7 +313,7 @@ QString KexiAlterTableDialog::messageForSavingChanges(bool &emptyTable)
 {
 	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
 	bool ok;
-	emptyTable = conn->isEmpty( *m_table, ok ) && ok;
+	emptyTable = conn->isEmpty( *tempData()->table, ok ) && ok;
 	return i18n("Do you want to save the design now?")
 	+ ( emptyTable ? QString::null : QString("\n\n") + i18n("Note: This table is already filled with data which will be removed.") );
 }
@@ -543,49 +542,12 @@ void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item,
 	//TODO
 }
 
-#if 0
-void KexiAlterTableDialog::slotRowDeleted()
-{
-	setDirty();
-	//remove current prop. buffer
-	removeCurrentPropertyBuffer();
-
-	//let's move up all buffers that are below that deleted
-	m_buffers.setAutoDelete(false);//to avoid auto deleting in insert()
-	const int r = m_view->currentRow();
-	for (int i=r;i<int(m_buffers.size()-1);i++) {
-		KexiPropertyBuffer *b = m_buffers->at(i+1);
-		m_buffers.insert( i , b );
-	}
-	m_buffers.insert( m_buffers.size()-1, 0 );
-	m_buffers.setAutoDelete(true);//revert the flag
-
-	propertyBufferSwitched();
-}
-
-void KexiAlterTableDialog::slotEmptyRowInserted(KexiTableItem*, uint /*index*/)
-{
-	setDirty();
-
-	//let's move down all buffers that are below that deleted
-	m_buffers.setAutoDelete(false);//to avoid auto deleting in insert()
-	const int r = m_view->currentRow();
-	m_buffers.resize(m_buffers.size()+1);
-	for (int i=int(m_buffers.size()); i>r; i--) {
-		KexiPropertyBuffer *b = m_buffers[i-1];
-		m_buffers.insert( i , b );
-	}
-	m_buffers.insert( r, 0 );
-	m_buffers.setAutoDelete(true);//revert the flag
-
-	propertyBufferSwitched();
-}
-#endif
-
 bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel)
 {
-	m_view->acceptRowEdit();
-
+	if (!m_view->acceptRowEdit()) {
+		cancel = true;
+		return false;
+	}
 	bool ok = true;
 	//check for duplicates
 	KexiPropertyBuffer *b = 0;
@@ -676,35 +638,39 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 
 KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
-	if (m_table || m_dialog->schemaData()) //must not be
+	if (tempData()->table || m_dialog->schemaData()) //must not be
 		return 0;
 	
 	//create table schema definition
-	m_table = new KexiDB::TableSchema(sdata.name());
-	m_table->setName( sdata.name() );
-	m_table->setCaption( sdata.caption() );
-	m_table->setDescription( sdata.description() );
+	tempData()->table = new KexiDB::TableSchema(sdata.name());
+	tempData()->table->setName( sdata.name() );
+	tempData()->table->setCaption( sdata.caption() );
+	tempData()->table->setDescription( sdata.description() );
 
-	bool ok = buildSchema(*m_table, cancel) && !cancel;
+	bool ok = buildSchema(*tempData()->table, cancel) && !cancel;
 
 	//FINALLY: create table:
 	if (ok) {
 		//todo
 		KexiDB::Connection *conn = mainWin()->project()->dbConnection();
-		ok = conn->createTable(m_table);
+		ok = conn->createTable(tempData()->table);
 		//todo: show err...?
 	}
 
-	if (!ok) {
-		delete m_table;
-		m_table = 0;
+	if (ok) {
+		//we've current schema
+		tempData()->tableSchemaChangedInPreviousView = true;
 	}
-	return m_table;
+	if (!ok) {
+		delete tempData()->table;
+		tempData()->table = 0;
+	}
+	return tempData()->table;
 }
 
 bool KexiAlterTableDialog::storeData(bool &cancel)
 {
-	if (!m_table || !m_dialog->schemaData())
+	if (!tempData()->table || !m_dialog->schemaData())
 		return 0;
 
 	if (!m_dontAskOnStoreData) {
@@ -721,7 +687,7 @@ bool KexiAlterTableDialog::storeData(bool &cancel)
 
 	KexiDB::TableSchema *newTable = new KexiDB::TableSchema(); 
 	//copy schema data
-	static_cast<KexiDB::SchemaData&>(*newTable) = static_cast<KexiDB::SchemaData&>(*m_table);
+	static_cast<KexiDB::SchemaData&>(*newTable) = static_cast<KexiDB::SchemaData&>(*tempData()->table);
 	bool ok = buildSchema(*newTable, cancel) && !cancel;
 
 	kdDebug() << "KexiAlterTableDialog::storeData() : BUILD SCHEMA:" << endl;
@@ -729,16 +695,22 @@ bool KexiAlterTableDialog::storeData(bool &cancel)
 
 	if (ok) {
 		KexiDB::Connection *conn = mainWin()->project()->dbConnection();
-		ok = conn->alterTable(*m_table, *newTable);
+		ok = conn->alterTable(*tempData()->table, *newTable);
 	}
 	if (ok) {
 		//change current schema
-		m_table = newTable;
+		tempData()->table = newTable;
+		tempData()->tableSchemaChangedInPreviousView = true;
 	}
 	else {
 		delete newTable;
 	}
 	return ok;
+}
+
+KexiTablePart::TempData* KexiAlterTableDialog::tempData() const
+{
+	return static_cast<KexiTablePart::TempData*>(parentDialog()->tempData());
 }
 
 /*void KexiAlterTableDialog::slotAboutToUpdateRow(

@@ -36,18 +36,11 @@ class KexiAlterTable_DataView : public KexiDataTable
 		KexiTablePart::TempData* tempData() const;
 
 	protected:
-		//! called just once from ctor
+//		//! called just once from ctor
 //		void init();
 //		void initActions();
-
-		//! called whenever data should be reloaded (on switching to this view mode)
+//		//! called whenever data should be reloaded (on switching to this view mode)
 //		void initData();
-
-		/*! Creates a new property buffer for \a field. 
-		 The buffer will be asigned to \a row, and owned by this dialog. 
-		 If \a newOne is true, the property buffer will be marked as newly created.
-		 \return newly created property buffer. */
-//		KexiPropertyBuffer * createPropertyBuffer( int row, KexiDB::Field *field, bool newOne = false );
 
 		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);

@@ -22,22 +22,10 @@
 
 #include <kexidatatable.h>
 #include <kexipropertybuffer.h>
+#include <kexitablepart.h>
 
-class KPopupMenu;
-class KexiMainWindow;
-class KexiTableView;
-class KexiTableItem;
-class KexiPropertyEditor;
 class KexiTableViewPropertyBuffer;
-
-namespace KexiDB
-{
-	class Field;
-	class Cursor;
-	class TableSchema;
-	class RowEditBuffer;
-	class ResultInfo;
-}
+class KexiTableItem;
 
 class KexiAlterTableDialog : public KexiDataTable
 {
@@ -49,7 +37,9 @@ class KexiAlterTableDialog : public KexiDataTable
 		KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
 			KexiDB::TableSchema *table, const char *name = 0);
 
-		~KexiAlterTableDialog();
+		virtual ~KexiAlterTableDialog();
+
+		KexiTablePart::TempData* tempData() const;
 
 //		virtual QWidget* mainWidget();
 //		KexiDataTableView* tableView() const { return m_view; }
@@ -119,7 +109,7 @@ class KexiAlterTableDialog : public KexiDataTable
 	private:
 
 //		KexiTableView *m_view;
-		KexiDB::TableSchema *m_table; //!< original table schema
+//		KexiDB::TableSchema *m_table; //!< original table schema
 
 		KexiTableViewData *m_data;
 //		KexiDB::TableSchema *m_newTable; //!< new table schema

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +24,7 @@
 
 #include <kexi.h>
 #include <kexipart.h>
+#include <kexidialogbase.h>
 #include <kexipartdatasource.h>
 #include <kexipartitem.h>
 #include <kexidb/fieldlist.h>
@@ -36,25 +38,26 @@ class KexiTablePart : public KexiPart::Part
 
 	public:
 		KexiTablePart(QObject *parent, const char *name, const QStringList &);
-		~KexiTablePart();
+		virtual ~KexiTablePart();
 
 		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
-
-//		virtual void execute(KexiMainWindow *win, KexiPart::Item &);
-//moved to Part:		virtual void createGUIClient(KexiMainWindow *win);
-
-//		virtual QString instanceName() const;
 
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
 		virtual KexiPart::DataSource *dataSource();
 
-	protected:
-//		virtual KexiDialogBase* createInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
+		class TempData : public KexiDialogTempData
+		{
+			public:
+				TempData(QObject* parent, KexiDB::TableSchema *sch);
+				KexiDB::TableSchema *table;
+				/*! true, if \a table member has changed in previous view. Used on view switching.
+				 We're checking this flag to see if we should refresh data for DataViewMode. */
+				bool tableSchemaChangedInPreviousView : 1;
+		};
 
-//		virtual void initPartActions( KActionCollection *col );
-//		virtual void initInstanceActions( int mode, KActionCollection *col );
+	protected:
 		virtual void initActions();
 
 	virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sdata);

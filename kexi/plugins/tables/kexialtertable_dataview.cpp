@@ -27,15 +27,12 @@
 KexiAlterTable_DataView::KexiAlterTable_DataView(KexiMainWindow *win, QWidget *parent, 
 	/*KexiDB::TableSchema *table, */const char *name)
  : KexiDataTable(win, parent, name, true/*db-aware*/)
-// , m_table(table) //orig table
 {
 }
 
 KexiAlterTable_DataView::~KexiAlterTable_DataView()
 {
 }
-
-setData();
 
 bool KexiAlterTable_DataView::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
