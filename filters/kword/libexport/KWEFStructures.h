@@ -202,7 +202,8 @@ public:
     /*
      * Set parameters of a <FOOTNOTE> element
      */
-    void setFootnote(const QString& value, QValueList<ParaData>* para);
+    void setFootnote(bool automatic, const QString& value, QValueList<ParaData>* para);
+    bool getFootnoteAuto(void) const;
     QString getFootnoteValue(void) const;
     QValueList<ParaData>* getFootnotePara(void) const;
 
