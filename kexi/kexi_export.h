@@ -182,7 +182,7 @@
 
 /* additional default options */
 # define KDE_CXXFLAGS
-# define DKEXI_NO_CTXT_HELP
+# define KEXI_NO_CTXT_HELP
 
 
 #endif //KEXI_EXPORT_H
