@@ -21,12 +21,14 @@
 #define GRAPHITE_GLOBAL_H
 
 #include <kimageeffect.h>
+#include <float.h>
 
 class QColor;
 class QPoint;
 class QPen;
 class QDomDocument;
 class QDomElement;
+class FxPoint;
 
 // This struct holds all the necessary information needed to represent
 // a KDE gradient
@@ -68,11 +70,13 @@ void rotatePoint(int &x, int &y, const double &angle, const QPoint &center);
 void rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center);
 void rotatePoint(double &x, double &y, const double &angle, const QPoint &center);
 void rotatePoint(QPoint &p, const double &angle, const QPoint &center);
+void rotatePoint(FxPoint &p, const double &angle, const FxPoint &center);
 
 void scalePoint(int &x, int &y, const double &xfactor, const double &yfactor, const QPoint &center);
 void scalePoint(unsigned int &x, unsigned int &y, const double &xfactor, const double &yfactor, const QPoint &center);
 void scalePoint(double &x, double &y, const double &xfactor, const double &yfactor, const QPoint &center);
 void scalePoint(QPoint &p, const double &xfactor, const double &yfactor, const QPoint &center);
+void scalePoint(FxPoint &p, const double &xfactor, const double &yfactor, const FxPoint &center);
 
 }; //namespace Graphite
 
@@ -168,9 +172,6 @@ public:
     ~FxValue() {}
 
     FxValue &operator=(const FxValue &rhs);
-    // compares the current pixel values!
-    bool operator==(const FxValue &rhs) { return m_pixel==rhs.pxValue(); }
-    bool operator!=(const FxValue &rhs) { return m_pixel!=rhs.pxValue(); }
 
     const double &value() const { return m_value; }
     void setValue(const double &value);
@@ -193,50 +194,129 @@ private:
     int m_pixel;       // current pixel value (approximated, zoomed)
 };
 
+// compares the current pixel values!
+bool operator==(const FxValue &lhs, const FxValue &rhs);
+bool operator!=(const FxValue &lhs, const FxValue &rhs);
+
 
 class FxPoint {
 
 public:
-    FxPoint(const FxValue &x, const FxValue &y);
-    explicit FxPoint(const QPoint &p);
-    FxPoint(const int &x, const int &y);
+    FxPoint() {}
+    FxPoint(const FxValue &x, const FxValue &y) : m_x(x), m_y(y) {}
+    explicit FxPoint(const QPoint &p) { setPxPoint(p); }
+    FxPoint(const int &x, const int &y) { setPxPoint(x, y); }
     ~FxPoint() {}
 
-    FxPoint &operator=(const FxPoint &rhs);
-    // compares the px values!
-    bool operator==(const FxPoint &rhs);
-    bool operator!=(const FxPoint &rhs);
+    FxPoint &operator=(const FxPoint &rhs) { m_x=rhs.fx(); m_y=rhs.fy(); return *this; }
 
-    const FxValue &x() const { return m_x; }
-    void setX(const FxValue &x);
+    const FxValue &fx() const { return m_x; }
+    const double &x() const { return m_x.value(); }
+    void setX(const FxValue &x) { m_x=x; }
+    void setX(const double &x) { m_x.setValue(x); }
 
-    const FxValue &y() const { return m_y; }
-    void setY(const FxValue &y);
+    const FxValue &fy() const { return m_y; }
+    const double &y() const { return m_y.value(); }
+    void setY(const FxValue &y) { m_y=y; }
+    void setY(const double &y) { m_y.setValue(y); }
 
     const int &pxX() const { return m_x.pxValue(); }
-    void setPxX(const int &x);
+    void setPxX(const int &x) { m_x.setPxValue(x); }
 
     const int &pxY() const { return m_y.pxValue(); }
-    void setPxY(const int &y);
+    void setPxY(const int &y) { m_y.setPxValue(y); }
 
-    void setPoint(const FxValue &x, const FxValue &y);
+    void setPoint(const FxValue &x, const FxValue &y) { m_x=x; m_y=y; }
 
     const QPoint pxPoint() { return QPoint(pxX(), pxY()); }
-    void setPxPoint(const int &x, const int &y);
-    void setPxPoint(const QPoint &p);
+    void setPxPoint(const int &x, const int &y) { m_x.setPxValue(x); m_y.setPxValue(y); }
+    void setPxPoint(const QPoint &p) { m_x.setPxValue(p.x()); m_y.setPxValue(p.y()); }
 
-    void recalculate();
+    void recalculate() { m_x.recalculate(); m_y.recalculate(); }
 
 private:
     FxValue m_x, m_y;
 };
 
-
-class FxPointArray {
-};
+// compares the px values!
+bool operator==(const FxPoint &lhs, const FxPoint &rhs);
+bool operator!=(const FxPoint &lhs, const FxPoint &rhs);
 
 
 class FxRect {
+
+public:
+    FxRect();   // isNull()==true
+    FxRect(const FxPoint &topleft, const FxPoint &bottomright) : m_tl(topleft), m_br(bottomright) {}
+    FxRect(const FxPoint &topleft, const QSize &size);  // pxSize, current zoom/res
+    FxRect(const double &top, const double &left, const double &width, const double &height);
+    explicit FxRect(const QRect &rect);  // pxSize, current zoom/res
+    ~FxRect() {}
+
+    bool isNull() const;
+    bool isEmpty() const;
+
+    FxRect normalize() const;
+
+    double left() const { return m_tl.x(); }
+    double top() const { return m_tl.y(); }
+    double right() const { return m_br.x(); }
+    double bottom() const { return m_br.y(); }
+    void setLeft(const double &left) { m_tl.setX(left); }
+    void setTop(const double &top) { m_tl.setY(top); }
+    void setRight(const double &right) { m_br.setX(right); }
+    void setBottom(const double &bottom) { m_br.setY(bottom); }
+
+    FxPoint topLeft() const { return FxPoint(m_tl); }
+    FxPoint bottomRight() const { return FxPoint(m_br); }
+    FxPoint topRight() const { return FxPoint(m_br.fx(), m_tl.fy()); }
+    FxPoint bottomLeft() const { return FxPoint(m_tl.fx(), m_br.fy()); }
+    FxPoint center() const;
+
+    void moveTopLeft(const FxPoint &topleft);
+    void moveBottomRight(const FxPoint &bottomright);
+    void moveTopRight(const FxPoint &topright);
+    void moveBottomLeft(const FxPoint &bottomleft);
+    void moveCenter(const FxPoint &center);
+    void moveBy(const double &dx, const double &dy);
+
+    void setRect(const double &x, const double &y, const double &width, const double &height);
+    void setRect(const QRect &rect);
+    void setCoords(const double &x1, const double &y1, const double &x2, const double &y2);
+
+    QSize size() const;
+    void setSize(const QSize &size);
+
+    double width() const { return m_br.x()-m_tl.x(); }
+    void setWidth(const double &width) { m_br.setX(m_tl.x()+width); }
+    void setWidth(const int &width) { m_br.setPxX(m_tl.pxX()+width); }
+    double height() const { return m_br.y()-m_tl.y(); }
+    void setHeight(const double &height) { m_br.setY(m_tl.y()+height); }
+    void setHeight(const int &height) { m_br.setPxY(m_tl.pxY()+height); }
+
+    FxRect &operator|=(const FxRect &rhs);
+    FxRect &operator&=(const FxRect &rhs);
+    bool contains(const FxPoint &p, bool proper=false) const;
+    bool contains(const QPoint &p, bool proper=false) const;
+    bool contains(const double &x, const double &y, bool proper=false) const;
+    bool contains(const FxRect &r, bool proper=false) const;
+    bool contains(const QRect &r, bool proper=false) const;
+    FxRect unite(const FxRect &r) const;
+    FxRect unite(const QRect &r) const;
+    FxRect intersect(const FxRect &r) const;
+    FxRect intersect(const QRect &r) const;
+    bool intersects(const FxRect &r) const;
+    bool intersects(const QRect &r) const;
+
+    void recalculate() { m_tl.recalculate(); m_br.recalculate(); }
+
+private:
+    FxPoint m_tl, m_br;
 };
+
+FxRect operator|(const FxRect &lhs, const FxRect &rhs);
+FxRect operator&(const FxRect &lhs, const FxRect &rhs);
+bool operator==(const FxRect &lhs, const FxRect &rhs);
+bool operator!=(const FxRect &lhs, const FxRect &rhs);
 
 #endif // GRAPHITE_GLOBAL_H

@@ -17,10 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-// This file has to be included, or kimageeffect will fail to compile!?!
+// Note: This file has to be included, or kimageeffect will fail to compile!?!
 #include <qimage.h>
 
 #include <qdom.h>
+#include <qsize.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -38,6 +39,16 @@ bool operator==(const Gradient &lhs, const Gradient &rhs) {
 
 bool operator!=(const Gradient &lhs, const Gradient &rhs) {
     return !operator==(lhs, rhs);
+}
+
+Gradient &Gradient::operator=(const Gradient &rhs) {
+
+    ca=rhs.ca;
+    cb=rhs.cb;
+    type=rhs.type;
+    xfactor=rhs.xfactor;
+    yfactor=rhs.yfactor;
+    return *this;
 }
 
 
@@ -72,10 +83,11 @@ const double deg2rad(const double &deg) {
 const double normalizeRad(const double &rad) {
 
     double nRad=rad;
-    while(nRad>2*M_PI)
-        nRad-=2*M_PI;
+    double twoPi=2*M_PI;
+    while(nRad>twoPi)
+        nRad-=twoPi;
     while(nRad<0)
-        nRad+=2*M_PI;
+        nRad+=twoPi;
     return nRad;
 }
 
@@ -110,18 +122,27 @@ void rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QP
     y=static_cast<unsigned int>(_y);
 }
 
-void rotatePoint(double &x, double &y, const double &angle, const QPoint &center) {
+void rotatePoint(double &x, double &y, const double &angle, const double &cx, const double &cy) {
 
-    double dx=x-static_cast<double>(center.x());
-    double dy=static_cast<double>(center.y())-y; // Attention: Qt coordinate system!
+    double dx=x-cx;
+    double dy=cy-y; // Attention: Qt coordinate system!
     double sinalpha=std::sin(angle);
     double cosalpha=std::cos(angle);
-    x=static_cast<double>(center.x())+(dx*cosalpha-dy*sinalpha);
-    y=static_cast<double>(center.y())-(dx*sinalpha+dy*cosalpha); // here too
+    x=cx+(dx*cosalpha-dy*sinalpha);
+    y=cy-(dx*sinalpha+dy*cosalpha); // here too
 }
 
 void rotatePoint(QPoint &p, const double &angle, const QPoint &center) {
     rotatePoint(p.rx(), p.ry(), angle, center);
+}
+
+void rotatePoint(FxPoint &p, const double &angle, const FxPoint &center) {
+
+    double px=p.x();
+    double py=p.y();
+    rotatePoint(px, py, angle, center.x(), center.y());
+    p.setX(px);
+    p.setY(py);
 }
 
 void scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
@@ -144,11 +165,11 @@ void scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
 }
 
 void scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
-                const QPoint &center) {
+                const double &cx, const double &cy) {
     if(xfactor<=0 || yfactor<=0)
         return;
-    x=static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor;
-    y=static_cast<double>(center.y()) + static_cast<double>(y-center.y())*yfactor;
+    x=cx + (x-cx)*xfactor;
+    y=cy + (y-cy)*yfactor;
 }
 
 void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
@@ -156,18 +177,17 @@ void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
     scalePoint(p.rx(), p.ry(), xfactor, yfactor, center);
 }
 
+void scalePoint(FxPoint &p, const double &xfactor, const double &yfactor, const FxPoint &center) {
+
+    double px=p.x();
+    double py=p.y();
+    scalePoint(px, py, xfactor, yfactor, center.x(), center.y());
+    p.setX(px);
+    p.setY(py);
+}
+
 }; //namespace Graphite
 
-
-Gradient &Gradient::operator=(const Gradient &rhs) {
-
-    ca=rhs.ca;
-    cb=rhs.cb;
-    type=rhs.type;
-    xfactor=rhs.xfactor;
-    yfactor=rhs.yfactor;
-    return *this;
-}
 
 GraphiteGlobal *GraphiteGlobal::m_self=0;
 
@@ -196,6 +216,8 @@ void GraphiteGlobal::setRotHandleSize(const int &rotHandleSize) {
 
 void GraphiteGlobal::setUnit(const Unit &unit) {
 
+    if(m_unit==unit)
+        return;
     m_unit=unit;
     if(unit==MM)
         m_unitString=QString::fromLatin1("mm");
@@ -336,4 +358,257 @@ const double FxValue::valuePt() const {
 
 void FxValue::recalculate() {
     m_pixel=Graphite::double2Int(m_value*GraphiteGlobal::self()->zoomedResolution());
+}
+
+// compares the current pixel values!
+bool operator==(const FxValue &lhs, const FxValue &rhs) { return lhs.pxValue()==rhs.pxValue(); }
+bool operator!=(const FxValue &lhs, const FxValue &rhs) { return lhs.pxValue()!=rhs.pxValue(); }
+
+
+// compares the px values!
+bool operator==(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()==rhs.fx() && lhs.fy()==rhs.fy(); }
+bool operator!=(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()!=rhs.fx() || lhs.fy()!=rhs.fy(); }
+
+
+FxRect::FxRect() : m_tl(FxValue(0.0), FxValue(0.0)), m_br(FxValue(-DBL_MIN), FxValue(-DBL_MIN)) {
+}
+
+FxRect::FxRect(const FxPoint &topleft, const QSize &size) : m_tl(topleft) {
+    m_br.setPxPoint(static_cast<const int>(m_tl.x()+size.width()),
+         static_cast<const int>(m_tl.y()+size.height()));
+}
+
+FxRect::FxRect(const double &top, const double &left, const double &width, const double &height) :
+    m_tl(FxValue(left), FxValue(top)), m_br(FxValue(left+width), FxValue(top+height)) {
+}
+
+FxRect::FxRect(const QRect &rect) {
+    setRect(rect);
+}
+
+bool FxRect::isNull() const {
+    return m_tl.x()==0.0 && m_tl.y()==0.0 && m_br.x()==-DBL_MIN && m_br.y()==-DBL_MIN;
+}
+
+bool FxRect::isEmpty() const {
+    return m_tl.x()>m_br.x() || m_tl.y()>m_br.y();
+}
+
+FxRect FxRect::normalize() const {
+
+    double x1, y1, x2, y2;
+    (m_tl.x()<m_br.x()) ? (x1=m_tl.x(), x2=m_br.x()) : (x1=m_br.x(), x2=m_tl.x());
+    (m_tl.y()<m_br.y()) ? (y1=m_tl.y(), y2=m_br.y()) : (y1=m_br.y(), y2=m_tl.y());
+    return FxRect(x1, y1, x2, y2);
+}
+
+FxPoint FxRect::center() const {
+    return FxPoint( Graphite::abs(m_br.x()-m_tl.x())*0.5,
+                    Graphite::abs(m_br.y()-m_tl.y())*0.5 );
+}
+
+void FxRect::moveTopLeft(const FxPoint &topleft) {
+
+    m_tl=topleft;
+    m_br.setX(topleft.x()+(m_br.x()-m_tl.x()));
+    m_br.setY(topleft.y()+(m_br.y()-m_tl.y()));
+}
+
+void FxRect::moveBottomRight(const FxPoint &bottomright) {
+
+    m_br=bottomright;
+    m_tl.setX(bottomright.x()-(m_br.x()-m_tl.x()));
+    m_tl.setY(bottomright.y()-(m_br.y()-m_tl.y()));
+}
+
+void FxRect::moveTopRight(const FxPoint &topright) {
+
+    m_tl.setX(topright.x()-(m_br.x()-m_tl.x()));
+    m_tl.setY(topright.y());
+    m_br.setX(topright.x());
+    m_br.setY(topright.y()+(m_br.y()-m_tl.y()));
+}
+
+void FxRect::moveBottomLeft(const FxPoint &bottomleft) {
+
+    m_tl.setX(bottomleft.x());
+    m_tl.setY(bottomleft.y()-(m_br.y()-m_tl.y()));
+    m_br.setX(bottomleft.x()+(m_br.x()-m_tl.x()));
+    m_br.setY(bottomleft.y());
+}
+
+void FxRect::moveCenter(const FxPoint &center) {
+
+    double dx=(m_br.x()-m_tl.x())*0.5;
+    double dy=(m_br.y()-m_tl.y())*0.5;
+    m_tl.setX(center.x()-dx);
+    m_tl.setY(center.y()-dy);
+    m_br.setX(center.x()+dx);
+    m_br.setY(center.y()+dy);
+}
+
+void FxRect::moveBy(const double &dx, const double &dy) {
+
+    m_tl.setX(m_tl.x()+dx);
+    m_tl.setY(m_tl.y()+dy);
+    m_br.setX(m_br.x()+dx);
+    m_br.setY(m_br.y()+dy);
+}
+
+void FxRect::setRect(const double &x, const double &y, const double &width, const double &height) {
+
+    m_tl.setX(x);
+    m_tl.setY(y);
+    m_br.setX(x+width);
+    m_br.setY(y+height);
+}
+
+void FxRect::setRect(const QRect &rect) {
+    m_tl.setPxPoint(rect.left(), rect.top());
+    m_br.setPxPoint(rect.right(), rect.bottom());
+}
+
+void FxRect::setCoords(const double &x1, const double &y1, const double &x2, const double &y2) {
+
+    m_tl.setX(x1);
+    m_tl.setY(y1);
+    m_br.setX(x2);
+    m_br.setY(y2);
+}
+
+QSize FxRect::size() const {
+    return QSize(Graphite::abs(m_br.pxX()-m_tl.pxX()),
+                 Graphite::abs(m_br.pxY()-m_tl.pxY()));
+}
+
+void FxRect::setSize(const QSize &size) {
+    m_br.setPxX(m_tl.pxX()+size.width());
+    m_br.setPxY(m_tl.pxY()+size.height());
+}
+
+FxRect &FxRect::operator|=(const FxRect &rhs) {
+
+    if(rhs.isEmpty())
+        return *this;
+    if(m_tl.x() > rhs.left())
+        m_tl.setX(rhs.left());
+    if(m_tl.y() > rhs.top())
+        m_tl.setY(rhs.top());
+    if(m_br.x() < rhs.right())
+        m_br.setX(rhs.right());
+    if(m_br.y() < rhs.bottom())
+        m_br.setY(rhs.bottom());
+    return *this;
+}
+
+FxRect &FxRect::operator&=(const FxRect &rhs) {
+
+    if(m_tl.x() < rhs.left())
+        m_tl.setX(rhs.left());
+    if(m_tl.y() < rhs.top())
+        m_tl.setY(rhs.top());
+    if(m_br.x() > rhs.right())
+        m_br.setX(rhs.right());
+    if(m_br.y() > rhs.bottom())
+        m_br.setY(rhs.bottom());
+    return *this;
+}
+
+bool FxRect::contains(const FxPoint &p, bool proper) const {
+
+    if(proper)
+        return (p.x() > m_tl.x() && p.x() < m_br.x() && p.y() > m_tl.y() && p.y() < m_br.y());
+    else
+        return (p.x() >= m_tl.x() && p.x() <= m_br.x() && p.y() >= m_tl.y() && p.y() <= m_br.y());
+}
+
+bool FxRect::contains(const QPoint &p, bool proper) const {
+
+    if(proper)
+        return (p.x() > m_tl.pxX() && p.x() < m_br.pxX() && p.y() > m_tl.pxY() && p.y() < m_br.pxY());
+    else
+        return (p.x() >= m_tl.pxX() && p.x() <= m_br.pxX() && p.y() >= m_tl.pxY() && p.y() <= m_br.pxY());
+}
+
+bool FxRect::contains(const double &x, const double &y, bool proper) const {
+
+    if(proper)
+        return (x > m_tl.x() && x < m_br.x() && y > m_tl.y() && y < m_br.y());
+    else
+        return (x >= m_tl.x() && x <= m_br.x() && y >= m_tl.y() && y <= m_br.y());
+}
+
+bool FxRect::contains(const FxRect &r, bool proper) const {
+
+    if(proper)
+        return (r.left() > m_tl.x() && r.right() < m_br.x() && r.top() > m_tl.y() && r.bottom() < m_br.y());
+    else
+        return (r.left() >= m_tl.x() && r.right() <= m_br.x() && r.top() >= m_tl.y() && r.bottom() <= m_br.y());
+}
+
+bool FxRect::contains(const QRect &r, bool proper) const {
+
+    if(proper)
+        return (r.left() > m_tl.pxX() && r.right() < m_br.pxX() && r.top() > m_tl.pxY() && r.bottom() < m_br.pxY());
+    else
+        return (r.left() >= m_tl.pxX() && r.right() <= m_br.pxX() && r.top() >= m_tl.pxY() && r.bottom() <= m_br.pxY());
+}
+
+FxRect FxRect::unite(const FxRect &r) const {
+    return *this | r;
+}
+
+FxRect FxRect::unite(const QRect &r) const {
+    return *this | FxRect(r);
+}
+
+FxRect FxRect::intersect(const FxRect &r) const {
+    return *this & r;
+}
+
+FxRect FxRect::intersect(const QRect &r) const {
+    return *this & FxRect(r);
+}
+
+bool FxRect::intersects(const FxRect &r) const {
+    return ( Graphite::max(m_tl.x(), r.left()) <= Graphite::min(m_br.x(), r.right()) &&
+             Graphite::max(m_tl.y(), r.top()) <= Graphite::min(m_br.y(), r.bottom()) );
+}
+
+bool FxRect::intersects(const QRect &r) const {
+    return ( Graphite::max(m_tl.pxX(), r.left()) <= Graphite::min(m_br.pxX(), r.right()) &&
+             Graphite::max(m_tl.pxY(), r.top()) <= Graphite::min(m_br.pxY(), r.bottom()) );
+}
+
+FxRect operator|(const FxRect &lhs, const FxRect &rhs) {
+
+    if(lhs.isEmpty())
+        return rhs;
+    if(rhs.isEmpty())
+        return lhs;
+    return FxRect( (lhs.left() < rhs.left() ? lhs.left() : rhs.left()),
+                   (lhs.top() < rhs.top() ? lhs.top() : rhs.top()),
+                   (lhs.right() > rhs.right() ? lhs.right() : rhs.right()),
+                   (lhs.bottom() > rhs.bottom() ? lhs.bottom() : rhs.bottom()) );
+}
+
+FxRect operator&(const FxRect &lhs, const FxRect &rhs) {
+    return FxRect( (lhs.left() > rhs.left() ? lhs.left() : rhs.left()),
+                   (lhs.top() > rhs.top() ? lhs.top() : rhs.top()),
+                   (lhs.right() < rhs.right() ? lhs.right() : rhs.right()),
+                   (lhs.bottom() < rhs.bottom() ? lhs.bottom() : rhs.bottom()) );
+}
+
+bool operator==(const FxRect &lhs, const FxRect &rhs) {
+    return ( lhs.topLeft().pxX()==rhs.topLeft().pxX() &&
+             lhs.topLeft().pxY()==rhs.topLeft().pxY() &&
+             lhs.bottomRight().pxX()==rhs.bottomRight().pxX() &&
+             lhs.bottomRight().pxY()==rhs.bottomRight().pxY() );
+}
+
+bool operator!=(const FxRect &lhs, const FxRect &rhs) {
+    return ( lhs.topLeft().pxX()!=rhs.topLeft().pxX() ||
+             lhs.topLeft().pxY()!=rhs.topLeft().pxY() ||
+             lhs.bottomRight().pxX()!=rhs.bottomRight().pxX() ||
+             lhs.bottomRight().pxY()!=rhs.bottomRight().pxY() );
 }
