@@ -122,9 +122,13 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_manager->setIgnoreScrollBars( true );
 
     connect( d->m_manager, SIGNAL( activePartChanged( KParts::Part * ) ),
-	     this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
+             this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
+
+    if ( instance )
+      setInstance( instance );
 
     setXMLFile( locate( "data", "koffice/koffice_shell.rc" ) );
+    setLocalXMLFile( locateLocal( "data", "koffice/koffice_shell.rc" ) );
 
     KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new" );
     KStdAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
@@ -135,8 +139,8 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
 
     (void) new KAction( i18n( "&Document Information..." ), "documentinfo", 0,
-			this, SLOT( slotDocumentInfo() ),
-			actionCollection(), "file_documentinfo" );
+                        this, SLOT( slotDocumentInfo() ),
+                        actionCollection(), "file_documentinfo" );
 
     KStdAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection(), "configurekeys" );
     KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection(), "configuretoolbars" );
@@ -153,7 +157,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     d->m_veryHackyActionList.append(new KAction(i18n("&Close All Views"), 0, this,
-	SLOT(slotCloseAllViews()), actionCollection(), "view_closeallviews"));
+        SLOT(slotCloseAllViews()), actionCollection(), "view_closeallviews"));
     // set up the action list for the splitter stuff
     d->m_splitViewActionList.append(new KAction(i18n("&Split View"), 0,
         this, SLOT(slotSplitView()),
@@ -168,21 +172,19 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
         actionCollection(), "view_splitter_orientation");
     QStringList items;
     items << i18n("&Vertical")
-	  << i18n("&Horizontal");
+          << i18n("&Horizontal");
     d->m_orientation->setItems(items);
     d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
     d->m_splitViewActionList.append(d->m_orientation);
     d->m_splitViewActionList.append(new KActionSeparator(this));
-
-    if ( instance )
-      setInstance( instance );
 
     // Load list of recent files
     KConfig * config = instance ? instance->config() : KGlobal::config();
     m_recent->loadEntries( config );
     config->sync();
 
-    buildMainWindowGUI();
+    createShellGUI();
+    d->bMainWindowGUIBuilt = true;
 
     // Status bar
     d->statusBarLabel = new QLabel( statusBar() );
@@ -203,8 +205,8 @@ KoMainWindow::~KoMainWindow()
         d->m_rootDoc->removeShell(this);
 
     if(d->m_rootViews.findRef(d->m_activeView)==-1) {
-	delete d->m_activeView;
-	d->m_activeView=0L;
+        delete d->m_activeView;
+        d->m_activeView=0L;
     }
     d->m_rootViews.setAutoDelete( true );
     d->m_rootViews.clear();
@@ -213,7 +215,7 @@ KoMainWindow::~KoMainWindow()
     // -> We aren't allowed to delete the (embedded) document!
     // This has to be checked from queryClose, too :)
     if ( d->m_rootDoc && d->m_rootDoc->viewCount() == 0 &&
-	 !d->m_rootDoc->isEmbedded())
+         !d->m_rootDoc->isEmbedded())
     {
         kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
         delete d->m_rootDoc;
@@ -335,15 +337,15 @@ bool KoMainWindow::openDocument( const KURL & url )
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     if ( !newdoc || !newdoc->openURL( url ) )
     {
-	newdoc->delayedDestruction();
-	return false;
+        newdoc->delayedDestruction();
+        return false;
     }
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
     if ( doc && doc->isEmpty() && !doc->isEmbedded() )
     {
         // Replace current empty document
-	setRootDocument( newdoc );
+        setRootDocument( newdoc );
     }
     else if ( doc && !doc->isEmpty() )
     {
@@ -374,12 +376,12 @@ bool KoMainWindow::saveDocument( bool saveas )
         KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
         dialog->setCaption( i18n("Save document as") );
         KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Export,
-					       _native_format, nativeFormatPattern(),
-					       nativeFormatName(), true);
-	KURL newURL;
+                                               _native_format, nativeFormatPattern(),
+                                               nativeFormatName(), true);
+        KURL newURL;
 
         bool bOk = true;
-	do {
+        do {
             if(dialog->exec()==QDialog::Accepted)
                 newURL=dialog->selectedURL();
             else
@@ -388,45 +390,45 @@ bool KoMainWindow::saveDocument( bool saveas )
                 break;
             }
 
-	    if ( newURL.isEmpty() )
+            if ( newURL.isEmpty() )
             {
                 bOk = false;
                 break;
             }
 
             // HACK - should we add extension() to KURL ?
-	    if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
-		// assume that the pattern ends with .extension
-		QString s( dialog->currentFilter() );
-		QString extension = s.mid( s.find( "." ) );
-		extension = extension.left( extension.find( " " ) );
+            if ( QFileInfo( newURL.path() ).extension().isEmpty() ) {
+                // assume that the pattern ends with .extension
+                QString s( dialog->currentFilter() );
+                QString extension = s.mid( s.find( "." ) );
+                extension = extension.left( extension.find( " " ) );
 
-		newURL.setPath( newURL.path() + extension );
-	    }
+                newURL.setPath( newURL.path() + extension );
+            }
 
-	    if ( KIO::NetAccess::exists( newURL ) ) { // this file exists => ask for confirmation
-		bOk = KMessageBox::questionYesNo( this,
-						  i18n("A document with this name already exists\n"\
-						       "Do you want to overwrite it ?"),
-						  i18n("Warning") ) == KMessageBox::Yes;
-	    }
+            if ( KIO::NetAccess::exists( newURL ) ) { // this file exists => ask for confirmation
+                bOk = KMessageBox::questionYesNo( this,
+                                                  i18n("A document with this name already exists\n"\
+                                                       "Do you want to overwrite it ?"),
+                                                  i18n("Warning") ) == KMessageBox::Yes;
+            }
         } while ( !bOk );
         KoFilterManager::self()->cleanUp();
         delete dialog;
-	if (bOk) {
-	    m_recent->addURL( newURL );
-	    bool ret = pDoc->saveAs( newURL );
-	    pDoc->setTitleModified();
-	    disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-	    return ret;
-	}
-	disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-	return false;
+        if (bOk) {
+            m_recent->addURL( newURL );
+            bool ret = pDoc->saveAs( newURL );
+            pDoc->setTitleModified();
+            disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+            return ret;
+        }
+        disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+        return false;
     }
     else {
-	bool ret=pDoc->save();
-	disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
-	return ret;
+        bool ret=pDoc->save();
+        disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+        return ret;
     }
 }
 
@@ -466,20 +468,20 @@ void KoMainWindow::slotFileNew()
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     if ( !newdoc || !newdoc->initDoc() )
     {
-	newdoc->delayedDestruction();
-	return;
+        newdoc->delayedDestruction();
+        return;
     }
     if ( doc && doc->isEmpty() && !doc->isEmbedded() )
     {
-	setRootDocument( newdoc );
-	return;
+        setRootDocument( newdoc );
+        return;
     }
     else if ( doc && !doc->isEmpty() )
     {
         KoMainWindow *s = newdoc->createShell();
         s->show();
         s->setRootDocument( newdoc );
-	return;
+        return;
     }
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     setRootDocument( newdoc );
@@ -491,8 +493,8 @@ void KoMainWindow::slotFileOpen()
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open document") );
     KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import,
-					   KoDocument::readNativeFormatMimeType(),
-					   nativeFormatPattern(), nativeFormatName(), true);
+                                           KoDocument::readNativeFormatMimeType(),
+                                           nativeFormatPattern(), nativeFormatName(), true);
     KURL url;
     if(dialog->exec()==QDialog::Accepted)
         url=dialog->selectedURL();
@@ -502,7 +504,7 @@ void KoMainWindow::slotFileOpen()
     KoFilterManager::self()->cleanUp();
     delete dialog;
     if ( url.isEmpty() )
-	return;
+        return;
 
     (void) openDocument(url);
 }
@@ -548,7 +550,7 @@ void KoMainWindow::slotFileClose()
     if ( queryClose() )
     {
         setRootDocument( 0L );
-	close();
+        close();
     }
 }
 
@@ -585,8 +587,8 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
 void KoMainWindow::slotHelpAbout()
 {
     KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtProduct | KAboutDialog::AbtTitle | KAboutDialog::AbtImageOnly,
-					  kapp->caption(),
-					  KDialogBase::Ok, KDialogBase::Ok, this, 0, true );
+                                          kapp->caption(),
+                                          KDialogBase::Ok, KDialogBase::Ok, this, 0, true );
     dia->setTitle( kapp->caption() );
     dia->setProduct( "", "pre-Beta1", "the KOffice Team", "1998-2000" );
     dia->setImage( locate( "data", "koffice/pics/koffice-logo.png" ) );
@@ -624,70 +626,48 @@ void KoMainWindow::slotRemoveView() {
     if(d->m_rootViews.findRef(d->m_activeView)!=-1)
         view=d->m_rootViews.current();
     else
-	view=d->m_rootViews.first();
+        view=d->m_rootViews.first();
     view->hide();
     d->m_rootViews.removeRef(view);
 
     if(d->m_rootViews.count()==1)
-	d->m_removeView->setEnabled(false);
+        d->m_removeView->setEnabled(false);
     delete view;
     view=0L;
     d->m_rootViews.first()->setPartManager( d->m_manager );
     d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.first() );
 
     if(d->m_rootViews.count()==1)
-	d->m_splitted=false;
+        d->m_splitted=false;
 }
 
 void KoMainWindow::slotSetOrientation() {
     d->m_splitter->setOrientation(static_cast<Qt::Orientation>
-				  (d->m_orientation->currentItem()));
+                                  (d->m_orientation->currentItem()));
 }
 
 void KoMainWindow::slotProgress(int value) {
 
     if(value==-1) {
-	statusBar()->removeWidget(d->m_progress);
-	delete d->m_progress;
-	d->m_progress=0L;
-	d->m_firstTime=true;
-	return;
+        statusBar()->removeWidget(d->m_progress);
+        delete d->m_progress;
+        d->m_progress=0L;
+        d->m_firstTime=true;
+        return;
     }
     if(d->m_firstTime) {
-	statusBar()->removeWidget(d->m_progress);
-	delete d->m_progress;
-	d->m_progress=0L;
-	statusBar()->setMaximumHeight(statusBar()->height());
-	d->m_progress=new KProgress(statusBar());
-	//d->m_progress->setMaximumHeight(statusBar()->height());
-	statusBar()->addWidget( d->m_progress, 0, true );
-	d->m_progress->show();
-	d->m_firstTime=false;
+        statusBar()->removeWidget(d->m_progress);
+        delete d->m_progress;
+        d->m_progress=0L;
+        statusBar()->setMaximumHeight(statusBar()->height());
+        d->m_progress=new KProgress(statusBar());
+        //d->m_progress->setMaximumHeight(statusBar()->height());
+        statusBar()->addWidget( d->m_progress, 0, true );
+        d->m_progress->show();
+        d->m_firstTime=false;
     }
     d->m_progress->setValue(value);
     kapp->processEvents();
-}
-
-void KoMainWindow::buildMainWindowGUI()
-{
-  KXMLGUIFactory *factory = guiFactory();
-  QValueList<KXMLGUIClient *> plugins;
-  QValueList<KXMLGUIClient *>::ConstIterator pIt, pEnd;
-  if ( !d->bMainWindowGUIBuilt )
-  {
-    factory->addClient( this );
-
-    KParts::GUIActivateEvent ev( true );
-    QApplication::sendEvent( this, &ev );
-
-    plugins = KParts::Plugin::pluginClients( this );
-    pIt = plugins.begin();
-    pEnd = plugins.end();
-    for (; pIt != pEnd; ++pIt )
-      factory->addClient( *pIt );
-
-    d->bMainWindowGUIBuilt = true;
-  }
 }
 
 void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
@@ -709,8 +689,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
   KXMLGUIFactory *factory = guiFactory();
 
-  QValueList<KXMLGUIClient *> plugins;
-  QValueList<KXMLGUIClient *>::ConstIterator pIt, pBegin, pEnd;
+  QList<KParts::Plugin> plugins;
 
   setUpdatesEnabled( false );
 
@@ -720,15 +699,13 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     QApplication::sendEvent( d->m_activePart, &ev );
     QApplication::sendEvent( d->m_activeView, &ev );
 
-    plugins = KParts::Plugin::pluginClients( d->m_activeView );
-    pIt = plugins.fromLast();
-    pBegin = plugins.begin();
-
-    for (; pIt != pBegin; --pIt )
-      factory->removeClient( *pIt );
-
-    if ( pIt != plugins.end() )
-      factory->removeClient( *pIt );
+    plugins = KParts::Plugin::pluginObjects( d->m_activeView );
+    KParts::Plugin *plugin = plugins.last();
+    while ( plugin )
+    {
+      factory->removeClient( plugin );
+      plugin = plugins.prev();
+    }
 
     factory->removeClient( d->m_activeView );
 
@@ -736,7 +713,8 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     d->m_toolbarList.clear(); // deletes the actions
   }
 
-  buildMainWindowGUI();
+  if ( !d->bMainWindowGUIBuilt )
+    createShellGUI();
 
   if ( newPart && d->m_manager->activeWidget() && d->m_manager->activeWidget()->inherits( "KoView" ) )
   {
@@ -750,18 +728,17 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     QApplication::sendEvent( d->m_activePart, &ev );
     QApplication::sendEvent( d->m_activeView, &ev );
 
-    plugins = KParts::Plugin::pluginClients( d->m_activeView );
-    pIt = plugins.begin();
-    pEnd = plugins.end();
-    for (; pIt != pEnd; ++pIt )
-      factory->addClient( *pIt );
+    plugins = KParts::Plugin::pluginObjects( d->m_activeView );
+    QListIterator<KParts::Plugin> pIt( plugins );
+    for (; pIt.current(); ++pIt )
+      factory->addClient( pIt.current() );
 
     // This gets plugged in even for embedded views!
     factory->plugActionList(d->m_activeView, "view_closeallviews",
-			    d->m_veryHackyActionList);
+                            d->m_veryHackyActionList);
     // This one only for root views
     if(d->m_rootViews.findRef(d->m_activeView)!=-1)
-	factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList );
+        factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList );
 
     // Create and plug toolbar list for Settings menu
     QListIterator<KToolBar> it = toolBarIterator();

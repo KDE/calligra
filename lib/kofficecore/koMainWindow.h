@@ -220,8 +220,6 @@ protected slots:
 
 private:
 
-    void buildMainWindowGUI();
-
     KoMainWindowPrivate *d;
 
 };

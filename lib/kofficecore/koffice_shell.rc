@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KOfficeShell" version="1">
+<kpartgui name="KOfficeShell" version="2">
 <MenuBar>
- <Menu name="file"><text>&amp;File</text>
+ <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
   <Action name="file_open" />
   <Action name="file_open_recent" />
@@ -23,7 +23,7 @@
   <Action name="configurekeys"/>
   <Action name="configuretoolbars"/>
  </Menu>
- <Menu name="help"><text>&amp;Help</text>
+ <Menu name="help" noMerge="1"><text>&amp;Help</text>
   <Merge />
   <Action name="contents"/>
   <Action name="whats_this"/>
@@ -34,7 +34,7 @@
   <Action name="about_kde"/>
  </Menu>
 </MenuBar>
-<ToolBar name="kofficeshelltoolbar" fullWidth="false"><Text>File</Text>
+<ToolBar name="mainToolBar" fullWidth="false" noMerge="1"><Text>File</Text>
   <Action name="file_new" />
   <Action name="file_open" />
   <Action name="file_save" />
