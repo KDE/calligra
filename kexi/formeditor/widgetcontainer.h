@@ -62,8 +62,8 @@ namespace KFormEditor
 
 			void setResizeHandles(QWidget *m_activeWidget);
 			void activateWidget(QWidget *widget);
-		
-			QWidget	*m_pendingWidget;
+
+			QWidget *pendingWidget();		
 		
 			QPixmap	m_dotBg;
 		
@@ -84,6 +84,9 @@ namespace KFormEditor
 			QWidget *m_activeMoveWidget;
 			ResizeHandleSet *m_resizeHandleSet;
 			WidgetContainer *m_topLevelContainer;
+
+		private:
+			QWidget	*m_pendingWidget;
 
 		protected slots:
 			bool eventFilter(QObject *obj, QEvent *ev);

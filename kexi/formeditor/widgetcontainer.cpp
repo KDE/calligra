@@ -67,7 +67,7 @@ namespace KFormEditor {
 
         void WidgetContainer::setTopLevelContainer(WidgetContainer *tpc)
 	{
-		if (this!=m_topLevelContainer) {
+		if (this==m_topLevelContainer) {
 			m_topLevelContainer=tpc;
 		}
 	}
@@ -82,10 +82,20 @@ namespace KFormEditor {
 		return 10;
 	}
 
+	QWidget *WidgetContainer::pendingWidget(){return m_pendingWidget;}
+
 	void WidgetContainer::addInteractive(QWidget *widget)
 	{
-		m_pendingWidget=widget;
-		m_widgetRectRequested=true;
+		if (widget==0)
+		{
+			m_pendingWidget=0;
+			m_widgetRectRequested=false;
+		}
+		else
+		{
+			m_pendingWidget=widget;
+			m_widgetRectRequested=true;
+		}
 	}
 
 	void WidgetContainer::registerSubContainer(WidgetContainer *cont)
@@ -97,6 +107,7 @@ namespace KFormEditor {
 	{
 		if(m_widgetRectRequested)
 		{
+			kdDebug()<<"Starting placement operation:"<<((m_topLevelContainer==this)?"toplevel":"subcontainer")<<endl;
 			m_widgetRect = true;
 			m_widgetRectBX = (((float)ev->x())/((float)m_dotSpacing)+0.5);
 			m_widgetRectBX*=m_dotSpacing;
@@ -106,7 +117,21 @@ namespace KFormEditor {
 			m_widgetRectEY = m_widgetRectBY;
 			m_widgetRectRequested = false;
 		} else
-		  if (m_topLevelContainer) QApplication::sendEvent(parent(),ev);
+		  if (m_topLevelContainer!=this) 
+		{
+			kdDebug()<<"not toplevel -> what shall we do ?"<<endl;
+			if (m_topLevelContainer->pendingWidget())
+			{
+				kdDebug()<<"try to place a new widget"<<endl;
+				addInteractive(m_topLevelContainer->pendingWidget());			
+				mousePressEvent(ev);
+			} 
+			else
+			{
+				kdDebug()<<"Let the parent handle the mouse press event"<<endl;
+				QApplication::sendEvent(parent(),ev);
+			}
+		}
 	}
 
 	void WidgetContainer::mouseMoveEvent(QMouseEvent *ev)
@@ -205,7 +230,7 @@ namespace KFormEditor {
 				widgetwidth = m_pendingWidget->sizeHint().width();
 				widgetheight = m_pendingWidget->sizeHint().height();
 			}
-
+			
 			insertWidget(m_pendingWidget, QRect(m_widgetRectBX, m_widgetRectBY, widgetwidth, widgetheight ) );
 			m_widgetRectBX = 0;
 			m_widgetRectBY = 0;
@@ -216,11 +241,13 @@ namespace KFormEditor {
 			if (m_pendingWidget->qt_cast("KFormEditor::containerIface")) {
 				static_cast<containerIface*>(m_pendingWidget->qt_cast("KFormEditor::containerIface"))
 					->registerContainers(this);
+				kdDebug()<<"New container has been told to register itself"<<endl;
 			}
 
 			m_widgetRect = false;
 
-
+			m_pendingWidget=0;
+			m_topLevelContainer->addInteractive(0);
 			repaint();
 		} else
 		  if (m_topLevelContainer) QApplication::sendEvent(parent(),ev);
@@ -229,6 +256,7 @@ namespace KFormEditor {
 
 	void WidgetContainer::insertWidget(QWidget *widget, const QRect &r)
 	{
+		if (widget->parent()!=this) widget->reparent(this,QPoint(0,0));
 		widget->move(r.x(), r.y());
 		widget->resize(r.width(), r.height());
 		widget->show();
@@ -238,6 +266,12 @@ namespace KFormEditor {
 
 	void WidgetContainer::setResizeHandles(QWidget *m_activeWidget)
 	{
+		if (m_topLevelContainer!=this)
+		{
+			m_topLevelContainer->setResizeHandles(m_activeWidget);
+			return;
+		}
+
 		if (!m_resizeHandleSet)
 		{
 			m_resizeHandleSet=new ResizeHandleSet(m_activeWidget);
@@ -253,15 +287,15 @@ namespace KFormEditor {
 
 	void WidgetContainer::activateWidget(QWidget *widget)
 	{
-		m_activeWidget=widget;
-		while (!(m_activeWidget->parentWidget(true)==this))
-			m_activeWidget=m_activeWidget->parentWidget();
-		setResizeHandles(m_activeWidget);
-
+			m_activeWidget=widget;
+			while (!(m_activeWidget->parentWidget(true)==this))
+				m_activeWidget=m_activeWidget->parentWidget();
+			setResizeHandles(m_activeWidget);
 	}
 
 	bool WidgetContainer::eventFilter(QObject *obj, QEvent *ev)
 	{
+		if (m_pendingWidget) return false;
 		kdDebug() << "event!" << endl;
 		QWidget *sh;
 		switch (ev->type())
