@@ -263,6 +263,13 @@ public:
     DataType dataType() const { return m_dataType; }
 
     /**
+     * Tells what is the type of data in the cell:
+     * string, numeric, date, time etc.
+     * Set by @ref checkTextInput(), and by @ref load().
+     */
+    void setDataType(DataType const & d) { m_dataType = d; }
+
+    /**
      * Increases the precison of the
      * value displayed. Precision means here the amount of
      * digits behind the dot. If the current precision is the
@@ -444,18 +451,13 @@ public:
 
     /**
      * Starts calculating.
-     * If a table is ok and you change this cell only, then you don't need to
-     * calculate all cells this one depends on. If you don't know whether all cells
-     * are calculated properly right now, you must set '_makedepend' to TRUE.
-     * If cell c1 changed you can call 'c1->calc(FALSE)', but all cells depending
-     * on c1 must be called with dep_on_c1->calc(TRUE) because the table is not ok
-     * any more.
-     *
-     * @param _makedepend tells whether all other cells are calculated properly or not.
+     * @param: true if you want to check for delay condition in doc()
+     *         false if you really have to calculate the value right now
+     *         e.g. if you sort with formula as key
      *
      * @return TRUE on success and FALSE on error.
      */
-    bool calc();
+    bool calc(bool delay = true);
 
     /**
      * Set the calcDirtyFlag
@@ -547,6 +549,11 @@ public:
      * @return the row of the obscuring cell.
      */
     int obscuringCellsRow();
+
+    /**
+     * @return the obscuring cell (might be 0L)
+     */
+    KSpreadCell const * obscuringCell() const { return m_pObscuringCell; }
 
     /**
      * Force the cell to occupy other cells space.
@@ -939,6 +946,11 @@ private:
 
 
     KSpreadConditions conditions;
+
+    /**
+     * if true: "Shrink to fit" for cell values
+     */
+    bool m_bShrinkToSize;
 
     /**
     * Store the number of line when you used multirow

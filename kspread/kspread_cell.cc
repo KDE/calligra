@@ -47,7 +47,9 @@ QChar KSpreadCell::decimal_point = '\0';
  *****************************************************************************/
 
 KSpreadCell::KSpreadCell( KSpreadTable *_table, int _column, int _row )
-  : KSpreadLayout( _table ), conditions(this)
+  : KSpreadLayout( _table ), 
+    conditions(this),
+    m_bShrinkToSize(false)
 {
   m_nextCell = 0;
   m_previousCell = 0;
@@ -88,39 +90,39 @@ void KSpreadCell::copyLayout( KSpreadCell *_cell )
 
 void KSpreadCell::copyLayout( int _column, int _row )
 {
-    KSpreadCell *o = m_pTable->cellAt( _column, _row );
+    KSpreadCell * cell = m_pTable->cellAt( _column, _row );
 
-    setAlign( o->align( _column, _row ) );
-    setAlignY( o->alignY( _column, _row ) );
-    setTextFont( o->textFont( _column, _row ) );
-    setTextColor( o->textColor( _column, _row ) );
-    setBgColor( o->bgColor( _column, _row) );
-    setLeftBorderPen(o->leftBorderPen( _column, _row ));
-    setTopBorderPen(o->topBorderPen( _column, _row ));
-    setBottomBorderPen(o->bottomBorderPen( _column, _row ));
-    setRightBorderPen(o->rightBorderPen( _column, _row ));
-    setFallDiagonalPen(o->fallDiagonalPen( _column, _row ));
-    setGoUpDiagonalPen(o->goUpDiagonalPen( _column, _row ));
-    setBackGroundBrush(o->backGroundBrush( _column, _row));
+    setAlign( cell->align( _column, _row ) );
+    setAlignY( cell->alignY( _column, _row ) );
+    setTextFont( cell->textFont( _column, _row ) );
+    setTextColor( cell->textColor( _column, _row ) );
+    setBgColor( cell->bgColor( _column, _row) );
+    setLeftBorderPen(cell->leftBorderPen( _column, _row ));
+    setTopBorderPen(cell->topBorderPen( _column, _row ));
+    setBottomBorderPen(cell->bottomBorderPen( _column, _row ));
+    setRightBorderPen(cell->rightBorderPen( _column, _row ));
+    setFallDiagonalPen(cell->fallDiagonalPen( _column, _row ));
+    setGoUpDiagonalPen(cell->goUpDiagonalPen( _column, _row ));
+    setBackGroundBrush(cell->backGroundBrush( _column, _row));
 
-    setPrecision( o->precision( _column, _row ) );
-    setPrefix( o->prefix( _column, _row ) );
-    setPostfix( o->postfix( _column, _row ) );
-    setFloatFormat( o->floatFormat( _column, _row ) );
-    setFloatColor( o->floatColor( _column, _row ) );
-    setFactor( o->factor( _column, _row ) );
-    setMultiRow( o->multiRow( _column, _row ) );
-    setVerticalText( o->verticalText( _column, _row ) );
-    setStyle( o->style());
-    setDontPrintText(o->getDontprintText(_column, _row ) );
-    setIndent( o->getIndent(_column, _row ) );
+    setPrecision( cell->precision( _column, _row ) );
+    setPrefix( cell->prefix( _column, _row ) );
+    setPostfix( cell->postfix( _column, _row ) );
+    setFloatFormat( cell->floatFormat( _column, _row ) );
+    setFloatColor( cell->floatColor( _column, _row ) );
+    setFactor( cell->factor( _column, _row ) );
+    setMultiRow( cell->multiRow( _column, _row ) );
+    setVerticalText( cell->verticalText( _column, _row ) );
+    setStyle( cell->style());
+    setDontPrintText(cell->getDontprintText(_column, _row ) );
+    setIndent( cell->getIndent(_column, _row ) );
 
-    QValueList<KSpreadConditional> conditionList = o->GetConditionList();
+    QValueList<KSpreadConditional> conditionList = cell->GetConditionList();
     conditions.SetConditionList(conditionList);
 
-    setComment( o->comment(_column, _row) );
-    setAngle( o->getAngle(_column, _row) );
-    setFormatType( o->getFormatType(_column, _row) );
+    setComment( cell->comment(_column, _row) );
+    setAngle( cell->getAngle(_column, _row) );
+    setFormatType( cell->getFormatType(_column, _row) );
 }
 
 void KSpreadCell::copyAll( KSpreadCell *cell )
@@ -134,7 +136,16 @@ void KSpreadCell::copyContent( KSpreadCell* cell )
 {
     Q_ASSERT( !isDefault() ); // trouble ahead...
 
-    setCellText( cell->text() );
+    if (cell->isFormula() && cell->column() > 0 && cell->row() > 0)
+    {
+      // change all the references, e.g. from A1 to A3 if copying
+      // from e.g. B2 to B4
+      QString d = cell->encodeFormula();
+      setCellText( cell->decodeFormula( d ), true );
+    }
+    else
+      setCellText( cell->text() );
+
     setAction(cell->action() );
 
     if ( m_pPrivate )
@@ -1370,13 +1381,13 @@ bool KSpreadCell::makeFormula()
     m_dValue = 0.0;
     setFlag(Flag_LayoutDirty);
     DO_UPDATE;
-    if(m_pTable->doc()->getShowMessageError())
-        {
-        QString tmp(i18n("Error in cell %1\n\n"));
-        tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
-        tmp += context.exception()->toString( context );
-        KMessageBox::error( (QWidget*)0L, tmp);
-        }
+    if (m_pTable->doc()->getShowMessageError())
+    {
+      QString tmp(i18n("Error in cell %1\n\n"));
+      tmp = tmp.arg( util_cellName( m_pTable, m_iColumn, m_iRow ) );
+      tmp += context.exception()->toString( context );
+      KMessageBox::error( (QWidget*)0L, tmp);
+    }
     return false;
   }
 
@@ -1399,7 +1410,7 @@ void KSpreadCell::clearFormula()
   }
 }
 
-bool KSpreadCell::calc()
+bool KSpreadCell::calc(bool delay)
 {
   if ( testFlag(Flag_Progress) )
   {
@@ -1423,9 +1434,12 @@ bool KSpreadCell::calc()
   if ( !testFlag(Flag_CalcDirty) )
     return true;
 
-  if ( m_pTable->doc()->delayCalculation() )
+  if (delay)
   {
-    return true;
+    if ( m_pTable->doc()->delayCalculation() )
+    {
+      return true;
+    }
   }
 
   setFlag(Flag_LayoutDirty);
@@ -1436,7 +1450,6 @@ bool KSpreadCell::calc()
   {
     makeFormula();
   }
-
 
   KSpreadDependency *dep;
   for ( dep = m_lstDepends.first(); dep != 0L; dep = m_lstDepends.next() )
@@ -1537,15 +1550,15 @@ bool KSpreadCell::calc()
     //change format
     FormatType tmpFormat = formatType();
     if( tmpFormat != SecondeTime &&  tmpFormat != Time_format1 &&  tmpFormat != Time_format2
-    && tmpFormat != Time_format3)
-        {
-        m_strFormulaOut = locale()->formatTime(valueTime(), false);
-        setFormatType(Time);
-        }
+        && tmpFormat != Time_format3)
+    {
+      m_strFormulaOut = locale()->formatTime(valueTime(), false);
+      setFormatType(Time);
+    }
     else
-        {
-        m_strFormulaOut = util_timeFormat(locale(), valueTime(), formatType());
-        }
+    {
+      m_strFormulaOut = util_timeFormat(locale(), valueTime(), formatType());
+    }
   }
   else if ( context.value()->type() == KSValue::DateType)
   {
@@ -1576,19 +1589,19 @@ bool KSpreadCell::calc()
   else
   {
     if ( m_pQML )
-        delete m_pQML;
+      delete m_pQML;
     m_pQML = 0;
     clearFlag(Flag_Error);
     m_dataType = StringData;
     m_strFormulaOut = context.value()->toString( context );
     if ( !m_strFormulaOut.isEmpty() && m_strFormulaOut[0] == '!' )
-        {
-        m_pQML = new QSimpleRichText( m_strFormulaOut.mid(1),  QApplication::font() );//, m_pTable->widget() );
-        }
-  else if( !m_strFormulaOut.isEmpty() && m_strFormulaOut[0]=='\'')
-        {
+    {
+      m_pQML = new QSimpleRichText( m_strFormulaOut.mid(1),  QApplication::font() );//, m_pTable->widget() );
+    }
+    else if( !m_strFormulaOut.isEmpty() && m_strFormulaOut[0]=='\'')
+    {
         m_strFormulaOut=m_strFormulaOut.right(m_strFormulaOut.length()-1);
-        }
+    }
     else
       m_strFormulaOut=m_strFormulaOut;
     setFormatType(Text_format);
@@ -4479,7 +4492,7 @@ KSpreadCell::~KSpreadCell()
 
 bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
 {
-    if ( isNumeric() ) // ### what about bools ?
+  if ( isNumeric() ) // ### what about bools ?
   {
     if ( cell.isNumeric() )
       return valueDouble() > cell.valueDouble();

@@ -2933,7 +2933,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
             return;
     }
 
-   doc()->emitBeginOperation();
+    doc()->emitBeginOperation();
     // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
     // For each column, we look for all cells right hand of it and we find the one to swap with it.
     // Much faster than the awful bubbleSort...
@@ -2955,7 +2955,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 
         for ( int x = d + 1 ; x <= r.right(); x++ )
         {
-            KSpreadCell * cell2 = cellAt( x, ref_row );
+            KSpreadCell * cell2 = cellAt( x, ref_row, true );
 
             if ( cell2->isEmpty() )
             { /* No need to swap */ }
@@ -2979,16 +2979,19 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
         // Swap columns cell1 and bestCell (i.e. d and bestX)
         if ( d != bestX )
         {
-            for( int y = r.top(); y <= r.bottom(); y++ )
+            for( int y = r.bottom(); y >= r.top(); --y )
+            {
+              if ( y != ref_row )
                 swapCells( d, y, bestX, y );
+            }
+            swapCells( d, ref_row, bestX, ref_row );           
         }
 
     }
-   doc()->emitEndOperation();
-
+    doc()->emitEndOperation();
 }
 
-void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
+void KSpreadTable::sortByColumn(int ref_column, SortingOrder mode)
 {
     Q_ASSERT( mode == Increase || mode == Decrease );
 
@@ -3036,12 +3039,10 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
     // Much faster than the awful bubbleSort...
     // Torben: Asymptotically it is alltogether O(n^2) :-)
 
-
    for ( int d = r.top(); d <= r.bottom(); d++ )
     {
         // Look for which row we want to swap with the one number d
         KSpreadCell *cell1 = cellAt( ref_column, d );
-        //kdDebug(36001) << "New ref row " << d << endl;
         if ( cell1->isObscured() && cell1->isObscuringForced() )
         {
             int moveY=cell1->obscuringCellsRow();
@@ -3054,8 +3055,8 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
 
         for ( int y = d + 1 ; y <= r.bottom(); y++ )
         {
-            KSpreadCell *cell2 = cellAt( ref_column, y );
-
+            KSpreadCell * cell2 = cellAt( ref_column, y, true );
+            
             if ( cell2->isEmpty() )
             { /* No need to swap */ }
             else if ( cell2->isObscured() && cell2->isObscuringForced() )
@@ -3079,7 +3080,11 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
         if ( d != bestY )
         {
             for (int x = r.left(); x <= r.right(); x++)
+            {
+              if ( x != ref_column )
                 swapCells( x, d, x, bestY );
+            }
+            swapCells( ref_column, d, ref_column, bestY );
         }
     }
    doc()->emitEndOperation();
@@ -3089,6 +3094,7 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
 {
   KSpreadCell *ref1 = cellAt( x1, y1 );
   KSpreadCell *ref2 = cellAt( x2, y2 );
+  
   if ( ref1->isDefault() )
   {
     if ( !ref2->isDefault() )
@@ -3111,15 +3117,52 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
   // information. Imagine sorting in a table. Swapping
   // the layout while sorting is not what you would expect
   // as a user.
-  bool changeLayout = true;
-  if (changeLayout)
+  if (!ref1->isFormula() && !ref2->isFormula())
   {
     KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
-
+  
     tmp->copyContent( ref1 );
     ref1->copyContent( ref2 );
     ref2->copyContent( tmp );
 
+    delete tmp;
+  }
+  else
+    if ( ref1->isFormula() && ref2->isFormula() )
+    {
+      QString d = ref1->encodeFormula();
+      ref1->setCellText( ref1->decodeFormula( ref2->encodeFormula( ) ) );
+      ref1->setCalcDirtyFlag();
+      ref1->calc(false);
+      ref2->setCellText( ref2->decodeFormula( d ) );
+      ref2->setCalcDirtyFlag();
+      ref2->calc(false);
+    }
+    else
+      if (ref1->isFormula() && !ref2->isFormula() )
+      {
+        QString d = ref1->encodeFormula();
+        ref1->setCellText(ref2->text(), true);
+        ref1->setAction(ref2->action());
+        ref2->setCellText(ref2->decodeFormula(d), true);
+        ref2->setCalcDirtyFlag();
+        ref2->calc(false);
+      }
+      else
+        if (!ref1->isFormula() && ref2->isFormula() )
+        {
+          QString d = ref2->encodeFormula();
+          ref2->setCellText(ref1->text(), true);
+          ref2->setAction(ref1->action());
+          ref1->setCellText(ref1->decodeFormula(d), true);
+          ref1->setCalcDirtyFlag();
+          ref1->calc(false);
+        }
+
+  // I'll put this in the sort dlg after feature freeze
+  bool changeLayout = true;
+  if (changeLayout)
+  {
     KSpreadLayout::Align a = ref1->align( ref1->column(), ref1->row() );
     ref1->setAlign( ref2->align( ref2->column(), ref2->row() ) );
     ref2->setAlign(a);
@@ -3227,16 +3270,6 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
     KSpreadLayout::FormatType form = ref1->getFormatType( ref1->column(), ref1->row() );
     ref1->setFormatType( ref2->getFormatType( ref2->column(), ref2->row() ) );
     ref2->setFormatType(form);
-
-    delete tmp;
-  }
-  else
-  {
-    KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
-    tmp->copyContent( ref1 );
-    ref1->copyContent( ref2 );
-    ref2->copyContent( tmp );
-    delete tmp;
   }
 }
 
