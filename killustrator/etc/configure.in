@@ -9,7 +9,7 @@ dnl the argument
 AM_CONFIG_HEADER(config.h)
 AC_CHECK_COMPILERS
 
-AM_INIT_AUTOMAKE(killustrator, 0.9)
+AM_INIT_AUTOMAKE(killustrator, 0.4)
 
 dnl make $KDEDIR the default for the installation
 AC_PREFIX_DEFAULT(${KDEDIR:-/usr/local/kde})
@@ -20,22 +20,22 @@ AC_PATH_KDE
 AM_KDE_WITH_NLS
 
 dnl Check for MICO. The argument is the minimal version required.
-KDE_CHECK_MICO(2.0.7)
-KDE_CHECK_MINI_STL
+dnl KDE_CHECK_MICO(2.0.7)
+dnl KDE_CHECK_MINI_STL
 
-idldir="\$(includedir)/idl"
-AC_SUBST(idldir)
+dnl idldir="\$(includedir)/idl"
+dnl AC_SUBST(idldir)
 
-KDE_CHECK_PYTHON(1.5)
+dnl KDE_CHECK_PYTHON(1.5)
 AC_CHECK_HEADERS(unistd.h sys/param.h floatingpoint.h)
 AC_FIND_QIMGIO
 AC_C_BIGENDIAN
 
-KOFFICE_LIBS="-lkofficeui -lkofficecore -llibkoml"
-AC_SUBST(KOFFICE_LIBS)
+dnl KOFFICE_LIBS="-lkofficeui -lkofficecore -llibkoml"
+dnl AC_SUBST(KOFFICE_LIBS)
 
-KOFFICE_INCLUDES=""
-AC_SUBST(KOFFICE_INCLUDES)
+dnl KOFFICE_INCLUDES=""
+dnl AC_SUBST(KOFFICE_INCLUDES)
 
 dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT( \
