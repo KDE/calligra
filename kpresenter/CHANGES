@@ -29,9 +29,9 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Add support for flip polyline object
 - Add support for "protect size and postion"
 - When we create a line object and we press shift we draw horizontal/vertical
-- Add support for dnd between "text object"
-- Add support for "keep ratio" in obj
-- Add "duplicate object" dialogbox
+- Added support for dnd between text objects
+- Added support for keeping ratio of objects
+- Added dialog for duplicatiing objects
 - Add "Apply AutoFormat"
 - Add new type of begin/end line (line arrow, Dimension line... )
 - Add support for find/replace with format
@@ -125,10 +125,10 @@ Changes after KPresenter 1.2
 - Add font properties : change relative font size when we sub/super script font
 - Add support to add offset from baseline
 - Now koinsertlink use 'recent document'
-- Now "create backup file" is configurable
+- Creating backup files is configurable
 - Add support to insert cursor directly
 - Add support to "word by word" underline/strikeout attribute
-- Add new variable : Next page number, previous page number
+- New variables: Next page number, Previous page number
 - Add time/date variable offset
 - Fix #24242 add variable : created/modified/printed document date
 - Now we can copy text of comment.
@@ -140,12 +140,12 @@ Changes after KPresenter 1.2
 - Now we can change backup path
 - Now kotextformat support language
 - Use kocommandhistory
-- Add support for global language
+- Added support for global language
 - Add new lineSpacing type :"At least"/"exactly"/"Multiple"
 - Use new kospell API
 - Allow to copy/paste image/embedded object from different kpresenter app, thanks to David to implement koStoreDrag
 - Now right button gives spell check result
 - Transition effect dialog (with preview)
-- Better loading of background pictures (especially for remote files.)
+- Better loading of background pictures (especially for remote files)
 - Web presentation: better HTML generation, usability improvement of the wizard
-- Display a "End of presentation"-slide at end of presentation
+- Display an "End of presentation"-slide at end of presentation

@@ -1551,7 +1551,11 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 
         m_canvas->deSelectAllObj();
         presStarted = true;
+#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
+#else
+        QRect desk = QApplication::desktop()->screenGeometry(this);
+#endif
         QRect pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
 
         float _presFaktW = static_cast<float>( desk.width() ) / static_cast<float>( pgRect.width() );
@@ -1707,7 +1711,11 @@ void KPresenterView::screenPrev()
             setCurrentTimer( 1 );
             m_canvas->setNextPageTimer( true );
         }
+#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
+#else
+        QRect desk = QApplication::desktop()->screenGeometry(this);
+#endif
         if ( m_canvas->pPrev( true ) ) {
 #if 0 // TODO currentPage-- instead
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, m_canvas->presFakt(), false );
@@ -1733,7 +1741,12 @@ void KPresenterView::screenNext()
     if ( m_canvas->currentTextObjectView() )
         return;
     if ( presStarted ) {
+
+#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
+#else
+        QRect desk = QApplication::desktop()->screenGeometry(this);
+#endif
         if ( m_canvas->pNext( true ) ) {
 #if 0 // TODO currentPage-- instead
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, m_canvas->presFakt(), false );

@@ -2364,8 +2364,13 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
     if ( editMode )
         QWidget::resizeEvent( e );
     else
+#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
         QWidget::resizeEvent( new QResizeEvent( KGlobalSettings::desktopGeometry(this).size(),
                                                 e->oldSize() ) );
+#else
+        QWidget::resizeEvent( new QResizeEvent( QApplication::desktop()->screenGeometry(this).size(),
+                                                e->oldSize() ) );
+#endif
     if ( editMode ) // ### what happens in fullscreen mode ? No double-buffering !?!?
         buffer.resize( size() );
 }
@@ -2375,9 +2380,7 @@ KPObject* KPrCanvas::getObjectAt( const KoPoint&pos )
 {
   KPObject *kpobject=m_activePage->getObjectAt(pos);
   if( !kpobject)
-    {
       kpobject=stickyPage()->getObjectAt(pos);
-    }
   return kpobject;
 }
 
@@ -3219,7 +3222,11 @@ bool KPrCanvas::pNext( bool )
             return false;
         }
 
+#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
+#else
+        QRect desk = QApplication::desktop()->screenGeometry(this);
+#endif
         QPixmap _pix1( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix1 );
 
@@ -3238,7 +3245,11 @@ bool KPrCanvas::pNext( bool )
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1 );
         currPresStep = *presStepList.begin();
 
+#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
         QPixmap _pix2( desk.width(), desk.height() );
+#else
+        QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
+#endif
         int pageHeight = m_view->kPresenterDoc()->pageList().at(currPresPage-1)->getZoomPageRect().height();
         int yOffset = ( presPage() - 1 ) * pageHeight;
         if ( height() > pageHeight )
@@ -3281,7 +3292,11 @@ bool KPrCanvas::pNext( bool )
     {
         m_view->setPresentationDuration( currPresPage - 1 );
 
+#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
+#else
+        QRect desk = QApplication::desktop()->screenGeometry(this);
+#endif
         QPixmap lastSlide( desk.width(), desk.height() );
         QFont font( m_view->kPresenterDoc()->defaultFont().family() );
         QPainter p( &lastSlide );
@@ -4761,21 +4776,12 @@ void KPrCanvas::selectPrev()
 void KPrCanvas::dragEnterEvent( QDragEnterEvent *e )
 {
     if ( m_currentTextObjectView )
-    {
         m_currentTextObjectView->dragEnterEvent( e );
-    }
     else if ( /*QTextDrag::canDecode( e ) ||*/
-         QImageDrag::canDecode( e ) )
-        e->accept();
+        QImageDrag::canDecode( e ) )
+        e->acceptAction();
     else
         e->ignore();
-}
-
-/*================================================================*/
-void KPrCanvas::dragLeaveEvent( QDragLeaveEvent *e )
-{
-    if(m_currentTextObjectView)
-        m_currentTextObjectView->dragLeaveEvent( e );
 }
 
 /*================================================================*/
@@ -4786,9 +4792,7 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
         KPTextObject * obj = textUnderMouse( e->pos());
         bool emitChanged = false;
         if ( obj )
-        {
             emitChanged = checkCurrentTextEdit( obj );
-        }
         if ( m_currentTextObjectView )
         {
             m_currentTextObjectView->dragMoveEvent( e, QPoint() );
@@ -4797,8 +4801,8 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
         }
     }
     else if ( /*QTextDrag::canDecode( e ) ||*/
-         QImageDrag::canDecode( e ) )
-        e->accept();
+        QImageDrag::canDecode( e ) )
+        e->acceptAction();
     else
         e->ignore();
 }
@@ -4814,19 +4818,19 @@ void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, i
     KTempFile tmpFile;
     tmpFile.setAutoDelete(true);
 
-    if( tmpFile.status() != 0 ) {
+    if( tmpFile.status() != 0 )
         return;
-    }
-    tmpFile.close();
 
     pix.save( tmpFile.name(), "PNG" );
     QCursor c = cursor();
     setCursor( waitCursor );
     m_activePage->insertPicture( tmpFile.name(), posX, posY  );
+
+    tmpFile.close();
+
     if ( resizeImageToOriginalSize )
         picViewOriginalSize();
     setCursor( c );
-
 }
 
 /*================================================================*/
@@ -4943,8 +4947,12 @@ void KPrCanvas::gotoPage( int pg )
         //recalculate the page numbers
         m_view->kPresenterDoc()->recalcPageNum();
 
+#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
         resize( desk.width(), desk.height() );
+#else
+        resize( QApplication::desktop()->screenGeometry(this).size());
+#endif
         repaint( false );
         setFocus();
         m_view->refreshPageButton();
@@ -5038,7 +5046,7 @@ void KPrCanvas::copyObjs()
 
     delete store;
     kd->setEncodedData( arr );
-    QApplication::clipboard()->setData( dragObject );
+    QApplication::clipboard()->setData( dragObject, QClipboard::Clipboard );
 }
 
 /*================================================================*/
@@ -5348,9 +5356,14 @@ void KPrCanvas::picViewOrigFactor()
 void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &pgSize,
                                        const QSize &presSize, KPPixmapObject *obj )
 {
+#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
     QRect desk = KGlobalSettings::desktopGeometry(this);
     double faktX = (double)presSize.width() / (double)desk.width();
     double faktY = (double)presSize.height() / (double)desk.height();
+#else
+    double faktX = (double)presSize.width() / (double)QApplication::desktop()->screenGeometry(this).width();
+    double faktY = (double)presSize.height() / (double)QApplication::desktop()->screenGeometry(this).height();
+#endif
     double w = pgSize.width() * faktX;
     double h = pgSize.height() * faktY;
 

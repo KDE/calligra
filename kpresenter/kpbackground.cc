@@ -19,7 +19,7 @@
 
 #include "kpbackground.h"
 #include "kpresenter_doc.h"
-#include <qapplication.h>
+#include <kapplication.h>
 #include "kpgradientcollection.h"
 #include "kptextobject.h"
 
@@ -423,7 +423,11 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
         double w = _origSize.width();
         w *= ext.width();
         // QCursor::pos() is not right.  What is right?
-        QRect desk = KGlobalSettings::desktopGeometry(QCursor::pos());
+#if KDE_VERSION > KDE_MAKE_VERSION(3,1,90)
+        QRect desk = KGlobalSettings::desktopGeometry(this);
+#else
+        QRect desk = QApplication::desktop()->screenGeometry();
+#endif
         w /= desk.width();
         double h = _origSize.height();
         h *= ext.height();

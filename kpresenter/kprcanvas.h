@@ -46,7 +46,6 @@ class QPopupMenu;
 class QResizeEvent;
 class QPaintEvent;
 class QDragEnterEvent;
-class QDragLeaveEvent;
 class QDragMoveEvent;
 class QDropEvent;
 class QFocusEvent;
@@ -396,7 +395,6 @@ protected:
     virtual void enterEvent( QEvent *e );
     virtual void leaveEvent( QEvent *e );
     virtual void dragEnterEvent( QDragEnterEvent *e );
-    virtual void dragLeaveEvent( QDragLeaveEvent *e );
     virtual void dragMoveEvent( QDragMoveEvent *e );
     virtual void dropEvent( QDropEvent *e );
     virtual void keyPressEvent( QKeyEvent *e );

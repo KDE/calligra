@@ -228,7 +228,6 @@ public:
     void mouseDoubleClickEvent( QMouseEvent *, const QPoint &);
     void dragEnterEvent( QDragEnterEvent * );
     void dragMoveEvent( QDragMoveEvent *, const QPoint & );
-    void dragLeaveEvent( QDragLeaveEvent * );
     void dropEvent( QDropEvent * );
 
     void clearSelection();

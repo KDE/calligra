@@ -2207,11 +2207,6 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
     textObject()->emitShowCursor();
     e->acceptAction(); // here or out of the if ?
 }
-void KPTextView::dragLeaveEvent( QDragLeaveEvent * )
-{
-}
-
-
 
 void KPTextView::dropEvent( QDropEvent * e )
 {
