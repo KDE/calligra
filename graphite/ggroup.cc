@@ -370,33 +370,33 @@ GGroupM9r::~GGroupM9r() {
         m_group->setState(GObject::Visible);
 }
 
-bool GGroupM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::gmouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
 }
 
-bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::gmousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
 
     // ###
     return false;
 }
 
-bool GGroupM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::gmouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
 }
 
-bool GGroupM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::gmouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
 }
 
-bool GGroupM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::gkeyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
 }
 
-bool GGroupM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+bool GGroupM9r::gkeyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
 }

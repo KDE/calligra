@@ -34,12 +34,12 @@ public:
     virtual ~GBackgroundM9r();
 
     // never draw any handles for the background
-    virtual void draw(QPainter &) {}
+    virtual void draw(QPainter &, const QRect&) {}
 
     // RMB popup on press
-    virtual bool mousePressEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool gmousePressEvent(QMouseEvent *e, QRect &dirty);
     // Property dia on DblClick
-    virtual bool mouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool gmouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
 
 private:
     GBackgroundM9r(const GBackgroundM9r &rhs);

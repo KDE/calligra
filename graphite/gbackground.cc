@@ -37,7 +37,7 @@ GBackgroundM9r::~GBackgroundM9r() {
     delete m_popup;
 }
 
-bool GBackgroundM9r::mousePressEvent(QMouseEvent *e, QRect &/*dirty*/) {
+bool GBackgroundM9r::gmousePressEvent(QMouseEvent *e, QRect &/*dirty*/) {
 
     if(e->button()==Qt::RightButton) {
         if(m_popup==0) {
@@ -61,7 +61,7 @@ bool GBackgroundM9r::mousePressEvent(QMouseEvent *e, QRect &/*dirty*/) {
         return false;
 }
 
-bool GBackgroundM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GBackgroundM9r::gmouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     showPropertyDialog();
     // ### repaint, calculate a dirty area
     return true;

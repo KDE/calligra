@@ -86,13 +86,13 @@ public:
     virtual void draw(QPainter &p, const QRect &rect);
 
     // return false when you couldn't handle the event
-    virtual bool mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual bool mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual bool mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual bool mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool gmouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool gmousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool gmouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool gmouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
 
-    virtual bool keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
-    virtual bool keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool gkeyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
+    virtual bool gkeyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
 
     virtual GObject *gobject() { return m_object; }
 
@@ -101,9 +101,9 @@ protected slots:
     // Yes, I know that this is an ugly hack :(
     // It was necessary to either have this or to store the temporary
     // values (because of the Ok/Apply/Cancel stuff).
-    virtual void slotChanged(const QString &);
-    virtual void slotChanged(int);
-    virtual void slotChanged(const QColor &);
+    virtual void slotChangedString(const QString &);
+    virtual void slotChangedInt(int);
+    virtual void slotChangedColor(const QColor &);
 
     virtual void slotOk();
     virtual void slotApply();
@@ -185,8 +185,8 @@ public:
     void updatePage();
 
 protected slots:
-    virtual void slotChanged(int x);
-    virtual void slotChanged(const QColor &x);
+    virtual void slotChangedInt(int x);
+    virtual void slotChangedColor(const QColor &x);
 
     virtual void slotApply();
     virtual void resizeEvent(QResizeEvent *e);  // update the preview on resize

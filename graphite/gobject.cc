@@ -65,17 +65,17 @@ void GObjectM9r::draw(QPainter &p, const QRect &rect) {
     gobject()->drawHandles(p, rect, handles());
 }
 
-void GObjectM9r::slotChanged(const QString &) {
+void GObjectM9r::slotChangedString(const QString &) {
     enableButtonApply(true);
     m_changed=true;
 }
 
-void GObjectM9r::slotChanged(int) {
+void GObjectM9r::slotChangedInt(int) {
     enableButtonApply(true);
     m_changed=true;
 }
 
-void GObjectM9r::slotChanged(const QColor &) {
+void GObjectM9r::slotChangedColor(const QColor &) {
     enableButtonApply(true);
     m_changed=true;
 }
@@ -133,7 +133,7 @@ void GObjectM9r::createPropertyDialog() {
     m_line=new QLineEdit(information);
     m_line->setText(m_object->name());
     connect(m_line, SIGNAL(textChanged(const QString &)),
-            this, SLOT(slotChanged(const QString &)));
+            this, SLOT(slotChangedString(const QString &)));
     grid->addWidget(m_line, 0, 2);
 
     label=new QLabel(i18n("Type:"), information);
@@ -203,7 +203,7 @@ void G1DObjectM9r::createPropertyDialog() {
     grid->addWidget(label, 0, 0);
 
     m_width=new KIntSpinBox(1, 100, 1, gobject()->pen().width(), 10, frame);
-    connect(m_width, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
+    connect(m_width, SIGNAL(valueChanged(int)), this, SLOT(slotChangedInt(int)));
     grid->addWidget(m_width, 0, 2);
 
     label=new QLabel(i18n("Color:"), frame);
@@ -211,7 +211,7 @@ void G1DObjectM9r::createPropertyDialog() {
 
     m_color=new KColorButton(gobject()->pen().color(), frame);
     connect(m_color, SIGNAL(changed(const QColor &)), this,
-            SLOT(slotChanged(const QColor &)));
+            SLOT(slotChangedColor(const QColor &)));
     grid->addWidget(m_color, 1, 2);
 
     label=new QLabel(i18n("Style:"), frame);
@@ -230,7 +230,7 @@ void G1DObjectM9r::createPropertyDialog() {
         painter.end();
         m_style->insertItem(pm);
     }
-    connect(m_style, SIGNAL(activated(int)), this, SLOT(slotChanged(int)));
+    connect(m_style, SIGNAL(activated(int)), this, SLOT(slotChangedInt(int)));
     m_style->setCurrentItem(gobject()->pen().style());
     grid->addWidget(m_style, 2, 2);
     grid->setColStretch(1, 1);
@@ -239,14 +239,14 @@ void G1DObjectM9r::createPropertyDialog() {
 }
 
 
-void G2DObjectM9r::slotChanged(int x) {
+void G2DObjectM9r::slotChangedInt(int x) {
     updatePage();
-    GObjectM9r::slotChanged(x);
+    GObjectM9r::slotChangedInt(x);
 }
 
-void G2DObjectM9r::slotChanged(const QColor &x) {
+void G2DObjectM9r::slotChangedColor(const QColor &x) {
     updatePage();
-    GObjectM9r::slotChanged(x);
+    GObjectM9r::slotChangedColor(x);
 }
 
 void G2DObjectM9r::slotApply() {
@@ -306,7 +306,7 @@ void G2DObjectM9r::createPropertyDialog() {
         r=new QRadioButton(i18n("Gradient"), m_style);
     leftbox->addWidget(m_style);
     connect(m_style, SIGNAL(clicked(int)),
-            this, SLOT(slotChanged(int)));
+            this, SLOT(slotChangedInt(int)));
     if(gobject()->brush().style()==Qt::NoBrush)
         m_style->setButton(0);
     else
@@ -341,7 +341,7 @@ void G2DObjectM9r::createPropertyDialog() {
     grid->addWidget(label, 1, 0);
     m_brushColor=new KColorButton(gobject()->brush().color(), widget);
     connect(m_brushColor, SIGNAL(changed(const QColor &)), this,
-            SLOT(slotChanged(const QColor &)));
+            SLOT(slotChangedColor(const QColor &)));
     grid->addWidget(m_brushColor, 1, 2);
     label=new QLabel(i18n("Style:"), widget);
     grid->addWidget(label, 3, 0);
@@ -368,7 +368,7 @@ void G2DObjectM9r::createPropertyDialog() {
     if(current==0) ++current;
     m_brushStyle->setCurrentItem(current-1);
     connect(m_brushStyle, SIGNAL(activated(int)),
-            this, SLOT(slotChanged(int)));
+            this, SLOT(slotChangedInt(int)));
     grid->addWidget(m_brushStyle, 3, 2);
     grid->setRowStretch(0, 1);
     grid->setRowStretch(2, 1);
@@ -387,11 +387,11 @@ void G2DObjectM9r::createPropertyDialog() {
     grid->addWidget(label, 0, 0);
     m_gradientCA=new KColorButton(gobject()->gradient().ca, widget);
     connect(m_gradientCA, SIGNAL(changed(const QColor &)), this,
-            SLOT(slotChanged(const QColor &)));
+            SLOT(slotChangedColor(const QColor &)));
     grid->addWidget(m_gradientCA, 0, 2);
     m_gradientCB=new KColorButton(gobject()->gradient().cb, widget);
     connect(m_gradientCB, SIGNAL(changed(const QColor &)), this,
-            SLOT(slotChanged(const QColor &)));
+            SLOT(slotChangedColor(const QColor &)));
     grid->addWidget(m_gradientCB, 1, 2);
     label=new QLabel(i18n("Style:"), widget);
     grid->addWidget(label, 2, 0);
@@ -408,7 +408,7 @@ void G2DObjectM9r::createPropertyDialog() {
     m_gradientStyle->insertStringList(content);
     m_gradientStyle->setCurrentItem(static_cast<int>(gobject()->gradient().type));
     connect(m_gradientStyle, SIGNAL(activated(int)),
-            this, SLOT(slotChanged(int)));
+            this, SLOT(slotChangedInt(int)));
     grid->addWidget(m_gradientStyle, 2, 2);
     grid->setColStretch(1, 1);
     grid->setColStretch(3, 10);
@@ -427,7 +427,7 @@ void G2DObjectM9r::createPropertyDialog() {
     m_xfactor=new QSlider(-200, 200, 10, gobject()->gradient().xfactor,
                           Qt::Horizontal, widget);
     connect(m_xfactor, SIGNAL(valueChanged(int)),
-            this, SLOT(slotChanged(int)));
+            this, SLOT(slotChangedInt(int)));
     m_xfactor->setEnabled(false);
     factorgrid->addWidget(m_xfactor, 0, 1);
 
@@ -436,7 +436,7 @@ void G2DObjectM9r::createPropertyDialog() {
     m_yfactor=new QSlider(-200, 200, 10, gobject()->gradient().yfactor,
                           Qt::Horizontal, widget);
     connect(m_yfactor, SIGNAL(valueChanged(int)),
-            this, SLOT(slotChanged(int)));
+            this, SLOT(slotChangedInt(int)));
     m_yfactor->setEnabled(false);
     factorgrid->addWidget(m_yfactor, 1, 1);
     m_stack->addWidget(widget, 2);

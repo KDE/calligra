@@ -93,9 +93,9 @@ void GraphitePart::paintContent(QPainter &painter, const QRect &rect, bool trans
 
 void GraphitePart::paintSelection(QPainter &painter, const QRect &rect, GraphiteView *view) {
 
-    GObjectM9r *manager=m_m9rMap[view];
-    if(manager)
-        manager->draw(painter, rect);
+    QMapConstIterator<GraphiteView*, GObjectM9r*> it( m_m9rMap.find( view ) );
+    if(it!=m_m9rMap.end())
+        it.data()->draw(painter, rect);
 }
 
 void GraphitePart::paintPageBorders(QPainter &painter, const QRect &rect) {
@@ -225,12 +225,12 @@ void GraphitePart::showPageLayoutDia(QWidget *parent) {
 // cursor effects
 void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view) {
 
-    GObjectM9r *manager=m_m9rMap[view];
-    if(manager) {
+    QMapConstIterator<GraphiteView*, GObjectM9r*> it( m_m9rMap.find( view ) );
+    if(it!=m_m9rMap.end()) {
         setGlobalZoom(view->zoom());
         QRect dirty;
         // ### does it matter whether it returns true or false?
-        manager->mouseMoveEvent(e, dirty);
+        it.data()->gmouseMoveEvent(e, dirty);
         // ### clean up, TODO
         return;
     }
@@ -281,30 +281,24 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     m_mouse.startSelectionX=e->x();
     m_mouse.startSelectionY=e->y();
 
-    GObjectM9r *manager=m_m9rMap[view];
-    int count=0;
-    while(count < 2) {
-        if(manager==0) {
-            const GObject *hit=m_nodeZero->hit(e->pos());
-            if(hit==0)  // noone hit -> ciao
-                return;
-            manager=hit->createM9r(this, view);  // we take ownership!
-            m_m9rMap.insert(view, manager);
-        }
-
-        QRect dirty;
-        if(manager->mousePressEvent(e, dirty)) {
-            kdDebug() << "GraphitePart::mousePressEvent -- manager accepted" << endl;
-            // ### erase and rewind :)
+    QMapConstIterator<GraphiteView*, GObjectM9r*> it( m_m9rMap.find( view ) );
+    // ################ BUG BUG BUG
+    if(it==m_m9rMap.end()) {
+        const GObject *hit=m_nodeZero->hit(e->pos());
+        if(hit==0)  // noone hit -> ciao
             return;
-        }
-        else {
-            //kdDebug() << "GraphitePart::mousePressEvent  --- false" << endl;
-            m_m9rMap.remove(view);
-            delete manager;
-            manager=0;
-            ++count;
-        }
+        it=m_m9rMap.insert(view, hit->createM9r(this, view)); // we take ownership!
+    }
+
+    QRect dirty;
+    if(it.data()->gmousePressEvent(e, dirty)) {
+        //kdDebug() << "GraphitePart::mousePressEvent -- manager accepted" << endl;
+        // ### erase and rewind :)
+        return;
+    }
+    else {
+        delete it.data();
+        m_m9rMap.remove(view);
     }
 }
 
@@ -313,20 +307,19 @@ void GraphitePart::mouseReleaseEvent(QMouseEvent *e, GraphiteView *view) {
     setGlobalZoom(view->zoom());  // safety
     m_mouse.lbPressed=false;
 
-    GObjectM9r *manager=m_m9rMap[view];
-    if(manager) {
+    QMapConstIterator<GraphiteView*, GObjectM9r*> it( m_m9rMap.find( view ) );
+    if(it!=m_m9rMap.end()) {
         QRect dirty;
-        bool accepted=manager->mouseReleaseEvent(e, dirty);
+        bool accepted=it.data()->gmouseReleaseEvent(e, dirty);
         if(accepted) {
             // no need to clean up if the m9r didn't accept the event
             kdDebug() << "GraphitePart::mouseReleaseEvent -- manager accepted" << endl;
             // ### erase and rewind :)
         }
-        if(!accepted || !manager->sticky()) {
-            kdDebug() << "GraphitePart::mouseReleaseEvent  --- not accepted/sticky" << endl;
+        if(!accepted || !it.data()->sticky()) {
+            delete it.data();
             m_m9rMap.remove(view);
-            delete manager;
-            manager=0;
+            kdDebug() << "GraphitePart::mouseReleaseEvent  --- not accepted/sticky: " << m_m9rMap.count() << endl;
         }
         return;
     }

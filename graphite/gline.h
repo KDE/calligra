@@ -32,13 +32,13 @@ public:
              GraphiteView *view, const QString &type);
     virtual ~GLineM9r();
 
-    virtual bool mouseMoveEvent(QMouseEvent *e, QRect &dirty);
-    virtual bool mousePressEvent(QMouseEvent *e, QRect &dirty);
-    virtual bool mouseReleaseEvent(QMouseEvent *e, QRect &dirty);
-    virtual bool mouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool gmouseMoveEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool gmousePressEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool gmouseReleaseEvent(QMouseEvent *e, QRect &dirty);
+    virtual bool gmouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
 
-    virtual bool keyPressEvent(QKeyEvent *e, QRect &dirty);
-    virtual bool keyReleaseEvent(QKeyEvent *e, QRect &dirty);
+    virtual bool gkeyPressEvent(QKeyEvent *e, QRect &dirty);
+    virtual bool gkeyReleaseEvent(QKeyEvent *e, QRect &dirty);
 
 private:
     GLineM9r(const GLineM9r &rhs);

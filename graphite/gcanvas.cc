@@ -29,7 +29,7 @@
 //#define GRAPHITE_DEBUG_PAINTING 1
 
 GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
-    : QScrollView(view, "GCanvas", Qt::WStaticContents/*WNorthWestGravity*/ | Qt::WResizeNoErase | Qt::WRepaintNoErase),
+    : QScrollView(view, "GCanvas", Qt::WPaintClever | Qt::WStaticContents | Qt::WResizeNoErase | Qt::WRepaintNoErase),
       m_doc(doc), m_view(view), m_vertical(0L), m_horizontal(0L), m_eraseWidth(0), m_eraseHeight(0),
       m_haveFocus(false) {
 
@@ -37,7 +37,6 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     setMouseTracking(true);
     setFocus();
     viewport()->setBackgroundMode(QWidget::PaletteLight);
-    installEventFilter(viewport());
     setFrameStyle(QFrame::NoFrame);
     resizeContentsMM(m_doc->pageLayout().width(),m_doc->pageLayout().height());
     connect(this, SIGNAL(contentsMoving(int, int)), this, SLOT(contentsMoving(int, int)));
@@ -135,10 +134,16 @@ bool GCanvas::eventFilter(QObject *obj, QEvent *e) {
         showMousePos(true);
     else if(e->type()==QEvent::Leave)
         showMousePos(false);
-    else if(e->type()==QEvent::FocusIn)
+    else if(e->type()==QEvent::FocusIn) {
         m_haveFocus=true;
-    else if(e->type()==QEvent::FocusOut)
+        // ###### FIXME: Add repaints for the cursor area here
+        return true; // Don't let the widget handle the focus in/out (full repaint!)
+    }
+    else if(e->type()==QEvent::FocusOut) {
         m_haveFocus=false;
+        // ###### FIXME: Add repaints for the cursor area here
+        return true;
+    }
     return QScrollView::eventFilter(obj, e);
 }
 

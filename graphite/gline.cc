@@ -38,32 +38,32 @@ GLineM9r::~GLineM9r() {
         m_line->setState(GObject::Visible);
 }
 
-bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::gmouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
 }
 
-bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::gmousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
 }
 
-bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::gmouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
 }
 
-bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::gmouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
 }
 
-bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::gkeyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
 }
 
-bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+bool GLineM9r::gkeyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // We don't need that one for lines... hmmm ...
     return false;
 }
