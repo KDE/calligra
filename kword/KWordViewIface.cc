@@ -147,3 +147,14 @@ void KWordViewIface::formatParagraph()
 {
     view->formatParagraph();
 }
+
+void KWordViewIface::raiseFrame()
+{
+  view->raiseFrame();
+}
+
+void KWordViewIface::lowerFrame()
+{
+  view->lowerFrame();
+}
+

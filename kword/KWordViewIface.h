@@ -59,6 +59,9 @@ k_dcop:
     virtual void formatFont();
     virtual void formatParagraph();
     virtual void formatPage();
+    virtual void raiseFrame();
+    virtual void lowerFrame();
+
 private:
     KWView *view;
 
