@@ -47,7 +47,8 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteDriver : public Driver
 
 	public:
 		SQLiteDriver( QObject *parent, const char *name, const QStringList &args = QStringList() );
-		~SQLiteDriver();
+		virtual ~SQLiteDriver();
+
 		/*! \return true if \a n is a system object name; 
 			for this driver any object with name prefixed with "sqlite_" 
 			is considered as system object.

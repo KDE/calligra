@@ -39,7 +39,7 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteConnection : public Connection
 	Q_OBJECT
 
 	public:
-		~SQLiteConnection();
+		virtual ~SQLiteConnection();
 
 		virtual Cursor* prepareQuery( const QString& statement, uint cursor_options = 0 );
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
