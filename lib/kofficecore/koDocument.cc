@@ -132,7 +132,7 @@ bool KoDocumentChild::load( const QDomElement& element )
 {
     if ( element.hasAttribute( "url" ) )
 	m_tmpURL = element.attribute("url");
-    else if ( element.hasAttribute("mime") )
+    if ( element.hasAttribute("mime") )
 	m_tmpMimeType = element.attribute("mime");
 
     if ( m_tmpURL.isEmpty() )
@@ -140,7 +140,7 @@ bool KoDocumentChild::load( const QDomElement& element )
 	kdebug( KDEBUG_INFO, 30003, "Empty 'url' attribute in OBJECT" );
 	return false;
     }
-    else if ( m_tmpMimeType.isEmpty() )
+    if ( m_tmpMimeType.isEmpty() )
     {
 	kdebug( KDEBUG_INFO, 30003, "Empty 'mime' attribute in OBJECT" );
 	return false;
@@ -203,7 +203,12 @@ QDomElement KoDocumentChild::save( QDomDocument& doc )
     QDomElement e = doc.createElement( "object" );
     e.setAttribute( "url", document()->url() );
     e.setAttribute( "mime", document()->mimeType() );
-    
+    QDomElement rect = doc.createElement( "rect" );
+    rect.setAttribute( "x", geometry().left() ); 
+    rect.setAttribute( "y", geometry().top() );
+    rect.setAttribute( "w", geometry().width() );
+    rect.setAttribute( "h", geometry().height() );
+    e.appendChild(rect);    
     return e;
 }
 
