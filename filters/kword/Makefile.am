@@ -3,4 +3,4 @@ MSWORD_SUBDIR=msword
 endif
 
 SUBDIRS = libexport abiword amipro applixword ascii docbook html latex mswrite \
-	  oowriter palmdoc rtf wml wordperfect $(MSWORD_SUBDIR)
+	  oowriter palmdoc rtf wml wordperfect pdf $(MSWORD_SUBDIR)
