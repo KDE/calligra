@@ -27,16 +27,17 @@
 #include <koPrintExt.h>
 
 #include "kformviewer.h"
+#include "formobject.h"
 
 class KformViewerView;
 
 #define MIME_TYPE "application/x-kformviewer"
-#define EDITOR "IDL:KformViewer/Document:1.0"
+#define EDITOR    "IDL:KformViewer/Document:1.0"
 
 class KformViewerDoc : public QObject,
-                  virtual public KoDocument,
-                  virtual public KoPrintExt,
-                  virtual public KformViewer::Document_skel
+                       virtual public KoDocument,
+                       virtual public KoPrintExt,
+                       virtual public KformViewer::Document_skel
 {
   Q_OBJECT
 
@@ -52,7 +53,7 @@ public:
 
   virtual OpenParts::View_ptr createView();
   virtual KformViewerView* createFormView( QWidget* _parent = 0 );
-  virtual void viewList( OpenParts::Document::ViewList*& );
+  virtual void viewList( OpenParts::Document::ViewList*& _list ); 
   virtual int viewCount();
   virtual bool isEmpty();
   virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
@@ -66,21 +67,27 @@ public:
   uint getFormHeight() { return 400; };
 
 signals:
-  // Document signals
+
   void sigUpdateView();
   
 protected:
+
   virtual bool completeLoading( KOStore::Store_ptr );
 
   /**
-   * Indicates whether an form is loaded or not.
+   *  Indicates whether an form is loaded or not.
    */
   bool m_bEmpty;
 
   /**
-   * List of views, that are connectet to the document.
+   *  List of views, that are connectet to the document.
    */
   QList<KformViewerView> m_lstViews;
+
+  /**
+   *  List of form objects.
+   */
+  QList<FormObject> m_lstFormObjects;
 };
 
 #endif

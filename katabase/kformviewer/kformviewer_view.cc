@@ -62,8 +62,13 @@ KformViewerView::KformViewerView( QWidget* _parent, const char* _name, KformView
 
   QObject::connect( m_pDoc, SIGNAL( sigUpdateView() ), this, SLOT( slotUpdateView() ) );
 
-  //setPalette( QPalette( white ) );
+  QLabel* child1 = new QLabel( "CHILD", viewport() );
+  QScrollView::addChild( child1 );
 
+  QPushButton* child2 = new QPushButton( this, "button" );
+  child2->setText( "Button" );
+  QScrollView::addChild( child2 );
+ 
   slotUpdateView();
 }
 
@@ -231,10 +236,6 @@ void KformViewerView::drawContentsOffset( QPainter * p, int offsetx, int offsety
     p->drawRect( 10 - offsetx, 10 - offsety, 
                   m_pDoc->getFormWidth() - 5 - offsetx, m_pDoc->getFormHeight() - 5 - offsety);
   }                                                                                                 
-}
-
-void KformViewerView::paintEvent( QPaintEvent * )
-{
 }
 
 #include "kformviewer_view.moc"

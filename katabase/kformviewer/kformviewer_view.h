@@ -30,8 +30,8 @@
 class KformViewerDoc;
 
 class KformViewerView : public QScrollView,
-		   virtual public KoViewIf,
-		   virtual public KformViewer::View_skel
+                        virtual public KoViewIf,
+                        virtual public KformViewer::View_skel
 {
   Q_OBJECT
 
@@ -55,7 +55,7 @@ protected:
   virtual void newView();
   virtual void helpUsing();
   virtual void resizeEvent( QResizeEvent* );
-  virtual void paintEvent( QPaintEvent* );
+//  virtual void paintEvent( QPaintEvent* );
   void drawContentsOffset( QPainter* , int, int, int, int, int, int );
 
 private:

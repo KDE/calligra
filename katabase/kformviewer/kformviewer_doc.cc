@@ -30,6 +30,9 @@
 #include "kformviewer_shell.h"
 #include "kformviewer_view.h"
 
+#define DEFAULT_WIDTH  500
+#define DEFAULT_HEIGHT 300
+
 /*****************************************************************************
  *
  * KformViewerDoc
@@ -63,6 +66,8 @@ void KformViewerDoc::cleanUp()
   ASSERT( m_lstViews.count() == 0 );
 
   m_lstAllChildren.clear();
+  m_lstFormObjects.clear();
+
   KoDocument::cleanUp();
 }
 
@@ -110,7 +115,7 @@ int KformViewerDoc::viewCount()
   return m_lstViews.count();
 }
 
-bool KformViewerDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr  )
+bool KformViewerDoc::loadXML( KOMLParser& _parser, KOStore::Store_ptr _store )
 {
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
 
@@ -119,7 +124,7 @@ bool KformViewerDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr  )
   string name;
 
   // DOC
-  if ( !parser.open( "DOC", tag ) )
+  if ( !_parser.open( "DOC", tag ) )
   {
     kdebug( KDEBUG_INFO, 0, "Missing DOC" );
     return false;
@@ -134,69 +139,65 @@ bool KformViewerDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr  )
       if ( it->m_strValue != MIME_TYPE )
       {
         kdebug( KDEBUG_INFO, 0, "Unknown mime type %s", it->m_strValue.c_str() );
+
         return false;
       }
     }
   }
 
   // FORM
-  if( !parser.open( "FORM", tag ) )
+  while( _parser.open( "", tag ) )
   {
-    kdebug( KDEBUG_INFO, 0, "Missing FORM" );
-    return false;
-  }
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+ 
+    if ( name == "SIZE" )
+    {
+      cout << "SIZE found" << endl;
 
-  kdebug( KDEBUG_INFO, 0, "form detected" );
-  
-  KOMLParser::parseTag( tag.c_str(), name, lst );
-  it = lst.begin();
-  for( ; it != lst.end(); it++ )
-  {
-    if( it->m_strName == "NAME" )
-    {
-      // Value von Name in Document einfuegen
+      KOMLParser::parseTag( tag.c_str(), name, lst );
+      vector<KOMLAttrib>::const_iterator it = lst.begin();
+      for( ; it != lst.end(); it++ )
+      {
+        if ( ( *it ).m_strName == "height" )
+        {
+          
+        }
+        else if ( ( *it ).m_strName == "width" )
+        {
+ 
+        }
+        else kdebug( KDEBUG_INFO, 0, "Unknown attrib PAPER:'%s'", ( *it ).m_strName.c_str() );
+      }
     }
-    else
+
+    else if ( name == "BUTTON" )
     {
-      kdebug( KDEBUG_INFO, 0, "Unknown tag parameter" );
+      cout << "BUTTON found" << endl;
+
+      KOMLParser::parseTag( tag.c_str(), name, lst );
+      vector<KOMLAttrib>::const_iterator it = lst.begin();
+      for( ; it != lst.end(); it++ )
+      {
+        if ( ( *it ).m_strName == "height" )
+        {
+ 
+        }
+        else if ( ( *it ).m_strName == "width" )
+        {
+ 
+        }
+        else kdebug( KDEBUG_INFO, 0, "Unknown attrib PAPER:'%s'", ( *it ).m_strName.c_str() );
+      }
+    }
+ 
+    else kdebug( KDEBUG_INFO, 0,  "Unknown tag '%s' in the DOCUMENT", tag.c_str() );
+ 
+    if ( !_parser.close( tag ) )
+    {
+      kdebug( KDEBUG_INFO, 0, "ERR: Closing Child" );
       return false;
     }
   }
-
-  while( parser.open( 0L, tag ) )
-  {
-    KOMLParser::parseTag( tag.c_str(), name, lst );
-
-    if( name == "SIZE" )
-    {
-      kdebug( KDEBUG_INFO, 0, "size detected" );
-
-      KOMLParser::parseTag( tag.c_str(), name, lst );
-      it = lst.begin();
-      for( ; it != lst.end(); it++ )
-      {
-        if( it->m_strName == "WIDTH" )
-        {
-          // Value von Name in Document einfügen
-        }
-        else if( it->m_strName == "HEIGTH" )
-        {
-          // Value vond Name in Document einfügen
-        }
-        else
-        {
-          kdebug( KDEBUG_INFO, 0, "Unknown tag paramter" );
-          return false;
-        }
-      }
-    }
-    else
-    {
-      kdebug( KDEBUG_INFO, 0, "Unknown tag" );
-      return false; 
-    }
-  }
-  parser.close( tag );
 
   kdebug( KDEBUG_INFO, 0, "------------------------ LOADING DONE --------------------" );
 

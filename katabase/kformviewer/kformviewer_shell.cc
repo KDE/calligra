@@ -180,8 +180,6 @@ bool KformViewerShell::openDocument( const char *_url, const char *_format )
     debug( "oder hier" );
     return false;
   }
-  debug( "Hier muss er herkommen" );
-
   m_pView = m_pDoc->createFormView( frame() );
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
