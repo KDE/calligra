@@ -3749,62 +3749,6 @@ void KSpreadTable::dissociateCell( const QPoint &_marker)
     emit sig_updateView( this, selection );
 }
 
-/*
-void KSpreadTable::draw( QPaintDevice* _dev, long int _width, long int _height,
-			 float _scale )
-{
-  QRect page_range;
-  page_range.setLeft( 1 );
-  page_range.setTop( 1 );
-
-  QRect rect( 1, 1, _width, _height );
-
-  int col = 1;
-  int x = columnLayout( col )->width();
-  bool bend = false;
-  while ( !bend )
-  {
-    col++;
-    int w = columnLayout( col )->width();
-    if ( x + w > rect.width() )
-    {
-      bend = true;
-      col--;
-    }
-    else
-      x += w;
-  }
-  page_range.setRight( col );
-	
-  int row = 1;
-  int y = rowLayout( row )->height();
-  bend = false;
-  while ( !bend )
-  {
-    row++;
-    int h = rowLayout( row )->height();
-    if ( y + h > rect.height() )
-    {
-      row--;
-      bend = true;
-    }
-    else
-      y += h;
-  }
-  page_range.setBottom( row );
-
-  QPainter painter;
-  painter.begin( _dev );
-
-  if ( _scale != 1.0 )
-    painter.scale( _scale, _scale );
-
-  printPage( painter, page_range, NoPen);//doc()->defaultGridPen() );
-
-  painter.end();
-}
-*/
-
 void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 {
     qDebug("PRINTING ....");
@@ -4725,8 +4669,9 @@ bool ChartChild::save( QTextStream& out )
     return true;
 }
 
+/*
 // ############### Is this KOML stuff really needed ?
-bool ChartChild::loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttrib>& /* lst */ )
+bool ChartChild::loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttrib>& lst )
 {
     if ( tag == "BINDING" )
     {
@@ -4757,6 +4702,7 @@ bool ChartChild::loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttr
 
     return FALSE;
 }
+*/
 
 bool ChartChild::loadDocument( KoStore* _store )
 {

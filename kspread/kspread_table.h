@@ -148,7 +148,6 @@ class ChartChild : public KSpreadChild
 {
 public:
   ChartChild( KSpreadDoc *_spread, KSpreadTable *_table, KoDocument* doc, const QRect& _rect );
-    // ChartChild( KSpreadDoc *_spread, KSpreadTable *_table );
   ~ChartChild();
 
   void setDataArea( const QRect& _data );
@@ -160,7 +159,7 @@ public:
   KChartPart* chart();
 
 private:
-  bool loadTag( KOMLParser& parser, const string& tag, std::vector<KOMLAttrib>& lst );
+    // bool loadTag( KOMLParser& parser, const string& tag, std::vector<KOMLAttrib>& lst );
 
   ChartBinding *m_pBinding;
   KSpreadTable* m_table;
@@ -649,12 +648,6 @@ public:
     void autofill( QRect &src, QRect &dest );
 
     void print( QPainter &painter, QPrinter *_printer );
-
-    /**
-     * Needed for the printing Extension KOffice::Print
-     */
-    // void draw( QPaintDevice* _dev, long int _width, long int _height,
-    // float _scale );
 
     void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
     void insertChild( const QRect& _geometry, KoDocumentEntry& );

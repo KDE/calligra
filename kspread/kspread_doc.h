@@ -278,11 +278,6 @@ signals:
 
 protected:
   KoView* createViewInstance( QWidget* parent, const char* name );
-  /**
-   * Needed for the printing extension KOffice::Print
-   */
-    // virtual void draw( QPaintDevice*, long int _width, long int _height,
-    // float _scale );
 
   /**
    * Overloaded function of @ref KoDocument.

@@ -739,27 +739,6 @@ void KSpreadDoc::enableRedo( bool _b )
       v->enableRedo( _b );
 }
 
-// ########## Torben: What is that good for
-// ### The header says 'Needed for the printing extension KOffice::Print' (David)
-// void KSpreadDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
-// float _scale)
-// {
-// if ( m_pMap )
-// m_pMap->draw( _dev, _width, _height, _scale );
-// }
-
-// ########## Torben: What is that good for
-// void KSpreadDoc::printMap( QPainter & )
-// {
-  // TODO
-  /*
-  KSpreadTable *t;
-  for ( t = m_pMap->firstTable(); t != 0L; t = m_pMap->nextTable() )
-  {
-    t->print( _painter, false );
-  } */
-// }
-
 void KSpreadDoc::paperLayoutDlg()
 {
     KoPageLayout pl;
