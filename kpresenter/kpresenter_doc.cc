@@ -394,7 +394,9 @@ KPresenterDoc::~KPresenterDoc()
     delete m_bgSpellCheck;
     delete m_styleColl;
     delete m_pKSpellConfig;
-
+    m_pageList.setAutoDelete( true );
+    m_pageList.clear();
+    delete m_stickyPage;
     tmpSoundFileList.setAutoDelete( true );
     tmpSoundFileList.clear();
 }

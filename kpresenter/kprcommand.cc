@@ -1746,6 +1746,7 @@ KPrDeletePageCmd::~KPrDeletePageCmd()
 {
     //todo
     m_page->deletePage();
+    delete m_page;
 }
 
 void KPrDeletePageCmd::execute()
