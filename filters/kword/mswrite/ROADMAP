@@ -8,7 +8,7 @@ Current "Roadmap" for mswritefilter Development:
 0.5 Major rewrite - portable code, export filter added
 
     <<< WE ARE HERE >>>
-	 
+
 0.6 LibMSWrite API stabilises, performance enhancements, implement OLE?
 
 0.9 Preparation for final release + full stress testing

@@ -1,5 +1,5 @@
 
-MS Write Import Filter for KWord - How to PERFECT the Filter
+MS Write Import Filter for KWord - How to Perfect the Filter
 $Date$
 Clarence Dang <dang@kde.org>
 
@@ -11,7 +11,8 @@ This filter appears to be feature-complete, except for OLE and what is
 mentioned here.
 
 This document discusses where and why the filter is not perfect (! :)) and
-whether or not these problems should or can be fixed.
+whether or not these problems should or can be fixed.  In the world of filter
+development, it is important to consider even minute details (within reason).
 
 
 Problems that could be fixed in the future
@@ -29,13 +30,13 @@ end of the paragraph and where paragraphs span more than one line.
 This feature is now disabled by default and cannot be turned on because of
 stability problems with the dialog!
 
-Word97 can import this linespacing, despite the fact that it doesn't
-do linespacing like MS Write either so perhaps this may be fixed in
-the future?
+Word97 can import this kind of linespacing, despite the fact that it too
+doesn't ordinarily do linespacing like MS Write does so perhaps this may be
+fixed in the future?
 
 2. Positioning of Headers, Footers & Main Text Frame
 
-The following things are known in an MS Write document (by LibMSWrite):
+The following things in an MS Write document are known:
 
 ##########    <-- top of header
 # Header #
@@ -59,9 +60,8 @@ be computed in advance.  If "DTP" mode is selected, we would need KWord to
 support expanding frames upwards for the footer (since we only know the bottom
 of the footer but not the top).
 
-In other words, AFAIK, the current filter system does not allow the
+In other words, AFAIK, the current KWord file format does not allow the
 specification of the exact position of each frame, like MS Write can.
-I will be rectifying this myself...
 
 See my post "Specifying exact frame positions" to the koffice-devel mailinglist
 on 2002-01-27 and the number of responses I got to it.
@@ -105,8 +105,8 @@ clicks "Repaginate"), which specifies where pages start and end esp. for
 printing purposes.  However due to the previous point (1) and the fact
 that the pageTable can get so out of sync with the document anyway esp. if
 the user doesn't "Repaginate" the document everytime s/he changes it,
-the pageTable is completely ignored in this import filter (i.e. signal
-MSWrite::Generator::writePageNew).
+the pageTable is completely ignored in this import filter (see the empty
+MSWrite::Generator::writePageNew implementation).
 
 
 What you can do to help
