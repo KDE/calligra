@@ -108,6 +108,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //	viewport()->setFocusPolicy(StrongFocus);
 	viewport()->setFocusPolicy(WheelFocus);
 	setFocusProxy(viewport());
+	viewport()->installEventFilter(this);
 
 	//setup colors defaults
 	setBackgroundMode(PaletteBackground);
@@ -1111,13 +1112,16 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}*/
 	
 	// draw selection background
-	const bool has_focus = hasFocus() || viewport()->hasFocus() || d->pContextMenu->hasFocus();
+//	const bool has_focus = hasFocus() || viewport()->hasFocus() || d->pContextMenu->hasFocus();
 
 	const bool columnReadOnly = m_data->column(col)->readOnly();
 
 	if (d->pCurrentItem == item && col == d->curCol) {
-		edit->paintSelectionBackground( p, has_focus, txt, align, x, y_offset, w, h,
+/*		edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
 			has_focus ? colorGroup().highlight() : gray,
+			columnReadOnly, d->fullRowSelectionEnabled );*/
+		edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
+			isEnabled() ? colorGroup().highlight() : gray,
 			columnReadOnly, d->fullRowSelectionEnabled );
 	}
 
@@ -1140,7 +1144,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	if(d->pCurrentItem == item && col == d->curCol //js: && !d->recordIndicator)
 		&& !d->fullRowSelectionEnabled) 
 	{
-		if (has_focus) {
+//		kdDebug() << ">>> CURRENT CELL ("<<d->curCol<<"," << d->curRow<<") focus="<<has_focus<<endl;
+//		if (has_focus) {
+		if (isEnabled()) {
 			p->setPen(colorGroup().text());
 		}
 		else {
@@ -3140,6 +3146,19 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 			if (ke->isAccepted())
 				return true;
 		}
+	}
+	else if (o==viewport() && (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut)) {
+		//update focus visibility
+		//updateCell( d->curRow, d->curCol );
+		const bool r = QScrollView::eventFilter(o,e);
+		repaintContents();
+//	QTimer::singleShot(1000, this, SLOT( slotUpdate() ));
+		kdDebug() << ">>> CURRENT CELL ("<<d->curCol<<"," << d->curRow<<")"<<endl;
+
+//		setCursor(0,1);
+//QMouseEvent e(QEvent::MouseButtonPress, QPoint(columnPos(1),rowPos(0)), LeftButton, LeftButton);
+//contentsMousePressEvent( &e );
+		return r;
 	}
 	return QScrollView::eventFilter(o,e);
 }
