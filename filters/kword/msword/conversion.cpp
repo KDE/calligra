@@ -34,41 +34,42 @@ QColor Conversion::color(int number, int defaultcolor, bool defaultWhite)
     {
 	case 0:
 	    if(defaultWhite)
-		return QColor("white");
+		return Qt::white;
 	case 1:
-	    return QColor("black");
+	    return Qt::black;
 	case 2:
-	    return QColor("blue");
+	    return Qt::blue;
 	case 3:
-	    return QColor("cyan");
+	    return Qt::cyan;
 	case 4:
-	    return QColor("green");
+	    return Qt::green;
 	case 5:
-	    return QColor("magenta");
+	    return Qt::magenta;
 	case 6:
-	    return QColor("red");
+	    return Qt::red;
 	case 7:
-	    return QColor("yellow");
+	    return Qt::yellow;
 	case 8:
-	    return QColor("white");
+	    return Qt::white;
 	case 9:
-	    return QColor("darkBlue");
+	    return Qt::darkBlue;
 	case 10:
-	    return QColor("darkCyan");
+	    return Qt::darkCyan;
 	case 11:
-	    return QColor("darkGreen");
+	    return Qt::darkGreen;
 	case 12:
-	    return QColor("darkMagenta");
+	    return Qt::darkMagenta;
 	case 13:
-	    return QColor("darkRed");
+	    return Qt::darkRed;
 	case 14:
-	    return QColor("darkYellow");
+	    return Qt::darkYellow;
 	case 15:
-	    return QColor("darkGray");
+	    return Qt::darkGray;
 	case 16:
-	    return QColor("lightGray");
+	    return Qt::lightGray;
 
 	default:
+            kdDebug() << "Conversion::color: unknown color: " << number << endl;
 	    if(defaultcolor == -1)
 		return QColor("black");
 	    else
