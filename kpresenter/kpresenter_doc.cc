@@ -3640,15 +3640,14 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 }
 
 /*================ return number of selected objs ================*/
-int KPresenterDoc::numSelected()
+int KPresenterDoc::numSelected() const
 {
     int num = 0;
 
-    KPObject *kpobject = 0;
-
-    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-	kpobject = objectList()->at( i );
-	if ( kpobject->isSelected() ) num++;
+    QPtrListIterator<KPObject> it( *objectList() );
+    for ( ; it.current(); ++it ) {
+	if ( it.current()->isSelected() )
+	    num++;
     }
 
     return num;

@@ -2974,7 +2974,7 @@ void KPresenterView::confPolygonOk()
 }
 
 /*================================================================*/
-unsigned int KPresenterView::getCurrPgNum()
+unsigned int KPresenterView::getCurrPgNum() const
 {
     return currPg + 1;
 }

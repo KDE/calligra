@@ -321,7 +321,7 @@ public:
     void setDiffY( int _y ) {yOffset = _y; }
 
     // get current pagenum, 1-based
-    unsigned int getCurrPgNum();
+    unsigned int getCurrPgNum() const;
 
     // return pointer to document
     class KPresenterDoc *kPresenterDoc() const {return m_pKPresenterDoc; }

@@ -250,8 +250,8 @@ protected:
     QPtrList<KPBackGround> *backgroundList();
     const QPtrList<KPBackGround> *backgroundList() const;
     const QPtrList<KPObject> *objectList() const;
-    unsigned int objNums();
-    unsigned int currPgNum();
+    unsigned int objNums() const;
+    unsigned int currPgNum() const;
     unsigned int rastX() const;
     unsigned int rastY() const;
     QColor txtBackCol() const;

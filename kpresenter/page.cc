@@ -4214,13 +4214,13 @@ const QPtrList<KPObject> *Page::objectList() const
 }
 
 /*================================================================*/
-unsigned int Page::objNums()
+unsigned int Page::objNums() const
 {
     return view->kPresenterDoc()->objNums();
 }
 
 /*================================================================*/
-unsigned int Page::currPgNum()
+unsigned int Page::currPgNum() const
 {
     return view->getCurrPgNum();
 }

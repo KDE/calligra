@@ -254,7 +254,7 @@ public:
     QPen presPen() const { return _presPen; }
     void setPresPen( QPen p ) {_presPen = p; }
 
-    int numSelected();
+    int numSelected() const;
     KPObject* getSelectedObj();
 
     void restoreBackground( int );
