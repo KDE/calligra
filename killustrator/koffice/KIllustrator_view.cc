@@ -95,20 +95,17 @@
 
 
 KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
-                                    KIllustratorDocument* doc) :
-    KoView( doc, parent, name )
+                                    KIllustratorDocument* doc)
+   :KoView( doc, parent, name )
+   ,objMenu(0)
+   ,rulerMenu(0)
 {
    QTime time;
    time.start();
     setInstance( KIllustratorFactory::global() );
-//    PStateManager::instance ();
-//    setupCanvas ();
-    //setXMLFile( "KIllustrator.rc" );
-    //kdDebug()<<"KIlluView after XMLFile: "<<time.elapsed()<<endl;
     m_pDoc = doc;
     m_bShowGUI = true;
     m_bShowRulers = true;
-    objMenu = 0L;
     mParent = parent;
 
     readConfig();
@@ -118,12 +115,10 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     PStateManager::instance ();
     kdDebug()<<"KIlluView after instance: "<<time.elapsed()<<endl;
 
-    QObject::connect (m_pDoc, SIGNAL (partInserted (KIllustratorChild *, GPart *)),
-                                          this, SLOT (insertPartSlot (KIllustratorChild *, GPart *)));
-    QObject::connect (m_pDoc, SIGNAL (childGeometryChanged (KIllustratorChild *)),
-                                           this, SLOT(changeChildGeometrySlot (KIllustratorChild *)));
+    connect (m_pDoc,SIGNAL(partInserted(KIllustratorChild*,GPart*)),this,SLOT(insertPartSlot(KIllustratorChild*,GPart*)));
+    connect (m_pDoc,SIGNAL(childGeometryChanged(KIllustratorChild*)),this,SLOT(changeChildGeometrySlot(KIllustratorChild*)));
     
-     setupCanvas();
+    setupCanvas();
     kdDebug()<<"KIlluView after setupCanvas: "<<time.elapsed()<<endl;
     createMyGUI();
     setXMLFile( "KIllustrator.rc" );
@@ -137,6 +132,8 @@ KIllustratorView::~KIllustratorView()
    delete mZoomTool;
    if (objMenu!=0)
       delete objMenu;
+   if (rulerMenu!=0)
+      delete rulerMenu;
    delete mToolDockManager;
 }
 
@@ -158,8 +155,6 @@ void KIllustratorView::createMyGUI()
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 
     // View menu
-    //new KAction( i18n("Zoom in..."), Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "zoomin" );
-    //new KAction( i18n("Zoom out..."), Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "zoomout" );
     new KAction( i18n("Zoom in"), "viewmag+", Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "zoomin");
     new KAction( i18n("Zoom out"), "viewmag-", Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "zoomout");
 
@@ -229,8 +224,9 @@ void KIllustratorView::createMyGUI()
 
     // Layout menu
     new KAction( i18n("&Page..."), 0, this, SLOT( slotPage() ), actionCollection(), "page" );
-    new KAction( i18n("&Grid..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
-    new KAction( i18n("&Helplines..."), 0, this, SLOT( slotHelplines() ), actionCollection(), "helplines" );
+    m_setupGrid=new KAction( i18n("&Grid..."), 0, this, SLOT( slotGrid() ), actionCollection(), "grid" );
+    m_setupHelplines=new KAction( i18n("&Helplines..."), 0, this, SLOT( slotHelplines() ), actionCollection(), "helplines" );
+
     m_alignToGrid = new KToggleAction( i18n("&Align To Grid"), 0, actionCollection(), "alignToGrid" );
     connect( m_alignToGrid, SIGNAL( toggled( bool ) ), this, SLOT( slotAlignToGrid( bool ) ) );
 
@@ -331,29 +327,17 @@ void KIllustratorView::createMyGUI()
 
 }
 
-void KIllustratorView::setupPopups()
-{
-    objMenu = new KPopupMenu();
-    m_copy->plug( objMenu );
-    m_cut->plug( objMenu );
-    m_delete->plug(objMenu);
-    objMenu->insertSeparator ();
-    m_distribute->plug( objMenu );
-    m_toFront->plug( objMenu );
-    m_toBack->plug( objMenu );
-    m_forwardOne->plug( objMenu );
-    m_backOne->plug( objMenu );
-    objMenu->insertSeparator ();
-    m_properties->plug( objMenu );
-}
-
 void KIllustratorView::setupCanvas()
 {
     MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
     hRuler = new Ruler (Ruler::Horizontal, mu, this);
     hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
+    hRuler->setCursor(Qt::pointingHandCursor);
     vRuler = new Ruler (Ruler::Vertical, mu, this);
     vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
+    vRuler->setCursor(Qt::pointingHandCursor);
+    connect(hRuler,SIGNAL(rmbPressed()),this,SLOT(popupForRulers()));
+    connect(vRuler,SIGNAL(rmbPressed()),this,SLOT(popupForRulers()));
 
     QScrollBar* vBar = new QScrollBar(QScrollBar::Vertical, this);
     QScrollBar* hBar = new QScrollBar(QScrollBar::Horizontal, this);
@@ -389,7 +373,7 @@ void KIllustratorView::setupCanvas()
     connect(canvas,SIGNAL(mousePositionChanged(int,int)),hRuler,SLOT(updatePointer(int,int)));
     connect(canvas,SIGNAL(mousePositionChanged(int,int)),vRuler,SLOT(updatePointer(int,int)));
 
-    connect(canvas,SIGNAL(rightButtonAtSelectionClicked(int,int)),this,SLOT(popupForSelection(int,int)));
+    connect(canvas,SIGNAL(rightButtonAtSelectionClicked(int,int)),this,SLOT(popupForSelection()));
     
     // helpline creation
     connect (hRuler, SIGNAL (drawHelpline(int, int, bool)),
@@ -582,11 +566,39 @@ void KIllustratorView::slotConfigureEllipse()
    tcontroller->configureTool (Tool::ToolEllipse);
 }
 
-void KIllustratorView::popupForSelection (int, int )
+void KIllustratorView::popupForSelection ()
 {
    if (objMenu==0)
-      setupPopups();
+   {
+      objMenu = new KPopupMenu();
+      m_copy->plug( objMenu );
+      m_cut->plug( objMenu );
+      m_delete->plug(objMenu);
+      objMenu->insertSeparator ();
+      m_distribute->plug( objMenu );
+      m_toFront->plug( objMenu );
+      m_toBack->plug( objMenu );
+      m_forwardOne->plug( objMenu );
+      m_backOne->plug( objMenu );
+      objMenu->insertSeparator ();
+      m_properties->plug( objMenu );
+   };
    objMenu->popup( QCursor::pos () );
+}
+
+void KIllustratorView::popupForRulers()
+{
+   if (rulerMenu==0)
+   {
+      rulerMenu = new KPopupMenu();
+      m_showGrid->plug(rulerMenu);
+      m_showHelplines->plug(rulerMenu);
+      m_setupGrid->plug(rulerMenu);
+      m_setupHelplines->plug(rulerMenu);
+      m_alignToGrid->plug(rulerMenu);
+      m_alignToHelplines->plug(rulerMenu);
+   };
+   rulerMenu->popup( QCursor::pos () );
 }
 
 void KIllustratorView::resetTools(Tool::ToolID id)

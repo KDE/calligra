@@ -109,8 +109,6 @@ protected:
     void showTransformationDialog (int id);
 
     void setupCanvas ();
-    void setupPopups ();
-    //void resizeEvent (QResizeEvent*);
 
     virtual void updateReadWrite( bool readwrite );
 
@@ -118,11 +116,10 @@ protected:
     virtual void print( QPrinter &printer );
 
 protected slots:
-   //connect(tcontroller,SIGNAL(activated(bool)), this, SLOT(enableNodeTools(bool)));
    void toolActivated(Tool::ToolID, bool show);
-    //void showNodesToolbar(bool show);
-    void setUndoStatus( bool undoPossible, bool redoPossible );
-    void popupForSelection (int x, int y);
+   void setUndoStatus( bool undoPossible, bool redoPossible );
+   void popupForSelection ();
+   void popupForRulers();
     void resetTools(Tool::ToolID id=Tool::ToolDummy);
     QString getExportFileName (FilterManager *filterMgr);
 
@@ -197,8 +194,6 @@ private slots:
     void slotConfigureEllipse();
     void slotAddHelpline(int x, int y, bool d);
     void slotZoomFactorChanged(float factor);
-    //void slotZoomFactorChanged(float factor, int xpos, int ypos);
-    //void slotSettingsChanged();
     void slotZoomIn();
     void slotZoomOut();
     void slotViewResize();
@@ -209,6 +204,7 @@ protected:
     EditPointTool *editPointTool;
     InsertPartTool *insertPartTool;
     QPopupMenu *objMenu;
+    QPopupMenu *rulerMenu;
     QWidget *mParent;
 
     bool m_bShowGUI;
@@ -233,6 +229,8 @@ protected:
     KAction* m_toFront;
     KAction* m_toBack;
     KAction* m_forwardOne;
+    KAction* m_setupGrid;
+    KAction* m_setupHelplines;
     KAction* m_backOne;
 
     KToggleAction *m_alignToGrid;
