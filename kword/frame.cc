@@ -1614,7 +1614,7 @@ void KWGroupManager::recalcCols()
 		  int w = 0;
 		  for (unsigned int k = 0;k < cell->cols;k++)
 		    w += *ws.at(k + cell->col);
-		  
+		
 		  cell->frameSet->getFrame(0)->setWidth(w + (cell->cols - 2) * 2 + 2);
 		}
 	    }	
@@ -1747,9 +1747,9 @@ void KWGroupManager::recalcRows(QPainter &_painter)
 		  int h = 0;
 		  for (unsigned int k = 0;k < cell->rows;k++)
 		    h += *hs.at(k + cell->row);
-		  
+		
 		  debug("expanded %d/%d",cell->row,cell->col);
-		  
+		
 		  cell->frameSet->getFrame(0)->setHeight(h + (cell->rows - 2) * 2 + 2);
 		}
 	    }
@@ -2189,6 +2189,39 @@ bool KWGroupManager::joinCells(QPainter &_painter)
       return true;
     }
 
+  return false;
+}
+
+/*================================================================*/
+bool KWGroupManager::splitCell(QPainter &_painter)
+{
+  unsigned int col,row;
+  if (!isOneSelected(0L,row,col)) return false;
+
+  Cell *cell = getCell(row,col);
+  if (cell->rows > 1)
+    {
+      for (unsigned int i = 0;i < cell->rows;i++)
+	{
+	  getCell(i + cell->row,col)->rows = 1;
+	  getCell(i + cell->row,col)->frameSet->setVisible(true);
+	}
+      recalcRows(_painter);
+      
+      return true;
+    }
+  else if (cell->cols > 1)
+    {
+      for (unsigned int i = 0;i < cell->cols;i++)
+	{
+	  getCell(row,i + cell->col)->cols = 1;
+	  getCell(row,i + cell->col)->frameSet->setVisible(true);
+	}
+      recalcCols();
+      
+      return true;
+    }
+  
   return false;
 }
 

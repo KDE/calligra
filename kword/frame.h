@@ -218,7 +218,7 @@ public:
 
   bool isVisible() { return visible; }
   void setVisible(bool v) { visible = v; }
-  
+
 protected:
   virtual void init()
     {;}
@@ -439,7 +439,8 @@ public:
   bool isActive() { return active; }
 
   bool joinCells(QPainter &_painter);
-
+  bool splitCell(QPainter &_painter);
+  
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;

@@ -1298,7 +1298,7 @@ void KWordView::tableDeleteCol()
 /*===============================================================*/
 void KWordView::tableJoinCells()
 {
-  gui->getPaperWidget()->mmEdit();
+  gui->getPaperWidget()->mmEditFrame();
 
   KWGroupManager *grpMgr = gui->getPaperWidget()->getCurrentTable();
   if (!grpMgr)
@@ -1311,6 +1311,7 @@ void KWordView::tableJoinCells()
 	QMessageBox::critical(0L,i18n("Error"),i18n("You have to select some cells which are next to each other\n"
 						    "and are not already joined."),i18n("OK"));
       painter.end();
+      gui->getPaperWidget()->repaint(false);
     }
 
   sendFocusEvent();
@@ -1319,6 +1320,21 @@ void KWordView::tableJoinCells()
 /*===============================================================*/
 void KWordView::tableSplitCells()
 {
+  gui->getPaperWidget()->mmEditFrame();
+
+  KWGroupManager *grpMgr = gui->getPaperWidget()->getCurrentTable();
+  if (!grpMgr)
+    QMessageBox::critical(0L,i18n("Error"),i18n("You have to select a cell in a table to split it!"),i18n("OK"));
+  else
+    {
+      QPainter painter;
+      painter.begin(gui->getPaperWidget());
+      if (!grpMgr->splitCell(painter))
+	QMessageBox::critical(0L,i18n("Error"),i18n("Currently it's only possible to split a joined cell.\n"
+						    "So, you have to selecte a joined cell."),i18n("OK"));
+      painter.end();
+      gui->getPaperWidget()->repaint(false);
+    }
 
   sendFocusEvent();
 }

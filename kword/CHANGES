@@ -1003,3 +1003,5 @@ Reggie, 29.3.1999:
 ------------------
 - For joining cells it's not required anymore to put the cursor
   into the table first
+- Implemented splitting cells - this means you can only split a joined
+  cell yet, no "normal" cells. I'll improve that later.
