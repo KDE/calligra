@@ -37,10 +37,10 @@ class KCharSelectDia : public QDialog
 public:
 
   // constructor - destructor
-  KCharSelectDia(QWidget *parent,const char *name,const QChar &_chr,const QString &_font);
+  KCharSelectDia(QWidget *parent,const char *name,const QChar &_chr,const QString &_font,bool _enableFont);
 
   // select char dialog
-  static bool selectChar(QString &_font,QChar &_chr);
+  static bool selectChar(QString &_font,QChar &_chr,bool _enableFont = true);
 
   // internal
   QChar chr() { return charSelect->chr(); }

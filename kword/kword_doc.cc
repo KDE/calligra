@@ -1046,7 +1046,8 @@ bool KWordDocument::loadXML(KOMLParser& parser,KOStore::Store_ptr)
 
   bool _first_footer = false,_even_footer = false,_odd_footer = false;
   bool _first_header = false,_even_header = false,_odd_header = false;
-
+  bool _footnotes;
+  
   for (unsigned int k = 0;k < getNumFrameSets();k++)
     {
       if (getFrameSet(k)->getFrameInfo() == FI_FIRST_HEADER) _first_header = true;
@@ -1055,6 +1056,7 @@ bool KWordDocument::loadXML(KOMLParser& parser,KOStore::Store_ptr)
       if (getFrameSet(k)->getFrameInfo() == FI_FIRST_FOOTER) _first_footer = true;
       if (getFrameSet(k)->getFrameInfo() == FI_EVEN_FOOTER) _odd_footer = true;
       if (getFrameSet(k)->getFrameInfo() == FI_ODD_FOOTER) _even_footer = true;
+      if (getFrameSet(k)->getFrameInfo() == FI_FOOTNOTE) _footnotes = true;
     }
 
   if (!_first_header)
@@ -1120,6 +1122,22 @@ bool KWordDocument::loadXML(KOMLParser& parser,KOStore::Store_ptr)
       fs->setAutoCreateNewFrame(false);
     }
 
+  if (!_footnotes)
+    {
+      KWTextFrameSet *fs = new KWTextFrameSet(this);
+      fs->setFrameInfo(FI_FOOTNOTE);
+
+      for (int i = 0;i < pages;i++)
+	{
+	  KWFrame *frame = new KWFrame(getPTLeftBorder(),i * getPTPaperHeight() + getPTPaperHeight() - getPTTopBorder() - 20,
+				       getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),20);
+	  fs->addFrame(frame);
+	}
+      frames.append(fs);
+      fs->setAutoCreateNewFrame(true);
+      fs->setVisible(false);
+    }
+  
   for (unsigned int i = 0;i < getNumGroupManagers();i++)
     {
       if (getGroupManager(i)->isActive())

@@ -47,13 +47,18 @@ protected:
   QCheckBox *cbTypographicQuotes,*cbUpperCase,*cbUpperUpper;
   QPushButton *pbQuote1,*pbQuote2;
   KCharSelect *charselect;
-
+  QChar oBegin,oEnd;
+  bool quotesChanged;
+  
   KWordDocument *doc;
   KWPage *page;
 
 protected slots:
   void applyConfig();
 
+  void chooseQuote1();
+  void chooseQuote2();
+  
 };
 
 #endif

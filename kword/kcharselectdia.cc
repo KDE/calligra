@@ -18,7 +18,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KCharSelectDia::KCharSelectDia(QWidget *parent,const char *name,const QChar &_chr,const QString &_font)
+KCharSelectDia::KCharSelectDia(QWidget *parent,const char *name,const QChar &_chr,const QString &_font,bool _enableFont)
   : QDialog(parent,name,true)
 {
   setCaption("Select a character");
@@ -27,6 +27,7 @@ KCharSelectDia::KCharSelectDia(QWidget *parent,const char *name,const QChar &_ch
 
   charSelect = new KCharSelect(this,"",_font,_chr);
   charSelect->resize(charSelect->sizeHint());
+  charSelect->enableFontCombo(_enableFont);
   grid->addWidget(charSelect,0,0);
 
   grid->addWidget(new QWidget(this),1,0);
@@ -59,11 +60,12 @@ KCharSelectDia::KCharSelectDia(QWidget *parent,const char *name,const QChar &_ch
 }
 
 /*================================================================*/
-bool KCharSelectDia::selectChar(QString &_font,QChar &_chr)
+bool KCharSelectDia::selectChar(QString &_font,QChar &_chr,bool _enableFont)
 {
   bool res = false;
 
-  KCharSelectDia *dlg = new KCharSelectDia(0L,"Select Character",_chr,_font);
+  KCharSelectDia *dlg = new KCharSelectDia(0L,"Select Character",_chr,_font,_enableFont);
+  
   if (dlg->exec() == QDialog::Accepted)
     {
       _font = dlg->font();

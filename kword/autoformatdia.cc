@@ -20,6 +20,9 @@
 #include "autoformatdia.moc"
 
 #include "autoformat.h"
+#include "kcharselectdia.h"
+
+#include <qfont.h>
 
 #include <klocale.h>
 
@@ -29,7 +32,8 @@
 
 /*================================================================*/
 KWAutoFormatDia::KWAutoFormatDia(QWidget *parent,const char *name,KWordDocument *_doc,KWPage *_page)
-  : QTabDialog(parent,name,true)
+  : QTabDialog(parent,name,true), oBegin(doc->getAutoFormat().getConfigTypographicQuotes().begin),
+    oEnd(doc->getAutoFormat().getConfigTypographicQuotes().end), quotesChanged(false)
 {
   doc = _doc;
   page = _page;
@@ -65,6 +69,9 @@ void KWAutoFormatDia::setupTab1()
   (void)new QWidget(quotes);
   quotes->setMaximumHeight(pbQuote1->sizeHint().height());
 
+  connect(pbQuote1,SIGNAL(clicked()),this,SLOT(chooseQuote1()));
+  connect(pbQuote2,SIGNAL(clicked()),this,SLOT(chooseQuote2()));
+  
   (void)new QWidget(tab1);
 
   cbUpperCase = new QCheckBox(tab1);
@@ -91,8 +98,21 @@ void KWAutoFormatDia::setupTab1()
 /*================================================================*/
 void KWAutoFormatDia::applyConfig()
 {
+  // iiiiiiiiigit - that's a hack!
+  if (quotesChanged)
+    {
+      KWAutoFormat::TypographicQuotes tq = doc->getAutoFormat().getConfigTypographicQuotes();
+      tq.replace = false;
+      doc->getAutoFormat().configTypographicQuotes(tq);
+      doc->getAutoFormat().setEnabled(true);
+      doc->recalcWholeText();
+      doc->getAutoFormat().setEnabled(false);
+    }
+  
   KWAutoFormat::TypographicQuotes tq = doc->getAutoFormat().getConfigTypographicQuotes();
   tq.replace = cbTypographicQuotes->isChecked();
+  tq.begin = pbQuote1->text()[0];
+  tq.end = pbQuote2->text()[0];
   doc->getAutoFormat().configTypographicQuotes(tq);
 
   doc->getAutoFormat().configUpperCase(cbUpperCase->isChecked());
@@ -102,4 +122,28 @@ void KWAutoFormatDia::applyConfig()
   doc->updateAllViews(0L);
   doc->updateAllCursors();
   doc->getAutoFormat().setEnabled(false);
+}
+
+/*================================================================*/
+void KWAutoFormatDia::chooseQuote1()
+{
+  QString f = font().family();
+  QChar c = doc->getAutoFormat().getConfigTypographicQuotes().begin;
+  if (KCharSelectDia::selectChar(f,c,false))
+    {
+      pbQuote1->setText(c);
+      quotesChanged = true;
+    }
+}
+
+/*================================================================*/
+void KWAutoFormatDia::chooseQuote2()
+{
+  QString f = font().family();
+  QChar c = doc->getAutoFormat().getConfigTypographicQuotes().end;
+  if (KCharSelectDia::selectChar(f,c,false))
+    {
+      pbQuote2->setText(c);
+      quotesChanged = true;
+    }
 }

@@ -1151,3 +1151,8 @@ Reggie, 29.4.1999:
 ------------------
 - Cursor gets updated correctly after changing autoformat configuration
 - Cleanups
+
+Reggie, 30.4.1999:
+------------------
+- More work on footnote descriptions
+- typographic quotes for autocorrection are now configurable
