@@ -97,11 +97,6 @@ KarbonFactory::aboutData()
 						  I18N_NOOP( "You are invited to participate in any way." ),
 						  "http://www.xs4all.nl/~rwlbuis/karbon/");
 		s_aboutData->addAuthor(
-			"Lennart Kudling",
-			0,
-			"kudling@kde.org",
-			0 );
-		s_aboutData->addAuthor(
 			"Rob Buis",
 			0,
 			"buis@kde.org",
