@@ -26,6 +26,7 @@ KexiPartPopupMenu::KexiPartPopupMenu(QObject *receiver)
 	kdDebug() << "KexiPartPopupMenu::KexiPartPopupMenu()" << endl;
 
 	m_receiver = receiver;
+	m_slots.resize(0);
 
 	connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
 }
@@ -35,7 +36,7 @@ KexiPartPopupMenu::insertAction(QString label, const char *slot)
 {
 	kdDebug() << "KexiPartPopupMenu::insertAction()" << endl;
 
-	int id = indexOf(insertItem(label));
+	int id = insertItem(label, m_slots.count());
 	kdDebug() << "KexiPartPopupMenu::insertAction(): id = " << id << endl;
 	m_slots.resize(id+1);
 	m_slots[id]=slot;
@@ -50,7 +51,7 @@ KexiPartPopupMenu::setIdentifier(QString identifier)
 void
 KexiPartPopupMenu::slotActivated(int id)
 {
-	connect(this, SIGNAL(execute(QString)), m_receiver, m_slots.at(indexOf(id)));
+	connect(this, SIGNAL(execute(QString)), m_receiver, m_slots.at(id));
 
 	emit execute(m_identifier);
 
