@@ -101,14 +101,25 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	// try normal PA
 	if( !e.attribute( "fill" ).isEmpty() )
 	{
-		c.setNamedColor( e.attribute( "fill" ) );
-		fillcolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+		if( e.attribute( "fill" ) == "none" )
+			gc->fill.setType( VFill::none );
+		else
+		{
+			c.setNamedColor( e.attribute( "fill" ) );
+			fillcolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+			gc->fill.setType( VFill::solid );
+		}
 	}
 	if( !e.attribute( "stroke" ).isEmpty() )
 	{
-		c.setNamedColor( e.attribute( "stroke" ) );
-		strokecolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
-		gc->stroke.setType( VStroke::solid );
+		if( e.attribute( "stroke" ) == "none" )
+			gc->stroke.setType( VStroke::none );
+		else
+		{
+			c.setNamedColor( e.attribute( "stroke" ) );
+			strokecolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+			gc->stroke.setType( VStroke::solid );
+		}
 	}
 	if( !e.attribute( "stroke-width" ).isEmpty() )
 		gc->stroke.setLineWidth( e.attribute( "stroke-width" ).toDouble() );
