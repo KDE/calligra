@@ -1126,7 +1126,7 @@ KarbonView::initActions()
 		i18n( "&Deselect All" ), QKeySequence( "Ctrl+D" ), this,
 		SLOT( editDeselectAll() ), actionCollection(), "edit_deselect_all" );
 	new KAction(
-		i18n( "D&elete" ), "editdelete", QKeySequence( "Del" ), this,
+		i18n( "D&elete" ), "editdelete", QKeySequence( "Shift+Del" ), this,
 		SLOT( editDeleteSelection() ), actionCollection(), "edit_delete" );
 	new KAction(
 		i18n( "&History" ), 0, 0, this,

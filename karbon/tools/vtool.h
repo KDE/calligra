@@ -174,10 +174,15 @@ protected:
 	}
 
 	/**
-	 * "Shift" key released while mouse drag.
+	 * "Arrow" key released up, down, left, right
 	 */
 	virtual void arrowKeyReleased( Qt::Key )
 	{
+	}
+
+	virtual bool keyReleased( Qt::Key )
+	{
+		return false;
 	}
 
 	/**

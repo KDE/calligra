@@ -36,6 +36,7 @@
 #include "vdrawselection.h"
 #include "vselection.h"
 #include "vtransformnodes.h"
+#include "vnodecmd.h"
 
 #include <kdebug.h>
 
@@ -92,10 +93,7 @@ VSelectNodesTool::draw()
 		VDrawSelection op( m_objects, painter, true );
 		VObjectListIterator itr = m_objects;
         for( ; itr.current(); ++itr )
-        {
-		//	itr.current()->draw( painter, &itr.current()->boundingBox() );
 			op.visit( *( itr.current() ) );
-		}
 	}
 	else
 	{
@@ -110,8 +108,6 @@ VSelectNodesTool::draw()
 
 		m_state = dragging;
 	}
-
-	//view()->painterFactory()->painter()->end();
 }
 
 void
@@ -152,16 +148,36 @@ VSelectNodesTool::mouseButtonPress()
 	draw();
 }
 
+bool
+VSelectNodesTool::keyReleased( Qt::Key key )
+{
+	if( key == Qt::Key_Delete )
+	{
+		KoRect selrect( view()->part()->document().selection()->boundingBox() );
+		QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
+		int i = -1;
+		while( ++i < segments.count() )
+			if( segments.at( i )->knotIsSelected() && !segments.at( i )->state() == VSegment::deleted )
+			{
+				// erase old object:
+				//draw();
+				view()->part()->addCommand( new VDeleteNodeCmd( segments.at( i ) ), true );
+				return true;
+			}
+		return true;
+	}
+	return false;
+}
+
 void
 VSelectNodesTool::mouseButtonRelease()
 {
-	double tolerance = 2.0 / view()->zoom();
-
-	KoRect selrect( last().x() - tolerance, last().y() - tolerance,
-					2 * tolerance + 1.0, 2 * tolerance + 1.0 );
-
 	// erase old object:
 	draw();
+
+	double tolerance = 2.0 / view()->zoom();
+	KoRect selrect( last().x() - tolerance, last().y() - tolerance,
+					2 * tolerance + 1.0, 2 * tolerance + 1.0 );
 
 	view()->part()->document().selection()->append();	// select all
 	view()->part()->document().selection()->append( selrect.normalize(), false, true );

@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/* This file is doc of the KDE project
+   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
@@ -17,41 +18,34 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VSELECTNODESTOOL_H__
-#define __VSELECTNODESTOOL_H__
 
-#include "vtool.h"
+#include <klocale.h>
 
-class VSelectNodesTool : public VTool
+#include "vnodecmd.h"
+#include "vsegment.h"
+
+VDeleteNodeCmd::VDeleteNodeCmd( VSegment *segment )
+	: VCommand( 0L, i18n( "Delete Node" ) ), m_segment( segment )
 {
-public:
-	VSelectNodesTool( KarbonView* view );
-	virtual ~VSelectNodesTool();
+}
 
-	virtual void activate();
+VDeleteNodeCmd::~VDeleteNodeCmd()
+{
+}
 
-protected:
-	virtual void draw();
+void
+VDeleteNodeCmd::execute()
+{
+	if( m_segment->type() != VSegment::begin )
+		m_segment->setState( VSegment::deleted );
+	setSuccess( true );
+}
 
-	virtual void setCursor() const;
-
-	virtual void mouseButtonPress();
-	virtual void mouseButtonRelease();
-	virtual void mouseDragRelease();
-	virtual void mouseDrag();
-
-	virtual bool keyReleased( Qt::Key );
-
-private:
-	enum { normal, dragging, moving, movingbezier1, movingbezier2 } m_state;
-
-	void recalc();
-
-	// A list of temporary objects:
-	VObjectList m_objects;
-
-	KoPoint m_current;
-};
-
-#endif
+void
+VDeleteNodeCmd::unexecute()
+{
+	if( m_segment->type() != VSegment::begin )
+		m_segment->setState( VSegment::normal );
+	setSuccess( false );
+}
 

@@ -185,11 +185,13 @@ VTool::keyEvent( QEvent* event )
 			return true;
 		}
 
-		if( key == Qt::Key_Left || key == Qt::Key_Right || key == Qt::Key_Up || Qt::Key_Down )
+		if( key == Qt::Key_Left || key == Qt::Key_Right || key == Qt::Key_Up || key == Qt::Key_Down )
 		{
 			arrowKeyReleased( key );
 			return true;
 		}
+
+		return keyReleased( key );
 	}
 
 	return false;

@@ -1,4 +1,5 @@
-/* This file is part of the KDE project
+/* This file is part of the KDE project          é
+   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
@@ -17,40 +18,24 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VSELECTNODESTOOL_H__
-#define __VSELECTNODESTOOL_H__
+#ifndef __VNODECMD_H__
+#define __VNODECMD_H__
 
-#include "vtool.h"
+#include "vcommand.h"
 
-class VSelectNodesTool : public VTool
+class VSegment;
+
+class VDeleteNodeCmd : public VCommand
 {
 public:
-	VSelectNodesTool( KarbonView* view );
-	virtual ~VSelectNodesTool();
+	VDeleteNodeCmd( VSegment *segment );
+	virtual ~VDeleteNodeCmd();
 
-	virtual void activate();
+	virtual void execute();
+	virtual void unexecute();
 
 protected:
-	virtual void draw();
-
-	virtual void setCursor() const;
-
-	virtual void mouseButtonPress();
-	virtual void mouseButtonRelease();
-	virtual void mouseDragRelease();
-	virtual void mouseDrag();
-
-	virtual bool keyReleased( Qt::Key );
-
-private:
-	enum { normal, dragging, moving, movingbezier1, movingbezier2 } m_state;
-
-	void recalc();
-
-	// A list of temporary objects:
-	VObjectList m_objects;
-
-	KoPoint m_current;
+	VSegment *m_segment;
 };
 
 #endif
