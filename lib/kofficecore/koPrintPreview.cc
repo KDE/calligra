@@ -30,16 +30,16 @@
 #include <qlayout.h>
 #include <qgrid.h>
 #include <qfile.h>
+#include <kapp.h>
 #include <ktrader.h>
 #include <krun.h>
 #include <kparts/mainwindow.h>
 
 #include <unistd.h>
 
-void KoPrintPreview::preview(QWidget* /*parent*/, const char* /*name*/, const QString & tmpFile )
+void KoPrintPreview::preview(QWidget* parent, const char* /*name*/, const QString & tmpFile )
 {
-    // ### While kghostview is busted, let's not use it
-#if 0
+#if KDE_VERSION >= 220
     KTrader::OfferList offers = KTrader::self()->query("application/postscript", "'KParts/ReadOnlyPart' in ServiceTypes");
 
     // Try to find a postscript component first
@@ -71,6 +71,7 @@ void KoPrintPreview::preview(QWidget* /*parent*/, const char* /*name*/, const QS
     // Note: the temp file won't be deleted :(
 
 #else
+    // ### In KDE 2.1.x kghostview was busted => not used
 
     // Find an installed application
     KTrader::OfferList offers = KTrader::self()->query("application/postscript");

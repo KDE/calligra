@@ -796,6 +796,7 @@ void KoMainWindow::slotFilePrintPreview()
     }
     KPrinter printer;
     KTempFile tmpFile;
+    // The temp file is deleted by KoPrintPreview
 
     // This line has to be before setupPrinter to let the apps decide what to
     // print and what not (if they want to :)
@@ -803,7 +804,7 @@ void KoMainWindow::slotFilePrintPreview()
     rootView()->setupPrinter( printer );
 
     QString oldFileName = printer.outputFileName();
-    printer.setOutputFileName(tmpFile.name());
+    printer.setOutputFileName( tmpFile.name() );
     int oldNumCopies = printer.numCopies();
     printer.setNumCopies( 1 );
 
