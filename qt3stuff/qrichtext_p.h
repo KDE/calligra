@@ -707,7 +707,7 @@ public:
     int height() const;
     void setWidth( int w );
     int minimumWidth() const;
-    bool setMinimumWidth( int w, QTextParag *parag );
+    virtual bool setMinimumWidth( int w, QTextParag *parag );
 
     void setY( int y );
     int leftMargin() const;
