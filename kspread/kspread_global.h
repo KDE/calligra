@@ -60,7 +60,7 @@ enum PasteMode { Normal, Text, Format, NoBorder, Comment, Result, NormalAndTrans
 enum Operation { OverWrite, Add, Mul, Sub, Div };
 enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different, DifferentTo};
 enum Action { Stop, Warning, Information};
-enum Allow { Allow_All, Allow_Number, Allow_Text,Allow_Time,Allow_Date,Allow_Integer,Allow_TextLength};
+enum Allow { Allow_All, Allow_Number, Allow_Text,Allow_Time,Allow_Date,Allow_Integer,Allow_TextLength, Allow_List};
 enum Series { Column,Row,Linear,Geometric };
 namespace KSpread
 {  // necessary due to QDock* enums (Werner)
@@ -70,7 +70,7 @@ enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc};
 
 enum FormatType {
     Generic_format=0,
-    Number_format=1, Text_format=5, Money_format=10, Percentage_format=25,  
+    Number_format=1, Text_format=5, Money_format=10, Percentage_format=25,
     Scientific_format=30,
     ShortDate_format=35, TextDate_format=36, Time_format=50,
     SecondeTime_format=51,
@@ -86,7 +86,7 @@ enum FormatType {
     date_format17=216,date_format18=217,date_format19=218,date_format20=219,
     date_format21=220,date_format22=221,date_format23=222,date_format24=223,
     date_format25=224,date_format26=225,
-    Custom_format = 300 
+    Custom_format = 300
 };
 
 #endif

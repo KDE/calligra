@@ -91,6 +91,7 @@ struct KSpreadValidity
     bool displayMessage;
     bool allowEmptyCell;
     bool displayValidationInformation;
+    QStringList listValidity;
 };
 
 class CellPrivate;
@@ -247,7 +248,7 @@ public:
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
 
     virtual bool saveOasis( KoXmlWriter& xmlwriter , KoGenStyles &mainStyles, int row, int column, int maxCol, int &repeated, KSpreadGenValidationStyles &valStyle );
-    
+
     void saveOasisValue (KoXmlWriter &xmlWriter);
 
     void saveOasisCellStyle( KoGenStyle &currentCellStyle );
@@ -480,7 +481,7 @@ public:
 
     /** return the cell's value as a double */
     double getDouble ();
-    
+
     void convertToDouble ();
     void convertToPercent ();
     void convertToMoney ();
@@ -896,7 +897,7 @@ private:
   /** handle the fact that a cell has been updated - calls cellUpdated()
   in the parent Sheet object */
   void valueChanged ();
-  
+
   /* helper functions to the makeLayout(...) function */
   /* (more to come) */
   void setOutputText();

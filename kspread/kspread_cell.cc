@@ -4095,191 +4095,197 @@ bool KSpreadCell::testValidity() const
         if ( d->extra()->validity->allowEmptyCell && d->strText.isEmpty() )
             return true;
 
-      if( value().isNumber() &&
-    (d->extra()->validity->m_allow == Allow_Number ||
-     (d->extra()->validity->m_allow == Allow_Integer &&
-      value().asFloat() == ceil(value().asFloat()))))
-      {
-  switch( d->extra()->validity->m_cond)
-  {
-    case Equal:
-      valid = ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
-          && value().asFloat() - d->extra()->validity->valMin >
-          (0.0 - DBL_EPSILON));
-      break;
-    case DifferentTo:
-      valid = !(  ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
-          && value().asFloat() - d->extra()->validity->valMin >
-          (0.0 - DBL_EPSILON)) );
-      break;
-          case Superior:
-      valid = ( value().asFloat() > d->extra()->validity->valMin);
-      break;
-          case Inferior:
-      valid = ( value().asFloat()  <d->extra()->validity->valMin);
-      break;
-          case SuperiorEqual:
-      valid = ( value().asFloat() >= d->extra()->validity->valMin);
-            break;
-          case InferiorEqual:
-      valid = (value().asFloat() <= d->extra()->validity->valMin);
-      break;
-    case Between:
-      valid = ( value().asFloat() >= d->extra()->validity->valMin &&
-          value().asFloat() <= d->extra()->validity->valMax);
-      break;
-    case Different:
-      valid = (value().asFloat() < d->extra()->validity->valMin ||
-         value().asFloat() > d->extra()->validity->valMax);
-      break;
-    default :
-      break;
-        }
-      }
-      else if(d->extra()->validity->m_allow==Allow_Text)
-      {
-  valid = value().isString();
-      }
-      else if(d->extra()->validity->m_allow==Allow_TextLength)
-      {
-  if( value().isString() )
+        if( value().isNumber() &&
+            (d->extra()->validity->m_allow == Allow_Number ||
+             (d->extra()->validity->m_allow == Allow_Integer &&
+              value().asFloat() == ceil(value().asFloat()))))
         {
-    int len = d->strOutText.length();
-    switch( d->extra()->validity->m_cond)
-    {
-      case Equal:
-        if (len == d->extra()->validity->valMin)
-    valid = true;
-        break;
-      case DifferentTo:
-        if (len != d->extra()->validity->valMin)
-    valid = true;
-        break;
-      case Superior:
-        if(len > d->extra()->validity->valMin)
-    valid = true;
-        break;
-      case Inferior:
-        if(len < d->extra()->validity->valMin)
-    valid = true;
-        break;
-      case SuperiorEqual:
-        if(len >= d->extra()->validity->valMin)
-    valid = true;
-        break;
-      case InferiorEqual:
-        if(len <= d->extra()->validity->valMin)
-    valid = true;
-        break;
-      case Between:
-        if(len >= d->extra()->validity->valMin && len <= d->extra()->validity->valMax)
-    valid = true;
-        break;
-      case Different:
-        if(len <d->extra()->validity->valMin || len >d->extra()->validity->valMax)
-    valid = true;
-        break;
-      default :
-        break;
-    }
-  }
-      }
-      else if(d->extra()->validity->m_allow == Allow_Time && isTime())
-      {
-  switch( d->extra()->validity->m_cond)
-  {
-    case Equal:
-      valid = (value().asTime() == d->extra()->validity->timeMin);
-      break;
-    case DifferentTo:
-      valid = (value().asTime() != d->extra()->validity->timeMin);
-      break;
-    case Superior:
-      valid = (value().asTime() > d->extra()->validity->timeMin);
-      break;
-    case Inferior:
-      valid = (value().asTime() < d->extra()->validity->timeMin);
-      break;
-    case SuperiorEqual:
-      valid = (value().asTime() >= d->extra()->validity->timeMin);
-      break;
-    case InferiorEqual:
-      valid = (value().asTime() <= d->extra()->validity->timeMin);
-      break;
-    case Between:
-      valid = (value().asTime() >= d->extra()->validity->timeMin &&
-         value().asTime() <= d->extra()->validity->timeMax);
-      break;
-      case Different:
-      valid = (value().asTime() < d->extra()->validity->timeMin ||
-         value().asTime() > d->extra()->validity->timeMax);
-      break;
-    default :
-      break;
+            switch( d->extra()->validity->m_cond)
+            {
+            case Equal:
+                valid = ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
+                          && value().asFloat() - d->extra()->validity->valMin >
+                          (0.0 - DBL_EPSILON));
+                break;
+            case DifferentTo:
+                valid = !(  ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
+                              && value().asFloat() - d->extra()->validity->valMin >
+                              (0.0 - DBL_EPSILON)) );
+                break;
+            case Superior:
+                valid = ( value().asFloat() > d->extra()->validity->valMin);
+                break;
+            case Inferior:
+                valid = ( value().asFloat()  <d->extra()->validity->valMin);
+                break;
+            case SuperiorEqual:
+                valid = ( value().asFloat() >= d->extra()->validity->valMin);
+                break;
+            case InferiorEqual:
+                valid = (value().asFloat() <= d->extra()->validity->valMin);
+                break;
+            case Between:
+                valid = ( value().asFloat() >= d->extra()->validity->valMin &&
+                          value().asFloat() <= d->extra()->validity->valMax);
+                break;
+            case Different:
+                valid = (value().asFloat() < d->extra()->validity->valMin ||
+                         value().asFloat() > d->extra()->validity->valMax);
+                break;
+            default :
+                break;
+            }
+        }
+        else if(d->extra()->validity->m_allow==Allow_Text)
+        {
+            valid = value().isString();
+        }
+        else if ( d->extra()->validity->m_allow == Allow_List )
+        {
+            //test int value
+            if ( value().isString() && d->extra()->validity->listValidity.contains( value().asString() ) )
+                valid = true;
+        }
+        else if(d->extra()->validity->m_allow==Allow_TextLength)
+        {
+            if( value().isString() )
+            {
+                int len = d->strOutText.length();
+                switch( d->extra()->validity->m_cond)
+                {
+                case Equal:
+                    if (len == d->extra()->validity->valMin)
+                        valid = true;
+                    break;
+                case DifferentTo:
+                    if (len != d->extra()->validity->valMin)
+                        valid = true;
+                    break;
+                case Superior:
+                    if(len > d->extra()->validity->valMin)
+                        valid = true;
+                    break;
+                case Inferior:
+                    if(len < d->extra()->validity->valMin)
+                        valid = true;
+                    break;
+                case SuperiorEqual:
+                    if(len >= d->extra()->validity->valMin)
+                        valid = true;
+                    break;
+                case InferiorEqual:
+                    if(len <= d->extra()->validity->valMin)
+                        valid = true;
+                    break;
+                case Between:
+                    if(len >= d->extra()->validity->valMin && len <= d->extra()->validity->valMax)
+                        valid = true;
+                    break;
+                case Different:
+                    if(len <d->extra()->validity->valMin || len >d->extra()->validity->valMax)
+                        valid = true;
+                    break;
+                default :
+                    break;
+                }
+            }
+        }
+        else if(d->extra()->validity->m_allow == Allow_Time && isTime())
+        {
+            switch( d->extra()->validity->m_cond)
+            {
+            case Equal:
+                valid = (value().asTime() == d->extra()->validity->timeMin);
+                break;
+            case DifferentTo:
+                valid = (value().asTime() != d->extra()->validity->timeMin);
+                break;
+            case Superior:
+                valid = (value().asTime() > d->extra()->validity->timeMin);
+                break;
+            case Inferior:
+                valid = (value().asTime() < d->extra()->validity->timeMin);
+                break;
+            case SuperiorEqual:
+                valid = (value().asTime() >= d->extra()->validity->timeMin);
+                break;
+            case InferiorEqual:
+                valid = (value().asTime() <= d->extra()->validity->timeMin);
+                break;
+            case Between:
+                valid = (value().asTime() >= d->extra()->validity->timeMin &&
+                         value().asTime() <= d->extra()->validity->timeMax);
+                break;
+            case Different:
+                valid = (value().asTime() < d->extra()->validity->timeMin ||
+                         value().asTime() > d->extra()->validity->timeMax);
+                break;
+            default :
+                break;
 
-  }
-      }
-      else if(d->extra()->validity->m_allow == Allow_Date && isDate())
-      {
-  switch( d->extra()->validity->m_cond)
-  {
-    case Equal:
-      valid = (value().asDate() == d->extra()->validity->dateMin);
-      break;
-    case DifferentTo:
-      valid = (value().asDate() != d->extra()->validity->dateMin);
-      break;
-    case Superior:
-      valid = (value().asDate() > d->extra()->validity->dateMin);
-      break;
-    case Inferior:
-      valid = (value().asDate() < d->extra()->validity->dateMin);
-      break;
-    case SuperiorEqual:
-      valid = (value().asDate() >= d->extra()->validity->dateMin);
-      break;
-    case InferiorEqual:
-      valid = (value().asDate() <= d->extra()->validity->dateMin);
-      break;
-    case Between:
-      valid = (value().asDate() >= d->extra()->validity->dateMin &&
-         value().asDate() <= d->extra()->validity->dateMax);
-      break;
-    case Different:
-      valid = (value().asDate() < d->extra()->validity->dateMin ||
-         value().asDate() > d->extra()->validity->dateMax);
-      break;
-    default :
-      break;
+            }
+        }
+        else if(d->extra()->validity->m_allow == Allow_Date && isDate())
+        {
+            switch( d->extra()->validity->m_cond)
+            {
+            case Equal:
+                valid = (value().asDate() == d->extra()->validity->dateMin);
+                break;
+            case DifferentTo:
+                valid = (value().asDate() != d->extra()->validity->dateMin);
+                break;
+            case Superior:
+                valid = (value().asDate() > d->extra()->validity->dateMin);
+                break;
+            case Inferior:
+                valid = (value().asDate() < d->extra()->validity->dateMin);
+                break;
+            case SuperiorEqual:
+                valid = (value().asDate() >= d->extra()->validity->dateMin);
+                break;
+            case InferiorEqual:
+                valid = (value().asDate() <= d->extra()->validity->dateMin);
+                break;
+            case Between:
+                valid = (value().asDate() >= d->extra()->validity->dateMin &&
+                         value().asDate() <= d->extra()->validity->dateMax);
+                break;
+            case Different:
+                valid = (value().asDate() < d->extra()->validity->dateMin ||
+                         value().asDate() > d->extra()->validity->dateMax);
+                break;
+            default :
+                break;
 
-  }
-      }
+            }
+        }
     }
     else
     {
-      valid= true;
+        valid= true;
     }
 
     if(!valid &&d->extra()->validity != NULL && d->extra()->validity->displayMessage)
     {
-      switch (d->extra()->validity->m_action )
-      {
+        switch (d->extra()->validity->m_action )
+        {
         case Stop:
             KMessageBox::error((QWidget*)0L, d->extra()->validity->message,
-           d->extra()->validity->title);
-    break;
+                               d->extra()->validity->title);
+            break;
         case Warning:
-    KMessageBox::warningYesNo((QWidget*)0L, d->extra()->validity->message,
-            d->extra()->validity->title);
-    break;
+            KMessageBox::warningYesNo((QWidget*)0L, d->extra()->validity->message,
+                                      d->extra()->validity->title);
+            break;
         case Information:
-    KMessageBox::information((QWidget*)0L, d->extra()->validity->message,
-           d->extra()->validity->title);
-    break;
-      }
+            KMessageBox::information((QWidget*)0L, d->extra()->validity->message,
+                                     d->extra()->validity->title);
+            break;
+        }
     }
     if (!d->hasExtra())
-      return true;  //okay if there's no validity
+        return true;  //okay if there's no validity
     return (valid || d->extra()->validity == NULL || d->extra()->validity->m_action != Stop);
 }
 
