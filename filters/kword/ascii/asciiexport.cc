@@ -204,10 +204,8 @@ bool ASCIIExport::filter(const QString  &filenameIn,
     QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
     koStoreIn.close ();
 
-    QString stringBufIn = QString::fromUtf8 ( (const char *) byteArrayIn, byteArrayIn.size () );
-
     QDomDocument qDomDocumentIn;
-    qDomDocumentIn.setContent (stringBufIn);
+    qDomDocumentIn.setContent (byteArrayIn);
 
     QDomNode docNode = qDomDocumentIn.documentElement ();
 

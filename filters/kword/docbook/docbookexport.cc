@@ -536,8 +536,6 @@ bool DocBookExport::filter ( const QString  &filenameIn,
 
     KoStore koStoreIn (filenameIn, KoStore::Read);
 
-
-    {
     if ( !koStoreIn.open ( "documentinfo.xml" ) )
     {
         koStoreIn.close ();
@@ -546,19 +544,17 @@ bool DocBookExport::filter ( const QString  &filenameIn,
         return false;
     }
 
+    {
     QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
     koStoreIn.close ();
 
-    QString stringBufIn = QString::fromUtf8 ( (const char *) byteArrayIn, byteArrayIn.size () );
-
     QDomDocument qDomDocumentIn;
-    qDomDocumentIn.setContent (stringBufIn);
+    qDomDocumentIn.setContent (byteArrayIn);
 
     QDomNode docNode = qDomDocumentIn.documentElement ();
 
     ProcessDocumentInfoTag (docNode, NULL, stringBufOut, NULL);
     }
-
 
     if ( !koStoreIn.open ( "root" ) )
     {
@@ -571,10 +567,8 @@ bool DocBookExport::filter ( const QString  &filenameIn,
     QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
     koStoreIn.close ();
 
-    QString stringBufIn = QString::fromUtf8 ( (const char *) byteArrayIn, byteArrayIn.size () );
-
     QDomDocument qDomDocumentIn;
-    qDomDocumentIn.setContent (stringBufIn);
+    qDomDocumentIn.setContent (byteArrayIn);
 
     QDomNode docNode = qDomDocumentIn.documentElement ();
 
