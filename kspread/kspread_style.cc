@@ -27,7 +27,9 @@
 #include <klocale.h>
 #include <koGenStyles.h>
 #include <qdom.h>
+#include <qbuffer.h>
 #include <koStyleStack.h>
+#include <koxmlwriter.h>
 
 static uint calculateValue( QPen const & pen )
 {
@@ -542,9 +544,24 @@ QString KSpreadStyle::saveOasisStyleNumericMoney( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles )
 {
+    //<number:percentage-style style:name="N106" style:family="data-style">
+    //<number:number number:decimal-places="6" number:min-integer-digits="1"/>
+    //<number:text>%</number:text>
+    //</number:percentage-style>
     KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_PERCENTAGE );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    elementWriter.startElement( "number:number" );
+    elementWriter.endElement();
 
-    return "";
+    if ( featureSet( SPrecision ) )
+        elementWriter.addAttribute( "number:decimal-places", m_precision );
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentCellStyle.addChildElement( "number", elementContents );
+
+    return mainStyles.lookup( currentCellStyle, "N" );
 }
 
 
@@ -562,7 +579,29 @@ QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericCustom( KoGenStyles&mainStyles )
 {
-    return "";
+    //<number:date-style style:name="N50" style:family="data-style" number:automatic-order="true" number:format-source="language">
+    //<number:month/>
+    //<number:text>/</number:text>
+    //<number:day/>
+    //<number:text>/</number:text>
+    //<number:year/>
+    //<number:text> </number:text>
+    //<number:hours number:style="long"/>
+    //<number:text>:</number:text>
+    //<number:minutes number:style="long"/>
+    // <number:text> </number:text>
+    //<number:am-pm/>
+    //</number:date-style>
+    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_DATE );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+
+
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentCellStyle.addChildElement( "number", elementContents );
+    return mainStyles.lookup( currentCellStyle, "N" );
 }
 
 QString KSpreadStyle::saveOasisStyleNumericTime( KoGenStyles& mainStyles )
