@@ -1546,90 +1546,152 @@ void KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
 
   KSpreadTable* table = activeTable();
   KSpreadCell* cell = NULL;
+  KSpreadCell* lastCell;
   QPoint destination;
-  ColumnLayout* cl = NULL;
-  RowLayout* rl = NULL;
-
+  bool searchThroughEmpty = TRUE;
 
   QPoint marker = m_bChoose ?
     selectionInfo()->getChooseMarker() : selectionInfo()->marker();
 
-  /* here, we want to move to the next cell in the given direction that is
+  /* here, we want to move to the first or last cell in the given direction that is
      actually being used.  Ignore empty cells and cells on hidden rows/columns */
   switch(event->key())
   {
 
-    //Ctrl+Key_Up
+  //Ctrl+Key_Up
   case Key_Up:
 
-    cell = table->getNextCellUp(marker.x(), marker.y());
-    if (cell != NULL)
+    cell = table->cellAt( marker.x(), marker.y() );
+    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.y() != 1))
     {
-      rl = table->rowLayout(cell->row());
-    }
-    while((cell != NULL) && (cell->isEmpty()) && !(rl->isHide()))
-    {
-      cell = table->getNextCellUp(cell->column(), cell->row());
-      if (cell != NULL)
+      lastCell = cell;
+      int row = marker.y()-1;
+      cell = table->cellAt(cell->column(), row);
+      while((cell != NULL) && (row > 1) && (!cell->isEmpty()) )
       {
-        rl = table->rowLayout(cell->row());
+        if(!(table->rowLayout(cell->row())->isHide()))
+        {
+          lastCell = cell;
+          searchThroughEmpty = FALSE;
+        }
+        row--;
+        cell = table->cellAt(cell->column(), row);
+      }
+      cell = lastCell;
+    }
+    if (searchThroughEmpty)
+    {
+      cell = table->getNextCellUp(marker.x(), marker.y());
+
+      while((cell != NULL) && 
+            (cell->isEmpty() || (table->rowLayout(cell->row())->isHide())))
+      {
+        cell = table->getNextCellUp(cell->column(), cell->row());
       }
     }
     destination.setX(marker.x());
     destination.setY((cell == NULL) ? 1 : cell->row());
     break;
 
+  //Ctrl+Key_Down
   case Key_Down:
 
-    cell = table->getNextCellDown(marker.x(), marker.y());
-    if (cell != NULL)
+    cell = table->cellAt( marker.x(), marker.y() );
+    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.y() != KS_rowMax))
     {
-      rl = table->rowLayout(cell->row());
-    }
-    while((cell != NULL) && (cell->isEmpty()) && !(rl->isHide()))
-    {
-      cell = table->getNextCellDown(cell->column(), cell->row());
-      if (cell != NULL)
+      lastCell = cell;
+      int row = marker.y()+1;
+      cell = table->cellAt(cell->column(), row);
+      while((cell != NULL) && (row < KS_rowMax) && (!cell->isEmpty()) )
       {
-        rl = table->rowLayout(cell->row());
+        if(!(table->rowLayout(cell->row())->isHide()))
+        {
+          lastCell = cell;
+          searchThroughEmpty = FALSE;
+        }
+        row++;
+        cell = table->cellAt(cell->column(), row);
+      }
+      cell = lastCell;
+    }
+    if (searchThroughEmpty)
+    {
+      cell = table->getNextCellDown(marker.x(), marker.y());
+
+      while((cell != NULL) && 
+            (cell->isEmpty() || (table->rowLayout(cell->row())->isHide())))
+      {
+        cell = table->getNextCellDown(cell->column(), cell->row());
       }
     }
     destination.setX(marker.x());
     destination.setY((cell == NULL) ? KS_rowMax : cell->row());
     break;
 
+  //Ctrl+Key_Left
   case Key_Left:
 
-    cell = table->getNextCellLeft(marker.x(), marker.y());
-    if (cell != NULL)
+    cell = table->cellAt( marker.x(), marker.y() );
+    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != 1))
     {
-      cl = table->columnLayout(cell->column());
-    }
-    while((cell != NULL) && (cell->isEmpty()) && !(cl->isHide()))
-    {
-      cell = table->getNextCellLeft(cell->column(), cell->row());
-      if (cell != NULL)
+      lastCell = cell;
+      int col = marker.x()-1;
+      cell = table->cellAt(col, cell->row());
+      while((cell != NULL) && (col > 1) && (!cell->isEmpty()) )
       {
-        cl = table->columnLayout(cell->column());
+        if(!(table->columnLayout(cell->column())->isHide()))
+        {
+          lastCell = cell;
+          searchThroughEmpty = FALSE;
+        }
+        col--;
+        cell = table->cellAt(col, cell->row());
+      }
+      cell = lastCell;
+    }
+    if (searchThroughEmpty)
+    {
+      cell = table->getNextCellLeft(marker.x(), marker.y());
+
+      while((cell != NULL) && 
+            (cell->isEmpty() || (table->columnLayout(cell->column())->isHide())))
+      {
+        cell = table->getNextCellLeft(cell->column(), cell->row());
       }
     }
     destination.setX((cell == NULL) ? 1 : cell->column());
     destination.setY(marker.y());
     break;
 
+  //Ctrl+Key_Right
   case Key_Right:
 
-    cell = table->getNextCellRight(marker.x(), marker.y());
-    if (cell != NULL)
+    cell = table->cellAt( marker.x(), marker.y() );
+    if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != KS_colMax))
     {
-      cl = table->columnLayout(cell->column());
-    }
-    while((cell != NULL) && (cell->isEmpty()) && !(cl->isHide()))
-    {
-      cell = table->getNextCellRight(cell->column(), cell->row());
-      if (cell != NULL)
+      lastCell = cell;
+      int col = marker.x()+1;
+      cell = table->cellAt(col, cell->row());
+      while((cell != NULL) && (col < KS_colMax) && (!cell->isEmpty()) )
       {
-        cl = table->columnLayout(cell->column());
+        if(!(table->columnLayout(cell->column())->isHide()))
+        {
+          lastCell = cell;
+          searchThroughEmpty = FALSE;
+        }
+        col++;
+        cell = table->cellAt(col, cell->row());
+      }
+      cell = lastCell;
+    }
+    if (searchThroughEmpty)
+    {
+      cell = table->getNextCellRight(marker.x(), marker.y());
+
+      while((cell != NULL) && 
+            (cell->isEmpty() || (table->columnLayout(cell->column())->isHide())))
+      {
+        cell = table->getNextCellRight(cell->column(), cell->row());
       }
     }
     destination.setX((cell == NULL) ? KS_colMax : cell->column());
