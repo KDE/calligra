@@ -685,12 +685,16 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				*stringPtr = "!=";
 				break;
 			case 0x12:  // ptgUPlus
-				kdDebug(30511) << "WARNING: ptgUPlus formula not supported, yet" << endl;
-				return ""; // Return empty formula-string on error
+				stringPtr = parsedFormula.fromLast();
+				--stringPtr;
+				--stringPtr;
+				(*stringPtr).append("+");
 				break;
 			case 0x13:  // ptgUMinus
-				kdDebug(30511) << "WARNING: ptgUMinus formula not supported, yet" << endl;
-				return ""; // Return empty formula-string on error
+				stringPtr = parsedFormula.fromLast();
+				--stringPtr;
+				--stringPtr;
+				(*stringPtr).append("-");
 				break;
 			case 0x14:  // ptgPercent
 				kdDebug(30511) << "WARNING: ptgPercent formula not supported, yet" << endl;
