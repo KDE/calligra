@@ -915,28 +915,74 @@ void ViewPrivate::initActions()
 
   // same action as insertTable, but without 'insert' in the caption
   actions->menuInsertTable = new KAction( i18n("&Sheet"),"inserttable",
-     0, view, SLOT( insertTable() ), ac, "menuInsertTable" );
+      0, view, SLOT( insertTable() ), ac, "menuInsertTable" );
   actions->menuInsertTable->setToolTip(i18n("Insert a new sheet."));
 
   actions->removeTable = new KAction( i18n("Remove Sheet"), "delete_table",
-     0, view, SLOT( removeTable() ), ac, "removeTable" );
+      0, view, SLOT( removeTable() ), ac, "removeTable" );
   actions->removeTable->setToolTip(i18n("Remove the active sheet."));
 
   actions->renameTable=new KAction( i18n("Rename Sheet..."),
-     0, view, SLOT( slotRename() ), ac, "renameTable" );
+      0, view, SLOT( slotRename() ), ac, "renameTable" );
   actions->renameTable->setToolTip(i18n("Rename the active sheet."));
 
   actions->showTable = new KAction(i18n("Show Sheet..."),
-     0, view, SLOT( showTable()), ac, "showTable" );
+      0, view, SLOT( showTable()), ac, "showTable" );
   actions->showTable->setToolTip(i18n("Show a hidden sheet."));
 
   actions->hideTable = new KAction(i18n("Hide Sheet"),
-     0, view, SLOT( hideTable() ), ac, "hideTable" );
+      0, view, SLOT( hideTable() ), ac, "hideTable" );
   actions->hideTable->setToolTip(i18n("Hide the active sheet."));
 
   actions->tableFormat = new KAction( i18n("AutoFormat..."),
-     0, view, SLOT( tableFormat() ), ac, "tableFormat" );
+      0, view, SLOT( tableFormat() ), ac, "tableFormat" );
   actions->tableFormat->setToolTip(i18n("Set the worksheet formatting."));
+
+  actions->areaName = new KAction( i18n("Area Name..."),
+      0, view, SLOT( setAreaName() ), ac, "areaname" );
+  actions->areaName->setToolTip(i18n("Set a name for a region of the spreadsheet."));
+
+  actions->showArea = new KAction( i18n("Show Area..."),
+      0, view, SLOT( showAreaName() ), ac, "showArea" );
+  actions->showArea->setToolTip(i18n("Display a named area."));
+
+  actions->insertFunction = new KAction( i18n("&Function..."), "funct",
+      0, view, SLOT( insertMathExpr() ), ac, "insertMathExpr" );
+  actions->insertFunction->setToolTip(i18n("Insert math expression."));
+
+  actions->insertSeries = new KAction( i18n("&Series..."),"series",
+      0, view, SLOT( insertSeries() ), ac, "series");
+  actions->insertSeries ->setToolTip(i18n("Insert a series."));
+
+  actions->insertLink = new KAction( i18n("&Link..."),
+      0, view, SLOT( insertHyperlink() ), ac, "insertHyperlink" );
+  actions->insertLink->setToolTip(i18n("Insert an Internet hyperlink."));
+
+  actions->insertSpecialChar = new KAction( i18n( "S&pecial Character..." ), "char",
+      view, SLOT( insertSpecialChar() ), ac, "insertSpecialChar" );
+  actions->insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
+
+  actions->insertPart = new KoPartSelectAction( i18n("&Object"), "frame_query",
+      view, SLOT( insertObject() ), ac, "insertPart");
+  actions->insertPart->setToolTip(i18n("Insert an object from another program."));
+
+  actions->insertChartFrame = new KAction( i18n("&Chart"), "frame_chart",
+      0, view, SLOT( insertChart() ), ac, "insertChart" );
+  actions->insertChartFrame->setToolTip(i18n("Insert a chart."));
+
+#ifndef QT_NO_SQL
+  actions->insertFromDatabase = new KAction( i18n("From &Database..."),
+      0, view, SLOT( insertFromDatabase() ),  ac, "insertFromDatabase");
+  actions->insertFromDatabase->setToolTip(i18n("Insert data from a SQL database."));
+#endif
+
+  actions->insertFromTextfile = new KAction( i18n("From &Text File..."),
+      0, view,  SLOT( insertFromTextfile() ), ac, "insertFromTextfile");
+  actions->insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection."));
+
+  actions->insertFromClipboard = new KAction( i18n("From &Clipboard..."),
+      0, view, SLOT( insertFromClipboard() ), ac, "insertFromClipboard");
+  actions->insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection."));
 
   // -- editing actions --
 
@@ -1256,7 +1302,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
         connect(d->calcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
 
     d->initActions();
-    initializeInsertActions();
     initializeAreaOperationActions();
     initializeGlobalOperationActions();
 
@@ -1318,67 +1363,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     adjustMapActions( !d->map->isProtected() );
 }
 
-void KSpreadView::initializeInsertActions()
-{
-  d->actions->insertFunction = new KAction( i18n("&Function..."), "funct", 0, this,
-                                  SLOT( insertMathExpr() ), actionCollection(),
-                                  "insertMathExpr" );
-  d->actions->insertFunction->setToolTip(i18n("Insert math expression."));
-
-  d->actions->insertSeries = new KAction( i18n("&Series..."),"series", 0, this,
-                                SLOT( insertSeries() ), actionCollection(), "series");
-  d->actions->insertSeries ->setToolTip(i18n("Insert a series."));
-
-  d->actions->insertLink = new KAction( i18n("&Link..."), 0, this,
-                              SLOT( insertHyperlink() ), actionCollection(),
-                              "insertHyperlink" );
-  d->actions->insertLink->setToolTip(i18n("Insert an Internet hyperlink."));
-
-  d->actions->insertSpecialChar = new KAction( i18n( "S&pecial Character..." ), "char", this,
-                                     SLOT( insertSpecialChar() ), actionCollection(),
-                                     "insertSpecialChar" );
-  d->actions->insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
-
-
-  d->actions->insertPart=new KoPartSelectAction( i18n("&Object"), "frame_query", this,
-                                       SLOT( insertObject() ),
-                                       actionCollection(), "insertPart");
-  d->actions->insertPart->setToolTip(i18n("Insert an object from another program."));
-
-  d->actions->insertChartFrame=new KAction( i18n("&Chart"), "frame_chart", 0, this,
-                                  SLOT( insertChart() ), actionCollection(),
-                                  "insertChart" );
-  d->actions->insertChartFrame->setToolTip(i18n("Insert a chart."));
-
-#ifndef QT_NO_SQL
-  d->actions->insertFromDatabase = new KAction( i18n("From &Database..."), 0, this,
-                                      SLOT( insertFromDatabase() ),
-                                      actionCollection(), "insertFromDatabase");
-  d->actions->insertFromDatabase->setToolTip(i18n("Insert data from a SQL database."));
-#endif
-
-  d->actions->insertFromTextfile = new KAction( i18n("From &Text File..."), 0, this,
-                                      SLOT( insertFromTextfile() ),
-                                      actionCollection(), "insertFromTextfile");
-  d->actions->insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection."));
-  d->actions->insertFromClipboard = new KAction( i18n("From &Clipboard..."), 0, this,
-                                      SLOT( insertFromClipboard() ),
-                                      actionCollection(), "insertFromClipboard");
-  d->actions->insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection."));
-
-}
 
 void KSpreadView::initializeAreaOperationActions()
 {
-  d->actions->areaName = new KAction( i18n("Area Name..."), 0, this,
-                            SLOT( setAreaName() ), actionCollection(),
-                            "areaname" );
-  d->actions->areaName->setToolTip(i18n("Set a name for a region of the spreadsheet."));
-
-  d->actions->showArea = new KAction( i18n("Show Area..."), 0, this,
-                            SLOT( showAreaName() ), actionCollection(),
-                            "showArea" );
-  d->actions->showArea->setToolTip(i18n("Display a named area."));
 
   d->actions->sortList = new KAction( i18n("Custom Lists..."), 0, this,
                             SLOT( sortList() ), actionCollection(),

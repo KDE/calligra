@@ -543,7 +543,6 @@ private:
 
 
   /* helper functions */
-  void initializeInsertActions();
   void initializeAreaOperationActions();
   void initializeGlobalOperationActions();
   void adjustMapActions( bool mode );
