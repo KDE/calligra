@@ -24,6 +24,7 @@
 #include <qstringlist.h>
 #include <qlist.h>
 #include <koRuler.h>
+#include <qcheckbox.h>
 
 #include "kwtextparag.h"
 #include "kwunit.h"
@@ -49,6 +50,7 @@ class KWPagePreview;
 class KWPagePreview2;
 class KWBorderPreview;
 class KWNumPreview;
+//class QCheckBox;
 
 /******************************************************************/
 /* Class: KWParagDia                                              */
@@ -103,12 +105,14 @@ public:
     Counter counter() const { return m_counter; }
 
     void setParagLayout( const KWParagLayout & lay );
+    void setPageBreaking( bool b);
 
     KoTabulatorList tabListTabulator() const { return _tabList; }
 
 
     bool isAlignChanged() const {return oldLayout.alignment!=align();}
     bool listTabulatorChanged() const {return m_bListTabulatorChanged;}
+    bool isPageBreakingChanged() const { return  cEndOfFramePage->isChecked();}
 
     bool isLineSpacingChanged() const {return oldLayout.lineSpacing.pt()!=lineSpacing().pt();}
     bool isLeftMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginLeft].pt()!=leftIndent().pt(); }
@@ -148,11 +152,14 @@ protected:
     QSpinBox *sDepth;
 
     QGridLayout *indentGrid, *spacingGrid,
-        *pSpaceGrid, *tabGrid;
+        *pSpaceGrid, *tabGrid, *endFramePageGrid;
     QLineEdit *eLeft, *eRight, *eFirstLine, *eSpacing, *eBefore, *eAfter, *eTabPos;
     QLabel *lLeft, *lRight, *lFirstLine, *lBefore, *lAfter, *lAlign, *lStyle, *lWidth, *lColor;
-    QGroupBox *indentFrame, *spacingFrame, *pSpaceFrame, *gText;
+    QGroupBox *indentFrame, *spacingFrame, *pSpaceFrame, *gText, *endFramePage;
     QComboBox *cSpacing, *cStyle, *cWidth;
+
+    QCheckBox *cEndOfFramePage;
+
     QRadioButton *rLeft, *rCenter, *rRight, *rJustify;
     KWPagePreview *prev1;
     KWPagePreview2 *prev2;

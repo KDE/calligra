@@ -43,6 +43,7 @@
 #include <qlineedit.h>
 #include <qvalidator.h>
 #include <qwhatsthis.h>
+#include <qcheckbox.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -401,6 +402,11 @@ void KWParagDia::setAlign( int align )
     }
 }
 
+void KWParagDia::setPageBreaking( bool b)
+{
+    cEndOfFramePage->setChecked(b);
+}
+
 /*================================================================*/
 int KWParagDia::align() const
 {
@@ -416,7 +422,7 @@ int KWParagDia::align() const
 void KWParagDia::setupTab1()
 {
     QWidget *tab = addPage( i18n( "Indent and Spacing" ) );
-    QGridLayout *grid = new QGridLayout( tab, 4, 2, 15, 7 );
+    QGridLayout *grid = new QGridLayout( tab, 6, 2, 15, 7 );
 
     // --------------- indent ---------------
     indentFrame = new QGroupBox( i18n( "Indent" ), tab );
@@ -499,14 +505,23 @@ void KWParagDia::setupTab1()
     connect( eSpacing, SIGNAL( textChanged( const QString & ) ), this, SLOT( spacingChanged( const QString & ) ) );
     spacingGrid->addWidget( eSpacing, 2, 0 );
 
-
-    // grid row spacing
+// grid row spacing
     spacingGrid->addRowSpacing( 0, 5 );
-    grid->addWidget( spacingFrame, 1, 0 );
+    grid->addWidget( spacingFrame, 2, 0 );
 
     cSpacing->setCurrentItem( 4 );
     cSpacing->setEnabled( false ); // TODO: handle 0.5 lines, 1 line etc
     eSpacing->setEnabled( true );
+
+    //
+    // --------------- End of page /frame ---------------
+    endFramePage = new QGroupBox( i18n( "Behaviour at end of frame/page" ), tab );
+    endFramePageGrid = new QGridLayout( endFramePage, 3, 2, 15, 7 );
+
+    cEndOfFramePage=new QCheckBox( i18n("Keep lines together"),endFramePage);
+    endFramePageGrid->addWidget(cEndOfFramePage,0,0);
+    endFramePageGrid->addRowSpacing( 0, 5 );
+    grid->addWidget( endFramePage, 1, 0 );
 
     // --------------- paragraph spacing ---------------
     pSpaceFrame = new QGroupBox( i18n( "Paragraph Space" ), tab );
@@ -546,7 +561,7 @@ void KWParagDia::setupTab1()
 
     // grid row spacing
     pSpaceGrid->addRowSpacing( 0, 5 );
-    grid->addWidget( pSpaceFrame, 2, 0 );
+    grid->addWidget( pSpaceFrame, 3, 0 );
 
     // --------------- preview --------------------
     prev1 = new KWPagePreview( tab );
@@ -1511,6 +1526,7 @@ void KWParagDia::setParagLayout( const KWParagLayout & lay )
     setTopBorder( lay.topBorder );
     setBottomBorder( lay.bottomBorder );
     setTabList( lay.tabList() );
+    setPageBreaking( lay.samePage);
     oldLayout=lay;
     //setTabList( lay.ParagLayout->getTabList );
     //border init it's necessary to allow left border works
