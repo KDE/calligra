@@ -31,7 +31,7 @@
 #include "kis_view.h"
 #include "kis_tool.h"
 
-KisTool::KisTool(KisDoc *doc, const char *name) //: QObject(doc, name)
+KisTool::KisTool(KisDoc *doc, const char * /*name*/) //: QObject(doc, name)
 {
 	m_pDoc = doc;
 	m_pView = doc -> currentView();

@@ -128,9 +128,9 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
 	m_dcop = 0;
 	dcopObject(); // build it
 
-	QObject::connect(m_doc, SIGNAL(docUpdated()), this, SLOT( slotDocUpdated ( ) ) );
-	QObject::connect( m_doc, SIGNAL( docUpdated( const QRect& ) ), this, SLOT( slotDocUpdated ( const QRect& ) ) );
-	QObject::connect( this, SIGNAL( embeddImage( const QString& ) ), this, SLOT( slotEmbeddImage( const QString& ) ) );
+	QObject::connect(m_doc, SIGNAL(docUpdated()), this, SLOT(slotDocUpdated()));
+	QObject::connect(m_doc, SIGNAL(docUpdated(const QRect&)), this, SLOT(slotDocUpdated(const QRect&)));
+	QObject::connect(this, SIGNAL(embeddImage(const QString&)), this, SLOT(slotEmbeddImage(const QString&)));
 
 	m_fg = KisColor::black();
 	m_bg = KisColor::white();
@@ -1410,6 +1410,8 @@ void KisView::canvasGotMouseWheelEvent( QWheelEvent *e )
 */
 void KisView::activateTool(KisTool* t)
 {
+	kdDebug() << "KisView::activateTool\n";
+
 	if (!t)
 		return;
 
@@ -1443,8 +1445,8 @@ void KisView::activateTool(KisTool* t)
 */
 void KisView::tool_properties()
 {
-        if(m_pTool)
-	  m_pTool -> optionsDialog();
+	Q_ASSERT(m_pTool);
+	m_pTool -> optionsDialog();
 }
 
 /*---------------------------
@@ -2530,15 +2532,14 @@ void KisView::setZoomFactor(float zf)
 
 void KisView::slotSetBrush(KisBrush* b)
 {
-  if(b && m_pBrush)
-    {
-      m_pBrush = b;
+	Q_ASSERT(b);
 
-      if (m_pTool) {
-	m_pTool -> setBrush(b);
-	m_pTool -> setCursor();
-      }
-    }
+	m_pBrush = b;
+
+	if (m_pTool) {
+		m_pTool -> setBrush(b);
+		m_pTool -> setCursor();
+	}
 }
 
 void KisView::slotSetKrayon(KisKrayon* k)
@@ -2709,11 +2710,13 @@ void KisView::addHasNewLayer(QImage& loadedImg, KURL& u)
 
 void KisView::setupTools()
 {
-	KisCanvas *canvas = m_pCanvas;
-	KisBrush *brush = m_pBrush;
-	KisPattern *pattern = m_pPattern;
+	if (m_tools.size())
+		return;
 
-	m_tools = ::toolFactory(canvas, brush, pattern, m_doc);
+	m_tools = m_doc -> getTools();
+
+	if (!m_tools.size())
+		m_tools = ::toolFactory(m_pCanvas, m_pBrush, m_pPattern, m_doc);
 
 	for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
 		KisTool *p = m_tools[i];
@@ -2723,7 +2726,12 @@ void KisView::setupTools()
 	}
 
 	kdDebug() << "KisView::setupTools\n";
-	m_doc -> setTools(m_tools);
+
+	if (m_doc -> viewCount() < 1)
+		m_doc -> setTools(m_tools);
+
+	m_tools[0] -> toolSelect();
+	activateTool(m_tools[0]);
 }
 
 #include "kis_view.moc"

@@ -64,7 +64,18 @@ ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, Ki
 	ktvector tools;
 
 	tools.reserve(100);
+	// painting tools
+	tools.push_back(new BrushTool(doc, brush));
+	tools.push_back(new PasteTool(doc, canvas));
+	tools.push_back(new AirBrushTool(doc, brush));
+	tools.push_back(new PenTool(doc, canvas, brush));
+	tools.push_back(new EraserTool(doc, brush));
+	tools.push_back(new ColorPicker(doc));
+	tools.push_back(new ColorChangerTool(doc));
+	tools.push_back(new FillTool(doc));
+	tools.push_back(new StampTool(doc, canvas, pattern));
 
+	// Positioning tools
 	tools.push_back(new ZoomTool(doc));
 	tools.push_back(new MoveTool(doc));
 
@@ -74,17 +85,6 @@ ktvector toolFactory(KisCanvas *canvas, KisBrush *brush, KisPattern *pattern, Ki
 	tools.push_back(new PolygonalSelectTool(doc, canvas));
 	tools.push_back(new EllipticalSelectTool(doc, canvas));
 	tools.push_back(new ContiguousSelectTool(doc, canvas));
-
-	// painting tools
-	tools.push_back(new PasteTool(doc, canvas));
-	tools.push_back(new BrushTool(doc, brush));
-	tools.push_back(new AirBrushTool(doc, brush));
-	tools.push_back(new PenTool(doc, canvas, brush));
-	tools.push_back(new EraserTool(doc, brush));
-	tools.push_back(new ColorPicker(doc));
-	tools.push_back(new ColorChangerTool(doc));
-	tools.push_back(new FillTool(doc));
-	tools.push_back(new StampTool(doc, canvas, pattern));
 
 	// drawing tools
 	tools.push_back(new LineTool(doc, canvas));

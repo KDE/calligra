@@ -85,6 +85,8 @@ bool KisDoc::initDoc()
 	bool ok = false;
 	QString name = i18n( "image %1" ).arg( m_Images.count() + 1 );
 
+	kdDebug() << "KisDoc::initDoc\n";
+
 	// choose dialog for open mode
 	QString templ;
 	KoTemplateChooseDia::ReturnType ret;
