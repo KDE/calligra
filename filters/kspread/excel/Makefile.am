@@ -1,15 +1,11 @@
 ####### General stuff
 
-INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread -I$(srcdir)/../libkspreadexport $(KOFFICE_INCLUDES) \
+INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread $(KOFFICE_INCLUDES) \
 	$(KOTEXT_INCLUDES) $(KOSCRIPT_INCLUDES) $(all_includes)
 
+SUBDIRS = sidewinder import
+
 ####### Files
-
-kde_module_LTLIBRARIES = libkspreadexcelexport.la
-
-libkspreadexcelexport_la_SOURCES = excelexport.cc
-libkspreadexcelexport_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
-libkspreadexcelexport_la_LIBADD  = $(KOFFICE_LIBS) ../../../kspread/libkspreadcommon.la ../libkspreadexport/libkspreadexport.la
 
 METASOURCES = AUTO
 
