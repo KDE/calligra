@@ -38,6 +38,7 @@
 #include <koSize.h>
 #include <qvariant.h>
 #include <qvaluevector.h>
+#include "kprvariable.h"
 
 class KPresenterDoc;
 class KPTextObject;
@@ -1025,5 +1026,20 @@ protected:
     double m_oldValue;
     double m_newValue;
 };
+
+class KPrChangeVariableNoteText : public KNamedCommand
+{
+ public:
+    KPrChangeVariableNoteText( const QString &name, KPresenterDoc *_doc, const QString &_oldValue,const QString &_newValue, KoNoteVariable *var);
+    ~KPrChangeVariableNoteText();
+    void execute();
+    void unexecute();
+ protected:
+    KPresenterDoc *m_doc;
+    QString newValue;
+    QString oldValue;
+    KoNoteVariable *m_var;
+};
+
 
 #endif

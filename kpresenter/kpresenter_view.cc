@@ -6051,10 +6051,19 @@ void KPresenterView::editComment()
                 kdWarning() << "Author information not found in documentInfo !" << endl;
             else
                 authorName = authorPage->fullName();
-            KoCommentDia *commentDia = new KoCommentDia( this, var->note(), authorName, var->createdNote());
+            QString oldValue = var->note();
+            QString createDate = var->createdNote();
+            KoCommentDia *commentDia = new KoCommentDia( this, oldValue, authorName, createDate);
 
             if( commentDia->exec() )
-                var->setNote( commentDia->commentText());
+            {
+                if ( oldValue != commentDia->commentText())
+                {
+                    KPrChangeVariableNoteText *cmd = new KPrChangeVariableNoteText( i18n("Change Note Text"), m_pKPresenterDoc, oldValue,commentDia->commentText(), var);
+                    m_pKPresenterDoc->addCommand( cmd );
+                    cmd->execute();
+                }
+            }
             delete commentDia;
         }
     }

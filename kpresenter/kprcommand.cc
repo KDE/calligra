@@ -2384,3 +2384,31 @@ void ImageEffectCmd::unexecute()
 
     doc->updateSideBarItem( m_page );
 }
+
+KPrChangeVariableNoteText::KPrChangeVariableNoteText( const QString &name, KPresenterDoc *_doc,
+                        const QString &_oldValue,const QString &_newValue,
+                        KoNoteVariable *var):
+    KNamedCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+KPrChangeVariableNoteText::~KPrChangeVariableNoteText()
+{
+}
+
+void KPrChangeVariableNoteText::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setNote(newValue);
+}
+
+void KPrChangeVariableNoteText::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setNote(oldValue);
+}
+
