@@ -91,7 +91,7 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
 
     // #### handle errors
     // Call the spell checker
-    KSpell::modalCheck( buffer );
+    KSpell::modalCheck( buffer, _ksconf );
 
     // Set data
     *((QString*)data) = buffer;
