@@ -24,6 +24,7 @@
 #include "framedia.moc"
 #include "defs.h"
 #include "kwcommand.h"
+#include "kwtableframeset.h"
 
 #include <klocale.h>
 #include <kapp.h>
@@ -898,9 +899,30 @@ bool KWFrameDia::applyChanges()
             double pw = KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() );
             double ph = KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() );
 
+            FrameIndex index;
+            FrameResizeStruct tmpResize;
+            tmpResize.sizeOfBegin = frame->normalize();
+
             frame->setRect( px, py, pw, ph );
             // TODO apply page limits
             // TODO undo-redo support
+
+            tmpResize.sizeOfEnd = frame->normalize();
+            KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
+            if(table)
+            {
+                index.m_iFrameSetIndex=doc->getFrameSetNum(table);
+                index.m_iFrameIndex=table->getFrameFromPtr(frame);
+            }
+            else
+            {
+                index.m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+                index.m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+            }
+
+            KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), doc, index, tmpResize ) ;
+            doc->addCommand(cmd);
+            doc->frameChanged( frame );
             doc->setModified( true );
         }
     }
@@ -927,7 +949,7 @@ void KWFrameDia::updateFrames()
     {
         KWFrame *theFrame = frames.first();
         if(theFrame->isSelected())
-            theFrame->setSelected(true);
+            theFrame->updateResizeHandles();
     }
 }
 

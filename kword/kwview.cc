@@ -1345,6 +1345,7 @@ void KWView::insertPicture()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->insertPicture( file );
+
 }
 
 /*===============================================================*/
