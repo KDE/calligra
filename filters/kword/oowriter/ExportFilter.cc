@@ -41,7 +41,7 @@
 #include <klocale.h>
 #include <kzip.h>
 
-#include <koGlobal.h>
+#include <koPageLayout.h>
 #include <koPictureKey.h>
 
 #include <KWEFStructures.h>
@@ -1474,9 +1474,12 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 bool OOWriterWorker::doOpenStyles(void)
 {
     m_styles += " <office:styles>\n";
-    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">"; // ### TODO: what if Grpahics is a normal style
-    m_styles += "   <style:properties/>";
-    m_styles += "  </style:style>";
+    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">\n"; // ### TODO: what if Graphics is a normal style
+    m_styles += "   <style:properties text:anchor-type=\"paragraph\" style:wrap=\"none\"/>\n";
+    m_styles += "  </style:style>\n";
+    m_styles += "  <style:style style:name=\"Frame\" style:family=\"graphics\">\n"; // ### TODO: what if Frame is a normal style
+    m_styles += "   <style:properties text:anchor-type=\"paragraph\" style:wrap=\"none\"/>\n";
+    m_styles += "  </style:style>\n";
     return true;
 }
 
@@ -1487,14 +1490,15 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
 
     m_styles += "  <style:style";
 
-    m_styles += " style:name=\"" + EscapeXmlText(layout.styleName,true,true) + "\"";
-    m_styles += " style:next-style-name=\"" + EscapeXmlText(layout.styleFollowing,true,true) + "\"";
+    m_styles += " style:name=\"" + escapeOOText( layout.styleName ) + "\"";
+    m_styles += " style:next-style-name=\"" + escapeOOText( layout.styleFollowing ) + "\"";
     m_styles += " style:family=\"paragraph\" style:class=\"text\"";
     m_styles += ">\n";
     m_styles += "   <style:properties ";
 
-    QString dummyKey; // Not needed
-    m_styles += layoutToParagraphStyle(layout,layout,true,dummyKey);
+    QString debugKey; // Not needed
+    m_styles += layoutToParagraphStyle(layout,layout,true,debugKey);
+    kdDebug(30518) << "Defining style: " << debugKey << endl;
 
     m_styles += "</style:properties>\n";
     m_styles += "  </style:style>\n";
@@ -1508,14 +1512,32 @@ bool OOWriterWorker::doCloseStyles(void)
     return true;
 }
 
-
 bool OOWriterWorker::doFullPaperFormat(const int format,
             const double width, const double height, const int orientation)
 {
-    m_paperFormat=format;
-    m_paperWidth=width;
-    m_paperHeight=height;
-    m_paperOrientation=orientation;
+    if ( ( format < 0 ) // Be careful that 0 is ISO A3
+        || ( width < 1.0 )
+        || ( height < 1.0 ) )
+    {
+        kdWarning(30518) << "Page size problem: format: " << format << " width: " << width << " height: " << height << endl;
+        // Something is wrong with the page size
+        KoFormat newFormat = KoFormat ( format );
+        if ( ( format < 0 ) || ( format > PG_LAST_FORMAT ) )
+        {
+            // Bad or unknown format, so assume ISO A4
+            newFormat = PG_DIN_A4;
+        }
+        m_paperWidth = KoPageFormat::width ( newFormat, KoOrientation( orientation ) ) * 72.0 / 25.4 ;
+        m_paperHeight = KoPageFormat::height ( newFormat, KoOrientation( orientation ) ) * 72.0 / 25.4 ;
+        m_paperFormat = newFormat;
+    }
+    else
+    {
+        m_paperFormat=format;
+        m_paperWidth=width;
+        m_paperHeight=height;
+    }
+    m_paperOrientation=orientation; // ### TODO: check if OOWriter needs the orignal size (without landscape) or the real size
     return true;
 }
 
