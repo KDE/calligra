@@ -32,11 +32,13 @@
 #include <qpushbutton.h>
 #include <qpainter.h>
 
-#include <koColorChooser.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
 #include <kdebug.h>
+
+#include <koColorChooser.h>
+#include <koIconChooser.h>
 
 #include "kontour_factory.h"
 #include "kontour_view.h"
@@ -46,7 +48,6 @@
 #include "GStyle.h"
 #include "GStyleList.h"
 #include "SetPropertyCmd.h"
-//#include "BrushCells.h"
 
 OutlinePanel::OutlinePanel(KontourView *aView, QWidget *parent, const char *name):
 QDockWindow(QDockWindow::InDock, parent, name)
@@ -355,6 +356,7 @@ QDockWindow(QDockWindow::InDock, parent, name)
   mPaintingBox->insertItem(i18n("Color"));
   mPaintingBox->insertItem(i18n("Gradient"));
   mPaintingBox->insertItem(i18n("Pattern"));
+  mPaintingBox->insertItem(i18n("Bitmap"));
   mPaintingBox->setCurrentItem(0);
 
   QLabel *mOpacityText = new QLabel(i18n("Opacity"), mPainting);
@@ -369,16 +371,13 @@ QDockWindow(QDockWindow::InDock, parent, name)
 
   mTab->insertTab(mPainting, i18n("Painting"));
 
-  KoColorChooser *mPaintPanel = new KoColorChooser(mTab);
+  mPaintPanel = new KoColorChooser(mTab);
   connect(mPaintPanel, SIGNAL(colorChanged(const KoColor &)), this, SLOT(slotChangeColor(const KoColor &)));
   mTab->insertTab(mPaintPanel, i18n("Color"));
 
-/*  QGroupBox *pattern = new QGroupBox(1, Qt::Vertical, this);
-  QBoxLayout *box2 = new QBoxLayout(pattern, QBoxLayout::Down);
-  BrushCells *brushCells = new BrushCells(pattern);
-  connect(brushCells, SIGNAL(brushChanged(Qt::BrushStyle)), this, SIGNAL(changeBrushStyle(Qt::BrushStyle)));
-  box2->addWidget(brushCells);
-  insertTab(pattern, i18n("Pattern"));*/
+
+  mBitmapPanel = new KoIconChooser(QSize(30, 30), mTab);
+  mTab->insertTab(mBitmapPanel, i18n("Bitmap"));
   connect(mPaintingBox, SIGNAL(activated(int)), this, SLOT(slotChangeFilled(int)));
 
   setWidget(mTab);

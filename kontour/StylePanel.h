@@ -32,6 +32,7 @@ class GStyle;
 class KComboBox;
 class KoColor;
 class KoColorChooser;
+class KoIconChooser;
 class QCheckBox;
 class QSpinBox;
 class QButtonGroup;
@@ -92,6 +93,7 @@ private:
   KComboBox       *mPaintingBox;
   QSpinBox        *mOpacityBox;
   KoColorChooser  *mPaintPanel;
+  KoIconChooser   *mBitmapPanel;
 };
 
 #endif
