@@ -343,7 +343,7 @@ void KoTemplateCreateDia::slotSelect() {
         return;
     }
     
-#if 0
+    // ### TODO: do a better remote loading without having to have d->m_tempFile
     if ( url.isLocalFile() )
     {
         d->m_customFile = url.path();
@@ -361,13 +361,7 @@ void KoTemplateCreateDia::slotSelect() {
                 return;
         }
     }
-#else
-    if(!url.isLocalFile()) {
-        KMessageBox::sorry(0L, i18n( "Only local files are currently supported."));
-        return;
-    }
-    d->m_customFile=url.path();
-#endif
+    
     d->m_customPixmap=QPixmap();
     updatePixmap();
 }
