@@ -192,7 +192,7 @@ void KoPictureShared::clearAndSetMode(const QString& newMode)
     {
         m_base=new KoPictureClipart();
     }
-    else if (mode==eps)
+    else if (mode=="eps")
     {
         KoPictureImage* image=new KoPictureImage();
         image->setResampleOnResize( true );
