@@ -43,10 +43,12 @@ public:
 
     virtual bool initDoc();
 
+    virtual bool loadOasis( const QDomDocument&, KoOasisStyles& );
+
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     virtual QDomDocument saveXML();
 
-    MyCanvas *canvas();
+    MyCanvas *canvas() const;
 
     void loadPlugin(const QString& name);
     KuDesignerPlugin *plugin();

@@ -115,6 +115,13 @@ KoView* KudesignerDoc::createViewInstance( QWidget* parent, const char* name )
     return new KudesignerView( this, parent, name );
 }
 
+bool KudesignerDoc::loadOasis( const QDomDocument&, KoOasisStyles& )
+{
+    //todo
+    return true;
+}
+
+
 bool KudesignerDoc::loadXML( QIODevice *, const QDomDocument & rt)
 {
     // TODO load the document from the QDomDocument
@@ -248,7 +255,7 @@ void KudesignerDoc::documentRestored()
     setModified(false);
 }
 
-MyCanvas *KudesignerDoc::canvas()
+MyCanvas *KudesignerDoc::canvas() const
 {
     return docCanvas;
 }
