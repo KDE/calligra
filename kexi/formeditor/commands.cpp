@@ -173,7 +173,6 @@ InsertWidgetCommand::execute()
 
 	if(!w)
 		return;
-	m_widgetname = w->name();
 
 	m_container->m_insertRect = m_insertRect;
 	if(!m_container->m_insertRect.isValid())
@@ -198,7 +197,7 @@ InsertWidgetCommand::execute()
 void
 InsertWidgetCommand::unexecute()
 {
-	QWidget *m_widget = m_form->objectTree()->lookup(m_widgetname)->widget();
+	QWidget *m_widget = m_form->objectTree()->lookup(m_name)->widget();
 	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
 	m_container->m_selected.clear();
 	m_container->m_selected.append(m_widget);
@@ -296,16 +295,14 @@ PasteWidgetCommand::name() const
 DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
  : KCommand(), m_form(form)
 {
-	for(QWidget *w = list.first(); w; w = list.next())
-		m_names += w->name();
-
 	m_domDoc = QDomDocument("UI");
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
 	QDomElement parent = m_domDoc.namedItem("UI").toElement();
-	for(QStringList::Iterator it = m_names.begin(); it != m_names.end(); ++it)
+
+	for(QWidget *w = list.first(); w; w = list.next())
 	{
-		ObjectTreeItem *item = m_form->objectTree()->lookup(*it);
+		ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
 		if (!item)
 			return;
 		m_containers.insert(item->name(), m_form->parentContainer(item->widget())->widget()->name());
@@ -316,9 +313,10 @@ DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
 void
 DeleteWidgetCommand::execute()
 {
-	for(QStringList::Iterator it = m_names.begin(); it != m_names.end(); ++it)
+	QMap<QString,QString>::Iterator it;
+	for(it = m_containers.begin(); it != m_containers.end(); ++it)
 	{
-		ObjectTreeItem *item = m_form->objectTree()->lookup(*it);
+		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
 		if (!item)
 			continue;
 

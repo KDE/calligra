@@ -87,7 +87,6 @@ class InsertWidgetCommand : public KCommand
 
 	protected:
 		Form *m_form;
-		QString m_widgetname;
 		QString m_containername;
 		QPoint m_point;
 		QString  m_name;
@@ -123,7 +122,6 @@ class DeleteWidgetCommand : public KCommand
 
 	protected:
 		QDomDocument  m_domDoc;
-		QStringList   m_names;
 		Form       *m_form;
 		QMap<QString, QString>  m_containers;
 };
