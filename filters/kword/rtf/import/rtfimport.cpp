@@ -401,6 +401,10 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     utf8TextCodec=QTextCodec::codecForName("UTF-8");
     kdDebug(30515) << "UTF-8 asked, given: " << (utf8TextCodec?utf8TextCodec->name():QString("-none-")) << endl;
 
+    // There is no default encoding in RTF, it must be always declared. (But beware of buggy files!)
+    textCodec=QTextCodec::codecForName("CP 1252"); // Or IBM 435 ?
+    kdDebug(30515) << "CP 1252 asked, given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
+
     // Parse RTF document
     while (true)
     {
@@ -1134,12 +1138,6 @@ void RTFImport::insertSymbol( RTFProperty *property )
  */
 void RTFImport::insertHexSymbol( RTFProperty * )
 {
-    if(!textCodec)
-    {
-        kdWarning(30515) << "No code page selected, assuming CP 1252! (in RTFImport::insertHexSymbol)" << endl;
-        textCodec = QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
-    }
-
     // Be careful, the value gicen in \' could be only one part of a multi-byte character.
     // So it cannot be assumed that it will result in one character.
     char tmpch[2] = {token.value, '\0'};
@@ -1207,12 +1205,12 @@ void RTFImport::parseFontTable( RTFProperty * )
     {
 	// Semicolons separate fonts
 	if (strchr( token.text, ';' ) == 0L)
-	    font.name += QString::fromUtf8( token.text );
+	    font.name += QString::fromUtf8( token.text ); // ### FIXME: wrong codec!
 	else
 	{
 	    // Add font to font table
 	    *strchr( token.text, ';' ) = 0;
-	    font.name += QString::fromUtf8( token.text );
+	    font.name += QString::fromUtf8( token.text ); // ### FIXME: wrong codec!
 
 	    // Use Qt to look up the closest matching installed font
 	    QFont qFont( font.name );
@@ -1858,11 +1856,6 @@ void RTFImport::parseRichText( RTFProperty * )
 		textState->formats.last().len += len;
 	    }
 	    textState->length += len;
-                if(!textCodec)
-                {
-                    kdWarning(30515) << "No code page selected, assuming CP 1252! (in RTFImport::parsePlainText)" << endl;
-                    textCodec = QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
-                }
 	    textState->text.addTextNode( token.text, textCodec );
 	}
     }
@@ -1889,11 +1882,6 @@ void RTFImport::parsePlainText( RTFProperty * )
     }
     else if (token.type == RTFTokenizer::PlainText)
     {
-        if(!textCodec)
-        {
-            kdWarning(30515) << "No code page selected, assuming CP 1252! (in RTFImport::parseRichText)" << endl;
-            textCodec = QTextCodec::codecForName("CP1252"); //in case codepage contains not supported one
-        }
         ((DomNode *)destination.target)->addTextNode( token.text, textCodec );
     }
 }
