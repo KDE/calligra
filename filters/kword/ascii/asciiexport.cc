@@ -22,14 +22,10 @@
 
 #include <qiodevice.h>
 #include <qtextstream.h>
-#include <qdom.h>
 
 #include <kdebug.h>
 
 #include <KWEFStructures.h>
-#include <TagProcessing.h>
-#include <KWEFBaseClass.h>
-#include <ProcessDocument.h>
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
 
@@ -56,13 +52,6 @@ private:
 
 bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& to)
 {
-    kdDebug(30503) << "Entering ASCIIWorker::doOpenFile" << endl;
-    if ( to != "text/plain" )
-    {
-        kdError(30502) << "Unexpected mime type " << to <<" Aborting!" << endl;
-        return false;
-    }
-
     m_ioDevice=new QFile(filenameOut);
 
     if (!m_ioDevice)
@@ -87,7 +76,6 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& to)
 
     // TODO: ask the user for the encoding!
     m_streamOut->setEncoding( QTextStream::Locale );
-    kdDebug(30503) << "Exiting ASCIIWorker::doOpenFile" << endl;
     return true;
 }
 
