@@ -1166,7 +1166,7 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
 {
     kdDebug(32001) << "KWFormulaFrameSetEdit::KWFormulaFrameSetEdit" << endl;
     formulaView = new KFormulaView(fs->getFormula());
-    formulaView->setSmallCursor(true);
+    //formulaView->setSmallCursor(true);
 
     connect( formulaView, SIGNAL( cursorChanged( bool, bool ) ),
              this, SLOT( cursorChanged( bool, bool ) ) );

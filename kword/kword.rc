@@ -13,6 +13,13 @@
   <Separator/>
   <Action name="edit_selectall"/>
   <Separator/>
+  <Menu name="Formula"><text>Formula</text>
+  <Action name="formula_addupperindex"/>
+  <Action name="formula_addlowerindex"/>
+  <Action name="formula_removeenclosing"/>
+  <Action name="formula_makegreek"/>
+  </Menu>
+  <Separator/>
   <Action name="edit_delframe"/>
   <Action name="edit_reconnect"/>
   <Separator/>
@@ -179,24 +186,23 @@
   <Action name="frame_backcolor"/>
 </ToolBar>
 <ToolBar hidden="true" fullWidth="false" name="formula_toolbar" position="bottom"><Text>Formula</Text>
-  <Action name="addtext"/>
-  <Action name="addroot"/>
-  <Action name="addfrac"/>
-  <Action name="addvspace"/>
-  <Action name="addbra"/>
-  <Action name="addsqrbra"/>
-  <Action name="addcurbra"/>
-  <Action name="addabsbra"/>
-  <Action name="addintegral"/>
-  <Action name="addsum"/>
-  <Action name="addproduct"/>
-  <Action name="addmatrix"/>
-  <Action name="addupperleft"/>
-  <Action name="addlowerleft"/>
-  <Action name="addupperright"/>
-  <Action name="addlowerright"/>
-  <Action name="typeleft"/>
-  <Action name="typeright"/>
+  <Action name="formula_addtext"/>
+  <Action name="formula_addroot"/>
+  <Action name="formula_addfrac"/>
+  <Action name="formula_addbra"/>
+  <Action name="formula_addsqrbra"/>
+  <Action name="formula_addcurbra"/>
+  <Action name="formula_addabsbra"/>
+  <Action name="formula_addintegral"/>
+  <Action name="formula_addsum"/>
+  <Action name="formula_addproduct"/>
+  <Action name="formula_addmatrix"/>
+  <Action name="formula_addupperleft"/>
+  <Action name="formula_addlowerleft"/>
+  <Action name="formula_addupperright"/>
+  <Action name="formula_addlowerright"/>
+  <Action name="formula_typeleft"/>
+  <Action name="formula_typeright"/>
 </ToolBar>
 <Menu name="text_popup">
  <Action name="format_paragraph"/>
