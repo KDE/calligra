@@ -35,7 +35,8 @@ class VPathIteratorList
 {
 public:
 	VPathIteratorList()
-		: m_list( 0L ), m_iterator( 0L ) {}
+			: m_list( 0L ), m_iterator( 0L )
+	{}
 
 	~VPathIteratorList()
 	{
@@ -56,7 +57,8 @@ public:
 		}
 	}
 
-	void remove( VPathIterator* itr ) {
+	void remove( VPathIterator* itr )
+	{
 		if( m_iterator == itr )
 			m_iterator = 0L;
 		else if( m_list )
@@ -111,8 +113,8 @@ public:
 				itr != m_list->end();
 				++itr )
 			{
-			if( ( *itr )->m_current == segment )
-				( *itr )->m_current = current;
+				if( ( *itr )->m_current == segment )
+					( *itr )->m_current = current;
 			}
 		}
 	}
@@ -124,7 +126,7 @@ private:
 
 
 VPath::VPath( VObject* parent )
-	: VObject( parent )
+		: VObject( parent )
 {
 	m_isClosed = false;
 
@@ -138,9 +140,9 @@ VPath::VPath( VObject* parent )
 }
 
 VPath::VPath( const VPath& list )
-	: VObject( list )
+		: VObject( list )
 {
-	m_isClosed = list.m_isClosed;
+	m_isClosed = list.isClosed();
 
 	m_first = m_last = m_current = 0L;
 	m_number = 0;
@@ -148,6 +150,7 @@ VPath::VPath( const VPath& list )
 	m_iteratorList = 0L;
 
 	VSegment* segment = list.m_first;
+
 	while( segment )
 	{
 		append( segment->clone() );
@@ -156,7 +159,7 @@ VPath::VPath( const VPath& list )
 }
 
 VPath::VPath( const VSegment& segment )
-	: VObject( 0L )
+		: VObject( 0L )
 {
 	m_isClosed = false;
 
@@ -206,8 +209,10 @@ VPath::lineTo( const KoPoint& p )
 		return false;
 
 	VSegment* s = new VSegment( 1 );
+
 	s->setType( VSegment::line );
 	s->setKnot( p );
+
 	append( s );
 
 	return true;
@@ -313,16 +318,17 @@ VPath::arcTo(
 	// We now calculate tan(a/2) where a is the angle between T10 and T12.
 	// We benefit from the facts T10*T12 = |T10|*|T12|*cos(a),
 	// |T10xT12| = |T10|*|T12|*sin(a) (cross product) and tan(a/2) = sin(a)/[1-cos(a)].
-	double num   = t10.x() * t12.y() - t10.y() * t12.x();
+	double num = t10.x() * t12.y() - t10.y() * t12.x();
+
 	double denom =
 		sqrt( dsqT10 * dsqT12 )
-			- t10.x() * t12.x()
-			+ t10.y() * t12.y();
+		- t10.x() * t12.x()
+		+ t10.y() * t12.y();
 
-	if( 1.0 + denom == 1.0 )	// points are co-linear
+	if( 1.0 + denom == 1.0 ) 	// points are co-linear
 		lineTo( p1 );	// just add a line to first point
-    else
-    {
+	else
+	{
 		// |P1B0| = |P1B3| = r * tan(a/2):
 		double dP1B0 = fabs( r * num / denom );
 
@@ -338,14 +344,16 @@ VPath::arcTo(
 
 
 		// The two bezier-control points are located on the tangents at a fraction
-		// of the distance [tangent points<->tangent intersection].
+		// of the distance[tangent points<->tangent intersection].
 		const KoPoint d = p1 - b0;
+
 		double distsq = d * d;
 
 		double rsq = r * r;
+
 		double fract;
 
-		if( distsq >= rsq * VGlobal::veryBigNumber ) // r is very small
+		if( distsq >= rsq * VGlobal::veryBigNumber )	// r is very small
 			fract = 0.0; // dist==r==0
 		else
 			fract = ( 4.0 / 3.0 ) / ( 1.0 + sqrt( 1.0 + distsq / rsq ) );
@@ -369,7 +377,7 @@ VPath::close()
 		append( new VSegment( 1 ) );
 
 	// Move end-segment if we are already closed:
-	if( m_isClosed )
+	if( isClosed() )
 	{
 		getLast()->setKnot( getFirst()->knot() );
 	}
@@ -394,15 +402,26 @@ VPath::close()
 }
 
 bool
+VPath::isInside( const KoPoint& /*p*/ ) const
+{
+	return false;
+}
+
+bool
 VPath::counterClockwise() const
 {
-	// The idea for this algorithm is taken from the FAQ of comp.graphics.algorithms:
+	// This algorithm is taken from the FAQ of comp.graphics.algorithms:
 	// "Find the lowest vertex (or, if there is more than one vertex with the
 	// same lowest coordinate, the rightmost of those vertices) and then take
 	// the cross product of the edges fore and aft of it."
 
-	if( !m_isClosed || count() <= 1 )
+	if(
+		!isClosed()
+		|| isEmpty() )
+	{
 		return false;
+	}
+
 
 	VSegment* segment = m_first;
 
@@ -415,7 +434,7 @@ VPath::counterClockwise() const
 		if( segment->knot().y() < bottomRight->knot().y() )
 			bottomRight = segment;
 		else if( segment->knot().y() - bottomRight->knot().y()
-			< VGlobal::isNearRange )
+				  < VGlobal::isNearRange )
 		{
 			if( segment->knot().x() > bottomRight->knot().x() )
 				bottomRight = segment;
@@ -459,13 +478,14 @@ VPath::revert()
 	list.moveTo( m_last->knot() );
 
 	VSegment* segment = m_last;
+
 	while( segment->m_prev )
 	{
 		list.append( segment->revert() );
 		segment = segment->m_prev;
 	}
 
-	list.m_isClosed = m_isClosed;
+	list.m_isClosed = isClosed();
 
 	*this = list;
 }
@@ -482,8 +502,9 @@ VPath::boundingBox() const
 
 		while( segment )
 		{
-			if(	segment->state() != VSegment::deleted )
+			if( segment->state() != VSegment::deleted )
 				m_boundingBox |= segment->boundingBox();
+
 			segment = segment->m_next;
 		}
 
@@ -504,20 +525,28 @@ VPath::saveSvgPath( QString &d ) const
 {
 	// save segments:
 	VSegment* segment = m_first;
+
 	while( segment )
 	{
 		switch( segment->type() )
 		{
-			case VSegment::begin: d += QString("M%1 %2").arg(segment->point(0).x()).arg(segment->point(0).y());
-								  break;
-			case VSegment::line:  d += QString("L%1 %2").arg(segment->point(0).x()).arg(segment->point(0).y());
-								  break;
-			case VSegment::curve: d += QString("C%1 %2 %3 %4 %5 %6").arg(segment->point(0).x()).arg(segment->point(0).y()).arg(segment->point(1).x()).arg(segment->point(1).y()).arg(segment->point(2).x()).arg(segment->point(2).y());
+			case VSegment::begin:
+				d += QString( "M%1 %2" ).arg( segment->point( 0 ).x() ).arg( segment->point( 0 ).y() );
+				break;
+
+			case VSegment::line:
+				d += QString( "L%1 %2" ).arg( segment->point( 0 ).x() ).arg( segment->point( 0 ).y() );
+				break;
+
+			case VSegment::curve:
+				d += QString( "C%1 %2 %3 %4 %5 %6" ).arg( segment->point( 0 ).x() ).arg( segment->point( 0 ).y() ).arg( segment->point( 1 ).x() ).arg( segment->point( 1 ).y() ).arg( segment->point( 2 ).x() ).arg( segment->point( 2 ).y() );
 		}
 
 		segment = segment->m_next;
 	}
-	if( isClosed() ) d += "Z";
+
+	if( isClosed() )
+		d += "Z";
 }
 
 void
@@ -526,6 +555,7 @@ VPath::load( const QDomElement& element )
 	clear();	// we already might have a "begin".
 
 	QDomNodeList list = element.childNodes();
+
 	for( uint i = 0; i < list.count(); ++i )
 	{
 		if( list.item( i ).isElement() )
@@ -555,11 +585,12 @@ VPath::operator=( const VPath& list )
 	if( this == &list )
 		return *this;
 
-	m_isClosed = list.m_isClosed;
+	m_isClosed = list.isClosed();
 
 	clear();
 
 	VSegment* segment = list.m_first;
+
 	while( segment )
 	{
 		append( segment->clone() );
@@ -612,6 +643,7 @@ VPath::insert( uint index, const VSegment* segment )
 	}
 
 	VSegment* next = locate( index );
+
 	if( !next )
 		return false;
 
@@ -683,6 +715,7 @@ VPath::clear()
 		m_iteratorList->notifyClear( false );
 
 	VSegment* prev;
+
 	while( segment )
 	{
 		prev = segment;

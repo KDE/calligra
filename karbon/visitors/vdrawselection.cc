@@ -29,38 +29,52 @@
 void
 VDrawSelection::visitVComposite( VComposite &composite )
 {
-	if( composite.state() == VObject::deleted || composite.state() == VObject::hidden || composite.state() == VObject::hidden_locked )
+	if(
+		composite.state() == VObject::deleted ||
+		composite.state() == VObject::hidden ||
+		composite.state() == VObject::hidden_locked )
+	{
 		return;
+	}
 
-	//if( rect && !rect->intersects( composite.boundingBox() ) )
-	//	return;
 
 	m_painter->save();
+	m_painter->setPen( Qt::SolidLine );
+
+	const bool editnodes = composite.state() == VObject::edit && m_nodeediting;
 
 	VPathListIterator itr( composite.paths() );
 
-	m_painter->setPen( Qt::SolidLine );
-
-	bool editnodes = composite.state() == VObject::edit && m_nodeediting;
-	if( composite.state() == VObject::selected || editnodes )
-    {
+	if(
+		composite.state() == VObject::selected ||
+		editnodes )
+	{
 		// paint fill:
 		m_painter->newPath();
+
+		if( editnodes )
+			m_painter->setRasterOp( Qt::XorROP );
+
+		m_painter->setPen( editnodes ? Qt::yellow : Qt::blue );
+		m_painter->setBrush( Qt::NoBrush );
 
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
 			VPathIterator jtr( *( itr.current() ) );
+
 			for( ; jtr.current(); ++jtr )
+			{
 				jtr.current()->draw( m_painter );
+			}
+
+			m_painter->strokePath();
 		}
-		if( editnodes ) m_painter->setRasterOp( Qt::XorROP );
-		m_painter->setPen( editnodes ? Qt::yellow : Qt::blue );
-		m_painter->setBrush( Qt::NoBrush );
-		m_painter->strokePath();
 	}
 
-	// Draw nodes and control lines:
-	if( composite.state() == VObject::selected || editnodes )
+	// Draw nodes and control lines.
+	if(
+		composite.state() == VObject::selected ||
+		editnodes )
 	{
 		itr.toFirst();
 		//++itr;		// Skip "begin".
@@ -69,6 +83,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 		{
 			VPathIterator jtr( *( itr.current() ) );
 			//++jtr;
+
 			for( ; jtr.current(); ++jtr )
 			{
 				if( editnodes )
@@ -76,8 +91,10 @@ VDrawSelection::visitVComposite( VComposite &composite )
 
 				VColor color;
 				color.set( 0.5, 0.5, 1.0 );
+
 				VStroke stroke( color );
 				stroke.setLineWidth( 1.0 );
+
 				if( !editnodes )
 				{
 					m_painter->setPen( stroke );
@@ -85,12 +102,13 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				}
 				else
 					m_painter->setPen( Qt::yellow );
+
 				m_painter->setBrush( Qt::NoBrush );
 
 				if( ( editnodes || composite.state() == VObject::selected && m_nodeediting ) &&
-					jtr.current()->type() == VSegment::curve )
+						jtr.current()->type() == VSegment::curve )
 				{
-					// Draw control lines:
+					// Draw control lines.
 					if(
 						jtr.current()->pointIsSelected( 1 ) ||
 						jtr.current()->knotIsSelected() ||
@@ -111,12 +129,13 @@ VDrawSelection::visitVComposite( VComposite &composite )
 						m_painter->drawNode( jtr.current()->point( 1 ), 2 );
 						m_painter->strokePath();
 					}
+
 					if(
-						jtr.current()->prev() && 
+						jtr.current()->prev() &&
 						( jtr.current()->prev()->knotIsSelected() ||
 						  jtr.current()->pointIsSelected( 0 ) ) ||
-						  ( jtr.current()->prev()->pointIsSelected( 1 ) &&
-							jtr.current()->prev()->isSmooth() ) )
+						( jtr.current()->prev()->pointIsSelected( 1 ) &&
+						  jtr.current()->prev()->isSmooth() ) )
 					{
 						m_painter->newPath();
 						m_painter->moveTo(
@@ -133,7 +152,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 					}
 				}
 
-				// Draw knot:
+				// Draw knot.
 				m_painter->setPen( editnodes ? Qt::yellow : Qt::blue );
 
 				if( !m_nodeediting )
@@ -143,18 +162,23 @@ VDrawSelection::visitVComposite( VComposite &composite )
 				else
 					m_painter->setBrush( Qt::white );
 
-				m_painter->drawNode( jtr.current()->knot(), composite.stroke()->lineWidth() > 5.0 ? 3 : 2 );
+				m_painter->drawNode(
+					jtr.current()->knot(),
+					composite.stroke()->lineWidth() > 5.0
+					? 3
+					: 2 );
 			}
 		}
 	}
 
+	// Draw center node.
 	if( composite.drawCenterNode() && composite.state() == VObject::selected && !m_nodeediting )
 	{
-		// Draw a center node:
 		m_painter->setPen( Qt::NoPen );
 		m_painter->setBrush( Qt::blue.light() );
 		m_painter->drawNode( composite.boundingBox().center(), 2 );
 	}
+
 	m_painter->restore();
 
 	setSuccess();

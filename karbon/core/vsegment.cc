@@ -30,35 +30,6 @@
 #include <kdebug.h>
 
 
-// Calculate height of p above line AB.
-static double
-height(
-	const KoPoint& a,
-	const KoPoint& p,
-	const KoPoint& b )
-{
-	// Calculate determinant of AP and AB to obtain projection of vector AP to
-	// the orthogonal vector of AB.
-	const double det =
-		p.x() * a.y() + b.x() * p.y() - p.x() * b.y() -
-		a.x() * p.y() + a.x() * b.y() - b.x() * a.y();
-
-	// Calculate norm = length(AB).
-	const KoPoint ab = b - a;
-	const double norm = sqrt( ab * ab );
-
-	// If norm is very small, simply use distance AP.
-	if( norm < VGlobal::verySmallNumber )
-		return
-			sqrt(
-				( p.x() - a.x() ) * ( p.x() - a.x() ) +
-				( p.y() - a.y() ) * ( p.y() - a.y() ) );
-
-	// Normalize.
-	return QABS( det ) / norm;
-}
-
-
 VSegment::VSegment( unsigned short deg )
 {
 	m_degree = deg;
@@ -794,6 +765,33 @@ VSegment::splitAt( double t )
 
 
 	return segment;
+}
+
+double
+VSegment::height(
+	const KoPoint& a,
+	const KoPoint& p,
+	const KoPoint& b )
+{
+	// Calculate determinant of AP and AB to obtain projection of vector AP to
+	// the orthogonal vector of AB.
+	const double det =
+		p.x() * a.y() + b.x() * p.y() - p.x() * b.y() -
+		a.x() * p.y() + a.x() * b.y() - b.x() * a.y();
+
+	// Calculate norm = length(AB).
+	const KoPoint ab = b - a;
+	const double norm = sqrt( ab * ab );
+
+	// If norm is very small, simply use distance AP.
+	if( norm < VGlobal::verySmallNumber )
+		return
+			sqrt(
+				( p.x() - a.x() ) * ( p.x() - a.x() ) +
+				( p.y() - a.y() ) * ( p.y() - a.y() ) );
+
+	// Normalize.
+	return QABS( det ) / norm;
 }
 
 bool

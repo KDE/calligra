@@ -322,6 +322,15 @@ public:
 
 
 	/**
+	 * Calculates height of point p above line AB.
+	 */
+	static double height(
+		const KoPoint& a,
+		const KoPoint& p,
+		const KoPoint& b );
+
+
+	/**
 	 * Calculates whether lines A0A1 and B0B1 intersect.
 	 */
 	static bool linesIntersect(
@@ -340,6 +349,21 @@ public:
 	 */
 	bool intersects( const VSegment& segment ) const;
 
+
+	/**
+	 * Returns a number > 0 if the point p is left, 0 if it's on and
+	 * a number < 0 if it's right of the infinite line through the
+	 * previous segment's knot and the current knot.
+	 */
+	double isLeftOnOrRight( const KoPoint& p ) const
+	{
+		return
+			( knot().x() - prev()->knot().x() ) *
+			( p.y() - prev()->knot().y() )
+			-
+			( p.x() - prev()->knot().x() ) *
+			( knot().y() - prev()->knot().y() );
+	}
 
 	/**
 	 * Calculates the bounding box.

@@ -40,7 +40,7 @@ class VVisitor;
 
 class VPath : public VObject
 {
-friend class VPathIterator;
+	friend class VPathIterator;
 
 public:
 	VPath( VObject* parent );
@@ -61,8 +61,19 @@ public:
 	bool arcTo(
 		const KoPoint& p1, const KoPoint& p2, const double r );
 
-	bool isClosed() const { return m_isClosed; }
+	bool isClosed() const
+	{
+		return m_isClosed;
+	}
+
 	void close();
+
+
+	/**
+	 * Returns true if point p is located inside this path.
+	 */
+	bool isInside( const KoPoint& p ) const;
+
 
 	/**
 	 * Returns false if segmentlist is oriented clockwise.
@@ -74,25 +85,34 @@ public:
 	 */
 	void revert();
 
+
 	/**
 	 * Returns true if the current path is "emtpy". That means that it has
 	 * zero or just one ( == "begin") segment.
 	 */
 	bool isEmpty() const
-		{ return count() <= 1; }
+	{
+		return count() <= 1;
+	}
+
 
 	virtual const KoRect& boundingBox() const;
 
-	virtual void save( QDomElement & ) const {}	// VPaths cant be saved...
+
+	virtual void save( QDomElement& ) const
+		{}	// VPaths cant be saved.
+
 	virtual void load( const QDomElement& element );
+
 	void saveSvgPath( QString & ) const;
+
 
 	virtual VPath* clone() const;
 
 	virtual void accept( VVisitor& visitor );
 
 
-	// general list stuff:
+	// General list stuff.
 	VPath& operator=( const VPath& list );
 
 	bool insert( const VSegment* segment );
@@ -101,11 +121,26 @@ public:
 	void append( const VSegment* segment );
 	void clear();
 
-	uint count() const { return m_number; }
+	uint count() const
+	{
+		return m_number;
+	}
 
-	VSegment* current() const { return m_current; }
-	VSegment* getFirst() const { return m_first; }
-	VSegment* getLast() const { return m_last; }
+	VSegment* current() const
+	{
+		return m_current;
+	}
+
+	VSegment* getFirst() const
+	{
+		return m_first;
+	}
+
+	VSegment* getLast() const
+	{
+		return m_last;
+	}
+
 	VSegment* first();
 	VSegment* last();
 	VSegment* prev();
@@ -114,14 +149,14 @@ public:
 private:
 	VSegment* locate( uint index );
 
-
 	VSegment* m_first;
 	VSegment* m_last;
 	VSegment* m_current;
 
 	int m_currentIndex;
-	uint m_number	: 31;
-	bool m_isClosed	: 1;
+	uint m_number : 31;
+
+	bool m_isClosed : 1;
 
 	VPathIteratorList* m_iteratorList;
 };
@@ -135,7 +170,7 @@ private:
 
 class VPathIterator
 {
-friend class VPathIteratorList;
+	friend class VPathIteratorList;
 
 public:
 	VPathIterator( const VPath& list );
