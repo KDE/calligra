@@ -4,6 +4,5 @@ SVG export
 
 SVG import
 - gradientTransform
-- stop-opacity
 - units (cm, mm)
 - trafo's
