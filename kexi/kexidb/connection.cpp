@@ -1279,9 +1279,12 @@ bool Connection::setupObjectSchemaData( const KexiDB::RecordData &data, SchemaDa
 bool Connection::querySingleRecord(const QString& sql, KexiDB::RecordData &data)
 {
 	KexiDB::Cursor *cursor;
-	if (!(cursor = executeQuery( sql )))
+	if (!(cursor = executeQuery( sql ))) {
+		KexiDBDbg << "Connection::querySingleRecord(): !executeQuery()" << endl;
 		return false;
+	}
 	if (!cursor->moveFirst() || cursor->eof()) {
+		KexiDBDbg << "Connection::querySingleRecord(): !cursor->moveFirst() || cursor->eof()" << endl;
 		deleteCursor(cursor);
 		return false;
 	}
