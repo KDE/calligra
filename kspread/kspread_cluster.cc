@@ -530,11 +530,11 @@ void KSpreadCluster::removeColumn( int col )
 
     for( int y1 = 0; y1 < KSPREAD_CLUSTER_LEVEL1; ++y1 )
     {
-	KSpreadCell** cl = m_cluster[ y1 * KSPREAD_CLUSTER_LEVEL2 + cx ];
+	KSpreadCell** cl = m_cluster[ y1 * KSPREAD_CLUSTER_LEVEL1 + cx ];
 	if ( cl )
 	    for( int y2 = 0; y2 < KSPREAD_CLUSTER_LEVEL2; ++y2 )
 		if ( cl[ y2 * KSPREAD_CLUSTER_LEVEL2 + dx ] )
-		    remove( col, y1 * KSPREAD_CLUSTER_LEVEL2 + y2 );
+		    remove( col, y1 * KSPREAD_CLUSTER_LEVEL1 + y2 );
     }
 
     for( int t1 = 0; t1 < KSPREAD_CLUSTER_LEVEL1; ++t1 )
@@ -559,7 +559,7 @@ void KSpreadCluster::removeRow( int row )
 
     for( int x1 = 0; x1 < KSPREAD_CLUSTER_LEVEL1; ++x1 )
     {
-	KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL2 + x1 ];
+	KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + x1 ];
 	if ( cl )
 	    for( int x2 = 0; x2 < KSPREAD_CLUSTER_LEVEL2; ++x2 )
 		if ( cl[ dy * KSPREAD_CLUSTER_LEVEL2 + x2 ] )
@@ -588,11 +588,11 @@ void KSpreadCluster::clearColumn( int col )
 
     for( int y1 = 0; y1 < KSPREAD_CLUSTER_LEVEL1; ++y1 )
     {
-	KSpreadCell** cl = m_cluster[ y1 * KSPREAD_CLUSTER_LEVEL2 + cx ];
+	KSpreadCell** cl = m_cluster[ y1 * KSPREAD_CLUSTER_LEVEL1 + cx ];
 	if ( cl )
 	    for( int y2 = 0; y2 < KSPREAD_CLUSTER_LEVEL2; ++y2 )
 		if ( cl[ y2 * KSPREAD_CLUSTER_LEVEL2 + dx ] )
-		    remove( col, y1 * KSPREAD_CLUSTER_LEVEL2 + y2 );
+		    remove( col, y1 * KSPREAD_CLUSTER_LEVEL1 + y2 );
     }
 }
 
