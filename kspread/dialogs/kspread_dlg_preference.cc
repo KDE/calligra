@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002-2004 Ariya Hidayat <ariya@kde.org>
              (C) 2002-2003 Norbert Andres <nandres@web.de>
-             (C) 2000-2003 Laurent Montel <montel@kde.org>
+             (C) 2000-2005 Laurent Montel <montel@kde.org>
              (C) 2002 John Dailey <dailey@vt.edu>
              (C) 2002 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 2001-2002 David Faure <faure@kde.org>
@@ -444,6 +444,7 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
   listTypeCalc+=i18n("Max");
   listTypeCalc+=i18n("Average");
   listTypeCalc+=i18n("Count");
+  listTypeCalc+=i18n("CountA");
   listTypeCalc+=i18n("None");
   typeCalc->insertStringList(listTypeCalc);
   typeCalc->setCurrentItem(0);
@@ -527,8 +528,11 @@ switch( m_pView->doc()->getTypeOfCalc())
         case  Count:
 	        typeCalc->setCurrentItem(4);
                 break;
-        case  NoneCalc:
+        case  CountA:
 	        typeCalc->setCurrentItem(5);
+                break;
+        case  NoneCalc:
+	        typeCalc->setCurrentItem(6);
                 break;
         default :
                 typeCalc->setCurrentItem(0);
@@ -623,6 +627,9 @@ void miscParameters::apply()
             tmpMethodCalc=Count;
             break;
         case 5:
+            tmpMethodCalc=CountA;
+            break;
+        case 6:
             tmpMethodCalc=NoneCalc;
             break;
 
