@@ -45,7 +45,7 @@ kdemimedir = $(kde_mimedir)/application
 rc_DATA = graphite.rc
 rcdir = $(kde_datadir)/graphite
 
-# SUBDIRS =  . plugins pics dtd toolbar
+SUBDIRS =  . tests
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc -o $(podir)/graphite.pot

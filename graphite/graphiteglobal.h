@@ -240,7 +240,7 @@ public:
     FxValue() : m_value(0.0), m_pixel(0) {}
     explicit FxValue(const int &pixel) { setPxValue(pixel); }
     explicit FxValue(const double &value) : m_value(value) { recalculate(); }
-    FxValue(const FxValue &v) : m_value(v.value()), m_pixel(v.pxValue()) {}
+    FxValue(const FxValue &v) : m_value(v.value()) { recalculate(); }
     ~FxValue() {}
 
     FxValue &operator=(const FxValue &rhs);

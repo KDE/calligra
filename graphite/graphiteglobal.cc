@@ -460,9 +460,7 @@ GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
 
 
 FxValue &FxValue::operator=(const FxValue &rhs) {
-
-    m_value=rhs.value();
-    m_pixel=rhs.pxValue();
+    setValue(rhs.value());
     return *this;
 }
 
