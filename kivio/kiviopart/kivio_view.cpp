@@ -393,8 +393,6 @@ void KivioView::setupActions()
   m_selectAll = KStdAction::selectAll(this, SLOT(selectAllStencils()), actionCollection(), "selectAllStencils");
   m_selectNone = KStdAction::deselect(this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils");
 
-  KAction *action;
-
   m_groupAction = new KAction( i18n("Group Selected Stencils"), "group", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
   m_ungroupAction = new KAction( i18n("Ungroup Selected Stencils"), "ungroup", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
 
