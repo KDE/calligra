@@ -34,6 +34,7 @@ KPresenterFrame::KPresenterFrame( KPresenterView* _view, KPresenterChild* _child
 {
   m_pKPresenterView = _view;
   m_pKPresenterChild = _child;
+  obj = 0L;
 }
 
 /*****************************************************************/
@@ -137,6 +138,14 @@ void KPresenterView::init()
 //   QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
 //   for(;it.current();++it)
 //     slotInsertObject(it.current());
+
+  KPObject *kpobject;
+  for (unsigned int i = 0;i < m_pKPresenterDoc->objectList()->count();i++)
+    {
+      kpobject = m_pKPresenterDoc->objectList()->at(i);
+      if (kpobject->getType() == OT_PART)
+	slotInsertObject(dynamic_cast<KPPartObject*>(kpobject)->getChild(),dynamic_cast<KPPartObject*>(kpobject));
+    }
 }
 
 /*======================= destructor ============================*/
@@ -145,6 +154,29 @@ KPresenterView::~KPresenterView()
   sdeb("KPresenterView::~KPresenterView()\n");
   cleanUp();
   edeb("...KPresenterView::~KPresenterView() %i\n",_refcnt());
+}
+
+/*===============================================================*/
+void KPresenterView::setFramesToParts()
+{
+  KPresenterFrame *frame = 0L;
+  for (unsigned int i = 0;i < m_lstFrames.count();i++)
+    {
+      frame = m_lstFrames.at(i);
+      frame->hide();
+      frame->getKPPartObject()->setView(frame);
+    }
+}
+
+/*===============================================================*/
+void KPresenterView::hideAllFrames()
+{
+  KPresenterFrame *frame = 0L;
+  for (unsigned int i = 0;i < m_lstFrames.count();i++)
+    {
+      frame = m_lstFrames.at(i);
+      frame->hide();
+    }
 }
 
 /*======================= clean up ==============================*/
@@ -1480,6 +1512,14 @@ void KPresenterView::construct()
 //   for(;it.current();++it)
 //     slotInsertObject(it.current());
 
+  KPObject *kpobject;
+  for (unsigned int i = 0;i < m_pKPresenterDoc->objectList()->count();i++)
+    {
+      kpobject = m_pKPresenterDoc->objectList()->at(i);
+      if (kpobject->getType() == OT_PART)
+	slotInsertObject(dynamic_cast<KPPartObject*>(kpobject)->getChild(),dynamic_cast<KPPartObject*>(kpobject));
+    }
+
   // We are now in sync with the document
   m_bKPresenterModified = false;
 
@@ -1528,6 +1568,7 @@ void KPresenterView::slotInsertObject(KPresenterChild *_child,KPPartObject *_kpp
 
   p->hide();
   _kppo->setView(p);
+  p->setKPPartObject(_kppo);
 
 //   page->insertChild(p);
 //   vert->raise();

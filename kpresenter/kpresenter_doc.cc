@@ -240,6 +240,7 @@ void KPresenterDoc::saveObjects(ostream& out)
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
+      if (kpobject->getType() == OT_PART) continue;
       out << otag << "<OBJECT type=\"" << static_cast<int>(kpobject->getType()) << "\">" << endl;
       kpobject->save(out);
       out << etag << "</OBJECT>" << endl;
@@ -346,8 +347,13 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	{
 	  KPresenterChild *ch = new KPresenterChild(this);
 	  ch->load(parser,lst);
+	  QRect r = ch->geometry();
 	  insertChild(ch);
-	  ch->setGeometry(ch->geometry());
+	  KPPartObject *kppartobject = new KPPartObject(ch);
+	  kppartobject->setOrig(r.x(),r.y());
+	  kppartobject->setSize(r.width(),r.height());
+	  _objectList->append(kppartobject);
+	  emit sig_insertObject(ch,kppartobject);
 	}
       else if (name == "PAPER")
 	{
@@ -699,11 +705,10 @@ void KPresenterDoc::insertObject(const KRect& _rect, const char* _server_name,in
 
   KPresenterChild* ch = new KPresenterChild(this,_rect,doc,_diffx,_diffy);
 
-  KPPartObject *kppartobject = new KPPartObject(ch);
-
   insertChild(ch);
   m_bModified = true;
 
+  KPPartObject *kppartobject = new KPPartObject(ch);
   kppartobject->setOrig(_rect.x() + _diffx,_rect.y() + _diffy);
   kppartobject->setSize(_rect.width(),_rect.height());
   kppartobject->setSelected(true);
@@ -1758,6 +1763,16 @@ void KPresenterDoc::repaint(bool erase)
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	viewPtr->repaint(erase);
+    }
+}
+
+/*==============================================================*/
+void KPresenterDoc::hideAllFrames()
+{
+  if (!m_lstViews.isEmpty())
+    {
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	viewPtr->hideAllFrames();
     }
 }
 

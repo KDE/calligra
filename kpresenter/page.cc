@@ -310,6 +310,16 @@ void Page::mousePressEvent(QMouseEvent *e)
 		  mousePressed = false;
 		  modType = MT_NONE;
 		}
+	      else if (kpobject->getType() == OT_PART)
+		{
+		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton) && !kpobject->isSelected())
+		    deSelectAllObj();
+		  selectObj(kpobject);
+		  KPoint pnt = QCursor::pos();
+		  partMenu->popup(pnt);
+		  mousePressed = false;
+		  modType = MT_NONE;
+		}
 	      else
 		{
 		  if (!(e->state() & ShiftButton) && !(e->state() & ControlButton) && !kpobject->isSelected())
@@ -949,6 +959,8 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 		}
 	      else if (kpobject->getType() == OT_PART)
 		{
+		  view->kPresenterDoc()->hideAllFrames();
+		  view->setFramesToParts();
 		  kpobject->activate(this,diffx(),diffy());
 		  setFocusProxy(dynamic_cast<KPPartObject*>(kpobject)->getView());
 		  setFocusPolicy(QWidget::StrongFocus);
@@ -1233,12 +1245,27 @@ void Page::setupMenus()
   alignMenu6->setMouseTracking(true);
   alignMenu6->setCheckable(false);
 
+  alignMenu7 = new QPopupMenu();
+  CHECK_PTR(alignMenu7);
+  alignMenu7->insertItem(ICON("aoleft.xpm"),this,SLOT(alignObjLeft()));
+  alignMenu7->insertSeparator();
+  alignMenu7->insertItem(ICON("aocenterh.xpm"),this,SLOT(alignObjCenterH()));
+  alignMenu7->insertSeparator();
+  alignMenu7->insertItem(ICON("aoright.xpm"),this,SLOT(alignObjRight()));
+  alignMenu7->insertSeparator();
+  alignMenu7->insertItem(ICON("aotop.xpm"),this,SLOT(alignObjTop()));
+  alignMenu7->insertSeparator();
+  alignMenu7->insertItem(ICON("aocenterv.xpm"),this,SLOT(alignObjCenterV()));
+  alignMenu7->insertSeparator();
+  alignMenu7->insertItem(ICON("aobottom.xpm"),this,SLOT(alignObjBottom()));
+  alignMenu7->setMouseTracking(true);
+  alignMenu7->setCheckable(false);
+
   // create right button graph menu 
   graphMenu = new QPopupMenu();
   CHECK_PTR(graphMenu);
   graphMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
   graphMenu->insertItem(ICON("editcopy.xpm"),i18n("C&opy"),this,SLOT(clipCopy()));
-//   graphMenu->insertItem(ICON("editpaste.xpm"),i18n("&Paste"),this,SLOT(clipPaste()));
   graphMenu->insertItem(ICON("delete.xpm"),i18n("&Delete"),this,SLOT(deleteObjs()));
   graphMenu->insertSeparator();
   graphMenu->insertItem(ICON("rotate.xpm"),i18n("&Rotate..."),this,SLOT(rotateObjs()));
@@ -1251,12 +1278,25 @@ void Page::setupMenus()
   graphMenu->insertItem(ICON("alignobjs.xpm"),i18n("&Align objects"),alignMenu1);
   graphMenu->setMouseTracking(true);
 
+  // create right button part menu 
+  partMenu = new QPopupMenu();
+  CHECK_PTR(partMenu);
+  partMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
+  partMenu->insertItem(ICON("editcopy.xpm"),i18n("C&opy"),this,SLOT(clipCopy()));
+  partMenu->insertItem(ICON("delete.xpm"),i18n("&Delete"),this,SLOT(deleteObjs()));
+  partMenu->insertSeparator();
+  partMenu->insertItem(ICON("rotate.xpm"),i18n("&Rotate..."),this,SLOT(rotateObjs()));
+  partMenu->insertSeparator();
+  partMenu->insertItem(ICON("effect.xpm"),i18n("&Assign effect..."),this,SLOT(assignEffect()));
+  partMenu->insertSeparator();
+  partMenu->insertItem(ICON("alignobjs.xpm"),i18n("&Align objects"),alignMenu7);
+  partMenu->setMouseTracking(true);
+
   // create right button rect menu 
   rectMenu = new QPopupMenu();
   CHECK_PTR(rectMenu);
   rectMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
   rectMenu->insertItem(ICON("editcopy.xpm"),i18n("C&opy"),this,SLOT(clipCopy()));
-//   rectMenu->insertItem(ICON("editpaste.xpm"),i18n("&Paste"),this,SLOT(clipPaste()));
   rectMenu->insertItem(ICON("delete.xpm"),i18n("&Delete"),this,SLOT(deleteObjs()));
   rectMenu->insertSeparator();
   rectMenu->insertItem(ICON("rotate.xpm"),i18n("&Rotate..."),this,SLOT(rotateObjs()));
@@ -1275,7 +1315,6 @@ void Page::setupMenus()
   CHECK_PTR(pieMenu);
   pieMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
   pieMenu->insertItem(ICON("editcopy.xpm"),i18n("C&opy"),this,SLOT(clipCopy()));
-//   pieMenu->insertItem(ICON("editpaste.xpm"),i18n("&Paste"),this,SLOT(clipPaste()));
   pieMenu->insertItem(ICON("delete.xpm"),i18n("&Delete"),this,SLOT(deleteObjs()));
   pieMenu->insertSeparator();
   pieMenu->insertItem(ICON("rotate.xpm"),i18n("&Rotate..."),this,SLOT(rotateObjs()));
@@ -1294,7 +1333,6 @@ void Page::setupMenus()
   CHECK_PTR(picMenu);
   picMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
   picMenu->insertItem(ICON("editcopy.xpm"),i18n("C&opy"),this,SLOT(clipCopy()));
-//   picMenu->insertItem(ICON("editpaste.xpm"),i18n("&Paste"),this,SLOT(clipPaste()));
   picMenu->insertItem(ICON("delete.xpm"),i18n("&Delete"),this,SLOT(deleteObjs()));
   picMenu->insertSeparator();
   picMenu->insertItem(ICON("rotate.xpm"),i18n("&Rotate..."),this,SLOT(rotateObjs()));
@@ -1312,7 +1350,6 @@ void Page::setupMenus()
   CHECK_PTR(clipMenu);
   clipMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
   clipMenu->insertItem(ICON("editcopy.xpm"),i18n("C&opy"),this,SLOT(clipCopy()));
-//   clipMenu->insertItem(ICON("editpaste.xpm"),i18n("&Paste"),this,SLOT(clipPaste()));
   clipMenu->insertItem(ICON("delete.xpm"),i18n("&Delete"),this,SLOT(deleteObjs()));
   clipMenu->insertSeparator();
   clipMenu->insertItem(ICON("rotate.xpm"),i18n("&Rotate..."),this,SLOT(rotateObjs()));
@@ -1330,7 +1367,6 @@ void Page::setupMenus()
   CHECK_PTR(txtMenu);
   txtMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
   txtMenu->insertItem(ICON("editcopy.xpm"),i18n("C&opy"),this,SLOT(clipCopy()));
-//   txtMenu->insertItem(ICON("editpaste.xpm"),i18n("&Paste"),this,SLOT(clipPaste()));
   txtMenu->insertItem(ICON("delete.xpm"),i18n("&Delete"),this,SLOT(deleteObjs()));
   txtMenu->insertSeparator();
   txtMenu->insertItem(ICON("rotate.xpm"),i18n("&Rotate..."),this,SLOT(rotateObjs()));

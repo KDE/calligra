@@ -106,26 +106,28 @@ void KPPartObject::deactivate()
 void KPPartObject::setSize(int _width,int _height)
 {
   KPObject::setSize(_width,_height);
-  child->setGeometry(KRect(orig.x(),orig.y(),ext.width(),ext.height()));
+  child->setGeometry(QRect(orig.x(),orig.y(),ext.width(),ext.height()));
 }
 
 /*================================================================*/
 void KPPartObject::resizeBy(int _dx,int _dy)
 {
   KPObject::resizeBy(_dx,_dy);
-  child->setGeometry(KRect(orig.x(),orig.y(),ext.width(),ext.height()));
+  child->setGeometry(QRect(orig.x(),orig.y(),ext.width(),ext.height()));
 }
 
 /*================================================================*/
 void KPPartObject::setOrig(int _x,int _y)
 {
   KPObject::setOrig(_x,_y);
-  child->setGeometry(KRect(orig.x(),orig.y(),ext.width(),ext.height()));
+  child->setGeometry(QRect(orig.x(),orig.y(),ext.width(),ext.height()));
 }
 
 /*================================================================*/
 void KPPartObject::moveBy(int _dx,int _dy)
 {
   KPObject::moveBy(_dx,_dy);
-  child->setGeometry(KRect(orig.x(),orig.y(),ext.width(),ext.height()));
+  child->setGeometry(QRect(orig.x(),orig.y(),ext.width(),ext.height()));
 }
+
+

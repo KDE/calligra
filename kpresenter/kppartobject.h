@@ -56,6 +56,8 @@ public:
   KPresenterFrame *getView() { return view; }
   void setView(KPresenterFrame *_view) { view = _view; }
 
+  KPresenterChild *getChild() { return child; }
+
 protected:
   void paint(QPainter *_painter);
 

@@ -4219,7 +4219,7 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	    if (!paragraphPtr->isEmpty())
 	      p->drawText(0,(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent(paragraphPtr) - fm.ascent(),
 			  xstart + getLeftIndent(row),fm.height() + paragraphPtr->getLineSpacing(),
-			  AlignRight,chr);	    
+			  AlignLeft,chr);	    
 
 	    if (!drawPic)
 	      {
@@ -4244,8 +4244,8 @@ void KTextObject::paintCell(class QPainter* painter,int row,int)
 	      p->setPen(allColor);
 	    sprintf(chr,"%c",*objUnsortListType.chr->at(paragraphPtr->getDepth()));
 	    if (!paragraphPtr->isEmpty())
-	      p->drawText(0,(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent(paragraphPtr) - fm.ascent(),
-			  xstart + getLeftIndent(row),fm.height() + paragraphPtr->getLineSpacing(),AlignRight,chr);
+	      p->drawText(0 + getLeftIndent(row),(!drawPic ? 0 : y) + paragraphPtr->lineAt(0)->ascent(paragraphPtr) - fm.ascent(),
+			  xstart,fm.height() + paragraphPtr->getLineSpacing(),AlignLeft,chr);
 	    
 	    if (!drawPic)
 	      {
@@ -4441,7 +4441,7 @@ int KTextObject::cellWidth(int i)
 /*====================== return cell height ======================*/
 int KTextObject::cellHeight(int i)
 {
-  if (i < numRows())
+  if (i < numRows() && i < static_cast<int>(cellHeights.count()))
     return cellHeights.at(i)->wh;
   else return 0;
 }
@@ -4810,13 +4810,13 @@ void KTextObject::recalc(bool breakAllLines=true)
       {
 	QFontMetrics fm(objEnumListType.font);
 	char chr[12];
-	sprintf(chr,"%s999 %s",objEnumListType.before.data(),objEnumListType.after.data());
+	sprintf(chr,"%s99 %s",objEnumListType.before.data(),objEnumListType.after.data());
 	xstart = fm.width(chr);
       } break;
     case UNSORT_LIST:
       {
 	QFontMetrics fm(*objUnsortListType.font->at(0));
-	xstart = fm.width(*objUnsortListType.chr->at(0));
+	xstart = fm.width(*objUnsortListType.chr->at(0)) + fm.width(*objUnsortListType.chr->at(0)) / 3;
       } break;
     default: break;
     }

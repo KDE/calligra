@@ -334,6 +334,8 @@ public:
   void setObjectList(QList<KPObject> *_list)
     { _objectList->setAutoDelete(false); _objectList = _list; _objectList->setAutoDelete(false); }
 
+  void hideAllFrames();
+
 signals:
 
   // document modified

@@ -56,7 +56,7 @@ class KPresenterDoc;
 class KPresenterView;
 
 const QString ObjName[] = {"Picture","Line","Rectangle","Ellipse","Text","Autoform",
-			   "Clipart","Undefined","Pie/Arc/Chord"};
+			   "Clipart","Undefined","Pie/Arc/Chord","Embedded Object"};
 const QString BackTypeName[] = {"Color","Picture","Clipart"};
 const QString BackViewName[] = {"Zoom","Center","Tiled"};
 const QString BackColorTypeName[] = {"Plain","Horizontal Gradient","Vertical Gradient","Diagonal Gradient 1","Diagonal Gradient 2",

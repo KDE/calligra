@@ -106,6 +106,9 @@ public:
   // get view
   KPresenterView* presenterView() {return m_pKPresenterView;}
   
+  void setKPPartObject(KPPartObject *o) { obj = o; }
+  KPPartObject *getKPPartObject() { return obj; }
+
 protected:
 
   // child
@@ -113,6 +116,8 @@ protected:
 
   // view
   KPresenterView *m_pKPresenterView;
+
+  KPPartObject *obj;
 
 };
 
@@ -316,6 +321,9 @@ public:
 
   int getRndX() { return rndX; }
   int getRndY() { return rndY; }
+
+  void setFramesToParts();
+  void hideAllFrames();
 
 public slots:
 
