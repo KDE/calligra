@@ -52,6 +52,7 @@
 #include "GLayer.h"
 #include "SelectionTool.h"
 
+const float MIN_GRID_DIST = 6.0;
 
 Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidget *parent, const char *name)
 :QWidget (parent, name)
@@ -820,6 +821,13 @@ void Canvas::drawGrid (QPainter& p)
    float h, v;
    float hd = hGridDistance * zoomFactor;
    float vd = vGridDistance * zoomFactor;
+
+   while(hd < MIN_GRID_DIST)
+     hd *= 2.0;
+   
+   while(vd < MIN_GRID_DIST)
+     vd *= 2.0;
+
    QPen pen1 (mGridColor, 0);
 
    p.save ();
