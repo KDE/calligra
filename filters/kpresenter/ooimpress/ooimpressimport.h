@@ -115,8 +115,16 @@ private:
     void createStyleMap( QDomDocument &docstyles );
     void insertStyles( const QDomElement& styles );
     void fillStyleStack( const QDomElement& object );
-    QDomElement parseObject( QDomDocument& doc, const QDomElement& object, int offset );
-    QDomElement parseLineObject( QDomDocument& doc, const QDomElement& object, int offset );
+    void storeObjectStyles( const QDomElement& object );
+    void append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
+    void appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
+    void appendRounding( QDomDocument& doc, QDomElement& e, const QDomElement& object );
+    void appendPen( QDomDocument& doc, QDomElement& e );
+    void appendBrush( QDomDocument& doc, QDomElement& e );
+    void appendShadow( QDomDocument& doc, QDomElement& e );
+    void appendLineEnds( QDomDocument& doc, QDomElement& e );
+    double toPoint( QString value );
+
     QDomElement parseTextBox( QDomDocument& doc, const QDomElement& textBox );
     QDomElement parseList( QDomDocument& doc, const QDomElement& paragraph );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& list );

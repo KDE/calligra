@@ -21,6 +21,8 @@
 
 #include <math.h>
 
+#include <qregexp.h>
+
 #include <kdebug.h>
 #include <koUnit.h>
 #include <koDocumentInfo.h>
@@ -285,19 +287,19 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     }
     else
     {
-        paperElement.setAttribute( "ptWidth", CM_TO_POINT(properties.attribute( "fo:page-width" ).toDouble() ) );
-        paperElement.setAttribute( "ptHeight", CM_TO_POINT(properties.attribute( "fo:page-height" ).toDouble() ) );
+        paperElement.setAttribute( "ptWidth", toPoint(properties.attribute( "fo:page-width" ) ) );
+        paperElement.setAttribute( "ptHeight", toPoint(properties.attribute( "fo:page-height" ) ) );
 //         paperElement.setAttribute( "unit", 0 );
 //         paperElement.setAttribute( "format", 5 );
 //         paperElement.setAttribute( "tabStopValue", 42.5198 );
 //         paperElement.setAttribute( "orientation", 0 );
-        pageHeight = properties.attribute( "fo:page-height" ).toDouble();
+        pageHeight = toPoint( properties.attribute( "fo:page-height" ) );
 
         QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
-        paperBorderElement.setAttribute( "ptRight", properties.attribute( "fo:margin-right" ).toDouble() );
-        paperBorderElement.setAttribute( "ptBottom", properties.attribute( "fo:margin-bottom" ).toDouble() );
-        paperBorderElement.setAttribute( "ptLeft", properties.attribute( "fo:page-left" ).toDouble() );
-        paperBorderElement.setAttribute( "ptTop", properties.attribute( "fo:page-top" ).toDouble() );
+        paperBorderElement.setAttribute( "ptRight", toPoint( properties.attribute( "fo:margin-right" ) ) );
+        paperBorderElement.setAttribute( "ptBottom", toPoint( properties.attribute( "fo:margin-bottom" ) ) );
+        paperBorderElement.setAttribute( "ptLeft", toPoint( properties.attribute( "fo:page-left" ) ) );
+        paperBorderElement.setAttribute( "ptTop", toPoint( properties.attribute( "fo:page-top" ) ) );
         paperElement.appendChild( paperBorderElement );
     }
 
@@ -325,23 +327,47 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             QDomElement e;
             if ( name == "draw:text-box" ) // textbox
             {
-                e = parseObject( doc, o, offset );
+                storeObjectStyles( o );
+                e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 4 );
+                append2DGeometry( doc, e, o, offset );
+                appendPen( doc, e );
+                appendBrush( doc, e );
+                appendRounding( doc, e, o );
+                appendShadow( doc, e );
                 e.appendChild( parseTextBox( doc, o ) );
             }
             else if ( name == "draw:rect" ) // rectangle
             {
-                e = parseObject( doc, o, offset );
+                storeObjectStyles( o );
+                e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 2 );
+                append2DGeometry( doc, e, o, offset );
+                appendPen( doc, e );
+                appendBrush( doc, e );
+                appendRounding( doc, e, o );
+                appendShadow( doc, e );
             }
             else if ( name == "draw:circle" || name == "draw:ellipse" ) // circle or ellipse
             {
-                e = parseObject( doc, o, offset );
+                storeObjectStyles( o );
+                e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 3 );
+                append2DGeometry( doc, e, o, offset );
+                appendPen( doc, e );
+                appendBrush( doc, e );
+                appendShadow( doc, e );
             }
             else if ( name == "draw:line" ) // line
             {
-                e = parseLineObject( doc, o, offset );
+                storeObjectStyles( o );
+                e = doc.createElement( "OBJECT" );
+                e.setAttribute( "type", 1 );
+                appendLineGeometry( doc, e, o, offset );
+                appendPen( doc, e );
+                appendBrush( doc, e );
+                appendShadow( doc, e );
+                appendLineEnds( doc, e );
             }
             else
             {
@@ -359,75 +385,38 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     doccontent.appendChild( doc );
 }
 
-QDomElement OoImpressImport::parseObject( QDomDocument& doc, const QDomElement& object, int offset )
+void OoImpressImport::append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset )
 {
-    // get origin, size, pen and brush of the object
-    // this code is identical for all objects
-    QDomElement objectElement = doc.createElement( "OBJECT" );
-
     QDomElement orig = doc.createElement( "ORIG" );
-    orig.setAttribute( "x", CM_TO_POINT(object.attribute("svg:x").toDouble()) );
-    orig.setAttribute( "y", CM_TO_POINT(object.attribute("svg:y").toDouble() + offset) );
-    objectElement.appendChild( orig );
+    orig.setAttribute( "x", toPoint( object.attribute( "svg:x" ) ) );
+    orig.setAttribute( "y", toPoint( object.attribute( "svg:y" ) ) + offset );
+    e.appendChild( orig );
 
     QDomElement size = doc.createElement( "SIZE" );
-    size.setAttribute( "width", CM_TO_POINT(object.attribute("svg:width").toDouble()) );
-    size.setAttribute( "height", CM_TO_POINT(object.attribute("svg:height").toDouble()) );
-    objectElement.appendChild( size );
-
-    m_styleStack.clear();
-    fillStyleStack( object );
-    m_styleStack.setMark( 0 );
-
-    // parse the pen- & brush-properties
-    QDomElement pen = doc.createElement( "PEN" );
-    objectElement.appendChild( pen );
-
-    if ( m_styleStack.hasAttribute( "draw:stroke" ) )
-        if ( m_styleStack.attribute( "draw:stroke" ) == "solid" ) // TODO check for other styles
-            pen.setAttribute( "style", 1 );
-        else
-            pen.setAttribute( "style", 0 );
-    if ( m_styleStack.hasAttribute( "svg:stroke-width" ) )
-        pen.setAttribute( "width", (int) CM_TO_POINT( m_styleStack.attribute( "svg:stroke-width" ).toDouble() ) );
-    if ( m_styleStack.hasAttribute( "svg:stroke-color" ) )
-        pen.setAttribute( "color", m_styleStack.attribute( "svg:stroke-color" ) );
-
-    QDomElement brush = doc.createElement( "BRUSH" );
-    objectElement.appendChild( brush );
-
-    if ( m_styleStack.hasAttribute( "draw:fill" ) )
-        if ( m_styleStack.attribute( "draw:fill" ) == "solid" ) // TODO check for other styles
-            brush.setAttribute( "style", 1 );
-    if ( m_styleStack.hasAttribute( "draw:fill-color" ) )
-        brush.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
-
-    return objectElement;
+    size.setAttribute( "width", toPoint( object.attribute( "svg:width" ) ) );
+    size.setAttribute( "height", toPoint( object.attribute( "svg:height" ) ) );
+    e.appendChild( size );
 }
 
-QDomElement OoImpressImport::parseLineObject( QDomDocument& doc, const QDomElement& object, int offset )
+void OoImpressImport::appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset )
 {
-    // lineobjects need special handling because the coordinates are stored in
-    // a different way than for the other objects
-    double x1 = object.attribute("svg:x1").toDouble();
-    double y1 = object.attribute("svg:y1").toDouble();
-    double x2 = object.attribute("svg:x2").toDouble();
-    double y2 = object.attribute("svg:y2").toDouble();
+    double x1 = toPoint( object.attribute( "svg:x1" ) );
+    double y1 = toPoint( object.attribute( "svg:y1" ) );
+    double x2 = toPoint( object.attribute( "svg:x2" ) );
+    double y2 = toPoint( object.attribute( "svg:y2" ) );
 
-    double x = QMIN(x1, x2);
-    double y = QMIN(y1, y2);
-
-    QDomElement objectElement = doc.createElement( "OBJECT" );
+    double x = QMIN( x1, x2 );
+    double y = QMIN( y1, y2 );
 
     QDomElement orig = doc.createElement( "ORIG" );
-    orig.setAttribute( "x", CM_TO_POINT( x ) );
-    orig.setAttribute( "y", CM_TO_POINT( y + offset) );
-    objectElement.appendChild( orig );
+    orig.setAttribute( "x", x );
+    orig.setAttribute( "y", y + offset );
+    e.appendChild( orig );
 
     QDomElement size = doc.createElement( "SIZE" );
-    size.setAttribute( "width", CM_TO_POINT( fabs( x1 - x2 ) ) );
-    size.setAttribute( "height", CM_TO_POINT( fabs( y1 - y2 ) ) );
-    objectElement.appendChild( size );
+    size.setAttribute( "width", fabs( x1 - x2 ) );
+    size.setAttribute( "height", fabs( y1 - y2 ) );
+    e.appendChild( size );
 
     QDomElement linetype = doc.createElement( "LINETYPE" );
     if ( ( x1 < x2 && y1 < y2 ) || ( x1 > x2 && y1 > y2 ) )
@@ -435,20 +424,155 @@ QDomElement OoImpressImport::parseLineObject( QDomDocument& doc, const QDomEleme
     else
         linetype.setAttribute( "value", 3 );
 
-    objectElement.appendChild( linetype );
+    e.appendChild( linetype );
+}
 
-    m_styleStack.clear();
-    fillStyleStack( object );
-    m_styleStack.setMark( 0 );
-
+void OoImpressImport::appendPen( QDomDocument& doc, QDomElement& e )
+{
     QDomElement pen = doc.createElement( "PEN" );
-    objectElement.appendChild( pen );
+    if ( m_styleStack.hasAttribute( "draw:stroke" ) )
+    {
+        if ( m_styleStack.attribute( "draw:stroke" ) == "solid" ) // TODO check for other styles
+            pen.setAttribute( "style", 1 );
+        if ( m_styleStack.hasAttribute( "svg:stroke-width" ) )
+            pen.setAttribute( "width", (int) toPoint( m_styleStack.attribute( "svg:stroke-width" ) ) );
+        if ( m_styleStack.hasAttribute( "svg:stroke-color" ) )
+            pen.setAttribute( "color", m_styleStack.attribute( "svg:stroke-color" ) );
+        e.appendChild( pen );
+    }
+    else
+        pen.setAttribute( "style", 0 ); // to avoid a line around textobjects
+}
 
-    QDomElement brush = doc.createElement( "BRUSH" );
-    objectElement.appendChild( brush );
-    objectElement.setAttribute( "type", 1 );
+void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
+{
+    if ( m_styleStack.hasAttribute( "draw:fill" ) )
+    {
+        QDomElement brush = doc.createElement( "BRUSH" );
+        if ( m_styleStack.attribute( "draw:fill" ) == "solid" ) // TODO check for other styles
+            brush.setAttribute( "style", 1 );
+        if ( m_styleStack.hasAttribute( "draw:fill-color" ) )
+            brush.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
+        e.appendChild( brush );
+    }
+}
 
-    return objectElement;
+void OoImpressImport::appendRounding( QDomDocument& doc, QDomElement& e, const QDomElement& object )
+{
+    if ( object.hasAttribute( "draw:corner-radius" ) )
+    {
+        // kpresenter uses percent, ooimpress uses cm ... hmm?
+        QDomElement rounding = doc.createElement( "RNDS" );
+        rounding.setAttribute( "x", (int) toPoint( object.attribute( "draw:corner-radius" ) ) );
+        rounding.setAttribute( "y", (int) toPoint( object.attribute( "draw:corner-radius" ) ) );
+        e.appendChild( rounding );
+    }
+}
+
+void OoImpressImport::appendShadow( QDomDocument& doc, QDomElement& e )
+{
+    // Note that ooimpress makes a difference between shadowed text and
+    // a shadowed object while kpresenter only knows the attribute 'shadow'.
+    // This means that a shadowed textobject in kpresenter will always show
+    // a shadowed text but no shadow for the object itself.
+
+    // make sure this is a textobject or textspan
+    if ( !e.hasAttribute( "type" ) ||
+         ( e.hasAttribute( "type" ) && e.attribute( "type" ) == "4" ) )
+    {
+        if ( m_styleStack.hasAttribute( "fo:text-shadow" ) &&
+             m_styleStack.attribute( "fo:text-shadow" ) != "none" )
+        {
+            // use the shadow attribute to indicate a text-shadow
+            QDomElement shadow = doc.createElement( "SHADOW" );
+            QString distance = m_styleStack.attribute( "fo:text-shadow" );
+            distance.truncate( distance.find( ' ' ) );
+            shadow.setAttribute( "distance", toPoint( distance ) );
+            shadow.setAttribute( "direction", 5 );
+            shadow.setAttribute( "color", "#a0a0a0" );
+            e.appendChild( shadow );
+        }
+    }
+    else if ( m_styleStack.hasAttribute( "draw:shadow" ) &&
+              m_styleStack.attribute( "draw:shadow" ) == "visible" )
+    {
+        // use the shadow attribute to indicate an object-shadow
+        QDomElement shadow = doc.createElement( "SHADOW" );
+        double x = toPoint( m_styleStack.attribute( "draw:shadow-offset-x" ) );
+        double y = toPoint( m_styleStack.attribute( "draw:shadow-offset-y" ) );
+
+        if ( x < 0 && y < 0 )
+        {
+            shadow.setAttribute( "direction", 1 );
+            shadow.setAttribute( "distance", (int) fabs ( x ) );
+        }
+        else if ( x == 0 && y < 0 )
+        {
+            shadow.setAttribute( "direction", 2 );
+            shadow.setAttribute( "distance", (int) fabs ( y ) );
+        }
+        else if ( x > 0 && y < 0 )
+        {
+            shadow.setAttribute( "direction", 3 );
+            shadow.setAttribute( "distance", (int) fabs ( x ) );
+        }
+        else if ( x > 0 && y == 0 )
+        {
+            shadow.setAttribute( "direction", 4 );
+            shadow.setAttribute( "distance", (int) fabs ( x ) );
+        }
+        else if ( x > 0 && y > 0 )
+        {
+            shadow.setAttribute( "direction", 5 );
+            shadow.setAttribute( "distance", (int) fabs ( x ) );
+        }
+        else if ( x == 0 && y > 0 )
+        {
+            shadow.setAttribute( "direction", 6 );
+            shadow.setAttribute( "distance", (int) fabs ( y ) );
+        }
+        else if ( x < 0 && y > 0 )
+        {
+            shadow.setAttribute( "direction", 7 );
+            shadow.setAttribute( "distance", (int) fabs ( x ) );
+        }
+        else if ( x < 0 && y == 0 )
+        {
+            shadow.setAttribute( "direction", 8 );
+            shadow.setAttribute( "distance", (int) fabs ( x ) );
+        }
+
+        if ( m_styleStack.hasAttribute ( "draw:shadow-color" ) )
+            shadow.setAttribute( "color", m_styleStack.attribute( "draw:shadow-color" ) );
+
+        e.appendChild( shadow );
+    }
+}
+
+void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e )
+{
+}
+
+double OoImpressImport::toPoint( QString value )
+{
+    value.simplifyWhiteSpace();
+    value.remove( ' ' );
+
+    int index = value.find( QRegExp( "[a-z]{1,2}$" ), -1 );
+    if ( index == -1 )
+        return 0;
+
+    QString unit = value.mid( index - 1 );
+    value.truncate ( index - 1 );
+
+    if ( unit == "cm" )
+        return CM_TO_POINT( value.toDouble() );
+    else if ( unit == "mm" )
+        return MM_TO_POINT( value.toDouble() );
+    else if ( unit == "pt" )
+        return value.toDouble();
+    else
+        return 0;
 }
 
 QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement& textBox )
@@ -571,7 +695,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         if ( m_styleStack.hasAttribute( "fo:font-family" ) )
             text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
         if ( m_styleStack.hasAttribute( "fo:font-size" ) )
-            text.setAttribute( "pointSize", m_styleStack.attribute( "fo:font-size" ).toDouble() );
+            text.setAttribute( "pointSize", toPoint( m_styleStack.attribute( "fo:font-size" ) ) );
         if ( m_styleStack.hasAttribute( "fo:font-weight" ) )
             if ( m_styleStack.attribute( "fo:font-weight" ) == "bold" )
                 text.setAttribute( "bold", 1 );
@@ -586,6 +710,8 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
             }
         }
+
+        appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
 
         if ( n.toElement().tagName() == "text:span" )
             m_styleStack.clearMark( 1 ); // current node is a text:span, remove its style from the stack
@@ -640,16 +766,16 @@ void OoImpressImport::fillStyleStack( const QDomElement& object )
             m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
         m_styleStack.push( style );
     }
-    if ( object.hasAttribute( "draw:text-style-name" ) )
+    if ( object.hasAttribute( "draw:style-name" ) )
     {
-        QDomElement *style = m_styles[object.attribute( "draw:text-style-name" )];
+        QDomElement *style = m_styles[object.attribute( "draw:style-name" )];
         if ( style->hasAttribute( "style:parent-style-name" ) )
             m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
         m_styleStack.push( style );
     }
-    if ( object.hasAttribute( "draw:style-name" ) )
+    if ( object.hasAttribute( "draw:text-style-name" ) )
     {
-        QDomElement *style = m_styles[object.attribute( "draw:style-name" )];
+        QDomElement *style = m_styles[object.attribute( "draw:text-style-name" )];
         if ( style->hasAttribute( "style:parent-style-name" ) )
             m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
         m_styleStack.push( style );
@@ -661,6 +787,13 @@ void OoImpressImport::fillStyleStack( const QDomElement& object )
             m_styleStack.push( m_styles[style->attribute( "style:parent-style-name" )] );
         m_styleStack.push( style );
     }
+}
+
+void OoImpressImport::storeObjectStyles( const QDomElement& object )
+{
+    m_styleStack.clear();
+    fillStyleStack( object );
+    m_styleStack.setMark( 0 );
 }
 
 StyleStack::StyleStack()
