@@ -1741,11 +1741,11 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
         }
     }
 
-    // Draw page borders (red), except when printing.
+    // Draw page borders, except when printing.
     if ( painter->device()->devType() != QInternal::Printer )
     {
         painter->save();
-        painter->setPen( QApplication::palette().active().color( QColorGroup::Highlight ) );
+        painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
         painter->setBrush( Qt::NoBrush );
 
         for ( int k = 0; k < getPages(); k++ )
@@ -1792,7 +1792,7 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
                     painter->setClipRegion( devReg );
 
                     //kdDebug() << "KWDocument::drawBorders clearEmptySpace in " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
-                    painter->fillRect( emptySpaceRegion.boundingRect(), QApplication::palette().active().brush( QColorGroup::Mid ) );
+                    painter->fillRect( emptySpaceRegion.boundingRect(), QApplication::palette().active().brush( QColorGroup::Base ) ); // Well, Midlight looks great but isn't WYSIWYG
                     painter->restore();
                 }
             }
