@@ -106,6 +106,11 @@ protected:
     void initTab4();
     void initTab5();
 
+    QStringList saveCompletionList;
+    QStringList saveExceptionAbbreviationList;
+    QStringList saveExceptionTwoUpperLetterList;
+
+
     QWidget *tab1;
     QWidget *tab2;
     QWidget *tab3;

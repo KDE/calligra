@@ -470,15 +470,18 @@ void KoAutoFormatDia::setupTab4()
     ( void )new QWidget( tab4 );
     twoUpperLetter=new KoAutoFormatExceptionWidget(tab4,i18n("Accept two uppercase letters in:"),m_autoFormat.listTwoUpperLetterException(),m_autoFormat.getConfigIncludeTwoUpperUpperLetterException());
     ( void )new QWidget( tab4 );
+    saveExceptionAbbreviationList = m_autoFormat.listException();
+    saveExceptionTwoUpperLetterList = m_autoFormat.listTwoUpperLetterException();
+    initTab4();
+
 }
 
 void KoAutoFormatDia::initTab4()
 {
-    abbreviation->setListException( m_autoFormat.listException() );
+    abbreviation->setListException( saveExceptionAbbreviationList );
     abbreviation->setAutoInclude( m_autoFormat.getConfigIncludeAbbreviation() );
-
-    twoUpperLetter->setListException( m_autoFormat.listTwoUpperLetterException());
-    twoUpperLetter->setAutoInclude( m_autoFormat.getConfigIncludeTwoUpperUpperLetterException());
+    twoUpperLetter->setListException( saveExceptionTwoUpperLetterList );
+    twoUpperLetter->setAutoInclude( m_autoFormat.getConfigIncludeTwoUpperUpperLetterException() );
 }
 
 void KoAutoFormatDia::setupTab5()
@@ -525,6 +528,8 @@ void KoAutoFormatDia::setupTab5()
     cbAppendSpace = new QCheckBox( tab5 );
     cbAppendSpace->setText( i18n( "Append Space" ) );
     cbAppendSpace->resize( cbAppendSpace->sizeHint() );
+    saveCompletionList=m_autoFormat.listCompletion();
+
     initTab5();
 }
 
@@ -532,15 +537,13 @@ void KoAutoFormatDia::initTab5()
 {
     cbAllowAutoCompletion->setChecked( m_autoFormat.getConfigAutoCompletion());
     cbAddCompletionWord->setChecked( m_autoFormat.getConfigAddCompletionWord());
-    QStringList list=m_autoFormat.listCompletion();
     m_listCompletion->clear();
-    m_listCompletion->insertStringList(list);
-    if( list.count()==0 || m_listCompletion->currentText().isEmpty())
+    m_listCompletion->insertStringList( saveCompletionList );
+    if( saveCompletionList.count()==0 || m_listCompletion->currentText().isEmpty())
         pbRemoveCompletionEntry->setEnabled( false );
     m_minWordLength->setValue ( m_docAutoFormat->getConfigMinWordLength() );
     m_maxNbWordCompletion->setValue ( m_docAutoFormat->getConfigNbMaxCompletionWord() );
     cbAppendSpace->setChecked( m_autoFormat.getConfigAppendSpace() );
-
 }
 
 void KoAutoFormatDia::slotCompletionWordSelected( const QString & word)
