@@ -26,10 +26,7 @@
 #include <qptrlist.h>
 #include <qdict.h>
 
-#include "kexipropertyeditor.h"
 #include "kexiproperty.h"
-
-typedef QDict<KexiPropertyEditorItem> ChildDict;
 
 /** This class is a subclass of KListViewItem which is associated to a property.
     It also takes care of drawing custom contents.
@@ -38,6 +35,8 @@ typedef QDict<KexiPropertyEditorItem> ChildDict;
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 {
 	public:
+		typedef QDict<KexiPropertyEditorItem> Dict;
+
 		/*! Creates a KexiPropertyEditorItem child of \a parent, associated to \a property.
 		 Within property editor, items are created in KexiPropertyEditor::fill(), 
 		 every time the buffer is updated.
@@ -70,9 +69,9 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 		*/ 
 //		QVariant	getComposedValue();
 		/*! Updates the value of child items, when the value of the parent was changed
- 		    with setValue(). Used by FormDesigner. 
+ 		    with setValue(). Used by PropertyEditor.
 		*/
-		void		updateChildValue();
+		void updateChildrenValue();
 
 		//! \return true if the item has been modified.
 //		bool		modified() { return !(m_value==m_oldvalue);}
@@ -113,7 +112,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 //		QVariant	m_oldvalue;
 		KexiProperty	*m_property;
 //		QPtrList<KexiProperty>	*m_childprop;
-		ChildDict	*m_children;
+		Dict	*m_children;
 
 		uint m_order;
 };

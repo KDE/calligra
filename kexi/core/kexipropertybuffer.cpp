@@ -47,7 +47,7 @@ KexiPropertyBuffer::changeProperty(const QString &property, const QVariant &valu
 	kdDebug() << "KexiPropertyBuffer::changeProperty(): changing: " << property 
 		<< " from '" << (prop->value().toString().isNull() ? QString("NULL") : prop->value().toString())
 		<< "' to '" << (value.toString().isNull() ? QString("NULL") : value.toString()) << "'" << endl;
-
+/*
 	bool ch = false;
 	if (prop->value().type()==QVariant::DateTime
 		|| prop->value().type()==QVariant::Time) {
@@ -68,12 +68,14 @@ KexiPropertyBuffer::changeProperty(const QString &property, const QVariant &valu
 	if (ch) {
 		prop->setValue(value);
 		emit propertyChanged(*this, *prop);
-	}
+	}*/
+	prop->setValue(value);
 }
 
 void
 KexiPropertyBuffer::add(KexiProperty *property)
 {
+	property->m_buf = this;
 	insert(property->name(), property);
 	m_list.append( property );
 }

@@ -19,6 +19,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kexipropertyeditor.h"
+
 #include <qheader.h>
 #include <qevent.h>
 #include <qfontmetrics.h>
@@ -28,7 +30,6 @@
 #include <kpushbutton.h>
 #include <kiconloader.h>
 
-#include "kexipropertyeditoritem.h"
 #include "kexipropertybuffer.h"
 #include "propertyeditorlist.h"
 #include "propertyeditorinput.h"
@@ -36,12 +37,12 @@
 #include "propertyeditorfont.h"
 #include "propertyeditordate.h"
 
-#include "kexipropertyeditor.h"
-
-
 KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const char *name)
  : KListView(parent, name)
+ , m_items(101)
 {
+	m_items.setAutoDelete(false);
+
 	addColumn(i18n("Property"));//, 145);
 	addColumn(i18n("Value"));//, 100);
 
@@ -70,6 +71,9 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	header()->setMovingEnabled( false );
 }
 
+KexiPropertyEditor::~KexiPropertyEditor()
+{
+}
 
 void
 KexiPropertyEditor::slotClicked(QListViewItem *item)
@@ -396,7 +400,15 @@ QSize KexiPropertyEditor::sizeHint() const
 void
 KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b)
 {
+	if (m_buffer) {
+		m_buffer->disconnect(this);
+	}
 	m_buffer = b; 
+	if (m_buffer) {
+		//receive property changes
+		connect(m_buffer,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
+			this,SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
+	}
 	fill(); 
 }
 
@@ -414,12 +426,15 @@ KexiPropertyEditor::fill()
 	{
 		m_topItem = new KexiPropertyEditorItem(this,"Top Item");
 	}
-	
+
+	m_items.clear();
+
 	KexiPropertyEditorItem *item=0;
 	for(;it.current(); ++it)
 	{
 		if (it.current()->isVisible()) {
 			item = new KexiPropertyEditorItem(m_topItem, it.current(), item);
+			m_items.insert(it.current()->name(), item);
 		}
 	}
 }
@@ -439,11 +454,12 @@ KexiPropertyEditor::resetItem()
 			m_editItem->updateValue();
 		}
 		//update children
-		KexiPropertyEditorItem *it = static_cast<KexiPropertyEditorItem*>(m_editItem->firstChild());
+		m_editItem->updateChildrenValue();
+/*		KexiPropertyEditorItem *it = static_cast<KexiPropertyEditorItem*>(m_editItem->firstChild());
 		while (it) {
 			it->updateValue(false);
 			it = static_cast<KexiPropertyEditorItem*>(it->nextSibling());
-		}
+		}*/
 
 		showDefaultsButton( false );
 //js: not needed		else
@@ -454,11 +470,14 @@ KexiPropertyEditor::resetItem()
 void
 KexiPropertyEditor::moveEditor()
 {
-	QPoint p = contentsToViewport(QPoint(0, itemPos(m_editItem)));
-	if(m_currentEditor)
+//	if (m_editItem) {
+	if (m_currentEditor) {
+		QPoint p = contentsToViewport(QPoint(0, itemPos(m_editItem)));
+//		if(m_currentEditor)
 		m_currentEditor->move(m_currentEditor->x(), p.y());
-	if(m_defaults->isVisible())
-		m_defaults->move(m_defaults->x(), p.y());
+		if(m_defaults->isVisible())
+			m_defaults->move(m_defaults->x(), p.y());
+	}
 }
 
 void
@@ -481,8 +500,14 @@ KexiPropertyEditor::resizeEvent(QResizeEvent *ev)
 	}
 }
 
-KexiPropertyEditor::~KexiPropertyEditor()
+void
+KexiPropertyEditor::slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &prop)
 {
+	if (m_buffer!=&buf)
+		return;
+	KexiPropertyEditorItem* item = m_items[prop.name()];
+	item->updateValue();
+	item->updateChildrenValue();
 }
 
 

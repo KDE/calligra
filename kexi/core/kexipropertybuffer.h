@@ -85,6 +85,8 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public QDict<KexiProp
 	protected:
 		QString m_typeName;
 		KexiProperty::List m_list;
+
+	friend class KexiProperty;
 };
 
 #endif

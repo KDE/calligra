@@ -24,12 +24,14 @@
 
 #include <qvariant.h>
 #include <qguardedptr.h>
+#include <qdict.h>
 
 #include <klistview.h>
 
+#include "kexipropertyeditoritem.h"
+
 class KexiProperty;
 class KexiPropertyBuffer;
-class KexiPropertyEditorItem;
 class KexiPropertySubEditor;
 class KPushButton;
 
@@ -44,21 +46,23 @@ class KPushButton;
     // Create a Property Buffer
     m_buffer = new KexiPropertyBuffer(this);
     // Add properties into the buffer
-    m_buffer->add(KexiProperty("Name", "Name"));
-    m_buffer->insert(KexiProperty("Int", 43));
+    m_buffer->add( new KexiProperty("Name", "Name") );
+    m_buffer->add( new KexiProperty("Int", 43) );
     
     // for a string list property
     QStringList list;
     list.append("MyItem");
     list.append("OtherItem");
     list.append("Item");
-    m_buffer->add(KexiProperty("list","Item" , list));
+    m_buffer->add( new KexiProperty("list","Item" , list) );
     [...]
     
     KexiPropertyEditor *edit = new KexiPropertyEditor(this,false);
     edit->setBuffer(m_buffer);
     \endcode
-**/
+    KexiPropertyEditor receives propery value changes from the assigned buffer,
+    and automatically updates visually, if needed.
+*/
 //! A list view to edit any type of properties
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 {
@@ -82,7 +86,10 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		*/
 		void	setBuffer(KexiPropertyBuffer *b);
 		virtual QSize sizeHint() const;
-		
+
+		//! \return editor item named with \a name or null if such item not found
+		KexiPropertyEditorItem* item(const QString& name) const { return m_items[name]; }
+
 	signals:
 		/*! This signal is emitted when a property value has changed, ie when the user presses Enter or when another item
 		    gets the focus. \a propname is the name of the property and \a value is the new value of this property.
@@ -131,6 +138,9 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		void	slotExpanded(QListViewItem *item);
 		void	slotCollapsed(QListViewItem *item);
 
+		/*! Receives signals on \a prop property change from buffer \a buf. */
+		void slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &prop);
+
 	protected:
 		/*! Creates an editor for the list item \a i in the rect \a geometry, and displays revert button 
 		    if property is modified (ie KexiPropertyEditorItem::modified() == true).
@@ -144,11 +154,12 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 
 	private:
 		QGuardedPtr<KexiPropertySubEditor> m_currentEditor;
-		KexiPropertyEditorItem	*m_editItem;
-		KexiPropertyEditorItem	*m_topItem; //The top item is used to control the drawing of every branches.
-		KexiPropertyBuffer	*m_buffer;
-		KPushButton		*m_defaults; // "Revert to defaults" button
-		bool			m_sync;
+		KexiPropertyEditorItem *m_editItem;
+		KexiPropertyEditorItem *m_topItem; //The top item is used to control the drawing of every branches.
+		KexiPropertyBuffer *m_buffer;
+		KPushButton *m_defaults; // "Revert to defaults" button
+		KexiPropertyEditorItem::Dict m_items;
+		bool m_sync : 1;
 };
 
 #endif

@@ -24,10 +24,12 @@
 
 #include <qvariant.h>
 #include <qdict.h>
+#include <qguardedptr.h>
 
 class QObject;
 class QString;
 class QStringList;
+class KexiPropertyBuffer;
 
 /** This class holds a single property, which can be any of the types supported by QVariant.
     It includes support for QStringList properties, an i18n'ed label and stores an old value to allow undo.
@@ -199,7 +201,7 @@ class KEXICORE_EXPORT KexiProperty
 		void updateValueForChild(const QString& childName, const QVariant &v, 
 			bool saveOldValue);
 
-	private:
+//	private:
 		void init(QVariant value);
 
 		QString		m_name;
@@ -210,12 +212,15 @@ class KEXICORE_EXPORT KexiProperty
 		KexiPropertyListData *m_list;
 //		QMap<QString,QString> *m_list;
 		KexiProperty* m_parent;
+		QGuardedPtr<KexiPropertyBuffer> m_buf;
 		KexiProperty::Dict* m_children_dict;
 		KexiProperty::List* m_children_list;
 
 		int m_autosync;
 		bool m_changed : 1;
 		bool m_visible : 1;
+
+	friend class KexiPropertyBuffer;
 };
 
 #endif

@@ -102,7 +102,7 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *par, Kexi
 	//add children
 	KexiProperty::List *children = m_property->children();
 	if (children) {
-		m_children = new ChildDict();
+		m_children = new Dict();
 		KexiProperty::ListIterator it(*children);
 		KexiPropertyEditorItem *item = 0;
 		for (;it.current();++it) {
@@ -134,7 +134,7 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *par, Kexi
 //			KexiProperty *height = new KexiProperty("height", s.height(), i18n("height") );
 //			m_childprop->append(height);
 			
-			m_children = new ChildDict();
+			m_children = new Dict();
 			m_children->insert("width", new KexiPropertyEditorItem(this, width));
 			m_children->insert("height", new KexiPropertyEditorItem(this, height));
 			break;
@@ -148,7 +148,7 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *par, Kexi
 			KexiProperty *y = new KexiProperty(i18n("y"), p.y() );
 			m_childprop->append(y);
 			
-			m_children = new ChildDict();
+			m_children = new Dict();
 			m_children->insert("x", new KexiPropertyEditorItem(this, x));
 			m_children->insert("y", new KexiPropertyEditorItem(this, y));
 			break;
@@ -166,7 +166,7 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *par, Kexi
 			KexiProperty *hei = new KexiProperty(i18n("height"), r.height() );
 			m_childprop->append(hei);
 			
-			m_children = new ChildDict();
+			m_children = new Dict();
 			m_children->insert("x", new KexiPropertyEditorItem(this, x));
 			m_children->insert("y", new KexiPropertyEditorItem(this, y));
 			m_children->insert("width", new KexiPropertyEditorItem(this, wid));
@@ -189,7 +189,7 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *par, Kexi
 			KexiProperty *vStr = new KexiProperty(i18n("vStretch"), (int)p.verStretch() );
 			m_childprop->append(vStr);
 			
-			m_children = new ChildDict();
+			m_children = new Dict();
 			m_children->insert("hSize", new KexiPropertyEditorItem(this, hSize));
 			m_children->insert("vSize", new KexiPropertyEditorItem(this, vSize));
 			m_children->insert("hStretch", new KexiPropertyEditorItem(this, hStr));
@@ -505,6 +505,17 @@ void KexiPropertyEditorItem::updateValue(bool alsoParent)
 	setText( 1, m_property->valueText() );
 	if (alsoParent && parent())
 		static_cast<KexiPropertyEditorItem*>(parent())->updateValue();
+}
+
+void
+KexiPropertyEditorItem::updateChildrenValue()
+{
+	//update children value
+	KexiPropertyEditorItem *it = static_cast<KexiPropertyEditorItem*>(firstChild());
+	while (it) {
+		it->updateValue(false);
+		it = static_cast<KexiPropertyEditorItem*>(it->nextSibling());
+	}
 }
 
 /*QString KexiPropertyEditorItem::key( int column, bool ascending ) const

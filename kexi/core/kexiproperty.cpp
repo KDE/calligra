@@ -20,6 +20,7 @@
 */
 
 #include "kexiproperty.h"
+#include "kexipropertybuffer.h"
 
 #include <qstringlist.h>
 #include <kdebug.h>
@@ -317,10 +318,27 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 	if (m_value.type() != v.type() && !m_value.isNull() && !v.isNull()) {
 		kdDebug() << "INCOMPAT TYPES! " <<m_value.typeName() <<" and " << v.typeName() << endl;
 	}
-		
+
+	//1. Check if the value should be changed
+	bool ch = false;
+	if (m_value.type()==QVariant::DateTime
+		|| m_value.type()==QVariant::Time) {
+		//for date and datetime types: compare with strings, because there 
+		//can be miliseconds difference
+		ch = m_value.toString() != v.toString();
+	}
+	else if (m_value.type()==QVariant::String) {
+		//property is also changed for string type, if one of value is empty and other isn't
+		if (m_value.toString().isEmpty() != v.toString().isEmpty())
+			ch = true;
+	}
+
+	if (!ch && m_value == v)
+		return;
+
 	if (saveOldValue) {
-		if (m_value == v)
-			return;
+//		if (m_value == v)
+//			return;
 		if (!m_changed) {
 			m_oldValue = m_value; //store old
 		}
@@ -337,6 +355,9 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 		m_oldValue = QVariant(); //clear old
 		setChanged(false);
 	}
+
+	if (!m_buf.isNull())
+		emit m_buf->propertyChanged(*m_buf, *this);
 
 	if (!updateChildren)
 		return;
