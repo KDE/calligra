@@ -159,12 +159,6 @@ public:
     bool exp0rt( const KURL &url );
 
     /**
-     * The current filter settings (used by the filter architecture).
-     * @internal
-     */
-    QMap <QString, QString> &filterSettings();
-
-    /**
      * Sets whether the document can be edited or is read only.
      * This recursively applied to all child documents and
      * @ref KoView::updateReadWrite is called for every attached
@@ -678,26 +672,6 @@ protected:
      *  otherwise, File --> Export will not work properly.
      */
     bool isExporting() const;
-
-    /**
-     *  Returns the normal filter settings used with saveFile() and openFile()
-     *  (including when isImporting(), but excluding when isExporting()).  After
-     *  a KoDocument::import(), these filter settings are copied over those used
-     *  for exporting.
-     *
-     *  Modifying the returned settings may have a direct impact on future
-     *  Save operations.
-     */
-    QMap <QString, QString> &normalFilterSettings();
-
-    /**
-     *  Returns the filter settings used with KoDocument::exp0rt (separate from
-     *  the normal filter settings).
-     *
-     *  Modifying the returned settings may have a direct impact on future
-     *  Export operations.
-     */
-    QMap <QString, QString> &exportFilterSettings();
 
     /**
      *  You need to overload this function if your document may contain

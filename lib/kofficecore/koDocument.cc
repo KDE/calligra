@@ -92,7 +92,6 @@ public:
         filterManager( 0L ),
         m_specialOutputFlag( 0 ),
         m_isImporting( false ), m_isExporting( false ),
-        m_filterSettings( m_normalFilterSettings ),
         m_numOperations( 0 ),
         modifiedAfterAutosave( false ),
         m_autosaving( false ),
@@ -126,10 +125,6 @@ public:
                                      // (Save/Save As, Export)
     int m_specialOutputFlag; // See KoFileDialog in koMainWindow.cc
     bool m_isImporting, m_isExporting; // File --> Import/Export vs File --> Open/Save
-
-    QMap <QString, QString> m_normalFilterSettings,
-                            m_exportFilterSettings,
-                            &m_filterSettings;
 
     QTimer m_autoSaveTimer;
     QString lastErrorMessage; // see openFile()
@@ -301,9 +296,6 @@ bool KoDocument::exp0rt( const KURL & _url )
     bool ret;
 
     d->m_isExporting = true;
-    // d->m_filterSettings is a reference
-    d->m_filterSettings = d->m_exportFilterSettings;
-
 
     //
     // Preserve a lot of state here because we need to restore it in order to
@@ -344,7 +336,6 @@ bool KoDocument::exp0rt( const KURL & _url )
     }
 
 
-    d->m_filterSettings = d->m_normalFilterSettings;
     d->m_isExporting = false;
 
     return ret;
@@ -482,21 +473,6 @@ bool KoDocument::isImporting() const
 bool KoDocument::isExporting() const
 {
     return d->m_isExporting;
-}
-
-QMap <QString, QString> &KoDocument::filterSettings()
-{
-    return d->m_filterSettings;
-}
-
-QMap <QString, QString> &KoDocument::normalFilterSettings()
-{
-    return d->m_normalFilterSettings;
-}
-
-QMap <QString, QString> &KoDocument::exportFilterSettings()
-{
-    return d->m_exportFilterSettings;
 }
 
 void KoDocument::setCheckAutoSaveFile( bool b )
@@ -1163,11 +1139,6 @@ bool KoDocument::import( const KURL & _url )
         resetURL ();
         setTitleModified ();
     }
-
-    // we were using normalFilterSettings - copy them to exportFilterSettings
-    // (they might be useful there for preselecting options in filter dialogs
-    // etc.)
-    d->m_exportFilterSettings = d->m_normalFilterSettings;
 
     d->m_isImporting = false;
 
