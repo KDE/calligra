@@ -141,6 +141,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 {
     dcop = 0;
     m_tabStop = MM_TO_POINT( 15.0 );
+    bgFrameSpellChecked = 0L;
 
     m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
@@ -3198,32 +3199,34 @@ void KWDocument::reactivateBgSpellChecking()
 
 KWTextFrameSet* KWDocument::nextTextFrameSet(KWTextFrameSet *obj)
 {
-    QPtrList<KWTextFrameSet> textFramesets;
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit ) {
-        fit.current()->addTextFrameSets(textFramesets);
-    }
     int pos = -1;
-    if ( obj )
-        pos=textFramesets.findNextRef(obj);
-
+    if ( bgFrameSpellChecked )
+        pos=m_lstFrameSet.findNextRef(bgFrameSpellChecked);
     if(pos !=-1)
     {
-        KWTextFrameSet *frm=0L;
-        for ( frm=textFramesets.at(pos); frm != 0; frm=textFramesets.next() ){
-            if(frm->textObject()->needSpellCheck())
-                return frm;
+        KWFrameSet *frm=0L;
+        for ( frm=m_lstFrameSet.at(pos); frm != 0; frm=m_lstFrameSet.next() ){
+            KWTextFrameSet *newFrm = frm->nextTextObject( obj );
+            if(newFrm && newFrm->textObject()->needSpellCheck())
+            {
+                bgFrameSpellChecked = frm;
+                return newFrm;
+            }
         }
     }
     else
     {
-        //return to 0
-        KWTextFrameSet *frm=0L;
-        for ( frm=textFramesets.first(); frm != 0; frm=textFramesets.next() ){
-            if(frm->textObject()->needSpellCheck())
-                return frm;
+        KWFrameSet *frm=0L;
+        for ( frm=m_lstFrameSet.first(); frm != 0; frm=m_lstFrameSet.next() ){
+            KWTextFrameSet *newFrm = frm->nextTextObject( obj );
+            if(newFrm && newFrm->textObject()->needSpellCheck())
+            {
+                bgFrameSpellChecked = frm;
+                return newFrm;
+            }
         }
     }
+    bgFrameSpellChecked = 0L;
     return 0L;
 }
 

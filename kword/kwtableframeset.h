@@ -287,6 +287,7 @@ public:
 
     KCommand *setProtectContent ( bool _protect );
 
+    virtual KWTextFrameSet* nextTextObject( KWFrameSet * );
 
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );

@@ -233,6 +233,7 @@ public:
     /** (Assuming this==main frameset), recalc the foot note numbers */
     void renumberFootNotes( bool repaint = true );
 
+    virtual KWTextFrameSet* nextTextObject( KWFrameSet * ) { return this;}
 signals:
     /** Tell the Edit object that this frame got deleted */
     void frameDeleted( KWFrame* frame );

@@ -663,6 +663,7 @@ public:
     virtual void printDebug( KWFrame * );
 #endif
 
+    virtual KWTextFrameSet* nextTextObject( KWFrameSet * ) { return 0L;}
 signals:
 
     // Emitted when something has changed in this frameset,

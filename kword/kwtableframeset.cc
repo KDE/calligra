@@ -1980,6 +1980,33 @@ KCommand *KWTableFrameSet::setProtectContent ( bool _protect )
     return 0L;
 }
 
+KWTextFrameSet* KWTableFrameSet::nextTextObject( KWFrameSet *obj )
+{
+    int pos = -1;
+    KWTableFrameSet::Cell *tmp = dynamic_cast<KWTableFrameSet::Cell *>(obj);
+    if ( tmp )
+        pos=m_cells.findNextRef(tmp);
+    if(pos !=-1)
+    {
+        KWFrameSet *frm=0L;
+        for ( frm=m_cells.at(pos); frm != 0; frm=m_cells.next() ){
+            KWTextFrameSet *newFrm = frm->nextTextObject( obj );
+            if(newFrm && newFrm->textObject()->needSpellCheck())
+                return newFrm;
+       }
+    }
+    else
+    {
+        KWFrameSet *frm=0L;
+        for ( frm=m_cells.first(); frm != 0; frm=m_cells.next() ){
+            KWTextFrameSet *newFrm = frm->nextTextObject( obj );
+            if(newFrm && newFrm->textObject()->needSpellCheck())
+                return newFrm;
+        }
+    }
+    return 0L;
+}
+
 #ifndef NDEBUG
 void KWTableFrameSet::printDebug( KWFrame * theFrame )
 {

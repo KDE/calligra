@@ -715,6 +715,7 @@ private:
 
     double m_tabStop;
     QStringList m_spellListIgnoreAll;
+    KWFrameSet * bgFrameSpellChecked;
 };
 
 
