@@ -308,12 +308,12 @@ void AEditWin::fileSaveAs()
       saveAsDia = 0;
     }
   saveAsDia = new SaveAsDia(0,"Save-As");
+  connect(saveAsDia,SIGNAL(saveATFAs(const char*,const char*)),
+	  this,SLOT(saveAsDiaOk(const char*,const char*)));
   saveAsDia->setCaption("Save autoform as");
   saveAsDia->setMaximumSize(saveAsDia->width(),saveAsDia->height());
   saveAsDia->setMinimumSize(saveAsDia->width(),saveAsDia->height());
   saveAsDia->show();
-  connect(saveAsDia,SIGNAL(saveATFAs(const char*,const char*)),
-	  this,SLOT(saveAsDiaOk(const char*,const char*)));
  }
 
 /*======================= file newWin ============================*/

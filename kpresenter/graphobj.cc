@@ -516,7 +516,93 @@ void GraphObj::paintObj(QPainter *painter)
 		if (pntArray2.at(0) == pntArray2.at(pntArray2.size() - 1))
 		  painter->drawPolygon(pntArray2);
 		else
-		  painter->drawPolyline(pntArray2);
+		  {
+		    QSize diff1(0,0),diff2(0,0);
+		    int _w = oPen.width();
+
+		    if (lineBegin != L_NORMAL)
+		      diff1 = getBoundingSize(lineBegin,_w);
+		    
+		    if (lineEnd != L_NORMAL)
+		      diff2 = getBoundingSize(lineEnd,_w);
+
+		    if (pntArray.size() > 1)
+		      {
+			if (lineBegin != L_NORMAL)
+			  {
+			    QPoint pnt1(pntArray2.at(0)),pnt2(pntArray2.at(1)),pnt3,pnt4(pntArray.at(0));
+			    float angle = getAngle(pnt1,pnt2);
+
+			    switch ((int)angle)
+			      {
+			      case 0:
+				{
+				  pnt3.setX(pnt4.x() - diff1.width() / 2);
+				  pnt3.setY(pnt1.y());
+				} break;
+			      case 180:
+				{
+				  pnt3.setX(pnt4.x() + diff1.width() / 2);
+				  pnt3.setY(pnt1.y());
+				} break;
+			      case 90:
+				{
+				  pnt3.setX(pnt1.x());
+				  pnt3.setY(pnt4.y() - diff1.width() / 2);
+				} break;
+			      case 270:
+				{
+				  pnt3.setX(pnt1.x());
+				  pnt3.setY(pnt4.y() + diff1.width() / 2);
+				} break;
+			      default: 
+				pnt3 = pnt1;
+				break;
+			      }
+
+			    drawFigure(lineBegin,painter,pnt3,oPen.color(),_w,angle);
+			  }
+				
+			if (lineEnd != L_NORMAL)
+			  {
+			    QPoint pnt1(pntArray2.at(pntArray2.size() - 1)),pnt2(pntArray2.at(pntArray2.size() - 2));
+			    QPoint  pnt3,pnt4(pntArray.at(pntArray.size() - 1));
+			    float angle = getAngle(pnt1,pnt2);
+			    
+			    switch ((int)angle)
+			      {
+			      case 0:
+				{
+				  pnt3.setX(pnt4.x() - diff2.width() / 2);
+				  pnt3.setY(pnt1.y());
+				} break;
+			      case 180:
+				{
+				  pnt3.setX(pnt4.x() + diff2.width() / 2);
+				  pnt3.setY(pnt1.y());
+				} break;
+			      case 90:
+				{
+				  pnt3.setX(pnt1.x());
+				  pnt3.setY(pnt4.y() - diff2.width() / 2);
+				} break;
+			      case 270:
+				{
+				  pnt3.setX(pnt1.x());
+				  pnt3.setY(pnt4.y() + diff2.width() / 2);
+				} break;
+			      default: 
+				pnt3 = pnt1;
+				break;
+			      }
+			  
+			    drawFigure(lineEnd,painter,pnt3,oPen.color(),_w,angle);
+			  }
+		      }
+		    
+		    painter->setPen(oPen);
+		    painter->drawPolyline(pntArray2);
+		  }
 	      }
 
 	    if (isVisible())

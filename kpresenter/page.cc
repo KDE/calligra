@@ -66,11 +66,22 @@ Page::~Page()
 /*============================ draw contents ====================*/
 void Page::draw(QRect _rect,QPainter *p)
 {
-  view->hideParts();
-  paintBackground(p,_rect);  
-  paintObjects(p,_rect);
-  view->presentParts(1.0,p,_rect,diffx(),diffy());
-  view->showParts();
+  editMode = false;
+  fillBlack = false;
+  _presFakt = 1.0;
+  currPresStep = 1000;
+  subPresStep = 1000;
+  currPresPage = currPgNum();
+
+  drawPageInPainter(p,view->getDiffY(),_rect);
+
+  currPresPage = 1;
+  currPresStep = 0;
+  subPresStep = 0;
+  _presFakt = 1.0;
+  fillBlack = true;
+  editMode = true;
+  repaint(false);
 }
 
 /*======================== paint event ===========================*/
@@ -2314,6 +2325,9 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   int j = 0;
   progress.setProgress(0);
 
+  if (printer->fromPage() > 1)
+    view->setDiffY(diffy() + (printer->fromPage() - 1) * (getPageSize(1).height() + 10));
+
   for (int i = printer->fromPage();i <= printer->toPage();i++)
     {
       progress.setProgress(++j);
@@ -2345,6 +2359,9 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   progress.setProgress(printer->toPage() - printer->fromPage() + 2);
   kapp->setWinStyleHighlightColor(c);
 
+  currPresPage = 1;
+  currPresStep = 0;
+  subPresStep = 0;
   _presFakt = 1.0;
   fillBlack = true;
   editMode = true;
