@@ -453,8 +453,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
             if(cmd)
                 emit newCommand(cmd);
         }
-        else if ( !cursor->atParagStart() || parag->prev() )
-        // Nothing to do if at the beginning of the very first parag
+        else if ( !cursor->atParagStart() )
         {
             checkUndoRedoInfo( cursor, UndoRedoInfo::Delete );
             if ( !undoRedoInfo.valid() ) {
@@ -464,21 +463,21 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 undoRedoInfo.text = QString::null;
                 undoRedoInfo.oldParagLayouts << parag->paragLayout();
             }
-            cursor->gotoPreviousLetter();
-            KoTextStringChar * ch = cursor->parag()->at( cursor->index() );
-            undoRedoInfo.text.prepend( QString( ch->c ) );
-            copyCharFormatting( cursor->parag(), cursor->index(), 0, true );
-            undoRedoInfo.index = cursor->index();
-            KoParagLayout paragLayout = cursor->parag()->paragLayout();
-            if ( cursor->remove() ) {
-                undoRedoInfo.text.remove( 0, 1 );
-                undoRedoInfo.text.prepend( "\n" );
-                undoRedoInfo.index = cursor->index();
-                undoRedoInfo.id = cursor->parag()->paragId();
-                undoRedoInfo.oldParagLayouts.prepend( paragLayout );
-            } else
-                emit paragraphModified( cursor->parag(), RemoveChar, cursor->index(),1 );
+            undoRedoInfo.text.insert( 0, cursor->parag()->at( cursor->index()-1 ) );
+            copyCharFormatting( cursor->parag(), cursor->index()-1, 0, true );
+            undoRedoInfo.index = cursor->index()-1;
+            //KoParagLayout paragLayout = cursor->parag()->paragLayout();
+            cursor->removePreviousChar();
+            emit paragraphModified( cursor->parag(), RemoveChar, cursor->index(),1 );
             m_lastFormatted = cursor->parag();
+        } else if ( parag->prev() ) { // joining paragraphs
+            emit paragraphDeleted( cursor->parag() );
+            clearUndoRedoInfo();
+	    textdoc->setSelectionStart( KoTextDocument::Temp, cursor );
+            cursor->gotoPreviousLetter();
+	    textdoc->setSelectionEnd( KoTextDocument::Temp, cursor );
+	    removeSelectedText( cursor, KoTextDocument::Temp, i18n( "Delete Text" ) );
+            emit paragraphModified( cursor->parag(), AddChar, cursor->index(), cursor->parag()->length() - cursor->index() );
         }
     } break;
     case ActionReturn: {

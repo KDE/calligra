@@ -825,6 +825,16 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
     space = QMAX( space, 0 ); // #### with nested tables this gets negative because of a bug I didn't find yet, so workaround for now. This also means non-left aligned nested tables do not work at the moment
     int start = (startChar - &string->at(0));
     int last = (lastChar - &string->at(0) );
+
+    KoTextStringChar *ch = lastChar;
+    while ( ch > startChar && ch->whiteSpace ) {
+        space += ch->format()->width( ' ' );
+        --ch;
+    }
+
+    if (space < 0)
+        space = 0;
+
     // do alignment Auto == Left in this case
     if ( align & Qt::AlignHCenter || align & Qt::AlignRight ) {
         if ( align & Qt::AlignHCenter )
@@ -922,6 +932,14 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
     KoTextParag * /*parag*/, KoTextString *text, KoTextParagLineStart *line,
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
+    // ignore white space at the end of the line.
+    int endSpaces = 0;
+    while ( lastChar > startChar && lastChar->whiteSpace ) {
+        space += lastChar->format()->width( ' ' );
+        --lastChar;
+        ++endSpaces;
+    }
+
     int start = (startChar - &text->at(0));
     int last = (lastChar - &text->at(0) );
 #ifdef DEBUG_FORMATTER
