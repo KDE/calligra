@@ -556,12 +556,24 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
     QTextCursor cursor( parag->document() );
     if( m_useBulletStyle && ch =='*' && (s->at(1).c).isSpace() && parag->string()->length()>3)
     {
+        KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (use bullet style)"));
         cursor.setParag( parag );
         cursor.setIndex( 0 );
         textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        cursor.setParag( parag );
         cursor.setIndex( 2 );
         textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-        txtObj->removeSelectedText( &cursor, KoTextObject::HighlightSelection,QString::null, false  );
+        KCommand *cmd=txtObj->removeSelectedTextCommand( &cursor, KoTextObject::HighlightSelection  );
+        if(cmd)
+            macroCmd->addCommand(cmd);
+
+        cursor.setParag( parag );
+        cursor.setIndex( 0 );
+        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+
+        cursor.setIndex( 2 );
+        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+
 
         KoParagCounter c;
         if( bulletStyle.isNull())
@@ -575,8 +587,18 @@ void KoAutoFormat::doRemoveSpaceBeginEndLine( QTextCursor *textEditCursor, KoTex
             c.setStyle( KoParagCounter::STYLE_CUSTOMBULLET );
             c.setCustomBulletCharacter( bulletStyle );
         }
-        parag->setCounter(c);
-        static_cast<KoTextParag*>(parag->next())->setCounter(c);
+        cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
+        if( cmd)
+            macroCmd->addCommand(cmd);
+        cursor.setParag( static_cast<KoTextParag*>(parag->next()) );
+        cursor.setIndex( 0 );
+        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        cursor.setIndex( 0 );
+        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
+        if(cmd)
+            macroCmd->addCommand(cmd);
+        txtObj->emitNewCommand(macroCmd);
     }
 
 
