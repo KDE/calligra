@@ -360,6 +360,10 @@ bool KoDocument::saveFile()
         return false;
     }
 
+    // Save it to be able to restore it after a failed save
+    const bool wasModified = isModified ();
+
+
     QCString _native_format = nativeFormatMimeType();
     // The output format is set by koMainWindow, and by openFile
     QCString outputMimeType = d->outputMimeType;
@@ -445,6 +449,9 @@ bool KoDocument::saveFile()
         // We still resetURL() here since we may or may not have been called
         // by KoMainWindow - Clarence
         resetURL();
+
+	// As we did not save, restore the "was modified" status
+        setModified( wasModified );
     }
 
     if ( ret )
