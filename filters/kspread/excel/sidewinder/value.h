@@ -20,6 +20,7 @@
 #ifndef SWINDER_VALUE_H
 #define SWINDER_VALUE_H
 
+#include <iostream>
 #include "ustring.h"
 
 namespace Swinder
@@ -278,6 +279,11 @@ class Value
 
     ValueData* d; // can't never be 0
 };
+
+/**
+ * Dumps value to output stream, useful for debugging.
+ */
+std::ostream& operator<<( std::ostream& s, Value value );
 
 }; // namespace Swinder
 

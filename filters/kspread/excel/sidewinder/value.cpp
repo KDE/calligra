@@ -361,3 +361,31 @@ void Value::detach()
   }
 }
 
+std::ostream& Swinder::operator<<( std::ostream& s, Swinder::Value value )
+{
+  switch( value.type() )
+  {
+    case Value::Empty:
+      s << "Empty";
+      break;
+    case Value::Boolean:
+      s << "Boolean: " << (value.asBoolean()?"True":"False");
+      break;
+    case Value::Integer:
+      s << "Integer: " << value.asInteger();
+      break;
+    case Value::Float:
+      s << "Float: " << value.asFloat();
+      break;
+    case Value::String:
+      s << "String: " << value.asString().ascii(); 
+      break;
+    case Value::Error:
+      s << "Error: " << value.errorMessage().ascii();  
+      break;
+    default:
+      break;
+  };
+  
+  return s;
+}
