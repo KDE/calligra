@@ -5104,7 +5104,15 @@ void KPresenterView::insertSpecialChar()
 
 void KPresenterView::slotSpecialCharDlgClosed()
 {
-    m_specialCharDlg = 0L;
+    if ( m_specialCharDlg)
+    {
+        disconnect( m_specialCharDlg, SIGNAL(insertChar(QChar,const QString &)),
+                    this, SLOT(slotSpecialChar(QChar,const QString &)));
+        disconnect( m_specialCharDlg, SIGNAL( finished() ),
+                    this, SLOT( slotSpecialCharDlgClosed() ) );
+        delete m_specialCharDlg;
+        m_specialCharDlg = 0L;
+    }
 }
 
 void KPresenterView::slotSpecialChar(QChar c, const QString &_font)
