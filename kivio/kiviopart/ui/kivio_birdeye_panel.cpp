@@ -8,9 +8,12 @@
 #include "kivio_page.h"
 #include "kivio_canvas.h"
 #include "kivio_common.h"
+#include "kivio_factory.h"
 
 #include <ktoolbar.h>
 #include <kaction.h>
+
+#include <kiconloader.h>
 
 #include <qpixmap.h>
 #include <qslider.h>
@@ -33,8 +36,8 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
 
   zoomIn = new KAction( i18n("Zoom In"), "kivio_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
   zoomOut = new KAction( i18n("Zoom Out"), "kivio_zoom_minus", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
-  KToggleAction* act3 = new KToggleAction( i18n("Show Page Border"), "view_pageborder", 0, this, "pageBorder" );
-  KToggleAction* act4 = new KToggleAction( i18n("View Page Only"), "view_page", 0, this, "pageOnly" );
+  KToggleAction* act3 = new KToggleAction( i18n("Show Page Border"),BarIcon("view_pageborder", KivioFactory::global()), 0, this, "pageBorder" );
+  KToggleAction* act4 = new KToggleAction( i18n("View Page Only"), BarIcon("view_page", KivioFactory::global()), 0, this, "pageOnly" );
   KAction* act5 = new KAction( i18n("Auto Resize"), "window_nofullscreen", 0, this, SLOT(doAutoResizeMin()), this, "autoResizeMin" );
   KAction* act6 = new KAction( i18n("Auto Resize"), "window_fullscreen", 0, this, SLOT(doAutoResizeMax()), this, "autoResizeMax" );
 
