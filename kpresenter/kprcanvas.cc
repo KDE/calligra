@@ -3158,11 +3158,7 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
 
     // add all selected slides
     m_presentationSlides.clear();
-#if CUSTOMSLIDESHOW
     QValueList<int> selected = doc->displaySelectedSlides();
-#else
-    QValueList<int> selected = doc->selectedSlides();
-#endif
     for ( QValueList<int>::Iterator it = selected.begin() ; it != selected.end(); ++ it )
     {
         // ARGLLLRGLRLGRLG selectedSlides gets us 0-based numbers,

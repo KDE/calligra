@@ -375,7 +375,7 @@ public:
     void setHeader( bool b );
     void setFooter( bool b );
 
-    QString saveOasisNamePage( int posPage ) const;
+    QString oasisNamePage( int posPage ) const;
 
 private:
     void makeUsedPixmapListForGroupObject( KPObject *_obj );

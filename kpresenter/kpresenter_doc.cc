@@ -1334,7 +1334,7 @@ void KPresenterDoc::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTm
         {
             int posPage = m_pageList.find(itPage.current() );
             if ( posPage != -1 )
-                tmp+=itPage.current()->saveOasisNamePage(posPage+1)+",";
+                tmp+=itPage.current()->oasisNamePage(posPage+1)+",";
         }
         contentTmpWriter.addAttribute( "presentation:pages", tmp );
         contentTmpWriter.endElement();
@@ -3728,7 +3728,6 @@ bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ )
 
 QValueList<int> KPresenterDoc::displaySelectedSlides()  /* returned list is 0-based */
 {
-#if CUSTOMSLIDESHOW
     QValueList<int> result;
     if ( m_presentationName.isEmpty() )
         return selectedSlides();
@@ -3747,9 +3746,6 @@ QValueList<int> KPresenterDoc::displaySelectedSlides()  /* returned list is 0-ba
         }
     }
     return result;
-#else
-    return selectedSlides();
-#endif
 }
 
 QValueList<int> KPresenterDoc::selectedSlides() /* returned list is 0-based */
@@ -4500,7 +4496,7 @@ void KPresenterDoc::updateCustomListSlideShow( CustomListMap & map, bool loadOas
                 //kdDebug()<<" insert page name :"<<*itList<<endl;
                 if ( loadOasis )
                 {
-                    if ( m_pageList.at( i )->saveOasisNamePage(i+1)== ( *itList ) )
+                    if ( m_pageList.at( i )->oasisNamePage(i+1)== ( *itList ) )
                     {
                         tmpDict.append(  m_pageList.at( i ) );
                         //kdDebug()<<" really insert\n";

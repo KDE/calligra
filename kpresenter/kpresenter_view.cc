@@ -1467,11 +1467,7 @@ void KPresenterView::screenStartFromFirst()
 void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 {
     // no slide is selected ?
-#if CUSTOMSLIDESHOW
     if( !kPresenterDoc()->displaySelectedSlides().count() )
-#else
-    if( !kPresenterDoc()->selectedSlides().count() )
-#endif
     {
         KMessageBox::sorry( this, i18n("You didn't select any slide." ),
                             i18n("No Slide") );
@@ -3192,10 +3188,7 @@ void KPresenterView::setupActions()
 void KPresenterView::customSlideShow()
 {
     CustomSlideShowDia *dlg = new CustomSlideShowDia( this, m_pKPresenterDoc, "custom slide show" );
-    if ( dlg->exec() )
-    {
-        //todo
-    }
+    dlg->exec();
     delete dlg;
 }
 

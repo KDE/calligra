@@ -467,7 +467,7 @@ QDomElement KPrPage::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
     return page;
 }
 
-QString KPrPage::saveOasisNamePage( int posPage ) const
+QString KPrPage::oasisNamePage( int posPage ) const
 {
     return  ( m_manualTitle.isEmpty() ?  QString( "page%1" ).arg( posPage ) : m_manualTitle );
 }
@@ -476,7 +476,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
 {
     //store use to save picture and co
     xmlWriter.startElement( "draw:page" );
-    QString namePage = saveOasisNamePage(posPage);
+    QString namePage = oasisNamePage(posPage);
 
     xmlWriter.addAttribute( "draw:name", namePage ); //we must store a name
     xmlWriter.addAttribute( "draw:id", posPage );
