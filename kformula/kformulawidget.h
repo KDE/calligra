@@ -25,7 +25,7 @@
 #include <qpoint.h>
 #include <qwidget.h>
 
-#include <formuladefs.h>
+#include <kformuladefs.h>
 #include <kformulaview.h>
 
 KFORMULA_NAMESPACE_BEGIN

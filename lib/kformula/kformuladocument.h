@@ -108,6 +108,10 @@ public:
      */
     const SymbolTable& getSymbolTable() const;
 
+    KAction* getAddThinSpaceAction();
+    KAction* getAddMediumSpaceAction();
+    KAction* getAddThickSpaceAction();
+    KAction* getAddQuadSpaceAction();
     KAction* getAddBracketAction();
     KAction* getAddFractionAction();
     KAction* getAddRootAction();
@@ -136,6 +140,10 @@ public slots:
     void copy();
     void cut();
 
+    void addThinSpace();
+    void addMediumSpace();
+    void addThickSpace();
+    void addQuadSpace();
     void addDefaultBracket();
     void addSquareBracket();
     void addCurlyBracket();

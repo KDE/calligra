@@ -54,6 +54,10 @@ struct Document::Document_Impl {
 
     // We know our actions, maybe a client is interessted...
 
+    KAction* addThinSpaceAction;
+    KAction* addMediumSpaceAction;
+    KAction* addThickSpaceAction;
+    KAction* addQuadSpaceAction;
     KAction* addBracketAction;
     KAction* addSBracketAction;
     KAction* addCBracketAction;
@@ -133,6 +137,10 @@ void Document::setResolution(double zX, double zY) { impl->contextStyle.setResol
 KCommandHistory* Document::getHistory() const { return impl->history; }
 const SymbolTable& Document::getSymbolTable() const { return impl->table; }
 
+KAction* Document::getAddThinSpaceAction()     { return impl->addThinSpaceAction; }
+KAction* Document::getAddMediumSpaceAction()   { return impl->addMediumSpaceAction; }
+KAction* Document::getAddThickSpaceAction()    { return impl->addThickSpaceAction; }
+KAction* Document::getAddQuadSpaceAction()     { return impl->addQuadSpaceAction; }
 KAction* Document::getAddBracketAction()       { return impl->addBracketAction; }
 KAction* Document::getAddFractionAction()      { return impl->addFractionAction; }
 KAction* Document::getAddRootAction()          { return impl->addRootAction; }
@@ -233,6 +241,23 @@ void Document::formulaDies(Container* f)
 
 void Document::createActions(KActionCollection* collection)
 {
+    impl->addThinSpaceAction = new KAction( i18n( "Add/change to thin space" ),
+                                    0,
+                                    this, SLOT( addThinSpace() ),
+                                    collection, "formula_addthinspace") ;
+    impl->addMediumSpaceAction = new KAction( i18n( "Add/change to medium space" ),
+                                    0,
+                                    this, SLOT( addMediumSpace() ),
+                                    collection, "formula_addmediumspace" );
+    impl->addThickSpaceAction = new KAction( i18n( "Add/change to thick space" ),
+                                    0,
+                                    this, SLOT( addThickSpace() ),
+                                    collection, "formula_addthickspace" );
+    impl->addQuadSpaceAction = new KAction( i18n( "Add/change to quad space" ),
+                                    0,
+                                    this, SLOT( addQuadSpace() ),
+                                    collection, "formula_addquadspace" );
+
     impl->addIntegralAction = new KAction(i18n("Add/change to integral"),
                                     "int",
                                     CTRL + Key_6,
@@ -406,6 +431,31 @@ void Document::cut()
 {
     if (hasFormula()) {
         formula()->cut();
+    }
+}
+
+void Document::addThinSpace()
+{
+    if (hasFormula()) {
+        formula()->addSpace( THIN );
+    }
+}
+void Document::addMediumSpace()
+{
+    if (hasFormula()) {
+        formula()->addSpace( MEDIUM );
+    }
+}
+void Document::addThickSpace()
+{
+    if (hasFormula()) {
+        formula()->addSpace( THICK );
+    }
+}
+void Document::addQuadSpace()
+{
+    if (hasFormula()) {
+        formula()->addSpace( QUAD );
     }
 }
 

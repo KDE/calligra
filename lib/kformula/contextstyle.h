@@ -218,9 +218,9 @@ private:
 
         void setup( QFont font, double baseSize, double reduction );
 
-        double thinSpace() const   { return static_cast<double>( quad )/6.; }
-        double mediumSpace() const { return static_cast<double>( quad )*2./9.; }
-        double thickSpace() const  { return static_cast<double>( quad )*5./18.; }
+        double thinSpace() const   { return reductionFactor*static_cast<double>( quad )/6.; }
+        double mediumSpace() const { return reductionFactor*static_cast<double>( quad )*2./9.; }
+        double thickSpace() const  { return reductionFactor*static_cast<double>( quad )*5./18.; }
         double quadSpace() const   { return static_cast<double>( quad ); }
 
         double reductionFactor;

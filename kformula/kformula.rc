@@ -23,8 +23,14 @@
   <Action name="formula_addproduct"/>
   <Action name="formula_addmatrix"/>
   <Action name="formula_add_one_by_two_matrix"/>
+  <Separator/>
   <Action name="formula_addupperindex"/>
   <Action name="formula_addlowerindex"/>
+  <Separator/>
+  <Action name="formula_addthinspace"/>
+  <Action name="formula_addmediumspace"/>
+  <Action name="formula_addthickspace"/>
+  <Action name="formula_addquadspace"/>
   </Menu>
   <Action name="formula_typeleft"/>
   <Action name="formula_typeright"/>

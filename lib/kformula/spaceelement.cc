@@ -68,11 +68,11 @@ void SpaceElement::draw( QPainter& painter, const QRect& r,
     if ( painter.device()->devType() != QInternal::Printer ) {
         painter.setPen( context.getEmptyColor() );
         painter.drawLine( myPos.x(), myPos.y()+getHeight(),
-                          myPos.x()+getWidth(), myPos.y()+getHeight() );
+                          myPos.x()+getWidth()-1, myPos.y()+getHeight() );
         painter.drawLine( myPos.x(), myPos.y()+getHeight(),
                           myPos.x(), myPos.y()+getHeight()-getHeight()/5 );
-        painter.drawLine( myPos.x()+getWidth(), myPos.y()+getHeight(),
-                          myPos.x()+getWidth(), myPos.y()+getHeight()-getHeight()/5 );
+        painter.drawLine( myPos.x()+getWidth()-1, myPos.y()+getHeight(),
+                          myPos.x()+getWidth()-1, myPos.y()+getHeight()-getHeight()/5 );
     }
 }
 
