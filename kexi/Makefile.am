@@ -48,6 +48,8 @@ INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) $(all_includes)
 METASOURCES = AUTO
 
 messages: rc.cpp
+	rm -f tips.cpp
+	(cd data && $(PREPARETIPS) > ../tips.cpp)
 	$(EXTRACTRC) data/*.rc >> rc.cpp; \
 	LIST=`find . -name \*.ui`; \
 	if test -n "$$LIST"; then \
@@ -57,6 +59,7 @@ messages: rc.cpp
 	if test -n "$$LIST"; then \
 	 $(XGETTEXT) $$LIST -o $(podir)/kexi.pot; \
 	fi
+	rm -f tips.cpp
 
 #uncomment this if you like doxygen docs for Kexi
 #include $(top_srcdir)/../admin/Doxyfile.am

@@ -29,7 +29,8 @@ rcdir = $(kde_datadir)/kexi
 rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc kexiquerypartui.rc \
 	kexitablepartui.rc kexirelationpartui.rc kexitablepartinstui.rc \
 	kexirelationhandlerui.rc kexiformpartui.rc kexitableview.rc \
-	kexirelationsview.rc kexikugarhandlerui.rc kexidatatableui.rc $(scriptrc)
+	kexirelationsview.rc kexikugarhandlerui.rc kexidatatableui.rc \
+	welcome $(scriptrc)
 
 kde_conf_DATA = kexirc
 
