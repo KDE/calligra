@@ -2902,14 +2902,10 @@ void KPrCanvas::setNewFirstIndent(double _firstIndent)
 {
     QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
     if ( lst.isEmpty() ) return;
-    double index=0.0;
-    if(!lst.isEmpty())
-        index=lst.first()->currentParagLayoutFormat()->margins[QStyleSheetItem::MarginLeft];
     QPtrListIterator<KoTextFormatInterface> it( lst );
-    double val = _firstIndent - index;
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
-        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginFirstLine, val);
+        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginFirstLine, _firstIndent);
         if ( cmd )
         {
             if ( !macroCmd )

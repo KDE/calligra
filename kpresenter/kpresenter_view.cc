@@ -5490,7 +5490,7 @@ void KPresenterView::slotApplyParag()
             macroCommand->addCommand(cmd);
             changed=true;
         }
-        h_ruler->setFirstIndent(KoUnit::ptToUnit( m_paragDlg->leftIndent() + m_paragDlg->firstLineIndent(), m_pKPresenterDoc->getUnit() ) );
+        h_ruler->setFirstIndent(KoUnit::ptToUnit( m_paragDlg->firstLineIndent(), m_pKPresenterDoc->getUnit() ) );
     }
 
     if(m_paragDlg->isAlignChanged())
@@ -5787,7 +5787,7 @@ void KPresenterView::showRulerIndent( double _leftMargin, double _firstLine, dou
   KoRuler * hRuler = getHRuler();
   if ( hRuler )
   {
-      hRuler->setFirstIndent( KoUnit::ptToUnit( _firstLine + _leftMargin, m_pKPresenterDoc->getUnit() ) );
+      hRuler->setFirstIndent( KoUnit::ptToUnit( _firstLine, m_pKPresenterDoc->getUnit() ) );
       hRuler->setLeftIndent( KoUnit::ptToUnit( _leftMargin, m_pKPresenterDoc->getUnit() ) );
       hRuler->setRightIndent( KoUnit::ptToUnit( _rightMargin, m_pKPresenterDoc->getUnit() ) );
       hRuler->setDirection( rtl );
