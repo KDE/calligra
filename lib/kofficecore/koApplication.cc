@@ -112,11 +112,8 @@ bool KoApplication::start()
                 KoMainWindow *shell = new KoMainWindow( doc->instance() );
                 shell->show();
                 // now try to load
-                QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
-                if ( doc->openURL( args->url(i) ) ) {
-                    shell->setRootDocument( doc );
+                if ( shell->openDocument( args->url(i) ) ) {
                     n++;
-                    QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
                 } else {
                     // .... if failed
                     delete shell;

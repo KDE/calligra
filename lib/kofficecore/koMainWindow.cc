@@ -389,17 +389,27 @@ KParts::PartManager *KoMainWindow::partManager()
 
 bool KoMainWindow::openDocument( const KURL & url )
 {
+    //kdDebug(30003) << "KoMainWindow::openDocument " << url.url() << endl;
     KoDocument* doc = rootDocument();
     KoDocument *newdoc=createDoc();
     d->m_firstTime=true;
     connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    connect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
+    connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
     if(!newdoc || !newdoc->openURL(url))
     {
         delete newdoc;
         return false;
     }
-    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    return true;
+}
 
+// Separate from openDocument to handle async loading (remote URLs)
+void KoMainWindow::slotLoadCompleted()
+{
+    //kdDebug(30003) << "KoMainWindow::slotLoadCompleted" << endl;
+    KoDocument* doc = rootDocument();
+    KoDocument* newdoc = (KoDocument *)(sender());
     if ( doc && doc->isEmpty() && !doc->isEmbedded() )
     {
         // Replace current empty document
@@ -419,7 +429,15 @@ bool KoMainWindow::openDocument( const KURL & url )
         // We had no document, set the new one
        setRootDocument( newdoc );
     }
-    return true;
+    disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
+    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
+}
+
+void KoMainWindow::slotLoadCanceled( const QString & errMsg )
+{
+    KMessageBox::error( this, errMsg );
+    // ... can't delete the document, it's the one who emitted the signal...
 }
 
 bool KoMainWindow::saveDocument( bool saveas )

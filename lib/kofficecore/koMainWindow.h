@@ -104,6 +104,14 @@ public:
 
     void setMaxRecentItems(uint _number);
 
+    /**
+     * Load the desired document and show it.
+     * @param url the URL to open
+     *
+     * @return TRUE on success.
+     */
+    virtual bool openDocument( const KURL & url );
+
 signals:
     /**
      * This signal is emitted if the document has been saved successfully.
@@ -214,14 +222,6 @@ protected:
     virtual KoDocument* createDoc() const;
 
     /**
-     * Load the desired document and show it.
-     * @param url the URL to open
-     *
-     * @return TRUE on success.
-     */
-    virtual bool openDocument( const KURL & url );
-
-    /**
      * Saves the document, asking for a filename if necessary.
      *
      * @param _saveas if set to TRUE the user is always prompted for a filename
@@ -243,6 +243,8 @@ protected slots:
 
 private slots:
     void slotProgress(int value);
+    void slotLoadCompleted();
+    void slotLoadCanceled (const QString &);
 
 private:
     KoMainWindowPrivate *d;

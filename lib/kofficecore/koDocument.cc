@@ -845,6 +845,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
 
     QApplication::restoreOverrideCursor();
     in.close();
+    m_bEmpty = false;
     return res;
   } else
   { // It's a koffice store (tar.gz)
@@ -903,6 +904,7 @@ bool KoDocument::loadNativeFormat( const QString & file )
     bool res = completeLoading( store );
     delete store;
     QApplication::restoreOverrideCursor();
+    m_bEmpty = false;
     return res;
   }
 }
