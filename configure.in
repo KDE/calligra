@@ -143,13 +143,5 @@ AC_OUTPUT( \
 	plugins/calc/Makefile \
 	plugins/calc/pics/Makefile \
 	pics/Makefile
-	pics/toolbar/Makefile \
-	po/Makefile \
-	po/de/Makefile \
-	po/fr/Makefile \
-	po/is/Makefile \
-	po/no/Makefile \
-	po/pt/Makefile \
-	po/sk/Makefile 
-	po/sv/Makefile 
+	pics/toolbar/Makefile
  )
