@@ -22,6 +22,8 @@ class KSelectColorAction;
 class KToggleAction;
 class QPaintEvent;
 class QLabel;
+class VInsertKnotsDlg;
+class VPolygonizeDlg;
 class VTool;
 class VToolContainer;
 
@@ -35,7 +37,6 @@ public:
 	virtual ~KarbonView();
 
 	virtual DCOPObject* dcopObject();
-
 
 	virtual void paintEverything( QPainter &p, const QRect &rect,
 		bool transparent = false );
@@ -140,10 +141,10 @@ private:
 	KToggleAction* m_ellipseToolAction;
 	KToggleAction* m_polygonToolAction;
 	KToggleAction* m_rectangleToolAction;
-	KToggleAction* m_roundRectToolAction;
-	KToggleAction* m_selectToolAction;
 	KToggleAction* m_rotateToolAction;
+	KToggleAction* m_roundRectToolAction;
 	KToggleAction* m_scaleToolAction;
+	KToggleAction* m_selectToolAction;
 	KToggleAction* m_shearToolAction;
 	KToggleAction* m_sinusToolAction;
 	KToggleAction* m_spiralToolAction;
@@ -164,6 +165,10 @@ private:
 
 	// settings:
 	KAction* m_configureAction;
+
+	// dialogs:
+	VInsertKnotsDlg* m_insertKnotsDlg;
+	VPolygonizeDlg* m_polygonizeDlg;
 
 	//toolbox
 	KSharedPtr< VToolContainer > m_toolbox;

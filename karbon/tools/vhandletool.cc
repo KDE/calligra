@@ -65,26 +65,26 @@ VHandleTool::draw( QPainter& painter, const double zoomFactor )
 
 	if( part()->document().selection().count() > 0 )
 	{
-		m_bbox = part()->document().selection().boundingBox();
-		kdDebug() << " x : " << m_bbox.x() << ", " << m_bbox.y() << ", " << m_bbox.width() << ", " << m_bbox.height() << endl;
-		painter.drawRect( m_bbox.toQRect() );
+		m_boundingBox = part()->document().selection().boundingBox();
+		kdDebug() << " x : " << m_boundingBox.x() << ", " << m_boundingBox.y() << ", " << m_boundingBox.width() << ", " << m_boundingBox.height() << endl;
+		painter.drawRect( m_boundingBox.toQRect() );
 
 		// draw boxes
-		m_nodes[ NODE_LT ] = computeRect( m_bbox.left(), m_bbox.top(), zoomFactor );
+		m_nodes[ NODE_LT ] = computeRect( m_boundingBox.left(), m_boundingBox.top(), zoomFactor );
 		drawBox( painter, NODE_LT);
-		m_nodes[ NODE_MT ] = computeRect( m_bbox.left() + m_bbox.width() / 2.0, m_bbox.top(), zoomFactor );
+		m_nodes[ NODE_MT ] = computeRect( m_boundingBox.left() + m_boundingBox.width() / 2.0, m_boundingBox.top(), zoomFactor );
 		drawBox( painter, NODE_MT);
-		m_nodes[ NODE_RT ] = computeRect( m_bbox.right(), m_bbox.top(), zoomFactor );
+		m_nodes[ NODE_RT ] = computeRect( m_boundingBox.right(), m_boundingBox.top(), zoomFactor );
 		drawBox( painter, NODE_RT);
-		m_nodes[ NODE_RM ] = computeRect( m_bbox.right(), m_bbox.top() + m_bbox.height() / 2.0, zoomFactor );
+		m_nodes[ NODE_RM ] = computeRect( m_boundingBox.right(), m_boundingBox.top() + m_boundingBox.height() / 2.0, zoomFactor );
 		drawBox( painter, NODE_RM);
-		m_nodes[ NODE_RB ] = computeRect( m_bbox.right(), m_bbox.bottom(), zoomFactor );
+		m_nodes[ NODE_RB ] = computeRect( m_boundingBox.right(), m_boundingBox.bottom(), zoomFactor );
 		drawBox( painter, NODE_RB);
-		m_nodes[ NODE_MB ] = computeRect( m_bbox.left() + m_bbox.width() / 2.0, m_bbox.bottom(), zoomFactor );
+		m_nodes[ NODE_MB ] = computeRect( m_boundingBox.left() + m_boundingBox.width() / 2.0, m_boundingBox.bottom(), zoomFactor );
 		drawBox( painter, NODE_MB);
-		m_nodes[ NODE_LB ] = computeRect( m_bbox.left(), m_bbox.bottom(), zoomFactor );
+		m_nodes[ NODE_LB ] = computeRect( m_boundingBox.left(), m_boundingBox.bottom(), zoomFactor );
 		drawBox( painter, NODE_LB);
-		m_nodes[ NODE_LM ] = computeRect( m_bbox.left(), m_bbox.top() + m_bbox.height() / 2.0, zoomFactor );
+		m_nodes[ NODE_LM ] = computeRect( m_boundingBox.left(), m_boundingBox.top() + m_boundingBox.height() / 2.0, zoomFactor );
 		drawBox( painter, NODE_LM);
 	}
 }

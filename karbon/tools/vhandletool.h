@@ -6,10 +6,11 @@
 #ifndef __VHANDLETOOL_H__
 #define __VHANDLETOOL_H__
 
+#include <koRect.h>
+
 #include "vtool.h"
 
 class KarbonPart;
-class KoRect;
 class QPainter;
 
 // A singleton state to represent a handle.
@@ -36,7 +37,7 @@ protected:
 private:
 	static VHandleTool* s_instance;
 
-	KoRect m_bbox;
+	KoRect m_boundingBox;
 	KoRect m_nodes[9];
 	short m_activeNode;
 };

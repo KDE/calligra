@@ -8,4 +8,3 @@
 -	examine the problem with non closed paths (polygonize combined.karbon for example
 	to make the inner circles rectangles)
 -	implement gradients after libart code reorganisations (Rob)
--	really derive vtextcmd from vshapecmd?

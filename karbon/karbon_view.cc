@@ -3,10 +3,10 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
+#include <qbuttongroup.h>
 #include <qcursor.h>
 #include <qiconset.h>
 #include <qpainter.h>
-#include <qbuttongroup.h>
 
 #include <kaction.h>
 #include <klocale.h>
@@ -14,11 +14,6 @@
 #include <koMainWindow.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
-
-#include "karbon_factory.h"
-#include "karbon_part.h"
-#include "karbon_view.h"
-#include "karbon_view_iface.h"
 
 // tools:
 #include "vellipsetool.h"
@@ -35,13 +30,13 @@
 #include "vstartool.h"
 
 // commands:
-//#include "vtextcmd.h"
 #include "vdeletecmd.h"
 #include "vfillcmd.h"
 #include "vgroupcmd.h"
 #include "vinsertknotscmd.h"
 #include "vpolygonizecmd.h"
 #include "vstrokecmd.h"
+//#include "vtextcmd.h"
 
 // dialogs:
 #include "vcolordlg.h"
@@ -51,12 +46,15 @@
 #include "vpolygonizedlg.h"
 #include "vstrokedlg.h"
 
+#include "karbon_factory.h"
+#include "karbon_part.h"
+#include "karbon_view.h"
+#include "karbon_view_iface.h"
+#include "vgroup.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
-
 //#include "vtext.h"
-#include "vgroup.h"
 #include "vtoolcontainer.h"
 
 #include <kdebug.h>
@@ -75,6 +73,14 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	dcopObject(); // build it
 
 
+	// dialogs:
+	m_insertKnotsDlg = new VInsertKnotsDlg();
+
+	m_polygonizeDlg = new VPolygonizeDlg();
+	m_polygonizeDlg->setFlatness( 5.0 );
+
+
+	// widgets:
 	m_canvas = new VCanvas( this, part );
 	m_canvas->viewport()->installEventFilter( this );
 	m_canvas->setGeometry( 0, 0, width(), height() );
@@ -102,12 +108,19 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 KarbonView::~KarbonView()
 {
-	delete m_dcop;
+	// dialogs:
+	delete( m_insertKnotsDlg );
+	delete( m_polygonizeDlg );
+
+	// widgets:
+	//delete m_toolbox;
+	delete m_status;
 	delete m_painterFactory;
 	delete m_canvas;
 	m_canvas = 0L;
-	//delete m_toolbox;
-	delete m_status;
+
+
+	delete m_dcop;
 }
 
 DCOPObject* KarbonView::dcopObject()
@@ -477,24 +490,21 @@ KarbonView::handleTool()
 void
 KarbonView::pathInsertKnots()
 {
-	VInsertKnotsDlg* dialog = new VInsertKnotsDlg();
-
-	if( dialog->exec() )
-		m_part->addCommand( new VInsertKnotsCmd( &m_part->document(), dialog->knots() ), true );
-
-	delete( dialog );
+	if( m_insertKnotsDlg->exec() )
+	{
+		m_part->addCommand( new VInsertKnotsCmd(
+			&m_part->document(), m_insertKnotsDlg->knots() ), true );
+	}
 }
 
 void
 KarbonView::pathPolygonize()
 {
-	VPolygonizeDlg* dialog = new VPolygonizeDlg();
-	dialog->setFlatness( 5.0 );
-
-	if( dialog->exec() )
-		m_part->addCommand( new VPolygonizeCmd( &m_part->document(), dialog->flatness() ), true );
-
-	delete( dialog );
+	if( m_polygonizeDlg->exec() )
+	{
+		m_part->addCommand( new VPolygonizeCmd(
+			&m_part->document(), m_polygonizeDlg->flatness() ), true );
+	}
 }
 
 
