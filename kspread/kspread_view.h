@@ -547,7 +547,6 @@ private:
   void initializeEditActions();
   void initializeAreaOperationActions();
   void initializeGlobalOperationActions();
-  void initializeTableActions();
   void adjustMapActions( bool mode );
   void adjustActions( bool mode );
   void adjustActions( KSpreadSheet const * const table,

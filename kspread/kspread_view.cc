@@ -908,6 +908,36 @@ void ViewPrivate::initActions()
       0, view, SLOT( adjust() ), ac, "adjust" );
   actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
 
+  // -- sheet/workbook actions --
+  actions->insertTable = new KAction( i18n("Insert Sheet"),"inserttable",
+      0, view, SLOT( insertTable() ), ac, "insertTable" );
+  actions->insertTable->setToolTip(i18n("Insert a new sheet."));
+
+  // same action as insertTable, but without 'insert' in the caption
+  actions->menuInsertTable = new KAction( i18n("&Sheet"),"inserttable",
+     0, view, SLOT( insertTable() ), ac, "menuInsertTable" );
+  actions->menuInsertTable->setToolTip(i18n("Insert a new sheet."));
+
+  actions->removeTable = new KAction( i18n("Remove Sheet"), "delete_table",
+     0, view, SLOT( removeTable() ), ac, "removeTable" );
+  actions->removeTable->setToolTip(i18n("Remove the active sheet."));
+
+  actions->renameTable=new KAction( i18n("Rename Sheet..."),
+     0, view, SLOT( slotRename() ), ac, "renameTable" );
+  actions->renameTable->setToolTip(i18n("Rename the active sheet."));
+
+  actions->showTable = new KAction(i18n("Show Sheet..."),
+     0, view, SLOT( showTable()), ac, "showTable" );
+  actions->showTable->setToolTip(i18n("Show a hidden sheet."));
+
+  actions->hideTable = new KAction(i18n("Hide Sheet"),
+     0, view, SLOT( hideTable() ), ac, "hideTable" );
+  actions->hideTable->setToolTip(i18n("Hide the active sheet."));
+
+  actions->tableFormat = new KAction( i18n("AutoFormat..."),
+     0, view, SLOT( tableFormat() ), ac, "tableFormat" );
+  actions->tableFormat->setToolTip(i18n("Set the worksheet formatting."));
+
   // -- misc actions --
 
   actions->spellChecking = KStdAction::spelling( view, SLOT( extraSpelling() ),
@@ -973,6 +1003,20 @@ void ViewPrivate::initActions()
       view, SLOT( menuCalc( bool ) ) );
   actions->calcCount->setExclusiveGroup( "Calc" );
   actions->calcCount->setToolTip(i18n("Calculate using the count."));
+
+  // -- script actions --
+
+  actions->editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0,
+      view, SLOT( editGlobalScripts() ),ac, "editGlobalScripts" );
+  actions->editGlobalScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
+
+  actions->editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0,
+      view, SLOT( editLocalScripts() ), ac, "editLocalScripts" );
+  actions->editLocalScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
+
+  actions->reloadScripts = new KAction( i18n("Reload Scripts"), 0,
+     view, SLOT( reloadScripts() ), ac, "reloadScripts" );
+  actions->reloadScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
 
   // -- running calculation actions --
 
@@ -1153,7 +1197,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     initializeEditActions();
     initializeAreaOperationActions();
     initializeGlobalOperationActions();
-    initializeTableActions();
 
     QPtrListIterator<KSpreadSheet> it( d->doc->map()->tableList() );
     for( ; it.current(); ++it )
@@ -1385,21 +1428,6 @@ void KSpreadView::initializeGlobalOperationActions()
                               "preference" );
   d->actions->preference->setToolTip(i18n("Set various KSpread options."));
 
-  d->actions->editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this,
-                                     SLOT( editGlobalScripts() ),
-                                     actionCollection(), "editGlobalScripts" );
-  d->actions->editGlobalScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
-
-  d->actions->editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this,
-                                    SLOT( editLocalScripts() ),
-                                    actionCollection(), "editLocalScripts" );
-  d->actions->editLocalScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
-
-  d->actions->reloadScripts = new KAction( i18n("Reload Scripts"), 0, this,
-                                 SLOT( reloadScripts() ), actionCollection(),
-                                 "reloadScripts" );
-  d->actions->reloadScripts->setToolTip("");//i18n("")); /* TODO - what is this? */
-
   d->actions->showPageBorders = new KToggleAction( i18n("Show Page Borders"), 0,
                                          actionCollection(), "showPageBorders");
   connect( d->actions->showPageBorders, SIGNAL( toggled( bool ) ), this,
@@ -1477,46 +1505,6 @@ void KSpreadView::initializeGlobalOperationActions()
                                actionCollection(), "styles" );
   d->actions->styleDialog->setToolTip( i18n( "Edit and organize cell styles." ) );
 
-}
-
-
-void KSpreadView::initializeTableActions()
-{
-  d->actions->insertTable = new KAction( i18n("Insert Sheet"),"inserttable", 0, this,
-                               SLOT( insertTable() ), actionCollection(),
-                               "insertTable" );
-  d->actions->insertTable->setToolTip(i18n("Insert a new sheet."));
-
-  /* basically the same action here, but it's in the insert menu so we don't
-     want to also have 'insert' in the caption
-  */
-  d->actions->menuInsertTable = new KAction( i18n("&Sheet"),"inserttable", 0, this,
-                               SLOT( insertTable() ), actionCollection(),
-                               "menuInsertTable" );
-  d->actions->menuInsertTable->setToolTip(i18n("Insert a new sheet."));
-
-  d->actions->removeTable = new KAction( i18n("Remove Sheet"), "delete_table",0,this,
-                               SLOT( removeTable() ), actionCollection(),
-                               "removeTable" );
-  d->actions->removeTable->setToolTip(i18n("Remove the active sheet."));
-
-  d->actions->renameTable=new KAction( i18n("Rename Sheet..."),0,this,
-                             SLOT( slotRename() ), actionCollection(),
-                             "renameTable" );
-  d->actions->renameTable->setToolTip(i18n("Rename the active sheet."));
-
-  d->actions->showTable = new KAction(i18n("Show Sheet..."),0 ,this,SLOT( showTable()),
-                            actionCollection(), "showTable" );
-  d->actions->showTable->setToolTip(i18n("Show a hidden sheet."));
-
-  d->actions->hideTable = new KAction(i18n("Hide Sheet"),0 ,this,SLOT( hideTable()),
-                            actionCollection(), "hideTable" );
-  d->actions->hideTable->setToolTip(i18n("Hide the active sheet."));
-
-  d->actions->tableFormat = new KAction( i18n("AutoFormat..."), 0, this,
-                               SLOT( tableFormat() ), actionCollection(),
-                               "tableFormat" );
-  d->actions->tableFormat->setToolTip(i18n("Set the worksheet formatting."));
 }
 
 KSpreadView::~KSpreadView()
