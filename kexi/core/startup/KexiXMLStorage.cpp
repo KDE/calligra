@@ -46,8 +46,8 @@ bool saveKexiConnectionDataListXML( QIODevice *dev, const KexiDBConnectionSet& c
 	while (cdata) {
 		QDomElement el = doc.createElement("connectiondata");
 		el.setAttribute("id",QString::number(cdata->id));
-		if (!cdata->name.isEmpty())
-			el.setAttribute("name",cdata->name);
+		if (!cdata->connName.isEmpty())
+			el.setAttribute("name",cdata->connName);
 		if (!cdata->driverName.isEmpty())
 			el.setAttribute("engine",cdata->driverName);
 		if (!cdata->hostName.isEmpty())
@@ -67,6 +67,7 @@ bool saveKexiConnectionDataListXML( QIODevice *dev, const KexiDBConnectionSet& c
 		mainel.appendChild(el);
 		cdata = clist.next();
 	}
+	return true;
 }
 
 bool saveKexiConnectionDataXML(QIODevice *dev, const KexiDB::ConnectionData &data, QString &error)
