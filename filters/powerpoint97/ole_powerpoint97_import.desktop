@@ -1,8 +1,13 @@
 [Desktop Entry]
 Name=OLEPowerPoint97Filter
+Name[eo]=Filtrilo OLEPowerPoint97
+Name[hu]=OLEPowerPoint97Szûrõ
 Exec=foo
 CORBAExec=ole_filter --server
 Comment=KPresenter PowerPoint 97 Filter
+Comment[de]=PowerPoint 97 Filter von KPresenter
+Comment[eo]=Filtrilo por Prezentilo el PowerPoint 97
+Comment[hu]=PowerPoint 97 szûrõ a KPresenterhez
 Export=application/x-kpresenter
 ExportDescription=KPresenter
 Import=application/x-powerpoint97
