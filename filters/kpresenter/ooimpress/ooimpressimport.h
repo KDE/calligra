@@ -1,4 +1,3 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
    Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
@@ -47,7 +46,9 @@ private:
     void createStyleMap( QDomDocument &docstyles );
     void insertDraws( const QDomElement& styles );
     void insertStyles( const QDomElement& styles );
-    void fillStyleStack( const QDomElement& object );
+	void insertStylesPresentation( const QDomElement& styles );
+
+    void fillStyleStack( const QDomElement& object,bool sticky = false );
     void addStyles( const QDomElement* style );
     void appendName(QDomDocument& doc, QDomElement& e, const QDomElement& object);
     void append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset );
@@ -88,7 +89,7 @@ private:
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
-    QDict<QDomElement> m_styles, m_draws;
+    QDict<QDomElement> m_styles, m_draws,m_stylesPresentation;
     QDict<QDomElement> m_animations;
     KZip * m_zip;
     StyleStack m_styleStack;

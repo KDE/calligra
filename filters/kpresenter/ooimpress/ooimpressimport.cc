@@ -340,7 +340,7 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
         QDomElement e;
         if ( name == "draw:text-box" ) // textbox
         {
-            fillStyleStack( o );
+            fillStyleStack( o, sticky );
             e = doc.createElement( "OBJECT" );
             e.setAttribute( "type", 4 );
             if ( sticky )
@@ -356,7 +356,7 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
         }
         else if ( name == "draw:rect" ) // rectangle
         {
-            fillStyleStack( o );
+            fillStyleStack( o, sticky );
             e = doc.createElement( "OBJECT" );
             e.setAttribute( "type", 2 );
             if ( sticky )
@@ -372,7 +372,7 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
         }
         else if ( name == "draw:circle" || name == "draw:ellipse" )
         {
-            fillStyleStack( o );
+            fillStyleStack( o, sticky );
             e = doc.createElement( "OBJECT" );
             if ( sticky )
                 e.setAttribute( "sticky", "1" );
@@ -415,7 +415,7 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
         }
         else if ( name == "draw:line" ) // line
         {
-            fillStyleStack( o );
+            fillStyleStack( o, sticky );
             e = doc.createElement( "OBJECT" );
             e.setAttribute( "type", 1 );
             if ( sticky )
@@ -429,7 +429,7 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
             appendObjectEffect(doc, e, o, soundElement);
         }
         else if (name=="draw:polyline") { // polyline
-            fillStyleStack(o);
+            fillStyleStack(o, sticky);
             e = doc.createElement("OBJECT");
             e.setAttribute("type", 12);
             if ( sticky )
@@ -444,7 +444,7 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
             appendObjectEffect(doc, e, o, soundElement);
         }
         else if (name=="draw:polygon") { // polygon
-            fillStyleStack(o);
+            fillStyleStack(o, sticky);
             e = doc.createElement("OBJECT");
             e.setAttribute("type", 16);
             if ( sticky )
@@ -460,7 +460,7 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
         }
         else if ( name == "draw:image" ) // image
         {
-            fillStyleStack( o );
+            fillStyleStack( o, sticky );
             e = doc.createElement( "OBJECT" );
             e.setAttribute( "type", 0 );
             if ( sticky )
@@ -1711,8 +1711,10 @@ void OoImpressImport::createStyleMap( QDomDocument &docstyles )
 
     QDomNode automaticStyles = styles.namedItem( "office:automatic-styles" );
     if ( !automaticStyles.isNull() )
+    {
         insertStyles( automaticStyles.toElement() );
-
+        insertStylesPresentation( automaticStyles.toElement() );
+    }
     QDomNode masterStyles = styles.namedItem( "office:master-styles" );
     if ( !masterStyles.isNull() )
         insertStyles( masterStyles.toElement() );
@@ -1747,13 +1749,31 @@ void OoImpressImport::insertStyles( const QDomElement& styles )
     }
 }
 
-void OoImpressImport::fillStyleStack( const QDomElement& object )
+void OoImpressImport::insertStylesPresentation( const QDomElement& styles )
+{
+    for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement e = n.toElement();
+
+        if ( !e.hasAttribute( "style:name" ) )
+            continue;
+
+        QString name = e.attribute( "style:name" );
+        m_stylesPresentation.insert( name, new QDomElement( e ) );
+        //kdDebug(30518) << "Style: '" << name << "' loaded " << endl;
+    }
+}
+
+void OoImpressImport::fillStyleStack( const QDomElement& object, bool sticky )
 {
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttribute( "presentation:style-name" ) )
     {
         kdDebug()<<" presentation:style-name **************************** :"<<object.attribute( "presentation:style-name" )<<endl;
-        addStyles( m_styles[object.attribute( "presentation:style-name" )] );
+        if ( sticky )
+            addStyles( m_stylesPresentation[object.attribute( "presentation:style-name" )] );
+        else
+            addStyles( m_styles[object.attribute( "presentation:style-name" )] );
     }
     if ( object.hasAttribute( "draw:style-name" ) )
         addStyles( m_styles[object.attribute( "draw:style-name" )] );
