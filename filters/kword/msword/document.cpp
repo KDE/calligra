@@ -53,7 +53,7 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement )
     : m_mainDocument( mainDocument ), m_mainFramesetElement( mainFramesetElement ), m_index( 0 ),
-      m_sectionNumber( 0 ), m_paragStyle( 0L ), m_replacementHandler( new KWordReplacementHandler ),
+      m_sectionNumber( 0 ), m_currentStyle( 0L ), m_replacementHandler( new KWordReplacementHandler ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) ), m_shadowTextFound( false )
 {
     if ( m_parser ) { // 0 in case of major error (e.g. unsupported format)
@@ -104,6 +104,7 @@ void Document::processStyles()
         //kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
+            m_currentStyle = style;
             m_shadowTextFound = false;
             QDomElement styleElem = m_mainDocument.createElement("STYLE");
             stylesElem.appendChild( styleElem );
@@ -131,6 +132,7 @@ void Document::processStyles()
         }
         // KWord doesn't support character styles yet
     }
+    m_currentStyle = 0L;
 }
 
 bool Document::parse()
@@ -208,19 +210,19 @@ void Document::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperti
     m_formats = m_mainDocument.createElement( "FORMATS" );
     m_paragraphProperties = paragraphProperties;
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
-    m_paragStyle = styles.styleByIndex( paragraphProperties->pap().istd );
-    Q_ASSERT( m_paragStyle );
+    m_currentStyle = styles.styleByIndex( paragraphProperties->pap().istd );
+    Q_ASSERT( m_currentStyle );
     m_shadowTextFound = false;
     // If the style's format includes shadowtext, then we need a <SHADOW> tag
     // in the parag layout
-    if ( m_paragStyle && m_paragStyle->chp().fShadow )
+    if ( m_currentStyle && m_currentStyle->chp().fShadow )
         m_shadowTextFound = true;
 }
 
 void Document::paragraphEnd()
 {
-    if ( m_paragStyle ) {
-        QConstString styleName = Conversion::string( m_paragStyle->name() );
+    if ( m_currentStyle ) {
+        QConstString styleName = Conversion::string( m_currentStyle->name() );
         writeOutParagraph( styleName.string(), m_paragraph );
     } else
         writeOutParagraph( "Standard", m_paragraph );
@@ -232,7 +234,7 @@ void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const w
     kdDebug() << "runOfText: " << newText.string() << endl;
     m_paragraph += newText.string();
 
-    writeFormat( m_formats, chp, m_paragStyle ? &m_paragStyle->chp() : 0, m_index, text.length() );
+    writeFormat( m_formats, chp, m_currentStyle ? &m_currentStyle->chp() : 0, m_index, text.length() );
 
     m_index += text.length();
 }
@@ -639,7 +641,7 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
                 kdDebug() << "custom bullet, code=" << QString::number(code,16) << endl;
                 counterElement.setAttribute( "type", 6 ); // custom
                 counterElement.setAttribute( "bullet", code );
-                QString paragFont = getFont( m_paragStyle->chp().ftcAscii );
+                QString paragFont = getFont( m_currentStyle->chp().ftcAscii );
                 counterElement.setAttribute( "bulletfont", paragFont );
             }
         } else
@@ -651,12 +653,12 @@ void Document::writeCounter( QDomElement& parentElement, const wvWare::Paragraph
         int depth = pap.ilvl; /*both are 0 based*/
         // Heading styles don't set the ilvl, but must have a depth coming
         // from their heading level (the style's STI)
-        if ( depth == 0 && m_paragStyle && m_paragStyle->sti() >= 1 && m_paragStyle->sti() <= 9 )
+        if ( depth == 0 && m_currentStyle->sti() >= 1 && m_currentStyle->sti() <= 9 )
         {
-            depth = m_paragStyle->sti() - 1;
+            depth = m_currentStyle->sti() - 1;
             numberingType = 1;
         }
-        kdDebug() << "  ilvl=" << pap.ilvl << " sti=" << m_paragStyle->sti() << " depth=" << depth << " numberingType=" << numberingType << endl;
+        kdDebug() << "  ilvl=" << pap.ilvl << " sti=" << m_currentStyle->sti() << " depth=" << depth << " numberingType=" << numberingType << endl;
         counterElement.setAttribute( "depth", depth );
 
         // Now we need to parse the text, to try and convert msword's powerful list template

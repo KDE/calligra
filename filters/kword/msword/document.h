@@ -79,7 +79,7 @@ private:
     QDomElement m_oldLayout;
     int m_index;
     int m_sectionNumber;
-    const wvWare::Style* m_paragStyle;
+    const wvWare::Style* m_currentStyle;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     KWordReplacementHandler* m_replacementHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;
