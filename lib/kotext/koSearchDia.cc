@@ -166,7 +166,7 @@ KoFindReplace::KoFindReplace( QWidget * parent, KoReplaceDia * dialog, KoTextVie
 
 KoFindReplace::~KoFindReplace()
 {
-    kdDebug() << "KWFindReplace::~KWFindReplace m_destroying=" << m_destroying << endl;
+    kdDebug(32500) << "KWFindReplace::~KWFindReplace m_destroying=" << m_destroying << endl;
     if ( !m_destroying )
     {
         delete m_find;
@@ -338,7 +338,7 @@ long KoFindReplace::options() const
 // slot connected to the 'highlight' signal
 void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingLength, const QRect & )
 {
-    //kdDebug() << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
+    //kdDebug(32500) << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
     highlightPortion(m_currentParag, m_offset + matchingIndex, matchingLength, m_currentTextObj->textDocument());
 }
 
@@ -346,7 +346,7 @@ void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 void KoFindReplace::replace( const QString &text, int matchingIndex,
                              int replacementLength, int matchedLength, const QRect &/*expose*/ )
 {
-    //kdDebug() << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << " options=" << options() << endl;
+    //kdDebug(32500) << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << " options=" << options() << endl;
     int index = m_offset + matchingIndex;
     // highlight might not have happened (if 'prompt on replace' is off)
     if ( (options() & KoReplaceDialog::PromptOnReplace) == 0 ) {
@@ -447,7 +447,7 @@ void KoFindReplace::abort()
 {
     // This is called when the KWView is being destroyed.
     // (Not when the user presses Cancel)
-    kdDebug(32001) << "KWFindReplace::abort" << endl;
+    kdDebug(32500) << "KWFindReplace::abort" << endl;
     if ( m_find )
         m_find->abort();
     else

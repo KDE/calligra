@@ -179,7 +179,7 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
     int leftBorderPenWidth = zoomWidthX( leftBorder.penWidth(), zoomHandler, minborder );
     int rightBorderPenWidth = zoomWidthX( rightBorder.penWidth(), zoomHandler, minborder );
 
-    //kdDebug() << "KoBorder::drawBorders top=" << topBorderWidth << " bottom=" << bottomBorderWidth
+    //kdDebug(32500) << "KoBorder::drawBorders top=" << topBorderWidth << " bottom=" << bottomBorderWidth
     //          << " left=" << leftBorderWidth << " right=" << rightBorderWidth << endl;
 
     QColor defaultColor = KoTextFormat::defaultTextColor( &painter );
@@ -207,9 +207,9 @@ void KoBorder::drawBorders( QPainter& painter, KoZoomHandler * zoomHandler, QRec
             painter.setPen( KoBorder::borderPen( bottomBorder, bottomBorderPenWidth, defaultColor ) );
         else
             painter.setPen( defaultPen );
-	//kdDebug() << "bottomBorderWidth=" << bottomBorderWidth << " bottomBorderWidth/2=" << (int)bottomBorderWidth/2 << endl;
+	//kdDebug(32500) << "bottomBorderWidth=" << bottomBorderWidth << " bottomBorderWidth/2=" << (int)bottomBorderWidth/2 << endl;
         int y = rect.bottom() + bottomBorderWidth - (bottomBorderWidth-1)/2;
-	//kdDebug() << "   -> bottom=" << rect.bottom() << " y=" << y << endl;
+	//kdDebug(32500) << "   -> bottom=" << rect.bottom() << " y=" << y << endl;
         if ( bottomBorder.style==KoBorder::DOUBLE_LINE)
         {
             y = rect.bottom() + bottomBorderWidth - (bottomBorderPenWidth-1)/2;

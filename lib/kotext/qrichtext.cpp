@@ -3744,7 +3744,7 @@ KoTextParag::~KoTextParag()
     {
         emit document()->paragraphDeleted( this );
     }
-    //kdDebug() << "KoTextParag::~KoTextParag " << this << endl;
+    //kdDebug(32500) << "KoTextParag::~KoTextParag " << this << endl;
     ////
 }
 
@@ -3982,7 +3982,7 @@ void KoTextParag::format( int start, bool doMove )
     }
 
     if ( n && doMove && n->invalid == -1 && r.y() + r.height() != n->r.y() ) {
-        //kdDebug() << "r=" << r << " n->r=" << n->r << endl;
+        //kdDebug(32500) << "r=" << r << " n->r=" << n->r << endl;
 	int dy = ( r.y() + r.height() ) - n->r.y();
 	KoTextParag *s = n;
 	bool makeInvalid = p && p->lastInFrame;
@@ -5957,7 +5957,7 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
 
     //////
     update();
-    //kdDebug() << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags
+    //kdDebug(32500) << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags
     //        << " ==> result " << this << " " << key() << endl;
 }
 

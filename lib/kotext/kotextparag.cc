@@ -43,7 +43,7 @@ KoParagCounter *KoTextParag::counter()
 
 void KoTextParag::setMargin( QStyleSheetItem::Margin m, double _i )
 {
-    //kdDebug() << "KoTextParag::setMargin " << m << " margin " << _i << endl;
+    //kdDebug(32500) << "KoTextParag::setMargin " << m << " margin " << _i << endl;
     m_layout.margins[m] = _i;
     if ( m == QStyleSheetItem::MarginTop && prev() )
         prev()->invalidate(0);     // for top margin (post-1.1: remove this, not necessary anymore)
@@ -188,11 +188,11 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
     {
 	int xBullet = xLeft + zh->layoutUnitToPixelX( m_layout.counter->bulletX() );
 
-        //kdDebug() << "KoTextParag::drawLabel xLU=" << xLU << " counterWidthLU=" << counterWidthLU << endl;
+        //kdDebug(32500) << "KoTextParag::drawLabel xLU=" << xLU << " counterWidthLU=" << counterWidthLU << endl;
 	// The width and height of the bullet is the width of one space
         int width = zh->layoutUnitToPixelX( format->width( ' ' ) );
 
-        //kdDebug() << "Pix: xLeft=" << xLeft << " counterWidth=" << counterWidth
+        //kdDebug(32500) << "Pix: xLeft=" << xLeft << " counterWidth=" << counterWidth
         //          << " xBullet=" << xBullet << " width=" << width << endl;
 
         QString prefix = m_layout.counter->prefix();
@@ -321,7 +321,7 @@ int KoTextParag::lineSpacing( int line ) const
         while ( line-- > 0 )
             ++it;
         int height = ( *it )->h;
-        //kdDebug() << " line height=" << height << " valid=" << isValid() << endl;
+        //kdDebug(32500) << " line height=" << height << " valid=" << isValid() << endl;
 
         if ( m_layout.lineSpacing == KoParagLayout::LS_ONEANDHALF )
         {
@@ -348,7 +348,7 @@ QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
     // QRect-semantics and rounding problem... The height is wrong.
     rct.setHeight( zh->layoutUnitToPixelY( rect().height() ) );
 
-    kdDebug() << "KoTextParag::pixelRect was:" << zh->layoutUnitToPixel( rect() ).height()
+    kdDebug(32500) << "KoTextParag::pixelRect was:" << zh->layoutUnitToPixel( rect() ).height()
               << " is now:" << rct.height() << endl;
 #endif
 #if 0
@@ -358,7 +358,7 @@ QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
         QRect prevRect( zh->layoutUnitToPixel( prev()->rect() ) );
         if ( rct.top() < prevRect.bottom() + 1 )
         {
-            kdDebug() << "pixelRect: rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
+            kdDebug(32500) << "pixelRect: rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
             rct.setTop( prevRect.bottom() + 1 );
         }
     }
@@ -371,9 +371,9 @@ QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
 void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor *cursor, bool drawSelections,
                          int clipx, int clipy, int clipw, int cliph )
 {
-    //kdDebug() << "KoTextParag::paint clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
-    //kdDebug() << " clipw in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) << endl;
-    //kdDebug() << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
+    //kdDebug(32500) << "KoTextParag::paint clipx=" << clipx << " clipy=" << clipy << " clipw=" << clipw << " cliph=" << cliph << endl;
+    //kdDebug(32500) << " clipw in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) << endl;
+    //kdDebug(32500) << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
 
     // Let's call drawLabel ourselves, rather than having to deal with QStyleSheetItem to get paintDefault to call it!
     if ( m_layout.counter && m_layout.counter->numbering() != KoParagCounter::NUM_NONE )
@@ -419,7 +419,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
         if ( m_layout.bottomBorder.width() > 0 )
             r.rBottom() -= zh->layoutUnitToPixelY(lineSpacing( lastLine )) + 1;
-        //kdDebug() << "KoTextParag::paint documentWidth=" << documentWidth() << " r=" << DEBUGRECT( r ) << endl;
+        //kdDebug(32500) << "KoTextParag::paint documentWidth=" << documentWidth() << " r=" << DEBUGRECT( r ) << endl;
         KoBorder::drawBorders( painter, zh, r,
                                m_layout.leftBorder, m_layout.rightBorder, m_layout.topBorder, m_layout.bottomBorder,
                                0, QPen() );
@@ -437,16 +437,16 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     assert(zh);
 
-    //kdDebug() << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
+    //kdDebug(32500) << "startX in LU: " << startX << " layoutUnitToPt( startX )*zoomedResolutionX : " << zh->layoutUnitToPt( startX ) << "*" << zh->zoomedResolutionX() << endl;
 
     // Calculate startX in pixels (using the xadj value of the corresponding char)
     int startX_pix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
-    //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startX_pix << " bw=" << bw << endl;
+    //kdDebug(32500) << "KoTextParag::drawParagString startX in pixels : " << startX_pix << " bw=" << bw << endl;
 
     int lastY_pix = zh->layoutUnitToPixelY( lastY );
     int baseLine_pix = zh->layoutUnitToPixelY( lastY, baseLine );
     int h_pix = zh->layoutUnitToPixelY( lastY, h );
-    //kdDebug() << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
+    //kdDebug(32500) << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
     //        << " h(PIX)=" << h_pix << " lastY(PIX)=" << lastY_pix << endl;
 
     if ( lastFormat->textBackgroundColor().isValid() )
@@ -491,8 +491,8 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
                                    KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, KoZoomHandler* zh )
 {
-    //kdDebug(32001) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << endl;
-    //kdDebug(32001) << "In pixels:  startX=" << startX << " lastY=" << lastY << " baseLine=" << baseLine
+    //kdDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << endl;
+    //kdDebug(32500) << "In pixels:  startX=" << startX << " lastY=" << lastY << " baseLine=" << baseLine
     //               << " bw=" << bw << " h=" << h << " rightToLeft=" << rightToLeft << endl;
 
     // 1) Sort out the color
@@ -507,9 +507,9 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     QFont font( lastFormat->screenFont( zh ) );
 #if 0
     QFontInfo fi( font );
-    kdDebug() << "KoTextParag::drawParagString requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
+    kdDebug(32500) << "KoTextParag::drawParagString requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
     QFontMetrics fm( font );
-    kdDebug() << "Real font: " << fi.family() << ". Font height in pixels: " << fm.height() << endl;
+    kdDebug(32500) << "Real font: " << fi.family() << ". Font height in pixels: " << fm.height() << endl;
 #endif
 
     // 3) Go (almost verbatim from the original KoTextFormat::drawParagString)
@@ -713,7 +713,7 @@ int KoTextParag::nextTab( int chnum, int x )
             i = m_layout.tabList().size() - 1;
 
         while ( i >= 0 && i < (int)m_layout.tabList().size() ) {
-            //kdDebug() << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
+            //kdDebug(32500) << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
             int tab = tArray[ i ];
             if ( string()->isRightToLeft() )
                 tab = rect().width() - tab;
@@ -885,7 +885,7 @@ void KoTextParag::applyStyle( KoStyle *style )
 
 void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
 {
-    //kdDebug() << "KoTextParag::setParagLayout flags=" << flags << endl;
+    //kdDebug(32500) << "KoTextParag::setParagLayout flags=" << flags << endl;
     if ( flags & KoParagLayout::Alignment )
         setAlign( layout.alignment );
     if ( flags & KoParagLayout::Margins )
@@ -915,7 +915,7 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
 
 void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, KoTextFormat * currentFormat )
 {
-    kdDebug(32001) << "KoTextParag::setCustomItem " << index << "  " << (void*)custom
+    kdDebug(32500) << "KoTextParag::setCustomItem " << index << "  " << (void*)custom
                    << "  currentFormat=" << (void*)currentFormat << endl;
     if ( currentFormat )
         setFormat( index, 1, currentFormat );
@@ -953,7 +953,7 @@ int KoTextParag::findCustomItem( const KoTextCustomItem * custom ) const
 #ifndef NDEBUG
 void KoTextParag::printRTDebug( int info )
 {
-    kdDebug() << "Paragraph " << this << " (" << paragId() << ") [changed="
+    kdDebug(32500) << "Paragraph " << this << " (" << paragId() << ") [changed="
               << hasChanged() << ", valid=" << isValid()
               << ", needsSpellCheck=" << string()->needsSpellCheck()
               << ", wasMovedDown=" << wasMovedDown()
@@ -963,37 +963,37 @@ void KoTextParag::printRTDebug( int info )
     if ( next() && next()->paragId() != paragId() + 1 )
         kdWarning() << "  Next paragraph " << next() << " has ID " << next()->paragId() << endl;
     //if ( !next() )
-    //    kdDebug() << "  next is 0L" << endl;
+    //    kdDebug(32500) << "  next is 0L" << endl;
     /*
       static const char * dm[] = { "DisplayBlock", "DisplayInline", "DisplayListItem", "DisplayNone" };
       QPtrVector<QStyleSheetItem> vec = styleSheetItems();
       for ( uint i = 0 ; i < vec.size() ; ++i )
       {
       QStyleSheetItem * item = vec[i];
-      kdDebug() << "  StyleSheet Item " << item << " '" << item->name() << "'" << endl;
-      kdDebug() << "        italic=" << item->fontItalic() << " underline=" << item->fontUnderline() << " fontSize=" << item->fontSize() << endl;
-      kdDebug() << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
-      kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
+      kdDebug(32500) << "  StyleSheet Item " << item << " '" << item->name() << "'" << endl;
+      kdDebug(32500) << "        italic=" << item->fontItalic() << " underline=" << item->fontUnderline() << " fontSize=" << item->fontSize() << endl;
+      kdDebug(32500) << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
+      kdDebug(32500) << "        displaymode=" << dm[item->displayMode()] << endl;
       }*/
-    kdDebug() << "  Style: " << style() << " " << ( style() ? style()->name().local8Bit().data() : "NO STYLE" ) << endl;
-    kdDebug() << "  Text: '" << string()->toString() << "'" << endl;
+    kdDebug(32500) << "  Style: " << style() << " " << ( style() ? style()->name().local8Bit().data() : "NO STYLE" ) << endl;
+    kdDebug(32500) << "  Text: '" << string()->toString() << "'" << endl;
     if ( info == 0 ) // paragraph info
     {
         if ( counter() )
-            kdDebug() << "  Counter style=" << counter()->style()
+            kdDebug(32500) << "  Counter style=" << counter()->style()
                       << " numbering=" << counter()->numbering()
                       << " depth=" << counter()->depth()
                       << " text='" << m_layout.counter->text( this ) << "'"
                       << " width=" << m_layout.counter->width( this ) << endl;
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
         static const char * const s_dir[] = { "DirL", "DirR", "DirEN", "DirES", "DirET", "DirAN", "DirCS", "DirB", "DirS", "DirWS", "DirON", "DirLRE", "DirLRO", "DirAL", "DirRLE", "DirRLO", "DirPDF", "DirNSM", "DirBN" };
-        kdDebug() << "  align: " << s_align[alignment()] << "  resolveAlignment: " << s_align[resolveAlignment()]
+        kdDebug(32500) << "  align: " << s_align[alignment()] << "  resolveAlignment: " << s_align[resolveAlignment()]
                   << "  isRTL:" << string()->isRightToLeft()
                   << "  dir: " << s_dir[direction()] << endl;
         QRect pixr = pixelRect( textDocument()->paintingZoomHandler() );
-        kdDebug() << "  rect() : " << DEBUGRECT( rect() )
+        kdDebug(32500) << "  rect() : " << DEBUGRECT( rect() )
                   << "  pixelRect() : " << DEBUGRECT( pixr ) << endl;
-        kdDebug() << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
+        kdDebug(32500) << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
                   << " leftMargin()=" << leftMargin() << " firstLineMargin()=" << firstLineMargin()
                   << " rightMargin()=" << rightMargin() << endl;
 
@@ -1001,23 +1001,23 @@ void KoTextParag::printRTDebug( int info )
         KoTabulatorList tabList = m_layout.tabList();
         if ( tabList.isEmpty() ) {
             if ( string()->toString().find( '\t' ) != -1 )
-                kdDebug() << "Tab width: " << textDocument()->tabStopWidth() << endl;
+                kdDebug(32500) << "Tab width: " << textDocument()->tabStopWidth() << endl;
         } else {
             KoTabulatorList::Iterator it = tabList.begin();
             for ( ; it != tabList.end() ; it++ )
-                kdDebug() << "Tab type:" << tabtype[(*it).type] << " at: " << (*it).ptPos << endl;
+                kdDebug(32500) << "Tab type:" << tabtype[(*it).type] << " at: " << (*it).ptPos << endl;
         }
     } else if ( info == 1 ) // formatting info
     {
-        kdDebug() << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()
+        kdDebug(32500) << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()
                   << " fontsize:" << dynamic_cast<KoTextFormat *>(paragFormat())->font().pointSize() << endl;
 
         for ( uint line = 0 ; line < lines(); ++ line ) {
             int y, h, baseLine;
             lineInfo( line, y, h, baseLine );
-            kdDebug() << "  Line " << line << " y=" << y << " height=" << h << " baseLine=" << baseLine << endl;
+            kdDebug(32500) << "  Line " << line << " y=" << y << " height=" << h << " baseLine=" << baseLine << endl;
         }
-        kdDebug() << endl;
+        kdDebug(32500) << endl;
         KoTextString * s = string();
         int lastX = 0; // pixels
         int lastW = 0; // pixels
@@ -1026,7 +1026,7 @@ void KoTextParag::printRTDebug( int info )
             KoTextStringChar & ch = s->at(i);
             int pixelx =  textDocument()->formattingZoomHandler()->layoutUnitToPixelX( ch.x )
                           + ch.pixelxadj;
-            kdDebug() << i << ": '" << QString(ch.c) << "' (" << ch.c.unicode() << ")"
+            kdDebug(32500) << i << ": '" << QString(ch.c) << "' (" << ch.c.unicode() << ")"
                       << " x(LU)=" << ch.x
                       << " w(LU)=" << ch.width//s->width(i)
                       << " x(PIX)=" << pixelx
@@ -1049,7 +1049,7 @@ void KoTextParag::printRTDebug( int info )
             if ( ch.isCustom() )
             {
                 KoTextCustomItem * item = ch.customItem();
-                kdDebug() << " - custom item " << item
+                kdDebug(32500) << " - custom item " << item
                           << " ownline=" << item->ownLine()
                           << " size=" << item->width << "x" << item->height
                           << endl;
@@ -1069,7 +1069,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         // Another solution would be to increase the descent, but this would have to be
         // done in the formatter
         // ### TODO scale the painter to do this, especially when printing, to gain more resolution
-        //kdDebug() << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 0.5pix=" << KoBorder::zoomWidthY( 0.5, zh, 0 ) << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
+        //kdDebug(32500) << "KoTextParag::drawParagStringInternal double underline. lastY=" << lastY << " baseLine=" << baseLine << " 0.5pix=" << KoBorder::zoomWidthY( 0.5, zh, 0 ) << " 1pix=" << KoBorder::zoomWidthY( 1, zh, 0 ) << " descent=(LU:" << lastFormat->descent() << " pix:" << zh->layoutUnitToPixelY( lastFormat->descent() ) << ")" << endl;
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
 
         int y = lastY + baseLine + KoBorder::zoomWidthY( 0.2, zh, 0 ); // slightly under the baseline if possible
@@ -1097,9 +1097,9 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         }
 
         p->drawLine( startX, y, startX + bw, y );
-        //kdDebug() << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
+        //kdDebug(32500) << "KoTextParag::drawParagStringInternal drawing first line at " << y << endl;
         y = lastY + baseLine + zh->layoutUnitToPixelY( format->descent() ) /*- KoBorder::zoomWidthY( 1, zh, 0 )*/;
-        //kdDebug() << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
+        //kdDebug(32500) << "KoTextParag::drawParagStringInternal drawing second line at " << y << endl;
         p->drawLine( startX, y, startX + bw, y );
         p->restore();
         if ( font.underline() ) { // can this happen?

@@ -88,7 +88,7 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
 {
     if ( data.type() != QVariant::Date )
     {
-        kdDebug()<<" Error in KoVariableDateFormat::convert. Value is a " << data.typeName() << endl;
+        kdDebug(32500)<<" Error in KoVariableDateFormat::convert. Value is a " << data.typeName() << endl;
         return QString::null;
     }
     if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())  // FIXME: "Locale" is I18N !
@@ -127,7 +127,7 @@ QString KoVariableTimeFormat::convert( const QVariant & time ) const
 {
     if ( time.type() != QVariant::Time )
     {
-        kdDebug()<<" Error in KoVariableTimeFormat::convert. Value is a " << time.typeName() << endl;
+        kdDebug(32500)<<" Error in KoVariableTimeFormat::convert. Value is a " << time.typeName() << endl;
         return QString::null;
     }
 
@@ -145,7 +145,7 @@ QString KoVariableStringFormat::convert( const QVariant & string ) const
 {
     if ( string.type() != QVariant::String )
     {
-        kdDebug()<<" Error in KoVariableStringFormat::convert. Value is a " << string.typeName() << endl;
+        kdDebug(32500)<<" Error in KoVariableStringFormat::convert. Value is a " << string.typeName() << endl;
         return QString::null;
     }
 
@@ -162,7 +162,7 @@ QString KoVariableNumberFormat::convert( const QVariant &value ) const
 {
     if ( value.type() != QVariant::Int )
     {
-        kdDebug()<<" Error in KoVariableNumberFormat::convert. Value is a " << value.typeName() << endl;
+        kdDebug(32500)<<" Error in KoVariableNumberFormat::convert. Value is a " << value.typeName() << endl;
         return QString::null;
     }
 
@@ -257,7 +257,7 @@ void KoVariableCollection::recalcVariables(int type)
             KoTextParag * parag = it.current()->paragraph();
             if ( parag )
             {
-                //kdDebug() << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
+                //kdDebug(32500) << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
                 parag->invalidate( 0 );
                 parag->setChanged( true );
             }
@@ -430,7 +430,7 @@ KoVariable::KoVariable( KoTextDocument *textdoc, KoVariableFormat *varFormat, Ko
 
 KoVariable::~KoVariable()
 {
-    //kdDebug() << "KoVariable::~KoVariable " << this << endl;
+    //kdDebug(32500) << "KoVariable::~KoVariable " << this << endl;
     m_varColl->unregisterVariable( this );
 }
 
@@ -457,7 +457,7 @@ void KoVariable::resize()
     // zoom to LU
     width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
     height = fmt->height();
-    //kdDebug() << "Before KoVariable::resize text=" << txt << " width=" << width << endl;
+    //kdDebug(32500) << "Before KoVariable::resize text=" << txt << " width=" << width << endl;
 }
 
 QString KoVariable::fieldCode()
@@ -486,7 +486,7 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, const QColorGr
     int bl, _y;
     KoTextParag * parag = paragraph();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
-    //kdDebug() << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
+    //kdDebug(32500) << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
     int h = parag->lineHeightOfChar( index(), &bl, &_y /*unused*/);
 
     h = zh->layoutUnitToPixelY( y, h );
@@ -526,14 +526,14 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, const QColorGr
 
     KoTextParag::drawFontEffects( p, fmt, zh, font, textColor, x, bl, zh->layoutUnitToPixelX( width ), y, h );
 
-    //kdDebug() << "KoVariable::draw bl=" << bl << << endl;
+    //kdDebug(32500) << "KoVariable::draw bl=" << bl << << endl;
     p->drawText( x, y + bl + offset, text() );
     p->restore();
 }
 
 void KoVariable::save( QDomElement &parentElem )
 {
-    //kdDebug() << "KoVariable::save" << endl;
+    //kdDebug(32500) << "KoVariable::save" << endl;
     QDomElement variableElem = parentElem.ownerDocument().createElement( "VARIABLE" );
     parentElem.appendChild( variableElem );
     QDomElement typeElem = parentElem.ownerDocument().createElement( "TYPE" );
@@ -1212,7 +1212,7 @@ QString KoFieldVariable::text()
 
 void KoFieldVariable::saveVariable( QDomElement& parentElem )
 {
-    //kdDebug() << "KoFieldVariable::saveVariable" << endl;
+    //kdDebug(32500) << "KoFieldVariable::saveVariable" << endl;
     QDomElement elem = parentElem.ownerDocument().createElement( "FIELD" );
     parentElem.appendChild( elem );
     elem.setAttribute( "subtype", m_subtype );
@@ -1529,7 +1529,7 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, 
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int _bl, _y;
     KoTextParag * parag = paragraph();
-    //kdDebug() << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
+    //kdDebug(32500) << "KoVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;
     int h = parag->lineHeightOfChar( index(), &_bl /*unused*/, &_y /*unused*/);
 
     h = zh->layoutUnitToPixelY( y, h );

@@ -528,7 +528,7 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
     int start = (startChar - &text->at(0));
     int last = (lastChar - &text->at(0) );
 #ifdef DEBUG_FORMATTER
-    kdDebug() << "*KoTextFormatter::koBidiReorderLine from " << start << " to " << last << " space=" << space << " startChar->x=" << startChar->x << endl;
+    kdDebug(32500) << "*KoTextFormatter::koBidiReorderLine from " << start << " to " << last << " space=" << space << " startChar->x=" << startChar->x << endl;
 #endif
     KoBidiControl *control = new KoBidiControl( line->context(), line->status );
     QString str;

@@ -161,7 +161,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
                                        KoTextCursor *cursor, bool resetChanged, uint drawingFlags )
 {
 #ifdef DEBUG_PAINTING
-    kdDebug() << "drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
+    kdDebug(32500) << "drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
 #endif
     m_drawingFlags = drawingFlags;
     int sx = 0, sy = 0;
@@ -181,7 +181,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     QBrush brush = parag->backgroundColor() ? *parag->backgroundColor() : cg.brush( QColorGroup::Base );
 
 #ifdef DEBUG_PAINTING
-    kdDebug() << "KoTextDocument::drawParagWYSIWYG parag->rect=" << DEBUGRECT( parag->rect() )
+    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG parag->rect=" << DEBUGRECT( parag->rect() )
               << " pixelRect()=" << DEBUGRECT(ir)
               << " crect (pixels)=" << DEBUGRECT(crect) << endl;
 #endif
@@ -237,14 +237,14 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 
     painter->translate( rect.x() - ir.x(), rect.y() - ir.y() );
 #ifdef DEBUG_PAINTING
-    kdDebug() << "KoTextDocument::drawParagWYSIWYG translate " << rect.x() - ir.x() << "," << rect.y() - ir.y() << endl;
+    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG translate " << rect.x() - ir.x() << "," << rect.y() - ir.y() << endl;
 #endif
     //painter->setBrushOrigin( painter->brushOrigin() + rect.topLeft() - ir.topLeft() );
 
     // The cliprect is checked in layout units, in KoTextParag::paint
     QRect crect_lu( zoomHandler->pixelToLayoutUnit( crect ) );
 #ifdef DEBUG_PAINTING
-    kdDebug() << "KoTextDocument::drawParagWYSIWYG crect_lu=" << DEBUGRECT( crect_lu ) << endl;
+    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG crect_lu=" << DEBUGRECT( crect_lu ) << endl;
 #endif
 
     if ( sx != 0 || sy != 0 )
@@ -280,11 +280,11 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     if ( useDoubleBuffer ) {
         int docright = zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
 #ifdef DEBUG_PAINTING
-        kdDebug() << "KoTextDocument::drawParagWYSIWYG my rect is: " << rect << endl;
+        kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG my rect is: " << rect << endl;
 #endif
         if ( rect.x() + rect.width() < docright ) {
 #ifdef DEBUG_PAINTING
-            kdDebug() << "KoTextDocument::drawParagWYSIWYG rect doesn't go up to docright=" << docright << endl;
+            kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG rect doesn't go up to docright=" << docright << endl;
 #endif
             p->fillRect( rect.x() + rect.width(), rect.y(),
                          docright - ( rect.x() + rect.width() ),
@@ -331,7 +331,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
     QPainter painter;
     QRect crect( cx, cy, cw, ch );
 #ifdef DEBUG_PAINTING
-    kdDebug() << "KoTextDocument::drawWYSIWYG crect=" << DEBUGRECT(crect) << endl;
+    kdDebug(32500) << "KoTextDocument::drawWYSIWYG crect=" << DEBUGRECT(crect) << endl;
 #endif
 
     // Space above first parag
@@ -352,7 +352,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 
 	QRect ir = parag->pixelRect( zoomHandler );
 #ifdef DEBUG_PAINTING
-        kdDebug() << "KoTextDocument::drawWYSIWYG ir=" << DEBUGRECT(ir) << endl;
+        kdDebug(32500) << "KoTextDocument::drawWYSIWYG ir=" << DEBUGRECT(ir) << endl;
 #endif
 	if ( isPageBreakEnabled() && parag->next() )
         {

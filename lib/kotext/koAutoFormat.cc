@@ -850,14 +850,14 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
             doAutoIncludeAbbreviation(textEditCursor, parag, txtObj );
     }
 
-    //kdDebug() << "KoAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
+    //kdDebug(32500) << "KoAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
     //if ( !m_enabled )
     //    return;
     // Auto-correction happens when pressing space, tab, CR, punct etc.
     if ( ( ch.isSpace() || ch.isPunct() ) && index > 0 )
     {
         QString lastWord = getLastWord(parag, index);
-        //kdDebug()<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
+        //kdDebug(32500)<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
         if( m_completion && m_addCompletionWord && m_listCompletion->items().count() < m_nbMaxCompletionWord
             && lastWord.length()>= m_minCompletionWordLength )
         {
@@ -866,7 +866,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
         }
 
         detectStartOfLink(lastWord);
-        //kdDebug() << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
+        //kdDebug(32500) << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
         KMacroCommand *macro = 0L;
         int newPos = index;
         KCommand *cmd = doAutoCorrect( textEditCursor, parag, newPos, txtObj );
@@ -1007,7 +1007,7 @@ KCommand *KoAutoFormat::doAutoCorrect( KoTextCursor* textEditCursor, KoTextParag
 
 KCommand *KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes )
 {
-    //kdDebug() << "KoAutoFormat::doTypographicQuotes" << endl;
+    //kdDebug(32500) << "KoAutoFormat::doTypographicQuotes" << endl;
     KoTextDocument * textdoc = parag->textDocument();
     KoTextCursor cursor( parag->document() );
     cursor.setParag( parag );
@@ -1096,7 +1096,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
     {
         backCursor.setIndex( backCursor.index() + 1 );
         QChar secondChar = backCursor.parag()->at( backCursor.index() )->c;
-        //kdDebug()<<" secondChar :"<<secondChar<<endl;
+        //kdDebug(32500)<<" secondChar :"<<secondChar<<endl;
         if ( isUpper( secondChar ) )
         {
             // Check next letter - we still want to be able to write fully uppercase words...
@@ -1830,7 +1830,7 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
             if ( ( ch.isSpace() || ch.isPunct() ) && i > 0 )
             {
                 QString lastWord = getLastWord(parag, i);
-                //kdDebug()<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
+                //kdDebug(32500)<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
                 KMacroCommand *macro2 =new KMacroCommand(i18n("Autocorrection"));
                 bool cmdCreate=false;
                 int newPos = i;

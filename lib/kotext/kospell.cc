@@ -125,7 +125,7 @@ KoSpell::KoSpell(QWidget */*_parent*/, QObject *obj, const char *slot, KSpellCon
 			break;
 	}
 
-	kdDebug() << __FILE__ << ":" << __LINE__ << " Codec = " << (codec ? codec->name() : "<default>") << endl;
+	kdDebug(32500) << __FILE__ << ":" << __LINE__ << " Codec = " << (codec ? codec->name() : "<default>") << endl;
 
 	m_status = Starting;
 
@@ -145,7 +145,7 @@ KoSpell::KoSpell(QWidget */*_parent*/, QObject *obj, const char *slot, KSpellCon
 //trystart = {0,1,2}
 void KoSpell::startIspell()
 {
-	kdDebug() << "Try #" << trystart << endl;
+	kdDebug(32500) << "Try #" << trystart << endl;
 	if (trystart>0)
 		proc->resetAll();
 
@@ -153,11 +153,11 @@ void KoSpell::startIspell()
 	{
 		case KS_CLIENT_ISPELL:
 			*proc << "ispell";
-			kdDebug() << "Using ispell" << endl;
+			kdDebug(32500) << "Using ispell" << endl;
 			break;
 		case KS_CLIENT_ASPELL:
 			*proc << "aspell";
-			kdDebug() << "Using aspell" << endl;
+			kdDebug(32500) << "Using aspell" << endl;
 			break;
 	}
 
@@ -182,7 +182,7 @@ void KoSpell::startIspell()
 	{
 		if (! ksconfig->dictionary().isEmpty())
 		{
-			kdDebug() << "using dictionary [" << ksconfig->dictionary() << "]" << endl;
+			kdDebug(32500) << "using dictionary [" << ksconfig->dictionary() << "]" << endl;
 			*proc << "-d";
 			*proc << ksconfig->dictionary();
 		}
@@ -248,12 +248,12 @@ void KoSpell::startIspell()
 void KoSpell::ispellErrors(KProcess *, char *buffer, int buflen)
 {
 	buffer [buflen-1] = '\0';
-	kdDebug() << "ispellErrors [" << buffer << "]\n" << endl;
+	kdDebug(32500) << "ispellErrors [" << buffer << "]\n" << endl;
 }
 
 void KoSpell::KoSpell2 (KProcIO *)
 {
-	kdDebug() << "KoSpell::KoSpell2" << endl;
+	kdDebug(32500) << "KoSpell::KoSpell2" << endl;
 
 	QString line;
 
@@ -351,7 +351,7 @@ KoSpell::Spelling KoSpell::parseLine(const QString &line, QString &word, int &po
 {
     bool skip = false;
 
-    //kdDebug() << "KoSpell::parseLine(\"" << line << "\")" << endl;
+    //kdDebug(32500) << "KoSpell::parseLine(\"" << line << "\")" << endl;
     if(line.isEmpty())
         return SpellingDone;
 
@@ -381,7 +381,7 @@ KoSpell::Spelling KoSpell::parseLine(const QString &line, QString &word, int &po
             l++;
         bool ok=true;
         pos = line.mid(p,l).toInt(&ok);
-        //kdDebug() << "	pos=" << pos << " [" << line.mid(p,l) << "]" << endl;
+        //kdDebug(32500) << "	pos=" << pos << " [" << line.mid(p,l) << "]" << endl;
 //			if(!ok)
 //				return SpellingError;
         return Misspelled;
@@ -394,10 +394,10 @@ KoSpell::Spelling KoSpell::parseLine(const QString &line, QString &word, int &po
 
 bool KoSpell::check(const QString &buffer)
 {
-//	kdDebug() << "KoSpell::check(\"" << buffer << "\")" << endl;
+//	kdDebug(32500) << "KoSpell::check(\"" << buffer << "\")" << endl;
 	if(buffer.isEmpty())
 	{
-//		kdDebug() << "KoSpell::done()" << endl;
+//		kdDebug(32500) << "KoSpell::done()" << endl;
 		emit done();
 		return true;
 	}
@@ -415,7 +415,7 @@ bool KoSpell::check(const QString &buffer)
 // invoked by KProcIO when read from ispell
 void KoSpell::check2(KProcIO *)
 {
-//	kdDebug() << "KoSpell::check2()" << endl;
+//	kdDebug(32500) << "KoSpell::check2()" << endl;
     QString line;
     int bytes;
     while((bytes=proc->fgets(line, true)) >= 0)
@@ -467,20 +467,20 @@ void KoSpell::check2(KProcIO *)
                 */
 
             }
-//				kdDebug() << "KoSpell::misspelling(" << word << ", " << pos << ")" << endl;
+//				kdDebug(32500) << "KoSpell::misspelling(" << word << ", " << pos << ")" << endl;
             emit misspelling(word, pos);
             break;
         }
 
         case SpellingDone:
-//				kdDebug() << "KoSpell::done()" << endl;
+//				kdDebug(32500) << "KoSpell::done()" << endl;
             m_buffer.pop_front();
             emit done();
             break;
         case SpellingIgnore:
             break;
         default:
-            kdDebug() << "KoSpell::check2() ERROR" << endl;
+            kdDebug(32500) << "KoSpell::check2() ERROR" << endl;
             break;
         }
     }
@@ -515,7 +515,7 @@ void KoSpell::cleanUp ()
 
 void KoSpell::ispellExit(KProcess *)
 {
-  kdDebug() << "KoSpell::ispellExit() " << m_status << endl;
+  kdDebug(32500) << "KoSpell::ispellExit() " << m_status << endl;
 
   if ((m_status == Starting) && (trystart<maxtrystart))
   {
@@ -533,7 +533,7 @@ void KoSpell::ispellExit(KProcess *)
   else // Error, Finished, Crashed
      return; // Dead already
 
-  kdDebug() << "Death" << endl;
+  kdDebug(32500) << "Death" << endl;
   QTimer::singleShot( 0, this, SLOT(emitDeath()));
 }
 
@@ -578,13 +578,13 @@ QStringList KoSpell::getAvailDictsIspell ()
     */
     if (!dir.exists() || !dir.isDir()) return QStringList();
 
-    kdDebug() << "KoSpell::getAvailDictsIspell "
+    kdDebug(32500) << "KoSpell::getAvailDictsIspell "
               << dir.filePath() << " " << dir.dirPath() << endl;
 
     QDir thedir (dir.filePath(),"*.hash");
 
-    kdDebug() << "KoSpell" << thedir.path() << "\n" << endl;
-    kdDebug() << "entryList().count()="
+    kdDebug(32500) << "KoSpell" << thedir.path() << "\n" << endl;
+    kdDebug(32500) << "entryList().count()="
               << thedir.entryList().count() << endl;
 
     for (unsigned int i=0;i<thedir.entryList().count();i++)
@@ -625,13 +625,13 @@ QStringList KoSpell::getAvailDictsAspell () {
         dir.setFile ("/usr/local/share/aspell");
     if (!dir.exists() || !dir.isDir()) return QStringList();
 
-    kdDebug() << "KoSpell::getAvailDictsAspell "
+    kdDebug(32500) << "KoSpell::getAvailDictsAspell "
                  << dir.filePath() << " " << dir.dirPath() << endl;
 
     QDir thedir (dir.filePath(),"*");
 
-    kdDebug() << "KSpellConfig" << thedir.path() << "\n" << endl;
-    kdDebug() << "entryList().count()="
+    kdDebug(32500) << "KSpellConfig" << thedir.path() << "\n" << endl;
+    kdDebug(32500) << "entryList().count()="
                  << thedir.entryList().count() << endl;
 
     for (unsigned int i=0; i<thedir.entryList().count(); i++)

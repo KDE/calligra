@@ -104,12 +104,12 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
         return;
     }
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug() << "KoBgSpellCheck::startBackgroundSpellCheck" << endl;
+    kdDebug(32500) << "KoBgSpellCheck::startBackgroundSpellCheck" << endl;
 #endif
 
     m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
     nextParagraphNeedingCheck();
-    //kdDebug() << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
+    //kdDebug(32500) << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
 
     if ( !m_bgSpell.currentTextObj || !m_bgSpell.currentParag ) {
         if ( m_bgSpell.currentTextObj )
@@ -118,7 +118,7 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
                 m_bgSpell.currentTextObj->setNeedSpellCheck(false);
         }
         // Might be better to launch again upon document modification (key, pasting, etc.) instead of right now
-        //kdDebug() << "KWDocument::startBackgroundSpellCheck nothing to check this time." << endl;
+        //kdDebug(32500) << "KWDocument::startBackgroundSpellCheck nothing to check this time." << endl;
         QTimer::singleShot( 1000, this, SLOT( startBackgroundSpellCheck() ) );
         return;
     }
@@ -150,7 +150,7 @@ void KoBgSpellCheck::spellCheckerReady()
     if (m_bgSpell.currentTextObj)
         m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
 
-    //kdDebug() << "KWDocument::spellCheckerReady" << endl;
+    //kdDebug(32500) << "KWDocument::spellCheckerReady" << endl;
     QTimer::singleShot( 10, this, SLOT( spellCheckNextParagraph() ) );
 }
 
@@ -159,7 +159,7 @@ void KoBgSpellCheck::spellCheckerReady()
 void KoBgSpellCheck::nextParagraphNeedingCheck()
 {
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug() << "KoBgSpellCheck::nextParagraphNeedingCheck" <<m_bgSpell.currentTextObj <<endl;
+    kdDebug(32500) << "KoBgSpellCheck::nextParagraphNeedingCheck" <<m_bgSpell.currentTextObj <<endl;
 #endif
     if ( !m_bgSpell.currentTextObj ) {
         m_bgSpell.currentParag = 0L;
@@ -200,16 +200,16 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
 void KoBgSpellCheck::spellCheckNextParagraph()
 {
     // TODO handle deletion of paragraphs.... signal from kotextobjects?
-    //kdDebug() << "KoBgSpellCheck::spellCheckNextParagraph" << endl;
+    //kdDebug(32500) << "KoBgSpellCheck::spellCheckNextParagraph" << endl;
 
     nextParagraphNeedingCheck();
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug() << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
+    kdDebug(32500) << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
 #endif
     if ( !m_bgSpell.currentTextObj || !m_bgSpell.currentParag )
     {
 #ifdef DEBUG_BGSPELLCHECKING
-        kdDebug() << "KoBgSpellCheck::spellCheckNextParagraph scheduling restart" << endl;
+        kdDebug(32500) << "KoBgSpellCheck::spellCheckNextParagraph scheduling restart" << endl;
 #endif
         // We arrived to the end of the paragraphs. Jump to startBackgroundSpellCheck,
         // it will check if we still have something to do.
@@ -223,7 +223,7 @@ void KoBgSpellCheck::spellCheckNextParagraph()
     format.setMisspelled( false );
     m_bgSpell.currentParag->setFormat( 0, m_bgSpell.currentParag->length()-1, &format, true, KoTextFormat::Misspelled );
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug() << "KoBgSpellCheck::spellCheckNextParagraph spell checking parag " << m_bgSpell.currentParag->paragId() << endl;
+    kdDebug(32500) << "KoBgSpellCheck::spellCheckNextParagraph spell checking parag " << m_bgSpell.currentParag->paragId() << endl;
 #endif
     // Now spell-check that paragraph
     QString text = m_bgSpell.currentParag->string()->toString();
@@ -234,7 +234,7 @@ void KoBgSpellCheck::spellCheckNextParagraph()
 void KoBgSpellCheck::spellCheckerMisspelling(const QString &old, int pos )
 {
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug() << "KoBgSpellCheck::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    kdDebug(32500) << "KoBgSpellCheck::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
 #endif
     KoTextObject * fs = m_bgSpell.currentTextObj;
     Q_ASSERT( fs );
@@ -242,7 +242,7 @@ void KoBgSpellCheck::spellCheckerMisspelling(const QString &old, int pos )
     KoTextParag* parag = m_bgSpell.currentParag;
     if ( !parag ) return;
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug() << "KoBgSpellCheck::spellCheckerMisspelling parag=" << parag << " (id=" << parag->paragId() << ", length=" << parag->length() << ") pos=" << pos << " length=" << old.length() << endl;
+    kdDebug(32500) << "KoBgSpellCheck::spellCheckerMisspelling parag=" << parag << " (id=" << parag->paragId() << ", length=" << parag->length() << ") pos=" << pos << " length=" << old.length() << endl;
 #endif
     KoTextStringChar *ch = parag->at( pos );
     KoTextFormat format( *ch->format() );
@@ -256,7 +256,7 @@ void KoBgSpellCheck::spellCheckerMisspelling(const QString &old, int pos )
 void KoBgSpellCheck::spellCheckerDone()
 {
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug() << "KoBgSpellCheck::spellCheckerDone" << endl;
+    kdDebug(32500) << "KoBgSpellCheck::spellCheckerDone" << endl;
 #endif
     if(m_bgSpell.currentParag)
         m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
@@ -269,7 +269,7 @@ void KoBgSpellCheck::spellCheckerDone()
 void KoBgSpellCheck::spellCheckerFinished()
 {
 #ifdef DEBUG_BGSPELLCHECKING
-    kdDebug() << "--- KoBgSpellCheck::spellCheckerFinished ---" << endl;
+    kdDebug(32500) << "--- KoBgSpellCheck::spellCheckerFinished ---" << endl;
 #endif
     KoSpell::spellStatus status = m_bgSpell.kspell->status();
     delete m_bgSpell.kspell;

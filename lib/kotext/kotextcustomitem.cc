@@ -32,7 +32,7 @@ int KoTextCustomItem::index() const
 KoTextFormat * KoTextCustomItem::format() const
 {
     KoTextParag * parag = paragraph();
-    //kdDebug() << "KoTextCustomItem::format index=" << index() << " format=" << parag->at( index() )->format() << endl;
+    //kdDebug(32500) << "KoTextCustomItem::format index=" << index() << " format=" << parag->at( index() )->format() << endl;
     return parag->at( index() )->format();
 }
 
@@ -40,7 +40,7 @@ KoTextFormat * KoTextCustomItem::format() const
 void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     KoZoomHandler *zh=textDocument()->paintingZoomHandler();
-    //kdDebug()<<" x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
+    //kdDebug(32500)<<" x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
     // Calculate index only once
     // Hmm, should pass it to drawCustomItem...
@@ -54,7 +54,7 @@ void KoTextCustomItem::draw(QPainter* p, int x, int _y, int cx, int cy, int cw, 
     cy = zh->layoutUnitToPixelY(_y,cy);
     ch = zh->layoutUnitToPixelY(_y,ch);
     cw = zh->layoutUnitToPixelX(cw);
-    //kdDebug()<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
+    //kdDebug(32500)<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
     KoTextFormat * fmt = stringChar->format();
 
@@ -84,7 +84,7 @@ void CustomItemsMap::insertItems( const KoTextCursor & startCursor, int size )
         CustomItemsMap::Iterator it = find( i );
         if ( it != end() )
         {
-            kdDebug() << "CustomItemsMap::insertItems setting custom item " << it.data() << endl;
+            kdDebug(32500) << "CustomItemsMap::insertItems setting custom item " << it.data() << endl;
             cursor.parag()->setCustomItem( cursor.index(), it.data(), 0 );
             it.data()->setDeleted( false );
         }

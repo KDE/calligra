@@ -493,7 +493,7 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     // Now go from 100%-zoom to LU
     m_cache.width = KoTextZoomHandler::ptToLayoutUnitPt( m_cache.width );
 
-    //kdDebug() << "KoParagCounter::width recalculated parag=" << paragraph << " text='" << text << "' width=" << m_cache.width << endl;
+    //kdDebug(32500) << "KoParagCounter::width recalculated parag=" << paragraph << " text='" << text << "' width=" << m_cache.width << endl;
     return m_cache.width;
 }
 

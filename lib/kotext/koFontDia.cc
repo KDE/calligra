@@ -207,7 +207,7 @@ void KoFontChooser::slotFontChanged(const QFont & f)
         m_changedFlags |= KoTextFormat::Family;
     if ( f.pointSize() != m_newFont.pointSize() )
         m_changedFlags |= KoTextFormat::Size;
-    kdDebug() << "KWFontChooser::slotFontChanged m_changedFlags=" << m_changedFlags << endl;
+    kdDebug(32500) << "KWFontChooser::slotFontChanged m_changedFlags=" << m_changedFlags << endl;
     m_newFont = f;
 }
 
