@@ -29,7 +29,7 @@ while ( <FILE> ) {
    $string .= $_;   
    chomp($string);
  
-   $textstring = '(Example|GroupName|Text|Comment|Syntax)>';
+   $textstring = '(Example|GroupName|Text|Comment|Syntax|TypeName)>';
 
    if ($intext == 0) {
      if ($string =~ /<$textstring/) {
