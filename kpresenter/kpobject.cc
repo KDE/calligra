@@ -101,8 +101,8 @@ QRect KPObject::getBoundingRect( int _diffx, int _diffy ) const
         mtx.rotate( angle );
         QRect rr = mtx.map( r );
 
-        int diffw = abs( rr.width() - r.width() );
-        int diffh = abs( rr.height() - r.height() );
+        int diffw = std::abs( rr.width() - r.width() );
+        int diffh = std::abs( rr.height() - r.height() );
 
         return QRect( r.x() - diffw, r.y() - diffh,
                       r.width() + diffw * 2, r.height() + diffh * 2 );
