@@ -1,4 +1,4 @@
-SUBDIRS = kohyphen
+SUBDIRS = kohyphen . tests
 INCLUDES= $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(all_includes)
 ## Needed for kohyphen...
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)

@@ -175,10 +175,12 @@ public:
      */
     int width( const QChar &c ) const;
     int width( const QString &str, int pos ) const;
-    int height() const;
-    int ascent() const;
-    int descent() const;
+    int height() const; // in LU pixels
+    int ascent() const; // in LU pixels
+    int descent() const; // in LU pixels
     //bool useLinkColor() const;
+    int offsetX() const; // in LU pixels
+    int offsetY() const; // in LU pixels
 
     void setBold( bool b );
     void setItalic( bool b );

@@ -39,6 +39,9 @@ public:
 
     virtual int format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts );
 
+    // Called after formatting a paragraph
+    virtual void postFormat( KoTextParag* parag );
+
 protected:
     KoTextParagLineStart *koFormatLine(
         KoZoomHandler *zh,
@@ -55,7 +58,6 @@ protected:
 
 private:
     KoHyphenator* m_hyphenator;
-
 };
 
 #endif

@@ -3476,6 +3476,9 @@ void KoTextParag::format( int start, bool doMove )
         }
     }
 
+    if ( doc )
+        doc->formatter()->postFormat( this );
+
     if ( n && doMove && n->invalid == -1 && r.y() + r.height() != n->r.y() ) {
         //kdDebug(32500) << "r=" << r << " n->r=" << n->r << endl;
 	int dy = ( r.y() + r.height() ) - n->r.y();
@@ -4121,7 +4124,9 @@ void KoTextCursor::setIndex( int i, bool restore )
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 KoTextFormatterBase::KoTextFormatterBase()
-    : thisminw(0), thiswused(0), wrapEnabled( TRUE ), wrapColumn( -1 ), biw( TRUE /*default in kotext*/ )
+    : thisminw(0), thiswused(0), wrapColumn( -1 ), wrapEnabled( TRUE ),
+      m_bViewFormattingChars( false ),
+      biw( true /*default in kotext*/ )
 {
 }
 

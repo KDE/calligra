@@ -801,9 +801,20 @@ int KoTextFormat::charWidth( const KoZoomHandler* zh, bool applyZoom, const KoTe
         pixelww = fontMetrics.charWidth( str, off );
     }
 
-#ifdef DEBUG_FORMATTER
-    if ( applyZoom ) // ###
-        kdDebug(32500) << "\nKoTextFormat::charWidth: char=" << // format=%s" << ", LU-size=" << %d << ", LU-width=" << ww << " [equiv. to pix=" << zh->layoutUnitToPixelX(ww) << "] pixel-width=" << pixelww/* << endl;
+    // Add room for the shadow
+    if ( d->m_shadowDistanceX != 0 )
+    {
+        // pt to pixel conversion
+        int shadowpix = (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiX() ) ) * QABS( d->m_shadowDistanceX ) );
+        //kdDebug(32500) << "d->m_shadowDistanceX=" << d->m_shadowDistanceX << " -> shadowpix=" << shadowpix 
+        //      << ( applyZoom ? " and applying zoom " : " (100% zoom) " )
+        //      << " -> adding " << ( applyZoom ? (  shadowpix * zh->zoom() / 100 ) : shadowpix ) << endl;
+        pixelww += applyZoom ? ( shadowpix * zh->zoom() / 100 ) : shadowpix;
+    }
+
+#if 0
+        kdDebug(32500) << "KoTextFormat::charWidth: char=" << QString(c->c) << " format=" << key()
+                       << ", applyZoom=" << applyZoom << " pixel-width=" << pixelww << endl;
 #endif
     return pixelww;
 }
@@ -818,11 +829,42 @@ int KoTextFormat::height() const
             h += refFontMetrics().height()/2;
         else if ( vAlign() == KoTextFormat::AlignSubScript )
             h += refFontMetrics().height()/6;
+
+        // Add room for the shadow
+        if ( d->m_shadowDistanceY != 0 ) {
+            // pt -> pixel (at 100% zoom)
+            h += (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiY() ) ) * QABS( d->m_shadowDistanceY ) );
+        }
+
         //kdDebug(32500) << "KoTextFormat::height 100%-zoom font says h=" << h << " in LU:" << KoTextZoomHandler::ptToLayoutUnitPt(h) << endl;
         // Then scale to LU
         d->m_refHeight = qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
     }
     return d->m_refHeight;
+}
+
+int KoTextFormat::offsetX() const // in LU pixels
+{
+    int off = 0;
+    // Shadow on left -> character is moved to the right
+    if ( d->m_shadowDistanceX < 0 )
+    {
+        double lupt = KoTextZoomHandler::ptToLayoutUnitPt( QABS( d->m_shadowDistanceX ) );
+        off += (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiX() ) ) * lupt );
+    }
+    return off;
+}
+
+int KoTextFormat::offsetY() const // in LU pixels
+{
+    int off = 0;
+    // Shadow on top -> character is moved down
+    if ( d->m_shadowDistanceY < 0 )
+    {
+        double lupt = KoTextZoomHandler::ptToLayoutUnitPt( QABS( d->m_shadowDistanceY ) );
+        off += (int)(POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiY() ) ) * lupt );
+    }
+    return off;
 }
 
 QString KoTextFormat::displayedString( const QString& str )const
@@ -869,6 +911,7 @@ int KoTextFormat::ascent() const
             h += refFontMetrics().height()/2;
         // Then scale to LU
         d->m_refAscent = qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
+        //d->m_refAscent += offsetY();
     }
     return d->m_refAscent;
 }
@@ -883,17 +926,21 @@ int KoTextFormat::descent() const
             h -= offsetFromBaseLine();
         // Then scale to LU
         d->m_refDescent = qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
+        //d->m_refDescent += offsetY();
     }
     return d->m_refDescent;
 }
 
 int KoTextFormat::charWidthLU( const KoTextStringChar* c, const KoTextParag* parag, int i ) const
 {
-    return KoTextZoomHandler::ptToLayoutUnitPt( charWidth( 0L, false, c, parag, i ) );
+    // Hmm, we add precision to the least precise one!
+    // TODO: We should instead implement it here in LU, and let charWidth call it...
+   return KoTextZoomHandler::ptToLayoutUnitPt( charWidth( 0L, false, c, parag, i ) );
 }
 
 int KoTextFormat::width( const QChar& ch ) const
 {
+    // Warning this doesn't take into account the shadow
     return KoTextZoomHandler::ptToLayoutUnitPt( refFontMetrics().width( ch ) );
 }
 

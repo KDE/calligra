@@ -143,6 +143,9 @@ public:
     /** a bit more clever than KoTextString::toString, e.g. with numbered lists */
     QString toString( int from = 0, int length = 0xffffffff ) const;
 
+    /** The app should call this during formatting - e.g. in formatVertically */
+    void fixParagWidth( bool viewFormattingChars );
+
 #ifndef NDEBUG
     void printRTDebug( int );
 #endif
@@ -163,12 +166,22 @@ protected:
                                   KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh, bool drawingShadow );
 
-    /** Hook for KWTextParag. Default implementation does nothing. See KWTextParag for params meaning */
-    virtual void drawFormattingChars( QPainter &, const QString &, int, int, // start, len
-                                      int, int, int, int, // startX, lastY, baseLine, h,
-                                      int, int, int, int, int, // startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
-                                      bool, KoTextFormat *, int, const QMemArray<int> &,
-                                      const QMemArray<int> &, const QColorGroup &, bool, int ) { }
+    /// Bitfield for drawFormattingChars's "whichFormattingChars" param
+    enum { FormattingSpace = 1, FormattingBreak = 2, FormattingEndParag = 4, FormattingTabs = 8,
+           AllFormattingChars = FormattingSpace | FormattingBreak | FormattingEndParag | FormattingTabs };
+
+    /// Called by drawParagStringInternal to draw the formatting characters, if the
+    /// kotextdocument drawingflag for it was set.
+    /// The last arg is a bit special: drawParagStringInternal always sets it to "all",
+    /// but reimplementations can change its value.
+    virtual void drawFormattingChars( QPainter &painter, int start, int len,
+                                      int lastY_pix, int baseLine_pix, int h_pix, // in pixels
+                                      bool drawSelections,
+                                      KoTextFormat *format, const QMemArray<int> &selectionStarts,
+                                      const QMemArray<int> &selectionEnds, const QColorGroup &cg,
+                                      bool rightToLeft, int line, KoZoomHandler* zh,
+                                      int whichFormattingChars );
+
 protected:
     KoParagLayout m_layout;
     QMap<int, int> m_tabCache;

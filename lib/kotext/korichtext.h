@@ -1087,6 +1087,8 @@ public:
     virtual ~KoTextFormatterBase() {}
     virtual int format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts ) = 0;
     virtual int formatVertically( KoTextDocument* doc, KoTextParag* parag );
+    // Called after formatting a paragraph
+    virtual void postFormat( KoTextParag* parag ) = 0;
 
     bool isWrapEnabled( KoTextParag *p ) const { if ( !wrapEnabled ) return FALSE; if ( p && !p->isBreakable() ) return FALSE; return TRUE;}
     int wrapAtColumn() const { return wrapColumn;}
@@ -1097,6 +1099,10 @@ public:
 
     int minimumWidth() const { return thisminw; }
     int widthUsed() const { return thiswused; }
+
+    // This setting is passed to KoTextParag::fixParagWidth by postFormat()
+    void setViewFormattingChars( bool b ) { m_bViewFormattingChars = b; }
+    bool viewFormattingChars() const { return m_bViewFormattingChars; }
 
 protected:
     //virtual KoTextParagLineStart *formatLine( KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line, KoTextStringChar *start,
@@ -1115,9 +1121,11 @@ protected:
     int thiswused;
 
 private:
-    bool wrapEnabled;
     int wrapColumn;
+    bool wrapEnabled;
+    bool m_bViewFormattingChars;
     bool biw;
+    bool unused; // for future extensions
 
 #ifdef HAVE_THAI_BREAKS
     static QCString *thaiCache;
@@ -1127,32 +1135,8 @@ private:
 };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#if 0
-class KoTextFormatterBaseBreakInWords : public KoTextFormatterBase
-{
-public:
-    KoTextFormatterBaseBreakInWords();
-    virtual ~KoTextFormatterBaseBreakInWords() {}
 
-    int format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts );
-
-};
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-class KoTextFormatterBaseBreakWords : public KoTextFormatterBase
-{
-public:
-    KoTextFormatterBaseBreakWords();
-    virtual ~KoTextFormatterBaseBreakWords() {}
-
-    int format( KoTextDocument *doc, KoTextParag *parag, int start, const QMap<int, KoTextParagLineStart*> &oldLineStarts );
-
-};
-#endif
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+// Not used
 class KoTextIndent
 {
 public:

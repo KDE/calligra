@@ -811,3 +811,8 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
     delete runs;
     return ls;
 }
+
+void KoTextFormatter::postFormat( KoTextParag* parag )
+{
+    parag->fixParagWidth( viewFormattingChars() );
+}
