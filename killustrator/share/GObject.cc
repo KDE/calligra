@@ -101,7 +101,7 @@ GObject::GObject (const QDomElement &element) {
     sflag=false;
     layer = 0L;
     inWork = false;
-    rcount=1;
+    rcount=0;
 
     outlineInfo.mask = 0;
     outlineInfo.startArrowId = outlineInfo.endArrowId = 0;

@@ -29,6 +29,7 @@
 #include <qlayout.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <Canvas.h>
 #include <UnitBox.h>
@@ -156,6 +157,7 @@ void HelplineDialog::addHorizLine () {
 
 void HelplineDialog::updateHorizLine () {
   int idx = horizList->currentItem ();
+  kdDebug() << "updateHorizLine: idx=" << idx << endl;
   if (idx != -1) {
     float value = horizValue->getValue ();
     MeasurementUnit unit =
@@ -171,8 +173,8 @@ void HelplineDialog::updateHorizLine () {
 void HelplineDialog::deleteHorizLine () {
   int idx = horizList->currentItem ();
   if (idx != -1) {
-    horizList->removeItem (idx);
     horizLines.remove(horizLines.at(idx));
+    horizList->removeItem (idx);
   }
 }
 
@@ -204,8 +206,8 @@ void HelplineDialog::updateVertLine () {
 void HelplineDialog::deleteVertLine () {
   int idx = vertList->currentItem ();
   if (idx != -1) {
-    vertList->removeItem (idx);
-    vertLines.remove(vertLines.at(idx));
+      vertLines.remove(vertLines.at(idx));
+      vertList->removeItem (idx);
   }
 }
 

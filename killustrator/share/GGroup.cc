@@ -38,6 +38,8 @@ GGroup::GGroup (const QDomElement &element) : GObject (element.namedItem("gobjec
              SLOT(propagateProperties (GObject::Property, int)));
     QDomElement child=element.firstChild().toElement();
     for( ; !child.isNull(); child = child.nextSibling().toElement() ) {
+        if(child.tagName()=="gobject")
+            continue;
         GObject *obj=KIllustrator::objectFactory(child);
         if(!obj) {
             GObject *proto = GObject::lookupPrototype (child.tagName());
@@ -78,9 +80,9 @@ bool GGroup::contains (const Coord& p) {
 }
 
 void GGroup::addObject (GObject* obj) {
-  obj->ref ();
-  members.append(obj);
-  updateRegion ();
+    obj->ref ();
+    members.append(obj);
+    updateRegion ();
 }
 
 void GGroup::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {

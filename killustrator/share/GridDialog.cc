@@ -49,25 +49,24 @@ void GridDialog::createGridWidget (QWidget* parent) {
 
     QBoxLayout *vboxlayout=new QVBoxLayout(box, KDialogBase::marginHint(), KDialogBase::spacingHint());
     vboxlayout->addSpacing(box->fontMetrics().height()/2);
-    QBoxLayout *hboxlayout=new QHBoxLayout(vboxlayout);
+    QGridLayout *grid=new QGridLayout(vboxlayout, 2, 2);
     QLabel* label = new QLabel(i18n("Horizontally"), box);
-    hboxlayout->addWidget(label);
+    grid->addWidget(label, 0, 0);
 
     hspinbox = new UnitBox(box);
     hspinbox->setFormatString ("%-3.3f");
     hspinbox->setEditable (true);
     hspinbox->setRange (0, 1000);
-    hboxlayout->addWidget(hspinbox, 0, 1);
+    grid->addWidget(hspinbox, 0, 1);
 
-    hboxlayout=new QHBoxLayout(vboxlayout);
     label=new QLabel(i18n("Vertically"), box);
-    hboxlayout->addWidget(label, 1, 0);
+    grid->addWidget(label, 1, 0);
 
     vspinbox = new UnitBox (box);
     vspinbox->setFormatString ("%-3.3f");
     vspinbox->setEditable (true);
     vspinbox->setRange (0, 1000);
-    hboxlayout->addWidget(vspinbox, 1, 1);
+    grid->addWidget(vspinbox, 1, 1);
 
     gbutton = new QCheckBox(i18n("Snap To Grid"), parent);
     layout->addWidget(gbutton, 1, 0);
