@@ -889,6 +889,7 @@ void KoRuler::handleDoubleClick()
         if ( d->tabChooser->getCurrTabType() != 0 && d->removeTab!=d->tabList.end() && !d->tabList.isEmpty()) {
             d->tabList.remove( d->removeTab );
             d->removeTab=d->tabList.end();
+            d->currTab=d->tabList.end();
             emit tabListChanged( d->tabList );
             update();
         } else if ( d->action == A_TAB ) {
