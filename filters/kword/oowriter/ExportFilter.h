@@ -98,6 +98,11 @@ private:
     void writeStylesXml(void);
     void writeMetaXml(void);
     void writeStartOfFile(const QString& type);
+    /**
+     * For automatic styles: create the name from @p prefix and from the increased @p counter
+     * (Yes, the counter is increased by the method.)
+     */
+    QString makeAutomaticStyleName(const QString& prefix, ulong& counter) const;
 private: // ZIP methids
     bool zipPrepareWriting(const QString& name);
     bool zipDoneWriting(void);
@@ -120,8 +125,8 @@ private:
     ulong m_automaticTextStyleNumber; // Number of text-based automatic styles (increment *before* use)
     ulong m_footnoteNumber; // Number of footnote (for text:id) (increment *before* use)
 
-    QString m_styles; // Normal paragraph styles
-    QString m_contentAutomaticStyles; // Automatic styles for content.xml
+    QString m_styles; // Normal paragraph styles (in OO format)
+    QString m_contentAutomaticStyles; // Automatic styles for content.xml (in OO format)
 
     uint m_size; // Size of ZIP entry
     int m_paperFormat;

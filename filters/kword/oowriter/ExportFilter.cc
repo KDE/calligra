@@ -749,8 +749,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
         if (it==m_mapTextStyleKeys.end())
         {
             // We have not any match, so we need a new automatic text style
-            automaticStyle="T";
-            automaticStyle += QString::number(++m_automaticTextStyleNumber,10); // ### TODO: verify that it is not a normal style
+            automaticStyle=makeAutomaticStyleName("T", m_automaticTextStyleNumber);
             kdDebug(30518) << "Creating automatic text style: " << automaticStyle << " key: " << styleKey << endl;
             m_mapTextStyleKeys[styleKey]=automaticStyle;
 
@@ -1113,8 +1112,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
         if (it==m_mapParaStyleKeys.end())
         {
             // We have additional properties, so we need an automatic style for the paragraph
-            automaticStyle += "P";
-            automaticStyle += QString::number(++m_automaticParagraphStyleNumber,10); // ### TODO: verify that it is not a normal style
+            automaticStyle = makeAutomaticStyleName("P", m_automaticParagraphStyleNumber);
             kdDebug(30518) << "Creating automatic paragraph style: " << automaticStyle << endl;
             m_mapParaStyleKeys[styleKey]=automaticStyle;
 
@@ -1278,5 +1276,34 @@ void OOWriterWorker::declareFont(const QString& fontName)
         // New font, so register it
         m_fontNames[fontName]=props;
     }
+}
+
+QString OOWriterWorker::makeAutomaticStyleName(const QString& prefix, ulong& counter) const
+{
+    const QString str (prefix + QString::number(++counter,10));
+
+    // Checks if the automatic style has not the same name as a user one.
+    // If it is the case, change it!
+
+    if (m_styleMap.find(str)==m_styleMap.end())
+        return str; // Unique, so let's go!
+
+    QString str2(str+"_bis");
+    if (m_styleMap.find(str2)==m_styleMap.end())
+        return str2;
+
+    str2 = str+"_ter";
+    if (m_styleMap.find(str2)==m_styleMap.end())
+        return str2;
+
+    // If it is still not unique, try a time stamp.
+    const QDateTime dt(QDateTime::currentDateTime(Qt::UTC));
+
+    str2 = str + "_" + QString::number(dt.toTime_t(),16);
+    if (m_styleMap.find(str2)==m_styleMap.end())
+        return str2;
+
+    kdWarning(30518) << "Could not make an unique style name: " << str2 << endl;
+    return str2; // Still return, as we have nothing better
 }
 
