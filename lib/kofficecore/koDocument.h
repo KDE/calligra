@@ -116,12 +116,6 @@ public:
   virtual KAction *action( const QDomElement &element ) const;
 
   /**
-   * Returns the DOM document which describes the GUI of the
-   * first view.
-   */
-  virtual QDomDocument domDocument() const;
-
-  /**
    * @internal
    */
   virtual void setManager( KParts::PartManager *manager );
