@@ -40,7 +40,7 @@ KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentific
 
 KoZipStore::~KoZipStore()
 {
-    kdDebug() << "KoZipStore::~KoZipStore" << endl;
+    kdDebug(s_area) << "KoZipStore::~KoZipStore" << endl;
     m_pZip->close();
     delete m_pZip;
 }
@@ -55,7 +55,7 @@ bool KoZipStore::init( Mode _mode, const QCString& appIdentification )
         good = m_pZip->directory() != 0;
     else if ( good && _mode == Write )
     {
-        //kdDebug() << "KoZipStore::init writing mimetype " << appIdentification << endl;
+        //kdDebug(s_area) << "KoZipStore::init writing mimetype " << appIdentification << endl;
 
         m_pZip->setCompression( KoZip::NoCompression );
         // Write identification
@@ -104,7 +104,7 @@ bool KoZipStore::openRead( const QString& name )
 Q_LONG KoZipStore::write( const char* _data, Q_ULONG _len )
 {
   if ( _len == 0L ) return 0;
-  //kdDebug() << "KoZipStore::write " << _len << endl;
+  //kdDebug(s_area) << "KoZipStore::write " << _len << endl;
 
   if ( !m_bIsOpen )
   {

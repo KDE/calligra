@@ -320,7 +320,7 @@ QCString KoDocument::outputMimeType() const
 
 void KoDocument::slotAutoSave()
 {
-    kdDebug()<<"Autosave : modifiedAfterAutosave "<<d->modifiedAfterAutosave<<endl;
+    //kdDebug(30003)<<"Autosave : modifiedAfterAutosave "<<d->modifiedAfterAutosave<<endl;
     if ( isModified() && d->modifiedAfterAutosave )
     {
         connect( this, SIGNAL( sigProgress( int ) ), shells().current(), SLOT( slotProgress( int ) ) );
@@ -630,7 +630,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         kdDebug(30003) << "Saving as uncompressed XML, using directory store." << endl;
     }
 
-    kdDebug() << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType() << endl;
+    kdDebug(30003) << "KoDocument::saveNativeFormat nativeFormatMimeType=" << nativeFormatMimeType() << endl;
     KoStore* store = KoStore::createStore( file, KoStore::Write, nativeFormatMimeType(), backend );
     if ( store->bad() )
     {
@@ -654,7 +654,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         KoStoreDevice dev( store );
         if ( !saveToStream( &dev ) )
         {
-            kdDebug() << "saveToStream failed" << endl;
+            kdDebug(30003) << "saveToStream failed" << endl;
             delete store;
             return false;
         }
@@ -695,7 +695,8 @@ bool KoDocument::saveToStream( QIODevice * dev )
     // Important: don't use s.length() here. It's slow, and dangerous (in case of a '\0' somewhere)
     // The -1 is because we don't want to write the final \0.
     int nwritten = dev->writeBlock( s.data(), s.size()-1 );
-    kdDebug() << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size()-1 << endl;
+    if ( nwritten != (int)s.size()-1 )
+        kdWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " << s.size()-1 << endl;
     return nwritten == (int)s.size()-1;
 }
 
@@ -807,7 +808,6 @@ QString KoDocument::autoSaveFile( const QString & path ) const
         // Yes, two open unnamed docs will overwrite each other's autosave file,
         // but hmm, we can only do something if that's in the same process anyway...
         QString ret = QDir::homeDirPath() + "/." + QString::fromLatin1(instance()->instanceName()) + ".autosave" + extension;
-        kdDebug() << "KoDocument::autosave ret=" << ret << endl;
         return ret;
     }
     else
@@ -823,7 +823,7 @@ QString KoDocument::autoSaveFile( const QString & path ) const
 bool KoDocument::checkAutoSaveFile()
 {
     QString asf = autoSaveFile( QString::null ); // the one in $HOME
-    kdDebug() << "asf=" << asf << endl;
+    //kdDebug(30003) << "asf=" << asf << endl;
     if ( QFile::exists( asf ) )
     {
         QDateTime date = QFileInfo(asf).lastModified();
@@ -871,7 +871,7 @@ bool KoDocument::openURL( const KURL & _url )
         QString asf = autoSaveFile( file );
         if ( QFile::exists( asf ) )
         {
-            kdDebug() << "KoDocument::openURL asf=" << asf << endl;
+            //kdDebug(30003) << "KoDocument::openURL asf=" << asf << endl;
             // ## TODO compare timestamps ?
             int res = KMessageBox::warningYesNoCancel( 0,
                                                        i18n( "An autosaved file exists for this document.\nDo you want to open it instead?" ));
@@ -939,9 +939,9 @@ bool KoDocument::openFile()
     {
         typeName = _native_format; // Hmm, what if it's from another app? ### Check mimetype
         d->m_specialOutputFlag = SaveAsDirectoryStore;
-        kdDebug() << "KoDocument::openFile loading maindoc.xml, using directory store for " << m_file << endl;
+        kdDebug(30003) << "KoDocument::openFile loading maindoc.xml, using directory store for " << m_file << endl;
     }
-    kdDebug() << "KoDocument::openFile " << m_file << " type:" << typeName << endl;
+    kdDebug(30003) << "KoDocument::openFile " << m_file << " type:" << typeName << endl;
 
     QString importedFile = m_file;
 
