@@ -357,8 +357,9 @@ page you want get more information on.
 <title>Using &kchart; in &kspread;</title>
 
 <para>
-&kchart; is intended primarily for use with &kspread;. It is currently
-undergoing revision and should  be considered beta software.
+In addition to standalone operation, &kchart; is designed to use with
+&kspread;. This chapter describes how to create and manipulate charts
+from within &kspread;.
 </para>
 
 <sect1 id="main_window">
