@@ -9,7 +9,7 @@ GenericName=Scalable Graphics
 GenericName[af]=Skaal veranderbare Grafieka
 GenericName[ar]=رسوم قابلة للتمدُّد
 GenericName[az]=Miqyaslı Qrafikalar
-GenericName[bg]=Програма за векторна графика
+GenericName[bg]=Векторна графика
 GenericName[ca]=Gràfics escalables
 GenericName[cs]=Škálovatelná grafika
 GenericName[cy]=Graffeg Graddadwy
@@ -52,7 +52,7 @@ GenericName[xh]=Imizobo Ekalishekayo
 GenericName[xx]=xxScalable Graphicsxx
 GenericName[zh_CN]=可缩放图像
 GenericName[zh_TW]=可縮放向量圖
-MimeType=application/x-karbon;application/illustrator;image/x-eps;application/postscript
+MimeType=application/vnd.oasis.openoffice.drawing;application/x-karbon;application/illustrator;image/x-eps;application/postscript
 # kghostview has 6 for application/postscript, we need to be under that...
 InitialPreference=5
 Type=Application
