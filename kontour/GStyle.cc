@@ -29,6 +29,11 @@
 #include <koFill.h>
 #include <kdebug.h>
 
+const int GStyle::NoFill = 0;
+const int GStyle::ColorFill = 1;
+const int GStyle::GradientFill = 2;
+const int GStyle::PatternFill = 3;
+
 GStyle::GStyle()
 {
   mStroked = true;

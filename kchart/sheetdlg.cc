@@ -21,6 +21,8 @@
 #include <qlabel.h>
 #include <qspinbox.h>
 
+const int SheetDlg::TABLE_SIZE = 16;
+
 SheetDlg::SheetDlg( QWidget *parent, const char *name )
     :QWidget( parent, name )
 {

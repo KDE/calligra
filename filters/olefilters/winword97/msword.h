@@ -376,12 +376,12 @@ protected:
 
 protected:
     // Error handling and reporting support.
-    static const int s_area = 30513;
+    static const int s_area;
     QString m_constructionError;
     void constructionError(unsigned line, const char *reason);
-    static const unsigned s_minWordVersion = 100;
-    static const unsigned s_maxWord6Version = 105;
-    static const unsigned s_maxWord7Version = 193;
+    static const unsigned s_minWordVersion;
+    static const unsigned s_maxWord6Version;
+    static const unsigned s_maxWord7Version;
 
 private:
     // Some fundamental data structures. We keep pointers to our streams,
@@ -399,7 +399,7 @@ private:
 
     // Word specification says it never has more than 64 columns in a table.
     // But it actually allows much more ...
-    static const int MAX_TABLE_SIZE = 500;
+    enum { MAX_TABLE_SIZE = 500 };
 
     // Character property handling.
 

@@ -80,7 +80,7 @@ private:
 
     // Error handling and reporting support.
 
-    static const int s_area = 30512;
+    static const int s_area;
 
     // The conversion is done exactly once. Has it already happened?
 

@@ -86,7 +86,7 @@ public:
 private:
     KLaola(const KLaola &);
     const KLaola &operator=(const KLaola &);
-    static const int s_area = 30510;
+    static const int s_area;
 
     unsigned char read8(int i) const;
     unsigned short read16(int i) const;

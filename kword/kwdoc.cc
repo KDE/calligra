@@ -117,6 +117,21 @@ void KWDocument::clearUndoRedoInfos()
 /******************************************************************/
 /* Class: KWDocument                                              */
 /******************************************************************/
+const int KWDocument::CURRENT_SYNTAX_VERSION = 2;
+/*
+const int KWDocument::U_FONT_FAMILY_SAME_SIZE = 1;
+const int KWDocument::U_FONT_ALL_SAME_SIZE = 2;
+const int KWDocument::U_COLOR = 4;
+const int KWDocument::U_INDENT = 8;
+const int KWDocument::U_BORDER = 16;
+const int KWDocument::U_ALIGN = 32;
+const int KWDocument::U_NUMBERING = 64;
+const int KWDocument::U_FONT_FAMILY_ALL_SIZE = 128;
+const int KWDocument::U_FONT_ALL_ALL_SIZE = 256;
+const int KWDocument::U_TABS = 512;
+const int KWDocument::U_SMART = 1024;
+*/
+
 
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),

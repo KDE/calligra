@@ -28,7 +28,7 @@ class QStringList;
 class AmiPro
 {
   public:
-    const static float LS_Single = -1, LS_OneAndHalf = -1.5, LS_Double = -2;
+    static const float LS_Single, LS_OneAndHalf, LS_Double;
 };
 
 class AmiProStyle;

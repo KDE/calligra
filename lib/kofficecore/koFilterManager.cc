@@ -40,6 +40,7 @@
 // static cache for filter availability
 QMap<QString, bool> KoFilterManager::m_filterAvailable;
 
+const int KoFilterManager::s_area = 30500;
 
 KoFilterManager::KoFilterManager( KoDocument* document ) :
     m_document( document ), m_parentChain( 0 ), m_graph( "" ), d( 0 )

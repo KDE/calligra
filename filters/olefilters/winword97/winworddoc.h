@@ -202,9 +202,9 @@ private:
 
     // Page sizes, margins etc. all in points.
 
-    static const unsigned s_height = 841; // Height.
-    static const unsigned s_width = 595;  // Width.
-    static const unsigned s_hMargin = 28; // Horizontal margin.
-    static const unsigned s_vMargin = 42; // Vertical margin.
+    static const unsigned s_height;  // Height.
+    static const unsigned s_width;   // Width.
+    static const unsigned s_hMargin; // Horizontal margin.
+    static const unsigned s_vMargin; // Vertical margin.
 };
 #endif // WINWORDDOC_H

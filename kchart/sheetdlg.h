@@ -41,7 +41,7 @@ public:
   QString getY(int);
   double getCell(int,int);
 
-  static const int TABLE_SIZE = 16;
+  static const int TABLE_SIZE;
   
 protected:
   virtual void resizeEvent( QResizeEvent *);

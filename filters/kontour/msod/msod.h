@@ -100,7 +100,7 @@ private:
 
     // Debug support.
 
-    static const int s_area = 30505;
+    static const int s_area;
 
 private:
     int m_dpi;

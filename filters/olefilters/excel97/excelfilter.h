@@ -44,7 +44,7 @@ private:
 	Handler *m_handler;
 
     const unsigned m_length;
-    static const int MAX_RECORD_SIZE = 0x2024;
+    static const int MAX_RECORD_SIZE;
 };
 
 #endif

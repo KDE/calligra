@@ -30,6 +30,8 @@ DESCRIPTION
 #include <msod.h>
 #include <zlib.h>
 
+const int Msod::s_area = 30505;
+
 Msod::Msod(
     unsigned dpi) :
         KWmf(dpi)

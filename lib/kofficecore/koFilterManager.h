@@ -136,7 +136,7 @@ private:
 
     void importErrorHelper( const QString& mimeType );
 
-    static const int s_area = 30500;
+    static const int s_area;
 
     KoDocument* m_document;
     KoFilterChain* const m_parentChain;

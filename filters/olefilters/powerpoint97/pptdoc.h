@@ -67,7 +67,7 @@ private:
 
     // Error handling and reporting support.
 
-    static const int s_area = 30512;
+    static const int s_area;
 
     myFile m_mainStream;
     myFile m_currentUser;

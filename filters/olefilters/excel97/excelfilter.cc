@@ -23,6 +23,8 @@
 #include "excelfilter.h"
 #include "handler.h"
 
+const int ExcelFilter::MAX_RECORD_SIZE = 0x2024;
+
 ExcelFilter::ExcelFilter(const QByteArray &mainStream)
 : FilterBase(), m_length(mainStream.size())
 {

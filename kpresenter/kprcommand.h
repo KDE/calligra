@@ -476,10 +476,10 @@ public:
 	}
     };
 
-    static const int LB_ONLY = 1;
-    static const int LE_ONLY = 2;
-    static const int PEN_ONLY = 4;
-    static const int BRUSH_ONLY = 8;
+    static const int LB_ONLY;
+    static const int LE_ONLY;
+    static const int PEN_ONLY;
+    static const int BRUSH_ONLY;
 
     PenBrushCmd( const QString &_name, QPtrList<Pen> &_oldPen, QPtrList<Brush> &_oldBrush,
 		 Pen _newPen, Brush _newBrush, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags = 0 );

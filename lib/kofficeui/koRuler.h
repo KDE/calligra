@@ -94,9 +94,9 @@ class KoRuler : public QFrame
     Q_OBJECT
     friend class KoRulerPrivate; // for the Action enum
 public:
-    static const int F_TABS = 1;
-    static const int F_INDENTS = 2;
-    static const int F_HELPLINES = 4;
+    static const int F_TABS;
+    static const int F_INDENTS;
+    static const int F_HELPLINES;
 
     /**
      * Create a ruler

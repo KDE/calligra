@@ -33,6 +33,9 @@ DESCRIPTION
 
 #define PI (3.14159265358979323846)
 
+const int KWmf::s_area = 30504;
+const int KWmf::s_maxHandles = 64;
+
 KWmf::KWmf(
     unsigned dpi)
 {

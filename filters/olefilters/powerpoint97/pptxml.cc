@@ -26,6 +26,8 @@ DESCRIPTION
 #include <qobject.h>
 #include <koGlobal.h>
 
+const int PptXml::s_area = 30512;
+
 PptXml::PptXml(
     const myFile &mainStream,
     const myFile &currentUser):

@@ -24,6 +24,10 @@
 #include <qstringlist.h>
 #include <qtextstream.h>
 
+const float AmiPro::LS_Single = -1;
+const float AmiPro::LS_OneAndHalf = -1.5;
+const float AmiPro::LS_Double = -2;
+
 // helper function to "unescape" AmiPro string
 static QString AmiProUnescape( const QString& str )
 {

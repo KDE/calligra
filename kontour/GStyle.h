@@ -36,10 +36,10 @@ class KoFill;
 class GStyle
 {
 public:
-  static const int NoFill = 0;
-  static const int ColorFill = 1;
-  static const int GradientFill = 2;
-  static const int PatternFill = 3;
+  static const int NoFill;
+  static const int ColorFill;
+  static const int GradientFill;
+  static const int PatternFill;
 
   GStyle();
   GStyle(const QDomElement &style);

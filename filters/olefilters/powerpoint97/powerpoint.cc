@@ -24,6 +24,8 @@ DESCRIPTION
 #include <myfile.h>
 #include <powerpoint.h>
 
+const int Powerpoint::s_area = 30512;
+
 Powerpoint::Powerpoint()
 {
 	mEditOffset = 0;

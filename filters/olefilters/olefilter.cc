@@ -37,6 +37,8 @@ DESCRIPTION
 #include <wordfilter.h>
 #include <myfile.h>
 
+const int OLEFilter::s_area = 30510;
+
 class OLEFilterFactory : KGenericFactory<OLEFilter, KoFilter>
 {
 public:

@@ -32,6 +32,11 @@
 
 //#define CHAR_DEBUG
 
+const int MsWord::s_area = 30513;
+const unsigned MsWord::s_minWordVersion = 100;
+const unsigned MsWord::s_maxWord6Version = 105;
+const unsigned MsWord::s_maxWord7Version = 193;
+
 // We currently only take note of the document's main non-Far Eastern
 // language, and ignore character properties. TBD: remove these restrictions!
 

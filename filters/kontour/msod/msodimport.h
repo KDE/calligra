@@ -73,7 +73,7 @@ private:
     virtual void savePartContents( QIODevice* file );
 
     // Debug support.
-    static const int s_area = 30505;
+    static const int s_area;
 
     void pointArray(
         const QPointArray &points);

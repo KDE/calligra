@@ -31,6 +31,8 @@ DESCRIPTION
 typedef KGenericFactory<WMFImport, KoFilter> WMFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwmfimport, WMFImportFactory( "wmfimport" ) );
 
+const int WMFImport::s_area = 38000;
+
 WMFImport::WMFImport(
     KoFilter *,
     const char *,

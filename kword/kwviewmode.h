@@ -99,7 +99,7 @@ protected:
                             const QRegion & emptySpaceRegion );
     QRect drawRightShadow( QPainter * painter, const QRect & crect, const QRect & pageRect, int topOffset );
     QRect drawBottomShadow( QPainter * painter, const QRect & crect, const QRect & pageRect, int leftOffset );
-    static const unsigned short s_shadowOffset = 3;
+    static const unsigned short s_shadowOffset;
 
     KWDocument * m_doc;
 };

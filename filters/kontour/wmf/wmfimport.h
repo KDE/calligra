@@ -63,7 +63,7 @@ protected:
 private:
     // Debug support.
 
-    static const int s_area = 38000;
+    static const int s_area;
 
     QString m_text;
     void pointArray(

@@ -30,6 +30,11 @@
 
 #define ROW_SIZE 20
 
+const unsigned WinWordDoc::s_height = 841;
+const unsigned WinWordDoc::s_width = 595;
+const unsigned WinWordDoc::s_hMargin = 28;
+const unsigned WinWordDoc::s_vMargin = 42;
+
 WinWordDoc::WinWordDoc(
     QCString &result,
     const myFile &mainStream,

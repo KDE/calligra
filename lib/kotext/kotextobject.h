@@ -475,7 +475,7 @@ private:
     QTime m_time;
 #endif
 
-    static const char s_customItemChar = '#'; // Has to be transparent to kspell but still be saved (not space)
+    static const char s_customItemChar;
     bool m_needsSpellCheck;
     bool m_protectContent;
 };

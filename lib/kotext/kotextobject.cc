@@ -30,6 +30,8 @@
 //#define DEBUG_FORMATS
 //#define DEBUG_FORMAT_MORE
 
+const char KoTextObject::s_customItemChar = '#'; // Has to be transparent to kspell but still be saved (not space)
+
 struct KoTextObject::KoTextObjectPrivate
 {
 public:

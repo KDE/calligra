@@ -283,7 +283,7 @@ protected:
   // Must be set by the constructor.
   bool m_bGood;
 
-  static const int s_area = 30002;
+  static const int s_area;
 
 private:
   KoStore( const KoStore& store );  // don't copy

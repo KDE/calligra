@@ -25,6 +25,8 @@
 #include <kdebug.h>
 #include <kdebugclasses.h>
 
+const unsigned short KWViewMode::s_shadowOffset = 3;
+
 QSize KWViewModeNormal::contentsSize()
 {
     return QSize( m_doc->paperWidth(), m_doc->pageTop( m_doc->getPages() ) /*i.e. bottom of last one*/ );

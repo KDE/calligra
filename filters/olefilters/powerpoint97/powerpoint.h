@@ -95,7 +95,7 @@ private:
     // Debug support.
 
 public:
-    static const int s_area = 30512;
+    static const int s_area;
 
 private:
 

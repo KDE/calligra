@@ -68,7 +68,7 @@ private:
 
     // Error handling and reporting support.
 
-    static const int s_area = 30513;
+    static const int s_area;
     static unsigned walkFile(
         const U8 *in,
         U32 count,

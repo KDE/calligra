@@ -20,6 +20,8 @@
 #include <klaola.h>
 #include <kdebug.h>
 
+const int KLaola::s_area = 30510;
+
 KLaola::KLaola(const myFile &file) {
 
     smallBlockDepot=0L;

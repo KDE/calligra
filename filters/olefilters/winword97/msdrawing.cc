@@ -28,6 +28,8 @@ DESCRIPTION
 #include <msdrawing.h>
 #include <mswordgenerated.h>
 
+const int MsDrawing::s_area = 30513;
+
 void MsDrawing::getDrawing(
     const U8 *in,
     U32 count,

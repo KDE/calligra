@@ -125,7 +125,7 @@ private:
     unsigned int m_embeddeeLength;
 
     bool success;
-    static const int s_area = 30510;
+    static const int s_area;
 };
 
 #endif // OLEFILTER_H

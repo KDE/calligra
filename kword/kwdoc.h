@@ -109,20 +109,20 @@ public:
 
     enum ProcessingType {WP = 0, DTP = 1};
     /*
-    static const int U_FONT_FAMILY_SAME_SIZE = 1;
-    static const int U_FONT_ALL_SAME_SIZE = 2;
-    static const int U_COLOR = 4;
-    static const int U_INDENT = 8;
-    static const int U_BORDER = 16;
-    static const int U_ALIGN = 32;
-    static const int U_NUMBERING = 64;
-    static const int U_FONT_FAMILY_ALL_SIZE = 128;
-    static const int U_FONT_ALL_ALL_SIZE = 256;
-    static const int U_TABS = 512;
-    static const int U_SMART = 1024;
+    static const int U_FONT_FAMILY_SAME_SIZE;
+    static const int U_FONT_ALL_SAME_SIZE;
+    static const int U_COLOR;
+    static const int U_INDENT;
+    static const int U_BORDER;
+    static const int U_ALIGN;
+    static const int U_NUMBERING;
+    static const int U_FONT_FAMILY_ALL_SIZE;
+    static const int U_FONT_ALL_ALL_SIZE;
+    static const int U_TABS;
+    static const int U_SMART;
     */
 
-    static const int CURRENT_SYNTAX_VERSION = 2;
+    static const int CURRENT_SYNTAX_VERSION;
 
 public:
     virtual bool initDoc();

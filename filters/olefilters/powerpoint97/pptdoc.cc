@@ -26,6 +26,8 @@ DESCRIPTION
 #include <pptdoc.h>
 #include <qptrlist.h>
 
+const int PptDoc::s_area = 30512;
+
 PptDoc::PptDoc(
     const myFile &mainStream,
     const myFile &currentUser) :

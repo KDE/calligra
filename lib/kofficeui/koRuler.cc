@@ -60,6 +60,10 @@ public:
 /* Class: KoRuler                                                 */
 /******************************************************************/
 
+const int KoRuler::F_TABS = 1;
+const int KoRuler::F_INDENTS = 2;
+const int KoRuler::F_HELPLINES = 4;
+
 /*================================================================*/
 KoRuler::KoRuler( QWidget *_parent, QWidget *_canvas, Orientation _orientation,
                  const KoPageLayout& _layout, int _flags, KoUnit::Unit _unit, KoTabChooser *_tabChooser )

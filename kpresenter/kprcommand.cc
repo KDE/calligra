@@ -900,6 +900,11 @@ void MoveByCmd2::unexecute()
 /* Class: PenBrushCmd						  */
 /******************************************************************/
 
+const int PenBrushCmd::LB_ONLY = 1;
+const int PenBrushCmd::LE_ONLY = 2;
+const int PenBrushCmd::PEN_ONLY = 4;
+const int PenBrushCmd::BRUSH_ONLY = 8;
+
 /*======================== constructor ===========================*/
 PenBrushCmd::PenBrushCmd( const QString &_name, QPtrList<Pen> &_oldPen, QPtrList<Brush> &_oldBrush,
 			  Pen _newPen, Brush _newBrush, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, int _flags )

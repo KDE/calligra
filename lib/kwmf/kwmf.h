@@ -98,7 +98,7 @@ protected:
 private:
     // Debug support.
 
-    static const int s_area = 30504;
+    static const int s_area;
 
     // Use unambiguous names for Microsoft types.
 
@@ -145,7 +145,7 @@ private:
     WinObjPenHandle *handleCreatePen(void);
     WinObjBrushHandle *handleCreateBrush(void);
     void handleDelete(int idx);
-    static const int s_maxHandles = 64;
+    static const int s_maxHandles;
     WinObjHandle **m_objectHandles;
 
     unsigned getColour(S32 colour);
