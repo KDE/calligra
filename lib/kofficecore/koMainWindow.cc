@@ -754,6 +754,30 @@ void KoMainWindow::slotToolbarToggled( bool toggle )
     kdWarning(30003) << "slotToolbarToggled : Toolbar " << sender()->name() << " not found!" << endl;
 }
 
+void KoMainWindow::showToolbar( const char * tbName, bool shown )
+{
+    QWidget * tb = toolBar( tbName );
+    if ( !tb )
+    {
+        kdWarning(30003) << "KoMainWindow: toolbar " << tbName << " not found." << endl;
+        return;
+    }
+    if ( shown )
+        tb->show();
+    else
+        tb->hide();
+
+    // Update the action appropriately
+    QListIterator<KAction> it( d->m_toolbarList );
+    for ( ; it.current() ; ++it )
+        if ( !strcmp( it.current()->name(), tbName ) )
+        {
+            //kdDebug(30003) << "KoMainWindow::showToolbar setChecked " << shown << endl;
+            static_cast<KToggleAction *>(it.current())->setChecked( shown );
+            break;
+        }
+}
+
 void KoMainWindow::slotSplitView() {
 
     d->m_splitted=true;
@@ -945,7 +969,6 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
           connect( act, SIGNAL( toggled( bool ) ), this, SLOT( slotToolbarToggled( bool ) ) );
           act->setChecked ( !tb->isHidden() );
           d->m_toolbarList.append( act );
-          installEventFilter( tb );
       }
       else
           kdWarning(30003) << "Toolbar list contains a " << it.current()->className() << " which is not a toolbar!" << endl;
@@ -1009,27 +1032,6 @@ QString KoMainWindow::nativeFormatPattern()
         return QString::null;
 
     return *mimeType->patterns().begin();
-}
-
-bool KoMainWindow::eventFilter(QObject *obj, QEvent *ev)
-{
-    if ( ( ev->type() == QEvent::Show || ev->type() == QEvent::Hide )
-         && obj->inherits("KToolBar") )
-    {
-        //kdDebug(30003) << "KoMainWindow::eventFilter " << obj->name() << endl;
-        QListIterator<KAction> it( d->m_toolbarList );
-        for ( ; it.current() ; ++it )
-        {
-            if ( !strcmp( it.current()->name(), obj->name() ) )
-            {
-                //kdDebug(30003) << "KoMainWindow::eventFilter setChecked " << (ev->type() == QEvent::Show) << endl;
-                static_cast<KToggleAction *>(it.current())->setChecked( ev->type() == QEvent::Show );
-                break;
-            }
-        }
-    }
-
-    return KParts::MainWindow::eventFilter( obj, ev );
 }
 
 #include <koMainWindow.moc>

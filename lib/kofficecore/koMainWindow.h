@@ -92,6 +92,12 @@ public:
     virtual KParts::PartManager *partManager();
 
     /**
+     * The application should call this to show or hide a toolbar.
+     * It also takes care of the corresponding action in the settings menu.
+     */
+    void showToolbar( const char * tbName, bool shown );
+
+    /**
      * Get hold of the label in the statusbar, to write messages to it.
      * You can also insert other items in the status bar by using QStatusBar::addWidget.
      */
@@ -230,8 +236,6 @@ protected:
     virtual void closeEvent( QCloseEvent * e );
     virtual void resizeEvent( QResizeEvent * e );
     virtual bool queryClose();
-
-    virtual bool eventFilter(QObject *obj, QEvent *ev);
 
     KRecentFilesAction *m_recent;
 
