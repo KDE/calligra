@@ -72,7 +72,7 @@ public:
 	const KoPoint& ctrlPoint1() const { return m_point[0]; }
 	const KoPoint& ctrlPoint2() const { return m_point[1]; }
 
-	// you have to make sure yourself that you don't call knot1() on a "begin"-segment:
+	/// Make sure yourself this segment has m_prev != 0L.
 	const KoPoint& knot1() const { return m_prev->m_point[2]; }
 	const KoPoint& knot2() const { return m_point[2]; }
 
@@ -83,8 +83,15 @@ public:
 	/// Returns true if segment is flat (see VGlobal for tolerance value).
 	bool isFlat() const;
 
-	/// Calculate bounding box.
+	/// Calculates the bounding box.
 	KoRect boundingBox() const;
+
+	/**
+	 *  Splits segment at 0 <= t <= 1. Returns the first segment and transforms
+	 *  the current one to the second segment. Make sure yourself, this segment
+	 *  has a m_prev != 0L.
+	 */
+	VSegment* splitAt( double t );
 
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );

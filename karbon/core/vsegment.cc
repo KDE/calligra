@@ -144,24 +144,24 @@ VSegment::isFlat() const
 {
 	if(
 		m_prev == 0L ||
-		type() == segment_begin ||
-		type() == segment_line ||
-		type() == segment_end )
+		m_type == segment_begin ||
+		m_type == segment_line ||
+		m_type == segment_end )
 	{
 		return true;
 	}
 
-	if( type() == segment_curve )
+	if( m_type == segment_curve )
 		return
 			height( m_prev->m_point[2], m_point[0], m_point[2] )
 				< VGlobal::flatnessTolerance &&
 			height( m_prev->m_point[2], m_point[1], m_point[2] )
 				< VGlobal::flatnessTolerance;
-	else if( type() == segment_curve1 )
+	else if( m_type == segment_curve1 )
 		return
 			height( m_prev->m_point[2], m_point[1], m_point[2] )
 				< VGlobal::flatnessTolerance;
-	else if( type() == segment_curve2 )
+	else if( m_type == segment_curve2 )
 		return
 			height( m_prev->m_point[2], m_point[0], m_point[2] )
 				< VGlobal::flatnessTolerance;
@@ -187,8 +187,8 @@ VSegment::boundingBox() const
 	}
 
 	if(
-		type() == segment_curve1 ||
-		type() == segment_curve )
+		m_type == segment_curve1 ||
+		m_type == segment_curve )
 	{
 		if( m_point[1].x() < rect.left() )
 			rect.setLeft( m_point[1].x() );
@@ -201,8 +201,8 @@ VSegment::boundingBox() const
 	}
 
 	if(
-		type() == segment_curve2 ||
-		type() == segment_curve )
+		m_type == segment_curve2 ||
+		m_type == segment_curve )
 	{
 		if( m_point[0].x() < rect.left() )
 			rect.setLeft( m_point[0].x() );
@@ -217,12 +217,60 @@ VSegment::boundingBox() const
 	return rect;
 }
 
+VSegment*
+VSegment::splitAt( double t )
+{
+	VSegment* segment = new VSegment();
+
+	// no need to change the current segment for these
+	// segment types:
+	if(
+		m_type == segment_line ||
+		m_type == segment_end )
+	{
+		segment->m_point[2] =
+			( m_point[2] - m_prev->m_point[2] ) * t;
+
+		segment->m_type = segment_line;
+		return segment;
+	}
+
+	// these make our life a bit easier:
+	KoPoint& p0 = m_prev->m_point[2];
+	KoPoint& p3 = m_point[2];
+	KoPoint& p1 = m_type == segment_curve1 ? p0 : m_point[0];
+	KoPoint& p2 = m_type == segment_curve2 ? p3 : m_point[1];
+
+
+	segment->m_point[0] = p0 + ( p1 - p0 ) * t;
+	segment->m_point[1] = p1 + ( p2 - p1 ) * t;
+
+	p2 = p2 + ( p3 - p2 ) * t;
+	p1 = segment->m_point[1] + ( p2 - segment->m_point[1] ) * t;
+
+	segment->m_point[1] =
+		segment->m_point[0] + ( segment->m_point[1] - segment->m_point[0] ) * t;
+	segment->m_point[2] =
+		segment->m_point[1] + ( p1 - segment->m_point[1] ) * t;
+
+
+	if( m_type == segment_curve1 )
+	{
+		segment->m_type = segment_curve1;
+		m_type = segment_curve;
+	}
+	else if( m_type == segment_curve2 )
+		segment->m_type = segment_curve;
+
+	return segment;
+}
+
 void
 VSegment::save( QDomElement& element ) const
 {
 	QDomElement me;
 
-	if( type() == segment_curve )
+	if( m_type == segment_curve )
 	{
 		me = element.ownerDocument().createElement( "CURVE" );
 		me.setAttribute( "x1", m_point[0].x() );
@@ -232,7 +280,7 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x3", m_point[2].x() );
 		me.setAttribute( "y3", m_point[2].y() );
 	}
-	else if( type() == segment_curve1 )
+	else if( m_type == segment_curve1 )
 	{
 		me = element.ownerDocument().createElement( "CURVE1" );
 		me.setAttribute( "x2", m_point[1].x() );
@@ -240,7 +288,7 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x3", m_point[2].x() );
 		me.setAttribute( "y3", m_point[2].y() );
 	}
-	else if( type() == segment_curve2 )
+	else if( m_type == segment_curve2 )
 	{
 		me = element.ownerDocument().createElement( "CURVE2" );
 		me.setAttribute( "x1", m_point[0].x() );
@@ -248,13 +296,13 @@ VSegment::save( QDomElement& element ) const
 		me.setAttribute( "x3", m_point[2].x() );
 		me.setAttribute( "y3", m_point[2].y() );
 	}
-	else if( type() == segment_line )
+	else if( m_type == segment_line )
 	{
 		me = element.ownerDocument().createElement( "LINE" );
 		me.setAttribute( "x", m_point[2].x() );
 		me.setAttribute( "y", m_point[2].y() );
 	}
-	else if( type() == segment_begin )
+	else if( m_type == segment_begin )
 	{
 		me = element.ownerDocument().createElement( "MOVE" );
 		me.setAttribute( "x", m_point[2].x() );
