@@ -23,6 +23,7 @@
 #include "kivio_line_style.h"
 #include "kivio_point.h"
 #include "kivio_shape.h"
+#include "kivio_text_style.h"
 
 /**
  * Default constructor
@@ -625,21 +626,39 @@ KivioShape *KivioShape::loadShapeTextBox( const QDomElement &e )
     KivioShape *pShape = NULL;
     QDomNode node;
     QString nodeName;
+    KivioTextStyle ts;
+    QString name;
 
 
     // Create the new shape to load into
     pShape = new KivioShape();
 
-    // Load the type, name, and lineWidth properties
-    QString name = XmlReadString( e, "name", "" );
-    QString text = XmlReadString( e, "text", "" );
+    // Load the type and name
     pShape->m_shapeData.setShapeType(KivioShapeData::kstTextBox);
-    pShape->m_shapeData.setName( name );
-    pShape->m_shapeData.setTextColor( XmlReadColor( e, "color", QColor(0,0,0) ) );
-    pShape->m_shapeData.setText( text );
+    pShape->m_shapeData.setName( XmlReadString( e, "name", "" ) );
+    pShape->m_shapeData.setTextColor(XmlReadColor(e,"color",QColor(0,0,0)));
 
-    pShape->m_shapeData.m_position.set( XmlReadFloat( e, "x", 0.0f ), XmlReadFloat( e, "y", 0.0f ) );
-    pShape->m_shapeData.m_dimensions.set( XmlReadFloat( e, "w", 72.0f ), XmlReadFloat( e, "h", 72.0f ) );
+    pShape->m_shapeData.m_position.set( 
+       XmlReadFloat( e, "x", 0.0f ), XmlReadFloat( e, "y", 0.0f ) );
+    pShape->m_shapeData.m_dimensions.set( 
+       XmlReadFloat( e, "w", 72.0f ), XmlReadFloat( e, "h", 72.0f ) );
+
+    // Now look for the KivioTextStyle
+    node = e.firstChild();
+    while( !node.isNull() )
+    {
+       nodeName = node.nodeName();
+       if( nodeName == "KivioTextStyle" )
+       {
+	  ts.loadXML( node.toElement() );
+	  pShape->m_shapeData.setTextStyle( &ts );
+       }
+
+       node = node.nextSibling();
+    }
+//    QString text = XmlReadString( e, "text", "" );
+//    pShape->m_shapeData.setText( text );
+
 
     return pShape;
 }

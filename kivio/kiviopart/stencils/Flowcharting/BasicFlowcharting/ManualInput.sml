@@ -7,7 +7,7 @@
 		<Description data="Basic flowcharting manual input shape"/>
 		<Version data="0.1"/>
 		<Web data="www.thekompany.com"/>
-		<Email data="landshark@ameritech.net"/>
+		<Email data="lndshark@speakeasy.net"/>
 		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
@@ -27,5 +27,5 @@
 		<KivioPoint x="0.0" y="54.0"/>
 		<KivioPoint x="0.0" y="21.6"/>
 	</KivioShape>
-	<KivioShape type="TextBox" name="Text" html="0" x="0.0" y="21.6" w="72.0" h="32.4" text=""/>
+	<KivioShape type="TextBox" name="Text"  x="0.0" y="21.6" w="72.0" h="32.4" />
 </KivioShapeStencil>

@@ -108,6 +108,7 @@ bool KivioStencilSpawnerSet::loadDir( const QString &dirName )
 
     for( int i=0; i<(int)d.count(); i++ )
     {
+       kdDebug() << "SpawnerSet: " << fileName << endl;
         fileName = dirName + "/" + d[i];
         loadFile(fileName);
     }

@@ -156,7 +156,7 @@ void TextTool::text(QRect r)
     KivioDoc* doc = m_pView->doc();
     KivioPage* page = m_pCanvas->activePage();
     
-    KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Text");
+    KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Text");
     if (!ss)
         return;
         

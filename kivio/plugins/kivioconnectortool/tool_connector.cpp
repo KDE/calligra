@@ -146,7 +146,7 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
 {
     KivioDoc* doc = m_pView->doc();
     KivioPage* pPage = m_pCanvas->activePage();
-    KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Straight Connector");
+    KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Straight Connector");
     if (!ss)
         return false;
 

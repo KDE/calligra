@@ -7,7 +7,7 @@
 		<Description data="Internal storage shape"/>
 		<Version data="0.1"/>
 		<Web data="www.thekompany.com"/>
-		<Email data="landshark@ameritech.net"/>
+		<Email data="lndshark@speakeasy.net"/>
 		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
@@ -25,5 +25,5 @@
 		<Line x1="7.2" y1="0.0" x2="7.2" y2="54.0"/>
 		<Line x1="0" y1="7.2" x2="54.0" y2="7.2"/>
 	</KivioShape>
-	<KivioShape type="TextBox" name="Text" html="0" x="7.2" y="7.2" w="46.8" h="46.8"/>
+	<KivioShape type="TextBox" name="Text"  x="7.2" y="7.2" w="46.8" h="46.8"/>
 </KivioShapeStencil>

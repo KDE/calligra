@@ -7,7 +7,7 @@
         <Description data="On-Page Reference"/>
         <Version data="0.1"/>
         <Web data="www.thekompany.com"/>
-        <Email data="landshark@ameritech.net"/>
+        <Email data="lndshark@speakeasy.net"/>
     		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
         <AutoUpdate data="off"/>
     </KivioSMLStencilSpawnerInfo>
@@ -21,6 +21,6 @@
 	<KivioConnectorTarget x="10.544156" y="61.455844"/>
 	<KivioConnectorTarget x="0.0" y="36.0"/>
 	<KivioShape type="Ellipse" name="On-Page Reference" x="0.0" w="72.0" y="0.0" h="72.0"/>
-	<KivioShape type="TextBox" name="Text" html="0" x="10.544156" y="10.544156" w="50.911688" h="50.911688" text=""/>
+	<KivioShape type="TextBox" name="Text"  x="10.544156" y="10.544156" w="50.911688" h="50.911688" />
 </KivioShapeStencil>
 

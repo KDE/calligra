@@ -546,3 +546,11 @@ void KivioShapeData::setTextColor( QColor c )
     if( m_pTextData )
         m_pTextData->setColor(c);
 }
+
+void KivioShapeData::setTextStyle( KivioTextStyle *pStyle )
+{
+   if( m_pTextData )
+   {
+      pStyle->copyInto( m_pTextData );
+   }
+}

@@ -7,7 +7,7 @@
         <Description data="Flowcharting Document Stencil"/>
         <Version data="1.0"/>
         <Web data="www.thekompany.com"/>
-        <Email data="landshark@ameritech.net"/>
+        <Email data="lndshark@speakeasy.net"/>
         <Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
         <AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
@@ -49,5 +49,5 @@
         <KivioPoint x="0" y="10.8992" type="bezier"/>
         <KivioPoint x="-0.0" y="0.0" type="bezier"/>
     </KivioShape>
-    <KivioShape type="TextBox" text="" name="text" x="0.0" y="0.0" w="72.0" h="43.9"/>
+    <KivioShape type="TextBox"  name="text" x="0.0" y="0.0" w="72.0" h="43.9"/>
 </KivioShapeStencil>

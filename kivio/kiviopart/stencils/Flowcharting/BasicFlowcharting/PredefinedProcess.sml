@@ -7,7 +7,7 @@
 		<Description data="Predefined process shape"/>
 		<Version data="0.1"/>
 		<Web data="www.thekompany.com"/>
-		<Email data="landshark@ameritech.net"/>
+		<Email data="lndshark@speakeasy.net"/>
 		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
@@ -25,5 +25,5 @@
 		<Line x1="7.2" x2="7.2" y1="0" y2="54"/>
 		<Line x1="64.8" x2="64.8" y1="0" y2="54"/>
 	</KivioShape>
-	<KivioShape type="TextBox" name="Text" html="0" x="7.2" y="0.0" w="57.6" h="54.0"/>
+	<KivioShape type="TextBox" name="Text"  x="7.2" y="0.0" w="57.6" h="54.0"/>
 </KivioShapeStencil>

@@ -142,6 +142,8 @@ public:
 
     QColor textColor();
     void setTextColor( QColor c );
+
+    void setTextStyle( KivioTextStyle * );
 };
 
 #endif

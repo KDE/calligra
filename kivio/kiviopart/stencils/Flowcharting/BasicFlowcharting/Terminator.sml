@@ -7,7 +7,7 @@
 		<Description data="Terminator shape"/>
 		<Version data="0.1"/>
 		<Web data="kivio.sourceforge.net"/>
-		<Email data="landshark@ameritech.net"/>
+		<Email data="lndshark@speakeasy.net"/>
 		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
@@ -37,5 +37,5 @@
 
 		<KivioPoint x="36.0" y="36"/>
 	</KivioShape>
-	<KivioShape type="TextBox" name="Text" html="0" x="0.0" y="0.0" w="72.0" h="36.0"/>
+	<KivioShape type="TextBox" name="Text"  x="0.0" y="0.0" w="72.0" h="36.0"/>
 </KivioShapeStencil>

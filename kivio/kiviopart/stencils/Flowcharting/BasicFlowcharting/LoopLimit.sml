@@ -7,7 +7,7 @@
 		<Description data="Basic flowcharting loop limit shape"/>
 		<Version data="0.1"/>
 		<Web data="www.thekompany.com"/>
-		<Email data="landshark@ameritech.net"/>
+		<Email data="lndshark@speakeasy.net"/>
 		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
@@ -33,5 +33,5 @@
 		<KivioPoint x="72.0" y="36.0"/>
 		<KivioPoint x="0.0" y="36.0"/>
 	</KivioShape>
-	<KivioShape type="TextBox" name="Text" html="0" x="0.0" y="0.0" w="72.0" h="36.0" text=""/>
+	<KivioShape type="TextBox" name="Text"  x="0.0" y="0.0" w="72.0" h="36.0" />
 </KivioShapeStencil>

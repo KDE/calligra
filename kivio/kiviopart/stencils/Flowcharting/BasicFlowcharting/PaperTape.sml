@@ -7,7 +7,7 @@
 		<Description data="Flowcharting Paper Tape Stencil"/>
 		<Version data="1.0"/>
 		<Web data="www.thekompany.com"/>
-		<Email data="landshark@ameritech.net"/>
+		<Email data="lndshark@speakeasy.net"/>
 		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
@@ -54,5 +54,5 @@
         <KivioPoint x="0.0" y="5.0" type="bezier"/>
         <KivioPoint x="0.0" y="5.0" type="bezier"/>
     </KivioShape>
-    <KivioShape type="TextBox" text="" name="text" x="0.0" y="10.2" w="72.0" h="33.6"/>
+    <KivioShape type="TextBox"  name="text" x="0.0" y="10.2" w="72.0" h="33.6"/>
 </KivioShapeStencil>
