@@ -274,7 +274,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
 
   for( it.toFirst(); it.current(); ++it )
   {
-    TableStyle ts;
+    SheetStyle ts;
     int maxCols         = 0;
     int maxRows         = 0;
     KSpreadSheet * sheet = it.current();
@@ -282,7 +282,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
     ts.visible = !sheet->isHidden();
 
     QDomElement tabElem = doc.createElement( "table:table" );
-    tabElem.setAttribute( "table:style-name", m_styles.tableStyle( ts ) );
+    tabElem.setAttribute( "table:style-name", m_styles.sheetStyle( ts ) );
     tabElem.setAttribute( "table:name", sheet->tableName() );
 
     maxRowCols( sheet, maxCols, maxRows );
@@ -353,6 +353,15 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 
     QFont font = cell->font();
     m_styles.addFont( font );
+    CellStyle c;
+    c.font    = font;
+
+    if ( cell->hasProperty( KSpreadFormat::PTextPen ) )
+      c.color   = cell->textColor( cell->column(), cell->row() );
+    if ( cell->hasProperty( KSpreadFormat::PBackgroundColor ) )
+      c.bgColor = cell->bgColor( cell->column(), cell->row() );
+
+    cellElem.setAttribute( "table:style-name", m_styles.cellStyle( c ) );
 
     if ( value.isBoolean() )
     {
@@ -497,9 +506,11 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
   QString l( locale->language() );
   KLocale::splitLocale( l, language, country, charSet );
   QFont font( format->font() );
+  m_styles.addFont( font, true );
 
   QDomElement style = doc.createElement( "style:properties" );
   style.setAttribute( "style:font-name", font.family() );
+  style.setAttribute( "fo:font-size", QString( "%1pt" ).arg( font.pointSize() ) );
   style.setAttribute( "style:decimal-places", QString::number( locale->fracDigits() ) );
   style.setAttribute( "fo:language", language );
   style.setAttribute( "fo:country", country );
@@ -813,7 +824,7 @@ void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
 void insertBracket( QString & s )
 {
   QChar c;
-  uint i = s.length() - 1;
+  int i = (int) s.length() - 1;
   while ( i >= 0 )
   {
     c = s[i];
@@ -886,7 +897,7 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
       int ml = exp.matchedLength();
       if ( formula[ i + ml ] == '!' )
       {
-        kdDebug() << "No cell ref but table name" << endl;
+        kdDebug() << "No cell ref but sheet name" << endl;
         s += formula[i];
         ++i;
         continue;

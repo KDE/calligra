@@ -27,7 +27,7 @@ OpenCalcStyles::OpenCalcStyles()
   m_columnStyles.setAutoDelete( true );
   m_numberStyles.setAutoDelete( true );
   m_rowStyles.setAutoDelete( true );
-  m_tableStyles.setAutoDelete( true );
+  m_sheetStyles.setAutoDelete( true );
 
   m_fontList.setAutoDelete( true );
 }
@@ -40,7 +40,7 @@ void OpenCalcStyles::writeStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
   addColumnStyles( doc, autoStyles );
   addRowStyles( doc, autoStyles );
-  addTableStyles( doc, autoStyles );
+  addSheetStyles( doc, autoStyles );
   addNumberStyles( doc, autoStyles );
   addCellStyles( doc, autoStyles );
 }
@@ -66,8 +66,11 @@ void OpenCalcStyles::writeFontDecl( QDomDocument & doc, QDomElement & fontDecls 
   }  
 }
 
-void OpenCalcStyles::addFont( QFont const & font )
+void OpenCalcStyles::addFont( QFont const & font, bool def )
 {
+  if ( def )
+    m_defaultFont = font;
+
   QFont * f = m_fontList.first();
   while ( f )
   {
@@ -83,7 +86,23 @@ void OpenCalcStyles::addFont( QFont const & font )
 
 QString OpenCalcStyles::cellStyle( CellStyle const & cs )
 {
-  return "";
+  CellStyle * t = m_cellStyles.first();
+  while ( t )
+  {
+    if ( CellStyle::isEqual( t, cs ) )
+      return t->name;
+
+    t = m_cellStyles.next();
+  }
+
+  t = new CellStyle();
+  t->copyData( cs );
+
+  m_cellStyles.append( t );
+
+  t->name = QString( "ce%1" ).arg( m_cellStyles.count() );
+
+  return t->name;
 }
 
 QString OpenCalcStyles::columnStyle( ColumnStyle const & cs )
@@ -133,29 +152,73 @@ QString OpenCalcStyles::rowStyle( RowStyle const & rs )
   return t->name;
 }
 
-QString OpenCalcStyles::tableStyle( TableStyle const & ts )
+QString OpenCalcStyles::sheetStyle( SheetStyle const & ts )
 {
-  TableStyle * t = m_tableStyles.first();
+  SheetStyle * t = m_sheetStyles.first();
   while ( t )
   {
-    if ( TableStyle::isEqual( t, ts ) )
+    if ( SheetStyle::isEqual( t, ts ) )
       return t->name;
 
-    t = m_tableStyles.next();
+    t = m_sheetStyles.next();
   }
 
-  t = new TableStyle();
+  t = new SheetStyle();
   t->copyData( ts );
 
-  m_tableStyles.append( t );
+  m_sheetStyles.append( t );
 
-  t->name = QString( "ta%1" ).arg( m_tableStyles.count() );
+  t->name = QString( "ta%1" ).arg( m_sheetStyles.count() );
 
   return t->name;
 }
 
 void OpenCalcStyles::addCellStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
+  CellStyle * t = m_cellStyles.first();
+  while ( t )
+  {
+    QDomElement ts = doc.createElement( "style:style" );
+    ts.setAttribute( "style:name", t->name );
+    ts.setAttribute( "style:family", "table-cell" );
+    ts.setAttribute( "style:parent-style-name", "Default" );
+    if ( t->numberStyle.length() > 0 )
+      ts.setAttribute( "style:data-style-name", t->numberStyle );
+
+    QDomElement prop = doc.createElement( "style:properties" );
+
+    if ( t->font.family() != m_defaultFont.family() )
+      prop.setAttribute( "style:font-name", t->font.family() );
+
+    if ( t->font.bold() != m_defaultFont.bold() )
+      prop.setAttribute( "fo:font-weight", ( t->font.bold() ? "bold" : "light" ) );
+
+    prop.setAttribute( "fo:font-size", QString( "%1pt" ).arg( t->font.pointSize() ) );
+
+    if ( t->font.underline() != m_defaultFont.underline() )
+    {
+      prop.setAttribute( "style:text-underline", ( t->font.underline() ? "single" : "none" ) );
+      if ( t->font.underline() )
+        prop.setAttribute( "style:text-underline-color", "font-color" );
+    }
+    
+    if ( t->font.italic() != m_defaultFont.italic() )
+      prop.setAttribute( "fo:font-style", ( t->font.italic() ? "italic" : "none" ) );
+    
+    if ( t->font.strikeOut() != m_defaultFont.strikeOut() )
+      prop.setAttribute( "style:text-crossing-out", ( t->font.strikeOut() ? "single-line" : "none" ) );
+    
+    if ( t->color != Qt::black )
+      prop.setAttribute( "fo:color", t->color.name() );
+
+    if ( t->bgColor != Qt::white )
+      prop.setAttribute( "fo:background-color", t->bgColor.name() );
+
+    ts.appendChild( prop );
+    autoStyles.appendChild( ts );
+
+    t = m_cellStyles.next();
+  }
 }
 
 void OpenCalcStyles::addColumnStyles( QDomDocument & doc, QDomElement & autoStyles )
@@ -204,9 +267,9 @@ void OpenCalcStyles::addRowStyles( QDomDocument & doc, QDomElement & autoStyles 
   }  
 }
 
-void OpenCalcStyles::addTableStyles( QDomDocument & doc, QDomElement & autoStyles )
+void OpenCalcStyles::addSheetStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
-  TableStyle * t = m_tableStyles.first();
+  SheetStyle * t = m_sheetStyles.first();
   while ( t )
   {
     QDomElement ts = doc.createElement( "style:style" );
@@ -220,13 +283,36 @@ void OpenCalcStyles::addTableStyles( QDomDocument & doc, QDomElement & autoStyle
     ts.appendChild( prop );
     autoStyles.appendChild( ts );
     
-    t = m_tableStyles.next();
+    t = m_sheetStyles.next();
   }  
 }
 
-bool TableStyle::isEqual( TableStyle const * const t1, TableStyle const & t2 )
+bool SheetStyle::isEqual( SheetStyle const * const t1, SheetStyle const & t2 )
 {
   if ( t1->visible == t2.visible )
+    return true;
+
+  return false;
+}
+
+CellStyle::CellStyle()
+  : color( Qt::black ),
+    bgColor( Qt::white )
+{
+}
+
+void CellStyle::copyData( CellStyle const & ts )
+{
+  font        = ts.font;
+  numberStyle = ts.numberStyle;
+  color       = ts.color;
+  bgColor     = ts.bgColor;
+}
+
+bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
+{
+  if ( ( t1->font == t2.font ) && ( t1->numberStyle == t2.numberStyle ) 
+       && ( t1->color == t2.color ) && ( t1->bgColor == t2.bgColor ) )
     return true;
 
   return false;

@@ -21,6 +21,7 @@
 #ifndef OPENCALCSTYLEEXPORT_H
 #define OPENCALCSTYLEEXPORT_H
 
+#include <qcolor.h>
 #include <qfont.h>
 #include <qptrlist.h>
 #include <qstring.h>
@@ -28,7 +29,7 @@
 class QDomDocument;
 class QDomElement;
 
-typedef enum T1 { Date, Number, Percentage, Time } NumberType;
+typedef enum T1 { Boolean, Date, Number, Percentage, Time } NumberType;
 
 class Style
 {
@@ -42,24 +43,16 @@ class Style
   double  size;
 };
 
-class TableStyle
+class SheetStyle
 {
  public:
-  TableStyle() : visible( true ) {}
+  SheetStyle() : visible( true ) {}
 
-  void copyData( TableStyle const & ts ) { visible = ts.visible; }
-  static bool isEqual( TableStyle const * const t1, TableStyle const & t2 );
+  void copyData( SheetStyle const & ts ) { visible = ts.visible; }
+  static bool isEqual( SheetStyle const * const t1, SheetStyle const & t2 );
 
   QString     name;
   bool        visible;
-};
-
-class CellStyle
-{
- public:
-  CellStyle() {}
-
-  QString     name;
 };
 
 class NumberStyle
@@ -71,9 +64,25 @@ class NumberStyle
   static bool isEqual( NumberStyle const * const t1, NumberStyle const & t2 );
 
   QString     name;
-  NumberType  type;
 
+  NumberType  type;
   QString     pattern;
+};
+
+class CellStyle
+{
+ public:
+  CellStyle();
+
+  void copyData( CellStyle const & ts );
+  static bool isEqual( CellStyle const * const t1, CellStyle const & t2 );
+
+  QString     name;
+
+  QFont       font;
+  QString     numberStyle;
+  QColor      color;
+  QColor      bgColor;
 };
 
 class ColumnStyle : public Style 
@@ -100,30 +109,32 @@ class OpenCalcStyles
   OpenCalcStyles();
   ~OpenCalcStyles();
 
-  void writeStyles( QDomDocument & doc, QDomElement & autoStyles );
-  void writeFontDecl( QDomDocument & doc, QDomElement & content );
+  void    writeStyles  ( QDomDocument & doc, QDomElement & autoStyles );
+  void    writeFontDecl( QDomDocument & doc, QDomElement & content );
 
-  void    addFont( QFont const & font );
+  void    addFont( QFont const & font, bool def = false );
 
   QString cellStyle( CellStyle const & cs );
   QString columnStyle( ColumnStyle const & cs );
   QString numberStyle( NumberStyle const & ns );
   QString rowStyle( RowStyle const & rs );
-  QString tableStyle( TableStyle const & ts );
+  QString sheetStyle( SheetStyle const & ts );
 
  private:
   QPtrList<CellStyle>   m_cellStyles;
   QPtrList<ColumnStyle> m_columnStyles;
   QPtrList<NumberStyle> m_numberStyles;
   QPtrList<RowStyle>    m_rowStyles;
-  QPtrList<TableStyle>  m_tableStyles;
+  QPtrList<SheetStyle>  m_sheetStyles;
   QPtrList<QFont>       m_fontList;
+
+  QFont                 m_defaultFont;
 
   void addCellStyles( QDomDocument & doc, QDomElement & autoStyles );
   void addColumnStyles( QDomDocument & doc, QDomElement & autoStyles );
   void addNumberStyles( QDomDocument & doc, QDomElement & autoStyles );
   void addRowStyles( QDomDocument & doc, QDomElement & autoStyles );
-  void addTableStyles( QDomDocument & doc, QDomElement & autoStyles );
+  void addSheetStyles( QDomDocument & doc, QDomElement & autoStyles );
 };
 
 #endif
