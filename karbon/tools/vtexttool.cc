@@ -357,7 +357,8 @@ void VTextOptionsWidget::valueChanged( int )
 
 void VTextOptionsWidget::accept()
 {
-	m_tool->accept();
+	if( m_tool )
+		m_tool->accept();
 } // VTextOptionsWidget::accept
 
 void VTextOptionsWidget::textChanged( const QString& )
@@ -597,6 +598,9 @@ void VTextTool::textChanged()
 
 void VTextTool::accept()
 {
+	if( !m_editedText )
+		return;
+
 	VTextCmd* cmd;
 	
 	if( !m_creating )
