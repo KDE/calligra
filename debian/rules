@@ -71,6 +71,11 @@ binary-indep: build install
 		usr/share/servicetypes/* 
 
 	cp debian/README.task debian/task-koffice/usr/share/doc/task-koffice/README
+	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/wizard.png
+	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/bottom.png
+	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/rotate.png
+	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/top.png
+
 	dh_installdocs -pkoffice-common
 	dh_installdocs -ptask-koffice
 	dh_installchangelogs -pkoffice-common
@@ -143,10 +148,6 @@ binary-arch: build install binary-indep
 	dh_compress
 	dh_fixperms
 	-chmod 644 debian/tmp/usr/bin/kprconverter.pl
-	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/wizard.png 
-	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/bottom.png
-	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/rotate.png
-	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/top.png
 	dh_suidregister
 	dh_makeshlibs 
 	dh_installdeb

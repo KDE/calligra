@@ -1,3 +1,15 @@
+koffice (2.0-20000920-2) unstable; urgency=low
+ 
+  * Fixing build-depends dockboook problem
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 21 Sep 2000 19:45:00 -0700
+
+koffice (2.0-20000920-0) unstable; urgency=low
+ 
+  * More upstream fixes
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 20 Sep 2000 23:00:00 -0700
+
 koffice (2.0-20000918-0) unstable; urgency=low
  
   * More upstream fixes
