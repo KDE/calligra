@@ -34,10 +34,14 @@
 #include "kexidialogbase.h"
 
 //KexiDataTable::KexiDataTable(KexiMainWindow *win, const QString &caption)
-KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, const char *name)
+KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
+	const char *name, bool dbAware)
  : KexiViewBase(mainWin, parent, name)
 {
-	m_view = new KexiDataTableView(this, "view");
+	if (dbAware)
+		m_view = new KexiDataTableView(this, "view");
+	else
+		m_view = new KexiTableView(0, this, "view");
 	init();
 }
 
@@ -116,7 +120,9 @@ KexiDataTable::initActions()
 void
 KexiDataTable::setData(KexiDB::Cursor *c)
 {
-	m_view->setData(c);
+	if (!m_view->isA("KexiDataTableView"))
+		return;
+	static_cast<KexiDataTableView*>(m_view)->setData(c);
 }
 
 void KexiDataTable::filter()

@@ -26,6 +26,8 @@
 
 class KexiMainWindow;
 class KexiDataTableView;
+class KexiTableView;
+class KexiTableViewData;
 class KPopupMenu;
 
 namespace KexiDB
@@ -38,35 +40,43 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiViewBase
 	Q_OBJECT
 
 	public:
-		/**
-		 * crates a empty table dialog
-		 */
-		KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
-//		KexiDataTable(KexiMainWindow *win, const QString &caption = QString::null);
-		KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, KexiDB::Cursor *cursor, const char *name = 0);
-//		KexiDataTable(KexiMainWindow *win, KexiDB::Cursor *cursor, const QString &caption = QString::null);
+		/*! CTOR1: Creates, empty table view that can be initialized later 
+		 with setData(). 
+		 If \a dbAware is true, table will be db-aware, 
+		  and KexiDataTableView is used internally.
+		 Otherwise, table will be not-db-aware, 
+		  and KexiTableView is used internally. In the latter case,
+		  data can be set by calling tableView()->setData(KexiTableViewData* data). */
+		KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0, bool dbAware = true);
+
+		/*! CTOR2: Creates db-aware, table view initialized with \a cursor. 
+		 KexiDataTableView is used internally. */
+		KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
+			KexiDB::Cursor *cursor, const char *name = 0);
+
 		~KexiDataTable();
 
+		/*! Sets data. Only works for db-aware table. */
 		void setData(KexiDB::Cursor *cursor);
 
 		virtual QWidget* mainWidget();
-		KexiDataTableView* tableView() const { return m_view; }
+
+		KexiTableView* tableView() const { return m_view; }
 
 		virtual QSize minimumSizeHint() const;
 		virtual QSize sizeHint() const;
 
-
-	protected:
-		void init();
-		void initActions();
 
 	protected slots:
 		void filter();
 		void slotCellSelected(int col, int row);
 		void slotUpdateRowActions(int row);
 
-	private:
-		KexiDataTableView *m_view;
+	protected:
+		void init();
+		void initActions();
+
+		KexiTableView *m_view;
 };
 
 #endif
