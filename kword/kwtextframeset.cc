@@ -380,19 +380,25 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
     KWViewMode *viewMode = canvas->viewMode();
     m_currentViewMode = viewMode;
 
-    QRect normalFrameRect( m_doc->zoomRect( *frame ) );
+    //QRect normalFrameRect( m_doc->zoomRect( *frame ) );
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
-    int h = cursor->parag()->lineHeightOfChar( cursor->index() );  //
+    int lineY;
+    int h = cursor->parag()->lineHeightOfChar( cursor->index(), 0, &lineY );
+    //kdDebug() << "KWTextFrameSet::drawCursor topLeft=" << topLeft.x() << "," << topLeft.y()
+    //          << " x=" << cursor->x() << " y=" << lineY << endl;
+    QPoint iPoint( topLeft.x() - cursor->totalOffsetX() + cursor->x(),
+                   topLeft.y() - cursor->totalOffsetY() + lineY );
+    //kdDebug() << "KWTextFrameSet::drawCursor iPoint=" << iPoint.x() << "," << iPoint.y() << "   h=" << h << endl;
     QPoint nPoint;
     QPoint hintNPoint = m_doc->zoomPoint( frame->topLeft() );
-    if ( internalToNormalWithHint( topLeft, nPoint, hintNPoint ) )
+    if ( internalToNormalWithHint( iPoint, nPoint, hintNPoint ) )
     {
         QPoint cPoint = viewMode->normalToView( nPoint );     // from normal to view contents
         // very small clipping around the cursor
-        QRect clip = QRect( cPoint.x() + cursor->x() - 5, cPoint.y() + cursor->y(), 10, h );
+        QRect clip = QRect( cPoint.x() - 5, cPoint.y(), 10, h );
 
         //kdDebug(32002) << "KWTextFrameSet::drawCursor "
-        //               << " topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
+        //               << " cPoint=(" << cPoint.x() << "," << cPoint.y() << ")  h=" << h << endl;
         //kdDebug(32002) << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
 
         QRegion reg = frameClipRegion( p, frame, clip, viewMode, true );
@@ -403,7 +409,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
 
             p->setClipRegion( reg );
             // translate to qrt coords - after setting the clip region !
-            p->translate( cPoint.x() - topLeft.x(), cPoint.y() - topLeft.y() );
+            p->translate( cPoint.x() - iPoint.x(), cPoint.y() - iPoint.y() );
 
             // The settings come from this frame
             KWFrame * settings = settingsFrame( frame );
@@ -411,11 +417,10 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             QPixmap *pix = 0;
             QColorGroup cg = QApplication::palette().active();
             QBrush bgBrush( settings->getBackgroundColor() );
-            bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
+            bgBrush.setColor( Qt::blue /*KWDocument::resolveBgColor( bgBrush.color(), p )*/ );
             cg.setBrush( QColorGroup::Base, bgBrush );
 
-            textdoc->drawParag( p, cursor->parag(), topLeft.x() - cursor->totalOffsetX() + cursor->x() - 5,
-                                topLeft.y() - cursor->totalOffsetY() + cursor->y(), 10, h,
+            textdoc->drawParag( p, cursor->parag(), iPoint.x() - 5, iPoint.y(), 10, h,
                                 pix, cg, cursorVisible, cursor );
             p->restore();
         }
@@ -905,7 +910,7 @@ void KWTextFrameSet::updateFrames()
     if ( width != textdoc->width() )
         textdoc->setWidth( width );
 
-    //kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
+    kdDebug(32002) << "KWTextFrameSet::updateFrames " << getName() << " frame-count=" << frames.count() << endl;
 
     // Sort frames of this frameset on (page, y coord, x coord)
 
@@ -1070,7 +1075,8 @@ void KWTextFrameSet::printDebug()
     {
         QListIterator<KWFrame> it( *m_framesInPage[i] );
         for ( ; it.current() ; ++it )
-            kdDebug() << i + m_firstPage << ": " << it.current() << "   " << DEBUGRECT( *it.current() ) << endl;
+            kdDebug() << i + m_firstPage << ": " << it.current() << "   " << DEBUGRECT( *it.current() )
+                      << " internalY=" << it.current()->internalY() << endl;
     }
 }
 #endif
