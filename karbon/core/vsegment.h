@@ -333,7 +333,8 @@ public:
 	/**
 	 * Tests whether this segment and the line A0A1 intersect.
 	 */
-	bool intersects( const KoPoint& a0, const KoPoint& a1 ) const;
+	bool intersects( const KoPoint &, const KoPoint &) const;
+	bool intersects( const VSegment & ) const;
 
 	/**
 	 * Calculates the bounding box.

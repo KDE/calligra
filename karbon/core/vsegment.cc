@@ -840,10 +840,24 @@ VSegment::splitAt( double t )
 
 	return segment;
 }
+
 bool
 VSegment::intersects( const KoPoint& a0, const KoPoint& a1 ) const
 {
-	return linesIntersect( a0, a1, point( 0 ), next() ? next()->point( 0 ) : knot() );
+	if( !prev() )
+		return linesIntersect( a0, a1, knot(), next() ? next()->knot() : knot() );
+	else
+		return linesIntersect( a0, a1, prev()->knot(), knot() );
+}
+
+bool
+VSegment::intersects( const VSegment& segment ) const
+{
+	// FIXME: this just dumbs down beziers to lines!
+	if( !segment.prev() )
+		return intersects( segment.knot(), segment.next() ? segment.next()->knot() : segment.knot() );
+	else
+		return intersects( segment.prev()->knot(), segment.knot() );
 }
 
 bool

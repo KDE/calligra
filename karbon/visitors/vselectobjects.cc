@@ -27,6 +27,10 @@
 void
 VSelectObjects::visitVComposite( VComposite& composite )
 {
+	// Never select a deleted object
+	if( composite.state() == VObject::deleted )
+		return;
+
 	if( !m_rect.isEmpty() )
 	{
 		if( m_select )
