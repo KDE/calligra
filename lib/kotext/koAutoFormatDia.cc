@@ -499,7 +499,7 @@ void KoAutoFormatDia::setupTab3()
     connect(autoFormatLanguage, SIGNAL(highlighted ( const QString & )), this, SLOT(changeAutoformatLanguage(const QString & )));
 
     grid->addMultiCellWidget( autoFormatLanguage, 0, 0, 4, 6 );
-    QLabel *lblAutoFormatLanguage = new QLabel( i18n("Remplacement and exception for language"), tab3);
+    QLabel *lblAutoFormatLanguage = new QLabel( i18n("Replacement and exception for language"), tab3);
     grid->addMultiCellWidget( lblAutoFormatLanguage, 0, 0, 0, 3 );
 
     cbAdvancedAutoCorrection = new QCheckBox( tab3 );
