@@ -28,7 +28,7 @@ noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
 
 METASOURCES = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 	kspread_view.moc kspread_tabbar.moc \
-	kspread_table.moc kspread_dlg_layout.moc \
+	kspread_table.moc kspread_dlg_layout.moc kspread_cell.moc \
 	kspread_dlg_scripts.moc kspread_part.moc kspread_dlg_cons.moc
 
 idl_DATA = kspread.idl
