@@ -172,6 +172,9 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 		gradientStyle.addAttribute( "draw:style", "radial" );
 		gradientStyle.addAttribute( "draw:cx", "50%" );
 		gradientStyle.addAttribute( "draw:cy", "50%" );
+		double dx = m_vector.x() - m_origin.x();
+		double dy = m_vector.y() - m_origin.y();
+		gradientStyle.addAttributePt( "draw:r",  sqrt( dx * dx + dy * dy ) );
 	}
 	else
 	{
