@@ -31,17 +31,17 @@
  kformulamain_la_LIBADD = $(LIB_KOFFICECORE)
  
  ## The executable
---- koffice/kivio/kiviopart/Makefile.am	2002/07/14 12:31:28	1.24
-+++ koffice/kivio/kiviopart/Makefile.am	2002/09/08 00:33:31
-@@ -97,7 +97,7 @@ EXTRA_DIST = \
+--- koffice/kivio/kiviopart/Makefile.am	30 Jun 2003 22:04:53 -0000	1.43
++++ koffice/kivio/kiviopart/Makefile.am	13 Aug 2003 04:30:25 -0000
+@@ -41,7 +41,7 @@ lib_LTLIBRARIES = kivio.la
  
- lib_LTLIBRARIES = kivio.la
  kivio_la_SOURCES = main.cpp
+ 
 -kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
 +kivio_la_LDFLAGS = $(all_libraries) -module
+ 
  kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
  
- libkiviopart_la_LDFLAGS = -avoid-version -module $(all_libraries) -no-undefined
 --- koffice/koshell/Makefile.am	2001/03/22 14:02:17	1.25
 +++ koffice/koshell/Makefile.am	2002/09/08 00:33:40
 @@ -4,7 +4,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) $(all_in
