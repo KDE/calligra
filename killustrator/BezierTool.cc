@@ -22,7 +22,7 @@
 
 */
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__NetBSD__)
 #include <math.h>
 #else
 #include <values.h>

@@ -22,7 +22,11 @@
 */
 
 #include <float.h>
+#if defined(__FreeBSD__) || defined(__NetBSD__)
+#include <math.h>
+#else
 #include <values.h>
+#endif
 #include <GBezier.h>
 #include <GCurve.h>
 #include <Arrow.h>
