@@ -118,6 +118,8 @@ public:
     void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, KWUnit margin );
     void applyStyle( QTextCursor * cursor, const KWStyle * style );
 
+    void setTabList( QTextCursor * cursor,const QList<KoTabulator> *tabList ); 
+
     virtual void layout();
 
     // reimplemented from QTextFlow
@@ -275,6 +277,8 @@ public:
     void applyStyle( const KWStyle * style ) { textFrameSet()->applyStyle( cursor, style ); }
 
     const KWParagLayout & currentParagLayout() const { return m_paragLayout; }
+    
+    void setTabList( const QList<KoTabulator> *tabList ){textFrameSet()->setTabList(cursor,tabList); }
 
 public slots:
     void updateUI();

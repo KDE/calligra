@@ -208,7 +208,8 @@ public:
 
 
     bool isAlignChanged() const {return oldLayout.alignment!=align();}
-    //bool listTabulatorChanged() const {return m_bListTabulatorChanged;}
+    bool listTabulatorChanged() const {return m_bListTabulatorChanged;}
+
     bool isLineSpacingChanged() const {return oldLayout.lineSpacing.pt()!=lineSpacing().pt();}
     bool isLeftMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginLeft].pt()!=leftIndent().pt(); }
     bool isRightMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginRight].pt()!=rightIndent().pt();}
@@ -273,6 +274,7 @@ protected:
     KWParagLayout oldLayout;
 
     bool m_bAfterInitBorder;
+    bool m_bListTabulatorChanged;
 
 protected slots:
     void leftChanged( const QString & );

@@ -2499,7 +2499,11 @@ void KWView::paragDiaOk()
         edit->setCounter( paragDia->counter() );
 
     //todo
-    gui->getHorzRuler()->setTabList( paragDia->tabListTabulator());
+    if(paragDia->listTabulatorChanged())
+    {
+        //gui->getHorzRuler()->setTabList( paragDia->tabListTabulator());
+        edit->setTabList(paragDia->tabListTabulator());
+    }
 
     if(paragDia->isLineSpacingChanged())
         edit->setLineSpacing( paragDia->lineSpacing() );

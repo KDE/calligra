@@ -423,6 +423,19 @@ void KWTextParag::setBottomBorder( const Border & _brd )
     invalidate(0);
 }
 
+void  KWTextParag::setTabList( const QList<KoTabulator> *tabList )
+{
+    QListIterator<KoTabulator> it( *tabList );
+    for ( it.toFirst(); it.current(); ++it ) {
+        KoTabulator *t = new KoTabulator;
+        t->type = it.current()->type;
+        t->mmPos = it.current()->mmPos;
+        t->inchPos = it.current()->inchPos;
+        t->ptPos = it.current()->ptPos;
+        m_tabList.append( t );
+    }
+}
+
 void KWTextParag::setNoCounter()
 {
     delete m_counter;
@@ -876,6 +889,17 @@ KWParagLayout KWTextParag::createParagLayout() const
     l.lineSpacing = m_lineSpacing;
     l.styleName = m_styleName;
 
+    l.m_tabList.clear();
+    QListIterator<KoTabulator> it( m_tabList);
+    for ( it.toFirst(); it.current(); ++it ) {
+        KoTabulator *t = new KoTabulator;
+        t->type = it.current()->type;
+        t->mmPos = it.current()->mmPos;
+        t->inchPos = it.current()->inchPos;
+        t->ptPos = it.current()->ptPos;
+        l.m_tabList.append( t );
+    }
+
     return l;
 }
 
@@ -890,6 +914,19 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout )
     setTopBorder( layout.topBorder );
     setBottomBorder( layout.bottomBorder );
     setCounter( layout.counter );
+
+    QList<KoTabulator>tmp;
+    QListIterator<KoTabulator> it( layout.m_tabList );
+    for ( it.toFirst(); it.current(); ++it ) {
+        KoTabulator *t = new KoTabulator;
+        t->type = it.current()->type;
+        t->mmPos = it.current()->mmPos;
+        t->inchPos = it.current()->inchPos;
+        t->ptPos = it.current()->ptPos;
+        tmp.append( t );
+    }
+
+    setTabList( &tmp);
     // Don't call setStyle from here, it would overwrite any paragraph-specific settings
     m_styleName = layout.styleName;
 }

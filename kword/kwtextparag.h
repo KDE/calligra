@@ -28,6 +28,7 @@
 #include <qstring.h>
 #include <qcolor.h>
 //#include <qlist.h>
+#include <koRuler.h>
 
 using namespace Qt3;
 class QDomDocument;
@@ -143,6 +144,7 @@ struct KWParagLayout
     Border leftBorder, rightBorder, topBorder, bottomBorder;
     Counter counter;
     QString styleName;
+    QList<KoTabulator> m_tabList;
 };
 
 /**
@@ -201,8 +203,8 @@ public:
     void save( QDomElement &parentElem );
     void load( QDomElement &attributes );
 
-    //const QList<KoTabulator> *tabList() const { return &m_tabList; }
-    //void setTabList( const QList<KoTabulator> *tabList );
+    const QList<KoTabulator> *tabList() const { return &m_tabList; }
+    void setTabList( const QList<KoTabulator> *tabList );
     //bool hasSpecialTabs() const { return m_specialTabs; }
 
 protected:
@@ -232,7 +234,7 @@ private:
     Counter * m_counter;
     QString m_styleName;
 
-    //QList<KoTabulator> m_tabList;
+    QList<KoTabulator> m_tabList;
     //bool m_specialTabs;
 };
 
