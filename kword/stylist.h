@@ -64,8 +64,6 @@ protected:
     QListBox *m_stylesList;
     QLineEdit *m_nameString;
     QComboBox *m_styleCombo;
-    //QPushButton *m_okButton;
-    //QPushButton *m_cancelButton;
     QPushButton *m_deleteButton;
     QPushButton *m_newButton;
     KWStylePreview *preview;

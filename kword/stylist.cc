@@ -154,24 +154,6 @@ kdDebug() << " style " << i << ": " << styles.at(i)->name() << " (" << styles.at
     m_tabs = new QTabWidget( frame1 );
     frame1Layout->addMultiCellWidget( m_tabs, 0, 1, 2, 2 );
 
-#if 0 // we're using KDialogBase now
-    form1Layout->addWidget( frame1 );
-    QHBoxLayout *layout2 = new QHBoxLayout( 0L, KDialog::marginHint(), 0 /*KDialog::spacingHint()*/ );
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    layout2->addItem( spacer );
-
-    m_okButton = new QPushButton( this );
-    m_okButton->setText( i18n( "&OK" ) );
-    m_okButton->setDefault(true);
-    connect( m_okButton, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-    layout2->addWidget( m_okButton );
-
-    m_cancelButton = new QPushButton( this);
-    m_cancelButton->setText( i18n( "&Cancel" ) );
-    connect( m_cancelButton, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
-    layout2->addWidget( m_cancelButton );
-    form1Layout->addLayout( layout2 );
-#endif
     connect( m_stylesList, SIGNAL( selectionChanged() ), this, SLOT( switchStyle() ) );
     connect( m_tabs, SIGNAL( currentChanged ( QWidget * ) ), this, SLOT( switchTabs() ) );
 }
@@ -216,6 +198,7 @@ void KWStyleManager::addGeneralTab() {
 }
 
 void KWStyleManager::switchStyle() {
+    kdDebug() << "KWStyleManager::switchStyle noSignals=" << noSignals << endl;
     if(noSignals) return;
     noSignals=true;
 
@@ -254,6 +237,7 @@ int KWStyleManager::getStyleByName(const QString & name) {
 }
 
 void KWStyleManager::updateGUI() {
+    kdDebug() << "KWStyleManager::updateGUI m_currentStyle=" << m_currentStyle << " " << m_currentStyle->name() << endl;
     QListIterator<KWStyleManagerTab> it( m_tabsList );
     for ( ; it.current() ; ++it )
     {
@@ -318,26 +302,22 @@ void KWStyleManager::addStyle() {
 
 void KWStyleManager::deleteStyle() {
 
-    save();
     unsigned int cur = getStyleByName(m_stylesList->currentText());
     KWStyle *s = m_changedStyles.at(cur);
+    ASSERT( s == m_currentStyle );
+    delete s;
+    m_currentStyle = 0L;
     m_changedStyles.remove(cur);
     m_changedStyles.insert(cur,0L);
-    delete s;
 
-    noSignals=true;
-
+    // Done with noSignals still false, so that when m_stylesList changes the current item
+    // we display it automatically
     m_stylesList->removeItem(cur);
     m_styleCombo->removeItem(cur);
-    if(cur > m_stylesList->count())
-        cur--;
-
+    //if(cur > m_stylesList->count())
+    //    cur--;
     numStyles--;
-    m_stylesList->setCurrentItem(cur);
-
-    noSignals=false;
-
-    updateGUI();
+    m_stylesList->setSelected( m_stylesList->currentItem(), true );
 }
 
 void KWStyleManager::slotOk() {
