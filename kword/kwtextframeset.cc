@@ -293,7 +293,7 @@ void KWTextFrameSet::layout()
 // Helper for adjust*. Returns marginLeft/marginRight/breakEnd, each for an adjust* method.
 void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd )
 {
-    kdDebug(32002) << "KWTextFrameSet " << this << " getMargins" << endl;
+    //kdDebug(32002) << "KWTextFrameSet " << this << " getMargins" << endl;
     QPoint p;
     KWFrame * frame = internalToContents( QPoint(0, yp), p ); // we could use the frame returned, maybe
     ASSERT(frame);
@@ -343,7 +343,7 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 {
     int marginLeft;
     getMargins( yp, h, &marginLeft, 0L, 0L );
-    kdDebug() << "KWTextFrameSet::adjustLMargin " << marginLeft << endl;
+    //kdDebug() << "KWTextFrameSet::adjustLMargin " << marginLeft << endl;
     return QTextFlow::adjustLMargin( yp, h, margin + marginLeft, space );
 }
 
@@ -351,7 +351,7 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 {
     int marginRight;
     getMargins( yp, h, 0L, &marginRight, 0L );
-    kdDebug() << "KWTextFrameSet::adjustRMargin " << marginRight << endl;
+    //kdDebug() << "KWTextFrameSet::adjustRMargin " << marginRight << endl;
     return QTextFlow::adjustRMargin( yp, h, margin + marginRight, space );
 }
 

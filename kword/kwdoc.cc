@@ -938,10 +938,15 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     if ( !attributes.isNull() )
     {
         m_processingType = static_cast<ProcessingType>( KWDocument::getAttribute( attributes, "processing", 0 ) );
-        KWDocument::getAttribute( attributes, "standardpage", QString::null );
+        //KWDocument::getAttribute( attributes, "standardpage", QString::null );
         m_headerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasHeader", 0 ) );
         m_footerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
         unit = correctQString( KWDocument::getAttribute( attributes, "unit", "pt" ) );
+    } else {
+        m_processingType = WP;
+        m_headerVisible = false;
+        m_footerVisible = false;
+        unit = "pt";
     }
 
     switch ( KWUnit::unitType( unit ) ) {
