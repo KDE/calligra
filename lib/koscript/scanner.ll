@@ -9,8 +9,6 @@
 #include "koscript_synext.h"
 #include "koscript_locale.h"
 
-#include <klocale.h>
-
 #ifndef KDE_USE_FINAL
 #include "yacc.cc.h"
 #endif
@@ -146,10 +144,10 @@ static void translate_string( QString& str )
 
 /*--------------------------------------------------------------------------*/
 
-Digits                  [0-9]+
 Sep			[ .,]
 Sep2			[.,]
 Digit			[0-9]
+Digits                  {Digit}+
 Oct_Digit               [0-7]
 Hex_Digit               [a-fA-F0-9]
 Oct_Literal		0{Oct_Digit}*
@@ -162,6 +160,7 @@ Char                    ([^\n\t\"\'\\]|{Esc_Sequence})
 Char_Literal            "'"({Char}|\")"'"
 String_Literal		\"({Char}|"'")*\"
 
+/* #### remove */
 Float_Literal1		{Digits}({Sep}{Digit}{Digit}{Digit})*{Sep2}{Digits}(e|E)("+"|"-")?{Digits}
 Float_Literal2		{Digits}({Sep}{Digit}{Digit}{Digit})*(e|E)("+"|"-")?{Digits}
 Float_Literal3		{Digits}({Sep}{Digit}{Digit}{Digit})*{Sep2}{Digits}
@@ -178,14 +177,13 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 /*--------------------------------------------------------------------------*/
 
 
-
 %%
 
 [ \t]			;
 [\n]			{ idl_line_no++; return T_SEMICOLON; }
 "//"[^\n]*		;
 "#!"[^\n]*		;
-"#"[^\n]*\n             ;
+"#"[^\n]*               ;
 
 "=~"" "*"s/"(\\.|[^\\/])*"/"(\\.|[^\\/])*"/"	{
 						  const char *c = yytext + 2;
