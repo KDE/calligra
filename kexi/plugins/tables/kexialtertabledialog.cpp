@@ -68,8 +68,8 @@ void KexiAlterTableDialog::init()
 	col->setValidator( new Kexi::IdentifierValidator() );
 
 	data->addColumn( col );
-//js TODO: COMBO
-	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
+	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum,
+		KexiDB::Field::NotEmpty | KexiDB::Field::NotNull);
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
 	for (int i=1; i<=KexiDB::Field::LastTypeGroup; i++) {
 		types[i-1] = KexiDB::Field::typeGroupName(i);
@@ -333,7 +333,13 @@ void KexiAlterTableDialog::slotAboutToUpdateRow(KexiTableItem* item, KexiDB::Row
 	KexiDB::RowEditBuffer::SimpleMap map = buffer->simpleBuffer();
 	buffer->debug();
 
-	//TODO
+	QVariant old_type = item->at(1);
+	QVariant *buf_type = buffer->at( m_view->field(1)->name() );
+
+	//check if there is a type specified
+	if ((old_type.isNull() && !buf_type) || (buf_type && buf_type->isNull())) {
+		kdDebug() << "err" << endl;
+	}
 
 	allow = true;
 
