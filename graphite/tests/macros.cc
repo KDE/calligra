@@ -54,8 +54,10 @@ int main() {
     kdDebug() << "inch2mm(mm2inch(1.0)): " << Graphite::inch2mm(Graphite::mm2inch(1.0)) << endl;
     kdDebug() << "pt2inch(inch2pt(1.0)): " << Graphite::pt2inch(Graphite::inch2pt(1.0)) << endl;
     kdDebug() << "pt2mm(mm2pt(1.0)): " << Graphite::pt2mm(Graphite::mm2pt(1.0)) << endl;
-    kdDebug() << "double2Int(1.49): " << Graphite:: double2Int(1.49) << endl;
-    kdDebug() << "double2Int(1.50): " << Graphite:: double2Int(1.50) << endl;
+    kdDebug() << "qRound(1.49): " << qRound(1.49) << endl;
+    kdDebug() << "qRound(1.50): " << qRound(1.50) << endl;
+    kdDebug() << "qRound(-1.49): " << qRound(-1.49) << endl;
+    kdDebug() << "qRound(-1.50): " << qRound(-1.50) << endl;
     kdDebug() << "rad2deg(1.0): " << Graphite::rad2deg(1.0) << endl;
     kdDebug() << "deg2rad(90.0): " << Graphite::deg2rad(90.0) << endl;
     kdDebug() << "normalizeRad(400.0): " << Graphite::normalizeRad(400.0) << endl;

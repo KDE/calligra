@@ -10,8 +10,10 @@ inch2pt(pt2inch(1.0)): 1.000000
 inch2mm(mm2inch(1.0)): 1.000000
 pt2inch(inch2pt(1.0)): 1.000000
 pt2mm(mm2pt(1.0)): 1.000000
-double2Int(1.49): 1
-double2Int(1.50): 2
+qRound(1.49): 1
+qRound(1.50): 2
+qRound(-1.49): -1
+qRound(-1.50): -2
 rad2deg(1.0): 57.295780
 deg2rad(90.0): 1.570796
 normalizeRad(400.0): 4.159326
