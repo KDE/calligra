@@ -660,8 +660,7 @@ bool KoDocument::saveNativeFormat( const QString & file )
     KoStoreDevice dev( store );
 
     QCString s = doc.toCString(); // this is already Utf8!
-
-    dev.writeBlock( s.data(), s.length() );
+    (void)dev.writeBlock( s.data(), s.size()-1 );
     store->close();
   }
 
@@ -675,8 +674,11 @@ bool KoDocument::saveToStream( QIODevice * dev )
 {
   QDomDocument doc = saveXML();
   // Save to buffer
-  QCString s = doc.toCString(); // utf8 already!!!
-  return dev->writeBlock( s.data(), s.length() ) == (int)s.length();
+  QCString s = doc.toCString(); // utf8 already
+  // Important: don't use s.length() here. It's slow, and dangerous (in case of a '\0' somewhere)
+  // The -1 is because we don't want to write the final \0.
+  int nwritten = dev->writeBlock( s.data(), s.size()-1 );
+  return nwritten == (int)s.size()-1;
 }
 
 bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
