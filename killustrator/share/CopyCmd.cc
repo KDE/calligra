@@ -25,6 +25,9 @@
 #include <CopyCmd.h>
 
 #include <qclipboard.h>
+#include <qbuffer.h>
+#include <qtextstream.h>
+#include <qdragobject.h>
 #include <qdom.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -62,7 +65,18 @@ void CopyCmd::execute () {
     for (GObject *o=objects.first(); o!=0L;
          o=objects.next())
         layer.appendChild(o->writeToXml (docu));
-    QApplication::clipboard ()->setText (docu.toCString());
+
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    QTextStream stream( &buffer );
+    stream.setEncoding( QTextStream::UnicodeUTF8 );
+    stream << docu;
+    buffer.close();
+
+    QStoredDrag *drag = new QStoredDrag( "application/x-killustrator-snippet" );
+    drag->setEncodedData( buffer.buffer() );
+
+    QApplication::clipboard ()->setData( drag );
 }
 
 void CopyCmd::unexecute () {

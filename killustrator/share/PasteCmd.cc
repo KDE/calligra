@@ -26,6 +26,7 @@
 
 #include <qstring.h>
 #include <qclipboard.h>
+#include <qbuffer.h>
 #include <qdom.h>
 
 #include <klocale.h>
@@ -51,30 +52,34 @@ void PasteCmd::execute () {
     for (GObject *o=objects.first(); o!=0L; o=objects.next())
         o->unref ();
     objects.clear ();
-    QString buf = QApplication::clipboard ()->text ();
-    if (!buf.isEmpty()) {
-        if (buf.left(5)=="<?xml") {
-            // KIllustrator objects
-            QWMatrix m;
-            m.translate(10, 10);
 
-            QDomDocument d;
-            d.setContent(buf);
-            document->insertFromXml (d, objects);
-            document->unselectAllObjects ();
-            for (GObject *o=objects.first(); o!=0L; o=objects.next()) {
-                o->ref ();
-                o->transform (m, true);
-                document->selectObject(o);
-            }
+    QMimeSource *src = QApplication::clipboard()->data();
+
+    if ( src && src->provides( "application/x-killustrator-snippet" ) )
+    {
+        // KIllustrator objects
+        QWMatrix m;
+        m.translate(10, 10);
+
+        QBuffer buffer( src->encodedData( "application/x-killustrator-snippet" ) );
+        buffer.open( IO_ReadOnly );
+        QDomDocument d;
+        d.setContent(&buffer);
+        buffer.close();
+        document->insertFromXml (d, objects);
+        document->unselectAllObjects ();
+        for (GObject *o=objects.first(); o!=0L; o=objects.next()) {
+            o->ref ();
+            o->transform (m, true);
+            document->selectObject(o);
         }
-        else {
-            // plain text
-            GText *tobj = new GText ();
-            tobj->setText (buf);
-            objects.append(tobj);
-            document->insertObject (tobj);
-        }
+    }
+    else {
+        // plain text
+        GText *tobj = new GText ();
+        tobj->setText ( QApplication::clipboard()->text() );
+        objects.append(tobj);
+        document->insertObject (tobj);
     }
 }
 
