@@ -561,10 +561,25 @@ void KWDocument::initEmpty()
 void KWDocument::setPageLayout( const KoPageLayout& _layout, const KoColumns& _cl, const KoKWHeaderFooter& _hf, bool updateViews )
 {
     if ( m_processingType == WP ) {
+        int numPages = m_pages;
         //kdDebug() << "KWDocument::setPageLayout WP" << endl;
         m_pageLayout = _layout;
         m_pageColumns = _cl;
         m_pageHeaderFooter = _hf;
+
+        if ( updateViews ) {
+            // Fix things up, when we change the orientation we might accidentally change the number of pages
+            // (and frames of the main textframeset might just remain un-moved...)
+            KWFrameSet *frameset = m_lstFrameSet.getFirst();
+            KWFrame* lastFrame = frameset->frame( frameset->getNumFrames() - 1 );
+            if ( lastFrame && lastFrame->pageNum() + 1 != numPages ) {
+                kdDebug(32002) << "KWDocument::setPageLayout ensuring that recalcFrames will consider " << numPages << " pages." << endl;
+                // All that matters is that it's on numPages so that all pages will be recalc-ed.
+                // If the text layout then wants to remove some pages, no problem.
+                lastFrame->setY( numPages * ptPaperHeight() + ptTopBorder() );
+            }
+        }
+
     } else {
         //kdDebug() << "KWDocument::setPageLayout NON-WP" << endl;
         m_pageLayout = _layout;
@@ -837,7 +852,6 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
         //kdDebug(32002) << "KWDocument::recalcFrames frms(" << frms << ") / columns(" << m_pageColumns.columns << ") = " << m_pages << endl;
 #endif
         m_pages = frameset->frame( frms - 1 )->pageNum() + 1;
-
 
         // Then from the other frames ( framesetNum > 0 )
         double maxBottom = 0;
