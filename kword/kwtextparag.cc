@@ -351,7 +351,11 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         r.setRight( documentWidth() - 2 - Border::zoomWidthX( m_layout.rightBorder.ptWidth, zh, 0 ) );
         r.setTop( lineY( 0 ) );
         int lastLine = lines() - 1;
-        r.setBottom( static_cast<int>( lineY( lastLine ) + lineHeight( lastLine ) - lineSpacing( lastLine ) ) - 1 );
+        r.setBottom( static_cast<int>( lineY( lastLine ) + lineHeight( lastLine ) ) );
+        // If we don't have a bottom border, we need go as low as possible ( to touch the next parag's border ).
+        // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
+        if ( m_layout.bottomBorder.ptWidth > 0 )
+            r.rBottom() -= lineSpacing( lastLine ) + 1;
 
         //kdDebug() << "KWTextParag::paint documentWidth=" << documentWidth() << " r=" << DEBUGRECT( r ) << endl;
         Border::drawBorders( painter, zh, r,
