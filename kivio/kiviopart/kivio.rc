@@ -46,6 +46,7 @@
      <Action name="layersPanel"/>
      <Action name="viewManager"/>
      <Action name="birdEye"/>
+     <Action name="protection"/>
    </Menu>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>

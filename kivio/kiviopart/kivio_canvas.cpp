@@ -206,12 +206,22 @@ void KivioCanvas::resizeEvent( QResizeEvent* )
 void KivioCanvas::wheelEvent( QWheelEvent* ev )
 {
   ev->accept();
-
+/*
   QPoint p = ev->pos();
   if ((ev->delta()<0)) {
     zoomIn(p);
   } else {
     zoomOut(p);
+  }
+*/
+  QPoint p = ev->pos();
+  if( (ev->delta()<0))
+  {
+     m_pVertScrollBar->subtractPage();
+  }
+  else
+  {
+     m_pVertScrollBar->addPage();
   }
 }
 
@@ -408,6 +418,9 @@ void KivioCanvas::updateScrollBars()
   {
     m_pVertScrollBar->setValue(0);
   }
+
+  m_pVertScrollBar->setPageStep( height() );
+  m_pHorzScrollBar->setPageStep( width() );
 }
 
 QSize KivioCanvas::actualSize()

@@ -41,6 +41,7 @@ class ToolDockManager;
 
 class KivioBirdEyePanel;
 class KivioLayerPanel;
+class KivioProtectionPanel;
 class KivioStencilGeometryPanel;
 class KivioViewManagerPanel;
 
@@ -129,6 +130,7 @@ protected:
   void createViewManagerDock();
   void createLayerDock();
   void createBirdEyeDock();
+  void createProtectionDock();
 
 public slots:
   void paperLayoutDlg();
@@ -145,6 +147,7 @@ public slots:
   void toggleViewManager(bool);
   void toggleLayersPanel(bool);
   void toggleBirdEyePanel(bool);
+  void toggleProtectionPanel(bool);
 
   void insertPage();
   void removePage();
@@ -274,6 +277,7 @@ private:
   KivioViewManagerPanel* m_pViewManagerPanel;
   KivioLayerPanel* m_pLayersPanel;
   KivioBirdEyePanel* m_pBirdEyePanel;
+  KivioProtectionPanel* m_pProtectionPanel;
 
   bool m_bShowPageBorders;
   bool m_bShowPageMargins;

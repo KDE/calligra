@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include "kivio_config.h"
 #include "kivio_custom_drag_data.h"
 #include "kivio_fill_style.h"
 #include "kivio_intra_stencil_data.h"
@@ -113,32 +114,48 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
     newW = m_w * scale;
     newH = m_h * scale;
 
-    painter->setFGColor( QColor(0,0,0) );
-    painter->setBGColor( QColor(0,200,0) );
-    painter->setLineWidth(1.0f);
+    // top left, top right, bottom left, bottom right
+    if( m_pProtection->at( kpWidth ) ||
+	m_pProtection->at( kpHeight ) )
+    {
+       painter->drawHandle( newX,                newY,               KivioPainter::cpfLock );
+       painter->drawHandle( newX + newW,         newY,               KivioPainter::cpfLock );
+       painter->drawHandle( newX,                newY + newH,        KivioPainter::cpfLock );
+       painter->drawHandle( newX + newW,         newY + newH,        KivioPainter::cpfLock );
+    }
+    else
+    {
+       painter->drawHandle( newX,                newY,               0 );
+       painter->drawHandle( newX + newW,         newY,               0 );
+       painter->drawHandle( newX,                newY + newH,        0 );
+       painter->drawHandle( newX + newW,         newY + newH,        0 );
+    }
 
-/*
-    painter->fillRect( newX,                newY,               HWP1, HWP1 );
-    painter->fillRect( newX + newW/2.0f,    newY,               HWP1, HWP1 );
-    painter->fillRect( newX + newW,         newY,               HWP1, HWP1 );
+    // Top/bottom
+    if( m_pProtection->at( kpHeight ) ||
+	m_pProtection->at( kpAspect ) )
+    {
+       painter->drawHandle( newX + newW/2.0f,    newY,               KivioPainter::cpfLock );
+       painter->drawHandle( newX + newW/2.0f,    newY + newH,        KivioPainter::cpfLock );
+    }
+    else
+    {
+       painter->drawHandle( newX + newW/2.0f,    newY,               0 );
+       painter->drawHandle( newX + newW/2.0f,    newY + newH,        0 );
+    }
 
-    painter->fillRect( newX,                newY + newH/2.0f,   HWP1, HWP1 );
-    painter->fillRect( newX + newW,         newY + newH/2.0f,   HWP1, HWP1 );
-
-    painter->fillRect( newX,                newY + newH,        HWP1, HWP1 );
-    painter->fillRect( newX + newW/2.0f,    newY + newH,        HWP1, HWP1 );
-    painter->fillRect( newX + newW,         newY + newH,        HWP1, HWP1 );
-*/
-    painter->drawHandle( newX,                newY,               0 );
-    painter->drawHandle( newX + newW/2.0f,    newY,               0 );
-    painter->drawHandle( newX + newW,         newY,               0 );
-
-    painter->drawHandle( newX,                newY + newH/2.0f,   0 );
-    painter->drawHandle( newX + newW,         newY + newH/2.0f,   0 );
-
-    painter->drawHandle( newX,                newY + newH,        0 );
-    painter->drawHandle( newX + newW/2.0f,    newY + newH,        0 );
-    painter->drawHandle( newX + newW,         newY + newH,        0 );
+       // left, right
+    if( m_pProtection->at( kpWidth ) ||
+	m_pProtection->at( kpAspect ) )
+    {
+       painter->drawHandle( newX,                newY + newH/2.0f,   KivioPainter::cpfLock );
+       painter->drawHandle( newX + newW,         newY + newH/2.0f,   KivioPainter::cpfLock );
+    }
+    else
+    {
+       painter->drawHandle( newX,                newY + newH/2.0f,   0 );
+       painter->drawHandle( newX + newW,         newY + newH/2.0f,   0 );
+    }
 }
 
 KivioCollisionType KivioStencil::checkForCollision( KivioPoint *, float )

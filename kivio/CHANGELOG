@@ -132,6 +132,10 @@
     - Implemented snap-to-guides
     - Fixed the stencils which went out of their bounding-boxes, now they don't.
 
+(Max Judin)
+12/25/2000
+    - Implemented an options dialog.
+
 (Dave Marotti)
 12/25/2000
     - Damn I suck, working on Christmas :(  Oh well, gotta do something while the
@@ -148,3 +152,25 @@
       Start points are drawn with a plus in the box, endpoints are drawn with an
       x in the box, connectable points are drawn with a smaller box inside the
       box, and others are just plain green. When connected, they turn red.
+
+(Dave Marotti)
+12/26/2000
+    - The wheel-event now causes the page to move up and down instead of zooming
+      in and out.
+
+(Dave Marotti)
+01/14/2000
+    - Started work on the protection dialog box
+    - Deletion protection works
+
+(Dave Marotti)
+01/18/2000
+    - Width/Height protection now works.
+    - Little pictures of padlocks are now drawn in place of resize handles when
+      protected.
+      
+(Dave Marotti)
+01/23/2000
+    - Width/height/x/y/deletion protection works, there are some flaws though.
+      If you protect something, then group it, things can act funny when you
+      move or resize the group.

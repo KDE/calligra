@@ -81,6 +81,12 @@ KivioStraightConnector::KivioStraightConnector()
    m_startAH = new KivioArrowHead();
    m_endAH = new KivioArrowHead();
    m_needsWidth = false;
+
+   m_pCanProtect->clearBit( kpAspect );
+   m_pCanProtect->clearBit( kpWidth );
+   m_pCanProtect->clearBit( kpHeight );
+   m_pCanProtect->clearBit( kpX );
+   m_pCanProtect->clearBit( kpY );
 }
 
 KivioStraightConnector::~KivioStraightConnector()
@@ -153,6 +159,9 @@ KivioStencil *KivioStraightConnector::duplicate()
     pStencil->setEndAHType( m_endAH->type() );
     pStencil->setEndAHWidth( m_endAH->width() );
     pStencil->setEndAHLength( m_endAH->length() );
+
+    *(pStencil->protection()) = *m_pProtection;
+    *(pStencil->canProtect()) = *m_pCanProtect;
 
     return pStencil;
 }

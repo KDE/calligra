@@ -50,8 +50,11 @@ typedef enum
     kpX = 0,
     kpY,
     kpWidth,
-    kpHeight
+    kpHeight,
+    kpAspect,
+    kpDeletion
 } KivioProtection;
+#define NUM_PROTECTIONS 6
 
 typedef enum
 {
@@ -95,7 +98,6 @@ typedef enum
       | krhpSW )
 
 
-#define NUM_PROTECTIONS 4
 
 class KivioStencil
 {

@@ -37,7 +37,9 @@ libui_la_SOURCES = \
 		pageoptionsdialogbase.ui\
 		pageoptionsdialog.cpp\
 		stencilsbaroptionsdialogbase.ui\
-		stencilsbaroptionsdialog.cpp
+		stencilsbaroptionsdialog.cpp\
+		kivio_protection_panel_base.ui\
+		kivio_protection_panel.cpp
 EXTRA_DIST = \
 		guidessetupdialogbase.ui\
 		guidessetupdialog.cpp\
@@ -72,7 +74,10 @@ EXTRA_DIST = \
 		pageoptionsdialog.h\
 		stencilsbaroptionsdialogbase.ui\
 		stencilsbaroptionsdialog.cpp\
-		stencilsbaroptionsdialog.h
+		stencilsbaroptionsdialog.h\
+		kivio_protection_panel_base.ui\
+		kivio_protection_panel.cpp\
+		kivio_protection_panel.h
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$

@@ -166,7 +166,7 @@ public:
 
 
 
-    virtual int resizeHandlePositions() { return KIVIO_RESIZE_HANDLE_POSITION_ALL; }
+    virtual int resizeHandlePositions();
 };
 
 #endif

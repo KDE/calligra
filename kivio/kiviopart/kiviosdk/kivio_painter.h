@@ -130,7 +130,8 @@ public:
        cpfConnectable=0x1,
        cpfStart=0x2,
        cpfEnd=0x4,
-       cpfConnected=0x8
+       cpfConnected=0x8,
+       cpfLock=0x10
     };
     virtual void drawHandle( float, float, int ) { ; }
 };

@@ -464,6 +464,8 @@ void SelectTool::continueDragging(QPoint pos)
     bool snappedX;
     bool snappedY;
 
+    float newX, newY;
+
     // Undraw the old stencils
     m_pCanvas->drawSelectedStencilsXOR();
 
@@ -480,25 +482,34 @@ void SelectTool::continueDragging(QPoint pos)
 	// First attempt a snap-to-grid
 	p.set( pData->rect.x() + dx, pData->rect.y() + dy, UnitPoint );
 	p = m_pCanvas->snapToGrid(p);
-	pStencil->setPosition(p.x, p.y);
+
+	newX = p.x;
+	newY = p.y;
 	
 	// Now the guides override the grid so we attempt to snap to them
 	p.set( pData->rect.x() + dx + pStencil->w(), pData->rect.y() + dy + pStencil->h(), UnitPoint );
 	p = m_pCanvas->snapToGuides(p, snappedX, snappedY);
 	if( snappedX==true ) {
-	   pStencil->setX(p.x - pStencil->w());
+	   newX = p.x - pStencil->w();
 	}
 	if( snappedY==true ) {
-	   pStencil->setY(p.y - pStencil->h());
+	   newY = p.y - pStencil->h();
 	}
 	
 	p.set( pData->rect.x() + dx, pData->rect.y() + dy, UnitPoint );
 	p = m_pCanvas->snapToGuides(p, snappedX, snappedY);
 	if( snappedX==true ) {
-	   pStencil->setX(p.x);
+	   newX = p.x;
 	}
 	if( snappedY==true ) {
-	   pStencil->setY(p.y);
+	   newY = p.y;
+	}
+
+	if( pStencil->protection()->at( kpX )==false ) {
+	   pStencil->setX(newX);
+	}
+	if( pStencil->protection()->at( kpY )==false ) {
+	   pStencil->setY(newY);
 	}
 
         pData = m_lstOldGeometry.next();
@@ -570,16 +581,17 @@ void SelectTool::continueResizing(QPoint pos)
     float sw = pData->rect.w();
     float sh = pData->rect.h();
 
+    float aspect = pData->rect.w() / pData->rect.h();
+
     switch( m_resizeHandle )
     {
         case 1: // top left
-            if( m_pResizingStencil->protection()->testBit( kpWidth )==false )
+            if( m_pResizingStencil->protection()->testBit( kpWidth )==false && 
+		m_pResizingStencil->protection()->testBit( kpHeight )==false )
             {
                 m_pResizingStencil->setX( sx + dx );
                 m_pResizingStencil->setW( sw - dx );
-            }
-                if( m_pResizingStencil->protection()->testBit( kpHeight )==false )
-            {
+
                 m_pResizingStencil->setY( sy + dy );
                 m_pResizingStencil->setH( sh - dy );
             }
@@ -594,16 +606,14 @@ void SelectTool::continueResizing(QPoint pos)
             break;
 
         case 3: // top right
-            if( m_pResizingStencil->protection()->testBit( kpHeight )==false )
-           {
+            if( m_pResizingStencil->protection()->testBit( kpHeight )==false &&
+		m_pResizingStencil->protection()->testBit( kpWidth )==false )
+	    {
                m_pResizingStencil->setY( sy + dy );
                m_pResizingStencil->setH( sh - dy );
-           }
 
-           if( m_pResizingStencil->protection()->testBit( kpWidth )==false )
-           {
                m_pResizingStencil->setW( sw + dx );
-           }
+	    }
            break;
 
         case 4: // right
@@ -616,13 +626,10 @@ void SelectTool::continueResizing(QPoint pos)
             break;
 
         case 5: // bottom right
-            if( m_pResizingStencil->protection()->testBit( kpWidth )==false )
+            if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
+		m_pResizingStencil->protection()->testBit( kpHeight )==false )
             {
                 m_pResizingStencil->setW( sw+dx );
-            }
-
-            if( m_pResizingStencil->protection()->testBit( kpHeight )==false )
-            {
                 m_pResizingStencil->setH( sh + dy );
             }
             break;
@@ -635,15 +642,13 @@ void SelectTool::continueResizing(QPoint pos)
             break;
 
         case 7: // bottom left
-            if( m_pResizingStencil->protection()->testBit( kpWidth )==false )
+            if( m_pResizingStencil->protection()->testBit( kpWidth )==false &&
+		m_pResizingStencil->protection()->testBit( kpHeight )==false )
             {
-                 m_pResizingStencil->setX( sx + dx );
-                m_pResizingStencil->setW( sw - dx );
-            }
+	       m_pResizingStencil->setX( sx + dx );
+	       m_pResizingStencil->setW( sw - dx );
 
-            if( m_pResizingStencil->protection()->testBit( kpHeight )==false )
-            {
-                m_pResizingStencil->setH( sh + dy );
+	       m_pResizingStencil->setH( sh + dy );
             }
             break;
 

@@ -88,6 +88,7 @@ public:
     QColor stencilBGColor() { return m_stencilBGColor; }
     StencilBGType stencilBGType() { return m_stencilBGType; }
     QPixmap *connectorTargetPixmap() { return m_pConnectorTargetPixmap; }
+    QPixmap *lockPixmap() { return m_pLockPixmap; }
 
 protected:
     static KivioConfig *s_config;
@@ -99,6 +100,7 @@ protected:
     QPixmap *m_pStencilBGPixmap;        // Holds the pixmap of the stencil dock bg.
     
     QPixmap *m_pConnectorTargetPixmap;  // Holds the pixmap of the KivioConnectorObject
+    QPixmap *m_pLockPixmap;             // Holds the pixmap of the lock pixmap
 };
 
 #endif

@@ -278,6 +278,10 @@ KivioStencil *KivioSMLStencil::duplicate()
 //        pOriginal = m_pOriginalConnectorTargets->next();
     }
 
+    *(pNewStencil->protection()) = *m_pProtection;
+    *(pNewStencil->canProtect()) = *m_pCanProtect;
+
+
     pReturn = pNewStencil;
 
     return pReturn;
@@ -1972,5 +1976,18 @@ bool KivioSMLStencil::checkCollisionTextBox( KivioShape *, KivioPoint * )
  */
 int KivioSMLStencil::resizeHandlePositions()
 {
-    return KIVIO_RESIZE_HANDLE_POSITION_ALL;
+   // Calculate the resize handle positions
+   int mask = KIVIO_RESIZE_HANDLE_POSITION_ALL;
+
+   if( m_pProtection->at( kpWidth ) )
+   {
+      mask &= ~(krhpNE | krhpNW | krhpSW | krhpSE | krhpE | krhpW);
+   }
+
+   if( m_pProtection->at( kpHeight) )
+   {
+      mask &= ~(krhpNE | krhpNW | krhpSW | krhpSE | krhpN | krhpS);
+   }
+
+   return mask;
 }

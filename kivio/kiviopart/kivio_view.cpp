@@ -81,6 +81,7 @@
 #include "tooldockmanager.h"
 #include "tooldockbase.h"
 
+#include "kivio_protection_panel.h"
 #include "kivio_stencil_geometry_panel.h"
 #include "kivio_viewmanager_panel.h"
 #include "kivio_layer_panel.h"
@@ -225,6 +226,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   createViewManagerDock();
   createLayerDock();
   createBirdEyeDock();
+  createProtectionDock();
 
   setupActions();
 
@@ -296,6 +298,17 @@ void KivioView::createLayerDock()
     KToggleAction* showLayers = new KToggleAction( i18n("Layers Manager"), CTRL+Key_L, actionCollection(), "layersPanel" );
     connect( showLayers, SIGNAL(toggled(bool)), layersBase, SLOT(makeVisible(bool)));
     connect( layersBase, SIGNAL(visibleChange(bool)), SLOT(toggleLayersPanel(bool)));
+}
+
+void KivioView::createProtectionDock()
+{
+   m_pProtectionPanel = new KivioProtectionPanel(this,this);
+   ToolDockBase* protectionBase = toolDockManager()->createToolDock(m_pProtectionPanel,i18n("Protection"));
+   protectionBase->move(0,0);
+
+   KToggleAction *showProtection = new KToggleAction( i18n("Protection"), CTRL+SHIFT+Key_P, actionCollection(), "protection" );
+   connect( showProtection, SIGNAL(toggled(bool)), protectionBase, SLOT(makeVisible(bool)));
+   connect( protectionBase, SIGNAL(visibleChange(bool)), SLOT(toggleProtectionPanel(bool)));
 }
 
 void KivioView::setupActions()
@@ -1043,6 +1056,8 @@ void KivioView::updateToolBars()
         m_setStartArrowSize->setSize( pStencil->startAHWidth(), pStencil->startAHLength() );
         m_setEndArrowSize->setSize( pStencil->endAHWidth(), pStencil->endAHLength() );
     }
+
+    m_pProtectionPanel->updateCheckBoxes();
 }
 
 void KivioView::slotSetStartArrow( int i )
@@ -1337,6 +1352,11 @@ void KivioView::toggleLayersPanel(bool b)
     TOGGLE_ACTION("layersPanel")->setChecked(b);
 }
 
+void KivioView::toggleProtectionPanel(bool b)
+{
+    TOGGLE_ACTION("protection")->setChecked(b);
+}
+
 void KivioView::toggleBirdEyePanel(bool b)
 {
     TOGGLE_ACTION("birdEye")->setChecked(b);
@@ -1347,5 +1367,6 @@ void KivioView::setupPrinter(QPrinter &p)
     p.setMinMax(1, m_pDoc->map()->pageList().count());
     p.setFromTo(1, m_pDoc->map()->pageList().count());
 }
+
 
 #include "kivio_view.moc"

@@ -16,10 +16,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include "kivio_config.h"
 #include "kivio_line_style.h"
-#include "kivio_screen_painter.h"
-
 #include "kivio_point.h"
+#include "kivio_screen_painter.h"
 
 #include <qpen.h>
 #include <qbrush.h>
@@ -906,12 +906,25 @@ void KivioScreenPainter::drawHandle( float x, float y, int flags )
    QColor fillColor;
    QBrush b;
    QPen p;
+   QPixmap *pLock;
 
    const float HW = 6.0f;
    const float HWP1 = HW+1.0f;
    const float HWo2 = HW/2.0f;
 
    float x1, y1;
+
+   // Is it a locked handle?
+   if( flags & cpfLock )
+   {
+      x1 = x - 4;
+      y1 = y - 4;
+
+      pLock = KivioConfig::config()->lockPixmap();
+
+      m_pPainter->drawPixmap( x1, y1, *pLock ); 
+      return;
+   }
 
    if( flags & cpfConnected )
    {

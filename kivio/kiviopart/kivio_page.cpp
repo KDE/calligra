@@ -42,6 +42,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kmessagebox.h>
 
 #include "kivio_page.h"
 #include "kivio_map.h"
@@ -403,38 +404,22 @@ void KivioPage::selectStencils( float x, float y, float w, float h )
         if( stencilInRect( x, y, w, h, pStencil )==true )
         {
             selectStencil( pStencil );
-        }
 
+	    // Don't allow reselection
+	    if( m_lstSelection.findRef( pStencil ) != -1 )
+	    {
+	    }
+	    else
+	    {
+	       pStencil->select();
+	       m_lstSelection.append( pStencil );
+	    }
+        }
+	
         pStencil = m_pCurLayer->stencilList()->next();
     }
-
-
-    /*
-    * No multi-layer selections
-    */
-    /*
-    KivioLayer *pLayer = m_lstLayers.first();
-    while( pLayer )
-    {
-        if( pLayer->visible() == true )
-        {
-            // Iterate through all stencils of this layer
-            KivioStencil *pStencil = pLayer->stencilList()->first();
-            while( pStencil )
-            {
-                // Is it in the rectangle?
-                if( stencilInRect( x, y, w, h, pStencil )==true )
-                {
-                    selectStencil( pStencil );
-                }
-
-                pStencil = pLayer->stencilList()->next();
-            }
-        }
-
-        pLayer = m_lstLayers.next();
-    }
-    */
+    
+    m_pDoc->slotSelectionChanged();
 }
 
 bool KivioPage::stencilInRect( float x, float y, float w, float h, KivioStencil *pStencil )
@@ -594,6 +579,20 @@ KivioStencil *KivioPage::checkForStencil( KivioPoint *pPoint, int *collisionType
 void KivioPage::deleteSelectedStencils()
 {
     KivioStencil *pStencil;
+
+    // Make sure none of them have deletion protection
+    pStencil = m_lstSelection.first();
+    while( pStencil )
+    {
+       if( pStencil->protection()->at(kpDeletion)==true )
+       {
+	  KMessageBox::information(NULL, i18n("One of the selected stencils has protection from deletion, and cannot be deleted."),
+				   i18n("Protection From Deletion") );
+	  return;
+       }
+
+       pStencil = m_lstSelection.next();
+    }
 
     // Iterate through all items in the selection list
     m_lstSelection.first();
@@ -916,11 +915,34 @@ void KivioPage::cut()
     KivioGroupStencil *pGroup = new KivioGroupStencil();
     KivioStencil *pStencil;
     KivioLayer *pLayer;
+    bool safe=true;
 
     if( m_lstSelection.count() <= 0 )
         return;
 
     pLayer = m_pCurLayer;
+
+    // Make sure none of them are protected from deletion
+    pStencil = pLayer->firstStencil();
+    while( pStencil )
+    {
+        if( isStencilSelected( pStencil )==true )
+        {
+	   if( pStencil->protection()->at(kpDeletion)==true )
+	   {
+	      safe=false;
+	   }
+        }
+
+        pStencil = pLayer->nextStencil();
+    }
+    if( safe==false )
+    {
+       KMessageBox::information(NULL, i18n("One of the stencils has protection from deletion.  You cannot cut or delete this stencil."), i18n("Protection From Delete") );
+
+       return;
+    }
+
 
     pStencil = pLayer->firstStencil();
     while( pStencil )

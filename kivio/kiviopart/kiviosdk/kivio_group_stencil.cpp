@@ -19,6 +19,7 @@
 #include "kivio_group_stencil.h"
 #include "kivio_intra_stencil_data.h"
 #include "kivio_layer.h"
+#include "kivio_rect.h"
 
 #include <kdebug.h>
 
@@ -147,32 +148,33 @@ void KivioGroupStencil::addToGroup( KivioStencil *pStencil )
         m_y = pStencil->y();
         m_w = pStencil->w();
         m_h = pStencil->h();
-        return;
     }
-
-    right = pStencil->x() + pStencil->w();
-    left = pStencil->x();
-    top = pStencil->y();
-    bottom = pStencil->y() + pStencil->h();
-
-    // Adjust the borders
-    if( left < m_x )
+    else
     {
-        m_w = m_w + (m_x - left);
-        m_x = left;
-    }
-    if( right > m_x + m_w )
-    {
-        m_w = right - m_x;
-    }
-    if( top < m_y )
-    {
-        m_h = m_h + (m_y - top);
-        m_y = top;
-    }
-    if( bottom > m_y + m_h )
-    {
-        m_h = bottom - m_y;
+       right = pStencil->x() + pStencil->w();
+       left = pStencil->x();
+       top = pStencil->y();
+       bottom = pStencil->y() + pStencil->h();
+       
+       // Adjust the borders to new limits
+       if( left < m_x )
+       {
+	  m_w = m_w + (m_x - left);
+	  m_x = left;
+       }
+       if( right > m_x + m_w )
+       {
+	  m_w = right - m_x;
+       }
+       if( top < m_y )
+       {
+	  m_h = m_h + (m_y - top);
+	  m_y = top;
+       }
+       if( bottom > m_y + m_h )
+       {
+	  m_h = bottom - m_y;
+       }
     }
 }
 
@@ -190,6 +192,8 @@ KivioStencil *KivioGroupStencil::duplicate()
 
         pStencil = m_pGroupList->next();
     }
+
+    *(pGroup->protection()) = *m_pProtection;
 
     return pGroup;
 }
@@ -255,59 +259,90 @@ QDomElement KivioGroupStencil::saveXML( QDomDocument &doc )
 
 void KivioGroupStencil::setX( float newX )
 {
-    float dx = newX - m_x;
+   float dx = newX - m_x;
+   
+   m_x = newX;
+   KivioStencil *pStencil = m_pGroupList->first();
+   while( pStencil )
+   {
+      if( pStencil->protection()->at(kpX)==false )
+      {
+	 pStencil->setX( pStencil->x() + dx );
+      }
+      
+      pStencil = m_pGroupList->next();
+   }
 
-    m_x = newX;
-    KivioStencil *pStencil = m_pGroupList->first();
-    while( pStencil )
-    {
-        pStencil->setX( pStencil->x() + dx );
-
-        pStencil = m_pGroupList->next();
-    }
 }
 
 void KivioGroupStencil::setY( float newY )
 {
-    float dy = newY - m_y;
+   float dy = newY - m_y;
+   
+   m_y = newY;
+   KivioStencil *pStencil = m_pGroupList->first();
+   while( pStencil )
+   {
+      if( pStencil->protection()->at(kpY)==false )
+      {
+	 pStencil->setY( pStencil->y() + dy );
+      }
+      
+      pStencil = m_pGroupList->next();
+   }
 
-    m_y = newY;
-    KivioStencil *pStencil = m_pGroupList->first();
-    while( pStencil )
-    {
-        pStencil->setY( pStencil->y() + dy );
-
-        pStencil = m_pGroupList->next();
-    }
 }
 
 void KivioGroupStencil::setPosition( float newX, float newY )
 {
-    float dx = newX - m_x;
-    float dy = newY - m_y;
+   float dx = newX - m_x;
+   float dy = newY - m_y;
+   
+   float newX2, newY2;
+   
+   m_x = newX;
+   m_y = newY;
+   
+   KivioStencil *pStencil = m_pGroupList->first();
+   while( pStencil )
+   {
+      if( pStencil->protection()->at(kpX)==false ) {
+	 newX2 = pStencil->x() + dx;
+      } else {
+	 newX2 = pStencil->x();
+      }
+      
+      if( pStencil->protection()->at(kpY)==false ) {
+	 newY2 = pStencil->y() + dy;
+      } else {
+	 newY2 = pStencil->y();
+      }
+      
+      pStencil->setPosition( newX2, newY2 );
+      
+      pStencil = m_pGroupList->next();
+   }
 
-    m_x = newX;
-    m_y = newY;
-
-    KivioStencil *pStencil = m_pGroupList->first();
-    while( pStencil )
-    {
-        pStencil->setPosition( pStencil->x() + dx, pStencil->y() + dy );
-
-        pStencil = m_pGroupList->next();
-    }
 }
 
 void KivioGroupStencil::setW( float newW )
 {
     double percInc = newW / m_w;
 
-    m_w = newW;
+    if( newW > 0.0f ) {
+       m_w = newW;
+    }
+
     KivioStencil *pStencil = m_pGroupList->first();
     while( pStencil )
     {
-        pStencil->setX( ((pStencil->x() - m_x) * percInc) + m_x );
-        pStencil->setW( pStencil->w() * percInc );
+       if( pStencil->protection()->at(kpX)==false ) {
+	  pStencil->setX( ((pStencil->x() - m_x) * percInc) + m_x );
+       }
+
+       if( pStencil->protection()->at(kpWidth)==false ) {
+	  pStencil->setW( pStencil->w() * percInc );
+       }
 
         pStencil = m_pGroupList->next();
     }
@@ -317,13 +352,20 @@ void KivioGroupStencil::setH( float newH )
 {
     double percInc = newH / m_h;
 
-    m_h = newH;
+    if( newH > 0.0f ) {
+       m_h = newH;
+    }
 
     KivioStencil *pStencil = m_pGroupList->first();
     while( pStencil )
     {
-        pStencil->setY( ((pStencil->y() - m_y) * percInc) + m_y );
-        pStencil->setH( pStencil->h() * percInc );
+       if( pStencil->protection()->at(kpY)==false ) {
+	  pStencil->setY( ((pStencil->y() - m_y) * percInc) + m_y );
+       }
+
+       if( pStencil->protection()->at(kpHeight)==false ) {
+	  pStencil->setH( pStencil->h() * percInc );
+       }
 
         pStencil = m_pGroupList->next();
     }
@@ -334,17 +376,33 @@ void KivioGroupStencil::setDimensions( float newW, float newH )
     double percIncX = newW / m_w;
     double percIncY = newH / m_h;
 
-    m_w = newW;
-    m_h = newH;
+    if( newW > 0.0f ) {
+       m_w = newW;
+    }
+    if( newH > 0.0f ) {
+       m_h = newH;
+    }
 
     KivioStencil *pStencil = m_pGroupList->first();
     while( pStencil )
     {
-        pStencil->setX( ((pStencil->x() - m_x) * percIncX) + m_x );
-        pStencil->setW( pStencil->w() * percIncX );
+       if( newW > 0.0f ) {
+	  if( pStencil->protection()->at(kpX)==false ) {
+	     pStencil->setX( ((pStencil->x() - m_x) * percIncX) + m_x );
+	  }
+	  if( pStencil->protection()->at(kpWidth)==false ) {
+	     pStencil->setW( pStencil->w() * percIncX );
+	  }
+       }
 
-        pStencil->setY( ((pStencil->y() - m_y) * percIncY) + m_y );
-        pStencil->setH( pStencil->h() * percIncY );
+       if( newH > 0.0f ) {
+	  if( pStencil->protection()->at(kpY)==false ) {
+	     pStencil->setY( ((pStencil->y() - m_y) * percIncY) + m_y );
+	  }
+	  if( pStencil->protection()->at(kpHeight)==false ) {
+	     pStencil->setH( pStencil->h() * percIncY );
+	  }
+       }
 
         pStencil = m_pGroupList->next();
     }

@@ -151,6 +151,25 @@ static const char * connectorTarget_xpm[] = {
 ".+. .+.",
 " .   . "}; 
 
+
+
+static const char * lock_xpm[] = {
+"10 10 3 1",
+" 	c None",
+".	c #FFFFFF",
+"+	c #000000",
+"    ..    ",
+"   .++.   ",
+"  .+..+.  ",
+"  .+..+.  ",
+" .++++++. ",
+" .+....+. ",
+" .+.  .+. ",
+" .+....+. ",
+" .++++++. ",
+"  ......  "};
+
+
 KivioConfig *KivioConfig::s_config=0L;
 
 
@@ -197,6 +216,7 @@ KivioConfig::KivioConfig( const QString &fileName )
     }
     
     m_pConnectorTargetPixmap = new QPixmap( (const char **)connectorTarget_xpm);
+    m_pLockPixmap = new QPixmap( (const char **)lock_xpm);
 
     kdDebug() << "KivioConfig::KivioConfig() - StencilBackgroundType: " <<  m_stencilBGType << endl;
     kdDebug() << "KivioConfig::KivioConfig() - StencilBackgroundFile: " << m_stencilBGFile << endl;
@@ -225,6 +245,12 @@ KivioConfig::~KivioConfig()
     {
         delete m_pConnectorTargetPixmap;
         m_pConnectorTargetPixmap = NULL;
+    }
+
+    if( m_pLockPixmap )
+    {
+       delete m_pLockPixmap;
+       m_pLockPixmap = NULL;
     }
 
     kdDebug() << "KivioConfig::~KivioConfig() - deleted" << endl;

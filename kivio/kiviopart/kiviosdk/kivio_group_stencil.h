@@ -24,9 +24,10 @@
 #include <qdom.h>
 
 class KivioIntraStencilData;
+class KivioLayer;
 class KivioPage;
 class KivioPainter;
-class KivioLayer;
+class KivioRect;
 
 class KivioGroupStencil : public KivioStencil
 {
@@ -35,7 +36,6 @@ protected:
 
     // The list of child stencils
     QList<KivioStencil> *m_pGroupList;
-
 
 public:
     KivioGroupStencil();

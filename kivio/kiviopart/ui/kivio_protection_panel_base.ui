@@ -1,0 +1,189 @@
+<!DOCTYPE UI><UI>
+<class>KivioProtectionPanelBase</class>
+<widget>
+    <class>QWidget</class>
+    <property stdset="1">
+        <name>name</name>
+        <cstring>KivioProtectionPanelBase</cstring>
+    </property>
+    <property stdset="1">
+        <name>geometry</name>
+        <rect>
+            <x>2</x>
+            <y>0</y>
+            <width>120</width>
+            <height>120</height>
+        </rect>
+    </property>
+    <property stdset="1">
+        <name>caption</name>
+        <string>Protection</string>
+    </property>
+    <property stdset="1">
+        <name>minimumSize</name>
+        <size>
+            <width>120</width>
+            <height>120</height>
+        </size>
+    </property>
+    <property stdset="1">
+        <name>maximumSize</name>
+        <size>
+            <width>120</width>
+            <height>120</height>
+        </size>
+    </property>
+    <widget>
+        <class>QCheckBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>m_checkAspect</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>0</x>
+                <y>40</y>
+                <width>120</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>&amp;Aspect Ratio</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Toggles the ability to change the aspect ratio of the selected stencil(s)</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QCheckBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>m_checkXPosition</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>0</x>
+                <y>60</y>
+                <width>120</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>&amp;X Position</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Toggles the ability to protect the x position of the selected stencil(s)</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QCheckBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>m_checkYPosition</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>0</x>
+                <y>80</y>
+                <width>120</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>&amp;Y Position</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Toggles the ability to protect the y position of the selected stencil(s)</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QCheckBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>m_checkDeletion</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>0</x>
+                <y>100</y>
+                <width>120</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>From &amp;Deletion</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Toggles the ability to delete the selected stencil(s)</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QCheckBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>m_checkHeight</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>0</x>
+                <y>20</y>
+                <width>120</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>&amp;Height</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Toggles the ability to change the height of the selected stencil(s)</string>
+        </property>
+    </widget>
+    <widget>
+        <class>QCheckBox</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>m_checkWidth</cstring>
+        </property>
+        <property stdset="1">
+            <name>geometry</name>
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>120</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property stdset="1">
+            <name>text</name>
+            <string>&amp;Width</string>
+        </property>
+        <property>
+            <name>toolTip</name>
+            <string>Toggles the ability to change the width of the selected stencil(s)</string>
+        </property>
+    </widget>
+</widget>
+<tabstops>
+    <tabstop>m_checkWidth</tabstop>
+    <tabstop>m_checkHeight</tabstop>
+    <tabstop>m_checkAspect</tabstop>
+    <tabstop>m_checkXPosition</tabstop>
+    <tabstop>m_checkYPosition</tabstop>
+    <tabstop>m_checkDeletion</tabstop>
+</tabstops>
+</UI>
