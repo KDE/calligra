@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Original file (serialletter.cc): Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Original file (mailmerge.cc): Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2001 Joseph Wenninger <jowenn@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 
 #include "serialletter_classicplugin.h"
 #include "serialletter_classicplugin.moc"
-#include "serialletter.h"
+#include "mailmerge.h"
 #include <klineeditdlg.h>
 
 #define KWSLCPBarIcon( x ) BarIcon( x, db->KWInstance() )
@@ -32,7 +32,7 @@
  ******************************************************************/
 
 KWClassicSerialDataSource::KWClassicSerialDataSource(KInstance *inst,QObject *parent)
-	: KWSerialLetterDataSource(inst,parent)
+	: KWMailMergeDataSource(inst,parent)
 //    : doc( doc_ )
 {
 }
@@ -45,7 +45,7 @@ QString KWClassicSerialDataSource::getValue( const QString &name, int record ) c
 {
     int num = record;
 /*    if ( num == -1 )
-        num = doc->getSerialLetterRecord(); Is this really needed ?*/
+        num = doc->getMailMergeRecord(); Is this really needed ?*/
 
     if ( num < 0 || num > (int)db.count() )
         return name;
@@ -57,7 +57,7 @@ void KWClassicSerialDataSource::setValue( const QString &name, const QString &va
 {
     int num = record;
 /*    if ( num == -1 )
-        num = doc->getSerialLetterRecord(); Is this really needed?*/
+        num = doc->getMailMergeRecord(); Is this really needed?*/
 
     if ( num < 0 || num > (int)db.count() )
         return;
@@ -153,7 +153,7 @@ bool KWClassicSerialDataSource::showConfigDialog(QWidget *par,int action)
    	db.clear();
    	sampleRecord.clear();
    }
-   KWClassicSerialLetterEditor *dia=new KWClassicSerialLetterEditor( par, this );
+   KWClassicMailMergeEditor *dia=new KWClassicMailMergeEditor( par, this );
    bool ret=(dia->exec()==QDialog::Accepted);
    delete dia;
    return ret;
@@ -162,44 +162,44 @@ bool KWClassicSerialDataSource::showConfigDialog(QWidget *par,int action)
 
 /******************************************************************
  *
- * Class: KWClassicSerialLetterEditorListItem
+ * Class: KWClassicMailMergeEditorListItem
  *
  ******************************************************************/
 
-KWClassicSerialLetterEditorListItem::KWClassicSerialLetterEditorListItem( QListView *parent )
+KWClassicMailMergeEditorListItem::KWClassicMailMergeEditorListItem( QListView *parent )
     : QListViewItem( parent )
 {
     editWidget = new QLineEdit( listView()->viewport() );
     listView()->addChild( editWidget );
 }
 
-KWClassicSerialLetterEditorListItem::KWClassicSerialLetterEditorListItem( QListView *parent, QListViewItem *after )
+KWClassicMailMergeEditorListItem::KWClassicMailMergeEditorListItem( QListView *parent, QListViewItem *after )
     : QListViewItem( parent, after )
 {
     editWidget = new QLineEdit( listView()->viewport() );
     listView()->addChild( editWidget );
 }
 
-KWClassicSerialLetterEditorListItem::~KWClassicSerialLetterEditorListItem()
+KWClassicMailMergeEditorListItem::~KWClassicMailMergeEditorListItem()
 {
     delete editWidget;
 }
 
-void KWClassicSerialLetterEditorListItem::setText( int i, const QString &text )
+void KWClassicMailMergeEditorListItem::setText( int i, const QString &text )
 {
     QListViewItem::setText( i, text );
     if ( i == 1 )
         editWidget->setText( text );
 }
 
-QString KWClassicSerialLetterEditorListItem::text( int i ) const
+QString KWClassicMailMergeEditorListItem::text( int i ) const
 {
     if ( i == 1 )
         return editWidget->text();
     return QListViewItem::text( i );
 }
 
-void KWClassicSerialLetterEditorListItem::setup()
+void KWClassicMailMergeEditorListItem::setup()
 {
     setHeight( QMAX( listView()->fontMetrics().height(),
                      editWidget->sizeHint().height() ) );
@@ -207,7 +207,7 @@ void KWClassicSerialLetterEditorListItem::setup()
         listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
 }
 
-void KWClassicSerialLetterEditorListItem::update()
+void KWClassicMailMergeEditorListItem::update()
 {
     editWidget->resize( listView()->header()->cellSize( 1 ), height() );
     listView()->moveChild( editWidget, listView()->header()->cellPos( 1 ),
@@ -217,11 +217,11 @@ void KWClassicSerialLetterEditorListItem::update()
 
 /******************************************************************
  *
- * Class: KWClassicSerialLetterEditorList
+ * Class: KWClassicMailMergeEditorList
  *
  ******************************************************************/
 
-KWClassicSerialLetterEditorList::KWClassicSerialLetterEditorList( QWidget *parent, KWClassicSerialDataSource *db_ )
+KWClassicMailMergeEditorList::KWClassicMailMergeEditorList( QWidget *parent, KWClassicSerialDataSource *db_ )
     : QListView( parent ), db( db_ )
 {
     setSorting( -1 );
@@ -238,7 +238,7 @@ KWClassicSerialLetterEditorList::KWClassicSerialLetterEditorList( QWidget *paren
     currentRecord = -1;
 }
 
-KWClassicSerialLetterEditorList::~KWClassicSerialLetterEditorList()
+KWClassicMailMergeEditorList::~KWClassicMailMergeEditorList()
 {
     if ( currentRecord == -1 )
         return;
@@ -254,25 +254,25 @@ KWClassicSerialLetterEditorList::~KWClassicSerialLetterEditorList()
     }
 }
 
-void KWClassicSerialLetterEditorList::columnSizeChange( int c, int, int )
+void KWClassicMailMergeEditorList::columnSizeChange( int c, int, int )
 {
     if ( c == 0 || c == 1 )
         updateItems();
 }
 
-void KWClassicSerialLetterEditorList::sectionClicked( int )
+void KWClassicMailMergeEditorList::sectionClicked( int )
 {
     updateItems();
 }
 
-void KWClassicSerialLetterEditorList::updateItems()
+void KWClassicMailMergeEditorList::updateItems()
 {
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it )
-        ( (KWClassicSerialLetterEditorListItem*)it.current() )->update();
+        ( (KWClassicMailMergeEditorListItem*)it.current() )->update();
 }
 
-void KWClassicSerialLetterEditorList::displayRecord( int i )
+void KWClassicMailMergeEditorList::displayRecord( int i )
 {
     if ( i < 0 || i >= db->getNumRecords() )
         return;
@@ -284,7 +284,7 @@ void KWClassicSerialLetterEditorList::displayRecord( int i )
     for ( ; it != db->getRecordEntries().end(); ++it ) {
         QListViewItem *item = 0;
         if ( create ) {
-            item = new KWClassicSerialLetterEditorListItem( this, after );
+            item = new KWClassicMailMergeEditorListItem( this, after );
             item->setText( 0, it.key() );
             after = item;
         } else {
@@ -303,11 +303,11 @@ void KWClassicSerialLetterEditorList::displayRecord( int i )
 
 /******************************************************************
  *
- * Class: KWClassicSerialLetterEditor
+ * Class: KWClassicMailMergeEditor
  *
  ******************************************************************/
 
-KWClassicSerialLetterEditor::KWClassicSerialLetterEditor( QWidget *parent, KWClassicSerialDataSource *db_ )
+KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSerialDataSource *db_ )
     : KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
 {
     QWidget *page = plainPage();
@@ -374,7 +374,7 @@ KWClassicSerialLetterEditor::KWClassicSerialLetterEditor( QWidget *parent, KWCla
              this, SLOT( removeEntry() ) );
     QToolTip::add( deleteEntry, i18n( "Remove Entry" ) );
 
-    dbList = new KWClassicSerialLetterEditorList( back, db );
+    dbList = new KWClassicMailMergeEditorList( back, db );
 
     if ( db->getNumRecords() > 0 ) {
         records->setValue( 1 );
@@ -392,18 +392,18 @@ KWClassicSerialLetterEditor::KWClassicSerialLetterEditor( QWidget *parent, KWCla
     setInitialSize( QSize( 600, 400 ) );
 }
 
-void KWClassicSerialLetterEditor::resizeEvent( QResizeEvent *e )
+void KWClassicMailMergeEditor::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );
 }
 
-void KWClassicSerialLetterEditor::changeRecord( int i )
+void KWClassicMailMergeEditor::changeRecord( int i )
 {
     dbList->displayRecord( i - 1 );
 }
 
-void KWClassicSerialLetterEditor::addEntry()
+void KWClassicMailMergeEditor::addEntry()
 {
 //    KWVariableNameDia
 //        *dia = new KWVariableNameDia( this );
@@ -431,14 +431,14 @@ void KWClassicSerialLetterEditor::addEntry()
 //    delete dia;
 }
 
-void KWClassicSerialLetterEditor::addRecord()
+void KWClassicMailMergeEditor::addRecord()
 {
     db->appendRecord();
     records->setRange( records->minValue(), records->maxValue() + 1 );
     records->setValue( db->getNumRecords() );
 }
 
-void KWClassicSerialLetterEditor::removeEntry()
+void KWClassicMailMergeEditor::removeEntry()
 {
 
 #warning reimplement
@@ -446,8 +446,8 @@ void KWClassicSerialLetterEditor::removeEntry()
     if ( db->getNumRecords() == 0 )
         return;
 
-    KWSerialLetterVariableInsertDia
-        *dia = new KWSerialLetterVariableInsertDia( this, db );
+    KWMailMergeVariableInsertDia
+        *dia = new KWMailMergeVariableInsertDia( this, db );
     if ( dia->exec() == QDialog::Accepted ) {
         dbList->clear();
         db->removeEntry( dia->getName() );
@@ -458,7 +458,7 @@ void KWClassicSerialLetterEditor::removeEntry()
 */
 }
 
-void KWClassicSerialLetterEditor::removeRecord()
+void KWClassicMailMergeEditor::removeRecord()
 {
     if ( db->getNumRecords() == 0 )
         return;
@@ -473,7 +473,7 @@ void KWClassicSerialLetterEditor::removeRecord()
 }
 
 extern "C" {
-	KWSerialLetterDataSource *create_kwserialletter_classic(KInstance *inst,QObject *parent)
+	KWMailMergeDataSource *create_kwmailmerge_classic(KInstance *inst,QObject *parent)
 	{
 		return new KWClassicSerialDataSource(inst,parent);
 	}

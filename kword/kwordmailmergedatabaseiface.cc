@@ -18,15 +18,15 @@
 */
 
 #include <dcopobject.h>
-#include "KWordSerialLetterDatabaseIface.h"
+#include "KWordMailMergeDatabaseIface.h"
 
-KWordSerialLetterDatabaseIface::KWordSerialLetterDatabaseIface(const QCString &name)
+KWordMailMergeDatabaseIface::KWordMailMergeDatabaseIface(const QCString &name)
 	:DCOPObject(name)
 {
 	;
 }
 
-KWordSerialLetterDatabaseIface::~KWordSerialLetterDatabaseIface()
+KWordMailMergeDatabaseIface::~KWordMailMergeDatabaseIface()
 {
 	;
 }

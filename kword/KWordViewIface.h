@@ -37,7 +37,7 @@ k_dcop:
     virtual void editFind();
     virtual void editReplace();
     virtual void editCustomVars();
-    virtual void editSerialLetterDataBase();
+    virtual void editMailMergeDataBase();
     virtual void viewPageMode();
     virtual void viewPreviewMode();
     virtual void configure();

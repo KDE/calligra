@@ -41,7 +41,7 @@
 #include <koUtils.h>
 #include <koAutoFormat.h>
 #include <koVariable.h>
-#include "serialletter.h"
+#include "mailmerge.h"
 #include "kwview.h"
 #include "kwviewmode.h"
 #include "kwcommand.h"
@@ -176,7 +176,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_varColl=new KWVariableCollection;
     m_formulaDocument = 0L; // created on demand
 
-    m_slDataBase = new KWSerialLetterDataBase( this );
+    m_slDataBase = new KWMailMergeDataBase( this );
     slRecordNum = -1;
 
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
@@ -1162,10 +1162,10 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         }
 #endif
 
-    QDomElement serialletter = word.namedItem( "SERIALL" ).toElement();
-    if (serialletter!=QDomElement())
+    QDomElement mailmerge = word.namedItem( "SERIALL" ).toElement();
+    if (mailmerge!=QDomElement())
         {
-             m_slDataBase->load(serialletter);
+             m_slDataBase->load(mailmerge);
         }
 /*
         else if ( name == "SERIALL" ) {
@@ -2633,12 +2633,12 @@ void KWDocument::slotRepaintVariable()
 #endif
 }
 
-int KWDocument::getSerialLetterRecord() const
+int KWDocument::getMailMergeRecord() const
 {
     return slRecordNum;
 }
 
-void KWDocument::setSerialLetterRecord( int r )
+void KWDocument::setMailMergeRecord( int r )
 {
     slRecordNum = r;
 }

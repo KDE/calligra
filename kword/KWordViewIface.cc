@@ -50,9 +50,9 @@ void KWordViewIface::editCustomVars()
     view->editCustomVars();
 }
 
-void KWordViewIface::editSerialLetterDataBase()
+void KWordViewIface::editMailMergeDataBase()
 {
-    view->editSerialLetterDataBase();
+    view->editMailMergeDataBase();
 }
 
 void KWordViewIface::viewPageMode()

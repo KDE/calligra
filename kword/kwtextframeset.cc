@@ -33,7 +33,7 @@
 #include "contents.h"
 #include <koVariable.h>
 #include <koVariableDlgs.h>
-#include "serialletter.h"
+#include "mailmerge.h"
 #include <koAutoFormat.h>
 #include <qclipboard.h>
 #include <qprogressdialog.h>
@@ -2651,12 +2651,12 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
         if ( dia.exec() == QDialog::Accepted )
             var = new KoCustomVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
     }
-    else if ( type == VT_SERIALLETTER )
+    else if ( type == VT_MAILMERGE )
     {
-        KWSerialLetterVariableInsertDia dia( m_canvas, doc->getSerialLetterDataBase() );
+        KWMailMergeVariableInsertDia dia( m_canvas, doc->getMailMergeDataBase() );
         if ( dia.exec() == QDialog::Accepted )
         {
-            var = new KWSerialLetterVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection(),doc );
+            var = new KWMailMergeVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection(),doc );
         }
     }
     else

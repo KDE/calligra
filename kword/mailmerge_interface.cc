@@ -1,8 +1,8 @@
-#include "serialletter_interface.h"
-#include "serialletter_interface.moc"
+#include "mailmerge_interface.h"
+#include "mailmerge_interface.moc"
 
-KWSerialLetterDataSource::KWSerialLetterDataSource(KInstance* inst,QObject *parent): QObject(parent),
+KWMailMergeDataSource::KWMailMergeDataSource(KInstance* inst,QObject *parent): QObject(parent),
 DCOPObject(QCString(parent->name())+".plugin_loading"),m_instance(inst)
 {
 }
-const QMap< QString, QString > &KWSerialLetterDataSource::getRecordEntries() const {return sampleRecord;}
+const QMap< QString, QString > &KWMailMergeDataSource::getRecordEntries() const {return sampleRecord;}

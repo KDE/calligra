@@ -19,8 +19,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef serialletter_h
-#define serialletter_h
+#ifndef mailmerge_h
+#define mailmerge_h
 
 #include <kdialogbase.h>
 #include <ktrader.h>
@@ -36,8 +36,8 @@
 #include <qdom.h>
 #include <qtextstream.h>
 
-#include "serialletter_interface.h"
-#include "KWordSerialLetterDatabaseIface.h"
+#include "mailmerge_interface.h"
+#include "KWordMailMergeDatabaseIface.h"
 
 class QListBox;
 class QPushButton;
@@ -45,23 +45,23 @@ class QLineEdit;
 class QSpinBox;
 class KWDocument;
 
-//class KWSerialLetterDataBase;
+//class KWMailMergeDataBase;
 
 
 
 
 /******************************************************************
  *
- * Class: KWSerialLetterDataBase
+ * Class: KWMailMergeDataBase
  *
  ******************************************************************/
 
-class KWSerialLetterDataBase: public QObject,KWordSerialLetterDatabaseIface
+class KWMailMergeDataBase: public QObject,KWordMailMergeDatabaseIface
 {
 Q_OBJECT
 
 public:
-    KWSerialLetterDataBase( KWDocument *doc_ );
+    KWMailMergeDataBase( KWDocument *doc_ );
     void showConfigDialog(QWidget *); // Select datasource type  and / or configure datasource
 
     QString getValue( const QString &name, int record = -1 ) const;  //accesses the plugin
@@ -72,47 +72,47 @@ public:
     QDomElement save(QDomDocument &doc) const; // save some global config + plugin config
     void load( QDomElement& elem ); // save some global config + plugin config
 
-    KWSerialLetterDataSource *loadPlugin(const QString& name);
-    KWSerialLetterDataSource *openPluginFor(int type);
+    KWMailMergeDataSource *loadPlugin(const QString& name);
+    KWMailMergeDataSource *openPluginFor(int type);
 
     virtual void refresh(bool force);
     virtual QStringList availablePlugins();
     virtual bool loadPlugin(QString name,QString command);
     virtual bool isConfigDialogShown();
 protected:
-    friend class KWSerialLetterConfigDialog;
+    friend class KWMailMergeConfigDialog;
     KWDocument *doc;
     int action;
-    class KWSerialLetterDataSource *plugin;
+    class KWMailMergeDataSource *plugin;
     QMap<QString, QString> emptyMap;
-    bool askUserForConfirmationAndConfig(KWSerialLetterDataSource *tmpPlugin,bool config,QWidget *par);
+    bool askUserForConfirmationAndConfig(KWMailMergeDataSource *tmpPlugin,bool config,QWidget *par);
     bool rejectdcopcall;
 };
 
 
-class KWSerialLetterChoosePluginDialog : public KDialogBase
+class KWMailMergeChoosePluginDialog : public KDialogBase
 {
 	Q_OBJECT
 public:
-	KWSerialLetterChoosePluginDialog(KTrader::OfferList);
-	~KWSerialLetterChoosePluginDialog();
+	KWMailMergeChoosePluginDialog(KTrader::OfferList);
+	~KWMailMergeChoosePluginDialog();
 	class QComboBox *chooser;
 };
 
-class KWSerialLetterConfigDialog : public KDialogBase
+class KWMailMergeConfigDialog : public KDialogBase
 {
     Q_OBJECT
 
 public:
-   KWSerialLetterConfigDialog ( QWidget *parent, KWSerialLetterDataBase *db );
-   ~KWSerialLetterConfigDialog();
+   KWMailMergeConfigDialog ( QWidget *parent, KWMailMergeDataBase *db );
+   ~KWMailMergeConfigDialog();
 protected:
     QPushButton *edit;
     QPushButton *create;
     QPushButton *open;
     QPushButton *preview;
     QPushButton *document;
-    KWSerialLetterDataBase *db_;
+    KWMailMergeDataBase *db_;
     void enableDisableEdit();
     void doNewActions();
 
@@ -126,16 +126,16 @@ protected slots:
 
 /******************************************************************
  *
- * Class: KWSerialLetterVariableInsertDia
+ * Class: KWMailMergeVariableInsertDia
  *
  ******************************************************************/
 
-class KWSerialLetterVariableInsertDia : public KDialogBase
+class KWMailMergeVariableInsertDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KWSerialLetterVariableInsertDia( QWidget *parent, KWSerialLetterDataBase *db );
+    KWMailMergeVariableInsertDia( QWidget *parent, KWMailMergeDataBase *db );
     QString getName() const;
 
 protected:

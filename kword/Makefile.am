@@ -17,7 +17,7 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
                 tabledia.cc insdia.cc deldia.cc docstruct.cc \
                 contents.cc stylist.cc searchdia.cc \
                 resizehandles.cc kwcommand.cc \
-		KWordSerialLetterDatabaseIface.skel kwordserialletterdatabaseiface.cc serialletter.cc \
+		KWordMailMergeDatabaseIface.skel kwordmailmergedatabaseiface.cc mailmerge.cc \
 		kweditpersonnalexpressiondia.cc \
 		splitcellsdia.cc kwinsertpicdia.cc \
 		KWordDocIface.skel KWordDocIface.cc \
@@ -29,18 +29,18 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
 		KWordFormulaFrameSetEditIface.skel KWordFormulaFrameSetEditIface.cc
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell ./libkwserialletter_interface.la
+libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell ./libkwmailmerge_interface.la
 METASOURCES = AUTO
 
-lib_LTLIBRARIES = kword.la libkwserialletter_interface.la
+lib_LTLIBRARIES = kword.la libkwmailmerge_interface.la
 
-## The serial letter interface library
-libkwserialletter_interface_la_SOURCES = serialletter_interface.cc serialletter_interface.skel
-libkwserialletter_interface_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
-libkwserialletter_interface_la_LIBADD = $(LIB_QT) -lDCOP
+## The mailmerge interface library
+libkwmailmerge_interface_la_SOURCES = mailmerge_interface.cc mailmerge_interface.skel
+libkwmailmerge_interface_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
+libkwmailmerge_interface_la_LIBADD = $(LIB_QT) -lDCOP
 
-kwserialletter_servicetype_DATA=kwmailmerge.desktop
-kwserialletter_servicetypedir=$(kde_servicetypesdir)
+kwmailmerge_servicetype_DATA=kwmailmerge.desktop
+kwmailmerge_servicetypedir=$(kde_servicetypesdir)
 
 ## The kdeinit loadable module
 kword_la_SOURCES = main.cc
@@ -65,7 +65,7 @@ kdemimedir = $(kde_mimedir)/application
 rcdir = $(kde_datadir)/kword
 rc_DATA = kword.rc
 
-SUBDIRS = . serialletter toolbar templates dtd pics expression
+SUBDIRS = . mailmerge toolbar templates dtd pics expression
 
 messages: rc.cpp
 	perl ../kspread/extracti18n expression/*.xml > xml_doc.cc

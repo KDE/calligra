@@ -33,7 +33,7 @@
 
 #include <koUtils.h>
 #include "defs.h"
-#include "serialletter_interface.h"
+#include "mailmerge_interface.h"
 #include "serialletter_qtsql_base.h"
 #include "kwqtsqlpower.h"
 #include "serialletter_sqlcursor.h"
@@ -60,7 +60,7 @@ class KWQTSQLPowerSerialDataSource: public KWQTSQLSerialDataSourceBase
     virtual void refresh(bool force);
 
     protected:
-	friend class KWQTSQLPowerSerialLetterEditor;
+	friend class KWQTSQLPowerMailMergeEditor;
 	QString query;
 	QMySqlCursor *myquery;
 
@@ -71,17 +71,17 @@ class KWQTSQLPowerSerialDataSource: public KWQTSQLSerialDataSourceBase
 
 /******************************************************************
  *
- * Class: KWQTSQLPowerSerialLetterEditor
+ * Class: KWQTSQLPowerMailMergeEditor
  *
  ******************************************************************/
 
-class KWQTSQLPowerSerialLetterEditor : public KDialogBase
+class KWQTSQLPowerMailMergeEditor : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KWQTSQLPowerSerialLetterEditor( QWidget *parent, KWQTSQLPowerSerialDataSource *db_ );
-    ~KWQTSQLPowerSerialLetterEditor();
+    KWQTSQLPowerMailMergeEditor( QWidget *parent, KWQTSQLPowerSerialDataSource *db_ );
+    ~KWQTSQLPowerMailMergeEditor();
 private:
  KWQTSQLPowerSerialDataSource *db;
  KWQTSQLPowerWidget *widget;

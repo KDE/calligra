@@ -194,7 +194,7 @@ void KWordDocIface::recalcVariables(const QString &varName)
         doc->recalcVariables(4);
     else if(varName=="VT_CUSTOM")
         doc->recalcVariables(6);
-    else if(varName=="VT_SERIALLETTER")
+    else if(varName=="VT_MAILMERGE")
         doc->recalcVariables(7);
     else if(varName=="VT_FIELD")
         doc->recalcVariables(8);

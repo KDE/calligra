@@ -506,7 +506,7 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         case VT_CUSTOM:
             varFormat = coll->format( "STRING" );
             break;
-        case VT_SERIALLETTER:
+        case VT_MAILMERGE:
             varFormat = coll->format( "STRING" );
             break;
         case VT_LINK:
@@ -535,8 +535,8 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         case VT_CUSTOM:
             var = new KoCustomVariable( textdoc, QString::null, varFormat, this);
             break;
-        case VT_SERIALLETTER:
-            var = new KoSerialLetterVariable( textdoc, QString::null, varFormat ,this);
+        case VT_MAILMERGE:
+            var = new KoMailMergeVariable( textdoc, QString::null, varFormat ,this);
             break;
     case VT_LINK:
             var = new KoLinkVariable( textdoc,QString::null, QString::null, varFormat ,this);
@@ -731,34 +731,34 @@ void KoCustomVariable::recalc()
 }
 
 /******************************************************************/
-/* Class: KoSerialLetterVariable                                  */
+/* Class: KoMailMergeVariable                                  */
 /******************************************************************/
-KoSerialLetterVariable::KoSerialLetterVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
+KoMailMergeVariable::KoMailMergeVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
     : KoVariable( textdoc, varFormat, _varColl ), m_name( name )
 {
 }
 
-void KoSerialLetterVariable::saveVariable( QDomElement& parentElem )
+void KoMailMergeVariable::saveVariable( QDomElement& parentElem )
 {
-    QDomElement elem = parentElem.ownerDocument().createElement( "SERIALLETTER" );
+    QDomElement elem = parentElem.ownerDocument().createElement( "MAILMERGE" );
     parentElem.appendChild( elem );
     elem.setAttribute( "name", correctQString( m_name ) );
 }
 
-void KoSerialLetterVariable::load( QDomElement& elem )
+void KoMailMergeVariable::load( QDomElement& elem )
 {
     KoVariable::load( elem );
-    QDomElement e = elem.namedItem( "SERIALLETTER" ).toElement();
+    QDomElement e = elem.namedItem( "MAILMERGE" ).toElement();
     if (!e.isNull())
         m_name = e.attribute( "name" );
 }
 
-QString KoSerialLetterVariable::value() const
+QString KoMailMergeVariable::value() const
 {
-    return QString();//m_doc->getSerialLetterDataBase()->getValue( m_name );
+    return QString();//m_doc->getMailMergeDataBase()->getValue( m_name );
 }
 
-QString KoSerialLetterVariable::text()
+QString KoMailMergeVariable::text()
 {
     // ## should use a format maybe
     QString v = value();
@@ -767,7 +767,7 @@ QString KoSerialLetterVariable::text()
     return v;
 }
 
-QStringList KoSerialLetterVariable::actionTexts()
+QStringList KoMailMergeVariable::actionTexts()
 {
     return QStringList( i18n( "&Mail Merge ..." ) );
 }

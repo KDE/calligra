@@ -29,7 +29,7 @@
 class KWDocument;
 class KoVariable;
 class KoPgNumVariable;
-class KoSerialLetterVariable;
+class KoMailMergeVariable;
 class QDomElement;
 namespace Qt3 {
 class QTextFormat;
@@ -60,10 +60,10 @@ public:
 /**
  * Serial letter variable
  */
-class KWSerialLetterVariable : public KoSerialLetterVariable
+class KWMailMergeVariable : public KoMailMergeVariable
 {
 public:
-    KWSerialLetterVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *doc );
+    KWMailMergeVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *doc );
     
     virtual QString text();
     virtual QString value() const;

@@ -17,20 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KWordSerialLetterDatabaseIface_h__
-#define  __KWordSerialLetterDatabaseIface_h__
+#ifndef __KWordMailMergeDatabaseIface_h__
+#define  __KWordMailMergeDatabaseIface_h__
 
 #include <dcopobject.h>
 #include <qstringlist.h>
 /**
- * DCOP interface for the SerialLetterDataBase class
+ * DCOP interface for the MailMergeDataBase class
  */
-class KWordSerialLetterDatabaseIface : public DCOPObject
+class KWordMailMergeDatabaseIface : public DCOPObject
 {
     K_DCOP
 public:
-    KWordSerialLetterDatabaseIface(const QCString &name);
-    ~KWordSerialLetterDatabaseIface();
+    KWordMailMergeDatabaseIface(const QCString &name);
+    ~KWordMailMergeDatabaseIface();
 k_dcop:
     virtual void refresh(bool)=0; //will not be blocked when the configuration dialog is open
 

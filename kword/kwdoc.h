@@ -26,7 +26,7 @@ class KWTextImage;
 class KWTextFrameSet;
 class KWPictureFrameSet;
 class KWClipartFrameSet;
-class KWSerialLetterDataBase;
+class KWMailMergeDataBase;
 class KWFrameSet;
 class KWTableFrameSet;
 class KWPartFrameSet;
@@ -341,9 +341,9 @@ public:
 
     KWVariableCollection *getVariableCollection() {return m_varColl;}
 
-    KWSerialLetterDataBase *getSerialLetterDataBase() const { return m_slDataBase; }
-    int getSerialLetterRecord() const;
-    void setSerialLetterRecord( int r );
+    KWMailMergeDataBase *getMailMergeDataBase() const { return m_slDataBase; }
+    int getMailMergeRecord() const;
+    void setMailMergeRecord( int r );
 
 #if 0
     bool onLineSpellCheck() const { return m_onlineSpellCheck; }
@@ -589,7 +589,7 @@ private:
     QMap<QString,QString> * m_pasteFramesetsMap;
 
     KoVariableFormatCollection *m_varFormatCollection;
-    KWSerialLetterDataBase *m_slDataBase;
+    KWMailMergeDataBase *m_slDataBase;
     int slRecordNum;
 
     // When a document is written out, the syntax version in use will be recorded. When read back

@@ -48,6 +48,6 @@ Comment[sv]=Den här typen av datakälla låter dig använda SQL-databastabeller
 Comment[xh]=Olu didi lwemvelaphi yedata ikuvumela usebenzise iidlela zemigca yesiseko sedata ye SQL. Kuxhomekeke kolwakho uqwalaselo lwendlela: MySQL, Postgres, (Oracle, ukuba usebenzisa olulayisenisiweyo uguqulelo lwe QT).
 Comment[xx]=xx
 
-X-KDE-Library=kwserialletter_qtsqldb_power
+X-KDE-Library=kwmailmerge_qtsqldb_power
 X-KDE-Capabilities=edit,open
 X-KDE-InternalName=QTSQLPower

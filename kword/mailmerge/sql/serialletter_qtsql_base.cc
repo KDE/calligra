@@ -43,7 +43,7 @@
  ******************************************************************/
 
 KWQTSQLSerialDataSourceBase::KWQTSQLSerialDataSourceBase(KInstance *inst,QObject *parent)
-	: KWSerialLetterDataSource(inst,parent)
+	: KWMailMergeDataSource(inst,parent)
 {
 	port=i18n("default");
 }
@@ -59,7 +59,7 @@ bool KWQTSQLSerialDataSourceBase::showConfigDialog(QWidget *par,int action)
    bool ret=false;
    if (action==KWSLOpen)
    {
-   	KWQTSQLSerialLetterOpen *dia=new KWQTSQLSerialLetterOpen(par,this);
+   	KWQTSQLMailMergeOpen *dia=new KWQTSQLMailMergeOpen(par,this);
 
 	ret=dia->exec();
 	if (ret) openDatabase();

@@ -29,11 +29,11 @@
 
 /******************************************************************
  *
- * Class: KWQTSQLSerialLetterOpen
+ * Class: KWQTSQLMailMergeOpen
  *
  ******************************************************************/
 
-KWQTSQLSerialLetterOpen::KWQTSQLSerialLetterOpen( QWidget *parent, KWQTSQLSerialDataSourceBase *db_ )
+KWQTSQLMailMergeOpen::KWQTSQLMailMergeOpen( QWidget *parent, KWQTSQLSerialDataSourceBase *db_ )
         :KDialogBase( Plain, i18n( "Mail Merge - Setup database connection" ), Ok | Cancel, Ok, parent, "", true ), db( db_ ){
         (new QVBoxLayout(plainPage()))->setAutoAdd(true);
         setMainWidget(widget=new KWQTSQLOpenWidget(plainPage()));
@@ -50,13 +50,13 @@ KWQTSQLSerialLetterOpen::KWQTSQLSerialLetterOpen( QWidget *parent, KWQTSQLSerial
 		this, SLOT(slotSave()));
 }
 
-KWQTSQLSerialLetterOpen::~KWQTSQLSerialLetterOpen(){;}
+KWQTSQLMailMergeOpen::~KWQTSQLMailMergeOpen(){;}
 
-void KWQTSQLSerialLetterOpen::savedPropertiesChanged(const QString& name)
+void KWQTSQLMailMergeOpen::savedPropertiesChanged(const QString& name)
 {
 	if (name!=i18n("<not saved>"))
 	{
-		KConfig conf("kwserialletterrc");
+		KConfig conf("kwmailmergerc");
 		conf.setGroup("KWSLQTDB:"+name);
 		widget->hostname->setText(conf.readEntry("hostname",""));
 		widget->username->setText(conf.readEntry("username",""));
@@ -73,12 +73,12 @@ void KWQTSQLSerialLetterOpen::savedPropertiesChanged(const QString& name)
 
 }
 
-void KWQTSQLSerialLetterOpen::fillSavedProperties()
+void KWQTSQLMailMergeOpen::fillSavedProperties()
 {
 	widget->savedProperties->clear();
 	widget->savedProperties->insertItem(i18n("<not saved>"));
 	//Read data from configuration file and add entries
-	KConfig conf("kwserialletterrc");
+	KConfig conf("kwmailmergerc");
 	QStringList list=conf.groupList();
 	for (QStringList::Iterator it=list.begin();it!=list.end();++it)
 	{
@@ -87,7 +87,7 @@ void KWQTSQLSerialLetterOpen::fillSavedProperties()
 	}
 }
 
-void KWQTSQLSerialLetterOpen::slotSave()
+void KWQTSQLMailMergeOpen::slotSave()
 {
 	QString value;
 	bool ok;
@@ -97,7 +97,7 @@ void KWQTSQLSerialLetterOpen::slotSave()
 	if (value.isEmpty()) kdDebug()<<"Name value was empty"<<endl;
 	if ((ok) && (!value.isEmpty()))
 	{
-		KConfig conf("kwserialletterrc");
+		KConfig conf("kwmailmergerc");
 		conf.setGroup("KWSLQTDB:"+value);
 		conf.writeEntry("hostname",widget->hostname->text());
 		conf.writeEntry("username",widget->username->text());
@@ -109,7 +109,7 @@ void KWQTSQLSerialLetterOpen::slotSave()
 	}
 }
 
-void KWQTSQLSerialLetterOpen::handleOk()
+void KWQTSQLMailMergeOpen::handleOk()
 {
         db->hostname=widget->hostname->text();
         db->username=widget->username->text();

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Original file (serialletter.h): Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Original file (mailmerge.h): Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2001 Joseph Wenninger <jowenn@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@
 #include <koVariableDlgs.h>
 #include <koUtils.h>
 #include "defs.h"
-#include "serialletter_interface.h"
+#include "mailmerge_interface.h"
 
 
 /******************************************************************
@@ -53,7 +53,7 @@
  ******************************************************************/
 typedef QValueList< DbRecord > Db;
 
-class KWClassicSerialDataSource: public KWSerialLetterDataSource
+class KWClassicSerialDataSource: public KWMailMergeDataSource
 {
     Q_OBJECT
     public:
@@ -70,8 +70,8 @@ class KWClassicSerialDataSource: public KWSerialLetterDataSource
     virtual void refresh(bool){};
 
     protected:
-    friend class KWClassicSerialLetterEditor;
-    friend class KWClassicSerialLetterEditorList;
+    friend class KWClassicMailMergeEditor;
+    friend class KWClassicMailMergeEditorList;
 
     void setValue( const QString &name, const QString &value, int record = -1 );
     void appendRecord();
@@ -83,16 +83,16 @@ class KWClassicSerialDataSource: public KWSerialLetterDataSource
 
 /******************************************************************
  *
- * Class: KWClassicSerialLetterEditorListItem
+ * Class: KWClassicMailMergeEditorListItem
  *
  ******************************************************************/
 
-class KWClassicSerialLetterEditorListItem : public QListViewItem
+class KWClassicMailMergeEditorListItem : public QListViewItem
 {
 public:
-    KWClassicSerialLetterEditorListItem( QListView *parent );
-    KWClassicSerialLetterEditorListItem( QListView *parent, QListViewItem *after );
-    virtual ~KWClassicSerialLetterEditorListItem();
+    KWClassicMailMergeEditorListItem( QListView *parent );
+    KWClassicMailMergeEditorListItem( QListView *parent, QListViewItem *after );
+    virtual ~KWClassicMailMergeEditorListItem();
 
     virtual void setText( int i, const QString &text );
     virtual QString text( int i ) const;
@@ -106,17 +106,17 @@ protected:
 
 /******************************************************************
  *
- * Class: KWClassicSerialLetterEditorList
+ * Class: KWClassicMailMergeEditorList
  *
  ******************************************************************/
 
-class KWClassicSerialLetterEditorList : public QListView
+class KWClassicMailMergeEditorList : public QListView
 {
     Q_OBJECT
 
 public:
-    KWClassicSerialLetterEditorList( QWidget *parent, KWClassicSerialDataSource *db_ );
-    virtual ~KWClassicSerialLetterEditorList();
+    KWClassicMailMergeEditorList( QWidget *parent, KWClassicSerialDataSource *db_ );
+    virtual ~KWClassicMailMergeEditorList();
 
     void updateItems();
     void displayRecord( int i );
@@ -137,22 +137,22 @@ protected:
 
 /******************************************************************
  *
- * Class: KWClassicSerialLetterEditor
+ * Class: KWClassicMailMergeEditor
  *
  ******************************************************************/
 
-class KWClassicSerialLetterEditor : public KDialogBase
+class KWClassicMailMergeEditor : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KWClassicSerialLetterEditor( QWidget *parent, KWClassicSerialDataSource *db_ );
+    KWClassicMailMergeEditor( QWidget *parent, KWClassicSerialDataSource *db_ );
 
 protected:
     void resizeEvent( QResizeEvent *e );
 
     QSpinBox *records;
-    KWClassicSerialLetterEditorList *dbList;
+    KWClassicMailMergeEditorList *dbList;
     QVBox *back;
     KWClassicSerialDataSource *db;
 

@@ -201,7 +201,7 @@ void KWQTSQLDataSourceEditor::slotSetQuery()
 
 
 extern "C" {
-        KWSerialLetterDataSource *create_kwserialletter_qtsqldb(KInstance *inst,QObject *parent)
+        KWMailMergeDataSource *create_kwmailmerge_qtsqldb(KInstance *inst,QObject *parent)
         {
                 return new KWQTSQLSerialDataSource(inst,parent);
         }

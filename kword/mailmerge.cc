@@ -26,8 +26,8 @@
 #include <kdebug.h>
 
 #include "kwdoc.h"
-#include "serialletter.h"
-#include "serialletter.moc"
+#include "mailmerge.h"
+#include "mailmerge.moc"
 #include <koVariableDlgs.h>
 #include <kmainwindow.h>
 #include "defs.h"
@@ -38,18 +38,18 @@
 
 /******************************************************************
  *
- * Class: KWSerialLetterDataBase
+ * Class: KWMailMergeDataBase
  *
  ******************************************************************/
 
-KWSerialLetterDataBase::KWSerialLetterDataBase( KWDocument *doc_ )
-    : QObject(doc_,doc_->dcopObject()->objId()+".SerialLetterDataBase"),
-	KWordSerialLetterDatabaseIface(QCString(doc_->dcopObject()->objId()+".SerialLetterDataBase")),doc( doc_ ) {
+KWMailMergeDataBase::KWMailMergeDataBase( KWDocument *doc_ )
+    : QObject(doc_,doc_->dcopObject()->objId()+".MailMergeDataBase"),
+	KWordMailMergeDatabaseIface(QCString(doc_->dcopObject()->objId()+".MailMergeDataBase")),doc( doc_ ) {
    plugin=0; //loadPlugin("classic");
    rejectdcopcall=false;
 }
 
-QStringList KWSerialLetterDataBase::availablePlugins()
+QStringList KWMailMergeDataBase::availablePlugins()
 {
 	QStringList tmp;
 	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),QString::null);
@@ -61,12 +61,12 @@ QStringList KWSerialLetterDataBase::availablePlugins()
 	return tmp;
 }
 
-bool KWSerialLetterDataBase::isConfigDialogShown()
+bool KWMailMergeDataBase::isConfigDialogShown()
 {
 	return rejectdcopcall;
 }
 
-bool KWSerialLetterDataBase::loadPlugin(QString name,QString command)
+bool KWMailMergeDataBase::loadPlugin(QString name,QString command)
 {
         if (rejectdcopcall)return false;
 	QString constrain=QString("[X-KDE-InternalName] =='"+name+"'");
@@ -75,7 +75,7 @@ bool KWSerialLetterDataBase::loadPlugin(QString name,QString command)
 	KService::Ptr it=pluginOffers.first();
 	if (it)
 	{
-		KWSerialLetterDataSource *tmp=loadPlugin(it->library());
+		KWMailMergeDataSource *tmp=loadPlugin(it->library());
 		if (!tmp)
 		{
 			kdDebug()<<"Couldn't load plugin"<<endl;
@@ -98,9 +98,9 @@ bool KWSerialLetterDataBase::loadPlugin(QString name,QString command)
 	}
 }
 
-KWSerialLetterDataSource *KWSerialLetterDataBase::openPluginFor(int type)
+KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type)
 {
-	KWSerialLetterDataSource *ret=0;
+	KWMailMergeDataSource *ret=0;
 	QString constrain=QString("'%1' in [X-KDE-Capabilities]").arg(((type==KWSLCreate)?KWSLCreate_text:KWSLOpen_text));
 	kdDebug()<<constrain<<endl;
 	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
@@ -119,7 +119,7 @@ KWSerialLetterDataSource *KWSerialLetterDataBase::openPluginFor(int type)
 	}
 	else
 	{
-		KWSerialLetterChoosePluginDialog *dia=new KWSerialLetterChoosePluginDialog(pluginOffers);
+		KWMailMergeChoosePluginDialog *dia=new KWMailMergeChoosePluginDialog(pluginOffers);
 		if (dia->exec()==QDialog::Accepted)
 		{
 			ret=loadPlugin((*(pluginOffers.at(dia->
@@ -130,7 +130,7 @@ KWSerialLetterDataSource *KWSerialLetterDataBase::openPluginFor(int type)
 	return ret;
 }
 
-KWSerialLetterDataSource *KWSerialLetterDataBase::loadPlugin(const QString& name)
+KWMailMergeDataSource *KWMailMergeDataBase::loadPlugin(const QString& name)
 {
   if (!name.isEmpty())
   {
@@ -139,7 +139,8 @@ KWSerialLetterDataSource *KWSerialLetterDataBase::loadPlugin(const QString& name
       KLibLoader *loader = KLibLoader::self();
 
       // try to load the library
-      QString libname("lib%1");
+	QString libname=name;
+//      QString libname("lib%1");
       KLibrary *lib = loader->library(QFile::encodeName(libname.arg(name)));
       if (lib)
 	{
@@ -150,9 +151,9 @@ KWSerialLetterDataSource *KWSerialLetterDataBase::loadPlugin(const QString& name
 	  if (create)
 	    {
 	      // create the module
-	      KWSerialLetterDataSource * (*func)(KInstance*,QObject*);
-	      func = (KWSerialLetterDataSource* (*)(KInstance*,QObject*)) create;
-	      KWSerialLetterDataSource *tmpsource =func(KWFactory::global(),this);
+	      KWMailMergeDataSource * (*func)(KInstance*,QObject*);
+	      func = (KWMailMergeDataSource* (*)(KInstance*,QObject*)) create;
+	      KWMailMergeDataSource *tmpsource =func(KWFactory::global(),this);
 	      if (tmpsource)
 	      {
 		QDataStream tmpstream(tmpsource->info,IO_WriteOnly);
@@ -169,11 +170,11 @@ KWSerialLetterDataSource *KWSerialLetterDataBase::loadPlugin(const QString& name
   return 0;
 }
 
-QString KWSerialLetterDataBase::getValue( const QString &name, int record ) const
+QString KWMailMergeDataBase::getValue( const QString &name, int record ) const
 {
 	if (plugin)
 	{
-		if (record==-1) record=doc->getSerialLetterRecord();
+		if (record==-1) record=doc->getMailMergeRecord();
 		return plugin->getValue(name,record);
 	}
 	else
@@ -181,12 +182,12 @@ QString KWSerialLetterDataBase::getValue( const QString &name, int record ) cons
 }
 
 
-void KWSerialLetterDataBase::refresh(bool force)
+void KWMailMergeDataBase::refresh(bool force)
 {
 	if (plugin) plugin->refresh(force);
 }
 
-const QMap< QString, QString > &KWSerialLetterDataBase::getRecordEntries() const
+const QMap< QString, QString > &KWMailMergeDataBase::getRecordEntries() const
 {
 	if (plugin)
 		return plugin->getRecordEntries();
@@ -194,7 +195,7 @@ const QMap< QString, QString > &KWSerialLetterDataBase::getRecordEntries() const
 		return emptyMap;
 }
 
-int KWSerialLetterDataBase::getNumRecords() const
+int KWMailMergeDataBase::getNumRecords() const
 {
 	if (plugin)
 		return plugin->getNumRecords();
@@ -204,17 +205,17 @@ int KWSerialLetterDataBase::getNumRecords() const
 }
 
 
-void KWSerialLetterDataBase::showConfigDialog(QWidget *par)
+void KWMailMergeDataBase::showConfigDialog(QWidget *par)
 {
 	rejectdcopcall=true;
-	KWSerialLetterConfigDialog *dia=new KWSerialLetterConfigDialog(par,this);
+	KWMailMergeConfigDialog *dia=new KWMailMergeConfigDialog(par,this);
 	dia->exec();
 	delete dia;
 	rejectdcopcall=false;
 }
 
 
-bool KWSerialLetterDataBase::askUserForConfirmationAndConfig(KWSerialLetterDataSource *tmpPlugin,bool config,QWidget *par)
+bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource *tmpPlugin,bool config,QWidget *par)
 {
 	if (tmpPlugin)
 	{
@@ -251,13 +252,13 @@ bool KWSerialLetterDataBase::askUserForConfirmationAndConfig(KWSerialLetterDataS
 
 
 
-QDomElement KWSerialLetterDataBase::save(QDomDocument &doc) const
+QDomElement KWMailMergeDataBase::save(QDomDocument &doc) const
 {
-	kdDebug()<<"KWSerialLetterDataBase::save()"<<endl;
+	kdDebug()<<"KWMailMergeDataBase::save()"<<endl;
 	QDomElement parentElem=doc.createElement("SERIALL");
 	if (plugin)
 	{
-		kdDebug()<<"KWSerialLetterDataBase::save() There is really something to save"<<endl;
+		kdDebug()<<"KWMailMergeDataBase::save() There is really something to save"<<endl;
 		QDomElement el=doc.createElement(QString::fromLatin1("PLUGIN"));
 
 		QDataStream ds(plugin->info,IO_ReadOnly);
@@ -265,18 +266,18 @@ QDomElement KWSerialLetterDataBase::save(QDomDocument &doc) const
 		ds>>libname;
 		el.setAttribute("library",libname);
  		parentElem.appendChild(el);
-		kdDebug()<<"KWSerialLetterDataBase::save() Calling datasource save()"<<endl;
+		kdDebug()<<"KWMailMergeDataBase::save() Calling datasource save()"<<endl;
 		QDomElement el2=doc.createElement(QString::fromLatin1("DATASOURCE"));
 		plugin->save(doc,el2);
 		parentElem.appendChild(el2);
 
 	}
-	kdDebug()<<"KWSerialLetterDataBase::save() leaving now"<<endl;
+	kdDebug()<<"KWMailMergeDataBase::save() leaving now"<<endl;
 	return parentElem;
 //	if (plugin) plugin->save(parentElem); // Not completely sure, perhaps the database itself has to save something too (JoWenn)
 }
 
-void KWSerialLetterDataBase::load( QDomElement& parentElem )
+void KWMailMergeDataBase::load( QDomElement& parentElem )
 {
 	QDomNode dn=parentElem.namedItem("PLUGIN");
 	if (dn.isNull()) return;
@@ -292,11 +293,11 @@ void KWSerialLetterDataBase::load( QDomElement& parentElem )
 
 /******************************************************************
  *
- * Class: KWSerialLetter ChoosePluginDialog
+ * Class: KWMailMerge ChoosePluginDialog
  *
  ******************************************************************/
 
-KWSerialLetterChoosePluginDialog::KWSerialLetterChoosePluginDialog(KTrader::OfferList pluginOffers)
+KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog(KTrader::OfferList pluginOffers)
     : KDialogBase(Plain, i18n( "Mail Merge - Configuration" ), Ok|Cancel, Ok, /*parent*/ 0, "", true )
 {
 	QWidget *back = plainPage();
@@ -322,17 +323,17 @@ KWSerialLetterChoosePluginDialog::KWSerialLetterChoosePluginDialog(KTrader::Offe
 
 }
 
-KWSerialLetterChoosePluginDialog::~KWSerialLetterChoosePluginDialog()
+KWMailMergeChoosePluginDialog::~KWMailMergeChoosePluginDialog()
 {
 }
 
 /******************************************************************
  *
- * Class: KWSerialLetterConfigDialog
+ * Class: KWMailMergeConfigDialog
  *
  ******************************************************************/
 
-KWSerialLetterConfigDialog::KWSerialLetterConfigDialog(QWidget *parent,KWSerialLetterDataBase *db)
+KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeDataBase *db)
     : KDialogBase(Plain, i18n( "Mail Merge - Configuration" ), Close, Close, parent, "", true )
 {
     db_=db;
@@ -378,7 +379,7 @@ KWSerialLetterConfigDialog::KWSerialLetterConfigDialog(QWidget *parent,KWSerialL
     connect(document,SIGNAL(clicked()),this,SLOT(slotDocumentClicked()));
 }
 
-void KWSerialLetterConfigDialog::enableDisableEdit()
+void KWMailMergeConfigDialog::enableDisableEdit()
 {
     if (!db_->plugin)
     	{
@@ -394,21 +395,21 @@ void KWSerialLetterConfigDialog::enableDisableEdit()
 	}
 }
 
-void KWSerialLetterConfigDialog::slotEditClicked()
+void KWMailMergeConfigDialog::slotEditClicked()
 {db_->action=KWSLEdit;
  if (db_->plugin) db_->plugin->showConfigDialog((QWidget*)parent(),KWSLEdit);
 }
 
-void KWSerialLetterConfigDialog::slotCreateClicked()
+void KWMailMergeConfigDialog::slotCreateClicked()
 {
 	db_->action=KWSLCreate;
 	doNewActions();  
 //done(QDialog::Accepted);
 }
 
-void KWSerialLetterConfigDialog::doNewActions()
+void KWMailMergeConfigDialog::doNewActions()
 {
-	KWSerialLetterDataSource *tmpPlugin=db_->openPluginFor(db_->action);
+	KWMailMergeDataSource *tmpPlugin=db_->openPluginFor(db_->action);
 	if (tmpPlugin)
 	{
 		db_->askUserForConfirmationAndConfig(tmpPlugin,true,this);
@@ -417,13 +418,13 @@ void KWSerialLetterConfigDialog::doNewActions()
 }
 
 
-void KWSerialLetterConfigDialog::slotOpenClicked()
+void KWMailMergeConfigDialog::slotOpenClicked()
 {
 	db_->action=KWSLOpen;
 	doNewActions();
 }
 
-void KWSerialLetterConfigDialog::slotPreviewClicked()
+void KWMailMergeConfigDialog::slotPreviewClicked()
 {
 	db_->action=KWSLMergePreview;
 	KMainWindow *mw=dynamic_cast<KMainWindow*>(((QWidget *)parent())->topLevelWidget());
@@ -437,20 +438,20 @@ void KWSerialLetterConfigDialog::slotPreviewClicked()
 		kdWarning()<<"Toplevel is no KMainWindow->no preview"<<endl;
 }
 
-void KWSerialLetterConfigDialog::slotDocumentClicked()
+void KWMailMergeConfigDialog::slotDocumentClicked()
 {db_->action=KWSLMergeDocument;done(QDialog::Accepted);}
 
-KWSerialLetterConfigDialog::~KWSerialLetterConfigDialog()
+KWMailMergeConfigDialog::~KWMailMergeConfigDialog()
 {
 }
 
 /******************************************************************
  *
- * Class: KWSerialLetterVariableInsertDia
+ * Class: KWMailMergeVariableInsertDia
  *
  ******************************************************************/
 
-KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *parent, KWSerialLetterDataBase *db )
+KWMailMergeVariableInsertDia::KWMailMergeVariableInsertDia( QWidget *parent, KWMailMergeDataBase *db )
     : KDialogBase(Plain, i18n( "Mail Merge - Variable Name" ), Ok | Cancel, Ok, parent, "", true )
 {
     QWidget *page = plainPage();
@@ -476,17 +477,17 @@ KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *paren
     enableButtonOK(names->currentItem ()!=-1);
 }
 
-void KWSerialLetterVariableInsertDia::slotSelectionChanged()
+void KWMailMergeVariableInsertDia::slotSelectionChanged()
 {
     enableButtonOK(names->currentItem ()!=-1);
 }
 
-QString KWSerialLetterVariableInsertDia::getName() const
+QString KWMailMergeVariableInsertDia::getName() const
 {
     return names->text( names->currentItem() );
 }
 
-void KWSerialLetterVariableInsertDia::resizeEvent( QResizeEvent *e )
+void KWMailMergeVariableInsertDia::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );

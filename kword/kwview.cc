@@ -52,7 +52,7 @@
 #include <koParagDia.h>
 #include <koSearchDia.h>
 #include "searchdia.h"
-#include "serialletter.h"
+#include "mailmerge.h"
 #include "splitcellsdia.h"
 #include "stylist.h"
 #include "tabledia.h"
@@ -337,7 +337,7 @@ void KWView::setupActions()
 
 
     (void) new KAction( i18n( "Configure Mai&l Merge ..." ), 0,
-                        this, SLOT( editSerialLetterDataBase() ),
+                        this, SLOT( editMailMergeDataBase() ),
                         actionCollection(), "edit_sldatabase" );
 
     // -------------- Frame menu
@@ -479,7 +479,7 @@ void KWView::setupActions()
 
 
     // TODO at the moment serial letters don't work correctly
-    addVariableActions( VT_SERIALLETTER, KoSerialLetterVariable::actionTexts(), actionInsertVariable, QString::null );
+    addVariableActions( VT_MAILMERGE, KoMailMergeVariable::actionTexts(), actionInsertVariable, QString::null );
 
     actionInsertVariable->popupMenu()->insertSeparator();
     actionRefreshAllVariable = new KAction( i18n( "&Refresh all variables" ), 0,
@@ -1181,17 +1181,17 @@ void KWView::print( KPrinter &prt )
     QPtrList<KoVariable> vars = m_doc->getVariableCollection()->getVariables();
     KoVariable *v = 0;
     for ( v = vars.first(); v; v = vars.next() ) {
-        if ( v->type() == VT_SERIALLETTER ) {
+        if ( v->type() == VT_MAILMERGE ) {
             serialLetter = TRUE;
             break;
         }
     }
 
-    if ( !m_doc->getSerialLetterDataBase() ) serialLetter=FALSE;
+    if ( !m_doc->getMailMergeDataBase() ) serialLetter=FALSE;
 	else
 	{
-		m_doc->getSerialLetterDataBase()->refresh(false);
-                if (m_doc->getSerialLetterDataBase()->getNumRecords() == 0 )  serialLetter = FALSE;
+		m_doc->getMailMergeDataBase()->refresh(false);
+                if (m_doc->getMailMergeDataBase()->getNumRecords() == 0 )  serialLetter = FALSE;
 	}
 
     //float left_margin = 0.0;
@@ -1257,14 +1257,14 @@ void KWView::print( KPrinter &prt )
             m_gui->canvasWidget()->print( &painter, &prt );
         else
         {
-            for ( int i = 0; i < m_doc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
-                m_doc->setSerialLetterRecord( i );
-		m_doc->getVariableCollection()->recalcVariables(VT_SERIALLETTER);
+            for ( int i = 0; i < m_doc->getMailMergeDataBase()->getNumRecords(); ++i ) {
+                m_doc->setMailMergeRecord( i );
+		m_doc->getVariableCollection()->recalcVariables(VT_MAILMERGE);
                 m_gui->canvasWidget()->print( &painter, &prt );
-                if ( i < m_doc->getSerialLetterDataBase()->getNumRecords() - 1 )
+                if ( i < m_doc->getMailMergeDataBase()->getNumRecords() - 1 )
                     prt.newPage();
             }
-            m_doc->setSerialLetterRecord( -1 );
+            m_doc->setMailMergeRecord( -1 );
         }
     }
 
@@ -1766,11 +1766,11 @@ void KWView::editCustomVars()
     }
 }
 
-void KWView::editSerialLetterDataBase()
+void KWView::editMailMergeDataBase()
 {
-	m_doc->getSerialLetterDataBase()->showConfigDialog(this);
+	m_doc->getMailMergeDataBase()->showConfigDialog(this);
 #if 0
-    KWSerialLetterEditor *dia = new KWSerialLetterEditor( this, m_doc->getSerialLetterDataBase() );
+    KWMailMergeEditor *dia = new KWMailMergeEditor( this, m_doc->getMailMergeDataBase() );
     dia->exec();
     // Don't know if we really need this so it's commented out (SL)
     // m_gui->canvasWidget()->repaintAll( FALSE );

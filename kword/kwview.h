@@ -175,7 +175,7 @@ public slots:
     void editReplace();
     void editDeleteFrame();
     void editCustomVars();
-    void editSerialLetterDataBase();
+    void editMailMergeDataBase();
 
     void viewTextMode();
     void viewPageMode();

@@ -20,7 +20,7 @@
 #include "variable.h"
 #include <koVariable.h>
 #include <koUtils.h>
-#include "serialletter.h"
+#include "mailmerge.h"
 #include "kwdoc.h"
 
 #include <klocale.h>
@@ -83,20 +83,20 @@ QString KWPgNumVariable::text()
 }
 
 /******************************************************************/
-/* Class: KWSerialLetterVariable                                  */
+/* Class: KWMailMergeVariable                                  */
 /******************************************************************/
-KWSerialLetterVariable::KWSerialLetterVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *doc  )
-    : KoSerialLetterVariable( textdoc, name, varFormat,_varColl ), m_doc(doc)
+KWMailMergeVariable::KWMailMergeVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *doc  )
+    : KoMailMergeVariable( textdoc, name, varFormat,_varColl ), m_doc(doc)
 {
 }
 
 
-QString KWSerialLetterVariable::value() const
+QString KWMailMergeVariable::value() const
 {
-    return m_doc->getSerialLetterDataBase()->getValue( m_name );
+    return m_doc->getMailMergeDataBase()->getValue( m_name );
 }
 
-QString KWSerialLetterVariable::text()
+QString KWMailMergeVariable::text()
 {
     // ## should use a format maybe
     QString v = value();
@@ -105,7 +105,7 @@ QString KWSerialLetterVariable::text()
     return v;
 }
 
-void KWSerialLetterVariable::recalc()
+void KWMailMergeVariable::recalc()
 {
     resize();
 }

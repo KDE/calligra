@@ -44,7 +44,7 @@ class KoVariableNameDia : public KDialogBase
     Q_OBJECT
 
 public:
-    // For KWSerialLetterVariableInsertDia
+    // For KWMailMergeVariableInsertDia
     KoVariableNameDia( QWidget *parent );
     // For kwview
     KoVariableNameDia( QWidget *parent, const QPtrList<KoVariable> &vars );

@@ -28,22 +28,22 @@
 #include <qguardedptr.h>
 #include <qwidget.h>
 
-#include "serialletter_interface.h"
+#include "mailmerge_interface.h"
 #include "serialletter_qtsql_base.h"
 #include "qtsqlopenwidget.h"
 
 /******************************************************************
  *
- * Class: KWQTSQLSerialLetterOpen
+ * Class: KWQTSQLMailMergeOpen
  *
  ******************************************************************/
-class KWQTSQLSerialLetterOpen : public KDialogBase
+class KWQTSQLMailMergeOpen : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KWQTSQLSerialLetterOpen( QWidget *parent, KWQTSQLSerialDataSourceBase *db_ );
-    ~KWQTSQLSerialLetterOpen();
+    KWQTSQLMailMergeOpen( QWidget *parent, KWQTSQLSerialDataSourceBase *db_ );
+    ~KWQTSQLMailMergeOpen();
 private:
  KWQTSQLSerialDataSourceBase *db;
  KWQTSQLOpenWidget *widget;

@@ -27,7 +27,7 @@
 #include <qsqldatabase.h>
 #include <qguardedptr.h>
 
-#include "serialletter_interface.h"
+#include "mailmerge_interface.h"
 #include "qtsqlopenwidget.h"
 
 
@@ -37,7 +37,7 @@
  * Class: KWQTSQLSerialDataSourceBase
  *
  ******************************************************************/
-class KWQTSQLSerialDataSourceBase: public KWSerialLetterDataSource
+class KWQTSQLSerialDataSourceBase: public KWMailMergeDataSource
 {
     Q_OBJECT
     K_DCOP
@@ -48,7 +48,7 @@ class KWQTSQLSerialDataSourceBase: public KWSerialLetterDataSource
    virtual bool showConfigDialog(QWidget *par,int action);
 
     protected:
-	friend class KWQTSQLSerialLetterOpen;
+	friend class KWQTSQLMailMergeOpen;
 	QString hostname;
 	QString username;
 	QString driver;

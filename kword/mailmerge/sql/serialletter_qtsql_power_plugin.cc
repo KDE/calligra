@@ -96,7 +96,7 @@ bool KWQTSQLPowerSerialDataSource::showConfigDialog(QWidget *par,int action)
    bool ret=false;
    if (action==KWSLEdit)
    {
-	KWQTSQLPowerSerialLetterEditor *dia=new KWQTSQLPowerSerialLetterEditor(par,this);
+	KWQTSQLPowerMailMergeEditor *dia=new KWQTSQLPowerMailMergeEditor(par,this);
 	ret=dia->exec();
 	delete dia;
    }
@@ -112,11 +112,11 @@ void KWQTSQLPowerSerialDataSource::addSampleRecordEntry(QString name)
 
 /******************************************************************
  *
- * Class: KWQTSQLSerialLetterEditor
+ * Class: KWQTSQLMailMergeEditor
  *
  ******************************************************************/
 
-KWQTSQLPowerSerialLetterEditor::KWQTSQLPowerSerialLetterEditor( QWidget *parent, KWQTSQLPowerSerialDataSource *db_ )
+KWQTSQLPowerMailMergeEditor::KWQTSQLPowerMailMergeEditor( QWidget *parent, KWQTSQLPowerSerialDataSource *db_ )
 	:KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
 {
         (new QVBoxLayout(plainPage()))->setAutoAdd(true);
@@ -129,13 +129,13 @@ KWQTSQLPowerSerialLetterEditor::KWQTSQLPowerSerialLetterEditor( QWidget *parent,
 	updateDBViews();
 }
 
-void KWQTSQLPowerSerialLetterEditor::slotSetQuery()
+void KWQTSQLPowerMailMergeEditor::slotSetQuery()
 {
 	db->query=widget->query->text();
 	db->refresh(true);
 }
 
-void KWQTSQLPowerSerialLetterEditor::slotExecute()
+void KWQTSQLPowerMailMergeEditor::slotExecute()
 {
 	QString tmp=widget->query->text().upper();
 	if (!tmp.startsWith("SELECT")) return;
@@ -151,7 +151,7 @@ void KWQTSQLPowerSerialLetterEditor::slotExecute()
 	widget->queryresult->refresh(QDataTable::RefreshAll);
 }
 
-void KWQTSQLPowerSerialLetterEditor::slotTableChanged ( QListBoxItem * item )
+void KWQTSQLPowerMailMergeEditor::slotTableChanged ( QListBoxItem * item )
 {
 	widget->fields->clear();
 	if (item)
@@ -165,9 +165,9 @@ void KWQTSQLPowerSerialLetterEditor::slotTableChanged ( QListBoxItem * item )
 	}
 }
 
-void KWQTSQLPowerSerialLetterEditor::openSetup()
+void KWQTSQLPowerMailMergeEditor::openSetup()
 {
-        KWQTSQLSerialLetterOpen *dia=new KWQTSQLSerialLetterOpen(this,db);
+        KWQTSQLMailMergeOpen *dia=new KWQTSQLMailMergeOpen(this,db);
         if (dia->exec())
 	{
 		 db->openDatabase();
@@ -177,7 +177,7 @@ void KWQTSQLPowerSerialLetterEditor::openSetup()
 }
 
 
-void KWQTSQLPowerSerialLetterEditor::updateDBViews()
+void KWQTSQLPowerMailMergeEditor::updateDBViews()
 {
 	widget->fields->clear();
 	widget->tables->clear();
@@ -185,11 +185,11 @@ void KWQTSQLPowerSerialLetterEditor::updateDBViews()
 	widget->tables->insertStringList(db->database->tables());
 }
 
-KWQTSQLPowerSerialLetterEditor::~KWQTSQLPowerSerialLetterEditor(){;}
+KWQTSQLPowerMailMergeEditor::~KWQTSQLPowerMailMergeEditor(){;}
 
 
 extern "C" {
-        KWSerialLetterDataSource *create_kwserialletter_qtsqldb_power(KInstance *inst,QObject *parent)
+        KWMailMergeDataSource *create_kwmailmerge_qtsqldb_power(KInstance *inst,QObject *parent)
         {
                 return new KWQTSQLPowerSerialDataSource(inst,parent);
         }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Original file (serialletter.h): Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Original file (mailmerge.h): Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2001 Joseph Wenninger <jowenn@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -40,17 +40,17 @@ typedef QMap<QString,QString> DbRecord;
 #define KWSLOpen_text		"open"
 /******************************************************************
  *
- * Class: KWSerialLetterDataSource
+ * Class: KWMailMergeDataSource
  *
  ******************************************************************/
 
-class KWSerialLetterDataSource: public QObject, public DCOPObject
+class KWMailMergeDataSource: public QObject, public DCOPObject
 {
     Q_OBJECT
     K_DCOP
     public:
-    KWSerialLetterDataSource(KInstance* inst,QObject *parent);
-    virtual ~KWSerialLetterDataSource(){;}
+    KWMailMergeDataSource(KInstance* inst,QObject *parent);
+    virtual ~KWMailMergeDataSource(){;}
     virtual class QString getValue( const class QString &name, int record = -1 ) const=0;
 
     const QMap< QString, QString > &getRecordEntries() const;

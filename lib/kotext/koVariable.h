@@ -31,7 +31,7 @@ class QDomElement;
 // (and update KWView::setupActions)
 enum VariableType { VT_NONE = -1,
                     VT_DATE = 0, VT_TIME = 2, VT_PGNUM = 4,
-                    VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_FIELD = 8, VT_LINK=9,
+                    VT_CUSTOM = 6, VT_MAILMERGE = 7, VT_FIELD = 8, VT_LINK=9,
                     VT_ALL=256 };
 
 enum VariableFormat { VF_DATE = 0, VF_TIME = 1, VF_STRING = 2, VF_NUM = 3 };
@@ -391,13 +391,13 @@ protected:
     KoDocument *m_doc;
 };
 
-class KoSerialLetterVariable : public KoVariable
+class KoMailMergeVariable : public KoVariable
 {
 public:
-    KoSerialLetterVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat, KoVariableCollection *_varColl );
+    KoMailMergeVariable( KoTextDocument *textdoc, const QString &name, KoVariableFormat *varFormat, KoVariableCollection *_varColl );
 
     virtual VariableType type() const
-    { return VT_SERIALLETTER; }
+    { return VT_MAILMERGE; }
     static QStringList actionTexts();
 
     virtual void saveVariable( QDomElement &parentElem );
