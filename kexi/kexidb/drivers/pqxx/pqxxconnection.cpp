@@ -19,7 +19,7 @@
 
 using namespace KexiDB;
 
-pqxxSqlConnection::pqxxSqlConnection(Driver *driver, const ConnectionData &conn_data)
+pqxxSqlConnection::pqxxSqlConnection(Driver *driver, ConnectionData &conn_data)
         :Connection(driver,conn_data)
         ,m_pqxxsql(0), m_res(0), m_trans(0)
 {}
@@ -114,9 +114,9 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
     QString socket;
     QStringList sockets;
 
-    if (m_data.hostName.isEmpty() || m_data.hostName == "localhost")
+    if (m_data->hostName.isEmpty() || m_data->hostName == "localhost")
     {
-        if (m_data.fileName().isEmpty())
+        if (m_data->fileName().isEmpty())
         {
             sockets.append("/tmp/.s.PGSQL.5432");
 
@@ -131,27 +131,27 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
         }
         else
         {
-            socket=m_data.fileName();
+            socket=m_data->fileName();
         }
     }
     else
     {
-        conninfo = "host='" + m_data.hostName + "'";
+        conninfo = "host='" + m_data->hostName + "'";
     }
 
     //Build up the connection string
-    if (m_data.port == 0)
-        m_data.port = 5432;
+    if (m_data->port == 0)
+        m_data->port = 5432;
 
-    conninfo += QString::fromLatin1(" port='%1'").arg(m_data.port);
+    conninfo += QString::fromLatin1(" port='%1'").arg(m_data->port);
 
     conninfo += QString::fromLatin1(" dbname='%1'").arg(dbName);
 
-    if (!m_data.userName.isNull())
-        conninfo += QString::fromLatin1(" user='%1'").arg(m_data.userName);
+    if (!m_data->userName.isNull())
+        conninfo += QString::fromLatin1(" user='%1'").arg(m_data->userName);
 
-    if (!m_data.password.isNull())
-        conninfo += QString::fromLatin1(" password='%1'").arg(m_data.password);
+    if (!m_data->password.isNull())
+        conninfo += QString::fromLatin1(" password='%1'").arg(m_data->password);
 
     try
     {

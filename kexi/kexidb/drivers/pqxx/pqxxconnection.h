@@ -35,7 +35,7 @@ class pqxxSqlConnection : public Connection
 
 	protected:
 
-                pqxxSqlConnection( Driver *driver, const ConnectionData &conn_data );
+                pqxxSqlConnection( Driver *driver, ConnectionData &conn_data );
 
 		virtual bool drv_isDatabaseUsed() const;
                 virtual bool drv_connect();
