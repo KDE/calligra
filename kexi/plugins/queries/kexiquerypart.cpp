@@ -159,6 +159,7 @@ KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sda
 		//todo
 		return 0;
 	}
+	query->debug();
 	(KexiDB::SchemaData&)*query = sdata; //copy main attributes
 
 	query->debug();

@@ -441,6 +441,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	//this will clear prev. expr
 	temp->query->setWhereExpression( whereExpr );
 
+	temp->query->debug();
 	//TODO?
 	return true;
 }
@@ -655,7 +656,11 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 //				if (columnAlias.isEmpty()) {
 //					columnAlias = i18n("expression", "expr%1").arg(row_num); //TODO
 //				}
-				fieldName = field->expression()->toString();
+//				if (columnAlias.isEmpty())
+//TODO: ok? perhaps do not allow to omit aliases?
+					fieldName = field->expression()->toString();
+//				else
+//					fieldName = columnAlias + ": " + field->expression()->toString();
 			}
 			else {
 				tableName = field->table()->name();
@@ -675,11 +680,16 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 		d->dataTable->tableView()->insertItem(newItem, row_num);
 		//create buffer
 		KexiPropertyBuffer &buf = *createPropertyBuffer( row_num, tableName, fieldName, true/*new one*/ );
-		if (!columnAlias.isEmpty()) {//add alias
+		if (!columnAlias.isEmpty())
 			buf["alias"].setValue(columnAlias, false);
-		}
 		if (!criteriaString.isEmpty())
 			buf["criteria"].setValue( criteriaString, false );
+		if (field->isExpression()) {
+			(*newItem)[0] = criteriaString;
+			d->data->clearRowEditBuffer();
+			d->data->updateRowEditBuffer(newItem, 0, QVariant(columnAlias + ": " + field->expression()->toString()));
+			d->data->saveRowChanges(*newItem, true);
+		}
 	}
 	propertyBufferSwitched();
 
@@ -784,21 +794,6 @@ QSize KexiQueryDesignerGuiEditor::sizeHint() const
 	QSize s2 = d->head->sizeHint();
 	return QSize(QMAX(s1.width(),s2.width()), s1.height()+s2.height());
 }
-
-#if 0
-KexiTableItem* 
-KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString& fieldName) const
-{
-	return createNewRowInternal(tableName+"."+fieldName, tableName);
-}
-
-KexiTableItem* 
-KexiQueryDesignerGuiEditor::createNewRow(const KexiDB::Field &exprField) const
-{
-	exprField.
-	return createNewRowInternal(tableName+"."+fieldName, tableName);
-}
-#endif
 
 KexiTableItem* 
 KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString& fieldName) const
@@ -1052,39 +1047,49 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			}
 			else {
 				//this value is properly selected from combo box list
-				const int id = fieldId.find('.');
-				if (id>=0)
-					tableName = fieldId.left(id);
-				fieldName = fieldId.mid(id+1);
+				if (fieldId=="*") {
+					tableName = "*";
+				}
+				else {
+					const int id = fieldId.find('.');
+					if (id>=0)
+						tableName = fieldId.left(id);
+					fieldName = fieldId.mid(id+1);
+				}
 			}
 			bool saveOldValue = true;
-			if (!propertyBuffer()) {
+			KexiPropertyBuffer *buf = d->buffers->bufferForItem(*item); //*propertyBuffer();
+			if (!buf) {
 				saveOldValue = false; // no old val.
-				createPropertyBuffer( d->dataTable->tableView()->currentRow(), 
-					tableName, fieldName, true );
+				const int row = d->data->findRef(item);
+				if (row<0) {
+					result->success = false;
+					return;
+				}
+				buf = createPropertyBuffer( row, tableName, fieldName, true );
 				propertyBufferSwitched();
 			}
 			d->data->updateRowEditBuffer(item, 1, QVariant(tableName), false/*!allowSignals*/);
 			d->data->updateRowEditBuffer(item, 2, QVariant(true,1));//visible
 			d->data->updateRowEditBuffer(item, 3, QVariant(0));//totals
 			//update properties
-			KexiPropertyBuffer &buf = *propertyBuffer();
-			buf["field"].setValue(fieldName, saveOldValue);
+			(*buf)["field"].setValue(fieldName, saveOldValue);
 			if (isExpression) {
 				//-no alias but it's needed:
 				if (alias.isEmpty()) //-try oto get old alias
-					alias = buf["alias"].value().toCString();
+					alias = (*buf)["alias"].value().toCString();
 				if (alias.isEmpty()) //-generate smallest unique alias
 					alias = generateUniqueAlias();
 			}
-			buf["isExpression"].setValue(QVariant(isExpression,1), saveOldValue);
+			(*buf)["isExpression"].setValue(QVariant(isExpression,1), saveOldValue);
 			if (!alias.isEmpty()) {
-				buf["alias"].setValue(alias, saveOldValue);
+				(*buf)["alias"].setValue(alias, saveOldValue);
 				//pretty printed "alias: expr"
 				newValue = QString(alias) + ": " + fieldName;
 			}
-			buf["caption"].setValue(QString::null, saveOldValue);
-			buf["table"].setValue(tableName, saveOldValue);
+			(*buf)["caption"].setValue(QString::null, saveOldValue);
+			(*buf)["table"].setValue(tableName, saveOldValue);
+			updatePropertiesVisibility(*buf);
 		}
 	}
 	else if (colnum==1) {//'table'
@@ -1096,10 +1101,18 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			d->buffers->removeCurrentPropertyBuffer();
 		}
 		//update property
-		if (propertyBuffer()) {
-			KexiPropertyBuffer &buf = *propertyBuffer();
-			buf["table"] = newValue;
-			buf["caption"] = QString::null;
+		KexiPropertyBuffer *buf = d->buffers->bufferForItem(*item);
+		if (buf) {
+			if ((*buf)["isExpression"].value().toBool()==false) {
+				(*buf)["table"] = newValue;
+				(*buf)["caption"] = QString::null;
+			}
+			else {
+				//do not set table for expr. columns
+				newValue = QVariant();
+			}
+//			KexiPropertyBuffer &buf = *propertyBuffer();
+			updatePropertiesVisibility(*buf);
 		}
 	}
 	else if (colnum==2) {//'visible'
@@ -1127,11 +1140,12 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 //		KexiPropertyBuffer &buf = *propertyBuffer();
 		int dummyToken;
 		QString field, table;
-		if (propertyBuffer()) {
-			field = (*propertyBuffer())["field"].value().toString();
-			table = (*propertyBuffer())["table"].value().toString();
+		KexiPropertyBuffer *buf = d->buffers->bufferForItem(*item); //*propertyBuffer();
+		if (buf) {
+			field = (*buf)["field"].value().toString();
+			table = (*buf)["table"].value().toString();
 		}
-		if (!str.isEmpty() && (!propertyBuffer() || table=="*" || field.find("*")!=-1)) {
+		if (!str.isEmpty() && (!buf || table=="*" || field.find("*")!=-1)) {
 			//asterisk found! criteria not allowed
 			result->success = false;
 			result->column = 4;
@@ -1147,7 +1161,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			//this is just checking: destroy expr. object
 			delete e;
       setDirty(true);
-			(*propertyBuffer())["criteria"] = str;
+			(*buf)["criteria"] = str;
 		} 
 		else {
 			result->success = false;
@@ -1191,11 +1205,29 @@ KexiPropertyBuffer *KexiQueryDesignerGuiEditor::propertyBuffer()
 	return d->buffers->currentPropertyBuffer();
 }
 
+static bool isAsterisk(const QString& tableName, const QString& fieldName)
+{
+	return tableName=="*" || fieldName.endsWith("*");
+}
+
+void KexiQueryDesignerGuiEditor::updatePropertiesVisibility(KexiPropertyBuffer& buf)
+{
+	const bool asterisk = isAsterisk(
+		buf["table"].value().toString(), buf["field"].value().toString()
+	);
+#ifndef KEXI_NO_UNFINISHED
+	buf["caption"].setVisible( !asterisk );
+#endif
+	buf["alias"].setVisible( !asterisk );
+	buf["sorting"].setVisible( !asterisk );
+	propertyBufferReloaded(true);
+}
+
 KexiPropertyBuffer *
 KexiQueryDesignerGuiEditor::createPropertyBuffer( int row, 
 	const QString& tableName, const QString& fieldName, bool newOne )
 {
-	const bool asterisk = (tableName=="*" || fieldName.find("*")!=-1);
+	const bool asterisk = isAsterisk(tableName, fieldName);
 	QString typeName = "KexiQueryDesignerGuiEditor::Column";
 	KexiPropertyBuffer *buff = new KexiPropertyBuffer(d->buffers, typeName);
 
@@ -1207,15 +1239,11 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 	prop->setVisible(false);//always hidden
 
 	buff->add(prop = new KexiProperty("caption", QVariant(QString::null), i18n("Caption") ) );
-	if (asterisk)
-		prop->setVisible(false);
 #ifdef KEXI_NO_UNFINISHED
 		prop->setVisible(false);
 #endif
 
 	buff->add(prop = new KexiProperty("alias", QVariant(QString::null), i18n("Alias")) );
-	if (asterisk)
-		prop->setVisible(false);
 
 	buff->add(prop = new KexiProperty("visible", QVariant(true, 4)) );
 	prop->setVisible(false);
@@ -1229,8 +1257,6 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 	slist << "nosorting" << "ascending" << "descending";
 	nlist << i18n("None") << i18n("Ascending") << i18n("Descending");
 	buff->add(prop = new KexiProperty("sorting", slist[0], slist, nlist, i18n("Sorting")));
-	if (asterisk)
-		prop->setVisible(false);
 
 	buff->add(prop = new KexiProperty("criteria", QVariant(QString::null)) );
 	prop->setVisible(false);
@@ -1242,6 +1268,8 @@ KexiQueryDesignerGuiEditor::createPropertyBuffer( int row,
 		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&, KexiProperty&)));
 
 	d->buffers->insert(row, buff, newOne);
+
+	updatePropertiesVisibility(*buff);
 	return buff;
 }
 

@@ -107,6 +107,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 			bool allowRelationalOperator);
 
 		QCString generateUniqueAlias() const;
+		void updatePropertiesVisibility(KexiPropertyBuffer& buf);
 
 	protected slots:
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);

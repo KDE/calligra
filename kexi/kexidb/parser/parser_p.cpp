@@ -492,8 +492,11 @@ QuerySchema* parseSelect(
 	if (colViews) {
 		BaseExpr *e;
 		columnNum = 0;
-		for (BaseExpr::ListIterator it(colViews->list);(e = it.current()); columnNum++)
-		{
+		const uint colCount = colViews->list.count();
+//		for (BaseExpr::ListIterator it(colViews->list);(e = it.current()); columnNum++)
+		colViews->list.first();
+		for (; columnNum<colCount; columnNum++) {
+			e = colViews->list.current();
 			bool moveNext = true; //used to avoid ++it when an item is taken from the list
 			BaseExpr *columnExpr = e;
 			VariableExpr* aliasVariable = 0;
@@ -528,9 +531,8 @@ QuerySchema* parseSelect(
 			}
 			else if (isExpressionField) {
 				//expression object will be reused, take, will be owned, do not destroy
-		KexiDBDbg << colViews->list.count() << " " << it.current()->debugString() << endl;
-KexiDBDbg << 	it.atFirst () << endl;
-				colViews->list.take(0); //take() doesn't work
+//		KexiDBDbg << colViews->list.count() << " " << it.current()->debugString() << endl;
+				colViews->list.take(); //take() doesn't work
 				moveNext = false;
 			}
 			else if (aliasVariable) {
@@ -568,8 +570,10 @@ KexiDBDbg << 	it.atFirst () << endl;
 				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
 			}*/
 	
-			if (moveNext)
-				++it;
+			if (moveNext) {
+				colViews->list.next();
+//				++it;
+			}
 		}
 	}
 	//----- WHERE expr.
