@@ -1688,7 +1688,9 @@ void KWView::print( KPrinter &prt )
     else
         m_doc->getVariableCollection()->recalcVariables(VT_MAILMERGE);
 
-    painter.end(); /// this is what triggers the printing
+    painter.end(); // this is what triggers the printing
+    m_doc->getVariableCollection()->variableSetting()->setLastPrint(QDate::currentDate());
+    m_doc->recalcVariables(  VT_DATE );
 }
 
 void KWView::showFormat( const KoTextFormat &currentFormat )

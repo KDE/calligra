@@ -102,7 +102,7 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
     case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
         if ( !varFormat )
         {
-            if ( _forceDefaultFormat )
+            if ( _forceDefaultFormat || subtype == KoDateVariable::VST_DATE_LAST_PRINTING)
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
             {
@@ -112,7 +112,6 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
                 varFormat =  coll->format( result );
             }
         }
-        kdDebug()<<" _correct :"<<_correct<<endl;
         return new KWDateVariable( textdoc, subtype, varFormat, this, m_doc,_correct );
     case VT_TIME:
     case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
