@@ -20,16 +20,16 @@
 #include <klocale.h>
 #include <qvbox.h>
 #include <qmultilineedit.h>
-#include "koNoteDia.h"
+#include "koCommentDia.h"
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <kglobal.h>
 #include <qdatetime.h>
 
-KoNoteDia::KoNoteDia( QWidget *parent, const QString &_note, const QString & _authorName, const char *name )
+KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString & _authorName, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
-    setCaption( i18n("Edit Note") );
+    setCaption( i18n("Edit Comment") );
     authorName = _authorName;
     QVBox *page = makeVBoxMainWidget();
 
@@ -41,12 +41,12 @@ KoNoteDia::KoNoteDia( QWidget *parent, const QString &_note, const QString & _au
     resize( 300,100 );
 }
 
-QString KoNoteDia::noteText()
+QString KoCommentDia::commentText()
 {
     return m_multiLine->text();
 }
 
-void KoNoteDia::slotAddAuthorName()
+void KoCommentDia::slotAddAuthorName()
 {
     QString date = KGlobal::locale()->formatDate( QDate::currentDate() );
     QString time = KGlobal::locale()->formatTime( QTime::currentTime() );
@@ -55,4 +55,4 @@ void KoNoteDia::slotAddAuthorName()
 
 }
 
-#include "koNoteDia.moc"
+#include "koCommentDia.moc"

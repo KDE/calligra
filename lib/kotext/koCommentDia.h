@@ -17,20 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __KoNoteDia__
-#define __KoNoteDia__
+#ifndef __KoCommentDia__
+#define __KoCommentDia__
 
 #include <kdialogbase.h>
 
 class QPushButton;
 class QMultiLineEdit;
 
-class KoNoteDia : public KDialogBase
+class KoCommentDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KoNoteDia( QWidget *parent, const QString &_note=QString::null, const QString & _authorName=QString::null, const char *name=0L );
-    QString noteText();
+    KoCommentDia( QWidget *parent, const QString &_note=QString::null, const QString & _authorName=QString::null, const char *name=0L );
+    QString commentText();
 
 private slots:
     void slotAddAuthorName();
