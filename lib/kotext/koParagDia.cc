@@ -1400,6 +1400,9 @@ KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent, c
         gNumbering->setEnabled( false);
         preview->setEnabled( false );
     }
+
+    QSpacerItem* spacer = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    Form1Layout->addItem( spacer );
 }
 
 void KoParagCounterWidget::styleChanged (KoParagCounter::Style st )
