@@ -104,7 +104,7 @@ void koScanPlugins( const char* _path, CORBA::ImplRepository_ptr _imr )
 void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
 {
   KSimpleConfig config( _file, true );
-  config.setGroup( "KDE Desktop Entry" );
+  config.setDesktopGroup();
 
   QString type = config.readEntry( "Type" );
   if ( type.isEmpty() )
