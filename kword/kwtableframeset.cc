@@ -192,6 +192,31 @@ KoRect KWTableFrameSet::boundingRect() {
                 m_rowPositions.last()-m_rowPositions[0]);// height
 }
 
+double KWTableFrameSet::topWithoutBorder()
+{
+    KWTableFrameSet::Cell *cell;
+    double top = 0.0;
+    int i;
+    for (i=0; cell = getCell(0,i); i++)
+    {
+        top = QMAX( top, m_rowPositions[0] + cell->topBorder() );
+    }
+    return top;
+}
+
+
+double KWTableFrameSet::leftWithoutBorder()
+{
+    KWTableFrameSet::Cell *cell;
+    double left = 0.0;
+    int i;
+    for (i=0; cell = getCell(i,0); i++)
+    {
+        left = QMAX( left, m_rowPositions[0] + cell->leftBorder() );
+    }
+    return left;
+}
+
 /* returns the cell that occupies row, col. */
 KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int col )
 {

@@ -144,6 +144,18 @@ public:
     void setBoundingRect( KoRect rect, CellSize widthMode, CellSize heightMode );
 
     /**
+     * Calculate the top postion of the cell(s) in the leftmost column
+     * @return double table leftmost position
+     */
+    double topWithoutBorder();
+
+    /**
+     * Calculate the top postion of the cell(s) in the top row
+     * @return double table top position
+     */
+    double leftWithoutBorder();
+
+    /**
      *  change the width of the table, keeping the proportions of the cells
      * (if one is wider than the others, it is still wider after resize)
      */

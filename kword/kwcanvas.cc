@@ -548,15 +548,17 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             {  // in position to select a ROW
                 // here the cursor is on the left of the table. the y is OK, but the x is not,
                 // hence finding a proper x with the table object
-                KWTableFrameSet::Cell *cell = table->getCellByPos( table->boundingRect().left(), m_doc->unzoomItY(e->pos().y())  );
-                table->selectRow( cell->getRow() );
+                KWTableFrameSet::Cell *cell = table->getCellByPos( table->leftWithoutBorder(), m_doc->unzoomItY(e->pos().y())  );
+                if (cell)
+                    table->selectRow( cell->getRow() );
             }
             else
             { // in position to select a COLUMN
               // here the cursor is on top of the table. the x is ok, but the y is not.
-                KWTableFrameSet::Cell *cell = table->getCellByPos( m_doc->unzoomItX(e->pos().x()), table->boundingRect().top()  );
-                table->selectCol( cell->getColumn() );
-            }
+                KWTableFrameSet::Cell *cell = table->getCellByPos( m_doc->unzoomItX(e->pos().x()), table->topWithoutBorder()  );
+                if (cell)
+                    table->selectCol( cell->getColumn() );
+    }
         }
         m_scrollTimer->start( 50 );
     }
