@@ -388,7 +388,6 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
             kdDebug() << "Found footer" << endl;
             importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter, footerStyle );
         }
-        m_styleStack.pop();
     }
     else
     {
@@ -1151,8 +1150,6 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         pos += length;
     }
 }
-
-
 
 QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement& paragraph )
 {

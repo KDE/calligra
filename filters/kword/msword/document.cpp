@@ -291,9 +291,9 @@ void Document::headerStart( wvWare::HeaderData::Type type )
     // Werner says the headers are always emitted in the order of the Type enum.
 
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
-    framesetElement.setAttribute("frameType",1);
-    framesetElement.setAttribute("frameInfo",Conversion::headerTypeToFrameInfo(type));
-    // TODO: "name" attribute (needs I18N)
+    framesetElement.setAttribute( "frameType", 1 );
+    framesetElement.setAttribute( "frameInfo", Conversion::headerTypeToFrameInfo( type ) );
+    framesetElement.setAttribute( "name", Conversion::headerTypeToFramesetName( type ) );
     m_framesetsElement.appendChild(framesetElement);
 
     bool isHeader = Conversion::isHeader( type );
@@ -373,7 +373,6 @@ void Document::slotTableCellEnd()
 QDomElement Document::createInitialFrame( QDomElement& parentFramesetElem, double left, double right, double top, double bottom, bool autoExtend, NewFrameBehavior nfb )
 {
     QDomElement frameElementOut = parentFramesetElem.ownerDocument().createElement("FRAME");
-    // Those values are unused. The paper margins make recalcFrames() resize this frame.
     frameElementOut.setAttribute( "left", left );
     frameElementOut.setAttribute( "right", right );
     frameElementOut.setAttribute( "top", top );
