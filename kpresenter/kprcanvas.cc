@@ -267,7 +267,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 {
     if ( isUpdatesEnabled() )
     {
-        kdDebug(33001) << "KPrCanvas::paintEvent" << endl;
+        //kdDebug(33001) << "KPrCanvas::paintEvent" << endl;
         QPainter bufPainter;
         bufPainter.begin( &buffer, this ); // double-buffering - (the buffer is as big as the widget)
         bufPainter.translate( -diffx(), -diffy() );

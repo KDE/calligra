@@ -492,7 +492,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 #endif
             )
         {
-            kdDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            //kdDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
         }
         else
         {
@@ -510,7 +510,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
             m_cachedPar1 = m_ie_par1;
             m_cachedPar2 = m_ie_par2;
             m_cachedPar3 = m_ie_par3;
-            kdDebug(33001) <<  "Drawing non-cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            //kdDebug(33001) <<  "Drawing non-cached pixmap " << (void*) this << " " << k_funcinfo << endl;
         }
         _painter->drawPixmap( rect, m_cachedPixmap);
     }
