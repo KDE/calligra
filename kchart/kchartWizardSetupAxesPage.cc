@@ -41,8 +41,8 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,2,2,15,7);
 
     grid = new QCheckBox( i18n( "Has grid" ),tmpQGroupBox  );
-    // PENDING(kalle) Put back in
-    //     grid->setChecked( _chart->params()->grid );
+
+    grid->setChecked(_chart->params()->showGrid());
     grid2->addWidget(grid,0,0);
 
     gridColor=new KColorButton(tmpQGroupBox);
