@@ -66,6 +66,7 @@ class VRoundRectTool;
 class VScaleTool;
 class VSelectNodesTool;
 class VSelectTool;
+class VSelectToolBar;
 class VShearTool;
 class VSinusTool;
 class VSpiralTool;
@@ -78,7 +79,6 @@ class VTool;
 class VToolBox;
 class VTransformDlg;
 class VWhirlPinchDlg;
-
 
 class KarbonView : public KoView, public KXMLGUIBuilder
 {
@@ -275,6 +275,9 @@ private:
 	DCOPObject* m_dcop;
 
 	VToolBox *m_toolbox;
+	
+	//toolbars
+	VSelectToolBar* m_selectToolBar;
 
 	//status bar message
 	QLabel* m_status;

@@ -86,6 +86,9 @@
 #include "vcontexthelpdocker.h"
 #include "vhistorydocker.h"
 
+// ToolBars
+#include "vselecttoolbar.h"
+
 // The rest.
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -188,6 +191,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	}
 
 	m_TransformDlg = new VTransformDlg( part(), this );
+	
+	//create toolbars
+	m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
+	mainWindow()->addToolBar( m_selectToolBar );
 
 	setNumberOfRecentFiles( part()->maxRecentFiles() );
 
