@@ -27,9 +27,6 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 kdelnkdir = $(kde_appsdir)/Office
 kdelnk_DATA = kexi.desktop
 
-mimedir = $(kde_mimedir)/application
-mime_DATA = x-kexi.desktop
-
 install-data-local:
 #	$(mkinstalldirs) $(kde_servicetypesdir)/
 #	$(INSTALL_DATA) $(srcdir)/kexiinterface.desktop $(kde_servicetypesdir)/kexiinterface.desktop
