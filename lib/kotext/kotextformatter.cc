@@ -192,7 +192,7 @@ bool KoTextFormatterCore::format()
                    << " left=" << left << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " availableWidth=" << availableWidth << " maxY=" << maxY << endl;
 #else
     if ( availableWidth == 0 )
-        kdDebug(32500) << "KoTextFormatter::format " << parag->paragId() << " warning, availableWidth=0" << endl;;
+        kdDebug(32500) << "KoTextFormatter::format " << parag->paragId() << " warning, availableWidth=0" << endl;
     if ( maxY == 0 )
         kdDebug(32500) << "KoTextFormatter::format " << parag->paragId() << " warning, maxY=0" << endl;
 #endif
