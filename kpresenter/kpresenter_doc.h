@@ -190,6 +190,8 @@ public:
     void loadPastedObjs( const QString &in, KPrPage* _page );
 
     void deSelectAllObj();
+    void deSelectObj(KPObject *obj);
+    void updateHeaderFooterButton();
 
     KPImageCollection *getImageCollection() { return &_imageCollection; }
     KPGradientCollection *getGradientCollection() { return &_gradientCollection; }

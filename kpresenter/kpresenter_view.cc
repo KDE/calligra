@@ -2377,11 +2377,15 @@ void KPresenterView::initGui()
     if ( sb )
         sb->show();
     showZoom( zoomHandler()->zoom() );
-    actionViewHeader->setChecked(m_pKPresenterDoc->hasHeader());
-    actionViewFooter->setChecked(m_pKPresenterDoc->hasFooter());
-
+    updateHeaderFooterButton();
     m_pKPresenterDoc->updateZoomRuler();
     updatePageInfo();
+}
+
+void KPresenterView::updateHeaderFooterButton()
+{
+    actionViewHeader->setChecked(m_pKPresenterDoc->hasHeader());
+    actionViewFooter->setChecked(m_pKPresenterDoc->hasFooter());
 }
 
 void KPresenterView::guiActivateEvent( KParts::GUIActivateEvent *ev )
@@ -5447,22 +5451,18 @@ void KPresenterView::viewFooter()
 {
     bool state=actionViewFooter->isChecked();
     m_pKPresenterDoc->setFooter( state );
-    if(!state)
-    {
-        m_pKPresenterDoc->terminateEditing(m_pKPresenterDoc->footer());
-        m_canvas->deSelectObj( m_pKPresenterDoc->footer() );
-    }
+    KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Header"):i18n("Hide Header") , m_pKPresenterDoc, state ,m_pKPresenterDoc->footer());
+    m_pKPresenterDoc->addCommand(cmd);
+
 }
 
 void KPresenterView::viewHeader()
 {
     bool state=actionViewHeader->isChecked();
     m_pKPresenterDoc->setHeader( state);
-    if(!state)
-    {
-        m_pKPresenterDoc->terminateEditing(m_pKPresenterDoc->header());
-        m_canvas->deSelectObj( m_pKPresenterDoc->header() );
-    }
+    KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Footer"):i18n("Hide Footer") , m_pKPresenterDoc,state ,m_pKPresenterDoc->header());
+    m_pKPresenterDoc->addCommand(cmd);
+
 }
 
 #include <kpresenter_view.moc>

@@ -122,6 +122,10 @@ public:
     void unZoomDocument(int &dpiX,int &dpiY);
     void zoomDocument(int zoom);
 
+    //refresh footer/header button when we make undo/redo show/hide header/footer
+    void updateHeaderFooterButton();
+
+
 signals:
     void currentPageChanged( int );
 

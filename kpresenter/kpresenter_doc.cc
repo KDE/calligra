@@ -1982,27 +1982,48 @@ void KPresenterDoc::deSelectAllObj()
 
 }
 
-/*================================================================*/
+void KPresenterDoc::deSelectObj(KPObject *obj)
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KPresenterView*)it.current())->getCanvas()->deSelectObj(obj );
+}
+
 void KPresenterDoc::setHeader( bool b )
 {
     _hasHeader = b;
     _header->setDrawEditRect( b );
     _header->setDrawEmpty( b );
-    setModified(true);
+    if(!b)
+    {
+        terminateEditing(_header);
+        deSelectObj(_header);
+    }
+    updateHeaderFooterButton();
     repaint(_hasHeader);
 }
 
-/*================================================================*/
 void KPresenterDoc::setFooter( bool b )
 {
     _hasFooter = b;
     _footer->setDrawEditRect( b );
     _footer->setDrawEmpty( b );
-    setModified(true);
+    if(!b)
+    {
+        terminateEditing(_footer);
+        deSelectObj(_footer);
+    }
+    updateHeaderFooterButton();
     repaint(_footer);
 }
 
-/*================================================================*/
+void KPresenterDoc::updateHeaderFooterButton()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KPresenterView*)it.current())->updateHeaderFooterButton();
+}
+
 void KPresenterDoc::makeUsedPixmapList()
 {
     usedPixmaps.clear();

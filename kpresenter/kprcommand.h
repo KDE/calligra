@@ -811,4 +811,18 @@ class KPrStickyObjCommand : public KNamedCommand
     KPrPage*m_page;
 };
 
+class KPrHideShowHeaderFooter : public KNamedCommand
+{
+ public:
+    KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc, bool _newValue,KPTextObject *_textObject);
+    ~KPrHideShowHeaderFooter(){};
+    void execute();
+    void unexecute();
+ protected:
+    KPresenterDoc *m_doc;
+    KPTextObject *m_textObject;
+    bool newValue;
+};
+
 #endif
+

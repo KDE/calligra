@@ -2149,3 +2149,33 @@ void KPrStickyObjCommand::unstickObj(KPObject *_obj)
     _obj->setSticky(false);
     m_doc->deSelectAllObj();
 }
+
+KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc, bool _newValue, KPTextObject *_textObject):
+    KNamedCommand(name),
+    m_doc(_doc),
+    m_textObject(_textObject),
+    newValue(_newValue)
+{
+}
+
+
+void KPrHideShowHeaderFooter::execute()
+{
+    if( m_textObject==m_doc->footer())
+        m_doc->setFooter( newValue );
+    else if( m_textObject==m_doc->header())
+        m_doc->setHeader( newValue );
+    else
+        kdDebug()<<"Error in void KPrHideShowHeaderFooter::execute()\n";
+}
+
+void KPrHideShowHeaderFooter::unexecute()
+{
+    if( m_textObject==m_doc->footer())
+        m_doc->setFooter( !newValue );
+    else if( m_textObject==m_doc->header())
+        m_doc->setHeader( !newValue );
+    else
+        kdDebug()<<"Error in void KPrHideShowHeaderFooter::unexecute()\n";
+
+}
