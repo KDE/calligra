@@ -8,4 +8,5 @@ package-messages:
 messages: rc.cpp
 	$(EXTRACTRC) `find . -name \*.ui` >> rc.cpp
 	$(EXTRACTRC) `find . -name \*.rc` >> rc.cpp
+	$(EXTRACTRC) `find . -name \*.shape` >> rc.cpp
 	$(XGETTEXT) `find . -name \*.cpp -not -name \*.moc.*` kiviopart/kivio_aboutdata.h -o $(podir)/kivio.pot
