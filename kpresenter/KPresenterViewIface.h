@@ -128,7 +128,6 @@ k_dcop:
     virtual void textUnsortList();
     virtual void textDepthPlus();
     virtual void textDepthMinus();
-    virtual void textSettings();
     virtual void textContentsToHeight();
     virtual void textObjectToContents();
     virtual void formatParagraph();

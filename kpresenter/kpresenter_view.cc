@@ -48,7 +48,6 @@
 #include <confpolygondia.h>
 #include <presdurationdia.h>
 #include <kppartobject.h>
-#include <textdialog.h>
 #include <sidebar.h>
 #include <notebar.h>
 #include <insertpagedia.h>
@@ -1716,49 +1715,6 @@ void KPresenterView::textDepthMinus()
 }
 
 /*===============================================================*/
-void KPresenterView::textSettings()
-{
-#if 0
-    KPTextObject *txtObj = m_canvas->currentTextObjectView()->kpTextObject();
-    if ( !txtObj )
-	txtObj = m_canvas->selectedTextObj();
-    if ( txtObj ) {
-	TextDialog dlg( this, 0, TRUE );
-/*	dlg.comboBullet1->setCurrentItem( (int)txtObj->document()->textSettings().bulletType[0] );
-	dlg.comboBullet2->setCurrentItem( (int)txtObj->document()->textSettings().bulletType[1] );
-	dlg.comboBullet3->setCurrentItem( (int)txtObj->document()->textSettings().bulletType[2] );
-	dlg.comboBullet4->setCurrentItem( (int)txtObj->document()->textSettings().bulletType[3] );
-	dlg.colorBullet1->setColor( txtObj->document()->textSettings().bulletColor[0] );
-	dlg.colorBullet2->setColor( txtObj->document()->textSettings().bulletColor[1] );
-	dlg.colorBullet3->setColor( txtObj->document()->textSettings().bulletColor[2] );
-	dlg.colorBullet4->setColor( txtObj->document()->textSettings().bulletColor[3] ); */
-	dlg.spinLineSpacing->setValue( txtObj->document()->textSettings().lineSpacing );
-	dlg.spinParagSpacing->setValue( txtObj->document()->textSettings().paragSpacing );
-	dlg.spinMargin->setValue( txtObj->document()->textSettings().margin );
-	if ( dlg.exec() == QDialog::Accepted ) {
-	    KTextEditDocument::TextSettings s;
-	    /*s.bulletType[0] = (KTextEditDocument::Bullet)dlg.comboBullet1->currentItem();
-	    s.bulletType[1] = (KTextEditDocument::Bullet)dlg.comboBullet2->currentItem();
-	    s.bulletType[2] = (KTextEditDocument::Bullet)dlg.comboBullet3->currentItem();
-	    s.bulletType[3] = (KTextEditDocument::Bullet)dlg.comboBullet4->currentItem();
-	    s.bulletColor[0] = dlg.colorBullet1->color();
-	    s.bulletColor[1] = dlg.colorBullet2->color();
-	    s.bulletColor[2] = dlg.colorBullet3->color();
-	    s.bulletColor[3] = dlg.colorBullet4->color();*/
-	    s.lineSpacing = dlg.spinLineSpacing->value();
-	    s.paragSpacing = dlg.spinParagSpacing->value();
-	    s.margin = dlg.spinMargin->value();
-	    txtObj->document()->setTextSettings( s );
-	    if ( !m_canvas->currentTextObjectView() )
-		m_canvas->repaint( false );
-	    else
-		txtObj->repaint( FALSE );
-	}
-    }
-#endif
-}
-
-/*===============================================================*/
 void KPresenterView::textContentsToHeight()
 {
 #if 0
@@ -2631,10 +2587,6 @@ void KPresenterView::setupActions()
 					CTRL + Key_Minus, this, SLOT( textDepthMinus() ),
 					actionCollection(), "text_depthMinus" );
 
-    actionTextSettings = new KAction( i18n( "&Settings..." ), "configure", 0,
-				      this, SLOT( textSettings() ),
-				      actionCollection(), "text_settings" );
-
     actionTextExtentCont2Height = new KAction( i18n( "Extend Contents to Object &Height" ), 0,
 					       this, SLOT( textContentsToHeight() ),
 					       actionCollection(), "text_con2hei" );
@@ -3053,7 +3005,6 @@ void KPresenterView::objectSelectedChanged()
     actionFormatDefault->setEnabled(isText);
     actionTextDepthMinus->setEnabled(isText);
 
-    actionTextSettings->setEnabled(isText);
     actionTextExtentCont2Height->setEnabled(isText);
     actionTextExtendObj2Cont->setEnabled(isText);
     actionTextBold->setEnabled(isText);

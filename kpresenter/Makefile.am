@@ -23,7 +23,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	KPresenterViewIface.skel KPresenterViewIface.cc\
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterPageIface.skel KPresenterPageIface.cc \
-	textdialog.ui sidebar.cc \
+	sidebar.cc \
 	insertpagedia.ui generalconfig.ui kpimage.cc \
 	kpresenter_dlg_config.cc kprvariable.cc kprdrag.cc \
 	kprtextdocument.cc kpfreehandobject.cc kppolylineobject.cc \

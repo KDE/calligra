@@ -242,7 +242,6 @@ public slots:
     void textUnsortList();
     void textDepthPlus();
     void textDepthMinus();
-    void textSettings();
     void textContentsToHeight();
     void textObjectToContents();
     void textInsertPageNum();
@@ -698,7 +697,6 @@ private:
     KToggleAction *actionTextTypeUnsortList;
     KAction *actionTextDepthPlus;
     KAction *actionTextDepthMinus;
-    KAction *actionTextSettings;
     KAction *actionTextExtentCont2Height;
     KAction *actionTextExtendObj2Cont;
     KToggleAction *actionTextBold;

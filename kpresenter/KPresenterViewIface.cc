@@ -401,11 +401,6 @@ void KPresenterViewIface::textDepthMinus()
     view->textDepthMinus();
 }
 
-void KPresenterViewIface::textSettings()
-{
-    view->textSettings();
-}
-
 void KPresenterViewIface::textContentsToHeight()
 {
     view->textContentsToHeight();

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="31">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="32">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -83,7 +83,6 @@
   <Action name="text_font"/>
   <Action name="format_paragraph"/>
   <Action name="text_color"/>
-  <Action name="text_settings"/>
   <Separator/>
   <Menu name="Align"><text>&amp;Align</text>
    <Action name="text_alignleft"/>
@@ -279,7 +278,6 @@
   <Separator/>
   <Action name="extra_rotate"/>
   <Action name="extra_shadow"/>
-  <Action name="text_settings"/>
   <Separator/>
   <Action name="object_properties"/>
   <Separator/>
