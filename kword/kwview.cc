@@ -918,7 +918,7 @@ void KWView::setupActions()
                                      this, SLOT( tableDeleteCol() ),
                                      actionCollection(), "table_delcol" );
     actionTableDelCol->setToolTip( i18n( "Delete selected columns from the current table." ) );
-    actionTableDelCol->setWhatsThis( i18n( "Delete selected column from the current table." ) );
+    actionTableDelCol->setWhatsThis( i18n( "Delete selected columns from the current table." ) );
 
     actionTableResizeCol = new KAction( i18n( "Resize Column..." ), 0,
                                this, SLOT( tableResizeCol() ),
