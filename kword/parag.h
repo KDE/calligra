@@ -9,6 +9,8 @@
 
 #include <koRuler.h>
 
+#include <qdom.h>
+
 class KWVariable;
 class KWFootNote;
 class KWTextFrameSet;
@@ -145,10 +147,8 @@ public:
     bool deleteText( unsigned int _pos, unsigned int _len = 1 );
     void setFormat( unsigned int _pos, unsigned int _len, const KWFormat &format );
 
-    // #### todo
-    //void save( ostream &out );
-    // #### todo
-    //void load( KOMLParser&, vector<KOMLAttrib>& );
+    QDomElement save( QDomDocument& doc );
+    bool load( const QDomElement& element );
 
     int *getCounterData() { return counterData; }
 

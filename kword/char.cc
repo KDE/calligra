@@ -292,17 +292,44 @@ QString KWString::toString( unsigned int _pos, unsigned int _len )
 }
 
 /*================================================================*/
-// #### todo
-// void KWString::saveFormat( ostream &out )
-// {
-//     unsigned int start = 0;
+QDomElement KWString::save( QDomDocument& d )
+{
+    QDomElement e = d.createElement( "TEXT" );
 
-//     for ( unsigned int i = 0; i < _len_; i++ )
-//     {
-//         if ( _data_[ i ].attrib->getClassId() != ID_KWCharFormat )
-//         {
-//             if ( start < i )
-//             {
+    if ( _len_ == 0 )
+	return;
+    
+    unsigned int start = 0;
+
+    QDomElement f = _data_[0].attrib->save( d );
+    if ( f.isNull() )
+	return f;
+    e.appendChild( f );
+
+    QString buffer;
+    
+    for ( unsigned int i = 0; i < _len_; i++ ) { 
+	if ( i > 0 ) {
+	    if ( formatChanged( _data_[i], _data_[i-1] ) ) {
+		if ( !buffer.isEmpty() ) {
+		    f.appendChild( d.createTextNode( buffer ) );
+		    buffer = QString::null;
+		}
+		f = _data_[i].attrib->save( d );
+		if ( f.isNull() )
+		    return f;
+		e.appendChild( f );
+	    }
+	}
+	buffer += _data_[i].c;
+    }
+
+    if ( !buffer.isEmpty() ) {
+	f.appendChild( d.createTextNode( buffer ) );
+	buffer = QString::null;
+    }
+
+		
 //                 out << otag << "<FORMAT id=\"" << _data_[ start ].attrib->getClassId() << "\" pos=\"" << start
 //                     << "\" len=\"" << i - start << "\">" << endl;
 //                 _data_[ start ].attrib->save( out );

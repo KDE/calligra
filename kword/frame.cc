@@ -886,11 +886,10 @@ QDomElement KWTextFrameSet::save( QDomDocument &doc )
 
     KWParag *parag = getFirstParag();
     while ( parag ) {
-	// #### tofo
-	//QDomElement p = parag->save( doc );
-	//if ( p.isNull() )
-	//return p;
-	//frameset.appendChild( p );
+	QDomElement p = parag->save( doc );
+	if ( p.isNull() )
+	    return p;
+	frameset.appendChild( p );
     }
 
     return frameset;

@@ -291,6 +291,25 @@ void KWParag::setFormat( unsigned int _pos, unsigned int _len, const KWFormat &_
 }
 
 /*================================================================*/
+QDomElement KWParag::save( QDomDocument& doc )
+{
+    QDomElement e = doc.createElement( "P" );
+    e.setAttribute( "info", (int)info );
+    if ( hardBreak )
+	e.setAttribute( "hard-break", "1" );
+    
+    QDomElement l = paragLayout->save( doc );
+    if ( l.isNull() )
+	return l;
+    e.appendChild( l );
+    
+    QDomElement t = text.save( doc );
+    if ( t.isNull() )
+	return t;
+    
+    return e;
+}
+
 // #### todo
 // void KWParag::save( ostream &out )
 // {

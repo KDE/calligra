@@ -11,6 +11,7 @@
 #include <qstring.h>
 #include <qregexp.h>
 #include <qcstring.h>
+#include <qdom.h>
 
 class KWordDocument;
 class KWTextFrameSet;
@@ -33,8 +34,7 @@ public:
     virtual bool operator==( const KWCharAttribute &_attrib )
     { return classId == static_cast<KWCharAttribute>( _attrib ).classId; }
 
-    // #### todo
-    //virtual void save( ostream & ) {}
+    virtual QDomElement save( QDomDocument& ) {}
 
 protected:
     int classId;
@@ -211,8 +211,9 @@ public:
 
     QString toString();
     QString toString( unsigned int _pos, unsigned int _len );
+
+    QDomElement save( QDomDocument& doc );
     // #### todo
-    //void saveFormat( ostream &out );
     //void loadFormat( KOMLParser &parser, vector<KOMLAttrib> &lst, KWordDocument *_doc, KWTextFrameSet *_frameset );
 
     int find( QString _expr, KWSearchDia::KWSearchEntry *_format, int _index, bool _cs, bool _whole );
