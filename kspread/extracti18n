@@ -9,6 +9,8 @@ sub writeoutstring($)
    print STDOUT "i18n(\"@_[0]\");\n";
 }
 
+use Getopt::Long; # This is just a TEST
+
 while (defined ($ARGV[0]))
 {
    $_ = shift; 
