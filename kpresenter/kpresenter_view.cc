@@ -1474,7 +1474,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         if ( m_bDisplayFieldCode )
         {
             m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
-            m_pKPresenterDoc->recalcVariables(  VT_ALL );
+            m_pKPresenterDoc->recalcVariables( VT_ALL );
         }
 
         setCanvasXOffset( 0 );
@@ -1544,7 +1544,7 @@ void KPresenterView::screenStop()
         if ( m_bDisplayFieldCode )
         {
             m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFieldCode(true);
-            m_pKPresenterDoc->recalcVariables(  VT_ALL );
+            m_pKPresenterDoc->recalcVariables( VT_ALL );
         }
 
 //         if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() )

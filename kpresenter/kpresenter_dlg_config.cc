@@ -96,7 +96,7 @@ KPConfig::KPConfig( KPresenterView* parent )
 
     _toolsPage=new ConfigureToolsPage(parent, page);
 
-    page = addVBoxPage( i18n("Path"), i18n("Path Settings"),
+    page = addVBoxPage( i18n("Paths"), i18n("Path Settings"),
                         BarIcon("path") );
 
     m_pathPage=new ConfigurePathPage(parent, page);
@@ -436,10 +436,12 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     QGridLayout *grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
     m_oldNbRedo=30;
+    m_printNotes=true;
     if( config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
         m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
+        m_printNotes = config->readBoolEntry("PrintNotes", true);
     }
 
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
@@ -466,6 +468,9 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_displayFieldCode->setChecked(doc->getVariableCollection()->variableSetting()->displayFieldCode());
     grid->addWidget(m_displayFieldCode,6,0);
 
+    m_cbPrintNotes=new QCheckBox(i18n("Print slide notes"),tmpQGroupBox);
+    m_cbPrintNotes->setChecked(m_printNotes);
+    grid->addWidget(m_cbPrintNotes,7,0);
 
     tmpQGroupBox = new QGroupBox( box, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Grid"));
@@ -473,21 +478,21 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     grid = new QGridLayout( tmpQGroupBox, 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
     KoRect rect = doc->stickyPage()->getPageRect();
-    QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->getUnitName()),  tmpQGroupBox);
-    grid->addWidget(lab ,0,0);
+    QLabel *lab=new QLabel(i18n("Resolution X (%1):").arg(doc->getUnitName()), tmpQGroupBox);
+    grid->addWidget(lab,0,0);
     KoUnit::Unit unit = doc->getUnit();
     resolutionX = new KDoubleNumInput(tmpQGroupBox);
     resolutionX->setValue( KoUnit::ptToUnit( doc->getGridX(), unit ) );
     resolutionX->setRange( KoUnit::ptToUnit(10.0 , unit), KoUnit::ptToUnit(rect.width(), unit), KoUnit::ptToUnit(1, unit ), false);
 
-    grid->addWidget(resolutionX ,1,0);
+    grid->addWidget(resolutionX,1,0);
 
     lab=new QLabel(i18n("Resolution Y (%1):").arg(doc->getUnitName()), tmpQGroupBox);
-    grid->addWidget(lab ,2,0);
+    grid->addWidget(lab,2,0);
 
     resolutionY = new KDoubleNumInput(tmpQGroupBox);
     resolutionY->setValue( KoUnit::ptToUnit( doc->getGridY(), unit ) );
-    resolutionY->setRange( KoUnit::ptToUnit(10.0 , unit), KoUnit::ptToUnit(rect.width(), unit), KoUnit::ptToUnit( 1,unit ), false);
+    resolutionY->setRange( KoUnit::ptToUnit(10.0,unit), KoUnit::ptToUnit(rect.width(), unit), KoUnit::ptToUnit( 1,unit ), false);
 
     grid->addWidget(resolutionY, 3, 0);
 }
@@ -503,6 +508,7 @@ KCommand * ConfigureMiscPage::apply()
         doc->setUndoRedoLimit(newUndo);
         m_oldNbRedo=newUndo;
     }
+    config->writeEntry("PrintNotes", m_cbPrintNotes->isChecked());
 
     KMacroCommand * macroCmd=0L;
     bool b=m_displayLink->isChecked();
@@ -560,6 +566,9 @@ KCommand * ConfigureMiscPage::apply()
     doc->setGridValue( KoUnit::ptFromUnit( resolutionX->value(), doc->getUnit() ),
                        KoUnit::ptFromUnit( resolutionY->value(), doc->getUnit() ), true);
     doc->repaint( false );
+
+    config->sync();
+
     return macroCmd;
 }
 
@@ -570,9 +579,10 @@ void ConfigureMiscPage::slotDefault()
     m_displayComment->setChecked(true);
     m_underlineLink->setChecked(true);
     m_displayFieldCode->setChecked( false );
+    m_cbPrintNotes->setChecked(true);
     KPresenterDoc* doc = m_pView->kPresenterDoc();
 
-    resolutionY->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0), doc->getUnit() ) );
+    resolutionY->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
     resolutionX->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0 ), doc->getUnit() ) );
 }
 

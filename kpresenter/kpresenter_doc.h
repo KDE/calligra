@@ -100,31 +100,30 @@ class KPresenterDoc : public KoDocument
 {
     Q_OBJECT
     Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
-        Q_PROPERTY( int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit )
-        Q_PROPERTY( double indentValue READ getIndentValue WRITE setIndentValue )
-        Q_PROPERTY( int getLeftBorder READ getLeftBorder )
-        Q_PROPERTY( int getTopBorder READ getTopBorder )
-        Q_PROPERTY( int getBottomBorder READ getBottomBorder )
-        Q_PROPERTY( int getRightBorder READ getRightBorder )
-        Q_PROPERTY( bool cursorInProtectedArea READ cursorInProtectedArea WRITE setCursorInProtectedArea )
-        Q_PROPERTY( bool insertDirectCursor READ insertDirectCursor WRITE setInsertDirectCursor )
-        Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
-        Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
-        Q_PROPERTY( bool globalHyphenation READ globalHyphenation WRITE setGlobalHyphenation )
-        Q_PROPERTY( double tabStopValue READ tabStopValue WRITE setTabStopValue )
-        Q_PROPERTY( bool snapToGrid READ snapToGrid WRITE setSnapToGrid )
-        Q_PROPERTY( bool backgroundSpellCheckEnabled READ backgroundSpellCheckEnabled WRITE enableBackgroundSpellCheck )
-        Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord )
-        Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase )
-        Q_PROPERTY( bool spInfiniteLoop READ spInfiniteLoop WRITE setInfiniteLoop )
-        Q_PROPERTY( bool spManualSwitch READ spManualSwitch WRITE setManualSwitch )
-        Q_PROPERTY( bool presentationDuration READ presentationDuration WRITE setPresentationDuration )
-        Q_PROPERTY( QColor gridColor READ gridColor WRITE setGridColor )
-        Q_PROPERTY( QColor txtBackCol READ txtBackCol WRITE setTxtBackCol )
+    Q_PROPERTY( int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit )
+    Q_PROPERTY( double indentValue READ getIndentValue WRITE setIndentValue )
+    Q_PROPERTY( int getLeftBorder READ getLeftBorder )
+    Q_PROPERTY( int getTopBorder READ getTopBorder )
+    Q_PROPERTY( int getBottomBorder READ getBottomBorder )
+    Q_PROPERTY( int getRightBorder READ getRightBorder )
+    Q_PROPERTY( bool cursorInProtectedArea READ cursorInProtectedArea WRITE setCursorInProtectedArea )
+    Q_PROPERTY( bool insertDirectCursor READ insertDirectCursor WRITE setInsertDirectCursor )
+    Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
+    Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
+    Q_PROPERTY( bool globalHyphenation READ globalHyphenation WRITE setGlobalHyphenation )
+    Q_PROPERTY( double tabStopValue READ tabStopValue WRITE setTabStopValue )
+    Q_PROPERTY( bool snapToGrid READ snapToGrid WRITE setSnapToGrid )
+    Q_PROPERTY( bool backgroundSpellCheckEnabled READ backgroundSpellCheckEnabled WRITE enableBackgroundSpellCheck )
+    Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord )
+    Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase )
+    Q_PROPERTY( bool spInfiniteLoop READ spInfiniteLoop WRITE setInfiniteLoop )
+    Q_PROPERTY( bool spManualSwitch READ spManualSwitch WRITE setManualSwitch )
+    Q_PROPERTY( bool presentationDuration READ presentationDuration WRITE setPresentationDuration )
+    Q_PROPERTY( QColor gridColor READ gridColor WRITE setGridColor )
+    Q_PROPERTY( QColor txtBackCol READ txtBackCol WRITE setTxtBackCol )
 
 
-        public:
-
+  public:
     // constructor - destructor
     KPresenterDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* doc = 0,
                    const char* name = 0, bool singleViewMode = false );

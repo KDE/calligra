@@ -360,7 +360,7 @@ void KPresenterDoc::initConfig()
 
     QColor oldBgColor = Qt::white;
     QColor oldGridColor = Qt::black;
-    if(  config->hasGroup( "KPresenter Color" ) ) {
+    if ( config->hasGroup( "KPresenter Color" ) ) {
         config->setGroup( "KPresenter Color" );
         setTxtBackCol(config->readColorEntry( "BackgroundColor", &oldBgColor ));
         setGridColor(config->readColorEntry( "GridColor", &oldGridColor ));

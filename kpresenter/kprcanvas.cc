@@ -80,6 +80,7 @@
 #include <koStore.h>
 #include <koStoreDrag.h>
 #include <kmultipledrag.h>
+#include <kconfig.h>
 
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase ), buffer( size() )
@@ -4252,10 +4253,14 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
           - static_cast<int>( MM_TO_POINT( top_margin ) ) );*/
     }
 
+    KConfig *config=KPresenterFactory::global()->config();
+    config->setGroup("Misc");
+    bool printNotes = config->readBoolEntry("PrintNotes", true);
+
     NoteBar *noteBar = m_view->getNoteBar();
-    //don't print notes when there is no note to print
+    //don't print notes when there is no note to print or it's disabled
     if ( noteBar && !noteBar->getNotesTextForPrinting(list).isEmpty()
-        && !progress.wasCancelled())
+         && !progress.wasCancelled() && printNotes )
     {
         printer->newPage();
         painter->resetXForm();
