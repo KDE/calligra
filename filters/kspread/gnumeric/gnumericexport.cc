@@ -766,11 +766,17 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
     QDomElement summary =  gnumeric_doc.createElement("gmr:Summary");
     workbook.appendChild(summary);
 
-    addSummaryItem(gnumeric_doc, summary, "title", aboutPage->title());
-    addSummaryItem(gnumeric_doc, summary, "company", authorPage->company());
-    addSummaryItem(gnumeric_doc, summary, "author", authorPage->fullName());
-    addSummaryItem(gnumeric_doc, summary, "comments", aboutPage->abstract());
-    addSummaryItem(gnumeric_doc, summary, "keywords", aboutPage->keywords());
+    if ( !aboutPage->title().isEmpty() )
+        addSummaryItem(gnumeric_doc, summary, "title", aboutPage->title());
+    if ( !authorPage->company().isEmpty() )
+        addSummaryItem(gnumeric_doc, summary, "company", authorPage->company());
+    if ( !authorPage->fullName().isEmpty() )
+        addSummaryItem(gnumeric_doc, summary, "author", authorPage->fullName());
+    if ( !aboutPage->abstract().isEmpty() )
+        addSummaryItem(gnumeric_doc, summary, "comments", aboutPage->abstract());
+    if ( !aboutPage->keywords().isEmpty() )
+        addSummaryItem(gnumeric_doc, summary, "keywords", aboutPage->keywords());
+
     addSummaryItem(gnumeric_doc, summary, "application", "KSpread");
 
     /*
