@@ -229,6 +229,9 @@ public:
 
     virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type);
 
+    /** (Assuming this==main frameset), recalc the foot note numbers */
+    void renumberFootNotes();
+
 signals:
     /** Tell the Edit object that this frame got deleted */
     void frameDeleted( KWFrame* frame );
@@ -318,8 +321,9 @@ public:
 
     void insertFrameBreak() { textFrameSet()->insertFrameBreak( cursor() ); }
     void insertVariable( int type, int subtype = 0 );
+    void insertFootNote( NoteType noteType );
     void insertCustomVariable( const QString &name);
-    void insertVariable( KoVariable *var);
+    void insertVariable( KoVariable *var, KoTextFormat *format = 0 /*means currentFormat()*/ );
 
     void insertLink(const QString &_linkName, const QString & hrefName);
     void insertComment(const QString &_comment);

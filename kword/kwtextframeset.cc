@@ -2163,6 +2163,46 @@ KCommand *KWTextFrameSet::setParagLayoutFormatCommand( KoParagLayout *newLayout,
     return m_textobj->setParagLayoutFormatCommand(newLayout, flags, marginIndex);
 }
 
+// Didn't use QPtrList::compareItems because index() is a bit slow, we want to store it.
+class KWFootNoteVarList : public QPtrList< KWFootNoteVariable >
+{
+protected:
+    virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
+    {
+        KWFootNoteVariable* vara = ((KWFootNoteVariable *)a);
+        KWFootNoteVariable* varb = ((KWFootNoteVariable *)b);
+        if ( vara->paragraph() == varb->paragraph() ) {
+            // index() is a bit slow. But this is only called when there are
+            // two footnotes in the same paragraph.
+            int indexa = vara->index();
+            int indexb = varb->index();
+            return indexa < indexb ? -1 : indexa == indexb ? 0 : 1;
+        }
+        if ( vara->paragraph()->paragId() < varb->paragraph()->paragId() )
+            return -1;
+        return 1;
+    }
+};
+
+void KWTextFrameSet::renumberFootNotes()
+{
+    KWFootNoteVarList lst;
+    QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
+    {
+        KWFootNoteVariable *fnv = dynamic_cast<KWFootNoteVariable *>( cit.current() );
+        if (fnv && !fnv->isDeleted())
+            lst.append( fnv );
+    }
+    lst.sort();
+    short int varNumber = 1;
+    QPtrListIterator< KWFootNoteVariable > vit( lst );
+    for ( ; vit.current() ; ++vit, ++varNumber )
+    {
+        vit.current()->setNum( varNumber );
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
@@ -2785,27 +2825,54 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
 
 void KWTextFrameSetEdit::insertLink(const QString &_linkName, const QString & hrefName)
 {
-    KoVariable * var = 0L;
     KWDocument * doc = frameSet()->kWordDocument();
-    var = new KoLinkVariable( textFrameSet()->textDocument(),_linkName,hrefName , doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
-    insertVariable( var);
+    KoVariable * var = new KoLinkVariable( textFrameSet()->textDocument(), _linkName, hrefName, doc->variableFormatCollection()->format( "STRING" ), doc->getVariableCollection() );
+    insertVariable( var );
 }
 
 void KWTextFrameSetEdit::insertComment(const QString &_comment)
 {
-    KoVariable * var = 0L;
     KWDocument * doc = frameSet()->kWordDocument();
-    var = new KoNoteVariable( textFrameSet()->textDocument(),_comment, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
-    insertVariable( var);
+    KoVariable * var = new KoNoteVariable( textFrameSet()->textDocument(), _comment, doc->variableFormatCollection()->format( "STRING" ), doc->getVariableCollection() );
+    insertVariable( var );
 }
 
 
 void KWTextFrameSetEdit::insertCustomVariable( const QString &name)
 {
-     KoVariable * var = 0L;
      KWDocument * doc = frameSet()->kWordDocument();
-     var = new KoCustomVariable( textFrameSet()->textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
-     insertVariable( var);
+     KoVariable * var = new KoCustomVariable( textFrameSet()->textDocument(), name, doc->variableFormatCollection()->format( "STRING" ), doc->getVariableCollection());
+     insertVariable( var );
+}
+
+void KWTextFrameSetEdit::insertFootNote( NoteType noteType )
+{
+     kdDebug() << "KWTextFrameSetEdit::insertFootNote " << endl;
+     KWDocument * doc = frameSet()->kWordDocument();
+     KoVariable * var = new KWFootNoteVariable( textFrameSet()->textDocument(), noteType, doc->variableFormatCollection()->format( "NUMBER" ), doc->getVariableCollection());
+
+     // Not a good idea, one enters superscript text afterwards when doing that...
+     //KoTextFormat format = *currentFormat();
+     //format.setVAlign(KoTextFormat::AlignSuperScript);
+     //insertVariable( var, &format );
+     insertVariable( var );
+
+     // Now create text frameset which will hold the variable's contents
+     KWTextFrameSet *fs = new KWTextFrameSet( doc, i18n( "Footnotes" ) );
+     fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
+
+     /// ### temporary code
+            int i = m_currentFrame->pageNum();
+            KWFrame *frame = new KWFrame(fs, doc->ptLeftBorder(),
+                i * doc->ptPaperHeight() + doc->ptPaperHeight() - doc->ptTopBorder() - 20,
+                doc->ptPaperWidth() - doc->ptLeftBorder() - doc->ptRightBorder(), 20 );
+            frame->setFrameBehavior(KWFrame::AutoExtendFrame);
+            fs->addFrame( frame );
+
+     doc->addFrameSet( fs );
+
+     // Re-number footnote variables
+     textFrameSet()->renumberFootNotes();
 }
 
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )
@@ -2835,17 +2902,19 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
     insertVariable( var );
 }
 
-void KWTextFrameSetEdit::insertVariable( KoVariable *var )
+void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/ )
 {
     if ( var )
     {
         CustomItemsMap customItemsMap;
         customItemsMap.insert( 0, var );
+        if (!format)
+            format = currentFormat();
         kdDebug() << "KWTextFrameSetEdit::insertVariable inserting into paragraph" << endl;
 #ifdef DEBUG_FORMATS
-        kdDebug() << "KWTextFrameSetEdit::insertVariable currentFormat=" << currentFormat() << endl;
+        kdDebug() << "KWTextFrameSetEdit::insertVariable format=" << format << endl;
 #endif
-        textObject()->insert( cursor(), currentFormat(), KoTextObject::customItemChar(),
+        textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
                                 false, true, i18n("Insert Variable"),
                                 customItemsMap );
         var->recalc();

@@ -29,7 +29,6 @@
 
 #include <koPageLayoutDia.h>
 #include <koView.h>
-
 class DCOPObject;
 
 class KWDocStruct;
@@ -105,7 +104,7 @@ public:
     //bool viewTableGrid() const { return m_viewTableGrid; }
     //void setViewTableGrid(bool _b) { m_viewTableGrid = _b;}
 
-//    virtual void setNoteType(KWFootNoteManager::NoteType nt, bool change=true);
+    void setNoteType(NoteType nt, bool change=true);
 
     KWDocument *kWordDocument() { return m_doc; }
     KWGUI *getGUI() { return m_gui; }
@@ -190,8 +189,6 @@ public slots:
     void slotViewFrameBorders();
     void viewHeader();
     void viewFooter();
-    void viewFootNotes();
-    void viewEndNotes();
     void viewZoom( const QString &s );
 
     void insertTable();
@@ -199,7 +196,7 @@ public slots:
     void insertSpecialChar();
     void insertFrameBreak();
     void insertVariable();
-    void insertFootNoteEndNote();
+    void insertFootNote();
     void insertContents();
     void insertLink();
     void insertComment();

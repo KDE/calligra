@@ -21,10 +21,8 @@
 #define footnotedia_h
 
 #include <kdialogbase.h>
-
-class KWDocument;
-class KWCanvas;
-class QWidget;
+#include "defs.h" // for NoteType
+class QRadioButton;
 
 /******************************************************************/
 /* Class: KWFootNoteDia                                           */
@@ -35,22 +33,19 @@ class KWFootNoteDia : public KDialogBase
     Q_OBJECT
 
 public:
-    KWFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas, int _start,
-    	bool _footnote );
+    KWFootNoteDia( QWidget *parent, const char *name = 0 );
+
+    NoteType noteType() const;
 
 protected:
     void setupTab1();
     bool insertFootNote();
 
+private:
     QWidget *tab1;
 
-    KWDocument *doc;
-    KWCanvas *canvas;
-    int start;
-    bool footnote;
-
-protected slots:
-    virtual void slotOk();
+    QRadioButton *m_rbFootNote;
+    QRadioButton *m_rbEndNote;
 };
 
 #endif

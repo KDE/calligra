@@ -34,17 +34,18 @@ KWVariableCollection::KWVariableCollection()
 KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc )
 {
     KWDocument *m_doc=static_cast<KWDocument*>(doc);
-    KoVariable *var=0L;
-    if(type ==VT_PGNUM) {
+    switch(type) {
+    case VT_PGNUM:
         if ( !varFormat )
             varFormat = (subtype == KoPgNumVariable::VST_CURRENT_SECTION) ? coll->format("STRING") : coll->format("NUMBER");
-        var = new KWPgNumVariable( textdoc, subtype, varFormat, this, m_doc );
-    } else
-	if (type==VT_MAILMERGE)
-	var = new KWMailMergeVariable(textdoc,QString::null,coll->format("STRING"),this,m_doc);
-	   else
-           var = KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc);
-    return var;
+        return new KWPgNumVariable( textdoc, subtype, varFormat, this, m_doc );
+    case VT_MAILMERGE:
+	return new KWMailMergeVariable( textdoc, QString::null, coll->format("STRING"), this, m_doc );
+    case VT_FOOTNOTE:
+        return new KWFootNoteVariable( textdoc, (NoteType)subtype /*TODO*/, coll->format("NUMBER"), this );
+    default:
+        return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc );
+    }
 }
 
 /******************************************************************/
@@ -99,3 +100,37 @@ void KWMailMergeVariable::recalc()
 {
     resize();
 }
+
+KWFootNoteVariable::KWFootNoteVariable( KoTextDocument *textdoc, NoteType noteType, KoVariableFormat *varFormat, KoVariableCollection *varColl )
+    : KoVariable( textdoc, varFormat, varColl ), m_num( 0 ), m_noteType( noteType ), m_frameset( 0L )
+{
+}
+
+void KWFootNoteVariable::saveVariable( QDomElement &parentElem )
+{
+    QDomElement pgNumElem = parentElem.ownerDocument().createElement( "FOOTNOTE" );
+    parentElem.appendChild( pgNumElem );
+    pgNumElem.setAttribute( "subtype", 0 ); // the only kind currently
+    pgNumElem.setAttribute( "value", m_num );
+}
+
+void KWFootNoteVariable::load( QDomElement &elem )
+{
+    KoVariable::load( elem );
+    QDomElement footnoteElem = elem.namedItem( "FOOTNOTE" ).toElement();
+    if (!footnoteElem.isNull())
+    {
+        //m_subtype = footnoteElem.attribute("subtype").toInt();
+        m_num = footnoteElem.attribute("value").toInt();
+    }
+}
+
+QString KWFootNoteVariable::text()
+{
+    KoVariableNumberFormat * format = dynamic_cast<KoVariableNumberFormat *>( m_varFormat );
+    if ( format )
+        return format->convert( m_num );
+    return QString::null;
+}
+
+

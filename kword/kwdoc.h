@@ -50,7 +50,6 @@ class KoTextObject;
 class KWBgSpellCheck;
 class KoStyleCollection;
 
-
 class DCOPObject;
 
 class QFont;
@@ -336,10 +335,6 @@ public:
     void setUnit( KoUnit::Unit _unit );
 
     void addCommand( KCommand * cmd );
-
-//    KWFootNoteManager &getFootNoteManager() { return footNoteManager; }
-//    void setNoteType( KWFootNoteManager::NoteType nt ) { footNoteManager.setNoteType( nt ); }
-//    KWFootNoteManager::NoteType getNoteType() const { return footNoteManager.getNoteType(); }
 
     KCommandHistory * commandHistory() { return m_commandHistory; }
     KoAutoFormat * getAutoFormat() { return m_autoFormat; }
@@ -630,7 +625,6 @@ private:
     KoUnit::Unit m_unit;
 
     KCommandHistory * m_commandHistory;
-//    KWFootNoteManager footNoteManager;
     KoAutoFormat * m_autoFormat;
 
     // Shared between loadXML and loadComplete

@@ -17,81 +17,56 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kwcanvas.h"
 #include "footnotedia.h"
 #include "footnotedia.moc"
-#include "footnote.h"
 
-#include <qlabel.h>
+#include <qbuttongroup.h>
+#include <qvbox.h>
+#include <qradiobutton.h>
 
 #include <klocale.h>
+#include <qlayout.h>
 
 /******************************************************************/
 /* Class: KWFootNoteDia                                           */
 /******************************************************************/
 
-KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc, KWCanvas *_canvas, int _start, bool _footnote )
-    : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true),
-    start( _start ), footnote( _footnote)
+KWFootNoteDia::KWFootNoteDia( QWidget *parent, const char *name )
+    : KDialogBase(Plain /*Tabbed*/, QString::null, Ok | Cancel, Ok, parent, name, true)
 {
-    doc = _doc;
-    canvas = _canvas;
-
     setupTab1();
 
-    setButtonOKText(i18n("&Insert"),
+    setButtonOKText(i18n("&Insert")/*,
                     footnote ? i18n("Insert a footnote") :
-                    i18n("Insert an endnote"));
+                    i18n("Insert an endnote")*/);
 
-    setCaption( footnote ?
+    /*setCaption( footnote ?
                 i18n("Insert Footnote") :
-                i18n("Insert Endnote"));
+                i18n("Insert Endnote"));*/
+    setCaption( i18n("Insert Footnote / Endnote") );
 
-    setInitialSize( QSize(300, 250) );
+    //setInitialSize( QSize(300, 250) );
 }
 
 void KWFootNoteDia::setupTab1()
 {
-    tab1 = addPage( footnote ? i18n( "Configure Footnote" ) :
-    			i18n("Configure Endnote"));
+    tab1 = plainPage();
 
-    QLabel *l;
-    if (footnote)
-       l = new QLabel( i18n( "Currently there is nothing to configure for\n"
-                             "footnotes." ), tab1 );
-    else
-       l = new QLabel( i18n( "Currently there is nothing to configure for\n"
-                             "endnotes." ), tab1 );
+    QVBoxLayout* vbox = new QVBoxLayout( tab1 );
 
-    l->resize( l->sizeHint() );
-    l->move( 5, 5 );
+    QButtonGroup *grp = new QButtonGroup( 2, Qt::Vertical, tab1 );
+    m_rbFootNote = new QRadioButton( i18n("Footnote"), grp );
+    m_rbEndNote = new QRadioButton( i18n("Endnote"), grp );
+    grp->setExclusive( true );
+    grp->insert( m_rbFootNote );
+    grp->insert( m_rbEndNote );
+
+    vbox->addWidget( grp );
+
+    m_rbFootNote->setChecked( true );
 }
 
-bool KWFootNoteDia::insertFootNote()
+NoteType KWFootNoteDia::noteType() const
 {
-    KWFootNote::KWFootNoteInternal *fi = new KWFootNote::KWFootNoteInternal;
-    fi->from = start;
-    fi->to = -1;
-    fi->space = "-";
-
-    QList<KWFootNote::KWFootNoteInternal> *lfi = new QList<KWFootNote::KWFootNoteInternal>();
-    lfi->setAutoDelete( false );
-    lfi->append( fi );
-
-    KWFootNote *fn = new KWFootNote( doc, lfi );
-    fn->setBefore( "[ " );
-    fn->setAfter( " ]" );
-
-#if 0
-    canvas->insertFootNote( fn );
-#endif
-    return true;
-}
-
-void KWFootNoteDia::slotOk()
-{
-   if (insertFootNote())
-   {
-      KDialogBase::slotOk();
-   }
+    return m_rbFootNote->isChecked() ? FootNote : EndNote;
 }

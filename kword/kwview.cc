@@ -19,9 +19,6 @@
 */
 
 #undef Unsorted
-#include <kaccel.h>
-#include <kmessagebox.h>
-#include <kdeversion.h>
 #include <qclipboard.h>
 #include <qregexp.h>
 #include <qpaintdevicemetrics.h>
@@ -29,18 +26,31 @@
 #include <qlabel.h>
 #include <qgroupbox.h>
 
+#include <koAutoFormat.h>
 #include <koAutoFormatDia.h>
+#include <koChangeCaseDia.h>
+#include <koCharSelectDia.h>
+#include <koCommentDia.h>
+#include <koCreateStyleDia.h>
+#include <koDocumentInfo.h>
+#include <koFontDia.h>
+#include <koFrame.h>
+#include <koInsertLink.h>
+#include <koMainWindow.h>
+#include <koParagDia.h>
+#include <koPartSelectAction.h>
+#include <koSearchDia.h>
+#include <koTemplateCreateDia.h>
+#include <koVariable.h>
+#include <koVariableDlgs.h>
+#include <kotextobject.h>
+
 #include "kwcanvas.h"
 #include "defs.h"
 #include "deldia.h"
 #include "docstruct.h"
-
-#include <koFontDia.h>
-
 #include "footnotedia.h"
 #include "insdia.h"
-#include <koCharSelectDia.h>
-#include <koChangeCaseDia.h>
 #include "resizetabledia.h"
 #include "kwcommand.h"
 #include "kwconfig.h"
@@ -51,25 +61,20 @@
 #include "kwtableframeset.h"
 #include "kwview.h"
 #include "kwviewmode.h"
-#include <koParagDia.h>
-#include <koSearchDia.h>
 #include "searchdia.h"
 #include "mailmerge.h"
 #include "mailmerge_actions.h"
 #include "splitcellsdia.h"
 #include "stylist.h"
 #include "tabledia.h"
-#include <koVariable.h>
-#include <koVariableDlgs.h>
-#include "koInsertLink.h"
-#include <koAutoFormat.h>
-#include <koCreateStyleDia.h>
-#include <koMainWindow.h>
-#include <koTemplateCreateDia.h>
-#include <koPartSelectAction.h>
-#include <koFrame.h>
-#include <kotextobject.h>
+#include "KWordViewIface.h"
 
+#include <kaccel.h>
+#include <kmessagebox.h>
+#include <kstatusbar.h>
+#include <kstdaccel.h>
+#include <kaccelgen.h>
+#include <kdeversion.h>
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kdebugclasses.h>
@@ -86,13 +91,6 @@
 #include <kformulamimesource.h>
 
 #include <stdlib.h>
-#
-#include <KWordViewIface.h>
-#include <kstatusbar.h>
-#include <kstdaccel.h>
-#include <koCommentDia.h>
-#include <koDocumentInfo.h>
-#include <kaccelgen.h>
 
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -443,19 +441,6 @@ void KWView::setupActions()
     actionViewFooter->setToolTip( i18n( "Shows and hides footer display." ) );
     actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
 
-    actionViewFootNotes = new KToggleAction( i18n( "Foot&notes" ), 0,
-                                             this, SLOT( viewFootNotes() ),
-                                          actionCollection(), "view_footnotes" );
-
-    actionViewFootNotes->setEnabled( false ); // #### TODO
-    actionViewFootNotes->setExclusiveGroup( "notes" );
-    actionViewEndNotes = new KToggleAction( i18n( "&Endnotes" ), 0,
-                                             this, SLOT( viewEndNotes() ),
-                                          actionCollection(), "view_endnotes" );
-
-    actionViewEndNotes->setExclusiveGroup( "notes" );
-    actionViewEndNotes->setEnabled( false ); // #### TODO
-
     actionViewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
                                         actionCollection(), "view_zoom" );
 
@@ -496,11 +481,9 @@ void KWView::setupActions()
                                      this,SLOT(removeComment()),
                                      actionCollection(), "remove_comment");
 
-
-    // TODO
-    /*actionInsertFootEndNote = new KAction( i18n( "&Footnote or Endnote..." ), 0,
-                                           this, SLOT( insertFootNoteEndNote() ),
-                                           actionCollection(), "insert_footendnote" );*/
+    actionInsertFootEndNote = new KAction( i18n( "&Footnote..." ), 0,
+                                           this, SLOT( insertFootNote() ),
+                                           actionCollection(), "insert_footendnote" );
 
     actionInsertContents = new KAction( i18n( "Table of &Contents" ), 0,
                                         this, SLOT( insertContents() ),
@@ -1536,8 +1519,6 @@ void KWView::updateReadWrite( bool readwrite )
         actionViewFrameBorders->setEnabled( true );
         actionViewHeader->setEnabled( true );
         actionViewFooter->setEnabled( true );
-        actionViewFootNotes->setEnabled( true );
-        actionViewEndNotes->setEnabled( true );
         actionViewZoom->setEnabled( true );
         actionInsertComment->setEnabled( true );
         actionAllowAutoFormat->setEnabled( true );
@@ -2374,44 +2355,6 @@ void KWView::updateFooter()
 
 }
 
-void KWView::viewFootNotes()
-{
-#if 0
-    if ( !actionViewFootNotes->isChecked() )
-        return;
-    setNoteType( KWFootNoteManager::FootNotes);
-#endif
-}
-
-void KWView::viewEndNotes()
-{
-#if 0
-    if ( !actionViewEndNotes->isChecked() )
-        return;
-    setNoteType( KWFootNoteManager::EndNotes);
-#endif
-}
-
-#if 0
-void KWView::setNoteType( KWFootNoteManager::NoteType nt, bool change)
-{
-    if (change)
-        m_doc->setNoteType( nt );
-    switch (nt)
-    {
-      case KWFootNoteManager::FootNotes:
-      actionViewFootNotes->setChecked( TRUE );
-      actionInsertFootEndNote->setText(i18n("&Footnote"));
-      break;
-    case KWFootNoteManager::EndNotes:
-      default:
-      actionViewEndNotes->setChecked( TRUE );
-      actionInsertFootEndNote->setText(i18n("&Endnote"));
-      break;
-    }
-}
-#endif
-
 void KWView::viewZoom( const QString &s )
 {
     QString z( s );
@@ -2686,23 +2629,22 @@ void KWView::insertVariable()
     }
 }
 
-void KWView::insertFootNoteEndNote()
+void KWView::insertFootNote()
 {
-#if 0
-    int start = m_doc->getFootNoteManager().findStart( m_gui->canvasWidget()->getCursor() );
-
-    if ( start == -1 )
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    Q_ASSERT( edit ); // the action should be disabled if we're not editing a textframeset...
+    if ( edit->frameSet() != m_doc->frameSet(0) )
     {
         KMessageBox::sorry( this,
                             i18n( "You can only insert footnotes or "
                                   "endnotes into the first frameset."),
-                            i18n("Insert Footnote/Endnote"));
+                            i18n("Insert Footnote"));
     } else {
-        KWFootNoteDia dia( 0L, "", m_doc, m_gui->canvasWidget(), start,
-                 m_doc->getNoteType() == KWFootNoteManager::FootNotes );
-        dia.show();
+        KWFootNoteDia dia( this, 0 );
+        if ( dia.exec() ) {
+            edit->insertFootNote( dia.noteType() );
+        }
     }
-#endif
 }
 
 void KWView::renameButtonTOC(bool b)

@@ -17,20 +17,27 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kmessagebox.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
+#include <qtimer.h>
+
+#include <kapplication.h> // for KDE_VERSION
+#include <kdebug.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+#include <kmessagebox.h>
+#include <kspell.h>
 
 #include <koTemplateChooseDia.h>
 #include <koMainWindow.h>
-
-#include <kapplication.h> // for KDE_VERSION
-#include <klocale.h>
-#include <kstandarddirs.h>
+#include <koDocumentInfo.h>
 #include <koGlobal.h>
+#include <koparagcounter.h>
+#include <kotextobject.h>
+#include <koAutoFormat.h>
+#include <koVariable.h>
 
 #include <kformuladocument.h>
-#include <koDocumentInfo.h>
 #include <unistd.h>
 #include <math.h>
 
@@ -38,24 +45,13 @@
 #include "kwdoc.h"
 #include "kwcanvas.h"
 #include "defs.h"
-#include <koAutoFormat.h>
-#include <koVariable.h>
 #include "mailmerge.h"
 #include "kwview.h"
 #include "kwviewmode.h"
 #include "kwcommand.h"
 #include "kwtextimage.h"
-#include <kdebug.h>
-
-#include <koparagcounter.h>
-#include <kotextobject.h>
-#include <kspell.h>
-#include <qtimer.h>
-#include <KWordDocIface.h>
-
-#include <KWordDocIface.h>
-
 #include "kwbgspellcheck.h"
+#include "KWordDocIface.h"
 
 //#define DEBUG_PAGES
 
@@ -123,7 +119,7 @@ void KWDocument::clearUndoRedoInfos()
 
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      m_unit( KoUnit::U_MM ), // footNoteManager( this ),
+      m_unit( KoUnit::U_MM ),
       m_urlIntern()
 {
     dcop = 0;
@@ -1173,13 +1169,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(10);
 
-#if 0
-        else if ( name == "FOOTNOTEMGR" ) {
-            parser.parseTag( tag, name, lst );
-            footNoteManager.load( parser, lst );
-        }
-#endif
-
     QDomElement mailmerge = word.namedItem( "MAILMERGE" ).toElement();
     if (mailmerge!=QDomElement())
         {
@@ -1267,7 +1256,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     bool _first_footer = FALSE, _even_footer = FALSE, _odd_footer = FALSE;
     bool _first_header = FALSE, _even_header = FALSE, _odd_header = FALSE;
-    bool _footnotes = FALSE;
 
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1279,7 +1267,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         case KWFrameSet::FI_FIRST_FOOTER: _first_footer = TRUE; break;
         case KWFrameSet::FI_EVEN_FOOTER: _odd_footer = TRUE; break;
         case KWFrameSet::FI_ODD_FOOTER: _even_footer = TRUE; break;
-        case KWFrameSet::FI_FOOTNOTE: _footnotes = TRUE; break;
         default: break;
         }
     }
@@ -1355,21 +1342,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         frame->setNewFrameBehavior( KWFrame::Copy );
         fs->addFrame( frame );
         m_lstFrameSet.append( fs );
-    }
-
-    if ( !_footnotes ) {
-        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Footnotes" ) );
-        fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
-
-        for ( int i = 0; i < m_pages; i++ ) {
-            KWFrame *frame = new KWFrame(fs, ptLeftBorder(),
-                i * ptPaperHeight() + ptPaperHeight() - ptTopBorder() - 20,
-                ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-            frame->setFrameBehavior(KWFrame::AutoExtendFrame);
-            fs->addFrame( frame );
-        }
-        m_lstFrameSet.append( fs );
-        fs->setVisible( FALSE );
     }
 
     // do some sanity checking on document.
@@ -1901,10 +1873,6 @@ QDomDocument KWDocument::saveXML()
     docattrs.setAttribute( "hasTOC", static_cast<int>(m_hasTOC));
 
     getVariableCollection()->variableSetting()->save(kwdoc );
-
-//    out << otag << "<FOOTNOTEMGR>" << endl;
-//    footNoteManager.save( out );
-//    out << etag << "</FOOTNOTEMGR>" << endl;
 
     QDomElement framesets = doc.createElement( "FRAMESETS" );
     kwdoc.appendChild( framesets );
@@ -3001,6 +2969,8 @@ void KWDocument::invalidate()
 KFormula::Document* KWDocument::getFormulaDocument()
 {
     if (!m_formulaDocument) {
+        /// ##### kapp->config()? Shouldn't that be instance()->config() instead?
+        // Otherwise it depends on which app is embedding us (David).
         m_formulaDocument = new KFormula::Document( kapp->config(), actionCollection(), m_commandHistory );
         m_formulaDocument->setZoomAndResolution( m_zoom,
                                                  qRound(INCH_TO_POINT( m_resolutionX )), // re-calculate dpiX and dpiY
