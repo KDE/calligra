@@ -92,7 +92,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     else
         m_name = name;
 
-    setName( m_name.utf8() ); // store name in the QObject, for DCOP users
+    QObject::setName( m_name.utf8() ); // store name in the QObject, for DCOP users
     m_currentViewMode = 0L;
     m_currentDrawnFrame = 0L;
     // Create the text document to set in the text object
