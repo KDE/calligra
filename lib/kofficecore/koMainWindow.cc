@@ -650,9 +650,11 @@ void KoMainWindow::slotProgress(int value) {
 	statusBar()->removeWidget(d->m_progress);
 	delete d->m_progress;
 	d->m_progress=0L;
+	d->m_firstTime=true;
 	return;
     }
     if(d->m_firstTime) {
+	kdDebug() << "first time" << endl;
 	statusBar()->removeWidget(d->m_progress);
 	delete d->m_progress;
 	d->m_progress=0L;
