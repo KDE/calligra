@@ -89,7 +89,8 @@ public:
      * Get a file from a storage. May return 0!
      * This part of the API is for the filters in our chain.
      * If you call it multiple times with the same stream name
-     * the stream will be closed and re-opened!
+     * the stream will be closed and re-opened.
+     * Note: @em Don't delete that @ref KoStoreDevice we return.
      * @param name The name of the stream inside the storage
      * @param mode Whether we want to read or write from/to the stream
      * @return The storage device to access the stream. May be 0!
