@@ -14,24 +14,18 @@ kimage_SOURCES = \
  kimage_shell.cc \
  kimage_doc.cc \
  kimage_view.cc \
- formats.cc \
  preferencesdlg.cc \
  zoomfactordlg.cc \
- kintegerinputdialog.cc \
- kstartparams.cc \
- koShell.cc
+ kintegerinputdialog.cc
 
 noinst_HEADERS = \
  kimage_main.h \
  kimage_shell.h \
  kimage_doc.h \
  kimage_view.h \
- formats.h \
  preferencesdlg.h \
  zoomfactordlg.h \
- kintegerinputdialog.h \
- kstartparams.h \
- koShell.h
+ kintegerinputdialog.h
 
 METASOURCES = \
  kimage_main.moc \
@@ -40,8 +34,7 @@ METASOURCES = \
  kimage_view.moc \
  preferencesdlg.moc \
  zoomfactordlg.moc \
- kintegerinputdialog.moc \
- koShell.moc
+ kintegerinputdialog.moc
 
 idl_DATA = kimage.idl
 idl_HEADERS = kimage.h

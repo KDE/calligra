@@ -22,12 +22,12 @@
 
 #include <qlist.h>
 
-#include "koShell.h"
+#include <koMainWindow.h>
 
 class KImageDoc;
 class KImageView;
 
-class KImageShell : public KoShell
+class KImageShell : public KoMainWindow
 {
   Q_OBJECT
 

@@ -25,8 +25,8 @@
 #include <koFactory.h>
 #include <koDocument.h>
 #include <koQueryTypes.h>
+#include <koMainWindow.h>
 
-#include "formats.h"
 #include "kimage_shell.h"
 #include "kimage_main.h"
 #include "kimage_doc.h"
@@ -37,75 +37,17 @@ typedef OPAutoLoader<KImageFactory> KImageAutoLoader;
 
 KImageApp::KImageApp( int& argc, char** argv ) 
   : KoApplication( argc, argv, "kimage" )
-  , m_params( argc, argv ) // sollte in KoApplcation
-  , m_bWithGUI( true ) // sollte in KoApplication
 {
-  FormatManager* formatManager;
-  formatManager = new FormatManager();
-
-  // sollte in KoApplication
-  QStringList::Iterator it;
-  if( m_params.find( "--server", "-s", true, it ) )
-  {
-    m_bWithGUI = false;
-    m_params.del( it );
-  }
 }
 
 KImageApp::~KImageApp()
 {
 }
 
-/*************************************************************************************************/
-// sollte in KoApplication.h als pur virtuell definiert sein,
-// so daß jede Applikation sie überschreiben muß
-
-KoShell* KImageApp::createNewShell()
+KoMainWindow* KImageApp::createNewShell()
 {
   return new KImageShell;
 }
-
-/*************************************************************************************************/
-// sollte in KoApplication.h definiert sein
-// 
-// Das mit KoShell hab ich nur gemacht, weil newDocument() und openDucoment() keine pur virtuellen
-// Prototypen in KoMainWindow besitzen. Vielleicht sollten sowas dort vorhanden sein.
-
-void KImageApp::start()
-{
-  KoShell* pShell;
-  QStringList openFiles;
-
-  if( m_bWithGUI )
-  {
-    for( uint i = 0; i < m_params.count(); i++ )
-    {
-      if( m_params.get( i ).left( 1 ) != "-" )
-      {
-        openFiles.append( m_params.get( i ) );
-      }
-    }
-    if( openFiles.isEmpty() )
-    {
-      pShell = createNewShell();
-      pShell->show();
-      pShell->newDocument();
-    }
-    else
-    {
-      QStringList::Iterator it;
- 
-      for( it = openFiles.begin() ; it != openFiles.end() ; ++it )
-      {
-        pShell = createNewShell();
-        pShell->show();
-        pShell->openDocument( *it, "" );
-      }
-    }
-  }
-}
-
-/*************************************************************************************************/
 
 int main( int argc, char** argv )
 {

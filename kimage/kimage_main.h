@@ -22,9 +22,7 @@
 
 #include <koApplication.h>
 
-#include "koShell.h"
-#include "kstartparams.h"
-
+class KoMainWindow;
 class KImageShell;
 
 class KImageApp : public KoApplication
@@ -35,12 +33,7 @@ public:
   KImageApp( int& argc, char** argv );
   ~KImageApp();
 
-  virtual KoShell* createNewShell();
-  virtual void start();
-  
-protected:
-  KStartParams m_params;
-  bool m_bWithGUI;
+  virtual KoMainWindow* createNewShell();
 };
 
 #endif
