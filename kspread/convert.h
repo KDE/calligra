@@ -20,6 +20,10 @@
 #ifndef KSPREAD_CONVERT
 #define KSPREAD_CONVERT
 
+#include "kspread_value.h"
+
+class KLocale;
+
 /*
 This file contains two classes, the former of them can convert between
 various data types of KSpreadValue, the latter can generate a textual
@@ -37,15 +41,28 @@ namespace KSpread {
 The Convert class contains various methods used to convert between
 various data types of KSpreadValue. Things like number to string,
 string to bool, and so on */
-class Convert {
 
+class Convert {
+ public:
+  static KSpreadValue toBool (const KSpreadValue &val, KLocale *locale);
+  static KSpreadValue toInteger (const KSpreadValue &val, KLocale *locale);
+  static KSpreadValue toFloat (const KSpreadValue &val, KLocale *locale);
+  static KSpreadValue toString (const KSpreadValue &val, KLocale *locale);
+  static KSpreadValue toDateTime (const KSpreadValue &val, KLocale *locale);
 };
 
 
-/** The OutTextConvert class generates a textual representation of
+/** the ValueParser parses a text input from the user, generating
+KSpreadValue in the desired format */
+
+class ValueParser {
+
+};
+
+/** The ValueFormatter class generates a textual representation of
 data stored in a KSpreadValue, with a given formatting */
 
-class OutTextConvert {
+class ValueFormatter {
 
 };
 
