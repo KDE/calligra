@@ -137,8 +137,16 @@ void KoMainWindow::createFileMenu( OPMenuBar* _menubar )
     m_pFileMenu = 0L;
     return;
   }
-  
-  m_pFileMenu = new OPMenu( _menubar );
+
+  m_pFileMenu = _menubar->fileMenu();
+  if ( m_pFileMenu == 0L )
+  {
+    m_pFileMenu = new OPMenu( _menubar );
+
+    _menubar->insertItem( i18n( "&File" ), m_pFileMenu );
+  }
+  else
+    m_pFileMenu->insertSeparator();    
 
   m_idMenuFile_New = m_pFileMenu->insertItem( Icon( "filenew.xpm" ) , i18n( "&New" ), this, SLOT( slotFileNew() ), CTRL + Key_N );
   m_idMenuFile_Open = m_pFileMenu->insertItem( Icon( "fileopen.xpm" ), i18n( "&Open..." ), this, SLOT( slotFileOpen() ), CTRL + Key_O );
@@ -158,8 +166,6 @@ void KoMainWindow::createFileMenu( OPMenuBar* _menubar )
   m_pFileMenu->setItemEnabled( m_idMenuFile_Close, false );
   
   m_idMenuFile_Quit = m_pFileMenu->insertItem( i18n( "&Quit" ), this, SLOT( slotFileQuit() ), CTRL + Key_Q );
-
-  _menubar->insertItem( i18n( "&File" ), m_pFileMenu );
 }
 
 void KoMainWindow::createHelpMenu( OPMenuBar* _menubar )
