@@ -155,7 +155,7 @@
 <customwidgets>
     <customwidget>
         <class>PBPreview</class>
-        <header location="global">/home/tz/develop/KDE3/CVS/koffice/kpresenter/pbpreview.h</header>
+        <header location="global">pbpreview.h</header>
         <sizehint>
             <width>80</width>
             <height>40</height>
