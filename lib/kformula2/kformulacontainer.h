@@ -27,13 +27,13 @@
 #include <qstack.h>
 
 #include <kcommand.h>
+#include <koprinter.h>
 
 #include "artwork.h"
 #include "basicelement.h"
 #include "contextstyle.h"
 #include "elementindex.h"
 #include "formuladefs.h"
-#include <koprinter.h>
 
 class BasicElement;
 class FormulaCursor;
