@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,16 +33,20 @@ static const KCmdLineOptions options[]=
 {
 	{"+in", I18N_NOOP("Input file"),0},
 	{"+out", I18N_NOOP("Output file"),0},
+    {"batch", I18N_NOOP("Batch mode, do not show dialogs"),0},
+    {"interactive", I18N_NOOP("Interactive mode, show dialogs (dafault)"),0},
 	{"mimetype <mime>", I18N_NOOP("Mimetype of the output file"),0},
 	KCmdLineLastOption
 };
 
-bool convert( const KURL & uIn, const QString & /*inputFormat*/, const KURL & uOut, const QString & outputFormat )
+bool convert( const KURL & uIn, const QString & /*inputFormat*/, const KURL & uOut, const QString & outputFormat, const bool batch )
 {
     KoFilterManager* manager = new KoFilterManager( uIn.path() );
 
     ProgressObject progressObj;
     QObject::connect(manager, SIGNAL(sigProgress(int)), &progressObj, SLOT(slotProgress(int)));
+
+    manager->setBatchMode( batch );
 
     QCString mime( outputFormat.latin1() );
     KoFilter::ConversionStatus status = manager->exp0rt( uOut.path(), mime );
@@ -51,20 +56,21 @@ bool convert( const KURL & uIn, const QString & /*inputFormat*/, const KURL & uO
     return status == KoFilter::OK;
 }
 
-void ProgressObject::slotProgress(int /*progress*/)
+void ProgressObject::slotProgress(int progress)
 {
     // Well, we could have a nifty "=====> " progress bar, but with all the
     // debug output, it would be badly messed up :)
-    //kdDebug() << "ProgressObject::slotProgress " << progress << endl;
+    // kdDebug() << "ProgressObject::slotProgress " << progress << endl;
 }
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "koconverter", I18N_NOOP("KOConverter"), "1.1",
+    KAboutData aboutData( "koconverter", I18N_NOOP("KOConverter"), "1.4",
                           I18N_NOOP("KOffice Document Converter"),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2001, KOffice developers") );
+                          I18N_NOOP("(c) 2001-2004 KOffice developers") );
     aboutData.addAuthor("David Faure",0, "faure@kde.org");
+    aboutData.addAuthor("Nicolas Goutte",0, "goutte@kde.org");
     KCmdLineArgs::init( argc, argv, &aboutData);
     KCmdLineArgs::addCmdLineOptions( options );
 
@@ -81,6 +87,12 @@ int main( int argc, char **argv )
     {
         KURL uIn = args->url( 0 );
         KURL uOut = args->url( 1 );
+
+        // Are we in batch mode or in interactive mode.
+        bool batch = args->isSet("batch");
+        if ( args->isSet("interactive") )
+            batch = false;
+
         KMimeType::Ptr inputMimetype = KMimeType::findByURL( uIn );
         if ( inputMimetype->name() == KMimeType::defaultMimeType() )
         {
@@ -109,7 +121,7 @@ int main( int argc, char **argv )
         }
 
         QApplication::setOverrideCursor( Qt::waitCursor );
-        bool ok = convert( uIn, inputMimetype->name(), uOut, outputMimetype->name() );
+        bool ok = convert( uIn, inputMimetype->name(), uOut, outputMimetype->name(), batch );
         QApplication::restoreOverrideCursor();
         return ok ? 0 : 2;
     }
