@@ -1762,7 +1762,6 @@ void KPresenterView::brushChosen()
 /*======================= align object left =====================*/
 void KPresenterView::extraAlignObjLeft()
 {
-    kdDebug()<<"KPresenterView::extraAlignObjLeft()*********************************************\n";
     m_canvas->activePage()->alignObjsLeft();
 }
 
