@@ -353,7 +353,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
         {
             //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
             //          << " and invalidating parag " << var->paragraph() << endl;
-            var->setPgNum( theFrame->pageNum() + 1 );
+            var->setPgNum( theFrame->pageNum() + 1 + kWordDocument()->getVariableCollection()->variableSetting()->numberOffset());
             var->resize();
             var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
             var->paragraph()->setChanged( true );
@@ -561,7 +561,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
     QStringList add_syl;
     add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii";
     QStringList add_syl_regexp;
-    add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$" 
+    add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
         << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
 
     QString s;

@@ -51,7 +51,7 @@ void KWPgNumVariable::recalc()
 #endif
     }
     else
-        m_pgNum = m_doc->getPages();
+        m_pgNum = m_doc->getPages()+m_varColl->variableSetting()->numberOffset();
     resize();
 }
 

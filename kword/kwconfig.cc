@@ -40,6 +40,7 @@
 #include "kwcanvas.h"
 #include "kwviewmode.h"
 #include <float.h>
+#include <koVariable.h>
 
 KWConfig::KWConfig( KWView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
@@ -383,6 +384,12 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     m_undoRedoLimit->setRange(1, 100, 1);
     QWhatsThis::add( m_undoRedoLimit, i18n("Limit the amount of undo/redo actions remembered to save "
                 "memory") );
+
+    KWDocument * doc = m_pView->kWordDocument();
+    m_oldVariableOffset=doc->getVariableCollection()->variableSetting()->numberOffset();
+    m_variableNumberOffset=new KIntNumInput(m_oldVariableOffset,gbMiscGroup);
+    m_variableNumberOffset->setLabel(i18n("Variable number offset:"));
+    m_variableNumberOffset->setRange(0,100,1);
 }
 
 void ConfigureMiscPage::apply()
@@ -412,6 +419,12 @@ void ConfigureMiscPage::apply()
     {
         config->writeEntry("UndoRedo",newUndo);
         doc->setUndoRedoLimit(newUndo);
+    }
+    int newVarOffset=m_variableNumberOffset->value();
+    if(newVarOffset!=m_oldVariableOffset)
+    {
+        doc->getVariableCollection()->variableSetting()->setNumberOffset(m_variableNumberOffset->value());
+        doc->recalcVariables( VT_PGNUM );
     }
 }
 

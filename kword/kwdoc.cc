@@ -1163,6 +1163,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     setPageLayout( __pgLayout, __columns, __hf );
 
+    getVariableCollection()->variableSetting()->load(word );
+
     emit sigProgress(10);
 
 #if 0
@@ -1403,6 +1405,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     setModified( false );
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+    recalcVariables( VT_PGNUM );
     return true;
 }
 
@@ -1873,6 +1876,8 @@ QDomDocument KWDocument::saveXML()
     docattrs.setAttribute( "hasFooter", static_cast<int>(isFooterVisible()) );
     docattrs.setAttribute( "unit", KoUnit::unitName(getUnit()) );
     docattrs.setAttribute( "hasTOC", static_cast<int>(m_hasTOC));
+
+    getVariableCollection()->variableSetting()->save(kwdoc );
 
 //    out << otag << "<FOOTNOTEMGR>" << endl;
 //    footNoteManager.save( out );

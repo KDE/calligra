@@ -79,6 +79,8 @@ private:
     int m_oldUnit;
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
+    int m_oldVariableOffset;
+    KIntNumInput* m_variableNumberOffset;
 };
 
 class ConfigureDefaultDocPage : public QObject
