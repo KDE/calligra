@@ -420,6 +420,7 @@ void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpa
     {
         QString s = parag->string()->toString();
         bool wordStarted = false;
+        bool sentenceStarted = false;
         for ( uint i = 0 ; i < s.length() - 1 /*trailing-space*/ ; ++i )
         {
             QChar ch = s[i];
@@ -429,13 +430,21 @@ void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpa
             if ( ch.isSpace() || ch.isPunct() )
             {
                 if ( wordStarted )
+                {
                     ++words;
-                if ( KWAutoFormat::isMark( ch ) )
+                    wordStarted = false;
+                }
+                if ( KWAutoFormat::isMark( ch ) && sentenceStarted )
+                {
                     ++sentences;
-                wordStarted = false;
+                    sentenceStarted = false;
+                }
             }
             else
+            {
                 wordStarted = true;
+                sentenceStarted = true;
+            }
         }
         if ( wordStarted )
             ++words;
