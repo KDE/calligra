@@ -6266,6 +6266,7 @@ void KWView::openDocStructurePopupMenu( const QPoint &_p, KWFrameSet *frameset)
     bool state = (frameset->type()==FT_TEXT || frameset->type()==FT_TABLE || frameset->type()==FT_FORMULA );
     if ( state )
         actionList.append(actionEditFrameSet);
+    actionDeleteFrameSet->setEnabled( (!frameset->isMainFrameset() && !frameset->isFootEndNote() && !frameset->isHeaderOrFooter()) );
 
     plugActionList( "edit_action", actionList );
 
