@@ -90,7 +90,7 @@ bool KexiProject::initDoc()
 	bool ok=false;
 	if (ret==KoTemplateChooseDia::Empty) {
 		clear();
-		QWidget *newDlg = KParts::ComponentFactory::createInstanceFromLibrary<QWidget>( "kexiprojectwizard", this );
+		QObject *newDlg = KParts::ComponentFactory::createInstanceFromLibrary<QObject>( "kexiprojectwizard", this );
 		ok=(static_cast<KexiCreateProjectIface*>(newDlg->qt_cast("KexiCreateProjectIface"))->execute())==QDialog::Accepted;
 		delete newDlg;
 		ok=false;

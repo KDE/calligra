@@ -25,6 +25,7 @@
 
 #include "kexirelationhandler.h"
 #include "kexirelationhandlerproxy.h"
+#include <kparts/genericfactory.h>
 
 KexiRelationHandler::KexiRelationHandler(QObject *project,const char *,const QStringList &)
  : KexiProjectHandler(KEXIPROJECT(project))
