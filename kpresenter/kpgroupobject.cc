@@ -341,15 +341,15 @@ void KPGroupObject::rotate( float _angle )
         it.current()->rotate( _angle );
 }
 
-void KPGroupObject::setShadowParameter(int _distance,ShadowDirection _direction,const QColor &_color)
+void KPGroupObject::setShadowParameter( int _distance, ShadowDirection _direction, const QColor &_color )
 {
-    KPObject::setShadowParameter( _distance,(ShadowDirection)_distance,_color );
+    KPObject::setShadowParameter( _distance, _direction, _color );
 
     if ( !updateObjs )
         return;
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
-        it.current()->setShadowParameter( _distance,(ShadowDirection)_distance,_color );
+        it.current()->setShadowParameter( _distance, _direction, _color );
 }
 
 
