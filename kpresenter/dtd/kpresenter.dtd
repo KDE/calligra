@@ -222,7 +222,7 @@
 		type	0=normal, 1=bullet-list, 2=enum-list
 		depth	list depth
 -->
-<!ELEMENT P  (TEXT)*>
+<!ELEMENT P  (TEXT|COUNTER)*>
 <!ATTLIST P
 		align	NMTOKEN #REQUIRED
 		type	NMTOKEN #REQUIRED
@@ -240,6 +240,43 @@
 		color	CDATA	#REQUIRED
                 textbackcolor CDATA #REQUIRES
                 VERTALIGN CDATA #REQUIRE>
+
+<!-- 
+        A paragraph and a style can have counter data.
+        The document will do the counting of the paragraphs that use this.
+
+        type:   0 = None
+                1 = Numeral
+                2 = Alphabetical
+                3 = Alphabetical uppercase
+                4 = Roman numbering
+                5 = Roman numbering uppercase
+                6 = Custom bullet (one char, set by the 'bullet' attribute)
+                7 = Custom (complex string, see kword's dialog)
+                8 = Circle bullet
+                9 = Square bullet
+                10 = Disc bullet
+
+        depth   The level of the numbering. 
+                Depth of 0 means the major numbering. (1, 2, 3...)
+                Depth of 1 is 1.1, 1.2, 1.3 etc.
+
+        start   The first used number in the numbering (usually 1).
+        numberingtype
+                0 = list numbering, 1 = chapter numbering.
+                List numbering starts at <start> everytime another list is used (everytime a 
+                non numbering paragraph has been used)
+                Chapter numbering is used throughout the whole document (in future throughout books)
+-->
+
+<!ELEMENT COUNTER
+    EMPTY>
+<!ATTLIST COUNTER
+    type CDATA #REQUIRED
+    depth CDATA #REQUIRED
+    bullet CDATA #IMPLIED
+    start CDATA #IMPLIED
+    numberingtype CDATA #REQUIRED>
 
 <!-- VERTALIGN
             Super/sub script.

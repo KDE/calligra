@@ -48,6 +48,7 @@
 #include "page.h"
 #include <koAutoFormat.h>
 #include <koparagcounter.h>
+#include <kotextparag.h>
 using namespace std;
 
 /******************************************************************/
@@ -367,7 +368,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
     textobj.setAttribute(attrBulletColor3, textSettings.bulletColor[2].name());
     textobj.setAttribute(attrBulletColor4, textSettings.bulletColor[3].name());
 #endif
-    Qt3::QTextParag *parag = textDocument()->firstParag();
+    KoTextParag *parag = static_cast<KoTextParag*> (textDocument()->firstParag());
     // ### fix this loop (Werner)
     while ( parag ) {
         QDomElement paragraph=doc.createElement(tagP);
@@ -388,6 +389,8 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
         }
         if(tmpAlign!=1)
             paragraph.setAttribute(attrAlign, tmpAlign);
+
+        saveParagLayout( parag->paragLayout(), paragraph );
 #if 0
         paragraph.setAttribute(attrType, (int)parag->type());
         paragraph.setAttribute(attrDepth, parag->listDepth());
@@ -424,7 +427,7 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
                                              tmpBold, tmpItalic, tmpUnderline, tmpStrikeOut,tmpTextBackColor ,tmpVerticalAlign, doc));
         }
         textobj.appendChild(paragraph);
-        parag = parag->next();
+        parag = static_cast<KoTextParag*>( parag->next());
     }
     return textobj;
 }
@@ -476,6 +479,9 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
             else
                 lastParag->setType( (KTextEditParag::Type)e.attribute( attrType ).toInt() );
 #endif
+            KoParagLayout paragLayout = loadParagLayout(e);
+            lastParag->setParagLayout( paragLayout );
+
             if(e.hasAttribute(attrAlign))
             {
                 int tmpAlign=e.attribute( attrAlign ).toInt();
@@ -488,7 +494,8 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                 else
                     kdDebug()<<"Error in e.attribute( attrAlign ).toInt()\n";
             }
-            // ## lastParag->setListDepth( e.attribute( attrDepth ).toInt() ); // TODO check/convert values
+            // ## lastParag->setListDepth( e.attribute( attrDepth ).toInt() );
+            // TODO check/convert values
             lineSpacing = QMAX( e.attribute( attrLineSpacing ).toInt(), lineSpacing );
             paragSpacing = QMAX( QMAX( e.attribute( "distBefore" ).toInt(), e.attribute( "distAfter" ).toInt() ), paragSpacing );
             while ( !n.isNull() ) {
@@ -570,6 +577,30 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     ktextobject.document()->setTextSettings( settings );
     ktextobject.updateCurrentFormat();
 #endif
+}
+
+KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
+{
+    KoParagLayout layout;
+    QDomElement element = parentElem.namedItem( "COUNTER" ).toElement();
+    if ( !element.isNull() )
+    {
+        layout.counter = new KoParagCounter;
+        layout.counter->load( element );
+    }
+    return layout;
+}
+
+void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem )
+{
+    QDomDocument doc = parentElem.ownerDocument();
+    if ( layout.counter && layout.counter->numbering() != KoParagCounter::NUM_NONE )
+    {
+        QDomElement element = doc.createElement( "COUNTER" );
+        parentElem.appendChild( element );
+        if (layout.counter )
+            layout.counter->save( element );
+    }
 }
 
 /*================================================================*/

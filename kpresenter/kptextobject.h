@@ -103,6 +103,8 @@ protected:
     void drawTextObject( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
     void drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
     void drawParags( QPainter *p, int from, int to );
+    KoParagLayout loadParagLayout( QDomElement & parentElem);
+    void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
 
 protected slots:
     void slotNewCommand( KCommand *cmd );
