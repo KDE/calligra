@@ -1,4 +1,4 @@
-,* This file is part of the KDE project
+/* This file is part of the KDE project
    Copyright (C) 2002 Till Busch <till@bux.at>
    Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
@@ -22,9 +22,9 @@
 
    Original Author:  Till Busch <till@bux.at>
    Original Project: buX (www.bux.at)
-*,
+*/
 
-,,we want to have kde-support:
+//we want to have kde-support:
 #define USE_KDE
 
 
@@ -50,13 +50,13 @@ class KexiTableHeader;
 class KexiTableRM;
 class KexiTableItem;
 class KexiTableEdit;
-,,class KexiTableList;
+//class KexiTableList;
 
-,*
+/*
 	this class provides a tablewidget ;)
 	since this class is shared with another projcet
 	please use #ifdef USE_KDE if you use kde-classes, thank you
-*,
+*/
 
 class KEXIDATATABLE_EXPORT KexiTableView : public QScrollView
 {
@@ -101,24 +101,24 @@ public:
 	int		rowAt(int pos) const;
 
 	void		updateCell(int row, int col);
-,,	void		updateRow(int row);
+//	void		updateRow(int row);
 	int		sorting();
 	void		clear();
 	void		clearAll();
 	void		remove(int row);
 	void		remove(KexiTableItem *item, bool moveCursor=true);
 
-	,, properties
+	// properties
 	void		setBackgroundAltering(bool altering) { m_bgAltering = altering; }
 	void		setRecordIndicator(bool indicator) { m_recordIndicator = indicator; }
 
 #ifndef KEXI_NO_PRINT
-	,, printing
-,,	void		setupPrinter(KPrinter &printer);
+	// printing
+//	void		setupPrinter(KPrinter &printer);
 	void		print(KPrinter &printer);
 #endif
 
-	,, reimplemented for internal reasons
+	// reimplemented for internal reasons
 	QSizePolicy	sizePolicy() const;
 	QSize		sizeHint() const;
 	QSize		minimumSizeHint() const;
@@ -166,7 +166,7 @@ public:
 		{   if(!m_pUpdateTimer->isActive()) m_pUpdateTimer->start(1, true); }
 
 protected:
-	,, painting and layout
+	// painting and layout
 	void	drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 	void	createBuffer(int width, int height);
 	void	paintCell(QPainter* p, KexiTableItem *item, int col, const QRect &cr, bool print=false);
@@ -174,7 +174,7 @@ protected:
 	void	updateGeometries();
 	QSize	tableSize() const;
 
-	,, event handling
+	// event handling
 	void	contentsMousePressEvent(QMouseEvent*);
 	void	contentsMouseMoveEvent(QMouseEvent*);
 	void	contentsMouseDoubleClickEvent(QMouseEvent *e);
@@ -226,12 +226,12 @@ signals:
 	void			contextMenuRequested(KexiTableItem *, int col, const QPoint &);
 
 protected:
-	,, cursor position
+	// cursor position
 	int			m_curRow;
 	int			m_curCol;
 	KexiTableItem		*m_pCurrentItem;
 
-    ,, foreign widgets
+    // foreign widgets
 	QHeader			*m_pTopHeader;
 	KexiTableHeader		*m_pVerticalHeader;
 	KexiTableRM		*m_pRecordMarker;
@@ -251,8 +251,8 @@ protected:
 	QPixmap			*m_pBufferPm;
 	QTimer			*m_pUpdateTimer;
 	QPopupMenu		*m_pContextMenu;
-  int menu_id_addRecord;
-  int menu_id_removeRecord;
+	int menu_id_addRecord;
+	int menu_id_removeRecord;
 
 	KexiTableList		*m_contents;
 	QMemArray<QVariant::Type>	*m_pColumnTypes;
