@@ -466,6 +466,10 @@ bool KexiTableViewData::saveNewRow(KexiTableItem& item)
 bool KexiTableViewData::deleteRow(KexiTableItem& item)
 {
 	m_result.clear();
+	emit aboutToDeleteRow(item, &m_result);
+	if (!m_result.success)
+		return false;
+
 	if (isDBAware()) {
 		m_result.success = false;
 		if (!m_cursor->deleteRow( static_cast<KexiDB::RowData&>(item) )) {
@@ -483,6 +487,7 @@ bool KexiTableViewData::deleteRow(KexiTableItem& item)
 		m_result.success = false;
 		return false;
 	}
+	emit rowDeleted();
 	return true;
 }
 

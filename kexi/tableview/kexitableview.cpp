@@ -473,7 +473,6 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 {
 	if (!item || !beforeDeleteItem(item))
 		return false;
-//	if (m_data->removeRef(item))
 
 	QString msg, desc;
 	if (!m_data->deleteRow(*d->pCurrentItem)) {
@@ -491,6 +490,9 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 	int row = d->curRow;
 	if (!isInsertingEnabled() && row>=rows())
 		row--; //move up
+
+	QSize s(tableSize());
+	resizeContents(s.width(),s.height());
 
 	setCursor(row, d->curCol, true/*forceSet*/);
 
@@ -2375,13 +2377,13 @@ bool KexiTableView::acceptEditor()
 	QString msg, desc;
 	bool setNull = false;
 //	bool allow = true;
-	static const QString msg_NOT_NULL = i18n("\"%1\" column requires a value to be entered.");
+//	static const QString msg_NOT_NULL = i18n("\"%1\" column requires a value to be entered.");
 
 	if (d->pEditor->valueIsNull()) {//null value entered
 		if (d->pEditor->field()->isNotNull()) {
 			kdDebug() << "KexiTableView::acceptEditor(): NULL NOT ALLOWED!" << endl;
 			res = KexiValidator::Error;
-			msg = msg_NOT_NULL.arg(d->pEditor->field()->captionOrName());
+			msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
 			desc = i18n("The column's constraint is declared as NOT NULL.");
 //			allow = false;
 //			removeEditor();
@@ -2398,7 +2400,7 @@ bool KexiTableView::acceptEditor()
 			if (d->pEditor->field()->isNotEmpty()) {
 				kdDebug() << "KexiTableView::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
 				res = KexiValidator::Error;
-				msg = msg_NOT_NULL.arg(d->pEditor->field()->captionOrName());
+				msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
 				desc = i18n("The column's constraint is declared as NOT EMPTY.");
 //				allow = false;
 //				removeEditor();
@@ -2412,7 +2414,7 @@ bool KexiTableView::acceptEditor()
 			if (d->pEditor->field()->isNotNull()) {
 				kdDebug() << "KexiTableView::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
 				res = KexiValidator::Error;
-				msg = msg_NOT_NULL.arg(d->pEditor->field()->captionOrName());
+				msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
 				desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
 //				allow = false;
 //				removeEditor();

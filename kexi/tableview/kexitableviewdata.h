@@ -220,17 +220,23 @@ signals:
 
 	/*! Emited before inserting of a new, current row.
 	 Connect this signal to your slot and set \a result->success to false 
-	 to disallow the inserting. */
+	 to disallow this inserting. */
 	void aboutToInsertRow(KexiTableItem *, KexiDB::ResultInfo* result);
 
 	/*! Emited before changing of an edited, current row.
 	 Connect this signal to your slot and set \a result->success to false 
-	 to disallow the change. */
+	 to disallow this change. */
 	void aboutToUpdateRow(KexiTableItem *, KexiDB::RowEditBuffer* buffer,
 		KexiDB::ResultInfo* result);
 
-	void rowUpdated(KexiTableItem*);
-	void rowInserted(KexiTableItem*);
+	/*! Emited before deleting of a current row.
+	 Connect this signal to your slot and set \a result->success to false 
+	 to disallow this deleting. */
+	void aboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result);
+
+	void rowUpdated(KexiTableItem*); //!< Current row has been updated
+	void rowInserted(KexiTableItem*); //!< A row has been inserted
+	void rowDeleted(); //!< Current row has been deleted
 
 protected:
 	virtual int compareItems(Item item1, Item item2);

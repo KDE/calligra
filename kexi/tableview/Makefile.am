@@ -9,7 +9,10 @@ libkexidatatable_la_SOURCES = kexicelleditorfactory.cpp \
 
 
 libkexidatatable_la_LDFLAGS = $(all_libraries) -Wnounresolved
-libkexidatatable_la_LIBADD = $(LIB_KDEUI)
+libkexidatatable_la_LIBADD = $(LIB_KDEUI) \
+	../core/libkexicore.la
+
+#TODO: remove libkexicore link when kexiutils arrive
 
 SUBDIRS = .
 
