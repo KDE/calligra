@@ -91,7 +91,7 @@ Ariya
 - add more functions (helps welcomed!)
 - add support for matrices operation
 - improve function compatibility with MS Excel
-- more choices for Data -> Consolidate
+- more choices for Data -> Consolidate (Done)
 - dBASE import filter (Done, need some improvements)
 - improve/fix MS Excel import filter
 - start working on MS Excel export filter (with 'wildfox')
