@@ -48,14 +48,14 @@ class KoLineWidthAction : public KoSelectAction
     KoLineWidthAction(const QString& text, const QString& icon, const QObject* receiver,
       const char* slot, QObject* parent, const char* name = 0);
     ~KoLineWidthAction();
-    
+
     /** Returns the currently selected line width */
-    double currentWidth();
-    
+    double currentWidth() const;
+
   signals:
     /** Emited when a new line width have been selected */
     void lineWidthChanged(double);
-  
+
   public slots:
     /** Set the current width.
      * @param width The new width.
@@ -65,18 +65,18 @@ class KoLineWidthAction : public KoSelectAction
      * @param unit The unit to use.
      */
     void setUnit(KoUnit::Unit unit);
-  
+
   protected slots:
     /** Reimplemented from KoSelectAction.
      * Emits lineWidthChanged(double) when a new width is selected.
      * @param index Index of the selected item
      */
     void execute(int index);
-    
+
   protected:
     /** Draws and adds each item of the menu. */
     void createMenu();
-  
+
   private:
     class KoLineWidthActionPrivate;
     KoLineWidthActionPrivate* d;
@@ -89,10 +89,10 @@ class KoLineWidthChooser : public KDialogBase
   public:
     KoLineWidthChooser(QWidget* parent = 0, const char* name = 0);
     ~KoLineWidthChooser();
-    
+
     /** Returns the selected line width in points. */
-    double width();
-  
+    double width() const;
+
   public slots:
     /** Set unit to use when showing the width.
      * @param unit Unit to use.
@@ -102,7 +102,7 @@ class KoLineWidthChooser : public KDialogBase
      * @param width Line width in points.
      */
     void setWidth(double width);
-    
+
   private:
     class KoLineWidthChooserPrivate;
     KoLineWidthChooserPrivate* d;

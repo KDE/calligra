@@ -46,11 +46,11 @@ class KoLineWidthAction::KoLineWidthActionPrivate
       m_currentWidth = 1.0;
       m_unit = KoUnit::U_PT;
     }
-    
+
     ~KoLineWidthActionPrivate()
     {
     }
-    
+
     double m_currentWidth;
     KoUnit::Unit m_unit;
 };
@@ -59,7 +59,7 @@ KoLineWidthAction::KoLineWidthAction(const QString &text, const QString& icon,
   QObject* parent, const char* name) : KoSelectAction(text, icon, parent, name)
 {
   d = new KoLineWidthActionPrivate;
-  
+
   createMenu();
 }
 
@@ -67,9 +67,9 @@ KoLineWidthAction::KoLineWidthAction(const QString &text, const QString& icon, c
   const char* slot, QObject* parent, const char* name) : KoSelectAction(text, icon, parent, name)
 {
   d = new KoLineWidthActionPrivate;
-  
+
   createMenu();
-  
+
   connect(this, SIGNAL(lineWidthChanged(double)), receiver, slot);
 }
 
@@ -96,7 +96,7 @@ void KoLineWidthAction::createMenu()
     pix.setMask(mask);
     popup->insertItem(pix,cindex++);
   }
-  
+
   popup->insertSeparator(cindex++);
   popup->insertItem(i18n("&Custom..."), cindex++);
 }
@@ -104,7 +104,7 @@ void KoLineWidthAction::createMenu()
 void KoLineWidthAction::execute(int index)
 {
   bool ok = false;
-  
+
   if((index >= 0) && (index < 10)) {
     d->m_currentWidth = (double) index + 1.0;
     ok = true;
@@ -112,7 +112,7 @@ void KoLineWidthAction::execute(int index)
     KoLineWidthChooser dlg;
     dlg.setUnit(d->m_unit);
     dlg.setWidth(d->m_currentWidth);
-    
+
     if(dlg.exec()) {
       d->m_currentWidth = dlg.width();
       ok = true;
@@ -125,7 +125,7 @@ void KoLineWidthAction::execute(int index)
   }
 }
 
-double KoLineWidthAction::currentWidth()
+double KoLineWidthAction::currentWidth() const
 {
   return d->m_currentWidth;
 }
@@ -133,7 +133,7 @@ double KoLineWidthAction::currentWidth()
 void KoLineWidthAction::setCurrentWidth(double width)
 {
   d->m_currentWidth = width;
-  
+
   // Check if it is a standard width...
   for(int i = 1; i <= 10; i++) {
     if(KoUnit::toPoint(width) == (double) i) {
@@ -184,7 +184,7 @@ KoLineWidthChooser::~KoLineWidthChooser()
   delete d;
 }
 
-double KoLineWidthChooser::width()
+double KoLineWidthChooser::width() const
 {
   return KoUnit::fromUserValue(d->m_lineWidthUSBox->value(), d->m_unit);
 }
