@@ -3621,6 +3621,7 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
 /*======================== print =================================*/
 void KPrCanvas::print( QPainter *painter, KPrinter *printer, float left_margin, float top_margin )
 {
+    deSelectAllObj();
     printer->setFullPage( true );
     int i = 0;
 

@@ -121,6 +121,7 @@
 #include "searchdia.h"
 #include "kprvariable.h"
 #include "kprcanvas.h"
+#include <qpaintdevicemetrics.h>
 
 #define DEBUG
 
@@ -380,6 +381,17 @@ void KPresenterView::print( KPrinter &prt )
     float left_margin = 0.0;
     float top_margin = 0.0;
 
+    // ### HACK: disable zooming-when-printing if embedded parts are used.
+    // No koffice app supports zooming in paintContent currently.
+    // Disable in ALL cases now
+    bool doZoom = false;
+    int oldZoom = m_pKPresenterDoc->zoomHandler()->zoom();
+    QPaintDeviceMetrics metrics( &prt );
+    int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
+    int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
+    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( 100, dpiX, dpiY );
+    m_pKPresenterDoc->newZoomAndResolution( false, true /* for printing*/ );
+
     if ( m_pKPresenterDoc->pageLayout().format == PG_SCREEN )
     {
         left_margin = 28.5;
@@ -389,8 +401,17 @@ void KPresenterView::print( KPrinter &prt )
     m_canvas->deSelectAllObj();
     QPainter painter;
     painter.begin( &prt );
+    kdDebug() << "KPresenterView::print scaling by " << (double)metrics.logicalDpiX() / (double)dpiX
+                   << "," << (double)metrics.logicalDpiY() / (double)dpiY << endl;
+    painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
+                   (double)metrics.logicalDpiY() / (double)dpiY );
+
     m_canvas->print( &painter, &prt, left_margin, top_margin );
     painter.end();
+
+    m_pKPresenterDoc->zoomHandler()->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    m_pKPresenterDoc->newZoomAndResolution( false, false );
+    kdDebug() << "KPresenterView::print zoom&res reset" << endl;
 }
 
 /*===============================================================*/
