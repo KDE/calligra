@@ -5378,6 +5378,12 @@ void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 void KSpreadTable::insertChild( const QRect& _rect, KoDocumentEntry& _e )
 {
     KoDocument* doc = _e.createDoc( m_pDoc );
+    if ( !doc )
+    {
+        kdDebug() << "Error inserting child!" << endl;
+        return;
+    }
+    
     doc->initDoc();
 
     KSpreadChild* ch = new KSpreadChild( m_pDoc, this, doc, _rect );
