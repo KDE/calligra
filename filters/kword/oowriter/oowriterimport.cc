@@ -1469,10 +1469,10 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
             QDomElement frameElementOut(doc.createElement("FRAME"));
             frameElementOut.setAttribute("left",columnLefts.at(column));
             frameElementOut.setAttribute("right",columnLefts.at(column+1));
-            // We assume 1 inch as cell height (### TODO, but how?)
-            frameElementOut.setAttribute("top",72*row);
-            frameElementOut.setAttribute("bottom",72*row+72);
+            frameElementOut.setAttribute("top", 0);
+            frameElementOut.setAttribute("bottom", 0);
             frameElementOut.setAttribute("runaround",1);
+            frameElementOut.setAttribute("autoCreateNewFrame",0); // Very important for cell growing!
             // ### TODO: a few attributes are missing
             framesetElement.appendChild(frameElementOut);
 
