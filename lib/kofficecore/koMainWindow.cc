@@ -38,6 +38,7 @@
 
 #include <kaboutdialog.h>
 #include <kstdaction.h>
+#include <kaction.h>
 #include <khelpmenu.h>
 #include <kapp.h>
 #ifndef USE_QFD
@@ -107,6 +108,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     KStdAction::openNew( this, SLOT( slotFileNew() ), actionCollection(), "file_new" );
     KStdAction::open( this, SLOT( slotFileOpen() ), actionCollection(), "file_open" );
+    m_recent = KStdAction::openRecent( this, SLOT(slotFileOpenRecent(const KURL&)), actionCollection() );
     KStdAction::save( this, SLOT( slotFileSave() ), actionCollection(), "file_save" );
     KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
     KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
@@ -122,10 +124,20 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
     if ( instance )
       setInstance( instance );
+
+    // Load list of recent files
+    KConfig * config = instance ? instance->config() : KGlobal::config();
+    m_recent->loadEntries( config );
+    config->sync();
 }
 
 KoMainWindow::~KoMainWindow()
 {
+    // Save list of recent files
+    KConfig * config = instance() ? instance()->config() : KGlobal::config();
+    m_recent->saveEntries( config );
+    config->sync();
+
     if ( s_lstMainWindows )
 	s_lstMainWindows->removeRef( this );
 
@@ -195,6 +207,7 @@ KoMainWindow* KoMainWindow::nextMainWindow()
 
 bool KoMainWindow::openDocument( const KURL & url )
 {
+    m_recent->addURL( url );
     KoDocument* doc = rootDocument();
 	
     KoDocument* newdoc = createDoc();
@@ -282,7 +295,8 @@ bool KoMainWindow::saveDocument( bool saveas )
 						       "Do you want to overwrite it ?"),
 						  i18n("Warning") ) == KMessageBox::Yes;
 	    }
-	} while ( !bOk );
+        } while ( !bOk );
+        m_recent->addURL( newURL );
         return pDoc->saveAs( newURL );
     }
     else
@@ -395,6 +409,11 @@ void KoMainWindow::slotFileOpen()
 	return;
 
     (void) openDocument(url);
+}
+
+void KoMainWindow::slotFileOpenRecent( const KURL & url )
+{
+  (void) openDocument( url );
 }
 
 void KoMainWindow::slotFileSave()

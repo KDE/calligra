@@ -26,6 +26,7 @@
 class KoDocument;
 class KoView;
 class KoMainWindowPrivate;
+class KRecentFilesAction;
 
 namespace KParts
 {
@@ -113,6 +114,14 @@ public slots:
     virtual void slotFileOpen();
 
     /**
+     *  Slot for opening a file among the recently opened files.
+     *
+     *  If the current document is empty, the opened document replaces the it.
+     *  If not a new shell will be opened for showing the opened file.
+     */
+    virtual void slotFileOpenRecent( const KURL & );
+
+    /**
      *  Saves the current document with the current name.
      */
     virtual void slotFileSave();
@@ -179,6 +188,8 @@ protected:
     virtual bool saveDocument( bool _saveas = FALSE );
 
     virtual bool queryClose();
+
+    KRecentFilesAction *m_recent;
 
 protected slots:
     virtual void slotActivePartChanged( KParts::Part *newPart );
