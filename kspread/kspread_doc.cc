@@ -722,7 +722,7 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter.endDocument();
 }
 
-bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* )
+bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
 {
     //todo Laurent just init for the moment
     // format for oasis is not implemented

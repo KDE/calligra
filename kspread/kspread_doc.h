@@ -443,7 +443,7 @@ public:
 
 
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
-  virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* );
+  virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );
   virtual bool loadChildren( KoStore* _store );
   QDomElement saveAreaName( QDomDocument& doc ) ;
     bool saveOasisAreaName( KoXmlWriter & xmlWriter );

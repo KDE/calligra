@@ -190,7 +190,7 @@ KarbonPart::saveXML()
 }
 
 bool
-KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, KoStore *store )
+KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDomDocument& settings, KoStore *store )
 {
 	kdDebug(38000) << "Start loading OASIS document..." << endl;
 

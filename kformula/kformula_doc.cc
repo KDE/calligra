@@ -86,7 +86,7 @@ QDomDocument KFormulaDoc::saveXML()
     return doc;
 }
 
-bool KFormulaDoc::loadOasis( const QDomDocument&, KoOasisStyles&, KoStore* )
+bool KFormulaDoc::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
 {
     //todo
     return false;

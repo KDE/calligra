@@ -36,7 +36,7 @@ class KChartPart : public KoChart::Part
   // save and load
   virtual QDomDocument saveXML();
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
-  virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* store );
+  virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store );
 
   bool m_bLoading; // Kalle: get rid of that one :)
   bool isLoading() {

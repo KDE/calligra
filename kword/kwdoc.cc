@@ -1021,7 +1021,7 @@ void KWDocument::loadPictureMap ( QDomElement& domElement )
 }
 
 
-bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* store )
+bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store )
 {
     QTime dt;
     dt.start();

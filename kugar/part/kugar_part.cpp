@@ -48,7 +48,7 @@ KugarPart::~KugarPart()
 //	closeURL();
 }
 
-bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles&, KoStore* )
+bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
 {
 	return false;
 }

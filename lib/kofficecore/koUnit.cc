@@ -24,6 +24,8 @@
 #include <kglobal.h>
 #include <qregexp.h>
 #include <kdebug.h>
+#include "koxmlwriter.h"
+#include <qdom.h>
 
 QStringList KoUnit::listOfUnitName()
 {
@@ -203,4 +205,18 @@ QString KoUnit::unitName( Unit _unit )
     if ( _unit == U_DD ) return QString::fromLatin1( "dd" );
     if ( _unit == U_CC ) return QString::fromLatin1( "cc" );
     return QString::fromLatin1( "pt" );
+}
+
+void KoUnit::saveOasis(KoXmlWriter* settingsWriter, Unit _unit)
+{
+    settingsWriter->startElement("config:config-item");
+    settingsWriter->addAttribute("config:name", "unit");
+    settingsWriter->addAttribute("config:type", "string");
+    settingsWriter->addTextNode(unitName(_unit));
+    settingsWriter->endElement(); // config:config-item
+}
+
+KoUnit::Unit KoUnit::loadOasis(const QDomElement& e)
+{
+    return unit(e.text());
 }

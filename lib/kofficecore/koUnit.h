@@ -24,6 +24,9 @@
 #include <qstringlist.h>
 #include <math.h> // for floor
 
+class KoXmlWriter;
+class QDomElement;
+
 // 1 inch ^= 72 pt
 // 1 inch ^= 25.399956 mm (-pedantic ;p)
 // 1 pt = 1/12 pi
@@ -157,6 +160,12 @@ public:
     /// parse common koffice and OO values, like "10cm", "5mm" to pt
     static double parseValue( QString value, double defaultVal = 0.0 );
     // Note: the above method doesn't take a const ref, since it modifies the arg.
+    
+    /// Save a unit in OASIS format
+    static void saveOasis(KoXmlWriter* settingsWriter, Unit _unit);
+    
+    /// Load a unit in OASIS format
+    static Unit loadOasis(const QDomElement& e);
 };
 
 

@@ -1651,6 +1651,7 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
         // TODO read manifest?
         KoOasisStyles oasisStyles;
         QDomDocument contentDoc;
+        QDomDocument settingsDoc;
         bool ok = loadAndParse( store, "content.xml", contentDoc, true );
         if ( ok ) {
             store->close();
@@ -1661,8 +1662,11 @@ bool KoDocument::loadNativeFormatFromStore( const QString& file )
             oasisStyles.createStyleMap( stylesDoc );
             // Also load styles from content.xml
             oasisStyles.createStyleMap( contentDoc );
+                        
+            if ( loadAndParse( store, "settings.xml", settingsDoc, true ) )
+                store->close();
 
-            ok = loadOasis( contentDoc, oasisStyles, store );
+            ok = loadOasis( contentDoc, oasisStyles, settingsDoc, store );
         }
         if ( !ok ) {
             delete store;

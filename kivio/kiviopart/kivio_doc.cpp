@@ -341,12 +341,34 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
   }
 
   manifestWriter->addManifestEntry("styles.xml", "text/xml");
+
+  if(!store->open("settings.xml")) {
+    return false;
+  }
+  
+  KoXmlWriter settingsWriter(&storeDev, "office:document-settings");
+  settingsWriter.startElement("office:settings");
+  settingsWriter.startElement("config:config-item-set");
+  settingsWriter.addAttribute("config:name", "kivio:settings");
+  
+  KoUnit::saveOasis(&settingsWriter, units());
+  
+  settingsWriter.endElement(); // config:config-item-set
+  settingsWriter.endElement(); // office:settings
+  settingsWriter.endElement(); // Root element
+  settingsWriter.endDocument();
+  
+  if(!store->close()) {
+    return false;
+  }
+
+  manifestWriter->addManifestEntry("settings.xml", "text/xml");
   
   setModified(false);
   return true;
 }
 
-bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* )
+bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
 {
   kdDebug(43000) << "Start loading OASIS document..." << endl;
   m_bLoading = true;
@@ -387,6 +409,39 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, K
     }
     
     node = node.nextSibling();
+  }
+  
+  // Load application settings
+  if(!settings.isNull()) {
+    contents = settings.documentElement();
+    body = contents.namedItem("office:settings").toElement();
+    
+    if(body.isNull()) {
+      kdDebug(43000) << "No office:settings found!" << endl;
+      setErrorMessage(i18n("Invalid OASIS document. No office:settings tag found."));
+      m_bLoading = false;
+      return false;
+    }
+    
+    node = body.firstChild();
+    
+    while(!node.isNull()) {
+      if(node.nodeName() == "config:config-item-set") {
+        QDomNode tmp = node.firstChild();
+        
+        while(!tmp.isNull()) {
+          if(tmp.nodeName() == "config:config-item") {
+            if(tmp.toElement().attribute("config:name") == "unit") {
+              setUnits(KoUnit::loadOasis(tmp.toElement()));
+            }
+          }
+          
+          tmp = tmp.nextSibling();
+        }
+      }
+      
+      node = node.nextSibling();
+    }
   }
   
   return true;

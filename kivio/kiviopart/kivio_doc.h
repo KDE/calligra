@@ -78,7 +78,7 @@ class KivioDoc : public KoDocument
     virtual bool saveOasis(KoStore* store, KoXmlWriter* manifestWriter);
 
     virtual bool loadXML( QIODevice *, const QDomDocument& doc );
-    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* );
+    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );
 
     virtual bool initDoc();
 

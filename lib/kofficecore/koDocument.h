@@ -434,7 +434,8 @@ public:
      *  you can find them in the oasisStyles parameter. The store can be used
      *  to load images and embedded documents.
      */
-    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles, KoStore* store ) = 0;
+    virtual bool loadOasis( const QDomDocument & doc, KoOasisStyles& oasisStyles,
+                            const QDomDocument & settings, KoStore* store ) = 0;
 
     /**
      *  Reimplement this method to save the contents of your KOffice document,

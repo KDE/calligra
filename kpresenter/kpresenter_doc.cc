@@ -1102,7 +1102,7 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     stylesWriter.endDocument();
 }
 
-bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles, KoStore*store )
+bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles, const QDomDocument&, KoStore*store )
 {
     QTime dt;
     dt.start();

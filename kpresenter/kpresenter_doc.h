@@ -144,7 +144,7 @@ class KPresenterDoc : public KoDocument
     enum { STYLE_BACKGROUNDPAGE = 20, STYLE_BACKGROUNDPAGEAUTO,STYLE_GRAPHICAUTO, STYLE_HATCH, STYLE_GRADIENT,STYLE_OBJECTANIMATION, STYLE_STROKE, STYLE_MARKER };
 
     // load
-    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& styles, KoStore* store );
+    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument&, KoStore* store );
     void loadOasisObject( int pos, KPrPage * page, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject = 0L);
 
     virtual bool loadXML( const QDomDocument& doc );
