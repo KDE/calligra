@@ -938,6 +938,10 @@ int MSWRITEImport::imageStartWrite (const int imageType, const int outputLength,
 	QString imageName;
 	QString fileInStore;
 
+
+	// indicate anchored image in formatting
+	//
+
 	tagWrite ("#");
 
 	m_formatOutput += "<FORMAT id=\"6\" pos=\"0\" len=\"1\">";
@@ -967,6 +971,10 @@ int MSWRITEImport::imageStartWrite (const int imageType, const int outputLength,
 	}
 	m_formatOutput += "\"/>";
 	m_formatOutput += "</FORMAT>";
+
+
+	// write framesets (truly written in documentEndWrite())
+	//
 
 	if (imageType == MSWRITE_OBJECT_BMP)
 	{
@@ -1046,6 +1054,10 @@ int MSWRITEImport::imageStartWrite (const int imageType, const int outputLength,
 
 		m_numClipart++;
 	}
+
+	
+	// store object properties
+	//
 
 	m_objectData [m_objectUpto].m_nameInStore = fileInStore;
 	m_objectData [m_objectUpto].m_dataLength = outputLength;
