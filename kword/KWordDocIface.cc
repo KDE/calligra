@@ -689,3 +689,30 @@ void KWordDocIface::setFootNoteSeparatorLineLength( int _length)
     doc->repaintAllViews();
 }
 
+void KWordDocIface::setFootNoteSeparatorLinePosition( const QString &pos)
+{
+    SeparatorLinePos tmp=SLP_LEFT;
+    if ( pos.lower()=="left")
+        tmp=SLP_LEFT;
+    else if ( pos.lower()=="centered")
+        tmp=SLP_CENTERED;
+    else if ( pos.lower()=="right")
+        tmp=SLP_RIGHT;
+    doc->setFootNoteSeparatorLinePosition( tmp);
+    doc->repaintAllViews();
+}
+
+QString KWordDocIface::footNoteSeparatorLinePosition()const
+{
+    QString tmp=QString::null;
+    switch( doc->footNoteSeparatorLinePosition() )
+    {
+    case SLP_LEFT:
+        return QString("left");
+    case SLP_RIGHT:
+        return QString("right");
+    case SLP_CENTERED:
+        return QString("centered");
+    }
+    return tmp;
+}

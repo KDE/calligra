@@ -201,6 +201,8 @@ k_dcop:
     void setViewFormattingBreak(bool _b);
     int footNoteSeparatorLineLength() const;
     void setFootNoteSeparatorLineLength( int _length);
+    void setFootNoteSeparatorLinePosition( const QString &pos);
+    QString footNoteSeparatorLinePosition()const;
 
 private:
     KWDocument *doc;
