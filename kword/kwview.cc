@@ -1590,6 +1590,9 @@ void KWView::showZoom( int zoom )
     QStringList list = actionViewZoom->items();
     QString zoomStr = QString::number( zoom ) + '%';
     actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
+
+    // Also set the zoom in KoView (for embedded views)
+    KoView::setZoom( static_cast<double>( zoom ) / 100 );
 }
 
 void KWView::slotViewFormattingChars()
