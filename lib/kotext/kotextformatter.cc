@@ -932,6 +932,9 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
     KoTextParag * /*parag*/, KoTextString *text, KoTextParagLineStart *line,
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
+    // This comes from Qt (3.3.x) but seems wrong: the last space is where we draw
+    // the "end of paragraph" sign, so it needs to be correctly positioned too.
+#if 0
     // ignore white space at the end of the line.
     int endSpaces = 0;
     while ( lastChar > startChar && lastChar->whiteSpace ) {
@@ -939,6 +942,7 @@ KoTextParagLineStart *KoTextFormatterCore::koBidiReorderLine(
         --lastChar;
         ++endSpaces;
     }
+#endif
 
     int start = (startChar - &text->at(0));
     int last = (lastChar - &text->at(0) );

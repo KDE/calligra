@@ -1492,6 +1492,7 @@ void KoTextString::checkBidi() const
 
     // determines the properties we need for layouting
     QTextEngine textEngine( toString(), 0 );
+    textEngine.direction = (QChar::Direction) dir;
     textEngine.itemize(QTextEngine::SingleLine);
     const QCharAttributes *ca = textEngine.attributes() + length-1;
     KoTextStringChar *ch = (KoTextStringChar *)end - 1;
@@ -1526,7 +1527,7 @@ void KoTextString::checkBidi() const
     } else if ( dir == QChar::DirL ) {
         that->rightToLeft = FALSE;
     } else {
-        that->rightToLeft = (textEngine.items[0].analysis.bidiLevel % 2);
+	that->rightToLeft = (textEngine.direction == QChar::DirR);
     }
 }
 
