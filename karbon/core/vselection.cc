@@ -162,15 +162,17 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 
 	KoPoint center = m_handleRect[ 0 ].center();
 
+	double handleNodeSize = m_handleNodeSize / zoomFactor;
+
 	// calculate displaycoords of nodes:
-	m_handleRect[ node_lb ].setRect( m_handleRect[0].left(), m_handleRect[0].top(), 2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_handleRect[ node_mb ].setRect( center.x(), m_handleRect[0].top(), 2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_handleRect[ node_rb ].setRect( m_handleRect[0].right(), m_handleRect[0].top(), 2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_handleRect[ node_rm ].setRect( m_handleRect[0].right(), center.y(), 2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_handleRect[ node_rt ].setRect( m_handleRect[0].right(), m_handleRect[0].bottom(), 2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_handleRect[ node_mt ].setRect( center.x(), m_handleRect[0].bottom(), 2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_handleRect[ node_lt ].setRect( m_handleRect[0].left(), m_handleRect[0].bottom(), 2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
-	m_handleRect[ node_lm ].setRect( m_handleRect[0].left(), center.y(), 2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
+	m_handleRect[ node_lb ].setRect( m_handleRect[0].left() - handleNodeSize, m_handleRect[0].top() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
+	m_handleRect[ node_mb ].setRect( center.x() - handleNodeSize, m_handleRect[0].top() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
+	m_handleRect[ node_rb ].setRect( m_handleRect[0].right() - handleNodeSize, m_handleRect[0].top() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
+	m_handleRect[ node_rm ].setRect( m_handleRect[0].right() - handleNodeSize, center.y() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
+	m_handleRect[ node_rt ].setRect( m_handleRect[0].right() - handleNodeSize, m_handleRect[0].bottom() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
+	m_handleRect[ node_mt ].setRect( center.x(), m_handleRect[0].bottom() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
+	m_handleRect[ node_lt ].setRect( m_handleRect[0].left() - handleNodeSize, m_handleRect[0].bottom() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
+	m_handleRect[ node_lm ].setRect( m_handleRect[0].left() - handleNodeSize, center.y() - handleNodeSize, 2 * handleNodeSize, 2 * handleNodeSize );
 
 	// draw handle rect:
 	painter->setPen( Qt::blue.light() );
@@ -191,8 +193,8 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 		{
 			if( i != node_mm )
 			{
-				temp.setRect(	zoomFactor * m_handleRect[ i ].left() - m_handleNodeSize,
-								zoomFactor * m_handleRect[ i ].top()  - m_handleNodeSize,
+				temp.setRect(	zoomFactor * m_handleRect[ i ].left(),
+								zoomFactor * m_handleRect[ i ].top(),
 								2 * m_handleNodeSize + 1, 2 * m_handleNodeSize + 1 );
 				painter->drawRect( temp );
 			}
