@@ -46,8 +46,7 @@ class KivioDragObject : public QDragObject
     QByteArray imageEncoded(const char* mimetype) const;
 
   private:
-    QValueList<QCString> m_decodeMimeList;
-    enum { NumEncodeFormats = 4 };
+    enum { NumEncodeFormats = 3 };
     QCString m_encodeMimeList[NumEncodeFormats];
     QPtrList<KivioStencil> m_stencilList;
     KoRect m_stencilRect;

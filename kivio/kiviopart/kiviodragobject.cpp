@@ -40,8 +40,6 @@
 KivioDragObject::KivioDragObject(QWidget* dragSource, const char* name)
   : QDragObject(dragSource, name)
 {
-  m_decodeMimeList.append("application/vnd.kde.kivio");
-  m_decodeMimeList.append("text/plain");
   m_encodeMimeList[0] = "application/vnd.kde.kivio";
   m_encodeMimeList[1] = "text/xml";
   m_encodeMimeList[2] = "text/plain";
@@ -52,12 +50,11 @@ const char* KivioDragObject::format(int i) const
 {
   if(i < NumEncodeFormats) {
     return m_encodeMimeList[i];
-  } else {
-    QImageDrag id;
-    return id.format(i - NumEncodeFormats);
   }
-
-  return 0;
+  
+  QImageDrag id;
+  id.setImage(QImage()); // We need the format list!!!
+  return id.format(i - NumEncodeFormats);
 }
 
 QByteArray KivioDragObject::encodedData(const char* mimetype) const
@@ -76,7 +73,11 @@ QByteArray KivioDragObject::encodedData(const char* mimetype) const
 
 bool KivioDragObject::canDecode(QMimeSource* e)
 {
-  for(QValueList<QCString>::Iterator it = m_decodeMimeList.begin(); it != m_decodeMimeList.end(); ++it) {
+  QValueList<QCString> decodeMimeList;
+  decodeMimeList.append("application/vnd.kde.kivio");
+  decodeMimeList.append("text/plain");
+  
+  for(QValueList<QCString>::Iterator it = decodeMimeList.begin(); it != decodeMimeList.end(); ++it) {
     if(e->provides(*it)) {
       return true;
     }
@@ -89,9 +90,9 @@ bool KivioDragObject::decode(QMimeSource* e, QPtrList<KivioStencil>& sl, KivioPa
 {
   bool ok = false;
 
-  if(e->provides(m_decodeMimeList[0])) {
+  if(e->provides("application/vnd.kde.kivio")) {
     QDomDocument doc("KivioSelection");
-    QByteArray data = e->encodedData(m_decodeMimeList[0]);
+    QByteArray data = e->encodedData("application/vnd.kde.kivio");
     doc.setContent( QCString( data, data.size()+1 ) );
     KivioLayer l(page);
     ok = l.loadXML(doc.documentElement());
@@ -102,7 +103,7 @@ bool KivioDragObject::decode(QMimeSource* e, QPtrList<KivioStencil>& sl, KivioPa
       sl.append(stencil->duplicate());
       stencil = l.stencilList()->next();
     }
-  } else if(e->provides(m_decodeMimeList[1])) {
+  } else if(e->provides("text/plain")) {
     QString str;
     ok = QTextDrag::decode(e, str);
     KivioStencilSpawner* ss = page->doc()->findInternalStencilSpawner("Dave Marotti - Text");
