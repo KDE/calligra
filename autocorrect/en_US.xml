@@ -668,7 +668,7 @@
     <item find="wo'nt" replace="won't" />
     <item find="yoiu" replace="you" />
     <item find="your his" replace="you're his" />
-    <item find="Berkeley" replace="Berkley" />
+    <item find="Berkley" replace="Berkeley" />
     <item find="Enland" replace="England" />
     <item find="Febuary" replace="February" />
     <item find="Greatbritain" replace="Great Britain" />
