@@ -48,10 +48,10 @@ public:
   void setFocus( bool _focus );
 
   // IDL
-  virtual CORBA::ULong leftGUISize() { return 0; }
-  virtual CORBA::ULong rightGUISize() { return 0; }
-  virtual CORBA::ULong topGUISize() { return 0; }
-  virtual CORBA::ULong bottomGUISize() { return 0; }
+  virtual unsigned long int leftGUISize() { return 0; }
+  virtual unsigned long int rightGUISize() { return 0; }
+  virtual unsigned long int topGUISize() { return 0; }
+  virtual unsigned long int bottomGUISize() { return 0; }
 
 protected:
   bool m_bMarked;

@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __ko_frame_h__
 #define __ko_frame_h__
@@ -40,16 +40,16 @@ class KoFrameResize : public QWidget
 public:
   KoFrameResize( KoFrame *_part, const QCursor &cursor, int _pos );
   ~KoFrameResize();
-  
+
 protected:
   void mousePressEvent( QMouseEvent *_ev );
   void mouseMoveEvent( QMouseEvent *_ev );
   void mouseReleaseEvent( QMouseEvent *_ev );
-  
+
   int position;
   int xPress;
   int yPress;
-  
+
   KoFrame *m_pFrame;
 };
 
@@ -63,7 +63,7 @@ class KoFrameMove : public QWidget
 public:
   KoFrameMove( KoFrame *_part, const QCursor &cursor, int _pos );
   ~KoFrameMove();
-  
+
 protected:
   void mousePressEvent( QMouseEvent *_ev );
   void mouseMoveEvent( QMouseEvent *_ev );
@@ -92,7 +92,7 @@ class KoFrame : public OPFrame,
 {
   friend KoFrameMove;
   friend KoFrameResize;
-  
+
   Q_OBJECT
 public:
   // C++
@@ -111,7 +111,7 @@ public:
 
   // IDL
   virtual KOffice::View_ptr view();
-  
+
   // C++
   /**
    * @return true if the function was successfull. The window
@@ -135,37 +135,37 @@ public:
    * resources.
    */
   virtual void detach();
-  
+
   // C++
   /**
    * Tells how many pixels the part needs on the
    * left when it gets keyboard focus. This space
    * is needed for extra rulers and stuff.
    */
-  virtual CORBA::ULong leftGUISize();
+  virtual unsigned long int leftGUISize();
   /**
    * Tells how many pixels the part needs on the
    * right when it gets keyboard focus. This space
    * is needed for extra rulers and stuff.
    */
-  virtual CORBA::ULong rightGUISize();
+  virtual unsigned long int rightGUISize();
   /**
    * Tells how many pixels the part needs on the
    * top when it gets keyboard focus. This space
    * is needed for extra rulers and stuff.
    */
-  virtual CORBA::ULong topGUISize();
+  virtual unsigned long int topGUISize();
   /**
    * Tells how many pixels the part needs on the
    * bottom when it gets keyboard focus. This space
    * is needed for extra rulers and stuff.
    */
-  virtual CORBA::ULong bottomGUISize();
+  virtual unsigned long int bottomGUISize();
 
   // C++
   virtual QRect partGeometry();
   virtual void setPartGeometry( const QRect& );
-  
+
 signals:
   void sig_geometryStart( KoFrame* );
   void sig_geometryEnd( KoFrame* );
@@ -173,33 +173,33 @@ signals:
   void sig_moveEnd( KoFrame* );
   void sig_popupMenu(  KoFrame*, const QPoint& _point );
   // void sig_attachPart( KoFrame* );
-  
+
 protected:
   virtual void paintEvent( QPaintEvent * );
   virtual void resizeEvent( QResizeEvent * );
   virtual void mousePressEvent( QMouseEvent * );
-  
+
   virtual void showBorders( bool _mode );
   virtual void setResizeMode( bool _m );
   virtual void showGUI( bool _mode );
-  
+
   virtual void popupMenu( const QPoint& _point );
   virtual void geometryStart();
   virtual void geometryEnd();
   virtual void moveStart();
   virtual void moveEnd();
-  
+
   bool m_bShowBorders;
   /**
    * Indicates wether we show the boxes that allow the user to resize this part.
    */
   bool m_bResizeMode;
   bool m_bShowGUI;
-  
+
   KOffice::View_var m_vView;
   OpenParts::Window m_wView;
   KoViewIf *m_pView;
-  
+
   KoFrameResize *m_pResizeWin1;
   KoFrameResize *m_pResizeWin2;
   KoFrameResize *m_pResizeWin3;
@@ -208,7 +208,7 @@ protected:
   KoFrameResize *m_pResizeWin6;
   KoFrameResize *m_pResizeWin7;
   KoFrameResize *m_pResizeWin8;
-  
+
   KoFrameMove *m_pMoveWin1;
   KoFrameMove *m_pMoveWin2;
   KoFrameMove *m_pMoveWin3;
