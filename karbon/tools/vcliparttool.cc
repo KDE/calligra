@@ -33,6 +33,7 @@
 #include <karbon_resourceserver.h>
 #include <karbon_view.h>
 #include "vcliparttool.h"
+#include <commands/vclipartcmd.h>
 #include <core/vdocument.h>
 #include <core/vgroup.h>
 #include <core/vobject.h>
@@ -380,43 +381,6 @@ VClipartTool::cancel()
 	draw();
 
 	delete m_clipart;
-}
-
-VClipartTool::VClipartCmd::VClipartCmd( VDocument* doc, const QString& name, VObject* clipart )
-		: VCommand( doc, name ), m_clipart( clipart->clone() ), m_executed( false )
-{
-}
-
-void
-VClipartTool::VClipartCmd::execute()
-{
-	if( !m_clipart )
-		return;
-
-	if( m_clipart->state() == VObject::deleted )
-		m_clipart->setState( VObject::normal );
-	else
-	{
-		m_clipart->setState( VObject::normal );
-		document()->append( m_clipart );
-		document()->selection()->clear();
-		document()->selection()->append( m_clipart );
-	}
-
-	m_executed = true;
-}
-
-void
-VClipartTool::VClipartCmd::unexecute()
-{
-	if( !m_clipart )
-		return;
-
-	document()->selection()->take( *m_clipart );
-
-	m_clipart->setState( VObject::deleted );
-
-	m_executed = false;
 }
 
 bool

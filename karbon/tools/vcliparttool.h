@@ -28,7 +28,6 @@
 #include <koPoint.h>
 #include <kdialogbase.h>
 
-#include "vcommand.h"
 #include "vtool.h"
 
 class QHButtonGroup;
@@ -91,26 +90,6 @@ protected:
 	virtual void cancel();
 
 private:
-
-	class VClipartCmd : public VCommand
-	{
-	public:
-		VClipartCmd( VDocument* doc, const QString& name, VObject* clipart );
-		virtual ~VClipartCmd()
-		{}
-
-		virtual void execute();
-		virtual void unexecute();
-		virtual bool isExecuted()
-		{
-			return m_executed;
-		}
-
-	private:
-		VObject* m_clipart;
-		bool m_executed;
-	};
-
 	VObject* m_clipart;
 	KoPoint m_topleft;
 	KoPoint m_bottomright;
