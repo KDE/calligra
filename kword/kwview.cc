@@ -5848,7 +5848,8 @@ int KWView::canvasYOffset() const
 
 void KWView::canvasAddChild( KoViewChild *child )
 {
-    m_gui->canvasWidget()->addChild( child->frame() );
+    // Not necessary anymore
+    //m_gui->canvasWidget()->addChild( child->frame() );
 }
 
 void KWView::changePicture()
