@@ -131,9 +131,8 @@ public:
     KWFrameSet *getFrameSet() const { return frameSet; }
     void setFrameSet( KWFrameSet *fs ) { frameSet = fs; }
 
-    /* The page on which this frame is */
-    void setPageNum( int i ) { m_pageNum = i; }
-    int pageNum() { return m_pageNum; }
+    /* The page on which this frame is (0 based)*/
+    int pageNum() const;
 
     /* All borders can be custom drawn with their own colors etc. */
     const Border &leftBorder() const { return brd_left; }
@@ -204,7 +203,6 @@ private:
 
     bool m_bCopy;
     bool selected;
-    int m_pageNum;
     int m_internalY; // for text frames only
 
     QBrush backgroundColor;

@@ -54,7 +54,6 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       bbottom( 0 ),
       m_bCopy( false ),
       selected( false ),
-      m_pageNum( 0 ),
       m_internalY( 0 ),
       backgroundColor( QBrush( QColor() ) ), // valid brush with invalid color ( default )
       brd_left( QColor(), Border::SOLID, 0 ),
@@ -64,7 +63,6 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       frameSet( fs )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
-    m_pageNum = fs ? fs->kWordDocument()->getPageOfRect( *this ) : 0;
     handles.setAutoDelete(true);
 }
 
@@ -75,6 +73,16 @@ KWFrame::~KWFrame()
         removeResizeHandles();
     /*if(anchor())
         anchor()->setDeleted(true);*/
+}
+
+int KWFrame::pageNum() const
+{
+    ASSERT( frameSet );
+    if ( !frameSet )
+        return 0;
+    KWDocument *doc = frameSet->kWordDocument();
+    int page = static_cast<int>(y() / doc->ptPaperHeight());
+    return QMIN( page, doc->getPages()-1 );
 }
 
 QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor defaultCursor )
@@ -126,7 +134,7 @@ KWFrame *KWFrame::getCopy() {
     frm->setFrameBehaviour(getFrameBehaviour());
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
     frm->setSheetSide(getSheetSide());
-    frm->setPageNum(pageNum());
+    //frm->setPageNum(pageNum());
     frm->setLeftBorder(leftBorder());
     frm->setRightBorder(rightBorder());
     frm->setTopBorder(topBorder());
@@ -655,6 +663,8 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const QPoint &position )
         kdDebug() << "KWFrameSet::moveFloatingFrame " << kopos.x() << "," << kopos.y() << endl;
         frame->moveTopLeft( kopos );
         kWordDocument()->updateAllFrames();
+        if ( frame->isSelected() )
+            frame->updateResizeHandles();
     }
 }
 

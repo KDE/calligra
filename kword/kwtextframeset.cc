@@ -953,7 +953,7 @@ void KWTextFrameSet::updateFrames()
     for ( ; frameIt.current(); ++frameIt )
     {
         // Set the page number while we're at it
-        frameIt.current()->setPageNum( static_cast<int>( frameIt.current()->y() / pageHeight ) );
+        //frameIt.current()->setPageNum( static_cast<int>( frameIt.current()->y() / pageHeight ) );
 
         FrameStruct str;
         str.frame = frameIt.current();
@@ -1774,7 +1774,7 @@ void KWTextFrameSet::formatMore()
                 KWFrame *frame = frames.last();
                 KWFrame *frm = frame->getCopy();
                 frm->moveBy( 0, m_doc->ptPaperHeight() );
-                frm->setPageNum( frame->pageNum()+1 );
+                //frm->setPageNum( frame->pageNum()+1 );
                 addFrame( frm );
             }
 
@@ -2132,17 +2132,18 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, bool copyPar
         int lastIndex = oldLen;
         int i;
         //kdDebug() << "KWTextFrameSet::readFormats copying from " << c1.index() << " to " << c1.parag()->length()-1 << " into lastIndex=" << lastIndex << endl;
-        undoRedoInfo.text += c1.parag()->string()->toString().mid( c1.index() ) + '\n';
+        // Replace the trailing spaces with '\n'. That char carries the formatting for the trailing space.
+        undoRedoInfo.text += c1.parag()->string()->toString().mid( c1.index(), c1.parag()->length() - 1 - c1.index() ) + '\n';
         for ( i = c1.index(); i < c1.parag()->length(); ++i, ++lastIndex )
             copyCharFormatting( c1.parag(), i, lastIndex, moveCustomItems );
-        ++lastIndex; // skip the '\n'.
+        //++lastIndex; // skip the '\n'.
         QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
-	    undoRedoInfo.text += p->string()->toString().left( p->length() ) + '\n';
+	    undoRedoInfo.text += p->string()->toString().left( p->length() - 1 ) + '\n';
             //kdDebug() << "KWTextFrameSet::readFormats (mid) copying from 0 to "  << p->length()-1 << " into i+" << lastIndex << endl;
             for ( i = 0; i < p->length(); ++i )
                 copyCharFormatting( p, i, i + lastIndex, moveCustomItems );
-            lastIndex += p->length() + 1; // skip the '\n'
+            lastIndex += p->length(); // + 1; // skip the '\n'
             //kdDebug() << "KWTextFrameSet::readFormats lastIndex now " << lastIndex << endl;
             p = p->next();
         }

@@ -2151,7 +2151,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
 
                 KWFrame *frm = frame->getCopy();
                 frm->moveBy( 0, ptPaperHeight() );
-                frm->setPageNum( frame->pageNum()+1 );
+                //frm->setPageNum( frame->pageNum()+1 );
                 newFrames.append( frm );
 
                 if ( frame->getNewFrameBehaviour()==KWFrame::Copy )

@@ -607,6 +607,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     double y = my / m_doc->zoomedResolutionY();
     int page = static_cast<int>( y / m_doc->ptPaperHeight() );
     int oldPage = static_cast<int>( frame->top() / m_doc->ptPaperHeight() );
+    ASSERT( oldPage == frame->pageNum() );
 
     // Calculate new frame coordinates, using minimum sizes, and keeping it in the bounds of the page
     double newLeft = frame->left();
@@ -615,20 +616,19 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     double newBottom = frame->bottom();
     if ( page == oldPage )
     {
-
         //kdDebug() << "KWCanvas::mmEditFrameResize old rect " << DEBUGRECT( *frame ) << endl;
 
         if ( top && newTop != y && !fs->isAHeader()/*!fs->isAFooter()*/ )
         {
             if (newBottom - y < minFrameHeight+5)
                 y = newBottom - minFrameHeight - 5;
-            y = QMAX( y, m_doc->ptPageTop( frame->pageNum() ) );
+            y = QMAX( y, m_doc->ptPageTop( oldPage ) );
             newTop = y;
         } else if ( bottom && newBottom != y && !fs->isAFooter()/*!fs->isAHeader()*/ )
         {
             if (y - newTop < minFrameHeight+5)
                 y = newTop + minFrameHeight + 5;
-            y = QMIN( y, m_doc->ptPageTop( frame->pageNum() + 1 ) );
+            y = QMIN( y, m_doc->ptPageTop( oldPage + 1 ) );
             newBottom = y;
         }
 
@@ -653,6 +653,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     frame->setTop(newTop);
     frame->setRight(newRight);
     frame->setBottom(newBottom);
+    //kdDebug() << "KWCanvas::mmEditFrameResize newTop=" << newTop << " newBottom=" << newBottom << " height=" << frame->height() << endl;
 
     // If header/footer, resize the first frame
     if ( frame->getFrameSet()->isHeaderOrFooter() )

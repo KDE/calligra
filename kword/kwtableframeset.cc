@@ -535,7 +535,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             }
             if(cell->m_col==i && cell->m_row==j) { // beware of multi cell frames.
                 cell->getFrame( 0 )->moveTopLeft( KoPoint( cell->getFrame( 0 )->x(), y ) );
-                cell->getFrame( 0 )->setPageNum(doingPage);
+                //cell->getFrame( 0 )->setPageNum(doingPage);
             }
             if(cell->m_row + cell->m_rows -1 == j)
                 nextY=cell->getFrame(0) -> bottom() + tableCellSpacing;
@@ -592,7 +592,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
                     newFrameSet->getFrame(0)->setHeight(baseFrameSet->getFrame(0)->height());
                 }
                 cell->getFrame( 0 )->moveTopLeft( KoPoint( cell->getFrame( 0 )->x(), y ) );
-                cell->getFrame( 0 )->setPageNum(doingPage);
+                //cell->getFrame( 0 )->setPageNum(doingPage);
                 if(cell->m_row + cell->m_rows -1 == j) {
                     nextY=cell->getFrame(0) -> bottom() + tableCellSpacing;
                 }
@@ -634,7 +634,7 @@ void KWTableFrameSet::setBoundingRect( KoRect rect )
             frame->setNewFrameBehaviour( KWFrame::NoFollowup );
             frame->setRect( rect.x() + j * (baseWidth + tableCellSpacing),
                 rect.y() + i * (baseHeight + tableCellSpacing), baseWidth, baseHeight );
-            frame->setPageNum(m_doc->getPageOfRect( *frame ));
+            //frame->setPageNum(m_doc->getPageOfRect( *frame ));
         }
     }
 }
