@@ -1,6 +1,5 @@
 Import filter:
 ==============
-Paragraph direction (http://web4.w3.org/TR/xsl/sliceA.html#writing-mode-add, fo:writing-mode (lr-tb|rl-tb|tb-rl|tb-lr|lr|rl|tb|page) "lr-tb")
 Paragraph bullets/counters
 Fields/Variables (Done?)
 Footnotes/Endnotes
