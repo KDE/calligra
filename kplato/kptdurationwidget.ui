@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>600</width>
-            <height>482</height>
+            <height>54</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -23,155 +23,152 @@
     <property name="caption">
         <string>KPTDurationWidget</string>
     </property>
-    <widget class="QLayoutWidget">
+    <vbox>
         <property name="name">
-            <cstring>layout1</cstring>
+            <cstring>unnamed</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>493</width>
-                <height>27</height>
-            </rect>
-        </property>
-        <hbox>
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>layout1</cstring>
             </property>
-            <widget class="KIconButton">
+            <hbox>
                 <property name="name">
-                    <cstring>addmonth</cstring>
+                    <cstring>unnamed</cstring>
                 </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>16</width>
-                        <height>32767</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string></string>
-                </property>
-                <property name="pixmap">
-                    <pixmap>image0</pixmap>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Add month</string>
-                </property>
-            </widget>
-            <widget class="KIconButton">
-                <property name="name">
-                    <cstring>addweek</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>16</width>
-                        <height>32767</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string></string>
-                </property>
-                <property name="pixmap">
-                    <pixmap>image1</pixmap>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Add week</string>
-                </property>
-            </widget>
-            <widget class="KIntNumInput">
-                <property name="name">
-                    <cstring>days</cstring>
-                </property>
-                <property name="minValue">
-                    <number>0</number>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Days</string>
-                </property>
-            </widget>
-            <widget class="KIconButton">
-                <property name="name">
-                    <cstring>subtractweek</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>16</width>
-                        <height>32767</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string></string>
-                </property>
-                <property name="pixmap">
-                    <pixmap>image2</pixmap>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Subtract week</string>
-                </property>
-            </widget>
-            <widget class="KIconButton">
-                <property name="name">
-                    <cstring>subtractmonth</cstring>
-                </property>
-                <property name="sizePolicy">
-                    <sizepolicy>
-                        <hsizetype>0</hsizetype>
-                        <vsizetype>0</vsizetype>
-                        <horstretch>0</horstretch>
-                        <verstretch>0</verstretch>
-                    </sizepolicy>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>16</width>
-                        <height>32767</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string></string>
-                </property>
-                <property name="pixmap">
-                    <pixmap>image3</pixmap>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Subtract month</string>
-                </property>
-            </widget>
-            <widget class="KTimeWidget">
-                <property name="name">
-                    <cstring>hhmmss</cstring>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>HH:MM:SS</string>
-                </property>
-            </widget>
-        </hbox>
-    </widget>
+                <widget class="KIconButton">
+                    <property name="name">
+                        <cstring>addmonth</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>16</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>image0</pixmap>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Add month</string>
+                    </property>
+                </widget>
+                <widget class="KIconButton">
+                    <property name="name">
+                        <cstring>addweek</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>16</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>image1</pixmap>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Add week</string>
+                    </property>
+                </widget>
+                <widget class="KIntNumInput">
+                    <property name="name">
+                        <cstring>days</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Days</string>
+                    </property>
+                </widget>
+                <widget class="KIconButton">
+                    <property name="name">
+                        <cstring>subtractweek</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>16</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>image2</pixmap>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Subtract week</string>
+                    </property>
+                </widget>
+                <widget class="KIconButton">
+                    <property name="name">
+                        <cstring>subtractmonth</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>16</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>image3</pixmap>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Subtract month</string>
+                    </property>
+                </widget>
+                <widget class="KTimeWidget">
+                    <property name="name">
+                        <cstring>hhmmss</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>HH:MM:SS</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
 </widget>
 <images>
     <image name="image0">
@@ -207,7 +204,7 @@
     <include location="local" impldecl="in implementation">kptdurationwidget.ui.h</include>
 </includes>
 <signals>
-    <signal>clicked()</signal>
+    <signal>valueChanged()</signal>
 </signals>
 <slots>
     <slot>addWeek()</slot>

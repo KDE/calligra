@@ -13,13 +13,13 @@
 void KPTDurationWidget::addWeek()
 {
     days->setValue(days->value() + DAYS_PER_WEEK);
-    emit clicked();
+    emit valueChanged();
 }
 
 void KPTDurationWidget::addMonth()
 {
     days->setValue(days->value() + DAYS_PER_MONTH);
-    emit clicked();
+    emit valueChanged();
 }
 
 void KPTDurationWidget::subtractWeek()
@@ -27,7 +27,7 @@ void KPTDurationWidget::subtractWeek()
     if (days->value() >= DAYS_PER_WEEK)
     {
         days->setValue(days->value() - DAYS_PER_WEEK);
-        emit clicked();
+        emit valueChanged();
     }
 }
 
@@ -36,7 +36,7 @@ void KPTDurationWidget::subtractMonth()
     if (days->value() >= DAYS_PER_MONTH)
     {
         days->setValue(days->value() - DAYS_PER_MONTH);
-        emit clicked();
+        emit valueChanged();
     }
 }
 
@@ -50,12 +50,12 @@ KPTDuration KPTDurationWidget::value()
 
 void KPTDurationWidget::days_valueChanged( int )
 {
-    emit clicked();
+    emit valueChanged();
 }
 
 void KPTDurationWidget::hhmmss_valueChanged( const QTime & )
 {
-    emit clicked();
+    emit valueChanged();
 }
 
 
@@ -65,6 +65,5 @@ void KPTDurationWidget::setValue( const KPTDuration &duration )
     tmp.addDays(-duration.days());
     hhmmss->setTime(tmp.time());
     days->setValue(duration.days());
+    emit valueChanged();
 }
-
-
