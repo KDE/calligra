@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -105,10 +105,10 @@ protected:
     void scaleAndCreatePixmap(const QSize& size, bool fastMode=false);
 
 private:
-    QImage  m_originalImage;
-    QByteArray m_rawData;
-    QPixmap m_cachedPixmap;
-    QSize m_cachedSize;
+    QImage  m_originalImage; ///< Image as Qimage
+    QByteArray m_rawData; ///< Binary copy of the loaded image file
+    QPixmap m_cachedPixmap; ///< Cached pixmap
+    QSize m_cachedSize; ///< size of the currently cached pixmap @see m_cachedPixmap
     /**
      * true, if the last cached image was done using fast mode.
      * false, if the last cached image was done using slow mode.

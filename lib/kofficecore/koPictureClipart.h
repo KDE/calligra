@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,7 +30,7 @@ class QSize;
 
 /**
  * @internal
- * KoPictureClipart is a container class
+ * KoPictureClipart is a container class for cliparts
  */
 class KoPictureClipart : public KoPictureBase
 {
@@ -101,14 +101,15 @@ public:
 protected:
     QPixmap getPixmap(QImage& image);
     /**
-     * @internal (Draw a QPicture)
+     * @internal
+     * Draw a QPicture
      */
     void drawQPicture(QPicture& clipart, QPainter& painter,
         int x, int y, int width, int height, int sx, int sy, int sw, int sh);
 protected:
-    QPicture m_clipart;
-    QByteArray m_rawData;
-    QSize m_size;
+    QPicture m_clipart; ///< The clipart as QPicture
+    QByteArray m_rawData; ///< Copy of the loaded image file
+    QSize m_size; // ### TODO: can it be removed?
 };
 
 #endif /* __koPictureClipart_h__ */

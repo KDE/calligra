@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,9 +34,9 @@ class KURL;
 class KoPictureShared;
 
 /**
- * KoPicture is a container class for various types of images supported by KOffice.
+ * KoPicture is a container class for various types of pictures supported by KOffice.
  *
- * @short An image container class
+ * @short An picture container class
  */
 class KoPicture
 {
@@ -155,16 +155,16 @@ public:
     bool loadXpm(QIODevice* io);
 
     /**
-     * @deprecated
+     * @deprecated To be replaced by @ref KoPicture::draw
+     *
      * Returns a QPixmap from an image
      * Returns an empty QPixmap if the KoPicture is not an image.
-     *
-     * To be replaced by @ref KoPicture::draw
      */
     QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
     /**
      * Helper function for saving
+     *
      * @return true if it is a clipart in KOffice 1.1, false if not
      */
     bool isClipartAsKOffice1Dot1(void) const;
@@ -201,8 +201,10 @@ public:
     QImage createAlphaMask(int conversion_flags = 0) const;
 
     /**
-     * Clear any cache (to avoid using too much memory
-     * especially if the application somehow also caches the KoPicture's output)
+     * Clear any cache
+     *
+     * This is used to avoid using too much memory
+     * especially if the application somehow also caches the KoPicture's output
      */
     void clearCache(void);
 

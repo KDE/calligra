@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,7 +38,7 @@ class KoPictureBase;
  * @internal
  * KoPictureShared is the class that contains the shared part for KoPicture
  *
- * As with all QShared objects, the sharing is neither automatic nor transparent!
+ * @warning As with all QShared objects, the sharing is neither automatic nor transparent!
  */
 class KoPictureShared : public QShared
 {
@@ -120,7 +120,7 @@ public:
     /**
      * Clear and set the mode of this KoPictureShared
      *
-     * @p newMode is a file extension (like "png") giving the wanted mode
+     * @param newMode file extension (like "png") giving the wanted mode
      */
     void clearAndSetMode(const QString& newMode);
 
@@ -132,7 +132,7 @@ public:
     /*
      * Load a file
      *
-     * @p fileName is the name of the file to load
+     * @param fileName the name of the file to load
      */
     bool loadFromFile(const QString& fileName);
 
@@ -145,7 +145,7 @@ public:
      * @deprecated
      * Returns a QPixmap from an image
      *
-     * @p size is the wanted size for the QPixmap
+     * @param size the wanted size for the QPixmap
      */
     QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
@@ -159,6 +159,7 @@ public:
 
     /**
      * Generate a QImage
+     *
      * (always in slow mode)
      *
      * @param size the wanted size for the QImage
@@ -170,8 +171,10 @@ public:
     QImage createAlphaMask(int conversion_flags = 0) const;
 
     /**
-     * Clear any cache (to avoid using too much memory
-     * especially if the application somehow also caches the KoPicture's output)
+     * Clear any cache
+     *
+     * It is used to avoid using too much memory
+     * especially if the application somehow also caches the KoPicture's output.
      */
     void clearCache(void);
 
@@ -192,7 +195,7 @@ protected:
      * @internal
      * Loads a compressed file
      * 
-     * WARNING: risk of endless recurision, be careful when it is called from @see load
+     * @warning risk of endless recurision, be careful when it is called from @see load
      *
      * @param io QIODevice of the compressed file/strea,
      * @param mimeType mimetype of the (de-)compressor

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ const char UNKNOWN_MIME_TYPE[]="application/octet-stream";
 
 /**
  * @internal
- * Base class for KoPictureImage, KoPictureClipart and KoPictureEps
+ * Base class for KoPictureImage, KoPictureClipart, KoPictureEps, KoPictureWmf...
  */
 class KoPictureBase
 {

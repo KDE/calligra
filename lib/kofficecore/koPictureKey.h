@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,9 +30,10 @@ namespace KoPictureType
     /**
      * QPicture version used by KoPictureClipart
      *
-     * 3 = Qt 2.1.x and later
-     * 4 = QT 3.x
-     * -1 = current QT
+     * Possible values:
+     * \li 3 for Qt 2.1.x and later
+     * \li 4 for QT 3.x
+     * \li -1 for current Qt
      */
     const int formatVersionQPicture=-1;
 
@@ -46,7 +47,7 @@ namespace KoPictureType
     };
 }
 
-// TODO: correct documentation
+// TODO: correct documentation (for example: sed "s/image/picture/g")
 
 /**
  * KoPictureKey is the structure describing an image in a unique way.
@@ -72,7 +73,8 @@ public:
     KoPictureKey( const QString &fn, const QDateTime &mod );
 
     /**
-     * Constructs a key, from a filename (without modification date)
+     * Constructs a key, from a filename 
+     * @note The modification date is set to 1970-01-01
      */
     KoPictureKey( const QString &fn );
 

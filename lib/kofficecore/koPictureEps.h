@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,7 +30,7 @@ class KoPictureEpsPrivate;
 
 /**
  * @internal
- * KoPictureImage is a container class for a EPS picture
+ * KoPictureEps is a container class for a EPS picture
  */
 class KoPictureEps : public KoPictureBase
 {
@@ -100,11 +100,15 @@ private:
     int tryScaleWithGhostScript(QImage &image, const QSize& size, const int resolutionx, const int resolutiony, const char* device );
 
 private:
+    /**
+     * Copy of the loaded EPS file
+     * @note For MS-DOS EPS files only the Postscript stream is kept, not any preview
+     */
     QByteArray m_rawData;
-    QPixmap m_cachedPixmap;
-    QSize m_originalSize;
-    QSize m_cachedSize;
-    QRect m_boundingBox;
+    QPixmap m_cachedPixmap; ///< Cached pixmap
+    QSize m_originalSize; ///< Original size of the EPS picture
+    QSize m_cachedSize; ///< size of the currently cached pixmap @see m_cachedPixmap
+    QRect m_boundingBox; ///< Bounding box, as read from the EPS file
     /**
      * true, if the last cached image was done using fast mode.
      * false, if the last cached image was done using slow mode.
