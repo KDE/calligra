@@ -78,7 +78,7 @@ public:
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
 	void setValue( double value ) { m_value = value; }
-	double value() { return m_value; }
+	double value() const { return m_value; }
 
 protected:
 	 bool eventFilter( QObject* obj, QEvent* ev );
@@ -98,7 +98,7 @@ public:
 	virtual void setUnit( KoUnit::Unit = KoUnit::U_PT );
 
 	void setValue( double value ) { m_value = value; }
-	double value() { return m_value; }
+	double value() const { return m_value; }
 
 protected:
 	 bool eventFilter( QObject* obj, QEvent* ev );
