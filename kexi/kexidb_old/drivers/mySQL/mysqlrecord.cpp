@@ -36,7 +36,7 @@ MySqlRecord::MySqlRecord(MYSQL_RES *result, MySqlDB *db, const char *name, bool 
 //(js)	m_readOnly = findKey();
   //TODO(js): get readonly flag from the database
   findKey();
-  if (fieldCount()>0 && findKey()) 
+  if (fieldCount()>0 && findKey())
     m_table = MySqlResult::fieldInfo(0)->table();
   m_readOnly = false;
 
@@ -100,7 +100,7 @@ MySqlRecord::writeOut(KexiDBUpdateRecord * ur)
 			}
 
 			fieldList+=tmpField;
-			valueList+="\""+tmpValue.asString()+"\"";
+			valueList+="\""+m_db->escape(tmpValue.asString())+"\"";
 		}
 		if (!fieldList.isEmpty())
 		{
@@ -115,7 +115,7 @@ MySqlRecord::writeOut(KexiDBUpdateRecord * ur)
 						if (fieldInfo(i)->auto_increment()) {
 							kdDebug()<<"Auto inc field found"<<endl;
 							ur->setValue(fieldInfo(i)->name(),QVariant(autoID));
-#ifdef __GNUC__ 
+#ifdef __GNUC__
 #warning "FIXME: Here should be a query of the record in question, not just an id update"
 #endif
 							emit recordInserted(ur);
@@ -134,7 +134,7 @@ MySqlRecord::writeOut(KexiDBUpdateRecord * ur)
 			valid; valid=ur->nextUpdateField(tmpField,tmpValue)) {
 
 			if (!statement.isEmpty()) statement+=",";
-			statement+=tmpField+"=\""+tmpValue.asString()+"\"";
+			statement+=tmpField+"=\""+m_db->escape(tmpValue.asString())+"\"";
 		}
 
 		if (!statement.isEmpty())

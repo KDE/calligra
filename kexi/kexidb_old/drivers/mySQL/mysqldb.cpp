@@ -352,6 +352,7 @@ MySqlDB::driverName() const
 QString
 MySqlDB::escape(const QString &str)
 {
+//	QCString val(encode(str));
 	char* escaped = (char*) malloc(str.length() * 2 + 2);
 	mysql_real_escape_string(m_mysql, escaped, str.local8Bit(), str.length());
 
