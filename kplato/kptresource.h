@@ -25,14 +25,59 @@
 #include <qlist.h>
 #include "defs.h"
 
-#include "kptnode.h"
-
 class KPTRisk;
 class KPTEffort;
 class KPTAppointment;
 class KPTTask;
+class KPTNode;
+class KPTResource;
 
-class KPTResource : public KPTNode {
+/**
+  * This class represents a group of similar resources to be assigned to a task
+  * e.g. The list of employees, computer resources, etc
+  */
+
+class KPTResourceGroup {
+    public:
+	      KPTResourceGroup();
+	      ~KPTResourceGroup();
+	
+	      void setName(QString);
+	      QString &name();
+	
+	      /** Manage the resources in this list
+	        * At some point we will have to look at not mixing types of resources
+	        * (e.g. you can't add a person to a list of computers
+	        *
+	        * Risks must always be associated with a resource, so there is no option
+	        * to manipulate risks seperately
+	        */
+	
+	      void addResource(KPTResource*, KPTRisk*);
+        void insertResource( unsigned int index, KPTResource *resource );
+        void removeResource( KPTResource *resource );
+	      void removeResource(int);
+
+	      KPTResource* getResource(int);
+	      KPTRisk* getRisk(int);
+ 	
+	      /** Manage the dependent resources.  This is a list of the resource
+	        * groups that must have available resources for this resource to
+	        * perform the work
+	        */
+	
+	      void addRequiredResource(KPTResourceGroup*);
+	      KPTResourceGroup* getRequiredResource(int);
+	      void removeRequiredResource(int);
+	
+    private:
+        QString m_name;
+        QList<KPTResource> m_resources;
+        QList<KPTRisk> m_risks;
+        QList<KPTResourceGroup> m_requires;
+};
+
+class KPTResource {
     public:
 
         KPTResource();

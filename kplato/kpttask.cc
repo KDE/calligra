@@ -42,10 +42,10 @@ QDateTime *KPTTask::getFloat() {
     return 0L;
 }
 
-void KPTTask::addResource( KPTResource *resource ) {
+void KPTTask::addResource( KPTResourceGroup *resource ) {
 }
 
-void KPTTask::removeResource( KPTResource *resource ){
+void KPTTask::removeResource( KPTResourceGroup *resource ){
    // always auto remove
 }
 
@@ -53,5 +53,14 @@ void KPTTask::removeResource( int number ){
    // always auto remove
 }
 
-void KPTTask::insertResource( unsigned int index, KPTResource *resource ) {
+void KPTTask::insertResource( unsigned int index, KPTResourceGroup *resource ) {
+}
+
+KPTEffort::KPTEffort( QDateTime e, QDateTime p, QDateTime o) {
+  m_expectedDuration = e;
+  m_pessimisticDuration = p;
+  m_optimisticDuration = o;
+}
+
+KPTEffort::~KPTEffort() {
 }

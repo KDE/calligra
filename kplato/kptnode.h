@@ -26,7 +26,7 @@
 #include "defs.h"
 #include "kptrelation.h"
 
-class KPTRisk;
+class KPTEffort;
 
 /**
  * This class represents any node in the project, a node can be a project to a subproject and any task.
@@ -49,19 +49,6 @@ class KPTNode {
         void delChildNode( KPTNode *node, bool remove=true);
         void delChildNode( int number, bool remove=true);
         KPTNode *getChildNode( int number) { return m_nodes.at(number); }
-
-        // Dependency management.  All types of tasks nodes can have dependencies
-        // as long as they have no child nodes
-
-        virtual KPTRelation::Result addDependNode( KPTNode*, TimingType, TimingRelation);
-        virtual KPTRelation::Result insertDependNode( unsigned int, KPTNode *, TimingType, TimingRelation);
-
-        virtual void removeDependNode( KPTNode* node);
-        virtual void removeDependNode( unsigned int index);
-
-
-        KPTRisk *risk();
-        void setRisk(KPTRisk *risk);
 
         // Type of this node.
         enum NodeType {
@@ -97,12 +84,10 @@ class KPTNode {
         QDateTime *startTime() { return m_startTime; }
         void setEndTime(QDateTime *endTime) { m_endTime=endTime; }
         QDateTime *endTime() { return m_endTime; }
-        void setOptimisticDuration(QDateTime *od) {m_optimisticDuration = od; }
-        QDateTime *optimisticDuration() { return m_optimisticDuration; }
-        void setPessemisticDuration(QDateTime *pd) {m_pessemisticDuration = pd; }
-        QDateTime *pessemisticDuration() { return m_pessemisticDuration; }
-        void setExpectedDuration(QDateTime *ed) { m_expectedDuration=ed; }
-        QDateTime *expectedDuration() { return m_expectedDuration; }
+
+
+        void addEffort(KPTEffort* e) { m_effort = e; }
+        KPTEffort* effort() { return m_effort; }
 
         /** The expected Duration is the expected time to complete a Task, Project, etc. For an 
          *  individual Task, this will calculate the expected duration by querying 
@@ -143,7 +128,23 @@ class KPTNode {
 
         QDateTime *m_startTime, *m_endTime; // both entered during the project, not at the initial calculation.
         // effort variables.
-        QDateTime *m_optimisticDuration, *m_pessemisticDuration, *m_expectedDuration;
-        KPTRisk *m_risk;
+        KPTEffort* m_effort;
 };
+
+class KPTEffort {
+
+    public:
+        KPTEffort ( QDateTime e = QDateTime(), QDateTime p = QDateTime(), QDateTime o = QDateTime() );
+        ~KPTEffort();
+
+        QDateTime& optimistic() {return m_optimisticDuration;}
+        QDateTime& pessimistic() {return m_pessimisticDuration;}
+        QDateTime& expected() {return m_expectedDuration;}
+
+    private:
+       QDateTime m_optimisticDuration;
+       QDateTime m_pessimisticDuration;
+       QDateTime m_expectedDuration;
+};
+
 #endif

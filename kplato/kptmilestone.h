@@ -24,7 +24,7 @@
 #include "kptnode.h"
 #include "defs.h"
 
-class KPTResource;
+class KPTResourceGroup;
 
 /**
  * This class represents any node in the project, a node can be a project to a subproject and any task.
@@ -38,9 +38,16 @@ class KPTMilestone : public KPTNode {
 
         // no children permitted.
         void addChildNode( KPTNode *) {}
-        void addResource( KPTResource *) {}
+        void addResource( KPTResourceGroup *) {}
+        void insertResource( KPTResourceGroup *) {}
         void insertChildNode( unsigned int, KPTNode *) {}
-        void insertRisk( unsigned int, KPTRisk *) {}
+
+        // No child time dependencies permitted
+
+        void addDependChildNode( KPTNode*, TimingType, TimingRelation) {}
+        void addDependChildNode( KPTNode*, TimingRelation, QDateTime) {}
+        void insertDependChildNode( unsigned int, KPTNode*, TimingType, TimingRelation) {}
+
 
         /** The expected Duration is the expected time to complete a Task, Project, etc. For an 
          *  individual Task, this will calculate the expected duration by querying 

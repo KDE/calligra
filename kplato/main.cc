@@ -36,14 +36,17 @@ int main( int /*argc*/, char /***argv */) {
     p->addChildNode(ta);
 
     // new task with name Task B
+    // Effort initialized in one line
     KPTTask *tb = new KPTTask();
-    ta->setExpectedDuration(new QDateTime(*(new QDate(1,0,0)), *(new QTime(2,0,0))));
+    ta->addEffort( new KPTEffort(QDateTime(*(new QDate(1,0,0)), *(new QTime(2,0,0)))));
     tb->setName("Task B");
     p->addChildNode(tb);
 
     // new subtask, we let it be a subtask of taskA, and name it Subtask A1
+    // effort initialized the easy to read way
     KPTTask *ta1 = new KPTTask();
-    ta->setExpectedDuration(new QDateTime(*(new QDate(1,0,0)),*( new QTime(1,0,0))));
+    ta1->addEffort(new KPTEffort);
+    ta1->effort()->expected() = QDateTime(*(new QDate(1,0,0)),*( new QTime(1,0,0)));
     ta1->setName("Subtask A1");
     p->addChildNode(ta1);
 
@@ -59,7 +62,7 @@ int main( int /*argc*/, char /***argv */) {
     // Task B takes 2 hours
     // Total: 4 hour 45 minutes.
 
-    kdDebug() << "Total running time: " << p->expectedDuration() << endl;
+    kdDebug() << "Total running time: " << p->getExpectedDuration() << endl;
      
     return 0;
 }

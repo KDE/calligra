@@ -49,39 +49,6 @@ void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
 void KPTNode::addChildNode( KPTNode *node) {
 }
 
-KPTRelation::Result KPTNode::addDependNode( KPTNode*, TimingType, TimingRelation) {
-  // Only possible if we have a terminal node
-
-  if ( !m_nodes.isEmpty() ) {
-  	return KPTRelation::HASCHILDREN;
-  }
-
-  return KPTRelation::NOTIMPL;
-
-}
-
-
-KPTRelation::Result KPTNode::insertDependNode( unsigned int, KPTNode *, TimingType, TimingRelation) {
-  // Only possible if we have a terminal node
-
-  if ( !m_nodes.isEmpty() ) {
-  	return KPTRelation::HASCHILDREN;
-  }
-
-  return KPTRelation::NOTIMPL;
-}
-
-void KPTNode::removeDependNode( KPTNode* node) {
-}
-
-void KPTNode::removeDependNode( unsigned int index){
-}
-
-KPTRisk *KPTNode::risk() {
-}
-
-void KPTNode::setRisk(KPTRisk *risk) {
-}
 
 QDateTime *KPTNode::getDelay() {
     return 0L;

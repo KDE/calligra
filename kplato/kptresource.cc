@@ -20,6 +20,42 @@
 #include "kptresource.h"
 #include "kpttask.h"
 
+
+KPTResourceGroup::KPTResourceGroup() {
+}
+
+KPTResourceGroup::~KPTResourceGroup() {
+}
+
+	
+void KPTResourceGroup::setName(QString) {
+}
+
+QString &KPTResourceGroup::name() {
+}
+	
+	
+void KPTResourceGroup::addResource(KPTResource*, KPTRisk*) {
+}
+
+KPTResource* KPTResourceGroup::getResource(int) {
+}
+
+KPTRisk* KPTResourceGroup::getRisk(int) {
+}
+
+void KPTResourceGroup::removeResource(int) {
+}
+	
+void KPTResourceGroup::addRequiredResource(KPTResourceGroup*) {
+}
+
+KPTResourceGroup* KPTResourceGroup::getRequiredResource(int) {
+}
+
+void KPTResourceGroup::removeRequiredResource(int) {
+}
+
 KPTResource::KPTResource() : m_appointments(), m_workingHours() {
 }
 
