@@ -29,7 +29,7 @@
 #include <kdebug.h>
 
 
-#define DEBUG_HYPHENATOR 1
+//#define DEBUG_HYPHENATOR 1
 
 KoHyphenator* KoHyphenator::s_self;
 static KStaticDeleter<KoHyphenator> kohyphensd;
@@ -46,7 +46,9 @@ KoHyphenator::KoHyphenator()
 /*  Reading config for dictionary encodings from file...*/
 
     QString path = kapp->dirs()->findResource("data", "koffice/hyphdicts/dicts.xml");
+#ifdef DEBUG_HYPHENATOR
     kdDebug() << path << endl;
+#endif
 
     QFile *f;
     if (!path.isNull())
@@ -68,7 +70,9 @@ KoHyphenator::KoHyphenator()
                 if (attr.contains("lang") && attr.contains("encoding")) {
                     QString lang = attr.namedItem("lang").nodeValue();
                     QString encoding = attr.namedItem("encoding").nodeValue();
+#ifdef DEBUG_HYPHENATOR
                     kdDebug() << "KoHyphenator: found lang=" << lang << " encoding=" << encoding << endl;
+#endif
                     encodings.insert( lang,
                                       EncodingStruct( encoding.latin1() ) );
                 }
