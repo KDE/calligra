@@ -13,5 +13,7 @@ main
   locationbartoggle = win.action( "showlocationbar" );
   println( locationbartoggle.plainText() );
   locationbartoggle.setChecked( FALSE );
+  println( konq.functions() );
+  println( locationbartoggle.functions() );
 }
 
