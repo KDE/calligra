@@ -36,6 +36,7 @@ public:
     virtual ~ParserNode() { debugCount--; }
     //virtual void output( ostream& ) = 0;
     virtual void buildXML( QDomDocument doc, QDomElement element ) = 0;
+    virtual bool isSimple() { return false; }
 
     static int debugCount;
 };
@@ -47,6 +48,7 @@ public:
     PrimaryNode( QString primary ) : m_primary( primary ), m_functionName( false ) {}
     //virtual void output( ostream& stream ) { stream << "PrimaryNode {" << m_primary << "}" << endl; }
     virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual bool isSimple() { return true; }
     void setUnicode( QChar unicode ) { m_unicode = unicode; }
     void setFunctionName( bool functionName ) { m_functionName = functionName; }
     QString primary() const { return m_primary; }
@@ -149,21 +151,11 @@ public:
 void TermNode::buildXML( QDomDocument doc, QDomElement element )
 {
     if ( m_type == "*" ) {
-        QDomElement bracket = doc.createElement( "BRACKET" );
-        bracket.setAttribute( "LEFT", '(' );
-        bracket.setAttribute( "RIGHT", ')' );
-        QDomElement content = doc.createElement( "CONTENT" );
-        QDomElement sequence = doc.createElement( "SEQUENCE" );
-
-        m_lhs->buildXML( doc, sequence );
+        m_lhs->buildXML( doc, element );
         QDomElement de = doc.createElement( "TEXT" );
         de.setAttribute( "CHAR", QString( m_type ) );
-        sequence.appendChild( de );
-        m_rhs->buildXML( doc, sequence );
-
-        content.appendChild( sequence );
-        bracket.appendChild( content );
-        element.appendChild( bracket );
+        element.appendChild( de );
+        m_rhs->buildXML( doc, element );
     }
     else {
         QDomElement fraction = doc.createElement( "FRACTION" );
@@ -193,9 +185,22 @@ void PowerNode::buildXML( QDomDocument doc, QDomElement element )
     QDomElement index = doc.createElement( "INDEX" );
     QDomElement content = doc.createElement( "CONTENT" );
     QDomElement sequence = doc.createElement( "SEQUENCE" );
-    m_lhs->buildXML( doc, sequence );
     content.appendChild( sequence );
     index.appendChild( content );
+
+    if ( !m_lhs->isSimple() ) {
+        QDomElement bracket = doc.createElement( "BRACKET" );
+        bracket.setAttribute( "LEFT", '(' );
+        bracket.setAttribute( "RIGHT", ')' );
+        sequence.appendChild( bracket );
+
+        content = doc.createElement( "CONTENT" );
+        bracket.appendChild( content );
+
+        sequence = doc.createElement( "SEQUENCE" );
+        content.appendChild( sequence );
+    }
+    m_lhs->buildXML( doc, sequence );
     if ( m_type == "_" ) {
         QDomElement lowerRight = doc.createElement( "LOWERRIGHT" );
         sequence = doc.createElement( "SEQUENCE" );
@@ -213,25 +218,6 @@ void PowerNode::buildXML( QDomDocument doc, QDomElement element )
     element.appendChild( index );
 }
 
-// class SqrtNode : public ParserNode {
-// public:
-//     SqrtNode( ParserNode* expr ) : m_expr( expr ) {}
-//     ~SqrtNode() { delete m_expr; }
-//     virtual void buildXML( QDomDocument doc, QDomElement element );
-// private:
-//     ParserNode* m_expr;
-// };
-
-// void SqrtNode::buildXML( QDomDocument doc, QDomElement element )
-// {
-//     QDomElement root = doc.createElement( "ROOT" );
-//     QDomElement content = doc.createElement( "CONTENT" );
-//     QDomElement sequence = doc.createElement( "SEQUENCE" );
-//     m_expr->buildXML( doc, sequence );
-//     content.appendChild( sequence );
-//     root.appendChild( content );
-//     element.appendChild( root );
-// }
 
 class FunctionNode : public ParserNode {
 public:
@@ -362,6 +348,11 @@ void RowNode::buildXML( QDomDocument doc, QDomElement element )
         if ( i < m_row.count() ) {
             m_row.at( i )->buildXML( doc, sequence );
         }
+        else {
+            QDomElement de = doc.createElement( "TEXT" );
+            de.setAttribute( "CHAR", "0" );
+            sequence.appendChild( de );
+        }
         element.appendChild( sequence );
     }
 }
@@ -383,6 +374,7 @@ public:
     MatrixNode( QPtrList<RowNode> rows ) : m_rows( rows ) { m_rows.setAutoDelete( true ); }
     //virtual void output( ostream& stream );
     virtual void buildXML( QDomDocument doc, QDomElement element );
+    virtual bool isSimple() { return true; }
     uint columns();
     uint rows() { return m_rows.count(); }
 private:
@@ -435,7 +427,8 @@ void MatrixNode::buildXML( QDomDocument doc, QDomElement element )
 
 
 FormulaStringParser::FormulaStringParser( const KFormula::SymbolTable& symbolTable, QString formula )
-    : m_symbolTable( symbolTable ), m_formula( formula ), pos( 0 ), line( 1 ), column( 1 )
+    : m_symbolTable( symbolTable ), m_formula( formula ),
+      pos( 0 ), line( 1 ), column( 1 ), m_newlineIsSpace( true )
 {
 }
 
@@ -561,7 +554,7 @@ ParserNode* FormulaStringParser::parsePrimary()
                     nextToken();
                 }
             }
-            expect( RP, QString( i18n( "')' expected at %1:%2" ) ).arg( line ).arg( column ) );
+            expect( RP, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( ")" ) );
             node->setFunctionName( true );
             return new FunctionNode( node, args );
         }
@@ -575,30 +568,48 @@ ParserNode* FormulaStringParser::parsePrimary()
     case LP: {
         nextToken();
         ParserNode* node = parseExpr();
-        expect( RP, QString( i18n( "')' expected at %1:%2" ) ).arg( line ).arg( column ) );
+        expect( RP, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( ")" ) );
         return node;
     }
     case LB: {
         nextToken();
         QPtrList<RowNode> rows;
         rows.setAutoDelete( false );
-        while ( currentType == LB ) {
-            nextToken();
+        bool innerBrackets = currentType == LB;
+        m_newlineIsSpace = innerBrackets;
+        while ( ( currentType != EOL ) && ( currentType != RB ) ) {
+            if ( innerBrackets ) {
+                expect( LB, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( "[" ) );
+            }
             QPtrList<ParserNode> row;
             row.setAutoDelete( false );
-            while ( ( currentType != EOL ) && ( currentType != RB ) ) {
+            while ( ( currentType != EOL ) && ( currentType != RB ) &&
+                    ( innerBrackets || ( currentType != SEMIC && currentType != NEWLINE ) ) ) {
                 row.append( parseExpr() );
                 if ( currentType == COMMA ) {
                     nextToken();
                 }
             }
-            expect( RB, QString( i18n( "']' expected at %1:%2" ) ).arg( line ).arg( column ) );
-            rows.append( new RowNode( row ) );
-            if ( currentType == COMMA ) {
-                nextToken();
+            if ( innerBrackets ) {
+                expect( RB, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( "]" ) );
+                if ( currentType == COMMA ) {
+                    nextToken();
+                }
             }
+            else {
+                if ( currentType != RB ) {
+                    if ( currentType == NEWLINE ) {
+                        nextToken();
+                    }
+                    else {
+                        expect( SEMIC, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( ";" ) );
+                    }
+                }
+            }
+            rows.append( new RowNode( row ) );
         }
-        expect( RB, QString( i18n( "']' expected at %1:%2" ) ).arg( line ).arg( column ) );
+        m_newlineIsSpace = true;
+        expect( RB, QString( i18n( "'%3' expected at %1:%2" ) ).arg( line ).arg( column ).arg( "]" ) );
         MatrixNode* node = new MatrixNode( rows );
         if ( node->columns() == 0 ) {
             error( QString( i18n( "null columns in Matrix at %1:%2" ) ).arg( line ).arg( column ) );
@@ -637,7 +648,15 @@ QString FormulaStringParser::nextToken()
                         ( m_formula[pos] == '\'' ) ) ) {
         if ( m_formula[pos] == '\n' ) {
             line++;
-            column = 0;
+            if ( m_newlineIsSpace ) {
+                column = 0;
+            }
+            else {
+                pos++;
+                column = 1;
+                currentType = NEWLINE;
+                return current = "\n";
+            }
         }
         pos++; column++;
     }
@@ -711,6 +730,10 @@ QString FormulaStringParser::nextToken()
             pos++; column++;
             currentType = COMMA;
             return current = ",";
+        case ';':
+            pos++; column++;
+            currentType = SEMIC;
+            return current = ";";
         case '=':
             pos++; column++;
             currentType = ASSIGN;

@@ -41,7 +41,8 @@ public:
 
 private:
 
-    enum TokenType { NUMBER, NAME, PLUS, SUB, MUL, DIV, POW, INDEX, LP, RP, LB, RB, ASSIGN, COMMA, OTHER, EOL };
+    enum TokenType { NUMBER, NAME, PLUS, SUB, MUL, DIV, POW, INDEX, LP, RP, LB, RB,
+                     ASSIGN, COMMA, SEMIC, NEWLINE, OTHER, EOL };
 
     ParserNode* parseAssign();
     ParserNode* parseExpr();
@@ -64,6 +65,7 @@ private:
     uint pos;
     uint line;
     uint column;
+    bool m_newlineIsSpace;
 
     TokenType currentType;
     QString current;
