@@ -315,6 +315,14 @@ static bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
 
     QString strDataId=attributes.value("dataid").stripWhiteSpace();
 
+    AbiPropsMap abiPropsMap;
+    abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
+
+    double height=ValueWithLengthUnit(abiPropsMap["height"].getValue());
+    double width =ValueWithLengthUnit(abiPropsMap["width" ].getValue());
+
+    kdDebug(30506) << "Image: " << strDataId << " height: " << height << " width: " << width << endl;
+
     // TODO: image properties
 
     if (strDataId.isEmpty())
@@ -341,8 +349,8 @@ static bool StartElementImage(StackItem* stackItem, StackItem* stackCurrent,
     QDomElement frameElementOut=mainDocument.createElement("FRAME");
     frameElementOut.setAttribute("left",0);
     frameElementOut.setAttribute("top",0);
-    frameElementOut.setAttribute("bottom",0);
-    frameElementOut.setAttribute("right",0);
+    frameElementOut.setAttribute("bottom",height);
+    frameElementOut.setAttribute("right" ,width );
     frameElementOut.setAttribute("runaround",1);
     // TODO: a few attributes are missing
     framesetElement.appendChild(frameElementOut);
@@ -395,6 +403,8 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
     stackItem->elementType=ElementTypeRealData;
 
     QString strName=attributes.value("name").stripWhiteSpace();
+    kdDebug(30506) << "Data: " << strName << endl;
+    
     QString strBase64=attributes.value("base64").stripWhiteSpace();
     QString strMime=attributes.value("mime").stripWhiteSpace();
 
@@ -405,10 +415,15 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
         return true;
     }
 
-    kdDebug(30506) << "Data: " << strName << endl;
+    if (strMime.isEmpty())
+    {
+        // Old AbiWord files had no mime types for images but the data were base64-coded PNG
+        strMime="image/png";
+        strBase64="yes";
+    }
 
     stackItem->fontName=strName;    // Store the data name as font name.
-    stackItem->bold=((strBase64=="yes") || strBase64.isEmpty());// Store base64-coded as bold
+    stackItem->bold=(strBase64=="yes");// Store base64-coded as bold
     stackItem->strMimeType=strMime;
     stackItem->strTemp=QString::null;
 
@@ -981,7 +996,7 @@ bool StructureParser::endDocument(void)
 {
     // TODO: put styles in the KWord document.
     QDomElement stylesPluralElement=mainDocument.createElement("STYLES");
-    mainDocument.documentElement().appendChild(stylesPluralElement);
+    mainDocument.documentElement().insertBefore(stylesPluralElement,pixmapsElement);
 
     kdDebug(30506) << "###### Start Style List ######" << endl;
     StyleDataMap::ConstIterator it;
@@ -1015,6 +1030,7 @@ bool StructureParser::endDocument(void)
         kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
 
         QDomElement styleElement=mainDocument.createElement("STYLE");
+        // insert before <PIXMAPS>, as <PIXMAPS> must remain last.
         stylesPluralElement.appendChild(styleElement);
 
         AddStyle(styleElement, it.key(),it.data(),mainDocument);
@@ -1034,7 +1050,7 @@ void StructureParser :: createMainFramesetElement(void)
     mainFramesetElement.setAttribute("frameType",1);
     mainFramesetElement.setAttribute("frameInfo",0);
     mainFramesetElement.setAttribute("visible",1);
-    // TODO: "name" attribute (needs I18N)
+    mainFramesetElement.setAttribute("name","Main Frameset");
     framesetsPluralElement.appendChild(mainFramesetElement);
 
     QDomElement frameElementOut=mainDocument.createElement("FRAME");
