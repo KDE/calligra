@@ -971,7 +971,7 @@ void StyleDia::setupTabGeometry()
 
     QGroupBox *grp1 = new QGroupBox( i18n("Position in %1").arg(m_doc->getUnitName()), tab );
     layout->addWidget( grp1 );
-    QGridLayout *pGrid = new QGridLayout( grp1, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *pGrid = new QGridLayout( grp1, 8, 2, 2*KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel * lab = new QLabel( i18n( "Left:" ), grp1 );
     lab->resize( lab->sizeHint() );
@@ -1010,7 +1010,7 @@ void StyleDia::setupTabGeometry()
 
 
     QGroupBox *grp2 = new QGroupBox( i18n("Margins in %1").arg(m_doc->getUnitName()), tab );
-    QGridLayout *mGrid = new QGridLayout( grp2, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *mGrid = new QGridLayout( grp2, 6, 2, 2*KDialog::marginHint(), KDialog::spacingHint() );
     layout->addWidget( grp2 );
 
 
