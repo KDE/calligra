@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <string>
+#include <iostream.h>
 #include <ctype.h>
 #include <qstringlist.h>
 #include "pscommentlexer.h"
