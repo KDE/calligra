@@ -58,7 +58,6 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     double newVal = 0.0;
     if( ok )
     {
-        // ### TODO: see if KoUnit has not something similar
         if ( unit.isEmpty() )
             newVal = value; // ### TODO: verify if this is not "Intermediate" instead
         else if( unit == "mm"  )
@@ -70,7 +69,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
         else if( unit == "in" )
             newVal = KoUnit::ptFromUnit( value, KoUnit::U_INCH );
         else if( unit == "pt" )
-            newVal = KoUnit::ptFromUnit( value, KoUnit::U_PT );
+            newVal = value;
         else if( unit == "dd" )
             newVal = KoUnit::ptFromUnit( value, KoUnit::U_DD );
         else if( unit == "cc" )
@@ -103,7 +102,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
         return Invalid;
     }
 
-    newVal = KoUnit::ptToUnit( newVal, m_base->m_unit );
+    newVal = KoUnit::ptToUnitUnrounded( newVal, m_base->m_unit );
     
     m_base->changeValue( newVal );
     s = m_base->getVisibleText( newVal );
