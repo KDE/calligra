@@ -146,9 +146,11 @@ void KexiInputTableEdit::init(const QString& add, bool removeOld)
 		QVariant origValue;
 		if (!removeOld)
 			origValue = m_origValue;
-		QString tmp_val = origValue.toString();
+		QString tmp_val;
 
 		if (field()->isFPNumericType()) {
+//TODO: precision!
+			tmp_val = QString::number(origValue.toDouble(), 'f', 2/*prec*/);
 			if (origValue.toDouble() == 0.0) {
 				tmp_val=add; //eat 0
 			}
@@ -159,7 +161,17 @@ void KexiInputTableEdit::init(const QString& add, bool removeOld)
 					m_lineedit->setText("");
 				else if (sl.count()==2) {
 					kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
-					tmp_val = sl[0] + m_decsym + sl[1];
+					const QString sl1 = sl[1];
+					int pos = sl1.length()-1;
+					if (pos>=1) {
+						for (;pos>=0 && sl1[pos]=='0';pos--)
+							;
+						pos++;
+					}
+					if (pos>0)
+						tmp_val = sl[0] + m_decsym + sl1.left(pos);
+					else
+						tmp_val = sl[0]; //no decimal point
 				}
 				tmp_val+=add;
 			}
@@ -167,21 +179,24 @@ void KexiInputTableEdit::init(const QString& add, bool removeOld)
 			QValidator *validator = new KDoubleValidator(m_lineedit);
 			m_lineedit->setValidator( validator );
 		}
-		else if (field()->isIntegerType()) {
-			if (origValue.toInt() == 0) {
-				tmp_val=add; //eat 0
-			}
-			else {
-				tmp_val += add;
-			}
+		else {
+			tmp_val = origValue.toString();
+			if (field()->isIntegerType()) {
+				if (origValue.toInt() == 0) {
+					tmp_val=add; //eat 0
+				}
+				else {
+					tmp_val += add;
+				}
 //			m_lineedit->setText(tmp_val);
 			//js: @todo implement ranges here!
-			QValidator *validator = new KIntValidator(m_lineedit);
-			m_lineedit->setValidator( validator );
-		}
-		else {//default: text
-			tmp_val+=add;
+				QValidator *validator = new KIntValidator(m_lineedit);
+				m_lineedit->setValidator( validator );
+			}
+			else {//default: text
+				tmp_val+=add;
 //			m_lineedit->setText(tmp_val);
+			}
 		}
 
 		if (tmp_val.isEmpty()) {
