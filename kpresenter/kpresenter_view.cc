@@ -572,7 +572,6 @@ void KPresenterView::insertPage()
     updateSideBarMenu();
 }
 
-/*====================== insert a picture =======================*/
 void KPresenterView::insertPicture()
 {
     m_canvas->setToolEditMode( INS_PICTURE );
@@ -589,17 +588,21 @@ void KPresenterView::insertPicture()
         url = fd.selectedURL();
 
     if( url.isEmpty() || !url.isValid() )
+    {
+        m_canvas->setToolEditMode( TEM_MOUSE, false );
         return;
-
+    }
     QString file;
     if ( !KIO::NetAccess::download( url, file ) )
+    {
+        m_canvas->setToolEditMode( TEM_MOUSE, false );
         return;
+    }
 
     if ( !file.isEmpty() )
         m_canvas->activePage()->setInsPictureFile( file );
 }
 
-/*====================== insert a picture (w/o filedialog) =======================*/
 void KPresenterView::insertPicture(const QString &file)
 {
     m_canvas->setToolEditMode( INS_PICTURE );
@@ -607,6 +610,7 @@ void KPresenterView::insertPicture(const QString &file)
 
     if ( !file.isEmpty() )
         m_canvas->activePage()->setInsPictureFile( file );
+
 }
 
 /*====================== insert a clipart =======================*/
@@ -624,11 +628,17 @@ void KPresenterView::insertClipart()
         url = fd.selectedURL();
 
     if( url.isEmpty() || !url.isValid() )
+    {
+        m_canvas->setToolEditMode( TEM_MOUSE, false );
         return;
+    }
 
     QString file;
     if ( !KIO::NetAccess::download( url, file ) )
+    {
+        m_canvas->setToolEditMode( TEM_MOUSE, false );
         return;
+    }
 
     if ( !file.isEmpty() )
         m_canvas->activePage()->setInsClipartFile( file );
