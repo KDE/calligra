@@ -532,8 +532,6 @@ void KWFrameSet::save( QDomElement &parentElem )
             frameElem.setAttribute( "top", frame->top() );
             frameElem.setAttribute( "right", frame->right() );
             frameElem.setAttribute( "bottom", frame->bottom() );
-            kdDebug()<<"save --------------------------\n";
-            kdDebug()<<"frame->bottom() :"<<frame->bottom()<< " frame->right() :"<<frame->right()<<" frame->top() :"<<frame->top()<<" frame->left() :"<<frame->left()<<endl;
         }
 
         if(frame->getRunAround()!=RA_NO)
@@ -667,7 +665,6 @@ void KWFrameSet::load( QDomElement &attributes )
         rect.setTop( KWDocument::getAttribute( frameElem, "top", 0 ) );
         rect.setRight( KWDocument::getAttribute( frameElem, "right", 0 ) );
         rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0 ) );
-         kdDebug()<<"load frame->bottom() :"<<rect.bottom()<< " frame->right() :"<<rect.right()<<" frame->top() :"<<rect.top()<<" frame->left() :"<<rect.left()<<endl;
         RunAround runaround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", 0 ) );
         KWUnit runAroundGap;
         runAroundGap.setPT( KWDocument::getAttribute( frameElem, "runaroundGap", 0.0 ) );

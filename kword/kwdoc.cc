@@ -1195,13 +1195,11 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             }
         }
     }
-    kdDebug()<<"getNumGroupManagers() :"<<getNumGroupManagers()<<endl;
     for (int i = getNumGroupManagers()-1; i>-1; i--) {
         if(! getGroupManager(i)) {
             kdWarning () << "GroupManager " << i << " is NULL!!" << endl;
             grpMgrs.remove(i);
         } else {
-            kdDebug()<<"VALIDATE-----------------------------------------\n";
             getGroupManager(i)->validate();
         }
     }
@@ -1373,7 +1371,7 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     }
                     if ( !grpMgr ) {
                         grpMgr = new KWGroupManager( this );
-                        kdDebug()<<"name -------------------------------:"<<_name <<endl;
+
                         grpMgr->setName( _name );
                         addGroupManager( grpMgr );
                     }
@@ -1381,7 +1379,6 @@ void KWDocument::loadFrameSets( QDomElement framesets )
                     grpMgr->addFrameSet( fs, _row, _col );
                     KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
                     if ( cell ) {
-                        kdDebug()<<" if ( cell ) { :"<<_rows<<" _cols :"<<_cols<<endl;
                         cell->rows = _rows;
                         cell->cols = _cols;
                     }

@@ -1158,7 +1158,6 @@ void KWGroupManager::validate()
     for(unsigned int row=0; row < getRows(); row++) {
         for(unsigned int col=0; col <getCols(); col++) {
             bool found=false;
-            kdDebug()<<" cells.count() :"<<cells.count()<<endl;
             for ( unsigned int i = 0; i < cells.count(); i++ )
             {
                 if ( cells.at( i )->row <= row &&
@@ -1172,10 +1171,8 @@ void KWGroupManager::validate()
                         misplacedCells.append(cells.take(i--));
                     }
                     found=true;
-                    kdDebug()<<"found :"<<found<<endl;
                 }
             }
-             kdDebug()<<"found sortie :"<<found<<endl;
             if(! found) {
                 kdWarning() << "Missing cell, creating a new one; ("<< row << "," << col<<")" << endl;
                 Cell *cell = new Cell;
@@ -1213,7 +1210,6 @@ void KWGroupManager::validate()
                 }
 #endif
                 doc->addFrameSet(_frameSet);
-                kdDebug()<<"addFrameSet(_frameSet); \n";
                 cell->frameSet = _frameSet;
                 cell->row = row;
                 cell->col = col;
