@@ -352,6 +352,7 @@ VText::traceText()
 
 	FT_UInt glyphIndex;
 	FT_Face fontFace;
+	// TODO : this lib should probably be a singleton (Rob)
 	FT_Library library;
 	FT_Init_FreeType( &library );
 	FT_Error error = FT_New_Face( library, filename.latin1(), id, &fontFace );
@@ -454,6 +455,7 @@ VText::traceText()
 		y += FT_TOFLOAT( fontFace->glyph->advance.y );
 	}
 	FT_Done_Face( fontFace );
+	FT_Done_FreeType( library );
 	m_boundingBoxIsInvalid = true;
 }
 
