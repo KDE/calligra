@@ -367,7 +367,7 @@ void KImageShopView::createGUI()
   m_pZoomTool = new ZoomTool(this);
 
   // layerlist
-  m_pLayerDialog = new LayerDialog(m_pDoc, m_pCanvasView);
+  m_pLayerDialog = new LayerDialog(m_pDoc, this);
   m_pLayerDialog->resize(205,267);
   m_pLayerDialog->move(200,20);
   m_pLayerDialog->show();

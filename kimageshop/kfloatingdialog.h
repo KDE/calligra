@@ -73,6 +73,7 @@ class KFloatingDialog : public QFrame
   bool     m_docked;
 
   QPoint   m_start;
+  QPoint   m_dockedPos;
   int      m_unshadedHeight;
   int      m_resizeMode;
 

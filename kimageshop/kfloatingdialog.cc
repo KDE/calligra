@@ -39,6 +39,17 @@ KFloatingDialog::KFloatingDialog(QWidget *parent, const char* name) : QFrame(par
   m_dragging = false;
   m_resizing = false;
   m_cursor = false;
+  
+  if (m_pParent)
+	{
+	  m_docked = true;
+	  m_dockedPos = pos();
+	}
+  else
+	{
+	  m_docked = false;
+	  m_dockedPos = QPoint(0,0);
+	}
 
   setMouseTracking(true);
   setFrameStyle(QFrame::Panel | QFrame::Raised);
@@ -113,6 +124,12 @@ void KFloatingDialog::mouseDoubleClickEvent (QMouseEvent *e)
 
 void KFloatingDialog::mousePressEvent(QMouseEvent *e)
 {
+  if(!m_docked)
+	{
+	  setActiveWindow();
+	  raise();
+	}
+
   QPoint pos = e->pos();
 
   if (e->button() & LeftButton)
@@ -155,7 +172,7 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
       if (newPos.y() < 0)
 		newPos.setY(0);
       
-      if(m_pParent)
+      if(m_pParent && m_docked)
 		{
 		  if (newPos.x() + width() > m_pParent->width())
 			newPos.setX(m_pParent->width() - width());
@@ -260,12 +277,27 @@ void  KFloatingDialog::slotClose()
 
 void  KFloatingDialog::slotDock()
 {
-  // TODO
+  if (m_docked) // docked -> undock
+	{
+	  m_dockedPos = pos();
+	  reparent(0, WStyle_Customize | WStyle_NoBorder, mapToGlobal(QPoint(0,0)), true);
+	  setActiveWindow();
+	  m_docked = false;
+	}
+  else // undocked -> dock
+	{
+	  if (!m_pParent)
+		return;
+
+	  reparent(m_pParent, 0, m_dockedPos, true);
+	  m_docked = true;
+	}
 }
 
 void  KFloatingDialog::slotMinimize()
 {
-  // TODO
+  if (!m_docked)
+	showMinimized(); // hmn...does not work
 }
 
 #include "kfloatingdialog.moc"
