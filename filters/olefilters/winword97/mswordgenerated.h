@@ -1,17 +1,17 @@
 /*
     Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
     This file is part of the KDE project
- 
+
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
     version 2 of the License, or (at your option) any later version.
- 
+
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Library General Public License for more details.
- 
+
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -32,16 +32,20 @@ class MsWordGenerated
 public:
     typedef char S8;
     typedef unsigned char U8;
+    static unsigned read(const U8 *in, S8 *out, unsigned count=1);
     static unsigned read(const U8 *in, U8 *out, unsigned count=1);
 
     typedef short S16;
     typedef unsigned short U16;
+    static unsigned read(const U8 *in, S16 *out, unsigned count=1);
     static unsigned read(const U8 *in, U16 *out, unsigned count=1);
 
     typedef int S32;
     typedef unsigned int U32;
+    static unsigned read(const U8 *in, S32 *out, unsigned count=1);
     static unsigned read(const U8 *in, U32 *out, unsigned count=1);
 
+    typedef U16 XCHAR;
     // Date and Time (internal date format) (DTTM)
     typedef struct DTTM
     {
@@ -49,17 +53,22 @@ public:
         // minutes (0-59)
         U16 mint:6;
 
+
         // hours (0-23)
         U16 hr:5;
+
 
         // days of month (1-31)
         U16 dom:5;
 
+
         // months (1-12)
         U16 mon:4;
 
+
         // years (1900-2411)-1900
         U16 yr:9;
+
 
         // weekday 
         //     Sunday=0 
@@ -70,6 +79,7 @@ public:
         //     Friday=5 
         //     Saturday=6
         U16 wdy:3;
+
     } __attribute__ ((packed)) DTTM;
     static unsigned read(const U8 *in, DTTM *out, unsigned count=1);
 
@@ -80,8 +90,10 @@ public:
         // foreground color (see chp.ico)
         U16 icoFore:5;
 
+
         // background color (see chp.ico)
         U16 icoBack:5;
+
 
         // shading pattern (see ipat table below) 
         //     0 Automatic 
@@ -139,6 +151,7 @@ public:
         //     61 97.5 Percent 
         //     62 97 Percent
         U16 ipat:6;
+
     } __attribute__ ((packed)) SHD;
     static unsigned read(const U8 *in, SHD *out, unsigned count=1);
 
@@ -149,11 +162,13 @@ public:
         // true if we're kerning punctuation
         U16 fKerningPunct:1;
 
+
         // Kinsoku method of justification: 
         //     0 = always expand 
         //     1 = compress punctuation 
         //     2 = compress punctuation and kana.
         U16 iJustification:2;
+
 
         // Level of Kinsoku: 
         //     0 = Level 1 
@@ -161,11 +176,14 @@ public:
         //     2 = Custom
         U16 iLevelOfKinsoku:2;
 
+
         // 2-page-on-1 feature is turned on.
         U16 f2on1:1;
 
+
         // reserved
         U16 unused0_6:10;
+
 
         // length of rgxchFPunct
         U16 cchFollowingPunct;
@@ -174,10 +192,10 @@ public:
         U16 cchLeadingPunct;
 
         // array of characters that should never appear at the start of a line
-        U16 rgxchFPunct[101];
+        XCHAR rgxchFPunct[101];
 
         // array of characters that should never appear at the end of a line
-        U16 rgxchLPunct[51];
+        XCHAR rgxchLPunct[51];
     } __attribute__ ((packed)) DOPTYPOGRAPHY;
     static unsigned read(const U8 *in, DOPTYPOGRAPHY *out, unsigned count=1);
 
@@ -188,11 +206,14 @@ public:
         // set to 0 for variant 1
         U16 fComplex:1;
 
+
         // index to entry into rgsprmPrm
         U16 isprm:7;
 
+
         // sprm's operand
         U16 val:8;
+
     } __attribute__ ((packed)) PRM;
     static unsigned read(const U8 *in, PRM *out, unsigned count=1);
 
@@ -203,7 +224,7 @@ public:
     {
 
         // pascal-style string holding initials of annotation author
-        U16 xstUsrInitl[10];
+        XCHAR xstUsrInitl[10];
 
         // index into GrpXstAtnOwners
         U16 ibst;
@@ -211,8 +232,10 @@ public:
         // unused
         U16 ak:2;
 
+
         // unused
         U16 unused22_2:14;
+
 
         // unused
         U16 grfbmc;
@@ -254,63 +277,80 @@ public:
         //     3 left and right justify
         U8 jc:2;
 
+
         // when ==1, number generated will include previous levels (used for 
         // legal numbering)
         U8 fPrev:1;
 
+
         // when ==1, number will be displayed using a hanging indent
         U8 fHang:1;
+
 
         // when ==1, boldness of number will be determined by anld.fBold.
         U8 fSetBold:1;
 
+
         // when ==1, italicness of number will be determined by anld.fItalic
         U8 fSetItalic:1;
+
 
         // when ==1, anld.fSmallCaps will determine whether number will be 
         // displayed in small caps or not.
         U8 fSetSmallCaps:1;
 
+
         // when ==1, anld.fCaps will determine whether number will be 
         // displayed capitalized or not
         U8 fSetCaps:1;
+
 
         // when ==1, anld.fStrike will determine whether the number will be 
         // displayed using strikethrough or not.
         U8 fSetStrike:1;
 
+
         // when ==1, anld.kul will determine the underlining state of the 
         // autonumber.
         U8 fSetKul:1;
+
 
         // when ==1, autonumber will be displayed with a single prefixing 
         // space character
         U8 fPrevSpace:1;
 
+
         // determines boldness of autonumber when anld.fSetBold == 1.
         U8 fBold:1;
 
+
         // determines italicness of autonumber when anld.fSetItalic == 1.
         U8 fItalic:1;
+
 
         // determines whether autonumber will be displayed using small caps 
         // when anld.fSetSmallCaps == 1.
         U8 fSmallCaps:1;
 
+
         // determines whether autonumber will be displayed using caps when 
         // anld.fSetCaps == 1.
         U8 fCaps:1;
+
 
         // determines whether autonumber will be displayed using caps when 
         // anld.fSetStrike == 1.
         U8 fStrike:1;
 
+
         // determines whether autonumber will be displayed with underlining 
         // when anld.fSetKul == 1.
         U8 kul:3;
 
+
         // color of autonumber
         U8 ico:5;
+
 
         // font code of autonumber
         U16 ftc;
@@ -340,7 +380,7 @@ public:
         U8 fSpareX;
 
         // characters displayed before/after autonumber
-        U16 rgxch[32];
+        XCHAR rgxch[32];
     } __attribute__ ((packed)) ANLD;
     static unsigned read(const U8 *in, ANLD *out, unsigned count=1);
 
@@ -374,63 +414,80 @@ public:
         //     3 left and right justify
         U8 jc:2;
 
+
         // when ==1, number generated will include previous levels (used for 
         // legal numbering)
         U8 fPrev:1;
 
+
         // when ==1, number will be displayed using a hanging indent
         U8 fHang:1;
+
 
         // when ==1, boldness of number will be determined by anld.fBold.
         U8 fSetBold:1;
 
+
         // when ==1, italicness of number will be determined by anld.fItalic
         U8 fSetItalic:1;
+
 
         // when ==1, anld.fSmallCaps will determine whether number will be 
         // displayed in small caps or not.
         U8 fSetSmallCaps:1;
 
+
         // when ==1, anld.fCaps will determine whether number will be 
         // displayed capitalized or not
         U8 fSetCaps:1;
+
 
         // when ==1, anld.fStrike will determine whether the number will be 
         // displayed using strikethrough or not.
         U8 fSetStrike:1;
 
+
         // when ==1, anld.kul will determine the underlining state of the 
         // autonumber.
         U8 fSetKul:1;
+
 
         // when ==1, autonumber will be displayed with a single prefixing 
         // space character
         U8 fPrevSpace:1;
 
+
         // determines boldness of autonumber when anld.fSetBold == 1.
         U8 fBold:1;
 
+
         // determines italicness of autonumber when anld.fSetItalic == 1.
         U8 FItalic:1;
+
 
         // determines whether autonumber will be displayed using small caps 
         // when anld.fSetSmallCaps == 1.
         U8 fSmallCaps:1;
 
+
         // determines whether autonumber will be displayed using caps when 
         // anld.fSetCaps == 1.
         U8 fCaps:1;
+
 
         // determines whether autonumber will be displayed using caps when 
         // anld.fSetStrike == 1.
         U8 fStrike:1;
 
+
         // determines whether autonumber will be displayed with underlining 
         // when anld.fSetKul == 1.
         U8 kul:3;
 
+
         // color of autonumber
         U8 ico:5;
+
 
         // font code of autonumber
         U16 ftc;
@@ -465,8 +522,10 @@ public:
         // true iff the ASUMYI is valid
         U16 fValid:1;
 
+
         // true iff AutoSummary View is active
         U16 fView:1;
+
 
         // Display method for AutoSummary View: 
         //     0 = Emphasize in current doc 
@@ -475,12 +534,15 @@ public:
         //     3 = Show in new document
         U16 iViewBy:2;
 
+
         // true if we should update File Properties summary information after 
         // the next summarization
         U16 fUpdateProps:1;
 
+
         // reserved
         U16 unused0_5:11;
+
 
         // Dialog summary level
         U16 wDlgLevel;
@@ -520,22 +582,28 @@ public:
         // 
         U16 icol:8;
 
+
         // when 1, this indicates that this is a table break.
         U16 fTableBreak:1;
+
 
         // when 1, this indicates that this is a column break.
         U16 fColumnBreak:1;
 
+
         // used temporarily while word is running.
         U16 fMarked:1;
+
 
         // in textbox BKD, when == 1 indicates cpLim of this textbox is not 
         // valid
         U16 fUnk:1;
 
+
         // in textbox BKD, when == 1 indicates that text overflows the end of 
         // this textbox
         U16 fTextOverflow:1;
+
     } __attribute__ ((packed)) BKD;
     static unsigned read(const U8 *in, BKD *out, unsigned count=1);
 
@@ -551,17 +619,21 @@ public:
         // table column bookmark.
         U16 itcFirst:7;
 
+
         // when 1, this indicates that this bookmark is marking the range of 
         // a Macintosh Publisher section.
         U16 fPub:1;
+
 
         // when bkf.fCol is 1, this is the index to limit column of a table 
         // column bookmark.
         U16 itcLim:7;
 
+
         // when 1, this bookmark marks a range of columns in a table 
         // specified by [bkf.itcFirst, bkf.itcLim).
         U16 fCol:1;
+
     } __attribute__ ((packed)) BKF;
     static unsigned read(const U8 *in, BKF *out, unsigned count=1);
 
@@ -584,6 +656,7 @@ public:
 
         // width of a single line in 1/8 pt, max of 32 pt.
         U16 dptLineWidth:8;
+
 
         // border type code: 
         //     0 none 
@@ -614,22 +687,28 @@ public:
         //     codes 64 - 230 represent border art types and are used only for page borders.
         U16 brcType:8;
 
+
         // color code (see chp.ico)
         U16 ico:8;
+
 
         // width of space to maintain between border and text within border. 
         // Must be 0 when BRC is a substructure of TC. Stored in points.
         U16 dptSpace:5;
 
+
         // when 1, border is drawn with shadow. Must be 0 when BRC is a 
         // substructure of the TC
         U16 fShadow:1;
 
+
         // 
         U16 fFrame:1;
 
+
         // reserved
         U16 unused2_15:1;
+
     } __attribute__ ((packed)) BRC;
     static unsigned read(const U8 *in, BRC *out, unsigned count=1);
 
@@ -640,22 +719,28 @@ public:
         // width of second line of border in pixels
         U16 dxpLine2Width:3;
 
+
         // distance to maintain between both lines of border in pixels
         U16 dxpSpaceBetween:3;
 
+
         // width of first border line in pixels
         U16 dxpLine1Width:3;
+
 
         // width of space to maintain between border and text within border. 
         // Must be 0 when BRC is a substructure of the TC.
         U16 dxpSpace:5;
 
+
         // when 1, border is drawn with shadow. Must be 0 when BRC10 is a 
         // substructure of the TC.
         U16 fShadow:1;
 
+
         // reserved
         U16 fSpare:1;
+
     } __attribute__ ((packed)) BRC10;
     static unsigned read(const U8 *in, BRC10 *out, unsigned count=1);
 
@@ -666,58 +751,73 @@ public:
         // text is bold when 1 , and not bold when 0.
         U8 fBold:1;
 
+
         // italic when 1, not italic when 0
         U8 FItalic:1;
+
 
         // when 1, text has been deleted and will be displayed with 
         // strikethrough when revision marked text is to be displayed
         U8 fRMarkDel:1;
 
+
         // outlined when 1, not outlined when 0
         U8 fOutline:1;
+
 
         // used internally by Word
         U8 fFldVanish:1;
 
+
         // displayed with small caps when 1, no small caps when 0
         U8 fSmallCaps:1;
+
 
         // displayed with caps when 1, no caps when 0
         U8 fCaps:1;
 
+
         // when 1, text has "hidden" format, and is not displayed unless 
         // fPagHidden is set in the DOP
         U8 fVanish:1;
+
 
         // when 1, text is newly typed since the last time revision marks 
         // have been accepted and will be displayed with an underline when 
         // revision marked text is to be displayed
         U8 fRMark:1;
 
+
         // character is a Word special character when 1, not a special 
         // character when 0
         U8 fSpec:1;
 
+
         // displayed with strikethrough when 1, no strikethrough when 0
         U8 fStrike:1;
+
 
         // embedded object when 1, not an embedded object when 0
         U8 fObj:1;
 
+
         // character is drawn with a shadow when 1; drawn without shadow when 
         // 0
         U8 fShadow:1;
+
 
         // character is displayed in lower case when 1. No case 
         // transformation is performed when 0. This field may be set to 1 
         // only when chp.fSmallCaps is 1.
         U8 fLowerCase:1;
 
+
         // when 1, chp.fcPic points to an FFDATA, the data structure binary 
         // data used by Word to describe a form field. The bit chp.fData may 
         // only be 1 when chp.fSpec is also 1 and the special character in 
         // the document stream that has this property is a chPicture (0x01).
         U8 fData:1;
+
 
         // when 1, chp.lTagObj specifies a particular object in the object 
         // stream that specifies the particular OLE object in the stream that 
@@ -727,21 +827,27 @@ public:
         // document stream that has this property is a chPicture (0x01).
         U8 fOle2:1;
 
+
         // text is embossed when 1 and not embossed when 0
         U16 fEmboss:1;
 
+
         // text is engraved when 1 and not engraved when 0
         U16 fImprint:1;
+
 
         // displayed with double strikethrough when 1, no double 
         // strikethrough when 0
         U16 fDStrike:1;
 
+
         // 
         U16 fUsePgsuSettings:1;
 
+
         // Reserved
         U16 unused2_4:12;
+
 
         // Reserved
         U32 unused4;
@@ -770,6 +876,7 @@ public:
         //     2 means text in run is subscripted
         U8 iss:3;
 
+
         // underline code: 
         //     0 none 
         //     1 single 
@@ -785,8 +892,10 @@ public:
         //     11 wave
         U8 kul:4;
 
+
         // used by Word internally, not stored in file
         U8 fSpecSymbol:1;
+
 
         // color of text: 
         //     0 Auto 
@@ -808,14 +917,18 @@ public:
         //     16 LtGray
         U8 ico:5;
 
+
         // reserved
         U8 unused23_5:1;
+
 
         // used by Word internally, not stored in file
         U8 fSysVanish:1;
 
+
         // reserved
         U8 hpsPos:1;
+
 
         // super/subscript position in half points; positive means text is 
         // raised; negative means text is lowered.
@@ -949,7 +1062,7 @@ public:
         // document stream is chSymbol (0x28), the character stored 
         // chp.xchSym will be displayed using the font specified in 
         // chp.ftcSym.
-        U16 xchSym[1];
+        XCHAR xchSym[1];
 
         // an index to strings displayed as reasons for actions taken by 
         // Word's AutoFormat code
@@ -982,24 +1095,31 @@ public:
         // highlight color (see chp.ico)
         U16 icoHighlight:5;
 
+
         // when 1, characters are highlighted with color specified by 
         // chp.icoHighlight.
         U16 fHighlight:1;
 
+
         // 
         U16 kcd:3;
+
 
         // used internally by Word
         U16 fNavHighlight:1;
 
+
         // 
         U16 fChsDiff:1;
+
 
         // 
         U16 fMacChs:1;
 
+
         // 
         U16 fFtcAsciSym:1;
+
 
 
         // when 1, properties have been changed with revision marking on
@@ -1052,7 +1172,7 @@ public:
 
         // The string value of the ListNum field when revision mark tracking 
         // began
-        U16 xstDispFldRMark[16];
+        XCHAR xstDispFldRMark[16];
 
         // shading
         SHD shd;
@@ -1083,8 +1203,10 @@ public:
         // 0
         U8 fdct:3;
 
+
         // 0
         U8 unused0_3:5;
+
 
         // 
         U16 unused1;
@@ -1112,17 +1234,21 @@ public:
         // in the y direction.
         U16 dyGridDisplay:7;
 
+
         // suppress display of gridlines
         U16 fTurnItOff:1;
+
 
         // the number of grid squares (in the x direction) between each 
         // gridline drawn on the screen. 0 means don't display any gridlines 
         // in the y direction.
         U16 dxGridDisplay:7;
 
+
         // if true, the grid will start at the left and top margins and 
         // ignore xaGrid and yaGrid.
         U16 fFollowMargins:1;
+
     } __attribute__ ((packed)) DOGRID;
     static unsigned read(const U8 *in, DOGRID *out, unsigned count=1);
 
@@ -1134,17 +1260,21 @@ public:
         //     Default 0.
         U16 fFacingPages:1;
 
+
         // 1 when widow control is in effect. 0 when widow control disabled. 
         //     Default 1.
         U16 fWidowControl:1;
+
 
         // 1 when doc is a main doc for Print Merge Helper, 0 when not; 
         // default=0
         U16 fPMHMainDoc:1;
 
+
         // Default line suppression storage; 0= form letter line suppression; 
         // 1= no line suppression; default=0. No longer used.
         U16 grfSuppression:2;
+
 
         // footnote position code&nbsp; 
         //     &nbsp; <p>0 print as endnotes 
@@ -1153,11 +1283,14 @@ public:
         //     Default 1.
         U16 fpc:2;
 
+
         // unused. Default 0.
         U16 unused0_7:1;
 
+
         // No longer used. Default 0.
         U16 grpfIhdt:8;
+
 
         // restart index for footnotes&nbsp; 
         //     &nbsp; <p>0 don't restart note numbering 
@@ -1166,62 +1299,80 @@ public:
         //     Default 0.
         U16 rncFtn:2;
 
+
         // initial footnote number for document. Default 1.
         U16 nFtn:14;
+
 
         // when 1, indicates that information in the hplcpad should be 
         // refreshed since outline has been dirtied
         U8 fOutlineDirtySave:1;
 
+
         // reserved
         U8 unused4_1:7;
+
 
         // when 1, Word believes all pictures recorded in the document were 
         // created on a Macintosh
         U8 fOnlyMacPics:1;
 
+
         // when 1, Word believes all pictures recorded in the document were 
         // created in Windows
         U8 fOnlyWinPics:1;
 
+
         // when 1, document was created as a print merge labels document
         U8 fLabelDoc:1;
+
 
         // when 1, Word is allowed to hyphenate words that are capitalized. 
         // When 0, capitalized may not be hyphenated
         U8 fHyphCapitals:1;
 
+
         // when 1, Word will hyphenate newly typed text as a background task
         U8 fAutoHyphen:1;
+
 
         // 
         U8 fFormNoFields:1;
 
+
         // when 1, Word will merge styles from its template
         U8 fLinkStyles:1;
+
 
         // when 1, Word will mark revisions as the document is edited
         U8 fRevMarking:1;
 
+
         // always make backup when document saved when 1.
         U8 fBackup:1;
+
 
         // when 1, the results of the last Word Count execution (as recorded 
         // in several DOP fields) are still exactly correct.
         U8 fExactCWords:1;
 
+
         // when 1, hidden document contents are displayed.
         U8 fPagHidden:1;
+
 
         // when 1, field results are displayed, when 0 field codes are 
         // displayed.
         U8 fPagResults:1;
 
+
         // when 1, annotations are locked for editing
         U8 fLockAtn:1;
 
+
         // swap margins on left/right pages when 1.
         U8 fMirrorMargins:1;
+
 
         // reserved
         U8 unused6_6;
@@ -1230,21 +1381,27 @@ public:
         // was created by WinWord 2.x)
         U8 fDfltTrueType:1;
 
+
         // when 1, file created with SUPPRESSTOPSPACING=YES in win.ini. (flag 
         // obeyed only when doc was created by WinWord 2.x).
         U8 fPagSuppressTopSpacing:1;
 
+
         // when 1, document is protected from edit operations
         U8 fProtEnabled:1;
+
 
         // when 1, restrict selections to occur only within form fields
         U8 fDispFormFldSel:1;
 
+
         // when 1, show revision markings on screen
         U8 fRMView:1;
 
+
         // when 1, print revision marks when document is printed
         U8 fRMPrint:1;
+
 
         // reserved
         U8 unused7_5;
@@ -1252,58 +1409,73 @@ public:
         // when 1, the current revision marking state is locked
         U8 fLockRev:1;
 
+
         // when 1, document contains embedded TrueType fonts
         U8 fEmbedFonts:1;
+
 
         // compatibility option: when 1, don't add automatic tab stops for 
         // hanging indent
         U16 copts_fNoTabForInd:1;
 
+
         // compatibility option: when 1, don't add extra space for raised or 
         // lowered characters
         U16 copts_fNoSpaceRaiseLower:1;
+
 
         // compatibility option: when 1, suppress the paragraph Space Before 
         // and Space After options after a page break
         U16 copts_fSuppressSpbfAfterPageBreak:1;
 
+
         // compatibility option: when 1, wrap trailing spaces at the end of a 
         // line to the next line
         U16 copts_fWrapTrailSpaces:1;
+
 
         // compatibility option: when 1, print colors as black on non-color 
         // printers
         U16 copts_fMapPrintTextColor:1;
 
+
         // compatibility option: when 1, don't balance columns for Continuous 
         // Section starts
         U16 copts_fNoColumnBalance:1;
 
+
         // 
         U16 copts_fConvMailMergeEsc:1;
+
 
         // compatibility option: when 1, suppress extra line spacing at top 
         // of page
         U16 copts_fSupressTopSpacing:1;
 
+
         // compatibility option: when 1, combine table borders like Word 5.x 
         // for the Macintosh
         U16 copts_fOrigWordTableRules:1;
+
 
         // compatibility option: when 1, don't blank area between metafile 
         // pictures
         U16 copts_fTransparentMetafiles:1;
 
+
         // compatibility option: when 1, show hard page or column breaks in 
         // frames
         U16 copts_fShowBreaksInFrames:1;
+
 
         // compatibility option: when 1, swap left and right pages on odd 
         // facing pages
         U16 copts_fSwapBordersFacingPgs:1;
 
+
         // reserved
         U16 unused8_12:4;
+
 
         // default tab width. Default 720 twips.
         U16 dxaTab;
@@ -1353,13 +1525,16 @@ public:
         //     2 restart for each page
         U16 rncEdn:2;
 
+
         // beginning endnote number
         U16 nEdn:14;
+
 
         // endnote position code&nbsp; 
         //     0 display endnotes at end of section 
         //     3 display endnotes at end of document
         U16 epc:2;
+
 
         // number format code for auto footnotes&nbsp; 
         //     0 Arabic 
@@ -1369,6 +1544,7 @@ public:
         //     4 Lower case Letter
         U16 nfcFtnRef:4;
 
+
         // number format code for auto endnotes&nbsp; 
         //     0 Arabic 
         //     1 Upper case Roman 
@@ -1377,20 +1553,26 @@ public:
         //     4 Lower case Letter
         U16 nfcEdnRef:4;
 
+
         // only print data inside of form fields
         U16 fPrintFormData:1;
+
 
         // only save document data that is inside of a form field.
         U16 fSaveFormData:1;
 
+
         // shade form fields
         U16 fShadeFormData:1;
+
 
         // reserved
         U16 unused54_13:2;
 
+
         // when 1, include footnotes and endnotes in word count
         U16 fWCFtnEdn:1;
+
 
         // count of lines tallied by last Word Count operation
         U32 cLines;
@@ -1425,8 +1607,10 @@ public:
         //     2 Page View
         U16 wvkSaved:3;
 
+
         // zoom percentage
         U16 wScaleSaved:9;
+
 
         // zoom type&nbsp; 
         //     0 None 
@@ -1434,11 +1618,14 @@ public:
         //     2 Page width
         U16 zkSaved:2;
 
+
         // This is a vertical document (Word 6/95 only)
         U16 fRotateFontW6:1;
 
+
         // Gutter position for this doc: 0 => side; 1 => top
         U16 iGutterPos:1;
+
     } __attribute__ ((packed)) DOP;
     static unsigned read(const U8 *in, DOP *out, unsigned count=1);
 
@@ -1448,62 +1635,82 @@ public:
         // (see above)
         U32 fNoTabForInd:1;
 
+
         // (see above)
         U32 fNoSpaceRaiseLower:1;
+
 
         // (see above)
         U32 fSupressSpbfAfterPageBreak:1;
 
+
         // (see above)
         U32 fWrapTrailSpaces:1;
+
 
         // (see above)
         U32 fMapPrintTextColor:1;
 
+
         // (see above)
         U32 fNoColumnBalance:1;
+
 
         // (see above)
         U32 fConvMailMergeEsc:1;
 
+
         // (see above)
         U32 fSupressTopSpacing:1;
+
 
         // (see above)
         U32 fOrigWordTableRules:1;
 
+
         // (see above)
         U32 fTransparentMetafiles:1;
+
 
         // (see above)
         U32 fShowBreaksInFrames:1;
 
+
         // (see above)
         U32 fSwapBordersFacingPgs:1;
+
 
         // (reserved)
         U32 unused84_12:4;
 
+
         // Suppress extra line spacing at top of page like MacWord5.x
         U32 fSuppressTopSpacingMac5:1;
+
 
         // Expand/Condense by whole number of points.
         U32 fTruncDxaExpand:1;
 
+
         // Print body text before header/footer
         U32 fPrintBodyBeforeHdr:1;
+
 
         // Don't add leading (extra space) between rows of text
         U32 fNoLeading:1;
 
+
         // (reserved)
         U32 unused84_20:1;
+
 
         // Use larger small caps like MacWord 5.x
         U32 fMWSmallCaps:1;
 
+
         // (reserved)
         U32 unused84_22:10;
+
     } __attribute__ ((packed)) DOP102;
     static unsigned read(const U8 *in, DOP102 *out, unsigned count=1);
 
@@ -1523,52 +1730,68 @@ public:
         // Always set to zero when writing files
         U16 reserved:1;
 
+
         // Which outline levels are showing in outline view (0 => heading 1 
         // only, 4 => headings 1 through 5, 9 => all levels showing)
         U16 lvl:4;
 
+
         // Doc has been completely grammar checked
         U16 fGramAllDone:1;
 
+
         // No grammer errors exist in doc
         U16 fGramAllClean:1;
+
 
         // if you are doing font embedding, you should only embed the 
         // characters in the font that are used in the document
         U16 fSubsetFonts:1;
 
+
         // Hide the version created for autoversion
         U16 fHideLastVersion:1;
+
 
         // This file is based upon an HTML file
         U16 fHtmlDoc:1;
 
+
         // Always set to zero when writing files
         U16 unused410_11:1;
+
 
         // Snap table and page borders to page border
         U16 fSnapBorder:1;
 
+
         // Place header inside page border
         U16 fIncludeHeader:1;
+
 
         // Place footer inside page border
         U16 fIncludeFooter:1;
 
+
         // Are we in online view
         U16 fForcePageSizePag:1;
+
 
         // Are we auto-promoting fonts to >= hpsZoonFontPag?
         U16 fMinFontSizePag:1;
 
+
         // versioning is turned on
         U16 fHaveVersions:1;
+
 
         // autoversioning is enabled
         U16 fAutoVersion:1;
 
+
         // Always set to zero when writing files
         U16 unused412_2:14;
+
 
         // Autosummary info
         ASUMYI asumyi;
@@ -1585,11 +1808,14 @@ public:
         // Have we prompted for virus protection on this doc?
         U32 fVirusPrompted:1;
 
+
         // If prompted, load safely for this doc?
         U32 fVirusLoadSafe:1;
 
+
         // Random session key to sign above bits for a Word session.
         U32 KeyVirusSession30:30;
+
 
         // Spare
         U8 Spare[30];
@@ -1642,8 +1868,10 @@ public:
         //     21 field end mark
         U8 ch:5;
 
+
         // reserved
         U8 unused0_5:3;
+
 
 
         // fld.ch == 19 (field begin mark) -> U8 field type (see flt table 
@@ -1689,6 +1917,7 @@ public:
         // (undefined when not in the undo doc)
         U16 fHdr:1;
 
+
         // x position of shape relative to anchor CP 
         //     0 relative to page margin 
         //     1 relative to top of page 
@@ -1696,11 +1925,13 @@ public:
         //     3 reserved for future use
         U16 bx:2;
 
+
         // y position of shape relative to anchor CP 
         //     0 relative to page margin 
         //     1 relative to top of page 
         //     2 relative to text (paragraph for horizontal text; column for vertical text)
         U16 by:2;
+
 
         // text wrapping mode 
         //     0 like 2, but doesn't require absolute object 
@@ -1712,6 +1943,7 @@ public:
         //     6-15 reserved for future use
         U16 wr:4;
 
+
         // text wrapping mode type (valid only for wrapping modes 2 and 4 
         //     0 wrap both sides 
         //     1 wrap only on left 
@@ -1719,17 +1951,21 @@ public:
         //     3 wrap only on largest side
         U16 wrk:4;
 
+
         // when set, temporarily overrides bx, by, forcing the xaLeft, 
         // xaRight, yaTop, and yaBottom fields to all be page relative.
         U16 fRcaSimple:1;
+
 
         // 1 shape is below text 
         //     0 shape is above text
         U16 fBelowText:1;
 
+
         // 1 anchor is locked 
         //     0 anchor is not locked
         U16 fAnchorLock:1;
+
 
         // count of textboxes in shape (undo doc only)
         U32 cTxbx;
@@ -1746,17 +1982,22 @@ public:
 //        // pitch request
 //        U8 prq:2;
 //
+//
 //        // when 1, font is a TrueType font
 //        U8 fTrueType:1;
+//
 //
 //        // reserved
 //        U8 unused1_3:1;
 //
+//
 //        // font family id
 //        U8 ff:3;
 //
+//
 //        // reserved
 //        U8 unused1_7:1;
+//
 //
 //        // base weight of font
 //        U16 wWeight;
@@ -1805,20 +2046,26 @@ public:
         // Set if this document is a template
         U16 fDot:1;
 
+
         // Set if this document is a glossary
         U16 fGlsy:1;
+
 
         // when 1, file is in <b>complex, fast-saved format.</b>
         U16 fComplex:1;
 
+
         // set if file contains 1 or more pictures
         U16 fHasPic:1;
+
 
         // count of times file was quicksaved
         U16 cQuickSaves:4;
 
+
         // Set if file is encrypted
         U16 fEncrypted:1;
+
 
         // When 0, this fib refers to the table stream named "0Table", when 
         // 1, this fib refers to the table stream named "1Table". Normally, a 
@@ -1828,23 +2075,30 @@ public:
         // valid.
         U16 fWhichTblStm:1;
 
+
         // Set when user has recommended that file be read read-only
         U16 fReadOnlyRecommended:1;
+
 
         // Set when file owner has made the file write reserved
         U16 fWriteReservation:1;
 
+
         // Set when using extended character set in file
         U16 fExtChar:1;
+
 
         // REVIEW
         U16 fLoadOverride:1;
 
+
         // REVIEW
         U16 fFarEast:1;
 
+
         // REVIEW
         U16 fCrypto:1;
+
 
         // This file format it compatible with readers that understand nFib 
         // at or above this value.
@@ -1861,20 +2115,26 @@ public:
         // when 1, this file was last saved in the Mac environment
         U8 fMac:1;
 
+
         // 
         U8 fEmptySpecial:1;
+
 
         // 
         U8 fLoadOverridePage:1;
 
+
         // 
         U8 fFutureSavedUndo:1;
+
 
         // 
         U8 fWord97Saved:1;
 
+
         // 
         U8 fSpare0:3;
+
 
         // Default extended character set id for text in document stream. 
         // (overridden by chp.chse) 
@@ -2810,28 +3070,35 @@ public:
         // alignment (left, right, or centered) of the paragraph number.
         U8 jc:2;
 
+
         // true (==1) if the level turns all inherited numbers to arabic, 
         // false if it preserves their number format code (nfc)
         U8 fLegal:1;
+
 
         // true if the level's number sequence is not restarted by higher 
         // (more significant) levels in the list
         U8 fNoRestart:1;
 
+
         // Word 6 compatibility option: equivalent to anld.fPrev (see ANLD)
         U8 fPrev:1;
+
 
         // Word 6 compatibility option: equivalent to anld.fPrevSpace (see 
         // ANLD)
         U8 fPrevSpace:1;
+
 
         // true if this level was from a converted Word 6 document. If it is 
         // true, all of the Word 6 compability options become valid; 
         // otherwise they are ignored.
         U8 fWord6:1;
 
+
         // unused.
         U8 unused5_7:1;
+
 
         // contains the character offsets into the LVL's XST of the inherited 
         // numbers of previous levels. This array should be zero terminated 
@@ -2897,12 +3164,15 @@ public:
         // multilevel (nine-level) list.
         U8 fSimpleList:1;
 
+
         // Word 6 compatibility option: true if the list should start 
         // numbering over at the beginning of each section
         U8 fRestartHdn:1;
 
+
         // reserved
         U8 unsigned26_2:6;
+
 
         // reserved
         U8 reserved;
@@ -2941,15 +3211,19 @@ public:
         // the level to be overridden
         U8 ilvl:4;
 
+
         // true if the start-at value is overridden
         U8 fStartAt:1;
+
 
         // true if the formatting is overriden (in which case the LFOLVL 
         // should contain a pointer to a LVL)
         U8 fFormatting:1;
 
+
         // reserved
         U8 unsigned4_6:2;
+
 
         // reserved
         U8 reserved[3];
@@ -2977,7 +3251,7 @@ public:
         U8 fSpareOlst4;
 
         // text before/after number
-        U16 rgxch[32];
+        XCHAR rgxch[32];
     } __attribute__ ((packed)) OLST;
     static unsigned read(const U8 *in, OLST *out, unsigned count=1);
 
@@ -3015,7 +3289,7 @@ public:
 
         // The text string for the paragraph number, containing level place 
         // holders
-        U16 xst[32];
+        XCHAR xst[32];
     } __attribute__ ((packed)) NUMRM;
     static unsigned read(const U8 *in, NUMRM *out, unsigned count=1);
 
@@ -3026,43 +3300,56 @@ public:
         // 1 only when footnote is continued from previous page
         U16 fContinue:1;
 
+
         // 1 when page is dirty (i.e. pagination cannot be trusted)
         U16 fUnk:1;
+
 
         // 1 when right hand side page
         U16 fRight:1;
 
+
         // 1 when page number must be reset to 1.
         U16 fPgnRestart:1;
+
 
         // 1 when section break forced page to be empty.
         U16 fEmptyPage:1;
 
+
         // 1 when page contains nothing but footnotes
         U16 fAllFtn:1;
+
 
         // unused
         U16 unused0_6:1;
 
+
         // table breaks have been calculated for this page.
         U16 fTableBreaks:1;
+
 
         // used temporarily while word is running.
         U16 fMarked:1;
 
+
         // column breaks have been calculated for this page.
         U16 fColumnBreaks:1;
 
+
         // page had a table header at the end
         U16 fTableHeader:1;
+
 
         // page has never been valid since created, must recalculate the 
         // bounds of this page. If this is the last page, this PGD may really 
         // represent many pages.
         U16 fNewPage:1;
 
+
         // section break code
         U16 bkc:4;
+
 
         // line number of first line, -1 if no line numbering
         U16 lnn;
@@ -3082,18 +3369,23 @@ public:
         // reserved
         U16 fSpare:1;
 
+
         // PHE entry is invalid when == 1
         U16 fUnk:1;
+
 
         // when 1, total height of paragraph is known but lines in paragraph 
         // have different heights.
         U16 fDiffLines:1;
 
+
         // reserved
         U16 unused0_3:5;
 
+
         // when fDiffLines is 0 is number of lines in paragraph
         U16 clMac:8;
+
 
         // reserved
         U16 unused2;
@@ -3135,11 +3427,14 @@ public:
         // 
         U8 fBrLnAbove:1;
 
+
         // 
         U8 fBrLnBelow:1;
 
+
         // reserved
         U8 fUnused:2;
+
 
         // vertical position code. Specifies coordinate frame to use when 
         // paragraphs are absolutely positioned. 
@@ -3148,12 +3443,14 @@ public:
         //     2 coordinates are relative to text. This means: relative to where the next non-APO text would have been placed if this APO did not exist.
         U8 pcVert:2;
 
+
         // horizontal position code. Specifies coordinate frame to use when 
         // paragraphs are absolutely positioned. 
         //     0 horiz. position coordinates are relative to column. 
         //     1 coordinates are relative to margin 
         //     2 coordinates are relative to page
         U8 pcHorz:2;
+
 
         // /* the brcp and brcl fields have been superseded by the newly 
         // defined brcLeft, brcTop, etc. fields. They remain in the PAP for 
@@ -3269,14 +3566,18 @@ public:
         // 
         U16 fVertical:1;
 
+
         // 
         U16 fBackward:1;
+
 
         // 
         U16 fRotateFont:1;
 
+
         // reserved
         U16 unused68_3:13;
+
 
         // reserved
         U16 unused70;
@@ -3353,8 +3654,10 @@ public:
         // height of abs obj; 0 == Auto
         U16 dyaHeight:15;
 
+
         // 0 = Exact, 1 = At Least
         U16 fMinHeight:1;
+
 
         // shading
         SHD shd;
@@ -3468,17 +3771,22 @@ public:
         // when 1, means that piece contains no end of paragraph marks.
         U16 fNoParaLast:1;
 
+
         // used internally by Word
         U16 fPaphNil:1;
+
 
         // used internally by Word
         U16 fCopied:1;
 
+
         // 
         U16 unused0_3:5;
 
+
         // used internally by Word
         U16 fn:8;
+
 
         // file offset of beginning of piece. The size of the <b>ith</b> 
         // piece can be determined by subtracting rgcp[<b>i</b>] of the 
@@ -3515,8 +3823,10 @@ public:
         // set to 1 for variant 2
         U16 fComplex:1;
 
+
         // index to a <b>grpprl</b> stored in <b>CLX</b> portion of file.
         U16 igrpprl:15;
+
     } __attribute__ ((packed)) PRM2;
     static unsigned read(const U8 *in, PRM2 *out, unsigned count=1);
 
@@ -3742,15 +4052,18 @@ public:
         //     3 whole document (all sections)
         U16 pgbApplyTo:3;
 
+
         // page border depth: 
         //     0 in front 
         //     1 in back
         U16 pgbPageDepth:2;
 
+
         // page border offset from: 
         //     0 offset from text 
         //     1 offset from edge of page
         U16 pgbOffsetFrom:3;
+
 
 
         // default value is 12240 twipswidth of page
@@ -3844,8 +4157,10 @@ public:
         // Are built-in stylenames stored?
         U16 fStdStylenamesWritten:1;
 
+
         // Spare flags
         U16 unused4_2:15;
+
 
         // Max sti known when this file was written
         U16 stiMaxWhenSaved;
@@ -3868,30 +4183,39 @@ public:
 //        // invariant style identifier
 //        U16 sti:12;
 //
+//
 //        // spare field for any temporary use, always reset back to zero!
 //        U16 fScratch:1;
+//
 //
 //        // PHEs of all text with this style are wrong
 //        U16 fInvalHeight:1;
 //
+//
 //        // UPEs have been generated
 //        U16 fHasUpe:1;
+//
 //
 //        // std has been mass-copied; if unused at save time, style should be 
 //        // deleted
 //        U16 fMassCopy:1;
 //
+//
 //        // style type code
 //        U16 sgc:4;
+//
 //
 //        // base style
 //        U16 istdBase:12;
 //
+//
 //        // # of UPXs (and UPEs)
 //        U16 cupx:4;
 //
+//
 //        // next style
 //        U16 istdNext:12;
+//
 //
 //        // offset to end of upx's, start of upe's
 //        U16 bchUpe;
@@ -3899,11 +4223,14 @@ public:
 //        // auto redefine style when appropriate
 //        U16 fAutoRedef:1;
 //
+//
 //        // hidden from UI?
 //        U16 fHidden:1;
 //
+//
 //        // unused bits
 //        U16 unused8_3:14;
+//
 //
 //        // sub-names are separated by chDelimStyle
 //        XCHAR xstzName[2];
@@ -3929,6 +4256,7 @@ public:
         //     4 bar
         U8 jc:3;
 
+
         // tab leader code 
         //     0 no leader 
         //     1 dotted leader 
@@ -3937,8 +4265,10 @@ public:
         //     4 heavy line leader
         U8 tlc:3;
 
+
         // reserved
         U8 unused0_6:2;
+
     } __attribute__ ((packed)) TBD;
     static unsigned read(const U8 *in, TBD *out, unsigned count=1);
 
@@ -3953,18 +4283,23 @@ public:
         // calculating line breaks.
         U16 fFirstMerged:1;
 
+
         // set to 1 when cell has been merged with preceding cell.
         U16 fMerged:1;
 
+
         // set to 1 when cell has vertical text flow
         U16 fVertical:1;
+
 
         // for a vertical table cell, text flow is bottom to top when 1 and 
         // is bottom to top when 0.
         U16 fBackward:1;
 
+
         // set to 1 when cell has rotated characters (i.e. uses @font)
         U16 fRotateFont:1;
+
 
         // set to 1 when cell is vertically merged with the cell(s) above 
         // and/or below. When cells are vertically merged, the display area 
@@ -3977,12 +4312,14 @@ public:
         // in rgdxaCenter of the table rows differ by at most 3).
         U16 fVertMerge:1;
 
+
         // set to 1 when the cell is the first of a set of vertically merged 
         // cells. The contents of a cell with fVertStart set to 1 are 
         // displayed in the consolidated area belonging to the entire set of 
         // vertically merged cells. Vertically merged cells with fVertRestart 
         // set to 0 must be empty.
         U16 fVertRestart:1;
+
 
         // specifies the alignment of the cell contents relative to text flow 
         // (e.g. in a cell with bottom to top text flow and bottom vertical 
@@ -3993,8 +4330,10 @@ public:
         //     2 bottom
         U16 vertAlign:2;
 
+
         // reserved
         U16 fUnused:7;
+
 
         // reserved
         U16 wUnused;
@@ -4065,33 +4404,42 @@ public:
         // when ==1, use the border properties from the selected table look
         U16 fBorders:1;
 
+
         // when ==1, use the shading properties from the selected table look
         U16 fShading:1;
+
 
         // when ==1, use the font from the selected table look
         U16 fFont:1;
 
+
         // when ==1, use the color from the selected table look
         U16 fColor:1;
 
+
         // when ==1, do best fit from the selected table look
         U16 fBestFit:1;
+
 
         // when ==1, apply properties from the selected table look to the 
         // header rows in the table
         U16 fHdrRows:1;
 
+
         // when ==1, apply properties from the selected table look to the 
         // last row in the table
         U16 fLastRow:1;
+
 
         // when ==1, apply properties from the selected table look to the 
         // header columns of the table
         U16 fHdrCols:1;
 
+
         // when ==1, apply properties from the selected table look to the 
         // last column of the table
         U16 fLastCol:1;
+
     } __attribute__ ((packed)) TLP;
     static unsigned read(const U8 *in, TLP *out, unsigned count=1);
 
@@ -4141,17 +4489,22 @@ public:
         // used internally by Word
         U16 fCaFull:1;
 
+
         // used internally by Word
         U16 fFirstRow:1;
+
 
         // used internally by Word
         U16 fLastRow:1;
 
+
         // used internally by Word
         U16 fOutline:1;
 
+
         // reserved
         U16 unused20_12:12;
+
 
         // count of cells defined for this row. ItcMac must be >= 0 and less 
         // than or equal to 64.
@@ -4230,8 +4583,10 @@ public:
         // 
         U16 fnpt:4;
 
+
         // 
         U16 fnpd:12;
+
 
         // unused
         U32 doc;

@@ -971,7 +971,7 @@ unsigned MsWord::read(unsigned nFib, const U8 *in, PAPXFKP *out)
         U8 tmp;
 
         out->grpprlBytes = 2 * (cw - 1);
-        // The spec says that the Word6 istd is a byte, but that seems to be wrong.
+        // TBD: The spec says that the Word6 istd is a byte, but that seems to be wrong.
         bytes += MsWordGenerated::read(in + bytes, &out->istd);
         out->grpprl = (U8 *)(in + bytes);
         bytes += out->grpprlBytes;
@@ -981,7 +981,7 @@ unsigned MsWord::read(unsigned nFib, const U8 *in, PAPXFKP *out)
 
 unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out, unsigned count)
 {
-    U8 *ptr = (U8 *)out;
+    unsigned long shiftRegister;
     unsigned bytes = 0;
 
     for (unsigned i = 0; i < count; i++)
@@ -989,8 +989,36 @@ unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out, unsi
         U8 offset;
 
         offset = 0;
-        offset += MsWordGenerated::read(in + offset, (U16 *)(ptr + bytes), 5);
-        memset((ptr + bytes) + baseInFile, 0, 10 - baseInFile);
+        offset += MsWordGenerated::read(in + offset, (U16 *)&shiftRegister);
+        out->sti = shiftRegister;
+        shiftRegister >>= 12;
+        out->fScratch = shiftRegister;
+        shiftRegister >>= 1;
+        out->fInvalHeight = shiftRegister;
+        shiftRegister >>= 1;
+        out->fHasUpe = shiftRegister;
+        shiftRegister >>= 1;
+        out->fMassCopy = shiftRegister;
+        shiftRegister >>= 1;
+        offset += MsWordGenerated::read(in + offset, (U16 *)&shiftRegister);
+        out->sgc = shiftRegister;
+        shiftRegister >>= 4;
+        out->istdBase = shiftRegister;
+        shiftRegister >>= 12;
+        offset += MsWordGenerated::read(in + offset, (U16 *)&shiftRegister);
+        out->cupx = shiftRegister;
+        shiftRegister >>= 4;
+        out->istdNext = shiftRegister;
+        shiftRegister >>= 12;
+        offset += MsWordGenerated::read(in + offset, &out->bchUpe); // U16
+        offset += MsWordGenerated::read(in + offset, (U16 *)&shiftRegister);
+        out->fAutoRedef = shiftRegister;
+        shiftRegister >>= 1;
+        out->fHidden = shiftRegister;
+        shiftRegister >>= 1;
+        out->unused8_3 = shiftRegister;
+        shiftRegister >>= 14;
+        memset(out + bytes + baseInFile, 0, 10 - baseInFile);
         offset -= 10 - baseInFile;
 
         // If the baseInFile is less than 10, then the style name is not stored in unicode!
@@ -1024,7 +1052,7 @@ unsigned MsWord::read(U16 lid, const U8 *in, unsigned baseInFile, STD *out, unsi
 
 unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
 {
-    U8 *ptr = (U8 *)out;
+    unsigned long shiftRegister;
     unsigned bytes = 0;
 
     for (unsigned i = 0; i < count; i++)
@@ -1034,49 +1062,85 @@ unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
         // Word 6 for the Mac writes files with nFib = 103-104.
         // Word 8 (a.k.a. Winword 97) and later products write files with nFib > 105.
 
-        // Bytes 0 to 31 are common.
-
-        bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 7);
-        bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 1);
-        bytes += MsWordGenerated::read(in + bytes, (U8 *)(ptr + bytes), 2);
-        bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 2);
-        bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 2);
+        MsWordGenerated::read(in + 2, &out->nFib);
         if (out->nFib > s_maxWord6Version)
         {
-            bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 16);
-            bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 22);
-            bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
-            bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 186);
+            bytes += MsWordGenerated::read(in + bytes, out);
         }
         else
         if (out->nFib > s_minWordVersion)
         {
-            // We will convert the FIB into the same form as for Winword
+            // We will convert the FIB into the same form as for Winword 7.
 
+            memset(out, sizeof(*out), 0);
+            bytes += MsWordGenerated::read(in + bytes, &out->wIdent); // U16
+            bytes += MsWordGenerated::read(in + bytes, &out->nFib); // U16
+            bytes += MsWordGenerated::read(in + bytes, &out->nProduct); // U16
+            bytes += MsWordGenerated::read(in + bytes, &out->lid); // U16
+            bytes += MsWordGenerated::read(in + bytes, &out->pnNext); // U16
+            bytes += MsWordGenerated::read(in + bytes, (U16 *)&shiftRegister);
+            out->fDot = shiftRegister;
+            shiftRegister >>= 1;
+            out->fGlsy = shiftRegister;
+            shiftRegister >>= 1;
+            out->fComplex = shiftRegister;
+            shiftRegister >>= 1;
+            out->fHasPic = shiftRegister;
+            shiftRegister >>= 1;
+            out->cQuickSaves = shiftRegister;
+            shiftRegister >>= 4;
+            out->fEncrypted = shiftRegister;
+            shiftRegister >>= 1;
+            out->fWhichTblStm = shiftRegister;
+            shiftRegister >>= 1;
+            out->fReadOnlyRecommended = shiftRegister;
+            shiftRegister >>= 1;
+            out->fWriteReservation = shiftRegister;
+            shiftRegister >>= 1;
+            out->fExtChar = shiftRegister;
+            shiftRegister >>= 1;
+            out->fLoadOverride = shiftRegister;
+            shiftRegister >>= 1;
+            out->fFarEast = shiftRegister;
+            shiftRegister >>= 1;
+            out->fCrypto = shiftRegister;
+            shiftRegister >>= 1;
+            bytes += MsWordGenerated::read(in + bytes, &out->nFibBack); // U16
+            bytes += MsWordGenerated::read(in + bytes, &out->lKey); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->envr); // U8
+            bytes += MsWordGenerated::read(in + bytes, (U8 *)&shiftRegister);
+            out->fMac = shiftRegister;
+            shiftRegister >>= 1;
+            out->fEmptySpecial = shiftRegister;
+            shiftRegister >>= 1;
+            out->fLoadOverridePage = shiftRegister;
+            shiftRegister >>= 1;
+            out->fFutureSavedUndo = shiftRegister;
+            shiftRegister >>= 1;
+            out->fWord97Saved = shiftRegister;
+            shiftRegister >>= 1;
+            out->fSpare0 = shiftRegister;
+            shiftRegister >>= 3;
+            bytes += MsWordGenerated::read(in + bytes, &out->chs); // U16
+            bytes += MsWordGenerated::read(in + bytes, &out->chsTables); // U16
+            bytes += MsWordGenerated::read(in + bytes, &out->fcMin); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcMac); // U32
             out->csw = 14;
-            out->wMagicCreated = 0;
-            out->wMagicRevised = 0;
-            out->wMagicCreatedPrivate = 0;
-            out->wMagicRevisedPrivate = 0;
-            out->pnFbpChpFirst_W6 = 0;
-            out->pnChpFirst_W6 = 0;
-            out->cpnBteChp_W6 = 0;
-            out->pnFbpPapFirst_W6 = 0;
-            out->pnPapFirst_W6 = 0;
-            out->cpnBtePap_W6 = 0;
-            out->pnFbpLvcFirst_W6 = 0;
-            out->pnLvcFirst_W6 = 0;
-            out->cpnBteLvc_W6 = 0;
             out->lidFE = out->lid;
             out->clw = 22;
             bytes += MsWordGenerated::read(in + bytes, &out->cbMac);
             bytes += 16;
-            out->lProductCreated = 0;
-            out->lProductRevised = 0;
 
             // ccpText through ccpHdrTxbx.
 
-            bytes += MsWordGenerated::read(in + bytes, &out->ccpText, 8);
+            bytes += MsWordGenerated::read(in + bytes, &out->ccpText); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->ccpFtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->ccpHdd); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->ccpMcr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->ccpAtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->ccpEdn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->ccpTxbx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->ccpHdrTxbx); // U32
 
             // ccpSpare2.
 
@@ -1085,7 +1149,82 @@ unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
 
             // fcStshfOrig through lcbSttbfAtnbkmk.
 
-            bytes += MsWordGenerated::read(in + bytes, &out->fcStshfOrig, 76);
+            bytes += MsWordGenerated::read(in + bytes, &out->fcStshfOrig); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbStshfOrig); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcStshf); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbStshf); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcffndRef); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcffndRef); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcffndTxt); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcffndTxt); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfandRef); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfandRef); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfandTxt); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfandTxt); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfsed); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfsed); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcpad); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcpad); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfphe); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfphe); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbfglsy); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbfglsy); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfglsy); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfglsy); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfhdd); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfhdd); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfbteChpx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfbteChpx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfbtePapx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfbtePapx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfsea); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfsea); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbfffn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbfffn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcffldMom); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcffldMom); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcffldHdr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcffldHdr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcffldFtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcffldFtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcffldAtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcffldAtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcffldMcr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcffldMcr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbfbkmk); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbfbkmk); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfbkf); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfbkf); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfbkl); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfbkl); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcCmds); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbCmds); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcmcr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcmcr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbfmcr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbfmcr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPrDrvr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPrDrvr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPrEnvPort); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPrEnvPort); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPrEnvLand); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPrEnvLand); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcWss); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbWss); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcDop); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbDop); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbfAssoc); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbfAssoc); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcClx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbClx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfpgdFtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfpgdFtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcAutosaveSource); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbAutosaveSource); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcGrpXstAtnOwners); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbGrpXstAtnOwners); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbfAtnbkmk); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbfAtnbkmk); // U32
 
             // wSpare4Fib.
 
@@ -1105,7 +1244,76 @@ unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
 
             // fcPlcdoaMom through lcbSttbFnm.
 
-            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcdoaMom, 70);
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcdoaMom); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcdoaMom); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcdoaHdr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcdoaHdr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcspaMom); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcspaMom); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcspaHdr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcspaHdr); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfAtnbkf); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfAtnbkf); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfAtnbkl); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfAtnbkl); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPms); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPms); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcFormFldSttbs); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbFormFldSttbs); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfendRef); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfendRef); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfendTxt); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfendTxt); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcffldEdn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcffldEdn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfpgdEdn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfpgdEdn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcDggInfo); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbDggInfo); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbfRMark); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbfRMark); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbCaption); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbCaption); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbAutoCaption); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbAutoCaption); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfwkb); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfwkb); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfspl); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfspl); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcftxbxTxt); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcftxbxTxt); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcffldTxbx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcffldTxbx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcfhdrtxbxTxt); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcfhdrtxbxTxt); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPlcffldHdrTxbx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPlcffldHdrTxbx); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcStwUser); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbStwUser); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbttmbd); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->cbSttbttmbd); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcUnused); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbUnused); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPgdMother); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPgdMother); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcBkdMother); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbBkdMother); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPgdFtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPgdFtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcBkdFtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbBkdFtn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcPgdEdn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbPgdEdn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcBkdEdn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbBkdEdn); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbfIntlFld); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbfIntlFld); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcRouteSlip); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbRouteSlip); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbSavedBy); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbSavedBy); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->fcSttbFnm); // U32
+            bytes += MsWordGenerated::read(in + bytes, &out->lcbSttbFnm); // U32
         }
         else
         {
@@ -1121,13 +1329,12 @@ unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
 
 unsigned MsWord::read(unsigned nFib, const U8 *in, BTE *out)
 {
-    U8 *ptr = (U8 *)out;
     unsigned bytes = 0;
     U16 tmp;
 
     if (nFib > s_maxWord6Version)
     {
-        bytes = MsWordGenerated::read(in, out);
+        bytes += MsWordGenerated::read(in + bytes, out);
     }
     else
     {
@@ -1139,26 +1346,35 @@ unsigned MsWord::read(unsigned nFib, const U8 *in, BTE *out)
 
 unsigned MsWord::read(unsigned nFib, const U8 *in, PCD *out)
 {
-    U8 *ptr = (U8 *)out;
     unsigned bytes = 0;
 
-    bytes = MsWordGenerated::read(in, out);
+    bytes += MsWordGenerated::read(in + bytes, out);
     return bytes;
 } // PCD
 
 unsigned MsWord::read(unsigned nFib, const U8 *in, PHE *out)
 {
-    U8 *ptr = (U8 *)out;
     unsigned bytes = 0;
+    unsigned long shiftRegister;
     U16 tmp;
 
     if (nFib > s_maxWord6Version)
     {
-        bytes = MsWordGenerated::read(in, out);
+        bytes += MsWordGenerated::read(in + bytes, out);
     }
     else
     {
-        bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes));
+        bytes += MsWordGenerated::read(in + bytes, (U16 *)&shiftRegister);
+        out->fSpare = shiftRegister;
+        shiftRegister >>= 1;
+        out->fUnk = shiftRegister;
+        shiftRegister >>= 1;
+        out->fDiffLines = shiftRegister;
+        shiftRegister >>= 1;
+        out->unused0_3 = shiftRegister;
+        shiftRegister >>= 5;
+        out->clMac = shiftRegister;
+        shiftRegister >>= 8;
         bytes += MsWordGenerated::read(in + bytes, &tmp);
         out->dxaCol = tmp;
         bytes += MsWordGenerated::read(in + bytes, &tmp);
