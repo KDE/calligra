@@ -101,8 +101,8 @@ private:
 	double m_value;
 	double m_lower;
 	double m_upper;
-    double m_lowerInPoints; //< lowest value in points
-    double m_upperInPoints; //< highest value in points
+    double m_lowerInPoints; ///< lowest value in points
+    double m_upperInPoints; ///< highest value in points
 };
 
 class KoUnitDoubleComboBox : public KComboBox, public KoUnitDoubleBase
@@ -132,8 +132,8 @@ protected:
 	double m_value;
 	double m_lower;
 	double m_upper;
-    double m_lowerInPoints; //< lowest value in points
-    double m_upperInPoints; //< highest value in points
+    double m_lowerInPoints; ///< lowest value in points
+    double m_upperInPoints; ///< highest value in points
 };
 
 class KoUnitDoubleSpinComboBox : public QWidget
