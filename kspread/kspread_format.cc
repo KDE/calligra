@@ -868,7 +868,7 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm, bool paste 
     {
         FloatFormat a = (FloatFormat) f.attribute( "float" ).toInt( &ok );
         if ( !ok ) return false;
-        if ( (unsigned int) a >= 1 || (unsigned int) a <= 3 )
+        if ( (unsigned int) a >= 1 && (unsigned int) a <= 3 )
         {
             setFloatFormat( a );
         }
@@ -878,7 +878,7 @@ bool KSpreadFormat::loadFormat( const QDomElement & f, PasteMode pm, bool paste 
     {
         FloatColor a = (FloatColor) f.attribute( "floatcolor" ).toInt( &ok );
         if ( !ok ) return false;
-        if ( (unsigned int) a >= 1 || (unsigned int) a <= 2 )
+        if ( (unsigned int) a >= 1 && (unsigned int) a <= 4 )
         {
             setFloatColor( a );
         }

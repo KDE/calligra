@@ -671,6 +671,19 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:cell-properties" );
     }
 
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:date-style", (*it).name, 0 /*TODO ????*/  );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:time-style", (*it).name, 0 /*TODO ????*/  );
+    }
+
+
     contentWriter->endElement(); // office:automatic-styles
 
 
