@@ -2,6 +2,10 @@
 Type=Service
 Name=KSpreadCSVFilterDia
 Comment=CSV Filter Dialog
+Export=application/x-kspread
+ExportDescription=KSpread
+Import=text/x-csv
+ImportDescription=CSV File
 X-KDE-Library=libcsvfilterdia
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
