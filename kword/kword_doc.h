@@ -207,14 +207,16 @@ public:
   float getMMBottomBorder() { return pageLayout.bottom; }
   float getMMLeftBorder() { return pageLayout.left; }
   float getMMRightBorder() { return pageLayout.right; }
+  float getMMPaperWidth() { return pageLayout.width; }
+  float getMMPaperHeight() { return pageLayout.height; }
   
-  unsigned int getPTTopBorder() { return MM_TO_POINT(pageLayout.top); }
-  unsigned int getPTBottomBorder() { return MM_TO_POINT(pageLayout.bottom); }
-  unsigned int getPTLeftBorder() { return MM_TO_POINT(pageLayout.left); }
-  unsigned int getPTRightBorder() { return MM_TO_POINT(pageLayout.right); }
-  unsigned int getPTPaperHeight() { return MM_TO_POINT(pageLayout.height); }
-  unsigned int getPTPaperWidth() { return MM_TO_POINT(pageLayout.width); }
-  unsigned int getPTColumnWidth() { return ptColumnWidth; }
+  unsigned int getPTTopBorder() { return static_cast<unsigned int>(pageLayout.ptTop); }
+  unsigned int getPTBottomBorder() { return static_cast<unsigned int>(pageLayout.ptBottom); }
+  unsigned int getPTLeftBorder() { return static_cast<unsigned int>(pageLayout.ptLeft); }
+  unsigned int getPTRightBorder() { return static_cast<unsigned int>(pageLayout.ptRight); }
+  unsigned int getPTPaperHeight() { return static_cast<unsigned int>(pageLayout.ptHeight); }
+  unsigned int getPTPaperWidth() { return static_cast<unsigned int>(pageLayout.ptWidth); }
+  unsigned int getPTColumnWidth() { return static_cast<unsigned int>(ptColumnWidth); }
   unsigned int getPTColumnSpacing() { return MM_TO_POINT(pageColumns.columnSpacing); }
     
   unsigned int getColumns() { return pageColumns.columns; }
@@ -370,3 +372,9 @@ protected:
 };
 
 #endif
+
+
+
+
+
+

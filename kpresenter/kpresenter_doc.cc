@@ -86,6 +86,12 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   _pageLayout.right = 0;
   _pageLayout.top = 0;
   _pageLayout.bottom = 0;
+  _pageLayout.ptWidth = cMM_TO_POINT(PG_SCREEN_WIDTH);
+  _pageLayout.ptHeight = cMM_TO_POINT(PG_SCREEN_HEIGHT);
+  _pageLayout.ptLeft = 0;
+  _pageLayout.ptRight = 0;
+  _pageLayout.ptTop = 0;
+  _pageLayout.ptBottom = 0;
   _pageLayout.unit = PG_MM;
   objStartY = 0;
   setPageLayout(_pageLayout,0,0);
@@ -132,6 +138,12 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   _pageLayout.top = 0;
   _pageLayout.bottom = 0;
   _pageLayout.unit = PG_MM;
+  _pageLayout.ptWidth = cMM_TO_POINT(PG_SCREEN_WIDTH);
+  _pageLayout.ptHeight = cMM_TO_POINT(PG_SCREEN_HEIGHT);
+  _pageLayout.ptLeft = 0;
+  _pageLayout.ptRight = 0;
+  _pageLayout.ptTop = 0;
+  _pageLayout.ptBottom = 0;
   setPageLayout(_pageLayout,0,0);
   objStartY = 0;
   insertNewTemplate(0,0,true);
@@ -401,9 +413,15 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 	      else if ((*it).m_strName == "orientation")
 		__pgLayout.orientation = (KoOrientation)atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "width")
-		__pgLayout.width = static_cast<double>(atof((*it).m_strValue.c_str()));
+		{
+		  __pgLayout.width = static_cast<double>(atof((*it).m_strValue.c_str()));
+		  __pgLayout.ptWidth = cMM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
+		}	      
 	      else if ((*it).m_strName == "height")
-		__pgLayout.height = static_cast<double>(atof((*it).m_strValue.c_str()));
+		{
+		  __pgLayout.height = static_cast<double>(atof((*it).m_strValue.c_str()));
+		  __pgLayout.ptHeight = cMM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
+		}	      
 	      else
 		cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
 	    }
@@ -419,13 +437,25 @@ bool KPresenterDocument_impl::load(KOMLParser& parser)
 		  for(;it != lst.end();it++)
 		    {
 		      if ((*it).m_strName == "left")
-			__pgLayout.left = (double)atof((*it).m_strValue.c_str());
+			{
+			  __pgLayout.left = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptLeft = cMM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			}		      
 		      else if ((*it).m_strName == "top")
-			__pgLayout.top = (double)atof((*it).m_strValue.c_str());
+			{
+			  __pgLayout.top = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptTop = cMM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			}		      
 		      else if ((*it).m_strName == "right")
-			__pgLayout.right = (double)atof((*it).m_strValue.c_str());
+			{
+			  __pgLayout.right = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptRight = cMM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			}		      
 		      else if ((*it).m_strName == "bottom")
-			__pgLayout.bottom = (double)atof((*it).m_strValue.c_str());
+			{
+			  __pgLayout.bottom = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptBottom = cMM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			}		      
 		      else
 			cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
 		    } 
@@ -1549,12 +1579,12 @@ QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,
   if (_pageLayout.unit == PG_CM) fact = 10;
   if (_pageLayout.unit == PG_INCH) fact = 25.4;
 
-  int pw,ph,bl = static_cast<int>(_pageLayout.left * fact * 100) / 100;
-  int br = static_cast<int>(_pageLayout.right * fact * 100) / 100;
-  int bt = static_cast<int>(_pageLayout.top * fact * 100) / 100;
-  int bb = static_cast<int>(_pageLayout.bottom * fact * 100) / 100;
-  int wid = static_cast<int>(_pageLayout.width * fact * 100) / 100;
-  int hei = static_cast<int>(_pageLayout.height * fact * 100) / 100;
+  int pw,ph,bl = static_cast<int>(_pageLayout.ptLeft * fact * 100) / 100;
+  int br = static_cast<int>(_pageLayout.ptRight * fact * 100) / 100;
+  int bt = static_cast<int>(_pageLayout.ptTop * fact * 100) / 100;
+  int bb = static_cast<int>(_pageLayout.ptBottom * fact * 100) / 100;
+  int wid = static_cast<int>(_pageLayout.ptWidth * fact * 100) / 100;
+  int hei = static_cast<int>(_pageLayout.ptHeight * fact * 100) / 100;
   
   if (!decBorders)
     {
@@ -1564,18 +1594,13 @@ QRect KPresenterDocument_impl::getPageSize(unsigned int num,int diffx,int diffy,
       bb = 0;
     }
 
-  pw = wid * static_cast<int>(MM_TO_POINT * 100) / 100 - 
-    (bl + br) * static_cast<int>(MM_TO_POINT * 100) / 100;
-  ph = hei * static_cast<int>(MM_TO_POINT * 100) / 100 -
-    (bt + bb) * static_cast<int>(MM_TO_POINT * 100) / 100;
+  pw = wid  - (bl + br);
+  ph = hei - (bt + bb);
 
   pw = static_cast<int>(static_cast<float>(pw) * fakt);
   ph = static_cast<int>(static_cast<float>(ph) * fakt);
 
-  return QRect(-diffx + bl * static_cast<int>(MM_TO_POINT * 100) / 100,
-	       -diffy + bt * static_cast<int>(MM_TO_POINT * 100) / 100 + 
-	       num * bt * static_cast<int>(MM_TO_POINT * 100) / 100 + 
-	       num * bb * static_cast<int>(MM_TO_POINT * 100) / 100 + num * ph,pw,ph);
+  return QRect(-diffx + bl,-diffy + bt + num * bt + num * bb + num * ph,pw,ph);
 }
 
 /*================================================================*/
@@ -1584,7 +1609,7 @@ int KPresenterDocument_impl::getLeftBorder()
   double fact = 1;
   if (_pageLayout.unit == PG_CM) fact = 10;
   if (_pageLayout.unit == PG_INCH) fact = 25.4;
-  return static_cast<int>(_pageLayout.left * fact * 100 * MM_TO_POINT) / 100;
+  return static_cast<int>(_pageLayout.ptLeft * fact * 100) / 100;
 }
 
 /*================================================================*/
@@ -1593,7 +1618,7 @@ int KPresenterDocument_impl::getTopBorder()
   double fact = 1;
   if (_pageLayout.unit == PG_CM) fact = 10;
   if (_pageLayout.unit == PG_INCH) fact = 25.4;
-  return static_cast<int>(_pageLayout.top * fact * 100 * MM_TO_POINT) / 100;
+  return static_cast<int>(_pageLayout.ptTop * fact * 100) / 100;
 }
 
 /*================================================================*/
@@ -1602,7 +1627,7 @@ int KPresenterDocument_impl::getBottomBorder()
   double fact = 1;
   if (_pageLayout.unit == PG_CM) fact = 10;
   if (_pageLayout.unit == PG_INCH) fact = 25.4;
-  return static_cast<int>(_pageLayout.bottom * fact * 100 * MM_TO_POINT) / 100;
+  return static_cast<int>(_pageLayout.ptBottom * fact * 100) / 100;
 }
 
 /*================================================================*/

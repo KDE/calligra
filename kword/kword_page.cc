@@ -75,6 +75,8 @@ unsigned int KWPage::ptTopBorder() { return doc->getPTTopBorder(); }
 unsigned int KWPage::ptBottomBorder() { return doc->getPTBottomBorder(); }
 unsigned int KWPage::ptPaperWidth() { return doc->getPTPaperWidth(); }
 unsigned int KWPage::ptPaperHeight() { return doc->getPTPaperHeight(); }
+unsigned int KWPage::mmPaperWidth() { return static_cast<unsigned int>(doc->getMMPaperWidth()); }
+unsigned int KWPage::mmPaperHeight() { return static_cast<unsigned int>(doc->getMMPaperHeight()); }
 unsigned int KWPage::ptColumnWidth() { return doc->getPTColumnWidth(); }
 unsigned int KWPage::ptColumnSpacing() { return doc->getPTColumnSpacing(); }
 
@@ -132,8 +134,8 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		    
 		    if (fc->getParag())
 		      {	  
-			gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
-			gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+			gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+			gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
 		      }
 		  }
 		else
@@ -467,8 +469,8 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		  
 		  if (fc->getParag())
 		    {	  
-		      gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
-		      gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+		      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+		      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
 		    }
 		}
 	      else
@@ -637,8 +639,8 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
       
       if (fc->getParag())
 	{	  
-	  gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
-	  gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+	  gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+	  gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
 	}
     }
 
@@ -1096,8 +1098,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  gui->getVertRuler()->setOffset(0,-getVertRulerPos());
 	if (oldParag != fc->getParag() && fc->getParag())
 	  {	  
-	    gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
-	    gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+	    gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+	    gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
 	  }
 	if (doc->getProcessingType() == KWordDocument_impl::DTP && oldFrame != fc->getFrame())
 	  setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
@@ -1223,8 +1225,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	      gui->getVertRuler()->setOffset(0,-getVertRulerPos());
 	    if (oldParag != fc->getParag() && fc->getParag())
 	      {	  
-		gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
-		gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+		gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+		gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
 	      }
 	    if (doc->getProcessingType() == KWordDocument_impl::DTP && oldFrame != fc->getFrame())
 	      setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
@@ -1461,8 +1463,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
     gui->getVertRuler()->setOffset(0,-getVertRulerPos());
   if (oldParag != fc->getParag() && fc->getParag())
     {	  
-      gui->getHorzRuler()->setLeftIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTLeftIndent()));
-      gui->getHorzRuler()->setFirstIndent(POINT_TO_MM(fc->getParag()->getParagLayout()->getPTFirstLineLeftIndent()));
+      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
     }
   if (doc->getProcessingType() == KWordDocument_impl::DTP && oldFrame != fc->getFrame())
     setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
@@ -1735,10 +1737,10 @@ void KWPage::frameSizeChanged(KoPageLayout _layout)
 	}
     }
   
-  doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->setCoords(MM_TO_POINT(_layout.left),
-										   MM_TO_POINT(_layout.top) + page * ptPaperHeight(),
-										   MM_TO_POINT(_layout.width) - MM_TO_POINT(_layout.right),
-										   MM_TO_POINT(_layout.height) - MM_TO_POINT(_layout.bottom)
+  doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->setCoords(_layout.ptLeft,
+										   _layout.ptTop + page * ptPaperHeight(),
+										   _layout.ptWidth - _layout.ptRight,
+										   _layout.ptHeight - _layout.ptBottom
 										   + page * ptPaperHeight());
   doc->updateAllFrames();
   recalcText();
@@ -1764,9 +1766,13 @@ void KWPage::setRuler2Frame(unsigned int _frameset,unsigned int _frame)
     }
 
   _layout.left = POINT_TO_MM(frame->left());
-  _layout.top = POINT_TO_MM(frame->top()) - page * POINT_TO_MM(ptPaperHeight());
-  _layout.right = POINT_TO_MM(_layout.width - frame->right());
-  _layout.bottom = POINT_TO_MM(_layout.height - frame->bottom()) + page * POINT_TO_MM(ptPaperHeight());
+  _layout.top = POINT_TO_MM(frame->top()) - page * mmPaperHeight();
+  _layout.right = _layout.width - POINT_TO_MM(frame->right());
+  _layout.bottom = _layout.height - POINT_TO_MM(frame->bottom()) + page * mmPaperHeight();
+  _layout.ptLeft = frame->left();
+  _layout.ptTop = frame->top() - page * ptPaperHeight();
+  _layout.ptRight = _layout.ptWidth - frame->right();
+  _layout.ptBottom = _layout.ptHeight - frame->bottom() + page * ptPaperHeight();
   gui->getHorzRuler()->setPageLayout(_layout);
   gui->getVertRuler()->setPageLayout(_layout);
 }
@@ -1871,3 +1877,20 @@ void KWPage::femProps()
   frameDia->setCaption(i18n("KWord - Frame settings"));
   frameDia->show();
 }
+
+/*================================================================*/
+void KWPage::newLeftIndent(int _left) 
+{ 
+  setLeftIndent(static_cast<float>(_left)); 
+  gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+  gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+}
+
+/*================================================================*/
+void KWPage::newFirstIndent(int _first)
+{ 
+  setFirstLineIndent(static_cast<float>(_first));
+  gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+  gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+}
+

@@ -132,7 +132,7 @@ void KWFrameDia::setupTab2TextFrame()
 
   grid2->addMultiCellWidget(runGroup,0,0,0,1);
 
-  lRGap = new QLabel(i18n("Runaround Gap: (in pt)"),tab2);
+  lRGap = new QLabel(i18n("Runaround Gap: (in mm)"),tab2);
   lRGap->resize(lRGap->sizeHint());
   lRGap->setAlignment(AlignRight);
   grid2->addWidget(lRGap,1,0);

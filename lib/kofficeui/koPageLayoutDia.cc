@@ -16,6 +16,9 @@
 
 #include <klocale.h>
 
+#define POINT_TO_MM(px) (int((float)px/2.83465))
+#define MM_TO_POINT(mm) (int((float)mm*2.83465))
+
 /******************************************************************/
 /* class KoPagePreview                                            */
 /******************************************************************/
@@ -204,6 +207,12 @@ KoPageLayout KoPageLayoutDia::standardLayout()
   _layout.top = 20;
   _layout.bottom = 20;
   _layout.unit = PG_MM;
+  _layout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
+  _layout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
+  _layout.ptLeft = MM_TO_POINT(20);
+  _layout.ptRight = MM_TO_POINT(20);
+  _layout.ptTop = MM_TO_POINT(20);
+  _layout.ptBottom = MM_TO_POINT(20);
 
   return  _layout;
 }
@@ -728,6 +737,13 @@ void KoPageLayoutDia::unitChanged(int _unit)
       layout.top *= fact; 
       layout.bottom *= fact; 
 
+      layout.ptWidth = MM_TO_POINT(layout.width);
+      layout.ptHeight = MM_TO_POINT(layout.height);
+      layout.ptLeft = MM_TO_POINT(layout.left);
+      layout.ptRight = MM_TO_POINT(layout.right);
+      layout.ptTop = MM_TO_POINT(layout.top);
+      layout.ptBottom = MM_TO_POINT(layout.bottom);
+
       fact = 1;
       if (_unit == PG_CM) fact = 0.1;
       if (_unit == PG_INCH) fact = 1/25.4;
@@ -739,6 +755,13 @@ void KoPageLayoutDia::unitChanged(int _unit)
       layout.top *= fact; 
       layout.bottom *= fact; 
 
+      layout.ptWidth = MM_TO_POINT(layout.width);
+      layout.ptHeight = MM_TO_POINT(layout.height);
+      layout.ptLeft = MM_TO_POINT(layout.left);
+      layout.ptRight = MM_TO_POINT(layout.right);
+      layout.ptTop = MM_TO_POINT(layout.top);
+      layout.ptBottom = MM_TO_POINT(layout.bottom);
+
       layout.unit = (KoUnit)_unit;
       setValuesTab1();
 
@@ -748,6 +771,13 @@ void KoPageLayoutDia::unitChanged(int _unit)
       layout.right = atof(ebrRight->text());
       layout.top = atof(ebrTop->text());
       layout.bottom = atof(ebrBottom->text());
+
+      layout.ptWidth = MM_TO_POINT(layout.width);
+      layout.ptHeight = MM_TO_POINT(layout.height);
+      layout.ptLeft = MM_TO_POINT(layout.left);
+      layout.ptRight = MM_TO_POINT(layout.right);
+      layout.ptTop = MM_TO_POINT(layout.top);
+      layout.ptBottom = MM_TO_POINT(layout.bottom);
 
       updatePreview(layout);
     }
@@ -820,6 +850,9 @@ void KoPageLayoutDia::formatChanged(int _format)
       layout.width = w;
       layout.height = h;
 
+      layout.ptWidth = MM_TO_POINT(layout.width);
+      layout.ptHeight = MM_TO_POINT(layout.height);
+
       if (layout.unit == PG_CM)
 	{
 	  layout.width *= 0.1; 
@@ -831,6 +864,9 @@ void KoPageLayoutDia::formatChanged(int _format)
 	  layout.height *= 1/25.4;
 	}
  
+      layout.ptWidth = MM_TO_POINT(layout.width);
+      layout.ptHeight = MM_TO_POINT(layout.height);
+
       sprintf(stmp,"%.2f",layout.width);
       epgWidth->setText(stmp);
       sprintf(stmp,"%.2f",layout.height);
@@ -840,6 +876,11 @@ void KoPageLayoutDia::formatChanged(int _format)
       layout.right = atof(ebrRight->text());
       layout.top = atof(ebrTop->text());
       layout.bottom = atof(ebrBottom->text());
+
+      layout.ptLeft = MM_TO_POINT(layout.left);
+      layout.ptRight = MM_TO_POINT(layout.right);
+      layout.ptTop = MM_TO_POINT(layout.top);
+      layout.ptBottom = MM_TO_POINT(layout.bottom);
 
       updatePreview(layout);
     }
@@ -863,6 +904,13 @@ void KoPageLayoutDia::orientationChanged(int _orientation)
       layout.width = layout.height;
       layout.height = tmp;
 
+      layout.ptWidth = MM_TO_POINT(layout.width);
+      layout.ptHeight = MM_TO_POINT(layout.height);
+      layout.ptLeft = MM_TO_POINT(layout.left);
+      layout.ptRight = MM_TO_POINT(layout.right);
+      layout.ptTop = MM_TO_POINT(layout.top);
+      layout.ptBottom = MM_TO_POINT(layout.bottom);
+
       if ((KoOrientation)_orientation == PG_LANDSCAPE)
 	{
 	  tmp = layout.left;
@@ -880,6 +928,11 @@ void KoPageLayoutDia::orientationChanged(int _orientation)
 	  layout.left = tmp;
 	}
 
+      layout.ptLeft = MM_TO_POINT(layout.left);
+      layout.ptRight = MM_TO_POINT(layout.right);
+      layout.ptTop = MM_TO_POINT(layout.top);
+      layout.ptBottom = MM_TO_POINT(layout.bottom);
+
       layout.orientation = (KoOrientation)_orientation;
       setValuesTab1();
       updatePreview(layout);
@@ -892,6 +945,7 @@ void KoPageLayoutDia::widthChanged()
   if (strlen(epgWidth->text()) == 0 && retPressed)
     epgWidth->setText("0.00");
   layout.width = atof(epgWidth->text());
+  layout.ptWidth = MM_TO_POINT(layout.width);
   updatePreview(layout);
   retPressed = false;
 }
@@ -902,6 +956,7 @@ void KoPageLayoutDia::heightChanged()
   if (strlen(epgHeight->text()) == 0 && retPressed)
     epgHeight->setText("0.00");
   layout.height = atof(epgHeight->text());
+  layout.ptHeight = MM_TO_POINT(layout.height);
   updatePreview(layout);
   retPressed = false;
 }
@@ -912,6 +967,7 @@ void KoPageLayoutDia::leftChanged()
   if (strlen(ebrLeft->text()) == 0 && retPressed)
     ebrLeft->setText("0.00");
   layout.left = atof(ebrLeft->text());
+  layout.ptLeft = MM_TO_POINT(layout.left);
   updatePreview(layout);
   retPressed = false;
 }
@@ -922,6 +978,7 @@ void KoPageLayoutDia::rightChanged()
   if (strlen(ebrRight->text()) == 0 && retPressed)
     ebrRight->setText("0.00");
   layout.right = atof(ebrRight->text());
+  layout.ptRight = MM_TO_POINT(layout.right);
   updatePreview(layout);
   retPressed = false;
 }
@@ -932,6 +989,7 @@ void KoPageLayoutDia::topChanged()
   if (strlen(ebrTop->text()) == 0 && retPressed)
     ebrTop->setText("0.00");
   layout.top = atof(ebrTop->text());
+  layout.ptTop = MM_TO_POINT(layout.top);
   updatePreview(layout);
   retPressed = false;
 }
@@ -942,6 +1000,7 @@ void KoPageLayoutDia::bottomChanged()
   if (strlen(ebrBottom->text()) == 0 && retPressed)
     ebrBottom->setText("0.00");
   layout.bottom = atof(ebrBottom->text());
+  layout.ptBottom = MM_TO_POINT(layout.bottom);
   updatePreview(layout);
   retPressed = false;
 }

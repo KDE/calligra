@@ -22,6 +22,9 @@
 #define MM_TO_POINT 2.83465
 #define POINT_TO_MM 0.3527772388    
 
+#define cPOINT_TO_MM(px) (int((float)px/2.83465))
+#define cMM_TO_POINT(mm) (int((float)mm*2.83465)) 
+
 #define MAX_UNDO_REDO 100
 #define NUM_OBJ_TYPES 8
 

@@ -474,7 +474,7 @@ void KPBackGround::drawBorders(QPainter *_painter)
   
   _painter->setPen(pen);
   _painter->setBrush(brush);
-  _painter->drawRect(0,0,ext.width(),ext.height());
+  _painter->drawRect(0,0,ext.width() + 1,ext.height() + 1);
 }
 
 /*======================== remove gradient =======================*/

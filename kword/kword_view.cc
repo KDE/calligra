@@ -1585,8 +1585,8 @@ KWordGUI::KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordVie
   connect(r_vert,SIGNAL(newPageLayout(KoPageLayout)),view,SLOT(newPageLayout(KoPageLayout)));
   connect(r_vert,SIGNAL(openPageLayoutDia()),view,SLOT(openPageLayoutDia()));
 
-  r_horz->setLeftIndent(static_cast<int>(paperWidget->getLeftIndent()));
-  r_horz->setFirstIndent(static_cast<int>(paperWidget->getFirstLineIndent()));
+  r_horz->setLeftIndent(static_cast<int>(MM_TO_POINT(paperWidget->getLeftIndent())));
+  r_horz->setFirstIndent(static_cast<int>(MM_TO_POINT(paperWidget->getFirstLineIndent())));
 
 //   if (doc->getProcessingType() == KWordDocument_impl::DTP)
 //     {

@@ -145,10 +145,8 @@ public:
   int getPageOfRect(QRect _rect);
   
 public slots:
-  void newLeftIndent(int _left)
-    { setLeftIndent(static_cast<float>(_left)); }
-  void newFirstIndent(int _first)
-    { setFirstLineIndent(static_cast<float>(_first)); }
+  void newLeftIndent(int _left); 
+  void newFirstIndent(int _first);
   void frameSizeChanged(KoPageLayout);
   void mmEdit()
     { setMouseMode(MM_EDIT); mmUncheckAll(); mm_menu->setItemChecked(mm_edit,true); }
@@ -173,6 +171,8 @@ protected:
   unsigned int ptPaperHeight();
   unsigned int ptColumnWidth();
   unsigned int ptColumnSpacing();
+  unsigned int mmPaperWidth();
+  unsigned int mmPaperHeight();
 
   void enterEvent(QEvent *)
     { setFocus(); }

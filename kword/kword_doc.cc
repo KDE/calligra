@@ -90,6 +90,12 @@ CORBA::Boolean KWordDocument_impl::init()
   pageLayout.right = DEFAULT_RIGHT_BORDER;
   pageLayout.top = DEFAULT_TOP_BORDER;
   pageLayout.bottom = DEFAULT_BOTTOM_BORDER;  
+  pageLayout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
+  pageLayout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
+  pageLayout.ptLeft = MM_TO_POINT(DEFAULT_LEFT_BORDER);
+  pageLayout.ptRight = MM_TO_POINT(DEFAULT_RIGHT_BORDER);
+  pageLayout.ptTop = MM_TO_POINT(DEFAULT_TOP_BORDER);
+  pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
   pageLayout.unit = PG_MM;
 
   defaultUserFont = new KWUserFont(this,"times");
@@ -162,6 +168,10 @@ void KWordDocument_impl::setPageLayout(KoPageLayout _layout,KoColumns _cl)
       pageLayout.right = 0;
       pageLayout.top = 0;
       pageLayout.bottom = 0;
+      pageLayout.ptLeft = 0;
+      pageLayout.ptRight = 0;
+      pageLayout.ptTop = 0;
+      pageLayout.ptBottom = 0;
     }
 
   if (processingType == WP)
@@ -246,6 +256,12 @@ bool KWordDocument_impl::load(KOMLParser& parser)
   pageLayout.right = DEFAULT_RIGHT_BORDER;
   pageLayout.top = DEFAULT_TOP_BORDER;
   pageLayout.bottom = DEFAULT_BOTTOM_BORDER;  
+  pageLayout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
+  pageLayout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
+  pageLayout.ptLeft = MM_TO_POINT(DEFAULT_LEFT_BORDER);
+  pageLayout.ptRight = MM_TO_POINT(DEFAULT_RIGHT_BORDER);
+  pageLayout.ptTop = MM_TO_POINT(DEFAULT_TOP_BORDER);
+  pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
   pageLayout.unit = PG_MM;
 
   defaultUserFont = new KWUserFont(this,"times");
@@ -310,9 +326,15 @@ bool KWordDocument_impl::load(KOMLParser& parser)
 	      else if ((*it).m_strName == "orientation")
 		__pgLayout.orientation = (KoOrientation)atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "width")
-		__pgLayout.width = static_cast<double>(atof((*it).m_strValue.c_str()));
+		{
+		  __pgLayout.width = static_cast<double>(atof((*it).m_strValue.c_str()));
+		  __pgLayout.ptWidth = MM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
+		}	      
 	      else if ((*it).m_strName == "height")
-		__pgLayout.height = static_cast<double>(atof((*it).m_strValue.c_str()));
+		{
+		  __pgLayout.height = static_cast<double>(atof((*it).m_strValue.c_str()));
+		  __pgLayout.ptHeight = MM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
+		}	      
 	      else if ((*it).m_strName == "columns")
 		__columns.columns = atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "columnspacing")
@@ -332,13 +354,25 @@ bool KWordDocument_impl::load(KOMLParser& parser)
 		  for(;it != lst.end();it++)
 		    {
 		      if ((*it).m_strName == "left")
-			__pgLayout.left = (double)atof((*it).m_strValue.c_str());
+			{
+			  __pgLayout.left = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptLeft = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			}
 		      else if ((*it).m_strName == "top")
-			__pgLayout.top = (double)atof((*it).m_strValue.c_str());
+			{
+			  __pgLayout.top = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptTop = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			}		      
 		      else if ((*it).m_strName == "right")
-			__pgLayout.right = (double)atof((*it).m_strValue.c_str());
+			{
+			  __pgLayout.right = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptRight = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			}		      
 		      else if ((*it).m_strName == "bottom")
-			__pgLayout.bottom = (double)atof((*it).m_strValue.c_str());
+			{
+			  __pgLayout.bottom = (double)atof((*it).m_strValue.c_str());
+			  __pgLayout.ptBottom = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
+			}		      
 		      else
 			cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
 		    } 
@@ -656,14 +690,6 @@ KWParagLayout* KWordDocument_impl::findParagLayout(const char *_name)
   
   return 0L;
 }
-
-
-/*================================================================*/
-// void KWordDocument_impl::calcColumnWidth()
-// {
-//   ptColumnWidth = (getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder() - getPTColumnSpacing() * (pageColumns.columns - 1)) 
-//     / pageColumns.columns;
-// }
 
 /*================================================================*/
 bool KWordDocument_impl::isPTYInFrame(unsigned int _frameSet,unsigned int _frame,unsigned int _ypos)

@@ -34,6 +34,7 @@
 
 #define _MM_TO_POINT 2.83465
 #define _POINT_TO_MM 0.3527772388    
+#define cMM_TO_POINT(mm) (int((float)mm*2.83465))
 
 /******************************************************************/
 /* Class: KoRuler                                                 */
@@ -64,9 +65,9 @@ public:
     { diffx = _diffx; diffy = _diffy; repaint(false); }
 
   void setLeftIndent(int _left)
-    { i_left = _left; repaint(false); }
+    { i_left = cMM_TO_POINT(_left); repaint(false); }
   void setFirstIndent(int _first)
-    { i_first = _first; repaint(false); }
+    { i_first = cMM_TO_POINT(_first); repaint(false); }
 
 signals:
   void newPageLayout(KoPageLayout);

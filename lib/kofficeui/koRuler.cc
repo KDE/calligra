@@ -14,6 +14,9 @@
 #include "koRuler.h"
 #include "koRuler.moc"
 
+#define POINT_TO_MM(px) (int((float)px/2.83465))
+#define MM_TO_POINT(mm) (int((float)mm*2.83465))
+
 /******************************************************************/
 /* Class: KoRuler                                                 */
 /******************************************************************/
@@ -98,8 +101,7 @@ void KoRuler::drawHorizontal(QPainter *_painter)
 
   int dist;
   int j = 0;
-  int wid = static_cast<int>(layout.width * 100) / 100;
-  int pw = wid * static_cast<int>(_MM_TO_POINT * 100) / 100;
+  int pw = static_cast<int>(layout.ptWidth);
   QString str;
   QFont font = QFont("helvetica",8);
   QFontMetrics fm(font);
@@ -109,13 +111,12 @@ void KoRuler::drawHorizontal(QPainter *_painter)
 
   QRect r; 
   if (!whileMovingBorderLeft)
-    r.setLeft(-diffx + static_cast<int>(layout.left) * static_cast<int>(100 * _MM_TO_POINT) / 100);
+    r.setLeft(-diffx + layout.ptLeft);
   else
     r.setLeft(oldMx);
   r.setTop(0);
   if (!whileMovingBorderRight)
-    r.setRight(-diffx + pw - static_cast<int>(layout.right) * 
-	       static_cast<int>(100 * _MM_TO_POINT) / 100);
+    r.setRight(-diffx + pw - layout.ptRight);
   else
     r.setRight(oldMx);
   r.setBottom(height());
@@ -126,16 +127,16 @@ void KoRuler::drawHorizontal(QPainter *_painter)
   p.setFont(font);
   dist = static_cast<int>((1000 * _MM_TO_POINT) / 100);
 
-  for (int i = 0;i <= (layout.width * 100 * _MM_TO_POINT) / 100;i+= dist)
+  for (int i = 0;i <= layout.ptWidth;i += dist)
     {    
       str.sprintf("%d",j++);
       p.drawText(i - diffx - fm.width(str) / 2,(height() - fm.height()) / 2,fm.width(str),height(),AlignLeft | AlignTop,str);
     }
 
-  for (int i = dist / 2;i <= (layout.width * 100 * _MM_TO_POINT) / 100;i+= dist)
+  for (int i = dist / 2;i <= layout.ptWidth;i += dist)
     p.drawLine(i - diffx,5,i - diffx,height() - 5);
 
-  for (int i = dist / 4;i <= (layout.width * 100 * _MM_TO_POINT) / 100;i+= dist / 2)
+  for (int i = dist / 4;i <= layout.ptWidth;i += dist / 2)
     p.drawLine(i - diffx,7,i - diffx,height() - 7);
 
   p.setPen(QPen(black));
@@ -152,8 +153,8 @@ void KoRuler::drawHorizontal(QPainter *_painter)
 
   if (flags & F_INDENTS)
     {
-      p.drawPixmap(static_cast<int>(i_first * 100 * _MM_TO_POINT) / 100 - pmFirst.size().width() / 2 + r.left(),2,pmFirst);
-      p.drawPixmap(static_cast<int>(i_left * 100 * _MM_TO_POINT) / 100 - pmLeft.size().width() / 2 + r.left(),
+      p.drawPixmap(i_first - pmFirst.size().width() / 2 + r.left(),2,pmFirst);
+      p.drawPixmap(i_left - pmLeft.size().width() / 2 + r.left(),
 		   height() - pmLeft.size().height() - 2,pmLeft);
     }
 
@@ -178,8 +179,7 @@ void KoRuler::drawVertical(QPainter *_painter)
 
   int dist;
   int j = 0;
-  int hei = static_cast<int>(layout.height * 100) / 100;
-  int ph = hei * static_cast<int>(_MM_TO_POINT * 100) / 100;
+  int ph = static_cast<int>(layout.ptHeight);
   QString str;
   QFont font = QFont("helvetica",8);
   QFontMetrics fm(font);
@@ -190,13 +190,12 @@ void KoRuler::drawVertical(QPainter *_painter)
   QRect r;
 
   if (!whileMovingBorderTop)
-    r.setTop(-diffy + static_cast<int>(layout.top) * static_cast<int>(100 * _MM_TO_POINT) / 100);
+    r.setTop(-diffy + layout.ptTop);
   else
     r.setTop(oldMy);
   r.setLeft(0);
   if (!whileMovingBorderBottom)
-    r.setBottom(-diffy + ph - static_cast<int>(layout.bottom) * 
-		static_cast<int>(100 * _MM_TO_POINT) / 100);
+    r.setBottom(-diffy + ph - layout.ptBottom);
   else
     r.setBottom(oldMy);
   r.setRight(width());
@@ -207,16 +206,16 @@ void KoRuler::drawVertical(QPainter *_painter)
   p.setFont(font);
   dist = static_cast<int>((1000 * _MM_TO_POINT) / 100);
 
-  for (int i = 0;i <= (layout.height * 100 * _MM_TO_POINT) / 100;i+= dist)
+  for (int i = 0;i <= layout.ptHeight;i += dist)
     {    
       str.sprintf("%d",j++);
       p.drawText((width() - fm.width(str)) / 2,i - diffy - fm.height() / 2,width(),fm.height(),AlignLeft | AlignTop,str);
     }
 
-  for (int i = dist / 2;i <= (layout.height * 100 * _MM_TO_POINT) / 100;i+= dist)
+  for (int i = dist / 2;i <= layout.ptHeight;i += dist)
     p.drawLine(5,i - diffy,width() - 5,i - diffy);
 
-  for (int i = dist / 4;i <= (layout.height * 100 * _MM_TO_POINT) / 100;i+= dist / 2)
+  for (int i = dist / 4;i <= layout.ptHeight;i += dist / 2)
     p.drawLine(7,i - diffy,width() - 7,i - diffy);
 
   p.setPen(QPen(black));
@@ -355,7 +354,7 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
 	}
       
       repaint(false);
-      emit newFirstIndent(i_first);
+      emit newFirstIndent(POINT_TO_MM(i_first));
     }
   else if (action == A_LEFT_INDENT)
     {
@@ -370,8 +369,10 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
 	}
       
       repaint(false);
-      emit newLeftIndent(i_left);
-      emit newFirstIndent(i_first);
+      int _tmp = i_first;
+      emit newLeftIndent(POINT_TO_MM(i_left));
+      i_first = _tmp;
+      emit newFirstIndent(POINT_TO_MM(i_first));
     }
 }
 
@@ -380,20 +381,18 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 {
   hasToDelete = false;
 
-  int wid = static_cast<int>(layout.width * 100) / 100;
-  int pw = wid * static_cast<int>(_MM_TO_POINT * 100) / 100;
-  int hei = static_cast<int>(layout.height * 100) / 100;
-  int ph = hei * static_cast<int>(_MM_TO_POINT * 100) / 100;
-  int left = static_cast<int>(layout.left * _MM_TO_POINT * 100) / 100;
+  int pw = static_cast<int>(layout.ptWidth);
+  int ph = static_cast<int>(layout.ptHeight);
+  int left = static_cast<int>(layout.ptLeft);
   left -= diffx;
-  int top = static_cast<int>(layout.top * _MM_TO_POINT * 100) / 100;
+  int top = static_cast<int>(layout.ptTop);
   top -= diffy;
-  int right = static_cast<int>(layout.right * _MM_TO_POINT * 100) / 100;
+  int right = static_cast<int>(layout.ptRight);
   right = pw - right - diffx;
-  int bottom = static_cast<int>(layout.bottom * _MM_TO_POINT * 100) / 100;
+  int bottom = static_cast<int>(layout.ptBottom);
   bottom = ph - bottom - diffy;
-  int ip_left = static_cast<int>(static_cast<float>(i_left) * 100 * _MM_TO_POINT) / 100;
-  int ip_first = static_cast<int>(static_cast<float>(i_first) * 100 * _MM_TO_POINT) / 100;
+  int ip_left = i_left;
+  int ip_first = i_first;
 
   int mx = e->x();
   int my = e->y();
@@ -448,7 +447,8 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(oldMx,0,oldMx,canvas->height());
 		      p.drawLine(mx,0,mx,canvas->height());
 		      p.end();
-		      layout.left = (static_cast<float>(mx + 1 + diffx) * _POINT_TO_MM * 100) / 100;
+		      layout.left = (static_cast<float>(mx + diffx) * _POINT_TO_MM * 100) / 100;
+		      layout.ptLeft = mx + diffx;
 		      oldMx = e->x();
 		      oldMy = e->y();
 		      repaint(false);
@@ -465,7 +465,8 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(oldMx,0,oldMx,canvas->height());
 		      p.drawLine(mx,0,mx,canvas->height());
 		      p.end();
-		      layout.right = (static_cast<float>(pw - (mx + 1 + diffx)) * _POINT_TO_MM * 100) / 100;
+		      layout.right = (static_cast<float>(pw - (mx + diffx)) * _POINT_TO_MM * 100) / 100;
+		      layout.ptRight = pw - (mx + diffx);
 		      oldMx = e->x();
 		      oldMy = e->y();
 		      repaint(false);
@@ -490,7 +491,7 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 			  return;
 			}
 		      p.end();
-		      i_first = static_cast<int>(static_cast<float>(mx - left) * 100 * _POINT_TO_MM) / 100;
+		      i_first = mx - left;
 		      if (i_first < 0) i_first = 0;
 		      oldMx = e->x();
 		      oldMy = e->y();
@@ -517,7 +518,7 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 			}
 		      p.end();
 		      int oldLeft = i_left;
-		      i_left = static_cast<int>(static_cast<float>(mx - left) * 100 * _POINT_TO_MM) / 100;
+		      i_left = mx - left;
 		      if (i_left < 0) i_left = 0;
 		      else i_first += i_left - oldLeft;
 		      oldMx = e->x();
@@ -561,7 +562,8 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(0,oldMy,canvas->width(),oldMy);
 		      p.drawLine(0,my,canvas->width(),my);
 		      p.end();
-		      layout.top = (static_cast<float>(my + 1 + diffy) * _POINT_TO_MM * 100) / 100;
+		      layout.top = (static_cast<float>(my + diffy) * _POINT_TO_MM * 100) / 100;
+		      layout.ptTop = my + diffy;
 		      oldMx = e->x();
 		      oldMy = e->y();
 		      repaint(false);
@@ -578,7 +580,8 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.drawLine(0,oldMy,canvas->width(),oldMy);
 		      p.drawLine(0,my,canvas->width(),my);
 		      p.end();
-		      layout.bottom = (static_cast<float>(ph - (my + 1 + diffy)) * _POINT_TO_MM * 100) / 100;
+		      layout.bottom = (static_cast<float>(ph - (my + diffy)) * _POINT_TO_MM * 100) / 100;
+		      layout.ptBottom = ph - (my + diffy);
 		      oldMx = e->x();
 		      oldMy = e->y();
 		      repaint(false);

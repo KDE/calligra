@@ -70,6 +70,9 @@ struct KoPageLayout
   double left,right,top,bottom;
   KoUnit unit;
 
+  double ptWidth,ptHeight;
+  double ptLeft,ptRight,ptTop,ptBottom;
+
   bool operator==(const KoPageLayout _l) {
     return (_l.format == format &&
 	    _l.orientation == orientation &&

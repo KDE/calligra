@@ -37,7 +37,7 @@ KWFrame::KWFrame()
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
   selected = false;
-  runAroundGap = 2;
+  runAroundGap = 1;
 }
 
 /*================================================================*/
@@ -47,7 +47,7 @@ KWFrame::KWFrame(const QPoint &topleft,const QPoint &bottomright)
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
   selected = false;
-  runAroundGap = 2;
+  runAroundGap = 1;
 } 
 
 /*================================================================*/
@@ -57,7 +57,7 @@ KWFrame::KWFrame(const QPoint &topleft,const QSize &size)
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
   selected = false;
-  runAroundGap = 2;
+  runAroundGap = 1;
 }    
 
 /*================================================================*/
@@ -67,7 +67,7 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   runAround = RA_NO; 
   intersections.setAutoDelete(true); 
   selected = false;
-  runAroundGap = 2;
+  runAroundGap = 1;
 }
 
 /*================================================================*/
@@ -101,7 +101,7 @@ int KWFrame::getLeftIndent(int _y,int _h)
       if (rect.intersects(QRect(left(),_y,width(),_h)))
 	{
 	  if (rect.left() == left())
-	    _left = max(_left,rect.width() + runAroundGap);
+	    _left = max(_left,rect.width() + MM_TO_POINT(runAroundGap));
 	}
     }
 
@@ -123,7 +123,7 @@ int KWFrame::getRightIndent(int _y,int _h)
       if (rect.intersects(QRect(left(),_y,width(),_h)))
 	{
 	  if (rect.right() == right())
-	    _right = max(_right,rect.width() + runAroundGap);
+	    _right = max(_right,rect.width() + MM_TO_POINT(runAroundGap));
 	}
     }
 
