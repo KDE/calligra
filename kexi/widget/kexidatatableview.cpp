@@ -198,11 +198,11 @@ KexiDataTableView::slotMoving(int)
 	verticalHeader()->setUpdatesEnabled(true);
 }
 
-QSize
+/*QSize
 KexiDataTableView::tableSize() const
 {
 	return QSize(KexiTableView::tableSize().width(), m_records * rowHeight());
-}
+}*/
 
 void
 KexiDataTableView::recordInsertFinished(KexiDBUpdateRecord *ur)

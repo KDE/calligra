@@ -67,7 +67,7 @@ class KexiDataTableView : public KexiTableView
 
 	protected:
 		void		init();
-		virtual QSize	tableSize() const;
+//		virtual QSize	tableSize() const;
 		void		appendInsertItem();
 
 	protected slots:
