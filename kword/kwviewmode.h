@@ -65,6 +65,11 @@ public:
     // Size of the contents area
     virtual QSize contentsSize() = 0;
 
+    // Size (in pixels) of the total area available for text in a given textframeset
+    // This is used by KWTextFrameSet::drawFrame to erase between the bottom of the
+    // last paragraph and the bottom of the available area.
+    virtual QSize availableSizeForText( KWTextFrameSet* textfs );
+
     // "Topleft of current page" - concept used by the rulers.
     // The default implementation is good enough for any page-based viewmode,
     // since it calls normalToView. But the textmode has no page concept.
@@ -195,6 +200,7 @@ public:
     virtual QPoint normalToView( const QPoint & nPoint );
     virtual QPoint viewToNormal( const QPoint & vPoint );
     virtual QSize contentsSize();
+    virtual QSize availableSizeForText( KWTextFrameSet* textfs );
     // There is no page concept. Keep everything relative to (0,0)
     virtual QPoint pageCorner( KWCanvas* ) { return QPoint( 0, 0 ); }
     virtual QRect rulerFrameRect( KWCanvas* canvas );

@@ -32,6 +32,13 @@ QSize KWViewModeNormal::contentsSize()
     return QSize( m_doc->paperWidth(), m_doc->pageTop( m_doc->getPages() ) /*i.e. bottom of last one*/ );
 }
 
+QSize KWViewMode::availableSizeForText( KWTextFrameSet* textfs )
+{
+    KWFrame* frame = textfs->frameIterator().getLast();
+    return m_doc->zoomSize( KoSize( frame->innerWidth(), frame->internalY() + frame->innerHeight() ) );
+
+}
+
 void KWViewMode::drawOnePageBorder( QPainter * painter, const QRect & crect, const QRect & _pageRect,
                                     const QRegion & emptySpaceRegion )
 {
@@ -383,6 +390,11 @@ QSize KWViewModeText::contentsSize()
                  QMAX( m_doc->layoutUnitToPixelY( luSize.height() ), pageHeight ) );
     //kdDebug() << "KWViewModeText::contentsSize " << cSize << endl;
     return cSize;
+}
+
+QSize KWViewModeText::availableSizeForText( KWTextFrameSet* textfs )
+{
+    return contentsSize();
 }
 
 bool KWViewModeText::isFrameSetVisible( const KWFrameSet *fs )

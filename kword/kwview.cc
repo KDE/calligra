@@ -913,6 +913,12 @@ void KWView::setupActions()
     actSoftHyphen->plugAccel( accel );
     actLineBreak->plugAccel( accel );
     actComplete->plugAccel( accel );
+#else
+    // Stupid compilers ;)
+    Q_UNUSED( actNbsp );
+    Q_UNUSED( actSoftHyphen );
+    Q_UNUSED( actLineBreak );
+    Q_UNUSED( actComplete );
 #endif
 
     actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,

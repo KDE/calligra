@@ -459,16 +459,15 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
 
     // Blank area under the very last paragraph - QRT draws it up to textdoc->height,
     // we have to draw it from there up to the bottom of the last frame.
-    if ( theFrame && ( !lastFormatted || lastFormatted == textDocument()->lastParag() ) )
+    if ( ( !lastFormatted || lastFormatted == textDocument()->lastParag() ) )
     {
         // This is drawing code, so we convert everything to pixels
-        //int docHeight = m_doc->layoutUnitToPixelY( textDocument()->height() );
         int docHeight = textDocument()->lastParag()->pixelRect(m_doc).bottom() + 1;
-        QRect frameRect = m_doc->zoomRect( (theFrame->innerRect()) );
+        //QRect frameRect = m_doc->zoomRect( (theFrame->innerRect()) );
 
-        int totalHeight = m_doc->zoomItY( frames.last()->internalY() + frames.last()->innerHeight() );
-
-        QRect blank( 0, docHeight, frameRect.width(), totalHeight + frameRect.height() - docHeight );
+        KWViewMode* viewMode = m_currentDrawnCanvas->viewMode(); // need to pass viewMode as param?
+        QSize availSize = viewMode->availableSizeForText( this );
+        QRect blank( 0, docHeight, availSize.width(), availSize.height() /*+ frameRect.height() ?? */ - docHeight );
         //kdDebug(32002) << this << " Blank area: " << blank << endl;
         painter->fillRect( blank, cg.brush( QColorGroup::Base ) );
         // for debugging :)
