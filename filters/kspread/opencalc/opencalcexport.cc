@@ -292,61 +292,93 @@ bool OpenCalcExport::exportContent( KoStore * store, KSpreadDoc const * const ks
 bool OpenCalcExport::exportSettings( KoStore * store, const KSpreadDoc * ksdoc )
 {
     if ( !store->open( "settings.xml" ) )
-        return false;
+    return false;
 
-    QDomDocument doc;
-    doc.appendChild( doc.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
+  QDomDocument doc;
+  doc.appendChild( doc.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
 
-    QDomElement settings = doc.createElement( "office:document-settings" );
-    settings.setAttribute( "xmlns:office", "http://openoffice.org/2000/office");
-    settings.setAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
-    settings.setAttribute( "xmlns:config", "http://openoffice.org/2001/config" );
-    settings.setAttribute( "office:version", "1.0" );
+  QDomElement settings = doc.createElement( "office:document-settings" );
+  settings.setAttribute( "xmlns:office", "http://openoffice.org/2000/office");
+  settings.setAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
+  settings.setAttribute( "xmlns:config", "http://openoffice.org/2001/config" );
+  settings.setAttribute( "office:version", "1.0" );
 
-   QDomElement begin = doc.createElement( "office:settings" );
+  QDomElement begin = doc.createElement( "office:settings" );
 
-   QDomElement configItem = doc.createElement("config:config-item-set" );
-   configItem.setAttribute( "config:name", "view-settings" );
+  QDomElement configItem = doc.createElement("config:config-item-set" );
+  configItem.setAttribute( "config:name", "view-settings" );
 
-   QDomElement mapIndexed = doc.createElement( "config:config-item-map-indexed" );
-   mapIndexed.setAttribute("config:name", "Views" );
-   configItem.appendChild( mapIndexed );
+  QDomElement mapIndexed = doc.createElement( "config:config-item-map-indexed" );
+  mapIndexed.setAttribute("config:name", "Views" );
+  configItem.appendChild( mapIndexed );
 
-   QDomElement mapItem = doc.createElement("config:config-item-map-entry" );
+  QDomElement mapItem = doc.createElement("config:config-item-map-entry" );
 
-   QDomElement attribute =  doc.createElement("config:config-item" );
-   attribute.setAttribute( "config:name", "ActiveTable" );
-   attribute.setAttribute( "config:type", "string" );
+  QDomElement attribute =  doc.createElement("config:config-item" );
+  attribute.setAttribute( "config:name", "ActiveTable" );
+  attribute.setAttribute( "config:type", "string" );
 
-   KSpreadView * view = static_cast<KSpreadView*>( ksdoc->views().getFirst());
-   QString activeTable;
-   if ( view ) // no view if embedded document
-   {
-       KSpreadCanvas * canvas = view->canvasWidget();
-       activeTable = canvas->activeTable()->tableName();
-   }
-   attribute.appendChild( doc.createTextNode( activeTable ) );
-   mapItem.appendChild( attribute );
+  KSpreadView * view = static_cast<KSpreadView*>( ksdoc->views().getFirst());
+  QString activeTable;
+  if ( view ) // no view if embedded document
+  {
+      KSpreadCanvas * canvas = view->canvasWidget();
+      activeTable = canvas->activeTable()->tableName();
+      // save current sheet selection before to save marker, otherwise current pos is not saved
+      view->saveCurrentSheetSelection();
+  }
+  attribute.appendChild( doc.createTextNode( activeTable ) );
+  mapItem.appendChild( attribute );
+
+  QDomElement configmaped = doc.createElement( "config:config-item-map-named" );
+  configmaped.setAttribute( "config:name","Tables" );
+
+  QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
+  for( ; it.current(); ++it )
+  {
+      QPoint marker;
+      if ( view )
+      {
+          marker = view->markerFromSheet( *it );
+      }
+      QDomElement tmpItemMapNamed = doc.createElement( "config:config-item-map-entry" );
+      tmpItemMapNamed.setAttribute( "config:name", ( *it )->tableName() );
+
+      QDomElement sheetAttribute = doc.createElement( "config:config-item" );
+      sheetAttribute.setAttribute( "config:name", "CursorPositionX" );
+      sheetAttribute.setAttribute( "config:type", "int" );
+      sheetAttribute.appendChild( doc.createTextNode( QString::number(marker.x() )  ) );
+      tmpItemMapNamed.appendChild( sheetAttribute );
+
+      sheetAttribute = doc.createElement( "config:config-item" );
+      sheetAttribute.setAttribute( "config:name", "CursorPositionY" );
+      sheetAttribute.setAttribute( "config:type", "int" );
+      sheetAttribute.appendChild( doc.createTextNode( QString::number(marker.y() )  ) );
+      tmpItemMapNamed.appendChild( sheetAttribute );
+
+      configmaped.appendChild( tmpItemMapNamed );
+  }
+  mapItem.appendChild( configmaped );
 
 
 
-   mapIndexed.appendChild( mapItem );
+  mapIndexed.appendChild( mapItem );
 
-   begin.appendChild( configItem );
+  begin.appendChild( configItem );
 
-   settings.appendChild( begin );
+  settings.appendChild( begin );
 
-    doc.appendChild( settings );
+  doc.appendChild( settings );
 
-    QCString f( doc.toCString() );
-    kdDebug(30518) << "Settings: " << (char const * ) f << endl;
+  QCString f( doc.toCString() );
+  kdDebug(30518) << "Settings: " << (char const * ) f << endl;
 
-    store->write( f, f.length() );
+  store->write( f, f.length() );
 
-    if ( !store->close() )
-        return false;
+  if ( !store->close() )
+    return false;
 
-    return true;
+  return true;
 }
 
 
