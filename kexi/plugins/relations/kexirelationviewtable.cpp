@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,36 +47,24 @@ QRgb qt_colorref2qrgb(COLORREF col)
 #endif
 
 KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, QString table, const KexiDBTable *t)
- : QFrame(parent,"tv", QFrame::Panel | QFrame::Raised)
+ : QFrame(parent,"tv", QFrame::Panel | QFrame::Raised), m_mousePressed(false)
 {
 //	setFixedSize(100, 150);
-	resize(100, 150);
+//js:	resize(100, 150);
 	//setMouseTracking(true);
-	m_mousePressed = false;
+	setFrameStyle(QFrame::WinPanel | QFrame::Raised);
 
-	QGridLayout *g = new QGridLayout(this);
-	g->setMargin(3);
+	QVBoxLayout *lyr = new QVBoxLayout(this,2,1); //js: using Q*BoxLayout is a good idea
+	lyr->setMargin(3);
 
-	QLabel *l = new KexiRelationViewTableContainerHeader(table, this);
-//	l->setPaletteBackgroundColor(colorGroup().highlight());
-
-//	QPushButton *btnClose = new QPushButton("x", this, "x");
-//	btnClose->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-//	btnClose->setFixedSize(15, 15);
-//	btnClose->setFlat(true);
+	m_tableHeader = new KexiRelationViewTableContainerHeader(table, this);
+	m_tableHeader->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
+	lyr->addWidget(m_tableHeader);
+	connect(m_tableHeader,SIGNAL(moved()),this,SLOT(moved()));
 
 	m_tableView = new KexiRelationViewTable(this, parent, table, t, "tbl-list");
+	lyr->addWidget(m_tableView, 1);
 	connect(m_tableView, SIGNAL(tableScrolling()), this, SLOT(moved()));
-
-//	g->addWidget(btnClose, 0, 1);
-	g->addWidget(l, 0, 0);
-	g->addWidget(m_tableView, 1, 0);
-
-	m_tbHeight = l->height();
-
-
-	setFrameStyle(QFrame::WinPanel | QFrame::Raised);
-	connect(l,SIGNAL(moved()),this,SLOT(moved()));
 }
 
 void KexiRelationViewTableContainer::moved() {
@@ -85,7 +74,6 @@ void KexiRelationViewTableContainer::moved() {
 
 int KexiRelationViewTableContainer::globalY(const QString &field)
 {
-//	m_ta
 //	kdDebug() << "KexiRelationViewTableContainer::globalY()" << endl;
 	QPoint o = mapFromGlobal(QPoint(0, (m_tableView->globalY(field))));
 //	kdDebug() << "KexiRelationViewTableContainer::globalY() db2" << endl;
@@ -109,7 +97,7 @@ KexiRelationViewTableContainer::mouseMoveEvent(QMouseEvent *ev)
 	if(m_mousePressed)
 	{
 //		move(ev->x() - m_bX, ev->y() - m_bY);
-		if(m_bY < m_tbHeight)
+		if(m_bY < m_tableHeader->height())
 		{
 			QPoint movePoint(ev->x() - m_bX, ev->y() - m_bY);
 			move(mapToParent(movePoint));
@@ -288,6 +276,7 @@ KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *
 	setAcceptDrops(true);
 	viewport()->setAcceptDrops(true);
 	setDropVisualizer(false);
+	setAllColumnsShowFocus(true);
 
 	addColumn("", 0);
 	addColumn("fields");
@@ -295,19 +284,21 @@ KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *
 //	setResizeMode(QListView::AllColumns);
 	header()->hide();
 
-	setSorting(0, true); // disable sorting
+	setSorting(-1, true); // disable sorting
 
 	int order=0;
 
+	KListViewItem *item = 0;
 	for(uint i=0; i < t->fieldCount(); i++)
 	{
 		KexiDBField f = t->field(i);
-		KListViewItem *i = new KListViewItem(this, QString::number(order), f.name());
+		item = item ? new KListViewItem(this, item, QString::number(order), f.name())
+			: new KListViewItem(this, QString::number(order), f.name());
 		if(f.primary_key() || f.unique_key())
-			i->setPixmap(1, SmallIcon("key"));
+			item->setPixmap(1, SmallIcon("key"));
 
-		i->setDragEnabled(true);
-		i->setDropEnabled(true);
+		item->setDragEnabled(true);
+		item->setDropEnabled(true);
 		order++;
 	}
 

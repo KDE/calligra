@@ -45,9 +45,9 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainer : public QFrame
 		void			moved(KexiRelationViewTableContainer *);
 
 	protected:
-		void			mouseMoveEvent(QMouseEvent *ev);
-		void			mousePressEvent(QMouseEvent *ev);
-		void			mouseReleaseEvent(QMouseEvent *ev);
+		virtual void			mouseMoveEvent(QMouseEvent *ev);
+		virtual void			mousePressEvent(QMouseEvent *ev);
+		virtual void			mouseReleaseEvent(QMouseEvent *ev);
 
 		bool			m_mousePressed;
 		int			m_bX;
@@ -55,7 +55,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainer : public QFrame
 		int			m_grabX;
 		int			m_grabY;
 
-		int			m_tbHeight;
+		QLabel *m_tableHeader;
 
 	private:
 		KexiRelationViewTable	*m_tableView;

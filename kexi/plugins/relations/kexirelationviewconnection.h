@@ -25,7 +25,7 @@
 
 class QPainter;
 class KexiRelationViewTableContainer;
-class SourceConnection;
+struct SourceConnection;
 
 class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
 {
