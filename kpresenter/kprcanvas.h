@@ -476,6 +476,7 @@ private:
     bool m_drawPolyline;
     bool m_drawCubicBezierCurve;
     bool m_drawLineWithCubicBezierCurve;
+    bool m_zoomRubberDraw;
 
     KPrPage *m_activePage;
     int m_xOffset, m_yOffset;

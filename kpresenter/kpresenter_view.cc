@@ -3080,6 +3080,20 @@ void KPresenterView::setupActions()
                                              this, SLOT( configureCompletion() ),
                                              actionCollection(), "configure_completion" );
 
+    actionZoomMinus = new KAction( i18n( "Zoom Minus" ), 0,
+                                   this, SLOT( zoomMinus() ),
+                                   actionCollection(), "zoom_minus" );
+    actionZoomPlus = new KAction( i18n( "Zoom Plus" ), 0,
+                                   this, SLOT( zoomPlus() ),
+                                   actionCollection(), "zoom_plus" );
+    actionZoomEntirePage = new KAction( i18n( "Zoom Entire Page" ), 0,
+                                   this, SLOT( zoomEntirePage() ),
+                                   actionCollection(), "zoom_entire_page" );
+
+    actionZoomMinus = new KAction( i18n( "Zoom Page Width" ), 0,
+                                   this, SLOT( zoomPageWidth() ),
+                                   actionCollection(), "zoom_page_width" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -5571,13 +5585,22 @@ void KPresenterView::viewZoom( const QString &s )
     m_canvas->repaint();
 }
 
-void KPresenterView::setZoomRect( const QRect & rect )
+void KPresenterView::setZoomRect( const QRect & rect, bool drawRubber )
 {
-    kdDebug()<<" DEBUGRECT ( rect ) :"<<DEBUGRECT ( rect )<<endl;
-    double height = zoomHandler()->resolutionY() * zoomHandler()->unzoomItY( rect.height() );
-    double width = zoomHandler()->resolutionX() * zoomHandler()->unzoomItY( rect.width() );
-    int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
-                 qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
+    int zoom = 100;
+    if( drawRubber )
+    {
+        double height = zoomHandler()->resolutionY() * zoomHandler()->unzoomItY( rect.height() );
+        double width = zoomHandler()->resolutionX() * zoomHandler()->unzoomItY( rect.width() );
+        int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
+                         qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
+        viewZoom( QString::number(zoom ) );
+    }
+    else
+    {
+        //just click => increase zoom from 25%
+        zoom = zoomHandler()->zoom() + (int)(zoomHandler()->zoom()*0.25);
+    }
     viewZoom( QString::number(zoom ) );
 }
 
@@ -6074,5 +6097,32 @@ void KPresenterView::openPopupMenuZoom( const QPoint & _point )
     static_cast<QPopupMenu*>(factory()->container("zoom_popup",this))->popup(_point);
 }
 
+void KPresenterView::zoomMinus()
+{
+    //unzoom from 25%
+    int zoom = zoomHandler()->zoom() - (int)(zoomHandler()->zoom()*0.25);
+    viewZoom( QString::number(zoom ) );
+}
+
+void KPresenterView::zoomPageWidth()
+{
+    int zoom = qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
+    viewZoom( QString::number(zoom ) );
+
+}
+
+void KPresenterView::zoomEntirePage()
+{
+    double height = zoomHandler()->resolutionY() * m_pKPresenterDoc->pageLayout().ptHeight;
+    double width = zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth;
+    int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
+                     qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
+    viewZoom( QString::number(zoom ) );
+}
+
+void KPresenterView::zoomPlus()
+{
+    setZoomRect( QRect(0,0,0,0),false);
+}
 
 #include <kpresenter_view.moc>

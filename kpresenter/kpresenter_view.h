@@ -359,6 +359,12 @@ public slots:
 
     void removeComment();
 
+    //zoom menu
+    void zoomMinus();
+    void zoomPageWidth();
+    void zoomEntirePage();
+    void zoomPlus();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -496,8 +502,7 @@ public:
 
     void updatePageParameter();
 
-
-    void setZoomRect( const QRect & rect );
+    void setZoomRect( const QRect & rect, bool drawRubber );
 
 protected slots:
     // dialog slots
@@ -883,6 +888,11 @@ private:
     KAction *actionAddHelpPoint;
 
     KAction *actionConfigureCompletion;
+
+    KAction *actionZoomMinus;
+    KAction *actionZoomPageWidth;
+    KAction *actionZoomEntirePage;
+    KAction *actionZoomPlus;
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;

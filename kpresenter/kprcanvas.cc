@@ -112,6 +112,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         drawMode = false;
         fillBlack = true;
         drawRubber = false;
+        m_zoomRubberDraw = false;
         toolEditMode = TEM_MOUSE;
         tmpObjs.setAutoDelete( false );
         setAcceptDrops( true );
@@ -746,6 +747,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 case TEM_ZOOM: {
                     modType = MT_NONE;
                     drawRubber = true;
+                    m_zoomRubberDraw = false;
                     rubber = QRect( e->x(), e->y(), 0, 0 );
                 }break;
 		case TEM_ROTATE: {
@@ -957,6 +959,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             }
 	    modType = MT_NONE;
 
+        }
+        else if( e->button() == RightButton && toolEditMode == TEM_ZOOM ) {
+            QPoint pnt = QCursor::pos();
+            mousePressed = false;
+            m_view->openPopupMenuZoom( pnt );
         }
         else if( e->button() == RightButton && toolEditMode != TEM_MOUSE ) {
             //deactivate tools when you click on right button
@@ -1284,7 +1291,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             drawRubber = false;
             rubber = rubber.normalize();
             rubber.moveBy(diffx(),diffy());
-            m_view->setZoomRect(rubber );
+            m_view->setZoomRect(rubber, m_zoomRubberDraw );
+            m_zoomRubberDraw = false;
         }
     }break;
     case TEM_ROTATE: {
@@ -1509,6 +1517,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     rubber.setBottom( e->y() );
                     p.drawRect( rubber );
                     p.end();
+                    m_zoomRubberDraw = true;
                 }
             }break;
 	    case TEM_ROTATE: {
