@@ -3,7 +3,10 @@
 
 void KWordParagraph::xmldump( QTextStream& iostream )
 {
-    iostream << "    <paragraph>" << m_text << "</paragraph>\n";
+    iostream << "    <paragraph>\n";
+    iostream << "      <text>" << m_text << "</text>\n";
+    m_layout.xmldump( iostream );
+    iostream << "    </paragraph>\n";
 }
 
 void KWordParagraph::setText( const QString& str)

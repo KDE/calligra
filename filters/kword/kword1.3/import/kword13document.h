@@ -17,6 +17,7 @@ public:
     void xmldump( QIODevice* io );
 
 public:
-    QMap<QString,QString> m_documentProperties;
+    QMap<QString, QString> m_documentProperties;
     QPtrList<KWordNormalTextFrameset> m_normalTextFramesetList; ///< List of \<FRAMESET\> having normal text
+    QValueList<KWord13Layout> m_styles;
 };

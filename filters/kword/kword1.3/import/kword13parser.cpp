@@ -1,8 +1,9 @@
 // 
 
-#include "kwordparser.h"
+#include "kword13layout.h"
 #include "kwordframeset.h"
 #include "kworddocument.h"
+#include "kwordparser.h"
 
 StackItem::StackItem() : elementType( ElementTypeUnknown ), m_currentFrameset( 0 )
 {
@@ -12,7 +13,8 @@ StackItem::~StackItem()
 {
 }
 
-KWordParser::KWordParser( KWordDocument* kwordDocument ) : m_kwordDocument(kwordDocument), m_currentParagraph( 0 )
+KWordParser::KWordParser( KWordDocument* kwordDocument ) 
+    : m_kwordDocument(kwordDocument), m_currentParagraph( 0 ), m_currentLayout( 0 )
 {
     parserStack.setAutoDelete( true );
     StackItem* bottom = new StackItem;
@@ -24,6 +26,47 @@ KWordParser::~KWordParser( void )
 {
     parserStack.clear();
     delete m_currentParagraph;
+    delete m_currentLayout;
+}
+
+bool KWordParser::startElementName( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
+{
+    if ( stackItem->elementType != ElementTypeLayout )
+    {
+        // We have something else than a LAYOU/STYLE, so ignore for now.
+        stackItem->elementType = ElementTypeIgnore;
+        return true;
+    }
+    
+    stackItem->elementType = ElementTypeEmpty;
+    
+    if ( m_currentLayout )
+    {
+        m_currentLayout->m_name = attributes.value( "value" );
+    }
+    return  true;
+}
+
+bool KWordParser::startElementLayout( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
+{
+    // ##TODO: check parent?
+    if ( stackItem->elementType == ElementTypeIgnore )
+    {
+        return true;
+    }
+    
+    stackItem->elementType = ElementTypeLayout;
+    
+    if ( m_currentLayout )
+    {
+        // Delete an eventually already existing paragraph (should not happen)
+        qDebug("Current layout already defined!");
+        delete m_currentLayout;
+    }
+    m_currentLayout = new KWord13Layout;
+    m_currentLayout->m_outline = ( attributes.value( "outline" ) == "true" );
+    
+    return true;    
 }
 
 bool KWordParser::startElementParagraph( const QString&, const QXmlAttributes&, StackItem *stackItem )
@@ -38,7 +81,7 @@ bool KWordParser::startElementParagraph( const QString&, const QXmlAttributes&, 
     
     if ( m_currentParagraph )
     {
-        // Delete an evenetually already existing paragraph (should not happen)
+        // Delete an eventually already existing paragraph (should not happen)
         qDebug("Current paragraph already defined!");
         delete m_currentParagraph;
     }
@@ -175,6 +218,7 @@ bool KWordParser::startElement( const QString&, const QString&, const QString& n
 
     bool success=false;
 
+    // Order of element names: probability in a document
     if ( name == "TEXT" )
     {
         if ( stackItem->elementType == ElementTypeParagraph && m_currentParagraph )
@@ -188,9 +232,17 @@ bool KWordParser::startElement( const QString&, const QString&, const QString& n
         }
         success = true;
     }
+    else if ( name == "NAME" )
+    {
+        success = startElementName( name, attributes, stackItem );
+    }
     else if ( name == "PARAGRAPH" )
     {
         success = startElementParagraph( name, attributes, stackItem );
+    }
+    else if (name == "LAYOUT" )
+    {
+        success = startElementLayout( name, attributes, stackItem );
     }
     else if ( name == "FRAME" )
     {
@@ -199,6 +251,10 @@ bool KWordParser::startElement( const QString&, const QString&, const QString& n
     else if ( name == "FRAMESET" )
     {
         success = startElementFrameset( name, attributes, stackItem );
+    }
+    else if (name == "STYLE" )
+    {
+        success = startElementLayout( name, attributes, stackItem );
     }
     else if ( name == "DOC" )
     {
@@ -265,6 +321,27 @@ bool KWordParser :: endElement( const QString&, const QString& , const QString& 
         }
         delete m_currentParagraph;
         m_currentParagraph = 0;
+    }
+    else if ( name == "LAYOUT" )
+    {
+        if ( m_currentLayout && m_currentParagraph )
+        {
+            m_currentParagraph->m_layout = *m_currentLayout;
+        }
+        delete m_currentLayout;
+        m_currentLayout = 0;
+        success = true;
+    }
+    else if ( name == "STYLE" )
+    {
+        // ### TODO: check if style name is empty (should not happen but it would have consequences)
+        if ( m_kwordDocument && m_currentLayout )
+        {
+            m_kwordDocument->m_styles.append( *m_currentLayout );
+            success = true;
+        }
+        delete m_currentLayout;
+        m_currentLayout = 0;
     }
     else if ( name == "DOC" )
     {

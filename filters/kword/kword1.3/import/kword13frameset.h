@@ -26,11 +26,11 @@ protected:
     QString m_name; ///< Name of frameset
 };
 
-class KWordNormalTextFrameset : public KWordFrameset
+class KWordTextFrameset : public KWordFrameset
 {
 public:
-    KWordNormalTextFrameset( int frameType, int frameInfo, const QString& name );
-    virtual ~KWordNormalTextFrameset( void );
+    KWordTextFrameset( int frameType, int frameInfo, const QString& name );
+    virtual ~KWordTextFrameset( void );
 public:
     virtual bool addParagraph(const KWordParagraph& para);
     virtual void xmldump( QTextStream& iostream );

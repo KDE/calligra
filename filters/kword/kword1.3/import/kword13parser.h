@@ -4,11 +4,12 @@
 class KWordParagraph;
 class KWordDocument;
 class KWordFrameset;
+class KWord13Layout;
 
 /**
  * Type of element
  *
- * Note: we do not care of the tags: \<FRAMESETS\>
+ * Note: we do not care of the tags: \<FRAMESETS\>, \<STYLES\>
  */
 enum StackItemElementType
 {
@@ -21,7 +22,8 @@ enum StackItemElementType
     ElementTypeFrameset,    ///< \<FRAMESET\>
     ElementTypeUnknownFrameset, ///< a \<FRAMESET\> which is not supported
     ElementTypeParagraph,   ///< \<PARAGRAPH\>
-    ElementTypeText        ///< \<TEXT\>
+    ElementTypeText,        ///< \<TEXT\>
+    ElementTypeLayout      ///< \<STYLE\> and \<LAYOUT\>
 };
 
 class StackItem
@@ -55,6 +57,10 @@ public:
     /// Process element's characters (between opening and closing tags)
     virtual bool characters ( const QString & ch );
 protected:
+    /// Process \<NAME\>
+    bool startElementName( const QString&, const QXmlAttributes& attributes, StackItem *stackItem );
+    /// Process \<LAYOUT\> and \<STYLE\>
+    bool startElementLayout( const QString&, const QXmlAttributes&, StackItem *stackItem );
     /// Process \<PARAGRAPH\>
     bool startElementParagraph( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem );
     /// Process \<FRAME\>
@@ -69,4 +75,5 @@ protected:
     StackItemStack parserStack;
     KWordDocument* m_kwordDocument;
     KWordParagraph* m_currentParagraph; ///< Current paragraph
+    KWord13Layout* m_currentLayout; ///< Current layout (or style)
 };

@@ -1,6 +1,7 @@
 #include <qiodevice.h>
 
 #include "kwordutils.h"
+#include "kword13layout.h"
 #include "kworddocument.h"
 
 KWordDocument::KWordDocument( void )
@@ -33,6 +34,17 @@ void KWordDocument::xmldump( QIODevice* io )
     {
         item->xmldump( iostream );
     }
+    
+    iostream << " <styles>\n";
+    
+    for ( QValueList<KWord13Layout>::Iterator it2 = m_styles.begin();
+        it2 != m_styles.end();
+        ++it2)
+    {
+        (*it2).xmldump( iostream );
+    }
+    
+    iostream << " </styles>\n";
     
     iostream << "</kworddocument>\n";
 }

@@ -5,6 +5,8 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 
+#include "kword13layout.h"
+
 /**
  * A paragraph
  */
@@ -15,6 +17,8 @@ public:
     void setText( const QString& str);
     void appendText( const QString& str);
     QString text( void ) const;
+public:
+    KWord13Layout m_layout;
 private:
     QString m_text; ///< Text
 };

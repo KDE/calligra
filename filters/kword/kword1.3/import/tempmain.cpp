@@ -22,7 +22,6 @@ int main( int argc, char **argv )
     
     KWordParser handler( &kwordDocument );
 
-    //We arbitrarily decide that Qt can handle the encoding in which the file was written!!
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
     //reader.setErrorHandler( &handler );
@@ -32,11 +31,13 @@ int main( int argc, char **argv )
     QXmlInputSource source(&fileIn); // Read the file
     fileIn.close();
 
+    bool success = true;
+    
     qDebug("Parsing...");
     if (!reader.parse( source ))
     {
         qDebug("Parse Error");
-        return 1;
+        success = false;
     }
 
     qDebug("Extracting...");
@@ -45,4 +46,6 @@ int main( int argc, char **argv )
     fileOut.open(IO_WriteOnly);
     kwordDocument.xmldump( &fileOut );
     fileOut.close();
+    
+    return ! success;
 }

@@ -1,0 +1,28 @@
+
+#ifndef _KWORD13LAYOUT
+#define _KWORD13LAYOUT
+
+class QTextStream;
+
+#include <qstring.h>
+#include <qmap.h>
+
+/**
+ * Layout or style
+ */
+class KWord13Layout
+{
+public:
+    KWord13Layout( void );
+    ~KWord13Layout( void );
+    
+public:
+    void xmldump( QTextStream& iostream );
+
+public:
+    QMap<QString,QString> m_layoutProperties;
+    bool m_outline;
+    QString m_name; ///< Name of the style (either the used one or the one currently being defined)
+};
+
+#endif // _KWORD13LAYOUT
