@@ -23,6 +23,7 @@
 
 #include <koDocument.h>
 #include <kexiDB/kexidb.h>
+#include <kexiDB/kexidberror.h>
 //#include <kexiformmanager.h>
 
 class KexiDoc;

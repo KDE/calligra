@@ -322,26 +322,30 @@ bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
 	}
 
 	kdDebug() << "KexiProject::initDBConnection(): using simple method\n  because current driver is: " << m_db->driverName() << endl;
-	if(m_db->connect(cred.host, cred.user, cred.password, cred.socket, cred.port, cred.database, create))
+
+	try
 	{
-		m_cred = cred;
-		kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
-                setModified( false );
-		emit dbAvaible();
-//		emit updateBrowsers();
-		m_dbAvaible = true;
-		loadHandlers();
-//		new KexiTablePart(this);
-//		new KexiQueryPart(this);
-		kdDebug() << "KexiProject::initDbConnection(): db is avaible now..." << endl;
-		return true;
+		m_db->connect(cred.host, cred.user, cred.password, cred.socket, cred.port, cred.database, create);
 	}
-	else
+	catch(KexiDBError *err)
 	{
 		kdDebug() << "KexiProject::initDbConnection(): connection failed: #need to implement" /*m_db->lastError().databaseText() */ << endl;
+		err->toUser(0);
 		m_cred = cred;
 		return false;
 	}
+
+	m_cred = cred;
+	kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
+	setModified( false );
+	emit dbAvaible();
+//		emit updateBrowsers();
+	m_dbAvaible = true;
+	loadHandlers();
+//		new KexiTablePart(this);
+//		new KexiQueryPart(this);
+	kdDebug() << "KexiProject::initDbConnection(): db is avaible now..." << endl;
+	return true;
 }
 
 bool
@@ -382,19 +386,24 @@ KexiProject::initFileConnection(const QString driver, const QString file)
 	else
 		return false;
 
-	if(m_db->load(file))
+//	if(m_db->load(file))
+//	{
+	try
 	{
-		setModified( false );
-		emit dbAvaible();
-//		emit updateBrowsers();
-		m_dbAvaible = true;
-		loadHandlers();
-		return true;
+		m_db->load(file);
 	}
-	else
+	catch(KexiDBError *err)
 	{
+		err->toUser(0);
 		return false;
 	}
+
+	setModified( false );
+	emit dbAvaible();
+//	emit updateBrowsers();
+	m_dbAvaible = true;
+	loadHandlers();
+	return true;
 }
 
 void
