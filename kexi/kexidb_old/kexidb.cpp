@@ -35,7 +35,15 @@ KexiDB::add(QString driver)
 	    oh, how we love c++
 	*/
 
-	m_manager->load(driver);
+	KexiDB *d = m_manager->require(driver);
+	if(d)
+	{
+		return d;
+	}
+//	else
+//	{
+//		throw 1;
+//	}
 }
 
 QStringList

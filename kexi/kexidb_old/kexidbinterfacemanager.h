@@ -52,7 +52,8 @@ class KexiDBInterfaceManager : public QObject
 
 		QStringList getDrivers() const;
 		KexiDBDriver *getDriverInfo(QString driver);
-		
+		KexiDB *require(QString driver);
+
 	protected:
 		void load(QString driver);
 		void lookupDrivers();

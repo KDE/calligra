@@ -24,6 +24,8 @@
 #include <qobject.h>
 #include <ktrader.h>
 
+class KexiDB;
+
 class KexiDBDriver
 {
 	friend class KexiDBInterfaceManager;
@@ -36,7 +38,7 @@ class KexiDBDriver
 		KService *service() const;
 		
 		bool loaded();
-		bool load();
+		KexiDB *db();
 		
 	private:
 		void setPath(QString path);
@@ -47,6 +49,8 @@ class KexiDBDriver
 		QString		m_path;
 
 		bool		m_loaded;
+		
+		KexiDB		*m_db;
 };
 
 #endif

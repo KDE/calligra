@@ -5,6 +5,8 @@ kexi_LDADD   =  $(LIB_KIO) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET) $(
 
 SUBDIRS = kexiDB . interfaces pics 
 
+KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Office/
 	$(INSTALL_DATA) $(srcdir)/kexi.desktop $(kde_appsdir)/Applications/kexi.desktop

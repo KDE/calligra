@@ -31,6 +31,12 @@ KexiDBDriver::setService(KService *service)
 	m_service = service;
 }
 
+KexiDB*
+KexiDBDriver::db()
+{
+	return m_db;
+}
+
 KService*
 KexiDBDriver::service() const
 {

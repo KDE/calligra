@@ -35,6 +35,20 @@ KexiDBInterfaceManager::KexiDBInterfaceManager(QObject *parent, const char *name
 //	load("mySQL");
 }
 
+KexiDB*
+KexiDBInterfaceManager::require(QString driver)
+{
+	if(!m_driverList.find(driver))
+		return 0;
+		
+	KexiDBDriver *d = m_driverList.find(driver);
+	if(d->loaded())
+	{
+		return d->db();
+	}
+	
+}
+
 void
 KexiDBInterfaceManager::lookupDrivers()
 {
@@ -69,6 +83,8 @@ KexiDBInterfaceManager::load(QString driver)
 				
 				if(plugin)
 				{
+					d->m_db = plugin;
+					d->m_loaded = true;
 					kdDebug() << "KexiDBInterfaceManager::load(): loading suceed: " << plugin << endl;
 				}
 			}
