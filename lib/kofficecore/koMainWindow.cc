@@ -39,6 +39,8 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kaction.h>
+#include <kaboutdialog.h>
+#include <kstddirs.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -68,7 +70,7 @@ KoMainWindow::KoMainWindow( QWidget* parent, const char* name )
 			  actionCollection(), "fileclose" );
     KAction* quit = new KAction( i18n("Quit"), 0, this, SLOT( slotFileQuit() ),
 			  actionCollection(), "quit" );
-    KAction* helpAbout = new KAction( i18n("About"), 0, this, SLOT( slotFileQuit() ),
+    KAction* helpAbout = new KAction( i18n("About"), 0, this, SLOT( slotHelpAbout() ),
 			  actionCollection(), "about" );
 
     KToolBar* fileTools = new KToolBar( this, "file operations" );
@@ -303,7 +305,13 @@ void KoMainWindow::slotFileQuit()
 
 void KoMainWindow::slotHelpAbout()
 {
+    KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtProduct | KAboutDialog::AbtTitle,
+					  kapp->caption(),
+					  KDialogBase::Ok, KDialogBase::Ok, this, 0, TRUE );
+    dia->setTitle( "KOffice - the KDE Office Suite" );
+    dia->setProduct( kapp->caption(), "Alpha Version", "Unknown", "1999" );
+    dia->exec();
+    delete dia;
 }
-
 
 #include "koMainWindow.moc"

@@ -10,12 +10,12 @@ SUBDIRS = . pics test
 
 lib_LTLIBRARIES = libkofficeui.la
 
-libkofficeui_la_SOURCES = koAboutDia.cc koPageLayoutDia.cc \
+libkofficeui_la_SOURCES = koPageLayoutDia.cc \
 	koPartSelectDia.cc koPartSelectDia_data.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
 	koKoolBar.cc koUIUtils.cc
 
-include_HEADERS = koAboutDia.h koPageLayoutDia.h \
+include_HEADERS = koPageLayoutDia.h \
 	koPartSelectDia.h koPartSelectDia_data.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h koUIUtils.h
