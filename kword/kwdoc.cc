@@ -1163,6 +1163,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
                 __pgLayout.ptBottom = getAttribute( paperborders, "ptBottom", 0.0 );
         }
     }
+    else
+        kdWarning() << "No <PAPER> tag! This is a mandatory tag! Expect weird page sizes..." << endl;
 
     // <ATTRIBUTES>
     QDomElement attributes = word.namedItem( "ATTRIBUTES" ).toElement();
