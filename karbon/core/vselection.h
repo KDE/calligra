@@ -76,9 +76,10 @@ public:
 	void append( VObject* object );
 
 	/**
-	 * Adds all objects within rect to the selection.
+	 * Adds all objects ( selectObjects == true ) or all nodes
+	 * ( selectObjects == false ) within rect to the selection.
 	 */
-	void append( const KoRect& rect );
+	bool append( const KoRect& rect, bool selectObjects = true );
 
 	/**
 	 * Removes the references to all objects, not the objects itselves.
@@ -91,9 +92,13 @@ public:
 	const VObjectList& objects() const { return m_objects; }
 
 
-	bool appendNode( const KoPoint& p );
-	bool checkNode( const KoPoint& p );
+	bool checkNode( const KoRect& rect );
+
+	/**
+	 * Deselects all nodes.
+	 */
 	void clearNodes();
+
 
 	/**
 	 * Returns the handle node id, the QPoint is inside.
@@ -107,7 +112,7 @@ private:
 	VObjectList m_objects;
 
 	/**
-	 * Handle and handlenodes paint coordinates.
+	 * Paint coordinates of handle rectangle and handle nodes.
 	 */
 	QRect* m_qrect;
 

@@ -14,62 +14,13 @@ VSelectNodes::visitVSegmentList( VSegmentList& segmentList )
 	// skip "begin":
 	while( segmentList.next() )
 	{
-		if( m_allNodes )
+		if( m_rect.isEmpty() )
 		{
 			segmentList.current()->selectCtrlPoint1( m_select );
 			segmentList.current()->selectCtrlPoint2( m_select );
 			segmentList.current()->selectKnot( m_select );
 
-			if( !success() )
-				setSuccess();
-		}
-		else if( !m_point.isNull() )
-		{
-			if(
-				segmentList.current()->ctrlPointFixing() != VSegment::first &&
-				segmentList.current()->ctrlPoint1().isNear( m_point, m_isNearRange ) )
-			{
-				// select first control point, when previous knot is selected:
-				//if(
-				//	m_prev &&
-				//	m_prev->m_nodeSelected[2] )
-				//{
-					segmentList.current()->selectCtrlPoint1( m_select );
-
-					if( m_select )
-					{
-						segmentList.current()->prev()->selectKnot( false );
-					}
-
-					setSuccess();
-				//}
-			}
-
-			if(
-				segmentList.current()->ctrlPointFixing() != VSegment::second &&
-				segmentList.current()->ctrlPoint2().isNear( m_point, m_isNearRange ) )
-			{
-				// select second control point, when knot is selected:
-				//if( m_nodeSelected[2] )
-				//{
-					segmentList.current()->selectCtrlPoint2( m_select );
-
-					if( m_select )
-					{
-						segmentList.current()->prev()->selectKnot( false );
-					}
-
-					setSuccess();
-				//}
-			}
-
-			if( segmentList.current()->knot().isNear( m_point, m_isNearRange ) )
-			{
-				segmentList.current()->selectCtrlPoint2( m_select );
-				segmentList.current()->selectKnot( m_select );
-
-				setSuccess();
-			}
+			setSuccess();
 		}
 		else
 		{

@@ -39,7 +39,7 @@ class VRoundCornersDlg;
 class VRoundRectTool;
 class VScaleTool;
 class VSelectTool;
-class VEditNodeTool;
+class VSelectNodesTool;
 class VShearTool;
 class VSinusTool;
 class VSpiralTool;
@@ -67,7 +67,7 @@ public:
 	virtual bool eventFilter( QObject* object, QEvent* event );
 
 	virtual QWidget* canvas() { return m_canvas; }
-	VCanvas* canvasWidget()const { return m_canvas; }
+	VCanvas* canvasWidget() const { return m_canvas; }
 
 	VPainterFactory* painterFactory()const { return m_painterFactory; }
 
@@ -132,7 +132,7 @@ protected slots:
 	void rectangleTool();
 	void roundRectTool();
 	void selectTool();
-	void editNodeTool();
+	void selectNodesTool();
 	void rotateTool();
 	void shearTool();
 	void sinusTool();
@@ -179,7 +179,7 @@ private:
 	KToggleAction* m_rotateToolAction;
 	KToggleAction* m_roundRectToolAction;
 	KToggleAction* m_selectToolAction;
-	KToggleAction* m_editNodeToolAction;
+	KToggleAction* m_selectNodesToolAction;
 	KToggleAction* m_shearToolAction;
 	KToggleAction* m_sinusToolAction;
 	KToggleAction* m_spiralToolAction;
@@ -193,7 +193,7 @@ private:
 	VRotateTool* m_rotateTool;
 	VRoundRectTool* m_roundRectTool;
 	VSelectTool* m_selectTool;
-	VEditNodeTool* m_editNodeTool;
+	VSelectNodesTool* m_selectNodesTool;
 	VShearTool* m_shearTool;
 	VSinusTool* m_sinusTool;
 	VSpiralTool* m_spiralTool;

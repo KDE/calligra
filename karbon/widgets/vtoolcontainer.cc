@@ -55,8 +55,8 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	pixmap = BarIcon( "14_selectnodes", KarbonFactory::instance() );
 	button->setPixmap( pixmap );
 	button->setToggleButton( true );
-	connect( button, SIGNAL( clicked() ), this, SIGNAL( editNodeToolActivated() ) );
-	btngroup->insert( button, EditNode );
+	connect( button, SIGNAL( clicked() ), this, SIGNAL( selectNodesToolActivated() ) );
+	btngroup->insert( button, SelectNodes );
 
 	button = new QToolButton(btngroup);
 	pixmap = BarIcon( "14_rotate", KarbonFactory::instance() );

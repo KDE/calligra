@@ -81,9 +81,13 @@ VSelection::append( VObject* object )
 	invalidateBoundingBox();
 }
 
-void
-VSelection::append( const KoRect& rect )
+bool
+VSelection::append( const KoRect& rect, bool selectObjects )
 {
+	bool success = false;
+
+	VSelectNodes op( rect );
+
 	VObjectList objects;
 	VLayerListIterator itr(
 		static_cast<VDocument*>( parent() )->layers() );
@@ -92,21 +96,30 @@ VSelection::append( const KoRect& rect )
 	{
 		VObjectListIterator itr2( itr.current()->objects() );
 
+// TODO: use a zoom dependant vflatten visitor to achieve finer resolution:
 		for ( ; itr2.current(); ++itr2 )
 		{
-			if(
-				itr2.current()->state() == normal &&
-// TODO: use a zoom dependant vflatten visitor to achieve finer resolution:
-				itr2.current()->boundingBox().intersects( rect ) )
+			if( selectObjects )
 			{
-				append( itr2.current() );
-				VSelectNodes op( rect, true, 2 );
-				op.visit( *itr2.current() );
+				if(
+					itr2.current()->state() == normal &&
+					itr2.current()->boundingBox().intersects( rect ) )
+				{
+					append( itr2.current() );
+					success = true;
+				}
+			}
+			else
+			{
+				if( op.visit( *itr.current() ) )
+					success = true;
 			}
 		}
 	}
 
 	invalidateBoundingBox();
+
+	return success;
 }
 
 void
@@ -236,9 +249,9 @@ VSelection::handleNode( const QPoint& point ) const
 }
 
 bool
-VSelection::checkNode( const KoPoint &p )
+VSelection::checkNode( const KoRect& rect )
 {
-	VSelectNodes op( p, false, 2 );
+	VSelectNodes op( rect, true );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
@@ -260,22 +273,5 @@ VSelection::clearNodes()
 	{
 		op.visit( *itr.current() );
 	}
-}
-
-bool
-VSelection::appendNode( const KoPoint &p )
-{
-	bool success = false;
-
-	VSelectNodes op( p, true, 2 );
-
-	VObjectListIterator itr = m_objects;
-	for( ; itr.current(); ++itr )
-	{
-		if( op.visit( *itr.current() ) )
-			success = true;
-	}
-
-	return success;
 }
 

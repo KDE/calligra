@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
 
@@ -14,27 +13,27 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "veditnodetool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
+#include "vselectnodestool.h"
 #include "vtransformcmd.h"
 #include "vtransformnodes.h"
 
 #include <kdebug.h>
 
 
-VEditNodeTool::VEditNodeTool( KarbonView* view )
+VSelectNodesTool::VSelectNodesTool( KarbonView* view )
 	: VTool( view ), m_state( normal ), m_isDragging( false )
 {
 }
 
-VEditNodeTool::~VEditNodeTool()
+VSelectNodesTool::~VSelectNodesTool()
 {
 }
 
 void
-VEditNodeTool::activate()
+VSelectNodesTool::activate()
 {
 	//if( m_state == normal )
 		view()->statusMessage()->setText( i18n( "EditNode" ) );
@@ -45,16 +44,25 @@ VEditNodeTool::activate()
 }
 
 void
-VEditNodeTool::setCursor( const KoPoint &p ) const
+VSelectNodesTool::setCursor( const KoPoint &p ) const
 {
-	if( view()->part()->document().selection()->checkNode( p ) )
+	double tolerance = 1.0 / view()->zoom();
+
+	if( view()->part()->document().selection()->checkNode(
+		KoRect(
+			p.x() - tolerance,
+			p.y() - tolerance,
+			2 * tolerance + 1,
+			2 * tolerance * 1 ) ) )
+	{
 		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::CrossCursor ) );
+	}
 	else
 		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 }
 
 void
-VEditNodeTool::drawTemporaryObject()
+VSelectNodesTool::drawTemporaryObject()
 {
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
@@ -62,12 +70,27 @@ VEditNodeTool::drawTemporaryObject()
 	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 	KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x() / view()->zoom(), m_lp.y() / view()->zoom() ) );
 
+	double tolerance = 1.0 / view()->zoom();
+
 	if( view()->part()->document().selection()->objects().count() > 0 &&
-		m_state != dragging && ( m_state == moving || view()->part()->document().selection()->checkNode( lp ) ) )
+		m_state != dragging &&
+		( m_state == moving || view()->part()->document().selection()->checkNode(
+			KoRect(
+				lp.x() - tolerance,
+				lp.y() - tolerance,
+				2 * tolerance + 1,
+				2 * tolerance + 1 ) ) ) )
 	{
 		if( m_state == normal )
 		{
-			view()->part()->document().selection()->appendNode( lp );
+			double tolerance = 1.0 / view()->zoom();
+			view()->part()->document().selection()->append(
+				KoRect(
+					fp.x() - tolerance,
+					fp.y() - tolerance,
+					2 * tolerance + 1,
+					2 * tolerance + 1 ).normalize(),
+				false );
 			m_state = moving;
 		}
 
@@ -118,7 +141,7 @@ VEditNodeTool::drawTemporaryObject()
 
 
 bool
-VEditNodeTool::eventFilter( QEvent* event )
+VSelectNodesTool::eventFilter( QEvent* event )
 {
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 	QPoint lp = view()->canvasWidget()->viewportToContents( mouse_event->pos() );
@@ -182,7 +205,8 @@ VEditNodeTool::eventFilter( QEvent* event )
 
 			view()->part()->document().selection()->clear();
 			view()->part()->document().selection()->append(
-				KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
+				KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(),
+				false );
 
 			view()->selectionChanged();
 			view()->part()->repaintAllViews();

@@ -1,18 +1,20 @@
 REAL BUGS:
 -	mirror coordinate-system so origin is bottom-left
+-	add a vpainter::closePath() which fixes combined.karbon
 -	dont always fill shapes especially when no fillShape() is called
 -	select first/last segment's knot if one of each other's knot is selected
 -	scale tool should only scale in one direction while dragging a slection node
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
--	examine the problem with non closed paths (see combined.karbon)
-	lenny: "i still dont see any vpainter:closePath() function are anything similar in vpath::draw().
-	closed shapes' end where they started, but they are never closed. how could libart
-	ever know it needs to paint a join here?"
-	maybe use libart instead ("art_drect_svp from art_rect_svp")
 -	revert() in vpath::combine() doesnt work
 
 TODO:
+-	rename VSelectNodes to VSelect and merge selection of VObjects there + use
+	it in vselection
+-	unify vselecttool and vselectnodestool
+
+-	scratch your head about how to do undo/redo of path operations best like
+	removing nodes, inserting nodes...
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand
 	similar to vshapecommand
 -	add undo/redo to shape commands like VFlattenCmd etc
@@ -20,10 +22,6 @@ TODO:
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
 -	vroundcorners needs to be improved for beziers and big radii (lenny)
--	check in other apps if this makes sense:
-	(make vselection a visitor and paint selected shapes instead of each shape)
--	scratch your head about how to do undo/redo of path operations best like
-	removing nodes, inserting nodes...
 -	allow for multiple strokes and fills in VPath. Also allow for strokes to be under
 	fills for nice special effects.
 -	use inside/intersection tests in vpath::combine() for changing winding.

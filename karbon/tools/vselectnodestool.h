@@ -1,19 +1,18 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VEDITNODETOOL_H__
-#define __VEDITNODETOOL_H__
+#ifndef __VSELECTNODESTOOL_H__
+#define __VSELECTNODESTOOL_H__
 
 #include "vtool.h"
 #include "vselection.h"
 
-class VEditNodeTool : public VTool
+class VSelectNodesTool : public VTool
 {
 public:
-	VEditNodeTool( KarbonView* view );
-	virtual ~VEditNodeTool();
+	VSelectNodesTool( KarbonView* view );
+	virtual ~VSelectNodesTool();
 
 	virtual void activate();
 

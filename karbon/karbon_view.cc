@@ -26,8 +26,8 @@
 #include "vrotatetool.h"
 #include "vroundrecttool.h"
 #include "vselection.h"
+#include "vselectnodestool.h"
 #include "vselecttool.h"
-#include "veditnodetool.h"
 #include "vsheartool.h"
 #include "vsinustool.h"
 #include "vspiraltool.h"
@@ -113,7 +113,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_rotateTool = new VRotateTool( this );
 	m_roundRectTool = new VRoundRectTool( this );
 	m_selectTool = new VSelectTool( this );
-	m_editNodeTool = new VEditNodeTool( this );
+	m_selectNodesTool = new VSelectNodesTool( this );
 	m_shearTool = new VShearTool( this );
 	m_sinusTool = new VSinusTool( this );
 	m_spiralTool = new VSpiralTool( this );
@@ -490,12 +490,12 @@ KarbonView::selectTool()
 }
 
 void
-KarbonView::editNodeTool()
+KarbonView::selectNodesTool()
 {
 	m_currentTool->deactivate();
-	m_currentTool = m_editNodeTool;
+	m_currentTool = m_selectNodesTool;
 	m_currentTool->activate();
-	m_editNodeToolAction->setChecked( true );
+	m_selectNodesToolAction->setChecked( true );
 	m_canvas->repaintAll();
 }
 
@@ -866,9 +866,9 @@ KarbonView::initActions()
 	m_sinusToolAction = new KToggleAction(
 		i18n( "S&inus" ), "14_sinus", 0, this,
 		SLOT( sinusTool() ), actionCollection(), "tool_sinus" );
-	m_editNodeToolAction = new KToggleAction(
+	m_selectNodesToolAction = new KToggleAction(
 		i18n( "&Manipulate nodes" ), "14_selectnodes", 0, this,
-		SLOT( editNodeTool() ), actionCollection(), "tool_editnode" );
+		SLOT( selectNodesTool() ), actionCollection(), "tool_selectnodes" );
 	m_selectToolAction = new KToggleAction(
 		i18n( "&Select Objects" ), "14_select", 0, this,
 		SLOT( selectTool() ), actionCollection(), "tool_select" );
@@ -897,7 +897,7 @@ KarbonView::initActions()
 	m_roundRectToolAction->setExclusiveGroup( "Tools" );
 	m_sinusToolAction->setExclusiveGroup( "Tools" );
 	m_selectToolAction->setExclusiveGroup( "Tools" );
-	m_editNodeToolAction->setExclusiveGroup( "Tools" );
+	m_selectNodesToolAction->setExclusiveGroup( "Tools" );
 	m_rotateToolAction->setExclusiveGroup( "Tools" );
 	m_shearToolAction->setExclusiveGroup( "Tools" );
 	m_spiralToolAction->setExclusiveGroup( "Tools" );
@@ -1012,6 +1012,64 @@ KarbonView::initActions()
 	connect( m_joinStyle, SIGNAL(clicked()), this, SLOT(slotJoinStyleClicked()) );
 
 	// toolbox ---->
+<<<<<<< karbon_view.cc
+	m_toolbox = VToolContainer::instance( m_part, this );
+	m_toolbox->strokeFillPreview()->update( part()->document().defaultStroke(), part()->document().defaultFill() );
+
+	connect(
+		m_toolbox, SIGNAL( selectToolActivated() ),
+		this, SLOT( selectTool() ) );
+	connect(
+		m_toolbox, SIGNAL( selectNodesToolActivated() ),
+		this, SLOT( selectNodesTool() ) );
+	connect(
+		m_toolbox, SIGNAL( rotateToolActivated() ),
+		this, SLOT( rotateTool() ) );
+	connect(
+		m_toolbox, SIGNAL( shearToolActivated() ),
+		this, SLOT( shearTool() ) );
+	connect(
+		m_toolbox, SIGNAL( ellipseToolActivated() ),
+		this, SLOT( ellipseTool() ) );
+	connect(
+		m_toolbox, SIGNAL( rectangleToolActivated() ),
+		this, SLOT( rectangleTool() ) );
+	connect(
+		m_toolbox, SIGNAL( roundRectToolActivated() ),
+		this, SLOT( roundRectTool() ) );
+	connect(
+		m_toolbox, SIGNAL( polygonToolActivated() ),
+		this, SLOT( polygonTool() ) );
+	connect(
+		m_toolbox, SIGNAL( starToolActivated() ),
+		this, SLOT( starTool() ) );
+	connect(
+		m_toolbox, SIGNAL( gradToolActivated() ),
+		this, SLOT( gradTool() ) );
+	connect(
+		m_toolbox, SIGNAL( sinusToolActivated() ),
+		this, SLOT( sinusTool() ) );
+	connect(
+		m_toolbox, SIGNAL( spiralToolActivated() ),
+		this, SLOT( spiralTool() ) );
+	connect(
+		m_toolbox, SIGNAL( textToolActivated() ),
+		this, SLOT( textTool() ) );
+	connect(
+		m_toolbox, SIGNAL( solidFillActivated() ),
+		this, SLOT( solidFillClicked() ) );
+	connect(
+		m_toolbox, SIGNAL( strokeActivated() ),
+		this, SLOT( strokeClicked() ) );
+	connect(
+		m_toolbox, SIGNAL( strokeChanged( const VStroke & ) ),
+		this, SLOT( slotStrokeChanged( const VStroke & ) ) );
+	connect( m_toolbox, SIGNAL( fillChanged( const VFill & ) ),
+		this, SLOT( slotFillChanged( const VFill & ) ) );
+
+	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
+	m_toolbox->show();
+=======
 	if( !m_strokeFillPreview )
 	{
 		m_strokeFillPreview = new VStrokeFillPreview( m_part, shell()->toolBar( "Toolbox" ) );
@@ -1025,6 +1083,7 @@ KarbonView::initActions()
 		shell()->toolBar( "Toolbox" )->insertWidget( 10, 30, m_strokeFillPreview );
 		m_strokeFillPreview->update( part()->document().defaultStroke(), part()->document().defaultFill() );
 	}
+>>>>>>> 1.188
 
 	m_configureAction = new KAction(
 		i18n( "Configure Karbon..." ), "configure", 0, this,
