@@ -42,6 +42,8 @@ public:
 	virtual void newCanvasBox(int type, CanvasBox *cb);
 	virtual bool store(KoStore*);
 	virtual bool load(KoStore*);
+        virtual void modifyItemPropertyOnSave(CanvasReportItem *item,const PropPtr &p,QString &propertyName,QString &propertyValue);
+        virtual void modifyItemPropertyOnLoad(CanvasReportItem *item,const PropPtr &p,QString &propertyName,QString &propertyValue);
 protected slots:
 	void slotDataSourceSelected(int level, int value);
 signals:

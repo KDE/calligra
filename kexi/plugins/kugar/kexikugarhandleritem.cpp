@@ -175,33 +175,49 @@ QString KexiKugarHandlerItem::generateDataFile() {
 	QString queryLine;
 	kdDebug()<<"Trying to build data file"<<endl;
 	kdDebug()<<templateInfo.readEntry(QString("DETAIL_0"),"NOTHING FOUND")<<endl;
+	QDomNode nodeBefore=QDomNode();
 	for(int level=0;!(queryLine=templateInfo.readEntry(QString("DETAIL_%1").arg(level),QString())).isEmpty();level++) {
 		kdDebug()<<"Found a none empty query line for level "<<level<<endl;
 
 		QString providerName=KexiProjectHandler::handlerNameFromGlobalIdentifier(queryLine);
-		if (providerName.isEmpty()) continue;
+		if (providerName.isEmpty()) break;
 		kdDebug()<<"provider plugin name has been decoded: "<<providerName<<endl;
 
 		KexiDataProvider *prov=KEXIDATAPROVIDER((projectPart()->kexiProject()->handlerForMime(providerName)));
-		if (!prov) continue;
+		if (!prov) break;;
 		kdDebug()<<"Provider found"<<endl;
 
-		KexiDBRecord  *recs=prov->records(KexiProjectHandler::localIdentifier(queryLine),KexiDataProvider::Parameters());
-		if (!recs) continue;
-		kdDebug()<<"There are records"<<endl;
-
-		while (recs->next()) {
-			QDomElement rowitem=doc.createElement("Row");
-			rowitem.setAttribute("level",QString("%1").arg(level));
-			for (uint i=0;i<recs->fieldCount();i++) {
-				rowitem.setAttribute(recs->fieldName(i),recs->value(i).toString());
+		QString levelStr=QString("%1").arg(level);
+		QString levelM1Str=QString("%1").arg(level-1);
+		QString shortLevelStr=QString("D%1_").arg(level);
+		do {
+			if (level) {
+				for (;!nodeBefore.isNull();nodeBefore=nodeBefore.nextSibling()) {
+					if (nodeBefore.toElement().attribute("level")==levelM1Str) break;
+				}
+				if (nodeBefore.isNull()) break;
 			}
-			parent.appendChild(rowitem);
-			
-		}
-		
-		delete recs;
+
+
+			KexiDBRecord  *recs=prov->records(KexiProjectHandler::localIdentifier(queryLine),KexiDataProvider::Parameters());
+			if (recs) {
+				kdDebug()<<"There are records"<<endl;
+
+				while (recs->next()) {
+					QDomElement rowitem=doc.createElement("Row");
+					rowitem.setAttribute("level",levelStr);
+					for (uint i=0;i<recs->fieldCount();i++) {
+						rowitem.setAttribute(shortLevelStr+recs->fieldName(i),recs->value(i).toString());
+					}
+					nodeBefore=parent.insertAfter(rowitem,nodeBefore);
+				}
+				delete recs;
+			}
+			nodeBefore=nodeBefore.nextSibling();
+		} while (!nodeBefore.isNull());
+		nodeBefore=parent.firstChild();
 	}
+
 	QFile f(m_tempPath+"tmpData/data1.kud");
 	f.open(IO_WriteOnly);
 	QTextStream st(&f);

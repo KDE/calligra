@@ -97,6 +97,7 @@ void KuKexiFieldComboBox::fill() {
 	kdDebug()<<"KuKexiFieldComboBox::fill"<<endl;
 	insertItem(i18n("<NONE>"));
 	for (int i=m_level;i>=0;i--) {
+		kdDebug()<<"Trying to fiell KuKexiFieldComboBox with data from level "<<i<<endl;
 		KuKexi::SectionMap::const_iterator sit=m_kukexi->m_sectionMap.find(i);
 		if (sit!=m_kukexi->m_sectionMap.end()) {
 			KuKexi::FieldMap::const_iterator fit=m_kukexi->m_fieldMap.find(sit.data());
@@ -209,7 +210,7 @@ void KuKexi::createPluggedInEditor(QWidget *& retVal,PropertyEditor *editor,
 //				PKexiStringListCombo(
 //				retVal = new PSpinBox(editor, p->name(), p->value(), 0, 10000, 1, 0);
 				retVal = new KuKexiFieldComboBox(editor,p->name(),p->value(),
-					this,cb->props["Level"]->value().toInt());
+					this,((CanvasReportItem*)cb)->section()->props["Level"]->value().toInt());
 			else
 				retVal = new QLabel(i18n("Unsupported"),editor);
 		}
@@ -218,8 +219,8 @@ void KuKexi::createPluggedInEditor(QWidget *& retVal,PropertyEditor *editor,
 void KuKexi::newCanvasBox(int type, CanvasBox *cb) {
 	switch (type) {
 		case KuDesignerRttiDetail:
-			cb->props["Datasource"] = *(new PropPtr(new Property(1024, "Datasource", i18n("Datasource"), "0")));
-			cb->props["DatasourceParameter"]= *(new PropPtr(new Property(1025,"DatasourceParameter", i18n("Parameter"),"0")));
+			cb->props["Datasource"] = *(new PropPtr(new Property(1024, "Datasource", i18n("Datasource"), "0",false)));
+			cb->props["DatasourceParameter"]= *(new PropPtr(new Property(1025,"DatasourceParameter", i18n("Parameter"),"0",false)));
 			break;
 		default:
 			break;
@@ -331,6 +332,18 @@ bool KuKexi::load(KoStore*) {
 
 
 	return true;
+}
+
+void KuKexi::modifyItemPropertyOnSave(CanvasReportItem *item, const PropPtr &p,QString &propertyName,QString &propertyValue) {
+	if ((item->rtti()==KuDesignerRttiCanvasField) && (p->type()==FieldName)) {
+		propertyValue=KuKexiFieldComboBox::convertToStorageName(propertyValue);
+	}
+}
+
+void KuKexi::modifyItemPropertyOnLoad(CanvasReportItem *item,const PropPtr &p,QString &propertyName,QString &propertyValue) {
+	if ((item->rtti()==KuDesignerRttiCanvasField) && (p->type()==FieldName)) {
+		propertyValue=KuKexiFieldComboBox::convertFromStorageName(propertyValue);
+	}	
 }
 
 
