@@ -5758,18 +5758,13 @@ void KSpreadView::alignTop( bool b )
   if ( m_toolbarLock )
     return;
 
-  m_pDoc->emitBeginOperation( false );
-  if ( !b )
-  {
-    m_alignMiddle->setChecked( true );
-    alignMiddle( true );
-    endOperation( selectionInfo()->selection() );
-    return;
-  }
-
   if ( m_pTable != 0L )
   {
-    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::Top );
+    m_pDoc->emitBeginOperation( false );
+    if ( !b )
+      m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::UndefinedY );
+    else
+      m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::Top );
 
     endOperation( selectionInfo()->selection() );
   }
@@ -5780,18 +5775,13 @@ void KSpreadView::alignBottom( bool b )
   if ( m_toolbarLock )
     return;
 
-  m_pDoc->emitBeginOperation( false );
-  if ( !b )
-  {
-    m_alignMiddle->setChecked( true );
-    alignMiddle( true );
-    endOperation( selectionInfo()->selection() );
-    return;
-  }
-
   if ( m_pTable != 0L )
   {
-    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::Bottom );
+    m_pDoc->emitBeginOperation( false );
+    if ( !b )
+      m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::UndefinedY );
+    else
+      m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::Bottom );
 
     endOperation( selectionInfo()->selection() );
   }
@@ -5802,17 +5792,13 @@ void KSpreadView::alignMiddle( bool b )
   if ( m_toolbarLock )
     return;
 
-  m_pDoc->emitBeginOperation( false );
-  if ( !b )
-  {
-    m_alignMiddle->setChecked( true);
-    endOperation( selectionInfo()->selection() );
-    return;
-  }
-
   if ( m_pTable != 0L )
   {
-    m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::Middle );
+    m_pDoc->emitBeginOperation( false );
+    if ( !b )
+      m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::UndefinedY );
+    else
+      m_pTable->setSelectionAlignY( selectionInfo(), KSpreadFormat::Middle );
 
     endOperation( selectionInfo()->selection() );
   }

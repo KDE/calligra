@@ -46,7 +46,7 @@ class KSpreadFormat
 {
 public:
     enum Align { Left = 1, Center = 2, Right = 3, Undefined = 4 };
-    enum AlignY { Top = 1, Middle = 2, Bottom = 3 };
+    enum AlignY { Top = 1, Middle = 2, Bottom = 3, UndefinedY = 4 };
     enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
     enum FloatColor { NegRed = 1, AllBlack = 2, NegBrackets = 3, NegRedBrackets = 4 };
     enum FormatType { Number=0, Text_format=5, Money=10, Percentage=25, Scientific=30,
