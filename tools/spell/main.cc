@@ -32,7 +32,7 @@
 #include <config.h>
 #endif
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
 #include <koSpell.h>
 #include <koSconfig.h>
 #endif
@@ -82,7 +82,7 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
     QString buffer = *((QString *)data);
     buffer = buffer.stripWhiteSpace();
 
-#if HAVE_LIBASPELL
+#ifdef HAVE_LIBASPELL
     // Read config
     KOSpellConfig kosconfig;
     if ( instance() )
