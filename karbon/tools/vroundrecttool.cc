@@ -40,7 +40,7 @@ VRoundRectTool::VRoundRectOptionsWidget::VRoundRectOptionsWidget( KarbonPart* pa
 	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
 
 	new QLabel( i18n( "Edge radius:" ), this );
-	m_round = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_round = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 10.0, KoUnit::U_MM );
 	refreshUnit();
 
 	setInsideMargin( 4 );
@@ -96,7 +96,6 @@ VRoundRectTool::VRoundRectTool( KarbonView* view )
 {
 	// Create config dialog:
 	m_optionsWidget = new VRoundRectOptionsWidget( view->part() );
-	m_optionsWidget->setRound( 20.0 );
 	registerTool( this );
 }
 
