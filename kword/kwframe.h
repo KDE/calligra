@@ -358,6 +358,9 @@ public:
     /** returns page number of the numbered frame */
     int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
 
+    /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
+    virtual void zoom() {}
+
     KWDocument* kWordDocument() const { return doc; }
 
     // only used for headers and footers...

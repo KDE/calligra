@@ -982,7 +982,7 @@ bool KWGroupManager::joinCells() {
     recalcCols();
     recalcRows();
     doc->updateAllFrames();
-    doc->refreshAllFrames();
+    doc->repaintAllViews();
     return true;
 }
 
@@ -1092,7 +1092,7 @@ bool KWGroupManager::splitCell(unsigned int intoRows, unsigned int intoCols)
     firstFrame->setSelected(true);
     selectUntil(getCell(row+intoRows-1, col+intoCols-1)->frameSet);
     doc->updateAllFrames();
-    doc->refreshAllFrames();
+    doc->repaintAllViews();
     return true;
 }
 

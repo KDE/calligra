@@ -704,13 +704,8 @@ void KWView::print( QPrinter &prt )
     prt.setFullPage( true );
 
     int oldZoom = doc->zoom();
-    //double oldZoomedResolutionX = doc->zoomedResolutionX();
-    //double oldZoomedResolutionY = doc->zoomedResolutionY();
-    doc->setZoom( 100 );
     QPaintDeviceMetrics metrics( &prt );
-    doc->setResolution( metrics.logicalDpiX(), metrics.logicalDpiY() );
-    //doc->updateFrameSizes( doc->zoomedResolutionX() / oldZoomedResolutionX, doc->zoomedResolutionY() / oldZoomedResolutionY );
-    // TODO update font sizes - using doc->zoomedResolutionY() / oldZoomedResolutionY
+    doc->setZoomAndResolution( 100, metrics.logicalDpiX(), metrics.logicalDpiY() );
 
     bool serialLetter = FALSE;
 #if 0
@@ -766,12 +761,10 @@ void KWView::print( QPrinter &prt )
 #endif
     }
 
-    //doc->updateFrameSizes( oldZoomedResolutionX / doc->zoomedResolutionX(), oldZoomedResolutionY / doc->zoomedResolutionY() );
-    doc->setZoom( oldZoom );
-    doc->setResolution( QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
-
     if ( pgLayout.format == PG_SCREEN )
         doc->setPageLayout( oldPGLayout, cl, hf );
+
+    doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
 
     if (shell()) shell()->setCursor( arrowCursor );
     gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
@@ -1235,10 +1228,7 @@ void KWView::viewZoom( const QString &s )
     z = z.simplifyWhiteSpace();
     int zoom = z.toInt();
     if ( zoom != doc->zoom() ) {
-        //double oldZoomedResolutionX = doc->zoomedResolutionX();
-        //double oldZoomedResolutionY = doc->zoomedResolutionY();
-        doc->setZoom( zoom );
-        //doc->updateFrameSizes( doc->zoomedResolutionX() / oldZoomedResolutionX, doc->zoomedResolutionY() / oldZoomedResolutionY );
+        doc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
         gui->getHorzRuler()->setZoom( doc->zoomedResolutionX() );
         gui->getVertRuler()->setZoom( doc->zoomedResolutionY() );
 

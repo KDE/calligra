@@ -85,13 +85,12 @@ int KWTextFrameSet::availableHeight() const
 
 QPoint KWTextFrameSet::contentsToInternal( QPoint p, bool onlyY ) const
 {
-    // ### In WP mode we could go much faster by a simple division...
     int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrame *frame = frameIt.current();
-        QRect r (*frame);
+        QRect frameRect = kWordDocument()->zoomRect( *frameIt.current() );
+        QRect r( frameRect );
         if ( onlyY )
             r.setLeft(0);      // p.x will be 0 too, so only the Y coords will count
         if ( r.contains( p ) ) // both r and p are in "contents coordinates"
@@ -100,16 +99,16 @@ QPoint KWTextFrameSet::contentsToInternal( QPoint p, bool onlyY ) const
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
             // ##### This will not work with multiple frames in the same page (DTP)
-            p.rx() += -frame->left();
-            p.ry() += -frame->top() + totalHeight;
+            p.rx() += -frameRect.left();
+            p.ry() += -frameRect.top() + totalHeight;
             return p;
-        } else if ( p.y() < frame->top() && doc->processingType() == KWDocument::WP ) // ## WP-only: we've been too far, the point is between two frames
+        } else if ( p.y() < frameRect.top() && doc->processingType() == KWDocument::WP ) // ## WP-only: we've been too far, the point is between two frames
         {
-            p.rx() += -frame->left();
+            p.rx() += -frameRect.left();
             p.ry() = totalHeight;
             return p;
         }
-        totalHeight += frame->height();
+        totalHeight += frameRect.height();
     }
 
     if ( onlyY ) // we only care about Y -> easy, return "we're below the bottom"
@@ -126,16 +125,16 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrame *frame = frameIt.current();
-        QRect r (*frame);
-        r.moveBy( -frame->left(), -frame->top() + totalHeight );   // frame in qrt coords
+        QRect frameRect = kWordDocument()->zoomRect( *frameIt.current() );
+        QRect r( frameRect );
+        r.moveBy( -frameRect.left(), -frameRect.top() + totalHeight );   // frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {
-            cPoint.setX( iPoint.x() + frame->left() );
-            cPoint.setY( iPoint.y() + frame->top() - totalHeight );
-            return frame;
+            cPoint.setX( iPoint.x() + frameRect.left() );
+            cPoint.setY( iPoint.y() + frameRect.top() - totalHeight );
+            return frameIt.current();
         }
-        totalHeight += frame->height();
+        totalHeight += frameRect.height();
     }
 
     kdWarning(32002) << "KWTextFrameSet::internalToContents " << iPoint.x() << "," << iPoint.y()
@@ -606,6 +605,43 @@ void KWTextFrameSet::load( QDomElement &attributes )
     m_lastFormatted = text->firstParag();
     //kdDebug(32001) << "KWTextFrameSet::load done" << endl;
 }
+
+void KWTextFrameSet::zoom()
+{
+    if ( !m_origFontSizes.isEmpty() )
+        unzoom();
+    QTextFormatCollection * coll = text->formatCollection();
+    double factor = kWordDocument()->zoomedResolutionY();
+    kdDebug() << "KWTextFrameSet::zoom " << factor << endl;
+    QDictIterator<QTextFormat> it( coll->dict() );
+    for ( ; it.current() ; ++it ) {
+        QTextFormat * format = it.current();
+        m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
+        kdDebug() << "KWTextFrameSet::zooming format " << format->key() << " to " << static_cast<float>( format->font().pointSize() ) * factor << endl;
+        format->setPointSize( static_cast<int>( static_cast<float>( format->font().pointSize() ) * factor ) );
+    }
+}
+
+void KWTextFrameSet::unzoom()
+{
+    QTextFormatCollection * coll = text->formatCollection();
+
+    QDictIterator<QTextFormat> it( coll->dict() );
+    for ( ; it.current() ; ++it ) {
+        QTextFormat * format = it.current();
+        int * oldSize = m_origFontSizes.find( format );
+        if ( !oldSize )
+            kdDebug() << "Can't unzoom: " << it.current()->key() << endl;
+        else
+        {
+            kdDebug() << "KWTextFrameSet::unzoom format=" << format->key() << " oldSize=" << *oldSize << endl;
+            format->setPointSize( *oldSize );
+        }
+    }
+
+    m_origFontSizes.clear();
+}
+
 
 /*================================================================*/
 void KWTextFrameSet::applyStyleChange( const QString & changedStyle )

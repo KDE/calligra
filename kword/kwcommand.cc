@@ -418,8 +418,7 @@ void KWFrameBorderCommand::execute()
                 break;
         }
     }
-    //update frame
-    m_pDoc->refreshAllFrames();
+    m_pDoc->repaintAllViews();
 }
 
 void KWFrameBorderCommand::unexecute()
@@ -449,7 +448,7 @@ void KWFrameBorderCommand::unexecute()
         }
     }
     //update frames
-    m_pDoc->refreshAllFrames();
+    m_pDoc->repaintAllViews();
 }
 
 KWFrameBackGroundColorCommand::KWFrameBackGroundColorCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_listFrameIndex, QList<QBrush> &_oldBrush,const QBrush & _newColor ):
@@ -471,7 +470,7 @@ void KWFrameBackGroundColorCommand::execute()
         frame->setBackgroundColor(m_newColor);
     }
     //update frame
-    m_pDoc->refreshAllFrames();
+    m_pDoc->repaintAllViews();
 }
 
 void KWFrameBackGroundColorCommand::unexecute()
@@ -486,7 +485,7 @@ void KWFrameBackGroundColorCommand::unexecute()
     }
 
     //update frames
-    m_pDoc->refreshAllFrames();
+    m_pDoc->repaintAllViews();
 }
 
 
@@ -513,7 +512,7 @@ void KWFrameResizeCommand::execute()
     }
 
     frame->setSelected(true);
-    m_pDoc->refreshAllFrames();
+    m_pDoc->repaintAllViews();
 }
 
 void KWFrameResizeCommand::unexecute()
@@ -530,7 +529,7 @@ void KWFrameResizeCommand::unexecute()
     }
     frame->setSelected(true);
     //update frames
-    m_pDoc->refreshAllFrames();
+    m_pDoc->repaintAllViews();
 }
 
 
@@ -554,7 +553,7 @@ void KWFrameMoveCommand::execute()
         frame->setSelected(true);
     }
 
-    m_pDoc->refreshAllFrames();
+    m_pDoc->repaintAllViews();
 }
 
 void KWFrameMoveCommand::unexecute()
@@ -569,5 +568,5 @@ void KWFrameMoveCommand::unexecute()
         frame->setSelected(true);
     }
 
-    m_pDoc->refreshAllFrames();
+    m_pDoc->repaintAllViews();
 }

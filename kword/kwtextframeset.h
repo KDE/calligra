@@ -20,6 +20,7 @@
 #ifndef kwtextframeset_h
 #define kwtextframeset_h
 
+#include <qptrdict.h>
 #include "qrichtext_p.h"
 #include "kwframe.h"
 #include "kwtextparag.h"
@@ -75,8 +76,11 @@ public:
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );
 
+    virtual void zoom();
+    void unzoom();
+
     // stupid updating of all styles.
-    void updateAllStyles();
+    //void updateAllStyles();
 
     /** returns a deep copy of self (and all it contains) */
     KWTextFrameSet *getCopy();
@@ -204,6 +208,7 @@ private:
     int m_width;                               // Copy of private QTextFlow::width
     int m_availableHeight;                     // Sum of the height of all our frames
     QMap<QWidget *, int> m_mapViewAreas;       // Store the "needs" of each view
+    QPtrDict<int> m_origFontSizes;
 };
 
 /**

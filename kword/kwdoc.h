@@ -181,10 +181,8 @@ public:
 
     void updateAllViews( KWView *_view, bool _erase = false );
     void updateAllViewportSizes();
-    void updateAllSelections();
     void setUnitToAll();
-    void drawAllBorders( bool back = true);
-    void refreshAllFrames();
+    void repaintAllViews( bool erase = false );
 
     const QList<KWStyle> & styleList() const { return m_styleList; }
     /**
@@ -316,10 +314,6 @@ public:
     bool canRemovePage( int num, KWFrame *f );
 
     /**
-     * Set a new resolution in DPI. Done on startup and when printing.
-     */
-    void setResolution( int dpiX, int dpiY );
-    /**
      * @return the conversion factor between pt and pixel, that
      * takes care of the zoom and the DPI setting.
      * Use zoomIt(pt) instead, though.
@@ -329,8 +323,12 @@ public:
 
     /**
      * Change the zoom factor to @p z (e.g. 150 for 150%)
+     * and/or change the resolution, given in DPI.
+     * This is done on startup and when printing.
+     * The same call combines both so that all the updating done behind
+     * the scenes is done only once, even if both zoom and DPI must be changed.
      */
-    void setZoom( int z );
+    void setZoomAndResolution( int zoom, int dpiX, int dpiY );
 
     int zoom() const { return m_zoom; }
 

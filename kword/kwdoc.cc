@@ -195,8 +195,12 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     spellCheck = FALSE;
     contents = new KWContents( this );
 
+    // Set no-op initial values (for setZoomAndResolution)
+    m_zoomedResolutionX = 1;
+    m_zoomedResolutionY = 1;
     m_zoom = 100;
-    setResolution( QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+
+    setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     syntaxVersion = CURRENT_SYNTAX_VERSION;
 
     m_pKSpellConfig=0;
@@ -205,25 +209,29 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     connect( &history, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 }
 
-void KWDocument::setResolution( int dpiX, int dpiY )
+void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
+    //double oldZoomedResolutionX = m_zoomedResolutionX;
+    //double oldZoomedResolutionY = m_zoomedResolutionY;
+
+    m_zoom = zoom;
     // m_resolution[XY] is in pixel per pt
     m_resolutionX = POINT_TO_INCH( static_cast<double>(dpiX) );
     m_resolutionY = POINT_TO_INCH( static_cast<double>(dpiY) );
     m_zoomedResolutionX = static_cast<double>(m_zoom) * m_resolutionX / 100.0;
     m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
-    kdDebug() << "KWDocument::setResolution " << dpiX << "," << dpiY
+    kdDebug() << "KWDocument::setZoomAndResolution " << zoom << " " << dpiX << "," << dpiY
               << " m_resolutionX=" << m_resolutionX << " m_zoomedResolutionX=" << m_zoomedResolutionX
               << " m_resolutionY=" << m_resolutionY << " m_zoomedResolutionY=" << m_zoomedResolutionY << endl;
-    updateAllViewportSizes();
-}
 
-void KWDocument::setZoom( int z )
-{
-    m_zoom = z;
-    m_zoomedResolutionX = static_cast<double>(m_zoom) * m_resolutionX / 100.0;
-    m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
+
+    // Update all fonts
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        fit.current()->zoom();
+
     updateAllViewportSizes();
+    repaintAllViews( true );
 }
 
 bool KWDocument::initDoc()
@@ -1928,8 +1936,8 @@ void KWDocument::updateAllViews( KWView *_view, bool erase )
 /*================================================================*/
 void KWDocument::updateAllViewportSizes()
 {
-    //kdDebug() << "KWDocument::updateAllViewportSizespages=" << m_pages << " " << ptPaperWidth() << "x" << ptPaperHeight() * m_pages << endl;
-    emit sig_newContentsSize( ptPaperWidth(), ptPaperHeight() * m_pages );
+    //kdDebug() << "KWDocument::updateAllViewportSizespages=" << m_pages << " " << paperWidth() << "x" << paperHeight() * m_pages << endl;
+    emit sig_newContentsSize( paperWidth(), paperHeight() * m_pages );
 }
 
 /*================================================================*/
@@ -1969,10 +1977,10 @@ void KWDocument::applyStyleChange( const QString & changedStyle )
 }
 
 /*================================================================*/
-void KWDocument::refreshAllFrames()
+void KWDocument::repaintAllViews( bool erase )
 {
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->getGUI()->canvasWidget()->repaintAll();
+        viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
 }
 
 /*================================================================*/
