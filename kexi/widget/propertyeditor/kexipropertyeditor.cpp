@@ -38,7 +38,7 @@
 #include "kexipropertyeditor.h"
 
 
-KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, bool AutoSync, const char *name)
+KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool AutoSync, const char *name)
  : KListView(parent, name)
 {
 	addColumn(i18n("Property"), 145);
@@ -47,7 +47,6 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool returnToAccept, boo
 	m_buffer = 0;
 	m_topItem = 0;
 	m_editItem = 0;
-	m_returnToAccept = returnToAccept;
 	m_sync = AutoSync;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
@@ -160,11 +159,8 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 	connect(editor, SIGNAL(reject(KexiPropertySubEditor *)), this,
 		SLOT(slotEditorReject(KexiPropertySubEditor *)));
 
-	if(m_returnToAccept)
-	{
 		connect(editor, SIGNAL(accept(KexiPropertySubEditor *)), this,
 			SLOT(slotEditorAccept(KexiPropertySubEditor *)));
-	}
 
 	connect(editor, SIGNAL(changed(KexiPropertySubEditor *)), this,
 		SLOT(slotValueChanged(KexiPropertySubEditor *)));
@@ -215,11 +211,6 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 			parent->getComposedValue();
 		}
 		emit valueChanged(m_editItem->text(0), value);
-	}
-
-	if(!m_returnToAccept)
-	{
-		emit itemRenamed(m_editItem);
 	}
 }
 

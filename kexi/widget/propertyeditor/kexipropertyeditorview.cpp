@@ -34,8 +34,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin)
 	setIcon(*mainWin->icon());
 
 	QHBoxLayout *lyr = new QHBoxLayout(this);
-	m_editor = new KexiPropertyEditor(this, true /*returnToAccept*/, 
-		true /*AutoSync*/, "propeditor");
+	m_editor = new KexiPropertyEditor(this, false /*AutoSync*/, "propeditor");
 	lyr->addWidget(m_editor);
 }
 

@@ -37,7 +37,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 	Q_OBJECT
 
 	public:
-		KexiPropertyEditor(QWidget *parent=0, bool returnToAccept = false, bool AutoSync=false, const char *name=0);
+		KexiPropertyEditor(QWidget *parent=0, bool AutoSync=false, const char *name=0);
 		~KexiPropertyEditor();
 
 		void	reset(bool editorOnly = false);
@@ -69,7 +69,6 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		QGuardedPtr<KexiPropertySubEditor> m_currentEditor;
 		KexiPropertyEditorItem	*m_editItem;
 		KexiPropertyEditorItem	*m_topItem;
-		bool 			m_returnToAccept;
 		KexiPropertyBuffer	*m_buffer;
 		KPushButton		*m_defaults; // "Revert to defaults" button
 		bool			m_sync;
