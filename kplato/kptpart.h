@@ -24,7 +24,8 @@
 
 class KoView;
 class KPTView;
-class KCommandHistory;
+class KoCommandHistory;
+class KCommand;
 class KPTProject;
 class KPTProjectDialog;
 class KPTResourceGroup;
@@ -59,6 +60,8 @@ public:
 
     bool loadOasis(const QDomDocument &, KoOasisStyles &, KoStore *) { return false; }
 
+    void addCommand(KCommand * cmd);
+    
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
 
@@ -69,7 +72,7 @@ private:
     KPTProject *m_project;
     KPTProjectDialog *m_projectDialog;
     KPTView *m_view;
-    KCommandHistory *m_commandHistory;
+    KoCommandHistory *m_commandHistory;
 };
 
 #endif

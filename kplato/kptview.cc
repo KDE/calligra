@@ -74,6 +74,7 @@
 #include <kprinter.h>
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
+#include <kcommand.h>
 
 KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     : KoView(part, parent, "Main View"),
@@ -276,6 +277,12 @@ void KPTView::slotProjectEdit() {
 void KPTView::slotProjectCalendar() {
     KPTCalendarListDialog *dia = new KPTCalendarListDialog(getProject());
     if (dia->exec()) {
+        KMacroCommand *cmd = dia->buildCommand();
+        if (cmd) {
+            kdDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
+            cmd->execute();
+            getPart()->addCommand(cmd);
+        }
     }
     delete dia;
 }

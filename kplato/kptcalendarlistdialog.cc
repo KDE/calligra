@@ -20,6 +20,7 @@
 #include "kptcalendarlistdialog.h"
 #include "kptproject.h"
 #include "kptcalendar.h"
+#include "kptcommand.h"
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -71,11 +72,11 @@ public:
         if (!base) return false;
         return base == item || base->hasBaseCalendar(item);
     }
-    void ok(KPTProject &p) {
+    void ok(KPTProject &p, KMacroCommand *macro) {
         if (state == New) {
             //kdDebug()<<k_funcinfo<<"add: "<<calendar->name()<<endl;
             base ? calendar->setParent(base->baseCalendar()) : calendar->setParent(0);
-            p.addCalendar(calendar);
+            macro->addCommand(new KPTCalendarAddCmd(p, calendar));
             calendar = 0;
         } else if (state == Modified) {
             //kdDebug()<<k_funcinfo<<"modified: "<<calendar->name()<<endl;
@@ -159,19 +160,30 @@ KPTCalendarListDialog::KPTCalendarListDialog(KPTProject &p, QWidget *parent, con
     connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOK(bool)));
 }
 
-void KPTCalendarListDialog::slotOk() {
-    //kdDebug()<<k_funcinfo<<endl;
+KMacroCommand *KPTCalendarListDialog::buildCommand() {
+    kdDebug()<<k_funcinfo<<endl;
+    KMacroCommand *cmd = new KMacroCommand(i18n("Modify calendars"));
+    bool modified = false;
     QPtrListIterator<CalendarListViewItem> it = dia->deletedItems();
     for (; it.current(); ++it) {
         //kdDebug()<<k_funcinfo<<"deleted: "<<it.current()->calendar->name()<<endl;
-        it.current()->deleteOriginal();
+        if (it.current()->original) {
+            cmd->addCommand(new KPTCalendarDeleteCmd(project, it.current()->original));
+            modified = true;
+        }
     }
     QListViewItemIterator cit(dia->calendarList);
     for (;cit.current(); ++cit) {
         CalendarListViewItem *item = dynamic_cast<CalendarListViewItem *>(cit.current());
-        if (item)
-            item->ok(project);
+        if (item) {
+            item->ok(project, cmd);
+            modified = true;
+        }
     }
+    return modified ? cmd : 0;
+}
+
+void KPTCalendarListDialog::slotOk() {
     accept();
 }
 

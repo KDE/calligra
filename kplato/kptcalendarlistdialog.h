@@ -28,6 +28,7 @@
 
 #include <qstring.h>
 
+class KMacroCommand;
 class KPTProject;
 class CalendarListViewItem;
 
@@ -69,9 +70,9 @@ private:
 class KPTCalendarListDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTCalendarListDialog(KPTProject &project, QWidget *parent=0,
-		     const char *name=0);
-
+    KPTCalendarListDialog(KPTProject &project, QWidget *parent=0, const char *name=0);
+    
+    KMacroCommand *buildCommand();
 
 protected slots:
     void slotOk();

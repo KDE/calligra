@@ -2,6 +2,9 @@
 <kpartgui name="KPlato" version="2">
     <MenuBar>
         <Menu name="edit"><text>&amp;Edit</text>
+            <Action name="koffice_undo"/>
+            <Action name="koffice_redo"/>
+            <Separator/>
             <Action name="edit_cut"/>
             <Action name="edit_copy"/>
             <Action name="edit_paste"/>
@@ -47,6 +50,9 @@
         <Action name="view_resources"/>
     </ToolBar>
     <ToolBar name="project" position="top"><Text>Project</Text>
+        <Action name="koffice_undo"/>
+        <Action name="koffice_redo"/>
+        <Separator/>
         <Action name="add_task"/>
         <Action name="add_sub_task"/>
         <Action name="add_milestone"/>

@@ -28,10 +28,11 @@
 #include <qfileinfo.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kcommand.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kcommand.h>
 #include <koTemplateChooseDia.h>
+#include <kocommandhistory.h>
 
 #define CURRENT_SYNTAX_VERSION "0.1"
 
@@ -41,7 +42,7 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
       m_project(0), m_projectDialog(0), m_view(0)
 {
     m_project = new KPTProject();
-    m_commandHistory = new KCommandHistory(actionCollection());
+    m_commandHistory = new KoCommandHistory(actionCollection());
 
     setInstance(KPTFactory::global());
 }
@@ -228,6 +229,13 @@ void KPTPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/,
 //         painter.drawLine( x * 40, top * 20, 40 * 20, bottom * 20 );
 //     for( int y = left; y < right; ++y )
 //         painter.drawLine( left * 20, y * 20, right * 20, y * 20 );
+}
+
+
+void KPTPart::addCommand( KCommand * cmd )
+{
+    m_commandHistory->addCommand( cmd, false );
+    setModified( true );
 }
 
 
