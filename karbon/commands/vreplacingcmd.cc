@@ -26,7 +26,7 @@ VReplacingCmd::VReplacingCmd( VDocument* doc, const QString& name )
 	: VCommand( doc, name )
 {
 	// Set members.
-	m_oldObjects = document()->selection()->clone();
+	m_oldObjects = doc ? document()->selection()->clone() : 0L;
 	m_newObjects = 0L;
 }
 
