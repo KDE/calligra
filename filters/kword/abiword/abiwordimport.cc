@@ -73,7 +73,7 @@ class StructureParser : public QXmlDefaultHandler
 {
 public:
     StructureParser(KoFilterChain* chain)
-        :  m_chain(chain), m_pictureNumber(0), m_pictureFrameNumber(0),
+        :  m_chain(chain), m_pictureNumber(0), m_pictureFrameNumber(0), m_tableGroupNumber(0),
         m_timepoint(QDateTime::currentDateTime(Qt::UTC))
     {
         createDocument();
@@ -114,6 +114,8 @@ private:
         const QXmlAttributes& attributes);
     bool StartElementFoot(StackItem* stackItem, StackItem* stackCurrent,
         const QXmlAttributes& attributes);
+    bool StartElementTable(StackItem* stackItem, StackItem* stackCurrent);
+    bool StartElementCell(StackItem* stackItem, StackItem* stackCurrent,const QXmlAttributes& attributes);
 private:
     void createDocument(void);
     void createDocInfo(void);
@@ -131,6 +133,7 @@ private:
     KoFilterChain* m_chain;
     uint m_pictureNumber;                   // unique: increment *before* use
     uint m_pictureFrameNumber;              // unique: increment *before* use
+    uint m_tableGroupNumber;                // unique: increment *before* use
     QMap<QString,QString> m_metadataMap;    // Map for <m> elements
     QDateTime m_timepoint;              // Date/time (for pictures)
 };
@@ -1060,10 +1063,9 @@ static bool EndElementIW(StackItem* stackItem, StackItem* /*stackCurrent*/,
 bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackCurrent*/,
     const QXmlAttributes& attributes)
 {
-    // We do not assume when we are called or if we are or not a child of <metadata>
     stackItem->elementType=ElementTypeFoot;
 
-    QString id(attributes.value("endnote-id").stripWhiteSpace());
+    const QString id(attributes.value("endnote-id").stripWhiteSpace());
     kdDebug(30506) << "Foot note id: " << id << endl;
 
     if (id.isEmpty())
@@ -1076,7 +1078,7 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
     // We need to create a frameset for the foot note.    
     QDomElement framesetElement(mainDocument.createElement("FRAMESET"));
     framesetElement.setAttribute("frameType",1);
-    framesetElement.setAttribute("frameInfo",0);
+    framesetElement.setAttribute("frameInfo",7);
     framesetElement.setAttribute("visible",1);
     framesetElement.setAttribute("name",getFootnoteFramesetName(id));
     framesetsPluralElement.appendChild(framesetElement);
@@ -1092,6 +1094,121 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
     
     stackItem->m_frameset=framesetElement;
 
+    return true;
+}
+
+// Element <table>
+
+bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCurrent)
+{
+    // In KWord, inline tables are inside a paragraph.
+    // In AbiWord, tables are outside any paragraph.
+
+    const uint tableNumber(++m_tableGroupNumber);
+    const QString tableName(i18n("Table %1").arg(tableNumber));
+        
+    QDomElement elementText=stackCurrent->stackElementText;
+    QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
+    stackCurrent->m_frameset.appendChild(paragraphElementOut);
+    
+    QDomElement textElementOut(mainDocument.createElement("TEXT"));
+    textElementOut.appendChild(mainDocument.createTextNode("#"));
+    paragraphElementOut.appendChild(textElementOut);
+    
+    QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
+    paragraphElementOut.appendChild(formatsPluralElementOut);
+    
+    QDomElement elementFormat(mainDocument.createElement("FORMAT"));
+    elementFormat.setAttribute("id",6);
+    elementFormat.setAttribute("pos",0);
+    elementFormat.setAttribute("len",1);
+    formatsPluralElementOut.appendChild(elementFormat);
+    
+    QDomElement elementAnchor(mainDocument.createElement("ANCHOR"));
+    elementAnchor.setAttribute("type","frameset");
+    elementAnchor.setAttribute("instance",tableName);
+    elementFormat.appendChild(elementAnchor);
+    
+    stackItem->elementType=ElementTypeTable;
+    stackItem->stackElementParagraph=paragraphElementOut; // <PARAGRAPH>
+    stackItem->stackElementText=textElementOut; // <TEXT>
+    stackItem->stackElementFormatsPlural=formatsPluralElementOut; // <FORMATS>
+    stackItem->strTemp1=tableName;
+    stackItem->strTemp2=QString::number(tableNumber); // needed as I18N does not allow adding phrases
+    stackItem->pos=1; // Just #
+
+    // Now we populate the layout
+    QDomElement layoutElement=mainDocument.createElement("LAYOUT");
+    paragraphElementOut.appendChild(layoutElement);
+
+    AbiPropsMap abiPropsMap;
+    styleDataMap.useOrCreateStyle("Normal"); // We might have to create the "Normal" style.
+    AddLayout("Normal", layoutElement, stackItem, mainDocument, abiPropsMap, 0, false);
+
+    return true;
+}
+
+// <cell>
+bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCurrent,
+    const QXmlAttributes& attributes)
+{
+    if (stackCurrent->elementType!=ElementTypeTable)
+    {
+        kdError(30506) << "Wrong element type!! Aborting! (in StructureParser::endElementCell)" << endl;
+        return false;
+    }
+    
+    stackItem->elementType=ElementTypeCell;
+
+    const QString tableName(stackCurrent->strTemp1);
+    kdDebug(30506) << "Table name: " << tableName << endl;
+
+    if (tableName.isEmpty())
+    {
+        kdError(30506) << "Table name is empty! Aborting!" << endl;
+        return false;
+    }
+
+    AbiPropsMap abiPropsMap;
+    abiPropsMap.splitAndAddAbiProps(attributes.value("props")); // Do not check PROPS
+    
+    // We abuse the attach number to know the row and col numbers.
+    const uint row=abiPropsMap["top-attach"].getValue().toUInt();
+    const uint col=abiPropsMap["left-attach"].getValue().toUInt();
+    
+    const QString frameName(i18n("Frameset name","Table %3, row %1, column %2")
+        .arg(row).arg(col).arg(stackCurrent->strTemp2)); // As the stack could be wrong, be careful and use the string as last!
+    
+    // We need to create a frameset for the cell    
+    QDomElement framesetElement(mainDocument.createElement("FRAMESET"));
+    framesetElement.setAttribute("frameType",1);
+    framesetElement.setAttribute("frameInfo",0);
+    framesetElement.setAttribute("visible",1);
+    framesetElement.setAttribute("name",frameName);
+    framesetElement.setAttribute("row",row);
+    framesetElement.setAttribute("col",col);
+    framesetElement.setAttribute("rows",1); // ### TODO: rowspan
+    framesetElement.setAttribute("cols",1); // ### TODO: colspan
+    framesetElement.setAttribute("grpMgr",tableName);
+    framesetsPluralElement.appendChild(framesetElement);
+
+    QDomElement frameElementOut(mainDocument.createElement("FRAME"));
+    //frameElementOut.setAttribute("left",28);
+    //frameElementOut.setAttribute("top",42);
+    //frameElementOut.setAttribute("bottom",566);
+    //frameElementOut.setAttribute("right",798);
+    frameElementOut.setAttribute("runaround",1);
+    // ### TODO: a few attributes are missing
+    mainFramesetElement.appendChild(frameElementOut);
+    
+    stackItem->m_frameset=framesetElement;
+    QDomElement nullDummy;
+    stackItem->stackElementParagraph=nullDummy; // <PARAGRAPH>
+    stackItem->stackElementText=nullDummy; // <TEXT>
+    stackItem->stackElementFormatsPlural=nullDummy; // <FORMATS>
+
+    kdDebug(30506) << mainDocument.toString() << endl;
+    
     return true;
 }
 
@@ -1224,6 +1341,10 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     else if (name=="foot") // No upper-case
     {
         success=StartElementFoot(stackItem,structureStack.current(),attributes);
+    }
+    else if (name=="table") // No upper-case
+    {
+        success=StartElementTable(stackItem,structureStack.current());
     }
     else
     {

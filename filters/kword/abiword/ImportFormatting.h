@@ -49,7 +49,9 @@ enum StackItemElementType{
     ElementTypeAnchorContent,// <c> when child of <a>
     ElementTypeIgnoreWord,  // <iw>
     ElementTypeRealMetaData,// <m>
-    ElementTypeFoot         // <foot>
+    ElementTypeFoot,        // <foot>
+    ElementTypeTable,       // <table>
+    ElementTypeCell         // <cell>
 };
 
 // Tags that we do not care of:
@@ -90,10 +92,12 @@ public:
     QString     strTemp1; // for <d>: mime type
                           // for <a>: link reference
                           // for <m>: key
+                          // for <table>: KWord's table name
     QString     strTemp2; // for <d>: collecting the data
                           // for <a>: link name
                           // for <iw>: collecting the data (i.e. word to ignore)
                           // for <m>: value of the meta data
+                          // for <table>: Number of the table (needed as I18N does not allow adding phrases)
 };
 
 class StackItemStack : public QPtrStack<StackItem>
