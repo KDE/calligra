@@ -1797,16 +1797,28 @@ KexiMainWindowImpl::showMessage(KMessageBox::DialogType dlgType,
 }
 
 void
-KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB::Object *obj)
+KexiMainWindowImpl::showErrorMessage(const QString &msg, KexiDB::Object *obj)
 {
-	QString msg = title;
+	QString _msg = msg;
 	if (!obj) {
-		showErrorMessage(msg);
+		showErrorMessage(_msg);
 		return;
 	}
 	QString details;
-	KexiDB::getHTMLErrorMesage(obj, msg, details);
-	showErrorMessage(msg, details);
+	KexiDB::getHTMLErrorMesage(obj, _msg, details);
+	showErrorMessage(_msg, details);
+}
+
+void KexiMainWindowImpl::showErrorMessage(const QString &msg, const QString &details, KexiDB::Object *obj)
+{
+	QString _msg = msg;
+	if (!obj) {
+		showErrorMessage(_msg, details);
+		return;
+	}
+	QString _details;
+	KexiDB::getHTMLErrorMesage(obj, _msg, _details);
+	showErrorMessage(_msg, _details);
 }
 
 void
@@ -1834,7 +1846,7 @@ KexiMainWindowImpl::showErrorMessage(const QString &message, Kexi::ObjectStatus 
 				desc = status->description;
 			}
 		}
-		showErrorMessage(msg, desc);
+		showErrorMessage(message, desc, status->dbObject());
 	}
 	else {
 		showErrorMessage(message);

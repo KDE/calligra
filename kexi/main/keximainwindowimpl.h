@@ -235,6 +235,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 
 		//! Shows an error message signaled by project's objects, connections, etc.
 		void showErrorMessage(const QString&,KexiDB::Object *obj);
+		void showErrorMessage(const QString&,const QString&,KexiDB::Object *obj);
 		void showErrorMessage(const QString &title, const QString &details = QString::null);
 		void showErrorMessage(Kexi::ObjectStatus *status);
 		void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
