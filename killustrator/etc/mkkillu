@@ -4,7 +4,7 @@ make acinclude.m4
 rm -rf killustrator.dist
 cp -rp killustrator killustrator.dist
 rm -rf killustrator.dist/etc killustrator.dist/koffice
-cp -p admin/install-sh admin/ltmain.sh admin/ltconfig admin/missing admin/mkinstalldirs acinclude.m4 killustrator/etc/configure.in COPYING INSTALL acconfig.h admin/config.guess admin/config.sub config.h.bot killustrator.dist
+cp -p admin/install-sh admin/ltmain.sh admin/ltconfig admin/missing admin/mkinstalldirs acinclude.m4 killustrator/etc/configure.in COPYING INSTALL acconfig.h admin/config.guess admin/config.sub admin/automoc killustrator.dist
 mkdir killustrator.dist/po
 cp -p po/killustrator.pot killustrator.dist/po
 cp -p killustrator/etc/po_Makefile.am killustrator.dist/po/Makefile.am
@@ -31,6 +31,7 @@ make -k maintainer-clean || rm config.cache
 aclocal
 autoheader
 automake
+perl automoc
 autoconf
 
 # if the following fails, try it by hand.
