@@ -1050,11 +1050,11 @@ void KWPage::vmrEdit()
 void KWPage::vmrEditFrame( int mx, int my )
 {
     for ( unsigned int i = 0; i < doc->getNumGroupManagers(); i++ ) {
-        if ( !doc->getGroupManager( i )->isActive() )
-            continue;
-
-        doc->getGroupManager( i )->recalcCols();
-        doc->getGroupManager( i )->recalcRows();
+        if ( doc->getGroupManager( i )->isActive() ) {
+            doc->getGroupManager( i )->recalcCols();
+            doc->getGroupManager( i )->recalcRows();
+            break;
+        }
     }
 
     selectedFrameSet = selectedFrame = -1;
@@ -5211,9 +5211,12 @@ void KWPage::updateSelections()
 
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
         for ( unsigned int j = 0; j < doc->getFrameSet( i )->getNumFrames(); ++j ) {
-            if ( doc->getFrameSet( i )->getFrame( j )->isSelected() ) {
-                for ( unsigned int k = 0; k < 8; ++k )
-                    doc->getFrameSet( i )->getFrame( j )->handles[ k ]->updateGeometry();
+            KWFrame *frame = doc->getFrameSet( i )->getFrame( j );
+            if ( frame->isSelected() ) {
+                for ( int k = frame->handles.size() -1 ; k >= 0 ; k-- ) { // This needs to be a SIGNED int!!
+                    if(frame->handles[ k ])
+                        frame->handles[ k ]->updateGeometry();
+                }
             }
         }
     }
