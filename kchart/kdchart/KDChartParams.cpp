@@ -1119,23 +1119,22 @@ void KDChartParams::setPrintDataValues( bool active,
                            break;
 
                 case Polar: {
-                              settings->_dataValuesFontRelSize = 26;
-                                /*if ( font )
-                                  settings->_dataValuesFont = *font;
-                                  else
-                                  settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
-                                  settings->_dataValuesUseFontRelSize = true;
-                                  settings->_dataValuesFontRelSize = 20;
-                                  settings->_dataValuesAutoColor   = polarMarker();  //  !!!
-                                  settings->_dataValuesColor = QColor( Qt::black );
-                                  settings->_dataValuesBrush = QBrush( Qt::NoBrush );
-
+                                if ( font )
+                                        settings->_dataValuesFont = *font;
+                                else
+                                        settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
+                                settings->_dataValuesUseFontRelSize = true;
+                                settings->_dataValuesFontRelSize = 26;
+                                settings->_dataValuesAutoColor   = polarMarker();  //  !!!
+                                settings->_dataValuesColor = QColor( Qt::black );
+                                settings->_dataValuesBrush = QBrush( Qt::NoBrush );
                                 // for values below zero:
                                 settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosCenter;
                                 settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
                                 settings->_dataValuesAnchorNegativeDeltaX   = 0;
                                 settings->_dataValuesAnchorNegativeDeltaY   = 0;
                                 settings->_dataValuesNegativeRotation       = 0;
+
                                 // for values greater/equal zero:
                                 settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosCenter;
                                 settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
@@ -1143,10 +1142,10 @@ void KDChartParams::setPrintDataValues( bool active,
                                 settings->_dataValuesAnchorNegativeDeltaY   = 0;
                                 settings->_dataValuesNegativeRotation       = 0;
 
-                                settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyShrinkFontSize;
-                                */
-                                setDefaultAxesTypes();
-                                finished = false;  // use build-in default params, see KDChartParams.h::setPrintDataValues()
+                                //settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyShrinkFontSize;
+				//settings->_dataValuesFontRelSize = 26;
+                                //setDefaultAxesTypes();
+                                //finished = false;  // use build-in default params, see KDChartParams.h::setPrintDataValues()
                             }
                             break;
 

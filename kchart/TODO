@@ -23,7 +23,7 @@ Item								   Prio Status
      - Enable and activate settings in the config dialog.		--
   + 55606: [modified] tag doesn't work correctly.		      2 ----
   + 90893: never-saved doc failes autosave			      2 ----
-  + 77839: Program hangs when only one value for pie chart 	      1	KDCH
+  + 77839: Program hangs when only one value for pie chart 	      1	KDCH DONE
 	   and value = 0.
        Fixed by new KDChart version
   + 100004: Manual should describe stand-alone charting  	      2	----
@@ -37,7 +37,7 @@ Item								   Prio Status
       version of KDChart.
       - Save row and column labels	 				--
       - Load row and column labels	 				--
-  + 101290: KChart changes font for axes when Polar chart is chosen   1	KDCH
+  + 101290: KChart changes font for axes when Polar chart is chosen   1	KDCH DONE
        Fixed by new KDChart version
   + 101490: Error in drawing charts with logarithmic scale.	      1	KDCH
        Fixed by new KDChart version (hopefully)
@@ -149,7 +149,7 @@ Item								   Prio Status
 
 * KDChart
   - (Bar) charts are drawn wrong when Y axis is logarithmic.		KDCH
-  - Font for X axis labels changes when Polar chart is chosen.		KDCH
+  - Font for X axis labels changes when Polar chart is chosen.		KDCH DONE
   - Strange looks when negative values.					KDCH
 
 
