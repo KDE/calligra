@@ -55,9 +55,6 @@ void KWFormatCollection::removeFormat(KWFormat *_format)
   QString key = generateKey(*_format);
 
   formats.remove(key);
-
-  //if (formats.remove(key))
-  //debug("remove: %s",key.data());
 }
 
 /*================================================================*/
@@ -91,7 +88,6 @@ KWFormat *KWFormatCollection::insertFormat(QString _key,const KWFormat &_format)
   KWFormat *format = new KWFormat(doc,_format);
   
   formats.insert(_key.data(),format);
-  //debug("insert: %s",_key.data());
   format->incRef();
 
   return format;

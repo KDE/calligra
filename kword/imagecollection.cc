@@ -76,9 +76,6 @@ void KWImageCollection::removeImage(KWImage *_image)
   QString key = generateKey(*_image);
 
   images.remove(key);
-  
-  //if (images.remove(key))
-  //debug("remove: %s",key.data());
 }
 
 /*================================================================*/
@@ -117,7 +114,6 @@ KWImage *KWImageCollection::insertImage(QString _key,KWImage &_image)
   KWImage *image = new KWImage(doc,_image);
   
   images.insert(_key.data(),image);
-  //debug("insert: %s",_key.data());
   image->incRef();
 
   return image;
@@ -135,7 +131,6 @@ KWImage *KWImageCollection::insertImage(QString _key,KWImage &_image,KSize _imgS
     }
 
   images.insert(_key.data(),image);
-  //debug("insert: %s",_key.data());
   image->incRef();
 
   return image;

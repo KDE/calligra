@@ -614,7 +614,11 @@ void KWFrameDia::applyChanges()
 	{
 	  KWTextFrameSet *_frameSet = new KWTextFrameSet(doc);
 	  _frameSet->addFrame(frame);
+	  _frameSet->setAutoCreateNewFrame(false);
 	  doc->addFrameSet(_frameSet);
+	  page->repaint(false);
+	  _frameSet->setAutoCreateNewFrame(true);
+	  return;
 	}
     }
 

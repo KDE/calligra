@@ -681,7 +681,6 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	      
 	      if (r != 0 && (e->state() & ShiftButton) && doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager())
 		{
-		  //doc->deSelectAllFrames();
 		  doc->getFrameSet(doc->getFrameSet(mx,my))->getGroupManager()->selectUntil(doc->getFrameSet(doc->getFrameSet(mx,my)));
 		  goon = false;
 		}
@@ -1966,7 +1965,6 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    fc->cursorGotoLeft(painter);
 	    painter.end();
-	    //draw_buffer = false;
 	    repaint(false);
 	    // HACK
 	    kbdc.auto_repeat_mode = repeat;
@@ -2567,18 +2565,6 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
       frameset = doc->getFrameSet(i);
-      _painter.setPen(lightGray);
-      should_draw = true;
-      if (frameset->getGroupManager())
-	{
-	  if (gui->getView()->getViewTableGrid())
-	    _painter.setPen(QPen(black,1,DotLine));
-	  else
-	    _painter.setPen(NoPen);
-	}
-      if (static_cast<int>(i) == hiliteFrameSet)
-	_painter.setPen(blue);
-      else if (!gui->getView()->getViewFrameBorders()) should_draw = false;
       
       if (isAHeader(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasHeader() ||
 	  isAFooter(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasFooter() ||
@@ -2588,7 +2574,20 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
       for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	{
 	  tmp = frameset->getFrame(j);
-	  _painter.setBrush(tmp->getBackgroundColor());
+	  _painter.setBrush(isAHeader(frameset->getFrameInfo()) || isAFooter(frameset->getFrameInfo()) ? 
+			    frameset->getFrame(0)->getBackgroundColor() : tmp->getBackgroundColor());
+	  _painter.setPen(lightGray);
+	  should_draw = true;
+	  if (frameset->getGroupManager())
+	    {
+	      if (gui->getView()->getViewTableGrid())
+		_painter.setPen(QPen(black,1,DotLine));
+	      else
+		_painter.setPen(NoPen);
+	    }
+	  if (static_cast<int>(i) == hiliteFrameSet)
+	    _painter.setPen(blue);
+	  else if (!gui->getView()->getViewFrameBorders()) should_draw = false;
 	  frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
 	  
 	  if (v_area.intersects(frame) && should_draw && !frameset->getGroupManager())
@@ -2632,7 +2631,10 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 		}	    
 	    }
 	  
-	  tmp = frameset->getFrame(j);
+	  if (isAHeader(frameset->getFrameInfo()) || isAFooter(frameset->getFrameInfo()))
+	    tmp = frameset->getFrame(0);
+	  else
+	    tmp = frameset->getFrame(j);
 	  if (tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(doc->setBorderPen(tmp->getLeftBorder()));
@@ -2708,38 +2710,38 @@ void KWPage::frameSizeChanged(KoPageLayout _layout)
   setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
   return;
 
-  if (mouseMode != MM_EDIT_FRAME)
-    {
-      selectedFrame = fc->getFrame() - 1;
-      selectedFrameSet = fc->getFrameSet() - 1;
-    }
-  else if (selectedFrame == -1 || selectedFrameSet == -1)
-    return;
+//   if (mouseMode != MM_EDIT_FRAME)
+//     {
+//       selectedFrame = fc->getFrame() - 1;
+//       selectedFrameSet = fc->getFrameSet() - 1;
+//     }
+//   else if (selectedFrame == -1 || selectedFrameSet == -1)
+//     return;
 
-  gui->getHorzRuler()->setFrameStart(doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame)->x());
+//   gui->getHorzRuler()->setFrameStart(doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame)->x());
 
-  if (doc->getProcessingType() != KWordDocument::DTP) return;
+//   if (doc->getProcessingType() != KWordDocument::DTP) return;
 
-  KWFrame *frame = doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame);
+//   KWFrame *frame = doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame);
 
-  unsigned int page = 0;
-  for (int i = 0;i < doc->getPages();i++)
-    {
-      if (frame->intersects(KRect(0,i * ptPaperHeight(),ptPaperWidth(),ptPaperHeight())))
-	{
-	  page = i;
-	  break;
-	}
-    }
+//   unsigned int page = 0;
+//   for (int i = 0;i < doc->getPages();i++)
+//     {
+//       if (frame->intersects(KRect(0,i * ptPaperHeight(),ptPaperWidth(),ptPaperHeight())))
+// 	{
+// 	  page = i;
+// 	  break;
+// 	}
+//     }
   
-  doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame)->setCoords(_layout.ptLeft,
-									 _layout.ptTop + page * ptPaperHeight(),
-									 _layout.ptWidth - _layout.ptRight,
-									 _layout.ptHeight - _layout.ptBottom
-									 + page * ptPaperHeight());
-  doc->updateAllFrames();
-  recalcText();
-  recalcCursor();
+//   doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame)->setCoords(_layout.ptLeft,
+// 									 _layout.ptTop + page * ptPaperHeight(),
+// 									 _layout.ptWidth - _layout.ptRight,
+// 									 _layout.ptHeight - _layout.ptBottom
+// 									 + page * ptPaperHeight());
+//   doc->updateAllFrames();
+//   recalcText();
+//   recalcCursor();
 }
 
 /*================================================================*/
@@ -2911,9 +2913,6 @@ int KWPage::getPageOfRect(KRect _rect)
 /*================================================================*/
 void KWPage::femProps()
 {
-//   int mx = oldMx;
-//   int my = oldMy;
-
   if (frameDia)
     {
       frameDia->close();
@@ -2925,7 +2924,6 @@ void KWPage::femProps()
       frameDia = 0;
     }
 
-  //hiliteFrameSet = doc->getFrameSet(mx,my);
   repaint(false);
   frameDia = new KWFrameDia(0,"",0L,doc,this,FD_FRAME_SET | FD_FRAME | FD_GEOMETRY | FD_BORDERS);
   connect(frameDia,SIGNAL(frameDiaClosed()),this,SLOT(frameDiaClosed()));
@@ -3561,7 +3559,7 @@ void KWPage::setLeftFrameBorder(KWParagLayout::Border _brd,bool _enable)
       for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	{
 	  frame = frameset->getFrame(j);
-	  if (frame->isSelected()) 
+	  if (frame->isSelected())
 	    {
 	      if (!_enable) 
 		{
@@ -3587,7 +3585,7 @@ void KWPage::setRightFrameBorder(KWParagLayout::Border _brd,bool _enable)
       for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	{
 	  frame = frameset->getFrame(j);
-	  if (frame->isSelected()) 
+	  if (frame->isSelected())
 	    {
 	      if (!_enable) 
 		{
@@ -3613,7 +3611,7 @@ void KWPage::setTopFrameBorder(KWParagLayout::Border _brd,bool _enable)
       for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	{
 	  frame = frameset->getFrame(j);
-	  if (frame->isSelected()) 
+	  if (frame->isSelected())
 	    {
 	      if (!_enable) 
 		{
@@ -3639,7 +3637,7 @@ void KWPage::setBottomFrameBorder(KWParagLayout::Border _brd,bool _enable)
       for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	{
 	  frame = frameset->getFrame(j);
-	  if (frame->isSelected()) 
+	  if (frame->isSelected())
 	    {
 	      if (!_enable) 
 		{

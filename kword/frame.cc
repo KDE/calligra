@@ -380,7 +380,19 @@ KWFrameSet::KWFrameSet(KWordDocument *_doc)
 /*================================================================*/
 void KWFrameSet::addFrame(KWFrame _frame)
 {
-  frames.append(new KWFrame(_frame.x(),_frame.y(),_frame.width(),_frame.height(),_frame.getRunAround(),_frame.getRunAroundGap()));
+  KWFrame *frm = new KWFrame(_frame.x(),_frame.y(),_frame.width(),_frame.height(),_frame.getRunAround(),
+			     _frame.getRunAroundGap());
+  frm->setLeftBorder(_frame.getLeftBorder2());
+  frm->setRightBorder(_frame.getRightBorder2());
+  frm->setTopBorder(_frame.getTopBorder2());
+  frm->setBottomBorder(_frame.getBottomBorder2());
+  frm->setBLeft(_frame.getBLeft());
+  frm->setBRight(_frame.getBRight());
+  frm->setBTop(_frame.getBTop());
+  frm->setBBottom(_frame.getBBottom());
+  frm->setBackgroundColor(QBrush(_frame.getBackgroundColor()));
+
+  frames.append(frm);
   if (frames.count() == 1) init();
   update();
 }
@@ -388,7 +400,7 @@ void KWFrameSet::addFrame(KWFrame _frame)
 /*================================================================*/
 void KWFrameSet::addFrame(KWFrame *_frame)
 {
-  frames.append(new KWFrame(_frame->x(),_frame->y(),_frame->width(),_frame->height(),_frame->getRunAround(),_frame->getRunAroundGap()));
+  frames.append(_frame);
   if (frames.count() == 1) init();
   update();
 }
@@ -1196,8 +1208,8 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	{
 	  KWFrame rect;
 	  KWParagLayout::Border l,r,t,b;
-	  float lmm,linch,rmm,rinch,tmm,tinch,bmm,binch,ramm,rainch = -1;
-	  unsigned int lpt,rpt,tpt,bpt,rapt;
+	  float lmm = 0,linch = 0,rmm = 0,rinch = 0,tmm = 0,tinch = 0,bmm = 0,binch = 0,ramm = 0,rainch = -1;
+	  unsigned int lpt = 0,rpt = 0,tpt = 0,bpt = 0,rapt = 0;
 	  
 	  l.color = white;
 	  l.style = KWParagLayout::SOLID;
@@ -1340,7 +1352,7 @@ QPicture *KWPartFrameSet::getPicture()
 { 
   if (!_enableDrawing) return 0L;
 
-  return child->draw(1.0,true); 
+  return child->draw(1.0,false); 
 }
 
 /*================================================================*/

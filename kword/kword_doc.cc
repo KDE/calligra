@@ -104,27 +104,7 @@ KWordDocument::KWordDocument()
 /*================================================================*/
 CORBA::Boolean KWordDocument::init()
 {
-//   pageLayout.format = PG_DIN_A4;
-//   pageLayout.orientation = PG_PORTRAIT;
-//   pageLayout.width = PG_A4_WIDTH;
-//   pageLayout.height = PG_A4_HEIGHT;
-//   pageLayout.left = DEFAULT_LEFT_BORDER;
-//   pageLayout.right = DEFAULT_RIGHT_BORDER;
-//   pageLayout.top = DEFAULT_TOP_BORDER;
-//   pageLayout.bottom = DEFAULT_BOTTOM_BORDER;  
-//   pageLayout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
-//   pageLayout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
-//   pageLayout.ptLeft = MM_TO_POINT(DEFAULT_LEFT_BORDER);
-//   pageLayout.ptRight = MM_TO_POINT(DEFAULT_RIGHT_BORDER);
-//   pageLayout.ptTop = MM_TO_POINT(DEFAULT_TOP_BORDER);
-//   pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
   pageLayout.unit = PG_MM;
-
-//   defaultUserFont = new KWUserFont(this,"times");
-//   defaultParagLayout = new KWParagLayout(this);
-//   defaultParagLayout->setName("Standard");
-//   defaultParagLayout->setCounterNr(-1);
-    
   pages = 1;
 
   pageColumns.columns = 1; //STANDARD_COLUMNS;
@@ -685,20 +665,6 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
   _loaded = true;
 
-//   pageLayout.format = PG_DIN_A4;
-//   pageLayout.orientation = PG_PORTRAIT;
-//   pageLayout.width = PG_A4_WIDTH;
-//   pageLayout.height = PG_A4_HEIGHT;
-//   pageLayout.left = DEFAULT_LEFT_BORDER;
-//   pageLayout.right = DEFAULT_RIGHT_BORDER;
-//   pageLayout.top = DEFAULT_TOP_BORDER;
-//   pageLayout.bottom = DEFAULT_BOTTOM_BORDER;  
-//   pageLayout.ptWidth = MM_TO_POINT(PG_A4_WIDTH);
-//   pageLayout.ptHeight = MM_TO_POINT(PG_A4_HEIGHT);
-//   pageLayout.ptLeft = MM_TO_POINT(DEFAULT_LEFT_BORDER);
-//   pageLayout.ptRight = MM_TO_POINT(DEFAULT_RIGHT_BORDER);
-//   pageLayout.ptTop = MM_TO_POINT(DEFAULT_TOP_BORDER);
-//   pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
   pageLayout.unit = PG_MM;
 
   pageColumns.columns = 1; //STANDARD_COLUMNS;
@@ -1449,8 +1415,6 @@ void KWordDocument::insertObject(const KRect& _rect, KoDocumentEntry& _e, int di
   addFrameSet(frameset);
 
   emit sig_insertObject(ch,frameset);
-
-  //updateAllViews(0L);
 }
 
 /*================================================================*/
@@ -1628,7 +1592,6 @@ KWParag* KWordDocument::findFirstParagOfRect(unsigned int _ypos,unsigned int _pa
 bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,bool _viewFormattingChars = false)
 {
   _painter.save();
-  //_painter.setRasterOp(CopyROP);
 
   unsigned int xShift = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left();
 
@@ -1729,8 +1692,6 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
   _painter.setFont( *_fc.loadFont( this ) );
   _painter.setPen( _fc.getColor() );
 
-  //cerr << "Starting with color " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
-
   char buffer[200];
   int i = 0;
   unsigned int tmpPTPos = 0;
@@ -1744,11 +1705,8 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	  tmpPTPos = _fc.getPTPos();
 	  _painter.setFont( *_fc.loadFont( this ) );
 	  _painter.setPen( _fc.getColor() );
-	  
-	  //cerr << "Switch1 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
 	}
       
-      //debug("%d",i);
       if (i > 200 || _fc.getTextPos() > textLen) 
 	{
 	  warning("Reggie: WOW - something has gone really wrong here!!!!!");
@@ -1760,9 +1718,9 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
       if ( buffer[i] == 0 )
 	{
 	  buffer[i] = '\0';
-	  _painter.drawText( tmpPTPos - xOffset, /*_fc.getPTY() + _fc.getPTMaxAscender() - yOffset*/
-			     _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - 
-			     _fc.getParag()->getParagLayout()->getLineSpacing().pt() - yOffset + plus, buffer );
+	  _painter.drawText(tmpPTPos - xOffset,
+			    _fc.getPTY() + _fc.getLineHeight() - _fc.getPTMaxDescender() - 
+			    _fc.getParag()->getParagLayout()->getLineSpacing().pt() - yOffset + plus, buffer );
 	  i = 0;
 
 	  switch (text[_fc.getTextPos()].attrib->getClassId())
@@ -1817,12 +1775,10 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 		  plus = - _fc.getPTAscender() + _font.pointSize() / 2;
 		}
 	      _painter.setPen( _fc.getColor() );
-	      //cerr << "Switch 2 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
 	    }
 	  
 	  // Test next character.
 	  i++;
-	  //lastPTPos = _fc.getPTPos();
 	  if ( _fc.cursorGotoNextChar( _painter ) != 1 || text[_fc.getTextPos()].c == ' ' || i >= 199 )
 	    {
 	      // there was a blank _or_ there will be a font switch _or_ a special object next, so print 
@@ -1834,7 +1790,6 @@ bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffse
 	      //cerr << "#'" << buffer << "'" << endl;
 	      i = 0;
 	      // Blanks are not printed at all - but we have to underline it in some cases
-	      //lastPTPos = _fc.getPTPos();
 	      if (text[_fc.getTextPos()].c == ' ')
 		{
 		  bool goneForward = false;
@@ -1907,11 +1862,16 @@ void KWordDocument::printBorders(QPainter &_painter,int xOffset,int yOffset,int 
 	  tmp = frameset->getFrame(j);
 	  frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
 
-	  if (!frame.intersects(KRect(xOffset,yOffset,_w,_h))) continue;
+	  //if (!frame.intersects(KRect(xOffset,yOffset,_w,_h))) continue;
 	  
-	  _painter.fillRect(frame,tmp->getBackgroundColor());
+	  if (isAHeader(frameset->getFrameInfo()) || isAFooter(frameset->getFrameInfo()))
+	    tmp = frameset->getFrame(0);
+	  else
+	    tmp = frameset->getFrame(j);
 
-	  tmp = frameset->getFrame(j);
+	  _painter.fillRect(KRect(frame.x(),frame.y(),frame.width() - (isRight ? 1 : 0),
+				  frame.height() - (isBottom ? 1 : 0)),tmp->getBackgroundColor());
+
 	  if (tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor().color())
 	    {
  	      QPen p(setBorderPen(tmp->getLeftBorder()));
@@ -2548,7 +2508,7 @@ void KWordDocument::appendPage(unsigned int _page,QPainter &_painter)
       if (getFrameSet(i)->getFrameType() != FT_TEXT || getFrameSet(i)->getFrameInfo() != FI_BODY) continue;
       
       // don't add tables! A table cell (frameset) _must_ not have more than one frame!
-      if (getFrameSet(i)->getGroupManager()) continue;
+      if (getFrameSet(i)->getGroupManager() || !dynamic_cast<KWTextFrameSet*>(getFrameSet(i))->getAutoCreateNewFrame()) continue;
 
       frameSet = getFrameSet(i);
 
@@ -2556,8 +2516,20 @@ void KWordDocument::appendPage(unsigned int _page,QPainter &_painter)
 	{
 	  frame = frameSet->getFrame(j);
 	  if (frame->intersects(pageRect))
-	    frameList.append(new KWFrame(frame->x(),frame->y() + getPTPaperHeight(),frame->width(),frame->height(),frame->getRunAround(),
-					 frame->getRunAroundGap()));
+	    {
+	      KWFrame *frm = new KWFrame(frame->x(),frame->y() + getPTPaperHeight(),frame->width(),frame->height(),frame->getRunAround(),
+					 frame->getRunAroundGap());
+	      frm->setLeftBorder(frame->getLeftBorder2());
+	      frm->setRightBorder(frame->getRightBorder2());
+	      frm->setTopBorder(frame->getTopBorder2());
+	      frm->setBottomBorder(frame->getBottomBorder2());
+	      frm->setBLeft(frame->getBLeft());
+	      frm->setBRight(frame->getBRight());
+	      frm->setBTop(frame->getBTop());
+	      frm->setBBottom(frame->getBBottom());
+	      frm->setBackgroundColor(QBrush(frame->getBackgroundColor()));
+	      frameList.append(frm);
+	    }
 	}
 
       if (!frameList.isEmpty())
@@ -2758,9 +2730,9 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
     {
       kapp->processEvents();
       KRect pageRect(0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
-      printBorders(*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
       unsigned int minus = 0;
       if (i + 1 > static_cast<unsigned int>(printer->fromPage())) printer->newPage();
+      printBorders(*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
       for (j = 0;j < frames.count();j++)
 	{
 	  if (isAHeader(getFrameSet(j)->getFrameInfo()) && !hasHeader() ||
@@ -2863,18 +2835,10 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
 		  }
 		if (reinit)
 		  fc->init(dynamic_cast<KWTextFrameSet*>(frames.at(fc->getFrameSet() - 1))->getFirstParag(),*painter,false,true);
-		//fc->init(getFrameSetfc->getParag(),*painter,true,true);
-		//KWParag *pg = fc->getParag();
-		while (/*fc->getPage() == i + 1 &&*/ !bend)
+		while (!bend)
 		  {
-		    //if (i + 1 >= static_cast<unsigned int>(printer->fromPage()) && i + 1 <= static_cast<unsigned int>(printer->toPage()))
 		    printLine(*fc,*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
 		    bend = !fc->makeNextLineLayout(*painter);
-// 		    if (pg != fc->getParag())
-// 		      {
-// 			fc->init(fc->getParag(),*painter,true,true);
-// 			pg = fc->getParag();
-// 		      }
 		  }
 	      } break;
 	    default: minus++; break;

@@ -762,3 +762,12 @@ the file format a bit, but old files can still be loaded
 - Switching to another unit is currently only possible with a right click on the ruler and choosing
   the unit in the popup menu there
 - Fixes with printing (textframes with num > 0 on pages > 0 were not printed)
+
+Reggie, 31.1.1999:
+------------------
+- Some small cleanups und fixes
+- Fixes with loading old kword files
+- More fixes with printing
+- Many fixes with drawing frame borders, headers/footers, etc.
+- Fixes with automatically adding new pages
+- Fixes with inserting new frames

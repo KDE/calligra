@@ -82,7 +82,6 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCou
 	  enterNextParag( _painter, _updateCounters );
 	}
       
-      // gotoLine( 0, _painter );
     }
   else
     {
@@ -382,7 +381,6 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 	  cursorGotoRight( _painter);
 	}
     }
-    //during_vertical_cursor_movement = true;
 }
 
 void KWFormatContext::cursorGotoDown( QPainter &_painter )
@@ -414,7 +412,6 @@ void KWFormatContext::cursorGotoDown( QPainter &_painter )
 	   !isCursorAtLineEnd() ){
 	cursorGotoRight( _painter);
     }
-    //during_vertical_cursor_movement = true;
 }
 
 void KWFormatContext::cursorGotoLineStart( QPainter &_painter )
@@ -918,7 +915,8 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
     // Loop until we reach the end of line
     while (!_break && (ptPos < xShift + (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->width() -
 					 document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt() -
-					 document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt()) - indent - _right || !_broken) && 
+					 document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt()) - indent - _right ||
+		       !_broken) && 
 	   textPos < parag->getTextLen())
       {
 	char c = text[textPos].c;
@@ -978,13 +976,13 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		} break;
 	      case ID_KWCharTab:
 		{
-		  //if (!_checkTabs) { textPos++; break; }
 		  unsigned int tabPos = 0;
 		  KoTabulators tabType;
 		  if (parag->getParagLayout()->getNextTab(ptPos,document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left() +
 							  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBLeft().pt(),
 							  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->right() -
-							  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt(),tabPos,tabType))
+							  document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->getBRight().pt(),
+							  tabPos,tabType))
 		    {
 		      // next tab is in this line
 		      if (tabPos > ptPos)
@@ -1183,7 +1181,6 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	  }
       }
     
-    //debug("start: %d, end: %d",lineStartPos,lineEndPos);
 
     compare_formats = true;
     // If we are in the last line, return false

@@ -166,6 +166,7 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  KOMLParser::parseTag(tag.c_str(),_name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  KoTabulator *tab = new KoTabulator;
+	  bool noinch = true;
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "mmpos")
@@ -173,10 +174,14 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	      if ((*it).m_strName == "ptpos")
 		tab->ptPos = atoi((*it).m_strValue.c_str());
 	      if ((*it).m_strName == "inchpos")
-		tab->inchPos = atof((*it).m_strValue.c_str());
+		{
+		  noinch = false;
+		  tab->inchPos = atof((*it).m_strValue.c_str());
+		}
 	      if ((*it).m_strName == "type")
 		tab->type = static_cast<KoTabulators>(atoi((*it).m_strValue.c_str()));
 	    }
+	  if (noinch) tab->inchPos = MM_TO_INCH(tab->mmPos);
 	  tabList.append(tab);
 	}
 
