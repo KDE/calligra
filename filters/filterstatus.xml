@@ -186,7 +186,7 @@
                 <stat import="threestars" export="threestars"/>
             </filter>
             <filter id="kword_oowriter">
-                <title xml:lang="en_us">OpenOffice Writer</title>
+                <title xml:lang="en_us">OpenOffice.org Writer</title>
                 <stat import="threestars" export="twostars"/>
             </filter>
             <filter id="kword_palmdoc">
@@ -302,7 +302,7 @@
             </filter>
             <filter id="kpresenter_ooimpress">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kpresenter/ooimpress"/>
-                <title xml:lang="en_us">OpenOffice Impress</title>
+                <title xml:lang="en_us">OpenOffice.org Impress</title>
                 <stat import="fourstars" export="twostars"/>
             </filter>
             <filter id="kpresenter_powerpoint">
@@ -366,7 +366,7 @@
                 <stat import="none" export="planned"/>
             </filter>
             <filter id="karbon_oodraw">
-                <title xml:lang="en_us">OpenOffice Draw</title>
+                <title xml:lang="en_us">OpenOffice.org Draw</title>
                 <stat import="onestar" export="none"/>
             </filter>
         </application>
