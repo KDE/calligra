@@ -9,7 +9,7 @@
     <head/>
     <foot/>
    </paper>
-   <printrange-rect left-rect="1" right-rect="7" top-rect="1" bottom-rect="36" />
+   <printrange-rect left-rect="0" right-rect="0" top-rect="0" bottom-rect="0" />
    <printrepeatcolumns right="0" left="0" />
    <printrepeatrows bottom="0" top="0" />
    <cell row="1" column="3" >
