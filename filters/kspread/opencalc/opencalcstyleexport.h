@@ -21,6 +21,8 @@
 #ifndef OPENCALCSTYLEEXPORT_H
 #define OPENCALCSTYLEEXPORT_H
 
+#include "kspread_format.h"
+
 #include <qcolor.h>
 #include <qfont.h>
 #include <qptrlist.h>
@@ -88,6 +90,14 @@ class CellStyle
   QString     numberStyle;
   QColor      color;
   QColor      bgColor;
+  double      indent;
+  bool        wrap;
+  bool        vertical;
+  int         angle;
+  bool        print;
+
+  KSpreadFormat::Align  alignX;
+  KSpreadFormat::AlignY alignY;
 };
 
 class ColumnStyle : public Style 

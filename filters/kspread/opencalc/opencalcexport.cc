@@ -283,7 +283,18 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
 
     QDomElement tabElem = doc.createElement( "table:table" );
     tabElem.setAttribute( "table:style-name", m_styles.sheetStyle( ts ) );
-    tabElem.setAttribute( "table:name", sheet->tableName() );
+    QString name( sheet->tableName() );
+
+    int n = name.find( ' ' );
+    if ( n != -1 )
+    {
+      kdDebug() << "Sheet name converting: " << name << endl;
+      name[n] == '_';
+      kdDebug() << "Sheet name converted: " << name << endl;
+    }
+    name = name.replace( ' ', "_" );
+
+    tabElem.setAttribute( "table:name", name );
 
     maxRowCols( sheet, maxCols, maxRows );
 
@@ -308,7 +319,6 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
   kdDebug() << "exportSheet: " << sheet->tableName() << endl;
   int i = 1;
 
-  // TODO: handle empty sheets
   while ( i <= maxCols )
   {
     ColumnFormat const * const column = sheet->columnFormat( i );
@@ -365,21 +375,35 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
   int i = 1;
   while ( i <= maxCols )
   {
-    int repeated = 1;
+    int  repeated = 1;
+    bool hasComment = false;
     KSpreadCell const * const cell = sheet->cellAt( i, row );
-    QDomElement cellElem = doc.createElement( "table:table-cell" );
+    QDomElement cellElem;
 
+    if ( !cell->isObscuringForced() )
+      cellElem = doc.createElement( "table:table-cell" );
+    else
+      cellElem = doc.createElement( "table:covered-table-cell" );
+
+    QFont font;
     KSpreadValue const value( cell->value() );
+    if ( !cell->isDefault() )
+    {
+      font = cell->textFont( i, row );
+      m_styles.addFont( font );
 
-    QFont font = cell->textFont( i, row );
-    m_styles.addFont( font );
+      if ( cell->hasProperty( KSpreadFormat::PComment ) )
+        hasComment = true;
+    }
+
     CellStyle c;
     CellStyle::loadData( c, cell ); // TODO: number style    
 
     cellElem.setAttribute( "table:style-name", m_styles.cellStyle( c ) );
 
-    if ( cell->isEmpty() ) // group empty cells with the same style
-    {
+    // group empty cells with the same style
+    if ( cell->isEmpty() && !hasComment && !cell->isObscuringForced() && !cell->isForceExtraCells() ) 
+    {  
       int j = i + 1;
       while ( j <= maxCols )
       {
@@ -388,7 +412,8 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
         CellStyle c1;
         CellStyle::loadData( c1, cell1 ); // TODO: number style
 
-        if ( cell1->isEmpty() && CellStyle::isEqual( &c, c1 ) )
+        if ( cell1->isEmpty() && !cell->hasProperty( KSpreadFormat::PComment ) 
+             && CellStyle::isEqual( &c, c1 ) && !cell->isObscuringForced() && !cell->isForceExtraCells() )
           ++repeated;
         else
           break;
@@ -428,6 +453,29 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 
       QString formula( convertFormula( cell->text() ) );
       cellElem.setAttribute( "table:formula", formula );
+    }
+    
+    if ( cell->isForceExtraCells() )
+    {
+      int colSpan = cell->mergedXCells() + 1;
+      int rowSpan = cell->mergedYCells() + 1;
+
+      if ( colSpan > 1 )
+        cellElem.setAttribute( "table:number-columns-spanned", QString::number( colSpan ) );
+
+      if ( rowSpan > 1 )
+        cellElem.setAttribute( "table:number-rows-spanned", QString::number( rowSpan ) );
+    }
+
+    if ( hasComment )
+    {
+      QString comment( cell->comment( i, row ) );
+      QDomElement annotation = doc.createElement( "office:annotation" );
+      QDomElement text = doc.createElement( "text:p" );
+      text.appendChild( doc.createTextNode( comment ) );
+
+      annotation.appendChild( text );
+      cellElem.appendChild( annotation );
     }
 
     if ( !cell->isEmpty() )
@@ -882,9 +930,12 @@ void insertBracket( QString & s )
 {
   QChar c;
   int i = (int) s.length() - 1;
+
   while ( i >= 0 )
   {
     c = s[i];
+    if ( c == ' ' )
+      s[i] = '_';
     if ( !(c.isLetterOrNumber() || c == ' ' || c == '.' 
            || c == '_') )
     {

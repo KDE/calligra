@@ -213,11 +213,51 @@ void OpenCalcStyles::addCellStyles( QDomDocument & doc, QDomElement & autoStyles
     if ( t->font.strikeOut() != m_defaultFont.strikeOut() )
       prop.setAttribute( "style:text-crossing-out", ( t->font.strikeOut() ? "single-line" : "none" ) );
     
-    if ( t->color != Qt::black )
+    if ( t->color.name() != "#000000" )
       prop.setAttribute( "fo:color", t->color.name() );
 
-    if ( t->bgColor != Qt::white )
+    if ( t->bgColor.name() != "#ffffff" )
       prop.setAttribute( "fo:background-color", t->bgColor.name() );
+
+    if ( t->alignX != KSpreadFormat::Undefined )
+    {
+      QString value;
+      if ( t->alignX == KSpreadFormat::Center )
+        value = "center";
+      else if ( t->alignX == KSpreadFormat::Right )
+        value = "end";
+      else if ( t->alignX == KSpreadFormat::Left )
+        value = "start";
+      prop.setAttribute( "fo:text-align", value );
+    }
+
+    if ( t->alignY != KSpreadFormat::Bottom ) // default in OpenCalc
+      prop.setAttribute( "fo:vertical-align", ( t->alignY == KSpreadFormat::Middle ? "middle" : "top" ) );
+
+    if ( t->indent > 0.0 )
+    {
+      prop.setAttribute( "fo:margin-left", QString( "%1pt" ).arg( t->indent ) );
+      if ( t->alignX == KSpreadFormat::Undefined )
+        prop.setAttribute( "fo:text-align", "start" );
+    }
+    
+    if ( t->wrap )
+      prop.setAttribute( "fo:wrap-option", "wrap" );
+
+    if ( t->vertical )
+    {
+      prop.setAttribute( "fo:direction", "ttb" );
+      prop.setAttribute( "style:rotation-angle", "0" );
+    }
+
+    if ( t->angle != 0 )
+      prop.setAttribute( "style:rotation-angle", QString::number( t->angle ) );
+
+    if ( !t->print )
+    {
+      prop.setAttribute( "style:cell-protect", "protected" );
+      prop.setAttribute( "style:print-content", "false" );
+    }
 
     ts.appendChild( prop );
     autoStyles.appendChild( ts );
@@ -302,7 +342,14 @@ bool SheetStyle::isEqual( SheetStyle const * const t1, SheetStyle const & t2 )
 
 CellStyle::CellStyle()
   : color( Qt::black ),
-    bgColor( Qt::white )
+    bgColor( Qt::white ),
+    indent( -1.0 ),
+    wrap( false ),
+    vertical( false ),
+    angle( 0 ),
+    print( true ),
+    alignX( KSpreadFormat::Undefined ),
+    alignY( KSpreadFormat::Middle )
 {
 }
 
@@ -312,12 +359,24 @@ void CellStyle::copyData( CellStyle const & ts )
   numberStyle = ts.numberStyle;
   color       = ts.color;
   bgColor     = ts.bgColor;
+  indent      = ts.indent;
+  wrap        = ts.wrap;
+  vertical    = ts.vertical;
+  angle       = ts.angle;
+  print       = ts.print;
+  alignX      = ts.alignX;
+  alignY      = ts.alignY;
 }
 
 bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
 {
   if ( ( t1->font == t2.font ) && ( t1->numberStyle == t2.numberStyle ) 
-       && ( t1->color == t2.color ) && ( t1->bgColor == t2.bgColor ) )
+       && ( t1->color == t2.color ) && ( t1->bgColor == t2.bgColor ) 
+       && ( t1->alignX == t2.alignX ) && ( t1->alignY == t2.alignY )
+       && ( t1->indent == t2.indent ) && ( t1->wrap == t2.wrap ) 
+       && ( t1->vertical == t2.vertical ) && ( t1->angle == t2.angle )
+       && ( t1->print == t2.print )
+      )
     return true;
 
   return false;
@@ -328,12 +387,43 @@ void CellStyle::loadData( CellStyle & cs, KSpreadCell const * const cell )
 {
   int col = cell->column();
   int row = cell->row();
-  if ( cell->hasProperty( KSpreadFormat::PFont ) )
-    cs.font    = cell->textFont( col, row );
-  if ( cell->hasProperty( KSpreadFormat::PTextPen ) )
-    cs.color   = cell->textColor( col, row );
-  if ( cell->hasProperty( KSpreadFormat::PBackgroundColor ) )
-    cs.bgColor = cell->bgColor( col, row );  
+
+  KSpreadFormat * f = new KSpreadFormat( 0 );
+
+  QFont font = cell->textFont( col, row );
+  if ( font != f->font() )
+    cs.font = font;
+
+  QColor color = cell->textColor( col, row );
+  if ( color != f->textColor( col, row ) )
+    cs.color   = color;
+
+  QColor bgColor = cell->bgColor( col, row );
+  if ( bgColor != f->bgColor( col, row ) )
+    cs.bgColor = bgColor;
+
+  if ( cell->hasProperty( KSpreadFormat::PAlign ) || !cell->hasNoFallBackProperties( KSpreadFormat::PAlign ) )
+    cs.alignX = cell->align( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PAlignY ) || !cell->hasNoFallBackProperties( KSpreadFormat::PAlignY ) )
+    cs.alignY = cell->alignY( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PIndent ) || !cell->hasNoFallBackProperties( KSpreadFormat::PIndent ) )
+    cs.indent = cell->getIndent( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PAngle ) || !cell->hasNoFallBackProperties( KSpreadFormat::PAngle ) )
+    cs.angle  = -cell->getAngle( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PMultiRow ) || !cell->hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
+    cs.wrap   = cell->multiRow( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PVerticalText ) 
+       || !cell->hasNoFallBackProperties( KSpreadFormat::PVerticalText ) )
+    cs.vertical = cell->verticalText( col, row );
+
+  if ( cell->hasProperty( KSpreadFormat::PDontPrintText )
+       || !cell->hasNoFallBackProperties( KSpreadFormat::PDontPrintText ) )
+    cs.print = cell->getDontprintText( col, row );
 }
 
 bool NumberStyle::isEqual( NumberStyle const * const t1, NumberStyle const & t2 )
