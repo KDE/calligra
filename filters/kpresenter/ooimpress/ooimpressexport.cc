@@ -425,8 +425,16 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
                 appendEllipse( doccontent, o, drawPage, true );
                 break;
             case 12: // polyline
+                appendPolyline( doccontent, o, drawPage );
+                break;
+            case 13: //OT_QUADRICBEZIERCURVE = 13
+            case 14: //OT_CUBICBEZIERCURVE = 14
+                //todo
+                // "draw:path"
                 break;
             case 15: // polygon
+            case 16: // close polygone
+                appendPolyline( doccontent, o, drawPage, true /*polygon*/ );
                 break;
             }
         }
@@ -560,9 +568,28 @@ void OoImpressExport::appendRectangle( QDomDocument & doc, QDomElement & source,
     target.appendChild( rectangle );
 }
 
+void OoImpressExport::appendPolyline( QDomDocument & doc, QDomElement & source, QDomElement & target,  bool _poly)
+{
+    QDomElement polyline = doc.createElement( _poly ? "draw:polygon" : "draw:polyline" );
+
+    // create the graphic style
+    QString gs = m_styleFactory.createGraphicStyle( source );
+    polyline.setAttribute( "draw:style-name", gs );
+
+    // set the geometry
+    set2DGeometry( source, polyline, false, true /*multipoint*/ );
+
+    target.appendChild( polyline );
+}
+
 void OoImpressExport::appendEllipse( QDomDocument & doc, QDomElement & source, QDomElement & target, bool pieObject )
 {
-    QDomElement ellipse = doc.createElement( "draw:ellipse" );
+    QDomElement size = source.namedItem( "SIZE" ).toElement();
+
+    double width = size.attribute( "width" ).toDouble();
+    double height = size.attribute( "height" ).toDouble();
+
+    QDomElement ellipse = doc.createElement( (width == height) ? "draw:circle" : "draw:ellipse" );
 
     // create the graphic style
     QString gs = m_styleFactory.createGraphicStyle( source );
@@ -574,12 +601,11 @@ void OoImpressExport::appendEllipse( QDomDocument & doc, QDomElement & source, Q
     target.appendChild( ellipse );
 }
 
-void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject )
+void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target, bool pieObject, bool multiPoint )
 {
     QDomElement orig = source.namedItem( "ORIG" ).toElement();
     QDomElement size = source.namedItem( "SIZE" ).toElement();
     QDomElement name = source.namedItem( "OBJECTNAME").toElement();
-
     float y = orig.attribute( "y" ).toFloat();
     y -= m_pageHeight * ( m_currentPage - 1 );
 
@@ -589,7 +615,7 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
     target.setAttribute( "svg:height", StyleFactory::toCM( size.attribute( "height" ) ) );
     QString nameStr = name.attribute("objectName");
     if( !nameStr.isEmpty() )
-      target.setAttribute( "draw:name", nameStr );
+        target.setAttribute( "draw:name", nameStr );
     if ( pieObject )
     {
         QDomElement pie = source.namedItem( "PIETYPE").toElement();
@@ -614,33 +640,63 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
         }
         else
             target.setAttribute( "draw:kind", "section");//by default
-	QDomElement pieAngle = source.namedItem( "PIEANGLE").toElement();   
+	QDomElement pieAngle = source.namedItem( "PIEANGLE").toElement();
 	int startangle = 45;
 	if( !pieAngle.isNull() )
-	  {
+        {
 	    startangle = (pieAngle.attribute("value").toInt())/16;
 	    target.setAttribute( "draw:start-angle", startangle);
-	  }
+        }
 	else
-	  {
+        {
 	    //default value take it into kppieobject
 	    target.setAttribute( "draw:start-angle", 45 );
-	  }
-	QDomElement pieLength = source.namedItem( "PIELENGTH").toElement();   
+        }
+	QDomElement pieLength = source.namedItem( "PIELENGTH").toElement();
 	if( !pieLength.isNull() )
-	  {
+        {
 	    int value = pieLength.attribute("value").toInt();
 	    value = value /16;
 	    value = value + startangle;
 	    target.setAttribute( "draw:end-angle", value );
-	  }
+        }
 	else
-	  {
+        {
 	    //default value take it into kppieobject
 	    //default is 90° into kpresenter
 	    target.setAttribute( "draw:end-angle", (90+startangle) );
-	  }
-
+        }
+    }
+    if ( multiPoint )
+    {
+        //loadPoint
+        QDomElement point = source.namedItem( "POINTS" ).toElement();
+        if ( !point.isNull() ) {
+            QDomElement elemPoint = point.firstChild().toElement();
+            unsigned int index = 0;
+            QString listOfPoint;
+            int maxX=0;
+            int maxY=0;
+            while ( !elemPoint.isNull() ) {
+                if ( elemPoint.tagName() == "Point" ) {
+                    int tmpX = 0;
+                    int tmpY = 0;
+                    if( elemPoint.hasAttribute( "point_x" ) )
+                        tmpX = ( int ) ( KoUnit::toMM( elemPoint.attribute( "point_x" ).toDouble() )*100 );
+                    if( elemPoint.hasAttribute( "point_y" ) )
+                        tmpY = ( int ) ( KoUnit::toMM(elemPoint.attribute( "point_y" ).toDouble() )*100 );
+                    if ( !listOfPoint.isEmpty() )
+                        listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
+                    else
+                        listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+                    maxX = QMAX( maxX, tmpX );
+                    maxY = QMAX( maxY, tmpY );
+                }
+                elemPoint = elemPoint.nextSibling().toElement();
+            }
+            target.setAttribute( "draw:points", listOfPoint );
+            target.setAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
+        }
     }
 }
 
@@ -672,6 +728,7 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
         target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y1 ) ) );
         target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2 ) ) );
     }
+
     QString nameStr = name.attribute("objectName");
     if( !nameStr.isEmpty() )
       target.setAttribute( "draw:name", nameStr );
