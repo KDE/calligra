@@ -40,8 +40,10 @@ public:
    * Creates a Tar Store (i.e. a file on the hard disk, to save a document)
    * if _mode is KoStore::Write
    * Opens a Tar Store for reading if _mode is KoStore::Read.
+   * @param appIdentification a string that identifies the application,
+   * to be written in the gzip header (see KTarGz::setOrigFileName)
    */
-  KoStore( const QString & _filename, Mode _mode );
+  KoStore( const QString & _filename, Mode _mode, const QCString & appIdentification = "" );
 
   /**
    * Destroys the store (i.e. closes the file on the hard disk)

@@ -31,7 +31,7 @@
 #define ROOTPART "root"
 #define MAINNAME "maindoc.xml"
 
-KoStore::KoStore( const QString & _filename, Mode _mode )
+KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
   m_bIsOpen = false;
   m_mode = _mode;
@@ -47,6 +47,11 @@ KoStore::KoStore( const QString & _filename, Mode _mode )
 #endif
 
   m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
+
+#ifdef HAVE_KDEPRINT // If we have kdeprint, we have kdelibs > 2.1, so we have the new KTar
+  if ( m_bGood && _mode == Write )
+      m_pTar->setOrigFileName( appIdentification );
+#endif
 
   // Assume new style names.
   m_namingVersion = NAMING_VERSION_2_2;
