@@ -32,7 +32,7 @@
 
 #include <qlistbox.h>
 #include <qclipboard.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qaccel.h>
 #include <qtabdialog.h>
 #include <qwidget.h>

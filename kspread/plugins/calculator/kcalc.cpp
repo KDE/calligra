@@ -44,7 +44,7 @@ extern last_input_type last_input;
 extern item_contents   display_data;
 extern num_base        current_base;
 
-QList<CALCAMNT>       temp_stack;
+QPtrList<CALCAMNT>       temp_stack;
 
 QtCalculator :: QtCalculator( Calculator *_corba, QWidget *parent, const char *name )
   : QDialog( parent, name )

@@ -61,7 +61,7 @@
 int isinf(double x) { return !finite(x) && x==x; }
 #endif
 
-extern QList<CALCAMNT> temp_stack;
+extern QPtrList<CALCAMNT> temp_stack;
 last_input_type last_input;
 char            display_str[DSP_SIZE+1];
 

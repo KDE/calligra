@@ -20,7 +20,7 @@
 #ifndef __my_app_h__
 #define __my_app_h__
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 #include <qobject.h>
 
