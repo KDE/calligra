@@ -15,37 +15,33 @@ checkoasis="0"
 appname=kword
 oldextension=kwd
 oasisextension=odt
+oasismimetype=application/vnd.oasis.opendocument.text
 
 test -f "$input" || { echo "No such file $input"; exit 1; }
 
-# Load KWD
+# Load old native file
 appid=`dcopstart $appname $input`
 test -n "$appid" || { echo "Error starting $appname!"; exit 1; }
 while `dcop $appid Document-0 isLoading` == "true"; do
     sleep 1;
 done
 
-# Save to KWD again (in case of changes in syntax etc.)
+# Save again (in case of changes in syntax etc.)
 origfile=$PWD/oasisregtest-initial.$oldextension
 dcop $appid Document-0 saveAs $origfile || exit 1
-dcop $appid Document-0 waitSaveComplete || exit 1
 test -f $origfile || exit 1
 
-# Save to OASIS ODT
+# Save to OASIS
 tmpoasisfile=$PWD/oasisregtest.$oasisextension
-dcop $appid Document-0 setOutputMimeType "application/vnd.oasis.opendocument.text" || exit 1
+dcop $appid Document-0 setOutputMimeType $oasismimetype || exit 1
 dcop $appid Document-0 saveAs $tmpoasisfile || exit 1
-dcop $appid Document-0 waitSaveComplete || exit 1
 test -f $tmpoasisfile || exit 1
 
 dcopquit $appid
 
-# Load resulting ODT, convert to KWD
+# Load resulting OASIS file, convert to old native format
 tmpnativefile=$PWD/oasisregtest-final.$oldextension
 appid=`dcopstart $appname $tmpoasisfile`
-# openURL doesn't clear enough stuff from the previous doc. I get crashes when saving paraglayouts...
-# [pointing to deleted styles]
-#dcop $appid Document-0 openURL $tmpoasisfile || exit 1
 while `dcop $appid Document-0 isLoading` == "true"; do
     sleep 1;
 done
@@ -83,16 +79,15 @@ if test "$checkoasis" = "1"; then
 fi
 cd ..
 
-# Some fixups
+# Some fixups - kword specific
 # 1) modification time obviously changed, remove it
 # 2) the name of the main text frameset changes, no big deal, so adjust in orig
 perl -pi -e 's/modificationDate=\"[0-9-T:]*\"//;s/\"Text Frameset 1\"/\"Main Text Frameset\"/' oasisregtest-orig/maindoc.xml
 perl -pi -e 's/modificationDate=\"[0-9-T:]*\"//' oasisregtest-final/maindoc.xml
 
-# Compare initial and final KWD files
+# Compare initial and final "native format" files
 diff -urp oasisregtest-orig oasisregtest-final 2>&1 | tee oasisdiff | less
 
 echo "See oasisregtest-oasis for the OASIS xml files."
 echo "For a better diffing mechanism, launch xemacs and paste into a terminal:"
 echo "gnudoit '(ediff-files \"oasisregtest-orig/maindoc.xml\" \"oasisregtest-final/maindoc.xml\")'"
-
