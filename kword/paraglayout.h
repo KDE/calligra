@@ -52,7 +52,7 @@ public:
       QString bulletFont;
     };
 
-    KWParagLayout( KWordDocument *_doc, bool _add = true );
+    KWParagLayout( KWordDocument *_doc, bool _add = true, QString _name = "Standard" );
     ~KWParagLayout();
     
     KWParagLayout& operator=(KWParagLayout &_layout);

@@ -393,3 +393,9 @@ Reggie, 24.11.1998:
 - More work on updating/applying style templates. It works quite well now.
 - Some fixes in calculation of the chapter numbers, lists, etc.
 - Enumerated lists and Bullet lists can be easily used using the toolbar now.
+
+Reggie, 25.11.1998:
+-------------------
+- Style Templates are saved and loaded now
+- Initialization of the GUI work correctly now
+- New Style Templates can be added

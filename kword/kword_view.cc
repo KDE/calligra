@@ -131,7 +131,7 @@ void KWordView::init()
   if (gui)
     gui->setDocument(m_pKWordDoc);
 
-  format.setDefaults(m_pKWordDoc);
+  format = m_pKWordDoc->getDefaultParagLayout()->getFormat();
   if (gui)
     gui->getPaperWidget()->formatChanged(format);
 }
@@ -478,6 +478,8 @@ void KWordView::updateStyle(QString _styleName)
 
   if (_styleName == "Bullet List")
     m_vToolBarText->setButton(ID_USORT_LIST,true);  
+
+  setFormat(m_pKWordDoc->findParagLayout(_styleName)->getFormat(),false);
 }
 
 /*===============================================================*/
@@ -1527,6 +1529,9 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   tmpBrd.style = KWParagLayout::SOLID;
 
   m_vToolBarText->enable( OpenPartsUI::Show );
+
+  updateStyle("Standard");
+  setFormat(format,false);
 
   return true;
 }      

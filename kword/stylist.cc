@@ -58,6 +58,7 @@ void KWStyleManager::setupTab1()
 
   bButtonBox = new KButtonBox(tab1,KButtonBox::VERTICAL);
   bAdd = bButtonBox->addButton(i18n("&Add.."),false);
+  connect(bAdd,SIGNAL(clicked()),this,SLOT(addStyle()));
   bDelete = bButtonBox->addButton(i18n("&Delete"),false);
   bButtonBox->addStretch();
   bEdit = bButtonBox->addButton(i18n("&Edit..."),false);
@@ -184,6 +185,18 @@ void KWStyleManager::editStyle()
 }
 
 /*================================================================*/
+void KWStyleManager::addStyle()
+{
+  QString str;
+  str.sprintf("%s (%d)",i18n("New Style Template"),doc->paragLayoutList.count());
+  KWParagLayout *pl = new KWParagLayout(doc,true,str);
+  lStyleList->insertItem(str);
+  lStyleList->setCurrentItem(lStyleList->count() - 1);
+  editStyle();
+  //doc->updateStyleList();
+}
+
+/*================================================================*/
 void KWStyleManager::apply()
 {
   int f = 0;
@@ -283,13 +296,13 @@ void KWStyleEditor::setupTab1()
   eName->setText(style->getName());
   grid2->addWidget(eName,0,1);
 
-  if (style->getName() == QString(i18n("Standard")) ||
-      style->getName() == QString(i18n("Head 1")) ||
-      style->getName() == QString(i18n("Head 2")) ||
-      style->getName() == QString(i18n("Head 3")) ||
-      style->getName() == QString(i18n("Enumearted List")) ||
-      style->getName() == QString(i18n("Bullet List")) ||
-      style->getName() == QString(i18n("Alphabetical List")))
+  if (style->getName() == QString("Standard") ||
+      style->getName() == QString("Head 1") ||
+      style->getName() == QString("Head 2") ||
+      style->getName() == QString("Head 3") ||
+      style->getName() == QString("Enumerated List") ||
+      style->getName() == QString("Bullet List") ||
+      style->getName() == QString("Alphabetical List"))
     eName->setEnabled(false);
 
   lFollowing = new QLabel(i18n("Following Style Template:"),nwid);

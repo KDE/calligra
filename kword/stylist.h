@@ -72,6 +72,7 @@ protected slots:
   void apply();
   void editStyle();
   void editStyle(int) { editStyle(); }
+  void addStyle();
 
 };
 

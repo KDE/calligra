@@ -498,6 +498,16 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	  loadFrameSets(parser,lst);
 	}
 
+      else if (name == "STYLES")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
+	  loadStyleTemplates(parser,lst);
+	}
+
       else
 	cerr << "Unknown tag '" << tag << "' in the DOCUMENT" << endl;    
 	
@@ -511,6 +521,39 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   setPageLayout(__pgLayout,__columns);
 
   return true;
+}
+
+/*================================================================*/
+void KWordDocument::loadStyleTemplates(KOMLParser& parser,vector<KOMLAttrib>& lst)
+{
+  string tag;
+  string name;
+
+  while (parser.open(0L,tag))
+    {
+      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      
+      if (name == "STYLE")
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for(;it != lst.end();it++)
+	    {
+	    }
+	  KWParagLayout *pl = new KWParagLayout(this,false);
+	  pl->load(parser,lst);
+	  addStyleTemplate(pl);
+	}
+      
+      else
+	cerr << "Unknown tag '" << tag << "' in STYLES" << endl;    
+      
+      if (!parser.close(tag))
+	{
+	  cerr << "ERR: Closing Child" << endl;
+	  return;
+	}
+    }
 }
 
 /*================================================================*/
@@ -594,6 +637,15 @@ bool KWordDocument::save( ostream &out, const char* /* _format */ )
     }
 
   out << etag << "</FRAMESETS>" << endl;
+
+  out << otag << "<STYLES>" << endl;
+  for (unsigned int j = 0;j < paragLayoutList.count();j++)
+    {
+      out << otag << "<STYLE>" << endl;
+      paragLayoutList.at(j)->save(out);
+      out << etag << "</STYLE>" << endl;
+    }
+  out << etag << "</STYLES>" << endl;
 
   // Write "OBJECT" tag for every child
   QListIterator<KWordChild> chl(m_lstChildren);
@@ -1827,4 +1879,21 @@ void KWordDocument::recalcWholeText()
       viewPtr = m_lstViews.first();
       viewPtr->getGUI()->getPaperWidget()->recalcWholeText();
     }
+}
+
+/*================================================================*/
+void KWordDocument::addStyleTemplate(KWParagLayout *pl)
+{
+  KWParagLayout* p;
+  for (p = paragLayoutList.first();p != 0L;p = paragLayoutList.next())
+    {    
+      if (p->getName() == pl->getName())
+	{
+	  *p = *pl;
+	  if (p->getName() == "Standard") defaultParagLayout = p;
+	  delete pl;
+	  return;
+	}
+    }
+  paragLayoutList.append(pl);
 }

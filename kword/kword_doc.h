@@ -338,7 +338,10 @@ protected:
   QPen setBorderPen(KWParagLayout::Border _brd);
 
   void loadFrameSets(KOMLParser&,vector<KOMLAttrib>&);
+  void loadStyleTemplates(KOMLParser&,vector<KOMLAttrib>&);
   void recalcFrames();
+
+  void addStyleTemplate(KWParagLayout *pl);
 
   QList<KWordView> m_lstViews;
   QList<KWordChild> m_lstChildren;

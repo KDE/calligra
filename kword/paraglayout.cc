@@ -7,7 +7,7 @@
 #include <fstream>
 #include <unistd.h>
 
-KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true)
+KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true, QString _name = "Standard")
   : format(_doc)
 {
     flow = LEFT;
@@ -21,7 +21,7 @@ KWParagLayout::KWParagLayout(KWordDocument *_doc,bool _add = true)
     counter.counterLeftText = "";
     counter.counterRightText = "";
     followingParagLayout = "Standard";
-    name = "Standard";
+    name = _name;
     ptLineSpacing = 0;
     counter.startCounter = "0";
     counter.numberingType = NT_LIST;
@@ -368,3 +368,4 @@ void KWParagLayout::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
     }
 }
+
