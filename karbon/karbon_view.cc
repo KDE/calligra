@@ -695,8 +695,8 @@ KarbonView::zoomChanged( const KoPoint &p )
 	bool bOK;
 	if( !p.isNull() )
 	{
-		centerX = ( ( p.x() + 20 ) * zoom() ) / double( m_canvas->contentsWidth() );
-		centerY = 1 - ( ( p.y() + 40 ) * zoom() ) / double( m_canvas->contentsHeight() );
+		centerX = ( ( p.x() ) * zoom() + m_canvas->pageOffsetX() ) / double( m_canvas->contentsWidth() );
+		centerY = 1 - ( ( p.y() ) * zoom() + m_canvas->pageOffsetY() ) / double( m_canvas->contentsHeight() );
 		zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	}
 	else if( m_zoomAction->currentText() == i18n("  Width") )
