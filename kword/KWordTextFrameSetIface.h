@@ -47,6 +47,7 @@ k_dcop:
     void setBoldText( bool b );
     void setItalicText( bool b );
     void setUnderlineText( bool b );
+    void setDoubleUnderlineText(bool on);
     void setStrikeOutText( bool b );
     void setTextColor( const QColor &col );
     void setTextPointSize( int s );
@@ -55,7 +56,7 @@ k_dcop:
     void setTextDefaultFormat();
     void setTextBackgroundColor(const QColor & col);
     void setTextFamilyFont(const QString &font);
-
+    void setUnderlineColor( const QColor & color );
 
     void changeCaseOfText( const QString & caseType);
 
@@ -63,11 +64,16 @@ k_dcop:
     QFont textFont() const;
     QString textFontFamily()const;
     QColor textBackgroundColor()const;
+    QColor textUnderlineColor() const;
 
 
     bool textItalic() const;
     bool textBold() const;
     bool textUnderline()const;
+    bool textDoubleUnderline()const;
+
+
+
     bool textStrikeOut()const;
     bool textSubScript() const;
     bool textSuperScript() const;

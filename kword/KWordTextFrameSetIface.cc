@@ -94,6 +94,11 @@ void KWordTextFrameSetIface::setUnderlineText( bool b )
     delete cmd;
 }
 
+void KWordTextFrameSetIface::setDoubleUnderlineText(bool b)
+{
+    KCommand *cmd=m_frametext->textObject()->setDoubleUnderlineCommand(b);
+    delete cmd;
+}
 
 void KWordTextFrameSetIface::setStrikeOutText( bool b )
 {
@@ -137,6 +142,14 @@ void KWordTextFrameSetIface::setTextBackgroundColor(const QColor & col)
     delete cmd;
 }
 
+void KWordTextFrameSetIface::setUnderlineColor( const QColor & color )
+{
+
+    KCommand *cmd=m_frametext->textObject()->setUnderlineColorCommand( color );
+    delete cmd;
+}
+
+
 QColor KWordTextFrameSetIface::textColor() const
 {
     return m_frametext->textObject()->textColor();
@@ -170,6 +183,16 @@ bool KWordTextFrameSetIface::textBold() const
 bool KWordTextFrameSetIface::textUnderline()const
 {
     return m_frametext->textObject()->textUnderline();
+}
+
+bool KWordTextFrameSetIface::textDoubleUnderline()const
+{
+    return m_frametext->textObject()->textDoubleUnderline();
+}
+
+QColor KWordTextFrameSetIface::textUnderlineColor() const
+{
+    return m_frametext->textObject()->textUnderlineColor();
 }
 
 bool KWordTextFrameSetIface::textStrikeOut()const
