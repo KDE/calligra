@@ -2212,7 +2212,7 @@ void KPresenterView::setupActions()
 
     // ----------------- format actions
 
-    actionExtraPenBrush = new KAction( i18n( "&Pen and Brush..." ), "style", 0,
+    actionExtraPenBrush = new KAction( i18n( "&Pen and Brush..." ), "penbrush", 0,
 				       this, SLOT( extraPenBrush() ),
 				       actionCollection(), "extra_penbrush" );
 
@@ -2402,7 +2402,7 @@ void KPresenterView::setupActions()
 
     actionResizeTextObject = new KAction( i18n( "&Resize Object to fit the Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
 
-    actionObjectProperties = new KAction( i18n( "&Properties..." ), "style", 0,
+    actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
 				       this, SLOT( extraPenBrush() ),
 				       actionCollection(), "object_properties" );
     actionChangeClipart =new KAction( i18n( "&Change Clipart..." ), "clipart", 0,
