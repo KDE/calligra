@@ -96,7 +96,7 @@ int KoParagLayout::compare( const KoParagLayout & layout ) const
 
 void KoParagLayout::initialise()
 {
-    alignment = Qt::AlignLeft;
+    alignment = Qt::AlignAuto;
     for ( int i = 0 ; i < 5 ; ++i ) // use memset ?
         margins[i] = 0;
     lineSpacing = 0;

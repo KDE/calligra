@@ -362,29 +362,13 @@ int KoTextFormat::descent() const
 
 void KoTextFormat::generateKey()
 {
-    k = QString::number( fn.pointSize() );
-    k += '/';
-    k += QString::number( fn.weight() );
-    k += '/';
-    k += QString::number( (int)fn.underline() );
-    k += '/';
-    k += QString::number( (int)fn.strikeOut() );
-    k += '/';
-    k += QString::number( (int)fn.italic() );
-    k += '/';
+    k = fn.key();
     if ( col.isValid() ) // just to shorten the key in the common case
         k += QString::number( (uint)col.rgb() );
     k += '/';
-    k += fn.family();
-    k += '/';
-    k += QString::number( (int)isMisspelled() );
-    k += '/';
+    k += QString::number( (int)isMisspelled() ); // a digit each, no need for '/'
     k += QString::number( (int)vAlign() );
     //// kotext addition
-    k += '/';
-    k += QString::number( (int)m_strikeOutLine );
-    //k += '/';
-    //k += QString::number( (int)(fn.pointSizeFloat() * 10) );
     k += '/';
     if (m_textBackColor.isValid())
         k += QString::number( (uint)m_textBackColor.rgb() );
@@ -392,9 +376,11 @@ void KoTextFormat::generateKey()
     if ( m_textUnderlineColor.isValid())
         k += QString::number( (uint)m_textUnderlineColor.rgb() );
     k += '/';
-    k += QString::number( (int)m_underlineLine );
+    k += QString::number( (int)m_underlineLine ); // a digit each, no need for '/'
+    k += QString::number( (int)m_strikeOutLine );
     k += '/';
     k += QString::number( (int)m_underlineLineStyle );
+    k += '/';
     k += QString::number( (int)m_strikeOutLineStyle);
     ////
 }
@@ -403,33 +389,25 @@ void KoTextFormat::generateKey()
 // advanced features. Doesn't matter, don't extend the args.
 QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelled, VerticalAlignment a )
 {
-    QString k = QString::number( fn.pointSize() );
-    k += '/';
-    k += QString::number( fn.weight() );
-    k += '/';
-    k += QString::number( (int)fn.underline() );
-    k += '/';
-    k += QString::number( (int)fn.strikeOut() );
-    k += '/';
-    k += QString::number( (int)fn.italic() );
+    QString k = fn.key();
     k += '/';
     if ( col.isValid() ) // just to shorten the key in the common case
         k += QString::number( (uint)col.rgb() );
     k += '/';
-    k += fn.family();
-    k += '/';
     k += QString::number( (int)misspelled );
-    k += '/';
     k += QString::number( (int)a );
     //// kotext addition
     k += '/';
+        // no background color
+    k += '/';
+        // no underline color
+    k += '/';
     k += QString::number( (int)U_NONE );
-    k += '/';
     k += QString::number( (int)S_NONE ); // no double-underline in a "simple format"
-    //k += '/';
-    //k += QString::number( (int)(fn.pointSizeFloat() * 10) );
     k += '/';
-    // And no text background color.
+    k += QString::number( (int)U_SOLID );
+    k += '/';
+    k += QString::number( (int)S_SOLID ); // no double-underline in a "simple format"
     ////
     return k;
 }
@@ -691,8 +669,9 @@ void KoTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
 
 int KoTextParag::alignment() const
 {
-    if ( align != -1 )
+//    if ( align != -1 )
 	return align;
+#if 0
     QStyleSheetItem *item = qstyle();
     if ( !item )
 	return Qt::AlignAuto;
@@ -704,6 +683,7 @@ int KoTextParag::alignment() const
 	}
     }
     return Qt::AlignAuto;
+#endif
 }
 
 QPtrVector<QStyleSheetItem> KoTextParag::styleSheetItems() const

@@ -192,13 +192,11 @@ public:
 
     void setFormat( int index, KoTextFormat *f, bool useCollection );
 
-    void setTextChanged( bool b ) { textChanged = b; }
     void setBidi( bool b ) { bidi = b; }
-    bool isTextChanged() const { return textChanged; }
     bool isBidi() const;
     bool isRightToLeft() const;
     QChar::Direction direction() const;
-    void setDirection( QChar::Direction d ) { dir = d; textChanged = TRUE; }
+    void setDirection( QChar::Direction d ) { dir = d; bidiDirty = TRUE; }
 
     /** Set dirty flag for background spell-checking */
     void setNeedsSpellCheck( bool b ) { bNeedsSpellCheck = b; }
@@ -215,7 +213,7 @@ private:
     void checkBidi() const;
 
     QMemArray<KoTextStringChar> data;
-    uint textChanged : 1;
+    uint bidiDirty : 1;
     uint bidi : 1; // true when the paragraph has right to left characters
     uint rightToLeft : 1;
     uint dir : 5;
@@ -224,14 +222,14 @@ private:
 
 inline bool KoTextString::isBidi() const
 {
-    if ( textChanged )
+    if ( bidiDirty )
 	checkBidi();
     return bidi;
 }
 
 inline bool KoTextString::isRightToLeft() const
 {
-    if ( textChanged )
+    if ( bidiDirty )
 	checkBidi();
     return rightToLeft;
 }
@@ -1588,6 +1586,7 @@ private:
     QFontMetrics fm;
     uint missp : 1;
     uint linkColor : 1;
+    uint usePixelSizes : 1;
     int leftBearing, rightBearing;
     VerticalAlignment ha;
     //uchar widths[ 256 ]; //// unused in kotext

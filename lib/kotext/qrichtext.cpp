@@ -575,6 +575,8 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTe
 	    ++it;
 	    if ( !s.isEmpty() )
 		string->insert( idx, s );
+            else
+                string->invalidate( 0 );
 
 	    if ( formatting ) {
 		int len = s.length();
@@ -3281,7 +3283,7 @@ int KoTextFormat::width( const QString &str, int pos ) const
 
 KoTextString::KoTextString()
 {
-    textChanged = FALSE;
+    bidiDirty = FALSE;
     bNeedsSpellCheck = true;
     bidi = FALSE;
     rightToLeft = FALSE;
@@ -3290,7 +3292,7 @@ KoTextString::KoTextString()
 
 KoTextString::KoTextString( const KoTextString &s )
 {
-    textChanged = s.textChanged;
+    bidiDirty = s.bidiDirty;
     bNeedsSpellCheck = s.bNeedsSpellCheck;
     bidi = s.bidi;
     rightToLeft = s.rightToLeft;
@@ -3322,7 +3324,7 @@ void KoTextString::insert( int index, const QString &s, KoTextFormat *f )
 #endif
 	data[ (int)index + i ].setFormat( f );
     }
-    textChanged = TRUE;
+    bidiDirty = TRUE;
     bNeedsSpellCheck = true;
 }
 
@@ -3349,7 +3351,7 @@ void KoTextString::insert( int index, KoTextStringChar *c )
     data[ (int)index ].d.format = 0;
     data[ (int)index ].type = KoTextStringChar::Regular;
     data[ (int)index ].setFormat( c->format() );
-    textChanged = TRUE;
+    bidiDirty = TRUE;
     bNeedsSpellCheck = true;
 }
 
@@ -3363,6 +3365,7 @@ void KoTextString::truncate( int index )
 		delete data[ i ].customItem();
 		if ( data[ i ].d.custom->format )
 		    data[ i ].d.custom->format->removeRef();
+		delete data[ i ].d.custom;
 		data[ i ].d.custom = 0;
 	    } else if ( data[ i ].format() ) {
 		data[ i ].format()->removeRef();
@@ -3370,7 +3373,7 @@ void KoTextString::truncate( int index )
 	}
     }
     data.truncate( index );
-    textChanged = TRUE;
+    bidiDirty = TRUE;
     bNeedsSpellCheck = true;
 }
 
@@ -3381,6 +3384,7 @@ void KoTextString::remove( int index, int len )
 	    delete data[ i ].customItem();
 	    if ( data[ i ].d.custom->format )
 		data[ i ].d.custom->format->removeRef();
+            delete data[ i ].d.custom;
 	    data[ i ].d.custom = 0;
 	} else if ( data[ i ].format() ) {
 	    data[ i ].format()->removeRef();
@@ -3389,7 +3393,7 @@ void KoTextString::remove( int index, int len )
     memmove( data.data() + index, data.data() + index + len,
 	     sizeof( KoTextStringChar ) * ( data.size() - index - len ) );
     data.resize( data.size() - len );
-    textChanged = TRUE;
+    bidiDirty = TRUE;
     bNeedsSpellCheck = true;
 }
 
@@ -3426,6 +3430,7 @@ void KoTextString::checkBidi() const
     if ( dir == QChar::DirR ) {
 	((KoTextString *)this)->bidi = TRUE;
 	((KoTextString *)this)->rightToLeft = TRUE;
+	((KoTextString *)this)->bidiDirty = FALSE;
 	return;
     } else if ( dir == QChar::DirL ) {
 	((KoTextString *)this)->rightToLeft = FALSE;
@@ -3461,11 +3466,13 @@ void KoTextString::checkBidi() const
 	uchar row = c->c.row();
 	if( (row > 0x04 && row < 0x09) || ( row > 0xfa && row < 0xff ) ) {
 	    ((KoTextString *)this)->bidi = TRUE;
-	    return;
+            if ( rtlKnown )
+                break;
 	}
 	len--;
 	++c;
     }
+    ((KoTextString *)this)->bidiDirty = FALSE;
 }
 
 void KoTextDocument::setStyleSheet( QStyleSheet *s )
@@ -3518,7 +3525,7 @@ void KoTextStringChar::setFormat( KoTextFormat *f )
 
 void KoTextStringChar::setCustomItem( KoTextCustomItem *i )
 {
-    if ( !isCustom() ) {
+    if ( type == Regular ) {
 	KoTextFormat *f = format();
 	d.custom = new CustomData;
 	d.custom->format = f;
@@ -4027,7 +4034,7 @@ void KoTextParag::format( int start, bool doMove )
     //firstFormat = FALSE; //// unused
     changed = TRUE;
     invalid = -1;
-    string()->setTextChanged( FALSE );
+    //####   string()->setTextChanged( FALSE );
 }
 
 int KoTextParag::lineHeightOfChar( int i, int *bl, int *y ) const
@@ -4209,7 +4216,6 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
     int cy = 0;
     int curx = -1, cury = 0, curh = 0, curline = 0;
     bool lastDirection = chr->rightToLeft;
-    KoTextStringChar::Type lastType = chr->type;
 #if 0 // seems we don't need that anymore
     int tw = 0;
 #endif
@@ -4275,6 +4281,14 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 	    curh = h;
 	    cury = cy;
 	    curline = line;
+#if 0 // code from current Qt. To be tested (uses height of char on the left??)
+            QTextStringChar *c = chr;
+            if ( i > 0 )
+                --c;
+            curh = c->format()->height();
+            cury = cy + baseLine - c->format()->ascent();
+#endif
+
 	}
 
 	// first time - start again...
@@ -4353,7 +4367,6 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 	lastBaseLine = baseLine;
 	lasth = h;
 	lastDirection = chr->rightToLeft;
-	lastType = chr->type;
     }
 
     // if we are through the parag, but still have some stuff left to draw, draw it now
@@ -5017,11 +5030,9 @@ void KoTextParag::hide()
 
 void KoTextParag::setDirection( QChar::Direction d )
 {
-    if ( str ) {
+    if ( str && str->direction() != d ) {
 	str->setDirection( d );
-	setChanged( TRUE );
 	invalidate( 0 );
-	format( -1, TRUE );
     }
 }
 

@@ -63,6 +63,8 @@ public:
 
     /** Use this to change the paragraph alignment, not KoTextParag::setAlignment ! */
     void setAlign( int align );
+    /** Return the real alignment: Auto is resolved to either Left or Right */
+    int resolveAlignment() const;
 
     // Borders
     KoBorder leftBorder() const { return m_layout.leftBorder; }

@@ -71,8 +71,6 @@ void KoTextParag::setMargins( const double * margins )
 {
     for ( int i = 0 ; i < 5 ; ++i )
         m_layout.margins[i] = margins[i];
-    if ( prev() )
-        prev()->invalidate(0);     // for top margin (post-1.1: remove this, not necessary anymore)
     invalidate(0);
 }
 
@@ -80,6 +78,13 @@ void KoTextParag::setAlign( int align )
 {
     setAlignment( align );
     m_layout.alignment = align;
+}
+
+int KoTextParag::resolveAlignment() const
+{
+    if ( m_layout.alignment == Qt::AlignAuto )
+        return string()->isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
+    return m_layout.alignment;
 }
 
 void KoTextParag::setLineSpacing( double _i )
@@ -91,8 +96,6 @@ void KoTextParag::setLineSpacing( double _i )
 void KoTextParag::setTopBorder( const KoBorder & _brd )
 {
     m_layout.topBorder = _brd;
-    if ( prev() )
-        prev()->invalidate(0);     // for top margin (post-1.1: remove this, not necessary anymore)
     invalidate(0);
 }
 
@@ -245,9 +248,9 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int hLU
                     bulletFont.setFamily( m_layout.counter->customBulletFont() );
                     p->setFont( bulletFont );
                 }
-                KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet - width, base, width, y - h, height );
+                KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, width, y - h, height );
 
-                p->drawText( xBullet - width, y - h + base, m_layout.counter->customBulletCharacter() );
+                p->drawText( xBullet, y - h + base, m_layout.counter->customBulletCharacter() );
                 break;
             default:
                 break;
@@ -256,7 +259,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int hLU
         QString suffix = m_layout.counter->suffix() + ' ' /*the trailing space*/;
         if ( !suffix.isEmpty() )
         {
-            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, counterWidth, y - h,height );
+            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y - h,height );
 
             p->drawText( xBullet + width, y - h + base, suffix );
         }
@@ -982,7 +985,8 @@ void KoTextParag::printRTDebug( int info )
                       << " depth=" << counter()->depth()
                       << " text='" << m_layout.counter->text( this ) << "'"
                       << " width=" << m_layout.counter->width( this ) << endl;
-        kdDebug() << "  align: " << alignment() << endl;
+        static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
+        kdDebug() << "  align: " << s_align[alignment()] << "  resolveAlignment: " << s_align[resolveAlignment()] << endl;
         QRect pixr = pixelRect( textDocument()->paintingZoomHandler() );
         kdDebug() << "  rect() : " << DEBUGRECT( rect() )
                   << "  pixelRect() : " << DEBUGRECT( pixr ) << endl;
@@ -990,7 +994,7 @@ void KoTextParag::printRTDebug( int info )
                   << " leftMargin()=" << leftMargin() << " firstLineMargin()=" << firstLineMargin()
                   << " rightMargin()=" << rightMargin() << endl;
 
-        static const char * tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
+        static const char * const tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();
         if ( tabList.isEmpty() ) {
             if ( string()->toString().find( '\t' ) != -1 )
