@@ -163,7 +163,7 @@ void GDocument::movePage( int from, int to, bool before )
 
   if ( to > static_cast<int>(pages.count()) )
   {
-   kdDebug(0) << "?" <<endl;
+   kdDebug(38000) << "?" <<endl;
   }
   else
   {
@@ -205,7 +205,8 @@ void GDocument::setAutoUpdate (bool flag)
   if (autoUpdate)
   {
     selBoxIsValid = false;
-    activePage()->updateHandle ();
+    assert( active_page );
+    active_page->updateHandle ();
     emit changed ();
   }
 }
@@ -303,18 +304,23 @@ bool GDocument::readFromXml (const  QDomDocument &document)
     }
 
     pages.clear ();
+    active_page = 0;
     QDomNode n = killustrator.firstChild();
     while(!n.isNull())
     {
       QDomElement pe=n.toElement();
-      kdDebug(0) << "Tag=" << pe.tagName() << endl;
+      kdDebug(38000) << "Tag=" << pe.tagName() << endl;
       if (pe.tagName() == "page")
       {
         GPage *page = addPage();
+        if ( !active_page )
+            active_page = page;
         page->readFromXml(pe);
       }
       n=n.nextSibling();
     }
+    if ( !active_page )
+        kdWarning(38000) << "No page found !" << endl;
 
     setModified (false);
     emit gridChanged ();
@@ -345,10 +351,9 @@ bool GDocument::readFromXml (const  QDomDocument &document)
 
     pages.clear ();
 
-    GPage *page = addPage();
-    page->readFromXmlV2(killustrator);
-
-    page->setName(i18n("Page %1").arg(1));
+    active_page = addPage();
+    active_page->readFromXmlV2(killustrator);
+    active_page->setName(i18n("Page %1").arg(1));
     curPageNum = 2;
 
     setModified (false);
