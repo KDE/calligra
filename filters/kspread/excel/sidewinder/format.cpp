@@ -441,19 +441,14 @@ bool Format::isNull() const
   return d->font.isNull() && d->alignment.isNull() && d->borders.isNull();
 }
 
-FormatFont& Format::font()
-{
-  return d->font;
-}
-
 FormatFont& Format::font() const
 {
   return d->font;
 }
 
-FormatAlignment& Format::alignment()
+void Format::setFont( const FormatFont& font )
 {
-  return d->alignment;
+  d->font = font;
 }
 
 FormatAlignment& Format::alignment() const
@@ -461,14 +456,19 @@ FormatAlignment& Format::alignment() const
   return d->alignment;
 }
 
+void Format::setAlignment( const FormatAlignment& alignment )
+{
+  d->alignment = alignment;
+}
+
 FormatBorders& Format::borders() const
 {
   return d->borders;
 }
 
-FormatBorders& Format::borders()
+void Format::setBorders( const FormatBorders& borders )
 {
-  return d->borders;
+  d->borders = borders;
 }
 
 // merge f into current format

@@ -426,19 +426,14 @@ public:
   bool isNull() const;
   
   /** 
-   * Returns a reference to the formatting information of this format.
-   */
-  FormatFont& font();
-  
-  /** 
    * Returns a constant reference to the formatting information of this format.
    */
   FormatFont& font() const;
   
   /** 
-   * Returns a reference to the alignment information of this format.
+   * Sets new font information for this format.
    */
-  FormatAlignment& alignment();
+  void setFont( const FormatFont& font );
   
   /** 
    * Returns a constant reference to the alignment information of this format.
@@ -446,14 +441,19 @@ public:
   FormatAlignment& alignment() const;
   
   /** 
-   * Returns a constant reference to the borders information of this format.
+   * Sets new alignment information for this format.
    */
-  FormatBorders& borders();
+  void setAlignment( const FormatAlignment& alignment );
   
   /** 
    * Returns a reference to the borders information of this format.
    */
   FormatBorders& borders() const;
+  
+  /** 
+   * Sets new borders information for this format.
+   */
+  void setBorders( const FormatBorders& border );
   
   enum { Left, Center, Right };
   

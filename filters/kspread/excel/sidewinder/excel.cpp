@@ -3645,37 +3645,42 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
 
   XFRecord xf = d->xfTable[ xfIndex ];
     
-  format.font() = convertFont( xf.fontIndex() );
-
+  format.setFont( convertFont( xf.fontIndex() ) );
+  
+  FormatAlignment alignment;
   switch( xf.horizontalAlignment() )
   {
     case XFRecord::Left:     
-      format.alignment().setAlignX( Format::Left ); break;
+      alignment.setAlignX( Format::Left ); break;
     case XFRecord::Right:    
-      format.alignment().setAlignX( Format::Right ); break;
+      alignment.setAlignX( Format::Right ); break;
     case XFRecord::Centered: 
-      format.alignment().setAlignX( Format::Center ); break;
+      alignment.setAlignX( Format::Center ); break;
     default: break;
     // FIXME still unsupported: Repeat, Justified, Filled, Distributed
   };
-  
+  format.setAlignment( alignment );
+
+  FormatBorders borders;
+    
   Pen pen;
-  
   pen = convertBorderStyle( xf.leftBorderStyle() );
   pen.color = convertColor( xf.leftBorderColor() );
-  format.borders().setLeftBorder( pen );
+  borders.setLeftBorder( pen );
   
   pen = convertBorderStyle( xf.rightBorderStyle() );
   pen.color = convertColor( xf.rightBorderColor() );
-  format.borders().setRightBorder( pen );
+  borders.setRightBorder( pen );
   
   pen = convertBorderStyle( xf.topBorderStyle() );
   pen.color = convertColor( xf.topBorderColor() );
-  format.borders().setTopBorder( pen );
+  borders.setTopBorder( pen );
   
   pen = convertBorderStyle( xf.bottomBorderStyle() );
   pen.color = convertColor( xf.bottomBorderColor() );
-  format.borders().setBottomBorder( pen );
+  borders.setBottomBorder( pen );
+  
+  format.setBorders( borders );
 
   return format;
 }
