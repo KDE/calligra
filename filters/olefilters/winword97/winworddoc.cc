@@ -158,7 +158,7 @@ unsigned WinWordDoc::computeCellEdge(
     // the page.
 
     cellEdge = row.rgdxaCenter[edge] - row.rgdxaCenter[0];
-    cellEdge = (unsigned)((double)cellEdge * (s_width - s_hMargin - s_hMargin) / rowWidth);
+    cellEdge = (unsigned)((double)cellEdge * (s_width - s_hMargin - s_hMargin - 6) / rowWidth);
     return cellEdge + s_hMargin;
 }
 
@@ -803,7 +803,7 @@ void WinWordDoc::gotTableEnd(
             cell.append(QString::number(ROW_SIZE + y * ROW_SIZE));
             cell.append("\" bottom=\"");
             cell.append(QString::number(2 * ROW_SIZE + y * ROW_SIZE));
-            cell.append("\" runaround=\"1\" runaGap=\"2\"");
+            cell.append("\" runaround=\"0\" runaGap=\"2\"");
             cell.append(generateBorder("l", row.rgtc[x].brcLeft));
             cell.append(generateBorder("r", row.rgtc[x].brcRight));
             cell.append(generateBorder("t", row.rgtc[x].brcTop));
