@@ -72,7 +72,6 @@ Philipp
   + Expand selection to page
   + Fit selection to page
   + Print selection only
-  + Fixed rows/columns
         
 - Filter, Autofilter                                             (but will take long, haven't started yet)
 - Performance improvements at end of ranges - last column/row    (started)

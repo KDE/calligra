@@ -9,8 +9,10 @@ Until beta2:
 - print functions:
     - added show/hide grid on printout option
     - added print range definiton
+    - added repeat columns & rows on printout
 - paper layout now a property of sheet (not the whole workbook)
 - header/footer now a property of sheet (not the whole workbook)
+- Settings in paper layout are now undoable
 - Sort enhanced for
     - sorting by up to three rows or columns
     - possibility of putting the result of sorting some place else
