@@ -87,16 +87,24 @@ class KexiFormBase::ViewGUIClient: public KXMLGUIClient
 	public:
 		ViewGUIClient():KXMLGUIClient()
 		{
+			m_formMode = new KToggleAction(i18n("Edit Form"),"form_edit",
+				0,actionCollection(),"form_edit");
+
 			setXMLFile("kexiformviewui.rc");
 		}
 		virtual ~ViewGUIClient(){;}
+
 		void activate(QObject* o)
 		{
+			m_formMode->setChecked(false);
 		}
+
 		void deactivate(QObject* o)
 		{
 		}
 	private:
+	KToggleAction *m_formMode;
+
 };
 
 
