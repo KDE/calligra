@@ -33,7 +33,6 @@
 #include "char.h"
 #include "kword_utils.h"
 
-#include <koIMR.h>
 #include <komlMime.h>
 #include <koStream.h>
 #include <komlParser.h>
@@ -1653,7 +1652,7 @@ OpenParts::View_ptr KWordDocument::createView()
 /*================================================================*/
 void KWordDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int diffx, int diffy )
 {
-    KOffice::Document_var doc = imr_createDoc( _e );
+    KOffice::Document_var doc = _e.createDoc();
     if ( CORBA::is_nil( doc ) )
         return;
 

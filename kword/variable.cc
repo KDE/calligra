@@ -17,7 +17,6 @@
 #include "parag.h"
 #include "defs.h"
 
-#include <koIMR.h>
 #include <komlMime.h>
 #include <strstream>
 #include <fstream>

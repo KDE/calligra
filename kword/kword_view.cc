@@ -3227,7 +3227,7 @@ void KWordView::changeRedo( QString _text, bool _enable )
 void KWordView::sendFocusEvent()
 {
     QFocusEvent e( ( QEvent::Type ) 9 );
-    QApplication::sendEvent( shell->getFrame(), &e );
+    QApplication::sendEvent( shell->frame(), &e );
 }
 
 /******************************************************************/

@@ -15,20 +15,15 @@
 
 #include "kword_main.h"
 #include "kword_doc.h"
-#include <string.h>
 #include "kword_main.moc"
 #include "kword_doc.h"
-#include "kword_shell.h"
 
 #include <koFactory.h>
 #include <koQueryTypes.h>
-#include <koIMR.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>
 #include <koApplication.h>
 #include <kimgio.h>
-
-#include <list>
 
 KOFFICE_DOCUMENT_FACTORY( KWordDocument, KWordFactory, KWord::DocumentFactory_skel )
 typedef OPAutoLoader<KWordFactory> KWordAutoLoader;

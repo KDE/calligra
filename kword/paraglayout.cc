@@ -3,7 +3,6 @@
 #include "defs.h"
 #include "kword_utils.h"
 
-#include <koIMR.h>
 #include <komlMime.h>
 
 #include <strstream>

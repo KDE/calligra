@@ -9,7 +9,6 @@
 #include "footnote.h"
 #include "font.h"
 
-#include <koIMR.h>
 #include <komlMime.h>
 
 #include <strstream>

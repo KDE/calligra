@@ -7,7 +7,6 @@
 #include <string.h>
 #include <assert.h>
 
-#include <koIMR.h>
 #include <komlMime.h>
 #include <koStream.h>
 

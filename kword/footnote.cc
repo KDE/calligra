@@ -24,7 +24,6 @@
 
 #include <klocale.h>
 
-#include <koIMR.h>
 #include <komlMime.h>
 #include <strstream>
 #include <fstream>
