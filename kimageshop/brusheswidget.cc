@@ -81,8 +81,8 @@ void BrushesWidget::loadBrushes()
   // (brushes will be saved differently)
 
   QStringList list;
-  list = KGlobal::dirs()->findAllResources("data",
-					   "kimageshop/brushes/*.jpg",
+  list = KGlobal::dirs()->findAllResources("appdata",
+					   "brushes/*.jpg",
 					   false, true);
   QString file;
   for ( QStringList::Iterator it = list.begin(); it != list.end(); ++it ) {
@@ -163,3 +163,6 @@ void BrushesWidget::slotSetBrushSpacing( int spacing )
 
 
 #include "brusheswidget.moc"
+
+
+
