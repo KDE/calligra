@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -52,22 +52,22 @@
 #include <kdebug.h>
 
 /******************************************************************/
-/* Class: KWFrameDia                                              *
+/* Class: KWFrameDia						  *
  *
  *  TAB nr1 Frame Options
- *      Set options dependend of frametype
+ *	Set options dependend of frametype
  *  TAB nr2 Text Runaround
- *      Set the text from of this frame
+ *	Set the text from of this frame
  *  TAB nr3 Frameset
- *      here the user can select from the current TEXT framesets, a new one is 
- *      included in the list.
- *      Afterwards (on ok) the frame should be checked if it is allready owned by a 
- *      frameset, if so that connection must be disconnected (if different) and 
- *      framebehaviour will be copied from the frameset
- *      then the new connection should be made.
+ *	here the user can select from the current TEXT framesets, a new one is
+ *	included in the list.
+ *	Afterwards (on ok) the frame should be checked if it is allready owned by a
+ *	frameset, if so that connection must be disconnected (if different) and
+ *	framebehaviour will be copied from the frameset
+ *	then the new connection should be made.
  *
  *  TAB nr4 Geometry
- *      position/size
+ *	position/size
  ******************************************************************/
 
 /*================================================================*/
@@ -91,44 +91,45 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame,KWordDocument *_doc,Fra
 }
 
 void KWFrameDia::init() {
+    tab1 = tab2 = tab3 = tab4 = 0;
     if (frame) {
-        QRect r = frame->normalize();
-        frame->setRect( r.x(), r.y(), r.width(), r.height() );
-        if(!doc && frame->getFrameSet())
-            doc=frame->getFrameSet()->getDocument();
-    
-        if(doc && doc->getProcessingType() != KWordDocument::DTP && 
-              frame->getFrameSet() == doc->getFrameSet(0)) {
-            setupTab2();
-            setupTab4();
-        } else if(frameType == FT_TEXT) {
-            if(frame->getFrameSet()) { // first creation
-                setupTab1();
-                if(doc) {
-                    setupTab2();
-                    setupTab3();
-                    setupTab4();
-                }
-            } else {
-                if(doc) setupTab3();
-                setupTab1();
-                if(doc) {
-                    setupTab2();
-                    setupTab4();
-                }
-            }
-        } else if(frameType == FT_PICTURE) {
-            setupTab1();
-            if(doc) setupTab4();
-        } else if(frameType == FT_PART) {
-            if(doc) setupTab4();
-        } else if(frameType == FT_FORMULA) {
-            setupTab1();
-            if(doc) setupTab4();
-        }
-    } else 
-        kdDebug() << "ERROR: KWFrameDia::KWFrameDia  no frame.."<<endl;
-    
+	QRect r = frame->normalize();
+	frame->setRect( r.x(), r.y(), r.width(), r.height() );
+	if(!doc && frame->getFrameSet())
+	    doc=frame->getFrameSet()->getDocument();
+
+	if(doc && doc->getProcessingType() != KWordDocument::DTP &&
+	   frame->getFrameSet() == doc->getFrameSet(0)) {
+	    setupTab2();
+	    setupTab4();
+	} else if(frameType == FT_TEXT) {
+	    if(frame->getFrameSet()) { // first creation
+		setupTab1();
+		if(doc) {
+		    setupTab2();
+		    setupTab3();
+		    setupTab4();
+		}
+	    } else {
+		if(doc) setupTab3();
+		setupTab1();
+		if(doc) {
+		    setupTab2();
+		    setupTab4();
+		}
+	    }
+	} else if(frameType == FT_PICTURE) {
+	    setupTab1();
+	    if(doc) setupTab4();
+	} else if(frameType == FT_PART) {
+	    if(doc) setupTab4();
+	} else if(frameType == FT_FORMULA) {
+	    setupTab1();
+	    if(doc) setupTab4();
+	}
+    } else
+	kdDebug() << "ERROR: KWFrameDia::KWFrameDia  no frame.."<<endl;
+
     setInitialSize( QSize(550, 400) );
 }
 
@@ -140,17 +141,17 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
     int rows=2;
     if(frameType == FT_FORMULA || frameType == FT_PICTURE) {
-        rows++;
-        grid1 = new QGridLayout( tab1, rows, 1, 15, 7 );
+	rows++;
+	grid1 = new QGridLayout( tab1, rows, 1, 15, 7 );
     }
     if(frameType == FT_TEXT){
-        rows+=2;
-        grid1 = new QGridLayout( tab1, rows, 2, 15, 7 );
+	rows+=2;
+	grid1 = new QGridLayout( tab1, rows, 2, 15, 7 );
     }
 
     rows--;
     for(int i=0;i<rows;i++)
-        grid1->setRowStretch( i, 0 );
+	grid1->setRowStretch( i, 0 );
     grid1->setRowStretch( rows, 1 );
 
     grid1->addRowSpacing(rows,0);
@@ -158,160 +159,160 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     floating = new QCheckBox (i18n("Frame is floating"), tab1);
     floating->setEnabled(false);
     if(frameType == FT_TEXT)
-        grid1->addMultiCellWidget(floating,0,0,0,1);
-    else 
-        grid1->addWidget(floating,0,0);
+	grid1->addMultiCellWidget(floating,0,0,0,1);
+    else
+	grid1->addWidget(floating,0,0);
     /* ideally the following properties could be given to any floating frame:
-        Position: Top of frame
-                  Top of paragraph
-                  Above current line
-                  At insertion point
-                  Below current line
-                  Bottom of paragraph
-                  Bottom of frame
-        Alignment:Left
-                  Right
-                  Center
-                  Closest to binding
-                  Further from binding
+       Position: Top of frame
+       Top of paragraph
+       Above current line
+       At insertion point
+       Below current line
+       Bottom of paragraph
+       Bottom of frame
+       Alignment:Left
+       Right
+       Center
+       Closest to binding
+       Further from binding
     */
 
     // formula frame
     if(frameType==FT_FORMULA) {
-        autofit = new QCheckBox (i18n("Autofit framesize"),tab1);
-        grid1->addWidget(autofit,1,0);
+	autofit = new QCheckBox (i18n("Autofit framesize"),tab1);
+	grid1->addWidget(autofit,1,0);
 
-    // Picture frame
+	// Picture frame
     } else if(frameType==FT_PICTURE) {
-        aspectRatio = new QCheckBox (i18n("Retain origional aspect-ratio"),tab1);
-        grid1->addWidget(aspectRatio,1,0);
+	aspectRatio = new QCheckBox (i18n("Retain origional aspect-ratio"),tab1);
+	grid1->addWidget(aspectRatio,1,0);
 
-    // Text frame
+	// Text frame
     } else if(frameType==FT_TEXT) {
 
-        // AutoCreateNewFrame policy.
-        endOfFrame = new QGroupBox(i18n("If text is to long for frame:"),tab1);
-        grid1->addWidget( endOfFrame, 1, 0 );
+	// AutoCreateNewFrame policy.
+	endOfFrame = new QGroupBox(i18n("If text is to long for frame:"),tab1);
+	grid1->addWidget( endOfFrame, 1, 0 );
 
-        eofGrid= new QGridLayout (endOfFrame,4,1,15,7);
-         rAppendFrame = new QRadioButton( i18n( "Create a new page" ), endOfFrame );
-         rAppendFrame->resize( rAppendFrame->sizeHint() );
-         eofGrid->addWidget( rAppendFrame, 0, 0 );
+	eofGrid= new QGridLayout (endOfFrame,4,1,15,7);
+	rAppendFrame = new QRadioButton( i18n( "Create a new page" ), endOfFrame );
+	rAppendFrame->resize( rAppendFrame->sizeHint() );
+	eofGrid->addWidget( rAppendFrame, 0, 0 );
 
-         rResizeFrame = new QRadioButton( i18n( "Resize last frame" ), endOfFrame );
-         rResizeFrame->resize( rResizeFrame->sizeHint() );
-         eofGrid->addWidget( rResizeFrame, 1, 0 );
+	rResizeFrame = new QRadioButton( i18n( "Resize last frame" ), endOfFrame );
+	rResizeFrame->resize( rResizeFrame->sizeHint() );
+	eofGrid->addWidget( rResizeFrame, 1, 0 );
 
-         rNoShow = new QRadioButton( i18n( "Don't show the extra text" ), endOfFrame );
-         rNoShow->resize( rNoShow->sizeHint() );
-         eofGrid->addWidget( rNoShow, 2, 0 );
-         QButtonGroup *grp = new QButtonGroup( endOfFrame );
-         grp->hide();
-         grp->setExclusive( true );
-         grp->insert( rAppendFrame );
-         grp->insert( rResizeFrame );
-         grp->insert( rNoShow );
+	rNoShow = new QRadioButton( i18n( "Don't show the extra text" ), endOfFrame );
+	rNoShow->resize( rNoShow->sizeHint() );
+	eofGrid->addWidget( rNoShow, 2, 0 );
+	QButtonGroup *grp = new QButtonGroup( endOfFrame );
+	grp->hide();
+	grp->setExclusive( true );
+	grp->insert( rAppendFrame );
+	grp->insert( rResizeFrame );
+	grp->insert( rNoShow );
 
-         eofGrid->addRowSpacing(0,rAppendFrame->height());
-         eofGrid->addRowSpacing(1,rResizeFrame->height());
-         eofGrid->addRowSpacing(2,rNoShow->height());
-         eofGrid->addRowSpacing(3,0);
-         eofGrid->setRowStretch( 0, 0 );
-         eofGrid->setRowStretch( 1, 0 );
-         eofGrid->setRowStretch( 2, 0 );
-         eofGrid->setRowStretch( 3, 1 );
-        eofGrid->activate();
-        grid1->addRowSpacing(1,endOfFrame->height());
-        if(frame->getFrameBehaviour() == AutoExtendFrame) {
-            rResizeFrame->setChecked(true);
-        } else if (frame->getFrameBehaviour() == AutoCreateNewFrame) {
-            rAppendFrame->setChecked(true);
-        } else {
-            rNoShow->setChecked(true);
-        }
+	eofGrid->addRowSpacing(0,rAppendFrame->height());
+	eofGrid->addRowSpacing(1,rResizeFrame->height());
+	eofGrid->addRowSpacing(2,rNoShow->height());
+	eofGrid->addRowSpacing(3,0);
+	eofGrid->setRowStretch( 0, 0 );
+	eofGrid->setRowStretch( 1, 0 );
+	eofGrid->setRowStretch( 2, 0 );
+	eofGrid->setRowStretch( 3, 1 );
+	eofGrid->activate();
+	grid1->addRowSpacing(1,endOfFrame->height());
+	if(frame->getFrameBehaviour() == AutoExtendFrame) {
+	    rResizeFrame->setChecked(true);
+	} else if (frame->getFrameBehaviour() == AutoCreateNewFrame) {
+	    rAppendFrame->setChecked(true);
+	} else {
+	    rNoShow->setChecked(true);
+	}
 
-        // NewFrameBehaviour
-        onNewPage = new QGroupBox(i18n("On new page creation:"),tab1);
-        grid1->addWidget( onNewPage, 1, 1 );
+	// NewFrameBehaviour
+	onNewPage = new QGroupBox(i18n("On new page creation:"),tab1);
+	grid1->addWidget( onNewPage, 1, 1 );
 
-        onpGrid = new QGridLayout (onNewPage,3,1,15,7);
-         reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), onNewPage);
-         reconnect->resize( reconnect->sizeHint() );
-         connect( reconnect, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
-         onpGrid ->addWidget( reconnect, 0, 0 );
-         
-         noFollowup = new QRadioButton (i18n ("Don't create a followup frame"), onNewPage);
-         noFollowup ->resize( noFollowup ->sizeHint() );
-         connect( noFollowup, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
-         onpGrid ->addWidget( noFollowup, 1, 0 );
+	onpGrid = new QGridLayout (onNewPage,3,1,15,7);
+	reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), onNewPage);
+	reconnect->resize( reconnect->sizeHint() );
+	connect( reconnect, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
+	onpGrid ->addWidget( reconnect, 0, 0 );
 
-         copyRadio= new QRadioButton (i18n ("Place a copy of this frame"), onNewPage);
-         copyRadio->resize( copyRadio->sizeHint() );
-         connect( copyRadio, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOff() ) );
-         onpGrid ->addWidget( copyRadio, 2, 0);
-        
-         QButtonGroup *grp2 = new QButtonGroup( onNewPage );
-         grp2->hide();
-         grp2->setExclusive( true );
-         grp2->insert( reconnect );
-         grp2->insert( noFollowup );
-         grp2->insert( copyRadio );
-        onpGrid->activate();
-        grid1->addRowSpacing(1,onNewPage->height());
-        if(frame->getNewFrameBehaviour() == Reconnect) {
-            reconnect->setChecked(true);
-        } else if(frame->getNewFrameBehaviour() == NoFollowup) {
-            noFollowup->setChecked(true);
-        } else {
-            copyRadio->setChecked(true);
-            setFrameBehaviourInputOff();
-        }
+	noFollowup = new QRadioButton (i18n ("Don't create a followup frame"), onNewPage);
+	noFollowup ->resize( noFollowup ->sizeHint() );
+	connect( noFollowup, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
+	onpGrid ->addWidget( noFollowup, 1, 0 );
 
-        // SideHeads definition
-        sideHeads = new QGroupBox(i18n("SideHead definition"),tab1);
-        sideHeads->setEnabled(false);
-        grid1->addWidget(sideHeads,2,0);
+	copyRadio= new QRadioButton (i18n ("Place a copy of this frame"), onNewPage);
+	copyRadio->resize( copyRadio->sizeHint() );
+	connect( copyRadio, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOff() ) );
+	onpGrid ->addWidget( copyRadio, 2, 0);
 
-        sideGrid = new QGridLayout (sideHeads,3,2,15,7);
-         sideTitle1 = new QLabel ( i18n( QString ("Size ( " + doc->getUnit() + " ):" )),sideHeads);
-         sideTitle1->resize(sideTitle1->sizeHint());
-         sideGrid->addWidget(sideTitle1,0,0);
-         sideWidth= new QLineEdit(sideHeads,"");
-         sideWidth->setMaxLength(6);
-         sideGrid->addWidget(sideWidth,0,1);
-         sideTitle2 = new QLabel( i18n( QString ("Gap size ( "+ doc->getUnit() + " ):" )),sideHeads);
-         sideTitle2->resize(sideTitle2->sizeHint());
-         sideGrid->addWidget(sideTitle2,1,0);
-         sideGap = new QLineEdit(sideHeads,"");
-         sideGap->setMaxLength(6);
-         sideGrid->addWidget(sideGap,1,1);
-         sideAlign = new QComboBox (false,sideHeads);
-         sideAlign->setAutoResize(false);
-         sideAlign->insertItem ( i18n("Left"));
-         sideAlign->insertItem ( i18n("Right"));
-         sideAlign->insertItem ( i18n("Closest to binding"));
-         sideAlign->insertItem ( i18n("Closest to page edge"));
-         sideAlign->resize(sideAlign->sizeHint());
-         sideGrid->addMultiCellWidget(sideAlign,2,2,0,1);
-         sideGrid->addRowSpacing(0,sideTitle1->height());
-         sideGrid->addRowSpacing(0,sideWidth->height());
-         sideGrid->addRowSpacing(1,sideTitle2->height());
-         sideGrid->addRowSpacing(1,sideGap->height());
-         sideGrid->addRowSpacing(2,sideAlign->height());
+	QButtonGroup *grp2 = new QButtonGroup( onNewPage );
+	grp2->hide();
+	grp2->setExclusive( true );
+	grp2->insert( reconnect );
+	grp2->insert( noFollowup );
+	grp2->insert( copyRadio );
+	onpGrid->activate();
+	grid1->addRowSpacing(1,onNewPage->height());
+	if(frame->getNewFrameBehaviour() == Reconnect) {
+	    reconnect->setChecked(true);
+	} else if(frame->getNewFrameBehaviour() == NoFollowup) {
+	    noFollowup->setChecked(true);
+	} else {
+	    copyRadio->setChecked(true);
+	    setFrameBehaviourInputOff();
+	}
 
-         sideGrid->addColSpacing(0,sideTitle1->width());
-         sideGrid->addColSpacing(0,sideTitle2->width());
-         sideGrid->addColSpacing(1,sideGap->width());
-        sideGrid->activate();
-        grid1->addRowSpacing(2,sideHeads->height());
+	// SideHeads definition
+	sideHeads = new QGroupBox(i18n("SideHead definition"),tab1);
+	sideHeads->setEnabled(false);
+	grid1->addWidget(sideHeads,2,0);
 
-        // init for sideheads.
-        sideWidth->setText("0");
-        sideWidth->setValidator( new QDoubleValidator( sideWidth) );
+	sideGrid = new QGridLayout (sideHeads,3,2,15,7);
+	sideTitle1 = new QLabel ( i18n( QString ("Size ( " + doc->getUnit() + " ):" )),sideHeads);
+	sideTitle1->resize(sideTitle1->sizeHint());
+	sideGrid->addWidget(sideTitle1,0,0);
+	sideWidth= new QLineEdit(sideHeads,"");
+	sideWidth->setMaxLength(6);
+	sideGrid->addWidget(sideWidth,0,1);
+	sideTitle2 = new QLabel( i18n( QString ("Gap size ( "+ doc->getUnit() + " ):" )),sideHeads);
+	sideTitle2->resize(sideTitle2->sizeHint());
+	sideGrid->addWidget(sideTitle2,1,0);
+	sideGap = new QLineEdit(sideHeads,"");
+	sideGap->setMaxLength(6);
+	sideGrid->addWidget(sideGap,1,1);
+	sideAlign = new QComboBox (false,sideHeads);
+	sideAlign->setAutoResize(false);
+	sideAlign->insertItem ( i18n("Left"));
+	sideAlign->insertItem ( i18n("Right"));
+	sideAlign->insertItem ( i18n("Closest to binding"));
+	sideAlign->insertItem ( i18n("Closest to page edge"));
+	sideAlign->resize(sideAlign->sizeHint());
+	sideGrid->addMultiCellWidget(sideAlign,2,2,0,1);
+	sideGrid->addRowSpacing(0,sideTitle1->height());
+	sideGrid->addRowSpacing(0,sideWidth->height());
+	sideGrid->addRowSpacing(1,sideTitle2->height());
+	sideGrid->addRowSpacing(1,sideGap->height());
+	sideGrid->addRowSpacing(2,sideAlign->height());
 
-        sideGap->setText("0");
-        sideGap->setValidator( new QDoubleValidator( sideGap) );
-        // add rest of sidehead init..
+	sideGrid->addColSpacing(0,sideTitle1->width());
+	sideGrid->addColSpacing(0,sideTitle2->width());
+	sideGrid->addColSpacing(1,sideGap->width());
+	sideGrid->activate();
+	grid1->addRowSpacing(2,sideHeads->height());
+
+	// init for sideheads.
+	sideWidth->setText("0");
+	sideWidth->setValidator( new QDoubleValidator( sideWidth) );
+
+	sideGap->setText("0");
+	sideGap->setValidator( new QDoubleValidator( sideGap) );
+	// add rest of sidehead init..
     }
 
     //kdDebug() << "setup tab 1 exit"<<endl;
@@ -380,7 +381,7 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
 
     grid2->addWidget( runGroup, 0, 0 );
     grid2->addMultiCellWidget( runGroup, 0, 0, 0, 1 );
-    
+
     lRGap = new QLabel( i18n( QString( "Run around gap ( " + doc->getUnit() + " ):" ) ), tab2 );
     lRGap->resize( lRGap->sizeHint() );
     lRGap->setAlignment( AlignRight | AlignVCenter );
@@ -388,9 +389,9 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
 
     eRGap = new QLineEdit( tab2 );
     if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
-        eRGap->setValidator( new QIntValidator( eRGap ) );
+	eRGap->setValidator( new QIntValidator( eRGap ) );
     else
-        eRGap->setValidator( new QDoubleValidator( eRGap ) );
+	eRGap->setValidator( new QDoubleValidator( eRGap ) );
     eRGap->setText( "0.00" );
     eRGap->setMaxLength( 5 );
     eRGap->setEchoMode( QLineEdit::Normal );
@@ -410,20 +411,20 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
 
     switch ( frame ? frame->getRunAround() : doc->getRunAround() ) {
     case RA_NO: rRunNo->setChecked( true );
-        break;
+	break;
     case RA_BOUNDINGRECT: rRunBounding->setChecked( true );
-        break;
+	break;
     case RA_SKIP: rRunContur->setChecked( true );
-        break;
+	break;
     }
     QString str;
     switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM: str.sprintf( "%.2f", frame ? frame->getRunAroundGap().mm() : doc->getRunAroundGap().mm() );
-        break;
+	break;
     case U_INCH: str.sprintf( "%.2f", frame ? frame->getRunAroundGap().inch() : doc->getRunAroundGap().inch() );
-        break;
+	break;
     case U_PT: str.sprintf( "%d", frame ? frame->getRunAroundGap().pt() : doc->getRunAroundGap().pt() );
-        break;
+	break;
     }
 
     eRGap->setText( str );
@@ -432,13 +433,13 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
 }
 
 void KWFrameDia::setupTab3(){ // TAB Frameset
-/*
- * here the user can select from the current TEXT framesets, a new one is 
- * included in the list.
- * Afterwards (on ok) the frame should be checked if it is allready owned by a 
- * frameset, if so that connection must be disconnected (if different) and 
- * framebehaviour will be copied from the frameset
- * then the new connection should be made. 
+    /*
+     * here the user can select from the current TEXT framesets, a new one is
+     * included in the list.
+     * Afterwards (on ok) the frame should be checked if it is allready owned by a
+     * frameset, if so that connection must be disconnected (if different) and
+     * framebehaviour will be copied from the frameset
+     * then the new connection should be made.
  */
     //kdDebug() << "setup tab 3 frameSet"<<endl;
     tab3 = addPage( i18n( "Connect text frames" ) );
@@ -456,28 +457,28 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
     lFrameSList->header()->setMovingEnabled( false );
 
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
-        if ( i == 0 && doc->getProcessingType() == KWordDocument::WP )
-            continue;
-        if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT ||
-             dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getFrameInfo() != FI_BODY )
-            continue;
-        if ( doc->getFrameSet( i )->getGroupManager() )
-            continue;
-        QListViewItem *item = new QListViewItem( lFrameSList );
-        item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-        item->setText( 1, doc->getFrameSet( i )->getName() );
+	if ( i == 0 && doc->getProcessingType() == KWordDocument::WP )
+	    continue;
+	if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT ||
+	     dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getFrameInfo() != FI_BODY )
+	    continue;
+	if ( doc->getFrameSet( i )->getGroupManager() )
+	    continue;
+	QListViewItem *item = new QListViewItem( lFrameSList );
+	item->setText( 0, QString( "%1" ).arg( i + 1 ) );
+	item->setText( 1, doc->getFrameSet( i )->getName() );
     }
 
     if (! frame->getFrameSet()) {
-        QListViewItem *item = new QListViewItem( lFrameSList );
-        item->setText( 0, QString( "*%1" ).arg( doc->getNumFrameSets() + 1 ) );
-        item->setText( 1, i18n( "Create a new frameset with this frame" ) );
+	QListViewItem *item = new QListViewItem( lFrameSList );
+	item->setText( 0, QString( "*%1" ).arg( doc->getNumFrameSets() + 1 ) );
+	item->setText( 1, i18n( "Create a new frameset with this frame" ) );
     }
 
     lFrameSList->setSelected( lFrameSList->firstChild(), TRUE );
 
     connect( lFrameSList, SIGNAL( currentChanged( QListViewItem * ) ),
-             this, SLOT( connectListSelected( QListViewItem * ) ) );
+	     this, SLOT( connectListSelected( QListViewItem * ) ) );
     grid3->addWidget( lFrameSList, 1, 0 );
 
     QHBox *row = new QHBox( tab3 );
@@ -518,9 +519,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     sx = new QLineEdit( grp1 );
     if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
-        sx->setValidator( new QIntValidator( sx ) );
+	sx->setValidator( new QIntValidator( sx ) );
     else
-        sx->setValidator( new QDoubleValidator( sx ) );
+	sx->setValidator( new QDoubleValidator( sx ) );
     sx->setText( "0.00" );
     sx->setMaxLength( 16 );
     sx->setEchoMode( QLineEdit::Normal );
@@ -534,9 +535,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     sy = new QLineEdit( grp1 );
     if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
-        sy->setValidator( new QIntValidator( sy ) );
+	sy->setValidator( new QIntValidator( sy ) );
     else
-        sy->setValidator( new QDoubleValidator( sy ) );
+	sy->setValidator( new QDoubleValidator( sy ) );
     sy->setText( "0.00" );
     sy->setMaxLength( 16 );
     sy->setEchoMode( QLineEdit::Normal );
@@ -550,9 +551,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     sw = new QLineEdit( grp1 );
     if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
-        sw->setValidator( new QIntValidator( sw ) );
+	sw->setValidator( new QIntValidator( sw ) );
     else
-        sw->setValidator( new QDoubleValidator( sw ) );
+	sw->setValidator( new QDoubleValidator( sw ) );
     sw->setText( "0.00" );
     sw->setMaxLength( 16 );
     sw->setEchoMode( QLineEdit::Normal );
@@ -566,9 +567,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     sh = new QLineEdit( grp1 );
     if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
-        sh->setValidator( new QIntValidator( sh ) );
+	sh->setValidator( new QIntValidator( sh ) );
     else
-        sh->setValidator( new QDoubleValidator( sh ) );
+	sh->setValidator( new QDoubleValidator( sh ) );
     sh->setText( "0.00" );
     sh->setMaxLength( 16 );
     sh->setEchoMode( QLineEdit::Normal );
@@ -615,9 +616,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     sml = new QLineEdit( grp2 );
     if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
-        sml->setValidator( new QIntValidator( sml ) );
+	sml->setValidator( new QIntValidator( sml ) );
     else
-        sml->setValidator( new QDoubleValidator( sml ) );
+	sml->setValidator( new QDoubleValidator( sml ) );
     sml->setText( "0.00" );
     sml->setMaxLength( 5 );
     sml->setEchoMode( QLineEdit::Normal );
@@ -631,9 +632,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     smr = new QLineEdit( grp2 );
     if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
-        smr->setValidator( new QIntValidator( smr ) );
+	smr->setValidator( new QIntValidator( smr ) );
     else
-        smr->setValidator( new QDoubleValidator( smr ) );
+	smr->setValidator( new QDoubleValidator( smr ) );
     smr->setText( "0.00" );
     smr->setMaxLength( 5 );
     smr->setEchoMode( QLineEdit::Normal );
@@ -647,9 +648,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     smt = new QLineEdit( grp2 );
     if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
-        smt->setValidator( new QIntValidator( smt ) );
+	smt->setValidator( new QIntValidator( smt ) );
     else
-        smt->setValidator( new QDoubleValidator( smt ) );
+	smt->setValidator( new QDoubleValidator( smt ) );
     smt->setText( "0.00" );
     smt->setMaxLength( 5 );
     smt->setEchoMode( QLineEdit::Normal );
@@ -663,9 +664,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     smb = new QLineEdit( grp2 );
     if ( KWUnit::unitType( doc->getUnit() ) == U_PT )
-        smb->setValidator( new QIntValidator( smb ) );
+	smb->setValidator( new QIntValidator( smb ) );
     else
-        smb->setValidator( new QDoubleValidator( smb ) );
+	smb->setValidator( new QDoubleValidator( smb ) );
     smb->setText( "0.00" );
     smb->setMaxLength( 5 );
     smb->setEchoMode( QLineEdit::Normal );
@@ -719,69 +720,69 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     doc->getFrameMargins( l, r, t, b );
     switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM:
-        sml->setText( QString().setNum( l.mm() ) );
-        smr->setText( QString().setNum( r.mm() ) );
-        smt->setText( QString().setNum( t.mm() ) );
-        smb->setText( QString().setNum( b.mm() ) );
-        break;
+	sml->setText( QString().setNum( l.mm() ) );
+	smr->setText( QString().setNum( r.mm() ) );
+	smt->setText( QString().setNum( t.mm() ) );
+	smb->setText( QString().setNum( b.mm() ) );
+	break;
     case U_INCH:
-        sml->setText( QString().setNum( l.inch() ) );
-        smr->setText( QString().setNum( r.inch() ) );
-        smt->setText( QString().setNum( t.inch() ) );
-        smb->setText( QString().setNum( b.inch() ) );
-        break;
+	sml->setText( QString().setNum( l.inch() ) );
+	smr->setText( QString().setNum( r.inch() ) );
+	smt->setText( QString().setNum( t.inch() ) );
+	smb->setText( QString().setNum( b.inch() ) );
+	break;
     case U_PT:
-        sml->setText( QString().setNum( l.pt() ) );
-        smr->setText( QString().setNum( r.pt() ) );
-        smt->setText( QString().setNum( t.pt() ) );
-        smb->setText( QString().setNum( b.pt() ) );
-        break;
+	sml->setText( QString().setNum( l.pt() ) );
+	smr->setText( QString().setNum( r.pt() ) );
+	smt->setText( QString().setNum( t.pt() ) );
+	smb->setText( QString().setNum( b.pt() ) );
+	break;
     }
 
 
     if (doc->isOnlyOneFrameSelected() && ( doc->getProcessingType() == KWordDocument::DTP ||
-                                            ( doc->getProcessingType() == KWordDocument::WP &&
-                                              doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
-        unsigned int x, y, w, h, _num;
+					   ( doc->getProcessingType() == KWordDocument::WP &&
+					     doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
+	unsigned int x, y, w, h, _num;
 
-        doc->getFrameCoords( x, y, w, h, _num );
-        QString _x, _y, _w, _h;
+	doc->getFrameCoords( x, y, w, h, _num );
+	QString _x, _y, _w, _h;
 
-        switch ( KWUnit::unitType( doc->getUnit() ) ) {
-        case U_MM:
-            _x.sprintf( "%.2f", POINT_TO_MM( x ) );
-            _y.sprintf( "%.2f", POINT_TO_MM( y ) );
-            _w.sprintf( "%.2f", POINT_TO_MM( w ) );
-            _h.sprintf( "%.2f", POINT_TO_MM( h ) );
-            break;
-        case U_INCH:
-            _x.sprintf( "%.2f", POINT_TO_INCH( x ) );
-            _y.sprintf( "%.2f", POINT_TO_INCH( y ) );
-            _w.sprintf( "%.2f", POINT_TO_INCH( w ) );
-            _h.sprintf( "%.2f", POINT_TO_INCH( h ) );
-            break;
-        case U_PT:
-            _x.sprintf( "%d", x );
-            _y.sprintf( "%d", y );
-            _w.sprintf( "%d", w );
-            _h.sprintf( "%d", h );
-            break;
-        }
+	switch ( KWUnit::unitType( doc->getUnit() ) ) {
+	case U_MM:
+	    _x.sprintf( "%.2f", POINT_TO_MM( x ) );
+	    _y.sprintf( "%.2f", POINT_TO_MM( y ) );
+	    _w.sprintf( "%.2f", POINT_TO_MM( w ) );
+	    _h.sprintf( "%.2f", POINT_TO_MM( h ) );
+	    break;
+	case U_INCH:
+	    _x.sprintf( "%.2f", POINT_TO_INCH( x ) );
+	    _y.sprintf( "%.2f", POINT_TO_INCH( y ) );
+	    _w.sprintf( "%.2f", POINT_TO_INCH( w ) );
+	    _h.sprintf( "%.2f", POINT_TO_INCH( h ) );
+	    break;
+	case U_PT:
+	    _x.sprintf( "%d", x );
+	    _y.sprintf( "%d", y );
+	    _w.sprintf( "%d", w );
+	    _h.sprintf( "%d", h );
+	    break;
+	}
 
-        oldX = atof( _x );
-        oldY = atof( _y );
-        oldW = atof( _w );
-        oldH = atof( _h );
+	oldX = atof( _x );
+	oldY = atof( _y );
+	oldW = atof( _w );
+	oldH = atof( _h );
 
-        sx->setText( _x );
-        sy->setText( _y );
-        sw->setText( _w );
-        sh->setText( _h );
+	sx->setText( _x );
+	sy->setText( _y );
+	sw->setText( _w );
+	sh->setText( _h );
     } else {
-        sx->setEnabled( false );
-        sy->setEnabled( false );
-        sw->setEnabled( false );
-        sh->setEnabled( false );
+	sx->setEnabled( false );
+	sy->setEnabled( false );
+	sw->setEnabled( false );
+	sh->setEnabled( false );
     }
 
     //kdDebug() << "setup tab 4 exit"<<endl;
@@ -795,21 +796,21 @@ void KWFrameDia::uncheckAllRuns()
 {
     rRunNo->setChecked( false );
     rRunBounding->setChecked( false );
-    rRunContur->setChecked( false ); 
+    rRunContur->setChecked( false );
 }
 
 /*================================================================*/
 void KWFrameDia::runNoClicked()
-{ 
+{
     uncheckAllRuns();
-    rRunNo->setChecked( true ); 
+    rRunNo->setChecked( true );
 }
 
 /*================================================================*/
 void KWFrameDia::runBoundingClicked()
-{ 
+{
     uncheckAllRuns();
-    rRunBounding->setChecked( true ); 
+    rRunBounding->setChecked( true );
 }
 
 /*================================================================*/
@@ -817,207 +818,217 @@ void KWFrameDia::runConturClicked()
 {
 
     uncheckAllRuns();
-    rRunContur->setChecked( true ); 
+    rRunContur->setChecked( true );
 }
 
 void KWFrameDia::setFrameBehaviourInputOn() {
     if(!rResizeFrame->isEnabled()) {
-        if(frameBehaviour== AutoExtendFrame) {
-            rResizeFrame->setChecked(true);
-        } else if (frameBehaviour== AutoCreateNewFrame) {
-            rAppendFrame->setChecked(true);
-        } else {
-            rNoShow->setChecked(true);
-        }
-        rResizeFrame->setEnabled(true);
-        rAppendFrame->setEnabled(true);
-        rNoShow->setEnabled(true);
+	if(frameBehaviour== AutoExtendFrame) {
+	    rResizeFrame->setChecked(true);
+	} else if (frameBehaviour== AutoCreateNewFrame) {
+	    rAppendFrame->setChecked(true);
+	} else {
+	    rNoShow->setChecked(true);
+	}
+	rResizeFrame->setEnabled(true);
+	rAppendFrame->setEnabled(true);
+	rNoShow->setEnabled(true);
     }
 }
 
 void KWFrameDia::setFrameBehaviourInputOff() {
     if(rResizeFrame->isEnabled()) {
-        if(rResizeFrame->isChecked()) {
-            frameBehaviour=AutoExtendFrame;
-        } else if ( rAppendFrame->isChecked()) {
-            frameBehaviour=AutoCreateNewFrame;
-        } else {
-            frameBehaviour=Ignore;
-        }
-        rNoShow->setChecked(true);
-        rResizeFrame->setEnabled(false);
-        rAppendFrame->setEnabled(false);
-        rNoShow->setEnabled(false);
-    } 
+	if(rResizeFrame->isChecked()) {
+	    frameBehaviour=AutoExtendFrame;
+	} else if ( rAppendFrame->isChecked()) {
+	    frameBehaviour=AutoCreateNewFrame;
+	} else {
+	    frameBehaviour=Ignore;
+	}
+	rNoShow->setChecked(true);
+	rResizeFrame->setEnabled(false);
+	rAppendFrame->setEnabled(false);
+	rNoShow->setEnabled(false);
+    }
 }
 
 /*================================================================*/
-bool KWFrameDia::applyChanges() { 
+bool KWFrameDia::applyChanges() {
     //kdDebug() << "KWFrameDia::applyChanges"<<endl;
-    if(frame && frameType==FT_TEXT) {
-        // FrameBehaviour
-        if(rResizeFrame->isChecked()) {
-            frame->setFrameBehaviour(AutoExtendFrame);
-        } else if ( rAppendFrame->isChecked()) {
-            frame->setFrameBehaviour(AutoCreateNewFrame);
-        } else {
-            frame->setFrameBehaviour(Ignore);
-        }
-        // TODO do some intelligent stuff with this setting so 
-        // the frameset will be updated as well when, for instance,
-        // all the frames have been set to a particular setting.
+    if(frame && frameType==FT_TEXT ) {
+	if ( tab1 ) {
+	    // FrameBehaviour
+	    if(rResizeFrame->isChecked()) {
+		frame->setFrameBehaviour(AutoExtendFrame);
+	    } else if ( rAppendFrame->isChecked()) {
+		frame->setFrameBehaviour(AutoCreateNewFrame);
+	    } else {
+		frame->setFrameBehaviour(Ignore);
+	    }
+	}
+	// TODO do some intelligent stuff with this setting so
+	// the frameset will be updated as well when, for instance,
+	// all the frames have been set to a particular setting.
 
-        // Run around
-        if ( rRunNo->isChecked() )
-            frame->setRunAround( RA_NO );
-        else if ( rRunBounding->isChecked() )
-            frame->setRunAround( RA_BOUNDINGRECT );
-        else if ( rRunContur->isChecked() )
-            frame->setRunAround( RA_SKIP );
-
-        // NewFrameBehaviour
-        if(reconnect->isChecked()) {
-            frame->setNewFrameBehaviour(Reconnect);
-        } else if ( noFollowup->isChecked()) {
-            frame->setNewFrameBehaviour(NoFollowup);
-        } else {
-            frame->setNewFrameBehaviour(Copy);
-        }
-
-        KWUnit u;
-        switch ( KWUnit::unitType( doc->getUnit() ) ) {
-        case U_MM: u.setMM( atof( eRGap->text() ) );
-            break;
-        case U_INCH: u.setINCH( atof( eRGap->text() ) );
-            break;
-        case U_PT: u.setPT( atoi( eRGap->text() ) );
-            break;
-        }
-        frame->setRunAroundGap( u );
-
+	// Run around
+	
+	if ( tab2 ) {
+	    if ( rRunNo->isChecked() )
+		frame->setRunAround( RA_NO );
+	    else if ( rRunBounding->isChecked() )
+		frame->setRunAround( RA_BOUNDINGRECT );
+	    else if ( rRunContur->isChecked() )
+		frame->setRunAround( RA_SKIP );
+	}
+	
+	// NewFrameBehaviour
+	if ( tab1 ) {
+	    if(reconnect->isChecked()) {
+		frame->setNewFrameBehaviour(Reconnect);
+	    } else if ( noFollowup->isChecked()) {
+		frame->setNewFrameBehaviour(NoFollowup);
+	    } else {
+		frame->setNewFrameBehaviour(Copy);
+	    }
+	}
+	
+	if ( tab2 ) {
+	    KWUnit u;
+	    switch ( KWUnit::unitType( doc->getUnit() ) ) {
+	    case U_MM: u.setMM( atof( eRGap->text() ) );
+		break;
+	    case U_INCH: u.setINCH( atof( eRGap->text() ) );
+		break;
+	    case U_PT: u.setPT( atoi( eRGap->text() ) );
+		break;
+	    }
+	    frame->setRunAroundGap( u );
+	}
 
     }
     int currFS = -1;
 
     if (frame && frameType==FT_TEXT) {
-        QString str = lFrameSList->currentItem()->text( 0 );
-        QString name = QString::null;
-        if ( str[ 0 ] == '*' ) {
-            str.remove( 0, 1 );
-            name = eFrameSetName->text();
-            if ( name.isEmpty() )
-                name = i18n( "Frameset %d" ).arg( doc->getNumFrameSets() + 1 );
-            bool same = FALSE;
-            for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
-                if ( doc->getFrameSet( i )->getName() == name ) {
-                    same = TRUE;
-                    break;
-                }
-            }
-            if ( same ) {
-                KMessageBox::sorry( this,
-                    i18n( "A new frameset with the name '%1'\n"
-                          "can not be made because a frameset with that name\n"
-                          "already exists. Please enter another name or select\n"
-                          "an existing frameset from the list.").arg(name));
-                return false;
-            }
-        }
-        int _num = str.toInt() - 1;
+	if ( tab1 ) { 
+	    QString str = lFrameSList->currentItem()->text( 0 );
+	    QString name = QString::null;
+	    if ( str[ 0 ] == '*' ) {
+		str.remove( 0, 1 );
+		name = eFrameSetName->text();
+		if ( name.isEmpty() )
+		    name = i18n( "Frameset %d" ).arg( doc->getNumFrameSets() + 1 );
+		bool same = FALSE;
+		for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
+		    if ( doc->getFrameSet( i )->getName() == name ) {
+			same = TRUE;
+			break;
+		    }
+		}
+		if ( same ) {
+		    KMessageBox::sorry( this,
+					i18n( "A new frameset with the name '%1'\n"
+					      "can not be made because a frameset with that name\n"
+					      "already exists. Please enter another name or select\n"
+					      "an existing frameset from the list.").arg(name));
+		    return false;
+		}
+	    }
+	    int _num = str.toInt() - 1;
 
-        // delete frame from frameset
-        if ( frame->getFrameSet() &&
-              ! (static_cast<unsigned int>( _num ) < doc->getNumFrameSets() &&
-               frame->getFrameSet() == doc->getFrameSet(_num))) {
-            if ( frame->getFrameSet()->getNumFrames() > 1 )
-                frame->getFrameSet()->delFrame( frame, FALSE );
-            else {
-                frame->getFrameSet()->delFrame( frame, FALSE );
-                doc->delFrameSet( frame->getFrameSet() );
-            }
-        }
+	// delete frame from frameset
+	    if ( frame->getFrameSet() &&
+		 ! (static_cast<unsigned int>( _num ) < doc->getNumFrameSets() &&
+		    frame->getFrameSet() == doc->getFrameSet(_num))) {
+		if ( frame->getFrameSet()->getNumFrames() > 1 )
+		    frame->getFrameSet()->delFrame( frame, FALSE );
+		else {
+		    frame->getFrameSet()->delFrame( frame, FALSE );
+		    doc->delFrameSet( frame->getFrameSet() );
+		}
+	    }
 
-        if(frame->getFrameSet() == 0L) { // if there is no frameset (anymore)
-            // attach frame to frameset
-            if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() ) {
-                doc->getFrameSet( _num )->addFrame( frame );
-                currFS = _num;
-            } else { // create a new frameset
-                KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
-                _frameSet->setName( name );
-                _frameSet->addFrame( frame );
-                doc->addFrameSet( _frameSet );
-                emit changed();
-                return true;
-            }
-            doc->updateAllFrames();
-        }
+	    if(frame->getFrameSet() == 0L) { // if there is no frameset (anymore)
+		// attach frame to frameset
+		if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() ) {
+		    doc->getFrameSet( _num )->addFrame( frame );
+		    currFS = _num;
+		} else { // create a new frameset
+		    KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
+		    _frameSet->setName( name );
+		    _frameSet->addFrame( frame );
+		    doc->addFrameSet( _frameSet );
+		    emit changed();
+		    return true;
+		}
+		doc->updateAllFrames();
+	    }
+	}
     }
 
-    if ( frame ) { 
-        if ( doc->isOnlyOneFrameSelected() && ( doc->getProcessingType() == KWordDocument::DTP ||
-                                                ( doc->getProcessingType() == KWordDocument::WP &&
-                                                  doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
-            if ( oldX != atof( sx->text() ) || oldY != atof( sy->text() ) || oldW != atof( sw->text() ) || oldH != atof( sh->text() ) ) {
-                unsigned int px, py, pw, ph;
-                switch ( KWUnit::unitType( doc->getUnit() ) ) {
-                case U_MM:
-                    px = MM_TO_POINT( atof( sx->text() ) );
-                    py = MM_TO_POINT( atof( sy->text() ) );
-                    pw = MM_TO_POINT( atof( sw->text() ) );
-                    ph = MM_TO_POINT( atof( sh->text() ) );
-                    break;
-                case U_INCH:
-                    px = INCH_TO_POINT( atof( sx->text() ) );
-                    py = INCH_TO_POINT( atof( sy->text() ) );
-                    pw = INCH_TO_POINT( atof( sw->text() ) );
-                    ph = INCH_TO_POINT( atof( sh->text() ) );
-                    break;
-                case U_PT:
-                    px = atoi( sx->text() );
-                    py = atoi( sy->text() );
-                    pw = atoi( sw->text() );
-                    ph = atoi( sh->text() );
-                    break;
-                }
-                doc->setFrameCoords( px, py, pw, ph );
-            }
-        }
+    if ( frame ) {
+	if ( doc->isOnlyOneFrameSelected() && ( doc->getProcessingType() == KWordDocument::DTP ||
+						( doc->getProcessingType() == KWordDocument::WP &&
+						  doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
+	    if ( oldX != atof( sx->text() ) || oldY != atof( sy->text() ) || oldW != atof( sw->text() ) || oldH != atof( sh->text() ) ) {
+		unsigned int px, py, pw, ph;
+		switch ( KWUnit::unitType( doc->getUnit() ) ) {
+		case U_MM:
+		    px = MM_TO_POINT( atof( sx->text() ) );
+		    py = MM_TO_POINT( atof( sy->text() ) );
+		    pw = MM_TO_POINT( atof( sw->text() ) );
+		    ph = MM_TO_POINT( atof( sh->text() ) );
+		    break;
+		case U_INCH:
+		    px = INCH_TO_POINT( atof( sx->text() ) );
+		    py = INCH_TO_POINT( atof( sy->text() ) );
+		    pw = INCH_TO_POINT( atof( sw->text() ) );
+		    ph = INCH_TO_POINT( atof( sh->text() ) );
+		    break;
+		case U_PT:
+		    px = atoi( sx->text() );
+		    py = atoi( sy->text() );
+		    pw = atoi( sw->text() );
+		    ph = atoi( sh->text() );
+		    break;
+		}
+		doc->setFrameCoords( px, py, pw, ph );
+	    }
+	}
 
-        KWUnit u1, u2, u3, u4;
-        switch ( KWUnit::unitType( doc->getUnit() ) ) {
-        case U_MM:
-            u1.setMM( atof( sml->text() ) );
-            u2.setMM( atof( smr->text() ) );
-            u3.setMM( atof( smt->text() ) );
-            u4.setMM( atof( smb->text() ) );
-            break;
-        case U_INCH:
-            u1.setINCH( atof( sml->text() ) );
-            u2.setINCH( atof( smr->text() ) );
-            u3.setINCH( atof( smt->text() ) );
-            u4.setINCH( atof( smb->text() ) );
-            break;
-        case U_PT:
-            u1.setPT( atoi( sml->text() ) );
-            u2.setPT( atoi( smr->text() ) );
-            u3.setPT( atoi( smt->text() ) );
-            u4.setPT( atoi( smb->text() ) );
-            break;
-        }
-        doc->setFrameMargins( u1, u2, u3, u4 );
+	KWUnit u1, u2, u3, u4;
+	switch ( KWUnit::unitType( doc->getUnit() ) ) {
+	case U_MM:
+	    u1.setMM( atof( sml->text() ) );
+	    u2.setMM( atof( smr->text() ) );
+	    u3.setMM( atof( smt->text() ) );
+	    u4.setMM( atof( smb->text() ) );
+	    break;
+	case U_INCH:
+	    u1.setINCH( atof( sml->text() ) );
+	    u2.setINCH( atof( smr->text() ) );
+	    u3.setINCH( atof( smt->text() ) );
+	    u4.setINCH( atof( smb->text() ) );
+	    break;
+	case U_PT:
+	    u1.setPT( atoi( sml->text() ) );
+	    u2.setPT( atoi( smr->text() ) );
+	    u3.setPT( atoi( smt->text() ) );
+	    u4.setPT( atoi( smb->text() ) );
+	    break;
+	}
+	doc->setFrameMargins( u1, u2, u3, u4 );
     }
 
     emit changed();
 
-    return true; 
+    return true;
 }
 
 void KWFrameDia::slotOk()
 {
     if (applyChanges())
     {
-       KDialogBase::slotOk();
+	KDialogBase::slotOk();
     }
 }
 
@@ -1025,12 +1036,12 @@ void KWFrameDia::slotOk()
 void KWFrameDia::connectListSelected( QListViewItem *item )
 {
     if ( !item )
-        return;
+	return;
 
     QString str = item->text( 0 );
     if ( str[ 0 ] == '*' ) {
-        str.remove( 0, 1 );
-        eFrameSetName->setEnabled( TRUE );
+	str.remove( 0, 1 );
+	eFrameSetName->setEnabled( TRUE );
     } else
-        eFrameSetName->setEnabled( FALSE );
+	eFrameSetName->setEnabled( FALSE );
 }
