@@ -122,12 +122,12 @@ void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QSt
     if ( styleStack.hasAttribute( attr, QString::null,"graphic" ) )
     {
         QString style = styleStack.attribute( attr, QString::null,"graphic" );
-        kdDebug()<<" marker style is  : "<<style<<endl;
+        //kdDebug()<<" marker style is  : "<<style<<endl;
 
         //type not defined by default
         //try to use style.
         QDomElement* draw = context.oasisStyles().drawStyles()[style];
-        kdDebug()<<" marker have oasis style defined :"<<draw<<endl;
+        //kdDebug()<<" marker have oasis style defined :"<<draw<<endl;
         if ( draw )
         {
             if( draw->hasAttribute( "svg:d" ))
@@ -600,7 +600,6 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
 
     if( animation)
     {
-        kdDebug()<<" load animation style **************************************\n";
         QString effectStr = animation->attribute("presentation:effect");
         QString dir = animation->attribute("presentation:direction");
         kdDebug()<<" direction : "<<dir<<" effect :"<<effect<<endl;
@@ -643,6 +642,24 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
         //FIXME allow to save/load this attribute
         if ( effect3 != EF3_NONE )
             disappear = true;
+#if 0
+        // sound effect
+        QDomElement origSoundEff = origEffect.namedItem("presentation:sound").toElement();
+        if (!origSoundEff.isNull())
+        {
+            QString soundUrl = storeSound(origSoundEff, sound, doc);
+
+            if (!soundUrl.isNull())
+            {
+                QDomElement pseElem = doc.createElement("APPEARSOUNDEFFECT");
+                pseElem.setAttribute("appearSoundEffect", 1);
+                pseElem.setAttribute("appearSoundFileName", soundUrl);
+
+                e.appendChild(pseElem);
+            }
+        }
+#endif
+
     }
     //shadow
 #if 0 //move it to kptextobject
