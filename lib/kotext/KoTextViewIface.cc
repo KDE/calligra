@@ -684,3 +684,9 @@ void KoTextViewIface::setWordByWord( bool _b )
     KCommand *cmd=m_textView->setWordByWordCommand(_b );
     delete cmd;
 }
+
+void KoTextViewIface::copyTextOfComment()
+{
+    m_textView->copyTextOfComment();
+}
+

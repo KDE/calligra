@@ -162,6 +162,7 @@ k_dcop:
     void addBookmarks(const QString &url);
     void copyLink();
     void removeLink();
+    void copyTextOfComment();
 
 private:
     KoTextView *m_textView;
