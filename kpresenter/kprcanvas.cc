@@ -677,7 +677,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         raiseObject( kpobject );
                         moveStartPosMouse = objectSelectedBoundingRect().topLeft();
                     }
-                    else 
+                    else
                     {
                         if ( modType != MT_MOVE || !kpobject->isSelected() )
                             deSelectAllObj();
@@ -693,9 +693,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         deSelectAllObj();
                         selectObj( kpobject );
                         raiseObject( kpobject );
-                        
+
                         m_resizeObject = kpobject;
-                        
+
                         m_keepRatio = false;
                         if ( e->state() & ControlButton )
                             m_keepRatio = true;
@@ -1308,17 +1308,17 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         if ( m_angleBeforeRotate != m_rotateObject->getAngle() ) {
             QPtrList<KPObject> objects;
             objects.append( m_rotateObject );
-            
-            /* As the object is allready rotated set the angle to 
-             * the m_angleBeforeRotate for the creation of the command, and 
+
+            /* As the object is allready rotated set the angle to
+             * the m_angleBeforeRotate for the creation of the command, and
              * back afterwards. No need for executing the command */
             float newAngle = m_rotateObject->getAngle();
             m_rotateObject->rotate( m_angleBeforeRotate );
-            
+
             RotateCmd *rotateCmd = new RotateCmd( i18n( "Change Rotation" ), newAngle,
                                                   objects, m_view->kPresenterDoc() );
             m_view->kPresenterDoc()->addCommand( rotateCmd );
-            
+
             m_rotateObject->rotate( newAngle );
             m_rotateObject = NULL;
         }
@@ -1529,7 +1529,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 } else if ( modType != MT_NONE && m_resizeObject ) {
                     int mx = e->x()+diffx();
                     int my = e->y()+diffy();
-                    
+
                     if ( m_view->kPresenterDoc()->snapToGrid() )
                     {
                         mx = applyGridOnPosX( mx );
@@ -1576,7 +1576,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         angle -= 360;
 
                     m_rotateObject->rotate( angle );
-                    _repaint( m_rotateObject );  
+                    _repaint( m_rotateObject );
                 }
             }break;
             case INS_TEXT: case INS_OBJECT: case INS_TABLE:
@@ -2447,7 +2447,7 @@ bool KPrCanvas::exportPage( int nPage,
             }
             if( !bLocalFile ){
                 if( res ){
-#if KDE_IS_VERSION(3,1,90)
+#if !KDE_IS_VERSION(3,1,90)
                     res = KIO::NetAccess::upload( this, tmpFile->name(), fileURL );
 #else
                     res = KIO::NetAccess::upload( tmpFile->name(), fileURL, this );
@@ -3332,7 +3332,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
     KPresenterDoc *doc = m_view->kPresenterDoc();
     int oldZoom = doc->zoomHandler()->zoom();
     bool oldDisplayFieldValue = false;
-    
+
     if( 0 < forceWidth || 0 < forceHeight )
     {
         const QRect rect( doc->getPageRect( true ) );
@@ -3340,13 +3340,13 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
         const double dRectWidth  = static_cast<double>(rect.width());
         double dForceHeight      = static_cast<double>(forceHeight);
         double dForceWidth       = static_cast<double>(forceWidth);
-        
+
         // adjust width or height, in case one of them is missing
         if( 0 >= forceWidth )
             dForceWidth = dForceHeight * dRectWidth / dRectHeight;
         else if( 0 >= forceHeight )
             dForceHeight = dForceWidth * dRectHeight / dRectWidth;
-        
+
         // set the stretching values
         doc->zoomHandler()->setResolution( dForceWidth / dRectWidth,
                                            dForceHeight / dRectHeight );
@@ -3356,7 +3356,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
     }else{
         m_view->zoomDocument(zoom);
     }
-    
+
     if ( forceRealVariableValue )
     {
         oldDisplayFieldValue = m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayFieldCode();
@@ -3435,13 +3435,13 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
     p.end();
 }
 
-void KPrCanvas::printPage( QPainter* painter, int pageNum ) 
+void KPrCanvas::printPage( QPainter* painter, int pageNum )
 {
     //kdDebug(33001) << "KPrCanvas::printPage" << endl;
     KPrPage* saveActivePage = m_activePage;
     KPresenterDoc *doc = m_view->kPresenterDoc();
     KPrPage* page = doc->pageList().at( pageNum );
-    QRect rect = page->getZoomPageRect();  
+    QRect rect = page->getZoomPageRect();
     doc->displayActivePage( page );
     setActivePage( page );
     drawBackground( painter, rect );
@@ -5427,7 +5427,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     double dy = m_view->zoomHandler()->unzoomItY( _dy);
     KPObject *kpobject = m_resizeObject;
 
-    QRect oldBoundingRect( getOldBoundingRect(kpobject) ); 
+    QRect oldBoundingRect( getOldBoundingRect(kpobject) );
 
     KoSize objSize = kpobject->getSize();
     KoRect objRect=kpobject->getBoundingRect();
@@ -5439,8 +5439,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
                     (kpobject->isSelected()) && drawContour);
     switch ( _modType ) {
     case MT_RESIZE_LU: {
-        // let the edge of the page be on the grid, this makes it 
-        // also possible to resize a object which is close to the edge 
+        // let the edge of the page be on the grid, this makes it
+        // also possible to resize a object which is close to the edge
         if( (objRect.left() + dx) < (pageRect.left() - 1) )
             dx = pageRect.left() - objRect.left();
         if( (objRect.top() + dy) < (pageRect.top() - 1) )
@@ -5523,7 +5523,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         kpobject->resizeBy( -dx, -dy );
         if ( objSize != kpobject->getSize() )
             kpobject->moveBy( KoPoint( 0, dy ) );
-            
+
     } break;
     case MT_RESIZE_DN: {
         dx = 0;
@@ -5554,14 +5554,14 @@ void KPrCanvas::finishResizeObject( const QString &name, int mx, int my, bool la
                                 m_resizeObject->getOrig().y() - m_rectBeforeResize.y() );
         KoSize size = KoSize( m_resizeObject->getSize().width() - m_rectBeforeResize.width(),
                               m_resizeObject->getSize().height() - m_rectBeforeResize.height() );
-            
+
         if ( firstX != mx || firstY != my ) {
-            ResizeCmd *resizeCmd = new ResizeCmd( name, move, size, m_resizeObject, 
+            ResizeCmd *resizeCmd = new ResizeCmd( name, move, size, m_resizeObject,
                                                   m_view->kPresenterDoc() );
             // the command is not executed as the object is allready resized.
             m_view->kPresenterDoc()->addCommand( resizeCmd );
         }
-        
+
         if ( layout )
             m_view->kPresenterDoc()->layout( m_resizeObject );
         _repaint( m_resizeObject );
@@ -6434,7 +6434,7 @@ void KPrCanvas::alignObjects( AlignType at )
             name = i18n( "Align Objects Center/Vertical" );
             break;
     }
-    
+
     QPtrList<KPObject> objects;
     for ( int i = 0; i < 2; ++i )
     {
@@ -6450,7 +6450,7 @@ void KPrCanvas::alignObjects( AlignType at )
             }
         }
     }
-    
+
     if ( objects.count() )
     {
         KCommand * cmd = new AlignCmd( name, objects, at, doc );
@@ -6827,7 +6827,7 @@ QPoint KPrCanvas::applyGrid( const QPoint &pos,bool offset )
     QPoint point( m_view->kPresenterDoc()->zoomHandler()->zoomPoint( newPos ) );
     if ( offset )
       point -= QPoint( diffx(), diffy() );
-    return point;    
+    return point;
 }
 
 int KPrCanvas::applyGridOnPosX( int pos ) const
@@ -6911,7 +6911,7 @@ KoPoint KPrCanvas::applyGrid( const KoPoint &pos )
 {
     if (  !m_view->kPresenterDoc()->snapToGrid() )
         return pos;
-    
+
     KoPoint newPos;
     newPos.setX( applyGridX( pos.x() ) );
     newPos.setY( applyGridY( pos.y() ) );
