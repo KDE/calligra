@@ -85,6 +85,14 @@ k_dcop:
     virtual void setHiLoChartSubType(const QString &);
     virtual QString hiLoChartSubType() const;
 
+    //polar chart
+    virtual void setPolarLineWidth( int width  );
+    virtual int polarLineWidth() const;
+    virtual void setPolarZeroDegreePos( int degrees );
+    virtual int polarZeroDegreePos() const;
+    virtual void setPolarRotateCircularLabels( bool rotateCircularLabels );
+    virtual bool polarRotateCircularLabels() const;
+
     //legend
     virtual void hideLegend();
     virtual void setLegendPosition(const QString &);

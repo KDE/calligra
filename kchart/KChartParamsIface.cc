@@ -297,3 +297,33 @@ QString KChartParamsIface::hiLoChartSubType() const
 {
     return params->hiLoChartSubTypeToString(params->hiLoChartSubType());
 }
+
+void KChartParamsIface::setPolarLineWidth( int width  )
+{
+    params->setPolarLineWidth( width  );
+}
+
+int KChartParamsIface::polarLineWidth() const
+{
+    return params->polarLineWidth();
+}
+
+void KChartParamsIface::setPolarZeroDegreePos( int degrees )
+{
+    params->setPolarZeroDegreePos( degrees );
+}
+
+int KChartParamsIface::polarZeroDegreePos() const
+{
+    return params->polarZeroDegreePos();
+}
+
+void KChartParamsIface::setPolarRotateCircularLabels( bool rotateCircularLabels )
+{
+    params->setPolarRotateCircularLabels( rotateCircularLabels );
+}
+
+bool KChartParamsIface::polarRotateCircularLabels() const
+{
+    return params->polarRotateCircularLabels();
+}
