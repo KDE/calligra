@@ -45,6 +45,12 @@ public:
     void saveConfig(KConfig *conf);
     KChartData *data() {return &currentData; };
     KChartParameters* params() const { return _params; };
+    // save and load
+    virtual bool save( ostream&, const char *_format );
+    virtual bool loadChildren( KoStore* _store );
+    virtual bool loadXML( const QDomDocument& doc, KoStore* store );
+    virtual bool load( istream& in, KoStore* _store );
+
 
 signals:
     void docChanged();

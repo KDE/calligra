@@ -4,6 +4,9 @@
  * Kalle Dalheimer <kalle@kde.org>
  */
 
+#include <qdom.h>
+#include <qtextstream.h>
+#include <qbuffer.h>
 #include "kchart_part.h"
 #include "kchart_view.h"
 #include "kchart_shell.h"
@@ -140,10 +143,75 @@ void KChartPart::saveConfig( KConfig *conf ) {
     _params->saveConfig(conf);
 }
 
+bool KChartPart::save( ostream& out, const char *_format ) {
+  cerr << "save kchart called!\n";
+  QDomDocument doc( "chart" );
+  doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  QDomElement chart = doc.createElement( "chart" );
+  chart.setAttribute( "author", "Kalle Dalheimer, Laszlo Boloni" );
+  chart.setAttribute( "email", "kalle@dalheimer.org, boloni@cs.purdue.edu" );
+  chart.setAttribute( "editor", "KChart" );
+  chart.setAttribute( "mime", "application/x-kchart" );
+  doc.appendChild( chart );
+  
+  
+
+  QBuffer buffer;
+  buffer.open( IO_WriteOnly );
+  QTextStream str( &buffer );
+  str << doc;
+  buffer.close();
+
+  out.write( buffer.buffer().data(), buffer.buffer().size() );
+
+  //  setModified( false );
+  return true;
+};
+
+bool KChartPart::loadChildren( KoStore* _store ) {
+  cerr << "kchart loadChildren called\n";
+  return true;
+};
+
+bool KChartPart::loadXML( const QDomDocument& doc, KoStore* store ) {
+  cerr << "kchart loadXML called\n";
+};
+
+bool KChartPart::load( istream& in, KoStore* store ) {
+  cerr << "kchart load colled\n";
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+
+    char buf[ 4096 ];
+    int anz;
+    do
+    {
+	in.read( buf, 4096 );
+	anz = in.gcount();
+	buffer.writeBlock( buf, anz );
+    } while( anz > 0 );
+
+    buffer.close();
+
+    buffer.open( IO_ReadOnly );
+    QDomDocument doc( &buffer );
+
+    bool b = loadXML( doc, store );
+
+    buffer.close();
+
+    return b;
+};
+
+
 #include "kchart_part.moc"
 
 /**
  * $Log$
+ * Revision 1.4  1999/11/16 03:00:56  boloni
+ * -enabling grid and label drawing. Some more small reorganizations
+ * -one more page in the wizard.
+ *
  * Revision 1.3  1999/11/14 18:02:06  boloni
  * auto-initialization for standalone startup
  * separate class for the kchart data editor
