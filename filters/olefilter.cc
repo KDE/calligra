@@ -9,7 +9,7 @@ OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
     fileOut=0L;
     numPic=0;
     numPart=0;
-    success=false; // later -> true;
+    success=true;
     fileCreated=false;
 
     docfile=new KLaola(fileIn);
@@ -41,7 +41,6 @@ OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
         tmp=dir;
         dir+='/';
         fileOut->writeDir(tmp, "", "");
-
         partMap.insert("root-dir", tmp);
     }
 }
@@ -125,7 +124,7 @@ void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
     }
 }
 
-void OLEFilter::convert(const QString &dirname) {
+void OLEFilter::convert(const QString &) { //dirname) { not needed at the moment...
 
     QList<OLENode> list=docfile->parseCurrentDir();
     OLENode *node;
@@ -141,7 +140,6 @@ void OLEFilter::convert(const QString &dirname) {
             onlyDirs=false;
         }
     }
-    kdebug(KDEBUG_INFO, 31000, (const char*)dirname);
 
     if(!onlyDirs) {
         FilterBase *myFilter=0L;
@@ -152,9 +150,32 @@ void OLEFilter::convert(const QString &dirname) {
                node->name=="0Table" || node->name=="ObjectPool") {
                 // Word
                 kdebug(KDEBUG_INFO, 31000, "WinWord");
-                // fetch streams, TODO
-                myFilter=new FilterBase(); // normally a WordFilter :)
-                // connect SIGNALs&SLOTs
+
+                myFile main, table0, table1, data;
+                QArray<long> tmp;
+
+                main.data=0L;
+                table0.data=0L;
+                table1.data=0L;
+                data.data=0L;
+
+                tmp=docfile->find("WordDocument", true);
+                if(tmp.size()==1)
+                    main=docfile->stream(tmp[0]);
+
+                tmp=docfile->find("0Table", true);
+                if(tmp.size()==1)
+                    table0=docfile->stream(tmp[0]);
+
+                tmp=docfile->find("1Table", true);
+                if(tmp.size()==1)
+                    table1=docfile->stream(tmp[0]);
+
+                tmp=docfile->find("Data", true);
+                if(tmp.size()==1)
+                    data=docfile->stream(tmp[0]);
+
+                myFilter=new WordFilter(main, table0, table1, data);
                 connectCommon(&myFilter);
             }
             else if(node->name=="Workbook") {
@@ -180,8 +201,8 @@ void OLEFilter::convert(const QString &dirname) {
             }
 
             // some more will be here, soon
-            // I'll have to read some additional OLE-Streams as
-            // the names are not unique!
+            // I'll have to read some additional OLE-Streams
+            // as the names are not unique!
 
             node=list.next();
         } while(myFilter==0L && node!=0);
@@ -195,6 +216,7 @@ void OLEFilter::convert(const QString &dirname) {
         // the part (correct name!)
 
         delete myFilter;
+        success=false;  // only at the moment!
     }
 }
 
