@@ -908,7 +908,7 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         if ( fontName == "Thorndale" )
             fontName = "Times New Roman";
 
-        fontName.remove(QRegExp("\sCE$")); // Arial CE -> Arial
+        fontName.remove(QRegExp("\\sCE$")); // Arial CE -> Arial
 
         QDomElement fontElem( doc.createElement( "FONT" ) );
         fontElem.setAttribute( "name", fontName );
