@@ -314,11 +314,13 @@ VObjectListViewItem::update()
 	QWMatrix mat;
 	mat.scale( 1, -1 );
 	KoRect bbox = m_object->boundingBox();
-	mat.translate( bbox.x(), bbox.y() );
+	mat.translate( 0, -16 );
+	double factor = 16. / kMax( bbox.width(), bbox.height() );
+	mat.translate( -bbox.x() * factor, -bbox.y() * factor );
 	p.setWorldMatrix( mat );
 
 	// TODO: When the document will support page size, change the following line.
-	p.setZoomFactor( kMin( bbox.width(), bbox.height() ) / 16. );
+	p.setZoomFactor( factor );
 	m_object->draw( &p );
 	p.end();
 
