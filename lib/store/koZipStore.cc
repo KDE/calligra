@@ -58,9 +58,13 @@ bool KoZipStore::init( Mode _mode, const QCString& appIdentification )
         //kdDebug(s_area) << "KoZipStore::init writing mimetype " << appIdentification << endl;
 
         m_pZip->setCompression( KZip::NoCompression );
+#if KDE_IS_VERSION(3,1,92)
+        m_pZip->setExtraField( KZip::NoExtraField );
+#endif
         // Write identification
         (void)m_pZip->writeFile( "mimetype", "", "", appIdentification.length(), appIdentification.data() );
         m_pZip->setCompression( KZip::DeflateCompression );
+        // We don't need the extra field in KOffice - so we leave it as "no extra field".
     }
     return good;
 }
