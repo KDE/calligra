@@ -316,33 +316,42 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
             {
                 // We have an image, a clipart or a table
 
-                // But first, we must sure that the paragraph is not opened.
-                if (!paragraphNotOpened)
-                {
-                    // The paragraph was opened, so close it.
-                    closeParagraph(strTag,layout);
-                }
-
                 if (6==(*paraFormatDataIt).frameAnchor.type)
                 {
+                    // We have a table
+                    // But first, we must sure that the paragraph is not opened.
+                    if (!paragraphNotOpened)
+                    {
+                        // The paragraph was opened, so close it.
+                        closeParagraph(strTag,layout);
+                    }
                     makeTable((*paraFormatDataIt).frameAnchor);
+                    // The paragraph will need to be opened again
+                    paragraphNotOpened=true;
+                    
                 }
-                else if (2==(*paraFormatDataIt).frameAnchor.type)
+
+                else if ( ( 2 == (*paraFormatDataIt).frameAnchor.type )
+                    || ( 5 == (*paraFormatDataIt).frameAnchor.type ) )
                 {
+                    // <img> and <object> need to be in a paragraph
+                    if (paragraphNotOpened)
+                    {
+                        openParagraph( strTag, layout,partialText.ref(0). direction() );
+                        paragraphNotOpened=false;
+                    }
+                    // ### FIXME: picture is still assumed to be only an image
+#if 1
                     makeImage((*paraFormatDataIt).frameAnchor);
-                }
-                else if (5==(*paraFormatDataIt).frameAnchor.type)
-                {
+#else
                     makeClipart((*paraFormatDataIt).frameAnchor);
+#endif
                 }
                 else
                 {
                     kdWarning(30503) << "Unknown anchor type: "
                         << (*paraFormatDataIt).frameAnchor.type << endl;
                 }
-
-                // The paragraph will need to be opened again
-                paragraphNotOpened=true;
             }
         }
         if (!paragraphNotOpened)
