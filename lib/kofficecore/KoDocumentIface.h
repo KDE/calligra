@@ -66,6 +66,20 @@ k_dcop:
 
     void saveAs( const QString & url );
     void setOutputMimeType( const QCString & mimetype );
+
+    QString documentInfoAuthorName() const;
+    QString documentInfoEmail() const;
+    QString documentInfoCompanyName() const;
+    QString documentInfoTitle() const;
+    QString documentInfoAbstract() const;
+    QString documentInfoTelephone() const;
+    QString documentInfoFax() const;
+    QString documentInfoCountry() const;
+    QString documentInfoPostalCode() const;
+    QString documentInfoCity() const;
+    QString documentInfoStreet() const;
+
+
 protected:
     KoDocument * m_pDoc;
     KDCOPActionProxy *m_actionProxy;

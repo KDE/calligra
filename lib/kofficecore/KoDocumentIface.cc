@@ -19,6 +19,8 @@
 
 #include "koDocument.h"
 #include "KoDocumentIface.h"
+#include "koDocumentInfoDlg.h"
+#include "koDocumentInfo.h"
 #include "koView.h"
 #include <kapplication.h>
 #include <dcopclient.h>
@@ -106,4 +108,149 @@ void KoDocumentIface::saveAs( const QString & url )
 void KoDocumentIface::setOutputMimeType( const QCString & mimetype )
 {
     m_pDoc->setOutputMimeType( mimetype );
+}
+
+QString KoDocumentIface::documentInfoAuthorName() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->fullName();
+}
+
+QString KoDocumentIface::documentInfoEmail() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->email();
+}
+
+QString KoDocumentIface::documentInfoCompanyName() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->company();
+}
+
+QString KoDocumentIface::documentInfoTelephone() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->telephone();
+
+}
+QString KoDocumentIface::documentInfoFax() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->fax();
+
+}
+QString KoDocumentIface::documentInfoCountry() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->country();
+
+}
+QString KoDocumentIface::documentInfoPostalCode() const
+{
+        KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->postalCode();
+
+}
+QString KoDocumentIface::documentInfoCity() const
+{
+        KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->city();
+
+}
+QString KoDocumentIface::documentInfoStreet() const
+{
+        KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->street();
+
+}
+
+QString KoDocumentIface::documentInfoTitle() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    if ( !aboutPage )
+    {
+        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return aboutPage->title();
+
+}
+
+QString KoDocumentIface::documentInfoAbstract() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
+    if ( !aboutPage )
+    {
+        kdWarning() << "'About' page not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return aboutPage->abstract();
 }
