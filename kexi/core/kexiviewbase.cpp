@@ -23,19 +23,25 @@
 #include "kexidialogbase.h"
 #include "kexipropertybuffer.h"
 #include "kexiproject.h"
+#include "kexi_utils.h"
 
 #include <kexidb/connection.h>
+#include <kdebug.h>
 
 KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : QWidget(parent, name)
  , KexiActionProxy(this, mainWin)
  , m_mainWin(mainWin)
  , m_dirty(false)
+ , m_viewWidget(0)
+ , m_parentView(0)
 {
 	QWidget *wi=this;
 	while ((wi = wi->parentWidget()) && !wi->inherits("KexiDialogBase"))
 		;
 	m_dialog = (wi && wi->inherits("KexiDialogBase")) ? static_cast<KexiDialogBase*>(wi) : 0;
+
+	installEventFilter(this);
 }
 
 KexiViewBase::~KexiViewBase()
@@ -138,6 +144,68 @@ bool KexiViewBase::storeData()
 	setDirty(false);
 	return true;
 }
+
+bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
+{
+	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {// && o->inherits("QWidget")) {
+//		//hp==true if currently focused widget is a child of this table view
+//		const bool hp = Kexi::hasParent( static_cast<QWidget*>(o), focusWidget());
+		if (Kexi::hasParent( this, static_cast<QWidget*>(o))) {
+			if (e->type()==QEvent::FocusOut && focusWidget() && !Kexi::hasParent( this, focusWidget())) {
+				//focus out: when currently focused widget is not a parent of this view
+				emit focus(false);
+			} else if (e->type()==QEvent::FocusIn) {
+				emit focus(true);
+			}
+			if (e->type()==QEvent::FocusOut) { // && focusWidget() && Kexi::hasParent( this, focusWidget())) { // && focusWidget()->inherits("KexiViewBase")) {
+//				kdDebug() << focusWidget()->className() << " " << focusWidget()->name()<< endl;
+				kdDebug() << o->className() << " " << o->name()<< endl;
+				KexiViewBase *v = Kexi::findParent<KexiViewBase>(o, "KexiViewBase") ;
+				if (v) {
+					while (v->m_parentView)
+						v = v->m_parentView;
+					v->m_lastFocusedChildBeforeFocusOut = static_cast<QWidget*>(o); //focusWidget();
+				}
+			}
+
+			if (e->type()==QEvent::FocusIn && m_actionProxyParent) {
+				m_actionProxyParent->m_focusedChild = this;
+			}
+		}
+	}
+	return false;
+}
+
+void KexiViewBase::setViewWidget(QWidget* w)
+{
+	if (m_viewWidget == w)
+		return;
+	m_viewWidget = w;
+	if (m_viewWidget) {
+		m_viewWidget->installEventFilter(this);
+	}
+}
+
+void KexiViewBase::addChildView( KexiViewBase* childView )
+{
+	addActionProxyChild( childView );
+	childView->m_parentView = this;
+//	if (m_parentView)
+//		childView->installEventFilter(m_parentView);
+	childView->installEventFilter(this);
+
+}
+
+void KexiViewBase::setFocus()
+{
+	if (!m_lastFocusedChildBeforeFocusOut.isNull()) {
+		kdDebug() << "FOCUS: " << m_lastFocusedChildBeforeFocusOut->className() << " " << m_lastFocusedChildBeforeFocusOut->name()<< endl;
+		m_lastFocusedChildBeforeFocusOut->setFocus();
+	}
+	else
+		QWidget::setFocus();
+}
+
 
 #include "kexiviewbase.moc"
 

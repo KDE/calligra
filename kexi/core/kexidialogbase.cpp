@@ -241,6 +241,11 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 		}
 		addView(newView, newViewMode);
 	}
+	if (!newView->beforeSwitchTo(newViewMode, cancelled)) {
+		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
+			<< m_currentViewMode << " restored." << endl;
+		return false;
+	}
 	if (!newView->afterSwitchFrom(m_currentViewMode, cancelled)) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< m_currentViewMode << " restored." << endl; 
@@ -260,7 +265,10 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 void KexiDialogBase::setFocus()
 {
 	if (m_stack->visibleWidget()) {
-		m_stack->visibleWidget()->setFocus();
+		if (m_stack->visibleWidget()->inherits("KexiViewBase"))
+			static_cast<KexiViewBase*>( m_stack->visibleWidget() )->setFocus();
+		else
+			m_stack->visibleWidget()->setFocus();
 	}
 	else {
 		KMdiChildView::setFocus();

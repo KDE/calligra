@@ -53,11 +53,18 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 yoursize.boundedTo( KexiViewBase::preferredSizeHint(otherSize) ). */
 		virtual QSize preferredSizeHint(const QSize& otherSize);
 
+		virtual bool eventFilter( QObject *o, QEvent *e );
+
+		void addChildView( KexiViewBase* childView );
+
 	public slots:
+		virtual void setFocus();
 
 	signals:
 		//! emitted when the view is about to close
 		void closing();
+
+		void focus(bool in);
 
 	protected:
 		/*! called by KexiDialogBase::switchToViewMode() right before dialog is switched to new mode
@@ -138,11 +145,20 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 \sa storeNewData() */
 		virtual bool storeData();
 
+		void setViewWidget(QWidget* w);
+
 		QString m_defaultIconName;
 
 		KexiMainWindow *m_mainWin;
 
 		KexiDialogBase *m_dialog;
+
+		QWidget *m_viewWidget;
+
+		KexiViewBase *m_parentView;
+
+		QGuardedPtr<QWidget> m_lastFocusedChildBeforeFocusOut;
+
 	private:
 		bool m_dirty : 1;
 

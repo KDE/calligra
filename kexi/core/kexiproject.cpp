@@ -316,6 +316,7 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& ite
 {
 	KexiPart::Part *part = Kexi::partManager().part(item.mime());
 	if (!part) {
+		setError(&Kexi::partManager());
 //js TODO:		setError(&Kexi::partManager());
 		return 0;
 	}

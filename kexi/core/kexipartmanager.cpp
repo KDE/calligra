@@ -108,6 +108,7 @@ Manager::part(Info *i)
 			kdDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
 			kdDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;
 			i->setBroken(true);
+			setError(i18n("Error during loading part module \"%1\"").arg(i->objectName()));
 			return 0;
 		}
 
@@ -179,7 +180,11 @@ Manager::part(const QCString &mime)
 Info *
 Manager::info(const QCString &mime)
 {
-	return m_partsByMime[mime];
+	Info *i = m_partsByMime[mime];
+	if (i)
+		return i;
+	setError(i18n("No parts module for mime type \"%1\"").arg(mime));
+	return 0;
 }
 
 

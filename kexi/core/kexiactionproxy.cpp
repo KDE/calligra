@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,7 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
  , m_signals(47)
  , m_actionProxyParent(0)
  , m_signal_parent( 0, "signal_parent" )
+ , m_focusedChild(0)
 {
 	m_signals.setAutoDelete(true);
 	m_sharedActionChildren.setAutoDelete(false);
@@ -137,6 +138,8 @@ bool KexiActionProxy::isSupported(const char* action_name) const
 	QPair<QSignal*,bool> *p = m_signals[action_name];
 	if (!p) {
 		//not supported explicity - try in children...
+		if (m_focusedChild)
+			return m_focusedChild->isSupported(action_name);
 		QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
 		for( ; it.current(); ++it ) {
 			if (it.current()->isSupported(action_name))
@@ -152,6 +155,8 @@ bool KexiActionProxy::isAvailable(const char* action_name) const
 	QPair<QSignal*,bool> *p = m_signals[action_name];
 	if (!p) {
 		//not supported explicity - try in children...
+		if (m_focusedChild)
+			return m_focusedChild->isAvailable(action_name);
 		QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
 		for( ; it.current(); ++it ) {
 			if (it.current()->isSupported(action_name))

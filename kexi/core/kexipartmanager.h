@@ -27,7 +27,10 @@
 #include <qintdict.h>
 #include <qvaluelist.h>
 #include <qptrlist.h>
+
 #include <kservice.h>
+
+#include <kexidb/object.h>
 
 namespace KexiDB
 {
@@ -57,7 +60,7 @@ namespace KexiPart
 /**
  * queries parts and dlopens them when needed, they aren't dlopened at startup tough
  */
-class KEXICORE_EXPORT Manager : public QObject
+class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 {
 	Q_OBJECT
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -131,6 +131,8 @@ class KEXICORE_EXPORT KexiActionProxy
 	public:
 		//! For internal use by addActionProxyChild(). \a parent can be 0.
 		void setActionProxyParent_internal( KexiActionProxy* parent );
+
+		KexiActionProxy *m_focusedChild;
 
 	friend class KexiSharedActionHost;
 };
