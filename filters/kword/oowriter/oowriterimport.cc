@@ -214,6 +214,11 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& p
             fillStyleStack( t );
             parseBodyOrSimilar( doc, t, currentFramesetElement);
         }
+        else if ( name == "table:table" )
+        {
+            kdDebug(30518) << "Table found!" << endl;
+            parseTable( doc, t, currentFramesetElement );
+        }
         else
         {
             kdDebug(30518) << "Unsupported texttype '" << name << "'" << endl;
@@ -1323,5 +1328,102 @@ void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats
     formats.appendChild(formatElement);
 }
 
+void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement )
+{
+    QString tableName ( parent.attribute("table:name") ); // TODO: what is empty (non-unique?)
+    kdDebug(30518) << "Found table " << tableName << endl;
+
+    // In OOWriter a table is never inisde a paragrpah, in KWord it is always in a paragraph
+    QDomElement paragraphElementOut (doc.createElement("PARAGRAPH"));
+    currentFramesetElement.appendChild(paragraphElementOut);
+
+    QDomElement textElementOut(doc.createElement("TEXT"));
+    textElementOut.appendChild(doc.createTextNode("#"));
+    paragraphElementOut.appendChild(textElementOut);
+
+    QDomElement formatsPluralElementOut(doc.createElement("FORMATS"));
+    paragraphElementOut.appendChild(formatsPluralElementOut);
+
+    QDomElement elementFormat(doc.createElement("FORMAT"));
+    elementFormat.setAttribute("id",6);
+    elementFormat.setAttribute("pos",0);
+    elementFormat.setAttribute("len",1);
+    formatsPluralElementOut.appendChild(elementFormat);
+
+    QDomElement elementAnchor(doc.createElement("ANCHOR"));
+    elementAnchor.setAttribute("type","frameset");
+    elementAnchor.setAttribute("instance",tableName);
+    elementFormat.appendChild(elementAnchor);
+
+    uint row=0;
+    uint column=0;
+    parseInsideOfTable(doc, parent, currentFramesetElement, tableName, row, column);
+}
+
+void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement,
+    const QString& tableName, uint& row, uint& column )
+{
+    QDomElement framesetsPluralElement (doc.documentElement().namedItem("FRAMESETS").toElement());
+    if (framesetsPluralElement.isNull())
+    {
+        kdError(30518) << "Cannot find KWord's <FRAMESETS>! Cannot process table!" << endl;
+        return;
+    }
+
+    for ( QDomNode text (parent.firstChild()); !text.isNull(); text = text.nextSibling() )
+    {
+        m_styleStack.save();
+        QDomElement t = text.toElement();
+        QString name = t.tagName();
+
+        if ( name == "table:table-cell" )
+        {
+            const QString frameName(i18n("Frameset name","Table %3, row %1, column %2")
+                .arg(row).arg(column).arg(tableName)); // The table name could have a % sequence so, use the table name as last!
+            kdDebug(30518) << "Trying to create " << frameName << endl;
+
+            // We need to create a frameset for the cell
+            QDomElement framesetElement(doc.createElement("FRAMESET"));
+            framesetElement.setAttribute("frameType",1);
+            framesetElement.setAttribute("frameInfo",0);
+            framesetElement.setAttribute("visible",1);
+            framesetElement.setAttribute("name",frameName);
+            framesetElement.setAttribute("row",row);
+            framesetElement.setAttribute("col",column);
+            framesetElement.setAttribute("rows",1); // ### TODO: rowspan
+            framesetElement.setAttribute("cols",1); // ### TODO: colspan
+            framesetElement.setAttribute("grpMgr",tableName);
+            framesetsPluralElement.appendChild(framesetElement);
+
+            QDomElement frameElementOut(doc.createElement("FRAME"));
+            //frameElementOut.setAttribute("left",28);
+            //frameElementOut.setAttribute("top",42);
+            //frameElementOut.setAttribute("bottom",566);
+            //frameElementOut.setAttribute("right",798);
+            frameElementOut.setAttribute("runaround",1);
+            // ### TODO: a few attributes are missing
+            framesetElement.appendChild(frameElementOut);
+
+            parseBodyOrSimilar( doc, t, framesetElement); // We change the frameset!
+            column++;
+        }
+        else if ( name == "table:table-row" )
+        {
+            column=0;
+            parseInsideOfTable( doc, t, currentFramesetElement, tableName, row, column);
+            row++;
+        }
+        else if ( name == "table:table-header-rows" ) // Provisory (###TODO)
+        {
+            parseInsideOfTable( doc, t, currentFramesetElement, tableName, row, column);
+        }
+        else
+        {
+            kdWarning(30518) << "Skiping element " << name << " (in OoWriterImport::parseInsideOfTable)" << endl;
+        }
+
+        m_styleStack.restore();
+    }
+}
 
 #include "oowriterimport.moc"
