@@ -130,7 +130,7 @@ KexiTablePartProxy::slotDrop(const QString& identifier)
 
 	QString rI = item->name();
 	int ans = KMessageBox::questionYesNo(kexiView(),
-		i18n("Do you realy want to delete %1?").arg(rI), i18n("Delete Table?"));
+		i18n("Do you really want to delete %1?").arg(rI), i18n("Delete Table?"));
 
 	if(ans == KMessageBox::Yes)
 	{
