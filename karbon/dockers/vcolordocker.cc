@@ -20,15 +20,12 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
-#include <qhbuttongroup.h>
-#include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
 
-#include <kcolordialog.h>
 #include <klocale.h>
 #include <koMainWindow.h>
+#include <kseparator.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -51,20 +48,14 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	/* ##### RGB WIDGET ##### */
 	mRGBWidget = new QWidget( mTabWidget );
 	QGridLayout *mainLayout = new QGridLayout( mRGBWidget, 4, 1 );
-
-	//Reference
-	QGroupBox* groupbox = new QGroupBox( 2, Horizontal, i18n( "Reference" ), mRGBWidget );
-	new QLabel( i18n( "Color:" ), groupbox );
-	mRGBColorPreview = new KColorPatch( groupbox );
-	mRGBColorPreview->setColor( QColor( "black" ) );
-	mainLayout->addWidget( groupbox, 0, 0);
 	
 	//RGB
-	QGroupBox* cgroupbox = new QGroupBox( 1, Horizontal, i18n( "Components" ), mRGBWidget );
-	mRedSlider = new VColorSlider( i18n( "R:" ), QColor( "red" ), QColor( "black" ), 0, 255, 0, cgroupbox );
-	mGreenSlider = new VColorSlider( i18n( "G:" ), QColor( "green" ), QColor( "black" ), 0, 255, 0, cgroupbox );
-	mBlueSlider = new VColorSlider( i18n( "B:" ), QColor( "blue" ), QColor( "black" ), 0, 255, 0, cgroupbox );
-	mainLayout->addWidget( cgroupbox, 1, 0 );
+	mRedSlider = new VColorSlider( i18n( "R:" ), QColor( "red" ), QColor( "black" ), 0, 255, 0, mRGBWidget );
+	mGreenSlider = new VColorSlider( i18n( "G:" ), QColor( "green" ), QColor( "black" ), 0, 255, 0, mRGBWidget );
+	mBlueSlider = new VColorSlider( i18n( "B:" ), QColor( "blue" ), QColor( "black" ), 0, 255, 0, mRGBWidget );
+	mainLayout->addWidget( mRedSlider, 1, 0 );
+	mainLayout->addWidget( mGreenSlider, 2, 0 );
+	mainLayout->addWidget( mBlueSlider, 3, 0 );
 
 	//Connections for Sliders
 	connect( mRedSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGB() ) );
@@ -77,21 +68,16 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	/* ##### CMYK WIDGET ##### */
 	mCMYKWidget = new QWidget( mTabWidget );
 	QGridLayout *mainCMYKLayout = new QGridLayout( mCMYKWidget, 4, 1);
-	
-	//Reference
-	QGroupBox* crgroupbox = new QGroupBox( 2, Horizontal, i18n( "Reference" ), mCMYKWidget );
-	new QLabel(i18n("Color:"), crgroupbox );
-	mCMYKColorPreview = new KColorPatch( crgroupbox );
-	mCMYKColorPreview->setColor( QColor( "white" ) );
-	mainCMYKLayout->addWidget( crgroupbox, 0, 0 );
-	
+
 	//Sliders
-	QGroupBox* csgroupbox = new QGroupBox( 1, Horizontal, i18n( "Components" ), mCMYKWidget );
-	mCyanSlider = new VColorSlider( i18n( "C:" ), QColor( "cyan" ), QColor( "white" ), 0, 100, 0, csgroupbox );
-	mMagentaSlider = new VColorSlider( i18n( "M:" ), QColor( "magenta" ), QColor( "white" ), 0, 100, 0, csgroupbox );
-	mYellowSlider = new VColorSlider( i18n( "Y:" ), QColor( "yellow" ), QColor( "white" ), 0, 100, 0, csgroupbox );
-	mBlackSlider = new VColorSlider( i18n( "K:" ), QColor( "black" ), QColor( "white" ), 0, 100, 0, csgroupbox );
-	mainCMYKLayout->addWidget( csgroupbox, 1, 0 );
+	mCyanSlider = new VColorSlider( i18n( "C:" ), QColor( "cyan" ), QColor( "white" ), 0, 100, 0, mCMYKWidget );
+	mMagentaSlider = new VColorSlider( i18n( "M:" ), QColor( "magenta" ), QColor( "white" ), 0, 100, 0, mCMYKWidget );
+	mYellowSlider = new VColorSlider( i18n( "Y:" ), QColor( "yellow" ), QColor( "white" ), 0, 100, 0, mCMYKWidget );
+	mBlackSlider = new VColorSlider( i18n( "K:" ), QColor( "black" ), QColor( "white" ), 0, 100, 0, mCMYKWidget );
+	mainCMYKLayout->addWidget( mCyanSlider, 1, 0 );
+	mainCMYKLayout->addWidget( mMagentaSlider, 2, 0 );
+	mainCMYKLayout->addWidget( mYellowSlider, 3, 0 );
+	mainCMYKLayout->addWidget( mBlackSlider, 4, 0 );
 	
 	//Connections for Sliders
 	connect( mCyanSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYK() ) );
@@ -102,24 +88,14 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mainCMYKLayout->activate();
 	mTabWidget->addTab( mCMYKWidget, i18n("CMYK") );
 	
-	//Buttons
-	mButtonGroup = new QHButtonGroup( mainWidget );
-	QPushButton *button = new QPushButton( i18n( "Stroke" ), mButtonGroup );
-	mButtonGroup->insert( button, Outline);
-	button = new QPushButton( i18n( "Fill" ), mButtonGroup );
-	mButtonGroup->insert( button, Fill );
-	mainLayout->addWidget( mButtonGroup, 3, 0 );
-	connect( mButtonGroup, SIGNAL( clicked ( int ) ), this, SLOT( buttonClicked ( int ) ) );
-	
 	//Opacity
 	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "black" ), QColor( "white" ), 0, 100, 100, mainWidget );
 	//TODO: Make "white" a transparent color
 	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
 	
-	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( mainWidget, 2 );
+	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( mainWidget, 3 );
 	mainWidgetLayout->addWidget( mTabWidget );
 	mainWidgetLayout->addWidget( mOpacity );
-	mainWidgetLayout->addWidget( mButtonGroup );
 	mainWidgetLayout->activate();
 	mainWidget->setMinimumWidth( 194 );
 	setWidget( mainWidget );
@@ -127,7 +103,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	m_Color = new VColor();
 }
 
-void VColorDocker::buttonClicked( int button_ID )
+/*void VColorDocker::buttonClicked( int button_ID )
 {
 	switch( button_ID ) {
 	case Fill:
@@ -141,14 +117,13 @@ void VColorDocker::buttonClicked( int button_ID )
 		m_view->selectionChanged();
 		break;
 	}
-}
+}*/
 
 void VColorDocker::updateRGB()
 {
 	float r = mRedSlider->value() / 255.0, g = mGreenSlider->value() / 255.0, b = mBlueSlider->value() / 255.0;
 	m_Color->setColorSpace( VColor::rgb );
 	m_Color->setValues( &r, &g, &b, 0L );
-	updateColorPreviews();
 }
 
 void VColorDocker::updateCMYK()
@@ -157,19 +132,12 @@ void VColorDocker::updateCMYK()
 	float k = mBlackSlider->value() / 100.0;
 	m_Color->setColorSpace( VColor::cmyk );
 	m_Color->setValues( &c, &m, &y, &k );
-	updateColorPreviews();
 }
 
 void VColorDocker::updateOpacity()
 {
 	float op = mOpacity->value() / 100.0;
 	m_Color->setOpacity( op );
-}
-
-void VColorDocker::updateColorPreviews()
-{
-	mRGBColorPreview->setColor( m_Color->toQColor() );
-	mCMYKColorPreview->setColor( m_Color->toQColor() );
 }
 #include "vcolordocker.moc"
 

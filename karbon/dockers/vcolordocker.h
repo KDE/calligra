@@ -23,10 +23,8 @@
 
 #include <vdocker.h>
 
-class QHButtonGroup;
 class QTabWidget;
 class QWidget;
-class KColorPatch;
 class KoMainWindow;
 class KarbonView;
 class KarbonPart;
@@ -45,9 +43,6 @@ private:
 	QTabWidget *mTabWidget;
 	QWidget *mRGBWidget;
 	QWidget *mCMYKWidget;
-	KColorPatch *mRGBColorPreview;
-	KColorPatch *mCMYKColorPreview;
-	QHButtonGroup *mButtonGroup;
 	VColorSlider *mRedSlider;
 	VColorSlider *mGreenSlider;
 	VColorSlider *mBlueSlider;
@@ -61,11 +56,9 @@ private:
 	KarbonView *m_view;
 	
 private slots:
-	void buttonClicked( int button_ID );
 	void updateCMYK();
 	void updateRGB();
 	void updateOpacity();
-	void updateColorPreviews();
 
 protected:
 	VColor *m_Color;
