@@ -4658,6 +4658,8 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     if ( ev->activated() )
     {
         initGui();
+        if (m_doc->isEmbedded() )
+            setZoom( m_doc->zoom(), true );
     }
     KoView::guiActivateEvent( ev );
 }
