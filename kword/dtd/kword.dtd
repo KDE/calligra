@@ -539,6 +539,11 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT STYLE
     (%layout;|FOLLOWING)*>
 
+<!--
+        Defines the color of the text, using RGB.
+        (-1,-1,-1) means "default color", i.e. the base color from the color scheme
+        (usually black).
+-->
 <!ELEMENT COLOR
     EMPTY>
 <!ATTLIST COLOR
@@ -546,6 +551,11 @@ don't put a </?xml...> at the end of the file!).
     green CDATA #REQUIRED
     blue CDATA #REQUIRED>
 
+<!--
+        Defines the background color of the text (aka "highlight"), using RGB.
+        (-1,-1,-1) means "default color", i.e. the base color from the color scheme
+        (usually white).
+-->
 <!ELEMENT TEXTBACKGROUNDCOLOR
     EMPTY>
 <!ATTLIST TEXTBACKGROUNDCOLOR
@@ -663,7 +673,7 @@ don't put a </?xml...> at the end of the file!).
 
 <!-- SHADOWTEXT
         Value is either 0 or 1 with 1=true and 0=false
-        When true, this text will be drawn with a shadow, defined by the
+        When set to 1, this text will be drawn with a shadow, defined by the
         paragraph's SHADOW element.
 -->
 <!ELEMENT SHADOWTEXT

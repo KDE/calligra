@@ -239,14 +239,21 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         elem.setAttribute( "value", curFormat->font().weight() );
     }
     if( !refFormat || curFormat->color() != refFormat->color() )
+    {
+        elem = doc.createElement( "COLOR" );
+        formatElem.appendChild( elem );
         if ( curFormat->color().isValid() )
         {
-            elem = doc.createElement( "COLOR" );
-            formatElem.appendChild( elem );
             elem.setAttribute( "red", curFormat->color().red() );
             elem.setAttribute( "green", curFormat->color().green() );
             elem.setAttribute( "blue", curFormat->color().blue() );
+        } else
+        {
+            elem.setAttribute( "red", -1 );
+            elem.setAttribute( "green", -1 );
+            elem.setAttribute( "blue", -1 );
         }
+    }
     if( !refFormat || curFormat->font().family() != refFormat->font().family() )
     {
         elem = doc.createElement( "FONT" );
@@ -320,15 +327,22 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->vAlign()) );
     }
-    if( !refFormat || curFormat->textBackgroundColor() != refFormat->textBackgroundColor())
+    if( !refFormat || curFormat->textBackgroundColor() != refFormat->textBackgroundColor() )
+    {
+        elem = doc.createElement( "TEXTBACKGROUNDCOLOR" );
+        formatElem.appendChild( elem );
         if ( curFormat->textBackgroundColor().isValid() )
         {
-            elem = doc.createElement( "TEXTBACKGROUNDCOLOR" );
-            formatElem.appendChild( elem );
             elem.setAttribute( "red", curFormat->textBackgroundColor().red() );
             elem.setAttribute( "green", curFormat->textBackgroundColor().green() );
             elem.setAttribute( "blue", curFormat->textBackgroundColor().blue() );
+        } else
+        {
+            elem.setAttribute( "red", -1 );
+            elem.setAttribute( "green", -1 );
+            elem.setAttribute( "blue", -1 );
         }
+    }
 
     if( !refFormat || curFormat->shadowText() != refFormat->shadowText())
     {
@@ -547,18 +561,24 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     elem = formatElem.namedItem( "COLOR" ).toElement();
     if ( !elem.isNull() )
     {
-        QColor col( elem.attribute("red").toInt(),
-                    elem.attribute("green").toInt(),
-                    elem.attribute("blue").toInt() );
-        format.setColor( col );
+        int red = elem.attribute("red").toInt();
+        int green = elem.attribute("green").toInt();
+        int blue = elem.attribute("blue").toInt();
+        if ( red == -1 && blue == -1 && green == -1 )
+            format.setColor( QColor() );
+        else
+            format.setColor( QColor(red,green,blue) );
     }
     elem = formatElem.namedItem( "TEXTBACKGROUNDCOLOR" ).toElement();
     if ( !elem.isNull() )
     {
-        QColor col( elem.attribute("red").toInt(),
-                    elem.attribute("green").toInt(),
-                    elem.attribute("blue").toInt() );
-        format.setTextBackgroundColor( col );
+        int red = elem.attribute("red").toInt();
+        int green = elem.attribute("green").toInt();
+        int blue = elem.attribute("blue").toInt();
+        if ( red == -1 && blue == -1 && green == -1 )
+            format.setTextBackgroundColor( QColor() );
+        else
+            format.setTextBackgroundColor( QColor(red,green,blue) );
     }
     elem = formatElem.namedItem( "SHADOWTEXT" ).toElement();
     if ( !elem.isNull() )
