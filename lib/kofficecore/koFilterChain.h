@@ -126,6 +126,15 @@ private:
     void appendChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to );
     void prependChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to );
 
+    // ### API for KoEmbeddingFilter
+    // This is needed as the embedding filter might have to influence
+    // the way we change directories (e.g. in the olefilter case)
+    // The ugly friend methods are needed, but I'd welcome and suggestions for
+    // better design :}
+    friend void KoEmbeddingFilter::filterChainEnterDirectory( const QString& directory ) const;
+    void enterDirectory( const QString& directory );
+    friend void KoEmbeddingFilter::filterChainLeaveDirectory() const;
+    void leaveDirectory();
 
     // These methods are friends of KoFilterManager and provide access
     // to a private part of its API. As I don't want to include
@@ -177,7 +186,7 @@ private:
 
         // This hack is only needed due to crappy Microsoft design and
         // circular dependencies in their embedded files :}
-        int currentPart() const;
+        int lruPartIndex() const;
 
     private:
         ChainLink( const ChainLink& rhs );
@@ -231,6 +240,12 @@ private:
     // filter (=user) asked for
     enum IOState { Nil, File, Storage, Document };
     IOState m_inputQueried, m_outputQueried;
+
+    // This stack keeps track of directories we have to enter and
+    // leave due to internal embedding a la OLE filters.
+    // I know that it's crap, and I'll try to clean up that hack
+    // sooner or later (Werner)
+    QStringList m_internalEmbeddingDirectories;
 
     class Private;
     Private* d;

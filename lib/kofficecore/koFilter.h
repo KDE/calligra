@@ -21,6 +21,7 @@
 
 #include <qobject.h>
 #include <qmap.h>
+#include <qptrstack.h>
 
 class QIODevice;
 class KoFilterChain;
@@ -101,6 +102,9 @@ protected:
 private:
     KoFilter( const KoFilter& rhs );
     KoFilter& operator=( const KoFilter& rhs );
+
+    class Private;
+    Private* d;
 };
 
 
@@ -113,24 +117,53 @@ class KoEmbeddingFilter : public KoFilter
 public:
     virtual ~KoEmbeddingFilter();
 
-    // The index of the currently processed part
-    int currentPart() const;
-
-    struct PartEntry
-    {
-        QString link;
-        QString mimetype;
-    };
+    // last recently used Part index at the current directory level
+    // will get updated when the stack is manipulated
+    // This is used to generate "unique" directory names
+    int lruPartIndex() const;
 
 protected:
     KoEmbeddingFilter();
 
-    // returns the key for the part entry
+    // Embed something using another filter
+    // returns the number of the part (1,2,3,...)
     // to.isEmpty() -> nearest part, like for exp0rt
     int embedPart( const QCString& from, QCString& to,
-                   KoFilter::ConversionStatus& status );
+                   KoFilter::ConversionStatus& status,
+                   const QString& key = QString::null );
+
+    // Embed something within your filter
+    // Changes the storage directory and messes with some
+    // bookkeeping data structures
+    void startInternalEmbedding( const QString& key, const QCString& mimeType );
+    void endInternalEmbedding();
+
+    // -1 if not found
+    int internalPartReference( const QString& key );
+    QCString internalPartMimeType( const QString& key );
 
 private:
+    // Holds the directory's number and the mimetype of the part
+    // for internal parts
+    struct PartReference
+    {
+        PartReference( int index = -1, const QCString& mimeType = "" );
+        bool isValid();
+
+        int m_index;
+        QCString m_mimeType;
+    };
+
+    // This struct keeps track of the last used index for a
+    // child part and all references to existing children
+    struct PartState
+    {
+        PartState();
+
+        int m_lruPartIndex;
+        QMap<QString, PartReference> m_partReferences;
+    };
+
     KoEmbeddingFilter( const KoEmbeddingFilter& rhs );
     KoEmbeddingFilter& operator=( const KoEmbeddingFilter& rhs );
 
@@ -138,9 +171,13 @@ private:
     // Save the contents to this (already opened) file
     virtual void savePartContents( QIODevice* file );
 
-    // maps keys to part entries
-    QMap<int, PartEntry> m_partMap;
-    int m_currentPart;
+    void filterChainEnterDirectory( const QString& directory ) const;
+    void filterChainLeaveDirectory() const;
+
+    QPtrStack<PartState> m_partStack;
+
+    class Private;
+    Private* d;
 };
 
 #endif

@@ -74,10 +74,10 @@ void KoFilterChain::ChainLink::dump() const
     kdDebug( 30500 ) << "   Link: " << m_filterEntry->service()->name() << endl;
 }
 
-int KoFilterChain::ChainLink::currentPart() const
+int KoFilterChain::ChainLink::lruPartIndex() const
 {
     if ( m_filter && m_filter->inherits( "KoEmbeddingFilter" ) )
-        return static_cast<KoEmbeddingFilter*>( m_filter )->currentPart();
+        return static_cast<KoEmbeddingFilter*>( m_filter )->lruPartIndex();
     return -1;
 }
 
@@ -124,31 +124,11 @@ void KoFilterChain::ChainLink::setupConnections( const KoFilter* sender, const Q
 }
 
 
-KoFilterChain::KoFilterChain( const KoFilterManager* manager ) :
-    m_manager( manager ), m_state( Beginning ), m_inputStorage( 0 ),
-    m_inputStorageDevice( 0 ), m_outputStorage( 0 ), m_outputStorageDevice( 0 ),
-    m_inputDocument( 0 ), m_outputDocument( 0 ), m_inputTempFile( 0 ),
-    m_outputTempFile( 0 ), m_inputQueried( Nil ), m_outputQueried( Nil ), d( 0 )
-{
-    // We "own" our chain links, the filter entries are implicitly shared
-    m_chainLinks.setAutoDelete( true );
-}
-
 KoFilterChain::~KoFilterChain()
 {
     if ( filterManagerParentChain() && filterManagerParentChain()->m_outputStorage )
         filterManagerParentChain()->m_outputStorage->leaveDirectory();
     manageIO(); // Called for the 2nd time in a row -> clean up
-}
-
-void KoFilterChain::appendChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to )
-{
-    m_chainLinks.append( new ChainLink( this, filterEntry, from, to ) );
-}
-
-void KoFilterChain::prependChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to )
-{
-    m_chainLinks.prepend( new ChainLink( this, filterEntry, from, to ) );
 }
 
 KoFilter::ConversionStatus KoFilterChain::invokeChain()
@@ -331,6 +311,43 @@ void KoFilterChain::dump() const
     for ( ; it.current(); ++it )
         it.current()->dump();
     kdDebug( 30500 ) << "########## KoFilterChain (done) ##########" << endl;
+}
+
+KoFilterChain::KoFilterChain( const KoFilterManager* manager ) :
+    m_manager( manager ), m_state( Beginning ), m_inputStorage( 0 ),
+    m_inputStorageDevice( 0 ), m_outputStorage( 0 ), m_outputStorageDevice( 0 ),
+    m_inputDocument( 0 ), m_outputDocument( 0 ), m_inputTempFile( 0 ),
+    m_outputTempFile( 0 ), m_inputQueried( Nil ), m_outputQueried( Nil ), d( 0 )
+{
+    // We "own" our chain links, the filter entries are implicitly shared
+    m_chainLinks.setAutoDelete( true );
+}
+
+void KoFilterChain::appendChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to )
+{
+    m_chainLinks.append( new ChainLink( this, filterEntry, from, to ) );
+}
+
+void KoFilterChain::prependChainLink( KoFilterEntry::Ptr filterEntry, const QCString& from, const QCString& to )
+{
+    m_chainLinks.prepend( new ChainLink( this, filterEntry, from, to ) );
+}
+
+void KoFilterChain::enterDirectory( const QString& directory )
+{
+    // Only a little bit of checking as we (have to :} ) trust KoEmbeddingFilter
+    // If the output storage isn't initialized yet, we perform that step(s) on init.
+    if ( m_outputStorage )
+        m_outputStorage->enterDirectory( directory );
+    m_internalEmbeddingDirectories.append( directory );
+}
+
+void KoFilterChain::leaveDirectory()
+{
+    if ( m_outputStorage )
+        m_outputStorage->leaveDirectory();
+    if ( !m_internalEmbeddingDirectories.isEmpty() )
+        m_internalEmbeddingDirectories.pop_back();
 }
 
 QString KoFilterChain::filterManagerImportFile() const
@@ -547,13 +564,13 @@ KoStoreDevice* KoFilterChain::storageInitEmbedding( const QString& name )
 
     // Now that we have a storage we have to change the directory
     // and remember it for later!
-    const int currentPart = filterManagerParentChain()->m_chainLinks.current()->currentPart();
-    if ( currentPart == -1 ) {
+    const int lruPartIndex = filterManagerParentChain()->m_chainLinks.current()->lruPartIndex();
+    if ( lruPartIndex == -1 ) {
         kdError( 30500 ) << "Huh! You want to use embedding features w/o inheriting KoEmbeddingFilter?" << endl;
         return storageCleanupHelper( &m_outputStorage );
     }
 
-    if ( !m_outputStorage->enterDirectory( QString( "part%1" ).arg( currentPart ) ) )
+    if ( !m_outputStorage->enterDirectory( QString( "part%1" ).arg( lruPartIndex ) ) )
         return storageCleanupHelper( &m_outputStorage );
 
     return storageCreateFirstStream( name, &m_outputStorage, &m_outputStorageDevice );
@@ -562,6 +579,15 @@ KoStoreDevice* KoFilterChain::storageInitEmbedding( const QString& name )
 KoStoreDevice* KoFilterChain::storageCreateFirstStream( const QString& streamName, KoStore** storage,
                                                         KoStoreDevice** device )
 {
+    // Before we go and create the first stream in this storage we
+    // have to perform a little hack in case we're used by any ole-style
+    // filter which utilizes internal embedding. Ugly, but well...
+    if ( !m_internalEmbeddingDirectories.isEmpty() ) {
+        QStringList::ConstIterator it = m_internalEmbeddingDirectories.begin();
+        QStringList::ConstIterator end = m_internalEmbeddingDirectories.end();
+        for ( ; it != end && ( *storage )->enterDirectory( *it ); ++it );
+    }
+
     if ( !( *storage )->open( streamName ) )
         return storageCleanupHelper( storage );
 
