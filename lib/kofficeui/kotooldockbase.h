@@ -331,7 +331,7 @@ private:
 
 /*******************************************************************************/
 
-class KoTabbedToolDock : public KoToolDockBase {
+class KOFFICEUI_EXPORT KoTabbedToolDock : public KoToolDockBase {
 
     Q_OBJECT
 
