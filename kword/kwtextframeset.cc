@@ -598,7 +598,9 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
 
 #ifdef DEBUG_FLOW
     kdDebugBody(32002) << "KWTextFrameSet::adjustFlow parag=" << parag
-                       << " linesTogether=" << linesTogether << " yp=" << yp
+                       << " linesTogether=" << linesTogether << " hardFrameBreak=" << hardFrameBreak
+                       << " movedDown=" << (parag?parag->isMovedDown():false)
+                       << " yp=" << yp
                        << " h=" << h << endl;
 #endif
 
@@ -619,10 +621,11 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
             if ( breaked )
                 break;
 
-            if ( hardFrameBreak && yp > totalHeight && yp <= bottom + 2 )
-                // last test has <= and +2 to ensure a no-op when adjustFlow is called the 2nd time
-                // for the same parag.
+            if ( hardFrameBreak && yp > totalHeight && yp < bottom && !parag->isMovedDown() )
             {
+                // The paragraph wants a frame break before it, and is in the current frame
+                // The last check is for whether we did the frame break already
+                // (adjustFlow is called twice for each paragraph, if a break was done)
                 yp = bottom + 2;
 #ifdef DEBUG_FLOW
                 kdDebug() << "KWTextFrameSet::adjustFlow -> HARD FRAME BREAK" << endl;
