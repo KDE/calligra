@@ -47,7 +47,7 @@ public:
     ~Artwork() {}
     
     void calcSizes(const ContextStyle& style, int parentSize);
-    void draw(QPainter& painter, const ContextStyle& style,
+    void draw(QPainter& painter, const QRect& r, const ContextStyle& style,
               int parentSize, const QPoint& origin);
     
     int getWidth() const { return size.width(); }
@@ -80,7 +80,26 @@ protected:
 
 private:
 
+    bool doSimpleRoundBracket(const ContextStyle& style, int height);
+    bool doSimpleCurlyBracket(const ContextStyle& style, int height);
+    
     void calcCharSize(const ContextStyle& style, int height, char ch);
+    
+    void calcRoundBracket(const ContextStyle& style, int height);
+    void calcCurlyBracket(const ContextStyle& style, int height);
+    
+    void drawLeftRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
+    void drawRightRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
+    void drawLeftSmallRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight, bool left = true);
+    void drawRightSmallRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight);
+    void drawLeftBigRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight, int height, bool left = true);
+    void drawRightBigRoundBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight, int height);
+    void drawLeftCurlyBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
+    void drawRightCurlyBracket(QPainter& p, const ContextStyle& style, int x, int y, int height);
+    void drawLeftSmallCurlyBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight, bool left = true);
+    void drawRightSmallCurlyBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight);
+    void drawLeftBigCurlyBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight, int height, bool left = true);
+    void drawRightBigCurlyBracket(QPainter& p, const ContextStyle& style, int x, int y, int charHeight, int height);
     
     QSize size;
     QPoint point;

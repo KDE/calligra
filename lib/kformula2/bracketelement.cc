@@ -122,9 +122,12 @@ void BracketElement::draw(QPainter& painter, const QRect& r,
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
-    left->draw(painter, style, mySize, myPos);
+    int contentHeight = 2 * QMAX(content->getMidline(),
+                                 content->getHeight() - content->getMidline());
+    
+    left->draw(painter, r, style, contentHeight + style.getSizeReduction(), myPos);
     content->draw(painter, r, style, mySize, myPos);
-    right->draw(painter, style, mySize, myPos);
+    right->draw(painter, r, style, contentHeight + style.getSizeReduction(), myPos);
 }
 
 

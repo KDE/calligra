@@ -196,7 +196,7 @@ void SymbolElement::draw(QPainter& painter, const QRect& r,
     if (!QRect(myPos, getSize()).intersects(r))
         return;
 
-    symbol.draw(painter, style, mySize, myPos);
+    symbol.draw(painter, r, style, mySize, myPos);
     content->draw(painter, r, style, mySize, myPos);
     if (hasUpper()) {
         upper->draw(painter, r, style, mySize, myPos);
@@ -206,11 +206,11 @@ void SymbolElement::draw(QPainter& painter, const QRect& r,
     }
 
     // Debug
-    painter.setBrush(Qt::NoBrush);
-    painter.setPen(Qt::red);
+    //painter.setBrush(Qt::NoBrush);
+    //painter.setPen(Qt::red);
     //painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
-    painter.drawLine(myPos.x(), myPos.y()+getMidline(),
-                     myPos.x()+getWidth(), myPos.y()+getMidline());
+    //painter.drawLine(myPos.x(), myPos.y()+getMidline(),
+    //                 myPos.x()+getWidth(), myPos.y()+getMidline());
 }
 
     

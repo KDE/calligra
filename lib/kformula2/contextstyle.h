@@ -81,8 +81,6 @@ public:
 
     bool getCenterSymbol() const { return centerSymbol; }
     
-private:
-
     // Shamelessly stolen from kword. (See kwdoc.h)
     
     // Input: pt. Output: pixels. Resolution and zoom are applied.
@@ -104,6 +102,8 @@ private:
     double zoomItY( double z ) const {
         return m_zoomedResolutionY * z;
     }
+
+private:
 
     double m_zoomedResolutionX;
     double m_zoomedResolutionY;
