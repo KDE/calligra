@@ -172,11 +172,6 @@
                 <title xml:lang="en_us">LaTeX</title>
                 <stat import="onestar" export="twostars"/>
             </filter>
-            <filter id="kword_mif">
-                <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/kword/filters/mif"/>
-                <title xml:lang="en_us">MIF</title>
-                <stat import="abandoned" export="none"/>
-            </filter>
             <filter id="kword_mswrite">
                 <webcvs importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/mswrite"/>
                 <title xml:lang="en_us">MS Write</title>
