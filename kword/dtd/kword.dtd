@@ -307,6 +307,10 @@ don't put a </?xml...> at the end of the file!).
                                 2...This frame will be shown on the new page
                                     as well (with the same content)
 
+            copy:               0...Not a copy
+                                1...This frame is a copy of the previous frame in this frameset
+                                (default is 1 for headers and footers and 0 for the others)
+
             sheetSide:          0...AnySide
                                 1...this frame will only be shown on odd pages
                                 2...this frame will only be shown on even pages
@@ -328,7 +332,8 @@ don't put a </?xml...> at the end of the file!).
     runaround CDATA #IMPLIED
     runaroundGap CDATA #IMPLIED
     autoCreateNewFrame CDATA #REQUIRED
-    newFrameBehaviour CDATA #REQUIRED>
+    newFrameBehaviour CDATA #REQUIRED
+    copy CDATA #IMPLIED>
 
 <!ELEMENT PARAGRAPH
     (TEXT|FORMATS|LAYOUT)*>

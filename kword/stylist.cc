@@ -120,13 +120,14 @@ void KWStyleManager::setupWidget()
     QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
                                                  KDialog::marginHint(), KDialog::spacingHint() );
 
-    QList<KWStyle> styles( m_doc->styleList() );
-    numStyles = styles.count();
+    QListIterator<KWStyle> style( m_doc->styleList() );
+    numStyles = m_doc->styleList().count();
     m_stylesList = new QListBox( frame1, "stylesList" );
-    for ( unsigned int i = 0; i < styles.count(); i++ ) {
-        m_stylesList->insertItem( styles.at( i )->name() );
-        m_origStyles.append(styles.at(i));
-        m_changedStyles.append(styles.at(i));
+    for ( ; style.current() ; ++style )
+    {
+        m_stylesList->insertItem( i18n("KWord style", style.current()->name().utf8() ) );
+        m_origStyles.append( style.current() );
+        m_changedStyles.append( style.current() );
     }
 
     frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
@@ -198,7 +199,8 @@ void KWStyleManager::switchStyle() {
         save();
 
     m_currentStyle = 0L;
-    int num = getStyleByName(m_stylesList->currentText());
+    int num = styleIndex( m_stylesList->currentItem() );
+    kdDebug() << "KWStyleManager::switchStyle switching to " << num << endl;
     if(m_origStyles.at(num) == m_changedStyles.at(num)) {
         m_currentStyle = new KWStyle( *m_origStyles.at(num) );
         m_changedStyles.take(num);
@@ -219,13 +221,22 @@ void KWStyleManager::switchTabs()
     updatePreview();
 }
 
-int KWStyleManager::getStyleByName(const QString & name) {
+// Return the index of the a style from its position in the GUI
+// (e.g. in m_stylesList or m_styleCombo). This index is used in
+// the m_origStyles and m_changedStyles lists.
+// The reason for the difference is that a deleted style is removed
+// from the GUI but not from the internal lists.
+int KWStyleManager::styleIndex( int pos ) {
+    int p = 0;
     for(unsigned int i=0; i < m_changedStyles.count(); i++) {
-
-        if(m_changedStyles.at(i) == NULL) continue;
-        if(m_changedStyles.at(i)->name() == name)
+        // Skip deleted styles, they're no in m_stylesList anymore
+        KWStyle * style = m_changedStyles.at(i);
+        if ( !style ) continue;
+        if ( p == pos )
             return i;
+        ++p;
     }
+    kdWarning() << "KWStyleManager::styleIndex no style found at pos " << pos << endl;
     return 0;
 }
 
@@ -240,9 +251,11 @@ void KWStyleManager::updateGUI() {
 
     m_nameString->setText(m_currentStyle->name());
 
+    kdDebug() << "KWStyleManager::updateGUI updating combo to " << m_currentStyle->followingStyle()->name() << endl;
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
-        if ( m_styleCombo->text( i ) == m_currentStyle->followingStyle()->name() ) {
+        if ( m_styleCombo->text( i ) == i18n( "KWord style", m_currentStyle->followingStyle()->name().utf8() ) ) {
             m_styleCombo->setCurrentItem( i );
+            kdDebug() << "found at " << i << endl;
             break;
         }
     }
@@ -264,8 +277,11 @@ void KWStyleManager::save() {
         QListIterator<KWStyleManagerTab> it( m_tabsList );
         for ( ; it.current() ; ++it )
             it.current()->save();
+
         m_currentStyle->setName( m_nameString->text() );
-        m_currentStyle->setFollowingStyle(m_changedStyles.at(getStyleByName(m_styleCombo->currentText())));
+
+        int indexNextStyle = styleIndex( m_styleCombo->currentItem() );
+        m_currentStyle->setFollowingStyle( m_changedStyles.at( indexNextStyle ) );
     }
 }
 
@@ -294,8 +310,8 @@ void KWStyleManager::addStyle() {
 
 void KWStyleManager::deleteStyle() {
 
-    unsigned int cur = getStyleByName(m_stylesList->currentText());
-    unsigned int curItem=m_stylesList->currentItem();
+    unsigned int cur = styleIndex( m_stylesList->currentItem() );
+    unsigned int curItem = m_stylesList->currentItem();
     KWStyle *s = m_changedStyles.at(cur);
     ASSERT( s == m_currentStyle );
     delete s;
@@ -307,8 +323,6 @@ void KWStyleManager::deleteStyle() {
     // we display it automatically
     m_stylesList->removeItem(curItem);
     m_styleCombo->removeItem(curItem);
-    //if(cur > m_stylesList->count())
-    //    cur--;
     numStyles--;
     m_stylesList->setSelected( m_stylesList->currentItem(), true );
 }
@@ -368,22 +382,26 @@ void KWStyleManager::apply() {
 void KWStyleManager::renameStyle(const QString &theText) {
     if(noSignals) return;
     noSignals=true;
-    QStringList listNameStyle;
-    bool found=false;
-    // rename only in the GUI, not even in the underlying objects.
+
+    int index = m_stylesList->currentItem();
+    kdDebug() << "KWStyleManager::renameStyle " << index << " to " << theText << endl;
+
+    // rename only in the GUI, not even in the underlying objects (save() does it).
+    kdDebug() << "KWStyleManager::renameStyle before " << m_styleCombo->currentText() << endl;
+    m_styleCombo->changeItem( theText, index );
+    kdDebug() << "KWStyleManager::renameStyle after " << m_styleCombo->currentText() << endl;
+    m_stylesList->changeItem( theText, index );
+
+    // Check how many styles with that name we have now
+    int synonyms = 0;
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
-        if ( m_styleCombo->text( i ) == m_stylesList->currentText() && !found) {
-            {
-                //change just first style name
-                m_styleCombo->changeItem(theText, i);
-                found=true;
-            }
-        }
-        listNameStyle<<m_styleCombo->text( i );
+        if ( m_styleCombo->text( i ) == m_stylesList->currentText() )
+            ++synonyms;
     }
-    m_stylesList->changeItem(theText, m_stylesList->currentItem());
+    ASSERT( synonyms > 0 ); // should have found 'index' at least !
     noSignals=false;
-    bool state=!theText.isEmpty() && !(listNameStyle.contains(theText)>1);
+    // Can't close the dialog if two styles have the same name
+    bool state=!theText.isEmpty() && (synonyms == 1);
     enableButtonOK(state );
     enableButtonApply(state);
     m_deleteButton->setEnabled(state&&(m_stylesList->currentItem() != 0));
@@ -420,7 +438,7 @@ void KWStylePreview::drawContents( QPainter *painter )
     // see also KWNumPreview::drawContents
     painter->save();
     QRect r = contentsRect();
-    kdDebug() << "KWStylePreview::drawContents contentsRect=" << DEBUGRECT(r) << endl;
+    //kdDebug() << "KWStylePreview::drawContents contentsRect=" << DEBUGRECT(r) << endl;
 
     QRect whiteRect( r.x() + 10, r.y() + 10,
                      r.width() - 20, r.height() - 20 );

@@ -1978,10 +1978,10 @@ QPoint KWCanvas::rulerPos(int x, int y)
     QPoint cPoint( m_viewMode->normalToView( nPoint ) );
     QPoint p( (x==-1 ? contentsX() : x) - cPoint.x(),
               (y==-1 ? contentsY() : y) - cPoint.y() );
-    kdDebug() << "KWCanvas::rulerPos pagenum=" << pageNum
-              << " nPoint=" << nPoint.x() << "," << nPoint.y()
-              << " cPoint=" << cPoint.x() << "," << cPoint.y() << endl;
-    kdDebug() << "KWCanvas::rulerPos p=" << p.x() << "," << p.y() << endl;
+    //kdDebug() << "KWCanvas::rulerPos pagenum=" << pageNum
+    //          << " nPoint=" << nPoint.x() << "," << nPoint.y()
+    //          << " cPoint=" << cPoint.x() << "," << cPoint.y() << endl;
+    //kdDebug() << "KWCanvas::rulerPos p=" << p.x() << "," << p.y() << endl;
     return p;
 }
 

@@ -59,7 +59,7 @@ protected:
     void updateGUI();
     void updatePreview();
     void save();
-    int getStyleByName(const QString & name);
+    int styleIndex( int pos );
 
     QTabWidget *m_tabs;
     QListBox *m_stylesList;

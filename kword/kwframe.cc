@@ -304,6 +304,9 @@ void KWFrame::save( QDomElement &frameElem )
     //if(getNewFrameBehaviour()!=Reconnect) // always save this one, since the default value depends on the type of frame, etc.
     frameElem.setAttribute( "newFrameBehaviour", static_cast<int>( getNewFrameBehaviour()) );
 
+    //same reason
+    frameElem.setAttribute( "copy", static_cast<int>( m_bCopy ) );
+
     if(getSheetSide()!= AnySide)
         frameElem.setAttribute( "sheetSide", static_cast<int>( getSheetSide()) );
 }
@@ -376,8 +379,7 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     bright = frameElem.attribute( "brightpt" ).toDouble();
     btop = frameElem.attribute( "btoppt" ).toDouble();
     bbottom = frameElem.attribute( "bbottompt" ).toDouble();
-    if ( headerOrFooter )
-        m_bCopy = true;
+    m_bCopy = KWDocument::getAttribute( frameElem, "copy", headerOrFooter /* default to true for h/f */ );
 }
 
 /******************************************************************/
