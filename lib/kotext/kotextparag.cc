@@ -775,8 +775,6 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 	}
     }
     
-    if(start+len!=s.length())
-	KoTextParag::drawFontEffectsHelper( &painter, format, zh, font, textColor, startX, baseLine, bw, lastY, h, start, len, this );
 
     QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
 
@@ -786,6 +784,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
        if ( len <= 0 )
            return;
     }
+    KoTextParag::drawFontEffectsHelper( &painter, format, zh, font, textColor, startX, baseLine, bw, lastY, h, start, len, this );
 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
         str = format->displayedString( str );
