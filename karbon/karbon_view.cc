@@ -15,7 +15,6 @@
 #include <kstatusbar.h>
 #include <kstdaction.h>
 
-#include "karbon_dlg_config.h"
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -46,6 +45,7 @@
 
 // dialogs:
 #include "vcolordlg.h"
+#include "vconfiguredlg.h"
 #include "vfilldlg.h"
 #include "vinsertknotsdlg.h"
 #include "vpolygonizedlg.h"
@@ -848,8 +848,8 @@ void KarbonView::setNumberOfRecentFiles( int number )
 
 void KarbonView::configure()
 {
-	KarbonConfig configDia( this );
-	configDia.exec();
+	VConfigureDlg dialog( this );
+	dialog.exec();
 }
 
 

@@ -9,7 +9,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) \
 	-I$(srcdir)/render \
 	$(all_includes)
 
-SUBDIRS = core visitors widgets dialogs commands tools render . data pics
+SUBDIRS = core widgets dialogs commands tools render visitors . data pics
 
 bin_PROGRAMS = karbon
 lib_LTLIBRARIES = \
@@ -17,10 +17,13 @@ lib_LTLIBRARIES = \
 	libkarbonpart.la
 
 libkarbonpart_la_SOURCES = \
-	karbon_part.cc \
+	karbon_factory.cc \
+	karbon_view_iface.skel \
+	karbon_view_iface.cc \
 	karbon_view.cc \
-	karbon_factory.cc karbon_view_iface.skel karbon_view_iface.cc \
-	karbon_dlg_config.cc karbon_part_iface.skel karbon_part_iface.cc 
+	karbon_part_iface.skel \
+	karbon_part_iface.cc \
+	karbon_part.cc
 
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) \
@@ -49,5 +52,4 @@ noinst_HEADERS = \
 	karbon_part.h \
 	karbon_view.h \
 	karbon_factory.h \
-	karbon_dlg_config.h \
 	karbon_part_iface.h
