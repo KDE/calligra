@@ -20,7 +20,15 @@ int main (int argc, char ** argv)
     //testing English
     QStringList en_tests = QStringList() << "Follow" << "white" << "rabbit";
 
-    KoHyphenator * hypher = new KoHyphenator();
+    KoHyphenator * hypher = 0L;
+    try {
+        hypher = new KoHyphenator();
+    }
+    catch (KoHyphenatorException &e)
+    {
+        qDebug("%s", e.message().latin1());
+        return 1;
+    }
 
     QStringList::ConstIterator it = cs_tests.begin();
 
