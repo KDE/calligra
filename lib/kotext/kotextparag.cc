@@ -1697,18 +1697,21 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         {
             textData = '#'; // anchor placeholder
             importFootnote( doc, ts, outputFormats, pos, tagName );
+            // do me last, combination of variable and frameset.
         }
         else if ( tagName == "draw:image" )
         {
             textData = '#'; // anchor placeholder
             QString frameName = appendPicture(doc, ts);
             anchorFrameset( doc, outputFormats, pos, frameName );
+            // see KWTextParag::loadFormatting "case 6:" for inspiration
         }
         else if ( tagName == "draw:text-box" )
         {
             textData = '#'; // anchor placeholder
             QString frameName = appendTextBox(doc, ts);
             anchorFrameset( doc, outputFormats, pos, frameName );
+            // see KWTextParag::loadFormatting "case 6:" for inspiration
         }
         else if ( textFoo && tagName == "text:a" )
         {
@@ -1759,6 +1762,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         {
             textData = "#";     // field placeholder
             appendField(doc, outputFormats, ts, pos);
+            // see KWTextParag::loadFormatting "case 4:" for inspiration
         }
         else if ( textFoo && tagName == "text:bookmark" )
         {
@@ -1809,7 +1813,9 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
 
         const uint length = textData.length();
         append( textData );
-        setFormat( pos, length, paragFormat(), TRUE ); // ### format!
+        KoTextFormat f;
+        f.load( context );
+        setFormat( pos, length, document()->formatCollection()->format( &f ), TRUE );
 
         //if (shouldWriteFormat)
         //{
