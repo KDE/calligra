@@ -358,19 +358,22 @@ void KoPageLayoutDia::setupTab1()
     // --------------- orientation ---------------
     QButtonGroup *orientFrame = new QButtonGroup( i18n( "Orientation" ), tab1 );
     grid1->addWidget( orientFrame, 2, 0 );
-    QLayout *orientLayout = new QGridLayout( orientFrame, 2, 2,
+    QGridLayout *orientLayout = new QGridLayout( orientFrame, 1, 4,
        2*KDialog::marginHint(), KDialog::spacingHint() );
-    orientLayout->setAutoAdd( true );
 
     QLabel* lbPortrait = new QLabel( orientFrame );
     lbPortrait->setPixmap( QPixmap( UserIcon( "koPortrait" ) ) );
     lbPortrait->setMaximumWidth( lbPortrait->pixmap()->width() );
+    orientLayout->addWidget(lbPortrait, 0, 0);
     rbPortrait = new QRadioButton( i18n("&Portrait"), orientFrame );
+    orientLayout->addWidget(rbPortrait, 0, 1);
 
     QLabel* lbLandscape = new QLabel( orientFrame );
     lbLandscape->setPixmap( QPixmap( UserIcon( "koLandscape" ) ) );
     lbLandscape->setMaximumWidth( lbLandscape->pixmap()->width() );
+    orientLayout->addWidget(lbLandscape, 0, 2);
     rbLandscape = new QRadioButton( i18n("La&ndscape"), orientFrame );
+    orientLayout->addWidget(rbLandscape, 0, 3);
 
 
     connect( rbPortrait, SIGNAL( clicked() ), this, SLOT( orientationChanged() ) );
@@ -379,47 +382,30 @@ void KoPageLayoutDia::setupTab1()
     // --------------- page margins ---------------
     QButtonGroup *marginsFrame = new QButtonGroup( i18n( "Margins" ), tab1 );
     grid1->addWidget( marginsFrame, 3, 0 );
-    QGridLayout *marginsLayout = new QGridLayout( marginsFrame, 4, 2,
+    QGridLayout *marginsLayout = new QGridLayout( marginsFrame, 3, 3,
        2*KDialog::marginHint(), KDialog::spacingHint() );
-    marginsLayout->setColStretch( 1, 1 );
 
     // left margin
-    QLabel* lbLeft = new QLabel( i18n( "&Left:" ), marginsFrame );
-    marginsLayout->addWidget( lbLeft,
-       0, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrLeft = new KDoubleNumInput( marginsFrame, "Left" );
-    lbLeft->setBuddy( ebrLeft );
-    marginsLayout->addWidget( ebrLeft, 0, 1 );
+    marginsLayout->addWidget( ebrLeft, 1, 0 );
     connect( ebrLeft, SIGNAL( valueChanged( double ) ), this, SLOT( leftChanged() ) );
     if ( !enableBorders ) ebrLeft->setEnabled( false );
 
     // right margin
-    QLabel* lbRight = new QLabel( i18n( "&Right:" ), marginsFrame );
-    marginsLayout->addWidget( lbRight,
-       1, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrRight = new KDoubleNumInput( marginsFrame, "Right" );
-    lbRight->setBuddy( ebrRight );
-    marginsLayout->addWidget( ebrRight, 1, 1 );
+    marginsLayout->addWidget( ebrRight, 1, 2 );
     connect( ebrRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged() ) );
     if ( !enableBorders ) ebrRight->setEnabled( false );
 
     // top margin
-    QLabel* lbTop = new QLabel( i18n( "&Top:" ), marginsFrame );
-    marginsLayout->addWidget( lbTop,
-       2, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrTop = new KDoubleNumInput( marginsFrame, "Top" );
-    lbTop->setBuddy( ebrTop );
-    marginsLayout->addWidget( ebrTop, 2, 1 );
+    marginsLayout->addWidget( ebrTop, 0, 1 , Qt::AlignCenter );
     connect( ebrTop, SIGNAL( valueChanged( double ) ), this, SLOT( topChanged() ) );
     if ( !enableBorders ) ebrTop->setEnabled( false );
 
     // bottom margin
-    QLabel* lbBottom = new QLabel ( i18n( "&Bottom:" ), marginsFrame );
-    marginsLayout->addWidget( lbBottom,
-       3, 0, Qt::AlignRight | Qt::AlignVCenter );
     ebrBottom = new KDoubleNumInput( marginsFrame, "Bottom" );
-    lbBottom->setBuddy( ebrBottom );
-    marginsLayout->addWidget( ebrBottom, 3, 1 );
+    marginsLayout->addWidget( ebrBottom, 2, 1, Qt::AlignCenter );
     connect( ebrBottom, SIGNAL( valueChanged( double ) ), this, SLOT( bottomChanged() ) );
     if ( !enableBorders ) ebrBottom->setEnabled( false );
 
@@ -472,19 +458,19 @@ void KoPageLayoutDia::setValuesTab1Helper()
 
     ebrLeft->setValue( KoUnit::toUserValue( m_layout.ptLeft, m_unit ) );
     ebrLeft->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrLeft->setRange( 0, KoUnit::toUserValue( m_layout.ptWidth, m_unit)  );
+    ebrLeft->setRange( 0, KoUnit::toUserValue( m_layout.ptWidth, m_unit), 0.2, false );
 
     ebrRight->setValue( KoUnit::toUserValue( m_layout.ptRight, m_unit ) );
     ebrRight->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrRight->setRange( 0, KoUnit::toUserValue( m_layout.ptWidth, m_unit)  );
+    ebrRight->setRange( 0, KoUnit::toUserValue( m_layout.ptWidth, m_unit), 0.2, false );
 
     ebrTop->setValue( KoUnit::toUserValue( m_layout.ptTop, m_unit ) );
     ebrTop->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrTop->setRange( 0, KoUnit::toUserValue( m_layout.ptHeight, m_unit)  );
+    ebrTop->setRange( 0, KoUnit::toUserValue( m_layout.ptHeight, m_unit), 0.2, false );
 
     ebrBottom->setValue( KoUnit::toUserValue( m_layout.ptBottom, m_unit ) );
     ebrBottom->setSuffix( KoUnit::unitName( m_unit ) );
-    ebrBottom->setRange( 0, KoUnit::toUserValue( m_layout.ptHeight, m_unit)  );
+    ebrBottom->setRange( 0, KoUnit::toUserValue( m_layout.ptHeight, m_unit), 0.2, false );
 }
 
 /*================ setup header and footer tab ===================*/

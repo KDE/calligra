@@ -23,7 +23,7 @@
 #define __KOPGLAYOUTDIA_H__
 
 #include <qgroupbox.h>
-
+#include <qlayout.h>
 #include <koGlobal.h>
 #include <koUnit.h>
 #include <kdialogbase.h>
