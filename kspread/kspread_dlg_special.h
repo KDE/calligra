@@ -24,8 +24,6 @@
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
-// #include <qcheckbox.h>
-
 
 class KSpreadView;
 class KSpreadTable;
@@ -41,7 +39,7 @@ public slots:
     void slotOk();
     void slotClose();
     void slotToggled( bool );
-    
+
 protected:
     KSpreadView* m_pView;
 
@@ -56,7 +54,7 @@ protected:
     QRadioButton *rb7;
     QRadioButton *rb8;
     QRadioButton *rb9;
-    // QCheckBox *cb;
+    QRadioButton *rb10;
 };
 
 #endif

@@ -3487,7 +3487,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 
   	}
     QDomElement comment = cell.namedItem( "comment" ).toElement();
-    if ( !comment.isNull() )
+    if ( !comment.isNull() && ( pm == ::Normal ||pm == ::Comment || pm == ::NoBorder ))
         {
         QString t = comment.text();
 	//t = t.stripWhiteSpace();

@@ -7,7 +7,7 @@
 
 #define KSBarIcon( x ) BarIcon( x, KSpreadFactory::global() )
 
-enum PasteMode { Normal, Text, Format, NoBorder, NormalAndTranspose, TextAndTranspoase,
+enum PasteMode { Normal, Text, Format, NoBorder, Comment, NormalAndTranspose, TextAndTranspoase,
 		 FormatAndTranspose, NoBorderAndTranspose };
 enum Operation { OverWrite, Add, Mul, Sub, Div };
 enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different};

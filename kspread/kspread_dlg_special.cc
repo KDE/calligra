@@ -49,6 +49,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
     rb1 = new QRadioButton( i18n("Everything"), grp );
     rb2 = new QRadioButton( i18n("Text"), grp );
     rb3 = new QRadioButton( i18n("Format"), grp );
+    rb10 = new QRadioButton( i18n("Comment"), grp );
     rb4 = new QRadioButton( i18n("Everything without border"), grp );
     rb1->setChecked(true);
 
@@ -80,6 +81,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
     connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
     connect( rb3, SIGNAL( toggled( bool ) ), this, SLOT( slotToggled( bool ) ) );
+    connect( rb10, SIGNAL( toggled( bool ) ), this, SLOT( slotToggled( bool ) ) );
 }
 
 void KSpreadspecial::slotOk()
@@ -104,6 +106,8 @@ void KSpreadspecial::slotOk()
 	sp = Format;
     else if( rb4->isChecked() )
 	sp = NoBorder;
+    else if( rb10->isChecked() )
+	sp = Comment;
 
     if( rb5->isChecked() )
 	op = OverWrite;

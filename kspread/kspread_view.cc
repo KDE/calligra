@@ -243,7 +243,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(), "copy" );
     m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste" );
     m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(), "cut" );
-    m_specialPaste = new KAction( i18n("Special Paste..."), 0, this, SLOT( specialPaste() ), actionCollection(), "specialPaste" );
+    m_specialPaste = new KAction( i18n("Special Paste..."), KSBarIcon("special_paste"),0, this, SLOT( specialPaste() ), actionCollection(), "specialPaste" );
     m_editCell = new KAction( i18n("Edit Cell"),KSBarIcon("cell_edit"), CTRL + Key_E, this, SLOT( editCell() ), actionCollection(), "editCell" );
     m_delete = new KAction( i18n("Delete"),KSBarIcon("deletecell"), 0, this, SLOT( deleteSelection() ), actionCollection(), "delete" );
     m_clear = new KAction( i18n("Clear"), 0, this, SLOT( clearSelection() ), actionCollection(), "clear" );

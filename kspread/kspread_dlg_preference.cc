@@ -33,35 +33,43 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* name)
 	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
-  
+
   setCaption( i18n("Preference") );
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  QVBoxLayout *box = new QVBoxLayout( this );
+  box->setMargin( 5 );
+  box->setSpacing( 10 );
+
+  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  tmpQGroupBox->setTitle(i18n("Table"));
+  QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
 
-  m_pFormula= new QCheckBox(i18n("Show formular"),this);
+  m_pFormula= new QCheckBox(i18n("Show formular"),tmpQGroupBox);
   lay1->addWidget(m_pFormula);
   m_pFormula->setChecked(m_pView->activeTable()->getShowFormular());
-  
-  m_pGrid=new QCheckBox(i18n("Show Grid"),this);
+
+  m_pGrid=new QCheckBox(i18n("Show Grid"),tmpQGroupBox);
   lay1->addWidget(m_pGrid);
   m_pGrid->setChecked(m_pView->activeTable()->getShowGrid());
-    
-  m_pColumn=new QCheckBox(i18n("Show column number"),this);
+
+  m_pColumn=new QCheckBox(i18n("Show column number"),tmpQGroupBox);
   lay1->addWidget(m_pColumn);
   m_pColumn->setChecked(m_pView->activeTable()->getShowColumnNumber());
-  
-  m_pLcMode=new QCheckBox(i18n("LC mode"),this);
+
+  m_pLcMode=new QCheckBox(i18n("LC mode"),tmpQGroupBox);
   lay1->addWidget(m_pLcMode);
   m_pLcMode->setChecked(m_pView->activeTable()->getLcMode());
-  
+
+  box->addWidget( tmpQGroupBox);
+
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("Ok") );
   m_pOk->setDefault( TRUE );
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
-  lay1->addWidget( bb);
+  box->addWidget( bb);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 
