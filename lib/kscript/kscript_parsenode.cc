@@ -385,7 +385,7 @@ void KSParseNode::setBranch( int i, KSParseNode *node )
 }
 
 
-void KSParseNode::printBranch( int indent, char *tag, bool detailed )
+void KSParseNode::printBranch( int indent, const char *tag, bool detailed )
 {
   for( int i = 0; i < indent; i++ )
     cout << " ";

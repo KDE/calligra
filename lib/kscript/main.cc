@@ -28,6 +28,7 @@ int main( int argc, char** argv )
   CORBA::ORB* orb = CORBA::ORB_init( argc, argv, "mico-local-orb");
   pOrb = orb;
   CORBA::BOA* boa = orb->BOA_init( argc, argv, "mico-local-boa");
+  (void)boa;
 
   KSInterpreter script;
   QString ex = script.runScript( argv[1] );

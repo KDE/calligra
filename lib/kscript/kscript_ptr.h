@@ -40,6 +40,7 @@ public:
   bool operator!= ( const T& p ) const { return ( ptr != &p ); }
   bool operator!() const { return ( ptr == 0 ); }
   operator bool() const { return ( ptr != 0 ); }
+  operator bool() { return (ptr != 0); }
   operator T*() { return ptr; }
   operator const T*() const { return ptr; }
 

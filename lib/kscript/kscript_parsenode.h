@@ -132,7 +132,7 @@ private:
   KSParseNode *b4;
   KSParseNode *b5;
 
-  void printBranch( int indent, char *tag, bool detailed );
+  void printBranch( int indent, const char *tag, bool detailed );
 
 public:
   KSParseNode( KSParseNodeType aType, KSParseNode *one = NULL,

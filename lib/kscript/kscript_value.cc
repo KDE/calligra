@@ -428,7 +428,7 @@ void KSValue::initTypeNameMap()
 {
     if ( typ_to_name ) return;
 
-    typ_to_name = new QString[NTypes];
+    typ_to_name = new QString[(int)NTypes];
 
     typ_to_name[(int)Empty] = QString::fromLatin1("<none>");
     typ_to_name[(int)StringType] = QString::fromLatin1("String");
