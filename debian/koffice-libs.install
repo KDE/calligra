@@ -51,8 +51,6 @@ usr/lib/kde3/libkfolatexexport.la
 usr/lib/kde3/libkfolatexexport.so
 usr/lib/kde3/libkfopngexport.la
 usr/lib/kde3/libkfopngexport.so
-usr/lib/kde3/libkontourrtfexport.la
-usr/lib/kde3/libkontourrtfexport.so
 usr/lib/kde3/libkounavailpart.la
 usr/lib/kde3/libkounavailpart.so
 usr/lib/kde3/libkprkword.la
@@ -157,7 +155,6 @@ usr/share/services/clipartthumbnail.desktop
 usr/share/services/karbon_ai_import.desktop
 usr/share/services/karbon_eps_export.desktop
 usr/share/services/karbon_eps_import.desktop
-usr/share/services/karbon_kontour_import.desktop
 usr/share/services/karbon_png_export.desktop
 usr/share/services/karbon_ps_import.desktop
 usr/share/services/karbon_svg_export.desktop
@@ -167,11 +164,6 @@ usr/share/services/kformula_latex_export.desktop
 usr/share/services/kformula_png_export.desktop
 usr/share/services/kodocinfopropspage.desktop
 usr/share/services/kofficethumbnail.desktop
-usr/share/services/kontour_applixgraphic_import.desktop
-usr/share/services/kontour_latex_export.desktop
-usr/share/services/kontour_msod_import.desktop
-usr/share/services/kontour_rtf_export.desktop
-usr/share/services/kontour_wmf_import.desktop
 usr/share/services/kounavail.desktop
 usr/share/services/kprkword.desktop
 usr/share/services/kspelltool.desktop
