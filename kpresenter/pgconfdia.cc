@@ -279,7 +279,7 @@ int PgConfDia::getPageTimer() const
 /*================================================================*/
 bool PgConfDia::getPageSoundEffect() const
 {
-    return checkSoundEffect->isChecked();
+    return (requester->url().isEmpty() ? false : checkSoundEffect->isChecked());
 }
 
 /*================================================================*/

@@ -326,8 +326,8 @@ void EffectDia::slotEffectDiaOk()
     eff.disappear = disappear->isChecked();
     eff.appearTimer = timerOfAppear->value();
     eff.disappearTimer = timerOfDisappear->value();
-    eff.appearSoundEffect = appearSoundEffect->isChecked();
-    eff.disappearSoundEffect = disappearSoundEffect->isChecked();
+    eff.appearSoundEffect = (requester1->url().isEmpty() ? false : appearSoundEffect->isChecked());
+    eff.disappearSoundEffect = (requester2->url().isEmpty() ? false : disappearSoundEffect->isChecked());
     eff.a_fileName = requester1->url();
     eff.d_fileName = requester2->url();
 
