@@ -19,17 +19,18 @@
 */
 
 #include <qevent.h>
+
 #include <kdebug.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"
-#include "vtooloptionsdocker.h"
 #include "vcontexthelpdocker.h"
 #include "vtool.h"
+#include "vtooloptionsdocker.h"
 
 
 VTool::VTool( KarbonView* view )
-	: m_view( view )
+		: m_view( view )
 {
 	m_mouseButtonIsDown = false;
 	m_isDragging = false;
@@ -41,7 +42,7 @@ void VTool::activateAll()
 	view()->contextHelpDocker()->manageTool( this );
 
 	activate();
-} 
+}
 
 bool
 VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
@@ -55,10 +56,10 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 	setCursor();
 
 	// Mouse events:
-	if ( mouseEvent->type() == QEvent::MouseButtonDblClick )
+	if( mouseEvent->type() == QEvent::MouseButtonDblClick )
 	{
 		mouseButtonDblClick();
-		
+
 		return true;
 	}
 
@@ -112,13 +113,16 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 bool
 VTool::keyEvent( QEvent* event )
 {
-	// Key press events:
+	// Key press events.
 	if( event->type() == QEvent::KeyPress )
 	{
 		QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
 
 		// Terminate the current drawing with the Enter-key:
-		if ( ( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return ) && !m_isDragging )
+		if(
+			( keyEvent->key() == Qt::Key_Enter ||
+			  keyEvent->key() == Qt::Key_Return )
+			&& !m_isDragging )
 		{
 			accept();
 
@@ -126,13 +130,13 @@ VTool::keyEvent( QEvent* event )
 		}
 
 		// Terminate the current drawing with the Enter-key:
-		if ( keyEvent->key() == Qt::Key_Backspace && !m_isDragging )
+		if( keyEvent->key() == Qt::Key_Backspace && !m_isDragging )
 		{
 			cancelStep();
 
 			return true;
 		}
-		
+
 		// Cancel dragging with ESC-key:
 		if( keyEvent->key() == Qt::Key_Escape )
 		{
@@ -153,7 +157,7 @@ VTool::keyEvent( QEvent* event )
 		}
 
 		// If Ctrl is pressed, some tools create a "centered" object while dragging:
-		if ( keyEvent->key() == Qt::Key_Control && m_isDragging )
+		if( keyEvent->key() == Qt::Key_Control && m_isDragging )
 		{
 			mouseDragCtrlPressed();
 

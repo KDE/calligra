@@ -12,10 +12,7 @@ BIG TOPICS:
 	- unify object and or node selection?
 	- achieve tight selection (exact selection-object collision test)
 3) reintroduce nodetool
-4) make VObject leaner (no fill/stroke bbox etc, move that to "3rd party classes".)
-   we could create e.g. a VObject->VDrawable-VPath hierarchy where
-   VDrawable derives from VHasStroke and VHasFill objects.
-   aim: make VSegment (VNode maybe) etc VObjects to simplify things
+4) make VObject leaner
 
 GUI:
 -	split the dialog under "Object->Transform" into different non-tabbed dialogs
@@ -24,12 +21,11 @@ GUI:
 	by "color manager" docker
 -	other koffice apps have widgts that may of interest to us, for instance in kpresenter. We should
 	try to reuse them.
--	make a tool of the patterns with support for pattern vector.
 -	make a UI for the node manipulation tool.
 -	rework the stroke/fill docker with preview on the document and apply button.
 -	Find a better way to select a color than the color manager. Maybe a popup ?
 -	gradient widget: maybe turn the midpoint arrows to black or 3d triangles like in gimp or illu
--	gradient widget: better seperate the midpoint arrows from the color stop triangles: put them
+-	gradient widget: better separate the midpoint arrows from the color stop triangles: put them
 	above the gradient bar like in adobe products. the current situation is a bit nasty
 	with near together midpoints and colorstops
 -	gradient widget: the midpoint arrows are currently hard to hit and modify
@@ -52,7 +48,6 @@ TODO:
 -	select first/last segment's knot if one of each other's knot is selected
 -	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
 -	use inside/intersection tests in vpath::combine() for changing winding.
--	use vflatten in vselectool for more precise selection (lenny)
 -	change flatness test in intersection code to a estimation used in gems code. otherwise
 	if the 2 input curves are the same our code runs forever.
 
@@ -69,7 +64,6 @@ OPTIMIZATION:
 -	check places we use sqrt() if these are really necessary (lenny)
 
 MAKE IT NICE:
--	use SVG's path notation natively?
 -	can't we pass VTool::draw() a painter inseatd of each tool creating a painter itself?
 -	remove V*Tool::refreshUnit(). call this directly via dialog() instead
 -	pass all dialogs a parent

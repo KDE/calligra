@@ -32,7 +32,6 @@
 
 
 class QDomElement;
-class QWMatrix;
 class VPainter;
 class VSegment;
 class VVisitor;
