@@ -1,8 +1,8 @@
-// $Header$
+// 
 
 /*
    This file is part of the KDE project
-   Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -184,6 +184,7 @@ DO_TRUE_DEFINITION (doFullDocumentInfo (const KWEFDocumentInfo&))
 DO_TRUE_DEFINITION (doVariableSettings (const VariableSettingsData &))
 DO_TRUE_DEFINITION (doFullPaperFormat (const int, const double, const double, const int))
 DO_TRUE_DEFINITION (doFullPaperBorders (const double, const double, const double, const double))
+DO_TRUE_DEFINITION (doFullPaperFormatOther ( const int, const double, const int ) )
 DO_TRUE_DEFINITION (doPageInfo(int,int))
 DO_TRUE_DEFINITION (doOpenHead (void))
 DO_TRUE_DEFINITION (doCloseHead (void))

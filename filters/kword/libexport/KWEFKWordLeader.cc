@@ -52,14 +52,12 @@
 #include "KWEFKWordLeader.h"
 
 KWEFKWordLeader::KWEFKWordLeader(void)
-    : m_syntaxVersion(-1), m_oldSyntax(false), m_numPages(-1),
-    m_columns( 1 ), m_columnspacing( 0.0 ), m_worker(NULL), m_chain(NULL), m_hType(0), m_fType(0)
+    : m_syntaxVersion(-1), m_oldSyntax(false), m_worker(NULL), m_chain(NULL), m_hType(0), m_fType(0)
 {
 }
 
 KWEFKWordLeader::KWEFKWordLeader(KWEFBaseWorker* newWorker)
-    : m_syntaxVersion(-1), m_oldSyntax(false), m_numPages(-1),
-    m_columns( 1 ), m_columnspacing( 0.0 ),m_worker(newWorker), m_chain(NULL)
+    : m_syntaxVersion(-1), m_oldSyntax(false), m_worker(newWorker), m_chain(NULL)
 {
     if (newWorker) newWorker->registerKWordLeader(this);
 }
@@ -668,15 +666,18 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
     double height   = -1.0;
     int hType       = -1;
     int fType       = -1;
+    int columns = 1;
+    double columnspacing = 36.0; // Half-inch
+    int numPages = -1;
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "format",              format      )
                        << AttrProcessing ( "width",               width       )
                        << AttrProcessing ( "height",              height      )
                        << AttrProcessing ( "orientation",         orientation )
-                       << AttrProcessing ( "columns",             leader->m_columns )
-                       << AttrProcessing ( "columnspacing",       leader->m_columnspacing )
-                       << AttrProcessing ( "pages",               leader->m_numPages )
+                       << AttrProcessing ( "columns",             columns )
+                       << AttrProcessing ( "columnspacing",       columnspacing )
+                       << AttrProcessing ( "pages",               numPages )
                        << AttrProcessing ( "hType",               hType        )
                        << AttrProcessing ( "fType",               fType        )
                        << AttrProcessing ( "spHeadBody" )
@@ -693,7 +694,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
         attrProcessingList
             << AttrProcessing ( "ptWidth", width )
             << AttrProcessing ( "ptHeight", height )
-            << AttrProcessing ( "ptColumnspc", leader->m_columnspacing )
+            << AttrProcessing ( "ptColumnspc", columnspacing )
             << AttrProcessing ( "mmWidth" )
             << AttrProcessing ( "mmHeight" )
             << AttrProcessing ( "mmColumnspc" )
@@ -710,6 +711,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
 
     leader->doPageInfo ( hType, fType );
     leader->doFullPaperFormat (format, width, height, orientation);
+    leader->doFullPaperFormatOther( columns, columnspacing, numPages );
 
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList
@@ -1215,6 +1217,14 @@ bool KWEFKWordLeader::doFullPaperBorders (const double top, const double left, c
     if ( m_worker )
         return m_worker->doFullPaperBorders (top, left, bottom, right);
 
+    return false;
+}
+
+bool KWEFKWordLeader::doFullPaperFormatOther ( const int columns, const double columnspacing, const int numPages )
+{
+    if ( m_worker )
+        return m_worker->doFullPaperFormatOther ( columns, columnspacing, numPages );
+    
     return false;
 }
 

@@ -1,8 +1,8 @@
-// $Header$
+// 
 
 /*
    This file is part of the KDE project
-   Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@
 class KWEFKWordLeader;
 
 /**
- * \deprecated
  * Base worker of the libexport system
  */
 class KWEFBaseWorker
@@ -65,6 +64,11 @@ class KWEFBaseWorker
             const double width, const double height, const int orientation); ///< Like AbiWord's \<papersize\>
         virtual bool doFullPaperBorders (const double top, const double left,
             const double bottom, const double right); ///< Like KWord's \<PAPERBORDERS\>
+        /**
+         * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
+         * @since 1.4
+         */
+        virtual bool doFullPaperFormatOther ( const int columns, const double columnspacing, const int numPages );
         virtual bool doPageInfo(const int headerType, const int footerType);
         virtual bool doHeader(const HeaderData& header);
         virtual bool doFooter(const FooterData& footer);

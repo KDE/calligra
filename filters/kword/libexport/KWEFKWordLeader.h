@@ -53,6 +53,11 @@ class KWEFKWordLeader
 	bool doPageInfo (const int headerType, const int footerType);
         bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
         bool doFullPaperBorders (const double top, const double left, const double bottom, const double right);
+        /**
+         * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
+         * @since 1.4
+         */
+        bool doFullPaperFormatOther ( const int columns, const double columnspacing, const int numPages );
         bool doOpenHead (void);
         bool doCloseHead (void);
         bool doOpenBody (void);
@@ -84,9 +89,6 @@ class KWEFKWordLeader
         int m_syntaxVersion;
         /// true if oldSyntax (KWord 0.8)
         bool m_oldSyntax;
-        int m_numPages;
-        int m_columns;
-        double m_columnspacing;
         /// Name of the current frame set
         QString m_currentFramesetName;
         /// Number of paragraph in each frameset (for bookmarks)
