@@ -1,9 +1,9 @@
-koffice (2.1-beta2-2) unstable; urgency=low
+koffice (2.1-beta2-0128-1) unstable; urgency=low
  
   * More upstream fixes
   * Applying Swedish debconf template translation (Closes: #83505)
  
- -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 25 Jan 2001 04:00:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 28 Jan 2001 01:45:00 -0700
 
 koffice (2.1-beta2-1) unstable; urgency=low
  
