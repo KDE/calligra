@@ -210,7 +210,7 @@ don't put a </?xml...> at the end of the file!).
 <!--    Contains general attributes variables. Has no children.
 
         Attributes:
-            startingPageNumber:     to the starting page number.
+            startingPageNumber:     the starting page number.
             displaylink TODO: document! (#REQUIRED or #IMPLIED)
 -->
 <!ELEMENT VARIABLESETTINGS
