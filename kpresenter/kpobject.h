@@ -130,6 +130,8 @@ public:
 
     virtual bool saveOasis( KoXmlWriter &xmlWriter );
 
+    void saveOasisPosObject( KoXmlWriter &xmlWriter );
+
     virtual void flip(bool horizontal );
 
     virtual ObjType getType() const
