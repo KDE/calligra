@@ -161,7 +161,8 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_minCompletionWordLength( 5 ),
       m_nbMaxCompletionWord( 500 ),
       m_countMaxWords(0),
-      m_completionBox(0)
+      m_completionBox(0),
+      m_keyCompletionAction( Enter )
 
 {
     //load once this list not each time that we "readConfig"
@@ -234,7 +235,8 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_minCompletionWordLength( format.m_minCompletionWordLength ),
       m_nbMaxCompletionWord( format.m_nbMaxCompletionWord ),
       m_cacheNameOfDays( format.m_cacheNameOfDays),
-      m_completionBox(0)
+      m_completionBox(0),
+      m_keyCompletionAction( format.m_keyCompletionAction )
 {
     //m_listCompletion=new KCompletion();
     //m_listCompletion->setItems( autoFormat.listCompletion() );
@@ -313,6 +315,7 @@ void KoAutoFormat::readConfig(bool force)
     m_nbMaxCompletionWord = config->readUnsignedNumEntry( "NbMaxCompletionWord", 100 );
     m_addCompletionWord = config->readBoolEntry( "AddCompletionWord", true );
     m_toolTipCompletion = config->readBoolEntry( "ToolTipCompletion", true );
+    m_keyCompletionAction = ( KoAutoFormat::KeyCompletionAction )config->readUnsignedNumEntry( "CompletionKeyAction", 0 );
 
     if ( force )
     {
@@ -660,6 +663,7 @@ void KoAutoFormat::saveConfig()
     config->writeEntry( "NbMaxCompletionWord", m_nbMaxCompletionWord);
     config->writeEntry( "AddCompletionWord", m_addCompletionWord );
     config->writeEntry( "ToolTipCompletion", m_toolTipCompletion );
+    config->writeEntry( "CompletionKeyAction", ( int )m_keyCompletionAction );
 
     config->setGroup( "AutoFormatEntries" );
     QDictIterator<KoAutoFormatEntry> it( m_entries );
@@ -986,11 +990,19 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
     return false;
 }
 
-bool KoAutoFormat::doToolTipCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj )
+bool KoAutoFormat::doToolTipCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, int keyPressed )
 {
-         if( m_completion && m_toolTipCompletion && m_completionBox && m_completionBox->isShown() )
-                return doCompletion(textEditCursor, parag, index, txtObj);
-         return false;
+    if( m_completion && m_toolTipCompletion && m_completionBox && m_completionBox->isShown() )
+    {
+        if ( ( keyPressed == Qt::Key_Return && m_keyCompletionAction==Enter )
+             || ( keyPressed == Qt::Key_Enter && m_keyCompletionAction==Enter )
+             || ( keyPressed == Qt::Key_Tab && m_keyCompletionAction==Tab )
+             || ( keyPressed == Qt::Key_Space && m_keyCompletionAction==Space ) )
+        {
+            return doCompletion(textEditCursor, parag, index, txtObj);
+        }
+    }
+    return false;
 }
 void KoAutoFormat::showToolTipBox(KoTextParag *parag,  int index, QWidget *widget, const QPoint &pos )
 {
@@ -2218,6 +2230,11 @@ void KoAutoFormat::configToolTipCompletion( bool b )
         delete m_completionBox;
         m_completionBox = 0;
     }
+}
+
+void KoAutoFormat::configKeyCompletionAction( KeyCompletionAction action )
+{
+    m_keyCompletionAction = action;
 }
 
 void KoAutoFormat::configAppendSpace( bool b)

@@ -204,6 +204,8 @@ protected:
     QListBox *m_lbListCompletion;
     KIntNumInput *m_minWordLength;
     KIntNumInput *m_maxNbWordCompletion;
+    QComboBox *m_completionKeyAction;
+    QLabel *m_completionKeyActionLabel;
 
 };
 #endif

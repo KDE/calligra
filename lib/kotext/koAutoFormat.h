@@ -107,6 +107,8 @@ public:
 
     ~KoAutoFormat();
 
+    enum KeyCompletionAction { Enter = 0, Tab = 1, Space = 2};
+
     KCommand *applyAutoFormat( KoTextObject * obj );
     /**
      * Called by edit widget when a character (@p ch) has been inserted
@@ -119,7 +121,7 @@ public:
      */
     bool doCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int const index,KoTextObject *txtObj );
 
-    bool doToolTipCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj );
+    bool doToolTipCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj,int keyPress );
     void showToolTipBox(KoTextParag *parag,  int index, QWidget *widget, const QPoint &pos);
     void removeToolTipCompletion();
 
@@ -188,6 +190,8 @@ public:
     void configCapitalizeNameOfDays( bool b);
 
     void configAutoFormatLanguage( const QString &_lang);
+
+    void configKeyCompletionAction( KeyCompletionAction action );
 
     TypographicQuotes getConfigTypographicSimpleQuotes() const
     { return m_typographicSimpleQuotes; }
@@ -267,6 +271,8 @@ public:
     QString getConfigAutoFormatLanguage( )const
         { return m_autoFormatLanguage;}
 
+    KeyCompletionAction getConfigKeyAction() const
+        { return m_keyCompletionAction;}
 
     const QDict<KoAutoFormatEntry> & getAutoFormatEntries() const{
         return m_entries;
@@ -406,6 +412,7 @@ private:
     uint m_countMaxWords;
     QStringList m_cacheNameOfDays;
     KoCompletionBox *m_completionBox;
+    KeyCompletionAction m_keyCompletionAction;
 };
 
 #endif

@@ -1957,13 +1957,13 @@ bool KPTextView::doCompletion( KoTextCursor* cursor, KoTextParag *parag, int ind
     return false;
 }
 
-bool KPTextView::doToolTipCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
+bool KPTextView::doToolTipCompletion( KoTextCursor* cursor, KoTextParag *parag, int index,int keyPress )
 {
     if( m_kptextobj->kPresenterDocument()->allowAutoFormat() )
     {
         KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
         if( autoFormat )
-            return autoFormat->doToolTipCompletion(  cursor, parag, index, textObject());
+            return autoFormat->doToolTipCompletion(  cursor, parag, index, textObject(), keyPress);
     }
     return false;
 }

@@ -286,7 +286,7 @@ protected:
     virtual void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
     virtual bool doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
-    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int  );
+    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int, int  );
     virtual void showToolTipBox(KoTextParag *parag, int index, QWidget *widget, const QPoint &pos);
     virtual void textIncreaseIndent();
     virtual bool textDecreaseIndent();

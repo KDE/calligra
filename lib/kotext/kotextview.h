@@ -205,7 +205,7 @@ protected:
                                int /*index*/, QChar /*ch*/ ) { }
 
     virtual bool doCompletion( KoTextCursor* , KoTextParag *, int  ) { return false;}
-    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int  ) { return false;}
+    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int, int  ) { return false;}
     virtual void showToolTipBox(KoTextParag *, int , QWidget *, const QPoint &){;};
 
     virtual void textIncreaseIndent(){;};

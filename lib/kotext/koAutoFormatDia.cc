@@ -1163,7 +1163,8 @@ void KoCompletionDia::changeButtonStatus()
     m_lbListCompletion->setEnabled( state );
     m_minWordLength->setEnabled( state );
     m_maxNbWordCompletion->setEnabled( state );
-
+    m_completionKeyActionLabel->setEnabled( state );
+    m_completionKeyAction->setEnabled( state );
     state = state && (m_lbListCompletion->count()!=0 && !m_lbListCompletion->currentText().isEmpty());
     pbRemoveCompletionEntry->setEnabled( state );
 }
@@ -1175,7 +1176,7 @@ void KoCompletionDia::setup()
     cbAllowCompletion->setText( i18n( "E&nable completion" ) );
     connect(cbAllowCompletion, SIGNAL(toggled ( bool )), this, SLOT( changeButtonStatus()));
     // TODO whatsthis or text, to tell about the key to use for autocompletion....
-    
+
     cbShowToolTip = new QCheckBox( page );
     cbShowToolTip->setText( i18n( "&Enable tool tip completion" ) );
     QWhatsThis::add( cbShowToolTip, i18n("If this option is enabled, a tool tip box will appear when you type the beginning of a word that exists in the completion list. To complete the word, press the TAB or ENTER key." ) );
@@ -1208,6 +1209,14 @@ void KoCompletionDia::setup()
     cbAppendSpace = new QCheckBox( page );
     cbAppendSpace->setText( i18n( "A&ppend space" ) );
 
+    m_completionKeyActionLabel = new QLabel(i18n( "Key used for competion" ),page );
+
+    m_completionKeyAction = new QComboBox( page );
+    QStringList lst;
+    lst << i18n( "Enter" );
+    lst << i18n( "Tab" );
+    lst << i18n( "Space" );
+    m_completionKeyAction->insertStringList( lst );
     m_listCompletion = m_docAutoFormat->listCompletion();
 }
 
@@ -1225,6 +1234,21 @@ void KoCompletionDia::slotResetConf()
     m_minWordLength->setValue ( m_docAutoFormat->getConfigMinWordLength() );
     m_maxNbWordCompletion->setValue ( m_docAutoFormat->getConfigNbMaxCompletionWord() );
     cbAppendSpace->setChecked( m_autoFormat.getConfigAppendSpace() );
+
+    switch( m_docAutoFormat->getConfigKeyAction() )
+    {
+    case KoAutoFormat::Enter:
+        m_completionKeyAction->setCurrentItem( 0 );
+        break;
+    case KoAutoFormat::Tab:
+        m_completionKeyAction->setCurrentItem( 1 );
+        break;
+    case KoAutoFormat::Space:
+        m_completionKeyAction->setCurrentItem( 2 );
+        break;
+    default:
+        m_completionKeyAction->setCurrentItem( 0 );
+    }
     changeButtonStatus();
 }
 
@@ -1275,6 +1299,20 @@ bool KoCompletionDia::applyConfig()
     m_docAutoFormat->configAddCompletionWord( cbAddCompletionWord->isChecked());
 
     m_docAutoFormat->getCompletion()->setItems( m_listCompletion );
+    switch( m_completionKeyAction->currentItem() )
+    {
+    case 0:
+        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Enter );
+        break;
+    case 1:
+        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Tab );
+        break;
+    case 2:
+        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Space );
+        break;
+    default:
+        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Enter );
+    }
     // Save to config file
     m_docAutoFormat->saveConfig();
     return true;

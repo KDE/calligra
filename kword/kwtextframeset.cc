@@ -3109,13 +3109,13 @@ bool KWTextFrameSetEdit::doCompletion( KoTextCursor* cursor, KoTextParag *parag,
     return false;
 }
 
-bool KWTextFrameSetEdit::doToolTipCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
+bool KWTextFrameSetEdit::doToolTipCompletion( KoTextCursor* cursor, KoTextParag *parag, int index, int keyPressed )
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat() )
     {
         KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
         if( autoFormat )
-            return autoFormat->doToolTipCompletion(  cursor, parag, index, textObject());
+            return autoFormat->doToolTipCompletion(  cursor, parag, index, textObject(), keyPressed);
     }
     return false;
 }

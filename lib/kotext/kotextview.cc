@@ -214,7 +214,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
         break;
     case Key_Return: case Key_Enter:
 
-        if (!doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1) )
+        if (!doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1, e->key()) )
                 if ( (e->state() & (ShiftButton|ControlButton)) == 0 )
                 {
                         if ( textObject()->hasSelection() )
@@ -291,7 +291,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
             //kdDebug(32500) << "KoTextView::keyPressEvent ascii=" << e->ascii() << " text=" << e->text()[0].unicode() << " state=" << e->state() << endl;
             if (e->key() == Qt::Key_Tab)
             {
-                if (doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1) )
+                if (doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1, e->key()) )
                         break;
 		if ( m_cursor->parag() && m_cursor->atParagStart() && m_cursor->parag()->counter() )
 		{
@@ -302,7 +302,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 
             if ( e->key() == Qt::Key_Space )
             {
-                if (doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1) )
+                if (doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1, e->key()) )
                         break;
             }
             if ( e->text().length() &&
