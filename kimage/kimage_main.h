@@ -23,7 +23,6 @@
 #include <koApplication.h>
 
 class KoMainWindow;
-class KImageShell;
 
 class KImageApp : public KoApplication
 {
@@ -33,7 +32,7 @@ public:
   KImageApp( int& argc, char** argv );
   ~KImageApp();
 
-  virtual KoMainWindow* createNewShell();
+  KoMainWindow* createNewShell();
 };
 
 #endif
