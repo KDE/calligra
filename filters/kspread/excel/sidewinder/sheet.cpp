@@ -114,7 +114,10 @@ Column* Sheet::column( unsigned index, bool autoCreate )
   {
     c = new Column( this, index );
     d->columns[ index ] = c;
+    if( index > d->maxColumn ) d->maxColumn = index;
   }
+  
+  return c;
 }
 
 Row* Sheet::row( unsigned index, bool autoCreate )
@@ -126,7 +129,10 @@ Row* Sheet::row( unsigned index, bool autoCreate )
   {
     r = new Row( this, index );
     d->rows[ index ] = r;
+    if( index > d->maxRow ) d->maxRow = index;
   }
+  
+  return r;
 }
 
 unsigned Sheet::maxRow() const
