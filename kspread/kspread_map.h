@@ -109,8 +109,8 @@ public:
   /**
    * Needed for the printing Extension KOffice::Print
    */
-  void draw( QPaintDevice* _dev, long int _width, long int _height,
-	       float _scale );
+    // void draw( QPaintDevice* _dev, long int _width, long int _height,
+    // float _scale );
 
   virtual DCOPObject* dcopObject();
 

@@ -224,7 +224,7 @@ public:
    */
   KSpreadUndo *undoBuffer() { return m_pUndoBuffer; }
 
-  virtual void printMap( QPainter &_painter );
+    // virtual void printMap( QPainter &_painter );
 
   void enableUndo( bool _b );
   void enableRedo( bool _b );
@@ -234,6 +234,7 @@ public:
    */
   bool isLoading() { return m_bLoading; }
 
+  void setDefaultGridPen( const QPen& );
   const QPen& defaultGridPen() { return m_defaultGridPen; }
 
   KoMainWindow* createShell();
@@ -280,8 +281,8 @@ protected:
   /**
    * Needed for the printing extension KOffice::Print
    */
-  virtual void draw( QPaintDevice*, long int _width, long int _height,
-		     float _scale );
+    // virtual void draw( QPaintDevice*, long int _width, long int _height,
+    // float _scale );
 
   /**
    * Overloaded function of @ref KoDocument.

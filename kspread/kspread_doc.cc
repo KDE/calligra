@@ -346,6 +346,11 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
   return true;
 }
 
+void KSpreadDoc::setDefaultGridPen( const QPen& p )
+{
+    m_defaultGridPen = p;
+}
+
 KSpreadTable* KSpreadDoc::createTable()
 {
   QString s( i18n("Table%1") );
@@ -736,16 +741,16 @@ void KSpreadDoc::enableRedo( bool _b )
 
 // ########## Torben: What is that good for
 // ### The header says 'Needed for the printing extension KOffice::Print' (David)
-void KSpreadDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
-		       float _scale)
-{
-  if ( m_pMap )
-    m_pMap->draw( _dev, _width, _height, _scale );
-}
+// void KSpreadDoc::draw( QPaintDevice* _dev, long int _width, long int _height,
+// float _scale)
+// {
+// if ( m_pMap )
+// m_pMap->draw( _dev, _width, _height, _scale );
+// }
 
 // ########## Torben: What is that good for
-void KSpreadDoc::printMap( QPainter & )
-{
+// void KSpreadDoc::printMap( QPainter & )
+// {
   // TODO
   /*
   KSpreadTable *t;
@@ -753,7 +758,7 @@ void KSpreadDoc::printMap( QPainter & )
   {
     t->print( _painter, false );
   } */
-}
+// }
 
 void KSpreadDoc::paperLayoutDlg()
 {

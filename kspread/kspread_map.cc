@@ -186,6 +186,7 @@ bool KSpreadMap::loadChildren( KoStore* _store )
   return true;
 }
 
+/*
 // ######### Torben: Is that really needed ?
 // ### The header says 'Needed for the printing extension KOffice::Print' (David)
 void KSpreadMap::draw( QPaintDevice* _dev, long int _width, long int _height,
@@ -196,6 +197,7 @@ void KSpreadMap::draw( QPaintDevice* _dev, long int _width, long int _height,
   if ( m_lstTables.first() )
     m_lstTables.first()->draw( _dev, _width, _height, _scale );
 }
+*/
 
 DCOPObject* KSpreadMap::dcopObject()
 {

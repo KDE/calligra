@@ -2601,6 +2601,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     }
 }
 
+/*
 void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _row,
 			 ColumnLayout *cl, RowLayout *rl, bool _only_left,
 			 bool _only_top, const QPen& _grid_pen )
@@ -2702,6 +2703,7 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
       _painter.drawText( _tx + m_iTextX, _ty + m_iTextY, m_strOutText );
     }
 }
+*/
 
 int KSpreadCell::width( int _col, KSpreadCanvas *_canvas )
 {

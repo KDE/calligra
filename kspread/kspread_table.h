@@ -653,8 +653,8 @@ public:
     /**
      * Needed for the printing Extension KOffice::Print
      */
-    void draw( QPaintDevice* _dev, long int _width, long int _height,
-	       float _scale );
+    // void draw( QPaintDevice* _dev, long int _width, long int _height,
+    // float _scale );
 
     void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
     void insertChild( const QRect& _geometry, KoDocumentEntry& );
@@ -693,7 +693,7 @@ public:
      * The returned pen has pen style NoPen set.
      */
     const QPen& emptyPen() const { return m_emptyPen; }
-    
+
 signals:
     void sig_updateView( KSpreadTable *_table );
     void sig_updateView( KSpreadTable *_table, const QRect& );
@@ -732,7 +732,7 @@ protected:
      * @paran _page_rangs QRect defines a rectangle of cells which should be painted
      *                    to the device 'prn'.
      */
-    void printPage( QPainter &_painter, QRect *page_range, const QPen& _grid_pen );
+    void printPage( QPainter &_painter, const QRect& page_range, const QRect& view );
 
     /**
      * @see #autofill
@@ -836,7 +836,7 @@ protected:
     bool m_bShowColumnNumber;
 
     KSpreadLayout* m_defaultLayout;
-    
+
     /**
      * @see #emptyPen
      */

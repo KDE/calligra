@@ -3749,6 +3749,7 @@ void KSpreadTable::dissociateCell( const QPoint &_marker)
     emit sig_updateView( this, selection );
 }
 
+/*
 void KSpreadTable::draw( QPaintDevice* _dev, long int _width, long int _height,
 			 float _scale )
 {
@@ -3798,22 +3799,30 @@ void KSpreadTable::draw( QPaintDevice* _dev, long int _width, long int _height,
   if ( _scale != 1.0 )
     painter.scale( _scale, _scale );
 
-  printPage( painter, &page_range, NoPen);//doc()->defaultGridPen() );
+  printPage( painter, page_range, NoPen);//doc()->defaultGridPen() );
 
   painter.end();
 }
+*/
 
 void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 {
-    QPen gridPen;
-    gridPen.setStyle( NoPen );
+    qDebug("PRINTING ....");
+
+    // Override the current grid pen setting
+    QPen gridPen = m_pDoc->defaultGridPen();
+    QPen nopen;
+    nopen.setStyle( NoPen );
+    m_pDoc->setDefaultGridPen( nopen );
 
     unsigned int pages = 1;
 
+    //
+    // Find maximum right/bottom cell with content
+    //
     QRect cell_range;
     cell_range.setCoords( 1, 1, 1, 1 );
 
-    // Find maximum right/bottom cell with content
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
@@ -3823,14 +3832,18 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	    cell_range.setBottom( c->row() );
     }
 
-    QList<QRect> page_list;
-    page_list.setAutoDelete( TRUE );
+    //
+    // Find out how many pages need printing
+    // and which cells to print on which page.
+    //
+    QValueList<QRect> page_list;
 
+    // How much space is on every page for table content ?
     QRect rect;
     rect.setCoords( 0, 0, (int)( MM_TO_POINT ( m_pDoc->printableWidth() )),
 		    (int)( MM_TO_POINT ( m_pDoc->printableHeight() )) );
 
-    // Up to this row everything is already printed
+    // Up to this row everything is already handled
     int bottom = 0;
     // Start of the next page
     int top = 1;
@@ -3847,10 +3860,9 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
         {
 	    kdDebug(36001) << "right=" << right << " right_range=" << cell_range.right() << endl;
 		
-	    QRect *page_range = new QRect;
-	    page_list.append( page_range );
-	    page_range->setLeft( left );
-	    page_range->setTop( top );
+	    QRect page_range;
+	    page_range.setLeft( left );
+	    page_range.setTop( top );
 
 	    int col = left;
 	    int x = columnLayout( col )->width();
@@ -3862,7 +3874,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	    // We want to print at least one column
 	    if ( col == left )
 		col = left + 1;
-	    page_range->setRight( col - 1 );
+	    page_range.setRight( col - 1 );
 
 	    int row = top;
 	    int y = rowLayout( row )->height();
@@ -3874,21 +3886,27 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	    // We want to print at least one row
 	    if ( row == top )
 		row = top + 1;
-	    page_range->setBottom( row - 1 );
+	    page_range.setBottom( row - 1 );
 
-	    right = page_range->right();
-	    left = page_range->right() + 1;
-	    bottom = page_range->bottom();
+	    right = page_range.right();
+	    left = page_range.right() + 1;
+	    bottom = page_range.bottom();
+	    
+	    page_list.append( page_range );
 	}
 
 	top = bottom + 1;
     }
 
+    qDebug("PRINTING %i pages", page_list.count() );
+	
     int pagenr = 1;
 
+    //
     // Print all pages in the list
-    QRect *p;
-    for ( p = page_list.first(); p != 0L; p = page_list.next() )
+    //
+    QValueList<QRect>::Iterator it = page_list.begin();
+    for( ; it != page_list.end(); ++it )
     {
 	// print head line
 	QFont font( "Times", 10 );
@@ -3931,7 +3949,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	painter.translate( MM_TO_POINT ( m_pDoc->leftBorder()),
 			   MM_TO_POINT ( m_pDoc->topBorder() ));
 	// Print the page
-	printPage( painter, p, gridPen );
+	printPage( painter, *it, rect );
 	painter.translate( - MM_TO_POINT ( m_pDoc->leftBorder()),
 			   - MM_TO_POINT ( m_pDoc->topBorder() ));
 
@@ -3939,60 +3957,55 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	    _printer->newPage();
 	pagenr++;
     }
+    
+    // Restore the grid pen
+    m_pDoc->setDefaultGridPen( gridPen );
 }
 
-void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen& _grid_pen )
+void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const QRect& view )
 {
-  int ypos = 0;
+    // kdDebug(36001) << "Rect x=" << page_range->left() << " y=" << page_range->top() << ", w="
+    // << page_range->width() << " h="  << page_range->height() << endl;
 
-  kdDebug(36001) << "Rect x=" << page_range->left() << " y=" << page_range->top() << ", w="
-		 << page_range->width() << " h="  << page_range->height() << endl;
-  for ( int y = page_range->top(); y <= page_range->bottom() + 1; y++ )
-  {
-    RowLayout *row_lay = rowLayout( y );
-    int xpos = 0;
-
-    for ( int x = page_range->left(); x <= page_range->right() + 1; x++ )
+    //
+    // Draw the cells.
+    //
+    int ypos = 0;
+    for ( int y = page_range.top(); y <= page_range.bottom(); y++ )
     {
-      ColumnLayout *col_lay = columnLayout( x );
+	RowLayout *row_lay = rowLayout( y );
+	int xpos = 0;
 
-      // painter.window();	
-      KSpreadCell *cell = cellAt( x, y );
-      if ( y > page_range->bottom() && x > page_range->right() )
-	{ /* Do nothing */ }
-      else if ( y > page_range->bottom() )
-	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, FALSE, TRUE, _grid_pen );
-      else if ( x > page_range->right() )
-	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, TRUE, FALSE, _grid_pen );
-      else
-	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay,
-		     FALSE, FALSE, _grid_pen );
+	for ( int x = page_range.left(); x <= page_range.right(); x++ )
+        {
+	    ColumnLayout *col_lay = columnLayout( x );
 
-      xpos += col_lay->width();
+	    KSpreadCell *cell = cellAt( x, y );
+	    cell->paintCell( view, _painter, xpos, ypos, x, y, col_lay, row_lay );
+	    
+	    xpos += col_lay->width();
+	}
+
+	ypos += row_lay->height();
     }
 
-    ypos += row_lay->height();
-  }
-
-  // ########## Torben: Need to print children here.
-  /**
-  // Draw the children
-  QListIterator<KSpreadChild> chl( m_lstChildren );
-  for( ; chl.current(); ++chl )
-  {
-    kdDebug(36001) << "Printing child ....." << endl;
-    // HACK, dont display images that reside outside the paper
-    _painter.translate( chl.current()->geometry().left(),
-			chl.current()->geometry().top() );
-    QPicture* pic;
-    pic = chl.current()->draw();
-    kdDebug(36001) << "Fetched picture data" << endl;
-    _painter.drawPicture( *pic );
-    kdDebug(36001) << "Played" << endl;
-    _painter.translate( - chl.current()->geometry().left(),
-			- chl.current()->geometry().top() );
-  }
-  */
+    //
+    // Draw the children
+    //
+    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+    for( ; it.current(); ++it )
+    {
+	if ( ((KSpreadChild*)it.current())->table() == this )
+        {
+	    _painter.save();
+	    
+	    it.current()->transform( _painter );
+	    it.current()->document()->paintEverything( _painter,
+						       it.current()->contentRect(),
+						       it.current()->isTransparent() );
+	    _painter.restore();
+	}
+    }
 }
 
 QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
