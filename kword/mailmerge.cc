@@ -48,7 +48,8 @@
 
 KWMailMergeDataBase::KWMailMergeDataBase( KWDocument *doc_ )
     : QObject(doc_,doc_->dcopObject()->objId()+".MailMergeDataBase"),
-	KWordMailMergeDatabaseIface(QCString(doc_->dcopObject()->objId()+".MailMergeDataBase")),doc( doc_ ) {
+	KWordMailMergeDatabaseIface(QCString(doc_->dcopObject()->objId()+".MailMergeDataBase")),doc( doc_ ),
+	m_version(0) {
    plugin=0; //loadPlugin("classic");
    rejectdcopcall=false;
 }
@@ -77,6 +78,10 @@ bool KWMailMergeDataBase::loadPlugin(QString name,QString command)
 	kdDebug()<<constrain<<endl;
 	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
 	KService::Ptr it=pluginOffers.first();
+	
+	QVariant verProp=it->property("X-KDE-PluginVersion");
+        int version=verProp.toInt();
+
 	if (it)
 	{
 		KWMailMergeDataSource *tmp=loadPlugin(it->library());
@@ -86,13 +91,15 @@ bool KWMailMergeDataBase::loadPlugin(QString name,QString command)
 			return false; //Plugin couldn't be loaded
 		}
 		//Plugin found and loaded
-		if (command=="silent") return askUserForConfirmationAndConfig(tmp,false,0);
+		if (command=="silent") {
+			return  askUserForConfirmationAndConfig(tmp,false,0,version);
+		}
 		else
 		{
 			if (command=="open") action=KWSLOpen;
 			else if (command=="create") action=KWSLCreate;
 			else action=KWSLUnspecified;
-			return askUserForConfirmationAndConfig(tmp,true,0);
+			return askUserForConfirmationAndConfig(tmp,true,0,version);
 		}
 	}
 	else
@@ -102,8 +109,9 @@ bool KWMailMergeDataBase::loadPlugin(QString name,QString command)
 	}
 }
 
-KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type)
+KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type,int &version)
 {
+	version=0;
 	KWMailMergeDataSource *ret=0;
 	QString constrain=QString("'%1' in [X-KDE-Capabilities]").arg(((type==KWSLCreate)?KWSLCreate_text:KWSLOpen_text));
 	kdDebug()<<constrain<<endl;
@@ -123,9 +131,13 @@ KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type)
 	}
 	else
 	{
+
 		KWMailMergeChoosePluginDialog *dia=new KWMailMergeChoosePluginDialog(pluginOffers);
 		if (dia->exec()==QDialog::Accepted)
 		{
+			QVariant verProp=(*(pluginOffers.at(dia->currentPlugin())))->property("X-KDE-PluginVersion");
+		        version=verProp.toInt();
+
 			ret=loadPlugin((*(pluginOffers.at(dia->currentPlugin())))->library());
 		}
 
@@ -173,6 +185,10 @@ KWMailMergeDataSource *KWMailMergeDataBase::loadPlugin(const QString& name)
   return 0;
 }
 
+bool KWMailMergeDataBase::isSampleRecord() {
+	return (0>doc->getMailMergeRecord());
+}
+
 QString KWMailMergeDataBase::getValue( const QString &name, int record ) const
 {
 	if (plugin)
@@ -218,7 +234,7 @@ void KWMailMergeDataBase::showConfigDialog(QWidget *par)
 }
 
 
-bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource *tmpPlugin,bool config,QWidget *par)
+bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource *tmpPlugin,bool config,QWidget *par,int version)
 {
 	if (tmpPlugin)
 	{
@@ -240,6 +256,7 @@ bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource 
 				}
 				delete plugin;
 			}
+			m_version=version;
 			plugin=tmpPlugin;
 		}
 		else
@@ -291,6 +308,12 @@ void KWMailMergeDataBase::load( const QDomElement& parentElem )
 	if (dn.isNull()) return;
 	el=dn.toElement();
 	if (plugin) plugin->load(el);
+}
+
+
+int KWMailMergeDataBase::version() {
+	kdDebug()<<"KWMailMergeDataBase::version:"<<m_version<<endl;
+	return m_version;
 }
 
 
@@ -431,10 +454,12 @@ void KWMailMergeConfigDialog::slotCreateClicked()
 
 void KWMailMergeConfigDialog::doNewActions()
 {
-	KWMailMergeDataSource *tmpPlugin=db_->openPluginFor(db_->action);
+	int tmpVersion;
+	KWMailMergeDataSource *tmpPlugin=db_->openPluginFor(db_->action,tmpVersion);
 	if (tmpPlugin)
 	{
-		db_->askUserForConfirmationAndConfig(tmpPlugin,true,this);
+		if (db_->askUserForConfirmationAndConfig(tmpPlugin,true,this,tmpVersion))
+		
 		enableDisableEdit();
 	}
 }
@@ -480,6 +505,7 @@ KWMailMergeVariableInsertDia::KWMailMergeVariableInsertDia( QWidget *parent, KWM
   : KDialogBase( Plain, i18n( "Mail Merge - Variable Name" ),
                  Ok | Cancel, Ok, parent, "", true )
 {
+  m_db=db;
   QWidget *page = plainPage();
 
   QVBoxLayout *layout = new QVBoxLayout( page, marginHint(), spacingHint() );
@@ -491,7 +517,7 @@ KWMailMergeVariableInsertDia::KWMailMergeVariableInsertDia( QWidget *parent, KWM
 
   QMap< QString, QString >::ConstIterator it = db->getRecordEntries().begin();
   for ( ; it != db->getRecordEntries().end(); ++it )
-    names->insertItem( it.key(), -1 );
+    names->insertItem( m_db->version() ?it.data():it.key(), -1 );
 
   setInitialSize( QSize( 350, 400 ) );
   connect( names, SIGNAL( selectionChanged() ),
@@ -510,5 +536,16 @@ void KWMailMergeVariableInsertDia::slotSelectionChanged()
 
 QString KWMailMergeVariableInsertDia::getName() const
 {
-  return names->text( names->currentItem() );
+     if (m_db->version()>=1) {
+           QString description=names->text(names->currentItem());
+           QMap< QString, QString >::ConstIterator it = m_db->getRecordEntries().begin();
+           for ( ; it != m_db->getRecordEntries().end(); ++it )
+                   if (description==it.data()) {
+                           return it.key();
+                   }
+       Q_ASSERT(0);
+         return ""; // can't happen
+     }
+       else
+           return names->text( names->currentItem() );
 }

@@ -101,7 +101,7 @@ void KWQTSQLSerialDataSource::load( QDomElement& /*parentElem*/ )
 	QDomElement def=defNd.toElement();
 	for (QDomElement defEnt=def.firstChild().toElement();!defEnt.isNull();defEnt=defEnt.nextSibling().toElement())
 	{
-		sampleRecord[defEnt.attribute(QString::fromLatin1("name"))]=i18n( "No Value" );
+		sampleRecord[defEnt.attribute(QString::fromLatin1("name"))]=defEnt.attribute(QString::fromLatin1("name"));//i18n( "No Value" );
 	}
 	QDomNode contNd=parentElem.namedItem("CONTENT");
 	if (contNd.isNull()) return;

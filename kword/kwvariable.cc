@@ -160,7 +160,7 @@ QString KWMailMergeVariable::text(bool realValue)
         return fieldCode();
     // ## should use a format maybe
     QString v = value();
-    if ( v == name() )
+    if (m_doc->getMailMergeDataBase()->isSampleRecord() )
         return "<" + v + ">";
     return v;
 }

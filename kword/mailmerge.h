@@ -62,6 +62,7 @@ public:
     void showConfigDialog(QWidget *); // Select datasource type  and / or configure datasource
 
     QString getValue( const QString &name, int record = -1 ) const;  //accesses the plugin
+    bool isSampleRecord();
 
     const QMap< QString, QString > &getRecordEntries() const; //accesses the plugin
     int getNumRecords() const; //accesses the plugin
@@ -70,19 +71,23 @@ public:
     void load( const QDomElement& elem ); // save some global config + plugin config
 
     KWMailMergeDataSource *loadPlugin(const QString& name);
-    KWMailMergeDataSource *openPluginFor(int type);
+    KWMailMergeDataSource *openPluginFor(int type,int &version);
 
     virtual void refresh(bool force);
     virtual QStringList availablePlugins();
     virtual bool loadPlugin(QString name,QString command);
     virtual bool isConfigDialogShown();
+    
+    int version();
+private:
+    int m_version;
 protected:
     friend class KWMailMergeConfigDialog;
     KWDocument *doc;
     int action;
     class KWMailMergeDataSource *plugin;
     QMap<QString, QString> emptyMap;
-    bool askUserForConfirmationAndConfig(KWMailMergeDataSource *tmpPlugin,bool config,QWidget *par);
+    bool askUserForConfirmationAndConfig(KWMailMergeDataSource *tmpPlugin,bool config,QWidget *par,int version);
     bool rejectdcopcall;
 };
 
@@ -147,6 +152,9 @@ class KWMailMergeVariableInsertDia : public KDialogBase
 
   protected slots:
     void slotSelectionChanged();
+
+  private:
+    KWMailMergeDataBase *m_db;
 
   protected:
     QListBox *names;

@@ -3,10 +3,12 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KWord/MailMergePlugin
 Comment=KWord mailmerge plugin
-Comment[ar]=ملحق كوورد mailmerge
+Comment[bg]=KWord plugin за обединение на поща
 Comment[bs]=KWord dodatak za spajanje mailova
+Comment[ca]=Connector de KWord per a la fusió de correus
 Comment[cs]=Modul pro KWord pro sériové dopisy
-Comment[da]=KWord postindfletningsindstik
+Comment[cy]=Ategyn postgyfuno KWord
+Comment[da]=KWord postindfletnings-plugin
 Comment[de]=Serienbrief-Plugin für KWord
 Comment[el]=Πρόσθετο mailmerge του KWord
 Comment[eo]=Retpoŝtintegrilo por Verkilo
@@ -19,28 +21,28 @@ Comment[hr]=KWord dodatak za mailmerge
 Comment[hu]=KWord körlevél-bővítőmodul
 Comment[it]=Stampa unione per KWord
 Comment[ja]=KWord mailmerge プラグイン
+Comment[lo]=ປັກອິນລວນເຂົ້າໄວ້ໃນຈົດຫມາຍຂອງເອກະສານຂໍ້ຄວາມ
 Comment[lt]=KWord laiško prijungimo priedas
-Comment[lv]=KWord pasta apvienošanas iespraudnis
+Comment[lv]=KWord pasta apvieno??anas iespraudnis
 Comment[mt]=Plagin tal-mailmerge ta' KWord
-Comment[nb]=KWord programtillegg for postfletting
+Comment[nb]=KWord-programtillegg for postfletting
 Comment[nl]=KWord mailmerge-plugin
 Comment[nn]=Postflettingsmodul for KWord
 Comment[pl]=Wtyczka korespondencji seryjnej dla KWord
 Comment[pt]='Plugin' de junção de 'emails' do KWord
 Comment[pt_BR]=Plug-in de união de e-mails  do KWord
 Comment[ro]=Modul KWord de scrisori combinate
-Comment[ru]=Дополнение почтового слияния KWord
+Comment[ru]=Модуль почтового слияния KWord
 Comment[sk]=Modul pre KWord pre sériové listy
 Comment[sl]=Vstavek za združevanje pošte za KWord
+Comment[sr]=KWord-ov dodatak za serijsku poštu
 Comment[sv]=Kword-insticksprogram för brevsammanfogning
 Comment[th]=ปลั๊กอินรวมเข้าไว้ในจดหมายของเอกสารข้อความ K
-Comment[uk]=Додаток об'єднання пошти для KWord
-Comment[ven]=Pulagini ya u tanganywa ha marifhi a fhungo la K
-Comment[xh]=KWord iplagi efakiweyo yothotho leleta
-Comment[xx]=xx
+Comment[tr]=KWord posta bütünleştirme eklentisi
+Comment[uk]=Втулок об'єднання пошти для KWord
+Comment[xh]=Uxutyo lweposi ye plagi yangaphakathi ye KWord
 Comment[zh_CN]=KWord 邮件合并插件
 Comment[zh_TW]=KWord 郵件合併外掛程式
-Comment[zu]=Iplagi efakiweyo yencwadi eneziqephu ye KWord 
 
 [PropertyDef::X-KDE-Capabilities]
 Type=QStringList
@@ -51,3 +53,5 @@ Type=QString
 [PropertyDef::X-KDE-Library]
 Type=QString
 
+[PropertyDef::X-KDE-PluginVersion]
+Type=int

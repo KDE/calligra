@@ -166,7 +166,7 @@ bool KWQTSQLPowerSerialDataSource::showConfigDialog(QWidget *par,int action)
 void KWQTSQLPowerSerialDataSource::clearSampleRecord() {sampleRecord.clear();}
 
 void KWQTSQLPowerSerialDataSource::addSampleRecordEntry(QString name)
-{sampleRecord[name]=i18n("No Value");}
+{sampleRecord[name]=name; }//i18n("No Value");}
 
 
 /******************************************************************
