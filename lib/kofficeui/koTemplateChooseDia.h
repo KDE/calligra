@@ -27,7 +27,7 @@
 
 class KoTemplateTree;
 class KoTemplateGroup;
-
+class KIO::Job;
 
 class MyIconCanvas : public KIconCanvas
 {
@@ -154,11 +154,13 @@ private:
     KoTemplateChooseDiaPrivate *d;
 
     void setupDialog();
+    void enableOK(bool enable=true);
 
 private slots:
     void chosen(QIconViewItem *);
     void currentChanged( QIconViewItem * );
     void ok();
+    void slotResult(KIO::Job *j);
 
     void openTemplate();
     void openFile();

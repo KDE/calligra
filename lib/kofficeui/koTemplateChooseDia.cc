@@ -43,7 +43,7 @@
 #include <koTemplates.h>
 #include <kseparator.h>
 #include <krecentdocument.h>
-#include <kio/netaccess.h>
+#include <kio/job.h>
 #include <kstringhandler.h>
 
 #include <koTemplateChooseDia.h>
@@ -58,7 +58,8 @@ public:
         m_templateType(templateType), m_global(global), m_format(format),
         m_nativePattern(nativePattern), m_nativeName(nativeName),
         m_dialogType(dialogType), m_firstTime(true), tree(0L), m_mainwidget(0L),
-        m_rbTemplates(0L), m_rbFile(0L), m_rbEmpty(0L), m_bFile(0L), m_tabs(0L) {
+        m_rbTemplates(0L), m_rbFile(0L), m_rbEmpty(0L), m_bFile(0L), m_tabs(0L),
+        m_job(0) {
     }
     ~KoTemplateChooseDiaPrivate() {}
 
@@ -88,6 +89,8 @@ public:
     QTabWidget *m_tabs;
     QDict<MyIconCanvas> canvasDict;
     QMap<QString, KURL> recentFilesMap;
+
+    KIO::Job *m_job;  // used to stat files and enable/disable the OK btn.
 };
 
 /******************************************************************/
@@ -120,6 +123,11 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KIns
 }
 
 KoTemplateChooseDia::~KoTemplateChooseDia() {
+
+    if(d->m_job) {
+        d->m_job->kill();
+        d->m_job=0;
+    }
     delete d->tree;
     delete d;
     d=0L;
@@ -258,16 +266,16 @@ void KoTemplateChooseDia::setupDialog()
             if ( !value.isEmpty() ) {
                 KURL url(value);
                 KURL dir(url);
-                dir.setPath(url.directory());
+                dir.setPath(url.directory(false));
                 QString dirurl = dir.isLocalFile() ? dir.path() : dir.prettyURL();
                 QString fname = KStringHandler::csqueeze(url.fileName(), 40); // Squeeze the filename as little as possible
                 QString squeezed = KStringHandler::csqueeze(dirurl, 40-fname.length()); // and the dir as much as possible :)
                 squeezed += fname;
                 lst.append( squeezed );
                 d->recentFilesMap.insert(squeezed, url);
-                ++i;
             }
-        } while ( !value.isEmpty() );
+            ++i;
+        } while ( !value.isEmpty() || i<=10 );
 
         // set file
         if( lst.isEmpty() )
@@ -291,6 +299,15 @@ void KoTemplateChooseDia::setupDialog()
     }
 }
 
+void KoTemplateChooseDia::enableOK(bool enable)
+{
+    if(d->m_job) {
+        d->m_job->kill();  // kill the KIO job
+        d->m_job=0;
+    }
+    enableButtonOK( enable );
+}
+
 /*================================================================*/
 void KoTemplateChooseDia::currentChanged( QIconViewItem * )
 {
@@ -303,6 +320,14 @@ void KoTemplateChooseDia::chosen(QIconViewItem *)
     slotOk();
 }
 
+void KoTemplateChooseDia::slotResult(KIO::Job *j) {
+    if(j->error())
+        enableButtonOK( false );
+    else
+        enableButtonOK( true );
+    d->m_job=0;
+}
+
 /*================================================================*/
 void KoTemplateChooseDia::openTemplate()
 {
@@ -312,7 +337,7 @@ void KoTemplateChooseDia::openTemplate()
         d->m_rbRecent->setChecked( false );
         d->m_rbEmpty->setChecked( false );
     }
-    enableButtonOK( true );
+    enableOK();
 }
 
 /*================================================================*/
@@ -323,6 +348,7 @@ void KoTemplateChooseDia::openFile()
     d->m_rbFile->setChecked( true );
     d->m_rbRecent->setChecked( false );
     d->m_rbEmpty->setChecked( false );
+    enableOK(false);
 }
 
 
@@ -335,8 +361,9 @@ void KoTemplateChooseDia::openRecent()
     d->m_rbRecent->setChecked( true );
     d->m_rbEmpty->setChecked( false );
     d->m_file = d->recentFilesMap[d->m_recent->currentText()];
-    enableButtonOK( false ); // because of that async stuff
-    enableButtonOK( KIO::NetAccess::exists( d->m_file ) );
+    enableOK();
+    d->m_job=KIO::stat(d->m_file, false);
+    connect(d->m_job, SIGNAL(result(KIO::Job*)), this, SLOT(slotResult(KIO::Job*)));
 }
 
 /*================================================================*/
@@ -347,8 +374,7 @@ void KoTemplateChooseDia::openEmpty()
     d->m_rbFile->setChecked( false );
     d->m_rbRecent->setChecked( false );
     d->m_rbEmpty->setChecked( true );
-
-    enableButtonOK( true );
+    enableOK();
 }
 
 /*================================================================*/
