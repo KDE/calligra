@@ -52,6 +52,7 @@
 #include "KWordTextFrameSetEditIface.h"
 #include "KWordFootNoteFrameSetIface.h"
 #include "KWordFrameSetIface.h"
+#include <kooasiscontext.h>
 #include <kdebug.h>
 #if ! KDE_IS_VERSION(3,1,90)
 #include <kdebugclasses.h>
@@ -1764,6 +1765,109 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
 
     zoom( false );
     return framesetElem;
+}
+
+void KWTextFrameSet::loadOasis( QDomElement &bodyElem, KoOasisContext& context )
+{
+    textDocument()->clear(false); // Get rid of dummy paragraph (and more if any)
+    m_textobj->setLastFormattedParag( 0L ); // no more parags, avoid UMR in next setLastFormattedParag call
+    KWTextParag *lastParagraph = 0L;
+
+    // was OoWriterImport::parseBodyOrSimilar
+    for ( QDomNode text (bodyElem.firstChild()); !text.isNull(); text = text.nextSibling() )
+    {
+        context.m_styleStack.save();
+        QDomElement t = text.toElement();
+        QString name = t.tagName();
+
+        if ( name == "text:p" ) {  // text paragraph
+            context.fillStyleStack( t, "text:style-name" );
+
+            KWTextParag *parag = new KWTextParag( textDocument(), lastParagraph );
+            parag->loadOasis( t, context, m_doc->styleCollection() );
+            if ( !lastParagraph )        // First parag
+                textDocument()->setFirstParag( parag );
+            lastParagraph = parag;
+            m_doc->progressItemLoaded();
+        }
+#if 0
+        else if ( name == "text:h" ) // heading
+        {
+            fillStyleStack( t, "text:style-name" );
+            int level = t.attribute( "text:level" ).toInt();
+            bool listOK = false;
+            // When a heading is inside a list, it seems that the list prevails.
+            // Example:
+            //    <text:ordered-list text:style-name="Numbering 1">
+            //      <text:list-item text:start-value="5">
+            //        <text:h text:style-name="P2" text:level="4">The header</text:h>
+            // where P2 has list-style-name="something else"
+            // Result: the numbering of the header follows "Numbering 1".
+            // So we use the style for the outline level only if we're not inside a list:
+            if ( !m_nextItemIsListItem )
+                listOK = pushListLevelStyle( "<outline-style>", m_outlineStyle, level );
+            m_nextItemIsListItem = true;
+            if ( t.hasAttribute( "text:start-value" ) )
+                 // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
+                 m_restartNumbering = t.attribute( "text:start-value" ).toInt();
+            e = parseParagraph( doc, t );
+            if ( listOK )
+                m_listStyleStack.pop();
+        }
+        else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // list
+        {
+            parseList( doc, t, currentFramesetElement );
+            context.m_styleStack.restore();
+            continue;
+        }
+        else if ( name == "text:section" ) // Provisory support (###TODO)
+        {
+            kdDebug(30518) << "Section found!" << endl;
+            fillStyleStack( t, "text:style-name" );
+            parseBodyOrSimilar( doc, t, currentFramesetElement);
+        }
+        else if ( name == "table:table" )
+        {
+            kdDebug(30518) << "Table found!" << endl;
+            parseTable( doc, t, currentFramesetElement );
+        }
+        else if ( name == "draw:image" )
+        {
+            appendPicture( doc, t );
+        }
+        else if ( name == "draw:text-box" )
+        {
+            appendTextBox( doc, t );
+        }
+        else if ( name == "text:variable-decls" )
+        {
+            // We don't parse variable-decls since we ignore var types right now
+            // (and just storing a list of available var names wouldn't be much use)
+        }
+        else if ( name == "text:table-of-content" )
+        {
+            appendTOC( doc, t );
+        }
+#endif
+        // TODO text:sequence-decls
+        else
+        {
+            kdWarning(30518) << "Unsupported body element '" << name << "'" << endl;
+        }
+
+        context.m_styleStack.restore(); // remove the styles added by the paragraph or list
+    }
+
+    if ( !lastParagraph )                // We created no paragraph
+    {
+        // Create an empty one, then. See KWTextDocument ctor.
+        textDocument()->clear( true );
+        static_cast<KWTextParag *>( textDocument()->firstParag() )->setStyle( m_doc->styleCollection()->findStyle( "Standard" ) );
+    }
+    else
+        textDocument()->setLastParag( lastParagraph );
+
+    m_textobj->setLastFormattedParag( textDocument()->firstParag() );
 }
 
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )

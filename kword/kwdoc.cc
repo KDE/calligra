@@ -42,6 +42,7 @@
 #include <koAutoFormat.h>
 #include <kovariable.h>
 #include <kformuladocument.h>
+#include <koOasisStyles.h>
 #include <unistd.h>
 #include <math.h>
 
@@ -70,6 +71,7 @@
 #include <koSconfig.h>
 
 #include "koApplication.h"
+#include <kooasiscontext.h>
 
 //#define DEBUG_PAGES
 //#define DEBUG_SPEED
@@ -1088,6 +1090,148 @@ void KWDocument::loadPictureMap ( QDomElement& domElement )
 }
 
 
+bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles )
+{
+    QTime dt;
+    dt.start();
+    emit sigProgress( 0 );
+    kdDebug(32001) << "KWDocument::loadOasis" << endl;
+    m_pictureMap.clear();
+    m_textImageRequests.clear();
+    m_pictureRequests.clear();
+    m_anchorRequests.clear();
+    m_footnoteVarRequests.clear();
+    m_spellListIgnoreAll.clear();
+
+    m_pageColumns.columns = 1;
+    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
+
+    m_pageHeaderFooter.header = HF_SAME;
+    m_pageHeaderFooter.footer = HF_SAME;
+    m_pageHeaderFooter.ptHeaderBodySpacing = 10;
+    m_pageHeaderFooter.ptFooterBodySpacing = 10;
+    m_pageHeaderFooter.ptFootNoteBodySpacing = 10;
+    m_varFormatCollection->clear();
+
+    m_pages = 1;
+    m_bHasEndNotes = false;
+
+    KoPageLayout __pgLayout;
+    KoColumns __columns;
+    __columns.columns = 1;
+    __columns.ptColumnSpacing = m_defaultColumnSpacing;
+    KoKWHeaderFooter __hf;
+    __hf.header = HF_SAME;
+    __hf.footer = HF_SAME;
+    __hf.ptHeaderBodySpacing = 10.0;
+    __hf.ptFooterBodySpacing = 10.0;
+    __hf.ptFootNoteBodySpacing = 10.0;
+
+    QDomElement content = doc.documentElement();
+    QDomElement body ( content.namedItem( "office:body" ).toElement() );
+    if ( body.isNull() )
+    {
+        kdError(30518) << "No office:body found!" << endl;
+        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
+        return false;
+    }
+
+    // TODO check versions and mimetypes etc.
+    // TODO page format (old paper and paperborder and attributes)
+    QString masterPageName = "Standard"; // use default layout as fallback
+    // In theory the page format is the style:master-page-name of the first paragraph...
+    // But, hmm, in a doc with only a table there was no reference to the master page at all...
+    QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
+    Q_ASSERT( masterPage );
+    QDomElement *style = masterPage ? oasisStyles.styles()[masterPage->attribute( "style:page-master-name" )] : 0;
+    Q_ASSERT( style );
+    if ( style )
+    {
+        QDomElement properties( style->namedItem( "style:properties" ).toElement() );
+        __pgLayout.orientation = ( (properties.attribute("style:print-orientation") != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
+        double width = KoUnit::parseValue(properties.attribute("fo:page-width"));
+        double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
+        // guessFormat takes millimeters
+        if ( __pgLayout.orientation == PG_LANDSCAPE )
+            __pgLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(height), MM_TO_POINT(width) );
+        else
+            __pgLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(width), MM_TO_POINT(height) );
+        __pgLayout.ptWidth = width;
+        __pgLayout.ptHeight = height;
+
+        __pgLayout.ptLeft = KoUnit::parseValue(properties.attribute("fo:margin-left"));
+        __pgLayout.ptTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
+        __pgLayout.ptRight = KoUnit::parseValue(properties.attribute("fo:margin-right"));
+        __pgLayout.ptBottom = KoUnit::parseValue(properties.attribute("fo:margin-bottom"));
+
+        //__hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
+        //__hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
+        //__hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
+
+        // TODO QDomElement footnoteSep = properties.namedItem( "style:footnote-sep" ).toElement();
+        // m_iFootNoteSeparatorLineLength = ...
+        // m_footNoteSeparatorLineWidth = ...
+        // m_footNoteSeparatorLineType = ...
+        // m_footNoteSeparatorLinePos = ...
+
+        __columns.columns = 1; // TODO
+        __columns.ptColumnSpacing = 2; // TODO
+
+        // TODO headers/footers
+        __hf.header = HF_SAME;
+        __hf.footer = HF_SAME;
+        m_headerVisible = false;
+        m_footerVisible = false;
+    }
+
+    // <text:page-sequence> oasis extension for DTP (2003-10-27 post by Daniel)
+    m_processingType = ( body.firstChild().toElement().tagName() == "text:page-sequence" )
+                       ? DTP : WP;
+
+    // TODO settings (m_unit -> make app config?, spellcheck settings)
+    m_hasTOC = false; // TODO (during parsing)
+    m_tabStop = MM_TO_POINT(15); // TODO
+    // TODO m_initialEditing
+
+    setPageLayout( __pgLayout, __columns, __hf, false );
+
+    // TODO variable settings
+    // By default display real variable value
+    if ( !isReadWrite())
+        getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
+
+    // TODO MAILMERGE
+
+    // Load all styles before the corresponding paragraphs try to use them!
+    //loadStyleTemplates( stylesElem );
+
+    // TODO framestyles and tablestyles
+
+    loadDefaultTableTemplates();
+
+    KoOasisContext context( oasisStyles );
+
+    if ( m_processingType == WP ) {
+        // Create main frameset
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
+        fs->loadOasis( body, context );
+        KWFrame* frame = new KWFrame( fs, 29, 798, 42, 566 );
+        frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
+        frame->setNewFrameBehavior( KWFrame::Reconnect );
+        fs->addFrame( frame );
+
+        m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
+    }
+
+    // TODO pictures
+    // TODO embedded objects
+
+    kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+    endOfLoading();
+
+    return true;
+}
+
 bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 {
     QTime dt;
@@ -1365,19 +1509,27 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(100); // the rest is only processing, not loading
 
-    bool _first_footer = FALSE, _even_footer = FALSE, _odd_footer = FALSE;
-    bool _first_header = FALSE, _even_header = FALSE, _odd_header = FALSE;
+    kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+
+    endOfLoading();
+    return true;
+}
+
+void KWDocument::endOfLoading()
+{
+    bool _first_footer = false, _even_footer = false, _odd_footer = false;
+    bool _first_header = false, _even_header = false, _odd_header = false;
 
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         switch( fit.current()->frameSetInfo() ) {
-        case KWFrameSet::FI_FIRST_HEADER: _first_header = TRUE; break;
-        case KWFrameSet::FI_ODD_HEADER: _odd_header = TRUE; break;
-        case KWFrameSet::FI_EVEN_HEADER: _even_header = TRUE; break;
-        case KWFrameSet::FI_FIRST_FOOTER: _first_footer = TRUE; break;
-        case KWFrameSet::FI_ODD_FOOTER: _odd_footer = TRUE; break;
-        case KWFrameSet::FI_EVEN_FOOTER: _even_footer = TRUE; break;
+        case KWFrameSet::FI_FIRST_HEADER: _first_header = true; break;
+        case KWFrameSet::FI_ODD_HEADER: _odd_header = true; break;
+        case KWFrameSet::FI_EVEN_HEADER: _even_header = true; break;
+        case KWFrameSet::FI_FIRST_FOOTER: _first_footer = true; break;
+        case KWFrameSet::FI_ODD_FOOTER: _odd_footer = true; break;
+        case KWFrameSet::FI_EVEN_FOOTER: _even_footer = true; break;
         case KWFrameSet::FI_FOOTNOTE: break;
         default: break;
         }
@@ -1501,9 +1653,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
                  SIGNAL( mainTextHeightChanged() ) );
     }
 
-    kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
-
-    return true;
 }
 
 void KWDocument::startBackgroundSpellCheck()
@@ -2004,7 +2153,7 @@ bool KWDocument::completeLoading( KoStore *_store )
     //attributes isReadWrite is not placed at the beginning !
     if ( !isReadWrite())
         enableBackgroundSpellCheck( false );
-    return TRUE;
+    return true;
 }
 
 void KWDocument::processPictureRequests()

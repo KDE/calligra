@@ -143,6 +143,7 @@ public:
     { return saveInternal( parentElem, saveFrames, true ); }
 
     virtual void load( QDomElement &attributes, bool loadFrames = true );
+    void loadOasis( QDomElement &bodyElem, KoOasisContext& context );
 
     virtual void finalize();
     virtual void zoom( bool forPrint );

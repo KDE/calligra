@@ -285,7 +285,7 @@ public:
      */
     void load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVersion );
 
-    void setMinFrameHeight(double h) {m_minFrameHeight=h;}
+    void setMinFrameHeight(double h);
     double minFrameHeight(void)const {return m_minFrameHeight;}
 
     /** Return if the point is on the frame.

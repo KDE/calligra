@@ -204,6 +204,7 @@ void KWFrame::invalidateParentFrameset() {
 
 void KWFrame::copySettings(KWFrame *frm)
 {
+    setFrameSet( frm->frameSet() ); // do this first in case of debug output in the methods below
     setRect(frm->x(), frm->y(), frm->width(), frm->height());
     // Keep order identical as member var order (and init in ctor)
     setSheetSide(frm->sheetSide());
@@ -227,7 +228,6 @@ void KWFrame::copySettings(KWFrame *frm)
     setRightBorder(frm->rightBorder());
     setTopBorder(frm->topBorder());
     setBottomBorder(frm->bottomBorder());
-    setFrameSet( frm->frameSet() );
 }
 
 // Insert all resize handles
@@ -580,6 +580,12 @@ void KWFrame::setFrameMargins( double _left, double _top, double _right, double 
     btop = _top;
     bright = _right;
     bbottom = _bottom;
+}
+
+void KWFrame::setMinFrameHeight(double h)
+{
+    //kdDebug() << k_funcinfo << m_frameSet->getName() << " " << this << " " << h << endl;
+    m_minFrameHeight = h;
 }
 
 /******************************************************************/
@@ -1450,6 +1456,20 @@ void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
         }
     }
 }
+
+#if 0
+//
+// This function is intended as a helper for all the derived classes. It reads
+// in all the attributes common to all framesets and loads all frames.
+//
+void KWFrameSet::loadOasis( QDomElement &bodyElem, bool loadFrames )
+{
+    // TODO removableheader
+    // TODO protectSize
+    // TODO visible?
+    // TODO load frames
+}
+#endif
 
 //
 // This function is intended as a helper for all the derived classes. It reads

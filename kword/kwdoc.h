@@ -226,6 +226,7 @@ public:
     virtual bool initDoc();
     void initEmpty();
 
+    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles );
     virtual bool loadXML( QIODevice *, const QDomDocument & dom );
     virtual bool loadChildren( KoStore *_store );
     virtual QDomDocument saveXML();
@@ -904,6 +905,7 @@ protected:
     void loadDefaultTableTemplates();
 
 private:
+    void endOfLoading();
     //private helper functions for frameUnderMouse
     /** return the top-most frame under mouse, using nPoint, always returns the first found. */
     KWFrame *topFrameUnderMouse( const QPoint& nPoint, bool* border=0L);
