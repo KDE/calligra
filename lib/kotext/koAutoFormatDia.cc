@@ -879,7 +879,7 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name,
 {
     setup();
     slotResetConf();
-    setInitialSize( QSize( 500, 400 ) );
+    setInitialSize( QSize( 500, 500 ) );
     connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotResetConf()));
 }
 
