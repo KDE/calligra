@@ -339,7 +339,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
 
     left->setSpacing( 5 );
 
-    QLabel *l = new QLabel( i18n( "Fill with:" ), left );
+    QLabel *l = new QLabel( i18n( "Fill Type:" ), left );
     l->setFixedHeight( l->sizeHint().height() );
 
     cFillType = new KComboBox( false, left );
@@ -393,7 +393,7 @@ ConfBrushDia::ConfBrushDia( QWidget* parent, const char* name, int flags)
     chooseBStyle->insertItem( i18n( "Diagonal Lines ( / )" ) );
     chooseBStyle->insertItem( i18n( "Diagonal Lines ( \\ )" ) );
     chooseBStyle->insertItem( i18n( "Diagonal Crossing Lines" ) );
-    chooseBStyle->insertItem( i18n( "No Brush" ) );
+    chooseBStyle->insertItem( i18n( "No Background Fill" ) );
     connect( chooseBStyle, SIGNAL( activated( int ) ),
 	     this, SLOT( updateBrushConfiguration() ) );
 

@@ -39,9 +39,6 @@ public:
     double moveX() const;
     double moveY() const;
 
-
-protected slots:
-    void slotReset();
 protected:
     KIntNumInput *m_nbCopy;
     KDoubleNumInput *m_rotation;

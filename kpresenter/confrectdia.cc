@@ -1,8 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
 
-#include "confrectdia.h"
-
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -80,18 +78,21 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     hbox->setSpacing( 5 );
 
     // ------------------------ settings
-    gSettings = new QGroupBox( 4, Qt::Vertical, i18n( "Settings" ), this );
+    gSettings = new QGroupBox( 4, Qt::Vertical, i18n( "Rounding" ), this );
 
-    lRndX = new QLabel( i18n( "Roundedness X:" ), gSettings );
+    lRndX = new QLabel( i18n( "Vertical declination:" ), gSettings );
 
     eRndX = new KIntNumInput( gSettings );
-    eRndX->setRange(0, 99);
+    eRndX->setRange(0, 100);
+    eRndX->setSuffix(" °");
     connect( eRndX, SIGNAL( valueChanged( int ) ), this, SLOT( rndXChanged( int ) ) );
 
-    lRndY = new QLabel( i18n( "Roundedness Y:" ), gSettings );
+    lRndY = new QLabel( i18n( "Horizontal declination:" ), gSettings );
 
     eRndY = new KIntNumInput( gSettings );
-    eRndY->setRange(0, 99);
+    eRndY->setRange(0, 100);
+    eRndY->setSuffix(" °");
+
     connect( eRndY, SIGNAL( valueChanged( int ) ), this, SLOT( rndYChanged( int ) ) );
 
     hbox->addWidget( gSettings );

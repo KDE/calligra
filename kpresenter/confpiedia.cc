@@ -112,12 +112,15 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
 
   eAngle = new KIntNumInput( gSettings );
   eAngle->setRange(0, 360);
+  eAngle->setSuffix(" °");
   connect( eAngle, SIGNAL( valueChanged( int ) ), this, SLOT( angleChanged( int ) ) );
 
   lLen = new QLabel( i18n( "Length:" ), gSettings );
 
   eLen = new KIntNumInput( gSettings );
   eLen->setRange(0, 360);
+  eLen->setSuffix(" °");
+
   connect( eLen, SIGNAL( valueChanged( int ) ), this, SLOT( lengthChanged( int ) ) );
 
   hbox->addWidget( gSettings );

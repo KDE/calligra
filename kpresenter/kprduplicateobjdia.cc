@@ -32,11 +32,10 @@
 #include <kseparator.h>
 
 KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const char *name)
-    : KDialogBase( parent, name , true, "", Ok | Cancel | User1, Ok, true )
+    : KDialogBase( parent, name , true, "", Ok | Cancel , Ok, true )
 {
     m_doc=_doc;
 
-    setButtonText( KDialogBase::User1, i18n("Reset") );
     setCaption( i18n("Duplicate Object") );
 
     QVBox *page = makeVBoxMainWidget();
@@ -66,19 +65,9 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const
     m_moveY= new KDoubleNumInput( page );
 
 
-    connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotReset() ));
     resize( 200,100 );
 }
 
-void KPrDuplicatObjDia::slotReset()
-{
-    m_nbCopy->setValue( 1 );
-    m_rotation->setValue( 0.0 );
-    m_increaseX->setValue( 0.0 );
-    m_increaseY->setValue( 0.0 );
-    m_moveY->setValue( 0.0 );
-    m_moveX->setValue( 0.0 );
-}
 
 int KPrDuplicatObjDia::nbCopy() const
 {
