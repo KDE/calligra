@@ -54,7 +54,6 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     kdDebug(30004) << "Split:" << number << ":" << unit << ":" << endl;
     
     bool ok = false;
-    // ### TODO: readNumber is not enough, as it wants 1000 separators at fixed positions, but when editing they might shift.
     const double value = m_base->toDouble( number, &ok );
     double newVal = 0.0;
     if( ok )
