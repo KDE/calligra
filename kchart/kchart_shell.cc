@@ -41,6 +41,11 @@ QString KChartShell::configFile() const
 KoDocument* KChartShell::createDoc()
 {
     return new KChartPart;
+    /*
+  KChartPart *p = new KChartPart;
+  p->initDoc();
+  return p;
+    */
 }
 
 #include "kchart_shell.moc"

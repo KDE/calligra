@@ -34,11 +34,16 @@ KChartPart::KChartPart( KoDocument* parent, const char* name )
   : KoDocument( parent, name ),
     _params( 0 )
 {
-    cerr << "Contstructor started!\n";
+  m_bLoading = false;
+  cerr << "Contstructor started!\n";
+  initDoc();
 }
 
 KChartPart::~KChartPart()
 {
+  cerr << "Part is going to be destroyed now!!!";
+  if (_params != NULL)
+    delete _params;
 }
 
 
@@ -102,6 +107,10 @@ Shell* KChartPart::createShell()
 
 void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transparent )
 {
+  if (isLoading()) {
+    cerr << "Loading... Do not paint!!!...\n";
+    return;
+  }
   // if params is 0, initDoc() has not been called
   ASSERT( _params != 0 );
   
@@ -112,6 +121,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect, bool transp
   // debug( "KChartPart::paintContent called, rows = %d, cols = %d", currentData.rows(), currentData.cols() );
 
   // Need to draw only the document rectangle described in the parameter rect.
+  //  return;
   out_graph( rect.width(),
 	     rect.height(), // short width, height 
 	     &painter,        // Paint into this painter
@@ -250,7 +260,8 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* store ) {
 
 bool KChartPart::load( istream& in, KoStore* store ) {
   cerr << "kchart load colled\n";
-    _params = new KChartParameters;
+  m_bLoading = true;
+  _params = new KChartParameters;
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
 
@@ -274,7 +285,7 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
     buffer.close();
     // init the parameters 
-
+    m_bLoading = false;
     return b;
 };
 
@@ -283,6 +294,11 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.8  1999/11/21 16:40:13  boloni
+ * save-load works
+ * data files can be specified at the command line
+ * the is some problem with load, still
+ *
  * Revision 1.7  1999/11/21 15:27:14  boloni
  * ok
  *

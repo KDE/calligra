@@ -46,7 +46,7 @@ int main( int argc, char **argv )
       
       Shell* shell = doc->createShell();
       shell->show();
-      app.setMainWidget( shell );
+      //      app.setMainWidget( shell );
     } else {
       QStringList::Iterator it = open.begin();
       for( ; it != open.end(); ++it )

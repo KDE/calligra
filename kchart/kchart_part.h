@@ -50,7 +50,10 @@ public:
     virtual bool loadChildren( KoStore* _store );
     virtual bool loadXML( const QDomDocument& doc, KoStore* store );
     virtual bool load( istream& in, KoStore* _store );
-
+    bool m_bLoading;
+    bool isLoading() {
+      return m_bLoading;
+    }
 
 signals:
     void docChanged();
