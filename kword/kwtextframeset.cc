@@ -1325,6 +1325,7 @@ void KWTextFrameSet::updateFrames()
     for ( ; frameIt.current(); ++frameIt )
     {
         // Calculate max width while we're at it
+        //kdDebug(32002) << "KWTextFrameSet::updateFrames frame innerWidth=" << frameIt.current()->innerWidth() << endl;
         width = QMAX( width, m_doc->ptToLayoutUnitPixX( frameIt.current()->innerWidth()));
         FrameStruct str;
         str.frame = frameIt.current();
@@ -1524,6 +1525,19 @@ void KWTextFrameSet::printDebug()
                           << " internalY=" << it.current()->internalY()
                           << " (in LU:" << m_doc->ptToLayoutUnitPixY( it.current()->internalY() ) << ")" << endl;
         }
+    }
+
+    bool first = true;
+    QPtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
+    {
+      KWAnchor *anc = dynamic_cast<KWAnchor *>( cit.current() );
+      if (anc) {
+          if ( first )
+              kdDebug() << "-- Inline framesets --" << endl;
+          first = false;
+          anc->frameSet()->printDebug();
+      }
     }
 }
 #endif
