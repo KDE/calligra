@@ -97,6 +97,7 @@
   <Action name="view_zoom"/>
   <Action name="cut"/>
   <Action name="copy"/>
+  <Action name="paste"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="colorbar" position="right"><Text>Color</Text>
   <Action name="colorbar"/>

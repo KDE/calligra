@@ -55,14 +55,17 @@ CutCmd::~CutCmd () {
 
 void CutCmd::execute () {
 
-    QDomDocument docu("doc");
-    QDomElement doc=docu.createElement("doc");
+    QDomDocument docu("killustrator");
+    docu.appendChild( docu.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    QDomElement doc=docu.createElement("killustrator");
     doc.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
     docu.appendChild(doc);
+    QDomElement layer=docu.createElement("layer");
+    doc.appendChild(layer);
 
     for (MyPair *p=objects.first(); p!=0L;
          p=objects.next()) {
-        doc.appendChild(p->o->writeToXml(docu));
+        layer.appendChild(p->o->writeToXml(docu));
         document->deleteObject (p->o);
     }
     QApplication::clipboard()->setText(docu.toCString());

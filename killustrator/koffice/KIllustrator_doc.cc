@@ -72,9 +72,8 @@ bool KIllustratorDocument::loadXML (QIODevice *, const QDomDocument &doc)
 {
   if ( m_gdocument->readFromXml (doc)) {
     // now look for part objects in order to create the child list
-    vector<GLayer*>& layers = (vector<GLayer*>&) m_gdocument->getLayers();
-    vector<GLayer*>::iterator i = layers.begin ();
-    for (; i != layers.end (); i++) {
+    QListIterator<GLayer> i(m_gdocument->getLayers());
+    for ( ; i.current(); ++i) {
       GLayer* layer = *i;
       const QList<GObject>& contents = layer->objects ();
       for (QListIterator<GObject> oi(contents); oi.current(); ++oi) {

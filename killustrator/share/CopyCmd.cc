@@ -51,14 +51,17 @@ CopyCmd::~CopyCmd () {
 
 void CopyCmd::execute () {
 
-    QDomDocument docu("doc");
-    QDomElement doc=docu.createElement("doc");
+    QDomDocument docu("killustrator");
+    docu.appendChild( docu.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    QDomElement doc=docu.createElement("killustrator");
     doc.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
     docu.appendChild(doc);
+    QDomElement layer=docu.createElement("layer");
+    doc.appendChild(layer);
 
     for (GObject *o=objects.first(); o!=0L;
          o=objects.next())
-        doc.appendChild(o->writeToXml (docu));
+        layer.appendChild(o->writeToXml (docu));
     QApplication::clipboard ()->setText (docu.toCString());
 }
 
