@@ -51,7 +51,11 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
     pie3d = new QCheckBox(i18n("Pie 3D"), gb);
     drawShadowColor=new QCheckBox(i18n("Draw shadow color"), gb);
 
-    QLabel *label = new QLabel( i18n( "Start:" ), gb );
+
+    QLabel *label = new QLabel( i18n( "Explode factor (%):" ), gb );
+    explode = new QSpinBox(0, 100, 1, gb);
+
+    label = new QLabel( i18n( "Start Angle:" ), gb );
     angle = new QSpinBox(0, 90, 1, gb);
 
     label = new QLabel( i18n( "3D-depth:" ), gb );
@@ -64,16 +68,18 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
 
 void KChartParameterPieConfigPage::active3DPie(bool b)
 {
-    depth->setEnabled(b);
     drawShadowColor->setEnabled(b);
+    depth->setEnabled(b);
 }
 
 void KChartParameterPieConfigPage::init()
 {
-    pie3d->setChecked(_params->threeDPies());
     bool state=_params->threeDPies();
+    pie3d->setChecked(state);
     depth->setEnabled(state);
     active3DPie(state);
+
+    explode->setValue((int)(_params->explodeFactor() * 100));
     depth->setValue( _params->threeDPieHeight() );
     drawShadowColor->setChecked(_params->threeDShadowColors());
     angle->setValue( _params->pieStart() );
@@ -88,6 +94,7 @@ void KChartParameterPieConfigPage::apply()
         _params->setThreeDPieHeight( depth->value() );
     }
     _params->setThreeDShadowColors( drawShadowColor->isChecked());
+    _params->setExplodeFactor(((double)(explode->value()))/100.0);
     _params->setPieStart( angle->value() );
 }
 

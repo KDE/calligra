@@ -1,3 +1,19 @@
+2005-04-06  Inge Wallin  <inge@lysator.liu.se>
+
+	Fix pie specific settings.
+	* kchartConfigDialog.cc (constructor): Move all type specific
+	settings immediately after the subtype page.
+	(constructor): disable the piepage.
+	* kchartParameterPieConfigPage.{h,cc} (explode): new member
+	(init, apply): set and use explode.
+	* kchartPieConfigPage (explose): Moved to kchartParameterPieConfigPage.
+	
+	Code cleaning
+	* kchartConfigDialog.cc (constructor): order initializations
+	logically
+	(all): Fix indentation and other smaller stuff.
+	* kchart_view.cc: Remove reduntant variable actionExtraCreateTemplate.
+
 2005-04-05  Fredrik Edemar  <f_edemar@linux.se>
     * Use a better layout in KChartParameterPieConfigPage and KChartParameterPolarConfigPage.
     * Keyboard navigation when editing cells in the data editor.

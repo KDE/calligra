@@ -23,16 +23,19 @@
 
 #include <qwidget.h>
 
+
 class QCheckBox;
 class QRadioButton;
 class QLineEdit;
 class QSpinBox;
 class QCheckBox;
 
+
 namespace KChart
 {
 
 class KChartParams;
+
 
 class KChartParameterPieConfigPage : public QWidget
 {
@@ -42,12 +45,18 @@ public:
     KChartParameterPieConfigPage( KChartParams* params,QWidget* parent );
     void init();
     void apply();
+
 public slots:
     void active3DPie(bool b);
+
 private:
     KChartParams* _params;
-    QCheckBox *pie3d,*drawShadowColor;
-    QSpinBox *depth,*angle;
+    QCheckBox *pie3d;
+    QCheckBox *drawShadowColor;
+    QSpinBox  *depth;
+    QSpinBox  *angle;
+    QSpinBox  *explode;
+
 };
 
 }  //KChart namespace

@@ -22,10 +22,12 @@
 #ifndef __KCHARTPIECONFIGPAGE_H__
 #define __KCHARTPIECONFIGPAGE_H__
 
+
 #include <qwidget.h>
 #include <qlistview.h>
 
 #include <koChart.h>
+
 
 class QSpinBox;
 class QLineEdit;

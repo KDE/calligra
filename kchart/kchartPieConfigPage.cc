@@ -46,7 +46,9 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
 {
     //    col=_params->colPie;
     pos=-1;
-    QGridLayout *grid = new QGridLayout(this,10,4,KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid = new QGridLayout(this,10,4,KDialog::marginHint(), 
+					KDialog::spacingHint());
+    // The listview
     list = new QListView( this );
     list->resize( list->sizeHint() );
     grid->addMultiCellWidget(list,0,9,0,0);
@@ -78,7 +80,6 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
     explose = new QSpinBox(0, 100, 1, this);
     explose->resize(100, explose->sizeHint().height() );
     grid->addWidget( explose,5,1);
-
 
     grid->addColSpacing(0,list->width());
     grid->addColSpacing(2,list->width());

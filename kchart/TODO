@@ -39,7 +39,7 @@ Item								   Prio Status
       - Store row and column labels separately in the document		done
       - Load old type files without separately stored labels.		done
       - Fix labelText bug in save/load in KDChart			kdch
-      ----------------------------------------------------------------
+      - - - - - - - - - - - - - - - - - - - - - - - - 
       I don't think the following is needed once we have a new 
       version of KDChart.
       - Save row and column labels	 				--
@@ -106,26 +106,29 @@ Item								   Prio Status
 
 * Config dialog
   + Make Data page work.						DONE
-  + Pie settings at the same place as Subtype?			      1 INGE
+  + Pie settings at the same place as Subtype?			      1 DONE
   + Type specific settings for each type?			      2 INGE
+  + Move type specific settings right after subtype (Pie, etc)	      1 DONE
   + Move Line Marker from Axes page?				      2 INGE
   + Check *all* subpages for uglyness and bugs			     S1 INGE
-    - BackgroundPixmap						     S1 --
     - Bar		REMOVE					     S1 done
-    - Color		Ugly					     S1 --
-    - Combo		When is this used?			     S1 --
-    - Data		OK					     S1 done
-    - Font		Ugly -> OK				     S1 done
-    - Geometry		REMOVE					     S1 done
-    - HeaderFooter	Somewhat ugly?  No, Ok.			     S1 done
-    - Legend		OK					     S1 done
-    - Line3d		UGLY!!  Disabled			     S1 done
-    - Parameter3d	OK					     S1 done
-    - Parameter (Axes)	Ugly -> OK				     S1 done
     - ParameterPie	Ugly -> OK				     S1 done
     - ParameterPolar	Ugly -> OK				     S1 done
-    - Pie		Remove?					     S1 --
-    - SubtypeChartPage						     S1 --
+    - Parameter3d	OK					     S1 done
+
+    - Data		OK					     S1 done
+    - SubtypeChartPage						     S1 done
+    - HeaderFooter	Somewhat ugly?  No, Ok.			     S1 done
+    - Legend		OK					     S1 done
+    - Parameter (Axes)	Ugly -> OK				     S1 done
+    - Color		Ugly					     S1 --
+    - Font		Ugly -> OK				     S1 done
+    - BackgroundPixmap	Ugly					     S1 --
+
+    - Line3d		UGLY!!  Disabled. Enable again?		     S1 done
+    - Geometry		REMOVE					     S1 done
+    - Combo		For HiLo charts. Never finished. 	     S1 done
+    - Pie		disabled. Explode factore to parameterpie    S1 done
   + Check handling of defaults.					      1 DONE
   + Integrate the Colors and Font pages into Axes?		      2 INGE
     - Maybe create a little combination widget that can change        2 --
@@ -133,27 +136,16 @@ Item								   Prio Status
   + Font page should have a buttongroup				      2	INGE
   + Bring back "line width" for line charts.			      1 INGE
 	Used to be on the Line3d page.
+  + Check keyboard shortcuts for all tabs			     S1 INGE
+  + Enable titles for axes again.					INGE
 
 * Wizard
-  + New data page?						     S1 ----
+  + New data page?						     S2 ----
   + "Select Chart Type" page: Reorder like the toolbar			DONE
   + Make Help button work or disable it.			      1 DONE
   + The Back button should be in the same place on all pages.	      3 ----
   + Subtype page should have icons for subtypes like config dialog.   2 ----
   + Enable Finish button for all pages.				      1 DONE
-
-* Chart types
-  + Check all chart types and see if they are drawn logically	      1 ----
-    from their input data.  Especially check strange data
-    (negative numbers, etc), and missing data.
-    - Bar							      1 --
-    - Line							      1 --
-    - Area							      1 --
-    - HiLo							      1 --
-    - Box  & Whiskers						      1 --
-    - Pie							      1 --
-    - Ring							      1 --
-    - Polar							      1 --
 
 * Manual
   + Describe stand-alone charting.				     S1 DONE
@@ -179,3 +171,16 @@ After release of KOffice 1.4
   + Selections: Clear, Cut/Copy&Paste, 
   + Formulas?
   + Select specific areas to chart (apart from entire data)
+
+* Chart types
+  + Check all chart types and see if they are drawn logically	      2 ----
+    from their input data.  Especially check strange data
+    (negative numbers, etc), and missing data.
+    - Bar							      2 --
+    - Line							      2 --
+    - Area							      2 --
+    - HiLo							      2 --
+    - Box  & Whiskers						      2 --
+    - Pie							      2 --
+    - Ring							      2 --
+    - Polar							      2 --

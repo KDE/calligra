@@ -52,9 +52,12 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
         setXMLFile( "kchart_readonly.rc" );
     m_dcop = 0;
     dcopObject(); // build it
-    KAction * actionExtraCreateTemplate = new KAction( i18n( "&Create Template From Document..." ), 0,
-                                             this, SLOT( extraCreateTemplate() ),
-                                             actionCollection(), "extra_template" );
+#if 0
+    KAction * actionExtraCreateTemplate	=
+#endif
+	new KAction( i18n( "&Create Template From Document..." ), 0,
+		       this, SLOT( extraCreateTemplate() ),
+		       actionCollection(), "extra_template" );
     m_wizard = new KAction( i18n("Customize with &Wizard..."),
                             "wizard", 0,
                             this, SLOT( wizard() ),
@@ -198,7 +201,7 @@ void KChartView::updateReadWrite( bool /*readwrite*/ )
 void KChartView::edit()
 {
     kchartDataEditor  ed(this);
-    KChartParams     *params=((KChartPart*)koDocument())->params();
+    //KChartParams     *params=((KChartPart*)koDocument())->params();
 
     KoChart::Data    *dat = (( (KChartPart*)koDocument())->data());
 

@@ -75,20 +75,22 @@ protected:
 
     KChartDataConfigPage         *m_datapage;
     KChartSubTypeChartPage       *m_subTypePage;
-    KChartHeaderFooterConfigPage *m_headerfooterpage;
-    KChartLegendConfigPage       *m_legendPage;
-    KChartParameterConfigPage    *m_axespage;
+
+    KChartParameter3dConfigPage      *_parameter3dpage;
+    //KChartLine3dConfigPage         *_linepage3d;
+    KChartParameterPieConfigPage     *_parameterpiepage;
+    KChartParameterPolarConfigPage   *_polarpage;
+
+    KChartHeaderFooterConfigPage     *m_headerfooterpage;
+    KChartLegendConfigPage           *m_legendPage;
+    KChartParameterConfigPage        *m_axespage;
+    KChartColorConfigPage            *_colorpage;
+    KChartFontConfigPage             *_parameterfontpage;
+    KChartBackgroundPixmapConfigPage *_backgroundpixpage;
 
     //KChartGeometryConfigPage* _geompage;
-    KChartColorConfigPage* _colorpage;
-    KChartParameter3dConfigPage*_parameter3dpage;
-    KChartParameterPieConfigPage*_parameterpiepage;
-    KChartFontConfigPage  *_parameterfontpage;
-    KChartPieConfigPage*_piepage;
-    KChartBackgroundPixmapConfigPage* _backgroundpixpage;
+    //KChartPieConfigPage*_piepage;
     //KChartComboPage *_hlcChart;
-    KChartLine3dConfigPage *_linepage3d;
-    KChartParameterPolarConfigPage *_polarpage;
 
 protected slots:
     void         init();
