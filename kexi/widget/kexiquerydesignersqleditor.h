@@ -44,18 +44,18 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 		KexiQueryDesignerSQLEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		virtual ~KexiQueryDesignerSQLEditor();
 
-		QString		text();
-		void		jump(int col);
+		QString text();
+		void jump(int character);
 
 	public slots:
 		/*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
-		void		setText(const QString &text);
+		void setText(const QString &text);
 
 	protected:
 //		virtual bool	eventFilter(QObject *w, QEvent *ev);
 
 	signals:
-		void		execQ();
+		void execQ();
 		void textChanged();
 
 	private:

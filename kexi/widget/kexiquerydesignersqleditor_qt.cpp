@@ -35,9 +35,3 @@ KexiQueryDesignerSQLEditor::setText(const QString &text)
 	setDirty(was_dirty);
 }
 
-void
-KexiQueryDesignerSQLEditor::jump(int col)
-{
-	d->view->setCursorPosition(0, col);
-}
-

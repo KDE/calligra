@@ -21,7 +21,7 @@
 #include "kexiquerydesignersqleditor.h"
 
 //uncomment this to enable Qt-only editor
-//#define QT_ONLY_SQL_EDITOR
+#define QT_ONLY_SQL_EDITOR
 
 //TODO: detect if KTextEditor returned something, if not- force QT_ONLY_SQL_EDITOR option
 
@@ -62,15 +62,16 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
  ,d(new KexiQueryDesignerSQLEditorPrivate())
 {
 	QVBoxLayout *lyr = new QVBoxLayout(this);
+#ifdef QT_ONLY_SQL_EDITOR
+	d->view = new KTextEdit( "", QString::null, this, "sqlDoc_editor" );
+	connect(d->view, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
+#else
 	QFrame *fr = new QFrame(this);
-	fr->setFrameStyle(QFrame::Sunken|QFrame::WinPanel);// | QFrame::WinPanel);
+	fr->setFrameStyle(QFrame::Sunken|QFrame::WinPanel);
 	lyr->addWidget(fr);
 	lyr = new QVBoxLayout(fr);
 	lyr->setMargin( 2 );
-#ifdef QT_ONLY_SQL_EDITOR
-	d->view = new KTextEdit( "", QString::null, fr, "sqlDoc_editor" );
-	connect(d->view, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
-#else
+
 	d->doc =  KTextEditor::EditorChooser::createDocument(fr, "sqlDoc");
 	d->view = d->doc->createView(fr, 0L);
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(d->doc);
@@ -101,6 +102,37 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(
 
 KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()
 {
+}
+
+void
+KexiQueryDesignerSQLEditor::jump(int character)
+{
+	//find row and column for this character
+#ifdef QT_ONLY_SQL_EDITOR
+	const int numRows = d->view->paragraphs();
+#else
+	KTextEditor::EditInterface *ei = KTextEditor::editInterface(d->doc);
+	const int numRows = ei->numLines();
+#endif
+	int row = 0, col = 0;
+	for (int ch = 0; row < numRows; row++) {
+#ifdef QT_ONLY_SQL_EDITOR
+	const int rowLen = d->view->paragraphLength(row)+1;
+#else
+	const int rowLen = ei->lineLength(row)+1;
+#endif
+		if ((ch + rowLen) > character) {
+			col = character-ch;
+			break;
+		}
+		ch += rowLen;
+	}
+#ifdef QT_ONLY_SQL_EDITOR
+	d->view->setCursorPosition(row, col);
+#else
+	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface(d->view);
+	ci->setCursorPositionReal(row, col);
+#endif
 }
 
 #if 0
@@ -150,14 +182,8 @@ KexiQueryDesignerSQLEditor::setText(const QString &text)
 	setDirty(was_dirty);
 }
 
-void
-KexiQueryDesignerSQLEditor::jump(int col)
-{
-	KTextEditor::ViewCursorInterface *ci = KTextEditor::viewCursorInterface(d->view);
-	ci->setCursorPosition(0, col);
-}
-
 #endif //!QT_ONLY_SQL_EDITOR
+
 
 #include "kexiquerydesignersqleditor.moc"
 
