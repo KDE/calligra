@@ -68,7 +68,7 @@ VStrokeDlg::VStrokeDlg( KarbonPart* part, QWidget* parent, const char* name )
 	connect( m_capOption, SIGNAL( clicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
 	
 	m_joinOption = new QVButtonGroup ( mainWidget );
-	button = new QRadioButton ( i18n( "Mittel" ), m_joinOption );
+	button = new QRadioButton ( i18n( "Miter" ), m_joinOption );
 	m_joinOption->insert( button );
 	button = new QRadioButton ( i18n( "Round" ), m_joinOption );
 	m_joinOption->insert( button );
