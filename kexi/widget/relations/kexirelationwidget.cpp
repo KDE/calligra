@@ -138,6 +138,11 @@ TablesDict* KexiRelationWidget::tables() const
 	return m_relationView->tables();
 }
 
+KexiRelationViewTableContainer* KexiRelationWidget::table(const QString& name) const
+{
+	return m_relationView->tables()->find( name );
+}
+
 const ConnectionList* KexiRelationWidget::connections() const
 { 
 	return m_relationView->connections();

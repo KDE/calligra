@@ -123,8 +123,6 @@ TODO: maybe also use "pragma table_info" for sanity checking, or more in kexidb 
 </SQLITE>
 
 <RENAME_PROPOSALS>
-Introduce KexiProject namespace for all components that are specially developed for Kexi project
-
 ALSO TODO: move all simple widget classes (e.g. KexiSettings, KexiTabBrowser) 
 from core, to more detailed dirs,
 and projectWizard/ to wizards/ (there will be more wizards soon)
@@ -133,11 +131,6 @@ and projectWizard/ to wizards/ (there will be more wizards soon)
 
 TODO:
 - add kexi__parts (p_id integer, p_type) table and appropriate part objects in kexi__objects
-
-TODO:
-- In mysql and pgsql drivers ConnectionData::fileName() is reused for socket names.
-  It's not ok. Add another member: localSocketFileName(), because fileName() 
-  is for file-based engines only.
 
 TODO:  CURSOR
 - m_readAhead: in Cursor::open():
@@ -190,15 +183,6 @@ TODO:
 HINT: removing Qt::WStaticContents from KExiTableView ctor fixed repaint problem
   the problem was with repainting when hscrollbar disapperars....
 
-FIXIT::: open Dialog:
-jowenn	by the way I have a problem with your open dialog. I can only open db's not in current directory, if I add the full path in the file name edit box
-jowenn	Not sure were that comes from, had no time to investigate
-js	jowenn: please send me example for reproduction
-jowenn	start kex, browse to a directory click onto something.kexi than I get an error box: Can't open "something.kexi"
-jowenn	If I copy the path from the directory combo and enter "/path/to/something/something.kexi" it works
-jowenn	fails here both, using the keyboard or the mouse
-::FIXIT
-
 TODO: Put Connection::dropTable() and Conenction::dropQuery() INSIDE TRANSACTION!!!!!!!
 
 TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
@@ -221,11 +205,6 @@ Detailed TODO for Beta3:
  4. Make database relations workable (@ GUI and KexiDB layer)
 
 TODO: fix lucijan's hack, with part loading (29 feb)
---- koffice/kexi/core/kexipartinfo.h  #1.9:1.10
-@@ -92,4 +92,5 @@ class KEXICORE_EXPORT Info
-                 friend class Manager;
-                 friend class KexiProject;
-+                friend class KexiMainWindowImpl;
 
 === USABILITY TODO ===
 -string2Identifier(): convert national chars like 'ó³¿æ' to similar latin-1, instead of '_'
@@ -321,7 +300,7 @@ CCPASTEUR:
 	-perhaps we'd reuse KDE Menu editor GUI?
 	-backgroundOrigin property should have 'ParentOrigin' as default 
 	 (not it's as in QtDesigner, and it's not intuitive)
-RENAME IN FORMS:
+TODO: RENAME IN FORMS:
  -s/Spacer/Spring/
  -s/A spacer widget to fill in blanks/A spring to place between widgets/
  -s/A simple push button to execute a command/A simple push button to execute actions
@@ -348,6 +327,8 @@ add KexiViewBase::removeDataBlock() so we can use it in KexiFormPart::remove()
 TODO: Query designer: update query after change in Connection cache
 TODO: Kate Part: call qApp->processEvents() on highlighting schema loading, 
  so 'wait' cursor can be visible on 1st loading.
+TODO: SQL Query designer: allow saving invalid queries (KexiQueryDesignerSQLView::storeNewData())
+       (for invelid queries, after opening SQL view should be shown automatically)
 
 === KexiDB Parser TODO ===
 - add clever query relatins parsing 
@@ -360,8 +341,11 @@ TODO: Kate Part: call qApp->processEvents() on highlighting schema loading,
 - polish translation updated (also for KFormDesigner)
 Core
 - "current mode" member is now reverted if afterSwitchFrom() failed
+- removed one (I hope unnecessary?) shared-action invalidation
 Query Designer
 - storing and mode switching fixed
+- KexiQueryDesignerSQLView::storeNewData():
+    we won't store query layout: it is recreated 'by hand' in GUI Query Editor
 
 2004-07-12..13
 KexiDB

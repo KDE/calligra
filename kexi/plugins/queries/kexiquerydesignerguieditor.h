@@ -57,7 +57,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 	public:
 		KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
-		~KexiQueryDesignerGuiEditor();
+		virtual ~KexiQueryDesignerGuiEditor();
 
 //		KexiDB::QuerySchema	*schema();
 
@@ -121,6 +121,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		/*! Stores layout of relation GUI diagram. */
 		bool storeLayout();
 
+		void showTablesAndConnectionsForQuery(KexiDB::QuerySchema *query);
 		void showFieldsForQuery(KexiDB::QuerySchema *query);
 
 	private:

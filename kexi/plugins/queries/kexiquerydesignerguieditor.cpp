@@ -422,26 +422,7 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode, bool &cancelled)
 			//todo
 			if (tempData()->query) {
 				//there is a query schema to show
-				//-show tables:
-				//(todo: instead of hiding all tables and showing some tables, 
-				// show only these new and hide these unncecessary; the same for connections)
-				KexiDB::QuerySchema *q = tempData()->query;
-				for (KexiDB::TableSchema::ListIterator it(*q->tables()); it.current(); ++it) {
-					m_relations->addTable( it.current() );
-				}
-				//-show relationships:
-				KexiDB::Relationship *rel;
-				for (KexiDB::Relationship::ListIterator it(*q->relationships()); (rel=it.current()); ++it) {
-					SourceConnection conn;
-//@todo: now only sigle-field relationships are implemented!
-					KexiDB::Field *masterField = rel->masterIndex()->fields()->first();
-					KexiDB::Field *detailsField = rel->detailsIndex()->fields()->first();
-					conn.masterTable = masterField->table()->name(); //<<<TODO
-					conn.masterField = masterField->name();
-					conn.detailsTable = detailsField->table()->name();
-					conn.detailsField = detailsField->name();
-					m_relations->addConnection( conn );
-				}
+				showTablesAndConnectionsForQuery( tempData()->query );
 				//-show fields
 				showFieldsForQuery( tempData()->query );
 			}
@@ -489,6 +470,30 @@ bool KexiQueryDesignerGuiEditor::storeData()
 	return ok;
 }
 
+void KexiQueryDesignerGuiEditor::showTablesAndConnectionsForQuery(KexiDB::QuerySchema *query)
+{
+	m_relations->clear();
+	//-show tables:
+	//(todo: instead of hiding all tables and showing some tables, 
+	// show only these new and hide these unncecessary; the same for connections)
+	for (KexiDB::TableSchema::ListIterator it(*query->tables()); it.current(); ++it) {
+		m_relations->addTable( it.current() );
+	}
+	//-show relationships:
+	KexiDB::Relationship *rel;
+	for (KexiDB::Relationship::ListIterator it(*query->relationships()); (rel=it.current()); ++it) {
+		SourceConnection conn;
+//@todo: now only sigle-field relationships are implemented!
+		KexiDB::Field *masterField = rel->masterIndex()->fields()->first();
+		KexiDB::Field *detailsField = rel->detailsIndex()->fields()->first();
+		conn.masterTable = masterField->table()->name(); //<<<TODO
+		conn.masterField = masterField->name();
+		conn.detailsTable = detailsField->table()->name();
+		conn.detailsField = detailsField->name();
+		m_relations->addConnection( conn );
+	}
+}
+
 void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 {
 	const bool was_dirty = dirty();
@@ -498,21 +503,25 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 	KexiDB::Field *field;
 	for (KexiDB::Field::ListIterator it(*query->fields()); (field = it.current()); ++it, row_num++) {
 		//add row
-		KexiTableItem *newItem;
+		QString tableName, fieldName;
 		if (field->isQueryAsterisk()) {
 			if (field->table()) {//single-table asterisk
-				newItem = createNewRow(field->table()->name(), "*");
+				tableName = field->table()->name();
+				fieldName = "*";
 			}
 			else {//all-tables asterisk
-				newItem = createNewRow("*", "");
+				tableName = "*";
+				fieldName = "";
 			}
 		}
 		else {
-			newItem = createNewRow(field->table()->name(), field->name());
+			tableName = field->table()->name();
+			fieldName = field->name();
 		}
+		KexiTableItem *newItem = createNewRow(tableName, fieldName);
 		m_dataTable->tableView()->insertItem(newItem, row_num);
 		//create buffer
-		createPropertyBuffer( row_num, field->table()->name(), field->name(), true/*new one*/ );
+		createPropertyBuffer( row_num, tableName, fieldName, true/*new one*/ );
 	}
 	propertyBufferSwitched();
 
@@ -524,10 +533,17 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 bool KexiQueryDesignerGuiEditor::loadLayout()
 {
 	QString xml;
-	if (!loadDataBlock( xml, "query_layout" )) {
+//	if (!loadDataBlock( xml, "query_layout" )) {
+	loadDataBlock( xml, "query_layout" );
 		//TODO errmsg
-		return false;
+//		return false;
+//	}
+	if (xml.isEmpty()) {
+		//in a case when query layout was not saved, build layout by hand
+		showTablesAndConnectionsForQuery( static_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData()) );
+		return true;
 	}
+
 	QDomDocument doc;
 	doc.setContent(xml);
 	QDomElement doc_el = doc.documentElement(), el;
@@ -542,8 +558,13 @@ bool KexiQueryDesignerGuiEditor::loadLayout()
 	for (el = doc_el.firstChild().toElement(); !el.isNull(); el=el.nextSibling().toElement()) {
 		if (el.tagName()=="table") {
 			KexiDB::TableSchema *t = m_conn->tableSchema(el.attribute("name"));
-			QRect rect(el.attribute("x").toInt(),el.attribute("y").toInt(),
-				el.attribute("width").toInt(),el.attribute("height").toInt());
+			int x = el.attribute("x","-1").toInt();
+			int y = el.attribute("y","-1").toInt();
+			int width = el.attribute("width","-1").toInt();
+			int height = el.attribute("height","-1").toInt();
+			QRect rect;
+			if (x!=-1 || y!=-1 || width!=-1 || height!=-1)
+				rect = QRect(x,y,width,height);
 			m_relations->addTable( t, rect );
 		}
 		else if (el.tagName()=="conn") {

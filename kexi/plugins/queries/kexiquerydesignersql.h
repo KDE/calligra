@@ -38,7 +38,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 
 	public:
 		KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
-		~KexiQueryDesignerSQLView();
+		virtual ~KexiQueryDesignerSQLView();
 
 		QString sqlText() const;
 		KexiQueryDesignerSQLEditor *editor() const;
@@ -50,6 +50,8 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 
 		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
+		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
+
 		void setStatusOk();
 		void setStatusError(const QString& msg);
 		void setStatusEmpty();

@@ -47,10 +47,11 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 
 	public:
 		KexiRelationWidget(KexiMainWindow *win, QWidget *parent, const char *name=0);
-		~KexiRelationWidget();
+		virtual ~KexiRelationWidget();
 
 		//! \return a dictionary of added tables
 		TablesDict* tables() const;
+		KexiRelationViewTableContainer* table(const QString& name) const;
 		const ConnectionList* connections() const;
 
 //		KexiRelationView	*relationView() const { return m_relationView; }

@@ -44,7 +44,7 @@ class KexiQueryPart : public KexiPart::Part
 
 	public:
 		KexiQueryPart(QObject *parent, const char *name, const QStringList &);
-		~KexiQueryPart();
+		virtual ~KexiQueryPart();
 
 		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
 

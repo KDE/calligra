@@ -208,7 +208,8 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontSt
 			}
 		}
 		else {
-			if (compareSQL(d->origStatement, d->editor->text())) {
+			const bool designViewWasVisible = parentDialog()->viewForMode(mode)!=0;
+			if (designViewWasVisible && compareSQL(d->origStatement, d->editor->text())) {
 				//statement unchanged! - nothing to do
 				temp->queryChangedInPreviousView = false;
 			}
@@ -395,6 +396,64 @@ KexiQueryDesignerSQLView::tempData() const
 {	
 	return static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
 }
+
+KexiDB::SchemaData*
+KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata)
+{
+	//here: we won't store query layout: it will be recreated 'by hand' in GUI Query Editor
+	bool queryOK = slotCheckQuery();
+	bool ok = true;
+	KexiDB::SchemaData* query = 0;
+	if (queryOK) {
+		//query is ok
+		if (d->parsedQuery) {
+			query = d->parsedQuery; //will be returned, so: don't keep it
+			d->parsedQuery = 0;
+		}
+		else {//empty query
+			query = new KexiDB::SchemaData(); //just empty
+		}
+
+		(KexiDB::SchemaData&)*query = sdata; //copy main attributes
+		ok = m_mainWin->project()->dbConnection()->storeObjectSchemaData( *query, true /*newObject*/ );
+		if (ok) {
+			m_dialog->setId( query->id() );
+			ok = storeDataBlock( d->editor->text(), "sql" );
+		}
+	}
+	else {
+		//query is not ok
+#if 0
+	//TODO: allow saving invalid queries
+	//TODO: just ask this question:
+		query = new KexiDB::SchemaData(); //just empty
+
+		ok = (KMessageBox::questionYesNo(this, i18n("Do you want to save invalid query?"),
+			0, KStdGuiItem::yes(), KStdGuiItem::no(), "askBeforeSavingInvalidQueries"/*config entry*/)==KMessageBox::Yes);
+		if (ok) {
+			(KexiDB::SchemaData&)*query = sdata; //copy main attributes
+			ok = m_mainWin->project()->dbConnection()->storeObjectSchemaData( *query, true /*newObject*/ );
+		}
+		if (ok) {
+			m_dialog->setId( query->id() );
+			ok = storeDataBlock( d->editor->text(), "sql" );
+		}
+#else
+		ok = false;
+#endif
+	}
+	if (!ok) {
+		delete query;
+		query = 0;
+	}
+	return query;
+}
+
+//TODO
+//virtual bool KexiQueryDesignerSQLView::storeData()
+//{
+//}
+
 
 /*void KexiQueryDesignerSQLView::slotHistoryHeaderButtonClicked(const QString& buttonIdentifier)
 {

@@ -70,7 +70,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 
 	public:
 		KexiRelationView(QWidget *parent, KexiDB::Connection *conn, const char *name=0);
-		~KexiRelationView();
+		virtual ~KexiRelationView();
 
 		//! \return a dictionary of added tables
 		TablesDict* tables() { return &m_tables; }
