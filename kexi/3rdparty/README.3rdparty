@@ -4,3 +4,7 @@ Kexi 3rdparty directory contents
 Purpose: Any kexi-independent code goes here.
 
 kexisql/ - database engine implementation taken "as-is" from SQLite project (www.sqlite.org)
+           We use kexisql name for indication that original SQLite sources can be changed
+	   by Kexi programmers from-version-to-version without notice. "original"
+	   SQLite db implementation library won't be in conflict with kexisql lib 
+	   (we use other naming).
