@@ -26,6 +26,7 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/transaction.h>
 #include <kexidb/cursor.h>
+#include <kexidb/global.h>
 
 #include <qfileinfo.h>
 
