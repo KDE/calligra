@@ -536,7 +536,7 @@ protected:
     void loadUsedSoundFileFromStore( KoStore *_store, QStringList _list );
     void addStyles( const QDomElement* style, KoOasisStyles& oasisStyles );
     void fillStyleStack( const QDomElement& object, KoOasisStyles& oasisStyles );
-
+    void createPresentationAnimation(const QDomElement& element);
 
     // ************ variables ************
 
@@ -634,6 +634,7 @@ private:
     QString m_globalLanguage;
     bool m_bGlobalHyphenation;
     KoStyleStack m_styleStack;
+    QDict<QDomElement> m_animations; 
 };
 
 #endif

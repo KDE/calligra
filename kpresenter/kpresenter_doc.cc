@@ -994,6 +994,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     {
         dp = drawPage.toElement();
         m_styleStack.clear(); // remove all styles
+	m_animations.clear(); // clear all animations 
         fillStyleStack( dp, oasisStyles );
         m_styleStack.save();
 
@@ -1001,6 +1002,10 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         KPrPage *newpage=new KPrPage(this);
         m_pageList.insert( pos,newpage);
         m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
+
+	//All animation object for current page is store into this element
+	createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement());
+
         if ( m_styleStack.hasAttribute( "draw:fill" )
              || m_styleStack.hasAttribute( "presentation:transition-style" ))
         {
@@ -1114,6 +1119,24 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     return true;
 }
 
+void KPresenterDoc::createPresentationAnimation(const QDomElement& element)
+{
+  kdDebug()<<"void KPresenterDoc::createPresentationAnimation(const QDomElement& element)-***\n";
+  for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement e = n.toElement();
+	QCString tagName = e.tagName().latin1();
+	kdDebug()<<"tagName :"<<tagName<<endl;
+        if ( tagName == "presentation:show-shape")
+        {
+            Q_ASSERT( e.hasAttribute( "draw:shape-id" ) );
+            QString name = e.attribute( "draw:shape-id" );
+	    kdDebug()<<" insert animation style : name :"<<name<<endl;
+            QDomElement* ep = new QDomElement( e );
+            m_animations.insert( name, ep );
+        }
+    }
+}
 
 void KPresenterDoc::loadOasisStyleTemplates( KoOasisContext& context )
 {
