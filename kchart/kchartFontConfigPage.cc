@@ -103,22 +103,22 @@ void KChartFontConfigPage::changeIndex(int newindex)
 void KChartFontConfigPage::changeLabelFont()
 {
   if(list->currentText()==i18n("Title")) {
-	if (KFontDialog::getFont( title,true,this ) == QDialog::Rejected )
+	if (KFontDialog::getFont( title,false,this ) == QDialog::Rejected )
 	  return;
   } else if(list->currentText()==i18n("X-Title")) {
-	if (KFontDialog::getFont( xtitle,true,this ) == QDialog::Rejected )
+	if (KFontDialog::getFont( xtitle,false,this ) == QDialog::Rejected )
 	  return;
   } else if(list->currentText()==i18n("Y-Title")) {
-	if (KFontDialog::getFont( ytitle,true,this ) == QDialog::Rejected )
+	if (KFontDialog::getFont( ytitle,false,this ) == QDialog::Rejected )
 	  return;
   } else if(list->currentText()==i18n("X-Axis")) {
-	if (KFontDialog::getFont( xaxis,true,this ) == QDialog::Rejected )
+	if (KFontDialog::getFont( xaxis,false,this ) == QDialog::Rejected )
 	  return;
   } else if(list->currentText()==i18n("Y-Axis")) {
-	if (KFontDialog::getFont( yaxis,true,this ) == QDialog::Rejected )
+	if (KFontDialog::getFont( yaxis,false,this ) == QDialog::Rejected )
 	  return;
   } else if(list->currentText()==i18n("Label")) {
-	if (KFontDialog::getFont( label,true,this ) == QDialog::Rejected )
+	if (KFontDialog::getFont( label,false,this ) == QDialog::Rejected )
 	  return;
   } else {
 	kdDebug( 35001 ) << "Pb in listBox" << endl;

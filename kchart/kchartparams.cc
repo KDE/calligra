@@ -7,6 +7,7 @@
 #include <klocale.h>
 #include <math.h>
 #include <kstddirs.h>
+#include <qapplication.h>
 KChartParameters::KChartParameters() :
 	annotation( 0 ),
 	scatter( 0 ),
@@ -294,13 +295,15 @@ void KChartParameters::defaultConfig()
   ExtColor.setColor( 10, Qt::darkMagenta );
   ExtColor.setColor( 11, Qt::darkYellow );
 
-  setTitleFont( QFont( "Helvetica", 12 ) );
-  setYTitleFont( QFont( "Helvetica", 12 ) );
-  setXTitleFont( QFont( "Helvetica", 12 ) );
-  setYAxisFont( QFont( "Helvetica", 10 ) );
-  setXAxisFont( QFont( "Helvetica", 10 ) );
-  setLabelFont( QFont( "Helvetica", 10 ) );
-  setAnnotationFont( QFont( "Helvetica", 10 ) );
+  QFont font = QApplication::font();
+
+  setTitleFont( QFont( font.family(), 12 ) );
+  setYTitleFont( QFont( font.family(), 12 ) );
+  setXTitleFont( QFont( font.family(), 12 ) );
+  setYAxisFont( QFont( font.family(), 10 ) );
+  setXAxisFont( QFont( font.family(), 10 ) );
+  setLabelFont( QFont( font.family(), 10 ) );
+  setAnnotationFont( QFont( font.family(), 10 ) );
 
   label_dist = 1+8/2;
   label_line = false;

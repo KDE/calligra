@@ -201,7 +201,7 @@ void KChartWizardSetupAxesPage::changeGridColor(const QColor &_color)
 
 void KChartWizardSetupAxesPage::changeLabelFont()
 {
-  if( KFontDialog::getFont( ylabel,true,this ) == QDialog::Rejected )
+  if( KFontDialog::getFont( ylabel,false,this ) == QDialog::Rejected )
     return;
 }
 

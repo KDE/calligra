@@ -166,7 +166,7 @@ else
 
 void KChartParameterConfigPage::changeFont()
 {
-if (KFontDialog::getFont( annotationFont,true,this ) == QDialog::Rejected )
+if (KFontDialog::getFont( annotationFont,false,this ) == QDialog::Rejected )
         return;
 }
 

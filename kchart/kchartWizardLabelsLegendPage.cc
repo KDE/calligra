@@ -134,19 +134,19 @@ KChartWizardLabelsLegendPage::~KChartWizardLabelsLegendPage()
 
 void KChartWizardLabelsLegendPage::changeXLabelFont()
 {
-    if (KFontDialog::getFont( xlabel,true,this ) == QDialog::Rejected )
+    if (KFontDialog::getFont( xlabel,false,this ) == QDialog::Rejected )
       return;
 
 }
 void KChartWizardLabelsLegendPage::changeYLabelFont()
 {
-    if (KFontDialog::getFont( ylabel ,true,this ) == QDialog::Rejected )
+    if (KFontDialog::getFont( ylabel ,false,this ) == QDialog::Rejected )
       return;
 
 }
 void KChartWizardLabelsLegendPage::changeTitleFont()
 {
-    if (KFontDialog::getFont( title ,true,this ) == QDialog::Rejected )
+    if (KFontDialog::getFont( title ,false,this ) == QDialog::Rejected )
       return;
 
 }
