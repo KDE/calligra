@@ -1,0 +1,6 @@
+[Desktop Entry]
+Icon=kword
+Type=MimeType
+MimeType=application/x-mswrite
+Patterns=*.wri;*.WRI;
+Comment=Microsoft Write document
