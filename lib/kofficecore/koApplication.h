@@ -31,11 +31,11 @@ inline QString colorToName( const QColor &c ) {
     QString t;
 
     t = QString( "0" ) + QString::number( c.red(), 16 );
-    r = r + t.left( 2 );
+    r = r + t.right( 2 );
     t = QString( "0" ) + QString::number( c.green(), 16 );
-    r = r + t.left( 2 );
+    r = r + t.right( 2 );
     t = QString( "0" ) + QString::number( c.blue(), 16 );
-    r = r + t.left( 2 );
+    r = r + t.right( 2 );
     return r;
 }
 
@@ -52,7 +52,7 @@ public:
     virtual void start();
 	
     void aboutKDE() { KApplication::aboutKDE(); }
-    
+
 private:
     KdedInstance kded;
     KStartParams m_params;
