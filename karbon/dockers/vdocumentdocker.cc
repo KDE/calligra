@@ -35,6 +35,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klineeditdlg.h>
+#include <kinputdialog.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -583,8 +584,8 @@ VLayersTab::renameItem( QListViewItem* item, const QPoint&, int col )
 		{
 			VObjectListViewItem *objectItem = dynamic_cast< VObjectListViewItem *>( m_layersListView->selectedItem() );
 			VObject *obj = objectItem->object();
-			QString name = QInputDialog::getText( i18n( "Current Object" ), i18n( "Change the name of the object:" ),
-												  QLineEdit::Normal, obj->name(), &ok, this );
+			QString name = KInputDialog::getText( i18n( "Current Object" ), i18n( "Change the name of the object:" ),
+												  obj->name(), &ok, this );
 			if( ok )
 			{
 				m_document->setObjectName( obj, name );
@@ -593,8 +594,8 @@ VLayersTab::renameItem( QListViewItem* item, const QPoint&, int col )
 		}
 		else
 		{
-			QString name = QInputDialog::getText( i18n( "Rename Layer" ), i18n( "Change the name of the current layer:" ),
-												  QLineEdit::Normal, layerItem->layer()->name(), &ok, this );
+			QString name = KInputDialog::getText( i18n( "Rename Layer" ), i18n( "Change the name of the current layer:" ),
+												  layerItem->layer()->name(), &ok, this );
 			if( ok )
 			{
 				layerItem->layer()->setName( name );
@@ -608,8 +609,8 @@ void
 VLayersTab::addLayer()
 {
 	bool ok = true;
-	QString name = QInputDialog::getText( i18n( "New Layer" ), i18n( "Enter the name of the new layer:" ),
-										  QLineEdit::Normal, i18n( "New layer" ), &ok, this );
+	QString name = KInputDialog::getText( i18n( "New Layer" ), i18n( "Enter the name of the new layer:" ),
+										  i18n( "New layer" ), &ok, this );
 	if( ok )
 	{
 		VLayer* layer = new VLayer( m_document );
