@@ -660,7 +660,7 @@ void GObject::setParent(GObject *parent) const {
 }
 
 GObject::GObject(const QString &name) : m_name(name), m_state(Visible), m_parent(0L),
-    m_zoom(1.0), m_angle(0.0), m_boundingRectDirty(true), m_fillStyle(Brush), m_ok(true) {
+    m_angle(0.0), m_boundingRectDirty(true), m_fillStyle(Brush), m_ok(true) {
 
     m_gradient.type=KImageEffect::VerticalGradient;
     m_gradient.xfactor=1;
@@ -668,13 +668,13 @@ GObject::GObject(const QString &name) : m_name(name), m_state(Visible), m_parent
 }
 
 GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
-    m_state(rhs.state()), m_parent(0L), m_zoom(rhs.zoom()), m_angle(rhs.angle()),
+    m_state(rhs.state()), m_parent(0L), m_angle(rhs.angle()),
     m_boundingRectDirty(true), m_fillStyle(rhs.fillStyle()), m_brush(rhs.brush()),
     m_gradient(rhs.gradient()), m_pen(rhs.pen()), m_ok(true) {
 }
 
-GObject::GObject(const QDomElement &element) : m_parent(0L), m_zoom(1.0),
-					       m_boundingRectDirty(true), m_ok(false) {
+GObject::GObject(const QDomElement &element) : m_parent(0L), m_boundingRectDirty(true),
+					       m_ok(false) {
 
     if(element.tagName()!=QString::fromLatin1("gobject"))
 	return;

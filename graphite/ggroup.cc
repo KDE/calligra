@@ -28,6 +28,7 @@
 #include <kdialogbase.h>
 #include <kdebug.h>
 
+
 GGroup::GGroup(const QString &name) : GObject(name), m_iterator(0L) {
     m_iterator=new QListIterator<GObject>(m_members);
 }
@@ -188,14 +189,12 @@ void GGroup::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
 	it.current()->draw(p, reg, toPrinter);
 }
 
-void GGroup::setZoom(const short &zoom) {
+void GGroup::recalculate() {
 
-    if(m_zoom==zoom)
-	return;
-    m_zoom=zoom;
     QListIterator<GObject> it(m_members);
     for( ; it!=0L; ++it)
-	it.current()->setZoom(zoom);
+	it.current()->recalculate();
+    m_boundingRectDirty=true;
 }
 
 const GObject *GGroup::hit(const QPoint &p) const {

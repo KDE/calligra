@@ -265,10 +265,8 @@ public:
     // is != 0L. Use this list to check "mouseOver" stuff
     virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
 
-    const double &zoom() const { return m_zoom; }
-    virtual void setZoom(const double &zoom=1.0) { m_zoom=zoom; }
-    // don't forget to set it for all children! Note: Check, if the zoom is equal to the last
-    // one - don't change it, then...
+    // This one is called by the document whenever the zoom of the view changes
+    virtual void recalculate() = 0;  // don't forget to call it for all coords!
 
     // does the object contain this point? (Note: finds the most nested child which is hit!)
     virtual const GObject *hit(const QPoint &p) const = 0;
@@ -311,13 +309,6 @@ protected:
     GObject(const GObject &rhs);
     GObject(const QDomElement &element);
 
-    // zoomIt zooms a value according to the current zoom setting and returns
-    // the zoomed value. The original value is not changed
-    const double zoomIt(const double &value) const;
-    const int zoomIt(const int &value) const;
-    const unsigned int zoomIt(const unsigned int &value) const;
-    const QPoint zoomIt(const QPoint &point) const;
-
     // rotatePoint rotates a given point. The "point" (x, y, or QPoint) passed as
     // function argument is changed! (we're using radians!)
     void rotatePoint(int &x, int &y, const double &angle, const QPoint &center) const;
@@ -339,7 +330,6 @@ protected:
     QString m_name;                    // name of the object
     State m_state;                     // are there handles to draw or not?
     mutable GObject *m_parent;
-    double m_zoom;                     // zoom value
     mutable double m_angle;            // angle (radians!)
 
     mutable bool m_boundingRectDirty;  // is the cached bounding rect still correct?
@@ -399,30 +389,6 @@ inline const double normalizeDeg(const double &deg) {
 }
 
 }; // namespace Graphite
-
-inline const double GObject::zoomIt(const double &value) const {
-    if(m_zoom==1.0)
-	return value;
-    return m_zoom*value;
-}
-
-inline const int GObject::zoomIt(const int &value) const {
-    if(m_zoom==1.0)
-	return value;
-    return Graphite::double2Int(m_zoom*static_cast<double>(value));
-}
-
-inline const unsigned int GObject::zoomIt(const unsigned int &value) const {
-    if(m_zoom==1.0)
-	return value;
-    return static_cast<unsigned int>(Graphite::double2Int(m_zoom*static_cast<double>(value)));
-}
-
-inline const QPoint GObject::zoomIt(const QPoint &point) const {
-    if(m_zoom==1.0)
-	return point;
-    return QPoint(zoomIt(point.x()), zoomIt(point.y()));
-}
 
 inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoint &center) const {
 

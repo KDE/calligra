@@ -38,8 +38,12 @@ public:
 
     virtual QWidget *canvas() { return m_canvas->viewport(); }
 
+    void setZoom(const double &zoom=1.0) { m_zoom=zoom; }
+    const double &zoom() const { return m_zoom; }
+
 protected slots:
-    void slotNewView();
+    void slotViewNew();
+    void slotViewZoom(int item);
 
 protected:
     void resizeEvent(QResizeEvent *ev);
@@ -48,5 +52,6 @@ protected:
 
 private:
     GCanvas *m_canvas;
+    double m_zoom;
 };
 #endif

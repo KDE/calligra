@@ -75,69 +75,54 @@ void GraphiteGlobal::setUnit(const Unit &unit) {
 	m_unitString=QString::fromLatin1("pt");
 }
 
+void GraphiteGlobal::setZoom(const double &zoom) {
+    m_zoom=zoom;
+}
+
+void GraphiteGlobal::setResoltuion(const int &resolution) {
+    m_resolution=static_cast<double>(resolution)/25.4;
+}
+
 GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
 				   m_rotHandleSize(4), m_thirdHandleTrigger(20),
-				   m_offset(2), m_unit(MM) {
+				   m_offset(2), m_unit(MM), m_zoom(1.0),
+				   m_resolution(2.8346457) {
     m_unitString=QString::fromLatin1("mm");
 }
 
-FxValue::FxValue() : m_value(0), m_pixel(0), m_zoom(1.0), m_resolution(72) {
+
+FxValue::FxValue() : m_value(0.0), m_pixel(0) {
 }
 
-FxValue::FxValue(const int &pixel, const double &zoom, const int &resolution) :
-    m_zoom(zoom), m_resolution(resolution) {
+FxValue::FxValue(const int &pixel) {
     setPxValue(pixel);
 }
 
-FxValue::FxValue(const FxValue &v) : m_value(v.value()), m_pixel(v.pxValue()),
-				     m_zoom(v.zoom()), m_resolution(v.resolution()) {
+FxValue::FxValue(const FxValue &v) : m_value(v.value()), m_pixel(v.pxValue()) {
 }
 
 FxValue &FxValue::operator=(const FxValue &rhs) {
 
     m_value=rhs.value();
     m_pixel=rhs.pxValue();
-    m_zoom=rhs.zoom();
-    m_resolution=rhs.resolution();
     return *this;
 }
 
 const bool FxValue::operator==(const FxValue &rhs) {
-
-    if(m_zoom!=rhs.zoom()) {
-	kdDebug(37001) << "FxValue::operator==(): The zoom factor differs!" << endl;
-	return false;
-    }
-    if(m_resolution!=rhs.resolution()) {
-	kdDebug(37001) << "FxValue::operator==(): The resoltuion differs!" << endl;
-	return false;
-    }
     return m_pixel==rhs.pxValue();
 }
 
 const bool FxValue::operator!=(const FxValue &rhs) {
-    return !(*this==rhs);
-}
-
-void FxValue::setZoom(const double &zoom) {
-
-    m_zoom=zoom;
-    recalc();
-}
-
-void FxValue::setResoltuion(const int &resolution) {
-
-    m_resolution=resolution;
-    recalc();
+    return m_pixel!=rhs.pxValue();
 }
 
 void FxValue::setValue(const double &value) {
-
     m_value=value;
-    recalc();
+    recalculate();
 }
 
 void FxValue::setPxValue(const int &/*pixel*/) {
+    // TODO
 }
 
 const double FxValue::valueUnit() const {
@@ -162,5 +147,5 @@ const double FxValue::valuePt() const {
     return 0.0;
 }
 
-void FxValue::recalc() {
+void FxValue::recalculate() {
 }

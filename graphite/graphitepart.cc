@@ -37,6 +37,7 @@
 #include <kdialogbase.h>
 #include <math.h>
 
+
 GraphitePart::GraphitePart(QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parent, name, singleViewMode) {
 
@@ -54,6 +55,7 @@ GraphitePart::~GraphitePart() {
 
 bool GraphitePart::initDoc() {
     // If nothing is loaded, do initialize here (TODO)
+    // Show the "template" dia
     return true;
 }
 
@@ -62,7 +64,8 @@ QCString GraphitePart::mimeType() const {
 }
 
 void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
-    //kdDebug(37001) << "MM x=" << e->x() << " y=" << e->y() << endl;
+    // kdDebug(37001) << "MM x=" << e->x() << " y=" << e->y() << endl;
+    // TODO: setGlobalZoom()
 }
 
 void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
@@ -78,22 +81,27 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     m->mousePressEvent(e, r);
     delete m;
     delete o;
+    // TODO: setGlobalZoom()
 }
 
 void GraphitePart::mouseReleaseEvent(QMouseEvent *e, GraphiteView */*view*/) {
     kdDebug(37001) << "MR x=" << e->x() << " y=" << e->y() << endl;
+    // TODO: setGlobalZoom()
 }
 
 void GraphitePart::mouseDoubleClickEvent(QMouseEvent *e, GraphiteView */*view*/) {
     kdDebug(37001) << "MDC x=" << e->x() << " y=" << e->y() << endl;
+    // TODO: setGlobalZoom()
 }
 
 void GraphitePart::keyPressEvent(QKeyEvent *e, GraphiteView */*view*/) {
     kdDebug(37001) << "KP key=" << e->key() << endl;
+    // TODO: setGlobalZoom()
 }
 
 void GraphitePart::keyReleaseEvent(QKeyEvent *e, GraphiteView */*view*/) {
     kdDebug(37001) << "KR key=" << e->key() << endl;
+    // TODO: setGlobalZoom()
 }
 
 KoView *GraphitePart::createView(QWidget *parent, const char *name) {
@@ -111,12 +119,9 @@ KoMainWindow *GraphitePart::createShell() {
     return shell;
 }
 
-void GraphitePart::preparePainting(const int &/*zoom*/) {
-    // TODO - call something like m_nodeZeroObject->setZoom(zoom)
-}
-
 void GraphitePart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bool /*transparent*/) {
     kdDebug(37001) << "GraphitePart::painEvent()" << endl;
+    // TODO: setGlobalZoom()
 }
 
 void GraphitePart::edit_undo() {
@@ -131,5 +136,13 @@ void GraphitePart::edit_redo() {
 
 void GraphitePart::edit_cut() {
     kdDebug(37001) << "GraphitePart: edit_cut called" << endl;
+}
+
+void GraphitePart::setGlobalZoom(const double &zoom) {
+
+    if(GraphiteGlobal::self()->zoom()==zoom)
+	return;
+    GraphiteGlobal::self()->setZoom(zoom);
+    // nodeZero->recalculate();
 }
 #include <graphitepart.moc>

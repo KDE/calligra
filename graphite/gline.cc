@@ -182,6 +182,10 @@ void GLine::drawHandles(QPainter &p, QList<QRect> *handles) {
     p.restore();
 }
 
+void GLine::recalculate() {
+    // TODO
+}
+
 const GLine *GLine::hit(const QPoint &p) const {
 
     if(p==m_a)

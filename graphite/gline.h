@@ -42,6 +42,8 @@ public:
     // Do we need this? Maybe even lines should have rectangular handles...
     virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
 
+    virtual void recalculate();
+
     virtual const GLine *hit(const QPoint &p) const;
     virtual const bool intersects(const QRect &r) const;
     virtual const QRect &boundingRect() const;

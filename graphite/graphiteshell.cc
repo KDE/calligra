@@ -38,6 +38,7 @@ QString GraphiteShell::nativeFormatName() const {
 
 void GraphiteShell::slotFilePrint() {
     kdDebug(37001) << "GraphiteShell::slotFilePrint()" << endl;
+    // Don't forget to change the global resolution!
 }
 
 KoDocument *GraphiteShell::createDoc() {

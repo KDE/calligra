@@ -53,7 +53,7 @@ public:
 
     virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false);
 
-    virtual void setZoom(const short &zoom=100);
+    virtual void recalculate();
 
     virtual const GObject *hit(const QPoint &p) const;
     virtual const bool intersects(const QRect &r) const;

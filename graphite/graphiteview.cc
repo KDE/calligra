@@ -31,13 +31,25 @@
 
 
 GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
-			   const char *name) : KoView(doc, parent, name) {
-
+			   const char *name) : KoView(doc, parent, name),
+					       m_zoom(1.0) {
     setInstance(GraphiteFactory::global());
     setXMLFile(QString::fromLatin1("graphite.rc"));
 
-    (void) new KAction(i18n("&New View"), 0, this, SLOT(slotNewView()),
+    (void) new KAction(i18n("&New View"), 0, this, SLOT(slotViewNew()),
 		       actionCollection(), "view_newview");
+    KSelectAction *zoom=new KSelectAction(i18n("&Zoom"), 0,
+					  actionCollection(), "view_zoom");
+    connect(zoom, SIGNAL(activated(int)), this, SLOT(slotViewZoom(int)));
+    QStringList lst;
+    lst << i18n("50%");
+    lst << i18n("100%");
+    lst << i18n("150%");
+    lst << i18n("200%");
+    lst << i18n("250%");
+    lst << i18n("300%");
+    lst << i18n("Other...");
+    zoom->setItems(lst);
 
     m_canvas=new GCanvas(this, doc);
 }
@@ -64,7 +76,7 @@ GraphiteView::~GraphiteView() {
     painter.end();
 }*/
 
-void GraphiteView::slotNewView() {
+void GraphiteView::slotViewNew() {
 
     if(koDocument()==0L)
 	kdFatal(37001) << "Huh! No doc?" << endl;
@@ -72,6 +84,10 @@ void GraphiteView::slotNewView() {
     KoMainWindow *shell = new GraphiteShell;
     shell->show();
     shell->setRootDocument(koDocument());
+}
+
+void GraphiteView::slotViewZoom(int item) {
+    kdDebug(37001) << "GraphiteView::slotViewZoom(): item=" << item << endl;
 }
 
 void GraphiteView::resizeEvent(QResizeEvent *ev) {

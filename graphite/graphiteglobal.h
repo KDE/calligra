@@ -69,7 +69,14 @@ public:
     void setUnit(const Unit &unit);
     const QString &unitString() const { return m_unitString; }
 
-    // more to come...
+    const double &zoom() const { return m_zoom; }
+    void setZoom(const double &zoom);
+
+    // note: returns pixel per mm (not per inch!)
+    const double &resolution() const { return m_resolution; }
+    // note: set the dpi resolution!
+    void setResoltuion(const int &resolution);
+
     // maybe I'll add a init(...) method which takes a KConfig file/pointer
     // and initializes all the "global" vars.
 
@@ -89,6 +96,8 @@ private:
     int m_offset;
     Unit m_unit;
     QString m_unitString;
+    double m_zoom;
+    double m_resolution;
 };
 
 
@@ -96,8 +105,7 @@ class FxValue {
 
 public:
     FxValue();
-    explicit FxValue(const int &pixel, const double &zoom=1.0,
-		     const int &resolution=72);
+    explicit FxValue(const int &pixel);
     FxValue(const FxValue &v);
     ~FxValue() {}
 
@@ -105,12 +113,6 @@ public:
     FxValue &operator=(const FxValue &rhs);
     const bool operator==(const FxValue &rhs);
     const bool operator!=(const FxValue &rhs);
-
-    const double zoom() const { return m_zoom; }
-    void setZoom(const double &zoom);
-
-    const int resolution() const { return m_resolution; }
-    void setResoltuion(const int &resolution);
 
     const double &value() const { return m_value; }
     void setValue(const double &value);
@@ -123,13 +125,13 @@ public:
     const double valueInch() const;
     const double valuePt() const;
 
-private:
-    void recalc();
+    // When the zoom factor and/or the resoltuion changes
+    // we have to recalculate the pixel value
+    void recalculate();
 
+private:
     double m_value;    // value in mm
     int m_pixel;       // current pixel value (approximated)
-    double m_zoom;     // 1.0 ^= 100%
-    int m_resolution;  // in dpi (defaults to 72 -> screens)
 };
 
 
@@ -137,21 +139,14 @@ class FxPoint {
 
 public:
     FxPoint(const FxValue &x, const FxValue &y);
-    explicit FxPoint(const QPoint &p, const double zoom=1.0, const int dpi=72);
-    FxPoint(const int &x, const int &y, const double zoom=1.0,
-	    const int dpi=72);
+    explicit FxPoint(const QPoint &p);
+    FxPoint(const int &x, const int &y);
     ~FxPoint() {}
 
     // compares the px values!
     FxPoint &operator=(const FxPoint &rhs);
     const bool operator==(const FxPoint &rhs);
     const bool operator!=(const FxPoint &rhs);
-
-    const double zoom() const;
-    void setZoom(const double &zoom);
-
-    const int resolution() const;
-    void setResoltuion(const int &resolution);
 
     const FxValue &x() const { return m_x; }
     void setX(const FxValue &x);
@@ -160,16 +155,17 @@ public:
     void setY(const FxValue &y);
 
     const int pxX() const { return m_x.pxValue(); }
-    void setPxX(const int &x, double zoom=1.0, int dpi=72);
+    void setPxX(const int &x);
 
     const int pxY() const { return m_y.pxValue(); }
-    void setPxY(const int &y, double zoom=1.0, int dpi=72);
+    void setPxY(const int &y);
 
     void setPoint(const FxValue &x, const FxValue &y);
 
     const QPoint pxPoint() { return QPoint(pxX(), pxY()); }
-    void setPxPoint(const int &x, const int &y, const double zoom=1.0,
-		    const int dpi=72);
+    void setPxPoint(const int &x, const int &y);
+
+    void recalculate();
 
 private:
     FxValue m_x, m_y;
