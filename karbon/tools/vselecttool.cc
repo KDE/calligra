@@ -54,7 +54,7 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 	kdDebug() << " x: " << rect.x() << " y: " << rect.y() << " rect.width: " << rect.width() << " rect.height: " << rect.height() << endl;
 	if(
 		part()->document().selection()->objects().count() > 0 &&
-		( m_state != normal || rect.contains( fp /* view->zoom() */ ) ) )
+		( m_state != normal || rect.contains( fp * ( 1.0 /  view->zoom() ) ) ) )
 	{
 		if( m_state != moving )
 			m_state = moving;
@@ -73,6 +73,7 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 			list.append( itr.current()->clone() );
 		}
 		VObjectListIterator itr2 = list;
+		painter->setZoomFactor( view->zoom() );
 		for( ; itr2.current() ; ++itr2 )
 		{
 			itr2.current()->transform( mat );
@@ -82,6 +83,7 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 				painter,
 				itr2.current()->boundingBox() );
 		}
+		painter->setZoomFactor( 1.0 );
 	}
 	else
 	{
@@ -140,7 +142,10 @@ VSelectTool::eventFilter( KarbonView* view, QEvent* event )
 		}
 		else
 		{
-
+			fp.setX( fp.x() / view->zoom() );
+			fp.setY( fp.y() / view->zoom() );
+			lp.setX( lp.x() / view->zoom() );
+			lp.setY( lp.y() / view->zoom() );
 			if ( (fabs(lp.x()-fp.x()) + fabs(lp.y()-fp.y())) < 3.0 ) {
 				// AK - should take the middle point here
 				fp = lp - KoPoint(8.0, 8.0);
@@ -152,12 +157,7 @@ VSelectTool::eventFilter( KarbonView* view, QEvent* event )
 
 			part()->document().deselect();
 
-			part()->document().select(
-				KoRect(
-					fp.x() * view->zoom(), fp.y() * view->zoom(),
-					( lp.x() - fp.x() ) * view->zoom(),
-					( lp.y() - fp.y() ) * view->zoom() ).normalize(),
-				true );
+			part()->document().select( KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(), true );
 
 			//if( part()->selection().count() > 0  )
 				part()->repaintAllViews();
