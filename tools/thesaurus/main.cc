@@ -276,7 +276,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
     QString buffer = *((QString *)data);
     buffer = buffer.stripWhiteSpace();
     QRegExp re("[.,;!?\"'()\\[\\]]");
-    buffer.replace(re, "");
+    buffer.remove(re);
     buffer = buffer.left(100);        // limit maximum length
 
     m_wnproc_stdout = "";
@@ -449,7 +449,7 @@ void Thesaurus::thesExited(KProcess *)
     QStringList hyper;
     QStringList hypo;
 
-    QStringList lines = lines.split(QRegExp("\n"), m_thesproc_stdout, false);
+    QStringList lines = lines.split(QChar('\n'), m_thesproc_stdout, false);
     for ( QStringList::Iterator it = lines.begin(); it != lines.end(); ++it ) {
         QString line = (*it);
         if( line.startsWith("  ") ) {  // ignore license (two spaces)
@@ -458,8 +458,8 @@ void Thesaurus::thesExited(KProcess *)
         int sep_pos = line.find("#");
         QString syn_part = line.left(sep_pos);
         QString hyper_part = line.right(line.length()-sep_pos-1);
-        QStringList syn_tmp = QStringList::split(QRegExp(";"), syn_part);
-        QStringList hyper_tmp = QStringList::split(QRegExp(";"), hyper_part);
+        QStringList syn_tmp = QStringList::split(QChar(';'), syn_part);
+        QStringList hyper_tmp = QStringList::split(QChar(';'), hyper_part);
         if( syn_tmp.grep(search_term, false).size() > 0 ) {
             // match on the left side of the '#' -- synonyms
             for ( QStringList::Iterator it2 = syn_tmp.begin(); it2 != syn_tmp.end(); ++it2 ) {
@@ -666,7 +666,7 @@ void Thesaurus::wnExited(KProcess *)
         m_resultbox->setText(i18n("No match for '%1'.").arg(m_edit->currentText()));
     } else {
         // render in a table, each line one row:
-        QStringList lines = lines.split(QRegExp("\n"), m_wnproc_stdout, false);
+        QStringList lines = lines.split(QChar('\n'), m_wnproc_stdout, false);
         QString result = "<qt><table>\n";
         // TODO in Qt > 3.01: try without the following line (it's necessary to ensure the
         // first column is really always quite small):
@@ -680,8 +680,9 @@ void Thesaurus::wnExited(KProcess *)
                 continue;
             }
             // Escape XML:
-            l = l.replace(QRegExp("<"), "&lt;");
-            l = l.replace(QRegExp(">"), "&gt;");
+            l = l.replace('&', "&amp;");
+            l = l.replace('<', "&lt;");
+            l = l.replace('>', "&gt;");
             // TODO?: 
             // move "=>" in own column?
             l = formatLine(l);
@@ -760,17 +761,17 @@ QString Thesaurus::formatLine(QString l)
     if( re.search(l) != -1 ) {
         l = re.cap(1);
         l += re.cap(2);
-        QStringList links = links.split(QRegExp(";"), re.cap(3), false);
+        QStringList links = links.split(QChar(';'), re.cap(3), false);
         for ( QStringList::Iterator it = links.begin(); it != links.end(); ++it ) {
             QString link = (*it);
             if( it != links.begin() ) {
                 l += ", ";
             }
             link = link.stripWhiteSpace();
-            link = link.replace(QRegExp("#\\d+"), "");
+            link = link.remove(QRegExp("#\\d+"));
             l += "<a href=\"" +link+ "\">" +link+ "</a>";
         }
-        l = " " + l;        // indent in table
+        l.prepend (' ');        // indent in table
     }
 
     re.setPattern("(.*)(=&gt;|HAS \\w+:|PART OF:)(.*) --");
@@ -780,7 +781,7 @@ QString Thesaurus::formatLine(QString l)
         QString line_end = l.mid(dash_pos+2, l.length()-dash_pos);
         l = re.cap(1);
         l += re.cap(2) + " ";
-        QStringList links = links.split(QRegExp(","), re.cap(3), false);
+        QStringList links = links.split(QChar(','), re.cap(3), false);
         for ( QStringList::Iterator it = links.begin(); it != links.end(); ++it ) {
             QString link = (*it);
             if( it != links.begin() ) {
@@ -790,7 +791,7 @@ QString Thesaurus::formatLine(QString l)
             l += "<a href=\"" +link+ "\">" +link+ "</a>";
         }
         l += "<font color=\"#777777\">" +line_end+ "</font>";
-        l = " " + l;        // indent in table
+        l.prepend(' ');        // indent in table
         return l;
     }
     re.setMinimal(false);    // greedy again
@@ -798,7 +799,9 @@ QString Thesaurus::formatLine(QString l)
     return l;
 }
 
-/** Sort a list case insensitively.
+/** 
+ * Sort a list case insensitively.
+ * Be careful: @p list is modified
  * TODO: use ksortablevaluelist?
  */
 QStringList Thesaurus::sortQStringList(QStringList list)

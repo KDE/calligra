@@ -98,6 +98,12 @@ protected:
     void findTermThesaurus(const QString &term);
     void findTermWordnet(const QString &term);
     QString formatLine(QString l);
+
+/** 
+ * Sort a list case insensitively.
+ * Be careful: @p list is modified
+ * TODO: use ksortablevaluelist?
+ */
     QStringList sortQStringList(QStringList list);
     void setCaption();
 
