@@ -1,3 +1,5 @@
+#!/usr/bin/perl
+
 # converts a KPresenter document from the old format to the new one (v2)
 # due to the new text object
 
