@@ -842,6 +842,7 @@ void KexiMainWindowImpl::slotNoMaximizedChildFrmLeft(KMdiChildFrm*)
 void KexiMainWindowImpl::slotLastChildFrmClosed()
 {
 	slotCaptionForCurrentMDIChild(false);
+	activeWindowChanged(0);
 }
 
 void KexiMainWindowImpl::slotChildViewIsDetachedNow(QWidget*)
@@ -1029,7 +1030,7 @@ void
 KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 {
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
-	kdDebug() << "KexiMainWindowImpl::activeWindowChanged() to = " << (dlg ? dlg->caption() : "") << endl;
+	kdDebug() << "KexiMainWindowImpl::activeWindowChanged() to = " << (dlg ? dlg->caption() : "<none>") << endl;
 
 	KXMLGUIClient *client=0;
 
@@ -1075,14 +1076,16 @@ KexiMainWindowImpl::activeWindowChanged(KMdiChildView *v)
 	bool update_dlg_caption = dlg && dlg!=(KexiDialogBase*)d->curDialog && dlg->mdiParent();
 
 	d->curDialogGUIClient=client;
-	bool dialogChanged = (KexiDialogBase*)d->curDialog!=dlg;
+	bool dialogChanged = ((KexiDialogBase*)d->curDialog)!=dlg;
 	d->curDialog=dlg;
+
+	propertyBufferSwitched(d->curDialog);
 
 	if (dialogChanged) {
 //		invalidateSharedActions();
 		//update property editor's contents...
 //		if ((KexiPropertyBuffer*)d->propBuffer!=d->curDialog->propertyBuffer()) {
-		propertyBufferSwitched(d->curDialog);
+//		propertyBufferSwitched();//d->curDialog);
 //			d->propBuffer = d->curDialog->propertyBuffer();
 //			d->propEditor->editor()->setBuffer( d->propBuffer );
 //		}
@@ -1778,14 +1781,15 @@ int KexiMainWindowImpl::generatePrivateDocID()
 void KexiMainWindowImpl::propertyBufferSwitched(KexiDialogBase *dlg)
 {
 	kdDebug() << "KexiMainWindowImpl::propertyBufferSwitched()" << endl;
-	if (!d->propEditor)
-		return;
-
 	if ((KexiDialogBase*)d->curDialog!=dlg)
 		return;
-	
-	d->propBuffer = d->curDialog->propertyBuffer();
-	d->propEditor->editor()->setBuffer( d->propBuffer );
+	if (d->propEditor) {
+		KexiPropertyBuffer *newBuf = d->curDialog ? d->curDialog->propertyBuffer() : 0;
+		if (!newBuf || (KexiPropertyBuffer *)d->propBuffer != newBuf) {
+			d->propBuffer = newBuf;
+			d->propEditor->editor()->setBuffer( d->propBuffer );
+		}
+	}
 }
 
 
