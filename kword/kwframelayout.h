@@ -2,6 +2,7 @@
 #define KWFRAMELAYOUT_H
 
 #include <qptrlist.h>
+#include <kdebug.h>
 
 class KWDocument;
 class KWFrameSet;
@@ -65,7 +66,11 @@ namespace KWFrameLayout
             {
                 if ( lastPage < m_startAtPage )
                     return -1; // we need none
-                int pg = lastPage - m_startAtPage; // always >=0
+                int pg = lastPage;
+                if ( m_endAtPage > -1 )
+                    pg = QMIN( m_endAtPage, pg );
+                pg -= m_startAtPage; // always >=0
+                Q_ASSERT( pg >= 0 );
                 switch (m_oddEvenAll) {
                 case Even:
                 case Odd:

@@ -3111,6 +3111,7 @@ void KWFootNoteFrameSet::createInitialFrame( int pageNum )
 {
      KWFrame *frame = new KWFrame(this, 0, pageNum * m_doc->ptPaperHeight() + 1, 20, 20 );
      frame->setFrameBehavior(KWFrame::AutoExtendFrame);
+     frame->setNewFrameBehavior(KWFrame::NoFollowup);
      addFrame( frame );
 }
 

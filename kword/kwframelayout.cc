@@ -122,6 +122,9 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
     for ( ; it.current() ; ++it )
     {
         int lastFrame = it.current()->lastFrameNumber( doc->getPages() - 1 );
+#ifdef DEBUG_FRAMELAYOUT
+        kdDebug(32002) << "Final cleanup: frameset " << it.current()->m_frameset->getName() << ": lastFrame=" << lastFrame << endl;
+#endif
         KWTextFrameSet* fs = it.current()->m_frameset;
         while ( (int)fs->getNumFrames() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT
