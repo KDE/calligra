@@ -20,6 +20,7 @@
 #include "kpresenter_view.h"
 #include "ktextobject.h"
 #include <klocale.h>
+#include "footer_header.h"
 
 /******************************************************************/
 /* class KPresenterChild                                          */
@@ -54,7 +55,7 @@ KPresenterChild::~KPresenterChild()
 
 /*====================== constructor =============================*/
 KPresenterDoc::KPresenterDoc()
-  : _pixmapCollection(), _gradientCollection(), _commands()
+  : _pixmapCollection(), _gradientCollection(), _commands(), _hasHeader(false), _hasFooter(false)
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0")
   // Use CORBA mechanism for deleting views
@@ -100,6 +101,13 @@ KPresenterDoc::KPresenterDoc()
   pasting = false;
   pasteXOffset = pasteYOffset = 0;
 
+  _header = new KPTextObject;
+  _footer = new KPTextObject;
+
+  headerFooterEdit = new KPFooterHeaderEditor(this);
+  headerFooterEdit->setCaption(i18n("KPresenter - Header/Footer Editor"));
+  headerFooterEdit->hide();
+  
   QObject::connect(&_commands,SIGNAL(undoRedoChanged(QString,QString)),this,SLOT(slotUndoRedoChanged(QString,QString)));
 }
 
@@ -108,6 +116,12 @@ KPresenterDoc::~KPresenterDoc()
 {
   sdeb("KPresenterDoc::~KPresenterDoc()\n");
 
+  headerFooterEdit->allowClose();
+  delete headerFooterEdit;
+
+  delete _header;
+  delete _footer;
+  
   _objectList->clear();
   delete _objectList;
   _backgroundList.clear();
@@ -3200,4 +3214,16 @@ QString KPresenterDoc::getPageTitle(unsigned int pgNum,const QString &_title)
     }
   
   return QString(txtObj->lineAt(0)->getText()).simplifyWhiteSpace();
+}
+
+/*================================================================*/
+void KPresenterDoc::setHeader(bool b)
+{
+  _hasHeader = b;
+}
+
+/*================================================================*/
+void KPresenterDoc::setFooter(bool b)
+{
+  _hasFooter = b;
 }

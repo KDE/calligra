@@ -97,6 +97,8 @@ class KPresenterView;
 #define MIME_TYPE "application/x-kpresenter"
 #define EDITOR "IDL:KPresenter/KPresenterDocument:1.0"
 
+class KPFooterHeaderEditor;
+
 /******************************************************************/
 /* class KPresenterChild                                          */
 /******************************************************************/
@@ -351,6 +353,14 @@ public:
   void setUnit(KoUnit _unit,QString __unit);
 
   QString getPageTitle(unsigned int pgNum,const QString &_title);
+
+  KPTextObject *header() { return _header; }
+  KPTextObject *footer() { return _footer; }
+  bool hasHeader() { return _hasHeader; }
+  bool hasFooter() { return _hasFooter; }
+  void setHeader(bool b);
+  void setFooter(bool b);
+  KPFooterHeaderEditor *getHeaderFooterEdit() { return headerFooterEdit; }
   
 signals:
 
@@ -443,10 +453,10 @@ protected:
   bool pasting;
   int pasteXOffset,pasteYOffset;
 
+  KPTextObject *_header,*_footer;
+  bool _hasHeader,_hasFooter;
+  KPFooterHeaderEditor *headerFooterEdit;
+    
 };
 
 #endif
-
-
-
-

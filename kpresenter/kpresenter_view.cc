@@ -22,6 +22,7 @@
 #include <opUIUtils.h>
 #include <koQueryTypes.h>
 #include <klocale.h>
+#include "footer_header.h"
 
 #define DEBUG
 
@@ -104,7 +105,7 @@ KPresenterView::KPresenterView(QWidget *_parent,const char *_name,KPresenterDoc*
   rndY = 0;
   m_vColorBar = 0;
   allowWebPres = true;
-
+ 
   m_pKPresenterDoc = _doc;
   m_bKPresenterModified = true;
 
@@ -279,7 +280,7 @@ CORBA::Boolean KPresenterView::printDlg()
   return true;
 }
 
-/*========================== edit undo ==========================*/
+/*===============================================================*/
 void KPresenterView::editUndo()
 {
   page->setToolEditMode(TEM_MOUSE);
@@ -288,7 +289,7 @@ void KPresenterView::editUndo()
   sendFocusEvent();
 }
 
-/*========================== edit redo ==========================*/
+/*===============================================================*/
 void KPresenterView::editRedo()
 {
   page->setToolEditMode(TEM_MOUSE);
@@ -297,7 +298,7 @@ void KPresenterView::editRedo()
   sendFocusEvent();
 }
 
-/*========================== edit cut ===========================*/
+/*===============================================================*/
 void KPresenterView::editCut()
 {
   page->setToolEditMode(TEM_MOUSE);
@@ -307,7 +308,7 @@ void KPresenterView::editCut()
   sendFocusEvent();
 }
 
-/*========================== edit copy ==========================*/
+/*===============================================================*/
 void KPresenterView::editCopy()
 {
   page->setToolEditMode(TEM_MOUSE);
@@ -316,7 +317,7 @@ void KPresenterView::editCopy()
   sendFocusEvent();
 }
 
-/*========================== edit paste =========================*/
+/*===============================================================*/
 void KPresenterView::editPaste()
 {
   page->setToolEditMode(TEM_MOUSE);
@@ -326,7 +327,7 @@ void KPresenterView::editPaste()
   sendFocusEvent();
 }
 
-/*========================== edit delete ========================*/
+/*===============================================================*/
 void KPresenterView::editDelete()
 {
   page->setToolEditMode(TEM_MOUSE);
@@ -335,7 +336,7 @@ void KPresenterView::editDelete()
   sendFocusEvent();
 }
 
-/*========================== edit select all ====================*/
+/*===============================================================*/
 void KPresenterView::editSelectAll()
 {
   page->setToolEditMode(TEM_MOUSE);
@@ -344,7 +345,7 @@ void KPresenterView::editSelectAll()
   sendFocusEvent();
 }
 
-/*========================== edit delete page ===================*/
+/*===============================================================*/
 void KPresenterView::editDelPage()
 {
   if (delPageDia)
@@ -374,7 +375,7 @@ void KPresenterView::editDelPage()
   sendFocusEvent();
 }
 
-/*========================== edit find ==========================*/
+/*===============================================================*/
 void KPresenterView::editFind()
 {
   if (searchDia)
@@ -399,7 +400,7 @@ void KPresenterView::editFind()
   sendFocusEvent();
 }
 
-/*========================== edit find and replace ==============*/
+/*===============================================================*/
 void KPresenterView::editFindReplace()
 {
   if (replaceDia)
@@ -422,6 +423,15 @@ void KPresenterView::editFindReplace()
 
       searchFirst = true;
     }
+
+  sendFocusEvent();
+}
+
+/*===============================================================*/
+void KPresenterView::editHeaderFooter()
+{
+  page->setToolEditMode(TEM_MOUSE);
+  m_pKPresenterDoc->getHeaderFooterEdit()->show();
 
   sendFocusEvent();
 }
@@ -490,7 +500,7 @@ void KPresenterView::insertPicture()
   page->setCursor(waitCursor);
   if (!file.isEmpty()) m_pKPresenterDoc->insertPicture(file.data(),xOffset,yOffset);
   page->setCursor(c);
-  
+
 //   QEvent ev(Event_Leave);
 //   QMouseEvent mev(Event_MouseButtonRelease,
 // 		  QCursor::pos(),LeftButton,LeftButton);
@@ -2995,6 +3005,11 @@ bool KPresenterView::mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar)
 
   text = Q2C( i18n("&Replace...") );
   m_idMenuEdit_FindReplace = m_vMenuEdit->insertItem(text,this,"editFindReplace",CTRL + Key_R);
+
+  m_vMenuEdit->insertSeparator(-1);
+
+  text = Q2C( i18n("Edit &Header/Footer...") );
+  m_idMenuEdit_HeaderFooter = m_vMenuEdit->insertItem(text,this,"editHeaderFooter",0);
 
   // MENU View
   text = Q2C( i18n("&View") );

@@ -146,5 +146,9 @@ Reggie, 4.5.1999:
   with looking through the text objects of each slide itself
   (No "Slide_X" deafult titles anymore :-)
 - Some cosmetic fixes in the HTML Slidshow generation dialogs
- 
+
+Reggie, 5.5.1999:
+-----------------
+- Started implementing footers and headers 
+- Fixed a mem leak
 

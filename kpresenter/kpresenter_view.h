@@ -158,7 +158,8 @@ public:
   virtual void editDelPage();
   virtual void editFind();
   virtual void editFindReplace();
-
+  virtual void editHeaderFooter();
+  
   // view menu
   virtual void newView();
 
@@ -336,8 +337,8 @@ public:
   QFont &currFont() { return tbFont; }
   QColor &currColor() { return tbColor; }
 
-  void enableWebPres() { 
-    m_vToolBarExtra->setItemEnabled(ID_TOOL_WEBPRES,true); 
+  void enableWebPres() {
+    m_vToolBarExtra->setItemEnabled(ID_TOOL_WEBPRES,true);
     m_vMenuExtra->setItemEnabled(m_idMenuExtra_WepPres,true);
   }
 
@@ -485,7 +486,8 @@ protected:
   CORBA::Long m_idMenuEdit_DelPage;
   CORBA::Long m_idMenuEdit_Find;
   CORBA::Long m_idMenuEdit_FindReplace;
-
+  CORBA::Long m_idMenuEdit_HeaderFooter;
+  
   // view menu
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_NewView;
