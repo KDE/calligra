@@ -271,7 +271,12 @@ void KWDocStructRootItem::setupArrangement()
                     }
                     else
                     {
-                        if ( parags[ _depth - 1 ]->childCount() == 0 )
+                        if (parags[ _depth - 1 ]==0)
+                            parags.replace( _depth, new KWDocStructParagItem( item,
+                                                                              QString( parag->getCounterText() + "  " +
+                                                                                       parag->getKWString()->toString( 0, parag->getKWString()->size() ) ),
+                                                                              parag, gui ) );
+                        else if ( parags[ _depth - 1 ]->childCount() == 0 )
                             parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ],
                                                                               QString( parag->getCounterText() + "  " +
                                                                                        parag->getKWString()->toString( 0, parag->getKWString()->size() ) ),
