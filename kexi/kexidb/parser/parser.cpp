@@ -51,12 +51,15 @@ Parser::createSelect()
 		return;
 
 	m_select = new QuerySchema();
+	m_select->setStatement(m_statement);
+	m_fieldList = new PFieldList();
 }
 
 void
 Parser::parse(const QString &statement)
 {
 	clear();
+	m_statement = statement;
 	parseData(this, statement.latin1());
 }
 
@@ -69,6 +72,23 @@ Parser::clear()
 }
 
 Parser::~Parser()
+{
+}
+
+ParserError::ParserError()
+{
+	m_isNull = true;
+}
+
+ParserError::ParserError(const QString &type, const QString &error, const QString &hint, int at)
+{
+	m_type = type;
+	m_error = error;
+	m_hint = hint;
+	m_at = at;
+}
+
+ParserError::~ParserError()
 {
 }
 

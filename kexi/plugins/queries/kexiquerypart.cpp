@@ -17,152 +17,41 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpixmap.h>
 
-#include <koApplication.h>
-
-#include <kiconloader.h>
 #include <kdebug.h>
-#include <klocale.h>
-#include <klineeditdlg.h>
-#include <kmessagebox.h>
 #include <kgenericfactory.h>
+
+#include <keximainwindow.h>
+#include <kexiproject.h>
+
 #include "kexiquerydesigner.h"
 #include "kexiquerypart.h"
-#include "kexiquerypartproxy.h"
-#include "kexiquerypartitem.h"
 
-KexiQueryPart::KexiQueryPart(QObject *project,const char *,const QStringList &)
- : KexiProjectHandler(KEXIPROJECT(project)),KexiDataProvider()
+KexiQueryPart::KexiQueryPart(QObject *parent, const char *name, const QStringList &l)
+ : KexiPart::Part(parent, name, l)
 {
-	kdDebug() << "KexiQueryPart::KexiQueryPart()" << endl;
+
+}
+
+KexiQueryPart::~KexiQueryPart()
+{
+}
+
+KexiDialogBase*
+KexiQueryPart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool design)
+{
+	KexiQueryDesigner *d = new KexiQueryDesigner(win, item);
+	return d;
 }
 
 QString
-KexiQueryPart::name()
+KexiQueryPart::instanceName() const
 {
 	return i18n("Query");
 }
-
-QString
-KexiQueryPart::groupName()
-{
-	return i18n("Queries");
-}
-
-QString
-KexiQueryPart::mime()
-{
-	return QString("kexi/query");
-}
-
-bool
-KexiQueryPart::visible()
-{
-	return true;
-}
-
-QPixmap
-KexiQueryPart::groupPixmap()
-{
-	return kapp->iconLoader()->loadIcon("queries", KIcon::Small);
-}
-
-QPixmap
-KexiQueryPart::itemPixmap()
-{
-	return kapp->iconLoader()->loadIcon("query", KIcon::Small);
-}
-
-
-void KexiQueryPart::store (KoStore *ks)
-{
-	kdDebug() << "KexiQueryPart::store(KoStore*)" << endl;
-
-	for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
-	{
-		KexiQueryPartItem *qpi=static_cast<KexiQueryPartItem*>(it.current());
-		qpi->store(ks);
-	}
-}
-
-void KexiQueryPart::load (KoStore *ks)
-{
-	References fileRefs = kexiProject()->fileReferences("Queries");
-	ItemList *list=items();
-	list->clear();
-
-	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
-	{
-		kdDebug() << "KexiQueryPart::getQueries() added " << (*it).name << endl;
-		KexiQueryPartItem *qpi;
-		qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name);
-    list->insert( qpi->fullIdentifier(), qpi );
-//		list->insert( (*it).name,qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
-		qpi->load(ks);
-	}
-
-	emit itemListChanged(this);
-
-}
-
-void KexiQueryPart::hookIntoView(KexiView *view)
-{
-    KexiQueryPartProxy *prx=new KexiQueryPartProxy(this,view);
-    insertIntoViewProxyMap(view,prx);
-}
-
-#if 0
-	virtual QStringList datasets() {return QStringList();}
-	virtual QStringList datasetNames() { return QStringList();}
-	virtual QStringList fields(const QString& identifier) {return QStringList();}
-	virtual ParameterList parameters(const QString &identifier) { return ParameterList();}
-#endif
-
-QStringList KexiQueryPart::datasets(QWidget*) {
-	QStringList list;
-
-	for(KexiProjectHandler::ItemIterator it(*items());it.current();++it) {
-		list <<it.current()->identifier();
-	}
-
-	return list;
-}
-
-KexiDB::Cursor *KexiQueryPart::records(QWidget* dpar,const QString& identifier,Parameters params) {
-	QString shortID=localIdentifier(identifier);
-
-	KexiProjectHandlerItem *it=(*items())[shortID];
-	if (it) {
-		return (dynamic_cast<KexiQueryPartItem*>(it))->records(dpar,params);
-	}
-	return 0;
-}
-
-QStringList KexiQueryPart::fields(QWidget*,const QString& identifier) {
-	QString shortID=localIdentifier(identifier);
-	KexiProjectHandlerItem *it=(*items())[shortID];
-	if (it) {
-		return (dynamic_cast<KexiQueryPartItem*>(it))->m_fields;
-	}
-	kdDebug()<<"KexiQueryPart::fields(): couldn't find shortID "<<shortID<<endl;
-	QStringList list;
-	return list;
-}
-
-QStringList KexiQueryPart::datasetNames(QWidget*) {
-	QStringList list;
-
-	for(KexiProjectHandler::ItemIterator it(*items());it.current();++it) {
-		list <<it.current()->name();
-	}
-
-	return list;
-
-}
-
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_query, KGenericFactory<KexiQueryPart> )
 
 
 #include "kexiquerypart.moc"
+

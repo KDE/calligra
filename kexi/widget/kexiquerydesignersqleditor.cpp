@@ -27,6 +27,7 @@
 #include <ktexteditor/editorchooser.h>
 #include <ktexteditor/highlightinginterface.h>
 #include <ktexteditor/editinterface.h>
+#include <ktexteditor/viewcursorinterface.h>
 
 #include <ktextedit.h>//TEMP
 
@@ -53,6 +54,7 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const ch
 		i++;
 	}
 #endif
+	m_view->installEventFilter(this);
 //	QPushButton *btnQuery = new QPushButton(i18n("&Query"), this);
 //	btnQuery->setFlat(true);
 //	QPushButton *btnClear = new QPushButton(i18n("&Clear"), this);
@@ -79,6 +81,30 @@ KexiQueryDesignerSQLEditor::getText()
 #else
 	return m_editor->text();
 #endif
+}
+
+bool
+KexiQueryDesignerSQLEditor::eventFilter(QObject *, QEvent *ev)
+{
+	if(ev->type() == QEvent::KeyRelease)
+	{
+		QKeyEvent *ke = static_cast<QKeyEvent*>(ev);
+		if(ke->key() == Key_Return && ke->state() == ControlButton)
+		{
+			kdDebug() << "KexiQueryDesignerSQLEditor::eventFilter(): magic" << endl;
+			emit execQ();
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void
+KexiQueryDesignerSQLEditor::jump(int col)
+{
+	KTextEditor::ViewCursorInterface *ci = viewCursorInterface(m_view);
+	ci->setCursorPosition(0, col);
 }
 
 KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()

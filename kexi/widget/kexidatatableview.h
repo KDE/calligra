@@ -101,9 +101,6 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 //js		int		m_maxRecord;
 //js		int		m_records;
 
-#ifndef Q_WS_WIN
-#warning FIXME
-#endif
 //		QMap<KexiDBUpdateRecord*,KexiTableItem*> m_insertMapping;
 };
 

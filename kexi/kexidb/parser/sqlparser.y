@@ -357,7 +357,7 @@
 %type <integerValue> UNSIGNED_INTEGER
 %type <integerValue> SIGNED_INTEGER
 
-%left EQUAL NOT_EQUAL GREATER_THAN GREATER_OR_EQUAL LESS_THAN LESS_OR_EQUAL LIKE PERCENT
+%left EQUAL NOT_EQUAL GREATER_THAN GREATER_OR_EQUAL LESS_THAN LESS_OR_EQUAL LIKE PERCENT NOT
 %left ARITHMETIC_PLUS ARITHMETIC_MINUS
 %left ASTERISK SLASH
 
@@ -373,6 +373,7 @@
 
 #include <qobject.h>
 #include <kdebug.h>
+#include <klocale.h>
 #include <qptrlist.h>
 
 #include <connection.h>
@@ -386,6 +387,7 @@
 
 //	using namespace std;
 
+	#define YY_NO_UNPUT
 	#define YYSTACK_USE_ALLOCA 1
 	#define YYMAXDEPTH 255
 
@@ -393,29 +395,51 @@
 	KexiDB::Field *field;
 	bool requiresTable;
 	QPtrList<KexiDB::Field> fieldList;
+	KexiDB::TableSchema *dummy;
+	int current = 0;
+	QString ctoken = "";
 
 	int yyparse();
 	int yylex();
-	void tookenize(const char *data);
+	void tokenize(const char *data);
 
 	void yyerror(const char *str)
 	{
 		kdDebug() << "error: " << str << endl;
+		kdDebug() << "at character " << current << " near tooken " << ctoken << endl;
 		parser->setOperation(KexiDB::Parser::OP_Error);
+
+		if(strcmp(str, "syntax error") == 0)
+		{
+			kdDebug() << parser->statement() << endl;
+			QString ptrline = "";
+			for(int i=0; i < current; i++)
+				ptrline += " ";
+
+			ptrline += "^";
+
+			kdDebug() << ptrline << endl;
+
+			KexiDB::ParserError err(i18n("Syntax Error"), i18n("Syntax Error near '%1'").arg(ctoken), ctoken, current);
+			parser->setError(err);
+		}
 	}
 
 	void parseData(KexiDB::Parser *p, const char *data)
 	{
+		dummy = new KexiDB::TableSchema();
 		parser = p;
 		field = 0;
 		fieldList.clear();
 		requiresTable = false;
-		tookenize(data);
+		tokenize(data);
 		yyparse();
+		/*
 		if(requiresTable)
 		{
 			yyerror("No tables used");
 		}
+		*/
 	}
 
 	extern "C"
@@ -447,7 +471,7 @@
 
 Statement :
 	Statement CreateTableStatement 		{ YYACCEPT; }
-	| Statement SelectStatement 		{ YYACCEPT; }
+	| Statement SelectStatement 		{  }
 	|
 	;
 
@@ -564,6 +588,10 @@ Select ColViews
 {
 	kdDebug() << "from detail" << endl;
 }
+| SelectStatement Tables Conditions
+{
+	kdDebug() << "from detail (conditioned)" << endl;
+}
 ;
 
 Select:
@@ -572,6 +600,25 @@ SELECT
 	kdDebug() << "SELECT" << endl;
 	parser->createSelect();
 	parser->setOperation(KexiDB::Parser::OP_Select);
+}
+;
+
+Conditions:
+WHERE ColExpression
+{
+	kdDebug() << "WHERE " << $2 << endl;
+}
+| Conditions AND ColExpression
+{
+	kdDebug() << "AND " << $3 << endl;
+}
+| Conditions OR ColExpression
+{
+	kdDebug() << "OR " << $3 << endl;
+}
+| LEFTPAREN Conditions RIGHTPAREN
+{
+	kdDebug() << "()" << endl;
 }
 ;
 
@@ -616,7 +663,18 @@ FlatTable:
 USER_DEFINED_NAME
 {
 	kdDebug() << "FROM: '" << $1 << "'" << endl;
+
+	KexiDB::TableSchema *schema = parser->db()->tableSchema($1);
+	parser->select()->setParentTable(schema);
+	parser->select()->addTable(schema);
 	requiresTable = false;
+
+	KexiDB::Field::ListIterator it = parser->select()->fieldsIterator();
+	for(KexiDB::Field *item; (item = it.current()); ++it)
+	{
+		if(item->table() == dummy)
+			item->setTable(schema);
+	}
 }
 ;
 
@@ -633,6 +691,7 @@ ColExpression
 {
 	kdDebug() << " adding field '" << $1->name() << "'" << endl;
 	parser->select()->addField($1);
+//	parser->fieldList()->append($1);
 }
 | ColWildCard
 {
@@ -640,8 +699,16 @@ ColExpression
 | ColExpression AS USER_DEFINED_NAME
 {
 	kdDebug() << " adding field '" << $1->name() << "' as '" << $3 << "'" << endl;
+//	parser->fieldList()->append($1);
 	parser->select()->addField($1);
 	parser->select()->setAlias($1, $3);
+}
+| ColExpression USER_DEFINED_NAME
+{
+	kdDebug() << " adding field '" << $1->name() << "' as '" << $2 << "'" << endl;
+//	parser->fieldList()->append($1);
+	parser->select()->addField($1);
+	parser->select()->setAlias($1, $2);
 }
 ;
 
@@ -651,6 +718,7 @@ USER_DEFINED_NAME
 	kdDebug() << "  + col " << $1 << endl;
 	$$ = new KexiDB::Field();
 	$$->setName($1);
+	$$->setTable(dummy);
 //	parser->select()->addField(field);
 	requiresTable = true;
 }
@@ -663,6 +731,11 @@ USER_DEFINED_NAME
 	$$->setTable(parser->db()->tableSchema($1));
 //	parser->select()->addField(field);
 	requiresTable = true;
+}
+| SQL_NULL
+{
+	$$ = new KexiDB::Field();
+	$$->setName(QString::null);
 }
 | CHARACTER_STRING_LITERAL
 {
@@ -691,6 +764,7 @@ ColExpression:
 ColView
 {
 	$$ = $1;
+	kdDebug() << "to expression: " << $$->name() << endl;
 }
 | ColExpression ARITHMETIC_PLUS ColExpression
 {
@@ -711,6 +785,11 @@ ColView
 {
 	kdDebug() << $1->name() << " * " << $3->name() << endl;
 	$$->setName($1->name() + " * " + $3->name());
+}
+| ColExpression NOT ColExpression
+{
+	kdDebug() << $1->name() << " NOT " << $3->name() << endl;
+	$$->setName($1->name() + " NOT " + $3->name());
 }
 | ColExpression EQUAL ColExpression
 {
@@ -799,8 +878,8 @@ ASTERISK
 	kdDebug() << "all columns" << endl;
 //	field = new KexiDB::Field();
 //	field->setName("*");
-	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select());
-//	parser->select()->addAsterisk(ast);
+	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), dummy);
+	parser->select()->addAsterisk(ast);
 //	fieldList.append(ast);
 	requiresTable = true;
 }
@@ -808,7 +887,7 @@ ASTERISK
 {
 	kdDebug() << "  + all columns from " << $1 << endl;
 	KexiDB::QueryAsterisk *ast = new KexiDB::QueryAsterisk(parser->select(), parser->db()->tableSchema($1));
-//	parser->select()->addAsterisk(ast);
+	parser->select()->addAsterisk(ast);
 //	fieldList.append(ast);
 	requiresTable = true;
 }

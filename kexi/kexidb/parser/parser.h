@@ -23,6 +23,8 @@
 #include <qobject.h>
 #include <qptrlist.h>
 
+typedef QPtrList<KexiDB::Field> PFieldList;
+
 namespace KexiDB
 {
 
@@ -30,6 +32,30 @@ class Connection;
 class QuerySchema;
 class TableSchema;
 class Field;
+
+/**
+ * class wich contains detailed i18n'ed error describtion
+ */
+class ParserError
+{
+	public:
+		ParserError();
+		ParserError(const QString &type, const QString &error, const QString &hint, int at);
+		~ParserError();
+
+		QString	type() { return m_type; }
+		QString	error() { return m_error; }
+		int	at() { return m_at; }
+		bool	isNull() { return m_isNull; }
+
+	private:
+		QString	m_type;
+		QString	m_error;
+		QString	m_hint;
+		int	m_at;
+		bool	m_isNull;
+};
+
 
 /**
  * parser for sql statements
@@ -86,6 +112,14 @@ class KEXI_DB_EXPORT Parser
 		 */
 		Connection	*db() { return m_db; }
 
+		/**
+		 * returns detailed information about a error.
+		 * if no error occured ParserError isNull()
+		 */
+		ParserError	error() const { return m_error; }
+
+		QString		statement() { return m_statement; }
+
 
 		/**
 		 * sets the operation (only parser will need to call that)
@@ -102,13 +136,27 @@ class KEXI_DB_EXPORT Parser
 		 */
 		void		createSelect();
 
+		/**
+		 * returns a INTERNAL list of fields
+		 */
+		PFieldList	*fieldList() { return m_fieldList; }
+
+		/**
+		 * INTERNAL use only: sets a error
+		 */
+		void		setError(const ParserError &err) { m_error = err; }
+
 	private:
 		OPCode		m_operation;
 //		KexiDBTable	*m_table;
 		TableSchema	*m_table;
 		QuerySchema	*m_select;
 		Connection	*m_db;
+		PFieldList	*m_fieldList;
+		QString		m_statement;
+		ParserError	m_error;
 };
+
 
 }
 

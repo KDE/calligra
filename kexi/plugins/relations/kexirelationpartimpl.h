@@ -17,27 +17,24 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYDESIGNERGUIEDITOR_H
-#define KEXIQUERYDESIGNERGUIEDITOR_H
+#ifndef KEXIRELATIONPARTIMPL_H
+#define KEXIRELATIONPARTIMPL_H
 
-#include <qwidget.h>
+#include <kgenericfactory.h>
+#include <kexirelationpart.h>
 
-class KexiMainWindow;
-class KexiTableViewData;
-class KexiTableView;
-
-class KexiQueryDesignerGuiEditor : public QWidget
+class KexiRelationPartImpl : public KexiRelationPart
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerGuiEditor(QWidget *parent, KexiMainWindow *win);
-		~KexiQueryDesignerGuiEditor();
+		KexiRelationPartImpl(QObject *parent, const char *name, const QStringList &args);
+		virtual ~KexiRelationPartImpl();
 
-	private:
-		KexiTableViewData	*m_data;
-		KexiTableView		*m_table;
+		virtual KexiDialogBase *createWindow(KexiMainWindow *parent);
+		virtual QWidget *createWidget(QWidget *parent);
 };
 
 #endif
+
 

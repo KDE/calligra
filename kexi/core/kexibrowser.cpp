@@ -107,6 +107,10 @@ KexiBrowser::clear()
 void
 KexiBrowser::addGroup(KexiPart::Info *info)
 {
+	if(!info->addTree())
+		return;
+
+
 //	KexiBrowserItem *item = new KexiBrowserItem(this, info->mime(), info->groupName(), 0, info);
 	KexiBrowserItem *item = new KexiBrowserItem(m_list, info);
 //	item->setPixmap(0, SmallIcon(info->groupIcon()));

@@ -20,6 +20,8 @@
 #ifndef KEXIPARTGUICL_H
 #define KEXIPARTGUICL_H
 
+#include <qobject.h>
+#include <kxmlguiclient.h>
 #include "kexipart.h"
 
 #include <kxmlguiclient.h>

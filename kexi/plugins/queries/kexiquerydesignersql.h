@@ -35,6 +35,10 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQL : public QWidget
 		~KexiQueryDesignerSQL();
 
 		QString				getQuery();
+		KexiQueryDesignerSQLEditor	*editor() { return m_editor; }
+
+	signals:
+		void				queryShortcut();
 
 	private:
 		KexiQueryDesignerSQLEditor	*m_editor;

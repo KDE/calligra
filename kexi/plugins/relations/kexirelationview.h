@@ -25,7 +25,6 @@
 #include <qptrlist.h>
 #include <qdict.h>
 
-#include "kexirelation.h"
 #include "kexirelationviewconnection.h"
 
 
@@ -33,27 +32,30 @@ class QFrame;
 
 class KexiRelationViewTable;
 class KexiRelationViewTableContainer;
-class KexiRelation;
-class KexiRelationDialog;
-class KexiDBTable;
 class KAction;
 class KPopupMenu;
+
+namespace KexiDB
+{
+	class TableSchema;
+	class Reference;
+}
 
 typedef QDict<KexiRelationViewTableContainer> TableList;
 typedef QPtrList<KexiRelationViewConnection> ConnectionList;
 
-class KEXI_HAND_RELAT_EXPORT KexiRelationView : public QScrollView
+class KexiRelationView : public QScrollView
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationView(KexiRelationDialog *parent, const char *name=0,KexiRelation* =0);
+		KexiRelationView(QWidget *parent, const char *name=0);
 		~KexiRelationView();
 
-		void		addTable(const QString &table, const KexiDBTable *t);
-		void		addConnection(SourceConnection con, bool interactive=true);
+		void		addTable(KexiDB::TableSchema *t);
+//		void		addConnection(SourceConnection con, bool interactive=true);
 
-		RelationList	getConnections()const { return m_connections; };
+//		RelationList	getConnections()const { return m_connections; };
 		void setReadOnly(bool);
 		void executePopup( QPoint pos = QPoint(-1,-1) );
 
@@ -74,15 +76,14 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationView : public QScrollView
 		virtual void	keyPressEvent(QKeyEvent *ev);
 
 		void		recalculateSize(int width, int height);
-		void stretchExpandSize();
-		void invalidateActions();
+		void		stretchExpandSize();
+		void		invalidateActions();
 
 	private:
-		KexiRelationDialog	*m_parent;
 		TableList		m_tables;
-		RelationList		m_connections;
+//		RelationList		m_connections;
 		bool			m_readOnly;
-		KexiRelation    	*m_relation;
+//		KexiRelation    	*m_relation;
 		ConnectionList		m_connectionViews;
 		KexiRelationViewConnection *m_selectedConnection;
 

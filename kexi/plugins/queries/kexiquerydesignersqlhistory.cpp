@@ -84,7 +84,7 @@ KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
 }
 
 void
-KexiQueryDesignerSQLHistory::addEvent(QString q, bool s)
+KexiQueryDesignerSQLHistory::addEvent(QString q, bool s, const QString &error)
 {
 	HistoryEntry *he=m_history.last();
 	if (he) {
@@ -94,7 +94,7 @@ KexiQueryDesignerSQLHistory::addEvent(QString q, bool s)
 			return;
 		}
 	}
-	addEntry(new HistoryEntry(s, QTime::currentTime(), q, 0));
+	addEntry(new HistoryEntry(s, QTime::currentTime(), q, 0, error));
 }
 
 void
@@ -143,11 +143,12 @@ KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()
    HISTORY ENTRY
  */
 
-HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, const QString &statement, int y)
+HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, const QString &statement, int y, const QString &err)
 {
 	m_succeed = succeed;
 	m_execTime = execTime;
 	m_statement = statement;
+	m_error = err;
 	m_selected = false;
 	highlight();
 }
@@ -256,9 +257,12 @@ HistoryEntry::highlight()
 		text += beginTag + curr + endTag;
 	}
 
-	QRegExp keywords("\\b(SELECT|UPDATE|INSERT|DELETE|DROP|FROM|WHERE|AND|OR|NOT|NULL|JOIN|LEFT|RIGHT|ON)\\b");
+	QRegExp keywords("\\b(SELECT|UPDATE|INSERT|DELETE|DROP|FROM|WHERE|AND|OR|NOT|NULL|JOIN|LEFT|RIGHT|ON|INTO|TABLE)\\b");
 	keywords.setCaseSensitive(false);
 	text.replace(keywords, "<b>\\1</b>");
+
+	if(!m_error.isEmpty())
+		text += i18n("<br><font face=\"arial\" size=\"-1\">Error: %1</font>").arg(m_error);
 
 	kdDebug() << "HistoryEntry::highlight() text:" << text << endl;
 //	m_formated = new QSimpleRichText(text, QFont("courier", 8));

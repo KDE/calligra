@@ -35,6 +35,11 @@ Info::Info(KService::Ptr ptr) //, Manager *manager)
 	m_itemIcon = m_ptr->property("X-Kexi-ItemIcon").toString();
 	m_objectName = m_ptr->property("X-Kexi-TypeName").toString();
 
+	if(m_ptr->property("X-Kexi-NoObject").toInt() == 1)
+		m_addTree = false;
+	else
+		m_addTree = true;
+
 	//! @todo (js)..... now it's hardcoded!
 	if(objectName() == "table")
 		m_projectPartID = KexiDB::TableObjectType;

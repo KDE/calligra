@@ -31,6 +31,8 @@ class KexiActionProxy;
 class KMdiChildView;
 class KexiDialogBase;
 class KToggleAction;
+class KexiRelationPart;
+
 namespace KexiDB {
 	class Object;
 	class ConnectionData;
@@ -78,6 +80,11 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 		void updateActionAvailable(const char *action_name, bool set, QObject *obj);
 
 		QPopupMenu* findPopupMenu(const char *popupName);
+
+		/**
+		 * @returns a pointer to the relation parts loads it if needed
+		 */
+		KexiRelationPart	*relationPart();
 
 	public slots:
 		/** Inherited from KMdiMainFrm: we need to do some tasks before child is closed */

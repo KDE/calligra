@@ -17,27 +17,43 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYDESIGNERGUIEDITOR_H
-#define KEXIQUERYDESIGNERGUIEDITOR_H
+#include <klocale.h>
+#include <kdebug.h>
+#include <kiconloader.h>
 
-#include <qwidget.h>
+#include <qlayout.h>
 
-class KexiMainWindow;
-class KexiTableViewData;
-class KexiTableView;
+#include <keximainwindow.h>
+#include <kexiproject.h>
+#include <kexidb/connection.h>
+#include "kexirelationview.h"
+#include "kexirelationmaindlg.h"
 
-class KexiQueryDesignerGuiEditor : public QWidget
+KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *win)
+ : KexiDialogBase(win, i18n("Relations"))
 {
-	Q_OBJECT
+	kdDebug() << "KexiRelationMainDlg()" << endl;
+	m_view = new KexiRelationView(this);
+	m_view->addTable(win->project()->dbConnection()->tableSchema("cars"));
+	m_view->addTable(win->project()->dbConnection()->tableSchema("persons"));
 
-	public:
-		KexiQueryDesignerGuiEditor(QWidget *parent, KexiMainWindow *win);
-		~KexiQueryDesignerGuiEditor();
+	QVBoxLayout *g = new QVBoxLayout(this);
+	g->addWidget(m_view);
 
-	private:
-		KexiTableViewData	*m_data;
-		KexiTableView		*m_table;
-};
+	setIcon(SmallIcon("relation")); 
+	setDocID(0xdeadbeef);
+	registerDialog();
+}
 
-#endif
+QWidget*
+KexiRelationMainDlg::mainWidget()
+{
+	return m_view;
+}
+
+KexiRelationMainDlg::~KexiRelationMainDlg()
+{
+}
+
+#include "kexirelationmaindlg.moc"
 

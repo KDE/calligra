@@ -55,6 +55,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		/*! reimplemented: size hint is inherited from mainWidget() */
 //		virtual QSize sizeHint() const;
 
+		KexiMainWindow	*mainWin() { return m_parentWindow; }
+
 		void	setDocID(int id);
 		int	docID() { return m_docID; }
 		KInstance *instance();

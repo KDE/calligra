@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004   Lucijan Busch <lucijan@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,7 +25,6 @@
 
 #include <math.h>
 
-#include <kexirelation.h>
 #include "kexirelationview.h"
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
@@ -33,8 +32,7 @@
 #include "r1.xpm"
 #include "rn.xpm"
 
-KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl, KexiRelationViewTableContainer *rcvTbl,
-   SourceConnection &c, KexiRelationView *parent)
+KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl, KexiRelationViewTableContainer *rcvTbl, KexiRelationView *parent)
 {
 	m_parent = parent;
 	kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << endl;
@@ -47,10 +45,10 @@ KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableCont
 		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << rcvTbl << endl;
 	}
 
-	m_conn = c;
+//	m_conn = c;
 	m_rcvTable = rcvTbl;
-	m_srcField = c.srcField;
-	m_rcvField = c.rcvField;
+	m_srcField = ""; //c.srcField;
+	m_rcvField = ""; //c.rcvField;
 
 	m_selected = false;
 }
@@ -59,10 +57,10 @@ void
 KexiRelationViewConnection::drawConnection(QPainter *p)
 {
 	p->setPen(QColor(0,0,0));
-	int sx = m_srcTable->x() + m_srcTable->width() + m_parent->contentsX();
-	int sy = m_srcTable->globalY(m_srcField);
-	int rx = m_rcvTable->x() + m_parent->contentsX();
-	int ry = m_rcvTable->globalY(m_rcvField);
+	int sx = 0; //m_srcTable->x() + m_srcTable->width() + m_parent->contentsX();
+	int sy = 0; //m_srcTable->globalY(m_srcField);
+	int rx = 0; //m_rcvTable->x() + m_parent->contentsX();
+	int ry = 0; //m_rcvTable->globalY(m_rcvField);
 
 	QPoint side1(0, 0);
 	QPoint sideN(0, 0);
@@ -149,10 +147,10 @@ const QRect
 KexiRelationViewConnection::connectionRect()
 {
 
-	int sx = m_srcTable->x() + m_parent->contentsX();
-	int rx = m_rcvTable->x() + m_parent->contentsX();
-	int ry = m_rcvTable->globalY(m_rcvField);
-	int sy = m_srcTable->globalY(m_srcField);
+	int sx = 0; //m_srcTable->x() + m_parent->contentsX();
+	int rx = 0; //m_rcvTable->x() + m_parent->contentsX();
+	int ry = 0; //m_rcvTable->globalY(m_rcvField);
+	int sy = 0; //m_srcTable->globalY(m_srcField);
 
 	int width, leftX, rightX;
 

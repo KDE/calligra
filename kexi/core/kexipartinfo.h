@@ -79,6 +79,8 @@ class KEXICORE_EXPORT Info
 		 */
 		bool broken() const { return m_broken; }
 
+		bool			addTree() { return m_addTree; }
+
 #if 0
 		/**
 		 * returns the instance of this @ref KexiProjectPart
@@ -112,6 +114,7 @@ class KEXICORE_EXPORT Info
 		QString m_itemIcon;
 		QString m_objectName;
 		int 			m_projectPartID;
+		bool			m_addTree;
 //		Manager 		*m_manager;
 };
 

@@ -3,7 +3,7 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=Kexi/Handler
 Comment=Kexi Project Handlers
-Comment[bg]=Kexi Проект
+Comment[bg]=Обработка на проекти в Kexi
 Comment[ca]=Manejadors de projectes de Kexi
 Comment[cs]=Ovladač projektů Kexi
 Comment[cy]=Trinyddion Prosiect Kexi
@@ -18,6 +18,7 @@ Comment[hu]=Kexi projektkezelők
 Comment[it]=Gestione progetto di Kexi
 Comment[lo]=ສ້າງແຟ້ມຂໍ້ຄວາມໃໝ่
 Comment[lv]=Kexi Projekta Apstrādātāji
+Comment[ms]=Pengendali Projek Kexi
 Comment[nb]=Kexi prosjektbehandlere
 Comment[nl]=Kexi Projecthandlers
 Comment[nn]=Kexi-prosjekthandtering
@@ -48,4 +49,7 @@ Type=QString
 
 [PropertyDef::X-Kexi-TypeMime]
 Type=QString
+
+[PropertyDef::X-Kexi-NoObject]
+Type=int
 

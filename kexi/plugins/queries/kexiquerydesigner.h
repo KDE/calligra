@@ -20,60 +20,49 @@
 #ifndef KEXIQUERYDESIGNER_H
 #define KEXIQUERYDESIGNER_H
 
-#include "kexidialogbase.h"
-#include "kexidataprovider.h"
+#include <kexidialogbase.h>
 
 class QTabWidget;
-class KexiView;
-class KexiQueryPartItem;
 class KexiQueryDesignerGuiEditor;
 class KexiQueryDesignerSQL;
-class KexiDataTable;
+class KexiDataTableView;
+class KexiMainWindow;
 
-class KEXI_HAND_QUERY_EXPORT KexiQueryDesigner : public KexiDialogBase
+namespace KexiPart
+{
+	class Item;
+};
+
+class KexiQueryDesigner : public KexiDialogBase
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesigner(KexiView *view, KexiQueryPartItem *item, 
-			QWidget *parent = 0, bool modeview = true);
-//		KexiQueryDesigner(KexiView *view,QWidget *parent, KexiQueryPartItem *item, bool modeview=true);
-//		KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name, KexiQueryPartItem *item,
-//		 bool modeview=true);
+		KexiQueryDesigner(KexiMainWindow *parent, const KexiPart::Item &i);
 		~KexiQueryDesigner();
-
-		virtual	KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
-
-		void	saveBack();
 
 	public slots:
 		void	query();
-		void	slotContextHelp(const QString &, const QString &);
-
-	signals:
-		void	queryExecuted(QString statement, bool succeed);
+		void	fastQuery();
 
 	protected:
-#ifndef KEXI_NO_PRINT
-		virtual void print(KPrinter &p);
-#endif
+		virtual QWidget*		mainWidget();
+
+	signals:
+		void	queryExecuted(QString statement, bool succeed, const QString &err);
 
 	protected slots:
 		void	viewChanged(QWidget *);
-		void	slotClosing(KexiDialogBase *);
 
 	private:
 		QTabWidget			*m_tab;
 
 		int				m_currentView;
 		QString				m_statement;
-		KexiDataProvider::ParameterList m_parameters;
-
-		KexiQueryDesignerGuiEditor	*m_editor;
 		KexiQueryDesignerSQL		*m_sql;
-		KexiDataTable			*m_queryView;
-
-		KexiQueryPartItem		*m_queryPartItem;
+		KexiDataTableView		*m_queryView;
+		KexiQueryDesignerGuiEditor	*m_editor;
 };
 
 #endif
+

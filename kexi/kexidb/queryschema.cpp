@@ -166,6 +166,7 @@ void QuerySchema::setParentTable(TableSchema *table)
 
 void QuerySchema::addTable(TableSchema *table)
 {
+	kdDebug() << "QuerySchema::addTable() " << (void *)table << endl;
 	if (!table)
 		return;
 	m_tables.append(table);

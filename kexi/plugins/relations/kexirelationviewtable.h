@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002, 2003	Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003		Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,15 +28,19 @@
 
 class KexiRelationView;
 class KexiRelationViewTable;
-class KexiDBTable;
 class KexiRelationViewTableContainerHeader;
 
-class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainer : public QFrame
+namespace KexiDB
+{
+	class TableSchema;
+}
+
+class KexiRelationViewTableContainer : public QFrame
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationViewTableContainer(KexiRelationView *parent, QString table, const KexiDBTable *t);
+		KexiRelationViewTableContainer(KexiRelationView *parent, KexiDB::TableSchema *t);
 		~KexiRelationViewTableContainer();
 
 		int			globalY(const QString &field);
@@ -78,7 +82,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainer : public QFrame
 };
 
 
-class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableItem : public KListViewItem
+class KexiRelationViewTableItem : public KListViewItem
 {
 	public:
 		KexiRelationViewTableItem(QListView *parent, QListViewItem *after,
@@ -87,12 +91,12 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableItem : public KListViewItem
 };
 
 
-class KEXI_HAND_RELAT_EXPORT KexiRelationViewTable : public KListView
+class KexiRelationViewTable : public KListView
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationViewTable(QWidget *parent, KexiRelationView *view, QString table, const KexiDBTable *t, const char *name=0);
+		KexiRelationViewTable(QWidget *parent, KexiRelationView *view, KexiDB::TableSchema *t, const char *name=0);
 		~KexiRelationViewTable();
 
 		QString			table() const { return m_table; };

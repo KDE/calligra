@@ -217,6 +217,7 @@ KexiProject::items(KexiPart::Info *i)
 	KexiDB::Cursor *cursor = m_connection->executeQuery(
 		"SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = " 
 		+ QString::number(i->projectPartID()), KexiDB::Cursor::Buffered);
+	kdDebug() << "KexiProject::items(): cursor handle is:" << cursor << endl;
 	if(!cursor)
 		return 0;
 

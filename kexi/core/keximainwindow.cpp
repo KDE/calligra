@@ -39,6 +39,7 @@
 #include <kedittoolbar.h>
 #include <kdeversion.h>
 #include <kglobalsettings.h>
+#include <kparts/componentfactory.h>
 
 #include "kexibrowser.h"
 #include "kexiactionproxy.h"
@@ -51,6 +52,7 @@
 #include "kexiprojectdata.h"
 #include "kexi.h"
 #include "kexistatusbar.h"
+#include "kexirelationpart.h"
 
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiConnSelector.h"
@@ -66,6 +68,9 @@
 #else
 # include <kuser.h>
 #endif
+
+//first fix the geometry
+#define KEXI_NO_CTXT_HELP 1
 
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
 
@@ -112,6 +117,7 @@ class KexiMainWindow::Private
 		KMdiToolViewAccessor* navToolWindow;
 
 		QWidget *focus_before_popup;
+		KexiRelationPart *relationPart;
 
 		bool block_KMdiMainFrm_eventFilter : 1;
 	Private()
@@ -125,6 +131,7 @@ class KexiMainWindow::Private
 		curDialog=0;
 		block_KMdiMainFrm_eventFilter=false;
 		focus_before_popup=0;
+		relationPart=0;
 	}
 };
 
@@ -562,7 +569,7 @@ void KexiMainWindow::initContextHelp() {
 		"hesitate to report it at our <A href=\"http://www.kexi-project.org/cgi-bin/bug.pl\"> issue "
 		"tracking system </A>.<BR><HR><BR>If you would like to <B>join</B> our effort, the <B>development</B> documentation "
 		"at <A href=\"http://www.kexi-project.org\">www.kexi-project.org</A> is a good starting point."),0);
-	addToolWindow(d->ctxH,KDockWidget::DockRight,getMainDockWidget(),20);
+	addToolWindow(d->ctxH,KDockWidget::DockBottom | KDockWidget::DockLeft,getMainDockWidget(),20);
 #endif
 }
 
@@ -1065,7 +1072,11 @@ KexiMainWindow::slotProjectClose()
 
 void KexiMainWindow::slotProjectRelations()
 {
-	//TODO
+	KexiRelationPart *p = relationPart();
+	if(!p)
+		return;
+
+	p->createWindow(this);
 }
 
 void KexiMainWindow::slotAction(const QString& act_id)
@@ -1170,6 +1181,16 @@ KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
 		}
 	}
 	KMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
+}
+
+KexiRelationPart *
+KexiMainWindow::relationPart()
+{
+	if(d->relationPart)
+		return d->relationPart;
+
+	d->relationPart = KParts::ComponentFactory::createInstanceFromLibrary<KexiRelationPart>("kexihandler_relation", this, "prel");
+	return d->relationPart;
 }
 
 void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
@@ -1352,6 +1373,8 @@ bool KexiMainWindow::removeObject( KexiPart::Item *item )
 
 	return true;
 }
+
+
 
 #include "keximainwindow.moc"
 

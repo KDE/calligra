@@ -22,48 +22,47 @@
 #include <qlayout.h>
 #include <qstatusbar.h>
 #include <qregexp.h>
+#include <qlayout.h>
 
 #include <klocale.h>
 #include <kaction.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kxmlguiclient.h>
 #include <klineeditdlg.h>
 #include <klistview.h>
 
-#include <koStore.h>
+#include <kexidb/cursor.h>
+#include <kexidb/connection.h>
+#include <kexidb/parser/parser.h>
 
-#ifndef KEXI_NO_PRINT
-# include <kprinter.h>
-#endif
+#include <kexipartitem.h>
+#include <keximainwindow.h>
+#include <kexidatatableview.h>
+#include <kexiproject.h>
 
-#include <kexiDB/kexidberror.h>
-
-#include "kexiquerypartitem.h"
-#include "kexidatatable.h"
+#include "kexiquerydesignersqleditor.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerydesignersql.h"
 #include "kexiquerydesigner.h"
-#include "kexiparameterlisteditor.h"
-#include "kexidataprovider.h"
 
-KexiQueryDesigner::KexiQueryDesigner(KexiView *view, KexiQueryPartItem *item, 
-	QWidget *parent, bool modeview)
-	: KexiDialogBase(view, item, parent)
-	, m_queryPartItem(item)
+KexiQueryDesigner::KexiQueryDesigner(KexiMainWindow *win, const KexiPart::Item &it)
+	: KexiDialogBase(win, it.name())
 {
-//	QVBoxLayout *l = new QVBoxLayout(this);
-//	setCaption(i18n("%1 - Query").arg(item->title()));
+	setIcon(SmallIcon("query"));
+	QVBoxLayout *l = new QVBoxLayout(this);
 
 	m_tab = new QTabWidget(this);
 	m_tab->setTabPosition(QTabWidget::Bottom);
-	gridLayout()->addWidget(m_tab, 0, 0);
+	l->addWidget(m_tab);
+//	gridLayout()->addWidget(m_tab, 0, 0);
 
-	m_editor = new KexiQueryDesignerGuiEditor(view, this, this, item, "design");
-	connect(m_editor, SIGNAL(contextHelp(const QString &, const QString &)), this,
-	 SLOT(slotContextHelp(const QString &, const QString &)));
+//	m_editor = new KexiQueryDesignerGuiEditor(view, this, this, item, "design");
+//	connect(m_editor, SIGNAL(contextHelp(const QString &, const QString &)), this,
+//	 SLOT(slotContextHelp(const QString &, const QString &)));
+	m_editor = new KexiQueryDesignerGuiEditor(this, win);
 	m_sql = new KexiQueryDesignerSQL(this);
-	m_queryView = new KexiDataTable(m_view, "Query View", "query_view", this, true);
+	m_queryView = new KexiDataTableView(this);
+//	m_queryView = new KexiDataTable(m_view, "Query View", "query_view", this, true);
 //	m_view = new KexiDataTable(view, this, "sql", 0, true);
 
 	m_tab->insertTab(m_editor, SmallIcon("state_edit"), i18n("Composer"));
@@ -72,14 +71,11 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view, KexiQueryPartItem *item,
 
 	m_currentView = 0;
 
-	QStatusBar *status = new QStatusBar(this);
-	gridLayout()->addWidget(status, 1, 0);
+	registerDialog();
 
-	registerAs(DocumentWindow, item->fullIdentifier());
-	setContextHelp(i18n("Queries"), i18n("After having set up relations you can drag fields from different tables into the \"query table\"."));
-
+/*
 	item->setClient(this);
-	m_parameters = item->parameters();
+m_parameters = item->parameters();
 	m_editor->setPrameters(m_parameters);
 
 	if(modeview)
@@ -89,29 +85,53 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view, KexiQueryPartItem *item,
 
 		query();
 	}
+*/
 
+	connect(m_sql, SIGNAL(queryShortcut()), this, SLOT(fastQuery()));
 	connect(m_tab, SIGNAL(currentChanged(QWidget *)), this, SLOT(viewChanged(QWidget *)));
-	connect(this, SIGNAL(closing(KexiDialogBase *)), this, SLOT(slotClosing(KexiDialogBase *)));
+//	connect(this, SIGNAL(closing(KexiDialogBase *)), this, SLOT(slotClosing(KexiDialogBase *)));
+}
+
+QWidget *
+KexiQueryDesigner::mainWidget()
+{
+	return m_queryView;
 }
 
 void
 KexiQueryDesigner::query()
 {
-	m_queryPartItem->setSQL(m_statement);
-	m_queryPartItem->setParameters(m_parameters);
-	KexiDBRecordSet *rec = m_queryPartItem->records(this);
-	if (rec) {
-		m_queryView->setDataSet(rec);
-		emit queryExecuted(m_statement,true);
+	kdDebug() << "KexiQueryDesigner::query()" << endl;
+//	KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(m_statement);
+
+	KexiDB::Cursor *rec;
+	KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
+	parser->parse(m_statement);
+	if(parser->operation() == KexiDB::Parser::OP_Select)
+		rec = mainWin()->project()->dbConnection()->executeQuery(*parser->select());
+	else
+		rec = mainWin()->project()->dbConnection()->executeQuery(m_statement);
+
+	if (rec)
+	{
+		m_queryView->setData(rec);
+		emit queryExecuted(m_statement, true, "");
 	}
 	else
-		emit queryExecuted(m_statement,false);
+	{
+		m_tab->setCurrentPage(1);
+		m_sql->editor()->jump(parser->error().at());
+		if(!parser->error().error().isEmpty())
+			emit queryExecuted(m_statement, false, parser->error().error());
+		else
+			emit queryExecuted(m_statement, true, "");
+	}
 }
 
 void
 KexiQueryDesigner::viewChanged(QWidget *w)
 {
-	int view = m_tab->indexOf(w);
+/*	int view = m_tab->indexOf(w);
 
 	if(view == 0)
 	{
@@ -135,45 +155,23 @@ KexiQueryDesigner::viewChanged(QWidget *w)
 			query();
 		}
 	}
-}
+*/
 
-void
-KexiQueryDesigner::slotContextHelp(const QString &t, const QString &m)
-{
-	setContextHelp(t, m);
-}
-
-#ifndef KEXI_NO_PRINT
-void
-KexiQueryDesigner::print(KPrinter &p)
-{
-	m_queryView->print(p);
-}
-#endif
-
-void
-KexiQueryDesigner::saveBack()
-{
-	kdDebug() << "KexiQueryDesigner::saveBack() e=" << m_editor << endl;
-
-	if(m_currentView == 0)
+	if(m_tab->indexOf(w) != 1)
 	{
-		m_queryPartItem->setSQL(m_editor->getQuery());
-		m_editor->getParameters(m_parameters);
-		m_queryPartItem->setParameters(m_parameters);
-	}
-	else if(m_currentView == 1)
-	{
-		m_queryPartItem->setSQL(m_sql->getQuery());
+		m_statement = m_sql->getQuery();
+		m_currentView = 1;
+		query();
 	}
 }
 
 void
-KexiQueryDesigner::slotClosing(KexiDialogBase *)
+KexiQueryDesigner::fastQuery()
 {
-	kdDebug() << "KexiQueryDesigner::slotClosing()" << endl;
-	saveBack();
-	m_queryPartItem->setClient(0);
+	kdDebug() << "KexiQueryDesigner::fastQuery()" << endl;
+	m_statement = m_sql->getQuery();
+	m_tab->setCurrentPage(2);
+	query();
 }
 
 KexiQueryDesigner::~KexiQueryDesigner()

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2004   Lucijan Busch <lucijan@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,14 +26,13 @@
 class QPainter;
 class KexiRelationViewTableContainer;
 class KexiRelationView;
-struct SourceConnection;
+//struct SourceConnection;
 
 class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
 {
 	public:
 
-		KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl,KexiRelationViewTableContainer *rcvTbl,
-		  SourceConnection &, KexiRelationView *parent);
+		KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl, KexiRelationViewTableContainer *rcvTbl, KexiRelationView *parent);
 		~KexiRelationViewConnection();
 
 
@@ -55,7 +54,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
 		KexiRelationViewTableContainer	*rcvTable() { return m_rcvTable; }
 
 		bool matchesPoint(const QPoint &p, int tolerance=3);
-		SourceConnection	connection() { return m_conn; }
+//		SourceConnection	connection() { return m_conn; }
 
 	private:
 		KexiRelationViewTableContainer	*m_srcTable;
@@ -66,7 +65,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
 		QRect				m_oldRect;
 
 		bool				m_selected;
-		SourceConnection		m_conn;
+//		SourceConnection		m_conn;
 
 		KexiRelationView		*m_parent;
 };

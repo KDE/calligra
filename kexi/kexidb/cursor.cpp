@@ -132,7 +132,8 @@ bool Cursor::open()
 	if (!m_opened)
 		return false;
 	m_validRecord = false;
-	
+
+//luci:	WHAT_EXACTLY_SHOULD_THAT_BE?
 //	if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
 	if (m_conn->driver()->beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY) {
 		KexiDBDbg << "READ AHEAD:" << endl;

@@ -825,6 +825,9 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 	if (querySchema.fieldCount()<1)
 		return QString::null;
 
+	if (!querySchema.statement().isEmpty())
+		return querySchema.statement();
+
 	QString sql;
 	Field::List *fields = querySchema.fields();
 	for (Field *f = fields->first(); f; f = fields->next()) {

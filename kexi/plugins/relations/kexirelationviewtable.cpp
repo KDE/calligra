@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
@@ -33,8 +33,7 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
-#include "kexiDB/kexidbtable.h"
-#include "kexiDB/kexidbfield.h"
+#include "kexidb/tableschema.h"
 #include "kexidragobjects.h"
 #include "kexirelationviewtable.h"
 #include "kexirelationview.h"
@@ -42,7 +41,7 @@
 void getTitleBarColors( const QPalette &pal, 
 	QColor &activeBG, QColor &activeFG, QColor &inactiveBG, QColor &inactiveFG );
 
-KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, QString table, const KexiDBTable *t)
+KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, KexiDB::TableSchema *t)
  : QFrame(parent,"KexiRelationViewTableContainer" )
 	, m_mousePressed(false)
 {
@@ -62,14 +61,14 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 	QVBoxLayout *lyr = new QVBoxLayout(this,2,1); //js: using Q*BoxLayout is a good idea
 #endif
 
-	m_tableHeader = new KexiRelationViewTableContainerHeader(table, this);
+	m_tableHeader = new KexiRelationViewTableContainerHeader(t->name(), this);
 	m_tableHeader->unsetFocus();
 	m_tableHeader->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 	lyr->addWidget(m_tableHeader);
 	connect(m_tableHeader,SIGNAL(moved()),this,SLOT(moved()));
 	connect(m_tableHeader, SIGNAL(endDrag()), this, SIGNAL(endDrag()));
 
-	m_tableView = new KexiRelationViewTable(this, parent, table, t, "KexiRelationViewTable");
+	m_tableView = new KexiRelationViewTable(this, parent, t, "KexiRelationViewTable");
 	m_tableView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
 	m_tableView->setMaximumSize( m_tableView->sizeHint() );
 //	m_tableView->resize( m_tableView->sizeHint() );
@@ -280,7 +279,7 @@ void KexiRelationViewTableContainerHeader::unsetFocus()
 	setPaletteForegroundColor(m_inactiveFG);
 }
 
-bool KexiRelationViewTableContainerHeader::eventFilter(QObject *obj, QEvent *ev) 
+bool KexiRelationViewTableContainerHeader::eventFilter(QObject *, QEvent *ev) 
 {
 	if (ev->type()==QEvent::MouseMove)
 	{
@@ -359,12 +358,11 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
 
 //=====================================================================================
 
-KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *view, QString table,
-                                             const KexiDBTable *t, const char *name)
+KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *view, KexiDB::TableSchema *t, const char *name)
  : KListView(parent)
 {
 //	m_fieldList = t.;
-	m_table = table;
+//	m_table = table;
 	m_view = view;
 //	m_parent = parent;
 
@@ -390,15 +388,14 @@ KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *
 
 	int order=0;
 
-	KListViewItem *item = 0;
-	bool hasPKeys = t->hasPrimaryKeys();
+	bool hasPKeys = true; //t->hasPrimaryKeys();
 	for(uint i=0; i < t->fieldCount(); i++)
 	{
-		KexiDBField f = t->field(i);
-		item = new KexiRelationViewTableItem(this, item, QString::number(order), f.name());
+		KexiDB::Field *f = t->field(i);
+		KListViewItem *item = new KexiRelationViewTableItem(this, item, QString::number(order), f->name());
 //		item = item ? new KexiRelationViewTableItem(this, item, QString::number(order), f.name())
 //			: new KexiRelationViewTableItem(this, QString::number(order), f.name());
-		if(f.primary_key() || f.unique_key())
+		if(f->isPrimaryKey() || f->isUniqueKey())
 			item->setPixmap(1, m_keyIcon);
 		else if (hasPKeys) {
 			item->setPixmap(1, m_noIcon);
@@ -473,6 +470,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 
 		QString rcvField = recever->text(1);
 
+#if 0
 		SourceConnection s;
 		s.srcTable = srcTable;
 		s.rcvTable = m_table;
@@ -481,6 +479,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 
 //		m_parent->addConnection(s);
 		m_view->addConnection(s, false);
+#endif
 
 		kdDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " << m_table << ":" << rcvField << endl;
 		ev->accept();

@@ -38,7 +38,9 @@ KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiQueryDesigner *parent)
 	QHBoxLayout *b = new QHBoxLayout(this);
 	b->addWidget(l);
 
-	connect(parent, SIGNAL(queryExecuted(QString, bool)), m_history, SLOT(addEvent(QString, bool)));
+	connect(parent, SIGNAL(queryExecuted(QString, bool, const QString &)), m_history, SLOT(addEvent(QString, bool, const QString &)));
+
+	connect(m_editor, SIGNAL(execQ()), parent, SLOT(fastQuery()));
 }
 
 QString

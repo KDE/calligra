@@ -1,0 +1,14 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexirelationpart" version="2">
+<MenuBar>
+  <Menu name="project">
+    <text>&amp;Project</text>
+    <Action name="relations"/>
+  </Menu>
+</MenuBar>
+
+<ToolBar name="projectToolBar" fullWidth="false">
+  <text>Project</text>
+  <Action name="relations"/>
+</ToolBar>
+</kpartgui>

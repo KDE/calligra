@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003   Lucijan Busch <lucijan@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,48 +20,22 @@
 #ifndef KEXIQUERYPART_H
 #define KEXIQUERYPART_H
 
-class QPixmap;
+#include <kexipart.h>
+#include <kexipartitem.h>
 
-#include "kexiprojecthandler.h"
-#include "kexidataprovider.h"
+class KexiMainWin;
 
-class KEXI_HAND_QUERY_EXPORT KexiQueryPart : public KexiProjectHandler, KexiDataProvider
+class KexiQueryPart : public KexiPart::Part
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryPart(QObject *project,const char *,const QStringList &);
+		KexiQueryPart(QObject *parent, const char *name, const QStringList &);
+		~KexiQueryPart();
 
-		virtual QString				name();
-		virtual QString				groupName();
-		virtual QString				mime();
-		virtual bool				visible();
-
-
-                virtual void hookIntoView(KexiView *view);
-
-//                virtual void saveXML(QDomDocument&);
-//		virtual void loadXML(const QDomDocument&);
-		virtual void store (KoStore *);
-                virtual void load  (KoStore *);
-
-
-		virtual QPixmap				groupPixmap();
-		virtual QPixmap				itemPixmap();
-
-		virtual QStringList datasets(QWidget*);
-		virtual QStringList datasetNames(QWidget*);
-		virtual KexiDB::Cursor *records(QWidget*,const QString& identifier,Parameters params);
-		virtual QStringList fields(QWidget*,const QString& identifier);
-
-		virtual KexiDataProvider	*provider() { return this; }
-
-	protected:
-		friend class KexiQueryPartProxy;
-
-	signals:
-		virtual	void	itemListChanged(KexiProjectHandler *);
-
+		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, bool design);
+		virtual QString instanceName() const;
 };
 
 #endif
+

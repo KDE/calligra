@@ -38,6 +38,13 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public QWidget
 		~KexiQueryDesignerSQLEditor();
 
 		QString		getText();
+		void		jump(int col);
+
+	protected:
+		virtual bool	eventFilter(QObject *w, QEvent *ev);
+
+	signals:
+		void		execQ();
 
 	private:
 #ifndef Q_WS_WIN //(TEMP)

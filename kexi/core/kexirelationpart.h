@@ -17,26 +17,28 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYDESIGNERGUIEDITOR_H
-#define KEXIQUERYDESIGNERGUIEDITOR_H
+#ifndef KEXIRELATIONPART_H
+#define KEXIRELATIONPART_H
 
-#include <qwidget.h>
+#include <qobject.h>
 
 class KexiMainWindow;
-class KexiTableViewData;
-class KexiTableView;
+class KexiDialogBase;
+class QWidget;
 
-class KexiQueryDesignerGuiEditor : public QWidget
+/**
+ * this is a virtual prototype for the relation implementation
+ */
+class KexiRelationPart : public QObject
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerGuiEditor(QWidget *parent, KexiMainWindow *win);
-		~KexiQueryDesignerGuiEditor();
+		KexiRelationPart(QObject *parent, const char *name, const QStringList &);
+		virtual ~KexiRelationPart();
 
-	private:
-		KexiTableViewData	*m_data;
-		KexiTableView		*m_table;
+		virtual KexiDialogBase *createWindow(KexiMainWindow *parent)=0;
+		virtual QWidget *createWidget(QWidget *parent)=0;
 };
 
 #endif

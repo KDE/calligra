@@ -17,27 +17,37 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIQUERYDESIGNERGUIEDITOR_H
-#define KEXIQUERYDESIGNERGUIEDITOR_H
+#include "kexirelationmaindlg.h"
+#include "kexirelationview.h"
+#include "kexirelationpartimpl.h"
 
-#include <qwidget.h>
-
-class KexiMainWindow;
-class KexiTableViewData;
-class KexiTableView;
-
-class KexiQueryDesignerGuiEditor : public QWidget
+KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const char *name, const QStringList &args)
+ : KexiRelationPart(parent, name, args)
 {
-	Q_OBJECT
+	kdDebug() << "KexiRelationPart()" << endl;
+}
 
-	public:
-		KexiQueryDesignerGuiEditor(QWidget *parent, KexiMainWindow *win);
-		~KexiQueryDesignerGuiEditor();
+KexiDialogBase *
+KexiRelationPartImpl::createWindow(KexiMainWindow *win)
+{
+	kdDebug() << "KexiRelationPartImpl::createWindow()" << endl;
+	KexiRelationMainDlg *dlg = new KexiRelationMainDlg(win);
+	dlg->show();
 
-	private:
-		KexiTableViewData	*m_data;
-		KexiTableView		*m_table;
-};
+	return dlg;
+}
 
-#endif
+QWidget *
+KexiRelationPartImpl::createWidget(QWidget *parent)
+{
+	return new KexiRelationView(parent);
+}
+
+KexiRelationPartImpl::~KexiRelationPartImpl()
+{
+}
+
+K_EXPORT_COMPONENT_FACTORY( kexihandler_relation, KGenericFactory<KexiRelationPartImpl>("relationplugin") )
+
+#include "kexirelationpartimpl.moc"
 

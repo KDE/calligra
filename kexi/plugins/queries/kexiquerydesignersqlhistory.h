@@ -31,7 +31,7 @@ class QSimpleRichText;
 class KEXI_HAND_QUERY_EXPORT HistoryEntry
 {
 	public:
-		HistoryEntry(bool success, const QTime &time, const QString &statement, int y);
+		HistoryEntry(bool success, const QTime &time, const QString &statement, int y, const QString &error = QString::null);
 		~HistoryEntry();
 
 		QRect	geometry(int y, int width, QFontMetrics f);
@@ -48,6 +48,7 @@ class KEXI_HAND_QUERY_EXPORT HistoryEntry
 		bool	m_succeed;
 		QTime	m_execTime;
 		QString	m_statement;
+		QString m_error;
 		QSimpleRichText	*m_formated;
 
 		int	m_y;
@@ -68,7 +69,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
 		void		contextMenu(const QPoint &pos, HistoryEntry *e);
 
 	public slots:
-		void		addEvent(QString q, bool s);
+		void		addEvent(QString q, bool s, const QString &error);
 
 		void		slotToClipboard();
 

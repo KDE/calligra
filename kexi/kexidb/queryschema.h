@@ -177,6 +177,12 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		*/
 		QValueVector<uint> pkeyFieldsOrder();
 
+		//! \return a preset statement (if any)
+		QString      statement() { return m_statement; }
+
+		//! forces a query statement (i.e. no statement is composed from QuerySchema's content)
+		void         setStatement(const QString &s) { m_statement = s; }
+
 	protected:
 		void init();
 
@@ -215,6 +221,9 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		//! order of PKEY fields (e.g. for updateRow() )
 		QValueVector<uint> *m_pkeyFieldsOrder;
+
+		/*! forced (predefined) statement */
+		QString      m_statement;
 
 	friend class Connection;
 };
@@ -276,10 +285,12 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		
 		//! \return string for debugging purposes.
 		virtual QString debugString() const;
+
 	
 	protected:
 		/*! Table schema for this asterisk */
 		TableSchema* m_table;
+
 
 	friend class QuerySchema;
 };
