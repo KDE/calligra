@@ -190,6 +190,9 @@ public:
   bool null;
   unsigned alignX;
   unsigned alignY;
+  bool wrap;
+  unsigned indentLevel;
+  unsigned rotationAngle;
 };
 
 FormatAlignment::FormatAlignment()
@@ -222,9 +225,12 @@ FormatAlignment& FormatAlignment::operator=( const FormatAlignment& align )
 // assign from another alignment
 FormatAlignment& FormatAlignment::assign( const FormatAlignment& align )
 {
-  d->null   = align.isNull();
-  d->alignX = align.alignX();
-  d->alignY = align.alignY();
+  d->null         = align.isNull();
+  d->alignX        = align.alignX();
+  d->alignY        = align.alignY();
+  d->wrap          = align.wrap();
+  d->indentLevel   = align.indentLevel();
+  d->rotationAngle = align.rotationAngle();
   return *this;
 }
 
@@ -247,6 +253,39 @@ unsigned FormatAlignment::alignY() const
 void FormatAlignment::setAlignY( unsigned ya )
 {
   d->alignY = ya;
+  d->null = false;
+}
+
+bool FormatAlignment::wrap() const
+{
+  return d->wrap;
+}
+
+void FormatAlignment::setWrap( bool w )
+{
+  d->wrap = w;
+  d->null = false;
+}
+
+unsigned FormatAlignment::indentLevel() const
+{
+  return d->indentLevel;
+}
+
+void FormatAlignment::setIndentLevel( unsigned i )
+{
+  d->indentLevel = i;
+  d->null = false;
+}
+
+unsigned FormatAlignment::rotationAngle() const
+{
+  return d->rotationAngle;
+}
+
+void FormatAlignment::setRotationAngle( unsigned r )
+{
+  d->rotationAngle = r;
   d->null = false;
 }
 

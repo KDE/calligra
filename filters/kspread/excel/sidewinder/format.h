@@ -224,7 +224,49 @@ public:
    * \sa alignY
    */
    void setAlignY( unsigned xa );
-    
+   
+  /**
+   * Returns true if the text should be wrapped at right border.
+   *
+   * \sa setWrap
+   */  
+   bool wrap() const;
+   
+  /**
+   * Sets whether the text should be wrapped at right border.
+   *
+   * \sa setWrap
+   */  
+   void setWrap( bool w );
+   
+  /**
+   * Returns the indentation level.
+   *
+   * \sa setIndentLevel
+   */  
+   unsigned indentLevel() const;
+   
+  /**
+   * Sets the indentation level.
+   *
+   * \sa indentLevel
+   */  
+   void setIndentLevel( unsigned i );
+   
+  /**
+   * Returns the text rotation angle.
+   *
+   * \sa setRotationAngle
+   */  
+   unsigned rotationAngle() const;
+   
+  /**
+   * Sets the text rotation angle.
+   *
+   * \sa rotationAngle
+   */  
+   void setRotationAngle( unsigned r );
+       
 private:  
   class Private;
   Private *d;
