@@ -94,6 +94,7 @@ AC_OUTPUT( \
 	kohtml/Makefile \
 	kohtml/toolbar/Makefile \
 	kimage/Makefile \
+	kimage/pics/Makefile \
 	kpresenter/Makefile \
 	kpresenter/autoformEdit/Makefile \
 	kpresenter/autoforms/Makefile \
@@ -124,6 +125,7 @@ AC_OUTPUT( \
 	kdiagramm/Makefile \
 	kdiagramm/pics/Makefile \
 	kimage/Makefile \
+	kimage/pics/Makefile \
 	koshell/Makefile \
 	lib/Makefile \
 	lib/kofficecore/Makefile \
