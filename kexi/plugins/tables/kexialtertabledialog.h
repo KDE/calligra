@@ -20,16 +20,15 @@
 #ifndef KEXIALTERTABLEDIALOG_H
 #define KEXIALTERTABLEDIALOG_H
 
-#include <qptrvector.h>
 #include <kexidatatable.h>
+#include <kexipropertybuffer.h>
 
 class KPopupMenu;
 class KexiMainWindow;
 class KexiTableView;
 class KexiTableItem;
 class KexiPropertyEditor;
-class KexiProperty;
-class KexiPropertyBuffer;
+class KexiTableViewPropertyBuffer;
 
 namespace KexiDB
 {
@@ -43,8 +42,6 @@ namespace KexiDB
 class KexiAlterTableDialog : public KexiDataTable
 {
 	Q_OBJECT
-
-	typedef QPtrVector<KexiPropertyBuffer> FieldsBuffer;
 
 	public:
 		/*! Creates alter table dialog. \a table may be NULL 
@@ -71,8 +68,9 @@ class KexiAlterTableDialog : public KexiDataTable
 
 		/*! Creates a new property buffer for \a field. 
 		 The buffer will be asigned to \a row, and owned by this dialog. 
+		 If \a newOne is true, the property buffer will be marked as newly created.
 		 \return newly created property buffer. */
-		KexiPropertyBuffer * createPropertyBuffer( int row, KexiDB::Field *field );
+		KexiPropertyBuffer * createPropertyBuffer( int row, KexiDB::Field *field, bool newOne = false );
 
 		virtual bool beforeSwitchTo(int mode, bool &cancelled);
 
@@ -89,7 +87,7 @@ class KexiAlterTableDialog : public KexiDataTable
 		virtual bool storeData();
 
 	protected slots:
-		void slotCellSelected(int col, int row);
+//		void slotCellSelected(int col, int row);
 //		void slotUpdateRowActions(int row);
 
 		//! Called on property changes in property editor.
@@ -109,11 +107,9 @@ class KexiAlterTableDialog : public KexiDataTable
 		void slotAboutToUpdateRow(KexiTableItem* item, 
 			KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result);
 */
-
 		//! Called on row delete in a tableview.
-		void slotRowDeleted();
-
-		void slotEmptyRowInserted(KexiTableItem*, uint index);
+//		void slotRowDeleted();
+//		void slotEmptyRowInserted(KexiTableItem*, uint index);
 
 	private:
 //		KexiTableView *m_view;
@@ -122,7 +118,11 @@ class KexiAlterTableDialog : public KexiDataTable
 		KexiTableViewData *m_data;
 //		KexiDB::TableSchema *m_newTable; //!< new table schema
 //		KexiPropertyEditor *m_properties;
-		FieldsBuffer m_buffers; //!< buffer
+
+		KexiTableViewPropertyBuffer *m_buffers;
+
+//		KexiPropertyBuffer::Vector m_buffers; //!< prop. buffers vector
+
 //		QPtrDict<KexiDB::Field> m_newFields; //!< newly created fields 
 //		                                     //!< assigned for property buffers
 		int m_row; //!< used to know if a new row is selected in slotCellSelected()
