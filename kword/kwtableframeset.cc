@@ -1801,38 +1801,51 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
     if ( !m_currentCell )
         return;
     KWTableFrameSet::Cell *cell = static_cast<KWTableFrameSet::Cell *>(m_currentCell->frameSet());
-    KWFrameSet *fs = 0L;
-    switch( e->key() ) {
-        case QKeyEvent::Key_Up:
-        {
-            if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->prev())
-            {
-                KWTableFrameSet* tableFrame=tableFrameSet();
-                if ( cell->m_col > 0 )
-                    fs = tableFrame->getCell(  cell->m_row, cell->m_col - 1 );
-                else if ( cell->m_row > 0 )
-                    fs = tableFrame->getCell(  cell->m_row - 1,tableFrame->getCols() - 1 );
-                else
-                    fs = tableFrame->getCell( tableFrame->getRows() - 1,tableFrame->getCols() - 1 );
-            }
-        }
-        break;
-        case QKeyEvent::Key_Down:
-        {
-            if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->next())
-            {
-                KWTableFrameSet* tableFrame=tableFrameSet();
-                if ( cell->m_col+cell->m_cols < tableFrame->getCols()  )
-                    fs = tableFrame->getCell( cell->m_row+cell->m_rows-1, cell->m_col + cell->m_cols );
-                else if ( cell->m_row+cell->m_rows < tableFrame->getRows() )
-                    fs = tableFrame->getCell( cell->m_row + cell->m_rows, 0 );
-                else
-                    fs = tableFrame->getCell( 0, 0 );
-            }
-        }
-        break;
+    KWTextFrameSet *textframeSet=dynamic_cast<KWTextFrameSet *>(m_currentCell->frameSet());
+    bool moveToOtherCell=true;
+    if(textframeSet)
+    {
+        //don't move to other cell when we try to select
+        //a text
+        QTextDocument * textdoc = textframeSet->textDocument();
+        if(textdoc->hasSelection( QTextDocument::Standard ))
+            moveToOtherCell=false;
     }
+    KWFrameSet *fs = 0L;
 
+    if(moveToOtherCell)
+    {
+        switch( e->key() ) {
+            case QKeyEvent::Key_Up:
+            {
+                if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->prev())
+                {
+                    KWTableFrameSet* tableFrame=tableFrameSet();
+                    if ( cell->m_col > 0 )
+                        fs = tableFrame->getCell(  cell->m_row, cell->m_col - 1 );
+                    else if ( cell->m_row > 0 )
+                        fs = tableFrame->getCell(  cell->m_row - 1,tableFrame->getCols() - 1 );
+                    else
+                        fs = tableFrame->getCell( tableFrame->getRows() - 1,tableFrame->getCols() - 1 );
+                }
+            }
+            break;
+            case QKeyEvent::Key_Down:
+            {
+                if(!(static_cast<KWTextFrameSetEdit *>(m_currentCell))->getCursor()->parag()->next())
+                {
+                    KWTableFrameSet* tableFrame=tableFrameSet();
+                    if ( cell->m_col+cell->m_cols < tableFrame->getCols()  )
+                        fs = tableFrame->getCell( cell->m_row+cell->m_rows-1, cell->m_col + cell->m_cols );
+                    else if ( cell->m_row+cell->m_rows < tableFrame->getRows() )
+                        fs = tableFrame->getCell( cell->m_row + cell->m_rows, 0 );
+                    else
+                        fs = tableFrame->getCell( 0, 0 );
+                }
+            }
+            break;
+        }
+    }
     if ( fs )
         setCurrentCell( fs );
     else
