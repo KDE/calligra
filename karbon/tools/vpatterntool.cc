@@ -40,7 +40,7 @@
 #include <core/vselection.h>
 #include <commands/vfillcmd.h>
 
-VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool* tool, QWidget* parent )
+VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool*, QWidget* parent )
 	: KDialogBase( parent, "", true, i18n( "" ), Ok | Cancel )
 {
 	KIconLoader il;
