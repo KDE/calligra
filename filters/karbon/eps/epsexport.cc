@@ -25,6 +25,7 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 
+#include <kdebug.h>
 #include <kgenericfactory.h>
 #include <koDocumentInfo.h>
 #include <koFilter.h>
@@ -44,8 +45,7 @@
 #include "vsegment.h"
 #include "vselection.h"
 #include "vstroke.h"
-
-#include <kdebug.h>
+#include "vtext.h"
 
 
 //Define level1 operators:
@@ -285,6 +285,20 @@ EpsExport::visitVPath( VPath& path )
 
 	if( path.isClosed() )
 		*m_stream << l1_closepath << "\n";
+}
+
+void
+EpsExport::visitVText( VText& text )
+{
+	// TODO: currently we only export the glyphs if available.
+
+	// Export the glyphs (= VComposites).
+	VCompositeListIterator itr( text.glyphs() );
+
+	for( ; itr.current(); ++itr )
+	{
+		visit( *itr.current() );
+	}
 }
 
 void

@@ -97,6 +97,11 @@ XcfExport::convert( const QCString& from, const QCString& to )
 void
 XcfExport::visitVDocument( VDocument& document )
 {
+	// Offsets.
+	QIODevice::Offset current = 0;
+	QIODevice::Offset start = 0;
+	QIODevice::Offset end = 0;
+
 	// Save width and height for layer saving.
 	m_width  = static_cast<unsigned>( document.width()  * m_zoomX );
 	m_height = static_cast<unsigned>( document.height() * m_zoomY );
@@ -121,11 +126,6 @@ XcfExport::visitVDocument( VDocument& document )
 		// Property size in bytes.
 		<< static_cast<Q_UINT32>( 0 );
 
-
-	// Offsets.
-	QIODevice::Offset current = 0;
-	QIODevice::Offset start = 0;
-	QIODevice::Offset end = 0;
 
 	// Save current offset.
 	current = m_stream->device()->at();
@@ -172,12 +172,9 @@ XcfExport::visitVDocument( VDocument& document )
 	// Append a zero offset to indicate end of layer offsets.
 	*m_stream << static_cast<Q_UINT32>( 0 );
 
-	// Save current offset.
-	current = m_stream->device()->at();
 
 	// Return to end offset.
 	m_stream->device()->at( end );
-
 
 	// Append a zero offset to indicate end of channel offsets.
 	*m_stream << static_cast<Q_UINT32>( 0 );
@@ -413,7 +410,18 @@ XcfExport::writeLevel()
 
 
 		// TODO: Save tile.
-		*m_stream << static_cast<Q_UINT8>( 0 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<Q_UINT8>( 1 );
 
 
 		// Save end offset.

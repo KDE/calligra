@@ -51,6 +51,7 @@ private:
 	virtual void visitVComposite( VComposite& composite );
 	virtual void visitVDocument( VDocument& document );
 	virtual void visitVPath( VPath& path );
+	virtual void visitVText( VText& text );
 
 	void getStroke( const VStroke& stroke );
 	void getFill( const VFill& fill );
