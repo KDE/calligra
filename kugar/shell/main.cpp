@@ -31,7 +31,7 @@ int main(int argc,char **argv)
 		"http://www.cloudtemple.mksat.net");
 	about.addAuthor("Phil Thompson", I18N_NOOP("Former maintainer, Shell, Konqueror Part"),
 		"phil@river-bank.demon.co.uk");
-	about.addAuthor("Mutiny Bay Software", "Original author", "info@mutinybaysoftware.com");
+	about.addAuthor("Mutiny Bay Software", I18N_NOOP("Original author"), "info@mutinybaysoftware.com");
 
 	// Handle the command line.
 
