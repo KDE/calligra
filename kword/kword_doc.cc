@@ -60,6 +60,7 @@ KWordChild::KWordChild( KWordDocument *_wdoc, const QRect& _rect, KOffice::Docum
 KWordChild::KWordChild( KWordDocument *_wdoc )
     : KoDocumentChild()
 {
+
     m_pKWordDoc = _wdoc;
 }
 
@@ -727,300 +728,77 @@ bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
     __hf.inchHeaderBodySpacing = POINT_TO_INCH( 10 );
     __hf.inchFooterBodySpacing = POINT_TO_INCH( 10 );
 
-  // <DOC>
-  if ( doc.doctype().name() != "DOC" )
-    return false;
+    // <DOC>
+    if ( doc.doctype().name() != "DOC" )
+	return false;
 
-  QDOM::Element word = doc.documentElement();
+    QDOM::Element word = doc.documentElement();
 
-  if ( word.attribute( "mime" ) != "application/x-kword" )
-    return false;
+    if ( word.attribute( "mime" ) != "application/x-kword" )
+	return false;
 
-  QDOM::Element paper = doc.namedItem("PAPER").toElement();
-  if ( paper.isNull() )
-    return false;
-  __pgLayout.format = (KoFormat)paper.attribute( "format" ).toInt();
-  __pgLayout.orientation = (KoOrientation)paper.attribute( "orientation" ).toInt();
+    QDOM::Element paper = doc.namedItem("PAPER").toElement();
+    if ( paper.isNull() )
+	return false;
+    __pgLayout.format = (KoFormat)paper.attribute( "format" ).toInt();
+    __pgLayout.orientation = (KoOrientation)paper.attribute( "orientation" ).toInt();
+    __pgLayout.mmWidth = paper.attribute( "mmWidth" ).toInt();
+    __pgLayout.inchWidth = paper.attribute( "inchWidth" ).toInt();
+    __pgLayout.ptWidth = paper.attribute( "ptWidth" ).toInt();
+    __pgLayout.mmHeight = paper.attribute( "mmHeight" ).toInt();
+    __pgLayout.inchHeight = paper.attribute( "inchHeight" ).toInt();
+    __pgLayout.ptHeight = paper.attribute( "ptHeight" ).toInt();
+    __pgLayout.columns = paper.attribute( "columns" ).toInt();
+    __pgLayout.ptColumnSpacing = paper.attribute( "ptColumnspc" ).toInt();
+    __pgLayout.mmColumnSpacing = paper.attribute( "mmColumnspc" ).toInt();
+    __pgLayout.inchColumnSpacing = paper.attribute( "inchColumnspc" ).toInt();
+    __hf.header = (KoHFType)paper.attribute( "hType" ).toInt();
+    __hf.footer = (KoHFType)paper.attribute( "fType" ).toInt();
+    __hf.ptHeadBody = paper.attribute( "ptHeadBody" ).toInt();
+    __hf.mmHeadBody = paper.attribute( "mmHeadBody" ).toInt();
+    __hf.inchHeadBody = paper.attribute( "inchHeadBody" ).toInt();
+    __hf.ptFootBody = paper.attribute( "ptFootBody" ).toInt();
+    __hf.mmFootBody = paper.attribute( "mmFootBody" ).toInt();
+    __hf.inchFootBody = paper.attribute( "inchFootBody" ).toInt();
 
-		if ( ( *it ).m_strName == "format" )
-		    __pgLayout.format = ( KoFormat )atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "orientation" )
-		    __pgLayout.orientation = ( KoOrientation )atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "width" ) {
-		    __pgLayout.width = __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
-		    __pgLayout.ptWidth = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-		    __pgLayout.inchWidth = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-		} else if ( ( *it ).m_strName == "height" ) {
-		    __pgLayout.height = __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
-		    __pgLayout.ptHeight = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-		    __pgLayout.inchHeight = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-		} else if ( ( *it ).m_strName == "columns" )
-		    __columns.columns = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "columnspacing" ) {
-		    __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
-		    __columns.mmColumnSpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
-		    __columns.inchColumnSpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
-		} else if ( ( *it ).m_strName == "hType" )
-		    __hf.header = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "fType" )
-		    __hf.footer = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "spHeadBody" ) {
-		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
-		    __hf.mmHeaderBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
-		    __hf.inchHeaderBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
-		} else if ( ( *it ).m_strName == "spFootBody" ) {
-		    __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
-		    __hf.mmFooterBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
-		    __hf.inchFooterBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
-		} else if ( ( *it ).m_strName == "ptWidth" )
-		    __pgLayout.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "inchWidth" )
-		    __pgLayout.inchWidth = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "mmWidth" )
-		    __pgLayout.mmWidth = __pgLayout.width = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "ptHeight" )
-		    __pgLayout.ptHeight = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "inchHeight" )
-		    __pgLayout.inchHeight = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "mmHeight" )
-		    __pgLayout.mmHeight = __pgLayout.height = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "ptHeadBody" )
-		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "inchHeadBody" )
-		    __hf.inchHeaderBodySpacing = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "mmHeadBody" )
-		    __hf.mmHeaderBodySpacing = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "ptFootBody" )
-		    __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "inchFootBody" )
-		    __hf.inchFooterBodySpacing = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "mmFootBody" )
-		    __hf.mmFooterBodySpacing = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "mmColumnspc" )
-		    __columns.mmColumnSpacing = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "ptColumnspc" )
-		    __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "inchColumnspc" )
-		    __columns.inchColumnSpacing = atof( ( *it ).m_strValue.c_str() );
+    QDOM::Element border = paper.namedItem( "PAPERBORDERS" ).toElement();
+    if ( border.isNull() )
+	return false;
+    __pgLayout.ptLeft = border.attribute( "ptLeft" ).toInt();
+    __pgLayout.ptRight = border.attribute( "ptRight" ).toInt();
+    __pgLayout.ptTop = border.attribute( "ptTop" ).toInt();
+    __pgLayout.ptBottom = border.attribute( "ptBottom" ).toInt();
+    __pgLayout.mmLeft = border.attribute( "mmLeft" ).toInt();
+    __pgLayout.mmRight = border.attribute( "mmRight" ).toInt();
+    __pgLayout.mmTop = border.attribute( "mmTop" ).toInt();
+    __pgLayout.mmBottom = border.attribute( "mmBottom" ).toInt();
+    __pgLayout.inchLeft = border.attribute( "inchLeft" ).toInt();
+    __pgLayout.inchRight = border.attribute( "inchRight" ).toInt();
+    __pgLayout.inchTop = border.attribute( "inchTop" ).toInt();
+    __pgLayout.inchBottom = border.attribute( "inchBottom" ).toInt();
+    
+    QDOM::Element attribs = doc.namedItem( "ATTRIBUTES" ).toElement();
+    if ( attribs.isNull() )
+	return false;
+    processingType = attribs.attribute( "processing" ).toInt();
+    _header = (bool)attribs.attribute( "hasHeader" ).toInt();
+    _footer = (bool)attribs.attribute( "hasFooter" ).toInt();
+    unit = attribs.attribute( "unit" );
+    
+    if ( !footNoteManager.load( word.namedItem( "FOOTNOTE-GLOBAL" ).toElement() ) )
+	return FALSE;
+    
+    if ( !loadFrameSets( word.namedItem( "FRAMESETS" ).toElement() ) )
+	return FALSE;
+    
+    if ( !loadStyleTemplates( word.namedItem( "STYLES" ).toElement() ) )
+	return FALSE;
 
-    // PAPER
-    while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-
-	if ( name == "OBJECT" ) {
-	    KWordChild *ch = new KWordChild( this );
-	    ch->load( parser, lst );
-	    insertChild( ch );
-	} else if ( name == "PAPER" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "format" )
-		    __pgLayout.format = ( KoFormat )atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "orientation" )
-		    __pgLayout.orientation = ( KoOrientation )atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "width" ) {
-		    __pgLayout.width = __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
-		    __pgLayout.ptWidth = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-		    __pgLayout.inchWidth = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-		} else if ( ( *it ).m_strName == "height" ) {
-		    __pgLayout.height = __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
-		    __pgLayout.ptHeight = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-		    __pgLayout.inchHeight = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-		} else if ( ( *it ).m_strName == "columns" )
-		    __columns.columns = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "columnspacing" ) {
-		    __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
-		    __columns.mmColumnSpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
-		    __columns.inchColumnSpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
-		} else if ( ( *it ).m_strName == "hType" )
-		    __hf.header = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "fType" )
-		    __hf.footer = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "spHeadBody" ) {
-		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
-		    __hf.mmHeaderBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
-		    __hf.inchHeaderBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
-		} else if ( ( *it ).m_strName == "spFootBody" ) {
-		    __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
-		    __hf.mmFooterBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
-		    __hf.inchFooterBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
-		} else if ( ( *it ).m_strName == "ptWidth" )
-		    __pgLayout.ptWidth = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "inchWidth" )
-		    __pgLayout.inchWidth = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "mmWidth" )
-		    __pgLayout.mmWidth = __pgLayout.width = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "ptHeight" )
-		    __pgLayout.ptHeight = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "inchHeight" )
-		    __pgLayout.inchHeight = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "mmHeight" )
-		    __pgLayout.mmHeight = __pgLayout.height = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "ptHeadBody" )
-		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "inchHeadBody" )
-		    __hf.inchHeaderBodySpacing = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "mmHeadBody" )
-		    __hf.mmHeaderBodySpacing = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "ptFootBody" )
-		    __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "inchFootBody" )
-		    __hf.inchFooterBodySpacing = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "mmFootBody" )
-		    __hf.mmFooterBodySpacing = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "mmColumnspc" )
-		    __columns.mmColumnSpacing = atof( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "ptColumnspc" )
-		    __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
-		else if ( ( *it ).m_strName == "inchColumnspc" )
-		    __columns.inchColumnSpacing = atof( ( *it ).m_strValue.c_str() );
-		else
-		    cerr << "Unknown attrib PAPER:'" << ( *it ).m_strName << "'" << endl;
-	    }
-
-	    // PAPERBORDERS, HEAD, FOOT
-	    while ( parser.open( 0L, tag ) ) {
-		KOMLParser::parseTag( tag.c_str(), name, lst );
-		if ( name == "PAPERBORDERS" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
-		    vector<KOMLAttrib>::const_iterator it = lst.begin();
-		    for( ; it != lst.end(); it++ ) {
-			if ( ( *it ).m_strName == "left" ) {
-			    __pgLayout.left = __pgLayout.mmLeft = ( double )atof( ( *it ).m_strValue.c_str() );
-			    __pgLayout.ptLeft = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			    __pgLayout.inchLeft = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			} else if ( ( *it ).m_strName == "top" ) {
-			    __pgLayout.top = __pgLayout.mmTop = ( double )atof( ( *it ).m_strValue.c_str() );
-			    __pgLayout.ptTop = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			    __pgLayout.inchTop = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			} else if ( ( *it ).m_strName == "right" ) {
-			    __pgLayout.right = __pgLayout.mmRight = ( double )atof( ( *it ).m_strValue.c_str() );
-			    __pgLayout.ptRight = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			    __pgLayout.inchRight = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			} else if ( ( *it ).m_strName == "bottom" ) {
-			    __pgLayout.bottom = __pgLayout.mmBottom = ( double )atof( ( *it ).m_strValue.c_str() );
-			    __pgLayout.ptBottom = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			    __pgLayout.inchBottom = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-			} else if ( ( *it ).m_strName == "ptLeft" )
-			    __pgLayout.ptLeft = atoi( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "inchLeft" )
-			    __pgLayout.inchLeft = atof( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "mmLeft" )
-			    __pgLayout.mmLeft = __pgLayout.left = atof( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "ptRight" )
-			    __pgLayout.ptRight = atoi( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "inchRight" )
-			    __pgLayout.inchRight = atof( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "mmRight" )
-			    __pgLayout.mmRight = __pgLayout.right = atof( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "ptTop" )
-			    __pgLayout.ptTop = atoi( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "inchTop" )
-			    __pgLayout.inchTop = atof( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "mmTop" )
-			    __pgLayout.mmTop = __pgLayout.top = atof( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "ptBottom" )
-			    __pgLayout.ptBottom = atoi( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "inchBottom" )
-			    __pgLayout.inchBottom = atof( ( *it ).m_strValue.c_str() );
-			else if ( ( *it ).m_strName == "mmBottom" )
-			    __pgLayout.mmBottom = __pgLayout.bottom = atof( ( *it ).m_strValue.c_str() );
-			else
-			    cerr << "Unknown attrib 'PAPERBORDERS:" << ( *it ).m_strName << "'" << endl;
-		    }
-		}
-		else
-		    cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
-
-		if ( !parser.close( tag ) ) {
-		    cerr << "ERR: Closing Child" << endl;
-		    return false;
-		}
-	    }
-
-	}
-
-	else if ( name == "ATTRIBUTES" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "processing" )
-		    processingType = static_cast<ProcessingType>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "standardpage" )
-				     ;
-		else if ( ( *it ).m_strName == "hasHeader" )
-		    _header = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "hasFooter" )
-		    _footer = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-		else if ( ( *it ).m_strName == "unit" )
-		    unit = correctQString( ( *it ).m_strValue.c_str() );
-	    }
-	}
-
-	else if ( name == "FOOTNOTEMGR" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-	    }
-	    footNoteManager.load( parser, lst );
-	}
-
-	else if ( name == "FRAMESETS" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-	    }
-	    loadFrameSets( parser, lst );
-	}
-
-	else if ( name == "STYLES" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-	    }
-	    loadStyleTemplates( parser, lst );
-	}
-
-	else if ( name == "PIXMAPS" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-	    }
-
-	    while ( parser.open( 0L, tag ) ) {
-		QString key;
-
-		KOMLParser::parseTag( tag.c_str(), name, lst );
-		if ( name == "KEY" ) {
-		    KOMLParser::parseTag( tag.c_str(), name, lst );
-		    vector<KOMLAttrib>::const_iterator it = lst.begin();
-		    for( ; it != lst.end(); it++ ) {
-			if ( ( *it ).m_strName == "key" )
-			    key = ( *it ).m_strValue.c_str();
-			else
-			    cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
-		    }
-		    pixmapKeys.append( key );
-		} else
-		    cerr << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
-
-		if ( !parser.close( tag ) ) {
-		    cerr << "ERR: Closing Child" << endl;
-		    QApplication::restoreOverrideCursor();
-		    return false;
-		}
-	    }
-	}
-
-	else
-	    cerr << "Unknown tag '" << tag << "' in the DOCUMENT" << endl;
-
-	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
-	    return false;
-	}
-    }
+    QDOM::Element pix = word.namedItem( "PIXMAPS" ).toElement();
+    QDOM::Element key = pix.firstChild();
+    for ( ; !key.isNull(); key = key.nextSibling() )
+	pixmapKeys.append( key.attribute( "key" ) );
+    
 
     switch ( KWUnit::unitType( unit ) ) {
     case U_MM: __pgLayout.unit = PG_MM;
@@ -1049,7 +827,8 @@ bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
     if ( !_first_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_FIRST_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), 
+				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
 	fs->setAutoCreateNewFrame( false );
@@ -1058,7 +837,8 @@ bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
     if ( !_even_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_EVEN_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), 
+				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
 	fs->setAutoCreateNewFrame( false );
@@ -1067,7 +847,8 @@ bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
     if ( !_odd_header ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_ODD_HEADER );
-	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
+	KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), 
+				      getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
 	fs->addFrame( frame );
 	frames.append( fs );
 	fs->setAutoCreateNewFrame( false );
@@ -1160,34 +941,21 @@ bool KWordDocument::loadXML( const QDOM::Document& doc, KOStore::Store_ptr )
 }
 
 /*================================================================*/
-void KWordDocument::loadStyleTemplates( KOMLParser& parser, vector<KOMLAttrib>& lst )
+bool KWordDocument::loadStyleTemplates( const QDOM::Element& element )
 {
-    string tag;
-    string name;
-
-    while ( parser.open( 0L, tag ) ) {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
-
-	if ( name == "STYLE" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-	    }
-	    KWParagLayout *pl = new KWParagLayout( this, false );
-	    pl->load( parser, lst );
-	    addStyleTemplate( pl );
-	} else
-	    cerr << "Unknown tag '" << tag << "' in STYLES" << endl;
-
-	if ( !parser.close( tag ) ) {
-	    cerr << "ERR: Closing Child" << endl;
-	    return;
-	}
+    QDOM::Element style = element.firstChild();
+    for ( ; !style.isNull(); style = style.nextSibling() ) {
+	KWParagLayout *pl = new KWParagLayout( this, FALSE );
+	if ( pl->load( style ) )
+	    return FALSE;
+	addStyleTemplate( pl );
     }
+    
+    return TRUE;
 }
 
 /*================================================================*/
-void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
+void KWordDocument::loadFrameSets( const QDOM::Element &framesets )
 {
     string tag;
     string name;
@@ -1198,114 +966,75 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
     int _row = 0, _col = 0, _rows = 1, _cols = 1;
     bool _visible = true;
 
-    while ( parser.open( 0L, tag ) )
-    {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+    QDOM::Element frameset = framesets.firstChild();
+    for ( ; !frameset.isNull(); frameset = frameset.nextSibling() ) {
+	FrameType frameType = FT_BASE;
+	_name = "";
+	_row = _col = 0, _rows = 1, _cols = 1;
+	_visible = true;
+	bool removeable = false;
+	QString fsname;
+	
+	frameType = (FrameType)frameset.attribute( "frameType" ).toInt();
+	autoCreateNewFrame = frameset.attribute( "autoCreateNewFrame" ).toInt();
+	frameInfo = (FrameInfo)frameset.attribute( "frameInfo" )toInt();
+	_name = frameset.attribute( "grpMgr" );
+	_row = frameset.attribute( "row" ).toInt();
+	_col = frameset.attribute( "col" ).toInt();
+	removeable = (bool)frameset.attribute( "removeable" ).toInt();
+	_rows = frameset.attribute( "rows" ).toInt();
+	_cols = frameset.attribute( "cols" ).toInt();
+	_visible = (bool)frameset.attribute( "visible" ).toInt();
+	fsname = frameset.attribute( "name" );
+	
+	if ( fsname.isEmpty() )
+	    fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
 
-	// paragraph
-	if ( name == "FRAMESET" )
-	{
-	    FrameType frameType = FT_BASE;
-	    _name = "";
-	    _row = _col = 0, _rows = 1, _cols = 1;
-	    _visible = true;
-	    bool removeable = false;
-	    QString fsname;
+	switch ( frameType ) {
+	case FT_TEXT: {
+	    KWTextFrameSet *frame = new KWTextFrameSet( this );
+	    frame->setVisible( _visible );
+	    frame->setName( fsname );
+	    frame->load( parser, lst );
+	    frame->setAutoCreateNewFrame( autoCreateNewFrame );
+	    frame->setFrameInfo( frameInfo );
+	    frame->setIsRemoveableHeader( removeable );
 
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ )
-	    {
-		if ( ( *it ).m_strName == "frameType" )
-		    frameType = static_cast<FrameType>( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "autoCreateNewFrame" )
-		    autoCreateNewFrame = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "frameInfo" )
-		    frameInfo = static_cast<FrameInfo>( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "grpMgr" )
-		    _name = correctQString( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "row" )
-		    _row = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "col" )
-		    _col = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "removeable" )
-		    removeable = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "rows" )
-		    _rows = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "cols" )
-		    _cols = atoi( ( *it ).m_strValue.c_str() );
-		if ( ( *it ).m_strName == "visible" )
-		    _visible = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
-		if ( ( *it ).m_strName == "name" )
-		    fsname = ( *it ).m_strValue.c_str();
-	    }
-
-	    if ( fsname.isEmpty() )
-		fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
-
-	    switch ( frameType )
-	    {
-	    case FT_TEXT:
-	    {
-		KWTextFrameSet *frame = new KWTextFrameSet( this );
-		frame->setVisible( _visible );
-		frame->setName( fsname );
-		frame->load( parser, lst );
-		frame->setAutoCreateNewFrame( autoCreateNewFrame );
-		frame->setFrameInfo( frameInfo );
-		frame->setIsRemoveableHeader( removeable );
-
-		if ( !_name.isEmpty() )
-		{
-		    KWGroupManager *grpMgr = 0L;
-		    if ( getNumGroupManagers() > 0 )
-		    {
-			for ( unsigned int i = 0; i < getNumGroupManagers(); i++ )
-			{
-			    if ( getGroupManager( getNumGroupManagers() - 1 - i )->isActive() &&
-				 getGroupManager( getNumGroupManagers() - 1 - i )->getName() == _name )
-			    {
-				grpMgr = getGroupManager( getNumGroupManagers() - 1 - i );
-				break;
-			    }
+	    if ( !_name.isEmpty() ) {
+		KWGroupManager *grpMgr = 0L;
+		if ( getNumGroupManagers() > 0 ) {
+		    for ( unsigned int i = 0; i < getNumGroupManagers(); i++ ) {
+			if ( getGroupManager( getNumGroupManagers() - 1 - i )->isActive() &&
+			     getGroupManager( getNumGroupManagers() - 1 - i )->getName() == _name ) {
+			    grpMgr = getGroupManager( getNumGroupManagers() - 1 - i );
+			    break;
 			}
 		    }
-		    if ( !grpMgr )
-		    {
-			grpMgr = new KWGroupManager( this );
-			grpMgr->setName( _name );
-			addGroupManager( grpMgr );
-		    }
-		    frame->setGroupManager( grpMgr );
-		    grpMgr->addFrameSet( frame, _row, _col );
-		    KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
-		    if ( cell )
-		    {
-			cell->rows = _rows;
-			cell->cols = _cols;
-		    }
 		}
-		else
-		    frames.append( frame );
-	    } break;
-	    case FT_PICTURE:
-	    {
-		KWPictureFrameSet *frame = new KWPictureFrameSet( this );
-		frame->setName( fsname );
-		frame->load( parser, lst );
-		frame->setFrameInfo( frameInfo );
+		
+		if ( !grpMgr ) {
+		    grpMgr = new KWGroupManager( this );
+		    grpMgr->setName( _name );
+		    addGroupManager( grpMgr );
+		}
+		frame->setGroupManager( grpMgr );
+		grpMgr->addFrameSet( frame, _row, _col );
+		KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
+		if ( cell ) {
+		    cell->rows = _rows;
+		    cell->cols = _cols;
+		}
+	    } else
 		frames.append( frame );
-	    } break;
-	    default: break;
-	    }
-	}
-	else
-	    cerr << "Unknown tag '" << tag << "' in FRAMESETS" << endl;
-
-	if ( !parser.close( tag ) )
-	{
-	    cerr << "ERR: Closing Child" << endl;
-	    return;
+	} break;
+	case FT_PICTURE: {
+	    KWPictureFrameSet *frame = new KWPictureFrameSet( this );
+	    frame->setName( fsname );
+	    frame->load( parser, lst );
+	    frame->setFrameInfo( frameInfo );
+	    frames.append( frame );
+	} break;
+	default: break;
 	}
     }
 }
@@ -1416,7 +1145,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 
     QDOM::Element fn = footNodeManager.save( doc );
     if ( fn.isNull() )
-      return false;
+	return false;
     word.appendChild( fn );
 
     QDOM::Element fs = doc.createElement( "FRAMESETS" );
@@ -1430,7 +1159,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 	{
 	    QDOM::Element e = frameSet->save( doc );
 	    if ( e.isNull() )
-	      return false;
+		return false;
 	    fs.append( e );
 	}
     }
@@ -1440,10 +1169,10 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 
     for ( unsigned int j = 0; j < paragLayoutList.count(); j++ )
     {
-      QDOM::Element e = paragLayoutList.at( j )->save( doc );
-      if ( e.isNull() )
-	return false;
-      styles.append( e );
+	QDOM::Element e = paragLayoutList.at( j )->save( doc );
+	if ( e.isNull() )
+	    return false;
+	styles.append( e );
     }
 
     QDOM::Element pix = doc.createElement( "PIXMAPS" );
@@ -1458,7 +1187,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 	QDOM::Element e = doc.createElement( "KEY" );
 	e.setAttribute( "key", it.current()->getFilename() );
 	pix.appendChild( e )
-	keys.append( it.currentKey() );
+	    keys.append( it.currentKey() );
 	images.append( it.current()->getFilename() );
     }
 
@@ -1466,10 +1195,10 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     QListIterator<KWordChild> chl( m_lstChildren );
     for( ; chl.current(); ++chl )
     {
-      QDOM::Element e = chl.current()->save( doc );
-      if ( e.isNull() )
-	return false;
-      word.appendChild( e );
+	QDOM::Element e = chl.current()->save( doc );
+	if ( e.isNull() )
+	    return false;
+	word.appendChild( e );
     }
 
     return true;
