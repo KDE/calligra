@@ -34,6 +34,8 @@
 			<Action name="object_move_down"/>
 			<Action name="object_move_tobottom"/>
 		</Menu>
+		<Action name="selection_group"/>
+		<Action name="selection_ungroup"/>
 		<Separator/>
 		<Menu name="object_insert">
 			<text>&amp;Insert Shape</text>

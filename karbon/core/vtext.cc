@@ -148,8 +148,8 @@ VText::draw( VPainter* painter, const KoRect& rect,
 	VObjectListIterator itr = m_glyphs;
 	for ( ; itr.current() ; ++itr )
 	{
-		kdDebug() << "draw!!!!" << itr.current() << endl;
-		itr.current()->setState( state() );
+		//kdDebug() << "draw!!!!" << itr.current() << endl;
+		//itr.current()->setState( state() );
 		itr.current()->fill() = fill();
 		itr.current()->stroke() = stroke();
 		itr.current()->draw( painter, rect, zoomFactor );

@@ -20,6 +20,7 @@ noinst_HEADERS = \
 	vmcmd_fill.h \
 	vmcmd_stroke.h \
 	vmcmd_transform.h
+	vmcmd_group.h
 
 libkarboncommands_la_SOURCES = \
 	vccmd_ellipse.cc \
@@ -35,7 +36,8 @@ libkarboncommands_la_SOURCES = \
 	vmcmd_delete.cc \
 	vmcmd_fill.cc \
 	vmcmd_stroke.cc \
-	vmcmd_transform.cc
+	vmcmd_transform.cc \
+	vmcmd_group.cc
 
 libkarboncommands_la_METASOURCES = \
 	AUTO

@@ -64,6 +64,9 @@ public slots:
 	void selectionMoveUp();
 	void selectionMoveDown();
 
+	void groupSelection();
+	void ungroupSelection();
+
 protected slots:
 
 	// object related operations:

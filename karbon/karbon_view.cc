@@ -18,6 +18,7 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "vccmd_text.h"
+#include "vmcmd_group.h"
 #include "vctool_ellipse.h"
 #include "vctool_polygon.h"
 #include "vctool_rectangle.h"
@@ -205,6 +206,17 @@ void
 KarbonView::selectionMoveToBottom()
 {
 	m_part->moveSelectionToBottom();
+}
+
+void
+KarbonView::groupSelection()
+{
+	m_part->addCommand( new VMCmdGroup( m_part ), true );
+}
+
+void
+KarbonView::ungroupSelection()
+{
 }
 
 void
@@ -476,6 +488,12 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "Send To &Back" ), 0, QKeySequence("Shift+PgDown"), this,
 		SLOT( selectionMoveToBottom() ), actionCollection(), "object_move_tobottom" );
+	new KAction(
+		i18n( "Group objects" ), 0, QKeySequence("Shift+G"), this,
+		SLOT( groupSelection() ), actionCollection(), "selection_group" );
+	new KAction(
+		i18n( "Ungroup objects" ), 0, QKeySequence("Shift+U"), this,
+		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
 	new KAction(
 		i18n( "&Translate" ), "translate", 0, this,
 		SLOT( objectTrafoTranslate() ), actionCollection(), "object_trafo_translate" );

@@ -13,6 +13,7 @@ noinst_HEADERS = \
 	vlayer.h \
 	vobject.h \
 	vobjectlist.h \
+	vgroup.h \
 	vpath.h \
 	vpath_bounding.h \
 	vpath_intersect.h \
@@ -31,6 +32,7 @@ libkarboncore_la_SOURCES = \
 	vlayer.cc \
 	vobject.cc \
 	vobjectlist.cc \
+	vgroup.cc \
 	vpath.cc \
 	vpath_bounding.cc \
 	vpath_intersect.cc \

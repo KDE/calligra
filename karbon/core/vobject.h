@@ -47,7 +47,7 @@ public:
 		{ return false; };
 
 	VState state() const { return m_state; }
-	void setState( const VState state ) { m_state = state; }
+	virtual void setState( const VState state ) { m_state = state; }
 
 	VFill& fill() { return m_fill; }
 	VStroke& stroke() { return m_stroke; }

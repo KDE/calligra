@@ -159,9 +159,9 @@ VLayer::load( const QDomElement& element )
 			}
 			else if( e.tagName() == "TEXT" )
 			{
-				VText* text = new VText();
+				/*VText* text = new VText();
 				text->load( e );
-				insertObject( text );
+				insertObject( text );*/
 			}
 		}
 	}
