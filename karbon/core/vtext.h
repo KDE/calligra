@@ -78,6 +78,14 @@ public:
 	virtual int shadowAngle() { return m_shadowAngle; }
 	virtual int shadowDistance() { return m_shadowDistance; }
 
+	/**
+	 * Provides read only access to the glyphs.
+	 */
+	const VCompositeList& glyphs() const
+	{
+		return m_glyphs;
+	}
+
 	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
 
 	virtual void transform( const QWMatrix& m );
