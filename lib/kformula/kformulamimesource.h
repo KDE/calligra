@@ -45,6 +45,8 @@ public:
     virtual void cursorHasMoved( FormulaCursor* );
     virtual const SymbolTable& getSymbolTable() const;
 
+    static const char* selectionMimeType();
+
 private:
 
     Document* formulaDocument;

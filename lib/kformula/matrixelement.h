@@ -167,11 +167,6 @@ public:
     uint getRows() { return content.count(); }
     uint getColumns() { return content.at(0)->count(); }
 
-    /**
-     * @returns a resized dom document. New elements are empty.
-     */
-    QDomDocument resizedDom( uint rows, uint cols );
-
 protected:
 
     //Save/load support

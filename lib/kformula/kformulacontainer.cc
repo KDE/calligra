@@ -285,8 +285,8 @@ void Container::paste()
         return;
     QClipboard* clipboard = QApplication::clipboard();
     const QMimeSource* source = clipboard->data();
-    if (source->provides("application/x-kformula")) {
-        QByteArray data = source->encodedData("application/x-kformula");
+    if (source->provides( MimeSource::selectionMimeType() )) {
+        QByteArray data = source->encodedData( MimeSource::selectionMimeType() );
         QDomDocument formula;
         formula.setContent(data);
         paste( formula, i18n("Paste") );

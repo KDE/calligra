@@ -64,12 +64,16 @@ MimeSource::~MimeSource()
     delete rootElement;
 }
 
+const char * MimeSource::selectionMimeType()
+{
+    return "application/x-kformula";
+}
 
 const char* MimeSource::format( int n ) const
 {
     switch (n) {
         case 0:
-            return "application/x-kformula";
+            return selectionMimeType();
         case 1:
             return "image/ppm";
         case 2:
@@ -83,7 +87,7 @@ const char* MimeSource::format( int n ) const
 bool MimeSource::provides( const char * format) const
 {
 //This is not completed
-    if(QString(format)=="application/x-kformula")
+    if(QString(format)==selectionMimeType())
         return true;
     else if(QString(format)=="image/ppm")
         return true;
@@ -102,7 +106,7 @@ QByteArray MimeSource::encodedData ( const char *format ) const
     if ((fmt=="text/plain") || (fmt=="text/x-tex"))
         return latexString;
 
-    if (fmt=="application/x-kformula") {
+    if (fmt==selectionMimeType()) {
 	QByteArray d=document.toCString();
   	d.truncate(d.size()-1);
 	return d;

@@ -665,40 +665,6 @@ bool MatrixElement::searchElement(BasicElement* element, uint& row, uint& column
 }
 
 
-QDomDocument MatrixElement::resizedDom( uint rows, uint cols )
-{
-    // This doubles a lot of information which is not a good thing.
-    QDomDocument doc("KFORMULA");
-    QDomElement de = doc.createElement("KFORMULACOPY");
-    doc.appendChild( de );
-    QDomElement matrix = doc.createElement( getTagName() );
-    matrix.setAttribute( "ROWS", rows );
-    matrix.setAttribute( "COLUMNS", cols );
-    de.appendChild( matrix );
-
-    uint currentRows = getRows();
-    uint currentCols = getColumns();
-
-    SequenceElement tmpSequence;
-
-    for ( uint r = 0; r < QMIN( rows, currentRows ); r++ ) {
-        for ( uint c = 0; c < cols; c++ ) {
-            if ( c < currentCols ) {
-                QDomElement tmp = getElement( r, c )->getElementDom( doc );
-                matrix.appendChild( tmp );
-            }
-            else {
-                matrix.appendChild( tmpSequence.getElementDom( doc ) );
-            }
-	}
-        matrix.appendChild( doc.createComment( "end of row" ) );
-    }
-
-    //QCString data = doc.toCString();
-    //kdDebug( DEBUGID ) << (const char *)data << endl;
-    return doc;
-}
-
 /**
  * Appends our attributes to the dom element.
  */

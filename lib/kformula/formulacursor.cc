@@ -624,7 +624,9 @@ void FormulaCursor::formulaLoaded(FormulaElement* rootElement)
 QDomDocument FormulaCursor::copy()
 {
     QDomDocument doc("KFORMULA");
-    QDomElement de = doc.createElement("KFORMULACOPY");
+    QDomElement de = doc.createElement("FORMULA");
+    // here comes the current version of FormulaElement
+    de.setAttribute( "VERSION", "4" );
     doc.appendChild(de);
     if (isSelection()) {
         SequenceElement* sequence = normal();
