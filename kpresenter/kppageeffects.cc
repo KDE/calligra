@@ -1,4 +1,4 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
+
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
@@ -56,7 +56,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _h = 0.5 * height * _step / _steps;
+                _h = (int )(0.5 * height * _step / _steps);
                 _h = kMin( _h, height / 2 );
 
                 bitBlt( canv, 0, 0, &_pix2, 0, height / 2 - _h, width, _h );
@@ -79,7 +79,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = 0.5 * width * _step / _steps;
+                _w =(int)( 0.5 * width * _step / _steps);
                 _w = kMin( _w, width / 2 );
 
                 bitBlt( canv, 0, 0, &_pix2, width / 2 - _w, 0, _w, height );
@@ -102,9 +102,9 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = 0.5 * width * _step / _steps;
+                _w =(int)( 0.5 * width * _step / _steps);
                 _w = kMin( _w, width / 2 );
-                _h = 0.5 * height * _step / _steps;
+                _h =(int)( 0.5 * height * _step / _steps);
                 _h = kMin( _h, height / 2 );
 
                 bitBlt( canv, 0, 0, &_pix2, 0, 0, _w, _h );
@@ -129,7 +129,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _h = 0.5 * height * _step / _steps;
+                _h =(int)( 0.5 * height * _step / _steps);
                 _h = kMin( _h, height / 2 );
 
                 bitBlt( canv, 0, height / 2 - _h, &_pix2, 0, 0, width, _h );
@@ -152,7 +152,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = 0.5 * width * _step / _steps;
+                _w =(int)( 0.5 * width * _step / _steps);
                 _w = kMin( _w, width / 2 );
 
                 bitBlt( canv, width / 2 - _w, 0, &_pix2, 0, 0, _w, height );
@@ -175,9 +175,9 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = 0.5 * width * _step / _steps;
+                _w =(int)( 0.5 * width * _step / _steps);
                 _w = kMin( _w, width / 2 );
-                _h = 0.5 * height * _step / _steps;
+                _h =(int)( 0.5 * height * _step / _steps);
                 _h = kMin( _h, height / 2 );
 
                 bitBlt( canv, width / 2 - _w, height / 2 - _h, &_pix2, 0, 0, _w, _h );

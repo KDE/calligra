@@ -1,4 +1,3 @@
-// -*- Mode: c++-mode; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
 
@@ -278,6 +277,8 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
 void KPTransEffectDia::preview()
 {
+    if( pageEffect==PEF_NONE)
+        return;
     effectPreview->run( pageEffect, speed );
 }
 
