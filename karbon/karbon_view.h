@@ -97,8 +97,7 @@ public:
 	void setLineWidth( double val);
 
 	QLabel* statusMessage() const { return m_status; }
-    void setUnit(KoUnit::Unit _unit);
-
+	void setUnit(KoUnit::Unit _unit);
 
 public slots:
 	// editing:

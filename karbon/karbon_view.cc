@@ -147,10 +147,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_ColorManager = new VColorDlg( m_part, this );
 	m_TransformDlg = new VTransformDlg( m_part, this );
 
-	if( shell() )
-	{
-		setNumberOfRecentFiles( m_part->maxRecentFiles() );
-	}
+        setNumberOfRecentFiles( m_part->maxRecentFiles() );
 
 	// initial tool is select-tool:
 	m_currentTool = m_selectTool;
@@ -428,7 +425,7 @@ KarbonView::objectTrafoTranslate()
 {
 	if (m_TransformDlg->isVisible() == false )
 	{
-		shell()->addDockWindow(m_TransformDlg, DockRight);
+		mainWindow()->addDockWindow(m_TransformDlg, DockRight);
 		m_TransformDlg->setTab( Translate );
 		m_TransformDlg->show();
 	}
@@ -439,7 +436,7 @@ KarbonView::objectTrafoScale()
 {
 	if (m_TransformDlg->isVisible() == false )
 	{
-		shell()->addDockWindow(m_TransformDlg, DockRight);
+		mainWindow()->addDockWindow(m_TransformDlg, DockRight);
 		m_TransformDlg->setTab( Scale );
 		m_TransformDlg->show();
 	}
@@ -450,7 +447,7 @@ KarbonView::objectTrafoRotate()
 {
 	if (m_TransformDlg->isVisible() == false )
 	{
-		shell()->addDockWindow(m_TransformDlg, DockRight);
+		mainWindow()->addDockWindow(m_TransformDlg, DockRight);
 		m_TransformDlg->setTab( Rotate );
 		m_TransformDlg->show();
 	}
@@ -461,7 +458,7 @@ KarbonView::objectTrafoShear()
 {
 	if (m_TransformDlg->isVisible() == false )
 	{
-		shell()->addDockWindow(m_TransformDlg, DockRight);
+		mainWindow()->addDockWindow(m_TransformDlg, DockRight);
 		m_TransformDlg->setTab( Shear );
 		m_TransformDlg->show();
 	}
@@ -478,7 +475,7 @@ KarbonView::ellipseTool()
 void
 KarbonView::polygonTool()
 {
-	//if( shell()->rootView() == this )
+	//if( shell() && shell()->rootView() == this )
 	//{
 		if( m_currentTool == m_polygonTool )
 			m_polygonTool->showDialog();
@@ -502,7 +499,7 @@ KarbonView::rectangleTool()
 void
 KarbonView::roundRectTool()
 {
-	//if( shell()->rootView() == this )
+	//if( shell() && shell()->rootView() == this )
 	//{
 		if( m_currentTool == m_roundRectTool )
 			m_roundRectTool->showDialog();
@@ -541,14 +538,14 @@ KarbonView::rotateTool()
 	/*if( !m_done )
 	{
 	// set up the new button group
-	QButtonGroup *grp = new QButtonGroup( 2, Horizontal, shell()->toolBar( "Toolbox" ) );
+	QButtonGroup *grp = new QButtonGroup( 2, Horizontal, mainWindow()->toolBar( "Toolbox" ) );
 	grp->setInsideSpacing( 2 );
 	grp->setInsideMargin( 5 );
 	grp->setExclusive( true );
 
 	// get the buttons
 	QPtrList<QToolButton> buttons;
-	QLayoutIterator it( shell()->toolBar( "Toolbox" )->boxLayout()->iterator() );
+	QLayoutIterator it( mainWindow()->toolBar( "Toolbox" )->boxLayout()->iterator() );
 	while( it.current() != 0 )
 	{
 		if( dynamic_cast<QToolButton *>( it.current()->widget() ) )
@@ -564,7 +561,7 @@ KarbonView::rotateTool()
 		itr.current()->setToggleButton( true );
 		++itr;
 	}
-	shell()->toolBar( "Toolbox" )->insertWidget( 1, 30, grp );
+	mainWindow()->toolBar( "Toolbox" )->insertWidget( 1, 30, grp );
 		m_done = true;
 	}*/
 	m_currentTool->deactivate();
@@ -600,7 +597,7 @@ KarbonView::shearTool()
 void
 KarbonView::sinusTool()
 {
-	//if( shell()->rootView() == this )
+	//if( shell() && shell()->rootView() == this )
 	//{
 		if( m_currentTool == m_sinusTool )
 			m_sinusTool->showDialog();
@@ -616,7 +613,7 @@ KarbonView::sinusTool()
 void
 KarbonView::spiralTool()
 {
-	//if( shell()->rootView() == this )
+	//if( shell() && shell()->rootView() == this )
 	//{
 		if( m_currentTool == m_spiralTool )
 			m_spiralTool->showDialog();
@@ -632,7 +629,7 @@ KarbonView::spiralTool()
 void
 KarbonView::starTool()
 {
-	//if( shell()->rootView() == this )
+	//if( shell() && shell()->rootView() == this )
 	//{
 		if( m_currentTool == m_starTool )
 			m_starTool->showDialog();
@@ -648,7 +645,7 @@ KarbonView::starTool()
 void
 KarbonView::gradTool()
 {
-	//if( shell()->rootView() == this )
+	//if( shell() && shell()->rootView() == this )
 	//{
 		if( m_currentTool == m_gradTool )
 			m_gradTool->showDialog();
@@ -744,7 +741,7 @@ KarbonView::zoomChanged()
 void
 KarbonView::solidFillClicked()
 {
-	if( shell()->rootView() == this )
+	if( shell() && shell()->rootView() == this )
 	{
 		VFillDlg* dialog = new VFillDlg( m_part );
 		connect(dialog, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
@@ -757,7 +754,7 @@ KarbonView::solidFillClicked()
 void
 KarbonView::strokeClicked()
 {
-	if( shell()->rootView() == this )
+	if( shell() && shell()->rootView() == this )
 	{
 		VStrokeDlg* dialog = new VStrokeDlg( m_part );
 		connect(dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
@@ -836,7 +833,7 @@ KarbonView::viewColorManager()
 {
 	if (m_ColorManager->isVisible() == false )
 	{
-		shell()->addDockWindow(m_ColorManager, DockRight);
+		mainWindow()->addDockWindow(m_ColorManager, DockRight);
 		m_ColorManager->show();
 	}
 }
@@ -1075,7 +1072,7 @@ KarbonView::initActions()
 
 	if( !m_strokeFillPreview )
 	{
-		m_strokeFillPreview = new VStrokeFillPreview( m_part, shell()->toolBar( "Toolbox" ) );
+		m_strokeFillPreview = new VStrokeFillPreview( m_part, mainWindow()->toolBar( "Toolbox" ) );
 		connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ),
 				this, SLOT( selectionChanged() ) );
 		connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ),
@@ -1083,7 +1080,7 @@ KarbonView::initActions()
 #if KDE_VERSION >= 305
 		//new KWidgetAction( m_strokeFillPreview, i18n(""), 0, this, SLOT( ), actionCollection(), "preview" );
 #endif
-		shell()->toolBar( "Toolbox" )->insertWidget( 10, 30, m_strokeFillPreview );
+		mainWindow()->toolBar( "Toolbox" )->insertWidget( 10, 30, m_strokeFillPreview );
 		m_strokeFillPreview->update( part()->document().defaultStroke(), part()->document().defaultFill() );
 	}
 
@@ -1099,14 +1096,14 @@ KarbonView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 	kdDebug() << "KarbonView::partSelectEvent" << endl;
 	KoView::guiActivateEvent( ev );
 	//KoView::partSelectEvent( ev );
-	/*QButtonGroup *grp = new QButtonGroup( 2, Horizontal, shell()->toolBar( "Toolbox" ) );
+	/*QButtonGroup *grp = new QButtonGroup( 2, Horizontal, mainWindow()->toolBar( "Toolbox" ) );
 	grp->setInsideSpacing( 2 );
 	grp->setInsideMargin( 5 );
 	grp->setExclusive( true );
 
 	// get the buttons
 	QPtrList<QToolButton> buttons;
-	QLayoutIterator it( shell()->toolBar( "Toolbox" )->boxLayout()->iterator() );
+	QLayoutIterator it( mainWindow()->toolBar( "Toolbox" )->boxLayout()->iterator() );
 	int i = 0;
 			kdDebug() << "ri : " << i++ << endl;
 	while( it.current() != 0 )
@@ -1128,7 +1125,7 @@ KarbonView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 		itr.current()->setToggleButton( true );
 		++itr;
 	}
-	shell()->toolBar( "Toolbox" )->insertWidget( 1, 30, grp );*/
+	mainWindow()->toolBar( "Toolbox" )->insertWidget( 1, 30, grp );*/
 		//m_done = true;
 }
 
@@ -1201,4 +1198,3 @@ void KarbonView::setUnit(KoUnit::Unit /*_unit*/)
 }
 
 #include "karbon_view.moc"
-
