@@ -1127,17 +1127,17 @@ void KWCanvas::mrCreateText()
 void KWCanvas::mrCreatePixmap()
 {
     //kdDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
-    // Make sure its completely on page.
+    // Make sure it's completely on page.
     if(m_insRect.right() > m_doc->ptPaperWidth()) {
-        double width=m_insRect.width();
+        double width = m_insRect.width();
         m_insRect.setLeft(m_doc->ptPaperWidth() - width);
         m_insRect.setRight(m_doc->ptPaperWidth());
     }
-    int page = m_insRect.top() / m_doc->ptPaperHeight() +1;
+    int page = static_cast<int>(m_insRect.top() / m_doc->ptPaperHeight()) + 1;
     kdDebug() << "page: " << page << endl;
 
     if(m_insRect.bottom() > m_doc->ptPaperHeight() * page) {
-        double height=m_insRect.height();
+        double height = m_insRect.height();
         m_insRect.setTop(m_doc->ptPaperHeight() * page - height);
         m_insRect.setBottom(m_doc->ptPaperHeight() * page);
     }
@@ -2086,7 +2086,6 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
              {
                  QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
                  KWFormulaFrameSetEdit * formulaEdit = dynamic_cast<KWFormulaFrameSetEdit *>(m_currentFrameSetEdit);
-                 KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
                  if ( !formulaEdit && keyev->state()==ControlButton&&keyev->key()==Key_R )
                  {
                      m_gui->getView()->editReplace();

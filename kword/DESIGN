@@ -94,7 +94,7 @@ Document:
     An example; a frame is positioned on paper some 35mm from the left border of the paper and
     some 35mm from the top of the first page. the absolute position of that frame is 100, 100
     since 100pt equals 35mm.
-    Note that positioning is done from page1, so when a frame is moved from page 1 to page 2 it
+    Note that positioning is done from page 1, so when a frame is moved from page 1 to page 2 it
     simply gets a higher Y coordinate.
 
 Zoomed: (aka Normal)
@@ -157,6 +157,15 @@ Document (pt values, in double, KoPoint, KoRect.)
  |--KWTextFrameSet::documentToInternal
  V
 Internal coordinates (the coordinates given to QRT - in "layout units")
+
+Font sizes
+==========
+A 12pt font will lead to a layout font of ptToLayoutUnit(12)=20*12=240pt.
+On screen, at 100%, a layoutUnitToFontSize(240,false)=(240/20)*1.0=20.0pt font size will be used.
+This does NOT depend on the DPI settings. Qt takes care of pt->pixel conversion for fonts.
+
+When printing... TODO, double-check whether Qt does pt->pixel conversion correctly
+(apparently it didn't, in Qt 2).
 
 
 Wow, you managed to read this until the end ? Good. "GOTO 10" now ;)

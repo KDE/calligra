@@ -247,7 +247,7 @@ public:
     /**
      * Called before destruction, when terminating edition - use to e.g. hide cursor
      */
-    virtual void terminate(bool removeselection=true) {}
+    virtual void terminate(bool /*removeselection*/ = true) {}
 
     /**
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
@@ -304,7 +304,7 @@ public:
     // destructor
     virtual ~KWFrameSet();
 
-    /** The type of frameset. Use this to differentiate between different instantiations of 
+    /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_BASE; }
@@ -605,7 +605,7 @@ public:
     KWPictureFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWPictureFrameSet();
 
-    /** The type of frameset. Use this to differentiate between different instantiations of 
+    /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_PICTURE; }
@@ -646,7 +646,7 @@ public:
     KWClipartFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWClipartFrameSet() {}
 
-    /** The type of frameset. Use this to differentiate between different instantiations of 
+    /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_CLIPART; }
@@ -685,7 +685,7 @@ public:
     KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name );
     virtual ~KWPartFrameSet();
 
-    /** The type of frameset. Use this to differentiate between different instantiations of 
+    /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_PART; }
@@ -745,7 +745,7 @@ public:
     KWFormulaFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWFormulaFrameSet();
 
-    /** The type of frameset. Use this to differentiate between different instantiations of 
+    /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_FORMULA; }

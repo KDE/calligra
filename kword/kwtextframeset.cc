@@ -1407,64 +1407,11 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
 
 void KWTextFrameSet::zoom( bool forPrint )
 {
-#ifdef ZOOM_FONTS // old stuff (i.e. this is all commented out)
-    if ( !m_origFontSizes.isEmpty() )
-        unzoom();
-    QTextFormatCollection * coll = textDocument()->formatCollection();
-    // This is because we are setting pt sizes (so Qt applies x11AppDpiY already)
-    double factor = kWordDocument()->zoomedResolutionY() *
-                    ( forPrint ? 1.0 : 72.0 / QPaintDevice::x11AppDpiY() );
-    //kdDebugBody(32002) << "KWTextFrameSet::zoom factor=" << factor << endl;
-
-#ifdef DEBUG_FORMATS
-    kdDebug(32002) << this << " KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
-    kdDebug(32002) << this << " firstparag:" << textDocument()->firstParag()
-                   << " format:" << textDocument()->firstParag()->paragFormat()
-                   << " first-char's format:" << textDocument()->firstParag()->at(0)->format()
-                   << endl;
-#endif
-    QDictIterator<QTextFormat> it( coll->dict() );
-    for ( ; it.current() ; ++it ) {
-        KWTextFormat * format = dynamic_cast<KWTextFormat *>(it.current());
-        Q_ASSERT( format );
-        m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
-#ifdef DEBUG_FORMATS
-        kdDebugBody(32002) << this << " KWTextFrameSet::zooming format " << format
-                           << " key=" << format->key()
-                           << " from " << format->font().pointSizeFloat()
-                           << " to " << format->font().pointSizeFloat() * factor << endl;
-#endif
-        format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
-    }
-    // Do the same to the default format !
-    KWTextFormat * format = static_cast<KWTextFormat *>(coll->defaultFormat());
-#ifdef DEBUG_FORMATS
-    kdDebug() << "KWTextFrameSet::zoom default format " << format << " " << format->key() << endl;
-#endif
-    m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
-    format->setPointSizeFloat( format->font().pointSizeFloat() * factor );
-
-    // Update Tab Width
-    textDocument()->setTabStops( textDocument()->formatCollection()->defaultFormat()->width( 'x' ) * 8 );
-
-    // Zoom all custom items
-    QPtrListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
-    for ( ; cit.current() ; ++cit )
-        static_cast<KoTextCustomItem *>( cit.current() )->resize();
-
-    // Mark all paragraphs as changed !
-    for ( KWTextParag * s = static_cast<KWTextParag *>( textDocument()->firstParag() ) ; s ; s = static_cast<KWTextParag *>( s->next() ) )
-    {
-        s->setTabList( s->tabList() ); // to recalculate with the new zoom
-        s->setChanged( TRUE );
-        s->invalidate( 0 );
-        if ( s->counter() )
-            s->counter()->invalidate();
-    }
-    m_lastFormatted = textDocument()->firstParag();
-    m_availableHeight = -1; // to be recalculated
-#endif
     KWFrameSet::zoom( forPrint );
+}
+
+void KWTextFrameSet::unzoom()
+{
 }
 
 void KWTextFrameSet::hideCustomItems(bool _hide)
@@ -1472,36 +1419,6 @@ void KWTextFrameSet::hideCustomItems(bool _hide)
     QPtrListIterator<QTextCustomItem> cit( textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
         static_cast<KWAnchor *>( cit.current() )->frameSet()->setVisible( _hide );
-}
-
-void KWTextFrameSet::unzoom()
-{
-#ifdef ZOOM_FONTS // not defined
-    QTextFormatCollection * coll = textDocument()->formatCollection();
-
-    QDictIterator<QTextFormat> it( coll->dict() );
-    for ( ; it.current() ; ++it ) {
-        KWTextFormat * format = static_cast<KWTextFormat *>(it.current());
-        int * oldSize = m_origFontSizes.find( format );
-        if ( !oldSize )
-            kdWarning() << "Can't unzoom: format=" << format << " " << it.current()->key() << endl;
-        else
-        {
-#ifdef DEBUG_FORMATS
-            kdDebugBody(32002) << "KWTextFrameSet::unzoom format=" << format
-                               << " key=" << format->key()
-                               << " oldSize=" << *oldSize << endl;
-#endif
-            format->setPointSizeFloat( *oldSize );
-        }
-    }
-    KWTextFormat * format = static_cast<KWTextFormat *>(coll->defaultFormat());
-    int * oldSize = m_origFontSizes.find( format );
-    if ( oldSize )
-        format->setPointSizeFloat( *oldSize );
-
-    m_origFontSizes.clear();
-#endif
 }
 
 void KWTextFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags )
