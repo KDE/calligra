@@ -1503,10 +1503,6 @@ bool KSpreadCell::calc(bool delay)
     return false;
   }
 
-  if ( !isFormula() )
-    return true;
-
-
   if (delay)
   {
     if ( m_pTable->doc()->delayCalculation() )
@@ -1516,8 +1512,16 @@ bool KSpreadCell::calc(bool delay)
   }
 
   setFlag(Flag_LayoutDirty);
-  setFlag(Flag_Progress);
   clearFlag(Flag_CalcDirty);
+
+  if ( !isFormula() )
+  {
+    DO_UPDATE;
+    return true;
+  }
+
+  setFlag(Flag_Progress);
+
 
   if (m_pCode == NULL)
   {
@@ -1532,10 +1536,6 @@ bool KSpreadCell::calc(bool delay)
       for ( int y = dep->Top(); y <= dep->Bottom(); y++ )
       {
 	KSpreadCell *cell = dep->Table()->cellAt( x, y );
-	if ( cell == NULL )
-	{
-	  return false;
-	}
 	if ( !cell->calc( delay ) )
         {
 	  m_strFormulaOut = "####";

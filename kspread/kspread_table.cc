@@ -1061,6 +1061,11 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint & /*_marker 
   int bottom = r.bottom();
   int right  = r.right();
 
+  KSpreadTable::SelectionType result;
+
+  m_pDoc->emitBeginOperation();
+//  m_pDoc->setCalculationDelay();
+
   // create cells in rows if complete columns selected
   KSpreadCell * cell;
   if ( !worker.type_B && selected && isColumnSelected() )
@@ -1071,13 +1076,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint & /*_marker 
       {
         for ( int col = m_rctSelection.left(); col <= right; ++col )
         {
-          cell = cellAt( col, rw->row() );
-          // '&& worker.create_if_default' unneccessary as never used in type A
-          if ( cell == m_pDefaultCell )
-          {
-            cell = new KSpreadCell( this, col, rw->row() );
-            insertCell( cell );
-          }
+          cell = nonDefaultCell( col, rw->row() );
         }
       }
     }
@@ -1114,8 +1113,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint & /*_marker 
     if ( worker.type_B )
     {
       // for type B there's nothing left to do
-      if ( worker.emit_signal )
-        emit sig_updateView( this, r );
+      ;
     }
     else
     {
@@ -1125,10 +1123,8 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint & /*_marker 
         RowLayout * rw = nonDefaultRowLayout(i);
         worker.doWork( rw );
       }
-      if ( worker.emit_signal )
-        emit sig_updateView( this );
     }
-    return CompleteRows;
+    result = CompleteRows;
   }
   // complete columns selected ?
   else if ( selected && isColumnSelected() )
@@ -1152,8 +1148,7 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint & /*_marker 
 
     if ( worker.type_B )
     {
-      if ( worker.emit_signal )
-        emit sig_updateView( this, r );
+      ;
     }
     else
     {
@@ -1182,10 +1177,8 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint & /*_marker 
           }
         }
       }
-      if ( worker.emit_signal )
-        emit sig_updateView( this );
     }
-    return CompleteColumns;
+    result = CompleteColumns;
   }
   // cell region selected
   else
@@ -1206,11 +1199,20 @@ KSpreadTable::SelectionType KSpreadTable::workOnCells( const QPoint & /*_marker 
             worker.doWork( cell, true, x, y );
         }
       }
-      if ( worker.emit_signal )
-        emit sig_updateView( this, r );
     }
-    return CellRegion;
+    result = CellRegion;
   }
+
+  m_pDoc->emitEndOperation();
+//  m_pDoc->clearCalculationDelay();
+//  updateCellArea(r);
+
+  if (worker.emit_signal)
+  {
+    emit sig_updateView( this, r );
+  }
+
+  return result;
 }
 
 struct SetSelectionFontWorker : public KSpreadTable::CellWorkerTypeA
