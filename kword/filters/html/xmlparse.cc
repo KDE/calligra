@@ -484,7 +484,7 @@ void TranslateEntityRefs(char *z){
   int from;   /* Read characters from this position in z[] */
   int to;     /* Write characters into this position in z[] */
   int h;      /* A hash on the entity reference */
-  char *zVal; /* The substituted value */
+  const char *zVal; /* The substituted value */
   Er *p;      /* For looping down the entity reference collision chain */
 
   from = to = 0;
