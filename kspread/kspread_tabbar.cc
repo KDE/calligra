@@ -18,6 +18,7 @@
 */
 
 #include <qtimer.h>
+#include <qdrawutil.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -228,8 +229,12 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
 
     QPainter painter;
     QPixmap pm(size());
-    pm.fill( backgroundColor() );
+    pm.fill( colorGroup().background() );
     painter.begin( &pm, this );
+
+    QBrush fill( colorGroup().brush( QColorGroup::Background ) );
+    qDrawShadePanel( &painter, 0, 0, width(),
+                     height(), colorGroup(), FALSE, 1, &fill );
 
     if ( leftTab > 1 )
         paintTab( painter, -10, QString(""), 0, 0, FALSE );
