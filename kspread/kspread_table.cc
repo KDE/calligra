@@ -18,7 +18,6 @@
 #include "kspread_table.h"
 #include "kspread_view.h"
 #include "kspread_python.h"
-#include "kspread_dlg_print.h"
 #include "kspread_undo.h"
 #include "kspread_map.h"
 

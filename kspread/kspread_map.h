@@ -26,7 +26,7 @@ public:
     /**
      * This deletes all tables contained in this map.
      */
-    ~KSpreadMap();
+    virtual ~KSpreadMap();
 
     virtual bool save( ostream& );
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );

@@ -17,8 +17,6 @@
 #include "kspread_map.h"
 #include "kspread_table.h"
 #include "kspread_dlg_scripts.h"
-#include "kspread_dlg_paper.h"
-#include "kspread_dlg_print.h"
 #include "kspread_doc.h"
 #include "kspread_shell.h"
 

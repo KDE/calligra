@@ -21,7 +21,7 @@ public:
     enum FloatColor { NegRed = 1, AllBlack = 2 };
 
     KSpreadLayout( KSpreadTable *_table );
-    ~KSpreadLayout();
+    virtual ~KSpreadLayout();
 
     void KSpreadLayout::copy( KSpreadLayout &_l );
     
