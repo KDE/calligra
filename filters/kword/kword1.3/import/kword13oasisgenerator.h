@@ -57,6 +57,8 @@ protected: // ZIP methods
     void writeContentXml( void );
     void writeMetaXml( void );
 protected: // Preparing phase
+    /// Also sets the name of the automatical style
+    void declareStyle( KWord13Layout& layout );
     double numberOrNull( const QString& str ) const;
     void fillGenStyleWithFormatOne( const KWord13FormatOne& one, KoGenStyle& gs, const bool style ) const;
     void fillGenStyleWithLayout( const KWord13Layout& layout, KoGenStyle& gs, const bool style ) const;

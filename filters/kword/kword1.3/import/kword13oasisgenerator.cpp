@@ -67,6 +67,29 @@ double KWord13OasisGenerator::numberOrNull( const QString& str ) const
         return 0.0;
 }
 
+// Inspired by KoParagStyle::saveStyle
+void KWord13OasisGenerator::declareStyle( KWord13Layout& layout )
+{
+    KoGenStyle gs( KoGenStyle::STYLE_USER, "paragraph", QString::null );
+
+    gs.addAttribute( "style:display-name", layout.m_name );
+#if 0
+    // TODO: check that this is correct
+    if ( m_paragLayout.counter && m_paragLayout.counter->depth() ) {
+        if ( m_bOutline )
+            gs.addAttribute( "style:default-outline-level", (int)m_paragLayout.counter->depth() + 1 );
+        else
+            gs.addAttribute( "style:default-level", (int)m_paragLayout.counter->depth() + 1 );
+    }
+#endif
+    fillGenStyleWithLayout( layout, gs, true );
+    fillGenStyleWithFormatOne( layout.m_format , gs, true );
+
+    layout.m_autoStyleName = m_oasisGenStyles.lookup( gs, layout.m_name, false );
+    
+    kdDebug(30520) << "Style: " << layout.m_name << " => " << layout.m_autoStyleName << endl;
+}
+
 
 // Inspired from KoTextFormat::save but we have not the same data to start with.
 void KWord13OasisGenerator::fillGenStyleWithFormatOne( const KWord13FormatOne& one, KoGenStyle& gs, const bool style ) const
