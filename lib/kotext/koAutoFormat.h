@@ -298,7 +298,6 @@ private:
     QStringList m_upperCaseExceptions;
     QStringList m_twoUpperLetterException;
 
-    uint m_maxlen;
     uint m_maxFindLength;
     uint m_minCompletionWordLength;
     uint m_nbMaxCompletionWord;

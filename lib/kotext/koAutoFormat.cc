@@ -71,7 +71,6 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_entries(),
       m_upperCaseExceptions(),
       m_twoUpperLetterException(),
-      m_maxlen( 0 ),
       m_maxFindLength( 0 ),
       m_minCompletionWordLength( 5 ),
       m_nbMaxCompletionWord( 500 )
@@ -109,7 +108,6 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_entries( format.m_entries ),
       m_upperCaseExceptions( format.m_upperCaseExceptions ),
       m_twoUpperLetterException( format.m_twoUpperLetterException ),
-      m_maxlen( format.m_maxlen ),
       m_maxFindLength( format.m_maxFindLength ),
       m_minCompletionWordLength( format.m_minCompletionWordLength ),
       m_nbMaxCompletionWord( format.m_nbMaxCompletionWord )
@@ -133,7 +131,6 @@ void KoAutoFormat::loadListOfWordCompletion()
 
 void KoAutoFormat::readConfig()
 {
-
     // Read the autoformat configuration
     // This is done on demand (when typing the first char, or when opening the config dialog)
     // so that loading is faster and to avoid doing it for readonly documents.
@@ -194,14 +191,15 @@ void KoAutoFormat::readConfig()
     bool fileNotFound = false;
     QFile xmlFile;
     KLocale klocale(m_doc->instance()->instanceName());
+
     xmlFile.setName(locate( "data", "koffice/autocorrect/" + klocale.languageList().front() + ".xml", m_doc->instance() ));
+
     if(!xmlFile.open(IO_ReadOnly)) {
         xmlFile.setName(locate( "data", "koffice/autocorrect/autocorrect.xml", m_doc->instance() ));
     if(!xmlFile.open(IO_ReadOnly)) {
 	fileNotFound = true;
       }
     }
-
     if(!fileNotFound) {
       QDomDocument doc;
       if(!doc.setContent(&xmlFile)) {
@@ -295,7 +293,6 @@ void KoAutoFormat::saveConfig()
 
     QDomElement begin = doc.createElement( "Word" );
     doc.appendChild( begin );
-
     QDomElement items;
     items = doc.createElement("items");
     QDomElement data;
@@ -1214,9 +1211,9 @@ void KoAutoFormat::buildMaxLen()
 {
     QMap< QString, KoAutoFormatEntry >::Iterator it = m_entries.begin();
 
-    m_maxlen = 0;
+    m_maxFindLength = 0;
     for ( ; it != m_entries.end(); ++it )
-	m_maxlen = QMAX( m_maxlen, it.key().length() );
+	m_maxFindLength = QMAX( m_maxFindLength, it.key().length() );
 }
 
 QStringList KoAutoFormat::listCompletion() const
