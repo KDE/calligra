@@ -18,6 +18,7 @@
 #include <qlabel.h>
 #include <qhgroupbox.h>
 
+#include "kchart_factory.h"
 #include "kchartparams.h"
 
 KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParameters* params,
@@ -85,16 +86,16 @@ void KChartBarSubTypeChartPage::slotChangeSubType( int type )
 {
   switch( type ) {
   case KCHARTSTACKTYPE_DEPTH:
-	exampleLA->setPixmap( UserIcon( "barsubtypedepth" ) );
+	exampleLA->setPixmap( UserIcon( "barsubtypedepth", KChartFactory::global()) );
 	break;
   case KCHARTSTACKTYPE_LAYER:
-	exampleLA->setPixmap( UserIcon( "barsubtypelayer" ) );
+	exampleLA->setPixmap( UserIcon( "barsubtypelayer", KChartFactory::global() ) );
 	break;
   case KCHARTSTACKTYPE_BESIDE:
-	exampleLA->setPixmap( UserIcon( "barsubtypebeside" ) );
+	exampleLA->setPixmap( UserIcon( "barsubtypebeside", KChartFactory::global() ) );
 	break;
   case KCHARTSTACKTYPE_PERCENT:
-	exampleLA->setPixmap( UserIcon( "barsubtypepercent" ) );
+	exampleLA->setPixmap( UserIcon( "barsubtypepercent", KChartFactory::global() ) );
 	break;
   };
 }
