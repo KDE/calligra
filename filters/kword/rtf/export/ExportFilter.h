@@ -81,7 +81,7 @@ private:
     QString lookupFont(const QString& fontName);
     QString lookupColor(const QString& markup, const QColor& color);
     QString lookupStyle(const QString& styleName, LayoutData& returnLayout);
-    QString writeRow(const QString& textCellx, const QString& rowText, const int firstLeft);
+    QString writeRow(const QString& textCellx, const QString& rowText, const FrameData& frame);
 
 protected:
     QIODevice* m_ioDevice;

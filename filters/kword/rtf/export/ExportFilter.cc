@@ -73,19 +73,36 @@ RTFWorker::RTFWorker():
 
 #define FULL_TABLE_SUPPORT
 
-QString RTFWorker::writeRow(const QString& textCellx, const QString& rowText, const int firstLeft)
+QString RTFWorker::writeRow(const QString& textCellx, const QString& rowText, const FrameData& frame)
 {
+#ifdef FULL_TABLE_SUPPORT
     QString row;
-    row += "\\trowd\\trgaph60";  // start new row
+
+    row += "\\trowd\\trgaph60\\trql";  // start new row
+
+    row += "\\trrh";
+    const int trrh = qRound(PT_TO_TWIP(frame.minHeight));
+    if (trrh>0)
+        row += QString::number(trrh);
+    else
+        row += '0'; // Automatic height
+
     row += "\\trleft";
-    if (firstLeft>m_paperMarginLeft)
-        row += QString::number(firstLeft - m_paperMarginLeft);
+    const int trleft = qRound(PT_TO_TWIP(frame.left) - m_paperMarginLeft);
+    if (trleft>0)
+        row += QString::number(trleft);
     else
         row += '0';
+
+    row += "\\trautofit0"; // ### VERIFY
     row += textCellx;
     row += " "; // End of keyword
     row += rowText;
+
     return row;
+#else
+    return QString::null;
+#endif
 }
 
 bool RTFWorker::makeTable(const FrameAnchor& anchor)
@@ -95,7 +112,8 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
 
 #ifdef FULL_TABLE_SUPPORT
     int rowCurrent = 0;
-    int firstLeft=-1; // position of left border, in twips
+    bool firstCellInRow = true;
+    FrameData firstFrameData;
     int debugCellCurrent = 0; //DEBUG
     int debugRowCurrent = 0; //DEBUG
     QString textCellx; // All \cellx
@@ -113,23 +131,22 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
         if (rowCurrent!=(*itCell).row)
         {
             rowCurrent = (*itCell).row;
-            m_textBody += writeRow( textCellx, rowText, firstLeft);
+            m_textBody += writeRow( textCellx, rowText, firstFrameData);
             m_textBody += "\\row";
             m_textBody += m_eol;
             rowText = QString::null;
             textCellx = QString::null;
-            firstLeft = -1;
+            firstCellInRow=true;
             debugRowCurrent ++; // DEBUG
             debugCellCurrent = 0; //DEBUG
         }
 
         const FrameData& frame = (*itCell).frame;
 
-        if (firstLeft<0) // Not yet set, so set the position of the left border.
+        if (firstCellInRow) // Not yet set, so set the position of the left border.
         {
-            firstLeft=qRound(PT_TO_TWIP(frame.left));
-            if (firstLeft<0) // If still negative, set it to 0
-                firstLeft=0;
+            firstFrameData=frame;
+            firstCellInRow=false;
         }
 
         kdDebug(30515) << "Cell: " << debugRowCurrent << "," << debugCellCurrent
@@ -158,7 +175,7 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
     }
 
 #ifdef FULL_TABLE_SUPPORT
-    m_textBody += writeRow( textCellx, rowText, firstLeft);
+    m_textBody += writeRow( textCellx, rowText, firstFrameData);
     //m_textBody += "\\row";
     //m_textBody += m_eol;
     m_inTable = oldInTable;
