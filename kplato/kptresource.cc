@@ -1089,8 +1089,9 @@ KPTDuration KPTResourceGroupRequest::effort(const KPTDateTime &time, const KPTDu
     if (ok) *ok = sts;
     QPtrListIterator<KPTResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
-        e = it.current()->resource()->effort(time, duration, &sts);
+        e += it.current()->resource()->effort(time, duration, &sts);
         if (sts && ok) *ok = sts;
+        //kdDebug()<<k_funcinfo<<it.current()->resource()->name()<<" e="<<e.toString()<<endl;
     }
     return e;
 }
