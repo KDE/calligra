@@ -48,6 +48,7 @@
 #include <qpicture.h>
 #include <qdom.h>
 #include <qtextstream.h>
+#include <qtimer.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store:" but KURL didn't like it,
@@ -91,6 +92,8 @@ public:
     KoDocumentInfo *m_docInfo;
 
     QCString outputMimeType;
+    QTimer m_autoSaveTimer;
+    int m_autoSaveDelay; // in seconds, 0 to disable.
 };
 
 // Used in singleViewMode
@@ -132,7 +135,8 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
   m_bEmpty = TRUE;
   d->m_changed=false;
   d->m_dcopObject = 0L;
-
+  connect( &d->m_autoSaveTimer, SIGNAL( timeout() ), this, SLOT( slotAutoSave() ) );
+  setAutoSave( 60 ); // 1 minute, by default
   d->m_bSingleViewMode = singleViewMode;
 
   // the parent setting *always* overrides! (Simon)
@@ -246,6 +250,13 @@ bool KoDocument::saveFile()
   } else {
     // Native format => normal save
     ret = saveNativeFormat( m_file );
+
+    if ( ret )
+    {
+        // Eliminate any auto-save file
+        if ( QFile::exists( m_file + ".autosave" ) )
+            unlink( QFile::encodeName( m_file + ".autosave" ) );
+    }
   }
 
   if ( !ret )
@@ -259,6 +270,17 @@ bool KoDocument::saveFile()
 void KoDocument::setOutputMimeType( const QCString & mimeType )
 {
     d->outputMimeType = mimeType;
+}
+
+void KoDocument::slotAutoSave()
+{
+    kdDebug() << "KoDocument::slotAutoSave m_file=" << m_file << endl;
+    if ( !m_file.isEmpty() && isModified() )
+    {
+        // TODO temporary message in statusbar ?
+        /*bool ret =*/ saveNativeFormat( m_file + ".autosave" );
+        setModified( true );
+    }
 }
 
 KAction *KoDocument::action( const QDomElement &element ) const
@@ -296,6 +318,17 @@ void KoDocument::setReadWrite( bool readwrite )
   for (; dIt.current(); ++dIt )
     if ( dIt.current()->document() )
       dIt.current()->document()->setReadWrite( readwrite );
+
+  setAutoSave( d->m_autoSaveDelay );
+}
+
+void KoDocument::setAutoSave( int delay )
+{
+  d->m_autoSaveDelay = delay;
+  if ( isReadWrite() && d->m_autoSaveDelay > 0 )
+    d->m_autoSaveTimer.start( d->m_autoSaveDelay * 1000 );
+  else
+    d->m_autoSaveTimer.stop();
 }
 
 void KoDocument::addView( KoView *view )
@@ -620,6 +653,41 @@ bool KoDocument::saveToStore( KoStore* _store, const QString & _path )
   return true;
 }
 
+bool KoDocument::openURL( const KURL & _url )
+{
+  // Reimplemented, to add a check for autosave files
+  if ( _url.isMalformed() )
+    return false;
+  if ( !closeURL() )
+    return false;
+  KURL url( _url );
+  bool autosaveOpened = false;
+  if ( url.isLocalFile() )
+  {
+    QString file = url.path();
+    if ( QFile::exists( file + ".autosave" ) )
+    {
+      // ## TODO compare timestamps ?
+      int res = KMessageBox::warningYesNoCancel( widget(),
+            i18n( "An autosaved file exists for this document.\nDo you want to open it instead ?" ));
+      switch(res) {
+      case KMessageBox::Yes :
+        url.setPath( file + ".autosave" );
+        autosaveOpened = true;
+        break;
+      case KMessageBox::No :
+        break;
+      default: // Cancel
+        return false;
+      }
+    }
+  }
+  bool ret = KParts::ReadWritePart::openURL( url );
+  if ( autosaveOpened )
+    m_url = KURL(); // Force save to act like 'Save As'
+  return ret;
+}
+
 bool KoDocument::openFile()
 {
   kdDebug(30003) << "KoDocument::openFile for " << m_file << endl;
@@ -657,7 +725,7 @@ bool KoDocument::openFile()
     if ( !loadNativeFormat( importedFile ) )
     {
       ok = false;
-      KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg(importedFile) );
+      KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
     }
   }
   else {

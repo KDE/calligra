@@ -124,7 +124,16 @@ public:
    */
   virtual QDomDocument domDocument() const;
 
+  /**
+   * @internal
+   */
   virtual void setManager( KParts::PartManager *manager );
+
+  /**
+   * Reimplemented from KParts::ReadWritePart for internal reasons
+   * (for the autosave functionality)
+   */
+  virtual bool openURL( const KURL & url );
 
   /**
    * Sets whether the document can be edited or is read only.
@@ -349,6 +358,13 @@ public:
    */
   virtual bool saveNativeFormat( const QString & file );
 
+  /**
+   * Activate/deactive/configure the autosave feature.
+   * This feature is initially disabled, you need to call this method
+   * to activate it.
+   * @param delay in seconds, 0 to disable )
+   */
+  void setAutoSave( int delay );
 
   /**
    * @return the list of all children. Do not modify the
@@ -395,7 +411,7 @@ public:
 
   /**
    * Return a DCOP interface for this document
-   * KOffice Application are strongly recommended to reimplement this method,
+   * KOffice parts are strongly recommended to reimplement this method,
    * so that their dcop interface provides more functionality than the basic KoDocumentIface
    */
   virtual DCOPObject * dcopObject();
@@ -528,6 +544,7 @@ protected:
 private slots:
   void slotChildChanged( KoChild *c );
   void slotChildDestroyed();
+  void slotAutoSave();
 
 private:
 
