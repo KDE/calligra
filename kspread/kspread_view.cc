@@ -952,7 +952,7 @@ void KSpreadView::spellCleanup()
   m_spell.currentSpellTable = 0L;
   m_spell.currentCell       = 0L;
 
-  KMessageBox::information( this, i18n( "Spell checking is done." ) );  // not supported yet
+  KMessageBox::information( this, i18n( "Spell checking is complete." ) );  // not supported yet
   //    if(m_spell.macroCmdSpellCheck)
   //      m_pDoc->addCommand(m_spell.macroCmdSpellCheck);
 }
