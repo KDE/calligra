@@ -51,7 +51,7 @@ KoTemplateChooseDia::KoTemplateChooseDia( QWidget *parent, const char *name, con
 {
     firstTime = TRUE;
     global = _global;
-	
+
     groupList.setAutoDelete( TRUE );
     getGroups();
 
@@ -68,7 +68,7 @@ KoTemplateChooseDia::KoTemplateChooseDia( QWidget *parent, const char *name, con
     setupTabs();
     grid->addWidget( bb, 9, 0 );
     grid->setRowStretch( 2, 1 );
-	
+
     templateName = "";
     fullTemplateName = "";
     returnType = Cancel;
@@ -105,7 +105,7 @@ void KoTemplateChooseDia::getGroups()
 {
     QString str;
     char c[256];
-	
+
     QStringList dirs = global->dirs()->resourceDirs( template_type );
     for ( QStringList::ConstIterator it = dirs.begin(); it != dirs.end(); it++ ) {
 	QFile templateInf( *it + ".templates" );
@@ -124,7 +124,7 @@ void KoTemplateChooseDia::getGroups()
 		*c = 0;
 		// strcpy( c, "" );
 	    }
-		
+
 	    templateInf.close();
 	}
     }
@@ -135,7 +135,7 @@ void KoTemplateChooseDia::getGroups()
 void KoTemplateChooseDia::setupTabs()
 {
     grid = new QGridLayout( this, 10, 1, 7 , 7 );
-	
+
     QFrame *line;
 
     if ( !onlyTemplates ) {
@@ -143,7 +143,7 @@ void KoTemplateChooseDia::setupTabs()
 	line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 	line->setMaximumHeight( 20 );
 	grid->addWidget( line, 0, 0 );
-		
+
 	rbTemplates = new QRadioButton( i18n( "Create new document from a &Template" ), this );
 	grid->addWidget( rbTemplates, 1, 0 );
     }
@@ -178,7 +178,7 @@ void KoTemplateChooseDia::setupTabs()
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     line->setMaximumHeight( 20 );
     grid->addWidget( line, 3, 0 );
-	
+
     if ( !onlyTemplates ) {
 	rbFile = new QRadioButton( i18n( "&Open an existing document" ), this );
 	connect( rbFile, SIGNAL( clicked() ), this, SLOT( openFile() ) );
@@ -239,7 +239,7 @@ void KoTemplateChooseDia::chosen()
 {
     if ( onlyTemplates || !onlyTemplates && rbTemplates->isChecked() ) {
 	returnType = Template;
-		
+
 	if ( !groupList.isEmpty() ) {
 	    for ( grpPtr = groupList.first();grpPtr != 0;grpPtr = groupList.next() ) {
 		if ( grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty() ) {
@@ -255,14 +255,16 @@ void KoTemplateChooseDia::chosen()
 	returnType = File;
 
 	QString fileName = lFile->text();
-		
-	if ( !m_strMimeType.isEmpty() )
-        {
-	    QString importedFile = KoFilterManager::self()->import( fileName, m_strMimeType );
-            if ( !importedFile.isEmpty() && importedFile != fileName )
-                returnType = TempFile; // importedFile points to a temporary file
-            fileName = importedFile; // open the imported file
-        }
+
+    // I commented that out b/c David reogranised that stuff and now
+    // the do-we-need-a-filter check is done later. (Werner)
+	//if ( !m_strMimeType.isEmpty() )
+    //    {
+	    //QString importedFile = KoFilterManager::self()->import( fileName, m_strMimeType );
+        //    if ( !importedFile.isEmpty() && importedFile != fileName )
+        //        returnType = TempFile; // importedFile points to a temporary file
+        //    fileName = importedFile; // open the imported file
+    //    }
 
 	fullTemplateName = templateName = fileName;
 	accept();
