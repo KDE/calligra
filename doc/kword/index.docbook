@@ -33,6 +33,8 @@
   <!ENTITY links SYSTEM "doclinks.docbook">
   <!ENTITY comments SYSTEM "doccomments.docbook">
   <!ENTITY footend SYSTEM "footendnotes.docbook">
+  <!ENTITY struct SYSTEM "docstruct.docbook">
+  <!ENTITY mmerge SYSTEM "mailmerge.docbook">
   
   <!ENTITY deleteme SYSTEM "do_not_translate.docbook">
 
@@ -426,9 +428,9 @@ If any document variables were changed, &kword; will update their values through
 
 <!-- **************************************************************************************************** -->
 <chapter id="advanced-topics"><title>Advanced Topics</title>
+&struct;
 <sect1 id="chapter-number"><title>Chapter numbering</title><para></para></sect1>
-<sect1 id="mail-merge"><title>Mail Merge</title><para></para></sect1>
-<sect1 id="doc-structure"><title>Document Structure</title><para></para></sect1>
+&mmerge;
 </chapter>
 
 <!-- **************************************************************************************************** -->
