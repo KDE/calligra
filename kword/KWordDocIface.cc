@@ -588,3 +588,13 @@ void KWordDocIface::setPgUpDownMovesCaret( bool b )
 {
     doc->setPgUpDownMovesCaret( b );
 }
+
+void KWordDocIface::addIgnoreWordAll( const QString &word )
+{
+    doc->addIgnoreWordAll( word );
+}
+
+void KWordDocIface::clearIgnoreWordAll( )
+{
+    doc->clearIgnoreWordAll();
+}

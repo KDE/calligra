@@ -170,6 +170,9 @@ k_dcop:
     bool pgUpDownMovesCaret() const;
     void setPgUpDownMovesCaret( bool b );
 
+    void addIgnoreWordAll( const QString &);
+    void clearIgnoreWordAll( );
+
 
     //init/save config
     virtual void initConfig();
