@@ -903,7 +903,6 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
 }
 
 void KoMainWindow::slotSplitView() {
-
     d->m_splitted=true;
     d->m_rootViews.append(d->m_rootDoc->createView(d->m_splitter));
     d->m_rootViews.current()->show();
@@ -939,27 +938,26 @@ void KoMainWindow::slotCloseAllViews() {
 }
 
 void KoMainWindow::slotRemoveView() {
-    kdDebug() << "KoMainWindow::slotRemoveView" << endl;
     KoView *view;
     if(d->m_rootViews.findRef(d->m_activeView)!=-1)
         view=d->m_rootViews.current();
     else
         view=d->m_rootViews.first();
     view->hide();
-    d->m_rootViews.removeRef(view);
+    if ( !d->m_rootViews.removeRef(view) )
+        kdWarning() << "view not found in d->m_rootViews!" << endl;
 
     if(d->m_rootViews.count()==1)
     {
         d->m_removeView->setEnabled(false);
         d->m_orientation->setEnabled(false);
     }
-    // We'll react on destroyed(), i.e. before the view is removed from the splitter,
-    // so remove by hand first.
-    kdDebug() << "calling d->m_splitter->removeChild" << endl;
-    d->m_splitter->removeChild( view );
-    kdDebug() << "delete view" << endl;
+    // Prevent the view's destroyed() signal from triggering GUI rebuilding (too early)
+    d->m_manager->setActivePart( 0, 0 );
+
     delete view;
     view=0L;
+
     d->m_rootViews.first()->setPartManager( d->m_manager );
     d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.first() );
 
