@@ -401,11 +401,11 @@
 	<Type>IntType</Type>
       </Parameter>
       <Help>
-	<Text>Returns the payment for a loan.</Text>
+	<Text>PMT returns the amount of payment for a loan based on a constant interest rate and constant payments (each payment is equal amount).</Text>
 	<Syntax>PMT(rate; nper ; pv; fv; type)</Syntax>
 	<Example>PMT(0.1; 4; 10000) equals -3154.71</Example>
         <Related>NPER</Related>
-        <Related>PPMT</Related>
+	<Related>IPMT</Related>
         <Related>PV</Related>
       </Help>
     </Function>
@@ -460,7 +460,7 @@
 	<Type>IntType</Type>
       </Parameter>
       <Help>
-	<Text>Calculates the periodic amortizement for an investment with regular payments and a constant interest rate.</Text>
+	<Text>PPMT calculates the amount of a payment of an annuity going towards principal.</Text>
 	<Text>Rate is the periodic interest rate.</Text>
 	<Text>Period is the amortizement period. 1 for the first and NPER for the last period.</Text>
 	<Text>NPER is the total number of periods during which annuity is paid.</Text>
@@ -469,7 +469,9 @@
 	<Text>Type (optional) defines the due date. 1 for payment at the beginning of a period and 0 (default) for payment at the end of a period.</Text>
 	<Syntax>PPMT(Rate; Period; NPer; PV; FV; Type)</Syntax>
 	<Example>PPMT(0.0875;1;36;5000;8000;1) equals -18.48</Example>
-        <Related>IPMT</Related>
+	<Related>IPMT</Related>
+        <Related>PMT</Related>
+        <Related>PV</Related>
       </Help>
     </Function>
 
@@ -532,7 +534,7 @@
 	<Type>IntType</Type>
       </Parameter>
       <Help>
-	<Text>Calculates the amount of a payment of a period for an investment.</Text>
+	<Text>IPMT calculates the amount of a payment of an annuity going towards interest.</Text>
 	<Text>Rate is the periodic interest rate.</Text>
 	<Text>Period is the amortizement period. 1 for the first and NPER for the last period.</Text>
 	<Text>NPER is the total number of periods during which annuity is paid.</Text>
@@ -543,7 +545,8 @@
 	<Syntax>IPMT(Rate; Period; NPer; PV; FV; Type)</Syntax>
 	<Example>IPMT(0.1;3;3;8000) equals -292.45</Example>
         <Related>PPMT</Related>
-        <Related>PV</Related>
+	<Related>PV</Related>
+	<Related>PMT</Related>
       </Help>
     </Function>
 
