@@ -123,7 +123,7 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 //				path->convertToCurves();
 //				path->whirlPinch( KoPoint( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor() ), m_angle / VGlobal::pi_180, 1.0 );
 			}
-			//itr2.current()->transform( mat );
+			itr2.current()->transform( mat );
 			itr2.current()->setState( state_edit );
 			itr2.current()->draw( painter, itr2.current()->boundingBox( view->zoomFactor() ) );
 		}
