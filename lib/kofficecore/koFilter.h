@@ -99,7 +99,7 @@ public:
     /**
      * Takes a file as input and writes the converted information in a
      * QDomDocument. It's slightly faster than the first one, but you need
-     * a part which uses QDom (e.g. KSpread, KIS,...- but NOT KWord, KPresenter!).
+     * a part which uses QDom (e.g. KWord, KSpread, KIS,...- but NOT KPresenter yet!).
      * This one can only be used as import filter!!! (hence the I_ :)
      * @param file      The filename of the input file
      * @param from      Mimetype of the input
@@ -134,7 +134,7 @@ public:
      * "full" KoDocument (read only, if you don't cast away the constness :)
      * Reimplement this method if you want to EXPORT data. Note: Normally you
      * won't need direct access to the document! Use this method only in very
-     * special clases where everything else is impossible! Beware of corrupting
+     * special cases where everything else is impossible! Beware of corrupting
      * the document!!!
      * @param file      The filename of the input file
      * @param document  The KoDocument of the part
