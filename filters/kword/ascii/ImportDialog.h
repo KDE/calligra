@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +41,7 @@ public:
     AsciiImportDialog(QWidget* parent=NULL);
     ~AsciiImportDialog(void);
     QTextCodec* getCodec(void) const;
+    int getParagraphStrategy(void) const;
 private:
     ImportDialogUI* m_dialog;
 private slots:

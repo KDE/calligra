@@ -10,8 +10,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>196</width>
-            <height>186</height>
+            <width>393</width>
+            <height>272</height>
         </rect>
     </property>
     <property name="caption">
@@ -34,7 +34,7 @@
             <property name="title">
                 <string>Encoding</string>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
@@ -44,7 +44,7 @@
                 <property name="spacing">
                     <number>6</number>
                 </property>
-                <widget class="QRadioButton">
+                <widget class="QRadioButton" row="0" column="0" rowspan="1" colspan="5">
                     <property name="name">
                         <cstring>radioEncodingUTF8</cstring>
                     </property>
@@ -55,7 +55,7 @@
                         <bool>false</bool>
                     </property>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="5">
                     <property name="name">
                         <cstring>radioEncodingLocal</cstring>
                     </property>
@@ -66,7 +66,7 @@
                         <bool>true</bool>
                     </property>
                 </widget>
-                <widget class="QRadioButton">
+                <widget class="QRadioButton" row="2" column="0">
                     <property name="name">
                         <cstring>radioEncodingOther</cstring>
                     </property>
@@ -80,7 +80,7 @@
                         <number>2</number>
                     </property>
                 </widget>
-                <widget class="QComboBox">
+                <widget class="QComboBox" row="2" column="1">
                     <property name="name">
                         <cstring>comboBoxEncoding</cstring>
                     </property>
@@ -91,6 +91,69 @@
                             <horstretch>0</horstretch>
                             <verstretch>0</verstretch>
                         </sizepolicy>
+                    </property>
+                </widget>
+                <spacer row="2" column="3">
+                    <property name="name" stdset="0">
+                        <cstring>Spacer6</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroupParagraph</cstring>
+            </property>
+            <property name="title">
+                <string>End Of Paragraph</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioParagraphAsIs</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;As Is: at the end of line</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioParagraphSentence</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Sentence: if end of line is the end of a sentence</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>radioParagraphOldWay</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Old &amp;Way: smart choice</string>
                     </property>
                 </widget>
             </vbox>

@@ -3,7 +3,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2000 Michael Johnson <mikej@xnet.com>
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -208,13 +208,10 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QCString& from, const QCS
     }
 
     QTextCodec* codec=dialog->getCodec();
+    int paragraphStrategy=dialog->getParagraphStrategy();
 
     delete dialog;
 
-    QStringList paragraph;  // lines of the paragraph
-    int linecount = 0;  // line counter used to position tables
-    //int table_no = 0;  // used for table identifiers
-    int numLines; // Number of lines of the paragraph
 
     QFile in(m_chain->inputFile());
     if(!in.open(IO_ReadOnly)) {
@@ -243,9 +240,42 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QCString& from, const QCS
 
     stream.setCodec(codec);
 
+    if (1==paragraphStrategy)
+        sentenceConvert(stream, mainDocument, mainFramesetElement);
+    else if (999==paragraphStrategy)
+        oldWayConvert(stream, mainDocument, mainFramesetElement);
+    else
+        asIsConvert(stream, mainDocument, mainFramesetElement);
+
+
+#if 0
+    kdDebug(30502) << mainDocument.toString() << endl;
+#endif
+
+    KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
+    if(!out) {
+        kdError(30502) << "Unable to open output file!" << endl;
+        in.close();
+        return KoFilter::StorageCreationError;
+    }
+    QCString cstr=mainDocument.toCString();
+    // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
+    out->writeBlock(cstr,cstr.length());
+    in.close();
+    return KoFilter::OK;
+}
+
+void ASCIIImport::oldWayConvert(QTextStream& stream, QDomDocument& mainDocument,
+    QDomElement& mainFramesetElement)
+{
+    kdDebug(30502) << "Entering: ASCIIImport::oldWayConvert" << endl;
+    QStringList paragraph;  // lines of the paragraph
+    int linecount = 0;  // line counter used to position tables
+    //int table_no = 0;  // used for table identifiers
+    int numLines; // Number of lines of the paragraph
+
     bool lastCharWasCr=false; // Was the previous character a Carriage Return?
     QString strLine;
-
     while(!stream.atEnd())
     {
         paragraph.clear();
@@ -300,22 +330,82 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QCString& from, const QCS
     // Add table info
     if( table_no > 0) str += tbl;
 #endif
+}
 
-#if 1
-    kdDebug(30502) << mainDocument.toString() << endl;
-#endif
-
-    KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
-    if(!out) {
-        kdError(30502) << "Unable to open output file!" << endl;
-        in.close();
-        return KoFilter::StorageCreationError;
+void ASCIIImport::asIsConvert(QTextStream& stream, QDomDocument& mainDocument,
+    QDomElement& mainFramesetElement)
+// Paragraph strategy: one line, one paragraph
+{
+    kdDebug(30502) << "Entering: ASCIIImport::asIsConvert" << endl;
+    bool lastCharWasCr=false; // Was the previous character a Carriage Return?
+    QString strLine;
+    while(!stream.atEnd())
+    {
+        // Read one line and consider it being a paragraph
+        strLine=readLine(stream,lastCharWasCr);
+        writeOutParagraph(mainDocument,mainFramesetElement, "Standard", strLine,
+            0, 0);
     }
-    QCString cstr=mainDocument.toCString();
-    // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-    out->writeBlock(cstr,cstr.length());
-    in.close();
-    return KoFilter::OK;
+}
+
+void ASCIIImport::sentenceConvert(QTextStream& stream, QDomDocument& mainDocument,
+    QDomElement& mainFramesetElement)
+// Strategy:
+// - end a paragraph when a line ends with a point or similar punctuation.
+// - search the punctuation at the end of the line, even if the sentence is quoted or in parentheses.
+// - an empty line also ends the paragraph
+// TODO/FIXME: we have a little problem with empty lines. Perhaps we should not allow empty paragraphs!
+{
+    kdDebug(30502) << "Entering: ASCIIImport::sentenceConvert" << endl;
+    QStringList paragraph;  // lines of the paragraph
+    bool lastCharWasCr=false; // Was the previous character a Carriage Return?
+    QString strLine;
+    QString stoppingPunctuation(".!?");
+    QString skippingQuotes("\"')");
+    while (!stream.atEnd())
+    {
+        paragraph.clear();
+        for(;;)
+        {
+            // We need to read a line
+            // NOTE: we cannot use QStreamText::readLine,
+            //   as it does not know anything about Carriage Returns
+            strLine=readLine(stream,lastCharWasCr);
+            if (strLine.isEmpty())
+            {
+                break;
+            }
+
+            paragraph.append(strLine);
+
+            uint lastPos=strLine.length()-1;
+            QChar lastChar;
+            // Skip a maximum of 10 quotes (or similar) at the end of the line
+            for (int i=0;i<10;i++)
+            {
+                lastChar=strLine[lastPos];
+                if (lastChar.isNull())
+                    break;
+                else if (skippingQuotes.find(lastChar)==-1)
+                    break;
+                else
+                    lastPos--;
+            }
+
+            lastChar=strLine[lastPos];
+            if (lastChar.isNull())
+                continue;
+            else if (stoppingPunctuation.find(lastChar)!=-1)
+                break;
+        }
+#if 1
+        writeOutParagraph(mainDocument,mainFramesetElement, "Standard",
+            paragraph.join(" ").simplifyWhiteSpace(), 0, 0);
+#else
+        // FIXME/TODO: why is this not working?
+        //processParagraph(mainDocument,mainFramesetElement,paragraph);
+#endif
+     }  // while(!eof)
 }
 
 void ASCIIImport::processParagraph(QDomDocument& mainDocument,

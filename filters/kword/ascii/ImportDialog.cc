@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
+   Copyright (C) 2001, 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -92,6 +92,23 @@ QTextCodec* AsciiImportDialog::getCodec(void) const
     }
 
     return codec;
+}
+
+int AsciiImportDialog::getParagraphStrategy(void) const
+{
+    if (m_dialog->radioParagraphAsIs==m_dialog->buttonGroupParagraph->selected())
+    {
+        return 0;
+    }
+    if (m_dialog->radioParagraphSentence==m_dialog->buttonGroupParagraph->selected())
+    {
+        return 1;
+    }
+    else if (m_dialog->radioParagraphOldWay==m_dialog->buttonGroupParagraph->selected())
+    {
+        return 999;
+    }
+    return 0;
 }
 
 void AsciiImportDialog::comboBoxEncodingActivated(int)
