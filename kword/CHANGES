@@ -1354,5 +1354,18 @@ Reggie, 29.6.1999:
 
 Reggie, 1.7.1999:
 -----------------
-- Improved image handling => Fixed also loosing 
+- Improved image handling => Fixed also loosing
   inlined saved pictures in some cases
+
+Reggie, 3.7.1999:
+-----------------
+- Fixed creating, moving and resizing frames
+- When connection a frame to a frameset, only
+  the framesets, to which a frame can be connected,
+  are listed
+- Framesets have now unique names, which the user
+  can (has to) specify - this makes working with 
+  multiple framesets easier for users
+- Implemented deleting frames, framesets and tables
+- Some minor fixes
+

@@ -107,7 +107,8 @@ public:
     virtual void editPaste();
     virtual void editSelectAll();
     virtual void editFind();
-
+    virtual void editDeleteFrame();
+    
     virtual void newView();
     virtual void viewFormattingChars();
     virtual void viewFrameBorders();
@@ -160,7 +161,8 @@ public:
     virtual void tableJoinCells();
     virtual void tableSplitCells();
     virtual void tableUngroupTable();
-
+    virtual void tableDelete();
+    
     virtual void helpContents();
     virtual void helpAbout();
     virtual void helpAboutKOffice();
@@ -289,7 +291,8 @@ protected:
     CORBA::Long m_idMenuEdit_Paste;
     CORBA::Long m_idMenuEdit_SelectAll;
     CORBA::Long m_idMenuEdit_Find;
-
+    CORBA::Long m_idMenuEdit_DeleteFrame;
+    
     // view menu
     OpenPartsUI::Menu_var m_vMenuView;
     CORBA::Long m_idMenuView_NewView;
@@ -356,7 +359,8 @@ protected:
     CORBA::Long m_idMenuTable_JoinCells;
     CORBA::Long m_idMenuTable_SplitCells;
     CORBA::Long m_idMenuTable_UngroupTable;
-
+    CORBA::Long m_idMenuTable_Delete;
+    
     // help menu
     OpenPartsUI::Menu_var m_vMenuHelp;
     CORBA::Long m_idMenuHelp_Contents;

@@ -16,7 +16,8 @@ module KWord
       slot void editPaste();
       slot void editSelectAll();
       slot void editFind();
-
+      slot void editDeleteFrame();
+      
       slot void newView();
       slot void viewFormattingChars();
       slot void viewFrameBorders();
@@ -69,7 +70,8 @@ module KWord
       slot void tableJoinCells();
       slot void tableSplitCells();
       slot void tableUngroupTable();
-
+      slot void tableDelete();
+      
       slot void helpContents();
       slot void helpAbout();
       slot void helpAboutKOffice();

@@ -244,14 +244,13 @@ void KWDocStructRootItem::setupArrangement()
     QListViewItem *item = 0L;
     QString _name;
 
-    int j = 0;
+    //int j = 0;
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->getFrameSet( i );
         if ( frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager() )
         {
-            _name.sprintf( i18n( "Frameset %d" ), ++j );
-            item = new QListViewItem( this, _name );
+            item = new QListViewItem( this, frameset->getName() );
 
             parag = dynamic_cast<KWTextFrameSet*>( frameset )->getFirstParag();
             while ( parag )
@@ -317,14 +316,13 @@ void KWDocStructRootItem::setupTextFrames()
     QString _name;
     KWDocStructFrameItem *child;
 
-    int k = 0;
+    //int k = 0;
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
     {
         frameset = doc->getFrameSet( i );
         if ( frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager() )
         {
-            _name.sprintf( i18n( "Frameset %d" ), ++k );
-            item = new QListViewItem( this, _name );
+            item = new QListViewItem( this, frameset->getName() );
 
             for ( int j = frameset->getNumFrames() - 1; j >= 0; j-- )
             {

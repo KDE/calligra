@@ -163,7 +163,6 @@ public:
     void delFrameSet( KWFrameSet *f )
     { frames.remove( f ); }
 
-
     /**
      * Returns the first parag of the frameset <i>_num</i>.
      */
@@ -349,6 +348,8 @@ public:
     void addGroupManager( KWGroupManager *gm ) { grpMgrs.append( gm ); }
     unsigned int getNumGroupManagers() { return grpMgrs.count(); }
     KWGroupManager *getGroupManager( int i ) { return grpMgrs.at( i ); }
+    void delGroupManager( KWGroupManager *g )
+    { grpMgrs.remove( g ); }
 
     QPen setBorderPen( KWParagLayout::Border _brd );
     void enableEmbeddedParts( bool f );

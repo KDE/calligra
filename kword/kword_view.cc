@@ -754,17 +754,13 @@ void KWordView::editPaste()
 {
     QClipboard *cb = QApplication::clipboard();
 
-    if ( cb->data()->provides( MIME_TYPE ) )
-    {
+    if ( cb->data()->provides( MIME_TYPE ) ) {
         if ( cb->data()->encodedData( MIME_TYPE ).size() )
             gui->getPaperWidget()->editPaste( cb->data()->encodedData( MIME_TYPE ), MIME_TYPE );
-    }
-    else if ( cb->data()->provides( "text/plain" ) )
-    {
+    } else if ( cb->data()->provides( "text/plain" ) ) {
         if ( cb->data()->encodedData( "text/plain" ).size() )
             gui->getPaperWidget()->editPaste( cb->data()->encodedData( "text/plain" ) );
-    }
-    else if ( !cb->text().isEmpty() )
+    } else if ( !cb->text().isEmpty() )
         gui->getPaperWidget()->editPaste( cb->text() );
 }
 
@@ -783,6 +779,12 @@ void KWordView::editFind()
     searchDia->setCaption( i18n( "KWord - Search & Replace" ) );
     QObject::connect( searchDia, SIGNAL( cancelButtonPressed() ), this, SLOT( searchDiaClosed() ) );
     searchDia->show();
+}
+
+/*================================================================*/
+void KWordView::editDeleteFrame()
+{
+    gui->getPaperWidget()->editDeleteFrame();
 }
 
 /*================================================================*/
@@ -1310,6 +1312,18 @@ void KWordView::tableUngroupTable()
 }
 
 /*===============================================================*/
+void KWordView::tableDelete()
+{
+    KWGroupManager *grpMgr = gui->getPaperWidget()->getTable();
+    if ( !grpMgr )
+        QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table \n"
+                                                            "or select it to delete it!" ), i18n( "OK" ) );
+    else
+        gui->getPaperWidget()->deleteTable( grpMgr );
+    
+}
+
+/*===============================================================*/
 void KWordView::helpContents()
 {
 }
@@ -1766,6 +1780,10 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = Q2C( i18n( "&Select all" ) );
     m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem4( text, this, "editSelectAll", 0, -1, -1 );
 
+    m_vMenuEdit->insertSeparator( -1 );
+    text = Q2C( i18n( "&Delete Frame" ) );
+    m_idMenuEdit_DeleteFrame = m_vMenuEdit->insertItem4( text, this, "editDeleteFrame", 0, -1, -1 );
+
     // View
     text = Q2C( i18n( "&View" ) );
     _menubar->insertMenu( text, m_vMenuView, -1, -1 );
@@ -1938,6 +1956,11 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_idMenuTable_SplitCells = m_vMenuTable->insertItem4( text, this, "tableSplitCells", 0, -1, -1 );
     text = Q2C( i18n( "&Ungroup Table" ) );
     m_idMenuTable_UngroupTable = m_vMenuTable->insertItem4( text, this, "tableUngroupTable", 0, -1, -1 );
+
+    m_vMenuTable->insertSeparator( -1 );
+
+    text = Q2C( i18n( "&Delete Table" ) );
+    m_idMenuTable_Delete = m_vMenuTable->insertItem4( text, this, "tableDelete", 0, -1, -1 );
 
     // extra menu
     text = Q2C( i18n( "&Extra" ) );

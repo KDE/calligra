@@ -420,6 +420,34 @@ void KWFrameSet::delFrame( unsigned int _num )
 }
 
 /*================================================================*/
+void KWFrameSet::delFrame( KWFrame *frm )
+{
+    int _num = frames.findRef( frm );
+    if ( _num == -1 )
+        return;
+    
+    KWFrame *f;
+    
+    bool del = true;
+    int i = 0;
+    for ( f = frames.first(); f != 0; f = frames.next(), i++ )
+    {
+        if ( f == frm && i != _num )
+        {
+            del = false;
+            break;
+        }
+    }
+
+    if ( !del )
+        frames.take( _num );
+    else
+        frames.remove( _num );
+
+    update();
+}
+
+/*================================================================*/
 int KWFrameSet::getFrame( int _x, int _y )
 {
     for ( unsigned int i = 0; i < getNumFrames(); i++ )
@@ -858,7 +886,7 @@ void KWTextFrameSet::save( ostream &out )
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() )
         << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\""
         << static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\"" << static_cast<int>( removeableHeader )
-        << "\" visible=\"" << static_cast<int>( visible )
+        << "\" visible=\"" << static_cast<int>( visible ) << "\" name=\"" << correctQString( name ).latin1()
         << "\">" << endl;
 
     KWFrameSet::save( out );
@@ -1199,7 +1227,7 @@ void KWPictureFrameSet::setFileName( QString _filename )
     int dashdash = _filename.findRev( "--" );
     if ( dashdash != -1 )
         _filename == _filename.left( dashdash );
-    
+
     if ( image )
     {
         image->decRef();
@@ -1451,8 +1479,8 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 KWPartFrameSet::KWPartFrameSet( KWordDocument *_doc, KWordChild *_child )
     : KWFrameSet( _doc )
 {
-    child = _child; 
-    _enableDrawing = true; 
+    child = _child;
+    _enableDrawing = true;
     frame = 0L;
 }
 
@@ -1477,16 +1505,16 @@ QPicture *KWPartFrameSet::getPicture()
 /*================================================================*/
 void KWPartFrameSet::activate( QWidget *_widget, int diffx, int diffy, int diffxx )
 {
-    if ( !frame ) 
+    if ( !frame )
     {
         frame = new KWordFrame( dynamic_cast<KWordView*>( _widget ), child );
         frame->attachView( view );
         frame->show();
     }
-    frame->setGeometry( frames.at( 0 )->x() - diffx + diffxx, frames.at( 0 )->y() - diffy + 20, 
+    frame->setGeometry( frames.at( 0 )->x() - diffx + diffxx, frames.at( 0 )->y() - diffy + 20,
                         frames.at( 0 )->width(), frames.at( 0 )->height() );
     frame->view()->mainWindow()->setActivePart( frame->view()->id() );
-    
+
     parentID = dynamic_cast<KWordView*>( _widget )->getID();
 }
 

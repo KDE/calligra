@@ -29,6 +29,9 @@ class QCheckBox;
 class QLabel;
 class KRestrictedLine;
 class QCloseEvent;
+class QListView;
+class QListViewItem;
+class QLineEdit;
 
 static const int FD_FRAME_SET      = 1;
 static const int FD_FRAME          = 2;
@@ -62,9 +65,10 @@ protected:
     QCheckBox *cAutoCreateFrame;
     QLabel *lRunNo, *lRunBounding, *lRunContur, *lRGap, *lFrameSet, *lNewFrame;
     QLabel *lx, *ly, *lw, *lh, *lml, *lmr, *lmt, *lmb;
-    QListBox *lFrameSList;
+    QListView *lFrameSList;
     KRestrictedLine *sx, *sy, *sw, *sh, *sml, *smr, *smt, *smb;
-
+    QLineEdit *eFrameSetName;
+    
     KWFrame *frame;
     KRestrictedLine *eRGap;
     int flags;
@@ -78,13 +82,14 @@ protected:
 
 signals:
     void frameDiaClosed();
-
+    void applyButtonReallyPressed();
+    
 protected slots:
     void runNoClicked();
     void runBoundingClicked();
     void runConturClicked();
     void applyChanges();
-    void connectListSelected( int );
+    void connectListSelected( QListViewItem * );
 
 };
 

@@ -164,7 +164,8 @@ public:
     virtual void addFrame( KWFrame _frame );
     virtual void addFrame( KWFrame *_frame );
     virtual void delFrame( unsigned int _num );
-
+    virtual void delFrame( KWFrame *frm );
+    
     virtual int getFrame( int _x, int _y );
     virtual KWFrame *getFrame( unsigned int _num );
     virtual unsigned int getNumFrames()
@@ -209,6 +210,9 @@ public:
     bool isVisible() { return visible; }
     void setVisible( bool v ) { visible = v; }
 
+    QString getName() const { return name; }
+    void setName( const QString &_name ) { name = _name; }
+
 protected:
     virtual void init()
     {; }
@@ -223,6 +227,7 @@ protected:
     int current;
     KWGroupManager *grpMgr;
     bool removeableHeader, visible;
+    QString name;
 
 };
 

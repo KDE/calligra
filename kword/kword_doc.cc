@@ -143,24 +143,19 @@ CORBA::Boolean KWordDocument::initDoc()
     QString _template;
 
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate( "kword_template", _template, true, false );
-    if ( ret == KoTemplateChooseDia::Template )
-    {
+    if ( ret == KoTemplateChooseDia::Template ) {
         QFileInfo fileInfo( _template );
         QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kwt" );
         bool ok = loadTemplate( fileName.data() );
         setURL( QString::null );
         return ok;
-    }
-    else if ( ret == KoTemplateChooseDia::File )
-    {
+    } else if ( ret == KoTemplateChooseDia::File ) {
         QString fileName( _template );
         bool ok = loadTemplate( fileName.data() );
         setURL( fileName );
         _loaded = true;
         return ok;
-    }
-    else if ( ret == KoTemplateChooseDia::Empty )
-    {
+    } else if ( ret == KoTemplateChooseDia::Empty ) {
         QString fileName( locate("kword_template", "Wordprocessing/PlainText.kwt") );
         bool ok = loadTemplate( fileName.data() );
         setURL( QString::null );
@@ -212,14 +207,11 @@ bool KWordDocument::loadTemplate( const char *_url )
 void KWordDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf )
 {
     pglChanged = true;
-    if ( processingType == WP )
-    {
+    if ( processingType == WP ) {
         pageLayout = _layout;
         pageColumns = _cl;
         pageHeaderFooter = _hf;
-    }
-    else
-    {
+    } else {
         pageLayout = _layout;
         pageLayout.left = 0;
         pageLayout.right = 0;
@@ -263,124 +255,96 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
     int firstFootOffset = 0, evenFootOffset = 0, oddFootOffset = 0;
     KWTextFrameSet *firstHeader = 0L, *evenHeader = 0L, *oddHeader = 0L;
     KWTextFrameSet *firstFooter = 0L, *evenFooter = 0L, *oddFooter = 0L;
-    if ( hasHeader() || hasFooter() )
-    {
-        for ( unsigned int k = 0; k < getNumFrameSets(); k++ )
-        {
-            if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_HEADER && hasHeader() )
-            {
+    if ( hasHeader() || hasFooter() ) {
+        for ( unsigned int k = 0; k < getNumFrameSets(); k++ ) {
+            if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_HEADER && hasHeader() ) {
                 firstHeader = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
                 firstHeadOffset = pageHeaderFooter.ptHeaderBodySpacing + getFrameSet( k )->getFrame( 0 )->height();
             }
-            if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_HEADER && hasHeader() )
-            {
+            if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_HEADER && hasHeader() ) {
                 evenHeader = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
                 evenHeadOffset = pageHeaderFooter.ptHeaderBodySpacing + getFrameSet( k )->getFrame( 0 )->height();
             }
-            if ( getFrameSet( k )->getFrameInfo() == FI_ODD_HEADER && hasHeader() )
-            {
+            if ( getFrameSet( k )->getFrameInfo() == FI_ODD_HEADER && hasHeader() ) {
                 oddHeader = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
                 oddHeadOffset = pageHeaderFooter.ptHeaderBodySpacing + getFrameSet( k )->getFrame( 0 )->height();
             }
 
-            if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_FOOTER && hasFooter() )
-            {
+            if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_FOOTER && hasFooter() ) {
                 firstFooter = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
                 firstFootOffset = pageHeaderFooter.ptFooterBodySpacing + getFrameSet( k )->getFrame( 0 )->height();
             }
-            if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_FOOTER && hasFooter() )
-            {
+            if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_FOOTER && hasFooter() ) {
                 evenFooter = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
                 evenFootOffset = pageHeaderFooter.ptFooterBodySpacing + getFrameSet( k )->getFrame( 0 )->height();
             }
-            if ( getFrameSet( k )->getFrameInfo() == FI_ODD_FOOTER && hasFooter() )
-            {
+            if ( getFrameSet( k )->getFrameInfo() == FI_ODD_FOOTER && hasFooter() ) {
                 oddFooter = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
                 oddFootOffset = pageHeaderFooter.ptFooterBodySpacing + getFrameSet( k )->getFrame( 0 )->height();
             }
         }
-        if ( hasHeader() )
-        {
-            switch ( getHeaderType() )
-            {
+        if ( hasHeader() ) {
+            switch ( getHeaderType() ) {
             case HF_SAME:
-            {
                 oddHeader = evenHeader;
                 firstHeader = evenHeader;
                 oddHeadOffset = evenHeadOffset;
                 firstHeadOffset = evenHeadOffset;
-            } break;
+                break;
             case HF_FIRST_DIFF:
-            {
                 oddHeader = evenHeader;
                 oddHeadOffset = evenHeadOffset;
-            } break;
+                break;
             case HF_EO_DIFF:
-            {
                 firstHeader = oddHeader;
                 firstHeadOffset = oddHeadOffset;
-            } break;
+                break;
             }
         }
-        if ( hasFooter() )
-        {
-            switch ( getFooterType() )
-            {
+        if ( hasFooter() ) {
+            switch ( getFooterType() ) {
             case HF_SAME:
-            {
                 oddFooter = evenFooter;
                 firstFooter = evenFooter;
                 oddFootOffset = evenFootOffset;
                 firstFootOffset = evenFootOffset;
-            } break;
+                break;
             case HF_FIRST_DIFF:
-            {
                 oddFooter = evenFooter;
                 oddFootOffset = evenFootOffset;
-            } break;
+                break;
             case HF_EO_DIFF:
-            {
                 firstFooter = oddFooter;
                 firstFootOffset = oddFootOffset;
-            } break;
+                break;
             }
         }
     }
 
-    if ( processingType == WP )
-    {
+    if ( processingType == WP ) {
         int headOffset = 0, footOffset = 0;
 
-        for ( unsigned int j = 0; j < static_cast<unsigned int>( ceil( static_cast<double>( frms ) / static_cast<double>( pageColumns.columns ) ) ); j++ )
-        {
-            if ( j == 0 )
-            {
+        for ( unsigned int j = 0; j < static_cast<unsigned int>( ceil( static_cast<double>( frms ) / 
+                                                                       static_cast<double>( pageColumns.columns ) ) ); j++ ) {
+            if ( j == 0 ) {
                 headOffset = firstHeadOffset;
                 footOffset = firstFootOffset;
-            }
-            else if ( ( ( j + 1 ) / 2 ) * 2 == j + 1 )
-            {
+            } else if ( ( ( j + 1 ) / 2 ) * 2 == j + 1 ) {
                 headOffset = evenHeadOffset;
                 footOffset = evenFootOffset;
-            }
-            else
-            {
+            } else {
                 headOffset = oddHeadOffset;
                 footOffset = oddFootOffset;
             }
 
-            for ( int i = 0; i < pageColumns.columns; i++ )
-            {
-                if ( j * pageColumns.columns + i < frameset->getNumFrames() )
-                {
+            for ( int i = 0; i < pageColumns.columns; i++ ) {
+                if ( j * pageColumns.columns + i < frameset->getNumFrames() ) {
                     frameset->getFrame( j * pageColumns.columns + i )->setRect( getPTLeftBorder() + i * ( ptColumnWidth + getPTColumnSpacing() ),
                                                                                 j * getPTPaperHeight() + getPTTopBorder() + headOffset,
                                                                                 ptColumnWidth,
                                                                                 getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() -
                                                                                 headOffset - footOffset );
-                }
-                else
-                {
+                } else {
                     frameset->addFrame( new KWFrame( getPTLeftBorder() + i * ( ptColumnWidth + getPTColumnSpacing() ),
                                                      j * getPTPaperHeight() + getPTTopBorder() + headOffset,
                                                      ptColumnWidth, getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() -
@@ -392,12 +356,9 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
         pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( pageColumns.columns ) ) );
     }
 
-    if ( hasHeader() )
-    {
-        switch ( getHeaderType() )
-        {
-        case HF_SAME:
-        {
+    if ( hasHeader() ) {
+        switch ( getHeaderType() ) {
+        case HF_SAME: {
             int h = evenHeader->getFrame( 0 )->height();
             for ( int l = 0; l < pages; l++ )
             {
@@ -418,99 +379,79 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
                     evenHeader->delFrame( evenHeader->getNumFrames() - 1 );
             }
         } break;
-        case HF_EO_DIFF:
-        {
+        case HF_EO_DIFF: {
             int h1 = evenHeader->getFrame( 0 )->height();
             int h2 = oddHeader->getFrame( 0 )->height();
             evenHeader->setCurrent( 0 );
             oddHeader->setCurrent( 0 );
             int even = 0, odd = 0;
-            for ( int l = 0; l < pages; l++ )
-            {
-                if ( ( ( l + 1 ) / 2 ) * 2 != l + 1 )
-                {
+            for ( int l = 0; l < pages; l++ ) {
+                if ( ( ( l + 1 ) / 2 ) * 2 != l + 1 ) {
                     odd++;
-                    if ( static_cast<int>( oddHeader->getCurrent() ) < static_cast<int>( oddHeader->getNumFrames() ) )
-                    {
+                    if ( static_cast<int>( oddHeader->getCurrent() ) < static_cast<int>( oddHeader->getNumFrames() ) ) {
                         oddHeader->getFrame( oddHeader->getCurrent() )->setRect( getPTLeftBorder(), l * getPTPaperHeight() + getPTTopBorder(),
                                                                                  getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h2 );
                         oddHeader->setCurrent( oddHeader->getCurrent() + 1 );
-                    }
-                    else
-                    {
+                    } else {
                         KWFrame *frame = new KWFrame( getPTLeftBorder(), l * getPTPaperHeight() + getPTTopBorder(),
                                                       getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h2 );
                         oddHeader->addFrame( frame );
                     }
-                }
-                else
-                {
+                } else {
                     even++;
-                    if ( static_cast<int>( evenHeader->getCurrent() ) < static_cast<int>( evenHeader->getNumFrames() ) )
-                    {
+                    if ( static_cast<int>( evenHeader->getCurrent() ) < static_cast<int>( evenHeader->getNumFrames() ) ) {
                         evenHeader->getFrame( evenHeader->getCurrent() )->setRect( getPTLeftBorder(), l * getPTPaperHeight() + getPTTopBorder(),
                                                                                    getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h1 );
                         evenHeader->setCurrent( evenHeader->getCurrent() + 1 );
-                    }
-                    else
-                    {
+                    } else {
                         KWFrame *frame = new KWFrame( getPTLeftBorder(), l * getPTPaperHeight() + getPTTopBorder(),
                                                       getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h1 );
                         evenHeader->addFrame( frame );
                     }
                 }
             }
-            if ( even + 1 < static_cast<int>( evenHeader->getNumFrames() ) )
-            {
+            if ( even + 1 < static_cast<int>( evenHeader->getNumFrames() ) ) {
                 int diff = evenHeader->getNumFrames() - even;
                 for ( ; diff > 0; diff-- )
                     evenHeader->delFrame( evenHeader->getNumFrames() - 1 );
             }
-            if ( odd + 1 < static_cast<int>( oddHeader->getNumFrames() ) )
-            {
+            if ( odd + 1 < static_cast<int>( oddHeader->getNumFrames() ) ) {
                 int diff = oddHeader->getNumFrames() - odd;
                 for ( ; diff > 0; diff-- )
                     oddHeader->delFrame( oddHeader->getNumFrames() - 1 );
             }
-            if ( pages == 1 && evenHeader->getNumFrames() > 0 )
-            {
+            if ( pages == 1 && evenHeader->getNumFrames() > 0 ) {
                 for ( unsigned int m = 0; m < evenHeader->getNumFrames(); m++ )
                     evenHeader->getFrame( m )->setRect( 0, pages * getPTPaperHeight() + h1,
                                                         getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h1 );
             }
         } break;
-        case HF_FIRST_DIFF:
-        {
+        case HF_FIRST_DIFF: {
             int h = firstHeader->getFrame( 0 )->height();
             firstHeader->getFrame( 0 )->setRect( getPTLeftBorder(), getPTTopBorder(),
                                                  getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h );
-            if ( firstHeader->getNumFrames() > 1 )
-            {
+            if ( firstHeader->getNumFrames() > 1 ) {
                 int diff = firstHeader->getNumFrames() - 1;
                 for ( ; diff > 0; diff-- )
                     firstHeader->delFrame( firstHeader->getNumFrames() - 1 );
             }
             h = evenHeader->getFrame( 0 )->height();
-            for ( int l = 1; l < pages; l++ )
-            {
+            for ( int l = 1; l < pages; l++ ) {
                 if ( l - 1 < static_cast<int>( evenHeader->getNumFrames() ) )
                     evenHeader->getFrame( l - 1 )->setRect( getPTLeftBorder(), l * getPTPaperHeight() + getPTTopBorder(),
                                                             getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h );
-                else
-                {
+                else {
                     KWFrame *frame = new KWFrame( getPTLeftBorder(), l * getPTPaperHeight() + getPTTopBorder(),
                                                   getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h );
                     evenHeader->addFrame( frame );
                 }
             }
-            if ( pages < static_cast<int>( evenHeader->getNumFrames() ) )
-            {
+            if ( pages < static_cast<int>( evenHeader->getNumFrames() ) ) {
                 int diff = evenHeader->getNumFrames() - pages;
                 for ( ; diff > 0; diff-- )
                     evenHeader->delFrame( evenHeader->getNumFrames() - 1 );
             }
-            if ( pages == 1 && evenHeader->getNumFrames() > 0 )
-            {
+            if ( pages == 1 && evenHeader->getNumFrames() > 0 ) {
                 for ( unsigned int m = 0; m < evenHeader->getNumFrames(); m++ )
                     evenHeader->getFrame( m )->setRect( 0, pages * getPTPaperHeight() + h,
                                                         getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h );
@@ -519,34 +460,28 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
         }
     }
 
-    if ( hasFooter() )
-    {
+    if ( hasFooter() ) {
         switch ( getFooterType() )
         {
-        case HF_SAME:
-        {
+        case HF_SAME: {
             int h = evenFooter->getFrame( 0 )->height();
-            for ( int l = 0; l < pages; l++ )
-            {
+            for ( int l = 0; l < pages; l++ ) {
                 if ( l < static_cast<int>( evenFooter->getNumFrames() ) )
                     evenFooter->getFrame( l )->setRect( getPTLeftBorder(), ( l + 1 ) * getPTPaperHeight() - getPTBottomBorder() - h,
                                                         getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h );
-                else
-                {
+                else {
                     KWFrame *frame = new KWFrame( getPTLeftBorder(), ( l + 1 ) * getPTPaperHeight() - getPTBottomBorder() - h,
                                                   getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h );
                     evenFooter->addFrame( frame );
                 }
             }
-            if ( pages < static_cast<int>( evenFooter->getNumFrames() ) )
-            {
+            if ( pages < static_cast<int>( evenFooter->getNumFrames() ) ) {
                 int diff = evenFooter->getNumFrames() - pages;
                 for ( ; diff > 0; diff-- )
                     evenFooter->delFrame( evenFooter->getNumFrames() - 1 );
             }
         } break;
-        case HF_EO_DIFF:
-        {
+        case HF_EO_DIFF: {
             int h1 = evenFooter->getFrame( 0 )->height();
             int h2 = oddFooter->getFrame( 0 )->height();
             evenFooter->setCurrent( 0 );
@@ -557,33 +492,25 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
                 if ( ( ( l + 1 ) / 2 ) * 2 != l + 1 )
                 {
                     odd++;
-                    if ( static_cast<int>( oddFooter->getCurrent() ) < static_cast<int>( oddFooter->getNumFrames() ) )
-                    {
+                    if ( static_cast<int>( oddFooter->getCurrent() ) < static_cast<int>( oddFooter->getNumFrames() ) ) {
                         oddFooter->getFrame( oddFooter->getCurrent() )->setRect( getPTLeftBorder(),
                                                                                  ( l + 1 )  * getPTPaperHeight() - getPTBottomBorder() - h2,
                                                                                  getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h2 );
                         oddFooter->setCurrent( oddFooter->getCurrent() + 1 );
-                    }
-                    else
-                    {
+                    } else {
                         KWFrame *frame = new KWFrame( getPTLeftBorder(),
                                                       ( l + 1 )  * getPTPaperHeight() - getPTBottomBorder() - h2,
                                                       getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h2 );
                         oddFooter->addFrame( frame );
                     }
-                }
-                else
-                {
+                } else {
                     even++;
-                    if ( static_cast<int>( evenFooter->getCurrent() ) < static_cast<int>( evenFooter->getNumFrames() ) )
-                    {
+                    if ( static_cast<int>( evenFooter->getCurrent() ) < static_cast<int>( evenFooter->getNumFrames() ) ) {
                         evenFooter->getFrame( evenFooter->getCurrent() )->setRect( getPTLeftBorder(),
                                                                                    ( l + 1 )  * getPTPaperHeight() - getPTBottomBorder() - h1,
                                                                                    getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h1 );
                         evenFooter->setCurrent( evenFooter->getCurrent() + 1 );
-                    }
-                    else
-                    {
+                    } else {
                         KWFrame *frame = new KWFrame( getPTLeftBorder(),
                                                       ( l + 1 )  * getPTPaperHeight() - getPTBottomBorder() - h1,
                                                       getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h1 );
@@ -591,57 +518,48 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
                     }
                 }
             }
-            if ( even + 1 < static_cast<int>( evenFooter->getNumFrames() ) )
-            {
+            if ( even + 1 < static_cast<int>( evenFooter->getNumFrames() ) ) {
                 int diff = evenFooter->getNumFrames() - even;
                 for ( ; diff > 0; diff-- )
                     evenFooter->delFrame( evenFooter->getNumFrames() - 1 );
             }
-            if ( odd + 1 < static_cast<int>( oddFooter->getNumFrames() ) )
-            {
+            if ( odd + 1 < static_cast<int>( oddFooter->getNumFrames() ) ) {
                 int diff = oddFooter->getNumFrames() - odd;
                 for ( ; diff > 0; diff-- )
                     oddFooter->delFrame( oddFooter->getNumFrames() - 1 );
             }
-            if ( pages == 1 && evenFooter->getNumFrames() > 0 )
-            {
+            if ( pages == 1 && evenFooter->getNumFrames() > 0 ) {
                 for ( unsigned int m = 0; m < evenFooter->getNumFrames(); m++ )
                     evenFooter->getFrame( m )->setRect( 0, pages * getPTPaperHeight() + h1,
                                                         getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h1 );
             }
         } break;
-        case HF_FIRST_DIFF:
-        {
+        case HF_FIRST_DIFF: {
             int h = firstFooter->getFrame( 0 )->height();
             firstFooter->getFrame( 0 )->setRect( getPTLeftBorder(), getPTPaperHeight() - getPTBottomBorder() - h,
                                                  getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h );
-            if ( firstFooter->getNumFrames() > 1 )
-            {
+            if ( firstFooter->getNumFrames() > 1 ) {
                 int diff = firstFooter->getNumFrames() - 1;
                 for ( ; diff > 0; diff-- )
                     firstFooter->delFrame( firstFooter->getNumFrames() - 1 );
             }
             h = evenFooter->getFrame( 0 )->height();
-            for ( int l = 1; l < pages; l++ )
-            {
+            for ( int l = 1; l < pages; l++ ) {
                 if ( l - 1 < static_cast<int>( evenFooter->getNumFrames() ) )
                     evenFooter->getFrame( l - 1 )->setRect( getPTLeftBorder(), ( l + 1 ) * getPTPaperHeight() - getPTBottomBorder() - h,
                                                             getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h );
-                else
-                {
+                else {
                     KWFrame *frame = new KWFrame( getPTLeftBorder(), ( l + 1 ) * getPTPaperHeight() - getPTBottomBorder() - h,
                                                   getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h );
                     evenFooter->addFrame( frame );
                 }
             }
-            if ( pages < static_cast<int>( evenFooter->getNumFrames() ) )
-            {
+            if ( pages < static_cast<int>( evenFooter->getNumFrames() ) ) {
                 int diff = evenFooter->getNumFrames() - pages;
                 for ( ; diff > 0; diff-- )
                     evenFooter->delFrame( evenFooter->getNumFrames() - 1 );
             }
-            if ( pages == 1 && evenFooter->getNumFrames() > 0 )
-            {
+            if ( pages == 1 && evenFooter->getNumFrames() > 0 ) {
                 for ( unsigned int m = 0; m < evenFooter->getNumFrames(); m++ )
                     evenFooter->getFrame( m )->setRect( 0, pages * getPTPaperHeight() + h,
                                                         getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), h );
@@ -688,8 +606,7 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
     cerr << "bool KWordDocument::loadChildren( OPParts::MimeMultipartDict_ptr _dict )" << endl;
 
     QListIterator<KWordChild> it( m_lstChildren );
-    for( ; it.current(); ++it )
-    {
+    for( ; it.current(); ++it ) {
         cerr << "Loading child" << endl;
         if ( !it.current()->loadDocument( _store, it.current()->mimeType() ) )
             return false;
@@ -824,86 +741,66 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
 
     // DOC
-    if ( !parser.open( "DOC", tag ) )
-    {
+    if ( !parser.open( "DOC", tag ) ) {
         cerr << "Missing DOC" << endl;
         return false;
     }
 
     KOMLParser::parseTag( tag.c_str(), name, lst );
     vector<KOMLAttrib>::const_iterator it = lst.begin();
-    for( ; it != lst.end(); it++ )
-    {
-        if ( ( *it ).m_strName == "mime" )
-        {
-            if ( ( *it ).m_strValue != "application/x-kword" )
-            {
+    for( ; it != lst.end(); it++ ) {
+        if ( ( *it ).m_strName == "mime" ) {
+            if ( ( *it ).m_strValue != "application/x-kword" ) {
                 cerr << "Unknown mime type " << ( *it ).m_strValue << endl;
                 return false;
             }
-        }
-        else if ( ( *it ).m_strName == "url" )
+        } else if ( ( *it ).m_strName == "url" )
             urlIntern = ( *it ).m_strValue.c_str();
     }
 
     // PAPER
-    while ( parser.open( 0L, tag ) )
-    {
+    while ( parser.open( 0L, tag ) ) {
         KOMLParser::parseTag( tag.c_str(), name, lst );
 
-        if ( name == "OBJECT" )
-        {
+        if ( name == "OBJECT" ) {
             KWordChild *ch = new KWordChild( this );
             ch->load( parser, lst );
             insertChild( ch );
-        }
-        else if ( name == "PAPER" )
-        {
+        } else if ( name == "PAPER" ) {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
                 if ( ( *it ).m_strName == "format" )
                     __pgLayout.format = ( KoFormat )atoi( ( *it ).m_strValue.c_str() );
                 else if ( ( *it ).m_strName == "orientation" )
                     __pgLayout.orientation = ( KoOrientation )atoi( ( *it ).m_strValue.c_str() );
-                else if ( ( *it ).m_strName == "width" )
-                {
+                else if ( ( *it ).m_strName == "width" ) {
                     __pgLayout.width = __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
                     __pgLayout.ptWidth = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
                     __pgLayout.inchWidth = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-                }
-                else if ( ( *it ).m_strName == "height" )
-                {
+                } else if ( ( *it ).m_strName == "height" ) {
                     __pgLayout.height = __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
                     __pgLayout.ptHeight = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
                     __pgLayout.inchHeight = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
-                }
-                else if ( ( *it ).m_strName == "columns" )
+                } else if ( ( *it ).m_strName == "columns" )
                     __columns.columns = atoi( ( *it ).m_strValue.c_str() );
-                else if ( ( *it ).m_strName == "columnspacing" )
-                {
+                else if ( ( *it ).m_strName == "columnspacing" ) {
                     __columns.ptColumnSpacing = atoi( ( *it ).m_strValue.c_str() );
                     __columns.mmColumnSpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
                     __columns.inchColumnSpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
-                }
-                else if ( ( *it ).m_strName == "hType" )
+                } else if ( ( *it ).m_strName == "hType" )
                     __hf.header = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
                 else if ( ( *it ).m_strName == "fType" )
                     __hf.footer = static_cast<KoHFType>( atoi( ( *it ).m_strValue.c_str() ) );
-                else if ( ( *it ).m_strName == "spHeadBody" )
-                {
+                else if ( ( *it ).m_strName == "spHeadBody" ) {
                     __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
                     __hf.mmHeaderBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
                     __hf.inchHeaderBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
-                }
-                else if ( ( *it ).m_strName == "spFootBody" )
-                {
+                } else if ( ( *it ).m_strName == "spFootBody" ) {
                     __hf.ptFooterBodySpacing = atoi( ( *it ).m_strValue.c_str() );
                     __hf.mmFooterBodySpacing = POINT_TO_MM( atoi( ( *it ).m_strValue.c_str() ) );
                     __hf.inchFooterBodySpacing = POINT_TO_INCH( atoi( ( *it ).m_strValue.c_str() ) );
-                }
-                else if ( ( *it ).m_strName == "ptWidth" )
+                } else if ( ( *it ).m_strName == "ptWidth" )
                     __pgLayout.ptWidth = atoi( ( *it ).m_strValue.c_str() );
                 else if ( ( *it ).m_strName == "inchWidth" )
                     __pgLayout.inchWidth = atof( ( *it ).m_strValue.c_str() );
@@ -938,40 +835,29 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
             }
 
             // PAPERBORDERS, HEAD, FOOT
-            while ( parser.open( 0L, tag ) )
-            {
+            while ( parser.open( 0L, tag ) ) {
                 KOMLParser::parseTag( tag.c_str(), name, lst );
-                if ( name == "PAPERBORDERS" )
-                {
+                if ( name == "PAPERBORDERS" ) {
                     KOMLParser::parseTag( tag.c_str(), name, lst );
                     vector<KOMLAttrib>::const_iterator it = lst.begin();
-                    for( ; it != lst.end(); it++ )
-                    {
-                        if ( ( *it ).m_strName == "left" )
-                        {
+                    for( ; it != lst.end(); it++ ) {
+                        if ( ( *it ).m_strName == "left" ) {
                             __pgLayout.left = __pgLayout.mmLeft = ( double )atof( ( *it ).m_strValue.c_str() );
                             __pgLayout.ptLeft = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
                             __pgLayout.inchLeft = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                        }
-                        else if ( ( *it ).m_strName == "top" )
-                        {
+                        } else if ( ( *it ).m_strName == "top" ) {
                             __pgLayout.top = __pgLayout.mmTop = ( double )atof( ( *it ).m_strValue.c_str() );
                             __pgLayout.ptTop = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
                             __pgLayout.inchTop = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                        }
-                        else if ( ( *it ).m_strName == "right" )
-                        {
+                        } else if ( ( *it ).m_strName == "right" ) {
                             __pgLayout.right = __pgLayout.mmRight = ( double )atof( ( *it ).m_strValue.c_str() );
                             __pgLayout.ptRight = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
                             __pgLayout.inchRight = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                        }
-                        else if ( ( *it ).m_strName == "bottom" )
-                        {
+                        } else if ( ( *it ).m_strName == "bottom" ) {
                             __pgLayout.bottom = __pgLayout.mmBottom = ( double )atof( ( *it ).m_strValue.c_str() );
                             __pgLayout.ptBottom = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
                             __pgLayout.inchBottom = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
-                        }
-                        else if ( ( *it ).m_strName == "ptLeft" )
+                        } else if ( ( *it ).m_strName == "ptLeft" )
                             __pgLayout.ptLeft = atoi( ( *it ).m_strValue.c_str() );
                         else if ( ( *it ).m_strName == "inchLeft" )
                             __pgLayout.inchLeft = atof( ( *it ).m_strValue.c_str() );
@@ -1002,8 +888,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
                 else
                     cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
 
-                if ( !parser.close( tag ) )
-                {
+                if ( !parser.close( tag ) ) {
                     cerr << "ERR: Closing Child" << endl;
                     return false;
                 }
@@ -1011,12 +896,10 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 
         }
 
-        else if ( name == "ATTRIBUTES" )
-        {
+        else if ( name == "ATTRIBUTES" ) {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
                 if ( ( *it ).m_strName == "processing" )
                     processingType = static_cast<ProcessingType>( atoi( ( *it ).m_strValue.c_str() ) );
                 else if ( ( *it ).m_strName == "standardpage" )
@@ -1030,67 +913,54 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
             }
         }
 
-        else if ( name == "FOOTNOTEMGR" )
-        {
+        else if ( name == "FOOTNOTEMGR" ) {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
             }
             footNoteManager.load( parser, lst );
         }
 
-        else if ( name == "FRAMESETS" )
-        {
+        else if ( name == "FRAMESETS" ) {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
             }
             loadFrameSets( parser, lst );
         }
 
-        else if ( name == "STYLES" )
-        {
+        else if ( name == "STYLES" ) {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
             }
             loadStyleTemplates( parser, lst );
         }
 
-        else if ( name == "PIXMAPS" )
-        {
+        else if ( name == "PIXMAPS" ) {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
             }
 
-            while ( parser.open( 0L, tag ) )
-            {
+            while ( parser.open( 0L, tag ) ) {
                 QString key;
 
                 KOMLParser::parseTag( tag.c_str(), name, lst );
-                if ( name == "KEY" )
-                {
+                if ( name == "KEY" ) {
                     KOMLParser::parseTag( tag.c_str(), name, lst );
                     vector<KOMLAttrib>::const_iterator it = lst.begin();
-                    for( ; it != lst.end(); it++ )
-                    {
+                    for( ; it != lst.end(); it++ ) {
                         if ( ( *it ).m_strName == "key" )
                             key = ( *it ).m_strValue.c_str();
                         else
                             cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
                     }
                     pixmapKeys.append( key );
-                }
-                else
+                } else
                     cerr << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
 
-                if ( !parser.close( tag ) )
-                {
+                if ( !parser.close( tag ) ) {
                     cerr << "ERR: Closing Child" << endl;
                     QApplication::restoreOverrideCursor();
                     return false;
@@ -1101,15 +971,13 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         else
             cerr << "Unknown tag '" << tag << "' in the DOCUMENT" << endl;
 
-        if ( !parser.close( tag ) )
-        {
+        if ( !parser.close( tag ) ) {
             cerr << "ERR: Closing Child" << endl;
             return false;
         }
     }
 
-    switch ( KWUnit::unitType( unit ) )
-    {
+    switch ( KWUnit::unitType( unit ) ) {
     case U_MM: __pgLayout.unit = PG_MM;
         break;
     case U_PT: __pgLayout.unit = PG_PT;
@@ -1123,8 +991,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     bool _first_header = false, _even_header = false, _odd_header = false;
     bool _footnotes = false;
 
-    for ( unsigned int k = 0; k < getNumFrameSets(); k++ )
-    {
+    for ( unsigned int k = 0; k < getNumFrameSets(); k++ ) {
         if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_HEADER ) _first_header = true;
         if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_HEADER ) _odd_header = true;
         if ( getFrameSet( k )->getFrameInfo() == FI_ODD_HEADER ) _even_header = true;
@@ -1134,8 +1001,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         if ( getFrameSet( k )->getFrameInfo() == FI_FOOTNOTE ) _footnotes = true;
     }
 
-    if ( !_first_header )
-    {
+    if ( !_first_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this );
         fs->setFrameInfo( FI_FIRST_HEADER );
         KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
@@ -1144,8 +1010,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         fs->setAutoCreateNewFrame( false );
     }
 
-    if ( !_even_header )
-    {
+    if ( !_even_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this );
         fs->setFrameInfo( FI_EVEN_HEADER );
         KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
@@ -1154,8 +1019,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         fs->setAutoCreateNewFrame( false );
     }
 
-    if ( !_odd_header )
-    {
+    if ( !_odd_header ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this );
         fs->setFrameInfo( FI_ODD_HEADER );
         KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTTopBorder(), getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
@@ -1164,8 +1028,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         fs->setAutoCreateNewFrame( false );
     }
 
-    if ( !_first_footer )
-    {
+    if ( !_first_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this );
         fs->setFrameInfo( FI_FIRST_FOOTER );
         KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
@@ -1175,8 +1038,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         fs->setAutoCreateNewFrame( false );
     }
 
-    if ( !_even_footer )
-    {
+    if ( !_even_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this );
         fs->setFrameInfo( FI_EVEN_FOOTER );
         KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
@@ -1186,8 +1048,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         fs->setAutoCreateNewFrame( false );
     }
 
-    if ( !_odd_footer )
-    {
+    if ( !_odd_footer ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this );
         fs->setFrameInfo( FI_ODD_FOOTER );
         KWFrame *frame = new KWFrame( getPTLeftBorder(), getPTPaperHeight() - getPTTopBorder() - 20,
@@ -1197,13 +1058,12 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         fs->setAutoCreateNewFrame( false );
     }
 
-    if ( !_footnotes )
-    {
+    if ( !_footnotes ) {
         KWTextFrameSet *fs = new KWTextFrameSet( this );
         fs->setFrameInfo( FI_FOOTNOTE );
+        fs->setName( "Footnotes" );
 
-        for ( int i = 0; i < pages; i++ )
-        {
+        for ( int i = 0; i < pages; i++ ) {
             KWFrame *frame = new KWFrame( getPTLeftBorder(), i * getPTPaperHeight() + getPTPaperHeight() - getPTTopBorder() - 20,
                                           getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(), 20 );
             fs->addFrame( frame );
@@ -1213,16 +1073,15 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
         fs->setVisible( false );
     }
 
-    for ( unsigned int i = 0; i < getNumGroupManagers(); i++ )
-    {
+    for ( unsigned int i = 0; i < getNumGroupManagers(); i++ ) {
         if ( getGroupManager( i )->isActive() )
             getGroupManager( i )->init();
     }
 
     KWordChild *ch = 0L;
-    for ( ch = m_lstChildren.first(); ch != 0; ch = m_lstChildren.next() )
-    {
+    for ( ch = m_lstChildren.first(); ch != 0; ch = m_lstChildren.next() ) {
         KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
+        frameset->setName( i18n( "Frameset %1" ).arg( frames.count() + 1 ) );
         QRect r = ch->geometry();
         KWFrame *frame = new KWFrame( r.x(), r.y(), r.width(), r.height() );
         frameset->addFrame( frame );
@@ -1261,27 +1120,21 @@ void KWordDocument::loadStyleTemplates( KOMLParser& parser, vector<KOMLAttrib>& 
     string tag;
     string name;
 
-    while ( parser.open( 0L, tag ) )
-    {
+    while ( parser.open( 0L, tag ) ) {
         KOMLParser::parseTag( tag.c_str(), name, lst );
 
-        if ( name == "STYLE" )
-        {
+        if ( name == "STYLE" ) {
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
+            for( ; it != lst.end(); it++ ) {
             }
             KWParagLayout *pl = new KWParagLayout( this, false );
             pl->load( parser, lst );
             addStyleTemplate( pl );
-        }
-
-        else
+        } else
             cerr << "Unknown tag '" << tag << "' in STYLES" << endl;
 
-        if ( !parser.close( tag ) )
-        {
+        if ( !parser.close( tag ) ) {
             cerr << "ERR: Closing Child" << endl;
             return;
         }
@@ -1312,6 +1165,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
             _row = _col = 0, _rows = 1, _cols = 1;
             _visible = true;
             bool removeable = false;
+            QString fsname;
 
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1337,13 +1191,20 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     _cols = atoi( ( *it ).m_strValue.c_str() );
                 if ( ( *it ).m_strName == "visible" )
                     _visible = static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) );
+                if ( ( *it ).m_strName == "name" )
+                    fsname = ( *it ).m_strValue.c_str();
             }
+
+            if ( fsname.isEmpty() )
+                fsname = i18n( "Frameset %1" ).arg( frames.count() + 1 );
 
             switch ( frameType )
             {
             case FT_TEXT:
             {
                 KWTextFrameSet *frame = new KWTextFrameSet( this );
+                frame->setVisible( _visible );
+                frame->setName( fsname );
                 frame->load( parser, lst );
                 frame->setAutoCreateNewFrame( autoCreateNewFrame );
                 frame->setFrameInfo( frameInfo );
@@ -1373,7 +1234,6 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
                     frame->setGroupManager( grpMgr );
                     grpMgr->addFrameSet( frame, _row, _col );
                     KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
-                    frame->setVisible( _visible );
                     if ( cell )
                     {
                         cell->rows = _rows;
@@ -1386,6 +1246,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
             case FT_PICTURE:
             {
                 KWPictureFrameSet *frame = new KWPictureFrameSet( this );
+                frame->setName( fsname );
                 frame->load( parser, lst );
                 frame->setFrameInfo( frameInfo );
                 frames.append( frame );
@@ -1434,7 +1295,7 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
                 filename == filename.left( dashdash );
 
             KWImage image( this, img, filename );
-            if ( !img.isNull() ) 
+            if ( !img.isNull() )
                 imageCollection.insertImage( *it, image );
         }
     }
@@ -1539,12 +1400,12 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
     QDictIterator<KWImage> it = imageCollection.iterator();
 
     QStringList keys, images;
-    
+
     for( ; it.current(); ++it )
     {
         if ( keys.contains( it.currentKey() ) || images.contains( it.current()->getFilename() ) )
             continue;
-        
+
         QString u2 = u.in();
         u2 += "/";
         u2 += it.current()->getFilename();

@@ -125,7 +125,8 @@ public:
     void editCut();
     void editCopy();
     void editPaste( QString _string, const QString &_mime = "text/plain" );
-
+    void deleteTable( KWGroupManager *g );
+    
     void recalcText();
     void recalcWholeText( bool _cursor = false, bool _fast = false );
     void recalcWholeText( KWParag *start, unsigned int fs );
@@ -178,7 +179,7 @@ public:
     void repaintScreen( int currFS, bool erase );
 
     void selectAll();
-    
+
 public slots:
     void newLeftIndent( int _left );
     void newFirstIndent( int _first );
@@ -203,6 +204,7 @@ public slots:
     { setMouseMode( MM_CREATE_PART ); mmUncheckAll(); mm_menu->setItemChecked( mm_create_part, true ); }
     void femProps();
     void tabListChanged( QList<KoTabulator> *_tablist );
+    void editDeleteFrame();
 
 protected slots:
     void frameDiaClosed();
@@ -266,27 +268,27 @@ protected:
     bool kTab( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
     bool kDefault( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag, KWTextFrameSet *frameSet );
 
-    void vmmEdit( unsigned int mx, unsigned int my );
-    void vmmEditFrameSizeAll( unsigned int mx, unsigned int my );
-    void vmmEditFrameSizeVert( unsigned int mx, unsigned int my );
-    void vmmEditFrameSizeHorz( unsigned int mx, unsigned int my );
-    void vmmEditFrameFDiag( unsigned int mx, unsigned int my );
-    void vmmEditFrameBDiag( unsigned int mx, unsigned int my );
-    void vmmCreate( unsigned int mx, unsigned int my );
-    bool vmpEdit( unsigned int mx, unsigned int my );
-    void vmpEditFrame( QMouseEvent *e, unsigned int mx, unsigned int my );
-    void vmpCreate( unsigned int mx, unsigned int my );
-    void vmpCreatePixmap( unsigned int mx, unsigned int my );
+    void vmmEdit( int mx, int my );
+    void vmmEditFrameSizeAll( int mx, int my );
+    void vmmEditFrameSizeVert( int mx, int my );
+    void vmmEditFrameSizeHorz( int mx, int my );
+    void vmmEditFrameFDiag( int mx, int my );
+    void vmmEditFrameBDiag( int mx, int my );
+    void vmmCreate( int mx, int my );
+    bool vmpEdit( int mx, int my );
+    void vmpEditFrame( QMouseEvent *e, int mx, int my );
+    void vmpCreate( int mx, int my );
+    void vmpCreatePixmap( int mx, int my );
     void vmpMidButton();
-    void vmpRightButton( QMouseEvent *e, unsigned int mx, unsigned int my );
+    void vmpRightButton( QMouseEvent *e, int mx, int my );
     void vmrEdit();
-    void vmrEditFrame( unsigned int mx, unsigned int my );
+    void vmrEditFrame( int mx, int my );
     void vmrCreateText();
     void vmrCreatePixmap();
     void vmrCreatePartAnSoOn();
     void vmrCreateTable();
-    void vmdEdit( unsigned int mx, unsigned int my );
-    void vmdEditFrame( unsigned int mx, unsigned int my );
+    void vmdEdit( int mx, int my );
+    void vmdEditFrame( int mx, int my );
 
     void paintPicture( QPainter &painter, int i );
     void paintPart( QPainter &painter, int i );
