@@ -54,7 +54,7 @@ void KexiTableList::setSorting(int key, bool order=true, short type=1)
 
 int KexiTableList::compareItems(Item item1, Item item2)
 {
-	return (KexiTableList::cmpFunc)(item1, item2);
+	return (this->*cmpFunc)(item1, item2);
 }
 
 int KexiTableList::cmpInt(Item item1, Item item2)

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-					  Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Daniel Molkentin <molkentin@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -18,15 +18,19 @@
    Boston, MA 02111-1307, USA.
  */
 
-#include "kexiwidget.h"
- 
-KexiWidget::KexiWidget(QWidget *parent, const char *name)
- : QWidget(parent, name)
-{
-}
+/* this class is the class, wich holds all the
+   widgets wich displays the content 		*/
 
-KexiWidget::~KexiWidget()
-{
-}
+#ifndef KEXITABBROWSER_H
+#define KEXITABBROWSER_H
 
-#include "kexiwidget.moc"
+class KexiTabBrowser : public QWidget
+{
+	Q_OBJECT
+
+	public:
+		KexiTabBrowser(QWidget *parent=0, const char *name=0);
+		~KexiTabBrowser();
+};
+
+#endif

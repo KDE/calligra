@@ -34,7 +34,16 @@ class KexiBrowser : public KListView {
    Q_OBJECT
 
 public:
-	KexiBrowser(QWidget *parent=0, const char *name=0);
+	enum Section
+	{
+		SectionDB,
+		SectionTables,
+		SectionQueries,
+		SectionForms,
+		SectionReports
+	};
+
+	KexiBrowser(QWidget *parent=0, Section s=SectionDB, const char *name=0);
 	~KexiBrowser();
 	
 	void clearView();
@@ -42,7 +51,7 @@ public:
 	
 protected:
 	void			createForm();
-	void            addTables(KexiBrowserItem *parent);
+	void			addTables(KexiBrowserItem *parent);
 	KexiBrowserItem*	m_tables;
 	KexiBrowserItem*	m_queries;
 	KexiBrowserItem*	m_forms;

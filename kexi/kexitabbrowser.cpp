@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
-					  Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Daniel Molkentin <molkentin@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -18,15 +18,24 @@
    Boston, MA 02111-1307, USA.
  */
 
-#include "kexiwidget.h"
- 
-KexiWidget::KexiWidget(QWidget *parent, const char *name)
- : QWidget(parent, name)
+#include <kiconloader.h>
+
+#include <qtabwidget.h>
+
+#include "kexiapplication.h"
+#include "kexibrowser.h"
+#include "kexitabbrowser.h"
+
+KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
+	: QWidget(parent, name)
+{
+	QTabWidget *w = new QTabWidget(this);
+	KexiBrowser *b = new KexiBrowser(this, KexiBrowser::SectionDB);
+	w->addTab(b, kexi->iconLoader()->loadIcon("database", KIcon::Small), "");
+}
+
+KexiTabBrowser::~KexiTabBrowser()
 {
 }
 
-KexiWidget::~KexiWidget()
-{
-}
-
-#include "kexiwidget.moc"
+#include "kexitabbrowser.moc"

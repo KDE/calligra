@@ -37,7 +37,7 @@
 #include "kexidatatable.h"
 
 
-KexiBrowser::KexiBrowser(QWidget *parent, const char *name ) : KListView(parent,name)
+KexiBrowser::KexiBrowser(QWidget *parent, Section s, const char *name ) : KListView(parent,name)
 {
 	m_parent = parent;
 
