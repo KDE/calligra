@@ -5680,12 +5680,18 @@ void KWView::openDocStructurePopupMenu( const QPoint &_p, KWFrameSet *frameset)
 {
     if(!koDocument()->isReadWrite() )
         return;
+    QPtrList<KAction> actionList= QPtrList<KAction>();
+
     bool state = (frameset->type()==FT_TEXT || frameset->type()==FT_TABLE || frameset->type()==FT_FORMULA );
-    actionEditFrameSet->setEnabled( state );
+    if ( state )
+        actionList.append(actionEditFrameSet);
+
+    plugActionList( "edit_action", actionList );
+
     QPopupMenu* popup = static_cast<QPopupMenu *>(factory()->container("docstruct_popup",this));
     if ( popup )
-        popup->popup(_p);
-
+        popup->exec(_p);
+    unplugActionList( "edit_action" );
 }
 
 void KWView::selectFrameSet()
