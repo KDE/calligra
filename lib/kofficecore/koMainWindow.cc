@@ -235,7 +235,7 @@ void KoMainWindow::createHelpMenu( OPMenuBar* _menubar )
   }
 }
 
-bool KoMainWindow::saveDocument( const char* _native_format, const char* _native_pattern )
+bool KoMainWindow::saveDocument( const char* _native_format, const char* _native_pattern, const char* _native_name )
 {
     KOffice::Document_ptr pDoc = document();
     assert( pDoc );
@@ -247,9 +247,9 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 
     if ( _url == 0L || *_url == 0 ) {
 	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
-	   _native_format, _native_pattern, i18n("Choose document name for saving"), TRUE );
+	   _native_format, _native_pattern, _native_name, TRUE );
 
-        file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
+        file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
         if ( file.isNull() )
             return false;
 

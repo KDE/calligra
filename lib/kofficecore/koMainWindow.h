@@ -101,11 +101,13 @@ public:
    * @param _native_format the standard mimetype for your document
    * Will allow to use filters if saving to another format
    * @param _native_pattern *.kwd for KWord
+   * @param _native_name optionnal. KWord for KWord :)
    * @return TRUE on success or on cancel, false on error
    * (don't display anything in this case, the error dialog box is also implemented here
    *  but restore the original URL in slotFileSaveAs)
    */
-  virtual bool saveDocument( const char* _native_format, const char* _native_pattern );
+  virtual bool saveDocument( const char* _native_format, const char* _native_pattern,
+                             const char* _native_name = 0L );
 
 protected slots:
   /**
