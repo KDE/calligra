@@ -1911,7 +1911,11 @@ void KPTextView::dropEvent( QDropEvent * e )
                 bool dropInSameObj= ( obj == kpTextObject());
                 KCommand *cmd=textView()->dropEvent(obj->textObject(), dropCursor, dropInSameObj );
                 if(cmd)
+                {
+                    obj->layout();
+                    kpTextObject()->layout();
                     macroCmd->addCommand(cmd);
+                }
                 else
                 {
                     delete macroCmd;
