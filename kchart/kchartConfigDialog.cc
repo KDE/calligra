@@ -19,8 +19,8 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 {
     // Geometry page
     // PENDING(kalle) _xstep only for axes charts
-    _geompage = new KChartGeometryConfigPage( this );
-    addTab( _geompage, i18n( "&Geometry" ) );
+    //_geompage = new KChartGeometryConfigPage( this );
+    //addTab( _geompage, i18n( "&Geometry" ) );
 
 	// Color page
     _colorpage = new KChartColorConfigPage( this );

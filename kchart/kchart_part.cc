@@ -188,6 +188,9 @@ void KChartPart::loadConfig( KConfig *conf ) {
     _params->loadConfig(conf);
 }
 
+void KChartPart::defaultConfig(  ) {
+    _params->defaultConfig();
+}
 
 void KChartPart::saveConfig( KConfig *conf ) {
     _params->saveConfig(conf);
@@ -843,6 +846,9 @@ bool KChartPart::load( istream& in, KoStore* store )
 
 /**
  * $Log$
+ * Revision 1.28  2000/02/20 22:39:54  mueller
+ * compilation fix with new Qt
+ *
  * Revision 1.27  2000/02/13 19:32:03  mlaurent
  * bug fix
  *

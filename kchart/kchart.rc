@@ -8,6 +8,7 @@
  <Menu name="Options"><text>Options</text>
   <Action name="loadconfig"/>
   <Action name="saveconfig"/>	
+  <Action name="defaultconfig"/>	
  </Menu>
 </MenuBar>
 <ToolBar name="KChartToolBar">

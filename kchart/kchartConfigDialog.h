@@ -11,7 +11,7 @@
 #include "kchartColorConfigPage.h"
 #include "kchartParameterConfigPage.h"
 #include "kchartParameterPieConfigPage.h"
-#include "kchartGeometryConfigPage.h"
+//#include "kchartGeometryConfigPage.h"
 #include "kchartFontConfigPage.h"
 #include "kchartPieConfigPage.h"
 #include "kchartparams.h"
@@ -27,7 +27,7 @@ public:
 
 protected:
     KChartParameters* _params;
-    KChartGeometryConfigPage* _geompage;
+    //KChartGeometryConfigPage* _geompage;
     KChartColorConfigPage* _colorpage;
     KChartParameterConfigPage*_parameterpage; 
     KChartParameterPieConfigPage*_parameterpiepage; 

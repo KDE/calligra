@@ -26,6 +26,7 @@ protected slots:
       void wizard();
       void saveConfig();
       void loadConfig();
+      void defaultConfig();
       void createTempData();
       void pieChart();
       void barsChart();
@@ -43,6 +44,7 @@ private:
     QAction* m_config;
     QAction* m_saveconfig;
     QAction* m_loadconfig;
+    QAction* m_defaultconfig;
     QAction* m_chartpie;
     QAction* m_chartareas;
     QAction* m_chartbars;

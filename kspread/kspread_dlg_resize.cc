@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -39,7 +39,7 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
   type=re;
   QString tmp;
   int pos;
-
+  QString label;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
@@ -53,13 +53,14 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
 		tmp=i18n("Row ")+tmp.setNum(pos);
 		rl = m_pView->activeTable()->rowLayout(pos);
 		size=rl->height(m_pView->canvasWidget());
-		
+		label=i18n("Height");
 		break;
 	case resize_column:
 		pos=m_pView->hBorderWidget()->markerColumn();
 		tmp=i18n("Column ")+util_columnLabel(pos);
 		cl = m_pView->activeTable()->columnLayout(pos);
 		size=cl->width(m_pView->canvasWidget());
+		label=i18n("Width");
 		break;
 	default :
 		cout <<"Err in type_resize\n";
@@ -68,10 +69,10 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
 
   setCaption( tmp );
   
-  m_pSize2=new KIntNumInput( 20,400,1,size ,this,QString::null, QString::null,false);
+  m_pSize2=new KIntNumInput( 20,400,1,size ,this,label, QString::null,false);
   m_pSize2->layout();
   lay1->addWidget(m_pSize2);
-  
+
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("OK") );
@@ -79,7 +80,7 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
   lay1->addWidget( bb );
-
+  lay1->activate();
   m_pSize2->setFocus();
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );

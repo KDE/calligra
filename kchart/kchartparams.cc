@@ -67,7 +67,7 @@ KChartParameters::KChartParameters() :
 	scatter = 0;
 	thumbnail = false;
 	thumbval = -MAXFLOAT;
-	border = false;
+	border = true;
 	transparent_bg = false;
 	percent_labels = KCHARTPCTTYPE_NONE;
 	type = KCHARTTYPE_3DBAR;
@@ -175,11 +175,6 @@ void KChartParameters::loadColorArray(KConfig *conf,
 
 void KChartParameters::saveConfig(KConfig *conf) {
   conf->setGroup("ChartParameters");
-  //title, xtitle, ytitle are writting in file when you save.
-  /*conf->writeEntry("title", title);
-  conf->writeEntry("xtitle", xtitle);
-  conf->writeEntry("ytitle", ytitle);*/
-  conf->writeEntry("ytitle2", ytitle2);
   // the fonts
   conf->writeEntry("titlefont", titlefont);
   conf->writeEntry("ytitlefont", ytitlefont);
@@ -247,10 +242,6 @@ void KChartParameters::saveConfig(KConfig *conf) {
 void KChartParameters::loadConfig(KConfig *conf) {
   conf->setGroup("ChartParameters");
 
-  /*title = conf->readEntry("title", title);
-  xtitle = conf->readEntry("xtitle", xtitle);
-  ytitle = conf->readEntry("ytitle", ytitle );*/
-  ytitle2 = conf->readEntry("ytitle2", ytitle2);
   // TODO: the fonts
   QFont tempfont;
   tempfont = conf->readFontEntry("titlefont", &titlefont);
@@ -323,3 +314,77 @@ void KChartParameters::loadConfig(KConfig *conf) {
   other_threshold = conf->readNumEntry("other_threshold", other_threshold);
 }
 
+void KChartParameters::defaultConfig()
+{
+/*BGColor( 0, 0, 0 ),
+GridColor( 160, 160, 160 ),
+LineColor( 0, 0, 0 ),
+PlotColor( 0, 0, 0 ),
+VolColor( 160, 160, 255 ),
+TitleColor( 0, 0, 0 ),
+XTitleColor( 0, 0, 0 ),
+YTitleColor( 0, 0, 0 ),
+YTitle2Color( 0, 0, 0 ),
+XLabelColor( 0, 0, 0 ),
+YLabelColor( 0, 0, 0 ),
+YLabel2Color( 0, 0, 0 ),
+EdgeColor() // default: no color
+{*/
+	ExtColor.setColor( 0, Qt::red );
+	ExtColor.setColor( 1, Qt::green );
+	ExtColor.setColor( 2, Qt::blue );
+	ExtColor.setColor( 3, Qt::cyan );
+	ExtColor.setColor( 4, Qt::magenta );
+	ExtColor.setColor( 5, Qt::yellow );
+	ExtColor.setColor( 6, Qt::darkRed );
+	ExtColor.setColor( 7, Qt::darkGreen );
+	ExtColor.setColor( 8, Qt::darkBlue );
+	ExtColor.setColor( 9, Qt::darkCyan );
+	ExtColor.setColor( 10, Qt::darkMagenta );
+	ExtColor.setColor( 11, Qt::darkYellow );
+
+	setTitleFont( QFont( "Helvetica", 12 ) );
+	setYTitleFont( QFont( "Helvetica", 12 ) );
+	setXTitleFont( QFont( "Helvetica", 12 ) );
+	setYAxisFont( QFont( "Helvetica", 10 ) );
+	setXAxisFont( QFont( "Helvetica", 10 ) );
+	setLabelFont( QFont( "Helvetica", 10 ) );
+	setAnnotationFont( QFont( "Helvetica", 10 ) );
+
+	label_dist = 1+8/2;
+	label_line = false;
+	xlabel_spacing = 5;
+	ylabel_density = 80;
+	requested_ymin = MAXDOUBLE;
+	requested_ymax = -MAXDOUBLE;
+	requested_yinterval = -MAXDOUBLE;
+	shelf = true;
+	grid = true;
+	xaxis = true;
+	yaxis = true;
+	yaxis2 = true;
+	yval_style = true;
+	hasxlabel=true;
+	stack_type = KCHARTSTACKTYPE_DEPTH;
+	_3d_depth = 5.0;
+	_3d_angle = 45;
+	bar_width = 75;
+	hlc_style = KCHARTHLCSTYLE_CLOSECONNECTED;
+	hlc_cap_width = 25;
+	annotation = 0;
+	num_scatter_pts = 0;
+	scatter = 0;
+	thumbnail = false;
+	thumbval = -MAXFLOAT;
+	border = true;
+	transparent_bg = false;
+	//percent_labels = KCHARTPCTTYPE_NONE;
+	//type = KCHARTTYPE_3DBAR;
+	hard_size = false;
+	hard_graphheight = 0;
+	hard_graphwidth = 0;
+	hard_xorig = 0;
+	hard_yorig = 0;
+	//colPie=0; //first column select
+	//offsetCol=0;
+}

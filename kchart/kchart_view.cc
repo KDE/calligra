@@ -45,6 +45,11 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
 				0,
 				this, SLOT( saveConfig() ),
 				actionCollection(), "saveconfig");
+    m_defaultconfig = new KAction( tr("By default"), KChartBarIcon("defaultconfig"),
+				0,
+				this, SLOT( defaultConfig() ),
+				actionCollection(), "defaultconfig");
+
     m_chartpie = new KAction( tr("Pie"), KChartBarIcon("cakes"),
 				0,
 				this, SLOT( pieChart() ),
@@ -201,7 +206,8 @@ void KChartView::config()
     switch( params->type ) {
     case KCHARTTYPE_3DBAR:
     case KCHARTTYPE_BAR: {
-	KChartBarConfigDialog* d = new KChartBarConfigDialog( params, this );
+	//KChartBarConfigDialog* d = new KChartBarConfigDialog( params, this );
+	KChartConfigDialog* d = new KChartConfigDialog( params, this );
 	d->exec();
 	delete d;
 	break;
@@ -248,6 +254,12 @@ void KChartView::loadConfig() {
     //refresh chart when you load config
     repaint();
 }
+
+void KChartView::defaultConfig() {
+    ((KChartPart*)koDocument())->defaultConfig(  );
+    repaint();
+}
+
 
 void KChartView::pieChart() {
 KChartParameters* params = ((KChartPart*)koDocument())->params();

@@ -102,6 +102,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 	
     m_pDoc = doc;
     m_pPopupMenu = 0;
+    m_pPopupColumn = 0;
+    m_pPopupRow = 0;
     m_dcop = 0;
 
     // Vert. Scroll Bar

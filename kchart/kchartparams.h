@@ -130,7 +130,7 @@ struct KChartParameters
 
     void saveConfig(KConfig *conf);
     void loadConfig(KConfig *conf);
-
+    void defaultConfig();
     QString title;
     QString xtitle;
     QString ytitle;

@@ -227,6 +227,7 @@ void KSpreadUndoDeleteRow::undo()
     KSpreadCell *o;
     for ( o = m_lstCells.first(); o != 0L; o = m_lstCells.next() )
 	m_pTable->insertCell( o );
+
     if ( m_pRowLayout )
 	m_pTable->insertRowLayout( m_pRowLayout );
 

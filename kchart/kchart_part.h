@@ -44,6 +44,7 @@ public:
     void initLabelAndLegend();
     void loadConfig(KConfig *conf);
     void saveConfig(KConfig *conf);
+    void defaultConfig();
     KChartData *data() {return &currentData; };
     KChartParameters* params() const { return _params; };
     // save and load
