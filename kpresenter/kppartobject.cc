@@ -74,7 +74,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
     double oh = ext.height();
 
     QSize size( _zoomhandler->zoomSize( ext ) );
-    int penw = pen.width() / 2;
+    int penw = ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2;
 
     QPen pen2;
     if ( drawContour )

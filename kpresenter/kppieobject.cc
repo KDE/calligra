@@ -138,7 +138,7 @@ void KPPieObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
 {
     double ow = ext.width();
     double oh = ext.height();
-    double pw = pen.width() / 2;
+    double pw = ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0;
 
     if ( drawContour ) {
         QPen pen3( Qt::black, 1, Qt::DotLine );

@@ -226,10 +226,18 @@ void SetBackCmd::execute()
     }
     doc->repaint( false );
 
-    if ( doc->refreshSideBar())
-    {
-        int pos=doc->pageList().findRef(m_page);
-        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    if ( doc->refreshSideBar() ) {
+        if ( takeGlobal ) {
+            QPtrListIterator<KPrPage> it( doc->getPageList() );
+            for ( int pos = 0; it.current(); ++it, ++pos ) {
+                KPrPage *_page = it.current();
+                doc->updateSideBarItem( pos, ( _page == doc->stickyPage() ) ? true : false );
+            }
+        }
+        else {
+            int pos = doc->pageList().findRef( m_page );
+            doc->updateSideBarItem( pos, ( m_page == doc->stickyPage() ) ? true : false );
+        }
     }
 }
 
@@ -257,10 +265,18 @@ void SetBackCmd::unexecute()
     }
     doc->repaint( false );
 
-    if ( doc->refreshSideBar())
-    {
-        int pos=doc->pageList().findRef(m_page);
-        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    if ( doc->refreshSideBar() ) {
+        if ( takeGlobal ) {
+            QPtrListIterator<KPrPage> it( doc->getPageList() );
+            for ( int pos = 0; it.current(); ++it, ++pos ) {
+                KPrPage *_page = it.current();
+                doc->updateSideBarItem( pos, ( _page == doc->stickyPage() ) ? true : false );
+            }
+        }
+        else {
+            int pos = doc->pageList().findRef( m_page );
+            doc->updateSideBarItem( pos, ( m_page == doc->stickyPage() ) ? true : false );
+        }
     }
 }
 

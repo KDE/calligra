@@ -196,7 +196,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
     }
 
     _painter->setPen( pen2 );
-    pwOrig = pen2.width();
+    pwOrig = ( pen2.style() == Qt::NoPen ) ? 1 : pen2.width();
     if ( !drawContour )
         _painter->setBrush( brush );
 

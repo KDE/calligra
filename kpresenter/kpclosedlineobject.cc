@@ -188,7 +188,7 @@ void KPClosedLineObject::setFillType( FillType _fillType )
 void KPClosedLineObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
                                 bool drawingShadow, bool drawContour )
 {
-    int _w = pen.width();
+    int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.width();
 
     if ( drawContour ) {
         QPointArray pointArray2 = points.zoomPointArray( _zoomHandler );
