@@ -120,9 +120,6 @@ class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public KFormDesigner::
 	protected:
 		void closeEvent(QCloseEvent *ev);
 
-	signals:
-		void formWidgetClosed(bool &accept);
-
 	private:
 		QPixmap buffer; //!< stores grabbed entire form's area for redraw
 		QRect prev_rect; //!< previously selected rectangle

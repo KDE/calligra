@@ -109,7 +109,7 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
 
 	m_workspace = new QWorkspace(container, "kfd_workspace");
 	m_workspace->show();
-	m_manager = new KFormDesigner::FormManager(m_workspace, this, "kfd_manager");
+	m_manager = new KFormDesigner::FormManager(this, "kfd_manager");
 
 	if(!readOnly)
 	{

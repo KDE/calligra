@@ -65,12 +65,11 @@
 
 using namespace KFormDesigner;
 
-FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name=0)
+FormManager::FormManager(QObject *parent=0, const char *name=0)
    : QObject(parent, name)
 {
 	m_lib = new WidgetLibrary(this);
 	m_buffer = new ObjectPropertyBuffer(this, this, "buffer");
-	m_parent = container;
 
 	m_editor = 0;
 	m_active = 0;

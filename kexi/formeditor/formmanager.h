@@ -59,7 +59,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 	Q_OBJECT
 
 	public:
-		FormManager(QWidget *container, QObject *parent, const char *name);
+		FormManager(QObject *parent, const char *name);
 		virtual ~FormManager();
 
 		/*! Creates all the KAction related to widget insertion, and plug them into the KActionCollection \a parent.
@@ -260,7 +260,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		QPtrList<Form>		m_forms;
 		QPtrList<Form>		m_preview;
 		QGuardedPtr<Form>	m_active;
-		QWidget			*m_parent;
 
 		// Copy/Paste
 		QDomDocument		m_domDoc;
