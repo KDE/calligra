@@ -47,7 +47,7 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent )
 	m_currentItem(0)
 {
     setScale(KDGanttView::Day);
-	//draw(view->getPart()->getProject());
+	draw(view->getPart()->getProject());
 
 	connect(this, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
 	             this, SLOT (popupMenuRequested(KDGanttViewItem *, const QPoint &, int)));
