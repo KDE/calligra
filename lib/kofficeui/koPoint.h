@@ -43,8 +43,11 @@ public:
     double &ry() { return m_y; }
 
     KoPoint &operator=(const KoPoint &rhs) { m_x = rhs.x(); m_y = rhs.y(); return *this; }
-    KoPoint &operator+( const KoPoint &rhs ) { m_x += rhs.x(); m_y += rhs.y(); return *this; }
-    KoPoint &operator-( const KoPoint &rhs ) { m_x -= rhs.x(); m_y -= rhs.y(); return *this; }
+    KoPoint &operator+=( const KoPoint &rhs ) { m_x += rhs.x(); m_y += rhs.y(); return *this; }
+    KoPoint &operator-=( const KoPoint &rhs ) { m_x -= rhs.x(); m_y -= rhs.y(); return *this; }
+
+    friend inline KoPoint operator+( const KoPoint &, const KoPoint & );
+    friend inline KoPoint operator-( const KoPoint &, const KoPoint & );
 
     // Not in QPoint:
     void setCoords(const double &x, const double &y) { m_x = x; m_y = y; }
@@ -52,5 +55,11 @@ public:
 private:
     double m_x, m_y;
 };
+
+inline KoPoint operator+( const KoPoint &p1, const KoPoint &p2 )
+{ return KoPoint( p1.m_x+p2.m_x, p1.m_y+p2.m_y ); }
+
+inline KoPoint operator-( const KoPoint &p1, const KoPoint &p2 )
+{ return KoPoint( p1.m_x-p2.m_x, p1.m_y-p2.m_y ); }
 
 #endif
