@@ -31,6 +31,10 @@
 #include <gcommand.h>
 //#include <gobjectfactory.h>
 
+// test
+#include <gobject.h>
+#include <ggroup.h>
+#include <kdialogbase.h>
 
 GraphitePart::GraphitePart(QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parent, name, singleViewMode) {
@@ -58,8 +62,16 @@ void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
     //kdDebug(37001) << "MM x=" << e->x() << " y=" << e->y() << endl;
 }
 
-void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView */*view*/) {
+void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
+    // test
+    GObject *o=new GGroup("foo");
+    kdDebug(37001) << "group: isOk=" << o->isOk() << endl;
+    GObjectM9r *m=o->createM9r(this);
+    QRect r;
+    kdDebug(37001) << "vor MP --->" << endl;
+    m->mousePressEvent(e, view, r);
+    kdDebug(37001) << "---> nach MP" << endl;
 }
 
 void GraphitePart::mouseReleaseEvent(QMouseEvent *e, GraphiteView */*view*/) {

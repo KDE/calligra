@@ -18,13 +18,17 @@
 */
 
 #include <qdom.h>
+#include <klocale.h>
 
 #include <ggroup.h>
 #include <gobjectfactory.h>
 
+// test
+#include <graphiteview.h>
+#include <kdialogbase.h>
+#include <kdebug.h>
 
 GGroup::GGroup(const QString &name) : GObject(name), m_iterator(0L) {
-
     m_iterator=new QListIterator<GObject>(m_members);
 }
 
@@ -237,9 +241,8 @@ const QRect &GGroup::boundingRect() const {
     return m_boundingRect;
 }
 
-GObjectM9r *GGroup::createM9r(GraphitePart */*part*/, const GObjectM9r::Mode &/*mode*/) {
-    // TODO - also the M9r :)
-    return 0L;
+GObjectM9r *GGroup::createM9r(GraphitePart *part, const GObjectM9r::Mode &mode) {
+    return new GGroupM9r(this, mode, part, i18n("Group"));
 }
 
 const QPoint GGroup::origin() const {
@@ -359,3 +362,60 @@ void GGroup::setPen(const QPen &pen) {
     for( ; it!=0L; ++it)
 	it.current()->setPen(pen);
 }
+
+
+GGroupM9r::GGroupM9r(GGroup *group, const Mode &mode, GraphitePart *part,
+		     const QString &type) : G2DObjectM9r(group, mode, part, type),
+					    m_group(group) {
+    m_group->setState(GObject::Handles);
+}
+
+GGroupM9r::~GGroupM9r() {
+    if(m_group->state()==GObject::Handles || m_group->state()==GObject::Rot_Handles)
+	m_group->setState(GObject::Visible);
+}
+
+void GGroupM9r::draw(QPainter &p) {
+    m_group->drawHandles(p, m_handles);
+}
+
+const bool GGroupM9r::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
+				    QRect &/*dirty*/) {
+    // TODO
+    return false;
+}
+
+const bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, GraphiteView *view,
+				     QRect &/*dirty*/) {
+    // TODO
+    // test
+    kdDebug(37001) << "here we go..." << endl;
+    createPropertyDialog(view->canvas());
+    m_dialog->exec();
+    return false;
+}
+
+const bool GGroupM9r::mouseReleaseEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
+				       QRect &/*dirty*/) {
+    // TODO
+    return false;
+}
+
+const bool GGroupM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, GraphiteView */*view*/,
+					   QRect &/*dirty*/) {
+    // TODO
+    return false;
+}
+
+const bool GGroupM9r::keyPressEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
+				   QRect &/*dirty*/) {
+    // TODO
+    return false;
+}
+
+const bool GGroupM9r::keyReleaseEvent(QKeyEvent */*e*/, GraphiteView */*view*/,
+				     QRect &/*dirty*/) {
+    // We don't need that one for lines... hmmm ...
+    return false;
+}
+#include <ggroup.moc>

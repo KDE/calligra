@@ -20,6 +20,7 @@
 #include <qdom.h>
 #include <qapp.h>
 #include <qpainter.h>
+#include <klocale.h>
 
 #include <gline.h>
 
@@ -259,7 +260,7 @@ const QRect &GLine::boundingRect() const {
 }
 
 GObjectM9r *GLine::createM9r(GraphitePart *part, const GObjectM9r::Mode &mode) {
-    return new GLineM9r(this, mode, part);
+    return new GLineM9r(this, mode, part, i18n("Line"));
 }
 
 void GLine::setOrigin(const QPoint &origin) {
@@ -313,8 +314,9 @@ void GLine::resize(const QRect &boundingRect) {
 }
 
 
-GLineM9r::GLineM9r(GLine *line, const Mode &mode, GraphitePart *part)
-    : G1DObjectM9r(line, mode, part), m_line(line) {
+GLineM9r::GLineM9r(GLine *line, const Mode &mode, GraphitePart *part,
+		   const QString &type) : G1DObjectM9r(line, mode, part, type),
+					  m_line(line) {
     m_line->setState(GObject::Handles);
 }
 
@@ -324,7 +326,7 @@ GLineM9r::~GLineM9r() {
 }
 
 void GLineM9r::draw(QPainter &p) {
-    m_line->drawHandles(p);
+    m_line->drawHandles(p, m_handles);
 }
 
 const bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/,

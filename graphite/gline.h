@@ -72,7 +72,7 @@ class GLineM9r : public G1DObjectM9r {
 
     Q_OBJECT
 public:
-    GLineM9r(GLine *line, const Mode &mode, GraphitePart *part);
+    GLineM9r(GLine *line, const Mode &mode, GraphitePart *part, const QString &type);
     virtual ~GLineM9r();
 
     virtual void draw(QPainter &p);

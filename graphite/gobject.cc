@@ -19,92 +19,221 @@
 
 #include <qdom.h>
 #include <qlayout.h>
+#include <qvbuttongroup.h>
+#include <qradiobutton.h>
+#include <qvgroupbox.h>
+#include <qwidgetstack.h>
 #include <qlabel.h>
+#include <qlineedit.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qslider.h>
 #include <qpixmap.h>
 #include <qpainter.h>
+#include <qstringlist.h>
 
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kcolorbtn.h>
+#include <kmessagebox.h>
 
 #include <gobject.h>
 #include <graphitefactory.h>
 
+// test
+#include <kdebug.h>
+
+GObjectM9r::GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
+		       const QString &type) : QObject(), m_object(object),
+					      m_mode(mode), first_call(true),
+					      m_dialog(0L), m_part(part),
+					      m_changed(false), m_type(type),
+					      m_line(0L) {
+    m_handles=new QList<QRect>;
+    m_handles->setAutoDelete(true);
+}
 
 GObjectM9r::~GObjectM9r() {
 
     if(m_dialog!=0L) {
+	delete m_line;
+	m_line=0L;
 	delete m_dialog;
 	m_dialog=0L;
     }
+    m_handles->clear();
+    delete m_handles;
+}
+
+void GObjectM9r::ok() {
+
+    // Ok => Apply + Cancel :)
+    if(m_changed)
+	apply();
+    cancel();
+}
+
+void GObjectM9r::apply() {
+
+    m_object->setName(m_line->text());
+    m_dialog->enableButtonApply(false);
+    m_changed=false;
+}
+
+void GObjectM9r::cancel() {
+
+    if(!m_changed) {
+	m_dialog->close(); // hide()?
+	return;
+    }
+    if(KMessageBox::warningContinueCancel(m_dialog,
+					  i18n("Your changes will be lost!"),
+					  i18n("Really Cancel?"),
+					  i18n("&OK"))==KMessageBox::Continue) {
+	m_dialog->close(); // hide()?
+	return;
+    }
+    apply();
+    m_dialog->close(); // hide()?
+}
+
+void GObjectM9r::slotChanged(const QString &) {
+    m_dialog->enableButtonApply(true);
+    m_changed=true;
+}
+
+void GObjectM9r::slotChanged(int) {
+    m_dialog->enableButtonApply(true);
+    m_changed=true;
+}
+
+void GObjectM9r::slotChanged(const QColor &) {
+    m_dialog->enableButtonApply(true);
+    m_changed=true;
 }
 
 KDialogBase *GObjectM9r::createPropertyDialog(QWidget *parent) {
 
-    if(m_dialog==0L)
-	m_dialog=new KDialogBase(KDialogBase::IconList,
-				 i18n("Change Properties"),
-				 KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
-				 KDialogBase::Ok, parent, "property dia", true, true);
+    if(m_dialog!=0L)
+	return m_dialog;
+
+    // Create the plain dia
+    m_dialog=new KDialogBase(KDialogBase::IconList,
+			     i18n("Change Properties"),
+			     KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
+			     KDialogBase::Ok, parent, "property dia", true, true);
+
+    m_dialog->enableButtonOK(true);
+    m_dialog->enableButtonApply(false);
+    m_dialog->enableButtonCancel(true);
+
+    connect(m_dialog, SIGNAL(okClicked()), this, SLOT(ok()));
+    connect(m_dialog, SIGNAL(applyClicked()), this, SLOT(apply()));
+    connect(m_dialog, SIGNAL(cancelClicked()), this, SLOT(cancel()));
+
+    // Add an information frame
+    QFrame *information=m_dialog->addPage(i18n("Information"), i18n("Information about the Object"),
+					  BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
+    QGridLayout *grid=new QGridLayout(information, 7, 2, KDialog::marginHint(), KDialog::spacingHint());
+
+    QLabel *label=new QLabel(i18n("Type:"), information);
+    grid->addWidget(label, 0, 0);
+    label=new QLabel(m_type, information);
+    grid->addWidget(label, 0, 1);
+
+    label=new QLabel(i18n("Name:"), information);
+    grid->addWidget(label, 1, 0);
+    m_line=new QLineEdit(information);
+    m_line->setText(m_object->name());
+    connect(m_line, SIGNAL(textChanged(const QString &)),
+	    this, SLOT(slotChanged(const QString &)));
+    grid->addWidget(m_line, 1, 1);
+
+    label=new QLabel(i18n("Origin:"), information);
+    grid->addWidget(label, 2, 0);
+    //label=new QLabel(i18n("x= %1, y= %2").arg(m_object->origin().x(),
+    //	     m_object->origin().y()), information);
+    //grid->addWidget(label, 2, 1);
+
+    kdDebug(37001) << "added some stuff" << endl;
+
+    label=new QLabel(i18n("Angle:"), information);
+    grid->addWidget(label, 3, 0);
+    label=new QLabel(i18n("ang= %1 rad").arg(m_object->angle()), information);
+    grid->addWidget(label, 3, 1);
+
+    label=new QLabel(i18n("Bounding Rectangle:"), information);
+    grid->addMultiCellWidget(label, 4, 4, 0, 1);
+
+    label=new QLabel(i18n("Top-Left Corner:"), information);
+    grid->addWidget(label, 5, 0);
+
+    kdDebug(37001) << "more stuff" << endl;
+
+    //label=new QLabel(i18n("x= %1, y= %2").arg(m_object->boundingRect().x(),
+    //		     m_object->boundingRect().y()), information);
+    //grid->addWidget(label, 5, 1);
+
+    label=new QLabel(i18n("Bottom-Right Corner:"), information);
+    grid->addWidget(label, 6, 0);
+
+    //label=new QLabel(i18n("x= %1, y= %2").arg(m_object->boundingRect().bottomRight().x()).
+    //		     arg(m_object->boundingRect().bottomRight().y()), information);
+    //grid->addWidget(label, 6, 1);
+
+    kdDebug(37001) << "leaving base" << endl;
     return m_dialog;
 }
 
 
-void G1DObjectM9r::setPenStyle(int style) {
-
-    QPen p=m_object->pen();
-    p.setStyle(static_cast<Qt::PenStyle>(style));
-    m_object->setPen(p);
+void G1DObjectM9r::apply() {
+    GObjectM9r::apply();
+    // TODO
 }
 
-void G1DObjectM9r::setPenWidth(int width) {
-
-    QPen p=m_object->pen();
-    p.setWidth(width);
-    m_object->setPen(p);
-}
-
-void G1DObjectM9r::setPenColor(const QColor &color) {
-
-    QPen p=m_object->pen();
-    p.setColor(color);
-    m_object->setPen(p);
+void G1DObjectM9r::cancel() {
+    GObjectM9r::cancel();
 }
 
 KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
+
+    if(m_dialog)
+	return m_dialog;
 
     GObjectM9r::createPropertyDialog(parent);
     if(!m_dialog)
 	return 0L;
 
+    kdDebug(37001) << "creating dia (1d)" << endl;
+
+    // Add a pen property page
     QFrame *frame=m_dialog->addPage(i18n("Pen"), i18n("Pen Settings"),
-			       BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
+				    BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
 
     QGridLayout *grid=new QGridLayout(frame, 3, 2, KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel *label=new QLabel(i18n("Width:"), frame);
     grid->addWidget(label, 0, 0);
 
-    QSpinBox *width=new QSpinBox(1, 100, 1, frame);
-    width->setValue(m_object->pen().width());
-    connect(width, SIGNAL(valueChanged(int)), this, SLOT(setPenWidth(int)));
-    grid->addWidget(width, 0, 1);
+    m_width=new QSpinBox(1, 100, 1, frame);
+    m_width->setValue(m_object->pen().width());
+    connect(m_width, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
+    grid->addWidget(m_width, 0, 1);
 
     label=new QLabel(i18n("Color:"), frame);
     grid->addWidget(label, 1, 0);
 
-    KColorButton *color=new KColorButton(m_object->pen().color(), frame);
-    connect(color, SIGNAL(changed(const QColor &)), this,
-	    SLOT(setPenColor(const QColor &)));
-    grid->addWidget(color, 1, 1);
+    m_color=new KColorButton(m_object->pen().color(), frame);
+    connect(m_color, SIGNAL(changed(const QColor &)), this,
+	    SLOT(setChanged(const QColor &)));
+    grid->addWidget(m_color, 1, 1);
 
     label=new QLabel(i18n("Style:"), frame);
     grid->addWidget(label, 2, 0);
 
-    QComboBox *style=new QComboBox(frame);
+    m_style=new QComboBox(frame);
     QPainter painter;
     QPixmap *pm;
     for(int i=0; i<6; ++i) {
@@ -116,13 +245,212 @@ KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
 			    static_cast<Qt::PenStyle>(i)));
 	painter.drawLine(0, 7, 70, 7);
 	painter.end();
-	style->insertItem(*pm);
+	m_style->insertItem(*pm);
     }
-    connect(style, SIGNAL(activated(int)), this, SLOT(setPenStyle(int)));
-    style->setCurrentItem(m_object->pen().style());
-    grid->addWidget(style, 2, 1);
+    connect(m_style, SIGNAL(activated(int)), this, SLOT(slotChanged(int)));
+    m_style->setCurrentItem(m_object->pen().style());
+    grid->addWidget(m_style, 2, 1);
 
+    kdDebug(37001) << "leaving 1d" << endl;
     return m_dialog;
+}
+
+
+void G2DObjectM9r::apply() {
+    G1DObjectM9r::apply();
+    // TODO
+    // brush style: index+1! (nobrush ;)
+}
+
+void G2DObjectM9r::cancel() {
+    G1DObjectM9r::cancel();
+}
+
+void G2DObjectM9r::slotChanged(int x) {
+
+    updatePage();
+    GObjectM9r::slotChanged(x);
+}
+
+void G2DObjectM9r::slotChanged(const QColor &x) {
+
+    updatePage();
+    GObjectM9r::slotChanged(x);
+}
+
+KDialogBase *G2DObjectM9r::createPropertyDialog(QWidget *parent) {
+
+    if(m_dialog)
+	return m_dialog;
+
+    G1DObjectM9r::createPropertyDialog(parent);
+    if(!m_dialog)
+	return 0L;
+
+    kdDebug(37001) << "entering 2d" << endl;
+
+    // Wow - the fill style page :)
+    QFrame *fill=m_dialog->addPage(i18n("Fill Style"), i18n("Fill Style Settings"),
+				   BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
+    QBoxLayout *mainbox=new QHBoxLayout(fill, KDialog::marginHint(), KDialog::spacingHint());
+    QBoxLayout *leftbox=new QVBoxLayout(fill, 0, 0);
+    mainbox->addLayout(leftbox);
+
+    m_style=new QVButtonGroup(i18n("Fill Style:"), fill);
+    QRadioButton *r=new QRadioButton(i18n("None"), m_style);
+    r=new QRadioButton(i18n("Brush"), m_style);
+    r=new QRadioButton(i18n("Gradient"), m_style);
+    leftbox->addWidget(m_style);
+    connect(m_style, SIGNAL(clicked(int)),
+	    this, SLOT(slotChanged(int)));
+    if(m_object->brush().style()==Qt::NoBrush)
+	m_style->setButton(0);
+    else
+	m_style->setButton(static_cast<int>(m_object->fillStyle())+1);
+    m_style->setExclusive(true);
+
+    QVGroupBox *previewbox=new QVGroupBox(i18n("Preview:"), fill);
+    m_preview=new QWidget(previewbox);
+    m_preview->setBackgroundMode(QWidget::FixedPixmap);
+    leftbox->addWidget(previewbox);
+
+    m_stack=new QWidgetStack(fill);
+    m_stack->setFrameStyle(QFrame::Box | QFrame::Sunken);
+    mainbox->addWidget(m_stack);
+
+    // none
+    QWidget *widget=new QWidget(m_stack);
+    QGridLayout *grid=new QGridLayout(widget, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
+    QLabel *label=new QLabel(i18n("Not configurable."), widget);
+    grid->addWidget(label, 0, 0);
+    m_stack->addWidget(widget, 0);
+
+    // brush
+    widget=new QWidget(m_stack);
+    grid=new QGridLayout(widget, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+    label=new QLabel(i18n("Color:"), widget);
+    grid->addWidget(label, 0, 0);
+    m_brushColor=new KColorButton(m_object->brush().color(), widget);
+    connect(m_brushColor, SIGNAL(changed(const QColor &)), this,
+	    SLOT(setChanged(const QColor &)));
+    grid->addWidget(m_brushColor, 0, 1);
+    label=new QLabel(i18n("Style:"), widget);
+    grid->addWidget(label, 1, 0);
+    m_brushStyle=new QComboBox(widget);
+    QStringList content;
+    // Note: index+1 => fill style (NoBrush is missing!)
+    content << i18n("100% filled (solid)")
+	    << i18n("94% filled")
+	    << i18n("88% filled")
+	    << i18n("63% filled")
+	    << i18n("50% filled")
+	    << i18n("37% filled")
+	    << i18n("12% filled")
+	    << i18n("6% filled")
+	    << i18n("Horizontal Lines")
+	    << i18n("Vertical Lines")
+	    << i18n("Crossing Lines")
+	    << i18n("Diagonal Lines (/)")
+	    << i18n("Diagonal Lines (\\)")
+	    << i18n("Diagonal Crossing Lines");
+    m_brushStyle->insertStringList(content);
+    m_brushStyle->setCurrentItem(static_cast<int>(m_object->brush().style())-1);
+    connect(m_brushStyle, SIGNAL(activated(int)),
+	    this, SLOT(slotChanged(int)));
+    grid->addWidget(m_brushStyle, 1, 1);
+    m_stack->addWidget(widget, 1);
+
+    // gradient
+    widget=new QWidget(m_stack);
+    QBoxLayout *wbox=new QVBoxLayout(m_stack, KDialog::marginHint(), KDialog::spacingHint());
+    grid=new QGridLayout(widget, 3, 2, KDialog::marginHint(), KDialog::spacingHint());
+    wbox->addLayout(grid);
+
+    label=new QLabel(i18n("Colors:"), widget);
+    grid->addWidget(label, 0, 0);
+    m_gradientCA=new KColorButton(m_object->gradient().ca, widget);
+    connect(m_gradientCA, SIGNAL(changed(const QColor &)), this,
+	    SLOT(setChanged(const QColor &)));
+    grid->addWidget(m_gradientCA, 0, 1);
+    m_gradientCB=new KColorButton(m_object->gradient().cb, widget);
+    connect(m_gradientCB, SIGNAL(changed(const QColor &)), this,
+	    SLOT(setChanged(const QColor &)));
+    grid->addWidget(m_gradientCB, 1, 1);
+    label=new QLabel(i18n("Style:"), widget);
+    grid->addWidget(label, 2, 0);
+    m_gradientStyle=new QComboBox(widget);
+    content.clear();
+    content << i18n("Vertical")
+	    << i18n("Horizontal")
+	    << i18n("Diagonal (/)")
+	    << i18n("Diagonal (\\)")
+	    << i18n("Pyramid")
+	    << i18n("Rectangle")
+	    << i18n("PipeCross")
+	    << i18n("Elliptic");
+    m_gradientStyle->insertStringList(content);
+    m_gradientStyle->setCurrentItem(static_cast<int>(m_object->gradient().type));
+    connect(m_gradientStyle, SIGNAL(activated(int)),
+	    this, SLOT(slotChanged(int)));
+    grid->addWidget(m_gradientStyle, 2, 1);
+
+    m_unbalanced=new QCheckBox(i18n("Unbalanced Gradient"), widget);
+    m_unbalanced->setChecked(false);
+    wbox->addWidget(m_unbalanced);
+    connect(m_unbalanced, SIGNAL(toggled()), this,
+	    SLOT(slotBalance()));
+
+    QGridLayout *factorgrid=new QGridLayout(widget, 2, 2, KDialog::marginHint(),
+					    KDialog::spacingHint());
+    wbox->addLayout(factorgrid);
+    label=new QLabel(i18n("X-Factor:"), widget);
+    factorgrid->addWidget(label, 0, 0);
+    m_xfactor=new QSlider(-200, 200, 10, m_object->gradient().xfactor,
+			  Qt::Horizontal, widget);
+    connect(m_xfactor, SIGNAL(valueChanged(int)),
+	    this, SLOT(slotChanged(int)));
+    m_xfactor->setEnabled(false);
+    factorgrid->addWidget(m_xfactor, 0, 1);
+
+    label=new QLabel(i18n("Y-Factor:"), widget);
+    factorgrid->addWidget(label, 1, 0);
+    m_yfactor=new QSlider(-200, 200, 10, m_object->gradient().yfactor,
+			  Qt::Horizontal, widget);
+    connect(m_yfactor, SIGNAL(valueChanged(int)),
+	    this, SLOT(slotChanged(int)));
+    m_yfactor->setEnabled(false);
+    factorgrid->addWidget(m_yfactor, 1, 1);
+
+    if(m_object->brush().style()==Qt::NoBrush)
+	m_stack->raiseWidget(2);
+    else
+	m_stack->raiseWidget(static_cast<int>(m_object->fillStyle())+1);
+
+    updatePreview(); // inititalize the pixmap
+
+    kdDebug(37001) << "leaving 2d" << endl;
+    return m_dialog;
+}
+
+void G2DObjectM9r::slotBalance() {
+
+    if(m_unbalanced->isChecked()) {
+	m_xfactor->setEnabled(true);
+	m_yfactor->setEnabled(true);
+    }
+    else {
+	m_xfactor->setEnabled(false);
+	m_yfactor->setEnabled(false);	
+    }
+    updatePreview();
+}
+
+void G2DObjectM9r::updatePage() {
+    // TODO
+}
+
+void G2DObjectM9r::updatePreview() {
+    // TODO
 }
 
 

@@ -38,8 +38,16 @@ class QRect;
 class QPainter;
 class QMouseEvent;
 class QKeyEvent;
+class QLineEdit;
+class QSpinBox;
+class QComboBox;
+class QVButtonGroup;
+class QWidgetStack;
+class QCheckBox;
+class QSlider;
 
 class KDialogBase;
+class KColorButton;
 
 class GObject;
 class GraphiteView;
@@ -64,6 +72,7 @@ class GraphitePart;
 // General rule: simple M9rs support Create, complex ones do not :)
 class GObjectM9r : public QObject {
 
+    Q_OBJECT
 public:
     enum Mode { Create, Manipulate };
 
@@ -91,10 +100,21 @@ public:
 
     virtual GObject *gobject() = 0;
 
+protected slots:
+    // Make sure to call the parent's implementation first!
+    virtual void ok();
+    virtual void apply();
+    virtual void cancel();
+
+    // All these slots just tell us that something has been changed
+    // Yes, I know that this is an ugly hack :(
+    virtual void slotChanged(const QString &);
+    virtual void slotChanged(int);
+    virtual void slotChanged(const QColor &);
+
 protected:
-    GObjectM9r(const Mode &mode, GraphitePart *part) : QObject(), m_mode(mode),
-						       first_call(true), m_dialog(0L),
-                                                       m_part(part) {}
+    GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
+	       const QString &type);
 
     // This menthod returns a property dialog for an object. It
     // creates an empty KDialogBase (IconList mode!) or returns the
@@ -106,12 +126,23 @@ protected:
     // user is able to change the properties and see the result after
     // pressing 'Apply'.
     // This dialog will be destroyed whenever the M9r gets deleted.
+    
+    // Note: We might have to store the parent and do a
+    // "reparent" if the constructed dia is called for another view.
+    // Is this possible? (TODO)
     virtual KDialogBase *createPropertyDialog(QWidget *parent);
 
+    GObject *m_object;
     Mode m_mode;
     bool first_call; // Whether this is the first call for this M9r (no hit test!)
     KDialogBase *m_dialog;
     GraphitePart *m_part;  // we need that for the history
+    QList<QRect> *m_handles;  // contains all the handle rects
+    bool m_changed;      // true, if the Apply btn is active
+
+private:
+    QString m_type;        // Type of object
+    QLineEdit *m_line;      // line ed. for the name
 };
 
 
@@ -123,20 +154,58 @@ public:
     virtual ~G1DObjectM9r() {}
 
 protected slots:
-    virtual void setPenStyle(int style);
-    virtual void setPenWidth(int width);
-    virtual void setPenColor(const QColor &color);
+    virtual void apply();
+    virtual void cancel();
 
 protected:
-    G1DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part)
-	: GObjectM9r(mode, part), m_object(object) {}
+    G1DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
+		 const QString &type) : GObjectM9r(object, mode, part, type) {}
     virtual KDialogBase *createPropertyDialog(QWidget *parent);
 
 private:
-    GObject *m_object;
+    QSpinBox *m_width;
+    KColorButton *m_color;
+    QComboBox *m_style;
 };
 
-// TODO G2DObjectM9r - with an additional gradient/brush page
+
+// Adds a "brush/gradient" page to the dialog
+class G2DObjectM9r : public G1DObjectM9r {
+
+    Q_OBJECT
+public:
+    virtual ~G2DObjectM9r() {}
+
+protected slots:
+    virtual void apply();
+    virtual void cancel();
+
+    virtual void slotChanged(int x);
+    virtual void slotChanged(const QColor &x);
+
+protected:
+    G2DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
+		 const QString &type) : G1DObjectM9r(object, mode, part, type) {}
+    virtual KDialogBase *createPropertyDialog(QWidget *parent);
+
+private slots:
+    void slotBalance();
+
+private:
+    void updatePage();
+    void updatePreview();
+
+    QVButtonGroup *m_style;
+    QWidget *m_preview;
+    QWidgetStack *m_stack;
+    KColorButton *m_brushColor;
+    QComboBox *m_brushStyle;
+    KColorButton *m_gradientCA, *m_gradientCB;
+    QComboBox *m_gradientStyle;
+    QCheckBox *m_unbalanced;
+    QSlider *m_xfactor, *m_yfactor;
+};
+
 
 // The abstract base classes for all graphic objects. This class is
 // implemented as a composite (pattern) - sort of :)

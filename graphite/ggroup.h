@@ -86,4 +86,37 @@ protected:
 private:
     GGroup &operator=(const GGroup &rhs);
 };
+
+
+class GGroupM9r : public G2DObjectM9r {
+
+    Q_OBJECT
+public:
+    GGroupM9r(GGroup *group, const Mode &mode, GraphitePart *part, const QString &type);
+    virtual ~GGroupM9r();
+
+    virtual void draw(QPainter &p);
+
+    virtual const bool mouseMoveEvent(QMouseEvent *e, GraphiteView *view,
+				      QRect &dirty);
+    virtual const bool mousePressEvent(QMouseEvent *e, GraphiteView *view,
+				       QRect &dirty);
+    virtual const bool mouseReleaseEvent(QMouseEvent *e, GraphiteView *view,
+					 QRect &dirty);
+    virtual const bool mouseDoubleClickEvent(QMouseEvent *e, GraphiteView *view,
+					     QRect &dirty);
+
+    virtual const bool keyPressEvent(QKeyEvent *e, GraphiteView *view,
+				     QRect &dirty);
+    virtual const bool keyReleaseEvent(QKeyEvent *e, GraphiteView *view,
+				       QRect &dirty);
+
+    virtual GObject *gobject() { return m_group; }
+
+private:
+    GGroupM9r(const GGroupM9r &rhs);
+    GGroupM9r &operator=(GGroupM9r &rhs);
+
+    GGroup *m_group;
+};
 #endif // ggroup_h
