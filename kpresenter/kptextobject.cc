@@ -620,18 +620,6 @@ KPTextView * KPTextObject::createKPTextView( Page * _page )
     return new KPTextView( this, _page );
 }
 
-KoTextFormat* KPTextObject::globalFormat()
-{
-    QTextStringChar *ch = textDocument()->firstParag()->at( 0 );
-    return static_cast<KoTextFormat *>(ch->format());
-}
-
-void KPTextObject::setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags)
-{
-    //TODO
-}
-
-
 
 KPTextView::KPTextView( KPTextObject * txtObj,Page *_page )
     : KoTextView( txtObj->textObject() )

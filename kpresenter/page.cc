@@ -1380,154 +1380,100 @@ void Page::chClip()
     }
 }
 
-/*======================= set text font ==========================*/
-void Page::setTextFont( const QFont &font )
-{
-    if ( m_currentTextObjectView ) {
-#if 0
-	m_currentTextObjectView->setTextFont( font );
-#endif
-    } else {
-	KPObject *kpobject = 0;
+void Page::setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags)
 
-	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
-	    kpobject = objectList()->at( i );
-	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-#if 0
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setFontToAll( font );
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
-#endif
-	    }
-	}
-	repaint( false );
-    }
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setFont( font, _subscript, _superscript, col, backGroundColor, flags );
 }
 
-/*======================= set text color =========================*/
 void Page::setTextColor( const QColor &color )
 {
-    if ( m_currentTextObjectView ) {
-	m_currentTextObjectView->setTextColor( color );
-    } else {
-	KPObject *kpobject = 0;
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setTextColor( color );
+}
 
-	for ( unsigned int i = 0; i < objectList()->count(); i++ )
-	{
-	    kpobject = objectList()->at( i );
-	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-#if 0
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setColorToAll( color );
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
-#endif
-	    }
-	}
-	repaint( false );
-    }
+void Page::setTextBackgroundColor( const QColor &color )
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setTextBackgroundColor( color );
 }
 
 void Page::setTextBold( bool b )
 {
-    if (m_currentTextObjectView ) {
-	m_currentTextObjectView->setBold( b );
-    } else {
-	KPObject *kpobject = 0;
-
-	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
-	    kpobject = objectList()->at( i );
-	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-#if 0
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setBoldToAll( b );
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
-#endif
-	    }
-	}
-	repaint( false );
-    }
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setBold( b );
 }
 
 void Page::setTextItalic( bool b )
 {
-    if (m_currentTextObjectView ) {
-	m_currentTextObjectView->setItalic( b );
-    } else {
-	KPObject *kpobject = 0;
-
-	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
-	    kpobject = objectList()->at( i );
-	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-#if 0
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setItalicToAll( b );
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
-#endif
-	    }
-	}
-	repaint( false );
-    }
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setItalic( b );
 }
 
 void Page::setTextUnderline( bool b )
 {
-    if ( m_currentTextObjectView ) {
-	m_currentTextObjectView->setUnderline( b );
-    } else {
-	KPObject *kpobject = 0;
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setUnderline( b );
+}
 
-	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
-	    kpobject = objectList()->at( i );
-	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-#if 0
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setUnderlineToAll( b );
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
-#endif
-	    }
-	}
-	repaint( false );
-    }
+void Page::setTextStrikeOut( bool b )
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setStrikeOut( b );
 }
 
 void Page::setTextFamily( const QString &f )
 {
-    if ( m_currentTextObjectView ) {
-	m_currentTextObjectView->setFamily( f );
-    } else {
-	KPObject *kpobject = 0;
-
-	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
-	    kpobject = objectList()->at( i );
-	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-#if 0
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setFamilyToAll( f );
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
-#endif
-	    }
-	}
-	repaint( false );
-    }
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setFamily( f );
 }
 
 void Page::setTextPointSize( int s )
 {
-    if ( m_currentTextObjectView ) {
-	m_currentTextObjectView->setPointSize( s );
-    } else {
-	KPObject *kpobject = 0;
-
-	for ( unsigned int i = 0; i < objectList()->count(); i++ ) {
-	    kpobject = objectList()->at( i );
-	    if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT ) {
-#if 0
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setPointSizeToAll( s );
-		dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->updateCurrentFormat();
-#endif
-	    }
-	}
-	repaint( false );
-    }
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setPointSize( s );
 }
+
+void Page::setTextSubScript( bool b )
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setTextSubScript( b );
+}
+
+void Page::setTextSuperScript( bool b )
+{
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setTextSuperScript( b );
+}
+
 
 /*===================== set text alignment =======================*/
 void Page::setTextAlign( int align )
 {
+    // TODO parag-level settings in KoTextFormatInterface
     if ( m_currentTextObjectView ) {
         KCommand *cmd =m_currentTextObjectView->setAlignCommand( align );
         if(cmd)
@@ -1550,23 +1496,6 @@ void Page::setTextAlign( int align )
 }
 
 /*================================================================*/
-bool Page::isASelectedTextObj()
-{
-    if ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT )
-    {
-        return true;
-    }
-    KPObject *kpobject = 0;
-    for ( unsigned int i = 0; i < objectList()->count(); i++ )
-    {
-        kpobject = objectList()->at( i );
-        if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
-            return true;
-    }
-
-    return false;
-}
-/*================================================================*/
 bool Page::haveASelectedPictureObj()
 {
     KPObject *kpobject = 0;
@@ -1581,18 +1510,45 @@ bool Page::haveASelectedPictureObj()
     return true;
 }
 
-/*================================================================*/
-KPTextObject *Page::selectedTextObj()
+QPtrList<KPTextObject> Page::applicableTextObjects() const
 {
-    KPObject *kpobject = 0;
-    for ( unsigned int i = 0; i < objectList()->count(); i++ )
-    {
-        kpobject = objectList()->at( i );
-        if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
-            return dynamic_cast<KPTextObject*>( kpobject );
-    }
+    QPtrList<KPTextObject> lst;
+    // If we're editing a text object, then that's the one we return
+    if ( m_currentTextObjectView )
+        lst.append( m_currentTextObjectView->kpTextObject() );
+    else
+        lst = selectedTextObjs();
+    return lst;
+}
 
-    return 0L;
+QPtrList<KoTextFormatInterface> Page::applicableTextInterfaces() const
+{
+    QPtrList<KoTextFormatInterface> lst;
+    // If we're editing a text object, then that's the one we return
+    if ( m_currentTextObjectView )
+        lst.append( m_currentTextObjectView );
+    else
+    {
+        // Otherwise we look for the text objects that are selected
+        QPtrListIterator<KPObject> it(*objectList());
+        for ( ; it.current(); ++it ) {
+            if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
+                lst.append( static_cast<KPTextObject*>( it.current() )->textObject() );
+        }
+    }
+    return lst;
+
+}
+
+QPtrList<KPTextObject> Page::selectedTextObjs() const
+{
+    QPtrList<KPTextObject> lst;
+    QPtrListIterator<KPObject> it(*objectList());
+    for ( ; it.current(); ++it ) {
+        if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
+            lst.append( static_cast<KPTextObject*>( it.current() ) );
+    }
+    return lst;
 }
 
 /*====================== start screenpresentation ================*/
@@ -3434,6 +3390,7 @@ KPTextObject* Page::kpTxtObj()
 {
     return ( ( editNum != -1 && objectList()->at( editNum )->getType() == OT_TEXT ) ?
              dynamic_cast<KPTextObject*>( objectList()->at( editNum ) ) : 0 );
+    // ### return m_currentTextObjectView->kpTextObject()
 }
 
 /*================================================================*/

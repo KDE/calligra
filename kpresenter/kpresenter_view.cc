@@ -1241,7 +1241,6 @@ void KPresenterView::fontSelected()
     kdDebug(33001) << "fontSelected() " << tbFont.family() << endl;
 }
 
-/*===============================================================*/
 void KPresenterView::textBold()
 {
     tbFont.setBold( !tbFont.bold() );
@@ -1251,43 +1250,27 @@ void KPresenterView::textBold()
 
 void KPresenterView::textStrikeOut()
 {
-    KPTextView *edit=page->currentTextObjectView();
-    if ( edit )
-        edit->setStrikeOut(actionFormatStrikeOut->isChecked());
+    page->setTextStrikeOut(actionFormatStrikeOut->isChecked());
 }
 
-
-/*===============================================================*/
-void KPresenterView::textInsertPageNum()
-{
-#if 0 // note: also the action is disabled now (Werner)
-    if ( page->currentTextObjectView() )
-	page->currentTextObjectView()->insertPageNum();
-#endif
-}
-
-/*===============================================================*/
 void KPresenterView::textItalic()
 {
     tbFont.setItalic( !tbFont.italic() );
     page->setTextItalic( tbFont.italic() );
 }
 
-/*===============================================================*/
 void KPresenterView::textUnderline()
 {
     tbFont.setUnderline( !tbFont.underline() );
     page->setTextUnderline( tbFont.underline() );
 }
 
-/*===============================================================*/
 void KPresenterView::textColor()
 {
     tbColor = actionTextColor->color();
     page->setTextColor( tbColor );
 }
 
-/*===============================================================*/
 void KPresenterView::textAlignLeft()
 {
     if ( !actionTextAlignLeft->isChecked() )
@@ -1296,7 +1279,6 @@ void KPresenterView::textAlignLeft()
     page->setTextAlign( tbAlign );
 }
 
-/*===============================================================*/
 void KPresenterView::textAlignCenter()
 {
     if ( !actionTextAlignCenter->isChecked() )
@@ -1305,7 +1287,6 @@ void KPresenterView::textAlignCenter()
     page->setTextAlign( Qt::AlignCenter );
 }
 
-/*===============================================================*/
 void KPresenterView::textAlignRight()
 {
     if ( !actionTextAlignRight->isChecked() )
@@ -1314,32 +1295,38 @@ void KPresenterView::textAlignRight()
     page->setTextAlign( Qt::AlignRight );
 }
 
-/*===============================================================*/
+void KPresenterView::textInsertPageNum()
+{
+#if 0 // note: also the action is disabled now (Werner)
+    if ( page->currentTextObjectView() )
+	page->currentTextObjectView()->insertPageNum();
+#endif
+}
+
 void KPresenterView::mtextFont()
 {
-    // TODO support doing the same to selectedTextObj
-    KPTextView *edit=page->currentTextObjectView();
-    if(edit)
-    {
-        QColor col=edit->textBackgroundColor();
-        col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
-        KoFontDia *fontDia = new KoFontDia( this, "", edit->textFont(),
-                                            actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
-                                            edit->textColor(), col );
-        fontDia->exec();
-        int flags = fontDia->changedFlags();
-        kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
-        if ( flags )
-        {
-            // The "change all the format" call
-            edit->setFont(fontDia->getNewFont(),
-                          fontDia->getSubScript(), fontDia->getSuperScript(),
-                          fontDia->color(),fontDia->backGroundColor(),
-                          flags);
-        }
+    KoTextFormatInterface* textIface = page->applicableTextInterfaces().first();
 
-        delete fontDia;
+    QColor col;
+    if (textIface)
+        col = textIface->textBackgroundColor();
+    col = col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
+    KoFontDia *fontDia = new KoFontDia( this, "", textIface->textFont(),
+                                        actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
+                                        textIface->textColor(), col );
+    fontDia->exec();
+    int flags = fontDia->changedFlags();
+    kdDebug() << "changedFlags = " << flags << endl;
+    if ( flags )
+    {
+        // The "change all the format" call
+        page->setFont(fontDia->getNewFont(),
+                      fontDia->getSubScript(), fontDia->getSuperScript(),
+                      fontDia->color(), fontDia->backGroundColor(),
+                      flags);
     }
+
+    delete fontDia;
 #if 0
     QFont tmpFont = tbFont;
 
@@ -1347,12 +1334,8 @@ void KPresenterView::mtextFont()
 	fontChanged( tmpFont );
 	tbFont = tmpFont;
 	page->setTextFont( tbFont );
-	actionTextFontFamily->blockSignals( true );
 	actionTextFontFamily->setFont( tbFont.family() );
-	actionTextFontFamily->blockSignals( false );
-	actionTextFontSize->blockSignals( true );
 	actionTextFontSize->setFontSize( tbFont.pointSize() );
-	actionTextFontSize->blockSignals( false );
     }
 #endif
 }
@@ -1573,7 +1556,7 @@ void KPresenterView::brushChosen()
     else
     {
 	tbColor = c;
-        edit->setTextBackgroundColor(c);
+        page->setTextBackgroundColor(c);
     }
 }
 
@@ -2383,16 +2366,12 @@ void KPresenterView::setupActions()
 
 void KPresenterView::textSubScript()
 {
-    KPTextView *edit=page->currentTextObjectView();
-    if(edit)
-        edit->setTextSubScript(actionFormatSub->isChecked());
+    page->setTextSubScript(actionFormatSub->isChecked());
 }
 
 void KPresenterView::textSuperScript()
 {
-    KPTextView *edit=page->currentTextObjectView();
-    if ( edit )
-        edit->setTextSuperScript(actionFormatSuper->isChecked());
+    page->setTextSuperScript(actionFormatSuper->isChecked());
 }
 
 
@@ -2418,7 +2397,7 @@ void KPresenterView::objectSelectedChanged()
     //actionExtraPenStyle->setEnabled(state);
     //actionExtraPenWidth->setEnabled(state);
 
-    bool isText=page->isASelectedTextObj();
+    bool isText=!page->applicableTextInterfaces().isEmpty();
     actionTextFont->setEnabled(isText);
     actionTextFontSize->setEnabled(isText);
     actionTextFontFamily->setEnabled(isText);
@@ -2703,21 +2682,11 @@ void KPresenterView::fontChanged( const QFont &font )
     tbFont.setUnderline( font.underline() );
     tbFont.setPointSize( font.pointSize() );
 
-    actionTextFontFamily->blockSignals( true );
     actionTextFontFamily->setFont( tbFont.family() );
-    actionTextFontFamily->blockSignals( false );
-    actionTextFontSize->blockSignals( true );
     actionTextFontSize->setFontSize( tbFont.pointSize() );
-    actionTextFontSize->blockSignals( false );
-    actionTextBold->blockSignals( true );
     actionTextBold->setChecked( tbFont.bold() );
-    actionTextBold->blockSignals( false );
-    actionTextItalic->blockSignals( true );
     actionTextItalic->setChecked( tbFont.italic() );
-    actionTextItalic->blockSignals( false );
-    actionTextUnderline->blockSignals( true );
     actionTextUnderline->setChecked( tbFont.underline() );
-    actionTextUnderline->blockSignals( false );
 }
 
 /*====================== color changed ==========================*/
@@ -3332,11 +3301,10 @@ void KPresenterView::search()
 {
     if ( !searchDialog )
 	return;
-    KPTextObject *txtObj = page->currentTextObjectView()->kpTextObject();
-    if ( !txtObj )
-	txtObj = page->selectedTextObj();
+    KPTextObject *txtObj = page->applicableTextObjects().first();
     if ( !txtObj )
 	return;
+    // TODO find dialog from kword
 #if 0
     QString txt = searchDialog->lineEdit->text();
     if ( !txtObj->find( txt, searchDialog->cs, searchDialog->wo, !searchDialog->back ) )

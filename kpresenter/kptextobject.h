@@ -87,14 +87,6 @@ public:
 
     KPTextView * createKPTextView( Page * );
 
-    /**
-     * Use this format for displaying the properties (font/color/...) of the object.
-     * This text format is in fact the one of the first character in the object.
-     */
-    KoTextFormat* globalFormat();
-
-    void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
-
 signals:
     void repaintChanged( KPTextObject* );
 

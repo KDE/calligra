@@ -32,6 +32,7 @@
 
 #include <global.h>
 
+class KoTextFormatInterface;
 class KPresenterView;
 class KPresenterDoc;
 class QPainter;
@@ -78,14 +79,18 @@ public:
     void selectObj( KPObject* );
     void deSelectObj( int num );
     void deSelectObj( KPObject* );
-    void setTextFont( const QFont & );
+    void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
     void setTextColor( const QColor & );
+    void setTextBackgroundColor( const QColor & );
     void setTextAlign( int );
     void setTextBold( bool b );
     void setTextItalic( bool b );
     void setTextUnderline( bool b );
+    void setTextStrikeOut( bool b );
     void setTextFamily( const QString &f );
     void setTextPointSize( int s );
+    void setTextSubScript( bool b );
+    void setTextSuperScript( bool b );
     KPTextObject* kpTxtObj();
 
     // Start a screen presentation
@@ -118,18 +123,24 @@ public:
     void setAutoForm( QString _autoform )
     { autoform = _autoform; }
 
-    KPTextObject *selectedTextObj();
-
     void drawPageInPix( QPixmap&, int );
     void drawPageInPix2( QPixmap&, int, int, float _zoom = 1.0 );
 
     void gotoPage( int pg );
 
-    bool mouseSelectedObject;
-
     bool isOneObjectSelected();
-
-    bool isASelectedTextObj();
+    /** Returns the list of selected text objects */
+    QPtrList<KPTextObject> selectedTextObjs() const;
+    /**
+     * Returns the list of interfaces to use for changing the text format.
+     * This can be either the currently edited text object,
+     * or the list of text objects currently selected
+     */
+    QPtrList<KoTextFormatInterface> applicableTextInterfaces() const;
+    /**
+     * Returns the list of text objects, either selected or activated.
+     */
+    QPtrList<KPTextObject> applicableTextObjects() const;
 
     void setMouseSelectedObject(bool b);
 
@@ -142,13 +153,32 @@ public:
 public slots:
     void exitEditMode();
 
-    // public slots
     void clipCut();
     void clipCopy();
     void clipPaste();
     void deleteObjs();
     void rotateObjs();
     void shadowObjs();
+
+    void chPic();
+    void chClip();
+    void picViewOrig640x480();
+    void picViewOrig800x600();
+    void picViewOrig1024x768();
+    void picViewOrig1280x1024();
+    void picViewOrig1600x1200();
+    void picViewOrigFactor();
+
+
+signals:
+
+    // signals to notify of changes
+    void fontChanged( const QFont & );
+    void colorChanged( const QColor & );
+    void alignChanged( int );
+    void updateSideBarItem( int );
+    void stopPres();
+    void objectSelectedChanged();
 
 protected:
 
@@ -236,6 +266,7 @@ protected:
     QSize getPixmapOrigSize( KPPixmapObject *&obj );
     void setTextBackground( KPTextObject *obj );
 
+private:
     // variables
     QPopupMenu *presMenu;
     bool mousePressed;
@@ -245,6 +276,7 @@ protected:
     bool fillBlack;
     KPresenterView *view;
     bool editMode, goingBack, drawMode;
+    bool mouseSelectedObject;
     unsigned int currPresPage, currPresStep, subPresStep;
     unsigned int oldPresPage, oldPresStep, oldSubPresStep;
     float _presFakt;
@@ -281,16 +313,6 @@ private:
     void lowerObject();
     int selectedObjectPosition;
 
-public slots:
-    void chPic();
-    void chClip();
-    void picViewOrig640x480();
-    void picViewOrig800x600();
-    void picViewOrig1024x768();
-    void picViewOrig1280x1024();
-    void picViewOrig1600x1200();
-    void picViewOrigFactor();
-
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
@@ -299,15 +321,5 @@ private slots:
     void switchingMode();
     void slotGotoPage();
     void slotExitPres();
-
-signals:
-
-    // signals to notify of changes
-    void fontChanged( const QFont & );
-    void colorChanged( const QColor & );
-    void alignChanged( int );
-    void updateSideBarItem( int );
-    void stopPres();
-    void objectSelectedChanged();
 };
 #endif //PAGE_H
