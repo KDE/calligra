@@ -44,7 +44,6 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 
 	beh->UNSIGNED_TYPE_KEYWORD = "";
 
-	m_typeNames.resize(Field::LastType + 1);
 	m_typeNames[Field::Byte]="CHAR";
 	m_typeNames[Field::ShortInteger]="SMALLINT";
 	m_typeNames[Field::Integer]="INTEGER";
