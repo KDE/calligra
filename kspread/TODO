@@ -98,7 +98,7 @@ Ariya
 - improve function compatibility with MS Excel
 - more choices for Data -> Consolidate (Done)
 - dBASE import filter (Done, need some improvements)
-- improve/fix MS Excel import filter
+- dBASE export filter
 - start working on MS Excel export filter (with 'wildfox')
 - ported export filter (CSV,html) not to use KoDocument anymore
 

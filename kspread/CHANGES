@@ -26,7 +26,8 @@ Until beta2:
 - Added "Text to Column"
 - improved Data Consolidate, with more choices: Sum, Average, Count,
   Min, Max, Product, Standard Deviation, Variance.
-- fixed some functions to be Excel-compatibel (FIND, REPLACE)
+- fixed some functions to be Excel-compatibel (FIND, REPLACE,LEFT,
+  RIGHT,MID)
 
 new functions added:
  ISBLANK, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,
