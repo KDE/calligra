@@ -138,9 +138,11 @@ void KPTextObject::setSize( int _width, int _height )
     if ( move )
         return;
 
-    kdDebug() << " KPTextObject::setSize -> setting doc width to " << KoTextZoomHandler::ptToLayoutUnit( _width ) << endl;
-    textDocument()->setWidth( KoTextZoomHandler::ptToLayoutUnit( _width ) );
+    //kdDebug() << " KPTextObject::setSize -> setting doc width to " << m_doc->zoomHandler()->pixelToLayoutUnitX( _width ) << endl;
+    textDocument()->setWidth( m_doc->zoomHandler()->pixelToLayoutUnitX( _width ) );
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
+    slotAvailableHeightNeeded();
+    m_textobj->formatMore();
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize() );
 }
@@ -151,9 +153,11 @@ void KPTextObject::resizeBy( int _dx, int _dy )
     KPObject::resizeBy( _dx, _dy );
     if ( move )
         return;
-    kdDebug() << " KPTextObject::resizeBy -> setting doc width to " << KoTextZoomHandler::ptToLayoutUnit( getSize().width() ) << endl;
-    textDocument()->setWidth( KoTextZoomHandler::ptToLayoutUnit( getSize().width() ) );
+    //kdDebug() << " KPTextObject::resizeBy -> setting doc width to " << m_doc->zoomHandler()->pixelToLayoutUnitX( getSize().width() ) << endl;
+    textDocument()->setWidth( m_doc->zoomHandler()->pixelToLayoutUnitX( getSize().width() ) );
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
+    slotAvailableHeightNeeded();
+    m_textobj->formatMore();
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize() );
 }
@@ -209,7 +213,7 @@ void KPTextObject::load(const QDomElement &element)
         loadKTextObject( e, t );
         //loadKTextObject( e, -1 /*TODO*/ );
     }
-    setSize( ext.width(), ext.height() );
+    setSize( ext.width(), ext.height() ); // this will to formatMore()
 }
 
 /*========================= draw =================================*/
@@ -913,8 +917,9 @@ void KPTextObject::slotNewCommand( KCommand * cmd)
 
 void KPTextObject::slotAvailableHeightNeeded()
 {
-    m_textobj->setAvailableHeight(getSize().height ());
-    kdDebug()<<"slotAvailableHeightNeeded: height=:"<<getSize().height()<<endl;
+    int ah = m_doc->zoomHandler()->pixelToLayoutUnitY( getSize().height() );
+    m_textobj->setAvailableHeight( ah );
+    kdDebug()<<"slotAvailableHeightNeeded: height=:"<<ah<<endl;
 }
 
 void KPTextObject::slotRepaintChanged()
