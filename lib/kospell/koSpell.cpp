@@ -344,6 +344,7 @@ void KOSpell::nextWord()
 {
     QString word;
     lastpos++;
+    bool haveAnNumber = false;
     do
     {
         int i =0;
@@ -352,11 +353,13 @@ void KOSpell::nextWord()
             QChar ch = origbuffer[i];
             if ( ch.isSpace() || ch.isPunct() )
                 break;
+            if ( ch.isNumber() )
+                haveAnNumber = true;
             word.append(ch);
         }
         lastpos = i;
         if ( !word.isEmpty() )
-            testIgnoreWord( word );
+            testIgnoreWord( word, haveAnNumber );
         else
             lastpos++;
     }
@@ -367,24 +370,38 @@ void KOSpell::nextWord()
     }
 }
 
-void KOSpell::testIgnoreWord( QString & word )
+void KOSpell::testIgnoreWord( QString & word, bool haveAnNumber )
 {
-    if(d->m_bIgnoreTitleCase && word==word.upper())
+    if ( !ksconfig->spellWordWithNumber() && haveAnNumber )
+    {
         word ="";
+        return;
+    }
+
+    if(d->m_bIgnoreTitleCase && word==word.upper())
+    {
+        word ="";
+        return;
+    }
 
     if(d->m_bIgnoreUpperWords && word[0]==word[0].upper())
     {
         QString text=word[0]+word.right(word.length()-1).lower();
         if(text==word)
+        {
             word ="";
+            return;
+        }
     }
 
     //We don't take advantage of ispell's ignore function because
     //we can't interrupt ispell's output (when checking a large
     //buffer) to add a word to _it's_ ignore-list.
     if (!word.isEmpty() &&ignorelist.findIndex(word.lower())!=-1)
+    {
         word ="";
-
+        return;
+    }
     //
     QStringList::Iterator it = replacelist.begin();
     for(;it != replacelist.end(); ++it, ++it) // Skip two entries at a time.
@@ -411,6 +428,7 @@ void KOSpell::previousWord()
 {
     QString word;
     lastpos--;
+    bool haveAnNumber = false;
     do
     {
         int i =0;
@@ -422,11 +440,13 @@ void KOSpell::previousWord()
                 lastpos--;
                 break;
             }
+            if ( ch.isNumber() )
+                haveAnNumber = true;
             word.prepend(ch);
         }
         lastpos = i;
         if ( !word.isEmpty() )
-            testIgnoreWord( word );
+            testIgnoreWord( word, haveAnNumber );
         else
             lastpos--;
     }

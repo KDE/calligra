@@ -451,7 +451,7 @@ protected:
 
     bool initConfig();
     void changeSpellLanguage( int index );
-    void testIgnoreWord( QString & word );
+    void testIgnoreWord( QString & word, bool haveAnNumber );
 
     void initSpell(KOSpellConfig *_ksc);
     void correctWord( const QString & originalword, const QString & newword );
