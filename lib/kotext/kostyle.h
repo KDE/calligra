@@ -23,6 +23,31 @@
 #include "kotextparag.h"
 #include "kotextformat.h"
 #include <qdom.h>
+
+class KoStyle;
+
+class KoStyleCollection
+{
+public:
+    KoStyleCollection();
+    ~KoStyleCollection();
+    const QPtrList<KoStyle> & styleList() const { return m_styleList; }
+
+    KoStyle* findStyle( const QString & name );
+    /**
+     * Return style number @p i.
+     */
+    KoStyle* styleAt( int i ) { return m_styleList.at(i); }
+
+    KoStyle* addStyleTemplate( KoStyle *style );
+
+    void removeStyleTemplate ( KoStyle *style );
+
+private:
+    QPtrList<KoStyle> m_styleList;
+    QPtrList<KoStyle> m_deletedStyles;
+    KoStyle *m_lastStyle;
+};
 /**
  * A style is a combination of formatting attributes (font, color, etc.)
  * and paragraph-layout attributes, all grouped under a name.

@@ -23,6 +23,64 @@
 #include <qdom.h>
 #include <koparagcounter.h>
 
+
+KoStyleCollection::KoStyleCollection()
+{
+    m_styleList.setAutoDelete( false );
+    m_deletedStyles.setAutoDelete( true );
+    m_lastStyle = 0L;
+}
+
+KoStyleCollection::~KoStyleCollection()
+{
+    //todo
+}
+
+KoStyle* KoStyleCollection::findStyle( const QString & _name )
+{
+    // Caching, to speed things up
+    if ( m_lastStyle && m_lastStyle->name() == _name )
+        return m_lastStyle;
+
+    QPtrListIterator<KoStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( styleIt.current()->name() == _name ) {
+            m_lastStyle = styleIt.current();
+            return m_lastStyle;
+        }
+    }
+
+    return 0L;
+}
+
+
+KoStyle* KoStyleCollection::addStyleTemplate( KoStyle * sty )
+{
+    // First check for duplicates.
+    for ( KoStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    {
+        if ( p->name() == sty->name() ) {
+            // Replace existing style
+            if ( sty != p )
+            {
+                *p = *sty;
+                delete sty;
+            }
+            return p;
+        }
+    }
+    m_styleList.append( sty );
+    return sty;
+}
+
+void KoStyleCollection::removeStyleTemplate ( KoStyle *style ) {
+    if( m_styleList.removeRef(style)) {
+        // Remember to delete this style when deleting the document
+        m_deletedStyles.append(style);
+    }
+}
+
 KoStyle::KoStyle( const QString & name )
 {
     m_name = name;
