@@ -88,7 +88,7 @@ class KWPage : public QScrollView
 
 public:
     KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui );
-    ~KWPage() { delete fc; }
+    ~KWPage() { delete fc; selectAllFrames( FALSE ); }
 
     void setDocument( KWordDocument *_doc )
     { doc = _doc; }

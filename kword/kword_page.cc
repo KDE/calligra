@@ -1031,14 +1031,14 @@ void KWPage::vmrEditFrame( int mx, int my )
     selectedFrame = frame;
     selectedFrameSet = frameset;
     if ( mouseMoved ) {
-	updateSelections();
 	doc->recalcFrames();
 	doc->updateAllFrames();
 	recalcAll = TRUE;
 	recalcText();
 	recalcCursor();
-	repaintScreen( TRUE );
+	repaintScreen( FALSE );
 	recalcAll = FALSE;
+	updateSelections();
     }  else
 	doc->updateAllViews( gui->getView() );
 }
@@ -5014,6 +5014,8 @@ void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )
     
     int my = y() + e->y();
     int mx = x() + e->x();
+    mx += page->contentsX();
+    my += page->contentsY();
     mx = ( mx / page->doc->getRastX() ) * page->doc->getRastX();
     my = ( my / page->doc->getRastY() ) * page->doc->getRastY();
     switch ( direction ) {
@@ -5070,14 +5072,16 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
     oldY = e->y();
     page->mouseMoved = FALSE;
     page->mousePressed = TRUE;
-    page->vmpEditFrame( 0, x() + e->x(), y() + e->y() );
+    page->vmpEditFrame( 0, x() + e->x() + page->contentsX(), 
+			y() + e->y() + page->contentsY() );
 }
 
 /*================================================================*/
 void KWResizeHandle::mouseReleaseEvent( QMouseEvent *e )
 {
     mousePressed = FALSE;
-    page->vmrEditFrame( x() + e->x(), y() + e->y() );
+    page->vmrEditFrame( x() + e->x() + page->contentsX(), 
+			y() + e->y() + page->contentsY() );
     page->mousePressed = FALSE;
 }
 
