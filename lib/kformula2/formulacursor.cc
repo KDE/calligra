@@ -92,7 +92,13 @@ void FormulaCursor::moveLeft(int flag)
     BasicElement* element = getElement();
     handleSelectState(flag);
     if (flag & WordMovement) {
-        element->moveHome(this);
+        SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
+        if (sequence != 0) {
+            sequence->moveWordLeft(this);
+        }
+        else {
+            element->moveHome(this);
+        }
     }
     else {
         element->moveLeft(this, element);
@@ -104,7 +110,13 @@ void FormulaCursor::moveRight(int flag)
     BasicElement* element = getElement();
     handleSelectState(flag);
     if (flag & WordMovement) {
-        element->moveEnd(this);
+        SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
+        if (sequence != 0) {
+            sequence->moveWordRight(this);
+        }
+        else {
+            element->moveEnd(this);
+        }
     }
     else {
         element->moveRight(this, element);
@@ -129,14 +141,24 @@ void FormulaCursor::moveHome(int flag)
 {
     BasicElement* element = getElement();
     handleSelectState(flag);
-    element->formula()->moveHome(this);
+    if (flag & WordMovement) {
+        element->formula()->moveHome(this);
+    }
+    else {
+        element->moveHome(this);
+    }
 }
 
 void FormulaCursor::moveEnd(int flag)
 {
     BasicElement* element = getElement();
     handleSelectState(flag);
-    element->formula()->moveEnd(this);
+    if (flag & WordMovement) {
+        element->formula()->moveEnd(this);
+    }
+    else {
+        element->moveEnd(this);
+    }
 }
 
 

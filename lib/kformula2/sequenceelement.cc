@@ -370,6 +370,31 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
     }
 }
 
+
+void SequenceElement::moveWordLeft(FormulaCursor* cursor)
+{
+    uint pos = cursor->getPos();
+    if (pos > 0) {
+        ElementType* type = children.at(pos-1)->getElementType();
+        if (type != 0) {
+            cursor->setTo(this, type->start());
+        }
+    }
+}
+
+
+void SequenceElement::moveWordRight(FormulaCursor* cursor)
+{
+    uint pos = cursor->getPos();
+    if (pos < children.count()) {
+        ElementType* type = children.at(pos)->getElementType();
+        if (type != 0) {
+            cursor->setTo(this, type->end());
+        }
+    }
+}
+
+
 /**
  * Enters this element while moving up starting inside
  * the element `from'. Searches for a cursor position inside

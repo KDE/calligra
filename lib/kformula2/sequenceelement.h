@@ -106,6 +106,18 @@ public:
     virtual void moveRight(FormulaCursor* cursor, BasicElement* from);
 
     /**
+     * Moves to the beginning of this word or if we are there already
+     * to the beginning of the previous.
+     */
+    void moveWordLeft(FormulaCursor* cursor);
+    
+    /**
+     * Moves to the end of this word or if we are there already
+     * to the end of the next.
+     */
+    void moveWordRight(FormulaCursor* cursor);
+
+    /**
      * Enters this element while moving up starting inside
      * the element `from'. Searches for a cursor position inside
      * this element or above it.

@@ -66,6 +66,8 @@ Assignment::Assignment(SequenceParser* parser)
         case SequenceParser::Assign:
         case SequenceParser::Less:
         case SequenceParser::Greater:
+            setStart(parser->getStart());
+            setEnd(parser->getEnd());
             parser->setElementType(parser->getStart(), this);
             parser->nextToken();
             rhs = new Assignment(parser);
@@ -86,6 +88,8 @@ Expression::Expression(SequenceParser* parser)
     switch (parser->getTokenType()) {
         case SequenceParser::Plus:
         case SequenceParser::Minus:
+            setStart(parser->getStart());
+            setEnd(parser->getEnd());
             parser->setElementType(parser->getStart(), this);
             parser->nextToken();
             rhs = new Expression(parser);
@@ -112,6 +116,8 @@ Term::Term(SequenceParser* parser)
     switch (parser->getTokenType()) {
         case SequenceParser::Mul:
         case SequenceParser::Div:
+            setStart(parser->getStart());
+            setEnd(parser->getEnd());
             parser->setElementType(parser->getStart(), this);
             parser->nextToken();
             rhs = new Term(parser);

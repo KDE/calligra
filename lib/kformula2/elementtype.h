@@ -79,6 +79,11 @@ public:
     // debug
     static int getEvilDestructionCount() { return evilDestructionCount; }
 
+protected:
+
+    void setStart(uint start) { from = start; }
+    void setEnd(uint end) { to = end; }
+    
 private:
 
     /**
