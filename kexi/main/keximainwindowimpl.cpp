@@ -801,9 +801,9 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 		d->createMenu->setEnabled(d->prj);
 
 	//TOOLS MENU
-#ifndef KEXI_NO_MIGRATION
-	d->action_tools_data_migration->setEnabled(d->prj);
-#endif
+//#ifndef KEXI_NO_MIGRATION
+//	d->action_tools_data_migration->setEnabled(d->prj);
+//#endif
 
 	//WINDOW MENU
 	if (d->action_window_next) {
