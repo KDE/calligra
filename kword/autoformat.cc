@@ -182,8 +182,12 @@ bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *para
         for ( int i = index - 1; i >= 0; --i )
         {
             QChar ch = s->at( i ).c;
-            if ( ch.isSpace() || ch.isPunct() )
-                wordArray[(index - 1)-i]=word;
+            if ( ch.isSpace() || ch.isPunct() || i==0)
+            {
+                if(i==0)
+                   word.prepend( ch );
+                wordArray[word.length()]=word;
+            }
             word.prepend( ch );
             if (((index - 1)-i)==m_maxFindLength)
                 break;
