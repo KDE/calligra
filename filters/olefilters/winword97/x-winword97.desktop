@@ -1,0 +1,13 @@
+[Desktop Entry]
+MimeType=application/x-winword97
+Comment=MS WinWord97 Document
+Comment[ca]=Document MS WinWord97
+Comment[eo]=Winword-97-dokumento
+Comment[fi]=MS WinWord97 asiakirja
+Comment[hu]=MS WinWord97 Dokumentum
+Comment[ja]=MS Word97ドキュメント
+Comment[sv]=MS WinWord97-dokument
+DefaultApp=kword
+Icon=txt.xpm
+Type=MimeType
+Patterns=*.doc;*.DOC;

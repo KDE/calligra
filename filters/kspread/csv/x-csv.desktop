@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=MimeType
+MimeType=text/x-csv
+Icon=unknown.png
+Patterns=*.csv;*.CSV;
+Comment=Text file with comma separated values
+Comment[ca]=Fitxer de text amb valors separats per comes
+Comment[hu]=Szöveg fájl, vesszõvel elválasztott értékekkel
+Comment[ja]=ÃÍ¤¬¥³¥ó¥Þ¤Ç¶èÀÚ¤é¤ì¤¿¥Æ¥­¥¹¥È¥Õ¥¡¥¤¥ë
+Comment[sv]=Textfil med kommaseparerade värden
+DefaultApp=kspread

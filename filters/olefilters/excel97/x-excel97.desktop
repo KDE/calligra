@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=MimeType
+MimeType=application/x-excel97
+Icon=unknown.xpm
+Patterns=*.xls;*.XLS;
+Comment=MS Excel 97 File
+Comment[ca]=Fitxer MS Excel 97
+Comment[eo]=Excel-97-dosiero
+Comment[fi]=MS Excel 97 tiedosto
+Comment[hu]=MS Excel 97 fájl
+Comment[ja]=MS Excel 97 ¥Õ¥¡¥¤¥ë
+Comment[sv]=MS Excel 97-fil
+DefaultApp=kspread

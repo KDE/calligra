@@ -1,0 +1,23 @@
+[Desktop Entry]
+Name=OLEExcel97Filter
+Name[eo]=Filtrilo OLEExcel97
+Name[hu]=OLEExcel97Szûrõ
+Name[ja]=OLE Excel97 ¥Õ¥£¥ë¥¿¡¼
+Comment=KSpread Excel 97 Filter
+Comment[ca]=Filtre d'Excel 97 pel KSpread
+Comment[de]=Excel 97 Filter von KSpread
+Comment[eo]=Filtrilo por Tabelkalkulilo el Excel 97
+Comment[fi]=KSpreak Excel 97 suodatin
+Comment[hu]=Excel 97 szûrõ a KSzámolótáblához
+Comment[ja]=KSpread Excel97 ¥Õ¥£¥ë¥¿¡¼
+Export=application/x-kspread
+ExportDescription=KSpread
+Import=application/x-excel97
+ImportDescription=MS Excel 97
+X-KDE-Library=libexcel97
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+Icon=unknown.png
+MiniIcon=unknown.png
+ServiceTypes=KOfficeFilter

@@ -1,0 +1,24 @@
+[Desktop Entry]
+Name=OLEWinword97Filter
+Name[eo]=Filtrilo OLEWinword97
+Name[hu]=OLEWinword97Szûrõ
+Name[ja]=OLE Word97 ¥Õ¥£¥ë¥¿¡¼
+Comment=KWord WinWord97 Filter
+Comment[ca]=Filtre de WinWord97 pel KWord
+Comment[de]=WinWord97 Filter von KWord
+Comment[eo]=Winword-97-filtrilo por Vorto
+Comment[fi]=KWordin WinWord97 suodatin
+Comment[hu]=WinWord97 szûrõ a KWord-höz
+Comment[ja]=KWord Word97 ¥Õ¥£¥ë¥¿¡¼
+Export=application/x-kword
+ExportDescription=KWord
+Import=application/x-winword97
+ImportDescription=MS WinWord 97
+X-KDE-Library=libwinword97
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+Icon=unknown.png
+MiniIcon=unknown.png
+ServiceTypes=KOfficeFilter
+

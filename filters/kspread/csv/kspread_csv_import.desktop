@@ -1,0 +1,21 @@
+[Desktop Entry]
+Name=KSpreadCSVFilter
+Name[hu]=KSzámolótáblaCSVSzûrõ
+Name[ja]=KSpread CSV ¥Õ¥£¥ë¥¿¡¼
+Name[sv]=KalkylSVFilter
+Comment=CSV Filter for KSpread
+Comment[ca]=Filtre CVS pel KSpread
+Comment[hu]=CSV szûrõ a KSzámolótáblához
+Comment[ja]=KSpreadÍÑ CSV ¥Õ¥£¥ë¥¿¡¼
+Comment[sv]=CVS-filter för kalkylprogrammet
+Export=application/x-kspread
+ExportDescription=KSpread
+Import=text/x-csv
+ImportDescription=CSV File
+X-KDE-Library=libcsvfilter
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+Icon=unknown.png
+MiniIcon=unknown.png
+ServiceTypes=KOfficeFilter

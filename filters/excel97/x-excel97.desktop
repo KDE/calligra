@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=MimeType
-MimeType=application/x-excel97
-Icon=unknown.xpm
-Patterns=*.xls;*.XLS;
-Comment=MS Excel 97 File
-Comment[de]=MS Excel 97 Datei
-DefaultApp=kspread
