@@ -117,9 +117,7 @@
 #include <kformulamimesource.h>
 
 #include <stdlib.h>
-#ifdef HAVE_LIBASPELL
 #include <koSpell.h>
-#endif
 
 #include "kwinsertpagedia.h"
 
