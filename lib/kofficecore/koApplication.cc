@@ -52,7 +52,7 @@ KoApplication::KoApplication()
     dcopClient()->setDefaultObject( (new KoApplicationIface())->objId() );
 }
 
-void KoApplication::start()
+bool KoApplication::start()
 {
     // Find out about the mimetype which is natively supported
     // by this application.
@@ -60,7 +60,7 @@ void KoApplication::start()
     if ( nativeFormat.isEmpty() )
     {
         kdError(30003) << "Couldn't find the native MimeType in " << kapp->name() << "'s desktop file. Check your installation !" << endl;
-        ::exit(1);
+        return false;
     }
 
     // Find the *.desktop file corresponding to the mime type
@@ -68,7 +68,7 @@ void KoApplication::start()
     if ( entry.isEmpty() )
     {
         kdError(30003) << "Unknown KOffice MimeType " << nativeFormat << ". Check your installation !" << endl;
-        ::exit(1);
+        return false;
     }
 
     // Get the command line arguments which we have to parse
@@ -79,7 +79,7 @@ void KoApplication::start()
     if (!argsCount) {
         KoDocument* doc = entry.createDoc( 0, "Document" );
         if ( !doc )
-            ::exit(1);
+            return false;
 //        KoMainWindow* shell = doc->createShell();
         KoMainWindow *shell = new KoMainWindow( doc->instance() );
         shell->show();
@@ -89,7 +89,7 @@ void KoApplication::start()
                 shell->setRootDocument( doc );
             }
         else
-            ::exit(1);
+            return false;
         QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
     } else {
         // Loop through arguments
@@ -118,11 +118,12 @@ void KoApplication::start()
             }
         }
         if (n == 0) // no doc, all URLs were malformed
-          ::exit(1);
+          return false;
     }
 
     args->clear();
     // not calling this before since the program will quit there.
+	return true;
 }
 
 KoApplication::~KoApplication()

@@ -41,6 +41,7 @@ int main(int argc, char **argv) {
     KoApplication app;
     app.dcopClient()->attach();
     app.dcopClient()->registerAs("graphite");
-    app.start(); // parses command line args, create initial docs and shells
+    if (!app.start()) // parses command line args, create initial docs and shells
+	return 1;
     return app.exec();
 }

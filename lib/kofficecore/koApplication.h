@@ -68,7 +68,7 @@ public:
      * It is valid behaviour not to call this method at all. In this case you
      * have to process your command line parameters by yourself.
      */
-    virtual void start();
+    virtual bool start();
 };
 
 #endif

@@ -39,7 +39,7 @@ int main( int argc, char **argv )
     KCmdLineArgs::addCmdLineOptions( options );
     KoApplication app;
 
-    app.start(); // parses command line args, create initial docs and shells
-    app.exec();
-    return 0;
+    if (!app.start()); // parses command line args, create initial docs and shells
+	return 1;
+    return app.exec();
 }

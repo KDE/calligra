@@ -41,7 +41,8 @@ int main( int argc, char **argv )
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "killustrator" );
 
-    app.start();
+    if (!app.start())
+	return 1;
     app.exec();
     PStateManager::instance()->saveDefaultSettings();
 }

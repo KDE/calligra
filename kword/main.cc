@@ -39,7 +39,9 @@ int main( int argc, char **argv )
 
     KoApplication app;
 
-    app.start();
+    if (!app.start()) {
+	return 1;
+    }
 
     app.exec();
 
