@@ -2918,37 +2918,7 @@ void KWTextFrameSetEdit::insertVariable( KWVariable *var )
 void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
 {
     // Update UI - only for those items which have changed
-
-    if ( updateFormat )
-    {
-        int i = cursor()->index();
-        if ( i > 0 )
-            --i;
-#ifdef DEBUG_FORMATS
-        if ( currentFormat() )
-            kdDebug(32003) << "KWTextFrameSet::updateUI old currentFormat=" << currentFormat()
-                           << " " << currentFormat()->key()
-                           << " parag format=" << cursor()->parag()->at( i )->format()->key() << endl;
-        else
-            kdDebug(32003) << "KWTextFrameSetEdit::updateUI old currentFormat=0" << endl;
-#endif
-        if ( !currentFormat() || currentFormat()->key() != cursor()->parag()->at( i )->format()->key() )
-        {
-            if ( currentFormat() )
-                currentFormat()->removeRef();
-#ifdef DEBUG_FORMATS
-            kdDebug() << "Setting currentFormat from format " << cursor()->parag()->at( i )->format()
-                      << " ( character " << i << " in paragraph " << cursor()->parag()->paragId() << " )" << endl;
-#endif
-            setCurrentFormat( static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( cursor()->parag()->at( i )->format() ) ) );
-            if ( currentFormat()->isMisspelled() ) {
-                currentFormat()->removeRef();
-                // ## this forgets the charset, etc.
-                setCurrentFormat( static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( currentFormat()->font(), currentFormat()->color() ) ) );
-            }
-            showCurrentFormat();
-        }
-    }
+    KoTextView::updateUI( updateFormat, force );
 
     // Paragraph settings
     KWTextParag * parag = static_cast<KWTextParag *>(cursor()->parag());
