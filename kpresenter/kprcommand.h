@@ -214,9 +214,9 @@ public:
     virtual void unexecute();
 
 protected:
-
-    QPtrList<KPObject> objects;
-    KPresenterDoc *doc;
+    QPtrList<KPObject> m_oldObjectList;
+    QPtrList<KPObject> m_objectsToDelete;
+    KPresenterDoc *m_doc;
     KPrPage *m_page;
 };
 

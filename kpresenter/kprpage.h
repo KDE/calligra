@@ -92,26 +92,42 @@ public:
      * take object object from m_objectList
      */
     void takeObject(KPObject *_obj);
+    /**
+     * delete selected objects from m_objectList
+     */
+    KCommand * deleteSelectedObjects();
 #if 0 //not used 
     void removeObject( int pos);
     void insertObject(KPObject *_obj,int pos);
 #endif    
     void completeLoading( bool _clean, int lastObj );
+    /**
+     * Create a uniq name for a object.
+     * if the name already exists append ' (x)'. // FIXME: not allowed by I18N
+     */
     void unifyObjectName( KPObject *object );
 
     KoRect getPageRect() const;
     QRect getZoomPageRect()const;
 
-    void setObjectList( QPtrList<KPObject> _list ) {
-        m_objectList.setAutoDelete( false ); m_objectList = _list; m_objectList.setAutoDelete( false );
+    /**
+     * set m_objectList to objectLlist
+     */
+    void setObjectList( QPtrList<KPObject> objectLlist ) {
+        m_objectList.setAutoDelete( false ); m_objectList = objectLlist; m_objectList.setAutoDelete( false );
     }
 
+    /**
+     * return the number of objects in m_objectList
+     */
     unsigned int objNums() const { return m_objectList.count(); }
 
+    /**
+     * The following two functions are only used in KPresenterPageIface.
+     */
     int numTextObject() const;
     KPTextObject *textFrameSet( unsigned int _num ) const;
 
-    KCommand * deleteObjs( bool _add=true );
     int numSelected() const;
     void pasteObjs( const QByteArray & data, int nbCopy = 1, double angle = 0.0 ,
                     double _increaseX=0.0, double increaseY = 0.0, double moveX=0.0, double moveY=0.0);
@@ -121,6 +137,12 @@ public:
     void copyObjs(QDomDocument &doc, QDomElement &presenter, QValueList<KoPictureKey> & lst) const;
 
     KPObject* getSelectedObj() const;
+    /**
+     * @return All selected objets.
+     * If withoutHeaderFooter is set to true a selected header 
+     * or footer are not returned.
+     */
+    QPtrList<KPObject> getSelectedObjects( bool withoutHeaderFooter = false ) const;
     KPPixmapObject* getSelectedImage() const;
 
     ImageEffect getImageEffect(ImageEffect eff) const;
@@ -225,7 +247,6 @@ public:
     void insertPicture( const QString &_file, const KoRect &_rect );
 
     void enableEmbeddedParts( bool f );
-    void deletePage( );
 
     KPBackGround *background() const { return kpbackground;}
 

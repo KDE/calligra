@@ -345,64 +345,80 @@ void ChgPixCmd::unexecute()
 
 DeleteCmd::DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects,
                       KPresenterDoc *_doc, KPrPage *_page )
-    : KNamedCommand( _name ), objects( _objects )
+: KNamedCommand( _name )
+, m_oldObjectList( _page->objectList() )
+, m_objectsToDelete( _objects )
+, m_doc( _doc )
+, m_page( _page )  
 {
-    objects.setAutoDelete( false );
-    doc = _doc;
-    m_page=_page;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_oldObjectList );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 DeleteCmd::~DeleteCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPObject> it( m_oldObjectList );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
 void DeleteCmd::execute()
 {
-    QRect oldRect;
     bool textObj=false;
-    QPtrList<KPObject> list (m_page->objectList());
-    for ( unsigned int i = 0; i < objects.count(); i++ )
+
+    QPtrListIterator<KPObject> it( m_oldObjectList );
+    QPtrListIterator<KPObject> itDelete( m_objectsToDelete );
+    QPtrList<KPObject> newObjectList;
+    for ( ; it.current(); ++it )
     {
-        oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect());
-        if ( list.findRef( objects.at( i ) ) != -1 )
+        if ( it.current() == itDelete.current() )
         {
-            m_page->takeObject(objects.at(i));
-            objects.at( i )->removeFromObjList();
-            if(objects.at(i)->getType()==OT_TEXT)
+            it.current()->setSelected( false );
+            it.current()->removeFromObjList();
+            
+            if ( !textObj && it.current()->getType() == OT_TEXT )
             {
-                KPTextObject * tmp = dynamic_cast<KPTextObject *>( objects.at( i ) );
+                KPTextObject * tmp = dynamic_cast<KPTextObject *>( it.current() );
                 if ( tmp )
                     tmp->setEditingTextObj( false );
                 textObj=true;
             }
+            ++itDelete;
         }
-        doc->repaint( oldRect );
-        doc->repaint( objects.at( i ) );
+        else
+        {
+            newObjectList.append( it.current() );
+        }
+    }
+
+    m_page->setObjectList( newObjectList );
+    
+    for ( itDelete.toFirst(); itDelete.current(); ++itDelete )
+    {
+        QRect oldRect = m_doc->zoomHandler()->zoomRect( itDelete.current()->getBoundingRect() );
+        m_doc->repaint( oldRect );
+        //m_doc->repaint( objects.at( i ) );
     }
     if(textObj)
-        doc->updateRuler();
+        m_doc->updateRuler();
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    int pos=m_doc->pageList().findRef(m_page);
+    m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
 }
 
 void DeleteCmd::unexecute()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
+    m_page->setObjectList( m_oldObjectList );
+    QPtrListIterator<KPObject> it( m_objectsToDelete );
+    for ( ; it.current(); ++it )
     {
-        m_page->appendObject( objects.at( i ) );
-        objects.at( i )->addToObjList();
-        doc->repaint( objects.at( i ) );
+        it.current()->addToObjList();
+        m_doc->repaint( it.current() );
     }
 
-    int pos=doc->pageList().findRef(m_page);
-    doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    int pos=m_doc->pageList().findRef(m_page);
+    m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
 }
 
 

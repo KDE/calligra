@@ -298,10 +298,6 @@ bool KPrPage::objectNameExists( KPObject *object, QPtrList<KPObject> &list ) {
     return false;
 }
 
-/*
- * Create a uniq name for a object.
- * if the name already exists append ' (x)'. // Fixme: not allowed by I18N
- */
 void KPrPage::unifyObjectName( KPObject *object ) {
     if ( object->getObjectName().isEmpty() ) {
         object->setObjectName( object->getTypeString() );
@@ -354,29 +350,19 @@ void KPrPage::insertObject(KPObject *_obj,int pos)
 }
 #endif
 
-KCommand * KPrPage::deleteObjs( bool _add )
+KCommand * KPrPage::deleteSelectedObjects()
 {
-    QPtrList<KPObject> _objects;
-    DeleteCmd *deleteCmd=0L;
-    _objects.setAutoDelete( false );
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
-    {
-        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
-            continue;
+    QPtrList<KPObject> objects = getSelectedObjects( true );
 
-        if(it.current()->isSelected())
-        {
-            _objects.append( it.current() );
-            it.current()->setSelected(false);
-        }
-    }
-    if ( _add &&_objects.count() > 0 ) {
-        deleteCmd = new DeleteCmd( i18n( "Delete Objects" ), _objects, m_doc, this );
+    DeleteCmd *deleteCmd=0L;
+    
+    if ( objects.count() > 0 ) {
+        deleteCmd = new DeleteCmd( i18n( "Delete Objects" ), objects, m_doc, this );
         deleteCmd->execute();
     }
     else
         m_doc->setModified(true);
+
     return deleteCmd ;
 }
 
@@ -569,6 +555,24 @@ KPObject* KPrPage::getSelectedObj() const
     }
     return 0L;
 }
+
+
+QPtrList<KPObject> KPrPage::getSelectedObjects( bool withoutHeaderFooter ) const
+{
+    QPtrList<KPObject> objects;
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->isSelected() 
+            && ( !withoutHeaderFooter
+                 || it.current() != m_doc->header() && it.current()!= m_doc->footer() ) )
+        {
+            objects.append( it.current() );
+        }
+    }
+    return objects;
+}
+
 
 void KPrPage::groupObjects()
 {
@@ -1840,14 +1844,6 @@ void KPrPage::enableEmbeddedParts( bool f )
     }
 }
 
-void KPrPage::deletePage( )
-{
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
-        it.current()->setSelected( true );
-
-    deleteObjs( false );
-}
 
 void KPrPage::setBackColor(const  QColor &backColor1, const QColor &backColor2, BCType bcType,
                            bool unbalanced, int xfactor, int yfactor )

@@ -4517,14 +4517,14 @@ void KPrCanvas::copyObjs()
 void KPrCanvas::deleteObjs()
 {
     KMacroCommand *macro=0L;
-    KCommand *cmd=m_activePage->deleteObjs();
+    KCommand *cmd=m_activePage->deleteSelectedObjects();
     if( cmd)
     {
         if ( !macro )
             macro=new KMacroCommand(i18n( "Delete Objects" ));
         macro->addCommand(cmd);
     }
-    cmd=stickyPage()->deleteObjs();
+    cmd=stickyPage()->deleteSelectedObjects();
     if( cmd)
     {
         if ( !macro )

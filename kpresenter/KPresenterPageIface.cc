@@ -699,6 +699,6 @@ void KPresenterPageIface::moveAllObjectSelected( int diffx,int diffy)
 
 void KPresenterPageIface::deleteAllObjectSelected()
 {
-    KCommand * cmd=m_page->deleteObjs();
+    KCommand * cmd=m_page->deleteSelectedObjects();
     delete cmd;
 }
