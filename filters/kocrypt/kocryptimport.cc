@@ -42,30 +42,32 @@
               i18n("The password is invalid or the file is corrupted."),   \
               i18n("Encrypted Document Import"));                          \
          QApplication::restoreOverrideCursor();                            \
+         goto start;                                                       \
+      }                                                                    \
+      } while(0)
+
+
+#define WRITE_ERROR_CHECK(XX)  do {                                        \
+      if (rc != XX) {                                                      \
+         QApplication::setOverrideCursor(Qt::arrowCursor);                 \
+         KMessageBox::error(NULL,                                          \
+              i18n("Disk write error - out of space?"),                    \
+              i18n("Encrypted Document Import"));                          \
+         QApplication::restoreOverrideCursor();                            \
+         outf.remove();                                                    \
          return false;                                                     \
       }                                                                    \
       } while(0)
 
 
-#define WRITE_ERROR_CHECK(XX)  do {       \
-      if (rc != XX) {                     \
-         QApplication::setOverrideCursor(Qt::arrowCursor);                  \
-         KMessageBox::error(NULL,         \
-              i18n("Disk write error - out of space?"),   \
-              i18n("Encrypted Document Import"));         \
-         QApplication::restoreOverrideCursor();                            \
-         return false;                                    \
-      }                                                   \
-      } while(0)
-
-
-#define CRYPT_ERROR_CHECK()  do {         \
-      if (rc != blocksize) {              \
+#define CRYPT_ERROR_CHECK()  do {                                          \
+      if (rc != blocksize) {                                               \
          QApplication::setOverrideCursor(Qt::arrowCursor);                 \
-         KMessageBox::error(NULL,         \
+         KMessageBox::error(NULL,                                          \
               i18n("There was an internal error while decrypting the file."), \
               i18n("Encrypted Document Import"));                          \
          QApplication::restoreOverrideCursor();                            \
+         outf.remove();                                                    \
          return false;                                                     \
       }                                                                    \
       } while(0)
@@ -81,8 +83,6 @@ bool KoCryptImport::filter(const QString &fileIn, const QString &fileOut,
                            const QString& ) {
 int ftype = -1;
 int blocksize = 64;
-QFile inf(fileIn);
-QFile outf(fileOut);
 int rc;
 
     if (to == "application/x-kword" && from == "application/x-kword-crypt")
@@ -98,11 +98,23 @@ int rc;
 
     //kdDebug() << "Crypto Filter Parameters: " << config << endl;
 
+    // OK.  Get this.  I'm not going to add 4 lines of code to this thing and
+    // nest it in another [infinite] loop just so someone can feel warm and
+    // fuzzy because they found a complicated way to avoid using a perfectly
+    // fine goto.  This is my code and I like the goto just the way it is.
+    // Deal with it.
+start:
+QFile inf(fileIn);
+QFile outf(fileOut);
+
     PasswordPrompt *pp = new PasswordPrompt(true);
     connect(pp, SIGNAL(setPassword(QString)), this, SLOT(setPassword(QString)));
     int dlgrc = pp->exec();
     delete pp;
-    if (dlgrc == QDialog::Rejected) return false;
+    if (dlgrc == QDialog::Rejected) {
+       outf.remove();  // incase it exists, lets not crash
+       return false;
+    }
 
     BlowFish cipher;
     CipherBlockChain cbc(&cipher);
@@ -124,11 +136,18 @@ int rc;
  
     if (cbc.blockSize() > 0) blocksize = cbc.blockSize();
 
+    // This is bad.  We don't have a buffer big enough for this anyways.
+    if (blocksize > 2048) {
+       QApplication::setOverrideCursor(Qt::arrowCursor);
+       KMessageBox::error(NULL, 
+                  i18n("There was an internal error in the cipher code."),
+                  i18n("Encrypted Document Import"));
+       QApplication::restoreOverrideCursor();
+       return false;
+    }
+
     inf.open(IO_ReadOnly);
     outf.open(IO_WriteOnly);
-
-    // This is bad.  We don't have a buffer big enough for this anyways.
-    if (blocksize > 2048) return false;
 
     char p[8192];
 
@@ -142,7 +161,8 @@ int rc;
                   i18n("This is the wrong document type or the document is corrupt."),
                   i18n("Encrypted Document Import"));
        QApplication::restoreOverrideCursor();
-      return false;   // wrong file type!
+       outf.remove();
+       return false;   // wrong file type!
     }
 
     /*
@@ -155,7 +175,8 @@ int rc;
                   i18n("I don't understand this version of the file format."),
                   i18n("Encrypted Document Import"));
        QApplication::restoreOverrideCursor();
-      return false;   // right now there is only one fileversion to understand!
+       outf.remove();
+       return false;   // right now there is only one fileversion to understand!
     }
 
     /*
@@ -168,7 +189,8 @@ int rc;
                   i18n("I don't understand this version of the file format."),
                   i18n("Encrypted Document Import"));
        QApplication::restoreOverrideCursor();
-      return false;   // we only know one crypto algorithm too.
+       outf.remove();
+       return false;   // we only know one crypto algorithm too.
     }
 
     /*

@@ -122,6 +122,8 @@ int rc;
     char thekey[512];
 
     // FIXME: obtain the password and ensure that we can use it.
+    //               we can copy the key-check routine from the blowfish code
+    //               We can re-prompt here if we like
     strncpy(thekey, pass.latin1(), 56);
     thekey[56] = 0;
 
