@@ -698,6 +698,7 @@ KoVariable* KoVariableCollection::loadOasisField( KoTextDocument* textdoc, const
             dateFormat = (*it);
 
         // Only text:time is a pure time (the data behind is only h/m/s)
+        // ### FIXME: not true, a time can have a date too (reason: for MS Word (already from long ago) time and date are the same thing. But for OO the correction is not in the same unit for time and date.)
         // Whereas print-time/creation-time etc. are actually related to a date/time value.
         if ( afterText == "time" )
         {
