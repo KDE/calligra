@@ -4316,7 +4316,27 @@ void KSpreadView::insertHyperlink()
     d->canvas->closeEditor();
 
     KSpreadLinkDlg dlg( this, "Insert Link" );
-    dlg.exec();
+    if( dlg.exec() == KDialog::Accepted )
+    {
+        QPoint marker( selectionInfo()->marker() );
+        KSpreadCell * cell = d->activeSheet->nonDefaultCell( marker );
+        
+        if ( !cell->isEmpty() )
+        {
+            int ret = KMessageBox::warningYesNo( this, 
+                i18n( "Cell is not empty.\nDo you want to continue?" ) );
+            if ( ret == 4 ) return;
+        }
+
+        LinkCommand* command = new LinkCommand( cell, dlg.text(), dlg.link(), 
+            dlg.bold(), dlg.italic() );
+        d->doc->addCommand( command );
+        command->execute();
+        
+        //refresh editWidget
+	    canvasWidget()->setFocus();
+	    editWidget()->setText( cell->text() );
+    }
 }
 
 void KSpreadView::insertFromDatabase()

@@ -334,7 +334,8 @@ protected:
 class LinkCommand : public KCommand
 {
 public:
-  LinkCommand( KSpreadCell* cell, const QString& text, const QString& link );
+  LinkCommand( KSpreadCell* cell, const QString& text, const QString& link, 
+    bool bold, bool italic );
   
   virtual void execute();
   virtual void unexecute();
@@ -347,6 +348,8 @@ protected:
   QString oldLink;  
   QString newText;
   QString newLink;
+  bool bold;
+  bool italic;
 };
 
 

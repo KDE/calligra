@@ -51,6 +51,9 @@ KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
                   KDialogBase::Ok )
 {
   m_pView = parent;
+  m_bold = false;
+  m_italic = false;
+  
   QVBox *page=addVBoxPage( i18n( "Internet" ), QString::null,BarIcon( "html",KIcon::SizeMedium ) );
   _internetAnchor = new  internetAnchor( parent,page );
 
@@ -67,6 +70,26 @@ KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
   resize( 400,300 );
 }
 
+QString KSpreadLinkDlg::text() const
+{
+  return m_text;
+}
+
+QString KSpreadLinkDlg::link() const
+{
+  return m_link;
+}
+
+bool KSpreadLinkDlg::bold() const
+{
+  return m_bold;
+}
+
+bool KSpreadLinkDlg::italic() const
+{
+  return m_italic;
+}
+
 void KSpreadLinkDlg::slotOk()
 {
   QString text, link, str;
@@ -75,85 +98,48 @@ void KSpreadLinkDlg::slotOk()
   switch( activePageIndex() )
   {
     case 0:
-      text = _internetAnchor->text();
-      link = _internetAnchor->link();
-      bold = _internetAnchor->bold();
-      italic = _internetAnchor->italic();
+      m_text = _internetAnchor->text();
+      m_link = _internetAnchor->link();
+      m_bold = _internetAnchor->bold();
+      m_italic = _internetAnchor->italic();
       str = i18n( "Internet address is empty" );
       break;
     case 1:
-      text = _mailAnchor->text();
-      link = _mailAnchor->link();
-      bold = _mailAnchor->bold();
-      italic = _mailAnchor->italic();
+      m_text = _mailAnchor->text();
+      m_link = _mailAnchor->link();
+      m_bold = _mailAnchor->bold();
+      m_italic = _mailAnchor->italic();
       str = i18n( "Mail address is empty" );
       break;
     case 2:
-      text = _fileAnchor->text();
-      link = _fileAnchor->link();
-      bold = _fileAnchor->bold();
-      italic = _fileAnchor->italic();
+      m_text = _fileAnchor->text();
+      m_link = _fileAnchor->link();
+      m_bold = _fileAnchor->bold();
+      m_italic = _fileAnchor->italic();
       str = i18n( "File name is empty" );
       break;
     case 3:
-      text = _cellAnchor->text();
-      link = _cellAnchor->link();
-      bold = _cellAnchor->bold();
-      italic = _cellAnchor->italic();
+      m_text = _cellAnchor->text();
+      m_link = _cellAnchor->link();
+      m_bold = _cellAnchor->bold();
+      m_italic = _cellAnchor->italic();
       str = i18n( "Destination cell is empty" );
       break;
     default:
       kdDebug(36001)<<"Error in KSpreadLinkDlg\n";
     }
     
-  if( link.isEmpty() )
+  if( m_link.isEmpty() )
   {
     KMessageBox::error( this, str );
     return;
   } 
   
-  if( text.isEmpty() )
-    text = link;
+  if( m_text.isEmpty() )
+    m_text = m_link;
     
-  str = "<a href=\"" + link + "\">" + text + "</a>";
-  if( italic ) 
-    str.prepend( "<i>" ).append( "</i>" );  
-  if( bold ) 
-    str.prepend( "<b>" ).append( "</b>" );  
-  str.prepend( '!' );
-  
-  setCellText( str );
+  accept();
 }
-
-void KSpreadLinkDlg::setCellText( const QString &_text )
-{
-    m_pView->doc()->emitBeginOperation(  false );
-
-    KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),m_pView->canvasWidget()->markerRow() );
-
-    if ( !cell->isEmpty() )
-      {
-	int ret = KMessageBox::warningYesNo( this, i18n( "Cell is not empty.\nDo you want to continue?" ) );
-	if ( ret == 4 )
-	  {
-	    reject();
-	    return;
-	  }
-      }
-
-    //refresh editWidget
-    if (!_text.isEmpty() )
-    {
-	m_pView->canvasWidget()->setFocus();
-	m_pView->setText( _text );
-	m_pView->editWidget()->setText( _text );
-	accept();
-    }
-
-    m_pView->slotUpdateView( m_pView->activeTable() );
-    //m_pView->doc()->emitEndOperation();
-}
-
 
 internetAnchor::internetAnchor( KSpreadView* _view, QWidget *parent , char *name )
   : QWidget ( parent,name )

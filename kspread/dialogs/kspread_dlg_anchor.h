@@ -115,12 +115,20 @@ class KSpreadLinkDlg : public KDialogBase
     Q_OBJECT
 public:
     KSpreadLinkDlg( KSpreadView* parent, const char* name );
+    QString text() const;
+    QString link() const;
+    bool bold() const;
+    bool italic() const;
 
-public slots:
+protected slots:
   void slotOk();
-  void setCellText(const QString &_text);
- private:
+
+private:
     KSpreadView* m_pView;
+    QString m_text;
+    QString m_link;
+    bool m_bold;
+    bool m_italic;
     internetAnchor *_internetAnchor;
     mailAnchor *_mailAnchor;
     fileAnchor *_fileAnchor;

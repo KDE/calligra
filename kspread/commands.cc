@@ -529,9 +529,11 @@ QString PaperLayoutCommand::name() const
 }
 
 LinkCommand::LinkCommand( KSpreadCell* c, const QString& text, 
- const QString& link )
+ const QString& link, bool b, bool i )
 {
   cell = c;
+  bold = b;
+  italic = i;
   oldText = cell->text();
   oldLink = cell->link();
   newText = text;
@@ -546,7 +548,7 @@ void LinkCommand::execute()
   if( !cell ) return;
   
   cell->setCellText( newText );
-  cell->setLink( newLink );
+  cell->setLink( newLink, bold, italic );
   
   doc->addDamage( new CellDamage( cell ) );
 }
