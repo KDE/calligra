@@ -40,3 +40,7 @@ KPresenter 1.2beta1 -> 1.2 beta 2
 - Now we can close polyline object
 - Fix save/load variable
 - Use tripleState in styledia
+- Removed settings-toolbar and corresponding menu-entries
+- Added tab to properties-dialog according to selected object
+- Moved default-settings for rectangles, pies and polygons to
+  'Settings' -> 'Configure KPresenter'
