@@ -914,9 +914,11 @@ static void ProcessLineSpaceTag (QDomNode myNode, void *tagData, KWEFKWordLeader
 void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 // Processes <LAYOUT> and <STYLE>
 {
-    LayoutData *layout = (LayoutData *) tagData;
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList << AttrProcessing ( "outline" ); // Only in <STYLE>
+    ProcessAttributes (myNode, attrProcessingList);
 
-    AllowNoAttributes (myNode);
+    LayoutData *layout = (LayoutData *) tagData;
 
     ValueListFormatData formatDataList;
 

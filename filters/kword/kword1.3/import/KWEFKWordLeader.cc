@@ -552,11 +552,6 @@ static void ProcessFramesetsTag ( QDomNode        myNode,
 
 static void ProcessStyleTag (QDomNode myNode, void *, KWEFKWordLeader *leader )
 {
-    QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList
-        << AttrProcessing ( "outline" );
-    ProcessAttributes (myNode, attrProcessingList);
-
     LayoutData layout;
 
     ProcessLayoutTag (myNode, &layout, leader);
