@@ -955,12 +955,17 @@ void KWordView::insertFootNoteEndNote()
     if ( start == -1 )
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "Currently you can only insert footnotes or\n"
 							    "endotes into the first frameset!" ), i18n( "OK" ) );
-    else
-    {
+    else {
 	KWFootNoteDia dia( 0L, "", m_pKWordDoc, gui->getPaperWidget(), start );
 	dia.setCaption( i18n( "Insert Footnote/Endnote" ) );
 	dia.show();
     }
+}
+
+/*===============================================================*/
+void KWordView::insertContents()
+{
+    m_pKWordDoc->createContents();
 }
 
 /*===============================================================*/
@@ -976,14 +981,14 @@ void KWordView::formatColor()
 /*===============================================================*/
 void KWordView::formatParagraph()
 {
-    if ( paragDia )
-    {
+    if ( paragDia ) {
 	QObject::disconnect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
 	paragDia->close();
 	delete paragDia;
 	paragDia = 0;
     }
-    paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING | KWParagDia::PD_FLOW | KWParagDia::PD_BORDERS |
+    paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING | KWParagDia::PD_FLOW | 
+			       KWParagDia::PD_BORDERS |
 			       KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_pKWordDoc );
     paragDia->setCaption( i18n( "KWord - Paragraph settings" ) );
     QObject::connect( paragDia, SIGNAL( applyButtonPressed() ), this, SLOT( paragDiaOk() ) );
@@ -1064,8 +1069,7 @@ void KWordView::extraAutoFormat()
 /*===============================================================*/
 void KWordView::extraStylist()
 {
-    if ( styleManager )
-    {
+    if ( styleManager ) {
 	QObject::disconnect( styleManager, SIGNAL( applyButtonPressed() ), this, SLOT( styleManagerOk() ) );
 	styleManager->close();
 	delete styleManager;
@@ -1075,12 +1079,6 @@ void KWordView::extraStylist()
     QObject::connect( styleManager, SIGNAL( applyButtonPressed() ), this, SLOT( styleManagerOk() ) );
     styleManager->setCaption( i18n( "KWord - Stylist" ) );
     styleManager->show();
-}
-
-/*===============================================================*/
-void KWordView::extraContents()
-{
-    m_pKWordDoc->createContents();
 }
 
 /*===============================================================*/
@@ -1952,6 +1950,11 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     text = i18n( "&Footnote or Endnote..." ) ;
     m_idMenuInsert_FootNoteEndNote = m_vMenuInsert->insertItem4( text, this, "insertFootNoteEndNote", 0, -1, -1 );
 
+    m_vMenuInsert->insertSeparator( -1 );
+
+    text = i18n( "&Table of Contents..." ) ;
+    m_idMenuInsert_Contents = m_vMenuInsert->insertItem4( text, this, "insertContents", 0, -1, -1 );
+
     text = i18n( "Date ( fix )" ) ;
     m_idMenuInsert_VariableDateFix = m_vMenuInsert_Variable->insertItem4( text, this, "insertVariableDateFix", 0, -1, -1 );
     text = i18n( "Date ( variable )" ) ;
@@ -2077,11 +2080,6 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_idMenuExtra_AutoFormat = m_vMenuExtra->insertItem4( text, this, "extraAutoFormat", 0, -1, -1 );
     text = i18n( "&Stylist..." ) ;
     m_idMenuExtra_Stylist = m_vMenuExtra->insertItem4( text, this, "extraStylist", ALT + Key_S, -1, -1 );
-
-    m_vMenuExtra->insertSeparator( -1 );
-
-    text = i18n( "&Create Table of Contents..." ) ;
-    m_idMenuExtra_Contents = m_vMenuExtra->insertItem4( text, this, "extraContents", 0, -1, -1 );
 
     m_vMenuExtra->insertSeparator( -1 );
 

@@ -131,6 +131,7 @@ public:
     virtual void insertVariableCustom();
     virtual void insertVariableSerialLetter();
     virtual void insertFootNoteEndNote();
+    virtual void insertContents();
 
     virtual void formatFont();
     virtual void formatColor();
@@ -143,7 +144,6 @@ public:
     virtual void extraSpelling();
     virtual void extraAutoFormat();
     virtual void extraStylist();
-    virtual void extraContents();
     virtual void extraOptions();
 
     virtual void toolsEdit();
@@ -336,6 +336,7 @@ protected:
     long int m_idMenuInsert_VariableCustom;
     long int m_idMenuInsert_VariableSerialLetter;
     long int m_idMenuInsert_FootNoteEndNote;
+    long int m_idMenuInsert_Contents;
 
     // format menu
     OpenPartsUI::Menu_var m_vMenuFormat;
@@ -352,7 +353,6 @@ protected:
     long int m_idMenuExtra_Spelling;
     long int m_idMenuExtra_AutoFormat;
     long int m_idMenuExtra_Stylist;
-    long int m_idMenuExtra_Contents;
     long int m_idMenuExtra_Options;
 
     // tools menu
