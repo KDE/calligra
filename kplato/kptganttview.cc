@@ -75,8 +75,9 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     
     m_gantt = new KDGanttView(this, "Gantt view");
     m_gantt->setLinkItemsEnabled(true);
-    m_showProgress = true; //FIXME
-    m_showPositiveFloat = true; //FIXME
+    m_showTaskLinks = false; // FIXME
+    m_showProgress = false; //FIXME
+    m_showPositiveFloat = false; //FIXME
     m_gantt->setHeaderVisible(true);
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
@@ -687,6 +688,8 @@ void KPTGanttView::addTaskLink(KDGanttViewTaskLink *link) {
 
 void KPTGanttView::drawRelations()
 {
+    if (!m_showTaskLinks)
+        return;
     KDGanttViewItem *item = m_gantt->firstChild();
     //kdDebug()<<k_funcinfo<<"First: "<<(item ? item->listViewText() : "nil")<<endl;
     for (; item; item = item->nextSibling())

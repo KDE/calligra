@@ -141,7 +141,12 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     // ------ View
     actionViewGantt = new KAction(i18n("Gantt"), "gantt_chart", 0, this, SLOT(slotViewGantt()), actionCollection(), "view_gantt");
-    actionViewPert = new KAction(i18n("PERT"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
+    actionViewGanttTaskLinks = new KToggleAction(i18n("Task links"), 0, 0, this, SLOT(slotViewGanttTaskLinks()), actionCollection(), "view_gantt_showTaskLinks");
+    actionViewGanttProgress = new KToggleAction(i18n("Progress"), 0, 0, this, SLOT(slotViewGanttProgress()), actionCollection(), "view_gantt_showProgress");
+    actionViewGanttFloat = new KToggleAction(i18n("Float"), 0, 0, this, SLOT(slotViewGanttFloat()), actionCollection(), "view_gantt_showFloat");
+    
+    actionViewPert = new KAction(i18n("Network"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
+    
     actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
 
     // ------ Insert
@@ -280,6 +285,27 @@ void KPTView::slotEditCopy() {
 
 void KPTView::slotEditPaste() {
     //kdDebug()<<k_funcinfo<<endl;
+}
+
+void KPTView::slotViewGanttTaskLinks() {
+    kdDebug()<<k_funcinfo<<endl;
+    m_ganttview->setShowTaskLinks(actionViewGanttTaskLinks->isChecked());
+    if (m_tab->visibleWidget() == m_ganttview)
+        slotUpdate(false);
+}
+
+void KPTView::slotViewGanttProgress() {
+    kdDebug()<<k_funcinfo<<endl;
+    m_ganttview->setShowProgress(actionViewGanttProgress->isChecked());
+    if (m_tab->visibleWidget() == m_ganttview)
+        slotUpdate(false);
+}
+
+void KPTView::slotViewGanttFloat() {
+    kdDebug()<<k_funcinfo<<endl;
+    m_ganttview->setShowPositiveFloat(actionViewGanttFloat->isChecked());
+    if (m_tab->visibleWidget() == m_ganttview)
+        slotUpdate(false);
 }
 
 void KPTView::slotViewGantt() {

@@ -84,6 +84,10 @@ signals:
 public slots:
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
 
+    void setShowTaskLinks(bool on) { m_showTaskLinks = on; }
+    void setShowProgress(bool on) { m_showProgress = on; }
+    void setShowPositiveFloat(bool on) { m_showPositiveFloat = on; }
+
 private slots:
     void currentItemChanged(KDGanttViewItem *);
     void slotItemDoubleClicked(KDGanttViewItem*);
@@ -145,6 +149,7 @@ private:
     KDGanttViewItem *m_currentItem;
     KDGanttView *m_gantt;
     KPTTaskAppointmentsView *m_taskView;
+    bool m_showTaskLinks;
     bool m_showProgress;
     bool m_showPositiveFloat;
     bool m_firstTime;

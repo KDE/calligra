@@ -19,8 +19,16 @@
         </Menu>
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_gantt"/>
+            <Separator/>
+            <Action name="view_gantt_showTaskLinks"/>
+            <Action name="view_gantt_showProgress"/>
+            <Action name="view_gantt_showFloat"/>
+            <Separator/>
+            <Separator/>
             <Action name="view_pert"/>
+            <Separator/>
             <Action name="view_resources"/>
+            <Separator/>
         </Menu>
         <Menu name="insert"><text>&amp;Insert</text>
             <Action name="add_task"/>
