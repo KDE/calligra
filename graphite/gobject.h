@@ -230,21 +230,21 @@ protected:
 
     // rotatePoint rotates a given point. The "point" (x, y, or QPoint) passed as
     // function argument is changed! (we're using radians!)
-    void rotatePoint(int &x, int &y, const double &angle, const QPoint &center);
-    void rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center);
-    void rotatePoint(double &x, double &y, const double &angle, const QPoint &center);
-    void rotatePoint(QPoint &p, const double &angle, const QPoint &center);
+    void rotatePoint(int &x, int &y, const double &angle, const QPoint &center) const;
+    void rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) const;
+    void rotatePoint(double &x, double &y, const double &angle, const QPoint &center) const;
+    void rotatePoint(QPoint &p, const double &angle, const QPoint &center) const;
 
     // scalePoint scales a given point. The "point" (x, y, or QPoint) passed as
     // function argument is changed!
     void scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
-		    const QPoint &center);
+		    const QPoint &center) const;
     void scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
-		    const double &yfactor, const QPoint &center);
+		    const double &yfactor, const QPoint &center) const;
     void scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
-		    const QPoint &center);
+		    const QPoint &center) const;
     void scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
-		    const QPoint &center);
+		    const QPoint &center) const;
 
     const int double2Int(const double &value) const;   // convert back to int
 
@@ -293,7 +293,7 @@ inline const QPoint GObject::zoomIt(const QPoint &point) const {
     return QPoint(zoomIt(point.x()), zoomIt(point.y()));
 }
 
-inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoint &center) {
+inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoint &center) const {
 
     double alpha=angle/2;
     double r=std::sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
@@ -304,7 +304,7 @@ inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoi
     x+=double2Int(s*std::cos(beta));
 }
 
-inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) {
+inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) const {
 
     // This awkward stuff with the two tmp references is a workaround for
     // "old" compilers (egcs-1.1.2 :)
@@ -313,7 +313,7 @@ inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double 
     rotatePoint(_x, _y, angle, center);
 }
 
-inline void GObject::rotatePoint(double &x, double &y, const double &angle, const QPoint &center) {
+inline void GObject::rotatePoint(double &x, double &y, const double &angle, const QPoint &center) const {
 
     double alpha=angle/2;
     double r=std::sqrt( static_cast<double>((center.x()-x)*(center.x()-x)+(center.y()-y)*(center.y()-y)) );
@@ -324,12 +324,12 @@ inline void GObject::rotatePoint(double &x, double &y, const double &angle, cons
     x+=s*std::cos(beta);
 }
 
-inline void GObject::rotatePoint(QPoint &p, const double &angle, const QPoint &center) {
+inline void GObject::rotatePoint(QPoint &p, const double &angle, const QPoint &center) const {
     rotatePoint(p.rx(), p.ry(), angle, center);
 }
 
 inline void GObject::scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
-			 const QPoint &center) {
+			 const QPoint &center) const {
     if(xfactor<=0 || yfactor<=0)
 	return;
     x=double2Int( static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor );
@@ -337,7 +337,7 @@ inline void GObject::scalePoint(int &x, int &y, const double &xfactor, const dou
 }
 
 inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
-			 const double &yfactor, const QPoint &center) {
+			 const double &yfactor, const QPoint &center) const {
     // This awkward stuff with the two tmp references is a workaround for
     // "old" compilers (egcs-1.1.2 :)
     int &_x=static_cast<int>(x);
@@ -346,7 +346,7 @@ inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &
 }
 
 inline void GObject::scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
-			 const QPoint &center) {
+			 const QPoint &center) const {
     if(xfactor<=0 || yfactor<=0)
 	return;
     x=static_cast<double>(center.x()) + static_cast<double>(x-center.x())*xfactor;
@@ -354,7 +354,7 @@ inline void GObject::scalePoint(double &x, double &y, const double &xfactor, con
 }
 
 inline void GObject::scalePoint(QPoint &p, const double &xfactor, const double &yfactor,
-			 const QPoint &center) {
+			 const QPoint &center) const {
     scalePoint(p.rx(), p.ry(), xfactor, yfactor, center);
 }
 

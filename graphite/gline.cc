@@ -124,23 +124,26 @@ const GLine *GLine::hit(const QPoint &p) const {
 	return this;
     else if(p==m_b)
 	return this;
-    /*
     else {
-	double dx=m_b.x()-m_a.x();
-	double dy=m_b.y()-m_a.y();
+	double dx=static_cast<double>(m_b.x()-m_a.x());
+	double dy=static_cast<double>(m_b.y()-m_a.y());
 	double r=std::sqrt( dx*dx + dy*dy );
 	int ir=double2Int(r);
 	double alpha=std::asin( dy/r );
 
 	// make it easier for the user to select something by
 	// adding a (configurable) "fuzzy zone" :)
-	QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x()+ir ) - GraphiteGlobal::self()->fuzzyBorder(),
+        QRect fuzzyZone=QRect( QMIN( m_a.x(), m_a.x()+ir ) - GraphiteGlobal::self()->fuzzyBorder(),
 			       m_a.y() - GraphiteGlobal::self()->fuzzyBorder(),
 			       ir + 2 * GraphiteGlobal::self()->fuzzyBorder(),
 			       2 * GraphiteGlobal::self()->fuzzyBorder());
+	// Don't change the original point!
+	QPoint tmp=p;
+	rotatePoint(tmp, alpha, m_a);
 	
+	if(fuzzyZone.contains(tmp))
+	    return this;	
     }
-    */
     return 0L;
 }
 
@@ -148,9 +151,33 @@ const bool GLine::intersects(const QRect &r) const {
 
     if(r.contains(m_a) || r.contains(m_b))
 	return true;
-    // TODO
-    //else if()
-    //	return true;
+    else if(r.intersects(m_boundingRect))
+	return true;
+    else {
+	// f(x)=mx+d
+	double m=static_cast<double>(m_b.y()-m_a.y())/static_cast<double>(m_b.x()-m_a.x());
+	double d=m_a.y()-m*m_a.x();
+	
+	// top
+	double i=(static_cast<double>(r.top())-d)/m;
+	if(i>=r.left() && i<=r.right())
+	    return true;
+	
+	// bottom
+	i=(static_cast<double>(r.bottom())-d)/m;
+	if(i>=r.left() && i<=r.right())
+	    return true;
+	
+	// left
+	i=m*static_cast<double>(r.left())+d;
+	if(i>=r.top() && i<=r.bottom())
+	    return true;
+	
+	// right
+	i=m*static_cast<double>(r.right())+d;
+	if(i>=r.top() && i<=r.bottom())
+	    return true;	
+    }
     return false;
 }
 
@@ -168,32 +195,54 @@ GObjectM9r *GLine::createM9r(const GObjectM9r::Mode &mode) {
     return new GLineM9r(this, mode);
 }
 
-void GLine::setOrigin(const QPoint &/*origin*/) {
-    // TODO
+void GLine::setOrigin(const QPoint &origin) {
+
+    m_b.setX(m_b.x()-m_a.x()+origin.x());
+    m_b.setY(m_b.y()-m_a.y()+origin.y());
+    m_a=origin;
+    m_boundingRectDirty=true;
 }
 
-void GLine::moveX(const int &/*dx*/) {
-    // TODO
+void GLine::moveX(const int &dx) {
+
+    m_a.setX(m_a.x()+dx);
+    m_b.setX(m_b.x()+dx);
+    m_boundingRectDirty=true;
 }
 
-void GLine::moveY(const int &/*dy*/) {
-    // TODO
+void GLine::moveY(const int &dy) {
+
+    m_a.setY(m_a.y()+dy);
+    m_b.setY(m_b.y()+dy);
+    m_boundingRectDirty=true;
 }
 
-void GLine::move(const int &/*dx*/, const int &/*dy*/) {
-    // TODO
+void GLine::move(const int &dx, const int &dy) {
+
+    moveX(dx);
+    moveY(dy);
 }
 
-void GLine::rotate(const QPoint &/*center*/, const double &/*angle*/) {
-    // TODO
+void GLine::rotate(const QPoint &center, const double &angle) {
+
+    rotatePoint(m_a, angle, center);
+    rotatePoint(m_b, angle, center);
+    m_boundingRectDirty=true;
 }
 
-void GLine::scale(const QPoint &/*origin*/, const double &/*xfactor*/, const double &/*yfactor*/) {
-    // TODO
+void GLine::scale(const QPoint &origin, const double &xfactor, const double &yfactor) {
+
+    scalePoint(m_a, xfactor, yfactor, origin);
+    scalePoint(m_b, xfactor, yfactor, origin);
+    m_boundingRectDirty=true;
 }
 
-void GLine::resize(const QRect &/*boundingRect*/) {
-    // TODO
+void GLine::resize(const QRect &boundingRect) {
+
+    m_boundingRect=boundingRect;
+    m_boundingRectDirty=false;
+    m_a=boundingRect.topLeft();
+    m_b=boundingRect.bottomRight();
 }
 
 

@@ -42,7 +42,8 @@ KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
 
     // TODO - add "pen" page and connect the SLOTs...
     /*QFrame *frame=*/dia->addPage(i18n("Pen"), i18n("Pen Settings"),
-			       BarIcon("exec", GraphiteFactory::global()));
+			       BarIcon("exec", 32, KIcon::DefaultState,
+			       GraphiteFactory::global()));
     return dia;
 }
 
