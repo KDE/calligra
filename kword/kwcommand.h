@@ -26,7 +26,6 @@
 #include <koborder.h>
 #include <koparaglayout.h>
 #include <koparagcounter.h>
-#include "kwvariable.h"
 #include "kwframestyle.h"
 #include <kocommand.h>
 
@@ -37,6 +36,9 @@ class KWTableFrameSet;
 class KWDocument;
 class KoCustomVariable;
 class KoLinkVariable;
+class KWFieldVariable;
+class KWTimeVariable;
+class KWDateVariable;
 /**
  * Command created when pasting formatted text
  * [relies on KWord's XML structure, so not moved to kotext]
