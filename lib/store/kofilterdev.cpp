@@ -153,7 +153,7 @@ void KoFilterDev::close()
 
 void KoFilterDev::flush()
 {
-    kdDebug(7005) << "KoFilterDev::flush" << endl;
+    //kdDebug(7005) << "KoFilterDev::flush" << endl;
     filter->device()->flush();
     // Hmm, might not be enough...
 }
@@ -225,10 +225,11 @@ Q_LONG KoFilterDev::readBlock( char *data, Q_ULONG maxlen )
     //kdDebug(7005) << "KoFilterDev::readBlock maxlen=" << maxlen << endl;
     // If we had an error, or came to the end of the stream, return 0.
     if ( d->result != KFilterBase::OK )
-        return 0;
+        return -1;
 
     filter->setOutBuffer( data, maxlen );
 
+    bool readEverything = false;
     uint dataReceived = 0;
     uint availOut = maxlen;
     while ( dataReceived < maxlen )
@@ -243,6 +244,8 @@ Q_LONG KoFilterDev::readBlock( char *data, Q_ULONG maxlen )
                                                     d->buffer.size() );
             if ( size )
                 filter->setInBuffer( d->buffer.data(), size );
+            else
+                readEverything = true;
             //kdDebug(7005) << "KoFilterDev::readBlock got " << size << " bytes from device" << endl;
         }
         if (d->bNeedHeader)
@@ -251,42 +254,38 @@ Q_LONG KoFilterDev::readBlock( char *data, Q_ULONG maxlen )
             d->bNeedHeader = false;
         }
 
-        // Breaks the case where we read all data at once, but output buffer is too small
-        // No idea why I added this test, in fact.
-        /*if ( filter->inBufferEmpty() )
-            d->result = KFilterBase::END;
-         else*/
         d->result = filter->uncompress();
 
         if (d->result == KFilterBase::ERROR)
         {
             kdWarning(7005) << "KoFilterDev: Error when uncompressing data" << endl;
-            // What to do ?
             break;
         }
 
-        // ### Test removed. Let's simply empty output buffer each time.
-        // No more space in output buffer, or finished ?
-        //if ((filter->outBufferFull()) || (d->result == KFilterBase::END))
-        {
-            // We got that much data since the last time we went here
-            uint outReceived = availOut - filter->outBufferAvailable();
-            //kdDebug(7005) << "avail_out = " << filter->outBufferAvailable() << " result=" << d->result << " outReceived=" << outReceived << endl;
-            if( availOut < (uint)filter->outBufferAvailable() )
-                kdWarning(7005) << " last availOut " << availOut << " smaller than new avail_out=" << filter->outBufferAvailable() << " !" << endl;
+        // We got that much data since the last time we went here
+        uint outReceived = availOut - filter->outBufferAvailable();
+        //kdDebug(7005) << "avail_out = " << filter->outBufferAvailable() << " result=" << d->result << " outReceived=" << outReceived << endl;
+        if( availOut < (uint)filter->outBufferAvailable() )
+            kdWarning(7005) << " last availOut " << availOut << " smaller than new avail_out=" << filter->outBufferAvailable() << " !" << endl;
 
-            // Move on in the output buffer
-            data += outReceived;
-            dataReceived += outReceived;
-            ioIndex += outReceived;
-            if (d->result == KFilterBase::END)
-            {
-                //kdDebug(7005) << "KoFilterDev::readBlock got END. dataReceived=" << dataReceived << endl;
-                break; // Finished.
-            }
-            availOut = maxlen - dataReceived;
-            filter->setOutBuffer( data, availOut );
+        // Move on in the output buffer
+        data += outReceived;
+        dataReceived += outReceived;
+        ioIndex += outReceived;
+        if (d->result == KFilterBase::END)
+        {
+            //kdDebug(7005) << "KoFilterDev::readBlock got END. dataReceived=" << dataReceived << endl;
+            break; // Finished.
         }
+        if (readEverything && filter->inBufferEmpty() )
+        {
+            // We decoded everything there was to decode. So -> done.
+            //kdDebug(7005) << "Seems we're done. dataReceived=" << dataReceived << endl;
+            d->result = KFilterBase::END;
+            break;
+        }
+        availOut = maxlen - dataReceived;
+        filter->setOutBuffer( data, availOut );
     }
 
     return dataReceived;
@@ -389,7 +388,7 @@ int KoFilterDev::getch()
 
 int KoFilterDev::putch( int c )
 {
-    kdDebug(7005) << "KoFilterDev::putch" << endl;
+    //kdDebug(7005) << "KoFilterDev::putch" << endl;
     char buf[1];
     buf[0] = c;
     return writeBlock( buf, 1 ) == 1 ? c : -1;
