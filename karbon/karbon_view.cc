@@ -558,7 +558,6 @@ KarbonView::viewModeChanged()
 void
 KarbonView::setZoomAt( double zoom, const KoPoint &p )
 {
-	KoView::setZoom( zoom );
 	QString zoomText = QString( "%1%" ).arg( zoom * 100.0, 0, 'f', 2 );
 	QStringList stl = m_zoomAction->items();
 	if( stl.first() == "    25%" )
@@ -582,14 +581,19 @@ KarbonView::zoomChanged( const KoPoint &p )
 	double centerY;
 	if( !p.isNull() )
 	{
-		centerX = p.x() / double( m_canvas->contentsWidth() );
-		centerY = p.y() / double( m_canvas->contentsHeight() );
+		kdDebug() << "p.x(): " << p.x() << endl;
+		kdDebug() << "p.y(): " << p.y() << endl;
+		centerX = ( p.x() * zoom() ) / double( m_canvas->contentsWidth() );
+		centerY = 1 - ( p.y() * zoom() ) / double( m_canvas->contentsHeight() );
 	}
 	else
 	{
 		centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
 		centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
 	}
+	kdDebug() << "centerX : " << centerX << endl;
+	kdDebug() << "centerY : " << centerY << endl;
+
 	bool bOK;
 	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 
