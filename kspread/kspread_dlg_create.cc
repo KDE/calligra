@@ -114,7 +114,7 @@ QString exp_funct;
   	lay1->addWidget(tmp_label,0,0);
   	tmp_label->setText(exp_funct);
    	}
-   else if(name=="RIGHT"||name=="LEFT")
+   else if(name=="RIGHT"||name=="LEFT"||name=="REPT")
         {
         nb_param=2;
         tmp_label = new QLabel( this);
@@ -125,8 +125,10 @@ QString exp_funct;
   	
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label,2,0);
-        tmp_label->setText(i18n("Number of characters"));
-
+        if( name=="RIGHT"||name=="LEFT")
+		tmp_label->setText(i18n("Number of characters"));
+        else if(name=="REPT")
+        	tmp_label->setText(i18n("Number of repetition"));
         s_param=new QLineEdit( this );
   	lay1->addWidget(s_param,3,0);
   	exp_funct=name+"("+"String,Double"+")";

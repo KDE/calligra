@@ -55,3 +55,10 @@ in the cell or editwidget = is add.
 Now when you click on bold button or italic button and in the cell
 it's a richtext so you add <i> </i> or <b> </b> .
 So text is in italic or bold.
+
+1999-09-20 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add now function REPT
+-When you selection a text in editWidget and first character egal to !
+and you click on bold or italic you add <b> </b> or <i> </i>
+-Start improved of special paste => operation add ,mult etc...

@@ -1064,24 +1064,84 @@ void KSpreadView::fontSizeSelected( const CORBA::WChar *_size )
 void KSpreadView::bold()
 {
   if ( m_pTable != 0L )
-    m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, -1, 1 );
-
- KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
- if ( cell->content()==KSpreadCell::RichText )
-	    editWidget()->setText( cell->text() );
+  {
+  if(editWidget()->hasFocus()&&editWidget()->text().find("!")==0)
+  	{
+  	if(editWidget()->hasMarkedText())
+  		{
+  		QString ft=setRichTextFond("bold");
+  		editWidget()->setText(ft);
+  		}
+  	}
+  else
+  	{
+  	m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, -1, 1 );
+ 	KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+ 	if ( cell->content()==KSpreadCell::RichText )
+		    editWidget()->setText( cell->text() );
+	}
+  }
 }
 
 void KSpreadView::italic()
 {
   if ( m_pTable != 0L )
-    m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, -1, -1, 1 );
- //refresh EditWidget when you click on bold button
- //because text changed add <i> </i>
- KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
- if ( cell->content()==KSpreadCell::RichText )
+   {
+ if(editWidget()->hasFocus()&&editWidget()->text().find("!")==0)
+  	{
+  	if(editWidget()->hasMarkedText())
+  		{
+  		QString ft=setRichTextFond("italic");
+  		editWidget()->setText(ft);
+  		}
+  	}
+  else
+  	{
+  	 m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, -1, -1, 1 );
+ 	//refresh EditWidget when you click on bold button
+ 	//because text changed add <i> </i>
+ 	KSpreadCell * cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	if ( cell->content()==KSpreadCell::RichText )
 	    editWidget()->setText( cell->text() );
+	}
+  }
 }
 
+QString KSpreadView::setRichTextFond(QString type_font)
+{
+QString tmp;
+QString mark;
+int pos;
+int len;
+tmp=editWidget()->text();
+mark=editWidget()->markedText();
+len= editWidget()->markedText().length();
+if( type_font=="bold")
+	{
+	if(tmp.find("<b>")==-1)
+		{
+		pos=tmp.find(mark);
+		tmp=tmp.insert(pos,"<b>");
+		pos=tmp.find(mark);
+		tmp=tmp.insert(pos+len,"</b>");
+		}
+	}
+else if( type_font=="italic")
+	{
+	if(tmp.find("<i>")==-1)
+		{
+		pos=tmp.find(mark);
+		tmp=tmp.insert(pos,"<i>");
+		pos=tmp.find(mark);
+		tmp=tmp.insert(pos+len,"</i>");
+		}
+	}
+else
+	{
+	cout <<"Err in setRichTextFont\n";
+	}
+return tmp;
+}
 void KSpreadView::sortincr()
 {
 QRect r( activeTable()-> selectionRect() );

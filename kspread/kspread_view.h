@@ -131,6 +131,7 @@ public:
     void set_text_color(QColor _tbcolor) { tbColor=_tbcolor;}
     void PopupMenuRow(const QPoint & _point ) ;
     void PopupMenuColumn( const QPoint & _point);
+    QString setRichTextFond(QString type_font);
     /**
      * Used by @ref KSpreadEditWidget. Sets the text of the active cell.
      */

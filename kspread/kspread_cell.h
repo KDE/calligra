@@ -100,12 +100,13 @@ public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
     enum Special_paste { ALL,FORMULA,Format,Wborder,Link,ALL_trans,FORMULA_trans,Format_trans,Wborder_trans,Link_trans};
+    enum Operation {Any,Add,Mul,Sub,Div};
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
 
     virtual bool save( ostream&, int _x_offset = 0, int _y_offset = 0,QString name=0  );
 
-    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift,Special_paste sp=ALL,QString name=0);
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>&, int _xshift, int _yshift,Special_paste sp=ALL,QString name=0,Operation=Any);
     virtual bool load( KOMLParser& _parser, vector<KOMLAttrib>& _attrib ) { return load( _parser, _attrib, 0, 0 ); }
     /**
      * Copyies the layout from the cell at the position (_column|_row).
@@ -456,6 +457,8 @@ public:
     QString encodeFormular( int _col = -1, int _row = -1 );
     QString decodeFormular( const char *_text, int _col = -1, int _row = -1 );
 
+    QString paste_Operation(QString new_text,QString old_text,Operation op);
+    bool Operation_ok(QString new_text);
     /**
      * @return TRUE if the cell contains a formula that could not
      *         be evaluated. These cells usually appear with "####" on the screen.

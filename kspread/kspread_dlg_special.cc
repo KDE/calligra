@@ -48,8 +48,25 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name)
   rb2 = new QRadioButton( i18n("Formula"), grp );
   rb3 = new QRadioButton( i18n("Format"), grp );
   rb4 = new QRadioButton( i18n("All without border"), grp );
-  rb5 = new QRadioButton( i18n("Create link"), grp );
   rb1->setChecked(true);
+
+  grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Operation",this);
+  grp->setRadioButtonExclusive( TRUE );
+  grp->layout();
+  lay1->addWidget(grp);
+
+  //don't work for the moment
+  rb5 = new QRadioButton( i18n("Any"), grp );
+  rb6 = new QRadioButton( i18n("Addition"), grp );
+  rb7 = new QRadioButton( i18n("Substration"), grp );
+  rb8 = new QRadioButton( i18n("Multiplication"), grp );
+  rb9 = new QRadioButton( i18n("Division"), grp );
+  rb5->setChecked(true);
+  rb5->setEnabled(false);
+  rb6->setEnabled(false);
+  rb7->setEnabled(false);
+  rb8->setEnabled(false);
+  rb9->setEnabled(false);
   cb=new QCheckBox(i18n("Transpose"),this);
   cb->layout();
   lay1->addWidget(cb);
@@ -58,21 +75,22 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name)
   m_pOk = bb->addButton( i18n("OK") );
   m_pOk->setDefault( TRUE );
   m_pClose = bb->addButton( i18n( "Close" ) );
+  m_link=bb->addButton(i18n("Create link"));
   bb->layout();
   lay1->addWidget( bb );
- 
 
 
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-
+  connect( m_link,SIGNAL(clicked()),this,SLOT(slotlink()));
 }
 
 
 void KSpreadspecial::slotOk()
 {
  KSpreadTable::Special_paste sp;
+ KSpreadTable::Operation op;
 if(rb1->isChecked())
 	{
 	if(cb->isChecked())
@@ -119,7 +137,32 @@ if(rb4->isChecked())
 	}
 if(rb5->isChecked())
 	{
-	if(cb->isChecked())
+	op=KSpreadTable::Any;
+	}
+if(rb6->isChecked())
+	{
+	op=KSpreadTable::Add;
+	}
+if(rb7->isChecked())
+	{
+	op=KSpreadTable::Sub;
+	}
+if(rb8->isChecked())
+	{
+	op=KSpreadTable::Mul;
+	}
+if(rb9->isChecked())
+	{
+	op=KSpreadTable::Div;
+	}
+m_pView->activeTable()->paste( QPoint(  m_pView->canvasWidget()->markerColumn(),  m_pView->canvasWidget()->markerRow() ) ,sp,op);
+accept();
+}
+
+void KSpreadspecial::slotlink()
+{
+KSpreadTable::Special_paste sp;
+if(cb->isChecked())
 		{
 		sp=KSpreadTable::Link_trans;
 		}
@@ -127,7 +170,6 @@ if(rb5->isChecked())
 		{
 		sp=KSpreadTable::Link;
 		}
-	}
 m_pView->activeTable()->paste( QPoint(  m_pView->canvasWidget()->markerColumn(),  m_pView->canvasWidget()->markerRow() ) ,sp);
 accept();
 }

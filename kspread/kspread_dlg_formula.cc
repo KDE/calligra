@@ -188,6 +188,7 @@ list_text+="LEFT";
 list_text+="NBCAR";
 list_text+="EXACT";
 list_text+="STXT";
+list_text+="REPT";
 
 if(string== "Statistic" )
 	{

@@ -41,17 +41,22 @@ public:
 public slots:
   void slotOk();
   void slotClose();
-
+  void slotlink();
 protected:
   KSpreadView* m_pView;
 
   QPushButton* m_pOk;
   QPushButton* m_pClose;
+  QPushButton* m_link;
   QRadioButton *rb1;
   QRadioButton *rb2;
   QRadioButton *rb3;
   QRadioButton *rb4;
   QRadioButton *rb5;
+  QRadioButton *rb6;
+  QRadioButton *rb7;
+  QRadioButton *rb8;
+  QRadioButton *rb9;
   QCheckBox *cb;
 };
 

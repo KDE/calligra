@@ -967,7 +967,27 @@ static bool kspreadfunc_PI( KSContext& context )
     return false;
 
   context.setValue( new KSValue(M_PI));
-  //cout <<"Power : " << (32)<<endl; 	
+  return true;
+}
+
+static bool kspreadfunc_REPT( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "REPT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+  if( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+
+  int nb=(int) args[1]->doubleValue();
+  QString tmp=args[0]->stringValue();
+  QString tmp1;
+  for (int i=0 ;i<nb;i++)
+  	tmp1+=tmp;
+  context.setValue( new KSValue(tmp1)); 	
   return true;
 }
 
@@ -1015,6 +1035,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "STXT", new KSValue( new KSBuiltinFunction( module, "STXT", kspreadfunc_STXT) ) );
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
   module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
+  module->addObject( "REPT", new KSValue( new KSBuiltinFunction( module, "REPT",kspreadfunc_REPT) ) );
   return module;
 }
 

@@ -366,12 +366,13 @@ public:
     void copySelection( const QPoint &_marker );
     void cutSelection( const QPoint &_marker );
     enum Special_paste { ALL,Formula,Format,Wborder,Link,ALL_trans,Formula_trans,Format_trans,Wborder_trans,Link_trans};
+    enum Operation {Any,Add,Mul,Sub,Div};
     enum Mode_sort{ Increase,Decrease};
     enum Type_font {bold,italic};
 
     QString setRichTextFond(QString text,Type_font font);
 
-    void paste( const QPoint &_marker,Special_paste=ALL );
+    void paste( const QPoint &_marker,Special_paste=ALL,Operation=Any );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace );
     void onlyRow(Mode_sort=Increase);
@@ -471,7 +472,7 @@ public:
     /**
      * @see #paste
      */
-    bool loadSelection( istream& _in, int _xshift, int _yshift,Special_paste = ALL );
+    bool loadSelection( istream& _in, int _xshift, int _yshift,Special_paste = ALL, Operation = Any );
     
     /**
      * Deletes all cells in the given rectangle.

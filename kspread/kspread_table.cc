@@ -2294,7 +2294,7 @@ void KSpreadTable::copySelection( const QPoint &_marker )
 
   QClipboard *clip = QApplication::clipboard();
   clip->setText( data.c_str() );
-  //cout <<" copy : " <<data.c_str()<<endl;
+  cout <<" copy : " <<data.c_str()<<endl;
 }
 
 void KSpreadTable::cutSelection( const QPoint &_marker )
@@ -2305,9 +2305,8 @@ void KSpreadTable::cutSelection( const QPoint &_marker )
     deleteSelection( _marker );
 }
 
-void KSpreadTable::paste( const QPoint &_marker,Special_paste sp)
+void KSpreadTable::paste( const QPoint &_marker,Special_paste sp,Operation op)
 {
-
   string data = QApplication::clipboard()->text().ascii();
   if ( data.empty() )
   {
@@ -2316,12 +2315,12 @@ void KSpreadTable::paste( const QPoint &_marker,Special_paste sp)
   }
 
   istrstream in( data.c_str() );
-  loadSelection( in, _marker.x() - 1, _marker.y() - 1,sp);
+  loadSelection( in, _marker.x() - 1, _marker.y() - 1,sp,op);
   m_pDoc->setModified( true );
   emit sig_updateView( this );
 }
 
-bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, Special_paste sp )
+bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, Special_paste sp,Operation op )
 {
   KOMLStreamFeed feed( _in );
   KOMLParser parser( &feed );
@@ -2330,7 +2329,7 @@ bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, Specia
   vector<KOMLAttrib> lst;
   string name;
   KSpreadCell::Special_paste sp_cell;
-
+  KSpreadCell::Operation op_cell;
   switch(sp)
   	{
   	case ALL:
@@ -2367,6 +2366,24 @@ bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, Specia
   		sp_cell=KSpreadCell::ALL;
   	}
   	
+  switch(op)
+  	{
+  	case Any:
+  		op_cell=KSpreadCell::Any;
+  		break;
+  	case Add:
+  		op_cell=KSpreadCell::Add;
+  		break;
+  	case Mul:
+  		op_cell= KSpreadCell::Mul;
+  		break;
+  	case Sub:
+  		op_cell= KSpreadCell::Sub;
+  		break;
+  	case Div:
+  		op_cell= KSpreadCell::Div;
+  		break;
+  	}		
   		
 
   // DOC
@@ -2389,7 +2406,6 @@ bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, Specia
       }
     }
   }
-
   // OBJECT
   while( parser.open( 0L, tag ) )
   {
@@ -2398,7 +2414,7 @@ bool KSpreadTable::loadSelection( istream& _in, int _xshift, int _yshift, Specia
     if ( name == "CELL" )
     {
       KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
-      cell->load( parser, lst, _xshift, _yshift,sp_cell,m_strName );
+      cell->load( parser, lst, _xshift, _yshift,sp_cell,m_strName,op_cell );
       insertCell( cell );
     }
     else
