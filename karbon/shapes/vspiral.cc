@@ -137,7 +137,10 @@ VSpiral::load( const QDomElement& element )
 {
 	setState( normal );
 
-	VObject::load( element );
+	QDomNodeList list = element.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+		if( list.item( i ).isElement() )
+			VObject::load( list.item( i ).toElement() );
 
 	m_radius  = element.attribute( "radius" ).toDouble(),
 	m_angle = element.attribute( "angle" ).toDouble(),
