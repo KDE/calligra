@@ -806,10 +806,11 @@ void Outline::addItem( int pos )
         OutlineSlideItem *after = slideItem( pos - 1 );
         item = new OutlineSlideItem( this, after, page );
     }
-
+    
+    item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() );
     // update title
-    for( ; item; item = dynamic_cast<OutlineSlideItem*>(item->nextSibling()) )
-        item->update();
+    for( ; item; item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() ) )
+        item->updateTitle();
 }
 
 // move an Outline Item so that not the hole list has to be recreated
@@ -851,11 +852,8 @@ void Outline::removeItem( int pos )
 
     delete item;
 
-    for( item = temp; item; ++pos ) {
-        KPrPage* newPage = m_doc->pageList().at( pos );
-        item->setPage( newPage );
-        item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() );
-    }
+    for ( item = temp; item; item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() ) )
+        item->updateTitle();
 }
 
 QRect Outline::tip(const QPoint &pos, QString &title)
