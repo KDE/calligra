@@ -1,27 +1,25 @@
 Kudesigner:
-- show properties AFTER selection
-- correct changing of the property value for 
-- automatic resize of property editor
-- saving the position and size of the property editor
-- correct multiple selection and deselection for items
+- property editing for multiple selections
+- Z-Ordering (right-click menu) for report items
+    default: all items are created with the same z-position 
 - selection of the template itself (on click)
 - selection and resize boxes for report sections
      ___________________
     / Report Section  + \______________
     |                    
 - print and print preview
-- property editing for multiple selections
-- Z-Ordering (right-click menu) for report items
-    default: all items are created with the same z-position 
 - open x-kugarmixed files ???
-- print and print preview
 - do not allow to move report items out of their section
+- make a grid for element placing
+- implement "smart" moving of elements (stick to borders)
+- automatic resize of property editor
+- save position and size of the property editor
 
 - optimizations:
--- create property editors only once
--- do not repaint selected items during selection
--- remove unnesesary canvas_item->hide() and show()
--- same for canvas()->update()
+-- create property editor widgets only once
+-- do not repaint selected items during selection (review algo if (selectionStarted) in ReportCanvas::contentsMouseMoveEvent())
+-- remove unnesesary canvas_item->hide() and show() 	| code review
+-- same for canvas()->update()				| nesessary
 
 
 Kugar engine:
