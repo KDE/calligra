@@ -471,9 +471,12 @@ void KoTemplateChooseDia::slotOk()
     static const char* const s_returnTypes[] = { 0 /*Cancel ;)*/, "Template", "File", "Empty" };
     if ( d->m_returnType <= Empty ) {
         grp.writeEntry( "LastReturnType", QString::fromLatin1(s_returnTypes[d->m_returnType]) );
-        QString groupName=d->m_tabs->tabLabel(d->m_tabs->currentPage());
-        grp.writeEntry( "TemplateTab", groupName );
-        grp.writeEntry( "TemplateName", d->m_templateName );
+        if ( d->m_tabs )
+        {
+            QString groupName=d->m_tabs->tabLabel(d->m_tabs->currentPage());
+            grp.writeEntry( "TemplateTab", groupName );
+            grp.writeEntry( "TemplateName", d->m_templateName );
+        }
     }
     else {
         kdWarning(30003) << "Unsupported template chooser result: " << d->m_returnType << endl;
