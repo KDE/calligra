@@ -404,6 +404,10 @@ KexiDB
 - alterTableName()
 --works better with already started transactions
 --finally works even for SQLite!
+- lowlevel Connection: drv_containsTable(), drv_getTablesList() added; 
+  impelemnted for all 3 drivers
+- Connection::dropTable(): No error is raised if the table does not exist physically 
+   -its schema is removed even in this case.
 Core
 - Kexi::setWaitCursor(), Kexi::removeWaitCursor() do nothing for non-GUI-aware apps.
 - KexiGUIMessageHandler now calls Kexi::removeWaitCursor()

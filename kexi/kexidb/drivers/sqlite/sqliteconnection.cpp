@@ -108,6 +108,34 @@ bool SQLiteConnection::drv_getDatabasesList( QStringList &list )
 	return true;
 }
 
+bool SQLiteConnection::drv_containsTable( const QString &tableName )
+{
+	bool success;
+	return resultExists(QString("select 1 from sqlite_master where type='table' and name LIKE %1")
+		.arg(driver()->escapeString(tableName)), success) && success;
+}
+
+bool SQLiteConnection::drv_getTablesList( QStringList &list )
+{
+	KexiDB::Cursor *cursor;
+	m_sql = "select lower(name) from sqlite_master where type='table'";
+	if (!(cursor = executeQuery( m_sql ))) {
+		KexiDBDbg << "Connection::drv_getTablesList(): !executeQuery()" << endl;
+		return false;
+	}
+	list.clear();
+	cursor->moveFirst();
+	while (!cursor->eof() && !cursor->error()) {
+		list += cursor->value(0).toString();
+		cursor->moveNext();
+	}
+	if (cursor->error()) {
+		deleteCursor(cursor);
+		return false;
+	}
+	return deleteCursor(cursor);
+}
+
 bool SQLiteConnection::drv_createDatabase( const QString &dbName )
 {
 	return drv_useDatabase(dbName);

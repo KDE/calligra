@@ -444,9 +444,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		bool createTable( TableSchema* tableSchema, bool replaceExisting = false );
 
-		/*! Drops a table defined by \a tableSchema.
+		/*! Drops a table defined by \a tableSchema (both table object as well as physically).
 		 If true is returned, schema information \a tableSchema is destoyed
 		 (because it's owned), so don't keep this anymore!
+		 No error is raised if the table does not exist physically 
+		 - its schema is removed even in this case.
 		*/
 //TODO(js): update any structure (e.g. query) that depend on this table!
 		bool dropTable( TableSchema* tableSchema );
@@ -640,10 +642,24 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! For reimplemenation: loads list of databases' names available for this connection
 		 and adds these names to \a list. If your server is not able to offer such a list,
 		 consider reimplementing drv_databaseExists() instead. 
-		 The mehod should return true only if there was no error on getting database names 
+		 The method should return true only if there was no error on getting database names 
 		 list from the server.
 		 Default implementation puts empty list into \a list and returns true. */
 		virtual bool drv_getDatabasesList( QStringList &list );
+
+//TODO: move this somewhere to low level class (MIGRATION?)
+		/*! LOW LEVEL METHOD. For reimplemenation: loads low-level list of table names
+		 available for this connection. The names are in lower case.
+		 The method should return true only if there was no error on getting database names 
+		 list from the server. */
+		virtual bool drv_getTablesList( QStringList &list ) = 0;
+
+//TODO: move this somewhere to low level class (MIGRATION?)
+		/*! LOW LEVEL METHOD. For reimplemenation: returns true if table 
+		 with name \a tableName exists in the database.
+		 \return false if it does not exist or error occured.
+		 The lookup is case insensitive. */
+		virtual bool drv_containsTable( const QString &tableName ) = 0;
 
 		/*! For optional reimplemenation: asks server if database \a dbName exists.
 		 This method is used internally in databaseExists(). The default  implementation

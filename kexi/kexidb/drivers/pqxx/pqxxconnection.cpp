@@ -289,4 +289,34 @@ Q_ULLONG pqxxSqlConnection::drv_lastInsertRowID()
     return 0;
 }
 
+//<queries taken from pqxxMigrate>
+bool pqxxSqlConnection::drv_containsTable( const QString &tableName )
+{
+	bool success;
+	return resultExists(QString("select 1 from pg_class where relkind='r' and relname LIKE %1")
+		.arg(driver()->escapeString(tableName)), success) && success;
+}
+
+bool pqxxSqlConnection::drv_getTablesList( QStringList &list )
+{
+	KexiDB::Cursor *cursor;
+	m_sql = "select lower(relname) from pg_class where relkind='r'";
+	if (!(cursor = executeQuery( m_sql ))) {
+		KexiDBDbg << "Connection::drv_getTablesList(): !executeQuery()" << endl;
+		return false;
+	}
+	list.clear();
+	cursor->moveFirst();
+	while (!cursor->eof() && !cursor->error()) {
+		list += cursor->value(0).toString();
+		cursor->moveNext();
+	}
+	if (cursor->error()) {
+		deleteCursor(cursor);
+		return false;
+	}
+	return deleteCursor(cursor);
+}
+//</taken from pqxxMigrate>
+
 #include "pqxxconnection.moc"

@@ -51,6 +51,10 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteConnection : public Connection
 		virtual bool drv_connect();
 		virtual bool drv_disconnect();
 		virtual bool drv_getDatabasesList( QStringList &list );
+//TODO: move this somewhere to low level class (MIGRATION?)
+		virtual bool drv_getTablesList( QStringList &list );
+//TODO: move this somewhere to low level class (MIGRATION?)
+		virtual bool drv_containsTable( const QString &tableName );
 		/*! Creates new database using connection. Note: Do not pass \a dbName 
 			arg because for file-based engine (that has one database per connection)
 			it is defined during connection. */

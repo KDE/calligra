@@ -1259,8 +1259,11 @@ bool Connection::dropTable( KexiDB::TableSchema* tableSchema )
 		return false;
 	TransactionGuard tg(trans);
 
-	if (!drv_dropTable(tableSchema->name()))
-		return false;
+	//for sanity we're checking if this table exists physically
+	if (drv_containsTable(tableSchema->name())) {
+		if (!drv_dropTable(tableSchema->name()))
+			return false;
+	}
 
 	TableSchema *ts = m_tables_byname["kexi__fields"];
 	if (!KexiDB::deleteRow(*this, ts, "t_id", tableSchema->id())) //field entries

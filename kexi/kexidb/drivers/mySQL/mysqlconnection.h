@@ -75,6 +75,11 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlConnection : public Connection
 		virtual QString serverErrorMsg();
 		virtual void drv_clearServerResult();
 
+//TODO: move this somewhere to low level class (MIGRATION?)
+		virtual bool drv_getTablesList( QStringList &list );
+//TODO: move this somewhere to low level class (MIGRATION?)
+		virtual bool drv_containsTable( const QString &tableName );
+
 		MySqlConnectionInternal* d;
 
 		friend class MySqlDriver;
