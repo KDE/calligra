@@ -46,7 +46,7 @@ public:
 
     virtual ~KWInsertPicPreview() {}
 
-    void setPixmap( const QString & filename )
+    bool setPixmap( const QString & filename )
     {
         m_pixmap.load( filename );
         if ( m_pixmap.height() > 0 ) // we divide by the height in kwcanvas...
@@ -56,7 +56,9 @@ public:
             const QBitmap nullBitmap;
             m_pixmap.setMask( nullBitmap );  //don't show transparency
             repaint(false);
+            return true;
         }
+        return false;
     }
 
     QSize pixmapSize() const { return m_type == IPD_IMAGE ? m_pixmap.size() : QSize(); }
@@ -148,12 +150,14 @@ void KWInsertPicDia::slotChooseImage()
     QString file = selectPicture( fd );
     if ( !file.isEmpty() )
     {
-        m_filename = file;
-        m_type = IPD_IMAGE;
-        m_preview->setPixmap( m_filename );
-        enableButtonOK( true );
-        m_cbKeepRatio->setEnabled( true );
-        m_cbKeepRatio->setChecked( true );
+        if ( m_preview->setPixmap( file ) )
+        {
+            m_filename = file;
+            m_type = IPD_IMAGE;
+            enableButtonOK( true );
+            m_cbKeepRatio->setEnabled( true );
+            m_cbKeepRatio->setChecked( true );
+        }
     }
 }
 
