@@ -214,14 +214,14 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_alignRight->setExclusiveGroup( "Align" );
     m_insertPart = new KAction( i18n("Insert part"), KSBarIcon("parts"), 0, this, SLOT( insertObject() ),
 			    actionCollection(), "insert_part");
-    m_transform = new KAction( i18n("Transform part"), KSBarIcon("rotate"), 0, this, SLOT( transformPart() ),
+    m_transform = new KAction( i18n("Transform part..."), KSBarIcon("rotate"), 0, this, SLOT( transformPart() ),
 			       actionCollection(), "transform" );
     m_transform->setEnabled( FALSE );
     connect( m_transform, SIGNAL( activated() ), this, SLOT( transformPart() ) );
     m_copy = KStdAction::copy( this, SLOT( copySelection() ), actionCollection(), "copy" );
     m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste" );
     m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(), "cut" );
-    m_specialPaste = new KAction( i18n("Special Paste"), 0, this, SLOT( specialPaste() ), actionCollection(), "specialPaste" );
+    m_specialPaste = new KAction( i18n("Special Paste..."), 0, this, SLOT( specialPaste() ), actionCollection(), "specialPaste" );
     m_editCell = new KAction( i18n("Edit Cell"), CTRL + Key_E, this, SLOT( editCell() ), actionCollection(), "editCell" );
     m_delete = new KAction( i18n("Delete"), 0, this, SLOT( deleteSelection() ), actionCollection(), "delete" );
     m_clear = new KAction( i18n("Clear"), 0, this, SLOT( clearSelection() ), actionCollection(), "clear" );
@@ -234,20 +234,20 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_removeTable = new KAction( i18n("Remove Table"), 0, this, SLOT( removeTable() ), actionCollection(), "removeTable" );
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
-    m_editGlobalScripts = new KAction( i18n("Edit Global Scripts"), 0, this, SLOT( editGlobalScripts() ),
+    m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
 				       actionCollection(), "editGlobalScripts" );
-    m_editLocalScripts = new KAction( i18n("Edit Local Scripts"), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
+    m_editLocalScripts = new KAction( i18n("Edit Local Scripts..."), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
     m_reloadScripts = new KAction( i18n("Reload Scripts"), 0, this, SLOT( reloadScripts() ), actionCollection(), "reloadScripts" );
     m_newView = new KAction( i18n("New View"), 0, this, SLOT( newView() ), actionCollection(), "newView" );
     m_gotoCell = new KAction( i18n("Goto Cell..."), 0, this, SLOT( gotoCell() ), actionCollection(), "gotoCell" );
     m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
-    m_replace = new KAction( i18n("Replace"), 0, this, SLOT( replace() ), actionCollection(), "replace" );
+    m_replace = new KAction( i18n("Replace..."), 0, this, SLOT( replace() ), actionCollection(), "replace" );
      m_conditional = new KAction( i18n("Relational cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
-    m_createAnchor = new KAction( i18n("Create Anchor"), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
+    m_createAnchor = new KAction( i18n("Create Anchor..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
-    m_help = new KAction( i18n("KSpread Help"), 0, this, SLOT( help() ), actionCollection(), "help" );
+    m_help = new KAction( i18n("KSpread Help..."), 0, this, SLOT( help() ), actionCollection(), "help" );
     m_insertChart = new KAction( i18n("InsertChart"), KSBarIcon("chart"), 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
     m_multiRow = new KToggleAction( i18n("Multi Row"), KSBarIcon("multirow"), 0, actionCollection(), "multiRow" );
     connect( m_multiRow, SIGNAL( toggled( bool ) ), this, SLOT( multiRow( bool ) ) );
@@ -321,7 +321,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_borderColor = new KColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
 			       actionCollection(), "borderColor" );
     m_tableFormat = new KAction( i18n("Table Style..."), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
-    m_oszi = new KAction( i18n("Oszilloscope"), 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
+    m_oszi = new KAction( i18n("Osciloscope..."), 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
     m_scripts = new KScriptMenu( DCOPRef( kapp->dcopClient()->appId(), dcopObject()->objId() ), KSpreadFactory::global(),
 				 i18n("Scripts"), actionCollection(), "scripts" );
 
@@ -666,12 +666,12 @@ void KSpreadView::activateFormulaEditor()
 void KSpreadView::updateReadWrite( bool readwrite )
 {
 #ifdef __GNUC_
-#warning TODO 
+#warning TODO
 #endif
-  m_pCancelButton->setEnabled( readwrite ); 
+  m_pCancelButton->setEnabled( readwrite );
   m_pOkButton->setEnabled( readwrite );
   m_pEditWidget->setEnabled( readwrite );
-  
+
   QValueList<QAction*> actions = actionCollection()->actions();
   QValueList<QAction*>::ConstIterator aIt = actions.begin();
   QValueList<QAction*>::ConstIterator aEnd = actions.end();
@@ -684,7 +684,7 @@ void KSpreadView::updateReadWrite( bool readwrite )
   m_gotoCell->setEnabled( true );
   m_help->setEnabled( true );
   m_oszi->setEnabled( true );
-} 
+}
 
 void KSpreadView::formulaPower()
 {
@@ -1736,7 +1736,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
 
     if ( !koDocument()->isReadWrite() )
       return;
-    
+
     if (m_pPopupColumn != 0L )
 	delete m_pPopupColumn ;
 
@@ -1798,7 +1798,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
 
     if ( !koDocument()->isReadWrite() )
       return;
-    
+
     if (m_pPopupRow != 0L )
 	delete m_pPopupRow ;
 
