@@ -915,6 +915,7 @@ void KPresenterView::extraLayout()
 						    pgLayout, oldLayout, this );
 	pgLayoutCmd->execute();
 	kPresenterDoc()->addCommand( pgLayoutCmd );
+        updateRuler();
     }
 }
 
@@ -1962,6 +1963,16 @@ void KPresenterView::newPageLayout( KoPageLayout _layout )
     PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ), _layout, oldLayout, this );
     pgLayoutCmd->execute();
     kPresenterDoc()->addCommand( pgLayoutCmd );
+    updateRuler();
+}
+
+
+void KPresenterView::updateRuler()
+{
+    //update koruler
+    QRect r=m_pKPresenterDoc->getPageRect( currPg, page->diffx(), page->diffy() );
+    getHRuler()->setFrameStartEnd( r.left() , r.right() );
+    getVRuler()->setFrameStartEnd( r.top() , r.bottom() );
 }
 
 /*======================== create GUI ==========================*/
@@ -3035,6 +3046,58 @@ void KPresenterView::resizeEvent( QResizeEvent *e )
     splitter->setGeometry( 0, 0, s.width(), s.height() );
 }
 
+void KPresenterView::reorganize()
+{
+    if (m_bShowGUI ) {
+
+        horz->show();
+        vert->show();
+	pgNext->show();
+	pgPrev->show();
+
+        if(kPresenterDoc()->showRuler())
+        {
+            page->move( 20, 20 );
+            if ( h_ruler )
+            {
+                h_ruler->show();
+                h_ruler->setGeometry( 20, 0, page->width(), 20 );
+            }
+            if (v_ruler )
+            {
+                v_ruler->show();
+                v_ruler->setGeometry( 0, 20, 20, page->height() );
+            }
+            if(getTabChooser())
+            {
+                getTabChooser()->setGeometry(0,0,20,20);
+                getTabChooser()->show();
+            }
+        }
+        else
+        {
+            page->move( 0, 0 );
+            if ( h_ruler )
+                h_ruler->hide();
+            if ( v_ruler )
+                v_ruler->hide();
+            getTabChooser()->hide();
+        }
+	setRanges();
+    }
+    else
+    {
+	horz->hide();
+	vert->hide();
+	pgNext->hide();
+	pgPrev->hide();
+	h_ruler->hide();
+	v_ruler->hide();
+        getTabChooser()->hide();
+	page->move( 0, 0 );
+    }
+}
+
 void PageBase::resizeEvent( QResizeEvent *e )
 {
     if ( !view->presStarted )
@@ -3043,41 +3106,19 @@ void PageBase::resizeEvent( QResizeEvent *e )
     QSize s = e ? e->size() : size();
 
     if ( view->m_bShowGUI ) {
-	view->horz->show();
-	view->vert->show();
-	view->pgNext->show();
-	view->pgPrev->show();
-	if ( view->h_ruler )
-	    view->h_ruler->show();
-	if ( view->v_ruler )
-	    view->v_ruler->show();
-	view->page->resize( s.width() - 36, s.height() - 36 );
-	view->page->move( 20, 20 );
+
+        view->page->resize( s.width() - 36, s.height() - 36 );
 	view->vert->setGeometry( s.width() - 16, 0, 16, s.height() - 32 );
 	view->pgPrev->setGeometry( s.width() - 15, s.height() - 32, 15, 16 );
 	view->pgNext->setGeometry( s.width() - 15, s.height() - 16, 15, 16 );
 	view->horz->setGeometry( 0, s.height() - 16, s.width() - 16, 16 );
-	if ( view->h_ruler )
-	    view->h_ruler->setGeometry( 20, 0, view->page->width(), 20 );
-	if ( view->v_ruler )
-	    view->v_ruler->setGeometry( 0, 20, 20, view->page->height() );
-	view->setRanges();
-        if(view->getTabChooser())
-        {
-            view->getTabChooser()->setGeometry(0,0,20,20);
-            view->getTabChooser()->show();
-        }
-    } else {
-	view->horz->hide();
-	view->vert->hide();
-	view->pgNext->hide();
-	view->pgPrev->hide();
-	view->h_ruler->hide();
-	view->v_ruler->hide();
-        view->getTabChooser()->hide();
+    }
+    else
+    {
 	view->page->move( 0, 0 );
 	view->page->resize( s.width(), s.height() );
     }
+    view->reorganize();
 }
 
 /*===============================================================*/
@@ -4336,19 +4377,18 @@ void KPresenterView::slotUpdateRuler()
 {
     // Set the "frame start" in the ruler (tabs are relative to that position)
     KPTextView *edit=page->currentTextObjectView();
-    QRect r;
     if ( edit )
     {
         KPTextObject *txtobj= edit->kpTextObject();
         if ( txtobj )
-            r= txtobj->getBoundingRect(page->diffx(),page->diffy() );
+        {
+            QRect r= txtobj->getBoundingRect(page->diffx(),page->diffy() );
+            getHRuler()->setFrameStartEnd( r.left() /*- pc.x()*/, r.right() /*- pc.x()*/ );
+            getVRuler()->setFrameStartEnd( r.top() /*- pc.y()*/, r.bottom() /*- pc.y()*/ );
+        }
     }
     else
-    {
-        r=m_pKPresenterDoc->getPageRect( currPg, page->diffx(), page->diffy() );
-    }
-    getHRuler()->setFrameStartEnd( r.left() /*- pc.x()*/, r.right() /*- pc.x()*/ );
-    getVRuler()->setFrameStartEnd( r.top() /*- pc.y()*/, r.bottom() /*- pc.y()*/ );
+        updateRuler();
 }
 
 

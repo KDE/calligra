@@ -150,6 +150,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_pKSpellConfig=0;
     m_bDontCheckUpperWord=false;
     m_bDontCheckTitleCase=false;
+    m_bShowRuler=true;
     //   _pageLayout.format = PG_SCREEN;
     //   _pageLayout.orientation = PG_PORTRAIT;
     //   _pageLayout.width = PG_SCREEN_WIDTH;
@@ -245,6 +246,7 @@ void KPresenterDoc::initConfig()
         double indent = MM_TO_POINT( config->readDoubleNumEntry("Indent", POINT_TO_MM(10.0) ) );
         setIndentValue(indent);
         m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
+        setShowRuler(config->readBoolEntry("Rulers",true));
     }
 
     QColor oldBgColor = Qt::white;
@@ -3936,5 +3938,11 @@ void KPresenterDoc::slotDocumentInfoModifed()
     recalcVariables( VT_FIELD );
 }
 
+void KPresenterDoc::reorganizeGUI()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KPresenterView*)it.current())->reorganize();
+}
 
 #include <kpresenter_doc.moc>

@@ -353,6 +353,11 @@ public:
 
     void refreshMenuCustomVariable();
 
+    void setShowRuler(bool _ruler){ m_bShowRuler=_ruler; }
+    bool showRuler() const { return m_bShowRuler; }
+
+    void reorganizeGUI();
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -474,6 +479,7 @@ protected:
     KSpellConfig *m_pKSpellConfig;
     bool m_bDontCheckUpperWord;
     bool m_bDontCheckTitleCase;
+    bool m_bShowRuler;
 
     double m_indent; // in pt
 
@@ -482,6 +488,7 @@ protected:
     
     KoVariableFormatCollection *m_varFormatCollection;
     KoVariableCollection *m_varColl;
+
 
 private:
     void pageTitleInsert( unsigned int pageNumber);

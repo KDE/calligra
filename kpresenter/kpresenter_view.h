@@ -406,6 +406,8 @@ public:
 
     void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin );
 
+    void reorganize();
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -489,6 +491,7 @@ protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
 
+    void updateRuler();
 private:
 // ********** variables **********
 

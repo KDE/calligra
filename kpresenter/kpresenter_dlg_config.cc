@@ -96,6 +96,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
 
     oldNbRecentFiles=10;
     double ptIndent = MM_TO_POINT(10.0);
+    bool bShowRuler=true;
 
     QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
     tmpQGroupBox->setTitle( i18n("Interface") );
@@ -113,7 +114,12 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
         oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
         oldNbRecentFiles=config->readNumEntry("NbRecentFile",oldNbRecentFiles);
         ptIndent = config->readDoubleNumEntry("Indent", ptIndent);
+        bShowRuler=config->readBoolEntry("Rulers",true);
     }
+
+    showRuler= new QCheckBox(i18n("Show rulers"),tmpQGroupBox);
+    showRuler->setChecked(bShowRuler);
+    lay1->addWidget(showRuler);
 
     autoSave = new KIntNumInput( oldAutoSaveValue, tmpQGroupBox );
     autoSave->setRange( 0, 60, 1 );
@@ -157,7 +163,7 @@ void configureInterfacePage::apply()
 {
     unsigned int rastX = eRastX->value();
     unsigned int rastY = eRastY->value();
-
+    bool ruler=showRuler->isChecked();
     KPresenterDoc * doc = m_pView->kPresenterDoc();
 
     config->setGroup( "Interface" );
@@ -186,7 +192,12 @@ void configureInterfacePage::apply()
         config->writeEntry( "NbRecentFile", nbRecent);
         m_pView->changeNbOfRecentFiles(nbRecent);
     }
-
+    if(ruler != doc->showRuler())
+    {
+        config->writeEntry( "Rulers", ruler );
+        doc->setShowRuler( ruler );
+        doc->reorganizeGUI();
+    }
 }
 
 void configureInterfacePage::slotDefault()
@@ -197,6 +208,7 @@ void configureInterfacePage::slotDefault()
     double newIndent = KoUnit::userValue( MM_TO_POINT( 10 ), m_pView->kPresenterDoc()->getUnit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
+    showRuler->setChecked(true);
 }
 
 configureColorBackground::configureColorBackground( KPresenterView* _view, QWidget *parent , char *name )

@@ -47,6 +47,7 @@ private:
     int oldNbRecentFiles;
     KDoubleNumInput* indent;
     KIntNumInput* recentFiles;
+    QCheckBox *showRuler;
 };
 
 class configureColorBackground : public QWidget
