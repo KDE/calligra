@@ -315,14 +315,19 @@ don't put a </?xml...> at the end of the file!).
                                 1...this frame will only be shown on odd pages
                                 2...this frame will only be shown on even pages
 
-  // ## Missing: lWidth, rWidth, tWidth, bWidth  (pt)
-  //    lRed, lGreen, lBlue
-  //    rRed, rGreen, rBlue
-  //    tRed, tGreen, tBlue
-  //    bRed, bGreen, bBlue
-  //    lStyle, rStyle, tStyle, bStyle
-  //    bkRed, bkGreen, bkBlue
-  //    bleftpt, brightpt, btoppt, bbottompt
+            lWidth, rWidth, tWidth, bWidth:  width (in pt) of a frame border (left, right, top, bottom)
+
+            lRed, lGreen, lBlue:   color (rgb) of the left frame border
+            rRed, rGreen, rBlue:   color (rgb) of the right frame border
+            tRed, tGreen, tBlue:   color (rgb) of the top frame border
+            bRed, bGreen, bBlue:   color (rgb) of the bottom frame border
+
+            lStyle, rStyle, tStyle, bStyle:  style of a frame border (left, right, top, bottom)
+                                             Solid = 0, Dash = 1, Dot = 2, Dash_dot = 3, Dash_dot_dot = 4
+
+            bkRed, bkGreen, bkBlue: color (rgb) used as the frame's background color
+
+            bleftpt, brightpt, btoppt, bbottompt: frame margins - not supported at the moment
 -->
 <!ATTLIST FRAME
     left CDATA #REQUIRED
