@@ -44,11 +44,11 @@ KoPicture KoPictureCollection::findPicture(const KoPictureKey& key) const
 
 KoPicture KoPictureCollection::insertPicture(const KoPictureKey& key, const KoPicture& picture)
 {
-    kdDebug(30003) << "KoPictureCollection::insertClipart " << key.toString() << endl;
+    kdDebug(30003) << "KoPictureCollection::insertPicture " << key.toString() << endl;
     KoPicture c = findPicture(key);
     if (c.isNull())
     {
-        kdDebug(30003) << "KoPictureCollection::insertClipart not found -> inserting" << endl;
+        kdDebug(30003) << "KoPictureCollection::insertPicture not found -> inserting" << endl;
         c=picture;
         c.setKey(key); // Be sure that the key is correctly set in the KoPicture!
         insert(key, c);

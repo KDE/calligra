@@ -45,14 +45,14 @@ KoPicture::KoPicture(const KoPicture &other)
 
 KoPicture& KoPicture::operator=( const KoPicture &other )
 {
-    kdDebug(30003) << "KoPicture::= before" << endl;
+    //kdDebug(30003) << "KoPicture::= before" << endl;
     if (other.m_sharedData)
         other.linkSharedData();
     if (m_sharedData)
         unlinkSharedData();
     m_sharedData=other.m_sharedData;
     m_key=other.m_key;
-    kdDebug(30003) << "KoPicture::= after" << endl;
+    //kdDebug(30003) << "KoPicture::= after" << endl;
     return *this;
 }
 

@@ -67,7 +67,10 @@ void KoPictureKey::loadAttributes( const QDomElement &elem, const QDate &dDate, 
 
 QString KoPictureKey::toString() const
 {
-    // m_filename must be the last argument as it can contain a sequence starting with %
-    return QString::fromLatin1("%2_%1").arg(m_lastModified.toString()).arg(m_filename);
+    if ( m_lastModified.isValid() )
+        // m_filename must be the last argument as it can contain a sequence starting with %
+        return QString::fromLatin1("%2_%1").arg(m_lastModified.toString()).arg(m_filename);
+    else
+        return m_filename; // for kword-1.0's KWTextImage, which only has the filename in the key
 }
 
