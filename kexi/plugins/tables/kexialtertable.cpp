@@ -24,6 +24,7 @@
 #include "formeditor/propertyeditoritem.h"
 #include "kexiproject.h"
 #include "kexiprojecthandleritem.h"
+#include "kexi_utils.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -72,14 +73,15 @@ void
 KexiAlterTable::initView()
 {
 	kdDebug() << "KexiAlterTable: Init gui..." << endl;
+/*(js)redundancy
 	QLabel* tableLbl = new QLabel(i18n("Table: %1").arg(m_table), this);
 	QFrame* lineFrm = new QFrame(this);
 	lineFrm->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-
+*/
 	QSplitter *splitter = new QSplitter(Vertical, this);
 
 	m_fieldTable = new KexiTableView(splitter);
-	m_fieldTable->m_editOnDubleClick = false;
+//(js)	m_fieldTable->m_editOnDubleClick = false;
 //(js)THIS did not look nicely:	m_fieldTable->setRecordIndicator(true);
 	m_fieldTable->addColumn(i18n("Field Name"), QVariant::String, true);
 	QStringList strings;
@@ -93,7 +95,8 @@ KexiAlterTable::initView()
 	m_fieldTable->addColumn(i18n("Primary Key"), QVariant::Bool, true);
 	
 	m_propList = new PropertyEditor(splitter, true);
-	splitter->setResizeMode(m_propList,QSplitter::KeepSize);
+//	splitter->setResizeMode(m_fieldTable,QSplitter::KeepSize);
+//	splitter->setResizeMode(m_propList,QSplitter::KeepSize);
 	
 	m_nameItem = new PropertyEditorItem(m_propList, i18n("Field Name"), QVariant::String, "");
 	m_datatypeItem = new PropertyEditorItem(m_propList, i18n("Datatype"), QVariant::StringList, KexiDBField::SQLVarchar - 1, strings);
@@ -108,8 +111,8 @@ KexiAlterTable::initView()
 	QGridLayout* l = new QGridLayout(this);
 	l->setSpacing(KDialog::spacingHint());
 	l->setMargin(KDialog::marginHint());
-	l->addWidget(tableLbl, 0, 0);
-	l->addWidget(lineFrm, 1, 0);
+//	l->addWidget(tableLbl, 0, 0);
+//	l->addWidget(lineFrm, 1, 0);
 //	l->addWidget(m_fieldTable, 2, 0);
 //	l->addWidget(m_propList, 3, 0);
 	l->addWidget(splitter, 2, 0);
@@ -117,7 +120,20 @@ KexiAlterTable::initView()
 	connect(m_fieldTable, SIGNAL(itemSelected(KexiTableItem*)), SLOT(changeShownField(KexiTableItem*)));
 	connect(m_fieldTable, SIGNAL(itemChanged(KexiTableItem *, int)), SLOT(tableItemChanged(KexiTableItem *, int)));
 	connect(m_propList, SIGNAL(itemRenamed(QListViewItem*)), SLOT(propertyChanged()));
+	
+#ifdef KEXI_NO_UNFINISHED
+	m_fieldTable->setDeletionPolicy(KexiTableView::SignalDelete);
+	connect(m_fieldTable,SIGNAL(currentItemRemoveRequest()),this,SLOT(tmp_filedTableCurrentItemRemoveRequest()));
+#endif	
 	kdDebug() << "Ready." << endl;
+}
+
+void
+KexiAlterTable::tmp_filedTableCurrentItemRemoveRequest()
+{
+#ifdef KEXI_NO_UNFINISHED
+	KEXI_UNFINISHED(tr("Removing fields"));
+#endif
 }
 
 void

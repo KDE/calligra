@@ -119,9 +119,9 @@ public:
 #endif
 
 	// reimplemented for internal reasons
-	QSizePolicy	sizePolicy() const;
-	QSize		sizeHint() const;
-	QSize		minimumSizeHint() const;
+	virtual QSizePolicy	sizePolicy() const;
+	virtual QSize		sizeHint() const;
+	virtual QSize		minimumSizeHint() const;
 	void		setFont(const QFont &f);
 
 	void		addDropFilter(const QString &filter);

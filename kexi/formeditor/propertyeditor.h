@@ -39,6 +39,7 @@ class KFORMEDITOR_EXPORT PropertyEditor : public KListView
 
 		void	reset(bool editorOnly = false);
 		void	setBuffer(PropertyBuffer *b) { m_buffer = b; }
+		virtual QSize sizeHint() const;
 
 	public slots:
 		void	setObject(QObject *o);

@@ -54,6 +54,8 @@ class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 		void tableItemChanged(KexiTableItem *i, int col);
 		void changeTable();
 		void propertyChanged();
+	
+		void tmp_filedTableCurrentItemRemoveRequest(); //TMP
 
 	private:
 		QString m_table;

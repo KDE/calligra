@@ -464,12 +464,13 @@ QSizePolicy KexiTableView::sizePolicy() const
 
 QSize KexiTableView::sizeHint() const
 {
-	return QSize(tableSize().width(), m_rowHeight*3);
+	return QSize(tableSize().width(), 
+		QMAX(m_rowHeight*m_numRows + m_pTopHeader->height(), minimumSizeHint().height()) );
 }
 
 QSize KexiTableView::minimumSizeHint() const
 {
-	return QSize(columnWidth(1), m_rowHeight*2);
+	return QSize(columnWidth(1), m_rowHeight*3 + m_pTopHeader->height());
 }
 
 void KexiTableView::createBuffer(int width, int height)
@@ -734,7 +735,8 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 {
 	if(m_numRows == 0)
 		return;
-
+	if (rowAt(e->pos().y())==-1 || columnAt(e->pos().x())==-1)
+		return; //clicked outside a grid
 
 	// get rid of editor
 	if (m_pEditor)
@@ -748,12 +750,12 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	m_curRow = rowAt(e->pos().y());
 	m_curCol = columnAt(e->pos().x());
 
-	if(m_curRow == -1)
+/*	if(m_curRow == -1)
 		m_curRow = m_numRows-1;
 
 	if(m_curCol == -1)
 		m_curCol = m_numCols-1;
-
+*/
 	//	if we have a new focus cell, repaint
 	if (( m_curRow != oldRow) || (m_curCol != oldCol ))
 	{

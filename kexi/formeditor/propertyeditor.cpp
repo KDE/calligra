@@ -216,4 +216,11 @@ PropertyEditor::~PropertyEditor()
 {
 }
 
+QSize PropertyEditor::sizeHint() const
+{
+	if (firstChild())
+		 return QSize(KListView::sizeHint().width(), firstChild()->height()*childCount());
+	return KListView::sizeHint();
+}
+
 #include "propertyeditor.moc"
