@@ -119,9 +119,21 @@ public:
         return QPoint( zoomItX( p.x() ), zoomItY( p.y() ) );
     }
     QRect zoomRect( const KoRect & r ) const {
-        return QRect( zoomItX( r.x() ), zoomItY( r.y() ),
-                      zoomItX( r.width() ), zoomItY( r.height() ) );
+        QRect _r;
+        _r.setCoords( zoomItX( r.left() ),  zoomItY( r.top() ),
+                      zoomItX( r.right() ), zoomItY( r.bottom() ) );
+        return _r;
     }
+    /**
+     * Returns the size in pixels for a input size in points.
+     * 
+     * This function can return a size with 1 pixel to less, depending
+     * on the reference point and the width and/or the zoom level.
+     * It's save to use if the starting point is (0/0).
+     * You can use it if you don't know the starting point yet 
+     * (like when inserting a picture), but then please take
+     * care of it afterwards, when you know the reference point.
+     */
     QSize zoomSize( const KoSize & s ) const {
         return QSize( zoomItX( s.width() ), zoomItY( s.height() ) );
     }
@@ -137,8 +149,10 @@ public:
         return KoPoint( unzoomItX( p.x() ), unzoomItY( p.y() ) );
     }
     KoRect unzoomRect( const QRect & r ) const {
-        return KoRect( unzoomItX( r.x() ), unzoomItY( r.y() ),
-                       unzoomItX( r.width() ), unzoomItY( r.height() ) );
+        KoRect _r;
+        _r.setCoords( unzoomItX( r.left() ),  unzoomItY( r.top() ),
+                      unzoomItX( r.right() ), unzoomItY( r.bottom() ) );
+        return _r;
     }
 
 
