@@ -64,6 +64,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent,const char *_name)
   searchDia = 0;
   replaceDia = 0;
   shadowDia = 0;
+  presStructView = 0;
   xOffset = 0;
   yOffset = 0;
   pen = QPen(black,1,SolidLine);
@@ -562,9 +563,21 @@ void KPresenterView_impl::screenConfigPages()
 			    KPresenterDoc()->backgroundList()->at(getCurrPgNum() - 1)->getPageEffect());
   pgConfDia->setMaximumSize(pgConfDia->width(),pgConfDia->height());
   pgConfDia->setMinimumSize(pgConfDia->width(),pgConfDia->height());
-  pgConfDia->setCaption("KPresenter - Page Configuration for Screenpresentations");
+  pgConfDia->setCaption(i18n("KPresenter - Page Configuration for Screenpresentations"));
   QObject::connect(pgConfDia,SIGNAL(pgConfDiaOk()),this,SLOT(pgConfOk()));
   pgConfDia->show();
+}
+
+/*========================== screen presStructView  =============*/
+void KPresenterView_impl::screenPresStructView()
+{
+  if (!presStructView)
+    {
+      presStructView = new PresStructViewer(0,"",KPresenterDoc());
+      presStructView->setCaption(i18n("KPresenter - Presentation structure viewer"));
+      QObject::connect(presStructView,SIGNAL(presStructViewClosed()),this,SLOT(psvClosed()));
+      presStructView->show();
+    }
 }
 
 /*========================== screen assign effect ===============*/
@@ -1354,6 +1367,13 @@ void KPresenterView_impl::shadowOk()
     }
 
   KPresenterDoc()->repaint(false);
+}
+
+/*================================================================*/
+void KPresenterView_impl::psvClosed()
+{
+  QObject::disconnect(presStructView,SIGNAL(presStructViewClosed()),this,SLOT(psvClosed()));
+  presStructView = 0;
 }
 
 /*================== scroll horizontal ===========================*/
@@ -2498,6 +2518,8 @@ void KPresenterView_impl::setupMenu()
       m_idMenuScreen = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Screen Presentations")));
       m_idMenuScreen_ConfigPage = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Configure pages...")),m_idMenuScreen,
 							 this,CORBA::string_dup("screenConfigPages"));
+      m_idMenuScreen_PresStructView = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Open presentation structure viewer...")),
+							     m_idMenuScreen,this,CORBA::string_dup("screenPresStructView"));
       tmp = kapp->kde_datadir().copy();
       tmp += "/kpresenter/toolbar/effect.xpm";
       pix = loadPixmap(tmp);

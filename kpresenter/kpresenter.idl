@@ -54,6 +54,7 @@ module KPresenter
       slot void extraAlignObjBottomidl();
       
       slot void screenConfigPages();
+      slot void screenPresStructView();
       slot void screenAssignEffect();
       slot void screenStart();
       slot void screenStop();

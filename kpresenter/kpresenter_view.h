@@ -75,6 +75,7 @@ class Page;
 #include "rotatedia.h"
 #include "ksearchdialogs.h"
 #include "shadowdia.h"
+#include "presstructview.h"
 
 #include <X11/Xlib.h>
 #include <signal.h>
@@ -180,6 +181,7 @@ public:
 
   // screen menu
   virtual void screenConfigPages();
+  virtual void screenPresStructView();
   virtual void screenAssignEffect();
   virtual void screenStart();
   virtual void screenStop();
@@ -293,6 +295,7 @@ protected slots:
   void effectOk();
   void rotateOk();
   void shadowOk();
+  void psvClosed();
 
   // scrolling
   void scrollH(int);
@@ -455,6 +458,7 @@ protected:
   // screenpresentation menu
   CORBA::Long m_idMenuScreen;
   CORBA::Long m_idMenuScreen_ConfigPage;
+  CORBA::Long m_idMenuScreen_PresStructView;
   CORBA::Long m_idMenuScreen_AssignEffect;
   CORBA::Long m_idMenuScreen_Start;
   CORBA::Long m_idMenuScreen_Stop;
@@ -570,6 +574,7 @@ protected:
   KSearchDialog *searchDia;
   KSearchReplaceDialog *replaceDia;
   ShadowDia *shadowDia;
+  PresStructViewer *presStructView;
 
   // default pen and brush
   QPen pen;
