@@ -94,7 +94,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     // Create the current frameset-edit last, to have everything ready for it
     KWFrameSet * fs = m_doc->getFrameSet( 0 );
     ASSERT( fs );
-    if ( fs )
+    if ( fs && fs->isVisible() )
         m_currentFrameSetEdit = fs->createFrameSetEdit( this );
 }
 
