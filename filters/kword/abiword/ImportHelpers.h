@@ -76,6 +76,12 @@ inline double PicaToPoints(const double d)
     return d * 12.0;
 }
 
-double ValueWithLengthUnit(const QString& _str);
+/**
+ * Transform a value with unit (for example "12cm") into a double
+ * @param _str the value as string
+ * @param atleast was there a + character after the unit to denote an "at-least" property
+ * @return the value as double (in points)
+ */
+double ValueWithLengthUnit( const QString& _str, bool* atleast = NULL );
 
 #endif // _IMPORT_HELPERS_H

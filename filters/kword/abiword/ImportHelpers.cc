@@ -62,11 +62,14 @@ void AbiPropsMap::splitAndAddAbiProps(const QString& strProps)
     }
 }
 
-double ValueWithLengthUnit(const QString& _str)
+double ValueWithLengthUnit( const QString& _str, bool* atleast )
 {
+    if ( atleast )
+        *atleast = false;
+    
     double result;
-    // We search an unit (defined by a sequence of lower case characters)
-    QRegExp unitExp("[a-z]+");
+    // We search an unit (defined by a sequence of lower case characters), with possibly a + sign after it
+    QRegExp unitExp("([a-z]+)\\s*(\\+?)");
     const int pos=unitExp.search(_str);
     if (pos==-1)
     {
@@ -78,7 +81,7 @@ double ValueWithLengthUnit(const QString& _str)
     else
     {
         const double rawValue=_str.left(pos).toDouble();
-        const QString strUnit=unitExp.cap();
+        const QString strUnit ( unitExp.cap(1) );
         if (strUnit=="cm")
             result=CentimetresToPoints(rawValue);
         else if (strUnit=="in")
@@ -94,6 +97,11 @@ double ValueWithLengthUnit(const QString& _str)
             kdWarning(30506) << "Value " << _str << " has non-supported unit: "
                 << strUnit << " (ValueWithLengthUnit)" << endl;
             result=rawValue;
+        }
+        
+        if ( atleast )
+        {
+            *atleast = ( unitExp.cap(2) == "+" );
         }
 
         // kdDebug(30506) << "Value: " << _str << " Unit: " << strUnit << " Result: " << result << endl;

@@ -308,13 +308,20 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
         {
             if (lineHeight==1.5)
             {
-                element.setAttribute("value","oneandhalf");
+                element.setAttribute( "value", "oneandhalf" );
+                element.setAttribute( "type", "oneandhalf" );
             }
             else if (lineHeight==2.0)
             {
-                element.setAttribute("value","double");
+                element.setAttribute( "value", "double" );
+                element.setAttribute( "type", "double" );
             }
-            else if (lineHeight!=1.0)
+            else if ( lineHeight > 0.0 )
+            {
+                element.setAttribute( "type", "multiple" );
+                element.setAttribute( "spacingvalue", lineHeight );
+            }
+            else
             {
                 kdWarning(30506) << "Unsupported line height " << lineHeight << " (Ignoring !)" << endl;
             }
@@ -322,11 +329,23 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
         else
         {
             // Something went wrong, so we assume that an unit is specified
-            lineHeight=ValueWithLengthUnit(strLineHeight);
+            bool atleast = false;
+            lineHeight = ValueWithLengthUnit( strLineHeight, &atleast );
             if (lineHeight>1.0)
             {
+                if ( atleast )
+                {
+                    kdDebug(30506) << "at-least" << endl;
+                    element.setAttribute( "type", "atleast" );
+                }
+                else
+                {
+                    element.setAttribute( "type", "exact" );
+                }
+
                 // We have a meaningful value, so use it!
-                element.setAttribute("value",lineHeight);
+                element.setAttribute( "value", lineHeight );
+                element.setAttribute( "spacingvalue", lineHeight );
             }
         }
         layoutElement.appendChild(element);
