@@ -85,4 +85,32 @@ appear <emphasis>before</emphasis> the footnote number.</para>
 the previous options.</para>
 </sect3>
 </sect2>
+<sect2 id="fn-placement">
+<title>Change the placment of the footnotes</title>
+<para>You can determine how much space seperates the main text frame and the footnotes.  Select 
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice>
+from the menubar. This will bring up a dialog:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="wpfmtpg1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Click on the tab labeled <guilabel>Headers and Footers</guilabel>. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="wpfmtpg3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>At the bottom of the dialog is a  text box is labeled <guilabel>Spacing between footnote and body</guilabel>.  As the label
+suggests, you can use this text
+box to specify the distance between the bottom edge of the main frame, and the top edge of the footnotes.  When you have entered the 
+desired spacing, click <guibutton>OK</guibutton>, and the footnotes will change position on the page.</para>
+</sect2>
 </sect1>

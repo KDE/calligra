@@ -63,7 +63,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-07-02</date>
+<date>2002-07-09</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -394,10 +394,10 @@ blocks of text (frames, then paragraphs, then characters). At each level, all of
 layout options will be explained.</para>
 
 <para>After discussing the formatting of individual characters, the manual will elaborate on styles
-(to provide formatting consistancy through the document), multi-column documents, tables and finally the use of headers
+(to provide formatting consistancy through the document), lists, multi-column documents, tables and finally the use of headers
 and footers in a document.</para>
 
-<para>The final part will show you how to save a document as a template.</para>
+<para>The final part will show you how to save a document as a template for future documents.</para>
 
 &pageformat;
 &frames;

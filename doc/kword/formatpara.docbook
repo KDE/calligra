@@ -11,16 +11,16 @@ one paragraph at a time, simply <link linkend="select">select the paragraphs wit
 <itemizedlist>
 <listitem>
 <para>Select <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
 from the menubar</para>
 </listitem>
 
-<listitem><para>Type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo></para></listitem>
+<listitem><para>Type <keycombo action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo></para></listitem>
 
 <listitem>
 <para>Place the mouse pointer in the paragraph and click once
 with the &RMB;.  A small menu
-will appear.  Select <guimenuitem>Paragraph</guimenuitem>.</para>
+will appear.  Select <guimenuitem>Paragraph...</guimenuitem>.</para>
 </listitem>
 
 </itemizedlist>
@@ -81,7 +81,7 @@ paragraph will not fit entirely within the current frame or page.</para>
 <para>The first option is labeled <guilabel>Keep lines
 together</guilabel>.  If this option is selected, then all of the lines
 of the paragraph will remain on the same page.  If this is not selected,
-&kword; may choose to move part of a paragrah to a new page or frame.  
+&kword; may choose to move part of a paragraph to a new page or frame.  
 For most work, this option is usually left
 unchecked.</para>
 
@@ -103,7 +103,7 @@ consists of two elements:</para>
 <varlistentry>
 <term>Drop-down box</term>
 <listitem>
-<para>The drop down box determines the spacing between lines.  There are three predefinded line spacing choices:
+<para>The drop down box determines the spacing between lines.  There are three predefined line spacing choices:
 <guilabel>Single</guilabel>, <guilabel>1.5 lines.</guilabel> and <guilabel>Double</guilabel>.  You can
 also select <guilabel>Custom</guilabel> which will allow you to enter a specific line spacing.</para>
 <para>The values selected here will be applied to all lines within the selected paragraphs.</para>
@@ -154,8 +154,8 @@ document.</para>
 
 <para>This section determines how the text is placed <emphasis>within
 the line</emphasis>.  With other applications, you may have referred to
-this as <emphasis>Alignment</emphasis>, or
-<emphasis>Justification</emphasis>.</para>
+this as <emphasis>alignment</emphasis>, or
+<emphasis>justification</emphasis>.</para>
 
 <screenshot>
 <mediaobject>
@@ -300,7 +300,7 @@ paragraph borders will look.</para>
 <para>A very common element of a document, is a list of items.  The list
 contains several elements which may be numbered, for easy
 reference.  Alternatively, the list elements may be simply set off from
-the rest of the text with a special character preceeding each element.  These special characters
+the rest of the text with a special character preceding each element.  These special characters
 are called bullets.</para>
 
 <para>This dialog box is used to define your bullets or the

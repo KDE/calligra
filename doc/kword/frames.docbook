@@ -2,7 +2,7 @@
 <title>Working with Frames</title>
 
 <para>Since &kword; is a frames based word processor, an understanding of
-Frames is necessary for all but the most simple of documents.</para>
+frames and framesets is necessary for all but the most simple of documents.</para>
 
 <para>This section is designed to give you a firm understanding of how
 to create, destroy and manipulate frames so &kword; can provide you with
@@ -50,7 +50,7 @@ automatically continued into Frame #2.</para>
 </variablelist>
 
 <para>Text moves freely between frames
-within a Frameset.  If you insert text in the middle of a frame, all text after the inserted text is 
+within a frameset.  If you insert text in the middle of a frame, all text after the inserted text is
 rearranged as you type.</para>
 
 </sect2>
@@ -63,7 +63,7 @@ rearranged as you type.</para>
 to select. </para></listitem>
 <listitem><para>By holding down the &Ctrl; key and clicking anywhere within the frame.</para></listitem>
 </orderedlist>
-<para>There should now be 8 black squares around the edges of the frame.</para>
+<para>There should now be 8 dark squares around the edges of the frame.</para>
 
 </sect2>
 <sect2 id="add-text-frame">
@@ -75,7 +75,7 @@ to select. </para></listitem>
 <listitem>
 <para>By selecting <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Text
-Frame</guimenuitem></menuchoice> from the Menu bar</para>
+Frame</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 
 <listitem>
@@ -116,7 +116,7 @@ document which currently has two framesets (called <guilabel>Frameset
 
 <variablelist>
 <varlistentry>
-<term>Append it to a  previously created
+<term>Add the new frame to one of the previously created
 framesets.</term>
 
 <listitem><para>To do this, simply select the frameset you want the new frame to belong to.
@@ -141,7 +141,7 @@ only frame in the frameset.</para>
 
 <para>The other tabs in this dialog box, can be used to set some options
 for this frame.  For more information on these options, see the section
-entitled <link linkend="format-frame">Formatting Frames</link>.</para>
+entitled <link linkend="format-frame">Setting the properties for a frame</link>.</para>
 
 <para>If you click <guibutton>OK</guibutton>, the new frame will be
 created.</para>
@@ -176,7 +176,7 @@ possible.</para>
 to delete. (Or holding down the &Ctrl; key and clicking inside the frame with the
 &LMB;.)</para>
 
-<para>There is now 8 black squares on the edges of the frame.</para>
+<para>There is now 8 dark squares on the edges of the frame.</para>
 
 <para>If this is the frame you want to delete, you can do so by:</para>
 
@@ -188,7 +188,7 @@ to delete. (Or holding down the &Ctrl; key and clicking inside the frame with th
 <listitem>
 <para>Selecting <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Delete
-Frame</guimenuitem></menuchoice> from the Menu bar</para>
+Frame</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 
 <listitem>
@@ -211,7 +211,7 @@ deleted.</para></warning>
 <para>If you are trying to delete a frame that is not the last frame in
 a frame set, &kword; will not ask for a confirmation.  It will delete the
 current frame immediately, and move the data into the next frame in a
-frame set. No data will be deleted. </para>
+frameset. No data will be deleted. </para>
 
 </sect2>
 
@@ -221,10 +221,10 @@ frame set. No data will be deleted. </para>
 <para>Moving a frame around on the page is easy.</para>
 
 <para>Begin by clicking on the text frame border of the frame you want
-to delete. (Or holding down the &Ctrl; key and clicking inside the frame with the
+to move. (Or holding down the &Ctrl; key and clicking inside the frame with the
 &LMB;.)</para>
 
-<para>There are now 8 black squares on the edges of the frame.</para>
+<para>There are now 8 dark squares on the edges of the frame.</para>
 
 <para>Click and hold the &LMB; on the border again and drag the cursor in the direction you want to move the
 frame.</para>
@@ -246,11 +246,11 @@ the &LMB;.</para></tip>
 <para>It is also easy to change the size or shape of a frame.</para>
 
 <para>Begin by clicking on the text frame border of the frame you want
-to delete. (Or holding down the &Ctrl; key and clicking inside the frame with the
+to change. (Or holding down the &Ctrl; key and clicking inside the frame with the
 &LMB;.)  This selects
 this frame as the current frame.</para>
 
-<para>There are now 8 black squares on the edges of the frame. By moving
+<para>There are now 8 dark squares on the edges of the frame. By moving
 these squares, you will be able to drag the frame border(s) to a new
 location.</para>
 
@@ -297,7 +297,7 @@ move to another frameset..</para>
 <para>You can change the frame set of the currently selected frame by
 selecting <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame/Frameset...</guimenuitem></menuchoice>
-from the Menu bar</para>
+from the menubar</para>
 
 <tip><para>You can also accomplish this by clicking on the frame border once with the &RMB;, and selecting
 <guilabel>Frame/Frameset...</guilabel> from the submenu.</para></tip>
@@ -391,7 +391,7 @@ cursor where you want the break to be located in the document.</para>
 <itemizedlist>
 <listitem>
 <para>Select <menuchoice> <guimenu>Insert</guimenu><guimenuitem>Hard
-Frame Break</guimenuitem></menuchoice> from the Menu bar</para>
+Frame Break</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 
 <listitem>
@@ -412,8 +412,8 @@ you can normally see in &kword;, it will be easier to delete a Hard Frame Break 
 Characters</guimenuitem></menuchoice> from the menubar.  This will make the paragraph marks visible.</para></listitem>
 
 <listitem><para>Find the newly revealed Hard Frame Break, labled <guilabel>---Frame Break---</guilabel>.
-  Place the cursor in
-front of this and click once with the &LMB;.</para></listitem>
+  Place the mouse pointer in
+front of this and click once with the &LMB;. This will place the cursor directly in front of the hard frame break.</para></listitem>
 
 <listitem><para>Now press the <keycap>Delete</keycap> key.</para></listitem>
 </orderedlist></tip>
