@@ -186,6 +186,13 @@
 # define KEXIRELATIONSVIEW_EXPORT //for apps
 #endif
 
+#ifdef MAKE_KEXIMIGR_LIB
+# define KEXIMIGR_EXPORT  KDE_EXPORT
+#elif defined(KDE_MAKE_LIB)
+# define KEXIMIGR_EXPORT  KDE_IMPORT
+#else
+# define KEXIMIGR_EXPORT //for apps
+#endif
 
 /* -- compile-time settings -- */
 #if defined(Q_WS_WIN) || defined(KEXI_OPTIONS)
@@ -203,5 +210,8 @@
 /* additional default options */
 # define KDE_CXXFLAGS
 # define DKEXI_NO_CTXT_HELP
+
+/* not yet ready */
+# define KEXI_NO_MIGRATION
 
 #endif //KEXI_EXPORT_H
