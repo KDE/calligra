@@ -1,5 +1,5 @@
 
-INCLUDES  = $(KOFFICE_INCLUDES) -I.. -I../share $(MICO_INCLUDES) $(all_includes) -I$(idldir)
+INCLUDES  = $(KOFFICE_INCLUDES) -I.. -I../share -I../filter $(MICO_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 FILTER_LIBS = ../filter/libfilter.a
 XML_LIBS = ../xmlutils/libxml.a
