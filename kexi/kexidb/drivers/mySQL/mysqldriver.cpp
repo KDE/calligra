@@ -36,6 +36,7 @@ Boston, MA 02111-1307, USA.
 #include "mysqldriver.moc"
 #include "mysqlconnection.h"
 #include <kexidb/field.h>
+#include <kexidb/driver_p.h>
 
 
 K_EXPORT_COMPONENT_FACTORY(kexidb_mysqldriver, KGenericFactory<KexiDB::MySqlDriver>( "kexidb_mysqldriver" ))
@@ -50,20 +51,21 @@ MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &a
 	m_isFileDriver=false;
 	m_features=CursorForward;
 
-        m_typeNames[Field::Byte]="UNSIGNED TINYINT";
-        m_typeNames[Field::ShortInteger]="SMALLINT";
-        m_typeNames[Field::Integer]="INT";
-        m_typeNames[Field::BigInteger]="BIGINT";
-        m_typeNames[Field::Boolean]="BOOLEAN";
-        m_typeNames[Field::Date]="DATE";
-        m_typeNames[Field::DateTime]="DATETIME";
-        m_typeNames[Field::Time]="TIME";
-        m_typeNames[Field::Float]="FLOAT";
-        m_typeNames[Field::Double]="DOUBLE";
-        m_typeNames[Field::Text]="TEXT";
-        m_typeNames[Field::LongText]="LONGTEXT";
-        m_typeNames[Field::BLOB]="BLOB"; 
-
+	beh->ROW_ID_FIELD_NAME="_ROWID";//(js): ok??
+	
+	m_typeNames[Field::Byte]="UNSIGNED TINYINT";
+	m_typeNames[Field::ShortInteger]="SMALLINT";
+	m_typeNames[Field::Integer]="INT";
+	m_typeNames[Field::BigInteger]="BIGINT";
+	m_typeNames[Field::Boolean]="BOOLEAN";
+	m_typeNames[Field::Date]="DATE";
+	m_typeNames[Field::DateTime]="DATETIME";
+	m_typeNames[Field::Time]="TIME";
+	m_typeNames[Field::Float]="FLOAT";
+	m_typeNames[Field::Double]="DOUBLE";
+	m_typeNames[Field::Text]="TEXT";
+	m_typeNames[Field::LongText]="LONGTEXT";
+	m_typeNames[Field::BLOB]="BLOB"; 
 }
 
 KexiDB::Connection*
