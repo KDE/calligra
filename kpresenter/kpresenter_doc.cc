@@ -96,7 +96,6 @@
 #include "koApplication.h"
 #include <koOasisStyles.h>
 #include <kooasiscontext.h>
-#include <koSconfig.h>
 
 #include "kprloadinginfo.h"
 
