@@ -1544,7 +1544,12 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
     return;
 
   // Dont handle the remaining special keys.
-  if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) && (_ev->key() != Key_Down) && (_ev->key()!= Key_Up)&& (_ev->key() != Key_Right)&& (_ev->key() != Key_Left)&& (_ev->key() != Key_Home) )
+  if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) &&
+                      (_ev->key() != Key_Down) &&
+                      (_ev->key() != Key_Up) &&
+                      (_ev->key() != Key_Right) &&
+                      (_ev->key() != Key_Left) &&
+                      (_ev->key() != Key_Home) )
       {
 	  QWidget::keyPressEvent( _ev );
 	  return;
@@ -1579,7 +1584,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   // Are we making a selection right now ? Go thru this only if no selection is made
   // or if we neither selected complete rows nor columns.
  bool make_select = m_pView->koDocument()->isReadWrite() &&
-     ((( _ev->state() & ShiftButton ) == ShiftButton ||(( _ev->state() & ShiftButton ) == ShiftButton)&&( _ev->state() & ControlButton ) == ControlButton)  && ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End ));
+                    ((( _ev->state() & ShiftButton ) == ShiftButton ||
+                      (( _ev->state() & ShiftButton ) == ShiftButton ) &&
+                      ( _ev->state() & ControlButton ) == ControlButton) &&
+                     ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End ));
+
     ColumnLayout *cl;
     RowLayout *rl;
     int moveHide=0;
@@ -1978,7 +1987,6 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       if(!make_select)
 	  table->unselect();
       int x, y;
-      int colMax;
 
       switch(_ev->key()){
 
@@ -2004,25 +2012,33 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  y --;
 	      else
 		  {
-		  // HELP! This is by far to slow and inefficent!
-
 		  // if this is a filled cell
 		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
 		      //Then we search as long as the previous pervios field is filled
-		      while ( (y-1 >= 1) && !(activeTable()->cellAt(x, y-1, true))->isEmpty() ){
+		      while ( (y-1 >= 1) && !(activeTable()->cellAt(x, y-1, true))->isEmpty() )
+		      {
 			  y --;
 		      }
 		  }
 		  else{
 		      //Otherwise we search as long as the previous pervios field is empty
-		      while ( (y-1 >= 1) && (activeTable()->cellAt(x, y-1, true))->isEmpty() ){
-			  y --;
+		      KSpreadCell * _c = activeTable()->getNextCellUp( x, y );
+
+		      //Found an existing cell, but does it contain something?
+		      while ( _c && _c->isEmpty() ) {
+			  _c = activeTable()->getNextCellUp( x, _c->row() );
 		      }
+
+		      //If there is a filled one, use the next
+		      if ( _c )
+		          y = _c->row() + 1;
+		      //Otherwise go to the first row
+		      else
+			  y = 1;
 		  }
 	      }
 
 	      gotoLocation( x, QMAX( 1, y ), 0, make_select, true, true );
-	      repaint();
 	  }
 
 	  return;
@@ -2054,7 +2070,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  // if this is a filled cell
 		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
 		      //Then we search as long as the next field is filled
-		      while ( (y+1 <= KS_rowMax) && !(activeTable()->cellAt(x, y+1, true))->isEmpty() ){
+		      while ( (y+1 <= KS_rowMax) && !(activeTable()->cellAt(x, y+1, true))->isEmpty() )
+		      {
 			  y ++;
 		      }
 		  }
@@ -2072,7 +2089,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			      _c = activeTable()->getNextCellDown( x, _c->row() );
 			  }
 
-			  //If there is filled own, use the previous
+			  //If there is a filled one, use the previous
 			  if ( _c )
 		              y = _c->row() - 1;
 			  //Otherwise go to the end
@@ -2082,26 +2099,23 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  }
 	      }
 	      gotoLocation( x, QMIN( KS_rowMax, y ), 0, make_select, true, true );
-//	      repaint(); //Philipp: For what do we need the repaint here?
 	  }
 
 	  return;
 
       //Ctrl+Key_Right
       case Key_Right:
-          // we don't need to go to KS_colMax, maxColumn() is enough
-          colMax = activeTable()->maxColumn();
 
 	  //If we are already at the end, we skip
-          if ( !m_bChoose && markerColumn() >= colMax )
+          if ( !m_bChoose && markerColumn() >= KS_colMax )
 	      return;
 	  //If we are already at the end, we skip
-	  if ( m_bChoose && chooseMarkerColumn() >= colMax )
+	  if ( m_bChoose && chooseMarkerColumn() >= KS_colMax )
 	      return;
 
 	  if ( m_bChoose )
 	      //If we are in choose mode, we only go 1 right
-	      chooseGotoLocation( QMIN( colMax, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
+	      chooseGotoLocation( QMIN( KS_colMax, chooseMarkerColumn() + 1 ), chooseMarkerRow(), 0, make_select );
 	  else{
 
 	      x = markerColumn();
@@ -2112,29 +2126,38 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  x ++;
 	      else
 		  {
-		  // HELP! This is by far to slow and inefficent!
-
 		  // if this is a filled cell
 		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
 		      //Then we search as long as the next field is filled
-		      while ( (x+1 <= colMax) && !(activeTable()->cellAt(x+1, y, true))->isEmpty() ){
+		      while ( (x < KS_colMax) && !(activeTable()->cellAt(x+1, y, true))->isEmpty() ){
 			  x ++;
 		      }
 		  }
 		  else{
-		      //Otherwise we search as long as the next field is empty
-		      while ( (x+1 <= colMax) && (activeTable()->cellAt(x+1, y, true))->isEmpty() ){
-			  x ++;
+		      // If this already the last used field then jump to the end
+		      if ( y >= activeTable()->maxColumn() ) {
+			  y = KS_colMax;
+		      }
+		      else {
+			  //Otherwise we search for the next filled field and use the last empty one
+			  KSpreadCell * _c = activeTable()->getNextCellRight( x, y );
+
+			  //Found an existing cell, but does it contain something?
+			  while ( _c && _c->isEmpty() ) {
+			      _c = activeTable()->getNextCellRight( _c->column(), y );
+			  }
+
+			  //If there is a filled one, use the previous
+			  if ( _c )
+		              x = _c->column() - 1;
+			  //Otherwise go to the end
+			  else
+			      x = KS_colMax;
 		      }
 		  }
 	      }
-              // if there is nothing on the right anymore, why not stay where we are?
-              // ... for visual feedback
-              if (x >= colMax)
-                  x = KS_colMax;
 
 	      gotoLocation( QMIN( KS_colMax, x ), y, 0, make_select, true, true );
-	      repaint();
 	  }
 
 	  return;
@@ -2161,8 +2184,6 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  x --;
 	      else
 		  {
-		  // HELP! This is by far to slow and inefficent!
-
 		  // if this is a filled cell
 		  if(!activeTable()->cellAt(x, y, true)->isEmpty()){
 		      //Then we search as long as the previous field is filled
@@ -2171,15 +2192,24 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      }
 		  }
 		  else{
-		      //Otherwise we search as long as the previous field is empty
-		      while ( (x-1 >= 1) && (activeTable()->cellAt(x-1, y, true))->isEmpty() ){
-			  x --;
+		      //Otherwise we search as long as the previous pervios field is empty
+		      KSpreadCell * _c = activeTable()->getNextCellLeft( x, y );
+
+		      //Found an existing cell, but does it contain something?
+		      while ( _c && _c->isEmpty() ) {
+			  _c = activeTable()->getNextCellLeft( _c->column(), y );
 		      }
+
+		      //If there is a filled one, use the next
+		      if ( _c )
+		          x = _c->column() + 1;
+		      //Otherwise go to the first row
+		      else
+			  x = 1;
 		  }
 	      }
 
 	      gotoLocation( QMAX( 1, x ), y, 0, make_select, true, true );
-	      repaint();
 	  }
 
 	  return;
@@ -2187,12 +2217,11 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       //Ctrl+Key_Home
       case Key_Home:
 
-	  gotoLocation( 1, 1 , 0, make_select, true, true );
-	  repaint();
+	  gotoLocation( 1, 1, 0, make_select, true, true );
 
 	  return;
-      }
 
+      }
   }
 
   /**
