@@ -5272,6 +5272,45 @@ void KSpreadSheet::setWordSpelling(KSpreadSelection* selectionInfo,
     workOnCells( selectionInfo, w );
 }
 
+static QString cellAsText( KSpreadCell* cell, unsigned int max )
+{
+  QString result;
+  if( !cell->isDefault() )
+  {
+    int l = max - cell->strOutText().length();
+    if (cell->defineAlignX() == KSpreadFormat::Right )
+    {
+        for ( int i = 0; i < l; ++i )
+          result += " ";
+        result += cell->strOutText();
+    }
+      else if (cell->defineAlignX() == KSpreadFormat::Left )
+      {
+          result += " ";
+          result += cell->strOutText();
+          // start with "1" because we already set one space
+          for ( int i = 1; i < l; ++i )
+            result += " ";
+       }
+         else // centered
+         {
+           int i;
+           int s = (int) l / 2;
+           for ( i = 0; i < s; ++i )
+             result += " ";
+           result += cell->strOutText();
+           for ( i = s; i < l; ++i )
+             result += " ";
+          }
+  }
+  else
+  {
+    for ( unsigned int i = 0; i < max; ++i )
+      result += " ";
+  }
+
+  return result;
+}
 
 QString KSpreadSheet::copyAsText( KSpreadSelection* selectionInfo )
 {
@@ -5285,66 +5324,41 @@ QString KSpreadSheet::copyAsText( KSpreadSelection* selectionInfo )
     }
 
     QRect selection(selectionInfo->selection());
-    int x;
-    int y;
-    unsigned int max = 1;
-    QString result;
-    KSpreadCell *cell;
-    for (y = selection.top(); y <= selection.bottom(); ++y)
+
+    // Find area
+    unsigned top = selection.bottom();
+    unsigned bottom = selection.top();
+    unsigned left = selection.right();
+    unsigned right = selection.left();
+
+    unsigned max = 1;
+    for( KSpreadCell *c = m_cells.firstCell();c; c = c->nextCell() )
     {
-      for (x = selection.left(); x <= selection.right(); ++x)
+      if ( !c->isDefault() )
       {
-        cell = cellAt( x, y );
-        if( !cell->isDefault() )
+        QPoint p( c->column(), c->row() );
+        if ( selection.contains( p ) )
         {
-          if ( cell->strOutText().length() > max )
-            max = cell->strOutText().length();
+          top = QMIN( top, c->row() );
+          left = QMIN( left, c->column() );
+          bottom = QMAX( bottom, c->row() );
+          right = QMAX( right, c->column() );
+
+          if ( c->strOutText().length() > max )
+                 max = c->strOutText().length();
         }
       }
     }
 
     ++max;
 
-    for (y = selection.top(); y <= selection.bottom(); ++y)
+    QString result;
+    for ( int y = top; y <= bottom; ++y)
     {
-      for (x = selection.left(); x <= selection.right(); ++x)
+      for ( int x = left; x <= right; ++x)
       {
-        cell = cellAt( x, y );
-        if( !cell->isDefault() )
-        {
-            int l = max - cell->strOutText().length();
-            if (cell->align(x, y) == KSpreadFormat::Right
-                || cell->defineAlignX() == KSpreadFormat::Right )
-            {
-              for ( int i = 0; i < l; ++i )
-                result += " ";
-              result += cell->strOutText();
-            }
-            else if (cell->align(x, y) == KSpreadFormat::Left
-                     || cell->defineAlignX() == KSpreadFormat::Left )
-            {
-              result += " ";
-              result += cell->strOutText();
-              // start with "1" because we already set one space
-              for ( int i = 1; i < l; ++i )
-                result += " ";
-            }
-            else // centered
-            {
-              int i;
-              int s = (int) l / 2;
-              for ( i = 0; i < s; ++i )
-                result += " ";
-              result += cell->strOutText();
-              for ( i = s; i < l; ++i )
-                result += " ";
-            }
-        }
-        else
-        {
-            for ( unsigned int i = 0; i < max; ++i )
-              result += " ";
-        }
+        KSpreadCell *cell = cellAt( x, y );
+        result += cellAsText( cell, max );
       }
       result += "\n";
     }
