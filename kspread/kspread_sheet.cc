@@ -641,7 +641,7 @@ void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool up
 
     if ( isProtected() )
     {
-      if ( cell->notProtected( _column, _row ) )
+      if ( !cell->notProtected( _column, _row ) )
         NO_MODIFICATION_POSSIBLE;
     }
 
@@ -5138,8 +5138,11 @@ void KSpreadSheet::pasteTextPlain( QString &_text, QRect pasteArea)
 
     rowtext = tmp.left(p);
 
-    cell->setCellText( rowtext );
-    cell->updateChart();
+    if ( !isProtected() || cell->notProtected( mx, my + i ) )
+    {
+      cell->setCellText( rowtext );
+      cell->updateChart();
+    }
 
     // next cell
     ++i;
@@ -5152,7 +5155,7 @@ void KSpreadSheet::pasteTextPlain( QString &_text, QRect pasteArea)
     tmp = tmp.right(tmp.length() - p - 1);
   }
 
-  if(!isLoading())
+  if (!isLoading())
     refreshMergedCell();
 
   emit sig_updateView( this );
@@ -5210,7 +5213,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
           kdDebug() << "xshift: " << _xshift << " _yshift: " << _yshift << endl;
     */
 
-    if ( !e.namedItem( "columns" ).toElement().isNull() )
+    if ( !e.namedItem( "columns" ).toElement().isNull() && !isProtected() )
     {
         _yshift = 0;
 
@@ -5240,7 +5243,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
 
     }
 
-    if ( !e.namedItem( "rows" ).toElement().isNull() )
+    if ( !e.namedItem( "rows" ).toElement().isNull() && !isProtected() )
     {
         _xshift = 0;
 
@@ -5286,6 +5289,8 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
             //          << roff << "," << coff << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
             cell = nonDefaultCell( col + coff, row + roff );
+            if ( isProtected() && !cell->notProtected( col + coff, row + roff ) )
+              continue;
 
             cellBackup = new KSpreadCell(this, cell->column(), cell->row());
             cellBackup->copyAll(cell);

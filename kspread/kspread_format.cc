@@ -109,11 +109,14 @@ void KSpreadFormat::defaultStyleFormat()
   setPrecision( -1 );
   setPostfix( "" );
   setPrefix( "" );
-  setVerticalText(false);
-  setAngle(0);
-  setFormatType(Number);
-  setComment("");
-  setDontPrintText(false);
+  setVerticalText( false );
+  setAngle( 0 );
+  setFormatType( Number );
+  setComment( "" ); 
+  setDontPrintText( false );
+  setHideAll( false );
+  setHideFormula( false );
+  setNotProtected( false );
 }
 
 void KSpreadFormat::setGlobalColWidth( double width )
@@ -363,15 +366,18 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc,int _col, int _row, boo
 	format.setAttribute( "angle", getAngle(_col, _row) );
     if ( hasProperty( PIndent ) || hasNoFallBackProperties( PIndent ) || force )
 	format.setAttribute( "indent", getIndent(_col, _row) );
-    if( ( hasProperty( PDontPrintText )
-          || hasNoFallBackProperties( PDontPrintText )
-          || force )
-        && getDontprintText(_col,_row))
-	format.setAttribute( "dontprinttext", "yes" );
-    if( ( hasProperty( PNotProtected )
-          || hasNoFallBackProperties( PNotProtected )
+    if( ( hasProperty( PDontPrintText ) || hasNoFallBackProperties( PDontPrintText )
+          || force ) && getDontprintText(_col,_row) )
+        format.setAttribute( "dontprinttext", "yes" );
+    if( ( hasProperty( PNotProtected ) || hasNoFallBackProperties( PNotProtected )
           || force ) && notProtected( _col, _row ) )
 	format.setAttribute( "noprotection", "yes" );
+    if( ( hasProperty( PHideAll ) || hasNoFallBackProperties( PHideAll )
+          || force ) && isHideAll( _col, _row ) )
+	format.setAttribute( "hideall", "yes" );
+    if( ( hasProperty( PHideFormula ) || hasNoFallBackProperties( PHideFormula )
+          || force ) && isHideFormula( _col, _row ) )
+	format.setAttribute( "hideformula", "yes" );
     if ( hasProperty( PFont ) || hasNoFallBackProperties( PFont ) || force )
 	format.appendChild( createElement( "font", textFont( _col, _row ), doc ) );
     if ( ( hasProperty( PTextPen )
@@ -481,15 +487,18 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force ) const
 	format.setAttribute( "angle", m_rotateAngle );
     if ( hasProperty( PIndent ) || hasNoFallBackProperties( PIndent ) || force )
 	format.setAttribute( "indent", m_dIndent );
-    if( ( hasProperty( PDontPrintText )
-          || hasNoFallBackProperties( PDontPrintText )
-          || force )
-        && testFlag( Flag_DontPrintText))
+    if( ( hasProperty( PDontPrintText ) || hasNoFallBackProperties( PDontPrintText )
+          || force ) && testFlag( Flag_DontPrintText))
 	format.setAttribute( "dontprinttext", "yes" );
-    if( ( hasProperty( PNotProtected )
-          || hasNoFallBackProperties( PNotProtected )
-          || force ) )
+    if( ( hasProperty( PNotProtected ) || hasNoFallBackProperties( PNotProtected )
+          || force ) && testFlag( Flag_NotProtected ) )
 	format.setAttribute( "noprotection", "yes" );
+    if( ( hasProperty( PHideAll ) || hasNoFallBackProperties( PHideAll )
+          || force ) && testFlag( Flag_HideAll ) )
+	format.setAttribute( "hideall", "yes" );
+    if( ( hasProperty( PHideFormula ) || hasNoFallBackProperties( PHideFormula )
+          || force ) && testFlag( Flag_HideFormula ) )
+	format.setAttribute( "hideformula", "yes" );
     if ( hasProperty( PFont ) || hasNoFallBackProperties( PFont ) || force )
 	format.appendChild( createElement( "font", m_textFont, doc ) );
     if ( ( hasProperty( PTextPen )
@@ -657,14 +666,17 @@ bool KSpreadFormat::loadFormat( const QDomElement& f, PasteMode pm )
         if ( !ok )
             return false;
     }
-    if(f.hasAttribute( "dontprinttext" ) )
+    if ( f.hasAttribute( "dontprinttext" ) )
         setDontPrintText(true);
 
-    if(f.hasAttribute( "noprotection" ) )
-    {
-        if ( f.attribute( "noprotection" ) == "yes" )
-            setNotProtected( true );
-    }
+    if ( f.hasAttribute( "noprotection" ) )
+      setNotProtected( true );
+
+    if ( f.hasAttribute( "hideall" ) )
+      setHideAll( true );
+
+    if ( f.hasAttribute( "hideformula" ) )
+      setHideFormula( true );
 
     if ( f.hasAttribute( "brushcolor" ) )
         setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
@@ -1371,11 +1383,13 @@ void KSpreadFormat::setNotProtected( bool _b)
   {
     clearProperty( PNotProtected );
     setNoFallBackProperties( PNotProtected );
+    clearFlag( Flag_NotProtected );
   }
   else
   {
     setProperty( PNotProtected );
     clearNoFallBackProperties( PNotProtected );
+    setFlag( Flag_NotProtected );
   }
   formatChanged();
 }
@@ -1393,6 +1407,40 @@ void KSpreadFormat::setDontPrintText( bool _b )
     setProperty( PDontPrintText);
     clearNoFallBackProperties( PDontPrintText);
     setFlag( Flag_DontPrintText );
+  }
+  formatChanged();
+}
+
+void KSpreadFormat::setHideAll( bool _b )
+{
+  if ( _b == false )
+  {
+    clearProperty( PHideAll );
+    setNoFallBackProperties(PHideAll);
+    clearFlag( Flag_HideAll );
+  }
+  else
+  {
+    setProperty( PHideAll);
+    clearNoFallBackProperties( PHideAll);
+    setFlag( Flag_HideAll );
+  }
+  formatChanged();
+}
+
+void KSpreadFormat::setHideFormula( bool _b )
+{
+  if ( _b == false )
+  {
+    clearProperty( PHideFormula );
+    setNoFallBackProperties(PHideFormula);
+    clearFlag( Flag_HideFormula );
+  }
+  else
+  {
+    setProperty( PHideFormula);
+    clearNoFallBackProperties( PHideFormula);
+    setFlag( Flag_HideFormula );
   }
   formatChanged();
 }
@@ -1856,16 +1904,46 @@ bool KSpreadFormat::getDontprintText( int col, int row ) const
     return testFlag(Flag_DontPrintText);
 }
 
+bool KSpreadFormat::isProtected( int col, int row ) const
+{ 
+  return ( m_pTable->isProtected() && !notProtected( col, row ) ); 
+}
+
+
 bool KSpreadFormat::notProtected( int col, int row) const
 {
-    if ( !hasProperty( PNotProtected )&& !hasNoFallBackProperties( PDontPrintText ))
+    if ( !hasProperty( PNotProtected )&& !hasNoFallBackProperties( PNotProtected ) )
     {
-	const KSpreadFormat* l = fallbackFormat( col, row );
+	const KSpreadFormat * l = fallbackFormat( col, row );
 	if ( l )
-	    return l->getDontprintText( col, row );
+	    return l->notProtected( col, row );
     }
 
-    return testFlag(Flag_DontPrintText);
+    return testFlag( Flag_NotProtected );
+}
+
+bool KSpreadFormat::isHideAll( int col, int row) const
+{
+    if ( !hasProperty( PHideAll )&& !hasNoFallBackProperties( PHideAll ) )
+    {
+	const KSpreadFormat * l = fallbackFormat( col, row );
+	if ( l )
+	    return l->isHideAll( col, row );
+    }
+
+    return testFlag( Flag_HideAll );
+}
+
+bool KSpreadFormat::isHideFormula( int col, int row) const
+{
+    if ( !hasProperty( PHideFormula )&& !hasNoFallBackProperties( PHideFormula ) )
+    {
+	const KSpreadFormat * l = fallbackFormat( col, row );
+	if ( l )
+	    return l->isHideFormula( col, row );
+    }
+
+    return testFlag( Flag_HideFormula );
 }
 
 bool KSpreadFormat::currencyInfo( Currency & currency) const

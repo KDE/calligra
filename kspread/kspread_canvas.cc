@@ -151,8 +151,7 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
 
   installEventFilter(m_pCanvas);
 
-  if ( !m_pCanvas->doc()->isReadWrite() || !m_pCanvas->activeTable()
-       || m_pCanvas->activeTable()->isProtected() )
+  if ( !m_pCanvas->doc()->isReadWrite() || !m_pCanvas->activeTable() )
     setEnabled( false );
   else
   {
@@ -520,7 +519,6 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadSheet* table,
       selectionInfo()->setSelection(topLeft, topLeft, table);
     }
   }
-
   scrollToCell(location);
 
   // Perhaps the user is entering a value in the cell.
@@ -1066,6 +1064,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )
   {
     processLeftClickAnchor();
+    updatePosWidget();
   }
   else if ( _ev->button() == LeftButton )
   {
@@ -1088,16 +1087,16 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
           table->paste( QRect(marker(), marker()) );
           table->setRegionPaintDirty(QRect(marker(), marker()));
       }
+      updatePosWidget();
   }
 
   // Update the edit box
   m_pView->updateEditWidgetOnPress();
 
-  updatePosWidget();
-
   // Context menu ?
   if ( _ev->button() == RightButton )
   {
+    updatePosWidget();
     // TODO: Handle anchor
     QPoint p = mapToGlobal( _ev->pos() );
     m_pView->openPopupMenu( p );
@@ -1201,8 +1200,7 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::mouseDoubleClickEvent( QMouseEvent*  )
 {
-  if ( m_pView->koDocument()->isReadWrite() && activeTable()
-       && !activeTable()->isProtected())
+  if ( m_pView->koDocument()->isReadWrite() && activeTable() )
     createEditor();
 }
 
@@ -2597,19 +2595,24 @@ void KSpreadCanvas::deleteEditor( bool saveChanges )
 
 void KSpreadCanvas::createEditor()
 {
-  KSpreadCell* cell = activeTable()->nonDefaultCell( markerColumn(), markerRow(), false );
+  KSpreadCell * cell = activeTable()->nonDefaultCell( markerColumn(), markerRow(), false );
 
-  createEditor( CellEditor );
+  if ( !createEditor( CellEditor ) )
+      return;
   if ( cell )
       m_pEditor->setText( cell->text() );
 }
 
-void KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
+bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
 {
-  KSpreadSheet *table = activeTable();
+  KSpreadSheet * table = activeTable();
   if ( !m_pEditor )
   {
-    KSpreadCell* cell = activeTable()->nonDefaultCell( marker().x(), marker().x(), false );
+    KSpreadCell * cell = table->nonDefaultCell( marker().x(), marker().y(), false );
+
+    if ( table->isProtected() && !cell->notProtected( marker().x(), marker().y() ) )
+      return false;
+
     if ( ed == CellEditor )
     {
       m_pEditWidget->setEditMode( true );
@@ -2663,6 +2666,8 @@ void KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
         m_pEditor->setFocus();
     //kdDebug(36001) << "FOCUS2" << endl;
   }
+
+  return true;
 }
 
 void KSpreadCanvas::closeEditor()

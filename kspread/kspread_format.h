@@ -90,7 +90,9 @@ public:
                      PIndent = 0x800000,
 		     PDontPrintText = 0x1000000,
                      PCustomFormat = 0x2000000,
-                     PNotProtected = 0x4000000 };
+                     PNotProtected = 0x4000000,
+                     PHideAll = 0x8000000,
+                     PHideFormula = 0x10000000 };
 
     struct Currency
     {
@@ -138,7 +140,10 @@ public:
     ///////////////////////////////
     enum FormatFlags{ Flag_MultiRow      = 0x00000001,
                       Flag_VerticalText  = 0x00000002,
-                      Flag_DontPrintText = 0x00000004
+                      Flag_DontPrintText = 0x00000004,
+                      Flag_HideAll       = 0x00000008,
+                      Flag_HideFormula   = 0x00000010,
+                      Flag_NotProtected  = 0x00000020
                       /* reserve the bits 0xFFFF0000 for subclasses to use */
                     };
     void clearFlag( FormatFlags flag );
@@ -229,8 +234,10 @@ public:
 
     virtual void setIndent( double _indent );
 
-    virtual void setDontPrintText ( bool _b);
-    virtual void setNotProtected ( bool _b);
+    virtual void setDontPrintText ( bool _b );
+    virtual void setNotProtected ( bool _b );
+    virtual void setHideAll( bool _b );
+    virtual void setHideFormula( bool _b );
 
     virtual void setCurrency( int type, QString const & symbol );
 
@@ -338,6 +345,10 @@ public:
 
     virtual bool getDontprintText( int col, int row) const;
     virtual bool notProtected( int col, int row) const;
+    virtual bool isHideAll( int col, int row) const;
+    virtual bool isHideFormula( int col, int row) const;
+    virtual bool isProtected( int col, int row ) const;
+
 
     KSpreadSheet* table() { return m_pTable; }
     const KSpreadSheet* table() const { return m_pTable; }
@@ -473,8 +484,6 @@ protected:
      * Used to display 0.15 as 15% for example.
      */
     double m_dFactor;
-
-    bool m_bNotProtected;
 
     KSpreadSheet *m_pTable;
 

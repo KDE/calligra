@@ -113,7 +113,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
     formatRedNeverSignedPixmap = 0L;
     formatAlwaysSignedPixmap = 0L;
     formatRedAlwaysSignedPixmap = 0L;
-    table = _table;
+    m_table = _table;
 
     //We need both conditions quite often, so store the condition here too
     isRowSelected = util_isRowSelected(_view->selection());
@@ -149,8 +149,11 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
     bUnderline = TRUE;
     bTextRotation = TRUE;
     bFormatType = TRUE;
-    bDontprintText = TRUE;
     bCurrency = TRUE;
+    bDontPrintText = false;
+    bHideFormula = false;
+    bHideAll = false;
+    bIsProtected = true;
 
     if( left == right )
         oneCol = TRUE;
@@ -163,7 +166,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
         oneRow = FALSE;
 
 
-    KSpreadCell *obj = table->cellAt( _left, _top );
+    KSpreadCell *obj = m_table->cellAt( _left, _top );
     oneCell = (left == right && top == bottom &&
                !obj->isForceExtraCells());
 
@@ -195,19 +198,19 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
       obj->goUpDiagonalColor( _left, _top );
 
     // Look at the upper right one for the right border.
-    obj = table->cellAt( _right, _top );
+    obj = m_table->cellAt( _right, _top );
     borders[BorderType_Right].style = obj->rightBorderStyle( _right, _top );
     borders[BorderType_Right].width = obj->rightBorderWidth( _right, _top );
     borders[BorderType_Right].color = obj->rightBorderColor( _right, _top );
 
     // Look at the bottom left cell for the bottom border.
-    obj = table->cellAt( _left, _bottom );
+    obj = m_table->cellAt( _left, _bottom );
     borders[BorderType_Bottom].style = obj->bottomBorderStyle( _left, _bottom );
     borders[BorderType_Bottom].width = obj->bottomBorderWidth( _left, _bottom );
     borders[BorderType_Bottom].color = obj->bottomBorderColor( _left, _bottom );
 
     // Just an assumption
-    obj = table->cellAt( _right, _top );
+    obj = m_table->cellAt( _right, _top );
     if(obj->isObscuringForced())
     {
       obj = obj->obscuringCells().first();
@@ -219,7 +222,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
       borders[BorderType_Vertical].width = obj->leftBorderWidth( moveX, moveY );
       borders[BorderType_Vertical].color = obj->leftBorderColor( moveX, moveY );
 
-      obj = table->cellAt( moveX2,  moveY2 );
+      obj = m_table->cellAt( moveX2,  moveY2 );
       borders[BorderType_Horizontal].style = obj->topBorderStyle( moveX2, moveY2 );
       borders[BorderType_Horizontal].width = obj->topBorderWidth( moveX2, moveY2 );
       borders[BorderType_Horizontal].color = obj->topBorderColor( moveX2, moveY2 );
@@ -234,7 +237,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
       borders[BorderType_Horizontal].color = obj->topBorderColor(_right, _bottom);
     }
 
-    obj = table->cellAt( _left, _top );
+    obj = m_table->cellAt( _left, _top );
     prefix = obj->prefix( _left, _top );
     postfix = obj->postfix( _left, _top );
     precision = obj->precision( _left, _top );
@@ -261,9 +264,13 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
 
     bMultiRow = obj->multiRow( _left, _top );
     bVerticalText=obj->verticalText( _left, _top );
-    bDontprintText=obj->getDontprintText( _left, _top );
     textRotation = obj->getAngle(_left, _top);
     formatType = obj->getFormatType(_left, _top);
+
+    bDontPrintText = obj->getDontprintText( _left, _top );
+    bHideFormula   = obj->isHideFormula( _left, _top );
+    bHideAll       = obj->isHideAll( _left, _top );
+    bIsProtected   = !obj->notProtected( _left, _top );
 
     indent = obj->getIndent(_left, _top);
 
@@ -315,11 +322,11 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
       KSpreadCell* c = NULL;
       for(int x=_left;x<=_right;x++)
       {
-        ColumnFormat *obj=table->nonDefaultColumnFormat(x);
+        ColumnFormat *obj=m_table->nonDefaultColumnFormat(x);
         initParameters( obj,x,y);
 
-        for(c = table->getFirstCellColumn(x); c != NULL;
-            c = table->getNextCellDown(c->column(), c->row()))
+        for(c = m_table->getFirstCellColumn(x); c != NULL;
+            c = m_table->getNextCellDown(c->column(), c->row()))
         {
           initParameters( c, x, c->row());
           if ( eStyle != c->style() )
@@ -334,11 +341,11 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
       KSpreadCell* c = NULL;
       for(int y=_top;y<=_bottom;y++)
       {
-        RowFormat *obj=table->nonDefaultRowFormat(y);
+        RowFormat *obj=m_table->nonDefaultRowFormat(y);
         initParameters( obj,x,y);
 
-        for(c = table->getFirstCellRow(y); c != NULL;
-            c = table->getNextCellRight(c->column(), c->row()) )
+        for(c = m_table->getFirstCellRow(y); c != NULL;
+            c = m_table->getNextCellRight(c->column(), c->row()) )
         {
           initParameters( c, c->column(), c->row());
           if ( eStyle != c->style() )
@@ -353,7 +360,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
       {
         for ( int y = _top; y <= _bottom; y++ )
         {
-          KSpreadCell *obj = table->cellAt( x, y );
+          KSpreadCell *obj = m_table->cellAt( x, y );
 
           if ( obj->isObscuringForced() )
             continue;
@@ -370,35 +377,35 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
     if( isColumnSelected )
     {
       int y=1;
-      ColumnFormat *obj=table->nonDefaultColumnFormat(_left);
+      ColumnFormat *obj=m_table->nonDefaultColumnFormat(_left);
       checkBorderLeft( obj,_left, y);
 
       KSpreadCell* c = NULL;
-      for(c = table->getFirstCellColumn(_left); c != NULL;
-          c = table->getNextCellDown(c->column(), c->row()) )
+      for(c = m_table->getFirstCellColumn(_left); c != NULL;
+          c = m_table->getNextCellDown(c->column(), c->row()) )
       {
          checkBorderLeft(c, c->column(), c->row());
       }
 
 
-      obj=table->nonDefaultColumnFormat(_right);
+      obj=m_table->nonDefaultColumnFormat(_right);
       checkBorderRight(obj,_right,y);
       c = NULL;
-      for(c = table->getFirstCellColumn(_right); c != NULL;
-          c = table->getNextCellDown(c->column(), c->row()) )
+      for(c = m_table->getFirstCellColumn(_right); c != NULL;
+          c = m_table->getNextCellDown(c->column(), c->row()) )
       {
         checkBorderRight(c, c->column(), c->row());
       }
 
       for ( int x = _left; x <= _right; x++ )
       {
-        KSpreadCell *obj = table->cellAt( x, _top );
+        KSpreadCell *obj = m_table->cellAt( x, _top );
         checkBorderTop(obj,x, _top);
-        obj = table->cellAt( x, _bottom );
+        obj = m_table->cellAt( x, _bottom );
         checkBorderBottom(obj,x, _bottom);
         if ( x > _left )
         {
-          ColumnFormat *obj = table->nonDefaultColumnFormat(x);
+          ColumnFormat *obj = m_table->nonDefaultColumnFormat(x);
           checkBorderHorizontal(obj,x, y);
           checkBorderVertical(obj,x, y);
         }
@@ -409,38 +416,38 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
       int x=1;
       for ( int y = _top; y <= _bottom; y++ )
       {
-        KSpreadCell *obj = table->cellAt( _right, y );
+        KSpreadCell *obj = m_table->cellAt( _right, y );
         checkBorderRight(obj,_right,y);
-        obj = table->cellAt( _left, y );
+        obj = m_table->cellAt( _left, y );
         checkBorderLeft( obj,_left, y);
         if ( y > _top )
         {
-          RowFormat* obj = table->nonDefaultRowFormat(y);
+          RowFormat* obj = m_table->nonDefaultRowFormat(y);
           checkBorderHorizontal(obj,x, y);
           checkBorderVertical(obj,x, y);
         }
       }
 
-      RowFormat *obj=table->nonDefaultRowFormat(_top);
+      RowFormat *obj=m_table->nonDefaultRowFormat(_top);
       checkBorderTop(obj,x, _top);
-      obj=table->nonDefaultRowFormat(_bottom);
+      obj=m_table->nonDefaultRowFormat(_bottom);
       checkBorderBottom(obj,x, _bottom);
     }
     else
     {
       for ( int y = _top; y <= _bottom; y++ )
       {
-        KSpreadCell *obj = table->cellAt( _left, y );
+        KSpreadCell *obj = m_table->cellAt( _left, y );
         checkBorderLeft( obj,_left, y);
-        obj = table->cellAt( _right, y );
+        obj = m_table->cellAt( _right, y );
         checkBorderRight(obj,_right,y);
       }
 
       for ( int x = _left; x <= _right; x++ )
       {
-        KSpreadCell *obj = table->cellAt( x, _top );
+        KSpreadCell *obj = m_table->cellAt( x, _top );
         checkBorderTop( obj, x, _top );
-        obj = table->cellAt( x, _bottom );
+        obj = m_table->cellAt( x, _bottom );
         checkBorderBottom( obj, x, _bottom );
       }
 
@@ -449,7 +456,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
       {
         for ( int y = _top+1; y <= _bottom; y++ )
         {
-          KSpreadCell *obj = table->cellAt( x, y );
+          KSpreadCell *obj = m_table->cellAt( x, y );
             checkBorderHorizontal(obj,x, y);
         }
       }
@@ -458,7 +465,7 @@ CellFormatDlg::CellFormatDlg( KSpreadView *_view, KSpreadSheet *_table,
       {
         for ( int y = _top; y <= _bottom; y++ )
         {
-          KSpreadCell *obj = table->cellAt( x, y );
+          KSpreadCell *obj = m_table->cellAt( x, y );
           checkBorderVertical(obj,x,y);
         }
       }
@@ -578,8 +585,8 @@ void CellFormatDlg::initParameters(KSpreadFormat *obj,int x,int y)
     bMultiRow = FALSE;
   if( bVerticalText!=obj->verticalText( left, top ) )
     bVerticalText = FALSE;
-  if(  bDontprintText!=obj->getDontprintText( left, top ) )
-    bDontprintText= FALSE;
+  if(  bDontPrintText!=obj->getDontprintText( left, top ) )
+    bDontPrintText= FALSE;
 
   KSpreadCell::Currency cur;
   if (!obj->currencyInfo(cur))
@@ -623,6 +630,9 @@ void CellFormatDlg::init()
 
     patternPage=new CellFormatPagePattern(tab,this);
     tab->addTab( patternPage,i18n("Back&ground"));
+
+    protectPage = new CellFormatPageProtection( tab, this );
+    tab->addTab( protectPage, i18n("&Cell Protection") );
 
     tab->setCancelButton(i18n("&Cancel"));
     tab->setOkButton(i18n("&OK"));
@@ -669,15 +679,16 @@ int CellFormatDlg::exec()
 void CellFormatDlg::slotDefault()
 {
   m_pView->doc()->emitBeginOperation( false );
-  KSpreadCell * obj = table->defaultCell();
+  KSpreadCell * obj = m_table->defaultCell();
 
   floatPage->apply( obj );
   fontPage->apply( obj );
   positionPage->apply( obj );
   patternPage->apply(obj);
   borderPage->applyOutline(obj);
+  protectPage->apply( obj );
 
-  m_pView->slotUpdateView( table, m_pView->canvasWidget()->visibleCells() );
+  m_pView->slotUpdateView( m_table, m_pView->canvasWidget()->visibleCells() );
   m_pView->doc()->emitEndOperation();
 }
 
@@ -686,39 +697,39 @@ void CellFormatDlg::slotApply()
     m_pView->doc()->emitBeginOperation( false );
     KSpreadCell *cell = NULL;
 
-    KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( table->doc(),i18n("Change Format") );
+    KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( m_table->doc(),i18n("Change Format") );
 
     if( isMerged!= positionPage->getMergedCellState())
     {
         if(positionPage->getMergedCellState())
         {
-            KSpreadCell *obj = table->nonDefaultCell( left, top );
+            KSpreadCell *obj = m_table->nonDefaultCell( left, top );
 
-            KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( table->doc(), table, left ,top ,obj->extraXCells() ,obj->extraYCells());
+            KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( m_table->doc(), m_table, left ,top ,obj->extraXCells() ,obj->extraYCells());
             macroUndo->addCommand(undo);
 
             //merge cell doesn't create undo
-            table->mergeCells(m_pView->selection(), false);
+            m_table->mergeCells(m_pView->selection(), false);
             right=left;
             bottom=top;
         }
         else
         {
             //dissociate cells
-            KSpreadCell *obj = table->nonDefaultCell( left, top );
+            KSpreadCell *obj = m_table->nonDefaultCell( left, top );
             right=obj->extraXCells()+left;
             bottom=obj->extraYCells()+top;
 
-            KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( table->doc(), table, left ,top,obj->extraXCells() ,obj->extraYCells());
+            KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( m_table->doc(), m_table, left ,top,obj->extraXCells() ,obj->extraYCells());
             macroUndo->addCommand(undo);
 
-            table->dissociateCell(QPoint(left,top),false);
+            m_table->dissociateCell(QPoint(left,top),false);
         }
 
     }
 
     // Prepare the undo buffer
-    if ( !table->doc()->undoBuffer()->isLocked() )
+    if ( !m_table->doc()->undoBuffer()->isLocked() )
     {
         QRect rect;
         // Since the right/bottom border is stored in objects right + 1 ( or: bottom + 1 )
@@ -730,14 +741,14 @@ void CellFormatDlg::slotApply()
         else if( isColumnSelected )
         {
             //create cell before to apply
-            RowFormat* rw =table->firstRow();
+            RowFormat* rw =m_table->firstRow();
             for( ; rw; rw = rw->next() )
             {
                 if ( !rw->isDefault() )
                 {
                     for(int i=left;i<=right;i++)
                     {
-		      cell = table->nonDefaultCell( i, rw->row() );
+		      cell = m_table->nonDefaultCell( i, rw->row() );
                     }
                 }
             }
@@ -745,15 +756,15 @@ void CellFormatDlg::slotApply()
         }
 
         QString title=i18n("Change format");
-        KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( table->doc(), table, rect, title );
-//        table->doc()->undoBuffer()->appendUndo( undo );
+        KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( m_table->doc(), m_table, rect, title );
+//        m_table->doc()->undoBuffer()->appendUndo( undo );
         macroUndo->addCommand(undo);
 
 /*	if( miscPage->getStyle()!=eStyle)
         {
 	    //make undo for style of cell
-	    KSpreadUndoStyleCell *undo3 = new KSpreadUndoStyleCell( table->doc(), table, rect );
-	    //table->doc()->undoBuffer()->appendUndo( undo3 );
+	    KSpreadUndoStyleCell *undo3 = new KSpreadUndoStyleCell( m_table->doc(), m_table, rect );
+	    //m_table->doc()->undoBuffer()->appendUndo( undo3 );
             macroUndo->addCommand( undo3 );
         }*/
     }
@@ -764,7 +775,7 @@ void CellFormatDlg::slotApply()
         for ( int x = left; x <= right; x++ )
             for ( int y = top; y <= bottom; y++ )
             {
-                KSpreadCell *obj = table->nonDefaultCell( x, y );
+                KSpreadCell *obj = m_table->nonDefaultCell( x, y );
                 if( !obj->isObscuringForced() )
                 {
                     floatPage->apply( obj );
@@ -772,6 +783,7 @@ void CellFormatDlg::slotApply()
                     fontPage->apply( obj );
                     positionPage->apply( obj );
                     patternPage->apply(obj);
+                    protectPage->apply( obj );
                 }
             }
 
@@ -779,12 +791,12 @@ void CellFormatDlg::slotApply()
         if( int( positionPage->getSizeHeight() ) != int( heigthSize )
             || int( positionPage->getSizeWidth() ) != int( widthSize ) )
         {
-            if ( !table->doc()->undoBuffer()->isLocked() )
+            if ( !m_table->doc()->undoBuffer()->isLocked() )
             {
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
-                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(), table , rect );
-                //table->doc()->undoBuffer()->appendUndo( undo2 );
+                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( m_table->doc(), m_table , rect );
+                //m_table->doc()->undoBuffer()->appendUndo( undo2 );
                 macroUndo->addCommand( undo2 );
             }
         }
@@ -805,21 +817,22 @@ void CellFormatDlg::slotApply()
     {
         for(int i=top;i<=bottom;i++)
         {
-            RowFormat *rw=table->nonDefaultRowFormat(i);
+            RowFormat *rw=m_table->nonDefaultRowFormat(i);
             floatPage->apply(rw );
             fontPage->apply( rw );
             positionPage->apply( rw );
             patternPage->apply(rw);
+            protectPage->apply(rw );
         }
 //        miscPage->applyRow( );
         if( int( positionPage->getSizeHeight() ) != int( heigthSize ) )
         {
-            if ( !table->doc()->undoBuffer()->isLocked())
+            if ( !m_table->doc()->undoBuffer()->isLocked())
             {
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
-                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
-                //table->doc()->undoBuffer()->appendUndo( undo2 );
+                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( m_table->doc(),m_table , rect );
+                //m_table->doc()->undoBuffer()->appendUndo( undo2 );
                 macroUndo->addCommand(undo2);
             }
             for ( int x = top; x <= bottom; x++ ) // The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
@@ -830,22 +843,23 @@ void CellFormatDlg::slotApply()
     {
         for(int i=left;i<=right;i++)
         {
-            ColumnFormat *cl=table->nonDefaultColumnFormat(i);
-            floatPage->apply(cl );
+            ColumnFormat *cl=m_table->nonDefaultColumnFormat(i);
+            floatPage->apply( cl );
             fontPage->apply( cl );
             positionPage->apply( cl );
-            patternPage->apply(cl);
+            patternPage->apply( cl );
+            protectPage->apply( cl );
         }
 //        miscPage->applyColumn( );
 
         if( int( positionPage->getSizeWidth() ) != int( widthSize ) )
         {
-            if ( !table->doc()->undoBuffer()->isLocked())
+            if ( !m_table->doc()->undoBuffer()->isLocked())
             {
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
-                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
-                //table->doc()->undoBuffer()->appendUndo( undo2 );
+                KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( m_table->doc(),m_table , rect );
+                //m_table->doc()->undoBuffer()->appendUndo( undo2 );
                 macroUndo->addCommand(undo2);
             }
             for ( int x = left; x <= right; x++ ) // The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
@@ -853,14 +867,14 @@ void CellFormatDlg::slotApply()
         }
     }
 
-    if ( !table->doc()->undoBuffer()->isLocked())
+    if ( !m_table->doc()->undoBuffer()->isLocked())
     {
-        table->doc()->undoBuffer()->appendUndo( macroUndo );
+        m_table->doc()->undoBuffer()->appendUndo( macroUndo );
     }
     // m_pView->drawVisibleCells();
     QRect r;
     r.setCoords( left, top, right, bottom );
-    m_pView->slotUpdateView( table, r );
+    m_pView->slotUpdateView( m_table, r );
     m_pView->doc()->setModified( true );
     // Update the toolbar (bold/italic/font...)
     m_pView->updateEditWidget();
@@ -1907,6 +1921,156 @@ void CellFormatPageFloat::apply( ColumnFormat *_obj )
   }
 }
 
+CellFormatPageProtection::CellFormatPageProtection( QWidget* parent, CellFormatDlg * _dlg )
+  : QWidget( parent ),
+    m_dlg( _dlg )
+{
+  QVBoxLayout * Form1Layout     = new QVBoxLayout( this, 11, 6, "Form1Layout"); 
+  QGroupBox   * groupBox1       = new QGroupBox( this, "groupBox1" );
+
+  groupBox1->setColumnLayout(0, Qt::Vertical );
+  groupBox1->layout()->setSpacing( 6 );
+  groupBox1->layout()->setMargin( 11 );
+  QVBoxLayout * groupBox1Layout = new QVBoxLayout( groupBox1->layout() );
+  groupBox1Layout->setAlignment( Qt::AlignTop );
+
+  m_bIsProtected = new QCheckBox( groupBox1, "m_bIsProtected" );
+  m_bIsProtected->setChecked( true );
+  groupBox1Layout->addWidget( m_bIsProtected );
+  QSpacerItem * spacer = new QSpacerItem( 20, 21, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  groupBox1Layout->addItem( spacer );
+
+  m_bHideFormula = new QCheckBox( groupBox1, "m_bHideFormula" );
+  groupBox1Layout->addWidget( m_bHideFormula );
+  QSpacerItem * spacer_2 = new QSpacerItem( 20, 21, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  groupBox1Layout->addItem( spacer_2 );
+
+  m_bHideAll = new QCheckBox( groupBox1, "m_bHideAll" );
+  groupBox1Layout->addWidget( m_bHideAll );
+  Form1Layout->addWidget( groupBox1 );
+
+  QGroupBox   * groupBox2       = new QGroupBox( this, "groupBox2" );
+  groupBox2->setColumnLayout(0, Qt::Vertical );
+  groupBox2->layout()->setSpacing( 6 );
+  groupBox2->layout()->setMargin( 11 );
+  QVBoxLayout * groupBox2Layout = new QVBoxLayout( groupBox2->layout() );
+  groupBox2Layout->setAlignment( Qt::AlignTop );
+
+  m_bDontPrint = new QCheckBox( groupBox2, "m_bDontPrint" );
+  groupBox2Layout->addWidget( m_bDontPrint );
+  QSpacerItem * spacer_3 = new QSpacerItem( 20, 51, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  groupBox2Layout->addItem( spacer_3 );
+  Form1Layout->addWidget( groupBox2 );
+  QSpacerItem * spacer_4 = new QSpacerItem( 20, 90, QSizePolicy::Minimum, QSizePolicy::Expanding );
+  Form1Layout->addItem( spacer_4 );
+
+  m_bIsProtected->setText( i18n( "&Protected" ) );
+  m_bHideFormula->setText( i18n( "&Hide Formula" ) );
+  groupBox1->setTitle(   i18n( "Protection" ) );
+  m_bHideAll->setText(   i18n( "Hide &All" ) );
+  groupBox2->setTitle(   i18n( "Printing" ) );
+  m_bDontPrint->setText( i18n( "&Don't Print Text" ) );
+
+  m_bDontPrint->setChecked( m_dlg->bDontPrintText );
+  m_bHideAll->setChecked( m_dlg->bHideAll );
+  m_bHideFormula->setChecked( m_dlg->bHideFormula );
+  m_bIsProtected->setChecked( m_dlg->bIsProtected );
+}
+
+CellFormatPageProtection::~CellFormatPageProtection()
+{
+}
+
+void CellFormatPageProtection::apply( KSpreadCell * _cell )
+{
+  applyFormat( _cell );
+}
+
+void CellFormatPageProtection::apply( ColumnFormat * _col )
+{
+  KSpreadSheet * table = m_dlg->getTable();
+  KSpreadCell  * c     = 0;
+  for (int col = m_dlg->left; col <= m_dlg->right; col++)
+  {
+    for( c = table->getFirstCellColumn( col ); c != 0;
+         c = table->getNextCellDown( c->column(), c->row() ) )
+    {
+      if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked() )
+      {
+        c->clearProperty( KSpreadCell::PDontPrintText );
+        c->clearNoFallBackProperties( KSpreadCell::PDontPrintText );
+      }
+      if ( m_dlg->bIsProtected != m_bIsProtected->isChecked() )
+      {
+        c->clearProperty( KSpreadCell::PNotProtected );
+        c->clearNoFallBackProperties( KSpreadCell::PNotProtected );
+      }
+      if ( m_dlg->bHideFormula != m_bHideFormula->isChecked() )
+      {
+        c->clearProperty( KSpreadCell::PHideFormula );
+        c->clearNoFallBackProperties( KSpreadCell::PHideFormula );
+      }
+      if ( m_dlg->bHideAll != m_bHideAll->isChecked() )
+      {
+        c->clearProperty( KSpreadCell::PHideAll );
+        c->clearNoFallBackProperties( KSpreadCell::PHideAll );
+      }
+    }
+  }
+
+  applyFormat( _col );
+}
+
+void CellFormatPageProtection::apply( RowFormat * _row )
+{
+  KSpreadSheet * table = m_dlg->getTable();
+  KSpreadCell  * c = 0;
+  for ( int row = m_dlg->top; row <= m_dlg->bottom; ++row)
+  {
+    for( c = table->getFirstCellRow( row ); c != 0;
+         c = table->getNextCellRight( c->column(), c->row() ) )
+    {
+      if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked() )
+      {
+        c->clearProperty( KSpreadCell::PDontPrintText );
+        c->clearNoFallBackProperties( KSpreadCell::PDontPrintText );
+      }
+      if ( m_dlg->bIsProtected != m_bIsProtected->isChecked() )
+      {
+        c->clearProperty( KSpreadCell::PNotProtected );
+        c->clearNoFallBackProperties( KSpreadCell::PNotProtected );
+      }
+      if ( m_dlg->bHideFormula != m_bHideFormula->isChecked() )
+      {
+        c->clearProperty( KSpreadCell::PHideFormula );
+        c->clearNoFallBackProperties( KSpreadCell::PHideFormula );
+      }
+      if ( m_dlg->bHideAll != m_bHideAll->isChecked() )
+      {
+        c->clearProperty( KSpreadCell::PHideAll );
+        c->clearNoFallBackProperties( KSpreadCell::PHideAll );
+      }
+    }
+  }
+
+  applyFormat( _row );
+}
+
+void CellFormatPageProtection::applyFormat( KSpreadFormat * _obj )
+{
+  if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked())
+    _obj->setDontPrintText( m_bDontPrint->isChecked() );
+
+  if ( m_dlg->bIsProtected != m_bIsProtected->isChecked())
+    _obj->setNotProtected( !m_bIsProtected->isChecked() );
+
+  if ( m_dlg->bHideAll != m_bHideAll->isChecked())
+    _obj->setHideAll( m_bHideAll->isChecked() );
+
+  if ( m_dlg->bHideFormula != m_bHideFormula->isChecked())
+    _obj->setHideFormula( m_bHideFormula->isChecked() );
+}
+
 
 CellFormatPageMisc::CellFormatPageMisc( QWidget* parent, CellFormatDlg *_dlg ) : QWidget( parent )
 {
@@ -1969,7 +2133,7 @@ CellFormatPageMisc::CellFormatPageMisc( QWidget* parent, CellFormatDlg *_dlg ) :
     box = new QGroupBox( this, "Box1");
     grid = new QGridLayout(box,4,1,7,7);
     dontPrintText= new QCheckBox(i18n("Don't print text"),box);
-    dontPrintText->setChecked(dlg->bDontprintText);
+    dontPrintText->setChecked(dlg->bDontPrintText);
 
     grid->addWidget(dontPrintText,0,0);
     layout->addWidget(box,1,0);
@@ -2038,7 +2202,7 @@ void CellFormatPageMisc::applyFormat( KSpreadCell *_obj )
       _obj->setStyle( KSpreadCell::ST_Select );
     if ( actionText->isEnabled() )
       _obj->setAction( actionText->text() );
-    if( dlg->bDontprintText!=dontPrintText->isChecked())
+    if( dlg->bDontPrintText!=dontPrintText->isChecked())
       _obj->setDontPrintText(dontPrintText->isChecked());
 }
 

@@ -478,6 +478,31 @@ protected:
     CellFormatDlg *dlg;
 };
 
+class CellFormatPageProtection : public QWidget
+{
+  Q_OBJECT
+
+ public:
+  CellFormatPageProtection( QWidget * parent, CellFormatDlg * _dlg );
+  ~CellFormatPageProtection();
+  
+  void apply( KSpreadCell  * _cell );
+  void apply( ColumnFormat * _col );
+  void apply( RowFormat    * _row );
+  void applyFormat( KSpreadFormat * _obj );
+
+ protected:
+  QCheckBox *     m_bIsProtected;
+  QCheckBox *     m_bHideFormula;
+  QCheckBox *     m_bHideAll;
+  QCheckBox *     m_bDontPrint;
+
+  CellFormatDlg * m_dlg;
+  bool            m_isProtected;
+  bool            m_hideFormula;
+  bool            m_hideAll;
+  bool            m_dontPrint;
+};
 
 /**
  */
@@ -505,7 +530,7 @@ public:
      */
     int exec();
 
-    KSpreadSheet* getTable() const {	return table; }
+    KSpreadSheet* getTable() const { return m_table; }
 
     bool isSingleCell() { return ( left == right && top == bottom ); }
 
@@ -562,7 +587,11 @@ public:
 
     bool bMultiRow;
     bool bVerticalText;
-    bool bDontprintText;
+
+    bool bDontPrintText;
+    bool bHideFormula;
+    bool bHideAll;
+    bool bIsProtected;
 
     double heigthSize;
     double widthSize;
@@ -621,16 +650,14 @@ protected:
     CellFormatPageFont *fontPage;
     CellFormatPagePosition *positionPage;
     CellFormatPagePattern *patternPage;
+    CellFormatPageProtection *protectPage;
     QTabDialog *tab;
 
     /**
      * The table that opened this dlg.
      */
-    KSpreadSheet *table;
-
-    KSpreadView *m_pView;
-
-
+    KSpreadSheet * m_table;
+    KSpreadView  * m_pView;
 };
 
 #endif

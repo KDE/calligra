@@ -101,9 +101,6 @@
 #include <kapplication.h>
 #include "kspread_dlg_paperlayout.h"
 
-#define NO_MODIFICATION_POSSIBLE \
-  KMessageBox::error( 0, i18n( "You cannot change a protected sheet" ) ); return
-
 /*****************************************************************************
  *
  * KSpreadView
@@ -452,8 +449,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
       }
       setActiveTable( tbl );
     }
-    adjustActions( !m_pTable->isProtected() );
-    adjustMapActions( !m_pDoc->map()->isProtected() );
 
     QObject::connect( m_pDoc, SIGNAL( sig_addTable( KSpreadSheet* ) ), SLOT( slotAddTable( KSpreadSheet* ) ) );
 
@@ -475,6 +470,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     QStringList list = m_viewZoom->items();
     QString zoomStr = QString::number(m_pDoc->zoom() ) + '%';
     m_viewZoom->setCurrentItem( list.findIndex(zoomStr)  );
+    adjustActions( !m_pTable->isProtected() );
+    adjustMapActions( !m_pDoc->map()->isProtected() );
 }
 
 
@@ -1860,6 +1857,9 @@ void KSpreadView::initialPosition()
 
     if ( koDocument()->isReadWrite() )
       initConfig();
+
+    adjustActions( !m_pTable->isProtected() );
+    adjustMapActions( !m_pDoc->map()->isProtected() );
 }
 
 
@@ -1909,28 +1909,30 @@ void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
       m_decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
 
     m_toolbarLock = FALSE;
-
+    if ( m_pTable )
+      adjustActions( m_pTable, cell );
 }
 
 void KSpreadView::adjustActions( KSpreadSheet const * const table,
                                  KSpreadCell const * const cell )
 {
   QRect selection = m_selectionInfo->selection();
-  if ( table->isProtected() && ( cell->isDefault() || cell->notProtected( cell->column(), cell->row() ) ) )
+  if ( table->isProtected() && !cell->isDefault() && cell->notProtected( cell->column(), cell->row() ) )
   {
     if ( ( selection.width() > 1 ) || ( selection.height() > 1 ) )
     {
-      adjustActions( true );
+      if ( m_bold->isEnabled() )
+        adjustActions( false );
     }
     else
     {
-      if ( m_removeComment->isEnabled() )
-        adjustActions( false );
+      if ( !m_bold->isEnabled() )
+        adjustActions( true );
     }
   }
   else if ( table->isProtected() )
   {
-    if ( m_removeComment->isEnabled() )
+    if ( m_bold->isEnabled() )
       adjustActions( false );
   }
 }
@@ -1949,15 +1951,25 @@ void KSpreadView::updateEditWidgetOnPress()
 
     if ( cell->content() == KSpreadCell::VisualFormula )
         editWidget()->setText( "" );
+    else if ( m_pTable->isProtected() && cell->isHideFormula( column, row ) )
+        editWidget()->setText( cell->strOutText() );
+    else if ( m_pTable->isProtected() && cell->isHideAll( column, row ) )
+        editWidget()->setText( "" );
     else
         editWidget()->setText( cell->text() );
+
     updateButton(cell, column, row);
     adjustActions( m_pTable, cell );
 }
 
 void KSpreadView::updateEditWidget()
 {
-    bool active = activeTable()->getShowFormula();
+    int column = m_pCanvas->markerColumn();
+    int row    = m_pCanvas->markerRow();
+
+    KSpreadCell * cell = m_pTable->cellAt( column, row );
+    bool active = activeTable()->getShowFormula() 
+      && !( m_pTable->isProtected() && cell && cell->isHideFormula( column, row ) );
 
     if ( !m_pTable && !m_pTable->isProtected() )
     {
@@ -1966,25 +1978,29 @@ void KSpreadView::updateEditWidget()
       m_alignRight->setEnabled(!active);
     }
 
-    int column = m_pCanvas->markerColumn();
-    int row    = m_pCanvas->markerRow();
-
-    KSpreadCell* cell = m_pTable->cellAt( column, row );
     if ( !cell )
-    {
+    {      
         editWidget()->setText( "" );
+        if ( m_pTable->isProtected() )
+          editWidget()->setEnabled( false );
+        else
+          editWidget()->setEnabled( true );
         return;
     }
 
     if ( cell->content() == KSpreadCell::VisualFormula )
-    {
         editWidget()->setText( "" );
-    }
+    else if ( m_pTable->isProtected() && cell->isHideFormula( column, row ) )
+        editWidget()->setText( cell->strOutText() );
+    else if ( m_pTable->isProtected() && cell->isHideAll( column, row ) )
+        editWidget()->setText( "" );
     else
-    {
         editWidget()->setText( cell->text() );
-    }
 
+    if ( m_pTable->isProtected() && !cell->notProtected( column, row ) )
+      editWidget()->setEnabled( false );
+    else
+      editWidget()->setEnabled( true );
 
     if ( m_pCanvas->editor() )
     {
@@ -1992,6 +2008,7 @@ void KSpreadView::updateEditWidget()
       m_pCanvas->editor()->setFocus();
     }
     updateButton(cell, column, row);
+    adjustActions( m_pTable, cell );
 }
 
 void KSpreadView::activateFormulaEditor()
@@ -3062,6 +3079,11 @@ void KSpreadView::slotScrollToLastTable()
 
 void KSpreadView::insertTable()
 {
+  if ( m_pDoc->map()->isProtected() )
+  {
+    KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) ); 
+    return;
+  }
   m_pDoc->emitBeginOperation(false);
   m_pCanvas->closeEditor();
   KSpreadSheet *t = m_pDoc->createTable();
@@ -3919,6 +3941,7 @@ void KSpreadView::adjustMapActions( bool mode )
     else
       m_renameTable->setEnabled( true );
   }
+  slotUpdateView( m_pTable );
 }
 
 void KSpreadView::toggleProtectSheet( bool mode )
@@ -3964,7 +3987,12 @@ void KSpreadView::toggleProtectSheet( bool mode )
      m_pTable->setProtected( QCString() );
    }
    m_pDoc->setModified( true );
-   adjustActions( !mode );
+   adjustActions( !mode );   
+   m_pDoc->emitBeginOperation();
+   m_pTable->setRegionPaintDirty( QRect(QPoint( 0, 0 ), QPoint( KS_colMax, KS_rowMax ) ) );
+   refreshView();
+   updateEditWidget();
+   m_pDoc->emitEndOperation();
 }
 
 void KSpreadView::adjustActions( bool mode )
@@ -4086,8 +4114,7 @@ void KSpreadView::adjustActions( bool mode )
   else
     m_renameTable->setEnabled( false );
 
-  if ( mode )
-    canvasWidget()->gotoLocation( m_selectionInfo->marker(), m_pTable );
+  canvasWidget()->gotoLocation( m_selectionInfo->marker(), m_pTable );
 }
 
 void KSpreadView::togglePageBorders( bool mode )
@@ -4795,7 +4822,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
 
     bool isProtected = m_pTable->isProtected();
-    if ( ( cell->isDefault() || cell->notProtected( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) )
+    if ( !cell->isDefault() && cell->notProtected( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) 
          && ( selection().width() == 1 ) && ( selection().height() == 1 ) )
       isProtected = false;
 
@@ -4834,7 +4861,6 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
         m_removeComment->plug( m_pPopupMenu );
       }
 
-
       if(activeTable()->testListChoose(selectionInfo()))
       {
 	m_pPopupMenu->insertSeparator();
@@ -4846,12 +4872,12 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
 
-    if(!activeTable()->getWordSpelling( selectionInfo() ).isEmpty())
+    if ( !isProtected && !activeTable()->getWordSpelling( selectionInfo() ).isEmpty() )
     {
       m_popupMenuFirstToolId = 10;
       int i = 0;
       QValueList<KDataToolInfo> tools = KDataToolInfo::query( "QString", "text/plain", m_pDoc->instance() );
-      if( tools.count() > 0 )
+      if ( tools.count() > 0 )
       {
         m_pPopupMenu->insertSeparator();
         QValueList<KDataToolInfo>::Iterator entry = tools.begin();

@@ -148,6 +148,9 @@ void KSpreadCell::copyFormat( int _column, int _row )
     setVerticalText( cell->verticalText( _column, _row ) );
     setStyle( cell->style());
     setDontPrintText(cell->getDontprintText(_column, _row ) );
+    setNotProtected(cell->notProtected(_column, _row ) );
+    setHideAll(cell->isHideAll(_column, _row ) );
+    setHideFormula(cell->isHideFormula(_column, _row ) );
     setIndent( cell->getIndent(_column, _row ) );
 
     QValueList<KSpreadConditional> conditionList = cell->conditionList();
@@ -1135,7 +1138,8 @@ void KSpreadCell::setOutputText()
   // Turn the stored value in a string
   //
 
-  if ( isFormula() && m_pTable->getShowFormula() )
+  if ( isFormula() && m_pTable->getShowFormula() 
+       && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) )
   {
     m_strOutText = m_strText;
   }
@@ -1483,8 +1487,9 @@ void KSpreadCell::offsetAlign( int _col, int _row )
     }
 
     a = defineAlignX();
-    if( m_pTable->getShowFormula() )
-        a = KSpreadCell::Left;
+    if ( m_pTable->getShowFormula()
+         && !( m_pTable->isProtected() && isHideFormula( _col, _row ) ) )
+      a = KSpreadCell::Left;
 
     switch( a )
     {
@@ -1547,8 +1552,9 @@ void KSpreadCell::applyZoomedFont( QPainter &painter, int _col, int _row )
     KSpreadConditional condition;
 
     QFont tmpFont;
-    if( conditions.currentCondition( condition ) &&
-           !m_pTable->getShowFormula() )
+    if ( conditions.currentCondition( condition ) 
+         && !(m_pTable->getShowFormula() 
+              && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
     {
         tmpFont = condition.fontcond;
     }
@@ -1953,8 +1959,9 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
   /**
    * QML ?
    */
-    if ( m_pQML && ( !painter.device()->isExtDev() ||
-                     !getDontprintText( cellRef.x(), cellRef.y() ) ) )
+    if ( m_pQML 
+         && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), cellRef.y() ) )
+         && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
       painter.save();
       m_pQML->draw( &painter, cellRect.x(), cellRect.y(),
@@ -1966,9 +1973,9 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
     /**
      * Usual Text
      */
-    else if ( !m_strOutText.isEmpty() &&
-              ( !painter.device()->isExtDev() ||
-                !getDontprintText( cellRef.x(), cellRef.y() ) ) )
+    else if ( !m_strOutText.isEmpty() 
+              && ( !painter.device()->isExtDev() || !getDontprintText( cellRef.x(), cellRef.y() ) )
+              && !( m_pTable->isProtected() && isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
       paintText( painter, cellRect, cellRef );
     }
@@ -2491,7 +2498,9 @@ void KSpreadCell::paintText( QPainter& painter,
   //Check for red font color for negativ values
   if( !conditions.currentCondition( condition ) )
   {
-    if( m_value.isNumber() && !m_pTable->getShowFormula() )
+    if ( m_value.isNumber() 
+         && !( m_pTable->getShowFormula() 
+               && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
     {
       double v = m_value.asFloat() * factor(column(),row());
       if ( floatColor( cellRef.x(), cellRef.y()) == KSpreadCell::NegRed && v < 0.0 )
@@ -2624,7 +2633,7 @@ void KSpreadCell::paintText( QPainter& painter,
       }
 
       int a = defineAlignX();
-      if( m_pTable->getShowFormula() )
+      if ( m_pTable->getShowFormula() && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) )
         a = KSpreadCell::Left;
 
       // #### Torben: This looks duplicated for me
@@ -3185,7 +3194,8 @@ QString KSpreadCell::textDisplaying( QPainter &_painter )
          }
        }
      }
-     if( m_pTable->doc()->unzoomItX( fm.width( localizedNumber ) ) < w && !m_pTable->getShowFormula() )
+     if ( m_pTable->doc()->unzoomItX( fm.width( localizedNumber ) ) < w 
+          && !( m_pTable->getShowFormula() && !( m_pTable->isProtected() && isHideFormula( m_iColumn, m_iRow ) ) ) )
      {
        return localizedNumber;
      }

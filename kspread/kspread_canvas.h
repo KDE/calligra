@@ -205,7 +205,7 @@ public:
      * the current cells value. By default CellEditor is chosen.
      */
     void createEditor();
-    void createEditor( EditorType type, bool addFocus=true );
+    bool createEditor( EditorType type, bool addFocus = true );
     /**
      * Deletes the current cell editor.
      *
