@@ -856,30 +856,26 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         }
 
         if ( e->button() == RightButton && toolEditMode == INS_POLYLINE && !m_pointArray.isNull() && m_drawPolyline ) {
-#if 0
-            m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
-                                       ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
-            m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y() ));
-            ++m_indexPointArray;
-            endDrawPolyline();
-#endif
             if( m_indexPointArray > 1)
             {
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
+                p.save();
                 p.setRasterOp( NotROP );
                 p.drawLine( m_dragStartPoint, m_dragEndPoint ); //
 
                 p.drawLine( m_dragStartPoint, m_view->zoomHandler()->zoomPoint( m_pointArray.at(m_indexPointArray - 2)) );
-                p.end();
+                p.restore();
 
                 m_indexPointArray= QMAX(1,m_indexPointArray-1);
                 m_pointArray.resize(m_indexPointArray);
                 m_dragStartPoint=m_view->zoomHandler()->zoomPoint( m_pointArray.at(m_indexPointArray - 1));
-            }
-            mouseMoveEvent( e );
 
+                p.drawLine( m_dragStartPoint, m_dragEndPoint );
+
+                p.end();
+            }
             return;
         }
 
@@ -1764,7 +1760,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
         return;
 
 
-    if ( e->button() == LeftButton && toolEditMode == INS_POLYLINE && !m_pointArray.isNull() && m_drawPolyline ) {
+    if ( toolEditMode == INS_POLYLINE && !m_pointArray.isNull() && m_drawPolyline ) {
         m_dragStartPoint = QPoint( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx(),
                                    ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
         m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y() ));
