@@ -2318,9 +2318,9 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     if( !m_strComment.isEmpty())
     {
 	QPointArray point( 3 );
-	point.setPoint( 0,_tx + w - 10, _ty );
-	point.setPoint( 1, _tx + w,_ty );
-	point.setPoint( 2, _tx + w,_ty + 10 );
+	point.setPoint( 0,_tx + w2 - 10, _ty );
+	point.setPoint( 1, _tx + w2,_ty );
+	point.setPoint( 2, _tx + w2,_ty + 10 );
 	_painter.setBrush( QBrush(Qt::red  ) );
 	_painter.setPen( Qt::NoPen );
 	_painter.drawPolygon( point );
@@ -2333,7 +2333,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
 	QBrush fill( Qt::lightGray );
 	QApplication::style().drawButton( &_painter, _tx + 1, _ty + 1,
-					  w - 1, h - 1,
+					  w2 - 1, h2 - 1,
 					  defaultColorGroup, selected, &fill );
     }
     /**
@@ -2342,7 +2342,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     else if ( m_style == KSpreadCell::ST_Select )
     {
 	QApplication::style().drawComboButton(  &_painter, _tx + 1, _ty + 1,
-						w - 1, h - 1,
+						w2 - 1, h2 - 1,
 						defaultColorGroup, selected );
     }
 
