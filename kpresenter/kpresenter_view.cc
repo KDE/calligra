@@ -730,24 +730,56 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
     KFileDialog fd( oldFile, QString::null, this, 0, TRUE );
     fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Save Picture"));
+    fd.setOperationMode(KFileDialog::Saving);
     if ( fd.exec() == QDialog::Accepted )
     {
         url = fd.selectedURL();
-        if( url.isEmpty() )
-        {
-            KMessageBox::sorry( this, i18n("File name is empty."),
-                                i18n("Save Picture"));
-            return;
-        }
-        // ### TODO: (JJ:) network transparency, use KIO::NetAccess::upload
-        QFile file( url.path() );
-        if ( file.open( IO_ReadWrite ) ) {
-            picture.save( &file );
-            file.close();
-        }
-        else
-            KMessageBox::error(this, i18n("Error during saving."),
-                               i18n("Save Picture"));
+        if ( url.isValid() )
+            {
+                if ( url.isLocalFile() )
+                {
+                    QFile file( url.path() );
+                    if ( file.open( IO_ReadWrite ) )
+                    {
+                        picture.save( &file );
+                        file.close();
+                    }
+                    else
+                    {
+                        KMessageBox::error(this,
+                                   i18n("Error during saving. Couldn't open '%1' for writing").arg ( url.path() ),
+                                   i18n("Save Picture"));
+                    }
+                }
+                else
+                {
+                    KTempFile tempFile;
+                    tempFile.setAutoDelete( true );
+                    if ( tempFile.status() == 0 )
+                    {
+                        QFile file( tempFile.name() );
+                        if ( file.open( IO_ReadWrite ) )
+                        {
+                            picture.save( &file );
+                            file.close();
+                            if ( !KIO::NetAccess::upload( tempFile.name(), url, this ) )
+                            {
+                                KMessageBox::sorry( this, i18n(
+                                   "Unable to save the file to '%1'. %2.").arg( url.prettyURL() ).arg( KIO::NetAccess::lastErrorString() ),
+                                   i18n("Save Failed") );
+                            }
+                        }
+                        else
+                            KMessageBox::error(this,
+                                   i18n("Error during saving. Couldn't open '%1' temporary file for writing").arg ( file.name() ),
+                                   i18n("Save Picture"));
+                    }
+                    else
+                        KMessageBox::sorry( this, i18n(
+                            "Error during saving. Couldn't create temporary file: %1.").arg( strerror( tempFile.status() ) ),
+                            i18n("Save Picture") );
+                }
+            }
     }
 }
 
