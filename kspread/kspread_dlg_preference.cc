@@ -52,14 +52,14 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 
   page=addVBoxPage(i18n("Local Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
   parameterLocale *_ParamLocal=new parameterLocale(parent,page );
-  page=addVBoxPage(i18n("Interface"), QString::null,BarIcon("colorize", KIcon::SizeMedium) );
+  page=addVBoxPage(i18n("Interface"), QString::null,BarIcon("signature", KIcon::SizeMedium) );
   _configure = new  configure(parent,page );
   page=addVBoxPage(i18n("Misc"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
   _miscParameter = new  miscParameters(parent,page );
 
-  page=addVBoxPage(i18n("Color"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
+  page=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",KIcon::SizeMedium) );
   _colorParameter=new colorParameters(parent,page );
-  page=addVBoxPage(i18n("Page layout"), QString::null,BarIcon("misc",KIcon::SizeMedium) );
+  page=addVBoxPage(i18n("Page layout"), QString::null,BarIcon("edit",KIcon::SizeMedium) );
   _layoutPage=new configureLayoutPage(parent,page );
 
   page = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
