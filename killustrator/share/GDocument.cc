@@ -402,7 +402,6 @@ bool GDocument::readFromXml (const char* fname) {
 
   XmlReader xml (is);
   if (! xml.validHeader ()) {
-    cout << "Invalid file header !" << endl;
     return false;
   }
   if (xml.doctype () != XML_DOCTYPE || xml.dtd () != XML_DTD) {

@@ -234,7 +234,7 @@ bool QWinMetaFile::load(const QString aFileName)
   }
   else // no, not enhanced
   {
-    debug("WMF Header");
+    //    debug("WMF Header");
     //----- Read as enhanced metafile header
     file.at(filePos);
     st >> header.mtType;
