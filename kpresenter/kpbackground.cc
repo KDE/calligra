@@ -383,12 +383,18 @@ QString KPBackGround::saveOasisGradientStyle( KoGenStyles& mainStyles )
     KoGenStyle gradientStyle( KPresenterDoc::STYLE_GRADIENT /*no family name*/);
     gradientStyle.addAttribute( "draw:start-color", backColor1.name() );
     gradientStyle.addAttribute( "draw:end-color", backColor2.name() );
+    QString unbalancedx( "50%" );
+    QString unbalancedy( "50%" );
+
     if ( unbalanced )
     {
+        unbalancedx = QString( "%1%" ).arg( xfactor / 4 + 50 );
+        unbalancedy = QString( "%1%" ).arg( yfactor / 4 + 50 );
     }
-    else
-    {
-    }
+    gradientStyle.addAttribute( "draw:cx", unbalancedx );
+    gradientStyle.addAttribute( "draw:cy", unbalancedy );
+
+
     switch( bcType )
     {
     case BCT_PLAIN:
