@@ -80,116 +80,88 @@ int KoPageFormat::printerPageSize( KoFormat format )
     return KPrinter::A4;   // let's make Tru64's cxx happy
 }
 
+static const double s_widths[ PG_LAST_FORMAT+1 ] = {
+    PG_A3_WIDTH,
+    PG_A4_WIDTH,
+    PG_A5_WIDTH,
+    PG_US_LETTER_WIDTH,
+    PG_US_LEGAL_WIDTH,
+    PG_A4_HEIGHT,  // since we fallback on A4 landscape
+    0, // custom
+    PG_B5_WIDTH,
+    PG_US_EXECUTIVE_WIDTH,
+    841.0,
+    594.0,
+    420.0,
+    105.0,
+    74.0,
+    52.0,
+    37.0,
+    1030.0, // B0
+    728.0,
+    32.0,
+    515.0,
+    364.0,
+    257.0,
+    128.0 // B6
+};
+
+static const double s_heights[ PG_LAST_FORMAT+1 ] = {
+    PG_A3_HEIGHT,
+    PG_A4_HEIGHT,
+    PG_A5_HEIGHT,
+    PG_US_LETTER_HEIGHT,
+    PG_US_LEGAL_HEIGHT,
+    PG_A4_WIDTH, // since we fallback on A4 landscape
+    0, // custom
+    PG_B5_HEIGHT,
+    PG_US_EXECUTIVE_HEIGHT,
+    1189.0, // A0
+    841.0,
+    594.0,
+    148.0,
+    105.0,
+    74.0,
+    52.0,
+    1456.0, // B0
+    1030.0,
+    45.0,
+    728.0,
+    515.0,
+    364.0,
+    182.0 // B6
+};
+
 double KoPageFormat::width( KoFormat format, KoOrientation orientation )
 {
     if ( orientation == PG_LANDSCAPE )
         return height( format, PG_PORTRAIT );
-    switch( format ) {
-        case PG_DIN_A3:
-            return PG_A3_WIDTH;
-        case PG_DIN_A4:
-            return PG_A4_WIDTH;
-        case PG_DIN_A5:
-            return PG_A5_WIDTH;
-        case PG_US_LETTER:
-            return PG_US_LETTER_WIDTH;
-        case PG_US_LEGAL:
-            return PG_US_LEGAL_WIDTH;
-        case PG_SCREEN:
-            return PG_A4_HEIGHT; // since we fallback on A4 landscape
-        case PG_CUSTOM:
-            kdWarning() << "KoPageFormat::width called with PG_CUSTOM!" << endl;
-            return 0;
-        case PG_DIN_B5:
-            return PG_B5_WIDTH;
-        case PG_US_EXECUTIVE:
-            return PG_US_EXECUTIVE_WIDTH;
-        case PG_DIN_A0:
-            return 841.0;
-        case PG_DIN_A1:
-            return 594.0;
-        case PG_DIN_A2:
-            return 420.0;
-        case PG_DIN_A6:
-            return 105.0;
-        case PG_DIN_A7:
-            return 74.0;
-        case PG_DIN_A8:
-            return 52.0;
-        case PG_DIN_A9:
-            return 37.0;
-        case PG_DIN_B0:
-            return 1030.0;
-        case PG_DIN_B1:
-            return 728.0;
-        case PG_DIN_B10:
-            return 32.0;
-        case PG_DIN_B2:
-            return 515.0;
-        case PG_DIN_B3:
-            return 364.0;
-        case PG_DIN_B4:
-            return 257.0;
-        case PG_DIN_B6:
-            return 128.0;
-    }
-    return PG_A4_WIDTH;   // let's make Tru64's cxx happy
+    if ( format <= PG_LAST_FORMAT )
+        return s_widths[ format ];
+    return PG_A4_WIDTH;   // should never happen
 }
 
 double KoPageFormat::height( KoFormat format, KoOrientation orientation )
 {
     if ( orientation == PG_LANDSCAPE )
         return width( format, PG_PORTRAIT );
-    switch( format ) {
-        case PG_DIN_A3:
-            return PG_A3_HEIGHT;
-        case PG_DIN_A4:
-            return PG_A4_HEIGHT;
-        case PG_DIN_A5:
-            return PG_A5_HEIGHT;
-        case PG_US_LETTER:
-            return PG_US_LETTER_HEIGHT;
-        case PG_US_LEGAL:
-            return PG_US_LEGAL_HEIGHT;
-        case PG_SCREEN:
-            return PG_A4_WIDTH; // since we fallback on A4 landscape
-        case PG_CUSTOM:
-            kdWarning() << "KoPageFormat::height called with PG_CUSTOM!" << endl;
-            return 0;
-        case PG_DIN_B5:
-            return PG_B5_HEIGHT;
-        case PG_US_EXECUTIVE:
-            return PG_US_EXECUTIVE_HEIGHT;
-        case PG_DIN_A0:
-            return 1189.0;
-        case PG_DIN_A1:
-            return 841.0;
-        case PG_DIN_A2:
-            return 594.0;
-        case PG_DIN_A6:
-            return 148.0;
-        case PG_DIN_A7:
-            return 105.0;
-        case PG_DIN_A8:
-            return 74.0;
-        case PG_DIN_A9:
-            return 52.0;
-        case PG_DIN_B0:
-            return 1456.0;
-        case PG_DIN_B1:
-            return 1030.0;
-        case PG_DIN_B10:
-            return 45.0;
-        case PG_DIN_B2:
-            return 728.0;
-        case PG_DIN_B3:
-            return 515.0;
-        case PG_DIN_B4:
-            return 364.0;
-        case PG_DIN_B6:
-            return 182.0;
+    if ( format <= PG_LAST_FORMAT )
+        return s_heights[ format ];
+    return PG_A4_HEIGHT;
+}
+
+KoFormat KoPageFormat::guessFormat( double width, double height )
+{
+    for ( int i = 0 ; i <= PG_LAST_FORMAT ; ++i )
+    {
+        // We have some tolerance. 1pt is a third of a mm, this is
+        // barely noticeable for a page size.
+        if ( i != PG_CUSTOM
+             && QABS( width - s_widths[i] ) < 1
+             && QABS( height - s_heights[i] ) < 1 )
+            return static_cast<KoFormat>(i);
     }
-    return PG_A4_HEIGHT;   // let's make Tru64's cxx happy
+    return PG_CUSTOM;
 }
 
 QString KoPageFormat::formatString( KoFormat format )

@@ -68,8 +68,10 @@ enum KoFormat {
     PG_DIN_B2 = 19,
     PG_DIN_B3 = 20,
     PG_DIN_B4 = 21,
-    PG_DIN_B6 = 22
+    PG_DIN_B6 = 22,
     // etc.
+    // update the number below and the static arrays if you add more values to the enum
+    PG_LAST_FORMAT = 22 // used by koGlobal.cpp.
 };
 
 /**
@@ -127,6 +129,11 @@ namespace KoPageFormat
      */
     QStringList allFormats();
 
+    /**
+     * Try to find the paper format for the given width and height.
+     * Useful to some import filters.
+     */
+    KoFormat guessFormat( double width, double height );
 };
 
 
