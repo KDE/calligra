@@ -19,7 +19,6 @@
 
 #include <myspinbox.h>
 
-#include <qpushbutton.h>
 #include <kglobal.h>
 #include <klocale.h>
 

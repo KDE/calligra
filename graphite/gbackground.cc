@@ -17,11 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qdom.h>
 #include <qpopupmenu.h>
 #include <qpainter.h>
 
-#include <kiconloader.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kaction.h>

@@ -17,7 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qcolor.h>
 #include <qpen.h>
 #include <qdom.h>
 #include <kdebug.h>

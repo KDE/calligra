@@ -21,7 +21,7 @@
 #include <qlayout.h>
 #include <qvgroupbox.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 
 #include <myspinbox.h>
 #include <myspinboxtest.h>

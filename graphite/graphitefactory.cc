@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kinstance.h>
-#include <klocale.h>
 #include <kiconloader.h>
 
 #include <graphitepart.h>

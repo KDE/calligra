@@ -20,7 +20,6 @@
 
 #include <koApplication.h>
 #include <kcmdlineargs.h>
-#include <klocale.h>
 #include <dcopclient.h>
 
 #include <gaboutdata.h>

@@ -17,14 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-// Note: This file has to be included, or kimageeffect will fail to compile!?!
-#include <qimage.h>
-
 #include <qdom.h>
-#include <qsize.h>
 
 #include <kdebug.h>
-#include <kglobal.h>
 #include <kconfig.h>
 #include <kstaticdeleter.h>
 
