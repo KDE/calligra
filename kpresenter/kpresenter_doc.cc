@@ -88,7 +88,10 @@
 #include <kostyle.h>
 #include <kcommand.h>
 #include "KPresenterDocIface.h"
-#include <kspell.h>
+
+#ifdef HAVE_LIBKSPELL2
+#include <kspell2/settings.h>
+#endif
 
 #include <kovariable.h>
 #include <koAutoFormat.h>
@@ -562,11 +565,11 @@ QDomDocument KPresenterDoc::saveXML()
 
     if ( saveOnlyPage == -1 )
     {
-        if( !m_spellListIgnoreAll.isEmpty() )
+        if( !m_spellCheckIgnoreList.isEmpty() )
         {
             QDomElement spellCheckIgnore = doc.createElement( "SPELLCHECKIGNORELIST" );
             presenter.appendChild( spellCheckIgnore );
-            for ( QStringList::Iterator it = m_spellListIgnoreAll.begin(); it != m_spellListIgnoreAll.end(); ++it )
+            for ( QStringList::Iterator it = m_spellCheckIgnoreList.begin(); it != m_spellCheckIgnoreList.end(); ++it )
             {
                 QDomElement spellElem = doc.createElement( "SPELLCHECKIGNOREWORD" );
                 spellCheckIgnore.appendChild( spellElem );
@@ -1060,7 +1063,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     settingsWriter.startElement("config:config-item-set");
     settingsWriter.addAttribute("config:name", "configuration-settings");
-    settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
+    settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellCheckIgnoreList.join( "," ) );
     settingsWriter.endElement(); // config:config-item-set
 
     m_varColl->variableSetting()->saveOasis( settingsWriter );
@@ -1090,7 +1093,7 @@ void KPresenterDoc::loadOasisIgnoreList( const KoOasisSettings& settings )
     if ( !configurationSettings.isNull() )
     {
         const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        m_spellListIgnoreAll = QStringList::split( ',', ignorelist );
+        m_spellCheckIgnoreList = QStringList::split( ',', ignorelist );
     }
 }
 
@@ -1474,7 +1477,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         urlIntern = url().path();
     }
     else
-        m_spellListIgnoreAll.clear();
+        m_spellCheckIgnoreList.clear();
     emit sigProgress( 5 );
 
     QDomElement content = doc.documentElement();
@@ -2106,7 +2109,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         urlIntern = url().path();
     }
     else
-        m_spellListIgnoreAll.clear();
+        m_spellCheckIgnoreList.clear();
     emit sigProgress( 5 );
 
     QDomElement document=doc.documentElement();
@@ -2294,7 +2297,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             {
                 if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
                 {
-                    m_spellListIgnoreAll.append(spellWord.attribute("word"));
+                    m_spellCheckIgnoreList.append(spellWord.attribute("word"));
                 }
                 spellWord=spellWord.nextSibling().toElement();
             }
@@ -4354,18 +4357,21 @@ int KPresenterDoc::indexOfHelpPoint( const KoPoint &pos )
     return -1;
 }
 
-void KPresenterDoc::addIgnoreWordAll( const QString & word)
+void KPresenterDoc::setSpellCheckIgnoreList( const QStringList& lst )
 {
-    if( m_spellListIgnoreAll.findIndex( word )==-1)
-        m_spellListIgnoreAll.append( word );
-    //m_bgSpellCheck->addIgnoreWordAll( word );
-	setModified( true );
+    m_spellCheckIgnoreList = lst;
+#ifdef HAVE_LIBKSPELL2
+    m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList );
+#endif
+    setModified( true );
 }
 
-void KPresenterDoc::clearIgnoreWordAll( )
+void KPresenterDoc::addSpellCheckIgnoreWord( const QString & word )
 {
-    m_spellListIgnoreAll.clear();
-    //m_bgSpellCheck->clearIgnoreWordAll( );
+    // ### missing: undo/redo support
+    if( m_spellCheckIgnoreList.findIndex( word ) == -1 )
+        m_spellCheckIgnoreList.append( word );
+    setSpellCheckIgnoreList( m_spellCheckIgnoreList );
 }
 
 void KPresenterDoc::updateObjectStatusBarItem()

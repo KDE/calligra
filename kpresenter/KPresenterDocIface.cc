@@ -635,17 +635,17 @@ double KPresenterDocIface::helpPointPosY( int index ) const
 
 void KPresenterDocIface::addIgnoreWordAll( const QString &word)
 {
-    doc->addIgnoreWordAll( word );
+    doc->addSpellCheckIgnoreWord( word );
 }
 
 void KPresenterDocIface::clearIgnoreWordAll( )
 {
-    doc->clearIgnoreWordAll();
+    doc->setSpellCheckIgnoreList( QStringList() );
 }
 
 QStringList KPresenterDocIface::spellListIgnoreAll() const
 {
-    return doc->spellListIgnoreAll();
+    return doc->spellCheckIgnoreList();
 }
 
 bool KPresenterDocIface::displayFieldCode()const

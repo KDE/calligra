@@ -452,12 +452,10 @@ class KPresenterDoc : public KoDocument
     QColor gridColor() const { return m_gridColor; }
     void setGridColor( const QColor & _col ) { m_gridColor = _col; }
 
-    QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
-    void addIgnoreWordAll( const QString & );
-    void addIgnoreWordAllList( const QStringList & _lst)
-        { m_spellListIgnoreAll = _lst;}
+    QStringList spellCheckIgnoreList() const { return m_spellCheckIgnoreList; }
+    void setSpellCheckIgnoreList( const QStringList& lst );
+    void addSpellCheckIgnoreWord( const QString & );
 
-    void clearIgnoreWordAll( );
     KoCommandHistory * commandHistory()const { return m_commandHistory; }
     void updateObjectStatusBarItem();
     void updateObjectSelected();
@@ -687,7 +685,7 @@ private:
     QPtrList<KPrPage> m_pageList;
     QPtrList<KPrPage> m_deletedPageList;
 
-    QStringList m_spellListIgnoreAll;
+    QStringList m_spellCheckIgnoreList;
 
     double m_gridX;
     double m_gridY;
