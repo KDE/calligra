@@ -28,8 +28,8 @@
 
 */
 
-
-#include <assert.h>
+#include <config.h>
+#include <cassert>
 #include <stdio.h>
 #include <errno.h>
 #include <limits.h>
