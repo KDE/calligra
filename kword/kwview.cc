@@ -2325,6 +2325,7 @@ void KWView::editSelectAll()
 void KWView::editSelectAllFrames()
 {
     m_gui->canvasWidget()->selectAllFrames( true );
+    frameSelectedChanged();
 }
 
 void KWView::editFind()
