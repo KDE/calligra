@@ -32,6 +32,8 @@
 #include <pcd.h>
 #include <atrd.h>
 #include <sttbf.h>
+#include <bkf.h>
+#include <bkl.h>
 
 #include <kdebug.h>
 
@@ -63,7 +65,9 @@ private:
     const bool locatePieceTbl();
     const bool checkBinTables();
     const bool readAtrdList();
-    const bool readGrpXst();
+    const bool readCommentStuff();
+    const bool readBKF();
+    const bool readBKL();
     const bool browseDop();
 
     const bool readSTTBF(STTBF &sttbf, const unsigned long &fc,
@@ -80,7 +84,10 @@ private:
     // Piece table (pt)
     long m_ptCPBase, m_ptSize, m_ptCount, m_ptPCDBase;
 
-    // ATRD
+    // Comments & stuff
     QList<ATRD> m_atrdList;
+    STTBF m_grpXst, m_atnbkmk;
+    QList<BKF> m_bkfList;
+    QList<BKL> m_bklList;
 };
 #endif // WINWORDDOC_H

@@ -22,13 +22,13 @@
 #ifndef STTBF_H
 #define STTBF_H
 
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qlist.h>
 #include <qarray.h>
 
 struct STTBF {
     unsigned short extraDataLen;
-    QStrList stringList;
+    QStringList stringList;
     QList< QArray<unsigned char> > extraData;
 };
 #endif // STTBF_H
