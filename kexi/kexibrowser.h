@@ -75,8 +75,11 @@ protected slots:
 	void		slotEdit();
 	
 	void		slotCreateTable();
-	void		slotCreateNewForm();
 	void		slotAlterTable();
+
+	void		slotCreateNewForm();
+
+	void		slotCreateQuery();
 };
 
 #endif

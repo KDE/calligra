@@ -38,6 +38,7 @@
 #include "kexibrowseritem.h"
 #include "kexidatatable.h"
 #include "kexialtertable.h"
+#include "kexiquerydesigner.h"
 
 KexiBrowser::KexiBrowser(QWidget *parent, Section s, const char *name ) : KListView(parent,name)
 {
@@ -121,7 +122,11 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 				}
 				break;
 			}
-			
+			case KexiBrowserItem::Query:
+			{
+				m->insertItem(i18n("Create Query"), this, SLOT(slotCreateQuery()));
+				break;
+			}
 			case KexiBrowserItem::Form:
 			{
 				m->insertItem(i18n("Create Form"), this, SLOT(slotCreateNewForm()));
@@ -134,9 +139,7 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 			}
 			default:
 			{
-				m->insertItem(i18n("Create Form"), this, SLOT(slotCreate()));
-				m->insertItem(i18n("Delete Form"), this, SLOT(slotDelete()));
-				m->insertItem(i18n("Edit Form"), this, SLOT(slotEdit()));
+				break;
 			}
 		}
 		m->exec(p);
@@ -218,6 +221,12 @@ void KexiBrowser::slotAlterTable()
 		KexiAlterTable* kat = new KexiAlterTable(kexi->mainWindow(), r->text(0), "alterTable");
 		kat->show();
 	}
+}
+
+void KexiBrowser::slotCreateQuery()
+{
+	KexiQueryDesigner *kqd = new KexiQueryDesigner(kexi->mainWindow(), "query");
+	kqd->show();
 }
 
 KexiBrowser::~KexiBrowser(){

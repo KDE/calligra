@@ -1,6 +1,6 @@
 bin_PROGRAMS = kexi
 
-kexi_SOURCES = kexiinputtableedit.cpp kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp kexitableheader.cpp kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspace.cpp kexiformbase.cpp kexicreateprojectpage.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp kexiformmanager.cpp kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp kexialtertable.cpp
+kexi_SOURCES = kexiinputtableedit.cpp kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp kexitableheader.cpp kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspace.cpp kexiformbase.cpp kexicreateprojectpage.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp kexiformmanager.cpp kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp kexialtertable.cpp kexiquerydesigner.cpp kexiquerydesignerguieditor.cpp kexiquerydesignerguitables.cpp kexirelation.cpp kexirelationview.cpp
 
 kexi_LDADD   = $(LIB_KPARTS) kexiDB/libkexidb.la -lkstore
 
@@ -49,7 +49,7 @@ METASOURCES = AUTO
 kexi_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 rcdir = $(kde_datadir)/kexi
-rc_DATA = kexiui.rc kexiformeditorui.rc
+rc_DATA = kexiui.rc kexiformeditorui.rc kexiquerydesignerui.rc
 
 messages: rc.cpp
 	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \

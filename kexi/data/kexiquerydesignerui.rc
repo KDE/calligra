@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexiquerydesigner" version="0.1">
+
+<ToolBar name="state"><text>State Toolbar</text>
+        <Action name="stateEdit"/>
+	<Action name="stateSQL"/>
+	<Action name="stateView"/>
+</ToolBar>
+
+</kpartgui>

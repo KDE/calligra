@@ -8,10 +8,12 @@
    <Action name="project_props"/>
   </Menu>
 </MenuBar>
+
 <ToolBar name="mainToolBar">
   <text>Main Toolbar</text>
   <action name="file_open">
   <action name="file_save">
   <action name="file_save_as">
+  <Action name="relations"/>
 </ToolBar>
 </kpartgui>

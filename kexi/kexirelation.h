@@ -17,37 +17,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXITABLEHEADER_H
-#define KEXITABLEHEADER_H
+#ifndef KEXIRELATION_H
+#define KEXIRELATION_H
 
-#include <qheader.h>
+#include "kexidialogbase.h"
 
-class QPainter;
+class QComboBox;
+class KexiDB;
 
-class KexiTableHeader : public QHeader
+class KexiRelationView;
+
+
+
+class KexiRelation : public KexiDialogBase
 {
 	Q_OBJECT
 
 	public:
-		KexiTableHeader(QWidget *parent, const char *name=0);
-		~KexiTableHeader();
-		
-		void		setCurrentRow(int row=-1);
-		void		setInsertRow(int row=-1);
-		
-		void		setCellHeight(int height=14);
-//		void	set
+		KexiRelation(QWidget *parent, const char *name="relations");
+		~KexiRelation();
+	
+		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
-	protected:
-		void		paintEvent(QPaintEvent *ev);
-		void		paintSectionLabel(QPainter *p, int index, const QRect & fr);
-
-		int		m_currentRow; 
-		int		m_insertRow;
-
-		int		m_cellHeight;
-
-		QPainter	*m_painter;
+	public slots:
+		void			slotAddTable();
+	
+	private:
+		KexiDB			*m_db;
+		QComboBox		*m_tableCombo;
+		KexiRelationView	*m_view;
 };
 
 #endif

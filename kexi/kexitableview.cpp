@@ -26,6 +26,7 @@
 #include <qkeycode.h>
 #include <qheader.h>
 #include <qlineedit.h>
+#include <qcombobox.h>
 #include <qwmatrix.h>
 #include <qtimer.h>
 #include <qpopupmenu.h>
@@ -67,6 +68,8 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 	m_pCurrentItem = 0;
 
 	m_rowHeight = fontMetrics().lineSpacing();
+	if(m_rowHeight < 17)
+		m_rowHeight = 17;
 	m_pBufferPm = 0;
 
 	m_sortedColumn = -1;
@@ -152,6 +155,8 @@ void KexiTableView::setFont(const QFont &f)
 {
 	QWidget::setFont(f);
 	m_rowHeight = fontMetrics().lineSpacing()+2;
+	if(m_rowHeight < 22)
+		m_rowHeight = 22;
 	setMargins(14, m_rowHeight, 0, 0);
 	m_pVerticalHeader->setCellHeight(m_rowHeight);
 }
@@ -574,6 +579,16 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 				p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
 				break;
 			}
+			break;
+		}
+		case QVariant::StringList:
+		{
+			QComboBox *b = new QComboBox(this);
+			b->setGeometry(0, 0, x2, y2);
+			b->insertItem("[No Table]");
+			style().drawComplexControl(QStyle::CC_ComboBox, p, b, QRect(0, 0, x2, y2), colorGroup(), QStyle::Style_Enabled);
+			p->drawText(4, 0, w - 31, h - 3, AlignLeft | SingleLine | AlignLeft, "[No Table]");
+		
 			break;
 		}
 		case QVariant::String:

@@ -17,37 +17,32 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXITABLEHEADER_H
-#define KEXITABLEHEADER_H
+#ifndef KEXIQUERYDESIGNER_H
+#define KEXIQUERYDESIGNER_H
 
-#include <qheader.h>
+#include <kexidialogbase.h>
 
-class QPainter;
+class KAction;
 
-class KexiTableHeader : public QHeader
+class KexiQueryDesigner : public KexiDialogBase
 {
 	Q_OBJECT
-
+	
 	public:
-		KexiTableHeader(QWidget *parent, const char *name=0);
-		~KexiTableHeader();
+		KexiQueryDesigner(QWidget *parent, const char *name=0);
+		~KexiQueryDesigner();
 		
-		void		setCurrentRow(int row=-1);
-		void		setInsertRow(int row=-1);
-		
-		void		setCellHeight(int height=14);
-//		void	set
+		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
-	protected:
-		void		paintEvent(QPaintEvent *ev);
-		void		paintSectionLabel(QPainter *p, int index, const QRect & fr);
+	private:
+		class EditGUIClient;
+		friend class EditGUIClient;
+		static EditGUIClient *m_editGUIClient;
 
-		int		m_currentRow; 
-		int		m_insertRow;
-
-		int		m_cellHeight;
-
-		QPainter	*m_painter;
+	protected slots:
+		void	slotEditState();
+		void	slotSQLState();
+		void	slotViewState();
 };
 
 #endif
