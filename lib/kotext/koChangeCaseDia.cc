@@ -20,7 +20,7 @@
 #include <klocale.h>
 
 #include <qvbox.h>
-
+#include <qwhatsthis.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 
@@ -43,6 +43,8 @@ KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
     m_titleCase=new QRadioButton( i18n("T&itle Case"), grp );
 
     m_toggleCase=new QRadioButton( i18n("&Toggle Case"), grp );
+    m_sentenceCase=new QRadioButton( i18n("Sentence Case"), grp );
+    QWhatsThis::add( m_sentenceCase, i18n("Convert &first letter of a sentence to &uppercase."));
 
     m_upperCase->setChecked(true);
     grp->setRadioButtonExclusive( TRUE );
@@ -60,6 +62,8 @@ KoChangeCaseDia::TypeOfCase KoChangeCaseDia::getTypeOfCase()
         type=TitleCase;
     else if( m_toggleCase->isChecked())
         type=ToggleCase;
+    else if( m_sentenceCase->isChecked())
+        type=SentenceCase;
     return type;
 }
 

@@ -30,7 +30,7 @@ class KoChangeCaseDia : public KDialogBase
     Q_OBJECT
 public:
     KoChangeCaseDia( QWidget *parent, const char *name );
-    enum TypeOfCase { UpperCase =0, LowerCase=1, TitleCase=2, ToggleCase=3};
+    enum TypeOfCase { UpperCase =0, LowerCase=1, TitleCase=2, ToggleCase=3, SentenceCase=4};
     TypeOfCase getTypeOfCase();
 
 protected:
@@ -38,6 +38,8 @@ protected:
     QRadioButton *m_titleCase;
     QRadioButton *m_lowerCase;
     QRadioButton *m_toggleCase;
+    QRadioButton *m_sentenceCase;
+
 };
 
 #endif

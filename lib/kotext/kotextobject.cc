@@ -1651,6 +1651,17 @@ QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::Type
                 text=text.replace(i, 1, repl );
             }
             break;
+        case KoChangeCaseDia::SentenceCase:
+            for(uint i=0;i<text.length();i++)
+            {
+                if(text.at(i)!=' ')
+                {
+                    QChar prev = text.at(QMAX(i-1,0));
+                    if(i==0 || prev == '\n' ||prev.isPunct())
+                        text=text.replace(i, 1, text.at(i).upper() );
+                }
+            }
+            break;
         default:
             kdDebug()<<"Error in changeCaseOfText !\n";
             break;
