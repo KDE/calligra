@@ -1,9 +1,12 @@
 #include "kspread_map.h"
+#include "kspread_doc.h"
 
 #include <time.h>
 #include <qmsgbox.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <komlWriter.h>
 
 KSpreadMap::KSpreadMap( KSpreadDoc *_doc )
 {
@@ -31,63 +34,50 @@ void KSpreadMap::removeTable( KSpreadTable *_table )
     m_lstTables.setAutoDelete( true );
 }
 
-/* OBJECT KSpreadMap::save( KorbSession *korb, OBJECT o_map )
+bool KSpreadMap::save( ostream& out )
 {
-  printf("Saving map ....\n");
+  out << otag << "<MAP>" << endl;
+  
+  QListIterator<KSpreadTable> it( m_lstTables );
+  for( ; it.current(); ++it )
+    it.current()->save( out );
+  
+  out << etag << "</MAP>" << endl;
 
-  QDataStream stream;
-
-  // Real types
-  TYPE t_m_lstTables =  korb->registerType( "KDE:KSpread::lstTables" );
-
-
-    // A list of all table object ids.
-    QStack<OBJECT> tableStack;
-    tableStack.setAutoDelete( TRUE );
-
-    KSpreadTable *t;
-    for ( t = m_lstTables.first(); t != 0L; t = m_lstTables.next() )
-    {
-	OBJECT *o_table = new OBJECT( t->save( korb ) );
-	
-	if ( *o_table == 0 )
-	    return 0;
-	
-	tableStack.push( o_table );
-    }
-    
-    // Write the map
-    VALUE value = korb->newValue( o_map, p_tables, t_m_lstTables );
-    KorbDevice *device = korb->getDeviceForValue( value );
-    stream.setDevice( device );
-    stream << (UINT32)m_lstTables.count();
-    while ( !tableStack.isEmpty() )
-	stream << *( tableStack.pop() );
-    stream.unsetDevice();
-    korb->release( device );
-    delete device;
-
-    // Write the paper metrics
-    korb->writeFloatValue( o_map, p_leftborder, xclPart->getLeftBorder() );
-    korb->writeFloatValue( o_map, p_rightborder, xclPart->getRightBorder() );
-    korb->writeFloatValue( o_map, p_topborder, xclPart->getTopBorder() );
-    korb->writeFloatValue( o_map, p_bottomborder, xclPart->getBottomBorder() );
-    korb->writeStringValue( o_map, p_papersize, xclPart->paperFormatString() );
-    korb->writeStringValue( o_map, p_paperorientation, xclPart->orientationString() );
-    korb->writeStringValue( o_map, p_m_headLeft, xclPart->getHeadLeft() );
-    korb->writeStringValue( o_map, p_m_headMid, xclPart->getHeadMid() );
-    korb->writeStringValue( o_map, p_m_headRight, xclPart->getHeadRight() );
-    korb->writeStringValue( o_map, p_footLeft, xclPart->getFootLeft() );
-    korb->writeStringValue( o_map, p_footMid, xclPart->getFootMid() );
-    korb->writeStringValue( o_map, p_footRight, xclPart->getFootRight() );
-    if ( !pythonCode.isNull() && pythonCode.length() > 0 )
-	korb->writeStringValue( o_map, p_code, pythonCode.data() );
-    
-    printf("Closing .....\n");
-    
-    return o_map;
+  return true;
 }
 
+bool KSpreadMap::load( KOMLParser& parser, vector<KOMLAttrib>& )
+{
+  string tag, name;
+  vector<KOMLAttrib> lst;
+  
+  // TABLE
+  while( parser.open( 0L, tag ) )
+  {
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+ 
+    if ( name == "TABLE" )
+    {
+      KSpreadTable *t = m_pDoc->createTable();
+      addTable( t );
+      if ( !t->load( parser, lst ) )
+	return false;
+    }
+    else
+      cerr << "Unknown tag '" << tag << "'" << endl;
+
+    if ( !parser.close( tag ) )
+    {
+      cerr << "ERR: Closing Child" << endl;
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/*
 bool KSpreadMap::load( KorbSession *korb, OBJECT o_map )
 {
     QDataStream stream;

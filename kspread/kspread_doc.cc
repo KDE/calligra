@@ -1,5 +1,11 @@
 #include "kspread_doc.h"
 
+#include <komlParser.h>
+#include <komlStreamFeed.h>
+#include <komlWriter.h>
+
+#include <fstream>
+
 #include <unistd.h>
 #include <qmsgbox.h>
 #include <kurl.h>
@@ -112,141 +118,255 @@ void KSpreadDoc::viewList( OPParts::Document::ViewList*& _list )
 
 CORBA::Boolean KSpreadDoc::open( const char *_filename )
 {
-  return false;
+  return load( _filename );
 }
 
 CORBA::Boolean KSpreadDoc::saveAs( const char *_filename, const char *_format )
 {
-  return false;
+  return save( _filename );
 }
 
-/*
 bool KSpreadDoc::save( const char *_url )
 {
   KURL u( _url );
   if ( u.isMalformed() )
-    return FALSE;
-    
-  if ( !u.isLocal() )
   {
-    warning("Can not save to remote URL\n");
+    cerr << "malformed URL" << endl;
     return false;
   }
   
-  Store* store = new Store( u.path(), IO_WriteOnly );
-  store->setAuthor( "(c) Torben Weis, weis@kde.org" );
-  store->setEditor( "KSpread" );
-  store->setMimeType( "application/x-kspread" );
-  
-  OBJECT o_map = save( korb );
-  
-  if ( o_map == 0 )
+  if ( !u.isLocalFile() )
   {
-    store->release();
-    delete korb;
-    return FALSE;
+    QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), i18n( "Can not save to remote URL\n" ), i18n( "Ok" ) );
+    return false;
   }
-    
-  store->setRootObject( o_map );
-  store->release();
-  delete korb;
 
-  fileURL = _url;
+  ofstream out( u.path() );
+  if ( !out )
+  {
+    QString tmp;
+    tmp.sprintf( i18n("Could not write to\n%s" ), u.path() );
+    cerr << tmp << endl;
+    // QMessageBox::critical( (QWidget*)0L, i18n("KSpread Error"), tmp, i18n( "Ok" ) );
+    return false;
+  }
+
+  out << "<?xml version=\"1.0\"?>" << endl;
+  
+  save( out );
+  
+  m_strFileURL = _url;
     
-  return TRUE;
+  return true;
 }
 
-OBJECT KSpreadDoc::save( Store* _store )
+bool KSpreadDoc::save( ostream& out )
 {
-    // For use as values in the ObjectType property
-    TYPE t_map   =  _store->registerType( "KDE:KSpread:Map" );
+  out << otag << "<DOC author=\"" << "Torben Weis" << "\" email=" << "weis@kde.org" << " editor=" << "KSpread"
+      << " mime=" << "application/x-kspread" << " >" << endl;
+  
+  if ( m_pEditor && !m_editorBuffer.isNull() && m_editorBuffer.length() > 0 )
+    m_pEditor->saveBuffer( m_editorBuffer );
+  m_pMap->getPythonCodeFromFile();
 
-    if ( m_pEditor && !m_editorBuffer.isNull() && m_editorBuffer.length() > 0 )
-      m_pEditor->saveBuffer( editorBuffer );
-    m_pMap->getPythonCodeFromFile();
+  out << otag << "<PAPER format=" << paperFormatString() << " orientation=" << orientationString() << '>' << endl;
+  out << indent << "<PAPERBORDERS left=" << leftBorder() << " top=" << topBorder() << " right=" << rightBorder()
+      << " bottom=" << bottomBorder() << "/>" << endl;
+  out << indent << "<HEAD left=\"" << headLeft() << "\" center=\"" << headMid() << "\" right=\"" << headRight() << "\"/>" << endl;
+  out << indent << "<FOOT left=\"" << footLeft() << "\" center=\"" << footMid() << "\" right=\"" << footRight() << "\"/>" << endl;
+  out << etag << "</PAPER>" << endl;
+  
+  // TODO
+  // if ( !pythonCode.isNull() && pythonCode.length() > 0 )
+  // {
+  // }
 
-    OBJECT o_doc( _store->newObject( t_part ) ); 
-
-    // Properties
-    PROPERTY p_leftborder = _store->registerProperty( "KDE:KSpread:LeftBorder" );
-    PROPERTY p_rightborder = _store->registerProperty( "KDE:KSpread:RightBorder" );
-    PROPERTY p_topborder = _store->registerProperty( "KDE:KSpread:TopBorder" );
-    PROPERTY p_bottomborder = _store->registerProperty( "KDE:KSpread:BottomBorder" );
-    PROPERTY p_papersize = _store->registerProperty( "KDE:KSpread:PaperSize" );
-    PROPERTY p_paperorientation = _store->registerProperty( "KDE:KSpread:PaperOrientation" );
-    PROPERTY p_m_headLeft = _store->registerProperty( "KDE:KSpread:headLeft" );
-    PROPERTY p_m_headMid = _store->registerProperty( "KDE:KSpread:headMid" );
-    PROPERTY p_m_headRight = _store->registerProperty( "KDE:KSpread:headRight" );
-    PROPERTY p_footLeft = _store->registerProperty( "KDE:KSpread:footLeft" );
-    PROPERTY p_footMid = _store->registerProperty( "KDE:KSpread:footMid" );
-    PROPERTY p_footRight = _store->registerProperty( "KDE:KSpread:footRight" );
-    PROPERTY p_code = _store->registerProperty( "KDE:KSpread:PythonCode" );
-
-    // Write the paper metrics
-    korb->writeFloatValue( o_doc, p_leftborder, xclPart->getLeftBorder() );
-    korb->writeFloatValue( o_doc, p_rightborder, xclPart->getRightBorder() );
-    korb->writeFloatValue( o_doc, p_topborder, xclPart->getTopBorder() );
-    korb->writeFloatValue( o_doc, p_bottomborder, xclPart->getBottomBorder() );
-    korb->writeStringValue( o_doc, p_papersize, xclPart->paperFormatString() );
-    korb->writeStringValue( o_doc, p_paperorientation, xclPart->orientationString() );
-    korb->writeStringValue( o_doc, p_m_headLeft, xclPart->getHeadLeft() );
-    korb->writeStringValue( o_doc, p_m_headMid, xclPart->getHeadMid() );
-    korb->writeStringValue( o_doc, p_m_headRight, xclPart->getHeadRight() );
-    korb->writeStringValue( o_doc, p_footLeft, xclPart->getFootLeft() );
-    korb->writeStringValue( o_doc, p_footMid, xclPart->getFootMid() );
-    korb->writeStringValue( o_doc, p_footRight, xclPart->getFootRight() );
-    if ( !pythonCode.isNull() && pythonCode.length() > 0 )
-	korb->writeStringValue( o_doc, p_code, pythonCode.data() );
-
-    OBJECT o_map( _store->newObject( t_part ) ); 
-    if ( o_map )
-      return pMap->save( _store, o_map );
+  m_pMap->save( out );
+  
+  out << etag << "</DOC>" << endl;
     
-    return 0;
+  setModified( FALSE );
+    
+  return true;
 }
-*/
-/*
+
 bool KSpreadDoc::load( const char *_url )
 {
-    KURL u( _url );
-    if ( u.isMalformed() )
-	return FALSE;
+  KURL u( _url );
+  if ( u.isMalformed() )
+    return FALSE;
+  
+  if ( !u.isLocalFile() )
+  {
+    cerr << "Can not save to remote URL" << endl;
+    return false;
+  }
 
-    KorbSession* korb = new KorbSession( u.path(), IO_ReadOnly );    
+  ifstream in( u.path() );
+  if ( !in )
+  {
+    cerr << "Could not open" << u.path() << endl;
+    return false;
+  }
 
-    printf("Searching author .....\n");
-    QString author = korb->getAuthor();
-    author.detach();
+  KOMLStreamFeed feed( &in );
+  KOMLParser parser( &feed );
+  
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
 
-    printf("The Author is: %s\n",author.data());
-
-    OBJECT o_root = korb->getRootObject();
-    if ( o_root == 0 )
+  // DOC
+  if ( !parser.open( "DOC", tag ) )
+  {
+    cerr << "Missing DOC" << endl;
+    return false;
+  }
+  
+  KOMLParser::parseTag( tag.c_str(), name, lst );
+  vector<KOMLAttrib>::const_iterator it = lst.begin();
+  for( ; it != lst.end(); it++ )
+  {
+    if ( (*it).m_strName == "mime" )
     {
-	printf("ERROR: No root object\n");
-	return FALSE;
+      if ( (*it).m_strValue != "application/x-kspread" )
+      {
+	cerr << "Unknown mime type " << (*it).m_strValue << endl;
+	return false;
+      }
     }
-    
-    bool ret = load( korb, o_root );
-    
-    if ( !ret )
-    {
-	korb->release();
-	delete korb;
-	return FALSE;
-    }
+  }
 
-    korb->release();
-    delete korb;
-
-    fileURL = _url;
+  if ( !load( parser ) )
+    return false;
     
-    return TRUE;
+  parser.close( tag );
+
+  m_strFileURL = _url;
+  
+  return true;
 }
-*/
-/*
-bool KSpreadDoc::load( KorbSession *_korb, OBJECT _map )
+
+bool KSpreadDoc::load( KOMLParser& parser )
 {
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+  
+  // PAPER, MAP
+  while( parser.open( 0L, tag ) )
+  {
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+ 
+    if ( name == "PAPER" )
+    {
+      KOMLParser::parseTag( tag.c_str(), name, lst );
+      vector<KOMLAttrib>::const_iterator it = lst.begin();
+      for( ; it != lst.end(); it++ )
+      {
+	if ( (*it).m_strName == "format" )
+	{
+	}
+	else if ( (*it).m_strName == "orientation" )
+	{
+	}
+	else
+	  cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+      }
+
+      // PAPERBORDERS, HEAD, FOOT
+      while( parser.open( 0L, tag ) )
+      {
+	KOMLParser::parseTag( tag.c_str(), name, lst );
+
+	if ( name == "PAPERBORDERS" )
+	{    
+	  KOMLParser::parseTag( tag.c_str(), name, lst );
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
+	  {
+	    if ( (*it).m_strName == "left" )
+	    {
+	    }
+	    else if ( (*it).m_strName == "top" )
+	    {
+	    }
+	    else if ( (*it).m_strName == "right" )
+	    {
+	    }
+	    else if ( (*it).m_strName == "bottom" )
+	    {
+	    }
+	    else
+	      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+	  } 
+	}
+      	else if ( name == "HEAD" )
+	{
+	  KOMLParser::parseTag( tag.c_str(), name, lst );
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
+	  {
+	    if ( (*it).m_strName == "left" )
+	    {
+	    }
+	    else if ( (*it).m_strName == "center" )
+	    {
+	    }
+	    else if ( (*it).m_strName == "right" )
+	    {
+	    }
+	    else
+	      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+	  } 
+	}
+      	else if ( name == "FOOT" )
+	{
+	  KOMLParser::parseTag( tag.c_str(), name, lst );
+	  vector<KOMLAttrib>::const_iterator it = lst.begin();
+	  for( ; it != lst.end(); it++ )
+	  {
+	    if ( (*it).m_strName == "left" )
+	    {
+	    }
+	    else if ( (*it).m_strName == "center" )
+	    {
+	    }
+	    else if ( (*it).m_strName == "right" )
+	    {
+	    }
+	    else
+	      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+	  } 
+	}
+	else
+	  cerr << "Unknown tag '" << tag << "'" << endl;    
+	
+	if ( !parser.close( tag ) )
+        {
+	  cerr << "ERR: Closing Child" << endl;
+	  return false;
+	}
+      }
+    }
+    else if ( name == "MAP" )
+    {
+      if ( !m_pMap->load( parser, lst ) )
+	return false;
+    }
+    else
+      cerr << "Unknown tag '" << tag << "'" << endl;    
+
+    if ( !parser.close( tag ) )
+    {
+      cerr << "ERR: Closing Child" << endl;
+      return false;
+    }
+  }
+
+  return true;
+
+  /*
     KSpreadMap *map2 = new XclMap( this );
 
     printf("Loading map ....\n");
@@ -289,8 +409,9 @@ bool KSpreadDoc::load( KorbSession *_korb, OBJECT _map )
     printf("... Done map\n");
 
     return TRUE;
-}
 */
+}
+
 
 KSpreadTable* KSpreadDoc::createTable()
 {

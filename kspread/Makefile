@@ -14,7 +14,7 @@ PYTHONLIBS =    -L$(PYTHON)/Modules \
 
 INCDIR  =	-I$(QTDIR)/include -I$(KDEDIR)/include -I/usr/local/include $(PYTHONINC) -I$(KDEDIR)/idl
 CXXFLAGS =	$(INCDIR) -g -fexceptions -O0
-LDFLAGS =        -L$(KDEDIR)/lib -L/usr/X11/lib -lqt -lkdecore -lkdeui -lmico2.0.5 -lX11 -lXext -lkom -lop $(PYTHONLIBS) -lModules -lPython -lObjects -lParser -lkfm -lkfile -lkofficecore -lkofficeui
+LDFLAGS =        -L$(KDEDIR)/lib -L/usr/X11/lib -lqt -lkdecore -lkdeui -lmico2.0.5 -lX11 -lXext -lkom -lop $(PYTHONLIBS) -lModules -lPython -lObjects -lParser -lkfm -lkfile -lkoml -lkofficecore -lkofficeui
 CXX     =       c++
 MOC     =       /usr/bin/moc
 

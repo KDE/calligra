@@ -22,7 +22,9 @@
 #include "kspread_undo.h"
 #include "kspread_map.h"
 
-#include <koffice_imr.h>
+#include <koIMR.h>
+
+#include <komlWriter.h>
 
 /*****************************************************************************
  *
@@ -1395,141 +1397,39 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range )
     }
 }
 
-/*
-OBJECT KSpreadTable::save( KorbSession *korb )
+bool KSpreadTable::save( ostream &out )
 {
-    QDataStream stream;
+  out << otag << "<TABLE name=" << m_strName << '>' << endl;
+  
+  // Save all cells.
+  QIntDictIterator<KSpreadCell> it( m_dctCells );
+  for ( ; it.current(); ++it ) 
+  {
+    if ( !it.current()->isDefault() )
+      it.current()->save( out );
+  }
 
-    // For use as values in the KSpreadCellType property
-    TYPE t_table =  korb->registerType( "KDE:kxcl:KSpreadTable" );
+  // Save all RowLayout objects.
+  QIntDictIterator<RowLayout> rl( m_dctRows );
+  for ( ; rl.current(); ++rl ) 
+  {
+    if ( !rl.current()->isDefault() )
+      rl.current()->save( out );
+  } 
 
-    // Real types
-    TYPE t_cellList  =  korb->registerType( "KDE:kxcl:CellList" );
-    TYPE t_rlList  =  korb->registerType( "KDE:kxcl:RowLayoutList" );
-    TYPE t_clList  =  korb->registerType( "KDE:kxcl:ColumnLayoutList" );
-    TYPE t_pList  =  korb->registerType( "KDE:kxcl:KPartList" );
+  // Save all ColumnLayout objects.
+  QIntDictIterator<ColumnLayout> cl( m_dctColumns );
+  for ( ; cl.current(); ++cl ) 
+  {
+    if ( !cl.current()->isDefault() )
+      cl.current()->save( out );
+  } 
+  
+  // TODO
+  // Save all KParts.
 
-    PROPERTY p_name   = korb->registerProperty( "KDE:kxcl:Name" );
-    PROPERTY p_cells = korb->registerProperty( "KDE:kxcl:Cells" );
-    PROPERTY p_rl = korb->registerProperty( "KDE:kxcl:RowLayouts" );
-    PROPERTY p_cl = korb->registerProperty( "KDE:kxcl:ColumnLayouts" );
-    PROPERTY p_parts = korb->registerProperty( "KDE:kxcl:KParts" );
-
-    OBJECT o_table( korb->newCell( t_table ) );
-
-    // A list of all cell object ids.
-    QStack<OBJECT> cellStack;
-    cellStack.setAutoDelete( TRUE );
-
-    // Save all cells.
-    QListIterator<KSpreadCell> it( objectList );
-    for ( ; it.current(); ++it ) 
-    {
-	if ( !it.current()->isDefault() )
-	{
-	    OBJECT *o_cell = new OBJECT( it.current()->save( korb ) );
-	    
-	    if ( *o_cell == 0 )
-		return 0;
-	    
-	    cellStack.push( o_cell );
-	}
-    }
-
-    // A list of all RowLayout object ids.
-    QStack<OBJECT> rlStack;
-    rlStack.setAutoDelete( TRUE );
-
-    // Save all RowLayout objects.
-    QListIterator<RowLayout> rl( rowList );
-    for ( ; rl.current(); ++rl ) 
-    {
-	if ( !rl.current()->isDefault() )
-	{
-	    OBJECT *o_rl = new OBJECT( rl.current()->save( korb ) );
-	    
-	    if ( *o_rl == 0 )
-		return 0;
-	    
-	    rlStack.push( o_rl );
-	}
-    } 
-
-    // A list of all ColumnLayout object ids.
-    QStack<OBJECT> clStack;
-    clStack.setAutoDelete( TRUE );
-
-    // Save all ColumnLayout objects.
-    QListIterator<ColumnLayout> cl( columnList );
-    for ( ; cl.current(); ++cl ) 
-    {
-	if ( !cl.current()->isDefault() )
-	{
-	    OBJECT *o_cl = new OBJECT( cl.current()->save( korb ) );
-	    
-	    if ( *o_cl == 0 )
-		return 0;
-	    
-	    clStack.push( o_cl );
-	}
-    } 
-
-    // A list of all KParts ids
-    QStack<OBJECT> plStack;
-    QStack<KPart> kStack;
-    plStack.setAutoDelete( TRUE );
-
-    // Save all KParts.
-    QListIterator<KPart> pl( partList );
-    for ( ; pl.current(); ++pl ) 
-    {
-	OBJECT *o_pl = new OBJECT( pl.current()->save( korb ) );
-	    
-	if ( *o_pl == 0 )
-	    return 0;
-	    
-	plStack.push( o_pl );
-	kStack.push( pl.current() );
-    } 
-    
-    // Write the tables name
-    korb->writeStringValue( o_table, p_name, name() );
-
-    // Write the list of cells
-    VALUE value = korb->newValue( o_table, p_cells, t_cellList );
-    KorbDevice *device = korb->deviceForValue( value );
-    stream.setDevice( device );
-    stream << (UINT32)cellStack.count();
-    printf("Writing %i cells\n",cellStack.count());
-    while ( !cellStack.isEmpty() )
-	stream << *( cellStack.pop() );
-    stream.unsetDevice();
-    korb->release( device );
-
-    // Write the list of RowLayouts
-    value = korb->newValue( o_table, p_rl, t_rlList );
-    device = korb->deviceForValue( value, device );
-    stream.setDevice( device );
-    stream << (UINT32)rlStack.count();
-    printf("Writing %i rls\n",rlStack.count());
-    while ( !rlStack.isEmpty() )
-	stream << *( rlStack.pop() );
-    stream.unsetDevice();
-    korb->release( device );
-
-    // Write the list of ColumnLayouts
-    value = korb->newValue( o_table, p_cl, t_clList );
-    device = korb->deviceForValue( value, device );
-    stream.setDevice( device );
-    stream << (UINT32)clStack.count();
-    printf("Writing %i cls\n",clStack.count());
-    while ( !clStack.isEmpty() )
-	stream << *( clStack.pop() );
-    stream.unsetDevice();
-    korb->release( device );
-
-    // Write the list of KParts
-    value = korb->newValue( o_table, p_parts, t_pList );
+  // Write the list of KParts
+  /*  value = korb->newValue( o_table, p_parts, t_pList );
     device = korb->deviceForValue( value, device );
     stream.setDevice( device );
     stream << (UINT32)plStack.count();
@@ -1539,16 +1439,66 @@ OBJECT KSpreadTable::save( KorbSession *korb )
 	stream << *( plStack.pop() );
 	stream << ( kStack.top()->visual()->x() + xOffset() );
 	stream << ( kStack.pop()->visual()->y() + yOffset() );
-    }
-    stream.unsetDevice();
-    korb->release( device );
-    delete device;
-    
-    m_pDoc->setDocumentChanged( FALSE );
+    } */
 
-    return o_table;
+  out << etag << "</TABLE>" << endl;
+  
+  return true;
 }
 
+bool KSpreadTable::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+{
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
+  {
+    if ( (*it).m_strName == "name" )
+    {
+    }
+    else
+      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+  }
+
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+  
+  // CELL, ROW, COLUMN
+  while( parser.open( 0L, tag ) )
+  {
+    KOMLParser::parseTag( tag.c_str(), name, lst );
+
+    if ( name == "CELL" )
+    {
+      KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
+      cell->load( parser, lst );
+      insertCell( cell );
+    }
+    else if ( name == "ROW" )
+    {
+      RowLayout *rl = new RowLayout( this, 0 );
+      insertRowLayout( rl );
+      rl->load( parser, lst );
+    }
+    else if ( name == "COLUMN" )
+    {
+      ColumnLayout *cl = new ColumnLayout( this, 0 );
+      insertColumnLayout( cl );
+      cl->load( parser, lst );
+    }
+    else
+      cerr << "Unknown tag '" << tag << "'" << endl;
+
+    if ( !parser.close( tag ) )
+    {
+      cerr << "ERR: Closing Child" << endl;
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/*
 bool KSpreadTable::load( KorbSession *korb, OBJECT o_table )
 {
     QDataStream stream;

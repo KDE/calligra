@@ -6,6 +6,8 @@ class KSpreadDoc;
 #include <part_frame_impl.h>
 #include <document_impl.h>
 
+#include <iostream.h>
+
 #include <qobject.h>
 #include <qrect.h>
 #include <qstring.h>
@@ -40,6 +42,11 @@ public:
     
     KSpreadDoc();
     ~KSpreadDoc();
+
+    virtual bool save( const char *_url );
+    virtual bool save( ostream& );
+    virtual bool load( const char *_url );
+    virtual bool load( KOMLParser& );
   
     virtual void cleanUp();
 

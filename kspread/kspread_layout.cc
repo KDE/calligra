@@ -2,6 +2,8 @@
 #include "kspread_layout.h"
 #include "kspread_table.h"
 
+#include <komlWriter.h>
+
 /*****************************************************************************
  *
  * KSpreadLayout
@@ -144,23 +146,32 @@ int RowLayout::height( KSpreadView *_view )
     return (int)(m_fHeight * MM_TO_POINT);
 }
 
-/*
-OBJECT RowLayout::save( KorbSession *korb )
+bool RowLayout::save( ostream &out )
 {
-    // For use as values in the ObjectType property
-    TYPE t_rl  =  korb->registerType( "KDE:kxcl:RowLayout" );
+  out << indent << "<ROW height=" << m_fHeight << " row=" << m_iRow << "/>" << endl;
 
-    PROPERTY p_height = korb->registerProperty( "KDE:kxcl:Height" );
-    PROPERTY p_row = korb->registerProperty( "KDE:kxcl:Row" );
-
-    OBJECT o_rl( korb->newObject( t_rl ) );
-	
-    korb->writeFloatValue( o_rl, p_height, height );
-    korb->writeUIntValue( o_rl, p_row, row );
-
-    return o_rl;
+  return true;
 }
 
+bool RowLayout::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+{
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
+  {
+    if ( (*it).m_strName == "height" )
+    {
+    }
+    else if ( (*it).m_strName == "row" )
+    {
+    }
+    else
+      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+  }
+
+  return true;
+}
+
+/*
 bool RowLayout::load( KorbSession *korb, OBJECT o_rl )
 {
     PROPERTY p_height = korb->findProperty( "KDE:kxcl:Height" );
@@ -242,6 +253,31 @@ int ColumnLayout::width( KSpreadView *_view )
     return (int)( _view->zoom() * m_fWidth * MM_TO_POINT );
   else
     return (int)( m_fWidth * MM_TO_POINT );
+}
+
+bool ColumnLayout::save( ostream &out )
+{
+  out << indent << "<COLUMN width=" << m_fWidth << " column=" << m_iColumn << "/>" << endl;
+
+  return true;
+}
+
+bool ColumnLayout::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
+{
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
+  {
+    if ( (*it).m_strName == "width" )
+    {
+    }
+    else if ( (*it).m_strName == "row" )
+    {
+    }
+    else
+      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+  }
+
+  return true;
 }
 
 /*

@@ -5,6 +5,9 @@ class KSpreadCell;
 class KSpreadTable;
 class KSpreadView;
 
+#include <iostream.h>
+#include <komlParser.h>
+
 #include <qstring.h>
 #include <qpen.h>
 #include <qcolor.h>
@@ -37,6 +40,9 @@ class KSpreadCell : public KSpreadLayout
 public:    
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
+
+    virtual bool save( ostream&, int _x_offset = 0, int _y_offset = 0 );
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
 
     /**
      * Copyies the layout from the cell at the position (_column|_row).

@@ -15,6 +15,9 @@ class KSpreadDoc;
 class QWidget;
 class QPainter;
 
+#include <iostream.h>
+#include <komlParser.h>
+
 #include <document_impl.h>
 
 #include <qpen.h>
@@ -98,7 +101,10 @@ class KSpreadTable : public QObject
 public:    
     KSpreadTable( KSpreadDoc *_doc, const char *_name );
     ~KSpreadTable();
-    
+
+    virtual bool save( ostream& );
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
+  
     /**
      * This event handler is called if the table becomes the active table,
      * that means that the table becomes visible and may fill the GUIs 
@@ -131,7 +137,9 @@ public:
      * @return a non default KSpreadCell for the position.
      */
     KSpreadCell* nonDefaultCell( int _column, int _row );
-    
+
+    KSpreadCell* defaultCell() { return m_pDefaultCell; }
+  
     int topRow( int _ypos, int &_top, KSpreadView *_view = 0L );
     int bottomRow( int _ypos, KSpreadView *_view = 0L );
     int leftColumn( int _xpos, int &_left, KSpreadView *_view = 0L );

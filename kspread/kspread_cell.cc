@@ -17,6 +17,9 @@
 #include "kspread_map.h"
 #include "kspread_doc.h"
 
+#include <koStream.h>
+#include <komlWriter.h>
+
 #define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pTable->emit_updateCell( this, m_iColumn, m_iRow );
 
@@ -1599,6 +1602,159 @@ void KSpreadCell::setCalcDirtyFlag( KSpreadTable *_table, int _column, int _row 
 		it2.current()->setCalcDirtyFlag( m_pTable, m_iColumn, m_iRow );
 	}
     }
+}
+
+bool KSpreadCell::save( ostream& out, int _x_offset, int _y_offset )
+{
+  out << otag << "<CELL row=" << m_iRow - _y_offset
+      << " column=" << m_iColumn - _x_offset << '>' << endl;
+
+  out << indent << "<FORMAT align=" << (unsigned int)m_eAlign;
+
+  if ( m_bgColor != white )
+    out << " bgcolor=" << m_bgColor;
+  if ( multiRow() )
+    out << " multirow";
+
+  if ( isForceExtraCells() )
+    out << " colspan=" << extraXCells() << " rowspan=" << extraYCells();
+  
+  out << " precision=" << precision();
+  if ( prefix() )
+    out << " prefix=\"" << prefix() << '"';
+  if ( postfix() )
+    out << " postfix=\"" << postfix() << '"';
+  
+  out << " float=" << (unsigned int)floatFormat() << " floatcolor=" << (unsigned int)floatColor()
+      << " faktor=" << m_dFaktor << "/>" << endl;
+
+  if ( m_textFont != m_pTable->defaultCell()->font() )
+    out << indent << m_textFont << endl;
+  if ( m_textPen != m_pTable->defaultCell()->textPen() )
+    out << indent << m_textPen << endl;
+
+  if ( m_leftBorderPen != m_pTable->defaultCell()->leftBorderPen() )
+    out << indent << "<LEFTBORDER>" << m_leftBorderPen << "</>" << endl;
+  if ( m_topBorderPen != m_pTable->defaultCell()->topBorderPen() )
+    out << indent << "<TOPBORDER>" << m_topBorderPen << "</>" << endl;
+
+  if ( !m_strText.isEmpty() )
+  {
+    if ( isFormular() )
+    {
+      string f = encodeFormular().data();
+      out << indent << f << endl;
+    }
+    else
+      out << indent << m_strText << endl;
+  }
+
+  out << etag << "</CELL>" << endl;
+  
+  return true;
+}
+
+bool KSpreadCell::load( KOMLParser &parser, vector<KOMLAttrib> &_attribs )
+{
+  vector<KOMLAttrib>::const_iterator it = _attribs.begin();
+  for( ; it != _attribs.end(); it++ )
+  {
+    if ( (*it).m_strName == "row" )
+    {
+      m_iRow = atoi( (*it).m_strValue.c_str() );
+    }
+    else if ( (*it).m_strName == "column" )
+    {
+      m_iColumn = atoi( (*it).m_strValue.c_str() );
+    }
+    else
+      cerr << "Unknown attrib '" << (*it).m_strName << "'" << endl;
+  }
+
+  string tag;
+  vector<KOMLAttrib> lst;
+  string name;
+  string text;
+  string tmp;
+  
+  bool res;
+  // FORMAT, LEFTBORDER, RIGHTBORDER, FONT
+  do
+  {
+    if ( parser.readText( tmp ) )
+    {
+      cerr << "READ: '" << tmp << "'" << endl;
+      text += tmp.c_str();
+    }
+    
+    if ( ( res = parser.open( 0L, tag ) ) )
+    {
+      KOMLParser::parseTag( tag.c_str(), name, lst );
+      vector<KOMLAttrib>::const_iterator it = lst.begin();
+
+      if ( name == "FORMAT" )
+      {
+      }
+      else if ( name == "FONT" )
+      {
+      }
+      else if ( name == "LEFTBORDER" )
+      {
+	// PEN
+	while( parser.open( 0L, tag ) )
+	{
+	  KOMLParser::parseTag( tag.c_str(), name, lst );
+	  
+	  if ( name == "PEN" )
+	  {    
+	    // tagToPen
+	  }
+	  else
+	    cerr << "Unknown tag '" << tag << "'" << endl;    
+	
+	  if ( !parser.close( tag ) )
+	  {
+	    cerr << "ERR: Closing Child" << endl;
+	    return false;
+	  }
+	}
+      }
+      else if ( name == "RIGHTBORDER" )
+      {
+	// PEN
+	while( parser.open( 0L, tag ) )
+	{
+	  KOMLParser::parseTag( tag.c_str(), name, lst );
+	  
+	  if ( name == "PEN" )
+	  {    
+	    // tagToPen
+	  }
+	  else
+	    cerr << "Unknown tag '" << tag << "'" << endl;    
+	
+	  if ( !parser.close( tag ) )
+	  {
+	    cerr << "ERR: Closing Child" << endl;
+	    return false;
+	  }
+	}
+      }
+      else
+	cerr << "Unknown tag '" << tag << "'" << endl;    
+
+      if ( !parser.close( tag ) )
+      {
+	cerr << "ERR: Closing Child" << endl;
+	return false;
+      }
+    }
+  } while( res );
+
+  setText( text.c_str() );
+  cerr << "TEXT: '" << text.c_str() << "'" << endl;
+  
+  return true;
 }
 
 KSpreadCell::~KSpreadCell()

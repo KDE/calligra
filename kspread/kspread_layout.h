@@ -8,6 +8,9 @@ class KSpreadView;
 #include <qcolor.h>
 #include <qfont.h>
 
+#include <iostream.h>
+#include <komlParser.h>
+
 /**
  */
 class KSpreadLayout
@@ -112,7 +115,13 @@ public:
     virtual double faktor() { return m_dFaktor; }
     
     virtual bool multiRow() { return m_bMultiRow; }
-    
+
+    virtual const QPen& leftBorderPen() { return m_leftBorderPen; }
+    virtual const QPen& topBorderPen() { return m_topBorderPen; }
+  
+    virtual const QFont& font() { return m_textFont; }
+    virtual const QPen& textPen() { return m_textPen; }
+
 protected:
     /**
      * Tells wether text may be broken into multiple lines.
@@ -197,6 +206,9 @@ class RowLayout : public KSpreadLayout
 {
 public:
     RowLayout( KSpreadTable *_table, int _row );
+
+    virtual bool save( ostream& );
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
     
     /**
      * @param _view is needed to get information about the zooming factor.
@@ -284,7 +296,10 @@ class ColumnLayout : public KSpreadLayout
 {
 public:
     ColumnLayout( KSpreadTable *_table, int _column );
-    
+
+    virtual bool save( ostream& );
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
+  
     /**
      * @param _view is needed to get information about the zooming factor.
      *

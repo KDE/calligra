@@ -4,6 +4,9 @@
 class KSpreadMap;
 class KSpreadDoc;
 
+#include <iostream.h>
+#include <komlParser.h>
+
 #include <qlist.h>
 #include <qstring.h>
 
@@ -24,7 +27,10 @@ public:
      * This deletes all tables contained in this map.
      */
     ~KSpreadMap();
-    
+
+    virtual bool save( ostream& );
+    virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
+  
     /**
      * @param _table becomes added to the map.
      */
