@@ -99,4 +99,4 @@ KInstance* KPTFactory::global()
     return s_global;
 }
 
-#include <kptfactory.moc>
+#include "kptfactory.moc"

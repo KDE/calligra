@@ -31,7 +31,6 @@
 
 #include <qlistbox.h>
 #include <qpushbutton.h>
-#include <qlistbox.h>
 #include <qlineedit.h>
 #include <qstring.h>
 #include <qspinbox.h>
@@ -62,7 +61,7 @@ void KPTResourceTableItem::clear() {
 void KPTResourceTableItem::ok(KPTResourceGroupRequest *group) {
     // assume old request is cleared, so we just create new one
     if (m_checked) {
-        group->addResourceRequest(new KPTResourceRequest(m_resource, m_units)); 
+        group->addResourceRequest(new KPTResourceRequest(m_resource, m_units));
         //kdDebug()<<k_funcinfo<<"Resource request to "<<m_resource->name()<<" added"<<endl;
     }
 }
@@ -158,7 +157,7 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
     KPTProject *p = dynamic_cast<KPTProject*>(task.projectNode());
     if (p) {
         m_worktime = p->standardWorktime();
-        
+
         QPtrListIterator<KPTResourceGroup> git(p->resourceGroups());
         for(int i=0; git.current(); ++git, ++i) {
             KPTResourceGroup *grp = git.current();
@@ -175,13 +174,13 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
     if (m_worktime && task.effort()->type() == KPTEffort::Type_WorkBased) {
         //FIXME handle decimals
         effort->setFieldScale(0, 24, m_worktime->durationDay().hours());
-        effort->setFieldRightscale(0, m_worktime->durationDay().hours()); 
+        effort->setFieldRightscale(0, m_worktime->durationDay().hours());
         effort->setFieldLeftscale(1, m_worktime->durationDay().hours());
         //kdDebug()<<k_funcinfo<<"Dayscale="<<m_worktime->durationDay().hours()<<endl;
     }
     effort->setValue(task.effort()->expected());
     //kdDebug()<<k_funcinfo<<"effort="<<task.effort()->expected().toString()<<endl;
-    
+
     //TODO: calc optimistic/pessimistic
     optimisticValue->setValue(task.effort()->optimisticRatio());
     pessimisticValue->setValue(task.effort()->pessimisticRatio());
@@ -198,7 +197,7 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
     connect(optimisticValue, SIGNAL(valueChanged(int)), SLOT(sendChanged()));
     connect(pessimisticValue, SIGNAL(valueChanged(int)), SLOT(sendChanged()));
     connect(risk, SIGNAL(activated(int)), SLOT(sendChanged()));
-    
+
 }
 
 void KPTRequestResourcesPanel::groupChanged(QListViewItem *item) {

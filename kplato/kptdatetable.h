@@ -25,7 +25,6 @@
 #include "kptmap.h"
 
 #include <kglobal.h>
-#include <kglobalsettings.h>
 #include <klocale.h>
 
 #include <qgridview.h>
@@ -34,7 +33,6 @@
 #include <qpair.h>
 
 #include <qvalidator.h>
-#include <qgridview.h>
 #include <qlineedit.h>
 #include <qdatetime.h>
 
@@ -57,7 +55,7 @@ public:
   KPTDateInternalWeekSelector(int fontsize,
 			    QWidget* parent=0,
 			    const char* name=0);
-  int getWeek();
+  int getWeek() const;
   void setWeek(int week);
 
 private:
@@ -158,7 +156,7 @@ public:
   KPTDateInternalYearSelector(int fontsize,
 			    QWidget* parent=0,
 			    const char* name=0);
-  int getYear();
+  int getYear() const;
   void setYear(int year);
 
 private:
@@ -288,13 +286,13 @@ public:
     void addMarkedWeek(int week, int year, int holiday);
     bool weekMarked(QPair<int, int> week);
 
-    KPTDateMap selectedDates() { return m_selectedDates; }
-    KPTIntMap selectedWeekdays() { return m_selectedWeekdays; }
-    KPTWeekMap selectedWeeks() { return m_selectedWeeks; }
+    KPTDateMap selectedDates() const { return m_selectedDates; }
+    KPTIntMap selectedWeekdays() const { return m_selectedWeekdays; }
+    KPTWeekMap selectedWeeks() const { return m_selectedWeeks; }
 
-    KPTDateMap markedDates() { return m_markedDates; }
-    KPTIntMap markedWeekdays() { return m_markedWeekdays; }
-    KPTWeekMap markedWeeks() { return m_markedWeeks; }
+    KPTDateMap markedDates() const { return m_markedDates; }
+    KPTIntMap markedWeekdays() const { return m_markedWeekdays; }
+    KPTWeekMap markedWeeks() const { return m_markedWeeks; }
 
     void clear();
     void clearSelection();

@@ -59,7 +59,6 @@
 #include <qgrid.h>
 #include <qsize.h>
 #include <qheader.h>
-#include <qlayout.h>
 #include <qtabwidget.h>
 #include <qwidgetstack.h>
 #include <qtimer.h>

@@ -30,7 +30,7 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kdatepicker.h>
-#include <kptdurationwidget.h>
+#include "kptdurationwidget.h"
 #include <kcommand.h>
 
 #include <qtextedit.h>
@@ -53,20 +53,20 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
 {
     QFrame *page;
     QVBoxLayout *topLayout;
-    
+
     // Create all the tabs.
     page = addPage(i18n("&General"));
     topLayout = new QVBoxLayout(page, 0, spacingHint());
     m_generalTab = new KPTTaskGeneralPanelBase(page);
     topLayout->addWidget(m_generalTab);
-    
+
     page = addPage(i18n("&Resources"));
     topLayout = new QVBoxLayout(page, 0, spacingHint());
     m_resourcesTab = new KPTRequestResourcesPanel(page, task);
     m_resourcesTab->effort->setVisibleFields(
         ~(KPTDurationWidget::Seconds | KPTDurationWidget::Milliseconds));
     topLayout->addWidget(m_resourcesTab);
-    
+
     page = addPage(i18n("&Notes"));
     topLayout = new QVBoxLayout(page, 0, spacingHint());
     m_notesTab = new KPTTaskNotesPanelBase(page);
@@ -98,7 +98,7 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
 KMacroCommand *KPTTaskDialog::buildCommand() {
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify task"));
     bool modified = false;
-    
+
     KPTDuration dt = KPTDuration();
 
     if (m_task.name() != m_name->text()) {
@@ -129,7 +129,7 @@ KMacroCommand *KPTTaskDialog::buildCommand() {
     }
     if (modified)
         return cmd;
-      
+
     delete cmd;
     return 0;
 }

@@ -33,6 +33,7 @@
 #include <qdialog.h>
 #include <assert.h>
 #include <qlayout.h>
+#include <kglobalsettings.h>
 
 #include <kdebug.h>
 
@@ -166,7 +167,7 @@ void KPTDateTable::paintWeekNumber(QPainter *painter, int row) {
     if (!m_enabled)
         font.setItalic(true);
     painter->setFont(font);
-    
+
     painter->setBrush(KGlobalSettings::baseColor());
     painter->setPen(KGlobalSettings::baseColor());
     painter->drawRect(0, 0, w, h);
@@ -562,7 +563,7 @@ bool KPTDateTable::setDate(const QDate& date_, bool repaint) {
         setWeekNumbers(d.addDays(d.daysInMonth()-1));
     }
     if (m_selectedWeeks.isEmpty() && m_selectedWeekdays.isEmpty() &&
-        !m_selectedDates.isEmpty() && !m_selectedDates.contains(date)) 
+        !m_selectedDates.isEmpty() && !m_selectedDates.contains(date))
     {
         //kdDebug()<<k_funcinfo<<"date inserted"<<endl;
         m_selectedDates.insert(date);
@@ -766,7 +767,7 @@ KPTDateInternalWeekSelector::weekEnteredSlot()
 }
 
 int
-KPTDateInternalWeekSelector::getWeek()
+KPTDateInternalWeekSelector::getWeek() const
 {
   return result;
 }
@@ -986,7 +987,7 @@ KPTDateInternalYearSelector::yearEnteredSlot()
 }
 
 int
-KPTDateInternalYearSelector::getYear()
+KPTDateInternalYearSelector::getYear() const
 {
   return result;
 }

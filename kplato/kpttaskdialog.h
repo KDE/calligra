@@ -21,7 +21,7 @@
 #define KPTTASKDIALOG_H
 
 #include <kdialogbase.h>
-#include <kptresource.h>
+#include "kptresource.h"
 #include <qtable.h>
 
 class KPTTaskGeneralPanelBase;
@@ -44,7 +44,7 @@ public:
     KPTTaskDialog(KPTTask &task, QWidget *parent=0, const char *name=0);
 
     KMacroCommand *buildCommand();
-    
+
 protected slots:
     void slotOk();
 

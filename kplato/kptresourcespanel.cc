@@ -27,7 +27,6 @@
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
-#include <qlistbox.h>
 #include <qpushbutton.h>
 #include <qlistbox.h>
 #include <qlineedit.h>
