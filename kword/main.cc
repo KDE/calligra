@@ -29,18 +29,11 @@ extern "C"
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "kword" );
+    KoApplication app( argc, argv, "kword", "application/x-kword" );
 
     init_libkword();
-	
-    KWordShell* shell = new KWordShell;
 
-    KWordDocument* doc = new KWordDocument;
-    doc->initDoc();
-    shell->setRootPart( doc );
-
-    shell->show();
-    app.setMainWidget( shell );
+    app.start();
 
     app.exec();
 

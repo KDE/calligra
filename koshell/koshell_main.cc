@@ -26,7 +26,7 @@
 
 int main( int argc, char **argv )
 {
-  KoApplication app( argc, argv, "KoShell" );
+  KoApplication app( argc, argv, "KoShell", "" );
   
   KoShellWindow *shell = new KoShellWindow;
   

@@ -24,18 +24,8 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "example" );
-
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-example" );
-    ASSERT( !entry.isEmpty() );
-    KoDocument* doc = entry.createDoc();
-    doc->initDoc();
-
-    Shell* shell = doc->createShell();
-    shell->show();
-    app.setMainWidget( shell );
-
+    KoApplication app( argc, argv, "example", "application/x-example" );
+    app.start(); // parses command line args, create initial docs and shells
     app.exec();
-
     return 0;
 }

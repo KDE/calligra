@@ -26,21 +26,12 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "killustrator" );
-
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-killustrator" );
-    ASSERT( !entry.isEmpty() );
+    KoApplication app( argc, argv, "killustrator", "application/x-killustrator" );
 
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "killustrator" );
 
-    KoDocument* doc = entry.createDoc( 0, "Document" );
-    doc->initDoc();
-
-    Shell* shell = doc->createShell();
-    shell->show();
-    app.setMainWidget( shell );
-
+    app.start();
     app.exec();
 
     return 0;

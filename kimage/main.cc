@@ -32,21 +32,12 @@ extern "C"
 
 int main( int argc, char **argv )
 {
-  KoApplication app( argc, argv, "kimage" );
+  KoApplication app( argc, argv, "kimage", "application/x-kimage" );
 
   app.dcopClient()->attach();
   app.dcopClient()->registerAs( "kimage" );
 
-  KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kimage" );
-  ASSERT( !entry.isEmpty() );
-  KoDocument* doc = entry.createDoc();
-  doc->initDoc();
-
-  Shell* shell = doc->createShell();
-
-  shell->show();
-  app.setMainWidget( shell );
-
+  app.start();
   app.exec();
 
   return 0;

@@ -26,20 +26,12 @@
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "kimageshop" );
+    KoApplication app( argc, argv, "kimageshop", "application/x-kimageshop" );
 
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "kimageshop" );
 
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kimageshop" );
-    ASSERT( !entry.isEmpty() );
-    KoDocument* doc = entry.createDoc();
-    doc->initDoc();
-
-    Shell* shell = doc->createShell();
-    shell->show();
-    app.setMainWidget( shell );
-
+    app.start();
     app.exec();
 
     return 0;

@@ -18,47 +18,12 @@
 */
 
 #include <koApplication.h>
-#include <koDocument.h>
-#include <koMainWindow.h>
-#include <koQueryTypes.h>
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "kchart" );
+    KoApplication app( argc, argv, "kchart", "application/x-kchart" );
 
-    KStartParams params( argc, argv );
-
-    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( "application/x-kchart" );
-    
-    ASSERT( !entry.isEmpty() );
-
-    QStringList open;
-    // Parse command line parameters
-    for( uint i = 0; i < params.count(); i++ )
-	if( params.get( i ).left( 1 ) != "-" )
-	    open.append( params.get( i ) );
-
-
-
-    if ( open.isEmpty() ) {
-      KoDocument* doc = entry.createDoc();
-      doc->initDoc();
-      
-      Shell* shell = doc->createShell();
-      shell->show();
-      //      app.setMainWidget( shell );
-    } else {
-      QStringList::Iterator it = open.begin();
-      for( ; it != open.end(); ++it )
-        {
-	  KoDocument* doc = entry.createDoc( 0 );
-	  doc->loadFromURL( *it );
-	  
-	  Shell* shell = doc->createShell();
-	  shell->show();
-	  // app.setMainWidget( shell );
-	}
-    }
+    app.start();
 
     app.exec();
 

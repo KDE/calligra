@@ -31,21 +31,14 @@ extern "C"
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "kpresenter" );
+    KoApplication app( argc, argv, "kpresenter", "application/x-kpresenter" );
 
     init_libkpresenter();
 	
     app.dcopClient()->attach();
     app.dcopClient()->registerAs( "kpresenter" );
 
-    KPresenterShell* shell = new KPresenterShell;
-
-    KPresenterDoc* doc = new KPresenterDoc( 0, "Document" );
-    doc->initDoc();
-    shell->setRootPart( doc );
-
-    shell->show();
-    app.setMainWidget( shell );
+    app.start();
 
     app.exec();
 
