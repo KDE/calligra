@@ -392,7 +392,7 @@ void
     p += result;
 
     //limit is KS_colMax
-    if (x > (KS_colMax)) {
+    if ( x > KS_colMax ) {
 	kdDebug(36001) << "KSpreadPoint::init: column value too high (col: " << x << ")" << endl;
 	return;
     }
@@ -416,7 +416,7 @@ void
     }
 
     int y = atoi(_str.latin1() + p2);
-    if (y >= KS_rowMax) {
+    if ( y > KS_rowMax ) {
 	kdDebug(36001) << "KSpreadPoint::init: row value too high (row: " << y << ")" << endl;
 	return;
     }

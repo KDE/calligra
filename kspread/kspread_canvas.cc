@@ -1871,7 +1871,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  {
 		  if(! (activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, KS_rowMax)))->isEmpty())
 		      {
-		      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= KS_rowMax )
+		      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y < KS_rowMax )
 			  {
 			      y ++;
 			  }
@@ -1881,7 +1881,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      {
 		      if(! (activeTable()->cellAt(x,y))->isEmpty() &&  !(activeTable()->cellAt(x,QMIN(y + 1, KS_rowMax))->isEmpty()))
 			  {
-			  while ( !(activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= KS_rowMax )
+			  while ( !(activeTable()->cellAt( x ,y +1 ))->isEmpty() && y < KS_rowMax )
 			      {
 				  y ++;
 			      }
@@ -1891,7 +1891,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			  {
 			  if((activeTable()->cellAt(x,y))->isEmpty() &&  (activeTable()->cellAt(x,QMIN(y + 1, KS_rowMax))->isEmpty()))
 			      {
-			      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y <= KS_rowMax )
+			      while (( activeTable()->cellAt( x ,y +1 ))->isEmpty() && y < KS_rowMax )
 				  {
 				      y ++;
 				  }
@@ -2864,7 +2864,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 
     QRect rect = m_pCanvas->activeTable()->selectionRect();
     QRect selection;
-    if(!rect.contains( QPoint(1,hit_row)) || !(_ev->button() == RightButton) 
+    if(!rect.contains( QPoint(1,hit_row)) || !(_ev->button() == RightButton)
                 || (!m_pCanvas->activeTable()->isRowSelected()) )
         {
         selection.setCoords( 1, hit_row, KS_colMax, hit_row );
@@ -2879,7 +2879,6 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     }
     m_pView->updateEditWidget();
   }
-
 }
 
 void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
