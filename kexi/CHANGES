@@ -1,8 +1,8 @@
-beta1 => beta2
-* mailmerge support
+beta2 "warsaw by night" (2004-01-20)
+* database library rewrite
+* core rewrite
 * extended blob support
   - entering text
   - showing a thumbnail image
   - showing a icon
-* support for Latin1, Utf8, ASCII, Local8Bit encoding
 * syntaxhighlighting in query history
