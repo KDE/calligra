@@ -66,10 +66,10 @@ class KoTextParag;
 #include <koDocumentChild.h>
 #include <koPictureCollection.h>
 #include <kozoomhandler.h>
-#include "kwanchorpos.h"
 #include <koUnit.h>
+
+#include "kwanchorpos.h"
 #include "defs.h"
-#include "variable.h"
 
 #include <qmap.h>
 #include <qptrlist.h>

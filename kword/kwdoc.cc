@@ -52,6 +52,7 @@
 #include "kwtextimage.h"
 #include "kwbgspellcheck.h"
 #include "KWordDocIface.h"
+#include "variable.h"
 
 //#define DEBUG_PAGES
 

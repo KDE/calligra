@@ -21,10 +21,10 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <knumvalidator.h>
 #include <kspell.h>
 #include <kfontdialog.h>
 #include <kdebug.h>
-
 
 #include <qcheckbox.h>
 #include <qlabel.h>
@@ -39,11 +39,13 @@
 #include "kwdoc.h"
 #include "kwcanvas.h"
 #include "kwviewmode.h"
-#include <float.h>
+#include "kwcommand.h"
+#include "variable.h"
+
 #include <koVariable.h>
-#include <knumvalidator.h>
-#include <kwcommand.h>
 #include <kformulaconfigpage.h>
+
+#include <float.h>
 
 // little helper stolen from kmail
 // (Note: KDialogBase should have version of the methods that take a QString for the icon name)

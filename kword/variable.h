@@ -26,8 +26,8 @@
 #include <defs.h>
 #include <koVariable.h>
 
-#include <kwtextdocument.h>
 class KWDocument;
+class KWTextFrameSet;
 class KoVariable;
 class KoPgNumVariable;
 class KoMailMergeVariable;
@@ -82,7 +82,7 @@ public:
     virtual VariableType type() const
     { return VT_FOOTNOTE; }
 
-    //static QStringList actionTexts();
+    virtual void drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset );
 
     /** The frameset that contains the text for this footnote */
     KWTextFrameSet * frameSet() const { return m_frameset; }
@@ -96,6 +96,7 @@ public:
     virtual void recalc() { }
 
     void setNum( int num ) { m_num = num; }
+    int num() const { return m_num; }
 
 private:
     unsigned short int m_num;

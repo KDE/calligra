@@ -31,7 +31,6 @@
 #include "kwdrag.h"
 #include <koparagcounter.h>
 #include "contents.h"
-#include <koVariable.h>
 #include <koVariableDlgs.h>
 #include "mailmerge.h"
 #include <koAutoFormat.h>
@@ -116,14 +115,6 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
              SLOT( slotNewCommand( KCommand * ) ) );
     connect( m_textobj, SIGNAL( repaintChanged( KoTextObject* ) ),
              SLOT( slotRepaintChanged() ) );
-
-    /* if ( QFile::exists( "bidi.txt" ) ) {
-       QFile fl( "bidi.txt" );
-       fl.open( IO_ReadOnly );
-       QByteArray array = fl.readAll();
-       QString text = QString::fromUtf8( array.data() );
-       textdoc->setText( text, QString::null );
-    }*/
 }
 
 KWordFrameSetIface* KWTextFrameSet::dcopObject()
@@ -535,7 +526,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
             int translationX = viewFrameRect.left();
             int translationY = viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() );
 #ifdef DEBUG_CURSOR
-            kdDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItY( theFrame->innerRect()->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() ) << endl;
+            kdDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItY( theFrame->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() ) << endl;
 #endif
             p->translate( translationX, translationY );
             p->setBrushOrigin( p->brushOrigin().x() + translationX, p->brushOrigin().y() + translationY );
@@ -793,7 +784,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     // Otherwise, parags broken at the line-level (e.g. between two columns) are seen
     // as still in one piece, and we miss the frames in the 2nd column.
     int from = 0;
-    int to = m_doc->ptToLayoutUnitPixX( theFrame->innerWidth());
+    int to = m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() );
     bool init = false;
 
 #ifdef DEBUG_MARGINS
@@ -872,8 +863,8 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     kdDebugBody(32002) << "   getMargins done. from=" << from << " to=" << to << endl;
 #endif
     if ( from == to ) {
-        from = m_doc->ptToLayoutUnitPixX( theFrame->bLeft());
-        to = m_doc->ptToLayoutUnitPixX( theFrame->width()-theFrame->bRight());
+        from = 0;
+        to = m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() );
     }
 
     if ( marginLeft )
@@ -1026,7 +1017,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
     QPtrListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
-        int frameHeight = kWordDocument()->ptToLayoutUnitPixY( frameIt.current()->height() );
+        int frameHeight = kWordDocument()->ptToLayoutUnitPixY( frameIt.current()->innerHeight() );
         int bottom = totalHeight + frameHeight;
         // Only skip bottom of frame if there is a next one or if there'll be another one created.
         // ( Not for header/footer, for instance. )
@@ -1789,7 +1780,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
             {
                 KWFrame * frm=fit.current()->frame( 0 );
                 if(frm->pageNum()==page )
-                    return (tmp-frm->height());
+                    return (tmp-frm->innerHeight());
             }
         }
     }
@@ -2163,7 +2154,6 @@ KCommand *KWTextFrameSet::setParagLayoutFormatCommand( KoParagLayout *newLayout,
     return m_textobj->setParagLayoutFormatCommand(newLayout, flags, marginIndex);
 }
 
-// Didn't use QPtrList::compareItems because index() is a bit slow, we want to store it.
 class KWFootNoteVarList : public QPtrList< KWFootNoteVariable >
 {
 protected:
@@ -2196,11 +2186,19 @@ void KWTextFrameSet::renumberFootNotes()
     }
     lst.sort();
     short int varNumber = 1;
+    bool needRepaint = false;
     QPtrListIterator< KWFootNoteVariable > vit( lst );
     for ( ; vit.current() ; ++vit, ++varNumber )
     {
-        vit.current()->setNum( varNumber );
+        if ( varNumber != vit.current()->num() )
+        {
+            vit.current()->setNum( varNumber );
+            vit.current()->paragraph()->invalidate(0);
+            vit.current()->paragraph()->setChanged( true );
+        }
     }
+    if (  needRepaint )
+        m_doc->slotRepaintChanged( this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

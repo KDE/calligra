@@ -67,6 +67,7 @@
 #include "splitcellsdia.h"
 #include "stylist.h"
 #include "tabledia.h"
+#include "variable.h"
 #include "KWordViewIface.h"
 
 #include <kaccel.h>
@@ -1197,7 +1198,7 @@ void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &provi
     providesFormula = formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1;
     providesKWordText = formats.findIndex( KWTextDrag::selectionMimeType() ) != -1;
     providesKWord = formats.findIndex( KWDrag::selectionMimeType() ) != -1;
-    kdDebug() << "KWView::checkClipboard providesFormula=" << providesFormula << " providesKWordText=" << providesKWordText << " providesKWord=" << providesKWord << endl;
+    //kdDebug() << "KWView::checkClipboard providesFormula=" << providesFormula << " providesKWordText=" << providesKWordText << " providesKWord=" << providesKWord << endl;
 }
 
 /*=========================== file print =======================*/

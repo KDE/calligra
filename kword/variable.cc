@@ -133,4 +133,23 @@ QString KWFootNoteVariable::text()
     return QString::null;
 }
 
+void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int _offset ) // TODO s/const int/int/
+{
+    KoTextFormat * fmt = format();
+    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
 
+    // Force drawing as "superscript" - hmm, the formatting will use too big font metrics though.
+    QFont font( fmt->screenFont( zh ) );
+    int pointSize = ( ( font.pointSize() * 2 ) / 3 );
+    font.setPointSize( pointSize );
+
+    int offset = _offset;
+    if ( offset == 0 )
+    {
+        int h = zh->layoutUnitToPixelY( /*_y HACK,*/ height );
+        offset = -( h - QFontMetrics(font).height() );
+    }
+
+    QColor textColor( fmt->color() );
+    drawCustomItemHelper( p, x, y, cg, selected, offset, fmt, font, textColor );
+}
