@@ -93,6 +93,7 @@ public:
     QString postalCode() const;
     QString city() const;
     QString street() const;
+    QString position() const;
 
     void setFullName( const QString& n );
     void setTitle( const QString& n );
@@ -106,6 +107,7 @@ public:
     void setCity( const QString& n );
     void setStreet( const QString& n );
     void setInitial( const QString& n );
+    void setPosition( const QString& n );
     void initParameters();
 
 private:
@@ -121,6 +123,7 @@ private:
     QString m_city;
     QString m_street;
     QString m_initial;
+    QString m_position;
 };
 
 class KoDocumentInfoAbout : public KoDocumentInfoPage

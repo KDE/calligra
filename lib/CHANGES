@@ -10,7 +10,7 @@ KOfficeCore:
 - Add new info in document properties (Subject/Keywords/home-work phone)
 
 KoText:
-- Add new variable (statistic, Subject/Keywords/home-work phone)
+- Add new variable (statistic, Subject/Keywords/home-work phone/Position)
 
 Changes after KOffice-1.3-rc1
 =============================

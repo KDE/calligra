@@ -262,6 +262,8 @@ bool KoDocumentInfoAuthor::load( const QDomElement& e )
             m_city = e.text();
         else if ( e.tagName() == "street" )
             m_street = e.text();
+        else if ( e.tagName() == "position" )
+            m_position = e.text();
     }
     return true;
 }
@@ -318,6 +320,10 @@ QDomElement KoDocumentInfoAuthor::save( QDomDocument& doc )
     t = doc.createElement( "street" );
     e.appendChild( t );
     t.appendChild( doc.createTextNode( m_street ) );
+
+    t = doc.createElement( "position" );
+    e.appendChild( t );
+    t.appendChild( doc.createTextNode( m_position ) );
 
     return e;
 }
@@ -382,6 +388,11 @@ QString KoDocumentInfoAuthor::street() const
     return m_street;
 }
 
+QString KoDocumentInfoAuthor::position() const
+{
+    return m_position;
+}
+
 void KoDocumentInfoAuthor::setFullName( const QString& n )
 {
     m_fullName = n;
@@ -441,6 +452,12 @@ void KoDocumentInfoAuthor::setStreet( const QString& n )
 {
     m_street = n;
 }
+
+void KoDocumentInfoAuthor::setPosition( const QString& n )
+{
+    m_position = n;
+}
+
 
 /*****************************************
  *

@@ -78,7 +78,7 @@ public:
   QMultiLineEdit *m_meAbstract;
     QLineEdit *m_leDocSubject;
     QLineEdit *m_leDocKeywords;
-
+    QLineEdit *m_leAuthorPosition;
 
 
   KConfig *m_emailCfg;
@@ -209,9 +209,14 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   d->m_leAuthorTitle = new QLineEdit( authorInfo->title(), page );
   layout->addWidget( d->m_leAuthorTitle, 2, 1 );
 
-  layout->addWidget( new QLabel( i18n( "Company:" ), page ), 3, 0 );
+  layout->addWidget( new QLabel( i18n( "Position:" ), page ), 3, 0 );
+  d->m_leAuthorPosition = new QLineEdit( authorInfo->position(), page );
+  layout->addWidget( d->m_leAuthorPosition, 3, 1 );
+
+
+  layout->addWidget( new QLabel( i18n( "Company:" ), page ), 4, 0 );
   d->m_leCompany = new QLineEdit( authorInfo->company(), page );
-  layout->addWidget( d->m_leCompany, 3, 1 );
+  layout->addWidget( d->m_leCompany, 4, 1 );
 
   if ( authorInfo->company().isNull() )
   {
@@ -220,9 +225,9 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leCompany->setText( name );
   }
 
-  layout->addWidget( new QLabel( i18n( "Email:" ), page ), 4, 0 );
+  layout->addWidget( new QLabel( i18n( "Email:" ), page ), 5, 0 );
   d->m_leEmail = new QLineEdit( authorInfo->email(), page );
-  layout->addWidget( d->m_leEmail, 4, 1 );
+  layout->addWidget( d->m_leEmail, 5, 1 );
 
   if ( authorInfo->email().isNull() )
   {
@@ -231,36 +236,36 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
       d->m_leEmail->setText( email );
   }
 
-  layout->addWidget( new QLabel( i18n( "Telephone (Home):" ), page ), 5, 0 );
+  layout->addWidget( new QLabel( i18n( "Telephone (Home):" ), page ), 6, 0 );
   d->m_leTelephoneHome = new QLineEdit( authorInfo->telephoneHome(), page );
-  layout->addWidget( d->m_leTelephoneHome, 5, 1 );
+  layout->addWidget( d->m_leTelephoneHome, 6, 1 );
 
-  layout->addWidget( new QLabel( i18n( "Telephone (Work):" ), page ), 6, 0 );
+  layout->addWidget( new QLabel( i18n( "Telephone (Work):" ), page ), 7, 0 );
   d->m_leTelephoneWork = new QLineEdit( authorInfo->telephoneWork(), page );
-  layout->addWidget( d->m_leTelephoneWork, 6, 1 );
+  layout->addWidget( d->m_leTelephoneWork, 7, 1 );
 
-  layout->addWidget( new QLabel( i18n( "Fax:" ), page ), 7, 0 );
+  layout->addWidget( new QLabel( i18n( "Fax:" ), page ), 8, 0 );
   d->m_leFax = new QLineEdit( authorInfo->fax(), page );
-  layout->addWidget( d->m_leFax, 7, 1 );
+  layout->addWidget( d->m_leFax, 8, 1 );
 
-  layout->addWidget( new QLabel( i18n( "Street:" ), page ), 8, 0 );
+  layout->addWidget( new QLabel( i18n( "Street:" ), page ), 9, 0 );
   d->m_leStreet = new QLineEdit( authorInfo->street(), page );
-  layout->addWidget( d->m_leStreet, 8, 1 );
+  layout->addWidget( d->m_leStreet, 9, 1 );
 
-  layout->addWidget( new QLabel( i18n( "Postal code:" ), page ), 9, 0 );
+  layout->addWidget( new QLabel( i18n( "Postal code:" ), page ), 10, 0 );
   d->m_lePostalCode = new QLineEdit( authorInfo->postalCode(), page );
-  layout->addWidget( d->m_lePostalCode, 9, 1 );
+  layout->addWidget( d->m_lePostalCode, 10, 1 );
 
-  layout->addWidget( new QLabel( i18n( "City:" ), page ), 10, 0 );
+  layout->addWidget( new QLabel( i18n( "City:" ), page ), 11, 0 );
   d->m_leCity = new QLineEdit( authorInfo->city(), page );
-  layout->addWidget( d->m_leCity, 10, 1 );
+  layout->addWidget( d->m_leCity, 11, 1 );
 
-  layout->addWidget( new QLabel( i18n( "Country:" ), page ), 11, 0 );
+  layout->addWidget( new QLabel( i18n( "Country:" ), page ), 12, 0 );
   d->m_leCountry = new QLineEdit( authorInfo->country(), page );
-  layout->addWidget( d->m_leCountry, 11, 1 );
+  layout->addWidget( d->m_leCountry, 12, 1 );
 
   d->m_pbLoadKABC = new QPushButton( i18n( "Load From Address Book" ), page );
-  layout->addMultiCellWidget( d->m_pbLoadKABC, 12, 12, 0, 1 );
+  layout->addMultiCellWidget( d->m_pbLoadKABC, 13, 13, 0, 1 );
 
   connect( d->m_leFullName, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
@@ -286,6 +291,8 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   connect( d->m_leCity, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
   connect( d->m_leStreet, SIGNAL( textChanged( const QString & ) ),
+           this, SIGNAL( changed() ) );
+  connect( d->m_leAuthorPosition, SIGNAL( textChanged( const QString & ) ),
            this, SIGNAL( changed() ) );
   connect( d->m_pbLoadKABC, SIGNAL( clicked() ),
            this, SLOT( loadFromKABC() ) );
@@ -363,6 +370,7 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAuthor *authorInfo )
   authorInfo->setPostalCode( d->m_lePostalCode->text() );
   authorInfo->setCity( d->m_leCity->text() );
   authorInfo->setStreet( d->m_leStreet->text() );
+  authorInfo->setPosition( d->m_leAuthorPosition->text() );
 
   KConfig* config = KoGlobal::kofficeConfig();
   KConfigGroupSaver cgs( config, "Author" );

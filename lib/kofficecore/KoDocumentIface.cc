@@ -264,6 +264,20 @@ QString KoDocumentIface::documentInfoInitial() const
         return authorPage->initial();
 }
 
+QString KoDocumentIface::documentInfoAuthorPostion() const
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+        return QString::null;
+    }
+    else
+        return authorPage->position();
+}
+
+
 QString KoDocumentIface::documentInfoStreet() const
 {
         KoDocumentInfo * info = m_pDoc->documentInfo();
@@ -390,6 +404,19 @@ void KoDocumentIface::setDocumentInfoCompanyName(const QString &text)
     else
         authorPage->setCompany(text);
 }
+
+void KoDocumentIface::setDocumentInfoAuthorPosition(const QString &text)
+{
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    if ( !authorPage )
+    {
+        kdWarning() << "Author information not found in documentInfo !" << endl;
+    }
+    else
+        authorPage->setPosition(text);
+}
+
 
 void KoDocumentIface::setDocumentInfoTelephone(const QString &text)
 {

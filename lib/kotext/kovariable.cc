@@ -2075,7 +2075,7 @@ void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
     else if ( localName == "sender-title" )
         m_subtype = VST_AUTHORTITLE; // Small hack (it's supposed to be about the sender, not about the author)
     else if ( localName == "sender-position" )
-        m_subtype = VST_AUTHORTITLE; // TODO separate variable
+        m_subtype = VST_AUTHORPOSITION; // TODO separate variable
     else if ( localName == "sender-phone-private" )
         m_subtype = VST_TELEPHONE_HOME;
     else if ( localName == "sender-phone-work" )
@@ -2155,6 +2155,9 @@ void KoFieldVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context
     case VST_AUTHORTITLE:
         writer.startElement("text:sender-title" );
         break;
+    case VST_AUTHORPOSITION:
+        writer.startElement("text:sender-position" );
+        break;
     case VST_INITIAL:
         writer.startElement("text:author-initials" );
         break;
@@ -2200,6 +2203,7 @@ void KoFieldVariable::recalc()
         case VST_CITY:
         case VST_STREET:
         case VST_AUTHORTITLE:
+    case VST_AUTHORPOSITION:
         case VST_INITIAL:
         {
             KoDocumentInfo * info = m_doc->documentInfo();
@@ -2232,6 +2236,8 @@ void KoFieldVariable::recalc()
                     value = authorPage->title();
                 else if ( m_subtype == VST_INITIAL )
                     value = authorPage->initial();
+                else if ( m_subtype == VST_AUTHORPOSITION )
+                    value = authorPage->position();
             }
         }
         break;
@@ -2276,6 +2282,7 @@ QStringList KoFieldVariable::actionTexts()
     QStringList lst;
     lst << i18n( "Author Name" );
     lst << i18n( "Title" );
+    lst << i18n( "Position" );
     lst << i18n( "Company" );
     lst << i18n( "Email" );
     lst << i18n( "Telephone (work)");
@@ -2315,41 +2322,43 @@ KoFieldVariable::FieldSubType KoFieldVariable::fieldSubType(short int menuNumber
                 break;
         case 1: v = VST_AUTHORTITLE;
                 break;
-        case 2: v = VST_COMPANYNAME;
+        case 2: v = VST_AUTHORPOSITION;
                 break;
-        case 3: v = VST_EMAIL;
+        case 3: v = VST_COMPANYNAME;
                 break;
-        case 4: v = VST_TELEPHONE_WORK;
+        case 4: v = VST_EMAIL;
                 break;
-        case 5: v = VST_TELEPHONE_HOME;
+        case 5: v = VST_TELEPHONE_WORK;
                 break;
-        case 6: v = VST_FAX;
+        case 6: v = VST_TELEPHONE_HOME;
                 break;
-        case 7: v = VST_STREET;
+        case 7: v = VST_FAX;
                 break;
-        case 8: v = VST_POSTAL_CODE;
+        case 8: v = VST_STREET;
                 break;
-        case 9: v = VST_CITY;
+        case 9: v = VST_POSTAL_CODE;
                 break;
-        case 10: v = VST_COUNTRY;
+        case 10: v = VST_CITY;
                 break;
-        case 11: v = VST_TITLE;
+        case 11: v = VST_COUNTRY;
                 break;
-        case 12: v = VST_ABSTRACT;
+        case 12: v = VST_TITLE;
                 break;
-        case 13: v = VST_SUBJECT;
+        case 13: v = VST_ABSTRACT;
                 break;
-        case 14: v = VST_KEYWORDS;
+        case 14: v = VST_SUBJECT;
                 break;
-        case 15: v = VST_FILENAME;
+        case 15: v = VST_KEYWORDS;
                 break;
-        case 16: v = VST_FILENAMEWITHOUTEXTENSION;
+        case 16: v = VST_FILENAME;
                 break;
-        case 17: v = VST_DIRECTORYNAME;
+        case 17: v = VST_FILENAMEWITHOUTEXTENSION;
                 break;
-        case 18: v = VST_PATHFILENAME;
+        case 18: v = VST_DIRECTORYNAME;
                 break;
-        case 19: v = VST_INITIAL;
+        case 19: v = VST_PATHFILENAME;
+                break;
+        case 20: v = VST_INITIAL;
                 break;
         default:
             v = VST_NONE;
