@@ -731,7 +731,7 @@ int KSpreadValue::compare( double v1, double v2 )
 {
   double v3 = v1 - v2;
   if( v3 > DBL_EPSILON ) return 1;
-  if( v3 < DBL_EPSILON ) return 1;
+  if( v3 < -DBL_EPSILON ) return -1;
   return 0;
 }
 
