@@ -1346,6 +1346,10 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     {
         success=StartElementTable(stackItem,structureStack.current());
     }
+    else if (name=="cell") // No upper-case
+    {
+        success=StartElementCell(stackItem,structureStack.current(),attributes);
+    }
     else
     {
         stackItem->elementType=ElementTypeUnknown;
