@@ -9,6 +9,8 @@
 void
 VSelectObjects::visitVObject( VObject& object )
 {
+	// never select a deleted object
+	if( object.state() == VObject::deleted ) return;
 	if( !m_rect.isEmpty() )
 	{
 		if( m_select )
