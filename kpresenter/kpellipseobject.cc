@@ -57,6 +57,12 @@ KPEllipseObject::KPEllipseObject( QPen _pen, QBrush _brush, FillType _fillType,
 }
 
 /*================================================================*/
+KPEllipseObject &KPEllipseObject::operator=( const KPEllipseObject & )
+{
+    return *this;
+}
+
+/*================================================================*/
 void KPEllipseObject::setSize( int _width, int _height )
 {
     KPObject::setSize( _width, _height );

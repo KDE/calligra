@@ -39,6 +39,8 @@ public:
     virtual ~KPPartObject()
     {}
 
+    KPPartObject &operator=( const KPPartObject & );
+    
     virtual void save( ostream& out );
     virtual void load( KOMLParser& parser, vector<KOMLAttrib>& lst );
 

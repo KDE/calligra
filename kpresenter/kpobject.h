@@ -42,6 +42,8 @@ class KPObject
 public:
     KPObject();
 
+    KPObject &operator=( const KPObject & );
+    
     virtual void setSelected( bool _selected )
     { selected = _selected; }
     virtual void rotate( float _angle )

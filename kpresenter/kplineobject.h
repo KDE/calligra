@@ -39,6 +39,8 @@ public:
     KPLineObject( QPen _pen, LineEnd _lineBegin, LineEnd _lineEnd, LineType _lineType );
     virtual ~KPLineObject()
     {}
+
+    KPLineObject &operator=( const KPLineObject & );
     
     virtual void setPen( QPen _pen )
     { pen = _pen; }

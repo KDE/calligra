@@ -44,6 +44,12 @@ KPLineObject::KPLineObject( QPen _pen, LineEnd _lineBegin, LineEnd _lineEnd, Lin
 }
 
 /*========================= save =================================*/
+KPLineObject &KPLineObject::operator=( const KPLineObject & )
+{
+    return *this;
+}
+
+/*========================= save =================================*/
 void KPLineObject::save( ostream& out )
 {
     out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;

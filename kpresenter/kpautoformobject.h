@@ -43,6 +43,8 @@ public:
     virtual ~KPAutoformObject()
     { if ( gradient ) delete gradient; }
 
+    KPAutoformObject &operator=( const KPAutoformObject & );
+    
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
 

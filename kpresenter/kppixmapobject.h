@@ -35,6 +35,8 @@ public:
     KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QString &_filename, QDateTime _lastModified );
     virtual ~KPPixmapObject()
     {}
+
+    KPPixmapObject &operator=( const KPPixmapObject & );
     
     virtual void setSize( int _width, int _height );
     virtual void setSize( QSize _size )
@@ -54,13 +56,13 @@ public:
     { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
     virtual QString getFileName()
     { return key.dataKey.filename; }
-    
+
     void setPixmap( const QString &_filename, QDateTime _lastModified )
     { setPixmap( _filename, _lastModified, orig_size ); }
     void setPixmap( const QString &_filename, QDateTime _lastModified, const QSize &_size );
     void reload()
     { setPixmap( key.dataKey.filename, key.dataKey.lastModified, key.size ); }
-    
+
     virtual ObjType getType()
     { return OT_PICTURE; }
     virtual QPen getPen()
@@ -89,7 +91,7 @@ protected:
     QPixmap *pixmap;
     KPPixmapCollection::Key key;
     KPGradient *gradient;
-    
+
     QPen pen;
     QBrush brush;
     QColor gColor1, gColor2;

@@ -42,6 +42,11 @@ KPPartObject::KPPartObject( KPresenterChild *_child )
     getNewPic = false;
 }
 
+/*================================================================*/
+KPPartObject &KPPartObject::operator=( const KPPartObject & )
+{
+}
+
 /*======================== draw ==================================*/
 void KPPartObject::draw( QPainter *_painter, int _diffx, int _diffy )
 {

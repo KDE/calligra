@@ -69,6 +69,12 @@ KPPieObject::KPPieObject( QPen _pen, QBrush _brush, FillType _fillType,
 }
 
 /*================================================================*/
+KPPieObject &KPPieObject::operator=( const KPPieObject & )
+{
+    return *this;
+}
+
+/*================================================================*/
 void KPPieObject::setSize( int _width, int _height )
 {
     KPObject::setSize( _width, _height );

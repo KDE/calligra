@@ -34,6 +34,8 @@ public:
     virtual ~KPRectObject()
     { if ( gradient ) delete gradient; }
 
+    KPRectObject &operator=( const KPRectObject & );
+    
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
 

@@ -65,6 +65,12 @@ KPClipartObject::KPClipartObject( KPClipartCollection *_clipartCollection, const
 }
 
 /*================================================================*/
+KPClipartObject &KPClipartObject::operator=( const KPClipartObject & )
+{
+    return *this;
+}
+
+/*================================================================*/
 void KPClipartObject::setFileName( const QString &_filename, QDateTime _lastModified )
 {
     if ( !_lastModified.isValid() )

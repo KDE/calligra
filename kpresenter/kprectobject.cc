@@ -54,6 +54,12 @@ KPRectObject::KPRectObject( QPen _pen, QBrush _brush, FillType _fillType,
 }
 
 /*================================================================*/
+KPRectObject &KPRectObject::operator=( const KPRectObject & )
+{
+    return *this;
+}
+
+/*================================================================*/
 void KPRectObject::setSize( int _width, int _height )
 {
     KPObject::setSize( _width, _height );

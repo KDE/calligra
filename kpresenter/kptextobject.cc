@@ -47,6 +47,12 @@ KPTextObject::KPTextObject()
     drawEmpty = true;
 }
 
+/*================================================================*/
+KPTextObject &KPTextObject::operator=( const KPTextObject & )
+{
+    return *this;
+}
+
 /*======================= set size ===============================*/
 void KPTextObject::setSize( int _width, int _height )
 {
@@ -560,8 +566,8 @@ void KPTextObject::extendObject2Contents( KPresenterView *view )
     QSize s( ktextobject.neededSize() );
 
     setSize( s.width(), s.height() );
-    
-//     ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object" ), QPoint( 0, 0 ), QSize( s.width() - ext.width(), 
+
+//     ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object" ), QPoint( 0, 0 ), QSize( s.width() - ext.width(),
 //                                                                                           s.height() - ext.height() ),
 //                                           this, view->kPresenterDoc() );
 //     resizeCmd->execute();

@@ -69,6 +69,12 @@ KPAutoformObject::KPAutoformObject( QPen _pen, QBrush _brush, QString _filename,
 }
 
 /*================================================================*/
+KPAutoformObject &KPAutoformObject::operator=( const KPAutoformObject & )
+{
+    return *this;
+}
+
+/*================================================================*/
 void KPAutoformObject::setSize( int _width, int _height )
 {
     KPObject::setSize( _width, _height );

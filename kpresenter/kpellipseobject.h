@@ -43,6 +43,8 @@ public:
     virtual ~KPEllipseObject()
     { if ( gradient ) delete gradient; }
 
+    KPEllipseObject &operator=( const KPEllipseObject & );
+    
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
 

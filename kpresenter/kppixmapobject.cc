@@ -65,6 +65,12 @@ KPPixmapObject::KPPixmapObject( KPPixmapCollection *_pixmapCollection, const QSt
     setPixmap( _filename, _lastModified );
 }
 
+/*================================================================*/
+KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
+{
+    return *this;
+}
+
 /*======================= set size ===============================*/
 void KPPixmapObject::setSize( int _width, int _height )
 {

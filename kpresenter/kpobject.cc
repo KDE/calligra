@@ -62,6 +62,12 @@ KPObject::KPObject()
     move = false;
 }
 
+/*================================================================*/
+KPObject &KPObject::operator=( const KPObject & )
+{
+    return *this;
+}
+
 /*======================= get bounding rect ======================*/
 QRect KPObject::getBoundingRect( int _diffx, int _diffy )
 {

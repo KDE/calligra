@@ -34,6 +34,8 @@ public:
     virtual ~KPPieObject()
     { if ( gradient ) delete gradient; }
 
+    KPPieObject &operator=( const KPPieObject & );
+    
     virtual void setSize( int _width, int _height );
     virtual void resizeBy( int _dx, int _dy );
 

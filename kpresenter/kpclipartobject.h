@@ -36,6 +36,8 @@ public:
     virtual ~KPClipartObject()
     {}
 
+    KPClipartObject &operator=( const KPClipartObject & );
+    
     virtual void setFileName( const QString &_filename, QDateTime _lastModified );
     virtual void setPen( QPen _pen )
     { pen = _pen; }
@@ -79,11 +81,11 @@ public:
 
     KPClipartCollection::Key getKey()
     { return key; }
-    
+
 protected:
     QPicture *picture;
     KPClipartCollection::Key key;
-    
+
     QPen pen;
     QBrush brush;
     QColor gColor1, gColor2;
@@ -94,7 +96,7 @@ protected:
     QPixmap pix;
     bool redrawPix;
     KPClipartCollection *clipartCollection;
-    
+
 };
 
 #endif
