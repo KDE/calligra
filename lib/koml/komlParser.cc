@@ -1,26 +1,29 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <ctype.h>
 #include <iostream.h>
 
 #include "komlParser.h"
+
+#include <qstring.h>
+#include <qregexp.h>
 
 #define PULL if ( m_iPos == m_iLen ) { if ( !pull() ) return false; }
 
@@ -44,19 +47,19 @@ bool KOMLParser::pull()
 {
   if ( m_bEOF )
     return false;
-  
+
   KOMLData* d = m_pFeed->read();
   if ( d == 0L )
   {
     m_bEOF = true;
     return false;
   }
-  
+
   m_lstData.push_back( d );
   m_iPos = 0;
   m_pData = d->data();
   m_iLen = d->length();
-  
+
   return true;
 }
 
@@ -65,7 +68,7 @@ bool KOMLParser::open( const char *_search, string& tag )
   // Obviously there are no tags to open in a single-tag
   if ( m_bCloseSingleTag )
     return false;
-  
+
   if ( m_bEOF )
     return false;
 
@@ -76,9 +79,9 @@ bool KOMLParser::open( const char *_search, string& tag )
   const char *end_tag = 0L;
   int endlen = 0;
   if ( m_vecStack.size() > 0 )
-  {    
+  {
     end_tag = m_vecStack.back().c_str();
-    while ( end_tag[ endlen ] != ' ' && end_tag[ endlen ] != '\n' && end_tag[ endlen ] != '\t' && 
+    while ( end_tag[ endlen ] != ' ' && end_tag[ endlen ] != '\n' && end_tag[ endlen ] != '\t' &&
 	    end_tag[ endlen ] != 0 )
       endlen++;
   }
@@ -88,7 +91,7 @@ bool KOMLParser::open( const char *_search, string& tag )
   {
     if ( !readTag( tag ) )
       return false;
-    
+
     int tl = tag.length();
     // Processing information  =>  Skip
     if ( tl > 0 && tag[ 0 ] == '?' )
@@ -128,8 +131,8 @@ bool KOMLParser::open( const char *_search, string& tag )
       m_vecStack.push_back( tag );
       return true;
     }
-    
-  } while( 1 );  
+
+  } while( 1 );
 }
 
 bool KOMLParser::readText( string &_str )
@@ -153,7 +156,7 @@ bool KOMLParser::readText( string &_str )
     _str = "";
     return false;
   }
-  
+
   if ( m_lstData.size() == 0 )
   {
     if ( !pull() )
@@ -164,12 +167,12 @@ bool KOMLParser::readText( string &_str )
   }
 
   bool bend = false;
-  
+
   do
-  {    
+  {
     while( m_iPos < m_iLen && m_pData[ m_iPos ] != '<' )
       m_iPos++;
-    
+
     if ( m_iPos == m_iLen )
     {
       if ( !pull() )
@@ -182,16 +185,16 @@ bool KOMLParser::readText( string &_str )
   } while( !bend );
 
   int end = m_iPos;
-  
+
   // KOMLData *d = m_lstData.front();
-  
+
   int size = m_lstData.size();
   if ( size == 1 )
   {
     _str.assign( m_pData + start, end - start );
   }
   else
-  {    
+  {
     _str.assign( m_lstData.front()->data() + start, m_lstData.front()->length() - start );
     free( m_lstData.front() );
     m_lstData.pop_front();
@@ -208,8 +211,10 @@ bool KOMLParser::readText( string &_str )
       }
     }
   }
+
+  encode(_str);
   
-  return true;  
+  return true;
 }
 
 bool KOMLParser::readTag( string &_str )
@@ -220,10 +225,10 @@ bool KOMLParser::readTag( string &_str )
     _str = m_strUnreadTag;
     return true;
   }
-  
+
   if ( !findTagStart() )
     return false;
-  
+
   int start = m_iPos;
 
   while( m_lstData.size() > 1 )
@@ -231,21 +236,21 @@ bool KOMLParser::readTag( string &_str )
     free( m_lstData.front() );
     m_lstData.pop_front();
   }
-  
+
   if ( !findTagEnd() )
     return false;
-  
+
   int end = m_iPos;
 
   // KOMLData *d = m_lstData.front();
-  
+
   int size = m_lstData.size();
   if ( size == 1 )
   {
     _str.assign( m_pData + start, end - start );
   }
   else
-  {    
+  {
     _str.assign( m_lstData.front()->data() + start, m_lstData.front()->length() - start );
     free( m_lstData.front() );
     m_lstData.pop_front();
@@ -288,12 +293,12 @@ bool KOMLParser::findTagStart()
   }
 
   bool bend = false;
-  
+
   do
-  {    
+  {
     while( m_iPos < m_iLen && m_pData[ m_iPos ] != '<' )
       m_iPos++;
-    
+
     if ( m_iPos == m_iLen )
     {
       if ( !pull() )
@@ -333,12 +338,12 @@ bool KOMLParser::findTagEnd()
 bool KOMLParser::close( string& _tag, bool _emit )
 {
   if ( m_bCloseSingleTag )
-  {    
+  {
     m_bCloseSingleTag = false;
     _tag = "/";
     return true;
   }
-  
+
   // cerr << "... Closing '" << m_vecStack.back() << "'" << endl;
 
   if ( _emit )
@@ -346,9 +351,9 @@ bool KOMLParser::close( string& _tag, bool _emit )
     m_bEmit = true;
     m_iEmitStart = m_iPos;
   }
-  
+
   do
-  {    
+  {
     if ( m_bEOF )
     {
       END_EMIT;
@@ -356,7 +361,7 @@ bool KOMLParser::close( string& _tag, bool _emit )
     }
 
     int prev = m_iPos;
-    
+
     if ( !readTag( _tag ) )
     {
       END_EMIT;
@@ -366,16 +371,16 @@ bool KOMLParser::close( string& _tag, bool _emit )
     // Which tag do we have to close ?
     const char *end_tag = m_vecStack.back().c_str();
     int endlen = 0;
-    while ( end_tag[ endlen ] != ' ' && end_tag[ endlen ] != '\n' && end_tag[ endlen ] != '\t' && 
+    while ( end_tag[ endlen ] != ' ' && end_tag[ endlen ] != '\n' && end_tag[ endlen ] != '\t' &&
 	    end_tag[ endlen ] != 0 )
       endlen++;
-    
+
     // Is this a tag that closes itself like <color rgb=#0f0f0f />  =>  Loop
     int len = _tag.length();
     while( len > 1 && _tag[ len - 1 ] == '/' )
     {
       prev = m_iPos;
-      
+
       if ( !readTag( _tag ) )
       {
 	END_EMIT;
@@ -383,7 +388,7 @@ bool KOMLParser::close( string& _tag, bool _emit )
       }
       len = _tag.length();
     }
-    
+
     // Is this the closing tag we are searching for ?
     if ( _tag == "/" || ( len > 1 && _tag[0] == '/' && strncmp( _tag.c_str() + 1, end_tag, endlen ) == 0 &&
 	 ( _tag[ endlen + 1 ] == ' ' || _tag[ endlen + 1 ] == '\t' || _tag[ endlen + 1 ] == '\n' || _tag[ endlen + 1 ] == 0 ) ) )
@@ -398,11 +403,11 @@ bool KOMLParser::close( string& _tag, bool _emit )
 	  tmp.assign( m_pData + m_iEmitStart, prev - m_iEmitStart );
 	// cerr << "EL:" << tmp << endl;	
       }
-      
+
       END_EMIT;
       return true;
     }
-    
+
     // We found another opening tag. We have to close this one first.
     m_vecStack.push_back( _tag );
     close( _tag );
@@ -412,11 +417,11 @@ bool KOMLParser::close( string& _tag, bool _emit )
 void KOMLParser::free( KOMLData* _data )
 {
   if ( !m_bEmit )
-  {    
+  {
     m_pFeed->free( _data );
     return;
   }
-  
+
   if ( m_iEmitStart != -1 )
   {
     // cerr << "EF:" << _data->data() + m_iEmitStart << endl;
@@ -434,27 +439,27 @@ bool KOMLParser::parseTag( const char *_tag, string& name, vector<KOMLAttrib>& _
 
   const char *p = _tag;
   int l = 0;
-  
+
   while( isalnum( *p ) )
   {
-    l++;  
+    l++;
     p++;
   }
-  
+
   if ( *p == 0 )
   {
     name = _tag;
     return true;
   }
-  
+
   name.assign( _tag, l );
-  
+
   while( *p == ' ' || *p == '\t' || *p == '\n' )
     p++;
-  
+
   if ( *p == 0 )
     return true;
-  
+
   do
   {
     int len = 0;
@@ -464,25 +469,25 @@ bool KOMLParser::parseTag( const char *_tag, string& name, vector<KOMLAttrib>& _
       len++;
       p++;
     }
-    
+
     while( *p == ' ' || *p == '\t' || *p == '\n' )
       p++;
-    
+
     char last = *p;
-  
+
     if ( last == '=' )
     {
       p++;
-      
+
       while( *p == ' ' || *p == '\t' || *p == '\n' )
 	p++;
-      
+
       if ( *p == 0 )
 	return false;
 
       const char* start2 = p;
       int len2 = 0;
-      
+
       if ( *p == '"' )
       {
 	p++;
@@ -507,6 +512,7 @@ bool KOMLParser::parseTag( const char *_tag, string& name, vector<KOMLAttrib>& _
       KOMLAttrib attrib;
       attrib.m_strName.assign( start, len );
       attrib.m_strValue.assign( start2, len2 );
+      encode(attrib.m_strValue);
       _attribs.push_back( attrib );
     }
     else if ( isalnum( last ) || last == 0 )
@@ -518,11 +524,19 @@ bool KOMLParser::parseTag( const char *_tag, string& name, vector<KOMLAttrib>& _
     }
     else
       return false;
-    
+
     while( *p == ' ' || *p == '\t' || *p == '\n' )
       p++;
-  
+
     if ( *p == 0 )
       return true;
   } while( 1 );
+}
+
+void KOMLParser::encode(string &_str)
+{
+  QString str(_str.c_str());
+  str.replace(QRegExp("&lt;"),"<");
+  str.replace(QRegExp("&gt;"),">");
+  _str = str.ascii();
 }
