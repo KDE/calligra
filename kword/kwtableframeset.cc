@@ -300,7 +300,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
     if(activeCell->getFrame(0)->left() - activeCell->leftBorder() != m_colPositions[activeCell->m_col]) {
         // left border moved.
         col = activeCell->m_row;
-        difference = activeCell->getFrame(0)->left() - activeCell->leftBorder() - m_colPositions[activeCell->m_col];
+        difference = 0-(activeCell->getFrame(0)->left() - activeCell->leftBorder() - m_colPositions[activeCell->m_col]);
     }
 
     if(activeCell->getFrame(0)->right() - activeCell->rightBorder() != 
@@ -309,9 +309,10 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
         col = activeCell->m_col + activeCell->m_cols;
         double difference2 = activeCell->getFrame(0)->right() + activeCell->rightBorder() - m_colPositions[activeCell->m_col + activeCell->m_cols];
 
-    if(difference==difference2) { // we were simply moved.
+    if(difference==0-difference2) { // we were simply moved.
             col=0;
-        } else
+            difference = difference2;
+        } else if(difference2!=0)
             difference = difference2;
     }
 
@@ -358,7 +359,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     if(activeCell->getFrame(0)->top() - activeCell->topBorder() != getPositionOfRow(activeCell->m_row)) {
         // top moved.
         row = activeCell->m_row;
-        difference = activeCell->getFrame(0)->top() - activeCell->topBorder() - getPositionOfRow(row);
+        difference = 0 - (activeCell->getFrame(0)->top() - activeCell->topBorder() - getPositionOfRow(row));
     }
 
     if(activeCell->getFrame(0)->bottom() - activeCell->bottomBorder() != 
@@ -366,9 +367,10 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 
         row = activeCell->m_row + activeCell->m_rows;
         double difference2 = activeCell->getFrame(0)->bottom() + activeCell->bottomBorder() - getPositionOfRow(row);
-        if(difference==difference2) { // we were simply moved.
+        if(difference==0-difference2) { // we were simply moved.
             row=0;
-        } else
+            difference = difference2;
+        } else if( difference2!=0) 
             difference = difference2;
     }
 
@@ -480,11 +482,13 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
         rowNumber++;
     }
 
+    //kdDebug () << "Repositioning from row : " << fromRow << " until: " << untilRow << endl;
+    //kdDebug () << "Repositioning from col > " << redrawFromCol << endl;
     // do positioning.
     Cell *cell;
     bool setMinFrameSize= activeCell->getFrame(0)->isSelected();
     for(cell=m_cells.first();cell;cell=m_cells.next()) {
-        if((cell->m_row >=fromRow && cell->m_row < untilRow) || cell->m_col >= redrawFromCol) 
+        if((cell->m_row + cell->m_rows > fromRow && cell->m_row < untilRow) || cell->m_col + cell->m_cols > redrawFromCol)
             if(setMinFrameSize)
                 position(cell, cell->m_row <= row-1 && cell->m_row + cell->m_rows > row-1);
             else
@@ -740,7 +744,7 @@ void KWTableFrameSet::insertRow( unsigned int newRowNumber,QPtrList<KWFrameSet> 
     if(newRowNumber==0)
         copyFromRow=1;
 
-    m_rows++;
+    unsigned int newRows=++m_rows;
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         Cell *cell = m_cells.at(i);
         if ( cell->m_row >= newRowNumber ) { // move all cells beneath the new row.
@@ -816,40 +820,47 @@ void KWTableFrameSet::insertRow( unsigned int newRowNumber,QPtrList<KWFrameSet> 
         i+=newCell->m_cols;
     }
 
+    m_rows=newRows;
     if ( recalc )
         finalize();
 }
 
-void KWTableFrameSet::insertCol( unsigned int col,QPtrList<KWFrameSet> listFrameSet, QPtrList<KWFrame>listFrame )
-{
-    unsigned int _cols = m_cols;
-    double x=0, width = 60;
-    if(col < m_cols)
-    {
-        // move others out of the way.
-        for(unsigned int i = 0; i < m_cells.count(); i++)
-        {
-            Cell *cell = m_cells.at(i);
-            if(cell->m_col == col)
-                x= cell->getFrame(0)->x();
-            if(cell->m_col >= col)
-            {
-                cell->m_col++;
-            }
-        }
+void KWTableFrameSet::insertCol( unsigned int newColNumber,QPtrList<KWFrameSet> redoFrameset, QPtrList<KWFrame>redoFrame ) {
+
+    double width=60;
+    unsigned int _cols = m_cols++;
+    QValueList<double>::iterator tmp = m_colPositions.at(newColNumber);
+
+for(unsigned int i=0; i < m_colPositions.count() ; i++) {
+   kdDebug()  << i << ": " << m_colPositions[i] << endl;
+}
+kdDebug() << "orig: " <<  *tmp << endl;
+    tmp=m_colPositions.insert(tmp, *tmp);
+    tmp++;
+    while(tmp!=m_colPositions.end()) {
+        (*tmp)= (*tmp)+width;
+        tmp++;
     }
-    else
-    {
-        x = boundingRect().right() + tableCellSpacing;
+for(unsigned int i=0; i < m_colPositions.count() ; i++) {
+ kdDebug()  << i << ": " << m_colPositions[i] << endl;
+}
+
+    for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
+        Cell *cell = m_cells.at(i);
+        if ( cell->m_col >= newColNumber)  // move all cells beneath the new row.
+            cell->m_col++;
+        int moveFrom=newColNumber-1;
+        if ( cell->m_col >= moveFrom )
+            position(cell);
     }
 
     for( unsigned int i = 0; i < getRows(); i++ ) {
         int rows;
         double height;
         Cell *cell;
-        if(col > 0 ) {
-            cell = getCell(i, col-1);
-            if(cell->m_col + cell->m_cols > col) {
+        if(newColNumber > 0 ) {
+            cell = getCell(i, newColNumber-1);
+            if(cell->m_col + cell->m_cols > newColNumber) {
                 // cell overlaps the new column
                 cell->m_cols++;
                 cell->getFrame(0)->setWidth(cell->getFrame(0)->width() + width + tableCellSpacing - 1);
@@ -859,45 +870,42 @@ void KWTableFrameSet::insertCol( unsigned int col,QPtrList<KWFrameSet> listFrame
             height = cell->getFrame(0)->height();
         } else {
             rows = 1;
-            cell = getCell(i, col+1);
+            cell = getCell(i, newColNumber+1);
             height = cell->getFrame(0)->height();
         }
         Cell *newCell=0L;
-        if(listFrameSet.isEmpty())
-            newCell = new Cell( this, i, col, QString::null );
+        if(redoFrameset.isEmpty())
+            newCell = new Cell( this, i, newColNumber, QString::null );
         else
         {
-            //when we add a column which has just a cell
-            // for example when we split a cell
-            // so we have a new column, but this column
-            //has just a cell.
-            if( i<listFrameSet.count())
+            if( i<redoFrameset.count())
             {
-                newCell = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
+                newCell = static_cast<KWTableFrameSet::Cell*> (redoFrameset.at(i));
                 addCell( newCell );
             }
             else
             {
-                newCell =getCell(i,col-1);
+                newCell =getCell(i,newColNumber-1);
                 newCell->m_cols=newCell->m_cols+1;
                 continue;
             }
         }
         KWFrame *frame = 0L;
-        if(listFrame.isEmpty())
+        if(redoFrame.isEmpty())
         {
-            frame=new KWFrame(newCell, x, cell->getFrame(0)->y(), width, height, KWFrame::RA_NO );
+            frame=new KWFrame(newCell, 1, 1, width, 20, KWFrame::RA_NO ); // dummy values..
             frame->setFrameBehaviour(KWFrame::AutoExtendFrame);
         }
         else
         {
-            frame=listFrame.at(i)->getCopy();
+            frame=redoFrame.at(i)->getCopy();
         }
         newCell->addFrame( frame,false );
         if(cell->m_rows >1) {
             newCell->m_rows = cell->m_rows;
             i+=cell->m_rows -1;
         }
+        position(newCell);
     }
 
     m_cols = ++_cols;
