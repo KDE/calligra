@@ -216,6 +216,9 @@ public:
 
   bool hasSelectedFrame();
 
+  bool isVisible() { return visible; }
+  void setVisible(bool v) { visible = v; }
+  
 protected:
   virtual void init()
     {;}
@@ -229,7 +232,7 @@ protected:
   FrameInfo frameInfo;
   int current;
   KWGroupManager *grpMgr;
-  bool removeableHeader;
+  bool removeableHeader,visible;
 
 };
 
@@ -403,7 +406,7 @@ public:
   unsigned int getNumCells() { return cells.count(); }
   Cell *getCell(int i) { return cells.at(i); }
   Cell *getCell(unsigned int row,unsigned int col);
-  
+
   bool hasSelectedFrame();
 
   void moveBy(unsigned int dx,unsigned int dy);
@@ -432,9 +435,9 @@ public:
   bool hasTempHeaders() { return hasTmpHeaders; }
 
   void ungroup();
-  
+
   bool isActive() { return active; }
-  
+
   bool joinCells();
 
 protected:
@@ -444,7 +447,7 @@ protected:
   QString name;
   bool showHeaderOnAllPages,hasTmpHeaders;
   bool active;
-  
+
 };
 
 bool isAHeader(FrameInfo fi);

@@ -1113,7 +1113,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
       if (getGroupManager(i)->isActive())
 	getGroupManager(i)->init();
     }
-  
+
   KWordChild *ch = 0L;
   for (ch = m_lstChildren.first();ch != 0;ch = m_lstChildren.next())
     {
@@ -1621,6 +1621,9 @@ KWParag* KWordDocument::findFirstParagOfRect(unsigned int _ypos,unsigned int _pa
 bool KWordDocument::printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,
 			      bool _viewFormattingChars = false,bool _drawVarBack = true)
 {
+  if (!getFrameSet(_fc.getFrameSet() - 1)->isVisible())
+    return false;
+  
   _painter.save();
 
   unsigned int xShift = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left();
@@ -1887,6 +1890,8 @@ void KWordDocument::printBorders(QPainter &_painter,int xOffset,int yOffset,int 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
       frameset = getFrameSet(i);
+      if (!frameset->isVisible()) continue;
+      
       if (isAHeader(getFrameSet(i)->getFrameInfo()) && !hasHeader() ||
 	  isAFooter(getFrameSet(i)->getFrameInfo()) && !hasFooter() ||
 	  isAWrongHeader(getFrameSet(i)->getFrameInfo(),getHeaderType()) ||
@@ -2972,6 +2977,7 @@ void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,
       printBorders(*painter,0,i * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
       for (j = 0;j < frames.count();j++)
 	{
+	  if (!getFrameSet(j)->isVisible()) continue;
 	  if (isAHeader(getFrameSet(j)->getFrameInfo()) && !hasHeader() ||
 	      isAFooter(getFrameSet(j)->getFrameInfo()) && !hasFooter() ||
 	      isAWrongHeader(getFrameSet(j)->getFrameInfo(),getHeaderType()) ||

@@ -336,7 +336,7 @@ void KWFormatContext::cursorGotoLeft( QPainter &_painter )
 void KWFormatContext::cursorGotoUp( QPainter &_painter )
 {
   int frm = frame;
-  
+
     if (!during_vertical_cursor_movement){
 	WantedPtPos = ptPos;
     }
@@ -416,10 +416,10 @@ void KWFormatContext::cursorGotoDown( QPainter &_painter )
 	ptY += getLineHeight();
 	makeLineLayout( _painter );
     }
-    
+
     if (frm != frame)
       WantedPtPos = ptStartPos; //doc->getFrameSet(frameSet - 1)->getFrame(frame - 1)->left();
-    
+
     cursorGotoLineStart( _painter );
     while (ptPos < WantedPtPos &&
 	   !isCursorAtLineEnd() ){
@@ -805,6 +805,9 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
 
 bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 {
+  if (!document->getFrameSet(frameSet - 1)->isVisible())
+    return false;
+  
   if ( lineEndPos == parag->getTextLen() )
     {
       if ( parag->getNext() == 0L || outOfFrame)
@@ -830,6 +833,9 @@ bool KWFormatContext::makeNextLineLayout( QPainter &_painter )
 
 bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects = true, bool _checkTabs = true )
 {
+    if (!document->getFrameSet(frameSet - 1)->isVisible())
+      return false;
+
     int _left = 0,_right = 0;
 
     // Reggie: DAMN SLOW HACK !!!!!!!

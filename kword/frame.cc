@@ -345,7 +345,7 @@ QString KWFrame::bottomBrd2String()
 
 /*================================================================*/
 KWFrameSet::KWFrameSet(KWordDocument *_doc)
-  : frames(), removeableHeader(false)
+  : frames(), removeableHeader(false), visible(true)
 {
   doc = _doc;
   frames.setAutoDelete(true);
@@ -1451,7 +1451,7 @@ void KWGroupManager::addFrameSet(KWFrameSet *fs,unsigned int row,unsigned int co
   cell->col = col;
   cell->rows = 1;
   cell->cols = 1;
-  
+
   cells.insert(i,cell);
 }
 
@@ -1593,13 +1593,13 @@ void KWGroupManager::recalcCols()
 	}
       x = getFrameSet(0,i)->getFrame(0)->right() + 3;
     }
-  
+
   QList<int> ws;
   ws.setAutoDelete(true);
 
   for (unsigned int i = 0;i < cols;i++)
     ws.append(new int(getFrameSet(0,i)->getFrame(0)->width()));
-  
+
   for (unsigned int i = 0;i < rows;i++)
     {
       {
@@ -1608,15 +1608,13 @@ void KWGroupManager::recalcCols()
 	    Cell *cell = getCell(i,j);
 	    if (cell->cols != 1)
 	      {	
-		if (cell->cols == 0)
-		  cell->frameSet->getFrame(0)->setWidth(30);
-		else 
+		if (cell->cols > 0)
 		  {
 		    int w = 0;
 		    for (unsigned int k = 0;k < cell->cols;k++)
 		      w += *ws.at(k);
-		    
-		    cell->frameSet->getFrame(0)->setWidth(w);
+		
+		    cell->frameSet->getFrame(0)->setWidth(w + (cell->cols - 2) * 2 + 2);
 		  }
 	      }
 	  }
@@ -2023,10 +2021,10 @@ void KWGroupManager::ungroup()
 {
   for (unsigned int i = 0;i < cells.count();i++)
     cells.at(i)->frameSet->setGroupManager(0L);
-  
+
   cells.setAutoDelete(false);
   cells.clear();
-  
+
   active = false;
 }
 
@@ -2037,7 +2035,7 @@ bool KWGroupManager::joinCells()
 
   unsigned int col,row;
   if (!isOneSelected(0L,row,col)) return false;
-  
+
   bool enough = false;
   Orientation orient = Horizontal;
 
@@ -2061,10 +2059,10 @@ bool KWGroupManager::joinCells()
       enough = true;
       orient = Vertical;
     }
-  
+
   QList<Cell> _cells;
   _cells.setAutoDelete(false);
-  
+
   if (enough)
     {
       switch (orient)
@@ -2081,14 +2079,14 @@ bool KWGroupManager::joinCells()
 		else
 		  cell = 0L;
 	      }
-	    if (col + 1 >= cols - 1) break;
-	    
+	    if (col + 1 > cols - 1) break;
+	
 	    cell = getCell(row,col + 1);
 	    tmpCol = col + 1;
 	    while (cell && cell->frameSet->getFrame(0)->isSelected())
 	      {
 		_cells.append(cell);
-		if (++tmpCol < cols - 1)
+		if (++tmpCol <= cols - 1)
 		  cell = getCell(row,tmpCol);
 		else
 		  cell = 0L;
@@ -2106,25 +2104,25 @@ bool KWGroupManager::joinCells()
 		else
 		  cell = 0L;
 	      }
-	    if (row + 1 >= rows - 1) break;
-	    
+	    if (row + 1 > rows - 1) break;
+	
 	    cell = getCell(row + 1,col);
 	    tmpRow = row + 1;
 	    while (cell && cell->frameSet->getFrame(0)->isSelected())
 	      {
 		_cells.append(cell);
-		if (++tmpRow < rows - 1)
+		if (++tmpRow <= rows - 1)
 		  cell = getCell(tmpRow,col);
 		else
 		  cell = 0L;
 	      }
 	  } break;
 	}
-      
+
       // this just can't happen :-)
       if (_cells.count() < 1)
 	return false;
-      
+
       switch (orient)
 	{
 	case Horizontal:
@@ -2132,7 +2130,10 @@ bool KWGroupManager::joinCells()
 	    Cell *cell = _cells.first();
 	    cell->cols = _cells.count();
 	    for (cell = _cells.next();cell != 0;cell = _cells.next())
-	      cell->cols = 0;
+	      {
+		cell->cols = 0;
+		cell->frameSet->setVisible(false);
+	      }
 	    recalcCols();
 	  } break;
 	case Vertical:
@@ -2140,10 +2141,13 @@ bool KWGroupManager::joinCells()
 	    Cell *cell = _cells.first();
 	    cell->rows = _cells.count();
 	    for (cell = _cells.next();cell != 0;cell = _cells.next())
-	      cell->rows = 0;
+	      {
+		cell->frameSet->setVisible(false);
+		cell->rows = 0;
+	      }
 	  } break;
 	}
-      
+
       return true;
     }
 

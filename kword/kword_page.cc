@@ -845,7 +845,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	for (unsigned int i = 0;i < doc->getNumGroupManagers();i++)
 	  {
 	    if (!doc->getGroupManager(i)->isActive()) continue;
-	    
+	
 	    doc->getGroupManager(i)->recalcCols();
 	    doc->getGroupManager(i)->recalcRows(p);
 	  }
@@ -2627,7 +2627,8 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
   for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
       frameset = doc->getFrameSet(i);
-
+      if (!frameset->isVisible()) continue;
+      
       if (isAHeader(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasHeader() ||
 	  isAFooter(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasFooter() ||
 	  isAWrongHeader(doc->getFrameSet(i)->getFrameInfo(),doc->getHeaderType()) ||

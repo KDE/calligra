@@ -981,3 +981,8 @@ Reggie, 25.3.1999:
   - Joining in horizontal direction works sort of - but
     some strange things are still going on here ;-)
 - Made some menu items functional
+
+Reggie, 26.3.1999:
+------------------
+- Joining table cells in horizontal direction works quite well now
+  (at least it doesn't crash anymore and resizes correctly :-)
