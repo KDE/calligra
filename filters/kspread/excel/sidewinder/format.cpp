@@ -151,6 +151,7 @@ bool FormatFont::strikeout() const
 void FormatFont::setStrikeout( bool s )
 {
   d->strikeout = s;
+  d->null = false;
 }
 
 bool FormatFont::subscript() const
@@ -161,6 +162,7 @@ bool FormatFont::subscript() const
 void FormatFont::setSubscript( bool s )
 {
   d->subscript = s;
+  d->null = false;
 
   // mutually exclusive
   if( d->subscript && d->superscript )
@@ -175,6 +177,7 @@ bool FormatFont::superscript() const
 void FormatFont::setSuperscript( bool s )
 {
   d->superscript = s;
+  d->null = false;
 
   // mutually exclusive
   if( d->superscript && d->subscript )
