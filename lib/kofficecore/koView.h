@@ -27,7 +27,6 @@
 
 class QAction;
 class QActionCollection;
-
 class KoDocument;
 class KoDocumentChild;
 class KoViewPrivate;
@@ -193,8 +192,8 @@ public:
   KoViewChild( KoDocumentChild *child, KoFrame *frame );
   virtual ~KoViewChild();
 
-  KoDocumentChild *documentChild() const { return m_child; }
-  KoFrame *frame() const { return m_frame; }
+  QGuardedPtr<KoDocumentChild> documentChild() const { return m_child; }
+  QGuardedPtr<KoFrame> frame() const { return m_frame; }
 
 private:
   QGuardedPtr<KoDocumentChild> m_child;
