@@ -8,9 +8,9 @@ LDADD = ../../lib/kofficeui/libkofficeui.la ../kdb/libkdb.la
  
 bin_PROGRAMS = ktables
 
-ktables_SOURCES = ktables.idl tableselectdata.cpp tableselect.cpp ktables_server.cpp \
+ktables_SOURCES = ktables.idl tableselectdata.cpp tableselect.cpp \
+	ktables_server.cpp ktables_shell.cpp ktables_main.cpp \
 	ktables_view.cpp ktables_doc.cpp main.cpp \
-	ktables_shell.cpp ktables_main.cpp \
 	propertyeditor.cpp propertyitem.cpp \
 	querydialog.cpp queryselect.cpp
 
@@ -21,8 +21,7 @@ noinst_HEADERS = tableselect.h ktables_server.h ktables_view.h \
 
 METASOURCES = tableselect.moc ktables_server.moc ktables_doc.moc \
 	ktables_view.moc ktables_shell.moc ktables_main.moc \
-	propertyeditor.moc propertyitem.moc \
-	querydialog.moc queryselect.moc
+	propertyeditor.moc querydialog.moc queryselect.moc 
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(ktables_SOURCES) -o ../po/ktables.pot
