@@ -4476,9 +4476,10 @@ void KWView::slotFrameSetEditChanged()
         goodleftMargin=(edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft]>0);
 
     actionFormatDecreaseIndent->setEnabled(goodleftMargin && state);
-
-    actionFormatBullet->setEnabled((rw && edit && !edit->textFrameSet()->isFootEndNote())||(!edit&& rw));
-    actionFormatNumber->setEnabled((rw && edit && !edit->textFrameSet()->isFootEndNote())||(!edit && rw ));
+    bool isFootNoteSelected = ((rw && edit && !edit->textFrameSet()->isFootEndNote())||(!edit&& rw));
+    actionFormatBullet->setEnabled(isFootNoteSelected);
+    actionFormatNumber->setEnabled(isFootNoteSelected);
+    actionFormatStyle->setEnabled(isFootNoteSelected);
     actionFormatSuper->setEnabled(rw);
     actionFormatSub->setEnabled(rw);
     actionFormatParag->setEnabled(state);
@@ -4528,8 +4529,7 @@ void KWView::frameSelectedChanged()
             bool isFootNote = it.current()->frameSet()->isFootEndNote();
             bool headerFooterFootNote = it.current()->frameSet()->isHeaderOrFooter() || isFootNote;
             bool isMainWPFrame = it.current()->frameSet()->isMainFrameset();
-            if ( isFootNote )
-                okForChangeParagStyle = false;
+            okForChangeParagStyle &= !isFootNote;
 
             okForDelete &= !headerFooterFootNote;
             okForDelete &= !isMainWPFrame;
@@ -4548,6 +4548,7 @@ void KWView::frameSelectedChanged()
         actionBringToFront->setEnabled( okForLowerRaise );
         actionFormatBullet->setEnabled( okForChangeParagStyle );
         actionFormatNumber->setEnabled( okForChangeParagStyle );
+        actionFormatStyle->setEnabled( okForChangeParagStyle);
 
     } else
     {   // readonly document, or no frame selected -> disable
