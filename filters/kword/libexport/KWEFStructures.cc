@@ -40,18 +40,14 @@ TableCell::~TableCell ( void )
 #endif
 }
 
-
-void Table::addCell ( int                   c,
-                      int                   r,
-                      QValueList<ParaData> &p,
-                      FrameData            &frameData )
+void Table::addCell ( int c, int r, int _cols, int _rows, QValueList<ParaData> &p, FrameData &frameData )
 {
-   if ( c + 1 > cols )
+   if ( c + _cols > cols )
    {
-      cols = c + 1;
+      cols = c + _cols;
    }
 
-   cellList << TableCell ( c, r, new QValueList<ParaData> (p), frameData );
+   cellList << TableCell ( c, r, _cols, _rows, new QValueList<ParaData> (p), frameData );
 }
 
 bool TabulatorData::operator == (const TabulatorData& other) const

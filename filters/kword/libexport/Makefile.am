@@ -2,7 +2,7 @@
 
 INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
 
-libkwordexportfilters_la_LDFLAGS = $(all_libraries) -version-info 1:0:0 -no-undefined
+libkwordexportfilters_la_LDFLAGS = $(all_libraries) -version-info 1:1:0 -no-undefined
 
 libkwordexportfilters_la_LIBADD = $(KOFFICE_LIBS)
 

@@ -95,20 +95,6 @@ static FrameAnchor *findAnchor ( const KoPictureKey& key,
     return NULL;
 }
 
-static ParaData createTableMgr( const QString& grpMgr )
-{
-    ParaData  pData;
-    LayoutData lData;
-    FormatData fData;
-    fData.id = 6;
-    fData.frameAnchor.key  = KoPictureKey( grpMgr );
-    fData.frameAnchor.type = 6;
-    lData.formatData = fData;
-    pData.layout = lData;
-    pData.formattingList << fData;
-    return pData;
-}
-
 static void ProcessHardBrkTag ( QDomNode myNode, void* tagData, KWEFKWordLeader* )
 {
     // <HARDBRK>
@@ -364,6 +350,19 @@ static void ProcessImageTag ( QDomNode         myNode,
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
+static void ProcessTableAnchor( QDomNode myNode, KWEFKWordLeader *leader, FrameAnchor* frameAnchor,
+    const int col, const int row, const int cols, const int rows )
+{
+    frameAnchor->type = 6; // Table
+
+    QValueList<ParaData> cellParaList;
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "FRAME",     ProcessFrameTag,     frameAnchor   )
+                        << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, &cellParaList );
+    ProcessSubtags (myNode, tagProcessingList, leader);
+
+    frameAnchor->table.addCell (col, row, cols, rows, cellParaList, frameAnchor->frame);
+}
 
 static void ProcessFramesetTag ( QDomNode        myNode,
                                 void            *tagData,
@@ -488,27 +487,21 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             {
                 if ( col != -1 && row != -1 )
                 {
-                    if ( cols == 1 && rows == 1 )
+                    if ( cols > 0 && rows > 0 )
                     {
 #if 0
                         kdDebug (30508) << "DEBUG - FRAMESET: table " << name << " col, row = "
                                         << col << ", " << row << ", Mgr = "<< grpMgr << endl;
 #endif
                         FrameAnchor *frameAnchor = findAnchor (grpMgr, *paraList);
-                        if ( !frameAnchor ) {
-                            *paraList << createTableMgr( grpMgr );
-                            frameAnchor = &paraList->last().formattingList.first().frameAnchor;
+                        if ( frameAnchor )
+                        {
+                            ProcessTableAnchor( myNode, leader, frameAnchor, col, row, cols, rows );
                         }
-
-                        frameAnchor->type = 6;
-
-                        QValueList<ParaData> cellParaList;
-                        QValueList<TagProcessing> tagProcessingList;
-                        tagProcessingList << TagProcessing ( "FRAME",     ProcessFrameTag,     frameAnchor   )
-                                          << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, &cellParaList );
-                        ProcessSubtags (myNode, tagProcessingList, leader);
-
-                        frameAnchor->table.addCell (col, row, cellParaList, frameAnchor->frame);
+                        else
+                        {
+                            // ### TODO: non-inlined table?
+                        }
                     }
                     else
                     {

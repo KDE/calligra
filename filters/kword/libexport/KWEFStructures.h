@@ -159,19 +159,18 @@ class ParaData;
 class TableCell
 {
    public:
-      TableCell (): col( 0 ), row( 0 ), m_rows( 1 ), m_cols( 1 ), paraList( 0 ) {}
+      TableCell (): col( 0 ), row( 0 ), m_cols( 0 ), m_rows( 0 ), paraList( 0 ) {}
 
-      TableCell ( int                   c,
-                  int                   r,
-                  QValueList<ParaData> *p,
-                  FrameData &frameData  ) : col (c), row (r), m_rows( 1 ), m_cols( 1 ), paraList (p), frame (frameData) {}
+      /// \since 1.4 (changes of parameters)
+      TableCell ( int c, int r, int _cols, int _rows, QValueList<ParaData> *p, FrameData &frameData  )
+         : col (c), row (r), m_cols( _cols ), m_rows( _rows ), paraList (p), frame (frameData) {}
 
       ~TableCell ();
 
       int                   col;
       int                   row;
-      int m_rows; ///< \todo
-      int m_cols; ///< \todo
+      int m_cols; ///< \since 1.4
+      int m_rows; ///< \since 1.4
       QValueList<ParaData> *paraList;
       FrameData   frame;
 };
@@ -182,10 +181,8 @@ class Table
    public:
       Table () : cols (0) {}
 
-      void addCell ( int                   c,
-                     int                   r,
-                     QValueList<ParaData> &p,
-                     FrameData &frameData  );
+      /// \since 1.4 (change of parameters)
+      void addCell ( int c, int r, int _cols, int _rows, QValueList<ParaData> &p, FrameData &frameData );
 
       int                   cols;
       QValueList<TableCell> cellList;
