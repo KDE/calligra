@@ -73,7 +73,7 @@ public:
     QRadioButton *m_rbTemplates;
     QRadioButton *m_rbFile;
     QRadioButton *m_rbEmpty;
-    QLabel *m_lFile;
+    QString m_file;
     QPushButton *m_bFile;
     QPushButton *m_ok;
     QTabWidget *m_tabs;
@@ -194,9 +194,7 @@ void KoTemplateChooseDia::getGroups()
 /*================================================================*/
 void KoTemplateChooseDia::setupTabs()
 {
-    d->m_grid = new QGridLayout( this, 10, 1, 7 , 7 );
-    d->m_grid->setMargin(KDialog::marginHint());
-    d->m_grid->setSpacing(KDialog::spacingHint());
+    d->m_grid = new QGridLayout( this, 8, 1, KDialog::marginHint() , KDialog::spacingHint() );
 
     QFrame *line;
 
@@ -239,35 +237,28 @@ void KoTemplateChooseDia::setupTabs()
     d->m_grid->addWidget( line, 3, 0 );
 
     if ( d->m_dialogType!=OnlyTemplates ) {
-	d->m_rbFile = new QRadioButton( i18n( "&Open an existing document" ), this );
-	connect( d->m_rbFile, SIGNAL( clicked() ), this, SLOT( openFile() ) );
-	d->m_grid->addWidget( d->m_rbFile, 4, 0 );
-		
 	QHBox *row = new QHBox( this );
-	row->setMargin(KDialog::marginHint());
-	row->setSpacing(KDialog::spacingHint());
-	d->m_lFile = new QLabel( i18n( "No File" ), row );
-	d->m_lFile->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+	d->m_rbFile = new QRadioButton( i18n( "&Open an existing document" ), row );
+	connect( d->m_rbFile, SIGNAL( clicked() ), this, SLOT( openFile() ) );
 	d->m_bFile = new QPushButton( i18n( "Choose..." ), row );
-	d->m_lFile->setMaximumHeight( d->m_bFile->sizeHint().height() );
 	d->m_bFile->setMaximumSize( d->m_bFile->sizeHint() );
 	row->setMaximumHeight( d->m_bFile->sizeHint().height() + 10 );
 	connect( d->m_bFile, SIGNAL( clicked() ), this, SLOT( chooseFile() ) );
-	d->m_grid->addWidget( row, 5, 0 );
+	d->m_grid->addWidget( row, 4, 0 );
 		
 	line = new QFrame( this );
 	line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 	line->setMaximumHeight( 20 );
-	d->m_grid->addWidget( line, 6, 0 );
+	d->m_grid->addWidget( line, 5, 0 );
 		
 	d->m_rbEmpty = new QRadioButton( i18n( "Start with an &empty document" ), this );
 	connect( d->m_rbEmpty, SIGNAL( clicked() ), this, SLOT( openEmpty() ) );
-	d->m_grid->addWidget( d->m_rbEmpty, 7, 0 );
+	d->m_grid->addWidget( d->m_rbEmpty, 6, 0 );
 		
 	line = new QFrame( this );
 	line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 	line->setMaximumHeight( 20 );
-	d->m_grid->addWidget( line, 8, 0 );
+	d->m_grid->addWidget( line, 7, 0 );
 	openEmpty();
     }
 }
@@ -298,9 +289,7 @@ void KoTemplateChooseDia::chosen()
 	
     } else if ( d->m_dialogType!=OnlyTemplates && d->m_rbFile->isChecked() ) {
 	d->m_returnType = File;
-
-	QString fileName = d->m_lFile->text();
-	d->m_fullTemplateName = d->m_templateName = fileName;
+	d->m_fullTemplateName = d->m_templateName = d->m_file;
 	accept();
     } else if ( d->m_dialogType!=OnlyTemplates && d->m_rbEmpty->isChecked() ) {
 	d->m_returnType = Empty;
@@ -339,7 +328,7 @@ void KoTemplateChooseDia::openFile()
     d->m_rbFile->setChecked( TRUE );
     d->m_rbEmpty->setChecked( FALSE );
 
-    d->m_ok->setEnabled( QFile::exists( d->m_lFile->text() ) );
+    d->m_ok->setEnabled( QFile::exists( d->m_file ) );
 }
 
 /*================================================================*/
@@ -358,8 +347,8 @@ void KoTemplateChooseDia::chooseFile()
 {
     // Use dir from currently selected file
     QString dir = QString::null;
-    if ( QFile::exists( d->m_lFile->text() ) )
-	dir = QFileInfo( d->m_lFile->text() ).absFilePath();
+    if ( QFile::exists( d->m_file ) )
+	dir = QFileInfo( d->m_file ).absFilePath();
 
     KURL u = KFileDialog::getOpenURL( dir, d->m_strImportFilter );
     QString filename = u.path();
@@ -376,9 +365,9 @@ void KoTemplateChooseDia::chooseFile()
     if ( ok )
     {
 	if (local)
-            d->m_lFile->setText( filename );
+            d->m_file=filename;
         else
-            d->m_lFile->setText( url );
+            d->m_file=url;
         openFile();
 	chosen();
     }

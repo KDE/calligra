@@ -46,9 +46,9 @@ const bool OLEFilter::filter(const QCString &fileIn, const QCString &fileOut,
        to!="application/x-kspread" &&
        to!="application/x-kpresenter")
         return false;
-    if(from!="application/x-winword97" &&
-       from!="application/x-excel97" &&
-       from!="application/x-powerpoint97")
+    if(from!="application/vnd.ms-word" &&
+       from!="application/vnd.ms-excel" &&
+       from!="application/mspowerpoint")
         return false;
 
     QFile in(fileIn);
