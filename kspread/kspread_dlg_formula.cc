@@ -654,7 +654,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 
 void KSpreadDlgFormula::slotSelected( const QString& function )
 {
-    KSpreadFunctionDescription* desc = 
+    KSpreadFunctionDescription* desc =
        KSpreadFunctionRepository::self()->functionInfo( function );
     if ( !desc )
     {
@@ -673,6 +673,7 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
 
     // Set the help text
     m_browser->setText( m_desc->toQML() );
+    m_browser->setContentsPos( 0, 0 );
 
     m_focus=0;
 
@@ -686,7 +687,7 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
 // from hyperlink in the "Related Function"
 void KSpreadDlgFormula::slotShowFunction( const QString& function )
 {
-    KSpreadFunctionDescription* desc = 
+    KSpreadFunctionDescription* desc =
        KSpreadFunctionRepository::self()->functionInfo( function );
     if ( !desc ) return;
 
