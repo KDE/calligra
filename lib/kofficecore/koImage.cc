@@ -21,6 +21,7 @@
 #include <qdom.h>
 #include <qfileinfo.h>
 #include <assert.h>
+#include <qpainter.h>
 
 class KoImagePrivate : public QShared
 {
@@ -141,6 +142,44 @@ KoImage KoImage::scale( const QSize &size ) const
     result.d->m_originalImage = originalImage;
 
     return result;
+}
+
+void KoImage::draw( QPainter& painter, int x, int y, int width, int height, int sx, int sy, int sw, int sh ) const
+{
+    if ( !d )
+        return;
+    QSize currentSize = size();
+    if ( currentSize.width() == 0 || currentSize.height() == 0 )
+        return;
+    if ( width == 0 || height == 0 )
+        return;
+    QSize origSize = originalSize();
+    bool scaleImage = painter.device()->isExtDev() // we are printing
+                      && ( currentSize.width() < origSize.width()
+                           || currentSize.height() < origSize.height() );
+    if( scaleImage ) {
+        // use full resolution of image
+        double xScale = double(width) / double(origSize.width());
+        double yScale = double(height) / double(origSize.height());
+
+        painter.save();
+        painter.translate( x, y );
+        painter.scale( xScale, yScale );
+         // Note that sx, sy, sw and sh are unused in this case. Not a problem, since it's about printing.
+        painter.drawPixmap( 0, 0, d->m_originalImage.pixmap() );
+        painter.restore();
+
+    } else {
+        QPixmap pix;
+        QSize screenSize( width, height );
+        if ( screenSize != currentSize )
+            pix = scale( screenSize ).pixmap();
+        else
+            pix = pixmap();
+        // sx,sy,sw,sh is meant to be used as a cliprect on the pixmap, but drawPixmap
+        // translates it to the (x,y) point -> we need (x+sx, y+sy).
+        painter.drawPixmap( x + sx, y + sy, pix, sx, sy, sw, sh );
+    }
 }
 
 //////////

@@ -26,6 +26,7 @@
 class KoImagePrivate;
 class QDomElement;
 class QDomDocument;
+class QPainter;
 
 /**
  * KoImageKey is the structure describing an image in a unique way.
@@ -196,6 +197,20 @@ public:
      * very original image, to provide best scaling quality.
      */
     KoImage scale( const QSize &size ) const;
+
+    /**
+     * Draw the image in a painter.
+     * No, this isn't as simple as painter.drawPixmap().
+     * This method ensures that the best quality is used when printing, scaling the painter.
+     *
+     * The parameters @p width, @p height define the desired size for the image
+     * The other parameters are very similar to QPainter::drawPixmap :
+     * (@p x, @p y) define the position in the painter,
+     * (@p sx, @p sy) specify the top-left point in pixmap that is to be drawn. The default is (0, 0).
+     * (@p sw, @p sh) specify the size of the pixmap that is to be drawn. The default, (-1, -1), means all the way to the bottom
+     * right of the pixmap.
+     */
+    void draw( QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1 ) const;
 
 private:
     KoImagePrivate *d;
