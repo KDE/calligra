@@ -162,7 +162,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		/*! Invalidates action availability for current application state.
 		 These actions are dependent on curently selected dialog. */
-		void invalidateSharedActions(QWidget *w);
+		virtual void invalidateSharedActions(QObject *o);
 
 		/*! Invalidates action availability for current application state.
 		 These actions only depend on project availability, not on curently selected dialog. */

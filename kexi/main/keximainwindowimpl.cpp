@@ -728,16 +728,16 @@ void KexiMainWindowImpl::invalidateActions()
 	invalidateSharedActions();
 }
 
-void KexiMainWindowImpl::invalidateSharedActions(QWidget *w)
+void KexiMainWindowImpl::invalidateSharedActions(QObject *o)
 {
 	//TODO: enabling is more complex...
 /*	d->action_edit_cut->setEnabled(true);
 	d->action_edit_copy->setEnabled(true);
 	d->action_edit_paste->setEnabled(true);*/
 
-	if (!w)
-		w = focusWindow();
-	KexiSharedActionHost::invalidateSharedActions(w);
+	if (!o)
+		o = focusWindow();
+	KexiSharedActionHost::invalidateSharedActions(o);
 }
 
 void KexiMainWindowImpl::invalidateSharedActions()
@@ -2583,9 +2583,10 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 		needsUpdateViewGUIClient = false;
 	}
 	else {
+		d->updatePropEditorVisibility(viewMode);
 		dlg = d->prj->openObject(this, *item, viewMode);
-		if (dlg)
-			d->updatePropEditorVisibility(dlg->currentViewMode());
+//moved up		if (dlg)
+//			d->updatePropEditorVisibility(dlg->currentViewMode());
 	}
 
 	if (!dlg || !activateWindow(dlg)) {

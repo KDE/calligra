@@ -92,7 +92,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	connect(m_list, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelectionChanged(QListViewItem*)));
 //	connect(m_list, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotClicked(QListViewItem*)));
 
-	connect(m_list, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
+//moved to event filter	connect(m_list, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 	connect(m_list, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
 //	connect(m_list->renameLineEdit(), SIGNAL(done(QListViewItem *, int)), this, SLOT(slotItemRenameDone(QListViewItem *, int)));
 //	connect(m_list, SIGNAL(itemRenamed(QListViewItem*)), this, SLOT(slotItemRenamed(QListViewItem*)));
@@ -316,13 +316,24 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 			ke->accept();
 			return true;
 		}
+		else if (ke->key()==Key_Enter || ke->key()==Key_Return) {
+			if (ke->state()==ControlButton) {
+				slotDesignObject();
+			}
+			else if (ke->state()==0) {
+				QListViewItem *it = m_list->selectedItem();
+				if (it)
+					slotExecuteItem(it);
+			}
+			ke->accept();
+			return true;
+		}
 	}
 	return false;
 }
 
 void KexiBrowser::slotRemove()
 {
-//	kdDebug() << "KexiBrowser::slotRemove()" << endl;
 	if (!isAvailable("edit_delete"))
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
@@ -333,7 +344,6 @@ void KexiBrowser::slotRemove()
 
 void KexiBrowser::slotNewObject()
 {
-//	kdDebug() << "KexiBrowser::slotNewObject()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->info())
 		return;
