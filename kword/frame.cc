@@ -610,10 +610,21 @@ void KWTextFrameSet::updateCounters()
 	      p->makeCounterText();
 	      for (i = p->getParagLayout()->getCounterDepth() + 1;i < 16;i++)
 		counterData[i] = -2;
+	      if (listData[0] != -2)
+		{
+		  for (i = 0;i < 16;i++)
+		    listData[i] = -2;
+		}
 	    }
 	  else
 	    {
-	      listData[p->getParagLayout()->getCounterDepth()]++;
+	      if (p->getParagLayout()->getCounterType() != KWParagLayout::CT_BULLET)
+		listData[p->getParagLayout()->getCounterDepth()]++;
+	      else if (listData[0] != -2)
+		{
+		  for (i = 0;i < 16;i++)
+		    listData[i] = -2;
+		}
 	      for (i = 0;i < 16;i++)
 		{
 		  if (listData[i] < 0)

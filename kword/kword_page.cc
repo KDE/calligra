@@ -2093,3 +2093,38 @@ void KWPage::applyStyle(QString _style)
   recalcCursor(); 
   recalcAll = false; 
 }
+/*================================================================*/
+void KWPage::setEnumList()
+{
+  int f = doc->getApplyStyleTemplate();
+  doc->setApplyStyleTemplate(KWordDocument::U_NUMBERING);
+
+  applyStyle("Enumerated List");
+
+  doc->setApplyStyleTemplate(f);
+  gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
+}
+
+/*================================================================*/
+void KWPage::setBulletList()
+{
+  int f = doc->getApplyStyleTemplate();
+  doc->setApplyStyleTemplate(KWordDocument::U_NUMBERING);
+
+  applyStyle("Bullet List");
+
+  doc->setApplyStyleTemplate(f);
+  gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
+}
+
+/*================================================================*/
+void KWPage::setNormalText()
+{
+  int f = doc->getApplyStyleTemplate();
+  doc->setApplyStyleTemplate(KWordDocument::U_NUMBERING);
+
+  applyStyle("Standard");
+
+  doc->setApplyStyleTemplate(f);
+  gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName());
+}

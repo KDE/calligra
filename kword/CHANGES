@@ -381,9 +381,15 @@ Reggie, 22.11.1998:
   The style template stuff starts working now - there are still lots of bugs and problems in it on which I will
   work tomorrow.
 
-Reggie, 22.11.1998:
+Reggie, 23.11.1998:
 -------------------
 - Fixed some code which produced memory leaks
 - The following style template (parag layout) can be defined
 - Applying/Updating style templates much works better now (but I have still to do some stuff here)
 - More internal work (esp. fixes) with style templates
+
+Reggie, 24.11.1998:
+-------------------
+- More work on updating/applying style templates. It works quite well now.
+- Some fixes in calculation of the chapter numbers, lists, etc.
+- Enumerated lists and Bullet lists can be easily used using the toolbar now.

@@ -469,6 +469,15 @@ void KWordView::updateStyle(QString _styleName)
   styleList.find(_styleName);
   if (!CORBA::is_nil(m_vToolBarText))
     m_vToolBarText->setCurrentComboItem(ID_STYLE_LIST,styleList.at());
+
+  m_vToolBarText->setButton(ID_USORT_LIST,false);  
+  m_vToolBarText->setButton(ID_ENUM_LIST,false);  
+
+  if (_styleName == "Enumerated List")
+    m_vToolBarText->setButton(ID_ENUM_LIST,true);  
+
+  if (_styleName == "Bullet List")
+    m_vToolBarText->setButton(ID_USORT_LIST,true);  
 }
 
 /*===============================================================*/
@@ -812,11 +821,21 @@ void KWordView::textAlignBlock()
 /*====================== enumerated list ========================*/
 void KWordView::textEnumList()
 {
+  m_vToolBarText->setButton(ID_USORT_LIST,false);  
+  if (m_vToolBarText->isButtonOn(ID_ENUM_LIST))
+    gui->getPaperWidget()->setEnumList();
+  else
+    gui->getPaperWidget()->setNormalText();
 }
 
 /*====================== unsorted list ==========================*/
 void KWordView::textUnsortList()
 {
+  m_vToolBarText->setButton(ID_ENUM_LIST,false);  
+  if (m_vToolBarText->isButtonOn(ID_USORT_LIST))
+    gui->getPaperWidget()->setBulletList();
+  else
+    gui->getPaperWidget()->setNormalText();
 }
 
 /*===============================================================*/
@@ -1403,13 +1422,19 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/enumList.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textEnumList", true, i18n("Enumerated List"), -1);
+  m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, ID_ENUM_LIST, SIGNAL( clicked() ), this, "textEnumList", 
+							   true, i18n("Enumerated List"), -1);
+  m_vToolBarText->setToggle(ID_ENUM_LIST,true);
+  m_vToolBarText->setButton(ID_ENUM_LIST,false);
 
   // unsorted list
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/unsortedList.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textUnsortList", true, i18n("Unsorted List"), -1);
+  m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, ID_USORT_LIST, SIGNAL( clicked() ), this, "textUnsortList", 
+							   true, i18n("Unsorted List"), -1);
+  m_vToolBarText->setToggle(ID_USORT_LIST,true);
+  m_vToolBarText->setButton(ID_USORT_LIST,false);
 
   m_vToolBarText->insertSeparator( -1 );
 

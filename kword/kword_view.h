@@ -341,6 +341,8 @@ protected:
   static const int ID_BRD_WIDTH = 25;
   static const int ID_REDO = 26;
   static const int ID_UNDO = 27;
+  static const int ID_ENUM_LIST = 28;
+  static const int ID_USORT_LIST = 29;
 
 };
 

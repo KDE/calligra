@@ -142,6 +142,10 @@ public:
 
   void applyStyle(QString _style);
 
+  void setEnumList();
+  void setBulletList();
+  void setNormalText();
+
   void recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_fc = 0L);
 
   int getVertRulerPos();

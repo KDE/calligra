@@ -278,6 +278,60 @@ void KWParag::applyStyle(QString _style)
 	    }
 	}
       
+      if (document->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_SAME_SIZE)
+	{
+	  KWFormat f(document);
+	  KWFormat *f2;
+
+	  for (unsigned int i = 0;i < getTextLen();i++)
+	    {
+	      f2 = ((KWCharFormat*)text.data()[i].attrib)->getFormat();
+	      if (f2->getPTFontSize() == paragLayout->getFormat().getPTFontSize() &&
+		  f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName())
+		{
+		  QColor c = paragLayout->getFormat().getColor();
+		  f = pl->getFormat();
+		  f.setColor(c);
+		  freeChar(text.data()[i]);
+		  KWFormat *format = document->getFormatCollection()->getFormat(f);
+		  KWCharFormat *fm = new KWCharFormat(format);
+		  text.data()[i].attrib = fm;
+		}
+	    }
+	}
+
+      if (document->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_ALL_SIZE)
+	{
+	  KWFormat f(document);
+	  KWFormat *f2;
+
+	  for (unsigned int i = 0;i < getTextLen();i++)
+	    {
+	      f2 = ((KWCharFormat*)text.data()[i].attrib)->getFormat();
+	      if (f2->getUserFont()->getFontName() == paragLayout->getFormat().getUserFont()->getFontName())
+		{
+		  QColor c = paragLayout->getFormat().getColor();
+		  f = pl->getFormat();
+		  f.setColor(c);
+		  freeChar(text.data()[i]);
+		  KWFormat *format = document->getFormatCollection()->getFormat(f);
+		  KWCharFormat *fm = new KWCharFormat(format);
+		  text.data()[i].attrib = fm;
+		}
+	    }
+	}
+
+      if (!document->getApplyStyleTemplate() & KWordDocument::U_COLOR)
+	{
+	  QColor c = paragLayout->getFormat().getColor();
+	  pl->getFormat().setColor(c);
+	}
+      else
+	{
+	  QColor c = tmp->getFormat().getColor();
+	  pl->getFormat().setColor(c);
+	}
+      
       delete paragLayout;
       paragLayout = pl;
     }  

@@ -93,15 +93,15 @@ public:
   virtual void cleanUp();
 
   enum ProcessingType {WP = 0,DTP = 1};
-  const int U_FONT_FAMILY_SAME_SIZE = 1;
-  const int U_FONT_ALL_SAME_SIZE = 2;
-  const int U_COLOR = 4;
-  const int U_INDENT = 8;
-  const int U_BORDER = 16;
-  const int U_ALIGN = 32;
-  const int U_NUMBERING = 64;
-  const int U_FONT_FAMILY_ALL_SIZE = 128;
-  const int U_FONT_ALL_ALL_SIZE = 256;
+  static const int U_FONT_FAMILY_SAME_SIZE = 1;
+  static const int U_FONT_ALL_SAME_SIZE = 2;
+  static const int U_COLOR = 4;
+  static const int U_INDENT = 8;
+  static const int U_BORDER = 16;
+  static const int U_ALIGN = 32;
+  static const int U_NUMBERING = 64;
+  static const int U_FONT_FAMILY_ALL_SIZE = 128;
+  static const int U_FONT_ALL_ALL_SIZE = 256;
   
 protected:
   virtual bool hasToWriteMultipart();
