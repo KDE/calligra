@@ -582,7 +582,7 @@ void KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bo
     }
 
     KoTextCursor oldCursor = *m_cursor;
-    placeCursor( iPoint, insertDirectCursor );
+    placeCursor( iPoint, insertDirectCursor&& isReadWrite() );
     ensureCursorVisible();
 
     if ( e->button() != LeftButton )
