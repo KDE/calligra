@@ -50,6 +50,7 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KDChartParams* param
      _typeLeft->resize(_typeLeft->sizeHint() );
     grid2->addWidget( _typeLeft,5,0 );
 
+    gb->setEnabled(false);
     grid2->addRowSpacing(0,7);
     grid2->addRowSpacing(1,_typeNone->height());
     grid2->addRowSpacing(2,_typeAbove->height());
@@ -93,6 +94,7 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KDChartParams* param
     lineLabel=new QCheckBox(i18n("Line label"),gb2);
     lineLabel->resize( lineLabel->sizeHint() );
     grid3->addWidget( lineLabel,1,0 );
+    lineLabel->setEnabled(false);
 
     QLabel* label2 = new QLabel( i18n( "Length of line" ), gb2 );
     label2->resize( label2->sizeHint() );
