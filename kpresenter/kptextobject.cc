@@ -226,7 +226,8 @@ double KPTextObject::load(const QDomElement &element)
 }
 
 // Standard paint method for KP2DObjects.
-void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawingShadow )
+void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
+			  bool drawingShadow, bool drawContour )
 {
     paint( _painter, _zoomHandler, false, 0L, true, drawingShadow );
 }

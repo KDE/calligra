@@ -111,7 +111,8 @@ double KPClipartObject::load(const QDomElement &element)
 }
 
 /*========================= draw =================================*/
-void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
+void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+			    bool drawSelection, bool drawContour )
 {
     if ( m_clipart.isNull() )
         return;

@@ -143,7 +143,8 @@ double KPFreehandObject::load( const QDomElement &element )
 }
 
 /*========================= draw =================================*/
-void KPFreehandObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
+void KPFreehandObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+			     bool drawSelection, bool drawContour )
 {
     // Hmm, this code is so much like KP2DObject::draw, but KPFreehandObject isn't a KP2DObject,
     // it doesn't have gradients etc.
@@ -229,7 +230,8 @@ float KPFreehandObject::getAngle( const QPoint &p1, const QPoint &p2 )
 }
 
 /*======================== paint =================================*/
-void KPFreehandObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler, bool /*drawingShadow*/ )
+void KPFreehandObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
+			      bool /*drawingShadow*/, bool drawContour )
 {
     int _w = _zoomHandler->zoomItX(pen.width());
     QPen pen2(pen);

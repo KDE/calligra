@@ -177,7 +177,8 @@ public:
      * @param drawSelection if true and the object is selected, draw the handles around it
      * (this can be set to false when printing, when generating previews etc.)
      */
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+		       bool drawSelection, bool drawContour = FALSE );
 
     virtual bool contains( const KoPoint &_point,KoZoomHandler *_zoomHandler  ) const;
     virtual bool intersects( const KoRect & _rect,KoZoomHandler *_zoomHandler  ) const;
@@ -333,7 +334,8 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+		       bool drawSelection, bool drawContour = FALSE );
 
 protected:
     /**
@@ -346,7 +348,8 @@ protected:
      *
      * This method isn't pure virtual because some objects implement draw() directly.
      */
-    virtual void paint( QPainter* /*painter*/, KoZoomHandler* /*zoomHandler*/, bool /*drawingShadow*/ ) {}
+    virtual void paint( QPainter* painter, KoZoomHandler* zoomHandler,
+			bool drawingShadow, bool drawContour =  FALSE ) {}
 
     QPen pen;
     QBrush brush;

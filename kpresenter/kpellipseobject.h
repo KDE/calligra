@@ -59,7 +59,8 @@ public:
     { return i18n("Ellipse"); }
 
 protected:
-    virtual void paint( QPainter *_painter,KoZoomHandler *_zoomHandler, bool drawingShadow );
+    virtual void paint( QPainter *_painter,KoZoomHandler *_zoomHandler,
+			bool drawingShadow, bool drawContour = FALSE );
 
     QPixmap pix;
     bool redrawPix;

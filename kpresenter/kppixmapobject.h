@@ -69,7 +69,8 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+		       bool drawSelection, bool drawContour = FALSE );
 
 protected:
     KPPixmapObject() {}

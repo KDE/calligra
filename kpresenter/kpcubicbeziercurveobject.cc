@@ -151,7 +151,8 @@ double KPCubicBezierCurveObject::load(const QDomElement &element)
 }
 
 /*========================= draw =================================*/
-void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
+void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+				     bool drawSelection, bool drawContour )
 {
     /// See comment in KPFreehandObject::draw about future plans
     double ox = orig.x();
@@ -169,12 +170,12 @@ void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHand
             getShadowCoords( sx, sy, _zoomHandler );
 
             _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY(sy) );
-            paint( _painter,_zoomHandler, true );
+            paint( _painter,_zoomHandler, true, drawContour );
         }
         else {
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
             rotateObjectWithShadow(_painter,_zoomHandler);
-            paint( _painter,_zoomHandler, true );
+            paint( _painter,_zoomHandler, true, drawContour );
         }
 
         pen = tmpPen;
@@ -186,10 +187,10 @@ void KPCubicBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHand
     _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
     if ( angle == 0 )
-        paint( _painter,_zoomHandler, false );
+        paint( _painter,_zoomHandler, false, drawContour );
     else {
         rotateObject(_painter,_zoomHandler);
-        paint( _painter,_zoomHandler, false );
+        paint( _painter,_zoomHandler, false, drawContour );
     }
 
     _painter->restore();
@@ -233,7 +234,8 @@ float KPCubicBezierCurveObject::getAngle( const QPoint &p1, const QPoint &p2 )
 }
 
 /*======================== paint =================================*/
-void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler, bool /*drawingShadow*/ )
+void KPCubicBezierCurveObject::paint( QPainter* _painter, KoZoomHandler*_zoomHandler,
+				      bool /*drawingShadow*/, bool drawContour )
 {
     int _w = pen.width();
     QPen pen2(pen);

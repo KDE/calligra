@@ -241,7 +241,8 @@ double KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
 }
 
 /*================================================================*/
-void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool drawSelection )
+void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler,
+			  bool drawSelection, bool drawContour )
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )

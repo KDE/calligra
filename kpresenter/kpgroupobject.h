@@ -70,7 +70,8 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element, KPresenterDoc *doc);
 
-    virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool drawSelection );
+    virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
+		       bool drawSelection, bool drawContour = FALSE );
 
     void setUpdateObjects( bool b ) {
         updateObjs = b;

@@ -97,7 +97,8 @@ void KPPartObject::resizeBy( double _dx, double _dy )
 }
 
 /*======================== draw ==================================*/
-void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool drawSelection )
+void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
+			 bool drawSelection, bool drawContour )
 {
     updateChildGeometry();
 //     int ox = orig.x() - _diffx;
@@ -129,7 +130,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool d
         _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
                             _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
 
-        paint( _painter,_zoomhandler );
+        paint( _painter,_zoomhandler, drawContour );
     }
     else
     {
@@ -168,7 +169,7 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool d
         _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
                             _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
 
-        paint( _painter, _zoomhandler );
+        paint( _painter, _zoomhandler, drawContour );
     }
 
     _painter->restore();
@@ -186,7 +187,7 @@ void KPPartObject::slot_changed( KoChild *_koChild )
 }
 
 /*================================================================*/
-void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler )
+void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler, bool drawContour )
 {
     if ( !_enableDrawing ) return;
 

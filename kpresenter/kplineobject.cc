@@ -110,7 +110,8 @@ double KPLineObject::load(const QDomElement &element)
 }
 
 /*========================= draw =================================*/
-void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool drawSelection )
+void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler,
+			 bool drawSelection, bool drawContour )
 {
     double ox = orig.x();
     double oy = orig.y();

@@ -60,7 +60,8 @@ public:
     virtual QString getTypeString() const
     { return i18n("Embedded object"); }
 
-    virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler, bool drawSelection );
+    virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
+		       bool drawSelection, bool drawContour = FALSE );
 
     void activate( QWidget *_widget );
     void deactivate();
@@ -74,7 +75,7 @@ public slots:
 
 protected:
     void updateChildGeometry();
-    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
+    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler, bool drawContour );
 
     bool _enableDrawing;
     KPresenterChild *child;

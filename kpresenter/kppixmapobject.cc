@@ -139,7 +139,8 @@ double KPPixmapObject::load(const QDomElement &element)
 }
 
 /*========================= draw =================================*/
-void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
+void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+			   bool drawSelection, bool drawContour )
 {
     if ( image.isNull() ) return;
 

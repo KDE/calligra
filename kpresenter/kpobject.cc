@@ -476,9 +476,10 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
 }
 
 /*======================== draw ==================================*/
-void KPObject::draw( QPainter *_painter, KoZoomHandler *_zoomHandler, bool drawSelection )
+void KPObject::draw( QPainter *_painter, KoZoomHandler *_zoomHandler,
+		     bool drawSelection, bool drawContour )
 {
-    if ( drawSelection )
+    if ( drawSelection &&  !drawContour )
         paintSelection( _painter, _zoomHandler );
 }
 
@@ -794,7 +795,8 @@ double KP2DObject::load(const QDomElement &element)
     return offset;
 }
 
-void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
+void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+		       bool drawSelection, bool drawContour )
 {
     double ox = orig.x();
     double oy = orig.y();
@@ -818,13 +820,13 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
             getShadowCoords( sx, sy, _zoomHandler );
 
             _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY( sy) );
-            paint( _painter, _zoomHandler, true /* drawing shadow */ );
+            paint( _painter, _zoomHandler, true, drawContour );
         }
         else
         {
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
             rotateObjectWithShadow(_painter, _zoomHandler);
-            paint( _painter, _zoomHandler, true /* drawing shadow */ );
+            paint( _painter, _zoomHandler, true, drawContour );
         }
 
         pen = tmpPen;

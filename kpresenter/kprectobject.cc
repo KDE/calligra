@@ -96,7 +96,8 @@ double KPRectObject::load(const QDomElement &element)
 }
 
 /*======================== paint =================================*/
-void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler, bool drawingShadow )
+void KPRectObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
+			  bool drawingShadow, bool drawContour )
 {
     double ow = ext.width();
     double oh = ext.height();

@@ -151,7 +151,8 @@ double KPQuadricBezierCurveObject::load(const QDomElement &element)
 }
 
 /*========================= draw =================================*/
-void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool drawSelection )
+void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
+				       bool drawSelection, bool drawContour )
 {
     double ox = orig.x();
     double oy = orig.y();
@@ -170,12 +171,12 @@ void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHa
             getShadowCoords( sx, sy, _zoomHandler );
 
             _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY(sy) );
-            paint( _painter,_zoomHandler );
+            paint( _painter,_zoomHandler, drawContour );
         }
         else {
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
             rotateObjectWithShadow(_painter,_zoomHandler );
-            paint( _painter,_zoomHandler );
+            paint( _painter,_zoomHandler, drawContour );
         }
 
         pen = tmpPen;
@@ -187,10 +188,10 @@ void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHa
     _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
     if ( angle == 0 )
-        paint( _painter,_zoomHandler );
+        paint( _painter,_zoomHandler, drawContour );
     else {
         rotateObject(_painter,_zoomHandler );
-        paint( _painter,_zoomHandler );
+        paint( _painter,_zoomHandler, drawContour );
     }
 
     _painter->restore();
@@ -234,7 +235,7 @@ float KPQuadricBezierCurveObject::getAngle( const QPoint &p1, const QPoint &p2 )
 }
 
 /*======================== paint =================================*/
-void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
+void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler, bool drawContour )
 {
     int _w =_zoomHandler->zoomItX( pen.width() );
     QPen pen2(pen);

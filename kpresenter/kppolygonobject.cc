@@ -219,7 +219,8 @@ void KPPolygonObject::setFillType( FillType _fillType )
 }
 
 /*======================== paint =================================*/
-void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler, bool drawingShadow )
+void KPPolygonObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
+			     bool drawingShadow, bool drawContour )
 {
     int _w = _zoomHandler->zoomItX( pen.width() );
     QPen pen2(pen);

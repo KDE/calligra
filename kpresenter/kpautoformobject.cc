@@ -220,7 +220,8 @@ float KPAutoformObject::getAngle( const QPoint &p1, const QPoint &p2 )
 }
 
 /*======================== paint =================================*/
-void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler, bool drawingShadow )
+void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler,
+			      bool drawingShadow, bool drawContour )
 {
     unsigned int pw = 0, pwOrig = 0, px, py;
     QPen pen2(pen);

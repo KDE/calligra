@@ -77,7 +77,8 @@ public:
     virtual double load(const QDomElement &element);
 protected:
     float getAngle( const QPoint &p1, const QPoint &p2 );
-    virtual void paint( QPainter *_painter, KoZoomHandler *_zoomHandler, bool drawingShadow );
+    virtual void paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
+			bool drawingShadow, bool drawContour = FALSE );
 
     QString filename;
     LineEnd lineBegin, lineEnd;
