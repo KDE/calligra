@@ -46,29 +46,6 @@
 
 KDiagrammDoc::KDiagrammDoc()
 {
-  ADD_INTERFACE( "IDL:Chart/SimpleChart:1.0" );
-  ADD_INTERFACE("IDL:KOffice/Print:1.0");
-
-  m_bEmpty = true;
-  m_bModified = FALSE;
-
-  m_type = KoDiagramm::DT_SAEULEN;
-
-  m_leftBorder = 20.0;
-  m_rightBorder = 20.0;
-  m_topBorder = 20.0;
-  m_bottomBorder = 20.0;
-  m_paperFormat = PG_DIN_A4;
-  m_paperWidth = PG_A4_WIDTH;
-  m_paperHeight = PG_A4_HEIGHT;
-  calcPaperSize();
-  m_orientation = PG_PORTRAIT;
-
-  m_lstViews.setAutoDelete( false );
-}
-
-CORBA::Boolean KDiagrammDoc::initDoc()
-{
   // Demo values
   m_table.xDesc.append( "Torben" );
   m_table.xDesc.append( "Claudia" );
@@ -92,6 +69,29 @@ CORBA::Boolean KDiagrammDoc::initDoc()
   l.push_back( 2.5 );
   m_table.data.push_back( l );
 
+  ADD_INTERFACE( "IDL:Chart/SimpleChart:1.0" );
+  ADD_INTERFACE("IDL:KOffice/Print:1.0");
+
+  m_bEmpty = true;
+  m_bModified = FALSE;
+
+  m_type = KoDiagramm::DT_SAEULEN;
+
+  m_leftBorder = 20.0;
+  m_rightBorder = 20.0;
+  m_topBorder = 20.0;
+  m_bottomBorder = 20.0;
+  m_paperFormat = PG_DIN_A4;
+  m_paperWidth = PG_A4_WIDTH;
+  m_paperHeight = PG_A4_HEIGHT;
+  calcPaperSize();
+  m_orientation = PG_PORTRAIT;
+
+  m_lstViews.setAutoDelete( false );
+}
+
+CORBA::Boolean KDiagrammDoc::initDoc()
+{
   return true;
 }
 
@@ -467,7 +467,7 @@ void KDiagrammDoc::setPaperLayout( float _leftBorder, float _topBorder, float _r
   m_bModified = TRUE;
 }
 
-QString KDiagrammDoc::completeHeading( const char *_data, int , 
+QString KDiagrammDoc::completeHeading( const char *_data, int ,
 				       const char */*_table*/ )
 {
   /* QString page;
