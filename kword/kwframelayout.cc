@@ -261,7 +261,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 kdDebug(32002) << " Invalidating from parag " << parag->paragId() << endl;
 #endif
                 fs->textObject()->setLastFormattedParag( parag );
-                fs->textObject()->formatMore();
+                fs->textObject()->formatMore( 2 );
             }
         }
     }

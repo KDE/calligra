@@ -643,6 +643,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
     int cursorHeight = m_doc->layoutUnitToPixelY( topLeft.y(), cursor->parag()->lineHeightOfChar( cursor->index(), 0, &lineY ) );
     QPoint iPoint( topLeft.x() - cursor->totalOffsetX() + cursor->x(),
                    topLeft.y() - cursor->totalOffsetY() + lineY );
+
 #ifdef DEBUG_CURSOR
     kdDebug() << "KWTextFrameSet::drawCursor topLeft=" << topLeft.x() << "," << topLeft.y()
               << " x=" << cursor->x() << " y=" << lineY << endl;
@@ -723,26 +724,35 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
             }
 
             QPixmap *pix = 0;
-            bool wasChanged = cursor->parag()->hasChanged();
             uint drawingFlags = KoTextDocument::DrawSelections;
             if ( m_doc->backgroundSpellCheckEnabled() )
                 drawingFlags |= KoTextDocument::DrawMisspelledLine;
             if ( m_doc->viewFormattingChars() )
                 drawingFlags |= KoTextDocument::DrawFormattingChars;
-            cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
+
+            // To force the drawing to happen:
+            bool wasChanged = cursor->parag()->hasChanged();
+            int oldLineChanged = cursor->parag()->lineChanged();
+            int line; // line number
+            cursor->parag()->lineStartOfChar( cursor->index(), 0, &line );
+            cursor->parag()->setChanged( false ); // not all changed, only from a given line
+            cursor->parag()->setLineChanged( line );
+
             textDocument()->drawParagWYSIWYG(
                 p, static_cast<KoTextParag *>(cursor->parag()),
                 iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
                 pix, cg, m_doc, // TODO view's zoom handler
                 cursorVisible, cursor, FALSE /*resetChanged*/, drawingFlags );
-            cursor->parag()->setChanged( wasChanged );      // Maybe we have more changes to draw!
+
+            if ( wasChanged )      // Maybe we have more changes to draw, than those in the small cliprect
+                cursor->parag()->setLineChanged( oldLineChanged ); // -1 = all
+            else
+                cursor->parag()->setChanged( false );
 
             p->restore();
 
             //XIM Position
             QPoint ximPoint = vPoint;
-            int line;
-            cursor->parag()->lineStartOfChar( cursor->index(), 0, &line );
             canvas->setXimPosition( ximPoint.x(), ximPoint.y(),
                                     0, cursorHeight - cursor->parag()->lineSpacing( line ) );
         }
@@ -754,7 +764,7 @@ void KWTextFrameSet::layout()
 {
     invalidate();
     // Get the thing going though, repainting doesn't call formatMore
-    m_textobj->formatMore();
+    m_textobj->formatMore( 2 );
 }
 
 void KWTextFrameSet::invalidate()
@@ -1879,7 +1889,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
 #endif
                         frameResized( theFrame, true );
                         // We only got room for the next paragraph, we still have to keep the formatting going...
-                        m_textobj->formatMore();
+                        m_textobj->formatMore( 2 );
                         *abort = true;
                         return;
                     }
@@ -1980,7 +1990,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
                     lastFormatted->invalidate( 0 );
                 }
 
-                m_textobj->formatMore();
+                m_textobj->formatMore( 2 );
                 *abort = true;
                 return;
             }
@@ -2248,7 +2258,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
     kdDebug(32002) << "KWTextFrameSet (" << getName() << ")::updateViewArea maxY now " << maxY << endl;
 #endif
     m_textobj->setViewArea( w, maxY );
-    m_textobj->formatMore();
+    m_textobj->formatMore( 2 );
 }
 
 KCommand * KWTextFrameSet::setPageBreakingCommand( KoTextCursor * cursor, int pageBreaking )
@@ -2275,7 +2285,7 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( KoTextCursor * cursor, int pa
             static_cast<KWTextParag *>(start)->setPageBreaking( pageBreaking );
     }
 
-    m_textobj->formatMore();
+    m_textobj->formatMore( 2 );
     emit repaintChanged( this );
     KoTextObject::UndoRedoInfo & undoRedoInfo = m_textobj->undoRedoInfoStruct();
     undoRedoInfo.newParagLayout.pageBreaking = pageBreaking;
@@ -2316,7 +2326,7 @@ KCommand * KWTextFrameSet::pasteKWord( KoTextCursor * cursor, const QCString & d
 
     *cursor = *( cmd->execute( cursor ) );
 
-    m_textobj->formatMore();
+    m_textobj->formatMore( 2 );
     emit repaintChanged( this );
     m_textobj->emitEnsureCursorVisible();
     m_textobj->emitUpdateUI( true );
@@ -2342,7 +2352,7 @@ void KWTextFrameSet::insertTOC( KoTextCursor * cursor )
     *cursor = *( cmd->execute( cursor ) );
 
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
-    m_textobj->formatMore();
+    m_textobj->formatMore( 2 );
     emit repaintChanged( this );
     m_textobj->emitEnsureCursorVisible();
     m_textobj->emitUpdateUI( true );
@@ -2366,7 +2376,7 @@ void KWTextFrameSet::insertFrameBreak( KoTextCursor *cursor )
     m_doc->addCommand( macroCmd );
 
     m_textobj->setLastFormattedParag( parag );
-    m_textobj->formatMore();
+    m_textobj->formatMore( 2 );
     emit repaintChanged( this );
     m_textobj->emitEnsureCursorVisible();
     m_textobj->emitUpdateUI( true );
