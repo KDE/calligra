@@ -137,6 +137,7 @@ RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
   m_bDisplayDirtyFlag = false;
   m_fHeight = 20 * POINT_TO_MM;
   m_iRow = _row;
+  m_bDefault=false;
 }
 
 void RowLayout::setMMHeight( float _h )
@@ -259,6 +260,7 @@ ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout(
   m_bDisplayDirtyFlag = false;
   m_fWidth = 60.0 * POINT_TO_MM;
   m_iColumn = _column;
+  m_bDefault=false;
 }
 
 void ColumnLayout::setMMWidth( float _w )

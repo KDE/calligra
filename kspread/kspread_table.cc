@@ -706,6 +706,187 @@ void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *_canvas )
   emit sig_changeSelection( this, old, m_rctSelection );
 }
 
+void KSpreadTable::changetab(QString old_name,QString new_name)
+{
+ QIntDictIterator<KSpreadCell> it( m_dctCells );
+ for ( ; it.current(); ++it )
+      	{
+      	if(it.current()->isFormular())
+      		{
+      		if(it.current()->text().find(old_name)!=-1)
+      			{
+      			int nb = it.current()->text().contains(old_name+"!");
+      			QString tmp=old_name+"!";
+      			int len=tmp.length();
+      			tmp=it.current()->text();
+      			
+      			for(int i=0;i<nb;i++)
+      				{
+      				 int pos= tmp.find(old_name+"!");
+      				 tmp.replace(pos,len,new_name+"!");
+      				}
+      			it.current()->setText(tmp);
+      			}
+      		}
+      	}
+}
+
+void KSpreadTable::changeRef(int pos,changeref ref)
+{
+QIntDictIterator<KSpreadCell> it( m_dctCells );
+ for ( ; it.current(); ++it )
+      	{
+      	if(it.current()->isFormular())
+      	{
+	QString erg = "";
+
+    const char *p = it.current()->text().ascii();
+    char buf[ 2 ];
+    buf[ 1 ] = 0;
+
+    bool fix1 = FALSE;
+    bool fix2 = FALSE;
+
+    while ( *p != 0 )
+    {
+	if ( *p != '$' && !isalpha( *p ) )
+	{
+	    buf[0] = *p++;
+	    erg += buf;
+	    fix1 = fix2 = FALSE;
+	}
+	else
+	{
+	    QString tmp = "";
+	    if ( *p == '$' )
+	    {
+		tmp = "$";
+		p++;
+		fix1 = TRUE;
+	    }
+	    if ( isalpha( *p ) )
+	    {
+		char buffer[ 1024 ];
+		char *p2 = buffer;
+		while ( *p && isalpha( *p ) )
+		{
+		    buf[ 0 ] = *p;
+		    tmp += buf;
+		    *p2++ = *p++;
+		    //cout <<"Temp : "<<tmp.ascii()<<endl;
+		}
+		*p2 = 0;
+		if ( *p == '$' )
+		{
+		    tmp += "$";
+		    p++;
+		    fix2 = TRUE;
+		}
+		if ( isdigit( *p ) )
+		{
+		    const char *p3 = p;
+		    int row = atoi( p );
+		    //cout <<"Row : "<<row<<endl;
+		    while ( *p != 0 && isdigit( *p ) ) p++;
+		    // Is it a table
+		    if ( *p == '!' )
+		    {
+			erg += tmp;
+			fix1 = fix2 = FALSE;
+			p = p3;
+			//cout <<"tmp :"<<erg.ascii()<<"P = "<<p<<endl;		
+		     }
+		    else // It must be a cell identifier
+		    {
+			int col = 0;
+			if ( strlen( buffer ) >= 2 )
+			{
+			    col += 26 * ( buffer[0] - 'A' + 1 );
+			    col += buffer[1] - 'A' + 1;
+			}
+			else
+			    col += buffer[0] - 'A' + 1;
+			if ( fix1 )
+			    erg+="$"+util_columnLabel(col);
+			else
+				{
+				
+				if(ref==columnInsert)
+					{
+					if(col >=pos)
+						erg+=util_columnLabel(col+1);
+					else
+					 	erg+=util_columnLabel(col);
+					}
+				else if(ref==columnRemove)
+					{
+					if(col >pos)
+						erg+=util_columnLabel(col-1);
+					else
+					 	erg+=util_columnLabel(col);
+					}
+				else
+					{
+					erg+=util_columnLabel(col);
+					}
+				}
+			if ( fix2 )
+				{
+			    	sprintf( buffer, "$%i", row );
+			    	}
+			else
+			    	{
+			    	if ( fix2 )
+				{
+			    	sprintf( buffer, "$%i", row );
+			    	}
+			else
+			    {
+			    if(ref==rowInsert)
+			    	{
+			    	if(row >=pos)
+			    		sprintf( buffer, "%i", (row+1)  );
+			    	else
+			    		sprintf( buffer, "%i", row  );
+				}
+			    else if(ref==rowRemove)
+			    	{
+			    	if(row >pos)
+			    		sprintf( buffer, "%i", (row-1)  );
+			    	else
+			    		sprintf( buffer, "%i", row  );
+				}
+			    else
+			    	{
+			    	sprintf( buffer, "%i", row  );
+			    	}
+			    }
+			
+			erg += buffer;		
+		    }
+			}
+		}
+		else
+		{
+		    erg += tmp;
+		    fix1 = fix2 = FALSE;
+		}
+	    }
+	    else
+	    	{
+		erg += tmp;
+		fix1 = FALSE;
+	    	}	
+		}
+           }
+
+        it.current()->setText(erg);
+		}
+	
+      	}
+}
+
+
 void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, int _size,
 				     signed char _bold, signed char _italic )
 {
@@ -2058,19 +2239,23 @@ void KSpreadTable::deleteRow( unsigned long int _row )
 
     // Remove row
     QIntDictIterator<KSpreadCell> it( m_dctCells );
-    for ( ; it.current(); ++it )
+    for ( ; it.current(); it)// ++it )
     {
 	int key = it.current()->row() + ( it.current()->column() * 0x10000 );
 
 	if ( it.current()->row() == (int)_row && !it.current()->isDefault() )
-	{
-	    KSpreadCell *cell = it.current();
-	    m_dctCells.remove( key );
-	    if ( undo )
-	      undo->appendCell( cell );
-	    else
-	      delete cell;
-	}
+		{
+	    	KSpreadCell *cell = it.current();
+	    	m_dctCells.remove( key );
+	    	if ( undo )
+	      		undo->appendCell( cell );
+	    	else
+	      		delete cell;
+		}
+	else
+		{
+		++it;
+		}
     }
 
     kauto_array<KSpreadCell*> list( m_dctCells.count());
@@ -2221,7 +2406,7 @@ void KSpreadTable::insertColumn( unsigned long int _column )
 	  m_dctColumns.remove( key );
 		
 	  list2[k]->setColumn( list2[ k ]->column() + 1 );
-		
+	
 	  key = list2[k]->column();
 	  m_dctColumns.insert( key, list2[k] );
 	}
@@ -2238,6 +2423,7 @@ void KSpreadTable::insertColumn( unsigned long int _column )
 
 void KSpreadTable::deleteColumn( unsigned long int _column )
 {
+
     KSpreadUndoDeleteColumn *undo = 0L;
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -2249,7 +2435,7 @@ void KSpreadTable::deleteColumn( unsigned long int _column )
     m_dctColumns.setAutoDelete( FALSE );
     // Delete column
     QIntDictIterator<KSpreadCell> it( m_dctCells );
-    for ( ; it.current(); ++it )
+    for ( ; it.current(); it) //++it )
     {
 	int key = it.current()->row() + ( it.current()->column() * 0x10000 );
 	if ( it.current()->column() == (int)_column && !it.current()->isDefault() )
@@ -2260,6 +2446,14 @@ void KSpreadTable::deleteColumn( unsigned long int _column )
 	      undo->appendCell( cell );
 	    else
 	      delete cell;
+	
+	}
+	else
+	{
+	//you must increase it when you don't remove cell because when
+	//you remove cell in the it.current(), you move index in it.current()
+	//so when you increase so you forget one cell
+	++it;
 	}
     }
 
@@ -2329,7 +2523,7 @@ void KSpreadTable::deleteColumn( unsigned long int _column )
 	{
 	  int key = list2[ k ]->column();
 	  m_dctColumns.remove( key );
-		
+	
 	  list2[ k ]->setColumn( list2[ k ]->column() - 1 );
 		
 	  key = list2[ k ]->column();

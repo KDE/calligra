@@ -372,6 +372,10 @@ void KSpreadTabBar::renameTab()
             QStringList::Iterator it = tabsList.find( activeName );
             (*it) = newName;
 	    repaint();
+	    KSpreadTable *tbl;
+            for ( tbl = m_pView->doc()->map()->firstTable(); tbl != 0L; tbl = m_pView->doc()->map()->nextTable() )
+		tbl->changetab(activeName,newName);   		
+
         }	
     }
 }

@@ -1134,7 +1134,13 @@ void KSpreadView::deleteColumn()
   if ( !m_pTable )
     return;
   m_pTable->deleteColumn( m_pCanvas->markerColumn() );
-   m_pTable->recalc(true);
+  m_pTable->recalc(true);
+  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  if ( cell->text() != 0L )
+	 editWidget()->setText( cell->text() );
+  else
+	 editWidget()->setText( "" );
+  m_pTable->changeRef( m_pCanvas->markerColumn(),KSpreadTable::columnRemove);
 }
 
 void KSpreadView::deleteRow()
@@ -1143,6 +1149,13 @@ void KSpreadView::deleteRow()
     return;
   m_pTable->deleteRow( m_pCanvas->markerRow() );
   m_pTable->recalc(true);
+  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  if ( cell->text() != 0L )
+	 editWidget()->setText( cell->text() );
+  else
+	 editWidget()->setText( "" );
+  m_pTable->changeRef( m_pCanvas->markerRow(),KSpreadTable::rowRemove);
+
 }
 
 void KSpreadView::insertColumn()
@@ -1150,7 +1163,13 @@ void KSpreadView::insertColumn()
   if ( !m_pTable )
     return;
   m_pTable->insertColumn( m_pCanvas->markerColumn() );
-   m_pTable->recalc(true);
+  m_pTable->recalc(true);
+  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  if ( cell->text() != 0L )
+	 editWidget()->setText( cell->text() );
+  else
+	 editWidget()->setText( "" );
+  m_pTable->changeRef( m_pCanvas->markerColumn(),KSpreadTable::columnInsert);
 }
 
 void KSpreadView::insertRow()
@@ -1158,7 +1177,13 @@ void KSpreadView::insertRow()
   if ( !m_pTable )
     return;
   m_pTable->insertRow( m_pCanvas->markerRow() );
-   m_pTable->recalc(true);
+  m_pTable->recalc(true);
+  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  if ( cell->text() != 0L )
+	 editWidget()->setText( cell->text() );
+  else
+	 editWidget()->setText( "" );
+ m_pTable->changeRef( m_pCanvas->markerRow(),KSpreadTable::rowInsert);
 }
 
 void KSpreadView::fontSelected( const QString &_font )
@@ -2124,13 +2149,25 @@ dlg->show();
 void KSpreadView::slotInsertColumn()
 {
     m_pTable->insertColumn( m_pHBorderWidget->markerColumn() );
-     m_pTable->recalc(true);
+    m_pTable->recalc(true);
+    KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+    if ( cell->text() != 0L )
+	   editWidget()->setText( cell->text() );
+    else
+	   editWidget()->setText( "" );
+   m_pTable->changeRef(m_pHBorderWidget->markerColumn(),KSpreadTable::columnInsert);
 }
 
 void KSpreadView::slotRemoveColumn()
 {
     m_pTable->deleteColumn( m_pHBorderWidget->markerColumn() );
     m_pTable->recalc(true);
+    KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+    if ( cell->text() != 0L )
+	   editWidget()->setText( cell->text() );
+    else
+	   editWidget()->setText( "" );
+    m_pTable->changeRef(m_pHBorderWidget->markerColumn(),KSpreadTable::columnRemove);
 }
 
 void KSpreadView::PopupMenuRow(const QPoint & _point )
@@ -2168,15 +2205,27 @@ dlg->show();
 
 void KSpreadView::slotInsertRow()
 {
-m_pTable->insertRow( m_pVBorderWidget->markerRow() );
+ m_pTable->insertRow( m_pVBorderWidget->markerRow() );
  m_pTable->recalc(true);
+ KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+ if ( cell->text() != 0L )
+	editWidget()->setText( cell->text() );
+ else
+	editWidget()->setText( "" );
+ m_pTable->changeRef( m_pVBorderWidget->markerRow(),KSpreadTable::rowInsert);
 }
 
 void KSpreadView::slotRemoveRow()
 {
 
-    m_pTable->deleteRow( m_pVBorderWidget->markerRow() );
- m_pTable->recalc(true);
+   m_pTable->deleteRow( m_pVBorderWidget->markerRow() );
+   m_pTable->recalc(true);
+   KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+   if ( cell->text() != 0L )
+	   editWidget()->setText( cell->text() );
+   else
+	   editWidget()->setText( "" );
+   m_pTable->changeRef(m_pVBorderWidget->markerRow(),KSpreadTable::rowRemove);
 }
 
 void KSpreadView::openPopupMenu( const QPoint & _point )

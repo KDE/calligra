@@ -107,3 +107,12 @@ and QML don't work)
 -----------------------------------------------------
 -Fix bug : Now when you delete a formula it works
 -Add ajust for row
+
+1999-09-29 -Montel laurent<montell@club-internet.fr>
+-----------------------------------------------------
+-Fix bug When you insert and remove column and row (Now it works)
+-When you change name of a table, now all cells which refere to this table
+now text is change to refere to new name.
+-Now when you insert column (row) or remove column (row) and there are cell
+which refere others cells so if these cells are moving so I modifie
+reference.

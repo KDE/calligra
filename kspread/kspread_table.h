@@ -369,8 +369,12 @@ public:
     enum Operation {Any,Add,Mul,Sub,Div};
     enum Mode_sort{ Increase,Decrease};
     enum Type_font {bold,italic};
+    enum changeref {columnInsert,columnRemove,rowInsert,rowRemove};
 
     QString setRichTextFond(QString text,Type_font font);
+
+    void changetab(QString old_name,QString new_name);
+    void changeRef(int pos,changeref ref);
 
     void paste( const QPoint &_marker,Special_paste=ALL,Operation=Any );
 
