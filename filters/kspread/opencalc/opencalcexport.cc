@@ -42,6 +42,8 @@
 #include <kspread_doc.h>
 #include <kspread_format.h>
 #include <kspread_map.h>
+#include <kspread_view.h>
+#include <kspread_canvas.h>
 #include <kspread_sheet.h>
 #include <kspread_sheetprint.h>
 #include <kspread_style.h>
@@ -254,8 +256,38 @@ bool OpenCalcExport::exportSettings( KoStore * store, const KSpreadDoc * ksdoc )
   settings.setAttribute( "xmlns:config", "http://openoffice.org/2001/config" );
   settings.setAttribute( "office:version", "1.0" );
 
-  QDomElement data = doc.createElement( "office:settings" );
-  settings.appendChild( data );
+  QDomElement begin = doc.createElement( "office:settings" );
+
+  QDomElement configItem = doc.createElement("config:config-item-set" );
+  configItem.setAttribute( "config:name", "view-settings" );
+
+  QDomElement mapIndexed = doc.createElement( "config:config-item-map-indexed" );
+  mapIndexed.setAttribute("config:name", "Views" );
+  configItem.appendChild( mapIndexed );
+
+  QDomElement mapItem = doc.createElement("config:config-item-map-entry" );
+
+  QDomElement attribute =  doc.createElement("config:config-item" );
+  attribute.setAttribute( "config:name", "ActiveTable" );
+  attribute.setAttribute( "config:type", "string" );
+
+  KSpreadView * view = static_cast<KSpreadView*>( ksdoc->views().getFirst());
+  QString activeTable;
+  if ( view ) // no view if embedded document
+  {
+      KSpreadCanvas * canvas = view->canvasWidget();
+      activeTable = canvas->activeTable()->tableName();
+  }
+  attribute.appendChild( doc.createTextNode( activeTable ) );
+  mapItem.appendChild( attribute );
+
+
+
+  mapIndexed.appendChild( mapItem );
+
+  begin.appendChild( configItem );
+
+  settings.appendChild( begin );
 
   doc.appendChild( settings );
 
