@@ -55,6 +55,8 @@ const bool OLEFilter::filter(const QString &fileIn, const QString &fileOut,
         return false;
     if(from!="application/vnd.ms-word" &&
        from!="application/vnd.ms-excel" &&
+       from!="application/msword" &&
+       from!="application/msexcel" &&
        from!="application/mspowerpoint")
         return false;
 
