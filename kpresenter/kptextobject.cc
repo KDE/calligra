@@ -1236,7 +1236,7 @@ void KPTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVis
     cursor->parag()->lineStartOfChar( cursor->index(), 0, &line );
     cursor->parag()->setChanged( false ); // not all changed, only from a given line
     cursor->parag()->setLineChanged( line );
-    kdDebug(33001) << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << " line=" << line << endl;
+    //kdDebug(33001) << "KPTextObject::drawCursor cursorVisible=" << cursorVisible << " line=" << line << endl;
 
     uint drawingFlags = KoTextDocument::DrawSelections;
     if ( m_doc->backgroundSpellCheckEnabled() )
