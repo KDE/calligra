@@ -16,6 +16,7 @@
 #include <kfiledialog.h>
 #include "kpresenter_view.h"
 #include "kpresenter_view.moc"
+#include "kpresenter_shell.h"
 #include "page.h"
 #include <opUIUtils.h>
 #include <koQueryTypes.h>
@@ -48,6 +49,8 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
 {
   setWidget(this);
 
+  shell = 0L;
+  
   OPPartIf::setFocusPolicy(OpenParts::Part::ClickFocus);
 
   m_pKPresenterDoc = 0L;
@@ -279,6 +282,8 @@ void KPresenterView::editUndo()
 {
   page->setToolEditMode(TEM_MOUSE);
   m_pKPresenterDoc->commands()->undo();
+
+  sendFocusEvent();
 }
 
 /*========================== edit redo ==========================*/
@@ -286,6 +291,8 @@ void KPresenterView::editRedo()
 {
   page->setToolEditMode(TEM_MOUSE);
   m_pKPresenterDoc->commands()->redo();
+
+  sendFocusEvent();
 }
 
 /*========================== edit cut ===========================*/
@@ -294,6 +301,8 @@ void KPresenterView::editCut()
   page->setToolEditMode(TEM_MOUSE);
   m_pKPresenterDoc->copyObjs(xOffset,yOffset);
   m_pKPresenterDoc->deleteObjs();
+
+  sendFocusEvent();
 }
 
 /*========================== edit copy ==========================*/
@@ -301,6 +310,8 @@ void KPresenterView::editCopy()
 {
   page->setToolEditMode(TEM_MOUSE);
   m_pKPresenterDoc->copyObjs(xOffset,yOffset);
+
+  sendFocusEvent();
 }
 
 /*========================== edit paste =========================*/
@@ -309,6 +320,8 @@ void KPresenterView::editPaste()
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
   m_pKPresenterDoc->pasteObjs(xOffset,yOffset);
+
+  sendFocusEvent();
 }
 
 /*========================== edit delete ========================*/
@@ -316,6 +329,8 @@ void KPresenterView::editDelete()
 {
   page->setToolEditMode(TEM_MOUSE);
   m_pKPresenterDoc->deleteObjs();
+
+  sendFocusEvent();
 }
 
 /*========================== edit select all ====================*/
@@ -323,6 +338,8 @@ void KPresenterView::editSelectAll()
 {
   page->setToolEditMode(TEM_MOUSE);
   page->selectAllObj();
+
+  sendFocusEvent();
 }
 
 /*========================== edit delete page ===================*/
@@ -351,6 +368,8 @@ void KPresenterView::editDelPage()
       QObject::connect(delPageDia,SIGNAL(deletePage(int,DelPageMode)),this,SLOT(delPageOk(int,DelPageMode)));
       delPageDia->show();
     }
+
+  sendFocusEvent();
 }
 
 /*========================== edit find ==========================*/
@@ -374,6 +393,8 @@ void KPresenterView::editFind()
 
       searchFirst = true;
     }
+
+  sendFocusEvent();
 }
 
 /*========================== edit find and replace ==============*/
@@ -399,6 +420,8 @@ void KPresenterView::editFindReplace()
 
       searchFirst = true;
     }
+
+  sendFocusEvent();
 }
 
 /*========================= view new view =======================*/
@@ -409,6 +432,8 @@ void KPresenterView::newView()
   KPresenterShell *shell = new KPresenterShell;
   shell->show();
   shell->setDocument(m_pKPresenterDoc);
+
+  sendFocusEvent();
 }
 
 /*====================== insert a new page ======================*/
@@ -427,6 +452,8 @@ void KPresenterView::insertPage()
   //insPageDia->resize(insPageDia->minimumSize());
   QObject::connect(insPageDia,SIGNAL(insertPage(int,InsPageMode,InsertPos)),this,SLOT(insPageOk(int,InsPageMode,InsertPos)));
   insPageDia->show();
+
+  sendFocusEvent();
 }
 
 /*==============================================================*/
@@ -434,6 +461,8 @@ void KPresenterView::toolsMouse()
 {
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
+
+  sendFocusEvent();
 }
 
 /*====================== insert a picture =======================*/
@@ -462,6 +491,8 @@ void KPresenterView::insertPicture()
 // 		  QCursor::pos(),LeftButton,LeftButton);
 //   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Picture),&ev);
 //   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Picture),&mev);
+
+  sendFocusEvent();
 }
 
 /*====================== insert a clipart =======================*/
@@ -477,6 +508,8 @@ void KPresenterView::insertClipart()
 // 		  QCursor::pos(),LeftButton,LeftButton);
 //   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Clipart),&ev);
 //   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Clipart),&mev);
+
+  sendFocusEvent();
 }
 
 /*=========================== insert line =======================*/
@@ -484,6 +517,8 @@ void KPresenterView::toolsLine()
 {
   page->setToolEditMode(INS_LINE);
   page->deSelectAllObj();
+
+  sendFocusEvent();
 }
 
 /*===================== insert rectangle ========================*/
@@ -491,6 +526,8 @@ void KPresenterView::toolsRectangle()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_RECT);
+
+  sendFocusEvent();
 }
 
 /*===================== insert circle or ellipse ================*/
@@ -498,6 +535,8 @@ void KPresenterView::toolsCircleOrEllipse()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_ELLIPSE);
+
+  sendFocusEvent();
 }
 
 /*==============================================================*/
@@ -505,6 +544,8 @@ void KPresenterView::toolsPie()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_PIE);
+
+  sendFocusEvent();
 }
 
 /*==============================================================*/
@@ -523,6 +564,8 @@ void KPresenterView::toolsDiagramm()
 
   cerr << "USING component " << vec[0].name << endl;
   page->setPartEntry(vec[0]);
+
+  sendFocusEvent();
 }
 
 /*==============================================================*/
@@ -541,6 +584,8 @@ void KPresenterView::toolsTable()
 
   cerr << "USING component " << vec[0].name << endl;
   page->setPartEntry(vec[0]);
+
+  sendFocusEvent();
 }
 
 /*==============================================================*/
@@ -559,6 +604,8 @@ void KPresenterView::toolsFormula()
 
   cerr << "USING component " << vec[0].name << endl;
   page->setPartEntry(vec[0]);
+
+  sendFocusEvent();
 }
 
 /*===================== insert a textobject =====================*/
@@ -566,6 +613,8 @@ void KPresenterView::toolsText()
 {
   page->deSelectAllObj();
   page->setToolEditMode(INS_TEXT);
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -587,6 +636,8 @@ void KPresenterView::toolsAutoform()
   afChoose->setMinimumSize(afChoose->width(),afChoose->height());
   QObject::connect(afChoose,SIGNAL(formChosen(const QString &)),this,SLOT(afChooseOk(const QString &)));
   afChoose->show();
+
+  sendFocusEvent();
 }
 
 /*======================== insert object ========================*/
@@ -601,6 +652,8 @@ void KPresenterView::toolsObject()
 
   page->setToolEditMode(INS_OBJECT);
   page->setPartEntry(pe);
+
+  sendFocusEvent();
 }
 
 /*===================== extra pen and brush =====================*/
@@ -628,6 +681,8 @@ void KPresenterView::extraPenBrush()
   QObject::connect(styleDia,SIGNAL(styleOk()),this,SLOT(styleOk()));
   page->setToolEditMode(TEM_MOUSE);
   styleDia->show();
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -652,6 +707,8 @@ void KPresenterView::extraConfigPie()
   QObject::connect(confPieDia,SIGNAL(confPieDiaOk()),this,SLOT(confPieOk()));
   page->setToolEditMode(TEM_MOUSE);
   confPieDia->show();
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -673,6 +730,8 @@ void KPresenterView::extraConfigRect()
   QObject::connect(confRectDia,SIGNAL(confRectDiaOk()),this,SLOT(confRectOk()));
   page->setToolEditMode(TEM_MOUSE);
   confRectDia->show();
+
+  sendFocusEvent();
 }
 
 /*========================== extra raise ========================*/
@@ -680,6 +739,8 @@ void KPresenterView::extraRaise()
 {
   page->setToolEditMode(TEM_MOUSE);
   m_pKPresenterDoc->raiseObjs(xOffset,yOffset);
+
+  sendFocusEvent();
 }
 
 /*========================== extra lower ========================*/
@@ -687,6 +748,8 @@ void KPresenterView::extraLower()
 {
   page->setToolEditMode(TEM_MOUSE);
   m_pKPresenterDoc->lowerObjs(xOffset,yOffset);
+
+  sendFocusEvent();
 }
 
 /*========================== extra rotate =======================*/
@@ -711,6 +774,8 @@ void KPresenterView::extraRotate()
       page->setToolEditMode(TEM_MOUSE);
       rotateDia->show();
     }
+
+  sendFocusEvent();
 }
 
 /*========================== extra shadow =======================*/
@@ -737,6 +802,8 @@ void KPresenterView::extraShadow()
       page->setToolEditMode(TEM_MOUSE);
       shadowDia->show();
     }
+
+  sendFocusEvent();
 }
 
 /*========================== extra align obj ====================*/
@@ -753,6 +820,8 @@ void KPresenterView::extraAlignObj()
 // 		  QCursor::pos(),LeftButton,LeftButton);
 //   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&ev);
 //   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&mev);
+
+  sendFocusEvent();
 }
 
 /*====================== extra background =======================*/
@@ -777,6 +846,8 @@ void KPresenterView::extraBackground()
   backDia->setCaption(i18n("KPresenter - Page Background"));
   QObject::connect(backDia,SIGNAL(backOk(bool)),this,SLOT(backOk(bool)));
   backDia->show();
+
+  sendFocusEvent();
 }
 
 /*======================= extra layout ==========================*/
@@ -792,6 +863,8 @@ void KPresenterView::extraLayout()
       pgLayoutCmd->execute();
       kPresenterDoc()->commands()->addCommand(pgLayoutCmd);
     }
+
+  sendFocusEvent();
 }
 
 /*========================== extra options ======================*/
@@ -813,6 +886,8 @@ void KPresenterView::extraOptions()
   optionDia->setRastY(kPresenterDoc()->getRastY());
   optionDia->setBackCol(kPresenterDoc()->getTxtBackCol());
   optionDia->show();
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -829,6 +904,8 @@ void KPresenterView::extraLineBegin()
 // 		  QCursor::pos(),LeftButton,LeftButton);
 //   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&ev);
 //   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&mev);
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -845,6 +922,8 @@ void KPresenterView::extraLineEnd()
 // 		  QCursor::pos(),LeftButton,LeftButton);
 //   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&ev);
 //   QApplication::sendEvent(m_rToolBarInsert->getButton(m_idButtonInsert_Line),&mev);
+
+  sendFocusEvent();
 }
 
 /*========================== screen config pages ================*/
@@ -866,6 +945,8 @@ void KPresenterView::screenConfigPages()
   pgConfDia->setCaption(i18n("KPresenter - Page Configuration for Screenpresentations"));
   QObject::connect(pgConfDia,SIGNAL(pgConfDiaOk()),this,SLOT(pgConfOk()));
   pgConfDia->show();
+
+  sendFocusEvent();
 }
 
 /*========================== screen presStructView  =============*/
@@ -881,6 +962,8 @@ void KPresenterView::screenPresStructView()
       QObject::connect(presStructView,SIGNAL(presStructViewClosed()),this,SLOT(psvClosed()));
       presStructView->show();
     }
+
+  sendFocusEvent();
 }
 
 /*========================== screen assign effect ===============*/
@@ -912,6 +995,8 @@ void KPresenterView::screenAssignEffect()
     QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),
 			  i18n("I can't assign an effect. You have to select EXACTLY one object!"),
 			  i18n("OK"));
+
+  sendFocusEvent();
 }
 
 /*========================== screen start =======================*/
@@ -1045,17 +1130,23 @@ void KPresenterView::screenStop()
 	  kill(screensaver_pid,SIGCONT);
 	}
     }
+
+  sendFocusEvent();
 }
 
 /*========================== screen pause =======================*/
 void KPresenterView::screenPause()
 {
+
+  sendFocusEvent();
 }
 
 /*========================== screen first =======================*/
 void KPresenterView::screenFirst()
 {
   vert->setValue(0);
+
+  sendFocusEvent();
 }
 
 /*========================== screen pevious =====================*/
@@ -1080,7 +1171,10 @@ void KPresenterView::screenPrev()
       p.end();
     }
   else
-    vert->setValue(yOffset - kPresenterDoc()->getPageSize(0,0,0,1.0,false).height());
+    {
+      vert->setValue(yOffset - kPresenterDoc()->getPageSize(0,0,0,1.0,false).height());
+      sendFocusEvent();
+    }
 }
 
 /*========================== screen next ========================*/
@@ -1105,24 +1199,34 @@ void KPresenterView::screenNext()
       p.end();
     }
   else
-    vert->setValue(yOffset + kPresenterDoc()->getPageSize(0,0,0,1.0,false).height());
+    {
+      vert->setValue(yOffset + kPresenterDoc()->getPageSize(0,0,0,1.0,false).height());
+      sendFocusEvent();
+
+    }
 }
 
 /*========================== screen last ========================*/
 void KPresenterView::screenLast()
 {
   vert->setValue(vert->maxValue());
+
+  sendFocusEvent();
 }
 
 /*========================== screen skip =======================*/
 void KPresenterView::screenSkip()
 {
+
+  sendFocusEvent();
 }
 
 /*========================== screen full screen ================*/
 void KPresenterView::screenFullScreen()
 {
   warning("Screenpresentations only work in FULLSCREEN mode at the moment!");
+
+  sendFocusEvent();
 }
 
 /*========================== screen pen/marker =================*/
@@ -1131,12 +1235,16 @@ void KPresenterView::screenPen()
   KPoint pnt(QCursor::pos());
 
   rb_pen->popup(pnt);
+
+  sendFocusEvent();
 }
 
 /*======================= help contents ========================*/
 void KPresenterView::helpContents()
 {
   KoAboutDia::about(KoAboutDia::KOffice,"0.0.1");
+
+  sendFocusEvent();
 }
 
 /*======================= help about kde ========================*/
@@ -1150,6 +1258,8 @@ void KPresenterView::sizeSelected(const char *size)
 {
   tbFont.setPointSize(atoi(size));
   page->setTextFont(&tbFont);
+
+  sendFocusEvent();
 }
 
 /*======================= text font selected  ===================*/
@@ -1157,6 +1267,8 @@ void KPresenterView::fontSelected(const char *font)
 {
   tbFont.setFamily(qstrdup(font));
   page->setTextFont(&tbFont);
+
+  sendFocusEvent();
 }
 
 /*========================= text bold ===========================*/
@@ -1164,6 +1276,8 @@ void KPresenterView::textBold()
 {
   tbFont.setBold(!tbFont.bold());
   page->setTextFont(&tbFont);
+
+  sendFocusEvent();
 }
 
 /*========================== text italic ========================*/
@@ -1171,6 +1285,8 @@ void KPresenterView::textItalic()
 {
   tbFont.setItalic(!tbFont.italic());
   page->setTextFont(&tbFont);
+
+  sendFocusEvent();
 }
 
 /*======================== text underline =======================*/
@@ -1178,6 +1294,8 @@ void KPresenterView::textUnderline()
 {
   tbFont.setUnderline(!tbFont.underline());
   page->setTextFont(&tbFont);
+
+  sendFocusEvent();
 }
 
 /*=========================== text color ========================*/
@@ -1190,6 +1308,8 @@ void KPresenterView::textColor()
       m_vToolBarText->setButtonPixmap(ID_TEXT_COLOR, pix );
       page->setTextColor(&tbColor);
     }
+
+  sendFocusEvent();
 }
 
 /*======================= text align left =======================*/
@@ -1204,6 +1324,8 @@ void KPresenterView::textAlignLeft()
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,true);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,false);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,false);
+
+  sendFocusEvent();
 }
 
 /*======================= text align center =====================*/
@@ -1218,6 +1340,8 @@ void KPresenterView::textAlignCenter()
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,false);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,true);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,false);
+
+  sendFocusEvent();
 }
 
 /*======================= text align right ======================*/
@@ -1232,6 +1356,8 @@ void KPresenterView::textAlignRight()
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,false);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,false);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,true);
+
+  sendFocusEvent();
 }
 
 /*======================= text align left =======================*/
@@ -1246,6 +1372,8 @@ void KPresenterView::mtextAlignLeft()
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,true);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,false);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,false);
+
+  sendFocusEvent();
 }
 
 /*======================= text align center =====================*/
@@ -1260,6 +1388,8 @@ void KPresenterView::mtextAlignCenter()
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,false);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,true);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,false);
+
+  sendFocusEvent();
 }
 
 /*======================= text align right ======================*/
@@ -1274,6 +1404,8 @@ void KPresenterView::mtextAlignRight()
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Left,false);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Center,false);
   m_vMenuText_TAlign->setItemChecked(m_idMenuText_TAlign_Right,true);
+
+  sendFocusEvent();
 }
 
 /*====================== font selected ==========================*/
@@ -1287,6 +1419,8 @@ void KPresenterView::mtextFont()
       tbFont = tmpFont;
       page->setTextFont(&tbFont);
     }
+
+  sendFocusEvent();
 }
 
 /*====================== enumerated list ========================*/
@@ -1315,6 +1449,8 @@ void KPresenterView::textEnumList()
 
       page->kTxtObj()->setObjType(KTextObject::ENUM_LIST);
     }
+
+  sendFocusEvent();
 }
 
 /*====================== unsorted list ==========================*/
@@ -1337,24 +1473,32 @@ void KPresenterView::textUnsortList()
 
       page->kTxtObj()->setObjType(KTextObject::UNSORT_LIST);
     }
+
+  sendFocusEvent();
 }
 
 /*====================== normal text ============================*/
 void KPresenterView::textNormalText()
 {
   if (page->kTxtObj()) page->kTxtObj()->setObjType(KTextObject::PLAIN);
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
 void KPresenterView::textDepthPlus()
 {
   if (page->kTxtObj()) page->kTxtObj()->incDepth();
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
 void KPresenterView::textDepthMinus()
 {
   if (page->kTxtObj()) page->kTxtObj()->decDepth();
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1382,6 +1526,8 @@ void KPresenterView::textSpacing()
       QObject::connect(spacingDia,SIGNAL(spacingDiaOk(int,int,int)),this,SLOT(spacingOk(int,int,int)));
       spacingDia->show();
     }
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1400,6 +1546,8 @@ void KPresenterView::setPenColor(CORBA::Long id)
       else
 	pen = NoPen;
     }
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1418,42 +1566,56 @@ void KPresenterView::setFillColor(CORBA::Long id)
       else
 	brush = NoBrush;
     }
+
+  sendFocusEvent();
 }
 
 /*======================= align object left =====================*/
 void KPresenterView::extraAlignObjLeftidl()
 {
   kPresenterDoc()->alignObjsLeft();
+
+  sendFocusEvent();
 }
 
 /*======================= align object center h =================*/
 void KPresenterView::extraAlignObjCenterHidl()
 {
   kPresenterDoc()->alignObjsCenterH();
+
+  sendFocusEvent();
 }
 
 /*======================= align object right ====================*/
 void KPresenterView::extraAlignObjRightidl()
 {
   kPresenterDoc()->alignObjsRight();
+
+  sendFocusEvent();
 }
 
 /*======================= align object top ======================*/
 void KPresenterView::extraAlignObjTopidl()
 {
   kPresenterDoc()->alignObjsTop();
+
+  sendFocusEvent();
 }
 
 /*======================= align object center v =================*/
 void KPresenterView::extraAlignObjCenterVidl()
 {
   kPresenterDoc()->alignObjsCenterV();
+
+  sendFocusEvent();
 }
 
 /*======================= align object bottom ===================*/
 void KPresenterView::extraAlignObjBottomidl()
 {
   kPresenterDoc()->alignObjsBottom();
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1461,6 +1623,8 @@ void KPresenterView::extraLineBeginNormal()
 {
   if (!m_pKPresenterDoc->setLineBegin(L_NORMAL))
     lineBegin = L_NORMAL;
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1468,6 +1632,8 @@ void KPresenterView::extraLineBeginArrow()
 {
   if (!m_pKPresenterDoc->setLineBegin(L_ARROW))
     lineBegin = L_ARROW;
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1475,6 +1641,8 @@ void KPresenterView::extraLineBeginRect()
 {
   if (!m_pKPresenterDoc->setLineBegin(L_SQUARE))
     lineBegin = L_SQUARE;
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1482,6 +1650,8 @@ void KPresenterView::extraLineBeginCircle()
 {
   if (!m_pKPresenterDoc->setLineBegin(L_CIRCLE))
     lineBegin = L_CIRCLE;
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1489,6 +1659,8 @@ void KPresenterView::extraLineEndNormal()
 {
   if (!m_pKPresenterDoc->setLineEnd(L_NORMAL))
     lineEnd = L_NORMAL;
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1496,6 +1668,8 @@ void KPresenterView::extraLineEndArrow()
 {
   if (!m_pKPresenterDoc->setLineEnd(L_ARROW))
     lineEnd = L_ARROW;
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1503,6 +1677,8 @@ void KPresenterView::extraLineEndRect()
 {
   if (!m_pKPresenterDoc->setLineEnd(L_SQUARE))
     lineEnd = L_SQUARE;
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -1510,6 +1686,8 @@ void KPresenterView::extraLineEndCircle()
 {
   if (!m_pKPresenterDoc->setLineEnd(L_CIRCLE))
     lineEnd = L_CIRCLE;
+
+  sendFocusEvent();
 }
 
 /*===============================================================*/
@@ -3836,4 +4014,11 @@ void KPresenterView::getFonts()
   }
 
   XFreeFontNames(fontNames_copy);
+}
+
+/*================================================================*/
+void KPresenterView::sendFocusEvent()
+{
+  QFocusEvent e((QEvent::Type) 9);
+  QApplication::sendEvent(shell->getFrame(),&e);
 }

@@ -36,8 +36,8 @@ KPresenterShell::KPresenterShell()
 {
   m_pDoc = 0L;
   m_pView = 0L;
-  
-  if (!previewHandlerRegistered) 
+
+  if (!previewHandlerRegistered)
     {
       KFilePreviewDialog::registerPreviewModule("wmf",wmfPreviewHandler,PreviewPixmap);
       KFilePreviewDialog::registerPreviewModule("gif",pixmapPreviewHandler,PreviewPixmap);
@@ -58,16 +58,16 @@ KPresenterShell::KPresenterShell()
 
   if ( s_lstShells == 0L )
     s_lstShells = new QList<KPresenterShell>;
-  
+
   s_lstShells->append( this );
 }
 
 KPresenterShell::~KPresenterShell()
-{ 
+{
   cerr << "KPresenterShell::~KPresenterShell()" << endl;
-  
+
   cleanUp();
-  
+
   s_lstShells->removeRef( this );
 }
 
@@ -75,7 +75,7 @@ bool KPresenterShell::isModified()
 {
   if ( m_pDoc )
     return (bool)m_pDoc->isModified();
-  
+
   return false;
 }
 
@@ -83,13 +83,13 @@ bool KPresenterShell::requestClose()
 {
   int res = QMessageBox::warning( 0L, i18n("Warning"), i18n("The document has been modified\nDo you want to save it ?" ),
 				  i18n("Yes"), i18n("No"), i18n("Cancel") );
-  
+
   if ( res == 0 )
     return saveDocument( "", "" );
-  
+
   if ( res == 1 )
     return true;
-  
+
   return false;
 }
 
@@ -104,14 +104,15 @@ void KPresenterShell::setDocument( KPresenterDoc *_doc )
 {
   if ( m_pDoc )
     releaseDocument();
-  
+
   m_pDoc = _doc;
   m_pDoc->_ref();
   m_pView = _doc->createPresenterView();
+  m_pView->setShell(this);
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
-  
+
   setRootPart( m_pView->id() );
   interface()->setActivePart( m_pView->id() );
 
@@ -123,7 +124,7 @@ void KPresenterShell::setDocument( KPresenterDoc *_doc )
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
-  
+
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
   opToolBar()->setFullWidth(false);
@@ -138,24 +139,25 @@ bool KPresenterShell::newDocument()
     s->newDocument();
     return true;
   }
-  
+
   m_pDoc = new KPresenterDoc;
   if ( !m_pDoc->init() )
   {
     cerr << "ERROR: Could not initialize document" << endl;
     return false;
   }
-  
+
   m_pView = m_pDoc->createPresenterView();
+  m_pView->setShell(this);
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   cerr << "*1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
   m_pView->setMainWindow( interface() );
 
   setRootPart( m_pView->id() );
-  
+
   interface()->setActivePart( m_pView->id() );
-  
+
   if( m_pFileMenu )
   {
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
@@ -164,7 +166,7 @@ bool KPresenterShell::newDocument()
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
-  
+
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
   opToolBar()->setFullWidth(false);
@@ -187,36 +189,37 @@ bool KPresenterShell::openDocument( const char *_url, const char *_format )
     s->show();
     return s->openDocument( _url, _format );
   }
-  
+
   cerr << "Creating new document" << endl;
-  
+
   m_pDoc = new KPresenterDoc;
   if ( !m_pDoc->loadFromURL( _url, _format ) )
     return false;
-  
+
   m_pView = m_pDoc->createPresenterView();
+  m_pView->setShell(this);
   m_pView->incRef();
   m_pView->setMode( KOffice::View::RootMode );
   m_pView->setMainWindow( interface() );
-  
+
   setRootPart( m_pView->id() );
   interface()->setActivePart( m_pView->id() );
-  
+
   if ( m_pFileMenu )
-  {    
+  {
     m_pFileMenu->setItemEnabled( m_idMenuFile_SaveAs, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Save, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Print, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Close, true );
     m_pFileMenu->setItemEnabled( m_idMenuFile_Quit, true );
   }
-  
+
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
   opToolBar()->setFullWidth(false);
 
   m_pDoc->setURL(_url);
-  
+
   return true;
 }
 
@@ -230,7 +233,7 @@ bool KPresenterShell::saveDocument( const char *_url, const char *_format )
     url = m_pDoc->url();
     _url = url.in();
   }
-  
+
   QString file;
   if ( _url == 0L || *_url == 0 )
   {
@@ -241,10 +244,10 @@ bool KPresenterShell::saveDocument( const char *_url, const char *_format )
     _url = file.data();
     m_pDoc->setURL(_url);
   }
-  
+
   if ( _format == 0L || *_format == 0 )
     _format = "application/x-kPresenter";
-  
+
   return m_pDoc->saveToURL( _url, _format );
 }
 
@@ -282,7 +285,7 @@ bool KPresenterShell::closeAllDocuments()
 	return false;
     }
   }
-  
+
   return true;
 }
 
@@ -297,7 +300,7 @@ void KPresenterShell::releaseDocument()
   if ( m_pDoc )
     views = m_pDoc->viewCount();
   cerr << "############## VIEWS=" << views << " #####################" << endl;
-  
+
   cerr << "-1) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
   setRootPart( 0 );
@@ -307,10 +310,10 @@ void KPresenterShell::releaseDocument()
   interface()->setActivePart( 0 );
 
   // cerr << "-3) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
-  
+
   if ( m_pView )
     m_pView->decRef();
-  
+
   /* if ( m_pView )
     m_pView->cleanUp(); */
 
@@ -331,7 +334,7 @@ void KPresenterShell::releaseDocument()
 void KPresenterShell::slotFileNew()
 {
   m_pDoc->enableEmbeddedParts(false);
-  if ( !newDocument() )    
+  if ( !newDocument() )
     QMessageBox::critical( this, i18n("KPresenter Error"), i18n("Could not create new document"), i18n("Ok") );
   m_pDoc->enableEmbeddedParts(true);
   m_pView->getPage()->repaint(false);
@@ -339,12 +342,13 @@ void KPresenterShell::slotFileNew()
 
 void KPresenterShell::slotFileOpen()
 {
+  m_pView->getPage()->setToolEditMode(TEM_MOUSE);
   m_pDoc->enableEmbeddedParts(false);
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
 
   if ( file.isNull() )
     return;
-  
+
   if ( !openDocument( file, "" ) )
   {
     QString tmp;
@@ -360,14 +364,14 @@ void KPresenterShell::slotFileSave()
   assert( m_pDoc != 0L );
 
   m_pDoc->enableEmbeddedParts(false);
-  
+
   CORBA::String_var url = m_pDoc->url();
   if ( strlen( url.in() ) == 0 )
   {
     slotFileSaveAs();
     return;
   }
-  
+
   if ( !saveDocument( url.in(), "" ) )
   {
     QString tmp;
@@ -409,18 +413,18 @@ void KPresenterShell::slotFileClose()
     slotFileQuit();
     return;
   }
-  
+
   if ( isModified() )
     if ( !requestClose() )
       return;
-  
+
   delete this;
 }
 
 void KPresenterShell::slotFilePrint()
 {
   assert( m_pView );
-  
+
   (void)m_pView->printDlg();
 }
 
@@ -432,7 +436,7 @@ void KPresenterShell::slotFileQuit()
     return;
 
   cerr << "EXIT 2" << endl;
-  
+
   delete this;
   kapp->exit();
 }

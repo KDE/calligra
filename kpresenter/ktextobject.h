@@ -1918,6 +1918,8 @@ signals:
    */
   void horzAlignChanged(TxtParagraph::HorzAlign);
 
+  void giveMeFocus();
+  
 protected:
 
   //**************** types *****************

@@ -41,5 +41,13 @@ Reggie, 7.2.1999:
 
 Reggie, 28.1.1999:
 ------------------
-- Optimized speed of moving objects in screenpresentations. 
+- Optimized speed of moving objects in screenpresentations.
   Now this is much smoother than before (even on high resolutions)
+
+Reggie, 2.3 - 6.3 1999:
+-----------------------
+- Porting to Qt 2.0 and lots of fixes for that
+
+Reggie, 10.3.1999:
+------------------
+- Fixed focus problems

@@ -166,6 +166,8 @@ void Page::mousePressEvent(QMouseEvent *e)
 {
   //setFocus();
 
+  view->sendFocusEvent();
+  
   KPObject *kpobject = 0;
 
   oldMx = e->x();
@@ -183,6 +185,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 	  kpobject->deactivate();
 	  kptextobject->getKTextObject()->clearFocus();
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+	  disconnect(kptextobject->getKTextObject(),SIGNAL(giveMeFocus()),view,SLOT(sendFocusEvent()));
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 		     this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
@@ -691,6 +694,9 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 /*==================== handle mouse moved ========================*/
 void Page::mouseMoveEvent(QMouseEvent *e)
 {
+  if (!hasFocus())
+    view->sendFocusEvent();
+  
   if (editMode)
     {
       view->setRulerMousePos(e->x(),e->y());
@@ -956,6 +962,7 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 		  //kptextobject->getKTextObject()->setFocus();
 		  kptextobject->getKTextObject()->setShowCursor(true);
 		  connect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+		  connect(kptextobject->getKTextObject(),SIGNAL(giveMeFocus()),view,SLOT(sendFocusEvent()));
 		  connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 		  connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 			  this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
@@ -1572,6 +1579,7 @@ void Page::startScreenPresentation(bool zoom)
 	  kpobject->deactivate();
 	  kptextobject->getKTextObject()->clearFocus();
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+	  disconnect(kptextobject->getKTextObject(),SIGNAL(giveMeFocus()),view,SLOT(sendFocusEvent()));
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 		     this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
@@ -2759,6 +2767,7 @@ void Page::editSelectedTextArea()
 		  //kptextobject->getKTextObject()->setFocus();
 		  //kptextobject->getKTextObject()->setShowCursor(true);
 		  connect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+		  connect(kptextobject->getKTextObject(),SIGNAL(giveMeFocus()),view,SLOT(sendFocusEvent()));
 		  connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 		  connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 			  this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
@@ -2876,6 +2885,7 @@ void Page::setToolEditMode(ToolEditMode _m)
 	  kpobject->deactivate();
 	  kptextobject->getKTextObject()->clearFocus();
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+	  disconnect(kptextobject->getKTextObject(),SIGNAL(giveMeFocus()),view,SLOT(sendFocusEvent()));
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 	  disconnect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
 		     this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));

@@ -54,6 +54,7 @@ class Page;
 #include <koPageLayoutDia.h>
 #include <kfontdialog.h>
 #include <koRuler.h>
+#include <koMainWindow.h>
 
 #include "kpresenter.h"
 #include "kpresenter_doc.h"
@@ -137,6 +138,8 @@ public:
   KPresenterView(QWidget *_parent, const char *_name, KPresenterDoc* _doc );
   ~KPresenterView();
 
+  void setShell(KPresenterShell *_shell) { shell = _shell; }
+  
   void init();
 
   // clean
@@ -340,6 +343,8 @@ public slots:
   void slotGeometryEnd( KoFrame* );
   void slotMoveEnd( KoFrame* );
 
+  void sendFocusEvent();
+  
 protected slots:
 
   // dialog slots
@@ -699,6 +704,8 @@ protected:
 
   int screensaver_pid;
 
+  KPresenterShell *shell;
+  
   // ids
   static const int ID_TOOL_MOUSE = 2;
   static const int ID_TOOL_LINE = 3;

@@ -4729,6 +4729,8 @@ void KTextObject::mousePressEvent(QMouseEvent *e)
 {
   //setFocus();
 
+  emit giveMeFocus();
+  
   if (e->button() != RightButton)
     {
       drawSelection = false;
@@ -4812,6 +4814,9 @@ void KTextObject::mouseReleaseEvent(QMouseEvent *e)
 /*====================== mouse move event =========================*/
 void KTextObject::mouseMoveEvent(QMouseEvent *e)
 {
+  if (!hasFocus())
+    emit giveMeFocus();
+  
   if (mousePressed)
     {
       TxtCursor _startCursor = startCursor;
