@@ -90,17 +90,6 @@ public:
     /** The type of content in the cell */
     enum Content { Text, RichText, Formula, VisualFormula };
 
-    /**
-     * The type of data in the cell, for Content == Text or Formula.
-     * RichText always is StringData, and VisualFormula is OtherData
-     * If you edit this, keep s_dataTypeToString uptodate.
-     */
-    enum DataType { StringData = 0, BoolData, NumericData, DateData, TimeData,
-                    OtherData, // see docu
-                    LastDataType = OtherData };
-    /** */
-    enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
-
     KSpreadCell( KSpreadSheet *_table, int _column, int _row );
     KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row );
     KSpreadCell( KSpreadSheet *_table, QPtrList<KSpreadDependency> _deponme, int _column, int _row );

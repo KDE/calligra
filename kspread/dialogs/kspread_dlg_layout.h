@@ -231,7 +231,6 @@ public:
     void applyColumn();
     void applyRow();
     void applyFormat( KSpreadCell *_obj );
-    KSpreadCell::Style getStyle();
     bool getDontPrintTextValue(){return dontPrintText->isChecked();}
 
 public slots:
@@ -636,7 +635,6 @@ public:
     QFont textFont;
     QColor bgColor;
     bool bBgColor;
-    KSpreadCell::Style eStyle;
     QString actionText;
     KSpreadCell::Align alignX;
     KSpreadCell::AlignY alignY;

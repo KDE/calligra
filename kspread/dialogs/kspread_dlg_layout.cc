@@ -2640,12 +2640,7 @@ CellFormatPageMisc::CellFormatPageMisc( QWidget* parent, CellFormatDlg *_dlg ) :
     idStyleNormal = 0; styleButton->insertItem( i18n("Normal"), 0 );
     idStyleButton = 1; styleButton->insertItem( i18n("Button"), 1 );
     idStyleSelect = 2; styleButton->insertItem( i18n("Select"), 2 );
-    if ( dlg->eStyle == KSpreadCell::ST_Undef )
-    {
-      idStyleUndef = 3; styleButton->insertItem( i18n("######"), 3 );
-    }
-    else
-      idStyleUndef = -1;
+    idStyleUndef = -1;
     connect( styleButton, SIGNAL( activated( int ) ), this, SLOT( slotStyle( int ) ) );
 
     tmpQLabel = new QLabel( box, "Label_3" );
@@ -2659,20 +2654,12 @@ CellFormatPageMisc::CellFormatPageMisc( QWidget* parent, CellFormatDlg *_dlg ) :
     {
       if ( !dlg->actionText.isEmpty() )
         actionText->setText( dlg->actionText );
-      if ( dlg->eStyle == KSpreadCell::ST_Normal || dlg->eStyle == KSpreadCell::ST_Undef )
         actionText->setEnabled( false );
     }
     else
       actionText->setEnabled( false );
 
-    if ( dlg->eStyle == KSpreadCell::ST_Normal )
       styleButton->setCurrentItem( idStyleNormal );
-    else if ( dlg->eStyle == KSpreadCell::ST_Button )
-      styleButton->setCurrentItem( idStyleButton );
-    else if ( dlg->eStyle == KSpreadCell::ST_Select )
-      styleButton->setCurrentItem( idStyleSelect );
-    else if ( dlg->eStyle == KSpreadCell::ST_Undef )
-      styleButton->setCurrentItem( idStyleUndef );
 
     layout->addWidget(box,0,0);
 
@@ -2724,23 +2711,6 @@ void CellFormatPageMisc::applyRow( )
       applyFormat(c);
     }
   }
-}
-
-KSpreadCell::Style CellFormatPageMisc::getStyle()
-{
-  switch(styleButton->currentItem())
-    {
-    case 0:
-      return KSpreadCell::ST_Normal;
-    case 1:
-      return KSpreadCell::ST_Button;
-    case 2:
-      return  KSpreadCell::ST_Select;
-    case 3 :
-      return  KSpreadCell::ST_Undef;
-    default :
-      return KSpreadCell::ST_Normal;
-    }
 }
 
 void CellFormatPageMisc::applyFormat( KSpreadCell *_obj )

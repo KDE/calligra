@@ -79,7 +79,6 @@ RowFormat *l;
 struct styleCell {
   int row;
   int col;
-  KSpreadCell::Style style;
   QString action;
 };
 
