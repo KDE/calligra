@@ -30,7 +30,7 @@ libkiviocommon_la_SOURCES = kivio_canvas.cpp kivio_doc.cpp kivio_factory.cpp kiv
 kde_module_LTLIBRARIES = libkiviopart.la
 libkiviopart_la_LDFLAGS = -avoid-version $(all_libraries) -module
 libkiviopart_la_LIBADD  = libkiviocommon.la
-libkiviopart_la_SOURCES = dummy.cpp
+libkiviopart_la_SOURCES = kivio_part_init.cc
 
 dummy.cpp:
 	echo > dummy.cpp
