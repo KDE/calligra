@@ -178,9 +178,9 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
     
     if ( m_currentFormat )
     {
-        // Delete an eventually already existing paragraph (should not happen)
         kdWarning(30520) << "Current format already defined!" << endl;
         delete m_currentFormat;
+        m_currentFormat = 0;
     }
     
     bool ok = false;
@@ -228,13 +228,19 @@ bool KWord13Parser::startElementLayout( const QString&, const QXmlAttributes& at
     
     stackItem->elementType = ElementTypeLayout;
     
+    if ( m_currentFormat )
+    {
+        kdWarning(30520) << "Current format defined! (Layout)" << endl;
+        delete m_currentFormat;
+        m_currentFormat = 0;
+    }
     if ( m_currentLayout )
     {
         // Delete an eventually already existing paragraph (should not happen)
         kdWarning(30520) << "Current layout already defined!" << endl;
         delete m_currentLayout;
     }
-    
+        
     m_currentLayout = new KWord13Layout;
     m_currentLayout->m_outline = ( attributes.value( "outline" ) == "true" );
         
@@ -541,6 +547,8 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
             {
                 success = true;
             }
+            // ### HACK: do not delete the data of <FORMATS>
+            m_currentParagraph->m_formats.setAutoDelete( false );
         }
         else if ( stackItem->elementType == ElementTypeIgnore )
         {
@@ -556,6 +564,7 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
             if ( m_currentParagraph )
             {
                 m_currentParagraph->m_formats.append( m_currentFormat );
+                kdDebug(30520) << "Adding to <FORMATS>: " << ((void*) m_currentFormat) << endl;
                 m_currentFormat = 0;
             }
             else
