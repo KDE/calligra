@@ -118,12 +118,13 @@ QWidget *KexiCreateProject::generatePage1()
 	QGridLayout *g1 = new QGridLayout(p1);
 	QLabel *pic1 = new QLabel("", p1);
 	pic1->setPixmap(m_wpic);
-	QLabel *lHost = new QLabel(i18n("Host:"), p1);
 	m_dbHost = new KLineEdit(p1);
-	QLabel *lUser = new QLabel(i18n("User:"), p1);
+	QLabel *lHost = new QLabel(m_dbHost, i18n("&Host:"), p1);
 	m_dbUser = new KLineEdit(p1);
-	QLabel *lPass = new QLabel(i18n("Password:"), p1);
+	QLabel *lUser = new QLabel(m_dbUser, i18n("&User:"), p1);
 	m_dbPass = new KLineEdit(p1);
+	m_dbPass->setEchoMode(QLineEdit::Password);
+	QLabel *lPass = new QLabel(m_dbPass, i18n("&Password:"), p1);
 		
 	QSpacerItem *s1 = new QSpacerItem(40, 40);
 	
@@ -192,7 +193,7 @@ void KexiCreateProject::nextClicked(const QString &pageTitle)
 		}
 		else
 		{
-			QString msg = i18n("connection faild: ");
+			QString msg = i18n("Connection failed: ");
 			msg += g_Global->g_db->m_db->lastError().databaseText();
 			KListViewItem *i = new KListViewItem(m_connectionLog, msg);
 		}

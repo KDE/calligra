@@ -97,7 +97,7 @@ void KexiBrowser::generateView()
 void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p)
 {
 	#warning "TODO: look up the type, wich we have to create"
-	KexiBrowserItem *r = (KexiBrowserItem *)i;
+	KexiBrowserItem *r = static_cast<KexiBrowserItem *>(i);
 	kdDebug() << "context menu requested..." << endl;
 		
 	if(i)
