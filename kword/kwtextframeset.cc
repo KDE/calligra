@@ -52,7 +52,6 @@
 #include "KWordFootNoteFrameSetIface.h"
 #include "KWordFrameSetIface.h"
 #include <kdebug.h>
-#include <kdebugclasses.h>
 #include <assert.h>
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY

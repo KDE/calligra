@@ -22,7 +22,6 @@
 #include "kwdoc.h"
 #include "kwviewmode.h"
 #include <kdebug.h>
-#include <kdebugclasses.h>
 
 
 KWAnchor::KWAnchor( KoTextDocument *textDocument, KWFrameSet * frameset, int frameNum )

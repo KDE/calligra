@@ -39,7 +39,6 @@
 #include <klocale.h>
 #include <kparts/partmanager.h>
 #include <kdebug.h>
-#include <kdebugclasses.h>
 #include <float.h>
 #include "KWordFrameSetIface.h"
 #include <dcopobject.h>

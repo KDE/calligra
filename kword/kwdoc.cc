@@ -23,7 +23,6 @@
 
 #include <kapplication.h> // for KDE_VERSION
 #include <kdebug.h>
-#include <kdebugclasses.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
