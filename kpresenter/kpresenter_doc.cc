@@ -716,25 +716,29 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	    }
 	    loadBackground( parser, lst );
 	} else if ( name == "HEADER" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "show" ) {
-		    setHeader( static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) ) );
-		    headerFooterEdit->setShowHeader( hasHeader() );
+	    if ( _clean || !hasHeader() ) {
+		KOMLParser::parseTag( tag.c_str(), name, lst );
+		vector<KOMLAttrib>::const_iterator it = lst.begin();
+		for( ; it != lst.end(); it++ ) {
+		    if ( ( *it ).m_strName == "show" ) {
+			setHeader( static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) ) );
+			headerFooterEdit->setShowHeader( hasHeader() );
+		    }
 		}
+		_header->load( parser, lst );
 	    }
-	    _header->load( parser, lst );
 	} else if ( name == "FOOTER" ) {
-	    KOMLParser::parseTag( tag.c_str(), name, lst );
-	    vector<KOMLAttrib>::const_iterator it = lst.begin();
-	    for( ; it != lst.end(); it++ ) {
-		if ( ( *it ).m_strName == "show" ) {
-		    setFooter( static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) ) );
-		    headerFooterEdit->setShowFooter( hasFooter() );
+	    if ( _clean || !hasFooter() ) {
+		KOMLParser::parseTag( tag.c_str(), name, lst );
+		vector<KOMLAttrib>::const_iterator it = lst.begin();
+		for( ; it != lst.end(); it++ ) {
+		    if ( ( *it ).m_strName == "show" ) {
+			setFooter( static_cast<bool>( atoi( ( *it ).m_strValue.c_str() ) ) );
+			headerFooterEdit->setShowFooter( hasFooter() );
+		    }
 		}
+		_footer->load( parser, lst );
 	    }
-	    _footer->load( parser, lst );
 	} else if ( name == "OBJECTS" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
 	    vector<KOMLAttrib>::const_iterator it = lst.begin();
