@@ -22,6 +22,7 @@
 #define __ko_koolbar_h__
 
 #include <qwidget.h>
+#include <qframe.h>
 #include <qpushbutton.h>
 #include <qintdict.h>
 
@@ -91,7 +92,7 @@ protected:
   bool m_bEnabled;
 };
 
-class KoKoolBarBox : public QWidget
+class KoKoolBarBox : public QFrame
 {
   Q_OBJECT
 public:
@@ -108,7 +109,7 @@ protected slots:
 
 protected:
   virtual void resizeEvent( QResizeEvent *_ev );
-  virtual void paintEvent( QPaintEvent *_ev );
+  virtual void drawContents( QPainter * );
   virtual void mousePressEvent( QMouseEvent *_ev )
   { KoKoolBarItem *item = findByPos( _ev->pos().y() + m_iYOffset ); if ( !item ) return; item->press(); }
 

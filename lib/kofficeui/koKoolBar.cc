@@ -209,13 +209,15 @@ void KoKoolBar::enableGroup( int _grp, bool _enable )
 }
 
 KoKoolBarBox::KoKoolBarBox( KoKoolBar *_bar ) :
-  QWidget( _bar ), m_pBar( _bar ),
+  QFrame( _bar ), m_pBar( _bar ),
   m_pButtonUp( 0L ), m_pButtonDown( 0L )
 {
   m_iYOffset = 0;
   m_iYIcon = 0;
   m_pGroup = 0L;
 
+  setFrameShape( StyledPanel );
+  setFrameShadow( Sunken );
   // setBackgroundMode( PaletteBase );
   setBackgroundColor( darkGray );
 }
@@ -333,7 +335,7 @@ void KoKoolBarBox::scrollUp()
   int old = m_iYOffset;
   m_iYOffset = y;
 
-  QWidget::scroll( 0, old - m_iYOffset );
+  QWidget::scroll( 0, old - m_iYOffset, contentsRect() );
   updateScrollButtons();
 }
 
@@ -359,7 +361,7 @@ void KoKoolBarBox::scrollDown()
   int old = m_iYOffset;
   m_iYOffset = y;
 
-  QWidget::scroll( 0, old - m_iYOffset );
+  QWidget::scroll( 0, old - m_iYOffset, contentsRect() );
   updateScrollButtons();
 }
 
@@ -380,19 +382,10 @@ void KoKoolBarBox::updateScrollButtons()
   m_pButtonDown->setGeometry( width() - bs, height() - bs, bs, bs );
 }
 
-void KoKoolBarBox::paintEvent( QPaintEvent * )
+void KoKoolBarBox::drawContents( QPainter * painter )
 {
-  QPainter painter;
-  painter.begin( this );
-
   if ( m_pGroup == 0L )
-  {
-    qDrawShadePanel( &painter, 0, 0, width(), height(), colorGroup(), true );
-    painter.end();
     return;
-  }
-
-  qDrawShadePanel( &painter, 0, -m_iYOffset, width(), maxHeight(), colorGroup(),true );
 
   int y = -m_iYOffset;
 
@@ -401,19 +394,17 @@ void KoKoolBarBox::paintEvent( QPaintEvent * )
   {
     if ( y + it.current()->height() >= 0 && y <= height() ) // visible ?
     {
-      painter.drawPixmap( ( width() - it.current()->pixmap().width() ) / 2, y, it.current()->pixmap() );
+      painter->drawPixmap( ( width() - it.current()->pixmap().width() ) / 2, y, it.current()->pixmap() );
       if ( !it.current()->text().isEmpty() )
       {
         int y2 = y + it.current()->pixmap().height() + 2;
-        painter.drawText( ( width() - painter.fontMetrics().width( it.current()->text() ) ) / 2,
-			    y2 + painter.fontMetrics().ascent(), it.current()->text() );
+        painter->drawText( ( width() - painter->fontMetrics().width( it.current()->text() ) ) / 2,
+			    y2 + painter->fontMetrics().ascent(), it.current()->text() );
       }
     }
 
     y += it.current()->height();
   }
-
-  painter.end();
 }
 
 KoKoolBarGroup::KoKoolBarGroup( KoKoolBar *_bar, const QString& _text ) :
