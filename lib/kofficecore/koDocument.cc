@@ -142,7 +142,7 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
       m_strMimeType = (*it).m_strValue.c_str();
     }
     else
-      kdebug( KDEBUG_INFO, 30003, "Unknown attrib 'OBJECT:%c'", (*it).m_strName.c_str() );
+      kdebug( KDEBUG_INFO, 30003, "Unknown attrib 'OBJECT:%s'", (*it).m_strName.c_str() );
   }
 
   if ( m_strURL.isEmpty() )
@@ -173,7 +173,7 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
       m_geometry = tagToRect( lst );
     }
     else
-      kdebug( KDEBUG_INFO, 30003, "Unknown tag '%c' in OBJECT", tag.c_str() );
+      kdebug( KDEBUG_INFO, 30003, "Unknown tag '%s' in OBJECT", tag.c_str() );
 
     if ( !parser.close( tag ) )
     {
@@ -195,7 +195,7 @@ bool KoDocumentChild::loadDocument( KOStore::Store_ptr _store, const char *_form
 {
   assert( !m_strURL.isEmpty() );
 
-  kdebug( KDEBUG_INFO, 30003, "Trying to load %c", m_strURL.ascii() );
+  kdebug( KDEBUG_INFO, 30003, "Trying to load %s", m_strURL.ascii() );
   KURL u( m_strURL );
 
   KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_strMimeType );
@@ -413,7 +413,7 @@ bool KoDocument::saveChildren( KOStore::Store_ptr _store )
   list<KoDocument::SimpleDocumentChild>::iterator it;
   for( it = m_lstAllChildren.begin(); it != m_lstAllChildren.end(); ++it )
   {
-    kdebug( KDEBUG_INFO, 30003, "Saving child %c", it->url() );
+    kdebug( KDEBUG_INFO, 30003, "Saving child %s", it->url() );
 
     KURL u( it->url() );
     // Do we have to save this child embedded ?
@@ -425,7 +425,7 @@ bool KoDocument::saveChildren( KOStore::Store_ptr _store )
     if ( !doc->saveToStore( _store, 0L ) )
       return false;
 
-    kdebug( KDEBUG_INFO, 30003, "Saved child %c", it->url() );
+    kdebug( KDEBUG_INFO, 30003, "Saved child %s", it->url() );
   }
 
   m_lstAllChildren.clear();
@@ -547,10 +547,11 @@ CORBA::Boolean KoDocument::saveToStore( KOStore::Store_ptr _store, const char *_
 
 CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char * )
 {
+  kdebug( KDEBUG_INFO, 30003, "KoDocument::loadFromURL( %s, <> )", _url );
   KURL u( _url );
   if ( u.isMalformed() )
   {
-    kdebug( KDEBUG_INFO, 30003, "Malformed URL %c", _url );
+    kdebug( KDEBUG_INFO, 30003, "Malformed URL %s", _url );
     return false;
   }
 
@@ -563,7 +564,7 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char * )
   ifstream in( u.path() );
   if ( !in )
   {
-    kdebug( KDEBUG_INFO, 30003, "Could not open %c", u.path().ascii() );
+    kdebug( KDEBUG_INFO, 30003, "Could not open %s", u.path().ascii() );
     return false;
   }
 
@@ -572,7 +573,7 @@ CORBA::Boolean KoDocument::loadFromURL( const char *_url, const char * )
   in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
   in.unget(); in.unget(); in.unget(); in.unget();
 
-  kdebug( KDEBUG_INFO, 30003, "PATTERN=%c", buf );
+  kdebug( KDEBUG_INFO, 30003, "PATTERN=%s", buf );
 
   setURL( _url );
 
@@ -633,12 +634,13 @@ CORBA::Boolean KoDocument::loadFromStore( KOStore::Store_ptr _store, const char 
 
 bool KoDocument::load( istream& in, KOStore::Store_ptr _store )
 {
+  kdebug( KDEBUG_INFO, 30003, "KoDocument::load( istream& in, KOStore::Store_ptr _store )");
   // Try to find out wether it is a mime multi part file
   char buf[5];
   in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
   in.unget(); in.unget(); in.unget(); in.unget();
 
-  kdebug( KDEBUG_INFO, 30003, "PATTERN2=%c", buf );
+  kdebug( KDEBUG_INFO, 30003, "PATTERN2=%s", buf );
 
   // Load XML ?
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
