@@ -3132,5 +3132,14 @@ void KPresenterDoc::setTabStopValue ( double _tabStop )
     m_stickyPage->changeTabStopValue( m_tabStop );
 }
 
+void KPresenterDoc::changeBgSpellCheckingState( bool b )
+{
+    enableBackgroundSpellCheck( b );
+    reactivateBgSpellChecking();
+    KConfig *config = KPresenterFactory::global()->config();
+    config->setGroup("KSpell kpresenter" );
+    config->writeEntry( "SpellCheck", (int)b );
+}
+
 
 #include <kpresenter_doc.moc>

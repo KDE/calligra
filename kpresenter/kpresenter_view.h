@@ -398,6 +398,8 @@ public slots:
 
     void saveClipart();
     void savePicture();
+    void autoSpellCheck();
+
 public:
     // create GUI
     virtual void createGUI();
@@ -569,6 +571,7 @@ public:
 
     void setZoomRect( const QRect & rect, bool drawRubber );
     void changeVerticalAlignmentStatus(VerticalAlignmentType _type );
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -1002,6 +1005,8 @@ private:
     KToggleAction *actionAlignVerticalTop;
     KToggleAction *actionAlignVerticalBottom;
     KToggleAction *actionAlignVerticalCenter;
+
+    KToggleAction *actionAllowBgSpellCheck;
 
 
     QTimer automaticScreenPresTimer;

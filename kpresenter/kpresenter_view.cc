@@ -2478,6 +2478,7 @@ void KPresenterView::initGui()
 
     m_pKPresenterDoc->updateZoomRuler();
     updatePageInfo();
+    actionAllowBgSpellCheck->setChecked( m_pKPresenterDoc->backgroundSpellCheckEnabled());
 }
 
 void KPresenterView::updateHeaderFooterButton()
@@ -3274,6 +3275,10 @@ void KPresenterView::setupActions()
     actionSaveClipart= new KAction( i18n("Save Clipart..."), 0,
                                     this, SLOT( saveClipart() ),
                                     actionCollection(), "save_clipart");
+    actionAllowBgSpellCheck = new KToggleAction( i18n( "AutoSpellCheck" ), 0,
+                                                 this, SLOT( autoSpellCheck() ),
+                                                 actionCollection(), "tool_auto_spellcheck" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -6820,6 +6825,11 @@ void KPresenterView::changeVerticalAlignmentStatus(VerticalAlignmentType _type )
         break;
     }
 
+}
+
+void KPresenterView::autoSpellCheck()
+{
+    m_pKPresenterDoc->changeBgSpellCheckingState( actionAllowBgSpellCheck->isChecked() );
 }
 
 

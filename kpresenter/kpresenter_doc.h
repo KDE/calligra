@@ -397,6 +397,7 @@ public:
     void updateObjectSelected();
     void layout(KPObject *kpobject);
     void layout();
+    void changeBgSpellCheckingState( bool b );
 
 public slots:
     void movePage( int from, int to );

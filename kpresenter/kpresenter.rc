@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="80">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="81">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -136,7 +136,10 @@
   <Separator/>
   <Action name="change_case"/>
   <Separator/>
-  <Action name="extra_spellcheck"/>
+  <Menu name="SpellCheck"><text>SpellCheck</text>
+	  <Action name="tool_auto_spellcheck"/>
+	  <Action name="extra_spellcheck"/>
+  </Menu>  
   <Separator/>
   <Action name="apply_autoformat"/>
  </Menu>
