@@ -205,11 +205,12 @@ bool pqxxMigrate::drv_connect()
 //Connect to the db backend
 bool pqxxMigrate::drv_disconnect()
 {
-    if (m_conn)
-    {
-        m_conn->disconnect();
-        delete m_conn;
-    }
+	if (m_conn)
+	{
+			m_conn->disconnect();
+			delete m_conn;
+	}
+	return true;
 }
 //==================================================================================
 //Perform a query on the database and store result in m_res
@@ -243,6 +244,7 @@ bool pqxxMigrate::query (const QString& statement)
 	{
 		kdDebug() << "pqxxMigrate::query:exception(...)??" << endl;
 	}
+	return true;
 }
 
 //=========================================================================
@@ -454,3 +456,4 @@ bool pqxxMigrate::uniqueKey(pqxx::oid table_uid, int col) const
 
     return false;
 }*/
+

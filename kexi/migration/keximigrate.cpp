@@ -224,3 +224,4 @@ else
 	return KexiDB::Field::Text;
 
 }
+
