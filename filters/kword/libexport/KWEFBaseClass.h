@@ -36,13 +36,7 @@ class KWEFBaseClass
         virtual ~KWEFBaseClass(void) {}
     public: //Non-virtual
     public: //virtual
-//        virtual bool filter(const QString &filenameIn, const QString &filenameOut);
-//        virtual QString escapeText(const QString& str) const;
-        virtual QString getHtmlOpeningTagExtraAttributes(void) const;
-//        virtual QString getDocType(void) const;
-        virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
-        virtual QString processDocTagStylesOnly(QDomElement myNode);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
         virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
         virtual void processStyleTag (QDomNode myNode, void * tagData, QString &strStyles);
@@ -52,8 +46,6 @@ class KWEFBaseClass
         bool inList; // Are we currently in a list?
         bool orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
         CounterData::Style typeList; // What is the style of the current list (undefined, if we are not in a list)
-    protected:
-        QDomDocument qDomDocumentIn;
 };
 
 #endif /* KWEF_BASECLASS_H */

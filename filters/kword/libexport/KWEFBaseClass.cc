@@ -25,74 +25,12 @@
 #include "KWEFStructures.h"
 #include "KWEFBaseClass.h"
 
-QString KWEFBaseClass::getHtmlOpeningTagExtraAttributes(void) const
-{
-    return QString::null;
-}
-
-#if 0
-QString KWEFBaseClass::escapeText(const QString& strIn) const
-{
-    QString strReturn;
-    QChar ch;
-
-    for (uint i=0; i<strIn.length(); i++)
-    {
-        ch=strIn[i];
-        switch (ch.unicode())
-        {
-        case 38: // &
-            {
-                strReturn+="&amp;";
-                break;
-            }
-        case 60: // <
-            {
-                strReturn+="&lt;";
-                break;
-            }
-        case 62: // >
-            {
-                strReturn+="&gt;";
-                break;
-            }
-        case 34: // "
-            {
-                strReturn+="&quot;";
-                break;
-            }
-        // NOTE: the apostrophe ' is not escaped,
-        // NOTE:  as HTML does not define &apos; by default (only XML/XHTML does)
-        default:
-            {
-                // TODO: verify that the character ch can be expressed in the
-                // TODO:  encoding in which we will write the HTML file.
-                strReturn+=ch;
-                break;
-            }
-        }
-    }
-
-    return strReturn;
-}
-#endif // 0
-
-QString KWEFBaseClass::processDocTagStylesOnly(QDomElement myNode)
-{
-    return QString::null;
-}
-
 void KWEFBaseClass::processStyleTag (QDomNode, void *, QString&)
 {
 }
 
 void KWEFBaseClass::helpStyleProcessing(QDomNode myNode,LayoutData* layout)
 {
-}
-
-QString KWEFBaseClass::getBodyOpeningTagExtraAttributes(void) const
-{
-    return QString::null;
 }
 
 void KWEFBaseClass::ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText)

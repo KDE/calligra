@@ -35,19 +35,21 @@ class ClassExportFilterHtml : public KWEFBaseClass
         inline void setUTF8 (const bool flag ) { m_utf8=flag; }
         bool filter(const QString  &filenameIn, const QString  &filenameOut);
     public: //virtual
-        virtual QString getHtmlOpeningTagExtraAttributes(void) const;
-        virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText);
-        virtual QString processDocTagStylesOnly(QDomElement myNode);
         virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
         virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout);
         virtual void processStyleTag (QDomNode myNode, void * tagData, QString &strStyles);
     protected:
+        QString processDocTagStylesOnly(QDomElement myNode);
+        QString getBodyOpeningTagExtraAttributes(void) const;
+        QString getHtmlOpeningTagExtraAttributes(void) const;
         QString escapeCssIdentifier(const QString& strText) const;
         QString layoutToCss(LayoutData& layout) const;
         QString getDocType(void) const;
     protected:
         virtual void helpStyleProcessing(QDomNode myNode,LayoutData* layout);
+    protected:
+        QDomDocument qDomDocumentIn;
     private:
         bool m_utf8;
         bool m_xml;
