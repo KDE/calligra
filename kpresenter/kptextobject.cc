@@ -89,6 +89,10 @@ const QString &KPTextObject::attrColor=KGlobal::staticQString("color");
 const QString &KPTextObject::attrWhitespace=KGlobal::staticQString("whitespace");
 const QString &KPTextObject::attrTextBackColor=KGlobal::staticQString("textbackcolor");
 const QString &KPTextObject::attrVertAlign=KGlobal::staticQString("VERTALIGN");
+//link
+const QString &KPTextObject::attrLinkName=KGlobal::staticQString("linkName");
+const QString &KPTextObject::attrHrefName=KGlobal::staticQString("hrefName");
+
 
 /*================ default constructor ===========================*/
 KPTextObject::KPTextObject(  KPresenterDoc *doc )
@@ -403,34 +407,19 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
         KTextEditFormat *lastFormat = 0;
 #endif
         KoTextFormat *lastFormat = 0;
-        QString tmpText, tmpFamily, tmpColor, tmpTextBackColor;
-        int tmpPointSize=10;
-        unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false,tmpVerticalAlign=false;
+        QString tmpText;
         for ( int i = 0; i < parag->length(); ++i ) {
-            //KTextEditString::Char *c = parag->at( i );
             QTextStringChar &c = parag->string()->at(i);
             if ( !lastFormat || c.format()->key() != lastFormat->key() ) {
                 if ( lastFormat )
-                    paragraph.appendChild(saveHelper(tmpText, tmpFamily, tmpColor, tmpPointSize,
-                                                     tmpBold, tmpItalic, tmpUnderline,tmpStrikeOut,tmpTextBackColor,tmpVerticalAlign, doc));
+                    paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
                 lastFormat = static_cast<KoTextFormat*> (c.format());
                 tmpText="";
-                tmpFamily=lastFormat->font().family();
-                tmpPointSize=lastFormat->font().pointSize();
-                tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
-                tmpItalic=static_cast<unsigned int>(lastFormat->font().italic());
-                tmpUnderline=static_cast<unsigned int>(lastFormat->font().underline());
-                tmpStrikeOut=static_cast<unsigned int>(lastFormat->font().strikeOut());
-                tmpColor=lastFormat->color().name();
-                tmpVerticalAlign=static_cast<unsigned int>(lastFormat->vAlign());
-                if(lastFormat->textBackgroundColor().isValid())
-                    tmpTextBackColor=lastFormat->textBackgroundColor().name();
             }
             tmpText+=c.c;
         }
         if ( lastFormat ) {
-            paragraph.appendChild(saveHelper(tmpText, tmpFamily, tmpColor, tmpPointSize,
-                                             tmpBold, tmpItalic, tmpUnderline, tmpStrikeOut,tmpTextBackColor ,tmpVerticalAlign, doc));
+            paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
         }
         textobj.appendChild(paragraph);
         parag = static_cast<KoTextParag*>( parag->next());
@@ -438,10 +427,25 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
     return textobj;
 }
 
-QDomElement KPTextObject::saveHelper(const QString &tmpText, const QString &tmpFamily, const QString &tmpColor,
-                                     int tmpPointSize, unsigned int tmpBold, unsigned int tmpItalic,
-                                     unsigned int tmpUnderline, unsigned int tmpStrikeOut, const QString & tmpTextBackColor, unsigned int tmpVerticalAlign, QDomDocument &doc) {
+QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)
+{
+
     QDomElement element=doc.createElement(tagTEXT);
+    QString tmpFamily, tmpColor, tmpTextBackColor,tmpLinkName,tmpHrefName;
+    int tmpPointSize=10;
+    unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false,tmpVerticalAlign=false;
+
+    tmpFamily=lastFormat->font().family();
+    tmpPointSize=lastFormat->font().pointSize();
+    tmpBold=static_cast<unsigned int>(lastFormat->font().bold());
+    tmpItalic=static_cast<unsigned int>(lastFormat->font().italic());
+    tmpUnderline=static_cast<unsigned int>(lastFormat->font().underline());
+    tmpStrikeOut=static_cast<unsigned int>(lastFormat->font().strikeOut());
+    tmpColor=lastFormat->color().name();
+    tmpVerticalAlign=static_cast<unsigned int>(lastFormat->vAlign());
+    if(lastFormat->textBackgroundColor().isValid())
+        tmpTextBackColor=lastFormat->textBackgroundColor().name();
+
     element.setAttribute(attrFamily, tmpFamily);
     element.setAttribute(attrPointSize, tmpPointSize);
 
@@ -459,6 +463,15 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText, const QString &tmpF
         element.setAttribute(attrColor, tmpTextBackColor);
     if(tmpVerticalAlign!=Qt::AlignLeft)
         element.setAttribute(attrVertAlign,tmpVerticalAlign);
+
+    if(!lastFormat->anchorName().isEmpty() && !lastFormat->anchorHref().isEmpty())
+    {
+        tmpLinkName=lastFormat->anchorName();
+        tmpHrefName=lastFormat->anchorHref();
+        element.setAttribute(attrLinkName,tmpLinkName);
+        element.setAttribute(attrHrefName,tmpHrefName);
+    }
+
     if(tmpText.stripWhiteSpace().isEmpty())
         // working around a bug in QDom
         element.setAttribute(attrWhitespace, tmpText.length());
@@ -543,6 +556,15 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     //TODO FIXME : value is correct, but format is not good :(
                     if(n.hasAttribute(attrVertAlign))
                         fm->setVAlign( static_cast<QTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
+
+                    if(n.hasAttribute(attrLinkName))
+                    {
+                        if(n.hasAttribute(attrHrefName))
+                        {
+                            fm->setAnchorName(n.attribute(attrLinkName));
+                            fm->setAnchorHref(n.attribute(attrHrefName));
+                        }
+                    }
 
                     QString txt = n.firstChild().toText().data();
                     if(n.hasAttribute(attrWhitespace)) {
