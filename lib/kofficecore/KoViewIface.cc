@@ -60,10 +60,10 @@ QCStringList KoViewIface::actions()
     for (; it != end; ++it )
         res.append( (*it)->name() );
 
-    return res;                                                                                              }
+    return res;
+}
 
 QMap<QCString,DCOPRef> KoViewIface::actionMap()
 {
     return m_actionProxy->actionMap();
 }
-
