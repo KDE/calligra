@@ -102,30 +102,26 @@ void KSpreadPaperLayout::initTab()
                               ":" +
                               QString().setNum( print->printRepeatRows().second ) );
 
-    QLabel *pZoom = new QLabel ( i18n("Zoom printout:"), tab );
+    QLabel *pZoom = new QLabel ( i18n("Zoom:"), tab );
     grid->addWidget( pZoom, 7, 0 );
 
     m_cZoom = new QComboBox( true, tab, "Zoom" );
-    grid->addWidget( m_cZoom, 7, 1 );
+    grid->addWidget( m_cZoom, 7, 1, Qt::AlignLeft );
 
     QStringList lst;
-    lst.append("");
     for( int i = 5; i < 500; i += 5 )
     {
-        lst.append( QString( "%1" ).arg( i ) );
+        lst.append( QString( "%1%" ).arg( i ) );
         if( qRound( print->zoom() * 100 ) > i &&
             qRound( print->zoom() * 100 ) < i + 5 )
         {
-            lst.append( QString( "%1" ).arg( print->zoom() * 100 ) );
+            lst.append( QString( "%1%" ).arg( qRound( print->zoom() * 100 ) ) );
         }
     }
-
     m_cZoom->insertStringList( lst );
 
     int number_of_entries = m_cZoom->count();
-    QString string;
-    string.setNum( qRound( print->zoom() * 100 ) );
-
+    QString string = QString( "%1%" ).arg( qRound( print->zoom() * 100 ) );
     for (int i = 0; i < number_of_entries ; i++)
     {
         if ( string == (QString) m_cZoom->text(i) )
@@ -134,7 +130,6 @@ void KSpreadPaperLayout::initTab()
             break;
         }
     }
-
 
     // --------------- main grid ------------------
     grid->addColSpacing( 0, pApplyToAll->width() );
@@ -284,7 +279,9 @@ void KSpreadPaperLayout::slotOk()
         if ( error )
           KMessageBox::information( 0, i18n( "Repeated rows range wrong, changes are ignored.\nMust be in format row:row (eg. 2:3)" ) );
       }
-      print->setZoom( 0.01 * m_cZoom->currentText().toDouble() );
+
+      if( QString( "%1%" ).arg( qRound( print->zoom() * 100 ) ) != m_cZoom->currentText() )
+        print->setZoom( 0.01 * m_cZoom->currentText().toDouble() );
 
       sheet->doc()->setModified( true );
 
