@@ -477,7 +477,7 @@ QString KoParagCounter::levelText( const KoTextParag *paragraph )
         text = '=';  // think up a better character
         break;
     case KoParagCounter::STYLE_CIRCLEBULLET:
-        text = 'O';
+        text = 'o';
         break;
     case KoParagCounter::STYLE_CUSTOMBULLET:
         text = m_customBulletChar;
