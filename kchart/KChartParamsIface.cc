@@ -39,6 +39,10 @@ void KChartParamsIface::setChartType( const QString &chart )
     params->setChartType(params->stringToChartType( chart ));
 }
 
+QString KChartParamsIface::barChartSubType() const
+{
+    return params->barChartSubTypeToString(params->barChartSubType());
+}
 
 bool KChartParamsIface::threeDBars()
 {
@@ -207,3 +211,13 @@ QString KChartParamsIface::header2Text() const
     return params->header2Text();
 }
 
+
+void KChartParamsIface::setOutlineDataLineWidth( uint width )
+{
+    params->setOutlineDataLineWidth( width );
+}
+
+uint KChartParamsIface::outlineDataLineWidth() const
+{
+    return params->outlineDataLineWidth();
+}

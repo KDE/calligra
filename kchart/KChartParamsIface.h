@@ -45,7 +45,7 @@ k_dcop:
     virtual uint threeDBarAngle() const;
     virtual void setThreeDBarDepth( double depth );
     virtual double threeDBarDepth() const;
-    
+    virtual QString barChartSubType() const;
 
     //line chart config
     virtual bool lineMarker() const;
@@ -79,6 +79,9 @@ k_dcop:
     virtual void setHeader1Text( const QString& text );
     virtual void setHeader2Text( const QString& text );
     virtual QString header2Text() const;
+
+    virtual uint outlineDataLineWidth() const;
+    virtual void setOutlineDataLineWidth( uint width );
 
 private:
     KChartParams *params;
