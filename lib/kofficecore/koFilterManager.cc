@@ -145,10 +145,8 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
     if ( _native_pattern && _native_name )
     {
-//#ifndef USE_QFD
         filters += _native_pattern;
         filters += "|";
-//#endif
         filters += _native_name;
         filters += " (";
         filters += _native_pattern;
@@ -175,10 +173,8 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                 s = patterns[j];
                 if ( !filters.isEmpty() )
                     filters += "\n";
-//#ifndef USE_QFD
                 filters += s;
                 filters += "|";
-//#endif
                 if ( direction == Import )
                     filters += vec[i].importDescription;
                 else
@@ -192,9 +188,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
         {
             if ( !filters.isEmpty() )
                 filters += "\n";
-//#ifndef USE_QFD
             filters += "*.*|";
-//#endif
             if ( direction == Import )
                 filters += vec[i].importDescription;
             else
@@ -206,9 +200,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
     {
         if ( !filters.isEmpty() )
             filters += "\n";
-//#ifndef USE_QFD
         filters += "*.*|";
-//#endif
         filters += i18n( "All files (*.*)" );
     }
 
@@ -225,7 +217,6 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
     d->setMinimumWidth(l->sizeHint().width()+20);
     ps->addWidget(d, 0);  // default Widget
 
-    //QMap<QString, long> dialogMap;    // QString==pattern, long==id in Widgetstack
     unsigned long id;                 // id for the next widget
 
     for(i=0, id=1; i<vec1.count(); ++i) {
@@ -253,8 +244,8 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                 while(tmp[tmp.length()-k]!=QChar('.')) {
                     ++k;
                 }
-                kdebug(KDEBUG_INFO, 31000, "Extension:");
-                kdebug(KDEBUG_INFO, 31000, tmp.right(k));
+                kDebugInfo(30003, "Extension:");
+                kDebugInfo(30003, tmp.right(k));
                 dialogMap.insert(tmp.right(k), id);
             }
             ps->addWidget(filterdia, id);
@@ -262,7 +253,7 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
         }
     }
     if(!dialogMap.isEmpty()) {
-        kdebug(KDEBUG_INFO, 31000, "----------------------------- setPreviewWidget");
+        kDebugInfo(30003, "----------------------------- setPreviewWidget");
         ps->raiseWidget(0);
         dialog->setPreviewWidget(ps);
     }
@@ -271,12 +262,16 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 
 void KoFilterManager::cleanUp() {
 
-    if(!dialogMap.isEmpty()) {
+    if(!dialogMap.isEmpty() && ps!=0L) {
         QWidget *tmp=ps->visibleWidget();
-        if(tmp!=ps->widget(0)) {
+        if(tmp!=0L && tmp!=ps->widget(0)) {
             KoFilterDialog *dia=dynamic_cast<KoFilterDialog*>(tmp);
-            kdebug(KDEBUG_INFO, 31000, dia->status());
-            // Save the status and pass is on to the filter...
+            if(dia!=0L) {
+                kDebugInfo(30003, dia->status());
+                // Save the status and pass is on to the filter...
+            }
+            else
+                kDebugWarning(30003, "*dia==0x0");
         }
     }
 }
@@ -432,21 +427,15 @@ void PreviewStack::showPreview(const KURL &url) {
     unsigned short k=0;
     unsigned long foo=tmp.length();
 
-    kdebug(KDEBUG_INFO, 31000, "vorher --------- showPreview");
-
     while(tmp[foo-k]!=QChar('.') && k<=foo) {
         ++k;
     }
-    kdebug(KDEBUG_INFO, 31000, "vor if --------- showPreview");
     if(tmp[foo-k]==QChar('.')) {
         extension=tmp.right(k);
-        kdebug(KDEBUG_INFO, 31000, extension);
+        kDebugInfo(30003, extension);
         raiseWidget(mgr->findWidget(extension));
-        kdebug(KDEBUG_INFO, 31000, "im if --------- showPreview");
     }
     else
         raiseWidget(0);
-
-    kdebug(KDEBUG_INFO, 31000, "ende --------- showPreview");
 }
 #endif
