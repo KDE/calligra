@@ -79,67 +79,67 @@ class StorageIO
 {
   public:
 
-    // result of operation
+    /// result of operation
     int result;
 
-    // owner of this object
+    /// owner of this object
     Storage* doc;
 
-    // filename (possible required)
+    /// filename (possible required)
     std::string filename;
 
-    // working mode: ReadOnly, WriteOnly, or ReadWrite
+    /// working mode: ReadOnly, WriteOnly, or ReadWrite
     int mode;
 
-    // working file
+    /// working file
     std::fstream file;
 
-    // size of the file
+    /// size of the file
     unsigned long filesize;
 
-    // header (first 512 byte)
+    /// header (first 512 byte)
     unsigned char header[512];
 
-    // magic id, first 8 bytes of header
+    /// magic id, first 8 bytes of header
     unsigned char magic[8];
 
-    // switch from small to big file (usually 4K)
+    /// switch from small to big file (usually 4K)
     unsigned threshold;
 
-    // size of big block (should be 512 bytes)
+    /// size of big block (should be 512 bytes)
     unsigned bb_size;
 
-    //  size of small block (should be 64 bytes )
+    ///  size of small block (should be 64 bytes )
     unsigned sb_size;
 
-    // allocation table for big blocks
+    /// allocation table for big blocks
     AllocTable bb;
     
-    // allocation table for small blocks
+    /// allocation table for small blocks
     AllocTable sb;
 
-    // starting block index to store small-BAT
+    /// starting block index to store small-BAT
     unsigned sbat_start;
 
-    // blocks where to find data for "small" files
+    /// blocks where to find data for "small" files
     std::vector<unsigned long> sb_blocks;
 
-    // starting block to store meta BAT
+    /// starting block to store meta BAT
     unsigned mbat_start;
     
-    // starting block index to store directory info
+    /// starting block index to store directory info
     unsigned dirent_start;
 
-    // root directory entry
+    /// root directory entry
     Entry* root;
     
-    // current directory entry
+    /// current directory entry
     Entry* current_dir;
 
-    // constructor
+    /// constructor
     StorageIO( Storage* storage, const char* fileName, int mode );
 
-    // destructor
+    /// destructor
     ~StorageIO();
 
     void flush();
@@ -152,12 +152,12 @@ class StorageIO
 
     unsigned long loadSmallBlock( unsigned long block, unsigned char* buffer, unsigned long maxlen );
 
-    // construct directory tree
+    /// construct directory tree
     Entry* buildTree( Entry* parent, int index, const unsigned char* dirent );
 
     std::string fullName( Entry* e );
 
-    // given a fullname (e.g "/ObjectPool/_1020961869"), find the entry
+    /// given a fullname (e.g "/ObjectPool/_1020961869"), find the entry
     Entry* entry( const std::string& name );
 
 
