@@ -3,16 +3,16 @@
 
 <sect1 id="starting">
 <title>Starting &kivio;</title>
-<para>Like other &koffice; applications on startup &kivio; presents a Create Document dialog. The three tabs offer a choice of creating a new document, opening a saved document or choosing a document from a list of recently saved files.</para>
+<para>Like other &koffice; applications, on startup &kivio; presents a Create Document dialog. The three tabs offer a choice of creating a new document, opening a saved document or choosing a document from a list of recently saved files.</para>
 <para>If you're new to &kivio; begin by creating an empty document by double-clicking on the <guilabel>Empty Document</guilabel> template.</para>
-<para>&kivio;'s main window contains a view of the current document. The page outline and margins are shown, as is a grid. Surrounding this view are horizontal and vertical rules. By default a tools toolbar is placed on the left-hand side and beneath the document view is a page selector, beneath that the status bar which shows the current position of the mouse pointer as a location on the page.</para>
+<para>&kivio;'s main window contains a view of the current document. The page outline and margins are shown, as is a grid. Surrounding this view are horizontal and vertical rules. By default a tools toolbar is placed on the left-hand side and beneath the document view is a page selector. Beneath that is the status bar which shows the current position of the mouse pointer as a location on the page.</para>
 <para>At the top of the window are the two main toolbars. These contain buttons for the most commonly used features of &kivio;.</para>
 </sect1>
 
 <sect1 id="stencils">
 <title>Using Stencils</title>
-<para>Diagrams are created by placing different pre-drawn shapes called stencils on the page. Stencils can represent many different things and &kivio; comes with a wide selection. For ease of reference they grouped into collections known as stencil sets. To use a stencil set select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Add Stencil Set</guimenuitem></menuchoice>. The stencil sets have been sub-divided into several groups, a sub-menu lists these. The shapes in the stencil set are shown on the left-hand side of the document view.</para>
-<para>Stencils are grouped into stencil sets for organizational purposes only, it is perfectly okay to add several stencil sets to a document and &kivio; allows you to mix and match stencils from different sets freely.</para>
+<para>Diagrams are created by placing different pre-drawn shapes called stencils on the page. Stencils can represent many different things and &kivio; comes with a wide selection. For ease of reference they are grouped into collections known as stencil sets. To use a stencil set select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Add Stencil Set</guimenuitem></menuchoice>. The stencil sets have been sub-divided into several groups; a sub-menu lists these. The shapes in the stencil set are shown on the left-hand side of the document view.</para>
+<para>Stencils are grouped into stencil sets for organizational purposes only; it is perfectly okay to add several stencil sets to a document and &kivio; allows you to mix and match stencils from different sets freely.</para>
 <para>To place a stencil onto the document simply drag it from the stencil area to the page.</para>
 
 <sect2>
@@ -28,19 +28,19 @@ To deselect all stencils select <menuchoice><guimenu>Edit</guimenu><guimenuitem>
 <sect2>
 <title>Moving Stencils</title>
 <para>
-To move a stencil to another position on the page. Move the mouse pointer over the stencil, note the pointer will change to a cross with four arrows. Hold down the &LMB; and move the stencil to the new position. Release the mouse button.</para>
+To move a stencil to another position on the page, move the mouse pointer over the stencil, note the pointer will change to a cross with four arrows. Hold down the &LMB; and move the stencil to the new position. Release the mouse button.</para>
 </sect2>
 
 <sect2>
 <title>Resizing a Stencil</title>
 <para>
-Move the mouse pointer over one of the handles and note the mouse pointer change. Hold down the &LMB; and move the mouse, the size of the stencil will be adjusted continuously as the mouse is moved. When you are happy with the new size release the mouse button.</para>
+Move the mouse pointer over one of the handles and note the mouse pointer change. Hold down the &LMB; and move the mouse. The size of the stencil will be adjusted continuously as the mouse is moved. When you are happy with the new size release the mouse button.</para>
 </sect2>
 
 <sect2>
 <title>Undoing a Mistake</title>
 <para>If at any time you are unhappy with a change you have made to the document you can select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Undo</guimenuitem></menuchoice> to revert the change. There is also an icon on the toolbar.</para>
-<para>If you undo an action and decide that was a mistake select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Redo</guimenuitem></menuchoice> restore the change. &kivio; stores multiple actions to undo/redo several changes.</para>
+<para>If you undo an action and decide that was a mistake, select <menuchoice><guimenu>Edit</guimenu><guimenuitem>Redo</guimenuitem></menuchoice> to restore the change. &kivio; stores multiple actions to undo/redo several changes.</para>
 </sect2>
 
 <sect2>
@@ -50,8 +50,8 @@ Move the mouse pointer over one of the handles and note the mouse pointer change
 
 <sect2>
 <title>Labeling Stencils</title>
-<para>Stencils can contain text to describe their function. To add text to a stencil move the mouse pointer over the stencil and double-click. A dialog box will appear prompting for some text. Enter some text and click <guibutton>OK</guibutton>, the text should be shown inside the stencil.</para>
-<para>The font, size, alignment and style of the text can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Text</guimenuitem></menuchoice>. Alternatively by using the buttons on the Format toolbar.
+<para>Stencils can contain text to describe their function. To add text to a stencil move the mouse pointer over the stencil and double-click it. A dialog box will appear prompting for some text. Enter some text and click <guibutton>OK</guibutton>. The text should be shown inside the stencil.</para>
+<para>The font, size, alignment and style of the text can be adjusted by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Text</guimenuitem></menuchoice>. Alternatively use the buttons on the Format toolbar.
 The adjustments will only affect the currently selected stencil.</para>
 </sect2>
 
@@ -72,7 +72,7 @@ The adjustments will only affect the currently selected stencil.</para>
 <sect2>
 <title>Adjusting the Fill Color and Line Color</title>
 <para>Stencils can be filled with a solid color and the color of the outline can be changed. Select a stencil then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Stencils and Connectors</guimenuitem></menuchoice>.</para>
-<para>There is also a <guibutton>Set Background Color</guibutton> button on the Format toolbar. Clicking on the arrow to the right-hand side of this button will produce a drop-down color selector, clicking on the button itself will display a color palette allowing you to choose any color. A similar toolbar button exists to adjust the line color.</para>
+<para>There is also a <guibutton>Set Background Color</guibutton> button on the Format toolbar. Clicking on the arrow to the right-hand side of this button will display a drop-down color selector. Clicking on the button itself will display a color palette allowing you to choose any color. A similar toolbar button exists to adjust the line color.</para>
 </sect2>
 
 <sect2>
@@ -83,13 +83,13 @@ The adjustments will only affect the currently selected stencil.</para>
 <sect2>
 <title>Connecting Shapes Together</title>
 <para>&kivio;'s connector tool allows lines to be drawn between shapes. The lines remain connected to the shapes even when the shapes are moved to new positions on the page.</para>
-<para>The Connector tool is available from the Tools toolbar, by default shown on the left-hand side of the window. Click on this tool to begin using it, the mouse pointer will change shape.</para>
+<para>The Connector tool is available from the Tools toolbar; by default shown on the left-hand side of the window. Click on this tool to begin using it; the mouse pointer will change shape.</para>
 <para>Notice that all stencils have little blue crosses around their edges. These crosses mark points where connectors can be attached.</para>
 <para>To connect two stencils move to one of the connection points on the first stencil, hold down the &LMB; and drag a line to one of the connection points on the second stencil. The green square at the end of the line will change to red when it is over a connection point indicating that the line is attached to a stencil. </para>
-<para>When you have finished using the connector tool click on the Arrow tool to regain normal selection functionality.</para>
+<para>When you have finished using the connector tool, click on the Arrow tool to regain normal selection functionality.</para>
 <note><para>A stencil can have multiple connectors attached to it, even at the same connection point.</para></note>
 <para>Various properties of the connector can be adjusted including line thickness and color, this is done in the same way as for stencils.</para>
-<para>Connectors may also be labelled with text. To add text to a connector simply double click on it and enter the text In the dialog that appears. The text will be shown with a green handle next to it. Use this to modify the position of the text.</para>
+<para>Connectors may also be labeled with text. To add text to a connector simply double-click on it and enter the text in the dialog that appears. The text will be shown with a green handle next to it. Use this to modify the position of the text.</para>
 <para>Arrowheads can be added to either end of a connector. Select the connector and then select <menuchoice><guimenu>Format</guimenu><guimenuitem>Arrowheads</guimenuitem></menuchoice>.</para>
 <para>Limitations: Connectors do not currently reroute around stencils, you need to adjust them manually. Text is always displayed horizontally; rotated text is not currently possible. </para>
 </sect2>
