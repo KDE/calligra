@@ -38,9 +38,17 @@ public:
      * counter may have changed. */
     void invalidate();
 
-    /** Return the current value of the counter either as a number or text.
+    /** Return the current value of the counter as a number.
      */
     int number( const KoTextParag *paragraph );
+    /** Return the current value of the counter as a text.
+     * This returns only the current level, e.g. "1."
+     */
+    QString levelText( const KoTextParag *paragraph );
+    /** Return the current value of the counter as a text.
+     * This returns the full text, all levels included (if displayLevels>1),
+     * e.g. "1.2.1." if displayLevels==3.
+     */
     QString text( const KoTextParag *paragraph );
 
     /**
@@ -105,6 +113,11 @@ public:
     unsigned int depth() const;
     void setDepth( unsigned int d );
 
+    /** Number of levels whose numbers are displayed at the current level.
+     */
+    int displayLevels() const;
+    void setDisplayLevels( int l );
+
     /** Starting number.
      */
     int startNumber() const;
@@ -150,7 +163,7 @@ private:
     char m_style;     // Style
     bool m_restartCounter;
     // you can add 7 bools here if you use :1 on all (including m_restartCounter)
-    char padding; // unused, feel free to use
+    char m_displayLevels; // Number of levels to display (e.g. 3 => 1.2.1)
     class Private;
     Private *d; // define operator= and copy ctor when using this!
     unsigned int m_depth;

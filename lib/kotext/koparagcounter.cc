@@ -31,6 +31,7 @@ KoParagCounter::KoParagCounter()
     m_style = STYLE_NONE;
     m_depth = 0;
     m_startNumber = 1;
+    m_displayLevels = 1;
     m_restartCounter = false;
     m_prefix = QString::null;
     m_suffix = '.';
@@ -46,6 +47,7 @@ bool KoParagCounter::operator==( const KoParagCounter & c2 ) const
             m_style==c2.m_style &&
             m_depth==c2.m_depth &&
             m_startNumber==c2.m_startNumber &&
+            m_displayLevels==c2.m_displayLevels &&
             m_restartCounter==c2.m_restartCounter &&
             m_prefix==c2.m_prefix &&
             m_suffix==c2.m_suffix &&
@@ -121,6 +123,11 @@ void KoParagCounter::load( QDomElement & element )
         m_startNumber = s.toInt();
     else // support for very-old files
         m_startNumber = s.lower()[0].latin1() - 'a' + 1;
+    s = element.attribute("display-levels");
+    if ( !s.isEmpty() )
+        m_displayLevels = s.toInt();
+    else // Not specified -> compat with koffice-1.2: make equal to depth
+        m_displayLevels = m_depth;
     m_customBullet.font = element.attribute("bulletfont");
     m_custom = element.attribute("customdef");
     QString restart = element.attribute("restart");
@@ -305,6 +312,8 @@ void KoParagCounter::save( QDomElement & element )
         element.setAttribute( "righttext", m_suffix );
     if ( m_startNumber != 1 )
         element.setAttribute( "start", m_startNumber );
+    //if ( m_displayLevels != m_depth ) // see load()
+        element.setAttribute( "display-levels", m_displayLevels );
     // Don't need to save NUM_FOOTNOTE, it's updated right after loading
     if ( (Numbering)m_numbering != NUM_NONE && (Numbering)m_numbering != NUM_FOOTNOTE )
         element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
@@ -357,6 +366,12 @@ void KoParagCounter::setStartNumber( int s )
     invalidate();
 }
 
+void KoParagCounter::setDisplayLevels( int l )
+{
+    m_displayLevels = l;
+    invalidate();
+}
+
 void KoParagCounter::setStyle( Style s )
 {
     m_style = s;
@@ -372,6 +387,11 @@ void KoParagCounter::setSuffix( QString s )
 int KoParagCounter::startNumber() const
 {
     return m_startNumber;
+}
+
+int KoParagCounter::displayLevels() const
+{
+    return m_displayLevels;
 }
 
 KoParagCounter::Style KoParagCounter::style() const
@@ -413,97 +433,106 @@ void KoParagCounter::setRestartCounter( bool restart )
     invalidate();
 }
 
+// Return the text for that level only
+QString KoParagCounter::levelText( const KoTextParag *paragraph )
+{
+    // Ensure paragraph number is valid.
+    number( paragraph );
+
+    QString text;
+    switch ( style() )
+    {
+    case STYLE_NONE:
+        if ( (Numbering)m_numbering == NUM_LIST )
+            text = ' ';
+        break;
+    case STYLE_NUM:
+        text.setNum( m_cache.number );
+        break;
+    case STYLE_ALPHAB_L:
+        text = makeAlphaLowerNumber( m_cache.number );
+        break;
+    case STYLE_ALPHAB_U:
+        text = makeAlphaUpperNumber( m_cache.number );
+        break;
+    case STYLE_ROM_NUM_L:
+        text = makeRomanNumber( m_cache.number ).lower();
+        break;
+    case STYLE_ROM_NUM_U:
+        text = makeRomanNumber( m_cache.number ).upper();
+        break;
+    case STYLE_CUSTOM:
+        ////// TODO
+        text.setNum( m_cache.number );
+        break;
+
+    // --- these are used in export filters but are ignored by KoTextParag::drawLabel (for bulleted lists - which they are :))  ---
+    case KoParagCounter::STYLE_DISCBULLET:
+        text = '*';
+        break;
+    case KoParagCounter::STYLE_SQUAREBULLET:
+        text = '#';
+        break;
+    case KoParagCounter::STYLE_BOXBULLET:
+        text = '=';  // think up a better character
+        break;
+    case KoParagCounter::STYLE_CIRCLEBULLET:
+        text = 'O';
+        break;
+    case KoParagCounter::STYLE_CUSTOMBULLET:
+        text = m_customBullet.character;
+        break;
+    }
+    // We want the '.' to be before the number in a RTL parag,
+    // but we can't paint the whole string using QPainter::RTL direction, otherwise
+    // '10' becomes '01'.
+    text.prepend( paragraph->string()->isRightToLeft() ? suffix() : prefix() );
+    text.append( paragraph->string()->isRightToLeft() ? prefix() : suffix() );
+    return text;
+}
+
+// Return the full text to be displayed
 QString KoParagCounter::text( const KoTextParag *paragraph )
 {
     // Return cached value if possible.
     if ( !m_cache.text.isNull() )
         return m_cache.text;
 
-    // Chapter numbering: recurse to find the text of the preceeding level.
-    if ( (Numbering)m_numbering == NUM_CHAPTER && parent( paragraph ) )
+    // If necessary, grab the text of the preceeding levels.
+    if ( m_displayLevels > 1 && parent( paragraph ) )
     {
-        m_cache.text = m_cache.parent->counter()->text( m_cache.parent );
+        KoTextParag* p = m_cache.parent; // calculated by parent() above
+        for ( int level = 2 ; level <= m_displayLevels ; ++level )  {
+            if ( p )
+            {
+                KoParagCounter* counter = p->counter();
+                QString str = counter->levelText( p );
+                // If the preceeding level is a bullet, replace it with blanks.
+                if ( counter->isBullet() )
+                    for ( unsigned i = 0; i < str.length(); i++ )
+                        str[i] = ' ';
 
-        // If the preceeding level is a bullet, replace it with blanks.
-        if ( m_cache.parent->counter()->isBullet() )
-            for ( unsigned i = 0; i < m_cache.text.length(); i++ )
-                m_cache.text.at( i ) = ' ';
+                // Find the number of missing parents, and add dummy text for them.
+                int missingParents = m_depth - p->counter()->m_depth - 1;
+                for ( ; missingParents > 0 ; --missingParents )
+                    // Each missing level adds a "0." prefix.
+                    str.append( "0." );
+
+                m_cache.text.prepend( str );
+                // Prepare next iteration
+                if ( level < m_displayLevels ) // no need to calc it if we won't use it
+                    p = counter->parent( p );
+            }
+            else // toplevel parents are missing
+            {
+                m_cache.text.prepend( "0." );
+            }
+        }
+
     }
 
-    // Ensure paragraph number is valid.
-    number( paragraph );
-
-    // Now convert to text.
-    QString tmp;
-    switch ( style() )
-    {
-    case STYLE_NONE:
-        if ( (Numbering)m_numbering == NUM_LIST )
-            tmp = ' ';
-        break;
-    case STYLE_NUM:
-        tmp.setNum( m_cache.number );
-        break;
-    case STYLE_ALPHAB_L:
-        tmp=makeAlphaLowerNumber( m_cache.number );
-        break;
-    case STYLE_ALPHAB_U:
-        tmp=makeAlphaUpperNumber( m_cache.number );
-        break;
-    case STYLE_ROM_NUM_L:
-        tmp = makeRomanNumber( m_cache.number ).lower();
-        break;
-    case STYLE_ROM_NUM_U:
-        tmp = makeRomanNumber( m_cache.number ).upper();
-        break;
-    case STYLE_CUSTOM:
-        ////// TODO
-        tmp.setNum( m_cache.number );
-        break;
-
-    // --- these are used in export filters but are ignored by KoTextParag::drawLabel (for bulleted lists - which they are :))  ---
-    case KoParagCounter::STYLE_DISCBULLET:
-        tmp = '*';
-        break;
-    case KoParagCounter::STYLE_SQUAREBULLET:
-        tmp = '#';
-        break;
-    case KoParagCounter::STYLE_BOXBULLET:
-        tmp = '=';  // think up a better character
-        break;
-    case KoParagCounter::STYLE_CIRCLEBULLET:
-        tmp = 'O';
-        break;
-    case KoParagCounter::STYLE_CUSTOMBULLET:
-        tmp = m_customBullet.character;
-        break;
-    }
-    // We want the '.' to be before the number in a RTL parag,
-    // but we can't paint the whole string using QPainter::RTL direction, otherwise
-    // '10' becomes '01'.
-    tmp.prepend( paragraph->string()->isRightToLeft() ? suffix() : prefix() );
-    tmp.append( paragraph->string()->isRightToLeft() ? prefix() : suffix() );
-
-    if ( (Numbering)m_numbering == NUM_CHAPTER )
-    {
-        // Find the number of missing parents, and add dummy text for them.
-        int missingParents;
-        if ( parent( paragraph ) )
-        {
-            missingParents = m_depth - m_cache.parent->counter()->m_depth - 1;
-        }
-        else
-        {
-            missingParents = m_depth;
-        }
-        while ( missingParents > 0 )
-        {
-            // Each missing level adds a "0." prefix.
-            tmp.prepend( "0." );
-            missingParents--;
-        }
-    }
-    m_cache.text.append( tmp );
+    // Now add text for this level.
+    m_cache.text.append( levelText( paragraph ) );
     return m_cache.text;
 }
 
