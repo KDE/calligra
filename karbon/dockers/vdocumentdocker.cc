@@ -121,8 +121,8 @@ VDocumentTab::~VDocumentTab()
 
 void VDocumentTab::updateDocumentInfo()
 {
-	m_width->setText( QString::number( m_part->document().width(), 'f', 2 ) + " " + m_part->unitName() );
-	m_height->setText( QString::number( m_part->document().height(), 'f', 2 ) + " " + m_part->unitName() );
+	m_width->setText( KoUnit::userValue( m_part->document().width(), m_part->unit() ) + m_part->unitName() );
+	m_height->setText( KoUnit::userValue( m_part->document().height(), m_part->unit() ) + m_part->unitName() );
 } // VDocumentTab::updateDocumentInfo
 
 /*************************************************************************
