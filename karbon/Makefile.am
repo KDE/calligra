@@ -17,7 +17,7 @@ bin_PROGRAMS = karbon
 lib_LTLIBRARIES = karbon.la
 kde_module_LTLIBRARIES = libkarbonbase.la libkarbonpart.la
 
-libkarbonpart_la_SOURCES = karbon_factory.cc 	karbon_resourceserver.cc 	karbon_part.cc 	karbon_part_iface.cc 	karbon_part_iface.skel 	karbon_view.cc 	karbon_view_iface.cc 	karbon_view_iface.skel karbon_drag.cpp
+libkarbonpart_la_SOURCES = karbon_factory.cc 	karbon_resourceserver.cc 	karbon_part.cc 	karbon_part_iface.cc 	karbon_part_iface.skel 	karbon_view.cc 	karbon_view_iface.cc 	karbon_view_iface.skel karbon_drag.cpp karbon_grid_data.cpp
 
 libkarbonbase_la_SOURCES = \
 	karbon_view_base.cc \
