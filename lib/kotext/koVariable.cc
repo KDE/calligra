@@ -37,13 +37,41 @@
 #include "timeformatwidget_impl.h"
 #include "dateformatwidget_impl.h"
 
+class KoVariableSettings::KoVariableSettingPrivate
+{
+public:
+    KoVariableSettingPrivate()
+        {
+            m_lastPrinting = QDate();
+        }
+    QDate m_lastPrinting;
+};
+
+
 KoVariableSettings::KoVariableSettings()
 {
+    d = new KoVariableSettingPrivate;
     m_startingpage = 1;
     m_displayLink = true;
     m_displayComment = true;
     m_underlineLink = true;
     m_displayFieldCode = false;
+}
+
+KoVariableSettings::~KoVariableSettings()
+{
+    delete d;
+    d=0;
+}
+
+QDate KoVariableSettings::lastPrinting() const
+{
+    return d->m_lastPrinting;
+}
+
+void KoVariableSettings::setLastPrint( const QDate & _date)
+{
+    d->m_lastPrinting = _date;
 }
 
 void KoVariableSettings::save( QDomElement &parentElem )
@@ -58,6 +86,13 @@ void KoVariableSettings::save( QDomElement &parentElem )
     elem.setAttribute("underlinelink",(int)m_underlineLink);
     elem.setAttribute("displaycomment",(int)m_displayComment);
     elem.setAttribute("displayfieldcode", (int)m_displayFieldCode);
+
+    if ( d->m_lastPrinting.isValid())
+    {
+        elem.setAttribute("lastPrintYear", d->m_lastPrinting.year());
+        elem.setAttribute("lastPrintMonth", d->m_lastPrinting.year());
+        elem.setAttribute("lastPrintDay", d->m_lastPrinting.year());
+    }
 }
 
 void KoVariableSettings::load( QDomElement &elem )
@@ -75,6 +110,17 @@ void KoVariableSettings::load( QDomElement &elem )
             m_displayComment=(bool)e.attribute("displaycomment").toInt();
         if (e.hasAttribute("displayfieldcode"))
             m_displayFieldCode=(bool)e.attribute("displayfieldcode").toInt();
+        int year = 0;
+        int month = 0;
+        int days = 0;
+        if (e.hasAttribute("lastPrintYear"))
+            year = e.attribute("lastPrintYear").toInt();
+        if (e.hasAttribute("lastPrintMonth"))
+            month = e.attribute("lastPrintMonth").toInt();
+        if (e.hasAttribute("lastPrintDay"))
+            days = e.attribute("lastPrintDay").toInt();
+        if ( year!=0 && month !=0 && days!=0 )
+            d->m_lastPrinting=QDate( year, month, days);
     }
 }
 
@@ -91,6 +137,9 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
         kdDebug(32500)<<" Error in KoVariableDateFormat::convert. Value is a " << data.typeName() << endl;
         return QString::null;
     }
+    if ( !data.toDate().isValid() )
+        return QString("");
+
     if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())  // FIXME: "Locale" is I18N !
 	return KGlobal::locale()->formatDate( data.toDate(),m_bShort );
     return data.toDate().toString(m_strFormat);
@@ -415,10 +464,6 @@ QPtrList<KAction> KoVariableCollection::variableActionList()
     return listAction;
 }
 
-//class KoVariable::Private
-//{
-//};
-
 /******************************************************************/
 /* Class: KoVariable                                              */
 /******************************************************************/
@@ -563,7 +608,7 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
         case VT_DATE:
         case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
         {
-            if ( _forceDefaultFormat )
+            if ( _forceDefaultFormat || subtype == KoDateVariable::VST_DATE_LAST_PRINTING )
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
                 varFormat = coll->format( KoDateVariable::formatStr(_correct) );
@@ -645,13 +690,22 @@ KoDateVariable::KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariable
 
 QString KoDateVariable::fieldCode()
 {
-    return (m_subtype == VST_DATE_FIX)?i18n("Date (Fixed)"):i18n("Date");
+    if ( m_subtype == VST_DATE_FIX )
+        return i18n("Date (Fixed)");
+    else if ( m_subtype == VST_DATE_CURRENT)
+        return i18n("Date");
+    else if ( m_subtype == VST_DATE_LAST_PRINTING)
+        return i18n("Last Printing");
+    else
+        return i18n("Date");
 }
 
 void KoDateVariable::recalc()
 {
     if ( m_subtype == VST_DATE_CURRENT )
         m_varValue = QVariant(QDate::currentDate().addDays(m_correctDate));
+    else if ( m_subtype == VST_DATE_LAST_PRINTING )
+        m_varValue = QVariant(m_varColl->variableSetting()->lastPrinting());
     else
     {
         // Only if never set before (i.e. upon insertion)
@@ -672,6 +726,7 @@ void KoDateVariable::saveVariable( QDomElement& varElem )
     elem.setAttribute( "day", date.day() );
     elem.setAttribute( "fix", m_subtype == VST_DATE_FIX ); // to be extended
     elem.setAttribute( "correct", m_correctDate);
+    elem.setAttribute( "subtype", m_subtype);
 }
 
 void KoDateVariable::load( QDomElement& elem )
@@ -694,7 +749,10 @@ void KoDateVariable::load( QDomElement& elem )
             date = date.addDays( m_correctDate );
             m_varValue = QVariant( date );
         }
+        //old date variable format
         m_subtype = fix ? VST_DATE_FIX : VST_DATE_CURRENT;
+        if ( elem.hasAttribute( "subtype" ))
+            m_subtype = elem.attribute( "subtype").toInt();
     }
 }
 
@@ -703,6 +761,7 @@ QStringList KoDateVariable::actionTexts()
     QStringList lst;
     lst << i18n( "Current Date (fixed)" );
     lst << i18n( "Current Date (variable)" );
+    lst << i18n( "Date Of Last Printing" );
     // TODO add date created, date printed, date last modified( BR #24242 )
     return lst;
 }

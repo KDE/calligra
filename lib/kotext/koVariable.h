@@ -49,7 +49,7 @@ class KoVariableSettings
 {
  public:
     KoVariableSettings();
-    virtual ~KoVariableSettings() {}
+    virtual ~KoVariableSettings();
     int startingPage()const{return m_startingpage;}
     void setStartingPage(int _startingpage){ m_startingpage=_startingpage;}
 
@@ -69,14 +69,17 @@ class KoVariableSettings
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
+    QDate lastPrinting() const;
+    void setLastPrint( const QDate & _date);
+
  private:
     int m_startingpage;
     bool m_displayLink;
     bool m_displayComment;
     bool m_underlineLink;
     bool m_displayFieldCode;
-    class Private;
-    Private *d;
+    class KoVariableSettingPrivate;
+    KoVariableSettingPrivate *d;
 };
 
 /**
@@ -371,7 +374,7 @@ public:
     virtual VariableType type() const
     { return VT_DATE; }
 
-    enum { VST_DATE_FIX = 0, VST_DATE_CURRENT = 1 };
+    enum { VST_DATE_FIX = 0, VST_DATE_CURRENT = 1, VST_DATE_LAST_PRINTING = 2 };
     static QStringList actionTexts();
 
     virtual void recalc();
