@@ -125,7 +125,7 @@ void KPTModifyRelationDialog::init()
     relationTypeLayout->addWidget(b, 1, 0);
     b = new QRadioButton(QString("Start-Start"), relationType);
     relationTypeLayout->addWidget(b, 2, 0);
-    relationType->setButton(FINISH_START);    
+    relationType->setButton(m_relation->timingRelation());    
 }
 
 
