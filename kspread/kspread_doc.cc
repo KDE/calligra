@@ -73,6 +73,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
     m_pageBorderColor( Qt::red )
 {
   m_bDelayCalculation = false;
+  m_syntaxVersion = CURRENT_SYNTAX_VERSION;
 
   if ( s_docs == 0 )
       s_docs = new QPtrList<KSpreadDoc>;
@@ -433,7 +434,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   }
 
   //Backwards compatibility with older versions for paper layout
-  if ( m_syntaxVersion < 1.2 )
+  if ( m_syntaxVersion < 1 )
   {
     // <paper>
     QDomElement paper = spread.namedItem( "paper" ).toElement();
