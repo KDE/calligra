@@ -11,6 +11,7 @@ usr/lib/kde2/libqproimport.*
 usr/share/applnk/Office/kspread.desktop
 usr/share/apps/kspread/*
 usr/share/mimelnk/application/x-kspread.desktop
+usr/share/mimelnk/application/x-quattropro.desktop
 usr/share/mimelnk/text/x-gnumeric.desktop
 usr/share/services/kspreadcalc.desktop
 usr/share/services/kspread_csv_export.desktop

@@ -22,10 +22,8 @@ usr/lib/kde2/libkprkword.*
 usr/lib/kde2/libkspelltool.*
 usr/lib/kde2/libkofficescan.*
 usr/share/apps/koffice/*
-usr/share/mimelnk/application/x-quattropro.desktop
 usr/share/mimelnk/image/x-msod.desktop
 usr/share/mimelnk/image/x-wmf.desktop
-usr/share/mimelnk/image/x-xfig.desktop
 usr/share/mimelnk/text/x-csv.desktop
 usr/share/services/*export*
 usr/share/services/*import*

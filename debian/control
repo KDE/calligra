@@ -70,7 +70,7 @@ Replaces: koffice-common, killustrator (<= 1:1.1-beta3-3)
 Provides: killustrator
 Depends: ${shlibs:Depends}
 Suggests: kdebase
-Conflicts: koffice-libs (<= 1:1.1-beta2-2), killustrator (<= 1:1.1-beta3-3)
+Conflicts: koffice-libs (<< 1:1.1.0-0), killustrator (<= 1:1.1-beta3-3)
 Description: a vector graphics tool for the KDE Office Suite
  Kontour is a vector graphics application.  This application was formerly
  known as KIllustrator.
@@ -111,7 +111,7 @@ Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
 Suggests: kdebase
-Conflicts: koffice-libs (<= 1:1.1-beta2-2)
+Conflicts: koffice-libs (<< 1:1.1.0-0)
 Description: a spreadsheet for the KDE Office Suite
  KSpread is a powerful spreadsheet application.
  .

@@ -8,24 +8,33 @@ It was downloaded via CVS from cvs.kde.org.
 Upstream authors:
 
   KChart: Kalle Dalheimer <kalle@kde.org>,
-          Laurent Montel <montell@club-internet.fr>
-  KFormula: Andrea Rizzi <rizzi@kde.org>, Stephan Kulow <coolo@kde.org>,
+          Laurent Montel <montell@club-internet.fr> and
+          Reginald Stadlbauer <reggie@kde.org>
+  KFormula: Andrea Rizzi <rizzi@kde.org>, Stephan Kulow <coolo@kde.org> and
             Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
-  Kontour: Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de> and others
   Kivio: Dave Marotti <lndshark@speakeasy.net>,
-         Max Judin <max@thekompany.com>, Dmitry Poplavsky <dima@kde.org>
-  KOShell: Torben Weis <weis@kde.org>, Simon Hausmann <hausmann@kde.org>,
+         Max Judin <max@thekompany.com> and Dmitry Poplavsky <dima@kde.org>
+  Kontour: Kai-Uwe Sattler <kus@iti.cs.uni-magdeburg.de>,
+           Igor Janssen <rm@linux.ru.net>,
+           Alexander Neundorf <neundorf@kde.org>,
+           Rob Buis <rwlbuis@wanadoo.nl> and
+           Laurent Montel <lmontel@mandrakesoft.com>
+  KOShell: Torben Weis <weis@kde.org>, Simon Hausmann <hausmann@kde.org> and
            David Faure <faure@kde.org>
   KPresenter: Reginald Stadlbauer <reggie@kde.org>,
-              Werner Trobin <trobin@kde.org>, David Faure <dfaure@kde.org>
+              Werner Trobin <trobin@kde.org>, David Faure <dfaure@kde.org>,
+              Toshitaka Fujioka <fujioka@kde.org> and
+              Lukáš Tinkl <lukas@kde.org>
   KSpread: Torben Weis <weis@kde.org>,
-           Laurent Montel <montell@club-internet.fr>
-  Kugar: Mutiny Bay Software <info@mutinybaysoftware.com>,
+           Laurent Montel <montell@club-internet.fr>,
+           David Faure <faure@kde.org> and others
+  Kugar: Mutiny Bay Software <info@mutinybaysoftware.com> and
          Phil Thompson <phil@river-bank.demon.co.uk>
   KWord: Reginald Stadlbauer <reggie@kde.org>, Torben Weis <weis@kde.org>,
          David Faure <dfaure@kde.org>, Thomas Zander <zander@kde.org>,
          Shaheed Haque <srhaque@iee.org>,
-         Laurent Montel <lmontel@mandrakesoft.com>
+         Laurent Montel <lmontel@mandrakesoft.com> and
+         Sven Lüppken <sven@kde.org>
 
 Copyright:
  

@@ -81,6 +81,7 @@ install-stamp: build
 
 	# Add "#!/usr/bin/perl" to the head of kprconverter.pl.
 	echo "#!/usr/bin/perl -w" > $(tmp)/usr/bin/kprconverter.pl.new
+	echo -n "# -- Was: " >> $(tmp)/usr/bin/kprconverter.pl.new
 	cat $(tmp)/usr/bin/kprconverter.pl >> $(tmp)/usr/bin/kprconverter.pl.new
 	mv $(tmp)/usr/bin/kprconverter.pl.new $(tmp)/usr/bin/kprconverter.pl
 	chmod 755 $(tmp)/usr/bin/kprconverter.pl
@@ -128,8 +129,6 @@ binary-arch: build install
 	dh_installdocs -a
 	dh_installexamples -a
 	# Rename a couple of newly installed files.
-	mv debian/koffice-libs/usr/share/doc/koffice-libs/HOWTO \
-	  debian/koffice-libs/usr/share/doc/koffice-libs/filters.HOWTO
 	mv debian/kugar/usr/share/doc/kugar/examples/kugar.examples.README \
 	  debian/kugar/usr/share/doc/kugar/examples/README.examples
 	dh_installmenu -a
@@ -149,7 +148,7 @@ binary-arch: build install
 	dh_installchangelogs -pkivio kivio/CHANGELOG
 	dh_installchangelogs -pkoshell
 	dh_installchangelogs -pkpresenter kpresenter/CHANGES
-	#dh_installchangelogs -pkrayon kimageshop/ChangeLog
+	#dh_installchangelogs -pkrayon
 	dh_installchangelogs -pkspread kspread/CHANGES
 	dh_installchangelogs -pkugar kugar/ChangeLog
 	dh_installchangelogs -pkword kword/CHANGES
