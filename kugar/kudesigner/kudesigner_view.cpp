@@ -54,7 +54,7 @@ KudesignerView::KudesignerView( KudesignerPart* part, QWidget* parent, const cha
     rc->viewport()->setFocusPolicy(WheelFocus);
     rc->setFocus();
 
-    selectedItem = 0;
+    rc->itemToInsert = 0;
 }
 
 void KudesignerView::paintEvent( QPaintEvent* ev )
@@ -132,7 +132,6 @@ void KudesignerView::resizeEvent(QResizeEvent* _ev)
     rc->setGeometry(0, 0, width(), height());
 }
 
-
 void KudesignerView::slotAddReportHeader(){
     if (!(((KudesignerPart *)(koDocument())))->canvas()->templ->reportHeader)
     {
@@ -158,7 +157,7 @@ void KudesignerView::slotAddReportFooter(){
 	((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
-/** No descriptions */
+
 void KudesignerView::slotAddPageHeader(){
     if (!((KudesignerPart *)(koDocument()))->canvas()->templ->pageHeader)
     {
@@ -171,7 +170,7 @@ void KudesignerView::slotAddPageHeader(){
 	((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
-/** No descriptions */
+
 void KudesignerView::slotAddPageFooter(){
     if (!((KudesignerPart *)(koDocument()))->canvas()->templ->pageFooter)
     {
@@ -184,7 +183,7 @@ void KudesignerView::slotAddPageFooter(){
 	((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
-/** No descriptions */
+
 void KudesignerView::slotAddDetailHeader(){
     bool Ok = false;
     unsigned int level = QInputDialog::getInteger(i18n("Add Detail Header"), i18n("Enter detail level:"),
@@ -202,7 +201,7 @@ void KudesignerView::slotAddDetailHeader(){
 	((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
-/** No descriptions */
+
 void KudesignerView::slotAddDetail(){
     bool Ok = false;
     unsigned int level = QInputDialog::getInteger(i18n("Add Detail"), i18n("Enter detail level:"),
@@ -222,7 +221,7 @@ void KudesignerView::slotAddDetail(){
 	((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
-/** No descriptions */
+
 void KudesignerView::slotAddDetailFooter(){
     bool Ok = false;
     unsigned int level = QInputDialog::getInteger(i18n("Add Detail Footer"), i18n("Enter detail level:"),
@@ -240,65 +239,65 @@ void KudesignerView::slotAddDetailFooter(){
 	((KudesignerPart *)(koDocument()))->setModified(true);
     }
 }
-/** No descriptions */
+
 void KudesignerView::slotAddItemNothing(){
     if (((KudesignerPart *)(koDocument()))->canvas())
     {
-        if (selectedItem)
+        if (rc->itemToInsert)
         {
-            delete selectedItem;
-            selectedItem = 0;
+            delete rc->itemToInsert;
+            rc->itemToInsert = 0;
         }
     }
 }
-/** No descriptions */
+
 void KudesignerView::slotAddItemLabel(){
     if (((KudesignerPart *)(koDocument()))->canvas())
     {
-        if (selectedItem)
-            delete selectedItem;
+        if (rc->itemToInsert)
+            delete rc->itemToInsert;
 	    CanvasLabel *l = new CanvasLabel(0, 0, 50, 20, ((KudesignerPart *)(koDocument()))->canvas());
-    	selectedItem = l;
+    	rc->itemToInsert = l;
     }
 }
-/** No descriptions */
+
 void KudesignerView::slotAddItemField(){
     if (((KudesignerPart *)(koDocument()))->canvas())
     {
-        if (selectedItem)
-            delete selectedItem;
+        if (rc->itemToInsert)
+            delete rc->itemToInsert;
 	    CanvasField *l = new CanvasField(0, 0, 50, 20, ((KudesignerPart *)(koDocument()))->canvas());
-    	selectedItem = l;
+    	rc->itemToInsert = l;
     }
 }
-/** No descriptions */
+
 void KudesignerView::slotAddItemSpecial(){
     if (((KudesignerPart *)(koDocument()))->canvas())
     {
-        if (selectedItem)
-            delete selectedItem;
+        if (rc->itemToInsert)
+            delete rc->itemToInsert;
 	    CanvasSpecialField *l = new CanvasSpecialField(0, 0, 50, 20, ((KudesignerPart *)(koDocument()))->canvas());
-    	selectedItem = l;
+    	rc->itemToInsert = l;
     }
 }
 
 void KudesignerView::slotAddItemCalculated(){
     if (((KudesignerPart *)(koDocument()))->canvas())
     {
-        if (selectedItem)
-            delete selectedItem;
+        if (rc->itemToInsert)
+            delete rc->itemToInsert;
 	    CanvasCalculatedField *l = new CanvasCalculatedField(0, 0, 50, 20, ((KudesignerPart *)(koDocument()))->canvas());
-    	selectedItem = l;
+    	rc->itemToInsert = l;
     }
 }
 
 void KudesignerView::slotAddItemLine(){
     if (((KudesignerPart *)(koDocument()))->canvas())
     {
-        if (selectedItem)
-            delete selectedItem;
+        if (rc->itemToInsert)
+            delete rc->itemToInsert;
 	    CanvasLine *l = new CanvasLine(0, 0, 50, 20, ((KudesignerPart *)(koDocument()))->canvas());
-    	selectedItem = l;
+    	rc->itemToInsert = l;
     }
 }
 

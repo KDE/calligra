@@ -34,15 +34,20 @@ class CanvasPageFooter;
 class CanvasBox: public QCanvasRectangle{
 public:
     CanvasBox(int x, int y, int width, int height, QCanvas * canvas):
-	    QCanvasRectangle(x, y, width, height, canvas) {}
+	    QCanvasRectangle(x, y, width, height, canvas)
+    {
+        selected = false;
+    }
 
     virtual int rtti() const { return RttiCanvasBox; }
     virtual void draw(QPainter &painter);
     void scale(int scale);
     virtual QString getXml() { return ""; }
 
-    std::map<QString, std::pair<QString, QStringList> > props;
-    /*
+    virtual bool isInHolder(const QPoint p) {}
+    virtual void drawHolders(QPainter &painter) {}
+
+    /**
       properties format
       map<key_name, pair<key_value, key_description> >
       key_description << key_hint -- to display helpful tips
@@ -50,6 +55,12 @@ public:
                          -- to organize appropriate input
 		      << probably_key_value << ... -- values
     */
+    std::map<QString, std::pair<QString, QStringList> > props;
+
+    virtual bool isSelected();
+    virtual void setSelected(bool s);
+protected:
+    bool selected;
 };
 
 class CanvasSection: public CanvasBox{

@@ -22,6 +22,11 @@
 #include <qaction.h>
 #include <qcursor.h>
 #include <qpainter.h>
+#include <qbitmap.h>
+#include <qimage.h>
+
+#include <qprinter.h>
+
 #include "mycanvas.h"
 #include "canvbox.h"
 #include "canvdefs.h"
@@ -32,13 +37,51 @@
 #include "ccalcfield.h"
 #include "cline.h"
 
+void SelectionRect::draw(QPainter & painter)
+{
+//    painter.setPen(Qt::NoPen);
+
+/*  QPrinter pr;
+  if ( pr.setup() ) {
+    QPainter p(&pr);
+    canvas()->drawArea( canvas()->rect(), &p );
+  } */
+
+/*    qDebug("creating pixmap");
+    QPixmap mp(rect().size());
+    qDebug("creating painter");
+    QPainter p(&mp);
+    qDebug("filling pixmap");
+    canvas()->drawArea(canvas()->rect(), &p);
+    qDebug("converting to image");
+    QImage im = mp.convertToImage();
+    if (!im.isNull())
+    {
+        qDebug("do dither");
+        mp.convertFromImage(im,  Qt::OrderedAlphaDither);
+
+        qDebug("creating brush");
+        QBrush br(KGlobalSettings::highlightColor(),Qt::CustomPattern);
+        br.setPixmap(mp);
+        painter.setBrush(br);
+    }
+    qDebug("drawing");*/
+//    painter.drawRect(rect());
+    QCanvasRectangle::draw(painter);
+}
+
+
+
 ReportCanvas::ReportCanvas(QCanvas * canvas, QWidget * parent, const char * name, WFlags f):
 	QCanvasView(canvas, parent, name, f)
 {
-    selectedItem = 0;
+    itemToInsert = 0;
     moving = 0;
     resizing = 0;
+    selectionStarted = 0;
+    selected = 0;
     request = RequestNone;
+    selectionRect = new SelectionRect(0, 0, 0, 0, canvas);
 }
 
 void ReportCanvas::deleteItem(QCanvasItemList &l)
@@ -111,6 +154,29 @@ void ReportCanvas::editItem(QCanvasItemList &l)
     }*/
 }
 
+void ReportCanvas::selectItem(QCanvasItemList &l)
+{
+    //display editor for report items or sections
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+    {
+        if ((*it)->rtti() >= 1800) //for my own report items
+        {
+            CanvasBox *l = (CanvasBox*)(*it);
+            if (l != selected)
+            {
+                selected->setSelected(false);
+                l->setSelected(true);
+                selected = l;
+            }
+            break;
+        }
+    }
+    if (selected)
+        selected->setSelected(false);
+    selected = 0;
+}
+
+
 void ReportCanvas::placeItem(QCanvasItemList &l, QMouseEvent *e)
 {
     bool used = false;
@@ -118,23 +184,23 @@ void ReportCanvas::placeItem(QCanvasItemList &l, QMouseEvent *e)
     {
         if ( ((*it)->rtti() > 1800) && (((*it)->rtti() < 2000)) )
         {
-    	    selectedItem->setX(e->x());
-	    selectedItem->setY(e->y());
-	    selectedItem->setSection((CanvasBand *)(*it));
-	    selectedItem->updateGeomProps();
-	    selectedItem->show();
-	    ((CanvasBand *)(*it))->items.append(selectedItem);
-	    used = true;
-	    emit modificationPerformed();
-	}
+            itemToInsert->setX(e->x());
+            itemToInsert->setY(e->y());
+            itemToInsert->setSection((CanvasBand *)(*it));
+            itemToInsert->updateGeomProps();
+            itemToInsert->show();
+            ((CanvasBand *)(*it))->items.append(itemToInsert);
+            used = true;
+            emit modificationPerformed();
+        }
     }
     if (!used)
-	delete selectedItem;
-    selectedItem = 0;
+        delete itemToInsert;
+    itemToInsert = 0;
     emit selectedActionProcessed();
 }
 
-void ReportCanvas::startMoveOrResizeItem(QCanvasItemList &l,
+void ReportCanvas::startMoveOrResizeOrSelectItem(QCanvasItemList &l,
     QMouseEvent *e, QPoint &p)
 {
     //allow user to move any item except for page rectangle
@@ -142,66 +208,71 @@ void ReportCanvas::startMoveOrResizeItem(QCanvasItemList &l,
     {
         if ((*it)->rtti() > 2001)
         {
+
     	    CanvasReportItem *item = (CanvasReportItem *)(*it);
 /*	    if (item->topLeftResizableRect().contains(e->pos()) ||
 	    item->bottomLeftResizableRect().contains(e->pos()) ||
 	    item->topRightResizableRect().contains(e->pos()) ||
 	    item->bottomRightResizableRect().contains(e->pos()))*/
-	    if (item->bottomRightResizableRect().contains(e->pos()))
-	    {
-		moving = 0;
-		resizing = item;
-		moving_start = p;
-		return;
-	    }
-	    else
-	    {
-		moving = item;
-		resizing = 0;
-		moving_start = p;
-		return;
-	    }
-	}
+            moving_start = p;
+            if (item->bottomRightResizableRect().contains(e->pos()))
+            {
+                moving = 0;
+                resizing = item;
+                return;
+            }
+            else
+            {
+                moving = item;
+                resizing = 0;
+                return;
+            }
+        }
     }
     moving = 0;
     resizing = 0;
+    selectionStarted = 1;
+    selectionRect->setX(p.x());
+    selectionRect->setY(p.y());
+    selectionRect->setZ(50);
+    selectionRect->show();
 }
 
 void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
     QPoint p = inverseWorldMatrix().QWMatrix::map(e->pos());
     QCanvasItemList l=canvas()->collisions(p);
-    
+
     //if there is a request for properties or for delete operation
     //perform that and do not take care about mouse buttons
     switch (request)
     {
-	case RequestProps:
-	    clearRequest();
-	    editItem(l);
-	    return;
-	case RequestDelete:
-	    deleteItem(l);
-	    clearRequest();
-	    return;
-	case RequestNone:
-	    break;
+        case RequestProps:
+            clearRequest();
+            editItem(l);
+            return;
+        case RequestDelete:
+            deleteItem(l);
+            clearRequest();
+            return;
+        case RequestNone:
+            break;
     }
 
     moving = 0;
     resizing = 0;
     switch (e->button())
     {
-	case LeftButton:
-	    if (selectedItem)
-	    {
-		    placeItem(l, e);
-	    }
-	    else
-	    {
-		    startMoveOrResizeItem(l, e, p);
-	    }
-	    break;
+        case LeftButton:
+            if (itemToInsert)
+            {
+                placeItem(l, e);
+            }
+            else
+            {
+                startMoveOrResizeOrSelectItem(l, e, p);
+            }
+            break;
         default:
             break;
     }
@@ -209,17 +280,24 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
 
 void ReportCanvas::contentsMouseReleaseEvent(QMouseEvent* e)
 {
+    selectionRect->setSize(0, 0);
+    selectionRect->setX(0);
+    selectionRect->setY(0);
+    selectionRect->hide();
+
     QPoint p = inverseWorldMatrix().QWMatrix::map(e->pos());
     QCanvasItemList l=canvas()->collisions(p);
 
     switch (e->button())
     {
+        case LeftButton:
+            selectItem(l);
         case MidButton:
-	    deleteItem(l);
-	    break;
-	case RightButton:
-	    editItem(l);
-	    break;
+            deleteItem(l);
+            break;
+        case RightButton:
+            editItem(l);
+            break;
         default:
             break;
     }
@@ -244,8 +322,8 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 
     if ( moving )
     {
-	moving->moveBy(p.x() - moving_start.x(),
-		       p.y() - moving_start.y());
+        moving->moveBy(p.x() - moving_start.x(),
+            p.y() - moving_start.y());
 /*	attempt to prevent item collisions
         QCanvasItemList l=canvas()->collisions(moving->rect());
 	if (l.count() > 2)
@@ -255,22 +333,29 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 	    canvas()->update();
 	    return;
 	}*/
-	moving_start = p;
-	moving->updateGeomProps();
-	canvas()->update();
-	emit modificationPerformed();
+        moving_start = p;
+        moving->updateGeomProps();
+        canvas()->update();
+        emit modificationPerformed();
     }
     if (resizing)
     {
-	QCanvasRectangle *r = (QCanvasRectangle *)resizing;
-	int w = r->width() + p.x() - moving_start.x();
-	int h = r->height() + p.y() - moving_start.y();
-	if (((w > 10) && (h > 10)) || (resizing->rtti() == RttiCanvasLine))
-	    r->setSize(w, h);
-	moving_start = p;
-	resizing->updateGeomProps();
-	canvas()->update();
-	emit modificationPerformed();
+        QCanvasRectangle *r = (QCanvasRectangle *)resizing;
+        int w = r->width() + p.x() - moving_start.x();
+        int h = r->height() + p.y() - moving_start.y();
+        if (((w > 10) && (h > 10)) || (resizing->rtti() == RttiCanvasLine))
+            r->setSize(w, h);
+        moving_start = p;
+        resizing->updateGeomProps();
+        canvas()->update();
+        emit modificationPerformed();
+    }
+    if (selectionStarted)
+    {
+/*        qDebug("x_start = %d, y_start = %d, x_end = %d, y_end = %d", moving_start.x(),
+            moving_start.y(), e->pos().x(), e->pos().y());*/
+        selectionRect->setSize(e->pos().x() - selectionRect->x(),
+            e->pos().y() - selectionRect->y());
     }
 }
 

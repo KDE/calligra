@@ -23,6 +23,8 @@
 class QString;
 class QStringList;
 
+const int HolderSize = 5;
+
 class CanvasReportItem: public CanvasBox{
 public:
     CanvasReportItem(int x, int y, int width, int height, QCanvas * canvas):
@@ -41,11 +43,18 @@ public:
     QRect bottomLeftResizableRect();
     QRect topRightResizableRect();
     QRect bottomRightResizableRect();
-    
+    QRect topMiddleResizableRect();
+    QRect bottomMiddleResizableRect();
+    QRect leftMiddleResizableRect();
+    QRect rightMiddleResizableRect();
+
     CanvasBand *section();
     virtual void setSection(CanvasBand *section);
     virtual void setSectionUndestructive(CanvasBand *section);
-    
+
+    virtual bool isInHolder(const QPoint p);
+    virtual void drawHolders(QPainter &painter);
+
 protected:
     CanvasBand *parentSection;
 };

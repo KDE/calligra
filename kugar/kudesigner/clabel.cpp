@@ -251,13 +251,10 @@ void CanvasLabel::draw(QPainter &painter)
     painter.drawText((int)x(), (int)y(), width(), height(),
 		     getTextAlignment() | getTextWrap(),
 		     props["Text"].first);
+
     //draw resizable region
-    painter.setPen(QColor(0, 0, 0));
-    painter.setBrush(QColor(0, 0, 0));
-//    painter.drawRect(topLeftResizableRect());
-//    painter.drawRect(topRightResizableRect());
-//    painter.drawRect(bottomLeftResizableRect());
-    painter.drawRect(bottomRightResizableRect());
+    if (isSelected())
+        drawHolders(painter);
 //    CanvasReportItem::draw(painter);
 }
 

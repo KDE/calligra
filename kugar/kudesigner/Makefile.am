@@ -1,4 +1,4 @@
-SUBDIRS = toolbar pics
+SUBDIRS = toolbar pics templates
 
 INCLUDES = -I$(srcdir)/../lib $(KOFFICE_INCLUDES) $(all_includes)
 

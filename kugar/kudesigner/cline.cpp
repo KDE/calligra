@@ -116,12 +116,15 @@ void CanvasLine::draw(QPainter &painter)
     	props["Y1"].first.toInt() + (int)section()->y(),
      	props["X2"].first.toInt() + (int)section()->x(),
       	props["Y2"].first.toInt() + (int)section()->y());
-    //draw resizable region
+
     painter.setPen(QColor(0, 0, 0));
+    painter.setBrush(QColor(0, 0, 0));
 //    painter.drawRect(topLeftResizableRect());
 //    painter.drawRect(topRightResizableRect());
 //    painter.drawRect(bottomLeftResizableRect());
     painter.drawRect(bottomRightResizableRect());
+
+//    drawHolders(painter);
 }
 
 void CanvasLine::setSection(CanvasBand *section)

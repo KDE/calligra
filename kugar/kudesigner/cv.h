@@ -18,17 +18,28 @@
 #define CV_H
 
 #include <qcanvas.h>
+#include <kglobalsettings.h>
+#include <qpainter.h>
 
 class CanvasReportItem;
 class QMouseEvent;
 class QCanvasItemList;
+class CanvasBox;
+
+class SelectionRect: public QCanvasRectangle{
+public:
+    SelectionRect( int x, int y, int width, int height, QCanvas * canvas):
+        QCanvasRectangle(x, y, width, height, canvas) {}
+
+    virtual void draw(QPainter & painter);
+};
 
 class ReportCanvas: public QCanvasView{
     Q_OBJECT
 public:
     ReportCanvas(QCanvas * canvas, QWidget * parent = 0, const char * name = 0, WFlags f = 0);
     
-    CanvasReportItem *selectedItem;
+    CanvasReportItem *itemToInsert;
     
     enum RequestType {RequestNone = 0, RequestProps, RequestDelete};
     
@@ -40,16 +51,22 @@ protected:
     void contentsMouseReleaseEvent(QMouseEvent*);
     void contentsMouseMoveEvent(QMouseEvent*);
 
-    void startMoveOrResizeItem(QCanvasItemList &l, QMouseEvent *e, QPoint &p);
+    void startMoveOrResizeOrSelectItem(QCanvasItemList &l, QMouseEvent *e, QPoint &p);
     void placeItem(QCanvasItemList &l, QMouseEvent *e);
     void editItem(QCanvasItemList &l);
     void deleteItem(QCanvasItemList &l);
+    void selectItem(QCanvasItemList &l);
 private:
     CanvasReportItem *moving;
     QPoint moving_start;
     CanvasReportItem *resizing;
+    bool selectionStarted;
+
+    SelectionRect *selectionRect;
     
     RequestType request;
+
+    CanvasBox *selected;
 signals: // Signals
   /** Emitted when user clicks on the canvas, so a button
 or a menu item assosiated with the selected item should

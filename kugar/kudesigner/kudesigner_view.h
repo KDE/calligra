@@ -85,7 +85,6 @@ private:
     KActionCollection *itemsCollection;
     KActionCollection *sectionsCollection;
 
-    CanvasReportItem *selectedItem;
 };
 
 #endif

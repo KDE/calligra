@@ -39,6 +39,18 @@ void CanvasBox::draw(QPainter &painter)
     QCanvasRectangle::draw(painter);
 }
 
+bool CanvasBox::isSelected()
+{
+    return selected;
+}
+
+void CanvasBox::setSelected(bool s)
+{
+    selected = s;
+    canvas()->update();
+}
+
+
 
 //CanvasSection class
 

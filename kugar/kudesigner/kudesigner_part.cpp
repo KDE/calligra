@@ -75,9 +75,10 @@ bool KudesignerPart::initDoc()
         KURL url( _template);
         ok = openURL( url );
     } else if ( ret == KoTemplateChooseDia::Empty ) {
-        QString fileName( locate( "kudesinger_template", "General/.source/A4.ktm" , KudesignerFactory::global() ) );
+        QString fileName( locate( "kudesigner_template", "General/.source/A4.ktm", KudesignerFactory::global() ) );
         resetURL();
         ok = loadNativeFormat( fileName );
+        qDebug("%d", ok);
         setEmpty();
     }
     setModified( FALSE );
@@ -189,8 +190,10 @@ bool KudesignerPart::loadXML( QIODevice *, const QDomDocument & rt)
 
 QDomDocument KudesignerPart::saveXML()
 {
-    // TODO save the document into a QDomDocument
-    return QDomDocument();
+	QDomDocument doc;
+    doc.setContent(docCanvas->templ->getXml());
+
+    return doc;
 }
 
 

@@ -15,27 +15,51 @@
  *                                                                         *
  ***************************************************************************/
 #include <klocale.h>
+#include <kglobalsettings.h>
+
 #include "creportitem.h"
+
 #include <qrect.h>
+#include <qpainter.h>
 
 QRect CanvasReportItem::topLeftResizableRect()
 {
-    return QRect((int)x(), (int)y(), 8, 8);
+    return QRect((int)x(), (int)y(), HolderSize, HolderSize);
 }
 
 QRect CanvasReportItem::bottomLeftResizableRect()
 {
-    return QRect((int)x(), (int)(y()+width()-8), 8, 8);
+    return QRect((int)x(), (int)(y()+height()-HolderSize), HolderSize, HolderSize);
 }
 
 QRect CanvasReportItem::topRightResizableRect()
 {
-    return QRect((int)(x()+width()-8), (int)y(), 8, 8);
+    return QRect((int)(x()+width()-HolderSize), (int)y(), HolderSize, HolderSize);
 }
 
 QRect CanvasReportItem::bottomRightResizableRect()
 {
-    return QRect((int)(x()+width()-8), (int)(y()+height()-8), 8, 8);
+    return QRect((int)(x()+width()-HolderSize), (int)(y()+height()-HolderSize), HolderSize, HolderSize);
+}
+
+QRect CanvasReportItem::topMiddleResizableRect()
+{
+    return QRect((int)(x()+width()/2-HolderSize/2.), (int)y(), HolderSize, HolderSize);
+}
+
+QRect CanvasReportItem::bottomMiddleResizableRect()
+{
+    return QRect((int)(x()+width()/2-HolderSize/2.), (int)(y()+height()-HolderSize), HolderSize, HolderSize);
+}
+
+QRect CanvasReportItem::leftMiddleResizableRect()
+{
+    return QRect((int)x(), (int)(y()+height()/2-HolderSize/2.), HolderSize, HolderSize);
+}
+
+QRect CanvasReportItem::rightMiddleResizableRect()
+{
+    return QRect((int)(x()+width()-HolderSize), (int)(y()+height()/2-HolderSize/2.), HolderSize, HolderSize);
 }
 
 void CanvasReportItem::updateGeomProps()
@@ -79,3 +103,30 @@ QString CanvasReportItem::getXml()
     return result;
 }
 
+bool CanvasReportItem::isInHolder(const QPoint p)
+{
+    if (topLeftResizableRect().contains(p) ||
+        bottomLeftResizableRect().contains(p) ||
+        topRightResizableRect().contains(p) ||
+        bottomRightResizableRect().contains(p) ||
+        topMiddleResizableRect().contains(p) ||
+        bottomMiddleResizableRect().contains(p) ||
+        leftMiddleResizableRect().contains(p) ||
+        rightMiddleResizableRect().contains(p))
+        return true;
+    return false;
+}
+
+void CanvasReportItem::drawHolders(QPainter &painter)
+{
+    painter.setPen(QColor(0, 0, 0));
+    painter.setBrush(KGlobalSettings::highlightColor());
+    painter.drawRect(topLeftResizableRect());
+    painter.drawRect(topRightResizableRect());
+    painter.drawRect(bottomLeftResizableRect());
+    painter.drawRect(bottomRightResizableRect());
+    painter.drawRect(topMiddleResizableRect());
+    painter.drawRect(bottomMiddleResizableRect());
+    painter.drawRect(leftMiddleResizableRect());
+    painter.drawRect(rightMiddleResizableRect());
+}
