@@ -2447,10 +2447,10 @@ bool KPrCanvas::exportPage( int nPage,
             }
             if( !bLocalFile ){
                 if( res ){
-#if ! KDE_IS_VERSION(3,1,90)
-                    res = KIO::NetAccess::upload( tmpFile->name(), fileURL );
-#else
+#if KDE_IS_VERSION(3,1,90)
                     res = KIO::NetAccess::upload( tmpFile->name(), fileURL, this );
+#else
+                    res = KIO::NetAccess::upload( tmpFile->name(), fileURL );
 #endif
                 }
             }
