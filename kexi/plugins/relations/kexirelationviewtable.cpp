@@ -165,7 +165,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *obj, QEvent *ev)
 			if ((abs(diffX)>2) || (abs(diffY)>2))
 			{
 				QPoint newPos=parentWidget()->pos()+QPoint(diffX,diffY);
-#if 0
+
 //correct the x position
 				if (newPos.x()<0) {
 					m_offsetX+=newPos.x();
@@ -174,7 +174,8 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *obj, QEvent *ev)
 				else
 				if (m_offsetX<0) {
 					m_offsetX+=newPos.x();
-					newPos.setX(0);	
+					newPos.setX(m_offsetX);
+					m_offsetX=0;	
 				}
 //correct the y position
 				if (newPos.y()<0) {
@@ -184,10 +185,11 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *obj, QEvent *ev)
 				else
 				if (m_offsetY<0) {
 					m_offsetY+=newPos.y();
-					newPos.setY(0);	
+					newPos.setY(m_offsetY);
+					m_offsetY=0;	
 				}
 //move and update helpers
-#endif
+
 				parentWidget()->move(newPos);
 				m_grabX=static_cast<QMouseEvent*>(ev)->globalPos().x();
 				m_grabY=static_cast<QMouseEvent*>(ev)->globalPos().y();
