@@ -4487,6 +4487,7 @@ void KPresenterView::updateSideBarItem( KPrPage * page )
 {
     if ( sidebar )
         sidebar->updateItem( page );
+    m_pKPresenterDoc->recalcVariables( VT_STATISTIC );
 }
 
 void KPresenterView::addSideBarItem( int pos )
