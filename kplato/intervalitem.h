@@ -21,6 +21,8 @@
 #define INTERVALITEM_H
 
 #include <qlistview.h>
+#include <qdatetime.h>
+#include <qpair.h>
 
 
 class IntervalItem : public QListViewItem
