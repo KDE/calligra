@@ -6322,8 +6322,15 @@ void KSpreadSheet::checkContentDirection( QString const & name )
 {
   bool rtl = m_bRightToLeft;
 
-  kdDebug() << "name[0].direction(): " << name[0].direction() << ", RTL: " << rtl << endl;
-  if ( /* ( name[0].direction() == QChar::DirR ) || */ ( name.left(3) == "rtl" ) ) // for testing...
+  kdDebug() << "name.isRightToLeft(): " << name.isRightToLeft() << ", RTL: " << rtl << endl;
+  
+  /*
+   * note:
+   * the rtl code in kspread is till buggy. for this release the trigger will be 
+   * an RTL sheet name. in between releases the trigger will be that the name
+   * of the sheet will start with "rtl". just to make developers life easier.
+   */
+  if ( (name.isRightToLeft())  ||  (name.left(3) == "rtl")  )
   {
     kdDebug() << "Table direction set to right to left" << endl;
     m_bRightToLeft = true;
