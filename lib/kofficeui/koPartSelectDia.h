@@ -20,7 +20,7 @@
 #ifndef DlgPartSelect_included
 #define DlgPartSelect_included
 
-#include <koQueryTrader.h>
+#include <koQueryTypes.h>
 
 #include "koPartSelectDia_data.h"
 
