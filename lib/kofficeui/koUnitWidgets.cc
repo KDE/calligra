@@ -119,14 +119,18 @@ QString KoUnitDoubleBase::getVisibleText( double value ) const
 
 double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
 {
-    kdDebug(30004) << "toDouble:" << str << ":" << endl;
     QString str2( str );
     /* KLocale::readNumber wants the thousand separator exactly at 1000.
        But when editing, it might be anywhere. So we need to remove it. */
     const QString sep( KGlobal::locale()->thousandsSeparator() );
     if ( !sep.isEmpty() )
         str2.remove( sep );
-    return KGlobal::locale()->readNumber( str2, ok );
+    const double dbl = KGlobal::locale()->readNumber( str2, ok );
+    if ( ok )
+        kdDebug(30004) << "toDouble:" << str << ": => :" << str2 << ": => " << dbl << endl;
+    else
+        kdWarning(30004) << "toDouble error:" << str << ": => :" << str2 << ":" << endl;
+    return dbl;
 }
 
 
