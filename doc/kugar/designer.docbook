@@ -49,11 +49,14 @@ set to <quote>Text</quote>.</para>
 
 <para>To change properties, use <guilabel>Report Item
 Options</guilabel> dialog.  That dialog can be called by &RMB; click
-on an item.  See screenshot below (properties for a Field item):
+on an item or with a <guilabel>Edit Properties</guilabel> button in the
+<guilabel>Edit Toolbar</guilabel>.
+  See screenshot below (properties for a Field item):
 </para>
 
 <para>
-To delete an item, &MMB; click on it.
+To delete an item, &MMB; click on it or use <guilabel>Delete</guilabel> button in the
+<guilabel>Edit Toolbar</guilabel>.
 </para>
 
 <screenshot>
@@ -167,6 +170,31 @@ must be set before the report created.
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Quit</action> the program.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Clear Selection</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Cancel</action> any edit action, so no properties
+will be edited or items deleted.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Edit Properties</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Edit</action> properties of the selected item.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guimenuitem>Delete</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Delete</action> the selected item.</para></listitem>
 </varlistentry>
 
 <varlistentry>

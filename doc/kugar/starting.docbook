@@ -28,10 +28,14 @@ For example, <userinput><command>kugar</command> <option>-d</option>
 </para>
 
 <para>
-The &kudesigner; program is started with no arguments:
+The &kudesigner; program can be started with no arguments
+or with a report template file name as an argument:
 </para>
 <cmdsynopsis>
 <command>kudesigner</command>
+<group>
+<replaceable>template.kut</replaceable>
+</group>
 </cmdsynopsis>
 
 </chapter>
