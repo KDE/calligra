@@ -1065,7 +1065,9 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 void KPresenterDoc::saveOasisIgnoreList( KoXmlWriter &settingsWriter )
 {
+    settingsWriter.startElement("config:config-item-map-entry" );
     settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
+    settingsWriter.endElement();
 }
 
 void KPresenterDoc::loadOasisIgnoreList( const QDomDocument&settingsDoc )
@@ -3185,7 +3187,7 @@ void KPresenterDoc::movePageTo( int oldPos, int newPos )
 
     KPrPage * page = m_pageList.take( oldPos );
     m_pageList.insert( newPos, page );
-    
+
     recalcPageNum();
     recalcVariables( VT_PGNUM );
 
