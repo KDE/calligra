@@ -349,8 +349,23 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     stylepageauto.addProperty( "presentation:background-objects-visible", "true" );
     QString transition = saveOasisPageEffect();
     if ( !transition.isEmpty() )
+    {
         stylepageauto.addProperty( "presentation:transition-style", transition );
+    }
+    if ( pageTimer != 1 )
+    {
+        QTime time;
+        time = time.addSecs( pageTimer );
+        QString hours( QString::number( time.hour() ).rightJustify( 2, '0' ) );
+        QString ms( QString::number( time.minute() ).rightJustify( 2, '0' ) );
+        QString sec( QString::number( time.second() ).rightJustify( 2, '0' ) );
 
+
+        //ISO8601 chapter 5.5.3.2
+        //QDate doesn't encode it as this format.
+        QString timeIso = QString( "PT%1H%2M%3S" ).arg( hours ).arg( ms ).arg( sec );
+        stylepageauto.addProperty("presentation:duration", timeIso );
+    }
     if ( m_presSpeed != 5 )
     {
         if ( m_presSpeed == 10 )
@@ -622,8 +637,16 @@ void KPBackGround::loadOasis(KoOasisContext & context )
     }
     if ( styleStack.hasAttribute("presentation:duration" , QString::null, "drawing-page"))
     {
-        kdDebug()<<"styleStack.hasAttribute(presentation:duration , QString::null, drawing-page ) :"<<styleStack.hasAttribute("presentation:duration" , QString::null, "drawing-page")<<endl;
+        QString str = styleStack.attribute("presentation:duration" , QString::null, "drawing-page");
+        kdDebug()<<"styleStack.hasAttribute(presentation:duration , QString::null, drawing-page ) :"<<str<<endl;
         //convert date duration
+	    int hour( str.mid( 2, 2 ).toInt() );
+	    int minute( str.mid( 5, 2 ).toInt() );
+	    int second( str.mid( 8, 2 ).toInt() );
+
+        pageTimer = second + minute*60 + hour*60*60;
+        kdDebug()<<" second : "<<second<<" minute :"<<minute<<" hour "<<hour<<endl;
+
     }
     if ( styleStack.hasAttribute("presentation:transition-style", QString::null, "drawing-page"))
     {
