@@ -141,6 +141,7 @@ void KoFontChooser::setupTab2()
     lst.clear();
     lst <<i18n("Without");
     lst <<i18n("Single");
+    lst <<i18n("Simple Bold");
     lst <<i18n("Double");
 
     d->m_strikeOut = new QComboBox( grp );
@@ -307,6 +308,9 @@ KoTextFormat::StrikeOutLineType KoFontChooser::getStrikeOutLineType()
         return KoTextFormat::S_SIMPLE;
         break;
     case 2:
+        return KoTextFormat::S_SIMPLE_BOLD;
+        break;
+    case 3:
         return KoTextFormat::S_DOUBLE;
         break;
     default:
@@ -325,8 +329,11 @@ void KoFontChooser::setStrikeOutlineType(KoTextFormat::StrikeOutLineType nb)
     case KoTextFormat::S_SIMPLE:
          d->m_strikeOut->setCurrentItem(1);
         break;
+    case KoTextFormat::S_SIMPLE_BOLD:
+        d->m_strikeOut->setCurrentItem(2);
+        break;
     case KoTextFormat::S_DOUBLE:
-         d->m_strikeOut->setCurrentItem(2);
+         d->m_strikeOut->setCurrentItem(3);
         break;
     }
 

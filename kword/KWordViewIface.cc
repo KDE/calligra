@@ -317,3 +317,7 @@ void KWordViewIface::selectBookmark()
     view->selectBookmark();
 }
 
+void KWordViewIface::tableProperties()
+{
+    view->tableProperties();
+}

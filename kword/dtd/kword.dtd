@@ -602,7 +602,7 @@ don't put a </?xml...> at the end of the file!).
     value CDATA #REQUIRED>
 
 <!-- UNDERLINE
-        Value is either 0 or 1 or single or double
+        Value is either 0 or 1 or single or double or single-bold
           0 = no underline
           1 or single = single underline
           double = double-underline.
@@ -619,7 +619,7 @@ don't put a </?xml...> at the end of the file!).
     underlinecolor CDATA #REQUIRED>
 
 <!-- STRIKEOUT
-        Value is either 0 or 1 with 1=true and 0=false
+        Value is either 0 or 1 with 1=true and 0=false single or single-bold
         styleline style of strikeout line solid, dash, dot, dashdot, dashdotdot
 -->
 <!ELEMENT STRIKEOUT

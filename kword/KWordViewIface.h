@@ -102,6 +102,7 @@ k_dcop:
 
     void addBookmark();
     void selectBookmark();
+    void tableProperties();
 
 private:
     KWView *view;

@@ -1136,32 +1136,38 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         p->setFont( font );
     }
 
-    if ( format->strikeOutLineType() == KoTextFormat::S_SIMPLE )
+    if ( format->strikeOutLineType() == KoTextFormat::S_SIMPLE
+        || format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)
     {
+        unsigned int dim = (format->strikeOutLineType() == KoTextFormat::U_SIMPLE_BOLD)? KoBorder::zoomWidthY( 2, zh, 1 ) : KoBorder::zoomWidthY( 1, zh, 1 );
+
         p->save();
         switch( format->strikeOutLineStyle() )
         {
         case KoTextFormat::S_SOLID:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+            p->setPen( QPen( color, dim, Qt::SolidLine ) );
             break;
         case KoTextFormat::S_DASH:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashLine ) );
+            p->setPen( QPen( color,dim, Qt::DashLine ) );
             break;
         case KoTextFormat::S_DOT:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            p->setPen( QPen( color, dim, Qt::DashDotLine ) );
             break;
         case KoTextFormat::S_DASH_DOT:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotLine ) );
+            p->setPen( QPen( color, dim, Qt::DashDotLine ) );
             break;
         case KoTextFormat::S_DASH_DOT_DOT:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::DashDotDotLine ) );
+            p->setPen( QPen( color, dim, Qt::DashDotDotLine ) );
 
             break;
         default:
-            p->setPen( QPen( color, KoBorder::zoomWidthY( 1, zh, 1 ), Qt::SolidLine ) );
+            p->setPen( QPen( color, dim, Qt::SolidLine ) );
         }
-
-        int y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
+        int y = 0;
+        if (format->strikeOutLineType() == KoTextFormat::U_SIMPLE_BOLD )
+            y = lastY + baseLine + KoBorder::zoomWidthY( 2, zh, 0 );
+        else
+            y = lastY + baseLine + KoBorder::zoomWidthY( 1, zh, 0 );
         p->drawLine( startX, y - h/2 + 2, startX + bw, y- h/2 +2 );
         p->restore();
         font.setStrikeOut( FALSE );

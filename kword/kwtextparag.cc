@@ -294,6 +294,8 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
             formatElem.appendChild( elem );
             if ( curFormat->doubleStrikeOut() )
                 elem.setAttribute( "value", "double" );
+            else if ( curFormat->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)
+                elem.setAttribute( "value", "single-bold" );
             else
                 elem.setAttribute( "value", static_cast<int>(curFormat->strikeOut()) );
             QString strLineType=KoTextFormat::strikeOutStyleToString( curFormat->strikeOutLineStyle() );
@@ -512,6 +514,9 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
             format.setStrikeOutLineType ( KoTextFormat::S_SIMPLE);
         else if ( value == "double" )
             format.setStrikeOutLineType ( KoTextFormat::S_DOUBLE);
+        else if ( value =="single-bold" )
+            format.setStrikeOutLineType ( KoTextFormat::S_SIMPLE_BOLD);
+
         if ( elem.hasAttribute("styleline" ))
         {
             QString strLineType = elem.attribute("styleline");
