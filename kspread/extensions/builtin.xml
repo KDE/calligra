@@ -609,6 +609,48 @@
 	<Example>time(10;2;2) returns 10:02:02</Example>
       </Help>
     </Function>
+    
+    <Function>	    
+     <Name>hours</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>time</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The hours() function returns the value of hour in a time expression.</Text>
+	<Syntax>hours( time)</Syntax>
+	<Example>hours("10:5:2") returns 10</Example>
+      </Help>
+    </Function>
+
+    <Function>	  
+     <Name>minutes</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>time</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The minutes() function returns the value of minute in a time expression.</Text>
+	<Syntax>minutes( time)</Syntax>
+	<Example>minutes("10:5:2") returns 5</Example>
+      </Help>
+    </Function>
+
+    <Function>	  
+     <Name>seconds</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>time</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The seconds() function returns the value of second in a time expression.</Text>
+	<Syntax>seconds( time)</Syntax>
+	<Example>seconds("10:5:2") returns 2</Example>
+      </Help>
+    </Function>
 
     <Function>
       <Name>day</Name>

@@ -1166,3 +1166,8 @@ Fix layout in kspread_dlg_preference
 ----------------------------------------------------
 -Now you can used "Area name" in formula
 example =sum('kspread')
+
+2001-02-03-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+Add three new functions hours,seconds,minutes
+These functions returns hour,second or minutes in a time expression.

@@ -1251,27 +1251,7 @@ static bool kspreadfunc_EXACT( KSContext& context )
   return true;
 }
 
-/*
-static bool kspreadfunc_STXT( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 3, "STXT", true ) )
-    return false;
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
-    return false;
-  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
-    return false;
-  QString tmp;
-  tmp=args[0]->stringValue().right(args[0]->stringValue().length()-(int)args[1]->doubleValue());
-  tmp=tmp.left(  (int)args[2]->doubleValue());
-  context.setValue( new KSValue(tmp));
-  return true;
-}
-*/
 
 static bool kspreadfunc_INT( KSContext& context )
 {
@@ -1472,7 +1452,77 @@ static bool kspreadfunc_mod( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_hours( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1, "hours",true ) )
+    return false;
+  if (!KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
+    {
+      if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+	return false;
+      QTime tmp=KGlobal::locale()->readTime(args[0]->stringValue());
+      if(tmp.isValid())
+	context.setValue(new KSValue(tmp.hour()));
+      else
+	context.setValue(new KSValue(i18n("Err")));
+      return true;
+    }
+  else
+    {
+      QTime tmp=args[0]->timeValue();
+      context.setValue(new KSValue(tmp.hour()));
+    }
+   return true;
+}
 
+static bool kspreadfunc_minutes( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1, "minutes",true ) )
+    return false;
+  if (!KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
+    {
+      if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+	return false;
+      QTime tmp=KGlobal::locale()->readTime(args[0]->stringValue());
+      if(tmp.isValid())
+	context.setValue(new KSValue(tmp.minute()));
+      else
+	context.setValue(new KSValue(i18n("Err")));
+      return true;
+    }
+  else
+    {
+      QTime tmp=args[0]->timeValue();
+      context.setValue(new KSValue(tmp.minute()));
+    }
+   return true;
+}
+
+static bool kspreadfunc_seconds( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1, "seconds",true ) )
+    return false;
+  if (!KSUtil::checkType( context, args[0], KSValue::TimeType, true ) )
+    {
+      if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+	return false;
+      QTime tmp=KGlobal::locale()->readTime(args[0]->stringValue());
+      if(tmp.isValid())
+	context.setValue(new KSValue(tmp.second()));
+      else
+	context.setValue(new KSValue(i18n("Err")));
+      return true;
+    }
+  else
+    {
+      QTime tmp=args[0]->timeValue();
+      context.setValue(new KSValue(tmp.second()));
+    }
+   return true;
+}
 
 static bool kspreadfunc_date( KSContext& context )
 {
@@ -4153,6 +4203,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "SEXDEC", new KSValue( new KSBuiltinFunction( module, "SEXDEC", kspreadfunc_sexdec) ) );
   module->addObject( "ISTIME", new KSValue( new KSBuiltinFunction( module, "ISTIME", kspreadfunc_istime) ) );
   module->addObject( "ISDATE", new KSValue( new KSBuiltinFunction( module, "ISDATE", kspreadfunc_isdate) ) );
+  module->addObject( "hours", new KSValue( new KSBuiltinFunction( module, "hours", kspreadfunc_hours) ) );
+  module->addObject( "minutes", new KSValue( new KSBuiltinFunction( module, "minutes", kspreadfunc_minutes) ) );
+  module->addObject( "seconds", new KSValue( new KSBuiltinFunction( module, "seconds", kspreadfunc_seconds) ) );
   return module;
 }
 
