@@ -181,6 +181,11 @@ protected:
     virtual void paint( QPainter &painter, const QColorGroup &cg, QTextCursor *cusror = 0, bool drawSelections = FALSE,
 			int clipx = -1, int clipy = -1, int clipw = -1, int cliph = -1 );
 
+    virtual void drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
+                                  int lastY, int baseLine, int bw, int h, bool drawSelections,
+                                  QTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
+                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft );
+
     // Draw the complete label (i.e. heading/list numbers/bullets) for this paragrpah.
     virtual void drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg );
     virtual void copyParagData( QTextParag *_parag );

@@ -56,9 +56,7 @@ public:
     static int zoomWidthY( double ptWidth, KWDocument * doc, int minborder ); // For top/bottom borders
 
     // Get a ready-to-use QPen for this border.
-    // width is usually QMAX(doc->zoomIt[XY]( brd.ptWidth ), 1)
-    // @internal
-    static QPen borderPen( const Border & brd, int width );
+    static QPen borderPen( const Border & brd, int width, bool printing );
 
     // The do-it-all method :)
     // Draws in @p painter the 4 borders on the _outside_ of @p rect.

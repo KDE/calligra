@@ -1204,7 +1204,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         addStyleTemplate( sty );
         if(m_styleList.count() > followingStyles.count() )
             followingStyles.append(styleElem.namedItem("FOLLOWING").toElement().attribute("name"));
-        else 
+        else
             kdWarning () << "Found duplicate style decleration, overwriting former" << endl;
     }
 
@@ -2584,6 +2584,36 @@ void KWDocument::refreshDocStructure(FrameType _type)
             typeItem=TextFrames;
     }
     emit docStructureChanged(typeItem);
+}
+
+QColor KWDocument::resolveTextColor( const QColor & col, QPainter * painter )
+{
+    if (col.isValid())
+        return col;
+
+    return defaultTextColor( painter );
+}
+
+QColor KWDocument::defaultTextColor( QPainter * painter )
+{
+    if ( painter->device()->devType() == QInternal::Printer )
+        return Qt::black;
+    return QApplication::palette().color( QPalette::Active, QColorGroup::Text );
+}
+
+QColor KWDocument::resolveBgColor( const QColor & col, QPainter * painter )
+{
+    if (col.isValid())
+        return col;
+
+    return defaultBgColor( painter );
+}
+
+QColor KWDocument::defaultBgColor( QPainter * painter )
+{
+    if ( painter->device()->devType() == QInternal::Printer )
+        return Qt::white;
+    return QApplication::palette().color( QPalette::Active, QColorGroup::Base );
 }
 
 #include "kwdoc.moc"

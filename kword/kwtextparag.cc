@@ -323,6 +323,32 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
     }
 }
 
+// Reimplemented from QTextParag
+void KWTextParag::drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
+                                   int lastY, int baseLine, int bw, int h, bool drawSelections,
+                                   QTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
+                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
+{
+    // Resolve the color before calling the default implementation of drawParagString
+    if ( lastFormat && !lastFormat->color().isValid() )
+    {
+        QTextFormat format( *lastFormat );
+        format.setColor( KWDocument::defaultTextColor( &painter ) );
+        QTextParag::drawParagString( painter, s, start, len, startX,
+                                     lastY, baseLine, bw, h, drawSelections,
+                                     &format, i, selectionStarts,
+                                     selectionEnds, cg, rightToLeft );
+    }
+    else
+    {
+        QTextParag::drawParagString( painter, s, start, len, startX,
+                                     lastY, baseLine, bw, h, drawSelections,
+                                     lastFormat, i, selectionStarts,
+                                     selectionEnds, cg, rightToLeft );
+    }
+}
+
+// Reimplemented from QTextParag
 void KWTextParag::copyParagData( QTextParag *_parag )
 {
     KWTextParag * parag = static_cast<KWTextParag *>(_parag);
@@ -514,13 +540,14 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, QTextFormat * curFormat
         elem.setAttribute( "value", curFormat->font().weight() );
     }
     if( !refFormat || curFormat->color() != refFormat->color() )
-    {
-        elem = doc.createElement( "COLOR" );
-        formatElem.appendChild( elem );
-        elem.setAttribute( "red", curFormat->color().red() );
-        elem.setAttribute( "green", curFormat->color().green() );
-        elem.setAttribute( "blue", curFormat->color().blue() );
-    }
+        if ( curFormat->color().isValid() )
+        {
+            elem = doc.createElement( "COLOR" );
+            formatElem.appendChild( elem );
+            elem.setAttribute( "red", curFormat->color().red() );
+            elem.setAttribute( "green", curFormat->color().green() );
+            elem.setAttribute( "blue", curFormat->color().blue() );
+        }
     if( !refFormat || curFormat->font().family() != refFormat->font().family() )
     {
         elem = doc.createElement( "FONT" );

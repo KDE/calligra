@@ -1337,19 +1337,23 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
         region = region.subtract( outerRect );
 
         // Set the background color.
-        painter->setBrush( frame->getBackgroundColor() );
+        QBrush bgBrush( frame->getBackgroundColor() );
+	bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
+        painter->setBrush( bgBrush );
 
         // Draw default borders using view settings except when printing, or disabled.
         QPen viewSetting( lightGray );
         if ( ( painter->device()->devType() == QInternal::Printer ) ||
             !m_doc->getViewFrameBorders() )
         {
-            viewSetting.setColor( frame->getBackgroundColor().color() );
+            viewSetting.setColor( bgBrush.color() );
         }
 
         // Draw borders either as the user defined them, or using the view settings.
         // Borders should be drawn _outside_ of the frame area
         // otherwise the frames will erase the border when painting themselves.
+
+        bool printing = painter->device()->devType() == QInternal::Printer;
 
         //    Border::drawBorders( *painter, m_doc, frameRect,
         //         frame->getLeftBorder(), frame->getRightBorder(),
@@ -1365,7 +1369,7 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
         if ( width > 0 )
         {
             w = QMAX( 1, (int)(m_doc->zoomItX( width ) + 0.5) );
-            pen = Border::borderPen( frame->getRightBorder(), w );
+            pen = Border::borderPen( frame->getRightBorder(), w, printing );
         }
         else
         {
@@ -1382,7 +1386,7 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
         if ( width > 0 )
         {
             w = QMAX( 1, (int)(m_doc->zoomItY( width ) + 0.5) );
-            pen = Border::borderPen( frame->getBottomBorder(), w );
+            pen = Border::borderPen( frame->getBottomBorder(), w, printing );
         }
         else
         {
@@ -1401,7 +1405,7 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
             if ( width > 0 )
             {
                 w = QMAX( 1, (int)(m_doc->zoomItX( width ) + 0.5) );
-                pen = Border::borderPen( frame->getLeftBorder(), w );
+                pen = Border::borderPen( frame->getLeftBorder(), w, printing );
             }
             else
             {
@@ -1420,7 +1424,7 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
             if ( width > 0 )
             {
                 w = QMAX( 1, (int)(m_doc->zoomItY( width ) + 0.5) );
-                pen = Border::borderPen( frame->getTopBorder(), w );
+                pen = Border::borderPen( frame->getTopBorder(), w, printing );
             }
             else
             {

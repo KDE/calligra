@@ -216,8 +216,8 @@ private:
     //QRegion emptyRegion;
     //bool emptyRegionDirty;
 
-    Border brd_left, brd_right, brd_top, brd_bottom;
     QBrush backgroundColor;
+    Border brd_left, brd_right, brd_top, brd_bottom;
 
     double bleft, bright, btop, bbottom; // margins
 

@@ -225,7 +225,10 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
 
                 p->translate( offsetX, offsetY ); // translate to qrt coords - after setting the clip region !
 
-                gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
+                QBrush bgBrush( frame->getBackgroundColor() );
+                bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
+                gb.setBrush( QColorGroup::Base, bgBrush );
+
                 QTextParag * lastFormatted = textdoc->draw( p, r.x(), r.y(), r.width(), r.height(),
                                                             gb, onlyChanged, drawCursor, cursor, resetChanged );
 
@@ -258,7 +261,8 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                     int docHeight = textdoc->height();
                     QRect blank( 0, docHeight, frameRect.width(), totalHeight+frameRect.height() - docHeight );
                     //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
-                    p->fillRect( blank, gb.brush( QColorGroup::Base ) );
+                    bool printing = p->device()->devType() == QInternal::Printer;
+                    p->fillRect( blank, printing ? Qt::white : gb.brush( QColorGroup::Base ) );
                     // for debugging :)
                     //p->setPen( QPen(Qt::blue, 1, DashLine) );  p->drawRect( blank );
                 }
@@ -316,7 +320,10 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
 
                 QPixmap *pix = 0;
                 QColorGroup cg = QApplication::palette().active();
-                cg.setBrush(QColorGroup::Base, frame->getBackgroundColor());
+                QBrush bgBrush( frame->getBackgroundColor() );
+                bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
+                cg.setBrush( QColorGroup::Base, bgBrush );
+
                 textdoc->drawParag( p, cursor->parag(), topLeft.x() - cursor->totalOffsetX() + cursor->x() - 5,
                                  topLeft.y() - cursor->totalOffsetY() + cursor->y(), 10, h,
                                  pix, cg, cursorVisible, cursor );

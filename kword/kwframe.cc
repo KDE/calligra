@@ -51,11 +51,11 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       selected( false ),
       mostRight( false ),
       m_pageNum( 0 ),
-      brd_left( Qt::white, Border::SOLID, 0 ),
-      brd_right( Qt::white, Border::SOLID, 0 ),
-      brd_top( Qt::white, Border::SOLID, 0 ),
-      brd_bottom( Qt::white, Border::SOLID, 0 ),
-      backgroundColor( Qt::white ),
+      backgroundColor(),
+      brd_left( QColor(), Border::SOLID, 0 ),
+      brd_right( QColor(), Border::SOLID, 0 ),
+      brd_top( QColor(), Border::SOLID, 0 ),
+      brd_bottom( QColor(), Border::SOLID, 0 ),
       bleft( 0 ),
       bright( 0 ),
       btop( 0 ),
@@ -217,7 +217,7 @@ QCursor KWFrame::getMouseCursor( double mx, double my, bool table )
 KWFrame *KWFrame::getCopy() {
     /* returns a deep copy of self */
     KWFrame *frm = new KWFrame(getFrameSet(), x(), y(), width(), height(), getRunAround(), getRunAroundGap() );
-    frm->setBackgroundColor( QBrush( getBackgroundColor() ) );
+    frm->setBackgroundColor( getBackgroundColor() );
     frm->setFrameBehaviour(getFrameBehaviour());
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
     frm->setSheetSide(getSheetSide());
@@ -397,14 +397,16 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
         // Set the background color from the main frameset (why?)
         if ( isAHeader() || isAFooter() )
             frame = getFrame( 0 );
-        painter->setBrush( frame->getBackgroundColor() );
+        QBrush bgBrush( frame->getBackgroundColor() );
+	bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
+        painter->setBrush( bgBrush );
 
         // Draw default borders using view settings except when printing, or disabled.
-        QPen viewSetting( lightGray );
+        QPen viewSetting( lightGray ); // TODO use qcolorgroup
         if ( ( painter->device()->devType() == QInternal::Printer ) ||
             !m_doc->getViewFrameBorders() )
         {
-            viewSetting.setColor( frame->getBackgroundColor().color() );
+            viewSetting.setColor( bgBrush.color() );
         }
 
         // Draw borders either as the user defined them, or using the view settings.
@@ -717,21 +719,11 @@ void KWFrameSet::save( QDomElement &parentElem )
         KWFrame *frame = frameIt.current();
         QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
         parentElem.appendChild( frameElem );
-#if 0
-        if(getGroupManager() && getGroupManager()->isAnchored()) {
-            // set the frame coordinates to the offset.
-            frameElem.setAttribute( "left", frame->left() );
-            frameElem.setAttribute( "top", frame->top() - getGroupManager()->getOrigin().y() );
-            frameElem.setAttribute( "right", frame->right() );
-            frameElem.setAttribute( "bottom", frame->bottom() - getGroupManager()->getOrigin().y() );
-        } else
-#endif
-        {
-            frameElem.setAttribute( "left", frame->left() );
-            frameElem.setAttribute( "top", frame->top() );
-            frameElem.setAttribute( "right", frame->right() );
-            frameElem.setAttribute( "bottom", frame->bottom() );
-        }
+
+        frameElem.setAttribute( "left", frame->left() );
+        frameElem.setAttribute( "top", frame->top() );
+        frameElem.setAttribute( "right", frame->right() );
+        frameElem.setAttribute( "bottom", frame->bottom() );
 
         if(frame->getRunAround()!=RA_NO)
             frameElem.setAttribute( "runaround", static_cast<int>( frame->getRunAround() ) );
@@ -742,7 +734,7 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getLeftBorder().ptWidth!=0)
             frameElem.setAttribute( "lWidth", frame->getLeftBorder().ptWidth );
 
-        if(frame->getLeftBorder().color != Qt::white)
+        if(frame->getLeftBorder().color.isValid())
         {
             frameElem.setAttribute( "lRed", frame->getLeftBorder().color.red() );
             frameElem.setAttribute( "lGreen", frame->getLeftBorder().color.green() );
@@ -754,7 +746,7 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getRightBorder().ptWidth!=0)
             frameElem.setAttribute( "rWidth", frame->getRightBorder().ptWidth );
 
-        if(frame->getRightBorder().color != Qt::white)
+        if(frame->getRightBorder().color.isValid())
         {
             frameElem.setAttribute( "rRed", frame->getRightBorder().color.red() );
             frameElem.setAttribute( "rGreen", frame->getRightBorder().color.green() );
@@ -766,7 +758,7 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getTopBorder().ptWidth!=0)
             frameElem.setAttribute( "tWidth", frame->getTopBorder().ptWidth );
 
-        if(frame->getTopBorder().color != Qt::white)
+        if(frame->getTopBorder().color.isValid())
         {
             frameElem.setAttribute( "tRed", frame->getTopBorder().color.red() );
             frameElem.setAttribute( "tGreen", frame->getTopBorder().color.green() );
@@ -778,7 +770,7 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getBottomBorder().ptWidth!=0) {
             frameElem.setAttribute( "bWidth", frame->getBottomBorder().ptWidth );
         }
-        if(frame->getBottomBorder().color != Qt::white) {
+        if(frame->getBottomBorder().color.isValid()) {
             frameElem.setAttribute( "bRed", frame->getBottomBorder().color.red() );
             frameElem.setAttribute( "bGreen", frame->getBottomBorder().color.green() );
             frameElem.setAttribute( "bBlue", frame->getBottomBorder().color.blue() );
@@ -786,7 +778,7 @@ void KWFrameSet::save( QDomElement &parentElem )
         if(frame->getBottomBorder().style != Border::SOLID)
             frameElem.setAttribute( "bStyle", static_cast<int>( frame->getBottomBorder().style ) );
 
-        if(frame->getBackgroundColor().color() != Qt::white)
+        if(frame->getBackgroundColor().color().isValid())
         {
             frameElem.setAttribute( "bkRed", frame->getBackgroundColor().color().red() );
             frameElem.setAttribute( "bkGreen", frame->getBackgroundColor().color().green() );
@@ -841,17 +833,9 @@ void KWFrameSet::load( QDomElement &attributes )
         {
             SheetSide sheetSide = AnySide;
             Border l, r, t, b;
-            l.color = Qt::white;
-            l.style = Border::SOLID;
             l.ptWidth = 0;
-            r.color = Qt::white;
-            r.style = Border::SOLID;
             r.ptWidth = 0;
-            t.color = Qt::white;
-            t.style = Border::SOLID;
             t.ptWidth = 0;
-            b.color = Qt::white;
-            b.style = Border::SOLID;
             b.ptWidth = 0;
 
             KoRect rect;
@@ -867,31 +851,36 @@ void KWFrameSet::load( QDomElement &attributes )
             r.ptWidth = KWDocument::getAttribute( frameElem, "rWidth", 0.0 );
             t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0.0 );
             b.ptWidth = KWDocument::getAttribute( frameElem, "bWidth", 0.0 );
-            l.color.setRgb(
-                KWDocument::getAttribute( frameElem, "lRed", 0 ),
-                KWDocument::getAttribute( frameElem, "lGreen", 0 ),
-                KWDocument::getAttribute( frameElem, "lBlue", 0 ) );
-            r.color.setRgb(
-                KWDocument::getAttribute( frameElem, "rRed", 0 ),
-                KWDocument::getAttribute( frameElem, "rGreen", 0 ),
-                KWDocument::getAttribute( frameElem, "rBlue", 0 ) );
-            t.color.setRgb(
-                KWDocument::getAttribute( frameElem, "tRed", 0 ),
-                KWDocument::getAttribute( frameElem, "tGreen", 0 ),
-                KWDocument::getAttribute( frameElem, "tBlue", 0 ) );
-            b.color.setRgb(
-                KWDocument::getAttribute( frameElem, "bRed", 0 ),
-                KWDocument::getAttribute( frameElem, "bGreen", 0 ),
-                KWDocument::getAttribute( frameElem, "bBlue", 0 ) );
+	    if ( frameElem.hasAttribute("lRed") )
+                l.color.setRgb(
+                    KWDocument::getAttribute( frameElem, "lRed", 0 ),
+                    KWDocument::getAttribute( frameElem, "lGreen", 0 ),
+                    KWDocument::getAttribute( frameElem, "lBlue", 0 ) );
+	    if ( frameElem.hasAttribute("rRed") )
+                r.color.setRgb(
+                    KWDocument::getAttribute( frameElem, "rRed", 0 ),
+                    KWDocument::getAttribute( frameElem, "rGreen", 0 ),
+                    KWDocument::getAttribute( frameElem, "rBlue", 0 ) );
+	    if ( frameElem.hasAttribute("tRed") )
+                t.color.setRgb(
+                    KWDocument::getAttribute( frameElem, "tRed", 0 ),
+                    KWDocument::getAttribute( frameElem, "tGreen", 0 ),
+                    KWDocument::getAttribute( frameElem, "tBlue", 0 ) );
+	    if ( frameElem.hasAttribute("bRed") )
+                b.color.setRgb(
+                    KWDocument::getAttribute( frameElem, "bRed", 0 ),
+                    KWDocument::getAttribute( frameElem, "bGreen", 0 ),
+                    KWDocument::getAttribute( frameElem, "bBlue", 0 ) );
             l.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "lStyle", Border::SOLID ) );
             r.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "rStyle", Border::SOLID ) );
             t.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "tStyle", Border::SOLID ) );
             b.style = static_cast<Border::BorderStyle>( KWDocument::getAttribute( frameElem, "bStyle", Border::SOLID ) );
             QColor c;
-            c.setRgb(
-                KWDocument::getAttribute( frameElem, "bkRed", 0xff ),
-                KWDocument::getAttribute( frameElem, "bkGreen", 0xff ),
-                KWDocument::getAttribute( frameElem, "bkBlue", 0xff ) );
+	    if ( frameElem.hasAttribute("bkRed") )
+                c.setRgb(
+                    KWDocument::getAttribute( frameElem, "bkRed", 0 ),
+                    KWDocument::getAttribute( frameElem, "bkGreen", 0 ),
+                    KWDocument::getAttribute( frameElem, "bkBlue", 0 ) );
 
             double lpt = frameElem.attribute( "bleftpt" ).toDouble();
             double rpt = frameElem.attribute( "brightpt" ).toDouble();
@@ -1317,7 +1306,10 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
                 //kdDebug() << "KWFormulaFrameSet::drawContents" << endl;
                 painter->save();
                 painter->setClipRegion( reg );
-                cg.setBrush(QColorGroup::Base,frames.first()->getBackgroundColor());
+
+                QBrush bgBrush( frames.first()->getBackgroundColor() );
+                bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
+                cg.setBrush( QColorGroup::Base, bgBrush );
 
                 // The frame moves without us knowing about it, so doing this in updateFrames
                 // isn't enough. Moved here.
@@ -1347,7 +1339,11 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
             if ( !reg.isEmpty() ) {
                 painter->save();
                 painter->setClipRegion( reg );
-                cg.setBrush(QColorGroup::Base,frames.first()->getBackgroundColor());
+
+                QBrush bgBrush( frames.first()->getBackgroundColor() );
+                bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
+                cg.setBrush( QColorGroup::Base, bgBrush );
+
                 formulaView->draw( *painter, crect, cg );
                 painter->restore();
             }

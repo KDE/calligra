@@ -465,6 +465,13 @@ public:
 
     void refreshDocStructure(FrameType);
 
+    // Convert a color into a color to be displayed for it
+    // (when using color schemes, we still want to print black on white)
+    static QColor resolveTextColor( const QColor & col, QPainter * painter );
+    static QColor defaultTextColor( QPainter * painter );
+    static QColor resolveBgColor( const QColor & col, QPainter * painter );
+    static QColor defaultBgColor( QPainter * painter );
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
     void sig_newContentsSize( int width, int height );

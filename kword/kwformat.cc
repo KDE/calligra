@@ -28,8 +28,7 @@ KWTextFormatCollection::KWTextFormatCollection( KWDocument * doc )
     //kdDebug() << "Deleting default format " << defaultFormat() << endl;
     delete defaultFormat();
 
-    QColor color = QApplication::palette().color( QPalette::Active, QColorGroup::Text );
-    setDefaultFormat( new KWTextFormat( doc->defaultFont(), color, 0L /* no coll, for no refcounting */ ) );
+    setDefaultFormat( new KWTextFormat( doc->defaultFont(), QColor(), 0L /* no coll, for no refcounting */ ) );
 }
 
 QTextFormat * KWTextFormatCollection::format( const QFont &f, const QColor &c )
