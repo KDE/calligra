@@ -54,6 +54,9 @@ namespace Conversion
     // Convert pattern style (ipat) to QBrush::BrushStyle
     int fillPatternStyle( int ipat );
 
+    // Hackery for gray levels
+    int ditheringToGray( int ipat, bool* ok );
+
     // Convert alignment code to string
     QString alignment( int jc );
 

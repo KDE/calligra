@@ -155,6 +155,97 @@ int Conversion::fillPatternStyle( int ipat )
     }
 }
 
+
+int Conversion::ditheringToGray( int ipat, bool* ok )
+{
+    *ok = true; // optimistic ;)
+    switch( ipat )  {
+    case 2: // 5%
+        return 255 - qRound(0.05 * 255);
+    case 35: // 2.5 Percent
+        return 255 - qRound(0.025 * 255);
+    case 36: // 7.5 Percent
+        return 255 - qRound(0.075 * 255);
+    case 3: // 10%
+        return 255 - qRound(0.1 * 255);
+    case 37: // 12.5 Percent
+        return 255 - qRound(0.125 * 255);
+    case 38: // 15 Percent
+        return 255 - qRound(0.15 * 255);
+    case 39: // 17.5 Percent
+        return 255 - qRound(0.175 * 255);
+    case 4: // 20%
+        return 255 - qRound(0.2 * 255);
+    case 40: // 22.5 Percent
+        return 255 - qRound(0.225 * 255);
+    case 5: // 25%
+        return 255 - qRound(0.25 * 255);
+    case 41: // 27.5 Percent
+        return 255 - qRound(0.275 * 255);
+    case 6: // 30%
+        return 255 - qRound(0.3 * 255);
+    case 42: // 32.5 Percent
+        return 255 - qRound(0.325 * 255);
+    case 43: // 35 Percent
+        return 255 - qRound(0.35 * 255);
+    case 44: // 37.5 Percent
+        return 255 - qRound(0.375 * 255);
+    case 7: // 40%
+        return 255 - qRound(0.4 * 255);
+    case 45: // 42.5 Percent
+        return 255 - qRound(0.425 * 255);
+    case 46: // 45 Percent
+        return 255 - qRound(0.45 * 255);
+    case 47: // 47.5 Percent
+        return 255 - qRound(0.475 * 255);
+    case 8: // 50%
+        return 255 - qRound(0.5 * 255);
+    case 48: // 52.5 Percent
+        return 255 - qRound(0.525 * 255);
+    case 49: // 55 Percent
+        return 255 - qRound(0.55 * 255);
+    case 50: // 57.5 Percent
+        return 255 - qRound(0.575 * 255);
+    case 9: // 60%
+        return 255 - qRound(0.6 * 255);
+    case 51: // 62.5 Percent
+        return 255 - qRound(0.625 * 255);
+    case 52: // 65 Percent
+        return 255 - qRound(0.65 * 255);
+    case 53: // 67.5 Percent
+        return 255 - qRound(0.675 * 255);
+    case 10: // 70%
+        return 255 - qRound(0.7 * 255);
+    case 54: // 72.5 Percent
+        return 255 - qRound(0.725 * 255);
+    case 11: // 75%
+        return 255 - qRound(0.75 * 255);
+    case 55: // 77.5 Percent
+        return 255 - qRound(0.775 * 255);
+    case 12: // 80%
+        return 255 - qRound(0.8 * 255);
+    case 56: // 82.5 Percent
+        return 255 - qRound(0.825 * 255);
+    case 57: // 85 Percent
+        return 255 - qRound(0.85 * 255);
+    case 58: // 87.5 Percent
+        return 255 - qRound(0.875 * 255);
+    case 13: // 90%
+        return 255 - qRound(0.9 * 255);
+    case 59: // 92.5 Percent
+        return 255 - qRound(0.925 * 255);
+    case 60: // 95 Percent
+        return 255 - qRound(0.95 * 255);
+    case 61: // 97.5 Percent
+        return 255 - qRound(0.975 * 255);
+    case 62: // 97 Percent
+        return 255 - qRound(0.97 * 255);
+    default:
+        *ok = false;
+        return 0;
+    }
+}
+
 QString Conversion::alignment( int jc ) {
     QString value( "left" );
     if ( jc == 1 )

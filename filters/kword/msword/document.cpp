@@ -387,9 +387,31 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
         // something that we can't set in Qt apparently).
         int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
         kdDebug() << "generateFrameBorder: " << " icoFore=" << shd.icoFore << " icoBack=" << shd.icoBack << " ipat=" << shd.ipat << " -> bkColor=" << bkColor << endl;
-        Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
-        // Fill style
-        frameElementOut.setAttribute( "bkStyle", Conversion::fillPatternStyle( shd.ipat ) );
+
+        // Reverse-engineer MSWord's own hackery: it models various gray levels
+        // using dithering. But this looks crappy with Qt. So we go back to a QColor.
+        bool grayHack = ( shd.ipat && shd.icoFore == 1 && shd.icoBack == 8 );
+        if ( grayHack )
+        {
+            bool ok;
+            int grayLevel = Conversion::ditheringToGray( shd.ipat, &ok );
+            if ( ok )
+            {
+                QColor color( 0, 0, grayLevel, QColor::Hsv );
+                QString prefix = "bk";
+                frameElementOut.setAttribute( "bkRed", color.red() );
+                frameElementOut.setAttribute( "bkBlue", color.blue() );
+                frameElementOut.setAttribute( "bkGreen", color.green() );
+            }
+            else grayHack = false;
+        }
+        if ( !grayHack )
+        {
+            Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
+            // Fill style
+            int brushStyle = Conversion::fillPatternStyle( shd.ipat );
+            frameElementOut.setAttribute( "bkStyle", brushStyle );
+        }
     }
 }
 
