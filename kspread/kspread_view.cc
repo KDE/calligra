@@ -552,6 +552,7 @@ public:
     
     // settings
     KToggleAction* showStatusBar;
+    KToggleAction* showTabBar;
     KAction* preference;
 
     // running calculation
@@ -1170,6 +1171,12 @@ void ViewPrivate::initActions()
       view, SLOT( showStatusBar( bool ) ) );
   actions->showStatusBar->setToolTip(i18n("Show the status bar."));
 
+  actions->showTabBar = new KToggleAction( i18n("Show Tab Bar"), 
+      0, ac, "showTabBar" );
+  QObject::connect( actions->showTabBar, SIGNAL( toggled( bool ) ),
+      view, SLOT( showTabBar( bool ) ) );
+  actions->showTabBar->setToolTip(i18n("Show the tab bar."));
+
   actions->preference = new KAction( i18n("Configure KSpread..."),"configure",
       0, view, SLOT( preference() ), ac, "preference" );
   actions->preference->setToolTip(i18n("Set various KSpread options."));
@@ -1340,6 +1347,7 @@ void ViewPrivate::adjustActions( bool mode )
     actions->renameSheet->setEnabled( false );
 
   actions->showStatusBar->setChecked( doc->showStatusBar() );  
+  actions->showTabBar->setChecked( doc->showTabBar() );  
   
   view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
   
@@ -4612,6 +4620,12 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
 void KSpreadView::showStatusBar( bool b )
 {
   d->doc->setShowStatusBar( b );
+  refreshView();
+}
+
+void KSpreadView::showTabBar( bool b )
+{
+  d->doc->setShowTabBar( b );
   refreshView();
 }
 

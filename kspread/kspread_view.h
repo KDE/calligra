@@ -453,6 +453,11 @@ public slots:
     void showStatusBar( bool b );
     
     /**
+     * Shows the tab bar if b is true, otherwise the tab bar will be hidden.
+     */
+    void showTabBar( bool b );
+    
+    /**
      * Shows context menu when tabbar is double-clicked.
      */
     void popupTabBarMenu( const QPoint& );
