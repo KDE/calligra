@@ -2057,7 +2057,6 @@ KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
 KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
     : KWFrameSetEdit( fs, canvas )
 {
-    kdDebug() << "KWPartFrameSetEdit::KWPartFrameSetEdit **********************8" << endl;
     m_dcop=0L;
     fs->startEditing();
     QObject::connect( m_canvas->gui()->getView(), SIGNAL( activated( bool ) ),

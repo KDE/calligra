@@ -106,6 +106,7 @@ k_dcop:
     void importStyle();
 
     void insertFile(const QString & path);
+    void createFrameStyle();
 
 private:
     KWView *view;

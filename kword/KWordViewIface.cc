@@ -332,3 +332,8 @@ void KWordViewIface::insertFile(const QString & path)
 {
     view->insertFile( path );
 }
+
+void KWordViewIface::createFrameStyle()
+{
+    view->createFrameStyle();
+}
