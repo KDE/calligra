@@ -26,11 +26,13 @@ Boston, MA 02111-1307, USA.
 #include <kexidbrecord.h>
 #include <CqlSqlInclude.h>
 #include <qvariant.h>
+#include <qvaluevector.h>
 
 #include "cqlfield.h"
 
 typedef QIntDict<CqlField> FieldIndex;
 typedef QIntDict<CqlString> RecordSet;
+typedef QValueVector<CqlString> DataVector;
 
 class CqlRecord : public KexiDBRecord
 {
@@ -80,6 +82,7 @@ class CqlRecord : public KexiDBRecord
 		unsigned int	m_fieldCount;
 		FieldIndex	m_fields;
 		RecordSet	m_data;
+		DataVector	m_datavector;
 };
 
 #endif

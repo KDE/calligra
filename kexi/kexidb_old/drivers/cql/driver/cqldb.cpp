@@ -130,16 +130,16 @@ CqlDB::queryRecord(QString statement, bool buffer)
 
 	QString rs(statement + ";");
 
-	try
-	{
+//	try
+//	{
 		CqlRecord *record = new CqlRecord(m_db, rs);
 		return record;
-	}
-	catch(KexiDBError *err)
-	{
-		throw err;
-		return 0;
-	}
+//	}
+//	catch(KexiDBError *e)
+//	{
+//		throw e;
+//		return 0;
+//	}
 
 	kdDebug() << "CqlDB::queryRecord(): record created" << endl;
 

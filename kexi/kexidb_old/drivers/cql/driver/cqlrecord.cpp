@@ -171,7 +171,18 @@ CqlRecord::next()
 		return false;
 
 //	return false;
-	return m_cursor->fetch();
+	try
+	{
+		m_cursor->fetch();
+	}
+	catch(CqlException &err)
+	{
+		cerr << err << endl;
+	}
+	
+	return false;
+//	kdDebug() << "CqlRecord::next (dbg2)" << endl;
+	
 }
 
 unsigned long
@@ -189,10 +200,12 @@ CqlRecord::setupCursor()
 		CqlField *cfield = new CqlField(meta);
 		m_fields.insert(fields, cfield);
 
-		CqlString data;
+		m_datavector.push_back(CqlString());
+		
+//		CqlString data;
 		bool flag;
-		m_cursor->bindColumn(fields, data, flag);
-		m_data.insert(fields, &data);
+		m_cursor->bindColumn(fields, m_datavector.last(), flag, true);
+//		m_data.insert(fields, &m_datavector.last());
 
 		kdDebug() << "CqlRecord::setupCursor: bind cursor " << fields << endl;
 		fields++;
