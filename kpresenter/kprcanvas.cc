@@ -2453,6 +2453,7 @@ void KPrCanvas::deSelectAllObj()
     if(m_currentTextObjectView)
     {
         m_currentTextObjectView->terminate();
+        m_currentTextObjectView->kpTextObject()->setEditingTextObj( false );
         delete m_currentTextObjectView;
         m_currentTextObjectView=0L;
     }

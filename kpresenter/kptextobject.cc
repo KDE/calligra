@@ -316,9 +316,8 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     //for debug
     //_painter->fillRect( clip, Qt::blue );
     _painter->setPen( pen2 );
-
     if ( !drawingShadow ) {
-        if ( editingTextObj ) { // editting text object
+        if ( editingTextObj && _painter->device() && _painter->device()->devType() != QInternal::Printer) { // editting text object
             _painter->setBrush( QBrush( m_doc->txtBackCol(), Qt::SolidPattern ) );
         }
         else {
@@ -373,7 +372,7 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
     QColorGroup cg = QApplication::palette().active();
     _painter->save();
     _painter->translate( m_doc->zoomHandler()->zoomItX( bLeft()), m_doc->zoomHandler()->zoomItY( bTop()+alignVertical));
-    if ( !editingTextObj )
+    if ( !editingTextObj || (_painter->device() && _painter->device()->devType() == QInternal::Printer))
         cg.setBrush( QColorGroup::Base, NoBrush );
     else
         cg.setColor( QColorGroup::Base, m_doc->txtBackCol() );

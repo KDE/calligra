@@ -426,6 +426,7 @@ KPresenterView::~KPresenterView()
 /*=========================== file print =======================*/
 void KPresenterView::setupPrinter( KPrinter &prt )
 {
+    m_canvas->deSelectAllObj();
     m_pKPresenterDoc->recalcVariables(  VT_TIME );
     m_pKPresenterDoc->recalcVariables(  VT_DATE );
     prt.setMinMax( 1, m_pKPresenterDoc->getPageNums() );
@@ -482,7 +483,6 @@ void KPresenterView::print( KPrinter &prt )
         top_margin = 15.0;
     }
 
-    m_canvas->deSelectAllObj();
     QPainter painter;
     painter.begin( &prt );
     kdDebug(33001) << "KPresenterView::print scaling by " << (double)metrics.logicalDpiX() / (double)dpiX
