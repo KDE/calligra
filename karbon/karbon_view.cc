@@ -60,6 +60,7 @@
 #include "vsinustool.h"
 #include "vspiraltool.h"
 #include "vstartool.h"
+#include "vpath.h"
 #ifdef HAVE_KARBONTEXT
 #include "vtexttool.h"
 #endif
@@ -232,7 +233,7 @@ KarbonView::~KarbonView()
 		delete( m_flattenDlg );
 		delete( m_roundCornersDlg );
 		delete( m_whirlPinchDlg );
-		
+
 		delete( m_ColorManager );
 		delete( m_strokeDocker );
 		delete( m_TransformDocker );
