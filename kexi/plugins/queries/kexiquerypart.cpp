@@ -57,13 +57,14 @@ KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Ite
 		dialog->setTempData( new KexiQueryPart::TempData(dialog) );
 	}
 	if (viewMode == Kexi::DataViewMode) {
-		return new KexiQueryView(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "dataview");
+//		return new KexiQueryView(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "dataview");
+		return new KexiQueryView(dialog->mainWin(), parent, "dataview");
 	}
 	else if (viewMode == Kexi::DesignViewMode) {
-		return new KexiQueryDesignerGuiEditor(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "guieditor");
+		return new KexiQueryDesignerGuiEditor(dialog->mainWin(), parent, "guieditor");
 	}
 	else if (viewMode == Kexi::TextViewMode) {
-		return new KexiQueryDesignerSQLView(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "sqldesigner");
+		return new KexiQueryDesignerSQLView(dialog->mainWin(), parent, "sqldesigner");
 	}
 
 	return 0;

@@ -51,11 +51,11 @@
 #include "widget/relations/kexirelationviewtable.h"
 
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
-	KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
+	KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
 	m_conn = mainWin->project()->dbConnection();
-	m_doc = doc;
+//	m_doc = doc;
 	m_droppedNewItem = 0;
 
 	m_spl = new QSplitter(Vertical, this);
@@ -133,7 +133,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	m_spl->setSizes(QValueList<int>()<< 800<<400);
 
 	if (!m_dialog->neverSaved()) {
-		loadLayout();
+		QTimer::singleShot(1,this,SLOT(loadLayout()));
 	}
 }
 
@@ -400,11 +400,11 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dont
 		return true;
 	}
 	else if (mode==Kexi::TextViewMode) {
+		buildSchema();
 		//todo
 		return true;
 	}
 
-//	schema();
 	return false;
 }
 
@@ -504,6 +504,7 @@ bool KexiQueryDesignerGuiEditor::loadLayout()
 	}
 	if (!was_dirty)
 		setDirty(false);
+	m_dataTable->tableView()->ensureCellVisible(0,0);
 	return true;
 }
 

@@ -26,7 +26,6 @@ namespace KexiDB
 {
 	class QuerySchema;
 }
-class KexiQueryDocument;
 class KexiMainWindow;
 
 class KexiQueryView : public KexiDataTable
@@ -34,14 +33,13 @@ class KexiQueryView : public KexiDataTable
 	Q_OBJECT
 
 	public:
-		KexiQueryView(KexiMainWindow *win, QWidget *parent, KexiQueryDocument *doc, const char *name=0);
+		KexiQueryView(KexiMainWindow *win, QWidget *parent, const char *name=0);
 		~KexiQueryView();
 
 	protected:
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 
 	private:
-		KexiQueryDocument	*m_doc;
 };
 
 #endif

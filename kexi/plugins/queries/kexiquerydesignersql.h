@@ -37,23 +37,22 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLView : public KexiViewBase
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name = 0);
+		KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		~KexiQueryDesignerSQLView();
 
-		QString				getQuery();
-		KexiQueryDesignerSQLEditor	*editor() { return m_editor; }
+		QString getQuery();
+		KexiQueryDesignerSQLEditor *editor() { return m_editor; }
 
 	protected:
 		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 
 	signals:
-		void				queryShortcut();
+		void queryShortcut();
 
 	private:
-		KexiQueryDesignerSQLEditor	*m_editor;
-		KexiQueryDesignerSQLHistory	*m_history;
-		KexiQueryDocument		*m_doc;
+		KexiQueryDesignerSQLEditor *m_editor;
+		KexiQueryDesignerSQLHistory *m_history;
 		KexiSectionHeader *m_head;
 };
 

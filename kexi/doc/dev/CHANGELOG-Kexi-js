@@ -313,11 +313,15 @@ Query Designer
 - SQL Editor: added KexiSectionHeader
 - KexiQueryDesignerSQLView -> KexiQueryDesignerSQL
 - KexiQueryDesignerSQLEditor: now inherits KexiViewBase
-
 - Double clicking on table's field in Relation View allows to auto-add this field
 KexiTableView
 - Editor's focus position is updated (moved down) 
   when new row is inserted above current row
+
+Query Designer
+-KexiQueryDocument no longer used, similar KexiQueryPart::TempData is used
+-Switching to SQL View working again
+
 
 2004-06-17
 KexiTableView

@@ -27,10 +27,9 @@
 #include "kexiquerypart.h"
 #include "kexitableview.h"
 
-KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, KexiQueryDocument *doc, const char *name)
+KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, const char *name)
  : KexiDataTable(win, parent, name)
 {
-	m_doc = doc;
 	bool c = false;
 	afterSwitchFrom(0, c);
 }

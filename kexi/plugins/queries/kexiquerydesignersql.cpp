@@ -34,12 +34,13 @@
 #include "kexiquerydesignersqlhistory.h"
 #include "kexiquerydesignersql.h"
 #include "kexiquerydocument.h"
+#include "kexiquerypart.h"
+
 #include "kexisectionheader.h"
 
-KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
+KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
-	m_doc = doc;
 	QSplitter *l = new QSplitter(this);
 	l->setOrientation(Vertical);
 
@@ -53,7 +54,8 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 
 	connect(parent, SIGNAL(queryExecuted(QString, bool, const QString &)), m_history, SLOT(addEvent(QString, bool, const QString &)));
 	connect(m_history, SIGNAL(editRequested(const QString &)), m_editor, SLOT(setText(const QString &)));
-	m_history->setHistory(doc->history());
+
+//TODO	m_history->setHistory(doc->history());
 
 //	connect(m_editor, SIGNAL(execQ()), parent, SLOT(fastQuery()));
 }
@@ -62,8 +64,7 @@ bool
 KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
 	//TODO
-	return true;
-	
+	/*
 	if (m_doc) {
 		KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
 		parser->parse(getQuery());
@@ -78,7 +79,7 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &cancelled, bool &dontSt
 		delete parser;
 	}
 
-	setDirty(true);
+	setDirty(true);*/
 	return true;
 }
 
@@ -86,9 +87,18 @@ bool
 KexiQueryDesignerSQLView::afterSwitchFrom(int mode, bool &cancelled)
 {
 	kdDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
-	if (m_doc && m_doc->schema()) {
-		m_editor->setText(m_doc->schema()->connection()->selectStatement(*m_doc->schema()));
+	if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
+		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
+		if (!temp->query) {
+			//TODO msg
+			return false;
+		}
+		m_editor->setText( mainWin()->project()->dbConnection()->selectStatement( *temp->query ) );
 	}
+
+/*	if (m_doc && m_doc->schema()) {
+		m_editor->setText(m_doc->schema()->connection()->selectStatement(*m_doc->schema()));
+	}*/
 	return true;
 }
 

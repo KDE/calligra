@@ -51,14 +51,12 @@ namespace KexiDB
 	class ResultInfo;
 };
 
-class KexiQueryDocument;
-
 class KexiQueryDesignerGuiEditor : public KexiViewBase
 {
 	Q_OBJECT
 
 	public:
-		KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name = 0);
+		KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		~KexiQueryDesignerGuiEditor();
 
 //		KexiDB::QuerySchema	*schema();
@@ -94,9 +92,6 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 		KexiQueryPart::TempData * tempData();
 
-		/*! Loads layout of relation GUI diagram. */
-		bool loadLayout();
-
 		/*! Helper: allocates and initializes new GUI table's row. Doesn't insert it, just returns. */
 		KexiTableItem* createNewRow(const QString& tableName, const QString& fieldName) const;
 
@@ -116,13 +111,15 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		void slotAboutConnectionRemove(KexiRelationViewConnection*);
 		void slotTableFieldDoubleClicked( KexiDB::TableSchema* table, const QString& fieldName );
 
+		/*! Loads layout of relation GUI diagram. */
+		bool loadLayout();
+
 	private:
 		KexiTableViewData *m_data;
 		KexiDataTable *m_dataTable;
 		QGuardedPtr<KexiDB::Connection> m_conn;
 
 		KexiRelationWidget *m_relations;
-		KexiQueryDocument *m_doc;
 		KexiSectionHeader *m_head;
 		QSplitter *m_spl;
 
