@@ -122,13 +122,10 @@ ShadowDia::ShadowDia(QWidget* parent,const char* name)
   ldistance->resize(ldistance->sizeHint());
   ldistance->move(color->x(),color->y() + color->height() + 20);
 
-  distance = new KNumericSpinBox(shadow);
+  distance = new QSpinBox(0,20,1,shadow);
   distance->resize(color->width(),distance->sizeHint().height());
   distance->move(ldistance->x(),ldistance->y() + ldistance->height() + 10);
-  distance->setRange(0,20);
-  distance->setEditable(false);
-  connect(distance,SIGNAL(valueIncreased()),this,SLOT(distanceChanged()));
-  connect(distance,SIGNAL(valueDecreased()),this,SLOT(distanceChanged()));
+  connect(distance,SIGNAL(valueChanged(int)),this,SLOT(distanceChanged(int)));
 
   ldirection = new QLabel(i18n("Direction:"),shadow);
   ldirection->resize(ldirection->sizeHint());
@@ -415,9 +412,9 @@ void ShadowDia::colorChanged(const QColor& col)
 }
 
 /*======================= distance changed =======================*/
-void ShadowDia::distanceChanged()
+void ShadowDia::distanceChanged(int _val)
 {
-  shadowDistance = distance->getValue();
+  shadowDistance = _val;
   sPreview->setShadowDistance(shadowDistance);
 }
 

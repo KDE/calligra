@@ -38,11 +38,9 @@ InsPageDia::InsPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int 
   after->move(before->x(),before->y() + before->height());
   connect(after,SIGNAL(clicked()),this,SLOT(afterClicked()));
 
-  spinBox = new KNumericSpinBox(this);
-  spinBox->setRange(1,doc->getPageNums());
+  spinBox = new QSpinBox(1,doc->getPageNums(),1,this);
   spinBox->setValue(currPageNum);
-  spinBox->setEditable(false);
-  spinBox->resize(spinBox->sizeHint().width() / 2,spinBox->sizeHint().height());
+  spinBox->resize(spinBox->sizeHint());
   spinBox->move(max(before->x() + before->width(),after->x() + after->width()) + 5,before->y() + before->height() / 2);
 
   leave = new QRadioButton(i18n("&Leave all objects untouched."),this);
@@ -140,6 +138,6 @@ void InsPageDia::okClicked()
   else if (after->isChecked())
     ip = IP_AFTER;
 
-  emit insertPage(spinBox->getValue() - 1,ipm,ip);
+  emit insertPage(spinBox->value() - 1,ipm,ip);
 }
 

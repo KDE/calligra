@@ -30,7 +30,7 @@
 #include <qstring.h>
 #include <qfontmet.h>
 
-#include <kspinbox.h>
+#include <qspinbox.h>
 #include <kapp.h>
 #include <kcolorbtn.h>
 #include <krect.h>
@@ -89,7 +89,7 @@ public:
   QColor getShadowColor() {return shadowColor;}
 
 protected:
-  KNumericSpinBox *distance; 
+  QSpinBox *distance; 
   QGroupBox *shadow,*preview;
   ShadowPreview *sPreview;
   QPushButton *lu,*u,*ru,*r,*rb,*b,*lb,*l;
@@ -111,7 +111,7 @@ protected slots:
   void lbChanged();
   void lChanged();
   void colorChanged(const QColor&);
-  void distanceChanged();
+  void distanceChanged(int);
   void Apply() {emit shadowDiaOk();}
   
 signals:

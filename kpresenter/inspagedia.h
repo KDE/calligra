@@ -22,7 +22,7 @@
 #include <qradiobutton.h>
 
 #include <kapp.h>
-#include <kspinbox.h>
+#include <qspinbox.h>
 
 #include "global.h"
 
@@ -49,7 +49,7 @@ protected:
 
   KPresenterDoc *doc;
   
-  KNumericSpinBox *spinBox;
+  QSpinBox *spinBox;
   QRadioButton *before,*after,*leave,*_move;
   QPushButton *ok,*cancel;
   

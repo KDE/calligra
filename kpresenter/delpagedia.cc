@@ -32,11 +32,9 @@ DelPageDia::DelPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int 
   label->resize(label->sizeHint());
   label->move(20,20);
 
-  spinBox = new KNumericSpinBox(this);
-  spinBox->setRange(1,doc->getPageNums());
+  spinBox = new QSpinBox(1,doc->getPageNums(),1,this);
   spinBox->setValue(currPageNum);
-  spinBox->setEditable(false);
-  spinBox->resize(spinBox->sizeHint().width() / 2,spinBox->sizeHint().height());
+  spinBox->resize(spinBox->sizeHint());
   spinBox->move(label->x() + label->width() + 5,label->y());
   label->move(label->x(),label->y() + (spinBox->height() - label->height()) / 2);
 
@@ -139,6 +137,6 @@ void DelPageDia::okClicked()
   else if (move_del->isChecked())
     dpl = DPM_DEL_MOVE_OBJS;
 
-  emit deletePage(spinBox->getValue() - 1,dpl);
+  emit deletePage(spinBox->value() - 1,dpl);
 }
 
