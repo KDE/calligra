@@ -55,13 +55,25 @@ KexiSubForm::setFormName(const QString &name)
 	if(name.isEmpty())
 		return;
 
+        // Be sure to don't run into a endless-loop cause of recursive subforms.
+        QStringList list;
+        QWidget *w = parentWidget();
+        while(w) {
+                if(w->isA("KexiSubForm")) {
+                        if(list.contains(w->name()))
+                                return;
+                        list.append(w->name());
+                }
+		w = w->parentWidget();
+        }
+
 	// we need a KexiFormView*
-	QWidget *w = parentWidget();
+	w = parentWidget();
 	while(w && !w->isA("KexiFormView"))
 		w = w->parentWidget();
 	KexiFormView *view = static_cast<KexiFormView*>(w);
 
-	if (!view || !view->parentDialog() || !view->parentDialog()->mainWin() 
+	if (!view || !view->parentDialog() || !view->parentDialog()->mainWin()
 		|| !view->parentDialog()->mainWin()->project()->dbConnection())
 		return;
 
@@ -163,7 +175,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLabel->setNamePrefix(i18n("Widget name (see above)", "Label"));
 	wLabel->setDescription(i18n("A widget to display text"));
 	m_classes.append(wLabel);
-	
+
 	m_propDesc["dataSource"] = i18n("Data source");
 	m_propDesc["formName"] = i18n("Form name");
 }
