@@ -38,4 +38,7 @@ QString util_rangeName( QRect _area );
 QString util_rangeName( KSpreadTable *_table, QRect _area );
 QString util_columnLabel( int column );
 
+/* Creates directory under localkdedir, if necessary */
+void util_testDir( const char *_name );
+
 #endif

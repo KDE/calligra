@@ -21,6 +21,13 @@
 #include "kspread_map.h"
 #include "kspread_table.h"
 
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h> 
+#include <dirent.h>
+#include <kapp.h>
+
 QString util_columnLabel( int column )
 {
   char buffer[ 100 ];
@@ -224,3 +231,14 @@ KSpread::Range util_parseRange2( const char *_str, KSpreadMap* _map )
   return r;
 }
 
+void util_testDir( const char *_name ) // copy of testDir2 in kfm
+{
+    DIR *dp;
+    QString c = kapp->localkdedir().copy();
+    c += _name;
+    dp = opendir( c.data() );
+    if ( dp == NULL )
+        ::mkdir( c.data(), S_IRWXU );
+    else
+        closedir( dp );
+}

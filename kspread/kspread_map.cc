@@ -21,6 +21,7 @@
 
 #include "kspread_map.h"
 #include "kspread_doc.h"
+#include "kspread_util.h"
 
 #include <time.h>
 #include <qmsgbox.h>
@@ -318,18 +319,21 @@ bool KSpreadMap::movePythonCodeToFile()
 {
     if ( m_bPythonCodeInFile )
 	return TRUE;
-    QString d;
-    d.sprintf( "%s/.koffice/xcl/tmp/script%i", getenv( "HOME" ), time( 0L ) );
-    FILE *f = fopen( d, "w" );
+    util_testDir( "/share" );
+    util_testDir( "/share/apps" );
+    util_testDir( "/share/apps/kspread" );
+    util_testDir( "/share/apps/kspread/tmp" );
+    m_strPythonCodeFile.sprintf( "%s/share/apps/kspread/tmp/script%i", 
+                                 kapp->localkdedir().data(), time( 0L ) );
+    
+    FILE *f = fopen( m_strPythonCodeFile, "w" );
     if ( f == 0L )
     {
-      // HACK
-      // QMessageBox::message( "Kxcl Error", "Could not write to\n~/.koffice/xcl/tmp" );
+	QMessageBox::message( "Kxcl Error", QString("Could not read from\n") + m_strPythonCodeFile );
 	return FALSE;
     }
     fwrite( m_strPythonCode.data(), 1, m_strPythonCode.length(), f );
     fclose( f );
-    m_strPythonCodeFile = d.data();
 
     m_bPythonCodeInFile = TRUE;
 
@@ -344,7 +348,7 @@ bool KSpreadMap::getPythonCodeFromFile()
     FILE *f = fopen( m_strPythonCodeFile, "r" );
     if ( f == 0L )
     {
-	QMessageBox::message( "Kxcl Error", "Could not read from\n~/.koffice/xcl/tmp" );
+	QMessageBox::message( "Kxcl Error", QString("Could not read from\n") + m_strPythonCodeFile );
 	return FALSE;
     }
     char buffer[ 4096 ];
