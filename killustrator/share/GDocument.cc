@@ -131,7 +131,7 @@ void GDocument::initialize () {
   // add layer for Helplines
   GLayer *l = addLayer ();
   l->setInternal ();
-  l->setName (I18N("Helplines"));
+  l->setName (i18n("Helplines"));
   connect (l, SIGNAL(propertyChanged ()),
            this, SLOT(helplineStatusChanged ()));
 

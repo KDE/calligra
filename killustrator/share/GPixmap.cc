@@ -54,16 +54,16 @@ GPixmap::GPixmap (const QDomElement &element) : GObject (element.namedItem("gobj
 
     url=element.attribute("src");
     if (url.isLocalFile ()) {
-	pix = new QPixmap (url.path ());
-	if (pix->isNull ()) {
-	    delete pix;
-	    pix = 0L;
-	}
+        pix = new QPixmap (url.path ());
+        if (pix->isNull ()) {
+            delete pix;
+            pix = 0L;
+        }
     }
     if (pix) {
-	// use real pixmap dimension
-	width = pix->width ();
-	height = pix->height ();
+        // use real pixmap dimension
+        width = pix->width ();
+        height = pix->height ();
     }
     calcBoundingBox ();
 }
@@ -83,7 +83,7 @@ GPixmap::~GPixmap () {
 }
 
 QString GPixmap::typeName () const {
-  return SI18N ("Pixmap object");
+  return i18n("Pixmap object");
 }
 
 void GPixmap::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
@@ -110,7 +110,7 @@ void GPixmap::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
 
 void GPixmap::calcBoundingBox () {
   calcUntransformedBoundingBox (Coord (0, 0), Coord (width, 0),
-				Coord (width, height), Coord (0, height));
+                                Coord (width, height), Coord (0, height));
 }
 
 GObject* GPixmap::copy () {

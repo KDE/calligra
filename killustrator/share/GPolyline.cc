@@ -122,7 +122,7 @@ float GPolyline::calcArrowAngle (const Coord& p1, const Coord& p2,
 }
 
 QString GPolyline::typeName () const {
-  return SI18N ("Polyline");
+  return i18n("Polyline");
 }
 
 void GPolyline::draw (QPainter& p, bool withBasePoints, bool /*outline*/) {

@@ -134,7 +134,7 @@ GText::TextInfo GText::getTextInfo () const {
 }
 
 QString GText::typeName () const {
-  return SI18N ("Text");
+  return i18n("Text");
 }
 
 void GText::draw (QPainter& p, bool, bool) {

@@ -32,7 +32,6 @@
 
 #define DELTA 0.05
 
-
 static bool bezier_segment_part_contains (int x0, int y0, int x1,int y1,
                                           const Coord& pp) {
   float  m, n, yp, xp;
@@ -198,7 +197,7 @@ void GBezier::movePoint (int idx, float dx, float dy) {
 
 QString GBezier::typeName () const
 {
-  return I18N ("Bezier curve");
+  return i18n("Bezier curve");
 }
 
 void GBezier::draw (QPainter& p, bool withBasePoints, bool outline) {

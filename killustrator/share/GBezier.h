@@ -25,19 +25,8 @@
 #ifndef GBezier_h_
 #define GBezier_h_
 
-//#include <qobject.h>
-//#include <qcolor.h>
-//#include <qfont.h>
-//#include <qwmatrix.h>
-//#include <qpainter.h>
-//#include <qdatastream.h>
-//#include <qdict.h>
-//#include <qlist.h>
-
 #include <Coord.h>
-//#include <GObject.h>
 #include <GPolyline.h>
-#include <math.h> // Does this line fix it?
 
 class GBezier : public GPolyline {
   Q_OBJECT
@@ -48,7 +37,7 @@ public:
   ~GBezier () {}
 
   virtual void draw (QPainter& p, bool withBasePoints = false,
-		     bool outline = false);
+                     bool outline = false);
   virtual bool contains (const Coord& p);
 
   virtual void setPoint (int idx, const Coord& p);
@@ -64,7 +53,7 @@ public:
   virtual QDomElement writeToXml (QDomDocument &document);
 
   virtual bool findNearestPoint (const Coord& p, float max_dist,
-				 float& dist, int& pidx, bool all = false);
+                                 float& dist, int& pidx, bool all = false);
   virtual int containingSegment (float xpos, float ypos);
 
   bool isEndPoint (int idx) { return (idx % 3) == 1; }
@@ -83,8 +72,8 @@ public:
   virtual GCurve* convertToCurve () const;
 
   static bool bezier_segment_contains (const Coord& p0, const Coord& p1,
-				       const Coord& p2, const Coord& p3,
-				       const Coord& c);
+                                       const Coord& p2, const Coord& p3,
+                                       const Coord& c);
 protected:
   void calcBoundingBox ();
 

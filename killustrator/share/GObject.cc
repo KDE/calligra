@@ -114,7 +114,7 @@ GObject::GObject (const QDomElement &element) {
     outlineInfo.color = QColor(element.attribute("strokecolor"));
     outlineInfo.mask |= OutlineInfo::Color;
 
-    outlineInfo.style = (QT_PRFX::PenStyle) element.attribute("strokestyle").toInt();
+    outlineInfo.style = (Qt::PenStyle) element.attribute("strokestyle").toInt();
     outlineInfo.mask |= OutlineInfo::Style;
 
     outlineInfo.width = element.attribute("linewidth").toFloat();
@@ -126,7 +126,7 @@ GObject::GObject (const QDomElement &element) {
     fillInfo.color = QColor(element.attribute("fillcolor"));
     fillInfo.mask |= FillInfo::Color;
 
-    fillInfo.pattern = (QT_PRFX::BrushStyle) element.attribute("fillpattern").toInt();
+    fillInfo.pattern = (Qt::BrushStyle) element.attribute("fillpattern").toInt();
     fillInfo.mask |= FillInfo::Pattern;
 
     fillInfo.gradient.setColor1 (QColor(element.attribute("gradcolor1")));
@@ -241,7 +241,7 @@ void GObject::setOutlineColor (const QColor& color) {
   emit propertiesChanged (Prop_Outline, OutlineInfo::Color);
 }
 
-void GObject::setOutlineStyle (QT_PRFX::PenStyle style) {
+void GObject::setOutlineStyle (Qt::PenStyle style) {
   outlineInfo.style = style;
   updateRegion (false);
   emit propertiesChanged (Prop_Outline, OutlineInfo::Style);
@@ -257,7 +257,7 @@ const QColor& GObject::getOutlineColor () const {
   return outlineInfo.color;
 }
 
-QT_PRFX::PenStyle GObject::getOutlineStyle () const {
+Qt::PenStyle GObject::getOutlineStyle () const {
   return outlineInfo.style;
 }
 
@@ -293,7 +293,7 @@ const QColor& GObject::getFillColor () const {
   return fillInfo.color;
 }
 
-void GObject::setFillPattern (QT_PRFX::BrushStyle b) {
+void GObject::setFillPattern (Qt::BrushStyle b) {
   fillInfo.pattern = b;
   updateRegion (false);
   emit propertiesChanged (Prop_Fill, FillInfo::Pattern);
@@ -321,7 +321,7 @@ const Gradient& GObject::getFillGradient () const {
   return fillInfo.gradient;
 }
 
-QT_PRFX::BrushStyle GObject::getFillPattern () const {
+Qt::BrushStyle GObject::getFillPattern () const {
   return fillInfo.pattern;
 }
 

@@ -73,9 +73,9 @@ GOval::GOval (const GOval& obj) : GObject (obj) {
 
 QString GOval::typeName () const {
   if (circleFlag)
-    return SI18N ("Circle");
+    return i18n("Circle");
   else
-    return SI18N ("Ellipse");
+    return i18n("Ellipse");
 }
 
 void GOval::draw (QPainter& p, bool withBasePoints, bool outline) {

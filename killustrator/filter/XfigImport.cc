@@ -117,9 +117,9 @@ int hexstrToInt (const char *str) {
 
    for (int i = 0; i < 2; i++) {
        if (str[i] >= '0' && str[i] <= '9')
-	   v = str[i] - '0';
+           v = str[i] - '0';
        else
-	   v = str[i] - 'a' + 10;
+           v = str[i] - 'a' + 10;
        value += v * fak[i];
    }
 
@@ -136,14 +136,14 @@ bool XfigImport::setup (GDocument* , const char* /*format*/) {
   fig_resolution = 1200.0 / 72.0;
   coordinate_system = 2;
 
-  colorTable.insert (0, new QColor (QT_PRFX::black));
-  colorTable.insert (1, new QColor (QT_PRFX::blue));
-  colorTable.insert (2, new QColor (QT_PRFX::green));
-  colorTable.insert (3, new QColor (QT_PRFX::cyan));
-  colorTable.insert (4, new QColor (QT_PRFX::red));
-  colorTable.insert (5, new QColor (QT_PRFX::magenta));
-  colorTable.insert (6, new QColor (QT_PRFX::yellow));
-  colorTable.insert (7, new QColor (QT_PRFX::white));
+  colorTable.insert (0, new QColor (Qt::black));
+  colorTable.insert (1, new QColor (Qt::blue));
+  colorTable.insert (2, new QColor (Qt::green));
+  colorTable.insert (3, new QColor (Qt::cyan));
+  colorTable.insert (4, new QColor (Qt::red));
+  colorTable.insert (5, new QColor (Qt::magenta));
+  colorTable.insert (6, new QColor (Qt::yellow));
+  colorTable.insert (7, new QColor (Qt::white));
 
   for (int i = 0; i <= 23; i++)
       colorTable.insert (i + 8, new QColor (colors[i]));
@@ -332,9 +332,9 @@ void XfigImport::parseArc (istream& fin, GDocument* ) {
   }
 
   Coord p1 ((center_x - radius) / fig_resolution,
-	    (center_y - radius) / fig_resolution);
+            (center_y - radius) / fig_resolution);
   Coord p2 ((center_x + radius) / fig_resolution,
-	    (center_y + radius) / fig_resolution);
+            (center_y + radius) / fig_resolution);
 
   obj->setStartPoint (p1);
   obj->setEndPoint (p2);
@@ -350,7 +350,7 @@ void XfigImport::parseArc (istream& fin, GDocument* ) {
   float angle1;
   p2 = Coord (x1 / fig_resolution, y1 /fig_resolution);
   if (p2.x () == p1.x ()) {
-    if (p2.y () > p1.y ()) 
+    if (p2.y () > p1.y ())
       angle1 = 90;
     else
       angle1 = -90;
@@ -366,7 +366,7 @@ void XfigImport::parseArc (istream& fin, GDocument* ) {
   float angle2;
   p2 = Coord (x3 / fig_resolution, y3 /fig_resolution);
   if (p2.x () == p1.x ()) {
-    if (p2.y () > p1.y ()) 
+    if (p2.y () > p1.y ())
       angle2 = 90;
     else
       angle2 = -90;
@@ -381,7 +381,7 @@ void XfigImport::parseArc (istream& fin, GDocument* ) {
 
   if (direction==0) // clockwise
     obj->setAngles (angle2, angle1);
-  else if (direction==1) // counterclockwise 
+  else if (direction==1) // counterclockwise
     obj->setAngles (angle1, angle2);
 
   // now set the properties
@@ -405,9 +405,9 @@ void XfigImport::parseEllipse (istream& fin, GDocument* ) {
   Coord p1, p2;
 
   p1 = Coord ((center_x - radius_x) /fig_resolution,
-	      (center_y - radius_y) /fig_resolution);
+              (center_y - radius_y) /fig_resolution);
   p2 = Coord ((center_x + radius_x) /fig_resolution,
-	      (center_y + radius_y) /fig_resolution);
+              (center_y + radius_y) /fig_resolution);
 
   obj->setStartPoint (p1);
   obj->setEndPoint (p2);
@@ -466,7 +466,7 @@ void XfigImport::parsePolyline (istream& fin, GDocument* ) {
 
     // forward arrow line
     fin >> arrow_type >> arrow_style >> arrow_thickness
-	>> arrow_width >> arrow_height;
+        >> arrow_width >> arrow_height;
     oinfo.endArrowId = arrow_ids[arrow_type];
     if (oinfo.endArrowId == 1 && arrow_style == 0)
       oinfo.endArrowId = 4;
@@ -476,7 +476,7 @@ void XfigImport::parsePolyline (istream& fin, GDocument* ) {
   if (backward_arrow > 0) {
     // backward arrow line
     fin >> arrow_type >> arrow_style >> arrow_thickness
-	>> arrow_width >> arrow_height;
+        >> arrow_width >> arrow_height;
     oinfo.startArrowId = arrow_ids[arrow_type];
     if (oinfo.startArrowId == 1 && arrow_style == 0)
       oinfo.startArrowId = 4;
@@ -529,7 +529,7 @@ void XfigImport::parseSpline (istream& fin, GDocument* ) {
 
     // forward arrow line
     fin >> arrow_type >> arrow_style >> arrow_thickness
-	>> arrow_width >> arrow_height;
+        >> arrow_width >> arrow_height;
     oinfo.endArrowId = arrow_ids[arrow_type];
     if (oinfo.endArrowId == 1 && arrow_style == 0)
       oinfo.endArrowId = 4;
@@ -539,7 +539,7 @@ void XfigImport::parseSpline (istream& fin, GDocument* ) {
   if (backward_arrow > 0) {
     // backward arrow line
     fin >> arrow_type >> arrow_style >> arrow_thickness
-	>> arrow_width >> arrow_height;
+        >> arrow_width >> arrow_height;
     oinfo.startArrowId = arrow_ids[arrow_type];
     if (oinfo.startArrowId == 1 && arrow_style == 0)
       oinfo.startArrowId = 4;
@@ -593,7 +593,7 @@ void XfigImport::parseText (istream& fin, GDocument* ) {
     if (font == -1)
       font = 0;
     qfont = QFont (psFontTable[font].family, qRound (font_size),
-		   psFontTable[font].weight, psFontTable[font].italic);
+                   psFontTable[font].weight, psFontTable[font].italic);
   }
   else {
     // LaTeX font
@@ -625,12 +625,12 @@ void XfigImport::parseText (istream& fin, GDocument* ) {
     if (c == '\\') {
       fin.get (ocode, 4);
       int code = (ocode[0] - '0') * 64 +
-	(ocode[1] - '0') * 8 +
-	(ocode[2] - '0');
+        (ocode[1] - '0') * 8 +
+        (ocode[2] - '0');
       if (code == 1)
-	finished = true;
+        finished = true;
       else
-	text += (char) code;
+        text += (char) code;
     }
     else
       text += c;
@@ -658,15 +658,15 @@ void XfigImport::parseText (istream& fin, GDocument* ) {
 
     if (sub_type == 0) {
       rotCenter = Coord (obj->boundingBox ().left (),
-			 obj->boundingBox ().bottom ());
+                         obj->boundingBox ().bottom ());
     }
     else if (sub_type == 1) {
       rotCenter = Coord (obj->boundingBox ().width () / 2,
-			 obj->boundingBox ().bottom ());
+                         obj->boundingBox ().bottom ());
     }
     else if (sub_type == 2) {
       rotCenter = Coord (obj->boundingBox ().right (),
-			 obj->boundingBox ().bottom ());
+                         obj->boundingBox ().bottom ());
     }
     m1.translate (-rotCenter.x (), -rotCenter.y ());
     m2.rotate (-nangle);
@@ -706,16 +706,16 @@ void XfigImport::buildDocument (GDocument *doc) {
 }
 
 void XfigImport::setProperties (GObject* obj, int pen_color, int style,
-				int thickness, int area_fill, int fill_color) {
+                                int thickness, int area_fill, int fill_color) {
   if (pen_color >= 0)
     obj->setOutlineColor (*colorTable[pen_color]);
 
   if (style < 1)
-    obj->setOutlineStyle (QT_PRFX::SolidLine);
+    obj->setOutlineStyle (Qt::SolidLine);
   else if (style == 1)
-    obj->setOutlineStyle (QT_PRFX::DashLine);
+    obj->setOutlineStyle (Qt::DashLine);
   else if (style == 2)
-    obj->setOutlineStyle (QT_PRFX::DotLine);
+    obj->setOutlineStyle (Qt::DotLine);
 
   obj->setOutlineWidth (thickness * 72.0 / 80.0);
 

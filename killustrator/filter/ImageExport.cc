@@ -41,7 +41,7 @@ ImageExport::ImageExport () {
 //   qInitImageIO ();
 // #endif
   QImageIO::defineIOHandler ("GIF", "^GIF[0-9][0-9][a-z]", 0,
-			     0, write_gif_image);
+                             0, write_gif_image);
 }
 
 ImageExport::~ImageExport () {
@@ -78,10 +78,10 @@ bool ImageExport::exportToFile (GDocument* doc) {
   if (buffer == 0L)
     return false;
 
-  buffer->fill (QT_PRFX::white);
+  buffer->fill (Qt::white);
   QPainter p;
   p.begin (buffer);
-  p.setBackgroundColor (QT_PRFX::white);
+  p.setBackgroundColor (Qt::white);
   p.eraseRect (0, 0, w, h);
   p.scale (RESOLUTION / 72.0, RESOLUTION / 72.0);
 
@@ -94,7 +94,7 @@ bool ImageExport::exportToFile (GDocument* doc) {
   Rect box = doc->boundingBoxForAllObjects ();
   // and copy the affected area to the new pixmap
   QPixmap *pixmap = new QPixmap (qRound (box.width ()),
-				 qRound (box.height ()));
+                                 qRound (box.height ()));
   if (pixmap == 0L)
     return false;
   bitBlt (pixmap, 0, 0, buffer, qRound (box.x ()), qRound (box.y ()),

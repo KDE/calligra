@@ -26,12 +26,12 @@
 #define GLayer_h_
 
 #include <list>
-#include <version.h>
 
 #include <qobject.h>
-#include <GObject.h>
+//#include <GObject.h>
 
 class GDocument;
+class GObject;
 
 class GLayer : public QObject {
   Q_OBJECT

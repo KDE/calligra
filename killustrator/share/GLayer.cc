@@ -25,7 +25,6 @@
 #include <algorithm>
 #include <stdio.h>
 
-#include <kapp.h>
 #include <klocale.h>
 #include <GLayer.h>
 #include <GDocument.h>
@@ -41,7 +40,7 @@ GLayer::GLayer (GDocument* doc, const char* text) :
   if (text == 0L) {
     char buf[20];
 
-    sprintf (buf, "%s #%d", I18N("Layer"), lastID++);
+    sprintf (buf, "%s #%d", i18n("Layer"), lastID++);
     ident = buf;
   }
 }
@@ -73,7 +72,7 @@ void GLayer::setVisible (bool flag) {
       editableFlag = false;
     else {
       if (wasEditable)
-	editableFlag = true;
+        editableFlag = true;
     }
     emit propertyChanged ();
   }
@@ -111,7 +110,7 @@ void GLayer::insertObject (GObject* obj) {
 
 void GLayer::deleteObject (GObject* obj) {
   list<GObject*>::iterator i = find (contents.begin (), contents.end (),
-				     obj);
+                                     obj);
   if (i != contents.end ()) {
     //    (*i)->setLayer (0L);
     (*i)->unref ();

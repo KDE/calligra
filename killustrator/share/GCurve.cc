@@ -24,18 +24,15 @@
 
 #include <GCurve.h>
 #include <GBezier.h>
-#include <qcolor.h>
-#include <kapp.h>
 #include <cassert>
 #include <klocale.h>
 #include <qdom.h>
-#include <version.h>
 
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
   // s1 == Line, s2 == Bezier
   float xp, yp;
 
-  float llen = s1.length ();
+  //float llen = s1.length ();
   float blen = s2.length ();
   float slen = 0;
   for (int i = 0; i < idx; i++) {
@@ -50,14 +47,14 @@ static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
 }
 
 static Coord blendPoints (const Coord& p1, const Coord& p2,
-			  int step, int num) {
+                          int step, int num) {
   float dx = ((p2.x () - p1.x ()) / (num + 1.0)) * (step + 1.0);
   float dy = ((p2.y () - p1.y ()) / (num + 1.0)) * (step + 1.0);
   return Coord (p1.x () + dx, p1.y () + dy);
 }
 
 static GSegment blendSegments (const GSegment& s1, const GSegment& s2,
-			       int step, int num) {
+                               int step, int num) {
   GSegment::Kind kind = GSegment::sk_Bezier;
   if (s1.kind () == GSegment::sk_Line && s2.kind () == GSegment::sk_Line)
     kind = GSegment::sk_Line;
@@ -74,8 +71,8 @@ static GSegment blendSegments (const GSegment& s1, const GSegment& s2,
       snew.setPoint (2, computePoint (2, s1, s2));
       snew.setPoint (3, s1.pointAt (1));
       for (int i = 0; i < 4; i++)
-	seg.setPoint (i, blendPoints (snew.pointAt (i), s2.pointAt (i),
-				      step, num));
+        seg.setPoint (i, blendPoints (snew.pointAt (i), s2.pointAt (i),
+                                      step, num));
     }
     else if (s2.kind () == GSegment::sk_Line) {
       GSegment snew (GSegment::sk_Bezier);
@@ -84,13 +81,13 @@ static GSegment blendSegments (const GSegment& s1, const GSegment& s2,
       snew.setPoint (2, computePoint (2, s2, s1));
       snew.setPoint (3, s2.pointAt (1));
       for (int i = 0; i < 4; i++)
-	seg.setPoint (i, blendPoints (s1.pointAt (i), snew.pointAt (i),
-				      step, num));
+        seg.setPoint (i, blendPoints (s1.pointAt (i), snew.pointAt (i),
+                                      step, num));
     }
     else {
       for (int i = 0; i < 4; i++)
-	seg.setPoint (i, blendPoints (s1.pointAt (i), s2.pointAt (i),
-				      step, num));
+        seg.setPoint (i, blendPoints (s1.pointAt (i), s2.pointAt (i),
+                                      step, num));
     }
   }
   return seg;
@@ -106,21 +103,21 @@ GSegment::GSegment(const QDomElement &element) {
     Coord p;
     QDomElement point = element.firstChild().toElement();
     for( ; !point.isNull() && i<4; point = element.nextSibling().toElement(), ++i ) {
-	p.x(point.attribute("x").toFloat());
-	p.y(point.attribute("y").toFloat());
-	setPoint(i, p);
+        p.x(point.attribute("x").toFloat());
+        p.y(point.attribute("y").toFloat());
+        setPoint(i, p);
     }
 }
 
 const Coord& GSegment::pointAt (int i) const {
   assert (i >= 0 && ((skind == sk_Bezier && i < 4) ||
-		     (skind == sk_Line && i < 2)));
+                     (skind == sk_Line && i < 2)));
   return points[i];
 }
 
 void GSegment::setPoint (int i, const Coord& c) {
   assert (i >= 0 && ((skind == sk_Bezier && i < 4) ||
-		     (skind == sk_Line && i < 2)));
+                     (skind == sk_Line && i < 2)));
   points[i] = c;
   if (skind == sk_Bezier) {
     bpoints.setPoint (i, c.x (), c.y ());
@@ -134,10 +131,10 @@ QDomElement GSegment::writeToXml (QDomDocument &document) {
 
     int num = (skind == sk_Line ? 2 : 4);
     for (int i = 0; i < num; i++) {
-	QDomElement point=document.createElement("point");
-	point.setAttribute ("x", points[i].x ());
-	point.setAttribute ("y", points[i].y ());
-	element.appendChild(point);
+        QDomElement point=document.createElement("point");
+        point.setAttribute ("x", points[i].x ());
+        point.setAttribute ("y", points[i].y ());
+        element.appendChild(point);
     }
     return element;
 }
@@ -161,49 +158,49 @@ bool GSegment::contains (const Coord& p) {
     }
     if (x1 - 3 <= p.x () && p.x () <= x2 + 3) {
       if (abs (int (x1 - x2)) < 5) {
-	if ((y1 <= p.y () && p.y () <= y2) ||
-	    (y2 <= p.y () && p.y () <= y1))
-	    return true;
+        if ((y1 <= p.y () && p.y () <= y2) ||
+            (y2 <= p.y () && p.y () <= y1))
+            return true;
       }
       else {
-	float xp, yp, m, n;
+        float xp, yp, m, n;
 
-	// y = m * x + n;
-	m = (y2 - y1) / (x2 - x1);
-	n = y1 - m * x1;
-	
-	if (m > 1) {
-	  xp = ((float) p.y () - n) / m;
-	  if (xp - 5 <= p.x () && p.x () <= xp + 5)
-	    return true;
-	}
-	else {
-	  yp = m * p.x () + n;
-	
-	  if (yp - 5 <= p.y () && p.y () <= yp + 5)
-	    return true;
-	}
+        // y = m * x + n;
+        m = (y2 - y1) / (x2 - x1);
+        n = y1 - m * x1;
+
+        if (m > 1) {
+          xp = ((float) p.y () - n) / m;
+          if (xp - 5 <= p.x () && p.x () <= xp + 5)
+            return true;
+        }
+        else {
+          yp = m * p.x () + n;
+
+          if (yp - 5 <= p.y () && p.y () <= yp + 5)
+            return true;
+        }
       }
     }
   }
   else {
     return GBezier::bezier_segment_contains (points[0], points[1],
-					     points[2], points[3], p);
+                                             points[2], points[3], p);
   }
   return false;
 }
 
 void GSegment::draw (QPainter& p, bool withBasePoints, bool /*outline*/,
-		     bool drawFirst) {
+                     bool drawFirst) {
   if (skind == sk_Line)
     Painter::drawLine (p, points[0].x (), points[0].y (),
-		points[1].x (), points[1].y ());
+                points[1].x (), points[1].y ());
   else
     p.drawQuadBezier (bpoints);
   if (withBasePoints) {
     p.save ();
-    p.setPen (QT_PRFX::black);
-//    p.setBrush (QT_PRFX::white);
+    p.setPen (Qt::black);
+//    p.setBrush (Qt::white);
     if (drawFirst)
       Painter::drawRect (p, points[0].x () - 2, points[0].y () - 2, 4, 4);
     if (skind == sk_Line)
@@ -216,7 +213,7 @@ void GSegment::draw (QPainter& p, bool withBasePoints, bool /*outline*/,
 
 void GSegment::movePoint (int idx, float dx, float dy) {
   assert (idx >= 0 && ((skind == sk_Bezier && idx < 4) ||
-		       (skind == sk_Line && idx < 2)));
+                       (skind == sk_Line && idx < 2)));
   points[idx].x (points[idx].x () + dx);
   points[idx].y (points[idx].y () + dy);
   if (skind == sk_Bezier) {
@@ -274,11 +271,11 @@ GCurve::GCurve (const QDomElement &element) : GObject (element.namedItem("gobjec
     closed=(element.attribute("closed").toInt()==1);
     QDomElement segment = element.firstChild().toElement();
     for( ; !segment.isNull(); segment = segment.nextSibling().toElement() ) {
-	if(segment.tagName()=="seg")
-	    addSegment(GSegment(segment));
+        if(segment.tagName()=="seg")
+            addSegment(GSegment(segment));
     }
     if (closed)
-	updatePath();
+        updatePath();
 }
 
 GCurve::GCurve (const GCurve& obj) : GObject (obj) {
@@ -300,15 +297,15 @@ void GCurve::draw (QPainter& p, bool withBasePoints, bool outline) {
       p.setBrush (brush);
 
       if (gradientFill ()) {
-	if (! gShape.valid ())
-	  updateGradientShape (p);
-	gShape.draw (p);
+        if (! gShape.valid ())
+          updateGradientShape (p);
+        gShape.draw (p);
       }
     }
     p.drawPolygon (points);
   if (withBasePoints) {
-    p.setPen (QT_PRFX::black);
-    p.setBrush (QT_PRFX::white);
+    p.setPen (Qt::black);
+    p.setBrush (Qt::white);
     for (unsigned int i = 0; i < points.size (); i++) {
       QPoint pnt = points.point (i);
       Painter::drawRect (p, pnt.x () - 2, pnt.y () - 2, 4, 4);
@@ -349,18 +346,18 @@ void GCurve::movePoint (int idx, float dx, float dy) {
       int sidx = idx - (pidx - num);
       i->movePoint (sidx, ndx, ndy);
       if (sidx == num - 1) {
-	// it's a endpoint, so move the first point of segment[i+1]
-	i++;
-	if (i != segments.end ()) {
-	  i->movePoint (0, ndx, ndy);
-	}
+        // it's a endpoint, so move the first point of segment[i+1]
+        i++;
+        if (i != segments.end ()) {
+          i->movePoint (0, ndx, ndy);
+        }
       }
       else if (sidx == 0) {
-	// it's a startpoint, so move the first point of segment[i-1]
-	if (i == segments.begin () && closed) {
-	  GSegment& seg = segments.back ();
-	  seg.movePoint (seg.kind () == GSegment::sk_Line ? 1 : 3, ndx, ndy);
-	}
+        // it's a startpoint, so move the first point of segment[i-1]
+        if (i == segments.begin () && closed) {
+          GSegment& seg = segments.back ();
+          seg.movePoint (seg.kind () == GSegment::sk_Line ? 1 : 3, ndx, ndy);
+        }
       }
       updatePath ();
       updateRegion (true);
@@ -379,7 +376,7 @@ int GCurve::getNeighbourPoint (const Coord& p) {
     for (int n = 0; n < num; n++) {
       c = i->pointAt (n).transform (tMatrix);
       if (c.isNear (p, NEAR_DISTANCE)) {
-	return idx;
+        return idx;
       }
       idx++;
     }
@@ -389,9 +386,9 @@ int GCurve::getNeighbourPoint (const Coord& p) {
 
 QString GCurve::typeName () const {
   if (closed)
-    return SI18N ("Closed Curve");
+    return i18n("Closed Curve");
   else
-    return SI18N ("Curve");
+    return i18n("Curve");
 }
 
 GObject* GCurve::copy () {
@@ -409,7 +406,7 @@ QDomElement GCurve::writeToXml (QDomDocument &document) {
 
     list<GSegment>::iterator i;
     for (i = segments.begin (); i != segments.end (); i++)
-	element.appendChild(i->writeToXml (document));
+        element.appendChild(i->writeToXml (document));
     element.appendChild(GObject::writeToXml(document));
     return element;
 }
@@ -455,7 +452,7 @@ void GCurve::addLineSegment (const Coord& p1, const Coord& p2) {
 }
 
 void GCurve::addBezierSegment (const Coord& p1, const Coord& p2,
-			       const Coord& p3, const Coord& p4) {
+                               const Coord& p3, const Coord& p4) {
   GSegment seg (GSegment::sk_Bezier);
   seg.setPoint (0, p1);
   seg.setPoint (1, p2);
@@ -478,9 +475,9 @@ const GSegment& GCurve::getSegment (int idx) {
   return *i;
 }
 
-void GCurve::removePoint (int idx, bool update) {
-  int pidx = 0;
-  list<GSegment>::iterator i;
+void GCurve::removePoint (int /*idx*/, bool update) {
+    //int pidx = 0;
+    //list<GSegment>::iterator i;
 
   if (segments.size () > 1) {
 #if 0
@@ -490,12 +487,12 @@ void GCurve::removePoint (int idx, bool update) {
     }
     else {
       for (i = segments.begin (); i != segments.end (); i++) {
-	int num = (i->kind () == GSegment::sk_Line ? 2 : 4);
-	pidx += num;
-	if (pidx > idx) {
-	  // remove this segment and set the first point
-	  // of the following
-	}
+        int num = (i->kind () == GSegment::sk_Line ? 2 : 4);
+        pidx += num;
+        if (pidx > idx) {
+          // remove this segment and set the first point
+          // of the following
+        }
       }
     }
 #endif
@@ -527,14 +524,14 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
       GSegment lseg (GSegment::sk_Line);
       const GSegment& last = start->segments.back ();
       Coord p = (last.kind () == GSegment::sk_Line ? last.pointAt (1) :
-		 last.pointAt (3));
+                 last.pointAt (3));
       lseg.setPoint (0, p);
       lseg.setPoint (1, p);
 
       while (ei != end->segments.end ()) {
-	GSegment seg = blendSegments (lseg, *ei, step, num);
-	res->segments.push_back (seg);
-	ei++;
+        GSegment seg = blendSegments (lseg, *ei, step, num);
+        res->segments.push_back (seg);
+        ei++;
       }
     }
   }
@@ -547,7 +544,7 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
     GSegment lseg (GSegment::sk_Line);
     const GSegment& last = end->segments.back ();
     Coord p = (last.kind () == GSegment::sk_Line ? last.pointAt (1) :
-	       last.pointAt (3));
+               last.pointAt (3));
     lseg.setPoint (0, p);
     lseg.setPoint (1, p);
 
@@ -558,14 +555,14 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
     }
   }
   res->setOutlineColor (blendColors (start->getOutlineColor (),
-				     end->getOutlineColor (), step, num));
+                                     end->getOutlineColor (), step, num));
   if (start->isClosed () && end->isClosed ()) {
     // blend fill properties
     if (start->getFillStyle () == end->getFillStyle () &&
-	start->getFillStyle () == GObject::FillInfo::SolidFill) {
+        start->getFillStyle () == GObject::FillInfo::SolidFill) {
       res->setFillStyle (GObject::FillInfo::SolidFill);
       res->setFillColor (blendColors (start->getFillColor (),
-				      end->getFillColor (), step, num));
+                                      end->getFillColor (), step, num));
     }
     res->setClosed (true);
   }
@@ -574,7 +571,7 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
 }
 
 QColor GCurve::blendColors (const QColor& c1, const QColor& c2, int step,
-			    int num) {
+                            int num) {
   if (c1 == c2)
     return c1;
   else {

@@ -37,15 +37,15 @@ GClipart::GClipart (const QDomElement &element) : GObject (element.namedItem("go
     url=element.attribute("src");
     QWinMetaFile wmf;
     if (url.isLocalFile () && wmf.load (url.path ())) {
-	QRect r = wmf.bbox ();
-	width = (r.right () - r.left ()) * 72.0 / wmf.dpi ();
-	height = (r.bottom () - r.top ()) * 72.0 / wmf.dpi ();
-	pic = new QPicture ();
-	wmf.paint (pic);
+        QRect r = wmf.bbox ();
+        width = (r.right () - r.left ()) * 72.0 / wmf.dpi ();
+        height = (r.bottom () - r.top ()) * 72.0 / wmf.dpi ();
+        pic = new QPicture ();
+        wmf.paint (pic);
     }
     else
-	// construct a malformed url
-	url = KURL ();
+        // construct a malformed url
+        url = KURL ();
     calcBoundingBox ();
 }
 
@@ -67,7 +67,7 @@ GClipart::GClipart (const GClipart& obj) : GObject (obj) {
 }
 
 QString GClipart::typeName () const {
-  return SI18N ("Clipart object");
+  return i18n("Clipart object");
 }
 
 void GClipart::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
@@ -92,7 +92,7 @@ void GClipart::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
     else {
       p.setPen (gray);
       p.fillRect (box.x (), box.y (), box.width (), box.height (),
-		  gray);
+                  gray);
     }
   }
   p.restore ();
@@ -100,7 +100,7 @@ void GClipart::draw (QPainter& p, bool /*withBasePoints*/, bool outline) {
 
 void GClipart::calcBoundingBox () {
   calcUntransformedBoundingBox (Coord (0, 0), Coord (width, 0),
-				Coord (width, height), Coord (0, height));
+                                Coord (width, height), Coord (0, height));
 }
 
 GObject* GClipart::copy () {

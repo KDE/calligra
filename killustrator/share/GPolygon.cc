@@ -148,11 +148,11 @@ void GPolygon::setKind (GPolygon::Kind k) {
 
 QString GPolygon::typeName () const {
   if (kind == PK_Polygon)
-    return SI18N ("Polygon");
+    return i18n("Polygon");
   else if (kind == PK_Rectangle)
-    return SI18N ("Rectangle");
+    return i18n("Rectangle");
   else
-    return SI18N ("Square");
+    return i18n("Square");
 }
 
 bool GPolygon::isFilled () const {

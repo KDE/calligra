@@ -74,7 +74,7 @@ GGroup::~GGroup () {
 }
 
 QString GGroup::typeName () const {
-  return SI18N ("Group");
+  return i18n("Group");
 }
 
 bool GGroup::contains (const Coord& p) {
@@ -175,6 +175,7 @@ QDomElement GGroup::writeToXml (QDomDocument &document) {
 
 void GGroup::printInfo () {
     cout << ">>>>>>>>>>>>>>>>>>>>>\n";
+    // operator<< has been removed for Rect (Werner)
     //cout << className () << " bbox = [" << boundingBox () << "]" << endl;
     list<GObject*>::iterator i = members.begin ();
     for (; i != members.end (); i++) {
