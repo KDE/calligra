@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="kudesigner" version="1">
+<MenuBar>
+ <Menu name="edit"><text>&amp;Edit</text>
+  <Action name="copy"/>
+ </Menu>
+</MenuBar>
+</kpartgui>
