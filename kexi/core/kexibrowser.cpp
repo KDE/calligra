@@ -77,6 +77,7 @@ KexiBrowser::addGroup(KexiProjectHandler *part)
 	setRootIsDecorated(true);
 	
 	item->setPixmap(0, part->groupPixmap());
+	item->setOpen(true);
 	m_baseItems.insert(part->mime(), item);
 	slotItemListChanged(part);
 	kdDebug() << "KexiBrowser::addGroup(): Added " << part->mime() << " @ " << item << endl;

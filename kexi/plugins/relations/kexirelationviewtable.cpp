@@ -112,6 +112,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 
 		QString srcTable = sourceTable->table();
 		QString srcField(ev->encodedData("kexi/field"));
+		kdDebug() << "KexiRelationViewTable::slotDropped() srcfield: " << srcField << endl;
 
 		QString rcvField = recever->text(1);
 
