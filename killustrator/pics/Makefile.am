@@ -32,7 +32,12 @@ tleftalign.xpm \
 tcenteralign.xpm \
 trightalign.xpm \
 killustrator.xpm \
-logo.xpm 
+logo.xpm \
+deletelayer.xpm \
+lowerlayer.xpm \
+newlayer.xpm \
+raiselayer.xpm \
+eye.xpm
 
 EXTRA_DIST = $(data_DATA) 
 
