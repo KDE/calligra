@@ -76,10 +76,12 @@ VSelectNodes::visitVPath( VPath& path )
 
 			if( m_rect.contains( path.current()->knot() ) )
 			{
-//				path.current()->selectKnot( m_select );
+				path.current()->selectKnot( m_select );
 
 				setSuccess();
 			}
+			else
+				path.current()->selectKnot( !m_select );
 		}
 	}
 }
