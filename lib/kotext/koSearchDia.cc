@@ -551,25 +551,27 @@ KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchCon
 
     m_checkUnderline = new QCheckBox( i18n( "Underline:" ), page);
     m_underlineItem = new QComboBox( page );
-    m_underlineItem->insertStringList( KoTextFormat::underlineStyleList());
+    // This has to be the type list, not the style list (we need the "no underline" case).
+    // Of course we could even have both...
+    m_underlineItem->insertStringList( KoTextFormat::underlineTypeList() );
     m_underlineItem->setCurrentItem( (int)m_ctx->m_underline );
 
     m_checkStrikeOut= new QCheckBox( i18n( "Strikeout:" ), page);
 
     m_strikeOutItem = new QComboBox( page );
-    m_strikeOutItem->insertStringList( KoTextFormat::strikeOutStyleList());
+    m_strikeOutItem->insertStringList( KoTextFormat::strikeOutTypeList() );
     m_strikeOutItem->setCurrentItem( (int)m_ctx->m_strikeOut );
 
 
     m_checkFontAttribute = new QCheckBox( i18n( "Capitalization:" ), page);
     m_fontAttributeItem = new QComboBox( page );
-    m_fontAttributeItem->insertStringList( KoTextFormat::fontAttributeList());
+    m_fontAttributeItem->insertStringList( KoTextFormat::fontAttributeList() );
     m_fontAttributeItem->setCurrentItem( (int)m_ctx->m_attribute );
 
     m_checkLanguage = new QCheckBox( i18n( "Language:" ), page);
     m_languageItem = new QComboBox( page );
-    m_languageItem->insertStringList( KoGlobal::listOfLanguages());
-    m_languageItem->setCurrentItem( (int)KoGlobal::languageIndexFromTag(m_ctx->m_language));
+    m_languageItem->insertStringList( KoGlobal::listOfLanguages() );
+    m_languageItem->setCurrentItem( (int)KoGlobal::languageIndexFromTag(m_ctx->m_language) );
 
 
     m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment:" ), page );
@@ -809,7 +811,7 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
     m_ctx->m_underline = (KoTextFormat::UnderlineType)m_underlineItem->currentItem();
     m_ctx->m_strikeOut = (KoTextFormat::StrikeOutType)m_strikeOutItem->currentItem();
-    m_ctx->m_attribute = ( KoTextFormat::AttributeStyle)m_fontAttributeItem->currentItem();
+    m_ctx->m_attribute = (KoTextFormat::AttributeStyle)m_fontAttributeItem->currentItem();
     m_ctx->m_language = KoGlobal::listTagOfLanguages()[m_languageItem->currentItem()];
 
     m_ctx->m_options = options;
