@@ -33,6 +33,9 @@ class KoTextFormat;
 class KoParagCounter;
 class KCommand;
 class QTimer;
+class KAction;
+class KInstance;
+class KoDataToolInfo;
 #include "qrichtext_p.h"
 using namespace Qt3;
 class KoBorder;
@@ -98,6 +101,8 @@ public:
     QTextCursor selectWordUnderCursor();
     QTextCursor selectParagUnderCursor();
 
+    QPtrList<KAction> dataToolActionList(KInstance * instance);
+
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
      * The default implementation handles m_currentFormat and calls showCurrentFormat().
@@ -113,10 +118,12 @@ public slots:
     /** This is a slot so that it's accessible from DCOP */
     void insertText( const QString &text );
 
+    QString refLink() {return m_refLink;}
+
 protected slots:
     /** Start a drag */
     virtual void startDrag() = 0;
-
+    void slotToolActivated( const KoDataToolInfo & info, const QString & command );
 signals:
     void copy();
     void cut();
@@ -195,6 +202,10 @@ private:
     bool m_bReadWrite;
     bool possibleTripleClick;
     bool afterTripleClick;
+
+    bool m_singleWord;
+    QString m_wordUnderCursor;
+    QString m_refLink;
 };
 
 #endif

@@ -25,6 +25,8 @@
 #include <klocale.h>
 #include <kstdaccel.h>
 #include <kdebug.h>
+#include <kinstance.h>
+#include <koDataTool.h>
 
 KoTextView::KoTextView( KoTextObject *textobj )
 {
@@ -709,6 +711,127 @@ KCommand * KoTextView::setTabListCommand( const KoTabulatorList & tabList )
 KoTextDocument * KoTextView::textDocument() const
 {
     return textObject()->textDocument();
+}
+
+QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
+{
+    m_singleWord = false;
+    m_wordUnderCursor = QString::null;
+    m_refLink= QString::null;
+    QString text;
+    if ( textObject()->hasSelection() )
+    {
+        text = textObject()->selectedText();
+        if ( text.find(' ') == -1 && text.find('\t') == -1 && text.find(KoTextObject::customItemChar()) == -1 )
+        {
+            m_singleWord = true;
+            textObject()->textSelectedIsAnLink(m_refLink);
+        }
+    }
+    else // No selection -> get word under cursor
+    {
+        selectWordUnderCursor();
+        text = textObject()->selectedText();
+        if(text.find(KoTextObject::customItemChar()) == -1)
+        {
+            textObject()->textSelectedIsAnLink(m_refLink);
+            textDocument()->removeSelection( QTextDocument::Standard );
+            m_singleWord = true;
+            m_wordUnderCursor = text;
+        }
+        else
+        {
+            text = "";
+            m_refLink=QString::null;
+        }
+    }
+
+#if 0
+
+    // EEEEEK. Please, no KSpell-specific things in here. This is the generic support
+    // for any datatool!
+    if(!text.isEmpty() && doc->dontCheckTitleCase() && text==text.upper())
+    {
+        text="";
+        m_singleWord = false;
+    }
+    else if(!text.isEmpty() && doc->dontCheckUpperWord() && text[0]==text[0].upper())
+    {
+        QString tmp=text[0]+text.right(text.length()-1).lower();
+        if(text==tmp)
+        {
+            text="";
+            m_singleWord = false;
+        }
+    }
+
+#endif
+
+    if ( text.isEmpty() ) // Nothing to apply a tool to
+        return QPtrList<KAction>();
+
+    // Any tool that works on plain text is relevant
+    QValueList<KoDataToolInfo> tools = KoDataToolInfo::query( "QString", "text/plain", instance );
+
+    // Add tools that work on a single word if that is the case
+    if ( m_singleWord )
+        tools += KoDataToolInfo::query( "QString", "application/x-singleword", instance );
+
+    // Maybe one day we'll have tools that link to kwordpart (later: qt3), to act on formatted text
+    tools += KoDataToolInfo::query( "QTextString", "application/x-qrichtext", instance );
+
+    return KoDataToolAction::dataToolActionList( tools, this, SLOT( slotToolActivated( const KoDataToolInfo &, const QString & ) ) );
+}
+
+void KoTextView::slotToolActivated( const KoDataToolInfo & info, const QString & command )
+{
+    KoDataTool* tool = info.createTool( );
+    if ( !tool )
+    {
+        kdWarning() << "Could not create Tool !" << endl;
+        return;
+    }
+
+    kdDebug() << "KWTextFrameSetEdit::slotToolActivated command=" << command
+              << " dataType=" << info.dataType() << endl;
+
+    QString text;
+    if ( textObject()->hasSelection() )
+        text = textObject()->selectedText();
+    else
+        text = m_wordUnderCursor;
+
+    // Preferred type is richtext
+    QString mimetype = "application/x-qrichtext";
+    QString datatype = "QTextString";
+    // If unsupported, try text/plain
+    if ( !info.mimeTypes().contains( mimetype ) )
+    {
+        mimetype = "text/plain";
+        datatype = "QString";
+    }
+    // If unsupported (and if we have a single word indeed), try application/x-singleword
+    if ( !info.mimeTypes().contains( mimetype ) && m_singleWord )
+        mimetype = "application/x-singleword";
+
+    kdDebug() << "Running tool with datatype=" << datatype << " mimetype=" << mimetype << endl;
+
+    QString origText = text;
+    kdDebug()<<"text :"<<text <<" command " << command<<"datatype :"<<datatype<<" mimetype :"<<mimetype<<endl;
+    if ( tool->run( command, &text, datatype, mimetype) )
+    {
+        kdDebug() << "Tool ran. Text is now " << text << endl;
+        if ( origText != text )
+        {
+            if ( !textObject()->hasSelection() )
+                selectWordUnderCursor();
+            // replace selection with 'text'
+            textObject()->emitNewCommand( textObject()->replaceSelectionCommand(
+                cursor(), text, QTextDocument::Standard, i18n("Replace word") ));
+        }
+    }
+
+    delete tool;
 }
 
 #include "kotextview.moc"
