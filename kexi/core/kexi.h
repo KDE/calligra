@@ -68,7 +68,9 @@ namespace Kexi
 			IdentifierValidator(QObject * parent = 0, const char * name = 0);
 			~IdentifierValidator();
 			virtual State validate( QString & input, int & pos) const;
-			virtual Result check(const QString &valueName, QVariant v, 
+
+		protected:
+			virtual Result internalCheck(const QString &valueName, QVariant v, 
 				QString &message, QString &details);
 	};
 
