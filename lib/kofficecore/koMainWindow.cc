@@ -278,7 +278,7 @@ KoMainWindow::~KoMainWindow()
 
     // Save list of recent files
     KConfig * config = instance() ? instance()->config() : KGlobal::config();
-    //kdDebug() << this << " Saving recent files list into config. instance()=" << instance() << endl;
+    //kdDebug(30003) << this << " Saving recent files list into config. instance()=" << instance() << endl;
     m_recent->saveEntries( config );
     config->sync();
 
@@ -350,7 +350,7 @@ void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QList<KoView> &
 
 void KoMainWindow::addRecentURL( const KURL& url )
 {
-    kdDebug() << "KoMainWindow::addRecentURL url=" << url.prettyURL() << endl;
+    kdDebug(30003) << "KoMainWindow::addRecentURL url=" << url.prettyURL() << endl;
     // Add entry to recent documents list
     // (call coming from KoDocument because it must work with cmd line, template dlg, file/open, etc.)
     if ( !url.isEmpty() )
@@ -478,7 +478,7 @@ void KoMainWindow::slotLoadCompleted()
 
 void KoMainWindow::slotLoadCanceled( const QString & errMsg )
 {
-    kdDebug() << "KoMainWindow::slotLoadCanceled" << endl;
+    kdDebug(30003) << "KoMainWindow::slotLoadCanceled" << endl;
     KMessageBox::error( this, errMsg );
     // ... can't delete the document, it's the one who emitted the signal...
 
@@ -514,7 +514,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                                      nativeFormatName(), true);
         KURL newURL;
         QCString outputFormat = _native_format;
-        kdDebug() << "KoMainWindow::saveDocument outputFormat = " << outputFormat << endl;
+        kdDebug(30003) << "KoMainWindow::saveDocument outputFormat = " << outputFormat << endl;
         bool bOk;
         do {
             bOk=true;
@@ -549,7 +549,7 @@ bool KoMainWindow::saveDocument( bool saveas )
                 // No more extensions in filters. We need to get it from the mimetype.
                 KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
                 QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
-                kdDebug() << "KoMainWindow::saveDocument outputFormat=" << outputFormat << " extension=" << extension << endl;
+                kdDebug(30003) << "KoMainWindow::saveDocument outputFormat=" << outputFormat << " extension=" << extension << endl;
                 newURL.setPath( newURL.path() + extension );
 #endif
             }
@@ -630,7 +630,7 @@ void KoMainWindow::closeEvent(QCloseEvent *e) {
             //kdDebug(30003) << "KoMainWindow::closeEvent -> saveWindowSize" << endl;
             saveWindowSize( instance()->config() );
             // Save toolbar position into the config file of the app, under the doc's instance name
-            //kdDebug() << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
+            //kdDebug(30003) << "KoMainWindow::closeEvent -> saveMainWindowSettings rootdoc's instance=" << rootDocument()->instance()->instanceName() << endl;
             saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
             KGlobal::config()->sync();
             resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
@@ -796,7 +796,7 @@ void KoMainWindow::slotFilePrint()
 {
     if ( !rootView() )
     {
-        kdDebug() << "KoMainWindow::slotFilePrint : No root view!" << endl;
+        kdDebug(30003) << "KoMainWindow::slotFilePrint : No root view!" << endl;
         return;
     }
 
@@ -1217,7 +1217,7 @@ void KoMainWindow::slotEmailFile()
    // Message Body = The current document in HTML export? <-- This may be an option.
    QString fileURL = d->m_rootDoc->url().url();
    QString theSubject = d->m_rootDoc->url().fileName(false);
-   kdDebug () << "(" << fileURL <<")" << endl;
+   kdDebug(30003) << "(" << fileURL <<")" << endl;
    if (!fileURL.isEmpty())
    kapp->invokeMailer("mailto:?subject=" + theSubject +
                      "&attach=" + fileURL);
