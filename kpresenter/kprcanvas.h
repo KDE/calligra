@@ -493,6 +493,7 @@ private:
 
     void rectSymetricalObjet();
     QPoint applyGrid( const QPoint &pos,bool offset);
+    KoPoint applyGrid( const KoPoint &pos);
     int applyGridOnPosX( int pos ) const;
     int applyGridOnPosY( int pos ) const;
 
@@ -578,6 +579,9 @@ private:
 
     bool m_keyPressEvent;
     bool m_drawSymetricObject;
+
+    KoRect m_origBRect;  // Start rect for move
+    QPoint m_origPos;  // Start point for move
 };
 
 #endif // __KPRCANVAS__

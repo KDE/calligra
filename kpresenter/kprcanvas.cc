@@ -746,6 +746,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 // update hotspot
                 calcBoundingRect();
                 m_hotSpot = docPoint - m_boundingRect.topLeft();
+                m_origPos = QPoint(e->x() + diffx(), e->y() + diffy());
             } break;
             case TEM_ZOOM: {
                 modType = MT_NONE;
@@ -1124,6 +1125,7 @@ void KPrCanvas::calcBoundingRect()
 
     m_boundingRect=m_activePage->getBoundingRect(m_boundingRect);
     m_boundingRect=stickyPage()->getBoundingRect(m_boundingRect);
+    m_origBRect = m_boundingRect;
 }
 
 KoRect KPrCanvas::objectSelectedBoundingRect() const
@@ -1661,7 +1663,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
                 } else if ( modType == MT_MOVE ) {
                     m_hotSpot = docPoint - m_boundingRect.topLeft();
-                    moveObject( mx - oldMx , my - oldMy, false );
+                    int x = e->x() + diffx();
+                    int y = e->y() + diffy();
+                    moveObject( x - m_origPos.x(), y - m_origPos.y(), false );
                 } else if ( modType != MT_NONE && resizeObjNum ) {
                     resizeObject( modType, mx - oldMx, my - oldMy );
                 }
@@ -2210,8 +2214,16 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
     } else if ( mouseSelectedObject ) {
         m_hotSpot = KoPoint(0,0);
         if ( e->state() & ControlButton ) {
-            int offsetx=QMAX(1,m_view->zoomHandler()->zoomItX(10));
-            int offsety=QMAX(1,m_view->zoomHandler()->zoomItY(10));
+            int offsetx, offsety;
+
+            if( !m_view->kPresenterDoc()->snapToGrid() ) {
+                offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(10));
+                offsety = QMAX(1,m_view->zoomHandler()->zoomItY(10));
+            } else {
+                offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->getGridX()));
+                offsety = QMAX(1,m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->getGridY()));
+            }
+
             if ( !m_keyPressEvent )
             {
                 firstX = m_view->zoomHandler()->zoomItX(m_boundingRect.x());
@@ -2221,22 +2233,37 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             case Key_Up:
                 m_keyPressEvent = true;
                 moveObject( 0, -offsety, false );
+                m_origBRect = m_boundingRect;
                 break;
             case Key_Down:
                 m_keyPressEvent = true;
                 moveObject( 0, offsety, false );
+                m_origBRect = m_boundingRect;
                 break;
             case Key_Right:
                 m_keyPressEvent = true;
                 moveObject( offsetx, 0, false );
+                m_origBRect = m_boundingRect;
                 break;
             case Key_Left:
                 m_keyPressEvent = true;
                 moveObject( -offsetx, 0, false );
+                m_origBRect = m_boundingRect;
                 break;
             default: break;
             }
+
         } else {
+            int offsetx, offsety;
+
+            if( !m_view->kPresenterDoc()->snapToGrid() ) {
+                offsetx = 1;
+                offsety = 1;
+            } else {
+                offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(m_view->kPresenterDoc()->getGridX()));
+                offsety = QMAX(1,m_view->zoomHandler()->zoomItY(m_view->kPresenterDoc()->getGridY()));
+            }
+
             if ( !m_keyPressEvent )
             {
                 firstX = m_view->zoomHandler()->zoomItX(m_boundingRect.x());
@@ -2245,19 +2272,23 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             switch ( e->key() ) {
             case Key_Up:
                 m_keyPressEvent = true;
-                moveObject( 0, -1, false );
+                moveObject( 0, -offsety, false );
+                m_origBRect = m_boundingRect;
                 break;
             case Key_Down:
                 m_keyPressEvent = true;
-                moveObject( 0, 1, false );
+                moveObject( 0, offsety, false );
+                m_origBRect = m_boundingRect;
                 break;
             case Key_Right:
                 m_keyPressEvent = true;
-                moveObject( 1, 0, false );
+                moveObject( offsetx, 0, false );
+                m_origBRect = m_boundingRect;
                 break;
             case Key_Left:
                 m_keyPressEvent = true;
-                moveObject( -1, 0, false );
+                moveObject( -offsety, 0, false );
+                m_origBRect = m_boundingRect;
                 break;
             case Key_Delete: case Key_Backspace:
                 m_view->editDelete();
@@ -5362,9 +5393,10 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     double newPosX=m_view->zoomHandler()->unzoomItX(x);
     double newPosY=m_view->zoomHandler()->unzoomItY(y);
     KoRect boundingRect = m_boundingRect;
+    m_boundingRect = m_origBRect;
     KoPoint point( m_boundingRect.topLeft() );
     KoRect pageRect=m_activePage->getPageRect();
-    point.setX( (m_boundingRect.x()+newPosX) );
+    point.setX( m_boundingRect.x()+newPosX );
     m_boundingRect.moveTopLeft( point );
     if ( ( boundingRect.left()+m_hotSpot.x() < pageRect.left() ) || ( m_boundingRect.left() < pageRect.left() ) )
     {
@@ -5391,6 +5423,9 @@ void KPrCanvas::moveObject( int x, int y, bool key )
         point.setY( pageRect.height() - m_boundingRect.height() );
         m_boundingRect.moveTopLeft( point );
     }
+
+    point = applyGrid(m_boundingRect.topLeft());
+    m_boundingRect.moveTopLeft(point);
 
     if( m_boundingRect.topLeft() == boundingRect.topLeft() )
         return; // nothing happende (probably due to the grid)
@@ -6938,4 +6973,17 @@ KPPixmapObject * KPrCanvas::getSelectedImage() const
         return obj;
     obj=stickyPage()->getSelectedImage();
     return obj;
+}
+
+KoPoint KPrCanvas::applyGrid( const KoPoint &pos )
+{
+    if (  !m_view->kPresenterDoc()->snapToGrid() )
+        return pos;
+
+    double gridX = m_view->kPresenterDoc()->getGridX();
+    double gridY = m_view->kPresenterDoc()->getGridY();
+    KoPoint newPos = pos;
+    newPos.setX( qRound( newPos.x() / gridX ) * gridX );
+    newPos.setY( qRound( newPos.y() / gridY ) * gridY );
+    return newPos;
 }
