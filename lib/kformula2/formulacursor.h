@@ -201,15 +201,6 @@ public:
      */
     IndexElement* getActiveIndexElement();
 
-    
-public slots:
-
-    /**
-     * The element is going to leave the formula with and all its children.
-     */
-    void elementWillVanish(BasicElement* element);
-
-    
     // undo/redo support
     
     /**
@@ -241,6 +232,13 @@ public slots:
      */
     void setCursorData(CursorData* data);
     
+public slots:
+
+    /**
+     * The element is going to leave the formula with and all its children.
+     */
+    void elementWillVanish(BasicElement* element);
+
 private:
     
     /**

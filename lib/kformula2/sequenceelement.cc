@@ -187,6 +187,8 @@ void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter)
         painter.setPen(Qt::white);
         painter.drawLine(point.x()+posX, point.y()-2,
                          point.x()+posX, point.y()+height+2);
+        painter.drawLine(point.x(), point.y()+height+3,
+                         point.x()+getWidth(), point.y()+height+3);
         painter.setRasterOp(Qt::CopyROP);
     }
 }

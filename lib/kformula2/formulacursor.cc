@@ -353,7 +353,7 @@ void FormulaCursor::elementWillVanish(BasicElement* element)
  * Creates a new CursorData object that describes the cursor.
  * It's up to the caller to delete this object.
  */
-CursorData* FormulaCursor::getCursorData()
+FormulaCursor::CursorData* FormulaCursor::getCursorData()
 {
     return new CursorData(current, cursorPos, markPos, selectionFlag);
 }
@@ -362,7 +362,7 @@ CursorData* FormulaCursor::getCursorData()
  * Sets the cursor to where the CursorData points to. No checking is done
  * so you better make sure the point exists.
  */
-void FormulaCursor::setCursorData(CursorData* data)
+void FormulaCursor::setCursorData(FormulaCursor::CursorData* data)
 {
     current = data->current;
     cursorPos = data->cursorPos;
