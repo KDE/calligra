@@ -1109,7 +1109,8 @@ void KWTextParag::printRTDebug( int info )
         kdDebug() << "  rect() : " << DEBUGRECT( rect() ) << endl;
 
         kdDebug() << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
-                  << " leftMargin()=" << leftMargin() << " rightMargin()=" << rightMargin() << endl;
+                  << " leftMargin()=" << leftMargin() << " firstLineMargin()=" << firstLineMargin()
+                  << " rightMargin()=" << rightMargin() << endl;
 
         static const char * tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();
