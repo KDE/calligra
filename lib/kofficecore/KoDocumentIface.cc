@@ -111,14 +111,15 @@ QMap<QCString,DCOPRef> KoDocumentIface::actionMap()
     return m_actionProxy->actionMap();
 }
 
+void KoDocumentIface::save()
+{
+    m_pDoc->save();
+}
+
 void KoDocumentIface::saveAs( const QString & url )
 {
     m_pDoc->saveAs( KURL( url ) );
-}
-
-bool KoDocumentIface::waitSaveComplete()
-{
-    return m_pDoc->waitSaveComplete(); // see ReadWritePart
+    m_pDoc->waitSaveComplete(); // see ReadWritePart
 }
 
 void KoDocumentIface::setOutputMimeType( const QCString & mimetype )

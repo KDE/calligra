@@ -97,17 +97,14 @@ k_dcop:
     QMap<QCString,DCOPRef> actionMap();
 
     /**
-     * Saves the document under a new name
-     * Warning: this is asynchronous. The document might not be loaded yet when
-     * this call returns. See waitSaveComplete.
+     * Saves the document under its existing filename
      */
-    void saveAs( const QString & url );
+    void save();
 
     /**
-     * Waits for any pending upload job to finish and returns whether the
-     * last save() action was successful.
+     * Saves the document under a new name
      */
-    bool waitSaveComplete();
+    void saveAs( const QString & url );
 
     void setOutputMimeType( const QCString & mimetype );
 
