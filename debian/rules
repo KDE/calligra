@@ -62,9 +62,13 @@ configure-stamp:
 	fi
 
 	# KDE CVS does not have aclocal.m4 or configure
-	if test ! -f configure; then \
-		$(MAKE) -f admin/Makefile.common ;\
-	fi
+	# if test ! -f configure; then \
+	# 	$(MAKE) -f admin/Makefile.common ;\
+	# fi
+
+	# Force a rerun of automake/etc since this is required by the
+	# debian patches.
+	$(MAKE) -f admin/Makefile.common ;\
 
 	# make build directory
 	mkdir $(objdir)
@@ -116,7 +120,7 @@ clean:
 		$(MAKE) distclean; \
 	fi
 
-	if test -f Makefile.cvs; then \
+	if test -d CVS; then \
 		$(MAKE) -f admin/Makefile.common cvs-clean ;\
 	fi
 
