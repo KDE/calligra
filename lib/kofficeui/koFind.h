@@ -66,13 +66,14 @@ public:
 
     typedef enum
     {
-        // Match whole words only.
-        WholeWordsOnly = 1,
-        FromCursor = 2,
-        SelectedText = 4,
-        CaseSensitive = 8,
-        FindBackwards = 16,
-        RegularExpression = 32
+        WholeWordsOnly = 1,     // Match whole words only.
+        FromCursor = 2,         // Start from current cursor position.
+        SelectedText = 4,       // Only search slected area.
+        CaseSensitive = 8,      // Consider case when matching.
+        FindBackwards = 16,     // Go backwards.
+        RegularExpression = 32, // Interpret the pattern as a regular expression.
+        // User extensions can use boolean options above this value.
+        MinimumUserOption = 65536
     } Options;
 
     /**
@@ -142,7 +143,7 @@ signals:
      */
     void okClicked();
 
-private slots:
+protected slots:
 
     void slotOk();
     void showPatterns();
