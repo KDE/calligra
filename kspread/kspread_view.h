@@ -458,6 +458,11 @@ public slots:
     void showTabBar( bool b );
     
     /**
+     * Shows the formula bar if b is true, otherwise the formula bar will be hidden.
+     */
+    void showFormulaBar( bool b );
+    
+    /**
      * If b is true, a red triangle is displayed on the corner of cells
      * which have comments.
      */

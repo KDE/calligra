@@ -553,6 +553,7 @@ public:
     // settings
     KToggleAction* showStatusBar;
     KToggleAction* showTabBar;
+    KToggleAction* showFormulaBar;
     KToggleAction* showCommentIndicator;
     KAction* preference;
 
@@ -1169,6 +1170,12 @@ void ViewPrivate::initActions()
       view, SLOT( showTabBar( bool ) ) );
   actions->showTabBar->setToolTip(i18n("Show the tab bar."));
 
+  actions->showFormulaBar = new KToggleAction( i18n("Show Formula Bar"), 
+      0, ac, "showFormulaBar" );
+  QObject::connect( actions->showFormulaBar, SIGNAL( toggled( bool ) ),
+      view, SLOT( showFormulaBar( bool ) ) );
+  actions->showFormulaBar->setToolTip(i18n("Show the formula bar."));
+
   actions->showCommentIndicator = new KToggleAction( i18n("Show Comment Indicator"), 
       0, ac, "showCommentIndicator" );
   QObject::connect( actions->showCommentIndicator, SIGNAL( toggled( bool ) ),
@@ -1346,6 +1353,7 @@ void ViewPrivate::adjustActions( bool mode )
 
   actions->showStatusBar->setChecked( doc->showStatusBar() );  
   actions->showTabBar->setChecked( doc->showTabBar() );  
+  actions->showFormulaBar->setChecked( doc->showFormulaBar() );  
   actions->showCommentIndicator->setChecked( doc->showCommentIndicator() );  
   
   view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
@@ -4635,6 +4643,12 @@ void KSpreadView::showTabBar( bool b )
   refreshView();
 }
 
+void KSpreadView::showFormulaBar( bool b )
+{
+  d->doc->setShowFormulaBar( b );
+  refreshView();
+}
+
 void KSpreadView::showCommentIndicator( bool b )
 {
   d->doc->setShowCommentIndicator( b );
@@ -4862,7 +4876,7 @@ void KSpreadView::refreshView()
     d->actions->alignCenter->setEnabled( !active );
     d->actions->alignRight->setEnabled( !active );
   }
-  active = d->doc->getShowFormulaBar();
+  active = d->doc->showFormulaBar();
   editWidget()->showEditWidget( active );
 
   QString zoomStr( i18n("%1%").arg( d->doc->zoom() ) );
