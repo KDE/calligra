@@ -7550,7 +7550,7 @@ void KSpreadSheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings 
     d->doc->loadingInfo()->addMarkerSelection( this, QPoint( cursorX, cursorY ) );
     kdDebug()<<"d->hideZero :"<<d->hideZero<<" d->showGrid :"<<d->showGrid<<" d->firstLetterUpper :"<<d->firstLetterUpper<<" cursorX :"<<cursorX<<" cursorY :"<<cursorY<< endl;
 
-    d->showFormulaIndicator = items.parseConfigItemInt("ShowFormulaIndicator" );
+    d->showFormulaIndicator = items.parseConfigItemBool("ShowFormulaIndicator" );
     d->showPageBorders = items.parseConfigItemBool( "ShowPageBorders" );
     d->lcMode = items.parseConfigItemBool( "lcmode" );
     d->showColumnNumber = items.parseConfigItemBool( "ShowPageBorders" );
