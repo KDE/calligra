@@ -23,6 +23,7 @@
 #include <ggroup.h>
 
 class GBackground;
+class QPopupMenu;
 
 class GBackgroundM9r : public G2DObjectM9r {
 
