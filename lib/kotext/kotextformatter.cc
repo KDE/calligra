@@ -603,7 +603,27 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	    }
 	}
     }
-
+    double current=0;
+    double nc=0;
+    for(int i=start;i<=last;i++)
+    {
+	if(((!string->at(i).d.format->underline())||(i==last))&&nc)
+	{
+	    double avg=current/nc;
+	    avg/=25;
+	    avg/=18;
+	    for(int j=i-nc;j<=i;j++)
+		string->at(j).ulw=avg;
+	    nc=0;
+	    current=0;
+	    avg=0;
+	}
+	else if(string->at(i).d.format->underline())
+	{
+	    nc++;
+	    current+=string->at(i).height();
+	}
+    }
     if ( last >= 0 && last < string->length() ) {
         KoTextStringChar &chr = string->at( last );
 	line->w = chr.x + chr.width; //string->width( last );

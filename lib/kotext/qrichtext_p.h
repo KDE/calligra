@@ -116,7 +116,7 @@ class Q_EXPORT KoTextStringChar
 
 public:
     // this is never called, initialize variables in KoTextString::insert()!!!
-    KoTextStringChar() : lineStart( 0 ), type( Regular ), startOfRun( 0 ) {d.format=0;}
+    KoTextStringChar() : lineStart( 0 ), type( Regular ), startOfRun( 0 ) {d.format=0; ulw=1.0; }
     ~KoTextStringChar();
 
     QChar c;
@@ -133,6 +133,7 @@ public:
     short int pixelwidth; // width in pixels
     short int width; // width in LU
 
+    double ulw;
     int x;
     int height() const;
     int ascent() const;
