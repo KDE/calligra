@@ -141,13 +141,13 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 		{
 			case QVariant::Pixmap:
 			{
-				p->eraseRect(0,0,width,height());
+				p->fillRect(0,0,width,height(),QBrush(backgroundColor()));
 				p->drawPixmap(margin, margin, m_property->value().toPixmap());
 				break;
 			}
 			case QVariant::Color:
 			{
-				p->eraseRect(0,0,width,height());
+				p->fillRect(0,0,width,height(), QBrush(backgroundColor()));
 				QColor ncolor = m_value.toColor();
 				p->setBrush(ncolor);
 				p->drawRect(margin, margin, width - 2*margin, height() - 2*margin);
@@ -156,7 +156,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 			}
 			case QVariant::Bool:
 			{
-				p->eraseRect(0,0,width,height());
+				p->fillRect(0,0,width,height(), QBrush(backgroundColor()));
 				if(m_value.toBool())
 				{
 					p->drawPixmap(margin, height()/2 -8, SmallIcon("button_ok"));
@@ -183,9 +183,14 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 	{
 		if(depth()==0)
 			return;
-		p->eraseRect(0,0,width,height());
+
+		p->fillRect(0,0,width, height(), QBrush(backgroundColor()));
+
 		if(isSelected())
+		{
 			p->fillRect(0,0,width, height(), QBrush(cg.highlight()));
+			p->setPen(cg.highlightedText());
+		}
 		
 		QFont f = listView()->font();
 		p->save();
@@ -207,7 +212,7 @@ void
 KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h)
 {
 	p->eraseRect(0,0,w,h);
-	QListViewItem *item = firstChild();
+	KListViewItem *item = (KListViewItem*)firstChild();
 	if(!item)
 		return;
 	
@@ -215,6 +220,9 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 	p->translate(0,y);
 	while(item)
 	{
+		p->fillRect(0,0,w, item->height(), QBrush(item->backgroundColor()));
+		p->fillRect(-50,0,50, item->height(), QBrush(item->backgroundColor()));
+		
 		if(item->isSelected())
 		{
 			p->fillRect(0,0,w, item->height(), QBrush(cg.highlight()));
@@ -229,7 +237,7 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 		}
 		
 		p->translate(0, item->totalHeight());
-		item = item->nextSibling();
+		item = (KListViewItem*)item->nextSibling();
 	}
 	p->restore();
 }
