@@ -1516,6 +1516,24 @@ MouseMeaning KWFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
     return isMoveable() ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
 }
 
+QString KWFrameSet::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
+{
+    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "presentation" );
+    QString protect;
+    if ( protectContent() )
+        protect = "content";
+    if ( m_protectSize )
+    {
+        if ( !protect.isEmpty() )
+            protect+=" ";
+        protect+="size";
+    }
+    frameStyle.addProperty("style:protect", protect );
+
+    return mainStyles.lookup( frameStyle, "fr" );
+}
+
+
 void KWFrameSet::saveOasisCommon( KoXmlWriter &xmlWriter ) const
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save

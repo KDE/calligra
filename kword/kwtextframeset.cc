@@ -1892,6 +1892,8 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) 
 
     KWFrameSet::saveOasisCommon( writer );
 
+    writer.addAttribute( "draw:style-name", KWFrameSet::saveOasisFrameStyle( context.mainStyles() ) );
+
     writer.endElement();
 }
 

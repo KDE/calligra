@@ -155,7 +155,7 @@ public:
     void initEmpty();
 
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store );
-    //enum { STYLE_FOOBAR = 20 };
+    enum {  STYLE_FRAME = 20 };
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
     virtual bool loadXML( QIODevice *, const QDomDocument & dom );
     virtual bool loadChildren( KoStore *_store );

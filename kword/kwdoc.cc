@@ -2658,6 +2658,15 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter.endElement(); // office:styles
 
     stylesWriter.startElement( "office:automatic-styles" );
+
+    styles = mainStyles.styles( KWDocument::STYLE_FRAME );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
+    }
+
+
+
     styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
     Q_ASSERT( styles.count() == 1 );
     it = styles.begin();
@@ -2669,6 +2678,8 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
         pageLayoutName = (*it).name;
     }
+
+
 
     stylesWriter.endElement(); // office:automatic-styles
 
