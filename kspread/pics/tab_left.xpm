@@ -1,7 +1,7 @@
 /* XPM */
 static char * tab_left_xpm[] = {
 "11 12 2 1",
-" 	c #C71BC71BC71B",
+" 	c None",
 ".	c #000000000000",
 "           ",
 "           ",
