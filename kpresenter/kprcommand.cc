@@ -635,7 +635,7 @@ void InsertCmd::execute()
     m_page->appendObject( object );
     object->addToObjList();
     if ( object->getType() == OT_TEXT )
-        ( (KPTextObject*)object )->recalcPageNum(m_page );
+        doc->updateRuler();
     doc->repaint( object );
 
     int pos=doc->pageList().findRef(m_page);
@@ -714,10 +714,6 @@ MoveByCmd::MoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPObj
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-        if ( it.current()->getType() == OT_TEXT ) {
-            ( (KPTextObject*)it.current() )->recalcPageNum( m_page );
-            doc->repaint( it.current() );
-        }
         it.current()->incCmdRef();
     }
 }
@@ -738,7 +734,6 @@ void MoveByCmd::execute()
         objects.at( i )->moveBy( diff );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
-            ( (KPTextObject*)objects.at( i ) )->recalcPageNum( m_page );
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
         }
@@ -759,7 +754,6 @@ void MoveByCmd::unexecute()
         objects.at( i )->moveBy( -diff.x(), -diff.y() );
         if ( objects.at( i )->getType() == OT_TEXT )
         {
-            ( (KPTextObject*)objects.at( i ) )->recalcPageNum(m_page );
             if(objects.at(i)->isSelected())
                 doc->updateRuler();
         }
@@ -1221,12 +1215,11 @@ TransEffectCmd::TransEffectCmd( QValueVector<PageEffectSettings> oldSettings,
 void TransEffectCmd::PageEffectSettings::applyTo( KPrPage *page )
 {
     page->setPageEffect( pageEffect );
-    /////// TODO page->setTransSpeed( transSpeed );
+    page->background()->setPageEffectSpeed( effectSpeed );
     page->setPageSoundEffect( soundEffect );
     page->setPageSoundFileName( soundFileName );
     // TODO page->setAutoAdvance( autoAdvance );
     page->setPageTimer( slideTime );
-    page->background()->setPageEffectSpeed( effectSpeed );
 }
 
 void TransEffectCmd::execute()

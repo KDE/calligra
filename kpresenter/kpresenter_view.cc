@@ -1534,8 +1534,6 @@ void KPresenterView::screenStop()
         actionScreenStart->setEnabled( true );
         pageBase->resizeEvent( 0 );
 
-        m_canvas->setActivePage( m_pKPresenterDoc->pageList().at( getCurrPgNum() - 1 ) );
-
         if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() ) {
             openThePresentationDurationDialog();
             m_presentationDurationList.clear();

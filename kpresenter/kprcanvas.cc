@@ -3096,8 +3096,6 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
     exitEditMode();
 
     KPresenterDoc * doc = m_view->kPresenterDoc();
-    m_activePageBeforePresentation = doc->activePage();
-    doc->displayActivePage( doc->pageList().at( curPgNum-1 ) );
 
     // Text can't zoom with a different x and y factor, yet.
     // So we have to choose the smallest zoom (but still paint background everywhere)
@@ -3148,7 +3146,6 @@ void KPrCanvas::stopScreenPresentation()
     setCursor( waitCursor );
 
     KPresenterDoc * doc = m_view->kPresenterDoc();
-    doc->displayActivePage( m_activePageBeforePresentation );
     doc->zoomHandler()->setZoomAndResolution( m_zoomBeforePresentation,
                                               KoGlobal::dpiX(), KoGlobal::dpiY() );
     doc->newZoomAndResolution(false,false);
@@ -3253,10 +3250,6 @@ bool KPrCanvas::pNext( bool gotoNextPage )
 
         m_step.m_pageNumber = *( ++m_presentationSlidesIterator ) - 1;
         m_step.m_subStep = 0;
-
-        doc->displayActivePage( doc->pageList().at( m_step.m_pageNumber ) );
-
-        setActivePage(doc->pageList().at( m_step.m_pageNumber ));
 
         m_pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
         m_step.m_step = *m_pageEffectSteps.begin();
@@ -3369,10 +3362,7 @@ bool KPrCanvas::pPrev( bool gotoPreviousPage )
         m_step.m_pageNumber = *( --m_presentationSlidesIterator ) - 1;
 
         KPresenterDoc * doc = m_view->kPresenterDoc();
-        doc->displayActivePage( doc->pageList().at( m_step.m_pageNumber ) );
 
-        //change active page.
-        setActivePage(doc->pageList().at( m_step.m_pageNumber ) );
         m_pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
 
         if ( gotoPreviousPage )
@@ -3499,12 +3489,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
     drawAllObjectsInPage( &p, _list, pgnum );
 
     //draw sticky object
-    //the numbers for the sticky page have to be recalculated
-    KPrPage* saveActivePage = m_activePage;
-    doc->displayActivePage( doc->pageList().at( pgnum ) );
-    setActivePage( doc->pageList().at( pgnum ) );
     drawAllObjectsInPage( &p, stickyPage()->objectList(), pgnum );
-    setActivePage( saveActivePage );
 
     editMode = _editMode;
     p.end();
@@ -3543,15 +3528,11 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
 void KPrCanvas::printPage( QPainter* painter, PresStep step )
 {
     //kdDebug(33001) << "KPrCanvas::printPage" << endl;
-    KPrPage* saveActivePage = m_activePage;
     KPresenterDoc *doc = m_view->kPresenterDoc();
     KPrPage* page = doc->pageList().at( step.m_pageNumber );
     QRect rect = page->getZoomPageRect();
-    doc->displayActivePage( page );
-    setActivePage( page );
     drawBackground( painter, rect, page );
     drawPresPage( painter, rect, step );
-    setActivePage( saveActivePage );
 }
 
 void KPrCanvas::doObjEffects( bool isAllreadyPainted )
@@ -3568,6 +3549,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
 
     QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );
 
+    KPrPage *page = m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber );
     // YABADABADOOOOOOO.... That's a hack :-)
     if ( m_step.m_subStep == 0 && !isAllreadyPainted )
     {
@@ -3575,7 +3557,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
         QPainter p;
         p.begin( &screen_orig );
         QRect desktopRect = QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
-        drawBackground( &p, desktopRect, m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber ) );
+        drawBackground( &p, desktopRect, page );
         PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, true, true );
         drawPresPage( &p, desktopRect ,step );
         p.end();
@@ -3586,7 +3568,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
         bitBlt( &screen_orig, 0, 0, this );
     }
 
-    QPtrList<KPObject> allObjects( m_activePage->objectList() );
+    QPtrList<KPObject> allObjects( page->objectList() );
 
     QPtrListIterator<KPObject> it( stickyPage()->objectList() );
     for ( ; it.current(); ++it ) {
@@ -3734,7 +3716,7 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
             printer->newPage();
 
         painter->resetXForm();
-        painter->fillRect( m_activePage->getZoomPageRect(), white );
+        painter->fillRect( m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber )->getZoomPageRect(), white );
 
         printPage( painter, step );
         kapp->processEvents();
@@ -4398,11 +4380,6 @@ void KPrCanvas::gotoPage( int pg )
         m_pageEffectSteps = m_view->kPresenterDoc()->getPageEffectSteps( m_step.m_pageNumber );
         m_step.m_step = *m_pageEffectSteps.begin();
         m_step.m_subStep = 0;
-        //change active page
-        m_activePage=m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber );
-        //recalculate the page numbers
-        m_view->kPresenterDoc()->recalcPageNum();
-
 #if 0
 #if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
@@ -5325,7 +5302,6 @@ void KPrCanvas::setActivePage( KPrPage* active )
     Q_ASSERT(active);
     //kdDebug(33001)<<"KPrCanvas::setActivePage( KPrPage* active) :"<<active<<endl;
     m_activePage = active;
-    m_view->kPresenterDoc()->recalcPageNum();
 }
 
 bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj) const
