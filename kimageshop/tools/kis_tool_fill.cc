@@ -37,7 +37,7 @@ FillTool::FillTool(KisDoc *doc, KisView *view)
     toleranceGreen = 0;
     toleranceBlue = 0;
 
-    layerAlpha = false;
+    layerAlpha = true;
 }
 
 FillTool::~FillTool() {}

@@ -66,7 +66,6 @@ void StampTool::setPattern(const KisPattern *pattern)
     mHotSpot = QPoint(mHotSpotX, mHotSpotY);
     spacing = m_pPattern->spacing();
     if (spacing < 1) spacing = 3;
-
 }
 
 
@@ -140,18 +139,19 @@ void StampTool::mousePress(QMouseEvent *e)
 bool StampTool::stampToCanvas(QPoint pos)
 {
     KisImage* img = m_pDoc->current();
+    KisLayer *lay = img->getCurrentLayer();
 
     QPainter p;
     p.begin(m_pCanvas);
     p.scale( m_pView->zoomFactor(), m_pView->zoomFactor() );
 
-    QRect ur(pos.x() - mHotSpotX, pos.y()-mHotSpotY, 
+    QRect ur(pos.x() - mHotSpotX, pos.y()- mHotSpotY, 
         patternWidth, patternHeight);
     
+    // check image bounds.  The image extends are a rectangle 
+    // containing all the layers that contribute to it
     ur = ur.intersect(img->imageExtents());
-    //ur.setBottom(ur.bottom()+1);
-    //ur.setRight(ur.right()+1);
-
+ 
     if (ur.top()    > img->height() 
     || ur.left()    > img->width()
     || ur.bottom()  < 0
@@ -160,6 +160,16 @@ bool StampTool::stampToCanvas(QPoint pos)
         p.end();
         return false;
     }
+
+    // check the layer bounds. There may be several different
+    // layers visible at once and we only want to draw on the
+    // current layer - which usually is also the topmost one
+    if (!ur.intersects(lay->layerExtents()))
+    {
+        p.end();
+        return false;
+    }
+    ur = ur.intersect(lay->layerExtents());
 
     int startX = 0;
     int startY = 0;
@@ -341,7 +351,6 @@ void StampTool::mouseMove(QMouseEvent *e)
             the layer at all ! No need for double buffer!!!    
             Refresh first - markDirty relies on timer, 
             so we need force by directly updating the canvas. */
-                
 
             if(oldp.x() < mHotSpotX) 
                 oldp.setX(mHotSpotX);
@@ -367,7 +376,7 @@ void StampTool::mouseMove(QMouseEvent *e)
                 
              if(!stampToCanvas(p /*- mHotSpot*/))
              {
-                 kdDebug(0) << "canvas error!" << endl;                
+                 // kdDebug(0) << "canvas error!" << endl;                
              }            
         }
             

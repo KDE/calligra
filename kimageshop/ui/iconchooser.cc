@@ -208,6 +208,7 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
         else
         {
             const QPixmap& thumbpix = item->thumbPixmap();
+            /*
             kdDebug()   << "itemWidth "  << itemWidth  
                         << "itemHeight " << itemHeight 
                         << endl;
@@ -215,7 +216,7 @@ void IconChooser::paintCell( QPainter *p, int row, int col )
             kdDebug()   << "thumbpix.width() "  << thumbpix.width()  
                         << "thumbpix.height() " << thumbpix.height() 
                         << endl;
-                                                
+            */                                    
             x  = margin;            y  = margin;
             pw = thumbpix.width(); 	ph = thumbpix.height();
             cw = cellWidth();       ch = cellHeight();

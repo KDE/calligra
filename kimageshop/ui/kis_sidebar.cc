@@ -40,9 +40,17 @@ KisSideBar::KisSideBar( QWidget* parent, const char* name )
 {
     kdDebug() << "KisSideBar::KisSideBar" << endl; 
 
-    m_pTopFrame = new TopFrame(this);
-    m_pChooserFrame = new ChooserFrame(this);
+    /* TopTitleFrame and Control frame are always at top of sidebar
+    sidabar and are always visible (unless the whole sidebar is hidden */
+    
+    m_pTopTitleFrame = new TopTitleFrame(this);
     m_pControlFrame = new ControlFrame(this);
+
+    // TopFrame is just for selecting color chooser
+    m_pTopFrame = new TopFrame(this);  
+    m_pChooserFrame = new ChooserFrame(this);
+
+    // krayon box
     m_pDockFrame = new DockFrame(this);
 
     setFixedWidth( 200 );
@@ -78,17 +86,28 @@ KisSideBar::KisSideBar( QWidget* parent, const char* name )
 
 void KisSideBar::resizeEvent ( QResizeEvent * )
 {
+    int topTitleHeight = 20;
+    int controlHeight = 42;    
     int topHeight = 20;
     int chooserHeight = 0;
     if(m_pChooserFrame->isVisible())  
         chooserHeight = 138;
-    int controlHeight = 42;
+
+    int total = 0;
     
-    m_pTopFrame->setGeometry( 0, 0, width(), topHeight );
-    m_pChooserFrame->setGeometry( 0, topHeight, width(), chooserHeight );
-    m_pControlFrame->setGeometry( 0, topHeight + chooserHeight, width(), 42);
-    m_pDockFrame->setGeometry( 0, topHeight + chooserHeight + controlHeight, 
-        width(), height() - (topHeight + chooserHeight + controlHeight) );
+    m_pTopTitleFrame->setGeometry( 0, 0, width(), topTitleHeight );
+    total += topTitleHeight;
+ 
+    m_pControlFrame->setGeometry( 0, total, width(), controlHeight);
+    total += controlHeight;
+
+    m_pTopFrame->setGeometry( 0, total, width(), topHeight );
+    total += topHeight;
+ 
+    m_pChooserFrame->setGeometry( 0, total, width(), chooserHeight );
+    total += chooserHeight;
+
+    m_pDockFrame->setGeometry( 0, total, width(), height() - total);
 }
 
 void KisSideBar::slotSetFGColor(const KisColor& c)
@@ -159,6 +178,49 @@ void KisSideBar::slotHideChooserFrame( )
     resizeEvent(0L);    
 }
 
+/*
+    Top Frame - really just a selector for the color chooser to show,
+    or to hide the color chooser entirely
+*/
+
+TopTitleFrame::TopTitleFrame( QWidget* parent, const char* name ) 
+    : QFrame( parent, name )
+{
+    setFrameStyle(Panel | Raised);
+    setLineWidth(1);
+
+    // setup buttons
+    m_pHideButton = new KisFrameButton("(*)", this);
+    m_pTitleButton = new KisFrameButton("Krayon Box", this);    
+
+    QFont font = KGlobalSettings::generalFont();
+    font.setPointSize( 8 );
+
+    m_pHideButton->setFont(font);
+    m_pTitleButton->setFont(font);
+
+    m_pHideButton->setToggleButton(true);
+    m_pTitleButton->setToggleButton(false);
+
+    // connect buttons
+    connect(m_pHideButton, SIGNAL(clicked()), this,
+		  SLOT(slotHideClicked()));
+
+    setFrameStyle( Panel | Raised );
+}
+
+void TopTitleFrame::resizeEvent ( QResizeEvent * )
+{
+   //int w = width();
+    m_pTitleButton->setGeometry(0, 0, 170, 20);
+    m_pHideButton->setGeometry(170, 0, 30, 20);
+}
+
+void TopTitleFrame::slotHideClicked()
+{
+    emit hideClicked();
+}
+
 
 /*
     Top Frame - really just a selector for the color chooser to show,
@@ -171,12 +233,12 @@ TopFrame::TopFrame( QWidget* parent, const char* name ) : QFrame( parent, name )
     setLineWidth(1);
 
     // setup buttons
-    m_pHideButton = new KisFrameButton(i18n("Hide"), this);
+    m_pHideButton = new KisFrameButton("(*)", this);
+    m_pLABButton = new KisFrameButton(i18n("LAB"), this);    
+    m_pCMYKButton = new KisFrameButton(i18n("CMYK"), this);
+    m_pHSBButton = new KisFrameButton(i18n("HSB"), this);    
     m_pGreyButton = new KisFrameButton(i18n("Grey"), this);
     m_pRGBButton = new KisFrameButton(i18n("RGB"), this);
-    m_pHSBButton = new KisFrameButton(i18n("HSB"), this);
-    m_pCMYKButton = new KisFrameButton(i18n("CMYK"), this);
-    m_pLABButton = new KisFrameButton(i18n("LAB"), this);
 
     m_pEmptyFrame = new QFrame(this);
     m_pEmptyFrame->setFrameStyle(Panel | Raised);
@@ -223,13 +285,13 @@ void TopFrame::resizeEvent ( QResizeEvent * )
 {
     int w = width();
 
-    m_pLABButton->setGeometry(0, 0, 28, 20);
-    m_pCMYKButton->setGeometry(28, 0, 36, 20);
-    m_pHSBButton->setGeometry(64, 0, 28, 20);
-    m_pRGBButton->setGeometry(92, 0, 28, 20);
-    m_pGreyButton->setGeometry(120, 0, 28, 20);
-    m_pHideButton->setGeometry(148, 0, 28, 20);
-    m_pEmptyFrame->setGeometry(176, 0, w-176, 20);
+    m_pRGBButton->setGeometry(0, 0, 30, 20);
+    m_pGreyButton->setGeometry(30, 0, 30, 20);
+    m_pHSBButton->setGeometry(60, 0, 30, 20);
+    m_pCMYKButton->setGeometry(90, 0, 36, 20);
+    m_pLABButton->setGeometry(126, 0, 30, 20);
+    m_pEmptyFrame->setGeometry(156, 0, 14, 20);
+    m_pHideButton->setGeometry(170, 0, 30, 20);
 }
 
 void TopFrame::slotHideClicked()
@@ -368,7 +430,7 @@ void DockFrame::slotActivateTab(const QString& tab)
 	    b->setOn(b->text() == tab);
 }
 
-void DockFrame::resizeEvent ( QResizeEvent * )
+void DockFrame::resizeEvent( QResizeEvent * )
 {
     int bw = 0;
     int row = 0;
@@ -377,7 +439,7 @@ void DockFrame::resizeEvent ( QResizeEvent * )
   
     for ( b = m_blst.first(); b != 0; b = m_blst.next() )
 	{
-	    if (bw >= width())
+	    if (bw + b->width() >= width())
 		{
 		    bw = 0;
 		    row++;
@@ -388,7 +450,7 @@ void DockFrame::resizeEvent ( QResizeEvent * )
  
     QWidget *w;
 
-    int xw = 18+ row*18;
+    int xw = 18 + row*18;
   
     for ( w = m_wlst.first(); w != 0; w = m_wlst.next() )
 	    w->setGeometry(2, xw, width()-4, height()- xw-2);
@@ -473,7 +535,7 @@ ControlFrame::ControlFrame( QWidget* parent, const char* name )
 {
     QString defaultPattern = getenv("KDEDIR") + QString("/")
         + KStandardDirs::kde_default("data") 
-        + "krayon/patterns/Concrete.xpm";
+        + "krayon/patterns/wizard.png";
 
     setFrameStyle(Panel | Raised);
     setLineWidth(1);

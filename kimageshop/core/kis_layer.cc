@@ -34,7 +34,9 @@ KisLayer::KisLayer(const QString& name, cMode cm, uchar bd)
     m_linked = false;
     m_current = 0;
     m_opacity= 255;
-
+    mLayerXOffset = 0;
+    mLayerYOffset = 0;
+    
     calcNumChannels();
 
     // FIXME: Implement non-RGB modes.
@@ -125,6 +127,12 @@ QRect KisLayer::imageExtents() const
 }
 
 
+QRect KisLayer::layerExtents() const
+{
+    return QRect(mLayerXOffset, mLayerYOffset, mLayerWidth, mLayerHeight);
+}
+
+
 QRect KisLayer::tileExtents() const
 {
     return m_ch[0]->tileExtents();
@@ -151,14 +159,34 @@ int KisLayer::yTiles() const
 
 void KisLayer::moveBy(int dx, int dy)
 {
+    mLayerXOffset += dx;
+    mLayerYOffset += dy;
+    
+    kdDebug() << " mLayerXOffset " << mLayerXOffset  
+              << " mLayerYOffset " << mLayerYOffset 
+              << " mLayerWidth "   << mLayerWidth 
+              << " mLayerHeight "  << mLayerHeight 
+              << endl;
+
     for (uchar i = 0; i < m_channels; i++)
 	    m_ch[i]->moveBy(dx, dy);
 }
 
-void KisLayer::moveTo(int x, int y) const
+
+void KisLayer::moveTo(int x, int y) 
 {
+    mLayerXOffset = x;
+    mLayerYOffset = y;
+    
+    kdDebug() << " mLayerXOffset " << mLayerXOffset  
+              << " mLayerYOffset " << mLayerYOffset 
+              << " mLayerWidth "   << mLayerWidth 
+              << " mLayerHeight "  << mLayerHeight 
+              << endl;
+
     for (uchar i = 0; i < m_channels; i++)
 	    m_ch[i]->moveTo(x, y);
+        
 }
 
 
@@ -188,8 +216,12 @@ bool KisLayer::boundryTileY(int tile) const
 
 void KisLayer::allocateRect(QRect r)
 {
+    mLayerWidth  = r.width();  //jwc
+    mLayerHeight = r.height(); //jwc
+        
     for (uchar i = 0; i < m_channels; i++)
 	    m_ch[i]->allocateRect(r);
+
 }
 
 

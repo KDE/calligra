@@ -18,7 +18,9 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#ifndef KDE_USE_FINAL // defined in kis_dlg_new.cc
+// defined in kis_dlg_new.cc
+
+#ifndef KDE_USE_FINAL 
 const int MAXIMAGEWIDTH = 32767;
 const int INITIALWIDTH = 512;
 const int MAXIMAGEHEIGHT = 32767;

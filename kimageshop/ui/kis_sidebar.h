@@ -40,6 +40,29 @@ class KisBrush;
 class KisPattern;
 class KisColorChooser;
 
+
+class TopTitleFrame : public QFrame
+{
+  Q_OBJECT
+
+ public:
+  TopTitleFrame( QWidget* parent = 0, const char* name = 0 );
+
+ signals:
+  void hideClicked();
+
+ protected:
+  virtual void resizeEvent ( QResizeEvent * );
+
+ protected slots:
+  void slotHideClicked();
+
+ private:
+  KisFrameButton *m_pHideButton, *m_pTitleButton;
+  QFrame *m_pEmptyFrame;
+};
+
+
 class TopFrame : public QFrame
 {
   Q_OBJECT
@@ -200,11 +223,13 @@ class KisSideBar : public KFloatingDialog
   void slotControlBGColorSelected(const KisColor&);
   void slotControlActiveColorChanged(ActiveColor);
 
-
  private:
+  TopTitleFrame   *m_pTopTitleFrame;
+  ChooserFrame    *m_pChooserFrame;  
+
   TopFrame        *m_pTopFrame;
-  ChooserFrame    *m_pChooserFrame;
   ControlFrame    *m_pControlFrame;
+
   DockFrame       *m_pDockFrame;
 };
 

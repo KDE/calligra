@@ -221,17 +221,15 @@ bool PasteTool::pasteToCanvas(QPoint pos)
     KisImage* img = m_pDoc->current();
     if (!img) return false;
 
+    KisLayer *lay = img->getCurrentLayer();
+    if (!lay) return false;
+
     QPainter p;
     p.begin(m_pCanvas);
     p.scale( m_pView->zoomFactor(), m_pView->zoomFactor() );
 
     QRect ur(pos.x(), pos.y(), clipPix.width(), clipPix.height());
     
-#if 0
-    ur.moveBy( - m_pView->xPaintOffset() + m_pView->xScrollOffset() , 
-               - m_pView->yPaintOffset() + m_pView->yScrollOffset());
-#endif
-
     ur = ur.intersect(img->imageExtents());
     ur.setBottom(ur.bottom()+1);
     ur.setRight(ur.right()+1);
@@ -245,6 +243,16 @@ bool PasteTool::pasteToCanvas(QPoint pos)
         return false;
     }
 
+    // check the layer bounds. There may be several different
+    // layers visible at once and we only want to draw over the
+    // current layer - which usually is also the topmost one
+    if (!ur.intersects(lay->layerExtents()))
+    {
+        p.end();
+        return false;
+    }
+    ur = ur.intersect(lay->layerExtents());
+
     int xt = m_pView->xPaintOffset()- m_pView->xScrollOffset();
     int yt = m_pView->yPaintOffset()- m_pView->yScrollOffset();
 
@@ -254,17 +262,6 @@ bool PasteTool::pasteToCanvas(QPoint pos)
                   clipPix, 
                   0, 0, ur.width(), ur.height() );
     p.end();
-
-    // Alternate bitBlt method, needs resarching.  This may be better
-    // than QPainter because it allows raster operations for neat effects.
-    
-    /*
-    bitBlt (m_pCanvas, 
-        pos.x() + m_pView->xPaintOffset() - m_pView->xScrollOffset(), 
-        pos.y() + m_pView->yPaintOffset() - m_pView->yScrollOffset(), 
-        m_pPattern->pixmap(), 0, 0, 
-        m_pPattern->width(), m_pPattern->height());    
-    */
     
     return true;
 }

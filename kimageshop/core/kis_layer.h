@@ -51,16 +51,27 @@ class KisLayer : public QObject
 	void    setLinked(bool l)  { m_linked = l; }
 
 	void    moveBy(int dx, int dy);
-	void    moveTo(int x, int y) const;
+	void    moveTo(int x, int y);
 
 	int     xTiles() const;
 	int     yTiles() const;
 	int     channelLastTileOffsetX() const;
 	int     channelLastTileOffsetY() const;
 	QRect   tileRect(int tileNo);
-	QRect   imageExtents() const;  // extents of the image in canvas coords
-	QRect   tileExtents() const;   // extents of the layers tiles in canv coords
-	QPoint  channelOffset() const; // topLeft of the image in the channel
+
+    // extents of the image in canvas coords
+	QRect   imageExtents() const;
+    // extents of the layers tiles in canv coords  
+	QRect   tileExtents() const;
+    // topLeft of the image in the channel   
+	QPoint  channelOffset() const; 
+
+    // information about where the layer rectange (not the
+    // entire image rectangle) is in canvas coords -jwc-
+    int     width()  { return mLayerWidth; } 
+    int     height() { return mLayerHeight; } 
+    QPoint  offset() { return QPoint(mLayerXOffset, mLayerYOffset); }
+    QRect   layerExtents() const;   
 	
 	void    loadRGBImage(QImage img, QImage alpha);
 	void    loadGrayImage(QImage img, QImage alpha);
@@ -96,8 +107,13 @@ class KisLayer : public QObject
 	bool     m_visible, m_linked;
 	cMode    m_cMode;
 	uchar    m_bitDepth;
+    
+    int      mLayerXOffset; 
+    int      mLayerYOffset; 
+    int      mLayerWidth;   
+    int      mLayerHeight;  	 
 	
-	KisChannel* m_ch[MAX_CHANNELS];
+    KisChannel* m_ch[MAX_CHANNELS];
         
 };
 

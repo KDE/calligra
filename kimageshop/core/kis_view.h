@@ -212,7 +212,9 @@ class KisView : public KoView
     void showMenubar();
     void showToolbar();
     void showStatusbar();
+    void floatSidebar();
     void showSidebar();
+    void leftSidebar();
     void saveOptions();
     void preferences();
 
@@ -283,7 +285,7 @@ class KisView : public KoView
 		*m_dialog_patterns, *m_dialog_layers, *m_dialog_channels;
 
     // krayon box (sidebar)
-    KToggleAction *m_side_bar;
+    KToggleAction *m_side_bar, *m_float_side_bar, *m_lsidebar;
 
     // tool actions (main toolbar & menu)
     KToggleAction *m_tool_select_rectangular, *m_tool_select_polygonal,
@@ -329,6 +331,9 @@ class KisView : public KoView
     KisKrayonChooser     *m_pKrayonChooser;    
     KisBrushChooser      *m_pBrushChooser;
     KisPatternChooser    *m_pPatternChooser;
+    QWidget              *m_pPaletteChooser;    
+    QWidget              *m_pGradientChooser;
+    QWidget              *m_pImageChooser;
     KisLayerView         *m_pLayerView;
     KisChannelView       *m_pChannelView;
 

@@ -121,21 +121,14 @@
 </Menu>
 
 <Menu name="settings"><text>Settings</text>
- <Action name="current_tool_properties"/>  
-  <Menu name="ToolSettings"><text>ToolSettings</text>
-    <Action name="dialog_gradient"/>
-    <Action name="dialog_gradienteditor"/>
-  </Menu>
-<!--  
-  <Action name="show_menubar"/>
-  <Action name="show_toolbar"/>
-  <Action name="show_statusbar"/>
-  <Separator/>
--->
+  <Action name="current_tool_properties"/>  
   <Action name="preferences"/>    
   <Action name="save_options"/>
   <Separator/>
   <Action name="show_sidebar"/>  
+  <Action name="float_sidebar"/>
+  <Action name="left_sidebar"/>
+  <Separator/>    
   <Action name="configure"/>
 </Menu>
 
@@ -179,13 +172,11 @@
 
 <ToolBar name="settings" position="top"><Text>Settings</Text>
   <Action name="show_sidebar"/>
+  <Action name="float_sidebar"/>      
+  <Action name="left_sidebar"/>      
   <Action name="preferences"/>
   <Action name="current_tool_properties"/>
   <Action name="blending_properties"/>       
-<!--  
-  <Action name="dialog_gradient"/>
-  <Action name="dialog_gradienteditor"/>
--->  
 </ToolBar>
 
 <ToolBar name="navigation" position="top"><Text>Navigation</Text>
