@@ -5,7 +5,7 @@ char kivio_module[] =
 "        self.this = apply(kivioc.new_KivioStencil,args)\n"\
 "        self.thisown = 1\n"\
 "\n"\
-"    def __del__(self,kivioc=kivioc):\n"\
+"    def __del__(self):\n"\
 "        if self.thisown == 1 :\n"\
 "            kivioc.delete_KivioStencil(self)\n"\
 "    def duplicate(*args):\n"\
@@ -157,7 +157,7 @@ char kivio_module[] =
 "        self.this = apply(kivioc.new_KivioLayer,args)\n"\
 "        self.thisown = 1\n"\
 "\n"\
-"    def __del__(self,kivioc=kivioc):\n"\
+"    def __del__(self):\n"\
 "        if self.thisown == 1 :\n"\
 "            kivioc.delete_KivioLayer(self)\n"\
 "    def visible(*args):\n"\
