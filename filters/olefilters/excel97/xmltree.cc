@@ -34,7 +34,7 @@ const char *palette[65] = {
   "#993300", "#993366", "#333399", "#333333", "#ffffff"
 };
 
-const int borderStyles[] = {1, 1, 2, 3, 1, 0, 1, 0, 4, 0, 5};
+const int borderStyles[] = {1, 1, 2, 3, 1, 0, 1, 0, 4, 0, 5, 0, 0, 0};
 const int ndays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 const int ldays[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
@@ -112,8 +112,8 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
     pen.setAttribute("style", 1);
     pen.setAttribute("color", palette[(fonts[fontid]->icv) & 0x7f]);
     f.appendChild(pen);
-
-  if (xfs[xf]->borderStyle & 0x0f != 0) {
+   
+    if ((xfs[xf]->borderStyle & 0x0f) != 0) {    
     border = root->createElement("left-border");
     pen = root->createElement("pen");
     penStyle = xfs[xf]->borderStyle & 0x0f;
@@ -124,6 +124,8 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
     else
         penWidth = 1;
     pen.setAttribute("width", penWidth);
+    if(borderStyles[penStyle-1]==0)
+      kdDebug()<<"Border style not supported\n";
     pen.setAttribute("style", borderStyles[penStyle-1]);
     pen.setAttribute("color", ((xfs[xf]->sideBColor ) & 0x7f) == 64 ?
 		     "#000000" : palette[(xfs[xf]->sideBColor  ) & 0x7f]);
@@ -132,7 +134,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
     f.appendChild(border);
   }
 
-  if ((xfs[xf]->borderStyle >> 4) & 0x0f != 0) {
+  if (((xfs[xf]->borderStyle >> 4) & 0x0f) != 0) {
     border = root->createElement("right-border");
     pen = root->createElement("pen");
     penStyle = (xfs[xf]->borderStyle >> 4) & 0x0f;
@@ -144,6 +146,8 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
         penWidth = 1;
     pen.setAttribute("width", penWidth);
     pen.setAttribute("style", borderStyles[penStyle-1]);
+    if(borderStyles[penStyle-1]==0)
+      kdDebug()<<"Border style not supported\n";
     pen.setAttribute("color", ((xfs[xf]->sideBColor >>7 ) & 0x7f) == 64 ?
 		     "#000000" : palette[(xfs[xf]->sideBColor >>7 ) & 0x7f]);
 
@@ -153,7 +157,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
     f.appendChild(border);
   }
 
-  if ((xfs[xf]->borderStyle >> 8) & 0x0f != 0) {
+  if (((xfs[xf]->borderStyle >> 8) & 0x0f) != 0) {
     border = root->createElement("top-border");
     pen = root->createElement("pen");
     penStyle = (xfs[xf]->borderStyle >> 8) & 0x0f;
@@ -164,6 +168,8 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
     else
         penWidth = 1;
     pen.setAttribute("width", penWidth);
+    if(borderStyles[penStyle-1]==0)
+      kdDebug()<<"Border style not supported\n";
     pen.setAttribute("style", borderStyles[penStyle-1]);
     pen.setAttribute("color", ((xfs[xf]->topBColor ) & 0x7f) == 64 ?
 		     "#000000" : palette[(xfs[xf]->topBColor ) & 0x7f]);
@@ -172,7 +178,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
     f.appendChild(border);
   }
 
-  if ((xfs[xf]->borderStyle >> 12) & 0x0f != 0) {
+  if (((xfs[xf]->borderStyle >> 12) & 0x0f) != 0) {
     border = root->createElement("bottom-border");
     pen = root->createElement("pen");
     penStyle = (xfs[xf]->borderStyle >> 12) & 0x0f;
@@ -183,6 +189,8 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
     else
         penWidth = 1;
     pen.setAttribute("width", penWidth);
+    if(borderStyles[penStyle-1]==0)
+      kdDebug()<<"Border style not supported\n";
     pen.setAttribute("style", borderStyles[penStyle-1]);
     pen.setAttribute("color",  ((xfs[xf]->topBColor >> 7) & 0x7f) == 64 ?
 		     "#000000" : palette[(xfs[xf]->topBColor >> 7) & 0x7f]);
@@ -216,6 +224,8 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
                   penWidth = 1;
               pen.setAttribute("width", penWidth);
               pen.setAttribute("style", borderStyles[penStyle-1]);
+	      if(borderStyles[penStyle-1]==0)
+		kdDebug()<<"Border style not supported\n";
               pen.setAttribute("color", ((xfs[xf]->topBColor >> 14) & 0x7f) == 64 ?
                                "#000000" : palette[(xfs[xf]->topBColor >> 14) & 0x7f]);
               border.appendChild(pen);
@@ -234,6 +244,8 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
       else
           penWidth = 1;
       pen.setAttribute("width", penWidth);
+      if(borderStyles[penStyle-1]==0)
+	kdDebug()<<"Border style not supported\n";
       pen.setAttribute("style", borderStyles[penStyle-1]);
       // the following is necessary to handle Excels "Automatic" color option
       // somehow this is only needed for diagonal borders
