@@ -4,7 +4,7 @@
 To edit or validate this document separately, uncomment this prolog
 Be sure to comment it out again when you are done -->
 
-<chapter id="menuitems">
+<chapter id="menu-items">
 <title>The Menu and Toolbar Items</title>
 
 <para>
@@ -260,7 +260,9 @@ previously saved the presentation, it will be resaved with the same name.
 </menuchoice>
 </term>
 <listitem>
-<para>FIXME: What does this do?</para>
+<para>Reload the currently active file.
+<!-- FIXME: What's a situation when you might want to do this? -->
+</para>
 </listitem>
 </varlistentry>
 
@@ -303,26 +305,11 @@ section <xref linkend="html-wizard"/>.
 <varlistentry>
 <term><menuchoice><guimenu>Template
 Manager</guimenu></menuchoice></term>
-<listitem><para>FIXME: Figure out how this works.</para></listitem>
+<listitem><para><action>Allows you to save the current slide as a
+template.</action> In future the template will be available for you to
+use to build slides with.  Creating a template is further discussed in
+section <xref linkend="creating-templates"/>.</para></listitem>
 </varlistentry>
-<!-- FIXME: Did this turn into 'Template Manager' ? It seems so, based
-on  the description below
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>File</guimenu>
-<guimenuitem>Create Template From Current Slide...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para>
-<action>Allows you to save the current slide as a template.</action>
-In future the template will be available for you to use to build slides
-with.  Creating a template is further discussed in section <xref
-linkend="creating-templates"/>.
-</para>
-</listitem>
-</varlistentry>  -->
 
 <varlistentry>
 <term><menuchoice>
@@ -389,7 +376,8 @@ documents contents.
 File...</guimenuitem>
 </menuchoice></term>
 <listitem>
-<para>FIXME: This doesn't seem to do anything when tested.</para>
+<para>Create a new email message and attach the file so you can
+send it to someone else.</para>
 </listitem>
 </varlistentry>
 
@@ -657,17 +645,6 @@ slide.</para>
 </listitem>
 </varlistentry>
 
-<varlistentry>
-<term><menuchoice>
-<guimenu>Edit</guimenu><guimenuitem>Enable
-Autocorrection</guimenuitem></menuchoice></term>
-<listitem><para>FIXME: Confirm what this does:</para>
-<para>If this is enabled, common spelling errors will be corrected as
-you type.  &eg; if you type <userinput>Teh</userinput> it will be
-corrected to <userinput>The</userinput> automatically.</para>
-</listitem>
-</varlistentry>
-
 </variablelist>
 
 </sect1>
@@ -816,7 +793,6 @@ will retain the help lines you created.</para>
 <varlistentry>
 <term><menuchoice><guimenu>View</guimenu>
 <guimenuitem>Help Line to Front</guimenuitem>
-<!-- FIXME: should this be help lines? -->
 </menuchoice></term>
 <listitem><para>
 By default, placing objects on a slide will cover any displayed help
@@ -901,8 +877,8 @@ on a US Keyboard.</para></listitem>
 <guisubmenu>Variable</guisubmenu></menuchoice>
 </term>
 <listitem>
-<para>FIXME: This probably deserves a section to itself</para>
-</listitem>
+<para>Here you can insert a variable that is filled in with a
+value that may be updated as you update the document.</para> </listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1097,7 +1073,6 @@ FIXME: Document how to set up a scanner that &kpresenter; can use.
 </variablelist>
 
 </sect1>
-
 
 <sect1 id="format-menu">
 <title><guimenu>Format</guimenu> Menu</title>
@@ -1613,19 +1588,23 @@ can begin a spelling check here.</para>
 
 <varlistentry>
 <term><menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Enable
+Autocorrection</guimenuitem></menuchoice></term>
+<listitem><para>FIXME: Confirm what this does:</para>
+<para>If this is enabled, common spelling errors will be corrected as
+you type.  &eg; if you type <userinput>Teh</userinput> it will be
+corrected to <userinput>The</userinput> automatically.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
 <guimenu>Text</guimenu>
 <guisubmenu>Apply Autocorrection...</guisubmenu>
 </menuchoice></term>
-<listitem><para>
-FIXME: The other autocorrection setting is in another menu, shouldn't
-they be together like the spell checking is?</para>
-<para>FIXME: Shouldn't have ..., no dialog is shown *before* the action
-is applied, only after to ask if it should be applied  (where?
-it says 'to new slide', does that mean this one, or ones
-created after this)</para>
-<para>If you did not choose to enable autocorrection in the
-<guimenu>Edit</guimenu> menu, you can apply it on demand here.</para>
-</listitem> </varlistentry>
+<listitem><para>If you did not choose to enable autocorrection, you can
+apply it on demand here.</para> </listitem>
+</varlistentry>
 
 </variablelist>
 

@@ -2,7 +2,6 @@
 <title>Detailed Guides</title>
 
 <para>
-
 This chapter describes how to perform some common tasks in
 &kpresenter;.
 </para>
@@ -16,12 +15,13 @@ into <acronym>WWW</acronym> pages.</para>
 <procedure>
 <step>
 <para>First make a few slides to include in the show.  I made one slide, used <menuchoice><guimenu>Edit
-</guimenu><guimenuitem>Duplicate Page</guimenuitem></menuchoice> to make a couple of copies, and added a little text
-and a couple of GNOME images that I found in
+</guimenu><guimenuitem>Duplicate Page</guimenuitem></menuchoice> to make
+a couple of copies, and added a little text and
+<!-- FIXME: Find new clipart -->
+a couple of GNOME images that I found in
 <filename class="directory">/usr/share/AbiSuite/clipart</filename></para>
 
-<!-- Heh, not too sure about this, I certainly don't have AbiSuite installed, and I'm sure many other people
-don't.  We might want to dig around for some KDE clipart that we can be sure people who have Kpresenter installed will have -->
+
 
 <screenshot>
 <screeninfo>The <guiicon>Add Clipart</guiicon> icon</screeninfo>
@@ -70,7 +70,7 @@ previously entered for your HTML slideshow.</para>
 </mediaobject>
 </screenshot>
 
-<para>Fill in each field and ensure that you get the path details correct, as this is where &kpresenter; 
+<para>Fill in each field and ensure that you get the path details correct, as this is where &kpresenter;
 will save your new HTML files and pictures.  Click on <guibutton>Next</guibutton> when you are done.</para>
 </step>
 
@@ -192,12 +192,12 @@ choose to use a picture or some clipart for the background.</para>
 <para>I have left this at the default <guilabel>Color/Gradient</guilabel>
 option. In the next Combo box down I have chosen <guilabel>Vertical gradient</guilabel>,
 clicked into the two long boxes below it and chosen two colors.</para>
- 
+
 <para>You can alter the start positions of the colors in  the gradients by
 clicking in the <guilabel>Unbalanced</guilabel> Check box. This lets you use
  the pair of X and Y sliders. Sometimes one slider will not do anything at all, it
 depends on what type of gradient you have chosen.</para>
- 
+
 <para>Remember to choose contrasting colors first. If you leave both white, you will not see
 anything. When you have a color scheme that you like, click <guibutton>Apply</guibutton> and
 <guibutton>OK</guibutton> to close the Dialog box.</para>
@@ -259,7 +259,7 @@ dialog.</phrase></textobject>
 </screenshot>
 
 <para>You want to <guilabel>Create a new document from a Template</guilabel>.
- Click to open the <guilabel>Screenpresentations</guilabel> tab and there is 
+ Click to open the <guilabel>Screenpresentations</guilabel> tab and there is
  the template we made earlier (highlighted in red by me).</para>
 </step>
 </procedure>
