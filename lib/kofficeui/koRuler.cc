@@ -867,8 +867,8 @@ void KoRuler::setupMenu()
     d->mMM = d->rb_menu->insertItem( i18n( "Millimeters (mm)" ), this, SLOT( rbMM() ) );
     d->mPT = d->rb_menu->insertItem( i18n( "Points (pt)" ), this, SLOT( rbPT() ) );
     d->mINCH = d->rb_menu->insertItem( i18n( "Inches (inch)" ), this, SLOT( rbINCH() ) );
-    d->rb_menu->insertSeparator();
-    d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
+    //d->rb_menu->insertSeparator();
+    //d->rb_menu->insertItem(i18n("Page Layout..."), this, SLOT(pageLayoutDia()));
     d->rb_menu->insertSeparator();
     d->mRemoveTab=d->rb_menu->insertItem(i18n("Remove Tabulator"), this, SLOT(rbRemoveTab()));
     d->rb_menu->setCheckable( false );
