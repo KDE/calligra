@@ -1,0 +1,90 @@
+Compile-Time Options for Kexi
+-----------------------------
+
+(c) 2005, Jaroslaw Staniek, <js @ iidea . pl>
+
+
+See http://www.kexi-project.org/wiki/wikiview/index.php?AdvancedBuildNotes
+for explanation how to conveniently set compile-time options.
+
+List of available options
+-------------------------
+
+* KEXI_OPTIONS
+Type: defined/undefined
+Default: undefined
+Description: Define this if you want override default compile time options 
+to use any of the options described below.
+
+* KEXI_NO_UNFINISHED
+Type: defined/undefined
+Default: defined in kexi_export.h if KEXI_OPTIONS is undefined
+Description: If defined, unfinished Kexi features (for example a few features 
+within Table Designer) will be hidded for Kexi, to avoid user confusion.
+
+* KEXI_SHOW_UNIMPLEMENTED
+Type: defined/undefined
+Default: undefined
+Description: If defined, forces to show menu entries and dialogs just to give 
+impression about development plans of Kexi Team. 
+Only recommended for test/development versions.
+
+* KDOCKWIDGET_P
+Type: defined/undefined
+Default: undefined
+Description: If defined, enables a hack for better handling property editor's 
+panel within KexiMainWindowImpl object. 
+Notes:
+- if you defined this, make sure you provided kdockwidget_private.h header file 
+  compatible with KDE version you're compiling Kexi with.
+
+* KEXI_FORMS_SUPPORT
+Type: defined/undefined
+Default: defined in kexi_export.h if KEXI_OPTIONS is undefined
+Description: If defined, form plugin will be loaded; else: it will be 
+not loaded even if is compiled.
+* KEXI_REPORTS_SUPPORT
+Like KEXI_FORMS_SUPPORT macro, but for enabling report plugin.
+
+* KEXI_SERVER_SUPPORT
+Type: defined/undefined
+Default: defined in kexidb/kexidb_export.h if KEXI_OPTIONS is undefined
+Description: If defined, server connections will be supported; else: support 
+for these will be disabled even if is compiled.
+
+* KEXI_NO_MIGRATION
+Type: defined/undefined
+Default: defined in kexidb/kexidb_export.h if KEXI_OPTIONS is undefined
+Description: If defined, data/project migration support for Kexi 
+(available in Tools>Migration menu) will be disabled; else: support will 
+be enabled.
+
+* KEXI_CUSTOM_HARDCODED_CONNDATA
+Type: defined/undefined
+Default: undefined
+Description: If defined, you are forcing to add custom hardcoded connections 
+to the  KexiMigration::importWizard constructor and KexiStartupHandler::init().
+All you need is to create your own private "custom_connectiondata.h" file 
+in kexi/ directory, which will be included into Kexi source code and fill 
+it with code providing one or more hardcoded connections. 
+Example custom_connectiondata.h file for adding a single connection data: 
+---- custom_connectiondata.h, cut here -----
+	conndata = new KexiDB::ConnectionData();
+	conndata->connName = "My Custom Pgsql Connection";
+	conndata->driverName = "postgresql"; //can be also "sqlite3", "sqlite2", "mysql"
+	conndata->hostName = "myhost.example.com";
+	conndata->userName = "john"
+	conndata->password = "secret"
+	Kexi::connset().addConnectionData(conndata); //always call this to add 
+----- cut here ------------------------------
+Notes: 
+- security warning: if you provide your passwords in your code, it will 
+  be available in compiled binaries, so think twice before providine the binaries
+  for somebody else. The custom_connectiondata.h file will not be available 
+  in CVS, so don't worry.
+- this hardcoding will be removed when full handling of connectiondata arrives.
+- conndata is predefined as: KexiDB::ConnectionData* conndata;
+- See KexiDB::ConnectionData deocumentation for more information.
+- you can assign KUser().loginName() for username if you want to get current 
+  login.
+
