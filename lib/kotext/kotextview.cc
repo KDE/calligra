@@ -778,7 +778,6 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
         else
          {
             m_singleWord = false;
-            text="";
         }
     }
     else // No selection -> get word under cursor
