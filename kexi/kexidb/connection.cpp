@@ -630,13 +630,13 @@ inline QString Connection_valueToSQL( const Field::Type ftype, const QVariant& v
 
 QString Connection::valueToSQL( const Field::Type ftype, const QVariant& v ) const
 {
-//	kdDebug() << "valueToSQL(" << (m_driver ? m_driver->sqlTypeName(ftype) : "??") << ", " << Connection_valueToSQL( ftype, v ) <<")" << endl;
+	kdDebug() << "valueToSQL(" << (m_driver ? m_driver->sqlTypeName(ftype) : "??") << ", " << Connection_valueToSQL( ftype, v ) <<")" << endl;
 	return Connection_valueToSQL( ftype, v );
 }
 
 QString Connection::valueToSQL( const Field *field, const QVariant& v ) const
 {
-//	kdDebug() << "valueToSQL(" << (m_driver ? ( field ? m_driver->sqlTypeName(field->type()): "!field") : "??") << ", " << Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v ) <<")" << endl;
+	kdDebug() << "valueToSQL(" << (m_driver ? ( field ? m_driver->sqlTypeName(field->type()): "!field") : "??") << ", " << Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v ) <<")" << endl;
 	return Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v );
 }
 
@@ -697,33 +697,41 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 		); \
 	}
 
-C_INS_REC( C_A(0), V_A0 )
-C_INS_REC( C_A(0) C_A(1), V_A0 V_A(1) )
-C_INS_REC( C_A(0) C_A(1) C_A(2), V_A0 V_A(1) V_A(2) )
-C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3), V_A0 V_A(1) V_A(2) V_A(3) )
-C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) )
-C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) )
-C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) )
+#define C_INS_REC_ALL \
+C_INS_REC( C_A(0), V_A0 ) \
+C_INS_REC( C_A(0) C_A(1), V_A0 V_A(1) ) \
+C_INS_REC( C_A(0) C_A(1) C_A(2), V_A0 V_A(1) V_A(2) ) \
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3), V_A0 V_A(1) V_A(2) V_A(3) ) \
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) ) \
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) ) \
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) ) \
 C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6) C_A(7), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) V_A(7) )
+
+C_INS_REC_ALL
 
 #undef V_A0
 #undef V_A
 #undef C_INS_REC
 
-#define V_A( a ) valueToSQL( flist->prev(), c ## a )+","+
-#define V_ALAST( a ) valueToSQL( flist->last(), c ## a )
+#define V_A0 value += valueToSQL( flist->first(), c0 );
+#define V_A( a ) value += ("," + valueToSQL( flist->next(), c ## a ));
+//#define V_ALAST( a ) valueToSQL( flist->last(), c ## a )
 
 #define C_INS_REC(args, vals) \
 	bool Connection::insertRecord(FieldList& fields args) \
 	{ \
+		QString value; \
 		Field::List *flist = fields.fields(); \
+		vals \
 		return drv_executeSQL( \
 			QString("INSERT INTO ") + \
 		((fields.fields()->first() && fields.fields()->first()->table()) ? fields.fields()->first()->table()->name() : "??") \
-		+ "(" + fields.sqlFieldsList() + ") VALUES (" + vals + ")" \
+		+ "(" + fields.sqlFieldsList() + ") VALUES (" + value + ")" \
 		); \
 	}
 
+C_INS_REC_ALL
+/*
 C_INS_REC( C_A(0), V_ALAST(0)  )
 C_INS_REC( C_A(0) C_A(1), V_A(0) V_ALAST(1) )
 C_INS_REC( C_A(0) C_A(1) C_A(2), V_A(0) V_A(1) V_ALAST(2) )
@@ -732,7 +740,7 @@ C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4), V_A(0) V_A(1) V_A(2) V_A(3) V_ALA
 C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5), V_A(0) V_A(1) V_A(2) V_A(3) V_A(4) V_ALAST(5) )
 C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6), V_A(0) V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_ALAST(6) )
 C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6) C_A(7), V_A(0) V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) V_ALAST(7) )
-
+*/
 #undef C_A
 #undef V_A
 #undef V_ALAST
@@ -944,6 +952,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 		f = fields->next();
 		order++;
 	}
+	delete fl;
 		
 	//store objects locally:
 	m_tables.insert(tableSchema->m_id, tableSchema);
