@@ -22,7 +22,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "koStore.h"
+#include <koStore.h>
 
 #include <qbuffer.h>
 #include <kdebug.h>
@@ -32,9 +32,10 @@
 #include <config.h>
 #endif
 
-#define ROOTPART "root"
-#define MAINNAME "maindoc.xml"
-
+namespace {
+  const char* const ROOTPART = "root";
+  const char* const MAINNAME = "maindoc.xml";
+}
 
 KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
@@ -358,30 +359,32 @@ QIODevice::Offset KoStore::size() const
 
 bool KoStore::enterDirectory( const QString& directory )
 {
-  if ( m_mode == Read ) {
-    if ( !m_currentDir ) {
-      m_currentDir = m_pTar->directory(); // initialize
-      Q_ASSERT( m_currentPath.isEmpty() );
-    }
-    const KArchiveEntry *entry = m_currentDir->entry( directory );
-    if ( entry && entry->isDirectory() ) {
-      m_currentPath.append( directory );
-      m_currentDir = dynamic_cast<const KArchiveDirectory*>( entry );
-      return m_currentDir != 0;
-    }
-    return false;
-  }
-  else { // Write, no checking here
-    m_currentPath.append( directory );
-    return true;
-  }
+  int pos;
+  bool success = true;
+  QString tmp( directory );
+
+  while ( ( pos = tmp.find( '/' ) ) != -1 &&
+          ( success = enterDirectoryInternal( tmp.left( pos ) ) ) )
+          tmp = tmp.mid( pos + 1 );
+
+  if ( success && !tmp.isEmpty() )
+    return enterDirectoryInternal( tmp );
+  return success;
 }
 
 bool KoStore::leaveDirectory()
 {
   if ( m_currentPath.isEmpty() )
     return false;
+
   m_currentPath.pop_back();
+
+  if ( m_currentPath.isEmpty() )
+    m_currentDir = 0;
+  else {
+    m_currentDir = dynamic_cast<const KArchiveDirectory*>( m_pTar->directory()->entry( expandEncodedDirectory( currentPath() ) ) );
+    Q_ASSERT( m_currentDir );
+  }
   return true;
 }
 
@@ -415,56 +418,65 @@ bool KoStore::atEnd() const
 // See the specification for details of what this function does.
 QString KoStore::toExternalNaming( const QString & _internalNaming )
 {
+  if ( _internalNaming == ROOTPART )
+    return expandEncodedDirectory( currentPath() ) + MAINNAME;
+
+  QString intern;
   if ( _internalNaming.startsWith( "tar:/" ) ) // absolute reference
-  {
-    QString intern( _internalNaming.mid( 5 ) ); // remove protocol
-    QString result( "" );
-    int pos;
-    while ( ( pos = intern.find( '/' ) ) != -1 ) {
-      if ( QChar(intern.at(0)).isDigit() )
-        result += "part";
-      result += intern.left( pos + 1 ); // copy numbers (or "pictures") + "/"
-      intern = intern.mid( pos + 1 ); // remove the dir we just processed
-    }
+    intern = _internalNaming.mid( 5 ); // remove protocol
+  else
+    intern = currentPath() + _internalNaming;
 
-    // Now process the filename. If the first character is numeric, we have
-    // a main document.
+  return expandEncodedPath( intern );
+}
+
+QString KoStore::expandEncodedPath( QString intern )
+{
+  QString result;
+  int pos;
+  while ( ( pos = intern.find( '/' ) ) != -1 ) {
     if ( QChar(intern.at(0)).isDigit() )
-    {
-      // If this is the first part name, check if we have a store with
-      // old-style names.
-      if ( ( m_namingVersion == NAMING_VERSION_2_2 ) &&
-           ( m_mode == Read ) &&
-           ( m_pTar->directory()->entry( result + "part" + intern + ".xml" ) ) )
-      {
-        m_namingVersion = NAMING_VERSION_2_1;
-      }
-      if ( m_namingVersion == NAMING_VERSION_2_1)
-      {
-        result = result + "part" + intern + ".xml";
-      }
-      else
-      {
-        result = result + "part" + intern + "/" + MAINNAME;
-      }
-    }
-    else
-    {
-      result += intern;
-    }
+      result += "part";
+    result += intern.left( pos + 1 ); // copy numbers (or "pictures") + "/"
+    intern = intern.mid( pos + 1 ); // remove the dir we just processed
+  }
 
-    return result;
-  }
-  else // relative reference
+  // Now process the filename. If the first character is numeric, we have
+  // a main document.
+  if ( QChar(intern.at(0)).isDigit() )
   {
-    kdDebug() << "++++++ internal name for '" << _internalNaming << "' is '"
-              << currentPath() + _internalNaming << "'" << endl;
-    // "root" is the main document, let's save it as current path + "maindoc.xml"
-    if (_internalNaming == ROOTPART)
-      return currentPath() + MAINNAME;
-    // else just prepend the path and be done with it
-    return currentPath() + _internalNaming;
+    // If this is the first part name, check if we have a store with
+    // old-style names.
+    if ( ( m_namingVersion == NAMING_VERSION_2_2 ) &&
+         ( m_mode == Read ) &&
+         ( m_pTar->directory()->entry( result + "part" + intern + ".xml" ) ) )
+      m_namingVersion = NAMING_VERSION_2_1;
+
+    if ( m_namingVersion == NAMING_VERSION_2_1 )
+      result = result + "part" + intern + ".xml";
+    else
+      result = result + "part" + intern + "/" + MAINNAME;
   }
+  else
+    result += intern;
+  return result;
+}
+
+QString KoStore::expandEncodedDirectory( QString intern )
+{
+  QString result;
+  int pos;
+  while ( ( pos = intern.find( '/' ) ) != -1 ) {
+    if ( QChar(intern.at(0)).isDigit() )
+      result += "part";
+    result += intern.left( pos + 1 ); // copy numbers (or "pictures") + "/"
+    intern = intern.mid( pos + 1 ); // remove the dir we just processed
+  }
+
+  if ( QChar(intern.at(0)).isDigit() )
+    result += "part";
+  result += intern;
+  return result;
 }
 
 void KoStore::init( Mode _mode )
@@ -482,4 +494,25 @@ void KoStore::init( Mode _mode )
 
   // Assume new style names.
   m_namingVersion = NAMING_VERSION_2_2;
+}
+
+bool KoStore::enterDirectoryInternal( const QString& directory )
+{
+  if ( m_mode == Read ) {
+    if ( !m_currentDir ) {
+      m_currentDir = m_pTar->directory(); // initialize
+      Q_ASSERT( m_currentPath.isEmpty() );
+    }
+    const KArchiveEntry *entry = m_currentDir->entry( expandEncodedDirectory( directory ) );
+    if ( entry && entry->isDirectory() ) {
+      m_currentPath.append( directory );
+      m_currentDir = dynamic_cast<const KArchiveDirectory*>( entry );
+      return m_currentDir != 0;
+    }
+    return false;
+  }
+  else { // Write, no checking here
+    m_currentPath.append( directory );
+    return true;
+  }
 }

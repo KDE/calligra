@@ -1,4 +1,6 @@
 
+SUBDIRS = . tests
+
 KDE_CXXFLAGS = $(USE_RTTI)
 lib_LTLIBRARIES = libkstore.la
 INCLUDES = $(all_includes)

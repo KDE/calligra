@@ -138,11 +138,13 @@ public:
   Mode mode() const { return m_mode; }
 
   /**
-   * Enters a directory. In Read mode this actually checks whether the
-   * specified directory exists and returns false if it doesn't. In
-   * Write mode we don't create the directory, we just use the "current
-   * directory" to generate the absolute path if you pass a relative
-   * path (one not starting with tar:/) when opening a stream.
+   * Enters one or multiple directories. In Read mode this actually
+   * checks whether the specified directories exist and returns false
+   * if they don't. In Write mode we don't create the directory, we
+   * just use the "current directory" to generate the absolute path
+   * if you pass a relative path (one not starting with tar:/) when
+   * opening a stream.
+   * Note: Operates on internal names
    */
   bool enterDirectory( const QString& directory );
 
@@ -154,8 +156,8 @@ public:
   bool leaveDirectory();
 
   /**
-   * Returns the current path (including "tar:/") including a
-   * trailing slash.
+   * Returns the current path including a trailing slash.
+   * Note: Returns a path in "internal name" style
    */
   QString currentPath() const;
 
@@ -182,6 +184,8 @@ private:
    * see specification (koffice/lib/store/SPEC) for details.
    */
   QString toExternalNaming( const QString & _internalNaming );
+  QString expandEncodedPath( QString intern );
+  QString expandEncodedDirectory( QString intern );
   enum
   {
       NAMING_VERSION_2_1,
@@ -189,6 +193,8 @@ private:
   } m_namingVersion;
 
   void init( Mode _mode );
+
+  bool enterDirectoryInternal( const QString& directory );
 
   Mode m_mode;
 
