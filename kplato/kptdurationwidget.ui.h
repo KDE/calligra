@@ -93,6 +93,10 @@ void KPTDurationWidget::setValue(const KPTDuration &newDuration)
     newDuration.get(&v[0], &v[1], &v[2], &v[3], &v[4]);
     for (i = 4; i >= 0; i--)
     {
+        if (m_fields[i].scale > 0 && m_fields[i].scale < m_fields[i].fullScale)
+        {
+            v[i] = (v[i] * m_fields[i].fullScale) / m_fields[i].scale;
+        }
         v[i] += t; // add overflow from prevoius field
         t = 0;
         if (m_fields[i].leftScale > 0)
@@ -118,7 +122,6 @@ KPTDuration KPTDurationWidget::value() const
         t = 0;
         if (m_fields[i].scale > 0 && m_fields[i].scale < m_fields[i].fullScale)
         {
-            
             t = (v[i] * m_fields[i].scale) % m_fields[i].fullScale; // this goes into next field
             v[i] = (v[i] * m_fields[i].scale) / m_fields[i].fullScale;
         }
