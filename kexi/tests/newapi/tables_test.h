@@ -73,6 +73,12 @@ int tablesTest()
 		return 1;
 	}
 
+	kdDebug() << "NOW, TABLE LIST: " << endl;
+	QStringList tnames = conn->tableNames();
+	for (QStringList::iterator it = tnames.begin(); it!=tnames.end(); ++it) {
+		kdDebug() << " - " << (*it) << endl;
+	}
+
 	return 0;
 }
 
