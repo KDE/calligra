@@ -2502,6 +2502,13 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                             m_doc->printStyleDebug();
                             keyev->accept();
                             break;
+                        case Key_M: // 'M' -> mark debug output
+                            {
+                                const QDateTime dtMark ( QDateTime::currentDateTime() );
+                                kdDebug(32002) << "Developer mark: " << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz") << endl;
+                                keyev->accept();
+                                break;
+                            }
                         default:
                             break;
                     };
