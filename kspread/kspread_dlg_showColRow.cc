@@ -45,9 +45,9 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
   list=new QListBox(this);
   lay1->addWidget( list );
   if(_type==Column)
-        setCaption( i18n("Column hidden number :") );
+        setCaption( i18n("Number of the hidden column :") );
   else if(_type==Row)
-        setCaption( i18n("Row hidden number :") );
+        setCaption( i18n("Number of the hidden row :") );
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
