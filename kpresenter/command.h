@@ -29,9 +29,8 @@
 class Command
 {
 public:
-    Command( QString _name );
-    virtual ~Command()
-    {; }
+    Command( QString _name ) : name( _name ) {}
+    virtual ~Command() {}
 
     virtual void execute() = 0;
     virtual void unexecute() = 0;
@@ -40,11 +39,9 @@ public:
     { return name; }
 
 protected:
-    Command() : name()
-    {; }
+    Command() {}
 
     QString name;
-
 };
 
 #endif
