@@ -897,8 +897,8 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
 #ifdef DEBUG_FLOW
             kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 #endif
-            // don't move down parags that are bigger than the page (e.g. floating tables)
-            if ( h < frameHeight )
+            // don't move down parags that have only one line and are bigger than the page (e.g. floating tables)
+            if ( h < frameHeight || ( parag && parag->lineStartList().count() > 1 ) )
             {
 
                 // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
