@@ -29,6 +29,8 @@
 class QPainter;
 class QSize;
 
+class KURL;
+
 class KoPictureShared;
 
 /**
@@ -91,7 +93,7 @@ public:
     void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
     bool load(QIODevice* io, const QString& extension);
-
+    
     /**
      * save file
      * @param io QIODevice used for saving
@@ -122,6 +124,11 @@ public:
      * Reset the KoPicture (but not the key!)
      */
     void clear(void);
+
+    /**
+     * Download a possibily remote file
+     */
+    bool download(const KURL& url);
 
     /**
      * Load the picture from a file named @p fileName

@@ -22,6 +22,8 @@
 #include <qfile.h>
 
 #include <kdebug.h>
+#include <kurl.h>
+#include <kio/netaccess.h>
 
 #include <qwmf.h>
 #include "koPictureKey.h"
@@ -343,7 +345,7 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
     QString ext(extension.lower());
     if (ext=="wmf")
         flag=loadWmf(io);
-    else if (ext=="tmp")
+    else if (ext=="tmp") // ### TODO: also remote scripts need this, don't they?
         flag=loadTmp(io);
     else
     {
@@ -357,6 +359,20 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
         kdError(30003) << "File was not loaded! (KoPictureShared::load)" << endl;
     }
     return flag;
+}
+
+bool KoPictureShared::download(const KURL& url)
+{
+    bool result=false;
+
+    QString tmpFileName;
+    if ( KIO::NetAccess::download(url, tmpFileName))
+    {
+        result=loadFromFile(tmpFileName);
+        KIO::NetAccess::removeTempFile(tmpFileName);
+    }
+
+    return result;
 }
 
 bool KoPictureShared::loadFromFile(const QString& fileName)

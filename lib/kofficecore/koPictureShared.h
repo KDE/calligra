@@ -30,6 +30,8 @@
 class QPainter;
 class QSize;
 
+class KURL;
+
 class KoPictureBase;
 
 /**
@@ -120,6 +122,11 @@ public:
      */
     void clear(void);
 
+    /**
+     * Download a possibily remote file
+     */
+    bool download(const KURL& url);
+    
     /*
      * Load a file
      *
