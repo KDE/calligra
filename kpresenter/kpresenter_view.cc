@@ -4798,6 +4798,10 @@ void KPresenterView::extraSpelling()
 {
     if (m_spell.kspell) return; // Already in progress
     m_spell.macroCmdSpellCheck=0L;
+#if KDE_VERSION >= 305
+    m_spell.replaceAll.clear();
+#endif
+
     m_pKPresenterDoc->setReadWrite(false); // prevent editing text
     m_spell.firstSpellPage=m_pKPresenterDoc->pageList().findRef(m_canvas->activePage());
     m_spell.currentSpellPage=m_spell.firstSpellPage;
@@ -4827,11 +4831,23 @@ void KPresenterView::spellAddTextObject()
     }
 }
 
+void KPresenterView::spellCheckerReplaceAll( const QString &orig, const QString & replacement)
+{
+    m_spell.replaceAll.append( orig);
+    m_spell.replaceAll.append( replacement);
+}
+
 void KPresenterView::startKSpell()
 {
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     if(m_pKPresenterDoc->getKSpellConfig())
+    {
         m_pKPresenterDoc->getKSpellConfig()->setIgnoreList(m_pKPresenterDoc->spellListIgnoreAll());
+#if KDE_VERSION >= 305
+        m_pKPresenterDoc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
+#endif
+
+    }
     m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_pKPresenterDoc->getKSpellConfig() );
 
 
@@ -4848,6 +4864,9 @@ void KPresenterView::startKSpell()
                       this, SLOT( spellCheckerDone( const QString & ) ) );
     QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
                       this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
+#if KDE_VERSION >= 305
+    QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
+#endif
 
 }
 
@@ -4994,6 +5013,10 @@ void KPresenterView::spellCheckerDone( const QString & )
     {
         m_pKPresenterDoc->setReadWrite(true);
         m_spell.textObject.clear();
+#if KDE_VERSION >= 305
+        m_spell.replaceAll.clear();
+#endif
+
         if(m_spell.macroCmdSpellCheck)
             m_pKPresenterDoc->addCommand(m_spell.macroCmdSpellCheck);
         m_spell.macroCmdSpellCheck=0L;
@@ -5031,6 +5054,9 @@ void KPresenterView::spellCheckerFinished()
     m_spell.macroCmdSpellCheck=0L;
 
     m_pKPresenterDoc->setReadWrite(true);
+#if KDE_VERSION >= 305
+    m_spell.replaceAll.clear();
+#endif
 
     KPTextView *edit=m_canvas->currentTextObjectView();
     if (edit)

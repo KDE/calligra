@@ -325,6 +325,7 @@ public slots:
     void spellCheckerFinished( );
     void spellCheckerIgnoreAll( const QString &);
     void startKSpell();
+    void spellCheckerReplaceAll( const QString &,  const QString &);
 
     void alignChanged( int );
 
@@ -953,6 +954,7 @@ private:
 	int spellCurrTextObjNum;
 	QPtrList<KPTextObject> textObject;
 	KMacroCommand * macroCmdSpellCheck;
+        QStringList replaceAll;
      } m_spell;
 
     KActionMenu *actionInsertVariable;
