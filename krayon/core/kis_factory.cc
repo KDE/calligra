@@ -21,7 +21,7 @@
 #include <kinstance.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kiconloader.h>
 
 #include "kis_factory.h"

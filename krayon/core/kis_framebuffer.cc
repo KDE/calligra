@@ -43,7 +43,7 @@
 #include <qcolor.h>
 #include <qclipboard.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 
 #include "kis_doc.h"

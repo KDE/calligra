@@ -22,7 +22,7 @@
 #include <qpainter.h>
 #include <qcolor.h>
 #include <qclipboard.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 
 #include "kis_doc.h"
@@ -151,7 +151,7 @@ bool KisSelection::erase()
                 lay->setPixel(1, x, y, green);
                 lay->setPixel(2, x, y, blue);
             }
-            
+
         }
     }
 

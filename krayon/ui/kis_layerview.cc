@@ -34,7 +34,7 @@
 #include <qtooltip.h>
 #include <qstyle.h>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <iostream>
 #include <klocale.h>
 #include <knuminput.h>

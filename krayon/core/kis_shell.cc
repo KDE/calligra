@@ -21,7 +21,7 @@
 #include "kis_shell.h"  // #define problem, don't move
 #include <kglobal.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>

@@ -35,7 +35,7 @@
 #include <qpopupmenu.h>
 #include <qstyle.h>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>

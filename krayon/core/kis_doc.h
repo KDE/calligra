@@ -23,7 +23,7 @@
 #define __kis_doc_h__
 
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 
 #include <koDocument.h>

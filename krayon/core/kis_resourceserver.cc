@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kinstance.h>
 
 #include "kis_factory.h"
@@ -48,7 +48,7 @@ KisTimer::start();
     QString format, file;
 
     // find brushes
-    for ( QStringList::Iterator it = formats.begin(); 
+    for ( QStringList::Iterator it = formats.begin();
     it != formats.end(); ++it )
     {
       format = *it;
@@ -65,7 +65,7 @@ KisTimer::start();
     // reset vars
     lst.clear();
     format = file = "";
-  
+
     // find pattern
     for ( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
     {
@@ -79,8 +79,8 @@ KisTimer::start();
       file = *it;
       (void) loadPattern( file );
     }
-    
-KisTimer::stop("KisResourceServer()");    
+
+KisTimer::stop("KisResourceServer()");
 
 }
 
@@ -96,7 +96,7 @@ const KisBrush * KisResourceServer::loadBrush( const QString& filename )
 
     if ( brush->isValid() )
         m_brushes.append(brush);
-    else 
+    else
     {
         delete brush;
         brush = 0L;
@@ -111,7 +111,7 @@ const KisPattern * KisResourceServer::loadPattern( const QString& filename )
 
     if ( pattern->isValid() )
         m_patterns.append(pattern);
-    else 
+    else
     {
         delete pattern;
         pattern = 0L;

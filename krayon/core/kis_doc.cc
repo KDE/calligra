@@ -38,7 +38,7 @@
 #include <qbuffer.h>
 #include <qimage.h>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kmimetype.h>
 #include <kimageio.h>

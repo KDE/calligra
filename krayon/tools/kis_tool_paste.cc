@@ -21,7 +21,7 @@
 #include <qcolor.h>
 #include <qclipboard.h>
 #include <qpainter.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 
 

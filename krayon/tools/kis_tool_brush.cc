@@ -21,7 +21,7 @@
 #include <qcolor.h>
 #include <qbitmap.h>
 #include <kdebug.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 
 #include "kis_brush.h"

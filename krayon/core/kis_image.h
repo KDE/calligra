@@ -22,7 +22,7 @@
 #ifndef __kis_image_h__
 #define __kis_image_h__
 
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qimage.h>
 #include <qptrlist.h>
 #include <qobject.h>
@@ -136,7 +136,7 @@ class KisImage : public QObject
     int          m_height;
     cMode        m_cMode;
     uchar        m_bitDepth;
-    QArray<bool> m_dirty;
+    QMemArray<bool> m_dirty;
     QTimer      *m_pUpdateTimer;
 };
 

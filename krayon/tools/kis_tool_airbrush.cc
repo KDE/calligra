@@ -18,7 +18,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 
 #include "kis_brush.h"

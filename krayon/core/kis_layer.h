@@ -23,7 +23,7 @@
 
 #include <qimage.h>
 #include <qobject.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "kis_global.h"
 #include "kis_channel.h"

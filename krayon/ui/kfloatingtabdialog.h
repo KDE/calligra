@@ -25,7 +25,7 @@
 
 #include "kfloatingdialog.h"
 #include <qtabbar.h>
-#include <qarray.h>
+#include <qmemarray.h>
 
 class KFloatingTabDialog : public KFloatingDialog
 {
@@ -59,6 +59,6 @@ class KFloatingTabDialog : public KFloatingDialog
  QRect getChildRect();
 
  QTabBar * tabs;
- QArray<QWidget *> pages;
+ QMemArray<QWidget *> pages;
 };
 #endif

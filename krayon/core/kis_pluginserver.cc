@@ -31,7 +31,7 @@
 #include <ksimpleconfig.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kinstance.h>
 #include <kdebug.h>
 

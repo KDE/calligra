@@ -29,8 +29,8 @@
 #include <qregexp.h>
 #include <qfileinfo.h>
 
-#include <kapp.h>
-#include <kstddirs.h>
+#include <kapplication.h>
+#include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kmimetype.h>
 #include <kdebug.h>

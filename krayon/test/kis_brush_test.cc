@@ -18,7 +18,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <qapp.h>
+#include <qapplication.h>
 #include <qwidget.h>
 #include <qimage.h>
 #include <qpainter.h>
@@ -77,7 +77,7 @@ int main( int argc, char **argv )
   QApplication a( argc, argv );
 
   BrushWidget w (argv[1]);
-  
+
   a.setMainWidget( &w );
   w.show();
 
