@@ -550,7 +550,7 @@ void KSpreadUndoDelete::undo()
     KSpreadTable* table = doc()->map()->findTable( m_tableName );
     if ( !table )
 	return;
-    
+
     doc()->undoBuffer()->lock();
 
     table->paste( m_data, m_selection.topLeft() );
@@ -567,7 +567,12 @@ void KSpreadUndoDelete::redo()
     if ( !table )
 	return;
 
-    table->deleteCells( m_selection );
+    //move next line to refreshView
+    //because I must know what is the real rect
+    //that I must refresh, when there is cell Merged
+
+
+    //table->deleteCells( m_selection );
     table->refreshView( m_selection );
     doc()->undoBuffer()->unlock();
 }

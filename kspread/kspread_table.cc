@@ -653,7 +653,8 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
         for( ; c; c = c->nextCell() )
         {
             int row = c->row();
-            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+            &&!c->isObscuringForced())
             {
                 c->setDisplayDirtyFlag();
                 if ( _font )
@@ -682,7 +683,8 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
         for( ; c; c = c->nextCell() )
         {
             int col = c->column();
-            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+            &&!c->isObscuringForced())
             {
                 c->setDisplayDirtyFlag();
                 if ( _font )
@@ -721,12 +723,13 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
               KSpreadCell *cell = cellAt( x, y );
-
-              if ( cell == m_pDefaultCell )
+              if(!cell->isObscuringForced())
               {
+               if ( cell == m_pDefaultCell )
+               {
                   cell = new KSpreadCell( this, x, y );
                   m_cells.insert( cell, x, y );
-              }
+               }
 
               cell->setDisplayDirtyFlag();
 
@@ -743,6 +746,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
               if ( _strike >= 0 )
                   cell->setTextFontStrike( (bool)_strike );
               cell->clearDisplayDirtyFlag();
+              }
             }
 
         emit sig_updateView( this, r );
@@ -762,7 +766,8 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker, int _size )
         for( ; c; c = c->nextCell() )
         {
             int row = c->row();
-            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+            if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+            &&!c->isObscuringForced())
             {
                 c->setDisplayDirtyFlag();
                 c->setTextFontSize( ( c->textFontSize( _marker.x(), _marker.y() ) + _size ) );
@@ -780,7 +785,8 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker, int _size )
         for( ; c; c = c->nextCell() )
         {
             int col = c->column();
-            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+            if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+            &&!c->isObscuringForced())
             {
                 c->setDisplayDirtyFlag();
                 c->setTextFontSize( ( c->textFontSize( _marker.x(), _marker.y() ) + _size ) );
@@ -808,16 +814,18 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker, int _size )
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
               KSpreadCell *cell = cellAt( x, y );
-
-              if ( cell == m_pDefaultCell )
+              if(!cell->isObscuringForced())
               {
+               if ( cell == m_pDefaultCell )
+               {
                 cell = new KSpreadCell( this, x, y );
                 m_cells.insert( cell, x, y );
-              }
+               }
 
               cell->setDisplayDirtyFlag();
               cell->setTextFontSize( (cell->textFontSize( _marker.x(), _marker.y() ) + _size) );
               cell->clearDisplayDirtyFlag();
+              }
             }
 
         emit sig_updateView( this, r );
@@ -840,7 +848,8 @@ void KSpreadTable::setSelectionUpperLower( const QPoint &_marker,int _type )
             if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
             {
                 if( !c->isValue() && !c->isBool() &&!c->isFormular() && !c->isDefault()&&
-                    !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!' )
+                    !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
+                    &&!c->isObscuringForced())
                 {
                     c->setDisplayDirtyFlag();
                     if( _type == -1 )
@@ -865,7 +874,7 @@ void KSpreadTable::setSelectionUpperLower( const QPoint &_marker,int _type )
             if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
             {
                 if( !c->isValue() && !c->isBool() &&!c->isFormular() && !c->isDefault() && !c->text().isEmpty() &&
-                    c->text()[0] != '*' && c->text()[0] != '!' )
+                    c->text()[0] != '*' && c->text()[0] != '!' &&!c->isObscuringForced())
                 {
                     c->setDisplayDirtyFlag();
                     if(_type==-1)
@@ -892,13 +901,15 @@ void KSpreadTable::setSelectionUpperLower( const QPoint &_marker,int _type )
               KSpreadCell *cell = cellAt( x, y );
               if(!cell->isValue() && !cell->isBool() &&!cell->isFormular() &&!cell->isDefault()&&!cell->text().isEmpty()&&(cell->text().find('*')!=0)&&(cell->text().find('!')!=0))
                 {
-
+                if(!cell->isObscuringForced())
+                {
                 cell->setDisplayDirtyFlag();
                 if(_type==-1)
                         cell->setCellText( (cell->text().lower()));
                 else if(_type==1)
                         cell->setCellText( (cell->text().upper()));
                 cell->clearDisplayDirtyFlag();
+                }
                 }
             }
 
@@ -922,7 +933,8 @@ void KSpreadTable::setSelectionfirstLetterUpper( const QPoint &_marker)
             if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
             {
                 if( !c->isValue() && !c->isBool() && !c->isFormular() && !c->isDefault() &&
-                    !c->text().isEmpty() && c->text()[0] != '*'  && c->text()[0] != '!' )
+                    !c->text().isEmpty() && c->text()[0] != '*'  && c->text()[0] != '!'
+                    &&!c->isObscuringForced())
                 {
                     c->setDisplayDirtyFlag();
                     QString tmp=c->text();
@@ -946,14 +958,16 @@ void KSpreadTable::setSelectionfirstLetterUpper( const QPoint &_marker)
             if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
             {
                 if( !c->isValue() && !c->isBool() && !c->isFormular() && !c->isDefault() &&
-                    !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!' )
+                    !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
+                    &&!c->isObscuringForced())
                 {
                     c->setDisplayDirtyFlag();
                     QString tmp=c->text();
                     int len=tmp.length();
                     c->setCellText( (tmp.at(0).upper()+tmp.right(len-1)));
                     c->clearDisplayDirtyFlag();
-                }               }
+                }
+            }
         }
 
         emit sig_updateView( this, m_rctSelection );
@@ -969,7 +983,8 @@ void KSpreadTable::setSelectionfirstLetterUpper( const QPoint &_marker)
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
               KSpreadCell *cell = cellAt( x, y );
-              if(!cell->isValue() && !cell->isBool() &&!cell->isFormular() &&!cell->isDefault()&&!cell->text().isEmpty()&&(cell->text().find('*')!=0)&&(cell->text().find('!')!=0))
+              if(!cell->isValue() && !cell->isBool() &&!cell->isFormular() &&!cell->isDefault()&&!cell->text().isEmpty()&&(cell->text().find('*')!=0)&&(cell->text().find('!')!=0)
+              &&!cell->isObscuringForced())
                 {
 
                 cell->setDisplayDirtyFlag();
@@ -997,7 +1012,8 @@ void KSpreadTable::setSelectionVerticalText( const QPoint &_marker,bool _b)
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
                 c->setDisplayDirtyFlag();
                 c->setVerticalText(_b);
@@ -1017,7 +1033,8 @@ void KSpreadTable::setSelectionVerticalText( const QPoint &_marker,bool _b)
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
                 c->setDisplayDirtyFlag();
                 c->setVerticalText(_b);
@@ -1048,16 +1065,20 @@ void KSpreadTable::setSelectionVerticalText( const QPoint &_marker,bool _b)
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
                 KSpreadCell *cell = cellAt( x, y );
-                if ( cell == m_pDefaultCell )
+                if(!cell->isObscuringForced())
                 {
+                 if ( cell == m_pDefaultCell )
+                 {
                     cell = new KSpreadCell( this, x, y );
                     m_cells.insert( cell, x, y );
-                }
+                 }
+
                 cell->setDisplayDirtyFlag();
                 cell->setVerticalText(_b);
                 cell->setMultiRow( false );
                 cell->setAngle(0);
                 cell->clearDisplayDirtyFlag();
+                }
 
             }
 
@@ -1078,7 +1099,8 @@ void KSpreadTable::setSelectionComment( const QPoint &_marker,QString _comment)
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
                 c->setDisplayDirtyFlag();
                 c->setComment(_comment);
@@ -1096,7 +1118,8 @@ void KSpreadTable::setSelectionComment( const QPoint &_marker,QString _comment)
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
                 c->setDisplayDirtyFlag();
                 c->setComment(_comment);
@@ -1125,15 +1148,18 @@ void KSpreadTable::setSelectionComment( const QPoint &_marker,QString _comment)
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
               KSpreadCell *cell = cellAt( x, y );
-              if ( cell == m_pDefaultCell )
+              if(!cell->isObscuringForced())
+               {
+               if ( cell == m_pDefaultCell )
                 {
                 cell = new KSpreadCell( this, x, y );
                 m_cells.insert( cell, x, y );
                 }
+
                cell->setDisplayDirtyFlag();
                cell->setComment(_comment);
                cell->clearDisplayDirtyFlag();
-
+               }
             }
 
         emit sig_updateView( this, r );
@@ -1153,7 +1179,8 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
                 c->setDisplayDirtyFlag();
                 c->setAngle(_value);
@@ -1173,7 +1200,8 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
                 c->setDisplayDirtyFlag();
                 c->setAngle(_value);
@@ -1204,16 +1232,20 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
               KSpreadCell *cell = cellAt( x, y );
-              if ( cell == m_pDefaultCell )
+              if(!cell->isObscuringForced())
+               {
+               if ( cell == m_pDefaultCell )
                 {
                 cell = new KSpreadCell( this, x, y );
                 m_cells.insert( cell, x, y );
                 }
+
                cell->setDisplayDirtyFlag();
                cell->setAngle(_value);
                cell->setVerticalText(false);
                cell->setMultiRow( false );
                cell->clearDisplayDirtyFlag();
+               }
             }
         emit sig_updateView( this, r );
     }
@@ -1233,7 +1265,8 @@ void KSpreadTable::setSelectionRemoveComment( const QPoint &_marker)
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
                 c->setDisplayDirtyFlag();
                 c->setComment("");
@@ -1251,7 +1284,8 @@ void KSpreadTable::setSelectionRemoveComment( const QPoint &_marker)
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
                 c->setDisplayDirtyFlag();
                 c->setComment("");
@@ -1280,12 +1314,16 @@ void KSpreadTable::setSelectionRemoveComment( const QPoint &_marker)
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
               KSpreadCell *cell = cellAt( x, y );
-              if ( cell != m_pDefaultCell )
+              if(!cell->isObscuringForced())
+              {
+                if ( cell != m_pDefaultCell )
                 {
-                cell->setDisplayDirtyFlag();
-                cell->setComment("");
-                cell->clearDisplayDirtyFlag();
+
+                        cell->setDisplayDirtyFlag();
+                        cell->setComment("");
+                        cell->clearDisplayDirtyFlag();
                 }
+              }
 
 
             }
@@ -1308,7 +1346,8 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &t
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           c->setTextColor(tb_Color);
@@ -1326,7 +1365,8 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &t
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           c->setTextColor(tb_Color);
@@ -1355,7 +1395,8 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &t
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
                 KSpreadCell *cell = cellAt( x, y );
-
+                if(!cell->isObscuringForced())
+                {
                 if ( cell == m_pDefaultCell )
                 {
                     cell = new KSpreadCell( this, x, y );
@@ -1365,6 +1406,7 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &t
                 cell->setDisplayDirtyFlag();
                 cell-> setTextColor(tb_Color);
                 cell->clearDisplayDirtyFlag();
+                }
             }
 
         emit sig_updateView( this, r );
@@ -1384,7 +1426,8 @@ m_pDoc->setModified( true );
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           c->setBgColor(bg_Color);
@@ -1402,7 +1445,8 @@ m_pDoc->setModified( true );
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           c->setBgColor(bg_Color);
@@ -1431,7 +1475,8 @@ m_pDoc->setModified( true );
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
                 KSpreadCell *cell = cellAt( x, y );
-
+                if(!cell->isObscuringForced())
+                {
                 if ( cell == m_pDefaultCell )
                 {
                     cell = new KSpreadCell( this, x, y );
@@ -1441,6 +1486,7 @@ m_pDoc->setModified( true );
                 cell->setDisplayDirtyFlag();
                 cell-> setBgColor(bg_Color);
                 cell->clearDisplayDirtyFlag();
+                }
             }
 
         emit sig_updateView( this, r );
@@ -1458,11 +1504,13 @@ void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, const QColor 
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           int it_Row=c->row();
-          int it_Col=c->column();                         if(c->topBorderStyle(it_Row,it_Col)!=Qt::NoPen )
+          int it_Col=c->column();
+          if(c->topBorderStyle(it_Row,it_Col)!=Qt::NoPen )
                 c->setTopBorderColor( bd_Color );
           if(c->leftBorderStyle(it_Row,it_Col)!=Qt::NoPen)
                 c->setLeftBorderColor(bd_Color);
@@ -1489,7 +1537,8 @@ void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, const QColor 
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           int it_Row=c->row();
@@ -1532,7 +1581,7 @@ void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, const QColor 
             {
                 KSpreadCell *cell = cellAt( x, y );
 
-                if ( cell != m_pDefaultCell )
+                if ( cell != m_pDefaultCell &&!cell->isObscuringForced())
                 {
                         cell->setDisplayDirtyFlag();
                         if(cell->topBorderStyle(x,y)!=Qt::NoPen )
@@ -1611,7 +1660,8 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           if(!b)
@@ -1641,7 +1691,8 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           if(!b)
@@ -1680,12 +1731,13 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
                 KSpreadCell *cell = cellAt( x, y );
-
-                if ( cell == m_pDefaultCell )
+                if(!cell->isObscuringForced())
                 {
+                 if ( cell == m_pDefaultCell )
+                 {
                     cell = new KSpreadCell( this, x, y );
                     m_cells.insert( cell, x, y );
-                }
+                 }
 
                 cell->setDisplayDirtyFlag();
 
@@ -1702,6 +1754,7 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
                         cell->setFormatNumber(KSpreadCell::Percentage);
                         }
                 cell->clearDisplayDirtyFlag();
+                }
             }
 
         emit sig_updateView( this, r );
@@ -2220,6 +2273,8 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
     {
         int y = r.bottom();
         KSpreadCell *cell = cellAt( x, y );
+        if(!cell->isObscuringForced())
+        {
         if ( cell == m_pDefaultCell )
         {
             cell = new KSpreadCell( this, x, y );
@@ -2228,6 +2283,7 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
         cell->setBottomBorderStyle( SolidLine );
         cell->setBottomBorderColor( _color );
         cell->setBottomBorderWidth( 2 );
+        }
     }
     emit sig_updateView( this, r );
 }
@@ -2249,10 +2305,12 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
     {
         int x = r.right();
         KSpreadCell *cell = nonDefaultCell( x, y );
-
+        if(!cell->isObscuringForced())
+        {
         cell->setRightBorderStyle( SolidLine );
         cell->setRightBorderColor( _color );
         cell->setRightBorderWidth( 2 );
+        }
     }
 
     emit sig_updateView( this, r );
@@ -2274,10 +2332,12 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
     {
         int x = r.left();
         KSpreadCell *cell = nonDefaultCell( x, y );
-
+        if(!cell->isObscuringForced())
+        {
         cell->setLeftBorderStyle( SolidLine );
         cell->setLeftBorderColor( _color );
         cell->setLeftBorderWidth( 2 );
+        }
     }
     emit sig_updateView( this, r );
 }
@@ -2297,6 +2357,8 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
     {
         int y = r.top();
         KSpreadCell *cell = cellAt( x, y );
+        if(!cell->isObscuringForced())
+        {
         if ( cell == m_pDefaultCell )
         {
             cell = new KSpreadCell( this, x, y );
@@ -2305,6 +2367,7 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
         cell->setTopBorderStyle( SolidLine );
         cell->setTopBorderColor( _color );
         cell->setTopBorderWidth( 2 );
+        }
     }
     emit sig_updateView( this, r );
 }
@@ -2324,35 +2387,46 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
     {
         int y = r.top();
         KSpreadCell *cell = cellAt( x, y );
-        if ( cell == m_pDefaultCell )
+        if(!cell->isObscuringForced())
         {
+         if ( cell == m_pDefaultCell )
+         {
             cell = new KSpreadCell( this, x, y );
             m_cells.insert( cell, x, y );
+         }
+         cell->setTopBorderStyle( SolidLine );
+         cell->setTopBorderColor( _color );
+         cell->setTopBorderWidth( 2 );
         }
-        cell->setTopBorderStyle( SolidLine );
-        cell->setTopBorderColor( _color );
-        cell->setTopBorderWidth( 2 );
     }
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
         int x = r.left();
         KSpreadCell *cell = nonDefaultCell( x, y );
+        if(!cell->isObscuringForced())
+        {
         cell->setLeftBorderStyle( SolidLine );
         cell->setLeftBorderColor( _color );
         cell->setLeftBorderWidth( 2 );
+        }
     }
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
         int x = r.right();
         KSpreadCell *cell = nonDefaultCell( x, y );
+        if(!cell->isObscuringForced())
+        {
         cell->setRightBorderStyle( SolidLine );
         cell->setRightBorderColor( _color );
         cell->setRightBorderWidth( 2 );
+        }
     }
     for ( int x = r.left(); x <= r.right(); x++ )
     {
         int y = r.bottom();
         KSpreadCell *cell = cellAt( x, y );
+        if(!cell->isObscuringForced())
+        {
         if ( cell == m_pDefaultCell )
         {
             cell = new KSpreadCell( this, x, y );
@@ -2361,6 +2435,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
         cell->setBottomBorderStyle( SolidLine );
         cell->setBottomBorderColor( _color );
         cell->setBottomBorderWidth( 2 );
+        }
     }
 
     emit sig_updateView( this, r );
@@ -2385,23 +2460,26 @@ void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
         for(int y=r.top();y<=r.bottom();y++)
         {
             KSpreadCell *cell = cellAt( x, y );
-            if ( cell == m_pDefaultCell )
+            if(!cell->isObscuringForced())
             {
+             if ( cell == m_pDefaultCell )
+             {
                 cell = new KSpreadCell( this, x, y );
                 m_cells.insert( cell, x, y );
-            }
-            cell->setBottomBorderStyle( SolidLine );
-            cell->setBottomBorderColor( _color );
-            cell->setBottomBorderWidth( 2 );
-            cell->setRightBorderStyle( SolidLine );
-            cell->setRightBorderColor( _color );
-            cell->setRightBorderWidth( 2 );
-            cell->setLeftBorderStyle( SolidLine );
-            cell->setLeftBorderColor( _color );
-            cell->setLeftBorderWidth( 2 );
-            cell->setTopBorderStyle( SolidLine );
-            cell->setTopBorderColor( _color );
-            cell->setTopBorderWidth( 2 );
+             }
+             cell->setBottomBorderStyle( SolidLine );
+             cell->setBottomBorderColor( _color );
+             cell->setBottomBorderWidth( 2 );
+             cell->setRightBorderStyle( SolidLine );
+             cell->setRightBorderColor( _color );
+             cell->setRightBorderWidth( 2 );
+             cell->setLeftBorderStyle( SolidLine );
+             cell->setLeftBorderColor( _color );
+             cell->setLeftBorderWidth( 2 );
+             cell->setTopBorderStyle( SolidLine );
+             cell->setTopBorderColor( _color );
+             cell->setTopBorderWidth( 2 );
+             }
         }
     }
     emit sig_updateView( this, r );
@@ -2425,24 +2503,27 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
         for(int y = r.top();y <= r.bottom(); y++ )
         {
             KSpreadCell *cell = cellAt( x, y );
-            cell->setBottomBorderStyle( NoPen );
-            cell->setBottomBorderColor( black );
-            cell->setBottomBorderWidth( 1 );
-            cell->setRightBorderStyle( NoPen );
-            cell->setRightBorderColor( black );
-            cell->setRightBorderWidth( 1 );
-            cell->setLeftBorderStyle( NoPen );
-            cell->setLeftBorderColor( black );
-            cell->setLeftBorderWidth( 1 );
-            cell->setTopBorderStyle( NoPen );
-            cell->setTopBorderColor( black );
-            cell->setTopBorderWidth( 1 );
-            cell->setFallDiagonalStyle( NoPen );
-            cell->setFallDiagonalColor( black );
-            cell->setFallDiagonalWidth( 1 );
-            cell->setGoUpDiagonalStyle( NoPen );
-            cell->setGoUpDiagonalColor( black );
-            cell->setGoUpDiagonalWidth( 1 );
+            if(!cell->isObscuringForced())
+            {
+             cell->setBottomBorderStyle( NoPen );
+             cell->setBottomBorderColor( black );
+             cell->setBottomBorderWidth( 1 );
+             cell->setRightBorderStyle( NoPen );
+             cell->setRightBorderColor( black );
+             cell->setRightBorderWidth( 1 );
+             cell->setLeftBorderStyle( NoPen );
+             cell->setLeftBorderColor( black );
+             cell->setLeftBorderWidth( 1 );
+             cell->setTopBorderStyle( NoPen );
+             cell->setTopBorderColor( black );
+             cell->setTopBorderWidth( 1 );
+             cell->setFallDiagonalStyle( NoPen );
+             cell->setFallDiagonalColor( black );
+             cell->setFallDiagonalWidth( 1 );
+             cell->setGoUpDiagonalStyle( NoPen );
+             cell->setGoUpDiagonalColor( black );
+             cell->setGoUpDiagonalWidth( 1 );
+            }
         }
 
     }
@@ -2661,7 +2742,8 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           c->setMultiRow( enable );
@@ -2681,7 +2763,8 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           c->setMultiRow( enable );
@@ -2711,18 +2794,20 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
                 KSpreadCell *cell = cellAt( x, y );
-
-                if ( cell == m_pDefaultCell )
+                if(!cell->isObscuringForced())
                 {
+                 if ( cell == m_pDefaultCell )
+                 {
                     cell = new KSpreadCell( this, x, y );
                     m_cells.insert( cell, x, y );
-                }
+                 }
 
                 cell->setDisplayDirtyFlag();
                 cell->setMultiRow( enable );
                 cell->setVerticalText( false );
                 cell->setAngle(0);
                 cell->clearDisplayDirtyFlag();
+                }
             }
 
         emit sig_updateView( this, r );
@@ -2742,7 +2827,8 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           c->setAlign( _align );
@@ -2760,7 +2846,8 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           c->setAlign( _align );
@@ -2788,16 +2875,18 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
                 KSpreadCell *cell = cellAt( x, y );
-
-                if ( cell == m_pDefaultCell )
+                if(!cell->isObscuringForced())
                 {
+                 if ( cell == m_pDefaultCell )
+                 {
                     cell = new KSpreadCell( this, x, y );
                     m_cells.insert( cell, x, y );
-                }
+                 }
 
                 cell->setDisplayDirtyFlag();
                 cell->setAlign( _align );
                 cell->clearDisplayDirtyFlag();
+                }
             }
 
         emit sig_updateView( this, r );
@@ -2817,7 +2906,8 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           c->setAlignY( _alignY );
@@ -2835,7 +2925,8 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           c->setAlignY( _alignY );
@@ -2863,16 +2954,18 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
                 KSpreadCell *cell = cellAt( x, y );
-
-                if ( cell == m_pDefaultCell )
+                if(!cell->isObscuringForced())
                 {
+                 if ( cell == m_pDefaultCell )
+                 {
                     cell = new KSpreadCell( this, x, y );
                     m_cells.insert( cell, x, y );
-                }
+                 }
 
                 cell->setDisplayDirtyFlag();
                 cell->setAlignY( _alignY );
                 cell->clearDisplayDirtyFlag();
+                }
             }
 
         emit sig_updateView( this, r );
@@ -2893,7 +2986,8 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           if ( _delta == 1 )
@@ -2914,7 +3008,8 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           if ( _delta == 1 )
@@ -2945,12 +3040,13 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
                 KSpreadCell *cell = cellAt( x, y );
-
-                if ( cell == m_pDefaultCell )
+                if(!cell->isObscuringForced())
                 {
+                 if ( cell == m_pDefaultCell )
+                 {
                     cell = new KSpreadCell( this, x, y );
                     m_cells.insert( cell, x, y );
-                }
+                 }
 
                 cell->setDisplayDirtyFlag();
 
@@ -2960,6 +3056,7 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
                   cell->decPrecision();
 
                 cell->clearDisplayDirtyFlag();
+                }
             }
 
         emit sig_updateView( this, r );
@@ -2977,7 +3074,8 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           if(b)
@@ -3006,7 +3104,8 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        &&!c->isObscuringForced())
         {
           c->setDisplayDirtyFlag();
           if(b)
@@ -3045,12 +3144,15 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
             for ( int y = r.top(); y <= r.bottom(); y++ )
             {
                 KSpreadCell *cell = cellAt( x, y );
-
-                if ( cell == m_pDefaultCell )
+                if(!cell->isObscuringForced())
                 {
+
+                 if ( cell == m_pDefaultCell )
+                 {
                     cell = new KSpreadCell( this, x, y );
                     m_cells.insert( cell, x, y );
-                }
+                 }
+
 
                 cell->setDisplayDirtyFlag();
                 if(b)
@@ -3066,6 +3168,7 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
                         cell->setPrecision( 0 );
                         }
                 cell->clearDisplayDirtyFlag();
+                }
                 }
 
         emit sig_updateView( this, r );
@@ -3720,7 +3823,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
         cell->updateChart();
         }
     m_pDoc->setModified( true );
-
+    refreshMergedCell();
     emit sig_updateView( this );
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );
@@ -3818,7 +3921,24 @@ void KSpreadTable::deleteSelection( const QPoint& _marker )
 
 void KSpreadTable::refreshView(const QRect& rect)
 {
-    emit sig_updateView( this, rect );
+    QRect tmp(rect);
+    KSpreadCell* c = m_cells.firstCell();
+    for( ;c; c = c->nextCell() )
+    {
+        if ( !c->isDefault() && c->row() >= rect.top() &&
+             c->row() <= rect.bottom() && c->column() >= rect.left() &&
+             c->column() <= rect.right() )
+                if(c->isForceExtraCells())
+                {
+                int right=QMAX(tmp.right(),c->column()+c->extraXCells());
+                int bottom=QMAX(tmp.bottom(),c->row()+c->extraYCells());
+
+                tmp.setRight(right);
+                tmp.setBottom(bottom);
+                }
+    }
+    deleteCells( rect );
+    emit sig_updateView( this, tmp );
 }
 void KSpreadTable::mergeCell( const QPoint &_marker)
 {
