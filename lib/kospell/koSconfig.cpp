@@ -476,6 +476,7 @@ void KOSpellConfig::fillInDialog ()
     cbDontCheckTitleCase->setChecked(dontCheckTitleCase());
 
     encodingcombo->setCurrentItem (encoding());
+    clientcombo->setCurrentItem( client() );
 
     // get list of available dictionaries
     // get list of available dictionaries
