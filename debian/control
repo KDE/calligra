@@ -9,13 +9,34 @@ Package: koffice
 Architecture: any
 Section: x11
 Depends: koffice-libs, kchart, kformula, kontour, kivio, koshell, kpresenter, kspread, kugar, kword
-Suggests: koffice-dev
+Suggests: koffice-dev, koffice-doc-html
 Description: KDE Office Suite
  KOffice is an integrated office suite for KDE, the K Desktop
  Environment.  It offers a word processor, spreadsheet, presentation
  program, graphics tools and more.
  .
  This package provides all the components of KOffice.
+
+Package: koffice-doc-html
+Architecture: all
+Section: doc
+Suggests: www-browser, koffice
+Conflicts: kugar (<< 1:1.1.0-0)
+Description: KDE Office Suite documentation in HTML format
+ KOffice is an integrated office suite for KDE, the K Desktop
+ Environment.  It offers a word processor, spreadsheet, presentation
+ program, graphics tools and more.
+ .
+ By default the KOffice applications only provide their documentation in
+ KDE docbook format, which can only be read by Konqueror or KHelpCenter.
+ This package provides all of the KOffice documentation converted to HTML
+ format so it can be read with any web browser.
+ .
+ The documentation will be installed into the usual directories
+ /usr/share/doc/kde/HTML/<language>/<app>/, for instance
+ /usr/share/doc/kde/HTML/en/kword/.
+ .
+ This package is part of the KDE Office Suite.
 
 Package: kchart
 Architecture: any
@@ -69,7 +90,7 @@ Section: graphics
 Replaces: koffice-common, killustrator (<= 1:1.1-beta3-3)
 Provides: killustrator
 Depends: ${shlibs:Depends}
-Suggests: kdebase
+Suggests: kdebase, konqueror, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1.0-0), killustrator (<= 1:1.1-beta3-3)
 Description: a vector graphics tool for the KDE Office Suite
  Kontour is a vector graphics application.  This application was formerly
@@ -83,7 +104,7 @@ Section: x11
 Replaces: koffice-libs (<< 2.0.1-0)
 Depends: ${shlibs:Depends}
 Recommends: koffice
-Suggests: kdebase
+Suggests: kdebase, konqueror, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: the KDE Office Suite workspace
  The KOffice workspace is a desktop with easy one-click launchers for
@@ -96,7 +117,7 @@ Architecture: any
 Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}, ${perl:Depends}
-Suggests: kdebase
+Suggests: kdebase, konqueror, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a presentation program for the KDE Office Suite
  KPresenter is a fully-featured presentation program.  It is sufficiently
@@ -110,7 +131,7 @@ Architecture: any
 Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
-Suggests: kdebase
+Suggests: kdebase, konqueror, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1.0-0)
 Description: a spreadsheet for the KDE Office Suite
  KSpread is a powerful spreadsheet application.
@@ -121,7 +142,7 @@ Package: kugar
 Architecture: any
 Section: x11
 Depends: ${shlibs:Depends}
-Suggests: kdebase
+Suggests: kdebase, konqueror, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a business report maker for the KDE Office Suite
  Kugar is a tool for generating business quality reports which can
@@ -137,7 +158,7 @@ Architecture: any
 Section: x11
 Replaces: koffice-common
 Depends: ${shlibs:Depends}
-Suggests: kdebase
+Suggests: kdebase, konqueror, koffice-doc-html
 Conflicts: koffice-libs (<< 1:1.1-20010404-0)
 Description: a word processor for the KDE Office Suite
  KWord is a frame-based wordprocessor comparable to FrameMaker.  It
@@ -151,7 +172,7 @@ Architecture: any
 Section: libs
 Replaces: koffice (<< 2.1-beta2-1), koffice-common, kspread (<< 2.1-20010101-0), kivio (<< 2.1-20010101-0)
 Depends: ${shlibs:Depends}, kdebase-libs, debconf (>= 0.3.83)
-Suggests: kdebase
+Suggests: kdebase, konqueror, koffice-doc-html
 Conflicts: koffice (<< 2.1-beta2-1), koffice-common
 Description: common libraries and files for the KDE Office Suite
  This package provides the libraries, binaries and other files that are

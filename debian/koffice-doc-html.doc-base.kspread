@@ -1,0 +1,12 @@
+Document: koffice-doc-html-kspread
+Title: KSpread Users Manual
+Author: Frank-Andreas Schmidt
+Abstract: KSpread is complete a spreadsheet program.  It is part of the
+ KOffice suite of utilities.
+Section: Apps/Math
+
+Format: HTML
+Index: /usr/share/doc/kspread/html/index.html
+Files: /usr/share/doc/kspread/html/*.html
+
+  

@@ -11,9 +11,8 @@ INSTALL_SCRIPT = install -p -o root -g root -m 755
 tmp = debian/tmp
 overrides = $(tmp)/usr/share/lintian/overrides
 pixmaps = $(tmp)/usr/share/pixmaps
-
-kugar_docs = $(tmp)/usr/share/doc/kde/HTML/en/kugar
 icons = $(tmp)/usr/share/icons
+kdedocs = $(tmp)/usr/share/doc/kde/HTML
 
 ARCH = $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 ifeq ($(ARCH),alpha)
@@ -61,22 +60,26 @@ install-stamp: build
 	dh_clean -k
 	dh_installdirs
 
+	# Install overrides.
 	$(INSTALL_DIR) $(overrides)
 	$(INSTALL_FILE) debian/*.override $(overrides)
 	for i in `ls $(overrides)/`; do \
-		mv $(overrides)/$$i \
-		$(overrides)/`echo $$i | sed -e 's#.override##'`; \
+		mv $(overrides)/$$i $(overrides)/`echo $$i | sed -e 's#.override##'`; \
 	done
 
+	# Install pixmaps.
 	$(INSTALL_DIR) $(pixmaps)
+	$(INSTALL_FILE) debian/*.xpm $(pixmaps)
+
+	# Install kformula icons.
 	$(INSTALL_DIR) $(icons)/locolor/16x16/apps
 	$(INSTALL_DIR) $(icons)/locolor/32x32/apps
-	$(INSTALL_FILE) debian/*.xpm $(pixmaps)
 	$(INSTALL_FILE) debian/kformula.lo16.xpm \
 		$(icons)/locolor/16x16/apps/kformula.xpm
 	$(INSTALL_FILE) kformula/kformula.xpm \
 		$(icons)/locolor/32x32/apps/kformula.xpm
 
+	# Main install.
 	$(MAKE) install DESTDIR=`pwd`/$(tmp)
 
 	# Add "#!/usr/bin/perl" to the head of kprconverter.pl.
@@ -93,33 +96,39 @@ install-stamp: build
 	mv $(tmp)/usr/share/apps/kivio/autoloadStencils/straight_connector.ksp \
 		$(tmp)/usr/lib/kivio/libstraight_connector.so
 
-	perl -w admin/debianrules cleanup
+	# Generate HTML docs.
+	for i in `find $(tmp) -name "*.docbook"`; do \
+	  pushd . > /dev/null; cd `dirname $$i`; meinproc `basename $$i`; \
+	  popd > /dev/null; done
 
-	for i in `find debian/ -type l -name "common"`; do \
-		rm $$i ;\
-	done
+	# Make common links for docs.
+	for p in `dh_listpackages`; do \
+	  for i in `find $(kdedocs) -type d -name $$p`; do \
+	    ln -f -n -s ../common $$i/common; done; done
+
+	perl -w admin/debianrules cleanup
 
 	touch install-stamp
 	
 binary-indep: build install
-	#dh_testdir
-	#dh_testroot
-	#dh_movefiles -i
-	#dh_installdocs -i
-	#dh_installmenu -i
-	#dh_installmime -i
-	#dh_installman -i
-	#dh_undocumented -i
-	#dh_link -i
+	dh_testdir
+	dh_testroot
+	dh_movefiles -i
+	dh_installdocs -i
+	dh_installmenu -i
+	dh_installmime -i
+	dh_installman -i
+	dh_installchangelogs -pkoffice-doc-html
+	dh_link -i
 	#dh_strip -i
-	#dh_compress -i
-	#dh_fixperms -i
-	#dh_installdeb -i
-	#dh_perl -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_perl -i
 	#dh_shlibdeps -i
-	#dh_gencontrol -i
-	#dh_md5sums -i
-	#dh_builddeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
 
 binary-arch: build install
 	dh_testdir

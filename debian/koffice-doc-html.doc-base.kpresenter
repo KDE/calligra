@@ -1,0 +1,12 @@
+Document: koffice-doc-html-kpresenter
+Title: KPresenter Users Manual
+Author: Krishna Tateneni <tateneni@pluto.njcc.com>
+Abstract: KPresenter is the presentations program in the KOffice suite of
+ productivity applications.
+Section: Apps/Tools
+
+Format: HTML
+Index: /usr/share/doc/kpresenter/html/index.html
+Files: /usr/share/doc/kpresenter/html/*.html
+
+  

@@ -1,14 +1,17 @@
 koffice (1:1.1.0-1) unstable; urgency=low
 
   * New upstream release.
+  * Added package koffice-doc-html.
+  * Added suggests: konqueror to packages including docbook documentation.
   * Removed debconf warning for pre-1.1-final releases.
   * Moved quattropro and xfig mimetype desktop files from koffice-libs into
     kspread and kontour respectively.
   * Moved all svgexport/svgimport material from koffice-libs into kontour.
   * Upped standards-version to 3.5.6.
+  * Cleaned up debian/rules.
   * Miscellaneous tidying up in debian/.
 
- -- Ben Burton <benb@acm.org>  Sun,  5 Aug 2001 23:45:23 +1000
+ -- Ben Burton <benb@acm.org>  Fri, 10 Aug 2001 20:29:10 +1000
 
 koffice (1:1.1-rc1-1) unstable; urgency=low
 

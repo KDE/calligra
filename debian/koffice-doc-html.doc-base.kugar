@@ -1,0 +1,12 @@
+Document: koffice-doc-html-kugar
+Title: Kugar Handbook
+Author: Phil Thompson <phil@river-bank.demon.co.uk>
+Abstract: The Kugar utility is an application that can preview and print
+ any Kugar report.
+Section: Apps/Tools
+
+Format: HTML
+Index: /usr/share/doc/kugar/html/index.html
+Files: /usr/share/doc/kugar/html/*.html
+
+  
