@@ -44,7 +44,7 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 
 		/*! Tries to load db driver \a name.
 			\return db driver, or 0 if error (then error message is also set) */
-		KexiDB::Driver* driver(const QCString& name);
+		KexiDB::Driver* driver(const QString& name);
 
 		static DriverManagerInternal *self();
 
@@ -155,7 +155,7 @@ bool DriverManagerInternal::lookupDrivers()
 	return true;
 }
 
-Driver* DriverManagerInternal::driver(const QCString& name)
+Driver* DriverManagerInternal::driver(const QString& name)
 {
 	if (!lookupDrivers())
 		return 0;
@@ -320,7 +320,7 @@ QString DriverManager::lookupByMime(const QString &mimeType)
 	return ptr->property("X-Kexi-DriverName").toString();
 }
 
-Driver* DriverManager::driver(const QCString& name)
+Driver* DriverManager::driver(const QString& name)
 {
 	Driver *drv = d_int->driver(name);
 	if (d_int->error())
