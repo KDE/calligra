@@ -348,12 +348,18 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
 KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * refFormat, const QFont & defaultFont )
 {
     KoTextFormat format;
+    QFont font;
     if ( refFormat )
     {
         format = *refFormat;
         format.setCollection( 0 ); // Out of collection copy
+        font = format.font();
     }
-    QFont font = format.font();
+    else
+    {
+        font = defaultFont;
+    }
+
     QDomElement elem;
     elem = formatElem.namedItem( "FONT" ).toElement();
     if ( !elem.isNull() )
