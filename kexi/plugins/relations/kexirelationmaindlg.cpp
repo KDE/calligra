@@ -26,16 +26,15 @@
 #include <keximainwindow.h>
 #include <kexiproject.h>
 #include <kexidb/connection.h>
-#include "kexirelationview.h"
+#include "kexirelationdialog.h"
 #include "kexirelationmaindlg.h"
 
 KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *win)
  : KexiDialogBase(win, i18n("Relations"))
 {
 	kdDebug() << "KexiRelationMainDlg()" << endl;
-	m_view = new KexiRelationView(this);
-	m_view->addTable(win->project()->dbConnection()->tableSchema("cars"));
-	m_view->addTable(win->project()->dbConnection()->tableSchema("persons"));
+
+	m_view = new KexiRelationDialog(this, win);
 
 	QVBoxLayout *g = new QVBoxLayout(this);
 	g->addWidget(m_view);

@@ -364,6 +364,7 @@ KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *
 //	m_fieldList = t.;
 //	m_table = table;
 	m_view = view;
+	m_table = t->name();
 //	m_parent = parent;
 
 	m_keyIcon = SmallIcon("key");
@@ -436,8 +437,7 @@ KexiRelationViewTable::dragObject()
 {
 	if(selectedItem())
 	{
-		KexiFieldDrag *drag = new KexiFieldDrag(
-			"kexi/table",m_table,selectedItem()->text(1), this, "metaDrag");
+		KexiFieldDrag *drag = new KexiFieldDrag("kexi/table",m_table,selectedItem()->text(1), this, "metaDrag");
 		return drag;
 	}
 

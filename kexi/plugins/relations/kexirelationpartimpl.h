@@ -32,7 +32,7 @@ class KexiRelationPartImpl : public KexiRelationPart
 		virtual ~KexiRelationPartImpl();
 
 		virtual KexiDialogBase *createWindow(KexiMainWindow *parent);
-		virtual QWidget *createWidget(QWidget *parent);
+		virtual QWidget *createWidget(QWidget *parent, KexiMainWindow *win);
 };
 
 #endif

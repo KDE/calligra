@@ -18,7 +18,7 @@
 */
 
 #include "kexirelationmaindlg.h"
-#include "kexirelationview.h"
+#include "kexirelationdialog.h"
 #include "kexirelationpartimpl.h"
 
 #include <kdebug.h>
@@ -40,9 +40,9 @@ KexiRelationPartImpl::createWindow(KexiMainWindow *win)
 }
 
 QWidget *
-KexiRelationPartImpl::createWidget(QWidget *parent)
+KexiRelationPartImpl::createWidget(QWidget *parent, KexiMainWindow *win)
 {
-	return new KexiRelationView(parent);
+	return new KexiRelationDialog(parent, win);
 }
 
 KexiRelationPartImpl::~KexiRelationPartImpl()

@@ -20,39 +20,38 @@
 #ifndef KEXIRELATIONDIALOG_H
 #define KEXIRELATIONDIALOG_H
 
-#include <qvaluelist.h>
-
-#include "kexidialogbase.h"
-#include "kexirelationview.h"
+#include <qwidget.h>
 
 class QComboBox;
-class KoStore;
-class KexiDB;
+class KexiRelationView;
+class KexiMainWindow;
 
-class KEXI_HAND_RELAT_EXPORT KexiRelationDialog : public KexiDialogBase
+namespace KexiDB
+{
+	class Connection;
+}
+
+class KEXI_HAND_RELAT_EXPORT KexiRelationDialog : public QWidget
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationDialog(KexiView *view, QString identifier, QWidget *parent = 0, const char *name="relations", bool embedd=false);
+		KexiRelationDialog(QWidget *parent, KexiMainWindow *w);
 		~KexiRelationDialog();
 
 		KexiRelationView	*relationView() const { return m_relationView; }
 		void			chooseTable(QString t);
 
-		typedef QValueList<SourceConnection> RelationList;
-
 	public slots:
-		void			slotSave(KoStore *store);
 		void			slotAddTable();
 
 	protected:
 		virtual void		keyPressEvent(QKeyEvent *ev);
 
 	private:
-		KexiDB			*m_db;
 		QComboBox		*m_tableCombo;
 		KexiRelationView	*m_relationView;
+		KexiDB::Connection	*m_conn;
 };
 
 #endif
