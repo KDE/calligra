@@ -110,7 +110,10 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
 	}
 	if (!obj || !obj->error())
 		return;
-	//lower level message is added th the details, if there is alread message specified
+	//lower level message is added to the details, if there is alread message specified
+	if (!obj->msgTitle().isEmpty())
+		msg += "<p>" + obj->msgTitle();
+	
 	if (msg.isEmpty())
 		msg = "<p>" + obj->errorMsg();
 	else

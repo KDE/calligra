@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=SQLite3
 Name[sv]=Sqlite 3
+Name[xx]=xxSQLite3xx
 Comment=SQLite is default Kexi embedded SQL engine
 Comment[bg]=SQLite е малка и бърза СУБД, която е вградена в Kexi
 Comment[ca]=SQLite és el motor SQL encastat i per defecte de Kexi
@@ -35,4 +36,4 @@ InitialPreference=8
 X-Kexi-DriverName=SQLite3
 X-Kexi-DriverType=File
 X-Kexi-FileDBDriverMime=application/x-kexiproject-sqlite3
-X-Kexi-KexiDBVersion=1.4
+X-Kexi-KexiDBVersion=1.5

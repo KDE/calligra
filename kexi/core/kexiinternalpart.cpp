@@ -23,7 +23,6 @@
 #include "kexidialogbase.h"
 #include "kexiviewbase.h"
 #include "keximainwindow.h"
-#include "keximsghandler.h"
 
 #include <qasciidict.h>
 #include <qdialog.h>
@@ -33,6 +32,7 @@
 #include <klocale.h>
 #include <ktrader.h>
 #include <kparts/componentfactory.h>
+#include <kexidb/msghandler.h>
 
 class KexiInternalPartManager
 {
@@ -43,7 +43,7 @@ class KexiInternalPartManager
 			m_parts.setAutoDelete(false);
 		}
 		
-		KexiInternalPart* findPart(KexiMessageHandler *msgHdr, const char* partName)
+		KexiInternalPart* findPart(KexiDB::MessageHandler *msgHdr, const char* partName)
 		{
 			KexiInternalPart *part = m_parts[partName];
 			if (!part) {
@@ -82,14 +82,14 @@ KexiInternalPart::~KexiInternalPart()
 
 //static
 const KexiInternalPart *
-KexiInternalPart::part(KexiMessageHandler *msgHdr, const char* partName)
+KexiInternalPart::part(KexiDB::MessageHandler *msgHdr, const char* partName)
 {
 	return internalPartManager.findPart(msgHdr, partName);
 }
 
 //static
 QWidget* KexiInternalPart::createWidgetInstance(const char* partName, 
- const char* widgetClass, KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, QWidget *parent, const char *objName)
+ const char* widgetClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, QWidget *parent, const char *objName)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part)
@@ -124,7 +124,7 @@ KexiDialogBase* KexiInternalPart::findOrCreateKexiDialog(KexiMainWindow* mainWin
 
 //static
 KexiDialogBase* KexiInternalPart::createKexiDialogInstance(const char* partName, 
-	KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName)
+	KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part) {
@@ -136,7 +136,7 @@ KexiDialogBase* KexiInternalPart::createKexiDialogInstance(const char* partName,
 
 //static
 QDialog* KexiInternalPart::createModalDialogInstance(const char* partName, 
-	const char* dialogClass, KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName)
+	const char* dialogClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part) {

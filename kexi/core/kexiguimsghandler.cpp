@@ -26,7 +26,7 @@
 #include <kmessagebox.h>
 
 KexiGUIMessageHandler::KexiGUIMessageHandler(QWidget *parent)
-: KexiMessageHandler(parent)
+: KexiDB::MessageHandler(parent)
 {
 }
 
@@ -36,7 +36,8 @@ KexiGUIMessageHandler::~KexiGUIMessageHandler()
 
 /*virtual*/
 void
-KexiGUIMessageHandler::showErrorMessage(const QString &msg, KexiDB::Object *obj)
+KexiGUIMessageHandler::showErrorMessage(KexiDB::Object *obj, 
+	const QString& msg)
 {
 	QString _msg = msg;
 	if (!obj) {

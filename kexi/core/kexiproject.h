@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,7 +47,6 @@ namespace KexiPart
 
 class KexiMainWindow;
 class KexiDialogBase;
-class KexiMessageHandler;
 
 /**
  * This class represents a project's controller. It also contains connection data,
@@ -58,10 +57,12 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 	Q_OBJECT
 
 	public:
-		/*! Constructor 1. Creates a new object using \a pdata, which will be owned. */
-		KexiProject(KexiProjectData* pdata, KexiMessageHandler* handler = 0);
+		/*! Constructor 1. Creates a new object using \a pdata, which will be owned. 
+		 \a handler can be provided to receive error messages. */
+		KexiProject(KexiProjectData* pdata, KexiDB::MessageHandler* handler = 0);
 //		/*! Constructor 1. Creates a new object using \a pdata, which will be owned. */
 //		KexiProject(KexiDB::ConnectionData *cdata);
+
 		~KexiProject();
 
 		//! Opens existing project using project data.
@@ -170,11 +171,13 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		 \a cancelled is set to true if creation has been cancelled (e.g. user answered 
 		 no when asked for database overwriting, etc.
 		 \return true if database was created, false on error or when cancel was pressed */
-		static KexiProject* createBlankProject(bool &cancelled, KexiProjectData* data, KexiMessageHandler* handler = 0);
+		static KexiProject* createBlankProject(bool &cancelled, KexiProjectData* data,
+			KexiDB::MessageHandler* handler = 0);
 
 		/*! Drops project described by \a data. \return true on success. 
 		 Use with care: Any KexiProject objects allocated for this project will become invalid! */
-		static tristate dropProject(KexiProjectData* data, KexiMessageHandler* handler, bool dontAsk = false);
+		static tristate dropProject(KexiProjectData* data, 
+			KexiDB::MessageHandler* handler, bool dontAsk = false);
 
 		/** new table \a schema created */
 		void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
@@ -190,19 +193,19 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 
 		bool initProject();
 
-		//! reimplementation
+/* moved to Object
 		virtual void setError(int code = ERR_OTHER, const QString &msg = QString::null );
 		virtual void setError( const QString &msg );
 		virtual void setError( KexiDB::Object *obj );
 
 		//! setting not KexiDB-related erorr
 		void setError(const QString &msg, const QString &desc);
-
+*/
 		/*! Finds part for \a item. Sets error retrieved from Part Manager 
 		 if the part cannot be found. */
 		KexiPart::Part *findPartFor(KexiPart::Item& item);
 
-		void clearMsg();
+//		void clearMsg();
 
 	signals:
 		/**
@@ -239,11 +242,8 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 		                              //!< temporary identifiers for unstored items
 
 		KexiDB::Parser* m_sqlParser;
-		KexiMessageHandler *m_msgHandler;
 		bool m_final;
 
-		class ErrorTitle;
-		friend class ErrorTitle;
 		friend class KexiMainWindowImpl;
 };
 

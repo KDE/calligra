@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,16 +19,20 @@
 
 #include <kexidb/object.h>
 #include <kexidb/error.h>
+#include <kexidb/msghandler.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 
 using namespace KexiDB;
 
+#define ERRMSG(a) \
+	{ if (m_msgHandler) m_msgHandler->showErrorMessage(a); }
 
-Object::Object()
+Object::Object(MessageHandler* handler)
 : m_previousServerResultNum(0)
 , m_previousServerResultNum2(0)
+, m_msgHandler(handler)
 , d(0) //empty
 {
 	clearError();
@@ -52,6 +56,9 @@ void Object::setError( int code, const QString &msg )
 	else
 		m_errMsg = msg;
 	m_hasError = code!=ERR_NONE;
+
+	if (m_hasError)
+		ERRMSG(this);
 }
 
 void Object::setError( const QString &msg )
@@ -61,6 +68,24 @@ void Object::setError( const QString &msg )
 	m_errno=ERR_OTHER;
 	m_errMsg = msg;
 	m_hasError = true;
+	if (m_hasError)
+		ERRMSG(this);
+}
+
+void Object::setError( const QString& title, const QString &msg )
+{
+	STORE_PREV_ERR;
+
+	m_errno=ERR_OTHER;
+	QString origMsgTitle( m_msgTitle ); //store
+	
+	m_msgTitle += title;
+	m_errMsg = msg;
+	m_hasError = true;
+	if (m_hasError)
+		ERRMSG(this);
+		
+	m_msgTitle = origMsgTitle; //revert 
 }
 
 void Object::setError( KexiDB::Object *obj )
@@ -72,6 +97,8 @@ void Object::setError( KexiDB::Object *obj )
 		m_errMsg = obj->errorMsg();
 		m_hasError = obj->error();
 	}
+	if (m_hasError)
+		ERRMSG(this);
 }
 
 void Object::clearError()
@@ -115,3 +142,4 @@ void Object::debugError()
 	} else
 		KexiDBDbg << "KEXIDB OK." << endl;
 }
+

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,25 +17,47 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIMSGHANDLER_H
-#define KEXIMSGHANDLER_H
+#ifndef KEXIDB_MSGHANDLER_H
+#define KEXIDB_MSGHANDLER_H
 
 #include <kexidb/object.h>
 #include <qguardedptr.h>
 #include <qwidget.h>
 
-/*! A prototype for Message Handler usable 
- for reacting on messages sent by KexiProject object(s) and (probably) other objects.
+namespace KexiDB {
+
+/*! A helper class for setting temporary message title for an KexiDB::Object. 
+ Message title is a text prepended to error or warning messages.
+ Use it this way:
+ \code
+ KexiDB::MessageTitle title(myKexiDBObject, i18n("Terrible error occured"));
+ \endcode
+ After leaving current from code block, object's message title will be reverted 
+ to previous value.
 */
-class KEXICORE_EXPORT KexiMessageHandler
+class KEXI_DB_EXPORT MessageTitle
+{
+	public:
+		MessageTitle(KexiDB::Object* o, const QString& msg = QString::null);
+		~MessageTitle();
+	
+	protected:
+		Object* m_obj;
+		QString m_prevMsgTitle;
+};
+
+/*! A prototype for Message Handler usable 
+ for reacting on messages sent by KexiDB::Object object(s).
+*/
+class KEXI_DB_EXPORT MessageHandler
 {
 	public:
 		enum MessageType { Error, Sorry };
 
 		/*! Constructs mesage handler, \a parent is a widget that will be a parent 
 		 for displaying gui elements (e.g. message boxes). Can be 0 for non-gui usage. */
-		KexiMessageHandler(QWidget *parent = 0);
-		virtual ~KexiMessageHandler();
+		MessageHandler(QWidget *parent = 0);
+		virtual ~MessageHandler();
 
 		/*! This method can be used to block/unblock messages.
 		 Sometimes you are receiving both lower- and higher-level messages,
@@ -45,12 +67,16 @@ class KEXICORE_EXPORT KexiMessageHandler
 		 See KexiMainWindowImpl::renameObject() implementation for example. */
 		inline void enableMessages(bool enable) { m_enableMessages = enable; }
 
-		virtual void showErrorMessage(const QString &title, const QString &details = QString::null) = 0;
-		virtual void showErrorMessage(const QString& msg, KexiDB::Object *obj) = 0;
+		virtual void showErrorMessage(const QString &title, 
+			const QString &details = QString::null) = 0;
+		
+		virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString::null) = 0;
 
 	protected:
 		QGuardedPtr<QWidget> m_messageHandlerParentWidget;
 		bool m_enableMessages : 1;
 };
+
+}
 
 #endif

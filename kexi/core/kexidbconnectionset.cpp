@@ -54,8 +54,12 @@ void KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data)
 	d->list.append(data);
 }
 
-KexiDB::ConnectionData::List KexiDBConnectionSet::list() const
+KexiDB::ConnectionData::List& KexiDBConnectionSet::list() const
 {
 	return d->list;
 }
 
+void KexiDBConnectionSet::clear()
+{
+	d->list.clear();
+}

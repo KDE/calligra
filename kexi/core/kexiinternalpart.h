@@ -25,9 +25,13 @@
 #include <qguardedptr.h>
 
 class KexiMainWindow;
-class KexiMessageHandler;
 class KexiDialogBase;
 class KexiViewBase;
+
+namespace KexiDB {
+	class MessageHandler;
+}
+
 class QWidget;
 
 /**
@@ -56,12 +60,12 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 \a msgHdr is a message handler for displaying error messages.
 		 Created widget will have assigned \a parent widget and \a objName name. */
 		static QWidget* createWidgetInstance(const char* partName, const char* widgetClass, 
-			KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, 
+			KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
 			QWidget *parent, const char *objName = 0);
 
 		/*! For convenience. */
 		static QWidget* createWidgetInstance(const char* partName,
-			KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, 
+			KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
 			QWidget *parent, const char *objName = 0)
 		 { return createWidgetInstance(partName, 0, msgHdr, mainWin, parent, objName); }
 
@@ -73,7 +77,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 The dialog is assigned to \a mainWin as its parent, 
 		 and \a objName name is set. */
 		static KexiDialogBase* createKexiDialogInstance(const char* partName, 
-			KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName = 0);
+			KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName = 0);
 
 		/*! Creates a new modal dialog instance (QDialog or a subclass). 
 		 If such instance already exists, and is unique (see uniqueDialog()) 
@@ -86,15 +90,15 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 The dialog is assigned to \a mainWin as its parent, 
 		 and \a objName name is set. */
 		static QDialog* createModalDialogInstance(const char* partName, 
-			const char* dialogClass, KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, 
+			const char* dialogClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
 			const char *objName = 0);
 
 		static QDialog* createModalDialogInstance(const char* partName, 
-		 KexiMessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName = 0)
+		 KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName = 0)
 		{ return createModalDialogInstance(partName, 0, msgHdr, mainWin, objName); }
 
 		/*! \return internal part of a name \a partName. Shouldn't be usable. */
-		static const KexiInternalPart* part(KexiMessageHandler *msgHdr, const char* partName);
+		static const KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const char* partName);
 
 		/*! \return true if the part can create only one (unique) dialog. */
 		inline bool uniqueDialog() const { return m_uniqueDialog; }

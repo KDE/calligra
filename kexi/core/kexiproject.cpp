@@ -32,6 +32,7 @@
 #include <kexidb/drivermanager.h>
 #include <kexidb/utils.h>
 #include <kexidb/parser/parser.h>
+#include <kexidb/msghandler.h>
 
 #include "kexiproject.h"
 #include "kexipartmanager.h"
@@ -42,15 +43,11 @@
 #include "kexi.h"
 #include "keximainwindow.h"
 #include "kexi_utils.h"
-#include "keximsghandler.h"
 
 #include <assert.h>
 
-#define ERRMSG(a1, a2) \
-	{ if (m_msgHandler) m_msgHandler->showErrorMessage(a1, a2); }
-
-/*! @internal
- Helper for setting temporary error title. */
+/*
+ Helper for setting temporary error title. 
 class KexiProject::ErrorTitle
 {
 	public:
@@ -66,17 +63,17 @@ class KexiProject::ErrorTitle
 	}
 	KexiProject* prj;
 	QString prev_err_title;
-};
+};*/
 
-KexiProject::KexiProject(KexiProjectData *pdata, KexiMessageHandler* handler)
- : QObject(), Object()
+KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler)
+ : QObject(), Object(handler)
  , m_data(pdata)
  , m_itemDictsCache(199)
  , m_unstoredItems(199, false)
  , m_tempPartItemID_Counter(-1)
  , m_sqlParser(0)
 {
-	m_msgHandler = handler;
+//	m_msgHandler = handler;
 //	m_drvManager = new KexiDB::DriverManager();
 //	m_connData = new KexiProjectConnectionData();
 //js	m_partManager = new KexiPart::Manager(this);
@@ -103,7 +100,9 @@ bool
 KexiProject::open()
 {
 	kdDebug() << "KexiProject::open(): " << m_data->databaseName() <<" "<< m_data->connectionData()->driverName  << endl;
-	ErrorTitle et(this, i18n("Could not open project \"%1\"").arg(m_data->databaseName()));
+	KexiDB::MessageTitle et(this, 
+		i18n("Could not open project \"%1\"").arg(m_data->databaseName()));
+	
 	if (!createConnection()) {
 		kdDebug() << "KexiProject::open(): !createConnection()" << endl;
 		return false;
@@ -122,7 +121,9 @@ KexiProject::open()
 tristate
 KexiProject::create(bool forceOverwrite)
 {
-	ErrorTitle et(this, i18n("Could not create project \"%1\"").arg(m_data->databaseName()));
+	KexiDB::MessageTitle et(this, 
+		i18n("Could not create project \"%1\"").arg(m_data->databaseName()));
+		
 	if (!createConnection())
 		return false;
 	if (m_connection->databaseExists( m_data->databaseName() )) {
@@ -179,7 +180,8 @@ KexiProject::createConnection()
 
 	clearError();
 //	closeConnection();//for sanity
-	ErrorTitle et(this);
+	KexiDB::MessageTitle et(this);
+	
 	KexiDB::Driver *driver = Kexi::driverManager().driver(m_data->connectionData()->driverName);
 	if(!driver) {
 		setError(&Kexi::driverManager());
@@ -336,7 +338,7 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
 	return 0;
 }
 
-void KexiProject::clearMsg()
+/*void KexiProject::clearMsg()
 {
 	clearError();
 //	m_error_title=QString::null;
@@ -375,11 +377,12 @@ void KexiProject::setError(const QString &msg, const QString &desc)
 	ERRMSG(msg, desc); //not KexiDB-related
 //	emit error(msg, desc); //not KexiDB-related
 }
+*/
 
 KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
 {
 	clearError();
-	ErrorTitle et(this);
+	KexiDB::MessageTitle et(this);
 	KexiPart::Part *part = Kexi::partManager().part(item.mime());
 	if (!part)
 		setError(&Kexi::partManager());
@@ -389,7 +392,7 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
 KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& item, int viewMode)
 {
 	clearError();
-	ErrorTitle et(this);
+	KexiDB::MessageTitle et(this);
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return 0;
@@ -413,7 +416,7 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QCString &mim
 bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 {
 	clearError();
-	ErrorTitle et(this);
+	KexiDB::MessageTitle et(this);
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return false;
@@ -445,7 +448,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 	clearError();
 	QString newName = _newName.stripWhiteSpace();
 	{
-		ErrorTitle et(this);
+		KexiDB::MessageTitle et(this);
 		if (newName.isEmpty()) {
 			setError( i18n("Could not set empty name for this object.") );
 			return false;
@@ -456,7 +459,8 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 		}
 	}
 
-	ErrorTitle et(this, i18n("Could not rename object \"%1\".").arg(item.name()) );
+	KexiDB::MessageTitle et(this, 
+		i18n("Could not rename object \"%1\".").arg(item.name()) );
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return false;
@@ -487,7 +491,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info)
 {
 	clearError();
-	ErrorTitle et(this);
+	KexiDB::MessageTitle et(this);
 	KexiPart::Part *part = Kexi::partManager().part(info);
 	if (!part) {
 		setError(&Kexi::partManager());
@@ -594,7 +598,8 @@ static const QString warningNoUndo = i18n("Warning: entire project's data will b
 
 /*static*/
 KexiProject*
-KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data, KexiMessageHandler* handler)
+KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
+	KexiDB::MessageHandler* handler)
 {
 	cancelled = false;
 	KexiProject *prj = new KexiProject( new KexiProjectData(*data), handler );
@@ -627,7 +632,8 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data, KexiMess
 }
 
 /*static*/
-tristate KexiProject::dropProject(KexiProjectData* data, KexiMessageHandler* handler, bool dontAsk)
+tristate KexiProject::dropProject(KexiProjectData* data, 
+	KexiDB::MessageHandler* handler, bool dontAsk)
 {
 	if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0, 
 		i18n("Do you want to drop the project \"%1\"?").arg(data->objectName())+"\n"+warningNoUndo ))

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,15 +17,31 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "keximsghandler.h"
+#include <kexidb/msghandler.h>
 
-KexiMessageHandler::KexiMessageHandler(QWidget *parent)
+using namespace KexiDB;
+
+MessageTitle::MessageTitle(Object* o, const QString& msg)
+	: m_obj(o)
+	, m_prevMsgTitle(o->m_msgTitle)
+{ 
+	m_obj->m_msgTitle = msg;
+}
+
+MessageTitle::~MessageTitle()
+{
+	m_obj->m_msgTitle = m_prevMsgTitle;
+}
+
+//------------------------------------------------
+
+MessageHandler::MessageHandler(QWidget *parent)
  : m_messageHandlerParentWidget(parent)
  , m_enableMessages(true)
 {
 }
 
-KexiMessageHandler::~KexiMessageHandler()
+MessageHandler::~MessageHandler()
 {
 }
 

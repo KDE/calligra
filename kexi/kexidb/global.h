@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,12 +24,15 @@
 
 //global public definitions
 
-/*! KexiDB implementation version.
+/*! KexiDB implementation version. 
+ It is altered after every change: 
+ - major number is increased after KexiDB storage format change, 
+ - minor is increased after adding binary-incompatible change.
  In external code: do not use this to get library version information:
  use KexiDB::versionMajor() and KexiDB::versionMinor() instead to get real version.
 */
 #define KEXIDB_VERSION_MAJOR 1
-#define KEXIDB_VERSION_MINOR 4
+#define KEXIDB_VERSION_MINOR 5
 
 
 /*! \namespace KexiDB 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,21 +26,23 @@
 
 namespace KexiDB {
 
+class MessageHandler;
+
 /*! Prototype of KexiDB object, handles result of last operation.
 */
 class KEXI_DB_EXPORT Object
 {
 	public:
 		/*! \return true if there was error during last operation on the object. */
-		bool error() { return m_hasError; }
+		bool error() const { return m_hasError; }
 
 		/*! \return (localized) error message if there was error during last operation on the object,
 			else: 0. */
-		const QString& errorMsg() { return m_errMsg; }
+		const QString& errorMsg() const { return m_errMsg; }
 
 		/*! \return error number of if there was error during last operation on the object,
 			else: 0. */
-		int errorNum() { return m_errno; }
+		int errorNum() const { return m_errno; }
 
 		//! \return previous server result number, for error displaying purposes.
 		int previousServerResult() const { return m_previousServerResultNum; }
@@ -91,9 +93,16 @@ class KEXI_DB_EXPORT Object
 		 \sa serverErrorMsg(), drv_clearServerResult()
 		*/
 		virtual QString serverResultName();
+		
+		/*! \return message title that sometimes is provided and prepended 
+		 to the main warning/error message. Used by MessageHandler. */
+		QString msgTitle() const { return m_msgTitle; }
 
 	protected:
-		Object();
+		/* Constructs a new object. 
+		 \a handler can be provided to receive error messages. */
+		Object(MessageHandler* handler = 0);
+		
 		virtual ~Object();
 		
 		/*! Sets the (localized) error code to \a code and message to \a msg. 
@@ -105,12 +114,17 @@ class KEXI_DB_EXPORT Object
 		 object's state. */
 		virtual void setError(int code = ERR_OTHER, const QString &msg = QString::null );
 
-		/* \overload void setError(int code,  const QString &msg = QString::null )
+		/*! \overload void setError(int code,  const QString &msg = QString::null )
 		
 			Sets error code to ERR_OTHER. Use this if you don't care about 
 			setting error code.
 		*/
 		virtual void setError( const QString &msg );
+
+		/* \overload void setError(const QString &msg)
+		
+			Also sets \a title. */
+		virtual void setError( const QString &title, const QString &msg );
 		
 		/*! Copies the (localized) error message and code from other KexiDB::Object. */
 		virtual void setError( KexiDB::Object *obj );
@@ -133,12 +147,15 @@ class KEXI_DB_EXPORT Object
 		//! previous server result name, for error displaying purposes.
 		QString m_previousServerResultName, m_previousServerResultName2;
 
+		QString m_msgTitle;
+		MessageHandler *m_msgHandler;
+
 		class Private;
 		Private *d; //!< for future extensions
+
+		friend class MessageTitle;
 };
 
 } //namespace KexiDB
 
 #endif
-
-
