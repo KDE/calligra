@@ -190,6 +190,7 @@ private:
 
   static QList<GObject> clipboard;
   static QList<KIllustrator> windows;
+  static bool previewHandlerRegistered;
 };
 
 #endif

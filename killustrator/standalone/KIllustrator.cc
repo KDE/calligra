@@ -33,6 +33,7 @@
 #include "Tool.h"
 #include "RectangleTool.h"
 #include "PolylineTool.h"
+#include "FreeHandTool.h"
 #include "SelectionTool.h"
 #include "OvalTool.h"
 #include "TextTool.h"
@@ -60,7 +61,7 @@
 #include "SetPropertyCmd.h"
 #include "filter/FilterManager.h"
 #include "ToolButton.h"
-
+#include "Preview.h"
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
@@ -83,6 +84,7 @@
 
 QList<GObject> KIllustrator::clipboard;
 QList<KIllustrator> KIllustrator::windows;
+bool KIllustrator::previewHandlerRegistered = false;
 
 KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
   windows.setAutoDelete (false);
@@ -131,6 +133,12 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
   	   this, SLOT (updateRecentFiles ()));
   connect (PStateManager::instance (), SIGNAL (settingsChanged ()),
   	   this, SLOT (updateSettings ()));
+
+  if (! previewHandlerRegistered) {
+    KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,
+					       PreviewPixmap);
+    previewHandlerRegistered = true;
+  }
 
   if (url != 0L)
     openURL (url);
@@ -201,25 +209,28 @@ void KIllustrator::setupMainView () {
   tcontroller->registerTool (1, tool = new EditPointTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (2, tool = new PolylineTool (&cmdHistory));
+  tcontroller->registerTool (2, tool = new FreeHandTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (3, tool = new BezierTool (&cmdHistory));
+  tcontroller->registerTool (3, tool = new PolylineTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (4, tool = new RectangleTool (&cmdHistory));
+  tcontroller->registerTool (4, tool = new BezierTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (5, tool = new PolygonTool (&cmdHistory));
+  tcontroller->registerTool (5, tool = new RectangleTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (6, tool = new OvalTool (&cmdHistory));
+  tcontroller->registerTool (6, tool = new PolygonTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (7, tool = new TextTool (&cmdHistory));
+  tcontroller->registerTool (7, tool = new OvalTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  tcontroller->registerTool (8, tool = new ZoomTool (&cmdHistory));
+  tcontroller->registerTool (8, tool = new TextTool (&cmdHistory));
+  connect (tool, SIGNAL(modeSelected(const char*)),
+	   this, SLOT(showCurrentMode(const char*)));
+  tcontroller->registerTool (9, tool = new ZoomTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
   tcontroller->toolSelected (0);
@@ -307,40 +318,45 @@ void KIllustrator::initToolBars () {
   toolPalette->insertWidget (1, toolButton->width (), toolButton);
   tgroup->insertButton (1, toolButton);
 
-  toolButton = new ToolButton (loader->loadIcon ("linetool.xpm"), 
+  toolButton = new ToolButton (loader->loadIcon ("freehandtool.xpm"), 
 			       toolPalette);
   toolPalette->insertWidget (2, toolButton->width (), toolButton);
   tgroup->insertButton (2, toolButton);
 
-  toolButton = new ToolButton (loader->loadIcon ("beziertool.xpm"), 
+  toolButton = new ToolButton (loader->loadIcon ("linetool.xpm"), 
 			       toolPalette);
   toolPalette->insertWidget (3, toolButton->width (), toolButton);
   tgroup->insertButton (3, toolButton);
 
-  toolButton = new ToolButton (loader->loadIcon ("recttool.xpm"), 
+  toolButton = new ToolButton (loader->loadIcon ("beziertool.xpm"), 
 			       toolPalette);
   toolPalette->insertWidget (4, toolButton->width (), toolButton);
   tgroup->insertButton (4, toolButton);
 
-  toolButton = new ToolButton (loader->loadIcon ("polygontool.xpm"), 
+  toolButton = new ToolButton (loader->loadIcon ("recttool.xpm"), 
 			       toolPalette);
   toolPalette->insertWidget (5, toolButton->width (), toolButton);
   tgroup->insertButton (5, toolButton);
 
-  toolButton = new ToolButton (loader->loadIcon ("ellipsetool.xpm"), 
+  toolButton = new ToolButton (loader->loadIcon ("polygontool.xpm"), 
 			       toolPalette);
   toolPalette->insertWidget (6, toolButton->width (), toolButton);
   tgroup->insertButton (6, toolButton);
 
-  toolButton = new ToolButton (loader->loadIcon ("texttool.xpm"), 
+  toolButton = new ToolButton (loader->loadIcon ("ellipsetool.xpm"), 
 			       toolPalette);
   toolPalette->insertWidget (7, toolButton->width (), toolButton);
   tgroup->insertButton (7, toolButton);
 
-  toolButton = new ToolButton (loader->loadIcon ("zoomtool.xpm"), 
+  toolButton = new ToolButton (loader->loadIcon ("texttool.xpm"), 
 			       toolPalette);
   toolPalette->insertWidget (8, toolButton->width (), toolButton);
   tgroup->insertButton (8, toolButton);
+
+  toolButton = new ToolButton (loader->loadIcon ("zoomtool.xpm"), 
+			       toolPalette);
+  toolPalette->insertWidget (9, toolButton->width (), toolButton);
+  tgroup->insertButton (9, toolButton);
 
   connect (tgroup, SIGNAL (toolSelected (int)), tcontroller,
   	   SLOT(toolSelected (int)));
@@ -552,7 +568,9 @@ void KIllustrator::menuCallback (int item) {
   case ID_FILE_OPEN: 
     {
       askForSave ();
-      QString fname = KFileDialog::getOpenFileURL (0, "*.kil", this);
+      QString fname = 
+	KFilePreviewDialog::getOpenFileURL (0, 
+					    "*.kil | KIllustrator File", this);
       if (! fname.isEmpty ()) {
 	document->initialize ();
 	openURL ((const char *)fname);
@@ -675,7 +693,7 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_EXTRAS_CLIPART:
     {
-      QString fname = KFileDialog::getOpenFileName (0, "*.wmf", this);
+      QString fname = KFileDialog::getOpenFileName (0, "*.wmf *.WMF | Windows Metafiles", this);
       if (! fname.isEmpty ()) {
 	InsertClipartCmd *cmd = new InsertClipartCmd (document, 
 						      (const char *) fname);
@@ -925,7 +943,8 @@ void KIllustrator::importFromFile (int id) {
   QString mask;
   mask.sprintf ("*.%s", filterInfo->extension ());
 
-  QString fname = KFileDialog::getOpenFileName (0, (const char *) mask, this);
+  QString fname = KFilePreviewDialog::getOpenFileName (0, (const char *) mask,
+						       this);
   if (! fname.isEmpty ()) {
     ImportFilter* filter = filterInfo->importFilter ();
     
