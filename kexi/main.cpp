@@ -166,8 +166,10 @@ extern "C" int kdemain(int argc, char *argv[])
 
 	KexiMainWindowImpl *win = new KexiMainWindowImpl();
 
-	if (true != win->startup())
+	if (true != win->startup()) {
+		delete win;
 		return 1;
+	}
 
 	app.setMainWidget(win);
 	delete dummyWidget;
