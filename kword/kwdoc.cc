@@ -2603,6 +2603,12 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         (*it).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
     }
 
+    styles = mainStyles.styles( KWDocument::STYLE_FRAME );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
+    }
+
     contentWriter.endElement(); // office:automatic-styles
 
 
@@ -2679,14 +2685,6 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter.endElement(); // office:styles
 
     stylesWriter.startElement( "office:automatic-styles" );
-
-    styles = mainStyles.styles( KWDocument::STYLE_FRAME );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
-    }
-
-
 
     styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
     Q_ASSERT( styles.count() == 1 );
