@@ -33,7 +33,7 @@ class KoViewPrivate
 public:
   KoViewPrivate()
   {
-    m_scaleX = m_scaleY = 1.0;
+    m_zoom = 1.0;
     m_children.setAutoDelete( true );
     m_manager = 0L;
     m_tempActiveWidget = 0L;
@@ -46,8 +46,7 @@ public:
 
   QGuardedPtr<KParts::PartManager> m_manager;
 
-  double m_scaleX;
-  double m_scaleY;
+  double m_zoom;
 
   QList<KoViewChild> m_children;
 
@@ -159,8 +158,8 @@ KoDocument *KoView::hitTest( const QPoint &pos )
         return 0;
   }
 
-  return koDocument()->hitTest( QPoint( pos.x() / xScaling(),
-				        pos.y() / yScaling() ) );
+  return koDocument()->hitTest( QPoint( pos.x() / zoom(),
+				        pos.y() / zoom() ) );
 }
 
 int KoView::leftBorder() const
@@ -183,21 +182,15 @@ int KoView::bottomBorder() const
   return 0;
 }
 
-void KoView::setScaling( double x, double y )
+void KoView::setZoom( double zoom )
 {
-  d->m_scaleX = x;
-  d->m_scaleY = y;
+  d->m_zoom = zoom;
   update();
 }
 
-double KoView::xScaling() const
+double KoView::zoom() const
 {
-  return d->m_scaleX;
-}
-
-double KoView::yScaling() const
-{
-  return d->m_scaleY;
+  return d->m_zoom;
 }
 
 QWidget *KoView::canvas()
@@ -240,11 +233,12 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
 	
 	view->setPartManager( partManager() );
 	
-	view->setScaling( xScaling() * child->yScaling(), yScaling() * child->xScaling() );
+	// hack? (Werner)
+	view->setZoom( zoom() * QMAX(child->xScaling(), child->yScaling()) );
 	
 	QRect geom = child->geometry();
-	frame->setGeometry( geom.x() * xScaling(), geom.y() * yScaling(),
-			    geom.width() * xScaling(), geom.height() * yScaling() );
+	frame->setGeometry( geom.x() * zoom(), geom.y() * zoom(),
+			    geom.width() * zoom(), geom.height() * zoom() );
 	frame->setView( view );
 	frame->show();
 	frame->raise();
@@ -360,7 +354,7 @@ KoViewChild *KoView::child( KoDocument *doc )
 QWMatrix KoView::matrix() const
 {
   QWMatrix m;
-  m.scale( xScaling(), yScaling() );
+  m.scale( zoom(), zoom() );
   return m;
 }
 
@@ -477,3 +471,5 @@ void KoViewChild::slotDocGeometryChanged()
 		    geom.height() + m_frame->topBorder() + m_frame->bottomBorder() );
   m_frame->setGeometry( borderRect );
 }
+
+#include <koView.moc>

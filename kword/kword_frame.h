@@ -53,6 +53,7 @@ enum FrameInfo { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HE
 		 FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
 		 FI_FOOTNOTE = 7 };
 enum RunAround { RA_NO = 0, RA_BOUNDINGRECT = 1, RA_SKIP = 2 };
+enum FrameBehaviour { AutoExtendFrame=0 , AutoCreateNewFrame=1, Ignore=2 };
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -287,8 +288,8 @@ public:
     virtual void save( ostream &out );
     virtual void load( KOMLParser&, vector<KOMLAttrib>& );
 
-    bool getAutoCreateNewFrame() { return autoCreateNewFrame; }
-    void setAutoCreateNewFrame( bool _auto ) { autoCreateNewFrame = _auto; }
+    FrameBehaviour getFrameBehaviour();
+    void setFrameBehaviour(FrameBehaviour);
 
     void updateCounters();
     void updateAllStyles();
@@ -301,8 +302,7 @@ protected:
 
     // pointer to the first parag of the list of parags
     KWParag *parags;
-    bool autoCreateNewFrame;
-
+    FrameBehaviour m_behaviour;
 };
 
 /******************************************************************/

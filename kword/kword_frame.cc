@@ -609,7 +609,7 @@ void KWTextFrameSet::init()
 {
     parags = 0L;
 
-    autoCreateNewFrame = true;
+    m_behaviour = AutoCreateNewFrame;
 
     parags = new KWParag( this, doc, 0L, 0L, doc->getDefaultParagLayout() );
     KWFormat *format = new KWFormat( doc );
@@ -617,6 +617,22 @@ void KWTextFrameSet::init()
 
     updateCounters();
 }
+
+/*============== FrameBehaviour      =============================*/
+/* Sets and gets this frames behaviour. This is used when the text
+   gets to long to fit in this frame. The possible behaviours are
+   defined in kword_frame.h with enum FrameBehaviour.
+   Writen by zander@earhtling.net
+*/
+ 
+FrameBehaviour KWTextFrameSet::getFrameBehaviour() {
+    return m_behaviour;
+}
+ 
+void KWTextFrameSet::setFrameBehaviour(FrameBehaviour l_behaviour){
+    m_behaviour = l_behaviour;
+}
+ 
 
 /*================================================================*/
 void KWTextFrameSet::assign( KWTextFrameSet *fs )
@@ -883,7 +899,7 @@ void KWTextFrameSet::save( ostream &out )
     }
 
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() )
-	<< "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\""
+	<< "\" autoCreateNewFrame=\"" << static_cast<int>( m_behaviour ) << "\" frameInfo=\""
 	<< static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\""
 	<< static_cast<int>( removeableHeader )
 	<< "\" visible=\"" << static_cast<int>( visible ) << "\" name=\"" << correctQString( name ).latin1()
@@ -2406,7 +2422,7 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
 				      doc->getDefaultParagLayout()->getFormat().getPTFontSize() + 10 );
 	KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 	_frameSet->addFrame( frame );
-	_frameSet->setAutoCreateNewFrame( false );
+        _frameSet->setFrameBehaviour(AutoExtendFrame);
 	_frameSet->setGroupManager( this );
 	_frameSet->setIsRemoveableHeader( _removeable );
 	addFrameSet( _frameSet, _idx, i );
@@ -2454,7 +2470,7 @@ void KWGroupManager::insertCol( unsigned int _idx )
 	KWFrame *frame = new KWFrame( r.x(), r.y() + hh, 60, *h.at( i ) );
 	KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 	_frameSet->addFrame( frame );
-	_frameSet->setAutoCreateNewFrame( false );
+        _frameSet->setFrameBehaviour(AutoExtendFrame);
 	_frameSet->setGroupManager( this );
 	addFrameSet( _frameSet, i, _idx );
 	nCells.append( _frameSet );

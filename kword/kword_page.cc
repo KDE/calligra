@@ -1140,7 +1140,7 @@ void KWPage::vmrCreateTable()
 						  insRect.width(), insRect.height() );
 		    KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
 		    _frameSet->addFrame( frame );
-		    _frameSet->setAutoCreateNewFrame( FALSE );
+            _frameSet->setFrameBehaviour(AutoExtendFrame);
 		    _frameSet->setGroupManager( grpMgr );
 		    grpMgr->addFrameSet( _frameSet, i, j );
 		}

@@ -141,15 +141,11 @@ public:
    *
    * The default scaling is 1.0 in both orientations.
    */
-  virtual void setScaling( double x, double y );
+  virtual void setZoom( double zoom );
   /**
-   * @see #setScaling
+   * @see #setZoom
    */
-  virtual double xScaling() const;
-  /**
-   * @see #setScaling
-   */
-  virtual double yScaling() const;
+  virtual double zoom() const;
 
   /**
    * Overload this function if the content will be displayed
@@ -204,7 +200,7 @@ public:
    * Returns the matrix which is used by the view to transform the content.
    * Currently only sclaing is supported.
    *
-   * The matrix changes when calling @ref #setScaling.
+   * The matrix changes when calling @ref #setZoom.
    */
   QWMatrix matrix() const;
 

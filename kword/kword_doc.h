@@ -293,11 +293,11 @@ public:
     QPen setBorderPen( KWParagLayout::Border _brd );
     void enableEmbeddedParts( bool f );
 
-    bool getAutoCreateNewFrame();
+    FrameBehaviour getFrameBehaviour();
     RunAround getRunAround();
     KWUnit getRunAroundGap();
 
-    void setAutoCreateNewFrame( bool _auto );
+    void setFrameBehaviour(FrameBehaviour);
     void setRunAround( RunAround _ra );
     void setRunAroundGap( KWUnit _gap );
 
