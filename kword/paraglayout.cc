@@ -51,6 +51,7 @@ KWParagLayout::KWParagLayout( KWordDocument *_doc, bool _add, QString _name )
     counter.startCounter = "0";
     counter.numberingType = NT_LIST;
     counter.bulletFont = "symbol";
+    counter.customCounterDef = "";
 
     left.color = Qt::white;
     left.style = SOLID;
@@ -101,6 +102,7 @@ KWParagLayout& KWParagLayout::operator=( const KWParagLayout &_layout )
     counter.startCounter = _layout.counter.startCounter;
     counter.numberingType = _layout.counter.numberingType;
     counter.bulletFont = _layout.counter.bulletFont;
+    counter.customCounterDef = _layout.counter.customCounterDef;
     name = _layout.name;
 
     left = _layout.left;
@@ -149,7 +151,8 @@ void KWParagLayout::save( ostream &out )
 	<< static_cast<int>( counter.numberingType ) << "\" lefttext=\""
 	<< correctQString( counter.counterLeftText ).latin1() << "\" righttext=\""
 	<< correctQString( counter.counterRightText ).latin1() << "\" bulletfont=\""
-	<< correctQString( counter.bulletFont ).latin1() << "\"/>" << endl;
+	<< correctQString( counter.bulletFont ).latin1() << "\" customdef=\""
+	<< correctQString( counter.customCounterDef ).latin1() << "\" />" << endl;
     out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
 	<< left.color.blue() << "\" style=\"" << static_cast<int>( left.style ) << "\" width=\"" << left.ptWidth << "\"/>" << endl;
     out << indent << "<RIGHTBORDER red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
@@ -336,6 +339,8 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 		    counter.numberingType = static_cast<NumType>( atoi( ( *it ).m_strValue.c_str() ) );
 		else if ( ( *it ).m_strName == "bulletfont" )
 		    counter.bulletFont = correctQString( ( *it ).m_strValue.c_str() );
+		else if ( ( *it ).m_strName == "customdef" )
+		    counter.customCounterDef = correctQString( ( *it ).m_strValue.c_str() );
 	    }
 	} else if ( _name == "LEFTBORDER" ) {
 	    unsigned int r = 0, g = 0, b = 0;

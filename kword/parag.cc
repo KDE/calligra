@@ -118,9 +118,70 @@ KWParag::~KWParag()
 /*================================================================*/
 void KWParag::makeCounterText()
 {
-    QString buffer = "";
+    QString ct = "";
+    
+    if ( paragLayout->getCounterType() == KWParagLayout::CT_CUSTOM )
+      ct = counterTextByCustomDef( paragLayout->getCustomCounterDef() );
+    else
+      ct = counterTextByType( paragLayout->getCounterType() );
+      
+    if ( paragLayout->getCounterType() != KWParagLayout::CT_NONE &&
+         paragLayout->getCounterType() != KWParagLayout::CT_BULLET )
+      ct = paragLayout->getCounterLeftText() + ct + paragLayout->getCounterRightText();
 
-    switch ( paragLayout->getCounterType() )
+    //buffer += " ";
+    debug("makeCounterText: " + ct );
+    counterText = ct.copy();
+    debug("makeCounterText 2");
+
+    makeCounterWidth();
+    debug("makeCounterText 3");
+}
+
+/*================================================================*/
+QString KWParag::counterTextByCustomDef( const QString& d_ )
+{
+    QString buffer = "";
+    QString partstr = "";
+    QString d = d_;
+    int pos;
+    while( d.length() != 0 )
+    {
+      debug( d );
+      pos = d.find('\\', 1);
+      if ( pos != -1 ) { partstr = d.left( pos ); d = d.right( d.length() - pos ); }
+      else             { partstr = d; d = ""; }
+      debug( "--->" + partstr );
+      
+      if ( partstr.at(0) == '\\' )
+      {
+        // TODO: some 'enum' functionality. E.g. \list{first,second,third,fourth...}
+        partstr = partstr.mid( 1, partstr.length() );
+        debug("--->" + partstr );
+        if ( partstr == "arabic" ) buffer += counterTextByType( KWParagLayout::CT_NUM );
+        else
+        if ( partstr == "alph" ) buffer += counterTextByType( KWParagLayout::CT_ALPHAB_L );
+        else
+        if ( partstr == "Alph" ) buffer += counterTextByType( KWParagLayout::CT_ALPHAB_U );
+        else
+        if ( partstr == "roman" ) buffer += counterTextByType( KWParagLayout::CT_ROM_NUM_L );
+        else                                                                                
+        if ( partstr == "Roman" ) buffer += counterTextByType( KWParagLayout::CT_ROM_NUM_U );
+      }
+      else
+        buffer += partstr;
+    }
+    debug( buffer );
+    return buffer;
+}
+
+/*================================================================*/
+QString KWParag::counterTextByType( KWParagLayout::CounterType ct_ )
+{
+    QString buffer = "";
+    debug("byType: %i", ct_);
+
+    switch ( ct_ )
     {
     case KWParagLayout::CT_BULLET:
     {
@@ -131,7 +192,6 @@ void KWParag::makeCounterText()
     } break;
     case KWParagLayout::CT_NUM:
     {
-	buffer = paragLayout->getCounterLeftText().copy();
 	QString tmp;
 	for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ )
 	{
@@ -140,11 +200,9 @@ void KWParag::makeCounterText()
 	    if ( i < paragLayout->getCounterDepth() )
 		buffer += ".";
 	}
-	buffer += paragLayout->getCounterRightText().copy();
     } break;
     case KWParagLayout::CT_ROM_NUM_L:
     {
-	buffer = paragLayout->getCounterLeftText().copy();
 	QString tmp;
 	for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ )
 	{
@@ -153,11 +211,9 @@ void KWParag::makeCounterText()
 	    if ( i < paragLayout->getCounterDepth() )
 		buffer += ".";
 	}
-	buffer += paragLayout->getCounterRightText().copy();
     } break;
     case KWParagLayout::CT_ROM_NUM_U:
     {
-	buffer = paragLayout->getCounterLeftText().copy();
 	QString tmp;
 	for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ )
 	{
@@ -166,43 +222,42 @@ void KWParag::makeCounterText()
 	    if ( i < paragLayout->getCounterDepth() )
 		buffer += ".";
 	}
-	buffer += paragLayout->getCounterRightText().copy();
     } break;
     case KWParagLayout::CT_ALPHAB_L:
     {
-	buffer = paragLayout->getCounterLeftText().copy();
 	QString tmp;
 	for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ )
 	{
-	    tmp.sprintf( "%c", counterData[ i ] );
+	    debug( "i: %i", i );
+	    // counterData now holds the same values, not depending on the numbering
+	    // style. Is the following change okay or will it cause problems on some unicode tables?
+	    // tmp.sprintf( "%c", counterData[ i ] + 16 );
+	    tmp.sprintf( "%c", QChar( 'a' ).unicode() + counterData[i] - 1 );
+	    debug( "tmp: " + tmp );
 	    tmp = tmp.lower();
 	    buffer += tmp;
 	    if ( i < paragLayout->getCounterDepth() )
 		buffer += ".";
 	}
-	buffer += paragLayout->getCounterRightText().copy();
     } break;
     case KWParagLayout::CT_ALPHAB_U:
     {
-	buffer = paragLayout->getCounterLeftText().copy();
 	QString tmp;
 	for ( int i = 0; i <= paragLayout->getCounterDepth(); i++ )
 	{
-	    tmp.sprintf( "%c", counterData[ i ] );
+	    // see above.
+	    // tmp.sprintf( "%c", counterData[ i ] + 16 );
+	    tmp.sprintf( "%c", QChar( 'A' ).unicode() + counterData[i] - 1 );
 	    tmp = tmp.upper();
 	    buffer += tmp;
 	    if ( i < paragLayout->getCounterDepth() )
 		buffer += ".";
 	}
-	buffer += paragLayout->getCounterRightText().copy();
     } break;
     default: break;
     }
-
-    //buffer += " ";
-    counterText = buffer.copy();
-
-    makeCounterWidth();
+    debug( "By type: " + buffer );
+    return buffer;
 }
 
 /*================================================================*/

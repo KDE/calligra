@@ -204,6 +204,15 @@ public:
 
 protected:
     /**
+     * called by makeCounterText(). Creates a counter text using a custom
+     * string that defines a counter (syntax a bit similar to LaTeX)
+     */
+    QString counterTextByCustomDef( const QString& d_ );
+    /** 
+     * called by makeCounterText and by counterTextByCustomDef. Returns counterText.
+     */
+    QString counterTextByType( KWParagLayout::CounterType ct_ );
+    /**
      * Pointer to the previous paragraph or 0L if this is the first one.
      */
     KWParag *prev;

@@ -42,14 +42,15 @@ class KWParagLayout;
  * parag. This means: Font, TextFlow, Counter ....
  * Every KWParag owns a KWParagLayout instance.
  */
-const QString CounterPlaceHolder[] = {"", "99", "w", "W", "iiix", "IIIX", "W "};
+const QString CounterPlaceHolder[] = {"", "99", "w", "W", "iiix", "IIIX", "W ", "WWW"}; // FIXME for custom
 
 class KWParagLayout
 {
 public:
     enum Flow {LEFT, RIGHT, CENTER, BLOCK};
     enum CounterType {CT_NONE = 0, CT_NUM = 1, CT_ALPHAB_L = 2, CT_ALPHAB_U = 3,
-		      CT_ROM_NUM_L = 4, CT_ROM_NUM_U = 5, CT_BULLET = 6};
+		      CT_ROM_NUM_L = 4, CT_ROM_NUM_U = 5, CT_BULLET = 6,
+		      CT_CUSTOM = 7 };
     enum NumType {NT_LIST = 0, NT_CHAPTER = 1};
 
     enum BorderStyle {SOLID = 0, DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4};
@@ -79,6 +80,7 @@ public:
 	QString startCounter;
 	NumType numberingType;
 	QString bulletFont;
+	QString customCounterDef;
     };
 
     KWParagLayout( KWordDocument *_doc, bool _add = true,
@@ -117,6 +119,9 @@ public:
 
     void setBulletFont( const QString& _f ) { counter.bulletFont = _f; }
     QString getBulletFont() const { return counter.bulletFont; }
+
+    void setCustomCounterDef( const QString& d_ ) { counter.customCounterDef = d_; }
+    QString getCustomCounterDef() { return counter.customCounterDef; }
 
     KWFormat& getFormat() { return format; }
     QString getName() const { return name; }
