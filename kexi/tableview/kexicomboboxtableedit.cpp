@@ -263,13 +263,13 @@ bool KexiComboBoxTableEdit::valueChanged()
 	KexiTableViewData *relData = column()->relatedData();
 	if (relData) {
 		//use 'related table data' model
-		KexiTableItem *it = m_popup->tableView()->selectedItem();
+		KexiTableItem *it = m_popup ? m_popup->tableView()->selectedItem() : 0;
 		if (!it)
 			return false;
 	}
 	else {
 		//use 'enum hints' model
-		const int row = m_popup->tableView()->currentRow();
+		const int row = m_popup ? m_popup->tableView()->currentRow() : -1;
 		if (row<0)
 			return false;
 	}
