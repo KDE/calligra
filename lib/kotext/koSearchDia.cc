@@ -243,7 +243,7 @@ bool KoFindReplace::findNext()
 {
     KFind::Result res = KFind::NoMatch;
     while ( res == KFind::NoMatch && !m_textIterator.atEnd() ) {
-        //kdDebug(32500) << "findNext loop. m_bInit=" << m_bInit << " needData=" << needData() << endl;
+        //kdDebug(32500) << "findNext loop. m_bInit=" << m_bInit << " needData=" << needData() << " m_currentParagraphModified=" << m_currentParagraphModified << endl;
         if ( needData() || m_currentParagraphModified ) {
             if ( !m_bInit && !m_currentParagraphModified ) {
                 ++m_textIterator;
@@ -267,7 +267,7 @@ bool KoFindReplace::findNext()
             res = m_replace->replace();
     }
 
-    //kdDebug(32500) << k_funcinfo << "res=" << res << endl;
+    //kdDebug(32500) << k_funcinfo << "we're done. res=" << res << endl;
     if ( res == KFind::NoMatch ) // i.e. at end
     {
         emitUndoRedo();
@@ -377,7 +377,16 @@ void KoFindReplace::replace( const QString &text, int matchingIndex,
 
     // Grab replacement string
     QString rep = text.mid( matchingIndex, replacementLength );
+
+    // Don't let the replacement set the paragraph to "modified by user"
+    disconnect( &m_textIterator, SIGNAL( currentParagraphModified( int, int, int ) ),
+                this, SLOT( slotCurrentParagraphModified( int, int, int ) ) );
+
     KCommand *cmd = currentTextObj->replaceSelectionCommand(&cursor, rep, KoTextObject::HighlightSelection, QString::null, repaint );
+
+    connect( &m_textIterator, SIGNAL( currentParagraphModified( int, int, int ) ),
+             this, SLOT( slotCurrentParagraphModified( int, int, int ) ) );
+
     if( cmd )
         macroCommand()->addCommand(cmd);
 }
