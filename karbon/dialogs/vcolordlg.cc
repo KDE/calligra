@@ -20,6 +20,8 @@
 #include "vcolor.h"
 #include "vcolorslider.h"
 #include "vfillcmd.h"
+#include "vselection.h"
+#include "vstroke.h"
 #include "vstrokecmd.h"
 
 #include "vcolordlg.h"
@@ -94,6 +96,8 @@ void VColorDlg::updateRGBColorPreview()
 void VColorDlg::buttonClicked( int button_ID )
 {
 	VColor color;
+	VStroke stroke;
+	
 	float r = mRedSlider->value() / 255.0, g = mGreenSlider->value() / 255.0, b = mBlueSlider->value() / 255.0;
 	float op = mOpacity->value() / 100.0;
 	color.setValues( &r, &g, &b, 0L );
@@ -105,7 +109,16 @@ void VColorDlg::buttonClicked( int button_ID )
 		break;
 	case Outline:
 		if( m_part )
-		m_part->addCommand( new VStrokeCmd( &m_part->document(), VStroke( color ) ), true );
+		if( m_part->document().selection()->objects().count() > 0 ) // there is a selection, so take the stroke of first selected object
+		{
+			stroke.setType ( m_part->document().selection()->objects().getFirst()->stroke()->type() );
+			stroke.setLineWidth ( m_part->document().selection()->objects().getFirst()->stroke()->lineWidth() );
+			stroke.setLineCap ( m_part->document().selection()->objects().getFirst()->stroke()->lineCap() );   
+			stroke.setLineJoin ( m_part->document().selection()->objects().getFirst()->stroke()->lineJoin() );
+			stroke.setMiterLimit ( m_part->document().selection()->objects().getFirst()->stroke()->miterLimit() );
+		}
+		stroke.setColor ( color );
+		m_part->addCommand( new VStrokeCmd( &m_part->document(), VStroke( stroke ) ), true );
 		break;
 	}
 
