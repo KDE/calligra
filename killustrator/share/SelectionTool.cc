@@ -48,6 +48,8 @@ void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     processMouseMoveEvent ((QMouseEvent *) e, doc, canvas);
   else if (e->type () == Event_MouseButtonRelease)
     processButtonReleaseEvent ((QMouseEvent *) e, doc, canvas);
+  else if (e->type () == Event_KeyPress)
+    processKeyPressEvent ((QKeyEvent *) e, doc, canvas);
 }
 
 void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
@@ -351,6 +353,36 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
     else
       state = S_Intermediate2;
   }
+}
+
+void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc, 
+					     Canvas* canvas) {
+  if (doc->selectionIsEmpty ())
+    return;
+
+#define BIG_STEP 10
+#define SMALL_STEP 2
+  int dx = 0, dy = 0;
+  bool shift = ke->state () & ShiftButton;
+
+  switch (ke->key ()) {
+  case Key_Left:
+    dx = (shift ? -SMALL_STEP : -BIG_STEP);
+    break;
+  case Key_Right:
+    dx = (shift ? SMALL_STEP : BIG_STEP);
+    break;
+  case Key_Up:
+    dy = (shift ? -SMALL_STEP : -BIG_STEP);
+    break;
+  case Key_Down:
+    dy = (shift ? SMALL_STEP : BIG_STEP);
+    break;
+  default:
+    break;
+  }
+  if (dx != 0 || dy != 0) 
+    translate (doc, dx, dy, true);
 }
 
 void SelectionTool::translate (GDocument* doc, int dx, int dy, 

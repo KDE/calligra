@@ -50,6 +50,7 @@ public:
   void translate (GDocument* doc, int dx, int dy, bool permanent = false);
   
 private:
+  void processKeyPressEvent (QKeyEvent* e, GDocument* doc, Canvas* canvas);
   void processButtonPressEvent (QMouseEvent* e, GDocument* doc, 
 				Canvas* canvas);
   void processMouseMoveEvent (QMouseEvent* e, GDocument* doc, Canvas* canvas);
