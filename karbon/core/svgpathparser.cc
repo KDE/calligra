@@ -77,7 +77,7 @@ SVGPathParser::getCoord( const char *ptr, double &number )
 		}
     }
 	number = integer + decimal;
-	number *= sign * pow(10, expsign * exponent);
+	number *= sign * pow( (double)10, double( expsign * exponent ) );
 
 	// skip the following space
 	if(*ptr == ' ')
