@@ -2316,6 +2316,8 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
     bool useDoubleBuffer = !parag->document()->parent();
     if ( !useDoubleBuffer && parag->document()->nextDoubleBuffered )
 	useDoubleBuffer = TRUE;
+    if ( p->device()->devType() == QInternal::Printer )
+	useDoubleBuffer = FALSE;
 
     if ( useDoubleBuffer  ) {
 	painter = new QPainter;
