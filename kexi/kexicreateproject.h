@@ -65,7 +65,8 @@ class KexiCreateProject : public KWizard  {
 
 		//all the pages
 		KexiCreateProjectPage	*m_pageEngine;
-		KexiCreateProjectPage	*m_pageConnection;
+//		KexiCreateProjectPage	*m_pageConnection;
+		KexiCreateProjectPage	*m_pageLocation;
 		KexiCreateProjectPage	*m_pageDatabase;
 		KexiCreateProjectPage	*m_pageFile;
 
