@@ -125,12 +125,16 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 
 	// Add axes page if applicable.
         if( m_params->chartType() != KDChartParams::Pie
-	    && m_params->chartType() != KDChartParams::Ring )	{
+	    && m_params->chartType() != KDChartParams::Ring ) {
+
+	    // If not Pie or Ring: ordinary axes page
             m_axespage = new KChartParameterConfigPage(m_params,this );
             addTab( m_axespage, i18n( "&Axes" ) );
 
         } else if( m_params->chartType() != KDChartParams::Ring ) {
-            _parameterpiepage = new KChartParameterPieConfigPage(m_params,this );
+
+            _parameterpiepage = new KChartParameterPieConfigPage(m_params,
+								 this );
             addTab( _parameterpiepage, i18n( "&Axes" ) );
 
             _piepage = new KChartPieConfigPage(m_params, this );
