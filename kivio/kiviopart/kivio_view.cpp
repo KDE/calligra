@@ -72,6 +72,7 @@
 #include <koUnitWidgets.h>
 #include <koApplication.h>
 #include <kotabbar.h>
+#include <kozoomaction.h>
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"
@@ -475,11 +476,9 @@ void KivioView::setupActions()
   connect( snapGuides, SIGNAL(toggled(bool)), SLOT(toggleSnapGuides(bool)));
   //--
 
-  m_viewZoom = new KSelectAction(i18n("Zoom &Level"), "viewmag", 0, actionCollection(), "viewZoom");
-  m_viewZoom->setEditable(true);
+  m_viewZoom = new KoZoomAction(i18n("Zoom &Level"), "viewmag", 0, actionCollection(), "view_zoom" );
   m_viewZoom->setWhatsThis(i18n("This allows you to zoom in or out of a document. You can either choose one of the predefined zoomfactors or enter a new zoomfactor (in percent)."));
-  connect(m_viewZoom, SIGNAL(activated(const QString&)), SLOT(viewZoom(const QString&)));
-  changeZoomMenu();
+  connect(m_viewZoom, SIGNAL(zoomChanged(const QString&)), SLOT(viewZoom(const QString&)));
 
   m_setArrowHeads = new KivioArrowHeadAction(i18n("Arrowheads"), "arrowheads", actionCollection(), "arrowHeads");
   m_setArrowHeads->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
@@ -776,13 +775,11 @@ void KivioView::viewZoom(int zoom)
   KoPageLayout l = activePage()->paperLayout();
   vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
   hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
-  changeZoomMenu(zoom);
   showZoom(zoom);
 }
 
 void KivioView::canvasZoomChanged()
 {
-  changeZoomMenu(zoomHandler()->zoom());
   showZoom(zoomHandler()->zoom());
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
@@ -1791,51 +1788,6 @@ void KivioView::viewZoom(const QString& s)
   if(zoom != zoomHandler()->zoom()) {
     viewZoom(zoom);
   }
-}
-
-void KivioView::changeZoomMenu(int zoom)
-{
-  QStringList lst;
-
-  if(zoom > 0) {
-    // This code is taken from KWords changeZoomMenu
-    QValueList<int> list;
-    bool ok;
-    const QStringList itemsList ( m_viewZoom->items() );
-    QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
-
-    for (QStringList::ConstIterator it = itemsList.begin() ; it != itemsList.end() ; ++it) {
-      regexp.search(*it);
-      const int val=regexp.cap(1).toInt(&ok);
-      //zoom : limit inferior=10
-      if(ok && val>9 && list.contains(val)==0)
-      list.append( val );
-    }
-    //necessary at the beginning when we read config
-    //this value is not in combo list
-    if(list.contains(zoom)==0)
-      list.append( zoom );
-
-    qHeapSort( list );
-
-    for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
-      lst.append( i18n("%1%").arg(*it) );
-  } else {
-    lst << i18n("%1%").arg("33");
-    lst << i18n("%1%").arg("50");
-    lst << i18n("%1%").arg("75");
-    lst << i18n("%1%").arg("100");
-    lst << i18n("%1%").arg("125");
-    lst << i18n("%1%").arg("150");
-    lst << i18n("%1%").arg("200");
-    lst << i18n("%1%").arg("250");
-    lst << i18n("%1%").arg("350");
-    lst << i18n("%1%").arg("400");
-    lst << i18n("%1%").arg("450");
-    lst << i18n("%1%").arg("500");
-  }
-
-  m_viewZoom->setItems(lst);
 }
 
 void KivioView::showZoom(int z)

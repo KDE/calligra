@@ -269,7 +269,6 @@ class KivioView : public KoView
     virtual void updateReadWrite( bool readwrite );
     virtual void partActivateEvent(KParts::PartActivateEvent* event);
 
-    void changeZoomMenu(int z = 0);
     void showZoom(int z);
   private:
     KivioCanvas *m_pCanvas;
