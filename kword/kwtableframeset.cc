@@ -171,18 +171,22 @@ void KWTableFrameSet::addCell( Cell *cell )
 
 void KWTableFrameSet::addCellToArray( Cell* cell )
 {
-    if ( m_rowArray.size() <= cell->m_row )
-        m_rowArray.resize( cell->m_row + 1 );
-    if ( !m_rowArray[ cell->m_row ] )
-        m_rowArray.insert( cell->m_row, new Row );
-    m_rowArray[ cell->m_row ]->addCell( cell );
+    if ( m_rowArray.size() < cell->m_row + cell->m_rows )
+        m_rowArray.resize( cell->m_row + cell->m_rows );
+    for ( uint row = cell->m_row ; row < cell->m_row + cell->m_rows; ++row )
+    {
+        if ( !m_rowArray[ row ] )
+            m_rowArray.insert( row, new Row );
+        m_rowArray[ row ]->addCell( cell );
+    }
 }
 
 void KWTableFrameSet::removeCell( Cell* cell )
 {
     // m_cells handling not done here
     // the point is to get rid of it in the long run
-    m_rowArray[ cell->m_row ]->removeCell( cell->m_col );
+    for ( uint row = cell->m_row ; row < cell->m_row + cell->m_rows; ++row )
+        m_rowArray[ row ]->removeCell( cell );
 }
 
 KoRect KWTableFrameSet::boundingRect() {
@@ -225,22 +229,27 @@ KWTableFrameSet::Cell *KWTableFrameSet::getCell( unsigned int row, unsigned int 
         if ( cell )
             return cell;
     }
+#if 0
     // Emulate the old behaviour of this method: go up or left until
     // finding a merged cell which covers (row,col). Some methods rely
     // on this, but it also makes some other methods look at the same cell
     // several times.... Maybe a bool would help...
 
     if ( row > 0 ) {
+        //kdDebug() << row << "," << col << "... looking above." << endl;
         Cell* cellAbove = getCell( row - 1, col ); // recursive call. Might go up, or left, until finding it...
-        if ( cellAbove && cellAbove->m_row == row && cellAbove->m_col == col )
+        if ( cellAbove && cellAbove->containsCell( row, col ) )
             return cellAbove;
     }
     if ( col > 0 ) {
+        //kdDebug() << row << "," << col << "... looking left." << endl;
         Cell* cellLeft = getCell( row, col - 1 );  // recursive call. Might go up, or left, until finding it...
-        if ( cellLeft && cellLeft->m_row == row && cellLeft->m_col == col )
+        if ( cellLeft && cellLeft->containsCell( row, col ) )
             return cellLeft;
     }
-
+#endif
+    kdWarning() << "getCell " << row << "," << col << " => returning 0!" << endl;
+    printDebug();
     return 0L;
 #if 0
     for ( unsigned int i = 0; i < m_cells.count(); i++ )
@@ -323,7 +332,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
 }
 
 void KWTableFrameSet::recalcRows(int _col, int _row) {
-    kdDebug(32004) << "KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
+    kdDebug(32004) << getName() << " KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
     //for(unsigned int i=0; i < m_rowPositions.count() ; i++) kdDebug(32004) << "row: " << i << " = " << m_rowPositions[i] << endl;
 
     Q_ASSERT( !m_cells.isEmpty() );
@@ -439,7 +448,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 
     unsigned int fromRow=m_rows; // possible reposition rows starting with this one, default to no repositioning
     unsigned int untilRow=0;     // possible reposition rows ending with this one
-    if(difference!=0) {
+    if( QABS( difference ) > 1E-10 ) { // means "difference != 0.0"
         QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
         QValueList<double>::iterator j = m_rowPositions.begin();
         double last=0.0;
@@ -660,7 +669,7 @@ kdDebug() << "j--";
             position(cell);
     }
     redrawFromCol=getCols();
-    kdDebug(32004) << "KWTableFrameSet::recalcRows done" << endl;
+    kdDebug(32004) << getName() << " KWTableFrameSet::recalcRows done" << endl;
     updateFrames();
 }
 
@@ -1066,7 +1075,7 @@ void KWTableFrameSet::insertRow( unsigned int newRowNumber,QPtrList<KWFrameSet> 
     m_rowPositions.insert(tmp, newPos);
     for(unsigned int i=newRowNumber+adjustment+2; i < m_rowPositions.count(); i++) {
         double &rowPos = m_rowPositions[i];
-kdDebug(32004) << "adjusting " << rowPos << " -> " << rowPos + height << endl;
+        kdDebug(32004) << "adjusting " << rowPos << " -> " << rowPos + height << endl;
         rowPos = rowPos + height;
         if(*pageBound == i) {
             untilRow= *pageBound;
@@ -1386,7 +1395,7 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
                 listCopyFrame.append(cell->frame(0)->getCopy());
                 frames.remove( cell->frame(0) );
                 cell->delFrame( cell->frame(0));
-                removeCell(cell);
+                //removeCell(cell);
                 m_cells.take(m_cells.find(cell));
                 // cell is not deleted (for undo/redo purposes...)
             }
@@ -1397,6 +1406,7 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
     // update firstcell properties to reflect the merge
     firstCell->m_cols=colEnd-colBegin+1;
     firstCell->m_rows=rowEnd-rowBegin+1;
+    addCellToArray(firstCell);
     position(firstCell);
     firstCell->frame(0)->updateResizeHandles();
 
@@ -1479,6 +1489,8 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
         /*if(extraHeight != 0 && theCell->m_row == row) {
             theCell->frame(0)->setHeight(theCell->frame(0)->height()+extraHeight);
         } */
+        if ( rowsDiff > 0 || colsDiff > 0 ) // something changed?
+            addCellToArray( theCell ); // update arrays
     }
 
     // set new row and col-span. Use intermediate ints otherwise we get strange results as the
@@ -1538,6 +1550,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     }
 
     position(cell);
+    addCellToArray(cell);
     firstFrame->setSelected(true);
     firstFrame->createResizeHandles();
 
@@ -1599,6 +1612,7 @@ void KWTableFrameSet::validate()
                 cell->addFrame( theFrame,false );
                 cell->m_rows = 1;
                 cell->m_cols = 1;
+                addCell(cell);
                 position(cell);
             }
         }
@@ -2024,9 +2038,9 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
     int _col = KWDocument::getAttribute( framesetElem, "col", 0 );
     if(_col <0) _col =0;
     int _rows = KWDocument::getAttribute( framesetElem, "rows", 1 );
-    if(_rows <0) _rows =0;
+    if(_rows <0) _rows = 1;
     int _cols = KWDocument::getAttribute( framesetElem, "cols", 1 );
-    if(_cols <0) _cols =0;
+    if(_cols <0) _cols = 1;
 
     while(m_rowPositions.count() <= static_cast<unsigned int>(row + _rows + m_pageBoundaries.count())) {
         QValueList<double>::iterator tmp = m_rowPositions.end();
@@ -2043,6 +2057,7 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
     cell->load( framesetElem, loadFrames );
     cell->m_rows = _rows;
     cell->m_cols = _cols;
+    addCellToArray( cell ); // m_rows/m_cols have changed -> update array
 
     if(m_pageBoundaries.count() > 0) {
         unsigned int adjustment=0;
@@ -2326,11 +2341,20 @@ void KWTableFrameSet::printDebug( KWFrame * theFrame )
 void KWTableFrameSet::printDebug() {
     kdDebug(32004) << " |  Table size (" << m_rows << "x" << getCols() << ")" << endl;
     kdDebug(32004) << " |  col  " << 0 << ": " << m_colPositions[0] << endl;
-    for(unsigned int i=1;i<m_colPositions.count();
-        kdDebug(32004) << " |    |  " << i++ << ": " << m_colPositions[i] << endl);
+    for(unsigned int i=1;i<m_colPositions.count(); ++i)
+        kdDebug(32004) << " |    |  " << i << ": " << m_colPositions[i] << endl;
     kdDebug(32004) << " |  row  " << 0 << ": " << m_rowPositions[0] << endl;
-    for(unsigned int i=1;i<m_rowPositions.count();
-        kdDebug(32004) << " |    |  " << i++ << ": " << m_rowPositions[i] << endl);
+    for(unsigned int i=1;i<m_rowPositions.count(); ++i)
+        kdDebug(32004) << " |    |  " << i << ": " << m_rowPositions[i] << endl;
+
+    kdDebug(32004) << " |  Row/Cell arrays" << endl;
+    Q_ASSERT( m_rows == m_rowArray.size() );
+    for ( unsigned int row = 0; row < m_rows; ++row )  {
+        QString str;
+        for ( unsigned int col = 0; col < getCols(); ++col )
+            str += QString("| 0x%1 ").arg( (unsigned long)(*m_rowArray[row])[col], 0, 16 );
+        kdDebug(32004) << " | " << str << endl;
+    }
     KWFrameSet::printDebug();
 }
 
@@ -2367,9 +2391,17 @@ KWTableFrameSet::Cell::~Cell()
 {
 }
 
-bool KWTableFrameSet::Cell::isAboveOrLeftOf( unsigned row, unsigned col )
+bool KWTableFrameSet::Cell::isAboveOrLeftOf( unsigned row, unsigned col ) const
 {
     return ( m_row < row ) || ( ( m_row == row ) && ( m_col < col ) );
+}
+
+bool KWTableFrameSet::Cell::containsCell( unsigned row, unsigned col ) const
+{
+    return ( m_row <= row &&
+             m_col <= col &&
+             m_row + m_rows > row &&
+             m_col + m_cols > col );
 }
 
 void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
@@ -2717,6 +2749,20 @@ void KWTableFrameSet::showPopup( KWFrame *theFrame, KWFrameSetEdit *edit, KWView
         if (popup)
             popup->popup( point );
     }
+}
+
+void KWTableFrameSet::Row::addCell( Cell *cell )
+{
+    if ( m_cellArray.size() < cell->m_col + cell->m_cols )
+        m_cellArray.resize( cell->m_col + cell->m_cols );
+    for ( uint col = cell->m_col ; col < cell->m_col + cell->m_cols; ++col )
+        m_cellArray.insert( col, cell );
+}
+
+void KWTableFrameSet::Row::removeCell( Cell* cell )
+{
+    for ( uint col = cell->m_col ; col < cell->m_col + cell->m_cols; ++col )
+        m_cellArray.remove( col );
 }
 
 #include "kwtableframeset.moc"

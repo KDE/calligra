@@ -70,12 +70,14 @@ public:
 
         unsigned int m_row, m_col;
         unsigned int m_rows, m_cols;
+
         virtual void addFrame(KWFrame *_frame, bool recalc = true);
 
         uint getRow() const {return m_row;}
         uint getColumn() const {return m_col;}
         KWTableFrameSet *table() const { return grpMgr; }
-        bool isAboveOrLeftOf( unsigned row, unsigned col );
+        bool isAboveOrLeftOf( unsigned row, unsigned col ) const;
+        bool containsCell( unsigned row, unsigned col ) const;
 
         double leftBorder();
         double rightBorder();
@@ -99,14 +101,8 @@ public:
         Cell* operator[] ( int i ) const { return i < (int)size() ? m_cellArray[i] : 0; }
         uint size() const { return m_cellArray.size(); }
 
-        void addCell( Cell *cell ) {
-            if ( m_cellArray.size() <= cell->m_col )
-                m_cellArray.resize( cell->m_col + 1 );
-            m_cellArray.insert( cell->m_col, cell );
-        }
-        void removeCell( int col )  {
-            m_cellArray.remove( col );
-        }
+        void addCell( Cell *cell );
+        void removeCell( Cell* cell );
 
         // Array of cells in the row. If a cell has m_cols = N, the N-1 following entries are 0.
         // (Same thing is a cell from a row above has m_rows > 1)
