@@ -32,6 +32,9 @@ class QCheckBox;
 class KLineEdit;
 class KDoubleNumInput;
 class KoSpellConfigWidget;
+namespace KSpell2 {
+    class ConfigWidget;
+}
 
 class configureInterfacePage : public QWidget
 {
@@ -74,7 +77,7 @@ public:
     void slotDefault();
 private:
     KPresenterView* m_pView;
-    KoSpellConfigWidget *m_spellConfigWidget;
+    KSpell2::ConfigWidget *m_spellConfigWidget;
     KConfig* config;
 };
 

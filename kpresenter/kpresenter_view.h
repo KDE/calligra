@@ -91,10 +91,10 @@ class KoTextIterator;
 
 class KoSpell;
 #ifdef HAVE_LIBKSPELL2
-#include <kspell2/dialog.h>
 #include "kospell.h"
-using namespace KSpell2;
-class KSpell2::Dialog;
+namespace KSpell2 {
+    class Dialog;
+}
 #endif
 
 class PageBase : public QWidget
@@ -161,6 +161,13 @@ public:
     void testAndCloseAllTextObjectProtectedContent();
     void updateRulerInProtectContentMode();
     QPtrList<KAction> listOfResultOfCheckWord( const QString &word );
+
+    /**
+     * Returns the KPresenter global KSpell2 Broker object.
+     */
+    KSpell2::Broker *broker() const;
+
+
 
 signals:
     void currentPageChanged( int );
@@ -1177,6 +1184,12 @@ private:
         KSpell2::Dialog *dlg;
 #endif
     } m_spell;
+
+#ifdef HAVE_LIBKSPELL2
+    KSpell2::Broker::Ptr m_broker;
+#endif
+
+
 
     KActionMenu *actionInsertVariable;
     KActionMenu *actionInsertCustom;

@@ -17,6 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+
 #include <kapplication.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -61,6 +66,13 @@
 #include <klistview.h>
 #include <kfiledialog.h>
 #include <koeditpath.h>
+
+#ifdef HAVE_LIBKSPELL2
+#include <kspell2/configwidget.h>
+#include <kspell2/settings.h>
+#include <kspell2/broker.h>
+using namespace KSpell2;
+#endif
 
 KPConfig::KPConfig( KPresenterView* parent )
     : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
@@ -355,21 +367,22 @@ configureSpellPage::configureSpellPage( KPresenterView *_view, QWidget *parent, 
 {
     m_pView=_view;
     config = KPresenterFactory::global()->config();
+    m_spellConfigWidget = new ConfigWidget( _view->broker(), parent );
+    m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
 }
 
 void configureSpellPage::apply()
 {
 
     KPresenterDoc* doc = m_pView->kPresenterDoc();
+    m_spellConfigWidget->save();
 
-    //bool state = m_spellConfigWidget->backgroundSpellCheck();
-    //config->writeEntry( "SpellCheck", (int)state );
 
-    //doc->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
-
-    //doc->reactivateBgSpellChecking(state);
-    //FIXME reactivate just if there is a changes.
-    //doc->enableBackgroundSpellCheck( state );
+    m_pView->kPresenterDoc()->addIgnoreWordAllList(
+        m_pView->broker()->settings()->currentIgnoreList() );
+    //FIXME reactivate just if there are changes.
+    doc->enableBackgroundSpellCheck( m_pView->broker()->settings()->backgroundCheckerEnabled() );
+    doc->reactivateBgSpellChecking();
 }
 
 void configureSpellPage::slotDefault()

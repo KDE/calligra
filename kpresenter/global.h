@@ -39,8 +39,10 @@ enum AlignType {
 enum BackType {
     BT_COLOR = 0,
     BT_PICTURE = 1,
-    BT_CLIPART = 2
+    BT_CLIPART = 2,
+    BT_BRUSH = 3
 };
+
 enum BackView {
     BV_ZOOM = 0,
     BV_CENTER = 1,

@@ -1629,7 +1629,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 }
                 spellWord=spellWord.nextSibling().toElement();
             }
-            //m_bgSpellCheck->addIgnoreWordAllList( m_spellListIgnoreAll );
         }else if(elem.tagName()=="ATTRIBUTES" && _clean) {
             if(elem.hasAttribute("activePage"))
                 activePage=elem.attribute("activePage").toInt();

@@ -152,6 +152,8 @@
 #ifdef HAVE_LIBKSPELL2
 #include <kspell2/broker.h>
 #include <kspell2/defaultdictionary.h>
+#include <kspell2/dialog.h>
+using namespace KSpell2;
 #endif
 
 
@@ -261,6 +263,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_spell.macroCmdSpellCheck = 0L;
 #ifdef HAVE_LIBKSPELL2
     m_spell.dlg = 0;
+    m_broker = Broker::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) );
 #endif
 
     m_autoPresTimerConnected = false;
@@ -4846,7 +4849,7 @@ void KPresenterView::startKSpell()
 #ifdef HAVE_LIBKSPELL2
     // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     if ( !m_spell.kospell )
-        m_spell.kospell = new KoSpell( Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) ), this  );
+        m_spell.kospell = new KoSpell( m_broker, this  );
     m_spell.kospell->check( m_spell.textIterator, true );
 
     delete m_spell.dlg;
@@ -7014,9 +7017,8 @@ void KPresenterView::spellAddAutoCorrect (const QString & originalword, const QS
 QPtrList<KAction> KPresenterView::listOfResultOfCheckWord( const QString &word )
 {
     QPtrList<KAction> listAction;
- #ifdef HAVE_LIBKSPELL2
-    KSpell2::Broker::Ptr broker = Broker::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) );
-    DefaultDictionary *dict = broker->defaultDictionary();
+#ifdef HAVE_LIBKSPELL2
+    DefaultDictionary *dict = m_broker->defaultDictionary();
     QStringList lst = dict->suggest( word );
     if ( !lst.contains( word ))
     {
@@ -7031,7 +7033,7 @@ QPtrList<KAction> KPresenterView::listOfResultOfCheckWord( const QString &word )
             }
         }
     }
-    #endif
+#endif
     return listAction;
 }
 
@@ -7069,5 +7071,11 @@ KCommand * KPresenterView::getPenCmd( const QString &name, QPen pen, LineEnd lb,
 
     return macro;
 }
+
+Broker *KPresenterView::broker() const
+{
+    return m_broker;
+}
+
 
 #include "kpresenter_view.moc"
