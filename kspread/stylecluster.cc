@@ -26,7 +26,7 @@
 #include "kspread_sheet.h"
 #include "kspread_util.h"
 
-#include <qptrlist.h>
+#include <qvaluestack.h>
 
 namespace KSpread {
 
@@ -128,7 +128,7 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
   
   //let's keep track of the path we went down, so we can go up as well
   // note that we store pointers to pointers 
-  QPtrList<StyleClusterQuad*> path;
+  QValueStack<StyleClusterQuad**> path;
   
   while (true)
   {
@@ -137,7 +137,7 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
   
     last_node = *current_node;
     
-    path.append(current_node);
+    path.push(current_node);
     
     if( x - x_offset < half_quad_size ) {
       if( y - y_offset < half_quad_size ) {
@@ -208,9 +208,8 @@ void StyleCluster::insert( int x, int y, KSpreadStyle * style)
               *current_node = NULL;
               
               //move up one layer
-              current_node = path.last();
-              path.removeLast();
-              last_node = *(path.last());
+              current_node = path.pop();
+              last_node = *(path.top());
           }
         }
         
