@@ -3307,7 +3307,8 @@ void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /
         cursor()->parag()->invalidate(0);
         cursor()->parag()->setChanged( true );
         frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
-        frameSet()->kWordDocument()->refreshMenuCustomVariable();
+        if ( var->type()==VT_CUSTOM )
+            frameSet()->kWordDocument()->refreshMenuCustomVariable();
     }
 }
 
