@@ -23,7 +23,7 @@
 
 // include files for KDE
 #include <kapp.h>
-#include <kmsgbox.h>
+#include <kmessagebox.h>
 #include <opView.h>
 
 #include <opMenu.h>

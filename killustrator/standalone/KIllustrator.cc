@@ -81,7 +81,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kapp.h>
-//#include <kmsgbox.h>
+//#include <kmessagebox.h>
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <qlayout.h>

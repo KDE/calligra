@@ -21,7 +21,7 @@
 #define Inherited QDialog
 #include "widget.h"
 #include <kiconloader.h>
-#include <kmsgbox.h>
+#include <kmessagebox.h>
 #include <qkeycode.h>
 #include <qbttngrp.h>
 #include <qframe.h>

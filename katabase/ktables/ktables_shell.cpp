@@ -27,7 +27,7 @@
 
 // include files for KDE
 #include <kiconloader.h>
-#include <kmsgbox.h>
+#include <kmessagebox.h>
 #include <kfiledialog.h>
 
 #include <kstdaccel.h>

@@ -14,7 +14,7 @@
 #include <qmsgbox.h>
 #include <kurl.h>
 #include <kapp.h>
-#include <kmsgbox.h>
+#include <kmessagebox.h>
 #include <qstack.h>
 #include <qkeycode.h>
 #include <qpainter.h>
