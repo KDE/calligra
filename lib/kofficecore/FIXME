@@ -1,0 +1,20 @@
+
+things/bugs/issues that need to be fixed for 2.0 (1.0), IMHO
+
+- make sure all apps support calling load() multiple times on the same
+  document (kword and kpresenter leak tons of memory for example)
+
+- KoDocument::createShell is a big problem when calling it for an
+  embedded document, as the created object (shell) is not registered
+  with KLibLoader/KLibrary. Therefore theoretically KLibLoader might
+  attempt to close the library while there might still be a shell object
+  from that library be "active" .
+  workaround (?) : make sure that when the document dies, all associated
+  shells die, too.
+  (so the document keeps a list of shells, instead of using the qobj
+   hierarchy/tree)
+
+- container states are not saved/restored when using embedded parts,
+  as they are stored in the view, which gets destroyed when being deactivated
+  (fix: store the data in the document; problem: how to identify views?)
+
