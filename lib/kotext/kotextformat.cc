@@ -20,10 +20,12 @@
 //#include "kotextformat.h"
 #include "korichtext.h" // for KoTextFormat
 #include "kozoomhandler.h"
+#include <kglobal.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <assert.h>
 #include "kostyle.h"
+
 void KoTextFormat::KoTextFormatPrivate::clearCache()
 {
     delete m_screenFontMetrics; m_screenFontMetrics = 0L;

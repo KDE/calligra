@@ -55,14 +55,14 @@ public:
     void setMargin( QStyleSheetItem::Margin m, double _i );
     void setMargins( const double * _i );
 
-    /** Line spacing in pt if >=0, can also be LS_ONEANDHALF or LS_DOUBLE */
+    /** Line spacing in pt if >=0, can also be one of the LS_* values */
     double kwLineSpacing() const { return m_layout.lineSpacingValue(); }
 
     void setLineSpacing( double _i );
 
-    KoParagLayout::spacingType kwLineSpacingType() const { return m_layout.lineSpacingType; }
+    KoParagLayout::SpacingType kwLineSpacingType() const { return m_layout.lineSpacingType; }
 
-    void setLineSpacingType( KoParagLayout::spacingType _type );
+    void setLineSpacingType( KoParagLayout::SpacingType _type );
 
 
     /** Use this to change the paragraph alignment, not KoTextParag::setAlignment ! */

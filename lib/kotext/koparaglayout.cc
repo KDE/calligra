@@ -277,6 +277,11 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
                 layout.lineSpacingType = KoParagLayout::LS_MULTIPLE;
                 layout.lineSpacing = element.attribute( "spacingvalue" ).toDouble();
             }
+            else if ( type == "fixed" )
+            {
+                layout.lineSpacingType = KoParagLayout::LS_FIXED;
+                layout.lineSpacing = element.attribute( "spacingvalue" ).toDouble();
+            }
         }
     }
 
@@ -417,6 +422,11 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
         else if ( layout.lineSpacingType == KoParagLayout::LS_MULTIPLE )
         {
             element.setAttribute( "type", "multiple" );
+            element.setAttribute( "spacingvalue", layout.lineSpacing);
+        }
+        else if ( layout.lineSpacingType == KoParagLayout::LS_FIXED )
+        {
+            element.setAttribute( "type", "fixed" );
             element.setAttribute( "spacingvalue", layout.lineSpacing);
         }
         else

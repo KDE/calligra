@@ -105,7 +105,6 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     int wused = 0;
     int tminw = marg;
     bool wrapEnabled = isWrapEnabled( parag );
-    int linenr = 0;
 
     int i = start;
 #ifdef DEBUG_FORMATTER
@@ -186,75 +185,46 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    y += h;
 	    h = c->height();
 	    lineStart = new KoTextParagLineStart( y, h, h );
+            // Added for kotext (to be tested)
+            lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
+            lineStart->h += lineStart->lineSpacing;
 	    insertLineStart( parag, i, lineStart );
 	    c->lineStart = 1;
 	    firstChar = c;
 	    x = 0xffffff;
 	    continue;
 	}
-        //Currently unused in KWord
-#if 0
-	// Custom item that forces a new line
-	if ( c->isCustom() && c->customItem()->ownLine() ) {
-            KoTextCustomItem* ci = c->customItem();
-	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height(), left, 4, parag ) : left;
-	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height(), rm, 4, parag ) : 0 );
-	    KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, availableWidth - x );
-	    c->customItem()->resize( parag->painter(), dw );
-	    if ( x != left || w != dw )
-		fullWidth = FALSE;
-	    curLeft = x;
-	    if ( i == 0 || !isBreakable( string, i - 1 ) || string->at( i - 1 ).lineStart == 0 ) {
-		// Create a new line for this custom item
-		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
-		y += QMAX( h, tmph );
-		tmph = c->height();
-		h = tmph;
-		lineStart = lineStart2;
-		lineStart->y = y;
-		insertLineStart( parag, i, lineStart );
-		c->lineStart = 1;
-		firstChar = c;
-	    } else {
-		// No need for a new line, already at beginning of line
-		tmph = c->height();
-		h = tmph;
-		delete lineStart2;
-	    }
-	    lineStart->h = h;
-	    lineStart->baseLine = h;
-	    tmpBaseLine = lineStart->baseLine;
-	    lastBreak = -2;
-	    x = 0xffffff;
-	    minw = QMAX( minw, tminw );
-	    int tw = ci->minimumWidth();
-	    if ( tw < QWIDGETSIZE_MAX )
-		tminw = tw;
-	    else
-		tminw = marg;
- 	    wused = QMAX( wused, ci->width );
-	    continue;
-	} // else ... left/right custom items. Unused too atm.
-#endif
 
 #ifdef DEBUG_FORMATTER
 	qDebug("c='%c' i=%d/%d x=%d ww=%d availableWidth=%d (test is x+ww>aW) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,availableWidth,lastBreak,isBreakable(string,i));
 #endif
-	// Wrapping at end of line
+	// Wrapping at end of line - one big if :)
 	if ( wrapEnabled
-	     // Allow '  ' but not more
-	     && ( !isBreakable( string, i ) || ( i > 1 && lastBreak == i-1 && isBreakable( string, i-2 ) )
-					    || lastBreak == -2 )
-	     && ( lastBreak != -1 || allowBreakInWords() ) &&
-	     ( wrapAtColumn() == -1 && x + ww > availableWidth && lastBreak != -1 ||
-	       wrapAtColumn() == -1 && x + ww > availableWidth - 4 && lastBreak == -1 && allowBreakInWords() ||
-	       wrapAtColumn() != -1 && col >= wrapAtColumn() ) ||
-	       parag->isNewLinesAllowed() && lastChr->c == '\n' && lastBreak > -1 ) {
+             // Check if should break (i.e. we are after the max X for the end of the line)
+	     && ( /*wrapAtColumn() == -1 &&*/ x + ww > availableWidth &&
+                  ( lastBreak != -1 || allowBreakInWords() )
+                  /*|| wrapAtColumn() != -1 && col >= wrapAtColumn()*/ )
+
+	     // Allow two breakable chars next to each other (e.g. '  ') but not more
+	     && ( !isBreakable( string, i ) ||
+                  ( i > 1 && lastBreak == i-1 && isBreakable( string, i-2 ) ) ||
+                  lastBreak == -2 ) // ... used to be a special case...
+
+             // Ensure that there is at least one char per line, otherwise, on
+             // a very narrow document and huge chars, we could loop forever.
+             // checkVerticalBreak takes care of moving down the lines where no
+             // char should be, anyway.
+             // Hmm, it doesn't really do so. To be continued...
+             /////////// && ( firstChar != c )
+
+             // Or maybe we simply encountered a '\n'
+             || lastChr->c == '\n' && parag->isNewLinesAllowed() && lastBreak > -1 )
+        {
 #ifdef DEBUG_FORMATTER
 	    qDebug( "BREAKING" );
 #endif
-	    if ( wrapAtColumn() != -1 )
-		minw = QMAX( minw, x + ww );
+	    //if ( wrapAtColumn() != -1 )
+	    //    minw = QMAX( minw, x + ww );
 
             bool hyphenated = false;
             // Hyphenation: check if we can break somewhere between lastBreak and i
@@ -269,16 +239,22 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                     word += string->at(wordEnd).c;
                     wordEnd++;
                 }
-                if ( !word.isEmpty() )
+                if ( word.length() > 1 ) // don't call the hyphenator for empty or one-letter words
                 {
                     QString lang = string->at(wordStart).format()->language();
                     char * hyphens = m_hyphenator->hyphens( word, lang );
 #ifdef DEBUG_FORMATTER
-                    kdDebug(32500) << "Hyphenation: word=" << word << " lang=" << lang << " hyphens=" << hyphens << endl;
+                    kdDebug(32500) << "Hyphenation: word=" << word << " lang=" << lang << " hyphens=" << hyphens << " maxlen=" << maxlen << endl;
+                    kdDebug(32500) << "Parag indexes: wordStart=" << wordStart << " lastBreak=" << lastBreak << " i=" << i << endl;
 #endif
                     int hylen = strlen(hyphens);
                     Q_ASSERT( maxlen <= hylen );
-                    for ( int hypos = maxlen-1 ; hypos >= 0 ; --hypos )
+                    // If this word was already hyphenated (at the previous line),
+                    // don't break it there again. We can only break after firstChar.
+                    int minPos = QMAX( 0, (firstChar - &string->at(0)) - wordStart );
+
+                    // Check hyphenation positions from the end
+                    for ( int hypos = maxlen-1 ; hypos >= minPos ; --hypos )
                         if ( ( hyphens[hypos] % 2 ) // odd number -> can break there...
                                && string->at(hypos + wordStart).format()->hyphenation() ) // ...if the user is ok with that
                         {
@@ -294,21 +270,21 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 }
             }
 
-	    // No breakable char found -> break at current char
+	    // No breakable char found -> break at current char (i.e. before 'i')
 	    if ( lastBreak < 0 ) {
-		Q_ASSERT( lineStart );
-		//if ( lineStart ) {
-		    // (combine lineStart and tmpBaseLine/tmph)
-		    int belowBaseLine = QMAX( h - lineStart->baseLine, tmph - tmpBaseLine );
-		    lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
-		    h = lineStart->baseLine + belowBaseLine;
-		    lineStart->h = h;
-		//}
+                // (combine lineStart->baseLine/h and tmpBaseLine/tmph)
+                int belowBaseLine = QMAX( h - lineStart->baseLine, tmph - tmpBaseLine );
+                lineStart->baseLine = QMAX( lineStart->baseLine, tmpBaseLine );
+                h = lineStart->baseLine + belowBaseLine;
+                lineStart->h = h;
+
 		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, availableWidth - x );
-		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
+                lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
+		lineStart->h += lineStart->lineSpacing;
 		y += lineStart->h;
 #ifdef DEBUG_FORMATTER
-                qDebug( "new line created, linenr now %d", linenr );
+                int linenr = parag->lineStartList().count()-1;
+                qDebug( "line %d done (breaking at current char)", linenr );
 #endif
 
 		lineStart = lineStart2;
@@ -341,6 +317,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		lastBreak = -1;
 		col = 0;
 		tminw = marg; // not in QRT?
+                continue; //// TEST
 	    } else {
 		// Breakable char was found
 		i = lastBreak;
@@ -360,11 +337,13 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                     spaceAfterLine -= width;
                 }
 		KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, spaceAfterLine );
-		lineStart->h += doc ? parag->lineSpacing( linenr++ ) : 0;
+                lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
+		lineStart->h += lineStart->lineSpacing;
 		y += lineStart->h;
 		lineStart = lineStart2;
 #ifdef DEBUG_FORMATTER
-		qDebug("Breaking at a breakable char (%d). linenr=%d y=%d",i,linenr,y);
+		qDebug("Breaking at a breakable char (%d). linenr=%d y=%d",
+                       i,parag->lineStartList().count()-1,y);
 #endif
 
 		c = &string->at( i + 1 ); // The first char in the new line
@@ -516,7 +495,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     // Finish formatting the last line
     if ( lineStart ) {
 #ifdef DEBUG_FORMATTER
-	qDebug( "Last Line.... linenr=%d", linenr );
+	qDebug( "Last Line.... linenr=%d", (int)parag->lineStartList().count()-1 );
 #endif
         //qDebug( "Combining %d/%d with %d/%d", lineStart->baseLine, h, tmpBaseLine, tmph );
 	// (combine lineStart and tmpBaseLine/tmph)
@@ -530,8 +509,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    align = Qt::AlignAuto;
         int space = availableWidth - x + c->width; // don't count the trailing space (it breaks e.g. centering)
         KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, space );
-
-	h += doc ? parag->lineSpacing( linenr++ ) : 0;
+        lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
+	h += lineStart->lineSpacing;
 	lineStart->h = h;
 	delete lineStart2;
     }

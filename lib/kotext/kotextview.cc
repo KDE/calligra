@@ -927,7 +927,7 @@ KCommand * KoTextView::setAlignCommand( int align )
 {
      return textObject()->setAlignCommand( m_cursor, align );
 }
-KCommand * KoTextView::setLineSpacingCommand( double spacing, KoParagLayout::spacingType _type)
+KCommand * KoTextView::setLineSpacingCommand( double spacing, KoParagLayout::SpacingType _type)
 {
      return textObject()->setLineSpacingCommand( m_cursor, spacing, _type);
 }

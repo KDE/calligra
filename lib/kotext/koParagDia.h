@@ -31,6 +31,8 @@
 #include "koparaglayout.h"
 #include "koparagcounter.h"
 #include <knuminput.h>
+#include <qgroupbox.h>
+
 class KButtonBox;
 class KColorButton;
 class KoTextDocument;
@@ -51,6 +53,7 @@ class QRadioButton;
 class QWidget;
 class KDoubleNumInput;
 class KComboBox;
+class QVBoxLayout;
 
 /**
  * This is the base class for any widget [usually used in a tab]
@@ -111,7 +114,7 @@ public:
     double spaceAfterParag() const;
     double lineSpacing() const;
     int pageBreaking() const;
-    KoParagLayout::spacingType lineSpacingType() const;
+    KoParagLayout::SpacingType lineSpacingType() const;
 private slots:
     void leftChanged( double );
     void rightChanged( double );
@@ -121,6 +124,8 @@ private slots:
     void beforeChanged( double );
     void afterChanged( double );
 private:
+    void updateLineSpacing( KoParagLayout::SpacingType _type );
+
     KDoubleNumInput *eLeft, *eRight, *eFirstLine, *eBefore, *eAfter, *eSpacing;
     QComboBox *cSpacing;
     QCheckBox *cKeepLinesTogether, *cHardBreakBefore, *cHardBreakAfter;
@@ -523,7 +528,7 @@ public:
     double spaceBeforeParag() const { return m_indentSpacingWidget->spaceBeforeParag(); }
     double spaceAfterParag() const { return m_indentSpacingWidget->spaceAfterParag(); }
     double lineSpacing() const { return m_indentSpacingWidget->lineSpacing(); }
-    KoParagLayout::spacingType lineSpacingType() const{ return m_indentSpacingWidget->lineSpacingType(); }
+    KoParagLayout::SpacingType lineSpacingType() const{ return m_indentSpacingWidget->lineSpacingType(); }
     int pageBreaking() const { return m_indentSpacingWidget->pageBreaking(); }
 
     // tab 2

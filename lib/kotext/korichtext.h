@@ -789,19 +789,21 @@ struct Q_EXPORT KoTextParagSelection
 
 struct Q_EXPORT KoTextParagLineStart
 {
-    KoTextParagLineStart() : y( 0 ), baseLine( 0 ), h( 0 ), hyphenated( false )
+    KoTextParagLineStart() : y( 0 ), baseLine( 0 ), h( 0 ), lineSpacing( 0 ), hyphenated( false )
 #ifndef QT_NO_COMPLEXTEXT
 	, bidicontext( 0 )
 #endif
     {  }
-    KoTextParagLineStart( ushort y_, ushort bl, ushort h_ ) : y( y_ ), baseLine( bl ), h( h_ ), hyphenated( false ),
+    KoTextParagLineStart( ushort y_, ushort bl, ushort h_ ) : y( y_ ), baseLine( bl ), h( h_ ),
+                                                              lineSpacing( 0 ), hyphenated( false ),
 	w( 0 )
 #ifndef QT_NO_COMPLEXTEXT
 	, bidicontext( 0 )
 #endif
     {  }
 #ifndef QT_NO_COMPLEXTEXT
-    KoTextParagLineStart( KoBidiContext *c, KoBidiStatus s ) : y(0), baseLine(0), h(0), hyphenated( false ),
+    KoTextParagLineStart( KoBidiContext *c, KoBidiStatus s ) : y(0), baseLine(0), h(0),
+                                                               lineSpacing( 0 ), hyphenated( false ),
 	status( s ), bidicontext( c ) { if ( bidicontext ) bidicontext->ref(); }
 #endif
 
@@ -827,7 +829,7 @@ struct Q_EXPORT KoTextParagLineStart
 #endif
 
 public:
-    ushort y, baseLine, h;
+    ushort y, baseLine, h, lineSpacing;
     bool hyphenated;
 #ifndef QT_NO_COMPLEXTEXT
     KoBidiStatus status;

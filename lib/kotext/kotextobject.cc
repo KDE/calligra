@@ -1152,7 +1152,7 @@ KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetIte
     return  new KoTextCommand( this, /*cmd, */name );
 }
 
-KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::spacingType _type, int selectionId )
+KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::SpacingType _type, int selectionId )
 {
     if ( protectContent() )
         return 0L;

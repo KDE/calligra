@@ -49,7 +49,6 @@ KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollecti
     setAddMargins( true );                 // top margin and bottom are added, not max'ed
     if ( !formatter )
         formatter = new KoTextFormatter;
-    formatter->setAllowBreakInWords( true ); // Necessary for lines without a single space
     setFormatter( formatter );
 
     setY( 0 );

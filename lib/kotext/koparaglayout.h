@@ -63,13 +63,28 @@ public:
     };
 
     // This class is used as a struct, which explains the public vars :)
+    /**
+     * Alignment flag (AlignAuto/AlignLeft/AlignRight/AlignJustify)
+     */
     int alignment;
     /** left, right, top, bottom, firstLineSpacing - in pt */
     double margins[5];
-    enum spacingType { LS_SINGLE = 0, LS_ONEANDHALF = -1, LS_DOUBLE = -2, LS_CUSTOM = -3, LS_AT_LEAST = -4, LS_MULTIPLE = -6};
-    spacingType lineSpacingType;
+    /**
+     * Line spacing values
+     * Assuming h is the height of the biggest char in the line,
+     * and v is the linespacing value, the total line height is:
+     *
+     * Single: h
+     * 1.5/2/multiple: v*h
+     * Custom (aka "line distance"): h + v
+     * At least: >= v
+     * Fixed: v
+     */
+    enum SpacingType { LS_SINGLE = 0, LS_ONEANDHALF = -1, LS_DOUBLE = -2,
+                       LS_CUSTOM = -3, LS_AT_LEAST = -4, LS_MULTIPLE = -5, LS_FIXED = -6 };
+    SpacingType lineSpacingType;
     double lineSpacingValue() const { return lineSpacing;}
-    void setLineSpacingValue(double _value)  { lineSpacing = _value;}
+    void setLineSpacingValue(double _value) { lineSpacing = _value;}
     double shadowDistance;
     QColor shadowColor;
     enum {

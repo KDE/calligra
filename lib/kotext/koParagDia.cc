@@ -887,12 +887,14 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
                                                  KDialog::marginHint(), KDialog::spacingHint() );
 
     cSpacing = new QComboBox( false, spacingFrame, "" );
+    // Keep order in sync with lineSpacingType() and display()
     cSpacing->insertItem( i18n( "Line spacing value", "Single" ) );
     cSpacing->insertItem( i18n( "Line spacing value", "1.5 Lines" ) );
     cSpacing->insertItem( i18n( "Line spacing value", "Double" ) );
-    cSpacing->insertItem( i18n( "Exactly (%1)" ).arg(unitName) );
-    cSpacing->insertItem( i18n( "At Least (%1)" ).arg(unitName) );
     cSpacing->insertItem( i18n( "Multiply") );
+    cSpacing->insertItem( i18n( "Line Distance (%1)" ).arg(unitName) ); // LS_CUSTOM
+    cSpacing->insertItem( i18n( "At Least (%1)" ).arg(unitName) );
+    cSpacing->insertItem( i18n( "Fixed (%1)").arg(unitName) ); // LS_FIXED
 
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
@@ -972,30 +974,35 @@ double KoIndentSpacingWidget::spaceAfterParag() const
     return QMAX(0,KoUnit::ptFromUnit( eAfter->value(), m_unit ));
 }
 
-KoParagLayout::spacingType KoIndentSpacingWidget::lineSpacingType() const
+KoParagLayout::SpacingType KoIndentSpacingWidget::lineSpacingType() const
 {
     int index = cSpacing->currentItem();
     switch ( index ) {
-    case 0: // single
+    case 0:
         return KoParagLayout::LS_SINGLE;
-    case 1: // one-and-half
+    case 1:
         return KoParagLayout::LS_ONEANDHALF;
     case 2:
         return KoParagLayout::LS_DOUBLE;
     case 3:
-        return KoParagLayout::LS_CUSTOM;
-    case 4:
-        return KoParagLayout::LS_AT_LEAST;
-    case 5:
         return KoParagLayout::LS_MULTIPLE;
+    case 4:
+        return KoParagLayout::LS_CUSTOM;
+    case 5:
+        return KoParagLayout::LS_AT_LEAST;
+    case 6:
+        return KoParagLayout::LS_FIXED;
     default:
+        kdError(32500) << "Error in KoIndentSpacingWidget::lineSpacingType" << endl;
         return KoParagLayout::LS_SINGLE;
     }
 }
 
 double KoIndentSpacingWidget::lineSpacing() const
 {
-    return (lineSpacingType() ==KoParagLayout::LS_MULTIPLE) ? QMAX(1, eSpacing->value()): QMAX(0,KoUnit::ptFromUnit( eSpacing->value(), m_unit ));
+    return (lineSpacingType() == KoParagLayout::LS_MULTIPLE)
+                               ? QMAX(1, eSpacing->value())
+                               : QMAX(0, KoUnit::ptFromUnit( eSpacing->value(), m_unit ));
 }
 
 int KoIndentSpacingWidget::pageBreaking() const
@@ -1035,7 +1042,7 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     prev1->setAfter( _after );
 
     double _spacing = lay.lineSpacingValue();
-    KoParagLayout::spacingType _type = lay.lineSpacingType;
+    KoParagLayout::SpacingType _type = lay.lineSpacingType;
     switch ( _type ) {
     case KoParagLayout::LS_SINGLE: // single
         cSpacing->setCurrentItem( 0 );
@@ -1046,26 +1053,26 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     case KoParagLayout::LS_DOUBLE:
         cSpacing->setCurrentItem( 2 );
         break;
-    case KoParagLayout::LS_CUSTOM:
+    case KoParagLayout::LS_MULTIPLE:
         cSpacing->setCurrentItem( 3 );
         break;
-    case KoParagLayout::LS_AT_LEAST:
+    case KoParagLayout::LS_CUSTOM:
         cSpacing->setCurrentItem( 4 );
         break;
-    case KoParagLayout::LS_MULTIPLE:
+    case KoParagLayout::LS_AT_LEAST:
         cSpacing->setCurrentItem( 5 );
+        break;
+    case KoParagLayout::LS_FIXED:
+        cSpacing->setCurrentItem( 6 );
         break;
     default:
         cSpacing->setCurrentItem( 0 );
         break;
     }
 
-    eSpacing->setEnabled( (_type != KoParagLayout::LS_SINGLE &&
-                              _type != KoParagLayout::LS_ONEANDHALF &&
-                              _type != KoParagLayout::LS_DOUBLE));
-    eSpacing->setValue( (_type == KoParagLayout::LS_MULTIPLE) ? QMAX( 1, _spacing) : KoUnit::ptToUnit( _spacing, m_unit ) );
-
-    prev1->setSpacing( _spacing );
+    updateLineSpacing( _type );
+    eSpacing->setValue( (_type == KoParagLayout::LS_MULTIPLE) ? QMAX( 1, _spacing )
+                        : KoUnit::ptToUnit( _spacing, m_unit ) );
 
     cKeepLinesTogether->setChecked( lay.pageBreaking & KoParagLayout::KeepLinesTogether );
     cHardBreakBefore->setChecked( lay.pageBreaking & KoParagLayout::HardFrameBreakBefore );
@@ -1107,23 +1114,27 @@ void KoIndentSpacingWidget::firstChanged( double _val )
     prev1->setFirst( _val );
 }
 
-void KoIndentSpacingWidget::spacingActivated( int /*_index*/ )
+void KoIndentSpacingWidget::updateLineSpacing( KoParagLayout::SpacingType _type )
 {
-    KoParagLayout::spacingType _type = lineSpacingType();
-    bool state = (_type != KoParagLayout::LS_SINGLE &&
-                  _type != KoParagLayout::LS_ONEANDHALF &&
-                  _type != KoParagLayout::LS_DOUBLE);
+    bool needsValue = (_type != KoParagLayout::LS_SINGLE &&
+                       _type != KoParagLayout::LS_ONEANDHALF &&
+                       _type != KoParagLayout::LS_DOUBLE);
 
-    eSpacing->setEnabled( state);
-    if ( state)
-    {
-        eSpacing->setFocus( );
+    eSpacing->setEnabled( needsValue );
+    if ( needsValue )
         prev1->setSpacing( eSpacing->value() );
-    }
     else
     {
-        prev1->setSpacing( _type == KoParagLayout::LS_ONEANDHALF ? 8 : _type == KoParagLayout::LS_DOUBLE ? 16 :0 );
+        prev1->setSpacing( _type == KoParagLayout::LS_ONEANDHALF ? 8 :
+                           _type == KoParagLayout::LS_DOUBLE ? 16 :0 );
     }
+}
+
+void KoIndentSpacingWidget::spacingActivated( int /*_index*/ )
+{
+    updateLineSpacing( lineSpacingType() );
+    if ( eSpacing->isEnabled() ) // i.e. needsValue = true
+        eSpacing->setFocus();
 }
 
 void KoIndentSpacingWidget::spacingChanged( double _val )

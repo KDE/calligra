@@ -79,7 +79,7 @@ void KoTextParag::setLineSpacing( double _i )
     invalidate(0);
 }
 
-void KoTextParag::setLineSpacingType( KoParagLayout::spacingType _type )
+void KoTextParag::setLineSpacingType( KoParagLayout::SpacingType _type )
 {
     m_layout.lineSpacingType = _type;
     invalidate(0);
@@ -379,32 +379,38 @@ int KoTextParag::lineSpacing( int line ) const
         QMap<int, KoTextParagLineStart*>::ConstIterator it = that->lineStartList().begin();
         while ( line-- > 0 )
             ++it;
-        int height = ( *it )->h;
-        // Tricky. During formatting height doesn't include the linespacing,
-        // but afterwards (e.g. when drawing the cursor), it does !
-        // This explains the tests for isValid() below, and the different calculation depending on it.
+        if ( isValid() )
+            return (*it)->lineSpacing;
 
+        int height = ( *it )->h;
         //kdDebug(32500) << " line height=" << height << " valid=" << isValid() << endl;
         switch ( m_layout.lineSpacingType )
         {
         case KoParagLayout::LS_MULTIPLE:
         {
             int n = QMAX( (int)m_layout.lineSpacingValue() - 1, 1 );
-            return shadow + (isValid() ? n*height/(n+1) : n);
+            return shadow + n*height;
         }
         case KoParagLayout::LS_ONEANDHALF:
         {
             // Special case of LS_MULTIPLE, with n=0.5
-            return shadow + (isValid() ? height / 3 : height / 2);
+            return shadow + height / 2;
         }
         case KoParagLayout::LS_DOUBLE:
         {
             // Special case of LS_MULTIPLE, with n=1
-            return shadow + (isValid() ? height / 2 : height);
+            return shadow + height;
         }
         case KoParagLayout::LS_AT_LEAST:
         {
-            return shadow + (height > zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() )) ? 0 : (zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() )-height);
+            int atLeast = zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() );
+            int h = QMAX( height, atLeast );
+            // height is now the required total height
+            return shadow + h - height;
+        }
+        case KoParagLayout::LS_FIXED:
+        {
+            return shadow + zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() ) - height;
         }
         // Silence compiler warnings
         case KoParagLayout::LS_SINGLE:
@@ -412,7 +418,7 @@ int KoTextParag::lineSpacing( int line ) const
             break;
         }
     }
-    kdWarning() << "Unhandled linespacing value : " << m_layout.lineSpacingValue() << endl;
+    kdWarning() << "Unhandled linespacing type : " << m_layout.lineSpacingType << endl;
     return 0+shadow;
 }
 
@@ -1336,6 +1342,8 @@ void KoTextParag::printRTDebug( int info )
         kdDebug(32500) << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
                   << " leftMargin()=" << leftMargin() << " firstLineMargin()=" << firstLineMargin()
                   << " rightMargin()=" << rightMargin() << endl;
+        //if ( kwLineSpacingType() != KoParagLayout::LS_SINGLE )
+        //    kdDebug(32500) << "  linespacing type=" << kwLineSpacingType() << " value=" << kwLineSpacing() << endl;
 
         static const char * const tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();
