@@ -3055,7 +3055,7 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs )
     fs->setAnchored( textFrameSet(), static_cast<KWTextParag *>(cursor->parag()), cursor->index() );
 }
 
-void KWTextFrameSetEdit::insertVariable( int type )
+void KWTextFrameSetEdit::insertVariable( int type, int subtype )
 {
     kdDebug() << "KWTextFrameSetEdit::insertVariable " << type << endl;
     KWDocument * doc = frameSet()->kWordDocument();
@@ -3075,7 +3075,7 @@ void KWTextFrameSetEdit::insertVariable( int type )
             var = new KWSerialLetterVariable( textFrameSet(), dia.getName(), doc->variableFormat( type ) );
     }
     else
-        var = KWVariable::createVariable( type, textFrameSet() );
+        var = KWVariable::createVariable( type, subtype, textFrameSet() );
 
     if ( var )
     {

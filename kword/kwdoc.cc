@@ -2300,17 +2300,8 @@ KWVariableFormat * KWDocument::variableFormat( int type )
             case VT_PGNUM:
                 format = new KWVariablePgNumFormat();
                 break;
-            case VT_FILENAME:
-                format = new KWVariableFileNameFormat();
-                break;
-            case VT_AUTHORNAME:
-                format = new KWVariableAuthorNameFormat();
-                break;
-            case VT_EMAIL:
-                format = new KWVariableEmailFormat();
-                break;
-            case VT_COMPANYNAME:
-                format = new KWVariableCompanyNameFormat();
+            case VT_FIELD:
+                format = new KWVariableFieldFormat();
                 break;
             case VT_CUSTOM:
                 format = new KWVariableCustomFormat();

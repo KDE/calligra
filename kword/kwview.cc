@@ -1440,7 +1440,7 @@ void KWView::insertVariableFileName()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->insertVariable( VT_FILENAME );
+        edit->insertVariable( VT_FIELD, VST_FILENAME );
 }
 
 /*===============================================================*/
@@ -1448,14 +1448,14 @@ void KWView::insertVariableAuthorName()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->insertVariable( VT_AUTHORNAME );
+        edit->insertVariable( VT_FIELD, VST_AUTHORNAME );
 }
 /*===============================================================*/
 void KWView::insertVariableEmail()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->insertVariable( VT_EMAIL );
+        edit->insertVariable( VT_FIELD, VST_EMAIL );
 }
 
 /*===============================================================*/
@@ -1463,7 +1463,7 @@ void KWView::insertVariableCompanyName()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->insertVariable( VT_COMPANYNAME );
+        edit->insertVariable( VT_FIELD, VST_COMPANYNAME );
 }
 
 /*===============================================================*/

@@ -73,57 +73,18 @@ QString KWVariableTimeFormat::convert( KWVariable *_var )
 }
 
 /******************************************************************/
-/* Class: KWVariableFileNameFormat                                */
+/* Class: KWVariableFieldFormat                                */
 /******************************************************************/
-QString KWVariableFileNameFormat::convert( KWVariable *_var )
+QString KWVariableFieldFormat::convert( KWVariable *_var )
 {
-    if ( _var->getType() != VT_FILENAME ) {
-        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a file name!!!" << endl;
-        return QString();
+    KWFieldVariable * var = dynamic_cast<KWFieldVariable *>(_var);
+    if ( var == 0L ) {
+        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a field!!!" << endl;
+        return QString::null;
     }
 
-    return dynamic_cast<KWFileNameVariable*>( _var )->getFileName();
+    return var->value();
 }
-
-/******************************************************************/
-/* Class: KWVariableAuthorNameFormat                              */
-/******************************************************************/
-QString KWVariableAuthorNameFormat::convert( KWVariable *_var )
-{
-    if ( _var->getType() !=  VT_AUTHORNAME ) {
-        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a author name!!!" << endl;
-        return QString();
-    }
-
-    return dynamic_cast<KWNameAuthorVariable*>( _var )->getAuthorName();
-}
-
-/******************************************************************/
-/* Class: KWVariableEmailFormat                                   */
-/******************************************************************/
-QString KWVariableEmailFormat::convert( KWVariable *_var )
-{
-    if ( _var->getType() !=  VT_EMAIL ) {
-        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a email!!!" << endl;
-        return QString();
-    }
-
-    return dynamic_cast<KWEmailVariable*>( _var )->getEmail();
-}
-
-/******************************************************************/
-/* Class: KWVariableCompanyNameFormat                             */
-/******************************************************************/
-QString KWVariableCompanyNameFormat::convert( KWVariable *_var )
-{
-    if ( _var->getType() !=  VT_COMPANYNAME ) {
-        kdWarning() << "Can't convert variable of type " << _var->getType() << " to a company name!!!" << endl;
-        return QString();
-    }
-
-    return dynamic_cast<KWCompanyNameVariable*>( _var )->getCompanyName();
-}
-
 
 /******************************************************************/
 /* Class: KWVariableCustomFormat                                  */
@@ -148,10 +109,11 @@ QString KWVariableSerialLetterFormat::convert( KWVariable *_var )
         return QString();
     }
 
-    if ( dynamic_cast<KWSerialLetterVariable*>( _var )->getValue() ==
-         dynamic_cast<KWSerialLetterVariable*>( _var )->getName() )
-        return "<" + dynamic_cast<KWSerialLetterVariable*>( _var )->getValue() + ">";
-    return dynamic_cast<KWSerialLetterVariable*>( _var )->getValue();
+    KWSerialLetterVariable * var = dynamic_cast<KWSerialLetterVariable*>( _var );
+    QString value = var->getValue();
+    if ( value == var->getName() )
+        return "<" + value + ">";
+    return value;
 }
 
 
@@ -162,7 +124,7 @@ QString KWVariableSerialLetterFormat::convert( KWVariable *_var )
 /* Class: KWVariable                                              */
 /******************************************************************/
 KWVariable::KWVariable( KWTextFrameSet *fs, KWVariableFormat *_varFormat )
-    : KWTextCustomItem( fs->textDocument() ), text()
+    : KWTextCustomItem( fs->textDocument() )
 {
     varFormat = _varFormat;
     doc = fs->kWordDocument();
@@ -208,6 +170,7 @@ void KWVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch
     int index = parag->findCustomItem( this );
     kdDebug() << "KWVariable::draw index=" << index << " x=" << x << " y=" << y << endl;
     parag->lineHeightOfChar( index, &bl, &_y );
+    kdDebug() << "KWVariable::draw bl=" << bl << " _y=" << _y << endl;
     p->drawText( x, y /*+ _y*/ + bl, getText() );
     p->restore();
 }
@@ -226,7 +189,7 @@ void KWVariable::load( QDomElement & )
 }
 
 //static
-KWVariable * KWVariable::createVariable( int type, KWTextFrameSet * textFrameSet )
+KWVariable * KWVariable::createVariable( int type, int subtype, KWTextFrameSet * textFrameSet )
 {
     KWDocument * doc = textFrameSet->kWordDocument();
     KWVariableFormat * varFormat = doc->variableFormat( type );
@@ -252,53 +215,11 @@ KWVariable * KWVariable::createVariable( int type, KWTextFrameSet * textFrameSet
     case VT_PGNUM:
         var = new KWPgNumVariable( textFrameSet, varFormat );
     break;
-    case  VT_FILENAME:
-        var = new KWFileNameVariable( textFrameSet,
-                                      doc->url().isEmpty()?i18n("<None>"):doc->url().filename(),
-                                      varFormat );
+    case VT_FIELD:
+        var = new KWFieldVariable( textFrameSet, subtype, varFormat );
     break;
-    case VT_AUTHORNAME:
-    case VT_EMAIL:
-    case VT_COMPANYNAME:
-    {
-        KConfig config("kofficerc");
-        QString full_name;
-        QString email_addr;
-        QString organization;
-        if( config.hasGroup( "Author" ))
-        {
-            config.setGroup( "Author" );
-            full_name=config.readEntry("full-name","");
-            email_addr=config.readEntry("email", "");
-            organization=config.readEntry("company", "");
-        }
-        else
-        {
-            KConfig config2( "emaildefaults", true );
-            config2.setGroup( "Defaults" );
-            QString group = config2.readEntry("Profile","Default");
-            config2.setGroup(QString("PROFILE_%1").arg(group));
-            full_name = config2.readEntry( "FullName", "" );
-            email_addr=config2.readEntry("EmailAddress", "");
-        }
-
-        switch ( type ) {
-        case VT_AUTHORNAME:
-            var = new KWNameAuthorVariable( textFrameSet,full_name.isEmpty()?i18n("<None>"):full_name, varFormat );
-            break;
-        case VT_EMAIL:
-            var = new KWEmailVariable( textFrameSet,email_addr.isEmpty()?i18n("<None>"):email_addr, varFormat );
-            break;
-        case VT_COMPANYNAME:
-            var = new KWCompanyNameVariable( textFrameSet,organization.isEmpty()?i18n("<None>"):organization, varFormat );
-            break;
-        defaut:
-            break;
-        }
-        break;
-    }
     case VT_CUSTOM:
-        var = new KWCustomVariable( textFrameSet, QString::null, doc->variableFormat( type ) );
+       var = new KWCustomVariable( textFrameSet, QString::null, doc->variableFormat( type ) );
         break;
     case VT_SERIALLETTER:
         var = new KWSerialLetterVariable( textFrameSet, QString::null, doc->variableFormat( type ) );
@@ -334,14 +255,15 @@ void KWPgNumVariable::load( QDomElement& elem )
 /******************************************************************/
 
 KWDateVariable::KWDateVariable( KWTextFrameSet *fs, bool _fix, QDate _date, KWVariableFormat *_varFormat )
-    : KWVariable( fs, _varFormat ), fix( _fix )
+    : KWVariable( fs, _varFormat ), date( _date ), fix( _fix )
+{
+    recalc();
+}
+
+void KWDateVariable::recalc()
 {
     if ( !fix )
         date = QDate::currentDate();
-    else
-        date = _date;
-
-    recalc();
 }
 
 void KWDateVariable::save( QDomElement& parentElem )
@@ -380,14 +302,15 @@ void KWDateVariable::load( QDomElement& elem )
 /******************************************************************/
 
 KWTimeVariable::KWTimeVariable( KWTextFrameSet *fs, bool _fix, QTime _time, KWVariableFormat *_varFormat )
-    : KWVariable( fs, _varFormat ), fix( _fix )
+    : KWVariable( fs, _varFormat ), time( _time ), fix( _fix )
+{
+    recalc();
+}
+
+void KWTimeVariable::recalc()
 {
     if ( !fix )
         time = QTime::currentTime();
-    else
-        time = _time;
-
-    recalc();
 }
 
 void KWTimeVariable::save( QDomElement& parentElem )
@@ -424,144 +347,86 @@ void KWTimeVariable::load( QDomElement& elem )
 }
 
 /******************************************************************/
-/* Class: KWFileNameVariable                                      */
+/* Class: KWFieldVariable                                         */
 /******************************************************************/
-KWFileNameVariable::KWFileNameVariable( KWTextFrameSet *fs,const QString &_fileName, KWVariableFormat *_varFormat )
-    : KWVariable( fs, _varFormat ), filename( _fileName )
+KWFieldVariable::KWFieldVariable( KWTextFrameSet *fs, int subtype, KWVariableFormat *varFormat )
+    : KWVariable( fs, varFormat ), m_subtype( subtype )
 {
-    doc->unregisterVariable( this );
-    doc->registerVariable( this );
-    recalc();
+    // m_subtype is VST_NONE when loading, it will be read in load()
+    if ( m_subtype != VST_NONE )
+        recalc();
 }
 
-void KWFileNameVariable::save( QDomElement& parentElem )
+void KWFieldVariable::save( QDomElement& parentElem )
 {
-    //kdDebug() << "KWFileNameVariable::save" << endl;
+    //kdDebug() << "KWFieldVariable::save" << endl;
     KWVariable::save( parentElem );
-    QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
+    QDomElement elem = parentElem.ownerDocument().createElement( "FIELD" );
     parentElem.appendChild( elem );
-    elem.setAttribute( "name", correctQString( filename ) );
+    elem.setAttribute( "field", m_subtype );
+    elem.setAttribute( "value", correctQString( m_value ) );
 }
 
-void KWFileNameVariable::load( QDomElement& elem )
+void KWFieldVariable::load( QDomElement& elem )
 {
-    doc->unregisterVariable( this );
-    doc->registerVariable( this );
-    recalc();
     KWVariable::load( elem );
-    QDomElement e = elem.namedItem( "FILENAME" ).toElement();
+    QDomElement e = elem.namedItem( "FIELD" ).toElement();
     if (!e.isNull())
     {
-        filename = e.attribute( "name" );
+        m_subtype = e.attribute( "field" ).toInt();
+        m_value = e.attribute( "value" );
+    } else
+        kdWarning() << "FIELD element not found !" << endl;
+
+    recalc();
+}
+
+void KWFieldVariable::recalc()
+{
+    switch( m_subtype ) {
+        case VST_NONE:
+            kdWarning() << "KWFieldVariable::recalc() called with m_subtype = VST_NONE !" << endl;
+            break;
+        case VST_FILENAME:
+            m_value = doc->url().filename();
+            break;
+        case VST_AUTHORNAME:
+        case VST_EMAIL:
+        case VST_COMPANYNAME:
+        {
+            KConfig config( "kofficerc", true );
+            if( config.hasGroup( "Author" ))
+            {
+                config.setGroup( "Author" );
+                if ( m_subtype == VST_AUTHORNAME )
+                    m_value = config.readEntry("full-name");
+                else if ( m_subtype == VST_EMAIL )
+                    m_value = config.readEntry("email");
+                else if ( m_subtype == VST_COMPANYNAME )
+                    m_value = config.readEntry("company");
+            }
+            else
+            {
+                KConfig config2( "emaildefaults", true );
+                config2.setGroup( "Defaults" );
+                QString group = config2.readEntry("Profile","Default");
+                config2.setGroup(QString("PROFILE_%1").arg(group));
+                if ( m_subtype == VST_AUTHORNAME )
+                    m_value = config.readEntry("FullName");
+                else if ( m_subtype == VST_EMAIL )
+                    m_value = config.readEntry("EmailAddress");
+            }
+        }
     }
+
+    if ( m_value.isEmpty() )
+        m_value = i18n("<None>");
 }
 
-/******************************************************************/
-/* Class: KWNameAuthorVariable                                    */
-/******************************************************************/
-KWNameAuthorVariable::KWNameAuthorVariable( KWTextFrameSet *fs, const QString &_authorName, KWVariableFormat *_varFormat )
-    : KWVariable( fs, _varFormat ), authorname( _authorName )
-{
-    doc->unregisterVariable( this );
-    doc->registerVariable( this );
-    recalc();
-}
-
-void KWNameAuthorVariable::save( QDomElement& parentElem )
-{
-    KWVariable::save( parentElem );
-    QDomElement elem = parentElem.ownerDocument().createElement( "AUTHORNAME" );
-    parentElem.appendChild( elem );
-    elem.setAttribute( "name", correctQString( authorname ) );
-}
-
-
-void KWNameAuthorVariable::load( QDomElement& elem )
-{
-    doc->unregisterVariable( this );
-    doc->registerVariable( this );
-    recalc();
-    KWVariable::load( elem );
-    QDomElement e = elem.namedItem( "AUTHORNAME" ).toElement();
-    if (!e.isNull())
-    {
-        authorname = e.attribute( "name" );
-    }
-}
-
-/******************************************************************/
-/* Class: KWEmailVariable                                         */
-/******************************************************************/
-KWEmailVariable::KWEmailVariable( KWTextFrameSet *fs, const QString &_email, KWVariableFormat *_varFormat )
-    : KWVariable( fs, _varFormat ), email( _email )
-{
-    doc->unregisterVariable( this );
-    doc->registerVariable( this );
-    recalc();
-}
-
-
-void KWEmailVariable::save( QDomElement& parentElem )
-{
-    KWVariable::save( parentElem );
-    QDomElement elem = parentElem.ownerDocument().createElement( "EMAIL" );
-    parentElem.appendChild( elem );
-    elem.setAttribute( "name", correctQString( email ) );
-}
-
-
-void KWEmailVariable::load( QDomElement& elem )
-{
-    doc->unregisterVariable( this );
-    doc->registerVariable( this );
-    recalc();
-    KWVariable::load( elem );
-    QDomElement e = elem.namedItem( "EMAIL" ).toElement();
-    if (!e.isNull())
-    {
-        email = e.attribute( "name" );
-    }
-}
-
-/******************************************************************/
-/* Class:  KWCompanyNameVariable                                  */
-/******************************************************************/
-KWCompanyNameVariable::KWCompanyNameVariable( KWTextFrameSet *fs, const QString &_companyname, KWVariableFormat *_varFormat )
-    : KWVariable( fs, _varFormat ), companyname( _companyname )
-{
-    doc->unregisterVariable( this );
-    doc->registerVariable( this );
-    recalc();
-}
-
-
-void KWCompanyNameVariable::save( QDomElement& parentElem )
-{
-    KWVariable::save( parentElem );
-    QDomElement elem = parentElem.ownerDocument().createElement( "COMPANYNAME" );
-    parentElem.appendChild( elem );
-    elem.setAttribute( "name", correctQString( companyname ) );
-}
-
-
-void KWCompanyNameVariable::load( QDomElement& elem )
-{
-    doc->unregisterVariable( this );
-    doc->registerVariable( this );
-    recalc();
-    KWVariable::load( elem );
-    QDomElement e = elem.namedItem( "COMPANYNAME" ).toElement();
-    if (!e.isNull())
-    {
-        companyname = e.attribute( "name" );
-    }
-}
 
 /******************************************************************/
 /* Class: KWCustomVariable                                        */
 /******************************************************************/
-
-
 KWCustomVariable::KWCustomVariable( KWTextFrameSet *fs, const QString &name_, KWVariableFormat *_varFormat )
     : KWVariable( fs, _varFormat ), name( name_ )
 {
@@ -569,7 +434,6 @@ KWCustomVariable::KWCustomVariable( KWTextFrameSet *fs, const QString &name_, KW
     doc->registerVariable( this );
     recalc();
 }
-
 
 void KWCustomVariable::save( QDomElement& parentElem )
 {
@@ -579,7 +443,6 @@ void KWCustomVariable::save( QDomElement& parentElem )
     elem.setAttribute( "name", correctQString( name ) );
     elem.setAttribute( "value", correctQString( getValue() ) );
 }
-
 
 void KWCustomVariable::load( QDomElement& elem )
 {
@@ -595,7 +458,6 @@ void KWCustomVariable::load( QDomElement& elem )
     }
 }
 
-
 QString KWCustomVariable::getValue() const
 {
     return doc->getVariableValue( name );
@@ -609,13 +471,10 @@ void KWCustomVariable::setValue( const QString &v )
 /******************************************************************/
 /* Class: KWSerialLetterVariable                                  */
 /******************************************************************/
-
-
 KWSerialLetterVariable::KWSerialLetterVariable( KWTextFrameSet *fs, const QString &name_, KWVariableFormat *_varFormat )
     : KWVariable( fs, _varFormat ), name( name_ )
 {
 }
-
 
 void KWSerialLetterVariable::save( QDomElement& parentElem )
 {
@@ -624,7 +483,6 @@ void KWSerialLetterVariable::save( QDomElement& parentElem )
     parentElem.appendChild( elem );
     elem.setAttribute( "name", correctQString( name ) );
 }
-
 
 void KWSerialLetterVariable::load( QDomElement& elem )
 {

@@ -722,7 +722,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                     {
                         int type = typeElem.attribute( "type" ).toInt();
                         kdDebug() << "KWTextParag::loadFormatting variable type=" << type << endl;
-                        KWVariable * var = KWVariable::createVariable( type, textDocument()->textFrameSet() );
+                        KWVariable * var = KWVariable::createVariable( type, VST_NONE, textDocument()->textFrameSet() );
                         var->load( varElem );
                         QTextFormat f = loadFormat( formatElem, paragFormat(), doc->defaultFont() );
                         setCustomItem( index, var, document()->formatCollection()->format( &f ) );

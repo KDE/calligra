@@ -303,7 +303,7 @@ public:
     void drawCursor( bool b );
 
     void insertPicture( const QString & file );
-    void insertVariable( int type );
+    void insertVariable( int type, int subtype = 0 );
     void insertSpecialChar(QChar _c);
     void insertFloatingFrameSet( KWFrameSet * fs );
 
