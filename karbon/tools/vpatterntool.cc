@@ -40,7 +40,6 @@
 #include <render/vpainterfactory.h>
 #include <core/vselection.h>
 #include <commands/vfillcmd.h>
-#include <kgenericfactory.h>
 
 VPatternWidget::VPatternWidget( QPtrList<KoIconItem>* patterns, VTool* tool, QWidget* parent )
 		: QFrame( parent ), m_tool( tool )
@@ -114,10 +113,7 @@ void VPatternWidget::patternSelected( KoIconItem* item )
 	m_deletePatternButton->setEnabled( QFileInfo( m_pattern->tilename() ).isWritable() );
 } // VPatternWidget::patternSelected
 
-typedef KGenericFactory<VPatternTool, KarbonView> PatternToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_patterntoolplugin, PatternToolPluginFactory( "karbonpatterntoolplugin" ) );
-
-VPatternTool::VPatternTool( KarbonView* view, const char *name, const QStringList & )
+VPatternTool::VPatternTool( KarbonView* view, const char *name )
 	: VTool( view, name )
 {
 	m_optionsWidget = new VPatternWidget( &KarbonFactory::rServer()->patterns(), this );
@@ -133,7 +129,7 @@ void
 VPatternTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Pattern" ) );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 QString VPatternTool::contextHelp()

@@ -29,7 +29,7 @@ class VGradientTabWidget;
 class VGradientTool : public VTool
 {
 public:
-	VGradientTool( KarbonView* view, const char *, const QStringList & );
+	VGradientTool( KarbonView* view, const char * );
 	virtual ~VGradientTool();
 
 	virtual void activate();

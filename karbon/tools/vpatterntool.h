@@ -61,7 +61,7 @@ private:
 class VPatternTool : public VTool
 {
 public:
-	VPatternTool( KarbonView* view, const char *, const QStringList & );
+	VPatternTool( KarbonView* view, const char * );
 	virtual ~VPatternTool();
 
 	virtual void activate();

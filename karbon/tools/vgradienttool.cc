@@ -34,14 +34,10 @@
 #include <commands/vstrokecmd.h>
 #include <core/vstroke.h>
 #include <core/vselection.h>
-#include <kgenericfactory.h>
 
 #include <kdebug.h>
 
-typedef KGenericFactory<VGradientTool, KarbonView> GradientToolPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_gradienttoolplugin, GradientToolPluginFactory( "karbongradienttoolplugin" ) );
-
-VGradientTool::VGradientTool( KarbonView* view, const char *name, const QStringList & )
+VGradientTool::VGradientTool( KarbonView* view, const char *name )
 	: VTool( view, name )
 {
 	m_optionsWidget = new VGradientTabWidget( m_gradient, KarbonFactory::rServer() );
@@ -57,7 +53,7 @@ void
 VGradientTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Gradient" ) );
-	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 QString 

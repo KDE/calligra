@@ -28,6 +28,8 @@
 #include "vrotatetool.h"
 #include "vsheartool.h"
 #include "vellipsetool.h"
+#include "vgradienttool.h"
+#include "vpatterntool.h"
 #include "vpolygontool.h"
 #include "vpolylinetool.h"
 #include "vrectangletool.h"
@@ -45,6 +47,8 @@ VToolFactory::VToolFactory( KarbonView *view )
 	m_rotateTool		= new VRotateTool( view, "" );
 	m_shearTool			= new VShearTool( view, "" );
 	m_ellipseTool		= new VEllipseTool( view );
+	m_gradientTool		= new VGradientTool( view, "" );
+	m_patternTool		= new VPatternTool( view, "" );
 	m_polygonTool		= new VPolygonTool( view );
 	m_polylineTool		= new VPolylineTool( view, "" );
 	m_rectangleTool		= new VRectangleTool( view );
@@ -63,6 +67,8 @@ VToolFactory::~VToolFactory()
 	delete m_rotateTool;
 	delete m_shearTool;
 	delete m_ellipseTool;
+	delete m_gradientTool;
+	delete m_patternTool;
 	delete m_polygonTool;
 	delete m_polylineTool;
 	delete m_rectangleTool;

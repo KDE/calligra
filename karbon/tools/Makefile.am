@@ -19,6 +19,8 @@ noinst_HEADERS = \
 	vsheartool.h \
 	vcliparttool.h \
 	vellipsetool.h \
+	vgradienttool.h \
+	vpatterntool.h \
 	vpolygontool.h \
 	vpolylinetool.h \
 	vrectangletool.h \
@@ -38,6 +40,8 @@ libkarbontools_la_SOURCES = \
 	vsheartool.cc \
 	vcliparttool.cc \
 	vellipsetool.cc \
+	vgradienttool.cc \
+	vpatterntool.cc \
 	vpolygontool.cc \
 	vpolylinetool.cc \
 	vrectangletool.cc \
