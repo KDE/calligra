@@ -35,7 +35,18 @@ VStrokeCmd::execute()
 
 		m_oldcolors.push_back( *itr.current()->stroke() );
 
-		itr.current()->setStroke( m_stroke );
+		VStroke stroke = *itr.current()->stroke();
+		if( m_stroke.type() == stroke_gradient )
+		{
+			stroke.gradient() = m_stroke.gradient();
+			stroke.setType( stroke_gradient );
+		}
+		else if( m_stroke.type() == stroke_stroke )
+		{
+			stroke.setColor( m_stroke.color() );
+			stroke.setType( stroke_stroke );
+		}
+		itr.current()->setStroke( stroke );
 	}
 }
 
