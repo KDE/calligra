@@ -1,4 +1,6 @@
 usr/include/kde
+usr/lib/libkdgantt.so
+usr/lib/libkdgantt.la
 usr/lib/libkformula.so
 usr/lib/libkformula.la
 usr/lib/libkochart.so
@@ -25,7 +27,3 @@ usr/lib/libkwmf.so
 usr/lib/libkwmf.la
 usr/lib/libkowmf.so
 usr/lib/libkowmf.la
-usr/lib/libkisp_example.so
-usr/lib/libkisp_example.la
-usr/lib/libkudesignercore.so
-usr/lib/libkudesignercore.la

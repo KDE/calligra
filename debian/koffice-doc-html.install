@@ -1,4 +1,3 @@
-usr/share/doc/kde/HTML/en/karbon/*.html
 usr/share/doc/kde/HTML/en/kchart/*.html
 usr/share/doc/kde/HTML/en/kformula/*.html
 usr/share/doc/kde/HTML/en/koffice/*.html
@@ -7,9 +6,4 @@ usr/share/doc/kde/HTML/en/kpresenter/*.html
 usr/share/doc/kde/HTML/en/kspread/*.html
 usr/share/doc/kde/HTML/en/kugar/*.html
 usr/share/doc/kde/HTML/en/kword/*.html
-usr/share/doc/kde/HTML/en/kword/.html
 usr/share/doc/kde/HTML/en/thesaurus/*.html
-usr/share/doc/kde/HTML/en/kugar/.html
-usr/share/doc/kde/HTML/en/kpresenter/.html
-usr/share/doc/kde/HTML/en/kchart/kchart.tar.gz
-usr/share/doc/kde/HTML/en/koffice-apidocs/common 
