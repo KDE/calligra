@@ -410,6 +410,11 @@ TODO: finish documentation
         text    The text shown by the counter in the document when it was saved.
                 This is redundant information, unused by KPresenter upon loading, but useful
                 for export filters.
+
+        align   Counter alignment. Possible values include:
+	            int(Qt::AlignAuto), //left for LTR text and right for RTL text
+		    int(Qt::AlignLeft),
+		    int(Qt::AlignRight).
 -->
 <!ELEMENT COUNTER
     EMPTY>
@@ -424,7 +429,8 @@ TODO: finish documentation
     bulletfont CDATA #IMPLIED
     customdef CDATA #IMPLIED
     restart CDATA #IMPLIED
-    text CDATA #IMPLIED>
+    text CDATA #IMPLIED
+    align CDATA #IMPLIED>
 
 <!-- INDENTS
         first: indent (pt) from the left border (of the frame) of the first line of a paragraph
