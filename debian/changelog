@@ -7,7 +7,7 @@ koffice (2.1-20001218-1) unstable; urgency=low
   * Providing kivio now as it's part of koffice and not a seperate app
     any more.  Done so with permission from kivio's debian maintainer
     "Jaldhar H. Vyas" <jaldhar@debian.org>.
-  * Adding new menu hints (Closes: #80023, #80025)
+  * Adding new menu hints (Closes: #80023, #80025, #80156)
 
  -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 18 Dec 2000 14:30:00 -0700
 
