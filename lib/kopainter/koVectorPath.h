@@ -40,6 +40,7 @@ public:
   void moveToOpen(double x, double y);
   void lineTo(double x, double y);
   void bezierTo(double x, double y, double x1, double y1, double x2, double y2);
+  void arcTo(double rx, double ry, double sa, double a);
 
   void transform(const QWMatrix &m);
 

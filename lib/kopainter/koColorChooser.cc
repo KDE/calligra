@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (c) 1999 Matthias Elter <me@kde.org>
-  Copyright (c) 2001 Igor Janssen <rm@linux.ru.net>
+  Copyright (c) 2001-2002 Igor Jansen <rm@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -135,7 +135,7 @@ void KoColorChooser::slotShowGrey()
 
 void KoColorChooser::slotChangeXY(int h, int s)
 {
-  slotChangeColor(KoColor(h, s, 192, KoColor::cs_HSV));
+  slotChangeColor(KoColor(h, s, 192, KoColor::csHSV));
 }
 
 void KoColorChooser::slotChangeColor(const QColor &c)
@@ -242,42 +242,42 @@ void RGBWidget::slotRSliderChanged(int r)
 {
   int g = mCC->color().G();
   int b = mCC->color().B();
-  emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
+  emit colorChanged(KoColor(r, g, b, KoColor::csRGB));
 }
 
 void RGBWidget::slotGSliderChanged(int g)
 {
   int r = mCC->color().R();
   int b = mCC->color().B();
-  emit colorChanged(KoColor( r, g, b, KoColor::cs_RGB));
+  emit colorChanged(KoColor( r, g, b, KoColor::csRGB));
 }
 
 void RGBWidget::slotBSliderChanged(int b)
 {
   int r = mCC->color().R();
   int g = mCC->color().G();
-  emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
+  emit colorChanged(KoColor(r, g, b, KoColor::csRGB));
 }
 
 void RGBWidget::slotRInChanged(int r)
 {
   int g = mCC->color().G();
   int b = mCC->color().B();
-  emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
+  emit colorChanged(KoColor(r, g, b, KoColor::csRGB));
 }
 
 void RGBWidget::slotGInChanged(int g)
 {
   int r = mCC->color().R();
   int b = mCC->color().B();
-  emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
+  emit colorChanged(KoColor(r, g, b, KoColor::csRGB));
 }
 
 void RGBWidget::slotBInChanged(int b)
 {
   int r = mCC->color().R();
   int g = mCC->color().G();
-  emit colorChanged(KoColor(r, g, b, KoColor::cs_RGB));
+  emit colorChanged(KoColor(r, g, b, KoColor::csRGB));
 }
 
 /*           HSVWidget         */
@@ -352,18 +352,18 @@ void HSVWidget::slotChangeColor()
   int s = mCC->color().S();
   int v = mCC->color().V();
 
-  mHSlider->slotSetColor1(KoColor(0, s, v, KoColor::cs_HSV).color());
-  mHSlider->slotSetColor2(KoColor(359, s, v, KoColor::cs_HSV).color());
+  mHSlider->slotSetColor1(KoColor(0, s, v, KoColor::csHSV).color());
+  mHSlider->slotSetColor2(KoColor(359, s, v, KoColor::csHSV).color());
   mHSlider->slotSetValue(h);
   mHIn->setValue(h);
 
-  mSSlider->slotSetColor1(KoColor(h, 0, v, KoColor::cs_HSV).color());
-  mSSlider->slotSetColor2(KoColor(h, 255, v, KoColor::cs_HSV).color());
+  mSSlider->slotSetColor1(KoColor(h, 0, v, KoColor::csHSV).color());
+  mSSlider->slotSetColor2(KoColor(h, 255, v, KoColor::csHSV).color());
   mSSlider->slotSetValue(s);
   mSIn->setValue(s);
 
-  mVSlider->slotSetColor1(KoColor(h, s, 0, KoColor::cs_HSV).color());
-  mVSlider->slotSetColor2(KoColor(h, s, 255, KoColor::cs_HSV).color());
+  mVSlider->slotSetColor1(KoColor(h, s, 0, KoColor::csHSV).color());
+  mVSlider->slotSetColor2(KoColor(h, s, 255, KoColor::csHSV).color());
   mVSlider->slotSetValue(v);
   mVIn->setValue(v);
 }
@@ -372,42 +372,42 @@ void HSVWidget::slotHSliderChanged(int h)
 {
   int s = mCC->color().S();
   int v = mCC->color().V();
-  emit colorChanged(KoColor(h, s, v, KoColor::cs_HSV));
+  emit colorChanged(KoColor(h, s, v, KoColor::csHSV));
 }
 
 void HSVWidget::slotSSliderChanged(int s)
 {
   int h = mCC->color().H();
   int v = mCC->color().V();
-  emit colorChanged(KoColor(h, s, v, KoColor::cs_HSV));
+  emit colorChanged(KoColor(h, s, v, KoColor::csHSV));
 }
 
 void HSVWidget::slotVSliderChanged(int v)
 {
   int h = mCC->color().H();
   int s = mCC->color().S();
-  emit colorChanged(KoColor(h, s, v, KoColor::cs_HSV));
+  emit colorChanged(KoColor(h, s, v, KoColor::csHSV));
 }
 
 void HSVWidget::slotHInChanged(int h)
 {
   int s = mCC->color().S();
   int v = mCC->color().V();
-  emit colorChanged(KoColor(h, s, v, KoColor::cs_HSV));
+  emit colorChanged(KoColor(h, s, v, KoColor::csHSV));
 }
 
 void HSVWidget::slotSInChanged(int s)
 {
   int h = mCC->color().H();
   int v = mCC->color().V();
-  emit colorChanged(KoColor(h, s, v, KoColor::cs_HSV));
+  emit colorChanged(KoColor(h, s, v, KoColor::csHSV));
 }
 
 void HSVWidget::slotVInChanged(int v)
 {
   int h = mCC->color().H();
   int s = mCC->color().S();
-  emit colorChanged(KoColor(h, s, v, KoColor::cs_HSV));
+  emit colorChanged(KoColor(h, s, v, KoColor::csHSV));
 }
 
 /*          GreyWidget         */
@@ -460,13 +460,13 @@ void GreyWidget::slotChangeColor()
 void GreyWidget::slotVSliderChanged(int v)
 {
   v = 255 - v;
-  emit colorChanged(KoColor(v, v, v, KoColor::cs_RGB));
+  emit colorChanged(KoColor(v, v, v, KoColor::csRGB));
 }
 
 void GreyWidget::slotVInChanged(int v)
 {
   v = 255 - v;
-  emit colorChanged(KoColor(v, v, v, KoColor::cs_RGB));
+  emit colorChanged(KoColor(v, v, v, KoColor::csRGB));
 }
 
 #include "koColorChooser.moc"

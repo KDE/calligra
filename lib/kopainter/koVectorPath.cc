@@ -207,6 +207,11 @@ void KoVectorPath::bezierTo(double x, double y, double x1, double y1, double x2,
   ye = y;
 }
 
+void KoVectorPath::arcTo(double rx, double ry, double sa, double a)
+{
+//  double x1 = 
+}
+
 void KoVectorPath::transform(const QWMatrix &m)
 {
   double x;

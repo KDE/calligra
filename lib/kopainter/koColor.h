@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
   Copyright (c) 1999 Matthias Elter (me@kde.org)
-  Copyright (c) 2001-2002 Igor Janssen (rm@kde.org)
+  Copyright (c) 2001-2002 Igor Jansen (rm@kde.org)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,15 +26,15 @@
 class KoColor
 {
 public:
-  enum cSpace { cs_Indexed, cs_RGB, cs_HSV, cs_CMYK, cs_Lab };
+  enum cSpace{ csIndexed, csRGB, csHSV, csCMYK, csLab };
 
   KoColor();
-  KoColor(int a, int b, int c,  cSpace m = cs_RGB);
+  KoColor(int a, int b, int c,  cSpace m = csRGB);
   KoColor(int c, int m, int y,  int k);
   KoColor(const QString &name);
   KoColor(const QColor &c);
 
-  cSpace native() const { return m_native; }
+  cSpace native() const {return mNative; }
 
   int R() const;
   int G() const;
@@ -99,6 +99,8 @@ public:
   static const KoColor darkYellow();
 
 protected:
+  int hex2int(QChar c);
+
   void calcRGB() const;
   void calcHSV() const;
   void calcCMYK() const;
@@ -114,102 +116,102 @@ private:
    * Mutable to make it possible for const objects to transform the native cModel
    * in functions like KoColor::rgb(...) to the requested.
    */
-  mutable int m_R, m_G, m_B;      // RGB
-  mutable int m_C, m_M, m_Y, m_K; // CMYK
-  mutable int m_H, m_S, m_V;      // HSV
-  mutable int m_L, m_a, m_b;      // LAB
+  mutable int mR, mG, mB;        // RGB
+  mutable int mC, mM, mY, mK;    // CMYK
+  mutable int mH, mS, mV;        // HSV
+  mutable int mL, ma, mb;        // LAB
 
-  mutable bool m_RGBvalid;
-  mutable bool m_HSVvalid;
-  mutable bool m_CMYKvalid;
-  mutable bool m_LABvalid;
+  mutable bool mRGBvalid;
+  mutable bool mHSVvalid;
+  mutable bool mCMYKvalid;
+  mutable bool mLABvalid;
 
-  cSpace m_native; 
+  cSpace mNative; 
 };
 
 inline const KoColor KoColor::white()
 {
-  return KoColor(255, 255, 255, cs_RGB);
+  return KoColor(255, 255, 255, csRGB);
 }
 
 inline const KoColor KoColor::black()
 {
-  return KoColor(0, 0, 0, cs_RGB);
+  return KoColor(0, 0, 0, csRGB);
 }
 
 inline const KoColor KoColor::gray()
 {
-  return KoColor(160, 160, 164, cs_RGB);
+  return KoColor(160, 160, 164, csRGB);
 }
 
 inline const KoColor KoColor::lightGray()
 {
-  return KoColor(192, 192, 192, cs_RGB);
+  return KoColor(192, 192, 192, csRGB);
 }
 
 inline const KoColor KoColor::darkGray()
 {
-  return KoColor(128, 128, 128, cs_RGB);
+  return KoColor(128, 128, 128, csRGB);
 }
 
 inline const KoColor KoColor::red()
 {
-  return KoColor(255, 0, 0, cs_RGB);
+  return KoColor(255, 0, 0, csRGB);
 }
 
 inline const KoColor KoColor::darkRed()
 {
-  return KoColor(128, 0, 0, cs_RGB);
+  return KoColor(128, 0, 0, csRGB);
 }
 
 inline const KoColor KoColor::green()
 {
-  return KoColor(0, 255, 0, cs_RGB);
+  return KoColor(0, 255, 0, csRGB);
 }
 
 inline const KoColor KoColor::darkGreen()
 {
-  return KoColor(0, 128, 0, cs_RGB);
+  return KoColor(0, 128, 0, csRGB);
 }
 
 inline const KoColor KoColor::blue()
 {
-  return KoColor(0, 0, 255, cs_RGB);
+  return KoColor(0, 0, 255, csRGB);
 }
 
 inline const KoColor KoColor::darkBlue()
 {
-  return KoColor(0, 0, 128, cs_RGB);
+  return KoColor(0, 0, 128, csRGB);
 }
 
 inline const KoColor KoColor::cyan()
 {
-  return KoColor(0, 255, 255, cs_RGB);
+  return KoColor(0, 255, 255, csRGB);
 }
 
 inline const KoColor KoColor::darkCyan()
 {
-  return KoColor(0, 128, 128, cs_RGB);
+  return KoColor(0, 128, 128, csRGB);
 }
 
 inline const KoColor KoColor::magenta()
 {
-  return KoColor(255, 0, 255, cs_RGB);
+  return KoColor(255, 0, 255, csRGB);
 }
 
 inline const KoColor KoColor::darkMagenta()
 {
-  return KoColor(128, 0, 128, cs_RGB);
+  return KoColor(128, 0, 128, csRGB);
 }
 
 inline const KoColor KoColor::yellow()
 {
-  return KoColor(255, 255, 0, cs_RGB);
+  return KoColor(255, 255, 0, csRGB);
 }
 
 inline const KoColor KoColor::darkYellow()
 {
-  return KoColor(128, 128, 0, cs_RGB);
+  return KoColor(128, 128, 0, csRGB);
 }
 
 #endif
