@@ -43,6 +43,11 @@ public:
 
   virtual bool openDocument( const KURL & url );
   virtual void setRootDocument( KoDocument *doc );
+  /**
+   * Update caption from document info - call when document info
+   * (title in the about page) changes.
+   */
+  virtual void updateCaption();
 
   virtual QString configFile() const;
 
@@ -64,7 +69,7 @@ protected slots:
 protected:
 
   virtual bool queryClose();
-  virtual KoDocument* createDoc();
+  virtual KoDocument* createDoc() { return 0L; }
 
   void closeDocument();
 
@@ -88,8 +93,8 @@ protected:
   QValueList<KoDocumentEntry> m_lstComponents;
   QMap<int,KoDocumentEntry*> m_mapComponents;
 
-  // Saved between openDocument and createDoc
-  KoDocumentEntry * m_documentEntry;
+  // Saved between openDocument and setRootDocument
+  KoDocumentEntry m_documentEntry;
 
   KoShellFrame *m_pFrame;
 
