@@ -165,7 +165,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     {
                         cell = table->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setCellText( text, true );
-                        cell->setFormatType( KSpreadCell::Number );
+                        cell->setFormatType( Number_format );
                     }
                     else
                     {
@@ -187,7 +187,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     {
                         cell = table->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setCellText( text, true );
-                        cell->setFormatType( KSpreadCell::Number );
+                        cell->setFormatType( Number_format );
                     }
                     else
                     {
@@ -209,7 +209,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                     {
                         cell = table->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setCellText( text,  true );
-                        cell->setFormatType( KSpreadCell::Number );
+                        cell->setFormatType( Number_format );
                     }
                     else
                     {
@@ -222,12 +222,12 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
              case CSVDialog::DATE:
               cell = table->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setDate( text );
-              cell->setFormatType( KSpreadCell::ShortDate );
+              cell->setFormatType( ShortDate_format );
               break;
              case CSVDialog::CURRENCY:
               cell = table->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setCellText( text, false );
-              cell->setFormatType( KSpreadCell::Money );
+              cell->setFormatType( Money_format );
               cell->setPrecision( 2 );
               break;
             }
