@@ -570,7 +570,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 			joinStyle = ART_PATH_STROKE_JOIN_BEVEL;
 
 		// zoom stroke width;
-		strokeSvp = art_svp_vpath_stroke( vec, joinStyle, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
+		strokeSvp = art_svp_vpath_stroke( vec, joinStyle, capStyle, ratio * m_stroke->lineWidth(), m_stroke->miterLimit(), 0.25 );
 	}
 
 	int x0, y0, x1, y1;
