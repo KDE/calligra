@@ -12,7 +12,6 @@ noinst_HEADERS = \
 	vcolorslider.h \
 	vreference.h \
 	vstrokefillpreview.h \
-	vtoolcontainer.h \
 	vtranslate.h \
 	vstatebutton.h \
 	tkfloatspinbox.h \
@@ -24,7 +23,6 @@ libkarbonwidgets_la_SOURCES = \
 	vcolorslider.cc \
 	vreference.cc \
 	vstrokefillpreview.cc \
-	vtoolcontainer.cc \
 	vtranslate.cc \
 	vstatebutton.cc \
 	tkfloatspinbox.cpp \
