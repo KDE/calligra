@@ -86,8 +86,6 @@ KexiBrowser::KexiBrowser(KexiMainWindow *parent )
 	m_newObjectAction->plug(m_partPopup);
 }
 
-plugAction(const char *action_name, QWidget* w);
-
 void
 KexiBrowser::clear()
 {
