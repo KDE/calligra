@@ -355,10 +355,15 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
 
 void KWTextFrameSet::layout()
 {
-    m_lastFormatted = textdoc->firstParag();
-    textdoc->invalidate(); // lazy layout, real update follows upon next repaint
+    invalidate();
     // Get the thing going though, repainting doesn't call formatMore
     formatMore();
+}
+
+void KWTextFrameSet::invalidate()
+{
+    m_lastFormatted = textdoc->firstParag();
+    textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
 void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences )
@@ -1321,9 +1326,11 @@ void KWTextFrameSet::formatMore()
                             theFrame->setTop( theFrame->top() - difference );
 
                             m_doc->recalcFrames();
-                            m_doc->frameChanged( theFrame );
-
-                            updateFrames();
+                            // m_doc->frameChanged( theFrame );
+                            // Warning, can't call layout() (frameChanged calls it)
+                            // from here, since it calls formatMore() !
+                            m_doc->updateAllFrames();
+                            m_doc->invalidate();
                             break;
                         }
 
@@ -1349,10 +1356,12 @@ void KWTextFrameSet::formatMore()
                             wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
                             // fall through to AutoCreateNewFrame
                         } else {
-                            m_doc->frameChanged( theFrame );
-
-                            updateFrames();
-                            break;
+                            // m_doc->frameChanged( theFrame );
+                            // Warning, can't call layout() (frameChanged calls it)
+                            // from here, since it calls formatMore() !
+                            m_doc->updateAllFrames();
+                            m_doc->invalidate();
+                           break;
                         }
                     }
                 }
@@ -3693,13 +3702,17 @@ void KWTextFrameSetEdit::slotToolActivated( const KoDataToolInfo & info, const Q
 
     kdDebug() << "Running tool with datatype=" << datatype << " mimetype=" << mimetype << endl;
 
+    QString origText = text;
     if ( tool->run( command, &text, datatype, mimetype) )
     {
         kdDebug() << "Tool ran. Text is now " << text << endl;
-        if ( !textFrameSet()->hasSelection() )
-            selectWordUnderCursor();
-        // replace selection with 'text'
-        textFrameSet()->replaceSelection( cursor, text, QTextDocument::Standard, i18n("Replace word") );
+        if ( origText != text )
+        {
+            if ( !textFrameSet()->hasSelection() )
+                selectWordUnderCursor();
+            // replace selection with 'text'
+            textFrameSet()->replaceSelection( cursor, text, QTextDocument::Standard, i18n("Replace word") );
+        }
     }
 
     delete tool;

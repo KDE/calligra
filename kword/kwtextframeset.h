@@ -192,6 +192,7 @@ public:
 
     // Invalidate all paragraphs (causes a re-flow of the text upon next redraw)
     virtual void layout();
+    virtual void invalidate();
 
     // Calculate statistics for this frameset
     virtual void statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences );

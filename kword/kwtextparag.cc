@@ -319,7 +319,7 @@ void KWTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
 
         QRect r;
         // r.setLeft( leftMargin() ); // breaks with centered text and with counters
-        r.setLeft( at( 0 )->x - counterWidth() );
+        r.setLeft( at( 0 )->x - counterWidth() - 1 );
         r.setRight( rect().width() - rightMargin() - 1 ); /*documentWidth()-1 requires many fixes in QRT*/
         r.setTop( lineY( 0 ) );
         r.setBottom( static_cast<int>( lineY( lines() -1 ) + lineHeight( lines() -1 ) - m_layout.lineSpacing ) - 1 );

@@ -355,6 +355,7 @@ public:
 
     /** relayout text in frames, so that it flows correctly around other frames */
     virtual void layout() {}
+    virtual void invalidate() {}
 
     /** returns true if we have a frame occupying that position */
     virtual bool contains( double mx, double my );

@@ -853,7 +853,7 @@ void KWFrameSet::load( QDomElement &attributes )
             rect.setTop( KWDocument::getAttribute( frameElem, "top", 0.0 ) );
             rect.setRight( KWDocument::getAttribute( frameElem, "right", 0.0 ) );
             rect.setBottom( KWDocument::getAttribute( frameElem, "bottom", 0.0 ) );
-            RunAround runaround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", 0 ) );
+            RunAround runaround = static_cast<RunAround>( KWDocument::getAttribute( frameElem, "runaround", RA_BOUNDINGRECT ) );
             double runAroundGap = ( frameElem.hasAttribute( "runaroundGap" ) )
                                   ? frameElem.attribute( "runaroundGap" ).toDouble()
                                   : frameElem.attribute( "runaGapPT" ).toDouble();

@@ -2507,6 +2507,13 @@ void KWDocument::layout()
         it.current()->layout();
 }
 
+void KWDocument::invalidate()
+{
+    QListIterator<KWFrameSet> it = framesetsIterator();
+    for (; it.current(); ++it )
+        it.current()->invalidate();
+}
+
 KFormula::KFormulaDocument* KWDocument::getFormulaDocument()
 {
     return m_formulaDocument;

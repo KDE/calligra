@@ -422,15 +422,14 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
 
     // --------------- line spacing ---------------
     QGroupBox * spacingFrame = new QGroupBox( i18n( "Line Spacing" ), this );
-    QGridLayout * spacingGrid = new QGridLayout( spacingFrame, 3, 1,
+    QGridLayout * spacingGrid = new QGridLayout( spacingFrame, 2, 1,
                                                  KDialog::marginHint(), KDialog::spacingHint() );
 
     cSpacing = new QComboBox( false, spacingFrame, "" );
-    cSpacing->insertItem( i18n( "0.5 lines" ) );
-    cSpacing->insertItem( i18n( "1.0 line" ) );
-    cSpacing->insertItem( i18n( "1.5 lines" ) );
-    cSpacing->insertItem( i18n( "2.0 lines" ) );
-    cSpacing->insertItem( i18n( "Space ( %1 )" ).arg(unitName) );
+    cSpacing->insertItem( i18n( "Line spacing value", "Single" ) );
+    cSpacing->insertItem( i18n( "Line spacing value", "1.5 lines" ) );
+    cSpacing->insertItem( i18n( "Line spacing value", "Double" ) );
+    cSpacing->insertItem( i18n( "Custom ( %1 )" ).arg(unitName) );
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
@@ -441,7 +440,7 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
     eSpacing->setEchoMode( QLineEdit::Normal );
     eSpacing->setFrame( true );
     connect( eSpacing, SIGNAL( textChanged( const QString & ) ), this, SLOT( spacingChanged( const QString & ) ) );
-    spacingGrid->addWidget( eSpacing, 2, 0 );
+    spacingGrid->addWidget( eSpacing, 1, 1 );
 
     // grid row spacing
     spacingGrid->addRowSpacing( 0, 12 );
@@ -449,8 +448,6 @@ KWIndentSpacingWidget::KWIndentSpacingWidget( KWUnit::Unit unit, QWidget * paren
         spacingGrid->setRowStretch( i, 1 );
     mainGrid->addWidget( spacingFrame, 4, 0 );
 
-    cSpacing->setCurrentItem( 4 );
-    cSpacing->setEnabled( false ); // TODO: handle 0.5 lines, 1 line etc
     eSpacing->setEnabled( true );
 
     // --------------- paragraph spacing ---------------
@@ -611,22 +608,11 @@ void KWIndentSpacingWidget::firstChanged( const QString & _text )
 
 void KWIndentSpacingWidget::spacingActivated( int _index )
 {
-    if ( _index == 4 ) {
+    if ( _index == cSpacing->count()-1 /* last item */ ) {
         eSpacing->setEnabled( true );
-        eSpacing->setText( "12.0" );
         eSpacing->setFocus();
     } else {
         eSpacing->setEnabled( false );
-        switch ( _index ) {
-        case 0: eSpacing->setText( "14.0" );
-            break;
-        case 1: eSpacing->setText( "28.0" );
-            break;
-        case 2: eSpacing->setText( "42.0" );
-            break;
-        case 3: eSpacing->setText( "56.0" );
-            break;
-        }
     }
     prev1->setSpacing( eSpacing->text().toDouble() );
 }
