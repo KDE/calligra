@@ -98,9 +98,11 @@ void KWCharAnchor::moveBy(int /*xy */, int /*dy*/ ) {
 /*================================================================*/
 void KWCharAnchor::save( QTextStream &out )
 {
-    out << indent << "<ANCHOR type=\"" << correctQString( anchorType() ) <<
-        "\" instance=\"" << correctQString( anchorInstance() ) <<
-        "\"/>" << endl;
+    if( anchored) {
+        out << indent << "<ANCHOR type=\"" << correctQString( anchorType() ) <<
+            "\" instance=\"" << correctQString( anchorInstance() ) <<
+            "\"/>" << endl;
+    }
 }
 
 /******************************************************************/
