@@ -41,7 +41,7 @@ class spHelper
 	public:
 	spHelper() {;}
 	~spHelper() {;}
-	
+
 	static QStringList	list();
 	static QString		valueToKey(int key);
 	static QSizePolicy::SizeType		keyToValue(const QString &key);
@@ -67,7 +67,7 @@ QStringList
 spHelper::list()
 {
 	QStringList list;
-	list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding" 
+	list << "Fixed" << "Maximum" << "Minimum" << "Preferred" << "Expanding"
 		<< "MinimumExpanding" << "Ignored";
 	return list;
 }
@@ -82,7 +82,7 @@ spHelper::keyToValue(const QString &key)
 	if(key == "MinimumExpanding") return QSizePolicy::MinimumExpanding;
 	if(key == "Expanding") return QSizePolicy::Expanding;
 	if(key == "Ignored") return QSizePolicy::Ignored;
-	
+
 	return QSizePolicy::Expanding;
 }
 
@@ -151,7 +151,7 @@ void
 KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align)
 {
 	int margin = listView()->itemMargin();
-	
+
 	if(column == 1)
 	{
 		switch(m_property->type())
@@ -186,7 +186,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 				}
 				break;
 			}
-			
+
 			default:
 			{
 				if(depth()==0)
@@ -208,7 +208,7 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 			p->fillRect(0,0,width, height(), QBrush(cg.highlight()));
 			p->setPen(cg.highlightedText());
 		}
-		
+
 		QFont f = listView()->font();
 		p->save();
 //		if(modified())
@@ -217,11 +217,11 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 		p->setFont(f);
 		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, text(0));
 		p->restore();
-		
+
 		p->setPen( QColor(200,200,200) ); //like in table view
 		p->drawLine(width-1, 0, width-1, height()-1);
 	}
-	
+
 	p->setPen( QColor(200,200,200) ); //like in t.v.
 	p->drawLine(-50, height()-1, width, height()-1 );
 }
@@ -233,7 +233,7 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 	KListViewItem *item = (KListViewItem*)firstChild();
 	if(!item)
 		return;
-	
+
 	p->save();
 	p->translate(0,y);
 	while(item)
@@ -244,7 +244,7 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 		p->setPen( QColor(200,200,200) ); //like in t.v.
 		p->drawLine(-50, item->height()-1, w, item->height()-1 );
 		p->restore();
-		
+
 		if(item->isSelected())
 		{
 			p->fillRect(0,0,w, item->height(), QBrush(cg.highlight()));
@@ -258,7 +258,7 @@ KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w,
 			if(!item->isOpen())
 				p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
 		}
-		
+
 		p->translate(0, item->totalHeight());
 		item = (KListViewItem*)item->nextSibling();
 	}
@@ -286,11 +286,11 @@ KexiPropertyEditorItem::getComposedValue()
 			v = (*m_children)["width"]->property()->value();
 			s.setWidth(v.toInt());
 			(*m_children)["width"]->property()->setValue(v.toInt());
-			
+
 			v = (*m_children)["height"]->property()->value();
 			s.setHeight(v.toInt());
 			(*m_children)["height"]->property()->setValue(v.toInt());
-			
+
 			setValue(s);
 			return s;
 		}
@@ -301,11 +301,11 @@ KexiPropertyEditorItem::getComposedValue()
 			v = (*m_children)["x"]->value();
 			p.setX(v.toInt());
 			(*m_children)["x"]->property()->setValue(v.toInt());
-			
+
 			v = (*m_children)["y"]->value();
 			p.setY(v.toInt());
 			(*m_children)["y"]->property()->setValue(v.toInt());
-			
+
 			setValue(p);
 			return p;
 		}
@@ -316,19 +316,19 @@ KexiPropertyEditorItem::getComposedValue()
 			v = (*m_children)["x"]->value();
 			r.setX(v.toInt());
 			(*m_children)["x"]->property()->setValue(v.toInt());
-			
+
 			v = (*m_children)["y"]->value();
 			r.setY(v.toInt());
 			(*m_children)["y"]->property()->setValue(v.toInt());
-			
+
 			v = (*m_children)["width"]->value();
 			r.setWidth(v.toInt());
 			(*m_children)["width"]->property()->setValue(v.toInt());
-			
+
 			v = (*m_children)["height"]->value();
 			r.setHeight(v.toInt());
 			(*m_children)["height"]->property()->setValue(v.toInt());
-			
+
 			setValue(r);
 			return r;
 		}
@@ -339,19 +339,19 @@ KexiPropertyEditorItem::getComposedValue()
 			v = (*m_children)["hSize"]->value();
 			p.setHorData(spHelper::keyToValue(v.toString()));
 			(*m_children)["hSize"]->property()->setValue(v.toString());
-			
+
 			v = (*m_children)["vSize"]->value();
 			p.setVerData(spHelper::keyToValue(v.toString()));
 			(*m_children)["vSize"]->property()->setValue(v.toString());
-			
+
 			v = (*m_children)["hStretch"]->value();
 			p.setHorStretch(v.toInt());
 			(*m_children)["hStretch"]->property()->setValue(v.toInt());
-			
+
 			v = (*m_children)["vStretch"]->value();
 			p.setVerStretch(v.toInt());
 			(*m_children)["vStretch"]->property()->setValue(v.toInt());
-			
+
 			setValue(p);
 			return p;
 		}
@@ -360,7 +360,7 @@ KexiPropertyEditorItem::getComposedValue()
 		{
 			return 0;
 		}
-	
+
 	}
 }
 #endif
@@ -385,7 +385,11 @@ KexiPropertyEditorItem::updateChildValue()
 
 KexiPropertyEditorItem::~KexiPropertyEditorItem()
 {
-	switch(m_property->type())
+	if(depth() == 0)
+		delete m_property;
+	delete m_children;
+
+/*	switch(m_property->type())
 	{
 		case QVariant::Point:
 		case QVariant::Rect:
@@ -399,7 +403,7 @@ KexiPropertyEditorItem::~KexiPropertyEditorItem()
 		{
 			return;
 		}
-	}
+	}*/
 }
 
 void KexiPropertyEditorItem::updateValue(bool alsoParent)
