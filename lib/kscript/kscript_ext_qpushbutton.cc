@@ -21,13 +21,9 @@
 #define CHECK_LEFTEXPR( context, name ) if ( context.leftExpr() ) return KSObject::member( context, name );
 #define SET_PROP( __n, __expr, __t ) if ( name == __n ) { CHECKTYPE( context, v, __t ); __expr; return TRUE; }
 
-KSClass_QPushButton::KSClass_QPushButton( KSModule* m, const char* name ) : KSClass_QWidget( m, name )
+KSClass_QPushButton::KSClass_QPushButton( KSModule* m, const char* name ) : KSClass_QButton( m, name )
 {
   nameSpace()->insert( "QPushButton", new KSValue( (KSBuiltinMethod)&KSObject_QPushButton::ksQPushButton ) );
-  nameSpace()->insert( "setText", new KSValue( (KSBuiltinMethod)&KSObject_QPushButton::ksQPushButton_setText ) );
-  nameSpace()->insert( "clicked", new KSValue( (KSBuiltinMethod)&KSObject_QPushButton::ksQPushButton_clicked ) );
-
-  addQtSignal( "clicked" );
 }
 
 KSScriptObject* KSClass_QPushButton::createObject( KSClass* c )
@@ -37,7 +33,7 @@ KSScriptObject* KSClass_QPushButton::createObject( KSClass* c )
 
 // ------------------------------------------------------
 
-KSObject_QPushButton::KSObject_QPushButton( KSClass* c ) : KSObject_QWidget( c )
+KSObject_QPushButton::KSObject_QPushButton( KSClass* c ) : KSObject_QButton( c )
 {
 }
 
@@ -80,45 +76,12 @@ bool KSObject_QPushButton::ksQPushButton( KSContext& context )
 
 void KSObject_QPushButton::setObject( QObject* obj )
 {
-    if ( obj )
-	KS_Qt_Callback::self()->connect( obj, SIGNAL( clicked() ),
-					 SLOT( clicked() ), this, "clicked" );
+//    if ( obj )
+//	KS_Qt_Callback::self()->connect( obj, SIGNAL( clicked() ),
+//					 SLOT( clicked() ), this, "clicked" );
 
-    KSObject_QWidget::setObject( obj );
-}
-
-bool KSObject_QPushButton::ksQPushButton_setText( KSContext& context )
-{
-  qDebug("QPushButton::setText\n");
-
-  if ( !checkLive( context, "QPushButton::setText" ) )
-    return false;
-
-  if ( !KSUtil::checkArgumentsCount( context, 1, "QPushButton::setText" ) )
-    return false;
-
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  if ( !checkType( context, args[0], KS_Qt_Object::StringType ) )
-      return false;
-
-  QPushButton* w = (QPushButton*)object();
-  w->setText( args[0]->stringValue() );
-
-  return true;
-}
-
-bool KSObject_QPushButton::ksQPushButton_clicked( KSContext& context )
-{
-  if ( !checkLive( context, "QPushButton::clicked" ) )
-    return false;
-
-  if ( !KSUtil::checkArgumentsCount( context, 0, "QPushButton::clicked" ) )
-    return false;
-
-  WIDGET->clicked();
-
-  return true;
+//    KSObject_QWidget::setObject( obj );
+    KSObject_QButton::setObject( obj );
 }
 
 KSValue::Ptr KSObject_QPushButton::member( KSContext& context, const QString& name )
@@ -127,12 +90,12 @@ KSValue::Ptr KSObject_QPushButton::member( KSContext& context, const QString& na
 
   RETURN_LEFTEXPR( "text", new KSValue( WIDGET->text() ) );
 
-  return KSObject_QWidget::member( context, name );
+  return KSObject_QButton::member( context, name );
 }
 
 bool KSObject_QPushButton::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
 {
   SET_PROP( "text", WIDGET->setText( v->stringValue() ), StringType )
 
-  return KSObject_QWidget::setMember( context, name, v );
+  return KSObject_QButton::setMember( context, name, v );
 }

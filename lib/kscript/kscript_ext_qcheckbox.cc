@@ -14,7 +14,7 @@
 #define CHECK_LEFTEXPR( context, name ) if ( context.leftExpr() ) return KSObject::member( context, name );
 #define SET_PROP( __n, __expr, __t ) if ( name == __n ) { CHECKTYPE( context, v, __t ); __expr; return TRUE; }
 
-KSClass_QCheckBox::KSClass_QCheckBox( KSModule* m, const char* name ) : KSClass_QWidget( m, name )
+KSClass_QCheckBox::KSClass_QCheckBox( KSModule* m, const char* name ) : KSClass_QButton( m, name )
 {
   nameSpace()->insert( "QCheckBox", new KSValue( (KSBuiltinMethod)&KSObject_QCheckBox::ksQCheckBox ) );
 }
@@ -24,7 +24,7 @@ KSScriptObject* KSClass_QCheckBox::createObject( KSClass* c )
   return new KSObject_QCheckBox( c );
 }
 
-KSObject_QCheckBox::KSObject_QCheckBox( KSClass* c ) : KSObject_QWidget( c )
+KSObject_QCheckBox::KSObject_QCheckBox( KSClass* c ) : KSObject_QButton( c )
 {
 }
 
@@ -72,7 +72,7 @@ KSValue::Ptr KSObject_QCheckBox::member( KSContext& context, const QString& name
   RETURN_LEFTEXPR( "checked", new KSValue( WIDGET->isChecked() ) );
   RETURN_LEFTEXPR( "text", new KSValue( WIDGET->text() ) );
 
-  return KSObject_QWidget::member( context, name );
+  return KSObject_QButton::member( context, name );
 }
 
 bool KSObject_QCheckBox::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
@@ -80,5 +80,5 @@ bool KSObject_QCheckBox::setMember( KSContext& context, const QString& name, con
   SET_PROP( "text", WIDGET->setText( v->stringValue() ), StringType )
   SET_PROP( "checked", WIDGET->setChecked( v->boolValue() ), BoolType )
       
-  return KSObject_QWidget::setMember( context, name, v );
+  return KSObject_QButton::setMember( context, name, v );
 }

@@ -21,8 +21,13 @@ main
 	l.text = "Edit me";
 	p = QPushButton( w );
 	p.text = "PushMe";
-	r = QRadioButton( w );
-	r.text = "Radio";
+	bg = QButtonGroup( w );
+	r1 = QRadioButton( bg );
+	r1.text = "Radio Button";
+	r2 = QRadioButton( bg );
+	r2.text = "Television Button";
+	r3 = QRadioButton( bg );
+	r3.text = "Other";
 	c = QCheckBox( w );
 	c.text = "Check";
 	c.checked = TRUE;
@@ -35,7 +40,7 @@ main
 	layout = QVBoxLayout( w );
 	layout.addWidget( l );
 	layout.addWidget( p );
-	layout.addWidget( r );
+	layout.addWidget( bg );
 	layout.addWidget( c );
 	layout.addWidget( la );
 	layout.addWidget( combo );

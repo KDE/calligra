@@ -17,7 +17,7 @@
 #define CHECK_LEFTEXPR( context, name ) if ( context.leftExpr() ) return KSObject::member( context, name );
 #define SET_PROP( __n, __expr, __t ) if ( name == __n ) { CHECKTYPE( context, v, __t ); __expr; return TRUE; }
 
-KSClass_QRadioButton::KSClass_QRadioButton( KSModule* m, const char* name ) : KSClass_QWidget( m, name )
+KSClass_QRadioButton::KSClass_QRadioButton( KSModule* m, const char* name ) : KSClass_QButton( m, name )
 {
   nameSpace()->insert( "QRadioButton", new KSValue( (KSBuiltinMethod)&KSObject_QRadioButton::ksQRadioButton ) );
 }
@@ -27,7 +27,7 @@ KSScriptObject* KSClass_QRadioButton::createObject( KSClass* c )
   return new KSObject_QRadioButton( c );
 }
 
-KSObject_QRadioButton::KSObject_QRadioButton( KSClass* c ) : KSObject_QWidget( c ) // was: KS_Qt_Object
+KSObject_QRadioButton::KSObject_QRadioButton( KSClass* c ) : KSObject_QButton( c )
 {
 }
 
@@ -74,12 +74,12 @@ KSValue::Ptr KSObject_QRadioButton::member( KSContext& context, const QString& n
 
   RETURN_LEFTEXPR( "geometry", new KSValue( new KSObject_QRect( WIDGET->geometry() ) ) );
 
-  return KSObject_QWidget::member( context, name );
+  return KSObject_QButton::member( context, name );
 }
 
 bool KSObject_QRadioButton::setMember( KSContext& context, const QString& name, const KSValue::Ptr& v )
 {
   SET_PROP( "text", WIDGET->setText( v->stringValue() ), StringType )
 
-  return KSObject_QWidget::setMember( context, name, v );
+  return KSObject_QButton::setMember( context, name, v );
 }

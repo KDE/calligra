@@ -3,12 +3,14 @@
 #include "kscript_ext_qapplication.h"
 #include "kscript_ext_qrect.h"
 #include "kscript_ext_qlineedit.h"
+#include "kscript_ext_qbutton.h"
 #include "kscript_ext_qcheckbox.h"
 #include "kscript_ext_qradiobutton.h"
 #include "kscript_ext_qpushbutton.h"
 #include "kscript_ext_qcombobox.h"
 #include "kscript_ext_qlabel.h"
 #include "kscript_ext_qvboxlayout.h"
+#include "kscript_ext_qbuttongroup.h"
 #include "kscript_value.h"
 #include "kscript_util.h"
 #include "kscript.h"
@@ -25,12 +27,14 @@ KSModule::Ptr ksCreateModule_Qt( KSInterpreter* interp )
   module->addObject( "QApplication", new KSValue( new KSClass_QApplication( module ) ) );
   module->addObject( "QRect", new KSValue( new KSClass_QRect( module ) ) );
   module->addObject( "QLineEdit", new KSValue( new KSClass_QLineEdit( module ) ) );
+  module->addObject( "QButton", new KSValue( new KSClass_QButton( module ) ) );
   module->addObject( "QRadioButton", new KSValue( new KSClass_QRadioButton( module ) ) );
   module->addObject( "QPushButton", new KSValue( new KSClass_QPushButton( module ) ) );
   module->addObject( "QCheckBox", new KSValue( new KSClass_QCheckBox( module ) ) );
   module->addObject( "QComboBox", new KSValue( new KSClass_QComboBox( module ) ) );
   module->addObject( "QLabel", new KSValue( new KSClass_QLabel( module ) ) );
   module->addObject( "QVBoxLayout", new KSValue( new KSClass_QVBoxLayout( module ) ) );
+  module->addObject( "QButtonGroup", new KSValue( new KSClass_QButtonGroup( module ) ) );
 	  
   return module;
 }
