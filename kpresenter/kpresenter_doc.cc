@@ -1014,6 +1014,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 
     KoGenStyle pageLayout = m_pageLayout.saveOasis();
+    pageLayout.addAttribute( "style:page-usage", "all" ); // needed?
     mainStyles.lookup( pageLayout, "pm" );
 
 

@@ -881,7 +881,8 @@ void Outline::itemClicked( QListViewItem *item )
     {
         KPrPage* page = slideItem->page();
         if( !page ) return;
-        emit showPage( m_doc->pageList().findRef( page ) );
+        if ( !m_viewMasterPage )
+            emit showPage( m_doc->pageList().findRef( page ) );
     }
 
     // check if we need to show chosen object
@@ -897,7 +898,8 @@ void Outline::itemClicked( QListViewItem *item )
         {
             KPrPage* page = slideItem->page();
             if( !page ) return;
-            emit showPage( m_doc->pageList().findRef( page ) );
+            if ( !m_viewMasterPage )
+                emit showPage( m_doc->pageList().findRef( page ) );
         }
 
         // select the object, make sure it's visible
