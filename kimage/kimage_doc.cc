@@ -725,14 +725,12 @@ void KImageDoc::transformImage( const QWMatrix& matrix )
 
   pix.convertFromImage( m_image );
   newpix = pix.xForm( matrix );
-  debug( "Image manipulated with matrix" );
-  
   m_image = newpix.convertToImage();
-
   emit sig_updateView();
-
   m_bModified = true;
   m_bEmpty = false;
+
+  debug( "Image manipulated with matrix" );
 }
 
 char* KImageDoc::mimeType()

@@ -20,8 +20,9 @@
 #ifndef __kinputdialog_h__
 #define __kinputdialog_h__
 
-#include <qlineedit.h>
 #include <kwizard.h>
+
+class QLineEdit;
 
 /**
  */
@@ -29,7 +30,7 @@ class KInputDialog : public KDialog
 {
     Q_OBJECT
 public:
-	KInputDialog( QWidget *parent = 0, const char *name = 0, const char *inputtitle = 0, WFlags f = 0 );
+	KInputDialog( QWidget* parent = 0, const char* name = 0, const char* inputtitle = 0, WFlags f = 0 );
 	~KInputDialog();
 
 	void setStr( const QString& theString ); 

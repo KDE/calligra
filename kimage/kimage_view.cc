@@ -26,18 +26,19 @@
 #include <kfiledialog.h>
 #include <kcolordlg.h>
 #include <klocale.h>
-#include <kprocess.h>
 #include <kiconloader.h>
 
 #include <opUIUtils.h>
 #include <opMainWindow.h>
 #include <opMainWindowIf.h>
+
 #include <koPartSelectDia.h>
 #include <koPrintDia.h>
 #include <koAboutDia.h>
 
 #include "kinputdialog.h"
 #include "kintegerinputdialog.h"
+#include "kzoomfactordialog.h"
 
 #include "kimage_doc.h"
 #include "kimage_view.h"
@@ -252,12 +253,13 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   }
 
   CORBA::WString_var text;
-  
+  OpenPartsUI::Pixmap_var pix;
+   
   // Edit
   text = Q2C( i18n( "&Edit" ) );
   _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
 
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON("undo.xpm") );
+  pix = OPUIUtils::convertPixmap( ICON("undo.xpm") );
   text = Q2C( i18n("no Undo possible") );
   m_idMenuEdit_Edit = m_vMenuEdit->insertItem6( pix, text, this, "editUndo", CTRL + Key_E, -1, -1 );
 
@@ -289,14 +291,15 @@ bool KImageView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   text = Q2C( i18n( "&View" ) );
   _menubar->insertMenu( text, m_vMenuView, -1, -1 );
 
+  text = Q2C( i18n("Zoom...") );
+  m_idMenuView_ZoomFactor = m_vMenuView->insertItem( text, this, "viewZoomFactor", 0 );
+
   pix = OPUIUtils::convertPixmap( ICON("fittoview.xpm") );
   text = Q2C( i18n("Fit to &view") );
   m_idMenuView_FitToView = m_vMenuView->insertItem6( pix, text, this, "viewFitToView", CTRL + Key_V, -1, -1 );
-
   pix = OPUIUtils::convertPixmap( ICON("fitwithprops.xpm") );
   text = Q2C( i18n("Fit and keep &proportions") );
   m_idMenuView_FitWithProps = m_vMenuView->insertItem6( pix, text, this, "viewFitWithProportions", CTRL + Key_P, -1, -1 );
-
   pix = OPUIUtils::convertPixmap( ICON("originalsize.xpm") );
   text = Q2C( i18n("&Original size") );
   m_idMenuView_Original = m_vMenuView->insertItem6( pix, text, this, "viewOriginalSize", CTRL + Key_O, -1, -1 );
@@ -518,6 +521,24 @@ void KImageView::viewInfoImage()
   QMessageBox::information( this, i18n( "Image information" ), i18n( "Infos " ), i18n( "OK" ) );
 }
 
+void KImageView::viewZoomFactor()
+{
+  if( m_pDoc->isEmpty() )
+  {
+    QMessageBox::critical( this, i18n( "KImage Error" ), i18n("The document is empty\nAction not available."), i18n( "OK" ) );
+    return;
+  }
+
+  QPoint factor( 100, 100 );
+  KZoomFactorDialog dlg( NULL, "KImage" ); 
+
+  if( dlg.getValue( factor ) != QDialog::Accepted )
+  {
+    return;
+  }
+  slotUpdateView();
+}
+
 void KImageView::viewCentered()
 {
   if( m_pDoc->isEmpty() )
@@ -735,61 +756,83 @@ void KImageView::editPreferences()
 
 QString KImageView::tmpFilename()
 {
-  QString result;
+  QString file;
 
-  result = "/tmp/kimage_pid.image";
-  return result;
+  file.sprintf( "/tmp/kimage_%i.image", getpid() );
+  debug( file );
+  return file;
+}
+
+void KImageView::executeCommand( KProcess& proc )
+{
+  debug( "starting process" );
+
+  QString file = tmpFilename();
+
+  parentWidget()->hide(); 
+  
+  if( !m_pDoc->saveDocument( file, 0L ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n( "Could not save\n%s" ), file.data() );
+    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+    return;
+  }
+
+  proc << file;
+  proc.start( KProcess::Block );
+
+  if( !m_pDoc->openDocument( file, 0L ) )
+  {
+    QString tmp;
+    tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
+    QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+    return;
+  }
+
+  parentWidget()->show(); 
+
+  debug( "ending process" );
 }
 
 void KImageView::extrasRunGimp()
 {
   if( m_pDoc->isEmpty() )
+  {
     return;
-
-  debug( "starting Process" );
-
+  }
   KProcess proc;
   proc << "gimp";
-  proc << "/t";
-  proc.start( KProcess::Block );
-
-  debug( "Process ended" );
+  //proc << "/t";
+  executeCommand( proc );
 }
 
 void KImageView::extrasRunXV()
 {
   if( m_pDoc->isEmpty() )
+  {
     return;
-
-  debug( "starting Process" );
-
+  }
   KProcess proc;
   proc << "xv";
-  proc.start( KProcess::Block );
-
-  debug( "Process ended" );
+  executeCommand( proc );
 }
 
 void KImageView::extrasRunCommand()
 {
   if( m_pDoc->isEmpty() )
+  {
     return;
-
-  debug( "Run Command" );
-
-  QString command = tmpFilename();
-  KInputDialog dlg( this, i18n( "KImage" ), i18n( "Commandline:" ) );
-  if( dlg.getStr( command ) != QDialog::Accepted )
+  }
+  QString tmp;
+  KInputDialog dlg( 0, i18n( "Execute Command" ), i18n( "Commandline:" ) );
+  if( dlg.getStr( tmp ) != KDialog::Accepted )
+  {
     return;
-
-  debug( "starting Process: " + command );
-
+  }
   KProcess proc;
   proc << "display";
-  proc << command;
-  proc.start( KProcess::Block );
-
-  debug( "Process ended" );
+  executeCommand( proc );
 }
 
 void KImageView::resizeEvent( QResizeEvent *_ev )

@@ -36,6 +36,7 @@ module KImage
 		slot void editPreferences();
 
 		// View
+		slot void viewZoomFactor();
 		slot void viewFitToView();
 		slot void viewFitWithProportions();
 		slot void viewOriginalSize();

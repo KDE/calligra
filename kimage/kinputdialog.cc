@@ -21,8 +21,8 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qlineedit.h>
 #include <qpushbutton.h>
-#include <qlabel.h>
 
 #include <klocale.h>
 
@@ -86,21 +86,21 @@ KInputDialog::~KInputDialog()
 
 void KInputDialog::setStr( const QString& theString )
 {
-	m_pLineEdit->setText( theString );
+  m_pLineEdit->setText( theString );
 }
 
 int KInputDialog::getStr( QString& theString)
 {
-	int result;
-	QString tmp;
+  int result;
+  QString tmp;
 
-	setStr( theString );
-	result = exec();
-
-	if( result == Accepted )
-		theString = m_pLineEdit->text();
-
-	return result;
+  setStr( theString );
+  result = exec();
+  if( result == Accepted )
+  {
+    theString = m_pLineEdit->text();
+  }
+  return result;
 }
 
 #include "kinputdialog.moc"

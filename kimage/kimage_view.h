@@ -22,18 +22,19 @@
 
 #include <qpixmap.h>
 #include <qwidget.h>
- 
-#include <koFrame.h>
-#include <koView.h>
 
+#include <kprocess.h>
+ 
 #include <opMenu.h>
 #include <opToolBar.h>
 #include <openparts_ui.h>
 
+#include <koFrame.h>
+#include <koView.h>
+
 #include "kimage.h"
 
 class KImageDoc;
-class KImageShell;
 
 class KImageView : public QWidget,
 		   virtual public KoViewIf,
@@ -52,6 +53,7 @@ public:
   void editPageLayout();
   void editPreferences();
 
+  void viewZoomFactor();
   void viewFitToView();
   void viewFitWithProportions();
   void viewOriginalSize();
@@ -93,6 +95,7 @@ protected:
   virtual void resizeEvent( QResizeEvent* _ev );
   virtual void paintEvent( QPaintEvent* _ev );
   QString tmpFilename();
+  void executeCommand( KProcess& proc );
 
   // edit toolbar
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
@@ -111,6 +114,7 @@ protected:
 
   // view menu
   OpenPartsUI::Menu_var m_vMenuView;
+  CORBA::Long m_idMenuView_ZoomFactor;
   CORBA::Long m_idMenuView_FitToView;
   CORBA::Long m_idMenuView_FitWithProps;
   CORBA::Long m_idMenuView_Original;

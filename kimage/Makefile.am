@@ -17,6 +17,7 @@ kimage_bin_SOURCES = \
     preferencesdlg.cc \
     kinputdialog.cc \
     kintegerinputdialog.cc \
+    kzoomfactordialog.cc \
     formats.cc
 
 noinst_HEADERS = \
@@ -28,6 +29,7 @@ noinst_HEADERS = \
     preferencesdlg.h \
     kinputdialog.h \
     kintegerinputdialog.h \
+    kzoomfactordialog.h \
     formats.h
 
 METASOURCES = \
@@ -37,7 +39,8 @@ METASOURCES = \
     kimage_view.moc \
     preferencesdlg.moc \
     kinputdialog.moc \
-    kintegerinputdialog.moc
+    kintegerinputdialog.moc \
+    kzoomfactordialog
 
 idl_DATA = kimage.idl
 idl_HEADERS = kimage.h
@@ -73,4 +76,5 @@ kimage_view.cc: kimage.h
 preferencesdlg.cc: preferencesdlg.h
 kinputdialog.cc: kinputdialog.h
 kintegerinputdialog.cc: kintegerinputdialog.h
+kzoomfactordialog.cc: kzoomfactordialog.h
 formats.cc: formats.h
