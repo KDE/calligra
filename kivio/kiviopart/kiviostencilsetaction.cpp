@@ -241,14 +241,18 @@ void KivioStencilSetAction::loadSet( KPopupMenu* menu, const QString& rootDirStr
 
 QPixmap KivioStencilSetAction::dirtPixmap( const QString& dir )
 {
-    QFile file( dir + "/icon.xpm" );
-    QFileInfo finfo( file );
+    QString fs;
 
-    if( finfo.exists()==false )
-    {
-        return QPixmap( (const char **)default_plug_xpm );
+    if( QFile::exists(dir + "/icon.xpm") ) {
+      fs = dir + "/icon.xpm";
+    } else if( QFile::exists(dir + "/icon.png") ) {
+      fs = dir + "/icon.png";
+    } else {
+      return QPixmap( (const char **)default_plug_xpm );
     }
 
+    QFile file( fs );
+    QFileInfo finfo( file );
     return QPixmap( finfo.absFilePath() );
 }
 
