@@ -20,6 +20,7 @@
 #include <kstandarddirs.h>
 #include <kwizard.h>
 #include <qstringlist.h>
+#include <klibloader.h>
 
 #include "kexicreateprojectpage.h"
 #include "kexicreateprojectpageengine.h"
@@ -187,7 +188,12 @@ KexiCreateProject::~KexiCreateProject()
 {
 }
 
+extern "C" {
+	void * init_kexiprojectwizard() {return new KexiCreateProjectFactory();}
+}
 
-K_EXPORT_COMPONENT_FACTORY( kexiprojectwizard, KGenericFactory<KexiCreateProject> )
+/*
+K_EXPORT_COMPONENT_FACTORY( kexiprojectwizard, KGenericFactory<KexiCreateProject>)
+*/
 
 #include "kexicreateproject.moc"

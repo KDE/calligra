@@ -23,6 +23,8 @@
 #include <qptrlist.h>
 #include <kexicreateprojectiface.h>
 #include <qstringlist.h>
+#include <klibloader.h>
+//#include <kdebug.h>
 
 /**
   *@author lucijan busch
@@ -86,5 +88,20 @@ class KexiCreateProject : public KWizard, public KexiCreateProjectIface {
 		void			next();
 		void			accept();
 };
+
+class KexiCreateProjectFactory : public KLibFactory {
+        Q_OBJECT
+        public:
+                KexiCreateProjectFactory():KLibFactory(){}
+                virtual ~KexiCreateProjectFactory(){}
+                virtual QObject* createObject( QObject* parent = 0, const char* name = 0,
+                const char* classname = "QObject", const QStringList &args = QStringList() )
+                {
+			return new KexiCreateProject(parent,name,args);
+//                        kdDebug()<<"JWKEXIFACTORY"<<endl;
+			return 0;
+                }
+};
+
 
 #endif
