@@ -490,6 +490,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             case MM_CREATE_TABLE:
             case MM_CREATE_FORMULA:
             case MM_CREATE_PIX:
+                setMouseMode( MM_EDIT );
             default: break;
         }
         m_mousePressed = false;
