@@ -46,7 +46,7 @@
 
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
-//#define DEBUG_FORMAT_MORE
+#define DEBUG_FORMAT_MORE
 
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc ), undoRedoInfo( this )
@@ -1455,7 +1455,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
     else // not found, assume worse
         maxY = m_availableHeight;
 
-    kdDebug(32002) << "KWTextFrameSet::updateViewArea maxY now " << maxY << endl;
+    kdDebug(32002) << "KWTextFrameSet (" << getName() << ")::updateViewArea maxY now " << maxY << endl;
     // Update map
     m_mapViewAreas.replace( w, maxY );
 
@@ -2182,12 +2182,15 @@ void KWTextFrameSet::pasteText( QTextCursor * cursor, const QString & text, KWTe
 
 void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bool removeSelected )
 {
+    //kdDebug(32001) << "KWTextFrameSet::pasteKWord" << endl;
     QTextDocument *textdoc = textDocument();
     if ( removeSelected && textdoc->hasSelection( QTextDocument::Standard ) )
         removeSelectedText( cursor );
     emit hideCursor();
-    setLastFormattedParag( cursor->parag()->prev() ?
-                           cursor->parag()->prev() : cursor->parag() );
+    // correct but useless due to unzoom/zoom
+    // (which invalidates everything and sets lastformatted to firstparag)
+    //setLastFormattedParag( cursor->parag()->prev() ?
+    //                       cursor->parag()->prev() : cursor->parag() );
 
     // We have our own command for this.
     // Using insert() wouldn't help storing the parag stuff for redo
@@ -2195,6 +2198,8 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
     textDocument()->addCommand( cmd );
     m_doc->addCommand( new KWTextCommand( this, /*cmd, */i18n("Paste Text") ) ); // the wrapper KCommand
     *cursor = *( cmd->execute( cursor ) );
+
+    (void) availableHeight(); // calculate it again (set to -1 due to unzoom/zoom)
 
     formatMore();
     emit repaintChanged( this );
