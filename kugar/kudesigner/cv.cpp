@@ -26,6 +26,7 @@
 #include <qimage.h>
 
 #include <qprinter.h>
+#include <kdebug.h>
 
 #include "mycanvas.h"
 #include "canvbox.h"
@@ -277,7 +278,7 @@ void ReportCanvas::contentsMousePressEvent(QMouseEvent* e)
     selectionStarted = 0;
 
     // ????
-    unselectAll();
+    //unselectAll();
     canvas()->update();
 
 
@@ -480,6 +481,7 @@ void ReportCanvas::selectAll()
 
 void ReportCanvas::selectItem(CanvasBox *it, bool addToSelection)
 {
+    
     if (!addToSelection)
         unselectAll();
     selected.append(it);
@@ -492,6 +494,7 @@ void ReportCanvas::selectItem(CanvasBox *it, bool addToSelection)
     m["Text3"] = "3";
     selProps["Text"] = *(new PropPtr(new DescriptionProperty("Text", m, "some descr", "2")));
   */
+
     emit selectionMade(&(it->props));
 }
 
