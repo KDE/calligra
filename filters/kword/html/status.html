@@ -73,8 +73,7 @@
         20 Apr 2001 New (single pass) HTML filter<br>
         07 May 2001 Removing code of the old import filter<br>
         09 May 2001 Removing code of the former two pass filter system<br>
-        18 Aug 2001 Adding a dialog for forcing a character set (Only KOffice post-1.1)<br>
-	10 Sep 2001 Rewrite using KHTML as html parser, support (simple) tables<br>
+        10 Sep 2001 Rewrite using KHTML as html parser, support (simple) tables<br>
      </td>
     </tr>
 
@@ -134,19 +133,19 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>30 Jun 2001</td>
+     <td>13 Nov 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
      <td>
-        - Export to HTML 4.01 or XHTML 1.0 documents<br>
-        - Three modes: &quot;Spartan&quot;, &quot;Direct&quot;, &quot;Style&quot;<br>
+        - Export to HTML 4.01 or XHTML 1.0 documents (with CSS2)<br>
+        - UTF-8 or locale encoding<br>
         - Lists<br>
-        - Character formatting (not in &quot;Spartan&quot; mode)<br>
-        - Paragraph formatting (not in &quot;Spartan&quot; mode)<br>
-        - Partial CSS2 support (&quot;Style&quot; mode, no style sheets)<br>
-        - Indentations (only in &quot;Style&quot; mode)<br>
+        - Character formatting<br>
+        - Paragraph formatting<br>
+        - Indentations<br>
+        - Links</br>
      </td>
     </tr>
 
@@ -154,14 +153,13 @@
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
      <td>
         - Finish the complete re-write<br>
-        - Fix white space problems (space at start, space at end, multiple consecutive spaces)<br>
-        - Other Unicode encodings (e.g. UTF-16)<br>
-        - Other non-Unicode encodings (e.g. ASCII, Local encoding)<br>
         - Tables<br>
         - Images<br>
+        - Fix white space problems (space at start, space at end, multiple consecutive spaces)<br>
+        - Other Unicode encodings (e.g. UTF-16)<br>
+        - Other non-Unicode encodings (e.g. ASCII)<br>
+        - Paragraph layout<br>
         - Special treatement for paragraphs in fixed fonts (needed or not?)<br>
-        - CSS2 (style sheets)<br>
-        - Have a correct font size algorithm<br>
      </td>
     </tr>
 
@@ -170,14 +168,8 @@
      <td>
         04 Feb 2001 Start of complete re-write.<br>
         06 Feb 2001 First version that can export XHTML 1.0.<br>
-        08 Feb 2001 New export mode : &quot;Spartan&quot;.<br>
-        06 Mar 2001 Fixes a font size bug in &quot;direct&quot; mode.<br>
-        07 Mar 2001 New mode "Style"<br>
-        19 Mar 2001 Fix the bug due to the new KWord<br>
-        01 Jun 2001 Lists (unorderd and ordered)<br>
-        06 Jun 2001 Paragraph formatting<br>
-        12 Jun 2001 Indentations<br>
-        30 Jun 2001 New Dialog<br>
+        ?? Nov 2001 New version with simplier dialog.<br>
+        13 Nov 2001 Links and full support for locale encoding
      </td>
     </tr>
 
@@ -199,7 +191,9 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
-     <td>-</td>
+     <td>
+        NOTE: this status describe the version of the filter for KOffice 1.2 (CVS HEAD)
+     </td>
     </tr>
    </table>
   </td>
