@@ -31,6 +31,7 @@
 #include <qlineedit.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
+#include <qtooltip.h>
 
 #include <kstddirs.h>
 #include <iostream>
@@ -84,6 +85,11 @@ KisLayerView::KisLayerView( KisDoc *doc, QWidget *parent, const char *name )
         layertable, SLOT( slotRaiseLayer() ) );
     connect( pbDown, SIGNAL( clicked() ), 
         layertable, SLOT( slotLowerLayer() ) );
+
+    QToolTip::add( pbAddLayer, i18n( "Create New Layer" ) );
+    QToolTip::add( pbRemoveLayer, i18n( "Remove Current Layer" ) );
+    QToolTip::add( pbUp, i18n( "Upper Current Layer" ) );
+    QToolTip::add( pbDown, i18n( "Lower Current Layer" ) );
     
     initGUI();
 }
@@ -332,6 +338,8 @@ void LayerTable::slotInverseVisibility( int indx )
   updateCell( indx, 0 );
   
   img->markDirty(img->layerList().at( indx )->imageExtents() );
+
+  m_doc->setModified( true );
 }
 
 
@@ -340,6 +348,8 @@ void LayerTable::slotInverseLinking( int indx )
     KisImage *img = m_doc->current();
     img->layerList().at(indx)->setLinked(!img->layerList().at(indx)->linked());
     updateCell( indx, 0 );
+
+    m_doc->setModified( true );
 }
 
 
@@ -435,8 +445,7 @@ void LayerTable::slotAddLayer()
 {
     KisImage *img = m_doc->current();
 
-    QString name;
-    name.sprintf("layer %d", img->layerList().count());
+    QString name = i18n( "layer %1" ).arg( img->layerList().count() );
 
     img->addLayer( img->imageExtents(), KisColor::white(), true, name );
 
@@ -447,6 +456,8 @@ void LayerTable::slotAddLayer()
 
     updateTable();
     updateAllCells();
+
+    m_doc->setModified( true );
 }
 
 
@@ -463,6 +474,8 @@ void LayerTable::slotRemoveLayer()
 
     updateTable();
     updateAllCells();
+
+    m_doc->setModified( true );
   }
 }
 
@@ -493,6 +506,8 @@ void LayerTable::slotRaiseLayer()
         repaint();
         swapLayers( m_selected, newpos );
         selectLayer( newpos );
+
+        m_doc->setModified( true );
     }
 }
 
@@ -508,6 +523,8 @@ void LayerTable::slotLowerLayer()
         repaint();
         swapLayers( m_selected, npos );
         selectLayer( npos );
+
+        m_doc->setModified( true );
     }
 }
 
@@ -523,6 +540,8 @@ void LayerTable::slotFrontLayer()
     m_doc->current()->markDirty( uR );
 
     updateAllCells();
+
+    m_doc->setModified( true );
   }
 }
 
@@ -538,6 +557,8 @@ void LayerTable::slotBackgroundLayer()
         m_doc->current()->markDirty(uR);
 
         updateAllCells();
+
+        m_doc->setModified( true );
     }
 }
 
@@ -558,6 +579,8 @@ void LayerTable::slotProperties()
         QRect uR = m_doc->current()->layerList().at( m_selected )->imageExtents();
         updateCell( m_selected, 0 );
         m_doc->current()->markDirty( uR );
+
+        m_doc->setModified( true );
     }
 }
 

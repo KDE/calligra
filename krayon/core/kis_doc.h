@@ -223,6 +223,29 @@ protected:
     views of the same data */
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
+    /* save images */
+    QDomElement saveImages( QDomDocument &doc );
+
+    /* save layers */
+    QDomElement saveLayers( QDomDocument &doc, KisImage *img );
+
+    /* save channels */
+    QDomElement saveChannels( QDomDocument &doc, KisLayer *lay );
+
+    /* load images */
+    bool loadImages( QDomElement &elem );
+
+    /* load layers */
+    bool loadLayers( QDomElement &elem, KisImage *img );
+
+    /* load channels */
+    void loadChannels( QDomElement &elem, KisLayer *lay );
+
+    /* load old file format */
+    bool loadXMLOldFileFormat( QDomElement &image );
+    void completeLoadingOldFileFormat( KoStore *store );
+    bool oldFileFormat;
+
     /* undo/redo */
     KoCommandHistory m_commands;
 

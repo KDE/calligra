@@ -250,6 +250,7 @@ class KisView : public KoView
     void canvasGotPaintEvent( QPaintEvent* );
     void canvasGotEnterEvent( QEvent * );
     void canvasGotLeaveEvent( QEvent * );
+    void canvasGotMouseWheelEvent( QWheelEvent * );
     void slotUndoRedoChanged( QString _undo, QString _redo );
     void slotUndoRedoChanged( QStringList _undo, QStringList _redo );
 

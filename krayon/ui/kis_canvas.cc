@@ -68,4 +68,9 @@ void KisCanvas::leaveEvent( QEvent*e )
     emit gotLeaveEvent(e);
 }
 
+void KisCanvas::wheelEvent( QWheelEvent *e )
+{
+    emit mouseWheelEvent( e );
+}
+
 #include "kis_canvas.moc"

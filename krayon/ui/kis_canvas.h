@@ -38,6 +38,7 @@ class KisCanvas : public QWidget
     void gotPaintEvent( QPaintEvent* );
     void gotEnterEvent( QEvent* );
     void gotLeaveEvent( QEvent* );  
+    void mouseWheelEvent( QWheelEvent * );
   
  protected:
     virtual void paintEvent( QPaintEvent* );
@@ -46,6 +47,7 @@ class KisCanvas : public QWidget
     virtual void mouseMoveEvent ( QMouseEvent * );
     virtual void enterEvent( QEvent* );
     virtual void leaveEvent( QEvent* );
+    virtual void wheelEvent( QWheelEvent * );
 };
 
 #endif

@@ -223,6 +223,9 @@ void KisView::setupCanvas()
 
     QObject::connect( m_pCanvas, SIGNAL( gotLeaveEvent (QEvent* ) ),
 		this, SLOT( canvasGotLeaveEvent ( QEvent* ) ) );
+
+    QObject::connect( m_pCanvas, SIGNAL( mouseWheelEvent( QWheelEvent* ) ),
+                      this, SLOT( canvasGotMouseWheelEvent( QWheelEvent* ) ) );
 }
 
 
@@ -1483,6 +1486,9 @@ void KisView::canvasGotMousePressEvent( QMouseEvent *e )
         e->globalPos(), e->button(), e->state() );
     
     emit canvasMousePressEvent( &ev );
+
+    if ( e->button() == Qt::LeftButton )
+        m_pDoc->setModified( true );
 }
 
 
@@ -1552,6 +1558,11 @@ void KisView::canvasGotLeaveEvent ( QEvent *e )
            
     QEvent ev(*e) ;
     emit canvasLeaveEvent( &ev );
+}
+
+void KisView::canvasGotMouseWheelEvent( QWheelEvent *e )
+{
+    QApplication::sendEvent( m_pVert, e );
 }
 
 
@@ -2294,6 +2305,8 @@ void KisView::insert_layer()
 
     slotUpdateImage();
     slotRefreshPainter();
+
+    m_pDoc->setModified( true );
 }
 
 /*
@@ -2305,6 +2318,8 @@ void KisView::remove_layer()
     m_pLayerView->layerTable()->slotRemoveLayer(); 
     slotUpdateImage();
     slotRefreshPainter();
+
+    m_pDoc->setModified( true );
 }
 
 /*
@@ -2320,7 +2335,9 @@ void KisView::hide_layer()
     m_pLayerView->layerTable()->slotInverseVisibility(indx);    
 
     m_pLayerView->layerTable()->updateTable();    
-    m_pLayerView->layerTable()->updateAllCells();    
+    m_pLayerView->layerTable()->updateAllCells(); 
+
+    m_pDoc->setModified( true );
 }
 
 /*
@@ -2336,7 +2353,9 @@ void KisView::link_layer()
     m_pLayerView->layerTable()->slotInverseLinking(indx);    
 
     m_pLayerView->layerTable()->updateTable();    
-    m_pLayerView->layerTable()->updateAllCells();    
+    m_pLayerView->layerTable()->updateAllCells();
+
+    m_pDoc->setModified( true );
 }
 
 /*
@@ -2371,6 +2390,8 @@ void KisView::next_layer()
         m_pLayerView->layerTable()->updateAllCells();
         showScrollBars();
         slotRefreshPainter();
+
+        m_pDoc->setModified( true );
     }    
 }
 
@@ -2408,6 +2429,8 @@ void KisView::previous_layer()
 
         showScrollBars();
         slotRefreshPainter();
+
+        m_pDoc->setModified( true );
    }     
 }
 
@@ -2415,6 +2438,8 @@ void KisView::previous_layer()
 void KisView::import_image()
 {
     insert_layer_image(true);
+
+    m_pDoc->setModified( true );
 }
 
 void KisView::export_image()
@@ -2425,6 +2450,8 @@ void KisView::export_image()
 void KisView::insert_image_as_layer()
 {
     insert_layer_image(false);
+
+    m_pDoc->setModified( true );
 }
 
 void KisView::save_layer_as_image()
@@ -2700,6 +2727,8 @@ void KisView::layerScale(bool smooth)
         m_pLayerView->layerTable()->updateAllCells();
         showScrollBars();
         slotRefreshPainter();
+
+        m_pDoc->setModified( true );
     }
 }
 
@@ -2740,6 +2769,8 @@ void KisView::add_new_image_tab()
     {    
         slotUpdateImage();
         slotRefreshPainter();
+
+        m_pDoc->setModified( true );
     }    
 }
 
@@ -2748,9 +2779,11 @@ void KisView::remove_current_image_tab()
 {
     if (m_pDoc->current())
     {
-	    m_pDoc->removeImage(m_pDoc->current());
+        m_pDoc->removeImage(m_pDoc->current());
         slotUpdateImage();
         slotRefreshPainter();
+
+        m_pDoc->setModified( true );
     }    
 }
 
@@ -2759,9 +2792,11 @@ void KisView::merge_all_layers()
 {
     if (m_pDoc->current())
     {
-	    m_pDoc->current()->mergeAllLayers();
+        m_pDoc->current()->mergeAllLayers();
         slotUpdateImage();
         slotRefreshPainter();
+
+        m_pDoc->setModified( true );
     }    
 }
 
@@ -2773,6 +2808,8 @@ void KisView::merge_visible_layers()
         m_pDoc->current()->mergeVisibleLayers();
         slotUpdateImage();
         slotRefreshPainter();
+
+        m_pDoc->setModified( true );
     }    
 }
 
@@ -2781,9 +2818,11 @@ void KisView::merge_linked_layers()
 {
     if (m_pDoc->current())
     {
-	    m_pDoc->current()->mergeLinkedLayers();
+        m_pDoc->current()->mergeLinkedLayers();
         slotUpdateImage();
         slotRefreshPainter();
+
+        m_pDoc->setModified( true );
     }    
 }
 
@@ -3032,10 +3071,10 @@ void KisView::setupPrinter( KPrinter &printer )
 {
 #ifdef HAVE_KDEPRINT
     printer.setPageSelection( KPrinter::ApplicationSide );
-    
+
     int count = 0;
     QStringList imageList = m_pDoc->images();
-    for ( QStringList::Iterator it = imageList.begin(); it != imageList.end(); ++it ) {
+    for ( QStringList::Iterator it = imageList.begin(); it != imageList.end(); ++it ) { 
         if ( *it == m_pDoc->current()->name() )
             break;
         ++count;

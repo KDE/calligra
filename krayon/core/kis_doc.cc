@@ -160,113 +160,148 @@ KisTimer::stop("initDoc()");
 
 
 /*
-    Save current document (image) to xml format using QDomDocument
+    Save document (image) to xml format using QDomDocument
     ko virtual method implemented
 */
 
 QDomDocument KisDoc::saveXML( )
 {
-    cout << "KisDoc::saveXML" << endl;
-    KisImage *img = m_pCurrent;
+    kdDebug(0) << "KisDoc::saveXML" << endl;
 
     // FIXME: implement saving of non-RGB modes.
 
     QDomDocument doc( "image" );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-
-    // image element - only one per document
-    QDomElement image = doc.createElement( "image" );
-
-    image.setAttribute( "name", img->name() );
-    image.setAttribute( "author", img->author() );
-    image.setAttribute( "email", img->email() );
-    image.setAttribute( "editor", "Krayon" );
-    image.setAttribute( "mime", "application/x-krayon" );
-    image.setAttribute( "width", img->width() );
-    image.setAttribute( "height", img->height() );
-    image.setAttribute( "bitDepth", static_cast<int>(img->bitDepth()) );
-    image.setAttribute( "cMode", static_cast<int>(img->colorMode()) );
-
-kdDebug(0) << "name: " <<  img->name() << endl;
-kdDebug(0) << "author: " <<  img->author() << endl;
-kdDebug(0) << "email: " <<  img->email() << endl;
-kdDebug(0) << "editor: " <<  "Krayon" << endl;
-kdDebug(0) << "mime: " << "application/x-krayon"  << endl;
-kdDebug(0) << "img->width(): " <<  img->width() << endl;
-kdDebug(0) << "img->height(): " <<  img->height() << endl;
-kdDebug(0) << "bitDepth " <<  static_cast<int>(img->bitDepth()) << endl;
-kdDebug(0) << "cMode: " <<  static_cast<int>(img->colorMode()) << endl;
-
-    doc.appendChild( image );
-
-    // layers element - variable
-    QDomElement layers = doc.createElement( "layers" );
-    image.appendChild( layers );
-
-    // layer elements
-kdDebug(0) << "layer elements" << endl;
-
-    QList<KisLayer> l_lst = img->layerList();
-    for (KisLayer *lay = l_lst.first(); lay != 0; lay = l_lst.next())
-    {
-        QDomElement layer = doc.createElement( "layer" );
-
-	    layer.setAttribute( "name", lay->name() );
-	    layer.setAttribute( "x", lay->imageExtents().x() );
-	    layer.setAttribute( "y", lay->imageExtents().y() );
-	    layer.setAttribute( "width", lay->imageExtents().width() );
-        layer.setAttribute( "height", lay->imageExtents().height() );
-	    layer.setAttribute( "opacity", static_cast<int>(lay->opacity()) );
-
-kdDebug(0) << "name: " <<  lay->name() << endl;
-kdDebug(0) << "x: " << lay->imageExtents().x()   << endl;
-kdDebug(0) << "y: " << lay->imageExtents().y()   << endl;
-kdDebug(0) << "width: " << lay->imageExtents().width()   << endl;
-kdDebug(0) << "height: " << lay->imageExtents().height()   << endl;
-kdDebug(0) << "opacity: " <<  static_cast<int>(lay->opacity())  << endl;
-
-	    if (lay->visible())
-		    layer.setAttribute( "visible", "true" );
-	    else
-		    layer.setAttribute( "visible", "false" );
-
-	    if (lay->linked())
-		    layer.setAttribute( "linked", "true" );
-	    else
-		    layer.setAttribute( "linked", "false" );
-
-	    layer.setAttribute( "bitDepth", static_cast<int>(lay->bitDepth()) );
-	    layer.setAttribute( "cMode", static_cast<int>(lay->colorMode()) );
-
-kdDebug(0) << "bitDepth: " <<  static_cast<int>(lay->bitDepth())  << endl;
-kdDebug(0) << "colorMode: " <<  static_cast<int>(lay->colorMode())  << endl;
-
-	    layers.appendChild( layer );
-
-	    // channels element - variable, normally maximum of 4 channels
-	    QDomElement channels = doc.createElement( "channels" );
-	    layer.appendChild( channels );
-
-kdDebug(0) << "channel elements" << endl;
-
-	    // channel elements
-	    for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
-	    {
-	        QDomElement channel = doc.createElement( "channel" );
-
-	        channel.setAttribute( "cId", static_cast<int>(ch->channelId()) );
-	        channel.setAttribute( "bitDepth", static_cast<int>(ch->bitDepth()) );
-
-kdDebug(0) << "cId: " <<  static_cast<int>(ch->channelId())  << endl;
-kdDebug(0) << "bitDepth: " <<  static_cast<int>(ch->bitDepth())  << endl;
-
-	        channels.appendChild( channel );
-
-	    } // end of channels loop
-    } // end of layers loop
+    doc.appendChild( saveImages( doc ) );
 
     setModified( false );
     return doc;
+}
+
+// save images
+QDomElement KisDoc::saveImages( QDomDocument &doc )
+{
+    QStringList imageNames = images();
+    QString tmp_currentImageName = currentImage();
+
+    QDomElement images = doc.createElement( "images" );
+    images.setAttribute( "editor", "Krayon" );
+    images.setAttribute( "mime", "application/x-krayon" );
+    images.setAttribute( "version", "1.2" );
+
+    kdDebug(0) << "editor: " <<  "Krayon" << endl;
+    kdDebug(0) << "mime: " << "application/x-krayon"  << endl;
+
+    for ( QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); ++it )
+    {
+        setImage( *it );
+        KisImage *img = m_pCurrent;
+
+        // image element
+        QDomElement image = doc.createElement( "image" );
+        image.setAttribute( "name", img->name() );
+        image.setAttribute( "author", img->author() );
+        image.setAttribute( "email", img->email() );
+        image.setAttribute( "width", img->width() );
+        image.setAttribute( "height", img->height() );
+        image.setAttribute( "bitDepth", static_cast<int>(img->bitDepth()) );
+        image.setAttribute( "cMode", static_cast<int>(img->colorMode()) );
+
+        kdDebug(0) << "name: " <<  img->name() << endl;
+        kdDebug(0) << "author: " <<  img->author() << endl;
+        kdDebug(0) << "email: " <<  img->email() << endl;
+        kdDebug(0) << "img->width(): " <<  img->width() << endl;
+        kdDebug(0) << "img->height(): " <<  img->height() << endl;
+        kdDebug(0) << "bitDepth " <<  static_cast<int>(img->bitDepth()) << endl;
+        kdDebug(0) << "cMode: " <<  static_cast<int>(img->colorMode()) << endl;
+
+        images.appendChild( image );
+
+        // save layers
+        image.appendChild( saveLayers( doc, img ) );
+    } // end of images loop
+
+    setImage( tmp_currentImageName );
+
+    return images;
+}
+
+// save layers 
+QDomElement KisDoc::saveLayers( QDomDocument &doc, KisImage *img )
+{
+    // layers element - variable
+    QDomElement layers = doc.createElement( "layers" );
+
+    // layer elements
+    kdDebug(0) << "layer elements" << endl;
+
+    QList<KisLayer> l_lst = img->layerList();
+    for ( KisLayer *lay = l_lst.first(); lay != 0; lay = l_lst.next() )
+    {
+        QDomElement layer = doc.createElement( "layer" );
+
+        layer.setAttribute( "name", lay->name() );
+        layer.setAttribute( "x", lay->imageExtents().x() );
+        layer.setAttribute( "y", lay->imageExtents().y() );
+        layer.setAttribute( "width", lay->imageExtents().width() );
+        layer.setAttribute( "height", lay->imageExtents().height() );
+        layer.setAttribute( "opacity", static_cast<int>(lay->opacity()) );
+
+        kdDebug(0) << "name: " <<  lay->name() << endl;
+        kdDebug(0) << "x: " << lay->imageExtents().x()   << endl;
+        kdDebug(0) << "y: " << lay->imageExtents().y()   << endl;
+        kdDebug(0) << "width: " << lay->imageExtents().width()   << endl;
+        kdDebug(0) << "height: " << lay->imageExtents().height()   << endl;
+        kdDebug(0) << "opacity: " <<  static_cast<int>(lay->opacity())  << endl;
+
+        if ( lay->visible() )
+            layer.setAttribute( "visible", "true" );
+        else
+            layer.setAttribute( "visible", "false" );
+
+        if ( lay->linked() )
+            layer.setAttribute( "linked", "true" );
+        else
+            layer.setAttribute( "linked", "false" );
+
+        layer.setAttribute( "bitDepth", static_cast<int>(lay->bitDepth()) );
+        layer.setAttribute( "cMode", static_cast<int>(lay->colorMode()) );
+
+        kdDebug(0) << "bitDepth: " <<  static_cast<int>(lay->bitDepth())  << endl;
+        kdDebug(0) << "colorMode: " <<  static_cast<int>(lay->colorMode())  << endl;
+
+        layers.appendChild( layer );
+
+        // save channels
+        layer.appendChild( saveChannels( doc, lay ) );
+    } // end of layers loop
+
+    return layers;
+}
+
+// save channels
+QDomElement KisDoc::saveChannels( QDomDocument &doc, KisLayer *lay )
+{
+    // channels element - variable, normally maximum of 4 channels
+    QDomElement channels = doc.createElement( "channels" );
+
+    kdDebug(0) << "channel elements" << endl;
+
+    // channel elements
+    for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
+    {
+        QDomElement channel = doc.createElement( "channel" );
+
+        channel.setAttribute( "cId", static_cast<int>(ch->channelId()) );
+        channel.setAttribute( "bitDepth", static_cast<int>(ch->bitDepth()) );
+
+        kdDebug(0) << "cId: " <<  static_cast<int>(ch->channelId())  << endl;
+        kdDebug(0) << "bitDepth: " <<  static_cast<int>(ch->bitDepth())  << endl;
+
+        channels.appendChild( channel );
+    } // end of channels loop
+
+    return channels;
 }
 
 /*
@@ -285,29 +320,49 @@ kdDebug(0) << "bitDepth: " <<  static_cast<int>(ch->bitDepth())  << endl;
 
 bool KisDoc::completeSaving( KoStore* store )
 {
-kdDebug(0) << "KisDoc::completeSaving() entering" << endl;
+    kdDebug(0) << "KisDoc::completeSaving() entering" << endl;
 
     if (!store)         return false;
     if (!m_pCurrent)    return false;
 
-    QList<KisLayer> layers = m_pCurrent->layerList();
+    QStringList imageNames = images();
+    QString tmp_currentImageName = currentImage();
+    uint imageNumbers = 1;
 
-    for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
+    for ( QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); ++it )
     {
-        for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
-	    {
-	        QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
-			    .arg( static_cast<int>(ch->channelId()) );
+        setImage( *it );
+        QList<KisLayer> layers = m_pCurrent->layerList();
+        uint layerNumbers = 0;
 
-            if ( store->open( url ) )
-	        {
-                ch->writeToStore(store);
-		        store->close();
-	        }
-	    }
+        for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
+        {
+            for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
+            {
+                QString image = QString( "image%1" ).arg( imageNumbers );
+                QString layer;
+                if ( layerNumbers == 0 )
+                    layer = QString::fromLatin1( "background" );
+                else
+                    layer = QString( "layer%1" ).arg( layerNumbers );
+
+                QString url = QString( "images/%1/layers/%2/channels/ch%3.bin" )
+                              .arg( image )
+                              .arg( layer )
+                              .arg( static_cast<int>(ch->channelId()) );
+
+                if ( store->open( url ) )
+                {
+                    ch->writeToStore(store);
+                    store->close();
+                }
+            }
+            ++layerNumbers;
+        }
+        ++imageNumbers;
     }
-
-kdDebug(0) << "KisDoc::completeSaving() leaving" << endl;
+    kdDebug(0) << "KisDoc::completeSaving() leaving" << endl;
+    setImage( tmp_currentImageName );
 
     return true;
 }
@@ -319,22 +374,251 @@ kdDebug(0) << "KisDoc::completeSaving() leaving" << endl;
 
 bool KisDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
-kdDebug(0) << "KisDoc::loadXML() entering" << endl;
+    kdDebug(0) << "KisDoc::loadXML() entering" << endl;
 
     if ( doc.doctype().name() != "image" )
     {
         kdDebug(0) << "KisDoc::loadXML() no doctype name error" << endl;
-	    return false;
+        return false;
     }
 
-    QDomElement image = doc.documentElement();
+    QDomElement images = doc.documentElement();
 
-    if (image.attribute( "mime" ) != "application/x-krayon")
+    if ( images.attribute( "mime" ) != "application/x-krayon" )
     {
         kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;
         return false;
     }
 
+    if ( images.attribute( "version" ) != "1.2" )
+    {
+        kdDebug(0) << "KisDoc::loadXML() old file format" << endl;
+        oldFileFormat = true;
+        if ( !loadXMLOldFileFormat( images ) )
+            return false;
+    }
+    else
+    {
+        oldFileFormat = false;
+        // load images
+        if ( !loadImages( images ) )
+            return false;
+    }
+
+    kdDebug(0) << "KisDoc::loadXML() leaving succesfully" << endl;
+
+    return true;
+}
+
+// load images
+bool KisDoc::loadImages( QDomElement &element )
+{
+    QDomElement elem = element.firstChild().toElement();
+    while ( !elem.isNull() )
+    {
+        if ( elem.tagName() == "image" )
+        {
+            // this assumes that we are loading an existing image
+            // with certain attributes set
+
+            QString name = elem.attribute( "name" );
+            int w = elem.attribute( "width" ).toInt();
+            int h = elem.attribute( "height" ).toInt();
+            int cm = elem.attribute( "cMode" ).toInt();
+            int bd = elem.attribute( "bitDepth" ).toInt();
+
+            kdDebug(0) << "name: " << name << endl;
+            kdDebug(0) << "width: " << w << endl;
+            kdDebug(0) << "height: " << w << endl;
+            kdDebug(0) << "cMode: " << cm << endl;
+            kdDebug(0) << "bitDepth: " << bd << endl;
+
+            cMode colorMode;
+
+            switch ( cm )
+            {
+                case 0:
+                    colorMode = cm_Indexed;
+                    break;
+                case 1:
+                    colorMode = cm_Greyscale;
+                    break;
+                case 2:
+                    colorMode = cm_RGB;
+                    break;
+                case 3:
+                    colorMode = cm_RGBA;
+                    break;
+                case 4:
+                    colorMode = cm_CMYK;
+                    break;
+                case 5:
+                    colorMode = cm_CMYKA;
+                    break;
+                case 6:
+                    colorMode = cm_Lab;
+                    break;
+                case 7:
+                    colorMode = cm_LabA;
+                    break;
+                default:
+                    return false;
+            }
+
+            KisImage *img = newImage( name, w, h, colorMode, bd );
+            if ( !img ) return false;
+
+            img->setAuthor( elem.attribute( "author" ) );
+            img->setEmail( elem.attribute( "email" ) );
+
+            // load layers
+            if ( !loadLayers( elem, img ) )
+                return false;
+
+            setCurrentImage( img );
+        }
+
+        elem = elem.nextSibling().toElement();
+    }
+
+    return true;
+}
+
+// load layers
+bool KisDoc::loadLayers( QDomElement &element, KisImage *img )
+{
+    // layers element
+    QDomElement layers = element.namedItem( "layers" ).toElement();
+    if ( layers.isNull() )
+    {
+         kdDebug(0) << "KisDoc::loadXML(): layers.isNull() error!" << endl;
+         return false;
+    }
+
+    // layer elements
+    QDomNode l = layers.firstChild();
+
+    while ( !l.isNull() )
+    {
+        QDomElement layer = l.toElement();
+        if ( layer.tagName() == "layer" )
+        {
+            kdDebug(0) << "layer" << endl;
+
+            QString layerName = layer.attribute( "name" );
+            int w = layer.attribute( "width" ).toInt();
+            int h = layer.attribute( "height" ).toInt();
+            int x = layer.attribute( "x" ).toInt();
+            int y = layer.attribute( "y" ).toInt();
+
+            img->addLayer( QRect( x, y, w, h ), KisColor::white(), true, layerName );
+            img->markDirty( QRect( x, y, w, h ) );
+
+            KisLayer *lay = img->getCurrentLayer();
+            lay->setOpacity( layer.attribute( "opacity" ).toInt() );
+
+            if ( layer.attribute( "visible" ) == "true" )
+                lay->setVisible( true );
+            else
+                lay->setVisible( false );
+
+            if ( layer.attribute( "linked" ) == "true" )
+                lay->setLinked( true );
+            else
+                lay->setLinked( false );
+
+            // load channels
+            loadChannels( layer, lay );
+        }
+        l = l.nextSibling();
+    }
+
+    return true;
+}
+
+// load channels
+void KisDoc::loadChannels( QDomElement &element, KisLayer *lay )
+{
+    // channels element
+    QDomElement channels = element.namedItem( "channels" ).toElement();
+    if ( !channels.isNull() )
+    {
+        // channel elements
+        QDomNode c = channels.firstChild();
+        while ( !c.isNull() )
+        {
+            QDomElement channel = c.toElement();
+            if ( channel.tagName() == "channel" )
+            {
+                kdDebug(0) << "channel" << endl;
+                // TODO
+            }
+            c = c.nextSibling();
+        }
+    }
+}
+
+bool KisDoc::completeLoading( KoStore* store )
+{
+    kdDebug(0) << "KisDoc::completeLoading() entering" << endl;
+
+    if ( !store )  return false;
+    if ( !m_pCurrent) return false;
+
+    if ( !oldFileFormat )
+    {
+        QStringList imageNames = images();
+        QString tmp_currentImageName = currentImage();
+        uint imageNumbers = 1;
+
+        for ( QStringList::Iterator it = imageNames.begin(); it != imageNames.end(); ++it )
+        {
+            setImage( *it );
+            QList<KisLayer> layers = m_pCurrent->layerList();
+            uint layerNumbers = 0;
+
+            for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next() )
+            {
+                for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
+                {
+                    QString image = QString( "image%1" ).arg( imageNumbers );
+                    QString layer;
+                    if ( layerNumbers == 0 )
+                        layer = QString::fromLatin1( "background" );
+                    else
+                        layer = QString( "layer%1" ).arg( layerNumbers );
+
+                    QString url = QString( "images/%1/layers/%2/channels/ch%3.bin" )
+                                  .arg( image )
+                                  .arg( layer )
+                                  .arg( static_cast<int>(ch->channelId()) );
+
+                    if ( store->open( url ) )
+                    {
+                        kdDebug(0) << "KisDoc::completeLoading() ch->loadFromStore()" << endl;
+                        ch->loadFromStore( store );
+                        store->close();
+                    }
+                }
+                ++layerNumbers;
+            }
+            ++imageNumbers;
+
+            // need this to force redraw of image data just loaded
+            current()->markDirty( QRect( 0, 0, current()->width(), current()->height() ) );
+            setCurrentImage( current() );
+        }
+    }
+    else
+        completeLoadingOldFileFormat( store );
+
+    kdDebug(0) << "KisDoc::completeLoading() leaving" << endl;
+    return true;
+}
+
+// load old file format
+bool KisDoc::loadXMLOldFileFormat( QDomElement &image )
+{
     // this assumes that we are loading an existing image
     // with certain attributes set
 
@@ -344,137 +628,138 @@ kdDebug(0) << "KisDoc::loadXML() entering" << endl;
     int cm = image.attribute( "cMode" ).toInt();
     int bd = image.attribute( "bitDepth" ).toInt();
 
-kdDebug(0) << "name: " << name << endl;
-kdDebug(0) << "width: " << w << endl;
-kdDebug(0) << "height: " << w << endl;
-kdDebug(0) << "cMode: " << cm << endl;
-kdDebug(0) << "bitDepth: " << bd << endl;
+    kdDebug(0) << "name: " << name << endl;
+    kdDebug(0) << "width: " << w << endl;
+    kdDebug(0) << "height: " << w << endl;
+    kdDebug(0) << "cMode: " << cm << endl;
+    kdDebug(0) << "bitDepth: " << bd << endl;
 
     cMode colorMode;
 
-    switch (cm)
+    switch ( cm )
     {
-      case 0:
-	    colorMode = cm_Indexed;
-	    break;
-	  case 1:
-	    colorMode = cm_Greyscale;
-	    break;
-	  case 2:
-	    colorMode = cm_RGB;
-	    break;
-	  case 3:
-	    colorMode = cm_RGBA;
-	    break;
-	  case 4:
-	    colorMode = cm_CMYK;
-	    break;
-	  case 5:
-	    colorMode = cm_CMYKA;
-	    break;
-	  case 6:
-	    colorMode = cm_Lab;
-	    break;
-	  case 7:
-	    colorMode = cm_LabA;
-	    break;
-	  default:
-	    return false;
+        case 0:
+            colorMode = cm_Indexed;
+            break;
+        case 1:
+            colorMode = cm_Greyscale;
+            break;
+        case 2:
+            colorMode = cm_RGB;
+            break;
+        case 3:
+            colorMode = cm_RGBA;
+            break;
+        case 4:
+            colorMode = cm_CMYK;
+            break;
+        case 5:
+            colorMode = cm_CMYKA;
+            break;
+        case 6:
+            colorMode = cm_Lab;
+            break;
+        case 7:
+            colorMode = cm_LabA;
+            break;
+        default:
+            return false;
     }
 
-    KisImage *img = newImage(name, w, h, colorMode, bd);
-    if (!img) return false;
+    KisImage *img = newImage( name, w, h, colorMode, bd );
+    if ( !img ) return false;
 
-    img->setAuthor( image.attribute( "author" ));
-    img->setEmail( image.attribute( "email" ));
+    img->setAuthor( image.attribute( "author" ) );
+    img->setEmail( image.attribute( "email" ) );
 
     // layers element
     QDomElement layers = image.namedItem( "layers" ).toElement();
-    if (layers.isNull())
+    if ( layers.isNull() )
     {
-        kdDebug(0) << "KisDoc::loadXML(): layers.isNull() error!" << endl;
+        kdDebug(0) << "KisDoc::loadXMLOldFileFormat(): layers.isNull() error!" << endl;
         return false;
     }
 
     // layer elements
     QDomNode l = layers.firstChild();
 
-    while (!l.isNull())
+    while ( !l.isNull() )
     {
         QDomElement layer = l.toElement();
-        if (layer.tagName() != "layer" ) continue;
+        if ( layer.tagName() != "layer" ) continue;
 
-	    cout << "layer" << endl;
+        kdDebug(0) << "layer" << endl;
 
-	    // channels element
-	    QDomElement channels = layer.namedItem( "channels" ).toElement();
-	    if (channels.isNull()) continue;
+        QString layerName = layer.attribute( "name" );
+        int w = layer.attribute( "width" ).toInt();
+        int h = layer.attribute( "height" ).toInt();
+        int x = layer.attribute( "x" ).toInt();
+        int y = layer.attribute( "y" ).toInt();
 
-	    // channel elements
-	    QDomNode c = channels.firstChild();
+        img->addLayer( QRect( x, y, w, h ), KisColor::white(), true, layerName );
+        img->markDirty( QRect( x, y, w, h ) );
 
-	    while (!c.isNull())
-	    {
-	        QDomElement channel = c.toElement();
-	        if (channel.tagName() != "channel" ) continue;
+        KisLayer *lay = img->getCurrentLayer();
+        lay->setOpacity( layer.attribute( "opacity" ).toInt() );
 
-            cout << "channel" << endl;
-	        c = c.nextSibling();
-	    }
+        if ( layer.attribute( "visible" ) == "true" )
+            lay->setVisible( true );
+        else
+            lay->setVisible( false );
 
-	    l = l.nextSibling();
+        if ( layer.attribute( "linked" ) == "true" )
+            lay->setLinked( true );
+        else
+            lay->setLinked( false );
+
+        // channels element
+        QDomElement channels = layer.namedItem( "channels" ).toElement();
+        if ( channels.isNull() ) continue;
+
+        // channel elements
+        QDomNode c = channels.firstChild();
+
+        while ( !c.isNull() )
+        {
+            QDomElement channel = c.toElement();
+            if (channel.tagName() != "channel" ) continue;
+
+            kdDebug(0) << "channel" << endl;
+            c = c.nextSibling();
+        }
+
+        l = l.nextSibling();
     }
 
-    /* add background layer : should only do this for a new document, not
-    when loading an existing image - for existing document,
-    but will do for now */
-
-    img->addLayer( QRect(0, 0, w, h), KisColor::white(), false, i18n("background"));
-    img->markDirty( QRect(0, 0, w, h) );
-    setCurrentImage(img);
-
-kdDebug(0) << "KisDoc::loadXML() leaving succesfully" << endl;
+    setCurrentImage( img );
 
     return true;
 }
 
-
-
-bool KisDoc::completeLoading( KoStore* store)
+void KisDoc::completeLoadingOldFileFormat( KoStore *store )
 {
-
-kdDebug(0) << "KisDoc::completeLoading() entering" << endl;
-
-    if ( !store )  return false;
-    if ( !m_pCurrent) return false;
-
     QList<KisLayer> layers = m_pCurrent->layerList();
 
-    for (KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
+    for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next() )
     {
-        for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
-	    {
-	        QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
-			    .arg( static_cast<int>(ch->channelId()) );
+        for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel() )
+        {
+            QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
+                          .arg( static_cast<int>(ch->channelId()) );
 
             if ( store->open( url ) )
-	        {
-                kdDebug(0) << "KisDoc::completeLoading() ch->loadFromStore()" << endl;
-                ch->loadFromStore(store);
-		        store->close();
-	        }
-	    }
+            {
+                kdDebug(0) << "KisDoc::completeLoadingOldFileFormat() ch->loadFromStore()" << endl;
+                ch->loadFromStore( store );
+                store->close();
+            }
+        }
     }
 
     // need this to force redraw of image data just loaded
-    current()->markDirty(QRect(0, 0, current()->width(), current()->height()));
-    setCurrentImage(current());
-
-kdDebug(0) << "KisDoc::completeLoading() leaving" << endl;
-
-    return true;
+    current()->markDirty( QRect( 0, 0, current()->width(), current()->height() ) );
+    setCurrentImage( current() );
 }
-
 
 /*
     setCurrentImage - using pointer to a KisImage - this is
