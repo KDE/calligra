@@ -1159,17 +1159,40 @@ void KWTextFrameSet::formatMore()
     if ( bottom != -1 && ( ( bottom > m_availableHeight ) ||   // this parag is already off page
                            ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) ) ) // or next parag will be off page
     {
-        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
+    if(lastFormatted) 
+        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom + lastFormatted->rect().height() << " m_availableHeight=" << m_availableHeight << endl;
+    else
+        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom2=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
         // #### KWFormatContext::makeLineLayout had much code about this,
         // especially for tables. TODO.
 
         if ( !frames.isEmpty() )
         {
+            double wantedPosition = 0;
             switch ( frames.last()->getFrameBehaviour() )
             {
                 case AutoExtendFrame:
-                    // TODO
-                    break;
+                {
+                    double difference = bottom - m_availableHeight;
+                    if(lastFormatted) difference +=lastFormatted->rect().height();
+                    difference = kWordDocument()->zoom() * difference / 100;
+
+                    if(difference > 0) {
+                        KWFrame *theFrame = frames.last();
+                        
+                        wantedPosition = difference + theFrame->bottom();
+                        double newPosition = QMIN(wantedPosition, 
+                            ((double) (theFrame->pageNum()+1) * m_doc->ptPaperHeight()) - m_doc->ptBottomBorder());
+                        theFrame->setBottom((int) newPosition+ 0.5);
+
+                        if(newPosition < wantedPosition && theFrame->getNewFrameBehaviour() == Reconnect) {
+                            wantedPosition = wantedPosition - newPosition + theFrame->top() + m_doc->ptPaperHeight();
+                        } else {
+                           updateFrames();
+                            break;
+                        }
+                    }
+                }
                 case AutoCreateNewFrame:
                 {
                     // We need a new frame in this frameset.
@@ -1192,11 +1215,16 @@ void KWTextFrameSet::formatMore()
 
                     if ( lastFormatted )
                         interval = 0;
+                    if(wantedPosition > 0)
+                        frames.last()->setBottom( wantedPosition);
+
+                   updateFrames();
                 }
                 break;
                 case Ignore:
                     break;
             }
+            
         }
         else
         {
@@ -1210,16 +1238,12 @@ void KWTextFrameSet::formatMore()
             kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << m_availableHeight << ") , trying to remove last frame" << endl;
             int lastPage = m_doc->getPages() - 1;
             // Last frame is empty -> try removing last page, and more if necessary
-            while ( frames.count() > 1 && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) &&
-                    m_doc->canRemovePage( lastPage, frames.last() ) )
+            while ( frames.count() > 1 && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
             {
+                delFrame(frames.last());
                 m_doc->removePage( lastPage );
                 if ( m_doc->getPages() - 1 >= lastPage ) // removing didn't work
-                {
-                    kdWarning() << "Removing page " << lastPage << " didn't work !" << endl;
-                    kdWarning() << "Last page still " << m_doc->getPages()-1 << ". Aborting loop." << endl;
                     break;
-                }
                 lastPage = m_doc->getPages() - 1;
             }
         }
