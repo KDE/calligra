@@ -329,13 +329,22 @@ void KoTemplateChooseDia::setupDialog()
     }
 }
 
-void KoTemplateChooseDia::enableOK(bool enable)
+void KoTemplateChooseDia::enableOK(bool enable, bool kill)
 {
-    if(d->m_job) {
+    if(d->m_job && kill) {
         d->m_job->kill();  // kill the KIO job
         d->m_job=0;
     }
+    QPushButton* ok = actionButton( KDialogBase::Ok );
+    QPushButton* cancel = actionButton( KDialogBase::Cancel );
+    bool wasDisabled = !ok->isEnabled();
     enableButtonOK( enable );
+    // We need to use focusWidget() instead of cancel->hasFocus(),
+    // since apparently the latter isn't true while the dialog isn't shown
+    if ( enable && wasDisabled && focusWidget() == cancel )
+    {
+        ok->setFocus();
+    }
 }
 
 /*================================================================*/
@@ -352,10 +361,7 @@ void KoTemplateChooseDia::chosen(QIconViewItem *)
 
 // Result of the "stat job to see if recently opened file is still there"
 void KoTemplateChooseDia::slotResult(KIO::Job *j) {
-    if(j->error())
-        enableButtonOK( false );
-    else
-        enableButtonOK( true );
+    enableOK( !j->error(), false /*don't kill*/ );
     d->m_job=0;
 }
 

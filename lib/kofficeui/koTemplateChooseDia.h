@@ -156,7 +156,7 @@ private:
     KoTemplateChooseDiaPrivate *d;
 
     void setupDialog();
-    void enableOK(bool enable=true);
+    void enableOK(bool enable=true, bool kill=true);
     void collectInfo();
 
 private slots:
