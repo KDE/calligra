@@ -65,10 +65,10 @@ public:
     }
   };
 
-  const int LB_ONLY = 1;
-  const int LE_ONLY = 2;
-  const int PEN_ONLY = 4;
-  const int BRUSH_ONLY = 8;
+  static const int LB_ONLY = 1;
+  static const int LE_ONLY = 2;
+  static const int PEN_ONLY = 4;
+  static const int BRUSH_ONLY = 8;
 
   PenBrushCmd(QString _name,QList<Pen> &_oldPen,QList<Brush> &_oldBrush,
 	      Pen _newPen,Brush _newBrush,QList<KPObject> &_objects,KPresenterDoc *_doc,int _flags = 0);
