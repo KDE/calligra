@@ -81,7 +81,8 @@ void VDocumentPreview::paintEvent( QPaintEvent* )
 	yoffset += 2 / scaleFactor;
 	p.setWorldMatrix( QWMatrix( 1, 0, 0, -1, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
 	p.setZoomFactor( scaleFactor );
-	m_document->draw( &p, &KoRect( -xoffset, -yoffset, m_document->width() + xoffset, m_document->height() + yoffset ) );
+	KoRect rect( -xoffset, -yoffset, m_document->width() + xoffset, m_document->height() + yoffset );
+	m_document->draw( &p, &rect );
 	p.end();
 	QPainter pw( this );
 	pw.setPen( colorGroup().light() );
