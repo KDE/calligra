@@ -141,6 +141,7 @@ AC_OUTPUT( \
 	plugins/recorder/pics/Makefile \
 	plugins/calc/Makefile \
 	plugins/calc/pics/Makefile \
-	pics/Makefile
-	pics/toolbar/Makefile
+	pics/Makefile \
+	pics/toolbar/Makefile \
+	servicetypes/Makefile
  )
