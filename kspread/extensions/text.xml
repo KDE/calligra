@@ -436,8 +436,8 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The ROT() function encrypts a text by moving each charatecters 13 positions in the alpahbet. After the letter Z, the alphabet begins again (rotation).</Text>
-        <Text>By appyling the encryption function again to the resulting text, you can decrypt the text.</Text>
+	<Text>The ROT() function encrypts text by replacing each letter with the one 13 places along in the alphabet. If the 13th position is beyond the letter Z, it begins again at A (rotation).</Text>
+        <Text>By applying the encryption function again to the resulting text, you can decrypt the text.</Text>
 	<Syntax>ROT(Text)</Syntax>
 	<Example>ROT("KSpread") returns "XFcernq"</Example>
 	<Example>ROT("XFcernq") returns "KSpread"</Example>

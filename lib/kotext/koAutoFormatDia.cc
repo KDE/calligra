@@ -303,7 +303,7 @@ void KoAutoFormatDia::setupTab1()
 
     cbUseBulletStyle=new QCheckBox( tab1 );
     cbUseBulletStyle->setText( i18n( 
-            "Use l&ists-formatting for bulletted paragraphs" ) );
+            "Use l&ist-formatting for bulleted paragraphs" ) );
     QWhatsThis::add( cbUseBulletStyle, i18n(
             "When typing '*' or '-' in front of a paragraph, automatically "
             "convert the paragraph to use that list-style. Using a list-style "
