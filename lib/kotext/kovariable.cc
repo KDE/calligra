@@ -1146,7 +1146,7 @@ QCString KoTimeVariable::formatStr(int & _correct)
             QString num;
             num.setNum(i);
             QString tmpString(config->readEntry("Last Used"+num));
-            if(tmpString.startsWith("Locale"))
+            if(tmpString.startsWith("locale"))
                 continue;
             else if(stringList.contains(tmpString))
                 continue;
