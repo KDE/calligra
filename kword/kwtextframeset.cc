@@ -701,18 +701,22 @@ void KWTextFrameSet::load( QDomElement &attributes )
     KWTextParag *lastParagraph = 0L;
 
     // <PARAGRAPH>
-    QDomNodeList listParagraphs = attributes.elementsByTagName ( "PARAGRAPH" );
-    unsigned int count = listParagraphs.count();
-    for (unsigned int item = 0; item < count; item++)
+    //QDomNodeList listParagraphs = attributes.elementsByTagName ( "PARAGRAPH" );
+    //unsigned int count = listParagraphs.count();
+    //for (unsigned int item = 0; item < count; item++)
+    QDomElement paragraph = attributes.firstChild().toElement();
+    for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
     {
-        QDomElement paragraph = listParagraphs.item( item ).toElement();
-
-        KWTextParag *parag = new KWTextParag( textdoc, lastParagraph );
-        parag->load( paragraph );
-        if ( !lastParagraph )        // First parag
-            textdoc->setFirstParag( parag );
-        lastParagraph = parag;
-        doc->progressItemLoaded();
+        //QDomElement paragraph = listParagraphs.item( item ).toElement();
+        if ( paragraph.tagName() == "PARAGRAPH" )
+        {
+            KWTextParag *parag = new KWTextParag( textdoc, lastParagraph );
+            parag->load( paragraph );
+            if ( !lastParagraph )        // First parag
+                textdoc->setFirstParag( parag );
+            lastParagraph = parag;
+            doc->progressItemLoaded();
+        }
     }
 
     if ( !lastParagraph )                // We created no paragraph
