@@ -18,12 +18,11 @@
 */
 
 #include <koApplication.h>
-#include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
 #include <dcopclient.h>
-#include "kspread_factory.h"
+#include "kspread_aboutdata.h"
 
 
 static const KCmdLineOptions options[]=
@@ -35,7 +34,7 @@ static const KCmdLineOptions options[]=
 int main( int argc, char **argv )
 {
 
-    KCmdLineArgs::init( argc, argv, KSpreadFactory::aboutData());
+    KCmdLineArgs::init( argc, argv, newKSpreadAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;

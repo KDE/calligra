@@ -39,13 +39,13 @@ libkspreadpart_la_METASOURCES = AUTO
 lib_LTLIBRARIES =  kspread.la
 kspread_la_SOURCES = main.cc
 kspread_la_LDFLAGS = $(all_libraries) -avoid-version -module
-kspread_la_LIBADD = libkspreadpart.la 
+kspread_la_LIBADD = ../lib/kofficecore/libkofficecore.la
 
 ## The executable
 bin_PROGRAMS = kspread
 kspread_SOURCES = dummy.cc
 kspread_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-##kspread_LDADD = ../lib/kofficecore/libkofficecore.la
+kspread_LDADD = kspread.la
 
 dummy.cc:
 	echo > dummy.cc
