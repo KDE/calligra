@@ -125,9 +125,9 @@ void KDChart::paint( QPainter*              painter,
     KDChartParams*        params = paraParams;
     KDChartTableDataBase* data   = paraData;
     if( !paraParams && !paraData ){
-        qDebug("-----");
-        qDebug("Note:  KDChart::paint() was called without \"params\" and without \"data\".");
-        qDebug("-----  Showing a default bar chart.");
+        //qDebug("-----");
+        //qDebug("Note:  KDChart::paint() was called without \"params\" and without \"data\".");
+        //qDebug("-----  Showing a default bar chart.");
         params = new KDChartParams();
         params->setDatasetGap(3 * params->valueBlockGap());
         params->setPrintDataValues( false );
