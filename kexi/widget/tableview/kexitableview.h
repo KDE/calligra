@@ -743,7 +743,7 @@ protected:
 	virtual void paletteChange( const QPalette & );
 	
 	/*! Implementation for KexiDataAwareObjectInterface */
-	virtual KexiTableEdit *editor( int col, bool ignoreMissingEditor = false );
+	virtual KexiDataItemInterface *editor( int col, bool ignoreMissingEditor = false );
 
 	/*! Implementation for KexiDataAwareObjectInterface */
 	virtual void editorShowFocus( int row, int col );

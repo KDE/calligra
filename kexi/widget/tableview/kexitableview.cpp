@@ -1560,7 +1560,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		return;
 	}
 
-	KexiTableEdit *edit = editor( col, /*ignoreMissingEditor=*/true );
+	KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( col, /*ignoreMissingEditor=*/true ) );
 //	if (!edit)
 //		return;
 
@@ -2363,7 +2363,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			showContextMenu();
 		}
 		else {
-			KexiTableEdit *edit = editor( m_curCol );
+			KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
 			if (edit && edit->handleKeyPress(e, m_editor==edit)) {
 				//try to handle the event @ editor's level
 				e->accept();
@@ -2507,7 +2507,7 @@ void KexiTableView::selectPrevRow()
 }
 */
 
-KexiTableEdit *KexiTableView::editor( int col, bool ignoreMissingEditor )
+KexiDataItemInterface *KexiTableView::editor( int col, bool ignoreMissingEditor )
 {
 	if (!m_data || col<0 || col>=columns())
 		return 0;
@@ -2545,7 +2545,7 @@ KexiTableEdit *KexiTableView::editor( int col, bool ignoreMissingEditor )
 
 void KexiTableView::editorShowFocus( int /*row*/, int col )
 {
-	KexiTableEdit *edit = editor( col );
+	KexiDataItemInterface *edit = editor( col );
 	/*nt p = rowPos(row);
 	 (!edit || (p < contentsY()) || (p > (contentsY()+clipper()->height()))) {
 		kdDebug()<< "KexiTableView::editorShowFocus() : OUT" << endl;
@@ -3015,7 +3015,7 @@ QSize KexiTableView::tableSize() const
 //		kdDebug()<< m_navPanel->isVisible() <<" "<<m_navPanel->height()<<" "
 //		<<horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rows()-1+(isInsertingEnabled()?1:0))<<endl;
 
-		int xx = horizontalScrollBar()->sizeHint().height()/2;
+		//int xx = horizontalScrollBar()->sizeHint().height()/2;
 
 		QSize s( 
 			columnPos( columns() - 1 ) + columnWidth( columns() - 1 ),
@@ -3752,7 +3752,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 
 //! \todo js: this is NOT EFFECTIVE for big data sets!!!!
 
-	KexiTableEdit *ed = editor( colNum );
+	KexiTableEdit *ed = dynamic_cast<KexiTableEdit*>( editor( colNum ) );
 //	KexiDB::Field *f = m_data->column( colNum )->field;
 	if (ed) {
 //		KexiDB::Field *f = m_data->column(colNum)->field;
@@ -4148,7 +4148,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 			int k = ke->key();
 			//cell editor's events:
 			//try to handle the event @ editor's level
-			KexiTableEdit *edit = editor( m_curCol );
+			KexiTableEdit *edit = dynamic_cast<KexiTableEdit*>( editor( m_curCol ) );
 			if (edit && edit->handleKeyPress(ke, m_editor==edit)) {
 				ke->accept();
 				return true;
