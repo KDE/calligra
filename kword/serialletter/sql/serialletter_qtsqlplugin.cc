@@ -21,6 +21,12 @@
 #include "serialletter_qtsqlplugin.moc"
 
 #include <qlayout.h>
+#include <qsqlcursor.h>
+#include <qdatatable.h>
+#include <qcheckbox.h>
+#include <qsqlrecord.h>
+#include <qsqlquery.h>
+#include <kdebug.h>
 
 #define KWQTSQLBarIcon( x ) BarIcon( x, db->KWInstance() )
 
@@ -37,11 +43,21 @@ KWQTSQLSerialDataSource::KWQTSQLSerialDataSource(KInstance *inst,QObject *parent
 
 KWQTSQLSerialDataSource::~KWQTSQLSerialDataSource()
 {
+        if (myquery) delete myquery;
+        QSqlDatabase::removeDatabase("KWQTSQLPOWER");
 }
+
 
 QString KWQTSQLSerialDataSource::getValue( const QString &name, int record ) const
 {
-	return QString();
+        int num=record;
+
+        if (!myquery) return name;
+        if ( num < 0 || num > (int)myquery->size() )
+                return name;
+        if (!myquery->seek(num,false)) return i18n(">>>Illegal position within datasource<<<");
+        if (!myquery->contains(name)) return i18n(">>>Field %1 is unknown in the current database query<<<").arg(name);
+        return (myquery->value(name)).toString();
 }
 
 void KWQTSQLSerialDataSource::save( QDomDocument &doc, QDomElement &parent)
@@ -112,14 +128,76 @@ bool KWQTSQLSerialDataSource::showConfigDialog(QWidget *par,int action)
 	return ret;
 }
 
+void KWQTSQLSerialDataSource::refresh(bool force)
+{
+        if ((force) || (myquery==0))
+        {
+                if (myquery)
+                {
+                        delete myquery;
+                        myquery=0;
+                }
+                if ((!database) || (!database->isOpen())) openDatabase();
+		if ((!database) || (!database->isOpen())) return;
+                myquery=new QSqlCursor(tableName,true,database);
+                myquery->setMode(QSqlCursor::ReadOnly);
+		myquery->select(filter);
+        }
+        kdDebug()<<QString("There were %1 rows in the query").arg(myquery->size())<<endl;
+	
+}
+
+
+
+
+
+/******************************************************************
+ *
+ * Class: KWQTSQLDataSourceEditor
+ *
+ ******************************************************************/
+
+
 
 KWQTSQLDataSourceEditor::KWQTSQLDataSourceEditor( QWidget *parent, KWQTSQLSerialDataSource *db_ )
         :KDialogBase( Plain, i18n( "Serial Letter - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
 {
+	tableName=db->tableName;
+	filter=db->filter;
         (new QVBoxLayout(plainPage()))->setAutoAdd(true);
         setMainWidget(widget=new QTSQLDataSourceEditor(plainPage()));
+	connect(widget->tableCombo,SIGNAL(activated(int)),this,SLOT(tableChanged(int)));
+	updateTableCombo();
 //        connect(this,SIGNAL(okClicked()),this,SLOT(slotSetQuery()));
 }
+
+void KWQTSQLDataSourceEditor::tableChanged(int item)
+{
+	tableName=widget->tableCombo->text(item);
+	QSqlCursor *tmpCursor=new QSqlCursor(tableName,true,db->database);
+	tmpCursor->setMode(QSqlCursor::ReadOnly);
+
+	if (widget->filterCheckBox->isChecked()) tmpCursor->select(filter);
+
+	widget->DataTable->setSqlCursor(tmpCursor,true,true);
+	widget->DataTable->refresh(QDataTable::RefreshAll);	
+}
+
+void KWQTSQLDataSourceEditor::updateTableCombo()
+{
+	widget->tableCombo->clear();
+        if (!db->database) return;
+	widget->tableCombo->insertItem("");
+        widget->tableCombo->insertStringList(db->database->tables());
+}
+
+void KWQTSQLDataSourceEditor::slotSetQuery()
+{
+        db->tableName=tableName;
+	db->filter=filter;
+        db->refresh(true);
+}
+
 
 extern "C" {
         KWSerialLetterDataSource *create_kwserialletter_qtsqldb(KInstance *inst,QObject *parent)

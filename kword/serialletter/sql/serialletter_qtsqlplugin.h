@@ -21,9 +21,11 @@
 #define _SERIALLETTER_QTSQL_PLUGIN_H_
 
 #include <qdom.h>
+#include <qsqlcursor.h>
 #include "serialletter_interface.h"
 #include "serialletter_qtsql_base.h"
 #include "qtsqldatasourceeditor.h"
+
 
 /******************************************************************
  *
@@ -41,12 +43,16 @@ class KWQTSQLSerialDataSource: public KWQTSQLSerialDataSourceBase
     virtual void load( QDomElement& elem );
     virtual class QString getValue( const class QString &name, int record = -1 ) const;
     virtual int getNumRecords() const {
-        return /*(int)db.count()*/ 0;
+        return (myquery?((myquery->size()<0)?0:myquery->size()):0);
     }
-    virtual void refresh(bool){;}
+    virtual void refresh(bool);
     virtual  bool showConfigDialog(QWidget *,int);
 
     protected:
+	friend class KWQTSQLDataSourceEditor;
+	QString tableName;
+	QString filter;
+	QSqlCursor *myquery;
 };
 
 /******************************************************************
@@ -65,6 +71,13 @@ public:
 private:
   KWQTSQLSerialDataSource *db;
   QTSQLDataSourceEditor *widget;
+  void updateTableCombo();
+  QString filter;
+  QString tableName;
+
+private slots:
+  void tableChanged(int);
+  void slotSetQuery();
 };
 
 
