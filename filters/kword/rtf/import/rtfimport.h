@@ -202,6 +202,7 @@ struct RTFGroupState
     RTFLayout layout;
     RTFSectionLayout section;
     bool brace0;	// '}' will close the current destination
+    bool ignoreGroup; // Should the group be ignored?
 };
 
 
@@ -251,6 +252,7 @@ public:
     void parsePicture( RTFProperty * );
     void parseRichText( RTFProperty * );
     void parsePlainText( RTFProperty * );
+    void parseGroup( RTFProperty * );
     void skipGroup( RTFProperty * );
     void changeDestination( RTFProperty *property );
 

@@ -57,11 +57,12 @@ static RTFProperty propertyTable[] =
 	MEMBER(	"@rtf",		"@headerf",	parseRichText,		firstPageHeader, true ),
 	MEMBER(	"@rtf",		"@headerl",	parseRichText,		oddPagesHeader, true ),
 	MEMBER(	"@rtf",		"@headerr",	parseRichText,		evenPagesHeader, true ),
-	PROP(	"@rtf",		"@info",	skipGroup,		0L, true ),
-	PROP(	"Text",		"@shpinst",	skipGroup,		0L, true ),
+	PROP(	"@rtf",		"@info",	parseGroup,		0L, true ),
+	PROP(	"Text",		"@nonshppict",	skipGroup,		0L, false ),
 	PROP(	"Text",		"@pict",	parsePicture,		0L, true ),
 	MEMBER(	"@",		"@rtf",		parseRichText,		bodyText, true ),
-	PROP(	"Text",		"@shppict",	skipGroup,		0L, false ),
+	PROP(	"Text",		"@shpinst",	skipGroup,		0L, true ),
+	PROP(	"Text",		"@shppict",	parseGroup,		0L, false ),
 	PROP(	"@rtf",		"@stylesheet",	parseStyleSheet,	0L, true ),
 	MEMBER(	"@info",	"@title",	parsePlainText,		title, false ),
 	PROP(	0L,		"\\",		insertSymbol,		0L, '\\' ),
@@ -350,6 +351,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     flddst = -1;
     emptyCell = state.tableCell;
     state.format.uc=1;
+    state.ignoreGroup = false;
 
     // Parse RTF document
     while (true)
@@ -1229,6 +1231,9 @@ void RTFImport::parseColorTable( RTFProperty * )
  */
 void RTFImport::parsePicture( RTFProperty * )
 {
+    if (state.ignoreGroup)
+        return;
+
     if (token.type == RTFTokenizer::OpenGroup)
     {
 	picture.type		= RTFPicture::PNG;
@@ -1733,10 +1738,18 @@ void RTFImport::parsePlainText( RTFProperty * )
 }
 
 /**
+ * Do nothing special for this group
+ */
+void RTFImport::parseGroup( RTFProperty * )
+{
+}
+
+/**
  * Discard all tokens until the current group is closed.
  */
 void RTFImport::skipGroup( RTFProperty * )
 {
+    state.ignoreGroup = true;
 }
 
 /**
