@@ -17,11 +17,12 @@
 #include <tkfloatspinbox.h>
 
 #include "karbon_part.h"
+#include "vreference.h"
 
 #include "vtransformdlg.h"
 
 // Translate widget for this dialog...
-VTranslateWidget::VTranslateWidget( QWidget* parent )
+VTranslateWidget::VTranslateWidget( QWidget* parent ) : QWidget ( parent )
 {
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
 	
@@ -42,6 +43,9 @@ VTranslateWidget::VTranslateWidget( QWidget* parent )
 	mRelative->setEnabled ( false ); //TODO: Make this useful and enable it
 	mainLayout->addWidget( mRelative );
 	
+	mReference = new VReference( this );
+	mainLayout->addWidget( mReference );
+	
 	mButtonGroup = new QVButtonGroup( this );
 	QPushButton* button = new QPushButton( i18n( "Apply to Duplicate" ), mButtonGroup );
 	mButtonGroup->insert( button, tr_Duplicate );
@@ -53,7 +57,7 @@ VTranslateWidget::VTranslateWidget( QWidget* parent )
 }
 
 // Rotation widget for this dialog...
-VRotateWidget::VRotateWidget( QWidget* parent )
+VRotateWidget::VRotateWidget( QWidget* parent ) : QWidget ( parent )
 {
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
 	
@@ -81,6 +85,9 @@ VRotateWidget::VRotateWidget( QWidget* parent )
 	mRelative->setEnabled ( false ); //TODO: Make this useful and enable it
 	mainLayout->addWidget( mRelative );
 	
+	mReference = new VReference( this );
+	mainLayout->addWidget( mReference );
+	
 	mButtonGroup = new QVButtonGroup( this );
 	QPushButton* button = new QPushButton( i18n( "Apply to Duplicate" ), mButtonGroup );
 	mButtonGroup->insert( button, tr_Duplicate );
@@ -92,7 +99,7 @@ VRotateWidget::VRotateWidget( QWidget* parent )
 }
 
 // Shear widget for this dialog...
-VShearWidget::VShearWidget( QWidget* parent )
+VShearWidget::VShearWidget( QWidget* parent ) : QWidget ( parent )
 {
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
 	
@@ -109,6 +116,9 @@ VShearWidget::VShearWidget( QWidget* parent )
 	mVSpinBox->setLineStep(1.00);
 	mainLayout->addWidget( groupBox );
 	
+	mReference = new VReference( this );
+	mainLayout->addWidget( mReference );
+	
 	mButtonGroup = new QVButtonGroup( this );
 	QPushButton* button = new QPushButton( i18n( "Apply to Duplicate" ), mButtonGroup );
 	mButtonGroup->insert( button, tr_Duplicate );
@@ -120,7 +130,7 @@ VShearWidget::VShearWidget( QWidget* parent )
 }
 
 // Scale widget for this dialog...
-VScaleWidget::VScaleWidget( QWidget* parent )
+VScaleWidget::VScaleWidget( QWidget* parent ) : QWidget ( parent )
 {
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
 
@@ -140,7 +150,10 @@ VScaleWidget::VScaleWidget( QWidget* parent )
 	mRelative = new QCheckBox( i18n( "Non-proportional" ), this );
 	mRelative->setEnabled ( false ); //TODO: Make this useful and enable it
 	mainLayout->addWidget( mRelative );
-		
+	
+	mReference = new VReference( this );
+	mainLayout->addWidget( mReference );
+	
 	mButtonGroup = new QVButtonGroup( this );
 	QPushButton* button = new QPushButton( i18n( "Apply to Duplicate" ), mButtonGroup );
 	mButtonGroup->insert( button, tr_Duplicate );
