@@ -114,5 +114,5 @@ void KoPictureFilePreview::clearPreview()
 
 QString KoPictureFilePreview::clipartPattern()
 {
-    return i18n( "*.svg *.wmf|Cliparts (*.svg *.wmf)" );
+    return i18n( "*.svg *.wmf|Clipart (*.svg *.wmf)" );
 }

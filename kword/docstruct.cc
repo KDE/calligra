@@ -193,7 +193,7 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, KWDocument *_doc, 
             setPixmap( 0, KWBarIcon( "frame_image" ) );
         } break;
         case Cliparts: {
-            setText( 0, i18n( "Cliparts" ) );
+            setText( 0, i18n( "Clipart" ) );
             setPixmap( 0, KWBarIcon( "clipart" ) );
         } break;
         case Embedded: {

@@ -1,6 +1,19 @@
 [Desktop Entry]
 Type=Service
-Name=Cliparts
+Name=Clipart
+Name[ar]=أعمال فنية
+Name[az]=Klip Artlar
+Name[cs]=Kliparty
+Name[da]=Udklip
+Name[fi]=Leikekuvat
+Name[he]=אוסף תמונות
+Name[hu]=Clipart-képek
+Name[nl]=Clipart
+Name[pt]='Cliparts'
+Name[pt_BR]='Cliparts'
+Name[sk]=Clipart
+Name[xx]=xx
+Name[zu]=Uhlu lwezithombe ezokuhlobisa
 ServiceTypes=ThumbCreator
 MimeTypes=image/wmf,image/svg+xml
 X-KDE-Library=clipartthumbnail
