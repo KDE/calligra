@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2004 Tomas Mecir <mecirt@gmail.com>
-   Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
+   Copyright 1999-2002,2004,2005 Laurent Montel <montel@kde.org>
    Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
@@ -4696,6 +4696,7 @@ void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 {
     if ( m_strComment )
     {
+        //<office:annotation draw:style-name="gr1" draw:text-style-name="P1" svg:width="2.899cm" svg:height="2.691cm" svg:x="2.858cm" svg:y="0.001cm" draw:caption-point-x="-2.858cm" draw:caption-point-y="-0.001cm">
         xmlwriter.startElement( "office:annotation" );
         QStringList text = QStringList::split( "\n", *m_strComment );
         for ( QStringList::Iterator it = text.begin(); it != text.end(); ++it ) {
@@ -4815,7 +4816,7 @@ void KSpreadCell::saveOasisValue (KoXmlWriter &xmlWriter)
     {
       xmlWriter.addAttribute( "office:value-type", "float" );
       xmlWriter.addAttribute( "office:value",
-          QString::number( value().asFloat() ) );
+                              QString::number( value().asFloat() ) );
       break;
     }
     case KSpreadValue::fmt_Percent:

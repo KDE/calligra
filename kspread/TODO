@@ -401,3 +401,4 @@ Fixe todo:
 -> Save/load spell checking ignore word into settings.xml
 -> Save/load col-width/row-height into settings.xml
 -> Save/load numeric-style
+-> Fix conditional cell attribute (list )
