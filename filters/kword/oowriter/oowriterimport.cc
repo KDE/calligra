@@ -51,7 +51,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
 {
     kdDebug() << "Entering Oowriter Import filter: " << from << " - " << to << endl;
 
-    if ( from != "application/x-oowriter" || to != "application/x-kword" )
+    if ( from != "application/vnd.sun.xml.writer" || to != "application/x-kword" )
     {
         kdWarning() << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;
