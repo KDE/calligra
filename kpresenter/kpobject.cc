@@ -1267,8 +1267,20 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
 
 QString KP2DObject::saveOasisBackgroundStyle( KoGenStyles& mainStyles )
 {
-    //todo
-    return "";
+    KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphics" );
+    switch ( fillType )
+    {
+    case FT_BRUSH:
+        styleobjectauto.addProperty( "draw:fill","solid" );
+        styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
+        break;
+    case FT_GRADIENT:
+        //todo
+        break;
+    }
+
+    return mainStyles.lookup( styleobjectauto, "gr" );
+
 }
 
 void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)

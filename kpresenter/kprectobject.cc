@@ -79,6 +79,7 @@ bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
     //save object name and other generic attribute
     //KPObject::saveOasis( xmlWriter );
     saveOasisPosObject(xmlWriter );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( mainStyles ) );
 
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
