@@ -681,6 +681,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     for ( ; framesetIt.current(); ++framesetIt, bFirst=false )
     {
         KWFrameSet *frameset = framesetIt.current();
+        // Can't move main frameset of a WP document
         if ( doc->processingType() == KWDocument::WP && bFirst ||
              frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() != FI_BODY ) continue;
 
@@ -694,24 +695,15 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                         tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
                 } else {
                     QRect oldRect( frame->outerRect() );
-                    int page = doc->getPageOfRect( *frame );
                     // Move the frame
-                    frame->setX( static_cast<int>((double)mx / doc->zoomedResolutionX()) );
-                    frame->setY( static_cast<int>((double)my / doc->zoomedResolutionY()) );
-                    // But not out of the page it was on initially
-                    if ( doc->isOutOfPage( *frame, page ) )
-                    {
-                        frame->setRect( oldRect.x(), oldRect.y(), oldRect.width(), oldRect.height() );
-                        //mx = oldMx; my = oldMy;
-                        //QCursor::setPos( viewport()->mapToGlobal( QPoint( oldMx, oldMy ) ) );
-                    }
+                    frame->moveTopLeft( frame->topLeft() + m_boundingRect.topLeft() - oldBoundingRect.topLeft() );
                     // Calculate new rectangle for this frame
                     QRect newRect( frame->outerRect() );
                     // Repaing only the changed rects (oldRect U newRect)
                     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
+                    // Move resize handles to new position
+                    frame->updateResizeHandles();
                 }
-                // Move resize handles to new position
-                frame->updateResizeHandles();
             }
         }
     }
