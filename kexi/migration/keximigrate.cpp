@@ -50,9 +50,7 @@ KexiMigrate::~KexiMigrate()
 bool KexiMigrate::performImport()
 {
 	QStringList tables;
-	TableSchema* table;
 	bool failure = false;
-	std::vector<KexiDB::TableSchema*>v_tableSchemas;
 
 	//Step 1 - connect
 	if (drv_connect())
@@ -66,11 +64,11 @@ bool KexiMigrate::performImport()
 				for (uint i = 0; i < tables.size(); i++)
 				{
 					//Step 3 - Read table schemas
-					if(readTableSchema(tables[i],table))
+					if(readTableSchema(tables[i]))
 					{
 						//yeah, got a table
 						//Add it to list of tables which we will create if all goes well
-						v_tableSchemas.push_back(table);
+						v_tableSchemas.push_back(m_table);
 					}
 					else
 					{
@@ -92,7 +90,7 @@ bool KexiMigrate::performImport()
 			else
 			{
 				//Create new database as we have all required info ;)
-				return createDatabase("kexi_" + m_dbName, v_tableSchemas);
+				return createDatabase("kexi_" + m_dbName);
 				return true;
 			}
 		}
@@ -111,7 +109,7 @@ else
 
 //==================================================================================
 //Create the final database
-bool KexiMigrate::createDatabase(const QString& dbname, std::vector<KexiDB::TableSchema*> tables)
+bool KexiMigrate::createDatabase(const QString& dbname)
 {
 	bool failure = false;
 	
@@ -123,11 +121,12 @@ bool KexiMigrate::createDatabase(const QString& dbname, std::vector<KexiDB::Tabl
 			if (m_kexiDB->useDatabase(dbname))
 			{
 				//Right, were connected..create the tables
-				for(uint i = 0; i < tables.size(); i++)
+				for(uint i = 0; i < v_tableSchemas.size(); i++)
 				{
-					if(!m_kexiDB->createTable(tables[i]))
+					if(!m_kexiDB->createTable(v_tableSchemas[i]))
 					{	
 						kdDebug() << "Failed to create a table" << endl;
+						m_kexiDB->debugError();
 						failure = true;
 					}
 				}
@@ -162,8 +161,8 @@ bool KexiMigrate::tableNames(QStringList & tn)
 
 //==================================================================================
 //Get the table names
-bool KexiMigrate::readTableSchema(const QString& t, KexiDB::TableSchema* ts)
+bool KexiMigrate::readTableSchema(const QString& t)
 {
 	kdDebug() << "Reading table schema for [" << t << "]" << endl;
-	return drv_readTableSchema(t, ts);
+	return drv_readTableSchema(t);
 }

@@ -24,7 +24,6 @@
 
 //Kexi Includes
 #include "./kexidb/field.h"
-#include "./kexidb/tableschema.h"
 #include "./kexidb/connection.h"
 
 #include <pqxx/pqxx>
@@ -76,7 +75,7 @@ namespace KexiMigration
 			virtual bool drv_tableNames(QStringList& tablenames);
 			
 			//Driver specific implementation to read a table schema
-			virtual bool drv_readTableSchema(const QString table, KexiDB::TableSchema* ts);
+			virtual bool drv_readTableSchema(const QString table);
 			
 			//Driver specific connection implementation
 			virtual bool drv_connect();

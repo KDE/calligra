@@ -50,13 +50,12 @@ pqxxMigrate::~pqxxMigrate()
 //This is probably going to be quite complex...need to get the types for all columns
 //any any other attributes required by kexi
 //helped by reading the 'tables' test program
-bool pqxxMigrate::drv_readTableSchema(const QString table, KexiDB::TableSchema* ts)
+bool pqxxMigrate::drv_readTableSchema(const QString table)
 {
-	KexiDB::Field *f;
-	ts = new KexiDB::TableSchema(table);
+	m_table = new KexiDB::TableSchema(table);
 
 	//TODO IDEA: ask for user input for captions
-	ts->setCaption(table + " table");
+	m_table->setCaption(table + " table");
 
 	//Perform a query on the table to get some data
 	if (query("select * from " + table + " limit 1"))
@@ -64,10 +63,10 @@ bool pqxxMigrate::drv_readTableSchema(const QString table, KexiDB::TableSchema* 
 		//Loop round the fields
 		for (int i = 0; i < m_res->columns(); i++)
 		{
-			ts->addField( f = new KexiDB::Field(m_res->column_name(i), type(m_res->column_type(i))));
-			f->setCaption(m_res->column_name(i));
-			f->setPrimaryKey(primaryKey(tableOid(table), i));
-			f->setUniqueKey(uniqueKey(tableOid(table), i));
+			m_table->addField( m_f = new KexiDB::Field(m_res->column_name(i), type(m_res->column_type(i))));
+			m_f->setCaption(m_res->column_name(i));
+			m_f->setPrimaryKey(primaryKey(tableOid(table), i));
+			m_f->setUniqueKey(uniqueKey(tableOid(table), i));
 			//f->setLength(m_res->at(0)[i].size());
 			kdDebug() << "Added field [" << m_res->column_name(i) << "] type [" << type(m_res->column_type(i)) << "]" << endl;
 		}
@@ -129,6 +128,8 @@ KexiDB::Field::Type pqxxMigrate::type(int t)
 		return KexiDB::Field::DateTime;
 		//case BYTEAOID:
 		//    return KexiDB::Field::Type::SQLVarBinary;
+	case BPCHAROID:
+		return KexiDB::Field::Text;
 	case VARCHAROID:
 		return KexiDB::Field::Text;
 	case TEXTOID:

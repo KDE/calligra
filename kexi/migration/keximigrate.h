@@ -21,7 +21,7 @@
 #define KEXI_IMPORT_H
 
 #include "./kexidb/connection.h"
-
+#include "./kexidb/tableschema.h"
 #include <qstringlist.h>
 #include <vector>
 
@@ -63,7 +63,7 @@ namespace KexiMigration
 			virtual bool drv_tableNames(QStringList& tablenames) = 0;
 			
 			//Driver specific implementation to read a table schema
-			virtual bool drv_readTableSchema(const QString table, KexiDB::TableSchema* ts) = 0;
+			virtual bool drv_readTableSchema(const QString table) = 0;
 			
 			//Driver specific connection function
 			virtual bool drv_connect() = 0;
@@ -74,6 +74,10 @@ namespace KexiMigration
 			KexiDB::ConnectionData* m_externalData;
 			
 			QString m_dbName;
+			
+			KexiDB::TableSchema* m_table;
+			KexiDB::Field *m_f;
+			
 		private:		
 			//Get the list of tables
 			bool tableNames(QStringList& tablenames);
@@ -81,17 +85,19 @@ namespace KexiMigration
 			//Get a table schema object for a table
 			//Perform general functionality and rely on drv_ReadTableSchema()
 			//to do the real work
-			bool readTableSchema(const QString& table, KexiDB::TableSchema* ts);
+			bool readTableSchema(const QString& table);
 			
 			//Copies data from original table to new table if required
 			bool copyData(const QString table);
 			
 			//Create the final database
-			bool createDatabase(const QString& dbname, std::vector<KexiDB::TableSchema*> tables);
+			bool createDatabase(const QString& dbname);
 			 
 			//Private data members
 			KexiDB::Connection* m_kexiDB;
 			bool m_keepData;
+			
+			std::vector<KexiDB::TableSchema*>v_tableSchemas;
 	};
 
 } //namespace KexiDB
