@@ -754,27 +754,37 @@ int CellLayoutDlg::exec()
 
 void CellLayoutDlg::slotApply()
 {
+    KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( table->doc(),i18n("Change Layout") );
 
     if( isMerged!= positionPage->getMergedCellState())
     {
         if(positionPage->getMergedCellState())
-                {
-                //merge cell
-                table->mergeCell(QPoint(left,top));
-                right=left;
-                bottom=top;
-                }
+        {
+            KSpreadCell *obj = table->nonDefaultCell( left,top );
+
+            KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( table->doc(), table, left ,top ,obj->extraXCells() ,obj->extraYCells());
+            macroUndo->addCommand(undo);
+
+            //merge cell doesn't create undo
+            table->mergeCell(QPoint(left,top),false);
+            right=left;
+            bottom=top;
+        }
         else
-                {
-                //dissociate cells
-                KSpreadCell *obj = table->nonDefaultCell( top, left );
-                right=obj->extraXCells()+left;
-                bottom=obj->extraYCells()+top;
-                table->dissociateCell(QPoint(left,top));
-                }
+        {
+            //dissociate cells
+            KSpreadCell *obj = table->nonDefaultCell( left,top );
+            right=obj->extraXCells()+left;
+            bottom=obj->extraYCells()+top;
+
+            KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( table->doc(), table, left ,top,obj->extraXCells() ,obj->extraYCells());
+            macroUndo->addCommand(undo);
+
+            table->dissociateCell(QPoint(left,top),false);
+        }
 
     }
-    KSpreadMacroUndoAction *macroUndo=new KSpreadMacroUndoAction( table->doc(),i18n("Change Layout") );
+
     // Prepare the undo buffer
     if ( !table->doc()->undoBuffer()->isLocked() )
     {
@@ -782,42 +792,43 @@ void CellLayoutDlg::slotApply()
         // Since the right/bottom border is stored in objects right + 1 ( or: bottom + 1 )
         // So we have to save these layouts, too
         if(right!=0x7FFF && bottom!=0x7FFF)
-                rect.setCoords( left, top, right + 1, bottom + 1 );
+            rect.setCoords( left, top, right + 1, bottom + 1 );
         else if( right==0x7FFF)
-                rect.setCoords( left, top, right , bottom+1  );
+            rect.setCoords( left, top, right , bottom+1  );
         else if( bottom==0x7FFF)
+        {
+            //create cell before to apply
+            RowLayout* rw =table->firstRow();
+            for( ; rw; rw = rw->next() )
+            {
+                if ( !rw->isDefault() )
                 {
-                //create cell before to apply
-                RowLayout* rw =table->firstRow();
-                for( ; rw; rw = rw->next() )
+                    for(int i=left;i<=right;i++)
+                    {
+                        KSpreadCell *cell = table->cellAt( i,  rw->row());
+                        if ( cell->isDefault() )
                         {
-                        if ( !rw->isDefault() )
-                                {
-                                for(int i=left;i<=right;i++)
-                                        {
-                                        KSpreadCell *cell = table->cellAt( i,  rw->row());
-                                        if ( cell->isDefault() )
-                                                {
-                                                cell = new KSpreadCell( table, i,  rw->row() );
-                                                table->insertCell( cell);
-                                                }
-                                        }
-                                }
+                            cell = new KSpreadCell( table, i,  rw->row() );
+                            table->insertCell( cell);
                         }
-                rect.setCoords( left, top, right+1 , bottom  );
+                    }
                 }
+            }
+            rect.setCoords( left, top, right+1 , bottom  );
+        }
+
         QString title=i18n("Change layout");
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( table->doc(), table, rect,title );
 //        table->doc()->undoBuffer()->appendUndo( undo );
         macroUndo->addCommand(undo);
 
 	if( miscPage->getStyle()!=eStyle)
-	  {
+        {
 	    //make undo for style of cell
 	    KSpreadUndoStyleCell *undo3 = new KSpreadUndoStyleCell( table->doc(), table, rect);
 	    //table->doc()->undoBuffer()->appendUndo( undo3 );
             macroUndo->addCommand(undo3);
-	  }
+        }
     }
     borderPage->applyOutline( left, top, right, bottom );
 
@@ -825,100 +836,98 @@ void CellLayoutDlg::slotApply()
 
     if(right!=0x7FFF && bottom!=0x7FFF)
     {
-    for ( int x = left; x <= right; x++ )
-        for ( int y = top; y <= bottom; y++ )
-        {
-            KSpreadCell *obj = table->nonDefaultCell( x, y );
-            if(!obj->isObscuringForced())
+        for ( int x = left; x <= right; x++ )
+            for ( int y = top; y <= bottom; y++ )
+            {
+                KSpreadCell *obj = table->nonDefaultCell( x, y );
+                if(!obj->isObscuringForced())
                 {
-                floatPage->apply( obj );
-                miscPage->apply( obj );
-                fontPage->apply( obj );
-                positionPage->apply( obj );
-                patternPage->apply(obj);
+                    floatPage->apply( obj );
+                    miscPage->apply( obj );
+                    fontPage->apply( obj );
+                    positionPage->apply( obj );
+                    patternPage->apply(obj);
                 }
-        }
+            }
 
 
-    if(positionPage->getSizeHeight()!=heigthSize
-    || positionPage->getSizeWidth()!=widthSize)
-    {
-        if ( !table->doc()->undoBuffer()->isLocked())
+        if(positionPage->getSizeHeight()!=heigthSize
+           || positionPage->getSizeWidth()!=widthSize)
         {
+            if ( !table->doc()->undoBuffer()->isLocked())
+            {
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
                 KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
                 //table->doc()->undoBuffer()->appendUndo( undo2 );
                 macroUndo->addCommand(undo2);
+            }
         }
-    }
-    if(positionPage->getSizeHeight()!=heigthSize)
+        if(positionPage->getSizeHeight()!=heigthSize)
         {
-        for ( int x = top; x <= bottom; x++ )
-                {
+            for ( int x = top; x <= bottom; x++ )
                 m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x,false );
-                }
+
         }
-    if(positionPage->getSizeWidth()!=widthSize)
+        if(positionPage->getSizeWidth()!=widthSize)
         {
-        for ( int x = left; x <= right; x++ )
-                {
+            for ( int x = left; x <= right; x++ )
                 m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x,false );
-                }
         }
 
     }
     else if( right==0x7FFF )
     {
-     for(int i=top;i<=bottom;i++)
+        for(int i=top;i<=bottom;i++)
         {
-        RowLayout *rw=table->nonDefaultRowLayout(i);
-        floatPage->apply(rw );
-        fontPage->apply( rw );
-        positionPage->apply( rw );
-        patternPage->apply(rw);
+            RowLayout *rw=table->nonDefaultRowLayout(i);
+            floatPage->apply(rw );
+            fontPage->apply( rw );
+            positionPage->apply( rw );
+            patternPage->apply(rw);
         }
-      miscPage->applyRow( );
-      if(positionPage->getSizeHeight()!=heigthSize)
+        miscPage->applyRow( );
+        if(positionPage->getSizeHeight()!=heigthSize)
         {
-        if ( !table->doc()->undoBuffer()->isLocked())
-                {
+            if ( !table->doc()->undoBuffer()->isLocked())
+            {
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
                 KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
                 //table->doc()->undoBuffer()->appendUndo( undo2 );
                 macroUndo->addCommand(undo2);
-                }
-        for ( int x = top; x <= bottom; x++ )
+            }
+            for ( int x = top; x <= bottom; x++ )
                 m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x,false );
         }
     }
     else if( bottom==0x7FFF)
     {
-    for(int i=left;i<=right;i++)
+        for(int i=left;i<=right;i++)
         {
-        ColumnLayout *cl=table->nonDefaultColumnLayout(i);
-        floatPage->apply(cl );
-        fontPage->apply( cl );
-        positionPage->apply( cl );
-        patternPage->apply(cl);
+            ColumnLayout *cl=table->nonDefaultColumnLayout(i);
+            floatPage->apply(cl );
+            fontPage->apply( cl );
+            positionPage->apply( cl );
+            patternPage->apply(cl);
         }
-    miscPage->applyColumn( );
+        miscPage->applyColumn( );
 
-    if( positionPage->getSizeWidth()!=widthSize)
+        if( positionPage->getSizeWidth()!=widthSize)
         {
-        if ( !table->doc()->undoBuffer()->isLocked())
-                {
+            if ( !table->doc()->undoBuffer()->isLocked())
+            {
                 QRect rect;
                 rect.setCoords( left, top, right , bottom  );
                 KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( table->doc(),table , rect );
                 //table->doc()->undoBuffer()->appendUndo( undo2 );
                 macroUndo->addCommand(undo2);
-                }
-        for ( int x = left; x <= right; x++ )
+            }
+            for ( int x = left; x <= right; x++ )
                 m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x,false );
         }
     }
+
     if ( !table->doc()->undoBuffer()->isLocked())
     {
         table->doc()->undoBuffer()->appendUndo( macroUndo );

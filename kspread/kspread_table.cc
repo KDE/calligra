@@ -18,7 +18,6 @@
 */
 
 #include <stdlib.h>
-//#include <stdio.h>
 #include <ctype.h>
 #include <math.h>
 
@@ -4349,7 +4348,7 @@ void KSpreadTable::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int 
 
 }
 
-void KSpreadTable::mergeCell( const QPoint &_marker)
+void KSpreadTable::mergeCell( const QPoint &_marker, bool makeUndo)
 {
     if(m_rctSelection.left() == 0)
         return;
@@ -4361,7 +4360,7 @@ void KSpreadTable::mergeCell( const QPoint &_marker)
         y = m_rctSelection.top();
     KSpreadCell *cell = nonDefaultCell( x ,y  );
 
-    if ( !m_pDoc->undoBuffer()->isLocked() )
+    if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
         KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( m_pDoc, this, x ,y,cell->extraXCells() ,cell->extraYCells());
         m_pDoc->undoBuffer()->appendUndo( undo );
@@ -4382,13 +4381,10 @@ void KSpreadTable::dissociateCell( const QPoint &_marker,bool makeUndo)
     if(!cell->isForceExtraCells())
         return;
 
-    if(makeUndo)
+    if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
-        if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-                KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( m_pDoc, this, _marker.x() ,_marker.y(),cell->extraXCells() ,cell->extraYCells());
-                m_pDoc->undoBuffer()->appendUndo( undo );
-        }
+        KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( m_pDoc, this, _marker.x() ,_marker.y(),cell->extraXCells() ,cell->extraYCells());
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
     int x=cell->extraXCells();
     if( x == 0 )
