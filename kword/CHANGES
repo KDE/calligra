@@ -269,9 +269,10 @@ Changes after KWord-1.2
 =======================
 - Spellchecker can spell check only a selection
 - Shadow is a character property
+- Language added as a new character property
 - Paragraph numbering: simple lists are not restarted by simple text in between
-- Paragraph numbering: new option "restart numbering at this paragraph"
-- Paragraph numbering: setting a depth doesn't imply "chapter numbering" anymore
+- Paragraph numbering: new properties "restart numbering at this paragraph",
+  "number of parent levels to display".
 - Add "copy link"
 - Add "Add to bookmark"
 - Now we can change "picture path" / "personal expression path"
@@ -289,19 +290,17 @@ Changes after KWord-1.2
 - Add support for font attribute ( lowercase/uppercase )
 - Add double click on frame => open frame dialogbox
 - Add autocorrection : "Capitalize name of days"
-- Add new font attribute : small caps
-- Now we can edit "ignore all list" 
+- New font attribute : small caps
+- The list of words to be ignored by the spellchecker can be edited
 - Add support for convert text to textbox
 - Now we can add/remove word in personal dictionary
-- Now we can change backup path
-- Now kotextformat support language
-- Improve statistic dialogbox : count number of lines.
-- Now we can add directly a personal expression
-- Add new lineSpacing type :"At least"/"exactly"/"Multiple"
+- The path where backup files are saved is now configurable
+- Improve statistics dialogbox : count number of lines.
+- The user can more easily add personal expressions to be inserted
+- New types of line spacing: "At least"/"Multiple"
 - Add horizontal line
-- Now we can select specific horizontal line
-- Now we can sort text
+- Text can be sorted
 - Use new kospell API
-- Now right button give spell check result
+- Now right button gives spell check result
 - Load pictures only one time when inserting from file (Good for remote files)
-
+- Hyphenation support. Configurable as a character property (to disable hyphenation on specific words).
