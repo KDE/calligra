@@ -97,7 +97,7 @@ short MsWord::char2unicode(unsigned char c)
 
 void MsWord::constructionError(unsigned line, const char *reason)
 {
-    m_constructionError.sprintf("[" __FILE__ ":%u] %s", line, reason);
+    m_constructionError="[" + QString(__FILE__ ) + ":" + QString::number(line) + "]" + reason;
     kdError(s_area) << m_constructionError << endl;
 }
 

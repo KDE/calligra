@@ -225,14 +225,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 	pgNum = i + 1;
 	html = QString( "<HTML><HEAD><TITLE>%1 - %2</TITLE></HEAD>\n" ).arg( title ).arg( slideTitles[ i ] );
 
-	QString c1;
-	c1.sprintf( "%02X%02X%02X", backColor.red(), backColor.green(), backColor.blue() );
-	QString c2;
-	c2.sprintf( "%02X%02X%02X", textColor.red(), textColor.green(), textColor.blue() );
-	QString c3;
-	c3.sprintf( "%02X%02X%02X", titleColor.red(), titleColor.green(), titleColor.blue() );
-
-	html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( c1 ).arg( c2 );
+	html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( backColor.name() ).arg( textColor.name() );
 
 	html += QString( "  <CENTER>\n" );
 	if ( i > 0 )
@@ -275,7 +268,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
 	html += "  </CENTER><BR><HR noshade>\n";
 
-	html += QString( "  <FONT color=\"%1\">\n" ).arg( c3 );
+	html += QString( "  <FONT color=\"%1\">\n" ).arg( titleColor.name() );
 	html += QString( "  <CENTER><B>%1</B> - <I>%2</I></CENTER>\n" ).arg( title ).arg( slideTitles[ i ] );
 
 	html += "  </FONT><HR noshade><BR>\n";
@@ -314,16 +307,9 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 
     html = QString( "<HTML><HEAD><TITLE>%1 - Table of Contents</TITLE></HEAD>\n" ).arg( title );
 
-    QString c1;
-    c1.sprintf( "%02X%02X%02X", backColor.red(), backColor.green(), backColor.blue() );
-    QString c2;
-    c2.sprintf( "%02X%02X%02X", textColor.red(), textColor.green(), textColor.blue() );
-    QString c3;
-    c3.sprintf( "%02X%02X%02X", titleColor.red(), titleColor.green(), titleColor.blue() );
+    html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( backColor.name() ).arg( textColor.name() );
 
-    html += QString( "<BODY bgcolor=\"%1\" text=\"%2\">\n" ).arg( c1 ).arg( c2 );
-
-    html += QString( "<FONT color=\"%1\">\n" ).arg( c3 );
+    html += QString( "<FONT color=\"%1\">\n" ).arg( titleColor.name() );
     html += QString( "<BR><CENTER><H1>%1</H1></CENTER>\n" ).arg( title );
     html += "</FONT>\n";
 

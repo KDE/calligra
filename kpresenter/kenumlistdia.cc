@@ -83,10 +83,10 @@ KEnumListDia::KEnumListDia( QWidget* parent, const char* name, int __type, QFont
     grid->addWidget( lSize, 0, 3 );
 
     sizeCombo = new QComboBox( false, this );
-    char chr[ 5 ];
+    QString chr;
     for ( unsigned int i = 4; i <= 100; i++ )
     {
-        sprintf( chr, "%d", i );
+        chr=QString::number(i);
         sizeCombo->insertItem( chr, -1 );
     }
     sizeCombo->resize( sizeCombo->sizeHint() );
@@ -155,9 +155,9 @@ KEnumListDia::KEnumListDia( QWidget* parent, const char* name, int __type, QFont
     eStart->resize( lStart->width(), eStart->sizeHint().height() );
     eStart->setMaxLength( 1 );
     if ( _type == 1 )
-        sprintf( chr, "%d", _start );
+        chr=QString::number(_start);
     else
-        sprintf( chr, "%c", _start );
+        chr=QChar(_start);
     eStart->setText( chr );
     grid->addWidget( eStart, 5, 2 );
     connect( eStart, SIGNAL( textChanged( const QString & ) ), this, SLOT( startChanged( const QString & ) ) );

@@ -674,7 +674,6 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
 {
   int i;
   double value = 0;
-  QString s;
   Q_UINT16 first, last, row, xf;
   Q_UINT32 number, t[2];
 
@@ -704,7 +703,7 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
 
     QDomElement e = root->createElement("cell");
     e.appendChild(getFormat(xf));
-    s.sprintf("%f", value);
+    QString s=QString::number(value, 'f');
     e.setAttribute("row", row+1);
     e.setAttribute("column", first+i+1);
     QDomElement text = root->createElement("text");
@@ -729,13 +728,12 @@ bool XMLTree::_note(Q_UINT16, QDataStream&)
 bool XMLTree::_number(Q_UINT16 size, QDataStream& body)
 {
   double value;
-  QString s;
   Q_UINT16 row, column, xf;
   body >> row >> column >> xf >> value;
 
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
-  s.sprintf("%f", value);
+  QString s=QString::number(value, 'f');
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
   QDomElement text = root->createElement("text");
@@ -848,7 +846,6 @@ bool XMLTree::_rightmargin(Q_UINT16 size, QDataStream& body)
 bool XMLTree::_rk(Q_UINT16 size, QDataStream& body)
 {
   double value = 0;
-  QString s;
   Q_UINT32 number, t[2];
   Q_UINT16 row, column, xf;
   body >> row >> column >> xf >> number;
@@ -874,7 +871,7 @@ bool XMLTree::_rk(Q_UINT16 size, QDataStream& body)
 
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
-  s.sprintf("%f", value);
+  QString s=QString::number(value, 'f');
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
   QDomElement text = root->createElement("text");

@@ -197,8 +197,7 @@ void RotateDia::setAngle( float __angle )
     else {
 	degCustom->setChecked( true );
 	custom->setEnabled( true );
-	QString str;
-	str.sprintf( "%g", _angle );
+	QString str=QString::number( _angle );
 	custom->setText( str );
     }
 

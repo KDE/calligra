@@ -2695,7 +2695,7 @@ void KPresenterView::changeUndo( QString _text, bool _enable )
     if ( _enable ) {
 	actionEditUndo->setEnabled( true );
 	QString str;
-	str.sprintf( i18n( "Undo: %s" ), _text.data() );
+	str=i18n( "Undo: %1" ).arg(_text);
 	actionEditUndo->setText( str );
     } else {
 	actionEditUndo->setEnabled( false );
@@ -2709,7 +2709,7 @@ void KPresenterView::changeRedo( QString _text, bool _enable )
     if ( _enable ) {
 	actionEditRedo->setEnabled( true );
 	QString str;
-	str.sprintf( i18n( "Redo: %s" ), _text.data() );
+	str=i18n( "Redo: %1" ).arg(_text);
 	actionEditRedo->setText( str );
     } else {
 	actionEditRedo->setEnabled( false );

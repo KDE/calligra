@@ -1764,11 +1764,10 @@ QString KTextObject::toASCII( bool linebreak, bool makelist )
 	    case UNSORT_LIST: str += "- "; break;
 	    case ENUM_LIST: {
 		if ( objEnumListType.type == NUMBER )
-		    chr.sprintf( "%s%d%s ", objEnumListType.before.data(), i+objEnumListType.start,
-				 objEnumListType.after.data() );
+		    chr=objEnumListType.before + QString::number(i + objEnumListType.start) +
+			objEnumListType.after;
 		else
-		    chr.sprintf( "%s%c%s ", objEnumListType.before.data(), i+objEnumListType.start,
-				 objEnumListType.after.data() );
+		    chr=objEnumListType.before+QChar(i+objEnumListType.start)+objEnumListType.after;
 		str += chr;
 	    } break;
 	    default: break;
@@ -3735,7 +3734,7 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
     bool drawCursor = false, cursorDrawn = false;
     QPoint c1, c2;
     int scrBar = 0, wid = 0;
-    char chr[ 11 ];
+    QString chr;
     int ry;
     QPixmap pix;
     QPainter *p = 0;
@@ -3762,13 +3761,11 @@ void KTextObject::paintCell( class QPainter* painter, int row, int )
 	    }
 
 	    if ( objEnumListType.type == NUMBER )
-		sprintf( chr, "%s%d%s", objEnumListType.before.data(), getParagNum( paragraphPtr ) +
-			 objEnumListType.start,
-			 objEnumListType.after.data() );
+		chr=objEnumListType.before + QString::number(getParagNum( paragraphPtr ) + objEnumListType.start) +
+		    objEnumListType.after;
 	    else
-		sprintf( chr, "%s%c%s", objEnumListType.before.data(), getParagNum( paragraphPtr ) +
-			 objEnumListType.start,
-			 objEnumListType.after.data() );
+		chr=objEnumListType.before+QString::number(getParagNum( paragraphPtr ) + objEnumListType.start) +
+		    objEnumListType.after;
 	    p->setFont( objEnumListType.font );
 	    fm = QFontMetrics( p->font() );
 	    if ( !allInOneColor )
@@ -4434,8 +4431,8 @@ void KTextObject::recalc( bool breakAllLines )
     case PLAIN: xstart = 0; break;
     case ENUM_LIST: {
 	QFontMetrics fm( objEnumListType.font );
-	char chr[ 12 ];
-	sprintf( chr, "%s99 %s", objEnumListType.before.data(), objEnumListType.after.data() );
+	QString chr;
+	chr=objEnumListType.before + objEnumListType.after;
 	xstart = fm.width( chr );
     } break;
     case UNSORT_LIST: {
@@ -5103,24 +5100,13 @@ TxtCursor KTextObject::getCursorPos( int _x, int _y, bool &changed, bool set, bo
 /*====================== convert color to hex-string ============*/
 QString KTextObject::toHexString( QColor c )
 {
-    int r, g, b;
-    QString str;
-
-    c.rgb( &r, &g, &b );
-
-    str.sprintf( "#%02X%02X%02X", r, g, b );
-
-    return str;
+    return c.name();
 }
 
 /*====================== convert hex-string to color ============*/
 QColor KTextObject::hexStringToQColor( QString str )
 {
-    //int r, g, b;
-
-    QColor c( str );
-
-    return c;
+    return QColor( str );
 }
 
 /*============ checks, if a string contains chars ===============*/

@@ -326,12 +326,12 @@ void KWDocStructRootItem::setupTextFrames()
                 if ( i == 0 && doc->getProcessingType() == KWordDocument::WP )
                 {
                     if ( doc->getColumns() == 1 )
-                        _name.sprintf( i18n( "Page %d" ), j + 1 );
+                        _name=i18n( "Page %1" ).arg(QString::number(j + 1));
                     else
-                        _name.sprintf( i18n( "Column %d" ), j + 1 );
+                        _name=i18n( "Column %1" ).arg(QString::number(j + 1));
                 }
                 else
-                    _name.sprintf( i18n( "Text Frame %d" ), j + 1 );
+                    _name=i18n( "Text Frame %1" ).arg(QString::number(j + 1));
                 child = new KWDocStructFrameItem( item, _name, frameset, frameset->getFrame( j ), gui );
                 QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
             }
@@ -364,7 +364,7 @@ void KWDocStructRootItem::setupTables()
     {
         if ( !doc->getGroupManager( i )->isActive() ) continue;
 
-        _name.sprintf( i18n( "Table %d" ), i + 1 );
+        _name=i18n( "Table %1" ).arg(QString::number( i + 1 ));
         child = new KWDocStructTableItem( this, _name, doc->getGroupManager( i ), gui );
         QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
     }
@@ -438,7 +438,7 @@ void KWDocStructRootItem::setupEmbedded()
         frameset = doc->getFrameSet( i );
         if ( frameset->getFrameType() == FT_PART )
         {
-            _name.sprintf( i18n( "Embedded Object %d" ), ++j );
+            _name=i18n( "Embedded Object %1" ).arg(QString::number( ++j ));
             child = new KWDocStructPartItem( this, _name, dynamic_cast<KWPartFrameSet*>( frameset ), gui );
             QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
         }

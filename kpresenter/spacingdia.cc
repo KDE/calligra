@@ -50,7 +50,7 @@ SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int 
     eLineSpacing->setValidator( new QIntValidator( eLineSpacing ) );
     eLineSpacing->move( lLineSpacing->width() + 15, 10 );
     eLineSpacing->resize( eLineSpacing->sizeHint().width() / 2, eLineSpacing->sizeHint().height() );
-    str.sprintf( "%d", _lineSpacing );
+    str=QString::number( _lineSpacing );
     eLineSpacing->setText( str );
 
     lDistBefore = new QLabel( i18n( "Distance before the Paragraph ( pt )" ), this );
@@ -61,7 +61,7 @@ SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int 
     eDistBefore->setValidator( new QIntValidator( eDistBefore ) );
     eDistBefore->move( lDistBefore->width() + 15, lDistBefore->y() );
     eDistBefore->resize( eDistBefore->sizeHint().width() / 2, eDistBefore->sizeHint().height() );
-    str.sprintf( "%d", _distBefore );
+    str=QString::number( _distBefore );
     eDistBefore->setText( str );
 
     lDistAfter = new QLabel( i18n( "Distance after the Paragraph ( pt )" ), this );
@@ -72,7 +72,7 @@ SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int 
     eDistAfter->setValidator( new QIntValidator( eDistAfter ) );
     eDistAfter->move( lDistAfter->width() + 15, lDistAfter->y() );
     eDistAfter->resize( eDistAfter->sizeHint().width() / 2, eDistAfter->sizeHint().height() );
-    str.sprintf( "%d", _distAfter );
+    str=QString::number( _distAfter );
     eDistAfter->setText( str );
 
     lGap = new QLabel( i18n( "Gap ( pt )" ), this );
@@ -83,7 +83,7 @@ SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int 
     eGap->setValidator( new QIntValidator( eGap ) );
     eGap->move( lGap->width() + 15, lGap->y() );
     eGap->resize( eGap->sizeHint().width() / 2, eGap->sizeHint().height() );
-    str.sprintf( "%d", _gap );
+    str=QString::number( _gap );
     eGap->setText( str );
 
     int m = QMAX( QMAX( QMAX( eGap->x(), eDistBefore->x() ), eDistAfter->x() ), eLineSpacing->x() );

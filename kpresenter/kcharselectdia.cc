@@ -76,10 +76,10 @@ KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, QList<QFont> 
     grid2->addWidget( lColor, 0, 1 );
 
     sizeCombo = new QComboBox( false, wid );
-    char chr[ 5 ];
+    QString chr;
     for ( i = 4; i <= 100; i++ )
     {
-        sprintf( chr, "%d", i );
+        chr=QString::number(i);
         sizeCombo->insertItem( chr, -1 );
     }
     sizeCombo->resize( sizeCombo->sizeHint() );
@@ -121,7 +121,7 @@ KCharSelectDia::KCharSelectDia( QWidget *parent, const char *name, QList<QFont> 
     depthCombo = new QComboBox( false, wid );
     for ( i = 1; i <= 16; i++ )
     {
-        sprintf( chr, "%d", i );
+        chr=QString::number(i);
         depthCombo->insertItem( chr, -1 );
     }
     depthCombo->resize( depthCombo->sizeHint() );

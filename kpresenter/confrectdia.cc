@@ -161,10 +161,8 @@ void ConfRectDia::setRnds( int _rx, int _ry )
     yRnd = _ry;
     rectPreview->setRnds( xRnd, yRnd );
 
-    QString str;
-
-    str.sprintf( "%d", xRnd );
+    QString str=QString::number(xRnd);
     eRndX->setText( str );
-    str.sprintf( "%d", yRnd );
+    str=QString::number(yRnd);
     eRndY->setText( str );
 }
