@@ -17,6 +17,7 @@ kformeditor_SOURCES = \
  kformeditor_shell.cc \
  widgetwrapper.cc \
  resizewidget.cc \
+ formregion.cc \
  formsizedlg.cc \
  formpropertydlg.cc \
  backgrounddlg.cc \
@@ -30,6 +31,7 @@ noinst_HEADERS = \
  kformeditor_view.h \
  widgetwrapper.h \
  resizewidget.h \
+ formregion.h \
  formsizedlg.h \
  formpropertydlg.h \
  backgrounddlg.h \
@@ -40,6 +42,7 @@ METASOURCES = \
  kformeditor_shell.moc \
  kformeditor_doc.moc \
  kformeditor_view.moc \
+ formregion.moc \
  formsizedlg.moc \
  formpropertydlg.moc \
  backgrounddlg.moc \
