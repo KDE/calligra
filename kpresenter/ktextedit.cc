@@ -49,6 +49,9 @@
 #include <qfileinfo.h>
 #include <qmime.h>
 #include <qregexp.h>
+#ifdef __DECCXX
+#include <alloca.h>
+#endif
 
 #include <stdlib.h>
 #include "kpresenter_doc.h"
@@ -2952,8 +2955,13 @@ void KTextEditParag::paint( QPainter &painter, const QColorGroup &cg, KTextEditC
     int curx = -1, cury, curh;
 
     // #### draw other selections too here!!!!!!!
+#ifdef __DECCXX
+    int *selectionStarts = (int*) alloca(doc->numSelections * sizeof(int));
+    int *selectionEnds   = (int*) alloca(doc->numSelections * sizeof(int));
+#else
     int selectionStarts[ doc->numSelections ];
     int selectionEnds[ doc->numSelections ];
+#endif
     if ( drawSelections ) {
 	bool hasASelection = FALSE;
 	for ( i = 0; i < doc->numSelections; ++i ) {
