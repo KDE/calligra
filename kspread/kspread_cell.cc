@@ -711,7 +711,7 @@ void KSpreadCell::unobscure( KSpreadCell * cell )
   m_pTable->setRegionPaintDirty( cellRect() );
 }
 
-void KSpreadCell::clicked( KSpreadCanvas * _canvas )
+void KSpreadCell::clicked( KSpreadCanvas* )
 {
     return;
 }
@@ -5446,7 +5446,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             kdDebug() << "Type: date, value: " << value << endl;
 
             // "1980-10-15"
-            int year, month, day;
+            int year = 0, month = 0, day = 0;
             bool ok = false;
 
             int p1 = value.find( '-' );
@@ -5469,8 +5469,6 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 
             if ( ok )
             {
-                QDateTime dt( QDate( year, month, day ) );
-                //            KSpreadValue kval( dt );
                 setValue( QDate( year, month, day ) );
                 kdDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
@@ -5483,7 +5481,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
                 value = element.attribute( "table:time-value" );
             kdDebug() << "Type: time: " << value << endl;
             // "PT15H10M12S"
-            int hours, minutes, seconds;
+            int hours = 0, minutes = 0, seconds = 0;
             int l = value.length();
             QString num;
             bool ok = false;
