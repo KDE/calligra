@@ -42,6 +42,8 @@ class VStarTool;
 class VTool;
 class VToolContainer;
 class VWhirlPinchDlg;
+class VStroke;
+class VFill;
 
 
 class KarbonView : public KoView
@@ -139,8 +141,8 @@ protected slots:
 	//toolbox dialogs - slots
 	void solidFillClicked();
 	void strokeClicked();
-	void slotStrokeColorChanged( const QColor & );
-	void slotFillColorChanged( const QColor & );
+	void slotStrokeChanged( const VStroke & );
+	void slotFillChanged( const VFill & );
 
 protected:
 	virtual void updateReadWrite( bool rw );

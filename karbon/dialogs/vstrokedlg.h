@@ -39,7 +39,7 @@ private:
 	KarbonPart *m_part;
 
 signals:
-	void strokeChanged();
+	void strokeChanged( const VStroke & );
 
 private slots:
 	void slotUpdateFromRGBSpinBoxes( int );

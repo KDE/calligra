@@ -35,7 +35,6 @@ public:
 signals:
 	// shape tools:
 	void ellipseToolActivated();
-	void fillColorChanged( const QColor& );
 	void polygonToolActivated();
 	void rectangleToolActivated();
 	void rotateToolActivated();
@@ -47,7 +46,8 @@ signals:
 	void spiralToolActivated();
 	void starToolActivated();
 	void strokeActivated();
-	void strokeColorChanged( const QColor& );
+	void strokeChanged( const VStroke & );
+	void fillChanged( const VFill& );
 	void textToolActivated();
 	void gradToolActivated();
 

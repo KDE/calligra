@@ -667,31 +667,23 @@ KarbonView::strokeClicked()
 }
 
 void
-KarbonView::slotStrokeColorChanged( const QColor &c )
+KarbonView::slotStrokeChanged( const VStroke &c )
 {
 	kdDebug() << "In KarbonView::slotStrokeColorChanged" << endl;
-	VColor color;
-	float r = float( c.red() ) / 255.0, g = float( c.green() ) / 255.0, b = float( c.blue() ) / 255.0;
+	m_part->document().setDefaultStroke( c );
 
-	color.setValues( &r, &g, &b, 0L );
-	m_part->document().setDefaultStrokeColor( color );
-
-	m_part->addCommand( new VStrokeCmd( &m_part->document(), color ), true );
+	m_part->addCommand( new VStrokeCmd( &m_part->document(), c ), true );
 
 	m_toolbox->strokeFillPreview()->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
 }
 
 void
-KarbonView::slotFillColorChanged( const QColor &c )
+KarbonView::slotFillChanged( const VFill &f )
 {
 	kdDebug() << "In KarbonView::slotFillColorChanged" << endl;
-	VColor color;
-	float r = float( c.red() ) / 255.0, g = float( c.green() ) / 255.0, b = float( c.blue() ) / 255.0;
+	m_part->document().setDefaultFill( f );
 
-	color.setValues( &r, &g, &b, 0L );
-	m_part->document().setDefaultFillColor( color );
-
-	m_part->addCommand( new VFillCmd( &m_part->document(), color ), true );
+	m_part->addCommand( new VFillCmd( &m_part->document(), f ), true );
 
 	m_toolbox->strokeFillPreview()->update( m_part->document().defaultStroke(), m_part->document().defaultFill() );
 }
@@ -977,10 +969,10 @@ KarbonView::initActions()
 		m_toolbox, SIGNAL( strokeActivated() ),
 		this, SLOT( strokeClicked() ) );
 	connect(
-		m_toolbox, SIGNAL( strokeColorChanged( const QColor & ) ),
-		this, SLOT( slotStrokeColorChanged( const QColor & ) ) );
-	connect( m_toolbox, SIGNAL( fillColorChanged( const QColor & ) ),
-		this, SLOT( slotFillColorChanged( const QColor & ) ) );
+		m_toolbox, SIGNAL( strokeChanged( const VStroke & ) ),
+		this, SLOT( slotStrokeChanged( const VStroke & ) ) );
+	connect( m_toolbox, SIGNAL( fillChanged( const VFill & ) ),
+		this, SLOT( slotFillChanged( const VFill & ) ) );
 
 	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
 	m_toolbox->show();

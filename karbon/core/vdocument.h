@@ -92,8 +92,8 @@ public:
 
 	VStroke defaultStroke() { return m_defaultStroke; }
 	VFill defaultFill() { return m_defaultFill; }
-	void setDefaultStrokeColor( const VColor &color ) { m_defaultStroke.setColor( color ); }
-	void setDefaultFillColor( const VColor &color ) { m_defaultFill.setColor( color ); }
+	void setDefaultStroke( const VStroke &s ) { m_defaultStroke = s; }
+	void setDefaultFill( const VFill &f ) { m_defaultFill = f; }
 	/// all newly created shapes in this document get the default color by using this method
 	void applyDefaultColors( VObject & ) const;
 

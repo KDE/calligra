@@ -32,6 +32,10 @@ public:
 
 	virtual bool eventFilter( QObject* object, QEvent* event );
 
+signals:
+	void strokeChanged( const VStroke & );
+	void fillChanged( const VFill& );
+
 protected:
 	virtual void paintEvent( QPaintEvent* event );
 

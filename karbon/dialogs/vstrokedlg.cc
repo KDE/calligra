@@ -222,7 +222,7 @@ void VStrokeDlg::slotApplyButtonPressed()
 	if( m_part )
 		m_part->addCommand( new VStrokeCmd( &m_part->document(), VStroke( color ) ), true );
 
-	emit strokeChanged();
+	emit strokeChanged( VStroke( color ) );
 }
 
 void VStrokeDlg::slotUpdate(QColor* color)

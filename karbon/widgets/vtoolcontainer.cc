@@ -156,11 +156,11 @@ VToolContainer::VToolContainer( KarbonPart *part, KoView* parent, const char* /*
 	m_strokeFillPreview = new VStrokeFillPreview( m_part, this );
 
 	connect(
-		m_dualColorButton, SIGNAL( fgChanged( const QColor& ) ),
-		this, SIGNAL(strokeColorChanged( const QColor& )));
+		m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ),
+		this, SIGNAL(strokeChanged( const VStroke & )));
 	connect(
-		m_dualColorButton, SIGNAL( bgChanged( const QColor& ) ),
-		this, SIGNAL( fillColorChanged( const QColor& ) ) );
+		m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ),
+		this, SIGNAL( fillChanged( const VFill & ) ) );
 
 	m_dualColorButton->setMaximumWidth( 30 );
 	m_dualColorButton->setMaximumHeight( 30 );

@@ -39,7 +39,7 @@ private:
 	KarbonPart *m_part;
 
 signals:
-	void fillChanged();
+	void fillChanged( const VFill & );
 
 private slots:
 	void slotUpdateFromRGBSpinBoxes();
