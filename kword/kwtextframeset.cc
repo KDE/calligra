@@ -3163,10 +3163,14 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType,KWFootNoteVariable::N
      // Layout the footnote frame
      doc->recalcFrames( pageNum, -1 ); // we know that for sure nothing changed before this page.
 
+     KWCanvas* canvas = m_canvas;
      // And now edit the footnote frameset - all WPs do that it seems.
      m_canvas->editFrameSet( fs );
+
+     // --- from here, we are deleted! ---
+     // (This is why we must use canvas and not m_canvas)
      // Ensure cursor is visible
-     KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_canvas->currentFrameSetEdit()->currentTextEdit());
+     KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(canvas->currentFrameSetEdit()->currentTextEdit());
      if ( textedit )
          textedit->ensureCursorVisible();
 }
