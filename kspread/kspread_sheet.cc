@@ -7201,9 +7201,10 @@ void KSpreadSheet::loadOasisSettings( const QDomElement& setting )
 
 void KSpreadSheet::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
-    //table.setAttribute( "hidezero", (int)m_bHideZero);
-    //table.setAttribute( "firstletterupper", (int)m_bFirstLetterUpper);
-    //table.setAttribute( "grid", (int)m_bShowGrid );
+    settingsWriter.addConfigItem( "ShowZeroValues", m_bHideZero );
+    settingsWriter.addConfigItem( "ShowGrid", m_bShowGrid );
+    //not define into oo spec
+    settingsWriter.addConfigItem( "FirstLetterUpper", m_bFirstLetterUpper);
 }
 
 
