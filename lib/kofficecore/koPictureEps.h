@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -72,8 +72,6 @@ public:
      */
     virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
-    virtual QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
-
     virtual bool load(const QByteArray& array, const QString& extension);
     
     virtual bool save(QIODevice* io);
@@ -83,6 +81,12 @@ public:
     virtual QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
 
     virtual QString getMimeType(const QString& extension) const;
+
+    /**
+     * Generate a QImage
+     * (always in slow mode)
+     */
+    virtual QImage generateImage(const QSize& size);
 
 protected:
     QPixmap getPixmap(QImage& image);

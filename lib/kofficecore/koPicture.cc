@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -241,4 +241,11 @@ QDragObject* KoPicture::dragObject( QWidget *dragSource, const char *name )
     if (m_sharedData)
         return m_sharedData->dragObject( dragSource, name );
     return 0L;
+}
+
+QImage KoPicture::generateImage(const QSize& size)
+{
+    if (m_sharedData)
+        return m_sharedData->generateImage( size );
+    return QImage();
 }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -161,6 +161,14 @@ public:
      * Downloads and set the key for a possibily remote file
      */
     bool setKeyAndDownloadPicture(const KURL& url);
+
+    /**
+     * Generate a QImage
+     * (always in slow mode)
+     *
+     * @param size the wanted size for the QImage
+     */
+    QImage generateImage(const QSize& size);
 
 protected:
     /**

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -123,10 +123,14 @@ bool KoPictureBase::isSlowResizeModeAllowed(void) const
 
 QDragObject* KoPictureBase::dragObject( QWidget * dragSource, const char * name )
 {
-    QImage image;
-    image=generatePixmap(getOriginalSize(),true);
+    QImage image (generateImage(getOriginalSize()));
     if (image.isNull())
         return 0L;
     else
         return new QImageDrag( image, dragSource, name );
+}
+
+QImage KoPictureBase::generateImage(const QSize& size)
+{
+    return generatePixmap(size,true).convertToImage();
 }
