@@ -239,6 +239,9 @@
 		paragSpacing	space between parags, in pt
 		etc.
                 bleft, bright, btop, bbottom marge in pt
+                verticalAlign type of vertical alignment : CENTER=0, TOP=1, BOTTOM=2
+                verticalValue value of alignment (to add to top margins )
+
 -->
 <!ELEMENT TEXTOBJ (ENUMLISTTYPE|UNSORTEDLISTTYPE|P)*>
 <!ATTLIST TEXTOBJ
@@ -257,7 +260,9 @@
                   bleft NMTOKEN #REQUIRED
                   bright NMTOKEN #REQUIRED                  
                   btop NMTOKEN #REQUIRED
-                  bbottom NMTOKEN #REQUIRED>
+                  bbottom NMTOKEN #REQUIRED
+                  verticalAlign NMTOKEN #REQUIRED
+                  verticalValue NMTOKEN #REQUIRED>
 
 <!ELEMENT ENUMLISTTYPE EMPTY>
 <!ATTLIST ENUMLISTTYPE

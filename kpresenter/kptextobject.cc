@@ -207,6 +207,10 @@ double KPTextObject::load(const QDomElement &element)
             btop = e.attribute( "btoppt").toDouble();
         if (e.hasAttribute( "bbottompt"))
             bbottom = e.attribute( "bbottompt").toDouble();
+        if ( e.hasAttribute("verticalAlign"))
+            m_textVertAlign =(VerticalAlignmentType)e.attribute("verticalAlign").toInt();
+        if ( e.hasAttribute( "verticalValue" ))
+            alignVertical = e.attribute( "verticalValue" ).toDouble();
 #if 0
         ktextobject.document()->setLineSpacing( e.attribute( attrLineSpacing ).toInt() );
         ktextobject.document()->setParagSpacing( e.attribute( attrParagSpacing ).toInt() );
@@ -408,7 +412,11 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
         textobj.setAttribute( "btoppt", btop );
     if (bbottom !=0.0)
         textobj.setAttribute( "bbottompt", bbottom );
-
+    if ( m_textVertAlign != KP_TOP )
+    {
+        textobj.setAttribute( "verticalAlign", (int)m_textVertAlign );
+        textobj.setAttribute( "verticalValue",alignVertical );
+    }
 #if 0
     textobj.setAttribute(attrLineSpacing, ktextobject.document()->lineSpacing());
     textobj.setAttribute(attrParagSpacing, ktextobject.document()->paragSpacing());
