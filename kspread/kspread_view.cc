@@ -272,6 +272,7 @@ class KSpreadSpell : public KSpell
 KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc ) :
   KoView( doc, _parent, _name )
 {
+    m_popupMenuFirstToolId = 0;
     kdDebug(36001) << "sizeof(KSpreadCell)=" << sizeof(KSpreadCell) <<endl;
     setInstance( KSpreadFactory::global() );
     if ( doc->isReadWrite() )
