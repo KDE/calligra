@@ -50,14 +50,25 @@ VGradientTool::draw()
 	painter->setPen( Qt::DotLine );
 	painter->newPath();
 	painter->moveTo( first() );
-	painter->lineTo( last() );
+	painter->lineTo( m_current );
 	painter->strokePath();
 }
 
 void
 VGradientTool::mouseDrag( const KoPoint& current )
 {
+	// undo old line
 	draw();
+
+	m_current = current;
+
+	draw();
+}
+
+void
+VGradientTool::mouseButtonPress( const KoPoint& current )
+{
+	m_current = current;
 }
 
 void
