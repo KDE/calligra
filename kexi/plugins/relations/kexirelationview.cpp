@@ -66,6 +66,22 @@ KexiRelationView::addTable(const QString &table, QStringList columns)
 	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, table, columns);
 	addChild(c, 100,100);
 	c->show();
+	c->setFixedSize(110, 160);
+
+	if(m_tables.count() > 0)
+	{
+		int place = -10;
+		for(TableList::Iterator it = m_tables.begin(); it != m_tables.end(); ++it)
+		{
+			int right = (*it)->x() + (*it)->width();
+			if(right > place)
+				place = right;
+		}
+
+		moveChild(c, place + 15, 5);
+	}
+	else
+		moveChild(c, 5, 5);
 
 	m_tables.insert(table, c);
 
@@ -133,12 +149,10 @@ KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 void
 KexiRelationView::slotTableScrolling(QString table)
 {
-	for(RelationList::Iterator itC=m_connections.begin(); itC != m_connections.end(); itC++)
-	{
-		if((*itC).srcTable == table || (*itC).rcvTable == table)
-		{
-		}
-	}
+	KexiRelationViewTableContainer *c = m_tables[table];
+
+	if(c)
+		containerMoved(c);
 }
 
 void

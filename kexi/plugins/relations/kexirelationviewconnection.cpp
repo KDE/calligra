@@ -45,8 +45,6 @@ KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableCont
 void
 KexiRelationViewConnection::drawConnection(QPainter *p, QWidget *parent)
 {
-	kdDebug() << "KexiRelationViewConnection::drawConnection()" << endl;
-
 	int sx = m_srcTable->x() + m_srcTable->width();
 	int sy = m_srcTable->globalY(m_srcField);
 	int rx = m_rcvTable->x();

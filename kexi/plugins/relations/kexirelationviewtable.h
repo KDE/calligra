@@ -58,6 +58,7 @@ class KexiRelationViewTableContainer : public QFrame
 
 	private:
 		KexiRelationViewTable	*m_tableView;
+
 	protected slots:
 		void moved();
 };
@@ -76,7 +77,7 @@ class KexiRelationViewTable : public KListView
 		void setReadOnly(bool);
 
 	signals:
-		void			tableScrolling(QString);
+		void			tableScrolling();
 
 	protected:
 		virtual bool		acceptDrag(QDropEvent *e) const;

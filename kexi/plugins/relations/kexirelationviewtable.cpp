@@ -56,6 +56,7 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 //	btnClose->setFlat(true);
 
 	m_tableView = new KexiRelationViewTable(this, parent, table, fields, "tbl-list");
+	connect(m_tableView, SIGNAL(tableScrolling()), this, SLOT(moved()));
 
 	g->addWidget(btnClose, 0, 1);
 	g->addMultiCellWidget(m_tableView, 1, 1, 0, 1);
@@ -72,8 +73,7 @@ void KexiRelationViewTableContainer::moved() {
 	emit moved(this);
 }
 
-int
-KexiRelationViewTableContainer::globalY(const QString &field)
+int KexiRelationViewTableContainer::globalY(const QString &field)
 {
 //	m_ta
 //	kdDebug() << "KexiRelationViewTableContainer::globalY()" << endl;
@@ -350,7 +350,7 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 void
 KexiRelationViewTable::slotContentsMoving(int,int)
 {
-	emit tableScrolling(table());
+	emit tableScrolling();
 }
 
 KexiRelationViewTable::~KexiRelationViewTable()
