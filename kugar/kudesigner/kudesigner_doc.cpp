@@ -39,10 +39,12 @@
 #include <qprinter.h>
 #include <qpaintdevicemetrics.h>
 #include <qfileinfo.h>
+#include <qdockwindow.h>
+
 #include "mycanvas.h"
 
 KudesignerDoc::KudesignerDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),m_plugin(0)
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),m_plugin(0),m_propPos(DockRight)
 {
     setInstance( KudesignerFactory::global(), false );
     history = new KCommandHistory(actionCollection());
@@ -394,5 +396,16 @@ KuDesignerPlugin *KudesignerDoc::plugin()
 {
 	return m_plugin;
 }
+
+Qt::Dock KudesignerDoc::propertyPosition()
+{
+	return m_propPos;
+}
+
+void KudesignerDoc::setForcedPropertyEditorPosition(Dock d)
+{
+	m_propPos=d;
+}
+
 
 #include "kudesigner_doc.moc"

@@ -48,6 +48,8 @@ public:
 
     void loadPlugin(const QString& name);
     KuDesignerPlugin *plugin();
+    Dock propertyPosition();
+    void setForcedPropertyEditorPosition(Dock);
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
@@ -61,6 +63,7 @@ private:
     MyCanvas *docCanvas;
 
     KuDesignerPlugin *m_plugin;
+    Dock m_propPos;
 
     void setReportItemAttributes(QDomNode *node, CanvasReportItem *item);
     void addReportItems(QDomNode *node, CanvasBand *section);

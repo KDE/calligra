@@ -46,7 +46,7 @@
 #include "property.h"
 
 KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char* name )
-    : KoView( part, parent, name ),pe(0)
+    : KoView( part, parent, name ),m_doc(part),pe(0)
 {
     setInstance( KudesignerFactory::global() );
     if ( !part->isReadWrite() ) // readonly case, e.g. when embedded into konqueror
@@ -71,6 +71,11 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
 
     connect(rc, SIGNAL(selectedActionProcessed()), this, SLOT(unselectItemAction()));
     connect(rc, SIGNAL(modificationPerformed()), part, SLOT(setModified()));
+}
+
+KudesignerView::~KudesignerView() 
+{
+	delete pe;
 }
 
 void KudesignerView::paintEvent( QPaintEvent* ev )
@@ -336,7 +341,7 @@ void KudesignerView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 			kdDebug()<<"*************Property and plugin have been connected"<<endl;
 		}
-	        shell()->addDockWindow(pe, DockRight);
+	        shell()->addDockWindow(pe, m_doc->propertyPosition());
 	        pe->show();
 	    
 	        connect(rc, SIGNAL( selectionMade(std::map<QString, PropPtr >*,CanvasBox*) ), pe,

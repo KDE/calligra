@@ -38,7 +38,7 @@ class KudesignerView : public KoView
     Q_OBJECT
 public:
     KudesignerView( KudesignerDoc* part, QWidget* parent = 0, const char* name = 0 );
-
+    virtual ~KudesignerView();
 protected slots:
     void cut();
     void copy();
@@ -70,6 +70,7 @@ protected:
 private:
     ReportCanvas *rc;
     PropertyEditor *pe;
+    KudesignerDoc *m_doc;
 
     KAction* sectionsReportHeader;
     KAction* sectionsReportFooter;

@@ -70,6 +70,12 @@ KParts::Part* KudesignerFactory::createPartObject( QWidget *parentWidget, const 
 		{
 			part->loadPlugin((*it).right((*it).length()-7));
 		}
+		else if ((*it).startsWith("forcePropertyEditorPosition="))
+		{
+			QString tmp=(*it).right((*it).length()-28).upper();
+			kdDebug()<<"forced property editor position: "<<tmp<<endl;
+			part->setForcedPropertyEditorPosition(tmp =="LEFT" ?DockLeft:DockRight);
+		}
 	}
     }
 
