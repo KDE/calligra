@@ -3,9 +3,9 @@
  <!ENTITY kappname "&krayon;">
  <!ENTITY % addindex "IGNORE">
  <!ENTITY % English "INCLUDE">
- <!ENTITY krayonusing SYSTEM "krayon-using.docbook">
- <!ENTITY krayoncommands SYSTEM "krayon-commands.docbook">
- <!ENTITY krayonfaq SYSTEM "krayon-faq.docbook">
+ <!ENTITY krayonusing SYSTEM "using.docbook">
+ <!ENTITY krayoncommands SYSTEM "commands.docbook">
+ <!ENTITY krayonfaq SYSTEM "faq.docbook">
 ]>
 
 <book lang="&language;">
