@@ -23,6 +23,7 @@
 #include <koGlobal.h>
 
 #include "kivio_settings.h"
+#include "kivio_grid_data.h"
 
 namespace Kivio {
   /**
@@ -40,6 +41,16 @@ namespace Kivio {
       * Get the default page layout
       */
       static KoPageLayout defaultPageLayout();
+      
+      /**
+       * Returns the grid settings
+       */
+      static void setGrid(const KivioGridData& grid);
+      
+      /**
+       * Returns the grid settings
+       */
+      static KivioGridData grid();
     
     protected:
       Config();

@@ -22,15 +22,9 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
-#include <qwhatsthis.h>
-#include <qmenubar.h>
 
 #include <kpopupmenu.h>
-#include <kapplication.h>
 #include <kdebug.h>
-#include <ktoolbar.h>
-#include <ktoolbarbutton.h>
-#include <kiconloader.h>
 #include <klocale.h>
 
 class KoLineStyleAction::KoLineStyleActionPrivate
@@ -38,22 +32,18 @@ class KoLineStyleAction::KoLineStyleActionPrivate
   public:
     KoLineStyleActionPrivate()
     {
-      m_popup = new KPopupMenu(0L,"KoLineStyleAction::popup");
       m_currentStyle = Qt::SolidLine;
     }
     
     ~KoLineStyleActionPrivate()
     {
-      delete m_popup;
-      m_popup = 0;
     }
     
-    KPopupMenu* m_popup;
     int m_currentStyle;
 };
 
 KoLineStyleAction::KoLineStyleAction(const QString &text, const QString& icon,
-  QObject* parent, const char* name) : KActionMenu(text, icon, parent, name)
+  QObject* parent, const char* name) : KoSelectAction(text, icon, parent, name)
 {
   d = new KoLineStyleActionPrivate;
    
@@ -61,14 +51,11 @@ KoLineStyleAction::KoLineStyleAction(const QString &text, const QString& icon,
 }
 
 KoLineStyleAction::KoLineStyleAction(const QString &text, const QString& icon, const QObject* receiver,
-  const char* slot, QObject* parent, const char* name) : KActionMenu(text, icon, parent, name)
+  const char* slot, QObject* parent, const char* name) : KoSelectAction(text, icon, receiver, slot, parent, name)
 {
   d = new KoLineStyleActionPrivate;
   
   createMenu();
-  
-  connect(this, SIGNAL(newLineStyle(int)), receiver, slot);
-  connect(popupMenu(), SIGNAL(activated(int)), this, SLOT(execute(int)));
 }
 
 KoLineStyleAction::~KoLineStyleAction()
@@ -96,114 +83,6 @@ void KoLineStyleAction::createMenu()
     pix.setMask(mask);
     popup->insertItem(pix,cindex++);
   }
-}
-
-KPopupMenu* KoLineStyleAction::popupMenu() const
-{
-  return d->m_popup;
-}
-
-void KoLineStyleAction::popup(const QPoint& global)
-{
-  popupMenu()->popup(global);
-}
-
-int KoLineStyleAction::plug(QWidget* widget, int index)
-{
-  // This function is copied from KActionMenu::plug
-  if (kapp && !kapp->authorizeKAction(name()))
-    return -1;
-  kdDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
-  if ( widget->inherits("QPopupMenu") )
-  {
-    QPopupMenu* menu = static_cast<QPopupMenu*>( widget );
-    int id;
-
-    if ( hasIconSet() )
-      id = menu->insertItem( iconSet(), text(), popupMenu(), -1, index );
-    else
-      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), KIcon::Small),
-        text(), popupMenu(), -1, index );
-
-    if ( !isEnabled() )
-      menu->setItemEnabled( id, false );
-
-    addContainer( menu, id );
-    connect( menu, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-
-    return containerCount() - 1;
-  }
-  else if ( widget->inherits( "KToolBar" ) )
-  {
-    KToolBar *bar = static_cast<KToolBar *>( widget );
-
-    int id_ = KAction::getToolButtonID();
-
-    if ( icon().isEmpty() && !iconSet().isNull() )
-      bar->insertButton( iconSet().pixmap(), id_, SIGNAL( clicked() ), this,
-                          SLOT( slotActivated() ), isEnabled(), plainText(),
-                          index );
-    else
-    {
-      KInstance *instance;
-
-      if ( m_parentCollection )
-        instance = m_parentCollection->instance();
-      else
-        instance = KGlobal::instance();
-
-      bar->insertButton( icon(), id_, SIGNAL( clicked() ), this,
-                          SLOT( slotActivated() ), isEnabled(), plainText(),
-                          index, instance );
-    }
-
-    addContainer( bar, id_ );
-
-    if (!whatsThis().isEmpty())
-      QWhatsThis::add( bar->getButton(id_), whatsThis() );
-
-    connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-
-    bar->getButton(id_)->setPopup(popupMenu(), true );
-
-    return containerCount() - 1;
-  }
-  else if ( widget->inherits( "QMenuBar" ) )
-  {
-    QMenuBar *bar = static_cast<QMenuBar *>( widget );
-
-    int id;
-
-    id = bar->insertItem( text(), popupMenu(), -1, index );
-
-    if ( !isEnabled() )
-      bar->setItemEnabled( id, false );
-
-    addContainer( bar, id );
-    connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-
-    return containerCount() - 1;
-  }
-
-  return -1;
-}
-
-void KoLineStyleAction::execute(int index)
-{
-  setCurrentStyle(index);
-  emit newLineStyle(d->m_currentStyle);
-}
-
-int KoLineStyleAction::currentStyle()
-{
-  return d->m_currentStyle;
-}
-
-void KoLineStyleAction::setCurrentStyle(int style)
-{
-  popupMenu()->setItemChecked(d->m_currentStyle, false);
-  popupMenu()->setItemChecked(style, true);
-  d->m_currentStyle = style;
 }
 
 #include "kolinestyleaction.moc"

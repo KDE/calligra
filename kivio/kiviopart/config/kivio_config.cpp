@@ -53,4 +53,22 @@ namespace Kivio {
     Settings::setWidth(layout.ptWidth);
     Settings::setHeight(layout.ptHeight);
   }
+
+  void Config::setGrid(const KivioGridData& grid)
+  {
+  }
+  
+  KivioGridData Config::grid()
+  {
+    KivioGridData gd;
+    gd.color = Settings::gridColor();
+    gd.isShow = Settings::showGrid();
+    gd.isSnap = Settings::snapGrid();
+    gd.freq.setWidth(Settings::gridXSpacing());
+    gd.freq.setHeight(Settings::gridYSpacing());
+    gd.snap.setWidth(Settings::gridXSnap());
+    gd.snap.setHeight(Settings::gridYSnap());
+    
+    return gd;
+  }
 };

@@ -164,17 +164,17 @@ void KivioOptionsDialog::initGrid()
   KivioGridData d = static_cast<KivioView*>(parent())->doc()->grid();
   double pgw = KoUnit::toUserValue(m_layout.ptWidth, unit);
   double pgh = KoUnit::toUserValue(m_layout.ptHeight, unit);
-  double fw = KoUnit::toUserValue(d.freq.width(), unit);
-  double fh = KoUnit::toUserValue(d.freq.height(), unit);
-  double sw = KoUnit::toUserValue(d.snap.width(), unit);
-  double sh = KoUnit::toUserValue(d.snap.height(), unit);
+  double fw = KoUnit::toUserValue(Kivio::Config::gridXSpacing(), unit);
+  double fh = KoUnit::toUserValue(Kivio::Config::gridYSpacing(), unit);
+  double sw = KoUnit::toUserValue(Kivio::Config::gridXSnap(), unit);
+  double sh = KoUnit::toUserValue(Kivio::Config::gridYSnap(), unit);
 
   m_gridChBox = new QCheckBox(i18n("Show &grid"), page);
-  m_gridChBox->setChecked(d.isShow);
+  m_gridChBox->setChecked(Kivio::Config::showGrid());
   m_snapChBox = new QCheckBox(i18n("Snap to g&rid"), page);
-  m_snapChBox->setChecked(d.isSnap);
+  m_snapChBox->setChecked(Kivio::Config::snapGrid());
   QLabel* gridColorLbl = new QLabel(i18n("Grid &color:"), page);
-  m_gridColorBtn = new KColorButton(d.color, page);
+  m_gridColorBtn = new KColorButton(Kivio::Config::gridColor(), page);
   gridColorLbl->setBuddy(m_gridColorBtn);
   QGroupBox* spacingGrp = new QGroupBox(2, Qt::Horizontal, i18n("Spacing"), page);
   QLabel* spaceHorizLbl = new QLabel(i18n("&Horizontal:"), spacingGrp);
@@ -319,15 +319,14 @@ void KivioOptionsDialog::applyGrid()
 {
   KivioGridData d;
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  d.freq.setWidth(KoUnit::fromUserValue(m_spaceHorizUSpin->value(), unit));
-  d.freq.setHeight(KoUnit::fromUserValue(m_spaceVertUSpin->value(), unit));
-  d.snap.setWidth(KoUnit::fromUserValue(m_snapHorizUSpin->value(), unit));
-  d.snap.setHeight(KoUnit::fromUserValue(m_snapVertUSpin->value(), unit));
-  d.isShow = m_gridChBox->isChecked();
-  d.isSnap = m_snapChBox->isChecked();
-  d.color = m_gridColorBtn->color();
+  Kivio::Config::setGridXSpacing(KoUnit::fromUserValue(m_spaceHorizUSpin->value(), unit));
+  Kivio::Config::setGridYSpacing(KoUnit::fromUserValue(m_spaceVertUSpin->value(), unit));
+  Kivio::Config::setGridXSnap(KoUnit::fromUserValue(m_snapHorizUSpin->value(), unit));
+  Kivio::Config::setGridYSnap(KoUnit::fromUserValue(m_snapVertUSpin->value(), unit));
+  Kivio::Config::setShowGrid(m_gridChBox->isChecked());
+  Kivio::Config::setSnapGrid(m_snapChBox->isChecked());
+  Kivio::Config::setGridColor(m_gridColorBtn->color());
   KivioView* view = static_cast<KivioView*>(parent());
-  view->doc()->setGrid(d);
   view->doc()->updateView(0);
 }
 

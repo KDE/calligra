@@ -686,46 +686,12 @@ KivioDoc::~KivioDoc()
     s_docs->removeRef(this);
 }
 
-void KivioDoc::saveConfig()
+void KivioDoc::saveConfig() //TODO: Remove this function
 {
-    // Only save the config that is manipulated by the UI directly.
-    // The config from the config dialog is saved by the dialog itself.
-    KConfig *config = KivioFactory::global()->config();
-    config->setGroup( "Interface" );
-    config->writeEntry("ShowGrid", grid().isShow );
-    config->writeEntry("SnapGrid",grid().isSnap);
-    config->writeEntry("GridColor",grid().color);
-    config->writeEntry("GridXSpacing", grid().freq.width());
-    config->writeEntry("GridYSpacing", grid().freq.height());
-    config->writeEntry("GridXSnap", grid().snap.width());
-    config->writeEntry("GridYSnap", grid().snap.height());
-    config->writeEntry("Unit", KoUnit::unitName(m_units));
 }
 
-void KivioDoc::initConfig()
+void KivioDoc::initConfig() //TODO: Remove this function
 {
-    KConfig *config = KivioFactory::global()->config();
-    if( config->hasGroup("Interface" ) )
-    {
-        config->setGroup( "Interface" );
-        KivioGridData d = grid();
-        d.isShow = config->readBoolEntry( "ShowGrid", true );
-        d.isSnap = config->readBoolEntry( "SnapGrid", true);
-        QColor color = QColor(200,200,200);
-        d.color = config->readColorEntry( "GridColor", &color );
-        d.freq.setWidth(config->readDoubleNumEntry("GridXSpacing", 10.0));
-        d.freq.setHeight(config->readDoubleNumEntry("GridYSpacing", 10.0));
-        d.snap.setWidth(config->readDoubleNumEntry("GridXSnap", 10.0));
-        d.snap.setHeight(config->readDoubleNumEntry("GridYSnap", 10.0));
-        setGrid(d);
-        QString defMS = "mm";
-        
-        if(KGlobal::locale()->measureSystem() == KLocale::Imperial) {
-          defMS = "in";
-        }
-        
-        m_units = KoUnit::unit(config->readEntry("Unit", defMS));
-    }
 }
 
 bool KivioDoc::removeSpawnerSet( KivioStencilSpawnerSet *pSet )

@@ -25,6 +25,7 @@
 #include <kapplication.h>
 #include <kmainwindow.h>
 #include "kivio_grid_data.h"
+#include "kivio_config.h"
 
 KIvioDocIface::KIvioDocIface( KivioDoc *doc_ )
     : KoDocumentIface( doc_ )
@@ -50,9 +51,7 @@ void KIvioDocIface::saveConfig()
 
 void KIvioDocIface::setShowGrid( bool b )
 {
-    KivioGridData d = doc->grid();
-    d.isShow = b;
-    doc->setGrid(d);
+    Kivio::Config::setShowGrid(b);
     doc->updateButton();
     doc->setModified( true );
 }
@@ -75,9 +74,7 @@ void KIvioDocIface::setUndoRedoLimit(int val)
 
 void KIvioDocIface::snapToGrid( bool b )
 {
-    KivioGridData d = doc->grid();
-    d.isSnap = b;
-    doc->setGrid(d);
+    Kivio::Config::setSnapGrid(b);
     doc->updateButton();
     doc->setModified( true );
 }

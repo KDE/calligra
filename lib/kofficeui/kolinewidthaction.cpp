@@ -44,41 +44,36 @@ class KoLineWidthAction::KoLineWidthActionPrivate
   public:
     KoLineWidthActionPrivate()
     {
-      m_popup = new KPopupMenu(0L,"KoLineWidthAction::popup");
       m_currentIndex = 0;
       m_currentWidth = 1.0;
       m_unit = KoUnit::U_PT;
     }
-
+    
     ~KoLineWidthActionPrivate()
     {
-      delete m_popup;
-      m_popup = 0;
     }
-
-    KPopupMenu* m_popup;
+    
     double m_currentWidth;
     int m_currentIndex;
     KoUnit::Unit m_unit;
 };
 
 KoLineWidthAction::KoLineWidthAction(const QString &text, const QString& icon,
-  QObject* parent, const char* name) : KActionMenu(text, icon, parent, name)
+  QObject* parent, const char* name) : KoSelectAction(text, icon, parent, name)
 {
   d = new KoLineWidthActionPrivate;
-
+  
   createMenu();
 }
 
 KoLineWidthAction::KoLineWidthAction(const QString &text, const QString& icon, const QObject* receiver,
-  const char* slot, QObject* parent, const char* name) : KActionMenu(text, icon, parent, name)
+  const char* slot, QObject* parent, const char* name) : KoSelectAction(text, icon, parent, name)
 {
   d = new KoLineWidthActionPrivate;
-
+  
   createMenu();
-
+  
   connect(this, SIGNAL(newLineWidth(double)), receiver, slot);
-  connect(popupMenu(), SIGNAL(activated(int)), this, SLOT(execute(int)));
 }
 
 KoLineWidthAction::~KoLineWidthAction()
@@ -106,105 +101,15 @@ void KoLineWidthAction::createMenu()
     pix.setMask(mask);
     popup->insertItem(pix,cindex++);
   }
-
+  
   popup->insertSeparator(cindex++);
   popup->insertItem(i18n("&Custom..."), cindex++);
-}
-
-KPopupMenu* KoLineWidthAction::popupMenu() const
-{
-  return d->m_popup;
-}
-
-void KoLineWidthAction::popup(const QPoint& global)
-{
-  popupMenu()->popup(global);
-}
-
-int KoLineWidthAction::plug(QWidget* widget, int index)
-{
-  // This function is copied from KActionMenu::plug
-  if (kapp && !kapp->authorizeKAction(name()))
-    return -1;
-  kdDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
-  if ( widget->inherits("QPopupMenu") )
-  {
-    QPopupMenu* menu = static_cast<QPopupMenu*>( widget );
-    int id;
-
-    if ( hasIconSet() )
-      id = menu->insertItem( iconSet(), text(), popupMenu(), -1, index );
-    else
-      id = menu->insertItem( kapp->iconLoader()->loadIcon(icon(), KIcon::Small),
-        text(), popupMenu(), -1, index );
-
-    if ( !isEnabled() )
-      menu->setItemEnabled( id, false );
-
-    addContainer( menu, id );
-    connect( menu, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-
-    return containerCount() - 1;
-  }
-  else if ( widget->inherits( "KToolBar" ) )
-  {
-    KToolBar *bar = static_cast<KToolBar *>( widget );
-
-    int id_ = KAction::getToolButtonID();
-
-    if ( icon().isEmpty() && !iconSet().isNull() )
-      bar->insertButton( iconSet().pixmap(), id_, SIGNAL( clicked() ), this,
-                          SLOT( slotActivated() ), isEnabled(), plainText(),
-                          index );
-    else
-    {
-      KInstance *instance;
-
-      if ( m_parentCollection )
-        instance = m_parentCollection->instance();
-      else
-        instance = KGlobal::instance();
-
-      bar->insertButton( icon(), id_, SIGNAL( clicked() ), this,
-                          SLOT( slotActivated() ), isEnabled(), plainText(),
-                          index, instance );
-    }
-
-    addContainer( bar, id_ );
-
-    if (!whatsThis().isEmpty())
-      QWhatsThis::add( bar->getButton(id_), whatsThis() );
-
-    connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-
-    bar->getButton(id_)->setPopup(popupMenu(), true );
-
-    return containerCount() - 1;
-  }
-  else if ( widget->inherits( "QMenuBar" ) )
-  {
-    QMenuBar *bar = static_cast<QMenuBar *>( widget );
-
-    int id;
-
-    id = bar->insertItem( text(), popupMenu(), -1, index );
-
-    if ( !isEnabled() )
-      bar->setItemEnabled( id, false );
-
-    addContainer( bar, id );
-    connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
-
-    return containerCount() - 1;
-  }
-
-  return -1;
 }
 
 void KoLineWidthAction::execute(int index)
 {
   bool ok = false;
-
+  
   if((index >= 0) && (index < 10)) {
     d->m_currentWidth = (double) index + 1.0;
     ok = true;
@@ -212,7 +117,7 @@ void KoLineWidthAction::execute(int index)
     KoLineWidthChooser dlg;
     dlg.setUnit(d->m_unit);
     dlg.setWidth(d->m_currentWidth);
-
+    
     if(dlg.exec()) {
       d->m_currentWidth = dlg.width();
       ok = true;
@@ -235,7 +140,7 @@ double KoLineWidthAction::currentWidth()
 void KoLineWidthAction::setCurrentWidth(double width)
 {
   d->m_currentWidth = width;
-
+  
   // Check if it is a standard width...
   for(int i = 1; i <= 10; i++) {
     if(KoUnit::toPoint(width) == (double) i) {

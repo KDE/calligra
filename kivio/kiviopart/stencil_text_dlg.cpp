@@ -17,20 +17,24 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <qlayout.h>
+#include <qtextedit.h>
+
 #include <klocale.h>
+
 #include "stencil_text_dlg.h"
 
 KivioStencilTextDlg::KivioStencilTextDlg( QWidget *p, const QString &initText )
-    : KDialogBase(p,"Kivio Stencil Text Dialog", true, i18n("Stencil Text"),
+  : KDialogBase(p,"Kivio Stencil Text Dialog", true, i18n("Stencil Text"),
                   KDialogBase::Ok | KDialogBase::Cancel)
 {
-    m_text = new QMultiLineEdit( this, "multilineedit" );
-    m_text->setText(initText);
-    setMainWidget(m_text);
+  m_text = new QTextEdit(this, "stencilTextEdit");
+  m_text->setTextFormat(RichText);
+  m_text->setText(initText);
+  setMainWidget(m_text);
 
-    m_text->setFocus();
+  m_text->setFocus();
 
-    resize(350,200);
+  resize(350,200);
 }
 
 KivioStencilTextDlg::~KivioStencilTextDlg()

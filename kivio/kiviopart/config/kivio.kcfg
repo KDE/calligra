@@ -24,7 +24,7 @@
     </entry>
     <entry name="Height" type="Double">
       <label>The height of the page.</label>
-      <default code="true">KoPageLayoutDia::standardLayout().ptWidth</default>
+      <default code="true">KoPageLayoutDia::standardLayout().ptHeight</default>
     </entry>
     <entry name="BorderTop" type="Double">
       <label>The size of the border at the top of the page.</label>

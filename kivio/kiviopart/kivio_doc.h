@@ -127,8 +127,7 @@ class KivioDoc : public KoDocument
 
     KoUnit::Unit units()const { return KoUnit::unit(Kivio::Config::unit()); }
 
-    KivioGridData grid() { return gridData; }
-    void setGrid(KivioGridData g) { gridData = g; emit sig_updateGrid();}
+    KivioGridData grid() { return Kivio::Config::grid(); }
 
     ViewItemList* viewItems()const { return viewItemList; }
 

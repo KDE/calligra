@@ -39,6 +39,9 @@
 #include <qpainter.h>
 #include <qbrush.h>
 #include <qcolor.h>
+#include <qsimplerichtext.h>
+#include <qpalette.h>
+#include <qrect.h>
 #include <kdebug.h>
 #include <koGlobal.h>
 #include <math.h>
@@ -1289,7 +1292,6 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
 {
   double defWidth = m_pSpawner->defWidth();
   double defHeight = m_pSpawner->defHeight();
-  int _x, _y, _w, _h;
   KivioShapeData *pShapeData = pShape->shapeData();
   KivioPoint *pPosition = pShapeData->position();
   KivioPoint *pDimensions = pShapeData->dimensions();
@@ -1301,20 +1303,31 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
     return;
   }
 
-  _x = zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
-  _y = zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
-  _w = zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
-  _h = zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
+  int _x = zoomHandler->zoomItX((pPosition->x() / defWidth) * m_w);
+  int _y = zoomHandler->zoomItY((pPosition->y() / defHeight) * m_h);
+  int _w = zoomHandler->zoomItX((pDimensions->x() / defWidth) * m_w) + 1;
+  int _h = zoomHandler->zoomItY((pDimensions->y() / defHeight) * m_h) + 1;
 
 
-  QFont f = pShapeData->textFont();
+  /*QFont f = pShapeData->textFont();
   f.setPointSizeFloat(f.pointSizeFloat() * (((float)zoomHandler->zoom()) / 100.0));
   painter->setFont( f );
   painter->setTextColor( pShapeData->textColor() );
 
 
   int tf = pShapeData->vTextAlign() | pShapeData->hTextAlign();
-  painter->drawText( _x, _y, _w, _h, tf | Qt::WordBreak, pShapeData->text() );
+  painter->drawText( _x, _y, _w, _h, tf | Qt::WordBreak, pShapeData->text() );*/
+  QSimpleRichText richText(pShapeData->text(), pShapeData->textFont());
+  richText.setWidth(_w);
+  int hdiff = _h - richText.height();
+  
+  if((hdiff > 1) && pShapeData->vTextAlign() == Qt::AlignVCenter) {
+    _y += hdiff / 2;
+  } else if((hdiff > 1) && pShapeData->vTextAlign() == Qt::AlignBottom) {
+    _y += hdiff;
+  }
+
+  richText.draw(static_cast<KivioScreenPainter*>(painter)->painter(), _x, _y, QRect(0, 0, _w, _h), QColorGroup());
 }
 
 

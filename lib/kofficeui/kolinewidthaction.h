@@ -20,15 +20,12 @@
 #ifndef KOLINEWIDTHACTION_H
 #define KOLINEWIDTHACTION_H
 
-#include <kaction.h>
 #include <kdialogbase.h>
 
 #include <koUnit.h>
+#include <koselectaction.h>
 
-class KPopupMenu;
-class QPoint;
-
-class KoLineWidthAction : public KActionMenu
+class KoLineWidthAction : public KoSelectAction
 {
   Q_OBJECT
   public:
@@ -36,11 +33,6 @@ class KoLineWidthAction : public KActionMenu
     KoLineWidthAction(const QString& text, const QString& icon, const QObject* receiver,
       const char* slot, QObject* parent, const char* name = 0);
     ~KoLineWidthAction();
-    
-    KPopupMenu* popupMenu() const;
-    void popup(const QPoint& global);
-  
-    virtual int plug(QWidget* widget, int index = -1);
     
     double currentWidth();
     

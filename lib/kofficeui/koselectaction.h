@@ -16,27 +16,43 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+#ifndef KOSELECTACTION_H
+#define KOSELECTACTION_H
 
-#ifndef KOLINESTYLEACTION_H
-#define KOLINESTYLEACTION_H
+#include <kaction.h>
 
-#include "koselectaction.h"
+class KPopupMenu;
+class QPoint;
 
-class KoLineStyleAction : public KoSelectAction
+class KoSelectAction : public KAction
 {
   Q_OBJECT
   public:
-    KoLineStyleAction(const QString& text, const QString& icon, QObject* parent = 0, const char* name = 0);
-    KoLineStyleAction(const QString& text, const QString& icon, const QObject* receiver,
+    KoSelectAction(const QString& text, const QString& icon, QObject* parent = 0, const char* name = 0);
+    KoSelectAction(const QString& text, const QString& icon, const QObject* receiver,
       const char* slot, QObject* parent, const char* name = 0);
-    ~KoLineStyleAction();
-    
-  protected:
-    void createMenu();
+    ~KoSelectAction();
+
+    KPopupMenu* popupMenu() const;
+    void popup(const QPoint& global);
   
+    virtual int plug(QWidget* widget, int index = -1);
+    
+    virtual int currentSelection();
+  
+  signals:
+    /** Emited when the selection changed */
+    void selectionChanged(int);
+
+  public slots:
+    virtual void setCurrentSelection(int index);
+  
+  protected slots:
+    virtual void execute(int index);
+        
   private:
-    class KoLineStyleActionPrivate;
-    KoLineStyleActionPrivate* d;
+    class KoSelectActionPrivate;
+    KoSelectActionPrivate* d;
 };
 
 #endif

@@ -21,16 +21,15 @@
 
 #include <kdialogbase.h>
 
-#include <qmultilineedit.h>
+class QTextEdit;
 
 class KivioStencilTextDlg : public KDialogBase
 {
-Q_OBJECT
+  Q_OBJECT
+  protected:
+    QTextEdit *m_text;
 
-protected:
-    QMultiLineEdit *m_text;
-
-public:
+  public:
     KivioStencilTextDlg( QWidget *, const QString & );
     virtual ~KivioStencilTextDlg();
 
