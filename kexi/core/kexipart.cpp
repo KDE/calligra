@@ -52,7 +52,7 @@ void Part::createGUIClient(KexiMainWindow *win)
 		m_guiClient = new GUIClient(win, this, false);
 		//default actions for part's gui client:
 		KAction *act = new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 
-		SLOT(create()), this, (info()->objectName()+"part_create").latin1());
+			SLOT(slotCreate()), this, (info()->objectName()+"part_create").latin1());
 		act->plug( win->findPopupMenu("create") );
 //		new KAction(m_names["instance"]+"...", info()->itemIcon(), 0, this, 
 //		SLOT(create()), m_guiClient->actionCollection(), (info()->objectName()+"part_create").latin1());
@@ -117,6 +117,10 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, const KexiPart::Item &it
 	return dlg;
 }
 
+void Part::slotCreate()
+{
+	emit newObjectRequest( m_info );
+}
 
 //-------------------------------------------------------------------------
 

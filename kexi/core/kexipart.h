@@ -72,6 +72,13 @@ class KEXICORE_EXPORT Part : public QObject
 		inline GUIClient *instanceGuiClient() const { return m_instanceGuiClient; }
 
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
+
+	signals: 
+		void newObjectRequest( KexiPart::Info *info );
+
+	protected slots:
+		void slotCreate();
+
 	protected:
 //		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 

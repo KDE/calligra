@@ -664,6 +664,9 @@ KexiMainWindow::initNavigator()
 
 void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
 {
+	if (!p)
+		return;
+	connect(p, SIGNAL(newObjectRequest(KexiPart::Info*)), this, SLOT(newObject(KexiPart::Info*)));
 	p->createGUIClient(this); //new KexiPart::GUIClient(this, p, p->instanceName());
 }
 
