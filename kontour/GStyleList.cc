@@ -47,6 +47,13 @@ GStyleList::GStyleList(const QDomElement &sl)
   mStyle = 0L;
 }
 
+GStyleList::~GStyleList()
+{
+    list.setAutoDelete(true);
+    list.clear();
+    mStyle= 0L;
+}
+
 QDomElement GStyleList::writeToXml(QDomDocument &document)
 {
   QDomElement sl = document.createElement("stylelist");

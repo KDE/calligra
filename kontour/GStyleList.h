@@ -36,6 +36,7 @@ class GStyleList
 {
 public:
   GStyleList();
+    ~GStyleList();
   GStyleList(const QDomElement &sl);
 
   QDomElement writeToXml(QDomDocument &document);
