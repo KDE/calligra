@@ -667,47 +667,54 @@ KexiPropertyEditor::slotPropertyChanged(KexiPropertyBuffer &buf,KexiProperty &pr
 bool
 KexiPropertyEditor::handleKeyPress( QKeyEvent* ev )
 {
-	if (ev->state()==NoButton 
-		&& (ev->key()==Key_Up || ev->key()==Key_Down || ev->key()==Key_Home || ev->key()==Key_End))
-	{
-		//selection moving
-		QListViewItem *item = 0; //= selectedItem(); // itemAt(mapToParent(QPoint(2,2)));
-	
-		if(ev->key()==Key_Up) {
-			//find prev visible
-			item = selectedItem() ? selectedItem()->itemAbove() : 0;
-			while (item && (!item->isSelectable() || !item->isVisible()))
-				item = item->itemAbove();
-		}
-		else if(ev->key()==Key_Down) {
-			//find next visible
-			item = selectedItem() ? selectedItem()->itemBelow() : 0;
-			while (item && (!item->isSelectable() || !item->isVisible()))
-				item = item->itemBelow();
-		}
-		else if(ev->key()==Key_Home) {
-			//find 1st visible
-			item = firstChild();
-			while (item && (!item->isSelectable() || !item->isVisible()))
-				item = item->itemBelow();
-		}
-		else if(ev->key()==Key_End) {
-			//find last visible
-			item = selectedItem();
-			QListViewItem *lastVisible = item;
-			while (item) { // && (!item->isSelectable() || !item->isVisible()))
-				item = item->itemBelow();
-				if (item && item->isSelectable() && item->isVisible())
-					lastVisible = item;
-			}
-			item = lastVisible;
-		}
-		if(item) {
-			ev->accept();
-			ensureItemVisible(item);
-			setSelected(item, true);
+	const int k = ev->key();
+	const Qt::ButtonState s = ev->state();
+
+	//selection moving
+	QListViewItem *item = 0;
+
+	if ((s==NoButton && k==Key_Up) || k==Key_BackTab) {
+		//find prev visible
+		item = selectedItem() ? selectedItem()->itemAbove() : 0;
+		while (item && (!item->isSelectable() || !item->isVisible()))
+			item = item->itemAbove();
+		if (!item)
 			return true;
+	}
+	else if (s==NoButton && (k==Key_Down || k==Key_Tab)) {
+		//find next visible
+		item = selectedItem() ? selectedItem()->itemBelow() : 0;
+		while (item && (!item->isSelectable() || !item->isVisible()))
+			item = item->itemBelow();
+		if (!item)
+			return true;
+	}
+	else if(s==NoButton && k==Key_Home) {
+		if (m_currentEditor && m_currentEditor->hasFocus())
+			return false;
+		//find 1st visible
+		item = firstChild();
+		while (item && (!item->isSelectable() || !item->isVisible()))
+			item = item->itemBelow();
+	}
+	else if(s==NoButton && k==Key_End) {
+		if (m_currentEditor && m_currentEditor->hasFocus())
+			return false;
+		//find last visible
+		item = selectedItem();
+		QListViewItem *lastVisible = item;
+		while (item) { // && (!item->isSelectable() || !item->isVisible()))
+			item = item->itemBelow();
+			if (item && item->isSelectable() && item->isVisible())
+				lastVisible = item;
 		}
+		item = lastVisible;
+	}
+	if(item) {
+		ev->accept();
+		ensureItemVisible(item);
+		setSelected(item, true);
+		return true;
 	}
 	return false;
 }
