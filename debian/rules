@@ -87,7 +87,7 @@ binary-indep: build install
 	dh_md5sums -pkoffice-common
 	dh_builddeb -pkoffice-common
 	dh_md5sums -ptask-koffice
-	dh_builddeb -pkoffice
+	dh_builddeb -ptask-koffice
 
 
 binary-arch: build install binary-indep
@@ -99,8 +99,8 @@ binary-arch: build install binary-indep
 	for i in `cat debian/undocumented.in | grep -v "#"`; do \
 		echo "$$i.1" >> debian/undocumented ; \
 	done
-	list=`cd debian/tmp && find ./ -type l -name "lib*.so" | sed -e 's#^./##'` ;\
 	dh_undocumented
+	list=`cd debian/tmp && find ./ -type l -name "lib*.so" | sed -e 's#^./##'` ;\
 	dh_movefiles -pkoffice-dev $$list $(kde_libdir)/*.a $(kde_includedir)
 	dh_movefiles -pkchart $(kde_bindir)/kchart usr/share/apps/kchart/* \
 		usr/share/applnk/Office/kchart.desktop \
@@ -125,7 +125,7 @@ binary-arch: build install binary-indep
 		usr/share/doc/kde/HTML/en/kspread/*  \
 		usr/share/doc/koffice/kspread/* \
 		usr/share/applnk/Office/kspread.desktop \
-		usr/share/mimelnk/application/x-kspread.desktop
+		usr/share/mimelnk/application/x-kspread.desktop \
 		usr/share/man/man1/kspread*
 	dh_movefiles -pkword $(kde_bindir)/kword \
 		usr/share/apps/kword/* \
