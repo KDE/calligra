@@ -778,6 +778,7 @@ void KWView::refreshCustomMenu()
     actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
                                         this, SLOT( editCustomVars() ),
                                         actionCollection(), "edit_customvars" );
+    actionEditCustomVars->setEnabled(!lst.isEmpty());
     actionInsertCustom->insert( actionEditCustomVars );
 }
 
