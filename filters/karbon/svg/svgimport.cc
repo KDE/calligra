@@ -28,6 +28,7 @@
 #include <shapes/vpolygon.h>
 #include <core/vsegment.h>
 #include <core/vtext.h>
+#include <core/vglobal.h>
 #include <qcolor.h>
 #include <qfile.h>
 #include <qregexp.h>
@@ -867,8 +868,6 @@ SvgImport::parsePath( VComposite *obj, const QString &s )
 	}
 }
 
-const double deg2rad = 0.017453292519943295769; // pi/180
-
 QWMatrix
 SvgImport::parseTransform( const QString &transform )
 {
@@ -919,11 +918,11 @@ SvgImport::parseTransform( const QString &transform )
 				result.scale(params[0].toFloat(), params[0].toFloat());
 		}
 		else if(subtransform[0] == "skewx")
-			result.shear(tan(params[0].toFloat() * deg2rad), 0.0F);
+			result.shear(tan(params[0].toFloat() * VGlobal::pi_180), 0.0F);
 		else if(subtransform[0] == "skewy")
-			result.shear(tan(params[0].toFloat() * deg2rad), 0.0F);
+			result.shear(tan(params[0].toFloat() * VGlobal::pi_180), 0.0F);
 		else if(subtransform[0] == "skewy")
-			result.shear(0.0F, tan(params[0].toFloat() * deg2rad));
+			result.shear(0.0F, tan(params[0].toFloat() * VGlobal::pi_180));
 		else if(subtransform[0] == "matrix")
 		{
 			if(params.count() >= 6)
