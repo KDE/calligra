@@ -54,6 +54,11 @@ KexiDialogBase* Part::execute(KexiMainWindow *win, const KexiPart::Item &item)
 	dlg->resize(dlg->sizeHint());
 	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
 
+//js TODO: apply settings for caption displaying menthod; there can be option for
+//- displaying item.caption() as caption, if not empty, without instanceName
+//- displaying the same as above in tabCaption (or not)
+	dlg->setCaption( QString("%1 : %2").arg(item.name()).arg(instanceName()) );
+	dlg->setTabCaption( dlg->caption() );
 	dlg->setIcon( SmallIcon( info()->itemIcon() ) );
 	dlg->setDocID(item.identifier());
 	dlg->registerDialog();
