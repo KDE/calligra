@@ -2093,7 +2093,7 @@ void KPresenterView::objectSelectedChanged()
     actionTextBold->setEnabled(isText);
     actionTextItalic->setEnabled(isText);
     actionTextUnderline->setEnabled(isText);
-    actionEditFind->setEnabled(isText);
+    actionEditFind->setEnabled(isText && page->kTxtObj());
 
     state=state || isText;
     actionEditCopy->setEnabled(state);
