@@ -9,5 +9,5 @@
          the version.h file and then comparing it to a minimum 'required' 
          version, passed as parameter.
 
-	* configure.in: Added parameter for KDE_CHECK_MICO. Current is 2.0.6.
+	* configure.in: Added parameter for KDE_CHECK_MICO. Current is 2.2.6.
 
