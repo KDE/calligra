@@ -101,6 +101,10 @@ Wishlist items
 #40037: cell default format should be definend
 #40388: unable to insert an image in a Kspread document
 
+Others bugs not in BT system (Report by - taken by):
+- Crash in open/save dialog when you try to create a directory          (Philipp - open)
+- Crash in print preview, when you make second preview                  (Philipp - Philipp)
+
 
 Other things: (please add the things you are working on!)
 
@@ -137,9 +141,12 @@ Other things: (please add the things you are working on!)
 Philipp
 =======
 
-- printing enhancements (show real page borders, fix preview, printing headers (Philipp, haven't started yet)
+- printing enhancements (show real page borders, fix preview, printing headers      (Philipp, haven't started yet)
         on each page, printing a selection only, ...)
 - Filter, Autofilter                                             (Philipp, but will take long, haven't started yet)
+- Performance improvements at end of ranges - last column/row    (Philipp, started)
+- Support "unlimited" columns/rows,
+  unlimited means a reasonable defined value                     (Philipp, concept finished, will include after beta1)
 
 
 Norbert
