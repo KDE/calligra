@@ -421,8 +421,20 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
             case 4: // textbox
                 appendTextbox( doccontent, o, drawPage );
                 break;
+            case 5:
+                kdDebug()<<" autoform not implemented\n";
+                break;
+            case 6:
+                kdDebug()<<" clipart not implemented\n";
+                break;
             case 8: // pie, chord, arc
                 appendEllipse( doccontent, o, drawPage, true );
+                break;
+            case 9:
+                kdDebug()<<" group not implemented \n";
+                break;
+            case 11:
+                kdDebug()<<" free hand not implemented\n";
                 break;
             case 12: // polyline
                 appendPolyline( doccontent, o, drawPage );
@@ -673,7 +685,6 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
         QDomElement point = source.namedItem( "POINTS" ).toElement();
         if ( !point.isNull() ) {
             QDomElement elemPoint = point.firstChild().toElement();
-            unsigned int index = 0;
             QString listOfPoint;
             int maxX=0;
             int maxY=0;
