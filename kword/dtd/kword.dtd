@@ -1131,6 +1131,30 @@ don't put a </?xml...> at the end of the file!).
 <!ATTLIST MAILMERGE
     name   CDATA #REQUIRED>
     
+
+<!--
+  The document-global MAILMERGE settings.
+  Commented out since it conflicts with the other <MAILMERGE> tag,
+  but included for documentation purposes.
+  
+<!ELEMENT MAILMERGE
+    (PLUGIN, DATASOURCE)>
+  The plugin being used. library is the name of the lib, like "kwmailmerge_qtsqldb_power"
+<!ELEMENT PLUGIN
+    EMPTY>
+<!ATTLIST PLUGIN
+   library CDATA #REQUIRED>
+<!ELEMENT DATASOURCE
+    [... depends on the plugin...]>
+For the QtSQL-power-plugin, the contents of DATASOURCE is
+ (DEFINITION,SAMPLERECORD)
+ DEFINITION is (DATABASE,QUERY)
+ DATABASE has port, driver, username, databasename, hostname attributes.
+ QUERY has a value attribute (containing the SQL query)
+ SAMPLERECORD is (FIELD*)
+ FIELD has a name attribute.
+-->
+
 <!--    A "field" variable (property of the document)
         subtype... Field subtype:
                    0... Filename
