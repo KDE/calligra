@@ -54,16 +54,13 @@ class VToolOptionsDocker;
 class VClipartTool;
 class VEllipseTool;
 class VFill;
-class VFlattenDlg;
 class VGradientTool;
-class VInsertKnotsDlg;
 class VPainterFactory;
 class VPatternTool;
 class VPolygonTool;
 class VPolylineTool;
 class VRectangleTool;
 class VRotateTool;
-class VRoundCornersDlg;
 class VRoundRectTool;
 class VScaleTool;
 class VSelectNodesTool;
@@ -85,8 +82,6 @@ class VTextTool;
 
 class VTool;
 class VToolBox;
-class VWhirlPinchDlg;
-
 
 class KarbonView : public KoView, public KXMLGUIBuilder
 {
@@ -175,12 +170,6 @@ public slots:
 
 	void setLineWidth();
 	void selectionChanged();
-
-	// Path.
-	void pathInsertKnots();
-	void pathFlatten();
-	void pathRoundCorners();
-	void pathWhirlPinch();
 
 protected slots:
 	// Object related operations.
@@ -293,12 +282,6 @@ private:
 	KAction* m_configureAction;
 	
 	KoContextHelpAction* m_contextHelpAction;
-
-	// dialogs:
-	VInsertKnotsDlg* m_insertKnotsDlg;
-	VFlattenDlg* m_flattenDlg;
-	VRoundCornersDlg* m_roundCornersDlg;
-	VWhirlPinchDlg* m_whirlPinchDlg;
 
 	//dockers
 	VColorDocker* m_ColorManager;

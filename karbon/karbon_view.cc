@@ -69,23 +69,16 @@
 #include "vcleanupcmd.h"
 #include "vdeletecmd.h"
 #include "vfillcmd.h"
-#include "vflattencmd.h"
 #include "vgroupcmd.h"
 #include "vungroupcmd.h"
 #include "vzordercmd.h"
-#include "vinsertknotscmd.h"
-#include "vroundcornerscmd.h"
 #include "vstrokecmd.h"
-#include "vwhirlpinchcmd.h"
 
 // Dialogs.
 #include "vconfiguredlg.h"
 #include "vfilldlg.h"
-#include "vflattendlg.h"
 #include "vinsertknotsdlg.h"
-#include "vroundcornersdlg.h"
 #include "vstrokedlg.h"
-#include "vwhirlpinchdlg.h"
 
 // Dockers.
 #include "vcolordocker.h"
@@ -129,23 +122,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_dcop = 0L;
 
 	dcopObject(); // build it
-
-	if( shell() )
-	{
-		// dialogs:
-		m_insertKnotsDlg = new VInsertKnotsDlg();
-
-		m_flattenDlg = new VFlattenDlg();
-		m_flattenDlg->setFlatness( 0.2 );
-
-		m_roundCornersDlg = new VRoundCornersDlg();
-		m_roundCornersDlg->setRadius( 10.0 );
-
-		m_whirlPinchDlg = new VWhirlPinchDlg();
-		m_whirlPinchDlg->setAngle( 20.0 );
-		m_whirlPinchDlg->setPinch( 0.0 );
-		m_whirlPinchDlg->setRadius( 100.0 );
-	}
 
 	// tools:
 	m_selectTool = new VSelectTool( this );
@@ -229,11 +205,6 @@ KarbonView::~KarbonView()
 
 	if( shell() )
 	{
-		delete( m_insertKnotsDlg );
-		delete( m_flattenDlg );
-		delete( m_roundCornersDlg );
-		delete( m_whirlPinchDlg );
-
 		delete( m_ColorManager );
 		delete( m_strokeDocker );
 		delete( m_TransformDocker );
@@ -880,50 +851,6 @@ KarbonView::patternTool()
 }
 
 void
-KarbonView::pathInsertKnots()
-{
-	if( m_insertKnotsDlg->exec() )
-	{
-		part()->addCommand( new VInsertKnotsCmd(
-								 &part()->document(), m_insertKnotsDlg->knots() ), true );
-	}
-}
-
-void
-KarbonView::pathFlatten()
-{
-	if( m_flattenDlg->exec() )
-	{
-		part()->addCommand( new VFlattenCmd(
-								 &part()->document(), m_flattenDlg->flatness() ), true );
-	}
-}
-
-void
-KarbonView::pathRoundCorners()
-{
-	if( m_roundCornersDlg->exec() )
-	{
-		part()->addCommand( new VRoundCornersCmd(
-								 &part()->document(), m_roundCornersDlg->radius() ), true );
-	}
-}
-
-void
-KarbonView::pathWhirlPinch()
-{
-	if( m_whirlPinchDlg->exec() )
-	{
-		part()->addCommand( new VWhirlPinchCmd(
-								 &part()->document(),
-								 m_whirlPinchDlg->angle(),
-								 m_whirlPinchDlg->pinch(),
-								 m_whirlPinchDlg->radius() ), true );
-	}
-}
-
-
-void
 KarbonView::viewModeChanged()
 {
 	canvasWidget()->pixmap()->fill();
@@ -1176,21 +1103,6 @@ KarbonView::initActions()
 	//	actionCollection(), "setTextColor" );
 	//connect( m_setTextColor, SIGNAL( activated() ), SLOT( setTextColor() ) );
 	// text <-----
-
-	// path ----->
-	new KAction(
-		i18n( "&Insert Knots" ), 0, 0, this,
-		SLOT( pathInsertKnots() ), actionCollection(), "path_insert_knots" );
-	new KAction(
-		i18n( "&Flatten" ), 0, 0, this,
-		SLOT( pathFlatten() ), actionCollection(), "path_flatten" );
-	new KAction(
-		i18n( "&Round Corners" ), 0, 0, this,
-		SLOT( pathRoundCorners() ), actionCollection(), "path_round_corners" );
-	new KAction(
-		i18n( "&Whirl/Pinch" ), 0, 0, this,
-		SLOT( pathWhirlPinch() ), actionCollection(), "path_whirlpinch" );
-	// path <-----
 
 	// view ----->
 	m_viewAction = new KSelectAction(

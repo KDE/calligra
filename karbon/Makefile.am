@@ -10,7 +10,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(srcdir)/widgets \
 	$(all_includes)
 
-SUBDIRS = core shapes widgets dialogs dockers commands tools render visitors . data pics
+SUBDIRS = core shapes widgets dialogs dockers commands tools render visitors . plugins data pics
 
 bin_PROGRAMS = karbon
 

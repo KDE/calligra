@@ -40,10 +40,6 @@
 	</Menu>
 	<Menu name="path">
 		<text>&amp;Path</text>
-		<Action name="path_insert_knots"/>
-		<Action name="path_flatten"/>
-		<Action name="path_round_corners"/>
-		<Action name="path_whirlpinch"/>
 	</Menu>
 	<Menu name="view">
 		<text>&amp;View</text>
