@@ -18,7 +18,7 @@ libkformula_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 	symboltable.cc kformulamathmlread.cc \
 	kformulainputfilter.cc kformulaview.cc kformulacompatibility.cc
 
-include_HEADERS =
+include_HEADERS = kformulacontainer.h kformuladocument.h kformulaview.h
 
 libkformula_la_LDFLAGS = -version-info 3:0 -no-undefined
 libkformula_la_LIBADD  = $(LIB_KDEUI) $(all_libraries) $(KDE_RPATH)
