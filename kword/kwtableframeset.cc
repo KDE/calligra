@@ -60,6 +60,7 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
     for ( unsigned int i = 0; i < original.m_cells.count(); i++ )
     {
         Cell *cell = new Cell( this, *original.m_cells.at( i ) );
+        m_cells.append( cell );
     }
     m_doc->addFrameSet( this );
 }

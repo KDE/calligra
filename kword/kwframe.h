@@ -465,6 +465,7 @@ protected:
 
 class KWPartFrameSet : public KWFrameSet
 {
+    Q_OBJECT
 public:
     KWPartFrameSet( KWDocument *_doc, KWChild *_child );
     virtual ~KWPartFrameSet();
@@ -472,8 +473,6 @@ public:
     virtual FrameType getFrameType() { return FT_PART; }
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * );
-
-    //virtual QPicture *getPicture();
 
     void activate( QWidget *_widget );
     void deactivate();
@@ -485,16 +484,15 @@ public:
     void drawContents( QPainter * p, const QRect & crect,
                        QColorGroup &, bool onlyChanged, bool resetChanged );
 
-    //void enableDrawing( bool f ) { _enableDrawing = f; }
-
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &attributes );
 
+protected slots:
+    void slotChildChanged();
+
 protected:
     KWChild *child;
-    QPicture pic;
-
-    //bool _enableDrawing;
+    bool m_lock;
 };
 
 class KWPartFrameSetEdit : public KWFrameSetEdit

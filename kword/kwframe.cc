@@ -869,6 +869,10 @@ KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child )
     : KWFrameSet( _doc )
 {
     child = _child;
+    m_lock = false;
+    kdDebug() << "KWPartFrameSet::KWPartFrameSet" << endl;
+    connect( child, SIGNAL( changed( KoChild * ) ),
+             this, SLOT( slotChildChanged() ) );
 }
 
 /*================================================================*/
@@ -883,7 +887,7 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
     {
         if ( !child || !child->document() || frames.isEmpty() )
         {
-            //kdDebug() << "KWPartFrameSet::drawContents " << this << " aborting. child=" << child << " child->document()=" << child->document() << " frames.count()=" << frames.count() << endl;
+            kdDebug() << "KWPartFrameSet::drawContents " << this << " aborting. child=" << child << " child->document()=" << child->document() << " frames.count()=" << frames.count() << endl;
             return;
         }
         KWFrame *frame = frames.first();
@@ -894,9 +898,11 @@ void KWPartFrameSet::drawContents( QPainter * painter, const QRect & crect,
             painter->save();
             QRect r = painter->viewport();
             painter->setClipRegion( reg );
-            painter->setViewport( frame->x(), frame->y(), r.width(), r.height() );
+            painter->setViewport( kWordDocument()->zoomItX( frame->x() ), kWordDocument()->zoomItY( frame->y() ),
+                                  r.width(), r.height() );
             // painter->translate( frame->x(), frame->y() ); // messes up the clip regions
-            QRect rframe( 0, 0, frames.first()->width(), frames.first()->height() ); // Not sure if applying the zoom here works
+            QRect rframe( 0, 0, kWordDocument()->zoomItX( frames.first()->width() ),
+                          kWordDocument()->zoomItY( frames.first()->height() ) ); // Not sure if applying the zoom here works
             child->document()->paintEverything( *painter, rframe, true, 0 );
             painter->setViewport( r );
             painter->restore();
@@ -920,6 +926,8 @@ void KWPartFrameSet::activate( QWidget *_widget )
 /*================================================================*/
 void KWPartFrameSet::deactivate()
 {
+    // repaint
+    kWordDocument()->frameChanged( frames.first() );
 }
 
 /*================================================================*/
@@ -928,8 +936,12 @@ void KWPartFrameSet::updateFrames()
     if(frames.isEmpty() ) // Deleted frameset -> don't refresh
         return;
 
-    child->setGeometry( QRect( frames.at( 0 )->x(), frames.at( 0 )->y(),
-                               frames.at( 0 )->width(), frames.at( 0 )->height() ) );
+    m_lock = true; // setGeometry emits changed() !
+    QRect frect = *frames.first();
+    kdDebug() << "KWPartFrameSet::updateFrames frames.first()=" << DEBUGRECT(frect)
+              << " child set to " << DEBUGRECT( kWordDocument()->zoomRect( frect ) ) << endl;
+    child->setGeometry( kWordDocument()->zoomRect( frect ) );
+    m_lock = false;
     KWFrameSet::updateFrames();
 }
 
@@ -945,6 +957,20 @@ void KWPartFrameSet::save( QDomElement &parentElem )
 void KWPartFrameSet::load( QDomElement &attributes )
 {
     KWFrameSet::load( attributes );
+}
+
+
+void KWPartFrameSet::slotChildChanged()
+{
+    KWFrame *frame = frames.first();
+    if ( frame && !m_lock )
+    {
+        QRect r = getChild()->geometry();
+        // Make "frame" follow the child's geometry (but frame is unzoomed)
+        frame->setCoords( r.left() / kWordDocument()->zoomedResolutionX(), r.top() / kWordDocument()->zoomedResolutionY(),
+                          r.right() / kWordDocument()->zoomedResolutionX(), r.bottom() / kWordDocument()->zoomedResolutionY() );
+        kWordDocument()->frameChanged( frame );
+    }
 }
 
 KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
@@ -967,8 +993,6 @@ void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent * )
     /// ## Pretty useless since single-click does it now...
     partFrameSet()->activate( m_canvas->gui()->getView() );
 }
-
-
 
 /******************************************************************/
 /* Class: KWFormulaFrameSet                                       */
@@ -1054,6 +1078,7 @@ void KWFormulaFrameSet::deactivate()
 {
 }
 
+// ## can this be done in the constructor instead (DF) ?
 void KWFormulaFrameSet::create( QWidget */*parent*/ )
 {
     if ( formula != 0 ) {

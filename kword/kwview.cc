@@ -120,8 +120,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     setInstance( KWFactory::global() );
     setXMLFile( "kword.rc" );
 
-    QObject::connect( doc, SIGNAL( sig_insertObject( KWChild*, KWPartFrameSet* ) ),
-                      this, SLOT( slotInsertObject( KWChild*, KWPartFrameSet* ) ) );
+    //QObject::connect( doc, SIGNAL( sig_insertObject( KWChild*, KWPartFrameSet* ) ),
+    //                  this, SLOT( slotInsertObject( KWChild*, KWPartFrameSet* ) ) );
     QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
                       this, SLOT( insertPicture( const QString & ) ) );
     QObject::connect( doc, SIGNAL( sig_updateChildGeometry( KWChild* ) ),
@@ -575,10 +575,11 @@ void KWView::createKWGUI()
     KWFrameSet *frameset;
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
         frameset = doc->getFrameSet( i );
-        if ( frameset->getFrameType() == FT_PART )
+        /*if ( frameset->getFrameType() == FT_PART )
             slotInsertObject( dynamic_cast<KWPartFrameSet*>( frameset )->getChild(),
                               dynamic_cast<KWPartFrameSet*>( frameset ) );
-        else if ( frameset->getFrameType() == FT_FORMULA )
+        else */
+        if ( frameset->getFrameType() == FT_FORMULA )
             dynamic_cast<KWFormulaFrameSet*>( frameset )->create( gui->canvasWidget() );
     }
 }

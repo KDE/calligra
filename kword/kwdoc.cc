@@ -73,8 +73,8 @@ do \
 /******************************************************************/
 
 /*================================================================*/
-KWChild::KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc, int diffx, int diffy )
-    : KoDocumentChild( _wdoc, _doc, QRect( _rect.left() + diffx, _rect.top() + diffy, _rect.width(), _rect.height() ) )
+KWChild::KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc )
+    : KoDocumentChild( _wdoc, _doc, _rect )
 {
 }
 
@@ -188,9 +188,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
 //    slDataBase = new KWSerialLetterDataBase( this );
 //    slRecordNum = -1;
-
-    connect( this, SIGNAL( childChanged( KoDocumentChild * ) ),
-             this, SLOT( slotChildChanged( KoDocumentChild * ) ) );
 
     spellCheck = FALSE;
     contents = new KWContents( this );
@@ -1748,7 +1745,7 @@ void KWDocument::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, boo
 }
 
 /*================================================================*/
-void KWDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _diffx, int _diffy )
+void KWDocument::insertObject( const QRect& rect, KoDocumentEntry& _e )
 {
 
     KoDocument* doc = _e.createDoc( this );
@@ -1758,50 +1755,19 @@ void KWDocument::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _dif
         return;
     }
 
-    KWChild* ch = new KWChild( this, _rect, doc, _diffx, _diffy );
+    KWChild* ch = new KWChild( this, rect, doc );
 
     insertChild( ch );
     setModified( TRUE );
 
     KWPartFrameSet *frameset = new KWPartFrameSet( this, ch );
-    QRect r( _rect );
-    r.moveBy( _diffx, _diffy );
-    KWFrame *frame = new KWFrame(frameset, r.x(), r.y(), r.width(), r.height() );
+    KWFrame *frame = new KWFrame(frameset, rect.x(), rect.y(), rect.width(), rect.height() );
     frameset->addFrame( frame );
     addFrameSet( frameset );
 
     emit sig_insertObject( ch, frameset );
 
     frameChanged( frame ); // repaint etc.
-}
-
-/*================================================================*/
-void KWDocument::slotChildChanged( KoDocumentChild *child )
-{
-    setModified(TRUE);
-
-    // Problem: we have to find the frame that contains this child.
-    // We could do a lot better if we could connect this signal's changed() signal
-    // directly in the appropriate KWPartFrameSet.
-    // But framesets are not a QObject. Should it ?
-    // (David)
-    // They are now, so lets do it. (TZ)
-    for ( unsigned int j = 0; j < frames.count(); j++ ) {
-        if ( frames.at( j )->getFrameType() == FT_PART )
-        {
-            KWPartFrameSet *partFS = dynamic_cast<KWPartFrameSet*>( getFrameSet( j ) );
-            if ( partFS->getChild() == child )
-            {
-                KWFrame *frame = partFS->getFrame( 0 );
-                QRect r = child->geometry();
-                frame->setCoords( r.left(), r.top(), r.right(), r.bottom() );
-                break;
-            }
-        }
-    }
-
-    // ...to update the views - do we need that ?
-    //emit sig_updateChildGeometry( _child );
 }
 
 /*================================================================*/

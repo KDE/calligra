@@ -1010,7 +1010,7 @@ void KWCanvas::mrCreatePart() // mouse release, when creating part or kspread ta
 {
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
-        doc->insertObject( m_insRect, m_partEntry, contentsX(), contentsY() );
+        doc->insertObject( m_insRect, m_partEntry );
     }
     setMouseMode( MM_EDIT );
 }
@@ -1559,6 +1559,7 @@ void KWCanvas::deleteFrame( KWFrame * frame )
     case FT_PART:
         cmdName=i18n("Delete object frame");
         break;
+    case FT_TABLE:
     case FT_BASE:
         ASSERT( 0 );
         break;

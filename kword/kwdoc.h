@@ -64,7 +64,7 @@ class KSpellConfig;
 class KWChild : public KoDocumentChild
 {
 public:
-    KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc, int diffx, int diffy );
+    KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc );
     KWChild( KWDocument *_wdoc );
     ~KWChild();
 
@@ -129,7 +129,7 @@ public:
 
     virtual void addShell( KoMainWindow *shell );
 
-    virtual void insertObject( const QRect& _rect, KoDocumentEntry& _e, int diffx, int diffy );
+    virtual void insertObject( const QRect& _rect, KoDocumentEntry& _e );
     void setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf );
 
     void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf );
@@ -399,7 +399,7 @@ public:
     /** calls layout() on all framesets  */
     void layout();
 
-    /** call by undo/redo frame border => update all button border frame **/ 
+    /** call by undo/redo frame border => update all button border frame **/
     void refreshFrameBorderButton();
 
     bool getViewFormattingChars() { return _viewFormattingChars; }
@@ -429,7 +429,6 @@ public slots:
 protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted();
-    void slotChildChanged( KoDocumentChild * child );
 
 protected:
     KoView* createViewInstance( QWidget* parent, const char* name );
