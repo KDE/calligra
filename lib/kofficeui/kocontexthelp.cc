@@ -423,7 +423,7 @@ void KoContextHelpPopup::keyReleaseEvent( QKeyEvent* e )
 KoContextHelpAction::KoContextHelpAction( KActionCollection* parent, QWidget* popupParent )
 		: KToggleAction( i18n( "Context help" ), BarIcon( "help" ), KShortcut( "CTRL+SHIFT+F1" ), 0, 0, parent, "help_context" )
 {
-	m_popup = new KoContextHelpPopup( popupParent );
+	m_popup = new KoContextHelpPopup( 0L );
 	connect( m_popup, SIGNAL( wantsToBeClosed() ), this, SLOT( closePopup() ) );
 	connect( this, SIGNAL( toggled( bool ) ), m_popup, SLOT( setShown( bool ) ) );
 } // KoContextHelpAction::KoContextHelpAction
