@@ -358,6 +358,9 @@ bool KSpreadDoc::loadChildren( KoStore* _store )
 
 bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
+    QTime dt;
+    dt.start();
+
     emit sigProgress( 0 );
   m_bLoading = TRUE;
   m_spellListIgnoreAll.clear();
@@ -510,6 +513,9 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   emit sigProgress( 90 );
   initConfig();
   emit sigProgress(-1);
+
+   kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
+
   return true;
 }
 
