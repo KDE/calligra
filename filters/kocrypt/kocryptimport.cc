@@ -74,6 +74,17 @@
       } while(0)
 
 
+#define SHA_ERROR()  do {                                                  \
+         QApplication::setOverrideCursor(Qt::arrowCursor);                 \
+         KMessageBox::error(NULL,                                          \
+              i18n("There was an internal error verifying the file."),     \
+              i18n("Encrypted Document Import"));                          \
+         QApplication::restoreOverrideCursor();                            \
+         return false;                                                     \
+      } while(0)
+
+
+
 KoCryptImport::KoCryptImport(KoFilter *parent, const char *name) :
                              KoFilter(parent, name) {
 }
@@ -245,13 +256,15 @@ QFile outf(fileOut);
     // Empty out this remaining block that we read in
     if (remaining > 0) {
       if (remaining > fsize) {
-        sha1.process(&(p[blocksize-remaining]), fsize);
+        if (sha1.process(&(p[blocksize-remaining]), fsize) != fsize)
+           SHA_ERROR();
         rc = outf.writeBlock(&(p[blocksize-remaining]), fsize);
         WRITE_ERROR_CHECK((int)fsize);
         remaining -= fsize;
         fsize = 0;
       } else {
-        sha1.process(&(p[blocksize-remaining]), remaining);
+        if (sha1.process(&(p[blocksize-remaining]), remaining) != remaining)
+           SHA_ERROR();
         rc = outf.writeBlock(&(p[blocksize-remaining]), remaining);
         WRITE_ERROR_CHECK((int)remaining);
         fsize -= remaining;
@@ -267,14 +280,16 @@ QFile outf(fileOut);
       CRYPT_ERROR_CHECK();
 
       if (fsize >= (unsigned int)blocksize) {
-         sha1.process(p, blocksize);
+         if (sha1.process(p, blocksize) != blocksize)
+            SHA_ERROR();
          rc = outf.writeBlock(p, blocksize);
          WRITE_ERROR_CHECK(blocksize);
          fsize -= blocksize;
          remaining = 0;
          continue;
       } else {
-         sha1.process(p, fsize);
+         if (sha1.process(p, fsize) != fsize)
+            SHA_ERROR();
          rc = outf.writeBlock(p, fsize);
          WRITE_ERROR_CHECK((int)fsize);
          remaining = blocksize - fsize;

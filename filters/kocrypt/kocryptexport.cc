@@ -79,6 +79,17 @@
 
 
 
+#define SHA_ERROR()  do {                                                  \
+         QApplication::setOverrideCursor(Qt::arrowCursor);                 \
+         KMessageBox::error(NULL,                                          \
+              i18n("There was an internal error securing the file."),      \
+              i18n("Encrypted Document Export"));                          \
+         QApplication::restoreOverrideCursor();                            \
+         return false;                                                     \
+      } while(0)
+
+
+
 
 KoCryptExport::KoCryptExport(KoFilter *parent, const char *name) :
                              KoFilter(parent, name) {
@@ -213,9 +224,8 @@ int rc;
        rc = inf.readBlock(tp, blocksize - shortness);
        READ_ERROR_CHECK();
 
-       if (sha1.process(tp, rc) != rc) {
-            // FIXME: HASH ERROR
-       }
+       if (sha1.process(tp, rc) != rc)
+          SHA_ERROR();
 
        // if we ran out of data already (!?!?) append random data.
        cursize += rc;
@@ -241,7 +251,14 @@ int rc;
 
     for (;;) {
        int readsz = 4096 - (4096 % blocksize);
-       // FIXME: assert: cursize % blocksize == 0;
+       if (cursize % blocksize != 0) {
+         QApplication::setOverrideCursor(Qt::arrowCursor);
+         KMessageBox::error(NULL,
+            i18n("Internal error writing file.  Please file a bug report."),
+                                  i18n("Encrypted Document Export"));
+         QApplication::restoreOverrideCursor();
+         return false;
+       }
 
        for (int i = 0; i < cursize/blocksize; i++) {
           rc = cbc.encrypt(&(p[i*blocksize]), blocksize);
@@ -255,9 +272,8 @@ int rc;
        rc = inf.readBlock(p, readsz);
        READ_ERROR_CHECK();
 
-       if (sha1.process(p, rc) != rc) {
-            // FIXME: HASH ERROR
-       }
+       if (sha1.process(p, rc) != rc)
+          SHA_ERROR();
 
        cursize = rc;
 
