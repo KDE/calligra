@@ -6368,6 +6368,10 @@ void KWView::updateRulerInProtectContentMode()
     }
 }
 
+void KWView::deselectAllFrames()
+{
+    m_gui->canvasWidget()->selectAllFrames( false );
+}
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

@@ -2512,6 +2512,9 @@ void KWDocument::addView( KoView *_view )
 {
     m_lstViews.append( (KWView*)_view );
     KoDocument::addView( _view );
+    QPtrListIterator<KWView> it( m_lstViews );
+    for ( ; it.current() ; ++it )
+        it.current()->deselectAllFrames();
 }
 
 void KWDocument::removeView( KoView *_view )

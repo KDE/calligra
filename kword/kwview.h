@@ -177,7 +177,7 @@ public:
     void testAndCloseAllFrameSetProtectedContent();
     void updateBgSpellCheckingState();
     void updateRulerInProtectContentMode();
-
+    void deselectAllFrames();
 public slots:
     void fileStatistics();
     void editCut();
