@@ -29,6 +29,7 @@
 #include <koUnit.h>
 #include <knumvalidator.h>
 #include "kpresenter_doc.h"
+#include <kseparator.h>
 
 KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const char *name)
     : KDialogBase( parent, name , true, "", Ok | Cancel | User1, Ok, true )
@@ -44,9 +45,12 @@ KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent,KPresenterDoc * _doc,const
     m_nbCopy = new KIntNumInput( 1, page );
     m_nbCopy->setRange( 1 , 10, 1);
 
+    KSeparator *tmp=new KSeparator(page);
     lab=new QLabel(i18n("Rotation Angle:"), page);
 
     m_rotation = new KDoubleNumInput( page, "customInput" );
+
+    tmp=new KSeparator(page);
 
     lab=new QLabel(i18n("Increase X(%1):").arg(m_doc->getUnitName()), page);
     m_increaseX= new KDoubleNumInput( page );
