@@ -4394,8 +4394,18 @@ KPTextObject* KPrCanvas::kpTxtObj()
 
 void KPrCanvas::copyObjs()
 {
-    m_activePage->copyObjs();
-    m_view->kPresenterDoc()->stickyPage()->copyObjs();
+    QDomDocument doc("DOC");
+    QDomElement presenter=doc.createElement("DOC");
+    presenter.setAttribute("editor", "KPresenter");
+    presenter.setAttribute("mime", "application/x-kpresenter-selection");
+    doc.appendChild(presenter);
+    m_activePage->copyObjs(doc, presenter);
+    m_view->kPresenterDoc()->stickyPage()->copyObjs(doc, presenter);
+
+    QStoredDrag * drag = new QStoredDrag( "application/x-kpresenter-selection" );
+    drag->setEncodedData( doc.toCString() );
+    kdDebug()<<"doc.toCString() :"<<doc.toCString()<<endl;
+    QApplication::clipboard()->setData( drag );
 }
 
 /*================================================================*/

@@ -144,16 +144,10 @@ KCommand * KPrPage::deleteObjs( bool _add )
     return deleteCmd ;
 }
 
-void KPrPage::copyObjs()
+void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter)
 {
     if ( !numSelected() )
         return;
-
-    QDomDocument doc("DOC");
-    QDomElement presenter=doc.createElement("DOC");
-    presenter.setAttribute("editor", "KPresenter");
-    presenter.setAttribute("mime", "application/x-kpresenter-selection");
-    doc.appendChild(presenter);
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -162,17 +156,10 @@ void KPrPage::copyObjs()
         {
             QDomElement object=doc.createElement("OBJECT");
             object.setAttribute("type", static_cast<int>( it.current()->getType() ));
-            //kpobject->moveBy( -diffx, -diffy );
             object.appendChild(it.current()->save( doc,0 ));
             presenter.appendChild(object);
-            //kpobject->moveBy( diffx, diffy );
         }
     }
-
-    QStoredDrag * drag = new QStoredDrag( "application/x-kpresenter-selection" );
-    drag->setEncodedData( doc.toCString() );
-    kdDebug()<<"doc.toCString() :"<<doc.toCString()<<endl;
-    QApplication::clipboard()->setData( drag );
 }
 
 void KPrPage::pasteObjs( const QByteArray & data )

@@ -130,7 +130,8 @@ void KPresenterPageIface::lowerObjs()
 
 void KPresenterPageIface::copyObjs()
 {
-    m_page->copyObjs();
+    //FIXME
+    //m_page->copyObjs();
 }
 
 void KPresenterPageIface::alignObjsLeft()

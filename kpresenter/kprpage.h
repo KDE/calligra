@@ -90,7 +90,8 @@ public:
     void pasteObjs( const QByteArray & data );
     KCommand * replaceObjs( bool createUndoRedo, unsigned int _orastX,unsigned int _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol);
 
-    void copyObjs();
+    void copyObjs(QDomDocument &doc, QDomElement &presenter);
+
     KPObject* getSelectedObj();
     void groupObjects();
     void ungroupObjects();
