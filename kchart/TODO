@@ -76,7 +76,7 @@ Item								   Prio Status
   + What is kchartBarConfigDialog.{h,cc}? Remove it if possible.      1 DONE
 
 * Toolbars
-  + Separate toolbar for chart types (separate from config, etc).     2 ----
+  + Separate toolbar for chart types (separate from config, etc).     2 DONE
   + Reorder chart types into a more logical order.		      1	DONE
 
 * Icons

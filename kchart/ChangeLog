@@ -1,3 +1,9 @@
+2005-03-17  Inge Wallin  <inge@lysator.liu.se>
+
+	Separate the toolbar for chart types from the actions.
+	* kchart.rc (Actions): Renamed from Chart
+	(Types): New toolbar.
+	
 2005-03-15  Fredrik Edemar <f_edemar@linux.se>
 
 	Changes in the data editor:

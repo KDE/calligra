@@ -19,11 +19,12 @@
   <Separator group="settings_show"/>
  </Menu>
 </MenuBar>
-<ToolBar name="KChartToolBar"><Text>Chart</Text>
+<ToolBar name="KChartToolBar"><Text>Actions</Text>
  <Action name="edit"/>
  <Action name="config"/>
  <Action name="wizard"/>
- <Separator />
+</ToolBar>
+<ToolBar name="KChartTypes"><Text>Types</Text>
  <Action name="barschart"/>
  <Action name="linechart"/>
  <Action name="areaschart"/>
