@@ -1,3 +1,7 @@
+Changes between KWord 1.3.2 and 1.3.3
+=====================================
+- Fix the 3 style menus for any translation (#61007)
+
 Changes after KWord-1.3
 =======================
 - Reorganized and simplified GUI of the configuration dialog
