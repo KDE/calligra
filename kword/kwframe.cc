@@ -788,11 +788,14 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bo
     Q_ASSERT( parag );
     if ( parag )
         createAnchors( parag, index, placeHolderExists );
+
+    m_doc->updateAllFrames(); // We just became floating, so we need to be removed from "frames on top/below".
 }
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
 {
     m_anchorTextFs = textfs;
+    m_doc->updateAllFrames(); // We just became floating, so we need to be removed from "frames on top/below".
 }
 
 // Find where our anchor is ( if we are anchored ).
@@ -1049,8 +1052,10 @@ void KWFrameSet::updateFrames( int flags )
                     continue;
 
                 // Floating frames are not "on top", they are "inside".
-                if ( frameSet->isFloating() )
+                if ( frameSet->isFloating() ) {
+                    //kdDebug(32001) << "KWFrameSet::updateFrames frameset " << frameSet << " is floating" << endl;
                     continue;
+                }
 
                 //kdDebug(32001) << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
 
@@ -1679,6 +1684,7 @@ bool KWFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& point, bool borderO
 
 void KWFrameSet::setZOrder()
 {
+    //kdDebug(32001) << "KWFrameSet::setZOrder (to max) " << getName() << endl;
     QPtrListIterator<KWFrame> fit = frameIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->setZOrder( m_doc->maxZOrder( fit.current()->pageNum(m_doc) ) + 1 );

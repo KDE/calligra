@@ -235,12 +235,14 @@ KCommand * KWAnchor::deleteCommand()
 
 void KWAnchor::setDeleted( bool b )
 {
+    // Do this first, because setAnchored->updateAllFrames->isDeleted, so it must have the right value already
+    KoTextCustomItem::setDeleted( b );
+
     kdDebug() << "KWAnchor::setDeleted " << b << endl;
     if ( b )
         m_frameset->setAnchored( 0L );
     else
         m_frameset->setAnchored( static_cast<KWTextDocument *>(textDocument())->textFrameSet() );
-    KoTextCustomItem::setDeleted( b );
 }
 
 void KWAnchor::save( QDomElement &parentElem )
