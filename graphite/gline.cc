@@ -26,6 +26,49 @@
 
 #include <float.h>  // DBL_BLAH
 
+
+GLineM9r::GLineM9r(GLine *line, const Mode &mode, GraphitePart *part,
+                   GraphiteView *view, const QString &type) :
+    G1DObjectM9r(line, mode, part, view, type), m_line(line) {
+    m_line->setState(GObject::Handles);
+}
+
+GLineM9r::~GLineM9r() {
+    if(m_line->state()==GObject::Handles || m_line->state()==GObject::Rot_Handles)
+        m_line->setState(GObject::Visible);
+}
+
+bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+    // ###
+    return false;
+}
+
+bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+    // ###
+    return false;
+}
+
+bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+    // ###
+    return false;
+}
+
+bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
+    // ###
+    return false;
+}
+
+bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+    // ###
+    return false;
+}
+
+bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
+    // We don't need that one for lines... hmmm ...
+    return false;
+}
+
+
 GLine::GLine(const QPoint &a, const QPoint &b, const QString &name) : GObject(name),
                                                                       m_a(a), m_b(b) {
 }
@@ -300,8 +343,8 @@ const QRect &GLine::boundingRect() const {
     return GObject::boundingRect();
 }
 
-GObjectM9r *GLine::createM9r(GraphitePart *part, GraphiteView *view,
-                             const GObjectM9r::Mode &mode) const {
+GLineM9r *GLine::createM9r(GraphitePart *part, GraphiteView *view,
+                           const GObjectM9r::Mode &mode) const {
     // Yes, this const_cast is ugly, I know
     return new GLineM9r(const_cast<GLine*>(this), mode, part, view, i18n("Line"));
 }
@@ -354,48 +397,6 @@ void GLine::resize(const FxRect &boundingRect) {
     setBoundingRectDirty(false);
     m_a=boundingRect.topLeft();
     m_b=boundingRect.bottomRight();
-}
-
-
-GLineM9r::GLineM9r(GLine *line, const Mode &mode, GraphitePart *part,
-                   GraphiteView *view, const QString &type) :
-    G1DObjectM9r(line, mode, part, view, type), m_line(line) {
-    m_line->setState(GObject::Handles);
-}
-
-GLineM9r::~GLineM9r() {
-    if(m_line->state()==GObject::Handles || m_line->state()==GObject::Rot_Handles)
-        m_line->setState(GObject::Visible);
-}
-
-bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // ###
-    return false;
-}
-
-bool GLineM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // ###
-    return false;
-}
-
-bool GLineM9r::mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // ###
-    return false;
-}
-
-bool GLineM9r::mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
-    // ###
-    return false;
-}
-
-bool GLineM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
-    // ###
-    return false;
-}
-
-bool GLineM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
-    // We don't need that one for lines... hmmm ...
-    return false;
 }
 
 #include <gline.moc>

@@ -23,7 +23,6 @@
 #include <qlist.h>
 #include <gobject.h>
 
-
 // This is an abstract middle layer for two kinds of gourps:
 // - groups to put objects together
 // - "real" groups which have to draw sth. and therefore need real coordinates
@@ -84,35 +83,7 @@ private:
 };
 
 
-// The "real" grouping class. The abstract one is needed as a
-// common layer for two kinds of groups. (see GAbstractGroup doc)
-class GGroup : public GAbstractGroup {
-
-public:
-    GGroup(const QString &name=QString::null) : GAbstractGroup(name) {}
-    // Note: copying changes the iterator of both objects!
-    GGroup(const GGroup &rhs) : GAbstractGroup(rhs) {}
-    GGroup(const QDomElement &element);
-
-    virtual ~GGroup() {}
-
-    virtual GObject *clone() const;
-    virtual GObject *instantiate(const QDomElement &element) const;
-
-    virtual QDomElement save(QDomDocument &doc) const;
-
-    virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
-                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) const;
-
-    virtual const FxPoint origin() const;
-    virtual void setOrigin(const FxPoint &origin);
-
-    virtual void resize(const FxRect &boundingRect);
-
-private:
-    GGroup &operator=(const GGroup &rhs);
-};
-
+class GGroup;
 
 class GGroupM9r : public G2DObjectM9r {
 
@@ -135,6 +106,36 @@ private:
     GGroupM9r &operator=(GGroupM9r &rhs);
 
     GGroup *m_group;
+};
+
+
+// The "real" grouping class. The abstract one is needed as a
+// common layer for two kinds of groups. (see GAbstractGroup doc)
+class GGroup : public GAbstractGroup {
+
+public:
+    GGroup(const QString &name=QString::null) : GAbstractGroup(name) {}
+    // Note: copying changes the iterator of both objects!
+    GGroup(const GGroup &rhs) : GAbstractGroup(rhs) {}
+    GGroup(const QDomElement &element);
+
+    virtual ~GGroup() {}
+
+    virtual GGroup *clone() const;
+    virtual GGroup *instantiate(const QDomElement &element) const;
+
+    virtual QDomElement save(QDomDocument &doc) const;
+
+    virtual GGroupM9r *createM9r(GraphitePart *part, GraphiteView *view,
+                                 const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) const;
+
+    virtual const FxPoint origin() const;
+    virtual void setOrigin(const FxPoint &origin);
+
+    virtual void resize(const FxRect &boundingRect);
+
+private:
+    GGroup &operator=(const GGroup &rhs);
 };
 
 #endif // ggroup_h

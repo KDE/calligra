@@ -241,13 +241,7 @@ void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view) {
         kdWarning(37001) << "Better give me some view to work on." << endl;
         return;
     }
-    QWidget *canvas=view->canvas();
-    if(!canvas || !canvas->isA("GCanvas")) {
-        kdWarning(37001) << "Huh? What did you do behind my back?" << endl;
-        return;
-    }
-    QScrollView *scrollview=static_cast<QScrollView*>(canvas);
-    QPainter p(scrollview->viewport());
+    QPainter p(view->canvas()->viewport());
     p.setRasterOp(Qt::NotROP);
 
     if(m_mouse.haveToErase) {
@@ -255,8 +249,8 @@ void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view) {
             p.setPen(QPen(Qt::black, 0, Qt::DashLine));
         else
             p.setPen(QPen(Qt::black, 0, Qt::DotLine));
-        p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-scrollview->contentsX(),
-                   Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-scrollview->contentsY(),
+        p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-view->canvas()->contentsX(),
+                   Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-view->canvas()->contentsY(),
                    Graphite::abs(m_mouse.startSelectionX-m_mouse.oldMX),
                    Graphite::abs(m_mouse.startSelectionY-m_mouse.oldMY));
         m_mouse.haveToErase=false;
@@ -270,8 +264,8 @@ void GraphitePart::mouseMoveEvent(QMouseEvent *e, GraphiteView *view) {
             p.setPen(QPen(Qt::black, 0, Qt::DashLine));
         else
             p.setPen(QPen(Qt::black, 0, Qt::DotLine));
-        p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-scrollview->contentsX(),
-                   Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-scrollview->contentsY(),
+        p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-view->canvas()->contentsX(),
+                   Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-view->canvas()->contentsY(),
                    Graphite::abs(m_mouse.startSelectionX-m_mouse.oldMX),
                    Graphite::abs(m_mouse.startSelectionY-m_mouse.oldMY));
         m_mouse.haveToErase=true;
@@ -341,21 +335,15 @@ void GraphitePart::mouseReleaseEvent(QMouseEvent *e, GraphiteView *view) {
             kdWarning(37001) << "Better give me some view to work on." << endl;
             return;
         }
-        QWidget *canvas=view->canvas();
-        if(!canvas || !canvas->isA("GCanvas")) {
-            kdWarning(37001) << "Huh? What did you do behind my back?" << endl;
-            return;
-        }
-        QScrollView *scrollview=static_cast<QScrollView*>(canvas);
-        QPainter p(scrollview->viewport());
+        QPainter p(view->canvas()->viewport());
         p.setRasterOp(Qt::NotROP);
 
         if(m_mouse.startSelectionX>m_mouse.oldMX) // right to left selection
             p.setPen(QPen(Qt::black, 0, Qt::DashLine));
         else
             p.setPen(QPen(Qt::black, 0, Qt::DotLine));
-        p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-scrollview->contentsX(),
-                   Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-scrollview->contentsY(),
+        p.drawRect(Graphite::min(m_mouse.startSelectionX, m_mouse.oldMX)-view->canvas()->contentsX(),
+                   Graphite::min(m_mouse.startSelectionY, m_mouse.oldMY)-view->canvas()->contentsY(),
                    Graphite::abs(m_mouse.startSelectionX-m_mouse.oldMX),
                    Graphite::abs(m_mouse.startSelectionY-m_mouse.oldMY));
         m_mouse.haveToErase=false;

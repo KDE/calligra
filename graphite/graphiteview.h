@@ -38,7 +38,7 @@ public:
                  const char *name=0);
     virtual ~GraphiteView();
 
-    virtual QWidget *canvas() { return m_canvas; }
+    virtual GCanvas *canvas() { return m_canvas; }
 
     virtual int leftBorder() const { return 20; }
     virtual int topBorder() const { return 20; }

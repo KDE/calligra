@@ -22,59 +22,7 @@
 
 #include <gobject.h>
 
-
-class GLine : public GObject {
-
-public:
-    GLine(const QPoint &a, const QPoint &b, const QString &name=QString::null);
-    GLine(const FxPoint &a, const FxPoint &b, const QString &name=QString::null);
-    GLine(const QString &name=QString::null);
-    GLine(const GLine &rhs);
-    GLine(const QDomElement &element);
-    virtual ~GLine() {}
-
-    virtual GLine *clone() const;           // exact copy of "this" (calls the Copy-CTOR)
-    // create a line and initialize it with the given XML (calls the XML-CTOR)
-    virtual GLine *instantiate(const QDomElement &element) const;
-
-    virtual void setDirty() { GObject::setDirty(); }
-
-    virtual QDomElement save(QDomDocument &doc) const; // save the line to xml
-
-    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) const;
-    // Do we need this? Maybe even lines should have rectangular handles... nah, doesn't look sexy :)
-    virtual void drawHandles(QPainter &p, const QRect &rect, QList<QRect> *handles=0L) const;
-
-    virtual const GLine *hit(const QPoint &p) const;
-    virtual bool intersects(const QRect &r) const;
-    virtual const QRect &boundingRect() const;
-
-    virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
-                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) const;
-
-    virtual const FxPoint origin() const { return m_a; }
-    virtual void setOrigin(const FxPoint &origin);
-    virtual void moveX(const double &dx);
-    virtual void moveY(const double &dy);
-    virtual void move(const double &dx, const double &dy);
-
-    virtual void rotate(const FxPoint &center, const double &angle);
-    virtual void scale(const FxPoint &origin, const double &xfactor, const double &yfactor);
-    virtual void resize(const FxRect &boundingRect);
-
-    const FxPoint &a() const { return m_a; }
-    void setA(const FxPoint &a) { m_a=a; }
-    const FxPoint &b() const { return m_b; }
-    void setB(const FxPoint &b) { m_b=b; }
-
-protected:
-    virtual void recalculate() const;
-
-private:
-    GLine &operator=(const GLine &rhs);    // don't assign the objects, clone them
-    FxPoint m_a, m_b;
-};
-
+class GLine;
 
 class GLineM9r : public G1DObjectM9r {
 
@@ -97,6 +45,60 @@ private:
     GLineM9r &operator=(GLineM9r &rhs);
 
     GLine *m_line;
+};
+
+
+class GLine : public GObject {
+
+public:
+    GLine(const QPoint &a, const QPoint &b, const QString &name=QString::null);
+    GLine(const FxPoint &a, const FxPoint &b, const QString &name=QString::null);
+    GLine(const QString &name=QString::null);
+    GLine(const GLine &rhs);
+    GLine(const QDomElement &element);
+    virtual ~GLine() {}
+
+    // relaxed return type (Stroustrup, p.425)
+    virtual GLine *clone() const;           // exact copy of "this" (calls the Copy-CTOR)
+    // create a line and initialize it with the given XML (calls the XML-CTOR)
+    virtual GLine *instantiate(const QDomElement &element) const;
+
+    virtual void setDirty() { GObject::setDirty(); }
+
+    virtual QDomElement save(QDomDocument &doc) const; // save the line to xml
+
+    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) const;
+    // Do we need this? Maybe even lines should have rectangular handles... nah, doesn't look sexy :)
+    virtual void drawHandles(QPainter &p, const QRect &rect, QList<QRect> *handles=0L) const;
+
+    virtual const GLine *hit(const QPoint &p) const;
+    virtual bool intersects(const QRect &r) const;
+    virtual const QRect &boundingRect() const;
+
+    virtual GLineM9r *createM9r(GraphitePart *part, GraphiteView *view,
+                                const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) const;
+
+    virtual const FxPoint origin() const { return m_a; }
+    virtual void setOrigin(const FxPoint &origin);
+    virtual void moveX(const double &dx);
+    virtual void moveY(const double &dy);
+    virtual void move(const double &dx, const double &dy);
+
+    virtual void rotate(const FxPoint &center, const double &angle);
+    virtual void scale(const FxPoint &origin, const double &xfactor, const double &yfactor);
+    virtual void resize(const FxRect &boundingRect);
+
+    const FxPoint &a() const { return m_a; }
+    void setA(const FxPoint &a) { m_a=a; }
+    const FxPoint &b() const { return m_b; }
+    void setB(const FxPoint &b) { m_b=b; }
+
+protected:
+    virtual void recalculate() const;
+
+private:
+    GLine &operator=(const GLine &rhs);    // don't assign the objects, clone them
+    FxPoint m_a, m_b;
 };
 
 #endif

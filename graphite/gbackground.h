@@ -22,46 +22,7 @@
 
 #include <ggroup.h>
 
-
-class GBackground : public GAbstractGroup {
-
-public:
-    GBackground(const QString &name=QString::null) : GAbstractGroup(name), m_transparent(false) {}
-    GBackground(const GBackground &rhs) : GAbstractGroup(rhs), m_transparent(false) {}
-    GBackground(const QDomElement &element);
-
-    virtual ~GBackground() {}
-
-    virtual GObject *clone() const;
-    virtual GObject *instantiate(const QDomElement &element) const;
-
-    virtual QDomElement save(QDomDocument &doc) const;
-
-    void setTransparent(bool transparent=true) { m_transparent=transparent; }
-    bool transparent() const { return m_transparent; }
-
-    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) const;
-
-    virtual const QRect &boundingRect() const;
-
-    virtual GObjectM9r *createM9r(GraphitePart *part, GraphiteView *view,
-                                  const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) const;
-
-    virtual const FxPoint origin() const;
-    virtual void setOrigin(const FxPoint &origin);
-
-    virtual void resize(const FxRect &boundingRect);
-
-protected:
-    virtual void recalculate() const;
-
-private:
-    GBackground &operator=(const GBackground &rhs);
-
-    FxRect m_rect;
-    bool m_transparent;
-};
-
+class GBackground;
 
 class GBackgroundM9r : public G2DObjectM9r {
 
@@ -79,14 +40,53 @@ public:
     // Property dia on DblClick
     virtual bool mouseDoubleClickEvent(QMouseEvent *e, QRect &dirty);
 
-    virtual GObject *gobject() { return m_background; }
-
 private:
     GBackgroundM9r(const GBackgroundM9r &rhs);
     GBackgroundM9r &operator=(GBackgroundM9r &rhs);
 
     GBackground *m_background;
     QPopupMenu *m_popup;
+};
+
+
+class GBackground : public GAbstractGroup {
+
+public:
+    GBackground(const QString &name=QString::null) : GAbstractGroup(name), m_transparent(false) {}
+    GBackground(const GBackground &rhs) : GAbstractGroup(rhs), m_transparent(false) {}
+    GBackground(const QDomElement &element);
+
+    virtual ~GBackground() {}
+
+    // relaxed return type (Stroustrup, p.425)
+    virtual GBackground *clone() const;
+    virtual GBackground *instantiate(const QDomElement &element) const;
+
+    virtual QDomElement save(QDomDocument &doc) const;
+
+    void setTransparent(bool transparent=true) { m_transparent=transparent; }
+    bool transparent() const { return m_transparent; }
+
+    virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false) const;
+
+    virtual const QRect &boundingRect() const;
+
+    virtual GBackgroundM9r *createM9r(GraphitePart *part, GraphiteView *view,
+                                      const GObjectM9r::Mode &mode=GObjectM9r::Manipulate) const;
+
+    virtual const FxPoint origin() const;
+    virtual void setOrigin(const FxPoint &origin);
+
+    virtual void resize(const FxRect &boundingRect);
+
+protected:
+    virtual void recalculate() const;
+
+private:
+    GBackground &operator=(const GBackground &rhs);
+
+    FxRect m_rect;
+    bool m_transparent;
 };
 
 #endif // gbackground_h

@@ -359,56 +359,6 @@ void GAbstractGroup::recalculate() const {
 }
 
 
-GGroup::GGroup(const QDomElement &element) :
-    GAbstractGroup(element.namedItem(QString::fromLatin1("gabstractgroup")).toElement()) {
-}
-
-GObject *GGroup::clone() const {
-    return new GGroup(*this);
-}
-
-GObject *GGroup::instantiate(const QDomElement &element) const {
-    return new GGroup(element);
-}
-
-QDomElement GGroup::save(QDomDocument &doc) const {
-
-    static const QString &tagGGroup=KGlobal::staticQString("ggroup");
-    QDomElement element=doc.createElement(tagGGroup);
-    element.appendChild(GAbstractGroup::save(doc));
-    return element;
-}
-
-GObjectM9r *GGroup::createM9r(GraphitePart *part, GraphiteView *view,
-                              const GObjectM9r::Mode &mode) const {
-    // Yes, this const_cast is ugly, I know
-    return new GGroupM9r(const_cast<GGroup*>(this), mode, part, view, i18n("Group"));
-}
-
-const FxPoint GGroup::origin() const {
-    return FxPoint(boundingRect().topLeft());
-}
-
-void GGroup::setOrigin(const FxPoint &o) {
-
-    // ### check!!!
-    double dx=o.x()-static_cast<double>(origin().x());
-    double dy=o.y()-static_cast<double>(origin().y());
-    GAbstractGroup::move(dx, dy);
-    // setBoundingRectDirty(); done in the parent class impl of move
-}
-
-void GGroup::resize(const FxRect &brect) {
-
-    double dx=brect.width()-static_cast<double>(boundingRect().width());
-    double dy=brect.height()-static_cast<double>(boundingRect().height());
-    double xfactor=static_cast<double>(dx)/static_cast<double>(boundingRect().width());
-    double yfactor=static_cast<double>(dy)/static_cast<double>(boundingRect().height());
-    scale(origin(), xfactor, yfactor);
-    move(dx, dy);
-}
-
-
 GGroupM9r::GGroupM9r(GGroup *group, const Mode &mode, GraphitePart *part,
                      GraphiteView *view, const QString &type) :
     G2DObjectM9r(group, mode, part, view, type), m_group(group) {
@@ -449,6 +399,56 @@ bool GGroupM9r::keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
 bool GGroupM9r::keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) {
     // ###
     return false;
+}
+
+
+GGroup::GGroup(const QDomElement &element) :
+    GAbstractGroup(element.namedItem(QString::fromLatin1("gabstractgroup")).toElement()) {
+}
+
+GGroup *GGroup::clone() const {
+    return new GGroup(*this);
+}
+
+GGroup *GGroup::instantiate(const QDomElement &element) const {
+    return new GGroup(element);
+}
+
+QDomElement GGroup::save(QDomDocument &doc) const {
+
+    static const QString &tagGGroup=KGlobal::staticQString("ggroup");
+    QDomElement element=doc.createElement(tagGGroup);
+    element.appendChild(GAbstractGroup::save(doc));
+    return element;
+}
+
+GGroupM9r *GGroup::createM9r(GraphitePart *part, GraphiteView *view,
+                             const GObjectM9r::Mode &mode) const {
+    // Yes, this const_cast is ugly, I know
+    return new GGroupM9r(const_cast<GGroup*>(this), mode, part, view, i18n("Group"));
+}
+
+const FxPoint GGroup::origin() const {
+    return FxPoint(boundingRect().topLeft());
+}
+
+void GGroup::setOrigin(const FxPoint &o) {
+
+    // ### check!!!
+    double dx=o.x()-static_cast<double>(origin().x());
+    double dy=o.y()-static_cast<double>(origin().y());
+    GAbstractGroup::move(dx, dy);
+    // setBoundingRectDirty(); done in the parent class impl of move
+}
+
+void GGroup::resize(const FxRect &brect) {
+
+    double dx=brect.width()-static_cast<double>(boundingRect().width());
+    double dy=brect.height()-static_cast<double>(boundingRect().height());
+    double xfactor=static_cast<double>(dx)/static_cast<double>(boundingRect().width());
+    double yfactor=static_cast<double>(dy)/static_cast<double>(boundingRect().height());
+    scale(origin(), xfactor, yfactor);
+    move(dx, dy);
 }
 
 #include <ggroup.moc>
