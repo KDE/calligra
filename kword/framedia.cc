@@ -41,7 +41,7 @@
 #include <qbuttongroup.h>
 #include <qhbox.h>
 #include <qheader.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <qvalidator.h>
 
 #include <stdlib.h>
@@ -692,9 +692,11 @@ void KWFrameDia::applyChanges()
 		}
 	    }
 	    if ( same ) {
-		QMessageBox::critical( this, i18n( "Error connecting frames" ),
-				       i18n( "A Frameset with the name\n%1\n already exists. Please enter\n"
-					     "an unique name for the new Frameset" ) );
+		KMessageBox::sorry( this,
+		    i18n( "A new frameset with the name '%1'\n"
+		          "can not be made because a frameset with that name\n"
+		          "already exists. Please enter another name or select\n"
+		          "an existing frameset from the list.").arg(name));
 		return;
 	    }
 	}
