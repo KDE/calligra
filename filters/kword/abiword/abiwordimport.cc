@@ -35,6 +35,7 @@
 
 #include "ImportHelpers.h"
 #include "ImportFormatting.h"
+#include "ImportStyle.h"
 
 #include "abiwordimport.h"
 #include "abiwordimport.moc"
@@ -61,11 +62,9 @@ public:
     {
         structureStack.clear();
     }
-    bool startDocument()
-    {
-        indent = "";  //DEBUG
-        return true;
-    }
+public:
+    virtual bool startDocument(void);
+    virtual bool endDocument(void);
     virtual bool startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes);
     virtual bool endElement( const QString&, const QString& , const QString& qName);
     virtual bool characters ( const QString & ch );
@@ -78,6 +77,7 @@ private:
     StackItemStack structureStack;
     QDomDocument mainDocument;
     QDomElement mainFramesetElement;     // The main <FRAMESET> where the body text will be under.
+    StyleDataMap styleDataMap;
 };
 
 // Element <c>
@@ -352,17 +352,32 @@ bool EndElementField (StackItem* stackItem, StackItem* stackCurrent)
 }
 
 // <s> (style)
-
 static bool StartElementS(StackItem* stackItem, StackItem* stackCurrent,
-    QDomDocument& mainDocument, QDomElement& mainFramesetElement,
-    const QXmlAttributes& attributes)
+    const QXmlAttributes& attributes, StyleDataMap& styleDataMap)
 {
+    // We do not assume when we are called.
+    // We also do not care if a style is defined multiple times.
     stackItem->elementType=ElementTypeEmpty;
 
-    AbiPropsMap abiPropsMap;
-    PopulateProperties(stackItem,attributes,abiPropsMap,false);
+    QString strStyleName=attributes.value("name").stripWhiteSpace();
 
-    // TODO
+    if (strStyleName.isEmpty())
+    {
+        kdWarning(30506) << "Style has no name!" << endl;
+    }
+    else
+    {
+        QString strLevel=attributes.value("level");
+        int level;
+        if (strLevel.isEmpty())
+            level=-1;
+        else
+            level=strLevel.toInt();
+        styleDataMap.defineNewStyle(strStyleName,level,attributes.value("props"));
+        kdDebug(30506) << " Style name: " << strStyleName << endl
+            << " Level: " << level << endl
+            << " Props: " << attributes.value("props") << endl;
+    }
 
     return true;
 }
@@ -378,7 +393,7 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
 //  false, if we should make a forced line break
 {
     // We are simulating a line break by starting a new paragraph!
-    // TODO: when KWord has learnt what line breaks are, change to them.
+    // TODO: when KWord would have learnt what line breaks are, change to them.
 
     // We are sure to be the child of a <p> element
 
@@ -440,7 +455,7 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     return true;
 }
 
-
+// <pagesize>
 static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttributes& attributes)
 {
     if (attributes.value("page-scale").toDouble()!=1.0)
@@ -470,8 +485,8 @@ static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttribute
 
     QString strPageType=attributes.value("pagetype").stripWhiteSpace();
 
-    // Do we know the page size or do we need to measure
-    // For page format that KWord knows, use our own values in case the values in the file would be wrong.
+    // Do we know the page size or do we need to measure?
+    // For page formats that KWord knows, use our own values in case the values in the file would be wrong.
 
     KoFormat kwordFormat = KoPageFormat::formatFromString(strPageType);
 
@@ -700,7 +715,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     }
     else if (name=="s") // Seems only to exist as lower case
     {
-        success=StartElementS(stackItem,structureStack.current(),mainDocument,mainFramesetElement,attributes);
+        success=StartElementS(stackItem,structureStack.current(),attributes,styleDataMap);
     }
     else
     {
@@ -804,6 +819,37 @@ bool StructureParser :: characters ( const QString & ch )
 
     return success;
 }
+
+bool StructureParser::startDocument(void)
+{
+    indent = QString::null;  //DEBUG
+    // Add KWord's default style sheet
+    styleDataMap.defineNewStyle("Standard",-1,QString::null);
+    // Add a few of AbiWord predefined style sheets 
+    // TODO: use the properties that AbiWord uses
+    // TODO: other predefined style sheets
+    styleDataMap.defineNewStyle("Normal",-1,QString::null);
+    styleDataMap.defineNewStyle("Heading 1",1,"font-weight: bold; font-size: 24pt");
+    styleDataMap.defineNewStyle("Heading 2",2,"font-weight: bold; font-size: 16pt");
+    styleDataMap.defineNewStyle("Heading 3",3,"font-weight: bold; font-size: 12pt");
+    return true;
+}
+
+bool StructureParser::endDocument(void)
+{
+    // TODO: put styles in the KWord document.
+#if 1
+    kdDebug(30506) << "=== Start Style List ===" << endl;
+    StyleDataMap::ConstIterator it;
+    for (it=styleDataMap.begin();it!=styleDataMap.end();it++)
+    {
+        kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
+    }
+    kdDebug(30506) << "===  End Style List  ===" << endl;
+#endif
+    return true;
+}
+
 
 void StructureParser :: createMainFramesetElement(void)
 {
@@ -970,7 +1016,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
         return false;
     }
     delete in;
-
+    
     KoStore out=KoStore(fileOut, KoStore::Write);
     if(!out.open("root"))
     {

@@ -13,12 +13,12 @@ libabiwordexport_la_LIBADD = $(KOFFICE_LIBS) ../libexport/libkwordexportfilters.
 kde_module_LTLIBRARIES = libabiwordimport.la libabiwordexport.la
 
 libabiwordimport_la_SOURCES = abiwordimport.cc abiwordimport_factory.cc\
-ImportHelpers.cc ImportFormatting.cc
+ImportHelpers.cc ImportFormatting.cc ImportStyle.cc
 
 libabiwordexport_la_SOURCES = abiwordexport.cc abiwordexport_factory.cc
 
 noinst_HEADERS = abiwordimport.h abiwordimport_factory.h ImportHelpers.h\
-ImportFormatting.h abiwordexport.h abiwordexport_factory.h
+ImportFormatting.h ImportStyle.h abiwordexport.h abiwordexport_factory.h
 
 METASOURCES = AUTO
 
