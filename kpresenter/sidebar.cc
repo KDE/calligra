@@ -962,10 +962,10 @@ void Outline::renamePageTitle()
 
     bool ok = false;
     QString activeTitle = item->text( 0 );
+    QRegExpValidator validator( QRegExp( ".*" ), 0 ); // we want to allow empty titles. Empty == automatic.
     QString newTitle = KLineEditDlg::getText( i18n("Rename Slide"),
                                               i18n("Slide title:"), activeTitle, &ok, this,
-                                              // we want to allow empty titles. Empty == automatic.
-                                              &QRegExpValidator(QRegExp(".*"), 0) );
+                                              &validator );
 
     // Have a different name ?
     if ( ok ) { // User pushed an OK button.
