@@ -377,8 +377,14 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
 
 KoPoint KWTextFrameSet::internalToDocumentKnowingFrame( const QPoint &iPoint, KWFrame* theFrame ) const
 {
-    return KoPoint( m_doc->layoutUnitPtToPt( m_doc->pixelXToPt( iPoint.x() ) ) + theFrame->innerRect().x(),
-                    m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.y() ) ) - theFrame->internalY() + theFrame->innerRect().y() );
+    // It's ok to have theFrame == 0 in the text viewmode, but not in other modes
+    if ( m_doc->viewMode()->hasFrames() )
+        Q_ASSERT( theFrame );
+    if ( theFrame )
+        return KoPoint( m_doc->layoutUnitPtToPt( m_doc->pixelXToPt( iPoint.x() ) ) + theFrame->innerRect().x(),
+                        m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( iPoint.y() ) ) - theFrame->internalY() + theFrame->innerRect().y() );
+    else
+        return KoPoint( m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) ) );
 }
 
 QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const

@@ -82,62 +82,56 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // The containing text-frameset.
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoZoomHandler* zh = fs->textDocument()->paintingZoomHandler();
+
     int paragx = paragraph()->rect().x();
     int paragy = paragraph()->rect().y();
+    QRect inlineFrameLU( paragx+xpos, paragy+ypos, width, height );
 #ifdef DEBUG_DRAWING
-    kdDebug(32001) << "KWAnchor::draw x:" << x << ", y:" << y << " paragx=" << paragx << " paragy=" << paragy
-                   << "  cliprect(LU)" << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
+    kdDebug(32001) << "KWAnchor::draw x:" << x << ", y:" << y << " paragx=" << paragx << " paragy=" << paragy << endl;
+    kdDebug(32001) << "               inline frame in LU coordinates: " << inlineFrameLU << endl;
 #endif
 
     QRect crectLU = QRect( (cx > 0 ? cx : 0)+paragx, cy+paragy, cw, ch );
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw crect in LU coordinates:                   " << DEBUGRECT( crectLU ) << endl;
+    kdDebug(32001) << "               crect in LU coordinates: " << DEBUGRECT( crectLU ) << endl;
 #endif
 
-    crectLU = crectLU.intersect ( QRect(paragx+xpos,paragy+ypos,width, height) );
-    QPoint topLeftLU = crectLU.topLeft();
-    
-        
+    crectLU = crectLU.intersect ( inlineFrameLU ); // KoTextParag::paintDefault could even do this
+
     // Convert crect to document coordinates, first topleft then bottomright
-    KoPoint topLeftPt;
-    KWFrame* frameContainingTopLeft = fs->internalToDocument( topLeftLU, topLeftPt );
-    if ( !frameContainingTopLeft )
-    {
-        kdDebug() << "KWAnchor::paint Hmm? it seems my frame is positioned outside all text areas!!, aboring draw\n";
-        return;
-    }
-    int rightFrameLU = zh->ptToLayoutUnitPixX( frameContainingTopLeft->innerWidth() );
-    int bottomFrameLU = zh->ptToLayoutUnitPixY( frameContainingTopLeft->internalY() + frameContainingTopLeft->innerHeight() );
-    //kdDebug() << "KWAnchor::draw rightFrameLU " << rightFrameLU << " bottomFrameLU=" << bottomFrameLU << endl;
-
-    crectLU = crectLU.intersect( QRect( topLeftLU, QPoint( rightFrameLU, bottomFrameLU ) ) );
-    //kdDebug() << "KWAnchor::draw crectLU now " << crectLU << endl;
-    
+    QPoint topLeftLU = crectLU.topLeft();
     QPoint bottomRightLU = crectLU.bottomRight();
-    KoPoint bottomRightPt;
-    if ( ! fs->internalToDocument( bottomRightLU, bottomRightPt ) )
+    KWFrame* containingFrame = fs->currentDrawnFrame(); // always set, except in the textviewmode
+    KoPoint topLeftPt = fs->internalToDocumentKnowingFrame( topLeftLU, containingFrame );
+
+#if 0 // not needed anymore, I think. There's no more ITD that can fail.
+    if ( containingFrame )
     {
-        kdWarning() << "internalToDocument returned 0L for bottomRightLU=" << bottomRightLU.x() << "," << bottomRightLU.y() << endl;
-#ifndef NDEBUG
-	// Some debug
-	fs->printDebug();
-	paragraph()->printRTDebug(0);
-#endif
-        return;
+        // Look at the bottom-right of the containing frame - to intersect, if we get out of it
+        int rightFrameLU = zh->ptToLayoutUnitPixX( containingFrame->innerWidth() );
+        int bottomFrameLU = zh->ptToLayoutUnitPixY( containingFrame->internalY() + containingFrame->innerHeight() );
+        //kdDebug() << "KWAnchor::draw rightFrameLU " << rightFrameLU << " bottomFrameLU=" << bottomFrameLU << endl;
+
+        crectLU &= QRect( topLeftLU, QPoint( rightFrameLU, bottomFrameLU ) );
+        //kdDebug() << "KWAnchor::draw crectLU now " << crectLU << endl;
+        bottomRightLU = crectLU.bottomRight();
     }
+#endif
+
+    // Now we can convert the bottomright
+    KoPoint bottomRightPt = fs->internalToDocumentKnowingFrame( bottomRightLU, containingFrame );
     KoRect crectPt( topLeftPt, bottomRightPt );
 
     // Convert crect to view coords
     QRect crect = fs->currentViewMode()->normalToView( zh->zoomRect( crectPt ) );
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw crect in view coordinates (pixel) : " << DEBUGRECT( crect ) << endl;
+    kdDebug() << "               crect in view coordinates (pixel) : " << DEBUGRECT( crect ) << endl;
 #endif
 
     // Ok, we finally have our crect in view coordinates!
     // Now ensure the containing frame is the one actually containing our text
     // (for copies, e.g. headers and footers, we need to go back until finding a real frame)
 
-    KWFrame* containingFrame = fs->currentDrawnFrame(); // always set, except in the textviewmode
     if ( containingFrame && containingFrame->isCopy() )
     {
         // Find last real frame, in case we are in a copied frame
@@ -152,18 +146,6 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         containingFrame = frameIt.current();
         //kdDebug() << "KWAnchor::draw frame=" << containingFrame << endl;
     }
-
-#if 0 // This code didn't work in case of a line-level broken parag with a custom
-    // item in the 2nd part. The topleft of the parag was in the other frame.
-
-    // Find the topleft of the _paragraph_, that's how the painter is set up
-    KoPoint topLeftParagPt;
-    if ( ! fs->internalToDocument( QPoint( 0, paragy ), topLeftParagPt ) )
-    {
-        kdDebug() << "KWAnchor::paint can't convert topleft of paragraph to doc coords\n";
-        return;
-    }
-#endif
 
     // Same calculation as in internalToDocument, but we know the frame already
     KoPoint topLeftParagPt( 0, 0 );
@@ -183,7 +165,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     p->save();
     p->translate( -topLeftParag.x(), -topLeftParag.y() );
 #ifdef DEBUG_DRAWING
-    kdDebug() << "KWAnchor::draw translating by " << -topLeftParag.x() << "," << -topLeftParag.y() << endl;
+    kdDebug() << "               translating by " << -topLeftParag.x() << "," << -topLeftParag.y() << endl;
 #endif
 
     QColorGroup cg2( cg );
