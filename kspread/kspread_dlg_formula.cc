@@ -169,6 +169,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
         {
         functions->setCurrentItem(functions->index(functions->findItem(formulaName)));
         slotDoubleClicked(functions->findItem(formulaName));
+        
         }
     if(functions->currentItem()==-1)
         selectFunction->setEnabled(false);
@@ -503,6 +504,8 @@ void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
     }
     if(funct.nb_param>0)
     {
+        m_focus=firstElement;
+        firstElement->setFocus();
         firstElement->show();
         if(funct.firstElementType==type_double)
             firstElement->setValidator( new KFloatValidator( firstElement ) );
@@ -581,8 +584,11 @@ void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
     int pos=result->cursorPosition();
     result->setText(m_leftText+functions->text(functions->currentItem())
                     +"()"+m_rightText);
-    result->setFocus();
-    result->setCursorPosition(pos+functions->text(functions->currentItem()).length()+1);
+    if(funct.nb_param==0)
+    {
+    	result->setFocus();
+ 	result->setCursorPosition(pos+functions->text(functions->currentItem()).length()+2);
+    }
 }
 
 void KSpreadDlgFormula::slotselected(const QString &string)

@@ -1,6 +1,7 @@
 #include "kspread_editors.h"
 #include "kspread_canvas.h"
 #include "kspread_view.h"
+#include "kspread_cell.h"
 
 #include <qlineedit.h>
 #include <qlayout.h>
@@ -124,7 +125,7 @@ void KSpreadTextEditor::setCursorPosition( int pos )
     checkChoose();
 }
 
-void KSpreadTextEditor::insertFormulaChar(int c)
+void KSpreadTextEditor::insertFormulaChar(int /*c*/)
 {
 }
 
@@ -179,7 +180,7 @@ KSpreadFormulaEditor::KSpreadFormulaEditor( KSpreadCell* _cell, KSpreadCanvas* _
 
   m_pEdit = new KFormulaEdit( this );
   m_pEdit->enableSizeHintSignal( true );
-
+  m_pEdit->setFont(_cell->textFont() );
   m_pEdit->installEventFilter( this );
   connect( m_pEdit, SIGNAL( sizeHint( QSize ) ), this, SLOT( slotSizeHint( QSize ) ) );
 
@@ -223,7 +224,7 @@ int KSpreadFormulaEditor::cursorPosition() const
     return 0;
 }
 
-void KSpreadFormulaEditor::setCursorPosition( int pos )
+void KSpreadFormulaEditor::setCursorPosition( int /*pos*/ )
 {
     //no implanted
     //m_pEdit->setCursorPosition(pos);

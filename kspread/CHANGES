@@ -403,3 +403,7 @@ Still don't know why I get a row = -1 for a cell, but at least it loads.
 2000-04-17 -Montel laurent <montell@club-internet.fr>
 -----------------------------------------------------
 -Add new mode : formular mode => now you can see formular in cell
+
+2000-04-20 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-bug fix
