@@ -1707,7 +1707,12 @@ void OpenCalcImport::loadStyleProperties( KSpreadLayout * layout, QDomElement co
   kdDebug() << "*** Loading style properties *****" << endl;
 
   if ( property.hasAttribute( "style:decimal-places" ) )
-    layout->setPrecision( property.attribute( "style:decimal-places" ).toInt() );
+  {
+    bool ok = false;
+    int p = property.attribute( "style:decimal-places" ).toInt( &ok );
+    if (ok )
+      layout->setPrecision( p );
+  }
 
   if ( property.hasAttribute( "style:font-name" ) )
   {
@@ -1728,7 +1733,12 @@ void OpenCalcImport::loadStyleProperties( KSpreadLayout * layout, QDomElement co
   //     => style:apply-style-name="Result" style:base-cell-address="Sheet6.A5"/>
 
   if ( property.hasAttribute( "style:rotation-angle" ) )
-    layout->setAngle( -property.attribute( "style:rotation-angle" ).toInt() + 1 );
+  {
+    bool ok = false;
+    int a = property.attribute( "style:rotation-angle" ).toInt( &ok );
+    if ( ok )
+      layout->setAngle( -a + 1 );
+  }
 
   if ( property.hasAttribute( "fo:text-align" ) )
   {
