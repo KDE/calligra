@@ -1436,6 +1436,7 @@ void KWView::formatPage()
         gui->getVertRuler()->setPageLayout( pgLayout );
         gui->getHorzRuler()->setPageLayout( pgLayout );
         doc->setModified(true);
+        gui->canvasWidget()->repaintAll();
 #if 0
         gui->canvasWidget()->frameSizeChanged( pgLayout );
 #endif
