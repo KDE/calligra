@@ -111,6 +111,7 @@ protected:
   void mouseMoveEvent(QMouseEvent *e);
   void mouseDoubleClickEvent(QMouseEvent *e);
   void keyPressEvent(QKeyEvent *e);
+  void resizeEvent(QResizeEvent *e);
   int getObjectAt(int x,int y); 
   struct PageObjects* getObject(int num);
   void resizeObjTop(int diff,PageObjects* obj);

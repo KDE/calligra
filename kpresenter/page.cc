@@ -663,6 +663,14 @@ void Page::keyPressEvent(QKeyEvent *e)
     }
 }
 
+/*========================= resize Event =========================*/
+void Page::resizeEvent(QResizeEvent *e)
+{
+  if (editMode) QWidget::resizeEvent(e);
+  else QWidget::resizeEvent(new QResizeEvent(QSize(QApplication::desktop()->width(),QApplication::desktop()->height()),
+					     e->oldSize()));
+}
+
 /*========================== get object ==========================*/
 int Page::getObjectAt(int x,int y)
 {
@@ -1077,9 +1085,9 @@ void Page::startScreenPresentation()
 {
   unsigned int i;
 
-  float _presFaktW = (float)width() / (float)getPageSize(1).width() > 1.0 ? 
+  float _presFaktW = (float)width() / (float)getPageSize(1).width() > 0.0 ? 
     (float)width() / (float)getPageSize(0).width() : 1.0;
-  float _presFaktH = (float)height() / (float)getPageSize(1).height() > 1.0 ? 
+  float _presFaktH = (float)height() / (float)getPageSize(1).height() > 0.0 ? 
     (float)height() / (float)getPageSize(1).height() : 1.0;
   _presFakt = min(_presFaktW,_presFaktH);
 
@@ -1133,6 +1141,7 @@ void Page::startScreenPresentation()
   editMode = false;
   drawBack = true;
   grabKeyboard();
+  grabMouse();
   setFocusPolicy(QWidget::StrongFocus);
   setFocus();
   repaint(true);
@@ -1142,6 +1151,7 @@ void Page::startScreenPresentation()
 void Page::stopScreenPresentation()
 {
   setFocusPolicy(QWidget::NoFocus);
+  releaseMouse();
   releaseKeyboard();
   unsigned int i;
 

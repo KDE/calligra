@@ -960,7 +960,7 @@ void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& 
 	}
       
       // unsortListType
-      if (name == "UNSORTEDLISTTYPE")
+      else if (name == "UNSORTEDLISTTYPE")
 	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -992,7 +992,7 @@ void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& 
 	}
 
       // paragraph
-      if (name == "PARAGRAPH")
+      else if (name == "PARAGRAPH")
 	{
 	  txtParagraph = txtPtr->addParagraph();
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -1036,7 +1036,7 @@ void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& 
 				}
 
 			      // font
-			      if (name == "FONT")
+			      else if (name == "FONT")
 				{
 				  KOMLParser::parseTag(tag.c_str(),name,lst);
 				  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1057,7 +1057,7 @@ void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& 
 				}
 
 			      // color
-			      if (name == "COLOR")
+			      else if (name == "COLOR")
 				{
 				  KOMLParser::parseTag(tag.c_str(),name,lst);
 				  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1075,7 +1075,7 @@ void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& 
 				}
 
 			      // vertical align
-			      if (name == "VERTALIGN")
+			      else if (name == "VERTALIGN")
 				{
 				  KOMLParser::parseTag(tag.c_str(),name,lst);
 				  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1087,7 +1087,7 @@ void KPresenterDocument_impl::loadTxtObj(KOMLParser& parser,vector<KOMLAttrib>& 
 				}
 
 			      // text
-			      if (name == "TEXT")
+			      else if (name == "TEXT")
 				{
 				  KOMLParser::parseTag(tag.c_str(),name,lst);
 				  vector<KOMLAttrib>::const_iterator it = lst.begin();

@@ -395,10 +395,12 @@ void KPresenterView_impl::screenStart()
   if (page && !presStarted) 
     {
       page->deSelectAllObj();
-      presStarted = true;
       page->recreate((QWidget*)0L,0,QPoint(0,0),true);
       page->topLevelWidget()->move(-4,-24);
-      page->topLevelWidget()->resize(QApplication::desktop()->width()-1,QApplication::desktop()->height()-1);
+      page->topLevelWidget()->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
+      page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
+      page->topLevelWidget()->setBackgroundColor(black);
+      presStarted = true;
 
       float _presFaktW = (float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() > 1.0 ? 
 	(float)page->width() / (float)KPresenterDoc()->getPageSize(1,0,0).width() : 1.0;
@@ -419,13 +421,18 @@ void KPresenterView_impl::screenStart()
       vert->setEnabled(false);
       horz->setEnabled(false);
       m_bShowGUI = false;
-      //resizeEvent(0L);
       page->setBackgroundColor(black);
       oldSize = widget()->size();
       widget()->resize(page->size());
       setSize(page->size().width(),page->size().height());
       page->startScreenPresentation();
+
+      // ugly HACK
+      page->recreate((QWidget*)0L,0,QPoint(0,0),true);
+      page->topLevelWidget()->move(-4,-24);
       page->topLevelWidget()->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
+      page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
+      page->topLevelWidget()->setBackgroundColor(black);
     }
 }
 
@@ -467,7 +474,8 @@ void KPresenterView_impl::screenPrev()
     {
       if (page->pPrev(true))
 	{
-	  yOffset -= KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()+10; 
+	  yOffset -= KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()+10; 
+	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  page->repaint(true);
 	}
     }
@@ -480,7 +488,8 @@ void KPresenterView_impl::screenNext()
     {
       if (page->pNext(true))
 	{
-	  yOffset += KPresenterDoc()->getPageSize(0,0,0,page->presFakt()).height()+10; 
+	  yOffset += KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()+10; 
+	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  page->repaint(true);
 	}
     }
@@ -1175,7 +1184,7 @@ void KPresenterView_impl::changeClipart(unsigned int,const char* filename)
 /*====================== resize event ===========================*/
 void KPresenterView_impl::resizeEvent(QResizeEvent *e)
 {
-  QWidget::resizeEvent(e);
+  if (!presStarted) QWidget::resizeEvent(e);
 
   if (m_bShowGUI && !presStarted)
     { 
