@@ -1,3 +1,7 @@
+2002-04-05 Philipp Müller <philipp.mueller@gmx.de>
+	* fixed bug with dynamic headers/footers "<table> <page>" in localized version
+	* fixed bug with copy&paste of formulas (DEC2HEX))
+
 2002-01-11 Joseph Wenninger <jowenn@kde.org>
 	* added DCOP access to maxRow() and maxColumn() of the table  and to isDefault() of the cell
 
