@@ -36,7 +36,3 @@ rcdir = $(kde_datadir)/example/example.rc
 
 # SUBDIRS =  . plugins pics dtd toolbar
 
-messages:
-#	$(XGETTEXT) *.cc -o $(podir)/example.pot
-
-
