@@ -27,6 +27,7 @@
 
 #include <GObject.h>
 #include <Tool.h>
+#include <qcursor.h>
 
 class GDocument;
 class Canvas;
@@ -35,6 +36,7 @@ class SelectionTool : public Tool {
   Q_OBJECT
 public:
   SelectionTool (CommandHistory* history);
+  ~SelectionTool() { delete cursor; }
 
   virtual void processEvent (QEvent* e, GDocument* doc, Canvas* canvas);
   virtual void activate (GDocument* doc, Canvas*);
@@ -86,6 +88,7 @@ private:
   Coord selPoint[2];
   Coord rotCenter;
   int dragHorizHelpline, dragVertHelpline;
+  QCursor *cursor;
 };
 
 #endif

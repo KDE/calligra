@@ -25,6 +25,9 @@
 #include <SelectionTool.h>
 
 #include <qkeycode.h>
+#include <qbitmap.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <GDocument.h>
 #include <Canvas.h>
@@ -36,16 +39,37 @@
 #include <CommandHistory.h>
 #include <units.h>
 #include <PStateManager.h>
-#include <klocale.h>
-#include <kdebug.h>
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
+#define resize_ptr_width 16
+#define resize_ptr_height 16
+#define resize_ptr_x_hot 8
+#define resize_ptr_y_hot 9
+static unsigned char resize_ptr_bits[] = {
+    0x00, 0x00, 0x00, 0x00, 0x7c, 0x7c, 0x78, 0x3c, 0x78, 0x3c, 0x7c, 0x7c,
+    0x4e, 0xe4, 0x07, 0xc0, 0x03, 0x80, 0x07, 0xc0, 0x4e, 0xe4, 0x7c, 0x7c,
+    0x78, 0x3c, 0x78, 0x3c, 0x7c, 0x7c, 0x00, 0x00};
+
+#define resize_ptrmsk_width 16
+#define resize_ptrmsk_height 16
+static unsigned char resize_ptrmsk_bits[] = {
+    0x00, 0x00, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfc, 0x7e, 0xfe, 0xfe,
+    0xff, 0xfe, 0xef, 0xee, 0x07, 0xc0, 0xef, 0xee, 0xff, 0xfe, 0xfe, 0xfe,
+    0xfc, 0x7e, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe};
+
 SelectionTool::SelectionTool (CommandHistory *history) : Tool (history) {
   state = S_Init;
   dragHorizHelpline = dragVertHelpline = -1;
+  cursor = new QCursor (QBitmap(resize_ptr_width,
+                                resize_ptr_height,
+                                resize_ptr_bits),
+                        QBitmap(resize_ptrmsk_width,
+                                resize_ptrmsk_height,
+                                resize_ptrmsk_bits),
+                        resize_ptr_x_hot, resize_ptr_y_hot);
 }
 
 void SelectionTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
@@ -332,7 +356,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       if (hmask && hmask != Handle::HPos_Center) {
         if (ctype != C_Size) {
           ctype = C_Size;
-          canvas->setCursor(Qt::pointingHandCursor);
+          canvas->setCursor(*cursor);
         }
       }
       else if (ctype != C_Arrow) {
@@ -370,7 +394,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       if (hmask) {
         if (ctype != C_Size) {
           ctype = C_Size;
-          canvas->setCursor(Qt::pointingHandCursor);
+          canvas->setCursor(*cursor);
         }
       }
       else if (ctype != C_Arrow) {
@@ -390,7 +414,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
         {
           if (ctype != C_Size) {
             ctype = C_Size;
-            canvas->setCursor(Qt::pointingHandCursor);
+            canvas->setCursor(*cursor);
           }
           if (me->state () & ControlButton) {
             if (fabs (xoff) > fabs (yoff)) {
