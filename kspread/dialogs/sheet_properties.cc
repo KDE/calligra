@@ -61,10 +61,10 @@ void SheetPropertiesDialog::slotDefault()
 
 KSpreadSheet::LayoutDirection SheetPropertiesDialog::layoutDirection() const
 {
-  if( d->directionComboBox->currentText() == i18n( "Left To Right" ) )
+  if( d->directionComboBox->currentText() == i18n( "Left to Right" ) )
     return KSpreadSheet::LeftToRight;
   
-  if( d->directionComboBox->currentText() == i18n( "Right To Left" ) )
+  if( d->directionComboBox->currentText() == i18n( "Right to Left" ) )
     return KSpreadSheet::RightToLeft;
   
   // fallback
@@ -76,10 +76,10 @@ void SheetPropertiesDialog::setLayoutDirection( KSpreadSheet::LayoutDirection di
   switch( dir )
   {
     case KSpreadSheet::LeftToRight:
-      d->directionComboBox->setCurrentText( i18n( "Left To Right" ) );
+      d->directionComboBox->setCurrentText( i18n( "Left to Right" ) );
       break;
     case KSpreadSheet::RightToLeft:
-      d->directionComboBox->setCurrentText( i18n( "Right To Left" ) );
+      d->directionComboBox->setCurrentText( i18n( "Right to Left" ) );
       break;
     default: break;
   };
