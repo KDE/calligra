@@ -43,7 +43,7 @@ KOSpell *KOSpell::createKoSpell( QWidget *parent, const QString &caption, QObjec
 
     int clt = ksc->client();
     kdDebug()<<" client :"<<clt<<endl;
-    if( clt == KOS_CLIENT_ISPELL)
+    if( clt == KOS_CLIENT_ISPELL || clt == KOS_CLIENT_HSPELL)
     {
         kdDebug()<<" KOS_CLIENT_ISPELL :*************\n";
         return new KOISpell(parent, caption,
@@ -162,7 +162,7 @@ void KOSpell::initSpell( KOSpellConfig *_ksc )
         codec = QTextCodec::codecForName("ISO 8859-7");
         break;
     case KOS_E_LATIN8:
-        codec = QTextCodec::codecForName("ISO 8859-8");
+        codec = QTextCodec::codecForName("ISO 8859-8-i");
         break;
     case KOS_E_LATIN9:
         codec = QTextCodec::codecForName("ISO 8859-9");

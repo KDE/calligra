@@ -129,123 +129,130 @@ void KOISpell::startIspell()
   //trystart = {0,1,2}
 {
 
-  kdDebug(750) << "Try #" << trystart << endl;
-  if (trystart>0)
-    proc->resetAll();
-#if 0 //fixem !!!!!!!!!!!!!
-  switch (ksconfig->client())
+    kdDebug(750) << "Try #" << trystart << endl;
+    if (trystart>0)
+        proc->resetAll();
+
+    switch (ksconfig->client())
     {
     case KOS_CLIENT_ISPELL:
-      *proc << "ispell";
-      kdDebug(750) << "Using ispell" << endl;
-      break;
+        *proc << "ispell";
+        kdDebug(750) << "Using ispell" << endl;
+        break;
+#if 0
     case KOS_CLIENT_ASPELL:
-      *proc << "aspell";
-      kdDebug(750) << "Using aspell" << endl;
-      break;
-    }
+        *proc << "aspell";
+        kdDebug(750) << "Using aspell" << endl;
+        break;
 #endif
-  *proc << "ispell";
-  kdDebug(750) << "Using ispell" << endl;
-
-  // TODO: add option -h to ignore HTML (XML) code
-  *proc << "-a" << "-S";
-  if (ksconfig->noRootAffix())
-    {
-      *proc<<"-m";
-    }
-  if (ksconfig->runTogether())
-    {
-      *proc << "-B";
-    }
-  else
-    {
-      *proc << "-C";
-    }
-
-  if (trystart<2)
-    {
-      if (! ksconfig->dictionary().isEmpty())
-	{
-	  kdDebug(750) << "using dictionary [" << ksconfig->dictionary() << "]" << endl;
-	  *proc << "-d";
-	  *proc << ksconfig->dictionary();
-	}
-    }
-
-  //Note to potential debuggers:  -Tlatin2 _is_ being added on the
-  //  _first_ try.  But, some versions of ispell will fail with this
-  // option, so kspell tries again without it.  That's why as 'ps -ax'
-  // shows "ispell -a -S ..." withou the "-Tlatin2" option.
-
-  if (trystart<1)
-    switch (ksconfig->encoding())
-      {
-      case KOS_E_LATIN1:
-	*proc << "-Tlatin1";
-	break;
-      case KOS_E_LATIN2:
-	*proc << "-Tlatin2";
-	break;
-      case KOS_E_LATIN3:
-        *proc << "-Tlatin3";
+    case KOS_CLIENT_HSPELL:
+        *proc << "hspell";
+        kdDebug(750) << "Using hspell" << endl;
         break;
-
-      // add the other charsets here
-      case KOS_E_LATIN4:
-      case KOS_E_LATIN5:
-      case KOS_E_LATIN7:
-      case KOS_E_LATIN8:
-      case KOS_E_LATIN9:
-      case KOS_E_LATIN13:
-      case KOS_E_LATIN15:
-
-	// will work, if this is the default charset in the dictionary
-	kdError(750) << "charsets iso-8859-4 .. iso-8859-15 not supported yet" << endl;
-	break;
-
-      case KOS_E_UTF8:
-        *proc << "-Tutf8";
-        break;
-
-      case KOS_E_KOI8U:
-	*proc << "-w'"; // add ' as a word char
-	break;
-
-      }
-
-
-
-
-  /*
-  if (ksconfig->personalDict()[0]!='\0')
-    {
-      kdDebug(750) << "personal dictionary [" << ksconfig->personalDict() << "]" << endl;
-      *proc << "-p";
-      *proc << ksconfig->personalDict();
-    }
-    */
-
-
-  // -a : pipe mode
-  // -S : sort suggestions by probable correctness
-  if (trystart==0) //don't connect these multiple times
-    {
-      connect (proc, SIGNAL (  receivedStderr (KProcess *, char *, int)),
-	       this, SLOT (ispellErrors (KProcess *, char *, int)));
-
-
-      connect(proc, SIGNAL(processExited(KProcess *)),
-	      this, SLOT (ispellExit (KProcess *)));
-
-      OUTPUT(KSpell2);
     }
 
-  if (proc->start ()==FALSE )
-  {
-      m_status = Error;
-      QTimer::singleShot( 0, this, SLOT(emitDeath()));
-  }
+    *proc << "ispell";
+    kdDebug(750) << "Using ispell" << endl;
+
+    // TODO: add option -h to ignore HTML (XML) code
+    if (ksconfig->client() == KOS_CLIENT_ISPELL || ksconfig->client() == KOS_CLIENT_ASPELL)
+    {
+        *proc << "-a" << "-S";
+        if (ksconfig->noRootAffix())
+        {
+            *proc<<"-m";
+        }
+        if (ksconfig->runTogether())
+        {
+            *proc << "-B";
+        }
+        else
+        {
+            *proc << "-C";
+        }
+
+        if (trystart<2)
+        {
+            if (! ksconfig->dictionary().isEmpty())
+            {
+                kdDebug(750) << "using dictionary [" << ksconfig->dictionary() << "]" << endl;
+                *proc << "-d";
+                *proc << ksconfig->dictionary();
+            }
+        }
+
+        //Note to potential debuggers:  -Tlatin2 _is_ being added on the
+        //  _first_ try.  But, some versions of ispell will fail with this
+        // option, so kspell tries again without it.  That's why as 'ps -ax'
+        // shows "ispell -a -S ..." withou the "-Tlatin2" option.
+
+        if (trystart<1)
+            switch (ksconfig->encoding())
+            {
+            case KOS_E_LATIN1:
+                *proc << "-Tlatin1";
+                break;
+            case KOS_E_LATIN2:
+                *proc << "-Tlatin2";
+                break;
+            case KOS_E_LATIN3:
+                *proc << "-Tlatin3";
+                break;
+
+                // add the other charsets here
+            case KOS_E_LATIN4:
+            case KOS_E_LATIN5:
+            case KOS_E_LATIN7:
+            case KOS_E_LATIN8:
+            case KOS_E_LATIN9:
+            case KOS_E_LATIN13:
+            case KOS_E_LATIN15:
+
+                // will work, if this is the default charset in the dictionary
+                kdError(750) << "charsets iso-8859-4 .. iso-8859-15 not supported yet" << endl;
+                break;
+
+            case KOS_E_UTF8:
+                *proc << "-Tutf8";
+                break;
+
+            case KOS_E_KOI8U:
+                *proc << "-w'"; // add ' as a word char
+                break;
+
+            }
+        /*
+          if (ksconfig->personalDict()[0]!='\0')
+          {
+          kdDebug(750) << "personal dictionary [" << ksconfig->personalDict() << "]" << endl;
+          *proc << "-p";
+          *proc << ksconfig->personalDict();
+          }
+        */
+
+
+        // -a : pipe mode
+        // -S : sort suggestions by probable correctness
+    }
+    else       // hspell doesn't need all the rest of the options
+        *proc << "-a";
+    if (trystart==0) //don't connect these multiple times
+    {
+        connect (proc, SIGNAL (  receivedStderr (KProcess *, char *, int)),
+                 this, SLOT (ispellErrors (KProcess *, char *, int)));
+
+
+        connect(proc, SIGNAL(processExited(KProcess *)),
+                this, SLOT (ispellExit (KProcess *)));
+
+        OUTPUT(KSpell2);
+    }
+
+    if (proc->start ()==FALSE )
+    {
+        m_status = Error;
+        QTimer::singleShot( 0, this, SLOT(emitDeath()));
+    }
 }
 
 QStringList KOISpell::resultCheckWord( const QString &/*_word*/ )

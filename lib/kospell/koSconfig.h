@@ -53,7 +53,8 @@ enum OEncoding {
 enum KOSpellClients {
   KOS_CLIENT_ISPELL=0,
   KOS_CLIENT_ASPELL=1,
-  KOS_CLIENT_MYSPELL=2
+  KOS_CLIENT_HSPELL=2,
+  KOS_CLIENT_MYSPELL=3
 };
 
 /**
