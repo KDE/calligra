@@ -54,9 +54,30 @@ QString KoTarStore::toExternalNaming( const QString _internalNaming )
   if (_internalNaming == "root") 
     return "maindoc.xml";
 
-  // store:/0 is saved as part0.xml
-  if (_internalNaming.left(7) == "store:/")
-    return QString("part") + _internalNaming.mid(7) + ".xml";
+  /*
+  // tar:/0 is saved as part0.xml
+  // tar:/0/1 is saved as part0/part1.xml
+  // tar:/0/1/pictures/picture0.png is saved as part0/part1/pictures/picture0.png
+  */
+  if ( _internalNaming.left(5) == "tar:/" )
+  {
+    QString intern( _internalNaming.mid( 5 ) ); // remove protocol
+    QString result( "" );
+    int pos;
+    while ( ( pos = intern.find( '/' ) ) != -1 ) {
+      if ( intern.at(0).isDigit() )
+        result += "part";
+      result += intern.left( pos + 1 ); // copy numbers (or "pictures") + "/"
+      intern = intern.mid( pos + 1 ); // remove the dir we just processed
+    }
+    // now process the filename
+    if ( intern.at(0).isDigit() )
+      result = result + "part" + intern + ".xml";
+    else
+      result += intern;
+
+    return result;
+  }
 
   return _internalNaming;
 }

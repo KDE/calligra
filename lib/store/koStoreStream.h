@@ -3,7 +3,7 @@
 
 #include <fstream>
 #include <koStoreIf.h>
-#include <kdebug.h>
+//#include <kdebug.h>
 
 /**
  * Define ostorestream and istorestream, used to conveniently
@@ -13,7 +13,7 @@
  * (David)
  */
 
-// (Werner) I've translated the comments - there migth be
+// (Werner) I've translated the comments - there might be
 // some errors, though :(
 // (David) Thanks !!!
 
@@ -123,7 +123,7 @@ public:
    */
   istorestreambuffer( KoStore* _store ) : m_pStore( _store )
   {
-    kdebug( KDEBUG_INFO, 30002, "Pointer constructor" );
+    //kdebug( KDEBUG_INFO, 30002, "Pointer constructor" );
     setg (puffer+4,     // beginning of Putback-Zone
 	  puffer+4,     // read posiition
 	  puffer+4);    // end of the buffer
@@ -132,14 +132,14 @@ public:
   {
     m_vStore = KOStore::Store::_duplicate( _store );
 
-    kdebug( KDEBUG_INFO, 30002, "Var constructor" );
+    //kdebug( KDEBUG_INFO, 30002, "Var constructor" );
     setg (puffer+4,     // beginning of Putback-Zone
 	  puffer+4,     // read position
 	  puffer+4);    // end of the buffer
   }
 
 protected:
-  /* read a new char into the buffer
+  /* read new chars into the buffer
    */
   virtual int underflow ();
 };
