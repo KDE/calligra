@@ -1,8 +1,9 @@
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I../kdb
 LDFLAGS = -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-#LDFLAGS = -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH) -lpq++
 LDADD = ../../lib/kofficeui/libkofficeui.la ../kdb/libkdb.la
+
+SUBDIRS = pics
 
 ####### Files
  
