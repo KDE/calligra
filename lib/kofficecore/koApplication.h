@@ -30,7 +30,7 @@ public:
     KoApplication( int &argc, char **argv, const QCString& rAppName = NULL );
     virtual ~KoApplication();
 	
-    void aboutKDE() { KApplication::aboutKDE(); }
+    void aboutKDE() { aboutKDE(); }
 
 private:
     KStartParams m_params;
