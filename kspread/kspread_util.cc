@@ -167,22 +167,26 @@ util_timeFormat(KLocale * locale, const QTime &m_Time,
     if (fmtType == KSpreadCell::SecondeTime)
 	return locale->formatTime(m_Time, true);
 
-    int hour = m_Time.hour();
-    int minute = m_Time.minute();
-    int second = m_Time.second();
-    bool pm = (hour > 12);
+    int h = m_Time.hour();
+    int m = m_Time.minute();
+    int s = m_Time.second();
+
+    QString hour = ( h < 10 ? "0" + QString::number(h) : QString::number(h) );
+    QString minute = ( m < 10 ? "0" + QString::number(m) : QString::number(m) );
+    QString second = ( s < 10 ? "0" + QString::number(s) : QString::number(s) );
+    bool pm = (h > 12);
     QString AMPM( pm ? i18n("PM"):i18n("AM") );
 
     if (fmtType == KSpreadCell::Time_format1) {	// 9 : 01 AM
 	return QString("%1:%2 %3")
-		.arg((pm ? hour-12 : hour),2)
+		.arg((pm ? h - 12 : h),2)
 		.arg(minute,2)
 		.arg(AMPM);
     }
 
     if (fmtType == KSpreadCell::Time_format2) {	//9:01:05 AM
 	return QString("%1:%2:%3 %4")
-		.arg((pm ? hour-12 : hour),2)
+		.arg((pm ? h-12 : h),2)
 		.arg(minute,2)
 		.arg(second,2)
 		.arg(AMPM);
