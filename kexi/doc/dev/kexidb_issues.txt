@@ -1,0 +1,98 @@
+---------------------------------------------------------
+ KexiDB module IDEAS, ISSUES, PROPOSALS
+ Copyright (C) 2003 Jaroslaw Staniek js at iidea dot pl
+ Started: 2003-08-01
+ Kexi home page: http://www.koffice.org/kexi/
+---------------------------------------------------------
+
+|
+| This document is expected to be independent of given KexiDB dirver implementation,
+| but proposals are described here are after certain decisions has been made:
+| -drivers are (by current importance): SQLite (embedded), 
+|  ODBC (universality reasons ), Mysql (historical reasons), PostgreSQL
+|
+
+1. EXTENSION: Option for setting user-defined error messages on selected error types.
+
+	Since new KexiDB has fully i18n'd user-visible messages, it outperforms other products as MSA 
+	(that often shows confusing message coming directly from the engine). There is possibility 
+	to provide users with table of error messages that they can personalize. These settings can 
+	be properties of table (query, form, etc.) and thus can be inherited (eg. by form from a table).
+	By default, i18n'd messages from KexiDB can be presented.
+	<EXAMPLE>
+		Before we set our message for UNIQUE KEY conflict for table Cars (name varchar UNIQUE, price integer),
+		we have got this message when try to violate 'unique' restionction: 
+		"There is already added one record with field 'name' set to 'Dodge' in table 'Cars'. 
+		This field must be unique."
+		Now, we want more descriptive message: "There should be only one car named 'Dodge'!".
+		We write this not as above, but rather: "There should be only one car named %field%!", 
+		since %field% is automatically substituted by given field value. After this we get message 
+		that is easier to understand for everyday user. Of course Kexi (and competitors too) never will 
+		be so clever as a human in building such messages automatically.
+	</EXAMPLE>
+	<NOTE>Inheriting messages: it will be more conventient to set up custom messages (if required)
+	for table definition rather than just in form. If we set up given message in for a table, every 
+	form that uses this table as data source (end every query that do so) can use this message when needed.
+	This note is also useful for other types of properties that can be inherited by extended objects from.
+	</NOTE>
+
+2. KexiDB classes inheritance diagram
+
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO 
+
+
+Object
+	DriverManager
+	Driver
+		[DRIVER]Driver
+	Connection
+		[DRIVER]Connection
+
+[DRIVER] should be substituted by SQLite, MySQL, etc. These are classess to reimplement in the drivers.
+
+Cursor
+
+3. Table definitions storage
+Table definitions are extended with additional properties usually not available from most db engines 
+or even related to gui.
+
+kexi__tables
+	t_id integer unsigned primary key auto_increment,
+	t_name varchar(200),
+
+
+kexi__fields
+	t_id integer REFERENCES kexi__tables(id),
+	f_type byte,
+	f_name varchar(200),
+	f_length integer,
+	f_precission integer,
+	f_constraints integer,
+	f_options integer,
+	f_default varchar,
+//these are additional properties:
+	f_order integer,
+	f_caption varchar(200),
+	f_help varchar,
+
+
+
+
+JOWENN:: plan to implement KexiStorage that abstracts storage using:
+1) db engine
+2) kostore xml format
+
+this 2) storage method is also proposal for OASIS db format
+
+
+JOWENN: proposals for better reporting tools for OOo and kexi
+
+
+-----------------------------------------------------------------
+PRAGMA table_info(table-name);
+For each column in the named table, invoke the callback function 
+once with information about that column, including the 
+column name, data type, whether or not the column can be NULL, 
+and the default value for the column.
+-----------------------------------------------------------------
+
