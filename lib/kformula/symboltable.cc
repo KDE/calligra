@@ -168,7 +168,7 @@ bool FontReader::parseLine( QString line )
             QFont f( fontName );
             QStringList fields = QStringList::split( '-', f.rawName() );
             if ( ( fields.size() != 13 )||( fields[1].upper() != fontName.upper() ) ) {
-                kdDebug( DEBUGID ) << "Font '" << fontName << "' not found." << endl;
+                kdDebug( DEBUGID ) << "Font '" << fontName << "' not found but '" << f.rawName() << "'." << endl;
                 return false;
             }
             index = fontTable->size();
