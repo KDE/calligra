@@ -92,8 +92,7 @@ class KoFilterEntry
 {
 
 public:
-
-  KoFilterEntry() { m_service = 0L; } // for QValueList
+  KoFilterEntry() : weight( 0 ) { m_service = 0L; } // for QValueList
   KoFilterEntry( KService::Ptr service );
   ~KoFilterEntry() { }
 
@@ -111,8 +110,14 @@ public:
 
   /**
    *  Which one of the filter methods is implemented?
+   *  This will disappear soon...
    */
   QString implemented;
+
+  /**
+   * The "weight" of this filter path. Has to be > 0 to be valid.
+   */
+  unsigned int weight;
 
   /**
    *  @return TRUE if the filter can imports the requested mimetype.

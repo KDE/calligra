@@ -1,8 +1,18 @@
 [Desktop Entry]
 Type=Service
 Name=KWord WordPerfect Import Filter
-Export=application/x-kword
-Import=application/wordperfect
+Name[af]=kword wordperfect in voer filter
+Name[de]=WordPerfect-Importfilter für KWord
+Name[he]=מסנן ייבוא WordPerfect ל-KWord
+Name[hu]=KWord WordPerfect importszűrő
+Name[ko]=K글틀에서 워드 퍼펙트 파일을 가져올 때 쓰는 거르개
+Name[nl]=KWord WordPerfect-importfilter
+Name[ru]=фильтр импорта из WordPerfect в KWord
+Name[xxx]=xx
+Name[zh_TW.Big5]=KWord WordPerfect 匯入過濾程式
+X-KDE-Export=application/x-kword
+X-KDE-Import=application/wordperfect
+X-KDE-Weight=1
 Implemented=file
 X-KDE-Library=libwpimport
 ServiceTypes=KOfficeFilter

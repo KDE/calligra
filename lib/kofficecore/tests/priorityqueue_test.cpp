@@ -29,17 +29,18 @@ struct Node {
     unsigned int key() const { return m_key; }
     void setKey(unsigned int key) { m_key=key; }
 
-    unsigned int index() const { return m_index; }
-    void setIndex(unsigned int i) { m_index=i; }
+    int index() const { return m_index; }
+    void setIndex(int i) { m_index=i; }
 private:
-    unsigned int m_key, m_index;
+    unsigned int m_key;
+    int m_index;
 };
 
 int main(int /*argc*/, char **/*argv*/) {
 
     QPtrList<Node> list;
     list.setAutoDelete(true);
-    PriorityQueue<Node> queue;
+    KOffice::PriorityQueue<Node> queue;
 
     srand(time(0));
     for(int i=0; i<12; ++i) {

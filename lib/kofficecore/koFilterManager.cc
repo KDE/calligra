@@ -95,9 +95,9 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
         constraint += QString::fromLatin1(_format);
         constraint += "' in ";
         if ( direction == Import )
-            constraint += "Export";
+            constraint += "[X-KDE-Export]";
         else
-            constraint += "Import";
+            constraint += "[X-KDE-Import]";
     }
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constraint );
@@ -180,9 +180,9 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
         constraint += nativeFormat;
         constraint += "' in ";
         if ( direction == Import )
-            constraint += "Export";
+            constraint += "[X-KDE-Export]";
         else
-            constraint += "Import";
+            constraint += "[X-KDE-Import]";
     }
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constraint );
@@ -286,9 +286,9 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
 
     QString constr = "'";
     constr += _native_format;
-    constr += "' in Export and '";
+    constr += "' in [X-KDE-Export] and '";
     constr += mimeType;
-    constr += "' in Import";
+    constr += "' in [X-KDE-Import]";
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )
@@ -402,9 +402,9 @@ QString KoFilterManager::prepareExport( const QString & file,
 
     QString constr = "'";
     constr += outputFormat;
-    constr += "' in Export and '";
+    constr += "' in [X-KDE-Export] and '";
     constr += _native_format;
-    constr += "' in Import";
+    constr += "' in [X-KDE-Import]";
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( constr );
     if ( vec.isEmpty() )

@@ -23,10 +23,11 @@
 #include <koDocument.h>
 #include <ktrader.h>
 #include <kservicetype.h>
+#include <kdebug.h>
 
 #include <qfile.h>
 
-#include <kdebug.h>
+#include <limits.h> // UINT_MAX
 
 /**
  * Port from KOffice Trader to KTrader/KActivator (kded) by Simon Hausmann
@@ -167,8 +168,11 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
 KoFilterEntry::KoFilterEntry( KService::Ptr service )
   : m_service( service )
 {
-  import = service->property( "Import" ).toStringList();
-  export_ = service->property( "Export" ).toStringList();
+  import = service->property( "X-KDE-Import" ).toStringList();
+  export_ = service->property( "X-KDE-Export" ).toStringList();
+  int w = service->property( "X-KDE-Weight" ).toInt();
+  weight = w < 0 ? UINT_MAX : static_cast<unsigned int>( w );
+  // soon to disappear
   implemented = service->property( "Implemented" ).toString();
 }
 
