@@ -430,8 +430,6 @@
  <item find="havenot" replace="have not" />
  <item find="havent" replace="haven't" />
  <item find="hda" replace="had" />
- <item find="he have" replace="he has" />
- <item find="he were" replace="he was" />
  <item find="he;ll" replace="he'll" />
  <item find="hearign" replace="hearing" />
  <item find="helpfull" replace="helpful" />
