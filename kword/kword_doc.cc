@@ -1121,6 +1121,11 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     paper.setAttribute( "mmFootBody", pageHeaderFooter.mmFooterBodySpacing );
     paper.setAttribute( "inchFootBody", pageHeaderFooter.inchFooterBodySpacing );
 
+    QDOM::Element e = formatCollection->save( doc );
+    if ( e.isNull() )
+	return FALSE;
+    word.append( e );
+
     QDOM::Element border = doc.createElement( "PAPERBORDERS" );
     paper.appendChild( border );
     border.setAttribute( "mmLeft", pageLayout.mmLeft );

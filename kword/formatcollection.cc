@@ -111,6 +111,8 @@ QDOM::Element KWFormatCollection::save( QDOM::Document &doc )
 	    return f;
 	formats_.appendChild( f );
     }
+    
+    return formats_;
 }
 
 /*================================================================*/
