@@ -90,6 +90,7 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	VGradient gradient( **m_lpgradient );
 	gradient.setType( VGradient::linear );
 	gradient.setOrigin( KoPoint( 2, 2 ) );
+	gradient.setFocalPoint( KoPoint( 2, 2 ) );
 	gradient.setVector( KoPoint( width() - 3, 2 ) );
 	VFill fill;
 	KIconLoader il;

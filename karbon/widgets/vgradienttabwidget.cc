@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -122,6 +121,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	if( gradient.type() == VGradient::radial )
 	{
 		gradient.setOrigin( KoPoint( width() / 2, height() / 2 ) );
+		gradient.setFocalPoint( KoPoint( width() / 2, height() / 2 ) );
 		gradient.setVector( KoPoint( width() / 4, height() / 4 ) );
 	}
 	else

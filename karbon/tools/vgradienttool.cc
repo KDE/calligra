@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -148,6 +147,7 @@ VGradientTool::mouseDragRelease()
 	KoPoint lp = last();
 	//lp.setY( -lp.y() + view()->canvasWidget()->viewport()->height() );
 	m_gradient.setOrigin( fp );
+	m_gradient.setFocalPoint( fp );
 	m_gradient.setVector( lp );
 
 	if( m_optionsWidget->target() == VGradientTabWidget::FILL )
