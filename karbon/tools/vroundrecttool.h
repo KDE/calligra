@@ -39,6 +39,7 @@ public:
 
 	virtual QWidget *optionsWidget() { return m_optionsWidget; }
 	virtual QString name() { return i18n( "Round rectangle tool" ); }
+	virtual QString icon() { return "14_roundrect"; }
 
 	virtual VComposite* shape( bool interactive = false ) const;
 

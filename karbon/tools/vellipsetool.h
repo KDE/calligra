@@ -37,6 +37,7 @@ public:
 	virtual ~VEllipseTool();
 
 	virtual QString name() { return i18n( "Ellipse tool" ); }
+	virtual QString icon() { return "14_ellipse"; }
 	virtual QWidget *optionsWidget() { return m_optionsWidget; }
 	
 	virtual VComposite *shape( bool interactive = false ) const;

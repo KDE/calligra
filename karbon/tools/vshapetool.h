@@ -37,6 +37,7 @@ public:
 	VShapeTool( KarbonView* view, const QString& name, bool polar = false );
 
 	virtual QString name() { return m_name; }
+	virtual QString icon() { return "14_polygon"; }
 	virtual QString contextHelp();
 	
 	virtual void activate();

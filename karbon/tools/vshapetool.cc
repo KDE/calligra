@@ -92,8 +92,7 @@ VShapeTool::mouseButtonRelease()
 	{
 		VShapeCmd* cmd = new VShapeCmd(
 			&view()->part()->document(),
-			name(),
-			composite );
+			name(), composite, icon() );
 
 		view()->part()->addCommand( cmd, true );
 		view()->selectionChanged();
@@ -122,8 +121,7 @@ VShapeTool::mouseDragRelease()
 
 	VShapeCmd* cmd = new VShapeCmd(
 		&view()->part()->document(),
-		name(),
-		shape() );
+		name(), shape(), icon() );
 
 	view()->part()->addCommand( cmd, true );
 	view()->selectionChanged();
