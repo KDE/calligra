@@ -814,11 +814,6 @@ void KPTextObject::recalcPageNum( KPresenterDoc *doc, KPrPage *page )
             var->paragraph()->setChanged( true );
         }
     }
-
-
-#if 0
-    ktextobject.setPageNum( pgnum );
-#endif
 }
 
 void KPTextObject::drawParags( QPainter *painter, KoZoomHandler* zoomHandler, const QColorGroup& cg, int from, int to )
@@ -1010,25 +1005,11 @@ KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
     connect( textView(), SIGNAL( copy() ), SLOT( copy() ) );
     connect( textView(), SIGNAL( paste() ), SLOT( paste() ) );
     updateUI( true, true );
-#if 0
-    if( m_canvas->getView() && m_canvas->getView()->getHRuler())
-    {
-        m_canvas->getView()->getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
-        m_canvas->getView()->getHRuler()->repaint();
-    }
-#endif
 
 }
 
 KPTextView::~KPTextView()
 {
-#if 0
-    if( m_canvas->getView() && m_canvas->getView()->getHRuler())
-    {
-        m_canvas->getView()->getHRuler()->changeFlags(0);
-        m_canvas->getView()->getHRuler()->repaint();
-    }
-#endif
 }
 
 KoTextViewIface* KPTextView::dcopObject()
@@ -1304,7 +1285,6 @@ void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
 
 void KPTextView::insertVariable( int type, int subtype )
 {
-    //kdDebug() << "KPTextView::insertVariable " << type << endl;
     KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
 
     KoVariable * var = 0L;
@@ -1375,7 +1355,7 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent ) const
     KPrTextDrag *kd = new KPrTextDrag( parent );
     kd->setPlain( text );
     kd->setKPresenter( domDoc.toCString() );
-    kdDebug() << "KPTextView::newDrag " << domDoc.toCString() << endl;
+    //kdDebug() << "KPTextView::newDrag " << domDoc.toCString() << endl;
     return kd;
 }
 

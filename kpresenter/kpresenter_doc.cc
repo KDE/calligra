@@ -2104,7 +2104,8 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
     KPrPage *page=m_pageList.first();
     if(m_kpresenterView && m_kpresenterView->getCanvas() && m_kpresenterView->getCanvas()->activePage())
         page=m_kpresenterView->getCanvas()->activePage();
-
+    else if( m_initialActivePage )
+        page=m_initialActivePage;
     //draw background
     page->background()->draw( &painter, zoomHandler(), rect, false );
     //for the moment draw first page.
