@@ -350,7 +350,7 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect, KPrPage * 
         QRect pageRect = page->getZoomPageRect();
 
         if ( rect.intersects( pageRect ) )
-            page->background()->draw( painter, m_view->zoomHandler(), rect, true );
+            page->background()->drawBackground( painter, m_view->zoomHandler(), rect, true );
 
         // Include the border
         pageRect.rLeft() -= 1;
@@ -374,7 +374,7 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect, KPrPage * 
         QRect crect = desk.intersect( rect );
         if ( crect.isEmpty() )
             return;
-        page->background()->draw( painter, desk.size(), crect, false );
+        page->background()->drawBackground( painter, desk.size(), crect, false );
     }
 }
 
@@ -4784,7 +4784,7 @@ void KPrCanvas::setTextBackground( KPTextObject */*obj*/ )
 #if 0
     QPixmap pix( m_activePage->getZoomPageRect().size() );
     QPainter painter( &pix );
-    m_activePage->background()->draw( &painter, FALSE );
+    m_activePage->background()->drawBackground( &painter, FALSE );
     QPixmap bpix( obj->getSize().toQSize() ); // ## zoom it !
     bitBlt( &bpix, 0, 0, &pix, obj->getOrig().x(), obj->getOrig().y() -
             m_activePage->getZoomPageRect().height() * ( m_view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );

@@ -61,7 +61,7 @@ void BackPreview::drawContents( QPainter *p )
     QFrame::drawContents( p );
     p->save();
     p->translate( contentsRect().x(), contentsRect().y() );
-    back->draw( p, contentsRect().size(), contentsRect(), false );
+    back->drawBackground( p, contentsRect().size(), contentsRect(), false );
     p->restore();
 }
 

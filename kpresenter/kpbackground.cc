@@ -78,18 +78,18 @@ void KPBackGround::setBackPicture ( const KoPictureKey& key )
     backPicture = pictureCollection()->findOrLoad(key.filename(), key.lastModified() );
 }
 
-void KPBackGround::draw( QPainter *_painter, const KoZoomHandler* zoomHandler,
-                         const QRect& _crect, bool _drawBorders )
+void KPBackGround::drawBackground( QPainter *_painter, const KoZoomHandler* zoomHandler,
+                                   const QRect& _crect, bool _drawBorders )
 {
     QRect pageRect = zoomHandler->zoomRect( m_page->getPageRect() );
     QRect crect = pageRect.intersect( _crect );
     if ( crect.isEmpty() )
         return;
     QSize ext = pageRect.size();
-    draw( _painter, ext, crect, _drawBorders );
+    drawBackground( _painter, ext, crect, _drawBorders );
 }
 
-void KPBackGround::draw( QPainter *_painter, const QSize& ext, const QRect& crect, bool _drawBorders )
+void KPBackGround::drawBackground( QPainter *_painter, const QSize& ext, const QRect& crect, bool _drawBorders )
 {
     _painter->save();
     switch ( backType )

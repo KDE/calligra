@@ -3253,8 +3253,7 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect,
     KPrPage *page=m_pageList.first();
     if( m_initialActivePage )
         page=m_initialActivePage;
-    //draw background
-    page->background()->draw( &painter, zoomHandler(), rect, false );
+    page->background()->drawBackground( &painter, zoomHandler(), rect, false );
     //for the moment draw first page.
     QPtrListIterator<KPObject> it( page->objectList() );
     for ( ; it.current() ; ++it )
