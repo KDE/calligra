@@ -84,9 +84,9 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
     else if ( node->getType() == t_range )
     {
       KSParseNodeExtraRange* extra = new KSParseNodeExtraRange( node->getStringLiteral(), m, t );
-      KSpreadDependency* d = new KSpreadDependency(extra->range()->range.left(), 
+      KSpreadDependency* d = new KSpreadDependency(extra->range()->range.left(),
 						   extra->range()->range.top(),
-						   extra->range()->range.right(), 
+						   extra->range()->range.right(),
 						   extra->range()->range.bottom(),
 						   extra->range()->table);
       if (!d->Table())
@@ -661,8 +661,8 @@ static bool kspreadfunc_sum( KSContext& context )
   return b;
 }
 
-static bool kspreadfunc_product_helper( KSContext & context, 
-                                        QValueList<KSValue::Ptr> & args, 
+static bool kspreadfunc_product_helper( KSContext & context,
+                                        QValueList<KSValue::Ptr> & args,
                                         double & result )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -687,8 +687,8 @@ static bool kspreadfunc_product_helper( KSContext & context,
 static bool kspreadfunc_product( KSContext& context )
 {
   double result = 1.0;
-  bool b = kspreadfunc_product_helper( context, 
-                                       context.value()->listValue(), 
+  bool b = kspreadfunc_product_helper( context,
+                                       context.value()->listValue(),
                                        result );
 
   if ( b )
@@ -775,7 +775,7 @@ static bool kspreadfunc_max( KSContext& context )
   return b;
 }
 
-static bool kspreadfunc_lcm_helper( KSContext & context, 
+static bool kspreadfunc_lcm_helper( KSContext & context,
 				    QValueList<KSValue::Ptr> & args,
 				    double & result,
 				    double & max,
@@ -807,7 +807,7 @@ static bool kspreadfunc_lcm_helper( KSContext & context,
     else if (KSUtil::checkType(context, *it, KSValue::DoubleType, true))
     {
       double d = (double) (*it)->doubleValue();
-      
+
       if (d < 0)
 	++signs;
 
@@ -837,7 +837,7 @@ static bool kspreadfunc_lcm_helper( KSContext & context,
 
 	it = args.begin();
 	continue;
-      } 
+      }
     } // end else if
 
     // ... otherwise check the next value if any
@@ -858,7 +858,7 @@ static bool kspreadfunc_lcm_helper( KSContext & context,
       result *= -1;
   }
 
-  return true;  
+  return true;
 }
 
 static bool kspreadfunc_lcm( KSContext & context )
@@ -868,14 +868,14 @@ static bool kspreadfunc_lcm( KSContext & context )
   double inter  = 0.0;
   int    signs  = 0;
 
-  bool b = kspreadfunc_lcm_helper(context, context.value()->listValue(), 
+  bool b = kspreadfunc_lcm_helper(context, context.value()->listValue(),
 				  result, max, inter, signs);
 
-  if (b) 
+  if (b)
     context.setValue(new KSValue(result));
 
   return b;
-  
+
 }
 
 static bool kspreadfunc_min_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,int& inter)
@@ -1938,6 +1938,10 @@ static bool kspreadfunc_month( KSContext& context )
 
 static bool kspreadfunc_time( KSContext& context )
 {
+  int hour;
+  int minute;
+  int second;
+
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context,3, "time",true ) )
@@ -1952,9 +1956,40 @@ static bool kspreadfunc_time( KSContext& context )
   if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
     return false;
 
+  hour = args[0]->intValue();
+  minute = args[1]->intValue();
+  second = args[2]->intValue();
+
+  /* normalize the data */
+  minute += second / 60;
+  second = second % 60;
+  hour += minute / 60;
+  minute = minute % 60;
+
+  /* we'll lose hours data that carries over into days */
+  hour = hour % 24;
+
+  /* now carry down hours/minutes for negative minutes/seconds */
+
+  if (second < 0)
+  {
+    second += 60;
+    minute -= 1;
+  }
+
+  if (minute < 0)
+  {
+    minute += 60;
+    hour -= 1;
+  }
+
+  if (hour < 0)
+  {
+    hour += 24;
+  }
+
   context.setValue( new KSValue(KGlobal::locale()->formatTime(
-    QTime(args[0]->intValue(),
-          args[1]->intValue(),args[2]->intValue()),true )));
+    QTime(hour, minute, second),true )));
 
   return true;
 }
@@ -2238,7 +2273,7 @@ static double phi_helper(double x)
 static bool kspreadfunc_phi(KSContext& context)
 {
   //distribution function for a standard normal distribution
-  
+
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "PHI", true ) )
@@ -2250,7 +2285,7 @@ static bool kspreadfunc_phi(KSContext& context)
   double x = args[0]->doubleValue();
 
   context.setValue( new KSValue(phi_helper(x)) );
- 
+
   return true;
 }
 
@@ -2321,7 +2356,7 @@ static bool kspreadfunc_gauss(KSContext& context)
   double tmp = gauss_helper(x);
 
   context.setValue( new KSValue(tmp) );
- 
+
   return true;
 }
 
@@ -2422,7 +2457,7 @@ static double GetGammaDist(double x, double alpha, double beta)
       return exp( dgamma * log(dx) - dx - a - b ) * t * den;
     }
   }
-  
+
   return 1.0;             // should not happen ...
 }
 
@@ -2535,7 +2570,7 @@ static double beta_helper(double x, double alpha, double beta) {
       b1 = 1.0E30;
     else
       b1 = exp(GetLogGamma(fA)+GetLogGamma(fB)-GetLogGamma(fA+fB));
-    
+
     cf *= pow(x, fA)*pow(1.0-x,fB)/(fA*b1);
   }
   if (bReflect)
@@ -2550,7 +2585,7 @@ static bool kspreadfunc_betadist( KSContext& context ) {
   double fA, fB;  //lower, upper bound
   fA = 0.0;
   fB = 1.0;
-  
+
   if ( KSUtil::checkArgumentsCount( context, 5, "BETADIST", false ) ) {
     if( KSUtil::checkType( context, args[3], KSValue::DoubleType, false ) )
       fA = args[3]->doubleValue();
@@ -2613,7 +2648,7 @@ static bool kspreadfunc_fisherinv( KSContext& context ) {
 static bool kspreadfunc_normdist(KSContext& context ) {
   //returns the normal cumulative distribution
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 4, "NORMDIST", true ) )
     return false;
 
@@ -2644,7 +2679,7 @@ static bool kspreadfunc_normdist(KSContext& context ) {
 static bool kspreadfunc_lognormdist(KSContext& context ) {
   //returns the cumulative lognormal distribution
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 3, "LOGNORMDIST", true ) )
     return false;
 
@@ -2670,15 +2705,15 @@ static bool kspreadfunc_lognormdist(KSContext& context ) {
 static bool kspreadfunc_stdnormdist(KSContext& context ) {
   //returns the cumulative lognormal distribution
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 1, "NORMSDIST", true ) )
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
     return false;
-  
+
   double x = args[0]->doubleValue();
-  
+
   context.setValue( new KSValue(0.5 + gauss_helper(x)));
   return true;
 }
@@ -2717,7 +2752,7 @@ static bool kspreadfunc_expondist(KSContext& context ) {
     else
       result = 0;
   }
-  
+
   context.setValue( new KSValue(result));
   return true;
 }
@@ -2725,7 +2760,7 @@ static bool kspreadfunc_expondist(KSContext& context ) {
 static bool kspreadfunc_weibull( KSContext& context ) {
   //returns the Weibull distribution
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 4, "WEIBULL", true ) )
     return false;
 
@@ -2742,7 +2777,7 @@ static bool kspreadfunc_weibull( KSContext& context ) {
   double alpha = args[1]->doubleValue();
   double beta = args[2]->doubleValue();
   double kum = args[3]->intValue();
-  
+
   double result;
 
   if (alpha <= 0.0 || beta <= 0.0 || x < 0.0)
@@ -2777,7 +2812,7 @@ static double gaussinv_helper (double x) {
 
 static bool kspreadfunc_normsinv( KSContext& context ) {
   //returns the inverse of the standard normal cumulative distribution
-  
+
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "NORMSINV", true ) )
@@ -2799,7 +2834,7 @@ static bool kspreadfunc_normsinv( KSContext& context ) {
 static bool kspreadfunc_norminv( KSContext& context ) {
   //returns the inverse of the normal cumulative distribution
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  
+
   if ( !KSUtil::checkArgumentsCount( context, 3, "NORMINV", true ) )
     return false;
 
@@ -2818,7 +2853,7 @@ static bool kspreadfunc_norminv( KSContext& context ) {
     return false;
   else
     context.setValue( new KSValue((gaussinv_helper(x)*sigma + mue)));
-  
+
   return true;
 }
 
@@ -2838,8 +2873,8 @@ static bool kspreadfunc_gammaln( KSContext& context ) {
     context.setValue( new KSValue(GetLogGamma(x)));
   else
     return false;
-  
-  return true;        
+
+  return true;
 }
 
 static bool kspreadfunc_poisson( KSContext& context ) {
@@ -2885,7 +2920,7 @@ static bool kspreadfunc_poisson( KSContext& context ) {
       result = sum;
     }
   }
-  
+
   context.setValue( new KSValue(result));
   return true;
 }
@@ -2912,7 +2947,7 @@ static bool kspreadfunc_confidence( KSContext& context ) {
     return false;
   else
     context.setValue( new KSValue(gaussinv_helper(1.0-alpha/2.0) * sigma/sqrt(n)));
-  
+
   return true;
 }
 
@@ -2982,7 +3017,7 @@ static bool kspreadfunc_fdist( KSContext& context ) {
   if (fF < 0.0 || fF1 < 1 || fF2 < 1 || fF1 >= 1.0E10 || fF2 >= 1.0E10) {
     return false;
   }
-  
+
   context.setValue( new KSValue(GetFDist(fF, fF1, fF2)));
 
   return true;
@@ -3002,12 +3037,12 @@ static bool kspreadfunc_chidist( KSContext& context ) {
 
   double fChi = args[0]->doubleValue();
   double fDF = args[1]->intValue();
-  
+
   if (fDF < 1 || fDF >= 1.0E5 || fChi < 0.0 )
     return false;
-  
+
   context.setValue( new KSValue(GetChiDist(fChi, fDF)));
-  
+
   return true;
 }
 
@@ -5348,7 +5383,7 @@ static bool kspreadfunc_AsciiToChar( KSContext& context )
     }
     else return false;
   }
-  
+
   context.setValue( new KSValue(str));
   return true;
 }
@@ -5385,7 +5420,7 @@ static bool kspreadfunc_booltoint( KSContext & context )
       int val = (args[0]->boolValue() ? 1 : 0);
 
       context.setValue( new KSValue(val));
-      
+
       return true;
     }
   }
@@ -5404,7 +5439,7 @@ static bool kspreadfunc_BoolToString( KSContext& context )
       QString val((args[0]->boolValue() ? "True" : "False"));
 
       context.setValue( new KSValue(val));
-	
+
       return true;
     }
   }
@@ -5424,7 +5459,7 @@ static bool kspreadfunc_NumberToString( KSContext& context )
       val.setNum(args[0]->doubleValue(), 'g', 8);
 
       context.setValue( new KSValue(val));
-	
+
       return true;
     }
   }
@@ -5605,7 +5640,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "ROMAN", new KSValue( new KSBuiltinFunction( module, "ROMAN", kspreadfunc_roman) ) );
   module->addObject( "shortcurrentDate", new KSValue( new KSBuiltinFunction( module, "shortcurrentDate", kspreadfunc_shortcurrentDate) ) );
   module->addObject( "trim", new KSValue( new KSBuiltinFunction( module, "trim", kspreadfunc_trim) ) );
-  
+
   //statistical stuff
   module->addObject( "GAUSS", new KSValue( new KSBuiltinFunction( module, "GAUSS", kspreadfunc_gauss) ) );
   module->addObject( "PHI", new KSValue( new KSBuiltinFunction( module, "PHI", kspreadfunc_phi) ) );

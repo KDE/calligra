@@ -714,6 +714,8 @@
 	<Text>The time() function returns the time formatted with local parameters.</Text>
 	<Syntax>time(hours;minutes;seconds)</Syntax>
 	<Example>time(10;2;2) returns 10:02:02</Example>
+        <Example>time(10;70;0) returns 11:10:0</Example>
+        <Example>time(10;-40;0) returns 9:20:0</Example>
       </Help>
     </Function>
     
