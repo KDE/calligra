@@ -305,6 +305,13 @@ AdjustSizeCommand::AdjustSizeCommand(int type, WidgetList &list, Form *form)
 {
 	for(QWidget *w = list.first(); w; w = list.next())
 	{
+		if(w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
+		{
+			w = w->parentWidget(); // widget is WidgetStack page
+			if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is tabwidget page
+				w = w->parentWidget();
+		}
+
 		m_sizes.insert(w->name(), w->size());
 		if(m_type == SizeToGrid) // SizeToGrid also move widgets
 			m_pos.insert(w->name(), w->pos());
@@ -352,8 +359,15 @@ AdjustSizeCommand::execute()
 
 		case SizeToFit:
 		{
-			for(QWidget *w = list.first(); w; w = list.next())
-				w->resize(w->sizeHint());
+			for(QWidget *w = list.first(); w; w = list.next()) {
+				ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
+				if(item && !item->children()->isEmpty())  // container
+					w->resize(getSizeFromChildren(item));
+				else if(item && item->container()) // empty container
+					w->resize(item->container()->form()->gridX() * 5, item->container()->form()->gridY() * 5); // basic size
+				else
+					w->resize(w->sizeHint());
+			}
 			break;
 		}
 
@@ -428,6 +442,29 @@ AdjustSizeCommand::execute()
 	// We restore selection
 	for(QWidget *w = list.first(); w; w = list.next())
 		m_form->setSelectedWidget(w, true);
+}
+
+QSize
+AdjustSizeCommand::getSizeFromChildren(ObjectTreeItem *item)
+{
+	if(!item->container()) // multi pages containers (eg tabwidget)
+	{
+		QSize s;
+		// get size for each container, and keep the biggest one
+		for(ObjectTreeItem *tree = item->children()->first(); tree; tree = item->children()->next())
+			s = s.expandedTo(getSizeFromChildren(tree));
+		return s + QSize(20, 20);
+	}
+
+	int tmpw = 0, tmph = 0;
+	for(ObjectTreeItem *tree = item->children()->first(); tree; tree = item->children()->next()) {
+		if(!tree->widget())
+			continue;
+		tmpw = QMAX(tmpw, tree->widget()->geometry().right());
+		tmph = QMAX(tmph, tree->widget()->geometry().bottom());
+	}
+
+	return QSize(tmpw, tmph) + QSize(10, 10);
 }
 
 void

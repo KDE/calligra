@@ -123,6 +123,9 @@ class KFORMEDITOR_EXPORT AdjustSizeCommand : public KCommand
 			SizeToSmallHeight, SizeToBigHeight };
 
 	protected:
+		QSize  getSizeFromChildren(ObjectTreeItem *item);
+
+	protected:
 		Form  *m_form;
 		int    m_type;
 		QMap<QString, QPoint>  m_pos;
