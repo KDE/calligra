@@ -58,6 +58,7 @@ KIllustratorChild::~KIllustratorChild ()
 KIllustratorDocument::KIllustratorDocument( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
+    setInstance( KIllustratorFactory::global() );
     m_gdocument = new GDocument();
     connect(m_gdocument, SIGNAL(wasModified(bool)), this, SLOT(modified(bool)));
     GObject::registerPrototype ("object", new GPart());
