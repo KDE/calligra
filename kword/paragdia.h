@@ -112,7 +112,7 @@ public:
 
 
     bool isAlignChanged() const {return oldLayout.alignment!=align();}
-    bool listTabulatorChanged() const {return m_bListTabulatorChanged;}
+    bool listTabulatorChanged() const {return oldLayout.tabList()!=tabListTabulator();}
 
     bool linesTogether() const ;
 
@@ -187,7 +187,6 @@ protected:
     KWParagLayout oldLayout;
 
     bool m_bAfterInitBorder;
-    bool m_bListTabulatorChanged;
     bool m_bPageBreakingChanged;
 
 protected slots:

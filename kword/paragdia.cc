@@ -320,7 +320,6 @@ KWParagDia::KWParagDia( QWidget* parent, const char* name, QStringList _fontList
         setupTab4();
     if ( _flags & PD_TABS )
         setupTab5();
-    m_bListTabulatorChanged=false;
     setInitialSize( QSize(600, 500) );
 }
 
@@ -995,7 +994,6 @@ void KWParagDia::addClicked()
 	  return;
 	}
 
-      m_bListTabulatorChanged=true;
       lTabs->insertItem(eTabPos->text());
       bDel->setEnabled(true);
       bModify->setEnabled(true);
@@ -1051,7 +1049,6 @@ void KWParagDia::modifyClicked()
       lTabs->removeItem(lTabs->currentItem());
       addClicked();
       eTabPos->setText("");
-      m_bListTabulatorChanged=true;
     }
 
 }
@@ -1061,7 +1058,6 @@ void KWParagDia::delClicked()
 {
     if(lTabs->currentItem()!=-1)
     {
-        m_bListTabulatorChanged=true;
         _tabList.remove( _tabList.at( lTabs->currentItem() ) );
         eTabPos->setText("");
         lTabs->removeItem(lTabs->currentItem());
