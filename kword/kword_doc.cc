@@ -2346,6 +2346,7 @@ void KWordDocument::copySelectedText()
 	}
 
       clipString = tmpFC1.getParag()->getKWString()->toString(tmpFC1.getTextPos(),tmpFC1.getParag()->getTextLen() - tmpFC1.getTextPos());
+
       parag = tmpFC1.getParag()->getNext();
       while (parag && parag != tmpFC2.getParag())
 	{

@@ -168,6 +168,9 @@ void KWordView::init()
       if (frameset->getFrameType() == FT_PART)
 	slotInsertObject(dynamic_cast<KWPartFrameSet*>(frameset)->getChild(),dynamic_cast<KWPartFrameSet*>(frameset));
     }
+
+//    clipboardDataChanged();
+//    selectionOnOff();
 }
 
 /*================================================================*/
@@ -176,6 +179,40 @@ KWordView::~KWordView()
   cerr << "KWordView::~KWordView()" << endl;
   cleanUp();
   cerr << "...KWordView::~KWordView()" << endl;
+}
+
+/*================================================================*/
+void KWordView::clipboardDataChanged()
+{
+  if (kapp->clipboard()->text().isEmpty())
+    {
+      m_vMenuEdit->setItemEnabled(m_idMenuEdit_Paste,false);
+      m_vToolBarEdit->setItemEnabled(ID_EDIT_PASTE,false);
+    }
+  else
+    {
+      m_vMenuEdit->setItemEnabled(m_idMenuEdit_Paste,true);
+      m_vToolBarEdit->setItemEnabled(ID_EDIT_PASTE,true);
+    }
+}
+
+/*================================================================*/
+void KWordView::selectionOnOff()
+{
+  if (m_pKWordDoc->has_selection())
+    {
+      m_vMenuEdit->setItemEnabled(m_idMenuEdit_Cut,true);
+      m_vMenuEdit->setItemEnabled(m_idMenuEdit_Copy,true);
+      m_vToolBarEdit->setItemEnabled(ID_EDIT_CUT,true);
+      m_vToolBarEdit->setItemEnabled(ID_EDIT_COPY,true);
+    }
+  else
+    {
+      m_vMenuEdit->setItemEnabled(m_idMenuEdit_Cut,false);
+      m_vMenuEdit->setItemEnabled(m_idMenuEdit_Copy,false);
+      m_vToolBarEdit->setItemEnabled(ID_EDIT_CUT,false);
+      m_vToolBarEdit->setItemEnabled(ID_EDIT_COPY,false);
+    }
 }
 
 /*================================================================*/
@@ -1874,6 +1911,9 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuHelp_AboutKDE = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&About KDE...")),m_idMenuHelp,
 						 this,CORBA::string_dup("helpAboutKDE")); */
 
+  QObject::connect(kapp->clipboard(),SIGNAL(dataChanged()),this,SLOT(clipboardDataChanged()));
+  QObject::connect(m_pKWordDoc,SIGNAL(selectionOnOff()),this,SLOT(selectionOnOff()));
+  
   return true;
 }
 
@@ -1906,15 +1946,18 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
   // cut
   pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
-  m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCut", true, i18n("Cut"), -1);
+  m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, ID_EDIT_CUT, SIGNAL( clicked() ), this, 
+						      "editCut", true, i18n("Cut"), -1);
 
   // copy
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
-  m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCopy", true, i18n("Copy"), -1);
+  m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, ID_EDIT_COPY, SIGNAL( clicked() ), this, 
+						       "editCopy", true, i18n("Copy"), -1);
 
   // paste
   pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
-  m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editPaste", true, i18n("Paste"), -1);
+  m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix, ID_EDIT_PASTE, SIGNAL( clicked() ), this, 
+							"editPaste", true, i18n("Paste"), -1);
 
   m_vToolBarEdit->insertSeparator( -1 );
 

@@ -110,7 +110,7 @@ public:
   virtual ~KWordView();
 
   void setShell(KWordShell *_shell) { shell = _shell; }
-  
+
   // IDL
   virtual void editUndo();
   virtual void editRedo();
@@ -237,7 +237,7 @@ public:
   void changeRedo(QString,bool);
 
   void sendFocusEvent();
-  
+
 public slots:
   void slotInsertObject(KWordChild *_child,KWPartFrameSet *_kwpf);
   void slotUpdateChildGeometry(KWordChild *_child);
@@ -253,6 +253,9 @@ public slots:
   void spellCheckerCorrected(char*,char*,unsigned);
   void spellCheckerDone(char*);
   void searchDiaClosed();
+
+  void clipboardDataChanged();
+  void selectionOnOff();
 
 protected:
   // C++
@@ -271,7 +274,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void focusInEvent(QFocusEvent *e);
-  
+
   enum PType {TXT_COLOR,FRAME_COLOR,BACK_COLOR};
   QString colorToPixString(QColor,PType _type);
   void getFonts();
@@ -459,7 +462,7 @@ protected:
   OpenPartsUI::BarPosition oldFramePos,oldTextPos;
 
   KWordShell *shell;
-  
+
   static const int ID_TOOL_EDIT = 2;
   static const int ID_TOOL_EDIT_FRAME = 3;
   static const int ID_TOOL_CREATE_TEXT = 4;
@@ -502,6 +505,9 @@ protected:
   static const int ID_FBRD_BOTTOM = 41;
   static const int ID_FBACK_COLOR = 42;
   static const int ID_LINE_SPC = 43;
+  static const int ID_EDIT_CUT = 44;
+  static const int ID_EDIT_COPY = 45;
+  static const int ID_EDIT_PASTE = 46;
 
 };
 

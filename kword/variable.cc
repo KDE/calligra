@@ -95,6 +95,7 @@ QString KWVariableTimeFormat::convert(KWVariable *_var)
 /*================================================================*/
 void KWVariable::save(ostream &out)
 {
+  out << indent << "<TYPE type=\"" << static_cast<int>(getType()) << "\"/>" << endl;
   out << indent << "<POS frameSet=\"" << frameSetNum << "\" frame=\"" << frameNum 
       << "\" pageNum=\"" << pageNum << "\"/>" << endl;
 }

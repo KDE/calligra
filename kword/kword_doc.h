@@ -282,14 +282,14 @@ public:
   void setSelStart(KWFormatContext &_fc)
     { selStart = _fc; }
   KWFormatContext *getSelStart()
-    { return &selStart; }
+    { return &selStart; emit selectionOnOff(); }
   void setSelEnd(KWFormatContext &_fc)
-    { selEnd = _fc; }
+    { selEnd = _fc; emit selectionOnOff(); }
   KWFormatContext *getSelEnd()
     { return &selEnd; }
   void drawSelection(QPainter &_painter,int xOffset,int yOffset);
   void setSelection(bool _has)
-    { hasSelection = _has; }
+    { hasSelection = _has; emit selectionOnOff(); }
   bool has_selection()
     { return hasSelection; }
 
@@ -396,7 +396,8 @@ signals:
   void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
   void sig_updateChildGeometry(KWordChild *_child);
   void sig_removeObject(KWordChild *_child);
-
+  void selectionOnOff();
+  
 protected slots:
   void slotUndoRedoChanged(QString,QString);
 

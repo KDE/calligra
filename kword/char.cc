@@ -368,6 +368,19 @@ void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocume
 		    _data_[__pos].c = 0;
 		    _data_[__pos].attrib = _kwtab;
 		  } break;
+//  		case ID_KWCharVariable:
+//  		  {
+//  		     = new KWImage();
+//  		    _image->load(parser,lst,_doc);
+//  		    QString key;
+//  		    image = _doc->getImageCollection()->getImage(*_image,key);
+//  		    _kwimage = new KWCharImage(image);
+//  		    freeChar(_data_[__pos]);
+//  		    _data_[__pos].c = 0;
+//  		    _data_[__pos].attrib = _kwimage;
+//  		    delete _image;
+//  		    _image = 0;
+//  		  } break;
 		default: break;
 		}
 	      _load = false;

@@ -102,15 +102,17 @@ public:
   KWVariable *getVar() { return var; }
 
   virtual void save(ostream &out)
-    { var->save(out); }
-
+  { var->save(out); }
+  virtual void load(KOMLParser& parser,vector<KOMLAttrib>& lst)
+  { var->load(parser,lst); }
+  
 protected:
   KWVariable *var;
 
 };
 
 // Be prepared for unicode
-#define kwchar char
+#define kwchar QChar
 
 struct KWChar
 {
