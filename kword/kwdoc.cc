@@ -526,7 +526,7 @@ bool KWDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
         KWFactory::global(), _template, "application/x-kword", "*.kwd", i18n("KWord"),
-        dlgtype, "kword_template");
+        dlgtype, "kword_template", parentWidget );
     if ( ret == KoTemplateChooseDia::Template ) {
         QFileInfo fileInfo( _template );
         QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
@@ -5272,12 +5272,6 @@ void KWDocument::paragraphModified(KoTextParag* /*_parag*/, int /*KoTextParag::P
     //kdDebug()<<" _parag :"<<_parag<<" start :"<<start<<" lenght :"<<lenght<<endl;
 }
 
-
-void KWDocument::spellCheckParagraphDeleted( KoTextParag *_parag,  KWTextFrameSet *frm)
-{
-    //FIXME: do we need that?
-    //m_bgSpellCheck->paragraphDeleted( _parag, frm->textObject());
-}
 
 void KWDocument::paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm )
 {

@@ -173,7 +173,6 @@ void KWTextFrameSet::slotParagraphCreated(KoTextParag* /*_parag*/)
 
 void KWTextFrameSet::slotParagraphDeleted(KoTextParag*_parag)
 {
-    kWordDocument()->spellCheckParagraphDeleted( _parag,  this);
     kWordDocument()->paragraphDeleted( _parag, this);
 }
 

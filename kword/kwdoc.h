@@ -749,7 +749,6 @@ public:
     QStringList listOfBookmarkName(KWViewMode * viewMode)const;
 
     void paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm);
-    void spellCheckParagraphDeleted( KoTextParag *_parag,  KWTextFrameSet *frm);
     void paragraphModified(KoTextParag* _parag, int /*KoTextParag::ParagModifyType*/ _type, int start, int lenght);
 
     void initBookmarkList();
