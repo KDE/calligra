@@ -413,6 +413,8 @@ public slots:
 
     void backgroundPicture();
     void updateBgSpellCheckingState();
+    void updatePresentationButton(bool);
+
 public:
     // create GUI
     virtual void createGUI();

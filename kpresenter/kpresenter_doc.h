@@ -413,6 +413,7 @@ public:
 
     void loadPictureMap ( QDomElement& domElement );
     void updateRulerInProtectContentMode();
+    void updatePresentationButton();
 
 public slots:
     void movePage( int from, int to );

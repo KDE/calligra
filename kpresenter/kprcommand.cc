@@ -2076,6 +2076,7 @@ void KPrDeletePageCmd::execute()
     doc->deSelectAllObj();
     doc->takePage(m_page);
     doc->addRemovePage( position, false );
+    doc->updatePresentationButton();
 }
 
 void KPrDeletePageCmd::unexecute()
@@ -2083,6 +2084,7 @@ void KPrDeletePageCmd::unexecute()
     doc->deSelectAllObj();
     doc->insertPage( m_page, position);
     doc->addRemovePage( position, true );
+    doc->updatePresentationButton();
 }
 
 KPrInsertPageCmd::KPrInsertPageCmd( const QString &_name,int _pos, KPrPage *_page, KPresenterDoc *_doc ) :
@@ -2103,6 +2105,7 @@ void KPrInsertPageCmd::execute()
     doc->insertPage( m_page, position);
     doc->addRemovePage( position, true );
     m_page->completeLoading( false, -1 );
+    doc->updatePresentationButton();
 }
 
 void KPrInsertPageCmd::unexecute()
@@ -2110,6 +2113,7 @@ void KPrInsertPageCmd::unexecute()
     doc->deSelectAllObj();
     doc->takePage(m_page);
     doc->addRemovePage( position, false );
+    doc->updatePresentationButton();
 }
 
 KPrMovePageCmd::KPrMovePageCmd( const QString &_name,int _oldpos,int _newpos, KPrPage *_page, KPresenterDoc *_doc ) :

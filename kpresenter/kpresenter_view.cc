@@ -7203,5 +7203,11 @@ void KPresenterView::slotChangeCutState(bool b)
         actionEditCut->setEnabled( b );
 }
 
+void KPresenterView::updatePresentationButton(bool b)
+{
+    actionScreenViewPage->setEnabled( b );
+    actionScreenStart->setEnabled( b );
+}
+
 
 #include <kpresenter_view.moc>

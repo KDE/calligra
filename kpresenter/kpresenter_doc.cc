@@ -2512,7 +2512,7 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     setModified(true);
 
     updateSideBarItem(pgNum);
-
+    updatePresentationButton();
     //update statusbar
     emit pageNumChanged();
 }
@@ -3287,6 +3287,13 @@ void KPresenterDoc::updateRulerInProtectContentMode()
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->updateRulerInProtectContentMode();
+}
+
+void KPresenterDoc::updatePresentationButton()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+        static_cast<KPresenterView*>(it.current())->updatePresentationButton((selectedSlides().count()>0));
 }
 
 
