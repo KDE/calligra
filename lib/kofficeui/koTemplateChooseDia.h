@@ -36,7 +36,9 @@
 #include <qsizepolicy.h>
 
 #include <kiconloaderdialog.h>
+#include <kpixmap.h>
 #include <kapp.h>
+
 
 class MyIconCanvas : public KIconLoaderCanvas
 {
@@ -44,9 +46,10 @@ class MyIconCanvas : public KIconLoaderCanvas
 
 public:
     MyIconCanvas( QWidget *parent = 0, const QString &name = QString::null )
-	: KIconLoaderCanvas( parent, name ) {}
+	: KIconLoaderCanvas( parent, name ) {};
 
     bool isCurrentValid() { return currentItem(); }
+    void loadDir( const QString &dirname, const QString &filter );
 
 protected:
     void viewportMousePressEvent( QMouseEvent *e ) {

@@ -354,3 +354,12 @@ void KoTemplateChooseDia::chooseFile()
     }
 }
 
+void MyIconCanvas::loadDir( const QString &dirname, const QString &filter )
+{
+    QDir d( dirname );
+    if( !filter.isEmpty() )
+	d.setNameFilter(filter);
+
+    if( d.exists() )
+	loadFiles(d.entryList( QDir::Files | QDir::Readable, QDir::Name ));
+}
