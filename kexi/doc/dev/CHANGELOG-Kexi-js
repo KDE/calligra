@@ -11,7 +11,6 @@
 ---------------------------------------------------
 
 [JK] - fix proposed by Jakub Kubica
-[KUBA] - fix proposed by Jakub Koscielak
 "TODO(js)" is my TODO indicatior in the code
 
 TODO: kexiprojectwizard: don't allow user to use the wizard when no db drivers are available
@@ -319,6 +318,11 @@ HOT TODO:
 CC_MAIL: dkite@shaw.ca
 
 ===================== Kexi 0.1 Beta 3 =====================
+
+2004-05-03
+Kexi Main Window
+- Dialog dictionary is properly cleared on project close (fixed possible crash)
+- Not stored dialogs are properly removed from a dictionary
 
 2004-05-01
 KexiDB

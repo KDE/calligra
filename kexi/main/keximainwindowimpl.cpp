@@ -771,6 +771,7 @@ bool KexiMainWindowImpl::closeProject(bool &cancelled)
 	d->navToolWindow->hide();
 	d->propEditorToolWindow->hide();
 
+	d->dialogs.clear(); //sanity!
 	delete d->prj;
 	d->prj=0;
 
@@ -1783,6 +1784,8 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 		}
 	}
 
+	const int dlg_id = dlg->id(); //remember now, because removeObject() can destruct partitem object
+
 	if (remove_on_closing) {
 		//we won't save this object, and it was never saved -remove it
 		if (!removeObject( dlg->partItem(), false )) {
@@ -1797,7 +1800,7 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 		d->nav->updateItemName( dlg->partItem(), false );
 	}
 
-	d->dialogs.take(dlg->id()); //don't remove -KMDI will do that
+	d->dialogs.take(dlg_id); //don't remove -KMDI will do that
 
 	KXMLGUIClient *client = dlg->guiClient();
 	if (d->curDialogGUIClient==client) {
