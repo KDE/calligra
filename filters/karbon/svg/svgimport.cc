@@ -32,6 +32,7 @@
 #include <core/vtext.h>
 #include <core/vglobal.h>
 #include <core/vgroup.h>
+#include <core/vimage.h>
 #include <qcolor.h>
 #include <qfile.h>
 #include <qregexp.h>
@@ -696,6 +697,14 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			VComposite *path = new VComposite( &m_document );
 			path->loadSvgPath( b.attribute( "d" ) );
 			obj = path;
+		}
+		else if( b.tagName() == "image" )
+		{
+			addGraphicContext();
+			setupTransform( b );
+			QString fname = b.attribute("xlink:href");
+			VImage *image = new VImage( 0L, fname );
+			obj = image;
 		}
 		else if( b.tagName() == "text" )
 		{
