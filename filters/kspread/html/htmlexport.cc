@@ -56,11 +56,13 @@ HTMLExport::HTMLExport(KoFilter *, const char *, const QStringList&) :
 
 // HTML enitities, AFAIK we don't need to escape " to &quot; (dnaber):
 const QString strAmp ("&amp;");
+const QString nbsp ("&nbsp;");
 const QString strLt  ("&lt;");
 const QString strGt  ("&gt;");
 const QRegExp regExpAmp ("&");
 const QRegExp regExpLt  ("<");
 const QRegExp regExpGt  (">");
+const QRegExp regExpSpace(" ");
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
@@ -278,7 +280,8 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
               // so use a RegExp:
               text.replace (regExpAmp , strAmp)
                   .replace (regExpLt  , strLt)
-                  .replace (regExpGt  , strGt);
+                  .replace (regExpGt  , strGt)
+                  .replace (regExpSpace, nbsp);
             }
             line += ">\n";
 
