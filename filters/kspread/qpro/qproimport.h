@@ -23,7 +23,7 @@
 #include <koFilter.h>
 #include <qpro/tablenames.h>
 
-class KSpreadTable;
+class KSpreadSheet;
 
 class QpImport : public KoFilter {
 
@@ -43,10 +43,10 @@ public:
    QpTableList();
    ~QpTableList();
 
-   void          table(unsigned pIdx, KSpreadTable* pTable);
-   KSpreadTable* table(unsigned pIdx);
+   void          table(unsigned pIdx, KSpreadSheet* pTable);
+   KSpreadSheet* table(unsigned pIdx);
 protected:
-   KSpreadTable* cTable[cNameCnt];
+   KSpreadSheet* cTable[cNameCnt];
 };
 
 #endif // QPROIMPORT_H

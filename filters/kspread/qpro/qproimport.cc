@@ -55,7 +55,7 @@ QpTableList::~QpTableList()
 
 
 void
-QpTableList::table(unsigned pIdx, KSpreadTable* pTable)
+QpTableList::table(unsigned pIdx, KSpreadSheet* pTable)
 {
    if(pIdx < cNameCnt)
    {
@@ -63,7 +63,7 @@ QpTableList::table(unsigned pIdx, KSpreadTable* pTable)
    }
 }
 
-KSpreadTable*
+KSpreadSheet*
 QpTableList::table(unsigned pIdx)
 {
    return (pIdx < cNameCnt ? cTable[pIdx] : 0);
@@ -132,8 +132,8 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
         return KoFilter::FileNotFound;
     }
 
-    KSpreadTable *table=0;
-//    KSpreadTable *table=ksdoc->createTable();
+    KSpreadSheet *table=0;
+//    KSpreadSheet *table=ksdoc->createTable();
 //    ksdoc->addTable(table);
 
     QString field = "";
@@ -205,7 +205,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
                // we're about to reference a table that hasn't been created yet.
                // setText gets upset about this, so create a blank table
 
-               KSpreadTable* lNewTable=ksdoc->createTable();
+               KSpreadSheet* lNewTable=ksdoc->createTable();
 
                // set up a default name for the table
                lNewTable->setTableName( lTableNames.name(lIdx)
