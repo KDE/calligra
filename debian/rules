@@ -54,23 +54,11 @@ install: build
 binary-indep: build install
 	dh_testroot
 	dh_testdir
-	dh_installdocs -i
-	dh_installchangelogs -i
-	cp debian/README.task debian/task-koffice/usr/share/doc/task-koffice/README
-	dh_compress -i
-	dh_fixperms -i
-	dh_installdeb -i
-	dh_shlibdeps -i
-	dh_gencontrol -i
-	dh_md5sums -i
-	dh_builddeb -i
-
 
 binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installdirs
-	install -d debian/task-koffice/usr/share/doc/task-koffice/
 	for i in `find debian/ -type l -name "common"`; do \
 		rm $$i ;\
 		ln -s ../common $$i ;\

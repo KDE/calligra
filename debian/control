@@ -113,14 +113,3 @@ Description: KDE Office Workspace
  .
  A desktop with easy one-click Office launchers.
 
-Package: task-koffice
-Architecture: all
-Section: x11
-Depends: koffice-libs, kformula, kchart, kword, kspread, killustrator, kpresenter, koshell, kivio, kdelibs3, kdebase-libs, libqt2.2 | libqt2.2-gl
-Suggests: kdebase
-Description: KDE Office Suite
- KDE Office Suite
- .
- This Task depends on each of the following KOffice components:
- .
- kchart, kformula, koshell, kspread, killustrator, kpresenter, and kword
