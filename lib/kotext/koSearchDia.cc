@@ -449,7 +449,58 @@ void KoFindReplace::replace( const QString &, int matchingIndex,
 
     //reactive spellchecking
     m_currentTextObj->setNeedSpellCheck(true);
+    if ( m_replace->replaceContext()->m_optionsMask )
+    {
+        replaceWithAttribut( &cursor, index );
+    }
     KCommand *cmd=m_currentTextObj->replaceSelectionCommand(&cursor, m_replaceDlg->replacement(), KoTextObject::HighlightSelection, QString::null );
+    if( cmd )
+        m_macroCmd->addCommand(cmd);
+}
+
+void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
+{
+    KoTextFormat * lastFormat = m_currentParag->at( index )->format();
+    KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
+    KoSearchContext *m_replaceContext = m_replace->replaceContext();
+    int flags = 0;
+    if (m_replaceContext->m_optionsMask & KoSearchContext::Bold)
+    {
+        flags |= KoTextFormat::Bold;
+        newFormat->setBold( (bool)(m_replaceContext->m_options & KoSearchContext::Bold) );
+    }
+    if (m_replaceContext->m_optionsMask & KoSearchContext::Size)
+    {
+        flags |= KoTextFormat::Size;
+    }
+    if ( m_replaceContext->m_optionsMask & KoSearchContext::Family)
+    {
+        flags |= KoTextFormat::Family;
+        newFormat->setFamily( m_replaceContext->m_family );
+    }
+    if ( m_replaceContext->m_optionsMask & KoSearchContext::Color)
+    {
+        flags |= KoTextFormat::Color;
+        newFormat->setColor( m_replaceContext->m_color );
+    }
+    if ( m_replaceContext->m_optionsMask & KoSearchContext::Italic)
+    {
+        flags |= KoTextFormat::Italic;
+        newFormat->setItalic( (bool)(m_replaceContext->m_options & KoSearchContext::Italic) );
+    }
+    if ( m_replaceContext->m_optionsMask & KoSearchContext::Underline)
+    {
+        flags |= KoTextFormat::Underline;
+        newFormat->setUnderline( (bool)(m_replaceContext->m_options & KoSearchContext::Underline) );
+
+    }
+    if ( m_replaceContext->m_optionsMask & KoSearchContext::VertAlign)
+    {
+        flags |= KoTextFormat::VAlign;
+        newFormat->setVAlign( m_replaceContext->m_vertAlign);
+    }
+    KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
+
     if( cmd )
         m_macroCmd->addCommand(cmd);
 }
@@ -556,9 +607,6 @@ KoTextReplace::~KoTextReplace()
 
 bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int matchedlength )
 {
-    if ( !m_searchContext || !m_searchContext->m_optionsMask)
-        return true;
-
     if ( !m_searchContext || !m_searchContext->m_optionsMask)
         return true;
     KoTextString * s = m_findReplace->currentParag()->string();

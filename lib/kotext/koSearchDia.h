@@ -197,7 +197,7 @@ protected:
     bool findInFrameSet( KoTextObject * textObj, KoTextParag * firstParag, int firstIndex,
                          KoTextParag * lastParag, int lastIndex );
     bool process( const QString &_text );
-
+    void replaceWithAttribut( KoTextCursor * cursor, int index );
 protected slots:
     void highlight( const QString &text, int matchingIndex, int matchingLength, const QRect & );
     void replace( const QString &text, int replacementIndex, int replacedLength,int searchLength, const QRect & );
@@ -241,6 +241,9 @@ public:
     KoTextReplace(const QString &pattern, const QString &replacement, long options, KoSearchContext * _searchContext, KoSearchContext *_replaceContext, KoFindReplace *_findReplace, QWidget *parent = 0);
     ~KoTextReplace();
     virtual bool validateMatch( const QString &text, int index, int matchedlength );
+    KoSearchContext *replaceContext()const {
+        return m_replaceContext;
+    }
 private:
     KoSearchContext *m_searchContext;
     KoSearchContext *m_replaceContext;
