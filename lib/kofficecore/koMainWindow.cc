@@ -49,6 +49,7 @@
 #include <kmimetype.h>
 #include <kstdaccel.h>
 #include <kstddirs.h>
+#include <kio/netaccess.h>
 
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
@@ -283,11 +284,7 @@ bool KoMainWindow::saveDocument( bool saveas )
 		newURL.setPath( newURL.path() + extension );
 	    }
 
-            //HACK
-            if ( !url.isLocalFile() ) return false; // only local files
-
-            // Use KIO::stat(newURL) or an async version of it
-	    if ( QFile::exists( url.path() ) ) { // this file exists => ask for confirmation
+	    if ( KIO::NetAccess::exists( url ) ) { // this file exists => ask for confirmation
 		bOk = KMessageBox::questionYesNo( this,
 						  i18n("A document with this name already exists\n"\
 						       "Do you want to overwrite it ?"),
@@ -300,21 +297,24 @@ bool KoMainWindow::saveDocument( bool saveas )
 	outputMimeType = t->mimeType();
     }
 
-    //HACK
-    if ( !url.isLocalFile() ) return false; // only local files
-
     QApplication::setOverrideCursor( waitCursor );
 
-    if ( QFile::exists( url.path() ) ) { // this file exists => backup
+    if ( KIO::NetAccess::exists( url ) ) { // this file exists => backup
 	// TODO : make this configurable ?
-        QString cmd = QString( "rm -rf %1~" ).arg( url.path() );
-	system( cmd.local8Bit() );
-	cmd = QString("cp %1 %2~").arg( url.path() ).arg( url.path() );
-	system( cmd.local8Bit() );
+        KURL backup( url );
+        backup.setPath( backup.path() + QString::fromLatin1("~") );
+        (void) KIO::NetAccess::del( backup );
+        (void) KIO::NetAccess::copy( url, backup );
+
+        //QString cmd = QString( "rm -rf %1~" ).arg( url.path() );
+        //system( cmd.local8Bit() );
+        //cmd = QString("cp %1 %2~").arg( url.path() ).arg( url.path() );
+        //system( cmd.local8Bit() );
     }
 
     // Not native format : save using export filter
     if ( outputMimeType != _native_format ) {
+        // ### TODO : port the filter manager to use URLs !
 	QString nativeFile=KoFilterManager::self()->prepareExport(url.path(), _native_format);
 	bool ret;
 	ret = pDoc->saveToURL( nativeFile, _native_format ) && KoFilterManager::self()->export_();
@@ -419,23 +419,25 @@ void KoMainWindow::slotFileOpen()
                                            nativeFormatName(), true);
 #endif
 
-    KURL file;
+    KURL url;
 #ifdef USE_QFD
-    file = QFileDialog::getOpenFileName( QString::null, filter );
+    QString file = QFileDialog::getOpenFileName( QString::null, filter );
+    if (file.isEmpty()) return;
+    KURL::encode(file);
+    url = file;
 #else
-    //file = KFileDialog::getOpenFileName( QString::null, filter );
     if(dialog->exec()==QDialog::Accepted)
-        file=dialog->selectedURL();
+        url=dialog->selectedURL();
     else
         return;
 
     KoFilterManager::self()->cleanUp();
     delete dialog;
 #endif
-    if ( file.url().isEmpty() )
+    if ( url.isEmpty() )
 	return;
 
-    (void) openDocument(file);
+    (void) openDocument(url);
 }
 
 void KoMainWindow::slotFileSave()
