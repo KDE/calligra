@@ -3,8 +3,8 @@
 Name=KPresenter
 Exec=kpresenter.bin --server
 Comment=Reggie's Presentation Software
-Comment[sk]=Reggieho Prezentaèný softvér
 Comment[pt_BR]=Software de Apresentações
+Comment[sk]=Reggieho Prezentaèný softvér
 MimeTypes=application/x-kpresenter,
 RepoID=IDL:KPresenter/DocumentFactory:1.0,
 ActivationMode=shared

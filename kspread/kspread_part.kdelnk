@@ -3,8 +3,8 @@
 Name=KSpread
 Exec=kspread.bin --server
 Comment=Torben's Spread Sheet
-Comment[sk]=Torbenov Spread Sheet
 Comment[pt_BR]=Planilha Eletrônica
+Comment[sk]=Torbenov Spread Sheet
 MimeTypes=application/x-kspread,
 RepoID=IDL:KSpread/DocumentFactory:1.0,
 ActivationMode=shared

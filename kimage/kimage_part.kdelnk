@@ -3,8 +3,8 @@
 Name=KImage
 Exec=kimage.bin --server
 Comment=Torben's Image Viewer
-Comment[sk]=Torbenov prehliadaè obrázkov
 Comment[pt_BR]=Visualizador de Imagens
+Comment[sk]=Torbenov prehliadaè obrázkov
 MimeTypes=application/x-kimage,image/gif,
 RepoID=IDL:KImage/Factory:1.0,
 ActivationMode=shared
