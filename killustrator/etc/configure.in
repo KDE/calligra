@@ -32,6 +32,8 @@ dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT( \
 	Makefile \
 	doc/Makefile \
+	doc/de/Makefile \
+	doc/en/Makefile \
 	filter/Makefile \
 	pics/Makefile \
 	share/Makefile \

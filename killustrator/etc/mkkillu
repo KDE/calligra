@@ -11,11 +11,20 @@ cp -p killustrator/etc/po_Makefile.am killustrator.dist/po/Makefile.am
 list=""
 for file in ../kde-i18n/*/messages/koffice/killustrator.po; do
    lang=`echo $file | awk -F '/' '{ print $3 }'`
-   echo $lang
    cp -p $file killustrator.dist/po/$lang.po
    msgfmt $file -o killustrator.dist/po/$lang.gmo
    list="$list $lang.gmo"
 done
+dlist=""
+for file in ../kde-i18n/*/docs/koffice/killustrator; do
+   lang=`echo $file | awk -F '/' '{ print $3 }'`
+   echo $lang
+   mkdir killustrator.dist/doc/$lang
+   cp $file/* killustrator.dist/doc/$lang
+   dlist="$dlist $lang"
+done
+echo "append SUBDIRS = $dlist"
+echo "SUBDIRS = $dlist" >> killustrator.dist/doc/Makefile.am
 
 # remove killustrator from SUBDIRS. Every other instance doesn't hurt :)
 for i in killustrator.dist/Makefile*; do 
