@@ -51,7 +51,7 @@ MySqlCursor::~MySqlCursor() {
 
 bool MySqlCursor::drv_open(const QString& statement) {
 	
-	MySqlConnection *conn=(MySqlConnection*)m_conn;
+	MySqlConnection *conn=static_cast<MySqlConnection*>( static_cast<Connection*>(m_conn) );
 	if ( (!conn)  || (!conn->m_mysql)) {
 		//should never happen, but who knows
 		setError(ERR_NO_CONNECTION,i18n("No connection for cursor open operation specified"));
