@@ -58,6 +58,8 @@ protected:
 private slots:
     void lineEditorSlot ();
 
+signals:
+    void layerChanged();
 private:
     GDocument* document;
     QList<GLayer> layers;

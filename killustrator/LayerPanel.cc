@@ -41,6 +41,9 @@ LayerPanel::LayerPanel (QWidget* parent, const char* name) :
     document = 0L;
     mGrid = new QGridLayout(this, 2, 4);
     layerView = new LayerView (this);
+
+    connect(layerView,SIGNAL(layerChanged()),this,SLOT(slotLayerChanged()));
+
     mGrid->addMultiCellWidget( layerView, 1, 1, 0, 3 );
 
     btn_rl = new QPushButton(this);
@@ -65,18 +68,19 @@ LayerPanel::LayerPanel (QWidget* parent, const char* name) :
 void LayerPanel::manageDocument (GDocument* doc) {
   document = doc;
   layerView->setActiveDocument (doc);
+  slotLayerChanged();
 }
 
 void LayerPanel::upPressed () {
   document->activePage()->raiseLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
-  upDownButton();
+  slotLayerChanged();
 }
 
 void LayerPanel::downPressed () {
   document->activePage()->lowerLayer (document->activePage()->activeLayer ());
   layerView->setActiveDocument (document);
-  upDownButton();
+  slotLayerChanged();
 }
 
 void LayerPanel::newPressed () {
@@ -99,11 +103,11 @@ void LayerPanel::stateOfButton(){
         btn_dl->setEnabled(state);
         btn_rl->setEnabled(state);
         btn_ll->setEnabled(state);
-        upDownButton();
+        slotLayerChanged();
     }
 }
 
-void LayerPanel::upDownButton(){
+void LayerPanel::slotLayerChanged(){
     QList<GLayer> list =document->activePage()->getLayers();
     btn_ll->setEnabled(list.first()!=document->activePage()->activeLayer ());
     btn_rl->setEnabled(list.last()!=document->activePage()->activeLayer ());

@@ -152,7 +152,7 @@ void LayerView::mouseDoubleClickEvent (QMouseEvent *event) {
     repaint ();
   }
 }
-
+#include <kdebug.h>
 void LayerView::mousePressEvent (QMouseEvent *event) {
   int row, col;
 
@@ -180,6 +180,7 @@ void LayerView::mousePressEvent (QMouseEvent *event) {
         break;
       case 3:
         document->activePage()->setActiveLayer (layer);
+        emit layerChanged();
         break;
       default:
         break;

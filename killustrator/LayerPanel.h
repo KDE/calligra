@@ -36,15 +36,14 @@ class LayerPanel : public QWidget {
 public:
   LayerPanel (QWidget* parent = 0L, const char* name = 0L);
 
-  void manageDocument (GDocument* doc);
+    void manageDocument (GDocument* doc);
     void stateOfButton();
-    void upDownButton();
 private slots:
   void upPressed ();
   void downPressed ();
   void newPressed ();
   void deletePressed ();
-
+    void slotLayerChanged();
 private:
   GDocument *document;
   QGridLayout *mGrid;
