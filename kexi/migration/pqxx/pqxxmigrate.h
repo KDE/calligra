@@ -26,7 +26,7 @@
 #include <kexidb/field.h>
 #include <kexidb/connection.h>
 
-#include <pqxx/pqxx>
+#include <pqxx/all.h>
 
 namespace KexiMigration
 {

@@ -4,7 +4,11 @@ lib_LTLIBRARIES = libkeximigrate.la
 
 INCLUDES = -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi $(all_includes) -I$(PG_INCDIR) -I$(PQXX_INCDIR)
 
-SUBDIRS = . pqxx
+if compile_pgsql_plugin
+pgsql_dir=pqxx
+endif
+
+SUBDIRS = . $(pgsql_dir)
 
 libkeximigrate_la_METASOURCES = AUTO
 
