@@ -1022,20 +1022,12 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                     KPPieObject *kppieobject = new KPPieObject();
                     kppieobject->loadOasis(o);
                     newpage->appendObject(kppieobject);
-                    //move to pieobject
-                    QString kind = o.attribute( "draw:kind" );
-                    if ( kind == "section" )
-                    {
-                    }
-                    else if ( kind == "cut" )
-                    {
-                    }
-                    else if ( kind == "arc" )
-                    {
-                    }
                 }
                 else  // circle or ellipse
                 {
+                    KPEllipseObject *kpellipseobject = new KPEllipseObject();
+                    kpellipseobject->loadOasis(o);
+                    newpage->appendObject(kpellipseobject);
                 }
             }
             else if ( name == "draw:line" ) // line

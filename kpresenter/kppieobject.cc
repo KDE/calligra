@@ -85,6 +85,22 @@ void KPPieObject::loadOasis(const QDomElement &element)
 {
     kdDebug()<<"void KPPieObject::loadOasis(const QDomElement &element) ***************\n";
     KP2DObject::loadOasis(element);
+    if ( element.hasAttribute( "draw:kind" ) )
+    {
+        QString kind = element.attribute( "draw:kind" );
+        if ( kind == "section" )
+            pieType = PT_PIE;
+        else if ( kind == "cut" )
+            pieType = PT_CHORD;
+        else if ( kind == "arc" )
+            pieType =PT_ARC;
+        else
+        {
+            kdDebug()<<" KPPieObject::loadOasis(const QDomElement &element) type indefined :"<<kind<<endl;
+            pieType = PT_PIE;
+        }
+        kdDebug()<<" type of pie object :"<<( ( pieType == PT_PIE ) ? "pie" : ( pieType == PT_CHORD )?"cut" : "arc" )<<endl;
+    }
 }
 
 double KPPieObject::load(const QDomElement &element)
