@@ -206,7 +206,6 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 void
 KexiPropertyEditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h)
 {
-	kdDebug() << "painting branches" << y << " " << h << endl;
 	p->eraseRect(0,0,w,h);
 	QListViewItem *item = firstChild();
 	if(!item)

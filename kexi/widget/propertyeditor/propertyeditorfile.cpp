@@ -25,6 +25,8 @@
 #include <qpixmap.h>
 #include <qvariant.h>
 #include <qevent.h>
+#include <qlabel.h>
+#include <qcursor.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -94,45 +96,86 @@ PropertyEditorFile::resizeEvent(QResizeEvent *ev)
 //PIXMAP
 
 PropertyEditorPixmap::PropertyEditorPixmap(QWidget *parent, KexiProperty *property, const char *name)
- : PropertyEditorFile(parent, property, name)
+ : KexiPropertySubEditor(parent, property, name)
  {
-	setFilter(i18n("*.png *.xpm *.bmp *.jpg|Pixmap Files"), false);
-	m_property = property;
-	m_pixmap = QPixmap();
+	m_label = new QLabel(this);
+	m_label->setPixmap(property->value().toPixmap());
+	m_label->setAlignment(Qt::AlignTop);
+	m_label->resize(width(), height()-1);
+	m_label->setBackgroundMode(Qt::PaletteBase);
+	m_label->installEventFilter(this);
+	m_label->show();
+	setWidget(m_label);
+	
+	m_button = new KPushButton(i18n(" ... "), this);
+	m_button->resize(height(), height()-8);
+	m_button->move(width() - m_button->width() -1, 0);
+	m_button->show();
+
+	m_popup = new QLabel(0, 0, Qt::WStyle_NoBorder|Qt::WX11BypassWM|WStyle_StaysOnTop);
+	m_popup->hide();
+
+	connect(m_button, SIGNAL(clicked()), this, SLOT(selectFile()));
  }
  
- 
+void
+PropertyEditorPixmap::resizeEvent(QResizeEvent *ev)
+{
+	m_label->resize(ev->size().width(), ev->size().height()-1);
+	m_button->move(ev->size().width() - m_button->width(), 0);
+}
+
+bool
+PropertyEditorPixmap::eventFilter(QObject *o, QEvent *ev)
+{
+	if(o == m_label)
+	{
+		if(ev->type() == QEvent::MouseButtonPress)
+		{
+			if(m_label->pixmap()->size().height() < height()-2 
+			     && m_label->pixmap()->size().width() < width()-20)
+				return false;
+			m_popup->setPixmap(*(m_label->pixmap()));
+			m_popup->resize(m_label->pixmap()->size());
+			m_popup->move(QCursor::pos());
+			m_popup->show();
+		}
+		if(ev->type() == QEvent::MouseButtonRelease)
+		{
+			if(m_popup->isVisible())
+				m_popup->hide();
+		}
+	}
+	return KexiPropertySubEditor::eventFilter(o, ev);
+}
+
 QVariant
 PropertyEditorPixmap::getValue()
 {
-	if(!m_url.isEmpty() )
-	{
-		QVariant v = QPixmap(m_url.path());
-		return v;
-	}
-	else
-	{
-		if(!(m_pixmap.isNull()))
-		{
-			QVariant p = QVariant(m_pixmap);
-			m_pixmap = QPixmap();
-			return p;
-		}
-		QVariant p = m_property->value();
-		return p;
-	}
+	return *(m_label->pixmap());
 }
 
 void
 PropertyEditorPixmap::setValue(const QVariant &value)
 {
-	m_url = KURL();
-	kdDebug() << value.toPixmap().width() << endl;
-	m_pixmap = value.toPixmap();
-	m_lineedit->setText("");
+	m_label->setPixmap(value.toPixmap());
 	emit changed(this);
 }
 
+void
+PropertyEditorPixmap::selectFile()
+{
+	m_url = KFileDialog::getOpenFileName(QString::null, i18n("*.png *.xpm *.bmp *.jpg|Pixmap Files"), 
+			this, i18n("Choose a file"));
+	if(!m_url.isEmpty())
+		m_label->setPixmap(QPixmap(m_url.path()));
+	emit changed(this);
+}
+
+PropertyEditorPixmap::~PropertyEditorPixmap()
+{
+	delete m_popup;
+}
 
 #include "propertyeditorfile.moc"
 

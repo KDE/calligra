@@ -26,6 +26,7 @@
 class KLineEdit;
 class KPushButton;
 class QResizeEvent;
+class QLabel;
 class KexiProperty;
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorFile : public KexiPropertySubEditor
@@ -53,20 +54,27 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorFile : public KexiPropertySubEdito
 };
 
 
-class KEXIPROPERTYEDITOR_EXPORT PropertyEditorPixmap : public PropertyEditorFile
+class KEXIPROPERTYEDITOR_EXPORT PropertyEditorPixmap : public KexiPropertySubEditor
 {
 	Q_OBJECT
 
 	public:
 		PropertyEditorPixmap(QWidget *parent, KexiProperty *property, const char *name=0);
-		~PropertyEditorPixmap() {;}
+		~PropertyEditorPixmap();
 
 		virtual QVariant	getValue();
 		virtual	void 		setValue(const QVariant &value);
+		virtual bool		eventFilter(QObject *o, QEvent *e);
+		void			resizeEvent(QResizeEvent *ev);
 
+	protected slots:
+		void selectFile();
+		
 	private:
-		KexiProperty	*m_property;
-		QPixmap		m_pixmap;
+		KPushButton	*m_button;
+		KURL		m_url;
+		QLabel		*m_label;
+		QLabel		*m_popup;
 };
 
 
