@@ -379,7 +379,7 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
         if ( doc && doc->viewFormattingChars() && painter.device()->devType() != QInternal::Printer )
         {
             painter.save();
-            QPen pen( Qt::red ); // ?
+            QPen pen( Qt::blue );
             painter.setPen( pen );
             //kdDebug() << "KWTextParag::drawParagString start=" << start << " len=" << len << " length=" << length() << endl;
             if ( start + len == length() )
