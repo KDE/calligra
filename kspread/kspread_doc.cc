@@ -270,7 +270,6 @@ bool KSpreadDoc::loadChildren( KoStore* _store )
 
 bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
-  kdDebug() << " loadXML" << endl;
   m_bLoading = TRUE;
 
   // <spreadsheet>
@@ -308,24 +307,14 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
     // <borders>
     QDomElement borders = paper.namedItem( "borders" ).toElement();
-    if ( borders.isNull() )
+    if ( !borders.isNull() )
     {
-      m_bLoading = false;
-      return false;
+        float left = borders.attribute( "left" ).toFloat();
+        float right = borders.attribute( "right" ).toFloat();
+        float top = borders.attribute( "top" ).toFloat();
+        float bottom = borders.attribute( "bottom" ).toFloat();
+        setPaperLayout( left, top, right, bottom, format.latin1(), orientation.latin1() ); // latin1 is ok, it's only "A4" "Letter" etc.
     }
-    bool ok;
-    float left = borders.attribute( "left" ).toFloat( &ok );
-    if ( !ok ) { m_bLoading = false; return false; }
-    float right = borders.attribute( "right" ).toFloat( &ok );
-    if ( !ok ) { m_bLoading = false; return false; }
-    float top = borders.attribute( "top" ).toFloat( &ok );
-    if ( !ok ) { m_bLoading = false; return false; }
-    float bottom = borders.attribute( "bottom" ).toFloat( &ok );
-    if ( !ok ) { m_bLoading = false; return false; }
-
-    //setPaperLayout( left, top, right, bottom, format.latin1(), orientation.latin1() );
-    setPaperLayout( left, top, right, bottom, format.local8Bit(), orientation.local8Bit() );
-
     QString hleft, hright, hcenter;
     QString fleft, fright, fcenter;
     // <head>
