@@ -324,7 +324,8 @@ public slots:
     void editPersonalExpr();
 
     void slotUpdateRuler();
-
+    void slotEmbedImage( const QString &filename );
+    
     void insertCustomVariable();
     void insertNewCustomVariable();
     void slotSpecialCharDlgClosed();

@@ -155,6 +155,10 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     else
         setXMLFile( "kword.rc" );
 
+
+    QObject::connect( this, SIGNAL( embeddImage( const QString & ) ),
+                      this, SLOT( slotEmbedImage( const QString & ) ) );
+
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
 
@@ -2985,6 +2989,17 @@ void KWView::insertPicture()
         // clicked on the already active tool -> abort
         m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
     }
+}
+
+
+void KWView::slotEmbedImage( const QString &filename )
+{
+    KoPicture picture;
+    KoPictureKey key;
+    key.setKeyFromFile( filename );
+    picture.setKey( key );
+    picture.loadFromFile( filename );
+    insertPicture( picture, false, true );
 }
 
 void KWView::insertPicture( const KoPicture& picture, const bool makeInline, const bool _keepRatio )
