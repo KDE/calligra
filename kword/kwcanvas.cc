@@ -1463,6 +1463,48 @@ void KWCanvas::editFrameProperties()
     delete frameDia;
 }
 
+
+void KWCanvas::editReconnectFrame()
+{
+    KWFrame *frame = doc->getFirstSelectedFrame();
+    if (!frame)
+        return;
+    KWFrameSet *fs = frame->getFrameSet();
+
+
+    KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet*>( fs );
+    QTextParag * parag = textfs->textDocument()->firstParag();
+    if(!( parag!=parag->next() && parag->string()->toString().length()==0)) {
+        int result;
+        result = KMessageBox::warningContinueCancel(this,
+                                                    i18n( "You are about to reconnect the last Frame of the\n"
+                                                          "Frameset '%1'.\n"
+                                                          "Doing so will delete the Frameset and all the\n"
+                                                          "text contained in it!\n\n"
+                                                          "Are you sure you want to do that?").arg(fs->getName()),
+                                                    i18n("Reconnect Frame"), i18n("&Delete"));
+        if (result != KMessageBox::Continue)
+            return;
+    }
+
+#if 0
+    bool blinking = blinkTimer.isActive();
+    if ( blinking )
+        stopBlinkCursor();
+#endif
+
+    KWFrameDia *frameDia = new KWFrameDia( this,  frame,doc,fs->getFrameType());
+    frameDia->setCaption( i18n( "Reconnect Frame" ) );
+    frameDia->show();
+    delete frameDia;
+
+#if 0
+    if ( blinking )
+        startBlinkCursor();
+#endif
+
+}
+
 void KWCanvas::updateFrameFormat()
 {
     doc->refreshFrameBorderButton();

@@ -1252,9 +1252,12 @@ void KWView::editDeleteFrame()
 
 void KWView::editReconnectFrame()
 {
-#if 0
-    gui->canvasWidget()->editReconnectFrame();
-#endif
+    if ( doc->getFirstSelectedFrame() )
+      gui->canvasWidget()->editReconnectFrame();
+    else // TODO enable/disable the action depending on whether a frame is selected, instead
+        KMessageBox::sorry( this,
+                            i18n("Sorry, you have to select a frame first."),
+                            i18n("Format Frameset"));
 }
 
 void KWView::editCustomVars()
@@ -2605,9 +2608,9 @@ void KWView::updatePopupMenuChangeAction()
     // if a header/footer etc. Dont show the popup.
     if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY)
         return;
-
+    int nbFrame=doc->getSelectedFrames().count();
     // enable delete
-    actionEditDelFrame->setEnabled(true && doc->getSelectedFrames().count()==1);
+    actionEditDelFrame->setEnabled(true && nbFrame==1);
 
     // if text frame,
     if(frame && frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT)
@@ -2620,7 +2623,7 @@ void KWView::updatePopupMenuChangeAction()
                 }
             else
                 {
-                    actionEditReconnectFrame->setEnabled(true);
+                    actionEditReconnectFrame->setEnabled(true && nbFrame==1);
                 }
         }
     else
