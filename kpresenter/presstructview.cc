@@ -275,7 +275,7 @@ void KPPresStructView::makeStuffVisible( QListViewItem *item )
             view->skipToPage( item->text( 0 ).toInt() - 1 );
         KPObject *kpobject = dynamic_cast<KPPresStructObjectItem *>(item)->getObject();
         if (kpobject) {
-          QRect rect( doc->zoomHandler()->zoomRect(kpobject->getBoundingRect(  ) ));
+          QRect rect( doc->zoomHandler()->zoomRect(kpobject->getBoundingRect(doc->zoomHandler()  ) ));
           kpobject->setSelected( true );
           doc->repaint( kpobject );
           rect.setLeft( rect.left() - 20 );

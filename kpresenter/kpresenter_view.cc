@@ -4770,7 +4770,7 @@ void KPresenterView::slotUpdateRuler()
         KPTextObject *txtobj= m_canvas->applicableTextObjects().first();
         if ( txtobj )
         {
-            QRect r= zoomHandler()->zoomRect(txtobj->getBoundingRect( ));
+            QRect r= zoomHandler()->zoomRect(txtobj->getBoundingRect(zoomHandler() ));
             getHRuler()->setFrameStartEnd( r.left() /*+ m_canvas->diffx()*//*- pc.x()*/, r.right()/*+m_canvas->diffx()*/ /*- pc.x()*/ );
             getVRuler()->setFrameStartEnd( r.top()/*+ m_canvas->diffy()*//*- pc.y()*/, r.bottom()/*+m_canvas->diffy()*//*- pc.y()*/ );
             if( getHRuler())

@@ -117,9 +117,9 @@ void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool dr
 
         if ( angle == 0 )
         {
-            int sx = ox;
-            int sy = oy;
-            getShadowCoords( sx, sy );
+            double sx = ox;
+            double sy = oy;
+            getShadowCoords( sx, sy,_zoomhandler );
 
             _painter->translate( _zoomhandler->zoomItX(sx), _zoomhandler->zoomItY(sy) );
             paint( _painter,_zoomhandler );
@@ -136,14 +136,14 @@ void KPLineObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler, bool dr
             int xPos = -rr.x();
             rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-            int sx = 0;
-            int sy = 0;
-            getShadowCoords( sx, sy );
+            double sx = 0;
+            double sy = 0;
+            getShadowCoords( sx, sy,_zoomhandler );
 
             QWMatrix m;
             m.translate( pw / 2, ph / 2 );
             m.rotate( angle );
-            m.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
+            m.translate( rr.left() + xPos + _zoomhandler->zoomItX(sx), rr.top() + yPos + _zoomhandler->zoomItY(sy) );
 
             _painter->setWorldMatrix( m, true );
             paint( _painter,_zoomhandler );

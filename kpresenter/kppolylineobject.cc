@@ -149,9 +149,9 @@ void KPPolylineObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, boo
         pen.setColor( shadowColor );
 
         if ( angle == 0 ) {
-            int sx = ox;
-            int sy = oy;
-            getShadowCoords( sx, sy );
+            double sx = ox;
+            double sy = oy;
+            getShadowCoords( sx, sy, _zoomHandler );
 
             _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY(sy) );
             paint( _painter,_zoomHandler );
@@ -167,14 +167,14 @@ void KPPolylineObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, boo
             int xPos = -rr.x();
             rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-            int sx = 0;
-            int sy = 0;
-            getShadowCoords( sx, sy );
+            double sx = 0;
+            double sy = 0;
+            getShadowCoords( sx, sy,_zoomHandler );
 
             QWMatrix m;
             m.translate( pw / 2, ph / 2 );
             m.rotate( angle );
-            m.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
+            m.translate( rr.left() + xPos + _zoomHandler->zoomItX(sx), rr.top() + yPos + _zoomHandler->zoomItY(sy) );
 
             _painter->setWorldMatrix( m, true );
             paint( _painter,_zoomHandler );

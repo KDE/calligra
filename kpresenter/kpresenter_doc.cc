@@ -1509,7 +1509,7 @@ void KPresenterDoc::repaint( const QRect& rect )
 /*===================== repaint =================================*/
 void KPresenterDoc::repaint( KPObject *kpobject )
 {
-    repaint( m_zoomHandler->zoomRect(kpobject->getBoundingRect()) );
+    repaint( m_zoomHandler->zoomRect(kpobject->getBoundingRect(m_zoomHandler)) );
 }
 
 QValueList<int> KPresenterDoc::reorderPage( unsigned int num )

@@ -188,13 +188,12 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool 
     {
         if ( angle == 0 )
         {
-            int sx = ox;
-            int sy = oy;
-            getShadowCoords( sx, sy );
-
+            double sx = ox;
+            double sy = oy;
+            getShadowCoords( sx, sy, _zoomHandler );
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
-            _painter->drawRect( _zoomHandler->zoomItX(ox+sx), _zoomHandler->zoomItY(oy+sx), _zoomHandler->zoomItX( ext.width()), _zoomHandler->zoomItY(ext.height()) );
+            _painter->drawRect( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItX(sy), _zoomHandler->zoomItX( ext.width()), _zoomHandler->zoomItY(ext.height()) );
         }
         else
         {
@@ -219,8 +218,8 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool 
             _painter->setPen( QPen( shadowColor ) );
             _painter->setBrush( shadowColor );
 
-            int dx = 0, dy = 0;
-            getShadowCoords( dx, dy );
+            double dx = 0, dy = 0;
+            getShadowCoords( dx, dy,_zoomHandler );
             _painter->drawRect( _zoomHandler->zoomItX(rr.left() + pixXPos + dx), _zoomHandler->zoomItY(rr.top() + pixYPos + dy),
                                 _zoomHandler->zoomItX(bs.width()), _zoomHandler->zoomItY(bs.height()) );
         }

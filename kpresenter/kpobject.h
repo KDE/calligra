@@ -120,7 +120,7 @@ public:
     virtual QString getTypeString() const
     { return QString(); }
 
-    virtual KoRect getBoundingRect( ) const;
+    virtual KoRect getBoundingRect( KoZoomHandler *_zoomHandler ) const;
     virtual bool isSelected() const
     { return selected; }
     virtual float getAngle() const
@@ -212,7 +212,7 @@ protected:
     /**
      * Modifies x and y to add the shadow offsets
      */
-    void getShadowCoords( int& _x, int& _y ) const;
+    void getShadowCoords( double& _x, double& _y,KoZoomHandler *_zoomHandler ) const;
 
     virtual void doDelete();
 

@@ -280,15 +280,15 @@ int KPObject::load(const QDomElement &element) {
 }
 
 /*======================= get bounding rect ======================*/
-KoRect KPObject::getBoundingRect( ) const
+KoRect KPObject::getBoundingRect( KoZoomHandler *_zoomHandler ) const
 {
     KoRect r( orig.x() , orig.y(),
              ext.width(), ext.height() );
 
     if ( shadowDistance > 0 )
     {
-        int sx = r.x(), sy = r.y();
-        getShadowCoords( sx, sy );
+        double sx = r.x(), sy = r.y();
+        getShadowCoords( sx, sy, _zoomHandler );
         KoRect r2( sx, sy, r.width(), r.height() );
         r = r.unite( r2 );
     }
@@ -447,50 +447,50 @@ void KPObject::draw( QPainter *_painter, KoZoomHandler *_zoomHandler, bool drawS
 }
 
 /*====================== get shadow coordinates ==================*/
-void KPObject::getShadowCoords( int& _x, int& _y ) const
+void KPObject::getShadowCoords( double& _x, double& _y ,KoZoomHandler *_zoomHandler) const
 {
-    int sx = 0, sy = 0;
-
+    double sx = 0, sy = 0;
+    double shadowDir=_zoomHandler->zoomItX(shadowDistance);
     switch ( shadowDirection )
     {
     case SD_LEFT_UP:
     {
-        sx = _x - shadowDistance;
-        sy = _y - shadowDistance;
+        sx = _x - shadowDir;
+        sy = _y - shadowDir;
     } break;
     case SD_UP:
     {
         sx = _x;
-        sy = _y - shadowDistance;
+        sy = _y - shadowDir;
     } break;
     case SD_RIGHT_UP:
     {
-        sx = _x + shadowDistance;
-        sy = _y - shadowDistance;
+        sx = _x + shadowDir;
+        sy = _y - shadowDir;
     } break;
     case SD_RIGHT:
     {
-        sx = _x + shadowDistance;
+        sx = _x + shadowDir;
         sy = _y;
     } break;
     case SD_RIGHT_BOTTOM:
     {
-        sx = _x + shadowDistance;
-        sy = _y + shadowDistance;
+        sx = _x + shadowDir;
+        sy = _y + shadowDir;
     } break;
     case SD_BOTTOM:
     {
         sx = _x;
-        sy = _y + shadowDistance;
+        sy = _y + shadowDir;
     } break;
     case SD_LEFT_BOTTOM:
     {
-        sx = _x - shadowDistance;
-        sy = _y + shadowDistance;
+        sx = _x - shadowDir;
+        sy = _y + shadowDir;
     } break;
     case SD_LEFT:
     {
-        sx = _x - shadowDistance;
+        sx = _x - shadowDir;
         sy = _y;
     } break;
     }
@@ -802,9 +802,9 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
 
         if ( angle == 0 )
         {
-            int sx = ox;
-            int sy = oy;
-            getShadowCoords( sx, sy );
+            double sx = ox;
+            double sy = oy;
+            getShadowCoords( sx, sy, _zoomHandler );
 
             _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY( sy) );
             paint( _painter, _zoomHandler );
@@ -821,9 +821,9 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
             double xPos = -rr.x();
             rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-            int sx = 0;
-            int sy = 0;
-            getShadowCoords( sx, sy );
+            double sx = 0;
+            double sy = 0;
+            getShadowCoords( sx, sy, _zoomHandler );
 
             QWMatrix m;
             m.translate( _zoomHandler->zoomItX(pw / 2), _zoomHandler->zoomItY(ph / 2) );
