@@ -629,3 +629,10 @@ code duplication and got rid of yellow background :))
 - Many fixes in KSpreadDlgLayout (removed hardcoded colorgroups, etc.)
 - Made KSpreadLayout return a proper color in textColor() and bgColor()
 even if default.
+
+2000-06-11 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Changed some dlg->show() by if(dlg->exec())
+because when you press on "cancel", it's not necessary to recalc all
+or refresh cell.
+-Used new icon loxx-action-delete_table.png

@@ -268,7 +268,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_redo->setEnabled( FALSE );
     m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
     m_insertTable = new KAction( i18n("Insert Table"),"inserttable", 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
-    m_removeTable = new KAction( i18n("Remove Table"), 0, this, SLOT( removeTable() ), actionCollection(), "removeTable" );
+    m_removeTable = new KAction( i18n("Remove Table"), "delete_table",0,this, SLOT( removeTable() ), actionCollection(), "removeTable" );
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
     m_hideTable = new KAction(i18n("Hide Table"),0 ,this,SLOT( hideTable()), actionCollection(), "hideTable" );
     m_removeTable = new KAction( i18n("Preference..."), 0, this, SLOT( preference() ), actionCollection(), "preference" );
@@ -1638,9 +1638,11 @@ void KSpreadView::specialPaste()
 	return;
 
     KSpreadspecial dlg( this, "Special Paste" );
-    dlg.exec();
-    m_pTable->recalc(true);
-    updateEditWidget();
+    if(dlg.exec())
+        {
+        m_pTable->recalc(true);
+        updateEditWidget();
+        }
 }
 
 void KSpreadView::removeComment()
@@ -1820,10 +1822,12 @@ void KSpreadView::preference()
   if ( !m_pTable )
        return;
   KSpreadpreference* dlg = new KSpreadpreference( this, "Preference");
-  dlg->show();
-  m_pTable->recalc();
-  m_pCanvas->repaint();
-  slotUpdateHBorder(activeTable());
+  if(dlg->exec())
+        {
+        m_pTable->recalc();
+        m_pCanvas->repaint();
+        slotUpdateHBorder(activeTable());
+        }
 }
 
 void KSpreadView::addModifyComment()
@@ -1832,8 +1836,8 @@ void KSpreadView::addModifyComment()
        return;
 
   KSpreadcomment* dlg = new  KSpreadcomment( this, "comment",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-  dlg->show();
-  updateEditWidget();
+  if(dlg->exec())
+        updateEditWidget();
 }
 
 void KSpreadView::editCell()
