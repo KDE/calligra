@@ -30,7 +30,9 @@ DESCRIPTION
 #ifndef MSWORD_H
 #define MSWORD_H
 
+#ifndef __FreeBSD__
 #include <iconv.h>
+#endif
 #include <kdebug.h>
 #include <mswordgenerated.h>
 
