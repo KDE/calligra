@@ -112,8 +112,6 @@ CORBA::Boolean KWordDocument_impl::init()
   else
     debug("no template chosen");
 
-  updateAllFrames();
-
   return true;
 }
 
@@ -687,13 +685,13 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 {
   _painter.save();
 
-  unsigned int xShift = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).left();
+  unsigned int xShift = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left();
 
   QRegion cr = QRegion(xShift - xOffset - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2 -
 		       _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth,
 		       _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth - 
 		       _fc.getParag()->getParagLayout()->getTopBorder().ptWidth / 2,
-		       getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).width() + 
+		       getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->width() + 
 		       _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + 
 		       _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
 		       _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth,
@@ -716,10 +714,10 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 
   if (_fc.isCursorInFirstLine() && _fc.getParag()->getParagLayout()->getTopBorder().ptWidth > 0)
     {
-      unsigned int _x1 = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).left() - xOffset -
+      unsigned int _x1 = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset -
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2;
       unsigned int _y = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
-      unsigned int _x2 = _x1 + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).width() +
+      unsigned int _x2 = _x1 + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->width() +
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2 + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2 -
 	((_fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2) * 2 == 
@@ -730,10 +728,10 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
     }
   if (_fc.isCursorInLastLine() && _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth > 0)
     {
-      unsigned int _x1 = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).left() - xOffset -
+      unsigned int _x1 = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset -
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth - _fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2;
       unsigned int _y = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth - 1;
-      unsigned int _x2 = _x1 + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).width() +
+      unsigned int _x2 = _x1 + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->width() +
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth + 
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth / 2 + _fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2 -
 	((_fc.getParag()->getParagLayout()->getRightBorder().ptWidth / 2) * 2 == 
@@ -744,7 +742,7 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
     }
   if (_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth > 0)
     {
-      unsigned int _x = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).left() - xOffset - 
+      unsigned int _x = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset - 
 	_fc.getParag()->getParagLayout()->getLeftBorder().ptWidth;
       unsigned int _y1 = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
       unsigned int _y2 = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth;
@@ -754,8 +752,8 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
     }
   if (_fc.getParag()->getParagLayout()->getRightBorder().ptWidth > 0)
     {
-      unsigned int _x = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).left() - xOffset + 
-	_fc.getParag()->getParagLayout()->getRightBorder().ptWidth + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1).width() - 1;
+      unsigned int _x = getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->left() - xOffset + 
+	_fc.getParag()->getParagLayout()->getRightBorder().ptWidth + getFrameSet(_fc.getFrameSet() - 1)->getFrame(_fc.getFrame() - 1)->width() - 1;
       unsigned int _y1 = _fc.getPTY() - yOffset - _fc.getParag()->getParagLayout()->getTopBorder().ptWidth;
       unsigned int _y2 = _fc.getPTY() + _fc.getLineHeight() - yOffset + _fc.getParag()->getParagLayout()->getBottomBorder().ptWidth;
       
@@ -1392,7 +1390,7 @@ void KWordDocument_impl::appendPage(unsigned int _page,QPainter &_painter)
   frameList.setAutoDelete(false);
 
   KWFrameSet *frameSet = 0L;
-  KWFrame frame;
+  KWFrame *frame;
 
   for (unsigned int i = 0;i < getNumFrameSets();i++)
     {
@@ -1401,14 +1399,14 @@ void KWordDocument_impl::appendPage(unsigned int _page,QPainter &_painter)
       for (unsigned int j = 0;j < frameSet->getNumFrames();j++)
 	{
 	  frame = frameSet->getFrame(j);
-	  if (pageRect.intersects(frame))
-	    frameList.append(new KWFrame(frame.x(),frame.y() + getPTPaperHeight(),frame.width(),frame.height(),frame.getRunAround()));
+	  if (frame->intersects(pageRect))
+	    frameList.append(new KWFrame(frame->x(),frame->y() + getPTPaperHeight(),frame->width(),frame->height(),frame->getRunAround()));
 	}
 
       if (!frameList.isEmpty())
 	{
 	  for (unsigned int k = 0;k < frameList.count();k++)
-	    frameSet->addFrame(*frameList.at(k));
+	    frameSet->addFrame(frameList.at(k));
 	}
 
       frameList.clear();
@@ -1475,35 +1473,44 @@ void KWordDocument_impl::updateAllFrames()
   _frames.setAutoDelete(false);
   unsigned int i = 0,j = 0;
   KWFrameSet *frameset = 0L;
-  KWFrame frame1,frame2;
+  KWFrame *frame1,*frame2;
+  KWFrame *framePtr = 0L;
 
   for (i = 0;i < frames.count();i++)
     {
       frameset = frames.at(i);
       for (j = 0;j < frameset->getNumFrames();j++)
-	_frames.append(frameset->getFramePtr(j));
+	_frames.append(frameset->getFrame(j));
     }
 
   for (i = 0;i < _frames.count();i++)
     {
-      frame1 = *_frames.at(i);
-      //debug("num: %d",i);
+      framePtr = _frames.at(i);
+      frame1 = _frames.at(i);
+      _frames.at(i)->clearIntersects();
+
       for (j = 0;j < _frames.count();j++)
 	{
 	  if (i == j) continue;
 
-	  frame2 = *_frames.at(j); 
-	  if (frame1.intersects(frame2))
+	  frame2 = _frames.at(j); 
+	  if (frame1->intersects(QRect(frame2->x(),frame2->y(),frame2->width(),frame2->height())))
 	    {
-	      QRect r = frame1.intersect(frame2);
-	      if (r.x() > frame1.x() || r.y() > frame1.y() || r.width() < frame1.width() || r.height() < frame1.height())
+	      QRect r = QRect(frame2->x(),frame2->y(),frame2->width(),frame2->height()); //frame1->intersect(QRect(frame2->x(),frame2->y(),frame2->width(),frame2->height()));
+	      if (r.left() > frame1->left() || r.top() > frame1->top() || r.right() < frame1->right() || r.bottom() < frame1->bottom())
 		{
-		  r.setLeft(r.left() - frame1.left());
-		  r.setTop(r.top() - frame1.top());
-		  //debug("%d %d %d %d",r.x(),r.y(),r.width(),r.height());
+		  if (r.left() < frame1->left()) r.setLeft(frame1->left());
+		  if (r.top() < frame1->top()) r.setTop(frame1->top());
+		  if (r.right() > frame1->right()) r.setRight(frame1->right());
+		  if (r.bottom() > frame1->bottom()) r.setBottom(frame1->bottom());
+		  if (r.left() - frame1->left() > frame1->right() - r.right())
+		    r.setRight(frame1->right());
+		  else
+		    r.setLeft(frame1->left());
+		  
+		  framePtr->addIntersect(r);
 		}
 	    }
 	}
-      //debug("\n");
     }
 }

@@ -263,3 +263,12 @@ Reggie, 21.10.1998:
 -------------------
 - Implemented printing documents
 - fixed some cursor navigation bugs when pressing return
+
+Reggie, 22.10.1998:
+-------------------
+- Some cursor navigation improvments and redraw fixes
+
+Reggie, 23.10.1998:
+-------------------
+- Started implementing that text can flow around other frames. It
+  already works somehow :-))

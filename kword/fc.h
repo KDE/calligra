@@ -70,7 +70,7 @@ public:
     void cursorGotoNextLine(QPainter &_painter);
     void cursorGotoPrevLine(QPainter &_painter);
     bool makeNextLineLayout( QPainter &_painter );
-    bool makeLineLayout( QPainter &_painter );
+    bool makeLineLayout( QPainter &_painter, bool _checkIntersects = true );
     void makeCounterLayout( QPainter &_painter );
 
     bool isCursorAtParagStart();

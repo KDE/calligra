@@ -22,6 +22,89 @@
 #include <fstream>
 #include <unistd.h>
 
+#ifndef max
+#define max(a,b) ((a)>(b)?(a):(b))
+#endif
+
+/******************************************************************/
+/* Class: KWFrame                                                 */
+/******************************************************************/
+
+/*================================================================*/
+KWFrame::KWFrame() 
+  : QRect(), intersections()
+{ 
+  runAround = RA_NO; 
+  intersections.setAutoDelete(true); 
+}
+
+/*================================================================*/
+KWFrame::KWFrame(const QPoint &topleft,const QPoint &bottomright) 
+  : QRect(topleft,bottomright), intersections() 
+{ 
+  runAround = RA_NO; 
+  intersections.setAutoDelete(true); 
+} 
+
+/*================================================================*/
+KWFrame::KWFrame(const QPoint &topleft,const QSize &size) 
+  : QRect(topleft,size), intersections()
+{ 
+  runAround = RA_NO; 
+  intersections.setAutoDelete(true); 
+}    
+
+/*================================================================*/
+KWFrame::KWFrame(int left,int top,int width,int height) 
+  : QRect(left,top,width,height), intersections() 
+{ 
+  runAround = RA_NO; 
+  intersections.setAutoDelete(true); 
+}
+
+/*================================================================*/
+KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra) 
+  : QRect(left,top,width,height), intersections() 
+{ 
+  runAround = _ra; 
+  intersections.setAutoDelete(true); 
+}
+
+/*================================================================*/
+void KWFrame::addIntersect(QRect _r)
+{ 
+  intersections.append(new QRect(_r)); 
+}
+
+/*================================================================*/
+int KWFrame::getLeftIndent(int _y,int _h)
+{
+  if (intersections.isEmpty()) return 0;
+
+  int _left = 0;
+  QRect rect;
+
+  for (unsigned int i = 0;i < intersections.count();i++)
+    {
+      rect = *intersections.at(i);
+
+      if (rect.intersects(QRect(left(),_y,width(),_h)))
+	{
+	  if (rect.left() == left())
+	    _left = max(_left,rect.width() + 2);
+	}
+    }
+
+  return _left;
+}
+
+/*================================================================*/
+int KWFrame::getRighIndent(int _y,int _h)
+{
+  if (intersections.isEmpty()) return 0;
+  return 0;
+}
+
 /******************************************************************/
 /* Class: KWFrameSet                                              */
 /******************************************************************/
@@ -35,9 +118,16 @@ KWFrameSet::KWFrameSet(KWordDocument_impl *_doc)
 }
 
 /*================================================================*/
-void KWFrameSet::addFrame(KWFrame _rect)
+void KWFrameSet::addFrame(KWFrame _frame)
 {
-  frames.append(new KWFrame(_rect));
+  frames.append(new KWFrame(_frame.x(),_frame.y(),_frame.width(),_frame.height(),_frame.getRunAround()));
+  if (frames.count() == 1) init();
+}
+
+/*================================================================*/
+void KWFrameSet::addFrame(KWFrame *_frame)
+{
+  frames.append(new KWFrame(_frame->x(),_frame->y(),_frame->width(),_frame->height(),_frame->getRunAround()));
   if (frames.count() == 1) init();
 }
 
@@ -52,19 +142,13 @@ int KWFrameSet::getFrame(int _x,int _y)
 {
   for (unsigned int i = 0;i < getNumFrames();i++)
     {
-      if (getFrame(i).contains(QPoint(_x,_y))) return i;
+      if (getFrame(i)->contains(QPoint(_x,_y))) return i;
     }
   return -1;
 }
 
 /*================================================================*/
-KWFrame KWFrameSet::getFrame(unsigned int _num)
-{
-  return *frames.at(_num);
-}
-
-/*================================================================*/
-KWFrame *KWFrameSet::getFramePtr(unsigned int _num)
+KWFrame *KWFrameSet::getFrame(unsigned int _num)
 {
   return frames.at(_num);
 }
@@ -83,14 +167,14 @@ bool KWFrameSet::contains(unsigned int mx,unsigned int my)
 /*================================================================*/
 void KWFrameSet::save(ostream &out)
 {
-  KWFrame frame;
+  KWFrame *frame;
 
   for (unsigned int i = 0;i < frames.count();i++)
     {
       frame = getFrame(i);
-      out << indent << "<FRAME left=\"" << frame.left() << "\" top=\"" << frame.top()
-	  << "\" right=\"" << frame.right() << "\" bottom=\"" << frame.bottom() 
-	  << "\" runaround=\"" << static_cast<int>(frame.getRunAround()) << "\"/>" << endl;
+      out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
+	  << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom() 
+	  << "\" runaround=\"" << static_cast<int>(frame->getRunAround()) << "\"/>" << endl;
     }
 }
 
@@ -131,8 +215,8 @@ void KWTextFrameSet::update()
 /*================================================================*/
 bool KWTextFrameSet::isPTYInFrame(unsigned int _frame,unsigned int _ypos)
 {
-  KWFrame frame = getFrame(_frame);
-  return (static_cast<int>(_ypos) >= frame.top() && static_cast<int>(_ypos) <= frame.bottom());
+  KWFrame *frame = getFrame(_frame);
+  return (static_cast<int>(_ypos) >= frame->top() && static_cast<int>(_ypos) <= frame->bottom());
 }
 
 /*================================================================*/
@@ -296,7 +380,7 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	      else if ((*it).m_strName == "runaround")
 		rect.setRunAround(static_cast<RunAround>(atoi((*it).m_strValue.c_str())));
 	    }
-	  frames.append(new KWFrame(rect));
+	  frames.append(new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround()));
 	}
 
       else

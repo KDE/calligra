@@ -38,17 +38,35 @@ enum RunAround {RA_NO = 0,RA_BOUNDUNGRECT = 1,RA_CONTUR = 2};
 class KWFrame : public QRect
 {
 public:
-  KWFrame() : QRect() { runAround = RA_NO; }
-  KWFrame(const QPoint &topleft,const QPoint &bottomright) : QRect(topleft,bottomright) { runAround = RA_NO; }     
-  KWFrame(const QPoint &topleft,const QSize &size) : QRect(topleft,size) { runAround = RA_NO; }    
-  KWFrame(int left,int top,int width,int height) : QRect(left,top,width,height) { runAround = RA_NO; }
-  KWFrame(int left,int top,int width,int height,RunAround _ra) : QRect(left,top,width,height) { runAround = _ra; }
+  KWFrame();
+  KWFrame(const QPoint &topleft,const QPoint &bottomright);
+  KWFrame(const QPoint &topleft,const QSize &size);
+  KWFrame(int left,int top,int width,int height);
+  KWFrame(int left,int top,int width,int height,RunAround _ra);
 
   void setRunAround(RunAround _ra) { runAround = _ra; }
   RunAround getRunAround() { return runAround; }
 
+  void addIntersect(QRect _r);
+  void clearIntersects()
+    { intersections.clear(); }
+  
+  int getLeftIndent(int _y,int _h);
+  int getRighIndent(int _y,int _h);
+
+  bool hasIntersections()
+    { return !intersections.isEmpty(); }
+
 protected:
   RunAround runAround;
+
+  QList<QRect> intersections;
+
+private:
+  KWFrame &operator=(KWFrame &_frame)
+    { return _frame; }
+  KWFrame (const KWFrame &_frame)
+    {;}
 
 };
 
@@ -66,12 +84,12 @@ public:
   virtual FrameType getFrameType()
     { return FT_BASE; }
 
-  virtual void addFrame(KWFrame _rect);
+  virtual void addFrame(KWFrame _frame);
+  virtual void addFrame(KWFrame *_frame);
   virtual void delFrame(unsigned int _num);
 
   virtual int getFrame(int _x,int _y);
-  virtual KWFrame getFrame(unsigned int _num);
-  virtual KWFrame *getFramePtr(unsigned int _num);
+  virtual KWFrame *getFrame(unsigned int _num);
   virtual unsigned int getNumFrames()
     { return frames.count(); }
 
