@@ -45,6 +45,8 @@
 #include "kexidbconnection.h"
 #include "filters/kexifiltermanager.h"
 
+#include "koApplication.h"
+
 #undef JoWenn_VERY_EXPERIMENTAL
 
 
@@ -115,9 +117,16 @@ bool KexiProject::completeLoading( KoStore* store )
 bool KexiProject::initDoc()
 {
 	QString filename;
+    
+    	KoTemplateChooseDia::DialogType dlgtype;
+    	if (KoApplication::isStarting())
+        	dlgtype = KoTemplateChooseDia::Everything;
+    	else
+        	dlgtype = KoTemplateChooseDia::OnlyTemplates;
+	
 	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(
 		KexiFactory::global(),filename,"application/x-vnd.kde.kexi","*.kexi",
-		i18n("Kexi"),KoTemplateChooseDia::Everything,"kexi_template");
+		i18n("Kexi"),dlgtype,"kexi_template");
 
 	bool ok=false;
 	if (ret==KoTemplateChooseDia::Empty) {

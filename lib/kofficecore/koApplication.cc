@@ -57,6 +57,8 @@ KoApplication::KoApplication()
     // Prepare a DCOP interface
     m_appIface=new KoApplicationIface();  // avoid the leak
     dcopClient()->setDefaultObject( m_appIface->objId() );
+    
+    //m_starting = 1;
 }
 
 // This gets called before entering KApplication::KApplication
@@ -98,14 +100,16 @@ bool KoApplication::start()
         shell->show();
         QObject::connect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
         doc->addShell( shell ); // for initDoc to fill in the recent docs list
-        if ( doc->checkAutoSaveFile() || doc->initDoc() )
+        
+	if ( doc->checkAutoSaveFile() || doc->initDoc() )
         {
             doc->removeShell( shell ); // setRootDocument will redo it
             shell->setRootDocument( doc );
         }
         else
             return false;
-        QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
+
+	QObject::disconnect(doc, SIGNAL(sigProgress(int)), shell, SLOT(slotProgress(int)));
     } else {
         KCmdLineArgs *koargs = KCmdLineArgs::parsedArgs("koffice");
         bool print = koargs->isSet("print");
@@ -155,5 +159,17 @@ KoApplication::~KoApplication()
 {
     delete m_appIface;
 }
+
+bool KoApplication::isStarting()
+{
+    if (KoApplication::m_starting)
+    {
+	KoApplication::m_starting = false;
+        return true;
+    }
+    return false;
+}
+
+bool KoApplication::m_starting = true;
 
 #include <koApplication.moc>

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-                 2000, 2001 Werner Trobin <trobin@kde.org>
+   2000, 2001 Werner Trobin <trobin@kde.org>
+   2002, 2003 Thomas Nagy <tnagy@eleve.emn.fr>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -16,73 +17,120 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/
+   */
 
 // Description: Template Choose Dialog
 
 /******************************************************************/
 
 #include <qlayout.h>
-#include <qvbox.h>
 #include <qtabwidget.h>
-#include <qradiobutton.h>
 #include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qpoint.h>
+#include <qobjectlist.h>
+#include <qvgroupbox.h>
 
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <kinstance.h>
-#include <kstandarddirs.h>
 #include <koFilterManager.h>
 #include <koTemplates.h>
-#include <kseparator.h>
-#include <krecentdocument.h>
-#include <kstringhandler.h>
 
 #include "koTemplateChooseDia.h"
 #include <kdebug.h>
 
+#include <kpushbutton.h>
+#include <kjanuswidget.h>
+#include <kglobalsettings.h>
+#include <ktextedit.h>
+
+
+
+class MyFileDialog : public KFileDialog
+{
+    public :
+        MyFileDialog(
+                const QString& startDir=0,
+                const QString& filter =0,
+                QWidget *parent=0,
+                const char *name=0,
+                bool modal=0)
+            :  KFileDialog (startDir, filter, parent, name, modal) {}
+
+        KURL currentURL()
+        {
+            setResult( QDialog::Accepted );
+            KURL url = KFileDialog::selectedURL();
+
+            if ( url.isLocalFile() )
+            {
+                if (! QFile::exists( url.path()) )
+                    return KURL();
+
+                QFileInfo info( url.path() );
+
+                if ( info.isDir() ) {
+                    return KURL();
+                }
+            }
+            return url;
+        };
+};
+
+/*================================================================*/
+/*================================================================*/
+
 class KoTemplateChooseDiaPrivate {
-public:
-    KoTemplateChooseDiaPrivate(const QCString& templateType, KInstance* global,
-                               const QCString &format, const QString &nativePattern,
-                               const QString &nativeName,
-                               const KoTemplateChooseDia::DialogType &dialogType) :
-        m_templateType(templateType), m_global(global), m_format(format),
-        m_nativePattern(nativePattern), m_nativeName(nativeName),
-        m_dialogType(dialogType), m_firstTime(true), tree(0L), m_mainwidget(0L),
-        m_rbTemplates(0L), m_rbFile(0L), m_rbEmpty(0L), m_bFile(0L), m_tabs(0L),
-        m_job(0) {
-    }
-    ~KoTemplateChooseDiaPrivate() {}
+    public:
+	KoTemplateChooseDiaPrivate(const QCString& templateType, KInstance* global,
+		const QCString &format, const QString &nativePattern,
+		const QString &nativeName,
+		const KoTemplateChooseDia::DialogType &dialogType) :
+	    m_templateType(templateType), m_global(global), m_format(format),
+	m_nativePattern(nativePattern), m_nativeName(nativeName),
+	m_dialogType(dialogType), tree(0L), m_mainwidget(0L)
+	{
+	    m_returnType = KoTemplateChooseDia::Empty;
+	    m_nostartupdlg = false;
+	    tree = 0;
+	}
 
-    QCString m_templateType;
-    KInstance* m_global;
-    QCString m_format;
-    QString m_nativePattern;
-    QString m_nativeName;
-    KoTemplateChooseDia::DialogType m_dialogType;
-    bool m_firstTime;
-    KoTemplateTree *tree;
+	~KoTemplateChooseDiaPrivate() {}
 
-    QString m_templateName;
-    QString m_fullTemplateName;
-    KoTemplateChooseDia::ReturnType m_returnType;
-    KURL m_file;
+	QCString m_templateType;
+	KInstance* m_global;
+	QCString m_format;
+	QString m_nativePattern;
+	QString m_nativeName;
+	KoTemplateChooseDia::DialogType m_dialogType;
+	KoTemplateTree *tree;
 
-    QWidget *m_mainwidget;
+	QString m_templateName;
+	QString m_fullTemplateName;
+	KoTemplateChooseDia::ReturnType m_returnType;
 
-    QRadioButton *m_rbTemplates;
-    QRadioButton *m_rbFile;
-    QRadioButton *m_rbRecent;
-    QRadioButton *m_rbEmpty;
-    QPushButton *m_bFile;
-    QComboBox *m_recent;
+	bool m_nostartupdlg;
 
-    QTabWidget *m_tabs;
-    QDict<MyIconCanvas> canvasDict;
-    QMap<QString, KURL> recentFilesMap;
+	// the main widget		
+	QWidget *m_mainwidget;
 
-    KIO::Job *m_job;  // used to stat files and enable/disable the OK btn.
+	// do not show this dialog at startup
+	QCheckBox *m_nodiag;	
+
+	// choose a template
+	KJanusWidget * m_jwidget;
+	QVGroupBox * boxdescription;
+	KTextEdit * textedit;
+
+	// choose a file
+	MyFileDialog *m_filedialog;
+
+	// for the layout
+	QTabWidget* tabWidget;
+	QWidget* newTab;
+	QWidget* existingTab;
+
 };
 
 /******************************************************************/
@@ -91,66 +139,83 @@ public:
 
 /*================================================================*/
 KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
-                                         const QCString &format, const QString &nativePattern,
-                                         const QString &nativeName, const DialogType &dialogType,
-                                         const QCString& templateType) :
-    KDialogBase(parent, name, true, i18n("Choose"), KDialogBase::Ok | KDialogBase::Cancel,
-                KDialogBase::Ok) {
+	const QCString &format, const QString &nativePattern,
+	const QString &nativeName, const DialogType &dialogType,
+	const QCString& templateType) :
+KDialogBase(parent, name, true, i18n("Open a Document"), KDialogBase::Ok | KDialogBase::Cancel,
+	KDialogBase::Ok) {
 
-    d=new KoTemplateChooseDiaPrivate(templateType, global, format, nativePattern,
-                                     nativeName, dialogType);
+    d = new KoTemplateChooseDiaPrivate(
+	    templateType, 
+	    global, 
+	    format, 
+	    nativePattern,
+	    nativeName, 
+	    dialogType);
+
     QPushButton* ok = actionButton( KDialogBase::Ok );
     QPushButton* cancel = actionButton( KDialogBase::Cancel );
     cancel->setAutoDefault(false);
     ok->setDefault(true);
-    enableButtonOK(false);
+    //enableButtonOK(false);
 
-    if(!templateType.isNull() && !templateType.isEmpty() && dialogType!=NoTemplates)
-        d->tree=new KoTemplateTree(templateType, global, true);
+    if (!templateType.isNull() && !templateType.isEmpty() && dialogType!=NoTemplates)
+	d->tree=new KoTemplateTree(templateType, global, true);
 
     d->m_mainwidget=makeMainWidget();
-    setupDialog();
 
     d->m_templateName = "";
     d->m_fullTemplateName = "";
     d->m_returnType = Cancel;
+
+    setupDialog();
+
 }
 
-KoTemplateChooseDia::~KoTemplateChooseDia() {
-
-    if(d->m_job) {
-        d->m_job->kill();
-        d->m_job=0;
-    }
+KoTemplateChooseDia::~KoTemplateChooseDia() 
+{
     delete d->tree;
     delete d;
     d=0L;
 }
 
 /*================================================================*/
+// static 
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, QString &file,
-                                                            const QCString &format, const QString &nativePattern,
-                                                            const QString &nativeName,
-                                                            const KoTemplateChooseDia::DialogType &dialogType,
-                                                            const QCString& templateType) {
-    bool res = false;
-    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Choose", global, format, nativePattern,
-                                                        nativeName, dialogType, templateType);
-    if(dialogType!=NoTemplates)
-        dlg->resize( 500, 400 );
-    else
-        dlg->resize( 10, 10 );  // geometry managed!
+	const QCString &format, const QString &nativePattern,
+	const QString &nativeName,
+	const KoTemplateChooseDia::DialogType &dialogType,
+	const QCString& templateType) {
 
-    if ( dlg->exec() == QDialog::Accepted ) {
-        res = true;
-        file = dlg->getFullTemplate();
+    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Choose", global, format, nativePattern,
+	    nativeName, dialogType, templateType);
+
+    KoTemplateChooseDia::ReturnType rt = Cancel;
+
+    if (dlg->noStartupDlg())
+    {
+	// start with the default template
+	file = dlg->getFullTemplate();
+	rt = dlg->getReturnType();
+    }
+    else
+    {
+	dlg->resize( 700, 480 );
+	if ( dlg->exec() == QDialog::Accepted ) 
+	{
+	    file = dlg->getFullTemplate();
+	    rt = dlg->getReturnType();
+	}
     }
 
-    KoTemplateChooseDia::ReturnType rt = dlg->getReturnType();
     delete dlg;
-
-    return res ? rt : KoTemplateChooseDia::Cancel;
+    return rt;
 }
+
+bool KoTemplateChooseDia::noStartupDlg() {
+    return d->m_nostartupdlg;
+}
+
 
 QString KoTemplateChooseDia::getTemplate() {
     return d->m_templateName;
@@ -168,380 +233,374 @@ KoTemplateChooseDia::DialogType KoTemplateChooseDia::getDialogType() {
     return d->m_dialogType;
 }
 
+/*================================================================*/
+// private
+void KoTemplateChooseDia::setupFileDialog(QWidget * widgetbase, QGridLayout * layout)
+{
+    QString dir = QString::null;
+    QPoint point( 0, 0 );
+
+    d->m_filedialog=new MyFileDialog(dir, 
+	    QString::null, 
+	    widgetbase, 
+	    "file dialog", 
+	    false);
+
+    layout->addWidget(d->m_filedialog,0,0);	
+    d->m_filedialog->reparent( widgetbase , point );
+    //d->m_filedialog->setOperationMode( KFileDialog::Opening);
+
+    QObjectList *l = d->m_filedialog->queryList( "QPushButton" );
+    QObjectListIt it( *l );
+    QObject *obj;
+    while ( (obj = it.current()) != 0 ) {
+	++it;
+	((QPushButton*)obj)->hide();
+    }
+    delete l;
+
+    d->m_filedialog->setSizeGripEnabled ( FALSE );
+    d->m_filedialog->setMimeFilter( 
+	    KoFilterManager::mimeFilter( d->m_format, KoFilterManager::Import ));
+
+    connect(d->m_filedialog, SIGNAL(  okClicked() ),
+	    this, SLOT (  slotOk() ));
+
+}
+
+/*================================================================*/
+// private
+void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout)
+{
+
+    d->m_jwidget = new KJanusWidget(
+	    widgetbase,
+	    "kjanuswidget", 
+	    KJanusWidget::IconList);
+    layout->addWidget(d->m_jwidget,0,0);	
+
+    d->boxdescription = new QVGroupBox(
+	    i18n("Selected Template : Empty Document"),
+	    widgetbase,
+	    "boxdescription");
+    layout->addWidget(d->boxdescription, 1, 0 );
+
+    // config
+    KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
+    int templateNum = grp.readEntry( "TemplateTab" ).toInt();
+    QString templateName = grp.readEntry( "TemplateName" );
+
+    // item which will be selected initially
+    QIconViewItem * itemtoselect = 0;
+
+    // count the templates inserted
+    int entriesnumber = 0;
+
+    for ( KoTemplateGroup *group = d->tree->first(); group!=0L; group=d->tree->next() ) 
+    {
+	if (group->isHidden())
+	    continue;
+
+	QFrame * frame = d->m_jwidget->addPage (
+		group->name(),
+		group->name(),
+		group->first()->loadPicture());
+
+	QGridLayout * layout = new QGridLayout(frame);
+	KoTCDIconCanvas *canvas = new KoTCDIconCanvas( frame );
+	layout->addWidget(canvas,0,0);
+
+	canvas->setBackgroundColor( colorGroup().base() );
+	canvas->setResizeMode(QIconView::Adjust);
+	canvas->setWordWrapIconText( true );
+	canvas->show();
+
+	// what item to select initially
+	QIconViewItem * tempitem = canvas->load(group, templateName);
+	if (tempitem)
+	    itemtoselect = tempitem;
+
+	canvas->sort();
+	canvas->setSelectionMode(QIconView::Single);
+
+	connect( canvas, SIGNAL( clicked ( QIconViewItem * ) ),
+		this, SLOT( currentChanged( QIconViewItem * ) ) );
+
+	connect( canvas, SIGNAL( doubleClicked( QIconViewItem * ) ),
+		this, SLOT( chosen(QIconViewItem *) ) );
+
+	entriesnumber++;
+    }
+
+    d->boxdescription->setInsideMargin ( 3 );
+    d->boxdescription->setInsideSpacing ( 3 );
+
+    d->textedit = new KTextEdit( d->boxdescription );
+    d->textedit->setReadOnly(1);
+    d->textedit->setText("Creates an empty document");
+    d->textedit->setLineWidth(0);
+    d->textedit->setMaximumHeight(50);
+
+    // Hide the widget if there is no template available. This should never happen ;-)
+    if (!entriesnumber)		
+	d->m_jwidget->hide();
+
+    // Set the initially shown page, possibly from the last usage of the dialog
+    if (entriesnumber >= templateNum)
+	d->m_jwidget->showPage(templateNum);
+
+    // Set the initially selected template, possibly from the last usage of the dialog
+    currentChanged(itemtoselect);
+
+}
+
+/*================================================================*/
+// private
 void KoTemplateChooseDia::setupDialog()
 {
-    QGridLayout *grid=new QGridLayout( d->m_mainwidget, 10, 1, KDialogBase::marginHint(),
-                                       KDialogBase::spacingHint() );
-    KSeparator *line;
+
+    QGridLayout *maingrid=new QGridLayout( d->m_mainwidget, 1, 1, 0, 6);
+    int checkboxposition = 1;
     KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
 
-    if ( d->m_dialogType==Everything ) {
-        line = new KSeparator( QFrame::HLine, d->m_mainwidget );
-        grid->addWidget( line, 0, 0 );
-
-        d->m_rbTemplates = new QRadioButton( i18n( "Create new document from a &template" ), d->m_mainwidget );
-        connect( d->m_rbTemplates, SIGNAL( clicked() ), this, SLOT( openTemplate() ) );
-        grid->addWidget( d->m_rbTemplates, 1, 0 );
-    }
-
-    if ( d->tree && d->m_dialogType!=NoTemplates ) {
-        d->m_tabs = new QTabWidget( d->m_mainwidget );
-
-        // for sorting stuff (ugly, will be replaced)
-        QDict<QVBox> tabDict;
-        QStringList tabNames;
-
-        for ( KoTemplateGroup *group = d->tree->first(); group!=0L; group=d->tree->next() ) {
-            if(group->isHidden())
-                continue;
-            QVBox *tab=new QVBox( d->m_tabs );
-            MyIconCanvas *canvas = new MyIconCanvas( tab );
-            canvas->setBackgroundColor( colorGroup().base() );
-            canvas->setResizeMode(QIconView::Adjust);
-            canvas->setWordWrapIconText( true ); // DF
-            canvas->show();
-            canvas->load(group);
-            canvas->sort();
-            connect( canvas, SIGNAL( doubleClicked( QIconViewItem * ) ),
-                     this, SLOT( chosen(QIconViewItem *) ) );
-            connect( canvas, SIGNAL( clicked ( QIconViewItem * ) ),
-                     this, SLOT( currentChanged( QIconViewItem * ) ) );
-            d->canvasDict.insert(group->name(), canvas);
-            // *uuuugggggllllyyyyyy* (Werner)
-            tabDict.insert(group->name(), tab);
-            tabNames.append(group->name());
-        }
-        tabNames.sort();
-        for(QStringList::ConstIterator it=tabNames.begin(); it!=tabNames.end(); ++it)
-            d->m_tabs->addTab( tabDict[(*it)], (*it) );
-
-        // Set the initially shown page (possibly from the last usage of the dialog)
-        // (First time: uses tree->defaultGroup)
-        KoTemplateGroup *defaultGroup = 0L;
-        QString groupName = grp.readEntry( "TemplateTab" );
-        if ( groupName.isEmpty() ) { // Nothing in config file, use default group
-            defaultGroup = d->tree->defaultGroup();
-            groupName = defaultGroup ? defaultGroup->name() : QString::null;
-        }
-        else                       // Found name in config file, lookup the group
-            defaultGroup = d->tree->find( groupName );
-
-        if ( defaultGroup && !groupName.isEmpty() )
-        {
-            d->m_tabs->showPage( tabDict[groupName] ); // showPage is 0L-safe
-
-            MyIconCanvas *canvas=d->canvasDict.find(groupName);
-            // Select last selected template
-            QString templateName = grp.readEntry( "TemplateName" );
-            if ( !templateName.isEmpty() && canvas )
-            {
-                QIconViewItem* item = canvas->findItem( templateName, Qt::ExactMatch );
-                if ( item ) {
-                    canvas->setCurrentItem( item );
-                    canvas->setSelected( item, true );
-                }
-            }
-        }
-
-        connect( d->m_tabs, SIGNAL( selected( const QString & ) ), this, SLOT( tabsChanged( const QString & ) ) );
-        grid->addWidget( d->m_tabs, 2, 0 );
-    }
-
-    line = new KSeparator( QFrame::HLine, d->m_mainwidget );
-    grid->addWidget( line, 3, 0 );
-
-    if ( d->m_dialogType!=OnlyTemplates ) {
-        QHBoxLayout *row = new QHBoxLayout( grid );
-        d->m_rbFile = new QRadioButton( i18n( "Open an existing document" ), d->m_mainwidget );
-        connect( d->m_rbFile, SIGNAL( clicked() ), this, SLOT( openFile() ) );
-        row->addWidget(d->m_rbFile);
-        row->addSpacing(30);
-        d->m_bFile = new QPushButton( i18n( "C&hoose..." ), d->m_mainwidget );
-        d->m_bFile->setMaximumSize( d->m_bFile->sizeHint() );
-        row->addWidget(d->m_bFile);
-        connect( d->m_bFile, SIGNAL( clicked() ), this, SLOT( chooseFile() ) );
-
-        line = new KSeparator( QFrame::HLine, d->m_mainwidget );
-        grid->addWidget( line, 5, 0 );
-
-        row = new QHBoxLayout( grid );
-        d->m_rbRecent = new QRadioButton( i18n( "Open a &recent document" ), d->m_mainwidget );
-        connect( d->m_rbRecent, SIGNAL( clicked() ), this, SLOT( openRecent() ) );
-        row->addWidget(d->m_rbRecent);
-        row->addSpacing(30);
-        d->m_recent = new QComboBox( d->m_mainwidget, "recent files" );
-
-        QString oldGroup;
-        oldGroup=d->m_global->config()->group();
-        d->m_global->config()->setGroup( "RecentFiles" );
-
-        // read file list
-        QStringList lst;
-        int i=1;
-        QString value;
-        do {
-            QString key=QString( "File%1" ).arg( i );
-            value=d->m_global->config()->readEntry( key, QString::null );
-            if ( !value.isEmpty() ) {
-                KURL url(value);
-                KURL dir(url);
-                dir.setPath(url.directory(false));
-                QString dirurl = dir.isLocalFile() ? dir.path() : dir.prettyURL();
-                QString fname = KStringHandler::csqueeze(url.fileName(), 40); // Squeeze the filename as little as possible
-                QString squeezed;
-                if ( 40-fname.length() > 3 )
-                    squeezed = KStringHandler::csqueeze(dirurl, 40-fname.length()); // and the dir as much as possible :)
-                else
-                    squeezed=".../"; // the filename is so long that there's no room for the dir.
-                squeezed += fname;
-                lst.append( squeezed );
-                d->recentFilesMap.insert(squeezed, url);
-            }
-            ++i;
-        } while ( !value.isEmpty() || i<=10 );
-
-        // set file
-        if( lst.isEmpty() )
-            lst.append( i18n("No recent files available") );
-        d->m_recent->insertStringList( lst );
-        d->m_global->config()->setGroup( oldGroup );
-
-        row->addWidget(d->m_recent);
-        connect( d->m_recent, SIGNAL( activated(int) ), this, SLOT( openRecent() ) );
-
-        line = new KSeparator( QFrame::HLine, d->m_mainwidget );
-        grid->addWidget( line, 7, 0 );
-
-        d->m_rbEmpty = new QRadioButton( i18n( "Start with an &empty document" ), d->m_mainwidget );
-        connect( d->m_rbEmpty, SIGNAL( clicked() ), this, SLOT( openEmpty() ) );
-        grid->addWidget( d->m_rbEmpty, 8, 0 );
-
-        line = new KSeparator( QFrame::HLine, d->m_mainwidget );
-        grid->addWidget( line, 9, 0 );
-
-        // Set the initial state (possibly from the last usage of the dialog)
-        QString lastReturnType = grp.readEntry( "LastReturnType", "Empty" );
-        if ( lastReturnType == "Template" && d->m_dialogType != NoTemplates )
-            openTemplate();
-        // For "File" we go to "Empty" too.
-        else
-            openEmpty();
-    }
-}
-
-void KoTemplateChooseDia::enableOK(bool enable, bool kill)
-{
-    if(d->m_job && kill) {
-        d->m_job->kill();  // kill the KIO job
-        d->m_job=0;
-    }
-    QPushButton* ok = actionButton( KDialogBase::Ok );
-    QPushButton* cancel = actionButton( KDialogBase::Cancel );
-    bool wasDisabled = !ok->isEnabled();
-    enableButtonOK( enable );
-    // We need to use focusWidget() instead of cancel->hasFocus(),
-    // since apparently the latter isn't true while the dialog isn't shown
-    if ( enable && wasDisabled && focusWidget() == cancel )
+    if (d->m_dialogType == Everything)
     {
-        ok->setFocus();
+
+	// the user may want to start with his favorite template
+	if (grp.readEntry( "NoStartDlg" ) == QString("yes") )
+	{
+	    d->m_nostartupdlg = true;
+	    d->m_returnType = Empty;
+
+	    // no default template, just start with an empty document
+	    if (grp.readEntry("LastReturnType") == QString("Empty") )
+		return;
+
+	    // start with the default template
+	    d->m_templateName = grp.readEntry( "TemplateName" );
+	    d->m_fullTemplateName = grp.readEntry( "FullTemplateName" );
+
+	    // be paranoid : invalid template means empty template
+	    if (!QFile::exists(d->m_fullTemplateName))
+		return;
+
+	    if (d->m_fullTemplateName.length() < 2)
+		return;
+
+	    d->m_returnType = Template;
+	    return;
+	}
+
+
+	// it would be better to disable this useless cancel button
+	// the users can click on the cross of the dialog window
+	setButtonCancelText(i18n("&Quit"));
+
+	d->tabWidget = new QTabWidget( d->m_mainwidget, "tabWidget" );
+	maingrid->addWidget( d->tabWidget, 0, 0 );
+
+	// new document
+	d->newTab = new QWidget( d->tabWidget, "newTab" );
+	d->tabWidget->insertTab( d->newTab, "" );
+	d->tabWidget->changeTab( d->newTab, i18n( "Create a Document" ) );
+	QGridLayout * newTabLayout = new QGridLayout( d->newTab, 1, 1, 0, 6);
+
+	// existing document
+	d->existingTab = new QWidget( d->tabWidget, "existingTab" );
+	d->tabWidget->insertTab( d->existingTab, "" );
+	d->tabWidget->changeTab( d->existingTab, i18n( "Open an Existing Document" ) );
+	QGridLayout * existingTabLayout = new QGridLayout( d->existingTab, 1, 1, 0, 6);
+
+	setupTemplateDialog(d->newTab, newTabLayout);
+	setupFileDialog(d->existingTab, existingTabLayout);
+
+	QString tabhighlighted = grp.readEntry("LastReturnType");
+	if ( tabhighlighted == QString("Template"))
+	    d->tabWidget->setCurrentPage(0);
+	else
+	    d->tabWidget->setCurrentPage(1);
     }
-}
-
-/*================================================================*/
-void KoTemplateChooseDia::currentChanged( QIconViewItem * )
-{
-    openTemplate();
-}
-
-/*================================================================*/
-void KoTemplateChooseDia::chosen(QIconViewItem *)
-{
-    slotOk();
-}
-
-// Result of the "stat job to see if recently opened file is still there"
-void KoTemplateChooseDia::slotResult(KIO::Job *j) {
-    enableOK( !j->error(), false /*don't kill*/ );
-    d->m_job=0;
-}
-
-/*================================================================*/
-void KoTemplateChooseDia::openTemplate()
-{
-    if ( d->m_dialogType==Everything ) {
-        d->m_rbTemplates->setChecked( true );
-        d->m_rbFile->setChecked( false );
-        d->m_rbRecent->setChecked( false );
-        d->m_rbEmpty->setChecked( false );
-    }
-    enableOK();
-}
-
-/*================================================================*/
-void KoTemplateChooseDia::openFile()
-{
-    if(d->m_dialogType!=NoTemplates)
-        d->m_rbTemplates->setChecked( false );
-    d->m_rbFile->setChecked( true );
-    d->m_rbRecent->setChecked( false );
-    d->m_rbEmpty->setChecked( false );
-    enableOK(false);
-}
-
-
-/*================================================================*/
-void KoTemplateChooseDia::openRecent()
-{
-    if(d->m_dialogType!=NoTemplates)
-        d->m_rbTemplates->setChecked( false );
-    d->m_rbFile->setChecked( false );
-    d->m_rbRecent->setChecked( true );
-    d->m_rbEmpty->setChecked( false );
-    d->m_file = d->recentFilesMap[d->m_recent->currentText()];
-    enableOK();
-    // Let's see if the file still exists
-    d->m_job=KIO::stat(d->m_file, false);
-    connect(d->m_job, SIGNAL(result(KIO::Job*)), this, SLOT(slotResult(KIO::Job*)));
-}
-
-/*================================================================*/
-void KoTemplateChooseDia::openEmpty()
-{
-    if(d->m_dialogType!=NoTemplates)
-        d->m_rbTemplates->setChecked( false );
-    d->m_rbFile->setChecked( false );
-    d->m_rbRecent->setChecked( false );
-    d->m_rbEmpty->setChecked( true );
-    enableOK();
-}
-
-/*================================================================*/
-void KoTemplateChooseDia::chooseFile()
-{
-    // Save current state - in case of Cancel
-    bool bEmpty = d->m_rbEmpty->isChecked();
-    bool bTemplates = (d->m_dialogType!=NoTemplates) && d->m_rbTemplates->isChecked();
-    openFile();
-
-    // Use dir from currently selected file
-    QString dir = QString::null;
-    if ( d->m_file.isLocalFile() && QFile::exists( d->m_file.path() ) )
-        dir = QFileInfo( d->m_file.path() ).absFilePath();
-
-    KFileDialog *dialog=new KFileDialog(dir, QString::null, 0L, "file dialog", true);
-    dialog->setCaption( i18n("Open Document") );
-    dialog->setMimeFilter( KoFilterManager::mimeFilter( d->m_format, KoFilterManager::Import ) );
-    // ##### CHECK
-    //KoFilterManager::self()->prepareDialog(dialog, KoFilterManager::Import, d->m_format,
-    //                                       d->m_nativePattern, d->m_nativeName, true);
-    KURL u;
-
-    if(dialog->exec()==QDialog::Accepted)
+    else
     {
-        u=dialog->selectedURL();
-        KRecentDocument::add(dialog->selectedURL().url(), !dialog->selectedURL().isLocalFile());
-    } else //revert state
-    {
-        if (bEmpty) openEmpty();
-        if (bTemplates) openTemplate();
+	// open a file
+	if (d->m_dialogType == NoTemplates)
+	{
+	    setupFileDialog(d->m_mainwidget, maingrid);
+	}
+	// create a new document from a template
+	if (d->m_dialogType == OnlyTemplates)
+	{
+	    setCaption(i18n( "Create a Document" ));
+	    setupTemplateDialog(d->m_mainwidget, maingrid);
+	    checkboxposition = 2;
+	}
     }
 
-    delete dialog;
-
-    QString filename = u.path();
-    QString url = u.url();
-    bool local = u.isLocalFile();
-
-    bool ok = !url.isEmpty();
-    if (local) // additionnal checks for local files
-        ok = ok && (QFileInfo( filename ).isFile() ||
-                    (QFileInfo( filename ).isSymLink() &&
-                     !QFileInfo( filename ).readLink().isEmpty() &&
-                     QFileInfo( QFileInfo( filename ).readLink() ).isFile() ) );
-
-    if ( ok )
+    // setup the checkbox
+    if (d->m_dialogType != NoTemplates)
     {
-        d->m_file = u;
-        slotOk();
+	QString translatedstring = i18n("Always start %1 with the selected template").arg(d->m_nativeName);
+
+	d->m_nodiag = new QCheckBox ( translatedstring , d->m_mainwidget);
+	maingrid->addWidget(d->m_nodiag, checkboxposition, 0);
+	QString  startwithoutdialog = grp.readEntry( "NoStartDlg" );
+
+	if (startwithoutdialog == QString("yes"))
+	    d->m_nodiag->setChecked(1);
+	else
+	    d->m_nodiag->setChecked(0);
     }
 }
 
-void KoTemplateChooseDia::tabsChanged( const QString & ) {
-    if ( !d->m_firstTime ) openTemplate();
-    d->m_firstTime = false;
+/*================================================================*/
+// private SLOT
+void KoTemplateChooseDia::currentChanged( QIconViewItem * item)
+{
+    if (item)
+    {
+	QIconView* canvas =  item->iconView();
+
+	// set text in the textarea
+	d->boxdescription->setTitle(  i18n("Selected template: %1").arg(item->text()) );
+	d->textedit->setText( ((KoTCDIconViewItem *) item)->getDescr() );
+
+	// set the icon in the canvas selected
+	if (canvas)
+	    canvas->setSelected(item,1,0);
+
+	// register the current template
+	d->m_templateName = item->text();
+	d->m_fullTemplateName = ((KoTCDIconViewItem *) item)->getFName();
+    }
 }
 
+/*================================================================*/
+// private SLOT
+void KoTemplateChooseDia::chosen(QIconViewItem * item)
+{
+    // the user double clicked on a template 
+    if (item)
+    {
+	currentChanged(item);
+	slotOk();
+    }
+}
+
+/*================================================================*/
+// protected SLOT
 void KoTemplateChooseDia::slotOk()
 {
     // Collect info from the dialog into d->m_returnType and d->m_templateName etc.
-    collectInfo();
+    if (collectInfo())
+    {
 
-    // Save it for the next time
-    KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
-    static const char* const s_returnTypes[] = { 0 /*Cancel ;)*/, "Template", "File", "Empty" };
-    if ( d->m_returnType <= Empty ) {
-        grp.writeEntry( "LastReturnType", QString::fromLatin1(s_returnTypes[d->m_returnType]) );
-        if ( d->m_tabs )
-        {
-            QString groupName=d->m_tabs->tabLabel(d->m_tabs->currentPage());
-            grp.writeEntry( "TemplateTab", groupName );
-            grp.writeEntry( "TemplateName", d->m_templateName );
-        }
-    }
-    else {
-        kdWarning(30003) << "Unsupported template chooser result: " << d->m_returnType << endl;
-        grp.writeEntry( "LastReturnType", QString::null );
-    }
+	// Save it for the next time
+	KConfigGroup grp( d->m_global->config(), "TemplateChooserDialog" );
+	static const char* const s_returnTypes[] = { 0 /*Cancel ;)*/, "Template", "File", "Empty" };
+	if ( d->m_returnType <= Empty ) 
+	{
+	    grp.writeEntry( "LastReturnType", QString::fromLatin1(s_returnTypes[d->m_returnType]) );
+	    if (d->m_returnType == Template)
+	    {
+		grp.writeEntry( "TemplateTab", d->m_jwidget->activePageIndex() );
+		grp.writeEntry( "TemplateName", d->m_templateName );
+		grp.writeEntry( "FullTemplateName", d->m_fullTemplateName);
+	    }
 
-    // Close dialog (calls accept())
-    KDialogBase::slotOk();
+	    if (d->m_nodiag)
+	    {
+		if (d->m_nodiag->isChecked())
+		    grp.writeEntry( "NoStartDlg", "yes");
+		else
+		    grp.writeEntry( "NoStartDlg", "no");
+	    }
+	}
+	else 
+	{
+	    kdWarning(30003) << "Unsupported template chooser result: " << d->m_returnType << endl;
+	    grp.writeEntry( "LastReturnType", QString::null );
+	}
+	KDialogBase::slotOk();
+    }
 }
 
-void KoTemplateChooseDia::collectInfo()
+/*================================================================*/
+// private
+bool KoTemplateChooseDia::collectInfo()
 {
-    if ( d->m_dialogType==OnlyTemplates || d->m_dialogType==Everything && d->m_rbTemplates->isChecked() ) {
-        d->m_returnType = Template;
-        QString groupName=d->m_tabs->tabLabel(d->m_tabs->currentPage());
-        MyIconCanvas *canvas=d->canvasDict.find(groupName);
-        if(!canvas || !canvas->currentItem()) {
-            d->m_returnType=Empty;
-            return;
-        }
-        QString templateName=canvas->currentItem()->text();
-        KoTemplateGroup *group=d->tree->find(groupName);
-        if(!group) {
-            d->m_returnType=Empty;
-            return;
-        }
-        KoTemplate *t=group->find(templateName);
-        if(!t) {
-            d->m_returnType=Empty;
-            return;
-        }
-        d->m_templateName=t->name();
-        d->m_fullTemplateName=t->file();
+
+
+    // to determine what tab is selected in "Everything" mode
+    bool newTabSelected = false;
+    if ( d->m_dialogType == Everything)
+	if ( d->tabWidget->currentPage() == d->newTab )
+	    newTabSelected = true;
+
+    // is it a template or a file ?
+    if ( d->m_dialogType==OnlyTemplates || newTabSelected )
+    {
+	// a template is chosen
+	if (d->m_templateName.length() > 0)
+	    d->m_returnType = Template;
+	else
+	    d->m_returnType=Empty;
+
+	return 1;
     }
-    else if ( d->m_dialogType!=OnlyTemplates && (d->m_rbFile->isChecked() || d->m_rbRecent->isChecked()) ) {
-        d->m_returnType = File;
-        d->m_fullTemplateName = d->m_templateName = d->m_file.isLocalFile() ? d->m_file.path() : d->m_file.url();
+    else if ( d->m_dialogType != OnlyTemplates )
+    {
+	// a file is chosen
+	// KURL url(d->m_filedialog->currentURL());
+
+	KURL url = d->m_filedialog->currentURL();
+	if (url.isEmpty())
+	    return false;
+	d->m_fullTemplateName = url.isLocalFile() ? url.path() : url.url();
+	d->m_returnType = File;
+	return true;
     }
-    else if ( d->m_dialogType!=OnlyTemplates && d->m_rbEmpty->isChecked() )
-        d->m_returnType = Empty;
-    else
-        d->m_returnType = Cancel;
+
+
+    d->m_returnType=Empty;
+    return false;
 }
 
 
-void MyIconCanvas::load( KoTemplateGroup *group )
+
+/*================================================================*/
+/*================================================================*/
+
+
+
+QIconViewItem * KoTCDIconCanvas::load( KoTemplateGroup *group , QString name)
 {
-    for(KoTemplate *t=group->first(); t!=0L; t=group->next()) {
-        if(t->isHidden())
-            continue;
-        QIconViewItem *item = new KIconViewItem(this, t->name(), t->loadPicture());
-        item->setKey(t->name());
-        item->setDragEnabled(false);
-        item->setDropEnabled(false);
+    QIconViewItem * itemtoreturn = 0;
+
+    for (KoTemplate *t=group->first(); t!=0L; t=group->next()) {
+	if (t->isHidden())
+	    continue;
+	QIconViewItem *item = new KoTCDIconViewItem(
+		this, 
+		t->name(), 
+		t->loadPicture(), 
+		t->name(), // TODO : should be the template description 
+		t->file());
+
+	if (name == t->name())
+	{
+	    itemtoreturn = item;
+	}
+
+	item->setKey(t->name());
+	item->setDragEnabled(false);
+	item->setDropEnabled(false);
     }
+
+    return itemtoreturn;
 }
+
+
 
 #include "koTemplateChooseDia.moc"
+
+

@@ -76,6 +76,7 @@
 #include <KIvioDocIface.h>
 #include <kcommand.h>
 #include <kozoomhandler.h>
+#include "koApplication.h"
 
 //using namespace std;
 
@@ -165,9 +166,15 @@ bool KivioDoc::initDoc()
   QString f;
   KoTemplateChooseDia::ReturnType ret;
 
+  KoTemplateChooseDia::DialogType dlgtype;
+    if (KoApplication::isStarting())
+      dlgtype = KoTemplateChooseDia::Everything;
+    else
+      dlgtype = KoTemplateChooseDia::OnlyTemplates;
+
   ret = KoTemplateChooseDia::choose(  KivioFactory::global(), f,
-                                      "application/x-kivio", "*.flw", i18n("Kivio"),
-                                      KoTemplateChooseDia::NoTemplates );
+         "application/x-kivio", "*.flw", i18n("Kivio"),
+         dlgtype );
 
   if ( ret == KoTemplateChooseDia::File ) {
     KURL url(f);

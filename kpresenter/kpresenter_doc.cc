@@ -90,7 +90,7 @@
 #include "kprbgspellcheck.h"
 #include <kglobalsettings.h>
 #include <kocommandhistory.h>
-
+#include "koApplication.h"
 
 #include <koSconfig.h>
 
@@ -1961,9 +1961,15 @@ bool KPresenterDoc::insertNewTemplate( bool clean )
     QString _template;
     KoTemplateChooseDia::ReturnType ret;
 
+    KoTemplateChooseDia::DialogType dlgtype;
+    if (KoApplication::isStarting())
+            dlgtype = KoTemplateChooseDia::Everything;
+    else
+            dlgtype = KoTemplateChooseDia::OnlyTemplates;
+
     ret = KoTemplateChooseDia::choose(  KPresenterFactory::global(), _template,
                                         "application/x-kpresenter", "*.kpr",
-                                        i18n("KPresenter"), KoTemplateChooseDia::Everything,
+                                        i18n("KPresenter"), dlgtype,
                                         "kpresenter_template" );
 
     if ( ret == KoTemplateChooseDia::Template ) {

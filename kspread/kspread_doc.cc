@@ -49,6 +49,8 @@
 #include "kspread_view.h"
 #include "KSpreadDocIface.h"
 
+#include "koApplication.h"
+
 using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 1;
@@ -149,9 +151,15 @@ bool KSpreadDoc::initDoc()
     QString f;
     KoTemplateChooseDia::ReturnType ret;
 
+    KoTemplateChooseDia::DialogType dlgtype;
+    if (KoApplication::isStarting())
+            dlgtype = KoTemplateChooseDia::Everything;
+    else
+            dlgtype = KoTemplateChooseDia::OnlyTemplates;
+
     ret = KoTemplateChooseDia::choose( KSpreadFactory::global(), f, "application/x-kspread",
                                        "*.ksp", i18n("KSpread"),
-                                        KoTemplateChooseDia::Everything, "kspread_template");
+                                        dlgtype, "kspread_template");
 
     if ( ret == KoTemplateChooseDia::File )
     {

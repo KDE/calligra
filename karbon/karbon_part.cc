@@ -41,7 +41,7 @@
 #include "vlayer.h"
 #include "vdocumentdocker.h"
 #include "vtoolcontroller.h"
-
+#include "koApplication.h"
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
@@ -99,8 +99,14 @@ KarbonPart::initDoc()
 	QString file;
 	KoTemplateChooseDia::ReturnType result;
 
+        KoTemplateChooseDia::DialogType dlgtype;
+        if (KoApplication::isStarting())
+            dlgtype = KoTemplateChooseDia::Everything;
+        else
+            dlgtype = KoTemplateChooseDia::OnlyTemplates;
+
 	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, "application/x-karbon",
-										  "*.karbon", i18n( "Karbon14" ), KoTemplateChooseDia::Everything, "karbon_template" );
+										  "*.karbon", i18n( "Karbon14" ), dlgtype, "karbon_template" );
 	// set as default A4 paper
 	m_pageLayout.ptWidth	= KoUnit::ptFromUnit( PG_A4_WIDTH, KoUnit::U_MM );
 	m_pageLayout.ptHeight	= KoUnit::ptFromUnit( PG_A4_HEIGHT, KoUnit::U_MM );

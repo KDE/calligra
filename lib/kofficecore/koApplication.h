@@ -72,10 +72,11 @@ public:
      * have to process your command line parameters by yourself.
      */
     virtual bool start();
-
+    static bool isStarting();
 private:
     bool initHack();
     KoApplicationIface *m_appIface;  // to avoid a leak
+    static bool m_starting ; // is the application starting or not
 };
 
 #endif

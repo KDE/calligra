@@ -69,6 +69,8 @@
 
 #include <koSconfig.h>
 
+#include "koApplication.h"
+
 //#define DEBUG_PAGES
 //#define DEBUG_SPEED
 
@@ -574,9 +576,17 @@ bool KWDocument::initDoc()
     QString _template;
 
     bool ok = FALSE;
+    
+    KoTemplateChooseDia::DialogType dlgtype;
+    if (KoApplication::isStarting())
+	    dlgtype = KoTemplateChooseDia::Everything;
+    else
+	    dlgtype = KoTemplateChooseDia::OnlyTemplates;
+    
+    
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::choose(
         KWFactory::global(), _template, "application/x-kword", "*.kwd", i18n("KWord"),
-        KoTemplateChooseDia::Everything, "kword_template");
+        dlgtype, "kword_template");
     if ( ret == KoTemplateChooseDia::Template ) {
         QFileInfo fileInfo( _template );
         QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
