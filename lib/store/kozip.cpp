@@ -1,4 +1,4 @@
-// GENERATED FILE. Do not edit! Generated from kzip.cpp by ./update_kzip.sh
+// GENERATED FILE. Do not edit! Generated from kzip.cpp by update_kzip.sh
 
 /* This file is part of the KDE libraries
    Copyright (C) 2000 David Faure <faure@kde.org>
@@ -86,6 +86,8 @@ KoZip::KoZip( QIODevice * dev )
 {
     kdDebug(7040) << "KoZip::KoZip( QIODevice * dev) reached." << endl;
     d = new KoZipPrivate;
+    setDevice( new KoZipFilter( dev ) );
+
 }
 
 void KoZip::prepareDevice( const QString & filename,
@@ -580,6 +582,11 @@ KoZipFilter::KoZipFilter(const QString& filename)
     dev = new QFile ( filename );
 }
 
+KoZipFilter::KoZipFilter(QIODevice * _dev)
+{
+    dev = _dev;
+}
+
 bool KoZipFilter::open(int _mode)
 {
     return dev->open(_mode);
@@ -621,8 +628,8 @@ Q_LONG KoZipFilter::readBlock(char * c, long unsigned int i)
     if (cmethod == 8) //zip deflated
     {
         // Inflate contents!
-        QByteArray * dataBuffer = new QByteArray( i );
-	dev->readBlock( reinterpret_cast<char *>(dataBuffer->data() ), i);
+        QByteArray * dataBuffer = new QByteArray( csize );
+	dev->readBlock( reinterpret_cast<char *>(dataBuffer->data() ), csize);
         z_stream d_stream;      /* decompression stream */
 
         d_stream.zalloc = ( alloc_func ) 0;
@@ -640,7 +647,7 @@ Q_LONG KoZipFilter::readBlock(char * c, long unsigned int i)
                 reinterpret_cast <
                 unsigned char *>(c);
             d_stream.avail_out = i ;
-            err = inflate( &d_stream, Z_NO_FLUSH );
+            err = inflate( &d_stream, Z_FINISH );
             if ( err == Z_STREAM_END )
                 break;
             if ( err < 0 ) { // some error
@@ -692,7 +699,7 @@ Q_LONG KoZipFilter::writeBlock(const char * c, long unsigned int i)
 	    kdDebug(7040) << "compression part reached... " << endl;
 	    kdDebug(7040) << "crc : " << QString::number( crc , 16) << endl;
         // Deflate contents!
-        QByteArray * dataBuffer = new QByteArray( i );
+        QByteArray * dataBuffer = new QByteArray( i + 100 );
         z_stream d_stream;      /* decompression stream */
 //	    kdDebug(7040) << "compression part 1 " << endl;
 
@@ -712,11 +719,11 @@ Q_LONG KoZipFilter::writeBlock(const char * c, long unsigned int i)
         d_stream.next_out = (unsigned char *)dataBuffer->data();
 //	    kdDebug(7040) << "compression part 5 " << endl;
 
-        d_stream.avail_out = i ;
+        d_stream.avail_out = i + 100 ;
         err = deflate( &d_stream, Z_FINISH );
         if ( err == Z_STREAM_END )
             kdDebug(7040) << "Z_STREAM_END " << endl;
-        else if ( err < 0 )
+        else
             kdWarning(7040) << "writeBlock: zlib deflate returned error " << err << endl;
 
         kdDebug(7040) << "compression part 6: total_out: " <<
