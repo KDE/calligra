@@ -1071,7 +1071,6 @@ void
 KarbonView::setLineWidth( double val )
 {
 	part()->addCommand( new VStrokeLineWidthCmd( &part()->document(), val ), true );
-	return ;
 }
 
 void
@@ -1283,8 +1282,14 @@ KarbonView::initActions()
 	// view <-----
 
 	// line width
-	m_setLineWidth = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
+	m_setLineWidth = new KoUnitDoubleComboBox( this, 0.0, 1000.0, 1.0, KoUnit::U_PT, 1 );
 	new KWidgetAction( m_setLineWidth, i18n( "Set Line Width" ), 0, this, SLOT( setLineWidth() ), actionCollection(), "setLineWidth" );
+	m_setLineWidth->insertItem( 0.5 );
+	m_setLineWidth->insertItem( 1.0 );
+	m_setLineWidth->insertItem( 2.0 );
+	m_setLineWidth->insertItem( 5.0 );
+	m_setLineWidth->insertItem( 10.0 );
+	m_setLineWidth->insertItem( 20.0 );
 	connect( m_setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( setLineWidth() ) );
 
 	// set up join style widget
@@ -1393,7 +1398,7 @@ KarbonView::selectionChanged()
 		part()->document().selection()->setStroke( *( part()->document().selection()->objects().getFirst()->stroke() ) );
 		part()->document().selection()->setFill( *( part()->document().selection()->objects().getFirst()->fill() ) );
 		m_setLineWidth->setEnabled( true );
-		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
+		m_setLineWidth->updateValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
 
 		if( m_ColorManager->isStrokeDocker() )
 		{
