@@ -39,6 +39,7 @@ VToolDocker::VToolDocker( KarbonPart* part, KarbonView* parent, const char* /*na
 	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
 {
 	setOrientation( Vertical );
+	setCloseMode( QDockWindow::Never );
 	QToolButton *button;
 
 	m_btngroup = new QButtonGroup( 2, Horizontal, this );
