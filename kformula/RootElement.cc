@@ -42,7 +42,7 @@ void RootElement::draw(QPoint drawPoint,int resolution)
     y=drawPoint.y();
     if( beActive )
 	pen->setPen(Qt::red);
-    unit=familySize.height()/4;
+    unit=familySize.height()/3;
 
     /*
 	Draw root!!
@@ -65,15 +65,23 @@ void RootElement::draw(QPoint drawPoint,int resolution)
       
       QColor elementColor(pen->pen().color());
       pen->setBrush(elementColor);
+     
+     
+      pen->setPen(QPen(elementColor,ofs*2));
+      pen->drawLine(x+familySize.x()+unit/3,y+familySize.y()+unit+1,
+      x+familySize.x()+unit/2+unit/3,y+familySize.bottom()+3);//familySize.y is < 0
+
       pen->setPen(QPen(elementColor,ofs));
-      ofs=0;
-      pen->drawLine(x+familySize.x()+ofs,y+familySize.y()+unit+1,
-      x+familySize.x()+unit+ofs,y+familySize.bottom()+3+ofs);//familySize.y is < 0
-      pen->drawLine(x+familySize.x()+unit+ofs,y+familySize.y()+3+ofs,
-      x+familySize.x()+unit+ofs,y+familySize.bottom()+ofs);
-      pen->drawLine(x+familySize.x()+unit+ofs,y+familySize.y()+3+ofs,
-      x+familySize.right()+1,y+familySize.y()+3+ofs);
+
+      pen->drawLine(x+familySize.x()+unit+unit/3,y+familySize.y()+3,
+      x+familySize.x()+unit/2+unit/3,y+familySize.bottom());
+
+      pen->drawLine(x+familySize.x()+unit+unit/3,y+familySize.y()+3,
+      x+familySize.right()+1+unit/3,y+familySize.y()+3);
       	
+      pen->drawLine(x+familySize.x()+unit/3,y+familySize.y()+unit+1,
+             x+familySize.x(),y+familySize.y()+unit+1+unit/2);
+      
       
 /*    warning("Array");
     QPointArray points(10);
@@ -132,7 +140,7 @@ void RootElement::checkSize()
     child[0]->checkSize();
     familySize=child[0]->getSize();
     familySize.setTop(familySize.top()-8-(numericFont/24));
-    familySize.setLeft(familySize.left()-8-(numericFont/24)-(familySize.height()/4));
+    familySize.setLeft(familySize.left()-8-(numericFont/24)-(familySize.height()/2));
 
     /*
     localSize is
