@@ -824,8 +824,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         return;
     }
 
-    if ( m_strText.length() > 0 )
-      setOutputText();
+    setOutputText();
 
     // Empty text?
     if ( m_strOutText.isEmpty() )
