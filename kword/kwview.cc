@@ -570,7 +570,7 @@ void KWView::setupActions()
                                      this, SLOT( formatParagraph() ),
                                      actionCollection(), "format_paragraph" );
     actionFormatParag->setToolTip( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc." ) );
-    actionFormatParag->setWhatsThis( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph with the cursor will be changed." ) );
+    actionFormatParag->setWhatsThis( i18n( "Change paragraph margins, text flow, borders, bullets, numbering, etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph where the cursor is located will be changed." ) );
 
     actionFormatFrameSet = new KAction( i18n( "F&rame/Frameset..." ), 0,
                                      this, SLOT( formatFrameSet() ),
