@@ -152,8 +152,8 @@ static const QpFormulaConv gConv[] =
    {11,  QpFormula::binaryOperand, "*"},
    {12,  QpFormula::binaryOperand, "/"},
    {13,  QpFormula::binaryOperand, "^"},
-   {14,  QpFormula::binaryOperand, "=="},   // ??? should be '=' in qpro
-   {15,  QpFormula::binaryOperand, "!="},   // ??? should be '<>' in qpro
+   {14,  QpFormula::binaryOperand, "="},
+   {15,  QpFormula::binaryOperand, "<>"},
    {16,  QpFormula::binaryOperand, "<="},
    {17,  QpFormula::binaryOperand, ">="},
    {18,  QpFormula::binaryOperand, "<"},
@@ -189,29 +189,29 @@ static const QpFormulaConv gConv[] =
    {48,  QpFormula::funcV,         "@choose("},
    {49,  QpFormula::func1,         "@isna("},
    {50,  QpFormula::func1,         "@iserr("},
-   {51,  QpFormula::func1,         "@false("},
-   {52,  QpFormula::func1,         "@true("},
-   {53,  QpFormula::func1,         "@rand("},
-   {54,  QpFormula::func1,         "@date("},
-   {55,  QpFormula::func1,         "@now("},
-   {56,  QpFormula::func1,         "@pmt("},
-   {57,  QpFormula::func1,         "@pv("},
-   {58,  QpFormula::func1,         "@fv("},
-   {59,  QpFormula::func1,         "@if("},
+   {51,  QpFormula::func0,         "@false"},
+   {52,  QpFormula::func0,         "@true"},
+   {53,  QpFormula::func0,         "@rand"},
+   {54,  QpFormula::func3,         "@date("},
+   {55,  QpFormula::func0,         "@now"},
+   {56,  QpFormula::func3,         "@pmt("},
+   {57,  QpFormula::func3,         "@pv("},
+   {58,  QpFormula::func3,         "@fv("},
+   {59,  QpFormula::func3,         "@if("},
    {60,  QpFormula::func1,         "@day("},
    {61,  QpFormula::func1,         "@month("},
    {62,  QpFormula::func1,         "@year("},
-   {63,  QpFormula::func1,         "@round("},
-   {64,  QpFormula::func1,         "@time("},
+   {63,  QpFormula::func2,         "@round("},
+   {64,  QpFormula::func3,         "@time("},
    {65,  QpFormula::func1,         "@hour("},
    {66,  QpFormula::func1,         "@minute("},
    {67,  QpFormula::func1,         "@second("},
-   {68,  QpFormula::func1,         "@isnum("},
-   {69,  QpFormula::func1,         "@isstr("},
+   {68,  QpFormula::func1,         "@isnumber("},
+   {69,  QpFormula::func1,         "@isstring("},
    {70,  QpFormula::func1,         "@length("},
    {71,  QpFormula::func1,         "@value("},
-   {72,  QpFormula::func1,         "@string("},
-   {73,  QpFormula::func1,         "@mid("},
+   {72,  QpFormula::func2,         "@string("},
+   {73,  QpFormula::func3,         "@mid("},
    {74,  QpFormula::func1,         "@char("},
    {75,  QpFormula::func1,         "@code("},
    {76,  QpFormula::func1,         "@find("},
@@ -388,6 +388,30 @@ QpFormula::binaryOperandReal(const char* pOper)
 }
 
 void
+QpFormula::absKludgeReal(const char* pOper)
+{
+   // kspread doesn't (yet) have the abs function so do it ourselves
+   // using 'if( (arg) < 0, -(arg), arg )'
+
+   cStack.bracket();
+
+   char* lArg = strcpy(new char[strlen(cStack.top())+1], cStack.top());
+
+   cStack.bracket("", "<0");
+
+   cStack.push(lArg);
+   cStack.bracket("-", "");
+
+   cStack.push(lArg);
+
+   cStack.join(3, cArgSeparator);
+
+   cStack.bracket("if(");
+
+   delete [] lArg;
+}
+
+void
 QpFormula::func0Real(const char* pFunc)
 {
    const char* lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
@@ -409,6 +433,15 @@ QpFormula::func2Real(const char* pFunc)
    const char* lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
 
    cStack.join( 2, cArgSeparator );
+   cStack.bracket( lFunc );
+}
+
+void
+QpFormula::func3Real(const char* pFunc)
+{
+   const char* lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
+
+   cStack.join( 3, cArgSeparator );
    cStack.bracket( lFunc );
 }
 

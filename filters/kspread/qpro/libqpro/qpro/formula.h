@@ -61,6 +61,9 @@ public:
 
    void               formulaStart(const char* pFirstChar);
 
+   static inline void absKludge(QpFormula& pThis, const char* pFunc)
+                      {pThis.absKludgeReal(pFunc);}
+
    static inline void func0(QpFormula& pThis, const char* pFunc)
                       {pThis.func0Real(pFunc);}
 
@@ -69,6 +72,9 @@ public:
 
    static inline void func2(QpFormula& pThis, const char* pFunc)
                       {pThis.func2Real(pFunc);}
+
+   static inline void func3(QpFormula& pThis, const char* pFunc)
+                      {pThis.func3Real(pFunc);}
 
    static inline void funcV(QpFormula& pThis, const char* pFunc)
                       {pThis.funcVReal(pFunc);}
@@ -101,11 +107,13 @@ protected:
    int                cDropLeadingAt;
    QpTableNames&      cTable;
 
+   void absKludgeReal(const char* pOper);
    void binaryOperandReal(const char* pOper);
    void floatFuncReal(const char* pFunc);
    void func0Real(const char* pFunc);
    void func1Real(const char* pFunc);
    void func2Real(const char* pFunc);
+   void func3Real(const char* pFunc);
    void funcVReal(const char* pFunc);
    void intFuncReal(const char* pFunc);
    void refReal(const char* pFunc);
