@@ -168,7 +168,10 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc )
     }
     else if(viewModeType=="ModeText")
     {
-        return new KWViewModeText( doc );
+        KWTextFrameSet* fs = KWViewModeText::determineTextFrameSet( doc );
+        if ( fs )
+            return new KWViewModeText( doc, fs );
+        return new KWViewModeNormal( doc, doc->viewFrameBorders() );
     }
     else
     {
@@ -313,32 +316,37 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
 }
 
 //////////////////
-KWViewModeText::KWViewModeText( KWDocument * doc ) : KWViewMode( doc, false ) {
-    m_textFrameSet=NULL;
+KWViewModeText::KWViewModeText( KWDocument * doc, KWTextFrameSet* fs ) : KWViewMode( doc, false )
+{
+    assert( fs );
+    m_textFrameSet = fs;
 }
 
-KWTextFrameSet * KWViewModeText::textFrameSet()
+KWTextFrameSet * KWViewModeText::textFrameSet() const
 {
-    if(m_textFrameSet==NULL) {
-        KWFrameSet * fs = 0L;
-
-        KWFrame *f = m_doc->getFirstSelectedFrame();
-        if(f) fs=f->frameSet();
-
-        if (!fs || fs->type() != FT_TEXT) { // no suitable frameset found
-            KWView *view = m_doc->getAllViews().first(); // try the one I am editing..
-            if(view) {
-                KWFrameSetEdit *fse = view->getGUI()->canvasWidget()->currentFrameSetEdit();
-                if(fse) fs = fse->frameSet(); // selected frame
-            }
-        }
-
-        if (!fs || fs->type() != FT_TEXT || fs->isHeaderOrFooter() || fs->isFootEndNote())
-            fs = m_doc->frameSet( 0 );  // if not a textFS, or header/footer/footnote: fallback to fs 0
-
-        m_textFrameSet=dynamic_cast<KWTextFrameSet *>(fs);
-    }
     return m_textFrameSet;
+}
+
+KWTextFrameSet * KWViewModeText::determineTextFrameSet( KWDocument* doc ) // static
+{
+    KWFrameSet * fs = 0L;
+
+    KWFrame *f = doc->getFirstSelectedFrame();
+    if(f) fs=f->frameSet();
+
+    if (!fs || fs->type() != FT_TEXT) { // no suitable frameset found
+        KWView *view = doc->getAllViews().first(); // try the one I am editing..
+        if(view) {
+            KWFrameSetEdit *fse = view->getGUI()->canvasWidget()->currentFrameSetEdit();
+            if(fse) fs = fse->frameSet(); // selected frame
+        }
+    }
+
+    if (!fs || fs->type() != FT_TEXT || fs->isHeaderOrFooter() || fs->isFootEndNote())
+        if ( doc->getNumFrameSets() > 0 && doc->frameSet( 0 )->isVisible() )
+            fs = doc->frameSet( 0 );  // if not a textFS, or header/footer/footnote: fallback to fs 0
+
+    return dynamic_cast<KWTextFrameSet *>(fs);
 }
 
 QPoint KWViewModeText::normalToView( const QPoint & nPoint )

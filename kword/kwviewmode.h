@@ -204,10 +204,11 @@ class KWViewModeText : public KWViewMode
 {
 public:
 
-    KWViewModeText( KWDocument * doc );
+    KWViewModeText( KWDocument * doc, KWTextFrameSet* fs );
     virtual ~KWViewModeText() {}
 
-    KWTextFrameSet *textFrameSet();
+    KWTextFrameSet *textFrameSet() const;
+    static KWTextFrameSet *determineTextFrameSet( KWDocument* doc );
 
     virtual QPoint normalToView( const QPoint & nPoint );
     virtual QPoint viewToNormal( const QPoint & vPoint );

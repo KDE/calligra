@@ -2707,11 +2707,15 @@ void KWView::viewTextMode()
 {
     if ( actionViewTextMode->isChecked() )
     {
-        if ( dynamic_cast<KWViewModePreview *>(m_gui->canvasWidget()->viewMode()) )
-            m_zoomViewModePreview = m_doc->zoom();
-        showZoom( m_zoomViewModeNormal ); // share the same zoom
-        setZoom( m_zoomViewModeNormal, false );
-        m_doc->switchViewMode( new KWViewModeText( m_doc ) );
+        KWTextFrameSet* fs = KWViewModeText::determineTextFrameSet( m_doc );
+        if ( fs ) { // TODO: disable the action when there is no text frameset available
+            if ( dynamic_cast<KWViewModePreview *>(m_gui->canvasWidget()->viewMode()) )
+                m_zoomViewModePreview = m_doc->zoom();
+            showZoom( m_zoomViewModeNormal ); // share the same zoom
+            setZoom( m_zoomViewModeNormal, false );
+            m_doc->switchViewMode( new KWViewModeText( m_doc, fs ) );
+        } else
+            initGUIButton(); // ensure we show the current viewmode
     }
     else
         actionViewTextMode->setChecked( true ); // always one has to be checked !
