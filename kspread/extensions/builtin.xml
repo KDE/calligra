@@ -1430,7 +1430,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The COMBIN() function calculates the count of possible combinations. The first parameter is the total count of elements. The second parameter is the count of element to choose. These two parameters should be positive, otherwise the function returns an error. The first parameter should be bigger than the second one otherwise the function returns an error, too.</Text>
+	<Text>The COMBIN() function calculates the count of possible combinations. The first parameter is the total count of elements. The second parameter is the count of element to choose.Both parameters should be positive and the first parameter should not be less then the second,the function returns an error otherwise.</Text>
 	<Syntax>COMBIN( total; choosen )</Syntax>
 	<Example>COMBIN(12;5) returns 792</Example>
 	<Example>COMBIN(5;5) returns 1</Example>

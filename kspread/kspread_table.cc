@@ -3948,7 +3948,7 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        QString title=i18n("Change align");
+        QString title=i18n("Change horizontal alignment");
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
@@ -4076,7 +4076,7 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        QString title=i18n("Change align Y");
+        QString title=i18n("Change vertical alignment");
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }

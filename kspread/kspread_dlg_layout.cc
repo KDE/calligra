@@ -570,6 +570,10 @@ void CellLayoutDlg::initParameters(KSpreadLayout *obj,int x,int y)
                 bTextRotation = FALSE;
         if( formatNumber != obj->getFormatNumber(left, top) )
                 bFormatNumber = FALSE;
+        if( bMultiRow != obj->multiRow( left, top ) )
+                bMultiRow = FALSE;
+        if( bVerticalText!=obj->verticalText( left, top ) )
+                bVerticalText = FALSE;
 }
 
 void CellLayoutDlg::init()
@@ -966,9 +970,16 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     connect(precision,SIGNAL(valueChanged(int)),this,SLOT(slotChangeValue(int)));
     connect(prefix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
     connect(postfix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
+    connect(format,SIGNAL(activated ( int ) ),this,SLOT(formatChanged(int)));
     slotChangeState();
+    m_bFormatColorChanged=false;
     m_bFormatNumberChanged=false;
     this->resize( 400, 400 );
+}
+
+void CellLayoutPageFloat::formatChanged(int)
+{
+    m_bFormatColorChanged=true;
 }
 
 void CellLayoutPageFloat::slotChangeValue(int)
@@ -1547,6 +1558,8 @@ void CellLayoutPageFloat::applyLayout( KSpreadLayout *_obj )
     if ( dlg->precision != precision->value() )
         _obj->setPrecision( precision->value() );
 
+    if(m_bFormatColorChanged)
+    {
     switch( format->currentItem() )
         {
                 case 0:
@@ -1570,6 +1583,7 @@ void CellLayoutPageFloat::applyLayout( KSpreadLayout *_obj )
                         _obj->setFloatColor( KSpreadCell::NegRed );
                         break;
          }
+     }
     if(m_bFormatNumberChanged)
     {
     _obj->setFaktor(1.0);
@@ -1695,10 +1709,13 @@ void CellLayoutPageFloat::apply( RowLayout *_obj )
                         c->clearNoFallBackProperties( KSpreadCell::PPrefix );
                         }
                 }
-           c->clearProperty(KSpreadCell::PFloatFormat);
-           c->clearNoFallBackProperties( KSpreadCell::PFloatFormat );
-           c->clearProperty(KSpreadCell::PFloatColor);
-           c->clearNoFallBackProperties( KSpreadCell::PFloatColor );
+           if(m_bFormatColorChanged)
+                {
+                c->clearProperty(KSpreadCell::PFloatFormat);
+                c->clearNoFallBackProperties( KSpreadCell::PFloatFormat );
+                c->clearProperty(KSpreadCell::PFloatColor);
+                c->clearNoFallBackProperties( KSpreadCell::PFloatColor );
+                }
            if(m_bFormatNumberChanged)
                 {
                 c->clearProperty(KSpreadCell::PFormatNumber);
@@ -1741,10 +1758,13 @@ void CellLayoutPageFloat::apply( ColumnLayout *_obj )
                         c->clearNoFallBackProperties( KSpreadCell::PPrefix );
                         }
                 }
-           c->clearProperty(KSpreadCell::PFloatFormat);
-           c->clearNoFallBackProperties( KSpreadCell::PFloatFormat );
-           c->clearProperty(KSpreadCell::PFloatColor);
-           c->clearNoFallBackProperties( KSpreadCell::PFloatColor );
+        if(m_bFormatColorChanged)
+                {
+                c->clearProperty(KSpreadCell::PFloatFormat);
+                c->clearNoFallBackProperties( KSpreadCell::PFloatFormat );
+                c->clearProperty(KSpreadCell::PFloatColor);
+                c->clearNoFallBackProperties( KSpreadCell::PFloatColor );
+                }
            if(m_bFormatNumberChanged)
                 {
                 c->clearProperty(KSpreadCell::PFormatNumber);
@@ -2484,11 +2504,13 @@ CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *
     connect(multi , SIGNAL(clicked() ),this, SLOT(slotChangeMultiState()));
     connect(angleRotation, SIGNAL(valueChanged(int)),this,SLOT(slotChangeAngle(int)));
     slotStateChanged(0);
+    m_bOptionText=false;
     this->resize( 400, 400 );
 }
 
 void CellLayoutPagePosition::slotChangeMultiState()
 {
+m_bOptionText=true;
 if(vertical->isChecked())
         {
         vertical->setChecked(false);
@@ -2497,6 +2519,7 @@ if(vertical->isChecked())
 
 void CellLayoutPagePosition::slotChangeVerticalState()
 {
+m_bOptionText=true;
 if(multi->isChecked())
         {
         multi->setChecked(false);
@@ -2565,10 +2588,18 @@ void CellLayoutPagePosition::apply( ColumnLayout *_obj )
            c->clearNoFallBackProperties( KSpreadCell::PAlign );
            c->clearProperty(KSpreadCell::PAlignY);
            c->clearNoFallBackProperties( KSpreadCell::PAlignY );
-           c->clearProperty(KSpreadCell::PMultiRow);
-           c->clearNoFallBackProperties( KSpreadCell::PMultiRow );
-           c->clearProperty(KSpreadCell::PVerticalText);
-           c->clearNoFallBackProperties( KSpreadCell::PVerticalText );
+           if( m_bOptionText)
+                {
+                c->clearProperty(KSpreadCell::PMultiRow);
+                c->clearNoFallBackProperties( KSpreadCell::PMultiRow );
+                }
+
+           if( m_bOptionText)
+                {
+                c->clearProperty(KSpreadCell::PVerticalText);
+                c->clearNoFallBackProperties( KSpreadCell::PVerticalText );
+                }
+
            if(dlg->textRotation!=angleRotation->value())
                 {
                 c->clearProperty(KSpreadCell::PAngle);
@@ -2618,10 +2649,17 @@ void CellLayoutPagePosition::apply( RowLayout *_obj )
            c->clearNoFallBackProperties( KSpreadCell::PAlign );
            c->clearProperty(KSpreadCell::PAlignY);
            c->clearNoFallBackProperties( KSpreadCell::PAlignY );
-           c->clearProperty(KSpreadCell::PMultiRow);
-           c->clearNoFallBackProperties( KSpreadCell::PMultiRow );
-           c->clearProperty(KSpreadCell::PVerticalText);
-           c->clearNoFallBackProperties( KSpreadCell::PVerticalText );
+
+           if( m_bOptionText)
+                {
+                c->clearProperty(KSpreadCell::PMultiRow);
+                c->clearNoFallBackProperties( KSpreadCell::PMultiRow );
+                }
+           if( m_bOptionText)
+                {
+                c->clearProperty(KSpreadCell::PVerticalText);
+                c->clearNoFallBackProperties( KSpreadCell::PVerticalText );
+                }
            if(dlg->textRotation!=angleRotation->value())
                 {
                 c->clearProperty(KSpreadCell::PAngle);
@@ -2655,15 +2693,22 @@ void CellLayoutPagePosition::applyLayout( KSpreadLayout *_obj )
     _obj->setAlign(KSpreadCell::Center);
   else if( standard->isChecked())
     _obj->setAlign(KSpreadCell::Undefined);
-  if(multi->isEnabled())
-        _obj->setMultiRow(multi->isChecked());
-  else
-        _obj->setMultiRow(false);
 
-  if(vertical->isEnabled())
-        _obj->setVerticalText(vertical->isChecked());
-  else
-        _obj->setVerticalText(false);
+  if( m_bOptionText )
+        {
+        if(multi->isEnabled())
+                _obj->setMultiRow(multi->isChecked());
+        else
+                _obj->setMultiRow(false);
+        }
+
+  if(m_bOptionText )
+        {
+        if(vertical->isEnabled())
+                _obj->setVerticalText(vertical->isChecked());
+        else
+                _obj->setVerticalText(false);
+        }
 
   if(dlg->textRotation!=angleRotation->value())
         _obj->setAngle((-angleRotation->value()));

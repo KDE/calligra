@@ -211,6 +211,7 @@ public slots:
     void makeDateFormat();
     void init();
     void slotChangeValue(int);
+    void formatChanged(int);
 protected:
     QLineEdit* postfix;
     KIntNumInput* precision;
@@ -226,7 +227,10 @@ protected:
     QListBox *listFormat;
     QLabel *exampleLabel;
     CellLayoutDlg *dlg;
+
+    //test if value changed
     bool m_bFormatNumberChanged;
+    bool m_bFormatColorChanged;
 };
 
 
@@ -270,6 +274,7 @@ protected:
     QCheckBox *mergeCell;
     KIntNumInput *angleRotation;
     KIntNumInput *indent;
+    bool m_bOptionText;
 };
 
 
