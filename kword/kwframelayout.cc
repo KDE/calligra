@@ -3,7 +3,7 @@
 #include "kwdoc.h"
 #include <qtimer.h>
 
-#define DEBUG_FRAMELAYOUT
+//#define DEBUG_FRAMELAYOUT
 
 #ifdef NDEBUG
 #undef DEBUG_FRAMELAYOUT
@@ -96,6 +96,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     kdDebug(32002) << "textBottom = " << textBottom << "pt" << endl;
 #endif
 #endif
+    m_framesetsToUpdate.clear();
     // Necessary for end notes: find out the last frame of the main textframeset
     KWFrame* lastMainFrame = mainTextFrameSet->frameIterator().getLast();
     m_lastMainFramePage = lastMainFrame->pageNum();
@@ -357,17 +358,16 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     // some text above an endnote, so the endnote moves up)
     m_doc->tryRemovingPages();
 
-    QPtrList<KWFrameSet> framesetsToUpdate;
     int pages = m_doc->numPages();
     // Final cleanup: delete all frames after lastFrameNumber in each frameset
     QPtrListIterator<HeaderFooterFrameset> it( m_headersFooters );
     for ( ; it.current() ; ++it )
         if ( it.current()->deleteFramesAfterLast( pages - 1 ) )
-            framesetsToUpdate.append( it.current()->m_frameset );
+            m_framesetsToUpdate.insert( it.current()->m_frameset, true );
     QPtrListIterator<HeaderFooterFrameset> it2( m_footnotes );
     for ( ; it2.current() ; ++it2 )
         if ( it2.current()->deleteFramesAfterLast( pages - 1 ) )
-            framesetsToUpdate.append( it2.current()->m_frameset );
+            m_framesetsToUpdate.insert( it2.current()->m_frameset, true );
     if ( mainTextFrameSet ) {
         // For the last main text frameset, we use m_lastMainFramePage, so that
         // there's no frame on the "end notes only" page(s).
@@ -381,7 +381,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
             deleted = true;
         }
         if ( deleted )
-            framesetsToUpdate.append( mainTextFrameSet );
+            m_framesetsToUpdate.insert( mainTextFrameSet, true );
         // The last frame before the first endnote, is in auto-extend mode
         if ( m_doc->hasEndNotes() ) {
             KWFrame* lastMainFrame = mainTextFrameSet->frameIterator().getLast();
@@ -395,9 +395,9 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         }
     }
 
-    QPtrListIterator<KWFrameSet> fsit( framesetsToUpdate );
-    for ( ; fsit.current() ; ++fsit )
-        fsit.current()->updateFrames();
+    QMap<KWFrameSet*, bool>::iterator fsit = m_framesetsToUpdate.begin();
+    for ( ; fsit != m_framesetsToUpdate.end() ; ++fsit )
+        fsit.key()->updateFrames();
 
     // ## TODO: only if something changed? (resizing, new frames, or deleted frames...)
     for ( int pg = fromPage ; pg <= toPage ; ++pg )
@@ -438,6 +438,8 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
 {
     if ( frameNumber < headerFooter->getNumFrames() ) {
         KWFrame* frame = headerFooter->frame( frameNumber );
+        if ( *frame == rect )
+            return;
         frame->setRect( rect );
 #ifdef DEBUG_FRAMELAYOUT
         kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->getName() << " " << frame << " resized to " << rect << " pagenum=" << frame->pageNum() << endl;
@@ -462,6 +464,7 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
     // This updates e.g. availableHeight. Very important in the case
     // of the footnote frameset with 2 frames.
     headerFooter->updateFrames( 0 /*fast one*/ );
+    m_framesetsToUpdate.insert( headerFooter, true );
 }
 
 // Called at beginning and end of the layout for a given page,

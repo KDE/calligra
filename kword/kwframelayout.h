@@ -4,6 +4,7 @@
 #include <qptrlist.h>
 #include <kdebug.h>
 #include <koRect.h>
+#include <qmap.h>
 
 class KWDocument;
 class KWFrameSet;
@@ -131,6 +132,7 @@ private:
     QPtrList<HeaderFooterFrameset>& m_headersFooters;
     QPtrList<HeaderFooterFrameset>& m_footnotes;
     QPtrList<HeaderFooterFrameset>& m_endnotes;
+    QMap<KWFrameSet *, bool> m_framesetsToUpdate;
     KWDocument* m_doc;
     int m_lastMainFramePage;
 };
