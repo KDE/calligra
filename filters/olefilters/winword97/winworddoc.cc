@@ -420,8 +420,8 @@ QString WinWordDoc::generateFormats(
         else
         if (typeid(VectorGraphic) == typeid(*run))
         {
-//#define KILLUSTRATOR_WORKS_AGAIN
-#ifdef KILLUSTRATOR_WORKS_AGAIN
+#define KONTOUR_WORKS_AGAIN
+#ifdef KONTOUR_WORKS_AGAIN
             VectorGraphic *vectorGraphic = static_cast<VectorGraphic *>(run.data());
             QString ourKey;
             QString uid;

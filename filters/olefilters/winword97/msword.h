@@ -219,7 +219,7 @@ public:
     // It is designed to be instantiated locally, once for each plex we are
     // interested in.
 
-    template <class T, int word6Size>
+    template <class T, int word6Size, int word8Size>
     class Plex
     {
     public:

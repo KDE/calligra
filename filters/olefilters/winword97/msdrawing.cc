@@ -50,96 +50,77 @@ void MsDrawing::getDrawing(
         pictureData);
 }
 
-unsigned MsDrawing::read(const U8 *in, FBSE *out, unsigned count)
+unsigned MsDrawing::read(const U8 *in, FBSE *out)
 {
     U32 shifterU32;
     U16 shifterU16;
     U8 shifterU8;
-    U8 *ptr;
-    unsigned bytes = 0;
+    unsigned bytes;
+    int i;
 
-    ptr = (U8 *)out;
-    shifterU32 = shifterU16 = shifterU8 = 0;
-    for (unsigned i = 0; i < count; i++)
-    {
-        bytes += MsWordGenerated::read(in + bytes, &out->btWin32);
-        bytes += MsWordGenerated::read(in + bytes, &out->btMacOS);
-        bytes += MsWordGenerated::read(in + bytes, &out->rgbUid[0], 16);
-        bytes += MsWordGenerated::read(in + bytes, &out->tag);
-        bytes += MsWordGenerated::read(in + bytes, &out->size);
-        bytes += MsWordGenerated::read(in + bytes, &out->cRef);
-        bytes += MsWordGenerated::read(in + bytes, &out->foDelay);
-        bytes += MsWordGenerated::read(in + bytes, &out->usage);
-        bytes += MsWordGenerated::read(in + bytes, &out->cbName);
-        bytes += MsWordGenerated::read(in + bytes, &out->unused2);
-        bytes += MsWordGenerated::read(in + bytes, &out->unused3);
-        out++;
-    }
+    i = bytes = shifterU8 = shifterU16 = shifterU32 = 0;
+    bytes += MsWordGenerated::read(in + bytes, &out->btWin32);
+    bytes += MsWordGenerated::read(in + bytes, &out->btMacOS);
+    for (i = 0; i < 51; i++);
+        bytes += MsWordGenerated::read(in + bytes, &out->rgbUid[i]);
+    bytes += MsWordGenerated::read(in + bytes, &out->tag);
+    bytes += MsWordGenerated::read(in + bytes, &out->size);
+    bytes += MsWordGenerated::read(in + bytes, &out->cRef);
+    bytes += MsWordGenerated::read(in + bytes, &out->foDelay);
+    bytes += MsWordGenerated::read(in + bytes, &out->usage);
+    bytes += MsWordGenerated::read(in + bytes, &out->cbName);
+    bytes += MsWordGenerated::read(in + bytes, &out->unused2);
+    bytes += MsWordGenerated::read(in + bytes, &out->unused3);
     return bytes;
 } // FBSE
 
-unsigned MsDrawing::read(const U8 *in, FDG *out, unsigned count)
+unsigned MsDrawing::read(const U8 *in, FDG *out)
 {
     U32 shifterU32;
     U16 shifterU16;
     U8 shifterU8;
-    U8 *ptr;
-    unsigned bytes = 0;
+    unsigned bytes;
+    int i;
 
-    ptr = (U8 *)out;
-    shifterU32 = shifterU16 = shifterU8 = 0;
-    for (unsigned i = 0; i < count; i++)
-    {
-        bytes += MsWordGenerated::read(in + bytes, &out->csp);
-        bytes += MsWordGenerated::read(in + bytes, &out->spidCur);
-        out++;
-    }
+    i = bytes = shifterU8 = shifterU16 = shifterU32 = 0;
+    bytes += MsWordGenerated::read(in + bytes, &out->csp);
+    bytes += MsWordGenerated::read(in + bytes, &out->spidCur);
     return bytes;
 } // FDG
 
-unsigned MsDrawing::read(const U8 *in, FDGG *out, unsigned count)
+unsigned MsDrawing::read(const U8 *in, FDGG *out)
 {
     U32 shifterU32;
     U16 shifterU16;
     U8 shifterU8;
-    U8 *ptr;
-    unsigned bytes = 0;
+    unsigned bytes;
+    int i;
 
-    ptr = (U8 *)out;
-    shifterU32 = shifterU16 = shifterU8 = 0;
-    for (unsigned i = 0; i < count; i++)
-    {
-        bytes += MsWordGenerated::read(in + bytes, &out->spidMax);
-        bytes += MsWordGenerated::read(in + bytes, &out->cidcl);
-        bytes += MsWordGenerated::read(in + bytes, &out->cspSaved);
-        bytes += MsWordGenerated::read(in + bytes, &out->cdgSaved);
-        out++;
-    }
+    i = bytes = shifterU8 = shifterU16 = shifterU32 = 0;
+    bytes += MsWordGenerated::read(in + bytes, &out->spidMax);
+    bytes += MsWordGenerated::read(in + bytes, &out->cidcl);
+    bytes += MsWordGenerated::read(in + bytes, &out->cspSaved);
+    bytes += MsWordGenerated::read(in + bytes, &out->cdgSaved);
     return bytes;
 } // FDGG
 
-unsigned MsDrawing::read(const U8 *in, MSOBFH *out, unsigned count)
+unsigned MsDrawing::read(const U8 *in, MSOBFH *out)
 {
     U32 shifterU32;
     U16 shifterU16;
     U8 shifterU8;
-    U8 *ptr;
-    unsigned bytes = 0;
+    unsigned bytes;
+    int i;
 
-    ptr = (U8 *)out;
-    shifterU32 = shifterU16 = shifterU8 = 0;
-    for (unsigned i = 0; i < count; i++)
-    {
-        bytes += MsWordGenerated::read(in + bytes, &shifterU32);
-        out->ver = shifterU32;
-        shifterU32 >>= 4;
-        out->inst = shifterU32;
-        shifterU32 >>= 12;
-        out->fbt = shifterU32;
-        shifterU32 >>= 16;
-        bytes += MsWordGenerated::read(in + bytes, &out->cbLength);
-        out++;
-    }
+    i = bytes = shifterU8 = shifterU16 = shifterU32 = 0;
+    bytes += MsWordGenerated::read(in + bytes, &shifterU32);
+    out->ver = shifterU32;
+    shifterU32 >>= 4;
+    out->inst = shifterU32;
+    shifterU32 >>= 12;
+    out->fbt = shifterU32;
+    shifterU32 >>= 16;
+    bytes += MsWordGenerated::read(in + bytes, &out->cbLength);
     return bytes;
 } // MSOBF
 
@@ -175,7 +156,7 @@ unsigned MsDrawing::walkFile(
             // TBD: There is an odd number of bytes being passed in...discard
             // it.
 
-            if (count % sizeof(U32))
+            if (count % MsWordGenerated::sizeof_U32)
                 bytes++;
             break;
         case msofbtBstoreContainer:

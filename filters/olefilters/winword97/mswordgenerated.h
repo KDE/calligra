@@ -1,6 +1,6 @@
 /*
-    Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
-    This file is part of the KDE project
+    Copyright (C) 2000, 2002, S.R.Haque <srhaque@iee.org>.
+    This file is part of the KDE project.
  
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -11,7 +11,7 @@
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     Library General Public License for more details.
- 
+
     You should have received a copy of the GNU Library General Public License
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -20,43 +20,139 @@
 DESCRIPTION
 
     This file is a description of most structures used in the on-disk format
-    of Microsoft Word 97 documents. The only structures missing are those
+    of Microsoft Word documents. The only structures missing are those
     which are tricky to autogenerate.
 */
 
 #ifndef MSWORDGENERATED_H
 #define MSWORDGENERATED_H
 
-#ifndef __GNUC__
-#define __attribute__(a)
-#pragma pack(1)
-#endif
-
-#ifdef __DECCXX
-#define __UNAL __unaligned
-#else
-#define __UNAL
-#endif
-
 class MsWordGenerated
 {
 public:
     typedef char S8;
     typedef unsigned char U8;
-    static unsigned read(const U8 *in, __UNAL U8 *out, unsigned count=1);
-    static unsigned read(const U8 *in, __UNAL S8 *out, unsigned count=1);
+    static unsigned read(const U8 *in, U8 *out);
+    static unsigned read(const U8 *in, S8 *out);
+    static const unsigned sizeof_U8 = 1;
+    static const unsigned sizeof_S8 = 1;
 
     typedef short S16;
     typedef unsigned short U16;
-    static unsigned read(const U8 *in, __UNAL U16 *out, unsigned count=1);
-    static unsigned read(const U8 *in, __UNAL S16 *out, unsigned count=1);
+    static unsigned read(const U8 *in, U16 *out);
+    static unsigned read(const U8 *in, S16 *out);
+    static const unsigned sizeof_U16 = 2;
+    static const unsigned sizeof_S16 = 2;
 
     typedef int S32;
     typedef unsigned int U32;
-    static unsigned read(const U8 *in, __UNAL U32 *out, unsigned count=1);
-    static unsigned read(const U8 *in, __UNAL S32 *out, unsigned count=1);
+    static unsigned read(const U8 *in, U32 *out);
+    static unsigned read(const U8 *in, S32 *out);
+    static const unsigned sizeof_U32 = 4;
+    static const unsigned sizeof_S32 = 4;
 
     typedef U16 XCHAR;
+    //static unsigned read(const U8 *in, XCHAR *out);
+    static const unsigned sizeof_XCHAR = sizeof_U16;
+
+    // HOIST STRUCTUREs just above here if needed to avoid forward references.
+    // Border Code (BRC)
+    typedef struct BRC
+    {
+
+        // width of a single line in 1/8 pt, max of 32 pt.
+        U16 dptLineWidth:8;
+
+        // border type code:
+        //     0 none
+        //     1 single
+        //     2 thick
+        //     3 double
+        //     5 hairline
+        //     6 dot
+        //     7 dash large gap
+        //     8 dot dash
+        //     9 dot dot dash
+        //     10 triple
+        //     11 thin-thick small gap
+        //     12 thick-thin small gap
+        //     13 thin-thick-thin small gap
+        //     14 thin-thick medium gap
+        //     15 thick-thin medium gap
+        //     16 thin-thick-thin medium gap
+        //     17 thin-thick large gap
+        //     18 thick-thin large gap
+        //     19 thin-thick-thin large gap
+        //     20 wave
+        //     21 double wave
+        //     22 dash small gap
+        //     23 dash dot stroked
+        //     24 emboss 3D
+        //     25 engrave 3D
+        //     codes 64 - 230 represent border art types and are used only for page borders.
+        U16 brcType:8;
+
+        // color code (see chp.ico)
+        U16 ico:8;
+
+        // width of space to maintain between border and text within border.
+        // Must be 0 when BRC is a substructure of TC. Stored in points.
+        U16 dptSpace:5;
+
+        // when 1, border is drawn with shadow. Must be 0 when BRC is a
+        // substructure of the TC
+        U16 fShadow:1;
+
+        //
+        U16 fFrame:1;
+
+        // reserved
+        U16 unused2_15:1;
+
+    } __attribute__ ((packed)) BRC;
+    static const unsigned sizeof_BRC = 2 + sizeof_U16;
+    static unsigned read(const U8 *in, BRC *out);
+
+    // Document Typography Info (DOPTYPOGRAPHY)
+    typedef struct DOPTYPOGRAPHY
+    {
+
+        // true if we're kerning punctuation
+        U16 fKerningPunct:1;
+
+        // Kinsoku method of justification:
+        //     0 = always expand
+        //     1 = compress punctuation
+        //     2 = compress punctuation and kana.
+        U16 iJustification:2;
+
+        // Level of Kinsoku:
+        //     0 = Level 1
+        //     1 = Level 2
+        //     2 = Custom
+        U16 iLevelOfKinsoku:2;
+
+        // 2-page-on-1 feature is turned on.
+        U16 f2on1:1;
+
+        // reserved
+        U16 unused0_6:10;
+
+        // length of rgxchFPunct
+        S16 cchFollowingPunct;
+
+        // length of rgxchLPunct
+        S16 cchLeadingPunct;
+
+        // array of characters that should never appear at the start of a line
+        XCHAR rgxchFPunct[101];
+
+        // array of characters that should never appear at the end of a line
+        XCHAR rgxchLPunct[51];
+    } __attribute__ ((packed)) DOPTYPOGRAPHY;
+    static const unsigned sizeof_DOPTYPOGRAPHY = 208 + sizeof_XCHAR * 51;
+    static unsigned read(const U8 *in, DOPTYPOGRAPHY *out);
+
     // Date and Time (internal date format) (DTTM)
     typedef struct DTTM
     {
@@ -87,7 +183,59 @@ public:
         U16 wdy:3;
 
     } __attribute__ ((packed)) DTTM;
-    static unsigned read(const U8 *in, __UNAL DTTM *out, unsigned count=1);
+    static const unsigned sizeof_DTTM = 2 + sizeof_U16;
+    static unsigned read(const U8 *in, DTTM *out);
+
+    // Paragraph Height (PHE)
+    typedef struct PHE
+    {
+
+        // reserved
+        U16 fSpare:1;
+
+        // PHE entry is invalid when == 1
+        U16 fUnk:1;
+
+        // when 1, total height of paragraph is known but lines in paragraph
+        // have different heights.
+        U16 fDiffLines:1;
+
+        // reserved
+        U16 unused0_3:5;
+
+        // when fDiffLines is 0 is number of lines in paragraph
+        U16 clMac:8;
+
+        // reserved
+        U16 unused2;
+
+        // width of lines in paragraph
+        S32 dxaCol;
+
+        // when fDiffLines is 0, is height of every line in paragraph in
+        // pixels (dymLine)
+        //     when fDiffLines is 1, is the total height in pixels of the paragraph (dymHeight)
+        S32 dym;
+    } __attribute__ ((packed)) PHE;
+    static const unsigned sizeof_PHE = 8 + sizeof_S32;
+    static unsigned read(const U8 *in, PHE *out);
+
+    // Property Modifier(variant 1) (PRM)
+    typedef struct PRM
+    {
+
+        // set to 0 for variant 1
+        U16 fComplex:1;
+
+        // index to entry into rgsprmPrm
+        U16 isprm:7;
+
+        // sprm's operand
+        U16 val:8;
+
+    } __attribute__ ((packed)) PRM;
+    static const unsigned sizeof_PRM = 0 + sizeof_U16;
+    static unsigned read(const U8 *in, PRM *out);
 
     // Shading Descriptor (SHD)
     typedef struct SHD
@@ -157,90 +305,167 @@ public:
         U16 ipat:6;
 
     } __attribute__ ((packed)) SHD;
-    static unsigned read(const U8 *in, __UNAL SHD *out, unsigned count=1);
+    static const unsigned sizeof_SHD = 0 + sizeof_U16;
+    static unsigned read(const U8 *in, SHD *out);
 
-    // Document Typography Info (DOPTYPOGRAPHY)
-    typedef struct DOPTYPOGRAPHY
+    // Table Cell Descriptors (TC)
+    typedef struct TC
     {
 
-        // true if we're kerning punctuation
-        U16 fKerningPunct:1;
+        // set to 1 when cell is first cell of a range of cells that have
+        // been merged. When a cell is merged, the display areas of the
+        // merged cells are consolidated and the text within the cells is
+        // interpreted as belonging to one text stream for purposes of
+        // calculating line breaks.
+        U16 fFirstMerged:1;
 
-        // Kinsoku method of justification:
-        //     0 = always expand
-        //     1 = compress punctuation
-        //     2 = compress punctuation and kana.
-        U16 iJustification:2;
+        // set to 1 when cell has been merged with preceding cell.
+        U16 fMerged:1;
 
-        // Level of Kinsoku:
-        //     0 = Level 1
-        //     1 = Level 2
-        //     2 = Custom
-        U16 iLevelOfKinsoku:2;
+        // set to 1 when cell has vertical text flow
+        U16 fVertical:1;
 
-        // 2-page-on-1 feature is turned on.
-        U16 f2on1:1;
+        // for a vertical table cell, text flow is bottom to top when 1 and
+        // is bottom to top when 0.
+        U16 fBackward:1;
+
+        // set to 1 when cell has rotated characters (i.e. uses @font)
+        U16 fRotateFont:1;
+
+        // set to 1 when cell is vertically merged with the cell(s) above
+        // and/or below. When cells are vertically merged, the display area
+        // of the merged cells are consolidated. The consolidated area is
+        // used to display the contents of the first vertically merged cell
+        // (the cell with fVertRestart set to 1), and all other vertically
+        // merged cells (those with fVertRestart set to 0) must be empty.
+        // Cells can only be merged vertically if their left and right
+        // boundaries are (nearly) identical (i.e. if corresponding entries
+        // in rgdxaCenter of the table rows differ by at most 3).
+        U16 fVertMerge:1;
+
+        // set to 1 when the cell is the first of a set of vertically merged
+        // cells. The contents of a cell with fVertStart set to 1 are
+        // displayed in the consolidated area belonging to the entire set of
+        // vertically merged cells. Vertically merged cells with fVertRestart
+        // set to 0 must be empty.
+        U16 fVertRestart:1;
+
+        // specifies the alignment of the cell contents relative to text flow
+        // (e.g. in a cell with bottom to top text flow and bottom vertical
+        // alignment, the text is shifted horizontally to match the cell's
+        // right boundary):
+        //     0 top
+        //     1 center
+        //     2 bottom
+        U16 vertAlign:2;
 
         // reserved
-        U16 unused0_6:10;
+        U16 fUnused:7;
 
-        // length of rgxchFPunct
-        U16 cchFollowingPunct;
+        // reserved
+        U16 wUnused;
 
-        // length of rgxchLPunct
-        U16 cchLeadingPunct;
+        // BRC[cbrcTc] rgbrc: notational convenience for referring to brcTop,
+        // brcLeft, etc. fields.
+        //     specification of the top border of a table cell
+        BRC brcTop;
 
-        // array of characters that should never appear at the start of a line
-        XCHAR rgxchFPunct[101];
+        // specification of left border of table row
+        BRC brcLeft;
 
-        // array of characters that should never appear at the end of a line
-        XCHAR rgxchLPunct[51];
-    } __attribute__ ((packed)) DOPTYPOGRAPHY;
-    static unsigned read(const U8 *in, __UNAL DOPTYPOGRAPHY *out, unsigned count=1);
+        // specification of bottom border of table row
+        BRC brcBottom;
 
-    // Property Modifier(variant 1) (PRM)
-    typedef struct PRM
+        // specification of right border of table row.
+        BRC brcRight;
+    } __attribute__ ((packed)) TC;
+    static const unsigned sizeof_TC = 16 + sizeof_BRC;
+    static unsigned read(const U8 *in, TC *out);
+
+    // Table Autoformat Look sPecifier (TLP)
+    typedef struct TLP
     {
 
-        // set to 0 for variant 1
-        U16 fComplex:1;
+        // index to Word's table of table looks:
+        //     0 (none)
+        //     1 Simple 1
+        //     2 Simple 2
+        //     3 Simple 3
+        //     4 Classic 1
+        //     5 Classic 2
+        //     6 Classic 3
+        //     7 Classic 4
+        //     8 Colorful 1
+        //     9 Colorful 2
+        //     10 Colorful 3
+        //     11 Columns 1
+        //     12 Columns 2
+        //     13 Columns 3
+        //     14 Columns 4
+        //     15 Columns 5
+        //     16 Grid 1
+        //     17 Grid 2
+        //     18 Grid 3
+        //     19 Grid 4
+        //     20 Grid 5
+        //     21 Grid 6
+        //     22 Grid 7
+        //     23 Grid 8
+        //     24 List 1
+        //     25 List 2
+        //     26 List 3
+        //     27 List 4
+        //     28 List 5
+        //     29 List 6
+        //     30 List 7
+        //     31 List 8
+        //     32 3D Effects 1
+        //     33 3D Effects 2
+        //     34 3D Effects 3
+        //     35 Contemporary
+        //     36 Elegant
+        //     37 Professional
+        //     38 Subtle1
+        //     39 Subtle2
+        S16 itl;
 
-        // index to entry into rgsprmPrm
-        U16 isprm:7;
+        // when ==1, use the border properties from the selected table look
+        U16 fBorders:1;
 
-        // sprm's operand
-        U16 val:8;
+        // when ==1, use the shading properties from the selected table look
+        U16 fShading:1;
 
-    } __attribute__ ((packed)) PRM;
-    static unsigned read(const U8 *in, __UNAL PRM *out, unsigned count=1);
+        // when ==1, use the font from the selected table look
+        U16 fFont:1;
 
-    // HOIST STRUCTUREs just above here if needed to avoid forward references.
+        // when ==1, use the color from the selected table look
+        U16 fColor:1;
 
-    // AnnoTation Reference Descriptor (ATRD)
-    typedef struct ATRD
-    {
+        // when ==1, do best fit from the selected table look
+        U16 fBestFit:1;
 
-        // pascal-style string holding initials of annotation author
-        XCHAR xstUsrInitl[10];
+        // when ==1, apply properties from the selected table look to the
+        // header rows in the table
+        U16 fHdrRows:1;
 
-        // index into GrpXstAtnOwners
-        U16 ibst;
+        // when ==1, apply properties from the selected table look to the
+        // last row in the table
+        U16 fLastRow:1;
+
+        // when ==1, apply properties from the selected table look to the
+        // header columns of the table
+        U16 fHdrCols:1;
+
+        // when ==1, apply properties from the selected table look to the
+        // last column of the table
+        U16 fLastCol:1;
 
         // unused
-        U16 ak:2;
+        U16 unused2_9:7;
 
-        // unused
-        U16 unused22_2:14;
-
-        // unused
-        U16 grfbmc;
-
-        // when not -1, this tag identifies the annotation bookmark that
-        // locates the range of CPs in the main document which this
-        // annotation references.
-        U32 lTagBkmk;
-    } __attribute__ ((packed)) ATRD;
-    static unsigned read(const U8 *in, __UNAL ATRD *out, unsigned count=1);
+    } __attribute__ ((packed)) TLP;
+    static const unsigned sizeof_TLP = 2 + sizeof_U16;
+    static unsigned read(const U8 *in, TLP *out);
 
     // Autonumbered List Data Descriptor (ANLD)
     typedef struct ANLD
@@ -331,7 +556,7 @@ public:
         U8 ico:5;
 
         // font code of autonumber
-        U16 ftc;
+        S16 ftc;
 
         // font half point size (or 0=auto)
         U16 hps;
@@ -360,7 +585,8 @@ public:
         // characters displayed before/after autonumber
         XCHAR rgxch[32];
     } __attribute__ ((packed)) ANLD;
-    static unsigned read(const U8 *in, __UNAL ANLD *out, unsigned count=1);
+    static const unsigned sizeof_ANLD = 20 + sizeof_XCHAR * 32;
+    static unsigned read(const U8 *in, ANLD *out);
 
     // Autonumber Level Descriptor (ANLV)
     typedef struct ANLV
@@ -429,7 +655,7 @@ public:
         U8 fBold:1;
 
         // determines italicness of autonumber when anld.fSetItalic == 1.
-        U8 FItalic:1;
+        U8 fItalic:1;
 
         // determines whether autonumber will be displayed using small caps
         // when anld.fSetSmallCaps == 1.
@@ -451,7 +677,7 @@ public:
         U8 ico:5;
 
         // font code of autonumber
-        U16 ftc;
+        S16 ftc;
 
         // font half point size (or 0=auto)
         U16 hps;
@@ -465,16 +691,18 @@ public:
         // minimum space between number and paragraph
         U16 dxaSpace;
     } __attribute__ ((packed)) ANLV;
-    static unsigned read(const U8 *in, __UNAL ANLV *out, unsigned count=1);
+    static const unsigned sizeof_ANLV = 14 + sizeof_U16;
+    static unsigned read(const U8 *in, ANLV *out);
 
     // AutoSummary Analysis (ASUMY)
     typedef struct ASUMY
     {
 
         // AutoSummary level
-        U32 lLevel;
+        S32 lLevel;
     } __attribute__ ((packed)) ASUMY;
-    static unsigned read(const U8 *in, __UNAL ASUMY *out, unsigned count=1);
+    static const unsigned sizeof_ASUMY = 0 + sizeof_S32;
+    static unsigned read(const U8 *in, ASUMY *out);
 
     // AutoSummary Info (ASUMYI)
     typedef struct ASUMYI
@@ -501,39 +729,57 @@ public:
         U16 unused0_5:11;
 
         // Dialog summary level
-        U16 wDlgLevel;
+        S16 wDlgLevel;
 
         // upper bound for lLevel for sentences in this document
-        U32 lHighestLevel;
+        S32 lHighestLevel;
 
         // show document sentences at or below this level
-        U32 lCurrentLevel;
+        S32 lCurrentLevel;
     } __attribute__ ((packed)) ASUMYI;
-    static unsigned read(const U8 *in, __UNAL ASUMYI *out, unsigned count=1);
+    static const unsigned sizeof_ASUMYI = 8 + sizeof_S32;
+    static unsigned read(const U8 *in, ASUMYI *out);
 
-    // Bin Table Entry (BTE)
-    typedef struct BTE
+    // AnnoTation Reference Descriptor (ATRD)
+    typedef struct ATRD
     {
 
-        // Page Number for FKP
-        U32 pn;
-    } __attribute__ ((packed)) BTE;
-    static unsigned read(const U8 *in, __UNAL BTE *out, unsigned count=1);
+        // pascal-style string holding initials of annotation author
+        XCHAR xstUsrInitl[10];
+
+        // index into GrpXstAtnOwners
+        S16 ibst;
+
+        // unused
+        U16 ak:2;
+
+        // unused
+        U16 unused22_2:14;
+
+        // unused
+        U16 grfbmc;
+
+        // when not -1, this tag identifies the annotation bookmark that
+        // locates the range of CPs in the main document which this
+        // annotation references.
+        S32 lTagBkmk;
+    } __attribute__ ((packed)) ATRD;
+    static const unsigned sizeof_ATRD = 26 + sizeof_S32;
+    static unsigned read(const U8 *in, ATRD *out);
 
     // BreaK Descriptor (BKD)
     typedef struct BKD
     {
 
         // except in textbox BKD, index to <b>PGD</b> in <b>plfpgd</b> that
-        // describes the page this break is on.
-        U16 ipgd;
-
-        // in textbox BKD,
-        U16 itxbxs;
+        // describes the page this break is on. Note: different behavior in
+        // textboxes! Check Version 1.9 or earlier for the "original" version
+        // (werner)
+        S16 ipgd;
 
         // number of cp's considered for this break; note that the CP's
         // described by cpDepend in this break reside in the next BKD
-        U16 dcpDepend;
+        S16 dcpDepend;
 
         //
         U16 icol:8;
@@ -555,8 +801,12 @@ public:
         // this textbox
         U16 fTextOverflow:1;
 
+        //
+        U16 unused4_13:3;
+
     } __attribute__ ((packed)) BKD;
-    static unsigned read(const U8 *in, __UNAL BKD *out, unsigned count=1);
+    static const unsigned sizeof_BKD = 4 + sizeof_U16;
+    static unsigned read(const U8 *in, BKD *out);
 
     // BooKmark First descriptor (BKF)
     typedef struct BKF
@@ -564,7 +814,7 @@ public:
 
         // index to <b>BKL</b> entry in <b>plcfbkl</b> that describes the
         // ending position of this bookmark in the <b>CP</b> stream.
-        U16 ibkl;
+        S16 ibkl;
 
         // when bkf.fCol is 1, this is the index to the first column of a
         // table column bookmark.
@@ -583,7 +833,8 @@ public:
         U16 fCol:1;
 
     } __attribute__ ((packed)) BKF;
-    static unsigned read(const U8 *in, __UNAL BKF *out, unsigned count=1);
+    static const unsigned sizeof_BKF = 2 + sizeof_U16;
+    static unsigned read(const U8 *in, BKF *out);
 
     // BooKmark Lim descriptor (BKL)
     typedef struct BKL
@@ -594,65 +845,10 @@ public:
         // the bkl.ibkf is negative, add on the number of bookmarks recorded
         // in the hplcbkf to the bkl.ibkf to calculate the index to the BKF
         // that corresponds to this entry.
-        U16 ibkf;
+        S16 ibkf;
     } __attribute__ ((packed)) BKL;
-    static unsigned read(const U8 *in, __UNAL BKL *out, unsigned count=1);
-
-    // Border Code (BRC)
-    typedef struct BRC
-    {
-
-        // width of a single line in 1/8 pt, max of 32 pt.
-        U16 dptLineWidth:8;
-
-        // border type code:
-        //     0 none
-        //     1 single
-        //     2 thick
-        //     3 double
-        //     5 hairline
-        //     6 dot
-        //     7 dash large gap
-        //     8 dot dash
-        //     9 dot dot dash
-        //     10 triple
-        //     11 thin-thick small gap
-        //     12 thick-thin small gap
-        //     13 thin-thick-thin small gap
-        //     14 thin-thick medium gap
-        //     15 thick-thin medium gap
-        //     16 thin-thick-thin medium gap
-        //     17 thin-thick large gap
-        //     18 thick-thin large gap
-        //     19 thin-thick-thin large gap
-        //     20 wave
-        //     21 double wave
-        //     22 dash small gap
-        //     23 dash dot stroked
-        //     24 emboss 3D
-        //     25 engrave 3D
-        //     codes 64 - 230 represent border art types and are used only for page borders.
-        U16 brcType:8;
-
-        // color code (see chp.ico)
-        U16 ico:8;
-
-        // width of space to maintain between border and text within border.
-        // Must be 0 when BRC is a substructure of TC. Stored in points.
-        U16 dptSpace:5;
-
-        // when 1, border is drawn with shadow. Must be 0 when BRC is a
-        // substructure of the TC
-        U16 fShadow:1;
-
-        //
-        U16 fFrame:1;
-
-        // reserved
-        U16 unused2_15:1;
-
-    } __attribute__ ((packed)) BRC;
-    static unsigned read(const U8 *in, __UNAL BRC *out, unsigned count=1);
+    static const unsigned sizeof_BKL = 0 + sizeof_S16;
+    static unsigned read(const U8 *in, BKL *out);
 
     // Border Code for Windows Word 1.0 (BRC10)
     typedef struct BRC10
@@ -679,7 +875,18 @@ public:
         U16 fSpare:1;
 
     } __attribute__ ((packed)) BRC10;
-    static unsigned read(const U8 *in, __UNAL BRC10 *out, unsigned count=1);
+    static const unsigned sizeof_BRC10 = 0 + sizeof_U16;
+    static unsigned read(const U8 *in, BRC10 *out);
+
+    // Bin Table Entry (BTE)
+    typedef struct BTE
+    {
+
+        // Page Number for FKP
+        U32 pn;
+    } __attribute__ ((packed)) BTE;
+    static const unsigned sizeof_BTE = 0 + sizeof_U32;
+    static unsigned read(const U8 *in, BTE *out);
 
     // Character Properties (CHP)
     typedef struct CHP
@@ -766,25 +973,25 @@ public:
         U16 unused2_4:12;
 
         // Reserved
-        U32 unused4;
+        S32 unused4;
 
         // no longer stored
-        U16 ftc;
+        S16 ftc;
 
         // (rgftc[0]) font for ASCII text
-        U16 ftcAscii;
+        S16 ftcAscii;
 
         // (rgftc[1]) font for Far East text
-        U16 ftcFE;
+        S16 ftcFE;
 
         // (rgftc[2]) font for non-Far East text
-        U16 ftcOther;
+        S16 ftcOther;
 
         // font size in half points
         U16 hps;
 
         // space following each character in the run expressed in twip units.
-        U32 dxaSpace;
+        S32 dxaSpace;
 
         // superscript/subscript indices
         //     0 means no super/subscripting
@@ -837,11 +1044,11 @@ public:
         U8 fSysVanish:1;
 
         // reserved
-        U8 hpsPos:1;
+        U8 hpScript:1;
 
         // super/subscript position in half points; positive means text is
         // raised; negative means text is lowered.
-        S16 hpScript;
+        S16 hpsPos;
 
         // LID language identification code (no longer stored here, see rglid
         // below):
@@ -931,15 +1138,15 @@ public:
         // <p>(lTagObj) long word tag that identifies an OLE2 object in the
         // object stream when the character is an OLE2 object character.
         // (character is 0x01 and chp.fSpec is 1, chp.fOle2 is 1)
-        U32 fcPic_fcObj_lTagObj;
+        S32 fcPic_fcObj_lTagObj;
 
         // index to author IDs stored in hsttbfRMark. used when text in run
         // was newly typed when revision marking was enabled
-        U16 ibstRMark;
+        S16 ibstRMark;
 
         // index to author IDs stored in hsttbfRMark. used when text in run
         // was deleted when revision marking was enabled
-        U16 ibstRMarkDel;
+        S16 ibstRMarkDel;
 
         // Date/time at which this run of text was entered/modified by the
         // author. (Only recorded when revision marking is on.)
@@ -950,7 +1157,7 @@ public:
         DTTM dttmRMarkDel;
 
         //
-        U16 unused52;
+        S16 unused52;
 
         // index to character style descriptor in the stylesheet that tags
         // this run of text When istd is istdNormalChar (10 decimal),
@@ -965,21 +1172,21 @@ public:
         // code of the symbol font that will be used to display the symbol
         // character recorded in chp.xchSym. chp.ftcSym is an index into the
         // rgffn structure.
-        U16 ftcSym;
+        S16 ftcSym;
 
         // when chp.fSpec is 1 and the character recorded for the run in the
         // document stream is chSymbol (0x28), the character stored
         // chp.xchSym will be displayed using the font specified in
         // chp.ftcSym.
-        XCHAR xchSym[1];
+        XCHAR xchSym;
 
         // an index to strings displayed as reasons for actions taken by
         // Word's AutoFormat code
-        U16 idslRMReason;
+        S16 idslRMReason;
 
         // an index to strings displayed as reasons for actions taken by
         // Word's AutoFormat code
-        U16 idslReasonDel;
+        S16 idslReasonDel;
 
         // hyphenation rule
         //     0 No hyphenation
@@ -1023,12 +1230,15 @@ public:
         //
         U16 fFtcAsciSym:1;
 
+        // Reserved
+        U16 reserved_3:3;
+
         // when 1, properties have been changed with revision marking on
         U16 fPropMark;
 
         // index to author IDs stored in hsttbfRMark. used when properties
         // have been changed when revision marking was enabled
-        U16 ibstPropRMark;
+        S16 ibstPropRMark;
 
         // Date/time at which properties of this were changed for this run of
         // text by the author. (Only recorded when revision marking is on.)
@@ -1054,7 +1264,7 @@ public:
         U16 unused83;
 
         // reserved
-        U16 unused85;
+        S16 unused85;
 
         // reserved
         U32 unused87;
@@ -1062,11 +1272,11 @@ public:
         // (Only valid for ListNum fields). When 1, the number for a ListNum
         // field is being tracked in xstDispFldRMark -- if that number is
         // different from the current value, the number has changed.
-        U8 fDispFldRMark;
+        S8 fDispFldRMark;
 
         // Index to author IDs stored in hsttbfRMark. used when ListNum field
         // numbering has been changed when revision marking was enabled
-        U16 ibstDispFldRMark;
+        S16 ibstDispFldRMark;
 
         // The date for the ListNum field number change
         U32 dttmDispFldRMark;
@@ -1081,7 +1291,8 @@ public:
         // border
         BRC brc;
     } __attribute__ ((packed)) CHP;
-    static unsigned read(const U8 *in, __UNAL CHP *out, unsigned count=1);
+    static const unsigned sizeof_CHP = 132 + sizeof_BRC;
+    static unsigned read(const U8 *in, CHP *out);
 
     // Character Property Exceptions (CHPX)
 //    typedef struct CHPX
@@ -1095,38 +1306,73 @@ public:
 //        // styles that tag the run.
 //        U8[cb] grpprl;
 //    } __attribute__ ((packed)) CHPX;
-//    static unsigned read(const U8 *in, __UNAL CHPX *out, unsigned count=1);
+//    static const unsigned sizeof_CHPX = 1 + sizeof_U8[cb];
+//    static unsigned read(const U8 *in, CHPX *out);
+
+    // Formatted Disk Page for CHPXs (CHPXFKP)
+//    typedef struct CHPXFKP
+//    {
+//
+//        // Each <b>FC</b> is the limit <b>FC</b> of a run of exception text.
+//        FC rgfc[];
+//
+//        // an array of bytes where each byte is the word offset of a<b>
+//        // CHPX</b>. If the byte stored is 0, there is no difference between
+//        // run's character properties and the style's character properties.
+//        U8 rgb[];
+//
+//        // As new runs/paragraphs are recorded in the <b>FKP</b>, unused
+//        // space is reduced by 5 if CHPX is already recorded and is reduced
+//        // by 5+sizeof(CHPX) if property is not already recorded.
+//        U8 unusedSpace[];
+//
+//        // grpchpx consists of all of the <b>CHPX</b>s stored in <b>FKP</b>
+//        // concatenated end to end. Each <b>CHPX</b> is prefixed with a count
+//        // of bytes which records its length.
+//        U8 grpchpx[];
+//
+//        // count of runs for <b>CHPX FKP,</b>
+//        U8 crun;
+//    } __attribute__ ((packed)) CHPXFKP;
+//    static const unsigned sizeof_CHPXFKP = 511 + sizeof_U8;
+//    static unsigned read(const U8 *in, CHPXFKP *out);
 
     // Drop Cap Specifier(DCS)
     typedef struct DCS
     {
 
-        // 0
+        // default value 0
+        //     drop cap type
+        //     0 no drop cap
+        //     1 normal drop cap
+        //     2 drop cap in margin
         U8 fdct:3;
 
-        // 0
-        U8 unused0_3:5;
+        // default value 0
+        //     count of lines to drop
+        U8 lines:5;
 
-        //
+        // reserved
         U8 unused1;
     } __attribute__ ((packed)) DCS;
-    static unsigned read(const U8 *in, __UNAL DCS *out, unsigned count=1);
+    static const unsigned sizeof_DCS = 1 + sizeof_U8;
+    static unsigned read(const U8 *in, DCS *out);
 
     // Drawing Object Grid (DOGRID)
     typedef struct DOGRID
     {
 
         // x-coordinate of the upper left-hand corner of the grid
-        U16 xaGrid;
+        S16 xaGrid;
 
         // y-coordinate of the upper left-hand corner of the grid
-        U16 yaGrid;
+        S16 yaGrid;
 
         // width of each grid square
-        U16 dxaGrid;
+        S16 dxaGrid;
 
         // height of each grid square
-        U16 dyaGrid;
+        S16 dyaGrid;
 
         // the number of grid squares (in the y direction) between each
         // gridline drawn on the screen. 0 means don't display any gridlines
@@ -1146,7 +1392,8 @@ public:
         U16 fFollowMargins:1;
 
     } __attribute__ ((packed)) DOGRID;
-    static unsigned read(const U8 *in, __UNAL DOGRID *out, unsigned count=1);
+    static const unsigned sizeof_DOGRID = 8 + sizeof_U16;
+    static unsigned read(const U8 *in, DOGRID *out);
 
     // Document Properties (DOP)
     typedef struct DOP
@@ -1169,7 +1416,7 @@ public:
         U16 grfSuppression:2;
 
         // footnote position code&nbsp;
-        //     &nbsp; <p>0 print as endnotes
+        //     0 print as endnotes
         //     1 print at bottom of page
         //     2 print immediately beneath text
         //     Default 1.
@@ -1182,7 +1429,7 @@ public:
         U16 grpfIhdt:8;
 
         // restart index for footnotes&nbsp;
-        //     &nbsp; <p>0 don't restart note numbering
+        //     0 don't restart note numbering
         //     1 restart for each section
         //     2 restart for each page
         //     Default 0.
@@ -1352,22 +1599,22 @@ public:
         DTTM dttmLastPrint;
 
         // number of times document has been revised since its creation
-        U16 nRevision;
+        S16 nRevision;
 
         // time document was last edited
-        U32 tmEdited;
+        S32 tmEdited;
 
         // count of words tallied by last Word Count execution
-        U32 cWords;
+        S32 cWords;
 
         // count of characters tallied by last Word Count execution
-        U32 cCh;
+        S32 cCh;
 
         // count of pages tallied by last Word Count execution
-        U16 cPg;
+        S16 cPg;
 
         // count of paragraphs tallied by last Word Count execution
-        U32 cParas;
+        S32 cParas;
 
         // restart endnote number code&nbsp;
         //     0 don't restart endnote numbering
@@ -1415,31 +1662,31 @@ public:
         U16 fWCFtnEdn:1;
 
         // count of lines tallied by last Word Count operation
-        U32 cLines;
+        S32 cLines;
 
         // count of words in footnotes and endnotes tallied by last Word
         // Count operation
-        U32 cWordsFtnEnd;
+        S32 cWordsFtnEnd;
 
         // count of characters in footnotes and endnotes tallied by last Word
         // Count operation
-        U32 cChFtnEdn;
+        S32 cChFtnEdn;
 
         // count of pages in footnotes and endnotes tallied by last Word
         // Count operation
-        U16 cPgFtnEdn;
+        S16 cPgFtnEdn;
 
         // count of paragraphs in footnotes and endnotes tallied by last Word
         // Count operation
-        U32 cParasFtnEdn;
+        S32 cParasFtnEdn;
 
         // count of paragraphs in footnotes and endnotes tallied by last Word
         // Count operation
-        U32 cLinesFtnEdn;
+        S32 cLinesFtnEdn;
 
         // document protection password key, only valid if dop.fProtEnabled,
         // dop.fLockAtn or dop.fLockRev are 1.
-        U32 lKeyProtDoc;
+        S32 lKeyProtDoc;
 
         // document view kind&nbsp;
         //     0 Normal view
@@ -1459,15 +1706,9 @@ public:
         // This is a vertical document (Word 6/95 only)
         U16 fRotateFontW6:1;
 
-        // Gutter position for this doc: 0 => side; 1 => top
+        // Gutter position for this doc: 0 => side; 1 => top.
         U16 iGutterPos:1;
 
-    } __attribute__ ((packed)) DOP;
-    static unsigned read(const U8 *in, __UNAL DOP *out, unsigned count=1);
-
-    // Document Properties with nFIB > 102 (DOP102)
-    typedef struct DOP102
-    {
         // (see above)
         U32 fNoTabForInd:1;
 
@@ -1528,12 +1769,6 @@ public:
         // (reserved)
         U32 unused84_22:10;
 
-    } __attribute__ ((packed)) DOP102;
-    static unsigned read(const U8 *in, __UNAL DOP102 *out, unsigned count=1);
-
-    // Document Properties with nFIB > 105 (DOP105)
-    typedef struct DOP105
-    {
         // Autoformat Document Type: 0 for normal. 1 for letter, and 2 for
         // email.
         U16 adt;
@@ -1598,13 +1833,13 @@ public:
         ASUMYI asumyi;
 
         // Count of characters with spaces
-        U32 cChWS;
+        S32 cChWS;
 
         // Count of characters with spaces in footnotes and endnotes
-        U32 cChWSFtnEdn;
+        S32 cChWSFtnEdn;
 
         //
-        U32 grfDocEvents;
+        S32 grfDocEvents;
 
         // Have we prompted for virus protection on this doc?
         U32 fVirusPrompted:1;
@@ -1625,10 +1860,10 @@ public:
         U32 unused476;
 
         // Count of double byte characters
-        U32 cDBC;
+        S32 cDBC;
 
         // Count od double byte characters in footnotes and endnotes
-        U32 cDBCFtnEdn;
+        S32 cDBCFtnEdn;
 
         // Always set to zero when writing files
         U32 unused488;
@@ -1639,125 +1874,22 @@ public:
         //     2 Lower case Roman
         //     3 Upper case Letter
         //     4 Lower case Letter
-        U16 nfcFtnRef;
+        S16 nfcFtnRef2;
 
         // number format code for auto endnote references&nbsp;
-        //     0 Arabic&nbsp; <div CLASS="tt">1 Upper case Roman</div>  <p>
-        //     2 Lower case Roman
+        //     0 Arabic&nbsp; <div CLASS="tt">1 Upper case Roman</div> 2 Lower case Roman
         //     3 Upper case Letter
         //     4 Lower case Letter
-        U16 nfcEdnRef;
+        S16 nfcEdnRef2;
 
         // minimum font size if fMinFontSizePag is true
-        U16 hpsZoonFontPag;
+        S16 hpsZoonFontPag;
 
         // height of the window in online view during last repag
-        U16 dywDispPag;
-    } __attribute__ ((packed)) DOP105;
-    static unsigned read(const U8 *in, __UNAL DOP105 *out, unsigned count=1);
-
-    // Field Descriptor (FLD)
-    typedef struct FLD
-    {
-
-        // type of field boundary the FLD describes:
-        //     19 field begin mark
-        //     20 field separator mark
-        //     21 field end mark
-        U8 ch:5;
-
-        // reserved
-        U8 unused0_5:3;
-
-        // fld.ch == 19 (field begin mark) -> U8 field type (see flt table
-        // below). <p>fld.ch == 21 (field end mark) ->
-        //     fDiffer:1 - ignored for saved file
-        //     fZombieEmbed:1 - 1 when result still believes this field is an EMBED or LINK field.
-        //     fResultDirty:1 -&nbsp; when user has edited or formatted the result. == 0 otherwise.
-        //     fResultEdited:1 - 1 when user has inserted text into or deleted text from the result.
-        //     fLocked:1 - 1 when field is locked from recalc.
-        //     fPrivateResult:1 - 1 whenever the result of the field is never to be shown.
-        //     fNested:1 - 1 when field is nested within another field.
-        //     fHasSep:1 - 1 when field has a field separator.
-        U8 flt;
-    } __attribute__ ((packed)) FLD;
-    static unsigned read(const U8 *in, __UNAL FLD *out, unsigned count=1);
-
-    // File Shape Address (FSPA)
-    typedef struct FSPA
-    {
-
-        // Shape Identifier. Used in conjunction with the office art data
-        // (found via <b>fcDggInfo</b> in the <b>FIB</b>) to find the actual
-        // data for this shape.
-        U32 spid;
-
-        // xa left of rectangle enclosing shape relative to the origin of the
-        // shape
-        U32 xaLeft;
-
-        // ya top of rectangle enclosing shape relative to the origin of the
-        // shape
-        U32 yaTop;
-
-        // xa right of rectangle enclosing shape relative to the origin of
-        // the shape
-        U32 xaRight;
-
-        // ya bottom of the rectangle enclosing shape relative to the origin
-        // of the shape
-        U32 yaBottom;
-
-        // 1 in the undo doc when shape is from the header doc, 0 otherwise
-        // (undefined when not in the undo doc)
-        U16 fHdr:1;
-
-        // x position of shape relative to anchor CP
-        //     0 relative to page margin
-        //     1 relative to top of page
-        //     2 relative to text (column for horizontal text; paragraph for vertical text)
-        //     3 reserved for future use
-        U16 bx:2;
-
-        // y position of shape relative to anchor CP
-        //     0 relative to page margin
-        //     1 relative to top of page
-        //     2 relative to text (paragraph for horizontal text; column for vertical text)
-        U16 by:2;
-
-        // text wrapping mode
-        //     0 like 2, but doesn't require absolute object
-        //     1 no text next to shape
-        //     2 wrap around absolute object
-        //     3 wrap as if no object present
-        //     4 wrap tightly around object
-        //     5 wrap tightly, but allow holes
-        //     6-15 reserved for future use
-        U16 wr:4;
-
-        // text wrapping mode type (valid only for wrapping modes 2 and 4
-        //     0 wrap both sides
-        //     1 wrap only on left
-        //     2 wrap only on right
-        //     3 wrap only on largest side
-        U16 wrk:4;
-
-        // when set, temporarily overrides bx, by, forcing the xaLeft,
-        // xaRight, yaTop, and yaBottom fields to all be page relative.
-        U16 fRcaSimple:1;
-
-        // 1 shape is below text
-        //     0 shape is above text
-        U16 fBelowText:1;
-
-        // 1 anchor is locked
-        //     0 anchor is not locked
-        U16 fAnchorLock:1;
-
-        // count of textboxes in shape (undo doc only)
-        U32 cTxbx;
-    } __attribute__ ((packed)) FSPA;
-    static unsigned read(const U8 *in, __UNAL FSPA *out, unsigned count=1);
+        S16 dywDispPag;
+    } __attribute__ ((packed)) DOP;
+    static const unsigned sizeof_DOP = 498 + sizeof_S16;
+    static unsigned read(const U8 *in, DOP *out);
 
     // Font Family Name (FFN)
 //    typedef struct FFN
@@ -1782,7 +1914,7 @@ public:
 //        U8 unused1_7:1;
 //
 //        // base weight of font
-//        U16 wWeight;
+//        S16 wWeight;
 //
 //        // character set identifier
 //        U8 chs;
@@ -1800,9 +1932,10 @@ public:
 //        // followed by a second xsz which records the name of an alternate
 //        // font to use if the first named font does not exist on this system.
 //        // Maximal size of xszFfn is 65 characters.
-//        U8 xszFfn[0];
+//        U8 xszFfn[];
 //    } __attribute__ ((packed)) FFN;
-//    static unsigned read(const U8 *in, __UNAL FFN *out, unsigned count=1);
+//    static const unsigned sizeof_FFN = 40 + sizeof_U8 * ;
+//    static unsigned read(const U8 *in, FFN *out);
 
     // File Information Block (FIB)
     typedef struct FIB
@@ -1823,7 +1956,7 @@ public:
         U16 lid;
 
         //
-        U16 pnNext;
+        S16 pnNext;
 
         // Set if this document is a template
         U16 fDot:1;
@@ -1965,7 +2098,7 @@ public:
 
         // Language id if document was written by Far East version of Word
         // (i.e. FIB.fFarEast is on)
-        U16 lidFE;
+        S16 lidFE;
 
         // Number of fields in the array of longs
         U16 clw;
@@ -2118,10 +2251,10 @@ public:
         U32 lcbPlcfsed;
 
         // no longer used
-        U32 fcPlcpad;
+        U32 fcPlcfpad;
 
         // no longer used
-        U32 lcbPlcpad;
+        U32 lcbPlcfpad;
 
         // offset in table stream of PHE PLC of paragraph heights. CPs in PLC
         // are relative to main document text stream. Only written for files
@@ -2411,10 +2544,10 @@ public:
 
         // offset in table stream of form field Sttbf which contains strings
         // used in form field dropdown controls
-        U32 fcFormFldSttbs;
+        U32 fcFormFldSttbf;
 
         // length in bytes of form field Sttbf
-        U32 lcbFormFldSttbs;
+        U32 lcbFormFldSttbf;
 
         // offset in table stream of endnote reference PLCF of FRD
         // structures. CPs in PLCF are relative to main document text stream
@@ -2462,18 +2595,18 @@ public:
 
         // offset in table stream to STTBF that records caption titles used
         // in the document.
-        U32 fcSttbCaption;
+        U32 fcSttbfCaption;
 
         //
-        U32 lcbSttbCaption;
+        U32 lcbSttbfCaption;
 
         // offset in table stream to the STTBF that records the object names
         // and indices into the caption STTBF for objects which get auto
         // captions.
-        U32 fcSttbAutoCaption;
+        U32 fcSttbfAutoCaption;
 
         //
-        U32 lcbSttbAutoCaption;
+        U32 lcbSttbfAutoCaption;
 
         // offset in table stream to WKB PLCF that describes the boundaries
         // of contributing documents in a master document
@@ -2507,10 +2640,10 @@ public:
         // offset in table stream of PLCF that records the beginning CP in
         // the header text box subdoc of the text of individual header text
         // box entries. No structure is stored in this PLC.
-        U32 fcPlcfhdrtxbxTxt;
+        U32 fcPlcfHdrtxbxTxt;
 
         //
-        U32 lcbPlcfhdrtxbxTxt;
+        U32 lcbPlcfHdrtxbxTxt;
 
         // offset in table stream of the FLD PLCF that records field
         // boundaries recorded in the header textbox subdoc.
@@ -2529,7 +2662,7 @@ public:
         U32 fcSttbttmbd;
 
         //
-        U32 cbSttbttmbd;
+        U32 lcbSttbttmbd;
 
         //
         U32 fcUnused;
@@ -2734,7 +2867,8 @@ public:
         //
         U32 lcbSttbfUssr;
     } __attribute__ ((packed)) FIB;
-    static unsigned read(const U8 *in, __UNAL FIB *out, unsigned count=1);
+    static const unsigned sizeof_FIB = 894 + sizeof_U32;
+    static unsigned read(const U8 *in, FIB *out);
 
     // File Information FC/LCB pair (FIBFCLCB)
     typedef struct FIBFCLCB
@@ -2746,7 +2880,38 @@ public:
         // Size of data. Ignore fc if lcb is zero.
         U32 lcb;
     } __attribute__ ((packed)) FIBFCLCB;
-    static unsigned read(const U8 *in, __UNAL FIBFCLCB *out, unsigned count=1);
+    static const unsigned sizeof_FIBFCLCB = 4 + sizeof_U32;
+    static unsigned read(const U8 *in, FIBFCLCB *out);
+
+    // Field Descriptor (FLD)
+    typedef struct FLD
+    {
+
+        // type of field boundary the FLD describes:
+        //     19 field begin mark
+        //     20 field separator mark
+        //     21 field end mark
+        U8 ch:5;
+
+        // reserved
+        U8 unused0_5:3;
+
+        // fld.ch == 19 (field begin mark) -> U8 field type (see flt table
+        // below).
+        //     fld.ch == 20 (field separator mark) -> not present
+        //     fld.ch == 21 (field end mark) ->
+        //     fDiffer:1 - ignored for saved file
+        //     fZombieEmbed:1 - 1 when result still believes this field is an EMBED or LINK field.
+        //     fResultDirty:1 -&nbsp; when user has edited or formatted the result. == 0 otherwise.
+        //     fResultEdited:1 - 1 when user has inserted text into or deleted text from the result.
+        //     fLocked:1 - 1 when field is locked from recalc.
+        //     fPrivateResult:1 - 1 whenever the result of the field is never to be shown.
+        //     fNested:1 - 1 when field is nested within another field.
+        //     fHasSep:1 - 1 when field has a field separator.
+        S8 flt;
+    } __attribute__ ((packed)) FLD;
+    static const unsigned sizeof_FLD = 1 + sizeof_S8;
+    static unsigned read(const U8 *in, FLD *out);
 
     // Footnote Reference Descriptor (FRD)
     typedef struct FRD
@@ -2754,71 +2919,215 @@ public:
 
         // if > 0, the note is an automatically numbered note, otherwise it
         // has a custom mark
-        U16 nAuto;
+        S16 nAuto;
     } __attribute__ ((packed)) FRD;
-    static unsigned read(const U8 *in, __UNAL FRD *out, unsigned count=1);
+    static const unsigned sizeof_FRD = 0 + sizeof_S16;
+    static unsigned read(const U8 *in, FRD *out);
 
-    // Formatted Disk Page for CHPXs (CHPXFKP)
-//    typedef struct CHPXFKP
-//    {
-//
-//        // Each <b>FC</b> is the limit <b>FC</b> of a run of exception text.
-//        FC rgfc[];
-//
-//        // an array of bytes where each byte is the word offset of a<b>
-//        // CHPX</b>. If the byte stored is 0, there is no difference between
-//        // run's character properties and the style's character properties.
-//        U8 rgb[];
-//
-//        // As new runs/paragraphs are recorded in the <b>FKP</b>, unused
-//        // space is reduced by 5 if CHPX is already recorded and is reduced
-//        // by 5+sizeof(CHPX) if property is not already recorded.
-//        U8 unusedSpace[];
-//
-//        // grpchpx consists of all of the <b>CHPX</b>s stored in <b>FKP</b>
-//        // concatenated end to end. Each <b>CHPX</b> is prefixed with a count
-//        // of bytes which records its length.
-//        U8 grpchpx[];
-//
-//        // count of runs for <b>CHPX FKP,</b>
-//        U8 crun;
-//    } __attribute__ ((packed)) CHPXFKP;
-//    static unsigned read(const U8 *in, __UNAL CHPXFKP *out, unsigned count=1);
+    // File Shape Address (FSPA)
+    typedef struct FSPA
+    {
 
-    // Formatted Disk Page for PAPXs (PAPXFKP)
-//    typedef struct PAPXFKP
-//    {
-//
-//        // Each <b>FC</b> is the limit <b>FC</b> of a paragraph (i.e. points
-//        // to the next character past an end of paragraph mark). There will
-//        // be fkp.crun+1 recorded in the FKP.
-//        FC[fkp.crun+1] rgfc;
-//
-//        // an array of the BX data structure. The <b>ith</b> BX entry in the
-//        // array describes the paragraph beginning at fkp.rgfc[i]. The BX is
-//        // a 13 byte data structure. The first byte of each BX is the word
-//        // offset of the <b>PAPX</b> recorded for the paragraph corresponding
-//        // to this BX. <b>.</b>. If the byte stored is 0, this represents a 1
-//        // line paragraph 15 pixels high with Normal style (stc == 0) whose
-//        // column width is 7980 dxas. The last 12 bytes of the BX is a PHE
-//        // structure which stores the current paragraph height for the
-//        // paragraph corresponding to the BX. If a plcfphe has an entry that
-//        // maps to the FC for this paragraph, that entry's PHE overrides the
-//        // PHE stored in the FKP.11*fkp.crun+4 unused space. As new
-//        // runs/paragraphs are recorded in the <b>FKP</b>, unused space is
-//        // reduced by 17 if CHPX/PAPX is already recorded and is reduced by
-//        // 17+sizeof(PAPX) if property is not already recorded.
-//        BX[fkp.crun] rgbx;
-//
-//        // grppapx consists of all of the <b>PAPX</b>s stored in <b>FKP</b>
-//        // concatenated end to end. Each <b>PAPX</b> begins with a count of
-//        // words which records its length padded to a word boundary.
-//        U8 grppapx[];
-//
-//        // count of paragraphs for <b>PAPX FKP.</b>
-//        U8 crun;
-//    } __attribute__ ((packed)) PAPXFKP;
-//    static unsigned read(const U8 *in, __UNAL PAPXFKP *out, unsigned count=1);
+        // Shape Identifier. Used in conjunction with the office art data
+        // (found via <b>fcDggInfo</b> in the <b>FIB</b>) to find the actual
+        // data for this shape.
+        S32 spid;
+
+        // xa left of rectangle enclosing shape relative to the origin of the
+        // shape
+        S32 xaLeft;
+
+        // ya top of rectangle enclosing shape relative to the origin of the
+        // shape
+        S32 yaTop;
+
+        // xa right of rectangle enclosing shape relative to the origin of
+        // the shape
+        S32 xaRight;
+
+        // ya bottom of the rectangle enclosing shape relative to the origin
+        // of the shape
+        S32 yaBottom;
+
+        // 1 in the undo doc when shape is from the header doc, 0 otherwise
+        // (undefined when not in the undo doc)
+        U16 fHdr:1;
+
+        // x position of shape relative to anchor CP
+        //     0 relative to page margin
+        //     1 relative to top of page
+        //     2 relative to text (column for horizontal text; paragraph for vertical text)
+        //     3 reserved for future use
+        U16 bx:2;
+
+        // y position of shape relative to anchor CP
+        //     0 relative to page margin
+        //     1 relative to top of page
+        //     2 relative to text (paragraph for horizontal text; column for vertical text)
+        U16 by:2;
+
+        // text wrapping mode
+        //     0 like 2, but doesn't require absolute object
+        //     1 no text next to shape
+        //     2 wrap around absolute object
+        //     3 wrap as if no object present
+        //     4 wrap tightly around object
+        //     5 wrap tightly, but allow holes
+        //     6-15 reserved for future use
+        U16 wr:4;
+
+        // text wrapping mode type (valid only for wrapping modes 2 and 4
+        //     0 wrap both sides
+        //     1 wrap only on left
+        //     2 wrap only on right
+        //     3 wrap only on largest side
+        U16 wrk:4;
+
+        // when set, temporarily overrides bx, by, forcing the xaLeft,
+        // xaRight, yaTop, and yaBottom fields to all be page relative.
+        U16 fRcaSimple:1;
+
+        // 1 shape is below text
+        //     0 shape is above text
+        U16 fBelowText:1;
+
+        // 1 anchor is locked
+        //     0 anchor is not locked
+        U16 fAnchorLock:1;
+
+        // count of textboxes in shape (undo doc only)
+        S32 cTxbx;
+    } __attribute__ ((packed)) FSPA;
+    static const unsigned sizeof_FSPA = 22 + sizeof_S32;
+    static unsigned read(const U8 *in, FSPA *out);
+
+    // TeXtBoX Story (FTXBXS)
+    typedef struct FTXBXS
+    {
+
+        // when not fReusable, counts the number of textboxes in this story
+        // chain
+        S32 cTxbx;
+
+        // when fReusable, the index of the next in the linked list of
+        // reusable FTXBXSs
+        S32 iNextReuse;
+
+        // if fReusable, counts the number of reusable FTXBXSs follow this
+        // one in the linked list
+        S32 cReusable;
+
+        // this FTXBXS is not currently in use
+        S16 fReusable;
+
+        // reserved
+        U32 reserved;
+
+        // Shape Identifier (see FSPA) for first Office Shape in textbox
+        // chain.
+        S32 lid;
+
+        //
+        S32 txidUndo;
+    } __attribute__ ((packed)) FTXBXS;
+    static const unsigned sizeof_FTXBXS = 18 + sizeof_S32;
+    static unsigned read(const U8 *in, FTXBXS *out);
+
+    // List Format Override (LFO)
+    typedef struct LFO
+    {
+
+        // List ID of corresponding LSTF (see LSTF)
+        S32 lsid;
+
+        // reserved
+        S32 unused4;
+
+        // reserved
+        S32 unused8;
+
+        // count of levels whose format is overridden (see LFOLVL)
+        U8 clfolvl;
+
+        // reserved
+        U8 reserved[3];
+    } __attribute__ ((packed)) LFO;
+    static const unsigned sizeof_LFO = 13 + sizeof_U8 * 3;
+    static unsigned read(const U8 *in, LFO *out);
+
+    // List Format Override for a single LeVeL (LFOLVL)
+    typedef struct LFOLVL
+    {
+
+        // start-at value if fFormatting == false and fStartAt == true. (if
+        // fFormatting == true, the start-at is stored in the LVL)
+        S32 iStartAt;
+
+        // the level to be overridden
+        U8 ilvl:4;
+
+        // true if the start-at value is overridden
+        U8 fStartAt:1;
+
+        // true if the formatting is overriden (in which case the LFOLVL
+        // should contain a pointer to a LVL)
+        U8 fFormatting:1;
+
+        // reserved
+        U8 unsigned4_6:2;
+
+        // reserved
+        U8 reserved[3];
+    } __attribute__ ((packed)) LFOLVL;
+    static const unsigned sizeof_LFOLVL = 5 + sizeof_U8 * 3;
+    static unsigned read(const U8 *in, LFOLVL *out);
+
+    // Line Spacing Descriptor (LSPD)
+    typedef struct LSPD
+    {
+
+        // see description of sprmPDyaLine for description of the meaning of
+        // dyaLine
+        S16 dyaLine;
+
+        // see description of sprmPDyaLine in the Sprm Definitions section
+        // for description of the meaning of dyaLine and fMultLinespace
+        // fields.
+        S16 fMultLinespace;
+    } __attribute__ ((packed)) LSPD;
+    static const unsigned sizeof_LSPD = 2 + sizeof_S16;
+    static unsigned read(const U8 *in, LSPD *out);
+
+    // LiST Data (on File) (LSTF)
+    typedef struct LSTF
+    {
+
+        // Unique List ID
+        S32 lsid;
+
+        // Unique template code
+        S32 tplc;
+
+        // Array of shorts containing the istd's linked to each level of the
+        // list, or istdNil (4095) if no style is linked.
+        U16 rgistd[9];
+
+        // true if this is a simple (one-level) list; false if this is a
+        // multilevel (nine-level) list.
+        U8 fSimpleList:1;
+
+        // Word 6 compatibility option: true if the list should start
+        // numbering over at the beginning of each section
+        U8 fRestartHdn:1;
+
+        // reserved
+        U8 unsigned26_2:6;
+
+        // reserved
+        U8 reserved;
+    } __attribute__ ((packed)) LSTF;
+    static const unsigned sizeof_LSTF = 27 + sizeof_U8;
+    static unsigned read(const U8 *in, LSTF *out);
 
     // List LeVeL (on File) (LVLF)
     typedef struct LVLF
@@ -2870,11 +3179,11 @@ public:
         U8 ixchFollow;
 
         // Word 6 compatibility option: equivalent to anld.dxaSpace (see ANLD)
-        U32 dxaSpace;
+        S32 dxaSpace;
 
         // Word 6 compatibility optino: equivalent to anld.dxaIndent (see
         // ANLD)
-        U32 dxaIndent;
+        S32 dxaIndent;
 
         // length, in bytes, of the LVL's grpprlChpx
         U8 cbGrpprlChpx;
@@ -2885,99 +3194,100 @@ public:
         // reserved
         U16 reserved;
     } __attribute__ ((packed)) LVLF;
-    static unsigned read(const U8 *in, __UNAL LVLF *out, unsigned count=1);
+    static const unsigned sizeof_LVLF = 26 + sizeof_U16;
+    static unsigned read(const U8 *in, LVLF *out);
 
-    // Line Spacing Descriptor (LSPD)
-    typedef struct LSPD
+    // Window's (METAFILEPICT)
+    typedef struct METAFILEPICT
     {
 
-        // see description of sprmPDyaLine for description of the meaning of
-        // dyaLine
-        U16 dyaLine;
+        // Specifies the mapping mode in which the picture is drawn.&nbsp;
+        S16 mm;
 
-        // see description of sprmPDyaLine in the Sprm Definitions section
-        // for description of the meaning of dyaLine and fMultLinespace
-        // fields.
-        U16 fMultLinespace;
-    } __attribute__ ((packed)) LSPD;
-    static unsigned read(const U8 *in, __UNAL LSPD *out, unsigned count=1);
+        // Specifies the size of the metafile picture for all modes except
+        // the MM_ISOTROPIC and MM_ANISOTROPIC modes. (For more information
+        // about these modes, see the yExt member.) The x-extent specifies
+        // the width of the rectangle within which the picture is drawn. The
+        // coordinates are in units that correspond to the mapping mode.
+        S16 xExt;
 
-    // LiST Data (on File) (LSTF)
-    typedef struct LSTF
+        // Specifies the size of the metafile picture for all modes except
+        // the MM_ISOTROPIC and MM_ANISOTROPIC modes. The y-extent specifies
+        // the height of the rectangle within which the picture is drawn. The
+        // coordinates are in units that correspond to the mapping
+        // mode.&nbsp; <p>For MM_ISOTROPIC and MM_ANISOTROPIC modes, which
+        // can be scaled, the xExt and yExt members contain an optional
+        // suggested size in MM_HIMETRIC units. <p>For MM_ANISOTROPIC
+        // pictures, xExt and yExt can be zero when no suggested size is
+        // supplied. For MM_ISOTROPIC pictures, an aspect ratio must be
+        // supplied even when no suggested size is given. (If a suggested
+        // size is given, the aspect ratio is implied by the size.) To give
+        // an aspect ratio without implying a suggested size, set xExt and
+        // yExt to negative values whose ratio is the appropriate aspect
+        // ratio. The magnitude of the negative xExt and yExt values is
+        // ignored; only the ratio is used.
+        S16 yExt;
+
+        // Identifies a memory metafile.
+        S16 hMF;
+    } __attribute__ ((packed)) METAFILEPICT;
+    static const unsigned sizeof_METAFILEPICT = 6 + sizeof_S16;
+    static unsigned read(const U8 *in, METAFILEPICT *out);
+
+    // Number Revision Mark Data (NUMRM)
+    typedef struct NUMRM
     {
 
-        // Unique List ID
-        U32 lsid;
+        // True if this paragraph was numbered when revision mark tracking
+        // was turned on
+        U8 fNumRM;
 
-        // Unique template code
-        U32 tplc;
+        //
+        U8 unused1;
 
-        // Array of shorts containing the istd's linked to each level of the
-        // list, or istdNil (4095) if no style is linked.
-        U16 rgistd[9];
+        // index to author IDs stored in hsttbfRMark for the paragraph number
+        // change
+        S16 ibstNumRM;
 
-        // true if this is a simple (one-level) list; false if this is a
-        // multilevel (nine-level) list.
-        U8 fSimpleList:1;
+        // Date of the paragraph number change
+        DTTM dttmNumRM;
 
-        // Word 6 compatibility option: true if the list should start
-        // numbering over at the beginning of each section
-        U8 fRestartHdn:1;
+        // Index into NUMRM.xst of the locations of paragraph number place
+        // holders for each level (see LVL.rgxchNums)
+        U8 rgbxchNums[9];
 
-        // reserved
-        U8 unsigned26_2:6;
+        // Number Format Code for the paragraph number place holders for each
+        // level (see LVL.nfc)
+        U8 rgnfc[9];
 
-        // reserved
-        U8 reserved;
-    } __attribute__ ((packed)) LSTF;
-    static unsigned read(const U8 *in, __UNAL LSTF *out, unsigned count=1);
+        //
+        S16 unused26;
 
-    // List Format Override (LFO)
-    typedef struct LFO
+        // Numerical value for each level place holder in NUMRM.xst.
+        U32 PNBR[9];
+
+        // The text string for the paragraph number, containing level place
+        // holders
+        XCHAR xst[32];
+    } __attribute__ ((packed)) NUMRM;
+    static const unsigned sizeof_NUMRM = 64 + sizeof_XCHAR * 32;
+    static unsigned read(const U8 *in, NUMRM *out);
+
+    // Embedded Object properties (OBJHEADER)
+    typedef struct OBJHEADER
     {
 
-        // List ID of corresponding LSTF (see LSTF)
-        U32 lsid;
+        // length of object (including this header)
+        U32 lcb;
 
-        // reserved
-        U32 unused4;
+        // length of this header (for future use)
+        U16 cbHeader;
 
-        // reserved
-        U32 unused8;
-
-        // count of levels whose format is overridden (see LFOLVL)
-        U8 clfolvl;
-
-        // reserved
-        U8 reserved[3];
-    } __attribute__ ((packed)) LFO;
-    static unsigned read(const U8 *in, __UNAL LFO *out, unsigned count=1);
-
-    // List Format Override for a single LeVeL (LFOLVL)
-    typedef struct LFOLVL
-    {
-
-        // start-at value if fFormatting == false and fStartAt == true. (if
-        // fFormatting == true, the start-at is stored in the LVL)
-        U32 iStartAt;
-
-        // the level to be overridden
-        U8 ilvl:4;
-
-        // true if the start-at value is overridden
-        U8 fStartAt:1;
-
-        // true if the formatting is overriden (in which case the LFOLVL
-        // should contain a pointer to a LVL)
-        U8 fFormatting:1;
-
-        // reserved
-        U8 unsigned4_6:2;
-
-        // reserved
-        U8 reserved[3];
-    } __attribute__ ((packed)) LFOLVL;
-    static unsigned read(const U8 *in, __UNAL LFOLVL *out, unsigned count=1);
+        // Index to clipboard format of object
+        U16 icf;
+    } __attribute__ ((packed)) OBJHEADER;
+    static const unsigned sizeof_OBJHEADER = 6 + sizeof_U16;
+    static unsigned read(const U8 *in, OBJHEADER *out);
 
     // Outline LiST Data (OLST)
     typedef struct OLST
@@ -3002,185 +3312,8 @@ public:
         // text before/after number
         XCHAR rgxch[32];
     } __attribute__ ((packed)) OLST;
-    static unsigned read(const U8 *in, __UNAL OLST *out, unsigned count=1);
-
-    // Window's (METAFILEPICT)
-    typedef struct METAFILEPICT
-    {
-
-        // Specifies the mapping mode in which the picture is drawn.&nbsp;
-        U16 mm;
-
-        // Specifies the size of the metafile picture for all modes except
-        // the MM_ISOTROPIC and MM_ANISOTROPIC modes. (For more information
-        // about these modes, see the yExt member.) The x-extent specifies
-        // the width of the rectangle within which the picture is drawn. The
-        // coordinates are in units that correspond to the mapping mode.
-        U16 xExt;
-
-        // Specifies the size of the metafile picture for all modes except
-        // the MM_ISOTROPIC and MM_ANISOTROPIC modes. The y-extent specifies
-        // the height of the rectangle within which the picture is drawn. The
-        // coordinates are in units that correspond to the mapping
-        // mode.&nbsp; <p>For MM_ISOTROPIC and MM_ANISOTROPIC modes, which
-        // can be scaled, the xExt and yExt members contain an optional
-        // suggested size in MM_HIMETRIC units. <p>For MM_ANISOTROPIC
-        // pictures, xExt and yExt can be zero when no suggested size is
-        // supplied. For MM_ISOTROPIC pictures, an aspect ratio must be
-        // supplied even when no suggested size is given. (If a suggested
-        // size is given, the aspect ratio is implied by the size.) To give
-        // an aspect ratio without implying a suggested size, set xExt and
-        // yExt to negative values whose ratio is the appropriate aspect
-        // ratio. The magnitude of the negative xExt and yExt values is
-        // ignored; only the ratio is used.
-        U16 yExt;
-
-        // Identifies a memory metafile.
-        U16 hMF;
-    } __attribute__ ((packed)) METAFILEPICT;
-    static unsigned read(const U8 *in, __UNAL METAFILEPICT *out, unsigned count=1);
-
-    // Number Revision Mark Data (NUMRM)
-    typedef struct NUMRM
-    {
-
-        // True if this paragraph was numbered when revision mark tracking
-        // was turned on
-        U8 fNumRM;
-
-        //
-        U8 unused1;
-
-        // index to author IDs stored in hsttbfRMark for the paragraph number
-        // change
-        U16 ibstNumRM;
-
-        // Date of the paragraph number change
-        DTTM dttmNumRM;
-
-        // Index into NUMRM.xst of the locations of paragraph number place
-        // holders for each level (see LVL.rgxchNums)
-        U8 rgbxchNums[9];
-
-        // Number Format Code for the paragraph number place holders for each
-        // level (see LVL.nfc)
-        U8 rgnfc[9];
-
-        //
-        U16 unused26;
-
-        // Numerical value for each level place holder in NUMRM.xst.
-        U32 PNBR[9];
-
-        // The text string for the paragraph number, containing level place
-        // holders
-        XCHAR xst[32];
-    } __attribute__ ((packed)) NUMRM;
-    static unsigned read(const U8 *in, __UNAL NUMRM *out, unsigned count=1);
-
-    // Embedded Object properties (OBJHEADER)
-    typedef struct OBJHEADER
-    {
-
-        // length of object (including this header)
-        U32 lcb;
-
-        // length of this header (for future use)
-        U16 cbHeader;
-
-        // Index to clipboard format of object
-        U16 icf;
-    } __attribute__ ((packed)) OBJHEADER;
-    static unsigned read(const U8 *in, __UNAL OBJHEADER *out, unsigned count=1);
-
-    // Page Descriptor (PGD)
-    typedef struct PGD
-    {
-
-        // 1 only when footnote is continued from previous page
-        U16 fContinue:1;
-
-        // 1 when page is dirty (i.e. pagination cannot be trusted)
-        U16 fUnk:1;
-
-        // 1 when right hand side page
-        U16 fRight:1;
-
-        // 1 when page number must be reset to 1.
-        U16 fPgnRestart:1;
-
-        // 1 when section break forced page to be empty.
-        U16 fEmptyPage:1;
-
-        // 1 when page contains nothing but footnotes
-        U16 fAllFtn:1;
-
-        // unused
-        U16 unused0_6:1;
-
-        // table breaks have been calculated for this page.
-        U16 fTableBreaks:1;
-
-        // used temporarily while word is running.
-        U16 fMarked:1;
-
-        // column breaks have been calculated for this page.
-        U16 fColumnBreaks:1;
-
-        // page had a table header at the end
-        U16 fTableHeader:1;
-
-        // page has never been valid since created, must recalculate the
-        // bounds of this page. If this is the last page, this PGD may really
-        // represent many pages.
-        U16 fNewPage:1;
-
-        // section break code
-        U16 bkc:4;
-
-        // line number of first line, -1 if no line numbering
-        U16 lnn;
-
-        // page number as printed
-        U16 pgn;
-
-        //
-        U32 dym;
-    } __attribute__ ((packed)) PGD;
-    static unsigned read(const U8 *in, __UNAL PGD *out, unsigned count=1);
-
-    // Paragraph Height (PHE)
-    typedef struct PHE
-    {
-
-        // reserved
-        U16 fSpare:1;
-
-        // PHE entry is invalid when == 1
-        U16 fUnk:1;
-
-        // when 1, total height of paragraph is known but lines in paragraph
-        // have different heights.
-        U16 fDiffLines:1;
-
-        // reserved
-        U16 unused0_3:5;
-
-        // when fDiffLines is 0 is number of lines in paragraph
-        U16 clMac:8;
-
-        // reserved
-        U16 unused2;
-
-        // width of lines in paragraph
-        U32 dxaCol;
-
-        // when fDiffLines is 0, is height of every line in paragraph in
-        // pixels (dymLine)
-        //     when fDiffLines is 1, is the total height in pixels of the paragraph (dymHeight)
-        U32 dym;
-    } __attribute__ ((packed)) PHE;
-    static unsigned read(const U8 *in, __UNAL PHE *out, unsigned count=1);
+    static const unsigned sizeof_OLST = 148 + sizeof_XCHAR * 32;
+    static unsigned read(const U8 *in, OLST *out);
 
     // Paragraph Properties (PAP)
     typedef struct PAP
@@ -3229,9 +3362,9 @@ public:
         //     2 coordinates are relative to page
         U8 pcHorz:2;
 
-        // /* the brcp and brcl fields have been superseded by the newly
-        // defined brcLeft, brcTop, etc. fields. They remain in the PAP for
-        // compatibility with MacWord 3.0 */
+        // the brcp and brcl fields have been superseded by the newly defined
+        // brcLeft, brcTop, etc. fields. They remain in the PAP for
+        // compatibility with MacWord 3.0
         //     rectangle border codes
         //     0 none
         //     1 border above
@@ -3259,7 +3392,7 @@ public:
 
         // when non-zero, (1-based) index into the pllfo identifying the list
         // to which the paragraph belongs
-        U16 ilfo;
+        S16 ilfo;
 
         // no longer used
         U8 nLvlAnm;
@@ -3281,13 +3414,13 @@ public:
         U8 fWidowControl;
 
         // indent from right margin (signed).
-        U32 dxaRight;
+        S32 dxaRight;
 
         // indent from left margin (signed)
-        U32 dxaLeft;
+        S32 dxaLeft;
 
         // first line indent; signed number relative to dxaLeft
-        U32 dxaLeft1;
+        S32 dxaLeft1;
 
         // line spacing descriptor
         LSPD lspd;
@@ -3356,11 +3489,11 @@ public:
         U16 unused70;
 
         // when 1, paragraph is contained in a table row
-        U8 fInTable;
+        S8 fInTable;
 
         // when 1, paragraph consists only of the row mark special character
         // and marks the end of a table row.
-        U8 fTtp;
+        S8 fTtp;
 
         // Wrap Code for absolute objects
         U8 wr;
@@ -3379,7 +3512,7 @@ public:
         //     -8 paragraph adjusted right within reference frame
         //     -12 paragraph placed immediately inside of reference frame
         //     -16 paragraph placed immediately outside of reference frame
-        U32 dxaAbs;
+        S32 dxaAbs;
 
         // when positive, is the vertical distance from the reference frame
         // specified by pap.pcVert. 0 means paragraph's y-position is
@@ -3387,11 +3520,11 @@ public:
         //     -4 paragraph is placed at top of reference frame
         //     -8 paragraph is centered vertically within reference frame
         //     -12 paragraph is placed at bottom of reference frame.
-        U32 dyaAbs;
+        S32 dyaAbs;
 
         // when not == 0, paragraph is constrained to be dxaWidth wide,
         // independent of current margin or column settings.
-        U32 dxaWidth;
+        S32 dxaWidth;
 
         // specification for border above paragraph
         BRC brcTop;
@@ -3418,11 +3551,11 @@ public:
 
         // horizontal distance to be maintained between an absolutely
         // positioned paragraph and any non-absolute positioned text
-        U32 dxaFromText;
+        S32 dxaFromText;
 
         // vertical distance to be maintained between an absolutely
         // positioned paragraph and any non-absolute positioned text
-        U32 dyaFromText;
+        S32 dyaFromText;
 
         // height of abs obj; 0 == Auto
         U16 dyaHeight:15;
@@ -3437,20 +3570,20 @@ public:
         DCS dcs;
 
         //
-        U8 lvl;
+        S8 lvl;
 
         //
-        U8 fNumRMIns;
+        S8 fNumRMIns;
 
         // autonumber list descriptor (see ANLD definition)
         ANLD anld;
 
         // when 1, properties have been changed with revision marking on
-        U16 fPropRMark;
+        S16 fPropRMark;
 
         // index to author IDs stored in hsttbfRMark. used when properties
         // have been changed when revision marking was enabled
-        U16 ibstPropRMark;
+        S16 ibstPropRMark;
 
         // Date/time at which properties of this were changed for this run of
         // text by the author. (Only recorded when revision marking is on.)
@@ -3461,15 +3594,16 @@ public:
 
         // number of tabs stops defined for paragraph. Must be >= 0 and &lt;=
         // 64.
-        U16 itbdMac;
+        S16 itbdMac;
 
         // array of positions of itbdMac tab stops. itbdMax == 64
-        U16 rgdxaTab[64];
+        S16 rgdxaTab[64];
 
         // array of itbdMac tab descriptors
-        U16 rgtbd[64];
+        S16 rgtbd[64];
     } __attribute__ ((packed)) PAP;
-    static unsigned read(const U8 *in, __UNAL PAP *out, unsigned count=1);
+    static const unsigned sizeof_PAP = 482 + sizeof_S16 * 64;
+    static unsigned read(const U8 *in, PAP *out);
 
     // Paragraph Property Exceptions (PAPX)
 //    typedef struct PAPX
@@ -3505,7 +3639,155 @@ public:
 //        // definitions for list of sprms that are used in PAPXs.
 //        character array grpprl;
 //    } __attribute__ ((packed)) PAPX;
-//    static unsigned read(const U8 *in, __UNAL PAPX *out, unsigned count=1);
+//    static const unsigned sizeof_PAPX = 3/4 + sizeof_character array;
+//    static unsigned read(const U8 *in, PAPX *out);
+
+    // Formatted Disk Page for PAPXs (PAPXFKP)
+//    typedef struct PAPXFKP
+//    {
+//
+//        // Each <b>FC</b> is the limit <b>FC</b> of a paragraph (i.e. points
+//        // to the next character past an end of paragraph mark). There will
+//        // be fkp.crun+1 recorded in the FKP.
+//        FC[fkp.crun+1] rgfc;
+//
+//        // an array of the BX data structure. The <b>ith</b> BX entry in the
+//        // array describes the paragraph beginning at fkp.rgfc[i]. The BX is
+//        // a 13 byte data structure. The first byte of each BX is the word
+//        // offset of the <b>PAPX</b> recorded for the paragraph corresponding
+//        // to this BX. <b>.</b>. If the byte stored is 0, this represents a 1
+//        // line paragraph 15 pixels high with Normal style (stc == 0) whose
+//        // column width is 7980 dxas. The last 12 bytes of the BX is a PHE
+//        // structure which stores the current paragraph height for the
+//        // paragraph corresponding to the BX. If a plcfphe has an entry that
+//        // maps to the FC for this paragraph, that entry's PHE overrides the
+//        // PHE stored in the FKP.11*fkp.crun+4 unused space. As new
+//        // runs/paragraphs are recorded in the <b>FKP</b>, unused space is
+//        // reduced by 17 if CHPX/PAPX is already recorded and is reduced by
+//        // 17+sizeof(PAPX) if property is not already recorded.
+//        BX[fkp.crun] rgbx;
+//
+//        // grppapx consists of all of the <b>PAPX</b>s stored in <b>FKP</b>
+//        // concatenated end to end. Each <b>PAPX</b> begins with a count of
+//        // words which records its length padded to a word boundary.
+//        U8 grppapx[];
+//
+//        // count of paragraphs for <b>PAPX FKP.</b>
+//        U8 crun;
+//    } __attribute__ ((packed)) PAPXFKP;
+//    static const unsigned sizeof_PAPXFKP = 511 + sizeof_U8;
+//    static unsigned read(const U8 *in, PAPXFKP *out);
+
+    // Piece Descriptor (PCD)
+    typedef struct PCD
+    {
+
+        // when 1, means that piece contains no end of paragraph marks.
+        U16 fNoParaLast:1;
+
+        // used internally by Word
+        U16 fPaphNil:1;
+
+        // used internally by Word
+        U16 fCopied:1;
+
+        //
+        U16 unused0_3:5;
+
+        // used internally by Word
+        U16 fn:8;
+
+        // file offset of beginning of piece. The size of the <b>ith</b>
+        // piece can be determined by subtracting rgcp[<b>i</b>] of the
+        // containing <b>plcfpcd</b> from its rgcp[<b>i+1</b>].
+        U32 fc;
+
+        // contains either a single sprm or else an index number of the
+        // grpprl which contains the sprms that modify the properties of the
+        // piece.
+        PRM prm;
+    } __attribute__ ((packed)) PCD;
+    static const unsigned sizeof_PCD = 6 + sizeof_PRM;
+    static unsigned read(const U8 *in, PCD *out);
+
+    // Page Descriptor (PGD)
+    typedef struct PGD
+    {
+
+        // 1 only when footnote is continued from previous page
+        U16 fContinue:1;
+
+        // 1 when page is dirty (i.e. pagination cannot be trusted)
+        U16 fUnk:1;
+
+        // 1 when right hand side page
+        U16 fRight:1;
+
+        // 1 when page number must be reset to 1.
+        U16 fPgnRestart:1;
+
+        // 1 when section break forced page to be empty.
+        U16 fEmptyPage:1;
+
+        // 1 when page contains nothing but footnotes
+        U16 fAllFtn:1;
+
+        // unused
+        U16 unused0_6:1;
+
+        // table breaks have been calculated for this page.
+        U16 fTableBreaks:1;
+
+        // used temporarily while word is running.
+        U16 fMarked:1;
+
+        // column breaks have been calculated for this page.
+        U16 fColumnBreaks:1;
+
+        // page had a table header at the end
+        U16 fTableHeader:1;
+
+        // page has never been valid since created, must recalculate the
+        // bounds of this page. If this is the last page, this PGD may really
+        // represent many pages.
+        U16 fNewPage:1;
+
+        // section break code
+        U16 bkc:4;
+
+        // line number of first line, -1 if no line numbering
+        U16 lnn;
+
+        // page number as printed
+        U16 pgn;
+
+        //
+        S32 dym;
+    } __attribute__ ((packed)) PGD;
+    static const unsigned sizeof_PGD = 6 + sizeof_S32;
+    static unsigned read(const U8 *in, PGD *out);
+
+    // Paragraph Height in a Table (PHE2)
+    typedef struct PHE2
+    {
+
+        // reserved
+        U32 fSpare:1;
+
+        // PHE entry is invalid when == 1
+        U32 fUnk:1;
+
+        // if not == 0, used as a hint when finding the next row
+        U32 dcpTtpNext;
+
+        //
+        S32 dxaCol;
+
+        // height of table row
+        S32 dymTableHeight;
+    } __attribute__ ((packed)) PHE2;
+    static const unsigned sizeof_PHE2 = 8 + sizeof_S32;
+    static unsigned read(const U8 *in, PHE2 *out);
 
     // Picture Descriptor (on File) (PICF)
     typedef struct PICF
@@ -3537,11 +3819,11 @@ public:
         // should be imaged within. when scaling bitmaps, dxaGoal and dyaGoal
         // may be ignored if the operation would cause the bitmap to shrink
         // or grow by a non -power-of-two factor
-        U16 dxaGoal;
+        S16 dxaGoal;
 
         // vertical measurement in twips of the rectangle the picture should
         // be imaged within.
-        U16 dyaGoal;
+        S16 dyaGoal;
 
         // horizontal scaling factor supplied by user expressed in .001%
         // units.
@@ -3555,16 +3837,16 @@ public:
         // border has been moved inward from its original setting and a
         // negative measurement means the border has been moved outward from
         // its original setting.
-        U16 dxaCropLeft;
+        S16 dxaCropLeft;
 
         // the amount the picture has been cropped on the top in twips.
-        U16 dyaCropTop;
+        S16 dyaCropTop;
 
         // the amount the picture has been cropped on the right in twips.
-        U16 dxaCropRight;
+        S16 dxaCropRight;
 
         // the amount the picture has been cropped on the bottom in twips.
-        U16 dyaCropBottom;
+        S16 dyaCropBottom;
 
         // Obsolete, superseded by brcTop, etc. In WinWord 1.x, it was the
         // type of border to place around picture
@@ -3605,62 +3887,32 @@ public:
         BRC brcRight;
 
         // horizontal offset of hand annotation origin
-        U16 dxaOrigin;
+        S16 dxaOrigin;
 
         // vertical offset of hand annotation origin
-        U16 dyaOrigin;
+        S16 dyaOrigin;
 
         // unused
-        U16 cProps;
+        S16 cProps;
     } __attribute__ ((packed)) PICF;
-    static unsigned read(const U8 *in, __UNAL PICF *out, unsigned count=1);
-
-    // Piece Descriptor (PCD)
-    typedef struct PCD
-    {
-
-        // when 1, means that piece contains no end of paragraph marks.
-        U16 fNoParaLast:1;
-
-        // used internally by Word
-        U16 fPaphNil:1;
-
-        // used internally by Word
-        U16 fCopied:1;
-
-        //
-        U16 unused0_3:5;
-
-        // used internally by Word
-        U16 fn:8;
-
-        // file offset of beginning of piece. The size of the <b>ith</b>
-        // piece can be determined by subtracting rgcp[<b>i</b>] of the
-        // containing <b>plcfpcd</b> from its rgcp[<b>i+1</b>].
-        U32 fc;
-
-        // contains either a single sprm or else an index number of the
-        // grpprl which contains the sprms that modify the properties of the
-        // piece.
-        PRM prm;
-    } __attribute__ ((packed)) PCD;
-    static unsigned read(const U8 *in, __UNAL PCD *out, unsigned count=1);
+    static const unsigned sizeof_PICF = 66 + sizeof_S16;
+    static unsigned read(const U8 *in, PICF *out);
 
     // Plex of CPs stored in File (PLCF)
 //    typedef struct PLCF
 //    {
 //
-//        // contains either a single sprm or else an index number of the
-//        // grpprl which contains the sprms that modify the properties of the
-//        // piece.
+//        // given that the size of PLCF is cb and the size of the structure
+//        // stored in plc is cbStruct, then the number of structure instances
+//        // stored in PLCF, iMac is given by (cb -4)/(4 + cbStruct) The number
+//        // of FCs stored in the PLCF will be iMac + 1.
 //        FC rgfc[];
 //
-//        // contains either a single sprm or else an index number of the
-//        // grpprl which contains the sprms that modify the properties of the
-//        // piece.
+//        // array of some arbitrary structure.
 //        U8 rgstruct[];
 //    } __attribute__ ((packed)) PLCF;
-//    static unsigned read(const U8 *in, __UNAL PLCF *out, unsigned count=1);
+//    static const unsigned sizeof_PLCF = 4*(iMac+1) + sizeof_U8 * ;
+//    static unsigned read(const U8 *in, PLCF *out);
 
     // Property Modifier(variant 2) (PRM2)
     typedef struct PRM2
@@ -3673,44 +3925,8 @@ public:
         U16 igrpprl:15;
 
     } __attribute__ ((packed)) PRM2;
-    static unsigned read(const U8 *in, __UNAL PRM2 *out, unsigned count=1);
-
-    // Routing Slip (RS)
-    typedef struct RS
-    {
-
-        // when 1, document has been routed to at least one recipient.
-        U16 fRouted;
-
-        // when 1, document should be routed to the originator after it has
-        // been routed to all recipients.
-        U16 fReturnOrig;
-
-        // when 1, a status message is sent to the originator each time the
-        // document is forwarded to a recipient on the routing list.
-        U16 fTrackStatus;
-
-        // unused( should be 0)
-        U16 fDirty;
-
-        // document protection while routing
-        //     0 recipients can make changes to the document and all changes are untracked.
-        //     1 recipients can add annotations and make changes to the document. Any changes are tracked by revision marks, and revision marking cannot be turned off.
-        //     2 recipients can only add annotations to the document.
-        //     3 recipients can enter information only in form fields.
-        U16 nProtect;
-
-        // index of the current recipient.
-        U16 iStage;
-
-        // when 0, document is routed to each recipient in turn. when 1,
-        // document is routed to all recipients simultaneously.
-        U16 delOption;
-
-        // count of recipients.
-        U16 cRecip;
-    } __attribute__ ((packed)) RS;
-    static unsigned read(const U8 *in, __UNAL RS *out, unsigned count=1);
+    static const unsigned sizeof_PRM2 = 0 + sizeof_U16;
+    static unsigned read(const U8 *in, PRM2 *out);
 
     // Routing Recipient (RR)
     typedef struct RR
@@ -3722,14 +3938,53 @@ public:
         // count of bytes in recipient string (including null terminator).
         U16 cbSzRecip;
     } __attribute__ ((packed)) RR;
-    static unsigned read(const U8 *in, __UNAL RR *out, unsigned count=1);
+    static const unsigned sizeof_RR = 2 + sizeof_U16;
+    static unsigned read(const U8 *in, RR *out);
+
+    // Routing Slip (RS)
+    typedef struct RS
+    {
+
+        // when 1, document has been routed to at least one recipient.
+        S16 fRouted;
+
+        // when 1, document should be routed to the originator after it has
+        // been routed to all recipients.
+        S16 fReturnOrig;
+
+        // when 1, a status message is sent to the originator each time the
+        // document is forwarded to a recipient on the routing list.
+        S16 fTrackStatus;
+
+        // unused( should be 0)
+        S16 fDirty;
+
+        // document protection while routing
+        //     0 recipients can make changes to the document and all changes are untracked.
+        //     1 recipients can add annotations and make changes to the document. Any changes are tracked by revision marks, and revision marking cannot be turned off.
+        //     2 recipients can only add annotations to the document.
+        //     3 recipients can enter information only in form fields.
+        S16 nProtect;
+
+        // index of the current recipient.
+        S16 iStage;
+
+        // when 0, document is routed to each recipient in turn. when 1,
+        // document is routed to all recipients simultaneously.
+        S16 delOption;
+
+        // count of recipients.
+        S16 cRecip;
+    } __attribute__ ((packed)) RS;
+    static const unsigned sizeof_RS = 14 + sizeof_S16;
+    static unsigned read(const U8 *in, RS *out);
 
     // Section Descriptor (SED)
     typedef struct SED
     {
 
         // used internally by Word
-        U16 fn;
+        S16 fn;
 
         // file offset in main stream to beginning of SEPX stored for
         // section. If sed.fcSepx == 0xFFFFFFFF, the section properties for
@@ -3737,13 +3992,14 @@ public:
         U32 fcSepx;
 
         // used internally by Word
-        U16 fnMpr;
+        S16 fnMpr;
 
         // points to offset in FC space of main stream where the Macintosh
         // Print Record for a document created on a Mac will be stored
         U32 fcMpr;
     } __attribute__ ((packed)) SED;
-    static unsigned read(const U8 *in, __UNAL SED *out, unsigned count=1);
+    static const unsigned sizeof_SED = 8 + sizeof_U32;
+    static unsigned read(const U8 *in, SED *out);
 
     // Section Properties (SEP)
     typedef struct SEP
@@ -3762,7 +4018,7 @@ public:
 
         // only for Mac compatibility, used only during open, when 1,
         // sep.dxaPgn and sep.dyaPgn are valid page number locations
-        U8 fAutoPgn;
+        S8 fAutoPgn;
 
         // page number format code:
         //     0 Arabic
@@ -3790,37 +4046,37 @@ public:
         //     0 Per page
         //     1 Restart
         //     2 Continue
-        U8 lnc;
+        S8 lnc;
 
         // specification of which headers and footers are included in this
         // section. See explanation in Headers and Footers topic. No longer
         // used.
-        U8 grpfIhdt;
+        S8 grpfIhdt;
 
         // if 0, no line numbering, otherwise this is the line number modulus
         // (e.g. if nLnnMod is 5, line numbers appear on line 5, 10, etc.)
         U16 nLnnMod;
 
         // distance of
-        U32 dxaLnn;
+        S32 dxaLnn;
 
         // when fAutoPgn ==1, gives the x position of auto page number on
         // page in twips (for Mac compatibility only)
-        U16 dxaPgn;
+        S16 dxaPgn;
 
         // when fAutoPgn ==1, gives the y position of auto page number on
         // page in twips (for Mac compatibility only)
-        U16 dyaPgn;
+        S16 dyaPgn;
 
         // when ==1, draw vertical lines between columns
-        U8 fLBetween;
+        S8 fLBetween;
 
         // vertical justification code
         //     0 top justified
         //     1 centered
         //     2 fully justified vertically
         //     3 bottom justified
-        U8 vjc;
+        S8 vjc;
 
         // bin number supplied from windows printer driver indicating which
         // bin the first page of section will be printed.
@@ -3846,21 +4102,21 @@ public:
         BRC brcRight;
 
         // when 1, properties have been changed with revision marking on
-        U16 fPropRMark;
+        S16 fPropRMark;
 
         // index to author IDs stored in hsttbfRMark. used when properties
         // have been changed when revision marking was enabled
-        U16 ibstPropRMark;
+        S16 ibstPropRMark;
 
         // Date/time at which properties of this were changed for this run of
         // text by the author. (Only recorded when revision marking is on.)
         DTTM dttmPropRMark;
 
         //
-        U32 dxtCharSpace;
+        S32 dxtCharSpace;
 
         //
-        U32 dyaLinePitch;
+        S32 dyaLinePitch;
 
         //
         U16 clm;
@@ -3879,7 +4135,7 @@ public:
         U16 pgnStart;
 
         // beginning line number for section
-        U16 lnnMin;
+        S16 lnnMin;
 
         //
         U16 wTextFlow;
@@ -3904,6 +4160,7 @@ public:
         //     1 offset from edge of page
         U16 pgbOffsetFrom:3;
 
+        // reserved
         U16 unused74_8:8;
 
         // default value is 12240 twipswidth of page
@@ -3925,10 +4182,10 @@ public:
         U32 dxaRight;
 
         // default value is 1440 twipstop margin
-        U32 dyaTop;
+        S32 dyaTop;
 
         // default value is 1440 twipsbottom margin
-        U32 dyaBottom;
+        S32 dyaBottom;
 
         // default value is 0 twips gutter width
         U32 dzaGutter;
@@ -3940,22 +4197,22 @@ public:
         U32 dyaHdrBottom;
 
         // number of columns in section - 1.
-        U16 ccolM1;
+        S16 ccolM1;
 
         // when == 1, columns are evenly spaced. Default value is 1.
-        U8 fEvenlySpaced;
+        S8 fEvenlySpaced;
 
         // reserved
         U8 unused123;
 
         // distance that will be maintained between columns
-        U32 dxaColumns;
+        S32 dxaColumns;
 
         // array of 89 longs that determine bounds of irregular width columns
         U32 rgdxaColumnWidthSpacing[89];
 
         // used internally by Word
-        U32 dxaColumnWidth;
+        S32 dxaColumnWidth;
 
         //
         U8 dmOrientFirst;
@@ -3969,7 +4226,8 @@ public:
         // multilevel autonumbering list data (see OLST definition)
         OLST olstAnm;
     } __attribute__ ((packed)) SEP;
-    static unsigned read(const U8 *in, __UNAL SEP *out, unsigned count=1);
+    static const unsigned sizeof_SEP = 492 + sizeof_OLST;
+    static unsigned read(const U8 *in, SEP *out);
 
     // Section Property Exceptions (SEPX)
 //    typedef struct SEPX
@@ -3980,39 +4238,10 @@ public:
 //
 //        // list of sprms that encodes the differences between the properties
 //        // of a section and Word's default section properties.
-//        U8 grpprl[0];
+//        U8 grpprl[];
 //    } __attribute__ ((packed)) SEPX;
-//    static unsigned read(const U8 *in, __UNAL SEPX *out, unsigned count=1);
-
-    // STyleSHeet Information (STSHI)
-    typedef struct STSHI
-    {
-
-        // Count of styles in stylesheet
-        U16 cstd;
-
-        // Length of STD Base as stored in a file
-        U16 cbSTDBaseInFile;
-
-        // Are built-in stylenames stored?
-        U16 fStdStylenamesWritten:1;
-
-        // Spare flags
-        U16 unused4_2:15;
-
-        // Max sti known when this file was written
-        U16 stiMaxWhenSaved;
-
-        // How many fixed-index istds are there?
-        U16 istdMaxFixedWhenSaved;
-
-        // Current version of built-in stylenames
-        U16 nVerBuiltInNamesWhenSaved;
-
-        // ftc used by StandardChpStsh for this document
-        U16 rgftcStandardChpStsh[3];
-    } __attribute__ ((packed)) STSHI;
-    static unsigned read(const U8 *in, __UNAL STSHI *out, unsigned count=1);
+//    static const unsigned sizeof_SEPX = 2 + sizeof_U8 * ;
+//    static unsigned read(const U8 *in, SEPX *out);
 
     // STyle Definition (STD)
 //    typedef struct STD
@@ -4059,7 +4288,7 @@ public:
 //        U16 unused8_3:14;
 //
 //        // sub-names are separated by chDelimStyle
-//        XCHAR xstzName[2];
+//        XCHAR xstzName[];
 //
 //        //
 //        U8 grupx[];
@@ -4068,7 +4297,130 @@ public:
 //        // based-on chain
 //        U8 grupe[];
 //    } __attribute__ ((packed)) STD;
-//    static unsigned read(const U8 *in, __UNAL STD *out, unsigned count=1);
+//    static const unsigned sizeof_STD = 10 + sizeof_XCHAR * ;
+//    static unsigned read(const U8 *in, STD *out);
+
+    // STyleSHeet Information (STSHI)
+    typedef struct STSHI
+    {
+
+        // Count of styles in stylesheet
+        U16 cstd;
+
+        // Length of STD Base as stored in a file
+        U16 cbSTDBaseInFile;
+
+        // Are built-in stylenames stored?
+        U16 fStdStylenamesWritten:1;
+
+        // Spare flags
+        U16 unused4_2:15;
+
+        // Max sti known when this file was written
+        U16 stiMaxWhenSaved;
+
+        // How many fixed-index istds are there?
+        U16 istdMaxFixedWhenSaved;
+
+        // Current version of built-in stylenames
+        U16 nVerBuiltInNamesWhenSaved;
+
+        // ftc used by StandardChpStsh for this document
+        U16 rgftcStandardChpStsh[3];
+    } __attribute__ ((packed)) STSHI;
+    static const unsigned sizeof_STSHI = 12 + sizeof_U16 * 3;
+    static unsigned read(const U8 *in, STSHI *out);
+
+    // Table Properties (TAP)
+    typedef struct TAP
+    {
+
+        // justification code. specifies how table row should be justified
+        // within its column.
+        //     0 left justify
+        //     1 center
+        //     2 right justify
+        S16 jc;
+
+        // measures half of the white space that will be maintained between
+        // text in adjacent columns of a table row. A dxaGapHalf width of
+        // white space will be maintained on both sides of a column boundary.
+        S32 dxaGapHalf;
+
+        // when greater than 0. guarantees that the height of the table will
+        // be at least dyaRowHeight high. When less than 0, guarantees that
+        // the height of the table will be exactly absolute value of
+        // dyaRowHeight high. When 0, table will be given a height large
+        // enough to represent all of the text in all of the cells of the
+        // table. Cells with vertical text flow make no contribution to the
+        // computation of the height of rows with auto or at least height.
+        // Neither do vertically merged cells, except in the last row of the
+        // vertical merge. If an auto height row consists entirely of cells
+        // which have vertical text direction or are vertically merged, and
+        // the row does not contain the last cell in any vertical cell merge,
+        // then the row is given height equal to that of the end of cell mark
+        // in the first cell.
+        S32 dyaRowHeight;
+
+        // when 1, table row may not be split across page bounds
+        U8 fCantSplit;
+
+        // when 1, table row is to be used as the header of the table
+        U8 fTableHeader;
+
+        // table look specifier (see TLP definition)
+        TLP tlp;
+
+        // reserved for future use
+        S32 lwHTMLProps;
+
+        // used internally by Word
+        U16 fCaFull:1;
+
+        // used internally by Word
+        U16 fFirstRow:1;
+
+        // used internally by Word
+        U16 fLastRow:1;
+
+        // used internally by Word
+        U16 fOutline:1;
+
+        // reserved
+        U16 unused20_12:12;
+
+        // count of cells defined for this row. ItcMac must be >= 0 and less
+        // than or equal to 64.
+        S16 itcMac;
+
+        // used internally by Word
+        S32 dxaAdjust;
+
+        // used internally by Word
+        S32 dxaScale;
+
+        // used internally by Word
+        S32 dxsInch;
+
+        // rgdxaCenter[0] is the left boundary of cell 0 measured relative to
+        // margin.. rgdxaCenter[tap.itcMac - 1] is left boundary of last
+        // cell. rgdxaCenter[tap.itcMac] is right boundary of last cell.
+        S16 rgdxaCenter[65];
+
+        // used internally by Word
+        S16 rgdxaCenterPrint[65];
+
+        // array of table cell descriptors
+        TC rgtc[64];
+
+        // array of cell shades
+        SHD rgshd[64];
+
+        // array of border defaults for cells
+        BRC rgbrcTable[6];
+    } __attribute__ ((packed)) TAP;
+    static const unsigned sizeof_TAP = 1704 + sizeof_BRC * 6;
+    static unsigned read(const U8 *in, TAP *out);
 
     // Tab Descriptor (TBD)
     typedef struct TBD
@@ -4094,292 +4446,21 @@ public:
         U8 unused0_6:2;
 
     } __attribute__ ((packed)) TBD;
-    static unsigned read(const U8 *in, __UNAL TBD *out, unsigned count=1);
-
-    // Table Cell Descriptors (TC)
-    typedef struct TC
-    {
-
-        // set to 1 when cell is first cell of a range of cells that have
-        // been merged. When a cell is merged, the display areas of the
-        // merged cells are consolidated and the text within the cells is
-        // interpreted as belonging to one text stream for purposes of
-        // calculating line breaks.
-        U16 fFirstMerged:1;
-
-        // set to 1 when cell has been merged with preceding cell.
-        U16 fMerged:1;
-
-        // set to 1 when cell has vertical text flow
-        U16 fVertical:1;
-
-        // for a vertical table cell, text flow is bottom to top when 1 and
-        // is bottom to top when 0.
-        U16 fBackward:1;
-
-        // set to 1 when cell has rotated characters (i.e. uses @font)
-        U16 fRotateFont:1;
-
-        // set to 1 when cell is vertically merged with the cell(s) above
-        // and/or below. When cells are vertically merged, the display area
-        // of the merged cells are consolidated. The consolidated area is
-        // used to display the contents of the first vertically merged cell
-        // (the cell with fVertRestart set to 1), and all other vertically
-        // merged cells (those with fVertRestart set to 0) must be empty.
-        // Cells can only be merged vertically if their left and right
-        // boundaries are (nearly) identical (i.e. if corresponding entries
-        // in rgdxaCenter of the table rows differ by at most 3).
-        U16 fVertMerge:1;
-
-        // set to 1 when the cell is the first of a set of vertically merged
-        // cells. The contents of a cell with fVertStart set to 1 are
-        // displayed in the consolidated area belonging to the entire set of
-        // vertically merged cells. Vertically merged cells with fVertRestart
-        // set to 0 must be empty.
-        U16 fVertRestart:1;
-
-        // specifies the alignment of the cell contents relative to text flow
-        // (e.g. in a cell with bottom to top text flow and bottom vertical
-        // alignment, the text is shifted horizontally to match the cell's
-        // right boundary):
-        //     0 top
-        //     1 center
-        //     2 bottom
-        U16 vertAlign:2;
-
-        // reserved
-        U16 fUnused:7;
-
-        // reserved
-        U16 wUnused;
-
-        // BRC[cbrcTc] rgbrc: notational convenience for referring to brcTop,
-        // brcLeft, etc. fields.
-        //     specification of the top border of a table cell
-        BRC brcTop;
-
-        // specification of left border of table row
-        BRC brcLeft;
-
-        // specification of bottom border of table row
-        BRC brcBottom;
-
-        // specification of right border of table row.
-        BRC brcRight;
-    } __attribute__ ((packed)) TC;
-    static unsigned read(const U8 *in, __UNAL TC *out, unsigned count=1);
-
-    // Table Autoformat Look sPecifier (TLP)
-    typedef struct TLP
-    {
-
-        // index to Word's table of table looks:
-        //     0 (none)
-        //     1 Simple 1
-        //     2 Simple 2
-        //     3 Simple 3
-        //     4 Classic 1
-        //     5 Classic 2
-        //     6 Classic 3
-        //     7 Classic 4
-        //     8 Colorful 1
-        //     9 Colorful 2
-        //     10 Colorful 3
-        //     11 Columns 1
-        //     12 Columns 2
-        //     13 Columns 3
-        //     14 Columns 4
-        //     15 Columns 5
-        //     16 Grid 1
-        //     17 Grid 2
-        //     18 Grid 3
-        //     19 Grid 4
-        //     20 Grid 5
-        //     21 Grid 6
-        //     22 Grid 7
-        //     23 Grid 8
-        //     24 List 1
-        //     25 List 2
-        //     26 List 3
-        //     27 List 4
-        //     28 List 5
-        //     29 List 6
-        //     30 List 7
-        //     31 List 8
-        //     32 3D Effects 1
-        //     33 3D Effects 2
-        //     34 3D Effects 3
-        //     35 Contemporary
-        //     36 Elegant
-        //     37 Professional
-        //     38 Subtle1
-        //     39 Subtle2
-        U16 itl;
-
-        // when ==1, use the border properties from the selected table look
-        U16 fBorders:1;
-
-        // when ==1, use the shading properties from the selected table look
-        U16 fShading:1;
-
-        // when ==1, use the font from the selected table look
-        U16 fFont:1;
-
-        // when ==1, use the color from the selected table look
-        U16 fColor:1;
-
-        // when ==1, do best fit from the selected table look
-        U16 fBestFit:1;
-
-        // when ==1, apply properties from the selected table look to the
-        // header rows in the table
-        U16 fHdrRows:1;
-
-        // when ==1, apply properties from the selected table look to the
-        // last row in the table
-        U16 fLastRow:1;
-
-        // when ==1, apply properties from the selected table look to the
-        // header columns of the table
-        U16 fHdrCols:1;
-
-        // when ==1, apply properties from the selected table look to the
-        // last column of the table
-        U16 fLastCol:1;
-
-    } __attribute__ ((packed)) TLP;
-    static unsigned read(const U8 *in, __UNAL TLP *out, unsigned count=1);
-
-    // Table Properties (TAP)
-    typedef struct TAP
-    {
-
-        // justification code. specifies how table row should be justified
-        // within its column.
-        //     0 left justify
-        //     1 center
-        //     2 right justify
-        U16 jc;
-
-        // measures half of the white space that will be maintained between
-        // text in adjacent columns of a table row. A dxaGapHalf width of
-        // white space will be maintained on both sides of a column boundary.
-        U32 dxaGapHalf;
-
-        // when greater than 0. guarantees that the height of the table will
-        // be at least dyaRowHeight high. When less than 0, guarantees that
-        // the height of the table will be exactly absolute value of
-        // dyaRowHeight high. When 0, table will be given a height large
-        // enough to represent all of the text in all of the cells of the
-        // table. Cells with vertical text flow make no contribution to the
-        // computation of the height of rows with auto or at least height.
-        // Neither do vertically merged cells, except in the last row of the
-        // vertical merge. If an auto height row consists entirely of cells
-        // which have vertical text direction or are vertically merged, and
-        // the row does not contain the last cell in any vertical cell merge,
-        // then the row is given height equal to that of the end of cell mark
-        // in the first cell.
-        U32 dyaRowHeight;
-
-        // when 1, table row may not be split across page bounds
-        U8 fCantSplit;
-
-        // when 1, table row is to be used as the header of the table
-        U8 fTableHeader;
-
-        // table look specifier (see TLP definition)
-        TLP tlp;
-
-        // reserved for future use
-        U32 lwHTMLProps;
-
-        // used internally by Word
-        U16 fCaFull:1;
-
-        // used internally by Word
-        U16 fFirstRow:1;
-
-        // used internally by Word
-        U16 fLastRow:1;
-
-        // used internally by Word
-        U16 fOutline:1;
-
-        // reserved
-        U16 unused20_12:12;
-
-        // count of cells defined for this row. ItcMac must be >= 0 and less
-        // than or equal to 64.
-        U16 itcMac;
-
-        // used internally by Word
-        U32 dxaAdjust;
-
-        // used internally by Word
-        U32 dxaScale;
-
-        // used internally by Word
-        U32 dxsInch;
-
-        // rgdxaCenter[0] is the left boundary of cell 0 measured relative to
-        // margin.. rgdxaCenter[tap.itcMac - 1] is left boundary of last
-        // cell. rgdxaCenter[tap.itcMac] is right boundary of last cell.
-        S16 rgdxaCenter[65];
-
-        // used internally by Word
-        U16 rgdxaCenterPrint[65];
-
-        // array of table cell descriptors
-        TC rgtc[64];
-
-        // array of cell shades
-        SHD rgshd[64];
-
-        // array of border defaults for cells
-        BRC rgbrcTable[6];
-    } __attribute__ ((packed)) TAP;
-    static unsigned read(const U8 *in, __UNAL TAP *out, unsigned count=1);
-
-    // TeXtBoX Story (FTXBXS)
-    typedef struct FTXBXS
-    {
-
-        // when not fReusable, counts the number of textboxes in this story
-        // chain
-        U32 cTxbx;
-
-        // when fReusable, the index of the next in the linked list of
-        // reusable FTXBXSs
-        U32 iNextReuse;
-
-        // if fReusable, counts the number of reusable FTXBXSs follow this
-        // one in the linked list
-        U32 cReusable;
-
-        // this FTXBXS is not currently in use
-        U16 fReusable;
-
-        // Shape Identifier (see FSPA) for first Office Shape in textbox
-        // chain.
-        U32 lid;
-
-        //
-        U32 txidUndo;
-    } __attribute__ ((packed)) FTXBXS;
-    static unsigned read(const U8 *in, __UNAL FTXBXS *out, unsigned count=1);
+    static const unsigned sizeof_TBD = 0 + sizeof_U8;
+    static unsigned read(const U8 *in, TBD *out);
 
     // WorK Book (WKB)
     typedef struct WKB
     {
 
         //
-        U16 fn;
+        S16 fn;
 
         //
         U16 grfwkb;
 
         //
-        U16 lvl;
+        S16 lvl;
 
         //
         U16 fnpt:4;
@@ -4388,12 +4469,10 @@ public:
         U16 fnpd:12;
 
         // unused
-        U32 doc;
+        S32 doc;
     } __attribute__ ((packed)) WKB;
-    static unsigned read(const U8 *in, __UNAL WKB *out, unsigned count=1);
+    static const unsigned sizeof_WKB = 8 + sizeof_S32;
+    static unsigned read(const U8 *in, WKB *out);
 };
 
-#ifndef __GNUC__
-#pragma pack()
-#endif
 #endif

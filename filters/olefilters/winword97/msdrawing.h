@@ -138,7 +138,7 @@ private:
         U32 fbt: 16;
         U32 cbLength;
     } MSOBFH;
-    static unsigned read(const U8 *in, MSOBFH *out, unsigned count=1);
+    static unsigned read(const U8 *in, MSOBFH *out);
 
     // FBSE - File Blip Store Entry
 
@@ -156,7 +156,7 @@ private:
         U8 unused2;     // for the future.
         U8 unused3;     // for the future.
     } FBSE;
-    static unsigned read(const U8 *in, FBSE *out, unsigned count=1);
+    static unsigned read(const U8 *in, FBSE *out);
 
     // FDG - File DG
 
@@ -165,7 +165,7 @@ private:
         U32 csp;        // The number pof shapes in this drawing.
         U32 spidCur;    // The last shape ID given to an SP in this DG.
     } FDG;
-    static unsigned read(const U8 *in, FDG *out, unsigned count=1);
+    static unsigned read(const U8 *in, FDG *out);
 
     // FDGG - File DGG
 
@@ -178,7 +178,7 @@ private:
                         // information was saved).
         U32 cdgSaved;   // The total number of drawings saved.
     } FDGG;
-    static unsigned read(const U8 *in, FDGG *out, unsigned count=1);
+    static unsigned read(const U8 *in, FDGG *out);
 
     // File ID Cluster - used to save IDCLs
 

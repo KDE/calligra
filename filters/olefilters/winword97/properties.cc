@@ -640,6 +640,7 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
         // Apply known opcodes.
 
         MsWord::U8 tmp;
+        int i;
 
         //kdDebug(s_area) << "Properties::apply: opcode:" << opcodeValue << endl;
         switch (opcodeValue)
@@ -836,7 +837,7 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
             break;
         case sprmCSymbol: // 0x6A09
             MsWordGenerated::read(in + bytes, &m_chp.ftcSym);
-            MsWordGenerated::read(in + bytes + 2, &m_chp.xchSym[0]);
+            MsWordGenerated::read(in + bytes + 2, &m_chp.xchSym);
             m_chp.fSpec = 1;
             break;
         case sprmTTlp: // 0x740A
@@ -882,7 +883,8 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
             MsWordGenerated::read(in + bytes, &m_pap.anld);
             break;
         case sprmTTableBorders: // 0xD605
-            MsWordGenerated::read(in + bytes, &m_tap.rgbrcTable[0], 6);
+            for (i = 0; i < 6; i++)
+                MsWordGenerated::read(in + bytes, &m_tap.rgbrcTable[i]);
             break;
         case sprmTDefTable: // 0xD608
 
@@ -894,15 +896,18 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
 
             // Get cell boundaries and descriptions.
 
-            tmp += MsWordGenerated::read(in + bytes + tmp, &m_tap.rgdxaCenter[0], m_tap.itcMac + 1);
-            tmp += MsWordGenerated::read(in + bytes + tmp, &m_tap.rgtc[0], m_tap.itcMac);
+            for (i = 0; i < m_tap.itcMac + 1; i++)
+                tmp += MsWordGenerated::read(in + bytes + tmp, &m_tap.rgdxaCenter[i]);
+            for (i = 0; i < m_tap.itcMac; i++)
+                tmp += MsWordGenerated::read(in + bytes + tmp, &m_tap.rgtc[i]);
             break;
         case sprmTDefTableShd: // 0xD609
 
             // TBD: this is completely different to the documented algorithm!
 
-            tmp = operandSize/sizeof(m_tap.rgshd[0]);
-            MsWordGenerated::read(in + bytes, &m_tap.rgshd[0], tmp);
+            tmp = operandSize/MsWordGenerated::sizeof_SHD;
+            for (i = 0; i < tmp; i++)
+                MsWordGenerated::read(in + bytes, &m_tap.rgshd[i]);
             break;
         default:
             if (!(m_document.m_fib.nFib > MsWord::s_maxWord6Version) &&
