@@ -12,5 +12,7 @@ what there is todo when I'll do the bugfix.
 
 4. FIXED. (was textobj focus problem)
 
+5. In screenpresentations the y-pos of objects isn't calculated cleanly.
+
 Reginald Stadlbauer
 <reggie@kde.org>

@@ -411,13 +411,13 @@ void KPresenterView_impl::screenStart()
 
       _xOffset = xOffset;
       _yOffset = yOffset;
-      xOffset = 5;
-      yOffset = 5;
+      xOffset = 10;
+      yOffset = 0;
       if (page->width() > KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).width())
  	xOffset -= (page->width() - KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).width()) / 2;
       if (page->height() > KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height())
  	yOffset -= (page->height() - KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()) / 2;
-      if (yOffset < 0) yOffset += 10; 
+      //if (yOffset < 0) yOffset += 10; 
       vert->setEnabled(false);
       horz->setEnabled(false);
       m_bShowGUI = false;

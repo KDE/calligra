@@ -32,6 +32,7 @@
 #include <komlParser.h>
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
+#include <kapp.h>
 
 #include <iostream.h>
 #include <fstream.h>

@@ -870,27 +870,6 @@ void Page::resizeObjRight(int diff,PageObjects* obj)
     }
 }
 
-/*====================== get page of object ======================*/
-int Page::getPageOfObj(int objNum)
-{
-  int i,j;
-
-  for (i = 0;i < objList()->count();i++)
-    {
-      objPtr = objList()->at(i);
-      if (objPtr->objNum == objNum)
-	{
-	  for (j = 0;j < pageList()->count();j++)
-	    {
-	      if (getPageSize(j+1).intersects(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
-						    objPtr->ow,objPtr->oh)))	  
-		return j+1;
-	    }
-	}
-    }
-  return -1;
-}
-
 /*======================== setup menus ===========================*/
 void Page::setupMenus()
 {
@@ -1083,7 +1062,7 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
 /*====================== start screenpresentation ================*/
 void Page::startScreenPresentation()
 {
-  unsigned int i;
+  unsigned int i,pgNum;
 
   float _presFaktW = (float)width() / (float)getPageSize(1).width() > 0.0 ? 
     (float)width() / (float)getPageSize(0).width() : 1.0;
@@ -1118,7 +1097,12 @@ void Page::startScreenPresentation()
       objPtr->oow = objPtr->ow;
       objPtr->ooh = objPtr->oh;
       objPtr->ox = (int)((float)objPtr->ox * _presFakt);
+      pgNum = getPageOfObj(i+1);
+      objPtr = objList()->at(i);
+      objPtr->oy -= getPageSize(pgNum).y();
       objPtr->oy = (int)((float)objPtr->oy * _presFakt);
+      objPtr->oy += getPageSize(pgNum,_presFakt).y() - diffy();
+      objPtr->oy -= (int)(_presFakt * 2.0);
       objPtr->ow = (int)((float)objPtr->ow * _presFakt);
       objPtr->oh = (int)((float)objPtr->oh * _presFakt);
 
@@ -1144,6 +1128,7 @@ void Page::startScreenPresentation()
   grabMouse();
   setFocusPolicy(QWidget::StrongFocus);
   setFocus();
+  view->KPresenterDoc()->reorderPage(1,diffx(),diffy());
   repaint(true);
 }
 

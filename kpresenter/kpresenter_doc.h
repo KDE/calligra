@@ -15,9 +15,10 @@
 #ifndef __kpresenter_doc_h__
 #define __kpresenter_doc_h__
 
-
 class KPresenterDocument_impl;
 class KPresenterView_impl;
+
+#include <stdlib.h>
 
 #include <document_impl.h>
 #include <view_impl.h>
@@ -272,6 +273,10 @@ public:
   void repaint(bool);
   void repaint(unsigned int,unsigned int,unsigned int,unsigned int,bool);
 
+  // stuff for screen-presentations
+  QList<int> reorderPage(unsigned int,int,int);
+  int getPageOfObj(int,int,int);
+
 signals:
 
   // document modified
@@ -336,6 +341,7 @@ protected:
   
   // url
   QString m_strFileURL;
+
 };
 
 #endif

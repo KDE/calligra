@@ -108,7 +108,17 @@ void GraphObj::save(ostream& out)
       << "\" blue=\"" << oBrush.color().blue() << "\" style=\"" << oBrush.style() << "\"/>" << endl;
   out << indent << "<XRND value=\"" << xRnd << "\"/>" << endl;
   out << indent << "<YRND value=\"" << yRnd << "\"/>" << endl;
-  out << indent << "<FILENAME value=\"" << fileName << "\"/>" << endl;
+  if (objType != OT_AUTOFORM)
+    out << indent << "<FILENAME value=\"" << fileName << "\"/>" << endl;
+  else
+    {
+      QString afDir = qstrdup(KApplication::kde_datadir());
+      afDir += "/kpresenter/autoforms/";
+      int len = afDir.length();
+      QString str = qstrdup(fileName);
+      str = str.remove(0,len);
+      out << indent << "<FILENAME value=\"" << str << "\"/>" << endl;
+    }
 }
 
 /*============================ load ==============================*/
@@ -217,7 +227,18 @@ void GraphObj::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "value")
-		fileName = (*it).m_strValue.c_str();
+		{
+		  fileName = (*it).m_strValue.c_str();
+		  if (objType == OT_AUTOFORM)
+		    {
+		      QString afDir = qstrdup(KApplication::kde_datadir());
+		      afDir += "/kpresenter/autoforms/";
+		      fileName.insert(0,qstrdup(afDir));
+		      QFileInfo fi(fileName);
+		      atfInterp = new ATFInterpreter(this,fi.baseName());
+		      atfInterp->load(fileName);
+		    }
+		}
 	    }
 	}
       

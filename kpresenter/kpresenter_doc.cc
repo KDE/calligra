@@ -242,9 +242,11 @@ void KPresenterDocument_impl::saveBackground(ostream& out)
 	  << pagePtr->backColor2.green() << "\" blue=\"" << pagePtr->backColor2.blue() << "\"/>" << endl; 
       out << indent << "<BCTYPE value=\"" << pagePtr->bcType << "\"/>" << endl; 
       if (pagePtr->backPic)
-	out << indent << "<BACKPIC value=\"" << pagePtr->backPic << "\"/>" << endl; 
+	out << indent << "<BACKPIC value=\"" << pagePtr->backPic << "\"/>" << endl;
+
       if (pagePtr->backClip)
 	out << indent << "<BACKCLIP value=\"" << pagePtr->backClip << "\"/>" << endl; 
+
       out << otag << "<TIMEPARTS>" << endl;
       for (unsigned int i = 0;i < pagePtr->timeParts.count();i++)
 	  out << indent << "<PART time=\"" << (int)pagePtr->timeParts.at(i) << "\"/>" << endl;
@@ -265,6 +267,7 @@ void KPresenterDocument_impl::saveObjects(ostream& out)
       out << indent << "<COORDINATES x=\"" << objPtr->ox << "\" y=\"" << objPtr->oy
 	  << "\" w=\"" << objPtr->ow << "\" h=\"" << objPtr->oh << "\"/>" << endl; 
       out << indent << "<PRESNUM value=\"" << objPtr->presNum << "\"/>" << endl; 
+      out << indent << "<EFFECT value=\"" << objPtr->effect << "\"/>" << endl; 
       
       if (objPtr->objType == OT_TEXT)
 	saveTxtObj(out,objPtr->textObj);
@@ -739,6 +742,7 @@ void KPresenterDocument_impl::loadBackground(KOMLParser& parser,vector<KOMLAttri
 			setBackClip(_num,(*it).m_strValue.c_str());
 		    }
 		}
+
 	      else
 		cerr << "Unknown tag '" << tag << "' in PAGE" << endl;    
 	      
@@ -830,6 +834,18 @@ void KPresenterDocument_impl::loadObjects(KOMLParser& parser,vector<KOMLAttrib>&
 		    {
 		      if ((*it).m_strName == "value")
 			objPtr->presNum = atoi((*it).m_strValue.c_str());
+		    }
+		}
+
+	      // effect
+	      else if (name == "EFFECT")
+		{
+		  KOMLParser::parseTag(tag.c_str(),name,lst);
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for(;it != lst.end();it++)
+		    {
+		      if ((*it).m_strName == "value")
+			objPtr->effect = (Effect)atoi((*it).m_strValue.c_str());
 		    }
 		}
 
@@ -1564,6 +1580,7 @@ void KPresenterDocument_impl::insertPicture(const char *filename,int diffx,int d
 	  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
 	  objPtr->graphObj->loadPixmap();
 	  objPtr->presNum = 0;
+	  objPtr->effect = EF_NONE;
 	  _objList.append(objPtr);
 	  repaint(objPtr->ox,objPtr->oy,
 		  objPtr->ow,objPtr->oh,false);
@@ -1592,6 +1609,7 @@ void KPresenterDocument_impl::insertClipart(const char *filename,int diffx,int d
       objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
       objPtr->graphObj->loadClipart();
       objPtr->presNum = 0;
+      objPtr->effect = EF_NONE;
       _objList.append(objPtr);
       repaint(objPtr->ox,objPtr->oy,
 	      objPtr->ow,objPtr->oh,false);
@@ -1690,6 +1708,7 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineType lt,int diffx,int diff
   objPtr->graphObj->setLineType(lt);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   objPtr->presNum = 0;
+  objPtr->effect = EF_NONE;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1714,6 +1733,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   objPtr->graphObj->setRnds(_xRnd,_yRnd);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   objPtr->presNum = 0;
+  objPtr->effect = EF_NONE;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1736,6 +1756,7 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   objPtr->graphObj->setObjBrush(brush);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   objPtr->presNum = 0;
+  objPtr->effect = EF_NONE;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1759,6 +1780,7 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   objPtr->textObj->resize(objPtr->ow,objPtr->oh);
   objPtr->textObj->setShowCursor(false);
   objPtr->presNum = 0;
+  objPtr->effect = EF_NONE;
   _objList.append(objPtr);
   repaint(objPtr->ox,objPtr->oy,
 	  objPtr->ow,objPtr->oh,false);
@@ -1780,6 +1802,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,const char *f
   objPtr->graphObj->setObjPen(pen);
   objPtr->graphObj->setObjBrush(brush);
   objPtr->presNum = 0;
+  objPtr->effect = EF_NONE;
   _objList.append(objPtr);
   objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
   repaint(objPtr->ox,objPtr->oy,
@@ -1809,6 +1832,66 @@ void KPresenterDocument_impl::repaint(unsigned int x,unsigned int y,unsigned int
 	  viewPtr->repaint(x,y,w,h,erase);
 	}
     }
+}
+
+/*==================== reorder page =============================*/
+QList<int> KPresenterDocument_impl::reorderPage(unsigned int num,int diffx,int diffy)
+{
+  QList<int> orderList;
+
+  if (!_objList.isEmpty())
+    {
+      for (unsigned int i = 0;i <= _objList.count()-1;i++)
+	{
+	  objPtr = _objList.at(i);
+	  if (getPageOfObj(objPtr->objNum,diffx,diffy) == num)
+	    {
+	      objPtr = _objList.at(i);
+	      if (!orderList.find((int*)objPtr->presNum))
+		{
+		  if (orderList.isEmpty())
+		    orderList.append((int*)objPtr->presNum);
+		  else
+		    {
+		      for (unsigned int j = 0;j < orderList.count();j++)
+			{
+			  if ((int*)objPtr->presNum > orderList.at(j))
+			    {
+			      orderList.append((int*)objPtr->presNum);
+			      break;
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    } 
+  printf("-----------------------------\n");
+  for (unsigned int k = 0;k < orderList.count();k++)
+    printf("%d ------------------\n",(int)orderList.at(k));
+
+  return orderList;
+}
+
+/*====================== get page of object ======================*/
+int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy)
+{
+  int i,j;
+
+  for (i = 0;i < _objList.count();i++)
+    {
+      objPtr = _objList.at(i);
+      if (objPtr->objNum == objNum)
+	{
+	  for (j = 0;j < _pageList.count();j++)
+	    {
+	      if (getPageSize(j+1,diffx,diffy).intersects(QRect(objPtr->ox - diffx,objPtr->oy - diffy,
+								objPtr->ow,objPtr->oh)))	  
+		return j+1;
+	    }
+	}
+    }
+  return -1;
 }
 
 /*================== get size of page ===========================*/

@@ -291,7 +291,6 @@ void BackDia::selectCType(int i)
   bcType = (BCType)i;
 
   QPainter p;
-  printf("HALLO\n");
   QPixmap pm(colorPreview->size());
   
   p.begin(&pm);

@@ -118,7 +118,6 @@ protected:
   void resizeObjLeft(int diff,PageObjects* obj);
   void resizeObjBot(int diff,PageObjects* obj);
   void resizeObjRight(int diff,PageObjects* obj);
-  int getPageOfObj(int);
 
   // setup popupmenus
   void setupMenus();
@@ -138,6 +137,7 @@ protected:
   bool spManualSwitch() {return view->KPresenterDoc()->spManualSwitch();}
   QRect getPageSize(unsigned int p,float fakt=1.0) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy(),fakt);}
   unsigned int pageNums() {return view->KPresenterDoc()->getPageNums();}
+  int getPageOfObj(int i) {return view->KPresenterDoc()->getPageOfObj(i,diffx(),diffy());}
 
   void drawBackColor(QColor,QColor,BCType,QPainter*,QSize);
   void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(erase);}

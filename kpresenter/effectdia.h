@@ -18,15 +18,22 @@
 
 class KPresenterView_impl;
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <qdialog.h>
 #include <qlabel.h>
 #include <qpushbt.h>
 #include <qbttngrp.h>
-#include <qchkbox.h>
+#include <qcombo.h>
 #include <qlabel.h>
 
 #include <kspinbox.h>
 #include <krestrictedline.h>
+
+#ifndef max
+#define max(a,b) ((a)>(b)?(a):(b))
+#endif
 
 /******************************************************************/
 /* class EffectDia                                                */
@@ -43,16 +50,16 @@ public:
   ~EffectDia();                                             
 
 protected:
-  QButtonGroup *general,*page; 
-  QCheckBox *infinitLoop,*manualSwitch;
-  QLabel *label1,*label2,*label3;
+  QComboBox *cEffect;
+  QLabel *lEffect,*lNum;
+  KRestrictedLine *eNum;
   QPushButton *cancelBut,*okBut;
 
   int objNum,pageNum;
   KPresenterView_impl *view;
 
 public slots:
-  void slotEffectDiaOk() {emit effectDiaOk();}
+  void slotEffectDiaOk();
 
 signals:
   void effectDiaOk();
