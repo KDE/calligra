@@ -259,7 +259,7 @@ const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
                     state = S_QUOTED_FIELD;
                 } else if (x == csv_delimiter || x == '\n')
                 {
-                    table->setText(row, column, field);
+                    table->setText(row, column, field, false);
                     field = "";
                     if (x == '\n') {
 			++row;
@@ -280,7 +280,7 @@ const bool CSVFilter::I_filter(const QCString &file, KoDocument *document,
             case S_NORMAL_FIELD :
                 if (x == csv_delimiter || x == '\n')
                 {
-                    table->setText(row, column, field);
+                    table->setText(row, column, field, false);
                     field = "";
                     if (x == '\n') {
 			++row;
