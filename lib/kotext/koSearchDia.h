@@ -64,8 +64,7 @@ public:
         Underline = 32 * KoFindDialog::MinimumUserOption,
         VertAlign = 64 * KoFindDialog::MinimumUserOption,
         StrikeOut = 128 * KoFindDialog::MinimumUserOption,
-        DoubleUnderLine = 256 * KoFindDialog::MinimumUserOption,
-        BgColor = 512 *KoFindDialog::MinimumUserOption
+        BgColor = 256 *KoFindDialog::MinimumUserOption
     } Options;
 
     KoSearchContext();
@@ -75,7 +74,7 @@ public:
     QColor m_backGroungColor;
     int m_size;
     KoTextFormat::VerticalAlignment m_vertAlign;
-
+    KoTextFormat::NbLine m_underline;
     QStringList m_strings; // history
     long m_optionsMask;
     long m_options;
@@ -260,7 +259,6 @@ private:
     QCheckBox *m_checkUnderline;
     QCheckBox *m_checkVertAlign;
     QCheckBox *m_checkStrikeOut;
-    QCheckBox *m_checkDoubleLine;
     KFontCombo *m_familyItem;
     QSpinBox *m_sizeItem;
     KColorButton *m_colorItem;
@@ -269,14 +267,12 @@ private:
     QRadioButton *m_boldNo;
     QRadioButton *m_italicYes;
     QRadioButton *m_italicNo;
-    QRadioButton *m_underlineYes;
-    QRadioButton *m_underlineNo;
     QRadioButton *m_strikeOutYes;
     QRadioButton *m_strikeOutNo;
-    QRadioButton *m_doubleLineYes;
-    QRadioButton *m_doubleLineNo;
 
     QComboBox *m_vertAlignItem;
+    QComboBox *m_underlineItem;
+
     KoSearchContext *m_ctx;
 };
 

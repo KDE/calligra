@@ -386,8 +386,8 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     }
     if ( m_replaceContext->m_optionsMask & KoSearchContext::Underline)
     {
-        flags |= KoTextFormat::Underline;
-        newFormat->setUnderline( (bool)(m_replaceContext->m_options & KoSearchContext::Underline) );
+        flags |= KoTextFormat::ExtendUnderLine;
+        newFormat->setNbLineType( m_replaceContext->m_underline );
 
     }
     if ( m_replaceContext->m_optionsMask & KoSearchContext::VertAlign)
@@ -399,13 +399,6 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     {
         flags |= KoTextFormat::StrikeOut;
         newFormat->setStrikeOut( (bool)(m_replaceContext->m_options & KoSearchContext::StrikeOut));
-    }
-    if ( m_replaceContext->m_optionsMask & KoSearchContext::DoubleUnderLine)
-    {
-#if 0
-        flags |= KoTextFormat::DoubleUnderline;
-        newFormat->setDoubleUnderline( (bool)(m_replaceContext->m_options & KoSearchContext::StrikeOut));
-#endif
     }
 
     KCommand *cmd=m_currentTextObj->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
@@ -496,20 +489,13 @@ bool KoTextFind::validateMatch( const QString &/*text*/, int index, int matchedl
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::Underline)
         {
-            if ( (!format->font().underline() && (m_searchContext->m_options & KoSearchContext::Underline)) || (format->font().underline() && ((m_searchContext->m_options & KoSearchContext::Underline)==0)))
+            if ( format->nbLineType()!= m_searchContext->m_underline)
                 return false;
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::StrikeOut)
         {
             if ( (!format->font().strikeOut() && (m_searchContext->m_options & KoSearchContext::StrikeOut)) || (format->font().strikeOut() && ((m_searchContext->m_options & KoSearchContext::StrikeOut)==0)))
                 return false;
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::DoubleUnderLine)
-        {
-#if 0
-            if ( (!format->doubleUnderline() && (m_searchContext->m_options & KoSearchContext::DoubleUnderLine)) || (format->doubleUnderline() && ((m_searchContext->m_options & KoSearchContext::DoubleUnderLine)==0)))
-                return false;
-#endif
         }
 
 
@@ -577,20 +563,13 @@ bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int match
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::Underline)
         {
-            if ( (!format->font().underline() && (m_searchContext->m_options & KoSearchContext::Underline)) || (format->font().underline() && ((m_searchContext->m_options & KoSearchContext::Underline)==0)))
+            if ( format->nbLineType() != m_searchContext->m_underline )
                 return false;
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::StrikeOut)
         {
             if ( (!format->font().strikeOut() && (m_searchContext->m_options & KoSearchContext::StrikeOut)) || (format->font().strikeOut() && ((m_searchContext->m_options & KoSearchContext::StrikeOut)==0)))
                 return false;
-        }
-        if ( m_searchContext->m_optionsMask & KoSearchContext::DoubleUnderLine)
-        {
-#if 0
-            if ( (!format->doubleUnderline() && (m_searchContext->m_options & KoSearchContext::DoubleUnderLine)) || (format->doubleUnderline() && ((m_searchContext->m_options & KoSearchContext::DoubleUnderLine)==0)))
-                return false;
-#endif
         }
 
         if ( m_searchContext->m_optionsMask & KoSearchContext::VertAlign)
@@ -621,9 +600,15 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_checkBgColor = new QCheckBox( i18n( "Background color:" ), page );
     m_checkBold = new QCheckBox( i18n( "Bold:" ), page );
     m_checkItalic = new QCheckBox( i18n( "Italic:" ),page );
+
     m_checkUnderline = new QCheckBox( i18n( "Underline:" ), page);
+    m_underlineItem = new QComboBox( page );
+    m_underlineItem->insertItem( i18n( "Without" ), -1 );
+    m_underlineItem->insertItem( i18n( "Simple" ), -1 );
+    m_underlineItem->insertItem( i18n( "Double" ), -1 );
+    m_underlineItem->setCurrentItem( (int)m_ctx->m_underline );
+
     m_checkStrikeOut = new QCheckBox( i18n( "Strikeout:" ), page);
-    m_checkDoubleLine = new QCheckBox( i18n( "Double underline:" ), page);
 
 
     m_checkVertAlign = new QCheckBox( i18n( "Vertical alignment:" ), page );
@@ -654,23 +639,12 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_italicYes=new QRadioButton( i18n("Yes"), grpItalic );
     m_italicNo=new QRadioButton( i18n("No"), grpItalic );
 
-    QButtonGroup *grpUnderline = new QButtonGroup( 1, QGroupBox::Vertical, page );
-    grpUnderline->setRadioButtonExclusive( TRUE );
-    grpUnderline->layout();
-    m_underlineYes=new QRadioButton( i18n("Yes"), grpUnderline );
-    m_underlineNo=new QRadioButton( i18n("No"), grpUnderline );
-
     QButtonGroup *grpStrikeOut = new QButtonGroup( 1, QGroupBox::Vertical, page );
     grpStrikeOut->setRadioButtonExclusive( TRUE );
     grpStrikeOut->layout();
     m_strikeOutYes=new QRadioButton( i18n("Yes"), grpStrikeOut );
     m_strikeOutNo=new QRadioButton( i18n("No"), grpStrikeOut );
 
-    QButtonGroup *grpDoubleLine = new QButtonGroup( 1, QGroupBox::Vertical, page );
-    grpDoubleLine->setRadioButtonExclusive( TRUE );
-    grpDoubleLine->layout();
-    m_doubleLineYes=new QRadioButton( i18n("Yes"), grpDoubleLine );
-    m_doubleLineNo=new QRadioButton( i18n("No"), grpDoubleLine );
 
     m_vertAlignItem = new QComboBox( false, page );
     m_vertAlignItem->insertItem( i18n( "Normal" ), -1 );
@@ -684,10 +658,9 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_grid->addWidget( m_checkBgColor, 4, 0);
     m_grid->addWidget( m_checkBold, 5, 0 );
     m_grid->addWidget( m_checkItalic, 6, 0 );
-    m_grid->addWidget( m_checkUnderline, 7, 0 );
-    m_grid->addWidget( m_checkStrikeOut, 8, 0 );
-    m_grid->addWidget( m_checkDoubleLine, 9, 0 );
-    m_grid->addWidget( m_checkVertAlign, 10, 0 );
+    m_grid->addWidget( m_checkStrikeOut, 7, 0 );
+    m_grid->addWidget( m_checkUnderline, 8, 0 );
+    m_grid->addWidget( m_checkVertAlign, 9, 0 );
 
     m_grid->addWidget( m_familyItem, 1, 1 );
     m_grid->addWidget( m_sizeItem, 2, 1 );
@@ -695,10 +668,11 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_grid->addWidget( m_bgColorItem, 4, 1);
     m_grid->addWidget( grpBold, 5, 1 );
     m_grid->addWidget( grpItalic, 6, 1 );
-    m_grid->addWidget( grpUnderline, 7, 1 );
-    m_grid->addWidget( grpStrikeOut, 8, 1 );
-    m_grid->addWidget( grpDoubleLine, 9, 1 );
-    m_grid->addWidget( m_vertAlignItem, 10, 1 );
+
+    m_grid->addWidget( grpStrikeOut, 7, 1 );
+    m_grid->addWidget( m_underlineItem, 8, 1 );
+
+    m_grid->addWidget( m_vertAlignItem, 9, 1 );
 
     KSeparator *tmpSep = new KSeparator( page );
     m_grid->addMultiCellWidget( tmpSep, 11, 11, 0, 1 );
@@ -711,18 +685,17 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
 
     QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldYes, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicYes, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkUnderline, SIGNAL( toggled( bool ) ), m_underlineYes, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutYes, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkDoubleLine, SIGNAL( toggled( bool ) ), m_doubleLineYes, SLOT( setEnabled( bool ) ) );
 
     QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldNo, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicNo, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkUnderline, SIGNAL( toggled( bool ) ), m_underlineNo, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutNo, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkDoubleLine, SIGNAL( toggled( bool ) ), m_doubleLineNo, SLOT( setEnabled( bool ) ) );
 
 
     QObject::connect( m_checkVertAlign, SIGNAL( toggled( bool ) ), m_vertAlignItem, SLOT( setEnabled( bool ) ) );
+
+    QObject::connect( m_checkUnderline, SIGNAL( toggled( bool ) ), m_underlineItem, SLOT( setEnabled( bool ) ) );
+
     slotReset();
 }
 
@@ -749,17 +722,13 @@ void KoFormatDia::slotReset()
     m_strikeOutYes->setEnabled( m_checkStrikeOut->isChecked());
     m_strikeOutNo->setEnabled( m_checkStrikeOut->isChecked());
 
-    m_checkDoubleLine->setChecked( m_ctx->m_optionsMask & KoSearchContext::DoubleUnderLine );
-    m_doubleLineNo->setEnabled( m_checkDoubleLine->isChecked());
-    m_doubleLineYes->setEnabled( m_checkDoubleLine->isChecked());
 
     m_checkItalic->setChecked( m_ctx->m_optionsMask & KoSearchContext::Italic );
     m_italicNo->setEnabled(m_checkItalic->isChecked());
     m_italicYes->setEnabled(m_checkItalic->isChecked());
 
     m_checkUnderline->setChecked( m_ctx->m_optionsMask & KoSearchContext::Underline );
-    m_underlineNo->setEnabled(m_checkUnderline->isChecked());
-    m_underlineYes->setEnabled(m_checkUnderline->isChecked());
+    m_underlineItem->setEnabled(m_checkUnderline->isChecked());
 
     m_checkVertAlign->setChecked( m_ctx->m_optionsMask & KoSearchContext::VertAlign );
     m_vertAlignItem->setEnabled(m_checkVertAlign->isChecked());
@@ -773,19 +742,10 @@ void KoFormatDia::slotReset()
         m_italicYes->setChecked( true );
     else
         m_italicNo->setChecked( true );
-
-    if (m_ctx->m_options & KoSearchContext::Underline )
-        m_underlineYes->setChecked( true );
-    else
-        m_underlineNo->setChecked( true );
     if (m_ctx->m_options & KoSearchContext::StrikeOut )
         m_strikeOutYes->setChecked( true);
     else
         m_strikeOutNo->setChecked( true );
-    if (m_ctx->m_options & KoSearchContext::DoubleUnderLine)
-        m_doubleLineYes->setChecked( true);
-    else
-        m_doubleLineNo->setChecked( true);
 }
 
 void KoFormatDia::ctxOptions( )
@@ -810,20 +770,14 @@ void KoFormatDia::ctxOptions( )
         optionsMask |= KoSearchContext::VertAlign;
     if ( m_checkStrikeOut->isChecked() )
         optionsMask |= KoSearchContext::StrikeOut;
-    if ( m_checkDoubleLine->isChecked() )
-        optionsMask |= KoSearchContext::DoubleUnderLine;
 
 
     if ( m_boldYes->isChecked() )
         options |= KoSearchContext::Bold;
     if ( m_italicYes->isChecked() )
         options |= KoSearchContext::Italic;
-    if ( m_underlineYes->isChecked() )
-        options |= KoSearchContext::Underline;
     if ( m_strikeOutYes->isChecked() )
         options |= KoSearchContext::StrikeOut;
-    if ( m_doubleLineYes->isChecked() )
-        options |= KoSearchContext::DoubleUnderLine;
 
 
     m_ctx->m_optionsMask = optionsMask;
@@ -832,6 +786,8 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_color = m_colorItem->color();
     m_ctx->m_backGroungColor = m_bgColorItem->color();
     m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
+    m_ctx->m_underline = (KoTextFormat::NbLine)m_underlineItem->currentItem();
+
     m_ctx->m_options = options;
 }
 
