@@ -1172,3 +1172,8 @@ Reggie, 4.5.1999:
 - Started with a user defineable autocorrection functionality
   (type in (c) and see what happens :-))
 - Fix when template loading goes wrong
+
+Reggie, 6.5.1999:
+-----------------
+- Implemented blinking cursor
+- Disabled Undo/Redo for now (it's broken at the moment)

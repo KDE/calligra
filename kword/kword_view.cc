@@ -1844,6 +1844,12 @@ void KWordView::keyPressEvent(QKeyEvent *e)
 }
 
 /*================================================================*/
+void KWordView::keyReleaseEvent(QKeyEvent *e)
+{
+  QApplication::sendEvent(gui,e);
+}
+
+/*================================================================*/
 void KWordView::mousePressEvent(QMouseEvent *e)
 {
   QApplication::sendEvent(gui->getPaperWidget(),e);
@@ -3363,7 +3369,12 @@ void KWordGUI::resizeEvent(QResizeEvent *e)
 /*================================================================*/
 void KWordGUI::keyPressEvent(QKeyEvent* e)
 {
-  //kapp->notify(paperWidget,e);
+  QApplication::sendEvent(paperWidget,e);
+}
+
+/*================================================================*/
+void KWordGUI::keyReleaseEvent(QKeyEvent* e)
+{
   QApplication::sendEvent(paperWidget,e);
 }
 

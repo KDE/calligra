@@ -37,6 +37,7 @@
 #include <qregion.h>
 #include <qdropsite.h>
 #include <qpaintdevice.h>
+#include <qtimer.h>
 
 #include <koRuler.h>
 #include <koPartSelectDia.h>
@@ -234,7 +235,10 @@ public slots:
 
 protected slots:
   void frameDiaClosed();
-
+  void startBlinkCursor();
+  void blinkCursor();
+  void stopBlinkCursor();
+  
 protected:
   unsigned int ptLeftBorder();
   unsigned int ptRightBorder();
@@ -247,9 +251,10 @@ protected:
 
   void enterEvent(QEvent *)
     { setFocus(); }
-  void focusInEvent(QFocusEvent *) {}
-  void focusOutEvent(QFocusEvent *) {}
-
+  void focusInEvent(QFocusEvent *);
+  void focusOutEvent(QFocusEvent *);
+  void keyReleaseEvent(QKeyEvent *e);
+  
   /**
    * Looks at 'yOffset' and 'paperHeight' and calculates the first and
    * last visible pages. The values are stored in 'firstVisiblePage' and
@@ -352,6 +357,9 @@ protected:
 
   KWGroupManager *curTable;
 
+  QTimer blinkTimer;
+  bool cursorIsVisible;
+  
 };
 
 #endif

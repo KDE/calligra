@@ -2078,11 +2078,11 @@ void KWordDocument::drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffs
 
   _painter->setRasterOp(NotROP);
   QPen pen;
-  pen.setWidth(2);
+  pen.setWidth(1);
   _painter->setPen(pen);
 
-  unsigned int diffx1 = 1;
-  unsigned int diffx2 = 1;
+  unsigned int diffx1 = 0;
+  unsigned int diffx2 = 0;
   if (_fc.getItalic())
     {
       diffx1 = static_cast<int>(static_cast<float>(_fc.getLineHeight()) / 3.732);

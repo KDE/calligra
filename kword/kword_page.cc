@@ -29,7 +29,8 @@
 
 /*================================================================*/
 KWPage::KWPage(QWidget *parent,KWordDocument *_doc,KWordGUI *_gui)
-  : QWidget(parent,""), buffer(width(),height()), format(_doc)
+  : QWidget(parent,""), buffer(width(),height()), format(_doc),
+    blinkTimer(this)
 {
   setFocusPolicy(QWidget::StrongFocus);
 
@@ -105,16 +106,60 @@ KWPage::KWPage(QWidget *parent,KWordDocument *_doc,KWordGUI *_gui)
   curTable = 0L;
 
   setAcceptDrops(true);
+
+  cursorIsVisible = true;
+
+  connect(&blinkTimer,SIGNAL(timeout()),this,SLOT(blinkCursor()));
+  startBlinkCursor();
 }
 
-unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
-unsigned int KWPage::ptRightBorder() { return doc->getPTRightBorder(); }
-unsigned int KWPage::ptTopBorder() { return doc->getPTTopBorder(); }
-unsigned int KWPage::ptBottomBorder() { return doc->getPTBottomBorder(); }
-unsigned int KWPage::ptPaperWidth() { return doc->getPTPaperWidth(); }
-unsigned int KWPage::ptPaperHeight() { return doc->getPTPaperHeight(); }
-unsigned int KWPage::ptColumnWidth() { return doc->getPTColumnWidth(); }
-unsigned int KWPage::ptColumnSpacing() { return doc->getPTColumnSpacing(); }
+/*================================================================*/
+unsigned int KWPage::ptLeftBorder() 
+{ 
+  return doc->getPTLeftBorder(); 
+}
+
+/*================================================================*/
+unsigned int KWPage::ptRightBorder() 
+{ 
+  return doc->getPTRightBorder(); 
+}
+
+/*================================================================*/
+unsigned int KWPage::ptTopBorder() 
+{ 
+  return doc->getPTTopBorder(); 
+}
+
+/*================================================================*/
+unsigned int KWPage::ptBottomBorder() 
+{ 
+  return doc->getPTBottomBorder(); 
+}
+
+/*================================================================*/
+unsigned int KWPage::ptPaperWidth() 
+{ 
+  return doc->getPTPaperWidth(); 
+}
+
+/*================================================================*/
+unsigned int KWPage::ptPaperHeight() 
+{ 
+  return doc->getPTPaperHeight(); 
+}
+
+/*================================================================*/
+unsigned int KWPage::ptColumnWidth() 
+{ 
+  return doc->getPTColumnWidth(); 
+}
+
+/*================================================================*/
+unsigned int KWPage::ptColumnSpacing() 
+{ 
+  return doc->getPTColumnSpacing(); 
+}
 
 /*================================================================*/
 void KWPage::init()
@@ -600,6 +645,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 /*================================================================*/
 void KWPage::mousePressEvent(QMouseEvent *e)
 {
+  stopBlinkCursor();
   maybeDrag = false;
 
   if (gui->getView()) gui->getView()->sendFocusEvent();
@@ -1037,6 +1083,8 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
       } break;
     default: repaint(false);
     }
+
+  startBlinkCursor();
 }
 
 /*================================================================*/
@@ -1044,6 +1092,8 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 {
   if (e->button() != LeftButton) return;
 
+  stopBlinkCursor();
+  
   unsigned int mx = e->x() + xOffset;
   unsigned int my = e->y() + yOffset;
 
@@ -1111,11 +1161,17 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
 	  editNum = frameset;
 	}
     }
+
+  startBlinkCursor();
 }
 
 /*================================================================*/
 void KWPage::recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_fc = 0L)
 {
+  bool blinking = blinkTimer.isActive();
+  if (blinking)
+    stopBlinkCursor();
+  
   if (!_fc) _fc = fc;
 
   QPainter _painter;
@@ -1140,6 +1196,9 @@ void KWPage::recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_f
       buffer.fill(white);
       repaint(false);
     }
+
+  if (blinking)
+    startBlinkCursor();
 }
 
 /*================================================================*/
@@ -1153,13 +1212,24 @@ int KWPage::getVertRulerPos()
 /*================================================================*/
 void KWPage::insertPictureAsChar(QString _filename)
 {
+  bool blinking = blinkTimer.isActive();
+  if (blinking)
+    stopBlinkCursor();
+
   fc->getParag()->insertPictureAsChar(fc->getTextPos(),_filename);
   recalcCursor();
+
+  if (blinking)
+    startBlinkCursor();
 }
 
 /*================================================================*/
 void KWPage::editCut()
 {
+  bool blinking = blinkTimer.isActive();
+  if (blinking)
+    stopBlinkCursor();
+
   if (doc->has_selection())
     {
       QPainter p;
@@ -1173,11 +1243,18 @@ void KWPage::editCut()
       recalcCursor();
       doc->getAutoFormat().setEnabled(false);
     }
+
+  if (blinking)
+    startBlinkCursor();
 }
 
 /*================================================================*/
 void KWPage::editCopy()
 {
+  bool blinking = blinkTimer.isActive();
+  if (blinking)
+    stopBlinkCursor();
+
   if (doc->has_selection())
     {
       doc->copySelectedText();
@@ -1185,11 +1262,18 @@ void KWPage::editCopy()
       buffer.fill(white);
       repaint(false);
     }
+
+  if (blinking)
+    startBlinkCursor();
 }
 
 /*================================================================*/
 void KWPage::editPaste(QString _string,const QString &_mime = "text/plain")
 {
+  bool blinking = blinkTimer.isActive();
+  if (blinking)
+    stopBlinkCursor();
+
   doc->getAutoFormat().setEnabled(true);
   doc->paste(fc,_string,this,0L,_mime);
   buffer.fill(white);
@@ -1197,11 +1281,18 @@ void KWPage::editPaste(QString _string,const QString &_mime = "text/plain")
   recalcText();
   recalcCursor();
   doc->getAutoFormat().setEnabled(false);
+
+  if (blinking)
+    startBlinkCursor();
 }
 
 /*================================================================*/
 void KWPage::recalcText()
 {
+  bool blinking = blinkTimer.isActive();
+  if (blinking)
+    stopBlinkCursor();
+
   QPainter painter;
   painter.begin(this);
 
@@ -1218,11 +1309,18 @@ void KWPage::recalcText()
     }
 
   painter.end();
+
+  if (blinking)
+    startBlinkCursor();
 }
 
 /*================================================================*/
 void KWPage::recalcWholeText(bool _cursor = false,bool _fast = false)
 {
+  bool blinking = blinkTimer.isActive();
+  if (blinking)
+    stopBlinkCursor();
+
   if (recalcingText) return;
 
   setCursor(waitCursor);
@@ -1252,6 +1350,9 @@ void KWPage::recalcWholeText(bool _cursor = false,bool _fast = false)
   recalcingText = false;
 
   setCursor(ibeamCursor);
+
+  if (blinking)
+    startBlinkCursor();
 }
 
 /*================================================================*/
@@ -1285,6 +1386,10 @@ void KWPage::footerHeaderDisappeared()
 /*================================================================*/
 void KWPage::recalcPage(KWParag *_p)
 {
+  bool blinking = blinkTimer.isActive();
+  if (blinking)
+    stopBlinkCursor();
+
   QPainter painter;
   painter.begin(this);
 
@@ -1337,11 +1442,16 @@ void KWPage::recalcPage(KWParag *_p)
 
   delete paintfc;
   painter.end();
+
+  if (blinking)
+    startBlinkCursor();
 }
 
 /*================================================================*/
 void KWPage::paintEvent(QPaintEvent* e)
 {
+  stopBlinkCursor();
+  
   QPainter painter;
   if (paint_directly)
     painter.begin(this);
@@ -1539,6 +1649,8 @@ void KWPage::paintEvent(QPaintEvent* e)
       else
 	drawBuffer();
     }
+
+  startBlinkCursor();
 }
 
 /*================================================================*/
@@ -1546,6 +1658,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 {
   if (mouseMode != MM_EDIT) return;
 
+  stopBlinkCursor();
+  
   editModeChanged(e);
   doc->getAutoFormat().setEnabled(true);
 
@@ -2463,10 +2577,14 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 /*================================================================*/
 void KWPage::resizeEvent(QResizeEvent *)
 {
+  stopBlinkCursor();
+  
   buffer.resize(width() < static_cast<int>(doc->getPTPaperWidth() + 20) ? width() : static_cast<int>(doc->getPTPaperWidth() + 20),
 		height());
   buffer.fill(white);
   calcVisiblePages();
+  
+  startBlinkCursor();
 }
 
 /*================================================================*/
@@ -2511,6 +2629,8 @@ void KWPage::scrollToCursor(KWFormatContext &_fc)
 /*================================================================*/
 void KWPage::scrollToParag(KWParag *_parag)
 {
+  stopBlinkCursor();
+  
   QPainter p;
   p.begin(this);
 
@@ -2525,6 +2645,8 @@ void KWPage::scrollToParag(KWParag *_parag)
   p.begin(this);
   doc->drawMarker(*fc,&p,xOffset,yOffset);
   p.end();
+  
+  startBlinkCursor();
 }
 
 /*================================================================*/
@@ -3881,6 +4003,8 @@ bool KWPage::editModeChanged(QKeyEvent *e)
       repaintTableHeaders(grpMgr);
     }
 
+  return false;
+  
   switch (e->key())
     {
     case Key_Delete:
@@ -4316,3 +4440,49 @@ bool KWPage::isInSelection(KWFormatContext *_fc)
   return false;
 }
 
+/*================================================================*/
+void KWPage::startBlinkCursor()
+{
+  blinkTimer.start(2000);
+}
+
+/*================================================================*/
+void KWPage::blinkCursor()
+{
+  cursorIsVisible = !cursorIsVisible;
+
+  QPainter p;
+  p.begin(this);
+  doc->drawMarker(*fc,&p,xOffset,yOffset);
+  p.end();
+
+  blinkTimer.changeInterval(kapp->cursorFlashTime());
+}
+
+/*================================================================*/
+void KWPage::stopBlinkCursor()
+{
+  if (!cursorIsVisible)
+    blinkCursor();
+  
+  blinkTimer.stop();
+}
+
+/*================================================================*/
+void KWPage::keyReleaseEvent(QKeyEvent *e)
+{
+  //QWidget::keyReleaseEvent(e);
+  startBlinkCursor();
+}
+
+/*================================================================*/
+void KWPage::focusInEvent(QFocusEvent *) 
+{
+  startBlinkCursor();
+}
+
+/*================================================================*/
+void KWPage::focusOutEvent(QFocusEvent *) 
+{
+  stopBlinkCursor();
+}
