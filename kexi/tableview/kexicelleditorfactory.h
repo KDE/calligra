@@ -27,6 +27,7 @@
 
 class KexiCellEditorFactoryItem;
 class KexiTableEdit;
+class KexiTableViewColumn;
 
 class KexiCellEditorFactory
 {
@@ -42,7 +43,8 @@ class KexiCellEditorFactory
 		//! \return item for \a type. It no item found, the default is tried. Eventually, may return NULL.
 		static KexiCellEditorFactoryItem* item( uint type );
 
-		static KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0);
+//		static KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0);
+		static KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
 };
 
 class KexiCellEditorFactoryItem
@@ -52,8 +54,9 @@ class KexiCellEditorFactoryItem
 		virtual ~KexiCellEditorFactoryItem();
 
 	protected:
-		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0) = 0;
-
+//		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0) = 0;
+		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0) = 0;
+	
 	friend class KexiCellEditorFactory;
 };
 

@@ -45,8 +45,8 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiDateTableEdit(KexiDB::Field &f, QScrollView *parent=0);
-//		KexiDateTableEdit(QVariant v=0, QWidget *parent=0, const char *name=0);
+//		KexiDateTableEdit(KexiDB::Field &f, QScrollView *parent=0);
+		KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
 
 		virtual QVariant value(bool &ok);
 
@@ -91,7 +91,7 @@ class KexiDateEditorFactoryItem : public KexiCellEditorFactoryItem
 		virtual ~KexiDateEditorFactoryItem();
 
 	protected:
-		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QScrollView* parent = 0);
+		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
 };
 
 #endif

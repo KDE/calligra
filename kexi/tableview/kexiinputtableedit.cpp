@@ -56,8 +56,9 @@ class MyLineEdit : public KLineEdit
 
 //======================================================
 
-KexiInputTableEdit::KexiInputTableEdit(KexiDB::Field &f, QScrollView *parent, const char* name)
- : KexiTableEdit(f, parent, name ? name : "KexiInputTableEdit")
+//KexiInputTableEdit::KexiInputTableEdit(KexiDB::Field &f, QScrollView *parent, const char* name)
+KexiInputTableEdit::KexiInputTableEdit(KexiTableViewColumn &column, QScrollView *parent, const char* name)
+ : KexiTableEdit(column, parent, name ? name : "KexiInputTableEdit")
 {
 //	m_type = f.type(); //copied because the rest of code uses m_type
 //	m_field = &f;
@@ -84,14 +85,14 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, int type, const QString& 
 void KexiInputTableEdit::init()
 {
 	kdDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
-	kdDebug() << "KexiInputTableEdit: type== " << m_field->typeName() << endl;
+	kdDebug() << "KexiInputTableEdit: type== " << field()->typeName() << endl;
 
 	//init settings
 	m_decsym = KGlobal::locale()->decimalSymbol();
 	if (m_decsym.isEmpty())
 		m_decsym=".";//default
 
-	const bool align_right = m_field->isNumericType();
+	const bool align_right = field()->isNumericType();
 
 	if (!align_right) {
 		//create layer for internal editor
@@ -159,7 +160,7 @@ void KexiInputTableEdit::init(const QString& add, bool removeOld)
 			origValue = m_origValue;
 		QString tmp_val = origValue.toString();
 
-		if (m_field->isFPNumericType()) {
+		if (field()->isFPNumericType()) {
 			if (origValue.toDouble() == 0.0) {
 				tmp_val=add; //eat 0
 			}
@@ -178,7 +179,7 @@ void KexiInputTableEdit::init(const QString& add, bool removeOld)
 			QValidator *validator = new KDoubleValidator(m_lineedit);
 			m_lineedit->setValidator( validator );
 		}
-		else if (m_field->isIntegerType()) {
+		else if (field()->isIntegerType()) {
 			if (origValue.toInt() == 0) {
 				tmp_val=add; //eat 0
 			}
@@ -282,14 +283,14 @@ bool KexiInputTableEdit::valueIsEmpty()
 
 QVariant KexiInputTableEdit::value(bool &ok)
 {
-	if (m_field->isFPNumericType()) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
+	if (field()->isFPNumericType()) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
 		//! js @todo PRESERVE PRECISION!
 		QString txt = m_lineedit->text();
 		if (m_decsym!=".")
 			txt = txt.replace(m_decsym,".");//convert back
 		return QVariant( txt.toDouble(&ok) );
 	}
-	else if (m_field->isIntegerType()) {
+	else if (field()->isIntegerType()) {
 		//check constraints
 		return QVariant( m_lineedit->text().toInt(&ok) );
 	}
@@ -520,9 +521,9 @@ KexiInputEditorFactoryItem::~KexiInputEditorFactoryItem()
 }
 
 KexiTableEdit* KexiInputEditorFactoryItem::createEditor(
-	KexiDB::Field &f, QScrollView* parent)
+	KexiTableViewColumn &column, QScrollView* parent)
 {
-	return new KexiInputTableEdit(f, parent);
+	return new KexiInputTableEdit(column, parent);
 }
 
 #include "kexiinputtableedit.moc"

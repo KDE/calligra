@@ -63,8 +63,9 @@ class KDownArrowPushButton : public KPushButton
 
 //======================================================
 
-KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field &f, QScrollView *parent)
- : KexiInputTableEdit(f, parent,"KexiComboBoxTableEdit")
+//KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDB::Field &f, QScrollView *parent)
+KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+ : KexiInputTableEdit(column, parent,"KexiComboBoxTableEdit")
 {
 //	QHBoxLayout* layout = new QHBoxLayout(this);
 	m_popup = 0;
@@ -104,7 +105,7 @@ void KexiComboBoxTableEdit::init(const QString& add, bool /*removeOld*/)
 //	m_combo->setCurrentItem(m_origValue.toInt() - 1);
 	if (add.isEmpty()) {
 		const int row = m_origValue.toInt();
-		m_lineedit->setText( m_field->enumHint(row) );
+		m_lineedit->setText( field()->enumHint(row) );
 		if (m_popup) {
 			if (m_origValue.isNull())
 				m_popup->tableView()->clearSelection();
@@ -134,8 +135,11 @@ void KexiComboBoxTableEdit::resize(int w, int h)
 	m_button->resize( h, h );
 	m_rightMargin = m_parentRightMargin + m_button->width();
 	updateFocus( QRect( pos().x(), pos().y(), w+1, h+1 ) );
-	if (m_popup)
+	if (m_popup) {
+//		KexiTableView *tv = static_cast<KexiTableView*>(m_scrollView);
+//		m_popup->move( tv->viewport()->mapToGlobal(pos()) + QPoint(0,height()) );//+ rect().bottomLeft() ) );
 		m_popup->resize(w, m_popup->height());
+	}
 //	m_lineedit->resize(w - m_button->width()-1, h);
 }
 
@@ -227,7 +231,7 @@ void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, QVariant v
 	if (focused && (w > m_button->width()))
 		w -= (m_button->width() - x);
 	if (!val.isNull())
-		txt = m_field->enumHint( val.toInt() );
+		txt = field()->enumHint( val.toInt() );
 }
 
 void KexiComboBoxTableEdit::slotButtonClicked()
@@ -245,7 +249,8 @@ void KexiComboBoxTableEdit::showPopup()
 {
 	if (!m_popup) {
 //js TODO: now it's only for simple ENUM case!
-		m_popup = new KexiComboBoxPopup(this, *m_field);
+//		m_popup = new KexiComboBoxPopup(this, *field());
+		m_popup = new KexiComboBoxPopup(this, *m_column);
 		connect(m_popup, SIGNAL(rowAccepted(KexiTableItem*,int)), 
 			this, SLOT(slotRowAccepted(KexiTableItem*,int)));
 		connect(m_popup, SIGNAL(cancelled()), this, SIGNAL(cancelRequested()));
@@ -269,8 +274,13 @@ void KexiComboBoxTableEdit::showPopup()
 	KexiTableView *tv = static_cast<KexiTableView*>(m_scrollView);
 	if (tv) {
 		m_popup->move( tv->viewport()->mapToGlobal(pos()) + QPoint(0,height()) );//+ rect().bottomLeft() ) );
+		//to avoid flickering: first resize to 0-height, then show and resize back to prev. height
+		int h = m_popup->height(), w = m_popup->width();
+		m_popup->resize(w, 0);
 		m_popup->show();
+		m_popup->resize(w, h);
 	}
+
 	m_lineedit->setFocus();
 }
 
@@ -338,7 +348,7 @@ bool KexiComboBoxTableEdit::handleKeyPress( QKeyEvent *ke, bool editorActive )
 
 void KexiComboBoxTableEdit::slotItemSelected(KexiTableItem*)
 {
-	m_lineedit->setText( m_field->enumHint( m_popup->tableView()->currentRow() ) );
+	m_lineedit->setText( field()->enumHint( m_popup->tableView()->currentRow() ) );
 	m_lineedit->end(false);
 	m_lineedit->selectAll();
 }
@@ -356,7 +366,7 @@ void KexiComboBoxTableEdit::slotLineEditTextChanged(const QString &newtext)
 
 int KexiComboBoxTableEdit::widthForValue( QVariant &val, QFontMetrics &fm )
 {
-	QValueVector<QString> hints = m_field->enumHints();
+	QValueVector<QString> hints = field()->enumHints();
 	bool ok;
 	int idx = val.toInt(&ok);
 	if (!ok || idx < 0 || idx > int(hints.size()-1))
@@ -386,9 +396,9 @@ KexiComboBoxEditorFactoryItem::~KexiComboBoxEditorFactoryItem()
 }
 
 KexiTableEdit* KexiComboBoxEditorFactoryItem::createEditor(
-	KexiDB::Field &f, QScrollView* parent)
+	KexiTableViewColumn &column, QScrollView* parent)
 {
-	return new KexiComboBoxTableEdit(f, parent);
+	return new KexiComboBoxTableEdit(column, parent);
 }
 
 

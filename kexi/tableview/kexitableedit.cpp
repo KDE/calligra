@@ -27,9 +27,11 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QScrollView* parent, const char* name)
+//KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QScrollView* parent, const char* name)
+KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent, const char* name)
 : QWidget(parent->viewport(), name)
- ,m_field(&f)
+, m_column(&column)
+// ,m_field(&f)
 // ,m_type(f.type()) //copied because the rest of code uses m_type
  ,m_scrollView(parent)
  ,m_view(0)
@@ -38,14 +40,14 @@ KexiTableEdit::KexiTableEdit(KexiDB::Field &f, QScrollView* parent, const char* 
 	installEventFilter(this);
 
 	//margins
-	if (m_field->isFPNumericType()) {
+	if (m_column->field->isFPNumericType()) {
 #ifdef Q_WS_WIN
 		m_leftMargin = 0;
 #else
 		m_leftMargin = 0;
 #endif
 	}
-	else if (m_field->isIntegerType()) {
+	else if (m_column->field->isIntegerType()) {
 #ifdef Q_WS_WIN
 		m_leftMargin = 1;
 #else
@@ -173,14 +175,14 @@ void KexiTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 //	align = SingleLine | AlignVCenter;
 //	QString txt; //text to draw
 
-	if (m_field->isFPNumericType()) {
+	if (m_column->field->isFPNumericType()) {
 //js TODO: ADD OPTION to desplaying NULL VALUES as e.g. "(null)"
 		if (!val.isNull())
 			txt = KGlobal::locale()->formatNumber(val.toDouble());
 		w -= 6;
 		align |= AlignRight;
 	}
-	else if (m_field->isIntegerType()) {
+	else if (m_column->field->isIntegerType()) {
 		int num = val.toInt();
 /*#ifdef Q_WS_WIN
 		x = 1;
@@ -192,7 +194,7 @@ void KexiTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 		if (!val.isNull())
 			txt = QString::number(num);
 	}
-	else if (m_field->type() == KexiDB::Field::Boolean) {
+	else if (m_column->field->type() == KexiDB::Field::Boolean) {
 		int s = QMAX(h - 5, 12);
 		s = QMIN( h-3, s );
 		s = QMIN( w-3, s );//avoid too large box

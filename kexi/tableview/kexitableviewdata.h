@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +43,7 @@ class Cursor;
 }
 
 class KexiValidator;
+class KexiTableViewData;
 
 
 /*! Single column definition. */
@@ -78,14 +79,21 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		/*! \return true if the column is read-only
 		 For db-aware column this can depend on whether the column 
 		 is in parent table of this query. \sa setReadOnly() */
-		inline bool readOnly() const { return m_readOnly; }
+		bool readOnly() const { return m_readOnly; }
 
+//TODO: syncroize this with table view:
 		//! forces readOnly flag to be set to \a ro
-		inline void setReadOnly(bool ro) { m_readOnly=ro; }
+		void setReadOnly(bool ro) { m_visible=ro; }
+
+		//! Column visibility. By default column is visible.
+		bool visible() const { return m_visible; }
+
+		//! Changes column visibility.
+		void setVisible(bool v) { m_visible=v; }
 
 		//! returns whatever is available: field's caption or field's alias (from query) 
 		//! or finally - field's name
-		inline QString nameOrCaption() const { return m_nameOrCaption; }
+		QString nameOrCaption() const { return m_nameOrCaption; }
 
 		/*! Assigns validator \a v for this column. 
 		 If the validator has no parent obejct, it will be owned by the column, 
@@ -94,6 +102,19 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 
 		//! \return validator assigned for this column of 0 if there is no validator assigned.
 		KexiValidator* validator() const { return m_validator; }
+
+		/*! For not-db-aware data only:
+		 Sets related data \a data for this column, what defines simple one-field, 
+		 one-to-many relationship between this column and the primary key in \a data. 
+		 The relationship will be used to generate a popup editor instead of just regular editor.
+		 This assignment has no result if \a data has no primary key defined.
+		 \a data is owned, so is will be destroyed when needed. It is also destroyed
+		 when another data (or NULL) is set for the same column. */
+		void setRelatedData(KexiTableViewData *data);
+
+		/*! For not-db-aware data only:
+		 Related data \a data for this column, what defines simple one-field. \sa setRelatedData() */
+		KexiTableViewData *relatedData() const { return m_relatedData; }
 
 		KexiDB::Field* field;
 
@@ -112,12 +133,21 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		//! special ctor that do not allocate d member;
 		KexiTableViewColumn(bool);
 
+		void init();
+
 		QString m_nameOrCaption;
 
 		KexiValidator* m_validator;
 
+		//! Data that this column is assigned to.
+		KexiTableViewData* m_data;
+
+		KexiTableViewData* m_relatedData;
+		uint m_relatedDataPKeyID;
+
 		bool m_readOnly : 1;
 		bool m_fieldOwned : 1;
+		bool m_visible : 1;
 		
 	friend class KexiTableViewData;
 };
@@ -145,11 +175,17 @@ class KEXIDATATABLE_EXPORT KexiTableViewData : public QObject, public KexiTableV
 	Q_OBJECT
 
 public: 
+	//! not db-aware version
 	KexiTableViewData();
 
-	KexiTableViewData(KexiDB::Cursor *c); //db-aware version
+	//! db-aware version
+	KexiTableViewData(KexiDB::Cursor *c);
 
-//	KexiTableViewData(KexiTableViewColumnList* cols);
+	KexiTableViewData(
+		const QValueList<QVariant> &keys, const QValueList<QVariant> &values,
+		KexiDB::Field::Type keyType = KexiDB::Field::Text, 
+		KexiDB::Field::Type valueType = KexiDB::Field::Text);
+
 	~KexiTableViewData();
 //js	void setSorting(int key, bool order=true, short type=1);
 
@@ -168,6 +204,9 @@ public:
 	/*! Adds column \a col. 
 	 Warning: \a col will be owned by this object, and deleted on its destruction. */
 	void addColumn( KexiTableViewColumn* col );
+
+	int globalColumnID(int visibleID) { return m_globalColumnsIDs.at( visibleID ); }
+	int visibleColumnID(int globalID) { return m_visibleColumnsIDs.at( globalID ); }
 
 	virtual bool isDBAware();
 
@@ -230,7 +269,13 @@ public:
 /*TODO: add this as well? 
 	void insertRow(KexiTableItem& item, KexiTableItem& aboveItem); */
 
+	/*! Clears data without clearing column's definition.
+	 refreshRequested() signal is emitted. */
+	virtual void clear();
+
 signals:
+	void destroying();
+
 	/*! Emitted before change of the single, currently edited cell.
 	 Connect this signal to your slot and set \a allow value to false 
 	 to disallow the change. */
@@ -248,19 +293,27 @@ signals:
 	void aboutToUpdateRow(KexiTableItem *, KexiDB::RowEditBuffer* buffer,
 		KexiDB::ResultInfo* result);
 
+	void rowUpdated(KexiTableItem*); //!< Current row has been updated
+
+	void rowInserted(KexiTableItem*); //!< A row has been inserted
+
+	//! A row has been inserted at \a index position (not db-aware data only)
+	void rowInserted(KexiTableItem*, uint index);
+
 	/*! Emited before deleting of a current row.
 	 Connect this signal to your slot and set \a result->success to false 
 	 to disallow this deleting. */
 	void aboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result);
 
-	void rowUpdated(KexiTableItem*); //!< Current row has been updated
-	void rowInserted(KexiTableItem*); //!< A row has been inserted
-	void rowDeleted(); //!< Current row has been deleted
+	//! Current row has been deleted
+	void rowDeleted(); 
 
-	//! A row has been inserted at \a index position (not db-aware data only)
-	void rowInserted(KexiTableItem*, uint index);
+	//! Data needs to be refreshed in all presenters.
+	void refreshRequested();
 
 protected:
+	void init();
+
 	virtual int compareItems(Item item1, Item item2);
 	int cmpStr(Item item1, Item item2);
 	int cmpInt(Item item1, Item item2);
@@ -279,6 +332,9 @@ protected:
 //	QDict<KexiTableViewColumn> *m_simpleColumnsByName;
 
 	KexiDB::ResultInfo m_result;
+
+	uint m_visibleColumnsCount;
+	QValueVector<int> m_visibleColumnsIDs, m_globalColumnsIDs;
 
 	bool m_readOnly : 1;
 	bool m_insertingEnabled : 1;

@@ -24,6 +24,8 @@
 #include <qvariant.h>
 #include <qscrollview.h>
 
+#include "kexitableviewdata.h"
+
 namespace KexiDB {
 	class Field;
 }
@@ -35,7 +37,8 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 	Q_OBJECT
 
 	public:
-		KexiTableEdit(KexiDB::Field &f, QScrollView* parent = 0, const char* name = 0);
+		KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent = 0, const char* name = 0);
+//		KexiTableEdit(KexiDB::Field &f, QScrollView* parent = 0, const char* name = 0);
 
 		virtual ~KexiTableEdit();
 
@@ -61,7 +64,8 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 
 		virtual QVariant value(bool &ok) = 0;
 
-		inline KexiDB::Field *field() const { return m_field; }
+		inline KexiDB::Field *field() const { return m_column->field; }
+		inline KexiTableViewColumn *column() const { return m_column; }
 
 		/*! \return true if internal editor's cursor (whatever that means, eg. line edit cursor)
 		 is at the beginning of editor's contents. This can inform table view that 
@@ -167,7 +171,8 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 
 	//		virtual void paintEvent( QPaintEvent *pe );
 		QVariant m_origValue;
-		KexiDB::Field *m_field;
+		KexiTableViewColumn *m_column;
+//		KexiDB::Field *m_field;
 //		int m_type; //! one of KexiDB::Field
 		int m_leftMargin;
 		int m_rightMargin;

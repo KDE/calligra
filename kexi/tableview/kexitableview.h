@@ -200,6 +200,12 @@ public:
 	 - enables inserting empty row; see setEmptyRowInsertingEnabled() */
 	void setSpreadSheetMode();
 
+	/*! \return true if vertical scrollbar's tooltips are enabled (true by default). */
+	bool scrollbarToolTipsEnabled() const;
+
+	/*! Enables or disables vertical scrollbar's. */
+	void setScrollbarToolTipsEnabled(bool set);
+
 	int currentColumn() const;
 	int currentRow() const;
 
@@ -208,7 +214,7 @@ public:
 	/*! \return number of rows in this view. */
 	int		rows() const;
 
-	/*! \return number of columns in this view. */
+	/*! \return number of visible columns in this view. */
 	int		columns() const;
 
 	QRect		cellGeometry(int row, int col) const;
@@ -267,6 +273,8 @@ public:
 	virtual QSize		sizeHint() const;
 	virtual QSize		minimumSizeHint() const;
 	void		setFont(const QFont &f);
+
+	virtual QSize tableSize() const;
 
 //jsL NOT ENOUGH GENERIC 	void		addDropFilter(const QString &filter);
 
@@ -494,6 +502,7 @@ signals:
 	void reloadActions();
 
 protected slots:
+	void slotDataDestroying();
 	void columnWidthChanged( int col, int os, int ns );
 	void cancelEditor();
 	virtual bool acceptEditor();
@@ -522,14 +531,21 @@ protected slots:
 	//! receives a signal from cell editors
 	void slotEditRequested();
 
+	//! Handles KexiTableViewData::refreshRequested()
+	void slotRefreshRequested();
+
 protected:
+	/*! Initializes data contents (resizes it, sets cursor at 1st row).
+	 Called on setData(). Also called once on show event after
+	 refreshRequested() signal was received from KexiTableViewData obejct. */
+	void initDataContents();
+
 	// painting and layout
 	void	drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 	void	createBuffer(int width, int height);
 	void	paintCell(QPainter* p, KexiTableItem *item, int col, int row, const QRect &cr, bool print=false);
 	void	paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
 	void	updateGeometries();
-	virtual QSize tableSize() const;
 
 	QPoint contentsToViewport2( const QPoint &p );
 	void contentsToViewport2( int x, int y, int& vx, int& vy );

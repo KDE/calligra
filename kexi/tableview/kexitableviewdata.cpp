@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,10 +45,8 @@ KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f, bool owner)
 {
 	isDBAware = false;
 	m_fieldOwned = owner;
-
 	m_nameOrCaption = field->captionOrName();
-	m_readOnly = false;
-	m_validator = 0;
+	init();
 }
 
 KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Type ctype,
@@ -67,10 +65,9 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 		caption, description, width);
 
 	isDBAware = false;
-	m_nameOrCaption = field->captionOrName();
 	m_fieldOwned = true;
-	m_readOnly = false;
-	m_validator = 0;
+	m_nameOrCaption = field->captionOrName();
+	init();
 }
 
 KexiTableViewColumn::KexiTableViewColumn(
@@ -79,6 +76,7 @@ KexiTableViewColumn::KexiTableViewColumn(
 {
 	isDBAware = true;
 	m_fieldOwned = false;
+
 	//setup column's caption:
 	if (!field->caption().isEmpty()) {
 		m_nameOrCaption = field->caption();
@@ -90,16 +88,17 @@ KexiTableViewColumn::KexiTableViewColumn(
 		if (m_nameOrCaption.isEmpty())
 			m_nameOrCaption = field->name();
 	}
+	init();
 	//setup column's readonly flag: true if this is parent table's field
 	m_readOnly = (query.parentTable()!=f.table());
-	m_validator = 0;
+	m_visible = query.isFieldVisible(&f);
 }
 
 KexiTableViewColumn::KexiTableViewColumn(bool)
 : field(0)
 {
 	isDBAware = false;
-	m_validator = 0;
+	init();
 }
 
 KexiTableViewColumn::~KexiTableViewColumn()
@@ -107,6 +106,16 @@ KexiTableViewColumn::~KexiTableViewColumn()
 	if (m_fieldOwned)
 		delete field;
 	setValidator( 0 );
+	delete m_relatedData;
+}
+
+void KexiTableViewColumn::init()
+{
+	m_relatedData = 0;
+	m_readOnly = false;
+	m_visible = true;
+	m_data = 0;
+	m_validator = 0;
 }
 
 void KexiTableViewColumn::setValidator( KexiValidator* v )
@@ -116,6 +125,27 @@ void KexiTableViewColumn::setValidator( KexiValidator* v )
 			delete m_validator;
 	}
 	m_validator = v;
+}
+
+void KexiTableViewColumn::setRelatedData(KexiTableViewData *data)
+{
+	if (isDBAware)
+		return;
+	if (m_relatedData)
+		delete m_relatedData;
+	m_relatedData = 0;
+	if (!data)
+		return;
+	//find a primary key
+	KexiTableViewColumn::ListIterator it( data->columns );
+	for (int id = 0;it.current();++it, id++) {
+		if (it.current()->field->isPrimaryKey()) {
+			//found, remember
+			m_relatedDataPKeyID = id;
+			m_relatedData = data;
+			return;
+		}
+	}
 }
 
 bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
@@ -135,50 +165,6 @@ bool KexiTableViewColumn::acceptsFirstChar(const QChar& ch) const
 
 //------------------------------------------------------
 
-#if 0 //merged with KexiTableViewColumn
-KexiDBTableViewColumn::KexiDBTableViewColumn()
- : KexiTableViewColumn(), field(0)
-{
-	isDBAware = true;
-}
-
-KexiDBTableViewColumn::KexiDBTableViewColumn(
-	const KexiDB::QuerySchema &query, KexiDB::Field& f)
- : KexiTableViewColumn(true), field(&f)
-{
-	isDBAware = true;
-	type = field->type();
-
-	if (!field->caption().isEmpty()) {
-		caption = field->caption();
-	}
-	else {
-		//reuse alias if available:
-		caption = query.alias(field);
-		//last hance: use field name
-		if (caption.isEmpty())
-			caption = field->name();
-	}
-}
-
-bool KexiDBTableViewColumn::acceptsFirstChar(const QChar& ch) const
-{
-	if (field->isNumericType()) {
-		if (ch=="-")
-			 return !field->isUnsigned();
-		if (ch=="+" || (ch>="0" && ch<="9"))
-			return true;
-		return false;
-	}
-	else if (field->type() == KexiDB::Field::Boolean)
-		return false;
-		
-	return true;
-}
-#endif
-
-//------------------------------------------------------
-
 KexiTableViewData::KexiTableViewData()
 	: QObject()
 	, KexiTableViewDataBase()
@@ -190,8 +176,7 @@ KexiTableViewData::KexiTableViewData()
 	, m_readOnly(false)
 	, m_insertingEnabled(true)
 {
-	setAutoDelete(true);
-	columns.setAutoDelete(true);
+	init();
 }
 
 KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
@@ -205,8 +190,44 @@ KexiTableViewData::KexiTableViewData(KexiDB::Cursor *c)
 	, m_readOnly(false)
 	, m_insertingEnabled(true)
 {
-	setAutoDelete(true);
-	columns.setAutoDelete(true);
+	init();
+
+	uint i = 0;
+	QValueList<bool> detailedVisibility;
+	KexiDB::Field::Vector vector = m_cursor->query()->fieldsExpanded(&detailedVisibility);
+	KexiTableViewColumn* col;
+	for (i=0;i<vector.count();i++) {
+		KexiDB::Field *f = vector[i];
+		col=new KexiTableViewColumn(*m_cursor->query(), *f);
+		col->setVisible( detailedVisibility[i] );
+		addColumn( col );
+	}
+}
+
+KexiTableViewData::KexiTableViewData(
+	const QValueList<QVariant> &keys, const QValueList<QVariant> &values,
+	KexiDB::Field::Type keyType, KexiDB::Field::Type valueType)
+{
+	init();
+	KexiDB::Field *keyField = new KexiDB::Field("key", keyType);
+	keyField->setPrimaryKey(true);
+	KexiTableViewColumn *keyColumn = new KexiTableViewColumn(*keyField, true);
+	keyColumn->setVisible(false);
+	addColumn(keyColumn);
+
+	KexiDB::Field *valueField = new KexiDB::Field("value", valueType);
+	KexiTableViewColumn *valueColumn = new KexiTableViewColumn(*valueField, true);
+	addColumn(valueColumn);
+
+	uint cnt = QMIN(keys.count(), values.count());
+	QValueList<QVariant>::ConstIterator it_keys = keys.constBegin();
+	QValueList<QVariant>::ConstIterator it_values = values.constBegin();
+	for (;cnt>0;++it_keys, ++it_values, cnt--) {
+		KexiTableItem *item = new KexiTableItem(2);
+		(*item)[0] = (*it_keys);
+		(*item)[1] = (*it_values);
+		append( item );
+	}
 }
 
 /*
@@ -226,6 +247,17 @@ KexiTableViewData::KexiTableViewData(KexiTableViewColumnList& cols)
 
 KexiTableViewData::~KexiTableViewData()
 {
+	emit destroying();
+}
+
+void KexiTableViewData::init()
+{
+	setAutoDelete(true);
+	columns.setAutoDelete(true);
+
+	m_visibleColumnsCount=0;
+	m_visibleColumnsIDs.resize(100);
+	m_globalColumnsIDs.resize(100);
 }
 
 void KexiTableViewData::addColumn( KexiTableViewColumn* col )
@@ -236,7 +268,27 @@ void KexiTableViewData::addColumn( KexiTableViewColumn* col )
 //		m_simpleColumnsByName->insert(col->caption,col);//for faster lookup
 //	}
 	columns.append( col );
+	col->m_data = this;
+	if (m_globalColumnsIDs.size() < columns.count()) {//sanity
+		m_globalColumnsIDs.resize( m_globalColumnsIDs.size()*2 );
+	}
+	if (col->visible()) {
+		m_visibleColumnsCount++;
+		if (m_visibleColumnsIDs.size() < m_visibleColumnsCount) {//sanity
+			m_visibleColumnsIDs.resize( m_visibleColumnsIDs.size()*2 );
+		}
+		m_visibleColumnsIDs[ columns.count()-1 ] = m_visibleColumnsCount-1;
+		m_globalColumnsIDs[ m_visibleColumnsCount-1 ] = columns.count()-1;
+	}
+	else {
+		m_visibleColumnsIDs[ columns.count()-1 ] = -1;
+	}
 }
+
+/*void KexiTableViewData::addColumns( KexiDB::QuerySchema *query, KexiDB::Field *field )
+{
+	field->isQueryAsterisk
+}*/
 
 void KexiTableViewData::setSorting(int column, bool ascending)
 {
@@ -514,6 +566,12 @@ void KexiTableViewData::insertRow(KexiTableItem& item, uint index)
 	if (!insert( index = QMIN(index, count()), &item ))
 		return;
 	emit rowInserted(&item, index);
+}
+
+void KexiTableViewData::clear()
+{
+	KexiTableViewDataBase::clear();
+	emit refreshRequested();
 }
 
 #include "kexitableviewdata.moc"

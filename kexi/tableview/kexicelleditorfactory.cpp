@@ -22,6 +22,10 @@
 #include <qptrdict.h>
 #include <qintdict.h>
 
+#include <kexidb/indexschema.h>
+#include <kexidb/tableschema.h>
+#include "kexitableviewdata.h"
+
 //============= KexiCellEditorFactoryItem ============
 
 KexiCellEditorFactoryItem::KexiCellEditorFactoryItem()
@@ -75,20 +79,47 @@ void KexiCellEditorFactory::registerItem( uint type, KexiCellEditorFactoryItem& 
 	static_KexiCellEditorFactory.registerItem( type, item );
 }
 
-KexiTableEdit* KexiCellEditorFactory::createEditor(KexiDB::Field &f, QScrollView* parent)
+KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, QScrollView* parent)
 {
-	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item( f.type() );
-	return item->createEditor(f, parent);
+	KexiTableViewData *rel_data = column.relatedData();
+	KexiCellEditorFactoryItem *item = 0;
+	if (rel_data) {
+		//--we need to create combo box because of relationship:
+		item = KexiCellEditorFactory::item( KexiDB::Field::Enum );
+	}
+	else {
+		item = KexiCellEditorFactory::item( column.field->type() );
+	}
+	
+#if 0 //js: TODO LATER
+	//--check if we need to create combo box because of relationship:
+	//WARNING: it's assumed that indices are one-field long
+	KexiDB::TableSchema *table = f.table();
+	if (table) {
+		//find index that contain this field
+		KexiDB::IndexSchema::ListIterator it = table->indicesIterator();
+		for (;it.current();++it) {
+			KexiDB::IndexSchema *idx = it.current();
+			if (idx->fields()->findRef(&f)!=-1) {
+				//find details-side rel. for this index
+				KexiDB::Relationship *rel = idx->detailsRelationships()->first();
+				if (rel) {
+					
+				}
+			}
+		}
+	}
+#endif
+
+	return item->createEditor(column, parent);
 }
 
 KexiCellEditorFactoryItem* KexiCellEditorFactory::item( uint type )
 {
 	KexiCellEditorFactoryItem *item = static_KexiCellEditorFactory.items_by_type[ type ];
-	if (!item) { //try the default
-		item = static_KexiCellEditorFactory.items_by_type[ KexiDB::Field::InvalidType ];
-		if (!item)
-			return 0;
-	}
-	return item;
+	if (item)
+		return item;
+	//try the default
+	return static_KexiCellEditorFactory.items_by_type[ KexiDB::Field::InvalidType ];
 }
 

@@ -47,8 +47,9 @@
 #include <kio/job.h>
 
 
-KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::Field &f, QScrollView *parent)
- : KexiTableEdit(f, parent,"KexiBlobTableEdit")
+//KexiBlobTableEdit::KexiBlobTableEdit(KexiDB::Field &f, QScrollView *parent)
+KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+ : KexiTableEdit(column, parent,"KexiBlobTableEdit")
 {
 	m_proc = 0;
 	m_content = 0;
@@ -314,7 +315,7 @@ KexiBlobEditorFactoryItem::~KexiBlobEditorFactoryItem()
 }
 
 KexiTableEdit* KexiBlobEditorFactoryItem::createEditor(
-	KexiDB::Field &f, QScrollView* parent)
+	KexiTableViewColumn &column, QScrollView* parent)
 {
 //js: TODO enable when KexiBlobTableEdit will be stable again!
 //DISABLED

@@ -45,8 +45,9 @@
 
 #include "kexi_utils.h"
 
-KexiDateTableEdit::KexiDateTableEdit(KexiDB::Field &f, QScrollView *parent)
- : KexiTableEdit(f, parent,"KexiDateTableEdit")
+//KexiDateTableEdit::KexiDateTableEdit(KexiDB::Field &f, QScrollView *parent)
+KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+ : KexiTableEdit(column, parent,"KexiDateTableEdit")
 {
 //	kdDebug() << "KexiDateTableEdit: Date = " << value.toString() << endl;
 	setView( new QWidget(this) );
@@ -252,9 +253,9 @@ KexiDateEditorFactoryItem::~KexiDateEditorFactoryItem()
 }
 
 KexiTableEdit* KexiDateEditorFactoryItem::createEditor(
-	KexiDB::Field &f, QScrollView* parent)
+	KexiTableViewColumn &column, QScrollView* parent)
 {
-	return new KexiDateTableEdit(f, parent);
+	return new KexiDateTableEdit(column, parent);
 }
 
 #include "kexidatetableedit.moc"

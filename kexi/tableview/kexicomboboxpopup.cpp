@@ -51,13 +51,35 @@ const int KexiComboBoxPopup::defaultMaxRows = 8;
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f)
  : QFrame( parent, "KexiComboBoxPopup", WType_Popup )
- , d( new KexiComboBoxPopupPrivate() )
 {
+	init();
+	//setup tv data
+	setData(f);
+}
+
+KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column)
+ : QFrame( parent, "KexiComboBoxPopup", WType_Popup )
+{
+	init();
+	//setup tv data
+	setData(column);
+}
+
+KexiComboBoxPopup::~KexiComboBoxPopup()
+{
+	delete d;
+}
+
+void KexiComboBoxPopup::init()
+{
+	d = new KexiComboBoxPopupPrivate();
+	setPaletteBackgroundColor(palette().color(QPalette::Active,QColorGroup::Base));
 	setLineWidth( 1 );
 	setFrameStyle( Box | Plain );
 	
-	QVBoxLayout *lyr = new QVBoxLayout(this, 1);
+//	QVBoxLayout *lyr = new QVBoxLayout(this, 1);
 	d->tv = new KexiTableView(0, this, "KexiComboBoxPopup_tv");
+	d->tv->setReadOnly( true );
 	d->tv->setLineWidth( 0 );
 	d->tv->setNavigatorEnabled( false );
 	d->tv->setFullRowSelectionEnabled( true );
@@ -68,6 +90,7 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f)
 	d->tv->setHorizontalHeaderVisible( false );
 	d->tv->setColumnStretchEnabled( true, -1 );
 	d->tv->setContextMenuEnabled( false );
+	d->tv->setScrollbarToolTipsEnabled( false );
 	d->tv->installEventFilter(this);
 	
 	connect(d->tv, SIGNAL(itemReturnPressed(KexiTableItem*,int,int)),
@@ -79,13 +102,15 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f)
 	connect(d->tv, SIGNAL(itemDblClicked(KexiTableItem*,int,int)),
 		this, SLOT(slotTVItemAccepted(KexiTableItem*,int,int)));
 
-	lyr->addWidget(d->tv);
-	
-	//setup tv data
+//	lyr->addWidget(d->tv);
+}
+
+void KexiComboBoxPopup::setData(KexiDB::Field &f)
+{
 //j: TODO: THIS IS PRIMITIVE: we'd need to employ KexiDB::Reference here!
 	d->int_f = new KexiDB::Field(f.name(), KexiDB::Field::Text);
 	KexiTableViewData *data = new KexiTableViewData();
-	data->setReadOnly( true );
+//	data->setReadOnly( true );
 	data->addColumn( new KexiTableViewColumn( *d->int_f ) );
 	QValueVector<QString> hints = f.enumHints();
 	for(uint i=0; i < hints.size(); i++) {
@@ -94,15 +119,39 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f)
 		kdDebug() << "added: '" << hints[i] <<"'"<<endl;
 		data->append( item );
 	}
-	d->tv->setData( data );
-	d->tv->adjustColumnWidthToContents( 0 ); //TODO: not only for column 0, if there are more columns!
-	                                         //TODO: check if the width is not too big
-	resize( d->tv->columnWidth( 0 ), d->tv->rowHeight() * QMIN( d->max_rows, d->tv->rows() ) +2 );
+	setDataInternal( data, true );
 }
 
-KexiComboBoxPopup::~KexiComboBoxPopup()
+void KexiComboBoxPopup::setData(KexiTableViewColumn &column)
 {
-	delete d;
+	if (!column.relatedData()) {
+		kdWarning() << "KexiComboBoxPopup::setData(KexiTableViewColumn &): no column relatedData \n - moving to setData(KexiDB::Field &)" << endl;
+		setData(*column.field);
+		return;
+	}
+	setDataInternal( column.relatedData(), false /*!owner*/ );
+}
+
+void KexiComboBoxPopup::setDataInternal( KexiTableViewData *data, bool owner )
+{
+	if (d->tv->data())
+		d->tv->data()->disconnect( this );
+	d->tv->setData( data, owner );
+	connect( data, SIGNAL(refreshRequested()), this, SLOT(slotDataRefreshRequested()));
+
+	updateSize();
+}
+
+void KexiComboBoxPopup::updateSize()
+{
+	d->tv->adjustColumnWidthToContents( -1 ); //TODO: not only for column 0, if there are more columns!
+	                                         //TODO: check if the width is not too big
+//	d->tv->adjustColumnWidthToContents( 0 ); //TODO: not only for column 0, if there are more columns!
+//	                                         //TODO: check if the width is not too big
+	const int rows = QMIN( d->max_rows, d->tv->rows() );
+	resize( d->tv->tableSize().width(), d->tv->rowHeight() * rows +2 );
+
+//	resize( d->tv->columnWidth( 0 ), d->tv->rowHeight() * QMIN( d->max_rows, d->tv->rows() ) +2 );
 }
 
 KexiTableView* KexiComboBoxPopup::tableView()
@@ -110,10 +159,18 @@ KexiTableView* KexiComboBoxPopup::tableView()
 	return d->tv;
 }
 
-/*void KexiComboBoxPopup::resize( int w, int h )
+void KexiComboBoxPopup::resize( int w, int h )
 {
+	d->tv->horizontalScrollBar()->hide();
+	d->tv->verticalScrollBar()->hide();
+//	hide();
+	d->tv->move(1,1);
+	d->tv->resize( w-2, h-2 );
 	QFrame::resize(w,h);
-}*/
+	update();
+	updateGeometry();
+//	show();
+}
 
 void KexiComboBoxPopup::setMaxRows(int r)
 {
@@ -148,6 +205,10 @@ bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 	return QFrame::eventFilter( o, e );
 }
 
+void KexiComboBoxPopup::slotDataRefreshRequested()
+{
+	updateSize();
+}
 
 #include "kexicomboboxpopup.moc"
 

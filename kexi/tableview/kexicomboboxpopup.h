@@ -24,6 +24,8 @@
 
 class KexiComboBoxPopupPrivate;
 class KexiTableView;
+class KexiTableViewData;
+class KexiTableViewColumn;
 class KexiTableItem;
 namespace KexiDB {
 	class Field;
@@ -38,6 +40,7 @@ class KexiComboBoxPopup : public QFrame
 		/*! Constructor for creating simple one-column enum-defined popup
 		 using definition from \a f. */
 		KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f);
+		KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column);
 		virtual ~KexiComboBoxPopup();
 
 		KexiTableView* tableView();
@@ -58,12 +61,19 @@ class KexiComboBoxPopup : public QFrame
 		void cancelled();
 
 	public slots:
-//		virtual void resize( int w, int h );
+		virtual void resize( int w, int h );
 
 	protected slots:
 		void slotTVItemAccepted(KexiTableItem *item, int row, int col);
+		void updateSize();
+		void slotDataRefreshRequested();
 
 	protected:
+		void init();
+		void setData(KexiDB::Field &f);
+		void setData(KexiTableViewColumn &column);
+		void setDataInternal( KexiTableViewData *data, bool owner = true ); //!< helper
+
 		KexiComboBoxPopupPrivate *d;
 };
 

@@ -51,6 +51,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	navPanel = 0;
 	skipKeyPress = false;
 	vScrollBarValueChanged_enabled = true;
+	scrollbarToolTipsEnabled = true;
 	navRowNumber = 0;
 	scrollBarTipTimerCnt = 0;
 	scrollBarTip = 0;
@@ -61,6 +62,7 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	emptyRowInsertingEnabled = false;
 	dragIndicatorLine = -1;
 	dropsAtRowEnabled = false;
+	initDataContentsOnShow = false;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()
