@@ -165,6 +165,8 @@ public:
     SymbolType getType() const { return type; }
     void setType(SymbolType t) { type = t; }
 
+    virtual bool isNormalChar() const { return getBaseline() != -1; }
+
 protected:
 
     void calcCharSize( const ContextStyle& style, luPt height, QChar ch );

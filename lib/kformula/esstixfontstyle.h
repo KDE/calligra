@@ -72,6 +72,8 @@ public:
                        ContextStyle::TextStyle tstyle,
                        luPt parentSize, const LuPixelPoint& origin );
 
+    virtual bool isNormalChar() const;
+
 private:
 
     bool calcEsstixDelimiterSize( const ContextStyle& context, char c, luPt fontSize, luPt parentSize );

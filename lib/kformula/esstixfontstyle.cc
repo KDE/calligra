@@ -325,7 +325,7 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
             drawEsstixDelimiter( painter, style, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, leftSquareBracketChar);
+            drawBigRoundBracket( painter, style, leftSquareBracket, myX, myY, mySize );
         }
         break;
     case RightSquareBracket:
@@ -333,7 +333,7 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
             drawEsstixDelimiter( painter, style, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, rightSquareBracketChar);
+            drawBigRoundBracket( painter, style, rightSquareBracket, myX, myY, mySize );
         }
         break;
     case LeftCurlyBracket:
@@ -341,7 +341,7 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
             drawEsstixDelimiter( painter, style, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, leftCurlyBracketChar);
+            drawBigCurlyBracket( painter, style, leftCurlyBracket, myX, myY, mySize );
         }
         break;
     case RightCurlyBracket:
@@ -349,7 +349,7 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
             drawEsstixDelimiter( painter, style, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, rightCurlyBracketChar);
+            drawBigCurlyBracket( painter, style, rightCurlyBracket, myX, myY, mySize );
         }
         break;
     case LeftLineBracket:
@@ -357,7 +357,7 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
             drawEsstixDelimiter( painter, style, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
+            drawBigRoundBracket( painter, style, leftLineBracket, myX, myY, mySize );
         }
         break;
     case RightLineBracket:
@@ -365,7 +365,7 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
             drawEsstixDelimiter( painter, style, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
+            drawBigRoundBracket( painter, style, rightLineBracket, myX, myY, mySize );
         }
         break;
     case SlashBracket:
@@ -391,7 +391,7 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
             drawEsstixDelimiter( painter, style, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, leftParenthesisChar);
+            drawBigRoundBracket( painter, style, leftRoundBracket, myX, myY, mySize );
         }
         break;
     case RightRoundBracket:
@@ -399,7 +399,7 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
             drawEsstixDelimiter( painter, style, myX, myY, mySize );
         }
         else {
-            drawCharacter(painter, style, myX, myY, mySize, rightParenthesisChar);
+            drawBigRoundBracket( painter, style, rightRoundBracket, myX, myY, mySize );
         }
         break;
     case EmptyBracket:
@@ -421,6 +421,11 @@ void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
     //painter.drawRect(myX, myY, getWidth(), getHeight());
 }
 
+
+bool EsstixArtwork::isNormalChar() const
+{
+    return Artwork::isNormalChar() && ( fontSizeFactor == 1 );
+}
 
 
 bool EsstixArtwork::calcEsstixDelimiterSize( const ContextStyle& context,
@@ -446,15 +451,8 @@ bool EsstixArtwork::calcEsstixDelimiterSize( const ContextStyle& context,
 
             setHeight( height );
             setWidth( width );
+            setBaseline( baseline );
 
-            // We are only interessted in the baseline when we have
-            // a bracket of normal height (like any other char.)
-            if ( fontSizeFactor == 1 ) {
-                setBaseline( baseline );
-            }
-            else {
-                setBaseline( -1 );
-            }
             return true;
         }
         c = esstixseven_nextchar( c );

@@ -292,13 +292,13 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
         content->setY(getHeight() / 2 - content->axis( style, tstyle ));
         setBaseline(content->getBaseline() + content->getY());
 
-        if ( left->getBaseline() != -1 ) {
+        if ( left->isNormalChar() ) {
             left->setY(getBaseline() - left->getBaseline());
         }
         else {
             left->setY((getHeight() - left->getHeight())/2);
         }
-        if ( right->getBaseline() != -1 ) {
+        if ( right->isNormalChar() ) {
             right->setY(getBaseline() - right->getBaseline());
         }
         else {
