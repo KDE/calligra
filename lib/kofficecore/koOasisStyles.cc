@@ -352,20 +352,23 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
                         denominatorValue = d;
                 }
 
-                for ( i = 0; i <= integer; ++i )
+                for ( i = 0; i < integer; ++i )
                     format+='#';
 
                 format+=' ';
 
-                for ( i = 0; i <= numerator; ++i )
+                for ( i = 0; i < numerator; ++i )
                     format+='?';
 
                 format+='/';
 
-                for ( i = 0; i <= denominator; ++i )
-                    format+='?';
-                if ( denominatorValue != -1 )
+                if ( denominatorValue != 0 )
                     format+=QString::number( denominatorValue );
+                else
+                {
+                    for ( i = 0; i < denominator; ++i )
+                        format+='?';
+                }
             }
         // Not needed:
         //  <style:map style:condition="value()&gt;=0" style:apply-style-name="N106P0"/>
@@ -946,6 +949,10 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
+
+    text= _prefix;
+    addTextNumber(text, elementWriter );
+
     elementWriter.startElement( "number:fraction" );
     elementWriter.addAttribute( "number:min-integer-digits", integer );
     elementWriter.addAttribute( "number:min-numerator-digits",numerator );
@@ -954,8 +961,6 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
         elementWriter.addAttribute( "number:denominator-value",denominatorValue );
     elementWriter.endElement();
 
-    text= _prefix;
-    addTextNumber(text, elementWriter );
     addKofficeNumericStyleExtension( elementWriter, _suffix, _prefix );
 
     text=_suffix;
@@ -998,14 +1003,15 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
+    text= _prefix ;
+    addTextNumber(text, elementWriter );
     elementWriter.startElement( "number:number" );
     elementWriter.addAttribute( "number:decimal-places", decimalplaces );
     elementWriter.addAttribute( "number:min-integer-digits", integerdigits );
     elementWriter.endElement();
 
     addTextNumber(QString( "%" ), elementWriter );
-    text= _prefix ;
-    addTextNumber(text, elementWriter );
+
     text =_suffix ;
     addTextNumber(text, elementWriter );
     addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
@@ -1071,6 +1077,9 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
+    text =  _prefix ;
+    addTextNumber(text, elementWriter );
+
     elementWriter.startElement( "number:scientific-number" );
     kdDebug(30003)<<" decimalplace :"<<decimalplace<<" integerdigits :"<<integerdigits<<" exponentdigits :"<<exponentdigits<<endl;
     elementWriter.addAttribute( "number:decimal-places", decimalplace );
@@ -1078,8 +1087,6 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     elementWriter.addAttribute( "number:min-exponent-digits",exponentdigits );
     elementWriter.endElement();
 
-    text =  _prefix ;
-    addTextNumber(text, elementWriter );
     text = _suffix;
     addTextNumber(text, elementWriter );
     addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
@@ -1111,10 +1118,10 @@ QString KoOasisStyles::saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QS
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
-
-    elementWriter.startElement( "number:currency-style" );
     text =  _prefix ;
     addTextNumber(text, elementWriter );
+
+    elementWriter.startElement( "number:currency-style" );
 
     text =  _suffix ;
     addTextNumber(text, elementWriter );
@@ -1146,10 +1153,10 @@ QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QStrin
         format.remove( 0,1 );
     }
     while ( format.length() > 0 );
-
-    elementWriter.startElement( "number:text-style" );
     text =  _prefix ;
     addTextNumber(text, elementWriter );
+
+    elementWriter.startElement( "number:text-style" );
 
     text =  _suffix ;
     addTextNumber(text, elementWriter );
