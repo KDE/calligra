@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1999 David Faure <faure@kde.org>
+             (C) 1999-2002 The KSpread Team
+                           www.koffice.org/kspread 
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,8 +22,8 @@
 #ifndef CSVDIALOG_H
 #define CSVDIALOG_H
 
+#include <kdialogbase.h>
 
-#include <qdialog.h>
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
@@ -35,7 +37,18 @@ class QTable;
 
 class KSpreadView;
 
-class KSpreadCSVDialog : public QDialog
+/**
+ * Provides dialog for managing CSV (comma separated value) data.
+ *
+ * Currently KSpreadCSVDialog is used for converting text into columns,
+ * inserting text file and pasting text from clipboard, where conversion
+ * from CSV (comma separated value) data is is all required. 
+ * The different purposed mentioned above is determined
+ * using mode, which can be Column, File, or Clipboard respectively.
+ *
+*/
+
+class KSpreadCSVDialog : public KDialogBase
 {
   Q_OBJECT
 
@@ -45,6 +58,7 @@ class KSpreadCSVDialog : public QDialog
   enum Header { TEXT, NUMBER, DATE, CURRENCY };
 
   KSpreadCSVDialog( KSpreadView * parent, const char * name, QRect const & rect, Mode mode);
+
   ~KSpreadCSVDialog();
 
  protected:
@@ -58,9 +72,6 @@ class KSpreadCSVDialog : public QDialog
   QHBoxLayout* Layout1;
   QGridLayout* m_delimiterBoxLayout;
   QGridLayout* m_formatBoxLayout;
-  QPushButton* buttonHelp;
-  QPushButton* buttonOk;
-  QPushButton* buttonCancel;
   QTable* m_table;
   QButtonGroup* m_delimiterBox;
   QRadioButton* m_radioComma;
@@ -105,5 +116,4 @@ class KSpreadCSVDialog : public QDialog
   void textChanged ( const QString & );
 };
 
-#endif
-
+#endif // CVSDIALOG_H

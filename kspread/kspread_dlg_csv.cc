@@ -17,35 +17,33 @@
    Boston, MA 02111-1307, USA.
 */
 
-
-#include "kspread_dlg_csv.h"
-#include "kspread_cell.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
-#include "kspread_undo.h"
-#include "kspread_view.h"
-
-#include <qclipboard.h>
-#include <qmime.h>
 #include <qbuttongroup.h>
+#include <qclipboard.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qmime.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qtable.h>
 #include <qlayout.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kdialogbase.h>
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include <kspread_dlg_csv.h>
+#include <kspread_cell.h>
+#include <kspread_doc.h>
+#include <kspread_table.h>
+#include <kspread_undo.h>
+#include <kspread_view.h>
+
 KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRect const & rect, Mode mode)
-  : QDialog( parent, name ),
+  : KDialogBase( parent, name, true, QString::null, Ok|Cancel ),
     m_pView( parent ),
     m_adjustRows( 0 ),
     m_startline( 0 ),
@@ -58,41 +56,19 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     setName( "KSpreadCSVDialog" );
 
   setSizeGripEnabled( TRUE );
-  MyDialogLayout = new QGridLayout( this, 1, 1, 11, 6, "MyDialogLayout");
 
-  Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
-
-  buttonHelp = new QPushButton( this, "buttonHelp" );
-  buttonHelp->setText( i18n( "Help" ) );
-  buttonHelp->setAccel( 4144 );
-  buttonHelp->setAutoDefault( TRUE );
-  buttonHelp->hide();
-  Layout1->addWidget( buttonHelp );
-  QSpacerItem* spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
-  Layout1->addItem( spacer );
-
-  buttonOk = new QPushButton( this, "buttonOk" );
-  buttonOk->setText( i18n( "&OK" ) );
-  buttonOk->setAccel( 0 );
-  buttonOk->setAutoDefault( TRUE );
-  buttonOk->setDefault( TRUE );
-  Layout1->addWidget( buttonOk );
-
-  buttonCancel = new QPushButton( this, "buttonCancel" );
-  buttonCancel->setText( i18n( "&Cancel" ) );
-  buttonCancel->setAccel( 0 );
-  buttonCancel->setAutoDefault( TRUE );
-  Layout1->addWidget( buttonCancel );
-
-  MyDialogLayout->addMultiCellLayout( Layout1, 4, 4, 0, 3 );
+  QWidget* page = new QWidget( this );
+  setMainWidget( page );
+  MyDialogLayout = new QGridLayout( page, 4, 4, marginHint(), spacingHint(), "MyDialogLayout");
 
   m_table = new QTable( this, "m_table" );
-  m_table->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, m_table->sizePolicy().hasHeightForWidth() ) );
+  //m_table->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, m_table->sizePolicy().hasHeightForWidth() ) );
   m_table->setNumRows( 0 );
   m_table->setNumCols( 0 );
 
   MyDialogLayout->addMultiCellWidget( m_table, 3, 3, 0, 3 );
 
+  // Delimiter: comma, semicolon, tab, space, other
   m_delimiterBox = new QButtonGroup( this, "m_delimiterBox" );
   m_delimiterBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_delimiterBox->sizePolicy().hasHeightForWidth() ) );
   m_delimiterBox->setTitle( i18n( "Delimiter" ) );
@@ -101,41 +77,36 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   m_delimiterBox->layout()->setMargin( 11 );
   m_delimiterBoxLayout = new QGridLayout( m_delimiterBox->layout() );
   m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
+  MyDialogLayout->addMultiCellWidget( m_delimiterBox, 0, 2, 0, 0 );
 
   m_radioComma = new QRadioButton( m_delimiterBox, "m_radioComma" );
   m_radioComma->setText( i18n( "Comma" ) );
   m_radioComma->setChecked( TRUE );
-
   m_delimiterBoxLayout->addWidget( m_radioComma, 0, 0 );
 
   m_radioSemicolon = new QRadioButton( m_delimiterBox, "m_radioSemicolon" );
   m_radioSemicolon->setText( i18n( "Semicolon" ) );
-
   m_delimiterBoxLayout->addWidget( m_radioSemicolon, 0, 1 );
 
   m_radioTab = new QRadioButton( m_delimiterBox, "m_radioTab" );
   m_radioTab->setText( i18n( "Tabulator" ) );
-
   m_delimiterBoxLayout->addWidget( m_radioTab, 1, 0 );
 
   m_radioSpace = new QRadioButton( m_delimiterBox, "m_radioSpace" );
   m_radioSpace->setText( i18n( "Space" ) );
-
   m_delimiterBoxLayout->addWidget( m_radioSpace, 1, 1 );
 
   m_radioOther = new QRadioButton( m_delimiterBox, "m_radioOther" );
   m_radioOther->setText( i18n( "Other" ) );
-
   m_delimiterBoxLayout->addWidget( m_radioOther, 0, 2 );
 
   m_delimiterEdit = new QLineEdit( m_delimiterBox, "m_delimiterEdit" );
   m_delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_delimiterEdit->sizePolicy().hasHeightForWidth() ) );
   m_delimiterEdit->setMaximumSize( QSize( 30, 32767 ) );
-
   m_delimiterBoxLayout->addWidget( m_delimiterEdit, 1, 2 );
 
-  MyDialogLayout->addMultiCellWidget( m_delimiterBox, 0, 2, 0, 0 );
 
+  // Format: number, text, currency,
   m_formatBox = new QButtonGroup( this, "m_formatBox" );
   m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_formatBox->sizePolicy().hasHeightForWidth() ) );
   m_formatBox->setTitle( i18n( "Format" ) );
@@ -144,37 +115,32 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   m_formatBox->layout()->setMargin( 11 );
   m_formatBoxLayout = new QGridLayout( m_formatBox->layout() );
   m_formatBoxLayout->setAlignment( Qt::AlignTop );
+  MyDialogLayout->addMultiCellWidget( m_formatBox, 0, 2, 1, 1 );
 
   m_radioNumber = new QRadioButton( m_formatBox, "m_radioNumber" );
   m_radioNumber->setText( i18n( "Number" ) );
-
   m_formatBoxLayout->addMultiCellWidget( m_radioNumber, 1, 1, 0, 1 );
 
   m_radioText = new QRadioButton( m_formatBox, "m_radioText" );
   m_radioText->setText( i18n( "Text" ) );
   m_radioText->setChecked( TRUE );
-
   m_formatBoxLayout->addWidget( m_radioText, 0, 0 );
 
   m_radioCurrency = new QRadioButton( m_formatBox, "m_radioCurrency" );
   m_radioCurrency->setText( i18n( "Currency" ) );
-
   m_formatBoxLayout->addMultiCellWidget( m_radioCurrency, 0, 0, 1, 2 );
 
   m_radioDate = new QRadioButton( m_formatBox, "m_radioDate" );
   m_radioDate->setText( i18n( "Date" ) );
-
   m_formatBoxLayout->addWidget( m_radioDate, 1, 2 );
 
-  MyDialogLayout->addMultiCellWidget( m_formatBox, 0, 2, 1, 1 );
-
-  m_comboLine = new QComboBox( FALSE, this, "m_comboLine" );
+  m_comboLine = new QComboBox( FALSE, page, "m_comboLine" );
   m_comboLine->insertItem( i18n( "1" ) );
   m_comboLine->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboLine->sizePolicy().hasHeightForWidth() ) );
 
   MyDialogLayout->addWidget( m_comboLine, 1, 3 );
 
-  m_comboQuote = new QComboBox( FALSE, this, "m_comboQuote" );
+  m_comboQuote = new QComboBox( FALSE, page, "m_comboQuote" );
   m_comboQuote->insertItem( i18n( "\"" ) );
   m_comboQuote->insertItem( i18n( "'" ) );
   m_comboQuote->insertItem( i18n( "None" ) );
@@ -184,23 +150,17 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
   MyDialogLayout->addItem( spacer_2, 2, 3 );
 
-  TextLabel3 = new QLabel( this, "TextLabel3" );
+  TextLabel3 = new QLabel( page, "TextLabel3" );
   TextLabel3->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, TextLabel3->sizePolicy().hasHeightForWidth() ) );
   TextLabel3->setText( i18n( "Start at line:" ) );
 
   MyDialogLayout->addWidget( TextLabel3, 0, 3 );
 
-  TextLabel2 = new QLabel( this, "TextLabel2" );
+  TextLabel2 = new QLabel( page, "TextLabel2" );
   TextLabel2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, TextLabel2->sizePolicy().hasHeightForWidth() ) );
   TextLabel2->setText( i18n( "Textquote:" ) );
 
   MyDialogLayout->addWidget( TextLabel2, 0, 2 );
-  QSpacerItem* spacer_3 = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
-  MyDialogLayout->addItem( spacer_3, 1, 4 );
-
-  // signals and slots connections
-  connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
-  connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 
   if ( m_mode == Clipboard )
   {
@@ -228,7 +188,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     //cancel action !
     if ( file.isEmpty() )
     {
-        buttonOk->setEnabled( false );
+        actionButton( Ok )->setEnabled( false );
         return;
     }
     QFile in(file);
@@ -236,7 +196,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     {
       KMessageBox::sorry( this, i18n("Cannot open input file!") );
       in.close();
-      buttonOk->setEnabled( false );
+      actionButton( Ok )->setEnabled( false );
       return;
     }
     m_fileArray = QByteArray(in.size());
@@ -682,7 +642,3 @@ QString KSpreadCSVDialog::getText(int row, int col)
 }
 
 #include <kspread_dlg_csv.moc>
-
-
-
-
