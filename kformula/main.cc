@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <dcopclient.h>
 
-#include <kformula_factory.h>
+#include "kformula_factory.h"
 
 
 static const KCmdLineOptions options[]=
