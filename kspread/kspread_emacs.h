@@ -9,7 +9,7 @@ class KEmacs : public KMetaEditor
 {
 public:
     KEmacs();
-    ~KEmacs();
+    virtual ~KEmacs();
     
     virtual bool isOk() { if ( emacsPID > 0 ) return TRUE; return FALSE; }
     
