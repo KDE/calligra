@@ -487,12 +487,10 @@ bool KuDesignerDoc::openDocument(const KURL& url, const char *format /*=0*/)
 
 bool KuDesignerDoc::saveDocument(const KURL& url, const char *format /*=0*/)
 {
-  /////////////////////////////////////////////////
-  // TODO: Add your document saving code here
-  /////////////////////////////////////////////////
     KTempFile temp;
 
     QTextStream t(temp.file());
+    t.setEncoding(QTextStream::UnicodeUTF8);
 	t << docCanvas->templ->getXml();
     temp.close();
 
@@ -505,11 +503,11 @@ bool KuDesignerDoc::saveDocument(const KURL& url, const char *format /*=0*/)
 
 void KuDesignerDoc::deleteContents()
 {
-  /////////////////////////////////////////////////
-  // TODO: Add implementation to delete the document contents
-  /////////////////////////////////////////////////
     if (docCanvas)
+    {
         delete docCanvas;
+	docCanvas = 0;
+    }	
 }
 
 MyCanvas *KuDesignerDoc::canvas()
