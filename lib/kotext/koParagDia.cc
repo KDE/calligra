@@ -556,7 +556,7 @@ void KoBorderPreview::drawContents( QPainter* painter )
         painter->setPen( setBorderPen( m_topBorder ) );
         painter->drawLine( r.x() + 20, r.y() + 30, r.right() - 20, r.y() + 30 );
         if ( m_topBorder.getStyle()==KoBorder::DOUBLE_LINE)
-            painter->drawLine( r.x() + 20, r.y() + 30+m_topBorder.width()+1, r.right() - 20, r.y() + 30+m_topBorder.width()+1 );
+            painter->drawLine( r.x() + 20, int(r.y() + 30+m_topBorder.width()+1), r.right() - 20, int(r.y() + 30+m_topBorder.width()+1) );
 
 
     }
@@ -565,7 +565,7 @@ void KoBorderPreview::drawContents( QPainter* painter )
         painter->setPen( setBorderPen( m_bottomBorder ) );
         painter->drawLine( r.x() + 20, r.bottom() - 30, r.right() - 20, r.bottom() - 30 );
         if ( m_bottomBorder.getStyle()==KoBorder::DOUBLE_LINE)
-            painter->drawLine( r.x() + 20, r.bottom() - 30 - m_bottomBorder.width()-1, r.right() - 20, r.bottom() - 30 - m_bottomBorder.width() - 1 );
+            painter->drawLine( r.x() + 20, int(r.bottom() - 30 - m_bottomBorder.width()-1), r.right() - 20, int(r.bottom() - 30 - m_bottomBorder.width() - 1) );
 
     }
 
@@ -573,7 +573,7 @@ void KoBorderPreview::drawContents( QPainter* painter )
         painter->setPen( setBorderPen( m_leftBorder ) );
         painter->drawLine( r.x() + 20, r.y() + 30, r.x() + 20, r.bottom() - 30 );
         if ( m_leftBorder.getStyle()==KoBorder::DOUBLE_LINE)
-            painter->drawLine( r.x() + 20 + m_leftBorder.width() +1 , r.y() + 30, r.x() + 20+ m_leftBorder.width() +1, r.bottom() - 30 );
+            painter->drawLine( int(r.x() + 20 + m_leftBorder.width() +1) , r.y() + 30, int(r.x() + 20+ m_leftBorder.width() +1), r.bottom() - 30 );
 
     }
 
@@ -581,7 +581,7 @@ void KoBorderPreview::drawContents( QPainter* painter )
         painter->setPen( setBorderPen( m_rightBorder ) );
         painter->drawLine( r.right() - 20, r.y() + 30, r.right() - 20, r.bottom() - 30 );
         if ( m_rightBorder.getStyle()==KoBorder::DOUBLE_LINE)
-            painter->drawLine( r.right() - 20 - m_rightBorder.width() - 1, r.y() + 30, r.right() - 20 - m_rightBorder.width() - 1, r.bottom() - 30 );
+            painter->drawLine( int(r.right() - 20 - m_rightBorder.width() - 1), r.y() + 30, int(r.right() - 20 - m_rightBorder.width() - 1), r.bottom() - 30 );
 
     }
 }
