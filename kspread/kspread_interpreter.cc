@@ -2508,6 +2508,25 @@ static bool kspreadfunc_weibull( KSContext& context ) {
   return true;
 }
 
+static double gaussinv_helper (double x) {
+  double c0, c1, c2, d1, d2, d3, q, t, z;
+  c0 = 2.515517;
+  c1 = 0.802853;
+  c2 = 0.010328;
+  d1 = 1.432788;
+  d2 = 0.189269;
+  d3 = 0.001308;
+  if (x < 0.5)
+    q = x;
+  else
+    q = 1.0-x;
+  t = sqrt(-log(q*q));
+  z = t - (c0 + t*(c1 + t*c2)) / (1.0 + t*(d1 + t*(d2 + t*d3)));
+  if (x < 0.5)
+    z *= -1.0;
+  return z;
+}
+
 static bool kspreadfunc_fv( KSContext& context )
 {
 /* Returns future value, given current value, interest rate and time */
