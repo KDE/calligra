@@ -561,7 +561,7 @@ void KoAutoFormatDia::setupTab3()
     m_pListView->addColumn( i18n( "Find" ) );
     m_pListView->addColumn( i18n( "Replace" ) );
     m_pListView->setAllColumnsShowFocus( true );
-    grid->addMultiCellWidget( m_pListView, 5, 5, 0, 5 );
+    grid->addMultiCellWidget( m_pListView, 6, 6, 0, 5 );
 
     connect(m_pListView, SIGNAL(doubleClicked ( QListViewItem * )),
              SLOT(slotEditEntry()) );
@@ -579,10 +579,17 @@ void KoAutoFormatDia::setupTab3()
     connect( pbChangeFormat, SIGNAL(clicked()), SLOT(slotChangeTextFormatEntry()));
     grid->setRowStretch( 2, 1 );
 
+    pbClearFormat= new QPushButton( i18n( "Clear Format" ), tab3 );
+    grid->addWidget( pbClearFormat, 6, 6, Qt::AlignTop );
+
+    connect( pbClearFormat, SIGNAL(clicked()), SLOT(slotClearTextFormatEntry()));
+    grid->setRowStretch( 2, 1 );
+
+
     pbRemove->setEnabled(false);
     pbChangeFormat->setEnabled( false );
     pbAdd->setEnabled(false);
-
+    pbClearFormat->setEnabled( false);
     initTab3();
 }
 
@@ -657,6 +664,15 @@ void KoAutoFormatDia::initTab4()
     twoUpperLetter->setListException( changeLanguage ? m_autoFormat.listException():m_docAutoFormat->listTwoUpperLetterException() );
 }
 
+void KoAutoFormatDia::slotClearTextFormatEntry()
+{
+    if ( m_pListView->currentItem() )
+    {
+        KoAutoFormatEntry *entry = m_autoFormat.findFormatEntry(m_pListView->currentItem()->text(0));
+        entry->clearFormatEntryContext( );
+    }
+}
+
 void KoAutoFormatDia::slotChangeTextFormatEntry()
 {
     if ( m_pListView->currentItem() )
@@ -723,6 +739,7 @@ void KoAutoFormatDia::slotfind2( const QString & )
     KoAutoFormatEntry * entry=m_autoFormat.findFormatEntry(m_find->text());
     pbRemove->setEnabled(state && entry);
     pbChangeFormat->setEnabled(state && entry);
+    pbClearFormat->setEnabled(state && entry);
     pbAdd->setEnabled(state);
 }
 
@@ -740,6 +757,8 @@ void KoAutoFormatDia::refreshEntryList()
     //we can delete item, as we search now in listbox and not in m_find lineedit
     pbRemove->setEnabled(m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
     pbChangeFormat->setEnabled(m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
+    pbClearFormat->setEnabled(m_pListView->currentItem() && m_pListView->selectedItem()!=0 );
+
     pbAdd->setEnabled(state);
 }
 
@@ -822,6 +841,7 @@ void KoAutoFormatDia::slotEditEntry()
     bool state = !m_replace->text().isEmpty() && !m_find->text().isEmpty();
     pbRemove->setEnabled(state);
     pbChangeFormat->setEnabled( state );
+    pbClearFormat->setEnabled(state);
     pbAdd->setEnabled(state);
 }
 

@@ -75,6 +75,13 @@ void KoAutoFormatEntry::setFormatEntryContext( KoSearchContext *_cont )
     m_formatOptions=_cont;
 }
 
+void KoAutoFormatEntry::clearFormatEntryContext( )
+{
+    delete m_formatOptions;
+    m_formatOptions = 0L;
+}
+
+
 /******************************************************************/
 /* Class: KoAutoFormat						  */
 /******************************************************************/

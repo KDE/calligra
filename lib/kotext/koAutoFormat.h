@@ -54,6 +54,8 @@ public:
     KoSearchContext *formatEntryContext()const;
     void createNewEntryContext();
     void setFormatEntryContext( KoSearchContext * );
+    void clearFormatEntryContext( );
+
 protected:
     QString m_replace;
     // For formatting in the replacement - not implemented yet

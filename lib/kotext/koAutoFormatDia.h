@@ -118,7 +118,7 @@ protected:
                 *pbSpecialChar1, *pbSpecialChar2, *pbBulletStyle, *pbDefaultBulletStyle;
 
     QPushButton *pbSimpleQuote1, *pbSimpleQuote2, *pbSimpleDefault;
-    QPushButton *pbChangeFormat;
+    QPushButton *pbChangeFormat, *pbClearFormat;
     KCharSelect *charselect;
     KoAutoFormatLineEdit *m_find, *m_replace;
     KListView *m_pListView;
@@ -161,7 +161,7 @@ protected slots:
     void slotChangeTextFormatEntry();
     void slotResetConf();
     void changeAutoformatLanguage(const QString & );
-
+    void slotClearTextFormatEntry();
 };
 
 class KoCompletionDia : public KDialogBase
