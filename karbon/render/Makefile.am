@@ -1,4 +1,4 @@
-INCLUDES = \
+INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/.. \
 	-I$(srcdir)/../../lib/kopainter/support \
 	-I$(srcdir)/../../../kdenonbeta/ksvg/impl/libs/xrgbrender \
