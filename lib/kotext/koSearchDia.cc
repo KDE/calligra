@@ -31,7 +31,8 @@
 #include <kotextview.h>
 #include <kfontcombo.h>
 #include <kseparator.h>
-
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 KoSearchContext::KoSearchContext()
 {
     m_family = "times";
@@ -633,12 +634,36 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_bgColorItem->setColor( m_ctx->m_backGroungColor);
 
 
-    m_boldItem = new QCheckBox( i18n( "Bold" ), page );
-    m_italicItem = new QCheckBox( i18n( "Italic" ), page );
-    m_underlineItem = new QCheckBox( i18n( "Underline" ),page  );
-    m_strikeOutItem = new QCheckBox( i18n( "Strikeout" ),page  );
-    m_doubleLineItem = new QCheckBox( i18n( "Double underline" ),page  );
 
+    QButtonGroup *grpBold = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    grpBold->setRadioButtonExclusive( TRUE );
+    grpBold->layout();
+    m_boldYes=new QRadioButton( i18n("Yes"), grpBold );
+    m_boldNo=new QRadioButton( i18n("No"), grpBold );
+
+    QButtonGroup *grpItalic = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    grpItalic->setRadioButtonExclusive( TRUE );
+    grpItalic->layout();
+    m_italicYes=new QRadioButton( i18n("Yes"), grpItalic );
+    m_italicNo=new QRadioButton( i18n("No"), grpItalic );
+
+    QButtonGroup *grpUnderline = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    grpUnderline->setRadioButtonExclusive( TRUE );
+    grpUnderline->layout();
+    m_underlineYes=new QRadioButton( i18n("Yes"), grpUnderline );
+    m_underlineNo=new QRadioButton( i18n("No"), grpUnderline );
+
+    QButtonGroup *grpStrikeOut = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    grpStrikeOut->setRadioButtonExclusive( TRUE );
+    grpStrikeOut->layout();
+    m_strikeOutYes=new QRadioButton( i18n("Yes"), grpStrikeOut );
+    m_strikeOutNo=new QRadioButton( i18n("No"), grpStrikeOut );
+
+    QButtonGroup *grpDoubleLine = new QButtonGroup( 1, QGroupBox::Vertical, page );
+    grpDoubleLine->setRadioButtonExclusive( TRUE );
+    grpDoubleLine->layout();
+    m_doubleLineYes=new QRadioButton( i18n("Yes"), grpDoubleLine );
+    m_doubleLineNo=new QRadioButton( i18n("No"), grpDoubleLine );
 
     m_vertAlignItem = new QComboBox( false, page );
     m_vertAlignItem->insertItem( i18n( "Normal" ), -1 );
@@ -661,11 +686,11 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     m_grid->addWidget( m_sizeItem, 2, 1 );
     m_grid->addWidget( m_colorItem, 3, 1 );
     m_grid->addWidget( m_bgColorItem, 4, 1);
-    m_grid->addWidget( m_boldItem, 5, 1 );
-    m_grid->addWidget( m_italicItem, 6, 1 );
-    m_grid->addWidget( m_underlineItem, 7, 1 );
-    m_grid->addWidget( m_strikeOutItem, 8, 1 );
-    m_grid->addWidget( m_doubleLineItem, 9, 1 );
+    m_grid->addWidget( grpBold, 5, 1 );
+    m_grid->addWidget( grpItalic, 6, 1 );
+    m_grid->addWidget( grpUnderline, 7, 1 );
+    m_grid->addWidget( grpStrikeOut, 8, 1 );
+    m_grid->addWidget( grpDoubleLine, 9, 1 );
     m_grid->addWidget( m_vertAlignItem, 10, 1 );
 
     KSeparator *tmpSep = new KSeparator( page );
@@ -676,11 +701,19 @@ KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* 
     QObject::connect( m_checkSize, SIGNAL( toggled( bool ) ), m_sizeItem, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkColor, SIGNAL( toggled( bool ) ), m_colorItem, SLOT( setEnabled( bool ) ) );
     QObject::connect( m_checkBgColor, SIGNAL( toggled( bool ) ), m_bgColorItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkUnderline, SIGNAL( toggled( bool ) ), m_underlineItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutItem, SLOT( setEnabled( bool ) ) );
-    QObject::connect( m_checkDoubleLine, SIGNAL( toggled( bool ) ), m_doubleLineItem, SLOT( setEnabled( bool ) ) );
+
+    QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldYes, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicYes, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkUnderline, SIGNAL( toggled( bool ) ), m_underlineYes, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutYes, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkDoubleLine, SIGNAL( toggled( bool ) ), m_doubleLineYes, SLOT( setEnabled( bool ) ) );
+
+    QObject::connect( m_checkBold, SIGNAL( toggled( bool ) ), m_boldNo, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkItalic, SIGNAL( toggled( bool ) ), m_italicNo, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkUnderline, SIGNAL( toggled( bool ) ), m_underlineNo, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkStrikeOut, SIGNAL( toggled( bool ) ), m_strikeOutNo, SLOT( setEnabled( bool ) ) );
+    QObject::connect( m_checkDoubleLine, SIGNAL( toggled( bool ) ), m_doubleLineNo, SLOT( setEnabled( bool ) ) );
+
 
     QObject::connect( m_checkVertAlign, SIGNAL( toggled( bool ) ), m_vertAlignItem, SLOT( setEnabled( bool ) ) );
     slotReset();
@@ -702,30 +735,50 @@ void KoFormatDia::slotReset()
 
 
     m_checkBold->setChecked( m_ctx->m_optionsMask & KoSearchContext::Bold );
-    m_boldItem->setEnabled(m_checkBold->isChecked());
+    m_boldYes->setEnabled(m_checkBold->isChecked());
+    m_boldNo->setEnabled(m_checkBold->isChecked());
 
     m_checkStrikeOut->setChecked( m_ctx->m_optionsMask & KoSearchContext::StrikeOut );
-
-    m_strikeOutItem->setEnabled( m_checkStrikeOut->isChecked());
+    m_strikeOutYes->setEnabled( m_checkStrikeOut->isChecked());
+    m_strikeOutNo->setEnabled( m_checkStrikeOut->isChecked());
 
     m_checkDoubleLine->setChecked( m_ctx->m_optionsMask & KoSearchContext::DoubleUnderLine );
-    m_doubleLineItem->setEnabled( m_checkDoubleLine->isChecked());
+    m_doubleLineNo->setEnabled( m_checkDoubleLine->isChecked());
+    m_doubleLineYes->setEnabled( m_checkDoubleLine->isChecked());
 
     m_checkItalic->setChecked( m_ctx->m_optionsMask & KoSearchContext::Italic );
-    m_italicItem->setEnabled(m_checkItalic->isChecked());
+    m_italicNo->setEnabled(m_checkItalic->isChecked());
+    m_italicYes->setEnabled(m_checkItalic->isChecked());
 
     m_checkUnderline->setChecked( m_ctx->m_optionsMask & KoSearchContext::Underline );
-    m_underlineItem->setEnabled(m_checkUnderline->isChecked());
+    m_underlineNo->setEnabled(m_checkUnderline->isChecked());
+    m_underlineYes->setEnabled(m_checkUnderline->isChecked());
 
     m_checkVertAlign->setChecked( m_ctx->m_optionsMask & KoSearchContext::VertAlign );
     m_vertAlignItem->setEnabled(m_checkVertAlign->isChecked());
 
-    m_boldItem->setChecked( m_ctx->m_options & KoSearchContext::Bold );
-    m_italicItem->setChecked( m_ctx->m_options & KoSearchContext::Italic );
-    m_underlineItem->setChecked( m_ctx->m_options & KoSearchContext::Underline );
-    m_strikeOutItem->setChecked( m_ctx->m_options & KoSearchContext::StrikeOut);
-    m_doubleLineItem->setChecked( m_ctx->m_options & KoSearchContext::DoubleUnderLine);
+    if (m_ctx->m_options & KoSearchContext::Bold)
+        m_boldYes->setChecked( true );
+    else
+        m_boldNo->setChecked( true );
 
+    if (m_ctx->m_options & KoSearchContext::Italic)
+        m_italicYes->setChecked( true );
+    else
+        m_italicNo->setChecked( true );
+
+    if (m_ctx->m_options & KoSearchContext::Underline )
+        m_underlineYes->setChecked( true );
+    else
+        m_underlineNo->setChecked( true );
+    if (m_ctx->m_options & KoSearchContext::StrikeOut )
+        m_strikeOutYes->setChecked( true);
+    else
+        m_strikeOutNo->setChecked( true );
+    if (m_ctx->m_options & KoSearchContext::DoubleUnderLine)
+        m_doubleLineYes->setChecked( true);
+    else
+        m_doubleLineNo->setChecked( true);
 }
 
 void KoFormatDia::ctxOptions( )
@@ -754,15 +807,15 @@ void KoFormatDia::ctxOptions( )
         optionsMask |= KoSearchContext::DoubleUnderLine;
 
 
-    if ( m_boldItem->isChecked() )
+    if ( m_boldYes->isChecked() )
         options |= KoSearchContext::Bold;
-    if ( m_italicItem->isChecked() )
+    if ( m_italicYes->isChecked() )
         options |= KoSearchContext::Italic;
-    if ( m_underlineItem->isChecked() )
+    if ( m_underlineYes->isChecked() )
         options |= KoSearchContext::Underline;
-    if ( m_strikeOutItem->isChecked() )
+    if ( m_strikeOutYes->isChecked() )
         options |= KoSearchContext::StrikeOut;
-    if ( m_doubleLineItem->isChecked() )
+    if ( m_doubleLineYes->isChecked() )
         options |= KoSearchContext::DoubleUnderLine;
 
 

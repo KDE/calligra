@@ -30,6 +30,7 @@
 #include <qrichtext_p.h>
 
 class QPushButton;
+class QRadioButton;
 class QGridLayout;
 class QCheckBox;
 class QComboBox;
@@ -264,11 +265,16 @@ private:
     QSpinBox *m_sizeItem;
     KColorButton *m_colorItem;
     KColorButton *m_bgColorItem;
-    QCheckBox *m_boldItem;
-    QCheckBox *m_italicItem;
-    QCheckBox *m_underlineItem;
-    QCheckBox *m_strikeOutItem;
-    QCheckBox *m_doubleLineItem;
+    QRadioButton *m_boldYes;
+    QRadioButton *m_boldNo;
+    QRadioButton *m_italicYes;
+    QRadioButton *m_italicNo;
+    QRadioButton *m_underlineYes;
+    QRadioButton *m_underlineNo;
+    QRadioButton *m_strikeOutYes;
+    QRadioButton *m_strikeOutNo;
+    QRadioButton *m_doubleLineYes;
+    QRadioButton *m_doubleLineNo;
 
     QComboBox *m_vertAlignItem;
     KoSearchContext *m_ctx;
