@@ -1,12 +1,12 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="16">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="17">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
   <Action name="createTemplate"/>
  </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="undo"/>
-  <Action name="redo"/>
+  <Action name="koffice_undo"/>
+  <Action name="koffice_redo"/>
   <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
@@ -161,8 +161,8 @@
  <Action name="menu_sum"/>
 </Menu>
 <ToolBar fullWidth="true" name="editAndColumnAndSortAndPartToolBar"><text>Edit</text>
- <Action name="undo"/>
- <Action name="redo"/>
+ <Action name="koffice_undo"/>
+ <Action name="koffice_redo"/>
  <Separator/>
  <Action name="cut"/>
  <Action name="copy"/>
