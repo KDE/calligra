@@ -337,7 +337,7 @@ QDateTime KSpreadValue::asDateTime() const
   QDateTime dt = QDate( 1899, 12, 31 );
 
   double f = asFloat();
-  dt = dt.addSecs( (f-(int)f) * 86400 );
+  dt = dt.addSecs( qRound( (f-(int)f) * 86400 ) );
   if( f > 1.0 ) dt = dt.addDays( (int) f-1 );
   
   return dt;
@@ -360,7 +360,7 @@ QTime KSpreadValue::asTime() const
   QTime dt;
   
   double f = asFloat();
-  dt = dt.addSecs( (f-(int)f) * 86400 );
+  dt = dt.addSecs( qRound( (f-(int)f) * 86400 ) );
   
   return dt;
 }
