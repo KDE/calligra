@@ -764,6 +764,8 @@ private:
 
     void saveOasisSettings( KoXmlWriter &settingsWriter );
     void loadOasisSettings( const QDomDocument&settingsDoc );
+    void saveOasisIgnoreList( KoXmlWriter &settingsWriter );
+    void loadOasisIgnoreList( const QDomDocument&settingsDoc );
 
     KSPLoadingInfo *m_loadingInfo;
 };

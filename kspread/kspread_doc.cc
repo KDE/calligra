@@ -718,6 +718,13 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     settingsWriter.endElement(); //config:config-item-map-indexed
     settingsWriter.endElement(); // config:config-item-set
+
+    settingsWriter.startElement("config:config-item-set");
+    settingsWriter.addAttribute("config:name", "configuration-settings");
+    saveOasisIgnoreList( settingsWriter );
+    settingsWriter.endElement(); // config:config-item-set
+
+
     settingsWriter.endElement(); // office:settings
     settingsWriter.endElement(); // Root element
     settingsWriter.endDocument();
@@ -734,8 +741,6 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 void KSpreadDoc::loadOasisSettings( const QDomDocument&settingsDoc )
 {
-    if ( settingsDoc.isNull() )
-        return ; //not a error some file doesn't have settings.xml
     KoOasisSettings settings( settingsDoc );
     bool tmp = settings.selectItemSet( "view-settings" );
     //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
@@ -753,6 +758,30 @@ void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
     d->workbook->saveOasisSettings( settingsWriter );
 }
+
+
+void KSpreadDoc::saveOasisIgnoreList( KoXmlWriter &settingsWriter )
+{
+    settingsWriter.startElement("config:config-item-map-entry" );
+    settingsWriter.addConfigItem("SpellCheckerIgnoreList", d->spellListIgnoreAll.join( "," ) );
+    settingsWriter.endElement();
+}
+
+void KSpreadDoc::loadOasisIgnoreList( const QDomDocument&settingsDoc )
+{
+    KoOasisSettings settings( settingsDoc );
+    bool tmp = settings.selectItemSet( "configuration-settings" );
+    kdDebug()<<" settings : configuration-settings :"<<tmp<<endl;
+
+    if ( tmp )
+    {
+        QString ignorelist = settings.parseConfigItemString( "SpellCheckerIgnoreList" );
+        kdDebug()<<" ignorelist :"<<ignorelist<<endl;
+
+        d->spellListIgnoreAll = QStringList::split( ',', ignorelist );
+    }
+}
+
 
 void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
 {
@@ -852,8 +881,12 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         return false;
     }
 
-    loadOasisSettings( settings );
 
+    if ( !settings.isNull() )
+    {
+        loadOasisSettings( settings );
+        loadOasisIgnoreList( settings );
+    }
     emit sigProgress( 90 );
     initConfig();
     emit sigProgress(-1);
