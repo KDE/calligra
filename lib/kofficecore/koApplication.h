@@ -46,8 +46,9 @@ public:
      *  @param argc     Number of arguments on the command line.
      *  @param argv     Array of arguments on the comment line.
      *  @param rappName Name of the app.
+     *  @param rNativeMimeType Name of the native mimetype, to load from command line
      */
-    KoApplication( int &argc, char **argv, const QCString& rAppName );
+    KoApplication( int &argc, char **argv, const QCString& rAppName, const QCString& rNativeMimeType );
 
     /**
      *  Destructor.
@@ -55,9 +56,16 @@ public:
     virtual ~KoApplication();
 
     /**
+     *  Call this to start the application
+     *  Parses command line arguments and creates the initial shells and docs
+     *  from them (or an empty doc if no cmd-line argument
+     */
+    virtual void start();
+
+    /**
      *  Shows a KOffice specific about dialog for this app.
      */
-    void aboutKDE() { aboutKDE(); }
+    void aboutKDE() { /*aboutKDE();*/ }
 
 protected:
 
@@ -65,6 +73,10 @@ protected:
      *  Saves all arguments given on the command line.
      */
     KStartParams m_params;
+    /**
+     *  Native mimetype
+     */
+    QCString m_nativeMimeType;
 };
 
 #endif

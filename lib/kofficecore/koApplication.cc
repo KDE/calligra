@@ -18,32 +18,58 @@
 */
 
 #include "koApplication.h"
-
+#include "koQueryTypes.h"
+#include "koDocument.h"
+#include "shell.h"
 #include <klocale.h>
 #include <kimgio.h>
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <qstringlist.h>
 
-KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName)
+KoApplication::KoApplication(int &argc, char **argv, const QCString& rAppName, const QCString& rNativeMimeType)
     : KApplication(argc, argv, rAppName)
     , m_params( argc, argv )
+    , m_nativeMimeType( rNativeMimeType )
 {
     KGlobal::locale()->insertCatalogue("koffice");
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/toolbar/");
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "/koffice/pics/");
 
     kimgioRegister();
+}
 
-    // checking whether the app is started as a server
-    // ###### Torben: Is that needed ?
-    /*
-    QStringList::Iterator it;
-    if( m_params.find( "--server", "-s", true, it ) )
-    {
-	m_bWithGUI = false;
-	m_params.del( it );
-    } */
+void KoApplication::start()
+{
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType( m_nativeMimeType );
+        
+    ASSERT( !entry.isEmpty() );
+        
+    QStringList open;
+    // Parse command line parameters
+    for( uint i = 0; i < m_params.count(); i++ )
+        if( m_params.get( i ).left( 1 ) != "-" )
+            open.append( m_params.get( i ) ); 
+        
+    if ( open.isEmpty() ) {
+        KoDocument* doc = entry.createDoc( 0, "Document" );
+        doc->initDoc();
+            
+        Shell* shell = doc->createShell();
+        shell->show();
+        // setMainWidget( shell ); // probably bad idea, says Torben...
+    } else {
+        QStringList::Iterator it = open.begin();
+        for( ; it != open.end(); ++it )
+        {
+            KoDocument* doc = entry.createDoc( 0 );
+            doc->loadFromURL( *it );
+                
+            Shell* shell = doc->createShell();
+            shell->show();
+            //setMainWidget( shell );
+        }
+    } 
 }
 
 KoApplication::~KoApplication()
