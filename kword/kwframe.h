@@ -182,6 +182,9 @@ public:
     QBrush backgroundColor() const { return m_backgroundColor; }
     void setBackgroundColor( QBrush _color ) { m_backgroundColor = _color; }
 
+    KoRect innerRect() const;
+
+
     // The "internal Y" is the offset (in pt) of the real frame showed in this one
     // ("real" means "the last that isn't a copy")
     // This offset in pt is the sum of the height of the frames before that one.

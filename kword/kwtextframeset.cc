@@ -450,9 +450,9 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
         // This is drawing code, so we convert everything to pixels
         //int docHeight = m_doc->layoutUnitToPixelY( textDocument()->height() );
         int docHeight = textDocument()->lastParag()->pixelRect(m_doc).bottom() + 1;
-        QRect frameRect = m_doc->zoomRect( *theFrame );
+        QRect frameRect = m_doc->zoomRect( (theFrame->innerRect()) );
 
-        int totalHeight = m_doc->zoomItY( frames.last()->internalY() + frames.last()->height() );
+        int totalHeight = m_doc->zoomItY( frames.last()->internalY() + frames.last()->innerRect().height() );
 
         QRect blank( 0, docHeight, frameRect.width(), totalHeight + frameRect.height() - docHeight );
         //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
@@ -471,7 +471,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
     m_currentViewMode = viewMode;
     m_currentDrawnFrame = theFrame;
 
-    QRect normalFrameRect( m_doc->zoomRect( *theFrame ) );
+    QRect normalFrameRect( m_doc->zoomRect( theFrame->innerRect() ) );
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
     int lineY;
     // Cursor height, in pixels
@@ -485,7 +485,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
               << "   cursorHeight=" << cursorHeight << endl;
 #endif
     KoPoint dPoint;
-    KoPoint hintDPoint = theFrame->topLeft();
+    KoPoint hintDPoint = theFrame->innerRect().topLeft();
     if ( internalToDocumentWithHint( iPoint, dPoint, hintDPoint ) )
     {
 #ifdef DEBUG_CURSOR
@@ -535,7 +535,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
             int translationX = viewFrameRect.left();
             int translationY = viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() );
 #ifdef DEBUG_CURSOR
-            kdDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItY( theFrame->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItY( theFrame->internalY() ) << endl;
+            kdDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItY( theFrame->innerRect()->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItY( theFrame->innerRect()->internalY() ) << endl;
 #endif
             p->translate( translationX, translationY );
             p->setBrushOrigin( p->brushOrigin().x() + translationX, p->brushOrigin().y() + translationY );

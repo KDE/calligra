@@ -447,12 +447,31 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
     btop = frameElem.attribute( "btoppt" ).toDouble();
     bbottom = frameElem.attribute( "bbottompt" ).toDouble();
     m_bCopy = KWDocument::getAttribute( frameElem, "copy", headerOrFooter /* default to true for h/f */ );
+    //for test
+#if 0
+    bleft = 100.0;
+    bright = 100.0;
+    btop = 100.0;
+    bbottom = 100.0;
+#endif
 }
 
 
 bool KWFrame::frameAtPos( const QPoint& point, bool borderOfFrameOnly) {
     // Forwarded to KWFrameSet to make it virtual
     return frameSet()->isFrameAtPos( this, point, borderOfFrameOnly );
+}
+
+KoRect KWFrame::innerRect() const
+{
+    //kdDebug()<<" this->normalize() :"<<DEBUGRECT(this->normalize())<<endl;
+    KoRect inner( this->normalize());
+    inner.setX( inner.x() + bLeft() );
+    inner.setY( inner.y() + bTop() );
+    inner.setWidth( inner.width() - bLeft() - bRight() );
+    inner.setHeight( inner.height() - bTop() - bBottom() );
+    //kdDebug()<<" DEBUGRECT inner :"<<DEBUGRECT(inner)<<endl;
+    return inner;
 }
 
 /******************************************************************/
