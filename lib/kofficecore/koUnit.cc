@@ -211,8 +211,3 @@ void KoUnit::saveOasis(KoXmlWriter* settingsWriter, Unit _unit)
 {
     settingsWriter->addConfigItem( "unit", unitName(_unit) );
 }
-
-KoUnit::Unit KoUnit::loadOasis(const QDomElement& e)
-{
-    return unit(e.text());
-}
