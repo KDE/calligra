@@ -681,10 +681,8 @@ QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
         objects=m_pageList.at(i)->saveObjects( doc, objects, yoffset, m_zoomHandler, saveOnlyPage );
 
     }
-    yoffset=m_stickyPage->getPageRect().height();
-    //save sticky object
-    //todo FIXME saveOnlyPage !!!!!!!!!!!!
-    objects=m_stickyPage->saveObjects( doc, objects, yoffset, m_zoomHandler, saveOnlyPage );
+    //offset = 0.0 when it's a sticky page.
+    objects=m_stickyPage->saveObjects( doc, objects, /*yoffset*/0.0, m_zoomHandler, saveOnlyPage );
 
     return objects;
 }
