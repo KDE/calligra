@@ -33,8 +33,16 @@ KWTextDrag::KWTextDrag( QWidget *dragSource, const char *name )
 
 QByteArray KWTextDrag::encodedData( const char *mime ) const
 {
-    if ( strcmp( selectionMimeType(), mime ) == 0 )
+    if ( strcmp( selectionMimeType(), mime ) == 0)
         return kword;
+    else if( strcmp( "application/x-kword-framesetnumber", mime ) == 0)
+    {
+        QByteArray a;
+        QCString s (  QString::number(m_framesetNumber).local8Bit() );
+	a.resize( s.length() + 1 ); // trailing zero
+	memcpy( a.data(), s.data(), s.length() + 1 );
+        return a;
+    }
     else
         return QTextDrag::encodedData(mime);
 }
@@ -52,12 +60,28 @@ const char* KWTextDrag::format( int i ) const
         return QTextDrag::format(i);
     else if ( i == 4 )
         return selectionMimeType();
+    else if ( i == 5 )
+        return "application/x-kword-framesetnumber";
     else return 0;
 }
 
 const char * KWTextDrag::selectionMimeType()
 {
     return "application/x-kword-textselection";
+}
+
+void KWTextDrag::setFrameSetNumber( int number )
+{
+    m_framesetNumber = number;
+}
+
+int KWTextDrag::decodeFrameSetNumber( QMimeSource *e )
+{
+    QByteArray a =  e->encodedData("application/x-kword-framesetnumber");
+    if(!a.isEmpty())
+        return QCString(a).toInt();
+    else
+        return -1;
 }
 
 /******************************************************************/

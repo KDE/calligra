@@ -2347,10 +2347,10 @@ KWTextFrameSetEdit::~KWTextFrameSetEdit()
     m_canvas->gui()->getHorzRuler()->changeFlags(0);
 }
 
-void KWTextFrameSetEdit::terminate()
+void KWTextFrameSetEdit::terminate(bool removeSelection)
 {
     disconnect( textView()->textObject(), SIGNAL( selectionChanged(bool) ), m_canvas, SIGNAL( selectionChanged(bool) ) );
-    textView()->terminate();
+    textView()->terminate(removeSelection);
 }
 
 void KWTextFrameSetEdit::slotFrameDeleted( KWFrame *frm )
@@ -2452,6 +2452,7 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 
     KWTextDrag *kd = new KWTextDrag( parent );
     kd->setPlain( text );
+    kd->setFrameSetNumber( textFrameSet()->kWordDocument()->frameSetNum(textFrameSet()) );
     kd->setKWord( domDoc.toCString() );
     kdDebug(32001) << "KWTextFrameSetEdit::newDrag " << domDoc.toCString() << endl;
     return kd;
@@ -2587,8 +2588,13 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
         if ( ( e->source() == m_canvas ||
                e->source() == m_canvas->viewport() ) &&
              e->action() == QDropEvent::Move ) {
-
-            if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+            int numberFrameSet=-1;
+            numberFrameSet=KWTextDrag::decodeFrameSetNumber( e );
+            //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;;
+            KWFrameSet *frameset= frameSet()->kWordDocument()->frameSet( numberFrameSet );
+            KWTextFrameSet *tmp=dynamic_cast<KWTextFrameSet*>(frameset);
+            tmp=tmp ? tmp:textFrameSet();
+            if ( tmp && tmp->textDocument()->hasSelection( QTextDocument::Standard ) )
             {
                 // Dropping into the selection itself ?
                 QTextCursor startSel = textDocument()->selectionStartCursor( QTextDocument::Standard );
@@ -2619,8 +2625,8 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                 if ( inSelection )
                 {
                     delete macroCmd;
-                    textDocument()->removeSelection( QTextDocument::Standard );
-                    textObject()->selectionChangedNotify();
+                    tmp->textDocument()->removeSelection( QTextDocument::Standard );
+                    tmp->textObject()->selectionChangedNotify();
                     hideCursor();
                     *cursor() = dropCursor;
                     showCursor();
@@ -2646,8 +2652,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                     }
                     kdDebug(32001) << "dropCursor: parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
                 }
-
-                macroCmd->addCommand(textObject()->removeSelectedTextCommand( cursor(), QTextDocument::Standard ));
+                macroCmd->addCommand(tmp->textObject()->removeSelectedTextCommand( cursor(), QTextDocument::Standard ));
             }
             hideCursor();
             *cursor() = dropCursor;

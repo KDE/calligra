@@ -246,7 +246,7 @@ public:
 
     virtual KWFrameSetEdit* currentTextEdit(){return this;}
 
-    virtual void terminate();
+    virtual void terminate(bool removeselection=true);
 
     KWTextFrameSet * textFrameSet() const
     {

@@ -1700,7 +1700,8 @@ bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
         if(edit)
         {
             // Don't use terminateCurrentEdit here, we want to emit changed only once
-            m_currentFrameSetEdit->terminate();
+            //don't remove selection in dnd
+            m_currentFrameSetEdit->terminate(false);
             delete m_currentFrameSetEdit;
             m_currentFrameSetEdit = 0L;
             emitChanged = true;
@@ -1714,7 +1715,7 @@ bool KWCanvas::checkCurrentTextEdit( KWFrameSet * fs )
         if(fs->type()==FT_TABLE || fs->type()==FT_TEXT)
         {
             m_currentFrameSetEdit = fs->createFrameSetEdit( this );
-            kdDebug()<<"create m_currentFrameSetEdit :"<<m_currentFrameSetEdit<<endl;
+            //kdDebug()<<"create m_currentFrameSetEdit :"<<m_currentFrameSetEdit<<endl;
             emitChanged = true;
         }
     }
@@ -1845,10 +1846,10 @@ void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
         if ( fs )
         {
             KWTableFrameSet *table = fs->getGroupManager();
-            kdDebug()<<"table :"<<table<<endl;
+            //kdDebug()<<"table :"<<table<<endl;
             emitChanged = checkCurrentTextEdit( table ? table : fs );
         }
-        kdDebug()<<"m_currentFrameSetEdit :"<<m_currentFrameSetEdit<<endl;
+        //kdDebug()<<"m_currentFrameSetEdit :"<<m_currentFrameSetEdit<<endl;
         if ( m_currentFrameSetEdit )
         {
             m_currentFrameSetEdit->dragMoveEvent( e, normalPoint, docPoint );

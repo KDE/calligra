@@ -43,8 +43,14 @@ public:
     static bool canDecode( QMimeSource* e );
 
     static const char * selectionMimeType();
+
+    void setFrameSetNumber( int number );
+
+    static int decodeFrameSetNumber( QMimeSource *e );
+
 protected:
     QCString kword;
+    int m_framesetNumber;
 };
 
 /**

@@ -246,7 +246,7 @@ public:
     /**
      * Called before destruction, when terminating edition - use to e.g. hide cursor
      */
-    virtual void terminate() {}
+    virtual void terminate(bool removeselection=true) {}
 
     /**
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
