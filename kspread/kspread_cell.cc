@@ -6060,6 +6060,5 @@ bool KSpreadCell::testFlag( CellFlags flag ) const
 }
 
 
-#include "kspread_cell.moc"
 
 
