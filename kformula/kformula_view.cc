@@ -32,11 +32,11 @@
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
-#include <kformulawidget.h>
 
-#include "kformula_view.h"
-#include "kformula_factory.h"
 #include "kformula_doc.h"
+#include "kformula_factory.h"
+#include "kformula_view.h"
+#include "kformulawidget.h"
 #include "matrixwidget.h"
 
 
@@ -55,7 +55,7 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     formulaWidget->setReadOnly(true);
 
     //KFormulaContainer* formula = m_pDoc->getFormula();
-    KFormulaDocument* document = m_pDoc->getDocument();
+    KFormula::Document* document = m_pDoc->getDocument();
 
     // copy&paste
     cutAction   = KStdAction::cut(document, SLOT(cut()), actionCollection());

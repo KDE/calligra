@@ -31,12 +31,9 @@
 KFORMULA_NAMESPACE_BEGIN
 
 class FormulaCursor;
-class FormulaElement;
-class KFormulaContainer;
+class Container;
 
 KFORMULA_NAMESPACE_END
-
-using namespace KFormula;
 
 
 /**
@@ -47,7 +44,7 @@ class KFormulaWidget : public QWidget {
     Q_OBJECT
 
 public:
-    KFormulaWidget(KFormulaContainer*, QWidget* parent=0, const char* name=0, WFlags f=0);
+    KFormulaWidget(KFormula::Container*, QWidget* parent=0, const char* name=0, WFlags f=0);
     ~KFormulaWidget();
 
 
@@ -97,19 +94,19 @@ protected:
     /**
      * The document we show.
      */
-    KFormulaContainer* getDocument();
+    KFormula::Container* getDocument();
 
     /**
      * Our cursor.
      */
-    FormulaCursor* getCursor();
+    KFormula::FormulaCursor* getCursor();
 
 private:
 
     /**
      * This widget is a wrapper around the actual view.
      */
-    KFormulaView formulaView;
+    KFormula::View formulaView;
 };
 
 #endif // KFORMULAWIDGET_H

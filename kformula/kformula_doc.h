@@ -27,7 +27,7 @@
 #include <kcommand.h>
 #include <koDocument.h>
 
-#include <formuladefs.h>
+#include <kformuladefs.h>
 
 #include "formuladef.h"
 #include "kformula_view.h"
@@ -36,8 +36,8 @@
 KFORMULA_NAMESPACE_BEGIN
 
 class FormulaCursor;
-class KFormulaContainer;
-class KFormulaDocument;
+class Container;
+class Document;
 
 KFORMULA_NAMESPACE_END
 
@@ -65,8 +65,8 @@ public:
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
     virtual QDomDocument saveXML();
 
-    KFormula::KFormulaContainer* getFormula() const { return formula; }
-    KFormula::KFormulaDocument* getDocument() const { return document; }
+    KFormula::Container* getFormula() const { return formula; }
+    KFormula::Document* getDocument() const { return document; }
 
 protected slots:
 
@@ -88,13 +88,13 @@ private:
     /**
      * The place where all formula related work is done.
      */
-    KFormula::KFormulaContainer* formula;
+    KFormula::Container* formula;
 
     /**
      * The document that contains all the formulas.
      * Right now we only have one, but this might change.
      */
-    KFormula::KFormulaDocument* document;
+    KFormula::Document* document;
 };
 
 #endif
