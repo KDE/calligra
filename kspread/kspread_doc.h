@@ -286,6 +286,11 @@ public:
   bool getShowColHeader() { return  m_bShowColHeader;}
   bool getShowRowHeader() {  return  m_bShowRowHeader;}
 
+  /**
+  * value of indent
+  */
+  int getIndentValue() {return m_iIndentValue;}
+  void setIndentValue(int _val) {m_iIndentValue=_val;}
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -515,6 +520,7 @@ protected:
   bool m_bShowColHeader;
   bool m_bShowRowHeader;
 
+  int m_iIndentValue;
 };
 
 #endif

@@ -122,6 +122,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_bHorizontalScrollBarShow=true;
   m_bShowColHeader=true;
   m_bShowRowHeader=true;
+  m_iIndentValue=10;
 }
 
 bool KSpreadDoc::initDoc()

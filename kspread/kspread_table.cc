@@ -4599,7 +4599,7 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
                 }
         }
     }
-
+    int valIndent=doc()->getIndentValue();
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
         QString title=i18n("Increase indent");
@@ -4627,7 +4627,7 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
       for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
         {
         RowLayout *rw=nonDefaultRowLayout(i);
-        rw->setIndent( tmpIndent+10);
+        rw->setIndent( tmpIndent+valIndent);
         }
 
       emit sig_updateView( this );
@@ -4654,7 +4654,7 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
       for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
         ColumnLayout *cl=nonDefaultColumnLayout(i);
-        cl->setIndent( tmpIndent+10);
+        cl->setIndent( tmpIndent+valIndent);
         }
 
         RowLayout* rw =m_rows.first();
@@ -4670,7 +4670,7 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
                                 cell = new KSpreadCell( this, i,  rw->row() );
                                 m_cells.insert( cell, i,  rw->row() );
                                 }
-                        cell->setIndent( tmpIndent+10);
+                        cell->setIndent( tmpIndent+valIndent);
                         }
                 }
         }
@@ -4694,7 +4694,7 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
                 }
 
                 cell->setDisplayDirtyFlag();
-                cell->setIndent( cell->getIndent(x,y)+10);
+                cell->setIndent( cell->getIndent(x,y)+valIndent);
                 cell->clearDisplayDirtyFlag();
                 }
             }
@@ -4708,7 +4708,7 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
     m_pDoc->setModified( true );
 
     bool selected = ( m_rctSelection.left() != 0 );
-
+    int valIndent=doc()->getIndentValue();
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
@@ -4760,8 +4760,8 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
       for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
         {
         RowLayout *rw=nonDefaultRowLayout(i);
-        if((tmpIndent-10)>=0)
-                rw->setIndent( tmpIndent-10);
+        if((tmpIndent-valIndent)>=0)
+                rw->setIndent( tmpIndent-valIndent);
           else
                 rw->setIndent( 0);
         }
@@ -4789,8 +4789,8 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
       for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
         ColumnLayout *cl=nonDefaultColumnLayout(i);
-        if((tmpIndent-10)>=0)
-                cl->setIndent( tmpIndent-10);
+        if((tmpIndent-valIndent)>=0)
+                cl->setIndent( tmpIndent-valIndent);
           else
                 cl->setIndent( 0);
         }
@@ -4808,8 +4808,8 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
                                 cell = new KSpreadCell( this, i,  rw->row() );
                                 m_cells.insert( cell, i,  rw->row() );
                                 }
-                        if((tmpIndent-10)>=0)
-                                cell->setIndent( tmpIndent-10);
+                        if((tmpIndent-valIndent)>=0)
+                                cell->setIndent( tmpIndent-valIndent);
                         else
                                 cell->setIndent( 0);
                         }
@@ -4834,8 +4834,8 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
                         }
 
                 cell->setDisplayDirtyFlag();
-                if((cell->getIndent(x,y)-10)>=0)
-                        cell->setIndent( cell->getIndent(x,y)-10);
+                if((cell->getIndent(x,y)-valIndent)>=0)
+                        cell->setIndent( cell->getIndent(x,y)-valIndent);
                 else
                         cell->setIndent( 0);
                 cell->clearDisplayDirtyFlag();

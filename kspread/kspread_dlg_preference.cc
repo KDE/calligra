@@ -184,6 +184,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   lay1->setSpacing( 10 );
   config = KSpreadFactory::global()->config();
   int _page=1;
+  int _indent=10;
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
@@ -192,6 +193,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
         vertical=config->readBoolEntry("Vert ScrollBar",true);
         colHeader=config->readBoolEntry("Column Header",true);
         rowHeader=config->readBoolEntry("Row Header",true);
+        _indent=config->readNumEntry( "Indent" ,10) ;
         }
 
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
@@ -228,6 +230,13 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   typeCompletion->insertStringList(listType);
   typeCompletion->setCurrentItem(0);
   lay1->addWidget(typeCompletion);
+
+
+  valIndent=new KIntNumInput(_indent, tmpQGroupBox , 10);
+  valIndent->setRange(1, 100, 1);
+  valIndent->setLabel(i18n("Value of indent :"));
+  lay1->addWidget(valIndent);
+
   initComboBox();
   box->addWidget( tmpQGroupBox);
 
@@ -326,6 +335,9 @@ switch(typeCompletion->currentItem())
                 config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionMan);
                 break;
         }
+m_pView->doc()->setIndentValue( valIndent->value());
+config->writeEntry( "Indent", valIndent->value());
+
 m_pView->doc()->refreshInterface();
 }
 #include "kspread_dlg_preference.moc"

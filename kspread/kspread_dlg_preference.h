@@ -68,6 +68,7 @@ public:
 protected:
   KSpreadView* m_pView;
   KIntNumInput  *nbPage;
+  KIntNumInput  *valIndent;
   QCheckBox *showVScrollBar;
   QCheckBox *showHScrollBar;
   QCheckBox *showColHeader;
