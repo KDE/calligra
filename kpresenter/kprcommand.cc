@@ -65,15 +65,17 @@ ShadowCmd::ShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, 
     doc = _doc;
     newShadow = _newShadow;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 ShadowCmd::~ShadowCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
     oldShadow.setAutoDelete( true );
     oldShadow.clear();
 }
@@ -113,15 +115,17 @@ SetOptionsCmd::SetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs,
     orastX = _orastX;
     orastY = _orastY;
     doc = _doc;
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 SetOptionsCmd::~SetOptionsCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
 }
 
 /*====================== execute =================================*/
@@ -247,15 +251,17 @@ RotateCmd::RotateCmd( const QString &_name, QPtrList<RotateValues> &_oldRotate, 
     doc = _doc;
     newAngle = _newAngle;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 RotateCmd::~RotateCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
     oldRotate.setAutoDelete( true );
     oldRotate.clear();
 }
@@ -263,8 +269,9 @@ RotateCmd::~RotateCmd()
 /*====================== execute =================================*/
 void RotateCmd::execute()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->rotate( newAngle );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->rotate( newAngle );
 
     doc->repaint( false );
 }
@@ -273,7 +280,7 @@ void RotateCmd::execute()
 void RotateCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->rotate( oldRotate.at( i )->angle );
+        objects.at(i)->rotate( oldRotate.at( i )->angle );
 
     doc->repaint( false );
 }
@@ -363,15 +370,17 @@ DeleteCmd::DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects, KPrese
     objects.setAutoDelete( false );
     doc = _doc;
     m_page=_page;
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 DeleteCmd::~DeleteCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
 }
 
 /*======================== execute ===============================*/
@@ -415,15 +424,17 @@ EffectCmd::EffectCmd( const QString &_name, const QPtrList<KPObject> &_objs,
     : KNamedCommand( _name ), oldEffects( _oldEffects ),
       newEffect( _newEffect ), objs( _objs )
 {
-    for ( unsigned int i = 0; i < objs.count(); ++i )
-        objs.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objs );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
 }
 
 /*================================================================*/
 EffectCmd::~EffectCmd()
 {
-    for ( unsigned int i = 0; i < objs.count(); ++i )
-        objs.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objs );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
 }
 
 /*================================================================*/
@@ -483,8 +494,9 @@ GroupObjCmd::GroupObjCmd( const QString &_name,
     objects.setAutoDelete( false );
     doc = _doc;
     m_page=_page;
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->incCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
     grpObj = new KPGroupObject( objects );
     grpObj->incCmdRef();
 }
@@ -492,8 +504,9 @@ GroupObjCmd::GroupObjCmd( const QString &_name,
 /*==============================================================*/
 GroupObjCmd::~GroupObjCmd()
 {
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-	objects.at( i )->decCmdRef();
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
     grpObj->decCmdRef();
 }
 
@@ -501,16 +514,16 @@ GroupObjCmd::~GroupObjCmd()
 void GroupObjCmd::execute()
 {
     QRect r = doc->zoomHandler()->zoomRect(objects.first()->getBoundingRect(doc->zoomHandler() ));
-    KPObject *obj = 0;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	obj = objects.at( i );
-        obj->setOrigPointInGroup( obj->getOrig() );
-        obj->setOrigSizeInGroup( obj->getSize() );
-	obj->setSelected( false );
-        m_page->takeObject(obj);
-	obj->removeFromObjList();
-	r = r.unite( doc->zoomHandler()->zoomRect(obj->getBoundingRect( doc->zoomHandler())) );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->setOrigPointInGroup( it.current()->getOrig() );
+        it.current()->setOrigSizeInGroup( it.current()->getSize() );
+	it.current()->setSelected( false );
+        m_page->takeObject(it.current());
+	it.current()->removeFromObjList();
+	r = r.unite( doc->zoomHandler()->zoomRect(it.current()->getBoundingRect( doc->zoomHandler())) );
     }
 
     grpObj->setUpdateObjects( false );
@@ -530,13 +543,13 @@ void GroupObjCmd::execute()
 void GroupObjCmd::unexecute()
 {
     grpObj->setUpdateObjects( false );
-    KPObject *obj = 0;
 
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	obj = objects.at( i );
-	m_page->appendObject( obj );
-	obj->addToObjList();
-	obj->setSelected( true );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+	m_page->appendObject( it.current() );
+	it.current()->addToObjList();
+	it.current()->setSelected( true );
     }
 
     m_page->takeObject(grpObj);
