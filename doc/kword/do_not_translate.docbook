@@ -46,35 +46,38 @@ as of the date included in the note.</para>
 <row><entry></entry><entry>Using Multiple Views </entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry><entry>Undo/Redo </entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry><entry>Cut/Copy/Paste and the Clipboard </entry><entry>Checked (May 7, 2002)</entry></row>
-<row><entry></entry><entry>Finding and Replacing Text </entry><entry>Question pending (Placeholders)</entry></row>
+<row><entry></entry><entry>Finding and Replacing Text </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry><entry>Spell Checking </entry><entry>Checked (May 21, 2002)</entry></row>
+<row><entry></entry><entry>Thesaurus </entry><entry>Not Written</entry></row>
 <row><entry></entry><entry>Autocorrection </entry><entry>Checked (May 21, 2002)</entry></row>
+<row><entry></entry><entry>Autoformat</entry><entry>Not written.</entry></row>
+<row><entry></entry><entry>Autocompletion</entry><entry>Not written.</entry></row>
 <row><entry></entry></row>
 
 <row><entry>DG: Document Layout </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Formatting the Page </entry><entry>Checked (April 7, 2002)</entry></row>
-<row><entry></entry><entry>Working with Frames </entry><entry>Checked (April 7, 2002)</entry></row>
-<row><entry></entry><entry>Setting the Properties for a Frame/Formatting Frames </entry><entry>Needs Updates-Pending Questions.</entry></row>
-<row><entry></entry><entry>Formatting paragraph </entry><entry>Checked (April 20, 2002)</entry></row>
-<row><entry></entry><entry>Using Tab Stops </entry><entry>Checked (March 24, 2002)</entry></row>
-<row><entry></entry><entry>Formatting Characters </entry><entry>Checked (April 20, 2002)</entry></row>
-<row><entry></entry><entry>Styles </entry><entry>Checked (April 20, 2002)</entry></row>
-<row><entry></entry><entry>Columns </entry><entry>Checked (April 20, 2002)</entry></row>
-<row><entry></entry><entry>Lists </entry><entry>Checked (April 20, 2002)</entry></row>
-<row><entry></entry><entry>Tables </entry><entry>Checked (April 20, 2002)</entry></row>
-<row><entry></entry><entry>Headers/Footers </entry><entry>Checked (May 6, 2002)</entry></row>
-<row><entry></entry><entry>Creating Templates/Saving a document as a template </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Formatting the Page </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Working with Frames </entry><entry><para>Checked (May 26, 2002)</para><para>Ensure bring to front and put back frames works the way documented ;-></para></entry></row>
+<row><entry></entry><entry>Setting the Properties for a Frame/Formatting Frames </entry><entry><para>Checked (May 26, 2002)</para><para>Needs a new screenshot</para></entry></row>
+<row><entry></entry><entry>Formatting paragraph </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Using Tab Stops </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Formatting Characters </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Styles </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Columns </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Lists </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Tables </entry><entry><para>Checked (May 26, 2002)</para><para>Table protected cells.</para></entry></row>
+<row><entry></entry><entry>Headers/Footers </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Creating Templates/Saving a document as a template </entry><entry>Checked (May 26, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>DG: More than just text </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Introduction </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Documentation Information </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Graphics </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Table of Contents </entry><entry>Checked (March 19, 2002)</entry></row>
-<row><entry></entry><entry>Document Variables </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Personal expressions </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Document links </entry><entry>Stable-Not Written</entry></row>
-<!--<row><entry></entry><entry>Endnotes/Footnotes </entry><entry>Stable-Not Written</entry></row> -->
+<row><entry></entry><entry>Introduction </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Documentation Information </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Graphics </entry><entry><para>Checked (May 26, 2002)</para><para>Saving pictures to seperate files.</para></entry></row>
+<row><entry></entry><entry>Table of Contents </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Document Variables </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Personal expressions </entry><entry>Checked (May 26, 2002)</entry></row>
+<row><entry></entry><entry>Document links </entry><entry><para>Checked (May 26, 2002)</para><para>Open link, change link options.</para></entry></row>
+<row><entry></entry><entry>Endnotes/Footnotes </entry><entry>Stable-Not Written</entry></row>
 <row><entry></entry><entry>KOffice Data </entry><entry>Not Stable-Not Written-March 12</entry></row>
 <row><entry></entry><entry>Formulas </entry><entry>Unstable-Not Written</entry></row>
 <row><entry></entry></row>
@@ -95,19 +98,19 @@ as of the date included in the note.</para>
 <row><entry></entry></row>
 
 <row><entry>The Menu Items/Tool Bars </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Introduction to Menu Bars and Tool Bars </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Hiding, Changing, and Moving Tool Bars </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>The &kword; Menu Bar </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Formatting ToolBar </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>File Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Insert Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Edit Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Paragraph Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Table ToolBar </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Border Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Formula Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Selecting Colors from a Color dialog </entry><entry>Checked (March 23, 2002)</entry></row>
-<row><entry></entry><entry>Selecting files from the file dialog </entry><entry>Checked (May 7, 2002)</entry></row>
+<row><entry></entry><entry>Introduction to Menu Bars and Tool Bars </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>Hiding, Changing, and Moving Tool Bars </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>The &kword; Menu Bar </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>Formatting ToolBar </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>File Toolbar </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>Insert Toolbar </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>Edit Toolbar </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>Paragraph Toolbar </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>Table ToolBar </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>Border Toolbar </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>Formula Toolbar </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>Selecting Colors from a Color dialog </entry><entry>Checked (May 27, 2002)</entry></row>
+<row><entry></entry><entry>Selecting files from the file dialog </entry><entry>Checked (May 27, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>KWord Options </entry><entry></entry><entry></entry></row>
@@ -150,15 +153,13 @@ as of the date included in the note.</para>
 <row><entry>Key Bindings Summary </entry><entry></entry><entry>Checked (May 7, 2002)</entry></row>
 <row><entry></entry></row>
 
-<row><entry>KWord file format </entry><entry></entry><entry>Checked (April 17, 2002)</entry></row>
+<row><entry>KWord file format </entry><entry></entry><entry><para>Checked (April 17, 2002)</para><para>Have developers check</para></entry></row>
 <row><entry></entry></row>
 
 <row><entry>Glossary</entry><entry></entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Sections to be added</entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Thesaurus</entry><entry></entry></row>
-<row><entry></entry><entry>Completion</entry><entry></entry></row>
 
 </tbody>
 </tgroup>
@@ -166,11 +167,6 @@ as of the date included in the note.</para>
 
 <sect1 id="deleteme-misc">
 <title>Misc issues</title>
-<para>Find dialog - Formatting characters.  Either new screenshots or description 
-of button, depending on development (Feb 20)</para>
-<para>"NL", "CR", "Unicode point", and "ASCII/Latin-1 Character" pattern matching (Feb 20)</para>
-<para>Add info for autospellcheck..</para>
-<para>Is Sidehead frames functional?</para>
-
+<para></para>
 </sect1>
 </chapter>

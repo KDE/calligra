@@ -55,6 +55,17 @@ rearranged as you type.</para>
 
 </sect2>
 
+<sect2 id="select-frame">
+<title>Selecting a frame</title>
+<para>You can select a frame within a frameset two ways:</para>
+<orderedlist>
+<listitem><para>By clicking on the text frame border of the frame you want
+to select. </para></listitem>
+<listitem><para>By holding down the &Ctrl; key and clicking anywhere within the frame.</para></listitem>
+</orderedlist>
+<para>There should now be 8 black squares around the edges of the frame.</para>
+
+</sect2>
 <sect2 id="add-text-frame">
 <title>Adding a Text Frame to a Document</title>
 
@@ -157,7 +168,8 @@ but you should delete it to keep your document as simple as
 possible.</para>
 
 <para>Begin by clicking on the text frame border of the frame you want
-to delete.</para>
+to delete. (Or holding down the &Ctrl; key and clicking inside the frame with the
+&LMB;.)</para>
 
 <para>There is now 8 black squares on the edges of the frame.</para>
 
@@ -203,17 +215,23 @@ frame set. No data will be deleted. </para>
 
 <para>Moving a frame around on the page is easy.</para>
 
-<para>Place the mouse cursor over the frame border, click once with the
-<mousebutton>left</mousebutton> mouse button and hold the button
-down..</para>
+<para>Begin by clicking on the text frame border of the frame you want
+to delete. (Or holding down the &Ctrl; key and clicking inside the frame with the
+&LMB;.)</para>
 
 <para>There are now 8 black squares on the edges of the frame.</para>
 
-<para>Drag the cursor in the direction you want to move the
+<para>Click and hold the &LMB; on the border again and drag the cursor in the direction you want to move the
 frame.</para>
 
 <para>You will see an outline of the frame as you move it.  When the
 outline is where you want it, release the mouse button.</para>
+
+<tip><para>A faster way to move the frame, can be done by holding down the
+&Ctrl; and &Shift; keys on the keyboard and click and hold with the &LMB;.  Drag
+the mouse cursor on the page and when the frame is in the correct location, release
+the &LMB;.</para></tip>
+
 
 </sect2>
 
@@ -222,8 +240,9 @@ outline is where you want it, release the mouse button.</para>
 
 <para>It is also easy to change the size or shape of a frame.</para>
 
-<para>Place the cursor on the border of the frame 
-and click once with the &LMB;. This selects
+<para>Begin by clicking on the text frame border of the frame you want
+to delete. (Or holding down the &Ctrl; key and clicking inside the frame with the
+&LMB;.)  This selects
 this frame as the current frame.</para>
 
 <para>There are now 8 black squares on the edges of the frame. By moving
@@ -318,14 +337,6 @@ same as selecting <guilabel>Raise Frame</guilabel> from the menubar.</para></tip
 same as selecting <guilabel>Lower Frame</guilabel> from the menubar.</para></tip>
 </listitem></varlistentry>
 </variablelist>
-
-<para></para>
-<para></para>
-<para></para>
-
-
-
-
 
 </sect2>
 

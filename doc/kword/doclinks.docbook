@@ -1,3 +1,31 @@
 <sect1 id="links"><title>Document Links </title>
-<para></para>
+
+<para>&kword; has the ability to insert Internet addresses, email addresses and file locations with a descriptor.  This is most often used to
+create web pages in &kword;.</para>
+
+<para>Once inserted into the document, the descriptor will be visible in &kword;, but when saved as a web document, the descriptor will become
+ the hyperlink for the location specified with the address.</para>
+
+<para>To insert a document link select <menuchoice>
+<guimenu>Insert</guimenu>
+<guimenuitem>Link</guimenuitem>
+</menuchoice> from the menubar. This will bring up a small dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="linkdlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Using the icon bar on the left, choose which link type you want to insert.</para>
+<para>In the comment field, type the text you want to appear in your web document (for example:  The KOffice Web Site).</para>
+<para>In the address field, type the internet address, email address or 
+file location you want the comment to be linked with (for example:  http://koffice.kde.org) </para>
+<para>Click <guibutton>OK</guibutton>.</para>
+<note><para>By default, &kword; displays links underlined (as in most browsers).  You can turn this behavior on and off by
+selecting <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
+&kword;</guimenuitem></menuchoice> from the menubar and selecting the <guilabel>Misc</guilabel> icon.  More information can be found
+<link linkend="opt-misc">here.</link>.</para></note>
+
 </sect1>

@@ -129,12 +129,20 @@ specific rules (which are outlined below) to create the completed date.</para>
 select the format from the <guilabel>Insert</guilabel>
 dropdown box, and the
 placeholder will be inserted into the date format string at the cursor location.</para>
-<para>A preview of the current date
-string is visible below the <guilabel>Custom></guilabel> checkbox.  Click <guibutton>OK</guibutton> when 
-the date format string is correct to insert the variable into the document.</para>
+
 </listitem>
 </varlistentry>
 </variablelist>
+
+<para>A preview of the current date
+string is visible below the <guilabel>Custom></guilabel> checkbox.  Click <guibutton>OK</guibutton> when
+the date format string is correct to insert the variable into the document.</para>
+
+<tip><para>Once the date has been inserted into the document, it can be reformated to a different layout
+and toggled between fixed and variable dates.  Simply place the cursor behind the date in question and click once with the &RMB;.
+A small menu will appear.  Select <guilabel>Change variable to...</guilabel> and a submenu will appear.  Select your new
+variable or new layout from the menu and the variable is imediatly updated. </para></tip>
+
 </sect3>
 <sect3 id="insert-time"><title>Insert Time</title>
 <para>To insert the time in the document, simply place the cursor in the text box where the time should
@@ -259,6 +267,16 @@ the time format string is correct to insert the variable into your document.</pa
 </listitem>
 </varlistentry>
 </variablelist>
+
+<para>A preview of the current time
+string is visible below the <guilabel>Custom></guilabel> checkbox.  Click <guibutton>OK</guibutton> when
+the time format string is correct to insert the variable into your document.</para>
+
+<tip><para>Once the time has been inserted into the document, it can be reformated to a different layout
+and toggled between fixed and variable times.  Simply place the cursor behind the time in question and click once with the &RMB;.
+A small menu will appear.  Select <guilabel>Change variable to...</guilabel> and a submenu will appear.  Select your new
+variable or new layout from the menu and the variable is imediatly updated. </para></tip>
+
 </sect3>
 </sect2>
 <sect2 id="page-number"><title>Page Numbering </title>
@@ -267,17 +285,30 @@ the time format string is correct to insert the variable into your document.</pa
 and <emphasis>Number of pages</emphasis></para>
 <para>To insert the current page number, place the cursor where you want the page number and select
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page Number</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenuitem>Page Number</guimenuitem>
 </menuchoice> from the menubar.  The page number will be inserted at the current cursor location.</para>
 <para>To insert the total number of pages, place the cursor where you want the variable and select
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Number of Pages</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenuitem>Number of Pages</guimenuitem>
 </menuchoice> from the menubar.  The total number of pages will be inserted.</para>
 <note><para>Page numbers are updated dynamically as the document
 is edited.</para></note>
 <tip><para>Page numbers are usually best located within
 <link linkend="headers-and-footers">headers and footers</link>.  This ensures that
 every page will have a page number at the appropriate place.</para></tip>
+</sect2>
+<sect2 id="misc-section-title"><title>Section Title</title>
+<para>You can insert the section title anywhere in your document by selecting
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenuitem>Section title</guimenuitem>
+</menuchoice> from the menubar. </para>
+<para>&kword; determines the Section title by beginning a search from the top of the current page.  The first paragraph with a style of
+<emphasis>Head 1</emphasis> is the section title.  If there are no paragraphs on the current page, &kword; does the same search along 
+on previous pages until it finds a section title.</para>
+
 </sect2>
 <sect2 id="misc-variable"><title>Other Variables </title>
 <para>&kword; provides other commonly used variables that you might find useful. This set of variables

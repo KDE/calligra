@@ -868,13 +868,28 @@ to change the fonts to boldface, italicized or strikout fonts.</para>
 <para>Click <guibutton>Reset</guibutton> to restore the options dialog box to the initial values prior to making any changes.</para>
 
 </sect4>
+<sect4 id="replace-placeholders">
+<title>Using placeholders</title>
+<para>Placeholders are useful when you want to add text to complex search strings.  Currently &kword; has only one placeholder:  
+<emphasis>Complete text string</emphasis>.</para>
+<para>This placeholder will contain the entire text string matched by the find command.</para>
+<para>For example:</para>
+<para>You create a search string, using patterns:  <emphasis>Reference \d</emphasis></para>
+<para>Now in the <guilabel>Replace With</guilabel> section of the replace dialog, you place a mark in the checkbox labeled
+<guilabel>Use placeholders</guilabel>.  Click the <guibutton>Insert Placeholder</guibutton> button and select
+<guilabel>Complete text found</guilabel>.  &kword; will insert a <emphasis>/0</emphasis> in the 
+<guilabel>Replacement text</guilabel> text box.</para>
+<para>Now surround the placeholder with parentheses, so your text string is:  <emphasis>(/0)</emphasis></para>
+<para>When this is executed, whenever &kword; encounters the find text (ie. <quote>Reference 0</quote>, <quote>Reference 1</quote>,
+<quote>Reference 2</quote>, etc) it will surround the text in parethesis (<quote>(Reference 0)</quote>, <quote>(Reference 1)</quote>,
+<quote>(Reference 2)</quote>, respectively). </para>
+<para>As you can see, the placeholder will maintain a copy of the search text.  You can use this placeholder to add text to the ends of any
+search string you can imagine.</para>
 
-
+</sect4>
 <sect4>
 <title>Other Replace Options</title>
 
-<para>You can place a mark in <guilabel>Use placeholders</guilabel> to help explain how &kword; will replace your text.</para>
-<para>Currently the only placeholder is <guilabel>Complete text found</guilabel>.  If you insert this </para>
 <para>Additional options in the dialog are:</para>
 <variablelist>
 <varlistentry>
@@ -1234,6 +1249,13 @@ miss the dialog box.  &kword; has spell checked the document!</para>
 For more details, please see the section entitled
 <link linkend="opt-spell">Configure Spelling</link>.</para>
 
+<sect2 id="auto-spell-check">
+<title>Automatically mark misspelled words</title>
+<para>&kword; can check the spelling of your document as you edit it.  It will underline in red any word which 
+it can not find in the dictionary.  This behavior can be turned on and off by the user.  See the section 
+entitled <link linkend="opt-spell">Configure Spelling</link> for more information.</para>
+</sect2>
+
 </sect1>
 
 <sect1 id="autocorrect">
@@ -1244,13 +1266,23 @@ converting abbreviations to their full spelling and adjusting
 capitalization. As you could guess from its name, this all occurs
 automatically, while you are editing your document.</para>
 
+<sect2 id="autocorrection-enable">
+<title>Enable/Disable Autocorrection</title>
+<para>To toggle autocorrection on and off, select <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>AutoFormat</guimenuitem>
+<guimenuitem>Enable Autocorrection</guimenuitem></menuchoice>
+from the menubar. </para>
+</sect2>
+
+<sect2 id="configure-autocorrection">
+<title>Configuring Autocorrection Options</title>
 <para>To adjust the options for auto correction, select <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Autocorrection...</guimenuitem></menuchoice>
-from the Menu bar </para>
+from the menubar.  </para>
 
 <para>A dialog window appears to help you set your options.</para>
 
-<sect2 id="simple-autocorrection">
+<sect3 id="simple-autocorrection">
 <title>Simple Autocorrection</title>
 
 <screenshot>
@@ -1298,7 +1330,7 @@ of text is a <link linkend="defurl">URL</link> and automatically creates a link.
 <varlistentry>
 <term><guilabel>Suppress Double Spaces</guilabel></term>
 <listitem>
-<para>When checked, &kword; will ignore the second space typed.  
+<para>When checked, &kword; will ignore the second space typed.
 This prevents users from adding double spaces between words or sentances</para>
 </listitem>
 </varlistentry>
@@ -1337,9 +1369,9 @@ to a bulleted list.  The bullet will begin with the letter selected in the left 
 
 
 </variablelist>
-</sect2>
+</sect3>
 
-<sect2 id="quotes-autocorrection"><title>Custom Quotes</title>
+<sect3 id="quotes-autocorrection"><title>Custom Quotes</title>
 <para>Select the tab labeled <guilabel>Custom Quotes</guilabel></para>
 
 <screenshot>
@@ -1369,8 +1401,8 @@ quotation character, click on one of the buttons. Clicking on
 </listitem>
 </varlistentry>
 </variablelist>
-</sect2>
-<sect2 id="advanced-autocorrection">
+</sect3>
+<sect3 id="advanced-autocorrection">
 <title>Advanced Autocorrection</title>
 
 <para>To switch to the Advanced Autocorrection, click on the tab labled
@@ -1389,10 +1421,10 @@ listed in the column labeled <guilabel>Find</guilabel> will be
 automatically replaced with the text in
 <guilabel>Replace</guilabel>.</para>
 
-<sect3>
+<sect4>
 <title>Adding an autocorrection string</title>
 
-<para>To add an autocorrection string, simply type the text you want &kword; to 
+<para>To add an autocorrection string, simply type the text you want &kword; to
 check for in the text box labeled
 <guilabel>Find</guilabel> Then enter the text you want &kword;
 to substitute in the text box labeled <guilabel>Replace</guilabel>.</para>
@@ -1404,9 +1436,9 @@ buttons with three periods on them and select a special character from the table
 
 <para>When these are entered, click <guibutton>Add</guibutton>. Your text
 strings are now added to the table.</para>
-</sect3>
+</sect4>
 
-<sect3>
+<sect4>
 <title>Editing an autocorrection string</title>
 <para><emphasis>Changing the text you want to find.</emphasis></para>
 <para>&kword; does not allow you to change the text to search for.
@@ -1420,9 +1452,9 @@ highlighted and the find and replace text will be listed in the text boxes
 above. You can alter the replacement text. When you
 are done, simply select <guibutton>Modify</guibutton>.</para>
 
-</sect3>
+</sect4>
 
-<sect3>
+<sect4>
 <title>Deleting an autocorrection string.</title>
 
 <para>Simply click on the string you want to delete.  Now click the
@@ -1434,12 +1466,12 @@ you have deleted a string.  Be sure you have selected the correct string
 <emphasis>before</emphasis> you click the <guibutton>Remove</guibutton>
 button.</para>
 </warning>
-</sect3>
+</sect4>
 
-</sect2>
-<sect2 id="autocorrection-exceptions">
+</sect3>
+<sect3 id="autocorrection-exceptions">
 <title>Autocorrection Exceptions</title>
-<para>There are instances where &kword; make make autocorrection changes 
+<para>There are instances where &kword; make make autocorrection changes
 that are inappropriate.  You can use the third tab of this dialog to define
 <emphasis>exceptions</emphasis> to the rules previously discussed.</para>
 <para>The dialog for exceptions is shown below:</para>
@@ -1448,7 +1480,7 @@ that are inappropriate.  You can use the third tab of this dialog to define
 <imageobject><imagedata fileref="auto3.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>To prevent &kword; from deciding an abbreviation or other text is 
+<para>To prevent &kword; from deciding an abbreviation or other text is
 the end of a sentance, simply enter the text fragment in the text box below
 <guilabel>Do not treat as the end of a sentence</guilabel>.  Then click
 <guibutton>Add</guibutton>.</para>
@@ -1469,6 +1501,44 @@ this instance, text entered in these boxes will stay double capital letters.</pa
 <para><quote>Sarasota, Fl </quote></para>
 <para>To remove an erroneous entry, simply click once on the wrong entry with the &RMB;
 and click on the <guibutton>Remove</guibutton> button.</para>
+</sect3>
 </sect2>
 </sect1>
-</chapter> 
+<sect1 id="autoformat">
+<title>Autoformatting</title>
+<para></para>
+</sect1>
+<sect1 id="autocomplete">
+<title>Autocompletion</title>
+<para>Autocompletion allows you to type the first few letters of a commonly used word (often technical or job specific), and tell &kword; to 
+finish typing the word for you.  This is often very useful when you have lengthy technical words.</para>
+<sect2 id="autocomplete-using">
+<title>Using autocomplete</title>
+<para></para>
+<sect3 id="autocomplete-using-add">
+<title>Adding words to autocomplete</title>
+<para></para>
+</sect3>
+<sect3 id="autocomplete-using-use">
+<title>Completing a word using autocomplete</title>
+<para></para>
+</sect3>
+</sect2>
+<sect2 id="autocomplete-dialog">
+<title>Configuring autocomplete</title>
+<para></para>
+<para></para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="autocompdlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para></para>
+</sect2>
+</sect1>
+
+
+</chapter>

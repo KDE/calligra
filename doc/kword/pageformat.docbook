@@ -107,8 +107,7 @@ specify header and footer information. </para>
 </mediaobject>
 </screenshot>
 
-<para>This dialog can be broken into two major sections, with each
-section being divided in to smaller divisions.</para>
+<para>This dialog can be broken into two major sections.</para>
 
 <para>If you are not familiar with Headers and Footers yet, you should
 first read the section entitled <link
@@ -119,68 +118,35 @@ linkend="headers-and-footers">Headers/Footers</link></para>
 <para>This section lets you determine the placement of headers, and
 which pages have which headers on them.</para>
 
-<para>In the text box labeled <guilabel>Spacing between header and
-body</guilabel>, you can specify how much empty space should be placed
-between the bottom of the header, and the top of the main frame.</para>
+<para>If you place a mark in front of <guilabel>Different header for the first page</guilabel>You
+will be able to specify a different format for the header on the first page.</para>
 
-<para>You are also presented with three options.  You must choose
-one:</para>
-
-<itemizedlist>
-<listitem>
-<para><guilabel>Same header for all pages</guilabel> - If you select
-this option, all pages, even or odd, including the first page, will
-have the same headers. This is the default.</para>
-</listitem>
-
-<listitem>
-<para><guilabel>Different header for first page</guilabel> - If you
-select this option, the first page will use a different header than the
-other pages.  After the first page, all pages have use the same
-header</para>
-</listitem>
-
-<listitem>
 <para><guilabel>Different header for even and odd pages</guilabel> - If
 you select this option, the even pages will use one header, the odd
 pages use another header.  You can use this to ensure the page numbers
 are always on the outside of the page, or to list the title of the
 document on odd pages and the chapter number on the even pages.</para>
-</listitem>
-</itemizedlist>
+
+<para>In the text box labeled <guilabel>Spacing between header and
+body</guilabel>, you can specify how much empty space should be placed
+between the bottom of the header, and the top of the main frame.</para>
 
 <para><emphasis>Footers</emphasis></para>
 
 <para>This section lets you determine the placement of footers, and
 which pages have which footers on them.</para>
 
-<para>In the text box labeled <guilabel>Spacing between footer and
-body</guilabel>, you can specify how much empty space should be placed
-between the top of the footer, and the bottom of the main frame.</para>
-
-<para>You are also presented with three options.  You must choose
-one:</para>
-
-<itemizedlist>
-<listitem>
-<para><guilabel>Same footer for all pages</guilabel> - If you select
-this option, all pages, even or odd, including the first page, will have
-the same footer. This is the default.</para>
-</listitem>
-
-<listitem>
 <para><guilabel>Different footer for first page</guilabel> - If you
-select this option, the first page will use a different footer than the
-other pages.  After the first page, all pages have use the same
-footer</para>
-</listitem>
+select this option, the first page will use a different footer than all other
+pages of the document.</para>
 
-<listitem>
 <para><guilabel>Different footer for even and odd pages</guilabel> - If
 you select this option, the even pages will use one footer, the odd
 pages use another footer.  </para>
-</listitem>
-</itemizedlist>
+
+<para>In the text box labeled <guilabel>Spacing between footer and
+body</guilabel>, you can specify how much empty space should be placed
+between the top of the footer, and the bottom of the main frame.</para>
 
 <para>When you are satisfied with the changes you are ready to make,
 click <guibutton>OK</guibutton>.</para>
@@ -225,13 +191,13 @@ half of this dialog.  This will <emphasis>approximate</emphasis> the
 final look of your document.  It is updated with each change, and should
 be used as a guide for your changes. </para>
 
-<para>On the left, the dialog displays the current unit of measurement.  
+<para>On the left, the dialog displays the current unit of measurement.
 This unit of measurement is the same unit of measurement
 you use for your document rulers. (In this example, we are using
 inches.)  To change the units, follow the instructions in the section entitled
 <link linkend="rulers">Using Rulers</link>.</para>
 
-<para>The dialog section labled <guilabel>Page Format</guilabel> is used to specify 
+<para>The dialog section labled <guilabel>Page Format</guilabel> is used to specify
 the paper size for the document.  </para>
 <para>&kword; includes many predefined paper sizes.  Select the appropriate paper size with the drop down
 box labled <guilabel>Format</guilabel>.</para>
@@ -283,8 +249,7 @@ specify header and footer information. </para>
 </mediaobject>
 </screenshot>
 
-<para>This dialog can be broken into two major sections, with each
-section being divided in to smaller divisions.</para>
+<para>This dialog can be broken into two major sections.</para>
 
 <para>If you are not familiar with Headers and Footers yet, you should
 first read the section entitled <link
@@ -295,68 +260,35 @@ linkend="headers-and-footers">Headers/Footers</link></para>
 <para>This section lets you determine the placement of headers, and
 which pages have which headers on them.</para>
 
-<para>In the text box labeled <guilabel>Spacing between header and
-body</guilabel>, you can specify how much empty space should be placed
-between the bottom of the header, and the top of the main frame.</para>
+<para>If you place a mark in front of <guilabel>Different header for the first page</guilabel>You
+will be able to specify a different format for the header on the first page.</para>
 
-<para>You are also presented with three options.  You must choose
-one:</para>
-
-<itemizedlist>
-<listitem>
-<para><guilabel>Same header for all pages</guilabel> - If you select
-this option, all pages, even or odd, including the first page, will
-have the same headers. This is the default.</para>
-</listitem>
-
-<listitem>
-<para><guilabel>Different header for first page</guilabel> - If you
-select this option, the first page will use a different header than the
-other pages.  After the first page, all pages have use the same
-header</para>
-</listitem>
-
-<listitem>
 <para><guilabel>Different header for even and odd pages</guilabel> - If
 you select this option, the even pages will use one header, the odd
 pages use another header.  You can use this to ensure the page numbers
 are always on the outside of the page, or to list the title of the
 document on odd pages and the chapter number on the even pages.</para>
-</listitem>
-</itemizedlist>
+
+<para>In the text box labeled <guilabel>Spacing between header and
+body</guilabel>, you can specify how much empty space should be placed
+between the bottom of the header, and the top of the main frame.</para>
 
 <para><emphasis>Footers</emphasis></para>
 
 <para>This section lets you determine the placement of footers, and
 which pages have which footers on them.</para>
 
-<para>In the text box labeled <guilabel>Spacing between footer and
-body</guilabel>, you can specify how much empty space should be placed
-between the top of the footer, and the bottom of the main frame.</para>
-
-<para>You are also presented with three options.  You must choose
-one:</para>
-
-<itemizedlist>
-<listitem>
-<para><guilabel>Same footer for all pages</guilabel> - If you select
-this option, all pages, even or odd, including the first page, will have
-the same footer. This is the default.</para>
-</listitem>
-
-<listitem>
 <para><guilabel>Different footer for first page</guilabel> - If you
-select this option, the first page will use a different footer than the
-other pages.  After the first page, all pages have use the same
-footer</para>
-</listitem>
+select this option, the first page will use a different footer than all other
+pages of the document.</para>
 
-<listitem>
 <para><guilabel>Different footer for even and odd pages</guilabel> - If
 you select this option, the even pages will use one footer, the odd
 pages use another footer.  </para>
-</listitem>
-</itemizedlist>
+
+<para>In the text box labeled <guilabel>Spacing between footer and
+body</guilabel>, you can specify how much empty space should be placed
+between the top of the footer, and the bottom of the main frame.</para>
 
 <para>When you are satisfied with the changes you are ready to make,
 click <guibutton>OK</guibutton>.</para>

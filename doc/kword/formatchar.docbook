@@ -35,9 +35,10 @@ and the keyboard shortcuts.</para>
 <row><entry align="right">Attribute</entry><entry align="center">Tool bar
 Button</entry><entry align="center">Key Combo</entry></row>
 </thead><tbody>
-<row><entry align="right">Font Size</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Font Size</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">
+<para>Decrease font size: <keycombo><keycap>Ctrl</keycap><keycap>&lt;</keycap></keycombo></para> <para>Increase font size: <keycombo><keycap>Ctrl</keycap><keycap>&gt;</keycap></keycombo></para></entry></row>
 <row><entry align="right">Font</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chfontbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
-<row><entry align="right">Bold Face</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bold.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
+<row><entry align="right">Bold Face</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bold.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
 <row><entry align="right">Italics</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="ital.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
 <row><entry align="right">Underline</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="undl.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
 <row><entry align="right">Strikethrough</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="stkout.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
@@ -104,8 +105,7 @@ inside the preview box with the &LMB;.  A text cursor will appear. You can edit 
 open this dialog.</para>
 </tip>
 
-<para>Using the checkboxes located below the preview box, you can select superscript, subscript, strikeout, underline,
- and double underline.</para>
+<para>Using the checkboxes located below the preview box, you can select superscript or subscript.</para>
 
 <para>Clicking the button labeled <guibutton>Change Color...</guibutton>
 will allow you to change the color of the text using the
@@ -114,6 +114,35 @@ will allow you to change the color of the text using the
 <para>Clicking the button labeled <guibutton>Change Background Color...</guibutton>
 will allow you to change the color of the background using the
 <link linkend="select-colors">color selection dialog box</link>.</para>
+
+<para>If you click the tab labeled <guilabel>Font Effects</guilabel>, the dialog changes to:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fchardlg2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The subsection labeled <guilabel>Underlining</guilabel> has two drop down boxes.  
+In the left most drop down box select between
+no underline (Without), Single, Simple Bold or Double underlining.  </para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="exul.png" format="PNG"/></imageobject>
+<caption><para>Examples of three underline styles</para></caption>
+</mediaobject>
+</screenshot>
+
+<para>Use the right drop down box to select the style of underlining (Solid line, dashed line, etc).</para>
+<para>Use the <guibutton>Change Color</guibutton> button to select a color for the underline using the
+<link linkend="select-colors">color selection dialog box</link>.  </para>
+
+<para>The subsection labeled <guilabel>Strikethrough</guilabel> has two drop down boxes.  
+Use the left drop down box to select between
+none (Without), Single or Double strikethrough.  Use the right drop down box to select the line style.</para>
 
 <para>Clicking <guibutton>OK</guibutton> will commit your changes to the
 document.</para>
@@ -156,10 +185,17 @@ from the menubar.</para>
 
 <varlistentry>
 <term><guilabel>Toggle Case</guilabel></term>
-<listitem><para>Converts all lowercase letters to uppercase <emphasis>and</emphasis> 
+<listitem><para>Converts all lowercase letters to uppercase <emphasis>and</emphasis>
 converts all upppercase letters to lowercase.</para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term><guilabel>Sentance Case</guilabel></term>
+<listitem><para>Capitalizes the first character after a period.</para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 
 <para>When you have selected the option you like.  Click <guibutton>OK</guibutton> and &kword; will make the changes.</para>

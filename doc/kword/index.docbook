@@ -215,9 +215,9 @@ different headers for even and odd pages, or the same headers
 throughout.</para>
 </listitem>
 <listitem>
-<para>Search through your document for text.  <!--You can further refine
+<para>Search through your document for text. You can further refine
 your search by specifying font, format, font size and many other
-features of the text. -->By adding wild-cards to your search, the search and
+features of the text. By adding wild-cards to your search, the search and
 replace functions can become very powerful.</para>
 </listitem>
 <!--<listitem>
@@ -1568,7 +1568,7 @@ Use with caution on critical information.</para>
 <term>Wireless Markup Language Information</term>
 <listitem>
 <para>WML is another markup-language, intended
-to display information on handheld. It's very much like HTML in general.</para>
+to display information on hand held computers (PDA's). It's very much like HTML in general.</para>
 <para>For the official specification, visit the
 <ulink url="http://www.wapforum.org/what/technical.htm">WAP forum technical pages</ulink>.</para>
 </listitem>

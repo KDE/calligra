@@ -126,7 +126,8 @@ are listed below the text box.</para>
 <guilabel>Alignment</guilabel>.</para></listitem>
 <listitem>
 <para>Determine what you want to fill the white space of the tab stop.  
-In most cases this should be left as <guilabel>Blank</guilabel>.</para></listitem>
+In most cases this should be left as <guilabel>Blank</guilabel>. For information on other options in this section, see 
+<link linkend="tab-fill">Tab filling</link>.</para></listitem>
 
 </orderedlist>
 
@@ -273,9 +274,25 @@ is in the box on the left side of the dialog panel</para>
 </listitem>
 </orderedlist>
 
+<note><para>You can delete all tab stops at once by clicking <guibutton>Delete All</guibutton>.</para>
+<para>&kword; will not prompt you prior to deleting all tabs, so make sure that is your intention prior to selecting the
+<guibutton>Delete All</guibutton> button.</para>
+</note>
+
 <para>When you are done deleting tab stops, you can click
 <guibutton>OK</guibutton> to finish.</para>
 
 </sect3>
+</sect2>
+<sect2 id="tab-fill">
+<title>Tab filling</title>
+<para>By default, &kword; uses the standard tab function that you are familiar with when using a typewriter or most wordprocessing programs.
+You can, however, have &kword; insert spaces or lines to fill the tab space.</para>
+<para>To change the way the tab fills work in &kword; you change the dropdown box labeled <guilabel>Filling</guilabel>.  This drop down box
+gives you many different line styles to choose from.</para>
+<para>You can change the thickness of the lines by using the <guilabel>Width</guilabel> text box.</para>
+
+
+
 </sect2>
 </sect1>

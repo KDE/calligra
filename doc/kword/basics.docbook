@@ -7,21 +7,23 @@
 <para>&kword;, like most <acronym>GUI</acronym> based programs, divides
 the screen up into several areas. Each area of the screen is used to
 perform a group of similar features.  When you examine the &kword;
-screen, it is divided into 4 major areas:</para>
+screen, it is divided into 5 major areas:</para>
 
 <orderedlist numeration="arabic">
 <listitem><para><link linkend="kde-frame">The &kde; Titlebar</link>
 (which remains at the top of all programs run under
 &kde;).</para></listitem>
 
-<listitem><para><link linkend="mb">The Menu
-Bar</link>.</para></listitem>
+<listitem><para><link linkend="mb">The Menubar</link>.</para></listitem>
 
 <listitem><para><link linkend="tb">an assortment of
 Toolbars</link>.</para></listitem>
 
-<listitem><para><link linkend="da">and the Document
+<listitem><para><link linkend="da">the Document
 Area</link>.</para></listitem>
+
+<listitem><para><link linkend="statb">and the Statusbar</link>.</para></listitem>
+
 </orderedlist>
 
 <screenshot>
@@ -52,6 +54,16 @@ entitled: <link linkend="basic-menubar">The Basic Menu Bar</link>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
+
+<term><emphasis><anchor id="statb"/>Statusbar</emphasis></term>
+<listitem><para>The statusbar provides important information during the editing of your document.
+In the lower left corner, &kword; gives you the current page number and the total number of pages.  There will be helpful text shown in
+the statusbar whenever you hold the mouse over a menu item..</para>
+<para>The statusbar can be toggled on and off.
+See the section on <link linkend="opt-ui">Configure &kword; User Interface</link>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
 <term><emphasis><anchor id="da"/>The Document Area.</emphasis></term>
 
 <listitem><para>The document area consists of:</para>
@@ -68,8 +80,9 @@ Rulers</link>.</para>
 <listitem><para><emphasis>Scrollbars</emphasis> - The scrollbars are used to move through a &kword; document
 quickly.  The &kword; scrollbars functions similar to all scrollbars in
 &kde; or &Windows;.</para>
+<para>The scrollbars can be toggled on and off.
+See the section on <link linkend="opt-ui">Configure &kword; User Interface</link>.</para>
 </listitem>
-
 
 <listitem><para><emphasis>Tab Selector</emphasis> - This is used to select and place tab stops in your document for
 easy formatting.  For more information on tab stops, see the section
@@ -143,13 +156,12 @@ and the <link linkend="page-format">Page Layout Dialog box</link>
 will appear.</para>
 </tip>
 
-<note> 
+<note>
 <para>If you don't want the rulers in your document area, they
 can be switched off.</para><para> Simply select <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure
-Kword</guimenuitem></menuchoice> from the Menu Bar.  Click on the
-<guibutton>Interface</guibutton> button.  The check box labeled <guilabel>Show Rulers</guilabel>
- will let you toggle the rulers on and off.</para> 
+<guimenu>View</guimenu><guimenuitem>Show Rulers</guimenuitem></menuchoice> from the menubar.  
+This will let you toggle the rulers on and off as you desire.
+</para>
 </note>
 
 </sect1>

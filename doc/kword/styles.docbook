@@ -82,6 +82,17 @@ fileref="chstylebut.png" format="PNG"/></imageobject></inlinemediaobject>.</para
 will probably want to create new styles specific for your needs.
 </para>
 
+<para>There are two major ways to create a new style:</para>
+
+<orderedlist>
+<listitem><para><link linkend="style-add-dialog">Create a style based on another style using a dialog</link>.</para></listitem>
+<listitem><para><link linkend="style-add-text">Format a block of text to the desired format, 
+then create a style based on that text</link>.</para></listitem>
+</orderedlist>
+
+
+<sect3 id="style-add-dialog">
+<title>Creating a new style based on another style</title>
 <para>To create a new style select <menuchoice>
 <guimenu>Format</guimenu><guimenuitem>Stylist</guimenuitem></menuchoice>
 from the menubar.</para><para>This will bring up a dialog box</para>
@@ -121,18 +132,18 @@ linkend="style-shadow">Shadow</link> to create the style.</para>
 <para>Click <guibutton>Cancel</guibutton> to abort the creation of the
 style.</para>
 
-<sect3 id="style-font">
+<sect4 id="style-font">
 <title>Changing the Font Size, Type etc.</title>
 
 <para>The tab labeled <guilabel>Font</guilabel> is used to set the font type, style, formatting, etc.</para>
 
-<para>This tab functions identically to the <link linkend="change-font-dialog">change font dialog</link> used to edit general text. 
+<para>This tab functions identically to the <link linkend="change-font-dialog">change font dialog</link> used to edit general text.
 Changes to this tab affect to
 all text formated with this style.</para>
 
-</sect3>
+</sect4>
 
-<sect3 id="style-space">
+<sect4 id="style-space">
 <title>Changing Paragraph Spacing and Indents</title>
 
 <para>The tab labeled <guilabel>Indents and Spacing</guilabel> is used to adjust
@@ -141,9 +152,9 @@ spacing between lines, paragraph indentation and the spacing between paragraphs.
 <para>This tab functions identically to the same tab in the <link linkend="indents-and-spaces">Format Paragraph</link> dialog.
 Changes to this tab affect to
 all text formated with this style.</para>
-</sect3>
+</sect4>
 
-<sect3 id="style-align">
+<sect4 id="style-align">
 <title>Changing Paragraph Alignment</title>
 
 <para>The tab labeled <guilabel>Aligns</guilabel> determines how the text is placed <emphasis>within
@@ -155,9 +166,9 @@ this as <emphasis>Alignment</emphasis>, or
 Changes to this tab affect to
 all text formated with this style.</para>
 
-</sect3>
+</sect4>
 
-<sect3 id="style-borders">
+<sect4 id="style-borders">
 <title>Changing Paragraph Borders</title>
 
 <para>The tab labeled <guilabel>Borders</guilabel> is used to define and configure graphical borders
@@ -167,9 +178,9 @@ around your paragraphs.</para>
 Changes to this tab affect to
 all text formated with this style.</para>
 
-</sect3>
+</sect4>
 
-<sect3 id="style-numbering">
+<sect4 id="style-numbering">
 <title>Changing Paragraph Numbering/Bullets</title>
 
 <para>The tab labeled <guilabel>Bullets/Numbers</guilabel> is used to make all text formatted with this style into a list.</para>
@@ -178,9 +189,9 @@ all text formated with this style.</para>
 For more information see the section entitled <link linkend="lists">Lists</link>.</para>
 
 
-</sect3>
+</sect4>
 
-<sect3 id="style-tabulators">
+<sect4 id="style-tabulators">
 <title>Changing Tab-stops.</title>
 
 <para>Using the tab labeled <guilabel>Tabulators</guilabel> it is possible to define tab stops for the new style.</para>
@@ -188,16 +199,28 @@ For more information see the section entitled <link linkend="lists">Lists</link>
 <para>This tab functions identically to the same tab in the <link linkend="tab-stop-setting-dialog">Format Paragraph</link> dialog.
 For more information see the section entitled <link linkend="tab-stops">Tab Stops.</link>.</para>
 
-</sect3>
+</sect4>
 
-<sect3 id="style-shadow">
+<sect4 id="style-shadow">
 <title>Changing style shadowing.</title>
 
 <para>Using the tab labeled <guilabel>Shadow</guilabel> it is possible to change the artificial shadowing of text within the style.</para>
 
 <para>This tab functions identically to the same tab in the <link linkend="para-shadow">Format Paragraph</link> dialog.</para>
+</sect4>
 </sect3>
-
+<sect3 id="style-add-text">
+<title>Creating a style based on formatted text</title>
+<para>If you have text that is already formatted correctly for a new style, simply select the text and select
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Create Style From Selection</guimenuitem></menuchoice>
+from the menubar.</para>
+<para>&kword; will prompt you for a name for your style.  Enter the name in the text box and click
+<guibutton>OK</guibutton>.  A new style is created with the font, paragraph spacing, paragraph alignment, borders and shadows of the
+currently selected text.</para>
+<note><para>Future formatting changes to this selected text will not automatically change the style you just created.  If you want the changes
+to become part of the style, you must <link linkend="style-edit">edit the style</link>.</para></note>
+</sect3>
 </sect2>
 
 <sect2 id="style-deleting">

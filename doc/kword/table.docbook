@@ -147,6 +147,12 @@ given a frame of its own.</para>
 <para>Click <guibutton>Cancel</guibutton> to cancel this action and return to editing your document.</para>
 </sect2>
 
+<sect2 id="table-navigation">
+<title>Moving between cells in a table</title>
+<para>You can navigate between cells of the table by using the mouse (simply click in the cell you want to edit),
+or by using the keyboard (use the arrow keyes to move up, down, left or right one cell at a time)..</para>
+
+</sect2>
 <sect2 id="table-delete">
 <title>Deleting a Table</title>
 
@@ -178,8 +184,10 @@ a row to.  Select either:</para>
 
 <itemizedlist>
 <listitem>
-<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Insert
-Row</guimenuitem></menuchoice> from the menubar</para>
+<para><menuchoice> <guimenu>Table</guimenu>
+<guimenuitem>Row</guimenuitem>
+<guimenuitem>Insert Row</guimenuitem>
+</menuchoice> from the menubar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
@@ -219,8 +227,8 @@ a column to.  Select either:</para>
 
 <itemizedlist>
 <listitem>
-<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Insert
-Column</guimenuitem></menuchoice> from the menubar</para>
+<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
+<guimenuitem>Insert Column</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 <listitem>
 <para>or by clicking <inlinemediaobject><imageobject><imagedata
@@ -252,6 +260,10 @@ box limits you to the columns currently in the table.</para>
 
 </sect2>
 
+<sect2 id="table-resize-column">
+<title>Change column width</title>
+<para></para>
+</sect2>
 <sect2 id="table-delete-row">
 <title>Delete Row in Table</title>
 
@@ -262,7 +274,8 @@ remove a row from.  Select either:</para>
 
 <itemizedlist>
 <listitem>
-<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete
+<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Row</guimenuitem>
+<guimenuitem>Delete
 row</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 <listitem>
@@ -295,7 +308,8 @@ remove a column from.  Select either:</para>
 
 <itemizedlist>
 <listitem>
-<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Delete
+<para><menuchoice> <guimenu>Table</guimenu><guimenuitem>Column</guimenuitem>
+<guimenuitem>Delete
 Column</guimenuitem></menuchoice> from the menubar</para>
 </listitem>
 <listitem>

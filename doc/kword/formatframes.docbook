@@ -132,6 +132,19 @@ on every new page.</para></tip></listitem>
 already another window for text to flow into, the text will flow into
 the next frame in the frame set as you have previously determined.</para>
 </note>
+
+<para>If you place a mark in the checkbox labled <guilabel>Changes will be applied to all
+frames in the frameset</guilabel>, then any changes made in the frame properties dialog box
+will automatically be applied to all frames within the frameset.</para>
+
+<para>If you place a mark in the checkbox labeled <guilabel>Protect content</guilabel>, &kword;
+will not allow any changes to the text within the frame, or the formatting of the text within the frameset.</para>
+
+<note><para>You can still reshape or even delete the frame, but the content within the frame is locked.  To lock the location 
+and size of the frame, see the <link linkend="format-frame-geometry">Geometry</link> tab.</para></note>
+
+<para>To make changes to the text, you need to remove the mark from <guilabel>Protect content</guilabel>.</para>
+
 </sect2>
 <sect2 id="format-frame-tra"><title>Text Flow around frames</title>
 <para>To adjust how text flows around overlapping frames, click the tab
@@ -147,6 +160,17 @@ labeled <guilabel>Text Run Around</guilabel>.</para>
 <para>When you overlay two text frames, and text from both frames is
 competing for the same space on the page, &kword; can (at your option),
 make sure that text from two frames does not overlap. </para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="intro3.png" format="PNG"/></imageobject>
+<caption><para>Example of text wrapping.</para></caption>
+</mediaobject>
+</screenshot>
+
+
+<para></para>
 
 <para>As you can see from the options in the dialog box, there are three
 possible choices.</para>
@@ -225,9 +249,12 @@ clicking on the tab labeled <guilabel>Geometry</guilabel>.</para>
 <para>This dialog box allows you to specify <emphasis>exactly</emphasis>
 where the frame goes and how large it is.</para>
 
-<para>If you put a mark in the checkbox labeled <guilabel>Frame is inline</guilabel>, the frame size and position will 
-be determined by the location of the placeholder in the text.  For a definition of inline frames, click 
+<para>If you put a mark in the checkbox labeled <guilabel>Frame is inline</guilabel>, the frame size and position will
+be determined by the location of the placeholder in the text.  For a definition of inline frames, click
 <link linkend="definlineframe">here</link>.</para>
+
+<para>If you put a mark in the checkbox labeled <guilabel>Protect size and position</guilabel>, the frame size and position will
+be fixed at their current location.  You will not be able to move the frame on the page until this box is unchecked.</para>
 
 <para>You can locate your frame on the page by first entering the top
 and left measurements.  This determines where the top left corner of the
@@ -237,6 +264,12 @@ page.</para>
 <para>You can also determine the exact size of the frame by entering its
 height and width in the text boxes provided.  These two measurements are
 relative to the top left corner of the frame you specified above. not to the size of the page.</para>
+
+<para>The subsection labeled <guilabel>Margins</guilabel> only applies to text frames.  Using the boxes labeled 
+<guilabel>Left</guilabel>, <guilabel>Right</guilabel>, <guilabel>Top</guilabel> and <guilabel>Bottom</guilabel>, you can establish 
+margins <emphasis>With in the frame</emphasis>.  This should not be confused with margins for the page, which are defined in the 
+<link linkend="page-format">page properties dialog box</link>.</para>
+
 </sect2>
 <sect2 id="format-frame-background"><title>Frame Background</title>
 

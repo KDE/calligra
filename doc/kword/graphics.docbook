@@ -38,6 +38,8 @@ format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
 
 <para>Use this dialog to select the picture.</para>
 
+<tip><para>Pressing <keycap>Esc</keycap> at this point will cancel the insertion of a picture into your document.</para></tip>
+
 <para>For more information on using this dialog, click <link linkend="file-dialog">here</link>.</para>
 
 <para>Once the appropriate picture file is located, click on the filename once with the &LMB;.  Click

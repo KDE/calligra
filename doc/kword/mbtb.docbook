@@ -16,8 +16,7 @@ bars and the toolbars.</para>
 <para>The menu bar is organized into groups of functions (&eg; file
 functions, table functions, &etc;).  Below each of these groups, is a
 submenu of actions.  Some of these submenus will have sub menus of
-their own.  All of the functions of &kword; can be found inside the
-menu bar hierarchy.</para>
+their own.</para>
 
 <para>The tool bars are also organized into groups.  Each toolbar
 consists of a set of buttons.  Each button performs a specific
@@ -740,25 +739,36 @@ Views</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>View</guimenu><guimenuitem>Page View</guimenuitem>
+<guimenu>View</guimenu><guimenuitem>Page Mode</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>When this option is selected, &kword; will show you how your page looks in a WYSIWYG environment.  This is the standard view
 for editing your document.</para>
-<para>Compare this with <guimenuitem>Preview View</guimenuitem>.</para>
+<para>Compare this with <guimenuitem>Preview Mode</guimenuitem> and <guimenuitem>Text Mode</guimenuitem>.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term id="preview-mode-menu">
 <menuchoice>
-<guimenu>View</guimenu><guimenuitem>Preview View</guimenuitem>
+<guimenu>View</guimenu><guimenuitem>Preview Mode</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>This changes &kword; from a single page view, to a multiple page view suitable for evaluating document flow and formatting.</para>
 <para>The number of pages shown in preview mode <link linkend="opt-ui">can be adjusted</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Text Mode</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>When this option is selected, &kword; will only show the text of your document..</para>
 </listitem>
 </varlistentry>
 
@@ -794,7 +804,7 @@ the borders back on.  </action></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>View</guimenu><guimenuitem>Doc Structure</guimenuitem>
+<guimenu>View</guimenu><guimenuitem>Show Doc Structure</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -802,6 +812,21 @@ the borders back on.  </action></para>
 structure window.</action> Selecting this option again will turn
 the window back on.  For more information, refer to the section entitled
 <link linkend="doc-structure">Document Structure</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Show Rulers</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will toggle the rullers off.</action>
+Selecting this option again will turn rulers on.  A checkmark before
+the menu entry will show you the current status of this option.  More
+information on rulers can be found under <link
+linkend="rulers">Using rulers</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -903,6 +928,19 @@ using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Footnote...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will insert a footnote at the current cursor
+position.</action>  More detailed information can be found in <link
+linkend="endnotes-and-footnotes">Footnotes</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Table of Contents</guimenuitem>
 </menuchoice>
 </term>
@@ -921,7 +959,7 @@ linkend="toc">Table of Contents</link>.</para>
 </term>
 <listitem>
 <para><action>Selecting this option will allow you to insert page
-numbers, Date, time, Serial letters, &etc;</action> You can find
+numbers, date, time, author information, &etc;</action> You can find
 specific information about page numbers <link
 linkend="page-number">here</link>.  More information about Date and
 Times can be found under <link linkend="date-time">Inserting the Date
@@ -951,10 +989,23 @@ entitled <link linkend="expressions">Expressions</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to connect text to an external web page, 
+<para><action>Allows you to connect text to an external web page,
 email address or files</action>
-For more information refer to the section entitled 
+For more information refer to the section entitled
 <link linkend="links">Document Links</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Comment</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to add comments to selected text.</action>
+For more information refer to the section entitled
+<link linkend="comments">Document Comments</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1074,7 +1125,7 @@ using the menubar. </para>
 <varlistentry>
 <term id="menu-scan-image">
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Scan...</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Scan Image...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1107,7 +1158,7 @@ default settings for the selected text.</action></para>
 <term id="format-font">
 <menuchoice>
 <shortcut>
-<keycombo action="simul">&Ctrl;&Alt;<keycap>F</keycap></keycombo>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo>
 </shortcut>
 <guimenu>Format</guimenu><guimenuitem>Font</guimenuitem>
 </menuchoice>
@@ -1118,7 +1169,7 @@ the selected text.</action> For more details, go to <link
 linkend="format-characters">Formating Characters</link></para>
 
 <para>Typing <keycombo
-action="simul">&Ctrl;&Alt;<keycap>F</keycap></keycombo> is equivalent to
+action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo> is equivalent to
 using the menubar. </para>
 </listitem>
 </varlistentry>
@@ -1127,7 +1178,7 @@ using the menubar. </para>
 <term>
 <menuchoice>
 <shortcut>
-<keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo>
 </shortcut>
 <guimenu>Format</guimenu>
 <guimenuitem>Paragraph</guimenuitem>
@@ -1138,7 +1189,7 @@ using the menubar. </para>
 tab stops, numbering and borders.</action> For more details, go to <link
 linkend="format-para">Formating Paragraphs</link>.</para>
 <para>Typing <keycombo
-action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo> is equivalent to
+action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo> is equivalent to
 using the menubar.</para>
 </listitem>
 </varlistentry>
@@ -1160,7 +1211,7 @@ including size, headers and footers.</action> For more details, go to
 <term id="menu-format-stylist">
 <menuchoice>
 <shortcut>
-<keycombo action="simul">&Ctrl;&Alt;<keycap>S</keycap></keycombo>
+<keycombo action="simul">&Alt;&Ctrl;<keycap>S</keycap></keycombo>
 </shortcut>
 <guimenu>Format</guimenu><guimenuitem>Stylist</guimenuitem>
 </menuchoice>
@@ -1169,12 +1220,23 @@ including size, headers and footers.</action> For more details, go to
 <para><action>Opens a dialog to allow you to format, add and delete
 styles.</action> For more information go to <link
 linkend="styles">Styles</link></para><para>Typing <keycombo
-action="simul">&Ctrl;&Alt;<keycap>S</keycap></keycombo> is equivalent to
+action="simul">&Alt;&Ctrl;<keycap>S</keycap></keycombo> is equivalent to
 using the menubar. </para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Create Style From Selection</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Uses the currently selected text to create a new style.</para>
+<para>For more
+information go to <link linkend="style-add-text">Styles</link></para>
+</listitem>
+</varlistentry><varlistentry>
 <term>
 <menuchoice>
 <guimenu>Format</guimenu><guimenuitem>Style</guimenuitem>
@@ -1269,9 +1331,33 @@ using the menubar. </para>
 </varlistentry>
 
 <varlistentry>
+<term id="menu-raise-front">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Bring to Front</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This raises the currently selected frame to the top of all overlapping frames.</action> For more information see the section entitled
+<link linkend="raise-frame">Raise and Lower frames</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term id="menu-lower-back">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Send to Back</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This lowers the currently selected frame to the bottom of all overlapping frames.</action> For more information see the section entitled
+<link linkend="raise-frame">Raise and Lower frames</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
-<guimenu>Edit</guimenu><guimenuitem>Text Background Color</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Text Background Color</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1282,7 +1368,7 @@ using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Edit</guimenu><guimenuitem>Configure Frame Border</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Configure Frame Border</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1307,12 +1393,12 @@ appear with all available border styles.  Select the correct style and the borde
 <varlistentry>
 <term id="menu-insert-row">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Insert Row</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Insert Row</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Allows you to insert a row into a table.</action> For more
-on tables, <link linkend="tables">click here</link>.</para> 
+on tables, <link linkend="tables">click here</link>.</para>
 <para>Clicking <inlinemediaobject><imageobject><imagedata
 fileref="rowin.png" format="PNG"/></imageobject></inlinemediaobject> is
 equivalent to using the menubar.</para>
@@ -1320,14 +1406,30 @@ equivalent to using the menubar.</para>
 </varlistentry>
 
 <varlistentry>
+<term id="menu-delete-row">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Delete Row</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Delete a row from a table.</action> For more on tables,
+<link linkend="tables">click here</link>.</para>
+
+<para>Clicking <inlinemediaobject><imageobject><imagedata
+fileref="rowout.png" format="PNG"/></imageobject></inlinemediaobject>
+is equivalent to using the menubar.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term id="menu-insert-column">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Insert Column</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Insert Column</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Allows you to insert a column into a table.</action> For
-more on tables, <link linkend="tables">click here</link>.</para> 
+more on tables, <link linkend="tables">click here</link>.</para>
 <para>Clicking <inlinemediaobject><imageobject><imagedata
 fileref="colin.png" format="PNG"/></imageobject></inlinemediaobject> is
 equivalent to using the menubar.</para>
@@ -1335,25 +1437,9 @@ equivalent to using the menubar.</para>
 </varlistentry>
 
 <varlistentry>
-<term id="menu-delete-row">
-<menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Delete Row</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Delete a row from a table.</action> For more on tables,
-<link linkend="tables">click here</link>.</para> 
-
-<para>Clicking <inlinemediaobject><imageobject><imagedata
-fileref="rowout.png" format="PNG"/></imageobject></inlinemediaobject>
-is equivalent to using the menubar.</para> 
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term id="menu-delete-column">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Delete Column</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Delete Column</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1366,9 +1452,21 @@ is equivalent to using the menubar.</para>
 </varlistentry>
 
 <varlistentry>
+<term id="menu-resize-column">
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Resize Column</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Change the width of the currently selected column.</action> For more on changing column widths,
+<link linkend="table-resize-column">click here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Join Cells</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Cells</guimenuitem><guimenuitem>Join Cells</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1381,12 +1479,24 @@ here</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Split Cells</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Cells</guimenuitem><guimenuitem>Split Cells</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>This will split previously joined cells in a
 table.</action>  For more on tables, <link linkend="tables">click
+here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Table</guimenu><guimenuitem>Cells</guimenuitem><guimenuitem>Protect Cells</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This prevent changes to the data in the selected cells.</action>  For more on tables, <link linkend="tables">click
 here</link>.</para>
 </listitem>
 </varlistentry>
@@ -1440,7 +1550,31 @@ equivalent to using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Autoformat</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Toggles autocorrection on and off.</action>  
+For more information see the section entitled
+<link linkend="autocorrect">Autocorrection</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Autoformat</guimenuitem><guimenuitem>Apply Autoformat</guimenuitem>
+</menuchoice>
+</term>
+<listitem><para><action>&kword; will format your document according to specific rules.</action>
+For more information see <link linkend="autoformat">Autoformating</link>.</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Autocorrection</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1453,11 +1587,36 @@ here</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Completion</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to modify the autocompletion options.</action>
+For more see the section on<link linkend="autocomplete">Autocompletion</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Footnote/Endnote</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to change the look of your footnotes and endnotes.</action>
+For more information see <link linkend="endnotes-and-footnotes">
+Footnotes</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Change Case</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to set the case of all selected text.</action> 
+<para><action>Allows you to set the case of all selected text.</action>
 For more information see <link linkend="change-font-case">
 Changing Font Case</link>.</para>
 </listitem>
@@ -1479,7 +1638,7 @@ refer to the section entitled <link linkend="expressions">Expressions</link>.</p
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Mail Merge</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1863,6 +2022,7 @@ a task from the menubar.  Click on that task for more details. </para>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="alignRight.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Right Text Align Button</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="alignBlock.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Justify Text Button</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="numtxtbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Numbered Text paragraphs</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bullist.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Bulleted Text paragraphs</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="decindbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Reduce paragraph indent</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="incindbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Increase Paragraph Indent</entry></row>
 </tbody></tgroup>
@@ -1980,7 +2140,7 @@ a task from the menubar.  Click on that task for more details. </para>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formlrind.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add Lower Right Index</entry></row>
 <row><entry></entry><entry>Right Facing Characters</entry></row>
 <row><entry></entry><entry>Left Facing Characters</entry></row>
-<row><entry></entry><entry>Special Symbols</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="formspecchar.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Special Symbols</entry></row>
 </tbody></tgroup></informaltable>
 
 </sect1>

@@ -205,7 +205,7 @@ will change.</para>
 
 <para>To configure options regarding spelling and the user interface
 select <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
-&kword;</guimenuitem></menuchoice> from the Menu bar.</para>
+&kword;</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>This will bring up a dialog box.</para>
 
@@ -316,12 +316,12 @@ the following.</para>
 </screenshot>
 
 <variablelist>
-<varlistentry>
+<!--<varlistentry>
 <term><guilabel>Show rulers</guilabel></term>
 <listitem><para>Placing a mark in this checkbox makes the rulers visible in &kword;.  See
 <link linkend="rulers">Using Rulers</link> for more information.</para>
 </listitem>
-</varlistentry>
+</varlistentry>  Currently not in CVS dialogs...-->
 
 <varlistentry>
 <term><guilabel>Show status bar</guilabel></term>
