@@ -323,7 +323,7 @@ void Document::footnoteEnd()
     m_textHandler->setFrameSetElement( QDomElement() );
 }
 
-void Document::slotTableCellStart( int row, int column, int rowSize, int columnSize, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::TC& tc, const wvWare::Word97::SHD& shd )
+void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::TC& tc, const wvWare::Word97::SHD& shd )
 {
     // Create footnote/endnote frameset
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
@@ -333,8 +333,8 @@ void Document::slotTableCellStart( int row, int column, int rowSize, int columnS
     framesetElement.setAttribute( "name", i18n("Table_Name Cell row,column", "%1 Cell %2,%3").arg(tableName).arg(row).arg(column) );
     framesetElement.setAttribute( "row", row );
     framesetElement.setAttribute( "col", column );
-    framesetElement.setAttribute( "rows", rowSize );
-    framesetElement.setAttribute( "cols", columnSize );
+    framesetElement.setAttribute( "rows", rowSpan );
+    framesetElement.setAttribute( "cols", columnSpan );
     m_framesetsElement.appendChild(framesetElement);
 
     QDomElement frameElem = createInitialFrame( framesetElement, cellRect.left(), cellRect.right(), cellRect.top(), cellRect.bottom(), true, NoFollowup );
@@ -398,7 +398,7 @@ void Document::processSubDocQueue()
     while ( !m_tableQueue.empty() )
     {
         KWord::Table& table = m_tableQueue.front();
-        m_tableHandler->tableStart( table.name );
+        m_tableHandler->tableStart( &table );
         QValueList<KWord::Row> &rows = table.rows;
         for( QValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
             KWord::TableRowFunctorPtr f = (*it).functorPtr;

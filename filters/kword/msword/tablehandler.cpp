@@ -19,14 +19,11 @@
 
 #include "tablehandler.h"
 
-#include <functor.h>
-#include <functordata.h>
 #include <word97_generated.h>
 
 #include <kdebug.h>
 #include <koRect.h>
-
-#include <algorithm>
+#include <qtl.h>
 
 KWordTableHandler::KWordTableHandler()
 {
@@ -34,16 +31,23 @@ KWordTableHandler::KWordTableHandler()
 }
 
 // Called by Document before invoking the table-row-functors
-void KWordTableHandler::tableStart( const QString& name )
+void KWordTableHandler::tableStart( KWord::Table* table )
 {
-    Q_ASSERT( !name.isEmpty() );
-    m_currentTableName = name;
+    Q_ASSERT( table );
+    Q_ASSERT( !table->name.isEmpty() );
+    m_currentTable = table;
+    qHeapSort( table->m_cellEdges );
+#if 0
+    for (unsigned int i = 0; i < table->m_cellEdges.size(); i++)
+        kdDebug() << table->m_cellEdges[i] << endl;
+#endif
     m_row = -1;
+    m_currentY = 0;
 }
 
 void KWordTableHandler::tableEnd()
 {
-    m_currentTableName = QString::null;
+    m_currentTable = 0L; // we don't own it, the table-queue does!
     m_row = -2;
     m_column = -2;
     // Warning: if doing more here, check that it's still ok to call this from the ctor
@@ -51,21 +55,23 @@ void KWordTableHandler::tableEnd()
 
 void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> tap )
 {
-    kdDebug() << k_funcinfo << endl;
     if ( m_row == -2 )
     {
         kdWarning() << "tableRowStart: tableStart not called previously!" << endl;
         return;
     }
-    Q_ASSERT( !m_currentTableName.isEmpty() );
+    Q_ASSERT( m_currentTable );
+    Q_ASSERT( !m_currentTable->name.isEmpty() );
     m_row++;
     m_column = -1;
     m_tap = tap;
+    kdDebug() << "tableRowStart row=" << m_row << endl;
 }
 
 void KWordTableHandler::tableRowEnd()
 {
-    kdDebug() << k_funcinfo << endl;
+    kdDebug() << "tableRowEnd" << endl;
+    m_currentY += rowHeight();
 }
 
 void KWordTableHandler::tableCellStart()
@@ -83,6 +89,8 @@ void KWordTableHandler::tableCellStart()
     const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
 
     // Check for merged cells
+    // ## We can ignore that one. Our cell-edge magic is much more flexible.
+#if 0
     int colSize = 1;
     if ( tc.fFirstMerged )
     {
@@ -94,24 +102,78 @@ void KWordTableHandler::tableCellStart()
             ++i;
         }
     }
+#endif
     if ( tc.fVertRestart )
     {
-        // Vertical merging is much harder to implement....
-        // ##### How do I find out the TAP of the rows below?
+        kdDebug() << "fVertRestart is set!" << endl;
+        // ####### TODO
     }
+
     KoRect cellRect( m_tap->rgdxaCenter[ m_column ] / 20.0, // left
-                     0, // top
+                     m_currentY, // top
                      ( m_tap->rgdxaCenter[ m_column+1 ] - m_tap->rgdxaCenter[ m_column ] ) / 20.0, // width
-                     20 ); // height (dyaRowHeight seems to be 0 most of the time)
-    kdDebug() << k_funcinfo << " row=" << m_row << " column=" << m_column << " colSize=" << colSize << " cellRect=" << cellRect << endl;
-    const wvWare::Word97::SHD& shd = m_tap->rgshd[ m_column ];
-    emit sigTableCellStart( m_row, m_column, 1 /*TODO*/, colSize, cellRect, m_currentTableName, tc, shd );
+                     rowHeight() ); // height
+
+    // Check how many cells that mean, according to our cell edge array
+    int leftCellNumber = m_currentTable->columnNumber( m_tap->rgdxaCenter[ m_column ] );
+    int rightCellNumber = m_currentTable->columnNumber( m_tap->rgdxaCenter[ m_column+1 ] );
+
+    // In cases where not all columns are present, ensure that the last
+    // column spans the remainder of the table.
+    if ( m_column == nbCells - 1 )
+        rightCellNumber = m_currentTable->m_cellEdges.size() - 1;
+
+    Q_ASSERT( rightCellNumber >= leftCellNumber ); // you'd better be...
+    int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells
+
+    kdDebug() << " tableCellStart row=" << m_row << " column=" << m_column << " colSpan=" << colSpan << " (from " << leftCellNumber << " to " << rightCellNumber << ") cellRect=" << cellRect << endl;
+
+    emit sigTableCellStart( m_row, leftCellNumber, 1 /*TODO rowSpan*/, colSpan, cellRect, m_currentTable->name, tc, m_tap->rgshd[ m_column ] );
 }
 
 void KWordTableHandler::tableCellEnd()
 {
-    kdDebug() << k_funcinfo << endl;
+    kdDebug() << " tableCellEnd" << endl;
     emit sigTableCellEnd();
+}
+
+
+// Add cell edge into the cache of cell edges for a given table.
+void KWord::Table::cacheCellEdge(int cellEdge)
+{
+    uint size = m_cellEdges.size();
+    // Do we already know about this edge?
+    for (unsigned int i = 0; i < size; i++)
+    {
+        if (m_cellEdges[i] == cellEdge)  {
+            kdDebug() << k_funcinfo << cellEdge << " -> found" << endl;
+            return;
+        }
+    }
+
+    // Add the edge to the array.
+    m_cellEdges.resize(size + 1, QGArray::SpeedOptim);
+    m_cellEdges[size] = cellEdge;
+    kdDebug() << k_funcinfo << cellEdge << " -> added. Size=" << size+1 << endl;
+}
+
+// Lookup a cell edge from the cache of cell edges
+// And return the column number
+int KWord::Table::columnNumber(int cellEdge) const
+{
+    for (unsigned int i = 0; i < m_cellEdges.size(); i++)
+    {
+        if (m_cellEdges[i] == cellEdge)
+            return i;
+    }
+    // This can't happen, if cacheCellEdge has been properly called
+    kdWarning() << "Column not found for cellEdge x=" << cellEdge << " - BUG." << endl;
+    return 0;
+}
+
+double KWordTableHandler::rowHeight() const
+{
+    return QMAX( m_tap->dyaRowHeight / 20.0, 20);
 }
 
 #include "tablehandler.moc"

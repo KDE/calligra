@@ -47,10 +47,23 @@ namespace KWord
         TableRowFunctorPtr functorPtr;
     };
 
+    // Data for a given table, stored between the 'tableRowFound' callback
+    // during text parsing and the final generation of table cells.
     struct Table
     {
         QString name; // kword's grpMgr attribute
         QValueList<Row> rows; // need to use QValueList to benefit from implicit sharing
+
+        // Word has a very flexible concept of columns: each row can vary the
+        // edges of each column. We must map this onto a set of fixed-width columns
+        // by defining columns on each edge, and then using joined cells to model
+        // the original Word cells. We accumulate all the known edges for a given
+        // table in an array.
+        // Important: don't use unsigned int. Value can be negative (relative to margin...).
+        QMemArray<int> m_cellEdges;
+
+        void cacheCellEdge( int cellEdge );
+        int columnNumber( int cellEdge ) const;
     };
 };
 
@@ -67,18 +80,22 @@ public:
     virtual void tableCellEnd();
 
     ///////// Our own interface
-    void tableStart( const QString& name );
+    void tableStart( KWord::Table* table );
     void tableEnd();
 
 signals:
     // Tells Document to create frameset for cell
-    void sigTableCellStart( int row, int column, int rowSize, int columnSize, const KoRect&, const QString& tableName, const wvWare::Word97::TC& tc, const wvWare::Word97::SHD& shd );
+    void sigTableCellStart( int row, int column, int rowSpan, int columnSpan, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::TC& tc, const wvWare::Word97::SHD& shd );
     void sigTableCellEnd();
 
+protected:
+    double rowHeight() const;
+
 private:
-    QString m_currentTableName;
+    KWord::Table* m_currentTable;
     int m_row;
     int m_column;
+    double m_currentY;
     wvWare::SharedPtr<const wvWare::Word97::TAP> m_tap;
 };
 

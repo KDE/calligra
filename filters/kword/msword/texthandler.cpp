@@ -150,7 +150,7 @@ QDomElement KWordTextHandler::insertVariable( int type, wvWare::SharedPtr<const 
     return varElem;
 }
 
-void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor )
+void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap )
 {
     if ( !m_currentTable )
     {
@@ -162,6 +162,11 @@ void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor )
         m_currentTable->name = i18n("Table %1").arg( ++s_tableNumber );
         insertAnchor( m_currentTable->name );
     }
+
+    // Add all cell edges to our array.
+    for (int i = 0; i <= tap->itcMac; i++)
+        m_currentTable->cacheCellEdge( tap->rgdxaCenter[ i ] );
+
     KWord::Row row( new wvWare::TableRowFunctor( functor ) );
     m_currentTable->rows.append( row );
 }
