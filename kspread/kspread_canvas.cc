@@ -2795,13 +2795,14 @@ void KSpreadCanvas::equalizeRow()
 
   rl = m_pView->activeTable()->rowLayout(selection.top());
   size=rl->height(this);
+  if ( selection.top() == selection.bottom() )
+      return;
   for(int i=selection.top()+1;i<=selection.bottom();i++)
-  {  KSpreadTable *table = activeTable();
-  if ( !table )
-    return;
-
-
-    size=QMAX(m_pView->activeTable()->rowLayout(i)->height(this),size);
+  {
+      KSpreadTable *table = activeTable();
+      if ( !table )
+          return;
+      size=QMAX(m_pView->activeTable()->rowLayout(i)->height(this),size);
   }
   m_pView->vBorderWidget()->equalizeRow(size);
 }
@@ -2814,6 +2815,9 @@ void KSpreadCanvas::equalizeColumn()
 
   cl = m_pView->activeTable()->columnLayout(selection.left());
   size=cl->width(this);
+  if ( selection.left() == selection.right() )
+      return;
+
   for(int i=selection.left()+1;i<=selection.right();i++)
   {
     size=QMAX(m_pView->activeTable()->columnLayout(i)->width(this),size);
