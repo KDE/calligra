@@ -41,8 +41,9 @@
 
 KoVariableSettings::KoVariableSettings()
 {
-    m_startingpage=1;
-    m_displayLink=true;
+    m_startingpage = 1;
+    m_displayLink = true;
+    m_displayComment = true;
 }
 
 void KoVariableSettings::save( QDomElement &parentElem )
@@ -54,6 +55,7 @@ void KoVariableSettings::save( QDomElement &parentElem )
         elem.setAttribute( "startingPageNumber", m_startingpage );
     }
     elem.setAttribute("displaylink",(int)m_displayLink);
+    elem.setAttribute("displaycomment",(int)m_displayComment);
 }
 
 void KoVariableSettings::load( QDomElement &elem )
@@ -65,7 +67,8 @@ void KoVariableSettings::load( QDomElement &elem )
             m_startingpage = e.attribute("startingPageNumber").toInt();
         if(e.hasAttribute("displaylink"))
             m_displayLink=(bool)e.attribute("displaylink").toInt();
-
+        if(e.hasAttribute("displaycomment"))
+            m_displayComment=(bool)e.attribute("displaycomment").toInt();
     }
 }
 
@@ -1267,6 +1270,9 @@ QString KoNoteVariable::text()
 
 void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const int offset )
 {
+    if ( !m_varColl->variableSetting()->displayComment())
+        return;
+
     KoTextFormat * f = static_cast<KoTextFormat *>(format());
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int bl, _y;

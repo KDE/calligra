@@ -51,12 +51,16 @@ class KoVariableSettings
     bool displayLink(){return m_displayLink;}
     void setDisplayLink( bool b){ m_displayLink=b;}
 
+    bool displayComment(){return m_displayComment;}
+    void setDisplayComment( bool b){ m_displayComment=b;}
+
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
  private:
     int m_startingpage;
     bool m_displayLink;
+    bool m_displayComment;
 };
 
 /**
