@@ -1036,6 +1036,11 @@ bool ABIWORDExport::filter(const QString  &filenameIn,
     // First the XML header in UTF-8 version
     // (AbiWord and QString handles UTF-8 well, so we stay with this encoding!)
     stringBufOut = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+
+    // NOTE: AbiWord CVS 2001-08-18 has now a DOCTPYE
+    // However I find that the DOCTYPE chosen is worng (AbiWord Bug #1882)
+    // <!DOCTYPE abw PUBLIC "-//W3C//DTD ABW 1.0 Strict//EN" "http://www.abisource.com/awml.dtd">
+
     // First magic: "<abiword"
     stringBufOut += "<abiword version=\"unnumbered\" fileformat=\"1.0\">\n";
     // Second magic: "<!-- This file is an AbiWord document."
