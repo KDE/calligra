@@ -73,6 +73,10 @@ void Page::paintEvent(QPaintEvent* paintEvent)
   painter.setClipRect(paintEvent->rect());
   if (drawBack) paintBackground(&painter,paintEvent->rect());
   if (!objList()->isEmpty()) paintObjects(&painter,paintEvent->rect());
+
+  if (!editMode)
+    view->presentParts(_presFakt,&painter,paintEvent->rect(),diffx(),diffy());
+
   painter.end();
 
   bitBlt(this,paintEvent->rect().x(),paintEvent->rect().y(),&pix,
@@ -2095,6 +2099,7 @@ void Page::doObjEffects()
       p.begin(this);
       p.drawPixmap(0,0,screen_orig);
       paintObjects(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
+      //view->presentParts(_presFakt,&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()),diffx(),diffy());
       p.end();  
     }
   else
@@ -2102,6 +2107,7 @@ void Page::doObjEffects()
       QPainter p;
       p.begin(screen);
       paintObjects(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
+      //view->presentParts(_presFakt,&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()),diffx(),diffy());
       p.end();
       bitBlt(this,0,0,screen);
     }

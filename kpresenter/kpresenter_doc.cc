@@ -54,12 +54,14 @@ QPicture* BackPic::getPic()
 /******************************************************************/
 
 /*====================== constructor =============================*/
-KPresenterChild::KPresenterChild(KPresenterDocument_impl *_kpr, const QRect& _rect,OPParts::Document_ptr _doc)
+KPresenterChild::KPresenterChild(KPresenterDocument_impl *_kpr, const QRect& _rect,OPParts::Document_ptr _doc,
+				 int _diffx,int _diffy)
   : KoDocumentChild( _rect, _doc )
 {
   m_pKPresenterDoc = _kpr;
   m_rDoc = OPParts::Document::_duplicate(_doc);
   m_geometry = _rect;
+  __geometry = QRect(_rect.left() + _diffx,_rect.top() + _diffy,_rect.right(),_rect.bottom());
 }
 
 /*====================== constructor =============================*/
@@ -1408,7 +1410,7 @@ void KPresenterDocument_impl::removeView(KPresenterView_impl *_view)
 }
 
 /*========================= insert an object =====================*/
-void KPresenterDocument_impl::insertObject(const QRect& _rect, const char* _server_name)
+void KPresenterDocument_impl::insertObject(const QRect& _rect, const char* _server_name,int _diffx,int _diffy)
 {
   OPParts::Document_var doc = imr_createDocByServerName( _server_name);
   if (CORBA::is_nil(doc))
@@ -1420,7 +1422,7 @@ void KPresenterDocument_impl::insertObject(const QRect& _rect, const char* _serv
       return;
     }
 
-  KPresenterChild* ch = new KPresenterChild(this,_rect,doc);
+  KPresenterChild* ch = new KPresenterChild(this,_rect,doc,_diffx,_diffy);
 
   insertChild( ch );
 }
@@ -1434,9 +1436,10 @@ void KPresenterDocument_impl::insertChild( KPresenterChild *_child )
 }
 
 /*======================= change child geometry ==================*/
-void KPresenterDocument_impl::changeChildGeometry(KPresenterChild *_child,const QRect& _rect)
+void KPresenterDocument_impl::changeChildGeometry(KPresenterChild *_child,const QRect& _rect,int _diffx,int _diffy)
 {
   _child->setGeometry(_rect);
+  _child->_setGeometry(QRect(_rect.left() + _diffx,_rect.top() + _diffy,_rect.right(),_rect.bottom()));
 
   emit sig_updateChildGeometry(_child);
 }

@@ -231,6 +231,7 @@ public:
   void changeClipart(unsigned int,const char*);
 
   QPen getPen() {return pen;} 
+  void presentParts(float,QPainter*,QRect,int,int);
 
 public slots:
 
@@ -305,8 +306,8 @@ protected:
   void keyPressEvent(QKeyEvent*);
   
   // screen presentation
-  void zoomParts(float);
-  void zoomBackParts();
+  void hideParts();
+  void showParts();
 
   // ********** variables **********
 
@@ -489,9 +490,6 @@ protected:
 
   KPresenterShell_impl* shell;
   QSize oldSize;
-
-  QList<QRect> origPartsList;
-  QList<QRect> origFramesList;
 
   int screensaver_pid;
 };

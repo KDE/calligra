@@ -3684,6 +3684,13 @@ void KTextObject::focusOutEvent(QFocusEvent*)
 //   debug("focus out");
 }
 
+/*======================= leave event ============================*/
+void KTextObject::leaveEvent(QEvent*)
+{
+  if (drawSelection && startCursor.positionAbs() != stopCursor.positionAbs())
+    copyRegion();
+}
+
 /*====================== return cell width =======================*/
 int KTextObject::cellWidth(int i)
 {
@@ -3749,9 +3756,18 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	{
 	  if (e->key() == Key_Return || e->key() == Key_Enter || e->key() == Key_Delete
 	      || e->key() == Key_Backspace || e->ascii() && e->ascii() > 31)
-	    cutRegion();
-	  if (e->key() != Key_Shift && e->key() != Key_Control && e->key() != Key_Alt)
+	    {
+	      cutRegion();
+	      _modified = true;
+	    }
+	  if (e->key() != Key_Shift && e->key() != Key_Control && e->key() != Key_Alt &&
+	      !(e->key() == Key_Right && e->state() & ShiftButton) &&
+	      !(e->key() == Key_Left && e->state() & ShiftButton) &&
+	      !(e->key() == Key_Up && e->state() & ShiftButton) &&
+	      !(e->key() == Key_Down && e->state() & ShiftButton))
 	    { 
+	      if (drawSelection && startCursor.positionAbs() != stopCursor.positionAbs())
+		copyRegion();
 	      drawSelection = false;
 	      redrawSelection(startCursor,stopCursor);
 	      startCursor.setPositionAbs(0);
@@ -3775,7 +3791,11 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	    if (e->state() & ControlButton)
 	      txtCursor->wordForward(); 
 	    else
-	      txtCursor->charForward(); 
+	      txtCursor->charForward();
+
+	    if (e->state() & ShiftButton)
+	      selectText(oldCursor,C_RIGHT);
+
 	    cursorChanged = true;
 	  } break;
 	case Key_Left:
@@ -3784,10 +3804,30 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 	      txtCursor->wordBackward(); 
 	    else
 	      txtCursor->charBackward(); 
+
+	    if (e->state() & ShiftButton)
+	      selectText(oldCursor,C_LEFT);
+
 	    cursorChanged = true;
 	  } break;
-	case Key_Up: { txtCursor->lineUp(); cursorChanged = true; } break;
-	case Key_Down: { txtCursor->lineDown(); cursorChanged = true;} break;
+	case Key_Up: 
+	  { 
+	    txtCursor->lineUp(); 
+
+	    if (e->state() & ShiftButton)
+	      selectText(oldCursor,C_UP);
+
+	    cursorChanged = true; 
+	  } break;
+	case Key_Down: 
+	  { 
+	    txtCursor->lineDown(); 
+
+	    if (e->state() & ShiftButton)
+	      selectText(oldCursor,C_DOWN);
+
+	    cursorChanged = true; 
+	  } break;
 	case Key_Return: case Key_Enter:
 	  {
 	    _modified = true;
@@ -5014,4 +5054,54 @@ void KTextObject::createRBMenu()
   pixmap.load(pixdir+"/editpaste.xpm");
   CB_PASTE = rbMenu->insertItem(pixmap,i18n("&Paste"),this,SLOT(clipPaste()));
   rbMenu->setMouseTracking(true);
+}
+
+/*====================== select text =============================*/
+void KTextObject::selectText(TxtCursor *oldCursor,CursorDirection _dir)
+{
+  TxtCursor *cursor_min = oldCursor->minCursor(txtCursor);
+  TxtCursor *cursor_max = oldCursor->maxCursor(txtCursor);
+
+  if (drawSelection && startCursor.positionAbs() != stopCursor.positionAbs())
+    {
+      TxtCursor _startCursor = startCursor;
+      TxtCursor _stopCursor = stopCursor;
+
+//       drawSelection = false;
+//       redrawSelection(startCursor,stopCursor);
+
+      if ((_dir == C_UP || _dir == C_LEFT) && (txtCursor->positionAbs() < startCursor.positionAbs()))
+	startCursor.setPositionAbs(txtCursor->positionAbs());
+      else if ((_dir == C_DOWN || _dir == C_RIGHT) && (txtCursor->positionAbs() < stopCursor.positionAbs()))
+	startCursor.setPositionAbs(txtCursor->positionAbs());
+      else if ((_dir == C_DOWN || _dir == C_RIGHT) && (txtCursor->positionAbs() == stopCursor.positionAbs()))
+	{
+	  stopCursor.setPositionAbs(txtCursor->positionAbs());
+	  startCursor.setPositionAbs(txtCursor->positionAbs());
+	}
+      else if (txtCursor->positionAbs() < startCursor.positionAbs())
+	startCursor.setPositionAbs(oldCursor->positionAbs());
+      else
+	stopCursor.setPositionAbs(txtCursor->positionAbs());
+      
+      if (startCursor.positionAbs() != stopCursor.positionAbs())
+	drawSelection = true;
+      else drawSelection = false;
+
+      if (_startCursor.positionAbs() < startCursor.positionAbs())
+	redrawSelection(_startCursor,startCursor);
+
+      if (_stopCursor.positionAbs() > stopCursor.positionAbs())
+	redrawSelection(stopCursor,_stopCursor);
+    }
+  else
+    {
+      startCursor.setPositionAbs(cursor_min->positionAbs());
+      stopCursor.setPositionAbs(cursor_max->positionAbs());
+      if (startCursor.positionAbs() != stopCursor.positionAbs())
+	drawSelection = true;
+      else drawSelection = false;
+    }
+
+  redrawSelection(startCursor,stopCursor);
 }

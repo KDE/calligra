@@ -67,8 +67,6 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   m_bShowGUI = true;
   m_bRectSelection = false;
   presStarted = false;
-  origFramesList.setAutoDelete(true);
-  origPartsList.setAutoDelete(true);
 }
 
 /*======================= destructor ============================*/
@@ -257,7 +255,7 @@ void KPresenterView_impl::insertObject()
   KoPartEntry* pe = KoPartSelectDia::selectPart();
   if (!pe) return;
   
-  m_pKPresenterDoc->insertObject(QRect(10,10,150,150),pe->name());
+  m_pKPresenterDoc->insertObject(QRect(10,10,150,150),pe->name(),xOffset,yOffset);
   //  startRectSelection(pe->name());
 }
 
@@ -427,6 +425,8 @@ void KPresenterView_impl::screenStart()
 	  kill(screensaver_pid,SIGSTOP);
 	}
 
+      hideParts();
+
       page->deSelectAllObj();
       presStarted = true;
       if (fullScreen)
@@ -439,7 +439,6 @@ void KPresenterView_impl::screenStart()
 	    (float)page->height() / (float)KPresenterDoc()->getPageSize(1,0,0).height() : 1.0;
 	  float _presFakt = min(_presFaktW,_presFaktH);
 	  page->setPresFakt(_presFakt);
-	  zoomParts(_presFakt);
 	}
       else
 	{
@@ -494,7 +493,6 @@ void KPresenterView_impl::screenStop()
 	{
 	  page->close(false);
 	  page->recreate((QWidget*)this,0,QPoint(0,0),true);
-	  zoomBackParts();
 	}
       xOffset = _xOffset;
       yOffset = _yOffset;
@@ -508,6 +506,8 @@ void KPresenterView_impl::screenStop()
       setSize(oldSize.width(),oldSize.height());
       widget()->resize(oldSize);
       resizeEvent(0L);
+
+      showParts();
 
       // start screensaver again
       QString pidFile;
@@ -550,6 +550,9 @@ void KPresenterView_impl::screenPrev()
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  page->setFocus();
 	}
+      QPainter p(page);
+      presentParts(page->presFakt(),&p,QRect(0,0,0,0),xOffset,yOffset);
+      p.end();
     }
 }
 
@@ -570,6 +573,9 @@ void KPresenterView_impl::screenNext()
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  page->setFocus();
 	}
+      QPainter p(page);
+      presentParts(page->presFakt(),&p,QRect(0,0,0,0),xOffset,yOffset);
+      p.end();
     }
 }
 
@@ -967,7 +973,7 @@ void KPresenterView_impl::slotGeometryEnd(PartFrame_impl* _frame)
 {
   KPresenterFrame *f = (KPresenterFrame*)_frame;
   // TODO scaling
-  m_pKPresenterDoc->changeChildGeometry(f->child(),_frame->partGeometry());
+  m_pKPresenterDoc->changeChildGeometry(f->child(),_frame->partGeometry(),xOffset,yOffset);
 }
 
 /*==================== slot move end ===========================*/
@@ -975,7 +981,7 @@ void KPresenterView_impl::slotMoveEnd(PartFrame_impl* _frame)
 {
   KPresenterFrame *f = (KPresenterFrame*)_frame;
   // TODO scaling
-  m_pKPresenterDoc->changeChildGeometry(f->child(),_frame->partGeometry());
+  m_pKPresenterDoc->changeChildGeometry(f->child(),_frame->partGeometry(),xOffset,yOffset);
 }
 
 /*=========== take changes for backgr dialog =====================*/
@@ -1313,59 +1319,72 @@ void KPresenterView_impl::keyPressEvent(QKeyEvent *e)
   page->keyPressEvent(e);
 }
 
-/*========================= zoom Parts ==========================*/
-void KPresenterView_impl::zoomParts(float _fakt)
+/*======================= hide parts ============================*/
+void KPresenterView_impl::hideParts()
 {
-  /*******************************
-   * this doesn't really work !
-   *******************************/
-
-  if (!origFramesList.isEmpty()) origFramesList.clear();
-  if (!origPartsList.isEmpty()) origPartsList.clear();
-  
   QListIterator<KPresenterFrame> it(m_lstFrames);
 
   for(;it.current();++it)
-    {
-      QRect *r = new QRect(it.current()->geometry().x(),it.current()->geometry().y(),
-			   it.current()->geometry().width(),it.current()->geometry().height());
-      origFramesList.append(r);
-      it.current()->hide();
-    }
+    it.current()->hide();
+}
 
-  QListIterator<KPresenterChild> _it(KPresenterDoc()->lstChildren());
+/*====================== present parts ==========================*/
+void KPresenterView_impl::presentParts(float _presFakt,QPainter* _painter,QRect _rect,int _diffx,int _diffy)
+{
+  QListIterator<KPresenterChild> chl = m_pKPresenterDoc->childIterator();
+  QRect child_geometry;
+  int diff_w,diff_h;
+  float scale_w,scale_h,scale_w_back,scale_h_back;
 
-  for(;_it.current();++_it)
+  for(;chl.current();++chl)
     {
-      QRect *r = new QRect(_it.current()->geometry().x(),_it.current()->geometry().y(),
-			   _it.current()->geometry().width(),_it.current()->geometry().height());
-      origPartsList.append(r);
+      child_geometry.setLeft((int)((float)chl.current()->_geometry().left() * _presFakt));
+      child_geometry.setTop((int)((float)chl.current()->_geometry().top() * _presFakt));
+
+      child_geometry.setRight(chl.current()->_geometry().right());
+      child_geometry.setBottom(chl.current()->_geometry().bottom());
+
+//       diff_w = (int)((float)chl.current()->_geometry().width() * _presFakt) - 
+// 	chl.current()->_geometry().width();
+      scale_w = (float)chl.current()->_geometry().width() * _presFakt / 
+	(float)chl.current()->_geometry().width();
+//       scale_w_back = (float)chl.current()->_geometry().width() /
+// 	(float)chl.current()->_geometry().width() * _presFakt;
+
+//       diff_h = (int)((float)chl.current()->_geometry().height() * _presFakt) - 
+// 	chl.current()->_geometry().height();
+      scale_h = (float)chl.current()->_geometry().height() * _presFakt / 
+	(float)chl.current()->_geometry().height();
+//       scale_h_back = (float)chl.current()->_geometry().height() / 
+// 	(float)chl.current()->_geometry().height() * _presFakt;
+
+//       child_geometry.setLeft(child_geometry.left() + diff_w / 2);
+//       child_geometry.setTop(child_geometry.top() + diff_h / 2);
+
+      _painter->translate((float)child_geometry.left() - (float)_diffx,
+			  (float)child_geometry.top() - (float)_diffy);
+      _painter->scale(scale_w,scale_h);
+
+      QPicture* pic;
+      pic = chl.current()->draw();
+
+      _painter->drawPicture(*pic);
+ 
+      _painter->resetXForm();
+      //_painter->scale(scale_w_back,scale_h_back);
+      //_painter->translate(-child_geometry.left(),
+      //		  -child_geometry.top());
+
     }
 }
 
-/*======================= zoom back Parts =======================*/
-void KPresenterView_impl::zoomBackParts()
+/*==================== show parts again =========================*/
+void KPresenterView_impl::showParts()
 {
-  /*******************************
-   * this doesn't really work !
-   *******************************/
-  
   QListIterator<KPresenterFrame> it(m_lstFrames);
 
-  for(unsigned int i = 0;it.current();++it,i++)
-    {
-      it.current()->show();
-      it.current()->setGeometry(origFramesList.at(i)->x(),origFramesList.at(i)->y(),
- 				origFramesList.at(i)->width(),origFramesList.at(i)->height());
-    }
-
-  QListIterator<KPresenterChild> _it(KPresenterDoc()->lstChildren());
-
-  for(unsigned int i = 0;_it.current();++_it,i++)
-    {
-      _it.current()->setGeometry(QRect(origPartsList.at(i)->x(),origPartsList.at(i)->y(),
-				       origPartsList.at(i)->width(),origPartsList.at(i)->height()));
-    }
+  for(;it.current();++it)
+    it.current()->show();
 }
 
 /*======================= setup menu ============================*/
@@ -2296,7 +2315,7 @@ void KPresenterView_impl::mouseReleaseEvent(QMouseEvent *_ev)
     m_rctRectSelection.setRight(_ev->pos().x());
   
   m_bRectSelection = false;
-  m_pKPresenterDoc->insertObject(m_rctRectSelection,m_strNewPart);
+  m_pKPresenterDoc->insertObject(m_rctRectSelection,m_strNewPart,xOffset,yOffset);
 }
 
 /*======================== set mode ==============================*/

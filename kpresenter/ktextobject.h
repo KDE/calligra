@@ -1589,12 +1589,15 @@ protected:
     QString additional;
   };
 
+  enum CursorDirection {C_LEFT,C_RIGHT,C_UP,C_DOWN};
+  
   //***************** methodes ****************
 
   void paintCell(class QPainter*,int,int);
   void paintEvent(QPaintEvent *);
   void focusInEvent(QFocusEvent*);
   void focusOutEvent(QFocusEvent*);
+  void leaveEvent(QEvent*);
   
   int cellWidth(int);
   int cellHeight(int);
@@ -1646,6 +1649,8 @@ protected:
   void _setHorzAlign(TxtParagraph::HorzAlign,int);
 
   void createRBMenu();
+
+  void selectText(TxtCursor*,CursorDirection);
 
 protected slots:
   void clipCut() {cutRegion();}

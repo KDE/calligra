@@ -102,9 +102,12 @@ class KPresenterChild : public KoDocumentChild
 public:
 
   // constructor - destructor
-  KPresenterChild( KPresenterDocument_impl *_kpr,const QRect& _rect,OPParts::Document_ptr _doc );
+  KPresenterChild( KPresenterDocument_impl *_kpr,const QRect& _rect,OPParts::Document_ptr _doc,int,int);
   KPresenterChild( KPresenterDocument_impl *_kpr );
   ~KPresenterChild();
+
+  QRect _geometry() {return __geometry;}
+  void _setGeometry(QRect g) {__geometry = g;}
   
   // get parent
   KPresenterDocument_impl* parent() {return m_pKPresenterDoc;}
@@ -113,6 +116,7 @@ protected:
 
   // parent, document and geometry
   KPresenterDocument_impl *m_pKPresenterDoc;
+  QRect __geometry;
 };
 
 /*****************************************************************/
@@ -171,11 +175,11 @@ public:
   virtual void removeView(KPresenterView_impl *_view);
   
   // insert an object
-  virtual void insertObject(const QRect&,const char*);
+  virtual void insertObject(const QRect&,const char*,int,int);
   virtual void insertChild( KPresenterChild *_child );
   
   // change geomentry of a child
-  virtual void changeChildGeometry(KPresenterChild*,const QRect&);
+  virtual void changeChildGeometry(KPresenterChild*,const QRect&,int,int);
   
   // get iterator if a child
   virtual QListIterator<KPresenterChild> childIterator();
@@ -276,8 +280,6 @@ public:
   // stuff for screen-presentations
   QList<int> reorderPage(unsigned int,int,int,float fakt = 1.0);
   int getPageOfObj(int,int,int,float fakt = 1.0);
-
-  QList<KPresenterChild> lstChildren() {return m_lstChildren;}
 
 signals:
 
