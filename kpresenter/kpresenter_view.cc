@@ -3189,9 +3189,7 @@ void KPresenterView::setupActions()
 void KPresenterView::customSlideShow()
 {
     CustomSlideShowDia *dlg = new CustomSlideShowDia( this, m_pKPresenterDoc, "custom slide show" );
-    connect( this, SIGNAL( presentationFinished() ), dlg, SLOT( slotPresentationFinished() ) );
     dlg->exec();
-    disconnect( this, SIGNAL( presentationFinished() ), dlg, SLOT( slotPresentationFinished() ) );
     delete dlg;
     //clear element
     m_pKPresenterDoc->clearTestCustomSlideShow();

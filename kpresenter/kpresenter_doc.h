@@ -511,7 +511,7 @@ class KPresenterDoc : public KoDocument
     //otherwise return list of custom slide show
     QValueList<int> displaySelectedSlides();
     QValueList<int> listOfDisplaySelectedSlides( const QValueList<KPrPage*>& lst );
-    void addTestCustomSlideShow( const QStringList &lst );
+    void addTestCustomSlideShow( const QStringList &lst, KPresenterView *_view );
     void clearTestCustomSlideShow();
 
 public slots:

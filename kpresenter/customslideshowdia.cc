@@ -35,12 +35,13 @@
 
 #include "kprpage.h"
 #include "kpresenter_doc.h"
+#include "kpresenter_view.h"
 
 #include "customslideshowdia.h"
 
 
-CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, KPresenterDoc *_doc, const char* name )
-    : KDialogBase( parent, name, true, i18n("Custom Slide Show"), Ok|Cancel ), m_doc( _doc )
+CustomSlideShowDia::CustomSlideShowDia( KPresenterView* _view, KPresenterDoc *_doc, const char* name )
+    : KDialogBase( _view, name, true, i18n("Custom Slide Show"), Ok|Cancel ), m_doc( _doc ), m_view( _view )
 {
   QWidget* page = new QWidget( this );
   setMainWidget( page );
@@ -75,12 +76,20 @@ CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, KPresenterDoc *_doc, co
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   connect( list, SIGNAL(clicked ( QListBoxItem * )),this,SLOT(slotTextClicked(QListBoxItem * )));
 
+  connect( m_view, SIGNAL( presentationFinished() ), this, SLOT( slotPresentationFinished() ) );
+
   init();
   updateButton();
 
   resize( 600, 250 );
 
   m_bChanged=false;
+}
+
+
+CustomSlideShowDia::~CustomSlideShowDia()
+{
+    kdDebug()<<"CustomSlideShowDia::~CustomSlideShowDia()********************\n";
 }
 
 void CustomSlideShowDia::init()
@@ -121,12 +130,17 @@ void CustomSlideShowDia::slotPresentationFinished()
     show();
 }
 
+
+void CustomSlideShowDia::hideEvent( QHideEvent* )
+{
+}
+
 void CustomSlideShowDia::slotTest()
 {
     QListBoxItem *item = list->selectedItem();
     if ( item )
     {
-        m_doc->addTestCustomSlideShow( m_customListMap[item->text()] );
+        m_doc->addTestCustomSlideShow( m_customListMap[item->text()], m_view );
         hide();
     }
 }

@@ -4560,14 +4560,12 @@ QStringList KPresenterDoc::presentationList()
     return lst;
 }
 
-void KPresenterDoc::addTestCustomSlideShow( const QStringList &lst )
+void KPresenterDoc::addTestCustomSlideShow( const QStringList &lst, KPresenterView *_view )
 {
     delete m_customListTest;
     m_customListTest = new QValueList<int>( listOfDisplaySelectedSlides( customListPage( lst) ) );
-    KPresenterView *view = firstView();
-    kdDebug()<<"KPresenterDoc::addTestCustomSlideShow( const QStringList &lst ) :"<<view<<endl;
-    if ( view )
-        view->screenStartFromFirst();
+    if ( _view )
+        _view->screenStartFromFirst();
 
 }
 

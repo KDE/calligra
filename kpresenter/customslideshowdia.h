@@ -30,14 +30,15 @@ class QMultiLineEdit;
 class QPushButton;
 class KPresenterDoc;
 class QToolButton;
+class KPresenterView;
 
 class CustomSlideShowDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    CustomSlideShowDia( QWidget* parent, KPresenterDoc *_doc, const char* name );
-
+    CustomSlideShowDia( KPresenterView* _view, KPresenterDoc *_doc, const char* name );
+    ~CustomSlideShowDia();
 public slots:
     virtual void slotOk();
     void slotDoubleClicked(QListBoxItem *);
@@ -50,6 +51,8 @@ public slots:
     void slotPresentationFinished();
 
 protected:
+    void hideEvent( QHideEvent* );
+
     void init();
     void updateButton();
     bool uniqueName( int val, const QString & name ) const;
@@ -62,6 +65,7 @@ protected:
     QPushButton* m_pTest;
     bool m_bChanged;
     KPresenterDoc *m_doc;
+    KPresenterView *m_view;
     CustomListMap m_customListMap;
     QStringList listPageName;
 };
