@@ -99,6 +99,12 @@ Form::setCurrentWidget(QWidget *w)
 	{
 		w = w->parentWidget()->parentWidget();
 	}*/
+	if(!m_manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
+	{
+		w = w->parentWidget();
+		if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget"))
+			w = w->parentWidget();
+	}
 
 	m_resizeHandles.clear();
 	if(m_toplevel && w != m_toplevel->widget() && w)
@@ -129,10 +135,10 @@ Form::unSelectWidget(QWidget *w)
 void
 Form::setSelWidget(QWidget *w)
 {
-	if(w->parentWidget()->inherits("QWidgetStack"))
+	/*if(w->parentWidget()->inherits("QWidgetStack"))
 	{
 		w = w->parentWidget()->parentWidget();
-	}
+	}*/
 
 	Container *cont;
 	ObjectTreeItem *item = m_topTree->lookup(w->name());
@@ -237,7 +243,7 @@ Form::fixNames(QDomElement el)
 		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "name"))
 		{
 			wname = n.toElement().text();
-			if(m_topTree->lookup(wname))
+			while(m_topTree->lookup(wname))
 			{
 				bool ok;
 				int num = wname.right(1).toInt(&ok, 10);
@@ -245,7 +251,9 @@ Form::fixNames(QDomElement el)
 					wname = wname.left(wname.length()-1) + QString::number(num+1);
 				else
 					wname += "2";
-
+			}
+			if(wname != n.toElement().text())
+			{
 				n.removeChild(n.firstChild());
 				QDomElement type = el.ownerDocument().createElement("string");
 				QDomText valueE = el.ownerDocument().createTextNode(wname);

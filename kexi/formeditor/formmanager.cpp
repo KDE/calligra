@@ -66,7 +66,7 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_domDoc.appendChild(m_domDoc.createElement("UI"));
 
 	m_popup = new KPopupMenu();
-	m_popup->insertItem(i18n("Copy"), this, SLOT(copyWidget()));
+	m_copyid = m_popup->insertItem(i18n("Copy"), this, SLOT(copyWidget()));
 	m_cutid = m_popup->insertItem(i18n("Cut"), this, SLOT(cutWidget()));
 	m_popup->insertItem(i18n("Paste"), this, SLOT(pasteWidget()));
 	m_deleteid = m_popup->insertItem(i18n("Remove Item"), this, SLOT(deleteWidget()));
@@ -419,6 +419,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool enableRemo
 
 	m_popup->setItemEnabled(m_deleteid, enableRemove);
 	m_popup->setItemEnabled(m_cutid, enableRemove);
+	m_popup->setItemEnabled(m_copyid, enableRemove);
 
 	m_insertPoint = container->widget()->mapFromGlobal(QCursor::pos());
 	m_popup->exec(QCursor::pos());
@@ -443,7 +444,7 @@ FormManager::showPropertyBuffer(ObjectPropertyBuffer *buff)
 	emit bufferSwitched(buff);
 }
 
-void 
+void
 FormManager::deleteWidgetLater( QWidget *w )
 {
 	w->hide();

@@ -136,8 +136,16 @@ void
 ObjectPropertyBuffer::setWidget(QWidget *widg)
 {
 	kdDebug() << "ObjectPropertyBuffer::setWidget()" << endl;
-	QObject *obj = (QObject*)widg;
 
+	QWidget *w = widg;
+	if(!m_manager->isTopLevel(w) && w->parentWidget() && w->parentWidget()->isA("QWidgetStack"))
+	{
+		w = w->parentWidget();
+		if(w->parentWidget() && w->parentWidget()->inherits("QTabWidget"))
+			w = w->parentWidget();
+	}
+
+	QObject *obj = (QObject*)widg;
 	if(obj==m_object && !m_multiple)
 		return;
 

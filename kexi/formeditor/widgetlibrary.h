@@ -97,6 +97,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		bool	createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
 
 		QString  displayName(const QString &classname);
+		QString  icon(const QString &classname);
 
 		void    startEditing(const QString &classname, QWidget *w, Container *container);
 

@@ -55,6 +55,8 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 
 	private:
 		ObjectTreeItem     *m_item;
+
+	friend class ObjectTreeView;
 };
 
 //! A graphical view of the ObjectTree of a Form.
@@ -75,6 +77,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		    in the Form, and selection will be synced. Nothing happens if \a form is already the current Form.
 		 */
 		void setForm(Form *form);
+		QString  pixmapForClass(const QString &classname);
 
 	public slots:
 		void slotColumnSizeChanged(int);
@@ -88,6 +91,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		void emitSelChanged(QListViewItem *item);
 		/*! Just renames the list item from \a oldname to \a newname. */
 		void renameItem(const QString &oldname, const QString &newname);
+		void displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p);
 
 	signals:
 		/*! This signal is emitted when the user changes the list item selected, so that the Form and the Property

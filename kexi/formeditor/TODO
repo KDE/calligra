@@ -18,10 +18,8 @@
 * Make actions toggable (with KRadioAction)
 
 ^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
-* Change tab position by drag'n drop
 * Move tab between two QTabWidgets by drag'n drop
-
-
+* Icons in ObjectTreeView(in branch) + context menu
 
 ^^^^^^^^^^^^^^^^ DONE ^^^^^^^^^^^^^^
 * Finish sync between Form and ObjectTreeView (2/21/04)
@@ -45,3 +43,5 @@
 * When double-clicking on a QLabel or a QLabel (others ?), the widget should be inline-editable (also on creation) (3/11/04)
 * Add many other widgets :-) (part I : all basic widgets) (3/20/04)
 * Add grid layout (3/27/04)
+* Add many other widgets :-) (part II : all basic containers + more widgets) (4/13/04)
+* Change tab position by drag'n drop (4/14/04)

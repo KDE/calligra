@@ -190,7 +190,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		QDomDocument		m_domDoc;
 		KPopupMenu		*m_popup;
-		int			m_deleteid, m_cutid;
+		int			m_deleteid, m_cutid, m_copyid;
 		QPoint			m_insertPoint;
 
 		bool			m_inserting;

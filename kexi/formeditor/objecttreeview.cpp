@@ -21,11 +21,14 @@
 
 #include <qpainter.h>
 
+#include <kiconloader.h>
 #include <klocale.h>
 
 #include "objecttree.h"
 #include "form.h"
 #include "container.h"
+#include "formmanager.h"
+#include "widgetlibrary.h"
 
 #include "objecttreeview.h"
 
@@ -98,7 +101,7 @@ void
 ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h)
 {
 	p->eraseRect(0,0,w,h);
-	KListViewItem *item = (KListViewItem*)firstChild();
+	ObjectTreeViewItem *item = (ObjectTreeViewItem*)firstChild();
 	if(!item)
 		return;
 
@@ -116,18 +119,20 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
 		if(item->isSelected())
 		{
 			p->fillRect(0,0,w, item->height(), QBrush(cg.highlight()));
-			p->fillRect(-150,0,50, item->height(), QBrush(cg.highlight()));
+			p->fillRect(-150,0,150, item->height(), QBrush(cg.highlight()));
 		}
-		if(item->firstChild())
+		/*if(item->firstChild())
 		{
 		p->drawRect(2, item->height()/2 -4, 9, 9);
 		p->drawLine(4, item->height()/2, 8, item->height()/2);
 		if(!item->isOpen())
 			p->drawLine(6, item->height()/2 - 2, 6, item->height()/2 +2);
-		}
+		}*/
+		QString iconName = ((ObjectTreeView*)listView())->pixmapForClass(item->m_item->widget()->className());
+		p->drawPixmap((w - IconSize(KIcon::Small))/2, (item->height() - IconSize(KIcon::Small))/2 , SmallIcon(iconName));
 
 		p->translate(0, item->totalHeight());
-		item = (KListViewItem*)item->nextSibling();
+		item = (ObjectTreeViewItem*)item->nextSibling();
 	}
 	p->restore();
 }
@@ -157,6 +162,7 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name)
 
 	connect((QObject*)header(), SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotColumnSizeChanged(int)));
 	connect(this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(emitSelChanged(QListViewItem*)));
+	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(KListView*, QListViewItem*, const QPoint&)));
 
 	setFullWidth(true);
 	setAllColumnsShowFocus(true);
@@ -170,10 +176,32 @@ ObjectTreeView::sizeHint() const
 		KListView::sizeHint().height());
 }
 
+QString
+ObjectTreeView::pixmapForClass(const QString &classname)
+{
+	return m_form->manager()->lib()->icon(classname);
+}
+
 void
 ObjectTreeView::slotColumnSizeChanged(int column)
 {
 	setColumnWidth(1, viewport()->width() - columnWidth(0));
+}
+
+void
+ObjectTreeView::displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p)
+{
+	if(list!= this)
+		return;
+
+	QWidget *w = ((ObjectTreeViewItem*)item)->m_item->widget();
+	if(!w)  return;
+
+	bool enable = true;
+	if((w->isA("QWidget")) || (m_form->manager()->isTopLevel(w)))
+		enable = false;
+
+	m_form->manager()->createContextMenu(w, m_form->activeContainer(), enable);
 }
 
 ObjectTreeViewItem*
