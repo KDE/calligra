@@ -126,19 +126,6 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
   m_initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
   m_initialMarkerRow = mymap.attribute( "markerRow" ).toInt();
 
-  if ( mymap.hasAttribute( "protected" ) )
-  {
-    QString passwd = mymap.attribute( "protected" );
-    
-    if ( passwd.length() > 0 )
-    {
-      QCString str( passwd.latin1() );
-      m_strPassword = KCodecs::base64Decode( str );        
-    }
-    else
-      m_strPassword = QCString( "" );
-  }
-
   QDomNode n = mymap.firstChild();
   if ( n.isNull() )
   {
@@ -157,6 +144,19 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
         return false;
     }
     n = n.nextSibling();
+  }
+
+  if ( mymap.hasAttribute( "protected" ) )
+  {
+    QString passwd = mymap.attribute( "protected" );
+    
+    if ( passwd.length() > 0 )
+    {
+      QCString str( passwd.latin1() );
+      m_strPassword = KCodecs::base64Decode( str );        
+    }
+    else
+      m_strPassword = QCString( "" );
   }
 
   if (!activeTable.isEmpty())

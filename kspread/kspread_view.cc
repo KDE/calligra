@@ -3902,9 +3902,10 @@ void KSpreadView::toggleProtectDoc( bool mode )
        return;
      }
 
-     QCString hash;
+     QCString hash( "" );
      QString password( passwd );
-     SHA1::getHash( password, hash );
+     if ( password.length() > 0 )
+       SHA1::getHash( password, hash );
      if ( !m_pDoc->map()->checkPassword( hash ) )
      {
        KMessageBox::error( 0, i18n( "Incorrect password" ) );
@@ -3974,9 +3975,10 @@ void KSpreadView::toggleProtectSheet( bool mode )
      }
 
 
-     QCString hash;
+     QCString hash( "" );
      QString password( passwd );
-     SHA1::getHash( password, hash );
+     if ( password.length() > 0 )
+       SHA1::getHash( password, hash );
      if ( !m_pTable->checkPassword( hash ) )
      {
        KMessageBox::error( 0, i18n( "Incorrect password" ) );
