@@ -184,6 +184,7 @@ public slots:
     void textBold();
     void textItalic();
     void textUnderline();
+    void textStrikeOut();
     void textColor();
     void textAlignLeft();
     void textAlignCenter();
@@ -528,6 +529,7 @@ protected:
     KAction *actionTextBold;
     KAction *actionTextItalic;
     KAction *actionTextUnderline;
+    KToggleAction *actionFormatStrikeOut;
     KAction *actionTextInsertPageNum;
 
     KAction *actionExtraPenBrush;

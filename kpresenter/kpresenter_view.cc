@@ -1239,6 +1239,15 @@ void KPresenterView::textBold()
     m_pKPresenterDoc->setModified(true);
 }
 
+
+void KPresenterView::textStrikeOut()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if ( edit )
+        edit->setStrikeOut(actionFormatStrikeOut->isChecked());
+}
+
+
 /*===============================================================*/
 void KPresenterView::textInsertPageNum()
 {
@@ -2050,6 +2059,10 @@ void KPresenterView::setupActions()
     actionTextUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", CTRL + Key_U,
 					   this, SLOT( textUnderline() ),
 					   actionCollection(), "text_underline" );
+
+    actionFormatStrikeOut = new KToggleAction( i18n( "&Strike out" ), "text_strike", 0 ,
+                                               this, SLOT( textStrikeOut() ),
+                                               actionCollection(), "format_strike" );
 
     actionTextColor = new TKSelectColorAction( i18n( "&Color" ), TKSelectColorAction::TextColor,
                                                actionCollection(), "text_color" );

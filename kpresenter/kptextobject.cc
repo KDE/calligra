@@ -86,7 +86,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     m_doc=doc;
 
     KoTextDocument * textdoc=new KoTextDocument( new KoZoomHandler() , 0,
-                                                 new KoTextFormatCollection( QFont("helvetica") ));
+                                                 new KoTextFormatCollection( QFont("clean",12) ));
 
     m_textobj= new KoTextObject( textdoc, doc->standardStyle());
 
@@ -99,7 +99,10 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 
     connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
              SLOT( slotNewCommand( KCommand * ) ) );
-
+    connect( m_textobj, SIGNAL( availableHeightNeeded() ),
+             SLOT( slotAvailableHeightNeeded() ) );
+    connect( m_textobj, SIGNAL( repaintChanged( KoTextObject* ) ),
+             SLOT( slotRepaintChanged() ) );
 }
 
 /*======================= set size ===============================*/
@@ -171,11 +174,16 @@ void KPTextObject::load(const QDomElement &element)
 void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 {
     kdDebug()<<"draw( QPainter *_painter, int _diffx, int _diffy )\n";
-    if ( move ) {
+    if ( move )
+    {
         KPObject::draw( _painter, _diffx, _diffy );
         return;
     }
 
+    bool drawCursor = m_textobjview!=0L;
+    QColorGroup cg = QApplication::palette().active();
+    QTextCursor * cursor =  m_textobjview? m_textobjview->cursor() : 0;
+    QRect r(getBoundingRect( _diffx, _diffy ));
 
     _painter->save();
 //    _painter->setClipRect( getBoundingRect( _diffx, _diffy ) );
@@ -191,21 +199,24 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     int penw = pen.width() / 2;
 
-    if ( shadowDistance > 0 ) {
+    if ( shadowDistance > 0 )
+    {
         _painter->save();
-
 #if 0
         ktextobject.document()->enableDrawAllInOneColor( shadowColor );
 #endif
-        if ( angle == 0 ) {
+        if ( angle == 0 )
+        {
             int sx = ox;
             int sy = oy;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
 
             _painter->translate( sx, sy );
 
-            if ( specEffects ) {
-                switch ( effect2 ) {
+            if ( specEffects )
+            {
+                switch ( effect2 )
+                {
                 case EF2T_PARA:
                     kdDebug(33001) << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
                     drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
@@ -216,12 +227,16 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
                     //   ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
                 }
                 }
-            } else {
+            }
+            else
+            {
                 //ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
             }
 
             //ktextobject.document()->disableDrawAllInOneColor();
-        } else {
+        }
+        else
+        {
             _painter->translate( ox, oy );
 
             QRect br = QRect( 0, 0, ow, oh );
@@ -244,8 +259,10 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
 
             _painter->translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
-            if ( specEffects ) {
-                switch ( effect2 ) {
+            if ( specEffects )
+            {
+                switch ( effect2 )
+                {
                 case EF2T_PARA:
                     kdDebug(33001) << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
                     drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
@@ -253,9 +270,19 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
                 default:
                 {
                     //   ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                    kdDebug()<<"draw text 33333333333333*******************************\n";
+                    Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+                        _painter, r.x(), r.y(), r.width(), r.height(),
+                        cg, false, drawCursor, cursor, false );
                 }
                 }
-            } else {
+            }
+            else
+            {
+                kdDebug()<<"draw text 222222222222*******************************\n";
+                Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+                    _painter, r.x(), r.y(), r.width(), r.height(),
+                    cg, false, drawCursor, cursor, false );
                 //ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
             }
             //ktextobject.document()->disableDrawAllInOneColor();
@@ -265,7 +292,8 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
     _painter->translate( ox, oy );
 
-    if ( angle == 0 ) {
+    if ( angle == 0 )
+    {
         _painter->setPen( Qt::NoPen );
         _painter->setBrush( brush );
         if ( fillType == FT_BRUSH || !gradient )
@@ -277,8 +305,10 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
         _painter->setBrush( Qt::NoBrush );
         _painter->drawRect( penw, penw, ow - 2 * penw, oh - 2 * penw );
 
-        if ( specEffects ) {
-            switch ( effect2 ) {
+        if ( specEffects )
+        {
+            switch ( effect2 )
+            {
             case EF2T_PARA:
                 kdDebug(33001) << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
                 drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
@@ -287,12 +317,30 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
             {
 
                 //   ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                kdDebug()<<"draw text 4444444444444444444*******************************\n";
+                Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+                    _painter, r.x(), r.y(), r.width(), r.height(),
+                    cg, false, drawCursor, cursor, false );
+
             }
             }
-        } else {
+        }
+        else
+        {
+            _painter->save();
+            _painter->translate(r.x(),r.y());
+            kdDebug()<<"draw text *******************************5555555555555555\n";
+            kdDebug()<<"ox,:"<<ox<<" oy :"<<oy<<" ext.width() :"<<ext.width()<<" ext.height() :"<<ext.height()<<endl;
+            kdDebug()<<"   r.x() :"<<  r.x()<<" r.y() :"<<r.y()<<"     r.width() :"<<  r.width()<<" r.height() ;"<<  r.height()<<endl;
+            Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+                _painter, r.x(), r.y(), r.width(), r.height(),
+                cg, false, drawCursor, cursor, false );
+            _painter->restore();
             //ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
         }
-    } else {
+    }
+    else
+    {
         QRect br = QRect( 0, 0, ow, oh );
         int pw = br.width();
         int ph = br.height();
@@ -322,8 +370,10 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
 
         _painter->translate( rr.left() + xPos, rr.top() + yPos );
 
-        if ( specEffects ) {
-            switch ( effect2 ) {
+        if ( specEffects )
+        {
+            switch ( effect2 )
+            {
             case EF2T_PARA:
                 kdDebug(33001) << "KPTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
                 drawParags( _painter, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
@@ -331,9 +381,21 @@ void KPTextObject::draw( QPainter *_painter, int _diffx, int _diffy )
             default:
             {
                 //   ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
+                kdDebug()<<"draw text 66666666666666*******************************\n";
+                Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+                    _painter, r.x(), r.y(), r.width(), r.height(),
+                    cg, false, drawCursor, cursor, false );
+
+
             }
             }
-        } else {
+        }
+        else
+        {
+            kdDebug()<<"draw text 77777777777777777*******************************\n";
+            Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+                _painter, r.x(), r.y(), r.width(), r.height(),
+                cg, false, drawCursor, cursor, false );
             //ktextobject.document()->draw( _painter, ktextobject.colorGroup() );
         }
     }
@@ -578,6 +640,19 @@ void KPTextObject::slotNewCommand( KCommand * cmd)
     m_doc->addCommand(cmd);
 }
 
+void KPTextObject::slotAvailableHeightNeeded()
+{
+    //todo
+    m_textobj->setAvailableHeight(getSize().height ());
+    kdDebug()<<"getSize().height () :"<<getSize().height ()<<" getSize().width () :"<<getSize().width ()<<endl;
+    textDocument()->setWidth( getSize().width ());
+}
+
+void KPTextObject::slotRepaintChanged()
+{
+    //todo
+    kdDebug()<<"KPTextObject::slotRepaintChanged() \n";
+}
 
 KPTextView::KPTextView( KPTextObject * txtObj )
     : KoTextView( txtObj->textObject() )

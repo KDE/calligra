@@ -104,7 +104,8 @@ protected:
 
 protected slots:
     void slotNewCommand( KCommand *cmd );
-
+    void slotAvailableHeightNeeded();
+    void slotRepaintChanged();
 private:
     KPTextObject &operator=( const KPTextObject & );
 
