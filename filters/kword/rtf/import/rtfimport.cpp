@@ -243,7 +243,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"uc",		setNumericProperty,	state.format.uc, 0 ),
 	MEMBER(	0L,		"ul",		setUnderlineProperty,	state.format.underline, 0 ),
 	MEMBER(	0L,		"ulc",		setNumericProperty,	state.format.underlinecolor, 0 ),
-	MEMBER(	0L,		"uld",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineDouble ),
+	MEMBER(	0L,		"uld",		setEnumProperty,	state.format.underline, RTFFormat::UnderlineDot ),
 	MEMBER(	0L,		"uldash",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDash ),
 	MEMBER(	0L,		"uldashd",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDashDot ),
 	MEMBER(	0L,		"uldashdd",	setEnumProperty,	state.format.underline, RTFFormat::UnderlineDashDotDot ),
@@ -2079,7 +2079,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
                 }
             case RTFFormat::UnderlineSimple:
                 {
-                    st="1";
+                    st="single";
                     break;
                 }
             case RTFFormat::UnderlineDouble:
@@ -2096,38 +2096,38 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 
             case RTFFormat::UnderlineWordByWord:
                 {
-                    st="1";
+                    st="single";
                     styleline="solid";
                     wordbyword="1";
                     break;
                 }
             case RTFFormat::UnderlineDash:
                 {
-                    st="1";
+                    st="single";
                     styleline="dash";
                     break;
                 }
             case RTFFormat::UnderlineDot:
                 {
-                    st="1";
+                    st="single";
                     styleline="dot";
                     break;
                 }
             case RTFFormat::UnderlineDashDot:
                 {
-                    st="1";
+                    st="single";
                     styleline="dashdot";
                     break;
                 }
             case RTFFormat::UnderlineDashDotDot:
                 {
-                    st="1";
+                    st="single";
                     styleline="dashdotdot";
                     break;
                 }
             case RTFFormat::UnderlineWave:
                 {
-                    st="1";
+                    st="single";
                     styleline="wave";
                     break;
                 }
