@@ -112,8 +112,10 @@ class KSPREAD_EXPORT KSpreadCell : public KSpreadFormat
   friend class KSpreadConditions;
 public:
 
-    KSpreadCell( KSpreadSheet *_table, int _column, int _row );
-    KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row );
+    KSpreadCell( KSpreadSheet *_sheet, int _column, int _row );
+    KSpreadCell( KSpreadSheet *_sheet, KSpreadStyle * _style, 
+		 int _column, int _row );
+
     /**
      * @see #tableDies
      */
@@ -178,7 +180,7 @@ public:
      * Given the column number, this static function returns the corresponding
      * column name, i.e. the first column is "A", the second is "B", and so on.
      */
-    static QString columnName( int column );
+    static QString columnName( uint column );
 
     /**
      * Returns true if this cell holds a formula.

@@ -92,6 +92,7 @@ using namespace KSpreadCell_LNS;
 // in simple case of cell(s). For example, most plain text cells don't need
 // to store information about spanned columns and rows, as this is only
 // the case with merged cells.
+//
 // When the cell is getting complex (e.g. merged with other cells, contains
 // rich text, has validation criteria, etc), this CellExtra is allocated by
 // CellPrivate and starts to be available. Otherwise, it won't exist at all.
@@ -100,38 +101,41 @@ class CellExtra
 {
 public:
 
-    // Not empty when the cell holds a link
-    QString link;
+  // Not empty when the cell holds a link
+  QString link;
 
-    // amount of additional cells
-    int extraXCells;
-    int extraYCells;
+  // Number of additional cells.
+  int extraXCells;
+  int extraYCells;
 
-    int mergedXCells;
-    int mergedYCells;
+  // FIXME (comment): What are these for?
+  int mergedXCells;
+  int mergedYCells;
 
-    // If a cell overlapps other cells, then we have the cells width stored here.
-    // This value does not mean anything unless extraXCells is different from 0.
-    double extraWidth;
+  // If this cell overlaps other cells, then we have the cells width and
+  // height stored here.  These values do not mean anything unless
+  // extraXCells and/or extraYCells are different from 0.
+  double extraWidth;
+  double extraHeight;
 
-    // If a cell overlapps other cells, then we have the cells height stored here.
-    // This value does not mean anything unless d->extra()->extraYCells is different from 0.
-    double extraHeight;
+  // A list of cells that obscure this one.
+  // If this list is not empty, then this cell is obscured by another
+  // enlarged object. This means that we have to call this object in order
+  // of painting it for example instead of painting 'this'.
+  //
+  // FIXME (comment): If the list consists of more than one obscuring
+  //                  element, then is there an order between them that 
+  //                  is important?
+  QValueList<KSpreadCell*> obscuringCells;
 
-    // A list of cells that obscure this one.
-    // If this list is not empty, then this cell is obscured by another
-    // enlarged object. This means that we have to call this object in order
-    // of painting it for example instead of painting 'this'.
-    QValueList<KSpreadCell*> obscuringCells;
+  KSpreadConditions  *conditions;
+  KSpreadValidity    *validity;
 
-    KSpreadConditions* conditions;
-    KSpreadValidity * validity;
-
-    // Store the number of line when you used multirow (default is 0)
-    int nbLines;
+  // Store the number of line when you used multirow (default is 0)
+  int nbLines;
 
 private:
-    CellExtra& operator=( const CellExtra& );
+  CellExtra& operator=( const CellExtra& );
 };
 
 
@@ -139,91 +143,103 @@ class CellPrivate
 {
 public:
 
-    // This cell's row. If it is 0, this is the default cell and its row/column can
-    // not be determined.
-    int row;
+  CellPrivate();
+  ~CellPrivate();
 
-    // This cell's column. If it is 0, this is the default cell and its row/column can
-    // not be determined.
-    int column;
+public:
 
-    // Value of the cell, either typed by user or as result of formula
-    KSpreadValue value;
+  // This cell's row and column. If either of them is 0, this is the
+  // default cell and its row/column can not be determined.  Note that
+  // in the isDefault() method, only column is tested.
+  int  row;
+  int  column;
 
-    // Holds the user's input
-    /*
+  // Value of the cell, either typed by user or as result of formula
+  KSpreadValue value;
 
-    Eventually, we'll want to get rid of strText and generate user's input
-    on-the-fly. Then, for normal cells, we'll generate this string using
-    KSpread::ValueConverter::self()->asString (value())
+  // Holds the user's input.
+  //
+  // FIXME:
+  // Eventually, we'll want to get rid of strText and generate
+  // user's input on-the-fly. Then, for normal cells, we'll generate
+  // this string using KSpread::ValueConverter::self()->asString
+  // (value()).
+  //
+  // Here the problem is, that strText also holds the formula -
+  // we'll need to provide some method to generate it from the
+  // parsed version, created in KSpread::Formula. Hence, we won't be
+  // able to get rid of strText until we switch to the new formula
+  // parser and until we write some method that re-generates the
+  // input formula...
+  //
+  // Alternately, we can keep using strText for formulas and
+  // generate it dynamically for static cells...
+  //
+  //  /Tomas
+  //
+  QString  strText;
 
-    Here the problem is, that strText also holds the formula - we'll need
-    to provide some method to generate it from the parsed version,
-    created in KSpread::Formula. Hence, we won't be able to get rid
-    of strText until we switch to the new formula parser and until we
-    write some method that re-generates the input formula...
+  // This is the text we want to display. Not necessarily the same
+  // as strText, e.g. strText="1" and strOutText="1.00" Also holds
+  // value that we got from calculation, formerly known as
+  // strFormulaOut
+  QString  strOutText;
 
-    Alternately, we can keep using strText for formulas and generate it
-    dynamically for static cells...
+  // The parse tree of the real formula (e.g: "=A1*A2").
+  KSParseNode  *code;
 
-    / Tomas
-    */
-    QString strText;
+  // Position and dimension of displayed text.
+  // FIXME (comment): Which coordinate system?  pixels?  mm/cm?  zoom?
+  double  textX;
+  double  textY;
+  double  textWidth;
+  double  textHeight;
 
-    // This is the text we want to display. Not necessarily the same as strText,
-    // e.g. strText="1" and strOutText="1.00"
-    // Also holds value that we got from calculation, formerly known as strFormulaOut
-    QString strOutText;
+  // result of "fm.ascent()" in makeLayout. used in offsetAlign.
+  int  fmAscent;
 
-    // The parse tree of the real formula (e.g: "=A1*A2").
-    KSParseNode* code;
+  // Pointers to neighboring cells.
+  // FIXME (comment): Which order? 
+  KSpreadCell  *nextCell;
+  KSpreadCell  *previousCell;
 
-    // position and dimension of displayed text
-    double textX;
-    double textY;
-    double textWidth;
-    double textHeight;
-
-    // result of "fm.ascent()" in makeLayout. used in offsetAlign.
-    int fmAscent;
-
-    KSpreadCell* nextCell;
-    KSpreadCell* previousCell;
-
-    CellPrivate();
-    ~CellPrivate();
-
-    bool hasExtra() { return (cellExtra != 0); };
-    CellExtra* extra();
+  bool        hasExtra() const { return (cellExtra != 0); };
+  CellExtra  *extra();
 
 private:
-    // "extra stuff", see explanation for CellExtra
-    CellExtra* cellExtra;
+  // "Extra stuff", see explanation for CellExtra.
+  CellExtra  *cellExtra;
 };
+
 
 CellPrivate::CellPrivate()
 {
-  row = 0;
+  // Some basic data.
+  row    = 0;
   column = 0;
-  value = KSpreadValue::empty();
-  code = 0;
+  value  = KSpreadValue::empty();
+  code   = 0;
 
-  textX = 0.0;
-  textY = 0.0;
-  textWidth = 0.0;
+  // Formatting
+  textX      = 0.0;
+  textY      = 0.0;
+  textWidth  = 0.0;
   textHeight = 0.0;
-  fmAscent = 0;
+  fmAscent   = 0;
 
-  nextCell = 0;
+  nextCell     = 0;
   previousCell = 0;
 
+  // Default is to not have the "extra" stuff in a cell.
   cellExtra = 0;
 }
+
 
 CellPrivate::~CellPrivate()
 {
     delete cellExtra;
 }
+
 
 CellExtra* CellPrivate::extra()
 {
@@ -247,12 +263,13 @@ CellExtra* CellPrivate::extra()
 
 /*****************************************************************************
  *
- * KSpreadCell
+ *                                 KSpreadCell
  *
  *****************************************************************************/
 
-KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
-  : KSpreadFormat( _table, _table->doc()->styleManager()->defaultStyle() )
+
+KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, int _column, int _row )
+  : KSpreadFormat( _sheet, _sheet->doc()->styleManager()->defaultStyle() )
 {
   d = new CellPrivate;
   d->row = _row;
@@ -260,8 +277,10 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, int _column, int _row )
   clearAllErrors();
 }
 
-KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _column, int _row )
-  : KSpreadFormat( _table, _style )
+
+KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, KSpreadStyle * _style, 
+			  int _column, int _row )
+  : KSpreadFormat( _sheet, _style )
 {
   d = new CellPrivate;
   d->row = _row;
@@ -269,34 +288,48 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _table, KSpreadStyle * _style, int _col
   clearAllErrors();
 }
 
+
+// Return the sheet that this cell belongs to.
+//
 KSpreadSheet * KSpreadCell::sheet() const
 {
   return m_pTable;
 }
 
+
+// Return true if this is the default cell.
+//
 bool KSpreadCell::isDefault() const
 {
     return ( d->column == 0 );
 }
 
+
+// Return the row number of this cell.
+//
 int KSpreadCell::row() const
 {
-  /* Make sure this isn't called for the default cell.  This assert can save you
-     (could have saved me!) the hassle of some very obscure bugs.
-  */
+  // Make sure this isn't called for the default cell.  This assert
+  // can save you (could have saved me!) the hassle of some very
+  // obscure bugs.
+
   if ( isDefault() )
   {
     kdWarning(36001) << "Error: Calling KSpreadCell::row() for default cell" << endl;
     return 0;
   }
+
   return d->row;
 }
 
+
+// Return the column number of this cell.
+//
 int KSpreadCell::column() const
 {
-  /* Make sure this isn't called for the default cell.  This assert can save you
-     (could have saved me!) the hassle of some very obscure bugs.
-  */
+  // Make sure this isn't called for the default cell.  This assert
+  // can save you (could have saved me!) the hassle of some very
+  // obscure bugs.
   if ( isDefault() )
   {
     kdWarning(36001) << "Error: Calling KSpreadCell::column() for default cell" << endl;
@@ -305,40 +338,60 @@ int KSpreadCell::column() const
   return d->column;
 }
 
+
+// Return the name of this cell, i.e. the string that the user would
+// use to reference it.  Example: A1, BZ16
+//
 QString KSpreadCell::name() const
 {
     return name( d->column, d->row );
 }
 
-QString KSpreadCell::fullName() const
-{
-    return fullName( table(), d->column, d->row );
-}
 
+// Return the name of any cell given by (col, row).
+//
 QString KSpreadCell::name( int col, int row )
 {
     return columnName( col ) + QString::number( row );
 }
 
+
+// Return the name of this cell, including the sheet name.
+// Example: sheet1!A5
+//
+QString KSpreadCell::fullName() const
+{
+    return fullName( table(), d->column, d->row );
+}
+
+
+// Return the full name of any cell given a sheet and (col, row).
+//
 QString KSpreadCell::fullName( const KSpreadSheet* s, int col, int row )
 {
     return s->tableName() + "!" + name( col, row );
 }
 
+
+// Return the symbolic name of the column of this cell.  Examples: A, BB.
+//
 QString KSpreadCell::columnName() const
 {
     return columnName( d->column );
 }
 
-QString KSpreadCell::columnName( int column )
+
+// Return the symbolic name of any column.  
+//
+QString KSpreadCell::columnName( uint column )
 {
-    QString str;
-    unsigned digits = 1;
-    unsigned offset = 0;
+    QString   str;
+    unsigned  digits = 1;
+    unsigned  offset = 0;
 
     column--;
 
-    if( column > 4058115285 ) return  QString("@@@");
+    if( column > 4058115285U ) return  QString("@@@");
 
     for( unsigned limit = 26; column >= limit+offset; limit *= 26, digits++ )
         offset += limit;
@@ -349,26 +402,51 @@ QString KSpreadCell::columnName( int column )
     return str;
 }
 
+
+// Return true if this cell is a formula.
+//
 bool KSpreadCell::isFormula() const
 {
     return d->strText[0] == '=';
 }
 
+
+// Return the input text of this cell.  This could, for instance, be a
+// formula.
+//
+// FIXME: These two functions are inconsistently named.  It should be
+//        either text() and outText() or strText() and strOutText().
+//
 QString KSpreadCell::text() const
 {
     return d->strText;
 }
 
+
+// Return the out text, i.e. the text that is visible in the cells
+// square when shown.  This could, for instance, be the calculated
+// result of a formula.
+//
 QString KSpreadCell::strOutText() const
 {
     return d->strOutText;
 }
 
+
+// Return the value of this cell.
+//
 const KSpreadValue KSpreadCell::value() const
 {
   return d->value;
 }
 
+
+// Set the value of this cell.  It also clears all errors if the value
+// itself is not an error.
+//
+// In addition to this, it calculates the outstring and sets the dirty
+// flags so that a redraw is forced.
+//
 void KSpreadCell::setValue( const KSpreadValue& v )
 {
   if (v.type() != KSpreadValue::Error)
@@ -379,17 +457,21 @@ void KSpreadCell::setValue( const KSpreadValue& v )
   setFlag(Flag_LayoutDirty);
   setFlag(Flag_TextFormatDirty);
 
+  // Format and set the outText.
   setOutputText();
 
-  //set the displayed text, if we hold an error value
+  // Set the displayed text, if we hold an error value.
   if (d->value.type() == KSpreadValue::Error)
     d->strOutText = d->value.errorMessage ();
 
-  //value of the cell has changed - trigger necessary actions
+  // Value of the cell has changed - trigger necessary actions
   valueChanged ();
 
   m_pTable->setRegionPaintDirty(cellRect());
 }
+
+// FIXME: Continue commenting and cleaning here (ingwa)
+
 
 KSpreadCell* KSpreadCell::previousCell() const
 {
