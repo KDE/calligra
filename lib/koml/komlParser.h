@@ -2,7 +2,7 @@
 #define __parser_h__
 
 #include <string.h>
-#include <vector.h>
+#include <ministl/vector.h>
 
 #include "torben.h"
 #include "komlFeed.h"

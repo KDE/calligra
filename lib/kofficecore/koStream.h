@@ -2,7 +2,7 @@
 #define __ko_stream_h__
 
 #include <iostream.h>
-#include <vector.h>
+#include <ministl/vector.h>
 
 #include <komlParser.h>
 #include <komlWriter.h>

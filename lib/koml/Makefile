@@ -83,9 +83,15 @@ idl:
 
 komlFeed.o: komlFeed.h
 komlFileFeed.o: komlFileFeed.h /usr/include/stdio.h /usr/include/libio.h
-komlFileFeed.o: /usr/include/_G_config.h /usr/include/sys/cdefs.h komlFeed.h
+komlFileFeed.o: /usr/include/features.h /usr/include/sys/cdefs.h
+komlFileFeed.o: /usr/include/gnu/stubs.h /usr/include/_G_config.h
+komlFileFeed.o: /usr/include/gnu/types.h
+komlFileFeed.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stddef.h
+komlFileFeed.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/stdarg.h
+komlFileFeed.o: /usr/lib/gcc-lib/alpha-redhat-linux/2.7.2.3/include/va-alpha.h
+komlFileFeed.o: /usr/include/stdio_lim.h komlFeed.h
 komlWriter.o: komlWriter.h
 komlStreamFeed.o: komlStreamFeed.h komlFeed.h
 torben.o: torben.h /usr/include/ctype.h /usr/include/features.h
-torben.o: /usr/include/sys/cdefs.h /usr/include/endian.h
-torben.o: /usr/include/bytesex.h
+torben.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+torben.o: /usr/include/endian.h /usr/include/bytesex.h
