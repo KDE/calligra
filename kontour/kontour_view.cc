@@ -276,12 +276,13 @@ void KontourView::setupCanvas()
   pm = new QPixmap(BarIcon("tab_first"));
   if(pm)
     mTabBarFirst->setPixmap(*pm);
-
+  delete pm;
   mTabBarLeft = new QPushButton(this);
   mTabBarLeft->setFixedSize(16,16);
   pm = new QPixmap(BarIcon("tab_left"));
   if(pm)
     mTabBarLeft->setPixmap(*pm);
+  delete pm;
 
   mTabBarRight = new QPushButton(this);
   mTabBarRight->setFixedSize(16,16);
@@ -289,12 +290,14 @@ void KontourView::setupCanvas()
   if(pm)
     mTabBarRight->setPixmap(*pm);
 
+  delete pm;
+
   mTabBarLast = new QPushButton(this);
   mTabBarLast->setFixedSize(16,16);
   pm = new QPixmap(BarIcon("tab_last"));
   if(pm)
     mTabBarLast->setPixmap(*pm);
-
+  delete pm;
   tabLayout = new QHBoxLayout();
   tabLayout->addWidget(mTabBarFirst);
   tabLayout->addWidget(mTabBarLeft);

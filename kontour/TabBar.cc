@@ -59,6 +59,11 @@ QWidget(parent)
   setFixedHeight(16);
 }
 
+TabBar::~TabBar()
+{
+    delete mPopupMenu;
+}
+
 void TabBar::moveTab(int _from, int _to, bool _before)
 {
   doc->movePage(_from, _to, _before);

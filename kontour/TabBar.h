@@ -36,7 +36,7 @@ class TabBar : public QWidget {
   Q_OBJECT
 public:
     TabBar( QWidget* parent, KontourView *view );
-
+    ~TabBar();
     /**
      * Moves the tab with number _from befor tab number _to if @param _before is
      * true _from is inserted before _to. If false it is inserted after.
@@ -128,11 +128,11 @@ protected:
      * If no tab is being moved this value is 0.
      */
     int m_moveTab;
-	
+
     /**
      * Indicates whether a tab is being moved using the mouse and in which
      * direction.
-     */ 	
+     */
     int m_moveTabFlag;
 
     /**
