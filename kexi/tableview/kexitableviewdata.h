@@ -86,10 +86,11 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		void setReadOnly(bool ro) { m_readOnly=ro; }
 
 		//! Column visibility. By default column is visible.
-		bool visible() const { return m_visible; }
+		bool visible() const { return fieldinfo ? fieldinfo->visible : m_visible; }
 
 		//! Changes column visibility.
-		void setVisible(bool v) { m_visible=v; }
+		void setVisible(bool v) { if (fieldinfo) fieldinfo->visible=v;
+			m_visible=v; }
 
 		//! returns whatever is available: field's caption or field's alias (from query) 
 		//! or finally - field's name

@@ -493,7 +493,8 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 				it.current(); ++it, i++) 
 			{
 				KexiDB::Field *f = it.current()->field();
-				if (!it.current()->fieldinfo || it.current()->fieldinfo->visible) {
+//				if (!it.current()->fieldinfo || it.current()->fieldinfo->visible) {
+				if (it.current()->visible()) {
 					int wid = f->width();
 					if (wid==0)
 						wid=KEXITV_DEFAULT_COLUMN_WIDTH;//default col width in pixels
@@ -1265,6 +1266,17 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 	
 	if ( collast == -1 )
 		collast = columns() - 1;
+
+	if (colfirst>collast) {
+		int tmp = colfirst;
+		colfirst = collast;
+		collast = tmp;
+	}
+	if (rowfirst>rowlast) {
+		int tmp = rowfirst;
+		rowfirst = rowlast;
+		rowlast = tmp;
+	}
 
 // 	qDebug("cx:%3d cy:%3d w:%3d h:%3d col:%2d..%2d row:%2d..%2d tsize:%4d,%4d", 
 //	cx, cy, cw, ch, colfirst, collast, rowfirst, rowlast, tableSize().width(), tableSize().height());
