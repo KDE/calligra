@@ -218,12 +218,12 @@ bool KoPicture::isClipartAsKOffice1Dot1(void) const
     return false;
 }
 
-bool KoPicture::setKeyAndDownloadPicture(const KURL& url)
+bool KoPicture::setKeyAndDownloadPicture(const KURL& url, QWidget *window)
 {
     bool result=false;
 
     QString tmpFileName;
-    if ( KIO::NetAccess::download(url, tmpFileName) )
+    if ( KIO::NetAccess::download(url, tmpFileName, window) )
     {
         KoPictureKey key;
         key.setKeyFromFile( tmpFileName );

@@ -151,10 +151,10 @@ KoPicture KWInsertPicDia::selectPictureDia( const QString & _path, QWidget* pare
     KFileDialog fd( _path, QString::null, parent, 0, TRUE );
     fd.setMimeFilter( mimetypes );
     fd.setCaption(i18n("Choose Picture"));
-    return selectPicture( fd );
+    return selectPicture( fd, parent );
 }
 
-KoPicture KWInsertPicDia::selectPicture( KFileDialog & fd )
+KoPicture KWInsertPicDia::selectPicture( KFileDialog & fd, QWidget *parent )
 {
     KoPicture picture;
 
@@ -164,7 +164,7 @@ KoPicture KWInsertPicDia::selectPicture( KFileDialog & fd )
         url = fd.selectedURL();
 
     if( !url.isEmpty() )
-        picture.setKeyAndDownloadPicture( url );
+        picture.setKeyAndDownloadPicture( url, parent );
 
     return picture;
 }

@@ -69,8 +69,11 @@ public:
      * Download a possibly remote file
      * If this file is really remote, it is always downloaded.
      * If the file is local, it acts as @ref #loadPicture.
+     * @param url the URL to download from
+     * @param window the parent window for the download. You can pass NULL (0)
+     *               if you absolutely cannot find anything to use.
      */
-    KoPicture downloadPicture(const KURL& url);
+    KoPicture downloadPicture(const KURL& url, QWidget *window);
 
     /**
      * Load a clipart from a file (and insert into the collection).

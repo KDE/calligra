@@ -48,7 +48,7 @@ protected slots:
     void slotChooseImage();
 
 protected:
-    static KoPicture selectPicture( KFileDialog & fd );
+    static KoPicture selectPicture( KFileDialog & fd, QWidget *parent );
 
 private:
 

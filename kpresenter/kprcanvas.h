@@ -272,7 +272,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void insertPie( const QRect& );
     KPTextObject* insertTextObject( const QRect& );
     void insertPicture( const QRect &_r, const QPoint & tl = QPoint());
-    void changePicture( const KURL & url );
+    void changePicture( const KURL & url, QWidget *window );
 
     int numberOfObjectSelected() const;
     KPObject *getSelectedObj() const;

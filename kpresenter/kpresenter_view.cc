@@ -3730,7 +3730,7 @@ void KPresenterView::changePicture( const QString & filename )
     if( url.isEmpty() || !url.isValid())
         return;
 
-    m_canvas->changePicture( url );
+    m_canvas->changePicture( url, m_canvas );
 }
 
 void KPresenterView::resizeEvent( QResizeEvent *e )

@@ -363,7 +363,7 @@ void BackDia::selectPic()
     if ( fd.exec() == QDialog::Accepted )
     {
         url = fd.selectedURL();
-        picture.setKeyAndDownloadPicture(url);
+        picture.setKeyAndDownloadPicture(url, tabWidget);
     }
 
     // Dialog canceled or download unsuccessful

@@ -1469,7 +1469,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     kdDebug(30515) << "Path: " << url.prettyURL() << endl;
 
     KoPicture pic;
-    pic.setKeyAndDownloadPicture(url);
+    pic.setKeyAndDownloadPicture(url, 0); // ### TODO: find a better parent if possible
     if (pic.isNull())
     {
         kdError(30515) << "Import field: file is empty: " << rawFileName << endl;

@@ -70,7 +70,7 @@ KoPicture KoPictureCollection::insertPicture(const KoPicture& picture)
     return insertPicture(picture.getKey(), picture);
 }
 
-KoPicture KoPictureCollection::downloadPicture(const KURL& url)
+KoPicture KoPictureCollection::downloadPicture(const KURL& url, QWidget *window)
 {
 #ifdef DEBUG_PICTURES
     kdDebug(30003) << "KoPictureCollection::downloadPicture " << url.prettyURL() << endl;
@@ -89,7 +89,7 @@ KoPicture KoPictureCollection::downloadPicture(const KURL& url)
     kdDebug(30003) << "Trying to download picture from file " << url.prettyURL() << endl;
 #endif
 
-    if (pic.setKeyAndDownloadPicture(url))
+    if (pic.setKeyAndDownloadPicture(url, window))
         insertPicture(pic.getKey(), pic);
     else
         kdWarning(30003) << "Could not download KoPicture from " << url.prettyURL() << endl;

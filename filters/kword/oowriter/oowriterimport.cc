@@ -1803,7 +1803,7 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const QDomElement& obje
     {
         KURL url;
         url.setPath(href); // ### TODO: is this really right?
-        picture.setKeyAndDownloadPicture(url);
+        picture.setKeyAndDownloadPicture(url, 0); // ### TODO: find a better parent if possible
     }
 
     kdDebug(30518) << "Picture ready! Key: " << picture.getKey().toString() << " Size:" << picture.getOriginalSize() << endl;

@@ -5407,10 +5407,10 @@ void KPrCanvas::scrollCanvas(const KoRect & oldPos)
     }
 }
 
-void KPrCanvas::changePicture( const KURL & url )
+void KPrCanvas::changePicture( const KURL & url, QWidget *window )
 {
-    m_activePage->changePicture( url );
-    stickyPage()->changePicture( url );
+    m_activePage->changePicture( url, window );
+    stickyPage()->changePicture( url, window );
 }
 
 unsigned int KPrCanvas::objNums() const

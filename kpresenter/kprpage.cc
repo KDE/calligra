@@ -1644,11 +1644,11 @@ void KPrPage::recalcPageNum()
     }
 }
 
-void KPrPage::changePicture( const KURL & url )
+void KPrPage::changePicture( const KURL & url, QWidget *parent )
 {
     // filename has been chosen in KPresenterView with a filedialog,
     // so we know it exists
-    KoPicture image = m_doc->pictureCollection()->downloadPicture( url );
+    KoPicture image = m_doc->pictureCollection()->downloadPicture( url, parent );
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )

@@ -496,7 +496,8 @@ void KPresenterPageIface::slideSelected(bool _b)
 
 void KPresenterPageIface::changePicture( const QString & filename )
 {
-    m_page->changePicture(filename);
+    // TODO: find a better parent
+    m_page->changePicture(filename, 0);
 }
 
 //create a rectangle and return a dcop reference!
