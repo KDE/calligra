@@ -429,8 +429,8 @@ void KoMainWindow::slotLoadCompleted()
         // We had no document, set the new one
        setRootDocument( newdoc );
     }
-    disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
 }
 
@@ -438,6 +438,11 @@ void KoMainWindow::slotLoadCanceled( const QString & errMsg )
 {
     KMessageBox::error( this, errMsg );
     // ... can't delete the document, it's the one who emitted the signal...
+
+    KoDocument* newdoc = (KoDocument *)(sender());
+    disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
+    disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
 }
 
 bool KoMainWindow::saveDocument( bool saveas )

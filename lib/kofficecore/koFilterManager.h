@@ -81,6 +81,8 @@ public:
      *                        This variable may be QString::null, then no native format
      *                        is added.
      * @param allfiles Whether a wildcard that matches all files should be added to the list.
+     *
+     * @deprecated. This obsolete method might be removed when kdelibs-2.2 is required.
      */
     QString fileSelectorList( const Direction &direction,
                               const char *_format,

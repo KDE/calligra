@@ -715,8 +715,9 @@ bool KoDocument::openURL( const KURL & _url )
     QString asf = autoSaveFile( file );
     if ( QFile::exists( asf ) )
     {
+      kdDebug() << "KoDocument::openURL asf=" << asf << endl;
       // ## TODO compare timestamps ?
-      int res = KMessageBox::warningYesNoCancel( widget(),
+      int res = KMessageBox::warningYesNoCancel( 0,
             i18n( "An autosaved file exists for this document.\nDo you want to open it instead ?" ));
       switch(res) {
       case KMessageBox::Yes :
@@ -1026,7 +1027,7 @@ KService::Ptr KoDocument::readNativeService( KInstance *instance )
       // It may be that the servicetype "KOfficePart" is missing, which leads to this property not being known
       if ( KServiceType::serviceType( "KOfficePart" ) == 0L )
         kdError(30003) << "The serviceType KOfficePart is missing. Check that you have a kofficepart.desktop file in the share/servicetypes directory." << endl;
-      else
+      else if ( instname != "koshell" ) // hack for koshell
         kdWarning(30003) << service->desktopEntryPath() << ": no X-KDE-NativeMimeType entry!" << endl;
   }
 

@@ -89,16 +89,20 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
                                            const QString & _native_name,
                                            bool allfiles ) const
 {
-    QString service;
-    service = "'";
-    service += QString::fromLatin1(_format);
-    service += "' in ";
-    if ( direction == Import )
-        service += "Export";
-    else
-        service += "Import";
+    QString nativeFormat = QString::fromLatin1(_format);
+    QString constraint;
+    if ( !nativeFormat.isEmpty() ) // format is empty for koshell
+    {
+        constraint = "'";
+        constraint += QString::fromLatin1(_format);
+        constraint += "' in ";
+        if ( direction == Import )
+            constraint += "Export";
+        else
+            constraint += "Import";
+    }
 
-    QValueList<KoFilterEntry> vec = KoFilterEntry::query( service );
+    QValueList<KoFilterEntry> vec = KoFilterEntry::query( constraint );
 
     QString ret;
 
@@ -112,47 +116,45 @@ QString KoFilterManager::fileSelectorList( const Direction &direction,
         ret += ")";
     }
 
+    QStringList mimes;
     for( unsigned int i = 0; i < vec.count(); ++i )
     {
-        KMimeType::Ptr t;
-        QStringList mimes;
-        if ( direction == Import )
-            mimes = vec[i].import;
-        else
-            mimes = vec[i].export_;
+        QStringList toadd = direction == Import ? vec[i].import : vec[i].export_;
+        QStringList::ConstIterator it = toadd.begin();
+        for ( ; it != toadd.end() ; ++it )
+            if ( !mimes.contains( *it ) )
+                mimes += *it;
+    }
 
-        kdDebug() << "KoFilterManager::fileSelectorList mimes=" << mimes.join("-") << endl;
-
-        QStringList::ConstIterator it = mimes.begin();
-        for ( ; it != mimes.end() ; ++it )
+    QStringList::ConstIterator it = mimes.begin();
+    for ( ; it != mimes.end() ; ++it )
+    {
+        QString mime ( *it );
+        KMimeType::Ptr t = KMimeType::mimeType( mime );
+        // Did we get exactly this mime type ?
+        if ( t && mime == t->name() )
         {
-            QString mime ( *it );
-            t = KMimeType::mimeType( mime );
-            // Did we get exactly this mime type ?
-            if ( t && mime == t->name() )
+            if ( !t->patterns().isEmpty() )
             {
-                if ( !t->patterns().isEmpty() )
-                {
-                    if ( !ret.isEmpty() )
-                        ret += "\n";
-                    QString patterns = t->patterns().join(" ");
-                    ret += patterns;
-                    ret += "|";
-                    ret += t->comment();
-                    ret += " (";
-                    ret += patterns;
-                    ret += ")";
-                }
-            }
-            else // The filter desktop file talks about an unknown mimetype... This shouldn't happen.
-            {
-                kdError() << "Unknown mimetype " << mime << " in " << vec[i].service()->desktopEntryPath() << endl;
                 if ( !ret.isEmpty() )
                     ret += "\n";
-                ret += "*|";
-                ret += "Unknown mimetype " + mime;
-                ret += " (*)";
+                QString patterns = t->patterns().join(" ");
+                ret += patterns;
+                ret += "|";
+                ret += t->comment();
+                ret += " (";
+                ret += patterns;
+                ret += ")";
             }
+        }
+        else // The filter desktop file talks about an unknown mimetype... This shouldn't happen.
+        {
+            kdWarning() << "Unknown mimetype " << mime << endl;
+            if ( !ret.isEmpty() )
+                ret += "\n";
+            ret += "*|";
+            ret += "Unknown mimetype " + mime;
+            ret += " (*)";
         }
     }
     if( allfiles )
@@ -180,19 +182,22 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                                ) {
 
     QString nativeFormat = QString::fromLatin1(_format);
-    QString service;
-    service = "'";
-    service += nativeFormat;
-    service += "' in ";
-    if ( direction == Import )
-        service += "Export";
-    else
-        service += "Import";
+    QString constraint;
+    if ( !nativeFormat.isEmpty() ) // format is empty for koshell
+    {
+        constraint = "'";
+        constraint += nativeFormat;
+        constraint += "' in ";
+        if ( direction == Import )
+            constraint += "Export";
+        else
+            constraint += "Import";
+    }
 
     d->config=QString::null;   // reset the config string
 
 #if KDE_VERSION >= 220 // kdelibs > 2.1 -> use the nice setMimeFilter
-    QValueList<KoFilterEntry> vec = KoFilterEntry::query( service );
+    QValueList<KoFilterEntry> vec = KoFilterEntry::query( constraint );
 
     QStringList mimes;
 
@@ -200,10 +205,11 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
         mimes += nativeFormat;
     for( unsigned int i = 0; i < vec.count(); ++i )
     {
-        if ( direction == Import )
-            mimes += vec[i].import;
-        else
-            mimes += vec[i].export_;
+        QStringList toadd = direction == Import ? vec[i].import : vec[i].export_;
+        QStringList::ConstIterator it = toadd.begin();
+        for ( ; it != toadd.end() ; ++it )
+            if ( !mimes.contains( *it ) )
+                mimes += *it;
     }
     if ( direction == Import )
         dialog->setMimeFilter( mimes );
@@ -215,7 +221,7 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                                        _native_name, allfiles));
 #endif
 
-    QValueList<KoFilterDialogEntry> vec1 = KoFilterDialogEntry::query( service );
+    QValueList<KoFilterDialogEntry> vec1 = KoFilterDialogEntry::query( constraint );
 
     d->ps=new PreviewStack(0L, "preview stack", this);
 
