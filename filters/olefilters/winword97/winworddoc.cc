@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <klocale.h>
 #include <koFilterManager.h>
 #include <ktempfile.h>
 #include <properties.h>
@@ -47,6 +48,7 @@ WinWordDoc::WinWordDoc(
     m_tables = "";
     m_pixmaps = "";
     m_embedded = "";
+    m_embeddedFrameSet = 0;
     m_cellEdges.setAutoDelete(true);
     m_table.setAutoDelete(true);
 }
@@ -458,6 +460,17 @@ QString WinWordDoc::generateFormats(
                 uid,
                 mimeType);
 
+            // Add an anchor for this frameset.
+
+            m_embeddedFrameSet++;
+            formats.append("<FORMAT id=\"6\" pos=\"");
+            formats.append(QString::number(object->start));
+            formats.append("\" len=\"1\">\n");
+            formats.append("<ANCHOR type=\"frameset\" instance=\"");
+            formats.append(i18n("Object %1").arg(m_embeddedFrameSet));
+            formats.append("\"/>\n");
+            formats.append("</FORMAT>\n");
+
             // Add an entry to the list of embedded objects too. TBD: fix
             // RECT and FRAME settings.
 
@@ -470,6 +483,9 @@ QString WinWordDoc::generateFormats(
             m_embedded.append("\">\n<RECT x=\"30\" y=\"190\" w=\"120\" h=\"80\"/>\n");
             m_embedded.append("</OBJECT>\n");
             m_embedded.append("<SETTINGS>\n");
+            m_embedded.append("<NAME value=\"");
+            m_embedded.append(i18n("Object %1").arg(m_embeddedFrameSet));
+            m_embedded.append("\"/>\n");
             m_embedded.append("<FRAME left=\"30\" top=\"190\" right=\"149\" bottom=\"269\" tRed=\"0\" tGreen=\"0\" tBlue=\"0\" bRed=\"0\" bGreen=\"0\" bBlue=\"0\"/>\n");
             m_embedded.append("</SETTINGS>\n");
             m_embedded.append(
@@ -490,7 +506,11 @@ void WinWordDoc::gotDocumentInformation(
     const QString &author,
     const QString &lastRevisedBy)
 {
-    emit signalSaveDocumentInformation(author, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, QString::null, title, QString::null);
+    emit signalSaveDocumentInformation(
+        i18n("%1, last revised by %2").arg(author).arg(lastRevisedBy),
+        QString::null, QString::null, QString::null, QString::null,
+        QString::null, QString::null, QString::null, QString::null,
+        QString::null, title, subject);
 }
 
 void WinWordDoc::gotError(
@@ -721,8 +741,8 @@ void WinWordDoc::gotTableBegin(
     m_cellEdges.insert(tableNumber - 1, new QArray<unsigned>);
     m_body.append("<PARAGRAPH>\n<TEXT>@</TEXT>\n");
     m_body.append("<FORMATS>\n<FORMAT id=\"6\" pos=\"0\" len=\"1\">\n");
-    m_body.append("<ANCHOR type=\"frameset\" instance=\"floattable_");
-    m_body.append(QString::number(tableNumber));
+    m_body.append("<ANCHOR type=\"frameset\" instance=\"");
+    m_body.append(i18n("Table %1").arg(tableNumber));
     m_body.append("\"/>\n</FORMAT>\n</FORMATS>\n");
     m_body.append(
         " <LAYOUT>\n"
@@ -754,8 +774,8 @@ void WinWordDoc::gotTableEnd(
             unsigned right;
             unsigned cellEdge;
 
-            cell.append("<FRAMESET frameType=\"1\" frameInfo=\"0\" grpMgr=\"floattable_");
-            cell.append(QString::number(tableNumber));
+            cell.append("<FRAMESET frameType=\"1\" frameInfo=\"0\" grpMgr=\"");
+            cell.append(i18n("Table %1").arg(tableNumber));
             cell.append("\" name=\"Table");
             cell.append(QString::number(tableNumber));
             cell.append('_');
