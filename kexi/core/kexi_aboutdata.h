@@ -51,7 +51,7 @@ KAboutData *newKexiAboutData()
 	aboutData->addAuthor("Jaroslaw Staniek / OpenOffice Polska", I18N_NOOP("Developer, Designer, commercially supported version, win32 port"), "js@iidea.pl");
 	aboutData->addCredit("Daniel Molkentin",I18N_NOOP("Initial design improvements"),  "molkentin@kde.org");
 	aboutData->addCredit("Kristof Borrey", I18N_NOOP("Icons and UI-Research"), "kristof.borrey@skynet.be");
-	aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\ne-mail"));
+	aboutData->setTranslator(I18N_NOOP("_:NAME OF TRANSLATORS\nNames"), I18N_NOOP("_:EMAIL OF TRANSLATORS\nemail"));
 	aboutData->addCredit("Tomas Krassnig", I18N_NOOP("Coffie sponsoring"), "tkrass05@hak1.at");
 #if defined(OOPL_VERSION) && ( KDE_IS_VERSION(3,1,1) || defined(Q_WS_WIN) )
 	aboutData->setProgramLogo(KEXI_APP_LOGO);
