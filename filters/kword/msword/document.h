@@ -90,7 +90,7 @@ protected slots:
 
     // Similar to footnoteStart/footnoteEnd but for cells.
     // This is connected to KWordTableHandler
-    void slotTableCellStart( int row, int column, int rowSize, int columnSize, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::TC& tc, const wvWare::Word97::SHD& shd );
+    void slotTableCellStart( int row, int column, int rowSize, int columnSize, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
     void slotTableCellEnd();
 
 private:

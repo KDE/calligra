@@ -513,7 +513,8 @@ void KWordTextHandler::writeOutParagraph( const QString& styleName, const QStrin
 {
     if ( m_framesetElement.isNull() )
     {
-        kdWarning() << "KWordTextHandler: no frameset element to write to! text=" << text << endl;
+        if ( !text.isEmpty() ) // vertically merged table cells are ignored, and have empty text -> no warning on those
+            kdWarning() << "KWordTextHandler: no frameset element to write to! text=" << text << endl;
         return;
     }
     QDomElement paragraphElementOut=mainDocument().createElement("PARAGRAPH");

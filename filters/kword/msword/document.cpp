@@ -56,8 +56,8 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         processStyles();
         processAssociatedStrings();
-        connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const KoRect&, const QString&, const wvWare::Word97::TC&, const wvWare::Word97::SHD& ) ),
-                 this, SLOT( slotTableCellStart( int, int, int, int, const KoRect&, const QString&, const wvWare::Word97::TC&, const wvWare::Word97::SHD& ) ) );
+        connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const KoRect&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
+                 this, SLOT( slotTableCellStart( int, int, int, int, const KoRect&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
         connect( m_tableHandler, SIGNAL( sigTableCellEnd() ),
                  this, SLOT( slotTableCellEnd() ) );
     }
@@ -323,14 +323,15 @@ void Document::footnoteEnd()
     m_textHandler->setFrameSetElement( QDomElement() );
 }
 
-void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::TC& tc, const wvWare::Word97::SHD& shd )
+void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const KoRect& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 {
     // Create footnote/endnote frameset
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
     framesetElement.setAttribute( "frameType", 1 /* text */ );
     framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
     framesetElement.setAttribute( "grpMgr", tableName );
-    framesetElement.setAttribute( "name", i18n("Table_Name Cell row,column", "%1 Cell %2,%3").arg(tableName).arg(row).arg(column) );
+    QString name = i18n("Table_Name Cell row,column", "%1 Cell %2,%3").arg(tableName).arg(row).arg(column);
+    framesetElement.setAttribute( "name", name );
     framesetElement.setAttribute( "row", row );
     framesetElement.setAttribute( "col", column );
     framesetElement.setAttribute( "rows", rowSpan );
@@ -338,7 +339,7 @@ void Document::slotTableCellStart( int row, int column, int rowSpan, int columnS
     m_framesetsElement.appendChild(framesetElement);
 
     QDomElement frameElem = createInitialFrame( framesetElement, cellRect.left(), cellRect.right(), cellRect.top(), cellRect.bottom(), true, NoFollowup );
-    generateFrameBorder( frameElem, tc.brcTop, tc.brcBottom, tc.brcLeft, tc.brcRight, shd );
+    generateFrameBorder( frameElem, brcTop, brcBottom, brcLeft, brcRight, shd );
 
     m_textHandler->setFrameSetElement( framesetElement );
 }
@@ -367,8 +368,11 @@ QDomElement Document::createInitialFrame( QDomElement& parentFramesetElem, doubl
 void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 {
     // Frame borders
-    Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
-    Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
+
+    if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
+        Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
+    if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
+        Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
     Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
     Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
 

@@ -316,7 +316,7 @@ int Conversion::headerMaskToHType( unsigned char mask )
     bool hasFirst = ( mask & wvWare::HeaderData::HeaderFirst );
     // Odd is always there. We have even!=odd only if Even is there too.
     bool hasEvenOdd = ( mask & wvWare::HeaderData::HeaderEven );
-    kdDebug() << k_funcinfo << " hasEvenOdd=" << hasEvenOdd << endl;
+    //kdDebug() << k_funcinfo << " hasEvenOdd=" << hasEvenOdd << endl;
     if ( hasFirst )
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;

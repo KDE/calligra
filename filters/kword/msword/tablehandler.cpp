@@ -132,6 +132,10 @@ void KWordTableHandler::tableCellStart()
         }
         //kdDebug() << "rowSpan=" << rowSpan << endl;
     }
+    // Skip cells that are part of a vertically merged cell, KWord doesn't want them
+    // The MSWord spec says they must be empty anyway (and we'll get a warning if not).
+    if ( tc.fVertMerge && !tc.fVertRestart )
+        return;
 
     KoRect cellRect( left / 20.0, // left
                      m_currentY, // top
@@ -150,9 +154,26 @@ void KWordTableHandler::tableCellStart()
     Q_ASSERT( rightCellNumber >= leftCellNumber ); // you'd better be...
     int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells
 
-    kdDebug() << " tableCellStart row=" << m_row << " column=" << m_column << " colSpan=" << colSpan << " (from " << leftCellNumber << " to " << rightCellNumber << ") cellRect=" << cellRect << endl;
+    kdDebug() << " tableCellStart row=" << m_row << " WordColumn=" << m_column << " colSpan=" << colSpan << " rowSpan=" << rowSpan << " (from " << leftCellNumber << " to " << rightCellNumber << " for KWord) cellRect=" << cellRect << endl;
 
-    emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, tc, m_tap->rgshd[ m_column ] );
+    // Sort out the borders.
+    // It seems we get this on the cells that are adjacent
+    // to one has a border, as if it means "whatever the adjacent cell on this border
+    // specifies". (cf table-22.doc)
+    // We need to set the adjacent cell's border instead, in that case.
+    // ### No idea how to do it properly for top/bottom though. The cell above might not have the same size...
+    const wvWare::Word97::BRC& brcTop = tc.brcTop;
+    const wvWare::Word97::BRC& brcBottom = tc.brcBottom;
+    const wvWare::Word97::BRC& brcLeft =
+     ( tc.brcLeft.ico == 255 && tc.brcLeft.dptLineWidth == 255 && m_column > 0 ) ?
+        m_tap->rgtc[ m_column - 1 ].brcRight
+        : tc.brcLeft;
+    const wvWare::Word97::BRC& brcRight =
+      ( tc.brcRight.ico == 255 && tc.brcRight.dptLineWidth == 255 && m_column < nbCells ) ?
+        m_tap->rgtc[ m_column + 1 ].brcLeft
+        : tc.brcRight;
+
+    emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
 }
 
 void KWordTableHandler::tableCellEnd()
