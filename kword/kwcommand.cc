@@ -902,12 +902,15 @@ void KWFrameSetPropertyCommand::setValue( const QString &value )
             m_pFrameSet->setProtectSize( true );
         else
             m_pFrameSet->setProtectSize( false );
+        m_pFrameSet->kWordDocument()->repaintResizeHandles();
         break;
     }
+
+    m_pFrameSet->kWordDocument()->updateResizeHandles();
+
     m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
     m_pFrameSet->kWordDocument()->updateRulerFrameStartEnd();
-    m_pFrameSet->kWordDocument()->updateResizeHandles();
 }
 
 void KWFrameSetPropertyCommand::execute()

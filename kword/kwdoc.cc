@@ -1884,7 +1884,7 @@ bool KWDocument::processFootNoteRequests()
     return ret;
 }
 
-void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
+void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool insertFile )
 {
     m_pasteFramesetsMap = new QMap<QString, QString>();
     QPtrList<KWFrameSet> frameSetsToFinalize;
@@ -1951,7 +1951,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd )
                 frameElem = elem.namedItem( "FRAME" ).toElement();
             }
             //when we paste a header/footer we transforme it in a body frame
-            if(fs->isHeaderOrFooter() || fs->isFootEndNote())
+            if(fs->isHeaderOrFooter() || ( !insertFile && fs->isFootEndNote()))
                 fs->setFrameSetInfo(KWFrameSet::FI_BODY);
         }
         // Test commented out since the toplevel element can contain "PARAGRAPH" now
@@ -3408,6 +3408,16 @@ void KWDocument::refreshFrameBorderButton()
             it.current()->showFrameBorders( frame->leftBorder(), frame->rightBorder(), frame->topBorder(), frame->bottomBorder() );
         }
     }
+}
+
+void KWDocument::repaintResizeHandles()
+{
+   QPtrList<KWFrame> selectedFrames = getSelectedFrames();
+   KWFrame *frame=0L;
+   for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
+   {
+       frame->repaintResizeHandles();
+   }
 }
 
 void KWDocument::updateResizeHandles( )

@@ -207,6 +207,7 @@ public:
     void removeResizeHandles();
     void frameBordersChanged();
     void updateResizeHandles();
+    void repaintResizeHandles();
     void updateRulerHandles();
 
     QBrush backgroundColor() const { return m_backgroundColor; }

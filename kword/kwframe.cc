@@ -241,6 +241,12 @@ void KWFrame::updateResizeHandles() {
     }
 }
 
+void KWFrame::repaintResizeHandles() {
+    for (unsigned int i=0; i< handles.count(); i++) {
+        handles.at(i)->repaint();
+    }
+}
+
 void KWFrame::frameBordersChanged() {
 	invalidateParentFrameset();
 }

@@ -5761,7 +5761,7 @@ void KWView::insertFile()
                     macroCmd = new KMacroCommand( i18n("Insert File") );
 
                 //kdDebug() << k_funcinfo << domDocFrames.toCString() << endl;
-                m_doc->pasteFrames( topElem, macroCmd );
+                m_doc->pasteFrames( topElem, macroCmd,true );
                 m_doc->addCommand( macroCmd );
 
 

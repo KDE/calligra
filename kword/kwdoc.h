@@ -308,7 +308,9 @@ public:
     void frameChanged( KWFrame * frame, KWView * view = 0L );
     void framesChanged( const QPtrList<KWFrame> & frames, KWView * view = 0L );
 
-    void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd );
+    //use insert file attribute for footnote frameset
+    //don't change it attibute otherwise we have a footnote with is not fixed
+    void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool insertFile=false );
 
 
     KoStyleCollection * styleCollection()const  { return m_styleColl;}
@@ -565,6 +567,9 @@ public:
     //necessary to update resize handle when you change layout
     // make zoom, add header, add footer etc...
     void updateResizeHandles();
+    //necessary to force repaint resizehandle otherwise
+    //when we change protect size attribute handle was not repainting
+    void repaintResizeHandles();
 
     // Tell all views to stop editing this frameset, if they were doing so
     void terminateEditing( KWFrameSet * frameSet )
