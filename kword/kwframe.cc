@@ -1413,7 +1413,7 @@ bool KWFrameSet::canRemovePage( int num )
     return true;
 }
 
-void KWFrameSet::showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, const QPoint &point )
+void KWFrameSet::showPopup( KWFrame *, KWView *view, const QPoint &point )
 {
     QPopupMenu * popup = view->popupMenu("frame_popup");
     Q_ASSERT(popup);
@@ -1523,6 +1523,11 @@ void KWFrameSetEdit::drawContents( QPainter *p, const QRect &crect,
 {
     //kdDebug() << "KWFrameSetEdit::drawContents " << frameSet()->getName() << endl;
     frameSet()->drawContents( p, crect, cg, onlyChanged, resetChanged, this, viewMode, canvas );
+}
+
+void KWFrameSetEdit::showPopup( KWFrame* frame, KWView* view, const QPoint & _point )
+{
+    frame->frameSet()->showPopup( frame, view, _point );
 }
 
 /******************************************************************/
@@ -2121,7 +2126,7 @@ int KWFormulaFrameSet::floatingFrameBaseline( int /*frameNum*/ )
     return -1;
 }
 
-void KWFormulaFrameSet::showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, const QPoint &point )
+void KWFormulaFrameSet::showPopup( KWFrame *, KWView *view, const QPoint &point )
 {
     QPopupMenu * popup = view->popupMenu("Formula");
     Q_ASSERT(popup);

@@ -4137,8 +4137,11 @@ QPopupMenu * KWView::popupMenu( const QString& name )
 
 void KWView::openPopupMenuInsideFrame( KWFrame* frame, const QPoint & _point )
 {
-    frame->frameSet()->showPopup( frame, m_gui->canvasWidget()->currentFrameSetEdit(),
-                                     this, _point );
+    KWFrameSetEdit *fse = m_gui->canvasWidget()->currentFrameSetEdit();
+    if (fse)
+        fse->showPopup(frame,this,_point);
+    else
+        frame->frameSet()->showPopup( frame, this, _point );
 }
 
 void KWView::openPopupMenuChangeAction( const QPoint & _point )

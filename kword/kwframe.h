@@ -310,6 +310,14 @@ public:
     virtual void paste() {}
     virtual void selectAll() {}
 
+    /** Show a popup menu - called when right-clicking inside a frame of this frameset.
+     * The default implementation calls the frameset's showPopup.
+     * @param frame the frame which was clicked.
+     * @param view the view - we use it to get the popupmenu by name
+     * @param point the mouse position (at which to show the menu)
+     */
+    virtual void showPopup( KWFrame* frame, KWView* view, const QPoint & _point );
+
 protected:
     KWFrameSet * m_fs;
     KWCanvas * m_canvas;
@@ -502,11 +510,10 @@ public:
     /** Show a popup menu - called when right-clicking inside a frame of this frameset.
      * The default implementation shows "frame_popup".
      * @param frame the frame which was clicked. Always one of ours.
-     * @param edit the current edit object. Either 0L or our own edit object (usually).
      * @param view the view - we use it to get the popupmenu by name
      * @param point the mouse position (at which to show the menu)
      */
-    virtual void showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point );
+    virtual void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
     /** save to XML - when saving */
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true ) = 0;
@@ -859,7 +866,7 @@ public:
 
     virtual int floatingFrameBaseline( int /*frameNum*/ );
 
-    void showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, const QPoint &point );
+    void showPopup( KWFrame *, KWView *view, const QPoint &point );
 
 protected slots:
 

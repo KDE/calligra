@@ -2309,6 +2309,20 @@ void KWTableFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &n, co
     }
 }
 
+void KWTableFrameSetEdit::showPopup( KWFrame *frame, KWView *view, const QPoint &point )
+{
+    if (m_currentCell)
+    {
+        KWTextFrameSetEdit *fse = dynamic_cast<KWTextFrameSetEdit *>(m_currentCell);
+        Q_ASSERT( fse ); // For now: m_currentCell always KWTextFrameSetEdit
+        if ( fse )
+        {
+            fse->showPopup( frame, view, point );
+        }
+    }
+
+}
+
 void KWTableFrameSet::showPopup( KWFrame *theFrame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )
 {
     KWTextFrameSetEdit * textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);

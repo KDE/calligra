@@ -149,7 +149,7 @@ public:
 
     void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *currentFrame );
 
-    void showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point );
+    void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
     KCommand* pasteKWord( KoTextCursor * cursor, const QCString & data, bool removeSelected );
     void insertTOC( KoTextCursor * cursor );

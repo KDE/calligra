@@ -2103,19 +2103,12 @@ void KWTextFrameSet::applyStyleChange( KoStyle * changedStyle, int paragLayoutCh
     m_textobj->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
 }
 
-void KWTextFrameSet::showPopup( KWFrame *theFrame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )
+void KWTextFrameSet::showPopup( KWFrame *theFrame, KWView *view, const QPoint &point )
 {
-    KWTextFrameSetEdit * textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
-    Q_ASSERT( textedit ); // is it correct that this is always set ?
-    if (textedit)
-        textedit->showPopup( theFrame, view, point );
-    else
-    {
-        QPopupMenu * popup = view->popupMenu("text_popup");
-        Q_ASSERT(popup);
-        if (popup)
-            popup->popup( point );
-    }
+    QPopupMenu * popup = view->popupMenu("text_popup");
+    Q_ASSERT(popup);
+    if (popup)
+        popup->popup( point );
 }
 
 // KoTextFormatInterface methods

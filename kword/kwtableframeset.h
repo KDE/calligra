@@ -364,6 +364,8 @@ public:
     void setCurrentCell( KWFrameSet * fs, bool eraseSelection=true );
     void setCurrentCell( const KoPoint & dPoint );
 
+    void showPopup( KWFrame* frame, KWView* view, const QPoint & _point );
+
 protected:
     KWFrameSetEdit * m_currentCell;
 
