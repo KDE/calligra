@@ -133,33 +133,34 @@ void KWResizeHandle::mouseReleaseEvent( QMouseEvent * )
 /*================================================================*/
 void KWResizeHandle::updateGeometry()
 {
+    KWDocument * doc = frame->getFrameSet()->kWordDocument();
     switch ( direction ) {
     case LeftUp:
-        m_canvas->moveChild( this, frame->x(), frame->y() );
+        m_canvas->moveChild( this, doc->zoomItX(frame->x()), doc->zoomItY(frame->y()) );
         break;
     case Up:
-        m_canvas->moveChild( this, frame->x() + frame->width() / 2 - 3, frame->y() );
+        m_canvas->moveChild( this, doc->zoomItX(frame->x() + frame->width() / 2) - 3, doc->zoomItY(frame->y()) );
         break;
     case RightUp:
-        m_canvas->moveChild( this, frame->x() + frame->width() - 6, frame->y() );
+        m_canvas->moveChild( this, doc->zoomItX(frame->x() + frame->width()) - 6, doc->zoomItY(frame->y()) );
         break;
     case Right:
-        m_canvas->moveChild( this, frame->x() + frame->width() - 6,
-                             frame->y() + frame->height() / 2 - 3 );
+        m_canvas->moveChild( this, doc->zoomItX(frame->x() + frame->width()) - 6,
+                             doc->zoomItY(frame->y() + frame->height() / 2) - 3 );
         break;
     case RightDown:
-        m_canvas->moveChild( this, frame->x() + frame->width() - 6,
-                             frame->y() + frame->height() - 6 );
+        m_canvas->moveChild( this, doc->zoomItX(frame->x() + frame->width()) - 6,
+                             doc->zoomItY(frame->y() + frame->height()) - 6 );
         break;
     case Down:
-        m_canvas->moveChild( this, frame->x() + frame->width() / 2 - 3,
-                             frame->y() + frame->height() - 5 );
+        m_canvas->moveChild( this, doc->zoomItX(frame->x() + frame->width() / 2) - 3,
+                             doc->zoomItY(frame->y() + frame->height()) - 5 );
         break;
     case LeftDown:
-        m_canvas->moveChild( this, frame->x(), frame->y() + frame->height() - 6 );
+        m_canvas->moveChild( this, doc->zoomItX(frame->x()), doc->zoomItY(frame->y() + frame->height()) - 6 );
         break;
     case Left:
-        m_canvas->moveChild( this, frame->x(), frame->y() + frame->height() / 2 - 3 );
+        m_canvas->moveChild( this,doc->zoomItX(frame->x()), doc->zoomItY(frame->y() + frame->height() / 2) - 3 );
         break;
     }
     resize( 6, 6 );
