@@ -2774,6 +2774,7 @@ void KWDocument::updateResizeHandles( )
    {
        frame->updateResizeHandles();
    }
+   updateRulerFrameStartEnd();
 }
 
 void KWDocument::deleteTable( KWTableFrameSet *table )
