@@ -34,19 +34,19 @@
 // Tags in upper case (e.g. <TEXT>) are KWord's ones.
 
 // Note: as we are not validating anything, we are quite tolerant about the file
-//   that we will read. So some element are not checked:
-//   <styles>
+//   that we will read.
+
 enum StackItemElementType{
     ElementTypeUnknown  = 0,
     ElementTypeBottom,      // Bottom of the stack
     ElementTypeIgnore,      // Element is known but ignored
-    ElementTypeEmpty,       // Element is empty ( <pagesize>, <s>, <image>, <field>)
+    ElementTypeEmpty,       // Element is empty (<pagesize>, <s>, <image>, <field>, <br>, <cbr>, <pbr>)
     ElementTypeSection,     // <section>
     ElementTypeParagraph,   // <p>
     ElementTypeContent,     // <c> (not child of <a>), also <a> if it points to a bookmark
     ElementTypeRealData,    // <d>
     ElementTypeAnchor,      // <a>
-    ElementTypeAnchorContent// <c>, when child of <a>
+    ElementTypeAnchorContent// <c> when child of <a>
 };
 
 // Tags that we do not care of:
