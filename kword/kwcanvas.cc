@@ -454,11 +454,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 m_gui->getView()->openPopupMenuEditText( QCursor::pos() );
                 break;
             case MM_EDIT_FRAME:
-            case MM_CREATE_TEXT:
-            case MM_CREATE_PART:
-            case MM_CREATE_TABLE:
-            case MM_CREATE_FORMULA:
-            case MM_CREATE_PIX:
             {
                 if (!doc->getFrameSet( docPoint.x(), docPoint.y() ))
                     m_gui->getView()->openPopupMenuChangeAction( QCursor::pos() );
@@ -476,6 +471,11 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 }
             }
             break;
+            case MM_CREATE_TEXT:
+            case MM_CREATE_PART:
+            case MM_CREATE_TABLE:
+            case MM_CREATE_FORMULA:
+            case MM_CREATE_PIX:
             default: break;
         }
         m_mousePressed = false;
