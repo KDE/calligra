@@ -232,6 +232,10 @@ void ProcessAttributes ( QDomNode                     myNode,
                         {
                             *((int *) (*attrProcessingIt).data) = myAttrib.value ().toInt ();
                         }
+                        else if ( (*attrProcessingIt).type == "double" )
+                        {
+                            *((double *) (*attrProcessingIt).data) = myAttrib.value ().toDouble ();
+                        }
                         else
                         {
                             kdError(30503) << "Unexpected data type " << (*attrProcessingIt).type << " in " <<
@@ -381,16 +385,15 @@ public:
 class LayoutData
 {
 public:
-    LayoutData() { init(); }
+    LayoutData():indentFirst(0.0), indentLeft(0.0), indentRight(0.0)
+      { }
 
     QString styleName;
     QString alignment;
     CounterData counter;
     FormatData formatData;
+    double indentFirst, indentLeft, indentRight;
 
-    void init()
-    {
-    }
 };
 
 static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* )
@@ -600,6 +603,17 @@ static void ProcessSingleFormatTag (QDomNode myNode, void *tagData, QString &, C
 
 }
 
+static void ProcessIndentsTag (QDomNode myNode, void* tagData , QString&, ClassExportFilterBase*)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("first" , "double", (void *)&layout->indentFirst ) );
+    attrProcessingList.append ( AttrProcessing ("left"  , "double", (void *)&layout->indentLeft  ) );
+    attrProcessingList.append ( AttrProcessing ("right" , "double", (void *)&layout->indentRight ) );
+    ProcessAttributes (myNode, attrProcessingList);
+}
+
 static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputText, ClassExportFilterBase* exportFilter )
 {
     LayoutData *layout = (LayoutData *) tagData;
@@ -613,7 +627,7 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     tagProcessingList.append ( TagProcessing ( "FORMAT",      ProcessSingleFormatTag,   (void*) & layout->formatData ) );
     tagProcessingList.append ( TagProcessing ( "TABULATOR",   NULL,                     NULL            ) );
     tagProcessingList.append ( TagProcessing ( "FLOW",        ProcessLayoutFlowTag,     (void*) layout  ) );
-    tagProcessingList.append ( TagProcessing ( "INDENTS",     NULL,                     NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "INDENTS",     ProcessIndentsTag,        (void*) layout  ) );
     tagProcessingList.append ( TagProcessing ( "OFFSETS",     NULL,                     NULL            ) );
     tagProcessingList.append ( TagProcessing ( "LINESPACING", NULL,                     NULL            ) );
     tagProcessingList.append ( TagProcessing ( "PAGEBREAKING",NULL,                     NULL            ) );
@@ -1826,6 +1840,21 @@ QString ClassExportFilterHtmlStyle::getParagraphElement(const QString& strTag, c
     if (( layout.alignment== "right") || (layout.alignment=="center") || (layout.alignment=="justify"))
     {
         strElement+=QString("text-align:%1;").arg(layout.alignment);
+    }
+
+    if ( layout.indentLeft!=0.0 )
+    {
+        strElement+=QString("margin-left:%1pt;").arg(layout.indentLeft);
+    }
+
+    if ( layout.indentRight!=0.0 )
+    {
+        strElement+=QString("margin-right:%1pt;").arg(layout.indentRight);
+    }
+
+    if ( layout.indentFirst!=0.0 )
+    {
+        strElement+=QString("text-indent:%1pt;").arg(layout.indentFirst);
     }
 
     // Font name
