@@ -440,12 +440,7 @@ KPTNode *KPTView::currentTask()
 
 void KPTView::slotOpenNode() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTNode *node = 0;
-	if (m_tab->visibleWidget() == m_ganttview) {
-        node = m_ganttview->currentNode();
-	} else if (m_tab->visibleWidget() == m_pertview) {
-	    node = m_pertview->currentNode();
-	}
+    KPTNode *node = currentTask();
     if (!node)
         return;
 
@@ -503,20 +498,23 @@ void KPTView::slotOpenNode() {
 void KPTView::slotDeleteTask()
 {
     //kdDebug()<<k_funcinfo<<endl;
-
-	KPTNode* task = currentTask();
-
-    KPTNodeDeleteCmd *cmd = new KPTNodeDeleteCmd(task, i18n("Delete Task"));
+    KPTNode *node = currentTask();
+    if (node == 0 || node->getParent() == 0) {
+        kdDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
+        return;
+    }
+    KPTNodeDeleteCmd *cmd = new KPTNodeDeleteCmd(node, i18n("Delete Task"));
     getPart()->addCommand(cmd);
-
-	// display the changes
-	slotUpdate(true);
 }
 
 void KPTView::slotIndentTask()
 {
     //kdDebug()<<k_funcinfo<<endl;
     KPTNode *node = currentTask();
+    if (node == 0 || node->getParent() == 0) {
+        kdDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
+        return;
+    }
     KPTNodeIndentCmd *cmd = new KPTNodeIndentCmd(*node, i18n("Indent Task"));
     getPart()->addCommand(cmd);
 }
@@ -525,6 +523,10 @@ void KPTView::slotUnindentTask()
 {
     //kdDebug()<<k_funcinfo<<endl;
     KPTNode *node = currentTask();
+    if (node == 0 || node->getParent() == 0) {
+        kdDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
+        return;
+    }
     KPTNodeUnindentCmd *cmd = new KPTNodeUnindentCmd(*node, i18n("Unindent Task"));
     getPart()->addCommand(cmd);
 }

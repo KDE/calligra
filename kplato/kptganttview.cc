@@ -613,8 +613,12 @@ void KPTGanttView::currentItemChanged(KDGanttViewItem* item)
 {
     //kdDebug()<<k_funcinfo<<(item ? item->listViewText() : "null")<<endl;
     m_taskView->clear();
-    m_gantt->setSelected(item, true);
+    m_gantt->setSelected(m_currentItem, false);
     m_currentItem = item;
+    if (!item) {
+        return;
+    }
+    m_gantt->setSelected(item, true);
     KPTGanttViewTaskItem *taskItem = dynamic_cast<KPTGanttViewTaskItem *>(item);
     if (taskItem) {
         m_taskView->draw(taskItem->getTask());

@@ -193,11 +193,10 @@ KPTNodeIndentCmd::KPTNodeIndentCmd(KPTNode &node, QString name)
     : KNamedCommand(name),
       m_node(node), m_newparent(0), m_newindex(-1) {
 
-    m_oldparent = node.getParent();
-    m_oldindex = m_oldparent->findChildNode(&node);
-    kdDebug()<<k_funcinfo<<node.name()<<": parent="<<m_oldparent->name()<<" ix="<<m_oldindex<<endl;
 }
 void KPTNodeIndentCmd::execute() {
+    m_oldparent = m_node.getParent();
+    m_oldindex = m_oldparent->findChildNode(&m_node);
     KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
     if (p && p->indentTask(&m_node)) {
         m_newparent = m_node.getParent();
@@ -217,11 +216,10 @@ void KPTNodeIndentCmd::unexecute() {
 KPTNodeUnindentCmd::KPTNodeUnindentCmd(KPTNode &node, QString name)
     : KNamedCommand(name),
       m_node(node), m_newparent(0),  m_newindex(-1) {
-
-      m_oldparent = node.getParent();
-      m_oldindex = m_oldparent->findChildNode(&node);
 }
 void KPTNodeUnindentCmd::execute() {
+    m_oldparent = m_node.getParent();
+    m_oldindex = m_oldparent->findChildNode(&m_node);
     KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
     if (p && p->unindentTask(&m_node)) {
         m_newparent = m_node.getParent();
@@ -241,10 +239,9 @@ void KPTNodeUnindentCmd::unexecute() {
 KPTNodeMoveUpCmd::KPTNodeMoveUpCmd(KPTNode &node, QString name)
     : KNamedCommand(name),
       m_node(node), m_newindex(-1) {
-
-      m_oldindex = node.getParent()->findChildNode(&node);
 }
 void KPTNodeMoveUpCmd::execute() {
+    m_oldindex = m_node.getParent()->findChildNode(&m_node);
     KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
     if (p && p->moveTaskUp(&m_node)) {
         m_newindex = m_node.getParent()->findChildNode(&m_node);
@@ -261,10 +258,9 @@ void KPTNodeMoveUpCmd::unexecute() {
 KPTNodeMoveDownCmd::KPTNodeMoveDownCmd(KPTNode &node, QString name)
     : KNamedCommand(name),
       m_node(node), m_newindex(-1) {
-
-      m_oldindex = node.getParent()->findChildNode(&node);
 }
 void KPTNodeMoveDownCmd::execute() {
+    m_oldindex = m_node.getParent()->findChildNode(&m_node);
     KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
     if (p && p->moveTaskDown(&m_node)) {
         m_newindex = m_node.getParent()->findChildNode(&m_node);
