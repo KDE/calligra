@@ -186,6 +186,8 @@ class KSpreadChanges : public QObject
     KSpreadSheet const * const table() const { return m_table; }
 
    private:
+    friend class KSpreadAcceptDlg;
+    friend class KSpreadFilterDlg;
     
     int            m_id;
     State          m_state;
@@ -215,6 +217,7 @@ class KSpreadChanges : public QObject
   bool loadChanges( QDomElement const & changes );
   void saveAuthors( QDomDocument & doc, QDomElement & changes );
   void saveChanges( QDomDocument & doc, QDomElement & changes );
+  QString getAuthor( int id );
 };
 
 #endif

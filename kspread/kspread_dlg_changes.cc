@@ -19,6 +19,9 @@
 
 #include "kspread_changes.h"
 #include "kspread_dlg_changes.h"
+#include "kspread_doc.h"
+#include "kspread_sheet.h"
+#include "kspread_util.h"
 #include "kspread_view.h"
 
 #include <kcombobox.h>
@@ -259,6 +262,7 @@ AcceptRejectWidget::AcceptRejectWidget( FilterSettings * settings, QWidget * par
   m_listView->header()->setLabel( 2, i18n( "Author" ) );
   m_listView->header()->setLabel( 3, i18n( "Date" ) );
   m_listView->header()->setLabel( 4, i18n( "Comment" ) );
+  m_listView->setRootIsDecorated( true );
   
   tabLayout->addMultiCellWidget( m_listView, 0, 0, 0, 3 );
   listTab->insertTab( m_listTab, i18n( "&List" ) );
@@ -366,10 +370,112 @@ KSpreadAcceptDlg::KSpreadAcceptDlg( KSpreadView * parent, KSpreadChanges * chang
   setCaption( i18n( "Accept or Reject Changes" ) );
   setButtonBoxOrientation( Vertical );
   setMainWidget( m_dialog );
+
+  fillList();
 }
 
 KSpreadAcceptDlg::~KSpreadAcceptDlg()
 {
+}
+
+void KSpreadAcceptDlg::addChangeRecord( KListViewItem * element, KSpreadChanges::ChangeRecord * record )
+{
+  QString action;
+  QString author;
+  QString timestamp;
+  QString comment;
+  QString newValue;
+
+  author    = m_changes->getAuthor( record->m_change->authorID );
+  timestamp = m_view->doc()->locale()->formatDateTime( record->m_change->timestamp );
+  comment   = ( record->m_change->comment ? *(record->m_change->comment) : "" );    
+  
+  QString cellName( record->m_table->tableName() + '!' + 
+                    util_encodeColumnLabelText( record->m_cell.x() )
+                    + QString::number( record->m_cell.y() ) );
+  if ( record->m_dependants.first() )
+  {
+    KSpreadChanges::ChangeRecord * r = record->m_dependants.first();
+    if ( r->m_type == KSpreadChanges::ChangeRecord::CELL )
+    {
+      newValue = ((KSpreadChanges::CellChange *) (r->m_change))->oldValue;
+    }
+  }
+  else
+    newValue = record->m_table->cellAt( record->m_cell.x(), 
+                                        record->m_cell.y() )->text();
+  
+  KSpreadChanges::CellChange * ch = 0;
+
+  switch( record->m_type )
+  {
+   case KSpreadChanges::ChangeRecord::CELL:
+    action = i18n( "Changed content" );
+    ch = (KSpreadChanges::CellChange *) record->m_change;
+    comment += i18n( "(Cell %1 changed from '%2' to '%3')" )
+      .arg( cellName )
+      .arg( ch->oldValue.length() > 0 ? ch->oldValue : i18n( "<empty>" ) )
+      .arg( newValue.length() > 0 ? newValue : i18n( "<empty>" ) );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::INSERTCOLUMN:
+    action = i18n( "Inserted column" );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::INSERTROW:
+    action = i18n( "Inserted row" );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::INSERTTABLE:
+    action = i18n( "Inserted table" );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::DELETECOLUMN:
+    action = i18n( "Deleted column" );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::DELETEROW:
+    action = i18n( "Deleted row" );
+    break;
+    
+   case KSpreadChanges::ChangeRecord::DELETETABLE:
+    action = i18n( "Deleted table" );
+    break;
+  };
+  
+  
+  KListViewItem * el = 0;
+
+  if ( element == 0 )
+    el = new KListViewItem( m_dialog->m_listView, action,
+                            cellName , author, timestamp,
+                            comment );    
+  else
+  {
+    el = new KListViewItem( element, action,
+                            cellName , author, timestamp,
+                            comment );    
+    element->setExpandable( true );
+  }
+
+  QPtrListIterator<KSpreadChanges::ChangeRecord> it( record->m_dependants );
+  for ( ; it.current(); ++it )
+  {
+    kdDebug() << "Adding record: " << it.current()->m_id <<  endl;
+    addChangeRecord( el, it.current() );
+  }
+}
+
+void KSpreadAcceptDlg::fillList()
+{
+  kdDebug() << "Filling list" <<  endl;
+  QPtrListIterator<KSpreadChanges::ChangeRecord> it( m_changes->m_dependancyList );
+  for ( ; it.current(); ++it )
+  {
+    kdDebug() << "Adding record as top level: " << it.current()->m_id <<  endl;
+    addChangeRecord( 0, it.current() );
+  }  
+  kdDebug() << "Filling list done" <<  endl;
 }
 
 #include "kspread_dlg_changes.moc"

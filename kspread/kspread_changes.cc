@@ -274,6 +274,19 @@ int KSpreadChanges::addAuthor()
   return id;
 }
 
+QString KSpreadChanges::getAuthor( int id )
+{
+  QPtrListIterator<AuthorInfo> it( m_authors );
+  for( ; it.current(); ++it )
+  {
+    if ( it.current()->id() == id )
+      return it.current()->name();
+  }
+
+  return "";
+}
+
+
 /*
  * class ChangeRecord
  */
@@ -356,16 +369,19 @@ bool KSpreadChanges::ChangeRecord::isDependant( KSpreadSheet const * const table
 
 void KSpreadChanges::ChangeRecord::addDependant( ChangeRecord * record, QPoint const & cellRef )
 {
+  bool added = false;
   QPtrListIterator<ChangeRecord> it( m_dependants );
   for ( ; it.current(); ++it )
   {
     if ( it.current()->isDependant( record->table(), cellRef ) )
     {
+      added = true;
       it.current()->addDependant( record, cellRef );
       record->addDependancy( it.current() );
     }
   }
-  m_dependants.append( record );
+  if ( !added )
+    m_dependants.append( record );
 }
 
 void KSpreadChanges::ChangeRecord::addDependancy( ChangeRecord * record )

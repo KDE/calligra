@@ -29,6 +29,7 @@ class KSpreadView;
 class KComboBox;
 class KLineEdit;
 class KListView;
+class KListViewItem;
 class KPushButton;
 
 class QCheckBox;
@@ -141,6 +142,9 @@ class KSpreadAcceptDlg : public KDialogBase
   KSpreadView        * m_view;
   KSpreadChanges     * m_changes;  
   AcceptRejectWidget * m_dialog;
+
+  void fillList();
+  void addChangeRecord( KListViewItem * element, KSpreadChanges::ChangeRecord * record );
 };
 
 
