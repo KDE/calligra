@@ -7,7 +7,9 @@ General info:
 (I'm still looking for some algorithms which do boolean operations on
 polygons/curves)
 
-Competitors:
+Similar projects:
+- Autotrace
+  http://homepages.go.com/~martweb/AutoTrace.htm
 - Adobe Illustrator Fileformat Specification:
   http://partners.adobe.com/asn/developer/PDFS/TN/5007.AI7FileFormat.pdf
 - Postscript Specs (since .AI is basically .PS):
