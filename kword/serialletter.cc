@@ -43,8 +43,8 @@
  ******************************************************************/
 
 KWSerialLetterDataBase::KWSerialLetterDataBase( KWDocument *doc_ )
-    : QObject(doc_),KWordSerialLetterDatabaseIface(QCString(doc_->dcopObject()->objId()+".SerialLetterDataBase")),doc( doc_ )
-{
+    : QObject(doc_,doc_->dcopObject()->objId()+".SerialLetterDataBase"),
+	KWordSerialLetterDatabaseIface(QCString(doc_->dcopObject()->objId()+".SerialLetterDataBase")),doc( doc_ ) {
    plugin=0; //loadPlugin("classic");
    rejectdcopcall=false;
 }
@@ -150,9 +150,9 @@ KWSerialLetterDataSource *KWSerialLetterDataBase::loadPlugin(const QString& name
 	  if (create)
 	    {
 	      // create the module
-	      KWSerialLetterDataSource * (*func)(KInstance*);
-	      func = (KWSerialLetterDataSource* (*)(KInstance*)) create;
-	      KWSerialLetterDataSource *tmpsource =func(KWFactory::global());
+	      KWSerialLetterDataSource * (*func)(KInstance*,QObject*);
+	      func = (KWSerialLetterDataSource* (*)(KInstance*,QObject*)) create;
+	      KWSerialLetterDataSource *tmpsource =func(KWFactory::global(),this);
 	      if (tmpsource)
 	      {
 		QDataStream tmpstream(tmpsource->info,IO_WriteOnly);
@@ -245,6 +245,7 @@ bool KWSerialLetterDataBase::askUserForConfirmationAndConfig(KWSerialLetterDataS
 			return false;
 		}
 	}
+#warning "Message from JoWenn to JoWenn: enable tmpPlugin->rename(\"SerialLetterPlugin\");, when the dcopobject patch is applied on next friday"
 	return true;
 }
 

@@ -34,7 +34,7 @@
 class KWQTSQLSerialDataSource: public KWQTSQLSerialDataSourceBase
 {
     public:
-    KWQTSQLSerialDataSource(KInstance *inst);
+    KWQTSQLSerialDataSource(KInstance *inst,QObject *parent);
     ~KWQTSQLSerialDataSource();
 
     virtual void save( QDomDocument &doc,QDomElement&);

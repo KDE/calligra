@@ -18,7 +18,7 @@
 */
 
 #include "serialletter_qtsql_base.h"
-//#include "serialletter_qtsql_base.moc"
+#include "serialletter_qtsql_base.moc"
 #include "qtsqlopeneditor.h"
 #include <qlayout.h>
 #include <qdom.h>
@@ -34,14 +34,16 @@
 #include <kdebug.h>
 
 
+
+
 /******************************************************************
  *
  * Class: KWQTSQLSerialDataSourceBase
  *
  ******************************************************************/
 
-KWQTSQLSerialDataSourceBase::KWQTSQLSerialDataSourceBase(KInstance *inst)
-	: KWSerialLetterDataSource(inst)
+KWQTSQLSerialDataSourceBase::KWQTSQLSerialDataSourceBase(KInstance *inst,QObject *parent)
+	: KWSerialLetterDataSource(inst,parent)
 {
 	port=i18n("default");
 }

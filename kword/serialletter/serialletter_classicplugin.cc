@@ -31,8 +31,8 @@
  *
  ******************************************************************/
 
-KWClassicSerialDataSource::KWClassicSerialDataSource(KInstance *inst)
-	: KWSerialLetterDataSource(inst)
+KWClassicSerialDataSource::KWClassicSerialDataSource(KInstance *inst,QObject *parent)
+	: KWSerialLetterDataSource(inst,parent)
 //    : doc( doc_ )
 {
 }
@@ -473,8 +473,8 @@ void KWClassicSerialLetterEditor::removeRecord()
 }
 
 extern "C" {
-	KWSerialLetterDataSource *create_kwserialletter_classic(KInstance *inst)
+	KWSerialLetterDataSource *create_kwserialletter_classic(KInstance *inst,QObject *parent)
 	{
-		return new KWClassicSerialDataSource(inst);
+		return new KWClassicSerialDataSource(inst,parent);
 	}
 }

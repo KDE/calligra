@@ -24,8 +24,11 @@
 #include <qcstring.h>
 #include <qdom.h>
 #include <kinstance.h>
+#include <qmap.h>
+#include <qobject.h>
+#include <dcopobject.h>
 
-typedef class QMap< class QString, class QString > DbRecord;
+typedef QMap<QString,QString> DbRecord;
 #define KWSLUnspecified		0
 #define KWSLEdit		1
 #define KWSLCreate		2
@@ -41,19 +44,18 @@ typedef class QMap< class QString, class QString > DbRecord;
  *
  ******************************************************************/
 
-class KWSerialLetterDataSource
+class KWSerialLetterDataSource: public QObject, public DCOPObject
 {
+    Q_OBJECT
+    K_DCOP
     public:
-    KWSerialLetterDataSource(KInstance* inst):m_instance(inst){;}
+    KWSerialLetterDataSource(KInstance* inst,QObject *parent);
     virtual ~KWSerialLetterDataSource(){;}
     virtual class QString getValue( const class QString &name, int record = -1 ) const=0;
 
-    const class QMap< QString, QString > &getRecordEntries() const {
-        return sampleRecord;
-    }
+    const QMap< QString, QString > &getRecordEntries() const;
 
     KInstance *KWInstance(){return m_instance;}
-    virtual  int getNumRecords() const =0;
     virtual  bool showConfigDialog(class QWidget*,int) =0;
 
     virtual void save(QDomDocument&, QDomElement&)=0;
@@ -65,6 +67,11 @@ class KWSerialLetterDataSource
     DbRecord sampleRecord;
     private:
     KInstance *m_instance;
+k_dcop:
+    virtual  int getNumRecords() const =0;
 };
+
+
+
 
 #endif

@@ -28,8 +28,8 @@
  *
  ******************************************************************/
 
-KWQTSQLSerialDataSource::KWQTSQLSerialDataSource(KInstance *inst)
-	: KWQTSQLSerialDataSourceBase(inst)
+KWQTSQLSerialDataSource::KWQTSQLSerialDataSource(KInstance *inst,QObject *parent)
+	: KWQTSQLSerialDataSourceBase(inst,parent)
 {
 }
 
@@ -111,8 +111,8 @@ bool KWQTSQLSerialDataSource::showConfigDialog(QWidget *par,int action)
 
 
 extern "C" {
-        KWSerialLetterDataSource *create_kwserialletter_qtsqldb(KInstance *inst)
+        KWSerialLetterDataSource *create_kwserialletter_qtsqldb(KInstance *inst,QObject *parent)
         {
-                return new KWQTSQLSerialDataSource(inst);
+                return new KWQTSQLSerialDataSource(inst,parent);
         }
 }

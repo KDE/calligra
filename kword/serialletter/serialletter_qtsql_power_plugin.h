@@ -36,47 +36,7 @@
 #include "serialletter_interface.h"
 #include "serialletter_qtsql_base.h"
 #include "kwqtsqlpower.h"
-
-/******************************************************************
- *
- * DIRTY HACK FOR SOME INFLEXIBILITY IN QT3's SQL stuff
- *
- * This class is rom some Trolltech guy on QT-interest
- ******************************************************************/
-
-
-
-class QMySqlCursor: public QSqlCursor
-{
-public:
-    QMySqlCursor( const QString & query = QString::null, bool autopopulate = 
-TRUE, QSqlDatabase* db = 0 ): QSqlCursor( QString::null, autopopulate, db )
-    {
-        exec( query );
-        if ( autopopulate )
-            *(QSqlRecord*)this = ((QSqlQuery*)this)->driver()->record(
-*(QSqlQuery*)this );
-        setMode( QSqlCursor::ReadOnly );
-    }
-    QMySqlCursor( const QMySqlCursor & other ): QSqlCursor( other ) {}
-    QMySqlCursor( const QSqlQuery & query, bool autopopulate = TRUE ): 
-QSqlCursor( QString::null, autopopulate )
-    {
-        *(QSqlQuery*)this = query;
-        if ( autopopulate )
-            *(QSqlRecord*)this = query.driver()->record( query );
-        setMode( QSqlCursor::ReadOnly );
-    }
-    bool select( const QString & /*filter*/, const QSqlIndex & /*sort*/ = 
-QSqlIndex() ) { return exec( lastQuery() ); }
-    QSqlIndex primaryIndex( bool /*prime*/ = TRUE ) const { return
-QSqlIndex(); }
-    int insert( bool /*invalidate*/ = TRUE ) { return FALSE; }
-    int update( bool /*invalidate*/ = TRUE ) { return FALSE; }
-    int del( bool /*invalidate*/ = TRUE ) { return FALSE; }
-    void setName( const QString& /*name*/, bool /*autopopulate*/ = TRUE ) {}
-};
-
+#include "serialletter_sqlcursor.h"
 
 /******************************************************************
  *
@@ -85,8 +45,9 @@ QSqlIndex(); }
  ******************************************************************/
 class KWQTSQLPowerSerialDataSource: public KWQTSQLSerialDataSourceBase
 {
+    Q_OBJECT
     public:
-    KWQTSQLPowerSerialDataSource(KInstance *inst);
+    KWQTSQLPowerSerialDataSource(KInstance *inst,QObject *parent);
     ~KWQTSQLPowerSerialDataSource();
 
     virtual void save( QDomDocument &doc,QDomElement&);

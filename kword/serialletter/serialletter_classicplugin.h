@@ -55,8 +55,9 @@ typedef QValueList< DbRecord > Db;
 
 class KWClassicSerialDataSource: public KWSerialLetterDataSource
 {
+    Q_OBJECT
     public:
-    KWClassicSerialDataSource(KInstance *inst);
+    KWClassicSerialDataSource(KInstance *inst,QObject *parent);
     ~KWClassicSerialDataSource();
 
     virtual void save( QDomDocument &doc,QDomElement&);

@@ -41,8 +41,8 @@
  *
  ******************************************************************/
 
-KWQTSQLPowerSerialDataSource::KWQTSQLPowerSerialDataSource(KInstance *inst)
-	: KWQTSQLSerialDataSourceBase(inst),myquery(0)
+KWQTSQLPowerSerialDataSource::KWQTSQLPowerSerialDataSource(KInstance *inst,QObject *parent)
+	: KWQTSQLSerialDataSourceBase(inst,parent),myquery(0)
 {
 	port=i18n("default");
 }
@@ -189,8 +189,8 @@ KWQTSQLPowerSerialLetterEditor::~KWQTSQLPowerSerialLetterEditor(){;}
 
 
 extern "C" {
-        KWSerialLetterDataSource *create_kwserialletter_qtsqldb_power(KInstance *inst)
+        KWSerialLetterDataSource *create_kwserialletter_qtsqldb_power(KInstance *inst,QObject *parent)
         {
-                return new KWQTSQLPowerSerialDataSource(inst);
+                return new KWQTSQLPowerSerialDataSource(inst,parent);
         }
 }

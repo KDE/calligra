@@ -30,6 +30,8 @@
 #include "serialletter_interface.h"
 #include "qtsqlopenwidget.h"
 
+
+
 /******************************************************************
  *
  * Class: KWQTSQLSerialDataSourceBase
@@ -37,11 +39,12 @@
  ******************************************************************/
 class KWQTSQLSerialDataSourceBase: public KWSerialLetterDataSource
 {
+    Q_OBJECT
+    K_DCOP
     public:
-    KWQTSQLSerialDataSourceBase(KInstance *inst);
+    KWQTSQLSerialDataSourceBase(KInstance *inst,QObject *parent);
     ~KWQTSQLSerialDataSourceBase();
 
-    bool openDatabase();
    virtual bool showConfigDialog(QWidget *par,int action);
 
     protected:
@@ -52,6 +55,9 @@ class KWQTSQLSerialDataSourceBase: public KWSerialLetterDataSource
 	QString port;
 	QString databasename;
 	QGuardedPtr<QSqlDatabase> database;
+ 
+   k_dcop:
+     bool openDatabase();
 
 };
 

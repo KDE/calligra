@@ -24,15 +24,15 @@ libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
 		KWordViewIface.skel KWordViewIface.cc
 
 libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell
+libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell ./libkwserialletter_interface.la
 METASOURCES = AUTO
 
 lib_LTLIBRARIES = kword.la libkwserialletter_interface.la
 
 ## The serial letter interface library
-libkwserialletter_interface_la_SOURCES = serialletter_interface.cc
+libkwserialletter_interface_la_SOURCES = serialletter_interface.cc serialletter_interface.skel
 libkwserialletter_interface_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
-libkwserialletter_interface_la_LIBADD = $(LIB_QT)
+libkwserialletter_interface_la_LIBADD = $(LIB_QT) -lDCOP
 
 kwserialletter_servicetype_DATA=kwserialletter.desktop
 kwserialletter_servicetypedir=$(kde_servicetypesdir)
