@@ -1196,6 +1196,10 @@ KWParag *KWTextFrameSet::getLastParag()
 /*================================================================*/
 void KWPictureFrameSet::setFileName( QString _filename )
 {
+    int dashdash = _filename.findRev( "--" );
+    if ( dashdash != -1 )
+        _filename == _filename.left( dashdash );
+    
     if ( image )
     {
         image->decRef();
@@ -1222,6 +1226,10 @@ void KWPictureFrameSet::setFileName( QString _filename )
 /*================================================================*/
 void KWPictureFrameSet::setFileName( QString _filename, QSize _imgSize )
 {
+    int dashdash = _filename.findRev( "--" );
+    if ( dashdash != -1 )
+        _filename == _filename.left( dashdash );
+
     if ( image )
     {
         image->decRef();
