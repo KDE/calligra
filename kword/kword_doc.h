@@ -471,6 +471,9 @@ protected:
     bool spellCheck;
     KWContents *contents;
 
+    Shell *tmpShell;
+    QRect tmpShellSize;
+    
 };
 
 #endif

@@ -88,6 +88,7 @@ protected:
 class KWPage : public QScrollView
 {
     friend class KWResizeHandle;
+    friend class KWordDocument;
     Q_OBJECT
 
 public:

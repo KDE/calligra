@@ -1394,7 +1394,7 @@ void KWordView::extraCreateTemplate()
 {
     QPixmap pix( 45, 60 );
     pix.fill( Qt::white );
-    
+
     QString file = "/tmp/kpt";
     m_pKWordDoc->saveToURL( file, "" );
 
@@ -1488,15 +1488,18 @@ void KWordView::toolsKSpreadTable()
 	return;
     gui->getPaperWidget()->mmKSpreadTable();
 
-    QValueList<KoDocumentEntry> vec = KoDocumentEntry::query( "'IDL:KSpread/DocumentFactory:1.0#KSpread' in RepoIds", 1 );
-    if ( vec.isEmpty() ) {
-	cout << "Got no results" << endl;
-	QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no table component registered" ), i18n( "OK" ) );
-	return;
+    QValueList<KoDocumentEntry> lst = KoDocumentEntry::query();
+
+    QValueList<KoDocumentEntry>::Iterator it = lst.begin();
+    for ( ; it != lst.end(); ++it ) {
+	if ( ( *it ).name == "KSpread" ) {
+	    gui->getPaperWidget()->setPartEntry( *it );
+	    return;
+	}
     }
 
-    cerr << "USING component " << vec[ 0 ].name.ascii() << endl;
-    gui->getPaperWidget()->setPartEntry( vec[ 0 ] );
+    QMessageBox::critical( 0, i18n( "Error" ), i18n( "Sorry, no table component registered" ), i18n( "OK" ) );
+    gui->getPaperWidget()->mmEdit();
 }
 
 /*===============================================================*/
@@ -1505,16 +1508,6 @@ void KWordView::toolsFormula()
     if ( !( (KToggleAction*)actionToolsCreateFormula )->isChecked() )
 	return;
     gui->getPaperWidget()->mmFormula();
-
-//     QValueList<KoDocumentEntry>
-// 	vec = KoDocumentEntry::query( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
-//     if ( vec.isEmpty() )
-//     {
-// 	cout << "Got no results" << endl;
-// 	QMessageBox::critical( this, i18n( "Error" ), i18n( "Sorry, no formula component registered" ), i18n( "OK" ) );
-// 	return;
-//     }
-//     gui->getPaperWidget()->setPartEntry( vec[ 0 ] );
 }
 
 /*===============================================================*/
@@ -1541,8 +1534,7 @@ void KWordView::tableInsertRow()
     if ( !grpMgr )
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
 			       i18n( "OK" ) );
-    else
-    {
+    else {
 	KWInsertDia dia( this, "", grpMgr, m_pKWordDoc, KWInsertDia::ROW, gui->getPaperWidget() );
 	dia.setCaption( i18n( "Insert Row" ) );
 	dia.show();
@@ -1558,11 +1550,11 @@ void KWordView::tableInsertCol()
     if ( !grpMgr )
 	QMessageBox::critical( this, i18n( "Error" ), i18n( "You have to put the cursor into a table to edit it!" ),
 			       i18n( "OK" ) );
-    else
-    {
+    else {
 	if ( grpMgr->getBoundingRect().right() + 62 > static_cast<int>( m_pKWordDoc->getPTPaperWidth() ) )
 	    QMessageBox::critical( this, i18n( "Error" ),
-				   i18n( "There is not enough space at the right of the table\nto insert a new column." ),
+				   i18n( "There is not enough space at the right of the table\n"
+					 "to insert a new column." ),
 				   i18n( "OK" ) );
 	else
 	{

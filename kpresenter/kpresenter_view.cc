@@ -511,18 +511,18 @@ void KPresenterView::toolsDiagramm()
     page->deSelectAllObj();
     page->setToolEditMode( INS_DIAGRAMM, FALSE );
 
-    // ####### Torben RepoId is no longer used
-    QValueList<KoDocumentEntry>
-	vec = KoDocumentEntry::query( "'IDL:KChart/DocumentFactory:1.0#KChart' in RepoIds", 1 );
-    if ( vec.isEmpty() ) {
-	cout << "Got no results" << endl;
-	QMessageBox::critical( this, i18n( "Error" ),
-			       i18n( "Sorry, no charting component registered" ), i18n( "Ok" ) );
-	return;
+    QValueList<KoDocumentEntry> lst = KoDocumentEntry::query();
+
+    QValueList<KoDocumentEntry>::Iterator it = lst.begin();
+    for ( ; it != lst.end(); ++it ) {
+	if ( ( *it ).name == "KChart" ) {
+	    page->setPartEntry( *it );
+	    return;
+	}
     }
 
-    cerr << "USING component " << vec[ 0 ].name.latin1() << endl;
-    page->setPartEntry( vec[ 0 ] );
+    QMessageBox::critical( 0, i18n( "Error" ), i18n( "Sorry, no chart component registered" ), i18n( "OK" ) );
+    page->setToolEditMode( TEM_MOUSE );
 }
 
 /*==============================================================*/
@@ -533,18 +533,18 @@ void KPresenterView::toolsTable()
     page->deSelectAllObj();
     page->setToolEditMode( INS_TABLE, FALSE );
 
-    // ####### Torben RepoId is no longer used
-    QValueList<KoDocumentEntry>
-	vec = KoDocumentEntry::query( "'IDL:KSpread/DocumentFactory:1.0#KSpread' in RepoIds", 1 );
-    if ( vec.isEmpty() ) {
-	cout << "Got no results" << endl;
-	QMessageBox::critical( this, i18n( "Error" ),
-			       i18n( "Sorry, no table component registered" ), i18n( "Ok" ) );
-	return;
+    QValueList<KoDocumentEntry> lst = KoDocumentEntry::query();
+
+    QValueList<KoDocumentEntry>::Iterator it = lst.begin();
+    for ( ; it != lst.end(); ++it ) {
+	if ( ( *it ).name == "KSpread" ) {
+	    page->setPartEntry( *it );
+	    return;
+	}
     }
 
-    cerr << "USING component " << vec[ 0 ].name.latin1() << endl;
-    page->setPartEntry( vec[ 0 ] );
+    QMessageBox::critical( 0, i18n( "Error" ), i18n( "Sorry, no table component registered" ), i18n( "OK" ) );
+    page->setToolEditMode( TEM_MOUSE );
 }
 
 /*==============================================================*/
@@ -555,18 +555,18 @@ void KPresenterView::toolsFormula()
     page->deSelectAllObj();
     page->setToolEditMode( INS_FORMULA, FALSE );
 
-    // ####### Torben RepoId is no longer used
-    QValueList<KoDocumentEntry>
-	vec = KoDocumentEntry::query( "'IDL:KFormula/DocumentFactory:1.0#KFormula' in RepoIds", 1 );
-    if ( vec.isEmpty() ) {
-	cout << "Got no results" << endl;
-	QMessageBox::critical( this, i18n( "Error" ),
-			       i18n( "Sorry, no formula component registered" ), i18n( "Ok" ) );
-	return;
+    QValueList<KoDocumentEntry> lst = KoDocumentEntry::query();
+
+    QValueList<KoDocumentEntry>::Iterator it = lst.begin();
+    for ( ; it != lst.end(); ++it ) {
+	if ( ( *it ).name == "KFormula" ) {
+	    page->setPartEntry( *it );
+	    return;
+	}
     }
 
-    cerr << "USING component " << vec[ 0 ].name.latin1() << endl;
-    page->setPartEntry( vec[ 0 ] );
+    QMessageBox::critical( 0, i18n( "Error" ), i18n( "Sorry, no formula component registered" ), i18n( "OK" ) );
+    page->setToolEditMode( TEM_MOUSE );
 }
 
 /*===================== insert a textobject =====================*/
