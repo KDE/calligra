@@ -19,6 +19,8 @@
 */
 
 #include <qrichtext_p.h>
+#include <qregexp.h>
+#include <qtimer.h>
 
 #include "kwtextframeset.h"
 #include "kwtextdocument.h"
@@ -74,7 +76,7 @@ public:
     KWTextFormatter( KWTextFrameSet *textfs ) : m_textfs( textfs ) {}
     virtual ~KWTextFormatter() {}
 
-    virtual int formatVertically( QTextDocument*, QTextParag* parag )
+    virtual int formatVertically( QTextDocument*, Qt3::QTextParag* parag )
     {
         return m_textfs->formatVertically( parag );
     }
@@ -365,7 +367,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     bool drawCursor = edit!=0L;
     QTextCursor * cursor = edit ? static_cast<KWTextFrameSetEdit *>(edit)->cursor() : 0;
 
-    QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
+    Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, onlyChanged, drawCursor, cursor, resetChanged );
 
@@ -376,7 +378,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     {
         // Finding the "last parag of the frame" is a bit tricky.
         // It's usually the one before lastFormatted, except if it's actually lastParag :}  [see QTextDocument::draw]
-        QTextParag * lastDrawn = lastFormatted->prev();
+        Qt3::QTextParag * lastDrawn = lastFormatted->prev();
         if ( lastFormatted == textDocument()->lastParag() && ( !lastDrawn || m_doc->layoutUnitToPixelY( lastDrawn->rect().bottom() ) < r.bottom() ) )
             lastDrawn = lastFormatted;
 
@@ -516,7 +518,7 @@ void KWTextFrameSet::slotRepaintChanged()
 int KWTextFrameSet::paragraphs()
 {
     int paragraphs = 0;
-    QTextParag * parag = textDocument()->firstParag();
+    Qt3::QTextParag * parag = textDocument()->firstParag();
     for ( ; parag ; parag = parag->next() )
         paragraphs++;
     return paragraphs;
@@ -532,7 +534,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
     add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii" << "[aeiouym]bl$" << "[aeiou]{3}"
             << "^mc" << "ism$" << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
 
-    QTextParag * parag = textDocument()->firstParag();
+    Qt3::QTextParag * parag = textDocument()->firstParag();
     for ( ; parag ; parag = parag->next() )
     {
         progress->setProgress(progress->progress()+1);
@@ -782,7 +784,7 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 }
 
 // helper for formatVertically
-bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd )
+bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, Qt3::QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd )
 {
     // We need the "+1" here because when skipping a frame on top, we want to be _under_
     // its bottom. Without the +1, we hit the frame again on the next adjustLMargin call.
@@ -813,7 +815,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, QTextParag * parag, 
             for ( ; it != lineStarts.end() ; ++it, ++line )
             {
                 QTextParagLineStart * ls = it.data();
-                ASSERT( ls );
+                Q_ASSERT( ls );
                 int y = parag->rect().y() + ls->y;
 #ifdef DEBUG_FLOW
                 kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
@@ -864,7 +866,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, QTextParag * parag, 
     return false;
 }
 
-int KWTextFrameSet::formatVertically( QTextParag * _parag )
+int KWTextFrameSet::formatVertically( Qt3::QTextParag * _parag )
 {
     QRect paragRect( _parag->rect() );
     int yp = paragRect.y();
@@ -979,7 +981,7 @@ int KWTextFrameSet::formatVertically( QTextParag * _parag )
     {
         kdDebug(32002) << "KWTextFrameSet::formatVertically no-space case. breakBegin=" << breakBegin
                        << " breakEnd=" << breakEnd << " hp=" << hp << endl;
-        ASSERT( breakBegin <= breakEnd );
+        Q_ASSERT( breakBegin <= breakEnd );
         if ( checkVerticalBreak( yp, hp, parag, linesTogether, breakBegin, breakEnd ) )
             ; //kdDebug(32002) << "checkVerticalBreak ok." << endl;
         else // shouldn't happen
@@ -1113,7 +1115,7 @@ void KWTextFrameSet::updateFrames()
         KWFrame * frame = (*it).frame;
         frames.append( frame );
 
-        ASSERT( frame->pageNum() <= lastPage );
+        Q_ASSERT( frame->pageNum() <= lastPage );
         m_framesInPage[frame->pageNum() - m_firstPage]->append( frame );
 
         if ( !frame->isCopy() )
@@ -1162,7 +1164,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
 #endif
     // This does a binary search in the m_framesInPage array, with internalY as criteria
     // We only look at the first frame of each page. Refining is done later on.
-    ASSERT( !m_framesInPage.isEmpty() );
+    Q_ASSERT( !m_framesInPage.isEmpty() );
     int len = m_framesInPage.count();
     int n1 = 0;
     int n2 = len - 1;
@@ -1175,7 +1177,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
 #ifdef DEBUG_ITD
         kdDebug() << "ITN: begin. mid=" << mid << endl;
 #endif
-        ASSERT( m_framesInPage[mid] ); // We have no null items
+        Q_ASSERT( m_framesInPage[mid] ); // We have no null items
         if ( m_framesInPage[mid]->isEmpty() )
             res = -1;
         else
@@ -1207,7 +1209,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
                 }
             }
         }
-        ASSERT( res != 0 ); // this should have been already handled !
+        Q_ASSERT( res != 0 ); // this should have been already handled !
         if ( res < 0 )
             n2 = mid - 1;
         else // if ( res > 0 )
@@ -1384,7 +1386,7 @@ void KWTextFrameSet::zoom( bool forPrint )
     QDictIterator<QTextFormat> it( coll->dict() );
     for ( ; it.current() ; ++it ) {
         KWTextFormat * format = dynamic_cast<KWTextFormat *>(it.current());
-        ASSERT( format );
+        Q_ASSERT( format );
         m_origFontSizes.insert( format, new int( format->font().pointSize() ) );
 #ifdef DEBUG_FORMATS
         kdDebugBody(32002) << this << " KWTextFrameSet::zooming format " << format
@@ -1468,7 +1470,7 @@ void KWTextFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progre
     textDocument()->setWithoutDoubleBuffer( painter != 0 );
 
     textDocument()->formatCollection()->setPainter( painter );
-    QTextParag *parag = textDocument()->firstParag();
+    Qt3::QTextParag *parag = textDocument()->firstParag();
     while ( parag ) {
         parag->invalidate( 0 );
         parag->setPainter( painter );
@@ -1490,14 +1492,14 @@ void KWTextFrameSet::slotNewCommand( KCommand *cmd )
     m_doc->addCommand( cmd );
 }
 
-void KWTextFrameSet::ensureFormatted( QTextParag * parag )
+void KWTextFrameSet::ensureFormatted( Qt3::QTextParag * parag )
 {
     if (!isVisible())
         return;
     m_textobj->ensureFormatted( parag );
 }
 
-void KWTextFrameSet::slotAfterFormatting( int bottom, QTextParag *lastFormatted, bool* abort )
+void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastFormatted, bool* abort )
 {
     int availHeight = availableHeight();
     if ( ( bottom > availHeight ) ||   // this parag is already off page
@@ -1752,7 +1754,7 @@ void KWTextFrameSet::frameResized( KWFrame *theFrame )
 
 bool KWTextFrameSet::isFrameEmpty( KWFrame * frame )
 {
-    QTextParag * lastParag = textDocument()->lastParag();
+    Qt3::QTextParag * lastParag = textDocument()->lastParag();
     ensureFormatted( lastParag );
     int bottom = lastParag->rect().top() + lastParag->rect().height();
 
@@ -1777,8 +1779,8 @@ bool KWTextFrameSet::canRemovePage( int num )
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * frame = frameIt.current();
-        ASSERT( frame->pageNum() == num );
-        ASSERT( frame->getFrameSet() == this );
+        Q_ASSERT( frame->pageNum() == num );
+        Q_ASSERT( frame->getFrameSet() == this );
         bool isEmpty = isFrameEmpty( frame );
 #ifdef DEBUG_FORMAT_MORE
         kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage"
@@ -1847,8 +1849,8 @@ KCommand * KWTextFrameSet::setPageBreakingCommand( QTextCursor * cursor, int pag
     }
     else
     {
-        QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
-        QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
+        Qt3::QTextParag *start = textDocument()->selectionStart( QTextDocument::Standard );
+        Qt3::QTextParag *end = textDocument()->selectionEnd( QTextDocument::Standard );
         m_textobj->setLastFormattedParag( start );
         for ( ; start && start != end->next() ; start = start->next() )
             static_cast<KWTextParag *>(start)->setPageBreaking( pageBreaking );
@@ -2009,7 +2011,7 @@ void KWTextFrameSet::changeCaseOfText(QTextCursor *cursor,TypeOfCase _type)
             cursor, textChangedCase(repl,_type),
             QTextDocument::Temp, "" ));
 
-        QTextParag *p = start.parag()->next();
+        Qt3::QTextParag *p = start.parag()->next();
         while ( p && p != end.parag() )
         {
             posStart=0;
@@ -2189,7 +2191,7 @@ void KWTextFrameSet::insertFrameBreak( QTextCursor *cursor )
     m_textobj->emitShowCursor();
 }
 
-QRect KWTextFrameSet::paragRect( QTextParag * parag ) const
+QRect KWTextFrameSet::paragRect( Qt3::QTextParag * parag ) const
 {
     // ## Warning. Imagine a paragraph cut in two pieces (at the line-level),
     // between two columns. A single rect in internal coords, but two rects in
@@ -2204,7 +2206,7 @@ QRect KWTextFrameSet::paragRect( QTextParag * parag ) const
     return QRect( topLeft, bottomRight );
 }
 
-void KWTextFrameSet::findPosition( const KoPoint &dPoint, QTextParag * & parag, int & index )
+void KWTextFrameSet::findPosition( const KoPoint &dPoint, Qt3::QTextParag * & parag, int & index )
 {
     QTextCursor cursor( textDocument() );
 
@@ -2227,7 +2229,7 @@ void KWTextFrameSet::findPosition( const KoPoint &dPoint, QTextParag * & parag, 
 KCommand * KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )
 {
     kdDebug() << "KWTextFrameSet::deleteAnchoredFrame anchor->index=" << anchor->index() << endl;
-    ASSERT( anchor );
+    Q_ASSERT( anchor );
     QTextCursor c( textDocument() );
     c.setParag( anchor->paragraph() );
     c.setIndex( anchor->index() );
@@ -2251,7 +2253,7 @@ QString KWTextFrameSet::selectedText() const
     return m_textobj->selectedText();
 }
 
-void KWTextFrameSet::highlightPortion( QTextParag * parag, int index, int length, KWCanvas * canvas )
+void KWTextFrameSet::highlightPortion( Qt3::QTextParag * parag, int index, int length, KWCanvas * canvas )
 {
     m_textobj->highlightPortion( parag, index, length );
     QRect expose = canvas->viewMode()->normalToView( paragRect( parag ) );
@@ -2279,13 +2281,13 @@ void KWTextFrameSet::applyStyleChange( KoStyle * changedStyle, int paragLayoutCh
 void KWTextFrameSet::showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )
 {
     KWTextFrameSetEdit * textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
-    ASSERT( textedit ); // is it correct that this is always set ?
+    Q_ASSERT( textedit ); // is it correct that this is always set ?
     if (textedit)
         textedit->showPopup( frame, view, point );
     else
     {
         QPopupMenu * popup = view->popupMenu("text_popup");
-        ASSERT(popup);
+        Q_ASSERT(popup);
         if (popup)
             popup->popup( point );
     }
@@ -2294,7 +2296,7 @@ void KWTextFrameSet::showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *vi
 #ifndef NDEBUG
 void KWTextFrameSet::printRTDebug( int info )
 {
-    for (QTextParag * parag = textDocument()->firstParag(); parag ; parag = parag->next())
+    for (Qt3::QTextParag * parag = textDocument()->firstParag(); parag ; parag = parag->next())
     {
         KWTextParag * p = static_cast<KWTextParag *>(parag);
         p->printRTDebug( info );
@@ -2422,7 +2424,7 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
     {
         text += c1.parag()->string()->toString().mid( c1.index() ) + "\n";
         static_cast<KWTextParag *>(c1.parag())->save( elem, c1.index(), c1.parag()->length()-2, true );
-        QTextParag *p = c1.parag()->next();
+        Qt3::QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             text += p->string()->toString() + "\n";
             static_cast<KWTextParag *>(p)->save( elem, 0, p->length()-2, true );
@@ -2443,7 +2445,7 @@ KWTextDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 void KWTextFrameSetEdit::ensureCursorVisible()
 {
     //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor()->parag()->paragId() << endl;
-    QTextParag * parag = cursor()->parag();
+    Qt3::QTextParag * parag = cursor()->parag();
     textFrameSet()->ensureFormatted( parag );
     QTextStringChar *chr = parag->at( cursor()->index() );
     int h = parag->lineHeightOfChar( cursor()->index() );
@@ -2588,7 +2590,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
                     if ( !inSelection )
                     {
                         // Look at all other paragraphs except last one
-                        QTextParag *p = startSel.parag()->next();
+                        Qt3::QTextParag *p = startSel.parag()->next();
                         while ( !inSelection && p && p != endSel.parag() )
                         {
                             inSelection = ( p == dropCursor.parag() );
@@ -2706,7 +2708,7 @@ void KWTextFrameSetEdit::pgUpKeyPressed()
 #if 0
     // One idea would be: move up until first-visible-paragraph wouldn't be visible anymore
     // First find the first-visible paragraph...
-    QTextParag *firstVis = m_cursor->parag();
+    Qt3::QTextParag *firstVis = m_cursor->parag();
     while ( firstVis && crect.intersects( s->rect() ) )
         firstVis = firstVis->prev();
     if ( !firstVis )
@@ -2716,7 +2718,7 @@ void KWTextFrameSetEdit::pgUpKeyPressed()
 #endif
     // Go up of 90% of crect.height()
     int h = static_cast<int>( (double)crect.height() * 0.9 );
-    QTextParag *s = textView()->cursor()->parag();
+    Qt3::QTextParag *s = textView()->cursor()->parag();
     int y = s->rect().y();
     while ( s ) {
         if ( y - s->rect().y() >= h )
@@ -2740,7 +2742,7 @@ void KWTextFrameSetEdit::pgDownKeyPressed()
     int h = static_cast<int>( (double)crect.height() * 0.9 );
 
     QTextCursor *cursor = textView()->cursor();
-    QTextParag *s = cursor->parag();
+    Qt3::QTextParag *s = cursor->parag();
     int y = s->rect().y();
     while ( s ) {
         if ( s->rect().y() - y >= h )
@@ -3124,7 +3126,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << m_actionList.count() << " actions" << endl;
     view->plugActionList( "datatools", m_actionList );
     QPopupMenu * popup = view->popupMenu("text_popup");
-    ASSERT(popup);
+    Q_ASSERT(popup);
     if (popup)
         popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
 }

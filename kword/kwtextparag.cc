@@ -158,7 +158,7 @@ void KWTextParag::copyParagData( QTextParag *_parag )
         {
             setParagLayout( newStyle->paragLayout() );
             KWTextFrameSet * textfs = kwTextDocument()->textFrameSet();
-            ASSERT( textfs );
+            Q_ASSERT( textfs );
             if ( textfs )
             {
                 QTextFormat * format = &newStyle->format();
@@ -264,12 +264,15 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().strikeOut()) );
     }
+    // ######## Not needed in 3.0?
+    /*
     if( !refFormat || curFormat->font().charSet() != refFormat->font().charSet() )
     {
         elem = doc.createElement( "CHARSET" );
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->font().charSet()) );
     }
+    */
     if( !refFormat || curFormat->vAlign() != refFormat->vAlign() )
     {
         elem = doc.createElement( "VERTALIGN" );
@@ -306,7 +309,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
     QDomElement textElem = doc.createElement( "TEXT" );
     paragElem.appendChild( textElem );
     QString text = string()->toString();
-    ASSERT( text.right(1)[0] == ' ' );
+    Q_ASSERT( text.right(1)[0] == ' ' );
     textElem.appendChild( doc.createTextNode( text.mid( from, to - from + 1 ) ) );
 
     QDomElement formatsElem = doc.createElement( "FORMATS" );
@@ -433,10 +436,12 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     elem = formatElem.namedItem( "STRIKEOUT" ).toElement();
     if ( !elem.isNull() )
         font.setStrikeOut( elem.attribute("value").toInt() == 1 );
+    // ######## Not needed in 3.0?
+    /*
     elem = formatElem.namedItem( "CHARSET" ).toElement();
     if ( !elem.isNull() )
         font.setCharSet( (QFont::CharSet) elem.attribute("value").toInt() );
-
+    */
     format.setFont( font );
 
     elem = formatElem.namedItem( "VERTALIGN" ).toElement();
@@ -545,7 +550,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 }
                 case 2: // Picture
                 {
-                    ASSERT( len == 1 );
+                    Q_ASSERT( len == 1 );
                     KWTextImage * custom = new KWTextImage( kwTextDocument(), QString::null );
                     kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
                     paragFormat()->addRef();
@@ -586,7 +591,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 }
                 case 6: // Anchor
                 {
-                    ASSERT( len == 1 );
+                    Q_ASSERT( len == 1 );
                     QDomElement anchorElem = formatElem.namedItem( "ANCHOR" ).toElement();
                     if ( !anchorElem.isNull() ) {
                         QString type = anchorElem.attribute( "type" );
@@ -733,7 +738,7 @@ KoParagLayout KWTextParag::loadParagLayout( QDomElement & parentElem, KWDocument
             kdError(32001) << "Missing NAME tag in paragraph LAYOUT - using Standard" << endl;
             style = doc->findStyle( "Standard" );
         }
-        ASSERT(style);
+        Q_ASSERT(style);
         layout.style = style;
     }
 
@@ -762,11 +767,11 @@ KoParagLayout KWTextParag::loadParagLayout( QDomElement & parentElem, KWDocument
         QString flow = element.attribute( "value" ); // KWord-0.8
         if ( !flow.isEmpty() )
         {
-            static const int flow2align[] = { Qt::AlignLeft, Qt::AlignRight, Qt::AlignCenter, Qt3::AlignJustify };
+            static const int flow2align[] = { Qt::AlignLeft, Qt::AlignRight, Qt::AlignCenter, Qt::AlignJustify };
             layout.alignment = flow2align[flow.toInt()];
         } else {
             flow = element.attribute( "align" ); // KWord-1.0 DTD
-            layout.alignment = flow=="right" ? (int)Qt::AlignRight : flow=="center" ? (int)Qt::AlignCenter : flow=="justify" ? (int)Qt3::AlignJustify : (int)Qt::AlignLeft;
+            layout.alignment = flow=="right" ? (int)Qt::AlignRight : flow=="center" ? (int)Qt::AlignCenter : flow=="justify" ? (int)Qt::AlignJustify : (int)Qt::AlignLeft;
         }
     }
 
@@ -888,7 +893,7 @@ void KWTextParag::saveParagLayout( const KoParagLayout& layout, QDomElement & pa
     element = doc.createElement( "FLOW" );
     parentElem.appendChild( element );
     int a = layout.alignment;
-    element.setAttribute( "align", a==Qt::AlignRight ? "right" : a==Qt::AlignCenter ? "center" : a==Qt3::AlignJustify ? "justify" : "left" );
+    element.setAttribute( "align", a==Qt::AlignRight ? "right" : a==Qt::AlignCenter ? "center" : a==Qt::AlignJustify ? "justify" : "left" );
 
     if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
          layout.margins[QStyleSheetItem::MarginLeft] != 0 ||

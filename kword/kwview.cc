@@ -218,7 +218,7 @@ void KWView::clearSelection()
     if(m_spell.kspell)
     {
         KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-        ASSERT( fs );
+        Q_ASSERT( fs );
         if ( fs )
             fs->removeHighlight();
         delete m_spell.kspell;
@@ -1236,7 +1236,7 @@ void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rig
 
 void KWView::showAlign( int align ) {
     switch ( align ) {
-        case Qt3::AlignAuto: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
+        case Qt::AlignAuto: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
         case Qt::AlignLeft:
             actionFormatAlignLeft->setChecked( TRUE );
             break;
@@ -1246,7 +1246,7 @@ void KWView::showAlign( int align ) {
         case Qt::AlignRight:
             actionFormatAlignRight->setChecked( TRUE );
             break;
-        case Qt3::AlignJustify: // Make this Qt:AlignJustify after the merge with Qt3
+        case Qt::AlignJustify: // Make this Qt:AlignJustify after the merge with Qt3
             actionFormatAlignBlock->setChecked( TRUE );
             break;
     }
@@ -1460,7 +1460,7 @@ void KWView::editDeleteFrame()
 void KWView::deleteFrame( bool _warning )
 {
     QList<KWFrame> frames=m_doc->getSelectedFrames();
-    ASSERT( frames.count() >= 1 );
+    Q_ASSERT( frames.count() >= 1 );
     if( frames.count() < 1)
         return;
     if(frames.count()==1)
@@ -1468,8 +1468,8 @@ void KWView::deleteFrame( bool _warning )
         KWFrame *theFrame = frames.at(0);
         KWFrameSet *fs = theFrame->getFrameSet();
 
-        ASSERT( !fs->isAHeader() ); // the action is disabled for such cases
-        ASSERT( !fs->isAFooter() );
+        Q_ASSERT( !fs->isAHeader() ); // the action is disabled for such cases
+        Q_ASSERT( !fs->isAFooter() );
         if ( fs->isAFooter() || fs->isAHeader() )
             return;
 
@@ -1502,7 +1502,7 @@ void KWView::deleteFrame( bool _warning )
                 return;
 
             QTextDocument * textdoc = textfs->textDocument();
-            QTextParag * parag = textdoc->firstParag();
+            Qt3::QTextParag * parag = textdoc->firstParag();
             if ( parag && parag->string()->length() > 0 )
             {
                 int result = KMessageBox::warningContinueCancel(
@@ -2422,7 +2422,7 @@ void KWView::tableInsertRow()
 {
     m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    ASSERT(table);
+    Q_ASSERT(table);
     KWInsertDia dia( this, "", table, m_doc, KWInsertDia::ROW, m_gui->canvasWidget() );
     dia.setCaption( i18n( "Insert Row" ) );
     dia.show();
@@ -2432,7 +2432,7 @@ void KWView::tableInsertCol()
 {
     m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    ASSERT(table);
+    Q_ASSERT(table);
     // value = 62 because a insert column = 60 +2 (border )see kwtableframeset.cc
     if ( table->boundingRect().right() + 62 > static_cast<int>( m_doc->ptPaperWidth() ) )
     {
@@ -2454,7 +2454,7 @@ void KWView::tableDeleteRow()
     m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    ASSERT(table);
+    Q_ASSERT(table);
     if ( table->getRows() == 1 )
     {
         int result;
@@ -2484,7 +2484,7 @@ void KWView::tableDeleteCol()
     m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    ASSERT(table);
+    Q_ASSERT(table);
     if ( table->getCols() == 1 )
     {
         int result;
@@ -2513,7 +2513,7 @@ void KWView::tableJoinCells()
     //m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT_FRAME );
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    ASSERT(table);
+    Q_ASSERT(table);
     KCommand * cmd=table->joinCells();
     if ( !cmd )
     {
@@ -2579,7 +2579,7 @@ void KWView::tableUngroupTable()
     m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    ASSERT(table);
+    Q_ASSERT(table);
 
     // Use a macro command because we may have to make the table non-floating first
     KMacroCommand * macroCmd = new KMacroCommand( i18n( "Ungroup Table" ) );
@@ -2599,7 +2599,7 @@ void KWView::tableUngroupTable()
 void KWView::tableDelete()
 {
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    ASSERT(table);
+    Q_ASSERT(table);
     m_doc->deleteTable( table );
     m_gui->canvasWidget()->emitFrameSelectedChanged();
 }
@@ -2727,7 +2727,7 @@ void KWView::textAlignBlock()
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
         {
-            KCommand *cmd=edit->setAlignCommand(Qt3::AlignJustify);
+            KCommand *cmd=edit->setAlignCommand(Qt::AlignJustify);
             if(cmd)
                 m_doc->addCommand(cmd);
         }
@@ -2748,7 +2748,7 @@ void KWView::textList()
         c.setNumbering( KoParagCounter::NUM_NONE );
     }
     KWTextFrameSetEdit * edit = currentTextEdit();
-    ASSERT(edit);
+    Q_ASSERT(edit);
     if ( edit )
     {
         KCommand *cmd=edit->setCounterCommand( c );
@@ -3090,7 +3090,7 @@ void KWView::newRightIndent( double _rightIndent)
 
 QPopupMenu * KWView::popupMenu( const QString& name )
 {
-    ASSERT(factory());
+    Q_ASSERT(factory());
     if ( factory() )
         return ((QPopupMenu*)factory()->container( name, this ));
     return 0L;
@@ -3219,7 +3219,7 @@ void KWView::spellCheckerReady()
         m_spell.spellCurrFrameSetNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
         //kdDebug() << "KWView::spellCheckerReady spell-checking frameset " << m_spellCurrFrameSetNum << endl;
 
-        QTextParag * p = textfs->textDocument()->firstParag();
+        Qt3::QTextParag * p = textfs->textDocument()->firstParag();
         QString text;
         bool textIsEmpty=true;
         while ( p ) {
@@ -3252,15 +3252,15 @@ void KWView::spellCheckerMisspelling( QString old, QStringList* , unsigned pos )
 {
     //kdDebug() << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
     KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-    ASSERT( fs );
+    Q_ASSERT( fs );
     if ( !fs ) return;
-    QTextParag * p = fs->textDocument()->firstParag();
+    Qt3::QTextParag * p = fs->textDocument()->firstParag();
     while ( p && (int)pos >= p->length() )
     {
         pos -= p->length();
         p = p->next();
     }
-    ASSERT( p );
+    Q_ASSERT( p );
     if ( !p ) return;
     //kdDebug() << "KWView::spellCheckerMisspelling p=" << p->paragId() << " pos=" << pos << " length=" << old.length() << endl;
     fs->highlightPortion( p, pos, old.length(), m_gui->canvasWidget() );
@@ -3271,15 +3271,15 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
     //kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
 
     KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-    ASSERT( fs );
+    Q_ASSERT( fs );
     if ( !fs ) return;
-    QTextParag * p = fs->textDocument()->firstParag();
+    Qt3::QTextParag * p = fs->textDocument()->firstParag();
     while ( p && (int)pos >= p->length() )
     {
         pos -= p->length();
         p = p->next();
     }
-    ASSERT( p );
+    Q_ASSERT( p );
     if ( !p ) return;
     fs->highlightPortion( p, pos, old.length(), m_gui->canvasWidget() );
 
@@ -3295,7 +3295,7 @@ void KWView::spellCheckerCorrected( QString old, QString corr, unsigned pos )
 void KWView::spellCheckerDone( const QString & )
 {
     KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-    ASSERT( fs );
+    Q_ASSERT( fs );
     if ( fs )
         fs->removeHighlight();
 
@@ -3337,7 +3337,7 @@ void KWView::spellCheckerFinished()
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
     }
     KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-    ASSERT( fs );
+    Q_ASSERT( fs );
     if ( fs )
         fs->removeHighlight();
     m_spell.textFramesets.clear();

@@ -47,7 +47,7 @@ KWTextDocument::~KWTextDocument()
 {
 }
 
-QTextParag * KWTextDocument::createParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool updateIds )
+Qt3::QTextParag * KWTextDocument::createParag( QTextDocument *d, Qt3::QTextParag *pr, Qt3::QTextParag *nx, bool updateIds )
 {
     return new KWTextParag( d, pr, nx, updateIds );
 }

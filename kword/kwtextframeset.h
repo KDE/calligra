@@ -142,13 +142,13 @@ public:
     void changeCaseOfText(QTextCursor *cursor, TypeOfCase _type);
     QString textChangedCase(const QString _text, TypeOfCase _type);
 
-    QRect paragRect( QTextParag * parag ) const; // in normal coords
+    QRect paragRect( Qt3::QTextParag * parag ) const; // in normal coords
 
     KCommand *deleteAnchoredFrame( KWAnchor * anchor );
-    void findPosition( const KoPoint &dPoint, QTextParag * & parag, int & index );
+    void findPosition( const KoPoint &dPoint, Qt3::QTextParag * & parag, int & index );
 
     /** Highlighting support (for search/replace, spellchecking etc.) */
-    void highlightPortion( QTextParag * parag, int index, int length, KWCanvas * canvas );
+    void highlightPortion( Qt3::QTextParag * parag, int index, int length, KWCanvas * canvas );
     void removeHighlight();
 
     virtual void addTextFramesets( QList<KWTextFrameSet> & /*lst*/ );
@@ -183,10 +183,10 @@ public:
     virtual int adjustRMargin( int yp, int h, int margin, int space );
 
     /** Called by KWTextFrameSet. Implements page breaking, breaking around frames, etc. */
-    int formatVertically( QTextParag *parag );
+    int formatVertically( Qt3::QTextParag *parag );
 
     /** Make sure this paragraph is formatted */
-    void ensureFormatted( QTextParag * parag );
+    void ensureFormatted( Qt3::QTextParag * parag );
 
     /** The viewmode that was passed to drawContents. Special hook for KWAnchor. Don't use. */
     KWViewMode * currentViewMode() const { return m_currentViewMode; }
@@ -201,13 +201,13 @@ signals:
 protected slots:
     // All those slots are connected to KoTextObject
     void slotAvailableHeightNeeded();
-    void slotAfterFormatting( int bottom, QTextParag *lastFormatted, bool* abort );
+    void slotAfterFormatting( int bottom, Qt3::QTextParag *lastFormatted, bool* abort );
     void slotNewCommand( KCommand *cmd );
     void slotRepaintChanged();
 
 protected:
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, int paragLeftMargin = 0 );
-    bool checkVerticalBreak( int & yp, int & h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
+    bool checkVerticalBreak( int & yp, int & h, Qt3::QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
     const QList<KWFrame> & framesInPage( int pageNum ) const;
     void frameResized( KWFrame *theFrame );
     double footerHeaderSizeMax( KWFrame *theFrame );

@@ -28,6 +28,7 @@
 #include <qvbox.h>
 #include <qlistview.h>
 #include <qspinbox.h>
+#include <qtoolbutton.h>
 
 #include <qtextstream.h>
 
@@ -94,6 +95,7 @@ protected:
 
 protected slots:
 	void slotSelectionChanged();
+protected:
     QListBox *names;
     QVBox *back;
 

@@ -69,8 +69,8 @@ public:
         // destructor
         virtual ~Cell();
 
-        int m_row, m_col;
-        int m_rows, m_cols;
+        unsigned int m_row, m_col;
+        unsigned int m_rows, m_cols;
         virtual void addFrame(KWFrame *_frame, bool recalc = true);
 
         bool isAboveOrLeftOf( unsigned row, unsigned col );
@@ -138,9 +138,9 @@ public:
     void recalcRows(int _col=-1,int _row=-1);
 
     /** returns the number of rows */
-    int getRows() { return m_rows; }
+    unsigned int getRows() { return m_rows; }
     /** returns the number of columns */
-    int getCols() { return m_cols; }
+    unsigned int getCols() { return m_cols; }
 
     /** returns the number of cells the table contains, this includes
      * temporary headers. */
@@ -257,7 +257,7 @@ protected:
     //void addCell( Cell *cell );
 
 private:
-    int m_rows, m_cols;
+    unsigned int m_rows, m_cols;
     CellSize m_widthMode;
     CellSize m_heightMode;
     bool m_showHeaderOnAllPages;

@@ -108,7 +108,7 @@ void KWTableFrameSet::updateFrames()
 void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )
 {
     Cell * cell = getCell( 0, 0 );
-    ASSERT( cell );
+    Q_ASSERT( cell );
     if ( !cell ) return;
     KoPoint currentPos = cell->getFrame( 0 )->topLeft();
     KoPoint pos( position );
@@ -138,7 +138,7 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
     QRect outerRect( m_doc->zoomRect( r ) );
     //kdDebug() << "floatingFrameSize outerRect initially " << DEBUGRECT( outerRect ) << endl;
     QSize sz = outerRect.size();
-    ASSERT( m_anchorTextFs );
+    Q_ASSERT( m_anchorTextFs );
     // Need to convert back to internal coords (in case of page breaking)
 #warning TODO
 #if 0
@@ -230,8 +230,8 @@ void KWTableFrameSet::addCell( Cell *cell )
 KoRect KWTableFrameSet::boundingRect()
 {
     KWFrame *first = getCell( 0, 0 )->getFrame( 0 );
-    ASSERT(first);
-    ASSERT(getCell( m_rows - 1, m_cols - 1 ));
+    Q_ASSERT(first);
+    Q_ASSERT(getCell( m_rows - 1, m_cols - 1 ));
     //laurent
     //when you insert a column or row
     //we test last cell but you resize anchor
@@ -243,7 +243,7 @@ KoRect KWTableFrameSet::boundingRect()
         return KoRect();
 
     KWFrame *last = getCell( m_rows - 1, m_cols - 1 )->getFrame( 0 );
-    ASSERT(last);
+    Q_ASSERT(last);
     if (!first || !last)
         return KoRect();
 
@@ -427,7 +427,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
     // remove automatically added headers
     for ( unsigned int j = 0; j < m_rows; j++ ) {
         Cell *tmp=getCell( j, 0 );
-        ASSERT(tmp);
+        Q_ASSERT(tmp);
         if ( tmp && tmp->isRemoveableHeader() ) {
             //kdDebug() << "KWTableFrameSet::recalcRows removing temp row " << j << endl;
             deleteRow( j, false );
@@ -460,7 +460,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             // search current row for a cell that starts at this row, just like our does.
             if( !(i>=col && i<=(activeCell->m_col+activeCell->m_cols-1))) {
                 cell=getCell(row,i);
-                ASSERT(cell);
+                Q_ASSERT(cell);
                 if(cell && cell->m_row==row) {
                     coordinate=cell->getFrame(0)->top();
                     found=true;
@@ -543,8 +543,8 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             if(coordinate != activeCell->getFrame(0)->bottom()) {
                 for ( unsigned int i = 0; i < m_cols; i++) {
                     cell = getCell(row,i);
-                    ASSERT(cell);
-                    ASSERT(activeCell);
+                    Q_ASSERT(cell);
+                    Q_ASSERT(activeCell);
                     if(cell && cell != activeCell && cell->m_col == i) {
                         double newHeight= cell->getFrame(0)->height() +
                             activeCell->getFrame(0)->bottom() - coordinate;
@@ -1284,7 +1284,7 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
             }
         }
     }
-    ASSERT(firstCell);
+    Q_ASSERT(firstCell);
     // update firstcell properties te reflect the merge
     firstCell->m_cols=colEnd-colBegin+1;
     firstCell->m_rows=rowEnd-rowBegin+1;
@@ -1823,7 +1823,7 @@ void KWTableFrameSet::addTextFramesets( QList<KWTextFrameSet> & lst )
 void KWTableFrameSet::printDebug( KWFrame * frame )
 {
     KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell *>( frame->getFrameSet() );
-    ASSERT( cell );
+    Q_ASSERT( cell );
     if ( cell ) {
         kdDebug() << " |  |- row :" << cell->m_row << endl;
         kdDebug() << " |  |- col :" << cell->m_col << endl;
@@ -1981,13 +1981,13 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
 void KWTableFrameSet::showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )
 {
     KWTextFrameSetEdit * textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
-    ASSERT( textedit ); // is it correct that this is always set ?
+    Q_ASSERT( textedit ); // is it correct that this is always set ?
     if (textedit)
         textedit->showPopup( frame, view, point );
     else
     {
         QPopupMenu * popup = view->popupMenu("text_popup");
-        ASSERT(popup);
+        Q_ASSERT(popup);
         if (popup)
             popup->popup( point );
     }

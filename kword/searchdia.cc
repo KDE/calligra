@@ -293,7 +293,7 @@ void KWFindReplace::proceed()
 {
     KWTextFrameSet * firstFrameSet = 0;
     // Start point
-    QTextParag * firstParag = 0;
+    Qt3::QTextParag * firstParag = 0;
     int firstIndex = 0;
 
     // 'From Cursor' option
@@ -330,7 +330,7 @@ void KWFindReplace::proceed()
             KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>(fit.current());
             if ( fs && fs->isVisible() )
             {
-                QTextParag * lastParag = fs->textDocument()->lastParag();
+                Qt3::QTextParag * lastParag = fs->textDocument()->lastParag();
                 bool ret = true;
                 if (!firstFrameSetFound && firstFrameSet == fs && firstParag)  // first frameset
                 {
@@ -350,8 +350,8 @@ void KWFindReplace::proceed()
         m_canvas->kWordDocument()->addCommand(m_macroCmd);
 }
 
-bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
-                                    QTextParag * lastParag, int lastIndex )
+bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, Qt3::QTextParag * firstParag, int firstIndex,
+                                    Qt3::QTextParag * lastParag, int lastIndex )
 {
     // TODO formatting options are not implemented !
     // We need to reimplement what KoFind::find does, and add that.
@@ -385,7 +385,7 @@ bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag
 
         m_currentParag = forw ? firstParag->next() : lastParag->prev();
         m_offset = 0;
-        QTextParag * endParag = forw ? lastParag : firstParag;
+        Qt3::QTextParag * endParag = forw ? lastParag : firstParag;
         while ( m_currentParag && m_currentParag != endParag )
         {
             QString str = m_currentParag->string()->toString();
@@ -393,7 +393,7 @@ bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag
             if (!ret) return false;
             m_currentParag = forw ? m_currentParag->next() : m_currentParag->prev();
         }
-        ASSERT( endParag == m_currentParag );
+        Q_ASSERT( endParag == m_currentParag );
         if ( forw )
         {
             ret = process( lastParag->string()->toString().left( lastIndex + 1 ) );

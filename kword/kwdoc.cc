@@ -203,7 +203,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     // Get default font from KDE
     m_defaultFont = KGlobalSettings::generalFont();
-    KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
+    // ####### Not needed in 3.0?
+    //KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
 
     m_defaultFont.setPointSize( ptToLayoutUnit( m_defaultFont.pointSize() ) );
 
@@ -1441,7 +1442,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
             kdWarning () << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
 
-    ASSERT( followingStyles.count() == m_styleList.count() );
+    Q_ASSERT( followingStyles.count() == m_styleList.count() );
 
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
@@ -1657,7 +1658,7 @@ void KWDocument::processAnchorRequests()
             fsname = (*m_pasteFramesetsMap)[ fsname ];
         kdDebug(32001) << "KWDocument::completeLoading anchoring frameset " << fsname << endl;
         KWFrameSet * fs = getFrameSetByName( fsname );
-        ASSERT( fs );
+        Q_ASSERT( fs );
         if ( fs )
             fs->setAnchored( itanch.data().textfs, itanch.data().paragId, itanch.data().index, true );
     }
@@ -2608,7 +2609,7 @@ void KWDocument::recalcVariables( int type )
         {
             update = true;
             it.current()->recalc();
-            QTextParag * parag = it.current()->paragraph();
+            Qt3::QTextParag * parag = it.current()->paragraph();
             if ( parag )
             {
                 kdDebug() << "KWDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
@@ -2851,7 +2852,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
         break;
     case FT_TABLE:
     case FT_BASE:
-        ASSERT( 0 );
+        Q_ASSERT( 0 );
         break;
     }
     if ( fs->isFloating() )
@@ -2886,7 +2887,7 @@ void KWDocument::deleteSeveralFrame()
         if ( fs->getGroupManager() )
         {
             KWTableFrameSet *table=fs->getGroupManager();
-            ASSERT(table);
+            Q_ASSERT(table);
             docItem|=typeItemDocStructure(table->type());
 
             if ( table->isFloating() )

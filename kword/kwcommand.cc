@@ -38,7 +38,7 @@ KWPasteTextCommand::KWPasteTextCommand( QTextDocument *d, int parag, int idx,
 
 QTextCursor * KWPasteTextCommand::execute( QTextCursor *c )
 {
-    QTextParag *firstParag = doc->paragAt( m_parag );
+    Qt3::QTextParag *firstParag = doc->paragAt( m_parag );
     if ( !firstParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
@@ -157,7 +157,7 @@ class KWDeleteCustomItemVisitor : public KoParagVisitor // see kwtextdocument.h
 {
 public:
     KWDeleteCustomItemVisitor() : KoParagVisitor() { }
-    virtual bool visit( QTextParag *parag, int start, int end )
+    virtual bool visit( Qt3::QTextParag *parag, int start, int end )
     {
         kdDebug() << "KWPasteTextCommand::execute " << parag->paragId() << " " << start << " " << end << endl;
         for ( int i = start ; i < end ; ++i )
@@ -177,7 +177,7 @@ public:
 
 QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
 {
-    QTextParag *firstParag = doc->paragAt( m_parag );
+    Qt3::QTextParag *firstParag = doc->paragAt( m_parag );
     if ( !firstParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
@@ -186,7 +186,7 @@ QTextCursor * KWPasteTextCommand::unexecute( QTextCursor *c )
     cursor.setIndex( m_idx );
     doc->setSelectionStart( QTextDocument::Temp, &cursor );
 
-    QTextParag *lastParag = doc->paragAt( m_lastParag );
+    Qt3::QTextParag *lastParag = doc->paragAt( m_lastParag );
     if ( !lastParag ) {
         qWarning( "can't locate parag at %d, last parag: %d", m_lastParag, doc->lastParag()->paragId() );
         return 0;
@@ -346,9 +346,9 @@ KWFrameResizeCommand::KWFrameResizeCommand( const QString &name, FrameIndex _fra
 void KWFrameResizeCommand::execute()
 {
     KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
-    ASSERT( frameSet );
+    Q_ASSERT( frameSet );
     KWFrame *frame = frameSet->getFrame(m_indexFrame.m_iFrameIndex);
-    ASSERT( frame );
+    Q_ASSERT( frame );
     frame->setCoords(m_FrameResize.sizeOfEnd.left(),m_FrameResize.sizeOfEnd.top(),m_FrameResize.sizeOfEnd.right(),m_FrameResize.sizeOfEnd.bottom());
 
     KWTableFrameSet *table = frame->getFrameSet()->getGroupManager();
@@ -421,9 +421,9 @@ KWFrameChangePictureClipartCommand::KWFrameChangePictureClipartCommand( const QS
 void KWFrameChangePictureClipartCommand::execute()
 {
     KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
-    ASSERT( frameSet );
+    Q_ASSERT( frameSet );
     KWFrame *frame = frameSet->getFrame(m_indexFrame.m_iFrameIndex);
-    ASSERT( frame );
+    Q_ASSERT( frame );
     KWDocument * doc = frameSet->kWordDocument();
     if(m_isAPicture)
     {
@@ -470,9 +470,9 @@ KWFramePartMoveCommand::KWFramePartMoveCommand( const QString &name, FrameIndex 
 void KWFramePartMoveCommand::execute()
 {
     KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
-    ASSERT( frameSet );
+    Q_ASSERT( frameSet );
     KWFrame *frame = frameSet->getFrame(m_indexFrame.m_iFrameIndex);
-    ASSERT( frame );
+    Q_ASSERT( frame );
     frame->setCoords(m_frameMove.sizeOfEnd.left(),m_frameMove.sizeOfEnd.top(),m_frameMove.sizeOfEnd.right(),m_frameMove.sizeOfEnd.bottom());
 
     KWDocument * doc = frameSet->kWordDocument();
@@ -590,10 +590,10 @@ void KWFramePropertiesCommand::execute()
 {
     kdDebug() << "KWFrameChangeParamCommand::execute" << endl;
     KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
-    ASSERT( frameSet );
+    Q_ASSERT( frameSet );
 
     KWFrame *frame = frameSet->getFrame( m_frameIndex.m_iFrameIndex );
-    ASSERT( frame );
+    Q_ASSERT( frame );
     frame->copySettings(m_frameAfter);
 
     KWDocument * doc = frameSet->kWordDocument();
@@ -612,10 +612,10 @@ void KWFramePropertiesCommand::unexecute()
 {
     kdDebug() << "KWFrameChangeParamCommand::unexecute" << endl;
     KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
-    ASSERT( frameSet );
+    Q_ASSERT( frameSet );
 
     KWFrame *frame = frameSet->getFrame( m_frameIndex.m_iFrameIndex );
-    ASSERT( frame );
+    Q_ASSERT( frame );
     frame->copySettings(m_frameBefore);
 
     KWDocument * doc = frameSet->kWordDocument();
@@ -726,10 +726,10 @@ KWDeleteFrameCommand::~KWDeleteFrameCommand()
 void KWDeleteFrameCommand::execute()
 {
     KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
-    ASSERT( frameSet );
+    Q_ASSERT( frameSet );
 
     KWFrame *frame = frameSet->getFrame( m_frameIndex.m_iFrameIndex );
-    ASSERT( frame );
+    Q_ASSERT( frame );
 
     frameSet->delFrame( m_frameIndex.m_iFrameIndex );
     //when you delete a frame frame pointer is deleted
@@ -793,7 +793,7 @@ void KWUngroupTableCommand::execute()
 
 void KWUngroupTableCommand::unexecute()
 {
-    ASSERT(m_pTable);
+    Q_ASSERT(m_pTable);
     m_pTable->group();
     KWDocument * doc = m_pTable->kWordDocument();
     KWFrameSet *tmp;
@@ -802,7 +802,7 @@ void KWUngroupTableCommand::unexecute()
         tmp->setGroupManager(m_pTable);
         doc->removeFrameSet(tmp);
         KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(tmp);
-        ASSERT(cell);
+        Q_ASSERT(cell);
         m_pTable->addCell( cell );
     }
     doc->addFrameSet(m_pTable);
@@ -822,7 +822,7 @@ KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWTableFrameSet
     KCommand(name),
     m_pTable(_table)
 {
-    ASSERT(m_pTable);
+    Q_ASSERT(m_pTable);
 }
 
 void KWDeleteTableCommand::execute()
@@ -853,7 +853,7 @@ KWInsertColumnCommand::KWInsertColumnCommand( const QString &name, KWTableFrameS
     m_pTable(_table),
     m_colPos(_col)
 {
-    ASSERT(m_pTable);
+    Q_ASSERT(m_pTable);
     m_ListFrameSet.clear();
 }
 
@@ -896,7 +896,7 @@ KWInsertRowCommand::KWInsertRowCommand( const QString &name, KWTableFrameSet * _
     m_pTable(_table),
     m_rowPos(_row)
 {
-    ASSERT(m_pTable);
+    Q_ASSERT(m_pTable);
     m_ListFrameSet.clear();
 }
 
@@ -940,7 +940,7 @@ KWRemoveRowCommand::KWRemoveRowCommand( const QString &name, KWTableFrameSet * _
     m_pTable(_table),
     m_rowPos(_row)
 {
-    ASSERT(m_pTable);
+    Q_ASSERT(m_pTable);
 }
 
 void KWRemoveRowCommand::execute()
@@ -986,7 +986,7 @@ KWRemoveColumnCommand::KWRemoveColumnCommand( const QString &name, KWTableFrameS
     m_pTable(_table),
     m_colPos(_col)
 {
-    ASSERT(m_pTable);
+    Q_ASSERT(m_pTable);
 }
 
 void KWRemoveColumnCommand::execute()
@@ -1036,7 +1036,7 @@ KWSplitCellCommand::KWSplitCellCommand( const QString &name, KWTableFrameSet * _
     m_colEnd(colEnd),
     m_rowEnd(rowEnd)
 {
-    ASSERT(m_pTable);
+    Q_ASSERT(m_pTable);
 }
 
 void KWSplitCellCommand::execute()
@@ -1102,7 +1102,7 @@ KWJoinCellCommand::KWJoinCellCommand( const QString &name, KWTableFrameSet * _ta
     m_ListFrameSet(listFrameSet),
     m_copyFrame(listCopyFrame)
 {
-    ASSERT(m_pTable);
+    Q_ASSERT(m_pTable);
 }
 
 void KWJoinCellCommand::execute()

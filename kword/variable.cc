@@ -229,7 +229,7 @@ KWVariable * KWVariable::createVariable( int type, int subtype, KWTextFrameSet *
             break;
         }
     }
-    ASSERT( varFormat );
+    Q_ASSERT( varFormat );
     if ( varFormat == 0L ) // still 0 ? Impossible!
         return 0L ;
 
@@ -254,7 +254,7 @@ KWVariable * KWVariable::createVariable( int type, int subtype, KWTextFrameSet *
             var = new KWSerialLetterVariable( textFrameSet, QString::null, varFormat );
             break;
     }
-    ASSERT( var );
+    Q_ASSERT( var );
     return var;
 }
 
@@ -282,7 +282,7 @@ void KWDateVariable::recalc()
 QString KWDateVariable::text()
 {
     KWVariableDateFormat * format = dynamic_cast<KWVariableDateFormat *>( m_varFormat );
-    ASSERT( format );
+    Q_ASSERT( format );
     if ( format )
         return format->convert( m_date );
     // make gcc happy
@@ -351,7 +351,7 @@ void KWTimeVariable::recalc()
 QString KWTimeVariable::text()
 {
     KWVariableTimeFormat * format = dynamic_cast<KWVariableTimeFormat *>( m_varFormat );
-    ASSERT( format );
+    Q_ASSERT( format );
     if ( format )
         return format->convert( m_time );
     // make gcc happy
@@ -450,7 +450,7 @@ void KWPgNumVariable::recalc()
 QString KWPgNumVariable::text()
 {
     KWVariableNumberFormat * format = dynamic_cast<KWVariableNumberFormat *>( m_varFormat );
-    ASSERT( format );
+    Q_ASSERT( format );
     if ( format )
         return format->convert( m_pgNum );
     // make gcc happy

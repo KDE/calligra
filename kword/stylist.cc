@@ -333,7 +333,7 @@ void KWStyleManager::deleteStyle() {
     unsigned int cur = styleIndex( m_stylesList->currentItem() );
     unsigned int curItem = m_stylesList->currentItem();
     KWStyle *s = m_changedStyles.at(cur);
-    ASSERT( s == m_currentStyle );
+    Q_ASSERT( s == m_currentStyle );
     delete s;
     m_currentStyle = 0L;
     m_changedStyles.remove(cur);
@@ -479,7 +479,7 @@ void KWStyleManager::renameStyle(const QString &theText) {
         if ( m_styleCombo->text( i ) == m_stylesList->currentText() )
             ++synonyms;
     }
-    ASSERT( synonyms > 0 ); // should have found 'index' at least !
+    Q_ASSERT( synonyms > 0 ); // should have found 'index' at least !
     noSignals=false;
     // Can't close the dialog if two styles have the same name
     bool state=!theText.isEmpty() && (synonyms == 1);

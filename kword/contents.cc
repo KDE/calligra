@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-KWInsertTOCCommand::KWInsertTOCCommand( KWTextFrameSet * fs, QTextParag *parag )
+KWInsertTOCCommand::KWInsertTOCCommand( KWTextFrameSet * fs, Qt3::QTextParag *parag )
     : QTextCommand( fs->textDocument() ), m_paragId( parag->paragId() )
 {
 }
@@ -48,7 +48,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
 
     fs->kWordDocument()->renameButtonTOC(true);
 
-    QTextParag *insertionParag = textdoc->paragAt( m_paragId );
+    Qt3::QTextParag *insertionParag = textdoc->paragAt( m_paragId );
     if ( !insertionParag ) {
         qWarning( "KWInsertTOCCommand:: can't locate parag at %d, last parag: %d", m_paragId, textdoc->lastParag()->paragId() );
         return c;
@@ -140,7 +140,7 @@ QTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cu
     QTextCursor start( textdoc );
     QTextCursor end( textdoc );
     // We start from the end, to avoid the parag shifting problem
-    QTextParag *p = textdoc->lastParag();
+    Qt3::QTextParag *p = textdoc->lastParag();
     QTextCursor *posOfTable=0L;
     KWTextParag *posOfToc=0L;
 
@@ -172,8 +172,8 @@ QTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cu
 
             // So instead, we do things by hand, and without undo....
 
-            QTextParag *prev = p->prev();
-            QTextParag *next = p->next();
+            Qt3::QTextParag *prev = p->prev();
+            Qt3::QTextParag *next = p->next();
             // Move cursor out
             if ( cursor->parag() == p )
                 cursor->setParag( next ? next : prev );

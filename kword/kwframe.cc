@@ -89,7 +89,7 @@ KWFrame::~KWFrame()
 
 int KWFrame::pageNum() const
 {
-    ASSERT( frameSet );
+    Q_ASSERT( frameSet );
     if ( !frameSet )
         return 0;
     KWDocument *doc = frameSet->kWordDocument();
@@ -457,7 +457,7 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
 void KWFrameSet::delFrame( unsigned int _num )
 {
     KWFrame *frm = frames.at( _num );
-    ASSERT( frm );
+    Q_ASSERT( frm );
     delFrame(frm,true);
 }
 
@@ -465,7 +465,7 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 {
     kdDebug() << "KWFrameSet::delFrame " << frm << " " << remove << endl;
     int _num = frames.findRef( frm );
-    ASSERT( _num != -1 );
+    Q_ASSERT( _num != -1 );
     if ( _num == -1 )
         return;
 
@@ -572,7 +572,7 @@ void KWFrameSet::setFloating()
         if ( !frameSet || frameSet->frameSetInfo() != FI_BODY )
             continue;
 
-        QTextParag* parag = 0L;
+        Qt3::QTextParag* parag = 0L;
         int index = 0;
         KoPoint dPoint( frames.first()->topLeft() );
         kdDebug() << "KWFrameSet::setFloating looking for pos at " << dPoint.x() << " " << dPoint.y() << endl;
@@ -588,13 +588,13 @@ void KWFrameSet::setFloating()
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists /* = false */ )
 {
-    ASSERT( textfs );
+    Q_ASSERT( textfs );
     kdDebug() << "KWFrameSet::setAnchored " << textfs << " " << paragId << " " << index << " " << placeHolderExists << endl;
     if ( isFloating() )
         deleteAnchors();
     m_anchorTextFs = textfs;
     KWTextParag * parag = static_cast<KWTextParag *>( textfs->textDocument()->paragAt( paragId ) );
-    ASSERT( parag );
+    Q_ASSERT( parag );
     if ( parag )
         createAnchors( parag, index, placeHolderExists );
 }
@@ -609,7 +609,7 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs )
 // (Especially, undo/redo of insert/delete can reuse an old anchor and forget a newer one etc.)
 KWAnchor * KWFrameSet::findAnchor( int frameNum )
 {
-    ASSERT( m_anchorTextFs );
+    Q_ASSERT( m_anchorTextFs );
     QListIterator<QTextCustomItem> cit( m_anchorTextFs->textDocument()->allCustomItems() );
     for ( ; cit.current() ; ++cit )
     {
@@ -640,7 +640,7 @@ KWAnchor * KWFrameSet::createAnchor( KWTextDocument * textdoc, int frameNum )
 void KWFrameSet::createAnchors( KWTextParag * parag, int index, bool placeHolderExists /*= false */ /*only used when loading*/ )
 {
     kdDebug() << "KWFrameSet::createAnchors" << endl;
-    ASSERT( m_anchorTextFs );
+    Q_ASSERT( m_anchorTextFs );
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt, ++index )
     {
@@ -676,7 +676,7 @@ void KWFrameSet::deleteAnchors()
 {
     kdDebug() << "KWFrameSet::deleteAnchors" << endl;
     KWTextFrameSet * textfs = m_anchorTextFs;
-    ASSERT( textfs );
+    Q_ASSERT( textfs );
     if ( !textfs )
         return;
     QListIterator<KWFrame> frameIt = frameIterator();
@@ -698,7 +698,7 @@ void KWFrameSet::deleteAnchors()
 void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
     KWFrame * frame = frames.at( frameNum );
-    ASSERT( frame );
+    Q_ASSERT( frame );
     if ( !frame ) return;
 
     KoPoint pos( position );
@@ -718,21 +718,21 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 QSize KWFrameSet::floatingFrameSize( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );
-    ASSERT( frame );
+    Q_ASSERT( frame );
     return frame->outerRect().size();
 }
 
 KCommand * KWFrameSet::anchoredObjectCreateCommand( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );
-    ASSERT( frame );
+    Q_ASSERT( frame );
     return new KWCreateFrameCommand( QString::null, frame );
 }
 
 KCommand * KWFrameSet::anchoredObjectDeleteCommand( int frameNum )
 {
     KWFrame * frame = frames.at( frameNum );
-    ASSERT( frame );
+    Q_ASSERT( frame );
     return new KWDeleteFrameCommand( QString::null, frame );
 }
 
@@ -922,8 +922,8 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             //QPoint tl( QMAX( 0, icrect.left() - offsetX ), QMAX( 0, icrect.top() - offsetY ) );
             //icrect.moveTopLeft( tl );
             icrect.moveBy( -offsetX, -offsetY );
-            ASSERT( icrect.x() >= 0 );
-            ASSERT( icrect.y() >= 0 );
+            Q_ASSERT( icrect.x() >= 0 );
+            Q_ASSERT( icrect.y() >= 0 );
 
             // icrect is now the portion of the frame to be drawn, in qrt coords
             //kdDebug() << "KWFrameSet::drawContents in internal coords:" << DEBUGRECT( icrect ) << endl;
@@ -1230,7 +1230,7 @@ bool KWFrameSet::canRemovePage( int num )
 void KWFrameSet::showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, const QPoint &point )
 {
     QPopupMenu * popup = view->popupMenu("frame_popup");
-    ASSERT(popup);
+    Q_ASSERT(popup);
     if (popup)
         popup->popup( point );
 }
@@ -1853,7 +1853,7 @@ int KWFormulaFrameSet::floatingFrameBaseline( int /*frameNum*/ )
 void KWFormulaFrameSet::showPopup( KWFrame *, KWFrameSetEdit *, KWView *view, const QPoint &point )
 {
     QPopupMenu * popup = view->popupMenu("Formula");
-    ASSERT(popup);
+    Q_ASSERT(popup);
     if (popup)
         popup->popup( point );
 }

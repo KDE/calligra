@@ -32,7 +32,7 @@ KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
     if ( !filename.isEmpty() )
     {
         m_image = doc->imageCollection()->loadImage( filename );
-        ASSERT( !m_image.isNull() );
+        Q_ASSERT( !m_image.isNull() );
         resize(); // Zoom if necessary
     }
 }

@@ -61,7 +61,7 @@ void KWAutoFormat::readConfig()
                                   && !begin.isEmpty()
                                   && !end.isEmpty();
 
-    ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
+    Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
     config->setGroup( "AutoFormatEntries" );
 
     QStringList find, replace;

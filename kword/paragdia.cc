@@ -228,7 +228,7 @@ void KWPagePreview2::drawContents( QPainter* p )
         }
 
         switch ( align ) {
-            case Qt3::AlignAuto:
+            case Qt::AlignAuto:
             case Qt::AlignLeft:
                 __x = _x + 6;
                 break;
@@ -238,7 +238,7 @@ void KWPagePreview2::drawContents( QPainter* p )
             case Qt::AlignRight:
                 __x = _x + ( wid - __w ) - 6;
                 break;
-            case Qt3::AlignJustify:
+            case Qt::AlignJustify:
             {
                 if ( i < 8 ) __w = wid - 12;
                 __x = _x + 6;
@@ -750,7 +750,7 @@ void KWParagAlignWidget::display( const KWParagLayout & lay )
 
     clearAligns();
     switch ( align ) {
-        case Qt3::AlignAuto: // see KWView::setAlign
+        case Qt::AlignAuto: // see KWView::setAlign
         case Qt::AlignLeft:
             rLeft->setChecked( true );
             break;
@@ -760,7 +760,7 @@ void KWParagAlignWidget::display( const KWParagLayout & lay )
         case Qt::AlignRight:
             rRight->setChecked( true );
             break;
-        case Qt3::AlignJustify:
+        case Qt::AlignJustify:
             rJustify->setChecked( true );
             break;
     }
@@ -776,7 +776,7 @@ int KWParagAlignWidget::align() const
     if ( rLeft->isChecked() ) return Qt::AlignLeft;
     else if ( rCenter->isChecked() ) return Qt::AlignCenter;
     else if ( rRight->isChecked() ) return Qt::AlignRight;
-    else if ( rJustify->isChecked() ) return Qt3::AlignJustify;
+    else if ( rJustify->isChecked() ) return Qt::AlignJustify;
 
     return Qt::AlignLeft;
 }
@@ -809,7 +809,7 @@ void KWParagAlignWidget::alignRight()
 
 void KWParagAlignWidget::alignJustify()
 {
-    prev2->setAlign( Qt3::AlignJustify );
+    prev2->setAlign( Qt::AlignJustify );
     clearAligns();
     rJustify->setChecked( true );
 }

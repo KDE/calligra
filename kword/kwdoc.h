@@ -65,6 +65,7 @@ namespace KFormula {
 
 #include <qmap.h>
 #include <qlist.h>
+#include <qfont.h>
 
 /******************************************************************/
 /* Class: KWChild                                              */

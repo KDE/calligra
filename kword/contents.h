@@ -33,7 +33,7 @@ class KWInsertTOCCommand : public QTextCommand
 {
 public:
     // The parag is where the TOC should be inserted
-    KWInsertTOCCommand( KWTextFrameSet *fs, QTextParag *parag );
+    KWInsertTOCCommand( KWTextFrameSet *fs, Qt3::QTextParag *parag );
     QTextCursor *execute( QTextCursor *c );
     QTextCursor *unexecute( QTextCursor *c );
 

@@ -204,7 +204,7 @@ void KWAnchor::resize()
         width = s.width();
         height = s.height();
         kdDebug(32001) << "KWAnchor::resize " << width << "x" << height << endl;
-        QTextParag * parag = paragraph();
+        Qt3::QTextParag * parag = paragraph();
         if ( parag )
         {
             kdDebug(32001) << "KWAnchor::resize invalidating parag " << parag->paragId() << endl;

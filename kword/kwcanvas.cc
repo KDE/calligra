@@ -94,7 +94,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     setMouseMode( MM_EDIT );
     // Create the current frameset-edit last, to have everything ready for it
     KWFrameSet * fs = m_doc->getFrameSet( 0 );
-    ASSERT( fs );
+    Q_ASSERT( fs );
     if ( fs && fs->isVisible() )
         m_currentFrameSetEdit = fs->createFrameSetEdit( this );
 }
@@ -594,7 +594,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     double y = docPoint.y();
     int page = static_cast<int>( y / m_doc->ptPaperHeight() );
     int oldPage = static_cast<int>( frame->top() / m_doc->ptPaperHeight() );
-    ASSERT( oldPage == frame->pageNum() );
+    Q_ASSERT( oldPage == frame->pageNum() );
 
     // Calculate new frame coordinates, using minimum sizes, and keeping it in the bounds of the page
     double newLeft = frame->left();
@@ -804,7 +804,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     if ( topPage != bottomPage )
     {
         // Choose the closest page...
-        ASSERT( topPage + 1 == bottomPage ); // Not too sure what to do otherwise
+        Q_ASSERT( topPage + 1 == bottomPage ); // Not too sure what to do otherwise
         double topPart = (bottomPage * m_doc->ptPaperHeight()) - m_boundingRect.top();
         if ( topPart > m_boundingRect.height() / 2 )
             // Most of the rect is in the top page
@@ -946,7 +946,7 @@ void KWCanvas::drawMovingRect( QPainter & p )
 
 void KWCanvas::deleteMovingRect()
 {
-    ASSERT( m_deleteMovingRect );
+    Q_ASSERT( m_deleteMovingRect );
     QPainter p;
     p.begin( viewport() );
     p.translate( -contentsX(), -contentsY() );
@@ -1014,7 +1014,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
             // If header/footer, resize the first frame
             if ( frame->getFrameSet()->isHeaderOrFooter() )
                 frame = frame->getFrameSet()->getFrame( 0 );
-            ASSERT( frame );
+            Q_ASSERT( frame );
             if ( frame )
             {
                 FrameIndex index( frame );
@@ -1037,7 +1037,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
         }
         else
         {
-            ASSERT( cmdMoveFrame ); // has been created by mpEditFrame
+            Q_ASSERT( cmdMoveFrame ); // has been created by mpEditFrame
             if( cmdMoveFrame )
             {
                 // Store final positions

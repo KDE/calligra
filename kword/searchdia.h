@@ -164,8 +164,8 @@ public:
     void proceed();
 
 protected:
-    bool findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
-                         QTextParag * lastParag, int lastIndex );
+    bool findInFrameSet( KWTextFrameSet * fs, Qt3::QTextParag * firstParag, int firstIndex,
+                         Qt3::QTextParag * lastParag, int lastIndex );
     bool process( const QString &_text );
 
 protected slots:
@@ -184,7 +184,7 @@ private:
     int m_options;
     KWCanvas *m_canvas;
     KWTextFrameSet *m_currentFrameSet;
-    QTextParag *m_currentParag;
+    Qt3::QTextParag *m_currentParag;
     KMacroCommand *m_macroCmd;
     int m_offset;
 };

@@ -40,7 +40,7 @@ public:
 
     ~KWTextDocument();
 
-    virtual QTextParag * createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE );
+    virtual Qt3::QTextParag * createParag( QTextDocument *d, Qt3::QTextParag *pr = 0, Qt3::QTextParag *nx = 0, bool updateIds = TRUE );
 
     /** Return the text frameset in which this document is.
      * Note that this can be 0L (e.g. for paragraphs in the paragdia preview) */

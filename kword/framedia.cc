@@ -874,7 +874,7 @@ void KWFrameDia::enableRunAround()
 bool KWFrameDia::applyChanges()
 {
     //kdDebug() << "KWFrameDia::applyChanges"<<endl;
-    ASSERT(frame);
+    Q_ASSERT(frame);
     if ( !frame )
         return false;
     KWFrame *frameCopy=frame->getCopy();
@@ -958,9 +958,9 @@ bool KWFrameDia::applyChanges()
             if ( fs->getNumFrames() == 1 )
             {
                 kdDebug() << "KWFrameDia::applyChanges " << fs->getName() << " has only one frame" << endl;
-                ASSERT( fs->type() == FT_TEXT );
+                Q_ASSERT( fs->type() == FT_TEXT );
                 KWTextFrameSet * textfs = static_cast<KWTextFrameSet*>( fs );
-                QTextParag * parag = textfs->textDocument()->firstParag();
+                Qt3::QTextParag * parag = textfs->textDocument()->firstParag();
                 bool isEmpty = parag->next() == 0L && parag->length() == 1;
                 if ( !isEmpty )
                 {
@@ -998,7 +998,7 @@ bool KWFrameDia::applyChanges()
                 kdDebug() << "KWFrameDia::applyChanges attaching to frameset " << _num << endl;
                 // attach frame to frameset number _num
                 KWFrameSet * newFs = doc->getFrameSet( _num );
-                ASSERT( newFs );
+                Q_ASSERT( newFs );
                 newFs->addFrame( frame );
                 // TODO undo/redo ?
             }
