@@ -280,7 +280,7 @@ void KWordView::setupActions()
     actionInsertClipart = new KAction( i18n( "&Clipart..." ), KWBarIcon( "clipart" ), Key_F3,
 				       this, SLOT( insertClipart() ),
 				       actionCollection(), "insert_clipart" );
-    actionInsertSpecialChar = new KAction( i18n( "&Special Character..." ), KWBarIcon( "char" ), ALT + Key_C,
+    actionInsertSpecialChar = new KAction( i18n( "&Special Character..." ), KWBarIcon( "char" ), ALT + SHIFT + Key_C,
 					   this, SLOT( insertSpecialChar() ),
 					   actionCollection(), "insert_specialchar" );
     actionInsertFrameBreak = new KAction( i18n( "&Hard Frame Break" ), CTRL + Key_Return,
@@ -357,7 +357,7 @@ void KWordView::setupActions()
     actionFormatFont = new KAction( i18n( "&Font..." ), ALT + Key_F,
 				    this, SLOT( formatFont() ),
 				    actionCollection(), "format_font" );
-    actionFormatColor = new KColorAction( i18n( "&Color..." ), KColorAction::TextColor, ALT + Key_C,
+    actionFormatColor = new KColorAction( i18n( "&Color..." ), KColorAction::TextColor, ALT + CTRL + Key_C,
 				     this, SLOT( textColor() ),
 				     actionCollection(), "format_color" );
     actionFormatParag = new KAction( i18n( "&Paragraph..." ), 0,

@@ -1643,3 +1643,7 @@ Reggie, 27.11.1999
 Reggie, 28.11.1999
 -----------------
 - Small fix for scrolling (new selection stuff is not comitted yet...)
+
+Reggie, 9.12.1999:
+----------------
+- Got rid of a shortcut which was used 3 times :-) (ALT + C)
