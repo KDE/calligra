@@ -1320,6 +1320,9 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
 
 KCommand * KPTextObject::textContentsToHeight()
 {
+    if (isProtect() )
+        return 0L;
+
     KoTextParag * parag = m_textobj->textDocument()->lastParag();
     double txtHeight = m_doc->zoomHandler()->unzoomItY( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().bottom() ))+btop+bbottom;
     if( getRect().height()> txtHeight )
@@ -1334,6 +1337,8 @@ KCommand * KPTextObject::textContentsToHeight()
 
 KCommand * KPTextObject::textObjectToContents()
 {
+    if (isProtect() )
+        return 0L;
     KoTextParag * parag = m_textobj->textDocument()->firstParag();
     KoTextParag * lastParag = m_textobj->textDocument()->lastParag();
     int widthTxt=10;
