@@ -151,7 +151,7 @@ public:
     bool isCustom() const { return type == Custom; }
     KoTextFormat *format() const;
     KoTextCustomItem *customItem() const;
-    void setFormat( KoTextFormat *f );
+    void setFormat( KoTextFormat *f,bool setFormatAgain=TRUE );
     void setCustomItem( KoTextCustomItem *i );
     void loseCustomItem();
     struct CustomData
@@ -206,7 +206,7 @@ public:
     void remove( int index, int len );
     void clear();
 
-    void setFormat( int index, KoTextFormat *f, bool useCollection );
+    void setFormat( int index, KoTextFormat *f, bool useCollection, bool setFormatAgain = FALSE );
 
     void setBidi( bool b ) { bidi = b; }
     bool isBidi() const;

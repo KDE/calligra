@@ -628,11 +628,33 @@ QRect KPrCanvas::getOldBoundingRect( const KPObject *obj )
 
 void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
+  QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+  KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
+
+  if (m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayLink() && m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->underlineLink() && e->button()==Qt::LeftButton)
+  {
+    KPObject *tmp_kpobject = getObjectAt( docPoint );
+    if(tmp_kpobject && tmp_kpobject->getType() == OT_TEXT)
+    {
+      KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( tmp_kpobject );
+      KPTextView *textview = kptextobject->createKPTextView(this);
+      if ( textview && textview->isLinkVariable(e->pos(),true) ) //the user clicked on a link
+      {
+	textview->openLink();
+ 	if (!(m_currentTextObjectView && m_currentTextObjectView->kpTextObject() == kptextobject))
+	  kptextobject->setEditingTextObj( false ); //don't edit the temporary selected text object
+	delete textview;
+	return;
+      }
+      if (!(m_currentTextObjectView && m_currentTextObjectView->kpTextObject() == kptextobject))
+	kptextobject->setEditingTextObj( false ); //don't edit the temporary selected text object
+      delete textview;
+    }
+  }
+
     if(!m_view->koDocument()->isReadWrite())
         return;
     moveStartPosMouse = objectSelectedBoundingRect().topLeft();
-    QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
@@ -1165,6 +1187,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 m_view->continueAutoPresTimer();
         }
     }
+    
+    
 #if 0 // Where do you need this ? (toshitaka)
     // ME: I have no idea why this is needed at all
     if ( toolEditMode == TEM_MOUSE )
@@ -1482,21 +1506,49 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
-        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
-        Q_ASSERT(txtObj);
-        if(txtObj->contains( docPoint )&&mousePressed)
-        {
-            KoPoint pos = docPoint - txtObj->innerRect().topLeft();
-            m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
-        }
-        return;
+      if (m_currentTextObjectView->isLinkVariable(e->pos()) )
+      {
+	setCursor(Qt::PointingHandCursor);
+	return;
+      }
+      setCursor( arrowCursor );
+	
+      KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+      Q_ASSERT(txtObj);
+      if(txtObj->contains( docPoint )&&mousePressed)
+      {
+	KoPoint pos = docPoint - txtObj->innerRect().topLeft();
+	m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
+      }
+      return;
     }
-
-    if ( editMode ) {
-        m_view->setRulerMousePos( e->x(), e->y() );
-
+	
+	if (m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayLink() && m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->underlineLink())
+	{
+	  KPObject *tmp_kpobject = getObjectAt( docPoint );
+	  if(tmp_kpobject && tmp_kpobject->getType() == OT_TEXT)
+	  {
+	    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( tmp_kpobject );
+	    KPTextView *textview = kptextobject->createKPTextView(this);
+	    if ( textview && textview->isLinkVariable(e->pos()))// the mouse cursor points on a link
+	    {
+	      setCursor(Qt::PointingHandCursor);
+	      kptextobject->setEditingTextObj( false );
+	      delete textview;
+	      return;
+	    }
+	    else
+	    {
+	      kptextobject->setEditingTextObj( false );
+	      delete textview;
+	    }
+	  }
+	}
+	
+	if ( editMode ) {
+	  m_view->setRulerMousePos( e->x(), e->y() );
+	  
         KPObject *kpobject;
-
         if ( ( !mousePressed || ( m_tmpHorizHelpline !=-1 && m_tmpVertHelpline != -1 && modType == MT_NONE ) )&&
              ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
              toolEditMode == TEM_MOUSE  ) {
@@ -1942,12 +1994,12 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 
     if ( toolEditMode != TEM_MOUSE || !editMode ) return;
 
-    deSelectAllObj();
     KPObject *kpobject = getObjectAt( docPoint );
     if(kpobject)
     {
         if ( kpobject->getType() == OT_TEXT )
         {
+            deSelectAllObj();
             KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
             if(kptextobject && (!kptextobject->isProtectContent() || kptextobject->isProtectContent()
                                 && m_view->kPresenterDoc()->cursorInProtectedArea()))
@@ -1966,6 +2018,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
         }
         else if ( kpobject->getType() == OT_PART )
         {
+            deSelectAllObj();
             KPPartObject * obj=dynamic_cast<KPPartObject *>(kpobject);
             if(obj)
             {
@@ -1973,6 +2026,8 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
                 editNum = obj;
             }
         }
+        else
+             getView()->extraPenBrush();
     }
 }
 

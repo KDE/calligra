@@ -68,6 +68,7 @@ public:
 
     KoTextObject * textObject() const { return m_textobj; }
     KoTextCursor * cursor() const { return m_cursor; }
+    void setCursor(KoTextCursor cursor) { *m_cursor = cursor; };
     KoTextDocument * textDocument() const;
 
     /** Return true if the view is allowed to modify the text object.
@@ -108,7 +109,7 @@ public:
     void dragStarted();
     void focusInEvent();
     void focusOutEvent();
-    void handleKeyPressEvent( QKeyEvent * e );
+    void handleKeyPressEvent( QKeyEvent * e, QWidget *, const QPoint &);
     void handleKeyReleaseEvent( QKeyEvent * e );
     void handleImStartEvent( QIMEvent * e );
     void handleImComposeEvent( QIMEvent * e );
@@ -158,6 +159,12 @@ public:
     void updateStyleFromSelection(KoParagStyle* style);
 
     QString underCursorWord();
+    
+    virtual void removeToolTipCompletion() {;};
+    
+    // return true if we "insert direct cursor" and we insert new parag
+    bool placeCursor( const QPoint &pos /* in internal coordinates */, bool insertDirectCursor=false );
+    void placeTempCursor( const QPoint &pos);
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
@@ -175,12 +182,15 @@ public slots:
     void insertText( const QString &text );
     void newParagraph();
 
-    QString refLink()const {return m_refLink;}
+    QString refLink()const {return m_refLink;};
+    void setRefLink(QString const &link){m_refLink=link;};
 
     void openLink();
     void copyLink();
     void removeLink();
     void completion();
+    
+    void setCursor( KoTextCursor * _cursor ) { *m_cursor = *_cursor; }
 
 protected slots:
     /** Start a drag */
@@ -199,8 +209,13 @@ protected:
     virtual void doAutoFormat( KoTextCursor* /*cursor*/, KoTextParag * /*parag*/,
                                int /*index*/, QChar /*ch*/ ) { }
 
-    virtual void doCompletion( KoTextCursor* /*textEditCursor*/, KoTextParag */*parag*/, int /*index*/ ) { }
-
+    virtual bool doCompletion( KoTextCursor* , KoTextParag *, int  ) { return false;}
+    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int  ) { return false;} 
+    virtual void showToolTipBox(KoTextParag *, int , QWidget *, const QPoint &){;};
+    
+    virtual void textIncreaseIndent(){;};
+    virtual bool textDecreaseIndent(){return true;};
+    
     //return true if we are a doubleSpace
     virtual bool doIgnoreDoubleSpace(KoTextParag * /*parag*/,
         int /*index*/,QChar /*ch*/ ) { return false;}
@@ -214,8 +229,6 @@ protected:
      */
     virtual void drawCursor( bool b );
 
-    // return true if we "insert direct cursor" and we insert new parag
-    bool placeCursor( const QPoint &pos /* in internal coordinates */, bool insertDirectCursor=false );
 
     /** Reimplement this to handle PageUp. Example implementation:
         textView->cursor()->gotoPageUp( scrollview->visibleHeight() ); */
@@ -234,7 +247,6 @@ protected:
 
 private slots:
     void blinkCursor();
-    void setCursor( KoTextCursor * _cursor ) { *m_cursor = *_cursor; }
     void tripleClickTimeout();
     void afterTripleClickTimeout();
 protected:

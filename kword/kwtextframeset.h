@@ -179,6 +179,7 @@ public:
                                     KWFrameSetEdit * edit, KWViewMode *viewMode );
 
     void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *currentFrame );
+    QPoint cursorPos( KoTextCursor *cursor, KWCanvas* canvas, KWFrame* currentFrame );
     virtual MouseMeaning getMouseMeaningInsideFrame( const KoPoint& );
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
@@ -425,6 +426,8 @@ public:
     double currentLeftMargin() const { return m_paragLayout.margins[QStyleSheetItem::MarginLeft]; }
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
+    virtual void removeToolTipCompletion();
+    bool isLinkVariable(const KoPoint &, bool setUrl=false);
 
 public slots:
     // Reimplemented from KWFrameSet and connected to KoTextView's signals
@@ -440,8 +443,12 @@ protected:
     // Reimplemented from KoTextView
     virtual void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
-    virtual void doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
-
+    virtual bool doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
+    virtual bool doToolTipCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
+    virtual void showToolTipBox(KoTextParag *parag, int index, QWidget *widget, const QPoint &pos);
+    virtual void textIncreaseIndent();
+    virtual bool textDecreaseIndent();
+    
     virtual void startDrag();
     KWTextDrag * newDrag( QWidget * parent );
 

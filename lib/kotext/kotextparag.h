@@ -140,7 +140,7 @@ public:
      static void drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHandler *zh, QFont font, const QColor & color, int startX, int baseLine, int bw, int y, int h, QChar firstChar );
 
     /** a bit more clever than KoTextString::toString, e.g. with numbered lists */
-    QString toString( int from = 0, int length = 0xffffffff ) const;
+    QString toString( int from = 0, int length = 0xffffffff) const;
 
     /// The app should call this during formatting - e.g. in formatVertically
     void fixParagWidth( bool viewFormattingChars );

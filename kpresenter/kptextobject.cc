@@ -1756,6 +1756,22 @@ void KPTextObject::recalcVerticalAlignment()
     }
 }
 
+QPoint KPTextObject::cursorPos(KPrCanvas *canvas, KoTextCursor *cursor) const
+{
+  KoZoomHandler *zh = m_doc->zoomHandler();
+  QPoint origPix = zh->zoomPoint( orig+KoPoint(bLeft(), bTop()+alignVertical) );
+  KoTextParag* parag = cursor->parag();
+  QPoint topLeft = parag->rect().topLeft();         // in QRT coords
+  int lineY;
+    // Cursor height, in pixels
+  int cursorHeight = zh->layoutUnitToPixelY( topLeft.y(), parag->lineHeightOfChar( cursor->index(), 0, &lineY ) );
+  QPoint iPoint( topLeft.x() + cursor->x(), topLeft.y() + lineY );
+  iPoint = zh->layoutUnitToPixel( iPoint );
+  iPoint.rx() -= canvas->diffx();
+  iPoint.ry() -= canvas->diffy();
+  return origPix+iPoint;
+}
+
 KPTextView::KPTextView( KPTextObject * txtObj, KPrCanvas *_canvas )
     : KoTextView( txtObj->textObject() )
 {
@@ -1929,16 +1945,61 @@ void KPTextView::ensureCursorVisible()
     m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
 }
 
-void KPTextView::doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
+bool KPTextView::doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
 {
     if( m_kptextobj->kPresenterDocument()->allowAutoFormat() )
     {
         KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
         if( autoFormat )
-            autoFormat->doCompletion(  cursor, parag, index, textObject());
+            return autoFormat->doCompletion(  cursor, parag, index, textObject());
+    }
+    return false;
+}
+
+bool KPTextView::doToolTipCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
+{
+    if( m_kptextobj->kPresenterDocument()->allowAutoFormat() )
+    {
+        KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
+        if( autoFormat )
+            return autoFormat->doToolTipCompletion(  cursor, parag, index, textObject());
+    }
+    return false;
+}
+void KPTextView::showToolTipBox(KoTextParag *parag, int index, QWidget *widget, const QPoint &pos)
+{
+    if( m_kptextobj->kPresenterDocument()->allowAutoFormat() )
+    {
+        KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
+        if( autoFormat )
+            autoFormat->showToolTipBox(parag, index, widget, pos);
     }
 }
 
+void KPTextView::removeToolTipCompletion()
+{
+    if( m_kptextobj->kPresenterDocument()->allowAutoFormat() )
+    {
+        KoAutoFormat * autoFormat = m_kptextobj->kPresenterDocument()->getAutoFormat();
+        if( autoFormat )
+            autoFormat->removeToolTipCompletion();
+    }
+}
+void KPTextView::textIncreaseIndent()
+{
+  m_canvas->setTextDepthPlus();
+}
+  
+bool KPTextView::textDecreaseIndent()
+{
+  if (m_paragLayout.margins[QStyleSheetItem::MarginLeft]>0)
+  {
+  	m_canvas->setTextDepthMinus();
+  	return true;
+  }
+  else
+    return false;
+}
 
 void KPTextView::doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch )
 {
@@ -2004,7 +2065,10 @@ bool KPTextView::pgDownKeyPressed()
 
 void KPTextView::keyPressEvent( QKeyEvent *e )
 {
-    handleKeyPressEvent(e);
+  //Calculate position of tooltip for autocompletion
+  const QPoint pos = kpTextObject()->cursorPos(m_canvas, cursor());
+  textView()->handleKeyPressEvent( e, m_canvas, pos );
+ //handleKeyPressEvent(e, m_canvas, m_canvas->mapFromGlobal(QCursor::pos()) );
 }
 
 void KPTextView::keyReleaseEvent( QKeyEvent *e )
@@ -2104,6 +2168,7 @@ void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &/*_pos*/)
 {
     bool addParag = handleMousePressEvent( e, cursorPosition( e->pos() ),true /*bool canStartDrag*/,
                                            kpTextObject()->kPresenterDocument()->insertDirectCursor() );
+    
     if ( addParag )
         kpTextObject()->kPresenterDocument()->setModified( true );
 }
@@ -2120,6 +2185,18 @@ void KPTextView::mouseMoveEvent( QMouseEvent *e, const QPoint &_pos )
     if ( _pos.y() > 0  )
         textView()->handleMouseMoveEvent( e,cursorPosition( e->pos() ) );
 }
+
+bool KPTextView::isLinkVariable(const KoPoint & dPoint, bool setUrl )
+{
+  KoTextCursor temp = *cursor();
+  placeTempCursor(cursorPosition(QPoint(dPoint.x(),dPoint.y())));
+  bool const result = linkVariable();
+  if (setUrl && result && linkVariable() )
+    setRefLink( linkVariable()->url() );
+  KoTextView::setCursor(&temp);
+  return result;
+}
+
 
 void KPTextView::mouseReleaseEvent( QMouseEvent *, const QPoint & )
 {

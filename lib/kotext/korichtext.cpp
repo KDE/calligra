@@ -1235,7 +1235,7 @@ void KoTextString::clear()
     data.resize( 0 );
 }
 
-void KoTextString::setFormat( int index, KoTextFormat *f, bool useCollection )
+void KoTextString::setFormat( int index, KoTextFormat *f, bool useCollection, bool setFormatAgain )
 {
     KoTextStringChar &ch = data[ index ];
 //    kdDebug(32500) << "KoTextString::setFormat index=" << index << " f=" << f << endl;
@@ -1244,7 +1244,7 @@ void KoTextString::setFormat( int index, KoTextFormat *f, bool useCollection )
 	//kdDebug(32500) << "KoTextString::setFormat removing ref on old format " << ch.format() << endl;
 	ch.format()->removeRef();
     }
-    ch.setFormat( f );
+    ch.setFormat( f, setFormatAgain );
 }
 
 void KoTextString::checkBidi() const
@@ -1425,7 +1425,7 @@ bool KoTextString::validCursorPosition( int idx )
 
 ////
 
-void KoTextStringChar::setFormat( KoTextFormat *f )
+void KoTextStringChar::setFormat( KoTextFormat *f, bool setFormatAgain )
 {
     if ( type == Regular ) {
 	d.format = f;
@@ -1435,7 +1435,7 @@ void KoTextStringChar::setFormat( KoTextFormat *f )
 	    d.custom->custom = 0;
 	}
 	d.custom->format = f;
-        if ( d.custom->custom )
+        if ( d.custom->custom && setFormatAgain )
             d.custom->custom->setFormat( f );
     }
 }
@@ -2072,7 +2072,7 @@ void KoTextParag::setFormat( int index, int len, const KoTextFormat *_f, bool us
 	    kdDebug(32500) << " KoTextParag::setFormat, will use format(f) " << f << " " << _f->key() << endl;
 #endif
             KoTextFormat* f = fc ? fc->format( _f ) : const_cast<KoTextFormat *>( _f );
-	    str->setFormat( i + index, f, useCollection );
+	    str->setFormat( i + index, f, useCollection, true );
 	} else {
 #ifdef DEBUG_COLLECTION
 	    kdDebug(32500) << " KoTextParag::setFormat, will use format(of,f,flags) of=" << of << " " << of->key() << ", f=" << _f << " " << _f->key() << endl;

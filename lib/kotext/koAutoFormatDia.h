@@ -197,7 +197,7 @@ protected:
     KoAutoFormat m_autoFormat; // The copy we're working on
     KoAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
     QStringList m_listCompletion; // The copy of the completion items - don't use m_autoFormat.getCompletion()!
-    QCheckBox *cbAllowCompletion, *cbAppendSpace, *cbAddCompletionWord;
+    QCheckBox *cbAllowCompletion, *cbAppendSpace, *cbAddCompletionWord, *cbShowToolTip;
     QPushButton *pbRemoveCompletionEntry;
     QPushButton *pbSaveCompletionEntry;
     QPushButton *pbAddCompletionEntry;

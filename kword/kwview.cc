@@ -6029,10 +6029,13 @@ void KWView::inlineFrame()
     }
 }
 
-
 void KWView::openLink()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
+  openLink(currentTextEdit());
+}
+
+void KWView::openLink(KWTextFrameSetEdit *edit)
+{
     if(edit && edit->refLink().startsWith("bkm://") && m_doc->bookMarkByName(edit->refLink().mid(6)))
     {
 	edit->cursor()->setParag(m_doc->bookMarkByName(edit->refLink().mid(6))->startParag());

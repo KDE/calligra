@@ -43,6 +43,10 @@
 #include <koparagcounter.h>
 #include <koVariableDlgs.h>
 #include <koAutoFormat.h>
+#include <qclipboard.h>
+#include <qcursor.h> 
+#include <qprogressdialog.h>
+#include <qpopupmenu.h>
 #include <kotextobject.h>
 #include <kocommand.h>
 #include <kotextformatter.h>
@@ -2975,7 +2979,7 @@ MouseMeaning KWTextFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     : KoTextView( fs->textObject() ), KWFrameSetEdit( fs, canvas ), m_rtl( false )
 {
-    kdDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->getName() << endl;
+    //kdDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->getName() << endl;
     KoTextView::setReadWrite( fs->kWordDocument()->isReadWrite() );
     KoTextObject* textobj = fs->textObject();
     connect( textobj, SIGNAL( selectionChanged(bool) ), canvas, SIGNAL( selectionChanged(bool) ) );
@@ -3088,14 +3092,64 @@ void KWTextFrameSetEdit::doAutoFormat( KoTextCursor* cursor, KoTextParag *parag,
     }
 }
 
-void KWTextFrameSetEdit::doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
+bool KWTextFrameSetEdit::doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat() )
     {
         KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
         if( autoFormat )
-            autoFormat->doCompletion(  cursor, parag, index, textObject());
+            return autoFormat->doCompletion(  cursor, parag, index, textObject());
     }
+    return false;
+}
+
+bool KWTextFrameSetEdit::doToolTipCompletion( KoTextCursor* cursor, KoTextParag *parag, int index )
+{
+    if( textFrameSet()->kWordDocument()->allowAutoFormat() )
+    {
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        if( autoFormat )
+            return autoFormat->doToolTipCompletion(  cursor, parag, index, textObject());
+    }
+    return false;
+}
+
+void KWTextFrameSetEdit::showToolTipBox(KoTextParag *parag, int index, QWidget *widget, const QPoint &pos)
+{
+    if( textFrameSet()->kWordDocument()->allowAutoFormat() )
+    {
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        if( autoFormat )
+            autoFormat->showToolTipBox(parag, index, widget, pos);
+    }
+}
+
+void KWTextFrameSetEdit::removeToolTipCompletion()
+{
+    if( textFrameSet()->kWordDocument()->allowAutoFormat() )
+    {
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        if( autoFormat )
+            autoFormat->removeToolTipCompletion();
+    }
+}
+
+void KWTextFrameSetEdit::textIncreaseIndent()
+{
+  	kdDebug(32001) << "Increasing list" << endl;
+  	m_canvas->gui()->getView()->textIncreaseIndent();
+}
+
+bool KWTextFrameSetEdit::textDecreaseIndent()
+{
+	if (currentLeftMargin()>0)
+	{
+	  kdDebug(32001) << "Decreasing list" << endl;
+	  m_canvas->gui()->getView()->textDecreaseIndent();
+	  return true;
+	}
+	else
+	  return false;
 }
 
 void KWTextFrameSetEdit::startDrag()
@@ -3245,7 +3299,10 @@ bool KWTextFrameSetEdit::enterCustomItem( KoTextCustomItem* customItem, bool fro
 void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
 {
     // Handle moving into foreign frames (formula frames).
-    if ( !( e->state() & ControlButton ) && !( e->state() & ShiftButton ) ) {
+    if ( !( e->state() & ControlButton ) && !( e->state() & ShiftButton ) )
+    {
+        if (e->state() != Qt::NoButton)
+                removeToolTipCompletion();
         switch ( e->key() ) {
         case Key_Left: {
             KoTextCursor* cursor = textView()->cursor();
@@ -3256,6 +3313,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
                 if ( ch->isCustom() ) {
                     KoTextCustomItem* customItem = ch->customItem();
                     if ( enterCustomItem( customItem, true ) ) {
+                        removeToolTipCompletion();
                         return;
                     }
                 }
@@ -3271,6 +3329,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
                 if ( ch->isCustom() ) {
                     KoTextCustomItem* customItem = ch->customItem();
                     if ( enterCustomItem( customItem, false ) ) {
+                        removeToolTipCompletion();
                         return;
                     }
                 }
@@ -3279,7 +3338,9 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
         }
         }
     }
-    textView()->handleKeyPressEvent( e );
+    //Calculate position of tooltip for autocompletion
+    const QPoint pos = textFrameSet()->cursorPos( cursor(), m_canvas, m_currentFrame );
+    textView()->handleKeyPressEvent( e, m_canvas, pos );
 }
 
 void KWTextFrameSetEdit::keyReleaseEvent( QKeyEvent* e )
@@ -3322,6 +3383,11 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
 
     if ( m_currentFrame )
     {
+//       if ( m_canvas->kWordDocument()->getVariableCollection()->variableSetting()->displayLink() && m_canvas->kWordDocument()->getVariableCollection()->variableSetting()->underlineLink() && isLinkVariable(dPoint, true ) && e->button() == Qt::LeftButton )
+//       {
+// 	m_canvas->gui()->getView()->openLink();
+// 	return;
+//       }
         // Let KoTextView handle the mousepress event - but don't let it start
         // a drag if clicking on the left of the text (out of the frame itself)
         bool addParag = textView()->handleMousePressEvent( e, iPoint, relPos != KWTextFrameSet::LeftOfFrame, frameSet()->kWordDocument()->insertDirectCursor() );
@@ -3353,6 +3419,21 @@ void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint,
         else
             textView()->handleMouseMoveEvent( e, iPoint );
     }
+
+}
+
+bool KWTextFrameSetEdit::isLinkVariable(const KoPoint & dPoint, bool setUrl )
+{
+  QPoint iPoint;
+  KWTextFrameSet::RelativePosition relPos;
+  textFrameSet()->documentToInternalMouseSelection( dPoint, iPoint, relPos );
+  KoTextCursor temp = *cursor();
+  placeTempCursor(iPoint);
+  bool const result = linkVariable();
+  if (setUrl && result && textView()->linkVariable() )
+    setRefLink(textView()->linkVariable()->url() );
+  KoTextView::setCursor(&temp);
+  return result;
 }
 
 void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent *, const QPoint &, const KoPoint & )
@@ -3951,6 +4032,30 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
                 popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
         }
     }
+}
+
+
+
+QPoint KWTextFrameSet::cursorPos( KoTextCursor *cursor, KWCanvas* canvas, KWFrame* currentFrame )
+{
+    KWViewMode *viewMode = canvas->viewMode();
+
+    KoTextParag* parag = cursor->parag();
+    QPoint const topLeft = parag->rect().topLeft();         // in QRT coords
+    int lineY;
+    parag->lineHeightOfChar( cursor->index(), 0, &lineY );
+    const QPoint iPoint( topLeft.x() + cursor->x() + parag->at( cursor->index() )->width, topLeft.y() + lineY ); // iPoint is the topright corner of the current character
+
+    KoPoint dPoint;
+    QPoint vPoint;
+    KoPoint hintDPoint = currentFrame->innerRect().topLeft();
+    if ( internalToDocumentWithHint( iPoint, dPoint, hintDPoint ) )
+    {
+        vPoint = viewMode->normalToView( m_doc->zoomPoint( dPoint ) ); // from doc to view contents
+        vPoint.rx() -= canvas->contentsX();
+        vPoint.ry() -= canvas->contentsY();
+    } // else ... ?
+    return vPoint;
 }
 
 //////

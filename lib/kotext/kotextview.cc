@@ -151,10 +151,10 @@ void KoTextView::deleteWordLeft()
 }
 
 // Compare with QTextEdit::keyPressEvent
-void KoTextView::handleKeyPressEvent( QKeyEvent * e )
+void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoint &pos)
 {
     textObject()->typingStarted();
-
+    
     /* bool selChanged = FALSE;
     for ( int i = 1; i < textDocument()->numSelections(); ++i )
         selChanged = textDocument()->removeSelection( i ) || selChanged;
@@ -165,7 +165,6 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
     }*/
 
     bool clearUndoRedoInfo = TRUE;
-
     if ( KShortcut( KKey( e ) ) == KStdAccel::deleteWordBack() )
     {
         if ( m_cursor->parag()->string()->isRightToLeft() )
@@ -214,17 +213,19 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         moveCursor( e->state() & ControlButton ? MovePgDown : MoveViewportDown, e->state() & ShiftButton );
         break;
     case Key_Return: case Key_Enter:
-        if ( (e->state() & (ShiftButton|ControlButton)) == 0 )
-        {
-            if ( textObject()->hasSelection() )
-                textObject()->removeSelectedText( m_cursor );
-            clearUndoRedoInfo = FALSE;
-            textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
-            Q_ASSERT( m_cursor->parag()->prev() );
-            if ( m_cursor->parag()->prev() )
-                doAutoFormat( m_cursor, m_cursor->parag()->prev(),
-                              m_cursor->parag()->prev()->length() - 1, '\n' );
-        }
+        
+        if (!doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1) )
+                if ( (e->state() & (ShiftButton|ControlButton)) == 0 )
+                {
+                        if ( textObject()->hasSelection() )
+                                textObject()->removeSelectedText( m_cursor );
+                        clearUndoRedoInfo = FALSE;
+                        textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
+                        Q_ASSERT( m_cursor->parag()->prev() );
+                        if ( m_cursor->parag()->prev() )
+                                doAutoFormat( m_cursor, m_cursor->parag()->prev(),
+                                        m_cursor->parag()->prev()->length() - 1, '\n' );
+                }
         break;
     case Key_Delete:
         if ( textObject()->hasSelection() ) {
@@ -241,15 +242,16 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
             textObject()->removeSelectedText( m_cursor );
             break;
         }
-        if ( !m_cursor->parag()->prev() &&
-             m_cursor->atParagStart() )
-        {
-            KoTextParag * parag = m_cursor->parag();
-            if ( parag->counter() && parag->counter()->style() != KoParagCounter::STYLE_NONE)
-                textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
-            break;
-        }
-        textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
+	if ( m_cursor->parag() && m_cursor->atParagStart() && m_cursor->parag()->counter() && textDecreaseIndent())
+	  break;
+	if ( !m_cursor->parag()->prev() && m_cursor->atParagStart() )
+	{
+		KoTextParag * parag = m_cursor->parag();
+		if ( parag->counter() && parag->counter()->style() != KoParagCounter::STYLE_NONE)
+			textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
+		break;
+	}
+	textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
 
         clearUndoRedoInfo = FALSE;
         break;
@@ -264,20 +266,37 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
         break;
     case Key_Direction_L: {
 	if ( !m_cursor->parag() || m_cursor->parag()->direction() == QChar::DirL )
+        {
+            removeToolTipCompletion();
 	    return;
+        }
         KCommand* cmd = textObject()->setParagDirectionCommand( m_cursor, QChar::DirL );
         textObject()->emitNewCommand( cmd );
         break;
     }
     case Key_Direction_R: {
 	if ( !m_cursor->parag() || m_cursor->parag()->direction() == QChar::DirR )
+        {
+            removeToolTipCompletion();
 	    return;
+        }
         KCommand* cmd = textObject()->setParagDirectionCommand( m_cursor, QChar::DirR );
         textObject()->emitNewCommand( cmd );
         break;
     }
     default: {
             //kdDebug(32500) << "KoTextView::keyPressEvent ascii=" << e->ascii() << " text=" << e->text()[0].unicode() << " state=" << e->state() << endl;
+            if (e->key() == Qt::Key_Tab)
+            {
+                if (doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1) )
+                        break;
+		if ( m_cursor->parag() && m_cursor->atParagStart() && m_cursor->parag()->counter() )
+		{
+			textIncreaseIndent();
+			break;
+		}
+            }
+            
             if ( e->text().length() &&
 //               !( e->state() & AltButton ) &&
                  ( !e->ascii() || e->ascii() >= 32 ) ||
@@ -311,7 +330,6 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
                         text.remove( 0, 1 );
                     }
                 }
-
                 if ( !text.isEmpty() )
                 {
                     // Bidi support: need to reverse mirrored chars (e.g. parenthesis)
@@ -332,41 +350,55 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e )
                         // Don't use 'p' past this point. If we replaced a selection, p could have been deleted (#48999)
                         doAutoFormat( m_cursor, m_cursor->parag(), m_cursor->index() - 1, text[ text.length() - 1 ] );
                     }
+                    showToolTipBox(m_cursor->parag(), m_cursor->index()-1, widget,pos);
                 }
-                break;
+                else
+                    removeToolTipCompletion();
+                
             }
             // We should use KAccel instead, to make this configurable !
             // Well, those are all alternate keys, for keys already configurable (KDE-wide)
             // and a kaccel makes it hard to
-            if ( e->state() & ControlButton ) {
-                switch ( e->key() ) {
-                case Key_F16: // Copy key on Sun keyboards
-                    copy();
-                    break;
-                case Key_A:
-                    moveCursor( MoveLineStart, e->state() & ShiftButton );
-                    break;
-                case Key_E:
-                    moveCursor( MoveLineEnd, e->state() & ShiftButton );
-                    break;
-                case Key_K:
-                    textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionKill );
-                    break;
-                case Key_Insert:
-                    copy();
-                    break;
-                case Key_Space:
-                    insertNonbreakingSpace();
-                    break;
-                }
-                break;
-            }
+            else
+	    {
+	      removeToolTipCompletion();
+	      if ( e->state() & ControlButton )
+		switch ( e->key() )
+	      {
+		case Key_F16: // Copy key on Sun keyboards
+		  copy();
+		  break;
+		case Key_A:
+		  moveCursor( MoveLineStart, e->state() & ShiftButton );
+		  break;
+		case Key_E:
+		  moveCursor( MoveLineEnd, e->state() & ShiftButton );
+		  break;
+		case Key_K:
+		  textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionKill );
+		  break;
+		case Key_Insert:
+		  copy();
+		  break;
+		case Key_Space:
+		  insertNonbreakingSpace();
+		  break;
+	      }
+	      break;
+	    }
+            
+            if ( clearUndoRedoInfo )
+                textObject()->clearUndoRedoInfo();
+            textObject()->typingDone();
+            return;
+            
         }
     }
 
     if ( clearUndoRedoInfo ) {
         textObject()->clearUndoRedoInfo();
     }
+    removeToolTipCompletion();
     textObject()->typingDone();
 }
 
@@ -444,7 +476,7 @@ void KoTextView::handleImEndEvent( QIMEvent * e )
 
 void KoTextView::completion()
 {
-    doCompletion(m_cursor, m_cursor->parag(),
+    (void) doCompletion(m_cursor, m_cursor->parag(),
                      m_cursor->index() - 1);
 }
 
@@ -879,6 +911,17 @@ bool KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
     m_cursor->place( pos, s, false, &variablePosition );
     updateUI( true );
     return addParag;
+}
+
+void KoTextView::placeTempCursor( const QPoint &pos)
+{
+    bool addParag = false;
+    KoTextParag *s = 0L;
+    if ( addParag )
+        s = textDocument()->lastParag();
+    else
+        s = textDocument()->firstParag();
+    m_cursor->place( pos, s, false, &variablePosition );
 }
 
 void KoTextView::blinkCursor()

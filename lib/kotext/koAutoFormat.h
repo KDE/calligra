@@ -28,7 +28,10 @@
 #include <qptrvector.h>
 #include <qdom.h>
 #include <qdict.h>
+#include <qlabel.h>
+#include <qwidget.h>
 #include <koffice_export.h>
+
 class KoDocument;
 class KoTextParag;
 class KoTextObject;
@@ -40,8 +43,29 @@ class KCommand;
 class KoSearchContext;
 class KoTextFormat;
 
+
+
+
+class KoCompletionBox : public QLabel
+{
+  Q_OBJECT
+  public:
+    KoCompletionBox( QWidget * parent = 0, const char * name = 0, WFlags f = 0 ); 
+    ~KoCompletionBox();
+    QString& lastWord();
+    void setLastWord(QString const &);
+
+  protected:
+    void mousePressEvent( QMouseEvent * );
+
+  private:
+    QString m_lastWord;
+};
+
+
+
 /******************************************************************/
-/* Class: KWAutoFormatEntry					  */
+/* Class: KWAutoFormatEntry				   */
 /******************************************************************/
 class KoAutoFormatEntry
 {
@@ -93,22 +117,26 @@ public:
     /**
      * Called by edit widget when a call a competion
      */
-    void doCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj );
-
-
+    bool doCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int const index,KoTextObject *txtObj );
+    
+    bool doToolTipCompletion( KoTextCursor* textEditCursor, KoTextParag *parag, int index,KoTextObject *txtObj );    
+    void showToolTipBox(KoTextParag *parag,  int index, QWidget *widget, const QPoint &pos);
+    void removeToolTipCompletion();
+    
     bool doIgnoreDoubleSpace( KoTextParag *parag, int index,QChar ch );
 
     /**
      * Helper method, returns the last word before parag,index
      */
-    static QString getLastWord( KoTextParag *parag, int index );
+    static QString getLastWord( KoTextParag *parag, int const index );
+    QString getLastWord( const int max_words, KoTextParag *parag, int const index );
 
     /**
      * Helper method, returns the last word before parag,index
      * different from getLastWord, because we test just space character
      * and not punctualtion character
      */
-    static QString getWordAfterSpace( KoTextParag * parag, int index);
+    static QString getWordAfterSpace( KoTextParag * parag, int const index);
 
     // Config for the typographic quotes. Used by the dialog.
     struct TypographicQuotes
@@ -138,6 +166,8 @@ public:
     void configAutoNumberStyle( bool b );
 
     void configCompletion( bool b );
+    
+    void configToolTipCompletion( bool b );
 
     void configAppendSpace( bool b);
 
@@ -203,6 +233,9 @@ public:
 
     bool getConfigCompletion() const
     { return m_completion; }
+
+    bool getConfigToolTipCompletion() const
+    { return m_toolTipCompletion; }
 
     bool getConfigAppendSpace() const
     { return m_completionAppendSpace; }
@@ -308,7 +341,6 @@ protected:
     void doAutoIncludeAbbreviation(KoTextCursor *textEditCursor, KoTextParag *parag, KoTextObject *txtObj );
 
     KCommand *doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
-    KCommand *scanParag( KoTextParag * parag, KoTextObject * obj );
 
     KCommand *doCapitalizeNameOfDays( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
 
@@ -316,7 +348,7 @@ protected:
     void loadEntry( const QDomElement &nl, bool _allLanguages = false);
     QDomElement saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QDomDocument doc);
 private:
-    void detectStartOfLink(const QString &word);
+    void detectStartOfLink(KoTextParag * parag, int const index, bool const insertedDot);
     void autoFormatIsActive();
     void loadListOfWordCompletion();
     void loadAutoCorrection( const QDomElement & _de, bool _allLanguages = false );
@@ -335,6 +367,7 @@ private:
     bool m_useBulletStyle, m_autoChangeFormat, m_autoReplaceNumber;
     bool m_useAutoNumberStyle;
     bool m_completion;
+    bool m_toolTipCompletion;
     bool m_completionAppendSpace;
     bool m_addCompletionWord;
     bool m_includeTwoUpperLetterException;
@@ -368,9 +401,11 @@ private:
     uint m_maxFindLength;
     uint m_minCompletionWordLength;
     uint m_nbMaxCompletionWord;
+    uint m_countMaxWords;
     QStringList m_cacheNameOfDays;
     /// Indicates if doAutoFormat has called itself
     bool m_wordInserted;
+    KoCompletionBox *m_completionBox;
 };
 
 #endif

@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include "kwcanvas.h"
 #include "kwtableframeset.h"
 #include "kwpartframeset.h"
@@ -35,6 +36,7 @@
 #include <qclipboard.h>
 #include <qprogressdialog.h>
 #include <qobjectlist.h>
+#include <qwhatsthis.h>
 
 #include <koStore.h>
 #include <koStoreDrag.h>
@@ -505,8 +507,35 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
 
+    
     if ( e->button() == LeftButton )
+    {
+      if (m_doc->getVariableCollection()->variableSetting()->displayLink() && m_doc->getVariableCollection()->variableSetting()->underlineLink() )
+      {
+	bool border=true;
+	KWFrame *frameundermouse = m_doc->frameUnderMouse(normalPoint, &border);
+	if (frameundermouse && frameundermouse->frameSet())
+	{
+	  KWTextFrameSet *frameset= dynamic_cast<KWTextFrameSet *>(frameundermouse->frameSet());
+	  if (frameset)
+	  {
+	    KWFrameSetEdit *framesetedit = frameset->createFrameSetEdit(this);
+	    if ( framesetedit )
+	    {
+	      KWTextFrameSetEdit *textedit = dynamic_cast<KWTextFrameSetEdit *>(framesetedit);
+	      if (textedit && textedit->isLinkVariable(docPoint,true))
+	      {
+		gui()->getView()->openLink(textedit); //open the link
+		delete textedit;
+		return;
+	      }
+	    }
+	    delete framesetedit;
+	  }
+	}
+      }
         m_mousePressed = true;
+    }
 
     // Only edit-mode (and only LMB) allowed on read-only documents (to select text)
     if ( !m_doc->isReadWrite() && ( m_mouseMode != MM_EDIT || e->button() != LeftButton ) )
@@ -1178,8 +1207,33 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
         return;
     QPoint normalPoint = m_viewMode->viewToNormal( e->pos() );
     KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
-    if ( m_mousePressed ) {
+    
+    if (m_doc->getVariableCollection()->variableSetting()->displayLink() && m_doc->getVariableCollection()->variableSetting()->underlineLink() )
+    {
+      bool border=true;
+      KWFrame *frameundermouse = m_doc->frameUnderMouse(normalPoint, &border);
+      if (frameundermouse && frameundermouse->frameSet())
+      {
+	KWTextFrameSet *frameset= dynamic_cast<KWTextFrameSet *>(frameundermouse->frameSet());
+	if (frameset)
+	{
+	  KWFrameSetEdit *framesetedit = frameset->createFrameSetEdit(this);
+	  if ( framesetedit )
+	  {
+	    KWTextFrameSetEdit *textedit = dynamic_cast<KWTextFrameSetEdit *>(framesetedit);
+	    if (textedit && textedit->isLinkVariable(docPoint))
+	    {
+	      viewport()->setCursor(Qt::PointingHandCursor); // the cursor is placed on a link
+	      delete textedit;
+	      return;
+	    }
+	  }
+	  delete framesetedit;
+	}
+      }
+    }
 
+    if ( m_mousePressed ) {
         //doAutoScroll();
 
         switch ( m_mouseMode ) {

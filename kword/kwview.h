@@ -206,6 +206,7 @@ public:
     void autoSpellCheck(bool b);
     void insertDirectCursor(bool b);
     void updateDirectCursorButton();
+    void openLink(KWTextFrameSetEdit *);
 
     void deleteFrameSet( KWFrameSet *);
 

@@ -94,6 +94,8 @@ public:
     void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
 
     void recalcPageNum( KPrPage *page );
+    /// Return the current text cursor position
+    QPoint cursorPos(KPrCanvas*, KoTextCursor *) const;
 
 
     /** Return the contained text object */
@@ -256,6 +258,9 @@ public:
 
     /** return true if some text is selected */
     bool hasSelection() const;
+    
+    virtual void removeToolTipCompletion();
+    bool isLinkVariable(const KoPoint &, bool setUrl=false);
 
 public slots:
     void cut();
@@ -275,9 +280,11 @@ protected:
     // Reimplemented from KoTextView
     virtual void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
-
-    virtual void doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
-
+    virtual bool doCompletion( KoTextCursor* cursor, KoTextParag *parag, int index );
+    virtual bool doToolTipCompletion( KoTextCursor* , KoTextParag *, int  ); 
+    virtual void showToolTipBox(KoTextParag *parag, int index, QWidget *widget, const QPoint &pos);
+    virtual void textIncreaseIndent();
+    virtual bool textDecreaseIndent();
     virtual void showFormat( KoTextFormat *format ) ;
 
     virtual bool pgUpKeyPressed();
