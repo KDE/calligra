@@ -2,6 +2,7 @@
 #include "kspread_view.h"
 
 #include <qpainter.h>
+#define KS_MIN_RECTSIZE 3
 
 KSpreadInsertHandler::KSpreadInsertHandler( KSpreadView* view, QWidget* widget, const KoDocumentEntry& entry, bool ischart )
     : EventHandler( widget ), m_entry( entry )
@@ -59,7 +60,10 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
 	    if ( w < 0 ) w *= -1;
 	    int h = m_geometryEnd.y() - m_geometryStart.y();
 	    if ( h < 0 ) h *= -1;
-	
+
+	    if ( w < KS_MIN_RECTSIZE ) w = KS_MIN_RECTSIZE;
+	    if ( h < KS_MIN_RECTSIZE ) h = KS_MIN_RECTSIZE;
+
 	    painter.drawRect( x, y, w, h );
 	}
 	else
@@ -77,6 +81,9 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
 	if ( w < 0 ) w *= -1;
 	int h = m_geometryEnd.y() - m_geometryStart.y();
 	if ( h < 0 ) h *= -1;
+
+	if ( w < KS_MIN_RECTSIZE ) w = KS_MIN_RECTSIZE;
+	if ( h < KS_MIN_RECTSIZE ) h = KS_MIN_RECTSIZE;
 
 	painter.drawRect( x, y, w, h );
 	painter.end();
@@ -106,6 +113,9 @@ bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
 	int h = m_geometryEnd.y() - m_geometryStart.y();
 	if ( h < 0 ) h *= -1;
 
+	if ( w < KS_MIN_RECTSIZE ) w = KS_MIN_RECTSIZE;
+	if ( h < KS_MIN_RECTSIZE ) h = KS_MIN_RECTSIZE;
+        
 	QPainter painter;
 	painter.begin( (QWidget*)target() );
 
