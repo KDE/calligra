@@ -35,6 +35,56 @@ SignalConnection::SignalConnection(SignalHandler* signalhandler)
 {
 }
 
+bool SignalConnection::connect()
+{
+    // try to determinate Qt parameters from signal
+    QString signature = QString(signal).mid(1);
+    int startpos = signature.find("(");
+    int endpos = signature.findRev(")");
+    if(startpos < 0 || startpos > endpos) {
+        kdWarning() << QString("SignalHandler::connect() Invalid signal '%1' from sender '%2' on the try to connect with function '%3'.")
+                       .arg(signal).arg(senderobj->name()).arg(function) << endl;
+        return false;
+    }
+    QString params = signature.mid(startpos + 1, endpos - startpos - 1);
+    QStringList paramlist = QStringList::split(",", params);
+    QString signalname = signature.left(startpos);
+
+    kdDebug() << QString("SignalHandler::connect signal='%1' signalname='%2' params='%3' function='%4'")
+                         .arg(signal).arg(signalname).arg(params).arg(function) << endl;
+
+    if(paramlist.isEmpty())
+        return QObject::connect((QObject*)senderobj, signal, SLOT(callback()));
+
+    if(paramlist.count() == 1) {
+        if(checkConnectArgs(signal, this, SLOT(callback_short(short))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_short(short)));
+        if(checkConnectArgs(signal, this, SLOT(callback_int(int))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_int(int)));
+        if(checkConnectArgs(signal, this, SLOT(callback_uint(uint))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_uint(uint)));
+        if(checkConnectArgs(signal, this, SLOT(callback_long(long))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_ulong(long)));
+        if(checkConnectArgs(signal, this, SLOT(callback_ulong(ulong))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_ulong(ulong)));
+        if(checkConnectArgs(signal, this, SLOT(callback_double(double))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_double(double)));
+        if(checkConnectArgs(signal, this, SLOT(callback_char(const char*))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_char(const char*)));
+        if(checkConnectArgs(signal, this, SLOT(callback_bool(bool))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_bool(bool)));
+        if(checkConnectArgs(signal, this, SLOT(callback_string(const QString&))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_string(const QString&)));
+        if(checkConnectArgs(signal, this, SLOT(callback_stringlist(const QStringList&))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_stringlist(const QStringList&)));
+        if(checkConnectArgs(signal, this, SLOT(callback_variant(const QVariant&))))
+            return QObject::connect((QObject*)senderobj, signal, SLOT(callback_variant(const QVariant&)));
+    }
+
+    kdWarning() << QString("SignalHandler::connect Failed to connect signal='%1'").arg(signature) << endl;
+    return false;
+}
+
 void SignalConnection::callback() {
     callback_variant(QVariant()); }
 void SignalConnection::callback_short(short s) {
@@ -63,10 +113,6 @@ void SignalConnection::callback_long(long l) {
     callback_variant(QVariant((Q_LLONG)l)); }
 void SignalConnection::callback_ulong(ulong l) {
     callback_variant(QVariant((Q_ULLONG)l)); }
-void SignalConnection::callback_llong(Q_LLONG l) {
-    callback_variant(QVariant(l)); }
-void SignalConnection::callback_ullong(Q_ULLONG l) {
-    callback_variant(QVariant(l)); }
 void SignalConnection::callback_double(double d) {
     callback_variant(QVariant(d)); }
 void SignalConnection::callback_char(const char* c) {

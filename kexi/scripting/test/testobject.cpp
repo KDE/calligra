@@ -37,6 +37,7 @@ void TestObject::testSlot()
 {
     kdDebug() << "TestObject::testSlot called" << endl;
     emit testSignal();
+    emit testSignalString("This is the emitted TestObject::testSignalString(const QString&)");
 }
 
 void TestObject::testSignalSlot()

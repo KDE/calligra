@@ -54,6 +54,8 @@ namespace Kross { namespace Api {
             const char* signal;
             QString function;
 
+            bool connect();
+
         private:
             SignalHandler* m_signalhandler;
 
@@ -75,8 +77,6 @@ namespace Kross { namespace Api {
             void callback_uint(uint);
             void callback_long(long);
             void callback_ulong(ulong);
-            void callback_llong(Q_LLONG);
-            void callback_ullong(Q_ULLONG);
             void callback_double(double);
             void callback_char(const char*);
             void callback_bool(bool);

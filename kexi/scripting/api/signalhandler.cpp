@@ -38,18 +38,21 @@ SignalHandler::~SignalHandler()
 
 bool SignalHandler::connect(QObject *sender, const char *signal, const QString& functionname)
 {
+    // create the matching SignalConnection
     SignalConnection* conn = new SignalConnection(this);
     conn->senderobj = sender;
     conn->signal = signal;
     conn->function = functionname;
     m_connections << conn;
 
-    return QObject::connect(
-        (QObject*)conn->senderobj,
-        conn->signal,
-        conn,
-        SLOT(callback())
-    );
+    // and try to connect the signal
+    if(! conn->connect()) {
+        m_connections.remove(conn);
+        delete conn;
+        return false;
+    }
+
+    return true;
 }
 
 bool SignalHandler::disconnect(QObject *sender, const char *signal, const QString& functionname)

@@ -118,6 +118,9 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
 
         // Connect QObject signal with scriptfunction.
         scriptcontainer->connect(testobject, SIGNAL(testSignal()), "testobjectCallback");
+
+scriptcontainer->connect(testobject, SIGNAL(testSignalString(const QString&)), "testobjectCallbackWithParams");
+
         // Call the testSlot to emit the testSignal.
         testobject->testSlot();
 

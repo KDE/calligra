@@ -210,8 +210,12 @@ def testfunc(msg):
     return "this is the __main__.testfunc() returnvalue!"
 
 def testobjectCallback():
-    print "testobjectCallback() returnvalue !!!!!!!!!!!!!!!!!!!!!!!!"
+    print "testobjectCallback() returnvalue !"
     return "this is the __main__.testobjectCallback() returnvalue!"
+
+def testobjectCallbackWithParams(argument):
+    print "testobjectCallbackWithParams() argument = %s" % str(argument)
+    return "this is the __main__.testobjectCallbackWithParams() returnvalue!"
 
 print "########## BEGIN ##########"
 testKexiDB()
