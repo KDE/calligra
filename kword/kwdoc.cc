@@ -166,7 +166,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_styleList.setAutoDelete( true );
 //    varFormats.setAutoDelete(true);
 
-    setInstance( KWFactory::global() );
+    setInstance( KWFactory::global(), false );
 
     // ## TODO make this configurable
     m_gridX = m_gridY = 10;
