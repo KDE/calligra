@@ -625,7 +625,7 @@ void RTFWorker::writeFontData(void)
         *m_streamOut << "{\\f" << count;
         if ( (strLower.find("symbol")>-1) || (strLower.find("dingbat")>-1) )
             *m_streamOut << "\\ftech";
-        else if ( (strLower.find("script")>-1) || (strLower.find("chancery")>-1) )
+        else if ( (strLower.find("script")>-1) )
             *m_streamOut << "\\fscript";
         else
         {
