@@ -38,7 +38,7 @@
 #include <config.h>
 
 KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
-    : QScrollView( parent ), doc( d )
+    : QScrollView( parent, "canvas", WNorthWestGravity | WRepaintNoErase | WResizeNoErase ), doc( d )
 {
     m_gui = lGui;
     m_currentFrameSetEdit = doc->getFrameSet( 0 )->createFrameSetEdit( this );
