@@ -44,7 +44,7 @@ KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWD
 
     resize( 510, 310 );
     setupTab1();
-#if END_NOTE
+#ifdef END_NOTE
     setupTab2();
 #endif
     setupTab3();
@@ -166,7 +166,7 @@ void KWConfigFootNoteDia::slotOk()
         cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change End-/Footnote Variable Settings") , counter, m_footNoteConfig->counter() ,true ,m_doc);
         macro->addCommand(cmd );
     }
-#if END_NOTE
+#ifdef END_NOTE
     counter = static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->endNoteCounter();
     if (counter != m_endNoteConfig->counter() )
     {
