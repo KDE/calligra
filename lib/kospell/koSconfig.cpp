@@ -50,7 +50,6 @@ KOSpellConfig::KOSpellConfig (const KOSpellConfig &_ksc)
   , dictlist(0)
   , dictcombo(0)
   , encodingcombo(0)
-  , clientcombo(0)
 {
     m_bIgnoreCase = false;
     m_bIgnoreAccent = false;
@@ -76,7 +75,6 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
   , dictlist(0)
   , dictcombo(0)
   , encodingcombo(0)
-  , clientcombo(0)
 {
     m_bIgnoreCase = false;
     m_bIgnoreAccent = false;
@@ -142,13 +140,6 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
     QLabel *tmpQLabel = new QLabel( encodingcombo, i18n("Encoding:"), this);
     glay->addWidget( tmpQLabel, 3, 0 );
 
-
-    clientcombo = new QComboBox( this );
-    clientcombo->insertItem (i18n("Aspell"));
-    glay->addMultiCellWidget( clientcombo, 4, 4, 1, 2 );
-
-    tmpQLabel = new QLabel( clientcombo, i18n("Client:"), this );
-    glay->addWidget( tmpQLabel, 4, 0 );
 
     if( addHelpButton == true )
     {

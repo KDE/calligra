@@ -159,7 +159,6 @@ public:
     QStringList ignoreList () const;
     QStringList replaceAllList () const;
 
-    int client () const; //see enums at top of file
 
     /**
      * Call this method before this class is deleted  if you want
@@ -231,7 +230,7 @@ protected:
 
     QCheckBox *cb1, *cb2;
     QLabel *dictlist;
-    QComboBox *dictcombo, *encodingcombo, *clientcombo;
+    QComboBox *dictcombo, *encodingcombo;
     QCheckBox *cbIgnoreCase;
     QCheckBox *cbIgnoreAccent;
 signals:
