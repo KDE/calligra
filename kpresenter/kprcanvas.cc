@@ -55,7 +55,6 @@
 #include <koparagcounter.h>
 #include <kapplication.h>
 #include <kmimemagic.h>
-#include <kurl.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kprinter.h>

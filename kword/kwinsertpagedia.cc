@@ -20,7 +20,6 @@
 
 
 #include "kwinsertpagedia.h"
-#include <qlayout.h>
 #include <klocale.h>
 #include <qradiobutton.h>
 #include <qgroupbox.h>

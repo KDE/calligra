@@ -52,7 +52,6 @@
 #include <klistview.h>
 #include <kstandarddirs.h>
 #include <kdeversion.h>
-#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kglobal.h>
 #include <kurlrequesterdlg.h>

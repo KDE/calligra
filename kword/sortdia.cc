@@ -24,7 +24,6 @@
 #include <klocale.h>
 #include <qradiobutton.h>
 #include <qgroupbox.h>
-#include <qlayout.h>
 #include <qbuttongroup.h>
 #include <qvbox.h>
 
