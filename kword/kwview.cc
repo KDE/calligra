@@ -703,8 +703,8 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
 
     QString group = "";
 
-    parentMenu->popupMenu()->insertSeparator();
     QDomNode n = doc.documentElement().firstChild();
+    bool expressionExist=false;
     for( ; !n.isNull(); n = n.nextSibling() )
         {
             if ( n.isElement() )
@@ -712,6 +712,11 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
                     QDomElement e = n.toElement();
                     if ( e.tagName() == "Type" )
                         {
+                            if(!expressionExist)
+                            {
+                                parentMenu->popupMenu()->insertSeparator();
+                                expressionExist=true;
+                            }
                             group = i18n( e.namedItem( "TypeName" ).toElement().text().latin1() );
                             KActionMenu * subMenu = new KActionMenu( group, actionCollection() );
                             parentMenu->insert( subMenu );
