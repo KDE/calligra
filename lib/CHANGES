@@ -37,6 +37,7 @@ KoSpell:
 - Improved configure check for libaspell
 - Fixed confusion with ispell's dictionaries which made it forget the chosen dictionary (#71002)
 - Fixed multiple connections in spell dialog, which made it skip some words (#75532)
+- Use ISO-8859-1 with ispell if the user has chosen ISO-8859-15 (#33108)
 
 KoWMF:
 - Fixed infinite loop on invalid WMF file
