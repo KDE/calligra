@@ -672,7 +672,7 @@ void KoMainWindow::slotHelpAbout()
                                           kapp->caption(),
                                           KDialogBase::Ok, KDialogBase::Ok, this, 0, true );
     dia->setTitle( kapp->caption() );
-    dia->setProduct( "", "pre-Beta1", "the KOffice Team", "1998-2000" );
+    dia->setProduct( "", "1.0", "the KOffice Team", "1998-2000" );
     dia->setImage( locate( "data", "koffice/pics/koffice-logo.png" ) );
     dia->exec();
     delete dia;
