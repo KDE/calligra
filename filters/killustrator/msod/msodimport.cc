@@ -41,14 +41,38 @@ MSODImport::~MSODImport()
 const bool MSODImport::filter(
     const QString &fileIn,
     const QString &fileOut,
-    const QString& from,
-    const QString& to,
-    const QString &)
+    const QString &from,
+    const QString &to,
+    const QString &config)
 {
     if (to != "application/x-killustrator" || from != "image/x-msod")
         return false;
 
-kdError(s_area) << "MSODImport::filter" << endl;
+    // Get configuration data: the shape id, and any delay stream that we were given.
+
+    unsigned shapeId = (unsigned)-1;
+    const char *delayStream = 0L;
+    QStringList args = QStringList::split(";", config);
+    unsigned i;
+
+    for (i = 0; i < args.count(); i++)
+    {
+        if (args[i].startsWith("shape-id="))
+        {
+            shapeId = args[i].mid(9).toUInt();
+        }
+        else
+        if (args[i].startsWith("delay-stream="))
+        {
+            delayStream = (const char *)args[i].mid(13).toULong();
+        }
+        else
+        {
+            kdError(s_area) << "Invalid argument: " << args[i] << endl;
+            return false;
+        }
+    }
+
     m_text = "";
     m_text += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     m_text += "<!DOCTYPE killustrator>\n";
@@ -61,10 +85,9 @@ kdError(s_area) << "MSODImport::filter" << endl;
     m_text += "</head>\n";
     m_text += "<layer>\n";
 
-kdError(s_area) << "MSODImport::calling parse" << endl;
-    if (!parse(fileIn))
+kdError(s_area) << "MSODImport::calling parse: " << config << endl;
+    if (!parse(shapeId, fileIn, delayStream))
         return false;
-kdError(s_area) << "MSODImport::filter" << endl;
 
     emit sigProgress(100);
 

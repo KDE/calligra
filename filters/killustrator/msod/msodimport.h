@@ -64,11 +64,11 @@ protected:
 private:
     // Debug support.
 
-    static const int s_area = 38000;
+    static const int s_area = 30505;
 
-    QString m_text;
     void pointArray(
         const QPointArray &points);
+    QString m_text;
 };
 
 #endif

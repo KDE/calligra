@@ -36,6 +36,11 @@ Msod::~Msod()
 {
 }
 
+double Msod::from1616ToDouble(U32 value)
+{
+    return (value >> 16) + 65535.0 / (double)(value & 0xffff);
+}
+
 //
 //
 //
@@ -135,22 +140,27 @@ void Msod::invokeHandler(
 //
 
 bool Msod::parse(
-    const QString &file)
+    unsigned shapeId,
+    const QString &fileIn,
+    const char *delayStream)
 {
-    QFile in(file);
+kdError(s_area) << "MSOD::parse" << fileIn << endl;
+    QFile in(fileIn);
     if (!in.open(IO_ReadOnly))
     {
-        kdError(s_area) << "Unable to open input file!" << endl;
+        kdError(s_area) << "Unable to open: " << fileIn << endl;
         in.close();
         return false;
     }
-
     QDataStream st(&in);
     st.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
+    m_requestedShapeId = shapeId;
+    m_isRequiredDrawing = false;
+    m_delayStream = delayStream;
 
     // Read bits.
 
-    while (!st.eof())
+//    while (!st.eof())
     {
         if (in.size() & 1)
         {
@@ -216,7 +226,6 @@ void Msod::opBlip(MSOFBH &, U32, QDataStream &)
 
 void Msod::opBse(MSOFBH &op, U32 byteOperands, QDataStream &operands)
 {
-
     // GEL provided types...
 
     typedef enum
@@ -342,11 +351,16 @@ void Msod::opDg(MSOFBH &, U32 byteOperands, QDataStream &operands)
 {
     struct
     {
-        U32 csp;        // The number pof shapes in this drawing.
+        U32 csp;        // The number of shapes in this drawing.
         U32 spidCur;    // The last shape ID given to an SP in this DG.
     } data;
 
     operands >> data.csp >> data.spidCur;
+    m_isRequiredDrawing = (m_requestedShapeId == data.spidCur);
+    if (m_isRequiredDrawing)
+    {
+        kdDebug(s_area) << "found requested drawing" << endl;
+    }
     skip(byteOperands - sizeof(data), operands);
 }
 
@@ -407,33 +421,96 @@ void Msod::opOpt(MSOFBH &, U32 byteOperands, QDataStream &operands)
             U16 fComplex: 1;
         } fields;
     } opcode;
-    U16 value;
+    U32 value;
     U16 length = 0;
     U16 complexLength = 0;
 
-if (1)
-{
-    skip(byteOperands, operands);
-    return;
-}
-else
-{
+    double m_rotation = 0.0;
+    U32 m_pib = 0;
+    U32 m_pictureId = 0;
+    bool m_fNoHitTestPicture = false;
+    bool m_pictureGray = false;
+    bool m_pictureBiLevel = false;
+    bool m_pictureActive = false;
+
+    bool m_fFilled = true;
+    bool m_fHitTestFill = true;
+    bool m_fillShape = true;
+    bool m_fillUseRect = false;
+    bool m_fNoFillHitTest = false;
+
+    U32 m_lineWidth = 9525;
+
+    bool m_fArrowheadsOK = false;
+    bool m_fLine = true;
+    bool m_fHitTestLine = true;
+    bool m_lineFillShape = true;
+    bool m_fNoLineDrawDash = false;
+
+    bool m_fOleIcon = false;
+    bool m_fPreferRelativeResize = false;
+    bool m_fLockShapeType = false;
+    bool m_fDeleteAttachedObject = false;
+    bool m_fBackground = false;
     while (length + complexLength < (int)byteOperands)
     {
         operands >> opcode.info >> value;
         length += 4;
-//        kdError(s_area) << "opt: fComplex: " << opcode.fields.fComplex << endl;
-//        kdError(s_area) << "opt: fBid: " << opcode.fields.fBid << endl;
-//        kdError(s_area) << "opt: pid: " << opcode.fields.pid << endl;
         if (opcode.fields.fComplex)
         {
             complexLength += value;
-            kdError(s_area) << "opt: complex: " << complexLength << endl;
         }
-        kdError(s_area) << "opt: " << length << " " << byteOperands << endl;
+
+        // Now squirrel away the option value.
+
+        switch (opcode.fields.pid)
+        {
+        case 4:
+            m_rotation = from1616ToDouble(value);
+            break;
+        case 260:
+            m_pib = value;
+            break;
+        case 267:
+            m_pictureId = value;
+            break;
+        case 319:
+            m_fNoHitTestPicture = (value & 0x0008) != 0;
+            m_pictureGray = (value & 0x0004) != 0;
+            m_pictureBiLevel = (value & 0x0002) != 0;
+            m_pictureActive = (value & 0x0001) != 0;
+            break;
+        case 447:
+            m_fFilled = (value & 0x0010) != 0;
+            m_fHitTestFill = (value & 0x0008) != 0;
+            m_fillShape = (value & 0x0004) != 0;
+            m_fillUseRect = (value & 0x0002) != 0;
+            m_fNoFillHitTest = (value & 0x0001) != 0;
+            break;
+        case 459:
+            m_lineWidth = value;
+            break;
+        case 511:
+            m_fArrowheadsOK = (value & 0x0010) != 0;
+            m_fLine = (value & 0x0008) != 0;
+            m_fHitTestLine = (value & 0x0004) != 0;
+            m_lineFillShape = (value & 0x0002) != 0;
+            m_fNoLineDrawDash = (value & 0x0001) != 0;
+            break;
+        case 831:
+            m_fOleIcon = (value & 0x0010) != 0;
+            m_fPreferRelativeResize = (value & 0x0008) != 0;
+            m_fLockShapeType = (value & 0x0004) != 0;
+            m_fDeleteAttachedObject = (value & 0x0002) != 0;
+            m_fBackground = (value & 0x0001) != 0;
+            break;
+        default:
+            kdDebug(s_area) << "opOpt: unsupported option: " <<
+                opcode.fields.pid << endl;
+            break;
+        }
     }
     skip(complexLength, operands);
-}
 }
 
 void Msod::opRegroupitems(MSOFBH &, U32, QDataStream &)
@@ -728,19 +805,19 @@ void Msod::opSp(MSOFBH &op, U32 byteOperands, QDataStream &operands)
         operands >> data.spid >> data.grfPersistent.info;
         byteOperands -= sizeof(data);
         kdDebug(s_area) << "opSp: opcode: " << funcTab[i].name <<
-            (data.grfPersistent.fields.fGroup ? "" : " group") <<
-            (data.grfPersistent.fields.fChild ? "" : " child") <<
-            (data.grfPersistent.fields.fPatriarch ? "" : " patriarch") <<
-            (data.grfPersistent.fields.fDeleted ? "" : " deleted") <<
-            (data.grfPersistent.fields.fOleShape ? "" : " oleshape") <<
-            (data.grfPersistent.fields.fHaveMaster ? "" : " master") <<
-            (data.grfPersistent.fields.fFlipH ? "" : " flipv") <<
-            (data.grfPersistent.fields.fConnector ? "" : " connector") <<
-            (data.grfPersistent.fields.fHaveAnchor ? "" : " anchor") <<
-            (data.grfPersistent.fields.fBackground ? "" : " background") <<
-            (data.grfPersistent.fields.fHaveSpt ? "" : " spt") <<
+            (data.grfPersistent.fields.fGroup ? " group" : "") <<
+            (data.grfPersistent.fields.fChild ? " child" : "") <<
+            (data.grfPersistent.fields.fPatriarch ? " patriarch" : "") <<
+            (data.grfPersistent.fields.fDeleted ? " deleted" : "") <<
+            (data.grfPersistent.fields.fOleShape ? " oleshape" : "") <<
+            (data.grfPersistent.fields.fHaveMaster ? " master" : "") <<
+            (data.grfPersistent.fields.fFlipH ? " flipv" : "") <<
+            (data.grfPersistent.fields.fConnector ? " connector" : "") <<
+            (data.grfPersistent.fields.fHaveAnchor ? " anchor" : "") <<
+            (data.grfPersistent.fields.fBackground ? " background" : "") <<
+            (data.grfPersistent.fields.fHaveSpt ? " spt" : "") <<
             " operands: " << byteOperands << endl;
-        if (data.grfPersistent.fields.fDeleted)
+        if (data.grfPersistent.fields.fDeleted || !m_isRequiredDrawing)
             skip(byteOperands, operands);
         else
             (this->*result)(op, byteOperands, operands);

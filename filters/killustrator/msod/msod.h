@@ -29,7 +29,6 @@ DESCRIPTION
 #define MSOD_H
 
 class QString;
-class QDatastream;
 class QPointArray;
 
 class Msod
@@ -42,10 +41,13 @@ public:
         unsigned dpi);
     virtual ~Msod();
 
-    // Called to parse the given file.
+    // Called to parse the given file. We extract a drawing by shapeId.
+    // If the drawing is not found, the return value will be false.
 
     bool parse(
-        const QString &file);
+        unsigned shapeId,
+        const QString &fileIn,
+        const char *delayStream);
 
     // Should be protected...
 
@@ -76,7 +78,7 @@ protected:
 private:
     // Debug support.
 
-    static const int s_area = 30504;
+    static const int s_area = 30505;
 
     // Use unambiguous names for Microsoft types.
 
@@ -85,28 +87,9 @@ private:
     typedef unsigned int U32;
 
     unsigned m_dggError;
-
-    static unsigned walkFile(
-        const U8 *in,
-        U32 count,
-        U32 shapeId,
-        const U8 *pictureStream,
-//        MSOBLIPTYPE *pictureType,
-        U32 *pictureLength,
-        const U8 **pictureData);
-
-
-    // Extract a picture from Drawing File by shapeId. If the picture is found,
-    // the pictureLength will be a non-zero value.
-
-    static void getDrawing(
-        const U8 *in,
-        U32 count,
-        U32 shapeId,
-        const U8 *pictureStream,
-//        MSOBLIPTYPE *pictureType,
-        U32 *pictureLength,
-        const U8 **pictureData);
+    unsigned m_requestedShapeId;
+    bool m_isRequiredDrawing;
+    const char *m_delayStream;
 
     // Common Header (MSOBFH)
 
@@ -168,6 +151,8 @@ private:
 
     void shpPictureFrame(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
     void shpRectangle(MSOFBH &op, U32 byteOperands, QDataStream &operands);                                                               // do nothing
+
+    double from1616ToDouble(U32 value);
 };
 
 #endif
