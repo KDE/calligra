@@ -22,7 +22,12 @@ public:
             { return m_filename == other.m_filename && m_timestamp == other.m_timestamp; }
 
         bool operator<( const Key &other ) const
-            { return m_filename < other.m_filename && m_timestamp < other.m_timestamp; }
+            {
+                register bool res = m_filename < other.m_filename;
+                if ( m_timestamp.isValid() && other.m_timestamp.isValid() )
+                    res &= m_timestamp < other.m_timestamp;
+                return res;
+            }
 
         QString m_filename;
         QDateTime m_timestamp;
