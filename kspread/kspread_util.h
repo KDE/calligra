@@ -20,18 +20,76 @@
 #ifndef __kspread_util_h__
 #define __kspread_util_h__
 
-#include "kspread.h"
-
 #include <qstring.h>
 #include <qrect.h>
 
 class KSpreadMap;
 class KSpreadTable;
+class KSpreadCell;
 
-KSpread::Cell util_parseCell( const char *_str );
-KSpread::Cell util_parseCell( const char *_str, KSpreadMap* _map );
-KSpread::Range util_parseRange( const char *_str );
-KSpread::Range util_parseRange2( const char *_str, KSpreadMap* _map );
+struct KSpreadPoint
+{
+public:
+  KSpreadPoint() { pos.setX( -1 ); table = 0; columnFixed = false; rowFixed = false; }
+  KSpreadPoint( const QString& );
+  KSpreadPoint( const QString&, KSpreadMap* );
+  KSpreadPoint( const KSpreadPoint& c ) {
+    pos = c.pos;
+    table = c.table; tableName = c.tableName;
+    columnFixed = c.columnFixed;
+    rowFixed = c.rowFixed;
+  }
+ 
+  bool isValid() const { return ( pos.x() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
+  bool isTableKnown() const { return ( table != 0 ); }
+  
+  KSpreadTable* table;
+  QString tableName;
+  QPoint pos;
+  bool columnFixed;
+  bool rowFixed;
+
+private:
+  void init( const QString& );
+};
+
+struct KSpreadRange
+{
+  KSpreadRange() { table = 0; range.setLeft( -1 ); }
+  KSpreadRange( const QString& );
+  KSpreadRange( const QString&, KSpreadMap* );
+  KSpreadRange( const KSpreadRange& r ) {
+    table = r.table;
+    tableName = r.tableName;
+    range = r.range;
+  }
+  KSpreadRange( const KSpreadPoint& ul, const KSpreadPoint& lr )
+  {
+    range = QRect( ul.pos, lr.pos );
+    if ( ul.tableName != lr.tableName )
+    {
+      range.setLeft( -1 );
+      return;
+    }
+    tableName = ul.tableName;
+    table = ul.table;
+    leftFixed = ul.columnFixed;
+    rightFixed = lr.columnFixed;
+    topFixed = ul.rowFixed;
+    bottomFixed = lr.rowFixed;
+  }
+  
+  bool isValid() const { return ( range.left() >= 0 && ( table != 0 || tableName.isEmpty() ) ); }
+  bool isTableKnown() const { return ( table != 0 ); }
+
+  KSpreadTable* table;
+  QString tableName;
+  QRect range;
+  bool leftFixed;
+  bool rightFixed;
+  bool topFixed;
+  bool bottomFixed;
+};
 
 QString util_cellName( int _col, int _row );
 QString util_rangeName( QRect _area );
@@ -39,3 +97,4 @@ QString util_rangeName( KSpreadTable *_table, QRect _area );
 QString util_columnLabel( int column );
 
 #endif
+
