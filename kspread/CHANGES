@@ -1,8 +1,13 @@
 Changes from 1.1 to 1.2
 =======================
 
+Since RC1:
+----------
+Bugfixes:
+- Fix display with special files (offset by 1 pixel).
+
 Until RC1:
-------------
+----------
 New:
 - Like all of KOffice: a readonly GUI for embedding into Konqueror
 - More DCOP calls
@@ -12,7 +17,7 @@ Bugfixes:
 - Fix cancel add embedded document.
 - Fix mem leak
 - Fix copy/paste attribute.
-- Fix display with special files (offset by 1 pixel).
+- Fix alignement of rotated text in one case (top/middle)
 
 Until beta2:
 ------------
