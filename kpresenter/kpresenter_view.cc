@@ -638,7 +638,11 @@ void KPresenterView::editDelPage()
 void KPresenterView::insertPage()
 {
     InsertPageDia dia( this, 0, TRUE );
+#if COPYOASISFORMAT
+    QString templ = locateLocal( "appdata", "default.oop" );
+#else
     QString templ = locateLocal( "appdata", "default.kpr" );
+#endif
     if ( !QFile::exists( templ ) ) {
         dia.radioDifferent->setChecked( TRUE );
         dia.radioDefault->setEnabled( FALSE );
@@ -648,8 +652,13 @@ void KPresenterView::insertPage()
 
     if (dia.radioCurrentDefault->isChecked())
     {
+#if COPYOASISFORMAT
+        QString file = locateLocal( "appdata", "default.oop" );
+        m_pKPresenterDoc->saveOasisPage( file, currPg, true /*ignore stickies*/ );
+#else
         QString file = locateLocal( "appdata", "default.kpr" );
         m_pKPresenterDoc->savePage( file, currPg, true /*ignore stickies*/ );
+#endif
     }
 
     InsertPos pos = (InsertPos)dia.locationCombo->currentItem();
@@ -1302,10 +1311,15 @@ void KPresenterView::extraCreateTemplate()
     int width = 60;
     int height = 60;
     QPixmap pix = m_pKPresenterDoc->generatePreview(QSize(width, height));
-
+#if COPYOASISFORMAT
+    KTempFile tempFile( QString::null, ".otp" );
+    tempFile.setAutoDelete( true );
+    m_pKPresenterDoc->saveOasisPage( tempFile.name(), getCurrPgNum() - 1);
+#else
     KTempFile tempFile( QString::null, ".kpt" );
     tempFile.setAutoDelete( true );
     m_pKPresenterDoc->savePage( tempFile.name(), getCurrPgNum() - 1);
+#endif
 
     KoTemplateCreateDia::createTemplate( "kpresenter_template", KPresenterFactory::global(),
                                          tempFile.name(), pix, this);
@@ -1316,8 +1330,13 @@ void KPresenterView::extraCreateTemplate()
 
 void KPresenterView::extraDefaultTemplate()
 {
+#if COPYOASISFORMAT
+    QString file = locateLocal( "appdata", "default.oop" );
+    m_pKPresenterDoc->saveOasisPage( file, currPg );
+#else
     QString file = locateLocal( "appdata", "default.kpr" );
     m_pKPresenterDoc->savePage( file, currPg );
+#endif
 }
 
 void KPresenterView::extraWebPres()
