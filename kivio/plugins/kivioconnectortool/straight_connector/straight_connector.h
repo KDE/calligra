@@ -38,14 +38,14 @@ class KivioPage;
 
 class KivioStraightConnector : public Kivio1DStencil
 {
-protected:
+  protected:
     KivioArrowHead *m_startAH;
     KivioArrowHead *m_endAH;
 
     bool loadArrowHeads( const QDomElement & );
     QDomElement saveArrowHeads( QDomDocument & );
 
-public:
+  public:
     KivioStraightConnector();
     virtual ~KivioStraightConnector();
 
@@ -76,18 +76,17 @@ public:
     virtual int endAHType()                     { return m_endAH->type(); }
     virtual double endAHWidth()                  { return m_endAH->width(); }
     virtual double endAHLength()                 { return m_endAH->length(); }
-
 };
 
 class KivioConnectorFactory : public KivioStencilFactory
 {
-	Q_OBJECT
-    public:
-    	KivioConnectorFactory(QObject *parent=0, const char* name=0, const QStringList& args = QStringList());
-	KivioStencil *NewStencil(const QString& name);
-	KivioStencil *NewStencil();
-    	QPixmap *GetIcon();
-    	KivioStencilSpawnerInfo *GetSpawnerInfo();
+  Q_OBJECT
+  public:
+    KivioConnectorFactory(QObject *parent=0, const char* name=0, const QStringList& args = QStringList());
+    KivioStencil *NewStencil(const QString& name);
+    KivioStencil *NewStencil();
+    QPixmap *GetIcon();
+    KivioStencilSpawnerInfo *GetSpawnerInfo();
 };
 
 #endif

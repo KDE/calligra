@@ -1,4 +1,4 @@
-SUBDIRS = straight_connector
+SUBDIRS = straight_connector polyline_connector
 lib_LTLIBRARIES =libkivioconnectortool.la
 
 
@@ -8,6 +8,7 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 	-I$(top_srcdir)/kivio/kiviopart/tools\
 	-I$(top_srcdir)/kivio/plugins/kivioconnectortool/straight_connector \
+	-I$(top_srcdir)/kivio/plugins/kivioconnectortool/polyline_connector \
 	$(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 libkivioconnectortool_la_METASOURCES = AUTO
 libkivioconnectortool_la_SOURCES = \

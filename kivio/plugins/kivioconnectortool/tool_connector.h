@@ -29,7 +29,7 @@ class KToggleAction;
 
 class KivioView;
 class KivioPage;
-class KivioStraightConnector;
+class Kivio1DStencil;
 class KivioCustomDragData;
 
 class ConnectorTool : public Kivio::MouseTool
@@ -68,17 +68,23 @@ class ConnectorTool : public Kivio::MouseTool
       stmNone,
       stmDrawRubber
     };
+    
+    enum {
+      StraightConnector,
+      PolyLineConnector
+    };
   
   private:
-    // Flag to indicate that we are drawing a rubber band
-    int m_mode;
+    int m_mode; // Flag to indicate that we are drawing a rubber band
+    int m_type; // Type of connector
     QCursor* m_pConnectorCursor1;
     QCursor* m_pConnectorCursor2;
-    KivioStraightConnector* m_pStencil;
+    Kivio1DStencil* m_pStencil;
     KoPoint startPoint;
     KivioCustomDragData* m_pDragData;
     
     KToggleAction* m_connectorAction;
+    KToggleAction* m_polyLineAction;
 };
 
 #endif

@@ -1,8 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KivioConnectorTool" library="libkivioconnectortool" version="3">
+<kpartgui name="KivioConnectorTool" library="libkivioconnectortool" version="4">
 <MenuBar>
   <Menu name="Tools">
     <Action name="connector"/>
+    <Action name="polyLineConnector"/>
   </Menu>
 </MenuBar>
 <ToolBar name="ToolsToolBar">
