@@ -66,7 +66,7 @@ void GraphiteView::layoutChanged(const QValueList<FxRect> &diff) {
     }
     // only minor stuff, avoid flicker
     else {
-        double oldZoom=GraphiteGlobal::self()->zoom();
+        double oldZoom=GraphiteGlobal::self()->zoomX(); // X==Y, as we have a view
         int dx=-m_canvas->contentsX();
         int dy=-m_canvas->contentsY();
         GraphiteGlobal::self()->setZoom(zoom());
@@ -257,7 +257,7 @@ void GraphiteView::setupRulers() {
 
     GraphiteGlobal *global=GraphiteGlobal::self();
     m_vert=new Ruler(this, m_canvas->viewport(), Qt::Vertical,
-                     m_doc->pageLayout(), global->zoomedResolution());
+                     m_doc->pageLayout(), global->zoomedResolutionY());
     m_vert->showMousePos(true);
     m_vert->setUnit(m_doc->unit());
     connect(m_vert, SIGNAL(unitChanged(Graphite::Unit)), m_doc,
@@ -267,7 +267,7 @@ void GraphiteView::setupRulers() {
             this, SLOT(borderChanged(const Graphite::PageBorders &)));
 
     m_horiz=new Ruler(this, m_canvas->viewport(), Qt::Horizontal,
-                     m_doc->pageLayout(), global->zoomedResolution());
+                     m_doc->pageLayout(), global->zoomedResolutionX());
     m_horiz->showMousePos(true);
     m_horiz->setUnit(m_doc->unit());
     connect(m_horiz, SIGNAL(unitChanged(Graphite::Unit)), m_doc,

@@ -34,7 +34,6 @@
 #include <float.h>
 
 bool operator==(const Gradient &lhs, const Gradient &rhs) {
-
     return lhs.ca==rhs.ca && lhs.cb==rhs.cb && lhs.type==rhs.type &&
            lhs.xfactor==rhs.xfactor && lhs.yfactor==rhs.yfactor;
 }
@@ -97,8 +96,7 @@ void rotatePoint(FxPoint &p, const double &angle, const FxPoint &center) {
     double px=p.x();
     double py=p.y();
     rotatePoint(px, py, angle, center.x(), center.y());
-    p.setX(px);
-    p.setY(py);
+    p.setPoint(px, py);
 }
 
 void scalePoint(int &x, int &y, const double &xfactor, const double &yfactor,
@@ -138,8 +136,7 @@ void scalePoint(FxPoint &p, const double &xfactor, const double &yfactor, const 
     double px=p.x();
     double py=p.y();
     scalePoint(px, py, xfactor, yfactor, center.x(), center.y());
-    p.setX(px);
-    p.setY(py);
+    p.setPoint(px, py);
 }
 
 PageBorders &PageBorders::operator=(const PageBorders &rhs) {
@@ -226,18 +223,19 @@ void PageLayout::saveDefaults() {
     config->writeEntry(QString::fromLatin1("Orientation"), static_cast<int>(orientation));
     config->writeEntry(QString::fromLatin1("Layout"), static_cast<int>(layout));
     config->writeEntry(QString::fromLatin1("Size"), static_cast<int>(size));
-    config->writeEntry(QString::fromLatin1("CustomWidth"), customWidth);
-    config->writeEntry(QString::fromLatin1("CustomHeight"), customHeight);
-    config->writeEntry(QString::fromLatin1("TopBorder"), borders.top);
-    config->writeEntry(QString::fromLatin1("LeftBorder"), borders.left);
-    config->writeEntry(QString::fromLatin1("RightBorder"), borders.right);
-    config->writeEntry(QString::fromLatin1("BottomBorder"), borders.bottom);
+    config->writeEntry(QString::fromLatin1("CustomWidth"), QString::number(customWidth, 'g', DBL_DIG));
+    config->writeEntry(QString::fromLatin1("CustomHeight"), QString::number(customHeight, 'g', DBL_DIG));
+    config->writeEntry(QString::fromLatin1("TopBorder"), QString::number(borders.top, 'g', DBL_DIG));
+    config->writeEntry(QString::fromLatin1("LeftBorder"), QString::number(borders.left, 'g', DBL_DIG));
+    config->writeEntry(QString::fromLatin1("RightBorder"), QString::number(borders.right, 'g', DBL_DIG));
+    config->writeEntry(QString::fromLatin1("BottomBorder"), QString::number(borders.bottom, 'g', DBL_DIG));
     config->sync();
 }
 
 void PageLayout::loadDefaults() {
 
     KConfig *config=KGlobal::config();
+    QString oldGroup=config->group();
     config->setGroup(QString::fromLatin1("PageLayout"));
     orientation=static_cast<KPrinter::Orientation>(config->readNumEntry(QString::fromLatin1("Orientation"), 0));
     if(config->readNumEntry(QString::fromLatin1("Layout"), 0)==0)
@@ -251,6 +249,7 @@ void PageLayout::loadDefaults() {
     borders.left=config->readDoubleNumEntry(QString::fromLatin1("LeftBorder"), 10.0);
     borders.right=config->readDoubleNumEntry(QString::fromLatin1("RightBorder"), 10.0);
     borders.bottom=config->readDoubleNumEntry(QString::fromLatin1("BottomBorder"), 10.0);
+    config->setGroup(oldGroup);
 }
 
 bool operator==(const PageLayout &lhs, const PageLayout &rhs) {
@@ -340,22 +339,28 @@ GraphiteGlobal *GraphiteGlobal::self() {
 
 void GraphiteGlobal::setHandleSize(const int &handleSize) {
     m_handleSize=handleSize;
-    m_handleOffset=qRound(static_cast<double>(handleSize)*0.5);
+    m_handleOffset=handleSize >> 1;
 }
 
 void GraphiteGlobal::setRotHandleSize(const int &rotHandleSize) {
     m_rotHandleSize=rotHandleSize;
-    m_rotHandleOffset=qRound(static_cast<double>(rotHandleSize)*0.5);
+    m_rotHandleOffset=rotHandleSize >> 1;
 }
 
-void GraphiteGlobal::setZoom(const double &zoom) {
-    m_zoom=zoom;
-    m_zoomedResolution=m_zoom*m_resolution;
+void GraphiteGlobal::setZoomX(const double &zoom) {
+    m_zoomX=zoom;
+    m_zoomedResolutionX=m_zoomX*m_resolution;
+}
+
+void GraphiteGlobal::setZoomY(const double &zoom) {
+    m_zoomY=zoom;
+    m_zoomedResolutionY=m_zoomY*m_resolution;
 }
 
 void GraphiteGlobal::setResoltuion(const int &resolution) {
     m_resolution=1.0/Graphite::inch2mm(1.0/static_cast<double>(resolution));
-    m_zoomedResolution=m_zoom*m_resolution;
+    m_zoomedResolutionX=m_zoomX*m_resolution;
+    m_zoomedResolutionY=m_zoomY*m_resolution;
 }
 
 QDomElement GraphiteGlobal::createElement(const QString &tagName, const QPen &pen, QDomDocument &doc) const {
@@ -471,15 +476,16 @@ FxRect GraphiteGlobal::toFxRect(const QDomElement &element) const {
 GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
                                    m_rotHandleSize(4), m_thirdHandleTrigger(20),
                                    m_handleOffset(2), m_rotHandleOffset(2),
-                                   m_zoom(1.0) {
+                                   m_zoomX(1.0), m_zoomY(1.0) {
     m_resolution=1.0/Graphite::inch2mm(1.0/static_cast<double>(QPaintDevice::x11AppDpiY()));  // we use *only* Y, because Qt also does that :)
-    m_zoomedResolution=m_zoom*m_resolution;
+    m_zoomedResolutionX=m_zoomX*m_resolution;
+    m_zoomedResolutionY=m_zoomY*m_resolution;
 }
 
 
 FxRect::FxRect(const FxPoint &topleft, const QSize &size) : m_tl(topleft) {
     m_br.setPxPoint(m_tl.pxX()+size.width(),
-        (m_tl.pxY()+size.height()));
+                    (m_tl.pxY()+size.height()));
 }
 
 FxRect FxRect::normalized() const {

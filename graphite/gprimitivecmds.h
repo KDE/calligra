@@ -48,6 +48,10 @@ public:
     const Property &newProperty() const { return m_newProperty; }
 
 private:
+    // Don't copy or assign this stuff
+    GenericCmd(const GenericCmd<Property, Function> &rhs);
+    GenericCmd &operator=(const GenericCmd<Property, Function> &rhs);
+
     GObject *m_object;
     Property m_oldProperty, m_newProperty;
 };

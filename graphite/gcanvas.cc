@@ -54,7 +54,8 @@ void GCanvas::showMousePos(bool show) {
 
 void GCanvas::resizeContentsMM(const double &x, const double &y) {
     GraphiteGlobal::self()->setZoom(m_view->zoom());
-    double zoomedRes=GraphiteGlobal::self()->zoomedResolution();
+    // no need to fuss with X/Y as we set the same factor for X and Y above
+    double zoomedRes=GraphiteGlobal::self()->zoomedResolutionX();
     resizeContents(qRound(x*zoomedRes),
                    qRound(y*zoomedRes));
 }

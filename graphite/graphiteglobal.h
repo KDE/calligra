@@ -27,7 +27,7 @@
 #include <math.h>
 
 #ifndef DBL_MIN
-#define DBL_MIN          4.94065645841246544e-324
+#define DBL_MIN 2.2250738585072014e-308
 #endif
 
 class QPoint;
@@ -217,21 +217,27 @@ public:
     const int &thirdHandleTrigger() const { return m_thirdHandleTrigger; }
     void setThirdHandleTrigger(const int &thirdHandleTrigger) { m_thirdHandleTrigger=thirdHandleTrigger; }
 
-    // current zoom factor (for the "active" (read: being painted on currently) view), 1.0 == 100%
-    // This global zoom factor is needed that we don't have to get zoom factors in every single
+    // current zoom factors (for the "active" (read: being painted on currently) view), 1.0 == 100%
+    // This global zoom factors are needed that we don't have to get zoom factors in every single
     // Fx* Object
-    const double &zoom() const { return m_zoom; }
-    void setZoom(const double &zoom);
+    const double &zoomX() const { return m_zoomX; }
+    void setZoomX(const double &zoom);
+
+    const double &zoomY() const { return m_zoomY; }
+    void setZoomY(const double &zoom);
+
+    void setZoom(const double &zoom) { setZoomX(zoom); setZoomY(zoom); }
 
     // note: returns pixel per mm (not per inch!)
     const double &resolution() const { return m_resolution; }
     // note: set the dpi resolution!
     void setResoltuion(const int &resolution);
 
-    // To avoid uncounted zoom*resolution calculations we cache this
-    // value here...
-    // There's no way to set it, of course, but it will be kept up to date ;)
-    const double &zoomedResolution() const { return m_zoomedResolution; }
+    // To avoid uncounted zoom*resolution calculations we cache these
+    // values here...
+    // There's no way to set them, of course, but they will be kept up to date ;)
+    const double &zoomedResolutionX() const { return m_zoomedResolutionX; }
+    const double &zoomedResolutionY() const { return m_zoomedResolutionY; }
 
     QDomElement createElement(const QString &tagName, const QPen &pen, QDomDocument &doc) const;
     QPen toPen(const QDomElement &element) const;
@@ -246,7 +252,6 @@ public:
     // and initializes all the "global" vars.
 
 private:
-    //friend class gcc_you_freak;  // to avoid an ugly warning
     GraphiteGlobal();
     // don't try to copy or assing this object
     GraphiteGlobal(const GraphiteGlobal &rhs);
@@ -259,53 +264,68 @@ private:
     int m_thirdHandleTrigger;
     int m_handleOffset;
     int m_rotHandleOffset;
-    double m_zoom;
+    double m_zoomX, m_zoomY;
     double m_resolution;
-    double m_zoomedResolution;
+    double m_zoomedResolutionX, m_zoomedResolutionY;
 };
 
 
 // FxValue is the base for all coordinate classes. It "knows" the
 // accurate (read: double) value and the pixel value for the
 // current zoom factor (cache).
-class FxValue {
+template <const double& (GraphiteGlobal::* zoomedResolution)() const> class FxValue {
 
 public:
     FxValue() : m_value(0.0), m_pixel(0) {}
     explicit FxValue(const int &pixel) { setPxValue(pixel); }
     explicit FxValue(const double &value) : m_value(value) { recalculate(); }
-    FxValue(const FxValue &v) : m_value(v.value()) { recalculate(); }
+    FxValue(const FxValue<zoomedResolution> &rhs) : m_value(rhs.value()), m_pixel(rhs.pxValue()) {}
     ~FxValue() {}
 
-    inline FxValue &operator=(const FxValue &rhs);
+    FxValue &operator=(const FxValue<zoomedResolution> &rhs) {
+        m_value=rhs.value();
+        m_pixel=rhs.pxValue();
+        return *this;
+    }
 
     const double &value() const { return m_value; }
-    inline void setValue(const double &value);
+    void setValue(const double &value) {
+        m_value=value;
+        recalculate();
+    }
 
     const int &pxValue() const { return m_pixel; }
-    inline void setPxValue(const int &pixel);
+    void setPxValue(const int &pixel) {
+        m_value=static_cast<double>(pixel)/(GraphiteGlobal::self()->*zoomedResolution)();
+        m_pixel=pixel;
+    }
 
     // When the zoom factor and/or the resoltuion changes
     // we have to recalculate the pixel value
     // const, because it's more convenient and in fact the *real*
     // value remains the same... not bitwise const, though ;)
-    inline void recalculate() const;
+    void recalculate() const { m_pixel=qRound(m_value*(GraphiteGlobal::self()->*zoomedResolution)()); }
 
 private:
     double m_value;    // value in mm
     mutable int m_pixel;       // current pixel value (approximated, zoomed)
 };
 
+typedef FxValue<&GraphiteGlobal::zoomedResolutionX> FxValueX;
+typedef FxValue<&GraphiteGlobal::zoomedResolutionY> FxValueY;
+
 // compares the current pixel values!
-inline bool operator==(const FxValue &lhs, const FxValue &rhs) { return lhs.pxValue()==rhs.pxValue(); }
-inline bool operator!=(const FxValue &lhs, const FxValue &rhs) { return lhs.pxValue()!=rhs.pxValue(); }
+inline bool operator==(const FxValueX &lhs, const FxValueX &rhs) { return lhs.pxValue()==rhs.pxValue(); }
+inline bool operator!=(const FxValueX &lhs, const FxValueX &rhs) { return lhs.pxValue()!=rhs.pxValue(); }
+inline bool operator==(const FxValueY &lhs, const FxValueY &rhs) { return lhs.pxValue()==rhs.pxValue(); }
+inline bool operator!=(const FxValueY &lhs, const FxValueY &rhs) { return lhs.pxValue()!=rhs.pxValue(); }
 
 
 class FxPoint {
 
 public:
     FxPoint() {}
-    FxPoint(const FxValue &x, const FxValue &y) : m_x(x), m_y(y) {}
+    FxPoint(const FxValueX &x, const FxValueY &y) : m_x(x), m_y(y) {}
     explicit FxPoint(const QPoint &p) { setPxPoint(p); }
     FxPoint(const int &x, const int &y) { setPxPoint(x, y); }
     FxPoint(const double &x, const double &y) : m_x(x), m_y(y) {}
@@ -313,14 +333,14 @@ public:
 
     FxPoint &operator=(const FxPoint &rhs) { m_x=rhs.fx(); m_y=rhs.fy(); return *this; }
 
-    const FxValue &fx() const { return m_x; }
+    const FxValueX &fx() const { return m_x; }
     const double &x() const { return m_x.value(); }
-    void setX(const FxValue &x) { m_x=x; }
+    void setX(const FxValueX &x) { m_x=x; }
     void setX(const double &x) { m_x.setValue(x); }
 
-    const FxValue &fy() const { return m_y; }
+    const FxValueY &fy() const { return m_y; }
     const double &y() const { return m_y.value(); }
-    void setY(const FxValue &y) { m_y=y; }
+    void setY(const FxValueY &y) { m_y=y; }
     void setY(const double &y) { m_y.setValue(y); }
 
     const int &pxX() const { return m_x.pxValue(); }
@@ -329,7 +349,7 @@ public:
     const int &pxY() const { return m_y.pxValue(); }
     void setPxY(const int &y) { m_y.setPxValue(y); }
 
-    void setPoint(const FxValue &x, const FxValue &y) { m_x=x; m_y=y; }
+    void setPoint(const FxValueX &x, const FxValueY &y) { m_x=x; m_y=y; }
     void setPoint(const double &x, const double &y) { m_x.setValue(x); m_y.setValue(y); }
 
     const QPoint pxPoint() const { return QPoint(pxX(), pxY()); }
@@ -339,9 +359,9 @@ public:
     void recalculate() const { m_x.recalculate(); m_y.recalculate(); }
 
 private:
-    FxValue m_x, m_y;
+    FxValueX m_x;
+    FxValueY m_y;
 };
-
 
 // compares the px values!
 inline bool operator==(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()==rhs.fx() && lhs.fy()==rhs.fy(); }
@@ -427,27 +447,8 @@ FxRect operator&(const FxRect &lhs, const FxRect &rhs);
 bool operator==(const FxRect &lhs, const FxRect &rhs);
 bool operator!=(const FxRect &lhs, const FxRect &rhs);
 
+
 // some inline methods...
-inline FxValue &FxValue::operator=(const FxValue &rhs) {
-    setValue(rhs.value());
-    return *this;
-}
-
-inline void FxValue::setValue(const double &value) {
-    m_value=value;
-    recalculate();
-}
-
-inline void FxValue::setPxValue(const int &pixel) {
-    m_value=static_cast<double>(pixel)/GraphiteGlobal::self()->zoomedResolution();
-    m_pixel=pixel;
-}
-
-inline void FxValue::recalculate() const {
-    m_pixel=qRound(m_value*GraphiteGlobal::self()->zoomedResolution());
-}
-
-
 inline bool FxRect::isNull() const {
     return m_tl.x()==0.0 && m_tl.y()==0.0 && m_br.x()==-DBL_MIN && m_br.y()==-DBL_MIN;
 }

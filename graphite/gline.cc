@@ -259,7 +259,7 @@ const GLine *GLine::hit(const QPoint &p) const {
         double dx=m_b.x()-m_a.x();
         double dy=m_b.y()-m_a.y();
         double r=std::sqrt( dx*dx + dy*dy );
-        int ir=qRound(r*GraphiteGlobal::self()->GraphiteGlobal::zoomedResolution());
+        int ir=qRound(r*GraphiteGlobal::self()->GraphiteGlobal::zoomedResolutionX()); // X==Y!
         double alpha1=std::asin( Graphite::abs(dy)/r );
         double alpha;
 
