@@ -25,6 +25,9 @@
 #include "vvisitor.h"
 #include "vgradient.h"
 
+#include "svggraphiccontext.h"
+
+#include <qptrstack.h>
 
 class QTextStream;
 class VColor;
@@ -65,6 +68,8 @@ private:
 	QTextStream* m_stream;
 	QTextStream* m_defs;
 	QTextStream* m_body;
+
+	QPtrStack<SvgGraphicsContext>	m_gc;
 };
 
 #endif

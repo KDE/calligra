@@ -53,6 +53,7 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "karbonsvgexpo
 SvgExport::SvgExport( KoFilter*, const char*, const QStringList& )
 	: KoFilter()
 {
+	m_gc.setAutoDelete( true );
 }
 
 KoFilter::ConversionStatus
@@ -134,6 +135,10 @@ SvgExport::visitVDocument( VDocument& document )
 	// we dont need the selection anymore:
 	document.selection()->clear();
 
+	// set up gc
+	SvgGraphicsContext *gc = new SvgGraphicsContext;
+	m_gc.push( gc );
+
 	// export layers:
 	VVisitor::visitVDocument( document );
 
@@ -173,10 +178,13 @@ SvgExport::visitVComposite( VComposite& composite )
 	composite.saveSvgPath( d );
 	*m_body << " d=\"" << d << "\" " << endl;
 
-	if( composite.fillRule() == evenOdd )
-		*m_body << " fill-rule=\"evenodd\"";
-	else
-		*m_body << " fill-rule=\"nonzero\"";
+	if( composite.fillRule() != m_gc.current()->fillRule )
+	{
+		if( composite.fillRule() == evenOdd )
+			*m_body << " fill-rule=\"evenodd\"";
+		else
+			*m_body << " fill-rule=\"nonzero\"";
+	}
 
 	*m_body << " />" << endl;
 }
@@ -266,23 +274,31 @@ SvgExport::getFill( const VFill& fill )
 	else 
 		getHexColor( m_body, fill.color() );
 	*m_body << "\"";
-	*m_body << " fill-opacity=\"" << fill.color().opacity() << "\"";
+
+	if( fill.color().opacity() != m_gc.current()->fill.color().opacity() )
+		*m_body << " fill-opacity=\"" << fill.color().opacity() << "\"";
 }
 
 void
 SvgExport::getStroke( const VStroke& stroke )
 {
-	*m_body << " stroke=\"";
-	if( stroke.type() == VStroke::none )
-		*m_body << "none";
-	else if( stroke.type() == VStroke::grad )
-		getGradient( stroke.gradient() );
-	else
-		getHexColor( m_body, stroke.color() );
-	*m_body << "\"";
-	*m_body << " stroke-opacity=\"" << stroke.color().opacity() << "\"";
+	if( stroke.type() != m_gc.current()->stroke.type() )
+	{
+		*m_body << " stroke=\"";
+		if( stroke.type() == VStroke::none )
+			*m_body << "none";
+		else if( stroke.type() == VStroke::grad )
+			getGradient( stroke.gradient() );
+		else
+			getHexColor( m_body, stroke.color() );
+		*m_body << "\"";
+	}
 
-	*m_body << " stroke-width=\"" << stroke.lineWidth() << "\"";
+	if( stroke.color().opacity() != m_gc.current()->stroke.color().opacity() )
+		*m_body << " stroke-opacity=\"" << stroke.color().opacity() << "\"";
+
+	if( stroke.lineWidth() != m_gc.current()->stroke.lineWidth() )
+		*m_body << " stroke-width=\"" << stroke.lineWidth() << "\"";
 
 	if( stroke.lineCap() == VStroke::capButt )
 		*m_body << " stroke-linecap=\"butt\"";
@@ -291,15 +307,18 @@ SvgExport::getStroke( const VStroke& stroke )
 	else if( stroke.lineCap() == VStroke::capSquare )
 			*m_body << " stroke-linecap=\"square\"";
 
-	if( stroke.lineJoin() == VStroke::joinMiter )
+	if( stroke.lineJoin() != m_gc.current()->stroke.lineJoin() )
 	{
-		*m_body << " stroke-linejoin=\"miter\"";
-		*m_body << " stroke-miterlimit=\"" << stroke.miterLimit() << "\"";
+		if( stroke.lineJoin() == VStroke::joinMiter )
+		{
+			*m_body << " stroke-linejoin=\"miter\"";
+			*m_body << " stroke-miterlimit=\"" << stroke.miterLimit() << "\"";
+		}
+		else if( stroke.lineJoin() == VStroke::joinRound )
+			*m_body << " stroke-linejoin=\"round\"";
+		else if( stroke.lineJoin() == VStroke::joinBevel )
+				*m_body << " stroke-linejoin=\"bevel\"";
 	}
-	else if( stroke.lineJoin() == VStroke::joinRound )
-		*m_body << " stroke-linejoin=\"round\"";
-	else if( stroke.lineJoin() == VStroke::joinBevel )
-			*m_body << " stroke-linejoin=\"bevel\"";
 
 	// dash
 	if( stroke.dashPattern().array().count() > 0 )

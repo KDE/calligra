@@ -29,6 +29,7 @@
 #include <core/vfill.h>
 #include <core/vstroke.h>
 #include <core/vfillrule.h>
+#include "svggraphiccontext.h"
 
 class VGroup;
 class VComposite;
@@ -44,23 +45,6 @@ public:
 	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
 
 protected:
-	class GraphicsContext
-	{
-	public:
-		GraphicsContext()
-		{
-			stroke.setType( VStroke::none ); // default is no stroke
-			stroke.setLineWidth( 1.0 );
-			fill.setColor( VColor( Qt::black ) );
-			fillRule = evenOdd;
-		}
-		VFill		fill;
-		VFillRule	fillRule;
-		VStroke		stroke;
-		QWMatrix	matrix;
-		QFont		font;
-	};
-
 	class GradientHelper
 	{
 	public:
@@ -75,7 +59,7 @@ protected:
 
 	void parseGroup( VGroup *, const QDomElement & );
 	void parseStyle( VObject *, const QDomElement & );
-	void parsePA( VObject *, GraphicsContext *, const QString &, const QString & );
+	void parsePA( VObject *, SvgGraphicsContext *, const QString &, const QString & );
 	void parseGradient( const QDomElement & );
 	void parseColorStops( VGradient *, const QDomElement & );
 	double parseUnit( const QString &, bool horiz = false, bool vert = false, KoRect bbox = KoRect() );
@@ -91,7 +75,7 @@ protected:
 
 private:
 	VDocument						m_document;
-	QPtrStack<GraphicsContext>		m_gc;
+	QPtrStack<SvgGraphicsContext>	m_gc;
 	QMap<QString, GradientHelper>	m_gradients;
 	KoRect							m_outerRect;
 };

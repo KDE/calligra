@@ -119,7 +119,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 void
 SvgImport::convert()
 {
-	GraphicsContext *gc = new GraphicsContext;
+	SvgGraphicsContext *gc = new SvgGraphicsContext;
 	QDomElement docElem = inpdoc.documentElement();
 	KoRect bbox( 0, 0, 550.0, 841.0 );
 	double width	= !docElem.attribute( "width" ).isEmpty() ? parseUnit( docElem.attribute( "width" ), true, false, bbox ) : 550.0;
@@ -378,7 +378,7 @@ SvgImport::parseGradient( const QDomElement &e )
 }
 
 void
-SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, const QString &params )
+SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command, const QString &params )
 {
 	VColor fillcolor = gc->fill.color();
 	VColor strokecolor = gc->stroke.color();
@@ -515,7 +515,7 @@ SvgImport::parsePA( VObject *obj, GraphicsContext *gc, const QString &command, c
 void
 SvgImport::addGraphicContext()
 {
-	GraphicsContext *gc = new GraphicsContext;
+	SvgGraphicsContext *gc = new SvgGraphicsContext;
 	// set as default
 	if( m_gc.current() )
 		*gc = *( m_gc.current() );
@@ -525,7 +525,7 @@ SvgImport::addGraphicContext()
 void
 SvgImport::setupTransform( const QDomElement &e )
 {
-	GraphicsContext *gc = m_gc.current();
+	SvgGraphicsContext *gc = m_gc.current();
 
 	QWMatrix mat = VComposite::parseTransform( e.attribute( "transform" ) );
 	gc->matrix = mat * gc->matrix;
@@ -534,7 +534,7 @@ SvgImport::setupTransform( const QDomElement &e )
 void
 SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 {
-	GraphicsContext *gc = m_gc.current();
+	SvgGraphicsContext *gc = m_gc.current();
 	if( !gc ) return;
 
 	// try normal PA
