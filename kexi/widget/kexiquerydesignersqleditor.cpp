@@ -82,7 +82,7 @@ KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()
 }
 
 QString
-KexiQueryDesignerSQLEditor::getText()
+KexiQueryDesignerSQLEditor::text()
 {
 #ifndef Q_WS_WIN //(TEMP)
 	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_doc);

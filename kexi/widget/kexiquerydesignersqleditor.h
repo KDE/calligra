@@ -44,7 +44,7 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiViewBase
 		KexiQueryDesignerSQLEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		virtual ~KexiQueryDesignerSQLEditor();
 
-		QString		getText();
+		QString		text();
 		void		jump(int col);
 
 	public slots:
