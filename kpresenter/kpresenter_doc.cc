@@ -316,15 +316,26 @@ void KPresenterDoc::draw( QPaintDevice* /*_dev*/, long int /*_width*/, long int 
 bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
+    KPObject *kpobject = 0L;
 
     if ( saveOnlyPage == -1 ) // Don't save all children into template for one page
            // ###### TODO: save objects that are on that page
     {
       QListIterator<KoDocumentChild> it( children() );
       for( ; it.current(); ++it ) {
-        QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
-        if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
-        return false;
+          // Don't save children that are only in the undo/redo history
+          // but not anymore in the presentation
+          for ( unsigned int j = 0; j < _objectList->count(); j++ )
+          {
+              kpobject = _objectList->at( j );
+              if ( kpobject->getType() == OT_PART &&
+                   dynamic_cast<KPPartObject*>( kpobject )->getChild() == it.current() )
+              {
+                  QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
+                  if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
+                      return false;
+              }
+          }
       }
     }
     return true;
@@ -396,22 +407,32 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
     // Write "OBJECT" tag for every child
     QListIterator<KoDocumentChild> chl( children() );
     for( ; chl.current(); ++chl ) {
-	out << otag << "<EMBEDDED>" << endl;
+        // Don't save children that are only in the undo/redo history
+        // but not anymore in the presentation
+        for ( unsigned int j = 0; j < _objectList->count(); j++ )
+        {
+            kpobject = _objectList->at( j );
+            if ( kpobject->getType() == OT_PART &&
+                 dynamic_cast<KPPartObject*>( kpobject )->getChild() == chl.current() )
+            {
+                out << otag << "<EMBEDDED>" << endl;
 
-	KPresenterChild* curr = (KPresenterChild*)chl.current();
+                KPresenterChild* curr = (KPresenterChild*)chl.current();
 
-	curr->save( out );
+                curr->save( out );
 
-	out << otag << "<SETTINGS>" << endl;
-	for ( unsigned int i = 0; i < _objectList->count(); i++ ) {
-	    kpobject = _objectList->at( i );
-	    if ( kpobject->getType() == OT_PART &&
-		 dynamic_cast<KPPartObject*>( kpobject )->getChild() == curr )
-		kpobject->save( out );
-	}
-	out << etag << "</SETTINGS> "<< endl;
+                out << otag << "<SETTINGS>" << endl;
+                for ( unsigned int i = 0; i < _objectList->count(); i++ ) {
+                    kpobject = _objectList->at( i );
+                    if ( kpobject->getType() == OT_PART &&
+                         dynamic_cast<KPPartObject*>( kpobject )->getChild() == curr )
+                        kpobject->save( out );
+                }
+                out << etag << "</SETTINGS> "<< endl;
 
-	out << etag << "</EMBEDDED>" << endl;
+                out << etag << "</EMBEDDED>" << endl;
+            }
+        }
     }
 
     makeUsedPixmapList();
