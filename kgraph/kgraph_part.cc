@@ -78,6 +78,6 @@ void KGraphPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bool
 }
 
 void KGraphPart::a_editcut() {
-    kDebugInfo(31000, "KGraphPart: a_editcut called");
+    kdDebug(37001) << "KGraphPart: a_editcut called" << endl;
 }
 #include <kgraph_part.moc>

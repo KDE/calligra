@@ -22,20 +22,39 @@
 KGGroupPool *KGGroupPool::m_self=0L;
 
 KGGroupPool *KGGroupPool::self() {
+
     if(m_self==0L)
         m_self=new KGGroupPool;
     return m_self;
+}
+
+KGGroup *KGGroupPool::find(const int &id) {
+
+    for(KGGroup *tmp=pool.first(); tmp!=0L; tmp=pool.next()) {
+	if(tmp->id()==id)
+	    return tmp;
+    }
+    return 0L;
 }
 
 KGGroupPool::KGGroupPool() : KGGenericPool<KGGroup>() {
 }
 
 const bool KGGroupPool::remove(const unsigned int &index) {
-    // tell the objects that this group will be deleted (TODO)
     return pool.remove(index);
 }
 
 const bool KGGroupPool::remove(const KGGroup *group) {
-    // tell the objects that this group will be deleted (TODO)
     return pool.removeRef(group);
+}
+
+void KGGroupPool::add(const KGGroup *group) {
+    pool.append(group);
+}
+
+const KGGroup *KGGroupPool::createGroup(const QDomElement &element) {
+
+    KGGroup *tmp=new KGGroup(element);
+    pool.append(tmp);
+    return tmp;
 }

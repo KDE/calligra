@@ -39,14 +39,17 @@ public:
 
     KGGroup *find(const int &id);  // find the group via its ID
 
+    void add(const KGGroup *group);
     virtual const bool remove(const unsigned int &index);
     virtual const bool remove(const KGGroup *group);
-
+    
+    const KGGroup *createGroup(const QDomElement &element);
+    
 protected:
     KGGroupPool();
     virtual ~KGGroupPool() {}
 
-private:
+private:    
     static KGGroupPool *m_self;
 };
 #endif // kggrouppool_h

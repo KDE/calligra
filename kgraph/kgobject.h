@@ -25,7 +25,6 @@
 #include <qobject.h>
 #include <qbrush.h>
 #include <qpen.h>
-#include <qguardedptr.h>
 
 #include <kgraph_global.h>
 
@@ -34,7 +33,6 @@ class QDomDocument;
 class QPoint;
 class QRect;
 class QPainter;
-class QWMatrix;
 class KActionCollection;
 
 class KGGroup;
@@ -58,7 +56,7 @@ public:
 
     virtual ~KGObject();
 
-    virtual QDomElement save(const QDomDocument &doc) const; // save the object to xml
+    virtual QDomElement save(QDomDocument &doc) const; // save the object to xml
     // Just add this element to the one from the derived object. Call the KGObject()
     // CTOR on loading (from the virtual CTOR in the part)
 
@@ -70,34 +68,33 @@ public:
 
     const KActionCollection *popupActions() const { return popup; } // return all the actions provided from
                                                                     // that object. Don't forget to init it!
-
-    const QString &name() const { return m_name; } // name of the object (e.g. "Line001")
-    void setName(const QString &name);             // set the name
+    const QString &name() const { return m_name; }       // name of the object (e.g. "Line001")
+    void setName(const QString &name) { m_name=name; }   // set the name
 
     const QPoint origin() const { return m_origin; }  // the origin coordinate of the obj
-    virtual void setOrigin(const QPoint &origin);
-    virtual void moveX(const int &dx);
-    virtual void moveY(const int &dy);
-    virtual void move(const QSize &d);
+    virtual void setOrigin(const QPoint &origin) = 0;
+    virtual void moveX(const int &dx) = 0;
+    virtual void moveY(const int &dy) = 0;
+    virtual void move(const int &dx, const int &dy) = 0;
 
-    enum STATE { NO_HANDLES, HANDLES, ROTATION_HANDLES, INVISIBLE };   // all possible states
-    const STATE state() const { return m_state; }          // what's the current state?
-    virtual void setState(const STATE state);              // set the state
-    const KGGroup *temporaryGroup() const { return tempGroup; }
-    virtual void setTemporaryGroup(const KGGroup *group);  // temporary group during a "select" state
+    enum STATE { VISIBLE, HANDLES, ROTATION_HANDLES, INVISIBLE, DELETED };   // all possible states
+    const STATE state() const { return m_state; }               // what's the current state?
+    virtual void setState(const STATE state) { m_state=state; } // set the state
 
+    const KGGroup *temporaryGroup() const { return tmpGroup; }
+    virtual const bool setTemporaryGroup(KGGroup *group);  // temporary group during a "select" state
     const KGGroup *group() const { return m_group; }       // are we in a group? which one?
-    virtual void setGroup(const KGGroup *group);           // set the group
+    virtual const bool setGroup(KGGroup *group);           // set the group
 
     enum FILL_STYLE { BRUSH, GRADIENT };                   // all possible fill styles
     const FILL_STYLE fillStyle() const { return m_fillStyle; }
-    virtual void setFillStyle(const FILL_STYLE &fillStyle);
+    virtual void setFillStyle(const FILL_STYLE &fillStyle) { m_fillStyle=fillStyle; }
     const QBrush brush() const { return m_brush; }         // Fill style (brush)
-    virtual void setBrush(const QBrush &brush);
+    virtual void setBrush(const QBrush &brush) { m_brush=brush; }
     const Gradient gradient() const { return m_gradient; } // Gradient filled
-    virtual void setGradient(const Gradient &gradient);
+    virtual void setGradient(const Gradient &gradient) { m_gradient=gradient; }
     const QPen pen() const { return m_pen; }               // Pen for the lines
-    virtual void setPen(const QPen &pen);
+    virtual void setPen(const QPen &pen) { m_pen=pen; }
 
 signals:
     void requestRepaint();                     // request a complete repaint
@@ -109,7 +106,7 @@ protected:
     KGObject(const QDomElement &element);        // create an object from xml (loading)
 
     STATE m_state;                               // are there handles to draw or not?
-    QGuardedPtr<KGGroup> tempGroup;
+    KGGroup *tmpGroup;
 
     mutable bool boundingRectDirty;              // is the cached bounding rect still correct?
     mutable QRect bounds;                        // bounding rect (cache)
@@ -121,10 +118,11 @@ protected:
     QBrush m_brush;
     Gradient m_gradient;
     QPen m_pen;
-    QGuardedPtr<KGGroup> m_group;
+    KGGroup *m_group;
     QPoint m_origin;
 
 private:
     KGObject &operator=(const KGObject &rhs);    // don't assign the objects, clone them
+    void initActionCollection();
 };
 #endif

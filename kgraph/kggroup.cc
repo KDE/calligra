@@ -17,8 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kggroup.h>
 #include <qdom.h>
+
+#include <kdebug.h>
+#include <kggroup.h>
 
 int KGGroup::ID=0;
 
@@ -41,14 +43,23 @@ KGGroup::KGGroup(const QDomElement &element) : m_exclusive(true),
 }
 
 KGGroup::~KGGroup() {
+
+    for(KGObject *tmp=members.first(); tmp!=0; tmp=members.next()) {
+	if(tmp->group()==this)
+	    tmp->setGroup(0L);
+	else if(tmp->temporaryGroup()==this)
+	    tmp->setTemporaryGroup(0L);
+	else
+	    kdWarning(37001) << "KGGroup::~KGGroup(): Member had no ptr to this group!" << endl;
+    }
     members.clear();
 }
 
 const bool KGGroup::isExclusive() {
-    
+
     if(m_exclCache)
 	return m_exclusive;
-    
+
     m_exclusive=true;
     m_exclCache=true;
     const char *firstName=members.first()->className();
@@ -56,7 +67,7 @@ const bool KGGroup::isExclusive() {
 	if(strcmp(firstName, tmp->className())!=0) {
 	    m_exclusive=false;
 	}
-    }   
+    }
     return m_exclusive;
 }
 
@@ -69,7 +80,7 @@ const QDomElement KGGroup::save(QDomDocument &document) {
 }
 
 void KGGroup::addMember(KGObject *member) {
-    
+
     if(!members.findRef(member)) {
 	members.append(member);
 	m_exclCache=false;
@@ -84,11 +95,11 @@ const bool KGGroup::changeProperty(const char *property, const QVariant &value,
 				   const KGObject *object) {
     if(!m_active)
 	return false;
-    
+
     bool ok=false;
-    
+
     // propagate it to all objects (if possible)
-    if(object==0L) {    
+    if(object==0L) {
 	for(KGObject *tmp=members.first(); tmp!=0L; tmp=members.next()) {
 	    if(tmp->setProperty(property, value))
 		ok=true;  // at least one successful change

@@ -37,26 +37,33 @@ public:
     KGGroup();                           // creates an empty group with a unique ID
     KGGroup(const QDomElement &element); // "loads" a group from XML
     ~KGGroup();
+    
+    // These methods are needed to give the KGObjects access to
+    // their "sisters" and "brothers" in the group :)
+    const KGObject *firstMember() { return members.first(); }
+    const KGObject *nextMember() { return members.next(); }
+    const KGObject *lastMember() { return members.last(); }
+    const KGObject *prevMember() { return members.prev(); }
 
     const int id() const { return m_id; }
-    
+
     const bool active() const { return m_active; }
     void setActive(const bool &active=true) { m_active=active; }
-    
+
     const bool isExclusive();
-    
+
     const QDomElement save(QDomDocument &document);  // save the group
 
     void addMember(KGObject *member);
     void removeMember(KGObject *member);
-    
+
     // changes a specific property - if object is 0L it tries to change
     // the prop. for all members, if it isn't 0L, then it changes only
     // members which are of the same type as object
     const bool changeProperty(const char *property, const QVariant &value,
-			      const KGObject *object=0L); 
+			      const KGObject *object=0L);
 
-private:    
+private:
     QList<KGObject> members;
     static int ID;      // This is the common counter for a unique group ID
     int m_id;           // This is the id of this group

@@ -42,12 +42,11 @@ public:
 
 protected:
     KGGenericPool() { pool.setAutoDelete(true); }
-    virtual ~KGGenericPool() { pool.clear(); } 
-    
+    virtual ~KGGenericPool() { pool.clear(); }
+
     QList<type> pool;
 
 private:
     KGGenericPool &operator=(const KGGenericPool &rhs);
-
 };
 #endif // kggenericpool_h

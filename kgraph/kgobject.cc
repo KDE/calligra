@@ -18,52 +18,62 @@
 */
 
 // kinda dummy file at the moment :)
-#include <kgobject.h>
 #include <qdom.h>
+
+#include <kaction.h>
+#include <kgobject.h>
+#include <kggroup.h>
 
 
 KGObject::~KGObject() {
-    // (TODO) remove this object from all groups!
+    
+    if(m_group!=0L)
+	m_group->removeMember(this);
+    if(tmpGroup!=0L)
+	tmpGroup->removeMember(this);
 }
 
-QDomElement KGObject::save(const QDomDocument &/*doc*/) const {
-    return QDomElement();
+QDomElement KGObject::save(QDomDocument &doc) const {
+
+    QDomElement e=doc.createElement("kgobject");
+    e.setAttribute("name", m_name);
+    // TODO
+    return e;
 }
 
-void KGObject::setOrigin(const QPoint &/*origin*/) {
+const bool KGObject::setTemporaryGroup(KGGroup *group) {
+    
+    if(group==m_group) 
+	return false;
+    group->addMember(this);
+    tmpGroup=group;
+    return true;
 }
 
-void KGObject::moveX(const int &/*dx*/) {
+const bool KGObject::setGroup(KGGroup *group) {
+    
+    if(group==tmpGroup) 
+	return false;
+    group->addMember(this);
+    m_group=group;
+    return true;
 }
 
-void KGObject::moveY(const int &/*dy*/) {
+KGObject::KGObject(const QString &name) : QObject(0L, name.local8Bit()),
+					  m_name(name) {
 }
 
-void KGObject::move(const QSize &/*d*/) {
+KGObject::KGObject(const KGObject &rhs) : QObject(0L, rhs.name().local8Bit()) {
+    // TODO
 }
 
-void KGObject::setState(const STATE /*state*/) {
+KGObject::KGObject(const QDomElement &/*element*/) : QObject() {
+    // TODO
 }
 
-void KGObject::setTemporaryGroup(const KGGroup */*group*/) {
-}
+void KGObject::initActionCollection() {
 
-void KGObject::setFillStyle(const FILL_STYLE &/*fillStyle*/) {
+    popup=new KActionCollection();
+    // TODO: Add common actions here (e.g. Delete, Cut,...)???
 }
-
-void KGObject::setGroup(const KGGroup */*group*/) {
-}
-
-void KGObject::setBrush(const QBrush &/*brush*/) {
-}
-
-void KGObject::setGradient(const Gradient &/*gradient*/) {
-}
-
-void KGObject::setPen(const QPen &/*pen*/) {
-}
-
-void KGObject::setName(const QString &/*name*/) {
-}
-
 #include <kgobject.moc>
