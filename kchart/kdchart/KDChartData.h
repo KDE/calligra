@@ -36,7 +36,7 @@
 #include <values.h>
 #else
 #include <float.h>
-#define MINDOUBLE DBL_MIN
+#define KDCHART_MINDOUBLE DBL_MIN
 #endif
 
 #include "KDChartGlobal.h"
@@ -114,7 +114,7 @@ public:
     }
     double doubleValue() const
     {
-        return isDouble() ? dValue : MINDOUBLE;
+        return isDouble() ? dValue : KDCHART_MINDOUBLE;
     }
     QDateTime dateTimeValue() const
     {

@@ -39,12 +39,12 @@
 #include <limits.h>
 #include <math.h>
 #define MAXDOUBLE DBL_MAX
-#define MINDOUBLE DBL_MIN
+#define KDCHART_MINDOUBLE DBL_MIN
 #define std
 #elif defined __APPLE__
 #include <float.h>
 #define MAXDOUBLE DBL_MAX
-#define MINDOUBLE DBL_MIN
+#define KDCHART_MINDOUBLE DBL_MIN
 #else
 #if defined(__FreeBSD__)
 #include <float.h>
@@ -758,7 +758,7 @@ inline double KDChartTableData::minInColumn( uint col ) const
 
 inline double KDChartTableData::maxInRow( uint row ) const
 {
-    double maxValue = MINDOUBLE;
+    double maxValue = KDCHART_MINDOUBLE;
     bool bStart = true;
     if ( UINT_MAX > row ) {
         for ( uint col = 0; col < usedCols(); col++ ) {
