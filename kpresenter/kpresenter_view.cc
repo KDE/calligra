@@ -434,13 +434,13 @@ void KPresenterView::insertPage()
 	insPageDia = 0;
     }
 
-    KURL url = m_pKPresenterDoc->url(); // Why ? insPageDia changes the url ? (David)
+    //KURL url = m_pKPresenterDoc->url(); // Why ? insPageDia changes the url ? (David)
     insPageDia = new InsPageDia( this, "", m_pKPresenterDoc, getCurrPgNum() );
     insPageDia->setCaption( i18n( "KPresenter - Insert Page" ) );
     QObject::connect( insPageDia, SIGNAL( insertPage( int, InsPageMode, InsertPos ) ),
 		      this, SLOT( insPageOk( int, InsPageMode, InsertPos ) ) );
     insPageDia->show();
-    m_pKPresenterDoc->setURL( url );
+    //m_pKPresenterDoc->setURL( url );
 }
 
 /*====================== insert a picture =======================*/
@@ -916,7 +916,7 @@ void KPresenterView::extraWebPres()
 				   i18n( "Do you want to load a configuration which should be used for this\n"
 					 "Web-Presentation, which you have already saved earlier?" ),
 				   i18n( "&Yes" ), i18n( "&No" ), QString::null, 1, 1 ) == 0 )
-    {		   
+    {		
 #ifdef USE_QFD
 	config = QFileDialog::getOpenFileName( QString::null, "KPresenter Web-Presentation (*.kpweb)" );
 #else

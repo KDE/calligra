@@ -498,12 +498,6 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
     return true;
 }
 
-/*========================= load a template =====================*/
-bool KPresenterDoc::load_template( const QString &_url )
-{
-    return loadFromURL( KURL( _url ) );
-}
-
 /*========================== load ===============================*/
 bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 {
@@ -1384,34 +1378,35 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	_clean = clean;
 	objStartY = getPageSize( _backgroundList.count() - 1, 0, 0 ).y() + getPageSize( _backgroundList.count() - 1,
 											0, 0 ).height();
-	load_template( fileName );
+	bool ok = loadNativeFormat( fileName );
 	objStartY = 0;
 	_clean = true;
 	setModified(true);
-	setURL( QString::null );
-	return true;
+	resetURL();
+	return ok;
     } else if ( ret == KoTemplateChooseDia::File ||
                 ret == KoTemplateChooseDia::TempFile ) {
 	objStartY = 0;
 	_clean = true;
 	setModified(true);
-	load_template( _template );
+	QString fileName( _template );
+        KURL::encode( fileName );
+	bool ok = openURL( KURL( fileName ) );
         if ( ret == KoTemplateChooseDia::TempFile )
 	{
-	    setURL(KURL());
+	    resetURL();
 	    unlink( _template.ascii() );
-        } else
-	    setURL( _template );
-	return true;
+        }
+	return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	QString fileName( locate("kpresenter_template", "Screenpresentations/Plain.kpt",
 				 KPresenterFactory::global() ) );
 	objStartY = 0;
 	_clean = true;
 	setModified(true);
-	load_template( fileName );
-	setURL( QString::null );
-	return true;
+	bool ok = loadNativeFormat( fileName );
+	resetURL();
+	return ok;
     } else
 	return false;
 }
@@ -1424,8 +1419,8 @@ void KPresenterDoc::initEmpty()
   objStartY = 0;
   _clean = true;
   setModified(true);
-  load_template( fileName );
-  setURL( QString::null );
+  loadNativeFormat( fileName );
+  resetURL();
 }
 
 /*==================== set background color ======================*/
@@ -3300,14 +3295,14 @@ void KPresenterDoc::insertPage( int _page, InsPageMode _insPageMode, InsertPos _
 
 	if ( _insPos == IP_AFTER ) _page++;
 	objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
-	load_template( fileName.data() );
+	loadNativeFormat( fileName );
 	objStartY = 0;
 	_clean = true;
 	setModified(true);
 	KPBackGround *kpbackground = _backgroundList.at( _backgroundList.count() - 1 );
 	_backgroundList.take( _backgroundList.count() - 1 );
 	_backgroundList.insert( _page, kpbackground );
-	setURL( QString::null );
+	resetURL();
     }
 
     repaint( false );
@@ -3397,7 +3392,7 @@ void KPresenterDoc::savePage( const QString &file, int pgnum )
     tostrstream out( str );
 
     saveOnlyPage = pgnum;
-    saveToURL( file, "" );
+    saveNativeFormat( file );
     saveOnlyPage = -1;
 }
 

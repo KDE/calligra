@@ -109,7 +109,6 @@ public:
     virtual bool completeSaving( KoStore* _store );
 
     // load
-    virtual bool load_template( const QString &_url );
     virtual bool loadXML( KOMLParser&, KoStore* );
     virtual bool loadChildren( KoStore* _store );
 
