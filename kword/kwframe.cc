@@ -1056,27 +1056,32 @@ QPicture *KWFormulaFrameSet::getPicture()
 }
 #endif
 
-void KWFormulaFrameSet::drawContents(QPainter* painter, const QRect& crect,
-                                     QColorGroup&, bool /*onlyChanged*/)
+void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
+                                      QColorGroup& cg, bool /*onlyChanged*/ )
 {
-    QRegion reg = frameClipRegion(painter, frames.first(), crect);
-    if (!reg.isEmpty()) {
+    //kdDebug(32001) << "KWFormulaFrameSet::drawContents1" << endl;
+    QRegion reg = frameClipRegion( painter, frames.first(), crect );
+    if ( !reg.isEmpty() ) {
         painter->save();
-        painter->setClipRegion(reg);
-        formula->draw(*painter);
+        painter->setClipRegion( reg );
+        //painter->fillRect( reg.boundingRect(), cg.base() );
+        painter->fillRect( crect, cg.base() );
+        formula->draw( *painter );
         painter->restore();
     }
 }
 
-void KWFormulaFrameSet::drawContents(QPainter* painter, const QRect& crect,
-                                     QColorGroup&, bool,
-                                     KFormulaView* formulaView)
+void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
+                                      QColorGroup& cg, bool,
+                                      KFormulaView* formulaView )
 {
-    QRegion reg = frameClipRegion(painter, frames.first(), crect);
-    if (!reg.isEmpty()) {
+    //kdDebug(32001) << "KWFormulaFrameSet::drawContents2" << endl;
+    QRegion reg = frameClipRegion( painter, frames.first(), crect );
+    if ( !reg.isEmpty() ) {
         painter->save();
-        painter->setClipRegion(reg);
-        formulaView->draw(*painter, reg.boundingRect());
+        painter->setClipRegion( reg );
+        //formulaView->draw(*painter, reg.boundingRect(), cg);
+        formulaView->draw( *painter, crect, cg );
         painter->restore();
     }
 }
@@ -1159,15 +1164,9 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
 {
     //kdDebug(32001) << "KWFormulaFrameSet::slotFormulaChanged" << endl;
 
-    // This is obvious not the way to do it.
-    // Anyway, the formula knows the space it needs. I would like to
-    // resize the frames accordingly.
-    for (QListIterator<KWFrame> iter = frameIterator(); iter.current() != 0; ++iter) {
-        iter.current()->setWidth(width);
-        iter.current()->setHeight(height);
-    }
-    // You probably have only one frame anyway, so .first() is ok,
-    // and you should take the zoom into account.... Does kformula support zooming ?
+    // zooming!!!
+    frames.first()->setWidth(width);
+    frames.first()->setHeight(height);
 
     updateFrames();
     emit repaintChanged( this );
@@ -1180,9 +1179,6 @@ void KWFormulaFrameSet::updateFrames()
     if ( !formula )
         return;
 
-    // This is buggy. Who knows how to fix?
-    //formula->moveTo(frames.at(0)->x(), frames.at(0)->y());
-    // I do :)
     formula->moveTo( kWordDocument()->zoomItX( frames.at(0)->x() ),
                      kWordDocument()->zoomItY( frames.at(0)->y() ) );
 
@@ -1242,7 +1238,9 @@ KWFormulaFrameSetEdit::KWFormulaFrameSetEdit(KWFormulaFrameSet* fs, KWCanvas* ca
 {
     kdDebug(32001) << "KWFormulaFrameSetEdit::KWFormulaFrameSetEdit" << endl;
     formulaView = new KFormulaView(fs->getFormula(), canvas->viewport());
+    formulaView->setSmallCursor(true);
 
+    m_canvas->gui()->getView()->showFormulaToolbar(true);
     focusInEvent();
 }
 
@@ -1251,6 +1249,7 @@ KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit()
 {
     kdDebug(32001) << "KWFormulaFrameSetEdit::~KWFormulaFrameSetEdit" << endl;
     focusOutEvent();
+    m_canvas->gui()->getView()->showFormulaToolbar(false);
     delete formulaView;
     formulaFrameSet()->deactivate();
 }
