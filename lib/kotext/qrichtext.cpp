@@ -4280,7 +4280,7 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 	    curh = h;
 	    cury = cy;
 	    curline = line;
-#if 0 // code from current Qt. To be tested (uses height of char on the left??)
+#if 0 // code from current Qt. To be tested - uses height of char on the left??
             QTextStringChar *c = chr;
             if ( i > 0 )
                 --c;
