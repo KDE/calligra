@@ -2004,7 +2004,7 @@ void KPresenterView::setupActions()
 					   actionCollection(), "text_underline" );
 
     actionTextColor = new TKSelectColorAction( i18n( "&Color" ), TKSelectColorAction::TextColor,
-                                               actionCollection(), "text_color", true );
+                                               actionCollection(), "text_color" );
     connect( actionTextColor, SIGNAL( activated() ), SLOT( textColor() ) );
 
     actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Key_L,
@@ -2242,11 +2242,11 @@ void KPresenterView::setupActions()
      // ----------------- colorbar(Brush and Pen) action
   
      actionBrushColor = new TKSelectColorAction( i18n( "Brush Color" ), TKSelectColorAction::FillColor,
-                                                 actionCollection(), "brush_color", false );
+                                                 actionCollection(), "brush_color" );
      connect( actionBrushColor, SIGNAL( activated() ), SLOT( brushChosen() ) );
  
      actionPenColor = new TKSelectColorAction( i18n( "Pen Color" ), TKSelectColorAction::LineColor,
-                                               actionCollection(), "pen_color", false );
+                                               actionCollection(), "pen_color" );
      connect( actionPenColor, SIGNAL( activated() ), SLOT( penChosen() ) );
 
     actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ), actionCollection(), "extendobjectheight" );
