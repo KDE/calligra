@@ -19,9 +19,9 @@
 #define KARBONAIPARSERBASE_H
 
 #include <aiparserbase.h>
-#include <qlist.h>
 #include <qstring.h>
 #include <qpair.h>
+#include <qptrlist.h>
 
 #include "aicolor.h"
 
@@ -29,8 +29,8 @@
   *@author 
   */
 typedef QPair<QString,QString> Parameter;
-typedef QList<Parameter> Parameters;
-typedef QList<PathElement> PathElements;
+typedef QPtrList<Parameter> Parameters;
+typedef QPtrList<PathElement> PathElements;
 
 typedef enum { POT_Filled, POT_Stroked, POT_FilledStroked, POT_Clip, POT_Ignore, POT_Other } PathOutputType;
 

@@ -54,7 +54,7 @@ AIElement::Private::Private( Private* d )
 	    value.d = d->value.d;
 	    break;
 		default:
-	    ASSERT( 0 );
+	    Q_ASSERT( 0 );
 	}
 
   typ = d->typ;

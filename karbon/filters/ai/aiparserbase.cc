@@ -353,7 +353,7 @@ void AIParserBase::_handleSetFillColorCustom()
   double m = getDoubleValue();
   double c = getDoubleValue();
 
-  AIColor color (c,m,y,k,name,g);
+  AIColor color (c,m,y,k,name.latin1(),g);
 
   gotFillColor (color);
 }
@@ -382,7 +382,7 @@ void AIParserBase::_handleSetStrokeColorCustom()
   double m = getDoubleValue();
   double c = getDoubleValue();
 
-  AIColor color (c,m,y,k,name,g);
+  AIColor color (c,m,y,k,name.latin1(),g);
 
   gotStrokeColor (color);
 }
