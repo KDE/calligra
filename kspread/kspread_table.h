@@ -224,31 +224,23 @@ public:
 
     bool isLoading();
 
-    /**
-     * This event handler is called if the table becomes the active table,
-     * that means that the table becomes visible and may fill the GUIs
-     * widget with new values ( for example the @ref EditWindow ) and
-     * the table has to hide/show its parts.
-     *
-     * @param _status is TRUE if the table became active or FALSE if it became
-     *                inactive.
-     */
-    // void activeKSpreadTableEvent( bool _status );
-
+    const ColumnLayout* columnLayout( int _column ) const;
     ColumnLayout* columnLayout( int _column );
     /**
      * If no special @ref ColumnLayout exists for this column, then a new one is created.
      *
      * @return a non default ColumnLayout for this column.
      */
-    ColumnLayout* nonDefaultColumnLayout( int _column );
+    ColumnLayout* nonDefaultColumnLayout( int _column, bool force_creation = TRUE );
+    
+    const RowLayout* rowLayout( int _row ) const;
     RowLayout* rowLayout( int _row );
     /**
      * If no special @ref RowLayout exists for this row, then a new one is created.
      *
      * @return a non default RowLayout for this row.
      */
-    RowLayout* nonDefaultRowLayout( int _row );
+    RowLayout* nonDefaultRowLayout( int _row, bool force_creation = TRUE );
 
     /**
      * @return the first cell of this table. Next cells can
@@ -291,6 +283,9 @@ public:
 
     KSpreadCell* defaultCell() { return m_pDefaultCell; }
 
+    KSpreadLayout* defaultLayout() { return m_defaultLayout; };
+    const KSpreadLayout* defaultLayout() const { return m_defaultLayout; }
+    
     int topRow( int _ypos, int &_top, KSpreadCanvas *_canvas = 0L );
     int bottomRow( int _ypos, KSpreadCanvas *_canvas = 0L );
     int leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas = 0L );
@@ -817,6 +812,8 @@ protected:
     bool m_bShowFormular;
     bool m_bLcMode;
     bool m_bShowColumnNumber;
+    
+    KSpreadLayout* m_defaultLayout;
 };
 
 #endif

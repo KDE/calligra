@@ -40,154 +40,222 @@ public:
     enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
     enum FloatColor { NegRed = 1, AllBlack = 2 };
 
+    enum Properties{ PAlign  = 0x01,
+		     PAlignY = 0x02,
+		     PFaktor = 0x04,
+		     PPrefix = 0x08,
+		     PPostfix = 0x10,
+		     PLeftBorder = 0x20,
+		     PRightBorder = 0x40,
+		     PTopBorder = 0x80,
+		     PBottomBorder = 0x100,
+		     PFallDiagonal = 0x200,
+		     PGoUpDiagonal = 0x400,
+		     PBackgroundBrush = 0x800,
+		     PFont = 0x1000,
+		     PTextPen = 0x2000,
+		     PBackgroundColor = 0x4000,
+		     PFloatFormat = 0x8000,
+		     PFloatColor = 0x10000,
+		     PMultiRow = 0x20000,
+		     PVerticalText = 0x40000,
+                     PPrecision = 0x80000 };
+    
     KSpreadLayout( KSpreadTable *_table );
     virtual ~KSpreadLayout();
 
     void copy( KSpreadLayout &_l );
 
-    virtual void setAlign( Align _align ) { m_eAlign = _align; }
-    virtual void setAlignY( AlignY _alignY) { m_eAlignY = _alignY; }
-    virtual void setFaktor( double _d ) { m_dFaktor = _d; }
-    virtual void setPrefix( const char * _prefix ) { m_strPrefix = _prefix; }
-    virtual void setPostfix( const char * _postfix ) { m_strPostfix = _postfix; }
-    virtual void setPrecision( int _p ) { m_iPrecision = _p; }
+    void clearProperties();
+    void clearProperty( Properties p );
+    
+    ////////////////////////////////
+    //
+    // Methods for setting layout stuff.
+    //
+    ////////////////////////////////
 
-    virtual void setLeftBorderStyle( Qt::PenStyle s ) { m_leftBorderPen.setStyle( s ); }
-    virtual void setTopBorderStyle( Qt::PenStyle s ) { m_topBorderPen.setStyle( s ); }
-    virtual void setFallDiagonalStyle( Qt::PenStyle s ) { m_fallDiagonalPen.setStyle( s ); }
-    virtual void setGoUpDiagonalStyle( Qt::PenStyle s ) { m_goUpDiagonalPen.setStyle( s ); }
+    virtual void setAlign( Align _align );
+    virtual void setAlignY( AlignY _alignY );
+    virtual void setFaktor( double _d );
+    virtual void setPrefix( const QString& _prefix );
+    virtual void setPostfix( const QString& _postfix );
+    virtual void setPrecision( int _p );
 
-    virtual void setBackGroundBrushStyle( Qt::BrushStyle s) {m_backGroundBrush.setStyle( s );}
+    virtual void setLeftBorderPen( const QPen& _p );
+    void setLeftBorderStyle( Qt::PenStyle s );
+    void setLeftBorderColor( const QColor & _c );
+    void setLeftBorderWidth( int _w );
 
-    virtual void setLeftBorderColor( const QColor & _c ) { m_leftBorderPen.setColor( _c ); }
-    virtual void setTopBorderColor( const QColor & _c ) { m_topBorderPen.setColor( _c ); }
-    virtual void setFallDiagonalColor( const QColor & _c ) { m_fallDiagonalPen.setColor( _c ); }
-    virtual void setGoUpDiagonalColor( const QColor & _c ) { m_goUpDiagonalPen.setColor( _c ); }
+    virtual void setTopBorderPen( const QPen& _p );
+    void setTopBorderStyle( Qt::PenStyle s );
+    void setTopBorderColor( const QColor & _c );
+    void setTopBorderWidth( int _w );
 
-    virtual void setBackGroundBrushColor( const QColor & _c) {m_backGroundBrush.setColor( _c);}
+    virtual void setRightBorderPen( const QPen& p );
+    void setRightBorderStyle( Qt::PenStyle _s );
+    void setRightBorderColor( const QColor & _c );
+    void setRightBorderWidth( int _w );
+    
+    virtual void setBottomBorderPen( const QPen& p );
+    void setBottomBorderStyle( Qt::PenStyle _s );
+    void setBottomBorderColor( const QColor & _c );
+    void setBottomBorderWidth( int _w );
 
-    virtual void setLeftBorderWidth( int _w ) { m_iLeftBorderWidth = _w; }
-    virtual void setTopBorderWidth( int _w ) { m_iTopBorderWidth = _w; }
-    virtual void setFallDiagonalWidth( int _w ) { m_iFallDiagonalWidth = _w; }
-    virtual void setGoUpDiagonalWidth( int _w ) { m_iGoUpDiagonalWidth = _w; }
+    virtual void setFallDiagonalPen( const QPen& _p );
+    void setFallDiagonalStyle( Qt::PenStyle s );
+    void setFallDiagonalColor( const QColor & _c );
+    void setFallDiagonalWidth( int _w );
 
+    virtual void setGoUpDiagonalPen( const QPen& _p );
+    void setGoUpDiagonalStyle( Qt::PenStyle s );
+    void setGoUpDiagonalColor( const QColor & _c );
+    void setGoUpDiagonalWidth( int _w );
 
-    virtual void setTextFontSize( int _s ) { m_textFont.setPointSize( _s ); }
-    virtual void setTextFontFamily( const char *_f ) { m_textFont.setFamily( _f ); }
-    virtual void setTextFontBold( bool _b ) { m_textFont.setBold( _b ); }
-    virtual void setTextFontItalic( bool _i ) { m_textFont.setItalic( _i ); }
-    virtual void setTextFontUnderline( bool _i ) { m_textFont.setUnderline( _i ); }
-    virtual void setTextFontStrike( bool _i ) { m_textFont.setStrikeOut( _i ); }
-    virtual void setTextFont( const QFont& _f ) { m_textFont = _f; }
-    virtual void setTextColor( const QColor & _c ) { m_textPen.setColor( _c ); m_textColor = _c; }
-    virtual void setBgColor( const QColor & _c ) { m_bgColor = _c; }
+    virtual void setBackGroundBrush( const QBrush& _p);
+    void setBackGroundBrushStyle( Qt::BrushStyle s);
+    void setBackGroundBrushColor( const QColor & _c);
 
-    virtual void setFloatFormat( FloatFormat _f ) { m_eFloatFormat = _f; }
-    virtual void setFloatColor( FloatColor _c ) { m_eFloatColor = _c; }
+    virtual void setTextFont( const QFont& _f );
+    void setTextFontSize( int _s );
+    void setTextFontFamily( const QString& _f );
+    void setTextFontBold( bool _b );
+    void setTextFontItalic( bool _i );
+    void setTextFontUnderline( bool _i );
+    void setTextFontStrike( bool _i );
 
-    virtual void setMultiRow( bool _b ) { m_bMultiRow = _b; }
+    virtual void setTextPen( const QPen& _p );
+    void setTextColor( const QColor & _c );
 
-    /**
-     * Since the @ref KSpreadCanvas  supports zooming, you can get the value zoomed
-     * or not scaled. The not scaled value may be of interest in a
-     * layout dialog for example.
-     *
-     * @return the border width of the left border
-     */
-    virtual int leftBorderWidth( KSpreadCanvas *_canvas = 0L );
-    virtual int topBorderWidth( KSpreadCanvas *canvas = 0L );
-    virtual int fallDiagonalWidth( KSpreadCanvas *canvas = 0L );
-    virtual int goUpDiagonalWidth( KSpreadCanvas *canvas = 0L );
+    virtual void setBgColor( const QColor & _c );
 
-    /**
-     * @return the style used to draw the left border.
-     */
-    virtual Qt::PenStyle leftBorderStyle() { return m_leftBorderPen.style(); }
-    virtual Qt::PenStyle topBorderStyle() { return m_topBorderPen.style(); }
-    virtual Qt::PenStyle fallDiagonalStyle() { return m_fallDiagonalPen.style(); }
-    virtual Qt::PenStyle goUpDiagonalStyle() { return m_goUpDiagonalPen.style(); }
+    virtual void setFloatFormat( FloatFormat _f );
+    virtual void setFloatColor( FloatColor _c );
 
-    virtual Qt::BrushStyle backGroundBrushStyle() { return m_backGroundBrush.style();}
+    virtual void setMultiRow( bool _b );
+
+    virtual void setVerticalText( bool _b );
+
+    ////////////////////////////////
+    //
+    // Methods for querying layout stuff.
+    //
+    ////////////////////////////////
+
+    virtual const QPen& leftBorderPen( int col, int row ) const;
+    int leftBorderWidth( int col, int row ) const;
+    Qt::PenStyle leftBorderStyle( int col, int row ) const;
+    const QColor& leftBorderColor( int col, int row ) const;
+
+    virtual const QPen& topBorderPen( int col, int row ) const;
+    int topBorderWidth( int col, int row ) const;
+    Qt::PenStyle topBorderStyle( int col, int row ) const;
+    const QColor& topBorderColor( int col, int row ) const;
+
+    virtual const QPen& rightBorderPen( int col, int row ) const;
+    int rightBorderWidth( int col, int row ) const;
+    Qt::PenStyle rightBorderStyle( int col, int row ) const;
+    const QColor& rightBorderColor( int col, int row ) const;
+
+    virtual const QPen& bottomBorderPen( int col, int row ) const;
+    int bottomBorderWidth( int col, int row ) const;
+    Qt::PenStyle bottomBorderStyle( int col, int row ) const;
+    const QColor& bottomBorderColor( int col, int row ) const;
+
+    virtual const QPen& fallDiagonalPen( int col, int row ) const;
+    int fallDiagonalWidth( int col, int row ) const;
+    Qt::PenStyle fallDiagonalStyle( int col, int row ) const;
+    const QColor& fallDiagonalColor( int col, int row ) const;
+
+    virtual const QPen& goUpDiagonalPen( int col, int row ) const;
+    int goUpDiagonalWidth( int col, int row ) const;
+    Qt::PenStyle goUpDiagonalStyle( int col, int row ) const;
+    const QColor& goUpDiagonalColor( int col, int row ) const;
+
+    virtual const QBrush& backGroundBrush( int col, int row ) const;
+    Qt::BrushStyle backGroundBrushStyle( int col, int row ) const;
+    const QColor& backGroundBrushColor(int col, int row ) const;
 
     /**
      * @return the precision of the floating point representation.
      */
-    virtual int precision() { return m_iPrecision; }
+    virtual int precision( int col, int row ) const;
     /**
      * @return the prefix of a numeric value ( for example "$" )
      */
-    virtual QString prefix() const;
+    virtual QString prefix( int col, int row ) const;
     /**
      * @return the postfix of a numeric value ( for example "DM" )
      */
-    virtual QString postfix() const;
+    virtual QString postfix( int col, int row ) const;
     /**
      * @return the way of formatting a floating point value
      */
-    virtual FloatFormat floatFormat() { return m_eFloatFormat; }
+    virtual FloatFormat floatFormat( int col, int row ) const;
     /**
      * @return the color format of a floating point value
      */
-    virtual FloatColor floatColor() { return m_eFloatColor; }
+    virtual FloatColor floatColor( int col, int row ) const;
+
+    virtual const QPen& textPen( int col, int row ) const;
     /**
      * @return the text color.
      */
-    virtual const QColor& textColor() const;
-    /**
-     * @return the background color
-     */
-    virtual const QColor& bgColor() const;
+    const QColor& textColor( int col, int row ) const;
 
     /**
-     * @return the color of the left color
+     * @param _col the column this cell is assumed to be in
+     * @param _row the row this cell is assumed to be in
+     *
+     * @return the background color.
      */
-    virtual const QColor& leftBorderColor() { return m_leftBorderPen.color(); }
-    virtual const QColor& topBorderColor() { return m_topBorderPen.color(); }
-    virtual const QColor& fallDiagonalColor() { return m_fallDiagonalPen.color(); }
-    virtual const QColor& goUpDiagonalColor() { return m_goUpDiagonalPen.color(); }
+    virtual const QColor& bgColor( int col, int row ) const;
 
-    virtual const QColor& backGroundBrushColor() { return m_backGroundBrush.color();}
+    virtual const QFont& textFont( int col, int row ) const;
+    int textFontSize( int col, int row ) const;
+    QString textFontFamily( int col, int row ) const;
+    bool textFontBold( int col, int row ) const;
+    bool textFontItalic( int col, int row ) const;
+    bool textFontUnderline( int col, int row ) const;
+    bool textFontStrike( int col, int row ) const;
 
-    virtual const QFont& textFont() { return m_textFont; }
-    virtual int textFontSize() { return m_textFont.pointSize(); }
-    virtual const char* textFontFamily() { return m_textFont.family(); }
-    virtual bool textFontBold() { return m_textFont.bold(); }
-    virtual bool textFontItalic() { return m_textFont.italic(); }
-    virtual bool textFontUnderline() { return m_textFont.underline(); }
-    virtual bool textFontStrike() { return m_textFont.strikeOut(); }
-    virtual Align align() { return m_eAlign; }
+    virtual Align align( int col, int row ) const;
+    virtual AlignY alignY( int col, int row ) const;
 
-    virtual AlignY alignY() { return m_eAlignY; }
+    virtual double faktor( int col, int row ) const;
 
-    virtual double faktor() { return m_dFaktor; }
+    virtual bool multiRow( int col, int row ) const;
 
-    virtual bool multiRow() { return m_bMultiRow; }
-
-    virtual const QPen& leftBorderPen() { return m_leftBorderPen; }
-    virtual const QPen& topBorderPen() { return m_topBorderPen; }
-    virtual const QPen& fallDiagonalPen() { return m_fallDiagonalPen; }
-    virtual const QPen& goUpDiagonalPen() { return m_goUpDiagonalPen; }
-    virtual const QBrush& backGroundBrush() { return m_backGroundBrush;}
-
-    virtual const QPen& textPen() { return m_textPen; }
-
-    virtual void setTextPen( const QPen& _p ) { m_textPen = _p; m_textColor = _p.color(); }
-    virtual void setLeftBorderPen( const QPen& _p ) { m_leftBorderPen = _p; m_iLeftBorderWidth = _p.width(); }
-    virtual void setFallDiagonalPen( const QPen& _p ) { m_fallDiagonalPen = _p; m_iFallDiagonalWidth = _p.width(); }
-    virtual void setGoUpDiagonalPen( const QPen& _p ) { m_goUpDiagonalPen = _p; m_iGoUpDiagonalWidth = _p.width(); }
-    virtual void setTopBorderPen( const QPen& _p ) { m_topBorderPen = _p; m_iTopBorderWidth = _p.width(); }
-    virtual void setBackGroundBrush( const QBrush& _p) {m_backGroundBrush= _p;}
-
-
-    virtual void setVerticalText( bool _b ) { m_bVerticalText = _b; }
-    virtual bool verticalText() { return m_bVerticalText; }
-
-    virtual QString getComment() {return m_strComment;}
-    virtual void setComment(QString _comment){ m_strComment=_comment;}
+    virtual bool verticalText( int col, int row ) const;
 
     KSpreadTable* table() { return m_pTable; }
-
+    const KSpreadTable* table() const { return m_pTable; }
+    
+    bool hasProperty( Properties p ) const;
+    
 protected:
+    virtual const QPen& rightBorderPen() const;
+    virtual const QPen& bottomBorderPen() const;
+
+    /**
+     * Default implementation does nothing.
+     */
+    virtual void layoutChanged();
+    
+    /**
+     * Default implementation returns 0.
+     */
+    virtual KSpreadLayout* fallbackLayout( int col, int row );
+    /**
+     * Default implementation returns 0.
+     */
+    virtual const KSpreadLayout* fallbackLayout( int col, int row ) const;
+    
+    /**
+     * Default implementation returns TRUE.
+     */
+    virtual bool isDefault() const;
+    
     /**
      * Tells whether text may be broken into multiple lines.
      */
@@ -211,50 +279,43 @@ protected:
      */
     QPen m_textPen;
     /**
-     * The color used to draw the text
-     */
-    QColor m_textColor;
-    /**
      * The background color
      */
     QColor m_bgColor;
 
     /**
-     * The not zoomed border width of the left border
+     * The pen used to draw the right border
      */
-    int m_iLeftBorderWidth;
+    QPen m_rightBorderPen;
+
+    /**
+     * The pen used to draw the bottom border
+     */
+    QPen m_bottomBorderPen;
+
     /**
      * The pen used to draw the left border
      */
     QPen m_leftBorderPen;
 
     /**
-     * The not zoomed border width of the top border
-     */
-    int m_iTopBorderWidth;
-    /**
      * The pen used to draw the top border
      */
     QPen m_topBorderPen;
-    /**
-     * The not zoomed border width of the diagonal which fall
-     */
-    int m_iFallDiagonalWidth;
+
     /**
      * The pen used to draw the diagonal
      */
     QPen m_fallDiagonalPen;
     /**
-     * The not zoomed border width of the digonal which go up
-     */
-    int m_iGoUpDiagonalWidth;
-    /**
      * The pen used to draw the the diagonal which go up
      */
     QPen m_goUpDiagonalPen;
 
+    /**
+     * The brush used to draw the background.
+     */
     QBrush m_backGroundBrush;
-
 
     /**
      * The precision of the floatinf point representation
@@ -287,9 +348,23 @@ protected:
 
     bool m_bVerticalText;
 
-    QString m_strComment;
-
     KSpreadTable *m_pTable;
+
+    uint m_mask;
+    
+private:
+    void setProperty( Properties p );
+    
+    /**
+     * Currently just used for better abstraction.
+     */
+    const QPen& leftBorderPen() const;
+    const QPen& topBorderPen() const;
+    const QPen& fallDiagonalPen() const;
+    const QPen& goUpDiagonalPen() const;
+    const QBrush& backGroundBrush() const;
+    const QFont& textFont() const;
+    const QPen& textPen() const;
 };
 
 /**
@@ -332,16 +407,9 @@ public:
      */
     void setDefault() { m_bDefault = TRUE; }
     /**
-     * @return TRUE if this is the default layout.
+     * @reimp
      */
-    bool isDefault() { return m_bDefault; }
-
-    /**
-     * @return the last time this layout has been modified.
-     *
-     * @see #time
-     */
-    int time() { return m_iTime; }
+    bool isDefault() const;
 
     /**
      * @return the row for this RowLayout. May be 0 if this is the default layout.
@@ -360,16 +428,38 @@ public:
     void setNext( RowLayout* c ) { m_next = c; }
     void setPrevious( RowLayout* c ) { m_prev = c; }
 
+    /**
+     * @reimp
+     */
+    const QPen& bottomBorderPen( int col, int row ) const;
+    /**
+     * @reimp
+     */
+    void setBottomBorderPen( const QPen& p );
+    /**
+     * @reimp
+     */
+    const QPen& topBorderPen( int col, int row ) const;
+    /**
+     * @reimp
+     */
+    void setTopBorderPen( const QPen& p );
+    
 protected:
+    /**
+     * @reimp
+     */
+    KSpreadLayout* fallbackLayout( int col, int row );
+    /**
+     * @reimp
+     */
+    const KSpreadLayout* fallbackLayout( int col, int row ) const;
+        
     /**
      * Width of the cell in unzoomed millimeters.
      */
     float m_fHeight;
 
-    /**
-     * The last time this layout has been modified
-     */
-    int m_iTime;
     /**
      * Flag that indicates whether this is the default layout.
      *
@@ -432,14 +522,9 @@ public:
      */
     void setDefault() { m_bDefault = TRUE; }
     /**
-     * @return TRUE if this is the default layout.
+     * @reimp
      */
-    bool isDefault() { return m_bDefault; }
-
-    /**
-     * @return the last time this layout has been modified.
-     */
-    int time() { return m_iTime; }
+    bool isDefault() const;
 
     /**
      * @return the column of this ColumnLayout. May be 0 if this is the default layout.
@@ -458,16 +543,38 @@ public:
     void setNext( ColumnLayout* c ) { m_next = c; }
     void setPrevious( ColumnLayout* c ) { m_prev = c; }
 
+    /**
+     * @reimp
+     */
+    const QPen& rightBorderPen( int col, int row ) const;
+    /**
+     * @reimp
+     */
+    void setRightBorderPen( const QPen& p );
+    /**
+     * @reimp
+     */
+    const QPen& leftBorderPen( int col, int row ) const;
+    /**
+     * @reimp
+     */
+    void setLeftBorderPen( const QPen& p );
+    
 protected:
+    /**
+     * @reimp
+     */
+    KSpreadLayout* fallbackLayout( int col, int row );
+    /**
+     * @reimp
+     */
+    const KSpreadLayout* fallbackLayout( int col, int row ) const;
+
     /**
      * Height of the cells in unzoomed millimeters.
      */
     float m_fWidth;
 
-    /**
-     * The last time this layout has been modified.
-     */
-    int m_iTime;
     /**
      * Flag that indicates whether this is the default layout.
      *
@@ -490,5 +597,3 @@ protected:
 };
 
 #endif
-
-

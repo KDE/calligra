@@ -1528,10 +1528,10 @@ void KSpreadCanvas::createEditor( EditorType ed )
     int ypos = table->rowPos( markerRow(), this );
     QPalette p = m_pEditor->palette();
     QColorGroup g( p.normal() );
-    g.setColor( QColorGroup::Text, cell->textColor() );
-    g.setColor( QColorGroup::Background, cell->bgColor() );
+    g.setColor( QColorGroup::Text, cell->textColor( markerColumn(), markerRow() ) );
+    g.setColor( QColorGroup::Background, cell->bgColor( markerColumn(), markerRow() ) );
     m_pEditor->setPalette( QPalette( g, p.disabled(), g ) );
-    m_pEditor->setFont( cell->textFont() );
+    m_pEditor->setFont( cell->textFont( markerColumn(), markerRow() ) );
     m_pEditor->setGeometry( xpos, ypos, w, h );
     m_pEditor->setMinimumSize( QSize( min_w, min_h ) );
     m_pEditor->show();
@@ -2802,7 +2802,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
 	return;
 
     // Get the comment
-    QString comment= cell->getComment();
+    QString comment= cell->comment();
 
     // Determine position and width of the current cell.
     cell = table->cellAt( col, row );

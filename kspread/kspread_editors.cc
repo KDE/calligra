@@ -187,7 +187,7 @@ KSpreadFormulaEditor::KSpreadFormulaEditor( KSpreadCell* _cell, KSpreadCanvas* _
 
   m_pEdit = new KFormulaEdit( this );
   m_pEdit->enableSizeHintSignal( true );
-  m_pEdit->setFont(_cell->textFont() );
+  // m_pEdit->setFont(_cell->textFont() );
   m_pEdit->installEventFilter( this );
   connect( m_pEdit, SIGNAL( sizeHint( QSize ) ), this, SLOT( slotSizeHint( QSize ) ) );
 

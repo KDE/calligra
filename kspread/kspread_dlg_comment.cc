@@ -36,9 +36,9 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
 {
     m_pView = parent;
     marker= _marker;
-    
+
     setCaption( i18n("Cell comment") );
-    
+
     QVBoxLayout *lay1 = new QVBoxLayout( this );
     lay1->setMargin( 5 );
     lay1->setSpacing( 10 );
@@ -57,9 +57,9 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
     lay1->addWidget( bb);
 
     KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
-    if(!cell->getComment().isEmpty())
-        multiLine->setText(cell->getComment());
-  
+    if(!cell->comment().isEmpty())
+        multiLine->setText(cell->comment());
+
     connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 }

@@ -195,6 +195,8 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
   m_id = s_id++;
   s_mapTables->insert( m_id, this );
 
+  m_defaultLayout = new KSpreadLayout( this );
+  
   m_pMap = _map;
   m_pDoc = _map->doc();
   m_dcop = 0;
@@ -250,6 +252,15 @@ bool KSpreadTable::isEmpty( unsigned long int x, unsigned long int y )
   return false;
 }
 
+const ColumnLayout* KSpreadTable::columnLayout( int _column ) const
+{
+    const ColumnLayout *p = m_columns.lookup( _column );
+    if ( p != 0L )
+	return p;
+
+    return m_pDefaultColumnLayout;
+}
+
 ColumnLayout* KSpreadTable::columnLayout( int _column )
 {
     ColumnLayout *p = m_columns.lookup( _column );
@@ -257,6 +268,15 @@ ColumnLayout* KSpreadTable::columnLayout( int _column )
 	return p;
 
     return m_pDefaultColumnLayout;
+}
+
+const RowLayout* KSpreadTable::rowLayout( int _row ) const
+{
+    const RowLayout *p = m_rows.lookup( _row );
+    if ( p != 0L )
+	return p;
+
+    return m_pDefaultRowLayout;
 }
 
 RowLayout* KSpreadTable::rowLayout( int _row )
@@ -427,10 +447,10 @@ KSpreadCell* KSpreadTable::cellAt( int _column, int _row, bool _no_scrollbar_upd
   return m_pDefaultCell;
 }
 
-ColumnLayout* KSpreadTable::nonDefaultColumnLayout( int _column )
+ColumnLayout* KSpreadTable::nonDefaultColumnLayout( int _column, bool force_creation )
 {
     ColumnLayout *p = m_columns.lookup( _column );
-    if ( p != 0L )
+    if ( p != 0L || !force_creation )
 	return p;
 	
     p = new ColumnLayout( this, _column );
@@ -440,10 +460,10 @@ ColumnLayout* KSpreadTable::nonDefaultColumnLayout( int _column )
     return p;
 }
 
-RowLayout* KSpreadTable::nonDefaultRowLayout( int _row )
+RowLayout* KSpreadTable::nonDefaultRowLayout( int _row, bool force_creation )
 {
     RowLayout *p = m_rows.lookup( _row );
-    if ( p != 0L )
+    if ( p != 0L || !force_creation )
 	return p;
 	
     p = new RowLayout( this, _row );
@@ -687,7 +707,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
     }
 }
 
-void KSpreadTable::setSelectionSize( const QPoint &_marker,int _size )
+void KSpreadTable::setSelectionSize( const QPoint &_marker, int _size )
 {
     m_pDoc->setModified( true );
 
@@ -703,7 +723,7 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker,int _size )
 	    if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	    {
 		c->setDisplayDirtyFlag();
-		c->setTextFontSize( ( c->textFontSize() + _size ) );
+		c->setTextFontSize( ( c->textFontSize( _marker.x(), _marker.y() ) + _size ) );
 		c->clearDisplayDirtyFlag();
 	    }
 	}
@@ -721,7 +741,7 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker,int _size )
 	    if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	    {
 		c->setDisplayDirtyFlag();
-		c->setTextFontSize( ( c->textFontSize() + _size ) );
+		c->setTextFontSize( ( c->textFontSize( _marker.x(), _marker.y() ) + _size ) );
 		c->clearDisplayDirtyFlag();
 	    }
 	}
@@ -754,7 +774,7 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker,int _size )
 	      }
 
 	      cell->setDisplayDirtyFlag();
-	      cell->setTextFontSize( (cell->textFontSize()+ _size) );
+	      cell->setTextFontSize( (cell->textFontSize( _marker.x(), _marker.y() ) + _size) );
 	      cell->clearDisplayDirtyFlag();
 	    }
 
@@ -2113,51 +2133,47 @@ void KSpreadTable::borderBottom( const QPoint &_marker,QColor _color )
 void KSpreadTable::borderRight( const QPoint &_marker,QColor _color )
 {
     QRect r( m_rctSelection );
-    if ( m_rctSelection.left()==0 )
+    if ( m_rctSelection.left() == 0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    
     KSpreadUndoCellLayout *undo;
     if ( !m_pDoc->undoBuffer()->isLocked() )
-	{
-	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-	    m_pDoc->undoBuffer()->appendUndo( undo );
-	}
+    {
+	undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+    
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
 	int x = r.right();
-	KSpreadCell *cell = cellAt( x, y );
-	if ( cell == m_pDefaultCell )
-        {
-	    cell = new KSpreadCell( this, x, y );
-	    m_cells.insert( cell, x, y );
-	}
+	KSpreadCell *cell = nonDefaultCell( x, y );
 
   	cell->setRightBorderStyle( SolidLine );
    	cell->setRightBorderColor( _color );
     	cell->setRightBorderWidth( 2 );
     }
+    
     emit sig_updateView( this, r );
 }
 
-void KSpreadTable::borderLeft( const QPoint &_marker,QColor _color )
+// #### Use const QColor& here
+void KSpreadTable::borderLeft( const QPoint &_marker, QColor _color )
 {
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
 	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    
     KSpreadUndoCellLayout *undo;
     if ( !m_pDoc->undoBuffer()->isLocked() )
-	{
-	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-	    m_pDoc->undoBuffer()->appendUndo( undo );
-	}
+    {
+	undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	m_pDoc->undoBuffer()->appendUndo( undo );
+    }
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
 	int x = r.left();
-	KSpreadCell *cell = cellAt( x, y );
-	if ( cell == m_pDefaultCell )
-        {
-	    cell = new KSpreadCell( this, x, y );
-	    m_cells.insert( cell, x, y );
-	}
+	KSpreadCell *cell = nonDefaultCell( x, y );
+
   	cell->setLeftBorderStyle( SolidLine );
    	cell->setLeftBorderColor( _color );
     	cell->setLeftBorderWidth( 2 );
@@ -2192,14 +2208,16 @@ void KSpreadTable::borderTop( const QPoint &_marker,QColor _color )
     emit sig_updateView( this, r );
 }
 
+// #### Use const QColor& here
 void KSpreadTable::borderOutline( const QPoint &_marker,QColor _color )
 {
-    borderRight( _marker,_color);
-    borderLeft(_marker,_color);
-    borderTop(_marker,_color);
-    borderBottom(_marker,_color);
+    borderRight( _marker,_color );
+    borderLeft(_marker,_color );
+    borderTop(_marker,_color );
+    borderBottom(_marker,_color );
 }
 
+// #### Use const QColor& here
 void KSpreadTable::borderAll( const QPoint &_marker,QColor _color )
 {
     QRect r( m_rctSelection );
@@ -3391,9 +3409,9 @@ void KSpreadTable::copySelection( const QPoint &_marker )
     // QCString::length() == QCString().size().
     // This allows us to treat the QCString like a QByteArray later on.
     QCString s = buffer.utf8();
-    
+
     printf("COPY %s\n", s.data() );
-    
+
     int len = s.length();
     char tmp = s[ len - 1 ];
     s.resize( len );
@@ -3534,49 +3552,6 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
               if ( needInsert )
 		insertCell( cell );
 	}
-        else if ( c.tagName() == "right-most-border" && ( sp == Normal || sp == Format ) )
-        {
-	    int row = c.attribute( "row" ).toInt() + _yshift;
-	    int col = c.attribute( "column" ).toInt() + _xshift;
-
-	    bool needInsert = FALSE;
-	    KSpreadCell* cell = nonDefaultCell( col, row );
-	    if ( !cell )
-	    {
-		cell = new KSpreadCell( this, 0, 0 );
-		needInsert = TRUE;
-	    }
-	    if ( !cell->loadRightMostBorder( c, _xshift, _yshift ) )
-            {
-                if ( needInsert )
-                  delete cell;
-            }
-	    else
-              if ( needInsert )
-		insertCell( cell );
-	}
-	else if ( c.tagName() == "bottom-most-border" && ( sp == Normal || sp == Format ) )
-        {
-	    int row = c.attribute( "row" ).toInt() + _yshift;
-	    int col = c.attribute( "column" ).toInt() + _xshift;
-
-	    bool needInsert = FALSE;
-	    KSpreadCell* cell = nonDefaultCell( col, row );
-	    if ( !cell )
-	    {
-		cell = new KSpreadCell( this, 0, 0 );
-		needInsert = TRUE;
-	    }
-
-            if ( !cell->loadBottomMostBorder( c, _xshift, _yshift ) )
-            {
-              if ( needInsert )
-                delete cell;
-            }
-	    else
-              if ( needInsert )
-		insertCell( cell );
-	}
     }
 
     m_pDoc->setModified( true );
@@ -3584,7 +3559,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
     emit sig_updateView( this );
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );
-    
+
     return true;
 }
 
@@ -3625,7 +3600,7 @@ void KSpreadTable::deleteCells( const QRect& rect )
     for( ;c; c = c->nextCell() )
 	if ( c->isForceExtraCells() && !c->isDefault() )
 	    c->forceExtraCells( c->column(), c->row(), c->extraXCells(), c->extraYCells() );
-    
+
     m_pDoc->setModified( true );
 	
 }
@@ -4038,9 +4013,6 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 	rows.setAttribute( "count", _rect.bottom() - _rect.top() + 1 );
 	spread.appendChild( rows );
 	
-	QRect rightMost( _rect.x(), _rect.y(), _rect.width() + 1, _rect.height() );
-	QRect bottomMost( _rect.x(), _rect.y(), _rect.width(), _rect.height() + 1 );
-
 	// Save all cells.
 	KSpreadCell* c = m_cells.firstCell();
 	for( ;c; c = c->nextCell() )
@@ -4050,10 +4022,6 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 		QPoint p( c->column(), c->row() );
 		if ( _rect.contains( p ) )
 		    spread.appendChild( c->save( doc, 0, _rect.top() - 1 ) );
-		else if ( rightMost.contains( p ) )
-		    spread.appendChild( c->saveRightMostBorder( doc, 0, _rect.top() - 1 ) );
-		else if ( bottomMost.contains( p ) )
-		    spread.appendChild( c->saveBottomMostBorder( doc, 0, _rect.top() - 1 ) );
 	    }
 	}
 
@@ -4087,9 +4055,6 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 	columns.setAttribute( "count", _rect.right() - _rect.left() + 1 );
 	spread.appendChild( columns );
 	
-	QRect rightMost( _rect.x(), _rect.y(), _rect.width() + 1, _rect.height() );
-	QRect bottomMost( _rect.x(), _rect.y(), _rect.width(), _rect.height() + 1 );
-
 	// Save all cells.
 	KSpreadCell* c = m_cells.firstCell();
 	for( ;c; c = c->nextCell() )
@@ -4099,10 +4064,6 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 		QPoint p( c->column(), c->row() );
 		if ( _rect.contains( p ) )
 		    spread.appendChild( c->save( doc, _rect.left() - 1, 0 ) );
-		else if ( rightMost.contains( p ) )
-		    spread.appendChild( c->saveRightMostBorder( doc, _rect.left() - 1, 0 ) );
-		else if ( bottomMost.contains( p ) )
-		    spread.appendChild( c->saveBottomMostBorder( doc, _rect.left() - 1, 0 ) );
 	    }
 	}
 
@@ -4127,9 +4088,6 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     QDomElement spread = doc.createElement( "spreadsheet-snippet" );
     doc.appendChild( spread );
 
-    QRect rightMost( _rect.x(), _rect.y(), _rect.width() + 1, _rect.height() );
-    QRect bottomMost( _rect.x(), _rect.y(), _rect.width(), _rect.height() + 1 );
-
     // Save all cells.
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
@@ -4139,10 +4097,6 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 	    QPoint p( c->column(), c->row() );
 	    if ( _rect.contains( p ) )
 		spread.appendChild( c->save( doc, _rect.left() - 1, _rect.top() - 1 ) );
-	    else if ( rightMost.contains( p ) )
-		spread.appendChild( c->saveRightMostBorder( doc, _rect.left() - 1, _rect.top() - 1 ) );
-	    else if ( bottomMost.contains( p ) )
-		spread.appendChild( c->saveBottomMostBorder( doc, _rect.left() - 1, _rect.top() - 1 ) );
 	}
     }
 
@@ -4582,6 +4536,8 @@ KSpreadTable::~KSpreadTable()
     m_pPainter->end();
     delete m_pPainter;
     delete m_pWidget;
+    
+    delete m_defaultLayout;
 }
 
 void KSpreadTable::enableScrollBarUpdates( bool _enable )

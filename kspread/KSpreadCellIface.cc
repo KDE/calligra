@@ -69,13 +69,13 @@ void KSpreadCellIface::setBgColor(int r,int g,int b)
 QString KSpreadCellIface::bgColor() const
 {
     KSpreadCell* cell = m_table->cellAt( m_point );
-    return cell->bgColor().name();
+    return cell->bgColor( m_point.x(), m_point.y() ).name();
 }
 
 QString KSpreadCellIface::textColor() const
 {
     KSpreadCell* cell = m_table->cellAt( m_point );
-    return cell->textColor().name();
+    return cell->textColor( m_point.x(), m_point.y() ).name();
 }
 
 void KSpreadCellIface::setTextColor(int r,int g,int b)
@@ -117,21 +117,21 @@ void KSpreadCellIface::setVerticalText(bool _vertical)
 bool KSpreadCellIface::verticalText() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->verticalText();
+    return cell->verticalText( m_point.x(), m_point.y() );
 }
 
 
 void KSpreadCellIface::setMultiRow(bool _multi)
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setMultiRow(_multi);
+    cell->setMultiRow( _multi );
     cell->update();
 }
 
 bool KSpreadCellIface::multiRow() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->multiRow();
+    return cell->multiRow( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setAlign( const QString& _Align )
@@ -154,7 +154,7 @@ QString KSpreadCellIface::align() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QString alignString;
-    switch(cell->align())
+    switch( cell->align( m_point.x(), m_point.y() ) )
         {
         case KSpreadCell::Left :
                 alignString="Left";
@@ -192,7 +192,7 @@ QString KSpreadCellIface::alignY() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QString alignString;
-    switch(cell->alignY())
+    switch( cell->alignY( m_point.x(), m_point.y() ) )
         {
         case KSpreadCell::Top :
                 alignString="Top";
@@ -210,27 +210,27 @@ QString KSpreadCellIface::alignY() const
 void KSpreadCellIface::setPostfix(const QString &_postfix)
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setPostfix( _postfix);
+    cell->setPostfix( _postfix );
     cell->update();
 }
 
 QString KSpreadCellIface::prefix() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->prefix();
+    return cell->prefix( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setPrefix(const QString &_prefix)
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setPrefix( _prefix);
+    cell->setPrefix( _prefix );
     cell->update();
 }
 
 QString KSpreadCellIface::postfix() const
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->postfix();
+    return cell->postfix( m_point.x(), m_point.y() );
 }
 
 void KSpreadCellIface::setFormatNumber(const QString &_formatNumber)

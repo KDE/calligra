@@ -130,7 +130,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 
     KSpreadCell *obj = table->cellAt( _left, _top );
 
-    // Initialize with the upper left object
+    // Initialize with the upper left object.
     leftBorderStyle = obj->leftBorderStyle( _left, _top );
     leftBorderWidth = obj->leftBorderWidth( _left, _top );
     leftBorderColor = obj->leftBorderColor( _left, _top );
@@ -143,73 +143,76 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     goUpDiagonalStyle = obj->goUpDiagonalStyle( _left, _top );
     goUpDiagonalWidth = obj->goUpDiagonalWidth( _left, _top );
     goUpDiagonalColor = obj->goUpDiagonalColor( _left, _top );
+    
+    // Look at the upper right one for the right border.
     obj = table->cellAt( _right, _top );
     rightBorderStyle = obj->rightBorderStyle( _right, _top );
     rightBorderWidth = obj->rightBorderWidth( _right, _top );
     rightBorderColor = obj->rightBorderColor( _right, _top );
+    
+    // Look at the bottom left cell for the bottom border.
     obj = table->cellAt( _left, _bottom );
     bottomBorderStyle = obj->bottomBorderStyle( _left, _bottom );
     bottomBorderWidth = obj->bottomBorderWidth( _left, _bottom );
     bottomBorderColor = obj->bottomBorderColor( _left, _bottom );
+    
     // Just an assumption
     obj = table->cellAt( _right, _top );
-
     verticalBorderStyle = obj->leftBorderStyle( _right, _top );
     verticalBorderWidth = obj->leftBorderWidth( _right, _top );
     verticalBorderColor = obj->leftBorderColor( _right, _top );
+    
+    // Just an assumption
     obj = table->cellAt( _right, _bottom );
     horizontalBorderStyle = obj->topBorderStyle( _right, _bottom );
     horizontalBorderWidth = obj->topBorderWidth( _right, _bottom );
     horizontalBorderColor = obj->topBorderColor( _right, _bottom );
 
     obj = table->cellAt( _left, _top );
-    prefix = obj->prefix();
-    postfix = obj->postfix();
-    precision = obj->precision();
-    floatFormat = obj->floatFormat();
-    floatColor = obj->floatColor();
-
-    alignX = obj->align();
-    alignY = obj->alignY();
-
-    textColor = obj->textColor();
+    prefix = obj->prefix( _left, _top );
+    postfix = obj->postfix( _left, _top );
+    precision = obj->precision( _left, _top );
+    floatFormat = obj->floatFormat( _left, _top );
+    floatColor = obj->floatColor( _left, _top );
+    alignX = obj->align( _left, _top );
+    alignY = obj->alignY( _left, _top );
+    textColor = obj->textColor( _left, _top );
     bgColor = obj->bgColor( _left, _top );
-    textFontSize = obj->textFontSize();
-    textFontFamily = obj->textFontFamily();
-    textFontBold = obj->textFontBold();
-    textFontItalic = obj->textFontItalic();
-    strike=obj->textFontStrike();
-    underline=obj->textFontUnderline();
+    textFontSize = obj->textFontSize( _left, _top );
+    textFontFamily = obj->textFontFamily( _left, _top );
+    textFontBold = obj->textFontBold( _left, _top );
+    textFontItalic = obj->textFontItalic( _left, _top );
+    strike=obj->textFontStrike( _left, _top );
+    underline=obj->textFontUnderline( _left, _top );
     // Needed to initialize the font correctly ( bug in Qt )
-    textFont = obj->textFont();
+    textFont = obj->textFont( _left, _top );
     eStyle = obj->style();
     actionText = obj->action();
 
-    brushColor = obj->backGroundBrushColor(_left,_top);
-    brushStyle = obj->backGroundBrushStyle(_left,_top);
+    brushColor = obj->backGroundBrushColor( _left, _top );
+    brushStyle = obj->backGroundBrushStyle( _left,_top );
 
-    bMultiRow = obj->multiRow();
-    bVerticalText=obj->verticalText();
+    bMultiRow = obj->multiRow( _left, _top );
+    bVerticalText=obj->verticalText( _left, _top );
 
     textRotation = obj->getAngle();
     formatNumber = obj->getFormatNumber();
 
     RowLayout *rl;
     ColumnLayout *cl;
-    widthSize=0;
-    heigthSize=0;
+    widthSize = 0;
+    heigthSize = 0;
     for ( int x = _left; x <= _right; x++ )
-        {
-	cl = m_pView->activeTable()->columnLayout(x);
-    	widthSize=QMAX(cl->width(m_pView->canvasWidget()),widthSize);
-    	}
+    {
+	cl = m_pView->activeTable()->columnLayout( x );
+    	widthSize = QMAX( cl->width( /* m_pView->canvasWidget() */ ), widthSize );
+    }
 
     for ( int y = _top; y <= _bottom; y++ )
-	{
+    {
     	rl = m_pView->activeTable()->rowLayout(y);
-    	heigthSize=QMAX(rl->height(m_pView->canvasWidget()),heigthSize);
-    	}
-
+    	heigthSize = QMAX( rl->height( /* m_pView->canvasWidget() */ ),heigthSize );
+    }
 
     // We assume, that all other objects have the same values
     bLeftBorderStyle = TRUE;
@@ -236,29 +239,28 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     bTextFontSize = TRUE;
     bTextFontBold = TRUE;
     bTextFontItalic = TRUE;
-    bStrike=TRUE;
-    bUnderline=TRUE;
-    bTextRotation=TRUE;
-    bFormatNumber=TRUE;
-    if( left==right)
-        oneCol=TRUE;
+    bStrike = TRUE;
+    bUnderline = TRUE;
+    bTextRotation = TRUE;
+    bFormatNumber = TRUE;
+    if( left == right )
+        oneCol = TRUE;
     else
-        oneCol=FALSE;
+        oneCol = FALSE;
 
-    if( top==bottom)
-        oneRow=TRUE;
+    if( top == bottom )
+        oneRow = TRUE;
     else
-        oneRow=FALSE;
+        oneRow = FALSE;
 
     // Do the other objects have the same values ?
     for ( int x = _left; x <= _right; x++ )
-        {
+    {
         for ( int y = _top; y <= _bottom; y++ )
 	{
 	    KSpreadCell *obj = table->cellAt( x, y );
 
-
-	   if ( fallDiagonalStyle != obj->fallDiagonalStyle( x, y ) )
+	    if ( fallDiagonalStyle != obj->fallDiagonalStyle( x, y ) )
 		bFallDiagonalStyle = FALSE;
 	    if ( fallDiagonalWidth != obj->fallDiagonalWidth( x, y ) )
 		bFallDiagonalStyle = FALSE;
@@ -270,45 +272,46 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		bGoUpDiagonalStyle = FALSE;
 	    if ( goUpDiagonalColor != obj->goUpDiagonalColor( x, y ) )
 		bGoUpDiagonalColor = FALSE;
-            if ( strike != obj->textFontStrike( ) )
+            if ( strike != obj->textFontStrike( x, y ) )
 		bStrike = FALSE;
-            if ( underline != obj->textFontUnderline() )
+            if ( underline != obj->textFontUnderline( x, y ) )
 		bUnderline = FALSE;
-	    if ( prefix != obj->prefix() )
+	    if ( prefix != obj->prefix( x, y ) )
 		prefix = QString::null;
-	    if ( postfix != obj->postfix() )
+	    if ( postfix != obj->postfix( x, y ) )
 		postfix = QString::null;
-	    if ( precision != obj->precision() )
+	    if ( precision != obj->precision( x, y ) )
 		precision = -2;
-	    if ( floatFormat != obj->floatFormat() )
+	    if ( floatFormat != obj->floatFormat( x, y ) )
 		bFloatFormat = FALSE;
-	    if ( floatColor != obj->floatColor() )
+	    if ( floatColor != obj->floatColor( x, y ) )
 		bFloatColor = FALSE;
-	    if ( textColor != obj->textColor() )
+	    if ( textColor != obj->textColor( x, y ) )
 		bTextColor = FALSE;
-	    if ( strcmp( textFontFamily.data(), obj->textFontFamily() ) != 0 )
+	    if ( textFontFamily != obj->textFontFamily( x, y ) )
 		bTextFontFamily = FALSE;
-	    if ( textFontSize != obj->textFontSize() )
+	    if ( textFontSize != obj->textFontSize( x, y ) )
 		bTextFontSize = FALSE;
-	    if ( textFontBold != obj->textFontBold() )
+	    if ( textFontBold != obj->textFontBold( x, y ) )
 		bTextFontBold = FALSE;
-	    if ( textFontItalic != obj->textFontItalic() )
+	    if ( textFontItalic != obj->textFontItalic( x, y ) )
 		bTextFontItalic = FALSE;
 	    if ( bgColor != obj->bgColor( x, y ) )
 		bBgColor = FALSE;
-            if( textRotation !=obj->getAngle())
+            if( textRotation != obj->getAngle() )
                 bTextRotation = FALSE;
-            if( formatNumber !=obj->getFormatNumber())
+            if( formatNumber != obj->getFormatNumber() )
                 bFormatNumber = FALSE;
 	    if ( eStyle != obj->style() )
 		eStyle = KSpreadCell::ST_Undef;
-
-	 }
-        }
-    if(!bTextRotation)
-        textRotation=0;
+	}
+    }
+    
+    if( !bTextRotation )
+        textRotation = 0;
+    
     for ( int y = _top; y <= _bottom; y++ )
-        {
+    {
         KSpreadCell *obj = table->cellAt( _left, y );
         if ( leftBorderStyle != obj->leftBorderStyle( _left, y ) )
 		bLeftBorderStyle = FALSE;
@@ -316,11 +319,11 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		bLeftBorderStyle = FALSE;
 	if ( leftBorderColor != obj->leftBorderColor( _left, y ) )
 		bLeftBorderColor = FALSE;
-        }
+    }
 
 
     for ( int y = _top; y <= _bottom; y++ )
-        {
+    {
         KSpreadCell *obj = table->cellAt( _right, y );
         if ( rightBorderStyle != obj->rightBorderStyle( _right, y ) )
 		bRightBorderStyle = FALSE;
@@ -328,10 +331,10 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		bRightBorderStyle = FALSE;
 	if ( rightBorderColor != obj->rightBorderColor( _right, y ) )
 		bRightBorderColor = FALSE;
-        }
+    }
 
     for ( int x = _left; x <= _right; x++ )
-        {
+    {
         KSpreadCell *obj = table->cellAt( x, _top );
         if (  topBorderStyle != obj->topBorderStyle( x, _top ) )
 		bTopBorderStyle = FALSE;
@@ -339,10 +342,10 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		bTopBorderStyle = FALSE;
 	if ( topBorderColor != obj->topBorderColor( x, _top ) )
 		bTopBorderColor = FALSE;
-        }
+    }
 
     for ( int x = _left; x <= _right; x++ )
-        {
+    {
         KSpreadCell *obj = table->cellAt( x, _bottom );
         if ( bottomBorderStyle != obj->bottomBorderStyle( x, _bottom ) )
 		bBottomBorderStyle = FALSE;
@@ -350,41 +353,38 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		bBottomBorderStyle = FALSE;
 	if ( bottomBorderColor != obj->bottomBorderColor( x, _bottom ) )
 		bBottomBorderColor = FALSE;
-        }
+    }
 
 
     // Look for the Outline
     for ( int x = _left; x <= _right; x++ )
-        {
+    {
         for ( int y = _top+1; y <= _bottom; y++ )
         {
-	KSpreadCell *obj = table->cellAt( x, y );
+	    KSpreadCell *obj = table->cellAt( x, y );
 
-	if ( horizontalBorderStyle != obj->topBorderStyle( x, y ) )
-	    bHorizontalBorderStyle = FALSE;
-	if ( horizontalBorderWidth != obj->topBorderWidth( x, y ) )
-	    bHorizontalBorderStyle = FALSE;
-	if ( horizontalBorderColor != obj->topBorderColor( x, y ) )
-	    bHorizontalBorderColor = FALSE;
+	    if ( horizontalBorderStyle != obj->topBorderStyle( x, y ) )
+		bHorizontalBorderStyle = FALSE;
+	    if ( horizontalBorderWidth != obj->topBorderWidth( x, y ) )
+		bHorizontalBorderStyle = FALSE;
+	    if ( horizontalBorderColor != obj->topBorderColor( x, y ) )
+		bHorizontalBorderColor = FALSE;
         }
-
     }
 
     for ( int x = _left+1; x <= _right; x++ )
     {
-    for ( int y = _top; y <= _bottom; y++ )
+	for ( int y = _top; y <= _bottom; y++ )
         {
+	    KSpreadCell *obj = table->cellAt( x, y );
 
-        KSpreadCell *obj = table->cellAt( x, y );
-
-	if ( verticalBorderStyle != obj->leftBorderStyle( x, y ) )
-	    bVerticalBorderStyle = FALSE;
-	if ( verticalBorderWidth != obj->leftBorderWidth( x, y ) )
-	    bVerticalBorderStyle = FALSE;
-	if ( verticalBorderColor != obj->leftBorderColor( x, y ) )
-	    bVerticalBorderColor = FALSE;
+	    if ( verticalBorderStyle != obj->leftBorderStyle( x, y ) )
+		bVerticalBorderStyle = FALSE;
+	    if ( verticalBorderWidth != obj->leftBorderWidth( x, y ) )
+		bVerticalBorderStyle = FALSE;
+	    if ( verticalBorderColor != obj->leftBorderColor( x, y ) )
+		bVerticalBorderColor = FALSE;
         }
-
     }
 
     init();

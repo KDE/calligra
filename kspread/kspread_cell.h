@@ -109,6 +109,14 @@ public slots:
 };
 
 /**
+ * For every cell in the spread sheet there is a KSpreadCell object.
+ *
+ * KSpreadCell contains layout information and algorithm and it
+ * contains the calculation algorithm.
+ *
+ * However, all empty cells are represented by one instace, called the
+ * default cell. @ref #isDefault tells wether a cell is the default one
+ * or not.
  */
 class KSpreadCell : public KSpreadLayout
 {
@@ -150,13 +158,9 @@ public:
      */
     void tableDies();
 
-    virtual QDomElement saveRightMostBorder( QDomDocument& doc, int _x_offset, int _y_offset );
-    virtual QDomElement saveBottomMostBorder( QDomDocument& doc, int _x_offset, int _y_offset );
     virtual QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0 );
-
-    bool loadRightMostBorder( const QDomElement& cell, int _xshift, int _yshift );
-    bool loadBottomMostBorder( const QDomElement& cell, int _xshift, int _yshift );
-    bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal, Operation op = OverWrite );
+    bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
+	       Operation op = OverWrite );
 
     /**
      * Copyies the layout from the cell at the position (_column|_row).
@@ -219,9 +223,9 @@ public:
     int height( int _row = -1, KSpreadCanvas *_canvas = 0L );
 
     /**
-     * @return TRUE if this cell is the default cell.
+     * @reimp
      */
-    virtual bool isDefault() const { return ( m_iColumn == 0 ); }
+    bool isDefault() const;
 
     /**
      * Tells whether this cell has any content.
@@ -235,11 +239,6 @@ public:
      * Tells whether the cell contains, text, a formula, richtext or a visual formula.
      */
     Content content() const { return m_content; }
-
-    /**
-     * @return the text the user entered.
-     */
-    QString text() const { return m_strText; }
 
     /**
      * Increases the precison of the
@@ -259,123 +258,82 @@ public:
     void decPrecision();
 
     /**
-     * Set the column this cell is now in. This function is usually used after the 'paste'
-     * command. It does not trigger any updates or make shure that no other cell
-     * already exists at this place.
-     */
-    // void setColumn( int _c ) { m_iColumn = _c; }
-    /**
-     * Set the row this cell is now in. This function is usually used after the 'paste'
-     * command. It does not trigger any updates or make shure that no other cell
-     * already exists at this place.
-     */
-    // void setRow( int _r ) { m_iRow = _r; }
-
-    /**
      * When we are in the progress of loading, then this function will only store the
      * text. KSpreadDoc::completeLoading takes care of updating dependencies etc.
      * For this, we call it with updateDepends=false.
      * Most of the time, call this with updateDepends=true so that dependencies are updated.
      */
     void setCellText( const QString& _text, bool updateDepends = true );
-    void setAlign( Align _align ) { m_eAlign = _align; m_bLayoutDirtyFlag = TRUE; }
-    void setAlignY( AlignY _alignY ) { m_eAlignY = _alignY; m_bLayoutDirtyFlag = TRUE; }
-    void setFaktor( double _d ) { m_dFaktor = _d; m_bLayoutDirtyFlag = TRUE; }
-
-    void setPrefix( const char * _prefix );
-    void setPostfix( const char * _postfix );
-    void setPrecision( int _p ) { m_bLayoutDirtyFlag = TRUE; m_iPrecision = _p; }
-
-    void setLeftBorderStyle( Qt::PenStyle _s ) { m_leftBorderPen.setStyle( _s ); m_bLayoutDirtyFlag = TRUE; }
-    void setTopBorderStyle( Qt::PenStyle _s ) { m_topBorderPen.setStyle( _s ); m_bLayoutDirtyFlag = TRUE; }
-    void setFallDiagonalStyle( Qt::PenStyle _s ) { m_fallDiagonalPen.setStyle( _s ); m_bLayoutDirtyFlag = TRUE; }
-    void setGoUpDiagonalStyle( Qt::PenStyle _s ) { m_goUpDiagonalPen.setStyle( _s ); m_bLayoutDirtyFlag = TRUE; }
-    void setRightBorderStyle( Qt::PenStyle _s );
-    void setBottomBorderStyle( Qt::PenStyle _s );
-
-    void setBackGroundBrushStyle( Qt::BrushStyle s) {m_backGroundBrush.setStyle( s );m_bLayoutDirtyFlag = TRUE; }
-
-    void setLeftBorderColor( const QColor & _c ) { m_leftBorderPen.setColor( _c ); m_bLayoutDirtyFlag = TRUE; }
-    void setTopBorderColor( const QColor & _c ) { m_topBorderPen.setColor( _c ); m_bLayoutDirtyFlag = TRUE; }
-    void setFallDiagonalColor( const QColor & _c ) { m_fallDiagonalPen.setColor( _c ); m_bLayoutDirtyFlag = TRUE; }
-    void setGoUpDiagonalColor( const QColor & _c ) { m_goUpDiagonalPen.setColor( _c ); m_bLayoutDirtyFlag = TRUE; }
-    void setRightBorderColor( const QColor & _c );
-    void setBottomBorderColor( const QColor & _c );
-    void setBackGroundBrushColor( const QColor & _c) {m_backGroundBrush.setColor( _c);m_bLayoutDirtyFlag = TRUE; }
-
-    void setLeftBorderWidth( int _w ) { m_iLeftBorderWidth = _w; m_bLayoutDirtyFlag = TRUE; }
-    void setTopBorderWidth( int _w ) { m_iTopBorderWidth = _w; m_bLayoutDirtyFlag = TRUE; }
-    void setFallDiagonalWidth( int _w ) { m_iFallDiagonalWidth = _w; m_bLayoutDirtyFlag = TRUE; }
-    void setGoUpDiagonalWidth( int _w ) { m_iGoUpDiagonalWidth = _w; m_bLayoutDirtyFlag = TRUE; }
-    void setRightBorderWidth( int _w );
-    void setBottomBorderWidth( int _w );
-
-    virtual void setTextFontSize( int _s ) { m_textFont.setPointSize( _s ); m_bLayoutDirtyFlag = TRUE; }
-    virtual void setTextFontFamily( const char *_f )
-    { m_textFont.setFamily( _f ); m_bLayoutDirtyFlag = TRUE; }
-    virtual void setTextFontBold( bool _b )
-    { m_textFont.setBold( _b ); m_bLayoutDirtyFlag = TRUE; }
-    virtual void setTextFontItalic( bool _i )
-    { m_textFont.setItalic( _i ); m_bLayoutDirtyFlag = TRUE; }
-    virtual void setTextFontUnderline( bool _i )
-    { m_textFont.setUnderline( _i ); m_bLayoutDirtyFlag = TRUE; }
-    void setTextFont( const QFont& _f ) { m_textFont = _f; m_bLayoutDirtyFlag = TRUE; }
-    void setTextColor( const QColor & _c ) { m_textColor = _c; m_bLayoutDirtyFlag = TRUE; }
-    void setBgColor( const QColor & _c ) { m_bgColor = _c; m_bLayoutDirtyFlag = TRUE; }
-
-    void setFloatFormat( FloatFormat _f ) { m_eFloatFormat = _f; m_bLayoutDirtyFlag = TRUE; }
-    void setFloatColor( FloatColor _c ) { m_eFloatColor = _c; m_bLayoutDirtyFlag = TRUE; }
-
-    void setMultiRow( bool _b ) { m_bMultiRow = _b; m_bLayoutDirtyFlag = TRUE; }
-
-    void setVerticalText( bool _b ) { m_bVerticalText = _b; m_bLayoutDirtyFlag = TRUE; }
+    /**
+     * @return the text the user entered.
+     */
+    QString text() const { return m_strText; }
 
     void setStyle( Style _s );
+    
     void setAction( const QString& _action ) { m_strAction = _action; }
 
-    /**
-     * Since the GUI supports zooming, you can get the value zoomed
-     * or not scaled. The not scaled value may be of interest in a
-     * layout dialog for example.
-     *
-     * @param _col the column this cell is assumed to be in
-     * @param _row the row this cell is assumed to be in
-     *
-     * @return the border width of the left border
-     */
-    int leftBorderWidth( int _col, int _row, KSpreadCanvas *_canvas = 0L );
-    int topBorderWidth( int _col, int _row, KSpreadCanvas *_canvas = 0L );
-    int rightBorderWidth( int _col, int _row, KSpreadCanvas *_canvas = 0L );
-    int bottomBorderWidth( int _col, int _row, KSpreadCanvas *_canvas = 0L );
-    int fallDiagonalWidth( int _col, int _row, KSpreadCanvas *_canvas = 0L );
-    int goUpDiagonalWidth( int _col, int _row, KSpreadCanvas *_canvas = 0L );
-    /**
-     * @param _col the column this cell is assumed to be in
-     * @param _row the row this cell is assumed to be in
-     *
-     * @return the style used to draw the left border
-     */
-    Qt::PenStyle leftBorderStyle( int _col, int _row );
-    Qt::PenStyle topBorderStyle( int _col, int _row );
-    Qt::PenStyle rightBorderStyle( int _col, int _row );
-    Qt::PenStyle bottomBorderStyle( int _col, int _row );
-    Qt::PenStyle fallDiagonalStyle( int _col, int _row );
-    Qt::PenStyle goUpDiagonalStyle( int _col, int _row );
-    Qt::BrushStyle backGroundBrushStyle(int _col,int _row);
+    void setComment( const QString& c );
+    QString comment() const;
+    
+    ////////////////////////////////
+    //
+    // Methods for querying layout stuff.
+    //
+    ////////////////////////////////
 
     /**
-     * @param _col the column this cell is assumed to be in
-     * @param _row the row this cell is assumed to be in
-     *
-     * @return the background color.
+     * @reimp
      */
-    const QColor& bgColor( int _col, int _row );
+    const QPen& leftBorderPen( int col, int row ) const;
 
     /**
-     * @return the background color.
+     * @reimp
      */
-    const QColor& bgColor() const { return KSpreadLayout::bgColor(); }
+    const QPen& topBorderPen( int col, int row ) const;
+    
+    /**
+     * @reimp
+     */
+    const QPen& rightBorderPen( int col, int row ) const;
 
+    /**
+     * @reimp
+     */
+    const QPen& bottomBorderPen( int col, int row ) const;
+
+    ////////////////////////////////
+    //
+    // Methods for setting layout stuff.
+    //
+    ////////////////////////////////
+
+    /**
+     * @reimp
+     */
+    void setLeftBorderPen( const QPen& p );
+
+    /**
+     * @reimp
+     */
+    void setTopBorderPen( const QPen& p );
+
+    /**
+     * @reimp
+     */
+    void setRightBorderPen( const QPen& p );
+    
+    /**
+     * @reimp
+     */
+    void setBottomBorderPen( const QPen& p );
+
+    //////////////////////
+    //
+    // Other stuff
+    //
+    //////////////////////
+    
     /**
      * @see #setStyle
      * @see #m_style
@@ -386,20 +344,6 @@ public:
      * @see #m_strAction
      */
     QString action() const { return m_strAction; }
-
-    /**
-     * @param _col the column this cell is assumed to be in
-     * @param _row the row this cell is assumed to be in
-     *
-     * @return the color of the left color.
-     */
-    const QColor& leftBorderColor( int _col, int _row );
-    const QColor& topBorderColor( int _col, int _row );
-    const QColor& rightBorderColor( int _col, int _row );
-    const QColor& bottomBorderColor( int _col, int _row );
-    const QColor& fallDiagonalColor( int _col, int _row );
-    const QColor& goUpDiagonalColor( int _col, int _row );
-    const QColor& backGroundBrushColor(int _col, int _row);
 
     bool isValue() const { return m_bValue; }
     bool isBool() const {  return m_bBool; }
@@ -656,10 +600,6 @@ public:
     void setFormatNumber(formatNumber _format){m_eFormatNumber=_format;}
     formatNumber getFormatNumber(){return  m_eFormatNumber;}
 
-    QString createFormat(double value);
-    QString createFractionFormat(double value);
-    void checkFormat(bool formular=false);
-
     /**
      * Used for comparing cells (when sorting)
      */
@@ -667,13 +607,29 @@ public:
     bool operator < ( const KSpreadCell & ) const;
 
 protected:
+    /**
+     * @reimp
+     */
+    void layoutChanged();
+    /**
+     * @reimp
+     */
+    KSpreadLayout* fallbackLayout( int col, int row );
+    /**
+     * @reimp
+     */
+    const KSpreadLayout* fallbackLayout( int col, int row ) const;
+
+    QString createFormat( double value, int col, int row );
+    QString createFractionFormat( double value );
+    void checkFormat( bool formular = false );
 
     /**
      * When you insert a cell at bottom or right
      * and the size is not the same so text offset
      * will not good => recalc offset
      */
-    void offsetAlign(int _col,int _row);
+    void offsetAlign( int _col, int _row );
 
     /**
      * Called from @ref #makeLayout to determine the space
@@ -956,6 +912,11 @@ protected:
 
     KSpreadCell* m_nextCell;
     KSpreadCell* m_previousCell;
+    
+    /**
+     * Stores a comment string.
+     */
+    QString m_strComment;
 };
 
 #endif

@@ -438,18 +438,18 @@ void KSpreadView::updateEditWidget()
     else
 	editWidget()->setText( cell->text() );
 
-    m_selectFontSize->setFontSize( cell->textFontSize() );
-    m_selectFont->setFont( cell->textFontFamily() );
-    m_bold->setChecked( cell->textFontBold() );
-    m_italic->setChecked( cell->textFontItalic() );
-    m_underline->setChecked( cell->textFontUnderline() );
-    m_strikeOut->setChecked( cell->textFontStrike() );
+    m_selectFontSize->setFontSize( cell->textFontSize( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_selectFont->setFont( cell->textFontFamily( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_bold->setChecked( cell->textFontBold( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_italic->setChecked( cell->textFontItalic( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_underline->setChecked( cell->textFontUnderline( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_strikeOut->setChecked( cell->textFontStrike( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
-    if ( cell->align() == KSpreadLayout::Left )
+    if ( cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Left )
 	m_alignLeft->setChecked( TRUE );
-    else if ( cell->align() == KSpreadLayout::Right )
+    else if ( cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Right )
 	m_alignRight->setChecked( TRUE );
-    else if ( cell->align() == KSpreadLayout::Center )
+    else if ( cell->align( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Center )
 	m_alignCenter->setChecked( TRUE );
     else
     {
@@ -458,41 +458,36 @@ void KSpreadView::updateEditWidget()
 	m_alignCenter->setChecked( FALSE );
     }
 
-    if ( cell->alignY() == KSpreadLayout::Top )
+    if ( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Top )
 	m_alignTop->setChecked( TRUE );
-    else if ( cell->alignY() == KSpreadLayout::Middle )
+    else if ( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Middle )
 	m_alignMiddle->setChecked( TRUE );
-    else if ( cell->alignY() == KSpreadLayout::Bottom )
+    else if ( cell->alignY( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) == KSpreadLayout::Bottom )
 	m_alignBottom->setChecked( TRUE );
 
-    m_verticalText->setChecked( cell->verticalText() );
+    m_verticalText->setChecked( cell->verticalText( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
-    m_multiRow->setChecked( cell->multiRow() );
+    m_multiRow->setChecked( cell->multiRow( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
     /*if( cell->faktor()==100.0 && cell->postfix()=="%")
     	m_percent->setChecked( TRUE );
     else
     	m_percent->setChecked( FALSE );
     */
-    if(cell->getFormatNumber()==KSpreadCell::Percentage)
+    if( cell->getFormatNumber() == KSpreadCell::Percentage )
         m_percent->setChecked( TRUE );
     else
     	m_percent->setChecked( FALSE );
 
-    if(cell->getFormatNumber()==KSpreadCell::Money)
+    if( cell->getFormatNumber() == KSpreadCell::Money )
         m_money->setChecked( TRUE );
     else
     	m_money->setChecked( FALSE );
 
-    if( cell->getComment().isEmpty())
-        {
-        //m_showComment->setEnabled(FALSE);
-        m_removeComment->setEnabled(FALSE);
-        }
+    if( cell->comment().isEmpty() )
+        m_removeComment->setEnabled( FALSE );
     else
-        {
-        //m_showComment->setEnabled(TRUE);
-        m_removeComment->setEnabled(TRUE);
-        }
+        m_removeComment->setEnabled( TRUE );
+
     m_toolbarLock = FALSE;
 }
 
@@ -1771,18 +1766,18 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
     m_pPopupMenu->insertSeparator();
     m_addModifyComment->plug( m_pPopupMenu );
-    if(!cell->getComment().isEmpty())
-        {
+    if( !cell->comment().isEmpty() )
+    {
         //m_showComment->plug( m_pPopupMenu );
         m_removeComment->plug( m_pPopupMenu );
-        }
+    }
 
     // Remove informations about the last tools we offered
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
 
     if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty()
-    && !cell->isTime() &&!cell->isDate() && koDocument()->isReadWrite() )
+	 && !cell->isTime() &&!cell->isDate() && koDocument()->isReadWrite() )
     {
       m_popupMenuFirstToolId = 10;
       int i = 0;

@@ -17,6 +17,7 @@ public:
     KSpreadCluster();
     ~KSpreadCluster();
 
+    const KSpreadCell* lookup( int x, int y ) const;
     KSpreadCell* lookup( int x, int y );
 
     /**
@@ -82,7 +83,7 @@ public:
      */
     void clearColumn( int col );
     void clearRow( int row );
-    
+
 private:
     /**
      * @param work is set to TRUE if the method found some clusters
@@ -105,6 +106,7 @@ public:
     KSpreadColumnCluster();
     ~KSpreadColumnCluster();
 
+    const ColumnLayout* lookup( int col ) const;
     ColumnLayout* lookup( int col );
 
     void clear();
@@ -132,6 +134,7 @@ public:
     KSpreadRowCluster();
     ~KSpreadRowCluster();
 
+    const RowLayout* lookup( int col ) const;
     RowLayout* lookup( int col );
 
     void clear();

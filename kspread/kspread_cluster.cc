@@ -90,6 +90,23 @@ KSpreadCell* KSpreadCluster::lookup( int x, int y )
     return cl[ dy * KSPREAD_CLUSTER_LEVEL2 + dx ];
 }
 
+const KSpreadCell* KSpreadCluster::lookup( int x, int y ) const
+{
+    if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
+	return 0;
+
+    int cx = x / KSPREAD_CLUSTER_LEVEL2;
+    int cy = y / KSPREAD_CLUSTER_LEVEL2;
+    int dx = x % KSPREAD_CLUSTER_LEVEL2;
+    int dy = y % KSPREAD_CLUSTER_LEVEL2;
+
+    const KSpreadCell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ];
+    if ( !cl )
+	return 0;
+
+    return cl[ dy * KSPREAD_CLUSTER_LEVEL2 + dx ];
+}
+
 void KSpreadCluster::insert( KSpreadCell* cell, int x, int y )
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
@@ -592,6 +609,21 @@ ColumnLayout* KSpreadColumnCluster::lookup( int col )
     return cl[ dx ];
 }
 
+const ColumnLayout* KSpreadColumnCluster::lookup( int col ) const
+{
+    if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
+	return 0;
+
+    int cx = col / KSPREAD_CLUSTER_LEVEL2;
+    int dx = col % KSPREAD_CLUSTER_LEVEL2;
+
+    const ColumnLayout** cl = m_cluster[ cx ];
+    if ( !cl )
+	return 0;
+
+    return cl[ dx ];
+}
+
 void KSpreadColumnCluster::clear()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
@@ -821,6 +853,21 @@ KSpreadRowCluster::~KSpreadRowCluster()
     }
 
     free( m_cluster );
+}
+
+const RowLayout* KSpreadRowCluster::lookup( int row ) const
+{
+    if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
+	return 0;
+
+    int cx = row / KSPREAD_CLUSTER_LEVEL2;
+    int dx = row % KSPREAD_CLUSTER_LEVEL2;
+
+    const RowLayout** cl = m_cluster[ cx ];
+    if ( !cl )
+	return 0;
+
+    return cl[ dx ];
 }
 
 RowLayout* KSpreadRowCluster::lookup( int row )
