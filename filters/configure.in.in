@@ -2,15 +2,16 @@ AC_MSG_CHECKING([for filters not to be compiled])
 
 for args in $DO_NOT_COMPILE ; do
     case $args in
-        kword) NO_KWORD="$args" ;;
-        kspread) NO_KSPREAD="$args" ;;
-        kontour) NO_KONTOUR="$args" ;;
-        karbon) NO_KARBON="$args" ;;
-        kpresenter) NO_KPRESENTER="$args" ;;
+        kword) NO_KWORD="$args " ;;
+        kspread) NO_KSPREAD="$args " ;;
+        kontour) NO_KONTOUR="$args " ;;
+        karbon) NO_KARBON="$args " ;;
+        kpresenter) NO_KPRESENTER="$args " ;;
+        kformula) NO_KFORMULA="$args " ;;
     esac
 done
 
-USERFEEDBACKNOTCOMPILE="$NO_KWORD $NO_KSPREAD $NO_KONTOUR $NO_KARBON $NO_KPRESENTER"
+USERFEEDBACKNOTCOMPILE="$NO_KWORD$NO_KSPREAD$NO_KONTOUR$NO_KARBON$NO_KPRESENTER$NO_KFORMULA"
 AC_MSG_RESULT([$USERFEEDBACKNOTCOMPILE])
 
 AM_CONDITIONAL(do_not_compile_KWORD, test -n "$NO_KWORD")
@@ -18,3 +19,4 @@ AM_CONDITIONAL(do_not_compile_KSPREAD, test -n "$NO_KSPREAD")
 AM_CONDITIONAL(do_not_compile_KONTOUR, test -n "$NO_KONTOUR")
 AM_CONDITIONAL(do_not_compile_KARBON, test -n "$NO_KARBON")
 AM_CONDITIONAL(do_not_compile_KPRESENTER, test -n "$NO_KPRESENTER")
+AM_CONDITIONAL(do_not_compile_KFORMULA, test -n "$NO_KFORMULA")
