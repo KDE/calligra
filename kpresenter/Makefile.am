@@ -2,15 +2,22 @@
 KDE_CXXFLAGS = $(USE_RTTI) 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 LDFLAGS	= $(all_libraries) $(KDE_RPATH)
-LDADD = autoformEdit/libaf.a ../lib/kofficeui/libkofficeui.la $(LIB_KIMGIO)
+LDADD = 
 
 ####### Files
 
 bin_PROGRAMS = kpresenter
+lib_LTLIBRARIES = libkpresenter.la
 
-kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc \
+kpresenter_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kpresenter_LDADD = libkpresenter.la 
+
+libkpresenter_la_LDFLAGS = -avoid-version -module
+libkpresenter_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la $(LIB_KIMGIO)
+
+libkpresenter_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
-	backdia.cc page.cc ktextobject.cc styledia.cc \
+	page.cc ktextobject.cc styledia.cc \
 	qwmf.cc kenumlistdia.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc ksearchdialogs.cc \
@@ -25,12 +32,14 @@ kpresenter_SOURCES = webpresentation.cc kpresenter_view.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
-	commandhistory.cc preview.cc gotopage.cc footer_header.cc main.cc \
+	commandhistory.cc preview.cc gotopage.cc footer_header.cc \
 	kpresenter_shell.cc kpresenter_factory.cc \
 	KPresenterDocIface.skel KPresenterDocIface.cc \
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc
+
+kpresenter_SOURCES = main.cc
 
 noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		backdia.h page.h ktextobject.h styledia.h \
