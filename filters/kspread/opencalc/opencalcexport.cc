@@ -275,8 +275,8 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
   for( it.toFirst(); it.current(); ++it )
   {
     SheetStyle ts;
-    int maxCols         = 0;
-    int maxRows         = 0;
+    int maxCols         = 1;
+    int maxRows         = 1;
     KSpreadSheet * sheet = it.current();
 
     ts.visible = !sheet->isHidden();
@@ -324,7 +324,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
       ColumnFormat const * const c = sheet->columnFormat( j );
       ColumnStyle cs1;
       cs1.breakB = Style::automatic;
-      cs1.size   = column->mmWidth() / 10;
+      cs1.size   = c->mmWidth() / 10;
       if ( ColumnStyle::isEqual( &cs, cs1 ) && ( hide == c->isHide() ) )
         ++repeated;
       else
@@ -460,6 +460,26 @@ void OpenCalcExport::maxRowCols( KSpreadSheet const * const sheet,
 
     cell = cell->nextCell();
   }
+
+  RowFormat const * row = sheet->firstRow();
+
+  while ( row )
+  {
+    if ( row->row() > maxRows )
+      maxRows = row->row();
+
+    row = row->next();
+  }
+
+  ColumnFormat const * col = sheet->firstCol();
+  while ( col )
+  {
+    if ( col->column() > maxCols )
+      maxCols = col->column();
+
+    col = col->next();
+  }
+  
 }
 
 bool OpenCalcExport::exportStyles( KoStore * store, KSpreadDoc const * const ksdoc )
