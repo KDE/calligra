@@ -747,39 +747,42 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
                        << " h=" << h << endl;
 #endif
 
-    int totalHeight = 0;
-    QListIterator<KWFrame> frameIt( frameIterator() );
-    for ( ; frameIt.current(); ++frameIt )
+    if ( !parag || !parag->isMovedDown() ) // only once. If it doesn't fit on a page, we don't want to do this for ever....
     {
-        int frameHeight = kWordDocument()->zoomItY( frameIt.current()->height() );
-        int bottom = totalHeight + frameHeight;
-        // Only skip bottom of frame if there is a next one or if there'll be another one created.
-        // ( Not for header/footer, for instance. )
-        if ( !frameIt.atLast() || frameIt.current()->getFrameBehaviour() == KWFrame::AutoCreateNewFrame )
+        int totalHeight = 0;
+        QListIterator<KWFrame> frameIt( frameIterator() );
+        for ( ; frameIt.current(); ++frameIt )
         {
-            //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
-
-            // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
-            breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
-            if ( breaked )
-                break;
-
-            if ( hardFrameBreak && yp > totalHeight && yp < bottom && !parag->isMovedDown() )
+            int frameHeight = kWordDocument()->zoomItY( frameIt.current()->height() );
+            int bottom = totalHeight + frameHeight;
+            // Only skip bottom of frame if there is a next one or if there'll be another one created.
+            // ( Not for header/footer, for instance. )
+            if ( !frameIt.atLast() || frameIt.current()->getFrameBehaviour() == KWFrame::AutoCreateNewFrame )
             {
-                // The paragraph wants a frame break before it, and is in the current frame
-                // The last check is for whether we did the frame break already
-                // (adjustFlow is called twice for each paragraph, if a break was done)
-                yp = bottom + 2;
+                //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
+
+                // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
+                breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
+                if ( breaked )
+                    break;
+
+                if ( hardFrameBreak && yp > totalHeight && yp < bottom && !parag->isMovedDown() )
+                {
+                    // The paragraph wants a frame break before it, and is in the current frame
+                    // The last check is for whether we did the frame break already
+                    // (adjustFlow is called twice for each paragraph, if a break was done)
+                    yp = bottom + 2;
 #ifdef DEBUG_FLOW
-                kdDebug() << "KWTextFrameSet::adjustFlow -> HARD FRAME BREAK" << endl;
-                kdDebug() << "KWTextFrameSet::adjustFlow yp now " << yp << endl;
+                    kdDebug() << "KWTextFrameSet::adjustFlow -> HARD FRAME BREAK" << endl;
+                    kdDebug() << "KWTextFrameSet::adjustFlow yp now " << yp << endl;
 #endif
-                break;
+                    break;
+                }
             }
+            if ( yp+h < bottom )
+                break; // we've been past the parag, so stop here
+            totalHeight = bottom;
         }
-        if ( yp+h < bottom )
-            break; // we've been past the parag, so stop here
-        totalHeight = bottom;
     }
 
     // Another case for a vertical break is frames with the RA_SKIP flag
