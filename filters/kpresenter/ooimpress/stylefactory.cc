@@ -837,8 +837,9 @@ void PageStyle::toXML( QDomDocument & doc, QDomElement & e ) const
     properties.setAttribute( "presentation:background-visible", m_bg_visible );
     properties.setAttribute( "presentation:background-objects-visible",
                              m_bg_objects_visible );
-    properties.setAttribute( "presentation:transition-style",
-                             m_page_effect );
+    if ( !m_page_effect.isEmpty() )
+        properties.setAttribute( "presentation:transition-style",
+                                 m_page_effect );
     if ( m_fill != QString::null )
         properties.setAttribute( "draw:fill", m_fill );
     if ( m_fill_color != QString::null )
