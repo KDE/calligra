@@ -831,13 +831,13 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     styles = mainStyles.styles( KSpreadDoc::STYLE_USERSTYLE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:cell-properties" );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
     }
 
     styles = mainStyles.styles( KSpreadDoc::STYLE_DEFAULTSTYLE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:cell-properties" );
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:table-cell-properties" );
     }
 
 

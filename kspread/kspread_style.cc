@@ -1039,7 +1039,9 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
         }
     }
 
-    if ( ( m_leftBorderPen == m_topBorderPen )&&
+    if ( featureSet( SLeftBorder ) &&featureSet( SRightBorder ) &&
+         featureSet( STopBorder ) && featureSet( SBottomBorder ) &&
+        ( m_leftBorderPen == m_topBorderPen )&&
          ( m_leftBorderPen == m_rightBorderPen )&&
          ( m_leftBorderPen == m_bottomBorderPen ) )
     {
@@ -1048,23 +1050,29 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     }
     else
     {
-        if ( ( m_leftBorderPen.width() != 0 ) && ( m_leftBorderPen.style() != Qt::NoPen ) )
+        if ( featureSet( SLeftBorder ) &&
+             ( ( m_leftBorderPen.width() != 0 ) && ( m_leftBorderPen.style() != Qt::NoPen ) ) )
             style.addProperty( "fo:border-left", convertOasisPenToString( m_leftBorderPen ) );
 
-        if ( ( m_rightBorderPen.width() != 0 ) && ( m_rightBorderPen.style() != Qt::NoPen ) )
+        if ( featureSet( SRightBorder ) &&
+             ( ( m_rightBorderPen.width() != 0 ) && ( m_rightBorderPen.style() != Qt::NoPen ) ) )
             style.addProperty( "fo:border-right", convertOasisPenToString( m_rightBorderPen ) );
 
-        if ( ( m_topBorderPen.width() != 0 ) && ( m_topBorderPen.style() != Qt::NoPen ) )
+        if ( featureSet( STopBorder ) &&
+             ( ( m_topBorderPen.width() != 0 ) && ( m_topBorderPen.style() != Qt::NoPen ) ) )
             style.addProperty( "fo:border-top", convertOasisPenToString( m_topBorderPen ) );
 
-        if ( ( m_bottomBorderPen.width() != 0 ) && ( m_bottomBorderPen.style() != Qt::NoPen ) )
+        if ( featureSet( SBottomBorder ) &&
+             ( m_bottomBorderPen.width() != 0 ) && ( m_bottomBorderPen.style() != Qt::NoPen ) )
             style.addProperty( "fo:border-bottom", convertOasisPenToString( m_bottomBorderPen ) );
     }
-    if ( ( m_fallDiagonalPen.width() != 0 ) && ( m_fallDiagonalPen.style() != Qt::NoPen ) )
+    if ( featureSet( SFallDiagonal ) &&
+         ( ( m_fallDiagonalPen.width() != 0 ) && ( m_fallDiagonalPen.style() != Qt::NoPen ) ) )
     {
         style.addProperty("style:diagonal-tl-br", convertOasisPenToString( m_fallDiagonalPen ) );
     }
-    if ( ( m_goUpDiagonalPen.width() != 0 ) && ( m_goUpDiagonalPen.style() != Qt::NoPen ) )
+    if ( featureSet( SGoUpDiagonal ) &&
+         ( ( m_goUpDiagonalPen.width() != 0 ) && ( m_goUpDiagonalPen.style() != Qt::NoPen ) ))
     {
         style.addProperty("style:diagonal-bl-tr", convertOasisPenToString(m_goUpDiagonalPen ) );
     }
