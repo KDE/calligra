@@ -36,7 +36,7 @@ namespace KexiDB {
 /*! This class automatically works as a proxy for shared (application-wide) actions.
  KexiViewBase has 'dirty' flag to indicate that view's data has changed.
  This flag's state is reused by KexiDialogBase object that contain the view.
- KexiViewBase obejcts can be also nested, using addChildView(): any actions and 'dirty' flag
+ KexiViewBase objects can be also nested, using addChildView(): any actions and 'dirty' flag
  are transmited to parent view in this case.
 
  KexiViewBase objects are usually allocated within KexiDialogBase objects by implementing
