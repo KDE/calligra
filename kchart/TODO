@@ -26,7 +26,7 @@ Item								   Prio Status
      - Set modified when the chart is changed through config.	      2 done
      - Set modified when the chart is changed through wizard.	      2 done
   + 90893: never-saved doc failes autosave			      2 DONE
-  + 77839: Program hangs when only one value for pie chart 	      1	KDCH DONE
+  + 77839: Program hangs when only one value for pie chart 	      1	DONE
 	   and value = 0.
        Fixed by new KDChart version
   + 100004: Manual should describe stand-alone charting  	      2	----
@@ -44,7 +44,7 @@ Item								   Prio Status
        Fixed by new KDChart version
   + 101490: Error in drawing charts with logarithmic scale.	      1	KDCH
        Fixed by new KDChart version (hopefully)
-  + ------: A chart in a spreadsheet opens the template dialog 	      1 ----
+  + 102414: A chart in a spreadsheet opens the template dialog 	      1 ----
 	    before the wizard appears.
 
 * Wishes
