@@ -2306,8 +2306,8 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
     }
     if ( element.hasAttribute( "table:allow-empty-cell" ) )
     {
-        //todo implement it into kspread
-        //todo add attribute and config into kspread_cell
+        val->allowEmptyCell = ( ( element.attribute( "table:allow-empty-cell" )=="true" ) ? true : false );
+
     }
     if ( element.hasAttribute( "table:base-cell-address" ) )
     {

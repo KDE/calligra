@@ -5162,7 +5162,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     }
     if ( element.hasAttribute( "table:validation-name" ) )
     {
-        kdDebug()<<" Celle has a validation :"<<element.attribute( "table:validation-name" )<<endl;
+        kdDebug()<<" Cel has a validation :"<<element.attribute( "table:validation-name" )<<endl;
         loadOasisValidation( element.attribute( "table:validation-name" ) );
     }
     if( element.hasAttribute( "table:value-type" ) )
@@ -5534,8 +5534,8 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
     }
     if ( element.hasAttribute( "table:allow-empty-cell" ) )
     {
-        //todo implement it into kspread
-        //todo add attribute and config into kspread_cell
+        kdDebug()<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttribute( "table:allow-empty-cell" )<<endl;
+        d->extra()->validity->allowEmptyCell = ( ( element.attribute( "table:allow-empty-cell" )=="true" ) ? true : false );
     }
     if ( element.hasAttribute( "table:base-cell-address" ) )
     {
