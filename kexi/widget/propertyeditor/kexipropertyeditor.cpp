@@ -142,6 +142,7 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 
 		default:
 			m_currentEditor = 0;
+			setFocus();
 			kdDebug() << "PropertyEditor::createEditor: No editor created!" << endl;
 			return;
 	}

@@ -31,13 +31,8 @@ KexiPropertySubEditor::KexiPropertySubEditor(QWidget *parent, KexiProperty *prop
 bool
 KexiPropertySubEditor::eventFilter(QObject* watched, QEvent* e)
 {
-
 	if(e->type() == QEvent::KeyPress)
 	{
-		kdDebug() << "event" << endl;
-		KListView *list = (KListView*) parentWidget()->parentWidget();
-		KListViewItem *item = (KListViewItem*)list->itemAt(mapToParent(QPoint(2,2)));
-
 		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
 		if(ev->key() == Key_Escape)
 		{
@@ -49,9 +44,11 @@ KexiPropertySubEditor::eventFilter(QObject* watched, QEvent* e)
 			emit accept(this);
 			return true;
 		}
-		else if(ev->key()==Key_Up && ev->state()!=ControlButton)
+		KListView *list = (KListView*) parentWidget()->parentWidget();
+		KListViewItem *item = (KListViewItem*)list->itemAt(mapToParent(QPoint(2,2)));
+		
+		if(ev->key()==Key_Up && ev->state()!=ControlButton)
 		{
-			kdDebug() << "key_up pressed" << endl;
 			list->setCurrentItem(item->itemAbove());
 			return true;
 		}
@@ -62,7 +59,7 @@ KexiPropertySubEditor::eventFilter(QObject* watched, QEvent* e)
 		}
 	}
 
-	return QWidget::eventFilter(watched, e);
+	return false;
 }
 
 void
@@ -75,19 +72,10 @@ KexiPropertySubEditor::resizeEvent(QResizeEvent *ev)
 }
 
 void
-KexiPropertySubEditor::focusInEvent(QFocusEvent *ev)
-{
-	if(m_childWidget)
-	{
-	m_childWidget->setFocus();
-	}
-}
-
-void
 KexiPropertySubEditor::setWidget(QWidget *w)
 {
 	m_childWidget = w;
-	//setFocusProxy(m_childWidget);
+	setFocusProxy(m_childWidget);
 	m_childWidget->installEventFilter(this);
 }
 

@@ -45,7 +45,6 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 
 	protected:
 		virtual void		resizeEvent(QResizeEvent *ev);
-		virtual void		focusInEvent(QFocusEvent *ev);
 
 	private:
 		QWidget			*m_childWidget;

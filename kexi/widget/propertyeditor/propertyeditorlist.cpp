@@ -17,16 +17,38 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kcombobox.h>
 #include <klocale.h>
 
 #include "propertyeditorlist.h"
 #include "kexiproperty.h"
 
+PropComboBox::PropComboBox(QWidget *parent)
+   : KComboBox(parent)
+  {}
+
+bool
+PropComboBox::eventFilter(QObject *o, QEvent *e)
+{
+	if(o == lineEdit())
+	{
+	if(e->type() == QEvent::KeyPress)
+	{
+		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+		if(ev->key()==Key_Up|ev->key()==Key_Down && ev->state()!=ControlButton)
+		{
+			parentWidget()->eventFilter(o, e);
+			return true;
+		}
+	}
+	}
+	
+	return KComboBox::eventFilter(o, e);
+}
+
 PropertyEditorList::PropertyEditorList(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
-	m_combo = new KComboBox(this);
+	m_combo = new PropComboBox(this);
 
 	m_combo->setFocusPolicy(QWidget::StrongFocus);
 	m_combo->setGeometry(frameGeometry());

@@ -27,6 +27,7 @@
 class QLineEdit;
 class KexiProperty;
 class QToolButton;
+class QEvent; 
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorInput : public KexiPropertySubEditor
 {
@@ -54,6 +55,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropIntSpinBox : public KIntSpinBox
 	
 	public:
 	PropIntSpinBox(int lower, int upper, int step, int value, int base, QWidget *parent, const char *name);
+	virtual bool eventFilter(QObject *o, QEvent *e);
 	~PropIntSpinBox() {;}
 };
 
@@ -83,6 +85,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropDoubleSpinBox : public KDoubleSpinBox
 	
 	public:
 	PropDoubleSpinBox(QWidget *parent);
+	virtual bool eventFilter(QObject *o, QEvent *e);
 	~PropDoubleSpinBox() {;}
 };
 

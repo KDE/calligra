@@ -24,11 +24,23 @@
 #ifndef PROPERTYEDITORLIST_H
 #define PROPERTYEDITORLIST_H
 
+#include <kcombobox.h>
+
 #include "kexipropertysubeditor.h"
 
 class KComboBox;
 class QStringList;
 class KexiProperty;
+
+class KEXIPROPERTYEDITOR_EXPORT PropComboBox : public KComboBox
+{
+	Q_OBJECT
+	
+	public:
+	PropComboBox(QWidget *parent);
+	virtual bool eventFilter(QObject *o, QEvent *e);
+	~PropComboBox() {;}
+};
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEditor
 {
@@ -47,7 +59,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEdito
 		void valueChanged();
 
 	protected:
-		KComboBox		*m_combo;
+		PropComboBox		*m_combo;
 };
 
 

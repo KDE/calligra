@@ -22,7 +22,6 @@
 #include <klineedit.h>
 #include <knuminput.h>
 #include <qtoolbutton.h>
-#include <kglobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -71,6 +70,25 @@ PropIntSpinBox::PropIntSpinBox(int lower, int upper, int step, int value, int ba
 	editor()->setAlignment(Qt::AlignLeft);
 }
 
+bool
+PropIntSpinBox::eventFilter(QObject *o, QEvent *e)
+{
+	if(o == editor())
+	{
+	if(e->type() == QEvent::KeyPress)
+	{
+		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+		if(ev->key()==Key_Up|ev->key()==Key_Down && ev->state()!=ControlButton)
+		{
+			parentWidget()->eventFilter(o, e);
+			return true;
+		}
+	}
+	}
+	
+	return KIntSpinBox::eventFilter(o, e);
+}
+
 
 PropertyEditorSpin::PropertyEditorSpin(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent,property, name)
@@ -110,6 +128,24 @@ PropDoubleSpinBox::PropDoubleSpinBox(QWidget *parent=0)
 	editor()->setAlignment(Qt::AlignLeft);
 }
 
+bool
+PropDoubleSpinBox::eventFilter(QObject *o, QEvent *e)
+{
+	if(o == editor())
+	{
+	if(e->type() == QEvent::KeyPress)
+	{
+		QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+		if(ev->key()==Key_Up|ev->key()==Key_Down  && ev->state()!=ControlButton)
+		{
+			parentWidget()->eventFilter(o, e);
+			return true;
+		}
+	}
+	}
+	
+	return KDoubleSpinBox::eventFilter(o, e);
+}
 
 PropertyEditorDblSpin::PropertyEditorDblSpin(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
