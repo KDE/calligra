@@ -2530,7 +2530,7 @@ void KWView::paragDiaOk()
 
     if(paragDia->isBorderChanged())
         edit->setBorders( paragDia->leftBorder(), paragDia->rightBorder(),
-                          paragDia->bottomBorder(), paragDia->topBorder() );
+                          paragDia->topBorder(), paragDia->bottomBorder() );
 
     if ( paragDia->isPageBreakingChanged() )
         edit->setPageBreaking( paragDia->linesTogether() );
