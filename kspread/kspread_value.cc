@@ -24,6 +24,8 @@
 #include <limits.h>
 
 #include <qstring.h>
+#include <qtextstream.h>
+
 
 // helper class for KSpreadValue
 class KSpreadValueData
@@ -712,4 +714,19 @@ bool KSpreadValue::less( const KSpreadValue& v ) const
 bool KSpreadValue::greater( const KSpreadValue& v ) const
 {
   return compare( v ) > 0;
+}
+
+QTextStream& operator<<( QTextStream& ts, KSpreadValue::Type type ) 
+{
+  switch( type )
+  {
+    case KSpreadValue::Empty:   ts << "Empty"; break;
+    case KSpreadValue::Boolean: ts << "Boolean"; break;
+    case KSpreadValue::Integer: ts << "Integer"; break;
+    case KSpreadValue::Float:   ts << "Float"; break;
+    case KSpreadValue::String:  ts << "String"; break;
+    case KSpreadValue::Error:   ts << "Error"; break;
+    default: ts << "Unknown!"; break;
+  };
+  return ts;
 }

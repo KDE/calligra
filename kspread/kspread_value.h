@@ -22,6 +22,7 @@
 
 #include <qdatetime.h>
 #include <qstring.h>
+#include <qtextstream.h>
 
 class KSpreadValueData;
 
@@ -429,5 +430,8 @@ class KSpreadValue
 
     KSpreadValueData* d; // can't never be 0
 };
+
+QTextStream& operator<< ( QTextStream& ts, KSpreadValue::Type type );
+
 
 #endif // KSPREAD_VALUE_H
