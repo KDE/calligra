@@ -43,10 +43,13 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
+	QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
+	//QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
+
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty()
 		&& ( m_state != normal ||
-			part()->selection().boundingBox( view->zoomFactor() ).contains( m_fp ) ) )
+			part()->selection().boundingBox( view->zoomFactor() ).contains( fp ) ) )
 //		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
 	{
 		if( m_state != moving )
@@ -54,8 +57,8 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 
 		// move operation
 		QWMatrix mat;
-		mat.translate(	( m_lp.x() - m_fp.x() ) / view->zoomFactor(),
-						( m_lp.y() - m_fp.y() ) / view->zoomFactor() );
+		mat.translate(	( m_lp.x() - fp.x() ) / view->zoomFactor(),
+						( m_lp.y() - fp.y() ) / view->zoomFactor() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
