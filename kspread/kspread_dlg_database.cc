@@ -1161,3 +1161,4 @@ void KSpreadDatabaseDlg::tableViewClicked( QListViewItem * )
 #include "kspread_dlg_database.moc"
 
 #endif
+
