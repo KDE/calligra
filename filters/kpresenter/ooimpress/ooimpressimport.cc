@@ -293,7 +293,9 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 //         paperElement.setAttribute( "format", 5 );
 //         paperElement.setAttribute( "tabStopValue", 42.5198 );
 //         paperElement.setAttribute( "orientation", 0 );
-        pageHeight = toPoint( properties.attribute( "fo:page-height" ) );
+        // Keep pageHeight in cm to avoid rounding-errors that would
+        // get multiplied with every new slide.
+        pageHeight = properties.attribute( "fo:page-height" ).remove( "cm" ).toDouble();
 
         QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
         paperBorderElement.setAttribute( "ptRight", toPoint( properties.attribute( "fo:margin-right" ) ) );
@@ -316,7 +318,9 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         titleElement.setAttribute( "title", dp.attribute( "draw:name" ) );
         pageTitleElement.appendChild( titleElement );
 
-        double offset = ( dp.attribute( "draw:id" ).toInt() - 1 ) * pageHeight;
+        // The '+1' is necessary to avoid that objects that start on the first line
+        // of a slide will show up on the last line of the previous slide.
+        double offset = CM_TO_POINT( ( dp.attribute( "draw:id" ).toInt() - 1 ) * pageHeight ) + 1;
 
         // parse all objects
         for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
@@ -463,17 +467,17 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
 {
     if ( m_styleStack.hasAttribute( "draw:fill" ) )
     {
-        QDomElement brush = doc.createElement( "BRUSH" );
-        if ( m_styleStack.attribute( "draw:fill" ) == "none" )
-            brush.setAttribute( "style", 0 );
-        else if ( m_styleStack.attribute( "draw:fill" ) == "solid" )
+        if ( m_styleStack.attribute( "draw:fill" ) == "solid" )
         {
+            QDomElement brush = doc.createElement( "BRUSH" );
             brush.setAttribute( "style", 1 );
             if ( m_styleStack.hasAttribute( "draw:fill-color" ) )
                 brush.setAttribute( "color", m_styleStack.attribute( "draw:fill-color" ) );
+            e.appendChild( brush );
         }
         else if ( m_styleStack.attribute( "draw:fill" ) == "hatch" )
         {
+            QDomElement brush = doc.createElement( "BRUSH" );
             QString style = m_styleStack.attribute( "draw:fill-hatch-name" );
             if ( style == "Black 0 Degrees" )
                 brush.setAttribute( "style", 9 );
@@ -488,14 +492,95 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
             else if ( style == "Red Crossed 45 Degrees" || style == "Blue Crossed 45 Degrees" )
                 brush.setAttribute( "style", 14 );
 
-            if ( style.left( 4 ) == "Blue" )
-                brush.setAttribute( "color", "#000080" );
-            else if ( style.left( 3 ) == "Red" )
-                brush.setAttribute( "color", "#800000" );
-            else if ( style.left( 5 ) == "Black" )
-                brush.setAttribute( "color", "#000000" );
+            QDomElement* draw = m_draws[style];
+            if ( draw && draw->hasAttribute( "draw:color" ) )
+                brush.setAttribute( "color", draw->attribute( "draw:color" ) );
+            e.appendChild( brush );
         }
-        e.appendChild( brush );
+        else if ( m_styleStack.attribute( "draw:fill" ) == "gradient" )
+        {
+            QDomElement gradient = doc.createElement( "GRADIENT" );
+            QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
+
+            QDomElement* draw = m_draws[style];
+            if ( draw )
+            {
+                gradient.setAttribute( "color1", draw->attribute( "draw:start-color" ) );
+                gradient.setAttribute( "color2", draw->attribute( "draw:end-color" ) );
+
+                QString type = draw->attribute( "draw:style" );
+                if ( type == "linear" )
+                {
+                    int angle = draw->attribute( "draw:angle" ).toInt() / 10;
+
+                    // make sure the angle is between 0 and 359
+                    angle = abs( angle );
+                    angle -= ( (int) ( angle / 360 ) ) * 360;
+
+                    // What we are trying to do here is to find out if the given
+                    // angle belongs to a horizontal, vertical or diagonal gradient.
+                    int lower, upper, nearAngle = 0;
+                    for ( lower = 0, upper = 45; upper < 360; lower += 45, upper += 45 )
+                    {
+                        if ( upper >= angle )
+                        {
+                            int distanceToUpper = abs( angle - upper );
+                            int distanceToLower = abs( angle - lower );
+                            nearAngle = distanceToUpper > distanceToLower ? lower : upper;
+                            break;
+                        }
+                    }
+
+                    // nearAngle should now be one of: 0, 45, 90, 135, 180...
+                    if ( nearAngle == 0 || nearAngle == 180 )
+                        gradient.setAttribute( "type", 1 ); // horizontal
+                    else if ( nearAngle == 90 || nearAngle == 270 )
+                        gradient.setAttribute( "type", 2 ); // vertical
+                    else if ( nearAngle == 45 || nearAngle == 225 )
+                        gradient.setAttribute( "type", 3 ); // diagonal 1
+                    else if ( nearAngle == 135 || nearAngle == 315 )
+                        gradient.setAttribute( "type", 4 ); // diagonal 2
+                }
+                else if ( type == "radial" || type == "ellipsoid" )
+                    gradient.setAttribute( "type", 5 ); // circle
+                else if ( type == "square" || type == "rectangular" )
+                    gradient.setAttribute( "type", 6 ); // rectangle
+                else if ( type == "axial" )
+                    gradient.setAttribute( "type", 7 ); // pipecross
+
+                // Hard to map between x- and y-center settings of ooimpress
+                // and (un-)balanced settings of kpresenter. Let's try it.
+                int x, y;
+                if ( gradient.hasAttribute( "draw:cx" ) )
+                    x = gradient.attribute( "draw:cx" ).remove( '%' ).toInt();
+                else
+                    x = 50;
+
+                if ( gradient.hasAttribute( "draw:cy" ) )
+                    y = gradient.attribute( "draw:cy" ).remove( '%' ).toInt();
+                else
+                    y = 50;
+
+                if ( x == 50 && y == 50 )
+                {
+                    gradient.setAttribute( "unbalanced", 0 );
+                    gradient.setAttribute( "xfactor", 100 );
+                    gradient.setAttribute( "yfactor", 100 );
+                }
+                else
+                {
+                    gradient.setAttribute( "unbalanced", 1 );
+                    // map 0 - 100% to -200 - 200
+                    gradient.setAttribute( "xfactor", 4 * x - 200 );
+                    gradient.setAttribute( "yfactor", 4 * y - 200 );
+                }
+            }
+            e.appendChild( gradient );
+
+            QDomElement fillType = doc.createElement( "FILLTYPE" );
+            fillType.setAttribute( "value", 1 );
+            e.appendChild( fillType );
+        }
     }
 }
 
@@ -834,7 +919,10 @@ void OoImpressImport::createStyleMap( QDomDocument &docstyles )
 
   QDomNode fixedStyles = styles.namedItem( "office:styles" );
   if ( !fixedStyles.isNull() )
+  {
+      insertDraws( fixedStyles.toElement() );
       insertStyles( fixedStyles.toElement() );
+  }
 
   QDomNode automaticStyles = styles.namedItem( "office:automatic-styles" );
   if ( !automaticStyles.isNull() )
@@ -843,6 +931,20 @@ void OoImpressImport::createStyleMap( QDomDocument &docstyles )
   QDomNode masterStyles = styles.namedItem( "office:master-styles" );
   if ( !masterStyles.isNull() )
       insertStyles( masterStyles.toElement() );
+}
+
+void OoImpressImport::insertDraws( const QDomElement& styles )
+{
+    for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement e = n.toElement();
+
+        if ( !e.hasAttribute( "draw:name" ) )
+            continue;
+
+        QString name = e.attribute( "draw:name" );
+        m_draws.insert( name, new QDomElement( e ) );
+    }
 }
 
 void OoImpressImport::insertStyles( const QDomElement& styles )
