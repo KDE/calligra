@@ -251,7 +251,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   int _page=1;
 
   oldRecent=10;
-  oldAutoSaveValue=1;
+  oldAutoSaveValue=KoDocument::defaultAutoSave()/60;
 
   if( config->hasGroup("Parameters" ))
         {
@@ -265,7 +265,7 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
 	formulaBar=config->readBoolEntry("Formula bar",true);
         statusBar=config->readBoolEntry("Status bar",true);
         oldRecent=config->readNumEntry( "NbRecentFile" ,10);
-        oldAutoSaveValue=config->readNumEntry("AutoSave",1);
+        oldAutoSaveValue=config->readNumEntry("AutoSave",KoDocument::defaultAutoSave()/60);
         }
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
@@ -327,7 +327,7 @@ void configure::slotDefault()
   showStatusBar->setChecked(true);
   nbPage->setValue(1);
   nbRecentFile->setValue(10);
-  autoSaveDelay->setValue(1);
+  autoSaveDelay->setValue(KoDocument::defaultAutoSave()/60);
 }
 
 
