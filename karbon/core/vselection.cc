@@ -86,6 +86,7 @@ VSelection::append()
 
 	VSelectObjects op( m_objects );
 	op.visit( *static_cast<VDocument*>( parent() ) );
+	selectNodes();
 
 	invalidateBoundingBox();
 }
