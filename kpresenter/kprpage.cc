@@ -957,10 +957,15 @@ void KPrPage::lowerObjs(bool backward)
 	_new.append( m_objectList.at( j ) );
 
     _new.setAutoDelete( false );
-
+    bool createCmd = true;
     for ( int i = 0; i < static_cast<int>( _new.count() ); i++ ) {
 	kpobject = _new.at( i );
 	if ( kpobject->isSelected() ) {
+            if ( i == 0 )
+            {
+                createCmd = false;
+                break;
+            }
 	    _new.take( i );
             if ( backward )
                 _new.insert(QMAX(i-1,0) ,  kpobject);
@@ -968,9 +973,12 @@ void KPrPage::lowerObjs(bool backward)
                 _new.insert( 0, kpobject );
 	}
     }
-    LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Object(s)" ), m_objectList, _new, m_doc,this );
-    lrCmd->execute();
-    m_doc->addCommand( lrCmd );
+    if ( createCmd )
+    {
+        LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Object(s)" ), m_objectList, _new, m_doc,this );
+        lrCmd->execute();
+        m_doc->addCommand( lrCmd );
+    }
     m_doc->raiseAndLowerObject = true;
 
 }
@@ -986,20 +994,28 @@ void KPrPage::raiseObjs(bool forward)
 	_new.append( m_objectList.at( j ) );
 
     _new.setAutoDelete( false );
-
+    bool createCmd = true;
     for ( int i = 0; i < static_cast<int>( _new.count() ); i++ ) {
 	kpobject = m_objectList.at( i );
 	if ( kpobject->isSelected() ) {
 	    _new.take( i );
+            if ( i == static_cast<int>(_new.count()) )
+            {
+                createCmd = false;
+                break;
+            }
             if ( forward )
                 _new.insert( QMIN( i+1, _new.count()),  kpobject);
             else
                 _new.append( kpobject );
 	}
     }
-    LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Object(s)" ), m_objectList, _new, m_doc,this );
-    lrCmd->execute();
-    m_doc->addCommand( lrCmd );
+    if ( createCmd )
+    {
+        LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Object(s)" ), m_objectList, _new, m_doc,this );
+        lrCmd->execute();
+        m_doc->addCommand( lrCmd );
+    }
     m_doc->raiseAndLowerObject = true;
 }
 
