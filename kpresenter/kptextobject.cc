@@ -1420,6 +1420,8 @@ KCommand * KPTextObject::textContentsToHeight()
     KoTextParag * parag = m_textobj->textDocument()->firstParag();
     int numLines = 0;
     int textHeightLU = 0;
+    bool lineSpacingEqual = false;
+    int oldLineSpacing = 0;
     for ( ; parag ; parag = parag->next() )
     {
         int lines = parag->lines();
@@ -1428,6 +1430,8 @@ KCommand * KPTextObject::textContentsToHeight()
         {
             int y, h, baseLine;
             parag->lineInfo( line, y, h, baseLine );
+            lineSpacingEqual = (oldLineSpacing == parag->lineSpacing( line ));
+            oldLineSpacing = parag->lineSpacing( line );
             textHeightLU += h - parag->lineSpacing( line );
         }
     }
@@ -1442,21 +1446,7 @@ KCommand * KPTextObject::textContentsToHeight()
     if ( lineSpacing < 0  || oneLine) // text object is too small
         lineSpacing = 0; // we can't do smaller linespacing than that, but we do need to apply it
                          // (in case there's some bigger linespacing in use)
-    if ( oneLine && m_textobj->textDocument()->firstParag()->kwLineSpacing() == lineSpacing)
-        return 0L;
-
-    KoTextParag * startParag = m_textobj->textDocument()->firstParag();
-    KoTextParag * endParag = m_textobj->textDocument()->lastParag();
-    bool equal = true;
-    for ( ; startParag && startParag != endParag->next() ; startParag = startParag->next() )
-    {
-        if ( startParag->kwLineSpacing()!=lineSpacing)
-        {
-            equal = false;
-            break;
-        }
-    }
-    if ( equal )
+    if ( (oneLine || lineSpacingEqual) &&(m_textobj->textDocument()->firstParag()->kwLineSpacing() == lineSpacing))
         return 0L;
     // Apply the new linespacing to the whole object
     m_textobj->textDocument()->selectAll( KoTextDocument::Temp );

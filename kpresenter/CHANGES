@@ -102,3 +102,5 @@ Bugfixes:
 - Fix undo/redo move object.
 - Fix #45966 kpresenter refuses to update image with same name
 - Fix #45991: problems w.r.t. font color and bullets
+- Fix mouse move event + vertical alignment
+- Fix resize to height : Don't create command when it's not necessary.
