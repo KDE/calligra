@@ -167,8 +167,10 @@ SvgImport::parseColor( const QString &s )
 }
 
 void
-SvgImport::parseGradient( const QDomElement & )
+SvgImport::parseGradient( const QDomElement &e )
 {
+	VGradient gradient;
+	m_gradients.insert( e.attribute( "id" ), gradient );
 }
 
 void
@@ -265,6 +267,10 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		{
 			if( params == "none" )
 				gc->fill.setType( VFill::none );
+			else if( params.startsWith( "url(" ) )
+			{
+				gc->fill.setType( VFill::grad );
+			}
 			else
 			{
 				fillcolor = parseColor( params );
@@ -365,6 +371,11 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			else
 				m_document.append( group );
 			m_gc.pop();
+			continue;
+		}
+		else if( b.tagName() == "linearGradient" || b.tagName() == "radialGradient" )
+		{
+			parseGradient( b );
 			continue;
 		}
 		else if( b.tagName() == "rect" )
