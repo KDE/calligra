@@ -344,7 +344,8 @@ void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingL
         m_lastTextObjectHighlighted->removeHighlight(true);
     m_lastTextObjectHighlighted = m_textIterator.currentTextObject();
     //kdDebug(32500) << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
-    highlightPortion(m_textIterator.currentParag(), m_offset + matchingIndex, matchingLength, m_lastTextObjectHighlighted->textDocument() );
+    KDialogBase* dialog = m_find ? m_find->findNextDialog() : m_replace->replaceNextDialog();
+    highlightPortion(m_textIterator.currentParag(), m_offset + matchingIndex, matchingLength, m_lastTextObjectHighlighted->textDocument(), dialog );
 }
 
 // slot connected to the 'replace' signal

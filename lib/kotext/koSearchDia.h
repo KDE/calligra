@@ -233,7 +233,7 @@ public:
     /**
      * Highlight a match.
      */
-    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc) = 0;
+    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc, KDialogBase* dialog) = 0;
 
     /** For KoTextFind and KoTextReplace */
     bool validateMatch( const QString &text, int index, int matchedlength );
