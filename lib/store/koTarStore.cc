@@ -241,6 +241,21 @@ long KoTarStore::read( char *_buffer, unsigned long _len )
   return _len;
 }
 
+long KoTarStore::size() const
+{
+  if ( !m_bIsOpen )
+  {
+    kdDebug(30002) << "KoTarStore: You must open before asking for a size" << endl;
+    return -1;
+  }
+  if ( m_mode != Read )
+  {
+    kdDebug(30002) << "KoTarStore: Can not get size from store that is opened for writing" << endl;
+    return -1;
+  }
+  return (long) m_iSize;
+}
+
 bool KoTarStore::write( const QByteArray& data )
 {
   unsigned int len = data.size();

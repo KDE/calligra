@@ -321,6 +321,21 @@ long KoBinaryStore::read( char *_buffer, unsigned long _len )
   return len;
 }
 
+long KoBinaryStore::size() const
+{
+  if ( !m_bIsOpen )
+  {
+    kDebugInfo( 30002, "KoBinaryStore: You must open before asking for size" );
+    return -1;
+  }
+  if ( m_mode != Read )
+  {
+    kDebugInfo( 30002, "KoBinaryStore: Can not get size from store that is opened for writing" );
+    return -1;
+  }
+  return m_current.size;
+}
+
 bool KoBinaryStore::write( const QByteArray& data )
 {
   unsigned int len = data.size();

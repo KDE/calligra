@@ -69,6 +69,7 @@ public:
     /**
      * Read data from the currently opened file. You can also use the streams
      * for this.
+     * @return size of data read, -1 on error
      */
     virtual long read( char *_buffer, unsigned long _len ) = 0;
 
@@ -82,6 +83,12 @@ public:
      * for this.
      */
     virtual QByteArray read( unsigned long max ) = 0;
+
+    /**
+     * @return the size of the currently opened file (-1 on error).
+     * Can be used as an argument for the read methods, for instance
+     */
+    virtual long size() const = 0;
 };
 
 #endif

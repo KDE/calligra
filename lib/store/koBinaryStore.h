@@ -44,6 +44,8 @@ public:
 
   bool bad() { return m_out.bad(); }
 
+  long size() const;
+
 protected:
   Mode m_mode;
 

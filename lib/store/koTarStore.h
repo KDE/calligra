@@ -52,6 +52,12 @@ public:
   virtual bool write( const char* _data, unsigned long _len );
   virtual long read( char *_buffer, unsigned long _len );
 
+  /**
+   * @return the size of the currently opened file, -1 on error.
+   * Can be used as an argument for the read methods, for instance
+   */
+  virtual long size() const;
+
   virtual bool bad() { return !m_bGood; } // :)
 
 protected:
