@@ -5,7 +5,9 @@
 #include <koStream.h>
 
 #include <kurl.h>
+
 #include <qmsgbox.h>
+#include <qcolor.h>
 
 #include <strstream>
 #include <fstream>
@@ -13,6 +15,8 @@
 
 ImageDocument_impl::ImageDocument_impl()
 {
+  ADD_INTERFACE( "IDL:OPParts/Print:1.0" );
+
   // Use CORBA mechanism for deleting views
   m_lstViews.setAutoDelete( false );
   m_lstChildren.setAutoDelete( true );
@@ -368,6 +372,18 @@ void ImageDocument_impl::changeChildGeometry( ImageChild *_child, const QRect& _
 QListIterator<ImageChild> ImageDocument_impl::childIterator()
 {
   return QListIterator<ImageChild> ( m_lstChildren );
+}
+
+void ImageDocument_impl::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height )
+{
+  QPainter painter;
+  painter.begin( _dev );
+  
+  QPixmap pix;
+  pix.convertFromImage( image() );
+  painter.drawPixmap( 0, 0, pix, 0, 0, _width, _height );
+  
+  painter.end();
 }
 
 /**********************************************************

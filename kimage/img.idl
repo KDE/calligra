@@ -14,7 +14,7 @@ module KImage
 		slot void importImage();
 	};
 
-	interface ImageDocument : OPParts::Document
+	interface ImageDocument : OPParts::Document, OPParts::Print
 	{
 		boolean import( in string filename );
 		boolean export( in string filename, in string format );

@@ -4,6 +4,7 @@
 class ImageDocument_impl;
 
 #include <koDocument.h>
+#include <koPrintExt.h>
 #include <document_impl.h>
 #include <view_impl.h>
 
@@ -38,6 +39,7 @@ protected:
 
 class ImageDocument_impl : public QObject,
 			   virtual public KoDocument,
+			   virtual public KoPrintExt,
 			   virtual public KImage::ImageDocument_skel
 {
   Q_OBJECT
@@ -144,6 +146,8 @@ protected:
   virtual void insertChild( ImageChild* );
   virtual void makeChildListIntern( OPParts::Document_ptr _doc, const char *_path );
   
+  virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height );
+
   QImage m_imgImage;
   string m_strExternFile;
   
