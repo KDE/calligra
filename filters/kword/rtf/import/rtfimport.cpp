@@ -348,10 +348,17 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 
     token.next();
 
-    if (token.type != RTFTokenizer::ControlWord ||
-	strcmp( token.text, "rtf" ) || token.value > 1)
+    if (token.type != RTFTokenizer::ControlWord)
     {
-	kdError(30515) << "Wrong document type or version (RTF version 0 or 1.x expected)" << endl;
+	kdError(30515) << "Wrong document type" << endl;
+	in.close();
+	return KoFilter::WrongFormat;
+    }
+
+    // ### TODO: Pocket Word seems to have 2 variants of RTF. \pwd seems to very similar to \rtf
+    if ((qstrcmp( token.text, "rtf" ) || token.value > 1))
+    {
+	kdError(30515) << "Wrong document type (" << token.text << ") or version (" << token.value << "; version 0 or 1.x expected)" << endl;
 	in.close();
 	return KoFilter::WrongFormat;
     }
