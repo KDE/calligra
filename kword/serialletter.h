@@ -37,6 +37,7 @@
 #include <qtextstream.h>
 
 #include "serialletter_interface.h"
+#include "KWordSerialLetterDatabaseIface.h"
 
 class QListBox;
 class QPushButton;
@@ -55,8 +56,10 @@ class KWDocument;
  *
  ******************************************************************/
 
-class KWSerialLetterDataBase
+class KWSerialLetterDataBase: public QObject,KWordSerialLetterDatabaseIface
 {
+Q_OBJECT
+
 public:
     KWSerialLetterDataBase( KWDocument *doc_ );
     void showConfigDialog(QWidget *); // Select datasource type  and / or configure datasource
@@ -72,7 +75,7 @@ public:
     KWSerialLetterDataSource *loadPlugin(const QString& name);
     KWSerialLetterDataSource *openPluginFor(int type);
 
-    void refresh(bool force);
+    virtual void refresh(bool force);
 protected:
     friend class KWSerialLetterConfigDialog;
     KWDocument *doc;

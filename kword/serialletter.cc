@@ -43,7 +43,7 @@
  ******************************************************************/
 
 KWSerialLetterDataBase::KWSerialLetterDataBase( KWDocument *doc_ )
-    : doc( doc_ )
+    : QObject(doc_),KWordSerialLetterDatabaseIface(QCString(doc_->dcopObject()->objId()+".SerialLetterDataBase")),doc( doc_ )
 {
    plugin=0; //loadPlugin("classic");
 }
