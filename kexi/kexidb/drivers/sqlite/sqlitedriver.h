@@ -56,15 +56,13 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteDriver : public Driver
 		/*! \return false for this driver. */
 		virtual bool isSystemDatabaseName( const QString& ) const { return false; }
 
-		//! Escape a string for use as a value
 		virtual QString escapeString(const QString& str) const;
 		virtual QCString escapeString(const QCString& str) const;
 
-		//! Escape a string for use as an identifier (e.g. of a table name, or db)
-		virtual QString escapeIdentifier( const QString& str) const;
-		virtual QCString escapeIdentifier( const QCString& str) const;
-
 	protected:
+		virtual QString drv_escapeIdentifier( const QString& str) const;
+		virtual QCString drv_escapeIdentifier( const QCString& str) const;
+		
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
 
 	SQLiteDriverPrivate *dp;

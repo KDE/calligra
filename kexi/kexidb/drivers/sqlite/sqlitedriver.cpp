@@ -61,6 +61,7 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const char *name, const QStringList
 	beh->AUTO_INCREMENT_FIELD_OPTION = "INTEGER PRIMARY KEY";
 	beh->ROW_ID_FIELD_NAME = "OID";
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=true;
+	beh->QUOTATION_MARKS_FOR_IDENTIFIER='"';
 
 	//predefined properties
 	d->properties["client_library_version"] = sqlite_libversion();
@@ -115,12 +116,14 @@ QCString SQLiteDriver::escapeString(const QCString& str) const
 	return QCString("'")+QCString(str).replace( '\'', "''" )+"'";
 }
 
-QString SQLiteDriver::escapeIdentifier( const QString& str) const {
-	return QString("\"") + QString(str).replace( '"', "\"\"" ) + "\"";
+QString SQLiteDriver::drv_escapeIdentifier( const QString& str) const
+{
+	return QString(str).replace( '"', "\"\"" );
 }
 
-QCString SQLiteDriver::escapeIdentifier( const QCString& str) const {
-	return QCString("\"") + QCString(str).replace( '"', "\"\"" ) + "\"";
+QCString SQLiteDriver::drv_escapeIdentifier( const QCString& str) const
+{
+	return QCString(str).replace( '"', "\"\"" );
 }
 
 #include "sqlitedriver.moc"

@@ -87,6 +87,7 @@ DriverBehaviour::DriverBehaviour()
 	, SPECIAL_AUTO_INCREMENT_DEF(false)
 	, ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE(false)
 	, USING_DATABASE_REQUIRED_TO_CONNECT(true)
+	, QUOTATION_MARKS_FOR_IDENTIFIER('"')
 	, _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY(false)
 {
 }
@@ -278,6 +279,28 @@ QValueList<QCString> Driver::propertyNames() const
 	return names;
 }
 
+QString Driver::escapeIdentifier( const QString& str) const
+{
+	const uint len = str.length(); 
+	for (uint i=0; i<len; i++) {
+		if (str[i]==' ') {
+			return QString(beh->QUOTATION_MARKS_FOR_IDENTIFIER)
+				+drv_escapeIdentifier(str) + QString(beh->QUOTATION_MARKS_FOR_IDENTIFIER);
+		}
+	}
+	return drv_escapeIdentifier(str);
+}
+
+QCString Driver::escapeIdentifier( const QCString& str) const
+{
+	const uint len = str.length();
+	for (uint i=0; i<len; i++) {
+		if (str[i]==' ') {
+			return QCString(beh->QUOTATION_MARKS_FOR_IDENTIFIER) + drv_escapeIdentifier(str) + QCString(beh->QUOTATION_MARKS_FOR_IDENTIFIER);
+		}
+	}
+	return drv_escapeIdentifier(str);
+}
 
 #include "driver.moc"
 

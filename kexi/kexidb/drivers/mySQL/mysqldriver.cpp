@@ -67,6 +67,7 @@ MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &a
 	beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE=true;
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
 	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
+	beh->QUOTATION_MARKS_FOR_IDENTIFIER='`';
 
 	//predefined properties
 #if MYSQL_VERSION_ID < 40000
@@ -124,12 +125,12 @@ QCString MySqlDriver::escapeString(const QCString& str) const
 /*! Add back-ticks to an identifier, and replace any back-ticks within
  * the name with single quotes.
  */
-QString MySqlDriver::escapeIdentifier( const QString& str) const {
-	return QString("`") + QString(str).replace('`', "'") + "`";
+QString MySqlDriver::drv_escapeIdentifier( const QString& str) const {
+	return QString(str).replace('`', "'");
 }
 
-QCString MySqlDriver::escapeIdentifier( const QCString& str) const {
-	return QCString("`") + QCString(str).replace('`', "'") + "`";
+QCString MySqlDriver::drv_escapeIdentifier( const QCString& str) const {
+	return QCString(str).replace('`', "'");
 }
 
 #include "mysqldriver.moc"

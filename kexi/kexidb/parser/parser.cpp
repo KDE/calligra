@@ -79,6 +79,7 @@ Parser::~Parser()
 }
 
 ParserError::ParserError()
+: m_at(-1)
 {
 //	m_isNull = true;
 }

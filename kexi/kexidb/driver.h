@@ -176,13 +176,20 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 			return valueToSQL( (field ? field->type() : Field::InvalidType), v );
 		}
 
-		//! Driver-specific SQL string escaping.
-		virtual QString escapeString(const QString& str) const = 0;
-		virtual QCString escapeString(const QCString& str) const = 0;
+		/*! Driver-specific SQL string escaping.
+		 Implement escaping for any character like " or ' as your 
+		 database engine requires. Prepend and append quotation marks.
+		*/
+		virtual QString escapeString( const QString& str ) const = 0;
 		
-		//! Driver-specific identifier escaping (e.g. for a table name, or db)
-		virtual QString escapeIdentifier( const QString& str) const = 0;
-		virtual QCString escapeIdentifier( const QCString& str) const = 0;
+		/*! This is overloaded version of escapeString( const QString& str )
+		 to be implemented in the same way.
+		*/
+		virtual QCString escapeString( const QCString& str ) const = 0;
+		
+		//! Driver-specific identifier escaping (e.g. for a table name, db name, etc.)
+		QString escapeIdentifier( const QString& str) const;
+		QCString escapeIdentifier( const QCString& str) const;
 
 		QVariant propertyValue( const QCString& propName ) const;
 
@@ -197,6 +204,20 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 that descructs all allocated driver-dependent connection structures. */
 		virtual Connection *drv_createConnection( ConnectionData &conn_data ) = 0;
 //virtual ConnectionInternal* createConnectionInternalObject( Connection& conn ) = 0;
+
+		/*! Driver-specific SQL string escaping.
+		 This method is used by escapeIdentifier().
+		 Implement escaping for any character like " or ' as your 
+		 database engine requires. Do not append or prepend any quotation 
+		 marks characters - it is automatically done by escapeIdentifier() using
+		 DriverBehaviour::QUOTATION_MARKS_FOR_IDENTIFIER.
+		*/
+		virtual QString drv_escapeIdentifier( const QString& str ) const = 0;
+		
+		/*! This is overloaded version of drv_escapeIdentifier( const QString& str )
+		 to be implemented in the same way.
+		*/
+		virtual QCString drv_escapeIdentifier( const QCString& str ) const = 0;
 
 		/*! Used by DriverManager. 
 		 Note for driver developers: Reimplement this.

@@ -405,6 +405,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <qptrlist.h>
+#include <qcstring.h>
 
 #include <connection.h>
 #include <queryschema.h>
@@ -441,7 +442,8 @@
 		kdDebug() << "at character " << current << " near tooken " << ctoken << endl;
 		parser->setOperation(KexiDB::Parser::OP_Error);
 
-		if(parser->error().type().isEmpty() && strcmp(str, "syntax error") == 0)
+		if (parser->error().type().isEmpty() 
+			&& (qstricmp(str, "syntax error")==0 || qstricmp(str, "parse error")==0))
 		{
 			kdDebug() << parser->statement() << endl;
 			QString ptrline = "";

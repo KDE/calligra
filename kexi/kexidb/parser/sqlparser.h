@@ -3,6 +3,716 @@
 #include "sqltypes.h"
 
 bool parseData(KexiDB::Parser *p, const char *data);
+/* A Bison parser, made from sqlparser.y, by GNU bison 1.75.  */
+
+/* Skeleton parser for Yacc-like parsing with Bison,
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002 Free Software Foundation, Inc.
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.  */
+
+/* As a special exception, when this file is copied by Bison into a
+   Bison output file, you may use that output file without restriction.
+   This special exception was added by the Free Software Foundation
+   in version 1.24 of Bison.  */
+
+#ifndef BISON_SQLPARSER_TAB_H
+# define BISON_SQLPARSER_TAB_H
+
+/* Tokens.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     SQL_TYPE = 258,
+     SQL_ABS = 259,
+     ACOS = 260,
+     AMPERSAND = 261,
+     SQL_ABSOLUTE = 262,
+     ADA = 263,
+     ADD = 264,
+     ADD_DAYS = 265,
+     ADD_HOURS = 266,
+     ADD_MINUTES = 267,
+     ADD_MONTHS = 268,
+     ADD_SECONDS = 269,
+     ADD_YEARS = 270,
+     ALL = 271,
+     ALLOCATE = 272,
+     ALTER = 273,
+     AND = 274,
+     ANY = 275,
+     ARE = 276,
+     AS = 277,
+     ASIN = 278,
+     ASC = 279,
+     ASCII = 280,
+     ASSERTION = 281,
+     ATAN = 282,
+     ATAN2 = 283,
+     AUTHORIZATION = 284,
+     AUTO_INCREMENT = 285,
+     AVG = 286,
+     BEFORE = 287,
+     SQL_BEGIN = 288,
+     BETWEEN = 289,
+     BIGINT = 290,
+     BINARY = 291,
+     BIT = 292,
+     BIT_LENGTH = 293,
+     BREAK = 294,
+     BY = 295,
+     CASCADE = 296,
+     CASCADED = 297,
+     CASE = 298,
+     CAST = 299,
+     CATALOG = 300,
+     CEILING = 301,
+     CENTER = 302,
+     SQL_CHAR = 303,
+     CHAR_LENGTH = 304,
+     CHARACTER_STRING_LITERAL = 305,
+     CHECK = 306,
+     CLOSE = 307,
+     COALESCE = 308,
+     COBOL = 309,
+     COLLATE = 310,
+     COLLATION = 311,
+     COLUMN = 312,
+     COMMIT = 313,
+     COMPUTE = 314,
+     CONCAT = 315,
+     CONNECT = 316,
+     CONNECTION = 317,
+     CONSTRAINT = 318,
+     CONSTRAINTS = 319,
+     CONTINUE = 320,
+     CONVERT = 321,
+     CORRESPONDING = 322,
+     COS = 323,
+     COT = 324,
+     COUNT = 325,
+     CREATE = 326,
+     CURDATE = 327,
+     CURRENT = 328,
+     CURRENT_DATE = 329,
+     CURRENT_TIME = 330,
+     CURRENT_TIMESTAMP = 331,
+     CURTIME = 332,
+     CURSOR = 333,
+     DATABASE = 334,
+     SQL_DATE = 335,
+     DATE_FORMAT = 336,
+     DATE_REMAINDER = 337,
+     DATE_VALUE = 338,
+     DAY = 339,
+     DAYOFMONTH = 340,
+     DAYOFWEEK = 341,
+     DAYOFYEAR = 342,
+     DAYS_BETWEEN = 343,
+     DEALLOCATE = 344,
+     DEC = 345,
+     DECLARE = 346,
+     DEFAULT = 347,
+     DEFERRABLE = 348,
+     DEFERRED = 349,
+     SQL_DELETE = 350,
+     DESC = 351,
+     DESCRIBE = 352,
+     DESCRIPTOR = 353,
+     DIAGNOSTICS = 354,
+     DICTIONARY = 355,
+     DIRECTORY = 356,
+     DISCONNECT = 357,
+     DISPLACEMENT = 358,
+     DISTINCT = 359,
+     DOMAIN_TOKEN = 360,
+     SQL_DOUBLE = 361,
+     DOUBLE_QUOTED_STRING = 362,
+     DROP = 363,
+     ELSE = 364,
+     END = 365,
+     END_EXEC = 366,
+     EQUAL = 367,
+     ESCAPE = 368,
+     EXCEPT = 369,
+     SQL_EXCEPTION = 370,
+     EXEC = 371,
+     EXECUTE = 372,
+     EXISTS = 373,
+     EXP = 374,
+     EXPONENT = 375,
+     EXTERNAL = 376,
+     EXTRACT = 377,
+     SQL_FALSE = 378,
+     FETCH = 379,
+     FIRST = 380,
+     SQL_FLOAT = 381,
+     FLOOR = 382,
+     FN = 383,
+     FOR = 384,
+     FOREIGN = 385,
+     FORTRAN = 386,
+     FOUND = 387,
+     FOUR_DIGITS = 388,
+     FROM = 389,
+     FULL = 390,
+     GET = 391,
+     GLOBAL = 392,
+     GO = 393,
+     GOTO = 394,
+     GRANT = 395,
+     GREATER_OR_EQUAL = 396,
+     GREATER_THAN = 397,
+     GROUP = 398,
+     HAVING = 399,
+     HOUR = 400,
+     HOURS_BETWEEN = 401,
+     IDENTITY = 402,
+     IFNULL = 403,
+     SQL_IGNORE = 404,
+     IMMEDIATE = 405,
+     SQL_IN = 406,
+     INCLUDE = 407,
+     INDEX = 408,
+     INDICATOR = 409,
+     INITIALLY = 410,
+     INNER = 411,
+     INPUT = 412,
+     INSENSITIVE = 413,
+     INSERT = 414,
+     INTEGER = 415,
+     INTERSECT = 416,
+     INTERVAL = 417,
+     INTO = 418,
+     IS = 419,
+     ISOLATION = 420,
+     JOIN = 421,
+     JUSTIFY = 422,
+     KEY = 423,
+     LANGUAGE = 424,
+     LAST = 425,
+     LCASE = 426,
+     LEFT = 427,
+     LENGTH = 428,
+     LESS_OR_EQUAL = 429,
+     LESS_THAN = 430,
+     LEVEL = 431,
+     LIKE = 432,
+     LINE_WIDTH = 433,
+     LOCAL = 434,
+     LOCATE = 435,
+     LOG = 436,
+     SQL_LONG = 437,
+     LOWER = 438,
+     LTRIM = 439,
+     LTRIP = 440,
+     MATCH = 441,
+     SQL_MAX = 442,
+     MICROSOFT = 443,
+     SQL_MIN = 444,
+     MINUS = 445,
+     MINUTE = 446,
+     MINUTES_BETWEEN = 447,
+     MOD = 448,
+     MODIFY = 449,
+     MODULE = 450,
+     MONTH = 451,
+     MONTHS_BETWEEN = 452,
+     MUMPS = 453,
+     NAMES = 454,
+     NATIONAL = 455,
+     NCHAR = 456,
+     NEXT = 457,
+     NODUP = 458,
+     NONE = 459,
+     NOT = 460,
+     NOT_EQUAL = 461,
+     NOW = 462,
+     SQL_NULL = 463,
+     NULLIF = 464,
+     NUMERIC = 465,
+     OCTET_LENGTH = 466,
+     ODBC = 467,
+     OF = 468,
+     SQL_OFF = 469,
+     SQL_ON = 470,
+     ONLY = 471,
+     OPEN = 472,
+     OPTION = 473,
+     OR = 474,
+     ORDER = 475,
+     OUTER = 476,
+     OUTPUT = 477,
+     OVERLAPS = 478,
+     PAGE = 479,
+     PARTIAL = 480,
+     SQL_PASCAL = 481,
+     PERSISTENT = 482,
+     CQL_PI = 483,
+     PLI = 484,
+     POSITION = 485,
+     PRECISION = 486,
+     PREPARE = 487,
+     PRESERVE = 488,
+     PRIMARY = 489,
+     PRIOR = 490,
+     PRIVILEGES = 491,
+     PROCEDURE = 492,
+     PRODUCT = 493,
+     PUBLIC = 494,
+     QUARTER = 495,
+     QUIT = 496,
+     RAND = 497,
+     READ_ONLY = 498,
+     REAL = 499,
+     REFERENCES = 500,
+     REPEAT = 501,
+     REPLACE = 502,
+     RESTRICT = 503,
+     REVOKE = 504,
+     RIGHT = 505,
+     ROLLBACK = 506,
+     ROWS = 507,
+     RPAD = 508,
+     RTRIM = 509,
+     SCHEMA = 510,
+     SCREEN_WIDTH = 511,
+     SCROLL = 512,
+     SECOND = 513,
+     SECONDS_BETWEEN = 514,
+     SELECT = 515,
+     SEQUENCE = 516,
+     SETOPT = 517,
+     SET = 518,
+     SHOWOPT = 519,
+     SIGN = 520,
+     INTEGER_CONST = 521,
+     REAL_CONST = 522,
+     SIN = 523,
+     SQL_SIZE = 524,
+     SMALLINT = 525,
+     SOME = 526,
+     SPACE = 527,
+     SQL = 528,
+     SQL_TRUE = 529,
+     SQLCA = 530,
+     SQLCODE = 531,
+     SQLERROR = 532,
+     SQLSTATE = 533,
+     SQLWARNING = 534,
+     SQRT = 535,
+     STDEV = 536,
+     SUBSTRING = 537,
+     SUM = 538,
+     SYSDATE = 539,
+     SYSDATE_FORMAT = 540,
+     SYSTEM = 541,
+     TABLE = 542,
+     TAN = 543,
+     TEMPORARY = 544,
+     THEN = 545,
+     THREE_DIGITS = 546,
+     TIME = 547,
+     TIMESTAMP = 548,
+     TIMEZONE_HOUR = 549,
+     TIMEZONE_MINUTE = 550,
+     TINYINT = 551,
+     TO = 552,
+     TO_CHAR = 553,
+     TO_DATE = 554,
+     TRANSACTION = 555,
+     TRANSLATE = 556,
+     TRANSLATION = 557,
+     TRUNCATE = 558,
+     GENERAL_TITLE = 559,
+     TWO_DIGITS = 560,
+     UCASE = 561,
+     UNION = 562,
+     UNIQUE = 563,
+     SQL_UNKNOWN = 564,
+     UPDATE = 565,
+     UPPER = 566,
+     USAGE = 567,
+     USER = 568,
+     USER_DEFINED_NAME = 569,
+     USER_DEFINED_NAME_DOT_ASTERISK = 570,
+     USING = 571,
+     VALUE = 572,
+     VALUES = 573,
+     VARBINARY = 574,
+     VARCHAR = 575,
+     VARYING = 576,
+     VENDOR = 577,
+     VIEW = 578,
+     WEEK = 579,
+     WHEN = 580,
+     WHENEVER = 581,
+     WHERE = 582,
+     WHERE_CURRENT_OF = 583,
+     WITH = 584,
+     WORD_WRAPPED = 585,
+     WORK = 586,
+     WRAPPED = 587,
+     YEAR = 588,
+     YEARS_BETWEEN = 589,
+     SIMILAR = 590,
+     ILIKE = 591
+   };
+#endif
+#define SQL_TYPE 258
+#define SQL_ABS 259
+#define ACOS 260
+#define AMPERSAND 261
+#define SQL_ABSOLUTE 262
+#define ADA 263
+#define ADD 264
+#define ADD_DAYS 265
+#define ADD_HOURS 266
+#define ADD_MINUTES 267
+#define ADD_MONTHS 268
+#define ADD_SECONDS 269
+#define ADD_YEARS 270
+#define ALL 271
+#define ALLOCATE 272
+#define ALTER 273
+#define AND 274
+#define ANY 275
+#define ARE 276
+#define AS 277
+#define ASIN 278
+#define ASC 279
+#define ASCII 280
+#define ASSERTION 281
+#define ATAN 282
+#define ATAN2 283
+#define AUTHORIZATION 284
+#define AUTO_INCREMENT 285
+#define AVG 286
+#define BEFORE 287
+#define SQL_BEGIN 288
+#define BETWEEN 289
+#define BIGINT 290
+#define BINARY 291
+#define BIT 292
+#define BIT_LENGTH 293
+#define BREAK 294
+#define BY 295
+#define CASCADE 296
+#define CASCADED 297
+#define CASE 298
+#define CAST 299
+#define CATALOG 300
+#define CEILING 301
+#define CENTER 302
+#define SQL_CHAR 303
+#define CHAR_LENGTH 304
+#define CHARACTER_STRING_LITERAL 305
+#define CHECK 306
+#define CLOSE 307
+#define COALESCE 308
+#define COBOL 309
+#define COLLATE 310
+#define COLLATION 311
+#define COLUMN 312
+#define COMMIT 313
+#define COMPUTE 314
+#define CONCAT 315
+#define CONNECT 316
+#define CONNECTION 317
+#define CONSTRAINT 318
+#define CONSTRAINTS 319
+#define CONTINUE 320
+#define CONVERT 321
+#define CORRESPONDING 322
+#define COS 323
+#define COT 324
+#define COUNT 325
+#define CREATE 326
+#define CURDATE 327
+#define CURRENT 328
+#define CURRENT_DATE 329
+#define CURRENT_TIME 330
+#define CURRENT_TIMESTAMP 331
+#define CURTIME 332
+#define CURSOR 333
+#define DATABASE 334
+#define SQL_DATE 335
+#define DATE_FORMAT 336
+#define DATE_REMAINDER 337
+#define DATE_VALUE 338
+#define DAY 339
+#define DAYOFMONTH 340
+#define DAYOFWEEK 341
+#define DAYOFYEAR 342
+#define DAYS_BETWEEN 343
+#define DEALLOCATE 344
+#define DEC 345
+#define DECLARE 346
+#define DEFAULT 347
+#define DEFERRABLE 348
+#define DEFERRED 349
+#define SQL_DELETE 350
+#define DESC 351
+#define DESCRIBE 352
+#define DESCRIPTOR 353
+#define DIAGNOSTICS 354
+#define DICTIONARY 355
+#define DIRECTORY 356
+#define DISCONNECT 357
+#define DISPLACEMENT 358
+#define DISTINCT 359
+#define DOMAIN_TOKEN 360
+#define SQL_DOUBLE 361
+#define DOUBLE_QUOTED_STRING 362
+#define DROP 363
+#define ELSE 364
+#define END 365
+#define END_EXEC 366
+#define EQUAL 367
+#define ESCAPE 368
+#define EXCEPT 369
+#define SQL_EXCEPTION 370
+#define EXEC 371
+#define EXECUTE 372
+#define EXISTS 373
+#define EXP 374
+#define EXPONENT 375
+#define EXTERNAL 376
+#define EXTRACT 377
+#define SQL_FALSE 378
+#define FETCH 379
+#define FIRST 380
+#define SQL_FLOAT 381
+#define FLOOR 382
+#define FN 383
+#define FOR 384
+#define FOREIGN 385
+#define FORTRAN 386
+#define FOUND 387
+#define FOUR_DIGITS 388
+#define FROM 389
+#define FULL 390
+#define GET 391
+#define GLOBAL 392
+#define GO 393
+#define GOTO 394
+#define GRANT 395
+#define GREATER_OR_EQUAL 396
+#define GREATER_THAN 397
+#define GROUP 398
+#define HAVING 399
+#define HOUR 400
+#define HOURS_BETWEEN 401
+#define IDENTITY 402
+#define IFNULL 403
+#define SQL_IGNORE 404
+#define IMMEDIATE 405
+#define SQL_IN 406
+#define INCLUDE 407
+#define INDEX 408
+#define INDICATOR 409
+#define INITIALLY 410
+#define INNER 411
+#define INPUT 412
+#define INSENSITIVE 413
+#define INSERT 414
+#define INTEGER 415
+#define INTERSECT 416
+#define INTERVAL 417
+#define INTO 418
+#define IS 419
+#define ISOLATION 420
+#define JOIN 421
+#define JUSTIFY 422
+#define KEY 423
+#define LANGUAGE 424
+#define LAST 425
+#define LCASE 426
+#define LEFT 427
+#define LENGTH 428
+#define LESS_OR_EQUAL 429
+#define LESS_THAN 430
+#define LEVEL 431
+#define LIKE 432
+#define LINE_WIDTH 433
+#define LOCAL 434
+#define LOCATE 435
+#define LOG 436
+#define SQL_LONG 437
+#define LOWER 438
+#define LTRIM 439
+#define LTRIP 440
+#define MATCH 441
+#define SQL_MAX 442
+#define MICROSOFT 443
+#define SQL_MIN 444
+#define MINUS 445
+#define MINUTE 446
+#define MINUTES_BETWEEN 447
+#define MOD 448
+#define MODIFY 449
+#define MODULE 450
+#define MONTH 451
+#define MONTHS_BETWEEN 452
+#define MUMPS 453
+#define NAMES 454
+#define NATIONAL 455
+#define NCHAR 456
+#define NEXT 457
+#define NODUP 458
+#define NONE 459
+#define NOT 460
+#define NOT_EQUAL 461
+#define NOW 462
+#define SQL_NULL 463
+#define NULLIF 464
+#define NUMERIC 465
+#define OCTET_LENGTH 466
+#define ODBC 467
+#define OF 468
+#define SQL_OFF 469
+#define SQL_ON 470
+#define ONLY 471
+#define OPEN 472
+#define OPTION 473
+#define OR 474
+#define ORDER 475
+#define OUTER 476
+#define OUTPUT 477
+#define OVERLAPS 478
+#define PAGE 479
+#define PARTIAL 480
+#define SQL_PASCAL 481
+#define PERSISTENT 482
+#define CQL_PI 483
+#define PLI 484
+#define POSITION 485
+#define PRECISION 486
+#define PREPARE 487
+#define PRESERVE 488
+#define PRIMARY 489
+#define PRIOR 490
+#define PRIVILEGES 491
+#define PROCEDURE 492
+#define PRODUCT 493
+#define PUBLIC 494
+#define QUARTER 495
+#define QUIT 496
+#define RAND 497
+#define READ_ONLY 498
+#define REAL 499
+#define REFERENCES 500
+#define REPEAT 501
+#define REPLACE 502
+#define RESTRICT 503
+#define REVOKE 504
+#define RIGHT 505
+#define ROLLBACK 506
+#define ROWS 507
+#define RPAD 508
+#define RTRIM 509
+#define SCHEMA 510
+#define SCREEN_WIDTH 511
+#define SCROLL 512
+#define SECOND 513
+#define SECONDS_BETWEEN 514
+#define SELECT 515
+#define SEQUENCE 516
+#define SETOPT 517
+#define SET 518
+#define SHOWOPT 519
+#define SIGN 520
+#define INTEGER_CONST 521
+#define REAL_CONST 522
+#define SIN 523
+#define SQL_SIZE 524
+#define SMALLINT 525
+#define SOME 526
+#define SPACE 527
+#define SQL 528
+#define SQL_TRUE 529
+#define SQLCA 530
+#define SQLCODE 531
+#define SQLERROR 532
+#define SQLSTATE 533
+#define SQLWARNING 534
+#define SQRT 535
+#define STDEV 536
+#define SUBSTRING 537
+#define SUM 538
+#define SYSDATE 539
+#define SYSDATE_FORMAT 540
+#define SYSTEM 541
+#define TABLE 542
+#define TAN 543
+#define TEMPORARY 544
+#define THEN 545
+#define THREE_DIGITS 546
+#define TIME 547
+#define TIMESTAMP 548
+#define TIMEZONE_HOUR 549
+#define TIMEZONE_MINUTE 550
+#define TINYINT 551
+#define TO 552
+#define TO_CHAR 553
+#define TO_DATE 554
+#define TRANSACTION 555
+#define TRANSLATE 556
+#define TRANSLATION 557
+#define TRUNCATE 558
+#define GENERAL_TITLE 559
+#define TWO_DIGITS 560
+#define UCASE 561
+#define UNION 562
+#define UNIQUE 563
+#define SQL_UNKNOWN 564
+#define UPDATE 565
+#define UPPER 566
+#define USAGE 567
+#define USER 568
+#define USER_DEFINED_NAME 569
+#define USER_DEFINED_NAME_DOT_ASTERISK 570
+#define USING 571
+#define VALUE 572
+#define VALUES 573
+#define VARBINARY 574
+#define VARCHAR 575
+#define VARYING 576
+#define VENDOR 577
+#define VIEW 578
+#define WEEK 579
+#define WHEN 580
+#define WHENEVER 581
+#define WHERE 582
+#define WHERE_CURRENT_OF 583
+#define WITH 584
+#define WORD_WRAPPED 585
+#define WORK 586
+#define WRAPPED 587
+#define YEAR 588
+#define YEARS_BETWEEN 589
+#define SIMILAR 590
+#define ILIKE 591
+
+
+
+
+#ifndef YYSTYPE
+#line 560 "sqlparser.y"
 typedef union {
 	char stringValue[255];
 	int integerValue;
@@ -11,341 +721,14 @@ typedef union {
 	KexiDB::Field *field;
 	KexiDB::BaseExpr *expr;
 	KexiDB::NArgExpr *exprlist;
-} YYSTYPE;
-#define	SQL_TYPE	257
-#define	SQL_ABS	258
-#define	ACOS	259
-#define	AMPERSAND	260
-#define	SQL_ABSOLUTE	261
-#define	ADA	262
-#define	ADD	263
-#define	ADD_DAYS	264
-#define	ADD_HOURS	265
-#define	ADD_MINUTES	266
-#define	ADD_MONTHS	267
-#define	ADD_SECONDS	268
-#define	ADD_YEARS	269
-#define	ALL	270
-#define	ALLOCATE	271
-#define	ALTER	272
-#define	AND	273
-#define	ANY	274
-#define	ARE	275
-#define	AS	276
-#define	ASIN	277
-#define	ASC	278
-#define	ASCII	279
-#define	ASSERTION	280
-#define	ATAN	281
-#define	ATAN2	282
-#define	AUTHORIZATION	283
-#define	AUTO_INCREMENT	284
-#define	AVG	285
-#define	BEFORE	286
-#define	SQL_BEGIN	287
-#define	BETWEEN	288
-#define	BIGINT	289
-#define	BINARY	290
-#define	BIT	291
-#define	BIT_LENGTH	292
-#define	BREAK	293
-#define	BY	294
-#define	CASCADE	295
-#define	CASCADED	296
-#define	CASE	297
-#define	CAST	298
-#define	CATALOG	299
-#define	CEILING	300
-#define	CENTER	301
-#define	SQL_CHAR	302
-#define	CHAR_LENGTH	303
-#define	CHARACTER_STRING_LITERAL	304
-#define	CHECK	305
-#define	CLOSE	306
-#define	COALESCE	307
-#define	COBOL	308
-#define	COLLATE	309
-#define	COLLATION	310
-#define	COLUMN	311
-#define	COMMIT	312
-#define	COMPUTE	313
-#define	CONCAT	314
-#define	CONNECT	315
-#define	CONNECTION	316
-#define	CONSTRAINT	317
-#define	CONSTRAINTS	318
-#define	CONTINUE	319
-#define	CONVERT	320
-#define	CORRESPONDING	321
-#define	COS	322
-#define	COT	323
-#define	COUNT	324
-#define	CREATE	325
-#define	CURDATE	326
-#define	CURRENT	327
-#define	CURRENT_DATE	328
-#define	CURRENT_TIME	329
-#define	CURRENT_TIMESTAMP	330
-#define	CURTIME	331
-#define	CURSOR	332
-#define	DATABASE	333
-#define	SQL_DATE	334
-#define	DATE_FORMAT	335
-#define	DATE_REMAINDER	336
-#define	DATE_VALUE	337
-#define	DAY	338
-#define	DAYOFMONTH	339
-#define	DAYOFWEEK	340
-#define	DAYOFYEAR	341
-#define	DAYS_BETWEEN	342
-#define	DEALLOCATE	343
-#define	DEC	344
-#define	DECLARE	345
-#define	DEFAULT	346
-#define	DEFERRABLE	347
-#define	DEFERRED	348
-#define	SQL_DELETE	349
-#define	DESC	350
-#define	DESCRIBE	351
-#define	DESCRIPTOR	352
-#define	DIAGNOSTICS	353
-#define	DICTIONARY	354
-#define	DIRECTORY	355
-#define	DISCONNECT	356
-#define	DISPLACEMENT	357
-#define	DISTINCT	358
-#define	DOMAIN_TOKEN	359
-#define	SQL_DOUBLE	360
-#define	DOUBLE_QUOTED_STRING	361
-#define	DROP	362
-#define	ELSE	363
-#define	END	364
-#define	END_EXEC	365
-#define	EQUAL	366
-#define	ESCAPE	367
-#define	EXCEPT	368
-#define	SQL_EXCEPTION	369
-#define	EXEC	370
-#define	EXECUTE	371
-#define	EXISTS	372
-#define	EXP	373
-#define	EXPONENT	374
-#define	EXTERNAL	375
-#define	EXTRACT	376
-#define	SQL_FALSE	377
-#define	FETCH	378
-#define	FIRST	379
-#define	SQL_FLOAT	380
-#define	FLOOR	381
-#define	FN	382
-#define	FOR	383
-#define	FOREIGN	384
-#define	FORTRAN	385
-#define	FOUND	386
-#define	FOUR_DIGITS	387
-#define	FROM	388
-#define	FULL	389
-#define	GET	390
-#define	GLOBAL	391
-#define	GO	392
-#define	GOTO	393
-#define	GRANT	394
-#define	GREATER_OR_EQUAL	395
-#define	GREATER_THAN	396
-#define	GROUP	397
-#define	HAVING	398
-#define	HOUR	399
-#define	HOURS_BETWEEN	400
-#define	IDENTITY	401
-#define	IFNULL	402
-#define	SQL_IGNORE	403
-#define	IMMEDIATE	404
-#define	SQL_IN	405
-#define	INCLUDE	406
-#define	INDEX	407
-#define	INDICATOR	408
-#define	INITIALLY	409
-#define	INNER	410
-#define	INPUT	411
-#define	INSENSITIVE	412
-#define	INSERT	413
-#define	INTEGER	414
-#define	INTERSECT	415
-#define	INTERVAL	416
-#define	INTO	417
-#define	IS	418
-#define	ISOLATION	419
-#define	JOIN	420
-#define	JUSTIFY	421
-#define	KEY	422
-#define	LANGUAGE	423
-#define	LAST	424
-#define	LCASE	425
-#define	LEFT	426
-#define	LENGTH	427
-#define	LESS_OR_EQUAL	428
-#define	LESS_THAN	429
-#define	LEVEL	430
-#define	LIKE	431
-#define	LINE_WIDTH	432
-#define	LOCAL	433
-#define	LOCATE	434
-#define	LOG	435
-#define	SQL_LONG	436
-#define	LOWER	437
-#define	LTRIM	438
-#define	LTRIP	439
-#define	MATCH	440
-#define	SQL_MAX	441
-#define	MICROSOFT	442
-#define	SQL_MIN	443
-#define	MINUS	444
-#define	MINUTE	445
-#define	MINUTES_BETWEEN	446
-#define	MOD	447
-#define	MODIFY	448
-#define	MODULE	449
-#define	MONTH	450
-#define	MONTHS_BETWEEN	451
-#define	MUMPS	452
-#define	NAMES	453
-#define	NATIONAL	454
-#define	NCHAR	455
-#define	NEXT	456
-#define	NODUP	457
-#define	NONE	458
-#define	NOT	459
-#define	NOT_EQUAL	460
-#define	NOW	461
-#define	SQL_NULL	462
-#define	NULLIF	463
-#define	NUMERIC	464
-#define	OCTET_LENGTH	465
-#define	ODBC	466
-#define	OF	467
-#define	SQL_OFF	468
-#define	SQL_ON	469
-#define	ONLY	470
-#define	OPEN	471
-#define	OPTION	472
-#define	OR	473
-#define	ORDER	474
-#define	OUTER	475
-#define	OUTPUT	476
-#define	OVERLAPS	477
-#define	PAGE	478
-#define	PARTIAL	479
-#define	SQL_PASCAL	480
-#define	PERSISTENT	481
-#define	CQL_PI	482
-#define	PLI	483
-#define	POSITION	484
-#define	PRECISION	485
-#define	PREPARE	486
-#define	PRESERVE	487
-#define	PRIMARY	488
-#define	PRIOR	489
-#define	PRIVILEGES	490
-#define	PROCEDURE	491
-#define	PRODUCT	492
-#define	PUBLIC	493
-#define	QUARTER	494
-#define	QUIT	495
-#define	RAND	496
-#define	READ_ONLY	497
-#define	REAL	498
-#define	REFERENCES	499
-#define	REPEAT	500
-#define	REPLACE	501
-#define	RESTRICT	502
-#define	REVOKE	503
-#define	RIGHT	504
-#define	ROLLBACK	505
-#define	ROWS	506
-#define	RPAD	507
-#define	RTRIM	508
-#define	SCHEMA	509
-#define	SCREEN_WIDTH	510
-#define	SCROLL	511
-#define	SECOND	512
-#define	SECONDS_BETWEEN	513
-#define	SELECT	514
-#define	SEQUENCE	515
-#define	SETOPT	516
-#define	SET	517
-#define	SHOWOPT	518
-#define	SIGN	519
-#define	INTEGER_CONST	520
-#define	REAL_CONST	521
-#define	SIN	522
-#define	SQL_SIZE	523
-#define	SMALLINT	524
-#define	SOME	525
-#define	SPACE	526
-#define	SQL	527
-#define	SQL_TRUE	528
-#define	SQLCA	529
-#define	SQLCODE	530
-#define	SQLERROR	531
-#define	SQLSTATE	532
-#define	SQLWARNING	533
-#define	SQRT	534
-#define	STDEV	535
-#define	SUBSTRING	536
-#define	SUM	537
-#define	SYSDATE	538
-#define	SYSDATE_FORMAT	539
-#define	SYSTEM	540
-#define	TABLE	541
-#define	TAN	542
-#define	TEMPORARY	543
-#define	THEN	544
-#define	THREE_DIGITS	545
-#define	TIME	546
-#define	TIMESTAMP	547
-#define	TIMEZONE_HOUR	548
-#define	TIMEZONE_MINUTE	549
-#define	TINYINT	550
-#define	TO	551
-#define	TO_CHAR	552
-#define	TO_DATE	553
-#define	TRANSACTION	554
-#define	TRANSLATE	555
-#define	TRANSLATION	556
-#define	TRUNCATE	557
-#define	GENERAL_TITLE	558
-#define	TWO_DIGITS	559
-#define	UCASE	560
-#define	UNION	561
-#define	UNIQUE	562
-#define	SQL_UNKNOWN	563
-#define	UPDATE	564
-#define	UPPER	565
-#define	USAGE	566
-#define	USER	567
-#define	USER_DEFINED_NAME	568
-#define	USER_DEFINED_NAME_DOT_ASTERISK	569
-#define	USING	570
-#define	VALUE	571
-#define	VALUES	572
-#define	VARBINARY	573
-#define	VARCHAR	574
-#define	VARYING	575
-#define	VENDOR	576
-#define	VIEW	577
-#define	WEEK	578
-#define	WHEN	579
-#define	WHENEVER	580
-#define	WHERE	581
-#define	WHERE_CURRENT_OF	582
-#define	WITH	583
-#define	WORD_WRAPPED	584
-#define	WORK	585
-#define	WRAPPED	586
-#define	YEAR	587
-#define	YEARS_BETWEEN	588
-#define	ILIKE	589
-#define	SIMILAR	590
-
+} yystype;
+/* Line 1281 of /usr/share/bison/yacc.c.  */
+#line 722 "sqlparser.tab.h"
+# define YYSTYPE yystype
+#endif
 
 extern YYSTYPE yylval;
+
+
+#endif /* not BISON_SQLPARSER_TAB_H */
+

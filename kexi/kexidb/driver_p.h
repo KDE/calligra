@@ -85,6 +85,11 @@ class KEXI_DB_EXPORT DriverBehaviour
 	*/
 	QString ALWAYS_AVAILABLE_DATABASE_NAME;
 	
+	/*! Quotation marks used for escaping identifier (see Driver::escapeIdentifier()).
+	 Default value is '"'. Change it for your driver.
+	*/
+	QChar QUOTATION_MARKS_FOR_IDENTIFIER;
+	
 	/*! True if using database is requied to perform real connection.
 	 This is true for may engines, e.g. for PostgreSQL, where connections 
 	 string should contain a database name.

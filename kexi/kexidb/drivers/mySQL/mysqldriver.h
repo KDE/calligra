@@ -43,11 +43,10 @@ class KEXIDB_MYSQL_DRIVER_EXPORT MySqlDriver : public Driver
 		virtual QString escapeString(const QString& str) const;
 		virtual QCString escapeString(const QCString& str) const;
 
-		//! Escape a string for use as an identifier (e.g. of a table name, or db)
-		virtual QString escapeIdentifier( const QString& str) const;
-		virtual QCString escapeIdentifier( const QCString& str) const;
-
 	protected:
+		virtual QString drv_escapeIdentifier( const QString& str) const;
+		virtual QCString drv_escapeIdentifier( const QCString& str) const;
+		
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
 };
 }

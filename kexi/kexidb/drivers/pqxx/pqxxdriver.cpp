@@ -50,6 +50,7 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const char *name, const QStringLi
 	beh->SPECIAL_AUTO_INCREMENT_DEF = true;
 	beh->AUTO_INCREMENT_FIELD_OPTION = "serial";
 	beh->ALWAYS_AVAILABLE_DATABASE_NAME = "template1";
+	beh->QUOTATION_MARKS_FOR_IDENTIFIER='"';
 
 	//predefined properties
 	d->properties["client_library_version"] = "";//TODO
@@ -122,14 +123,14 @@ QCString pqxxSqlDriver::escapeString( const QCString& str) const
 
 //==================================================================================
 //
-QString pqxxSqlDriver::escapeIdentifier( const QString& str) const {
-	return QString("\"") + QString(str).replace( '"', "\"\"" ) + "\"";
+QString pqxxSqlDriver::drv_escapeIdentifier( const QString& str) const {
+	return QString(str).replace( '"', "\"\"" );
 }
 
 //==================================================================================
 //
-QCString pqxxSqlDriver::escapeIdentifier( const QCString& str) const {
-	return QCString("\"") + QCString(str).replace( '"', "\"\"" ) + "\"";
+QCString pqxxSqlDriver::drv_escapeIdentifier( const QCString& str) const {
+	return QCString(str).replace( '"', "\"\"" );
 }
 
 #include "pqxxdriver.moc"
