@@ -146,12 +146,6 @@ KexiAlterTableDialog::~KexiAlterTableDialog()
 
 void KexiAlterTableDialog::initData()
 {
-//	d->buffers->clear();
-
-//	d->buffers.resize(MAX_FIELDS);
-//	d->buffers.setAutoDelete(true);
-//	m_row = -99;
-
 	//add column data
 	d->data->clear();
 	int tableFieldCount = 0;
@@ -176,29 +170,22 @@ void KexiAlterTableDialog::initData()
 		d->buffers->clear();//default size
 	}
 	//add empty space
-//	for (int i=tableFieldCount; i<MAX_FIELDS; i++) {
 	const int columnsCount = d->data->columnsCount();
 	for (int i=tableFieldCount; i<(int)d->buffers->size(); i++) {
-//		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
-//		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
-//		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
-//		m_fields.insert(i, buff);
 		KexiTableItem *item = new KexiTableItem(columnsCount);//3 empty fields
 		d->data->append(item);
 	}
 
-//	QSplitter *splitter = new QSplitter(Vertical, this);
-
-	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << d->buffers->size() << " items" << endl;
-
 	m_view->setData(d->data);
 
+	//column widths
 	m_view->setColumnWidth(COLUMN_ID_PK, IconSize( KIcon::Small ) + 10);
 	m_view->adjustColumnWidthToContents(COLUMN_ID_NAME); //adjust column width
 	m_view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2*m_view->rowHeight());
 	m_view->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
 
 	setDirty(false);
+	m_view->setCursor(0, COLUMN_ID_NAME); //set @ name column
 }
 
 static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiPropertyBuffer& buf)
@@ -623,7 +610,7 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 			no_fields = false;
 			const QString name = (*b)["name"].value().toString();
 			if (name.isEmpty()) {
-				m_view->setCursor(i, 0);
+				m_view->setCursor(i, COLUMN_ID_NAME);
 				m_view->startEditCurrentCell();
 				KMessageBox::information(this, i18n("You should enter field name.") );
 				cancel = true;
@@ -642,7 +629,7 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 		ok = false;
 	}
 	if (ok && b && i<(int)d->buffers->size()) {//found a duplicate
-		m_view->setCursor(i, 0);
+		m_view->setCursor(i, COLUMN_ID_NAME);
 		m_view->startEditCurrentCell();
 		KMessageBox::information(this, i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. Correct name of the field.")
 			.arg((*b)["name"].value().toString()) );
