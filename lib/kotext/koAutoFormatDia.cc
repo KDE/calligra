@@ -496,7 +496,7 @@ void KoAutoFormatDia::setupTab3()
     }
     autoFormatLanguage->insertStringList(lst);
 
-    connect(autoFormatLanguage, SIGNAL(highlighted ( const QString & )), this, SLOT(changeAutoformatLanguage(const QString & )));
+    connect(autoFormatLanguage->listBox(), SIGNAL(selected ( const QString & )), this, SLOT(changeAutoformatLanguage(const QString & )));
 
     grid->addMultiCellWidget( autoFormatLanguage, 0, 0, 4, 6 );
     QLabel *lblAutoFormatLanguage = new QLabel( i18n("Replacement and exception for language"), tab3);
