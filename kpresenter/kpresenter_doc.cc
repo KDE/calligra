@@ -1013,6 +1013,10 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 //todo ????
 
 
+    makeUsedPixmapList();
+
+    m_pictureCollection.saveOasisToStore( store, usedPictures, manifestWriter);
+
 
     //reset progressbar
     emit sigProgress( 100 );
@@ -3547,11 +3551,11 @@ void KPresenterDoc::enableBackgroundSpellCheck( bool b )
 
 bool KPresenterDoc::backgroundSpellCheckEnabled() const
 {
-  #ifdef HAVE_LIBKSPELL2
+#ifdef HAVE_LIBKSPELL2
     return m_bgSpellCheck->enabled();
-    #else
+#else
     return false;
-    #endif
+#endif
 }
 
 void KPresenterDoc::reactivateBgSpellChecking(bool refreshTextObj)

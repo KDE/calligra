@@ -102,7 +102,10 @@ bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context
     xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(),indexObj ) );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
-
+    xmlWriter.addAttribute( "xlink:type", "simple" );
+    xmlWriter.addAttribute( "xlink:show", "embed" );
+    xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
+    xmlWriter.addAttribute( "xlink:href", "#"+ imageCollection->getOasisFileName(image) );
 //xlink:href="#Pictures/100000000000030E00000203A35860EF.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad
 
     //we don't have a simple object
