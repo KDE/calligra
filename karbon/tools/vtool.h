@@ -27,7 +27,7 @@ public:
 
 protected:
 	virtual void mousePressed( QMouseEvent * ) {}
-	virtual void mouseMoved( QMouseEvent * ) {}
+	virtual void mouseMoved( QMouseEvent * );
 	virtual void dragShiftPressed() {}
 	virtual void dragCtrlPressed() {}
 	virtual void dragShiftReleased() {}

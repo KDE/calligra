@@ -13,6 +13,22 @@ VTool::VTool( KarbonView* view )
 }
 
 void
+VTool::mouseMoved( QMouseEvent *mouse_event )
+{
+	if( m_isDragging )
+	{
+		// erase old object:
+		drawTemporaryObject();
+
+		m_lp.setX( mouse_event->pos().x() );
+		m_lp.setY( mouse_event->pos().y() );
+
+		// paint new object:
+		drawTemporaryObject();
+	}
+}
+
+void
 VTool::cancel()
 {
 	m_isDragging = false;

@@ -151,17 +151,9 @@ VSelectNodesTool::eventFilter( QEvent* event )
 		setCursor( lpp );
 	}
 
-	if ( event->type() == QEvent::MouseMove && m_isDragging )
+	if ( event->type() == QEvent::MouseMove )
 	{
-		// erase old object:
-		drawTemporaryObject();
-
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-
-		// paint new object:
-		drawTemporaryObject();
-
+		mouseMoved( static_cast<QMouseEvent *>( event ) );
 		return true;
 	}
 
