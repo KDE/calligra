@@ -115,10 +115,10 @@ bool Cursor::open()
 	m_at = 0; //we are before 1st rec
 	if (!m_opened)
 		return false;
+	m_validRecord = false;
 	if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
 		m_readAhead = drv_getNextRecord(); //true if any record in this query
 	m_at = 0; //we are still before 1st rec
-//	m_validRecord = false; //no record retrieved
 	return !error();
 }
 
