@@ -330,8 +330,8 @@ void KoFontChooser::setUnderlineType(KoTextFormat::LineType _t)
         m_underlineType->setCurrentItem( 0 );
         break;
     }
-    m_underlineType->setEnabled( m_underlineType->currentItem()!= 0);
-    m_underlineColorButton->setEnabled( m_underlineType->currentItem()!=0);
+    m_underlineType->setEnabled( m_underlining->currentItem()!= 0);
+    m_underlineColorButton->setEnabled( m_underlining->currentItem()!=0);
     m_changedFlags = 0;
 }
 
