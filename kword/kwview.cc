@@ -4584,6 +4584,11 @@ void KWView::tabListChanged( const KoTabulatorList & tabList )
 
 void KWView::newPageLayout( KoPageLayout _layout )
 {
+    QString mode = m_gui->canvasWidget()->viewMode()->type();
+    bool state = (mode!="ModeText");
+    if ( !state )
+        return;
+
     KoPageLayout pgLayout;
     KoColumns cl;
     KoKWHeaderFooter hf;
@@ -5741,7 +5746,6 @@ void KWView::insertFile()
 
 void KWView::insertFile(const QString & path)
 {
-    bool hasPictures=false;
     bool hasFixedFramesets = false;
     // ### TODO network transparency
     KoStore* store=KoStore::createStore( path, KoStore::Read );
