@@ -82,3 +82,4 @@ stylist.cc: stylist.moc
 kcharselect.cc: kcharselect.moc
 kcharselectdia.cc: kcharselectdia.moc
 kword_utils.cc: kword_utils.h
+stylist.cc: kword.h

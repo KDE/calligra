@@ -39,6 +39,7 @@ moc_koApplication.cc: koApplication.h
 
 
 koDocument.cc: koDocument.h
+moc_koMainWindow.cc: koffice.h
 koDocument.h: koffice.h
 koffice.cc: koffice.h
 koffice.h: koffice.idl

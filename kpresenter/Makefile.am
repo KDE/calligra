@@ -156,3 +156,4 @@ lowraicmd.cc: lowraicmd.moc
 pievaluecmd.cc: pievaluecmd.moc
 rectvaluecmd.cc: rectvaluecmd.moc
 commandhistory.cc: commandhistory.moc
+shadowcmd.cc: kpresenter.h
