@@ -7220,19 +7220,19 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
 
     // add Tab "All"
     pageAll = new QFrame( this );
-    tab->addTab( pageAll,  i18n( "All" ) );
+    tab->addTab( pageAll,  i18n( "Text" ) );
 
     addBox( pageAll, resultLabelAll );
 
     m_canceled = true;
+    pageSelected = new QFrame( this );
+    tab->addTab( pageSelected,  i18n( "Selected text" ) );
     // let's see if there's selected text
     bool b = docHasSelection();
+    tab->setTabEnabled(pageSelected, b);
     if ( b ) {
-        // add Tab "Selected"
-        pageSelected = new QFrame( this );
-        tab->addTab( pageSelected,  i18n( "Selected" ) );
         addBox( pageSelected, resultLabelSelected);
-        // assign results
+        // assign results to 'selected' tab.
         if ( !calcStats( resultLabelSelected, true,false ) )
             return;
         if ( !calcStats( resultLabelAll, false,false ) )
@@ -7408,28 +7408,28 @@ void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
     grid->addRowSpacing( 0, fHeight );
 
     // insert labels
-    QLabel *label1 = new QLabel( i18n( "Number Of Page:" ), box );
+    QLabel *label1 = new QLabel( i18n( "Number Of Pages:" ), box );
     grid->addWidget( label1, 1, 0, 1 );
     resultLabel[0] = new QLabel( "", box );
     grid->addWidget( resultLabel[0], 1, 2, 2 );
 
-    QLabel *label2 = new QLabel( i18n( "Number Of Frame:" ), box );
+    QLabel *label2 = new QLabel( i18n( "Number Of Frames:" ), box );
     grid->addWidget( label2, 2, 0, 1 );
     resultLabel[1] = new QLabel( "", box );
     grid->addWidget( resultLabel[1], 2, 2, 2 );
 
-    QLabel *label3 = new QLabel( i18n( "Number Of Picture:" ), box );
+    QLabel *label3 = new QLabel( i18n( "Number Of Pictures:" ), box );
     grid->addWidget( label3, 3, 0, 1 );
     resultLabel[2] = new QLabel( "", box );
     grid->addWidget( resultLabel[2], 3, 2, 2 );
 
 
-    QLabel *label4 = new QLabel( i18n( "Number Of Table:" ), box );
+    QLabel *label4 = new QLabel( i18n( "Number Of Tables:" ), box );
     grid->addWidget( label4, 4, 0, 1 );
     resultLabel[3] = new QLabel( "", box );
     grid->addWidget( resultLabel[3], 4, 2, 2 );
 
-    QLabel *label5 = new QLabel( i18n( "Number Of Embedded Object:" ), box );
+    QLabel *label5 = new QLabel( i18n( "Number Of Embedded Objects:" ), box );
     grid->addWidget( label5, 5, 0, 1 );
     resultLabel[4] = new QLabel( "", box );
     grid->addWidget( resultLabel[4], 5, 2, 2 );
