@@ -20,44 +20,45 @@
 
 #include <math.h>
 
-#include <qlayout.h>
 #include <qcheckbox.h>
-#include <qlineedit.h>
 #include <qcombobox.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qtabwidget.h>
 #include <qcursor.h>
-#include <qpixmap.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlineedit.h>
 #include <qpainter.h>
+#include <qpixmap.h>
+#include <qpushbutton.h>
+#include <qtabwidget.h>
 
-#include <kfontcombo.h>
-#include <knuminput.h>
 #include <kdebug.h>
+#include <kfontcombo.h>
 #include <kiconloader.h>
+#include <knuminput.h>
 
 #include "karbon_view.h"
-#include "vpainterfactory.h"
-#include "vtexttool.h"
-#include "vselection.h"
 #include "vkopainter.h"
+#include "vpainterfactory.h"
+#include "vselection.h"
+#include "vtexttool.h"
 
-static void traceShape( VKoPainter* p, int x, int y, int w, int h )
+
+static void
+traceShape( VKoPainter* p, int x, int y, int w, int h )
 {
 	p->newPath();
-	p->moveTo( KoPoint( x + w    , y + h     ) );
-	p->lineTo( KoPoint( x + w / 3, y + h     ) );
+	p->moveTo( KoPoint( x + w , y + h ) );
+	p->lineTo( KoPoint( x + w / 3, y + h ) );
 	p->lineTo( KoPoint( x + w / 3, y + h / 3 ) );
-	p->lineTo( KoPoint( x + w    , y + h / 3 ) );
-	p->lineTo( KoPoint( x + w    , y + h     ) );
-	
-	p->moveTo( KoPoint( x                , y                 ) );
-	p->lineTo( KoPoint( x + ( w / 3 ) * 2, y                 ) );
+	p->lineTo( KoPoint( x + w , y + h / 3 ) );
+	p->lineTo( KoPoint( x + w , y + h ) );
+
+	p->moveTo( KoPoint( x , y ) );
+	p->lineTo( KoPoint( x + ( w / 3 ) * 2, y ) );
 	p->lineTo( KoPoint( x + ( w / 3 ) * 2, y + ( h / 3 ) * 2 ) );
-	p->lineTo( KoPoint( x                , y + ( h / 3 ) * 2 ) );
-	p->lineTo( KoPoint( x                , y                 ) );
-	
-} // traceShape [static]
+	p->lineTo( KoPoint( x , y + ( h / 3 ) * 2 ) );
+	p->lineTo( KoPoint( x , y ) );
+}
 
 ShadowPreview::ShadowPreview( ShadowWidget* parent )
 		: QWidget( parent ), m_parent( parent )
@@ -66,22 +67,24 @@ ShadowPreview::ShadowPreview( ShadowWidget* parent )
 	setMinimumSize( 60, 60 );
 
 	connect( this, SIGNAL( changed( int, int, bool ) ), m_parent, SLOT( setShadowValues( int, int, bool ) ) );
-} // ShadowPreview::ShadowPreview
+}
 
 ShadowPreview::~ShadowPreview()
 {
-} // ShadowPreview::~ShadowPreview
+}
 
-void ShadowPreview::mouseReleaseEvent( QMouseEvent* e )
+void
+ShadowPreview::mouseReleaseEvent( QMouseEvent* e )
 {
 	int dx = e->x() - width() / 2;
 	int dy = e->y() - height() / 2;
 
 	float fd = sqrt( dx * dx + dy * dy );
 	int a;
-	if ( fd == 0 )
+
+	if( fd == 0 )
 		a = 0;
-	else if ( dy == 0 && dx < 0 )
+	else if( dy == 0 && dx < 0 )
 		a = 180;
 	else
 	{
@@ -89,10 +92,12 @@ void ShadowPreview::mouseReleaseEvent( QMouseEvent* e )
 		a = int( ( dy <= 0 ? r : 6.2832 - r ) / 6.2832 * 360. );
 	}
 
-	emit changed( a, (int)fd, m_parent->isTranslucent() );
-} // ShadowPreview::mouseReleaseEvent
+	emit changed( a, ( int
+) fd, m_parent->isTranslucent() );
+}
 
-void ShadowPreview::paintEvent( QPaintEvent* )
+void
+ShadowPreview::paintEvent( QPaintEvent* )
 {
 	int w = width() - 4;
 	int h = height() - 4;
@@ -102,11 +107,12 @@ void ShadowPreview::paintEvent( QPaintEvent* )
 	QPixmap pm( w, h );
 	VKoPainter p( &pm, w, h );
 	VColor color( VColor::rgb );
-	
+
 	VFill fill;
 	KIconLoader il;
 	fill.pattern() = VPattern( il.iconPath( "karbon.png", KIcon::Small ) );
 	fill.setType( VFill::patt );
+
 	p.newPath();
 	p.moveTo( KoPoint( 0, 0 ) );
 	p.lineTo( KoPoint( 0, h ) );
@@ -115,12 +121,13 @@ void ShadowPreview::paintEvent( QPaintEvent* )
 	p.lineTo( KoPoint( 0, 0 ) );
 	p.setBrush( fill );
 	p.fillPath();
+
 	color.set( 1., 1., 1. );
 	color.setOpacity( .5 );
 	p.setBrush( VFill( color ) );
 	p.fillPath();
-	
-	if ( m_parent->isTranslucent() )
+
+	if( m_parent->isTranslucent() )
 	{
 		color.set( 0., 0., 0. );
 		color.setOpacity( .3 );
@@ -130,12 +137,13 @@ void ShadowPreview::paintEvent( QPaintEvent* )
 		color.set( .3, .3, .3 );
 		color.setOpacity( 1. );
 	}
+
 	p.setPen( VStroke( color ) );
 	p.setBrush( VFill( color ) );
 	traceShape( &p, int( w / 4 + d * cos( a / 360. * 6.2832 ) ), int( h / 4 + d * sin( a / 360. * 6.2832 ) ), int( w / 2 ), int( h / 2 ) );
 	p.strokePath();
 	p.fillPath();
-	
+
 	color.set( 0., 0., 1. );
 	color.setOpacity( 1. );
 	p.setBrush( VFill( color ) );
@@ -145,7 +153,7 @@ void ShadowPreview::paintEvent( QPaintEvent* )
 	p.strokePath();
 	p.fillPath();
 
-	if ( !m_parent->useShadow() )
+	if( !m_parent->useShadow() )
 	{
 		p.newPath();
 		p.moveTo( KoPoint( 0, 0 ) );
@@ -158,8 +166,9 @@ void ShadowPreview::paintEvent( QPaintEvent* )
 		p.setBrush( VFill( c ) );
 		p.fillPath();
 	}
+
 	p.end();
-	
+
 	QPainter painter( this );
 	painter.drawPixmap( 2, 2, pm );
 	painter.setPen( colorGroup().light() );
@@ -174,12 +183,11 @@ void ShadowPreview::paintEvent( QPaintEvent* )
 	painter.lineTo( width() - 1, 0 );
 	painter.moveTo( width() - 2, 2 );
 	painter.lineTo( width() - 2, height() - 2 );
-	painter.lineTo( 2, height() - 2 );    
+	painter.lineTo( 2, height() - 2 );
 	painter.setPen( Qt::black );
 	painter.drawLine( width() / 2 - 2, height() / 2, width() / 2 + 2, height() / 2 );
 	painter.drawLine( width() / 2, height() / 2 - 2, width() / 2, height() / 2 + 2 );
-
-} // ShadowPreview::paintEvent
+}
 
 ShadowWidget::ShadowWidget( QWidget* parent, const char* name, int angle, int distance, bool translucent )
 		: QGroupBox( parent, name )
@@ -206,84 +214,93 @@ ShadowWidget::ShadowWidget( QWidget* parent, const char* name, int angle, int di
 	m_angle->setValue( angle );
 	m_distance->setValue( distance );
 	m_translucent->setChecked( translucent );
-	
+
 	connect( m_angle, SIGNAL( valueChanged( int ) ), this, SLOT( updatePreview( int ) ) );
 	connect( m_distance, SIGNAL( valueChanged( int ) ), this, SLOT( updatePreview( int ) ) );
 	connect( m_useShadow, SIGNAL( clicked() ), this, SLOT( updatePreview() ) );
 	connect( m_translucent, SIGNAL( clicked() ), this, SLOT( updatePreview() ) );
-	
+
 	updatePreview();
-} // ShadowWidget::ShadowWidget 
+}
 
 ShadowWidget::~ShadowWidget()
 {
-} // ShadowWidget::ShadowWidget
+}
 
-void ShadowWidget::setUseShadow( bool use )
+void
+ShadowWidget::setUseShadow( bool use )
 {
 	m_useShadow->setChecked( use );
 	m_preview->repaint();
-} // ShadowWidget::setUseShadow
+}
 
 bool ShadowWidget::useShadow()
 {
 	return m_useShadow->isChecked();
-} // ShadowWidget::useShadow
+}
 
-void ShadowWidget::setShadowAngle( int angle )
+void
+ShadowWidget::setShadowAngle( int angle )
 {
 	m_angle->setValue( angle );
 	m_preview->repaint();
-} // ShadowWidget::setShadowAngle
+}
 
-int ShadowWidget::shadowAngle()
+int
+ShadowWidget::shadowAngle()
 {
 	return m_angle->value();
-} // ShadowWidget::shadowAngle
+}
 
-void ShadowWidget::setShadowDistance( int distance )
+void
+ShadowWidget::setShadowDistance( int distance )
 {
 	m_distance->setValue( distance );
 	m_preview->repaint();
-} // ShadowWidget::setShadowDistance
+}
 
-int ShadowWidget::shadowDistance()
+int
+ShadowWidget::shadowDistance()
 {
 	return m_distance->value();
-} // ShadowWidget::shadowDistance
+}
 
-void ShadowWidget::setTranslucent( bool translucent )
+void
+ShadowWidget::setTranslucent( bool translucent )
 {
 	m_translucent->setChecked( translucent );
 	m_preview->repaint();
-} // ShdowWidget::setTranslucent
+}
 
 bool ShadowWidget::isTranslucent()
 {
 	return m_translucent->isChecked();
-} // ShadowWidget::isTranslucent
+}
 
-void ShadowWidget::setShadowValues( int angle, int distance, bool translucent ) 
+void
+ShadowWidget::setShadowValues( int angle, int distance, bool translucent )
 {
 	m_angle->setValue( angle );
 	m_distance->setValue( distance );
 	m_translucent->setChecked( translucent );
 	m_preview->repaint();
-} // ShadowWidget::setShadowValues
+}
 
-void ShadowWidget::updatePreview( int )
+void
+ShadowWidget::updatePreview( int )
 {
 	m_preview->repaint();
-} // ShadowWidget::updatePreview
+}
 
-void ShadowWidget::updatePreview()
+void
+ShadowWidget::updatePreview()
 {
 	m_preview->repaint();
 	bool ok = m_useShadow->isChecked();
 	m_angle->setEnabled( ok );
-	m_distance->setEnabled( ok ); 
+	m_distance->setEnabled( ok );
 	m_translucent->setEnabled( ok );
-} // ShadowWidget::updatePreview
+}
 
 VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 		: QFrame( parent, "TextOptionsWidget" ), m_tool( tool )
@@ -292,11 +309,16 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 	setFrameStyle( Box | Sunken );
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
 	mainLayout->setMargin( 3 );
-	mainLayout->add( m_tabWidget = new QTabWidget( this ) );
+
+	mainLayout->add
+	( m_tabWidget = new QTabWidget( this ) );
+
 	m_tabWidget->setFont( QFont( "helvetica" , 8 ) );
 
 	QWidget* textWidget = new QWidget( m_tabWidget );
+
 	QGridLayout* textLayout = new QGridLayout( textWidget );
+
 	textLayout->setMargin( 3 );
 	textLayout->setSpacing( 2 );
 	textLayout->addMultiCellWidget( m_fontCombo = new KFontCombo( textWidget ), 0, 0, 0, 2 );
@@ -304,14 +326,19 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 	textLayout->addWidget( m_boldCheck = new QCheckBox( i18n( "Bold" ), textWidget ), 1, 1 );
 	textLayout->addWidget( m_italicCheck = new QCheckBox( i18n( "Italic" ), textWidget ), 1, 2 );
 	textLayout->addMultiCellWidget( m_textEditor = new QLineEdit( textWidget ), 2, 2, 0, 2 );
+
 	m_tabWidget->addTab( textWidget, i18n( "Text" ) );
-	
+
 	QWidget* fxWidget = new QWidget( m_tabWidget );
+
 	QVBoxLayout* fxLayout = new QVBoxLayout( fxWidget );
+
 	fxLayout->setMargin( 3 );
 	fxLayout->setSpacing( 2 );
 	fxLayout->add( m_shadow = new ShadowWidget( fxWidget, 0L, 315, 4, true ) );
+
 	QGridLayout* fxLayout2 = new QGridLayout( fxLayout );
+
 	fxLayout2->setSpacing( 2 );
 	fxLayout2->addWidget( new QLabel( i18n( "Alignment:" ), fxWidget ), 1, 0 );
 	fxLayout2->addWidget( m_textAlignment = new QComboBox( fxWidget ), 1, 1 );
@@ -321,143 +348,167 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 	fxLayout2->addMultiCellWidget( m_convertToShapes = new QPushButton( i18n( "Convert to shapes" ), fxWidget ), 2, 2, 2, 3 );
 	fxLayout2->setColStretch( 1, 1 );
 	fxLayout2->setColStretch( 3, 1 );
+
 	m_tabWidget->addTab( fxWidget, i18n( "Effects" ) );
-	
+
 	m_fontCombo->setCurrentText( "Helvetica" );
+
 	m_fontSize->setValue( 12 );
 	m_fontSize->setSuffix( " pt" );
+
 	m_textEditor->setMinimumHeight( 100 );
+
 	m_convertToShapes->setEnabled( true );
-	 // TODO: Find a way to display correctly the following icons...
+
+	// TODO: Find a way to display correctly the following icons...
 	m_textAlignment->insertItem( "Left" );
 	m_textAlignment->insertItem( "Center" );
 	m_textAlignment->insertItem( "Right" );
+
 	m_textPosition->insertItem( SmallIcon( "14_text_above" ) );
 	m_textPosition->insertItem( SmallIcon( "14_text_on" ) );
 	m_textPosition->insertItem( SmallIcon( "14_text_under" ) );
-	
+
 	connect( m_fontCombo, SIGNAL( activated( int ) ), this, SLOT( valueChanged( int ) ) );
 	connect( m_boldCheck, SIGNAL( stateChanged( int ) ), this, SLOT( valueChanged( int ) ) );
 	connect( m_italicCheck, SIGNAL( stateChanged( int ) ), this, SLOT( valueChanged( int ) ) );
 	connect( m_fontSize, SIGNAL( valueChanged( int ) ), this, SLOT( valueChanged( int ) ) );
 	connect( m_textPosition, SIGNAL( activated( int ) ), this, SLOT( valueChanged( int ) ) );
 	connect( m_textAlignment, SIGNAL( activated( int ) ), this, SLOT( valueChanged( int ) ) );
-	
 	connect( m_textEditor, SIGNAL( returnPressed() ), this, SLOT( accept() ) );
 	connect( m_textEditor, SIGNAL( textChanged( const QString& ) ), this, SLOT( textChanged( const QString& ) ) );
-	
 	connect( m_editBasePath, SIGNAL( clicked() ), this, SLOT( editBasePath() ) );
 	connect( m_convertToShapes, SIGNAL( clicked() ), this, SLOT( convertToShapes() ) );
-} // VTextOptionsWidget::VTextOptionsWidget
+}
 
 VTextOptionsWidget::~VTextOptionsWidget()
 {
-} // VTextOptionsWidget::~VTextOptionsWidget
+}
 
-void VTextOptionsWidget::valueChanged( int )
+void
+VTextOptionsWidget::valueChanged( int )
 {
 	m_fontCombo->setBold( m_boldCheck->isChecked() );
 	m_fontCombo->setItalic( m_italicCheck->isChecked() );
-	m_textEditor->setFont( QFont( m_fontCombo->currentText(), m_fontSize->value(), ( m_boldCheck->isChecked() ? 75 : 50 ), m_italicCheck->isChecked() ) );
-	m_tool->textChanged();
-} // VTextOptionsWidget::valueChanged
 
-void VTextOptionsWidget::accept()
+	m_textEditor->setFont( QFont( m_fontCombo->currentText(), m_fontSize->value(), ( m_boldCheck->isChecked() ? 75 : 50 ), m_italicCheck->isChecked() ) );
+
+	m_tool->textChanged();
+}
+
+void
+VTextOptionsWidget::accept()
 {
 	if( m_tool )
 		m_tool->accept();
-} // VTextOptionsWidget::accept
+}
 
-void VTextOptionsWidget::textChanged( const QString& )
+void
+VTextOptionsWidget::textChanged( const QString& )
 {
 	m_tool->textChanged();
-} // VTextOptionsWidget::textChanged
+}
 
-void VTextOptionsWidget::editBasePath()
+void
+VTextOptionsWidget::editBasePath()
 {
 	m_tool->editBasePath();
-} // VTextOptionsWidget::editBasePath
+}
 
-void VTextOptionsWidget::convertToShapes()
+void
+VTextOptionsWidget::convertToShapes()
 {
 	m_tool->convertToShapes();
-} // VTextOptionsWidget::convertToShapes
+}
 
-void VTextOptionsWidget::setFont( const QFont& font )
+void
+VTextOptionsWidget::setFont( const QFont& font )
 {
 	m_fontCombo->setCurrentText( font.family() );
+
 	m_boldCheck->setChecked( font.bold() );
+
 	m_italicCheck->setChecked( font.italic() );
+
 	m_fontSize->setValue( font.pointSize() );
+
 	m_fontCombo->setBold( m_boldCheck->isChecked() );
 	m_fontCombo->setItalic( m_italicCheck->isChecked() );
+
 	m_textEditor->setFont( QFont( m_fontCombo->currentText(), m_fontSize->value(), ( m_boldCheck->isChecked() ? 75 : 50 ), m_italicCheck->isChecked() ) );
-} // VTextOptionsWidget::setFont
+}
 
 QFont VTextOptionsWidget::font()
 {
 	return QFont( m_fontCombo->currentText(), m_fontSize->value(), ( m_boldCheck->isChecked() ? 75 : 50 ), m_italicCheck->isChecked() );
-} // VTextOptionsWidget::font
+}
 
-void VTextOptionsWidget::setText( const QString& text )
+void
+VTextOptionsWidget::setText( const QString& text )
 {
 	m_textEditor->setText( text );
-} // VTextOptionsWidget::setText
+}
 
 QString VTextOptionsWidget::text()
 {
 	return m_textEditor->text();
-} // VTextOptionsWidget::text
+}
 
-void VTextOptionsWidget::setPosition( VText::Position position )
+void
+VTextOptionsWidget::setPosition( VText::Position position )
 {
 	m_textPosition->setCurrentItem( position );
-} // VTextOptionsWidget::setPosition
+}
 
 VText::Position VTextOptionsWidget::position()
 {
-	return (VText::Position)m_textPosition->currentItem();
-} // VTextOptionsWidget::position
+	return ( VText::Position ) m_textPosition->currentItem();
+}
 
-void VTextOptionsWidget::setAlignment( VText::Alignment alignment )
+void
+VTextOptionsWidget::setAlignment( VText::Alignment alignment )
 {
 	m_textAlignment->setCurrentItem( alignment );
-} // VTextOptionsWidget::setAlignment
+}
 
 VText::Alignment VTextOptionsWidget::alignment()
 {
-	return (VText::Alignment)m_textAlignment->currentItem();
-} // VTextOptionsWidget::alignment
+	return ( VText::Alignment ) m_textAlignment->currentItem();
+}
 
-void VTextOptionsWidget::setUseShadow( bool state )
+void
+VTextOptionsWidget::setUseShadow( bool state )
 {
 	m_shadow->setUseShadow( state );
-} // VTextOptionsWidget::setUseShadow
+}
 
 bool VTextOptionsWidget::useShadow()
 {
 	return m_shadow->useShadow();
-} // VTextOptionsWidget::useShadow
+}
 
-void VTextOptionsWidget::setShadow( int angle, int distance, bool translucent )
+void
+VTextOptionsWidget::setShadow( int angle, int distance, bool translucent )
 {
 	m_shadow->setShadowValues( angle, distance, translucent );
-} // VTextOptionsWidget::setShadow
+}
 
 bool VTextOptionsWidget::translucentShadow()
 {
 	return m_shadow->isTranslucent();
-} // VTextOptionsWidget::translucentShadow
+}
 
-int VTextOptionsWidget::shadowAngle()
+int
+VTextOptionsWidget::shadowAngle()
 {
 	return m_shadow->shadowAngle();
-} // VTextOptionsWidget::shadowAngle
+}
 
-int VTextOptionsWidget::shadowDistance()
+int
+VTextOptionsWidget::shadowDistance()
 {
 	return m_shadow->shadowDistance();
-} // VTextOptionsWidget::shadowDistance
+}
 
 VTextTool::VTextTool( KarbonView* view )
 		: VTool( view )
@@ -465,12 +516,12 @@ VTextTool::VTextTool( KarbonView* view )
 	m_optionsWidget = new VTextOptionsWidget( this );
 	m_text = 0L;
 	m_editedText = 0L;
-} // VTextTool::VTextTool
+}
 
 VTextTool::~VTextTool()
 {
 	delete m_optionsWidget;
-} // VTextTool::~VTextTool
+}
 
 QString VTextTool::contextHelp()
 {
@@ -479,10 +530,12 @@ QString VTextTool::contextHelp()
 	s += "If the selection made before the tool activation was a text object, it is edited.<br>";
 	s += "If the selection was a path, the text is drawn along it.<br>";
 	s += "Press <i>Return</i> to validate your text.</qt>";
-	return s;
-} // VTextTool::contextHelp
 
-void VTextTool::activate()
+	return s;
+}
+
+void
+VTextTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Text Tool" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
@@ -495,19 +548,22 @@ void VTextTool::activate()
 
 	VSelection* selection = view()->part()->document().selection();
 	kdDebug() << "Nb objects selected: " << selection->objects().count() << endl;
+
 	if( selection->objects().count() == 1 )
 		visit( *selection->objects().getFirst() );
-} // VTextTool::activate
+}
 
-void VTextTool::deactivate()
+void
+VTextTool::deactivate()
 {
 	if( m_creating )
 		delete m_text;
-} // VTextTool::deactivate()
+}
 
-void VTextTool::drawPathCreation()
+void
+VTextTool::drawPathCreation()
 {
-	VPainter* painter = view()->painterFactory()->editpainter();
+	VPainter * painter = view()->painterFactory()->editpainter();
 
 	view()->canvasWidget()->setYMirroring( true );
 	painter->setZoomFactor( view()->zoom() );
@@ -517,49 +573,56 @@ void VTextTool::drawPathCreation()
 	painter->setPen( Qt::DotLine );
 	painter->setBrush( Qt::NoBrush );
 
-	painter->moveTo( first() ); 
+	painter->moveTo( first() );
 	painter->lineTo( m_last );
 	painter->strokePath();
-} // VTextTool::drawPathCreation
+}
 
-void VTextTool::drawEditedText()
+void
+VTextTool::drawEditedText()
 {
 	if( !m_editedText )
-		return;
+		return ;
 
 	kdDebug() << "Drawing: " << m_editedText->text() << endl;
+
 	VPainter* painter = view()->painterFactory()->editpainter();
 
 	view()->canvasWidget()->setYMirroring( true );
+
 	painter->setZoomFactor( view()->zoom() );
 
 	m_editedText->draw( painter );
-} // VTextTool::drawEditedText
+}
 
-void VTextTool::mouseButtonPress()
+void
+VTextTool::mouseButtonPress()
 {
 	m_last = first();
 	drawPathCreation();
-} // VTextTool::mouseButtonPress
+}
 
-void VTextTool::mouseButtonRelease()
+void
+VTextTool::mouseButtonRelease()
 {
 	cancel();
-} // VTextTool::mouseButtonRelease
+}
 
-void VTextTool::mouseDrag()
+void
+VTextTool::mouseDrag()
 {
 	drawPathCreation();
-	
+
 	m_last = last();
-	
-	drawPathCreation();
-} // VTextTool::mouseDrag
 
-void VTextTool::mouseDragRelease()
+	drawPathCreation();
+}
+
+void
+VTextTool::mouseDragRelease()
 {
 	drawPathCreation();
-	
+
 	if( m_creating && m_editedText )
 	{
 		drawEditedText();
@@ -573,19 +636,22 @@ void VTextTool::mouseDragRelease()
 	m_text = 0L;
 	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
+
 #ifdef HAVE_KARBONTEXT
 	m_editedText->traceText();
 #endif
+
 	m_creating = true;
 
 	drawEditedText();
-} // VTextTool::mouseDragRelease
+}
 
-void VTextTool::textChanged()
+void
+VTextTool::textChanged()
 {
-	
+
 	if( !m_editedText )
-		return;
+		return ;
 
 	if( !m_creating && m_text && m_text->state() != VObject::hidden )
 	{
@@ -599,170 +665,194 @@ void VTextTool::textChanged()
 	m_editedText->setFont( m_optionsWidget->font() );
 	m_editedText->setPosition( m_optionsWidget->position() );
 	m_editedText->setAlignment( m_optionsWidget->alignment() );
+
 #ifdef HAVE_KARBONTEXT
 	m_editedText->traceText();
-#endif	
-	drawEditedText();
-} // VTextTool::textChanged
+#endif
 
-void VTextTool::accept()
+	drawEditedText();
+}
+
+void
+VTextTool::accept()
 {
 	if( !m_editedText )
-		return;
+		return ;
 
 	VTextCmd* cmd;
-	
+
 	if( !m_creating )
 	{
 		cmd = new VTextCmd(
-			&view()->part()->document(),
-			i18n( "Change text" ),
-			m_text,
-			m_editedText->font(),
-			m_editedText->basePath(),
-			m_editedText->position(),
-			m_editedText->alignment(),
-			m_editedText->text(),
-			m_optionsWidget->useShadow(),
-			m_optionsWidget->shadowAngle(), 
-			m_optionsWidget->shadowDistance(), 
-			m_optionsWidget->translucentShadow() );
+				  &view()->part()->document(),
+				  i18n( "Change text" ),
+				  m_text,
+				  m_editedText->font(),
+				  m_editedText->basePath(),
+				  m_editedText->position(),
+				  m_editedText->alignment(),
+				  m_editedText->text(),
+				  m_optionsWidget->useShadow(),
+				  m_optionsWidget->shadowAngle(),
+				  m_optionsWidget->shadowDistance(),
+				  m_optionsWidget->translucentShadow() );
 	}
 	else
 	{
 		m_text = m_editedText->clone();
 		m_text->setUseShadow( m_optionsWidget->useShadow() );
 		m_text->setShadow( m_optionsWidget->shadowAngle(), m_optionsWidget->shadowDistance(), m_optionsWidget->translucentShadow() );
+
 		cmd = new VTextCmd(
-			&view()->part()->document(),
-			i18n( "Insert text" ),
-			m_text );
-	} 
+				  &view()->part()->document(),
+				  i18n( "Insert text" ),
+				  m_text );
+	}
 
 	view()->part()->addCommand( cmd, true );
 	view()->selectionChanged();
 
 	m_creating = false;
-} // VTextTool::accept
+}
 
-void VTextTool::cancel()
+void
+VTextTool::cancel()
 {
 	drawPathCreation();
-} // VTextTool::cancel
+}
 
-void VTextTool::editBasePath()
+void
+VTextTool::editBasePath()
 {
 	if( !m_editedText )
-		return;
+		return ;
+
 	view()->part()->document().selection()->clear();
 	view()->part()->document().selection()->append( &m_editedText->basePath() );
 	view()->part()->repaintAllViews();
-} // VTextTool::editBasePath
+}
 
-void VTextTool::convertToShapes()
+void
+VTextTool::convertToShapes()
 {
 	if( !m_text )
-		return;
+		return ;
 
 	VTextToCompositeCmd* cmd = new VTextToCompositeCmd(
-		&view()->part()->document(),
-		i18n( "Text conversion" ),
-		m_text );
+								   &view()->part()->document(),
+								   i18n( "Text conversion" ),
+								   m_text );
+
 	view()->part()->addCommand( cmd, true );
+
 	view()->selectionChanged();
 
 	m_creating = false;
+
 	delete m_editedText;
+
 	m_text = 0L;
 	m_editedText = 0L;
-} // VTextTool::convertToShapes
+}
 
-void VTextTool::visitVComposite( VComposite& composite )
+void
+VTextTool::visitVComposite( VComposite& composite )
 {
 	if( composite.paths().count() == 0 )
-		return;
+		return ;
 
-	m_text = 0L; 
+	m_text = 0L;
+
 	m_editedText = new VText( m_optionsWidget->font(), *composite.paths().getFirst(), m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
+
 	m_editedText->setState( VObject::edit );
+
 #ifdef HAVE_KARBONTEXT
 	m_editedText->traceText();
 #endif
+
 	m_creating = true;
 
 	drawEditedText();
-} // VTextTool::visitVComposite
+}
 
-void VTextTool::visitVPath( VPath& path )
+void
+VTextTool::visitVPath( VPath& path )
 {
-	m_text = 0L; 
+	m_text = 0L;
 	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
+
 #ifdef HAVE_KARBONTEXT
 	m_editedText->traceText();
 #endif
+
 	m_creating = true;
 
 	drawEditedText();
-} // VTextTool::visitVPath
+}
 
-void VTextTool::visitVText( VText& text )
+void
+VTextTool::visitVText( VText& text )
 {
 	m_text = &text;
 	m_editedText = text.clone();
+
 	m_optionsWidget->setFont( text.font() );
 	m_optionsWidget->setText( text.text() );
 	m_optionsWidget->setPosition( text.position() );
 	m_optionsWidget->setAlignment( text.alignment() );
+
 	m_creating = false;
-} // VTextTool::visitVText
+}
 
 VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text )
 		: VCommand( doc, name, "14_text" ), m_text( text )
 {
 	m_textModifications = 0L;
-	
+
 	m_executed = false;
-} // VTextTool::VTextCmd::VTextCmd
+}
 
 VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text,
-		const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
-		bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow )
+							   const QFont &newFont, const VPath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
+							   bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow )
 		: VCommand( doc, name, "14_text" ), m_text( text )
 {
 	m_textModifications = new VTextModifPrivate();
-	m_textModifications->newFont              = newFont;
-	m_textModifications->oldFont              = text->font();
-	m_textModifications->newBasePath          = newBasePath;
-	m_textModifications->oldBasePath          = text->basePath();
-	m_textModifications->newPosition          = newPosition;
-	m_textModifications->oldPosition          = text->position();
-	m_textModifications->newAlignment         = newAlignment;
-	m_textModifications->oldAlignment         = text->alignment();
-	m_textModifications->newText              = newText;
-	m_textModifications->oldText              = text->text();
-	m_textModifications->newUseShadow         = newUseShadow;
-	m_textModifications->oldUseShadow         = text->useShadow();
-	m_textModifications->newShadowAngle       = newShadowAngle;
-	m_textModifications->oldShadowAngle       = text->shadowAngle();
-	m_textModifications->newShadowDistance    = newShadowDistance;
-	m_textModifications->oldShadowDistance    = text->shadowDistance();
+	m_textModifications->newFont = newFont;
+	m_textModifications->oldFont = text->font();
+	m_textModifications->newBasePath = newBasePath;
+	m_textModifications->oldBasePath = text->basePath();
+	m_textModifications->newPosition = newPosition;
+	m_textModifications->oldPosition = text->position();
+	m_textModifications->newAlignment = newAlignment;
+	m_textModifications->oldAlignment = text->alignment();
+	m_textModifications->newText = newText;
+	m_textModifications->oldText = text->text();
+	m_textModifications->newUseShadow = newUseShadow;
+	m_textModifications->oldUseShadow = text->useShadow();
+	m_textModifications->newShadowAngle = newShadowAngle;
+	m_textModifications->oldShadowAngle = text->shadowAngle();
+	m_textModifications->newShadowDistance = newShadowDistance;
+	m_textModifications->oldShadowDistance = text->shadowDistance();
 	m_textModifications->newTranslucentShadow = newTranslucentShadow;
 	m_textModifications->oldTranslucentShadow = text->translucentShadow();
-	
+
 	m_executed = false;
-} // VTextTool::VTextCmd::VTextCmd
+}
 
 VTextTool::VTextCmd::~VTextCmd()
 {
 	delete m_textModifications;
-} // VTextTool::VTextCmd::~VTextCmd
+}
 
-void VTextTool::VTextCmd::execute()
+void
+VTextTool::VTextCmd::execute()
 {
 	if( !m_text )
-		return;
-	
+		return ;
+
 	if( !m_textModifications )
 	{
 		if( m_text->state() == VObject::deleted )
@@ -784,20 +874,23 @@ void VTextTool::VTextCmd::execute()
 		m_text->setText( m_textModifications->newText );
 		m_text->setUseShadow( m_textModifications->newUseShadow );
 		m_text->setShadow( m_textModifications->newShadowAngle, m_textModifications->newShadowDistance, m_textModifications->newTranslucentShadow );
+
 #ifdef HAVE_KARBONTEXT
 		m_text->traceText();
 #endif
+
 		m_text->setState( VObject::normal );
 	}
 
 	m_executed = true;
-} // VTextTool::VTextCmd::execute
+}
 
-void VTextTool::VTextCmd::unexecute()
+void
+VTextTool::VTextCmd::unexecute()
 {
 	if( !m_text )
-		return;
-	
+		return ;
+
 	if( !m_textModifications )
 	{
 		document()->selection()->take( *m_text );
@@ -812,53 +905,60 @@ void VTextTool::VTextCmd::unexecute()
 		m_text->setText( m_textModifications->oldText );
 		m_text->setUseShadow( m_textModifications->oldUseShadow );
 		m_text->setShadow( m_textModifications->oldShadowAngle, m_textModifications->oldShadowDistance, m_textModifications->oldTranslucentShadow );
+
 #ifdef HAVE_KARBONTEXT
 		m_text->traceText();
 #endif
+
 		m_text->setState( VObject::normal );
 	}
 
 	m_executed = false;
-} // VTextTool::VTextCmd::unexecute
+}
 
 VTextTool::VTextToCompositeCmd::VTextToCompositeCmd( VDocument* doc, const QString& name, VText* text )
 		: VCommand( doc, name, "14_text" ), m_text( text ), m_group( 0L ), m_executed( false )
 {
-} // VTextTool::VTextToCompositeCmd::VTextToCompositeCmd
+}
 
 VTextTool::VTextToCompositeCmd::~VTextToCompositeCmd()
 {
-} // VTextTool::VTextToCompositeCmd::~VTextToCompositeCmd
+}
 
-void VTextTool::VTextToCompositeCmd::execute()
+void
+VTextTool::VTextToCompositeCmd::execute()
 {
-	if ( !m_text )
-		return;
+	if( !m_text )
+		return ;
 
-	if ( !m_group )
+	if( !m_group )
 	{
 		m_group = m_text->toVGroup();
 		document()->append( m_group );
 	}
-		
+
 	m_text->setState( VObject::deleted );
 	m_group->setState( VObject::normal );
 	document()->selection()->clear();
 	document()->selection()->append( m_group );
 
 	m_executed = true;
-} // VTextTool::VTextToCompositeCmd::execute
+}
 
-void VTextTool::VTextToCompositeCmd::unexecute()
+void
+VTextTool::VTextToCompositeCmd::unexecute()
 {
-	if ( !m_text )
-		return;
+	if( !m_text )
+		return ;
 
 	m_text->setState( VObject::normal );
+
 	document()->selection()->take( *m_group );
+
 	m_group->setState( VObject::deleted );
 
 	m_executed = false;
-} // VTextTool::VTextToCompositeCmd::unexecute
+}
 
 #include "vtexttool.moc"
+
