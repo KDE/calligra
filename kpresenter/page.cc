@@ -57,6 +57,7 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kapp.h>
+#include <ktempfile.h>
 
 #include <stdlib.h>
 
@@ -3564,6 +3565,8 @@ void Page::dragMoveEvent( QDragMoveEvent *e )
 /*================================================================*/
 void Page::dropEvent( QDropEvent *e )
 {
+    KPresenterDoc *doc = view->kPresenterDoc();
+
     if ( QImageDrag::canDecode( e ) ) {
         setToolEditMode( TEM_MOUSE );
         deSelectAllObj();
@@ -3571,25 +3574,21 @@ void Page::dropEvent( QDropEvent *e )
         QImage pix;
         QImageDrag::decode( e, pix );
 
-        QString uid = getenv( "USER" );
-        QString num;
-        num.setNum( objectList()->count() );
-        uid += "_";
-        uid += num;
+        KTempFile tmpFile;
+        tmpFile.setAutoDelete(true);
 
-        QString filename = "/tmp/kpresenter";
-        filename += uid;
-        filename += ".png";
+	if( tmpFile.status() != 0 ) {
+	    return;
+	}
+        tmpFile.close();
 
-        pix.save( filename, "PNG" );
+        pix.save( tmpFile.name(), "PNG" );
         QCursor c = cursor();
         setCursor( waitCursor );
-        view->kPresenterDoc()->insertPicture( filename, e->pos().x(), e->pos().y() );
+        doc->insertPicture( tmpFile.name(), e->pos().x(), e->pos().y() +
+                            ( currPgNum() - 1) * getPageSize( 0 ).height() );
         setCursor( c );
 
-        QString cmd = "rm -f ";
-        cmd += filename;
-        system( cmd.ascii() );
         e->accept();
     } else if ( QUriDrag::canDecode( e ) ) {
         setToolEditMode( TEM_MOUSE );
@@ -3617,7 +3616,8 @@ void Page::dropEvent( QDropEvent *e )
                 if ( mimetype.contains( "image" ) ) {
                     QCursor c = cursor();
                     setCursor( waitCursor );
-                    view->kPresenterDoc()->insertPicture( filename, e->pos().x(), e->pos().y() );
+                    doc->insertPicture( filename, e->pos().x(), e->pos().y() +
+                                        ( currPgNum() - 1) * getPageSize( 0 ).height() );
                     setCursor( c );
                 } else if ( mimetype.contains( "text" ) ) {
                     QCursor c = cursor();
@@ -3635,8 +3635,8 @@ void Page::dropEvent( QDropEvent *e )
                         f.close();
                     }
 
-                    view->kPresenterDoc()->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ),
-                                                       diffx(), diffy(), text, view );
+                    doc->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ),
+                                     diffx(), diffy(), text, view );
 
                     setCursor( c );
                 }
@@ -3649,8 +3649,8 @@ void Page::dropEvent( QDropEvent *e )
         QString text;
         QTextDrag::decode( e, text );
 
-        view->kPresenterDoc()->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ),
-                                           diffx(), diffy(), text, view );
+        doc->insertText( QRect( e->pos().x(), e->pos().y(), 250, 250 ),
+                         diffx(), diffy(), text, view );
         e->accept();
     } else
         e->ignore();
