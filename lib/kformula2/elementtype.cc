@@ -33,6 +33,142 @@
 int ElementType::evilDestructionCount = 0;
 
 
+ElementType::ElementType(SequenceParser* parser)
+        : from(parser->getStart()), to(parser->getEnd())
+{
+    evilDestructionCount++;
+}
+
+ElementType::~ElementType()
+{
+    evilDestructionCount--;
+}
+
+
+OperatorType::OperatorType(SequenceParser* parser)
+        : ElementType(parser), lhs(0), rhs(0)
+{
+}
+
+OperatorType::~OperatorType()
+{
+    delete rhs;
+    delete lhs;
+}
+
+
+Assignment::Assignment(SequenceParser* parser)
+        : OperatorType(parser)
+{
+    lhs = new Expression(parser);
+
+    switch (parser->getTokenType()) {
+        case SequenceParser::Assign:
+        case SequenceParser::Less:
+        case SequenceParser::Greater:
+            parser->setElementType(parser->getStart(), this);
+            parser->nextToken();
+            rhs = new Assignment(parser);
+            break;
+        case SequenceParser::End:
+            break;
+        default:
+            rhs = new ErrorType(parser);
+    }
+}
+
+
+Expression::Expression(SequenceParser* parser)
+        : OperatorType(parser)
+{
+    lhs = new Term(parser);
+
+    switch (parser->getTokenType()) {
+        case SequenceParser::Plus:
+        case SequenceParser::Minus:
+            parser->setElementType(parser->getStart(), this);
+            parser->nextToken();
+            rhs = new Expression(parser);
+            break;
+        case SequenceParser::End:
+            break;
+        default:
+            //rhs = new ErrorType(parser);
+            break;
+    }
+}
+
+
+Term::Term(SequenceParser* parser)
+        : OperatorType(parser)
+{
+    lhs = parser->getPrimitive();
+    
+    switch (parser->getTokenType()) {
+        case SequenceParser::Mul:
+        case SequenceParser::Div:
+            parser->setElementType(parser->getStart(), this);
+            parser->nextToken();
+            rhs = new Term(parser);
+            break;
+        case SequenceParser::Text:
+        case SequenceParser::Number:
+        case SequenceParser::Element:
+            // assume mul if no operator
+            rhs = new Term(parser);
+            break;
+        case SequenceParser::End:
+            break;
+        default:
+            break;
+    }
+}
+
+
+ErrorType::ErrorType(SequenceParser* parser)
+        : ElementType(parser)
+{
+    parser->setElementType(start(), this);
+    parser->nextToken();
+}
+
+
+MultiElementType::MultiElementType(SequenceParser* parser)
+        : ElementType(parser)
+{
+    for (uint i = start(); i < end(); i++) {
+        parser->setElementType(i, this);
+    }
+    parser->nextToken();
+}
+
+
+TextType::TextType(SequenceParser* parser)
+        : MultiElementType(parser)
+{
+}
+
+
+NameType::NameType(SequenceParser* parser, QString n)
+        : MultiElementType(parser), name(n)
+{
+}
+
+
+NumberType::NumberType(SequenceParser* parser)
+        : MultiElementType(parser)
+{
+}
+
+
+ComplexElementType::ComplexElementType(SequenceParser* parser)
+        : ElementType(parser)
+{
+    parser->setElementType(start(), this);
+    parser->nextToken();
+}
+
+
 int ElementType::getSpace(ContextStyle&, int)
 {
     return 0;
@@ -49,16 +185,6 @@ void ElementType::setUpPainter(ContextStyle& context, QPainter& painter)
 }
 
 
-OperatorType::OperatorType()
-        : lhs(0), rhs(0)
-{
-}
-
-OperatorType::~OperatorType()
-{
-    delete rhs;
-    delete lhs;
-}
 
 int OperatorType::getSpace(ContextStyle& context, int size)
 {
@@ -86,9 +212,7 @@ void ErrorType::setUpPainter(ContextStyle& context, QPainter& painter)
 
 QFont NameType::getFont(ContextStyle& context)
 {
-    QFont font = MultiElementType::getFont(context);
-    font.setItalic(true);
-    return font;
+    return context.getNameFont();
 }
 
 
@@ -103,119 +227,9 @@ void NumberType::setUpPainter(ContextStyle& context, QPainter& painter)
 }
 
 
-Assignment::Assignment(SequenceParser* parser)
-{
-    lhs = new Expression(parser);
-
-    switch (parser->getTokenType()) {
-        case SequenceParser::Assign:
-        case SequenceParser::Less:
-        case SequenceParser::Greater:
-            parser->setElementType(parser->getStart(), this);
-            parser->nextToken();
-            rhs = new Assignment(parser);
-            break;
-        case SequenceParser::End:
-            break;
-        default:
-            rhs = new ErrorType(parser);
-    }
-}
-
-
-Expression::Expression(SequenceParser* parser)
-{
-    lhs = new Term(parser);
-
-    switch (parser->getTokenType()) {
-        case SequenceParser::Plus:
-        case SequenceParser::Minus:
-            parser->setElementType(parser->getStart(), this);
-            parser->nextToken();
-            rhs = new Expression(parser);
-            break;
-        case SequenceParser::End:
-            break;
-        default:
-            //rhs = new ErrorType(parser);
-            break;
-    }
-}
-
-
-Term::Term(SequenceParser* parser)
-{
-    lhs = parser->getPrimitive();
-    
-    switch (parser->getTokenType()) {
-        case SequenceParser::Mul:
-        case SequenceParser::Div:
-            parser->setElementType(parser->getStart(), this);
-            parser->nextToken();
-            rhs = new Term(parser);
-            break;
-        case SequenceParser::Text:
-        case SequenceParser::Number:
-        case SequenceParser::Element:
-            // assume mul if no operator
-            rhs = new Term(parser);
-            break;
-        case SequenceParser::End:
-            break;
-        default:
-            break;
-    }
-}
-
-
-ErrorType::ErrorType(SequenceParser* parser)
-{
-    pos = parser->getStart();
-    parser->setElementType(pos, this);
-    parser->nextToken();
-}
-
-
-MultiElementType::MultiElementType(SequenceParser* parser)
-{
-    from = parser->getStart();
-    to = parser->getEnd();
-    for (uint i = from; i < to; i++) {
-        parser->setElementType(i, this);
-    }
-    parser->nextToken();
-}
-
-
-TextType::TextType(SequenceParser* parser)
-        : MultiElementType(parser)
-{
-}
-
-
-NameType::NameType(SequenceParser* parser)
-        : MultiElementType(parser)
-{
-}
-
-
-NumberType::NumberType(SequenceParser* parser)
-        : MultiElementType(parser)
-{
-}
-
-
-ComplexElementType::ComplexElementType(SequenceParser* parser)
-{
-    pos = parser->getStart();
-    parser->setElementType(pos, this);
-    parser->nextToken();
-}
-
-
 void MultiElementType::output()
 {
-    cout << "from = " << from << "\tto = " << to << endl;
+    cout << "from = " << start() << "\tto = " << end() << endl;
 }
 
 void TextType::output()
@@ -227,7 +241,7 @@ void TextType::output()
 
 void ErrorType::output()
 {
-    cout << "ErrorType: pos = " << pos << endl;
+    cout << "ErrorType: pos = " << start() << endl;
 }
 
 void NumberType::output()

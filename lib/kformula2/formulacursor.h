@@ -21,6 +21,8 @@
 #ifndef __FORMULACURSOR_H
 #define __FORMULACURSOR_H
 
+#include <qstring.h>
+
 #include "basicelement.h"
 #include "formuladefs.h"
 
@@ -237,6 +239,12 @@ public:
      * if there is non.
      */
     SymbolElement* getActiveSymbolElement();
+
+    /**
+     * @returns the name of the name element the cursor is inside
+     * Selects the name if one is found.
+     */
+    QString getCurrentName();
 
     /**
      * Stores the currently selected elements inside a dom.

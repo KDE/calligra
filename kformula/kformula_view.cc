@@ -312,6 +312,14 @@ KFormulaView::~KFormulaView()
     delete mn_indexList;
 }
 
+void KFormulaView::focusInEvent(QFocusEvent*)
+{
+    // After saving the focus doesn't come back to the formulaWidget
+    // so the cursor is not shown. (very bad)
+    //cerr << "KFormulaView::focusInEvent(QFocusEvent*)\n";
+    formulaWidget->setFocus();
+}
+
 void KFormulaView::updateReadWrite(bool readwrite)
 {
     formulaWidget->setReadOnly(!readwrite);

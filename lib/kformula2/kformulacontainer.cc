@@ -46,6 +46,7 @@
 #include "sequenceelement.h"
 #include "symbolelement.h"
 #include "textelement.h"
+#include "textsymbolelement.h"
 
 
 KFormulaContainer::KFormulaContainer(KFormulaDocument* doc)
@@ -377,6 +378,28 @@ void KFormulaContainer::replaceElementWithMainChild(BasicElement::Direction dire
     if (!cursor->isSelection()) {
         KFCRemoveEnclosing* command = new KFCRemoveEnclosing(this, direction);
         execute(command);
+    }
+}
+
+
+void KFormulaContainer::compactExpression()
+{
+    if (!hasValidCursor())
+        return;
+    FormulaCursor* cursor = getActiveCursor();
+    QString name = cursor->getCurrentName();
+    if (!name.isNull()) {
+        QChar ch = getDocument()->getSymbolTable().getSymbolChar(name);
+        if (!ch.isNull()) {
+            removeSelection();
+            KFCAdd* command = new KFCAdd(i18n("Add symbol"), this);
+            command->addElement(new TextSymbolElement(ch));
+            execute(command);
+        }
+    }
+    else {
+        // It might have moved the cursor. So tell them.
+        emit cursorMoved(cursor);
     }
 }
 

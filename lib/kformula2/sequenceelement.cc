@@ -35,6 +35,7 @@
 #include "sequenceparser.h"
 #include "symbolelement.h"
 #include "textelement.h"
+#include "textsymbolelement.h"
 
 
 SequenceElement::SequenceElement(BasicElement* parent)
@@ -572,6 +573,26 @@ void SequenceElement::selectChild(FormulaCursor* cursor, BasicElement* child)
 }
 
 
+QString SequenceElement::getCurrentName(FormulaCursor* cursor)
+{
+    uint pos = cursor->getPos();
+    if (pos > 0) {
+        ElementType* type = children.at(pos-1)->getElementType();
+        if (type != 0) {
+            QString name = type->getName();
+            if (!name.isNull()) {
+                cursor->setTo(this, type->start(), type->end());
+                return name;
+            }
+        }
+        if (pos == children.count()) {
+            cursor->moveRight();
+        }
+    }
+    return QString::null;
+}
+
+
 /**
  * Selects all children. The cursor is put behind, the mark before them.
  */
@@ -631,13 +652,14 @@ bool SequenceElement::buildChildrenFromDom(QList<BasicElement>& list, QDomNode n
 
 BasicElement* SequenceElement::createElement(QString type)
 {
-    if      (type == "TEXT")     return new TextElement();
-    else if (type == "ROOT")     return new RootElement();
-    else if (type == "BRACKET")  return new BracketElement();
-    else if (type == "MATRIX")   return new MatrixElement();
-    else if (type == "INDEX")    return new IndexElement();
-    else if (type == "FRACTION") return new FractionElement();
-    else if (type == "SYMBOL")   return new SymbolElement();
+    if      (type == "TEXT")       return new TextElement();
+    else if (type == "TEXTSYMBOL") return new TextSymbolElement();
+    else if (type == "ROOT")       return new RootElement();
+    else if (type == "BRACKET")    return new BracketElement();
+    else if (type == "MATRIX")     return new MatrixElement();
+    else if (type == "INDEX")      return new IndexElement();
+    else if (type == "FRACTION")   return new FractionElement();
+    else if (type == "SYMBOL")     return new SymbolElement();
     else if (type == "SEQUENCE") {
         cerr << "malformed data: sequence inside sequence.\n";
         return 0;

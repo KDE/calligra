@@ -72,7 +72,7 @@ QPoint KFormulaWidget::getCursorPoint() const
 
 void KFormulaWidget::paintEvent(QPaintEvent* event)
 {
-    //cerr << "void KFormulaWidget::paintEvent(QPaintEvent*)\n";
+    //cerr << "void KFormulaWidget::paintEvent(QPaintEvent*): " << cursorVisible << " " << hasFocus() << endl;
     hideCursor();
     
     QPainter painter;
@@ -113,6 +113,8 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
             document->addLowerRightIndex();
             break;
         case ' ':
+            document->compactExpression();
+            break;
         case '}':
         case ']':
         case ')':
@@ -164,7 +166,7 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
                     document->addLowerLeftIndex();
                     break;
                 default:
-                    //cerr << "Key: " << event->key() << endl;
+                    // cerr << "Key: " << event->key() << endl;
                     break;
                 }
             }
@@ -175,7 +177,7 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 
 void KFormulaWidget::focusInEvent(QFocusEvent*)
 {
-    //cerr << "void KFormulaWidget::focusInEvent(QFocusEvent*)\n";
+    //cerr << "void KFormulaWidget::focusInEvent(QFocusEvent*): " << cursorVisible << " " << hasFocus() << endl;
     document->setActiveView(this);
     showCursor();
     cursorHasChanged = true;
@@ -184,7 +186,7 @@ void KFormulaWidget::focusInEvent(QFocusEvent*)
 
 void KFormulaWidget::focusOutEvent(QFocusEvent*)
 {
-    //cerr << "void KFormulaWidget::focusOutEvent(QFocusEvent*)\n";
+    //cerr << "void KFormulaWidget::focusOutEvent(QFocusEvent*): " << cursorVisible << " " << hasFocus() << endl;
     document->setActiveView(0);
     hideCursor();
     cursorHasChanged = true;
@@ -334,7 +336,7 @@ MoveFlag KFormulaWidget::movementFlag(int state)
 void KFormulaWidget::hideCursor()
 {
     if (cursorVisible) {
-        //cerr << "void KFormulaWidget::hideCursor()\n";
+        //cerr << "void KFormulaWidget::hideCursor(): " << cursorVisible << " " << hasFocus() << endl;
         cursorVisible = false;
 
         QPainter painter;
@@ -351,7 +353,7 @@ void KFormulaWidget::showCursor()
     }
     
     if ((!cursorVisible) && hasFocus()) {
-        //cerr << "void KFormulaWidget::showCursor()\n";
+        //cerr << "void KFormulaWidget::showCursor(): " << cursorVisible << " " << hasFocus() << endl;
         cursorVisible = true;
 
         QPainter painter;

@@ -114,6 +114,9 @@ public slots:
     void cut();
 
     void addDefaultBracket();
+    void addSquareBracket();
+    void addCurlyBracket();
+    void addLineBracket();
     void addFraction();
     void addRoot();
     void addIntegral();
@@ -146,6 +149,9 @@ private:
     // We know our actions, maybe a client is interessted...
     
     KAction* addBracketAction;
+    KAction* addSBracketAction;
+    KAction* addCBracketAction;
+    KAction* addAbsAction;
     KAction* addFractionAction;
     KAction* addRootAction;
     KAction* addSumAction;

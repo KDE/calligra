@@ -22,6 +22,7 @@
 #define __ELEMENTTYPE_H
 
 #include <qfont.h>
+#include <qstring.h>
 
 class ContextStyle;
 class OperatorToken;
@@ -37,11 +38,25 @@ class SymbolTableEntry;
  */
 class ElementType {
 public:
-    ElementType() { evilDestructionCount++; }
-    virtual ~ElementType() { evilDestructionCount--; }
+    ElementType(SequenceParser* parser);
+    virtual ~ElementType();
 
-    virtual void output() = 0;
+    /**
+     * @returns the name of the type. Only name types are allowed
+     * to have a name.
+     */
+    virtual QString getName() const { return QString::null; }
 
+    /**
+     * @returns the position of the first character
+     */
+    uint start() { return from; }
+
+    /**
+     * @returns the position of the first character after the typed element
+     */
+    uint end() { return to; }
+    
     /**
      * @returns the space to be left before and behind each char
      * for the given style and font size.
@@ -59,24 +74,11 @@ public:
     virtual void setUpPainter(ContextStyle& context, QPainter& painter);
     
     // debug
-    static int getEvilDestructionCount() { return evilDestructionCount; }
-
-private:
+    virtual void output() = 0;
 
     // debug
-    static int evilDestructionCount;
-};
+    static int getEvilDestructionCount() { return evilDestructionCount; }
 
-
-/**
- * Basis for all tokens that run along several elements.
- */
-class MultiElementType : public ElementType {
-public:
-    MultiElementType(SequenceParser* parser);
-
-    virtual void output();
-    
 private:
 
     /**
@@ -90,6 +92,20 @@ private:
      * to the name.
      */
     uint to;
+    
+    // debug
+    static int evilDestructionCount;
+};
+
+
+/**
+ * Basis for all tokens that run along several elements.
+ */
+class MultiElementType : public ElementType {
+public:
+    MultiElementType(SequenceParser* parser);
+
+    virtual void output();
 };
 
 
@@ -111,19 +127,30 @@ public:
  */
 class NameType : public MultiElementType {
 public:
-    NameType(SequenceParser* parser);
+    NameType(SequenceParser* parser, QString name);
     
-private:
+    /**
+     * @returns the name of the type. Only name types are allowed
+     * to have a name.
+     */
+    virtual QString getName() const { return name; }
 
     /**
      * @returns the font to be used for this kind of element
      */
     virtual QFont getFont(ContextStyle& context);
 
+private:
+
     /**
      * The symbol table entry this name referres to.
      */
     //SymbolTableEntry* entry;
+
+    /**
+     * Our name.
+     */
+    QString name;
 };
 
 
@@ -141,13 +168,6 @@ public:
 
     // debug
     virtual void output();
-    
-private:
-
-    /**
-     * The elements position.
-     */
-    uint pos;
 };
 
 
@@ -179,7 +199,7 @@ public:
  */
 class OperatorType : public ElementType {
 public:
-    OperatorType();
+    OperatorType(SequenceParser* parser);
     ~OperatorType();
 
     /**
@@ -214,6 +234,7 @@ class Expression : public OperatorType {
 public:
     Expression(SequenceParser* parser);
 
+    // debug
     virtual void output();
 };
 
@@ -225,6 +246,7 @@ class Term : public OperatorType {
 public:
     Term(SequenceParser* parser);
 
+    // debug
     virtual void output();
 };
 
@@ -245,10 +267,8 @@ class ComplexElementType : public ElementType {
 public:
     ComplexElementType(SequenceParser* parser);
 
+    // debug
     virtual void output();
-private:
-
-    uint pos;
 };
 
 #endif // __ELEMENTTYPE_H

@@ -15,7 +15,7 @@ libkformula2_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 	matrixelement.cc fractionelement.cc rootelement.cc symbolelement.cc \
 	artwork.cc kformulacommand.cc kformulamimesource.cc \
 	MatrixDialog.cc sequenceparser.cc elementtype.cc kformuladocument.cc \
-	symboltable.cc 
+	symboltable.cc textsymbolelement.cc
 
 include_HEADERS =
 #include_HEADERS =  artwork.h formulaelement.h symbolelement.h \

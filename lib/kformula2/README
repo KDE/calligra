@@ -44,6 +44,12 @@ Text, numbers and operators are supported as well.
 Please note that the key bindings are for testing only. The library
 is meant to be used with KActions. Look at KFormulaContainer::createActions.
 
-And yes, we do have syntax highlighting!
+
+And yes, we do have syntax highlighting! Just type:
+
+y = e ^ - o m e g a <space> t <space> ( a * s i n ( o m e g a <space> t <space> + b * c o s ( o m e g a <space> t
+
+or anything else you want to.
+
 
 See DESIGN to know the structure of the formulas

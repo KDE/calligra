@@ -260,6 +260,11 @@ public slots:
     void replaceElementWithMainChild(BasicElement::Direction = BasicElement::beforeCursor);
 
     /**
+     * Replaces the current name with its text symbol if it has one.
+     */
+    void compactExpression();
+    
+    /**
      * Insert data from the clipboard.
      */
     void paste();

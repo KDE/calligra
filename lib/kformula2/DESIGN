@@ -256,6 +256,25 @@ content.
 
 
 
+Syntax highlighting
+###################
+
+Everytime a sequence is edited it builds a new syntax tree. (The old
+one gets recycled :) ) The parser goes throught the sequence and
+builds a type object for every token is finds. A token consists of
+one or more elements.
+
+On drawing the elements use their types to find the right font, color
+and spacing.
+
+One nice thing about the syntax checking is that it allows us to
+replace symbol names with a more fancy graphical representation.
+
+The syntax tree is meant to support evaluation of formulas as well,
+but this is yet another story...
+
+
+
 Save and Load (Import/Export)
 #############################
 

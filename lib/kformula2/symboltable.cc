@@ -21,8 +21,8 @@
 #include "symboltable.h"
 
 
-SymbolTableEnty::SymbolTableEnty(QString n)
-        : name(n)
+SymbolTableEnty::SymbolTableEnty(QString n, QChar ch)
+        : name(n), symbolChar(ch)
 {
 }
 
@@ -63,47 +63,47 @@ SymbolTable::SymbolTable()
     addEntry("max");
 
     // symbols
-    addEntry("alpha");
-    addEntry("beta");
-    addEntry("gamma");
-    addEntry("delta");
+    addEntry("alpha", 'a');
+    addEntry("beta", 'b');
+    addEntry("gamma", 'g');
+    addEntry("delta", 'd');
     addEntry("epsilon");
-    addEntry("varepsilon");
-    addEntry("zeta");
-    addEntry("eta");
-    addEntry("theta");
+    addEntry("varepsilon", 'e');
+    addEntry("zeta", 'z');
+    addEntry("eta", 'h');
+    addEntry("theta", 'q');
     addEntry("vartheta");
-    addEntry("iota");
-    addEntry("kappa");
-    addEntry("lambda");
-    addEntry("mu");
-    addEntry("nu");
-    addEntry("xi");
-    addEntry("pi");
-    addEntry("varpi");
-    addEntry("rho");
+    addEntry("iota", 'i');
+    addEntry("kappa", 'k');
+    addEntry("lambda", 'l');
+    addEntry("mu", 'm');
+    addEntry("nu", 'n');
+    addEntry("xi", 'x');
+    addEntry("pi", 'p');
+    addEntry("varpi", 'v');
+    addEntry("rho", 'r');
     addEntry("varrho");
-    addEntry("sigma");
+    addEntry("sigma", 's');
     addEntry("varsigma");
-    addEntry("tau");
-    addEntry("upsilon");
-    addEntry("phi");
-    addEntry("varphi");
-    addEntry("chi");
-    addEntry("psi");
-    addEntry("omega");
+    addEntry("tau", 't');
+    addEntry("upsilon", 'u');
+    addEntry("phi", 'f');
+    addEntry("varphi", 'j');
+    addEntry("chi", 'c');
+    addEntry("psi", 'y');
+    addEntry("omega", 'w');
 
-    addEntry("Gamma");
-    addEntry("Delta");
-    addEntry("Theta");
-    addEntry("Lambda");
-    addEntry("Xi");
-    addEntry("Pi");
-    addEntry("Sigma");
-    addEntry("Upsilon");
-    addEntry("Phi");
-    addEntry("Psi");
-    addEntry("Omega");
+    addEntry("Gamma", 'G');
+    addEntry("Delta", 'D');
+    addEntry("Theta", 'Q');
+    addEntry("Lambda", 'L');
+    addEntry("Xi", 'X');
+    addEntry("Pi", 'P');
+    addEntry("Sigma", 'S');
+    addEntry("Upsilon", 'U');
+    addEntry("Phi", 'F');
+    addEntry("Psi", 'Y');
+    addEntry("Omega", 'W');
 }
 
 
@@ -112,7 +112,16 @@ bool SymbolTable::contains(QString name) const
     return entries.find(name) != 0;
 }
 
-void SymbolTable::addEntry(QString name)
+QChar SymbolTable::getSymbolChar(QString name) const
 {
-    entries.insert(name, new SymbolTableEnty(name));
+    SymbolTableEnty* entry = entries.find(name);
+    if (entry != 0) {
+        return entry->getSymbolChar();
+    }
+    return QChar::null;
+}
+
+void SymbolTable::addEntry(QString name, QChar ch)
+{
+    entries.insert(name, new SymbolTableEnty(name, ch));
 }

@@ -18,59 +18,35 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __TEXTELEMENT_H
-#define __TEXTELEMENT_H
+#ifndef __TEXTSYMBOLELEMENT_H
+#define __TEXTSYMBOLELEMENT_H
 
-#include <qfont.h>
-#include <qstring.h>
-
-#include "basicelement.h"
+#include "textelement.h"
 
 
 /**
- * A element that represents one char.
+ * A text char that gets formated as symbol.
+ * (Using the symbol font.)
  */
-class TextElement : public BasicElement {
+class TextSymbolElement : public TextElement {
 public:
 
-    TextElement(QChar ch = ' ', BasicElement* parent = 0);
-
-    
-    /**
-     * @returns the character that represents this element. Used for
-     * parsing a sequence.
-     */
-    virtual QChar getCharacter() const { return character; }
-
-    // drawing
-    //
-    // Drawing depends on a context which knows the required properties like
-    // fonts, spaces and such.
-    // It is essential to calculate elements size with the same context
-    // before you draw.
-    
-    /**
-     * Calculates our width and height and
-     * our children's parentPosition.
-     */
-    virtual void calcSizes(ContextStyle& context, int parentSize);
+    TextSymbolElement(QChar ch = ' ', BasicElement* parent = 0);
 
     /**
-     * Draws the whole element including its children.
-     * The `parentOrigin' is the point this element's parent starts.
-     * We can use our parentPosition to get our own origin then.
+     * @returns the character that marks a complex element.
+     * A text symbol does its drawing itself.
      */
-    virtual void draw(QPainter& painter, ContextStyle& context,
-                      int parentSize, const QPoint& parentOrigin);
+    virtual QChar getCharacter() const { return QChar::null; }
 
 protected:
-
+    
     //Save/load support
     
     /**
      * @returns the tag name of this element type.
      */
-    virtual QString getTagName() const { return "TEXT"; }
+    virtual QString getTagName() const { return "TEXTSYMBOL"; }
     
     /**
      * Appends our attributes to the dom element.
@@ -79,17 +55,9 @@ protected:
     
     /**
      * Reads our attributes from the element.
-     * Returns false if it failed.
+     * @returns false if it failed.
      */
     virtual bool readAttributesFromDom(QDomElement& element);
-
-    /**
-     * Reads our content from the node. Sets the node to the next node
-     * that needs to be read.
-     * Returns false if it failed.
-     */
-    virtual bool readContentFromDom(QDomNode& node);
-
 
     /**
      * @returns the font to be used for the element.
@@ -105,24 +73,14 @@ protected:
      * Sets up the painter to be used for drawing.
      */
     virtual void setUpPainter(ContextStyle& context, QPainter& painter);
-    
+
 private:
 
     /**
-     * Our content.
+     * The symbol table entry we refer to.
      */
-    QChar character;
-
-    /**
-     * The position of our baseline.
-     */
-    int baseline;
-
-    /**
-     * Room to be left before and after the character.
-     */
-    int spaceWidth;
+    //QString name;
 };
 
 
-#endif // __TEXTELEMENT_H
+#endif // __TEXTSYMBOLELEMENT_H

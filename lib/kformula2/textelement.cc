@@ -43,18 +43,10 @@ TextElement::TextElement(QChar ch, BasicElement* parent)
 void TextElement::calcSizes(ContextStyle& context, int parentSize)
 {
     int mySize = QMAX(parentSize + getRelativeSize(), 8);
-    QFont font;
-    
-    ElementType* type = getElementType();
-    if (type != 0) {
-        spaceWidth = type->getSpace(context, mySize);
-        font = type->getFont(context);
-    }
-    else {
-        spaceWidth = 0;
-        font = context.getDefaultFont();
-    }
+
+    QFont font = getFont(context);
     font.setPointSize(mySize);
+    spaceWidth = getSpaceWidth(context, mySize);
 
     QFontMetrics fm(font);
     QRect bound=fm.boundingRect(character);
@@ -76,19 +68,11 @@ void TextElement::draw(QPainter& painter, ContextStyle& context,
                        int parentSize, const QPoint& parentOrigin)
 {
     int mySize = QMAX(parentSize + getRelativeSize(), 10);
-    QFont font;
-    
-    ElementType* type = getElementType();
-    if (type != 0) {
-        font = type->getFont(context);
-        type->setUpPainter(context, painter);
-    }
-    else {
-        font = context.getDefaultFont();
-        //painter.setPen(context.getDefaultColor());
-        painter.setPen(Qt::red);
-    }
+
+    QFont font = getFont(context);
     font.setPointSize(mySize);
+    setUpPainter(context, painter);
+    
     painter.setFont(font);
     painter.drawText(parentOrigin.x()+getX()+spaceWidth,
                      parentOrigin.y()+getY()+baseline, character);
@@ -97,7 +81,32 @@ void TextElement::draw(QPainter& painter, ContextStyle& context,
 
 QFont TextElement::getFont(ContextStyle& context)
 {
-    return context.getDefaultFont();
+    if (getElementType() != 0) {
+        return getElementType()->getFont(context);
+    }
+    else {
+        return context.getDefaultFont();
+    }
+}
+
+int TextElement::getSpaceWidth(ContextStyle& context, int size)
+{
+    if (getElementType() != 0) {
+        return getElementType()->getSpace(context, size);
+    }
+    else {
+        return 0;
+    }
+}
+
+void TextElement::setUpPainter(ContextStyle& context, QPainter& painter)
+{
+    if (getElementType() != 0) {
+        getElementType()->setUpPainter(context, painter);
+    }
+    else {
+        painter.setPen(Qt::red);
+    }
 }
 
 

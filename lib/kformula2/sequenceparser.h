@@ -70,6 +70,11 @@ public:
      * @returns a new primitive token.
      */
     ElementType* getPrimitive();
+
+    /**
+     * The character that makes a text symbol.
+     */
+    static const QChar textSymbol;
     
 private:
 

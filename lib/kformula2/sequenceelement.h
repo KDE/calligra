@@ -21,10 +21,9 @@
 #ifndef __SEQUENCEELEMENT_H
 #define __SEQUENCEELEMENT_H
 
-// Qt Include
 #include <qlist.h>
+#include <qstring.h>
 
-// Formula include
 #include "basicelement.h"
 
 
@@ -163,6 +162,15 @@ public:
      */
     virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
 
+    /**
+     * Selects the current name if there currently is a name.
+     * If there is no name and the cursor is at the end of the sequence
+     * it moves one step right.
+     * Leaves the cursor untouched otherwise.
+     * @returns the current name
+     */
+    QString getCurrentName(FormulaCursor* cursor);
+    
     /**
      * Returns the number of children we have.
      */

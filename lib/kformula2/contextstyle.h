@@ -32,13 +32,13 @@
 
 
 /**
- * Contains info on fonts etc..
+ * Contains all the style information for the formela. The idea
+ * is to change the values here (user configurable) and have
+ * the elements paint themselves with this information.
  */
-
 class ContextStyle
 {
 public:  
-    enum DrawMode {CharSize,FixedHeight,FixedWidth};
     enum Alignment {left, center, right};
 
     /**
@@ -58,8 +58,10 @@ public:
     QColor getErrorColor()    { return errorColor; }
 
     QFont getDefaultFont()    { return defaultFont; }
+    QFont getNameFont()       { return nameFont; }
     QFont getNumberFont()     { return numberFont; }
     QFont getOperatorFont()   { return operatorFont; }
+    QFont getSymbolFont()     { return symbolFont; }
 
     int getDistance() { return 5; }
 
@@ -68,17 +70,15 @@ public:
 private:
     
     QFont defaultFont;
+    QFont nameFont;
     QFont numberFont;
     QFont operatorFont;
+    QFont symbolFont;
     
     QColor defaultColor;
     QColor numberColor;
     QColor operatorColor;
     QColor errorColor;
- 
-    DrawMode mode;
-    bool editing;
- 
 };
 
 #endif // __CONTEXTSTYLE_H

@@ -23,7 +23,6 @@
 #include "sequenceparser.h"
 #include "symboltable.h"
 
-
 SequenceParser::SequenceParser(const SymbolTable& t)
         : tokenStart(0), tokenEnd(0), table(t)
 {
@@ -167,7 +166,7 @@ ElementType* SequenceParser::getPrimitive()
         case Text: {
             QString text = getText();
             if (table.contains(text)) {
-                return new NameType(this);
+                return new NameType(this, text);
             }
             else {
                 return new TextType(this);

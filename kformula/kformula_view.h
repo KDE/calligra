@@ -95,6 +95,7 @@ public slots:
 protected:
 
     virtual void resizeEvent(QResizeEvent* _ev);
+    virtual void focusInEvent(QFocusEvent*);
     
     virtual void updateReadWrite(bool);
 

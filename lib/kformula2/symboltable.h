@@ -30,15 +30,18 @@
  */
 class SymbolTableEnty {
 public:
-    SymbolTableEnty(QString name);
+    SymbolTableEnty(QString name, QChar ch = QChar::null);
 
     QString getName() const { return name; }
 
     bool matches(QString n) { return name == n; }
+
+    QChar getSymbolChar() const { return symbolChar; }
     
 private:
 
     QString name;
+    QChar symbolChar;
 };
 
 
@@ -53,10 +56,16 @@ public:
     SymbolTable();
 
     bool contains(QString name) const;
+
+    /**
+     * @returns the char in the symbol font that belongs to
+     * the given name.
+     */
+    QChar getSymbolChar(QString name) const;
     
 private:
 
-    void addEntry(QString name);
+    void addEntry(QString name, QChar ch = QChar::null);
     
     QDict<SymbolTableEnty> entries;
 };

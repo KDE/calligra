@@ -121,6 +121,21 @@ void KFormulaDocument::createActions(KActionCollection* collection)
                                     CTRL + Key_5,
                                     this, SLOT(addDefaultBracket()),
                                     collection,"addbra");
+    addSBracketAction = new KAction(i18n("Add/change to square bracket"),
+                                    "brackets",
+                                    CTRL + Key_5,
+                                    this, SLOT(addSquareBracket()),
+                                    collection,"addsqrbra");
+    addCBracketAction = new KAction(i18n("Add/change to curly bracket"),
+                                    "brace",
+                                    CTRL + Key_5,
+                                    this, SLOT(addCurlyBracket()),
+                                    collection,"addcurbra");
+    addAbsAction      = new KAction(i18n("Add/change to abs"),
+                                    "abs",
+                                    CTRL + Key_5,
+                                    this, SLOT(addLineBracket()),
+                                    collection,"addabsbra");
 
     addMatrixAction   = new KAction(i18n("Add matrix"),
                                     "matrix",
@@ -222,6 +237,27 @@ void KFormulaDocument::addDefaultBracket()
 {
     if (hasFormula()) {
         formula->addBracket(leftBracketChar, rightBracketChar);
+    }
+}
+
+void KFormulaDocument::addSquareBracket()
+{
+    if (hasFormula()) {
+        formula->addSquareBracket();
+    }
+}
+
+void KFormulaDocument::addCurlyBracket()
+{
+    if (hasFormula()) {
+        formula->addCurlyBracket();
+    }
+}
+
+void KFormulaDocument::addLineBracket()
+{
+    if (hasFormula()) {
+        formula->addLineBracket();
     }
 }
 

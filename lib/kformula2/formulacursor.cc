@@ -473,6 +473,19 @@ SymbolElement* FormulaCursor::getActiveSymbolElement()
 }
 
 
+QString FormulaCursor::getCurrentName()
+{
+    if (isSelection()) {
+        return QString::null;
+    }
+    SequenceElement* sequence = getNormal();
+    if (sequence != 0) {
+        return sequence->getCurrentName(this);
+    }
+    return QString::null;
+}
+
+
 /**
  * The element is going to leave the formula with and all its children.
  */
