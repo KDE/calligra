@@ -242,7 +242,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	}
 
 	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
-	setStandardMDIMenuEnabled();
+	setStandardMDIMenuEnabled(false);
 	setAsDefaultHost(); //this is default host now.
 	KGlobal::iconLoader()->addAppDir("kexi");
 	setXMLFile("kexiui.rc");
@@ -477,6 +477,8 @@ KexiMainWindowImpl::initActions()
 #endif
 	new KAction(i18n("Important Information"), "messagebox_info", 0,
 		this, SLOT(slotImportantInfo()), actionCollection(), "help_show_important_info");
+
+//TODO: UNCOMMENT TO REMOVE MDI MODES SETTING	m_pMdiModeMenu->hide();
 
 //	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
 //	 actionCollection(), "kexi_settings");
