@@ -448,5 +448,5 @@ Reggie, 12.9.1999:
 
 Reggie, 13.9.1999:
 ------------------
-- Saving pixmaps follows now the SPECS
-
+- Saving/Loading pixmaps follows now the SPECS
+- Saving/Loading cliparts follows now the new fileformat SPECS too

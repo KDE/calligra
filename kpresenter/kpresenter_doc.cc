@@ -265,7 +265,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
     out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\""
 	<< "KPresenter"
-	<< "\" mime=\"" << "application/x-kpresenter" << "\" url=\"" << KURL( url() ).path().latin1() << "\">" << endl;
+	<< "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
 
     out << otag << "<PAPER format=\"" << static_cast<int>( _pageLayout.format ) << "\" ptWidth=\""
 	<< _pageLayout.ptWidth
@@ -360,7 +360,9 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 
     for( ; it2 != _clipartCollection.end(); ++it2 ) {
 	KPClipartCollection::Key key = it2.key();
-	out << indent << "<KEY " << key << " />" << endl;
+	out << indent << "<KEY " << key << " name=\"" 
+	    << QString( "cliparts/clipart%1.wmf" ).arg( ++i ).latin1() 
+	    << "\" />" << endl;
     }
 
     out << etag << "</CLIPARTS>" << endl;
@@ -425,9 +427,6 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
     for( ; it != _pixmapCollection.getPixmapDataCollection().end(); ++it ) {
 	if ( _pixmapCollection.getPixmapDataCollection().references( it.key() ) > 0 &&
 	     !it.key().filename.isEmpty() && usedPixmaps.contains( it.key() ) ) {
-// 	    QString u2 = u.in();
-// 	    u2 += "/";
-// 	    u2 += it.key().toString();
 	    
 	    QString format = QFileInfo( it.key().filename ).extension().upper();
 	    if ( format == "JPG" )
@@ -436,8 +435,8 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
 		format = "BMP";
 
 	    QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
-
 	    QString mime = "image/" + format.lower();
+
 	    if ( _store->open( u2, mime.lower() ) ) {
 	        ostorestream out( _store );
 	        writeImageToStream( out, it.data(), format );
@@ -450,15 +449,12 @@ bool KPresenterDoc::completeSaving( KOStore::Store_ptr _store )
     QMap< KPClipartCollection::Key, QPicture >::Iterator it2 = _clipartCollection.begin();
 
     for( ; it2 != _clipartCollection.end(); ++it2 ) {
-	if ( _clipartCollection.references( it2.key() ) > 0 &&
-	     !it2.key().filename.isEmpty() ) {
-	    QString u2 = u.in();
-	    u2 += "/";
-	    u2 += it2.key().toString();
+	if ( _clipartCollection.references( it2.key() ) > 0 && !it2.key().filename.isEmpty() ) {
 
+	    QString u2 = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
 	    QString mime = "clipart/wmf";
-	    if ( _store->open( u2, mime.lower() ) )
-	    {
+
+	    if ( _store->open( u2, mime.lower() ) ) {
 	        ostorestream out( _store );
 	        out << it2.data();
 	        out.flush();
@@ -499,7 +495,8 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
     pixmapCollectionKeys.clear();
     pixmapCollectionNames.clear();
     clipartCollectionKeys.clear();
-
+    clipartCollectionNames.clear();
+    
     // clean
     if ( _clean ) {
 	//KoPageLayout __pgLayout;
@@ -845,9 +842,11 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    while ( parser.open( 0L, tag ) ) {
 		KPClipartCollection::Key key;
 		int year, month, day, hour, minute, second, msec;
-
+		QString n;
+		
 		KOMLParser::parseTag( tag.c_str(), name, lst );
 		if ( name == "KEY" ) {
+		    n = QString::null;
 		    KOMLParser::parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ )
@@ -868,6 +867,8 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 			    second = atoi( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "msec" )
 			    msec = atoi( ( *it ).m_strValue.c_str() );
+			else if ( ( *it ).m_strName == "name" )
+			    n = ( *it ).m_strValue.c_str();
 			else
 			    cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
 		    }
@@ -875,6 +876,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		    key.lastModified.setTime( QTime( hour, minute, second, msec ) );
 
 		    clipartCollectionKeys.append( key );
+		    clipartCollectionNames.append( n );
 		} else
 		    cerr << "Unknown tag '" << tag << "' in CLIPARTS" << endl;
 
@@ -1110,14 +1112,20 @@ bool KPresenterDoc::completeLoading( KOStore::Store_ptr _store )
 	}
 
 	QValueListIterator<KPClipartCollection::Key> it2 = clipartCollectionKeys.begin();
-
-	for ( ; it2 != clipartCollectionKeys.end(); ++it2 ) {
-	    QString u = str.in();
-	    u += "/";
-	    u += it2.node->data.toString();
-
+	QStringList::Iterator nit2 = clipartCollectionNames.begin();
+	
+	for ( ; it2 != clipartCollectionKeys.end(); ++it2, ++nit2 ) {
+	    QString u = QString::null;
+	    
+	    if ( !( *nit2 ).isEmpty() )
+		u = *nit2;
+	    else {
+		u = str.in();
+		u += "/";
+		u += it2.node->data.toString();
+	    }
+	    
 	    QPicture pic;
-	    QCString buf;
 
 	    if ( _store->open( u, 0L ) ) {
 		istorestream in( _store );

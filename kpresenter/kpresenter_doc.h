@@ -428,8 +428,8 @@ protected:
     KPFooterHeaderEditor *headerFooterEdit;
 
     QValueList<KPPixmapDataCollection::Key> pixmapCollectionKeys;
-    QStringList pixmapCollectionNames;
     QValueList<KPClipartCollection::Key> clipartCollectionKeys;
+    QStringList pixmapCollectionNames, clipartCollectionNames;
     KoPageLayout __pgLayout;
 
     QString urlIntern;
