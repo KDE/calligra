@@ -472,7 +472,7 @@ bool KoTabBar::canScrollForward() const
     if ( d->tabs.count() == 0 )
         return false;
         
-    return d->lastTab < d->tabs.count();
+    return d->lastTab < (int)d->tabs.count();
 }
 
 void KoTabBar::scrollBack()
@@ -494,7 +494,7 @@ void KoTabBar::scrollForward()
         return;
 
     d->firstTab ++;
-    if( d->firstTab > d->tabs.count() )
+    if( d->firstTab > (int)d->tabs.count() )
         d->firstTab = d->tabs.count();
 
     d->layoutTabs();
@@ -534,7 +534,7 @@ void KoTabBar::scrollLast()
     else
     {
         // FIXME optimize this, perhaps without loop
-        for( ; d->firstTab <= d->tabRects.count();)
+        for( ; d->firstTab <= (int)d->tabRects.count();)
         {
             int x = d->tabRects[ d->tabRects.count()-1 ].x();
             if( x > 0 ) break;
