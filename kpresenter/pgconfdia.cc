@@ -47,9 +47,9 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc* doc )
       Ok|Cancel, Ok, parent, "pgConfDia", true ), 
       m_doc( doc )
 {
-
     setupPageGeneral();
     setupPageSlides();
+    
     connect( this, SIGNAL( okClicked() ), this, SLOT( confDiaOk() ) );
     connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 }
@@ -57,7 +57,7 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc* doc )
 /*================================================================*/
 void PgConfDia::setupPageGeneral()
 {
-    QFrame* generalPage = addPage( i18n("General") );    
+    QFrame* generalPage = addPage( i18n("&General") );    
     QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, 0, spacingHint() );
     generalLayout->setAutoAdd( true );
 
@@ -67,7 +67,7 @@ void PgConfDia::setupPageGeneral()
     manualSwitch = new QCheckBox( i18n( "&Manual switch to next step" ), generalPage );
     manualSwitch->setChecked( m_doc->spManualSwitch() );
 
-    presentationDuration = new QCheckBox( i18n( "&Show presentation duration" ), generalPage );
+    presentationDuration = new QCheckBox( i18n( "Show presentation &duration" ), generalPage );
     presentationDuration->setChecked( m_doc->presentationDuration() );
 
     // presentation pen (color and width)
@@ -93,7 +93,7 @@ void PgConfDia::setupPageGeneral()
 /*================================================================*/
 void PgConfDia::setupPageSlides()
 {
-    QFrame* slidesPage = addPage( i18n("Slides") );
+    QFrame* slidesPage = addPage( i18n("&Slides") );
     QVBoxLayout *slidesLayout = new QVBoxLayout( slidesPage, 0, spacingHint() );
     slidesLayout->setAutoAdd( true );
     
@@ -114,10 +114,10 @@ void PgConfDia::setupPageSlides()
     QHBox* buttonGroup = new QHBox( slidesPage );
     buttonGroup->setSpacing( KDialog::spacingHint() );
     
-    QPushButton* selectAllButton = new QPushButton( i18n( "Select All" ), buttonGroup );
+    QPushButton* selectAllButton = new QPushButton( i18n( "Select &All" ), buttonGroup );
     connect( selectAllButton, SIGNAL( clicked() ), this, SLOT( selectAllSlides() ) );
     
-    QPushButton* deselectAllButton = new QPushButton( i18n( "Deselect All" ), buttonGroup );
+    QPushButton* deselectAllButton = new QPushButton( i18n( "&Deselect All" ), buttonGroup );
     connect( deselectAllButton, SIGNAL( clicked() ), this, SLOT( deselectAllSlides() ) );    
     
     QWidget* spacer = new QWidget( buttonGroup );
