@@ -1794,7 +1794,8 @@ void KWView::updateReadWrite( bool readwrite )
         actionExtraCreateTemplate->setEnabled( true );
         actionViewPageMode->setEnabled( true );
         actionViewPreviewMode->setEnabled( true );
-        actionViewTextMode->setEnabled( true );
+
+        actionViewTextMode->setEnabled( (m_doc->processingType()==KWDocument::WP) );
         actionShowRuler->setEnabled( true );
         actionEditFind->setEnabled( true );
         actionViewFormattingChars->setEnabled( true );
