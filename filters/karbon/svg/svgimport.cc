@@ -18,6 +18,7 @@
 */
 
 #include <svgimport.h>
+#include "color.h"
 #include <koFilterChain.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -179,6 +180,8 @@ SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 			value = value * DPI;
 		else if( unit.right( 2 ) == "pt" )
 			value = ( value / 72.0 ) * DPI;
+		else if( unit.right( 2 ) == "em" )
+			value = value * m_gc.current()->font.pointSize() / ( sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 ) );
 		else if( unit.right( 1 ) == "%" )
 		{
 			if( horiz && vert )
@@ -202,6 +205,14 @@ SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 		}
 	}*/
 	return value;
+}
+
+QColor
+SvgImport::parseColor( const QString &rgbColor )
+{
+	int r, g, b;
+	keywordToRGB( rgbColor, r, g, b );
+	return QColor( r, g, b );
 }
 
 void
@@ -238,8 +249,12 @@ SvgImport::parseColor( VColor &color, const QString &s )
 	}
 	else
 	{
+		QString rgbColor = s.stripWhiteSpace();
 		QColor c;
-		c.setNamedColor( s );
+		if( rgbColor.startsWith( "#" ) )
+			c.setNamedColor( rgbColor );
+		else
+			c = parseColor( rgbColor );
 		color.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
 	}
 }

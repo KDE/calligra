@@ -79,6 +79,7 @@ protected:
 	double parseUnit( const QString &, bool horiz = false, bool vert = false, KoRect bbox = KoRect() );
 	QWMatrix parseTransform( const QString & );
 	void parseColor( VColor &, const QString & );
+	QColor parseColor( const QString & );
 	double toPercentage( const QString & );
 	void setupTransform( const QDomElement & );
 	void addGraphicContext();
