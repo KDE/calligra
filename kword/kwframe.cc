@@ -1414,11 +1414,14 @@ bool KWFrameSet::canRemovePage( int num )
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * frame = frameIt.current();
-        if ( frame->pageNum() == num )
+        if ( frame->pageNum() == num ) // ## TODO: use framesInPage, see KWTextFrameSet
         {
             // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame
             if ( ! ( frame->isCopy() && frameIt.current() != frames.first() ) )
+            {
+                //kdDebug() << "KWFrameSet::canRemovePage " << getName() << " frame on page " << num << " -> false" << endl;
                 return false;
+            }
         }
     }
     return true;

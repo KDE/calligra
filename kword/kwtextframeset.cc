@@ -1935,7 +1935,10 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
     int bottom = lastParag->rect().top() + lastParag->rect().height();
 
     if ( theFrame->frameSet() == this ) // safety check
+    {
+        //kdDebug() << "KWTextFrameSet::isFrameEmpty text bottom=(LU) " << bottom << " theFrame=" << theFrame << " " << *theFrame << " its internalY(LU)=" << m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) << endl;
         return bottom < m_doc->ptToLayoutUnitPixY( theFrame->internalY() );
+    }
 
     kdWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << theFrame << " which isn't a child of ours!" << endl;
     if ( theFrame->frameSet()!=0L && theFrame->frameSet()->getName()!=0L)
@@ -1959,10 +1962,8 @@ bool KWTextFrameSet::canRemovePage( int num )
         Q_ASSERT( theFrame->pageNum() == num );
         Q_ASSERT( theFrame->frameSet() == this );
         bool isEmpty = isFrameEmpty( theFrame );
-#ifdef DEBUG_FORMAT_MORE
-        kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage"
-                  << " found a frame on page " << num << " empty:" << isEmpty << endl;
-#endif
+        //kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage"
+        //          << " found a frame on page " << num << " empty:" << isEmpty << endl;
         // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
         bool isCopy = theFrame->isCopy() && frameIt.current() != frames.first();
         if ( !isCopy && !isEmpty )

@@ -756,11 +756,16 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
         unsigned int frms = frameset->getNumFrames();
 
         // Determine number of pages - first from the text frames
-        m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) );
+        // - BUT NOT from the number of frames. Some people manage to end up with
+        // multiple frames of textframeset1 on the same page(!)
+        //m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) );
 #ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::recalcFrames frms(" << frms << ") / columns(" << m_pageColumns.columns << ") = " << m_pages << endl;
+        //kdDebug(32002) << "KWDocument::recalcFrames frms(" << frms << ") / columns(" << m_pageColumns.columns << ") = " << m_pages << endl;
 #endif
-        // Then from the other frames ( frameset-num > 0 )
+        m_pages = frameset->frame( frms - 1 )->pageNum() + 1;
+
+
+        // Then from the other frames ( framesetNum > 0 )
         double maxBottom = 0;
         for (int m = getNumFrameSets() - 1; m > 0; m-- )
         {
@@ -2236,6 +2241,9 @@ void KWDocument::removePage( int num )
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frm = frameIt.current();
+#ifdef DEBUG_PAGES
+            //kdDebug(32002) << "   looking at " << frameSet->getName() << "  frame " << frm << "  pageNum:" << frm->pageNum() << endl;
+#endif
             if ( frm->pageNum() == num )
             {
 #ifdef DEBUG_PAGES
@@ -2842,6 +2850,7 @@ bool KWDocument::isOutOfPage( KoRect & r, int page ) const
 
 void KWDocument::addCommand( KCommand * cmd )
 {
+    Q_ASSERT( cmd );
     //kdDebug(32001) << "KWDocument::addCommand " << cmd->name() << endl;
     m_commandHistory->addCommand( cmd, false );
     setModified( true );
