@@ -23,7 +23,7 @@
 #include <kdebug.h>
 //#define DEBUG_FORMATTER
 
-// Heavily based on KoTextFormatterBaseBreakWords::format()
+// Originally based on KoTextFormatterBaseBreakWords::format()
 int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                              int start, const QMap<int, KoTextParagLineStart*> & )
 {
@@ -57,6 +57,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     bool fullWidth = TRUE;
     int marg = left + initialRMargin;
     int minw = 0;
+    int wused = 0;
     int tminw = marg;
     bool wrapEnabled = isWrapEnabled( parag );
     int linenr = 0;
@@ -147,6 +148,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #if 0
 	// Custom item that forces a new line
 	if ( c->isCustom() && c->customItem()->ownLine() ) {
+            QTextCustomItem* ci = c->customItem();
 	    x = doc ? doc->flow()->adjustLMargin( y + parag->rect().y(), c->height(), left, 4 ) : left;
 	    w = dw - ( doc ? doc->flow()->adjustRMargin( y + parag->rect().y(), c->height(), rm, 4 ) : 0 );
 	    KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, w - x );
@@ -177,13 +179,14 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    lastBreak = -2;
 	    x = 0xffffff;
 	    minw = QMAX( minw, tminw );
-	    int tw = QMAX( c->customItem()->minimumWidth(), QMIN( c->customItem()->widthHint(), c->customItem()->width ) );
-	    if ( tw < 32000 )
+	    int tw = ci->minimumWidth();
+	    if ( tw < QWIDGETSIZE_MAX )
 		tminw = tw;
 	    else
 		tminw = marg;
+ 	    wused = QMAX( wused, ci->width );
 	    continue;
-	}
+	} // else ... left/right custom items. Unused too atm.
 #endif
 
 #ifdef DEBUG_FORMATTER
@@ -249,7 +252,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		tmpBaseLine = lineStart->baseLine;
 		lastBreak = -1;
 		col = 0;
-		tminw = marg;
+		tminw = marg; // not in QRT?
 	    } else {
 		// Breakable char was found
 		i = lastBreak;
@@ -390,9 +393,18 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    c->customItem()->move( x, y );
 	x += ww;
         pixelx += pixelww;
+        wused = QMAX( wused, x );
 #ifdef DEBUG_FORMATTER
 	qDebug("LU: added %d -> now x=%d ; PIX: added %d -> now pixelx=%d",ww,x,pixelww,pixelx);
 #endif
+    }
+
+    // ### hack. The last char in the paragraph is always invisible, and somehow sometimes has a wrong format. It changes between
+    // layouting and printing. This corrects some layouting errors in BiDi mode due to this.
+    if ( len > 1 /*&& !c->isAnchor()*/ ) {
+	c->format()->removeRef();
+	c->setFormat( string->at( len - 2 ).format() );
+	c->format()->addRef();
     }
 
     // Finish formatting the last line
@@ -423,22 +435,16 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     if ( parag->next() && doc && !doc->addMargins() )
 	m = QMAX( m, parag->next()->topMargin() );
     parag->setFullWidth( fullWidth );
-    /*if ( is_printer( parag->painter() ) ) {
-	QPaintDeviceMetrics metrics( parag->painter()->device() );
-	double yscale = scale_factor( metrics.logicalDpiY() );
-	m = (int)( (double)m * yscale );
-    }*/
+    //if ( parag->next() && parag->next()->isLineBreak() )
+    //    m = 0;
     //qDebug( "Adding h(%d) and bottomMargin(%d) to y(%d) => %d", h, m, y, y+h+m );
     y += h + m;
 
-    /*
-    if ( !wrapEnabled )
-	minw = QMAX( minw, c->x + ww ); // #### Lars: Fix this for BiDi, please
-    if ( doc ) {
-	if ( minw < 32000 )
-	    doc->setMinimumWidth( minw, parag );
-    }*/
-
+    wused += rm;
+    if ( !wrapEnabled || wrapAtColumn() != -1  )
+	minw = QMAX(minw, wused);
+    thisminw = minw;
+    thiswused = wused;
     return y;
 }
 

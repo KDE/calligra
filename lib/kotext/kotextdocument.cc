@@ -20,6 +20,7 @@
 #include "kozoomhandler.h"
 #include "kotextformatter.h"
 #include <kdebug.h>
+#include <kdebugclasses.h>
 
 //#define DEBUG_PAINTING
 
@@ -258,13 +259,6 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     parag->paint( *painter, cg, drawCursor ? cursor : 0, TRUE,
                   crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
 
-/*  if ( !flow()->isEmpty() ) {
-	painter->translate( 0, -parag->rect().y() );
-	QRect cr( cx, cy, cw, ch );
-	cr = cr.intersect( QRect( 0, parag->rect().y(), parag->rect().width(), parag->rect().height() ) );
-	flow()->drawFloatingItems( painter, cr.x(), cr.y(), cr.width(), cr.height(), cg, FALSE );
-	painter->translate( 0, +parag->rect().y() );
-    } */
 
     if ( useDoubleBuffer ) {
 	delete painter;
@@ -281,9 +275,15 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
         //painter->setBrushOrigin( painter->brushOrigin() - ir.topLeft() );
     }
 
-    int docright = zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
     if ( useDoubleBuffer ) {
+        int docright = zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
+#ifdef DEBUG_PAINTING
+        kdDebug() << "KoTextDocument::drawParagWYSIWYG my rect is: " << rect << endl;
+#endif
         if ( rect.x() + rect.width() < docright ) {
+#ifdef DEBUG_PAINTING
+            kdDebug() << "KoTextDocument::drawParagWYSIWYG rect doesn't go up to docright=" << docright << endl;
+#endif
             p->fillRect( rect.x() + rect.width(), rect.y(),
                          docright - ( rect.x() + rect.width() ),
                          rect.height(), cg.brush( QColorGroup::Base ) );
@@ -329,7 +329,9 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
     QPixmap *doubleBuffer = 0;
     QPainter painter;
     QRect crect( cx, cy, cw, ch );
-    //kdDebug() << "KoTextDocument::drawWYSIWYG crect=" << DEBUGRECT(crect) << endl;
+#ifdef DEBUG_PAINTING
+    kdDebug() << "KoTextDocument::drawWYSIWYG crect=" << DEBUGRECT(crect) << endl;
+#endif
 
     // Space above first parag
     QRect pixelRect = parag->pixelRect( zoomHandler );
@@ -348,7 +350,9 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 	    parag->format();
 
 	QRect ir = parag->pixelRect( zoomHandler );
-        //kdDebug() << "KoTextDocument::drawWYSIWYG ir=" << DEBUGRECT(ir) << endl;
+#ifdef DEBUG_PAINTING
+        kdDebug() << "KoTextDocument::drawWYSIWYG ir=" << DEBUGRECT(ir) << endl;
+#endif
 	if ( isPageBreakEnabled() && parag->next() )
         {
             int nexty = parag->next()->pixelRect(zoomHandler).y();
@@ -362,6 +366,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 	    }
         }
 	if ( !ir.intersects( crect ) ) {
+            // Paragraph is not in the crect - but let's check if the area on its right is.
 	    ir.setWidth( zoomHandler->layoutUnitToPixelX( parag->document()->width() ) );
 	    if ( ir.intersects( crect ) )
 		p->fillRect( ir.intersect( crect ), cg.brush( QColorGroup::Base ) );

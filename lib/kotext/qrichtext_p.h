@@ -1411,6 +1411,9 @@ public:
     virtual void setAllowBreakInWords( bool b ) { biw = b; }
     bool allowBreakInWords() const { return biw; }
 
+    int minimumWidth() const { return thisminw; }
+    int widthUsed() const { return thiswused; }
+
 protected:
     //virtual KoTextParagLineStart *formatLine( KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line, KoTextStringChar *start,
     //					       KoTextStringChar *last, int align = AlignAuto, int space = 0 );
@@ -1422,6 +1425,9 @@ protected:
 #endif
     virtual bool isBreakable( KoTextString *string, int pos ) const;
     void insertLineStart( KoTextParag *parag, int index, KoTextParagLineStart *ls );
+
+    int thisminw;
+    int thiswused;
 
 private:
     bool wrapEnabled;

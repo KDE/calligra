@@ -3890,7 +3890,6 @@ void KoTextParag::format( int start, bool doMove )
 	return;
 
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
-    r.setWidth( documentWidth() );
     if ( p )
 	p->lastInFrame = FALSE;
 
@@ -3898,6 +3897,8 @@ void KoTextParag::format( int start, bool doMove )
     bool formattedAgain = FALSE;
 
  formatAgain:
+    r.setWidth( documentWidth() );
+
     if ( doc && mFloatingItems ) {
 	for ( KoTextCustomItem *i = mFloatingItems->first(); i; i = mFloatingItems->next() ) {
 	    if ( i->placement() == KoTextCustomItem::PlaceRight )
@@ -3909,37 +3910,36 @@ void KoTextParag::format( int start, bool doMove )
     QMap<int, KoTextParagLineStart*> oldLineStarts = lineStarts;
     lineStarts.clear();
     int y = formatter()->format( doc, this, start, oldLineStarts );
-    r.setWidth( QMAX( r.width(), minimumWidth() ) );
+
+    r.setWidth( QMAX( r.width(), formatter()->minimumWidth() ) );
+
     QMap<int, KoTextParagLineStart*>::Iterator it = oldLineStarts.begin();
 
     for ( ; it != oldLineStarts.end(); ++it )
 	delete *it;
 
     KoTextStringChar *c = 0;
-    if ( lineStarts.count() == 1 && ( !doc || doc->flow()->isEmpty() ) ) {
+    if ( lineStarts.count() == 1 ) { //&& ( !doc || doc->flow()->isEmpty() ) ) {
 	if ( !string()->isBidi() ) {
 	    c = &str->at( str->length() - 1 );
-	    r.setWidth( c->x + c->width /*str->width( str->length() - 1 )*/ );
+	    r.setWidth( c->x + c->width );
 	} else {
 	    r.setWidth( lineStarts[0]->w );
 	}
     }
      if ( newLinesAllowed ) {
 	it = lineStarts.begin();
-	int usedw = 0;
-	for ( ; it != lineStarts.end(); ++it )
+	int usedw = 0; int lineid = 0;
+	for ( ; it != lineStarts.end(); ++it, ++lineid ) {
 	    usedw = QMAX( usedw, (*it)->w );
-	// ##### Lars, for left-to-right the QMAX was wrong (message boxes suddenly took up the whole screen width)
+        }
 	if ( r.width() <= 0 ) {
 	    // if the user specifies an invalid rect, this means that the
 	    // bounding box should grow to the width that the text actually
 	    // needs
 	    r.setWidth( usedw );
 	} else {
-	    if ( !string()->isBidi() )
-		r.setWidth( QMIN( usedw, r.width() ) );
-	    else
-		r.setWidth( QMAX( usedw, r.width() ) );
+            r.setWidth( QMIN( usedw, r.width() ) );
 	}
      }
 
@@ -4992,7 +4992,7 @@ KoTextPreProcessor::KoTextPreProcessor()
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 KoTextFormatterBase::KoTextFormatterBase()
-    : wrapEnabled( TRUE ), wrapColumn( -1 ), biw( FALSE )
+    : thisminw(0), thiswused(0), wrapEnabled( TRUE ), wrapColumn( -1 ), biw( FALSE )
 {
 }
 
