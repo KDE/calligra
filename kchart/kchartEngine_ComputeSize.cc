@@ -275,7 +275,7 @@ void kchartEngine::computeMinMaxValues() {
 	//debug( "Vor dem crash" );
 	if( CELLEXISTS( i, j ) ) {
 	  //debug( "nach dem crash" );
-	  cerr << "cellvalue " << i << "," << j << "=" << CELLVALUE(i,j) << "\n";
+	  //cerr << "cellvalue " << i << "," << j << "=" << CELLVALUE(i,j) << "\n";
 	  highest = MAX( CELLVALUE( i, j ), highest );
 	  lowest  = MIN( CELLVALUE( i, j ), lowest );
 	}

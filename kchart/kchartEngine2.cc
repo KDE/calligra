@@ -209,7 +209,7 @@ void kchartEngine::prepareColors() {
     for(int j=0; j<num_sets; ++j )
       for(int i=0; i<num_points; ++i )
 	if( params->ExtColor.count() ) {			
-	  cerr << "Ext color\n";
+	  //cerr << "Ext color\n";
 	  // changed by me, BL
 	  //QColor ext_clr = params->ExtColor.color( num_points*j+i );			
 	  QColor ext_clr = params->ExtColor.color( (num_points*j+i) % params->ExtColor.count());

@@ -172,8 +172,8 @@ bool KChartPart::save( ostream& out, const char *_format ) {
       }
   }
   // now save the parameters
-  doc.appendChild(data);
-
+  chart.appendChild(data);
+  cerr << "Ok, till here!!!";
   QBuffer buffer;
   buffer.open( IO_WriteOnly );
   QTextStream str( &buffer );
@@ -193,10 +193,52 @@ bool KChartPart::loadChildren( KoStore* _store ) {
 
 bool KChartPart::loadXML( const QDomDocument& doc, KoStore* store ) {
   cerr << "kchart loadXML called\n";
+  // <spreadsheet>
+  //  m_bLoading = true;
+  if ( doc.doctype().name() != "chart" )
+  {
+    //m_bLoading = false;
+    return false;
+  }
+
+  cerr << "Ok, it is a chart\n";
+  
+  QDomElement chart = doc.documentElement();
+  if ( chart.attribute( "mime" ) != "application/x-kchart" )
+    return false;
+
+  cerr << "Mimetype ok\n";
+
+  QDomElement data = chart.namedItem("data").toElement();
+  bool ok;
+  int cols = data.attribute("cols").toInt(&ok);
+  cerr << "cols readed as:" << cols << "\n";
+  if (!ok)  { return false; }
+  int rows = data.attribute("rows").toInt(&ok);
+  if (!ok)  { return false; }
+  cerr << rows << " x " << cols << "\n";
+  currentData.expand(rows, cols);
+
+  QDomNode n = data.firstChild();
+  while( !n.isNull() )
+  {
+    QDomElement e = n.toElement();
+    if ( !e.isNull() && e.tagName() == "cell" )
+    {
+      // add the cell to the corresponding place...
+      double val = e.attribute("value").toDouble(&ok);
+      if (!ok)  {  return false; }
+      cerr << val << "\n";      
+    }
+    n = n.nextSibling();
+  }
+  //  cerr << 
+  return true;
 };
 
 bool KChartPart::load( istream& in, KoStore* store ) {
   cerr << "kchart load colled\n";
+    _params = new KChartParameters;
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
 
@@ -215,8 +257,8 @@ bool KChartPart::load( istream& in, KoStore* store ) {
     QDomDocument doc( &buffer );
 
     bool b = loadXML( doc, store );
-
     buffer.close();
+    // init the parameters 
 
     return b;
 };
@@ -226,6 +268,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.6  1999/11/19 05:04:35  boloni
+ * more work on saving
+ *
  * Revision 1.5  1999/11/17 02:49:53  boloni
  * -started implementing save and load.
  *

@@ -140,7 +140,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	  sprintf( whole, "%d", w );
 	}
 	
-	qDebug( "drawing 1" );
+	//qDebug( "drawing 1" );
 	
 	if( params->grid ) {
 	  int	x1, x2, y1, y2;

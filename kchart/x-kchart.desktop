@@ -2,6 +2,8 @@
 [Desktop Entry]
 MimeType=application/x-kchart
 Comment=KChart
+Comment[fi]=KChart kuvaajienpiirto-ohjelma
+Comment[hu]=KGrafikon
 DefaultApp=KChart
 Type=MimeType
-Patterns=*.xmpl;
+Patterns=*.chrt;
