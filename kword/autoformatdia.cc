@@ -54,7 +54,7 @@ void KWAutoFormatDia::setupTab1()
   cbTypographicQuotes->setText(i18n("Replace &Quotes by Typographical Quotes:"));
   cbTypographicQuotes->resize(cbTypographicQuotes->sizeHint());
   cbTypographicQuotes->setChecked(doc->getAutoFormat().getConfigTypographicQuotes().replace);
-  
+
   QHBox *quotes = new QHBox(tab1);
   pbQuote1 = new QPushButton(quotes);
   pbQuote1->setText(doc->getAutoFormat().getConfigTypographicQuotes().begin);
@@ -100,5 +100,6 @@ void KWAutoFormatDia::applyConfig()
 
   doc->getAutoFormat().setEnabled(true);
   doc->updateAllViews(0L);
+  doc->updateAllCursors();
   doc->getAutoFormat().setEnabled(false);
 }

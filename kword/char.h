@@ -168,9 +168,6 @@ struct KWChar
 {
   KWChar() : c(), autoformat(0L), attrib(0L)
   {}
-  
-  //~KWChar()
-  //{ if (autoformat) delete autoformat; autoformat = 0L; }
 
   kwchar c;
   KWAutoFormat::AutoformatInfo *autoformat;

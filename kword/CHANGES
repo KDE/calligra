@@ -1146,3 +1146,8 @@ Reggie, 28.4.1999:
 ------------------
 - Some improvements in autoformat
 - Fixed a memory leak
+
+Reggie, 29.4.1999:
+------------------
+- Cursor gets updated correctly after changing autoformat configuration
+- Cleanups
