@@ -403,9 +403,7 @@ void Filter::filter(KOffice::Filter::Data& data, const QCString &from,
             "</DOC>";
         }
     }
-    // will disappear soon?
-    // will we give back the name only, soon?
-    // Not sure, why ? (David)
+    
     QCString cstr=QCString(str.utf8());
     char * ret = strdup( cstr.data() );
     data.assign( ret, cstr.length() ); 

@@ -21,7 +21,6 @@ WinWordDoc::WinWordDoc(const myFile &mainStream, const myFile &table0Stream,
         table=table1Stream;
 
     styleSheet=new StyleSheet(table, fib);
-
     // print some debug info
     // FIBInfo();
 }

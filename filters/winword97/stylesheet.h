@@ -10,14 +10,15 @@
 #include <kdebug.h>
 
 struct STYLE {
-    bool paragStyle;         // is it a paragraph style?
-    unsigned long fcPAPX;    // position of the PAPX grpprl in the table stream if there is one
-    unsigned short lenPAPX;  // length of the grpprl
-    unsigned long fcCHPX;    // CHPX position
-    unsigned short lenCHPX;  // length
+    bool paragStyle;              // is it a paragraph style?
+    unsigned long fcPAPX;         // position of the PAPX grpprl in the table stream if there is one
+    unsigned short lenPAPX;       // length of the grpprl
+    unsigned long fcCHPX;         // CHPX position
+    unsigned short lenCHPX;       // length
 };
 
-struct STD {
+struct STD {                      // used in QMap (for efficiency)
+    unsigned short istd;
     unsigned short istdBase;
     QString name;
     STYLE style;
@@ -37,8 +38,8 @@ private:
     StyleSheet(const StyleSheet &);
     const StyleSheet &operator=(const StyleSheet &);
 
-    const bool chain_rec(const unsigned short &sti);             // recursively walks back to the NULL-Style
-
+    const bool chain_rec(const unsigned short &istd);            // recursively walks back to the NULL-Style
+    
     myFile table;
     const FIB * const fib;
     QMap<unsigned long, STD> styleMap;
