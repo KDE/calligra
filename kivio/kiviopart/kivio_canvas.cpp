@@ -505,7 +505,18 @@ void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
   if (pressGuideline) {
     m_guideLinesTimer->stop();
     KoPoint p = mapFromScreen(e->pos());
+    bool insideCanvas = geometry().contains(mapFromGlobal(e->globalPos()));
     KivioGuideLines* gl = activePage()->guideLines();
+
+    if(!insideCanvas) {
+      eraseGuides();
+      gl->remove(pressGuideline);
+      paintGuides();
+      delegateThisEvent = false;
+      pressGuideline = 0;
+      return;
+    }
+
     KivioGuideLineData* gd = gl->find(p.x(),p.y(),m_pView->zoomHandler()->unzoomItY(2));
     if (gd) {
       setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
@@ -1260,7 +1271,7 @@ bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
 
     if (e->type() == QEvent::MouseMove) {
       bool f = geometry().contains(p);
-      if (!pressGuideline && f) {
+      if (!pressGuideline && f && (me->state() == QMouseEvent::LeftButton)) {
         enterEvent(0);
 
         eraseGuides();
@@ -1284,33 +1295,30 @@ bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
         w->setCursor(sizeAllCursor);
 
         lastPoint = p;
+      } else if (pressGuideline && !f) {
+        leaveEvent(0);
 
-      } else {
-        if (pressGuideline && !f) {
-          leaveEvent(0);
+        eraseGuides();
+        gl->remove(pressGuideline);
+        paintGuides();
 
-          eraseGuides();
-          gl->remove(pressGuideline);
-          paintGuides();
-
-          if (storedCursor) {
-            QWidget* w = (QWidget*)o;
-            w->setCursor(*storedCursor);
-            delete storedCursor;
-            storedCursor = 0;
-          }
-
-          pressGuideline = 0;
-        } else if (pressGuideline && f) {
-          QMouseEvent* m = new QMouseEvent(QEvent::MouseMove, p, me->globalPos(), me->button(), me->state());
-          mouseMoveEvent(m);
-          delete m;
-          delegateThisEvent = true;
+        if (storedCursor) {
+          QWidget* w = (QWidget*)o;
+          w->setCursor(*storedCursor);
+          delete storedCursor;
+          storedCursor = 0;
         }
+
+        pressGuideline = 0;
+      } else if (pressGuideline && f) {
+        QMouseEvent* m = new QMouseEvent(QEvent::MouseMove, p, me->globalPos(), me->button(), me->state());
+        mouseMoveEvent(m);
+        delete m;
+        delegateThisEvent = true;
       }
     }
-    if (e->type() == QEvent::MouseButtonRelease && pressGuideline) {
 
+    if (e->type() == QEvent::MouseButtonRelease && pressGuideline) {
       eraseGuides();
       gl->unselect(pressGuideline);
       paintGuides();
