@@ -31,7 +31,7 @@ DESCRIPTION
 class QString;
 class QPointArray;
 #include <kwmf.h>
-#include <qvector.h>
+#include <qptrvector.h>
 
 class Msod :
     private KWmf
@@ -176,7 +176,7 @@ private:
         Image() { data = 0L; }
         ~Image() { delete [] data; }
     };
-    QVector<Image> m_images;
+    QPtrVector<Image> m_images;
 
     // Opcode handling and painter methods.
 

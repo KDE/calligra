@@ -27,7 +27,7 @@
 #include <qstring.h>
 #include <qdom.h>
 #include <qvaluelist.h>
-#include <qvector.h>
+#include <qptrvector.h>
 #include <qstringlist.h>
 
 class myFile;
@@ -161,7 +161,7 @@ private:
     // the original Word cells. We accumulate all the known edges for a given
     // table in an array, and store the per-table arrays in a vector.
 
-    QVector< QArray<unsigned> > m_cellEdges;
+    QPtrVector< QArray<unsigned> > m_cellEdges;
     int cacheCellEdge(
         unsigned tableNumber,
         unsigned cellEdge);
@@ -180,7 +180,7 @@ private:
         QStringList m_texts;
         MsWordGenerated::TAP m_row;
     };
-    QVector<TableRow> m_table;
+    QPtrVector<TableRow> m_table;
 
     // Since there is no way to fill m_part incrementally with XML content,
     // we will fill m_body instead.
