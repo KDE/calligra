@@ -1708,8 +1708,6 @@ static bool kspreadfunc_time( KSContext& context )
 
 static bool kspreadfunc_currentDate( KSContext& context )
 {
-    // QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
     if ( !KSUtil::checkArgumentsCount( context,0, "currentDate",true ) )
       return false;
 
@@ -1720,8 +1718,6 @@ static bool kspreadfunc_currentDate( KSContext& context )
 
 static bool kspreadfunc_shortcurrentDate( KSContext& context )
 {
-    // QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
     if ( !KSUtil::checkArgumentsCount( context,0, "shortcurrentDate",true ) )
       return false;
 
@@ -1733,8 +1729,6 @@ static bool kspreadfunc_shortcurrentDate( KSContext& context )
 
 static bool kspreadfunc_currentTime( KSContext& context )
 {
-    // QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
     if ( !KSUtil::checkArgumentsCount( context,0, "currentTime",true ) )
       return false;
 
@@ -1745,8 +1739,6 @@ static bool kspreadfunc_currentTime( KSContext& context )
 
 static bool kspreadfunc_currentDateTime( KSContext& context )
 {
-    // QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
     if ( !KSUtil::checkArgumentsCount( context,0, "currentDateTime",true ) )
       return false;
 
@@ -1985,8 +1977,78 @@ static bool kspreadfunc_bino_inv( KSContext& context )
         }
   }
   return true;
+}
+
+static double phi_helper(double x)
+{
+  return 0.39894228040143268 * exp(-(x * x) / 2.0);
+}
 
 
+static double taylor_helper (double* pPolynom, uint nMax, double x)
+{
+  double nVal = pPolynom[nMax];
+  for (int i = nMax-1; i >= 0; i--) {
+    nVal = pPolynom[i] + (nVal * x);
+  }
+  return nVal;
+}
+
+
+static bool kspreadfunc_gauss(KSContext& context)
+{
+  //Returns the standard normal cumulative distribution.
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "GAUSS", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+
+  double t0[] =
+        { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
+         -0.00118732821548045,  0.00011543468761616, -0.00000944465625950,
+          0.00000066596935163, -0.00000004122667415,  0.00000000227352982,
+          0.00000000011301172,  0.00000000000511243, -0.00000000000021218 };
+  double t2[] =
+        { 0.47724986805182079,  0.05399096651318805, -0.05399096651318805,
+          0.02699548325659403, -0.00449924720943234, -0.00224962360471617,
+          0.00134977416282970, -0.00011783742691370, -0.00011515930357476,
+          0.00003704737285544,  0.00000282690796889, -0.00000354513195524,
+          0.00000037669563126,  0.00000019202407921, -0.00000005226908590,
+         -0.00000000491799345,  0.00000000366377919, -0.00000000015981997,
+         -0.00000000017381238,  0.00000000002624031,  0.00000000000560919,
+         -0.00000000000172127, -0.00000000000008634,  0.00000000000007894 };
+  double t4[] =
+        { 0.49996832875816688,  0.00013383022576489, -0.00026766045152977,
+          0.00033457556441221, -0.00028996548915725,  0.00018178605666397,
+         -0.00008252863922168,  0.00002551802519049, -0.00000391665839292,
+         -0.00000074018205222,  0.00000064422023359, -0.00000017370155340,
+          0.00000000909595465,  0.00000000944943118, -0.00000000329957075,
+          0.00000000029492075,  0.00000000011874477, -0.00000000004420396,
+          0.00000000000361422,  0.00000000000143638, -0.00000000000045848 };
+  double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
+
+  double xAbs = fabs(x);
+  uint xShort = static_cast<uint>(floor(xAbs));
+  double nVal = 0.0;
+  if (xShort == 0)
+    nVal = taylor_helper(t0, 11, (xAbs * xAbs)) * xAbs;
+  else if ((xShort >= 1) && (xShort <= 2))
+    nVal = taylor_helper(t2, 23, (xAbs - 2.0));
+  else if ((xShort >= 3) && (xShort <= 4))
+    nVal = taylor_helper(t4, 20, (xAbs - 4.0));
+  else
+    nVal = 0.5 + phi_helper(xAbs) * taylor_helper(asympt, 4, 1.0 / (xAbs * xAbs)) / xAbs;
+  if (x < 0.0)
+    context.setValue( new KSValue(-nVal) );
+  else
+    context.setValue( new KSValue(nVal) );
+ 
+  return true;
 }
 
 static bool kspreadfunc_fv( KSContext& context )
@@ -4478,6 +4540,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "ROMAN", new KSValue( new KSBuiltinFunction( module, "ROMAN", kspreadfunc_roman) ) );
   module->addObject( "shortcurrentDate", new KSValue( new KSBuiltinFunction( module, "shortcurrentDate", kspreadfunc_shortcurrentDate) ) );
   module->addObject( "trim", new KSValue( new KSBuiltinFunction( module, "trim", kspreadfunc_trim) ) );
+  module->addObject( "GAUSS", new KSValue( new KSBuiltinFunction( module, "GAUSS", kspreadfunc_gauss) ) );
 
   return module;
 }

@@ -2115,8 +2115,6 @@
       </Help>
     </Function>
 
-
-
     <Function>
       <Name>ISTEXT</Name>
       <Type>Boolean</Type>
@@ -2457,6 +2455,21 @@
       <Help>
 	<Text></Text>
 	<Syntax>stddev(value;value;...)</Syntax>
+      </Help>
+    </Function>
+    
+    <Function>
+      <Name>GAUSS</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>The number for which the integral value of standard normal distribution is to be
+        computed.</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>This function returns the integral values for the standard normal cumulative distribution.</Text>
+        <Syntax>GAUSS(value)</Syntax>
+        <Example>GAUSS(0.25) equals 0.098706</Example>
       </Help>
     </Function>
 
