@@ -42,9 +42,9 @@ K_EXPORT_COMPONENT_FACTORY(kexidb_mysqldriver, KGenericFactory<KexiDB::MySqlDriv
 
 using namespace KexiDB;
 
-MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &args) : Driver(parent, name,list)
+MySqlDriver::MySqlDriver(QObject *parent, const char *name, const QStringList &args) : Driver(parent, name,args)
 {
-	KexiDBDrvDbg << "MySqlDB::MySqlDB()" << endl;
+	KexiDBDrvDbg << "MySqlDriver::MySqlDriver()" << endl;
 
 	m_driverName = "mySQL";
 	m_isFileDriver=false;
