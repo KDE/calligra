@@ -227,7 +227,7 @@ KSpreadDoc::KSpreadDoc()
   m_defaultGridPen.setWidth( 1 );
   m_defaultGridPen.setStyle( SolidLine );
 
-  //initPython();
+  initPython();
 
   m_pMap = new KSpreadMap( this );
 
@@ -765,7 +765,7 @@ void KSpreadDoc::reloadScripts()
   if ( m_pPython )
     delete m_pPython;
 
-  //initPython();
+  initPython();
 
   // Update the cell content
   KSpreadTable *t;
