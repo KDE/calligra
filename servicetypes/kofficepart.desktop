@@ -1,0 +1,50 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KOfficePart
+X-KDE-Derived=KParts/ReadWritePart
+Comment=KOffice Component
+Comment[af]=Koffice Komponent
+Comment[bg]=Компонент на KOffice
+Comment[ca]=Component de KOffice
+Comment[cs]=Komponenta KOffice
+Comment[da]=KOffice-komponent
+Comment[de]=KOffice-Komponente
+Comment[el]=Μέρος του KOffice
+Comment[eo]=KOficejo-komponento
+Comment[es]=Componente de KOffice
+Comment[et]=KOffice'i komponent
+Comment[fa]=KOffice اجزای
+Comment[fi]=KOffice komponentti
+Comment[fr]=Composant KOffice
+Comment[he]=רכיב של KOffice
+Comment[hu]=KOffice komponens
+Comment[it]=Componente di KOffice
+Comment[ja]=KOfficeコンポーネント
+Comment[lo]=ຄອມໂພເນນຕຂອງໂປຣແກມຊຸດສໍານັກງານ K 
+Comment[mt]=Komponent tal-KOffice
+Comment[nb]=KOffice-komponent
+Comment[nn]=KOffice-komponent
+Comment[pl]=Składnik KOffice
+Comment[pt]=Componente do KOffice
+Comment[pt_BR]=Componente do KOffice
+Comment[ru]=Компонент KOffice
+Comment[se]=Koffice-oassi
+Comment[sk]=Zložka Koffice
+Comment[sl]=Komponenta za KOffice
+Comment[sr]=KOffice-ова компонента
+Comment[sv]=Koffice-komponent
+Comment[tg]=Компоненти KOffice
+Comment[th]=คอมโพเน็นต์ของโปรแกรมชุดสำนักงาน K
+Comment[tr]=KOffice Bileşeni
+Comment[ven]=Khomphonente ya ofisi ya K
+Comment[xh]=Ingxenye ye KOffice
+Comment[zh_CN]=KOffice 部件
+Comment[zh_TW]=KOffice 元件
+Comment[zu]=Ingxenye ye KOffice
+
+[PropertyDef::X-KDE-NativeMimeType]
+Type=QString
+
+[PropertyDef::X-KDE-NOTKoDocumentEmbeddable]
+Type=bool
