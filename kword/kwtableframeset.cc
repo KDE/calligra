@@ -1233,7 +1233,7 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     double extraHeight = 0;
 
     // will it fit?
-    if(width < minFrameWidth) return false;
+    if(width < minFrameWidth) return 0L;
     if(height < minFrameHeight) {
         extraHeight = minFrameHeight * intoRows - firstFrame->height();
         height = minFrameHeight;
