@@ -7,7 +7,7 @@ with other types of data, please see the section entitled <link linkend="guides-
 
 <sect1 id="select">
 <title>Selecting Text</title>
-
+<indexterm><primary>selecting text</primary></indexterm>
 <para>For many editing and formatting functions in &kword;, certain actions (bold face, underline,&etc;) should be
 applied to a
 certain section of text, not the document as a whole. You specify which
@@ -83,6 +83,7 @@ Use the following key combinations to move the endpoint to the desired location.
 
 <sect1 id="views">
 <title>Using Multiple Views</title>
+<indexterm><primary>views</primary><secondary>using multiple</secondary></indexterm>
 <sect2 id="views-intro">
 <title>Introduction</title>
 <para>When editing very large documents, there will be times when it is helpful to 
@@ -96,7 +97,9 @@ move through the document making updates and changes.  These changes are automat
 </sect2>
 
 <sect2 id="views-new">
+
 <title>Creating a new view</title>
+<indexterm><primary>views</primary><secondary>create new view</secondary></indexterm>
 <para>Creating a new view creates an entirely new window, with toolbars, menubars etc.
 Compare this with the <link linkend="views-split">Split View</link> command.</para>
 
@@ -110,6 +113,7 @@ Updates in one window will be immediately visible in the other.</para>
 
 <sect2 id="views-split">
 <title>Splitting the current view into two separate views. </title>
+<indexterm><primary>views</primary><secondary>split current view</secondary></indexterm>
 <para>It is also possible to split one view into two views.  Both views are contained within one window, and
 use the same toolbars, menubars, etc.  Contrast this to the effect of the <link linkend="views-new">New View</link> command.</para>
 
@@ -123,7 +127,9 @@ Updates in one window will be immediately visible in the other.</para>
 </sect2>
 
 <sect2 id="views-split-orientation">
+
 <title>Changing the split view orientation </title>
+<indexterm><primary>views</primary><secondary>change split view orientation</secondary></indexterm>
 <para>To change the direction that the views are split, simply select
 <menuchoice><guimenu>View</guimenu><guimenuitem>Splitter Orientation</guimenuitem></menuchoice> from the menubar.
 This will show a submenu.  Select either <guilabel>Horizontal</guilabel> or <guilabel>Vertical</guilabel>.</para>
@@ -132,7 +138,9 @@ This will show a submenu.  Select either <guilabel>Horizontal</guilabel> or <gui
 </sect2>
 
 <sect2 id="views-adjust-size">
+
 <title>Changing the size of views </title>
+<indexterm><primary>views</primary><secondary>resizing</secondary></indexterm>
 <para>The relative sizes of each view can be adjusted with your mouse.</para>
 <para>To adjust the view size, look at the border between the scrollbar of one window
 (the upper or right view) and the ruler of the other view (the lower or left view).  There is a
@@ -145,14 +153,18 @@ views will change to the new proportions.</para>
 </sect2>
 
 <sect2 id="views-remove">
+
 <title>Remove View </title>
+<indexterm><primary>views</primary><secondary>removing</secondary></indexterm>
 <para>To remove a view, simply click the mouse pointer in the view to be deleted.
 Then select <menuchoice><guimenu>View</guimenu><guimenuitem>Remove View</guimenuitem></menuchoice>
 from the menubar.</para>
 </sect2>
 
 <sect2 id="views-close">
+
 <title>Close all views </title><para>To close all views,  select
+<indexterm><primary>views</primary><secondary>closing all views</secondary></indexterm>
 <menuchoice><guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem></menuchoice>
 from the menubar.</para>
 </sect2>
@@ -160,7 +172,8 @@ from the menubar.</para>
 
 <sect1 id="undo-redo">
 <title>Undo/Redo</title>
-
+<indexterm><primary>Undoing last edit</primary></indexterm>
+<indexterm><primary>Redoing previously undone edit</primary></indexterm>
 <para>It happens all the time.  While working on a document, a change is made.
 The change was wrong, now you want to back out of your changes.</para>
 
@@ -225,7 +238,9 @@ action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo></entry></row>
 </sect1>
 
 <sect1 id="clipboard">
+
 <title>Cut/Copy/Paste and the Clipboard</title>
+<indexterm><primary>clipboard</primary><secondary>using</secondary></indexterm>
 
 <para>The <quote>clipboard</quote> is a concept familiar to most people
 who have used modern word processors. It is a piece of your computers
@@ -269,8 +284,9 @@ from the menubar.</para>
 <para>The clipboard is not limited to text.
 The clipboard can contain tables, pictures, spreadsheets or any other type of information.</para>
 <sect2 id="local-copy">
-<title>The Copy Command</title>
 
+<title>The Copy Command</title>
+<indexterm><primary>clipboard</primary><secondary>copying text to</secondary></indexterm>
 <para>The <guimenuitem>Copy</guimenuitem> command can be invoked 4 ways:</para>
 
 <itemizedlist>
@@ -308,7 +324,7 @@ unaffected.</emphasis></para>
 
 <sect2 id="local-cut">
 <title>The Cut Command</title>
-
+<indexterm><primary>clipboard</primary><secondary>moving text to</secondary></indexterm>
 <para>The <guimenuitem>Cut</guimenuitem> command can be invoked 4 ways:</para>
 
 <itemizedlist>
@@ -343,7 +359,7 @@ document.</emphasis></para>
 
 <sect2 id="local-paste">
 <title>The Paste Command</title>
-
+<indexterm><primary>clipboard</primary><secondary>moving text from</secondary></indexterm>
 <para>The <guimenuitem>Paste</guimenuitem> command can be invoked 4 ways:</para>
 
 <itemizedlist>
@@ -401,6 +417,8 @@ into another open document, or another &kde; application entirely.</para></tip>
 
 <sect2 id="find">
 <title>The Find Command</title>
+<indexterm><primary>searching for text</primary></indexterm>
+<indexterm><primary>finding text in a document</primary></indexterm>
 
 <para>The <quote>Find</quote> command can be invoked 3 ways:</para>
 
@@ -674,6 +692,8 @@ appears.</para>
 </mediaobject>
 </screenshot>
 <sect3><title>Basic Search and Replace</title>
+<indexterm><primary>replacing text</primary></indexterm>
+
 <para>The drop-down box labeled <guilabel>Text to find:</guilabel>,
 provides a place for you to enter the text of your search command. (In
 the screenshot, that box is currently filled with
@@ -1158,6 +1178,7 @@ Examples of whitespace characters are spaces, tabs, and carrage returns.</para><
 
 <sect1 id="spell-check">
 <title>Spell Checking</title>
+<indexterm><primary>spelling</primary><secondary>check spelling of document</secondary></indexterm>
 
 <para>The <guilabel>Spell Checking...</guilabel> command can be invoked
 2 ways:</para>
@@ -1275,6 +1296,8 @@ For more details, please see the section entitled
 
 <sect2 id="auto-spell-check">
 <title>Automatically mark misspelled words</title>
+<indexterm><primary>spelling</primary><secondary>automatically mark mispelled words</secondary></indexterm>
+
 <para>&kword; can check the spelling of your document as you edit it.  It will underline in red any word which 
 it can not find in the dictionary.  This behavior can be turned on and off by the user.  See the section 
 entitled <link linkend="opt-spell">Configure Spelling</link> for more information.</para>
@@ -1284,6 +1307,10 @@ entitled <link linkend="opt-spell">Configure Spelling</link> for more informatio
 
 <sect1 id="thesaurus">
 <title>Finding related word (Thesaurus)</title>
+<indexterm><primary>thesaurus, using</primary></indexterm>
+<indexterm><primary>Wordnet</primary></indexterm>
+<indexterm><primary>related words</primary></indexterm>
+
 <para>&kword; comes with a small thesaurus based on the Wordnet project. For more information on Wordnet, visit the 
 <ulink url="http://www.cogsci.princeton.edu/~wn/">Wordnet homepage</ulink>.</para>
 <para>You can invoke the thesaurus two ways:  </para>
@@ -1315,6 +1342,7 @@ from the menubar</para></listitem>
 
 <sect1 id="autocorrect">
 <title>Autocorrection</title>
+<indexterm><primary>autocorrection</primary><secondary>using</secondary></indexterm>
 
 <para>Auto correction is a system for correcting common typing errors,
 converting abbreviations to their full spelling and adjusting
@@ -1323,6 +1351,7 @@ automatically, while you are editing your document.</para>
 
 <sect2 id="autocorrection-enable">
 <title>Enable/Disable Autocorrection</title>
+
 <para>To toggle autocorrection on and off, select <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
 <guimenuitem>Enable Autocorrection</guimenuitem></menuchoice>
@@ -1334,6 +1363,8 @@ determine which changes to make by <link linkend="configure-autocorrection">conf
 
 <sect2 id="configure-autocorrection">
 <title>Configuring Autocorrection Options</title>
+<indexterm><primary>autocorrection</primary><secondary>configuring</secondary></indexterm>
+
 <para>To adjust the options for auto correction, select <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure Autocorrection...</guimenuitem></menuchoice>
 from the menubar.  </para>
@@ -1635,6 +1666,8 @@ to change the fonts to boldface or italicized fonts.</para>
 </sect3>
 <sect3 id="autocorrection-exceptions">
 <title>Autocorrection Exceptions</title>
+<indexterm><primary>autocorrection</primary><secondary>exceptions</secondary></indexterm>
+
 <para>There are instances where &kword; will make autocorrection changes
 that are inappropriate.  You can use the third tab of this dialog to define
 <emphasis>exceptions</emphasis> to the rules previously discussed.</para>
@@ -1670,6 +1703,8 @@ and click on the <guibutton>Remove</guibutton> button.</para>
 
 <sect2 id="autoformat">
 <title>Manually applying autocorrection</title>
+<indexterm><primary>autocorrection</primary><secondary>manually applying</secondary></indexterm>
+
 <para>If autocorrection is turned off in your document, you can mannually enable <link linkend="autocorrect">autocorrection</link>.</para>
 <para>To manually apply autocorrection, first configure your options by using the
 <link linkend="configure-autocorrection">autocorrection dialogs</link>.</para>
@@ -1686,6 +1721,8 @@ see <link linkend="autocorrection-enable">Enable/Disable Autocorrection</link>.<
 
 <sect1 id="autocomplete">
 <title>Autocompletion</title>
+<indexterm><primary>autocompletion</primary></indexterm>
+
 <para>Autocompletion allows you to type the first few letters of a commonly
 used word (often technical or job specific), and tell &kword; to
 finish typing the word for you.  This is often very useful when you have lengthy technical words.</para>

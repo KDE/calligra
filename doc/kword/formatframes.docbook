@@ -1,5 +1,6 @@
 <sect1 id="format-frame">
 <title>Setting the Properties for a Frame</title>
+<indexterm><primary>frames</primary><secondary>configure</secondary></indexterm>
 
 <para>For each frame in your document, you can:</para>
 
@@ -72,6 +73,8 @@ tabs labeled <link linkend="format-frame-options">Options</link>,
 <link linkend="format-frame-background">Background</link>.</para>
 
 <sect3 id="format-frame-options"><title>General Options</title>
+<indexterm><primary>frames</primary><secondary>configure automatic creation</secondary></indexterm>
+<indexterm><primary>frames</primary><secondary>protect contents of</secondary></indexterm>
 
 <screenshot>
 <mediaobject>
@@ -153,6 +156,8 @@ and size of the frame, see the <link linkend="format-frame-geometry">Geometry</l
 
 </sect3>
 <sect3 id="format-frame-tra"><title>Text Flow around frames</title>
+<indexterm><primary>frames</primary><secondary>force text around</secondary></indexterm>
+
 <para>To adjust how text flows around overlapping frames, click the tab
 labeled <guilabel>Text Run Around</guilabel>.</para>
 
@@ -216,6 +221,8 @@ this frame before continuing to display text in overlapping frames.</para>
 
 </sect3>
 <sect3 id="format-frame-connect"><title>Reconnect frames</title>
+<indexterm><primary>frames</primary><secondary>edit framesets</secondary></indexterm>
+<indexterm><primary>framesets</primary><secondary>edit</secondary></indexterm>
 
 <para>You can change which frameset the current frame belongs to by selecting 
 the <guilabel>Connect text frames</guilabel> tab.</para>
@@ -239,6 +246,9 @@ so that you can quickly refer to it again later.</para></tip>
 
 </sect3>
 <sect3 id="format-frame-geometry"><title>Frame size and position</title>
+<indexterm><primary>frames</primary><secondary>geometry</secondary></indexterm>
+<indexterm><primary>frames</primary><secondary>determine size (dialog box)</secondary></indexterm>
+<indexterm><primary>frames</primary><secondary>determine position (dialog box)</secondary></indexterm>
 
 <para>You can adjust the size and position of your frame by
 clicking on the tab labeled <guilabel>Geometry</guilabel>.</para>
@@ -289,6 +299,7 @@ become 1 cm in size.</para>
 </sect4>
 </sect3>
 <sect3 id="format-frame-background"><title>Frame Background</title>
+<indexterm><primary>frames</primary><secondary>background colors and patterns</secondary></indexterm>
 
 <para>You can adjust the background color of the text frame by selecting the <guilabel>Background</guilabel> tab.</para>
 
@@ -315,8 +326,13 @@ become 1 cm in size.</para>
 
 <sect2 id="framestyles">
 <title>Using frame styles</title>
+<indexterm><primary>frames</primary><secondary>frame styles</secondary></indexterm>
+<indexterm><primary>frame style</primary><secondary>using</secondary></indexterm>
+
 <sect3 id="framestyles-use">
 <title>Formatting a frame with a framestyle</title>
+<indexterm><primary>frame style</primary><secondary>apply frame style to a paragraph</secondary></indexterm>
+
 <para>To format a frame using a predefined framestyle simply:</para>
 <para>Select the frame(s) by holding down &Ctrl; and clicking within the frame with the &LMB;.</para>
 <para>Select <menuchoice>
@@ -327,6 +343,8 @@ you want and all selected frames will automatically be formatting using the opti
 
 <sect3 id="framestyle-edit">
 <title>Editing a framestyle</title>
+<indexterm><primary>frame style</primary><secondary>editing</secondary></indexterm>
+
 <para>To change the options of a framesyle, you will use the framestylist.</para>
 <para>Select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame Style Manager...</guimenuitem></menuchoice>
@@ -357,6 +375,8 @@ be changed to reflect the new options.</para>
 
 <sect3 id="framestyle-add">
 <title>Creating a new framestyle</title>
+<indexterm><primary>frame style</primary><secondary>create new</secondary></indexterm>
+
 <para>To create a new framestyle, select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
@@ -379,6 +399,8 @@ of the previously selected framestyle.</para>
 
 <sect3 id="framestyle-delete">
 <title>Deleting a framestyle</title>
+<indexterm><primary>frame style</primary><secondary>deleting</secondary></indexterm>
+
 <para>To delete framestyle, select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>
@@ -416,6 +438,8 @@ selected framestyle up or down in the list of framestyles.</para>
 
 <sect3 id="framestyle-import">
 <title>Importing a framestyle from another &kword; file</title>
+<indexterm><primary>frame style</primary><secondary>importing from another file</secondary></indexterm>
+
 <para>To import a framestyle from another &kword; file, select <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Frame Style Manager...</guimenuitem></menuchoice>
 from the menubar. A dialog box will appear.</para>

@@ -1,5 +1,6 @@
 <chapter id="tutorial">
 <title>Step by Step Tutorial</title>
+<indexterm><primary>tutorial</primary></indexterm>
 <para>This section is a step by step
 walk through of the most important functions needed to understand how
 to create and manipulate a complex document. This tutorial will generate the start of a

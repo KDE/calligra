@@ -1,6 +1,5 @@
 <chapter id="fundamentals">
 <title>Fundamentals</title>
-
 <para>This section of the documentation discusses starting &kword;, introduces the user to templates and
 discusses an important difference between two major types of templates.</para>
 
@@ -41,7 +40,9 @@ automatically start &kword; and begin editing the file.</para>
 </sect1>
 
 <sect1 id="template-intro">
+
 <title>An Introduction to Templates</title>
+<indexterm><primary>templates</primary><secondary>introduction</secondary></indexterm>
 
 <para>OK, so the first question a new user may have is:</para>
 
@@ -101,8 +102,10 @@ you should understand before we begin using &kword;.</para>
 </sect1>
 
 <sect1 id="wp-vs-dtp">
+
 <title>The difference between Text Oriented and Page Layout
 templates</title>
+<indexterm><primary>templates</primary><secondary>Text oriented/Page Layout</secondary></indexterm>
 
 <para>It is vital that the
 difference between Text Oriented and Page Layout templates is clear in

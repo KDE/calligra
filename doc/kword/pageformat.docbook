@@ -12,6 +12,12 @@ if the differences are still unclear.</para>
 
 <sect2 id="wp-page-format">
 <title> Formatting the Page (Text Oriented Document)</title>
+<indexterm><primary>text oriented document</primary><secondary>formatting the page size</secondary></indexterm>
+<indexterm><primary>formatting the page size (text oriented document)</primary></indexterm>
+<indexterm><primary>text oriented document</primary><secondary>formatting the margins</secondary></indexterm>
+<indexterm><primary>formatting the margins (text oriented document)</primary></indexterm>
+<indexterm><primary>headers</primary><secondary>formatting</secondary></indexterm>
+<indexterm><primary>footers</primary><secondary>formatting the page</secondary></indexterm>
 
 <para>When you are working with a Text Oriented Document, you control
 the size and shape of the main frame by setting the paper size and the margins. </para>
@@ -162,6 +168,8 @@ be ignored.</para>
 
 <sect2 id="dtp-page-format">
 <title> Formatting the Page (Page Layout Template)</title>
+<indexterm><primary>page layout document</primary><secondary>formatting the page size</secondary></indexterm>
+<indexterm><primary>formatting the page size(page layout document)</primary></indexterm>
 
 <para>When you are working with a Page Layout Template, you control the
 size and shape of all the frames individually. </para>

@@ -120,6 +120,7 @@ TODO:
 - Convert table to text (MB and text)
 - Sort text (MB and text)
 - type anywhere cursor
+- Index entries - currently done up to formating paragraphs
 
 -->
 
@@ -128,15 +129,15 @@ TODO:
 
 <sect1 id="introduction1">
 <title>Introduction</title>
-
+<indexterm><primary>introduction</primary></indexterm>
 <para>
 &kword;, is a full featured
-<indexterm><primary><acronym>WYSIWYG</acronym></primary></indexterm>
+
 <acronym>WYSIWYG</acronym> (What You See Is What You Get)
 Word-processor/Desktop Publishing Program.
 </para>
 
-<para>
+<indexterm><primary>&koffice;</primary><secondary>applications</secondary></indexterm><para>
 &kword; is part of the &koffice; productivity suite for the K Desktop
 Environment.  Other applications in &koffice; include:
 </para>
@@ -221,6 +222,7 @@ automatically while you edit.
 <textobject><phrase>Button</phrase></textobject>
 </mediaobject>
 
+<indexterm><primary>&kword;</primary><secondary>features</secondary></indexterm>
 <para>
 As a word-processor, &kword; includes the most used options of many other
 word processors, while maintaining a simple interface. In addition to
@@ -334,6 +336,7 @@ letter, to the most complex document you might need to work on.</para>
 
 <sect1 id="who-reads">
 <title>What parts of this guide should I read?</title>
+<indexterm><primary>getting started</primary></indexterm>
 
 <para>Anyone who has looked at the table of contents has surely come to
 the conclusion that reading this manual from cover to cover, is an
@@ -2012,4 +2015,5 @@ url="http://www.xfree86.org">http://www.xfree86.org</ulink></para>
 
 </glossary>
 
+&documentation.index;
 </book>

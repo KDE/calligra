@@ -3,6 +3,7 @@
 
 <sect1 id="screen-overview">
 <title>Overview</title>
+<indexterm><primary>screen</primary></indexterm>
 
 <para>&kword;, like most <acronym>GUI</acronym> based programs, divides
 the screen up into several areas. Each area of the screen is used to
@@ -104,7 +105,7 @@ frames, select text, and cut and paste text.  </para>
 
 <sect1 id="rulers">
 <title>Using Rulers</title>
-
+<indexterm><primary>Rulers</primary></indexterm>
 <para>Along the top and left edges of the document area, are a
 horizontal and a vertical ruler.</para>
 
