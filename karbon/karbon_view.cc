@@ -1126,10 +1126,12 @@ KarbonView::setViewportRect( const KoRect &rect )
 }
 
 void
-KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
+KarbonView::setUnit( KoUnit::Unit _unit )
 {
 	if( part()->toolController()->activeTool() )
 		part()->toolController()->activeTool()->refreshUnit();
+	m_horizRuler->setUnit( _unit );
+	m_vertRuler->setUnit( _unit );
 }
 
 #include "karbon_view.moc"
