@@ -40,6 +40,7 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qvbox.h>
+#include <qwhatsthis.h>
 
 #include <kapplication.h>
 #include <kbuttonbox.h>
@@ -158,18 +159,6 @@ void KPMSPresentation::createIndexFile( KProgress *progressBar )
     // set up the header part of the SPP file
     QFile sppFile;
     sppFile.setName( (path + "/MSSONY/PJ/" + title + ".SPP") );
-    // this should never happen, but we check anyway.
-    if (sppFile.exists()) {
-        if ( KMessageBox::warningYesNo( 0,
-                                   i18n( "You are about to overwrite an existing index file "
-                                         "named %1. Do you want to proceed?" ).arg(title),
-                                   i18n( "Overwrite presentation" ) )
-             == KMessageBox::No) {
-            KMessageBox::information( 0, i18n( "You have aborted the index creation. "
-                                               "Your presentation needs to be regenerated" ) );
-            return;
-        }
-    }
 
     if (false == sppFile.open( IO_WriteOnly ) ) {
         KMessageBox::error( 0, i18n( "The index file could not be opened for writing. Your "
@@ -192,7 +181,7 @@ void KPMSPresentation::createIndexFile( KProgress *progressBar )
 
     // DCIM path 1, 68 bytes null padded
     char buff[68];
-    strncpy( buff, QString("/%1").arg(slidePath).ascii(), 67 );
+    strncpy( buff, QString("%1").arg(slidePath).ascii(), 67 );
     buff[67] = 0x00;
     sppStream.writeRawBytes( buff, 68 );
     sppStream << (Q_UINT32)0x00000001; // fixed value
@@ -239,7 +228,7 @@ void KPMSPresentation::createIndexFile( KProgress *progressBar )
     // Add in the slide filenames
     QString filename;
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
-        filename.sprintf("/SPJP%04i.JPG", i+3);
+        filename.sprintf("SPJP%04i.JPG", i+3);
         strncpy( buff, filename.ascii(), 63 );
         buff[64] = 0x00;
         sppStream.writeRawBytes( buff, 64 );
@@ -306,6 +295,7 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
     QHBoxLayout *pathLayout = new QHBoxLayout;
     pathLayout->addWidget(lable2);
     pathLayout->addWidget(path);
+ 
     connect( path, SIGNAL( textChanged(const QString&) ),
              this, SLOT( slotChoosePath(const QString&) ) );
     connect( path, SIGNAL( urlSelected( const QString&) ),
@@ -337,6 +327,11 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
     colourGroup = new QGroupBox( 2, Qt::Vertical,
                                             i18n("Preliminary Slides"),
                                             this , "colourBox" );
+    QWhatsThis::add( colourGroup,
+                     i18n( "This section allows you to set the colours for "
+                           "the preliminary slides. It doesn't affect the "
+                           "presentation in any way, and it is normal to "
+                           "leave these set to the default.") );
     QHBox *textColourLayout = new QHBox( colourGroup );
     QLabel *lable3 = new QLabel( i18n("Text colour:"), textColourLayout );
     lable3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
@@ -352,7 +347,15 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterVie
 
     QHBox *buttonLayout = new QHBox( this );
     QPushButton *createButton = new QPushButton( i18n("&OK"), buttonLayout );
+    QWhatsThis::add( createButton,
+                     i18n( "Selecting this button will proceed to generating "
+                           "the presentation in the special Sony format." ) );
     QPushButton *cancelButton = new QPushButton( i18n("&Cancel"), buttonLayout );
+    QWhatsThis::add( cancelButton,
+                     i18n( "Selecting this button will cancel out of the "
+                           "generation of the presentation, and return "
+                           "to the normal KPresenter view. No files will "
+                           "be affected." ) );
     
     mainLayout = new QVBoxLayout( this );
     mainLayout->setMargin(11);
