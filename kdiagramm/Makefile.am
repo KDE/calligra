@@ -3,7 +3,7 @@ SUBDIRS = pics
 
 INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) -I../lib/store -I../lib/koml -I../lib/kofficecore -I../lib/kofficeui -I../lib/interface $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ../lib/store/libkstore.la ../lib/kofficeui/libkofficeui.la ../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la -lkparts -lkpartsui -lkom -lkfile -lkfm  -lkdeutil   $(LIBMICO) $(LIBPYTHON)    $(LIB_KDEUI) $(LIBCRYPT)
+LDADD = ../lib/store/libkstore.la ../lib/kofficeui/libkofficeui.la ../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la -lkparts -lkpartsui -lkom    -lkdeutil   $(LIBMICO) $(LIBPYTHON)    $(LIB_KFILE) $(LIBCRYPT)
 
 ####### Files
 
