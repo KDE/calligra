@@ -19,16 +19,17 @@
 
 #include "koPainter.h"
 
-#include <support/art_rgb.h>
-#include <support/art_render.h>
-#include <support/art_render_svp.h>
-#include <support/art_render_gradient.h>
-#include <support/art_rgb_svp.h>
-#include <support/art_vpath_dash.h>
-#include <support/art_svp_vpath_stroke.h>
-#include <support/art_svp_vpath.h>
-#include <support/art_svp_intersect.h>
-#include <support/art_rgb_affine.h>
+#include "art_rgb.h"
+#include "art_rgb_svp.h"
+
+#include <libart_lgpl/art_render.h>
+#include <libart_lgpl/art_render_svp.h>
+#include <libart_lgpl/art_render_gradient.h>
+#include <libart_lgpl/art_vpath_dash.h>
+#include <libart_lgpl/art_svp_vpath_stroke.h>
+#include <libart_lgpl/art_svp_vpath.h>
+#include <libart_lgpl/art_svp_intersect.h>
+#include <libart_lgpl/art_rgb_affine.h>
 
 #include <qwidget.h>
 #include <qwmatrix.h>
@@ -199,7 +200,7 @@ void KoPainter::drawVectorPathOutline(KoVectorPath *vp)
       }
 
     ArtSVP *svp = art_svp_vpath_stroke(vec, (ArtPathStrokeJoinType)mOutline->join(), (ArtPathStrokeCapType)mOutline->cap(), mOutline->width(), 4, 0.25);
-    art_rgb_svp_alpha(svp, 0, 0, mWidth, mHeight, (art_u32)color, mOutline->opacity(), mBuffer->bits(), mWidth * 4, 0);
+    art_rgb_svp_alpha_(svp, 0, 0, mWidth, mHeight, (art_u32)color, mOutline->opacity(), mBuffer->bits(), mWidth * 4, 0);
     art_free(svp);
     if(vec != vp->data())
       art_free(vec);
@@ -222,7 +223,7 @@ void KoPainter::drawVectorPathFill(KoVectorPath *vp)
 //			swr = art_svp_writer_rewind_new(ART_WIND_RULE_NONZERO);
     art_svp_intersector(temp, swr);
     ArtSVP *svp = art_svp_writer_rewind_reap(swr);
-    art_rgb_svp_alpha(svp, 0, 0, mWidth, mHeight, (art_u32)color, mFill->opacity(), mBuffer->bits(), mWidth * 4, 0);
+    art_rgb_svp_alpha_(svp, 0, 0, mWidth, mHeight, (art_u32)color, mFill->opacity(), mBuffer->bits(), mWidth * 4, 0);
     art_svp_free(temp);
     art_svp_free(svp);
   }

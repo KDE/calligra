@@ -20,10 +20,8 @@
 #ifndef __ko_vectorpath_h__
 #define __ko_vectorpath_h__
 
-#define LIBART_COMPILATION
-
 #include <qmemarray.h>
-#include <support/art_vpath.h>
+#include <libart_lgpl/art_vpath.h>
 
 class QWMatrix;
 

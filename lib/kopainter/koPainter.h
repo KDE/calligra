@@ -20,10 +20,8 @@
 #ifndef __ko_painter_h__
 #define __ko_painter_h__
 
-#define LIBART_COMPILATION
-
 #include <koColor.h>
-#include <support/art_vpath.h>
+#include <libart_lgpl/art_vpath.h>
 
 class QWidget;
 class KoVectorPath;
