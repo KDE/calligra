@@ -23,6 +23,11 @@ libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	enginepie.cc \
 	enginetoremove.cc \
 	kchartparams.cc \
+	kchartBarConfigDialog.cc \
+	kchartBarConfigPage.cc \
+	kchartColorConfigPage.cc \
+	kchartConfigDialog.cc \
+	kchartGeometryConfigPage.cc \
 	kchartWizard.cc \
 	kchartEngine.cc \
 	kchartEngine2.cc \
@@ -49,6 +54,11 @@ noinst_HEADERS =  kchart_global.h \
 		  kchart_shell.h kchart_part.h \
 		  kchart_view.h kchart_factory.h	\
 	          engine.h \
+		kchartBarConfigDialog.h \
+		kchartBarConfigPage.h \
+		kchartColorConfigPage.h \
+		kchartConfigDialog.h \
+		kchartGeometryConfigPage.h \
 	   	kchartEngine.h \
 		kchartWizard.h \
 		kchartWizardLabelsLegendPage.h \
@@ -66,6 +76,11 @@ noinst_HEADERS =  kchart_global.h \
 
 libkchart_la_METASOURCES = kchart_shell.moc kchart_part.moc \
 			       kchart_view.moc kchart_factory.moc \
+		kchartBarConfigDialog.moc	\
+		kchartBarConfigPage.moc	\
+		kchartColorConfigPage.moc \
+		kchartConfigDialog.moc \
+		kchartGeometryConfigPage.moc \
 		kchartWizard.moc \
 		kchartWizardLabelsLegendPage.moc \
 		kchartWizardSelectChartSubTypePage.moc \
