@@ -39,6 +39,7 @@
 #include <kcompletion.h>
 #include <kconfig.h>
 #include <klineeditdlg.h>
+#include <qcombobox.h>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -471,20 +472,25 @@ void KoAutoFormatDia::setupTab3()
     QGridLayout *grid = new QGridLayout( tab3, 3, 7, KDialog::marginHint(),
             KDialog::spacingHint() );
 
+    autoFormatLanguage = new QComboBox(tab3);
+    grid->addMultiCellWidget( autoFormatLanguage, 0, 0, 4, 6 );
+    QLabel *lblAutoFormatLanguage = new QLabel( i18n("Remplacement and exeption for language"), tab3);
+    grid->addMultiCellWidget( lblAutoFormatLanguage, 0, 0, 0, 3 );
+
     cbAdvancedAutoCorrection = new QCheckBox( tab3 );
     cbAdvancedAutoCorrection->setText( i18n("Enable autocorrection") );
 
-    grid->addMultiCellWidget( cbAdvancedAutoCorrection, 0, 0, 0, 6 );
+    grid->addMultiCellWidget( cbAdvancedAutoCorrection, 1, 1, 0, 6 );
 
     cbAutoCorrectionWithFormat = new QCheckBox( tab3 );
     cbAutoCorrectionWithFormat->setText( i18n("Replace text with format") );
-    grid->addMultiCellWidget( cbAutoCorrectionWithFormat, 1, 1, 0, 6 );
+    grid->addMultiCellWidget( cbAutoCorrectionWithFormat, 2, 2, 0, 6 );
 
     lblFind = new QLabel( i18n( "&Find:" ), tab3 );
-    grid->addWidget( lblFind, 2, 0 );
+    grid->addWidget( lblFind, 3, 0 );
 
     m_find = new KoAutoFormatLineEdit( tab3 );
-    grid->addWidget( m_find, 2, 1 );
+    grid->addWidget( m_find, 3, 1 );
 
     lblFind->setBuddy( m_find );
 
@@ -495,15 +501,15 @@ void KoAutoFormatDia::setupTab3()
 
     pbSpecialChar1 = new QPushButton( "...", tab3 );
     pbSpecialChar1->setFixedWidth( 40 );
-    grid->addWidget( pbSpecialChar1, 2, 2 );
+    grid->addWidget( pbSpecialChar1, 3, 2 );
 
     connect(pbSpecialChar1,SIGNAL(clicked()), SLOT(chooseSpecialChar1()));
 
     lblReplace = new QLabel( i18n( "&Replace:" ), tab3 );
-    grid->addWidget( lblReplace, 2, 3 );
+    grid->addWidget( lblReplace, 3, 3 );
 
     m_replace = new KoAutoFormatLineEdit( tab3 );
-    grid->addWidget( m_replace, 2, 4 );
+    grid->addWidget( m_replace, 3, 4 );
 
     lblReplace->setBuddy( m_replace );
 
@@ -514,12 +520,12 @@ void KoAutoFormatDia::setupTab3()
 
     pbSpecialChar2 = new QPushButton( "...", tab3 );
     pbSpecialChar2->setFixedWidth( 40 );
-    grid->addWidget( pbSpecialChar2, 2, 5 );
+    grid->addWidget( pbSpecialChar2, 3, 5 );
 
     connect(pbSpecialChar2,SIGNAL(clicked()), SLOT(chooseSpecialChar2()));
 
     pbAdd = new QPushButton( i18n( "&Add"), tab3  );
-    grid->addWidget( pbAdd, 2, 6 );
+    grid->addWidget( pbAdd, 3, 6 );
 
     connect(pbAdd,SIGNAL(clicked()),this, SLOT(slotAddEntry()));
 
@@ -527,7 +533,7 @@ void KoAutoFormatDia::setupTab3()
     m_pListView->addColumn( i18n( "Find" ) );
     m_pListView->addColumn( i18n( "Replace" ) );
     m_pListView->setAllColumnsShowFocus( true );
-    grid->addMultiCellWidget( m_pListView, 4, 4, 0, 5 );
+    grid->addMultiCellWidget( m_pListView, 5, 5, 0, 5 );
 
     connect(m_pListView, SIGNAL(doubleClicked ( QListViewItem * )),
              SLOT(slotEditEntry()) );
@@ -535,12 +541,12 @@ void KoAutoFormatDia::setupTab3()
              SLOT(slotEditEntry()) );
 
     pbRemove = new QPushButton( i18n( "Remove" ), tab3 );
-    grid->addWidget( pbRemove, 3, 6, Qt::AlignTop );
+    grid->addWidget( pbRemove, 4, 6, Qt::AlignTop );
 
     connect(pbRemove,SIGNAL(clicked()), SLOT(slotRemoveEntry()));
 
     pbChangeFormat= new QPushButton( i18n( "Change Format" ), tab3 );
-    grid->addWidget( pbChangeFormat, 4, 6, Qt::AlignTop );
+    grid->addWidget( pbChangeFormat, 5, 6, Qt::AlignTop );
 
     connect( pbChangeFormat, SIGNAL(clicked()), SLOT(slotChangeTextFormatEntry()));
     grid->setRowStretch( 2, 1 );
