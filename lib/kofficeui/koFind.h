@@ -83,7 +83,7 @@ public:
      * @param name The name of this widget.
      * @param options A bitfield of the @ref Options to be enabled.
      */
-    KoFindDialog( QWidget *parent = 0, const char *name = 0, long options = 0, QStringList *findStrings = 0L );
+    KoFindDialog( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList() );
 
     /**
      * Destructor.
@@ -98,7 +98,7 @@ public:
      * @param history The find history.
      * @see #findHistory
      */
-    void setFindHistory( QStringList *strings );
+    void setFindHistory( const QStringList &strings );
 
     /**
      * Returns the list of history items.
@@ -180,7 +180,7 @@ private:
      * @param forReplace Is this a replace dialog?
      */
     KoFindDialog( QWidget *parent, const char *name, bool forReplace );
-    void init( bool forReplace, QStringList *findStrings );
+    void init( bool forReplace, const QStringList &findStrings );
 
     QGroupBox *m_replaceGrp;
     QLabel *m_replaceLabel;

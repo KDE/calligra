@@ -26,7 +26,7 @@
 #include <koReplace.h>
 #include <kmessagebox.h>
 
-KoReplaceDialog::KoReplaceDialog(QWidget *parent, const char *name, long options, QStringList *findStrings, QStringList *replaceStrings) :
+KoReplaceDialog::KoReplaceDialog(QWidget *parent, const char *name, long options, const QStringList &findStrings, const QStringList &replaceStrings) :
     KoFindDialog(parent, name, true)
 {
     init(true, findStrings);
@@ -72,10 +72,10 @@ void KoReplaceDialog::setOptions(long options)
     m_backRef->setChecked(options & BackReference);
 }
 
-void KoReplaceDialog::setReplacementHistory(QStringList *strings)
+void KoReplaceDialog::setReplacementHistory(const QStringList &strings)
 {
-    if (strings)
-        m_replace->setHistoryItems(*strings, true);
+    if (strings.count() > 0)
+        m_replace->setHistoryItems(strings, true);
     else
         m_replace->clearHistory();
 }

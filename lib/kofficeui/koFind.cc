@@ -33,7 +33,7 @@
 #include <koFind.h>
 #include <kmessagebox.h>
 
-KoFindDialog::KoFindDialog(QWidget *parent, const char *name, long options, QStringList *findStrings) :
+KoFindDialog::KoFindDialog(QWidget *parent, const char *name, long options, const QStringList &findStrings) :
     KDialogBase(parent, name, true, i18n("Find Text"), Ok | Cancel, Ok)
 {
     init(false, findStrings);
@@ -59,7 +59,7 @@ QStringList KoFindDialog::findHistory() const
     return m_find->historyItems();
 }
 
-void KoFindDialog::init(bool forReplace, QStringList *findStrings)
+void KoFindDialog::init(bool forReplace, const QStringList &findStrings)
 {
     QVBoxLayout *topLayout;
     QGridLayout *optionsLayout;
@@ -201,10 +201,10 @@ QString KoFindDialog::pattern() const
     return m_find->currentText();
 }
 
-void KoFindDialog::setFindHistory(QStringList *strings)
+void KoFindDialog::setFindHistory(const QStringList &strings)
 {
-    if (strings)
-        m_find->setHistoryItems(*strings, true);
+    if (strings.count() > 0)
+        m_find->setHistoryItems(strings, true);
     else
         m_find->clearHistory();
 }

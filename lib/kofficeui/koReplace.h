@@ -79,7 +79,7 @@ public:
      * @param name The name of this widget
      * @param options A bitfield of the @ref Options to be enabled.
      */
-    KoReplaceDialog( QWidget *parent = 0, const char *name = 0, long options = 0, QStringList *findStrings = 0L, QStringList *replaceStrings = 0L );
+    KoReplaceDialog( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList(), const QStringList &replaceStrings = QStringList() );
 
     /**
      * Destructor.
@@ -94,7 +94,7 @@ public:
      * @param history The replacement history.
      * @see #replacementHistory
      */
-    void setReplacementHistory( QStringList *strings );
+    void setReplacementHistory( const QStringList &strings );
 
     /**
      * Returns the list of history items.
