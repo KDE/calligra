@@ -1985,7 +1985,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                     QPoint normalPoint = m_viewMode->viewToNormal( mousep );
                     viewport()->setCursor( m_doc->getMouseCursor( normalPoint, true ) );
                 }
-                else if ( keyev->key() == Key_Delete && m_doc->getFirstSelectedFrame() )
+                else if ( (keyev->key() == Key_Delete ||keyev->key() ==Key_Backspace ) && m_doc->getFirstSelectedFrame() )
                 {
                     m_gui->getView()->editDeleteFrame();
                 }
