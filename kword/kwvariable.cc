@@ -124,6 +124,11 @@ KoVariable *KWVariableCollection::createVariable( int type, short int subtype, K
             varFormat =  coll->format("STRING");
         var = new KWFootNoteVariable( textdoc, varFormat, this, m_doc );
         break;
+    case VT_STATISTIC:
+        if ( !varFormat )
+            varFormat = coll->format("NUMBER");
+        var = new KWStatisticVariable( textdoc, subtype, varFormat, this, m_doc );
+        break;
     default:
         return KoVariableCollection::createVariable( type, subtype, coll, varFormat, textdoc, doc, _correct, _forceDefaultFormat );
     }
@@ -555,3 +560,157 @@ double KWFootNoteVariable::varY() const
         return 0;
     }
 }
+
+
+KWStatisticVariable::KWStatisticVariable( KoTextDocument *textdoc,  int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KWDocument *doc )
+    : KoVariable( textdoc, varFormat, _varColl ),
+      m_doc(doc), m_subtype( subtype )
+{
+}
+
+QStringList KWStatisticVariable::actionTexts()
+{
+    QStringList lst;
+    lst << i18n( "Number of Frame" );
+    lst << i18n( "Number of Picture" );
+    lst << i18n( "Number of Table" );
+    lst << i18n( "Number of Embedded Object" );
+    lst << i18n( "Number of Word" );
+    lst << i18n( "Number of Sentence" );
+    lst << i18n( "Number of Lines" );
+
+    return lst;
+}
+
+void KWStatisticVariable::setVariableSubType( short int subtype )
+{
+    m_subtype = subtype;
+    setVariableFormat(m_doc->variableFormatCollection()->format("NUMBER"));
+}
+
+QStringList KWStatisticVariable::subTypeText()
+{
+    return KWStatisticVariable::actionTexts();
+}
+
+void KWStatisticVariable::saveVariable( QDomElement& varElem )
+{
+    //Now we use oasis format => don't use it.
+}
+
+void KWStatisticVariable::load( QDomElement &elem )
+{
+    //Now we use oasis format
+}
+
+void KWStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+{
+    //TODO
+}
+
+void KWStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    //TODO
+}
+
+QString KWStatisticVariable::fieldCode()
+{
+    if ( m_subtype == VST_STATISTIC_NB_FRAME )
+    {
+        return i18n( "Number of Frame" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_PICTURE )
+    {
+        return i18n( "Number of Picture" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_TABLE )
+    {
+        return i18n( "Number of Table" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_EMBEDDED )
+    {
+        return i18n( "Number of Embedded Object" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_WORD )
+    {
+        return i18n( "Number of Word" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_SENTENCE )
+    {
+        return i18n( "Number of Sentence" );
+    }
+    else if( m_subtype == VST_STATISTIC_NB_LINES )
+    {
+        return i18n( "Number of Lines" );
+    }
+    else
+        return i18n( "Number of Frame" );
+}
+
+
+void KWStatisticVariable::recalc()
+{
+    if ( m_doc->viewMode()->type() == "ModeText")
+    {
+        //necessary to resize it in this mode because in this mode
+        //we don't call KWTextFrameSet::drawFrame()
+        resize();
+        return;
+    }
+    int nb = 0;
+    if ( m_subtype == VST_STATISTIC_NB_FRAME )
+        nb = m_doc->framesetsIterator().count();
+    else
+    {
+        QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+        for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt )
+        {
+            KWFrameSet *frameSet = framesetIt.current();
+            if ( frameSet->isVisible() )
+            {
+                if( m_subtype == VST_STATISTIC_NB_PICTURE && frameSet->type() == FT_PICTURE)
+                {
+                    ++nb;
+                }
+                else if( m_subtype == VST_STATISTIC_NB_TABLE && frameSet->type() == FT_TABLE)
+                {
+                    ++nb;
+                }
+                else if( m_subtype == VST_STATISTIC_NB_EMBEDDED && frameSet->type() == FT_PART )
+                {
+                    ++nb;
+                }
+            }
+        }
+#if 0
+        else if( m_subtype == VST_STATISTIC_NB_WORD )
+        {
+            return i18n( "Number of Word" );
+        }
+        else if( m_subtype == VST_STATISTIC_NB_SENTENCE )
+        {
+            return i18n( "Number of Sentence" );
+        }
+        else if( m_subtype == VST_STATISTIC_NB_LINES )
+        {
+            return i18n( "Number of Lines" );
+        }
+        else
+            return i18n( "Number of Frame" );
+#endif
+    }
+    m_varValue = QVariant(nb);
+    resize();
+    if ( width == -1 )
+        width = 0;
+}
+
+QString KWStatisticVariable::text(bool realValue)
+{
+    if (m_varColl->variableSetting()->displayFieldCode()&& !realValue)
+        return fieldCode();
+    else
+        return m_varFormat->convert( m_varValue );
+}
+
+

@@ -622,6 +622,7 @@ void KWView::setupActions()
     addVariableActions( VT_DATE, KoDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
     addVariableActions( VT_TIME, KoTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
     addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
+    addVariableActions( VT_STATISTIC, KWStatisticVariable::actionTexts(), actionInsertVariable, i18n("&Statistic") );
 
     actionInsertCustom = new KActionMenu( i18n( "&Custom" ),
                                             actionCollection(), "insert_custom" );
