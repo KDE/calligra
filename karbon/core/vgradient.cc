@@ -205,7 +205,7 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 		elementWriter.addAttribute( "svg:offset", QString( "%1" ).arg( colorstop->rampPoint ) );
 		elementWriter.addAttribute( "svg:color", QColor( colorstop->color ).name() );
 		if( colorstop->color.opacity() < 1 )
-			elementWriter.addAttribute( "svg:stop-opacity", QString( "%1%" ).arg( colorstop->color.opacity() * 100. ) );
+			elementWriter.addAttribute( "svg:stop-opacity", QString( "%1" ).arg( colorstop->color.opacity() ) );
 		elementWriter.endElement();
 	}
 
@@ -219,12 +219,51 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 void
 VGradient::loadOasis( const QDomElement &object, KoStyleStack &stack )
 {
+	kdDebug()<<" loadOasis :" << endl;
+	m_type = object.attribute( "draw:style" ) == "radial" ? VGradient::radial : VGradient::linear;
+	if( m_type == VGradient::radial )
+	{
+		// TODO : find out whether Oasis works with boundingBox only?
+		m_origin.setX( object.attribute( "svg:cx", "0.0" ).toDouble() );
+		m_origin.setY( object.attribute( "svg:cy", "0.0" ).toDouble() );
+		double r = object.attribute( "svg:r", "0.0" ).toDouble();
+		m_vector.setX( m_origin.x() + r );
+		m_vector.setY( m_origin.y() );
+	}
+	else
+	{
+		m_origin.setX( object.attribute( "svg:x1", "0.0" ).toDouble() );
+		m_origin.setY( object.attribute( "svg:y1", "0.0" ).toDouble() );
+		m_vector.setX( object.attribute( "svg:x2", "0.0" ).toDouble() );
+		m_vector.setY( object.attribute( "svg:y2", "0.0" ).toDouble() );
+	}
 	if( object.attribute( "svg:spreadMethod" ) == "repeat" )
 		m_repeatMethod = VGradient::repeat;
 	else if( object.attribute( "svg:spreadMethod" ) == "reflect" )
 		m_repeatMethod = VGradient::reflect;
 	else
 		m_repeatMethod = VGradient::none;
+
+	kdDebug()<<" loadOasis :" << object.attribute( "draw:style" ) << endl;
+
+	m_colorStops.clear();
+
+	// load stops
+	QDomNodeList list = object.childNodes();
+	for( uint i = 0; i < list.count(); ++i )
+	{
+		if( list.item( i ).isElement() )
+		{
+			QDomElement colorstop = list.item( i ).toElement();
+
+			if( colorstop.tagName() == "svg:stop" )
+			{
+				VColor color( QColor( colorstop.attribute( "svg:color" ) ) );
+				addStop( color, colorstop.attribute( "svg:offset", "0.0" ).toDouble(), 0.5 );
+			}
+		}
+	}
+	m_colorStops.sort();
 }
 
 void

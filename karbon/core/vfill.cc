@@ -114,7 +114,8 @@ VFill::loadOasis( const QDomElement &object, KoOasisContext &context )
 			setType( VFill::grad );
 			QString style = stack.attribute( "draw:fill-gradient-name" );
 			kdDebug()<<" style gradient name :"<<style<<endl;
-			QDomElement *grad = context.oasisStyles().drawStyles()[ style ];
+			//QDomElement *grad = context.oasisStyles().drawStyles()[ style ];
+			QDomElement *grad = context.oasisStyles().styles()[ style ];
 			if( grad )
 				m_gradient.loadOasis( *grad, stack );
 		}
