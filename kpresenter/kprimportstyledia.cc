@@ -73,7 +73,6 @@ void KPrImportStyleDia::loadFile()
         {
             QDomDocument doc;
             doc.setContent( store->device() );
-#if 0
             QDomElement word = doc.documentElement();
 
             QDomElement stylesElem = word.namedItem( "STYLES" ).toElement();
@@ -87,9 +86,9 @@ void KPrImportStyleDia::loadFile()
                 {
                     QDomElement styleElem = listStyles.item( item ).toElement();
 
-                    KWStyle *sty = new KWStyle( QString::null );
+                    KoStyle *sty = new KoStyle( QString::null );
                     // Load the paraglayout from the <STYLE> element
-                    KoParagLayout lay = KoStyle::loadStyle( styleElem,m_doc->syntaxVersion() );
+                    KoParagLayout lay = KoStyle::loadStyle( styleElem,2 );
                     // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
                     lay.style = sty;
                     sty->paragLayout() = lay;
@@ -109,13 +108,13 @@ void KPrImportStyleDia::loadFile()
 
                     // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
                     sty->setFollowingStyle( sty );
-
+#if 0
                     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
                     if ( !formatElem.isNull() )
                         sty->format() = KWTextParag::loadFormat( formatElem, 0L, m_doc->defaultFont() );
                     else
                         kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
-
+#endif
                     // Style created, now let's try to add it
                     m_styleList.append(sty);
 
@@ -136,19 +135,18 @@ void KPrImportStyleDia::loadFile()
                     if ( m_insertStyle && m_insertStyle->contains( *it ) )
                         newName = (*m_insertStyle)[ *it ];
 
-                    KWStyle * style = findStyle(newName);
+                    KoStyle * style = findStyle(newName);
                     if ( style )
                         m_styleList.at(i++)->setFollowingStyle( style );
                 }
 
             }
-#endif
             initList();
         }
         else
         {
             KMessageBox::error( this,
-                                i18n("File is not a kword file!"),
+                                i18n("File is not a kpresenter file!"),
                                 i18n("Import Style"));
         }
         store->close();
