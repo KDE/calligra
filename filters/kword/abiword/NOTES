@@ -33,6 +33,9 @@
    "-//W3C//DTD ABW 1.0 Strict//EN". (Wrong is the W3C part! W3C has nothing to
    do with AbiWord. AbiWord Bug #1882)
 
+   - The "correct doctype": (AbiWord CVS 2001-08-21) with a DOCTYPE of:
+   <!DOCTYPE abw PUBLIC "-//ABISOURCE//DTD ABW 1.0 Strict//EN" "http://www.abisource.com/awml.dtd">
+
  (They are NOT official names; it is just how I have named them.)
 
  They may be also other variations of the file format!
@@ -41,7 +44,7 @@
  will not be happy if you tell him that his sub-version is not supported!
  
  However to make it easier all these formats differ mainly only in the header.
- (Only the "awml" formats has different names for some tags.)
+ (Only the "awml" format has different names for some tags.)
 
  Additionally, some files ("anonymous" ones?) seems to have tags and attributes
  in upper case. This must also be taken care of.
