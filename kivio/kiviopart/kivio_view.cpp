@@ -137,16 +137,13 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   dcop = 0;
   dcopObject(); // build it
 
-  KStatusBar* sb = statusBar();
-
-  if(sb) {
-    QString unit = KoUnit::unitName(m_pDoc->units());
-    KoPoint xy(0, 0);
-    QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
-      .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
-    sb->removeItem(MOUSEPOS_TEXT);
-    sb->insertItem(text, MOUSEPOS_TEXT, 0, true);
-  }
+  // Add coords to the statusbar
+  QString unit = KoUnit::unitName(m_pDoc->units());
+  KoPoint xy(0, 0);
+  QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
+  .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
+  m_coordSLbl = new KStatusBarLabel(text, 1000);
+  addStatusBarItem(m_coordSLbl, 0, true);
 
   bool isModified = doc->isModified();
   m_pTools = new ToolController(this);
@@ -1709,16 +1706,15 @@ void KivioView::setMousePos( int mx, int my )
 {
   vRuler->setMousePos(mx, my);
   hRuler->setMousePos(mx, my);
-  KStatusBar* sb = statusBar();
 
-  if(sb && (mx >= 0) && (my >= 0)) {
+  if((mx >= 0) && (my >= 0)) {
     QString unit = KoUnit::unitName(m_pDoc->units());
     KoPoint xy = m_pCanvas->mapFromScreen(QPoint(mx, my));
     xy.setX(KoUnit::ptToUnit(xy.x(), m_pDoc->units()));
     xy.setY(KoUnit::ptToUnit(xy.y(), m_pDoc->units()));
     QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
       .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
-    sb->changeItem(text, MOUSEPOS_TEXT);
+    m_coordSLbl->setText(text);
   }
 }
 

@@ -62,6 +62,7 @@ class DCOPObject;
 class KoRuler;
 class KoZoomHandler;
 class KoUnitDoubleSpinBox;
+class KStatusBarLabel;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -336,6 +337,8 @@ class KivioView : public KoView
     DCOPObject *dcop;
 
     KoZoomHandler* m_zoomHandler;
+
+    KStatusBarLabel* m_coordSLbl;
 };
 
 #endif
