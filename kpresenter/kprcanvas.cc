@@ -137,7 +137,12 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
 /*======================== destructor ============================*/
 KPrCanvas::~KPrCanvas()
 {
+    // disconnect all signals to avoid crashes on exit
+    // (exitEditMode) emits signals
+    disconnect( this, 0, 0, 0 );
+
     // deactivate possible opened textobject to avoid double deletion, KPTextObject deletes this already
+
     exitEditMode();
 
     delete presMenu;

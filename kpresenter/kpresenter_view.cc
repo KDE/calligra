@@ -353,7 +353,6 @@ KPresenterView::~KPresenterView()
     delete rb_lbegin;
     delete rb_lend;
     delete dcop;
-    delete m_canvas; // it's a child widget, but it emits a signal on destruction
     delete m_specialCharDlg;
     delete m_sbPageLabel;
     delete notebar;
