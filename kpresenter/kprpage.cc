@@ -2081,10 +2081,10 @@ KCommand* KPrPage::setPieSettings( PieType pieType, int angle, int len, int flag
         if(it.current()->getType()==OT_PIE)
         {
 	    if ( it.current()->isSelected() ) {
-		tmp = new PieValueCmd::PieValues;
                 KPPieObject *obj= dynamic_cast<KPPieObject*>( it.current() );
                 if(obj)
                 {
+                    tmp = new PieValueCmd::PieValues;
                     tmp->pieType = obj->getPieType();
                     tmp->pieAngle = obj->getPieAngle();
                     tmp->pieLength = obj->getPieLength();
@@ -2128,11 +2128,10 @@ KCommand* KPrPage::setRectSettings( int _rx, int _ry, int flags )
         if(it.current()->getType()==OT_RECT)
         {
     	    if ( it.current()->isSelected() ) {
-		tmp = new RectValueCmd::RectValues;
                 KPRectObject *obj=dynamic_cast<KPRectObject*>( it.current() );
                 if(obj)
                 {
-
+                    tmp = new RectValueCmd::RectValues;
                     obj->getRnds( tmp->xRnd, tmp->yRnd );
                     _oldValues.append( tmp );
                     _objects.append(it.current() );
@@ -2179,9 +2178,9 @@ KCommand* KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersVa
         {
             if ( it.current()->isSelected() ) {
                 tmp = new PolygonSettingCmd::PolygonSettings;
-                tmp->checkConcavePolygon = dynamic_cast<KPPolygonObject*>(it.current())->getCheckConcavePolygon();
-                tmp->cornersValue = dynamic_cast<KPPolygonObject*>(it.current())->getCornersValue();
-                tmp->sharpnessValue = dynamic_cast<KPPolygonObject*>(it.current())->getSharpnessValue();
+                tmp->checkConcavePolygon = static_cast<KPPolygonObject*>(it.current())->getCheckConcavePolygon();
+                tmp->cornersValue = static_cast<KPPolygonObject*>(it.current())->getCornersValue();
+                tmp->sharpnessValue = static_cast<KPPolygonObject*>(it.current())->getSharpnessValue();
                 _oldSettings.append( tmp );
                 _objects.append( it.current() );
 
@@ -2230,11 +2229,11 @@ KCommand* KPrPage::setPictureSettings( PictureMirrorType _mirrorType, int _depth
         if ( it.current()->getType() == OT_PICTURE ) {
             if ( it.current()->isSelected() ) {
                 tmp = new PictureSettingCmd::PictureSettings;
-                tmp->mirrorType = dynamic_cast<KPPixmapObject*>(it.current())->getPictureMirrorType();
-                tmp->depth = dynamic_cast<KPPixmapObject*>(it.current())->getPictureDepth();
-                tmp->swapRGB = dynamic_cast<KPPixmapObject*>(it.current())->getPictureSwapRGB();
-                tmp->grayscal = dynamic_cast<KPPixmapObject*>(it.current())->getPictureGrayscal();
-                tmp->bright = dynamic_cast<KPPixmapObject*>(it.current())->getPictureBright();
+                tmp->mirrorType = static_cast<KPPixmapObject*>(it.current())->getPictureMirrorType();
+                tmp->depth =  static_cast<KPPixmapObject*>(it.current())->getPictureDepth();
+                tmp->swapRGB =  static_cast<KPPixmapObject*>(it.current())->getPictureSwapRGB();
+                tmp->grayscal =  static_cast<KPPixmapObject*>(it.current())->getPictureGrayscal();
+                tmp->bright =  static_cast<KPPixmapObject*>(it.current())->getPictureBright();
                 _oldSettings.append( tmp );
                 _objects.append( it.current() );
 
@@ -2471,16 +2470,14 @@ void KPrPage::changePicture( const QString & filename )
     {
         if(it.current()->isSelected() && it.current()->getType()==OT_PICTURE)
         {
-    	    KPPixmapObject *pix = new KPPixmapObject( m_doc->getPictureCollection(), image.getKey() );
             KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
             if( obj)
             {
+                KPPixmapObject *pix = new KPPixmapObject( m_doc->getPictureCollection(), image.getKey() );
                 ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change Pixmap" ),obj,pix, m_doc,this );
                 chgPixCmd->execute();
                 m_doc->addCommand( chgPixCmd );
             }
-            else
-                delete pix;
 	    break;
 	}
     }
