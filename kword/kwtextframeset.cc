@@ -2075,8 +2075,7 @@ KoTextFormat *KWTextFrameSet::currentFormat() const
 KCommand *KWTextFrameSet::setFormatCommand( KoTextFormat * newFormat, int flags, bool zoomFont )
 {
     m_textobj->textDocument()->selectAll( KoTextDocument::Temp );
-    KoTextFormat* current = currentFormat();
-    KCommand *cmd = m_textobj->setFormatCommand( 0L, current, newFormat, flags, zoomFont, KoTextDocument::Temp );
+    KCommand *cmd = m_textobj->setFormatCommand( 0L, 0L, newFormat, flags, zoomFont, KoTextDocument::Temp );
     m_textobj->textDocument()->removeSelection( KoTextDocument::Temp );
     return cmd;
 }
