@@ -376,7 +376,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		a = qRound( 255 * m_stroke->color().opacity() );
 		strokeColor = ( 0 << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
 
-		double ratio = sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
+		double ratio = m_zoomFactor;//sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
 		if( m_stroke->dashArray().count() > 0 )
 		{
 			// there are dashes to be rendered
