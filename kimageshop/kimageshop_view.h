@@ -22,6 +22,7 @@
 #ifndef __kimageshop_view_h__
 #define __kimageshop_view_h__
 
+#include <qcolor.h>
 #include <qwidget.h>
 
 #include <opMenu.h>
@@ -91,6 +92,8 @@ public slots:
   void scrollV(int);
 
   void slotSetZoomFactor(float);
+  void slotSetFGColor(const QColor&);
+  void slotSetBGColor(const QColor&);
 
   virtual void slotEditUndo();
   virtual void slotEditUndo2();
@@ -183,6 +186,7 @@ private:
   ZoomTool      *m_pZoomTool;
   Brush         *m_pBrush; // current brush
   ColorDialog   *m_pColorDialog;
+  QColor        m_fg, m_bg;
   float         m_ZoomFactor;
 };
 

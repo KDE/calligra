@@ -35,7 +35,7 @@ class KVector
 
   bool isNull()	const;
 
-  double length();
+  double length() const;
 
   double	 x() const;
   double	 y() const;
@@ -46,7 +46,7 @@ class KVector
 
   KVector &normalize();
   KVector &crossProduct(const KVector &);
-  double  dotProduct(const KVector &);
+  double  dotProduct(const KVector &) const;
 
   KVector &operator+=(const KVector &);
   KVector &operator-=(const KVector &);
@@ -93,10 +93,10 @@ inline KVector::KVector(long x, long y, long z)
 inline bool KVector::isNull() const
 { return m_x == 0 && m_y == 0 && m_z == 0; }
 
-inline double KVector::length()
+inline double KVector::length() const
 {  return (sqrt(m_x*m_x + m_y*m_y + m_z*m_z)); }
 
-inline double KVector::dotProduct(const KVector &v)
+inline double KVector::dotProduct(const KVector &v) const
 { return m_x*v.m_x + m_y*v.m_y + m_z*v.m_z; }
 
 inline double KVector::x() const

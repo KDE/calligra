@@ -76,6 +76,8 @@ KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopD
   m_pHRuler = 0L;
   m_pVRuler = 0L;
   m_ZoomFactor = 1;
+  m_fg = QColor(255,255,255);
+  m_bg = QColor(0,0,0);
 
   QObject::connect(m_pDoc, SIGNAL(sigUpdateView(const QRect&)), this, SLOT(slotUpdateView(const QRect&)));
 }
@@ -893,6 +895,16 @@ void KImageShopView::changeRedo( QString _text, bool _enable )
 
     cout << "REDO not enabled" << endl;
   }
+}
+
+void  KImageShopView::slotSetFGColor(const QColor& c)
+{
+  m_fg = c;
+}
+
+void  KImageShopView::slotSetBGColor(const QColor& c)
+{
+  m_bg = c;
 }
 
 #include "kimageshop_view.moc"
