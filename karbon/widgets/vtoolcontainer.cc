@@ -5,7 +5,7 @@
 #include <qbuttongroup.h>
 #include <qtoolbutton.h>
 
-#include <kdualcolorbtn.h>
+#include <kdualcolorbutton.h>
 #include <kdualcolorbutton.h>
 #include <kiconloader.h>
 #include <koMainWindow.h>
