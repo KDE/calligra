@@ -330,7 +330,7 @@ KarbonView::initActions()
 		i18n( "&Rotate Objects" ), "rotate", 0, this,
 		SLOT( rotateTool() ), actionCollection(), "tool_rotate" );
 	m_scaleToolAction = new KToggleAction(
-		i18n( "&Scale Objects" ), "star", 0, this,
+		i18n( "&Scale Objects" ), "scale", 0, this,
 		SLOT( scaleTool() ), actionCollection(), "tool_scale" );
 	m_spiralToolAction = new KToggleAction(
 		i18n( "S&piral" ), "spiral", 0, this,
