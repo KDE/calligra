@@ -27,6 +27,7 @@ KexiPropertySubEditor::KexiPropertySubEditor(QWidget *parent, KexiProperty *prop
 {
 	m_childWidget = 0;
 	m_property = property;
+	m_leaveTheSpaceForRevertButton = false;
 }
 
 bool

@@ -95,6 +95,7 @@ PropIntSpinBox::eventFilter(QObject *o, QEvent *e)
 PropertyEditorSpin::PropertyEditorSpin(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent,property, name)
 {
+	m_leaveTheSpaceForRevertButton = true;
 	m_spinBox = new PropIntSpinBox(0,50000, 1, 0, 10, this);
 	m_spinBox->resize(width(), height());
 	m_spinBox->setValue(property->value().toInt());
@@ -152,6 +153,7 @@ PropDoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 PropertyEditorDblSpin::PropertyEditorDblSpin(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
+	m_leaveTheSpaceForRevertButton = true;
 	m_spinBox = new PropDoubleSpinBox(this);
 	m_spinBox->resize(width(), height());
 	setValue( property->value() );

@@ -28,6 +28,7 @@
 PropertyEditorDate::PropertyEditorDate(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
+	m_leaveTheSpaceForRevertButton = true;
 	m_dateedit = new QDateEdit(property->value().asDate(), this);
 	m_dateedit->resize(width(), height());
 	m_dateedit->show();
@@ -59,6 +60,7 @@ PropertyEditorDate::valueChanged(const QDate &date)
 PropertyEditorTime::PropertyEditorTime(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
+	m_leaveTheSpaceForRevertButton = true;
 	m_timeedit = new QTimeEdit(property->value().asTime(), this);
 	m_timeedit->resize(width(), height());
 	m_timeedit->show();
@@ -91,6 +93,7 @@ PropertyEditorTime::valueChanged(const QTime &time)
 PropertyEditorDateTime::PropertyEditorDateTime(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
+	m_leaveTheSpaceForRevertButton = true;
 	m_datetime = new QDateTimeEdit(property->value().asDateTime(), this);
 	m_datetime->resize(width(), height());
 	m_datetime->show();

@@ -191,6 +191,9 @@ KexiPropertyEditor::showDefaultsButton( bool show )
 	QRect geometry(columnWidth(0), y, columnWidth(1), m_editItem->height());
 
 	if (!show) {
+		if (m_currentEditor->leavesTheSpaceForRevertButton()) {
+			geometry.setWidth(geometry.width()-geometry.height());
+		}
 		m_currentEditor->resize(geometry.width(), geometry.height());
 		m_defaults->hide();
 		return;

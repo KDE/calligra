@@ -41,6 +41,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 		//! Sets \a w as editor 's widget, ie the widget which events are filtered and which is resized.
 		void			setWidget(QWidget *w);
 
+		//! \sa m_leaveTheSpaceForRevertButton description
+		bool leavesTheSpaceForRevertButton() const { return m_leaveTheSpaceForRevertButton; }
 	signals:
 		//! Validate the input in the editor.
 		void			accept(KexiPropertySubEditor *);
@@ -54,6 +56,10 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertySubEditor : public QWidget
 
 		KexiProperty *m_property;
 		QWidget *m_childWidget;
+		/*! true if there should be left space at the right hand for the Revert Button
+		 False by default. Integer editor (spinbox) sets this to true to avoid spin 
+		 arrows clicking inconvenience. */
+		bool m_leaveTheSpaceForRevertButton;
 };
 
 #endif
