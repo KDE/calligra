@@ -952,7 +952,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
     default:
    	 	qDebug("KexiTableView::KeyPressEvent(): default");
-		if (!e->text().isEmpty() && !e->text()[0].isPrint() ) {
+		if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint() ) {
 			kdDebug() << "NOT PRINTABLE" <<endl;
 			e->ignore();
 			return;
