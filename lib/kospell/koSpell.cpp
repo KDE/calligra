@@ -325,7 +325,7 @@ bool KOSpell::spellWord( const QString &_word )
     QStringList lst =resultCheckWord( _word );
     if ( lst.isEmpty() && ((lastpos >= (int)origbuffer.length()-1)|| lastpos<0) )
     {
-        emit death();
+        emit done( origbuffer );
         m_status = Finished;
         return false;
     }
@@ -417,6 +417,7 @@ void KOSpell::previousWord()
 
 bool KOSpell::check( const QString &_buffer, bool _usedialog )
 {
+    lastpos = -1;
     usedialog = _usedialog;
     origbuffer = _buffer;
     if ( ( totalpos = origbuffer.length() ) == 0 )
