@@ -129,9 +129,10 @@ public:
     KoStyle *followingStyle() const { return m_followingStyle; }
     void setFollowingStyle( KoStyle *fst ) { m_followingStyle = fst; }
 
-    void save( QDomElement parentElem, KoZoomHandler* zh );
+    // Saves the name, layout, the following style and the outline bool. Not the format.
     void saveStyle( QDomElement & parentElem );
-    static KoParagLayout loadStyle( QDomElement & parentElem, int docVersion=2 );
+    // Loads the name, layout and the outline bool. Not the "following style" nor the format.
+    void loadStyle( QDomElement & parentElem, int docVersion = 2 );
 
     static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue)
       {
@@ -151,8 +152,11 @@ public:
     int inheritedParagLayoutFlag() const { return m_inheritedParagLayoutFlag; }
     int inheritedFormatFlag() const { return m_inheritedFormatFlag; }
 
-
     void propagateChanges( int paragLayoutFlag, int formatFlag );
+
+    // If true, paragraphs with this style will be included in the table of contents
+    bool isOutline() const { return m_bOutline; }
+    void setOutline( bool b );
 
 private:
     KoParagLayout m_paragLayout;
@@ -160,6 +164,7 @@ private:
     KoStyle *m_parentStyle;
     int m_inheritedParagLayoutFlag;
     int m_inheritedFormatFlag;
+    bool m_bOutline;
 };
 
 #endif

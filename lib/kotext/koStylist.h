@@ -41,6 +41,7 @@ class QPushButton;
 class QTabWidget;
 class QWidget;
 class KoTextDocument;
+class KoStyleManagerPrivate;
 
 /******************************************************************/
 /* Class: KoStyleManager                                          */
@@ -51,6 +52,7 @@ class KoStyleManager : public KDialogBase
 
 public:
     KoStyleManager( QWidget *_parent,KoUnit::Unit unit,const QPtrList<KoStyle> & style, const QString & activeStyleName );
+    virtual ~KoStyleManager();
 
     virtual KoStyle* addStyleTemplate(KoStyle *style)=0;
     //virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )=0;
@@ -71,6 +73,7 @@ protected:
     void save();
     int styleIndex( int pos );
 
+private:
     QTabWidget *m_tabs;
     QListBox *m_stylesList;
     QLineEdit *m_nameString;
@@ -80,7 +83,7 @@ protected:
     QPushButton *m_moveUpButton;
     QPushButton *m_moveDownButton;
     QComboBox *m_inheritCombo;
-    KoStylePreview *preview;
+    KoStyleManagerPrivate *d;
 
     KoStyle *m_currentStyle;
     QPtrList<KoStyle> m_origStyles;      // internal list of orig styles we have modified

@@ -139,6 +139,8 @@ void KoStyleCollection::updateStyleListOrder( const QStringList &list )
 #endif
 }
 
+/////////////
+
 KoCharStyle::KoCharStyle( const QString & name )
 {
     m_name = name;
@@ -167,7 +169,7 @@ KoTextFormat & KoCharStyle::format()
     return m_format;
 }
 
-
+///////////////////////////
 
 KoStyle::KoStyle( const QString & name )
     : KoCharStyle( name )
@@ -176,11 +178,12 @@ KoStyle::KoStyle( const QString & name )
     m_shortCut_name = QString::null;
     m_followingStyle = this;
 
-    // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
+    // This way, KoTextParag::setParagLayout also sets the style pointer, to this style
     m_paragLayout.style = this;
     m_parentStyle = 0L;
     m_inheritedParagLayoutFlag = 0;
     m_inheritedFormatFlag = 0;
+    m_bOutline = false;
 }
 
 KoStyle::KoStyle( const KoStyle & rhs )
@@ -200,7 +203,7 @@ void KoStyle::operator=( const KoStyle &rhs )
     m_parentStyle = rhs.m_parentStyle;
     m_inheritedParagLayoutFlag = rhs.m_inheritedParagLayoutFlag;
     m_inheritedFormatFlag = rhs.m_inheritedFormatFlag;
-
+    m_bOutline = rhs.m_bOutline;
 }
 
 void KoStyle::saveStyle( QDomElement & parentElem )
@@ -213,18 +216,30 @@ void KoStyle::saveStyle( QDomElement & parentElem )
         parentElem.appendChild( element );
         element.setAttribute( "name", followingStyle()->name() );
     }
+    // TODO save parent style, and inherited flags.
+
+    parentElem.setAttribute( "outline", m_bOutline ? "true" : "false" );
 }
 
-// Create a KoParagLayout from XML.
-KoParagLayout KoStyle::loadStyle( QDomElement & parentElem, int docVersion )
+void KoStyle::loadStyle( QDomElement & parentElem, int docVersion )
 {
     KoParagLayout layout;
-
     KoParagLayout::loadParagLayout( layout, parentElem, docVersion );
 
-    // The followingStyle stuff is done by KWDocument after loading all styles.
+    // This way, KoTextParag::setParagLayout also sets the style pointer, to this style
+    layout.style = this;
+    m_paragLayout = layout;
 
-    return layout;
+    // Load name
+    QDomElement nameElem = parentElem.namedItem("NAME").toElement();
+    if ( !nameElem.isNull() )
+        m_name = nameElem.attribute("value");
+    else
+        kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
+
+    // The followingStyle stuff has to be done after loading all styles.
+
+    m_bOutline = parentElem.attribute( "outline" ) == "true";
 }
 
 
@@ -278,4 +293,11 @@ void KoStyle::propagateChanges( int paragLayoutFlag, int formatFlag )
         setStyle( layout.style );
     }
 #endif
+    // TODO a flag for the "is outline" bool? Otherwise we have no way to inherit
+    // that property (and possibly reset it).
+}
+
+void KoStyle::setOutline( bool b )
+{
+    m_bOutline = b;
 }

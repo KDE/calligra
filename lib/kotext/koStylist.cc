@@ -35,6 +35,8 @@
 //#include "kotextparag.h"
 #include "kozoomhandler.h"
 #include <koGlobal.h>
+#include <qcheckbox.h>
+
 /******************************************************************/
 /* Class: KoStyleManager                                          */
 /******************************************************************/
@@ -50,12 +52,19 @@
    containing the orig and the copy and an enum plus some simple methods..
    Well; just keep that for those loonly uninspiring days :) (Thomas Z)
 */
+class KoStyleManagerPrivate
+{
+public:
+    KoStylePreview* preview;
+    QCheckBox* cbIncludeInTOC;
+};
 
 KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrList<KoStyle> & style, const QString & activeStyleName)
     : KDialogBase( _parent, "Stylist", true,
                    i18n("Style Manager"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply )
 {
+    d = new KoStyleManagerPrivate;
     //setWFlags(getWFlags() || WDestructiveClose);
     m_currentStyle =0L;
     noSignals=true;
@@ -99,6 +108,11 @@ KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrLi
     noSignals=false;
     switchStyle();
     setInitialSize( QSize( 600, 570 ) );
+}
+
+KoStyleManager::~KoStyleManager()
+{
+    delete d;
 }
 
 void KoStyleManager::addTab( KoStyleManagerTab * tab )
@@ -160,12 +174,8 @@ void KoStyleManager::addGeneralTab() {
     QWidget *tab = new QWidget( m_tabs );
 
     QGridLayout *tabLayout = new QGridLayout( tab );
-    tabLayout->setSpacing( 6 );
-    tabLayout->setMargin( 11 );
-
-    preview = new KoStylePreview( i18n( "Preview" ), i18n( "The quick brown fox jumps over the lazy dog" ), tab, "stylepreview" );
-
-    tabLayout->addMultiCellWidget( preview, 3, 3, 0, 1 );
+    tabLayout->setSpacing( KDialog::spacingHint() );
+    tabLayout->setMargin( KDialog::marginHint() );
 
     m_nameString = new QLineEdit( tab );
     m_nameString->resize(m_nameString->sizeHint() );
@@ -196,6 +206,13 @@ void KoStyleManager::addGeneralTab() {
     inheritStyleLabel->setText( i18n( "Inherit style:" ) );
 
     tabLayout->addWidget( inheritStyleLabel, 2, 0 );
+
+    d->cbIncludeInTOC = new QCheckBox( i18n("Include in table of contents"), tab );
+    tabLayout->addMultiCellWidget( d->cbIncludeInTOC, 3, 3, 0, 1 );
+
+    d->preview = new KoStylePreview( i18n( "Preview" ), i18n( "The quick brown fox jumps over the lazy dog" ), tab, "stylepreview" );
+
+    tabLayout->addMultiCellWidget( d->preview, 4, 4, 0, 1 );
 
     m_tabs->insertTab( tab, i18n( "General" ) );
 
@@ -263,6 +280,7 @@ int KoStyleManager::styleIndex( int pos ) {
     return 0;
 }
 
+// Update the GUI so that it shows m_currentStyle
 void KoStyleManager::updateGUI() {
     kdDebug(32500) << "KoStyleManager::updateGUI m_currentStyle=" << m_currentStyle << " " << m_currentStyle->name() << endl;
     QPtrListIterator<KoStyleManagerTab> it( m_tabsList );
@@ -296,6 +314,7 @@ void KoStyleManager::updateGUI() {
             m_inheritCombo->setCurrentItem( 0 );//none !!!
     }
 
+    d->cbIncludeInTOC->setChecked( m_currentStyle->isOutline() );
 
     // update delete button (can't delete first style);
     m_deleteButton->setEnabled(m_stylesList->currentItem() != 0);
@@ -308,8 +327,8 @@ void KoStyleManager::updateGUI() {
 
 void KoStyleManager::updatePreview()
 {
-    preview->setStyle(m_currentStyle);
-    preview->repaint(true);
+    d->preview->setStyle(m_currentStyle);
+    d->preview->repaint(true);
 }
 
 void KoStyleManager::save() {
@@ -331,6 +350,7 @@ void KoStyleManager::save() {
         int indexNextStyle = styleIndex( m_styleCombo->currentItem() );
         m_currentStyle->setFollowingStyle( m_changedStyles.at( indexNextStyle ) );
         m_currentStyle->setParentStyle( style( m_inheritCombo->currentText() ) );
+        m_currentStyle->setOutline( d->cbIncludeInTOC->isChecked() );
     }
 }
 
@@ -436,11 +456,11 @@ void KoStyleManager::moveUpStyle()
 
     pos=m_stylesList->currentItem();
     noSignals=true;
-    m_stylesList->changeItem( m_stylesList->text ( pos-1 ),pos);
-    m_styleCombo->changeItem( m_stylesList->text ( pos-1 ),pos);
+    m_stylesList->changeItem( m_stylesList->text( pos-1 ), pos );
+    m_styleCombo->changeItem( m_stylesList->text( pos-1 ), pos );
 
-    m_stylesList->changeItem( currentStyleName ,pos-1);
-    m_styleCombo->changeItem( currentStyleName ,pos-1);
+    m_stylesList->changeItem( currentStyleName, pos-1 );
+    m_styleCombo->changeItem( currentStyleName, pos-1 );
 
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
@@ -688,4 +708,3 @@ void KoStyleFontTab::resizeEvent( QResizeEvent *e )
     QWidget::resizeEvent( e );
     if ( m_chooser ) m_chooser->resize( size() );
 }
-
