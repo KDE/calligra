@@ -23,7 +23,7 @@
 #define __kspread_dlg_sort__
 
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qstringlist.h>
 
 class KSpreadView;
@@ -37,20 +37,20 @@ class QRadioButton;
 class QTabWidget;
 class QWidget;
 
-class KSpreadSortDlg : public QDialog
-{ 
+class KSpreadSortDlg : public KDialogBase
+{
   Q_OBJECT
 
  public:
-  KSpreadSortDlg( KSpreadView * parent, const char * name = 0, 
-                  bool modal = false, WFlags fl = 0 );
+  KSpreadSortDlg( KSpreadView * parent, const char * name = 0,
+                  bool modal = false );
   ~KSpreadSortDlg();
 
  private slots:
   void sortKey2textChanged( int );
   void useCustomListsStateChanged( int );
   void firstRowHeaderChanged( int );
-  void slotOk();
+  virtual void slotOk();
   void slotOrientationChanged(int id);
 
  private:
@@ -85,8 +85,6 @@ class KSpreadSortDlg : public QDialog
   QComboBox    * m_outputTable;
   QLineEdit    * m_outputCell;
 
-  QPushButton  * m_buttonOk;
-  QPushButton  * m_buttonCancel;
 };
 
-#endif 
+#endif

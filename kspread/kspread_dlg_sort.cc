@@ -43,10 +43,11 @@
 #include <qrect.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
+#include <qvbox.h>
 
 KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
-                                bool modal, WFlags fl )
-  : QDialog( parent, name, modal, fl ),
+                                bool modal )
+    : KDialogBase( parent, name, modal,"Sort",Ok|Cancel ),
     m_pView( parent )
 {
   if ( !name )
@@ -54,12 +55,11 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
 
   resize( 528, 316 );
   setCaption( i18n( "Sort - Attention: This is still Work in Progress!" ) );
-  setSizeGripEnabled( true );
+  //setSizeGripEnabled( true );
 
-  QVBoxLayout * KSpreadSortDlgLayout
-    = new QVBoxLayout( this, 11, 6, "KSpreadSortDlgLayout");
+  QVBox *page = makeVBoxMainWidget();
 
-  m_tabWidget = new QTabWidget( this, "m_tabWidget" );
+  m_tabWidget = new QTabWidget( page, "m_tabWidget" );
 
   m_page1 = new QWidget( m_tabWidget, "m_page1" );
   QGridLayout * page1Layout
@@ -203,29 +203,11 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
 
   page2Layout->addMultiCellWidget( resultToBox, 1, 1, 0, 1 );
   m_tabWidget->insertTab( m_page2, i18n( "Options" ) );
-  KSpreadSortDlgLayout->addWidget( m_tabWidget );
 
   QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
   QSpacerItem * spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding,
                                             QSizePolicy::Minimum );
   Layout1->addItem( spacer_2 );
-
-  m_buttonOk = new QPushButton( this, "m_buttonOk" );
-  m_buttonOk->setText( i18n( "&OK" ) );
-  m_buttonOk->setAccel( 0 );
-  m_buttonOk->setAutoDefault( TRUE );
-  m_buttonOk->setDefault( TRUE );
-  Layout1->addWidget( m_buttonOk );
-
-  m_buttonCancel = new QPushButton( this, "buttonCancel" );
-  m_buttonCancel->setText( i18n( "&Cancel" ) );
-  m_buttonCancel->setAccel( 0 );
-  m_buttonCancel->setAutoDefault( TRUE );
-  Layout1->addWidget( m_buttonCancel );
-  KSpreadSortDlgLayout->addLayout( Layout1 );
-
-  connect( m_buttonOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 
   connect( m_sortKey2, SIGNAL( activated( int ) ), this,
            SLOT( sortKey2textChanged( int ) ) );
