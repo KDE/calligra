@@ -5480,18 +5480,25 @@ void KWView::slotFrameSetEditChanged()
     actionInsertVariable->setEnabled(state);
     actionInsertExpression->setEnabled(state);
 
+    changeFootEndNoteState();
     //frameset different of header/footer
     state= state && edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager() && !edit->frameSet()->isFootEndNote();
-
     actionInsertContents->setEnabled(state);
     actionInsertFrameBreak->setEnabled( state );
+    slotUpdateRuler();
+}
+
+void KWView::changeFootEndNoteState()
+{
+    bool rw = koDocument()->isReadWrite();
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    bool state= state && edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager() && !edit->frameSet()->isFootEndNote();
     QString mode=m_gui->canvasWidget()->viewMode()->type();
     state =state && (mode!="ModeText");
     actionInsertFootEndNote->setEnabled( state && (edit && (edit->frameSet()==m_doc->frameSet(0))));
     state=  rw && edit && edit->frameSet() && !edit->frameSet()->isFootEndNote()&& (mode!="ModeText");
 
     actionEditFootEndNote->setEnabled( state);
-    slotUpdateRuler();
 }
 
 void KWView::changeFootNoteMenuItem( bool _footnote)
@@ -6081,8 +6088,7 @@ void KWView::switchModeView()
     actionToolsCreatePart->setEnabled(state);
     actionInsertFormula->setEnabled(state);
     actionInsertTable->setEnabled(state);
-    actionInsertFootEndNote->setEnabled( state );
-    actionEditFootEndNote->setEnabled( state );
+    changeFootEndNoteState();
     actionViewFooter->setEnabled( state && m_doc->processingType() == KWDocument::WP );
     actionViewHeader->setEnabled( state && m_doc->processingType() == KWDocument::WP );
     //actionViewTextMode->setEnabled(m_doc->processingType()==KWDocument::WP);

@@ -454,6 +454,7 @@ protected:
     void textStyleSelected( KoStyle *_sty );
     void frameStyleSelected( KWFrameStyle *_sty );
     void tableStyleSelected( KWTableStyle *_sty );
+    void changeFootEndNoteState();
 
 private:
     KWDocument *m_doc;
