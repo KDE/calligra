@@ -111,6 +111,19 @@ QDomElement GObject::writeToXml(QDomDocument &document)
   return go;
 }
 
+void GObject::drawNode(QPainter &p, int x, int y, bool active)
+{
+  p.save();
+  QWMatrix e;
+  p.scale(1.0, 1.0);
+  QBrush brush(Qt::magenta);
+  p.setBrush(brush);
+  p.setPen(Qt::black);
+  p.drawRect(x - 3, y - 3, 7, 7);
+  p.fillRect(x - 2, y - 2, 5, 5, brush);
+  p.restore();
+}
+
 void GObject::setZoomFactor(double f, double pf)
 {
 
@@ -311,7 +324,7 @@ void GObject::changeStroked(bool stroked)
   st.stroked(stroked);
 }
 
-void GObject::changeFilled(bool filled)
+void GObject::changeFilled(int filled)
 {
   st.filled(filled);
 }

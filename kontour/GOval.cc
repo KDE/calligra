@@ -91,24 +91,6 @@ void GOval::startPoint(const KoPoint &p)
 
 void GOval::endPoint(const KoPoint &p)
 {
-/*  if(circleFlag && ePoint.x() != 0 && ePoint.y() != 0)
-  {
-      double dx = (double) fabs (p.x () - sPoint.x ());
-      double dy = (double) fabs (p.y () - sPoint.y ());
-      double xoff = p.x () - sPoint.x ();
-      double yoff = p.y () - sPoint.y ();
-      if (dx > dy)
-      {
-         ePoint.x (p.x ());
-         ePoint.y (sPoint.y () + xoff);
-      }
-      else
-      {
-         ePoint.x (sPoint.x () + yoff);
-         ePoint.y (p.y ());
-      }
-  }
-  else*/
   ePoint = p;
   calcBoundingBox();
 }
@@ -151,7 +133,7 @@ void GOval::draw(QPainter &p, bool withBasePoints, bool outline, bool)
   setBrush(&p);
 
   p.drawEllipse((int)sPoint.x(), (int)sPoint.y(), (int)(ePoint.x() - sPoint.x()), (int)(ePoint.y() - sPoint.y()));
-  
+
   p.restore();
 
 /*  double alen = 0;

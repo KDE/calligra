@@ -122,6 +122,21 @@ void GRect::draw(QPainter &p, bool withBasePoints, bool outline, bool)
   
   p.restore();
 
+  if(withBasePoints)
+  {
+    int x;
+    int y;
+    KoPoint c;
+    c = sPoint.transform(tmpMatrix);
+    x = static_cast<int>(c.x());
+    y = static_cast<int>(c.y());
+    drawNode(p, x, y, false);
+    c = ePoint.transform(tmpMatrix);
+    x = static_cast<int>(c.x());
+    y = static_cast<int>(c.y());
+    drawNode(p, x, y, false);
+  }
+
 /*  double alen = 0;
   if (! workInProgress () && ! outline) {
     initBrush (brush);

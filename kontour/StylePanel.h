@@ -27,11 +27,13 @@
 #include <qpen.h>
 
 class GStyle;
+class QComboBox;
 class KoColor;
 class KoColorChooser;
 class QCheckBox;
 class QSpinBox;
 class QButtonGroup;
+
 class PaintPanel : public QTabWidget
 {
   Q_OBJECT
@@ -44,11 +46,14 @@ public slots:
 signals:
   void colorChanged(const KoColor &);
   void changePaintColor(const KoColor &);
-  void changeFilled(bool);
+  void changeFilled(int f);
   void changeBrushStyle(Qt::BrushStyle);
 
+private slots:
+  void activate(int f);
+
 private:
-  QCheckBox *mFilled;
+  QComboBox *mPaintingBox;
   KoColorChooser *mPaintPanel;
 };
 

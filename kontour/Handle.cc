@@ -35,12 +35,18 @@ Handle::Handle(GPage *aGPage)
 {
   mGPage = aGPage;
   mMode = HMode_Default;
-  mShow = true;
+  mShow = false;
+  mEmpty = true;
 }
 
 void Handle::show(bool flag)
 {
   mShow = flag;
+}
+
+void Handle::empty(bool flag)
+{
+  mEmpty = flag;
 }
 
 void Handle::mode(Mode m, bool propagate)
@@ -79,6 +85,9 @@ void Handle::draw(QPainter &p)
   if(!mShow)
     return;
 
+  if(mEmpty)
+    return;
+
   p.save();
   if(mMode == HMode_Default)
   {
@@ -87,8 +96,8 @@ void Handle::draw(QPainter &p)
     p.setPen(Qt::black);
     for(int i = 0; i < 8; i++)
     {
-      p.drawRect(static_cast<int>(pos[i].x() - 3), static_cast<int>(pos[i].y() - 3), 6, 6);
-      p.fillRect(static_cast<int>(pos[i].x() - 2), static_cast<int>(pos[i].y() - 2), 4, 4, brush);
+      p.drawRect(static_cast<int>(pos[i].x() - 3), static_cast<int>(pos[i].y() - 3), 7, 7);
+      p.fillRect(static_cast<int>(pos[i].x() - 2), static_cast<int>(pos[i].y() - 2), 5, 5, brush);
     }
   }
   else

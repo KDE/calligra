@@ -43,10 +43,12 @@ Tool(aId, tc)
 void EditPointTool::activate()
 {
   toolController()->view()->canvas()->setCursor(Qt::crossCursor);
+  toolController()->view()->canvas()->withBasePoints(true);
 }
 
 void EditPointTool::deactivate()
 {
+  toolController()->view()->canvas()->withBasePoints(false);
 }
 
 void EditPointTool::processEvent(QEvent *e)

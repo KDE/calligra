@@ -53,6 +53,7 @@ public:
   QRect onCanvas(const KoRect &r);
 
   void outlineMode(bool flag);
+  void withBasePoints(bool flag);
 
   void updateBuf();
   void updateBuf(const QRect &rect);
@@ -129,6 +130,7 @@ private:
   int mHeightH;
 
   bool mOutlineMode:1;
+  bool mWithBasePoints:1;
 
   int mTmpHorizHelpline;
   int mTmpVertHelpline;

@@ -72,9 +72,16 @@ QDomElement GLine::writeToXml(QDomDocument &document)
   return line;
 }
 
-void GLine::draw(QPainter &p, bool withBasePoints, bool outline)
+void GLine::draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline)
 {
   p.drawLine(static_cast<int>(points[0].x()), static_cast<int>(points[0].y()), static_cast<int>(points[1].x()), static_cast<int>(points[1].y()));
+/*  if(withBasePoints)
+  {
+    KoPoint c = points[1].transform(m);
+    int x = static_cast<int>(c.x());
+    int y = static_cast<int>(c.y());
+    drawNode(p, x, y, false);
+  }*/
 }
 
 void GLine::movePoint(int idx, double dx, double dy, bool ctrlPressed)
@@ -177,7 +184,7 @@ QDomElement GCubicBezier::writeToXml(QDomDocument &document)
   return arc;
 }
 
-void GCubicBezier::draw(QPainter &p, bool withBasePoints, bool outline)
+void GCubicBezier::draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline)
 {
 }
 
@@ -238,7 +245,7 @@ QDomElement GArc::writeToXml(QDomDocument &document)
   return arc;
 }
 
-void GArc::draw(QPainter &p, bool withBasePoints, bool outline)
+void GArc::draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline)
 {
   p.drawLine(static_cast<int>(points[0].x()), static_cast<int>(points[0].y()), static_cast<int>(points[1].x()), static_cast<int>(points[1].y()));
 }
@@ -837,7 +844,7 @@ void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMa
   for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {
     GSegment *s = *seg;
-    s->draw(p, withBasePoints, outline);
+    s->draw(p, tmpMatrix, withBasePoints, outline);
   }
   p.restore();
 }

@@ -63,6 +63,7 @@ Canvas::Canvas(GDocument *aGDoc, KontourView *aView, QScrollBar *hb, QScrollBar 
   mHeightH = height() >> 1;
 
   mOutlineMode = false;
+  mWithBasePoints = false;
 
   kdDebug(38000) << "Double canvas width=" << 2*mGDoc->xCanvas() << endl;
   kdDebug(38000) << "Double canvas height=" << 2*mGDoc->yCanvas() << endl;
@@ -98,6 +99,14 @@ void Canvas::outlineMode(bool flag)
   {
     mOutlineMode = flag;
     repaint();
+  }
+}
+
+void Canvas::withBasePoints(bool flag)
+{
+  if(mWithBasePoints != flag)
+  {
+    mWithBasePoints = flag;
   }
 }
 
@@ -161,7 +170,7 @@ void Canvas::updateBuf(const QRect &rect)
 
   p.save();
   p.scale(document()->zoomFactor(), document()->zoomFactor());
-  document()->activePage()->drawContents(p, false, mOutlineMode);
+  document()->activePage()->drawContents(p, mWithBasePoints, mOutlineMode);
 
   if(!document()->activePage()->selectionIsEmpty())
     document()->activePage()->handle().draw(p);

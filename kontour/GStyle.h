@@ -35,25 +35,31 @@ class QDomElement;
 /* Class for drawing style */
 
 class GStylePrivate;
+
 class GStyle
 {
 public:
+  const static int NoFill = 0;
+  const static int ColorFill = 1;
+  const static int GradientFill = 2;
+  const static int PatternFill = 3;
+
   GStyle();
   GStyle(const QDomElement &style);
   GStyle(GStyle &obj);
   virtual ~GStyle();
-     
+
   QDomElement writeToXml(QDomDocument &document);
-  
+
   const KoColor &outlineColor() const;
   void outlineColor(const KoColor &c);
-  
+
   unsigned int outlineWidth() const;
   void outlineWidth(unsigned int lwidth);
 
   const KoColor &fillColor() const;
   void fillColor(const KoColor &c);
-  
+
   Qt::PenJoinStyle joinStyle() const;
   void joinStyle(Qt::PenJoinStyle join);
 
@@ -66,11 +72,11 @@ public:
   bool stroked() const;
   void stroked(bool stroked);
 
-  bool filled() const;
-  void filled(bool filled);
+  int filled() const;
+  void filled(int filled);
 
   GStyle &operator=(const GStyle &s);
-    
+
 private:
   GStylePrivate *d;
 };

@@ -122,6 +122,8 @@ public:
    */
   virtual QDomElement writeToXml(QDomDocument &document);
 
+  void drawNode(QPainter &p, int x, int y, bool active);
+
   /**
    * Draw the object with the given painter.
    * NOTE: This method has to be implemented in every subclass.
@@ -149,7 +151,7 @@ public:
   void changePaintStyle(const KoColor &c);
   void changeOutlineStyle(const KoColor &c);
   void changeStroked(bool stroked);
-  void changeFilled(bool filled);
+  void changeFilled(int filled);
   void changeOutlineWidth(unsigned int lwidth);
   void changeBrushStyle(Qt::BrushStyle bstyle);
   void changeJoinStyle(Qt::PenJoinStyle style);

@@ -45,14 +45,15 @@ public:
   Handle(GPage *aGPage);
 
   void show(bool flag = true);
+  void empty(bool flag = true);
 
   void mode(Mode m, bool propagate = false);
 
   void box(const KoRect &r);
-  
+
   KoPoint rotCenter() const {return mRotCenter; }
   void rotCenter(const KoPoint &p);
-  
+
   void draw(QPainter &p);
   int contains(const KoPoint &p);
 
@@ -67,6 +68,7 @@ private:
   KoPoint mRotCenter;
   Mode mMode;
   bool mShow;
+  bool mEmpty;
 };
 
 #endif

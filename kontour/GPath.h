@@ -47,7 +47,7 @@ public:
   virtual void point(int i, const KoPoint &c) = 0;
 
   virtual QDomElement writeToXml(QDomDocument &document) = 0;
-  virtual void draw(QPainter &p, bool withBasePoints, bool outline) = 0;
+  virtual void draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline) = 0;
   virtual void movePoint(int idx, double dx, double dy, bool ctrlPressed = false) = 0;
 
   virtual KoRect boundingBox() = 0;
@@ -74,7 +74,7 @@ public:
   void point(int i, const KoPoint &c);
 
   QDomElement writeToXml(QDomDocument &document);
-  void draw(QPainter &p, bool withBasePoints, bool outline);
+  void draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
 
   KoRect boundingBox();
@@ -103,7 +103,7 @@ public:
   void point(int i, const KoPoint &c);
 
   QDomElement writeToXml(QDomDocument &document);
-  void draw(QPainter &p, bool withBasePoints, bool outline);
+  void draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
 
   KoRect boundingBox();
@@ -144,7 +144,7 @@ public:
   void point(int i, const KoPoint &c);
 
   QDomElement writeToXml(QDomDocument &document);
-  void draw(QPainter &p, bool withBasePoints, bool outline);
+  void draw(QPainter &p, QWMatrix &m, bool withBasePoints, bool outline);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
 
   KoRect boundingBox();

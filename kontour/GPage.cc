@@ -616,13 +616,13 @@ void GPage::updateHandle()
 {
   kdDebug(38000) << "Update handle" << endl;
   if(selectionIsEmpty())
-    mHandle.show(false);
+    mHandle.empty();
   else
   {
     KoRect rr = boundingBoxForSelection();
 	// TODO : adjust to current zoom factor
     mHandle.box(rr);
-    mHandle.show();
+    mHandle.empty(false);
     kdDebug(38000) << "L=" << rr.left() << endl;
     kdDebug(38000) << "R=" << rr.right() << endl;
   }

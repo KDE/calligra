@@ -23,16 +23,16 @@
 #include "StylePanel.h"
 
 #include <qlayout.h>
-#include <qgroupbox.h>
 #include <qcheckbox.h>
 #include <qspinbox.h>
-#include <qvgroupbox.h>
 #include <qgrid.h>
 #include <qlabel.h>
+#include <qvgroupbox.h>
 #include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qpainter.h>
 #include <qbitmap.h>
+#include <qcombobox.h>
 
 #include <koColorChooser.h>
 #include <klocale.h>
@@ -51,14 +51,22 @@ PaintPanel::PaintPanel(QWidget *parent, const char *name):
 QTabWidget(parent, name)
 {
   setTabShape(Triangular);
-  mFilled = new QCheckBox(i18n("filled"), this);
-  connect(mFilled, SIGNAL(toggled(bool)), this, SIGNAL(changeFilled(bool)));
+
+  QWidget *mPainting = new QWidget(this);
+  QGridLayout *mPaintingLayout = new QGridLayout(mPainting, 3, 2);
+  mPaintingBox = new QComboBox(mPainting);
+  mPaintingBox->insertItem(i18n("No"));
+  mPaintingBox->insertItem(i18n("Color"));
+  mPaintingBox->insertItem(i18n("Gradient"));
+  mPaintingBox->insertItem(i18n("Pattern"));
+  mPaintingBox->setCurrentItem(0);
+  mPaintingLayout->addWidget(mPaintingBox, 1, 1);
+  insertTab(mPainting, i18n("Painting"));
+
   KoColorChooser *mPaintPanel = new KoColorChooser(this);
   connect(mPaintPanel, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(changePaintColor(const KoColor &)));
   connect(this, SIGNAL(colorChanged(const KoColor &)), mPaintPanel, SLOT(slotChangeColor(const KoColor &)));
   insertTab(mPaintPanel, i18n("Color"));
-  // TODO : add some content here :)
-  insertTab(mFilled, i18n("Gradient"));
 
   QGroupBox *pattern = new QGroupBox(1, Qt::Vertical, this);
   QBoxLayout *box2 = new QBoxLayout(pattern, QBoxLayout::Down);
@@ -67,16 +75,22 @@ QTabWidget(parent, name)
   box2->addWidget(brushCells);
   insertTab(pattern, i18n("Pattern"));
 
+
+  connect(mPaintingBox, SIGNAL(activated(int)), this, SLOT(activate(int)));
 }
 
 void PaintPanel::slotStyleChanged(const GStyle &style)
 {
-  mFilled->setChecked(style.filled());
   // TODO : I fear the color chooser will send a signal back
   //        blocking doesnt work, disconnect maybe ?
   //mPaintPanel->blockSignals(true);
   emit colorChanged(style.fillColor());
   //mPaintPanel->blockSignals(false);
+}
+
+void PaintPanel::activate(int f)
+{
+
 }
 
 OutlinePanel::OutlinePanel(QWidget *parent, const char *name):
