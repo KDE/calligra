@@ -18,5 +18,5 @@ if include_sql
 SQLDIRECTORY=sql
 endif
 
-SUBDIRS = . $(SQLDIRECTORY)
+SUBDIRS = . kabc $(SQLDIRECTORY)
 
