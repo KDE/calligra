@@ -37,7 +37,11 @@ KexiWorkspaceTabbedMDI::KexiWorkspaceTabbedMDI(QWidget *parent, const char *name
 	: KTabWidget(parent, name),KexiWorkspace(),no(0),m_activeDialog(0),m_mainwindow(mw)
 {
 
+#if KDE_IS_VERSION(1,9,0)
 	setHoverCloseButton(true);	
+#endif
+
+#if QT_VERSION>=0x030200
 	m_closeButton = new QToolButton( this );
     	connect( m_closeButton, SIGNAL( clicked() ), this, SLOT( slotCloseCurrent() ) );
 	m_closeButton->setIconSet( SmallIcon( "tab_remove" ) );
@@ -45,9 +49,10 @@ KexiWorkspaceTabbedMDI::KexiWorkspaceTabbedMDI(QWidget *parent, const char *name
         QToolTip::add(m_closeButton, i18n("Close the current tab"));
         setCornerWidget( m_closeButton, TopRight );
 	m_closeButton->hide();
+#endif
+
 	connect(this,SIGNAL(currentChanged(QWidget*)),this,SLOT(slotWindowActivated(QWidget*)));
 	connect(this,SIGNAL(closeRequest(QWidget*)),this,SLOT(slotCloseRequest(QWidget*)));
-
 }
 
 
@@ -56,7 +61,9 @@ void KexiWorkspaceTabbedMDI::slotCloseRequest(QWidget* w) {
 	QApplication::sendEvent(w,&cev);
 	if (cev.isAccepted()) delete w;
 	no--;
+#if QT_VERSION>=0x030200
 	if (!no) m_closeButton->hide();
+#endif
 	kdDebug() << "deleted item; realnumber now" << no << endl;
 
 }
@@ -72,8 +79,9 @@ void KexiWorkspaceTabbedMDI::addItem(KexiDialogBase *newItem)
 	else
 		addTab(newItem,QIconSet(*newItem->icon()),newItem->caption());
 	no++;
+#if QT_VERSION>=0x030200
 	m_closeButton->show();
-
+#endif
 //	connect(newItem, SIGNAL(closing(KexiDialogBase *)), this, SLOT(takeItem(KexiDialogBase *)));
 	kdDebug() << "item added; realnumber now: " << no << endl;
 }
@@ -81,7 +89,9 @@ void KexiWorkspaceTabbedMDI::addItem(KexiDialogBase *newItem)
 void KexiWorkspaceTabbedMDI::takeItem(KexiDialogBase *delItem)
 {
 	no--;
+#if QT_VERSION>=0x030200
 	if (!no) m_closeButton->hide();
+#endif
 	kdDebug() << "took item; realnumber now" << no << endl;
 }
 

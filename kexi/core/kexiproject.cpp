@@ -190,7 +190,7 @@ bool KexiProject::initDoc()
 KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )
 {
 	kdDebug() << "KoView* KexiProject::createViewInstance()" << endl;
-	KexiView *v= new KexiView( KexiView::MDIWindowMode,this, parent, name );
+	KexiView *v= new KexiView( KexiView::MDIMode,this, parent, name );
 	for(KexiProjectHandler *part = m_parts->first(); part; part = m_parts->next())
 		part->hookIntoView(v);
 	v->finalizeInit();

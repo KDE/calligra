@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexi" version="96">
+<kpartgui name="kexi" version="97">
 <MenuBar>
   <Menu name="edit"><text>&amp;Edit</text>
     <Merge/>
@@ -7,6 +7,8 @@
   <Menu name="view"><text>&amp;View</text>
     <Action name="view_newview"/>
     <ActionList name="view_closeallviews"/>
+    <Separator/>
+    <Action name="view_viewmode"/>
     <Separator/>
     <Action name="show_nav"/>
     <Action name="show_contexthelp"/>

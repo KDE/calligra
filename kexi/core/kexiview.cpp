@@ -69,6 +69,14 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, c
 	setInstance(KexiFactory::global());
 	setXMLFile("kexiui.rc");
 
+	//IMPORTANT !!!!!!!!!! This has to be in the same order as the WindowMode enum
+	m_modeDescriptions<<i18n("Child frames");
+	m_modeDescriptions<<i18n("Tabbed");
+	m_modeDescriptions<<i18n("Single document");
+	m_possibleModes=m_modeDescriptions;
+#if !KDE_IS_VERSION(3,1,9)
+	m_possibleModes.remove(m_possibleModes.at(1);
+#endif
 	initActions();
 
 	if(winmode != EmbeddedMode)
@@ -119,7 +127,7 @@ void KexiView::finalizeInit()
 	{
 		initBrowser();
 		initHelper();
-
+/*
 		if(m_windowMode == MultipleWindowMode)
 		{
 			QDesktopWidget dw;
@@ -127,15 +135,21 @@ void KexiView::finalizeInit()
 			move(availGeom.left(),availGeom.top());
 			resize(availGeom.width()-(frameGeometry().width()-geometry().width()),
 				height());
-		}
+		}*/
 	}
 }
 
 void KexiView::initMainDock()
 {
 	(new QVBoxLayout (this))->setAutoAdd(true);
-//	m_workspace = new KexiWorkspaceMDI(this, "kexiworkspace", this);
-	m_workspace = new KexiWorkspaceTabbedMDI(this, "kexiworkspace", this);
+	m_workspace=0;
+	if (m_windowMode==MDIMode)
+		m_workspace = new KexiWorkspaceMDI(this, "kexiworkspace", this);
+	else if (m_windowMode==TabbedMDIMode) 
+		m_workspace = new KexiWorkspaceTabbedMDI(this, "kexiworkspace", this);
+	else
+		kdDebug()<<"Not implemented yet";
+	if (m_workspace) m_workspace->show();
 }
 
 void KexiView::initBrowser()
@@ -182,6 +196,12 @@ void KexiView::initActions()
 	KAction *actionProjectProps = new KAction(i18n("Project Properties"), "edit", Key_F7,
 	 actionCollection(), "project_props");
 	connect(actionProjectProps, SIGNAL(activated()), this, SLOT(slotShowProjectProps()));
+
+	KSelectAction *actionViewMode = new KSelectAction(i18n("View mode"), KShortcut(),
+		actionCollection(),"view_viewmode");
+
+	actionViewMode->setItems(m_possibleModes);
+	connect(actionViewMode,SIGNAL(activated(const QString&)),this,SLOT(changeViewMode(const QString&)));
 
 #ifndef KEXI_NO_UNFINISHED
 	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
@@ -443,5 +463,13 @@ void KexiView::slotAboutCloseWindow( KexiDialogBase *w )
 	//UNUSED
 }
 
+
+void KexiView::changeViewMode(const QString& newMode) {
+	kdDebug()<<"KexiView::changeViewMode"<<endl;
+	m_windowMode=(KexiWindowMode) m_modeDescriptions.findIndex(newMode);
+
+	delete m_workspace;
+	initMainDock();
+}
 
 #include "kexiview.moc"

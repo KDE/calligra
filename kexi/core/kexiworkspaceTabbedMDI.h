@@ -22,11 +22,20 @@
 
 #include <qguardedptr.h>
 
+#include <kdeversion.h>
+
+#if KDE_IS_VERSION(3,1,9)
 #include <ktabwidget.h>
+#else
+#include <qtabwidget.h>
+#define KTabWidget QTabWidget
+#endif
+
 #include "kexiworkspace.h"
 
 class KexiDialogBase;
 class KexiView;
+
 
 class KEXICORE_EXPORT KexiWorkspaceTabbedMDI : public KTabWidget, public KexiWorkspace
 {

@@ -53,7 +53,7 @@ class KEXICORE_EXPORT KexiView : public KoView
 public:
 	typedef QMap<QString, KexiDialogBase *> Windows;
 
-	enum KexiWindowMode {MultipleWindowMode=0,SingleWindowMode=1,MDIWindowMode=2,EmbeddedMode=3};
+	enum KexiWindowMode {MDIMode=0,TabbedMDIMode=1,SDIMode=2,EmbeddedMode=255};
 
 	KexiView(KexiWindowMode winmode, KexiProject* part,QWidget *parent=0, const char *name=0);
 	~KexiView();
@@ -133,13 +133,15 @@ protected slots:
 	void slotInfoUnfinished();
 
 	void slotAboutCloseWindow( KexiDialogBase *w );
+	void changeViewMode(const QString&);
 
 private:
 	KexiProject *m_project;
 	DCOPObject *dcop;
 	QPtrList<QDockWindow> m_dockWins;
 	Windows m_wins;
-
+	QStringList m_modeDescriptions;
+	QStringList m_possibleModes;
 	friend class KexiProject;
 };
 
