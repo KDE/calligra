@@ -4311,140 +4311,139 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
     int paintEnd = -1;
     int lasth = 0;
     int i = 0;
-    if ( m_lineChanged > 0 )
+
+    // Draw them lines!
+    int startOfLine;
+    line=m_lineChanged;
+    if(line<0) line=0;
+    
+    int numLines=lines();
+    for(;line<numLines;line++)
     {
-        //qDebug( "painting paragraph %p id:%d from line %d", (void*)this, paragId(), m_lineChanged );
-        lineStartOfLine( m_lineChanged, &i );
-        line = m_lineChanged - 1; // ++ is the first thing that will happen in the loop
-    }
-    //else
-    //    qDebug( "painting paragraph %p id:%d", (void*)this, paragId() );
-    int paintStart = i;
-    for ( ; i < length(); i++ ) {
-	chr = at( i );
+	// get the start and length of the line
+	int lineLen;
+	int nextLine;
+    	lineStartOfLine(line, &startOfLine);
+	if(line==(numLines-1))
+		nextLine=length();
+	else
+		lineStartOfLine(line+1, &nextLine);
+	lineLen=(nextLine-startOfLine);
+	
+	// init this line
+	lineInfo( line, cy, h, baseLine );
+	lasth = h;
+	if ( clipy != -1 && cy > clipy - r.y() + cliph ) // outside clip area, leave
+	    break;
+	if ( lastBaseLine == 0 )
+	lastBaseLine = baseLine;
 
-        cw = chr->width;
+    	// initialise the line
+	int paintStart = startOfLine;
+	paintEnd = startOfLine;
+	lastY = cy;
+	chr = at(startOfLine);
+	startX=chr->x;
+	bw=cw=chr->width;
 
-	// init a new line
-	if ( chr->lineStart ) {
-	    ++line;
-	    lineInfo( line, cy, h, baseLine );
-	    lasth = h;
-	    if ( clipy != -1 && cy > clipy - r.y() + cliph ) // outside clip area, leave
-		break;
-	    if ( lastBaseLine == 0 )
-		lastBaseLine = baseLine;
-	}
+	// only reset lastFormat if it wasn't set before!
+	if(!lastFormat)
+		lastFormat = chr->format();
 
-	// check for cursor mark
-	if ( cursor && this == cursor->parag() && i == cursor->index() ) {
-	    curx = cursor->x();
-	    curline = line;
-            KoTextStringChar *c = chr;
-            if ( i > 0 )
-                --c;
-            curh = c->height();
-            cury = cy + baseLine - c->ascent();
-	}
-
-	// first time - start again...
-	if ( !lastFormat || lastY == -1 ) {
-	    lastFormat = chr->format();
-	    lastY = cy;
-	    startX = chr->x;
-	    paintEnd = i;
-	    bw = cw;
-	    if ( !chr->isCustom() )
-		continue;
-	}
-
-	// check if selection state changed
-	bool selectionChange = FALSE;
-	if ( drawSelections ) {
-	    for ( int j = 0; j < nSels; ++j ) {
-		selectionChange = selectionStarts[ j ] == i || selectionEnds[ j ] == i;
-		if ( selectionChange )
-		    break;
-	    }
-	}
-
-	//if something (format, etc.) changed, draw what we have so far
-	if ( ( ( alignment() & Qt::AlignJustify ) == Qt::AlignJustify && paintEnd != -1 && at(paintEnd)->c.isSpace() ) ||
-#ifdef CHECK_PIXELXADJ
-               lastXAdj != chr->pixelxadj ||
-#endif
-	       lastDirection != (bool)chr->rightToLeft ||
-	       chr->startOfRun ||
-	       lastY != cy || chr->format() != lastFormat ||
-	       ( paintEnd != -1 && at( paintEnd )->c =='\t' ) || chr->c == '\t' ||
-	       ( paintEnd != -1 && at( paintEnd )->c.unicode() == 0xad ) || chr->c.unicode() == 0xad ||
-	       selectionChange || chr->isCustom() ) {
-
-            if ( paintStart <= paintEnd ) {
-		if ( chr->isCustom() && chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
-		    qstr.replace(i,1," ");
+	// okay, paint the line!
+	for(i=startOfLine;i<nextLine;i++)
+	{
+		chr = at( i );
+	        cw = chr->width;
+			// check for cursor mark
+		if ( cursor && this == cursor->parag() && i == cursor->index() ) {
+		    curx = cursor->x();
+		    curline = line;
+	            KoTextStringChar *c = chr;
+	            if ( i > 0 )
+	                --c;
+	            curh = c->height();
+	            cury = cy + baseLine - c->ascent();
 		}
-                // QRT hack removed from this place, it broke justified spaces
-		drawParagString( painter, qstr, paintStart, paintEnd - paintStart + 1, startX, lastY,
+			// test for end of line
+		bool endOfLine=false;
+		if(i==((startOfLine+lineLen)-1))
+			endOfLine=true;
+			// check if selection state changed
+		bool selectionChange = FALSE;
+		if ( drawSelections ) {
+		    for ( int j = 0; j < nSels; ++j ) {
+			selectionChange = selectionStarts[ j ] == i || selectionEnds[ j ] == i;
+			if ( selectionChange )
+			    break;
+		    }
+		}
+		//if something (format, etc.) changed, draw what we have so far
+		if ( ( (alignment() & Qt::AlignJustify) == Qt::AlignJustify && paintEnd != -1 &&  at(paintEnd)->c.isSpace() ) ||
+	#ifdef CHECK_PIXELXADJ
+	            lastXAdj != chr->pixelxadj ||
+	#endif
+		    endOfLine ||
+		    lastDirection != (bool)chr->rightToLeft ||
+		    chr->startOfRun ||
+		    lastY != cy || chr->format() != lastFormat ||
+		    ( paintEnd != -1 && at( paintEnd )->c =='\t' ) || chr->c == '\t' ||
+		    ( paintEnd != -1 && at( paintEnd )->c.unicode() == 0xad ) || chr->c.unicode() == 0xad ||
+		    selectionChange || 
+		    chr->isCustom() 
+		   ) 
+		   {
+	
+		   if ( paintStart <= paintEnd ) {
+			if ( chr->isCustom() && chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
+			    qstr.replace(i,1," ");
+			}
+
+  		    drawParagString( painter, qstr, paintStart, paintEnd - paintStart + 1, startX, lastY,
 				 lastBaseLine, bw, lasth, drawSelections,
 				 lastFormat, i, selectionStarts, selectionEnds, cg, lastDirection );
-	    }
-	    if ( !chr->isCustom() ) {
-		paintStart = i;
-		paintEnd = i;
-		lastFormat = chr->format();
-		lastY = cy;
-		startX = chr->x;
-		bw = cw;
-	    } else {
-		if ( chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
-                    chr->customItem()->draw( &painter, chr->x, cy + baseLine - chr->customItem()->ascent(), clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
-					     drawSelections && nSels && selectionStarts[ 0 ] <= i && selectionEnds[ 0 ] > i );
-		    paintStart = i+1;
-		    paintEnd = -1;
-		    lastFormat = chr->format();
-		    lastY = cy;
-		    startX = chr->x + chr->width;
-		    bw = 0;
+		    }
+		    if ( !chr->isCustom() ) {
+			paintStart = i;
+			paintEnd = i;
+			lastFormat = chr->format();
+			lastY = cy;
+			startX = chr->x;
+			bw = cw;
+		    } else {
+			if ( chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
+	       	            chr->customItem()->draw( &painter, chr->x, cy + baseLine - chr->customItem()->ascent(), clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
+						     drawSelections && nSels && selectionStarts[ 0 ] <= i && selectionEnds[ 0 ] > i );
+			    paintStart = i+1;
+			    paintEnd = -1;
+			    lastFormat = chr->format();
+			    lastY = cy;
+			    startX = chr->x + chr->width;
+			    bw = 0;
+			} else {
+			    chr->customItem()->resize( pntr, chr->customItem()->width );
+			    paintStart = i+1;
+			    paintEnd = -1;
+			    lastFormat = chr->format();
+			    lastY = cy;
+			    startX = chr->x + chr->width;
+			    bw = 0;
+			}
+		    }
 		} else {
-		    chr->customItem()->resize( pntr, chr->customItem()->width );
-		    paintStart = i+1;
-		    paintEnd = -1;
-		    lastFormat = chr->format();
-		    lastY = cy;
-		    startX = chr->x + chr->width;
-		    bw = 0;
+		    if( chr->rightToLeft ) {
+			startX = chr->x;
+		    }
+		    paintEnd = i;
+		    bw += cw;
 		}
-	    }
-	} else {
-	    if( chr->rightToLeft ) {
-		startX = chr->x;
-	    }
-	    paintEnd = i;
-	    bw += cw;
-	}
-	lastBaseLine = baseLine;
-	lasth = h;
-	lastDirection = chr->rightToLeft;
-#ifdef CHECK_PIXELXADJ
-        lastXAdj = chr->pixelxadj;
-#endif
-    }
-
-    // if we are through the parag, but still have some stuff left to draw, draw it now
-    if ( paintStart <= paintEnd ) {
-	bool selectionChange = FALSE;
-	if ( drawSelections ) {
-	    for ( int j = 0; j < nSels; ++j ) {
-		selectionChange = selectionStarts[ j ] == i || selectionEnds[ j ] == i;
-		if ( selectionChange )
-		    break;
-	    }
-	}
-	int x = startX;
-	drawParagString( painter, qstr, paintStart, paintEnd-paintStart+1, x, lastY,
-			 lastBaseLine, bw, h, drawSelections,
-			 lastFormat, i, selectionStarts, selectionEnds, cg, lastDirection );
+		lastBaseLine = baseLine;
+		lasth = h;
+		lastDirection = chr->rightToLeft;
+	#ifdef CHECK_PIXELXADJ
+	        lastXAdj = chr->pixelxadj;
+	#endif
+	} // end of charecter loop
     }
 
     // if we should draw a cursor, draw it now
