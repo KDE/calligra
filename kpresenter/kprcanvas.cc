@@ -543,7 +543,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                             kpobject = objectList().at( i );
                             KoSize s = kpobject->getSize();
                             KoPoint pnt = kpobject->getOrig();
-                            KoRect rect(pnt.x() - diffx(), pnt.y() - diffy(), s.width(), s.height() );
+                            KoRect rect(pnt.x() - m_view->zoomHandler()->unzoomItX( diffx()), pnt.y() - m_view->zoomHandler()->unzoomItY( diffy()), s.width(), s.height() );
                             QRect rect2=m_view->zoomHandler()->zoomRect(rect);
                             if ( rect.contains( docPoint ) ) {
                                 overObject = true;
@@ -1122,7 +1122,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		    kpobject = objectList().at( i );
 		    KoSize s = kpobject->getSize();
 		    KoPoint pnt = kpobject->getOrig();
-                    KoRect rect(pnt.x() - diffx(), pnt.y() - diffy(), s.width(), s.height() );
+                    KoRect rect(pnt.x() - m_view->zoomHandler()->unzoomItX(diffx()), pnt.y() - m_view->zoomHandler()->unzoomItY( diffy()), s.width(), s.height() );
                     if ( rect.contains( docPoint ) ) {
                         if ( kpobject->isSelected() ) {
 			    setCursor( kpobject->getCursor( /*QPoint( e->x(), e->y() )*/m_view->zoomHandler()->unzoomPoint(e->pos()) , modType ) );
@@ -3712,7 +3712,9 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float left_margin, 
 /*================================================================*/
 void KPrCanvas::insertTextObject( const QRect& _r )
 {
-    KoRect rect=m_view->zoomHandler()->unzoomRect(_r);
+    QRect r(_r);
+    r.moveBy(diffx(),diffy());
+    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertTextObject( rect );
     selectObj( objectList().last() );
 }
@@ -3720,7 +3722,9 @@ void KPrCanvas::insertTextObject( const QRect& _r )
 /*================================================================*/
 void KPrCanvas::insertLineH( const QRect& _r, bool rev )
 {
-    KoRect rect=m_view->zoomHandler()->unzoomRect(_r);
+    QRect r(_r);
+    r.moveBy(diffx(),diffy());
+    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertLine( rect, m_view->getPen(),
                                        !rev ? m_view->getLineBegin() : m_view->getLineEnd(), !rev ? m_view->getLineEnd() : m_view->getLineBegin(),
                                        LT_HORZ );
@@ -3729,7 +3733,9 @@ void KPrCanvas::insertLineH( const QRect& _r, bool rev )
 /*================================================================*/
 void KPrCanvas::insertLineV( const QRect &_r, bool rev )
 {
-    KoRect rect=m_view->zoomHandler()->unzoomRect(_r);
+    QRect r(_r);
+    r.moveBy(diffx(),diffy());
+    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertLine( rect, m_view->getPen(),
                                        !rev ? m_view->getLineBegin() : m_view->getLineEnd(), !rev ? m_view->getLineEnd() : m_view->getLineBegin(),
                                        LT_VERT );
@@ -3738,7 +3744,9 @@ void KPrCanvas::insertLineV( const QRect &_r, bool rev )
 /*================================================================*/
 void KPrCanvas::insertLineD1( const QRect &_r, bool rev )
 {
-    KoRect rect=m_view->zoomHandler()->unzoomRect(_r);
+    QRect r(_r);
+    r.moveBy(diffx(),diffy());
+    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertLine( rect, m_view->getPen(),
                                        !rev ? m_view->getLineBegin() : m_view->getLineEnd(), !rev ? m_view->getLineEnd() : m_view->getLineBegin(),
                                        LT_LU_RD );
@@ -3747,7 +3755,9 @@ void KPrCanvas::insertLineD1( const QRect &_r, bool rev )
 /*================================================================*/
 void KPrCanvas::insertLineD2( const QRect &_r, bool rev )
 {
-    KoRect rect=m_view->zoomHandler()->unzoomRect(_r);
+    QRect r(_r);
+    r.moveBy(diffx(),diffy());
+    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertLine(rect, m_view->getPen(),
                                        !rev ? m_view->getLineBegin() : m_view->getLineEnd(), !rev ? m_view->getLineEnd() : m_view->getLineBegin(),
                                        LT_LD_RU );
@@ -3756,7 +3766,9 @@ void KPrCanvas::insertLineD2( const QRect &_r, bool rev )
 /*================================================================*/
 void KPrCanvas::insertRect( const QRect& _r )
 {
-    KoRect rect=m_view->zoomHandler()->unzoomRect(_r);
+    QRect r(_r);
+    r.moveBy(diffx(),diffy());
+    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertRectangle( rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                    m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getRndX(), m_view->getRndY(),
                                    m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
@@ -3765,7 +3777,9 @@ void KPrCanvas::insertRect( const QRect& _r )
 /*================================================================*/
 void KPrCanvas::insertEllipse( const QRect &_r )
 {
-    KoRect rect=m_view->zoomHandler()->unzoomRect(_r);
+    QRect r(_r);
+    r.moveBy(diffx(),diffy());
+    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertCircleOrEllipse( rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                                          m_view->getGColor1(), m_view->getGColor2(),
                                          m_view->getGType(), m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
@@ -3774,7 +3788,9 @@ void KPrCanvas::insertEllipse( const QRect &_r )
 /*================================================================*/
 void KPrCanvas::insertPie( const QRect &_r )
 {
-    KoRect rect=m_view->zoomHandler()->unzoomRect(_r);
+    QRect r(_r);
+    r.moveBy(diffx(),diffy());
+    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertPie( rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
                              m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(),
                              m_view->getPieType(), m_view->getPieAngle(), m_view->getPieLength(),
@@ -3785,7 +3801,9 @@ void KPrCanvas::insertPie( const QRect &_r )
 void KPrCanvas::insertAutoform( const QRect &_r, bool rev )
 {
     rev = false;
-    KoRect rect=m_view->zoomHandler()->unzoomRect(_r);
+    QRect r(_r);
+    r.moveBy(diffx(),diffy());
+    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertAutoform( rect, m_view->getPen(), m_view->getBrush(),
                                   !rev ? m_view->getLineBegin() : m_view->getLineEnd(), !rev ? m_view->getLineEnd() : m_view->getLineBegin(),
                                   m_view->getFillType(), m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(),
@@ -3795,7 +3813,9 @@ void KPrCanvas::insertAutoform( const QRect &_r, bool rev )
 /*================================================================*/
 void KPrCanvas::insertObject( const QRect &_r )
 {
-    KoRect rect=m_view->zoomHandler()->unzoomRect(_r);
+    QRect r(_r);
+    r.moveBy(diffx(),diffy());
+    KoRect rect=m_view->zoomHandler()->unzoomRect(r);
     m_activePage->insertObject( rect, partEntry );
 }
 
