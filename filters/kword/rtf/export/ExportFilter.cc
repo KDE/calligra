@@ -273,17 +273,17 @@ void RTFWorker::ProcessParagraphData (const QString& strTag, const QString &para
                         m_textBody += escapeRtfText((*paraFormatDataIt).variable.m_text);
                     }
                 }
-#if 0
                 else if (9==(*paraFormatDataIt).variable.m_type)
                 {
                     // A link
-                    m_textBody += "<a href=\""
-                        + escapeRtfText((*paraFormatDataIt).variable.getHrefName())
-                        + "\">"
-                        + escapeRtfText((*paraFormatDataIt).variable.getLinkName())
-                        + "</a>";
+                    m_textBody += "{\\field";
+                    m_textBody += "{\\*\\fldinst { HYPERLINK ";
+                    m_textBody += escapeRtfText((*paraFormatDataIt).variable.getHrefName());
+                    m_textBody += "}}";
+                    m_textBody += "{\\fldrslt ";
+                    m_textBody += escapeRtfText((*paraFormatDataIt).variable.getLinkName());
+                    m_textBody += "}}";
                 }
-#endif
                 else
                 {
                     // Generic variable
