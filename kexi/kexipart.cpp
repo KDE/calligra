@@ -22,12 +22,7 @@
 */
 
 #include <core/kexi_factory.h>
+#include <klibloader.h>
 
-extern "C"
-{
-    void* init_libkexipart()
-    {
-        return new KexiFactory;
-    }
-};
+K_EXPORT_COMPONENT_FACTORY( kexipart, KexiFactory );
 
