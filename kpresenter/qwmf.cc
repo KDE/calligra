@@ -23,8 +23,6 @@
 #include <assert.h>
 #include <qcolor.h>
 #include <qapp.h>
-#include <endian.h>
-
 
 bool qwmfDebug = FALSE;
 
