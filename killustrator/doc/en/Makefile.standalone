@@ -1,0 +1,10 @@
+docs_DATA = index.html killustrator-1.html killustrator-2.html \
+	killustrator-3.html killustrator-4.html killustrator-5.html \
+	align.png align2.png bezier.png colour.png ellipse.png \
+	freehand.png line.png logo.png logotp3.png movepoint.png \
+	newpoint.png pfeil.png point.png polygon-setup.png polygon.png \
+	rect.png rmpoint.png text.png zoom.png
+
+docsdir = $(kde_htmldir)/en/killustrator
+ 
+EXTRA_DIST = $(docs_DATA)                                                       

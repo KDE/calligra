@@ -22,6 +22,7 @@ for file in ../kde-i18n/*/docs/koffice/killustrator; do
    mkdir killustrator.dist/doc/$lang
    cp $file/* killustrator.dist/doc/$lang
    dlist="$dlist $lang"
+   cp killustrator/doc/$lang/Makefile.standalone killustrator.dist/doc/$lang/Makefile.am
 done
 echo "append SUBDIRS = $dlist"
 echo "SUBDIRS = de en" >> killustrator.dist/doc/Makefile.am

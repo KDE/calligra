@@ -38,7 +38,8 @@ Contributions by\n\
 Steffen Thorhauer, Stefan Taferner,\n\
 Stephan Kulow, Jost Schenck, Ben Skelton,\n\
 Reginald Stadlbauer, Hagen Höpfner,\n\
-Stefan Eickeler, Tobias Burnus, Wilco Greven"
+Stefan Eickeler, Tobias Burnus, Wilco Greven,\n\
+Claudiu Costin"
 
 AboutDialog::AboutDialog (QWidget* parent) :
     QDialog (parent, "About", true) {
