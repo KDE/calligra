@@ -1949,6 +1949,16 @@ void KWTextFrameSet::selectAll( bool select )
     emit repaintChanged( this );
 }
 
+QRect KWTextFrameSet::paragRect( QTextParag * parag ) const
+{
+    QPoint topLeft;
+    (void)internalToContents( parag->rect().topLeft(), topLeft );
+    QPoint bottomRight;
+    (void)internalToContents( parag->rect().bottomRight(), bottomRight );
+    return QRect( topLeft, bottomRight );
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )

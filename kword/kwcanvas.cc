@@ -162,9 +162,12 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
 
 void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 {
-    // Note: in drawContents, the painter is already to the contents coordinates
-    painter->setBrushOrigin( -contentsX(), -contentsY() );
-    drawDocument( 0L, painter, cx, cy, cw, ch );
+    if ( isUpdatesEnabled() )
+    {
+        // Note: in drawContents, the painter is already to the contents coordinates
+        painter->setBrushOrigin( -contentsX(), -contentsY() );
+        drawDocument( 0L, painter, cx, cy, cw, ch );
+    }
 }
 
 void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch, bool resetChanged )

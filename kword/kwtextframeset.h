@@ -89,6 +89,11 @@ public:
     /** returns a deep copy of self (and all it contains) */
     KWTextFrameSet *getCopy();
 
+    /** return true if some text is selected */
+    bool hasSelection() const {
+        return textdoc->hasSelection( QTextDocument::Standard );
+    }
+
     virtual void drawContents( QPainter *p, const QRect & crect,
                                QColorGroup &cg, bool onlyChanged, bool resetChanged )
     {
@@ -112,6 +117,7 @@ public:
     void pasteText( QTextCursor * cursor, const QString & text, KWTextFormat * currentFormat, bool removeSelected );
     void selectAll( bool select );
     void selectionChanged() { emit repaintChanged( this ); }
+    QRect paragRect( QTextParag * parag ) const;
 
     /** Set format changes on selection or current cursor */
     void setFormat( QTextCursor * cursor, KWTextFormat * & currentFormat, KWTextFormat *format, int flags, bool zoomFont = false );

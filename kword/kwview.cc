@@ -112,8 +112,8 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     m_border.common.ptWidth = 1;
     m_currentPage = 0;
 
-    searchEntry = new KWSearchContext();
-    replaceEntry = new KWSearchContext();
+    searchEntry = 0L;
+    replaceEntry = 0L;
     doc = _doc;
     backColor = QBrush( white );
 
@@ -665,9 +665,8 @@ void KWView::setupPrinter( KPrinter &prt )
 
 void KWView::print( KPrinter &prt )
 {
-    // Repaint behind the print dialog right now, before zooming the doc
-    kapp->processEvents();
-
+    // Don't repaint behind the print dialog until we're done zooming/unzooming the doc
+    gui->canvasWidget()->setUpdatesEnabled(false);
     gui->canvasWidget()->viewport()->setCursor( waitCursor );
 
     prt.setFullPage( true );
@@ -741,7 +740,9 @@ void KWView::print( KPrinter &prt )
     doc->setZoomAndResolution( oldZoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
     kdDebug() << "KWView::print zoom&res reset" << endl;
 
+    gui->canvasWidget()->setUpdatesEnabled(true);
     gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
+    doc->repaintAllViews();
 }
 
 /*================================================================*/
@@ -1026,25 +1027,29 @@ void KWView::editSelectAll()
 /*===============================================================*/
 void KWView::editFind()
 {
-    KWSearchDia *dialog;
-
-    dialog = new KWSearchDia( this, "Find", searchEntry );
-    if (dialog->exec() == QDialog::Accepted)
+    if (!searchEntry)
+        searchEntry = new KWSearchContext();
+    KWSearchDia dialog( gui->canvasWidget(), "find", searchEntry );
+    if ( dialog.exec() == QDialog::Accepted )
     {
+        KWFind find( gui->canvasWidget(), &dialog );
+        find.proceed();
     }
-    delete dialog;
 }
 
 /*===============================================================*/
 void KWView::editReplace()
 {
-    KWReplaceDia *dialog;
-
-    dialog = new KWReplaceDia( this, "Replace", searchEntry, replaceEntry );
-    if (dialog->exec() == QDialog::Accepted)
+    if (!searchEntry)
+        searchEntry = new KWSearchContext();
+    if (!replaceEntry)
+        replaceEntry = new KWSearchContext();
+    KWReplaceDia dialog( gui->canvasWidget(), "replace", searchEntry, replaceEntry );
+    if ( dialog.exec() == QDialog::Accepted )
     {
+        // KWReplace replace( gui->canvasWidget(), &dialog )
+        // replace.proceed();
     }
-    delete dialog;
 }
 
 /*================================================================*/

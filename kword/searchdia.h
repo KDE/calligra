@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2001, S.R.Haque <srhaque@iee.org>
+   Copyright (C) 2001, David Faure <david@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,8 +27,17 @@
 #include <qcolor.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qrichtext_p.h>
+using namespace Qt3;
 
-class KWSearchContextUI;
+class QPushButton;
+class QGridLayout;
+class QCheckBox;
+class QComboBox;
+class QSpinBox;
+class KColorButton;
+class KWCanvas;
+class KWTextFrameSet;
 
 //
 // This class represents the KWord-specific search extension items, and also the
@@ -54,10 +65,48 @@ public:
     QString m_family;
     QColor m_color;
     int m_size;
-    //KWFormat::VertAlign vertAlign;
-    QStringList m_strings;
+    QTextFormat::VerticalAlignment m_vertAlign;
+
+    QStringList m_strings; // history
     long m_optionsMask;
     long m_options;
+};
+
+//
+// This class represents the GUI elements that correspond to KWSearchContext.
+//
+class KWSearchContextUI : public QObject
+{
+    Q_OBJECT
+public:
+    KWSearchContextUI( KWSearchContext *ctx, QWidget *parent );
+    void setCtxOptions( long options );
+    void setCtxHistory( const QStringList & history );
+
+private slots:
+    void slotShowOptions();
+
+private:
+    KWSearchContext *m_ctx;
+    QWidget *m_parent;
+
+    bool m_bOptionsShown;
+    QPushButton *m_btnShowOptions;
+    QGridLayout *m_grid;
+    QCheckBox *m_checkFamily;
+    QCheckBox *m_checkSize;
+    QCheckBox *m_checkColor;
+    QCheckBox *m_checkBold;
+    QCheckBox *m_checkItalic;
+    QCheckBox *m_checkUnderline;
+    QCheckBox *m_checkVertAlign;
+    QComboBox *m_familyItem;
+    QSpinBox *m_sizeItem;
+    KColorButton *m_colorItem;
+    QCheckBox *m_boldItem;
+    QCheckBox *m_italicItem;
+    QCheckBox *m_underlineItem;
+    QComboBox *m_vertAlignItem;
 };
 
 //
@@ -69,16 +118,39 @@ class KWSearchDia:
     Q_OBJECT
 
 public:
-
-    KWSearchDia( QWidget *parent, const char *name, KWSearchContext *find );
+    KWSearchDia( KWCanvas *parent, const char *name, KWSearchContext *find );
 
 protected slots:
-
     void slotOk();
 
 private:
+    KWSearchContextUI *m_findUI;
+};
 
-    KWSearchContextUI *m_find;
+//
+// This class implements the 'find' functionality,
+// the "search next, prompt" loop.
+//
+class KWFind : public KoFind
+{
+    Q_OBJECT
+public:
+    KWFind( KWCanvas * canvas, KWSearchDia * dialog );
+    void proceed();
+
+protected:
+    bool findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
+                         QTextParag * lastParag, int lastIndex );
+
+protected slots:
+
+    void highlight( const QString &text, int matchingIndex, int matchingLength, const QRect &expose );
+private:
+    KWSearchDia * m_dialog;
+    KWCanvas *m_canvas;
+    KWTextFrameSet *m_currentFrameSet;
+    QTextParag *m_currentParag;
+    int m_offset;
 };
 
 //
@@ -91,10 +163,9 @@ class KWReplaceDia:
 
 public:
 
-    KWReplaceDia( QWidget *parent, const char *name, KWSearchContext *find, KWSearchContext *replace );
+    KWReplaceDia( KWCanvas *parent, const char *name, KWSearchContext *find, KWSearchContext *replace );
 
 protected slots:
-
     void slotOk();
 
 private:

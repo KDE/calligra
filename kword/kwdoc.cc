@@ -2287,12 +2287,12 @@ void KWDocument::setFrameMargins( KWUnit l, KWUnit r, KWUnit t, KWUnit b )
     for ( unsigned int i = 0; i < getNumFrameSets(); i++ ) {
         if ( getFrameSet( i )->hasSelectedFrame() ) {
             KWFrameSet *frameset = getFrameSet( i );
-            for ( unsigned int j = 0; j < getFrameSet( i )->getNumFrames(); j++ ) {
-                if ( getFrameSet( i )->getFrame( j )->isSelected() ) {
-                    getFrameSet( i )->getFrame( j )->setBLeft( l );
-                    getFrameSet( i )->getFrame( j )->setBRight( r );
-                    getFrameSet( i )->getFrame( j )->setBTop( t );
-                    getFrameSet( i )->getFrame( j )->setBBottom( b );
+            for ( unsigned int j = 0; j < frameset->getNumFrames(); j++ ) {
+                if ( frameset->getFrame( j )->isSelected() ) {
+                    frameset->getFrame( j )->setBLeft( l );
+                    frameset->getFrame( j )->setBRight( r );
+                    frameset->getFrame( j )->setBTop( t );
+                    frameset->getFrame( j )->setBBottom( b );
                 }
             }
         }
