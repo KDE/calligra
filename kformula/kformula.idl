@@ -1,0 +1,23 @@
+#ifndef __kformula_idl__
+#define __kformula_idl__
+
+#include <parts.idl>
+
+module KFormula
+{
+	interface View : OPParts::View
+	{
+		slot void newView();
+	};
+
+	interface Document : OPParts::Document
+	{
+	};
+
+	interface Factory : OPParts::Factory
+	{
+	};
+};
+
+#endif
+

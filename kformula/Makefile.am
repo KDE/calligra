@@ -1,33 +1,54 @@
-####### General stuff
+# $Id$
 
 SUBDIRS = pics
 
-bin_PROGRAMS = kformula.bin
-
-INCLUDES = $(all_includes)
-IBADD = $(all_libraries) -lkdeui -lkdecore -lqt $(LIBDL) $(LIBSOCKET) -lm
+INCLUDES  = $(MICO_INCLUDES)  -I./ui -I./core  -I../lib/koml \
+	-I../lib/kofficecore -I../lib/kofficeui $(all_includes) -I$(idldir)
+LDFLAGS =   $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
+LDADD =  ../lib/kofficeui/libkofficeui.la \
+	../lib/kofficecore/libkofficecore.la \
+	../lib/koml/libkoml.la -lkfile -lkfm -lkom -lop -lkdeui -lkdecore \
+	-lqt $(LIBMICO) -lXext -lX11 $(LIBSOCKET)
 
 ####### Files
 
-kformula_bin_SOURCES = part.cpp widget.cpp main.cpp
+bin_PROGRAMS = kformula.bin
 
-noinst_HEADERS = part.h widget.h main.h
+kformula_bin_SOURCES = kformula_main.cc kformula_doc.cc kformula_view.cc kformula.cc kformula_shell.cc
+noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h kformula.h kformula_shell.h
+SRCMETA =	kformula_main.moc kformula_view.moc kformula_doc.moc kformula_shell.moc
 
-BUILTSOURCES =	part.moc widget.moc main.moc
+IDL_INCLUDES = -I$(idldir)
 
-messages:
-	$(XGETTEXT) -C -ki18n -kklocale -ktranslate -x $(includedir)/kde.pot $(includedir)/corba.pot  *.cpp && mv messages.po ../po/kformula.pot
-
-part.cpp: part.moc
-widget.cpp: widget.moc
-main.cpp: main.moc
-
-SUFFIXES = .h .moc
-
-.h.moc: 
-	$(MOC) $< -o $@      
-
-bin_SCRIPTS = kformula
+idl_DATA = kformula.idl
+idl_HEADER = kformula.h
 
 kdelnk_DATA = kformula_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
+
+####### Implicit rules
+
+SUFFIXES = .h .moc
+
+.h.moc:
+	$(MOC) $< -o $@      
+
+####### Build rules
+
+install-exec-local:
+	$(INSTALL_SCRIPT) kformula $(bindir)/kformula
+
+kformula.h: kformula.idl
+	@echo $(IDL) --query-server-for-narrow $(IDL_INCLUDES) kformula.idl ;\
+	-rm -f kformula.h kformula.cc ;\
+	$(IDL) --query-server-for-narrow $(IDL_INCLUDES) kformula.idl ;\
+	sed -e "s,^#include \".*/\(.*\)\",#include <\1>," kformula.h > kformula.h.new && mv kformula.h.new kformula.h
+
+kformula.cc: kformula.h
+kformula_view.h: kformula.h
+kformula_shell.h: kformula.h
+kformula_doc.cc: kformula_doc.moc
+kformula_main.cc: kformula_main.moc kformula.h
+kformula_shell.cc: kformula_shell.moc
+kformula_view.cc: kformula_view.moc
+kformula_main.cc: kformula_view.h kformula.h
