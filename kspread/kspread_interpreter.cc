@@ -697,6 +697,54 @@ static bool kspreadfunc_product( KSContext& context )
   return b;
 }
 
+static int kspreadfunc_div_helper( KSContext & context,
+                                   QValueList<KSValue::Ptr> & args,
+                                   double & result )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  result = (*it)->doubleValue();
+  ++it;
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_product_helper( context, (*it)->listValue(), result ) )
+        return 0;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      double val =(*it)->doubleValue();
+      
+      if (val == 0)
+        return -1;
+
+      result /= val;
+    }
+  }
+
+  return 1;
+}
+
+static bool kspreadfunc_div( KSContext& context )
+{
+  double result = 0.0;
+  int b = kspreadfunc_div_helper( context,
+                                  context.value()->listValue(), 
+                                  result );
+
+  if ( b == 1 )
+    context.setValue( new KSValue( result ) );
+  else if ( b == -1 )
+    context.setValue( new KSValue( i18n("#DIV/0") ) );
+  else
+    return false;
+
+  return true;
+}
+
 static bool kspreadfunc_sumsq_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -771,6 +819,102 @@ static bool kspreadfunc_max( KSContext& context )
 
   if ( b )
     context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+static int kspreadfunc_lcd_lcd(int value1, int value2)
+{
+  // start with the lower value.
+  int n = (value1 <= value2 ? value1 : value2);
+  
+  // check if this is already the result
+  if ((value1 % n == 0) && (value2 % n == 0))
+  {
+    return n;
+  }
+  // to save time: start with n = n / 2
+  n = (int) (n / 2);
+
+  while ((value1 % n != 0) || (value2 % n != 0))
+  {
+    --n;
+  }
+
+  return n;
+}
+
+static bool kspreadfunc_lcd_helper( KSContext & context, 
+                                    QValueList<KSValue::Ptr>& args, 
+                                    int & result)
+{
+  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  // at first get the smallest value to start with
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_lcd_helper( context, (*it)->listValue(), result ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::IntType, true ) )
+    {
+      int val = (*it)->intValue();
+
+      if (val == 0)
+      {
+        result = 0;
+        return true;
+      }
+      
+      if ((result == 0) || (val < result))
+        result = val;
+    }
+  }
+
+  it = args.begin();
+
+  // calculate the LCD:
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_lcd_helper( context, (*it)->listValue(), result ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::IntType, true ) )
+    {
+      int n = kspreadfunc_lcd_lcd(result, (*it)->intValue());
+
+      if (n != result)
+      {
+        result = n;
+        it = args.begin();
+
+        continue;
+      }
+    }
+  }
+
+  if (result < 0)
+    result *= -1;
+
+  context.setValue(new KSValue(result));
+
+  return true;  
+}
+
+static bool kspreadfunc_lcd( KSContext & context )
+{
+  int result = 0;
+
+  bool b = kspreadfunc_lcd_helper(context, context.value()->listValue(),
+				  result);
+
+  if (b)
+    context.setValue(new KSValue(result));
 
   return b;
 }
@@ -1369,6 +1513,93 @@ static bool kspreadfunc_upper( KSContext& context )
     return true;
 }
 
+static bool kspreadfunc_toggle( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 1, "TOGGLE", true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+      return false;
+
+    QString str(args[0]->stringValue());
+    int i;
+    int l = str.length();
+
+    for (i = 0; i < l; ++i)
+    {
+      QChar c = str[i];
+      QChar lc = c.lower();
+      QChar uc = c.upper();
+
+      if (c == lc) // it is in lowercase
+        str[i] = c.upper();
+      else if (c == uc) // it is in uppercase
+        str[i] = c.lower();
+    }
+
+    context.setValue( new KSValue( str ) );
+
+    return true;
+}
+
+static bool kspreadfunc_clean( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 1, "CLEAN", true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+      return false;
+
+    QString str(args[0]->stringValue());
+    QString result;
+    QChar   c;
+    int     i;
+    int     l = str.length();
+
+    for (i = 0; i < l; ++i)
+    {
+      c = str[i];
+      if (c.isPrint())
+        result += c;
+    }
+
+    context.setValue(new KSValue(result));
+
+    return true;
+}
+
+static bool kspreadfunc_sleek( KSContext& context )
+{
+    QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+    if ( !KSUtil::checkArgumentsCount( context, 1, "SLEEK", true ) )
+      return false;
+
+    if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+      return false;
+
+    QString str(args[0]->stringValue());
+    QString result;
+    QChar   c;
+    int     i;
+    int     l = str.length();
+
+    for (i = 0; i < l; ++i)
+    {
+      c = str[i];
+      if (!c.isSpace())
+        result += c;
+    }
+
+    context.setValue(new KSValue(result));
+
+    return true;
+}
+
 static bool kspreadfunc_proper(KSContext & context)
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1383,23 +1614,20 @@ static bool kspreadfunc_proper(KSContext & context)
   {
     unsigned int i;
     str = args[0]->stringValue().lower();
-    QString f;
-    bool    first = true;
+    QChar f;
+    bool  first = true;
 
     for (i = 0; i < str.length(); ++i)
     {
       if (first)
       {
-        bool ok;
         f = str[i];
-        f.toInt( &ok, 10 );
-
-        if (ok)
+        if (f.isNumber())
           continue;
 
         f = f.upper();
 
-        str[i] = f[0];
+        str[i] = f;
         first = false;
 
         continue;
@@ -1529,7 +1757,41 @@ static bool kspreadfunc_EXACT( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_compare( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
+  if ( !KSUtil::checkArgumentsCount( context, 3, "COMPARE", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::BoolType, true ) )
+    return false;
+
+  int  result = 0;
+  bool exact = args[2]->boolValue();
+
+  QString s1 = args[0]->stringValue();
+  QString s2 = args[1]->stringValue();
+
+  if (!exact)
+    result = s1.lower().localeAwareCompare(s2.lower());
+  else
+    result = s1.localeAwareCompare(s2);
+
+  if (result < 0)
+    result = -1;
+  else if (result > 0)
+    result = 1;
+
+  context.setValue( new KSValue(result) );
+  return true;
+}
 
 static bool kspreadfunc_INT( KSContext& context )
 {
@@ -1753,6 +2015,283 @@ static bool kspreadfunc_isdate( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_years( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "YEARS", true ) )
+    return false;
+
+  // date1 is supposed to be the smaller one
+  QDate date1;
+  QDate date2;
+  
+  if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
+    return false;
+
+  // Accept both: dates and strings
+  if (!KSUtil::checkType( context, args[0], KSValue::StringType, true ))
+  {
+    if (!KSUtil::checkType( context, args[0], KSValue::DateType, true ))
+      return false;
+
+    date1 = args[0]->dateValue();
+  }
+  else
+    date1 = QDate::fromString(args[0]->stringValue());
+
+  if (!KSUtil::checkType( context, args[1], KSValue::StringType, true ))
+  {
+    if (!KSUtil::checkType( context, args[1], KSValue::DateType, true ))
+      return false;
+
+    date2 = args[1]->dateValue();
+  }
+  else
+    date2 = QDate::fromString(args[1]->stringValue());
+
+  if (!date1.isValid())
+    return false;
+
+  if (!date2.isValid())
+    return false;
+  
+  int type  = args[2]->intValue();
+  int years = 0;
+
+  if (type == 0)
+  {
+    // max. possible years between both dates
+
+    years  = date2.year() - date1.year();
+
+    if (date2.month() < date1.month())
+    {
+      --years;
+    }
+    else if ( (date2.month() == date1.month()) && (date2.day() < date1.day()) )
+    {
+      --years;
+    }
+
+    context.setValue( new KSValue( years ) );
+  }
+  else
+    //  if (type == 1)
+  {
+    // the number of full years in between, starting on 1/1/XXXX
+    if ( date1.year() == date2.year() )
+    {
+      context.setValue( new KSValue( 0 ) );
+
+      return true;
+    }
+
+    if ( (date1.month() != 1) || (date1.day() != 1) )
+      date1.setYMD(date1.year() + 1, 1, 1);
+
+    date2.setYMD(date2.year(), 1, 1);
+    
+    context.setValue( new KSValue( date2.year() - date1.year() ) );    
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_months( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "WEEKS", true ) )
+    return false;
+
+  // date1 is supposed to be the smaller one
+  QDate date1;
+  QDate date2;
+  
+  if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
+    return false;
+
+  // Accept both: dates and strings
+  if (!KSUtil::checkType( context, args[0], KSValue::StringType, true ))
+  {
+    if (!KSUtil::checkType( context, args[0], KSValue::DateType, true ))
+      return false;
+
+    date1 = args[0]->dateValue();
+  }
+  else
+    date1 = QDate::fromString(args[0]->stringValue());
+
+  if (!KSUtil::checkType( context, args[1], KSValue::StringType, true ))
+  {
+    if (!KSUtil::checkType( context, args[1], KSValue::DateType, true ))
+      return false;
+
+    date2 = args[1]->dateValue();
+  }
+  else
+    date2 = QDate::fromString(args[1]->stringValue());
+
+  if (!date1.isValid())
+    return false;
+
+  if (!date2.isValid())
+    return false;
+  
+  int type   = args[2]->intValue();
+  int months = 0;
+
+  if (type == 0)
+  {
+    months  = (date2.year() - date1.year()) * 12;
+    months += date2.month() - date1.month();
+
+    if (date2.day() < date1.day())
+    {
+      if (date2.day() != date2.daysInMonth())
+        --months;
+    }
+
+    context.setValue( new KSValue( months ) );    
+  }
+  else
+  //  if (type == 1)
+  {
+    // the number of full months in between, starting on 1/XX/XXXX
+    if (date1.month() == 12)
+      date1.setYMD(date1.year() + 1, 1, 1);
+    else
+      date1.setYMD(date1.year(), date1.month() + 1, 1);
+    date2.setYMD(date2.year(), date2.month(), 1);
+
+    months  = (date2.year() - date1.year()) * 12;
+    months += date2.month() - date1.month();
+
+    context.setValue( new KSValue( months ) );    
+  }
+
+  return true;
+}
+
+
+static bool kspreadfunc_weeks( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "WEEKS", true ) )
+    return false;
+
+  // date1 is supposed to be the smaller one
+  QDate date1;
+  QDate date2;
+  
+  if (!KSUtil::checkType( context, args[2], KSValue::IntType, true ))
+    return false;
+
+  if (!KSUtil::checkType( context, args[0], KSValue::StringType, true ))
+  {
+    if (!KSUtil::checkType( context, args[0], KSValue::DateType, true ))
+      return false;
+
+    date1 = args[0]->dateValue();
+  }
+  else
+    date1 = QDate::fromString(args[0]->stringValue());
+
+  if (!KSUtil::checkType( context, args[1], KSValue::StringType, true ))
+  {
+    if (!KSUtil::checkType( context, args[1], KSValue::DateType, true ))
+      return false;
+
+    date2 = args[1]->dateValue();
+  }
+  else
+    date2 = QDate::fromString(args[1]->stringValue());
+
+  if (!date1.isValid())
+    return false;
+
+  if (!date2.isValid())
+    return false;
+  
+  int type = args[2]->intValue();
+
+  int days = date1.daysTo(date2);
+
+  if (type == 0)
+  {
+    // just the number of full weeks between
+    context.setValue( new KSValue( (int)(days / 7) ) );
+    return true;
+  }
+  else
+    //  if (type == 1)
+  {
+    // the number of full weeks between starting on mondays
+    bool mondayFirstDay = KGlobal::locale()->weekStartsMonday();
+
+    int dow1 = date1.dayOfWeek();
+    int dow2 = date2.dayOfWeek();
+    
+    if (mondayFirstDay)
+    {
+      days -= (8 - dow1);
+      days -= (dow2 - 1);
+    }
+    else
+    {
+      days -= (7 - dow1);
+      days -= dow2;
+    }
+
+    context.setValue( new KSValue( (int) (days / 7) ) );    
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_days( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "DAYS", true ) )
+    return false;
+
+  QDate date1;
+  QDate date2;
+
+  if (!KSUtil::checkType( context, args[0], KSValue::StringType, true ))
+  {
+    if (!KSUtil::checkType( context, args[0], KSValue::DateType, true ))
+      return false;
+
+    date1 = args[0]->dateValue();
+  }
+  else
+    date1 = QDate::fromString(args[0]->stringValue());
+
+  if (!KSUtil::checkType( context, args[1], KSValue::StringType, true ))
+  {
+    if (!KSUtil::checkType( context, args[1], KSValue::DateType, true ))
+      return false;
+
+    date2 = args[1]->dateValue();
+  }
+  else
+    date2 = QDate::fromString(args[1]->stringValue());
+
+  if (!date1.isValid())
+    return false;
+
+  if (!date2.isValid())
+    return false;
+
+  int result = date1.daysTo(date2);
+
+  context.setValue( new KSValue(result));
+  return true;
+}
 
 static bool kspreadfunc_pow( KSContext& context )
 {
@@ -5408,6 +5947,26 @@ static bool kspreadfunc_CharToAscii( KSContext& context )
   return false;
 }
 
+static bool kspreadfunc_inttobool( KSContext & context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if (args.count() == 1)
+  {
+    if (KSUtil::checkType(context, args[0],
+                          KSValue::IntType, true))
+    {
+      bool result = (args[0]->intValue() == 1 ? true : false);
+
+      context.setValue( new KSValue(result) );
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
 static bool kspreadfunc_booltoint( KSContext & context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -5474,6 +6033,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "cos", new KSValue( new KSBuiltinFunction( module, "cos", kspreadfunc_cos ) ) );
   module->addObject( "sin", new KSValue( new KSBuiltinFunction( module, "sin", kspreadfunc_sin ) ) );
   module->addObject( "sum", new KSValue( new KSBuiltinFunction( module, "sum", kspreadfunc_sum ) ) );
+  module->addObject( "DIV", new KSValue( new KSBuiltinFunction( module, "DIV", kspreadfunc_div ) ) );
   module->addObject( "PRODUCT", new KSValue( new KSBuiltinFunction( module, "PRODUCT", kspreadfunc_product ) ) );
   module->addObject( "sumsq", new KSValue( new KSBuiltinFunction( module, "sumsq", kspreadfunc_sumsq ) ) );
   module->addObject( "sqrt", new KSValue( new KSBuiltinFunction( module, "sqrt", kspreadfunc_sqrt ) ) );
@@ -5490,6 +6050,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "log", new KSValue( new KSBuiltinFunction( module, "log", kspreadfunc_log ) ) );
   module->addObject( "max", new KSValue( new KSBuiltinFunction( module, "max", kspreadfunc_max ) ) );
   module->addObject( "LCM", new KSValue( new KSBuiltinFunction( module, "LCM", kspreadfunc_lcm ) ) );
+  module->addObject( "LCD", new KSValue( new KSBuiltinFunction( module, "LCD", kspreadfunc_lcd ) ) );
   module->addObject( "min", new KSValue( new KSBuiltinFunction( module, "min", kspreadfunc_min ) ) );
   module->addObject( "cosh", new KSValue( new KSBuiltinFunction( module, "cosh", kspreadfunc_cosh ) ) );
   module->addObject( "sinh", new KSValue( new KSBuiltinFunction( module, "sinh", kspreadfunc_sinh ) ) );
@@ -5521,6 +6082,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", kspreadfunc_mid) ) );
   module->addObject( "len", new KSValue( new KSBuiltinFunction( module, "len", kspreadfunc_len) ) );
   module->addObject( "EXACT", new KSValue( new KSBuiltinFunction( module, "EXACT", kspreadfunc_EXACT) ) );
+  module->addObject( "COMPARE", new KSValue( new KSBuiltinFunction( module, "COMPARE", kspreadfunc_compare) ) );
   module->addObject( "PROPER", new KSValue( new KSBuiltinFunction( module, "PROPER", kspreadfunc_proper) ) );
   module->addObject( "INT", new KSValue( new KSBuiltinFunction( module, "INT",kspreadfunc_INT) ) );
   //compatibility with kspread1.0
@@ -5557,7 +6119,10 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "INVBINO", new KSValue( new KSBuiltinFunction( module,"INVBINO",kspreadfunc_bino_inv) ) );
   module->addObject( "lower", new KSValue( new KSBuiltinFunction( module,"lower",kspreadfunc_lower) ) );
   module->addObject( "upper", new KSValue( new KSBuiltinFunction( module,"upper",kspreadfunc_upper) ) );
+  module->addObject( "TOGGLE", new KSValue( new KSBuiltinFunction( module,"TOGGLE",kspreadfunc_toggle) ) );
   module->addObject( "find", new KSValue( new KSBuiltinFunction( module,"find",kspreadfunc_find) ) );
+  module->addObject( "CLEAN", new KSValue( new KSBuiltinFunction( module, "CLEAN", kspreadfunc_clean) ) );
+  module->addObject( "SLEEK", new KSValue( new KSBuiltinFunction( module, "SLEEK", kspreadfunc_sleek) ) );
   module->addObject( "compound", new KSValue( new KSBuiltinFunction( module,"compound",kspreadfunc_compound) ) );
   module->addObject( "continuous", new KSValue( new KSBuiltinFunction( module,"continuous",kspreadfunc_continuous) ) );
   module->addObject( "effective", new KSValue( new KSBuiltinFunction( module,"effective",kspreadfunc_effective) ) );
@@ -5632,6 +6197,10 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "ISDATE", new KSValue( new KSBuiltinFunction( module, "ISDATE", kspreadfunc_isdate) ) );
   module->addObject( "hours", new KSValue( new KSBuiltinFunction( module, "hours", kspreadfunc_hours) ) );
   module->addObject( "minutes", new KSValue( new KSBuiltinFunction( module, "minutes", kspreadfunc_minutes) ) );
+  module->addObject( "DAYS", new KSValue( new KSBuiltinFunction( module, "DAYS", kspreadfunc_days) ) );
+  module->addObject( "WEEKS", new KSValue( new KSBuiltinFunction( module, "WEEKS", kspreadfunc_weeks) ) );
+  module->addObject( "MONTHS", new KSValue( new KSBuiltinFunction( module, "MONTHS", kspreadfunc_months) ) );
+  module->addObject( "YEARS", new KSValue( new KSBuiltinFunction( module, "YEARS", kspreadfunc_years) ) );
   module->addObject( "isLeapYear", new KSValue( new KSBuiltinFunction( module, "isLeapYear", kspreadfunc_isLeapYear) ) );
   module->addObject( "daysInMonth", new KSValue( new KSBuiltinFunction( module, "daysInMonth", kspreadfunc_daysInMonth) ) );
   module->addObject( "daysInYear", new KSValue( new KSBuiltinFunction( module, "daysInYear", kspreadfunc_daysInYear) ) );
@@ -5666,6 +6235,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "BOOL2STRING", new KSValue( new KSBuiltinFunction( module, "BOOL2STRING", kspreadfunc_BoolToString) ) );
   module->addObject( "NUM2STRING", new KSValue( new KSBuiltinFunction( module, "NUM2STRING", kspreadfunc_NumberToString) ) );
   module->addObject( "BOOL2INT", new KSValue( new KSBuiltinFunction( module, "BOOL2INT", kspreadfunc_booltoint) ) );
+  module->addObject( "INT2BOOL", new KSValue( new KSBuiltinFunction( module, "INT2BOOL", kspreadfunc_inttobool) ) );
 
   return module;
 }

@@ -259,14 +259,30 @@
     </Function>
 
     <Function>
+      <Name>INT2BOOL</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+        <Comment>Integer value to convert</Comment>
+        <Type range="false">Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The INT2BOOL() function returns a boolean value for a given integer number. This method is intended for using a int in methods which require a boolean. It only accept 0 or 1. If any other value is given, false is returned.</Text>
+        <Syntax>INT2BOOL(value)</Syntax>
+        <Example>INT2BOOL(1) returns true</Example>
+        <Example>INT2BOOL(0) returns false</Example>
+        <Example>OR(INT2BOOL(1), false) returns true</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>BOOL2INT</Name>
-      <Type>FLOAT</Type>
+      <Type>Int</Type>
       <Parameter>
         <Comment>Bool value to convert</Comment>
         <Type range="false">Boolean</Type>
       </Parameter>
       <Help>
-        <Text>The BOOL2INT() function returns an integer value for a given bool value. This method is intended for using a bool in methods which require an int or float</Text>
+        <Text>The BOOL2INT() function returns an integer value for a given bool value. This method is intended for using a bool in methods which require an int.</Text>
         <Syntax>BOOL2INT(value)</Syntax>
         <Example>BOOL2INT(True) returns 1</Example>
         <Example>BOOL2INT(False) returns 0</Example>
@@ -651,6 +667,93 @@
     <GroupName>Time and Date</GroupName>
 
     <Function>
+      <Name>WEEKS</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First (earlier) date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Calculation mode</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The WEEKS() function returns the difference between two dates in weeks.The third parameter indicates the calculation mode: if the mode is 0, WEEKS() returns the maximal possible number of weeks between those days. If the mode is 1, it only returns the number of whole weeks in between.</Text>
+	<Syntax>WEEKS(date2, date1, mode)</Syntax>
+	<Example>WEEKS("02/18/2002", "02/26/2002", 0) returns 1, cause there is one week and 1 day in between</Example>
+	<Example>WEEKS("02/19/2002", "02/26/2002", 1) returns 0, cause there is no whole week in between, starting at the first day of the week (monday or sunday, depending on your local settings)</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>MONTHS</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First (earlier) date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Calculation mode</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The MONTHS() function returns the difference between two dates in months.The third parameter indicates the calculation mode: if the mode is 0, MONTHS() returns the maximal possible number of months between those days. If the mode is 1, it only returns the number of complete months in between.</Text>
+	<Syntax>MONTHS(date2, date1, mode)</Syntax>
+	<Example>MONTHS("01/18/2002", "02/26/2002", 0) returns 1, cause there is 1 month and 8 days in between</Example>
+	<Example>MONTHS("01/19/2002", "02/26/2002", 1) returns 0, cause there is no whole month in between, starting at the first day of the month</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>YEARS</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First (earlier) date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Calculation mode</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The YEARS() function returns the difference between two dates in years.The third parameter indicates the calculation mode: if the mode is 0, YEARS() returns the maximal possible number of months between those days. If the mode is 1, it only returns whole true years, starting at the 1st Jan and ending at the 31th Dec.</Text>
+	<Syntax>YEARS(date2, date1, mode)</Syntax>
+	<Example>YEARS("02/19/2001", "02/26/2002", 0) returns 1, cause there is one year and 7 days in between</Example>
+	<Example>YEARS("02/19/2002", "02/26/2002", 1) returns 0, cause there is no whole year in between, starting at the first day of the year</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DAYS</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First (earlier) date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Second date value</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The DAYS() function returns the difference between two dates in days.</Text>
+	<Syntax>DAYS(date2, date1)</Syntax>
+	<Example>DAYS("02/22/2002", "02/26/2002") returns 4</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>dayOfYear</Name>
       <Type>Int</Type>
       <Parameter>
@@ -908,6 +1011,30 @@
     </Function>
 
     <Function>
+      <Name>COMPARE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>First String</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>String to compare with</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Compare case-sensitve (true/false)?</Comment>
+	<Type>Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The COMPARE() function returns 0 if these two strings are equal. -1 if the first one is lower than the second one, 1 otherwise.</Text>
+	<Syntax>COMPARE(string1; string2; true|false)</Syntax>
+	<Example>COMPARE("KOffice"; "KOffice", true) returns 0</Example>
+        <Example>COMPARE("koffice"; "KOffice", true) returns 1</Example>
+        <Example>COMPARE("kspread"; "KOffice", false) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>EXACT</Name>
       <Type>Boolean</Type>
       <Parameter>
@@ -1111,6 +1238,50 @@
     </Function>
 
     <Function>
+      <Name>TOGGLE</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The TOGGLE() function changes the characters written in lowercase to uppercase and characters written in uppercase to lowercase.</Text>
+	<Syntax>TOGGLE(text)</Syntax>
+	<Example>TOGGLE("hello") returns "HELLO"</Example>
+	<Example>TOGGLE("HELLO") returns "hello"</Example>
+	<Example>TOGGLE("HeLlO") returns "hElLo"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CLEAN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The CLEAN() function removes every not printable character from the string</Text>
+	<Syntax>CLEAN(text)</Syntax>
+	<Example>CLEAN(AsciiToChar(7) + "HELLO") returns "HELLO"</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SLEEK</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Source string</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The SLEEK() function removes all spaces from the string.</Text>
+	<Syntax>SLEEK(text)</Syntax>
+	<Example>SLEEK("This is   a  text ") returns "Thisisatext"</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>upper</Name>
       <Type>String</Type>
       <Parameter>
@@ -1165,21 +1336,26 @@
     </Function>
 
     <Function>
-      <Name>GCD</Name>
-      <Type>Float</Type>
+      <Name>LCD</Name>
+      <Type>Int</Type>
       <Parameter>
         <Comment>First number</Comment>
-        <Type range="true">FLOAT</Type>
+        <Type range="true">Int</Type>
       </Parameter>
       <Parameter>
         <Comment>Second Number</Comment>
-        <Type range="true">FLOAT</Type>
+        <Type range="true">Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Third Number</Comment>
+        <Type range="true">Int</Type>
       </Parameter>
       <Help>
-	<Text>The GCD() function returns the greatest common denominator for two or more float values</Text>
-	<Syntax>GCD(value; value)</Syntax>
-	<Example>GCD(6;4) returns 2</Example>
-	<Example>GCD(16;12) returns 4</Example>
+	<Text>The LCD() function returns the largest common denominator for two or more int values.</Text>
+	<Syntax>LCM(value; value)</Syntax>
+	<Example>LCM(6;4) returns 2</Example>
+	<Example>LCM(10;20) returns 10</Example>
+	<Example>LCM(20;15;10) returns 5</Example>
       </Help>
     </Function>
 
@@ -1418,10 +1594,42 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The PRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range sum(A1:B5) or a list of values like product(12;5;12.5).</Text>
+	<Text>The PRODUCT() function calculates the product of all the values given as parameters. You can calculate the product of a range: PRODUCT(A1:B5) or a list of values like product(12;5;12.5).</Text>
 	<Syntax>PRODUCT(value;value;...)</Syntax>
 	<Example>PRODUCT(3;5;7) equals 105</Example>
 	<Example>PRODUCT(12.5;2) equals 25</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>DIV</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The DIV() function divides the first value through all
+the other values. You can calculate using a range: DIV(A1:B5) or a list of values like DIV(12;5;12.5).</Text>
+	<Syntax>DIV(value;value;...)</Syntax>
+	<Example>DIV(20;2;2) returns 5</Example>
+	<Example>DIV(25;2.5) returns 10</Example>
       </Help>
     </Function>
 
