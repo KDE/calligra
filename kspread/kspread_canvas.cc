@@ -2136,13 +2136,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  }
 		  else{
 		      // If this already the last used field then jump to the end
-		      if ( y >= activeTable()->maxColumn() ) {
-			  y = KS_colMax;
+		      if ( x >= activeTable()->maxColumn() ) {
+			  x = KS_colMax;
 		      }
 		      else {
 			  //Otherwise we search for the next filled field and use the last empty one
 			  KSpreadCell * _c = activeTable()->getNextCellRight( x, y );
-
+			  
 			  //Found an existing cell, but does it contain something?
 			  while ( _c && _c->isEmpty() ) {
 			      _c = activeTable()->getNextCellRight( _c->column(), y );
