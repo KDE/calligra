@@ -37,13 +37,13 @@ void VColorSlider::init()
 	mSelector = new KGradientSelector( KSelector::Horizontal, this );
 	mSpinBox = new QSpinBox ( this );
 	layout->addWidget( mLabel );
-	layout->addWidget( mSelector );
+	layout->addWidget( mSelector, 2 );
 	layout->addWidget( mSpinBox );
 	setValue(0);
 	setMinValue(0);
 	setMaxValue(255);
-	connect( mSpinBox, SIGNAL( valueChanged ( int )), this, SLOT( updateFromSpinBox( int ) ) );
-	connect( mSelector, SIGNAL( valueChanged ( int )), this, SLOT( updateFromSpinBox( int ) ) );
+	connect( mSpinBox, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFromSpinBox( int ) ) );
+	connect( mSelector, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFromSelector( int ) ) );
 	layout->activate();
 }
 
