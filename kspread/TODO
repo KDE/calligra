@@ -90,12 +90,10 @@ Ariya
 =====
 - more "Related Functions" in function help/desc text
 - add more functions (helps welcomed!)
-- add support for matrices operation
 - improve function compatibility with MS Excel
 - more choices for Data -> Consolidate (Done)
 - dBASE import filter (Done, need some improvements)
 - dBASE export filter
-- start working on MS Excel export filter (with 'wildfox')
 - ported export filter (CSV,html) not to use KoDocument anymore
 
 
