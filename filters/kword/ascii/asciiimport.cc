@@ -452,17 +452,13 @@ void ASCIIImport::writeOutParagraph(QDomDocument& mainDocument,
     mainFramesetElement.appendChild(paragraphElementOut);
     QDomElement textElement=mainDocument.createElement("TEXT");
     paragraphElementOut.appendChild(textElement);
-    QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
-    paragraphElementOut.appendChild(formatsPluralElementOut);
+    //QDomElement formatsPluralElementOut=mainDocument.createElement("FORMATS");
+    //paragraphElementOut.appendChild(formatsPluralElementOut);
     QDomElement layoutElement=mainDocument.createElement("LAYOUT");
     paragraphElementOut.appendChild(layoutElement);
 
     QDomElement element;
     element=mainDocument.createElement("NAME");
-    element.setAttribute("value",name);
-    layoutElement.appendChild(element);
-
-    element=mainDocument.createElement("FOLLOWING");
     element.setAttribute("value",name);
     layoutElement.appendChild(element);
 
@@ -490,14 +486,7 @@ void ASCIIImport::writeOutParagraph(QDomDocument& mainDocument,
        {
        str += "<COUNTER type=\"";
        str += type;  // "6" = bullet "7" = dash
-       str += "\" depth=\"0\" bullet=\"";
-
-       if(type == "7") bullet = "183";  // symbol for a dash
-       else bullet = "176";    // symbol for a bullet list
-       str += bullet;
-
-       // FIXME: not sure if times is the right font for symbols
-       str+= "\" start=\"1\" numberingtype=\"0\" lefttext=\"\" righttext=\".\" bulletfont=\"times\" customdef=\"\" />\n";
+       str += "\" depth=\"0\" start=\"1\" numberingtype=\"0\" lefttext=\"\" righttext=\".\" />\n";
        }
 
     str += "<FORMAT>\n";
