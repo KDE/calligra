@@ -1136,3 +1136,4 @@ I used ghostview.
 ----------------------------------------------------
 -Now you can change default grid color
 -Undo works when you change type of cell (combobox, button, normal)
+-Add "Selection List"

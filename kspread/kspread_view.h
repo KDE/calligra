@@ -343,6 +343,12 @@ protected slots:
      */
     void slotScrollToLastTable();
 
+    /**
+     * list from list choose
+     */
+    void slotItemSelected( int );
+    void slotListChoosePopupMenu( );
+   
 protected slots:
     void repaintPolygon( const QPointArray& );
 
@@ -545,6 +551,12 @@ private:
      * Used for embedded children.
      */
     QPopupMenu* m_popupChild;
+
+    /**
+     * used for list of choose
+     */
+    QPopupMenu* m_popupListChoose;
+
     /**
      * Holds a pointer of the child for which the popup menu has been opened.
      */

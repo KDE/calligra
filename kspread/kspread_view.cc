@@ -122,6 +122,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pPopupColumn = 0;
     m_pPopupRow = 0;
     m_popupChild = 0;
+    m_popupListChoose=0;
 
     m_dcop = 0;
     m_bLoading =false;
@@ -464,6 +465,8 @@ KSpreadView::~KSpreadView()
     delete m_pPopupColumn;
     delete m_pPopupRow;
     delete m_pPopupMenu;
+    delete m_popupChild;
+    delete m_popupListChoose;
 }
 
 
@@ -2168,6 +2171,76 @@ void KSpreadView::slotPopupAdjustRow()
     canvasWidget()->adjustArea();
 }
 
+
+void KSpreadView::slotListChoosePopupMenu( )
+{
+ assert( m_pTable );
+ if (  m_popupListChoose != 0L )
+   delete m_popupListChoose;
+
+ if(!koDocument()->isReadWrite() )
+   return;
+
+ m_popupListChoose = new QPopupMenu();
+ int id = 0;
+ QRect selection( m_pTable->selectionRect() );
+ if(selection.left()==0)
+   selection.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
+		       m_pCanvas->markerColumn(),m_pCanvas->markerRow());
+ QStringList itemList;
+ KSpreadCell* c = m_pTable->firstCell();
+ for( ;c; c = c->nextCell() )
+   {
+     int col = c->column();
+     if ( selection.left() <= col && selection.right() >= col
+	  &&!c->isObscuringForced())
+       {
+	 if(!c->isFormular() && !c->isValue() && !c->valueString().isEmpty()
+         && !c->isTime() &&!c->isDate()
+	    && c->content() != KSpreadCell::VisualFormula)
+	   {
+	     if(itemList.findIndex(c->text())==-1)
+	       itemList.append(c->text());
+	   }
+	   
+       }
+   }
+ for ( QStringList::Iterator it = itemList.begin(); it != itemList.end();++it ) 
+   m_popupListChoose->insertItem( (*it), id++ );
+
+ if(id==0)
+   return;
+ RowLayout *rl = m_pTable->rowLayout( m_pCanvas->markerRow());
+ int tx = m_pTable->columnPos( m_pCanvas->markerColumn(), m_pCanvas );
+ int ty = m_pTable->rowPos(m_pCanvas->markerRow(), m_pCanvas );
+ int h = rl->height( m_pCanvas );
+ KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );  
+ if ( cell->extraYCells())
+   h = cell->extraHeight();
+ ty += h;
+
+ QPoint p( tx, ty );
+ QPoint p2 = m_pCanvas->mapToGlobal( p );
+ m_popupListChoose->popup( p2 );
+ QObject::connect( m_popupListChoose, SIGNAL( activated( int ) ),
+		  this, SLOT( slotItemSelected( int ) ) );
+}
+
+
+void KSpreadView::slotItemSelected( int id) 
+{
+  QString tmp=m_popupListChoose->text(id);
+  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );   
+  if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+      KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, cell->text(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+      m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+  
+  cell->setCellText( tmp, true );
+  editWidget()->setText( tmp );
+}
+
 void KSpreadView::openPopupMenu( const QPoint & _point )
 {
     assert( m_pTable );
@@ -2201,6 +2274,9 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
         m_insertCell->plug( m_pPopupMenu );
         m_removeCell->plug( m_pPopupMenu );
     }
+    
+
+
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
     m_pPopupMenu->insertSeparator();
     m_addModifyComment->plug( m_pPopupMenu );
@@ -2208,6 +2284,9 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     {
         m_removeComment->plug( m_pPopupMenu );
     }
+    
+   m_pPopupMenu->insertSeparator();
+    m_pPopupMenu->insertItem( i18n("Selection list..."), this, SLOT( slotListChoosePopupMenu() ) );
 
     // Remove informations about the last tools we offered
     m_lstTools.clear();
