@@ -55,7 +55,7 @@ protected:
 class KoTextDeleteCommand : public QTextDeleteCommand
 {
 public:
-    KoTextDeleteCommand( QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
+    KoTextDeleteCommand( QTextDocument *d, int i, int idx, const QMemArray<QTextStringChar> &str,
                          const CustomItemsMap & customItemsMap,
                          const QValueList<KoParagLayout> & oldParagLayouts );
     QTextCursor *execute( QTextCursor *c );
@@ -71,7 +71,7 @@ protected:
 class KoTextInsertCommand : public KoTextDeleteCommand
 {
 public:
-    KoTextInsertCommand( QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
+    KoTextInsertCommand( QTextDocument *d, int i, int idx, const QMemArray<QTextStringChar> &str,
                          const CustomItemsMap & customItemsMap,
                          const QValueList<KoParagLayout> &oldParagLayouts )
         : KoTextDeleteCommand( d, i, idx, str, customItemsMap, oldParagLayouts ) {}

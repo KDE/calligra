@@ -19,7 +19,7 @@
 */
 
 #include <iostream>
-#include <qarray.h>
+#include <qmemarray.h>
 #include <qpainter.h>
 
 #include "formulaelement.h"
@@ -145,9 +145,9 @@ BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
  */
 void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
-    QArray<double> toMidlines(getRows());
-    QArray<double> fromMidlines(getRows());
-    QArray<double> widths(getColumns());
+    QMemArray<double> toMidlines(getRows());
+    QMemArray<double> fromMidlines(getRows());
+    QMemArray<double> widths(getColumns());
 
     toMidlines.fill(0);
     fromMidlines.fill(0);

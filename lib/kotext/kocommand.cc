@@ -35,13 +35,13 @@ void KoTextCommand::unexecute()
 }
 
 KoTextDeleteCommand::KoTextDeleteCommand(
-    QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
+    QTextDocument *d, int i, int idx, const QMemArray<QTextStringChar> &str,
     const CustomItemsMap & customItemsMap,
     const QValueList<KoParagLayout> &oldParagLayouts )
     : QTextDeleteCommand( d, i, idx, str,
                           QValueList< QPtrVector<QStyleSheetItem> >(),
                           QValueList<QStyleSheetItem::ListStyle>(),
-                          QArray<int>() ),
+                          QMemArray<int>() ),
       m_oldParagLayouts( oldParagLayouts ),
       m_customItemsMap( customItemsMap )
 {
