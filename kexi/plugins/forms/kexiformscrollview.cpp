@@ -88,21 +88,25 @@ void KexiFormScrollView::moveToRecordRequested(uint r)
 void KexiFormScrollView::moveToLastRecordRequested()
 {
 	//! @todo
+	selectLastRow();
 }
 
 void KexiFormScrollView::moveToPreviousRecordRequested()
 {
 	//! @todo
+	selectPrevRow();
 }
 
 void KexiFormScrollView::moveToNextRecordRequested()
 {
 	//! @todo
+	selectNextRow();
 }
 
 void KexiFormScrollView::moveToFirstRecordRequested()
 {
 	//! @todo
+	selectFirstRow();
 }
 
 void KexiFormScrollView::addNewRecordRequested()

@@ -104,7 +104,7 @@ class KexiLabel : public QLabel, KexiDataItemInterface {
 			QLabel::styleChange( style );
 		}
 
-		virtual void enabledChange( const bool enabled ) {
+		virtual void enabledChange( bool enabled ) {
 			p_pixmapDirty = true;
 			p_privateLabel->setEnabled( enabled );
 			QLabel::enabledChange( enabled );

@@ -400,6 +400,12 @@ TODO: update to sqlite3.1 and use it's features http://www.sqlite.org/releasenot
 TODO: 0.1 stable: reuse http://segfault.is-a-geek.net:8001/feedback-kinitiator/
 	gfx can be found here: http://cvs.sourceforge.net/viewcvs.py/kinitiator/
 
+2005-02-02
+Tables/Forms
+- navigating within rows optimized by using iterators
+Forms
+- navigating readded (still read-only)
+
 2005-01-29..31
 Forms
 - KexiGradientWidget introduced: 
@@ -407,6 +413,7 @@ Forms
   Shadow Labels introduced
   (by Christian Nitschkowski; segfault_ii at web.de)
 - "show ui xml code" debug function added to forms
+- 1st attempt to port Forms to updated data-awarness API
 
 2005-01-27..29
 Widgets
