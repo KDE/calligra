@@ -89,10 +89,10 @@ void KFloatingDialog::mousePressEvent(QMouseEvent *e)
 
       if(title.contains(e->pos()))
 	{
-	  m_dragging = true;
+	  m_dragging = true; -
 	  m_dragStart = e->pos();
 	}
-      else if(!m_shaded && bottom.contains(e->pos()))
+      else if(bottom.contains(e->pos()))
 	{
 	  m_resizing = true;
 	  m_resizeStart = e->globalPos();
@@ -128,8 +128,12 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
     {
       QPoint dist = m_resizeStart - e->globalPos();
       QPoint newSize = QPoint(width(), height()) - dist;
+
+      if(m_shaded)
+	newSize.setY(height());
       
       resize(newSize.x(), newSize.y());
+      m_resizeStart = e->globalPos();
     }
 }
 
