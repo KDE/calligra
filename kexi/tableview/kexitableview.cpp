@@ -1196,6 +1196,10 @@ void KexiTableView::gotoNext()
 
 void KexiTableView::createEditor(int row, int col, QString addText/* = QString::null*/, bool backspace/* = false*/)
 {
+	if(d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
+		return;
+
+	
 //	QString val;
 	QVariant val;
 /*	switch(columnType(col))
