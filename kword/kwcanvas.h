@@ -102,7 +102,6 @@ public:
     void mpCreate( const QPoint& normalPoint );
     void mpCreatePixmap( const QPoint& normalPoint );
     // Mouse move
-    void mmEdit( int /*mx*/, int /*my*/ );  // mouse move in edit mode (with button pressed)
     void mmEditFrameResize( bool top, bool bottom, bool left, bool right, bool noGrid );
     void mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed );
     void mmCreate( const QPoint& normalPoint );

@@ -3010,9 +3010,9 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
         removeSelectedText( cursor );
     }
     QTextCursor c2 = *cursor;
-    checkUndoRedoInfo( cursor, UndoRedoInfo::Insert );
     if ( !customItemsMap.isEmpty() )
         clearUndoRedoInfo();
+    checkUndoRedoInfo( cursor, UndoRedoInfo::Insert );
     if ( !undoRedoInfo.valid() ) {
         if ( !commandName.isNull() ) // see replace-selection
             newPlaceHolderCommand( commandName );
@@ -3710,7 +3710,6 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action, bool select )
         } else {
             showCursor();
         }
-        ensureCursorVisible();
     } else {
         bool redraw = textDocument()->removeSelection( QTextDocument::Standard );
         moveCursor( action );
@@ -3718,10 +3717,9 @@ void KWTextFrameSetEdit::moveCursor( CursorAction action, bool select )
             //cursor->parag()->document()->nextDoubleBuffered = TRUE; // we need that only if we have nested items/documents
             textFrameSet()->selectionChangedNotify();
         }
-        ensureCursorVisible();
-        showCursor();
     }
 
+    ensureCursorVisible();
     showCursor();
     updateUI( true );
 }
