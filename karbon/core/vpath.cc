@@ -356,10 +356,10 @@ VPath::boundingBox() const
 
 		// take line width into account:
 		m_boundingBox.setCoords(
-			m_boundingBox.left()   - stroke()->lineWidth(),
-			m_boundingBox.top()    - stroke()->lineWidth(),
-			m_boundingBox.right()  + stroke()->lineWidth(),
-			m_boundingBox.bottom() + stroke()->lineWidth() );
+			m_boundingBox.left()   - 0.5 * stroke()->lineWidth(),
+			m_boundingBox.top()    - 0.5 * stroke()->lineWidth(),
+			m_boundingBox.right()  + 0.5 * stroke()->lineWidth(),
+			m_boundingBox.bottom() + 0.5 * stroke()->lineWidth() );
 
 		m_boundingBoxIsInvalid = false;
 	}
