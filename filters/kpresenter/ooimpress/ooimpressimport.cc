@@ -338,6 +338,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
     {
         dp = drawPage.toElement();
+        if ( dp.tagName()=="draw:page" && dp.hasAttribute( "draw:id" ))
+        {
         m_styleStack.clear(); // remove all styles
         fillStyleStack( dp );
         m_styleStack.save();
@@ -385,6 +387,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
         //m_animations.clear();
         m_styleStack.restore();
+    }
     }
 
     docElement.appendChild( paperElement );
