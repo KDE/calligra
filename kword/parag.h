@@ -40,7 +40,7 @@ class KWordDocument;
 /******************************************************************/
 
 /**
- * This class hold a real paragraph. It tells abou the text in this
+ * This class hold a real paragraph. It tells about the text in this
  * paragraph, its format etc. The complete text is a list of KWParag instances.
  */
 class KWParag

@@ -140,37 +140,94 @@ void KWParagLayout::save( QTextStream&out )
 {
     out << indent << "<NAME value=\"" << correctQString( name ) << "\"/>" << endl;
     out << indent << "<FOLLOWING name=\"" << correctQString( followingParagLayout ) << "\"/>" << endl;
-    out << indent << "<FLOW value=\"" << static_cast<int>( flow ) << "\"/>" << endl;
-    out << indent << "<OHEAD " << paragHeadOffset << "/>" << endl;
-    out << indent << "<OFOOT " << paragFootOffset << "/>" << endl;
-    out << indent << "<IFIRST " << firstLineLeftIndent << "/>" << endl;
-    out << indent << "<ILEFT " << leftIndent << "/>" << endl;
-    out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
-    out << indent << "<COUNTER type=\"" << static_cast<int>( counter.counterType ) << "\" depth=\"" << counter.counterDepth
-        << "\" bullet=\"" << counter.counterBullet.unicode() << "\" start=\""
-        << QString::number(counter.startCounter) << "\" numberingtype=\""
-        << static_cast<int>( counter.numberingType ) << "\" lefttext=\""
-        << correctQString( counter.counterLeftText ) << "\" righttext=\""
-        << correctQString( counter.counterRightText ) << "\" bulletfont=\""
-        << correctQString( counter.bulletFont ) << "\" customdef=\""
-        << correctQString( counter.customCounterDef ) << "\" />" << endl;
-    out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
-        << left.color.blue() << "\" style=\"" << static_cast<int>( left.style ) << "\" width=\"" << left.ptWidth << "\"/>" << endl;
-    out << indent << "<RIGHTBORDER red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
-        << right.color.blue() << "\" style=\"" << static_cast<int>( right.style ) << "\" width=\"" << right.ptWidth << "\"/>" << endl;
-    out << indent << "<TOPBORDER red=\"" << top.color.red() << "\" green=\"" << top.color.green() << "\" blue=\""
-        << top.color.blue() << "\" style=\"" << static_cast<int>( top.style ) << "\" width=\"" << top.ptWidth << "\"/>" << endl;
-    out << indent << "<BOTTOMBORDER red=\"" << bottom.color.red() << "\" green=\"" << bottom.color.green() << "\" blue=\""
-        << bottom.color.blue() << "\" style=\"" << static_cast<int>( bottom.style )
-        << "\" width=\"" << bottom.ptWidth << "\"/>" << endl;
+    if(flow!=0) {
+        out << indent << "<FLOW value=\"" << static_cast<int>( flow ) << "\"/>" << endl;
+    }
+    if(paragHeadOffset.pt()!=0) {
+        out << indent << "<OHEAD " << paragHeadOffset << "/>" << endl;
+    }
+    if(paragFootOffset.pt()!=0) {
+        out << indent << "<OFOOT " << paragFootOffset << "/>" << endl;
+    }
+    if(firstLineLeftIndent.pt()!=0) {
+        out << indent << "<IFIRST " << firstLineLeftIndent << "/>" << endl;
+    }
+    if(leftIndent.pt()!=0) {
+        out << indent << "<ILEFT " << leftIndent << "/>" << endl;
+    }
+    if(lineSpacing.pt()!=0) {
+        out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
+    }
+    if(counter.counterType!=CT_NONE) {
+        out << indent << "<COUNTER type=\"" << static_cast<int>( counter.counterType ) << "\" depth=\"" << counter.counterDepth
+            << "\" bullet=\"" << counter.counterBullet.unicode() << "\" start=\""
+            << QString::number(counter.startCounter) << "\" numberingtype=\""
+            << static_cast<int>( counter.numberingType ) << "\" lefttext=\""
+            << correctQString( counter.counterLeftText ) << "\" righttext=\""
+            << correctQString( counter.counterRightText ) << "\" bulletfont=\""
+            << correctQString( counter.bulletFont ) << "\" customdef=\""
+            << correctQString( counter.customCounterDef ) << "\" />" << endl;
+    }
+    if(left.color.red()!=255 || left.color.green()!=255 || left.color.blue()!=255 || 
+            left.style!=0 || left.ptWidth!=0) {
+        out << indent << "<LEFTBORDER ";
+        if(left.color.red()!=255 || left.color.green()!=255 || left.color.blue()!=255) {
+            out << "red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
+                << left.color.blue() << "\" ";
+        }
+        if(left.style!=0 || left.ptWidth!=0) {
+            out << "style=\"" << static_cast<int>( left.style ) << "\" width=\"" << left.ptWidth << "\"";
+        }
+        out << "/>" << endl;
+    }
+    if(right.color.red()!=255 || right.color.green()!=255 || right.color.blue()!=255 || 
+            right.style!=0 || right.ptWidth!=0) {
+        out << indent << "<RIGHTBORDER ";
+        if(right.color.red()!=255 || right.color.green()!=255 || right.color.blue()!=255) {
+            out << "red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
+                << right.color.blue() << "\" ";
+        }
+        if(right.style!=0 || right.ptWidth!=0) {
+            out << "style=\"" << static_cast<int>( right.style ) << "\" width=\"" << right.ptWidth << "\"";
+        }
+        out << "/>" << endl;
+    }
+    if(top.color.red()!=255 || top.color.green()!=255 || top.color.blue()!=255 || 
+            top.style!=0 || top.ptWidth!=0) {
+        out << indent << "<TOPBORDER ";
+        if(top.color.red()!=255 || top.color.green()!=255 || top.color.blue()!=255) {
+            out << "red=\"" << top.color.red() << "\" green=\"" << top.color.green() << "\" blue=\""
+                << top.color.blue() << "\" ";
+        }
+        if(top.style!=0 || top.ptWidth!=0) {
+            out << "style=\"" << static_cast<int>( top.style ) << "\" width=\"" << top.ptWidth << "\"";
+        }
+        out << "/>" << endl;
+    }
+    if(bottom.color.red()!=255 || bottom.color.green()!=255 || bottom.color.blue()!=255 || 
+            bottom.style!=0 || bottom.ptWidth!=0) {
+        out << indent << "<BOTTOMBORDER ";
+        if(bottom.color.red()!=255 || bottom.color.green()!=255 || bottom.color.blue()!=255) {
+            out << "red=\"" << bottom.color.red() << "\" green=\"" << bottom.color.green() << "\" blue=\""
+                << bottom.color.blue() << "\" ";
+        }
+        if(bottom.style!=0 || bottom.ptWidth!=0) {
+            out << "style=\"" << static_cast<int>( bottom.style ) << "\" width=\"" << bottom.ptWidth << "\"";
+        }
+        out << "/>" << endl;
+    }
     out << otag << "<FORMAT>" << endl;
     format.save( out );
     out << etag << "</FORMAT> " << endl;
 
-    for ( unsigned int i = 0; i < tabList.count(); i++ )
-        out << indent << "<TABULATOR mmpos=\"" << tabList.at( i )->mmPos << "\" ptpos=\"" << tabList.at( i )->ptPos
-            << "\" inchpos=\"" << tabList.at( i )->inchPos << "\" type=\""
-            << static_cast<int>( tabList.at( i )->type ) << "\"/>" << endl;
+    for ( unsigned int i = 0; i < tabList.count(); i++ ){
+        out << indent << "<TABULATOR mmpos=\"" << tabList.at( i )->mmPos << "\" ptpos=\"" 
+            << tabList.at( i )->ptPos << "\" inchpos=\"" << tabList.at( i )->inchPos << "\"";
+        if(tabList.at(i)->type!=T_LEFT) {
+            out << "type=\"" << static_cast<int>( tabList.at( i )->type ) << "\"";
+        }
+        out << "/>" << endl;
+    }
 }
 
 /*================================================================*/
@@ -203,6 +260,7 @@ void KWParagLayout::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
             QValueList<KOMLAttrib>::ConstIterator it = lst.begin();
             KoTabulator *tab = new KoTabulator;
             bool noinch = true;
+            tab->type=T_LEFT;
             for( ; it != lst.end(); ++it ) {
                 if ( ( *it ).m_strName == "mmpos" )
                     tab->mmPos = ( *it ).m_strValue.toDouble();

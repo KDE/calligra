@@ -7,7 +7,6 @@ Bugs; in order or importance:
 - Opening frame properties for headers and footers should not be possible.
 - Frame Run around is the wrong way around.. Framedia does it correct now. 
   still needs to be done correctly in kword_doc
-- Page Preview image forgets about orientation when changing page size. (always shows  portrait)
 - deleting pictures-frames should also delete the picture (from the tar) (imageCollection)
   (we have a problem with reference counts in the creation of a new image)
 - Setting a paragraph to a new style should override ALL settings, including size of the characters.
@@ -15,7 +14,7 @@ Bugs; in order or importance:
 - When deleting text, empty pages are not removed
 - When a frame grows there are sometimes redraw errors
 - When removing text in a table cell shrink table cells
-- Ancher is not redrawn if page scrolls
+- Anchor is not redrawn if page scrolls
 
 Missing or incomplete stuff:
 ----------------------------------------
@@ -30,6 +29,8 @@ Missing or incomplete stuff:
 - Sideheads
 - split frame
 - Toolbars in the settings menu are not updated if they are not shown/reshown
+- The borders dialog doesnt work (settings are not used)
+- runAroundGap does nothing
 
 
 cleanup:
@@ -39,7 +40,8 @@ isAFooter is a global function; move to frameset class.
 what does int frameset in the fc.cc do??
 char.cc uses C-type strings, passing around *char pointers without destructors etc. Very ugly.
 char.h does a define "#define kwchar QChar", lets replace all kwchar with QChars in the sources..
-
+load and save functions in frame and frameset are mixed up. Should move them to right position
+to save code duplication.
 
 Optimations:
 ----------------------------------------

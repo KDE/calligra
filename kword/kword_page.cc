@@ -1145,7 +1145,7 @@ void KWPage::vmrCreateTable()
 
     insRect = insRect.normalize();
     if ( insRect.width() > doc->getRastX() && insRect.height() > doc->getRastY() ) {
-        if ( tcols * 70 + insRect.x() > doc->getPTPaperWidth() )
+        if ( tcols * minColWidth + insRect.x() > doc->getPTPaperWidth() )
             {
                 KMessageBox::sorry(0, i18n("KWord is unable to insert the table because there\n"
                                            "is not enough space available."));
@@ -1166,7 +1166,7 @@ void KWPage::vmrCreateTable()
             for ( unsigned int i = 0; i < trows; i++ ) {
                 for ( unsigned int j = 0; j < tcols; j++ ) {
                     KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
-                    KWFrame *frame = new KWFrame(_frameSet, insRect.x() + contentsX(), insRect.y() + contentsY(), insRect.width(), insRect.height() );
+                    KWFrame *frame = new KWFrame(_frameSet, insRect.x() + contentsX(), insRect.y() + contentsY(), (doc->getPTPaperWidth() - insRect.x())/tcols, insRect.height() );
                     _frameSet->addFrame( frame );
                     frame->setFrameBehaviour(AutoExtendFrame);
                     frame->setNewFrameBehaviour(NoFollowup);

@@ -367,8 +367,12 @@ void KWParag::save( QTextStream&out )
     out << indent << "<TEXT>" << text.decoded() << "</TEXT>" << endl;
     if ( info == PI_FOOTNOTE || info == PI_CONTENTS )
         out << indent << "<NAME name=\"" << correctQString( paragName ) << "\"/>" << endl;
-    out << indent << "<INFO info=\"" << static_cast<int>( info ) << "\"/>" << endl;
-    out << indent << "<HARDBRK frame=\"" << static_cast<int>( hardBreak ) << "\"/>" << endl;
+    if(info != PI_NONE) { // only save tag if it diffs from the default
+        out << indent << "<INFO info=\"" << static_cast<int>( info ) << "\"/>" << endl;
+    }
+    if(hardBreak != false) {
+        out << indent << "<HARDBRK frame=\"" << static_cast<int>( hardBreak ) << "\"/>" << endl;
+    }
     out << otag << "<FORMATS>" << endl;
     text.saveFormat( out );
     out << etag << "</FORMATS>" << endl;

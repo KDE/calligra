@@ -182,13 +182,30 @@ void KWFormat::incRef()
 /*================================================================*/
 void KWFormat::save( QTextStream&out )
 {
-    out << indent << "<COLOR red=\"" << color.red() << "\" green=\"" << color.green() << "\" blue=\"" << color.blue() << "\"/>" << endl;
+    // Related note: the checks are now to see if the values are the default values (as
+    // set in load()) The KWFormat class supports 'unchanged' states for most values.
+    // These are however not used, it would be nicer to use the 'unchanged' states and 
+    // not save those states.
+
+    if(color.red()!=0 || color.green()!=0 || color.blue()!=0) {
+        out << indent << "<COLOR red=\"" << color.red() << "\" green=\"" << color.green() << "\" blue=\"" << color.blue() << "\"/>" << endl;
+    }
     out << indent << "<FONT name=\"" << correctQString( userFont->getFontName() ) << "\"/>" << endl;
-    out << indent << "<SIZE value=\"" << ptFontSize << "\"/>" << endl;
-    out << indent << "<WEIGHT value=\"" << weight << "\"/>" << endl;
-    out << indent << "<ITALIC value=\"" << static_cast<int>( italic ) << "\"/>" << endl;
-    out << indent << "<UNDERLINE value=\"" << static_cast<int>( underline ) << "\"/>" << endl;
-    out << indent << "<VERTALIGN value=\"" << static_cast<int>( vertAlign ) << "\"/>" << endl;
+    if(ptFontSize!=12) {
+        out << indent << "<SIZE value=\"" << ptFontSize << "\"/>" << endl;
+    }
+    if(weight!=50) {
+        out << indent << "<WEIGHT value=\"" << weight << "\"/>" << endl;
+    }
+    if(italic!='\0') {
+        out << indent << "<ITALIC value=\"" << static_cast<int>( italic ) << "\"/>" << endl;
+    }
+    if(underline!=0) {
+        out << indent << "<UNDERLINE value=\"" << static_cast<int>( underline ) << "\"/>" << endl;
+    }
+    if(vertAlign!=VA_NORMAL) {
+        out << indent << "<VERTALIGN value=\"" << static_cast<int>( vertAlign ) << "\"/>" << endl;
+    }
 }
 
 /*================================================================*/
@@ -199,6 +216,14 @@ void KWFormat::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst, KWordDocum
 
     QString tag;
     QString name;
+
+    // defaults. (see the note in save())
+    color.setRgb(0,0,0);
+    weight=50;
+    italic='\0';
+    underline=0;
+    vertAlign=VA_NORMAL;
+    ptFontSize=12;
 
     while ( parser.open( QString::null, tag ) )
     {

@@ -592,33 +592,93 @@ void KWFrameSet::save( QTextStream&out )
     for ( unsigned int i = 0; i < frames.count(); i++ ) {
         frame = getFrame( i );
         out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
-            << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom()
-            << "\" runaround=\"" << static_cast<int>( frame->getRunAround() )
-            << "\" runaGapPT=\"" << frame->getRunAroundGap().pt()
-            << "\" runaGapMM=\"" << frame->getRunAroundGap().mm()
-            << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" "
-            << correctQString( frame->leftBrd2String() ) << correctQString( frame->rightBrd2String() )
-            << correctQString( frame->topBrd2String() )
-            << correctQString( frame->bottomBrd2String() ) << "bkRed=\""
-            << frame->getBackgroundColor().color().red()
-            << "\" bkGreen=\"" << frame->getBackgroundColor().color().green()
-            << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
+            << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom() << "\" ";
+        if(frame->getRunAround()!=RA_NO) {
+            out << "runaround=\"" << static_cast<int>( frame->getRunAround() ) << "\" ";
+        }
+        if(frame->getRunAroundGap().mm()!=1) {
+            out << "runaGapPT=\"" << frame->getRunAroundGap().pt()
+              << "\" runaGapMM=\"" << frame->getRunAroundGap().mm()
+              << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" ";
+        }
+        if(frame->getLeftBorder().ptWidth!=1) {
+            out << "lWidth=\"" << frame->getLeftBorder().ptWidth << "\" ";
+        }
+        if(frame->getLeftBorder().color != Qt::white) {
+            out << "lRed=\"" << frame->getLeftBorder().color.red() << "\" lGreen=\"" 
+                << frame->getLeftBorder().color.green() << "\" lBlue=\"" 
+                << frame->getLeftBorder().color.blue() << "\" ";
+        }
+        if(frame->getLeftBorder().style != KWParagLayout::SOLID) {
+            out << "lStyle=\"" <<  static_cast<int>( frame->getLeftBorder().style ) << "\" ";
+        }
 
-            << "\" bleftpt=\"" << frame->getBLeft().pt() << "\" bleftmm=\"" << frame->getBLeft().mm()
-            << "\" bleftinch=\"" << frame->getBLeft().inch()
+        if(frame->getRightBorder().ptWidth!=1) {
+            out << "rWidth=\"" << frame->getRightBorder().ptWidth << "\" ";
+        }
+        if(frame->getRightBorder().color != Qt::white) {
+            out << "rRed=\"" << frame->getRightBorder().color.red() << "\" rGreen=\"" 
+                << frame->getRightBorder().color.green() << "\" rBlue=\"" 
+                << frame->getRightBorder().color.blue() << "\" ";
+        }
+        if(frame->getRightBorder().style != KWParagLayout::SOLID) {
+            out << "rStyle=\"" <<  static_cast<int>( frame->getRightBorder().style ) << "\" ";
+        }
 
-            << "\" brightpt=\"" << frame->getBRight().pt() << "\" brightmm=\"" << frame->getBRight().mm()
-            << "\" brightinch=\"" << frame->getBRight().inch()
+        if(frame->getTopBorder().ptWidth!=1) {
+            out << "tWidth=\"" << frame->getTopBorder().ptWidth << "\" ";
+        }
+        if(frame->getTopBorder().color != Qt::white) {
+            out << "tRed=\"" << frame->getTopBorder().color.red() << "\" tGreen=\"" 
+                << frame->getTopBorder().color.green() << "\" tBlue=\"" 
+                << frame->getTopBorder().color.blue() << "\" ";
+        }
+        if(frame->getTopBorder().style != KWParagLayout::SOLID) {
+            out << "tStyle=\"" <<  static_cast<int>( frame->getTopBorder().style ) << "\" ";
+        }
 
-            << "\" btoppt=\"" << frame->getBTop().pt() << "\" btopmm=\"" << frame->getBTop().mm()
-            << "\" btopinch=\"" << frame->getBTop().inch()
-
-            << "\" bbottompt=\"" << frame->getBBottom().pt() << "\" bbottommm=\"" << frame->getBBottom().mm()
-            << "\" bbottominch=\"" << frame->getBBottom().inch()
-            << "\" autoCreateNewFrame=\"" << static_cast<int>( frame->getFrameBehaviour())
-            << "\" newFrameBehaviour=\"" << static_cast<int>( frame->getNewFrameBehaviour())
-            << "\" sheetSide=\"" << static_cast<int>( frame->getSheetSide())
-            << "\"/>" << endl;
+        if(frame->getBottomBorder().ptWidth!=1) {
+            out << "bWidth=\"" << frame->getBottomBorder().ptWidth << "\" ";
+        }
+        if(frame->getBottomBorder().color != Qt::white) {
+            out << "bRed=\"" << frame->getBottomBorder().color.red() << "\" bGreen=\"" 
+                << frame->getBottomBorder().color.green() << "\" bBlue=\"" 
+                << frame->getBottomBorder().color.blue() << "\" ";
+        }
+        if(frame->getBottomBorder().style != KWParagLayout::SOLID) {
+            out << "bStyle=\"" <<  static_cast<int>( frame->getBottomBorder().style ) << "\" ";
+        }
+        if(frame->getBackgroundColor().color() != Qt::white) {
+            out << "bkRed=\"" << frame->getBackgroundColor().color().red()
+                << "\" bkGreen=\"" << frame->getBackgroundColor().color().green()
+                << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue() << "\" ";
+        }
+        if(frame->getBLeft().pt() != 0) {
+            out << "bleftpt=\"" << frame->getBLeft().pt() << "\" bleftmm=\"" << frame->getBLeft().mm()
+                << "\" bleftinch=\"" << frame->getBLeft().inch() << "\" ";
+        }
+        if(frame->getBRight().pt()!=0) {
+            out << "brightpt=\"" << frame->getBRight().pt() << "\" brightmm=\"" << frame->getBRight().mm()
+                << "\" brightinch=\"" << frame->getBRight().inch() << "\" ";
+        }
+        if(frame->getBTop().pt()!=0) {
+            out << "btoppt=\"" << frame->getBTop().pt() << "\" btopmm=\"" << frame->getBTop().mm()
+                << "\" btopinch=\"" << frame->getBTop().inch() << "\" ";
+        }
+        if(frame->getBBottom().pt()!=0) {
+            out << "bbottompt=\"" << frame->getBBottom().pt() << "\" bbottommm=\"" << frame->getBBottom().mm()
+                << "\" bbottominch=\"" << frame->getBBottom().inch() << "\" ";
+        }
+        if(frame->getFrameBehaviour()!=AutoCreateNewFrame) {
+            out << "autoCreateNewFrame=\"" << static_cast<int>( frame->getFrameBehaviour()) << "\" ";
+        }
+        if(frame->getNewFrameBehaviour()!=Reconnect) {
+            out << "newFrameBehaviour=\"" << static_cast<int>( frame->getNewFrameBehaviour()) << "\" ";
+        }
+        if(frame->getSheetSide()!= AnySide) {
+            out << "sheetSide=\"" << static_cast<int>( frame->getSheetSide()) << "\" ";
+        }
+        out << "/>" << endl;
     }
 }
 
@@ -1009,8 +1069,8 @@ void KWTextFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
             FrameBehaviour autoCreateNewValue = AutoCreateNewFrame;
             SheetSide sheetSide = AnySide;
             KWParagLayout::Border l, r, t, b;
-            double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 0.0, rainch = -1.0;
-            double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 0.0;
+            double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 1.0, rainch = 0.0393701;
+            double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 2.0;
 
             l.color = Qt::white;
             l.style = KWParagLayout::SOLID;
@@ -1373,8 +1433,8 @@ void KWPictureFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
         } else if ( name == "FRAME" ) {
             KWFrame rect;
             KWParagLayout::Border l, r, t, b;
-            double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 0.0, rainch = -1.0;
-            double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 0.0;
+            double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 1.0, rainch = 0.0393701;
+            double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 2.83465;
 
             l.color = Qt::white;
             l.style = KWParagLayout::SOLID;
@@ -1914,8 +1974,8 @@ void KWFormulaFrameSet::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
         } else if ( name == "FRAME" ) {
             KWFrame rect;
             KWParagLayout::Border l, r, t, b;
-            double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 0.0, rainch = -1.0;
-            double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 0.0;
+            double lmm = 0.0, linch = 0.0, rmm = 0.0, rinch = 0.0, tmm = 0.0, tinch = 0.0, bmm = 0.0, binch = 0.0, ramm = 1.0, rainch = 0.0393701;
+            double lpt = 0.0, rpt = 0.0, tpt = 0.0, bpt = 0.0, rapt = 2.83465;
 
             l.color = Qt::white;
             l.style = KWParagLayout::SOLID;
@@ -2193,8 +2253,8 @@ void KWGroupManager::init( unsigned int x, unsigned int y, unsigned int width, u
         wid = width / cols - 5;
     }
 
-    if ( wid < 40 )
-        wid = 40;
+    if ( wid < minColWidth )
+        wid = minColWidth;
 
     unsigned int _wid, _hei;
 
@@ -2232,7 +2292,6 @@ void KWGroupManager::init()
 /*================================================================*/
 void KWGroupManager::recalcCols()
 {
-    const int minColWidth=18;
     unsigned int row=0,col=0;
     if(! cells.isEmpty() && isOneSelected(row,col)) {
         // check/set sizes of frames
