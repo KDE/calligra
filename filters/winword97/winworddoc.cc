@@ -48,24 +48,34 @@ WinWordDoc::~WinWordDoc() {
     }
 }
 
-void WinWordDoc::convert() {
+const bool WinWordDoc::convert() {
 
     QString p;
-    ptCPBase=locatePieceTbl();
-    ptSize=read32(table.data+ptCPBase);
-    ptCPBase+=4;
 
-    if((ptSize-4)%12!=0)
-        kdebug(KDEBUG_ERROR, 31000, "Sumting Wong (inside joke(tm))");
-    ptCount=static_cast<long>((ptSize-4)/12);
-    ptPCDBase=ptCount*4+4+ptCPBase;
+    if(!locatePieceTbl())
+        return false;
 
     PCD pcd=readPCD(ptPCDBase);
-    kdebug(KDEBUG_ERROR, 31000, "test: pcd[0].fc");
+    kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::convert(): pcd[0].fc");
     kdebug(KDEBUG_ERROR, 31000, (const char*)QString::number((long)pcd.fc));
     pcd=readPCD(ptPCDBase+8);
-    kdebug(KDEBUG_ERROR, 31000, "test: pcd[1].fc");
+    kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::convert(): pcd[1].fc");
     kdebug(KDEBUG_ERROR, 31000, (const char*)QString::number((long)pcd.fc));
+
+    kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::convert(): main.length");
+    kdebug(KDEBUG_ERROR, 31000, (const char*)QString::number((long)main.length));
+
+    pcd=readPCD(ptPCDBase);
+    QString r="WinWordDoc::convert(): String(0-1):  ";
+    for(int i=0; i<20; ++i) {
+        if(pcd.unicode) {
+            r+=QChar(read16(main.data+pcd.fc+i));
+            ++i;
+        }
+        else
+            r+=QChar(char2uni(*(main.data+pcd.fc+i)));
+    }
+    kdebug(KDEBUG_INFO, 31000, (const char*)r.latin1());
 
     if(fib->fComplex==0) {
     }
@@ -74,6 +84,7 @@ void WinWordDoc::convert() {
 
     ready=true;
     success=false;  // only now :)
+    return true;
 }
 
 const QString WinWordDoc::part() {
@@ -85,6 +96,7 @@ const QString WinWordDoc::part() {
 
 void WinWordDoc::FIBInfo() {
 
+    kdebug(KDEBUG_INFO, 31000, "WinWordDoc::FIBInfo() - start -----------------");
     kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->wIdent))));
     kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->nFib))));
     kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(QString::number(static_cast<long>(fib->nProduct))));
@@ -130,6 +142,7 @@ void WinWordDoc::FIBInfo() {
     kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(str));
     kdebug(KDEBUG_INFO, 31000, "--------------------------");
     delete [] str;
+    kdebug(KDEBUG_INFO, 31000, "WinWordDoc::FIBInfo() - end -----------------");
 }
 
 void WinWordDoc::readFIB() {
@@ -194,26 +207,47 @@ const PCD WinWordDoc::readPCD(const long &pos) {
     return ret;
 }
 
-const long WinWordDoc::locatePieceTbl() {
+const bool WinWordDoc::locatePieceTbl() {
 
-    long ret=fib->fcClx;
+    long tmp=fib->fcClx;
     QString r;
+    bool found=false;
 
-    while(*(table.data+ret)==1 && ret<static_cast<long>(fib->fcClx+fib->lcbClx)) {
-        ret+=read16(table.data+ret+1)+3;
-        r="ret(grpprl): ";
-        r+=QString::number((long)ret);
+    while(*(table.data+tmp)==1 && tmp<static_cast<long>(fib->fcClx+fib->lcbClx)) {
+        tmp+=read16(table.data+tmp+1)+3;
+        r="WinWordDoc::locatePieceTbl(): tmp(grpprl): ";
+        r+=QString::number((long)tmp);
         kdebug(KDEBUG_INFO, 31000, (const char*)r);
     }
-    if(*(table.data+ret)==2)
-        kdebug(KDEBUG_INFO, 31000, "Found pclfpcd :)");
-    else
+    if(*(table.data+tmp)==2) {
+        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::locatePieceTbl(): Found pclfpcd :)");
+        ptCPBase=tmp+1;
+        ptSize=read32(table.data+ptCPBase);
+        ptCPBase+=4;
+
+        r="WinWordDoc::locatePieceTbl(): ptCPBase: ";
+        r+=QString::number((long)ptCPBase);
+        kdebug(KDEBUG_INFO, 31000, (const char*)r);
+        r="WinWordDoc::locatePieceTbl(): ptSize: ";
+        r+=QString::number((long)ptSize);
+        kdebug(KDEBUG_INFO, 31000, (const char*)r);
+
+        if((ptSize-4)%12!=0)
+            kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::locatePieceTbl(): Sumting Wong (inside joke(tm))");
+        ptCount=static_cast<long>((ptSize-4)/12);
+        ptPCDBase=ptCount*4+4+ptCPBase;
+
+        r="WinWordDoc::locatePieceTbl(): ptPCDBase: ";
+        r+=QString::number((long)ptPCDBase);
+        kdebug(KDEBUG_INFO, 31000, (const char*)r);
+
+        found=true;
+    }
+    else {
         success=false;
-    ++ret;
-    r="ret(pclfpcd): ";
-    r+=QString::number((long)ret);
-    kdebug(KDEBUG_INFO, 31000, (const char*)r);
-    return ret;
+        kdebug(KDEBUG_ERROR, 31000, "WinWordDoc::locatePieceTbl(): Can't locate the piece table");
+    }
+    return found;
 }
 
 const short WinWordDoc::char2uni(const unsigned char c) {

@@ -88,7 +88,7 @@ void OLEFilter::convert() {
             myFile main, table0, table1, data;
             QArray<long> tmp;
 
-            kdebug(KDEBUG_INFO, 31000, "WinWord");
+            kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): WinWord");
 
             main.data=0L;
             table0.data=0L;
@@ -116,7 +116,7 @@ void OLEFilter::convert() {
         }
         else if(node->name=="Workbook") {
             // Excel
-            kdebug(KDEBUG_INFO, 31000, "Excel");
+            kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Excel");
 
             myFile workbook;
             workbook.data=0L;
@@ -127,7 +127,7 @@ void OLEFilter::convert() {
         }
         else if(node->name=="PowerPoint Document") {
             // PowerPoint
-            kdebug(KDEBUG_INFO, 31000, "Power Point");
+            kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): Power Point");
             myFilter=new FilterBase();
             // connect SIGNALs&SLOTs
             connectCommon();
@@ -138,7 +138,7 @@ void OLEFilter::convert() {
 
     if(myFilter==0L) {
         // unknown
-        kdebug(KDEBUG_INFO, 31000, "superunknown");
+        kdebug(KDEBUG_INFO, 31000, "OLEFilter::convert(): superunknown");
         myFilter=new FilterBase();
         // connect SIGNALs&SLOTs
         connectCommon();

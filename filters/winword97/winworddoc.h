@@ -19,7 +19,7 @@ public:
 
     const bool isOk() { return success; }
 
-    void convert();
+    const bool convert();
     const QString part();
 
 private:
@@ -29,7 +29,7 @@ private:
     void FIBInfo();
     void readFIB();
     const PCD readPCD(const long &pos);
-    const long locatePieceTbl();
+    const bool locatePieceTbl();
 
     const short char2uni(const unsigned char c);
     inline const unsigned short read16(const unsigned char *d);

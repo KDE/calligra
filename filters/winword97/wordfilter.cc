@@ -32,7 +32,8 @@ const QString WordFilter::part() {
 }
 
 const bool WordFilter::filter() {
-    myDoc->convert();
+
+    success=myDoc->convert();
     myKwd->part(myDoc->part());
     success=myDoc->isOk() & myKwd->isOk();
     ready=true;

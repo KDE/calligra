@@ -16,7 +16,7 @@ KLaola::KLaola(const myFile &file) {
     ok=true;
 
     if( (file.length % 0x200) != 0 ) {
-        kdebug(KDEBUG_ERROR, 31000, "Invalid file size!");
+        kdebug(KDEBUG_ERROR, 31000, "KLaola::KLaola(): Invalid file size!");
         ok=false;
     }
     if(ok) {
@@ -101,7 +101,7 @@ const QList<OLENode> KLaola::parseCurrentDir() {
             found=false;
             do {
                 if(tree==0) {
-                    kdebug(KDEBUG_ERROR, 31000, "path seems to be corrupted!");
+                    kdebug(KDEBUG_ERROR, 31000, "KLaola::parseCurrentDir(): path seems to be corrupted!");
                     ok=false;
                 }
                 else if(tree->handle==path[i] && tree->subtree!=-1)
@@ -109,7 +109,6 @@ const QList<OLENode> KLaola::parseCurrentDir() {
                 else
                     tree=tmpList->next();
             } while(!found);
-
             tmpList=treeList.at(tree->subtree);
         }
     }
@@ -242,7 +241,7 @@ void KLaola::testIt() {
     OLEInfo info;
     QString foo;
 
-    kdebug(KDEBUG_INFO, 31000, "testIt()");
+    kdebug(KDEBUG_INFO, 31000, "KLaola::testIt() - start -----------");
 
     if(ok) {
         dir=parseRootDir();
@@ -258,13 +257,14 @@ void KLaola::testIt() {
             kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(foo));
         }
     }
+    kdebug(KDEBUG_INFO, 31000, "KLaola::testIt() - end -----------");
 }
 
 const bool KLaola::parseHeader() {
 
     if(qstrncmp((const char*)data,"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1",8 )!=0) {
         kdebug(KDEBUG_ERROR, 31000, 
-               "Invalid file format (unexpected id in header)!");
+               "KLaola::parseHeader(): Invalid file format (unexpected id in header)!");
         return false;
     }
 
@@ -282,7 +282,6 @@ const bool KLaola::parseHeader() {
 void KLaola::readBigBlockDepot() {
 
     bigBlockDepot=new unsigned char[0x200*num_of_bbd_blocks];
-    
     for(unsigned int i=0; i<num_of_bbd_blocks; ++i)
         memcpy(&bigBlockDepot[i*0x200], &data[(bbd_list[i]+1)*0x200], 0x200);
 }
@@ -305,7 +304,6 @@ void KLaola::readRootList() {
             readPPSEntry((pos+1)*0x200+0x80*i, handle);
         pos=nextBigBlock(pos);
     }
-
     QList<OLETree> *tmpList=new QList<OLETree>;
     treeList.append(tmpList);
 
