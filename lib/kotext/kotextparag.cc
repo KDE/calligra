@@ -991,8 +991,8 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
         setMargins( layout.margins );
     if ( flags & KoParagLayout::LineSpacing )
     {
+        setLineSpacingType( layout.lineSpacingType );
         setLineSpacing( layout.lineSpacingValue() );
-        setLineSpacingType( m_layout.lineSpacingType );
     }
     if ( flags & KoParagLayout::Borders )
     {
