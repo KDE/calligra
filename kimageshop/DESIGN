@@ -13,8 +13,8 @@ KImageShopShell
  - derived from koMainWindow
 
 KImageShopDoc
- - derived from koDocument
- - holds and manages the image canvas
+ - derived from Canvas
+ - holds and manages the image data
 
 KImageShopView
  - derived from QWidget (implements koViewIf)
@@ -23,9 +23,6 @@ KImageShopView
 
 Canvas
  - holds, manages and modifies the image data
- - don't access the canvas direct, implement KImageShopDoc functiosn to access it indirectly
-   (some classes like the tools may have direct access)
- - manages/ updates a list of canvas views.
 
 CanvasView
  - derived from QWidget
@@ -65,4 +62,4 @@ Ideas:
 ------
 
 - Use KScript to implement a scripting server later.
- 
+
