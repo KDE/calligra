@@ -86,7 +86,7 @@ void VDocumentPreview::paintEvent( QPaintEvent* )
 	m_document->draw( &p, &rect );
 	// draw viewport rect
 	VColor c( Qt::red );
-	VStroke stroke( c, 0L, 12.0 );
+	VStroke stroke( c, 0L, 1.0 / scaleFactor );
 	p.setPen( stroke );
 	p.newPath();
 	KoPoint p1( 0, 0 );
