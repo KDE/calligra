@@ -79,7 +79,9 @@ int main( int argc, char** argv ) {
     TEST_BEGIN( 0, 0 );
     writer.addAttribute( "a", "val" );
     writer.addAttribute( "b", "<\">" );
-    TEST_END( "attributes test", "<!DOCTYPE r>\n<r a=\"val\" b=\"&lt;&quot;&gt;\"/>\n" );
+    writer.addAttribute( "c", -42 );
+    writer.addAttribute( "d", 1234.56789012345 );
+    TEST_END( "attributes test", "<!DOCTYPE r>\n<r a=\"val\" b=\"&lt;&quot;&gt;\" c=\"-42\" d=\"1234.56789012345\"/>\n" );
 
     TEST_BEGIN( 0, 0 );
     writer.startElement( "m" );

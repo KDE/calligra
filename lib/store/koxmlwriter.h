@@ -45,15 +45,16 @@ public:
      *  and the root element with all its namespaces.
      *  You can add more namespaces afterwards with addAttribute.
      *
-     *  @param subtype either 0, "content", "styles", "meta" or "settings",
-     *   which is the second part of the name of the tag for the root element.
+     *  @param rootElementName the tag name of the root element.
+     *     This is either office:document, office:document-content,
+     *     office:document-styles, office:document-meta or office:document-settings
      *  @return the KoXmlWriter instance. It becomes owned by the caller, which
      *  must delete it at some point.
      *
      * Once done with writing the contents of the root element, you
      * will need to call endElement(); endDocument(); before destroying the KoXmlWriter.
      */
-    KoXmlWriter( QIODevice* dev, const char* subtype );
+    KoXmlWriter( QIODevice* dev, const char* rootElementName );
 
     /// Destructor
     ~KoXmlWriter();
@@ -70,19 +71,38 @@ public:
     /// Call this to terminate an XML document.
     void endDocument();
 
+    /**
+     * Start a new element, as a child of the current element.
+     * @param tagName the name of the tag. Warning: this string must
+     * remain alive until endElement, no copy is internally made.
+     * Usually tagName is a string constant so this is no problem anyway.
+     */
     void startElement( const char* tagName );
+
+    /**
+     * Overloaded version of addAttribute( const char*, const char* ),
+     * which is a bit slower because it needs to convert @p value to utf8 first.
+     */
     inline void addAttribute( const char* attrName, const QString& value ) {
         addAttribute( attrName, value.utf8() );
     }
+    /**
+     * Add an attribute whose value is an integer
+     */
     inline void addAttribute( const char* attrName, int value ) {
         QCString str;
         str.setNum( value );
         addAttribute( attrName, str.data() );
     }
+    /**
+     * Add an attribute whose value is a floating point number
+     * The number is written out with the highest possible precision
+     * (unlike QString::number and setNum, which default to 6 digits)
+     */
+    void addAttribute( const char* attrName, double value );
     inline void addAttribute( const char* attrName, const QCString& value ) {
         addAttribute( attrName, value.data() );
     }
-    // Overload for fixed-value attributes
     void addAttribute( const char* attrName, const char* value );
     void endElement();
     inline void addTextNode( const QString& str ) {

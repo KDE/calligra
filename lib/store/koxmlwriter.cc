@@ -19,6 +19,8 @@
 
 #include "koxmlwriter.h"
 #include <kglobal.h> // kMin
+#include <kdebug.h>
+#include <float.h>
 
 static const unsigned int s_indentBufferLength = 100;
 
@@ -37,24 +39,17 @@ void KoXmlWriter::init()
     m_escapeBuffer = new char[s_escapeBufferLen];
 }
 
-// subtype is either 0, content, styles, meta or settings
-KoXmlWriter::KoXmlWriter( QIODevice* dev, const char* subtype )
+KoXmlWriter::KoXmlWriter( QIODevice* dev, const char* rootElemName )
     : m_dev( dev )
 {
     init();
 
-    QCString rootElemName = "office:document";
-    if ( subtype )
-    {
-        rootElemName += '-';
-        rootElemName += subtype;
-    }
-    startDocument( rootElemName /*TODO: , publicId, systemId - how do I refer to a relaxng schema? */ );
+    startDocument( rootElemName );
     startElement( rootElemName );
     addAttribute( "xmlns:office", "urn:oasis:names:tc:openoffice:xmlns:office:1.0" );
     addAttribute( "xmlns:meta", "urn:oasis:names:tc:openoffice:xmlns:meta:1.0" );
 
-    if ( qstrcmp( subtype, "meta" ) != 0 ) {
+    if ( qstrcmp( rootElemName, "office:document-meta" ) != 0 ) {
         addAttribute( "xmlns:config", "urn:oasis:names:tc:openoffice:xmlns:config:1.0" );
         addAttribute( "xmlns:text", "urn:oasis:names:tc:openoffice:xmlns:text:1.0" );
         addAttribute( "xmlns:table", "urn:oasis:names:tc:openoffice:xmlns:table:1.0" );
@@ -126,12 +121,14 @@ void KoXmlWriter::startElement( const char* tagName )
     m_tags.push( Tag( tagName ) );
     writeChar( '<' );
     writeCString( tagName );
+    //kdDebug() << k_funcinfo << tagName << endl;
 }
 
 void KoXmlWriter::endElement()
 {
     Q_ASSERT( !m_tags.isEmpty() );
     Tag tag = m_tags.pop();
+    //kdDebug() << k_funcinfo << " tagName=" << tag.tagName << " hasChildren=" << tag.hasChildren << endl;
     if ( !tag.hasChildren ) {
         writeCString( "/>" );
     }
@@ -171,6 +168,13 @@ void KoXmlWriter::addAttribute( const char* attrName, const char* value )
     if(escaped != m_escapeBuffer)
         delete[] escaped;
     writeChar( '"' );
+}
+
+void KoXmlWriter::addAttribute( const char* attrName, double value )
+{
+    QCString str;
+    str.setNum( value, 'g', DBL_DIG );
+    addAttribute( attrName, str.data() );
 }
 
 void KoXmlWriter::writeIndent()
