@@ -5800,7 +5800,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
     // Start of the next page
     int top = bottom + 1;
     // Calculate all pages, but if we are embedded, print only the first one
-    while ( bottom < cell_range.bottom() /* && page_list.count() == 0 */ )
+    while ( bottom <= cell_range.bottom() /* && page_list.count() == 0 */ )
     {
 //         kdDebug(36001) << "KSpreadTable::print: bottom=" << bottom << " bottom_range=" << cell_range.bottom() << endl;
 
@@ -5808,7 +5808,7 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
         int right = m_printRange.left()-1;
         // Start of the next page
         int left = right + 1;
-        while ( right < cell_range.right() )
+        while ( right <= cell_range.right() )
         {
 //             kdDebug(36001) << "KSpreadTable::print: right=" << right << " right_range=" << cell_range.right() << endl;
 
