@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+Name=KSpread Applix-Spreadsheets Import Filter
+Export=application/x-kspread
+Import=application/x-applixspread
+Implemented=file
+X-KDE-Library=libapplixspreadimport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter
