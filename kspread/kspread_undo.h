@@ -169,7 +169,7 @@ protected:
 class KSpreadUndoCellLayout : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection );
+    KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection, QString &_title );
     virtual ~KSpreadUndoCellLayout();
 
     virtual void undo();

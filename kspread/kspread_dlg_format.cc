@@ -129,7 +129,8 @@ void KSpreadFormatDlg::slotOk()
 
     if ( !m_view->doc()->undoBuffer()->isLocked() )
     {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_view->doc(), m_view->activeTable(), r );
+        QString title=i18n("Change layout");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_view->doc(), m_view->activeTable(), r ,title);
         m_view->doc()->undoBuffer()->appendUndo( undo );
     }
     //

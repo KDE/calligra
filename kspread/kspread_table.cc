@@ -219,6 +219,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_bShowColumnNumber=false;
   m_bHideZero=false;
   m_bFirstLetterUpper=false;
+  m_bAutoCalc=true;
   // Get a unique name so that we can offer scripting
   if ( !_name )
   {
@@ -697,6 +698,8 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
     QRect r( m_rctSelection );
     if ( !selected )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+    //necessary to create cell otherwise undo layout doen't work
     if(   selected && m_rctSelection.bottom() == 0x7FFF )
     {
       RowLayout* rw =m_rows.first();
@@ -718,7 +721,8 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
     }
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+            QString title=i18n("Change font");
+            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
@@ -884,8 +888,9 @@ void KSpreadTable::setSelectionSize( const QPoint &_marker, int _size )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Change font");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
@@ -1162,8 +1167,9 @@ void KSpreadTable::setSelectionVerticalText( const QPoint &_marker,bool _b)
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Vertical Text");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     // Complete rows selected ?
@@ -1248,8 +1254,9 @@ void KSpreadTable::setSelectionComment( const QPoint &_marker,QString _comment)
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Add comment");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     // Complete rows selected ?
@@ -1346,8 +1353,9 @@ void KSpreadTable::setSelectionAngle( const QPoint &_marker,int _value)
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Change angle");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     // Complete rows selected ?
@@ -1452,8 +1460,9 @@ void KSpreadTable::setSelectionRemoveComment( const QPoint &_marker)
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Remove comment");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     // Complete rows selected ?
@@ -1552,8 +1561,9 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &t
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Change text color");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     if ( selected && m_rctSelection.right() == 0x7FFF )
@@ -1678,8 +1688,9 @@ void KSpreadTable::setSelectionbgColor( const QPoint &_marker, const QColor &bg_
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Change background color");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
 
@@ -1780,8 +1791,9 @@ void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, const QColor 
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Change border color");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     // Complete rows selected ?
@@ -2013,8 +2025,9 @@ void KSpreadTable::setSelectionPercent( const QPoint &_marker ,bool b )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Format percent");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
         // Complete rows selected ?
@@ -2753,7 +2766,8 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
     {
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+            QString title=i18n("Change border");
+            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -2784,7 +2798,8 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
     {
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+            QString title=i18n("Change border");
+            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -2837,7 +2852,8 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        QString title=i18n("Change border");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
         m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -2880,7 +2896,8 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
     {
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        QString title=i18n("Change border");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
         m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -2898,6 +2915,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
 void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
 {
     bool selected = ( m_rctSelection.left() != 0 );
+    QString title=i18n("Change border");
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
@@ -2911,7 +2929,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
     rect.setCoords(r.left(),r.top(),1,r.bottom());
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, rect );
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, rect,title );
         m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -2947,7 +2965,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
         m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -2989,7 +3007,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
     {
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
         m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -3010,14 +3028,14 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-
+    QString title=i18n("Change border");
     QPen pen( _color,2,SolidLine);
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -3046,7 +3064,7 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, rect );
+            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, rect,title );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -3064,7 +3082,7 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
     {
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -3088,7 +3106,8 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        QString title=i18n("Change border");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
         m_pDoc->undoBuffer()->appendUndo( undo );
         }
     QPen pen( _color,2,SolidLine);
@@ -3247,7 +3266,8 @@ void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+            QString title=i18n("Change border");
+            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
 
@@ -3397,7 +3417,8 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        QString title=i18n("Change border");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
     QPen pen( black,1,NoPen);
@@ -3822,8 +3843,9 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Multirow");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
 
@@ -3926,8 +3948,9 @@ void KSpreadTable::setSelectionAlign( const QPoint &_marker, KSpreadLayout::Alig
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Change align");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
 
@@ -4053,8 +4076,9 @@ void KSpreadTable::setSelectionAlignY( const QPoint &_marker, KSpreadLayout::Ali
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Change align Y");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r, title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     // Complete rows selected ?
@@ -4160,8 +4184,9 @@ void KSpreadTable::setSelectionPrecision( const QPoint &_marker, int _delta )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Change precision");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     // Complete rows selected ?
@@ -4269,8 +4294,9 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker,bool b )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Format money");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
 
@@ -4455,8 +4481,9 @@ void KSpreadTable::increaseIndent( const QPoint &_marker )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Increase indent");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     if ( selected && m_rctSelection.right() == 0x7FFF )
@@ -4586,8 +4613,9 @@ void KSpreadTable::decreaseIndent( const QPoint &_marker )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Decrease indent");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
 
@@ -5127,8 +5155,9 @@ void KSpreadTable::defaultSelection( const QPoint &_marker )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
+        QString title=i18n("Default parameters");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r,title );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     // Complete rows selected ?

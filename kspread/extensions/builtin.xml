@@ -208,7 +208,7 @@
       <Help>
 	<Text>This function transforms a radian angle to degree angle.</Text>
 	<Syntax>degree(Float)</Syntax>
-	<Example>degree(75) equals 44.69</Example>
+	<Example>degree(0.78) equals 44.69</Example>
 	<Example>degree(1) equals 57.29</Example>
       </Help>
     </Function>

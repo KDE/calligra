@@ -457,10 +457,13 @@ void KSpreadUndoSetTableName::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoCellLayout::KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection ) :
+KSpreadUndoCellLayout::KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection, QString &_title ) :
     KSpreadUndoAction( _doc )
 {
-  title=i18n("Change layout");
+  if( _title.isEmpty())
+        title=i18n("Change layout");
+  else
+        title=_title;
   m_rctRect = _selection;
   m_tableName = _table->tableName();
   copyLayout( m_lstLayouts, m_lstColLayouts,m_lstRowLayouts,_table );

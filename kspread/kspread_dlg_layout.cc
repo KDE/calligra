@@ -700,7 +700,8 @@ void CellLayoutDlg::slotApply()
                         }
                 rect.setCoords( left, top, right+1 , bottom  );
                 }
-        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( table->doc(), table, rect );
+        QString title=i18n("Change layout");
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( table->doc(), table, rect,title );
         table->doc()->undoBuffer()->appendUndo( undo );
     }
     if(right!=0x7FFF && bottom!=0x7FFF)
