@@ -26,7 +26,9 @@ public:
     virtual void setCursorPosition(int pos) = 0;
     // virtual void setFocus() = 0;
     virtual void insertFormulaChar(int c) = 0;
-
+    virtual void cut(){};
+    virtual void paste(){};
+    virtual void copy(){};
     KSpreadCanvas* canvas() { return m_pCanvas; }
 
 private:
@@ -48,7 +50,9 @@ public:
     virtual void setCursorPosition(int pos);
     // virtual void setFocus();
     virtual void insertFormulaChar(int c);
-
+    virtual void cut();
+    virtual void paste();
+    virtual void copy();
     void checkChoose();
     void blockCheckChoose( bool b ) { m_blockCheck = b; }
 

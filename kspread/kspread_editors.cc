@@ -56,6 +56,25 @@ KSpreadTextEditor::~KSpreadTextEditor()
     canvas()->endChoose();
 }
 
+void KSpreadTextEditor::cut()
+{
+    if(m_pEdit)
+        m_pEdit->cut();
+}
+
+void KSpreadTextEditor::paste()
+{
+    if( m_pEdit)
+        m_pEdit->paste();
+}
+
+void KSpreadTextEditor::copy()
+{
+    if( m_pEdit)
+        m_pEdit->copy();
+}
+
+
 void KSpreadTextEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completion)
 {
   canvas()->view()->doc()->setCompletionMode( _completion );

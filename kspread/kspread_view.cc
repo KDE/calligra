@@ -1401,10 +1401,14 @@ void KSpreadView::copySelection()
 {
     if ( !m_pTable )
         return;
+    if(!m_pCanvas->editor())
+    {
+        m_pTable->copySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
-    m_pTable->copySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-
-    updateEditWidget();
+        updateEditWidget();
+    }
+    else
+        m_pCanvas->editor()->copy();
 }
 
 void KSpreadView::copyAsText()
@@ -1420,26 +1424,35 @@ void KSpreadView::cutSelection()
 {
     if ( !m_pTable )
         return;
-
-    m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    resultOfCalc();
-    updateEditWidget();
+    //don't used this function when we edit a cell.
+    if( !m_pCanvas->editor())
+    {
+        m_pTable->cutSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+        resultOfCalc();
+        updateEditWidget();
+    }
+    else
+        m_pCanvas->editor()->cut();
 }
 
 void KSpreadView::paste()
 {
     if ( !m_pTable )
         return;
-
-    QRect r( activeTable()-> selectionRect() );
-    if(r.left()==0 )
-        r.setCoords(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,
-                m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-    m_pTable->paste( QPoint( r.left(),r.top() ) );
-    if(m_pTable->getAutoCalc())
-        m_pTable->recalc(true);
-    resultOfCalc();
-    updateEditWidget();
+    if(!m_pCanvas->editor())
+    {
+        QRect r( activeTable()-> selectionRect() );
+        if(r.left()==0 )
+            r.setCoords(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ,
+                        m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+        m_pTable->paste( QPoint( r.left(),r.top() ) );
+        if(m_pTable->getAutoCalc())
+            m_pTable->recalc(true);
+        resultOfCalc();
+        updateEditWidget();
+    }
+    else
+        m_pCanvas->editor()->paste();
 }
 
 void KSpreadView::specialPaste()
