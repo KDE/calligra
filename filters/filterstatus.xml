@@ -8,7 +8,7 @@
         id: unique identifier of the application
         released: will this application will be released?
      -->
-    <!ELEMENT application ( title+, description*, filter*)>
+    <!ELEMENT application ( title+, foreword*, description*, filter*)>
     <!ATTLIST application id ID #REQUIRED
               released ( yes | no ) "yes">
 
@@ -45,6 +45,12 @@
     -->
     <!ELEMENT note (#PCDATA)>
     <!ATTLIST note xml:lang CDATA "en_us">
+
+    <!-- Foreword to the filters
+        xml:lang: language of the description
+    -->
+    <!ELEMENT foreword (#PCDATA)>
+    <!ATTLIST foreword xml:lang CDATA "en_us">
 
     <!-- Description
         xml:lang: language of the description
@@ -363,6 +369,15 @@
             </filter>
         </application>
 
+        <application id="krita" released="no">
+            <title xml:lang="en_US">Krita</title>
+            <foreword xml:lang="en_US">
+                Krita uses ImageMagick for importing and exporting images. This
+                means that Krita can work with all images that your installation of
+                ImageMagick supports. This includes all common image file formats, including
+                the native formats of Photoshop and the Gimp.
+            </foreword>
+        </application>
 <!--
         <application id="kivio">
             <title xml:lang="en_us">Kivio</title>
