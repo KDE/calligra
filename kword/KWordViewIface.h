@@ -89,6 +89,8 @@ k_dcop:
     bool selectAllFrames();
     bool unSelectAllFrames();
 
+    void editFootEndNote();
+
 private:
     KWView *view;
 

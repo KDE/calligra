@@ -927,6 +927,10 @@ void KWView::setupActions()
                                         this, SLOT( configureFootEndNote()),
                                         actionCollection(), "configure_footendnote" );
 
+    actionEditFootEndNote= new KAction( i18n( "Edit FootNote/EndNote" ), 0,
+                                        this, SLOT( editFootEndNote()),
+                                        actionCollection(), "edit_footendnote" );
+
 }
 
 void KWView::refreshMenuExpression()
@@ -5013,6 +5017,20 @@ void KWView::configureFootEndNote()
     KWConfigFootNoteDia *dia = new KWConfigFootNoteDia( this, "configfootnote", m_doc );
     dia->exec();
     delete dia;
+}
+
+void KWView::editFootEndNote()
+{
+    KWTextFrameSetEdit * edit = currentTextEdit();
+    if ( edit )
+    {
+        KoVariable * tmpVar=edit->variable();
+        KWFootNoteVariable * var = dynamic_cast<KWFootNoteVariable *>(tmpVar);
+        if(var && var->frameSet())
+        {
+            m_gui->canvasWidget()->editFrameSet( var->frameSet());
+        }
+    }
 }
 
 /******************************************************************/

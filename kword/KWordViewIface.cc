@@ -272,3 +272,7 @@ bool KWordViewIface::unSelectAllFrames()
 }
 
 
+void KWordViewIface::editFootEndNote()
+{
+    view->editFootEndNote();
+}

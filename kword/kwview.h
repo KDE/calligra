@@ -336,6 +336,8 @@ public slots:
     // end of public slots
     void configureFootEndNote();
 
+    void editFootEndNote();
+
 protected slots:
     void spellCheckerReady();
     void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
@@ -530,6 +532,8 @@ private:
     KAction *actionCreateStyleFromSelection;
 
     KAction *actionConfigureFootEndNote;
+
+    KAction *actionEditFootEndNote;
 
     KoCharSelectDia *m_specialCharDlg;
     KoFontDia *m_fontDlg;

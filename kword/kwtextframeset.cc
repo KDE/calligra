@@ -3085,10 +3085,14 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
             view->plugActionList( "datatools", actionList );
             KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(variable());
             KoCustomVariable * varCustom = dynamic_cast<KoCustomVariable *>(variable());
+            KWFootNoteVariable * varFootNote = dynamic_cast<KWFootNoteVariable *>(variable());
+
             if( var )
                 popup = view->popupMenu("comment_popup");
             else if( varCustom )
                 popup = view->popupMenu("custom_var_popup");
+            else if ( varFootNote )
+                popup = view->popupMenu("footnote_popup");
             else
                 popup = view->popupMenu("text_popup");
             Q_ASSERT(popup);
