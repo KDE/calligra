@@ -1434,7 +1434,7 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
 	    {
 		// Office 95 always saved non-unicode
 	        bytes += MsWordGenerated::read(in + bytes, &char8);
-        	*out += char2unicode(lid, char8).latin1();
+        	*out += char2unicode(lid, char8);
 	    }
 */	}
     }
@@ -1443,7 +1443,7 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
         for (unsigned i = 0; i < count; i++)
         {
             bytes += MsWordGenerated::read(in + bytes, &char8);
-            *out += char2unicode(lid, char8).latin1();
+	    *out += char2unicode(lid, char8);
 	}
     }
     return bytes;
