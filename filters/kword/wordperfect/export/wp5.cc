@@ -135,22 +135,47 @@ bool WPFiveWorker::doCloseDocument(void)
   return true;
 }
 
+// quick-and-dirty escape function for WP 5.x chars
+// TODO fix it !
+static QCString WPFiveEscape( const QString& text )
+{
+  QCString result;
+
+  for( unsigned int i=0; i < text.length(); i++ )
+  {
+    int c = text[i].unicode();
+    if( c < 32 ) result += '.';
+    else if ( c == 32 ) result += 0x20 ; // hard space
+    else if ( c < 128 ) result += text[i].latin1();
+    else result += '.';
+  }
+
+  return result;
+}
+
+
 bool WPFiveWorker::doFullParagraph(const QString& paraText, 
   const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
-  QString amiproText = paraText;
-
-  Q_UINT8 softspace = 0x80;
-  Q_UINT8 dot = '.';
-  for( int i=0; i<amiproText.length(); i++ )
+  ValueListFormatData::ConstIterator it;
+  for( it = paraFormatDataList.begin(); it!=paraFormatDataList.end(); ++it )
   {
-    int c = amiproText[i].unicode();
-    if( c < 32 ) output << dot;
-    else if ( c == 32 ) output << softspace;
-    else if ( c < 128 ) output << (Q_UINT8)amiproText[i].latin1() ;
-    else output << dot;
-  } 
- 
+    const FormatData& formatData = *it;
+
+    // only if the format is for text (id==1)
+    if( formatData.id == 1 )
+    {
+
+       // the text itself, "escape" it first
+       QCString out = WPFiveEscape( paraText.mid( formatData.pos, formatData.len ) );
+       output.writeRawBytes( (const char*)out, out.length() );
+
+    }
+  }
+
+  // write hard-return 
+  output << (Q_UINT8) 0x0a;
+
   return true;
 }
 
