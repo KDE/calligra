@@ -22,14 +22,13 @@ public:
 
     const QValueList<STYLE> chain(const unsigned short &sti);    // returns a list with all the PAPX/CHPX/... which
                                                                  // have to be applied (one after the other!)
-    const QString styleName(const unsigned short &sti);          // returns the name of a specific style (TODO)
+    const QString styleName(const unsigned short &sti);          // returns the name of a specific style
 
 private:
     StyleSheet(const StyleSheet &);
     const StyleSheet &operator=(const StyleSheet &);
 
     const bool chain_rec(const unsigned short &sti);             // recursively walks back to the NULL-Style
-    void align2(long &adr);                                      // all blocks start on even addresses!
     const bool findSTD(const unsigned short &sti, unsigned long &offset); // Offset to specific STD
 
     myFile table;

@@ -14,7 +14,8 @@ static const short CP2UNI[] = { 0x20ac, 0x0000, 0x201a, 0x0192,
                                 0x201d, 0x2022, 0x2013, 0x2014,
                                 0x02dc, 0x2122, 0x0161, 0x203a,
                                 0x0153, 0x0000, 0x017e, 0x0178 };
-
 const short char2uni(const unsigned char &c);
+
+void align2(unsigned long &adr);
 
 #endif // MISC_H

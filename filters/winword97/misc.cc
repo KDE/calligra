@@ -14,3 +14,9 @@ const short char2uni(const unsigned char &c) {
     else
         return CP2UNI[c-0x80];
 }
+
+void align2(unsigned long &adr) {
+    if((adr%2)!=0)
+        ++adr;
+}
+
