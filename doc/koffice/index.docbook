@@ -76,7 +76,7 @@ Jost <email>jost@schenck.de</email>
 &KOffice; currently consists of the following programs:
 </para>
 
-<simplelist type=vert columns=1>
+<simplelist type="vert" columns="1">
 <member>KWord (a frames-based wordprocessor)</member>
 <member>KSpread (a spreadsheet application)</member> 
 <member>KPresenter (screen and slide presentations)</member>

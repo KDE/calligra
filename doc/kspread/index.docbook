@@ -56,15 +56,15 @@ A template only. Has to be filled with contents
 <para> It is part of the KOffice productivity suite for the KDesktop Environment.</para>
 <para> Other applications in KOffice include</para>
 <para>
-<simplelist type=vert columns=1>
-<member>KWord (text processing and desktop publishing)</>
-<member>KPresenter (presentation creator)</>
-<member>KIllustrator (a vector drawing program)</>
-<member>KImageShop (a bitmap image editor)</>
-<member>Katabase (database)</>
-<member>KFormula (formula editor)</>
-<member>KChart (for charts/graphs)</>
-<member>and KImage (an image viewer).  </>
+<simplelist type="vert" columns="1">
+<member>KWord (text processing and desktop publishing)</member>
+<member>KPresenter (presentation creator)</member>
+<member>KIllustrator (a vector drawing program)</member>
+<member>KImageShop (a bitmap image editor)</member>
+<member>Katabase (database)</member>
+<member>KFormula (formula editor)</member>
+<member>KChart (for charts/graphs)</member>
+<member>and KImage (an image viewer).  </member>
 </simplelist>
 </para>
 
@@ -74,7 +74,7 @@ Because of this, KSpread (like all of KOffice), supports drag and drop, themes, 
 </para>
 
 <para>KSpread is a spreadsheet which can work as a traditional table-oriented sheet but also allows
-to put in complex formula of higher mathematics and statistics. There´s also the possibility of
+to put in complex formula of higher mathematics and statistics. There's also the possibility of
 putting the data to visibility by using graphics
 </para>
 <para> With the use of Python scripting there will be the possibility of having automated processes
@@ -101,11 +101,11 @@ installation first.
 </para>
 <para>
 If you are an experienced user who has a special question you may try the reference section
-and/or the FAQ´s
+and/or the FAQ's
 </para>
 <para>
 If you got this file while working with KSpread (by pressing F1) it would be best to follow the
-chapter´s link to the Step-by-Step Guide
+chapter's link to the Step-by-Step Guide
 </para>
 
 </sect1>
@@ -205,9 +205,9 @@ KSpread can be started one of three ways:
 <listitem><para>You can select KSpread through the system menu by following the KDE Application menue
 -> Applications -> Koffice -> Kpread</para></listitem>
 <listitem><para>If you are in a terminal program (KVT, Xterm, etc), you can type:
-<screen><prompt>$</prompt> <command>KSpread &amp</command></screen></para>
+<screen><prompt>$</prompt> <command>KSpread &amp;</command></screen></para>
 <para>Or</para>
-<para><screen><prompt>$</prompt> <command>KSpread <replaceable>filename</replaceable> &amp</command></screen></para></listitem>
+<para><screen><prompt>$</prompt> <command>KSpread <replaceable>filename</replaceable> &amp;</command></screen></para></listitem>
 <listitem><para>Using Konquerer, you can click on your data file (KSpread documents end in .ksp).
   This will automatically start KSpread show the last edited table of the sheet.</para></listitem>
 </orderedlist>
@@ -323,7 +323,7 @@ a file on your hard drive.</para>
 <row><entry>Quit KSpread</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Q</keycap></keycombo></entry></row>
 <row><entry>Forgot</entry><entry><keycombo><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo></entry></row>
 <row><entry>Copy</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo></entry></row>
-<row><entry>Cut<</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo></entry></row>
+<row><entry>Cut</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo></entry></row>
 <row><entry>Paste</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo></entry></row>
 <row><entry>Find and Replace</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry></row>
 <row><entry>Select All</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo></entry></row>

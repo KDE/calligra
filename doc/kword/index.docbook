@@ -60,7 +60,7 @@ documentation team, please feel free to send me a message at
 <para>Sincerely Mike</para>
 </warning>
 
-<Sect1 id="todo1">
+<sect1 id="todo1">
 <title>What's done and what needs to be done</title>
 
 <sect2 id="done">
@@ -145,15 +145,15 @@ Is What You Get) Wordprocessor/Desktop Publishing Program.</para>
 <para>KWord is part of the KOffice productivity suite for the K Dekstop
 Environment.  Other applications in KOffice include</para>
 
-<simplelist type=vert columns=1>
-<member><application>KOShell</application> (toolbar/program starter)</>
-<member><application>KSpread</application> (spreadsheet)</> 
-<member><application>KPresenter</application> (presentation creator)</>
-<member><application>KIllustrator</application> (a vector drawing program)</>
-<member><application>KImageShop</application> (a bitmap image editor)</>
+<simplelist type="vert" columns="1">
+<member><application>KOShell</application> (toolbar/program starter)</member>
+<member><application>KSpread</application> (spreadsheet)</member> 
+<member><application>KPresenter</application> (presentation creator)</member>
+<member><application>KIllustrator</application> (a vector drawing program)</member>
+<member><application>KImageShop</application> (a bitmap image editor)</member>
 <!--<member>Katabase (database)</> ****Put this back in if it does become a reality**** -->
-<member><application>KChart</application> (for charts/graphs)</>
-<member>and <application>KImage</application> (an image viewer).  </>
+<member><application>KChart</application> (for charts/graphs)</member>
+<member>and <application>KImage</application> (an image viewer).  </member>
 </simplelist>
 
 <para>All KOffice applications were designed from the beginning to take
@@ -277,10 +277,11 @@ easy.</para>
 <para></para>
 
 <informaltable>
-<tgroup cols=3 align=left><thead>
+<tgroup cols="3" align="left"><thead>
 <row><entry>Experience Level</entry><entry>Previous Experience</entry><entry>What you should read</entry></row>
 </thead><tbody>
-<row><entry>Novice</entry><entry>No previous computer expierience</entry><entry><para><simplelist type=vert columns=1>
+<row><entry>Novice</entry><entry>No previous computer expierience</entry>
+<entry><para><simplelist type="vert" columns="1">
 <member><link linkend="Fundimental">Fundimentals</link></member>
 <member><link linkend="Tutorial">Step by Step Tutorial</link></member>
 <member><link linkend="KWordScreen">The KWord Screen</link></member>
@@ -289,12 +290,12 @@ easy.</para>
 <member><link linkend="menuintro">Introduction to Menu Bars and Tool Bars</link></member>
 </simplelist></para></entry></row>
 <row><entry>Intermediate</entry><entry>Comfortable with other page based wordprocessors (Microsoft Word, Word Perfect and Applixware.)  </entry>
-<entry><para><simplelist type=vert columns=1>
+<entry><para><simplelist type="vert" columns="1">
 <member><link linkend="Fundimental">Fundimentals</link></member>
 <member><link linkend="Tutorial">Step by Step Tutorial</link></member>
 </simplelist></para></entry></row>
 <row><entry>Advanced User</entry><entry>Comfortable with other frames based word processors (Frame Maker, etc).</entry>
-<entry><para><simplelist type=vert columns=1>
+<entry><para><simplelist type="vert" columns="1">
 <member><link linkend="WPVSDTP">The differenct between Wordprocessing and DTP templates</link></member>
 <member><link linkend="textandframe"> The difference between Text Edit mode and Frame Edit mode</link></member>
 </simplelist></para></entry></row>
@@ -332,9 +333,9 @@ KWord can be started one of four ways:
   <guimenuitem>KWord</guimenuitem>
 </menuchoice>.</para> </listitem>
 <listitem><para>If you are in a terminal program (KVT, Xterm, etc), you can type:
-<screen><prompt>$</prompt> <command>kword &amp</command></screen></para>
+<screen><prompt>$</prompt> <command>kword &amp;</command></screen></para>
 <para>Or</para>
-<para><screen><prompt>$</prompt> <command>kword <replaceable>filename</replaceable> &amp</command></screen></para></listitem>
+<para><screen><prompt>$</prompt> <command>kword <replaceable>filename</replaceable> &amp;</command></screen></para></listitem>
 <listitem><para>Using <application>Konqerer</application>, you can click on your data file (KWord documents end in .kwd).  This will automatically start <application>KWord</application> and begin editing the file.</para></listitem>
 <listitem><para>Using <application>KOShell</application></para></listitem>
 </orderedlist></para>
@@ -682,7 +683,7 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 <para>The KDE Titlebar surrounds all applications run under KDE.  For more information on KDE Frames, please see the KDE User Guide.</para>
 <para><emphasis><anchor id="da">The Document Area.</emphasis></para>
 <para>The document area consists of:</para><para></para>
-<informaltable frame=none><tgroup cols=2 align=left><tbody>
+<informaltable frame="none"><tgroup cols="2" align="left"><tbody>
 <row><entry></entry><entry><variablelist>
 <varlistentry><term>Horizontal and Vertical Rulers</term><listitem><para>The rulers can be used to help you layout your document.  For more information on Rulers, see <link linkend="Rulers">Using Rulers</link>.</para></listitem></varlistentry>
 <varlistentry><term>Scrollbar</term><listitem><para>The scrollbar is used to move through a KWord document quickly.  The KWord scroll bar functions similar to all scrollbars in KDE or Windows.</para></listitem></varlistentry>
@@ -694,7 +695,7 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 <para><emphasis><anchor id="tb">The Toolbars</emphasis></para>
 <para>The Tool bars provide "shortcuts" to commonly used functions.  KWord uses 6 toolbars, with similar functions grouped together.</para>
 <para></para>
-<informaltable frame=none><tgroup cols=2 align=left><tbody>
+<informaltable frame="none"><tgroup cols="2" align="left"><tbody>
 <row><entry></entry><entry><variablelist>
 <varlistentry><term><link linkend="CharFormatToolbar">Character/Border Formatting Toolbar</link></term><listitem><para>This toolbar has commonly used features for formatting your text and paragraph borders. Features on this toolbar include boldface and italic text, superscripted text, and adding a border to your paragraph</para></listitem></varlistentry>
 <varlistentry><term><link linkend="FileToolbar">File Toolbar</link></term><listitem><para>This toolbar is used to load, save, print and start new documents</para></listitem></varlistentry>
@@ -729,7 +730,7 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 <para>Starting a new document can be done 5 ways:</para>
 <itemizedlist>
 <listitem><para>You can start KWord from the KDE Panel.</para></listitem>
-<listitem><para>You can start KWord from the command line by typing<screen><prompt>$</prompt> <command>kword &amp</command></screen></para></listitem>
+<listitem><para>You can start KWord from the command line by typing<screen><prompt>$</prompt> <command>kword &amp;</command></screen></para></listitem>
 <listitem><para>You can begin a new document in KWord by selecting <menuchoice> <guimenu>File</guimenu><guimenuitem>New</guimenuitem></menuchoice> from the Menu bar</para></listitem>
 <listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo></para></listitem>
 <listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="filenew2" format="png" align="center"></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
@@ -737,7 +738,7 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 <para>However you begin a new document, a dialog box appears:</para>
 <screenshot><mediaobject><imageobject><imagedata fileref="ChooseTempDia" format="png" align="center"></imageobject></mediaobject></screenshot>
 <para>This dialog box allows you to:</para>
-<itemizedlist spacing=compact>
+<itemizedlist spacing="compact">
 <listitem><para><link linkend="newdoctemp">Start a New document from a template</link></para></listitem>
 <listitem><para><link linkend="Loading">Open a previously saved document</link></para></listitem>
 <listitem><para><link linkend="emptydoc">Start an "Empty" document.(default)</link></para></listitem>
@@ -798,12 +799,12 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>To enter a folder, you double click on that folder.  To exit that folder, you double click the ".." folder, or the click blue up arrow  button.</para>
 <para>When you are in the correct folder, you can type a name into the "File Name" box. There is no need to put a .kwd at the end of your filename, &kword; will do this for you.</para>
 <note><para>Unix filenames are more flexible than many other operating systems.  Filenames can:</para>
-<itemizedlist spacing=compact>
+<itemizedlist spacing="compact">
 <listitem><para>be of nearly any length</para></listitem>
 <listitem><para>be any comination of upper and lower case letters</para></listitem>
 <listitem><para>include spaces and puncuation</para></listitem>
 </itemizedlist>
-<para>Filenames should not:</para><itemizedlist spacing=compact>
+<para>Filenames should not:</para><itemizedlist spacing="compact">
 <listitem><para>begin with a space or period</para></listitem>
 <listitem><para>end with a common file extension (.ps,.pdf,etc).  This will tell KWord to try to export to that filetype.  KWord has only certain specific <link linkend="Filters">filters</link>.</para></listitem>
 </itemizedlist>
@@ -879,14 +880,14 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>Selected text has a black background to seperate it from unselected text. You select text by designating a start and an end point.  All the ttext in between the start and end point is selected text.  (Note:  The "endpoint" can be located before the start point.  The text will not be reversed.)</para>
 <para>You can select text with either the mouse or the keyboard. </para>
 <sect2 id="selkb"><title>Using The Keyboard</title>
-<informaltable frame=none><tgroup cols=2 align=left>
+<informaltable frame="none"><tgroup cols="2" align="left">
 <tbody>
-<row><entry align=center><keycombo><keycap>Shift</keycap><keycap>Left Arrow</keycap></keycombo></entry><entry>Move selection one character to the left.</entry></row>
-<row><entry align=center><keycombo><keycap>Shift</keycap><keycap>Right Arrow</keycap></keycombo></entry><entry>Move selection one character to the Right.</entry></row>
-<row><entry align=center><keycombo><keycap>Shift</keycap><keycap>Up Arrow</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the character directly up one line.</entry></row>
-<row><entry align=center><keycombo><keycap>Shift</keycap><keycap>Down Arrow</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the character directly down one line.</entry></row>
-<row><entry align=center><keycombo><keycap>Shift</keycap><keycap>Home</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the beginning of the line.</entry></row>
-<row><entry align=center><keycombo><keycap>Shift</keycap><keycap>End</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the end of the line.</entry></row>
+<row><entry align="center"><keycombo><keycap>Shift</keycap><keycap>Left Arrow</keycap></keycombo></entry><entry>Move selection one character to the left.</entry></row>
+<row><entry align="center"><keycombo><keycap>Shift</keycap><keycap>Right Arrow</keycap></keycombo></entry><entry>Move selection one character to the Right.</entry></row>
+<row><entry align="center"><keycombo><keycap>Shift</keycap><keycap>Up Arrow</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the character directly up one line.</entry></row>
+<row><entry align="center"><keycombo><keycap>Shift</keycap><keycap>Down Arrow</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the character directly down one line.</entry></row>
+<row><entry align="center"><keycombo><keycap>Shift</keycap><keycap>Home</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the beginning of the line.</entry></row>
+<row><entry align="center"><keycombo><keycap>Shift</keycap><keycap>End</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the end of the line.</entry></row>
 </tbody></tgroup></informaltable>
 </sect2>
 <sect2 id="selmouse"><title>Using The Mouse</title>
@@ -897,7 +898,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>Fortunately, &kword; has a solution for you.</para>
 <para>Each time you make a change to a document, &kword; remembers what the change was.  If you decide to remove some of the changes, you can "Undo" each change one at a a time. </para>
 <para>As an example, William Shakespeare is using &kword; to write his new drama.  He types in the following verse:   </para>
-<informaltable frame=none><tgroup cols=2 align=left><tbody>
+<informaltable frame="none"><tgroup cols="2" align="left"><tbody>
 <row><entry>Chorus:</entry>
 <entry>Two households, both alike in dignity,</entry></row><row><entry></entry>
 <entry>In fair Verona, where we lay our scene,</entry></row><row><entry></entry>
@@ -906,7 +907,7 @@ This is an excellent choice for every day correspondance, or general word proces
 </tbody></tgroup></informaltable>
 <para>Now he thinks to himself, <quote>Maybe Verona is not the ideal place?</quote></para>
 <para>So he changes the line:</para>
-<informaltable frame=none><tgroup cols=2 align=left><tbody>
+<informaltable frame="none"><tgroup cols="2" align="left"><tbody>
 <row><entry>Chorus:</entry>
 <entry>Two households, both alike in dignity,</entry></row><row><entry></entry>
 <entry>In fair Constantinople, where we lay our scene,</entry></row><row><entry></entry>
@@ -1420,13 +1421,13 @@ This is an excellent choice for every day correspondance, or general word proces
 <varlistentry><term>"Color"</term><listitem><para>Clicking on the color bar will allow you to <link linkend="SelColor">select a color using a new dialog box</link></para></listitem></varlistentry>
 </variablelist>
 <para><emphasis>Selecting the borders</emphasis></para>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
 </tbody></tgroup></informaltable>
 <para>The "Preview" window will show you how your paragraph borders will look.</para>
 
@@ -1439,33 +1440,33 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>When a tab stop is in place, you can immediatly jump to that horizontal position on the page by pressing the "Tab" key.  Tab stops are most commonly used to allign columns in a table, or to automatically indent paragraphs.</para>
 <para>Tab stops are part of the properties of a paragraph.  Each paragraph keeps track of its own set of tab stops.  You can view the tab stops of a particular paragraph by placing the mouse cursor within a paragraph, clicking once, and checking the top ruler.  The tab stops are marked as symbols in black. </para>
 <para>KWord recognises 4 types of tab stops.  Each of these types has a corresponding symbol to help you identify the type in the ruler.  </para>
-<informaltable frame=none><tgroup cols=4 align=left>
-<colspec colname=c1>
-<colspec colname=c2>
-<colspec colname=c3>
-<colspec colname=c4>
-<spanspec spanname=hspan namest=c3 nameend=c4 align=left>
+<informaltable frame="none"><tgroup cols="4" align="left">
+<colspec colname="c1">
+<colspec colname="c2">
+<colspec colname="c3">
+<colspec colname="c4">
+<spanspec spanname="hspan" namest="c3" nameend="c4" align="left">
 <tbody>
-<row><entry align=center>Type</entry><entry align=center>Symbol</entry><entry align=center>Description</entry></row>
+<row><entry align="center">Type</entry><entry align="center">Symbol</entry><entry align="center">Description</entry></row>
 <row><entry>Right Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="rtab" format="png" align="center"></imageobject></mediaobject></entry>
-<entry spanname=hspan>With a right tab stop, the right edge of the next set of words is aligned at the tab stop. </entry></row>
+<entry spanname="hspan">With a right tab stop, "the right edge of the next set of words is aligned at the tab stop. </entry></row>
 <row><entry></entry></row>
-<row><entry></entry><entry></entry><entry align=right><emphasis>Example:</emphasis></entry><entry align=left><mediaobject><imageobject><imagedata fileref="rtab2" format="png" align="center"></imageobject></mediaobject></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="rtab2" format="png" align="center"></imageobject></mediaobject></entry></row>
 <row><entry></entry></row>
 <row><entry>Center Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="ctab" format="png" align="center"></imageobject></mediaobject></entry>
-<entry spanname=hspan>With a right tab stop, the text is centered at the tab stop. </entry></row>
+<entry spanname="hspan">With a right tab stop, the text is centered at the tab stop. </entry></row>
 <row><entry></entry></row>
-<row><entry></entry><entry></entry><entry align=right><emphasis>Example:</emphasis></entry><entry align=left><mediaobject><imageobject><imagedata fileref="ctab2" format="png" align="center"></imageobject></mediaobject></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="ctab2" format="png" align="center"></imageobject></mediaobject></entry></row>
 <row><entry></entry></row>
 <row><entry>Left Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="ltab" format="png" align="center"></imageobject></mediaobject></entry>
-<entry spanname=hspan>With a left tab stop, the left edge of the next set of words is aligned at the tab stop. </entry></row>
+<entry spanname="hspan">With a left tab stop, the left edge of the next set of words is aligned at the tab stop. </entry></row>
 <row><entry></entry></row>
-<row><entry></entry><entry></entry><entry align=right><emphasis>Example:</emphasis></entry><entry align=left><mediaobject><imageobject><imagedata fileref="ltab2" format="png" align="center"></imageobject></mediaobject></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="ltab2" format="png" align="center"></imageobject></mediaobject></entry></row>
 <row><entry></entry></row>
 <row><entry>Decimal Tab Stop</entry><entry><mediaobject><imageobject><imagedata fileref="dtab" format="png" align="center"></imageobject></mediaobject></entry>
-<entry spanname=hspan>With a decimal tab stop, the decimal points of the text are aligned at the tab stop. </entry></row>
+<entry spanname="hspan">With a decimal tab stop, the decimal points of the text are aligned at the tab stop. </entry></row>
 <row><entry></entry></row>
-<row><entry></entry><entry></entry><entry align=right><emphasis>Example:</emphasis></entry><entry align=left><mediaobject><imageobject><imagedata fileref="dtab2" format="png" align="center"></imageobject></mediaobject></entry></row>
+<row><entry></entry><entry></entry><entry align="right"><emphasis>Example:</emphasis></entry><entry align="left"><mediaobject><imageobject><imagedata fileref="dtab2" format="png" align="center"></imageobject></mediaobject></entry></row>
 </tbody></tgroup></informaltable>
 <sect2 id="TabStopsetting"><title>Setting Tab Stops</title>
 <para>Tab stops can be set one of two ways:</para>
@@ -1554,15 +1555,15 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>There are several keyboard shortcuts which you can use to make common changes to character formatting. After selecting the text, you can use these key combinations to toggle each attribute.</para>
 <para>The Basic Formatting Toolbar also has buttons which you can use to toggle these same attributes.  </para>
 <para>The following table details each attribute, the toolbar buttons and the keyboard shortcuts.</para>
-<informaltable frame=all><tgroup cols=3 align=left>
+<informaltable frame="all"><tgroup cols="3" align="left">
 <thead>
-<row><entry align=right>Attribute</entry><entry align=center>Toolbar Button</entry><entry align=center>Key Combo</entry></row>
+<row><entry align="right">Attribute</entry><entry align="center">Toolbar Button</entry><entry align="center">Key Combo</entry></row>
 </thead><tbody>
-<row><entry align=right>Font Size</entry><entry align=center><inlinemediaobject><imageobject><imagedata fileref="chsizebut" format="png" align="center"></imageobject></inlinemediaobject></entry><entry align=center>-</entry></row>
-<row><entry align=right>Font</entry><entry align=center><inlinemediaobject><imageobject><imagedata fileref="chfontbut" format="png" align="center"></imageobject></inlinemediaobject></entry><entry align=center>-</entry></row>
-<row><entry align=right>Bold Face</entry><entry align=center><inlinemediaobject><imageobject><imagedata fileref="bold" format="png" align="center"></imageobject></inlinemediaobject></entry><entry align=center><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
-<row><entry align=right>Italics</entry><entry align=center><inlinemediaobject><imageobject><imagedata fileref="ital" format="png" align="center"></imageobject></inlinemediaobject></entry><entry align=center><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
-<row><entry align=right>Underline</entry><entry align=center><inlinemediaobject><imageobject><imagedata fileref="undl" format="png" align="center"></imageobject></inlinemediaobject></entry><entry align=center><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
+<row><entry align="right">Font Size</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chsizebut" format="png" align="center"></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Font</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chfontbut" format="png" align="center"></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Bold Face</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bold" format="png" align="center"></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
+<row><entry align="right">Italics</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="ital" format="png" align="center"></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
+<row><entry align="right">Underline</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="undl" format="png" align="center"></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
 </tbody></tgroup></informaltable>
 <note><para>You cannot change the Character Set using the keyboard or the toolbar, you must <link linkend="chfnt1b">use the dialog box</link>.</para></note>
 </sect3>
@@ -1598,7 +1599,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>You can use styles to easily keep a consistant look throughout your document.</para>
 <tip><para>If you are familiar with "Styles" in Microsoft Word, KWord styles perform the same functions.  You can skip to the next section.</para></tip>
 <para>As an example, if we look at a snipit of a document, and assign different styles to appropriate parts :</para>
-<informaltable frame=none><tgroup cols=2 align=left>
+<informaltable frame="none"><tgroup cols="2" align="left">
 <tbody>
 <row><entry></entry><entry><emphasis>Section Title ----></emphasis></entry><entry>Setion 1:  How to use your new computer</entry></row>
 <row><entry></entry><entry></entry></row>
@@ -1695,13 +1696,13 @@ This is an excellent choice for every day correspondance, or general word proces
 <varlistentry><term>"Color"</term><listitem><para>Clicking on the color bar will allow you to <link linkend="SelColor">select a color using a new dialog box</link></para></listitem></varlistentry>
 </variablelist>
 <para><emphasis>Selecting the borders</emphasis></para>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
 </tbody></tgroup></informaltable>
 <para>The "Preview" window will show you how your paragraph borders will look.</para></sect3>
 <sect3 id="stynumb"><title>Changing Paragraph Numbering/Bullets</title><para>To add bullets or numbering to your style, click "Numbering".</para>
@@ -1808,13 +1809,13 @@ This is an excellent choice for every day correspondance, or general word proces
 <varlistentry><term>"Color"</term><listitem><para>Clicking on the color bar will allow you to <link linkend="SelColor">select a color using a new dialog box</link></para></listitem></varlistentry>
 </variablelist>
 <para><emphasis>Selecting the borders</emphasis></para>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutL" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Left Border.  Clicking this button will apply the current options to the left paragraph border.  Clicking a second time will remove the left paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutR" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Right Border.  Clicking this button will apply the current options to the right paragraph border.  Clicking a second time will remove the right paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutT" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Top Border.  Clicking this button will apply the current options to the top paragraph border.  Clicking a second time will remove the top paragraph border.</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="borbutB" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select/Unselect Bottom Border.  Clicking this button will apply the current options to the bottom paragraph border.  Clicking a second time will remove the bottom paragraph border.</entry></row>
 </tbody></tgroup></informaltable>
 <para>The "Preview" window will show you how your paragraph borders will look.</para>
 <para>Click "OK" to accept your changes.</para>
@@ -2154,17 +2155,17 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>When you startup KWord, all the available toolbars are visible.  If you don't think you will need a toolbar, and want to reclaim that desktop space, 
 you "minimize" the toolbar.</para>
 <para>There are two ways to acomplish this task</para>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
-<row><entry align=center>
+<row><entry align="center">
 Option 1</entry></row><row><entry></entry></row><row><entry></entry><entry>
 Each toolbar has a stippled area to the left (or on top) of the toolbar buttons.  By clicking on this area, the toolbar will be minimized.
 </entry></row><row><entry></entry><entry><inlinemediaobject><imageobject><imagedata fileref="tbmin" format="png" align="center"></imageobject></inlinemediaobject>
 </entry></row><row><entry></entry></row><row><entry></entry><entry>Once a toolbar is minimized, this stipled area moves up near the menubar.
 </entry></row><row><entry></entry></row><row><entry></entry><entry><inlinemediaobject><imageobject><imagedata fileref="tbmax" format="png" align="center"></imageobject></inlinemediaobject>
 </entry></row><row><entry></entry></row><row><entry></entry><entry>Clicking on this area will "Restore" the toolbar to its original size.
-</entry></row><row><entry></entry></row><row><entry align=center>
+</entry></row><row><entry></entry></row><row><entry align="center">
 Option 2</entry></row><row><entry></entry><entry>
 </entry></row><row><entry></entry><entry>Place the cursor over on the toolbar you want to minimize, and click with the right mouse button. <emphasis>Note: The mouse must be on the "background" of the toolbar, not over a button to use this option.</emphasis> 
 </entry></row><row><entry></entry></row><row><entry></entry><entry>A small menu will appear at the mouse cursor.  Select "Flat".
@@ -2186,8 +2187,8 @@ Option 2</entry></row><row><entry></entry><entry>
 <para>Multiple toolbars can be located at each of these points in the screen.  (You could, for instance, move all the toolbars to the top of the screen).  KWord will shuffle toolbars around, to fit in the most compact way at that location.</para>
 <para>If you move the toolbar into a "Floating" position, what you are doing is creating a new window just for that toolbar.  The toolbar continues to operate just as before, but you now have complete flexibility to place this toolbar anywhere on the screen.</para>
 <para>There are two ways of moving your toolbars:</para>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
 <row><entry>
 Option 1</entry></row><row><entry></entry></row><row><entry></entry><entry>
@@ -2201,17 +2202,17 @@ Option 2</entry></row><row><entry></entry><entry>
 </sect2>
 <sect2 id="ToolbarOptions"><title>Changing the look of your toolbars</title>
 <para>Toolbars can have their buttons displayed different ways.  Below are examples of the four options for the "File" toolbar.</para>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
-<row><entry align=right valign=middle><inlinemediaobject><imageobject><imagedata fileref="tb1" format="png" align="center"></imageobject></inlinemediaobject></entry>
-<entry align=left valign=middle>Icons Only</entry></row>
-<row><entry align=right valign=middle><inlinemediaobject><imageobject><imagedata fileref="tb2" format="png" align="center"></imageobject></inlinemediaobject></entry>
-<entry align=left valign=middle>Text Only</entry></row>
-<row><entry align=right valign=middle><inlinemediaobject><imageobject><imagedata fileref="tb3" format="png" align="center"></imageobject></inlinemediaobject></entry>
-<entry align=left valign=middle>Text Aside Icons</entry></row>
-<row><entry align=right valign=middle><inlinemediaobject><imageobject><imagedata fileref="tb4" format="png" align="center"></imageobject></inlinemediaobject></entry>
-<entry align=left valign=middle>Text Under Icons</entry></row>
+<row><entry align="right" valign="middle"><inlinemediaobject><imageobject><imagedata fileref="tb1" format="png" align="center"></imageobject></inlinemediaobject></entry>
+<entry align="left" valign="middle">Icons Only</entry></row>
+<row><entry align="right" valign="middle"><inlinemediaobject><imageobject><imagedata fileref="tb2" format="png" align="center"></imageobject></inlinemediaobject></entry>
+<entry align="left" valign="middle">Text Only</entry></row>
+<row><entry align="right" valign="middle"><inlinemediaobject><imageobject><imagedata fileref="tb3" format="png" align="center"></imageobject></inlinemediaobject></entry>
+<entry align="left" valign="middle">Text Aside Icons</entry></row>
+<row><entry align="right" valign="middle"><inlinemediaobject><imageobject><imagedata fileref="tb4" format="png" align="center"></imageobject></inlinemediaobject></entry>
+<entry align="left" valign="middle">Text Under Icons</entry></row>
 </tbody></tgroup></informaltable>
 <para>To change the appearance of a toolbar, place the cursor over on the toolbar you want to minimize, and click with the right mouse button. <emphasis>Note: The mouse must be on the "background" of the toolbar, not over a button to use this option.</emphasis> </para>
 <para>A small menu will appear at the mouse cursor.  Select "Mode". This will open a submenu, select your preference from the list.</para>
@@ -2723,27 +2724,27 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <sect1 id="FileToolbar"><title>File Toolbar</title>
 <para>The File Toolbar consists of 4 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
 <screenshot><mediaobject><imageobject><imagedata fileref="filetb" format="png" align="center"></imageobject></mediaobject></screenshot>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
 <row><entry>
 <link linkend="MenuNew"><inlinemediaobject><imageobject><imagedata fileref="filenew2" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuNew">Open New File</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuOpen"><inlinemediaobject><imageobject><imagedata fileref="fileopen" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuOpen">Open Saved File</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuSave"><inlinemediaobject><imageobject><imagedata fileref="filefloppy" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuSave">Save File</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuPrint"><inlinemediaobject><imageobject><imagedata fileref="fileprint" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuPrint">Print File</link>
 </entry></row>
 </tbody></tgroup>
@@ -2752,42 +2753,42 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <sect1 id="BasicEditToolbar"><title>Basic Editing Toolbar</title>
 <para>The Basic Editing Toolbar consists of 7 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
 <screenshot><mediaobject><imageobject><imagedata fileref="edittb" format="png" align="center"></imageobject></mediaobject></screenshot>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
 <row><entry>
 <link linkend="MenuUndo"><inlinemediaobject><imageobject><imagedata fileref="undo" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuUndo">Undo</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuRedo"><inlinemediaobject><imageobject><imagedata fileref="redo" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuRedo">Redo</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuCut"><inlinemediaobject><imageobject><imagedata fileref="editcut" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuCut">Cut</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuCopy"><inlinemediaobject><imageobject><imagedata fileref="editcopy" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuCopy">Copy</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuPaste"><inlinemediaobject><imageobject><imagedata fileref="editspace" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuPaste">Paste</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuSpell"><inlinemediaobject><imageobject><imagedata fileref="spell" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuSpell">Spell Check</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuFind"><inlinemediaobject><imageobject><imagedata fileref="find" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuFind">Find and Replace</link>
 </entry></row>
 </tbody></tgroup>
@@ -2796,22 +2797,22 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <sect1 id="InsertToolBar"><title>Insert Tool Bar</title>
 <para>The Basic Editing Toolbar consists of 3 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
 <screenshot><mediaobject><imageobject><imagedata fileref="instb" format="png" align="center"></imageobject></mediaobject></screenshot>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
 <row><entry>
 <link linkend="MenuInsPict"><inlinemediaobject><imageobject><imagedata fileref="picture" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuInsPict">Insert Picture</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuInsCA"><inlinemediaobject><imageobject><imagedata fileref="clipart" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuInsCA">Insert Clipart</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuInsSC"><inlinemediaobject><imageobject><imagedata fileref="inssc" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuInsSC">Insert Special Character</link>
 </entry></row>
 </tbody></tgroup>
@@ -2821,52 +2822,52 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <para>The Frame Edit/Create Toolbar consists of 9 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
 
 <screenshot><mediaobject><imageobject><imagedata fileref="fcrtb" format="png" align="center"></imageobject></mediaobject></screenshot>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
 <row><entry>
 <link linkend="MenuEditText"><inlinemediaobject><imageobject><imagedata fileref="textmode" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuEditText">Edit Text</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuEditFrame"><inlinemediaobject><imageobject><imagedata fileref="framemode" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuEditFrame">Edit Frames</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuCrTF"><inlinemediaobject><imageobject><imagedata fileref="tfcreatebut" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuCrTF">Create Text Frame</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuCrPF"><inlinemediaobject><imageobject><imagedata fileref="picture" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuCrPF">Create Picture Frame</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuCrCAF"><inlinemediaobject><imageobject><imagedata fileref="clipart" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuCrCAF">Create Clipart Frame</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuCrTbl"><inlinemediaobject><imageobject><imagedata fileref="part-kspread" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuCrTbl">Create Table</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuCrKspread"><inlinemediaobject><imageobject><imagedata fileref="part-kspread" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuCrKspread">Create Kspread Table Frame</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuCrForm"><inlinemediaobject><imageobject><imagedata fileref="part-kformula" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuCrForm">Create Formula Frame</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuCrPart"><inlinemediaobject><imageobject><imagedata fileref="part-unspecif" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuCrPart">Create Part Frame</link>
 </entry></row>
 </tbody></tgroup>
@@ -2875,27 +2876,27 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <sect1 id="TableEditToolbar"><title>Table Edit ToolBar</title>
 <para>The Table Edit Toolbar consists of 4 "buttons".  Each "button" performs a task from the menubar.  Click on that task for more details. </para>
 <screenshot><mediaobject><imageobject><imagedata fileref="tedittb" format="png" align="center"></imageobject></mediaobject></screenshot>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
 <row><entry>
 <link linkend="MenuInsRow"><inlinemediaobject><imageobject><imagedata fileref="rowin" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuInsRow">Insert Row</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuInsCol"><inlinemediaobject><imageobject><imagedata fileref="colin" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuInsCol">Insert Column</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuDelRow"><inlinemediaobject><imageobject><imagedata fileref="rowout" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuDelRow">Delete Row</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuDelCol"><inlinemediaobject><imageobject><imagedata fileref="colout" format="png" align="center"></imageobject></inlinemediaobject></link>
-</entry><entry valign=middle>
+</entry><entry valign="middle">
 <link linkend="MenuDelCol">Delete Column</link>
 </entry></row>
 </tbody></tgroup>
@@ -2904,32 +2905,32 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <sect1 id="CharFormatToolbar"><title>Character Formatting ToolBar</title>
 <para>The Character Formatting Toolbar consists of 23 "elements".  Each "element" performs a task from the menubar.</para>
 <screenshot><mediaobject><imageobject><imagedata fileref="cftb" format="png" align="center"></imageobject></mediaobject></screenshot>
-<informaltable frame=none>
-<tgroup cols=2 align=left>
+<informaltable frame="none">
+<tgroup cols="2" align="left">
 <tbody>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chstylebut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select Character Style</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chsizebut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Character Size</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chfontbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select Font Face</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bold" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Bold Text</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="ital" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Italics Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="undl" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Underline Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="chcolorbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Text Color Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignRight" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Right Text Align Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignCenter" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Center Text Align Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignLeft" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Left Text Align Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignBlock" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Justify Text Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="lspcbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select Line Spacing</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="numtxtbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Numbered Text paragraphs</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bultxtbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Bulleted Text paragraphs</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="supscbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Superscript Text Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="subscbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Subscript Text Button</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="lbord" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Toggle Left Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="rbord" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Toggle Right Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="tbord" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Toggle Top Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bbord" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Toggle Bottom Paragraph Border</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bord" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Toggle border colors</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdsizebut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select Border Size</entry></row>
-<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdselbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign=middle>Select Border Style</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chstylebut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select Character Style</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chsizebut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Character Size</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chfontbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select Font Face</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bold" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Bold Text</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="ital" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Italics Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="undl" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Underline Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="chcolorbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Text Color Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignRight" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Right Text Align Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignCenter" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Center Text Align Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignLeft" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Left Text Align Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="alignBlock" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Justify Text Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="lspcbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select Line Spacing</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="numtxtbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Numbered Text paragraphs</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bultxtbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Bulleted Text paragraphs</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="supscbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Superscript Text Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="subscbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Subscript Text Button</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="lbord" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Left Paragraph Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="rbord" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Right Paragraph Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="tbord" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Top Paragraph Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bbord" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle Bottom Paragraph Border</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bord" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Toggle border colors</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdsizebut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select Border Size</entry></row>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="bdselbut" format="png" align="right"></imageobject></inlinemediaobject></entry><entry valign="middle">Select Border Style</entry></row>
 
 </tbody></tgroup>
 </informaltable>
@@ -2961,7 +2962,7 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <para>KWord comes with 11 pre-defined Styles.</para>
 <para>The table below provides you a quick glimpse of the formatting that is predefined for these styles.</para>
 <informaltable>
-<tgroup cols=2 align=left><thead>
+<tgroup cols="2" align="left"><thead>
 <row><entry>Style</entry><entry>Characters</entry><entry>Paragraph</entry><entry>Borders</entry></row>
 </thead><tbody>
 <row><entry>Standard</entry><entry><para>Times</para><para>12 Point</para><para>Regular Style</para></entry><entry>Left Justified</entry><entry>None</entry></row>
@@ -3024,42 +3025,42 @@ at present.</para></listitem>
 <table><title>Key Bindings for KWord</title><tgroup cols="2">
 <thead><row><entry>Command</entry><entry>Key Combination</entry></row></thead>
 <tbody>
-<row><entry align=center><link linkend="MenuNew">Start New Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuOpen">Open Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuSave">Save Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>S</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuPrint">Print Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>P</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuClose">Close Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>W</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuQuit">Quit KWord</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Q</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuUndo">Undo</link></entry><entry><keycombo><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuCopy">Copy</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuCut">Cut</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuPaste">Paste</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuFind">Find and Replace</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuSelectAll">Select All</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuInsPict">Insert Picture</link></entry><entry><keycombo><keycap>F2</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuInsCA">Insert Clipart</link></entry><entry><keycombo><keycap>F3</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuInsSC">Insert Special Character</link></entry><entry><keycombo><keycap>Alt</keycap><keycap>C</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuInsFB">Insert Hard Frame Break</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Enter</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuEditText">Switch to Edit Text Mode</link></entry><entry><keycombo><keycap>F4</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuEditFrame">Switch to Edit Frame Mode</link></entry><entry><keycombo><keycap>F5</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuCrTF">Create Text Frame</link></entry><entry><keycombo><keycap>F6</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuCrPF">Create Picture Frame</link></entry><entry><keycombo><keycap>F7</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuCrCaF">Create Clipart Frame</link></entry><entry><keycombo><keycap>F8</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuCrTbl">Create Table</link></entry><entry><keycombo><keycap>F9</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuCrKspread">Create KSpread Table</link></entry><entry><keycombo><keycap>F10</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuCrForm">Create Formula Frame</link></entry><entry><keycombo><keycap>F11</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="MenuCrPart">Create Parts Frame</link></entry><entry><keycombo><keycap>F12</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="FormatFont">Format Font</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry></row>
-<row><entry align=center><link linkend="FormatColor">Format Character Color</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>C</keycap></keycombo></entry></row>
-<row><entry align=center>Move selection one character to the left.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Left Arrow</keycap></keycombo></entry></row>
-<row><entry align=center>Move selection one character to the Right.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Right Arrow</keycap></keycombo></entry></row>
-<row><entry align=center>Selects all characters from the start of the selection, to the character directly up one line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Up Arrow</keycap></keycombo></entry></row>
-<row><entry align=center>Selects all characters from the start of the selection, to the character directly down one line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Down Arrow</keycap></keycombo></entry></row>
-<row><entry align=center>Selects all characters from the start of the selection, to the beginning of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Home</keycap></keycombo></entry></row>
-<row><entry align=center>Selects all characters from the start of the selection, to the end of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>End</keycap></keycombo></entry></row>
-<row><entry align=center>Toggle Boldface On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
-<row><entry align=center>Toggle Italics On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
-<row><entry align=center>Toggle Underline On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuNew">Start New Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuOpen">Open Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuSave">Save Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>S</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuPrint">Print Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>P</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuClose">Close Document</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>W</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuQuit">Quit KWord</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Q</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuUndo">Undo</link></entry><entry><keycombo><keycap>Alt</keycap><keycap>Backspace</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuCopy">Copy</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuCut">Cut</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuPaste">Paste</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuFind">Find and Replace</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuSelectAll">Select All</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>A</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuInsPict">Insert Picture</link></entry><entry><keycombo><keycap>F2</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuInsCA">Insert Clipart</link></entry><entry><keycombo><keycap>F3</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuInsSC">Insert Special Character</link></entry><entry><keycombo><keycap>Alt</keycap><keycap>C</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuInsFB">Insert Hard Frame Break</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Enter</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuEditText">Switch to Edit Text Mode</link></entry><entry><keycombo><keycap>F4</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuEditFrame">Switch to Edit Frame Mode</link></entry><entry><keycombo><keycap>F5</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuCrTF">Create Text Frame</link></entry><entry><keycombo><keycap>F6</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuCrPF">Create Picture Frame</link></entry><entry><keycombo><keycap>F7</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuCrCaF">Create Clipart Frame</link></entry><entry><keycombo><keycap>F8</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuCrTbl">Create Table</link></entry><entry><keycombo><keycap>F9</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuCrKspread">Create KSpread Table</link></entry><entry><keycombo><keycap>F10</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuCrForm">Create Formula Frame</link></entry><entry><keycombo><keycap>F11</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="MenuCrPart">Create Parts Frame</link></entry><entry><keycombo><keycap>F12</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="FormatFont">Format Font</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo></entry></row>
+<row><entry align="center"><link linkend="FormatColor">Format Character Color</link></entry><entry><keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>C</keycap></keycombo></entry></row>
+<row><entry align="center">Move selection one character to the left.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Left Arrow</keycap></keycombo></entry></row>
+<row><entry align="center">Move selection one character to the Right.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Right Arrow</keycap></keycombo></entry></row>
+<row><entry align="center">Selects all characters from the start of the selection, to the character directly up one line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Up Arrow</keycap></keycombo></entry></row>
+<row><entry align="center">Selects all characters from the start of the selection, to the character directly down one line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Down Arrow</keycap></keycombo></entry></row>
+<row><entry align="center">Selects all characters from the start of the selection, to the beginning of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>Home</keycap></keycombo></entry></row>
+<row><entry align="center">Selects all characters from the start of the selection, to the end of the line.</entry><entry><keycombo><keycap>Shift</keycap><keycap>End</keycap></keycombo></entry></row>
+<row><entry align="center">Toggle Boldface On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
+<row><entry align="center">Toggle Italics On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
+<row><entry align="center">Toggle Underline On/Off</entry><entry><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
 </tbody></tgroup></table></para></sect1>  
 </chapter>     
 <!-- **************************************************************************************************** -->   
@@ -3075,7 +3076,7 @@ at present.</para></listitem>
 
 <para>Contributors:
 <itemizedlist>
-<listitem><para>Jost Schenck <email>jost@schneck.de</email</para>
+<listitem><para>Jost Schenck <email>jost@schneck.de</email></para>
 </listitem>
 </itemizedlist></para>
 <para>Translations done by:</para>
@@ -3330,3 +3331,5 @@ url="http://koffice.kde.org/faq/koffice-faq.html">here</ulink>.</para></glossdef
 
 <![ %addindex; [ &kdedocindex; ]]>
 </book>
+
+
