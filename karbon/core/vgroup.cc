@@ -31,6 +31,8 @@
 #include "shapes/vsinus.h"
 #include "shapes/vspiral.h"
 #include "shapes/vstar.h"
+#include "shapes/vpolyline.h"
+#include "shapes/vpolygon.h"
 #include "vfill.h"
 #include "vgroup.h"
 #include "vlayer.h"
@@ -198,6 +200,18 @@ VGroup::load( const QDomElement& element )
 				VRectangle* rectangle = new VRectangle( this );
 				rectangle->load( e );
 				append( rectangle );
+			}
+			else if( e.tagName() == "POLYLINE" )
+			{
+				VPolyline* polyline = new VPolyline( this );
+				polyline->load( e );
+				append( polyline );
+			}
+			else if( e.tagName() == "POLYGON" )
+			{
+				VPolygon* polygon = new VPolygon( this );
+				polygon->load( e );
+				append( polygon );
 			}
 			else if( e.tagName() == "SINUS" )
 			{

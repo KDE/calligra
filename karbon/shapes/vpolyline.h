@@ -17,16 +17,18 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VPOLYGON_H__
-#define __VPOLYGON_H__
+#ifndef __VPOLYLINE_H__
+#define __VPOLYLINE_H__
 
 #include "vcomposite.h"
+#include <qstring.h>
 
-class VPolygon : public VComposite
+class VPolyline : public VComposite
 {
 public:
-	VPolygon( VObject* parent, VState state = edit );
-	//VPolygon( VObject* parent, const QString &points  );
+	VPolyline( VObject* parent, VState state = edit );
+	//VPolyline( VObject* parent, VState state = edit );
+	//VPolyline( VObject* parent, const QString &points  );
 
 	virtual QString name() const;
 

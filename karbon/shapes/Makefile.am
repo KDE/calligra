@@ -8,6 +8,7 @@ noinst_LTLIBRARIES = libkarbonshapes.la
 
 noinst_HEADERS = \
 	vellipse.h \
+	vpolyline.h \
 	vpolygon.h \
 	vrectangle.h \
 	vsinus.h \
@@ -16,6 +17,7 @@ noinst_HEADERS = \
 
 libkarbonshapes_la_SOURCES = \
 	vellipse.cc \
+	vpolyline.cc \
 	vpolygon.cc \
 	vrectangle.cc \
 	vsinus.cc \

@@ -18,27 +18,31 @@
 */
 
 
+#include "vpolyline.h"
 #include <qregexp.h>
 #include <qdom.h>
 
 #include "vglobal.h"
-#include "vpolygon.h"
-#include "vtransformcmd.h"
 #include <klocale.h>
 
-VPolygon::VPolygon( VObject* parent, VState state ) 
+VPolyline::VPolyline( VObject* parent, VState state )
 	: VComposite( parent, state )
 {
 }
 
-/*VPolygon::VPolygon( VObject* parent, const QString &points ) 
+/*VPolyline::VPolyline( VObject* parent, VState state ) 
+	: VComposite( parent, state )
+{
+}*/
+
+/*VPolyline::VPolyline( VObject* parent, const QString &points ) 
 	: VComposite( parent ), m_points( points )
 {
 	init();
 }*/
 
 void
-VPolygon::init()
+VPolyline::init()
 {
 	bool bFirst = true;
 
@@ -61,18 +65,18 @@ VPolygon::init()
 }
 
 QString
-VPolygon::name() const
+VPolyline::name() const
 {
 	QString result = VObject::name();
-	return !result.isEmpty() ? result : i18n( "Polygon" );
+	return !result.isEmpty() ? result : i18n( "Polyline" );
 }
 
 void
-VPolygon::save( QDomElement& element ) const
+VPolyline::save( QDomElement& element ) const
 {
 	if( state() != deleted )
 	{
-		QDomElement me = element.ownerDocument().createElement( "POLYGON" );
+		QDomElement me = element.ownerDocument().createElement( "POLYLINE" );
 		element.appendChild( me );
 
 		VObject::save( me );
@@ -84,7 +88,7 @@ VPolygon::save( QDomElement& element ) const
 }
 
 void
-VPolygon::load( const QDomElement& element )
+VPolyline::load( const QDomElement& element )
 {
 	setState( normal );
 

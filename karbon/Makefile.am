@@ -41,8 +41,8 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOPAINTER) \
 	render/libvpainter.la \
 	render/xrgbrender/libkarbonxrgbrender.la \
 	tools/libkarbontools.la \
-	shapes/libkarbonshapes.la \
 	core/libkarboncore.la \
+	shapes/libkarbonshapes.la \
 	commands/libkarboncommands.la \
 	visitors/libkarbonvisitors.la \
 	dialogs/libkarbondialogs.la \
