@@ -31,6 +31,7 @@ class PenStyleWidget;
 class BrushProperty;
 class RectProperty;
 class PolygonProperty;
+class PieProperty;
 class TextProperty;
 class KPObjectProperties;
 
@@ -53,6 +54,7 @@ private:
     void setupTabBrush();
     void setupTabRect();
     void setupTabPolygon();
+    void setupTabPie();
     void setupTabText();
     void setupTabGeneral();
 
@@ -66,6 +68,7 @@ private:
     BrushProperty *m_brushProperty;
     RectProperty *m_rectProperty;
     PolygonProperty *m_polygonProperty;
+    PieProperty *m_pieProperty;
     TextProperty *m_textProperty;
     GeneralProperty *m_generalProperty;
 
