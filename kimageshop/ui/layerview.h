@@ -29,7 +29,7 @@
 class KisDoc;
 class QPopupMenu;
 class QLineEdit;
-class KIntSpinBox;
+class IntegerWidget;
 
 class KisLayer;
 
@@ -96,7 +96,7 @@ protected:
   LayerPropertyDialog( QString _layername, uchar _opacity, QWidget *_parent, const char *_name );
 
   QLineEdit *m_name;
-  KIntSpinBox *m_spin;
+  IntegerWidget *m_opacity;
 };
 
 #endif // __layerview_h__

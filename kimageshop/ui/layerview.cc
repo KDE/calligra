@@ -19,27 +19,27 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-// only for debug
-#include <iostream.h>
-
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qpopupmenu.h>
+#include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qlineedit.h>
 #include <qstring.h>
+#include <qslider.h>
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qlineedit.h>
+#include <qpopupmenu.h>
+#include <qpushbutton.h>
 
 #include <kstddirs.h>
 #include <klocale.h>
 #include <knuminput.h>
 
-#include "kis_util.h"
 #include "kis_doc.h"
-#include "kis_factory.h"
+#include "kis_util.h"
 #include "layerview.h"
+#include "kis_factory.h"
 #include "kis_dlg_layer.h"
+#include "integerwidget.h"
 
 LayerView::LayerView( QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
@@ -264,8 +264,6 @@ void LayerView::mouseDoubleClickEvent( QMouseEvent *_event )
 
 void LayerView::slotAddLayer()
 {
-  cout << "LayerView::slotAddLayer()" << endl;
-
   QString image = locate( "kis_images", "cam9b.jpg", KisFactory::global() );	
   m_doc->addRGBLayer( image );
   m_doc->setLayerOpacity( 255 );
@@ -281,8 +279,6 @@ void LayerView::slotAddLayer()
 
 void LayerView::slotRemoveLayer()
 {
-  cout << "LayerView::slotRemoveLayer()" << endl;
-
   if( m_doc->layerList().count() != 0 )
   {
     QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
@@ -301,8 +297,6 @@ void LayerView::slotRemoveLayer()
 
 void LayerView::swapLayers( int a, int b )
 {
-  cout << "LayerView::swapLayers" << endl;
-
   if( ( m_doc->layerList().at( a )->isVisible() ) &&
       ( m_doc->layerList().at( b )->isVisible() ) )
   {
@@ -320,8 +314,6 @@ void LayerView::swapLayers( int a, int b )
 
 void LayerView::slotRaiseLayer()
 {
-  cout << "LayerView::slotRaiseLayer()" << endl;
-
   int newpos = m_selected > 0 ? m_selected - 1 : 0;
 
   if( m_selected != newpos )
@@ -335,8 +327,6 @@ void LayerView::slotRaiseLayer()
 
 void LayerView::slotLowerLayer()
 {
-  cout << "LayerView::slotLowerLayer()" << endl;
-
   int newpos = ( m_selected + 1 ) < (int)m_doc->layerList().count() ? m_selected + 1 : m_selected;
 
   if( m_selected != newpos )
@@ -350,8 +340,6 @@ void LayerView::slotLowerLayer()
 
 void LayerView::slotFrontLayer()
 {
-  cout << "LayerView::slotFrontLayer" << endl;
-
   if( m_selected != (int) ( m_doc->layerList().count() - 1 ) )
   {
     m_doc->setFrontLayer( m_selected );
@@ -366,8 +354,6 @@ void LayerView::slotFrontLayer()
 
 void LayerView::slotBackgroundLayer()
 {
-  cout << "LayerView::slotBackgroundLayer" << endl;
-
   if( m_selected != 0 )
   {
     m_doc->setBackgroundLayer( m_selected );
@@ -389,8 +375,6 @@ void LayerView::updateAllCells()
 
 void LayerView::slotProperties()
 {
-  cout << "LayerView::slotProperties()" << endl;
-
   if( LayerPropertyDialog::editProperties( *( m_doc->layerList().at( m_selected ) ) ) )
   {
     QRect updateRect = m_doc->layerList().at( m_selected )->imageExtents();
@@ -403,27 +387,43 @@ void LayerView::slotProperties()
 LayerPropertyDialog::LayerPropertyDialog( QString _layername, uchar _opacity, QWidget *_parent, const char *_name )
   : QDialog( _parent, _name, true )
 {
-  QGridLayout *layout = new QGridLayout( this, 3, 2, 15, 7 );
+  QGridLayout *layout = new QGridLayout( this, 4, 2, 15, 7 );
 
   m_name = new QLineEdit( _layername, this );
   layout->addWidget( m_name, 0, 1 );
 
-  QLabel *label1 = new QLabel( m_name, i18n( "Name" ), this );
-  layout->addWidget( label1, 0, 0 );
+  QLabel *lblName = new QLabel( m_name, i18n( "Name" ), this );
+  layout->addWidget( lblName, 0, 0 );
 
+/*
   m_spin = new KIntSpinBox( 0, 255, 1, _opacity, 10, this );
   layout->addWidget( m_spin, 1, 1 );
 
   QLabel *label2 = new QLabel( m_spin, i18n( "Opacity" ), this );
   layout->addWidget( label2, 1, 0 );
+*/
+  
+  m_opacity = new IntegerWidget( 0, 255, this );
+  m_opacity->setValue( _opacity );
+  m_opacity->setTickmarks( QSlider::Below );
+  m_opacity->setTickInterval( 32 );
+  layout->addWidget( m_opacity, 1, 1 );
 
-  QPushButton *pbOk = new QPushButton( i18n( "Ok" ), this );
+  QLabel *lblOpacity = new QLabel( m_opacity, i18n( "Opacity" ), this );
+  layout->addWidget( lblOpacity, 1, 0 );
+
+  layout->setRowStretch( 2, 1 );
+
+  QHBox *buttons = new QHBox( this );
+  layout->addMultiCellWidget( buttons, 3, 4, 0, 1 );
+
+  (void) new QWidget( buttons );
+
+  QPushButton *pbOk = new QPushButton( i18n( "Ok" ), buttons );
   pbOk->setDefault( true );
-  layout->addWidget( pbOk, 2, 0 );
   QObject::connect( pbOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
-  QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), this );
-  layout->addWidget( pbCancel, 2, 1 );
+  QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), buttons );
   QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
 
@@ -435,7 +435,7 @@ bool LayerPropertyDialog::editProperties( KisLayer &_layer )
   if( dialog->exec() == Accepted )
   {
     _layer.setName( dialog->m_name->text() );
-    _layer.setOpacity( dialog->m_spin->value() );
+    _layer.setOpacity( dialog->m_opacity->value() );
 
     return true;
   }
