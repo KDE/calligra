@@ -136,6 +136,7 @@ void KoVariableSettings::saveOasis( KoXmlWriter &settingsWriter )
 
 void KoVariableSettings::loadOasis(const KoOasisSettings&settingsDoc)
 {
+    kdDebug() << k_funcinfo << endl;
     KoOasisSettings::Items configurationSettings = settingsDoc.itemSet( "configuration-variable-settings" );
     if ( !configurationSettings.isNull() )
     {
@@ -145,11 +146,20 @@ void KoVariableSettings::loadOasis(const KoOasisSettings&settingsDoc)
         m_displayFieldCode = configurationSettings.parseConfigItemBool( "displayfieldcode", false );
         m_startingPageNumber = configurationSettings.parseConfigItemInt( "startingPageNumber",  1 );
 
-        d->m_lastPrintingDate = QDateTime::fromString( configurationSettings.parseConfigItemString( "lastPrintingDate",  "" ) );
-        d->m_creationDate = QDateTime::fromString( configurationSettings.parseConfigItemString( "creationDate",  "" ) );
-        d->m_modificationDate = QDateTime::fromString( configurationSettings.parseConfigItemString( "modificationDate",  "" ) );
-    }
+        QString str = configurationSettings.parseConfigItemString( "lastPrintingDate" );
+        if ( !str.isEmpty() )
+            d->m_lastPrintingDate = QDateTime::fromString( str, Qt::ISODate );
+        else
+            d->m_lastPrintingDate.setTime_t(0); // 1970-01-01 00:00:00.000 locale time
 
+        str = configurationSettings.parseConfigItemString( "creationDate" );
+        if ( !str.isEmpty() )
+            d->m_creationDate = QDateTime::fromString( str, Qt::ISODate );
+
+        str = configurationSettings.parseConfigItemString( "modificationDate" );
+        if ( !str.isEmpty() )
+            d->m_modificationDate = QDateTime::fromString( str, Qt::ISODate );
+    }
 }
 
 void KoVariableSettings::save( QDomElement &parentElem )

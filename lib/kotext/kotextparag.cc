@@ -1734,6 +1734,14 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         {
             textData = '\n';
         }
+        else if ( node.isProcessingInstruction() )
+        {
+            QDomProcessingInstruction pi = node.toProcessingInstruction();
+            if ( pi.target() == "opendocument" && pi.data().startsWith( "cursor-position" ) )
+            {
+                context.setCursorPosition( this, pos );
+            }
+        }
         else
         {
             bool handled = false;
@@ -1822,6 +1830,11 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 
     loadOasisSpan( parent, context, pos );
 
+    // Apply default format to trailing space
+    const int len = string()->length();
+    Q_ASSERT( len >= 1 );
+    setFormat( len - 1, 1, paragFormat(), TRUE );
+
     setChanged( true );
     invalidate( 0 );
 }
@@ -1875,7 +1888,9 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     QString text = string()->toString();
     Q_ASSERT( text.right(1)[0] == ' ' );
 
-    //kdDebug() << k_funcinfo << "'" << text << "' from=" << from << " to=" << to << endl;
+    const int cursorIndex = context.cursorTextParagraph() == this ? context.cursorTextIndex() : -1;
+
+    kdDebug() << k_funcinfo << "'" << text << "' from=" << from << " to=" << to << " cursorIndex=" << cursorIndex << endl;
 
     // A helper method would need no less than 7 params...
 #define WRITESPAN( next ) { \
@@ -1884,7 +1899,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         } else {                                                        \
             KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", autoParagStyleName ); \
             curFormat->save( gs );                                      \
-            QString autoStyleName = mainStyles.lookup( gs, "T" );       \
+            const QString autoStyleName = mainStyles.lookup( gs, "T" );       \
             writer.startElement( "text:span" );                         \
             writer.addAttribute( "text:style-name", autoStyleName );    \
             writer.addTextSpan( text.mid( startPos, next - startPos ), m_tabCache ); \
@@ -1903,10 +1918,13 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );
         if ( !curFormat )
             curFormat = newFormat;
-        if ( newFormat != curFormat || ch.isCustom() ) { // Format changed, save previous one.
-            WRITESPAN( i )
+        if ( newFormat != curFormat || ch.isCustom() || cursorIndex == i ) { // Format changed, save previous one.
+            WRITESPAN( i ) // write text up to i-1
             startPos = i;
             curFormat = newFormat;
+        }
+        if ( cursorIndex == i ) {
+            writer.addProcessingInstruction( "opendocument cursor-position" );
         }
         if ( ch.isCustom() ) {
             KoTextCustomItem* customItem = ch.customItem();
@@ -1919,6 +1937,9 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     if ( to >= startPos ) { // Save last format
         WRITESPAN( to + 1 )
+    }
+    if ( cursorIndex == to + 1 ) {
+        writer.addProcessingInstruction( "opendocument cursor-position" );
     }
 
     writer.endElement(); // text:p or text:h

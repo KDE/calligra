@@ -25,7 +25,8 @@
 
 KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection& varColl,
                                 KoOasisStyles& styles, KoStore* store )
-    : m_doc( doc ), m_store( store ), m_varColl( varColl ), m_styles( styles )
+    : m_doc( doc ), m_store( store ), m_varColl( varColl ), m_styles( styles ),
+      m_cursorTextParagraph( 0 )
 {
 }
 
@@ -105,6 +106,13 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, // for de
     return true;
 }
 
+void KoOasisContext::setCursorPosition( KoTextParag* cursorTextParagraph,
+                                        int cursorTextIndex )
+{
+    m_cursorTextParagraph = cursorTextParagraph;
+    m_cursorTextIndex = cursorTextIndex;
+}
+
 KoOasisContext::~KoOasisContext()
 {
 }
@@ -113,6 +121,14 @@ KoOasisContext::~KoOasisContext()
 
 KoSavingContext::KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode )
     : m_mainStyles( mainStyles ),
-      m_savingMode( savingMode )
+      m_savingMode( savingMode ),
+      m_cursorTextParagraph( 0 )
 {
+}
+
+void KoSavingContext::setCursorPosition( KoTextParag* cursorTextParagraph,
+                                         int cursorTextIndex )
+{
+    m_cursorTextParagraph = cursorTextParagraph;
+    m_cursorTextIndex = cursorTextIndex;
 }

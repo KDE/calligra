@@ -1687,7 +1687,7 @@ KWFrame* KWTextFrameSet::loadOasisTextBox( const QDomElement& frameTag, const QD
     }
     KWFrame* frame = 0;
     if ( !fs ) {
-        fs = new KWTextFrameSet( m_doc, tag, context );
+        fs = new KWTextFrameSet( m_doc, frameTag, context );
         m_doc->addFrameSet( fs, false );
         frame = fs->loadOasis( frameTag, tag, context );
     } else { // Adding frame to existing frameset

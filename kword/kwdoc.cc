@@ -1128,7 +1128,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // TODO settings (m_unit, spellcheck settings)
     m_hasTOC = false;
     m_tabStop = MM_TO_POINT(15); // TODO
-    // TODO m_initialEditing
+    m_initialEditing = 0;
 
     // TODO variable settings
     // By default display real variable value
@@ -1192,6 +1192,17 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     }
 
     // TODO embedded objects
+
+    if ( context.cursorTextParagraph() ) {
+        // Maybe, once 1.3-support is dropped, we can get rid of InitialEditing and fetch the
+        // values from KoOasisContext? But well, it lives a bit longer.
+        // At least we could store a KWFrameSet* and a KoTextParag* instead of a name and an id.
+        m_initialEditing = new InitialEditing();
+        KWTextFrameSet* fs = static_cast<KWTextDocument *>( context.cursorTextParagraph()->textDocument() )->textFrameSet();
+        m_initialEditing->m_initialFrameSet = fs->name();
+        m_initialEditing->m_initialCursorParag = context.cursorTextParagraph()->paragId();
+        m_initialEditing->m_initialCursorIndex = context.cursorTextIndex();
+    }
 
     kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
     endOfLoading();
@@ -2604,6 +2615,23 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
     savingContext.setStyleNameMap( map );
 
+    // Save visual info for the first view, such as the active frameset and cursor position
+    // It looks like a hack, but reopening a document creates only one view anyway (David)
+    KWView * view = static_cast<KWView*>(views().getFirst());
+    if ( view ) // no view if embedded document
+    {
+        KWFrameSetEdit* edit = view->getGUI()->canvasWidget()->currentFrameSetEdit();
+        if ( edit )
+        {
+            KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
+            if ( textedit && textedit->cursor() ) {
+                KoTextCursor* cursor = textedit->cursor();
+                savingContext.setCursorPosition( cursor->parag(),
+                                                 cursor->index() );
+            }
+        }
+    }
+
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );
     QFile* tmpFile = contentTmpFile.file();
@@ -2861,7 +2889,7 @@ QDomDocument KWDocument::saveXML()
     docattrs.setAttribute( "hasTOC", static_cast<int>(m_hasTOC));
     docattrs.setAttribute( "tabStopValue", m_tabStop );
 
-    // Save visual info for the first view, such as active table and active cell
+    // Save visual info for the first view, such as the active frameset and cursor position
     // It looks like a hack, but reopening a document creates only one view anyway (David)
     KWView * view = static_cast<KWView*>(views().getFirst());
     if ( view ) // no view if embedded document

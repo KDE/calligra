@@ -69,4 +69,6 @@ perl -pi -e 's/modificationDate=\"[0-9-T:]*\"//' oasisregtest-final/maindoc.xml
 diff -urp oasisregtest-orig oasisregtest-final 2>&1 | tee oasisdiff | less
 
 echo "See /tmp/oasisregtest-oasis for the OASIS xml files."
+echo "For a better diffing mechanism, launch xemacs and paste into a terminal:"
+echo "gnudoit '(ediff-files \"/tmp/oasisregtest-orig/maindoc.xml\" \"/tmp/oasisregtest-final/maindoc.xml\")'"
 

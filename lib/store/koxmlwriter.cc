@@ -90,6 +90,16 @@ bool KoXmlWriter::prepareForChild()
     return true;
 }
 
+void KoXmlWriter::prepareForTextNode()
+{
+    Tag& parent = m_tags.top();
+    if ( !parent.hasChildren ) {
+        closeStartElement( parent );
+        parent.hasChildren = true;
+        parent.lastChildIsText = true;
+    }
+}
+
 void KoXmlWriter::startElement( const char* tagName, bool indentInside )
 {
     Q_ASSERT( tagName != 0 );
@@ -148,17 +158,19 @@ void KoXmlWriter::endElement()
 
 void KoXmlWriter::addTextNode( const char* cstr )
 {
-    Tag& parent = m_tags.top();
-    if ( !parent.hasChildren ) {
-        closeStartElement( parent );
-        parent.hasChildren = true;
-        parent.lastChildIsText = true;
-    }
-
+    prepareForTextNode();
     char* escaped = escapeForXML( cstr, -1 );
     writeCString( escaped );
     if(escaped != m_escapeBuffer)
         delete[] escaped;
+}
+
+void KoXmlWriter::addProcessingInstruction( const char* cstr )
+{
+    prepareForTextNode();
+    writeCString( "<?" );
+    addTextNode( cstr );
+    writeCString( "?>");
 }
 
 void KoXmlWriter::addAttribute( const char* attrName, const char* value )
@@ -401,4 +413,3 @@ void KoXmlWriter::addTextSpan( const QString& text, const QMap<int, int>& tabCac
         endElement();
     }
 }
-

@@ -130,6 +130,17 @@ public:
     void addTextNode( const char* cstr );
 
     /**
+     * @brief Adds a processing instruction
+     *
+     * This writes a processing instruction, like <?foo bar blah?>, where foo
+     * is the target, and the rest is the data.
+     *
+     * Processing instructions are used in XML to keep processor-specific
+     * information in the text of the document.
+     */
+    void addProcessingInstruction( const char* cstr );
+
+    /**
      * This is quite a special-purpose method, not for everyday use.
      * It adds a complete element (with its attributes and child elements)
      * as a child of the current element. The string is supposed to be escaped
@@ -175,7 +186,7 @@ public:
     // TODO addConfigItem for datetime and base64Binary
 
     /**
-     * @brief Adds a text span as nods of the current element.
+     * @brief Adds a text span as nodes of the current element.
      *
      * Unlike KoXmlWriter::addTextNode it handles tabulations, linebreaks,
      * and multiple spaces by using the appropriate OASIS tags.
@@ -236,6 +247,7 @@ private:
     }
     char* escapeForXML( const char* source, int length ) const;
     bool prepareForChild();
+    void prepareForTextNode();
     void init();
 
     QIODevice* m_dev;

@@ -20,6 +20,7 @@
 #ifndef KOOASISCONTEXT_H
 #define KOOASISCONTEXT_H
 
+class KoTextParag;
 class KoParagStyle;
 class KoGenStyles;
 class QDomElement;
@@ -80,6 +81,13 @@ public:
     /// Used for outline levels
     bool pushOutlineListLevelStyle( int level );
 
+    /// Set cursor position (set by KoTextParag upon finding the processing instruction)
+    void setCursorPosition( KoTextParag* cursorTextParagraph,
+                            int cursorTextIndex );
+
+    KoTextParag* cursorTextParagraph() const { return m_cursorTextParagraph; }
+    int cursorTextIndex() const { return m_cursorTextIndex; }
+
 private:
     /// @return true on success (a list style was found and pushed)
     bool pushListLevelStyle( const QString& listStyleName, const QDomElement& fullListStyle, int level );
@@ -93,6 +101,9 @@ private:
 
     KoListStyleStack m_listStyleStack;
     QString m_currentListStyleName;
+
+    KoTextParag* m_cursorTextParagraph;
+    int m_cursorTextIndex;
 
     class Private;
     Private *d;
@@ -113,6 +124,7 @@ public:
     /// @param savingMode either Store (a KoStore will be used) or Flat (all data must be inline in the XML)
     KoSavingContext( KoGenStyles& mainStyles, SavingMode savingMode );
 
+
     KoGenStyles& mainStyles() { return m_mainStyles; }
 
     /// @return the saving mode: Store (a KoStore will be used) or Flat (all data must be inline in the XML)
@@ -132,10 +144,20 @@ public:
         return QString::null;
     }
 
+    /// Set cursor position (so that KoTextParag can insert a processing instruction)
+    void setCursorPosition( KoTextParag* cursorTextParagraph,
+                            int cursorTextIndex );
+
+    KoTextParag* cursorTextParagraph() const { return m_cursorTextParagraph; }
+    int cursorTextIndex() const { return m_cursorTextIndex; }
+
 private:
     KoGenStyles& m_mainStyles;
     StyleNameMap m_styleNameMap;
     SavingMode m_savingMode;
+
+    KoTextParag* m_cursorTextParagraph;
+    int m_cursorTextIndex;
 
     class Private;
     Private *d;

@@ -94,6 +94,15 @@ int main( int argc, char** argv ) {
               "</r>\n" );
 
     TEST_BEGIN( 0, 0 );
+    writer.startElement( "p", false /*no indent*/ );
+    writer.addProcessingInstruction( "opendocument foobar" );
+    writer.addTextSpan( "foo" );
+    writer.endElement();
+    TEST_END( "processinginstruction test", "<r>\n"
+              " <p><?opendocument foobar?>foo</p>\n"
+              "</r>\n" );
+
+    TEST_BEGIN( 0, 0 );
     writer.addManifestEntry( "foo/bar/blah", "mime/type" );
     TEST_END( "addManifestEntry", "<r>\n <manifest:file-entry manifest:media-type=\"mime/type\" manifest:full-path=\"foo/bar/blah\"/>\n</r>\n" );
 

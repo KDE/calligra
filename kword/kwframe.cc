@@ -2077,7 +2077,7 @@ KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
 KWPictureFrameSet::KWPictureFrameSet( KWDocument* doc, const QDomElement& frame, const QDomElement& imageTag, KoOasisContext& context )
     : KWFrameSet( doc ), m_keepAspectRatio( true ), m_finalSize( false )
 {
-    m_name = imageTag.attributeNS( KoXmlNS::draw, "name", QString::null );
+    m_name = frame.attributeNS( KoXmlNS::draw, "name", QString::null );
     if ( doc->frameSetByName( m_name ) ) // already exists!
         m_name = doc->generateFramesetName( m_name + " %1" );
     loadOasis( frame, imageTag, context );
