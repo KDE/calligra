@@ -101,7 +101,7 @@ KSearchReplaceDialog::KSearchReplaceDialog(QWidget *parent=0,const char *name=0)
   ok->resize(ok->sizeHint());
   replace_all->resize(ok->sizeHint());
   cancel->move(frame->x() + frame->width() - cancel->width(),frame->y() + frame->height() + 15);
-  ok->move(cancel->x() - cancel->width() - 5,cancel->y());
+  ok->move(cancel->x() - ok->width() - 5,cancel->y());
   replace_all->move(ok->x() - replace_all->width() - 5,cancel->y());
   
   resize(cancel->x() + cancel->width() + 10,cancel->y() + cancel->height() + 10);
