@@ -49,9 +49,6 @@ class KexiFormPart : public KexiPart::Part
 		KexiFormPart(QObject *parent, const char *name, const QStringList &);
 		virtual ~KexiFormPart();
 
-		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog,
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
-
 		KFormDesigner::FormManager *manager() { return m_manager; }
 
 		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
@@ -67,6 +64,11 @@ class KexiFormPart : public KexiPart::Part
 		};
 
 	protected:
+		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
+
+		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog,
+			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
+
 		virtual void initPartActions();
 		virtual void initInstanceActions();
 

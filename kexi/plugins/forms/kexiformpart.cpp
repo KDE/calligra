@@ -114,6 +114,11 @@ void KexiFormPart::initInstanceActions()
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("To Widest"), "aowidest", 0, "formpart_adjust_width_big") );
 }
 
+KexiDialogTempData* 
+KexiFormPart::createTempData(KexiDialogBase* dialog)
+{
+	return new KexiFormPart::TempData(dialog);
+}
 
 KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	KexiPart::Item &item, int viewMode)
@@ -123,13 +128,8 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	if (!win || !win->project() || !win->project()->dbConnection())
 		return 0;
 
-	if (!dialog->tempData()) {
-		dialog->setTempData( new KexiFormPart::TempData(dialog) );
-	}
-	//KexiFormPart::TempData *tempData = static_cast<KexiFormPart::TempData*>(dialog->tempData());
-
-	KexiFormView *view = new KexiFormView(win, parent, item.name().latin1(), (viewMode == Kexi::DataViewMode)
-	, win->project()->dbConnection() );
+	KexiFormView *view = new KexiFormView(win, parent, item.name().latin1(), 
+		viewMode == Kexi::DataViewMode, win->project()->dbConnection() );
 
 	return view;
 }
