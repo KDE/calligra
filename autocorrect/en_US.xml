@@ -218,7 +218,7 @@
     <item find="wether" replace="whether" />
     <item find="whta" replace="what" />
     <item find="you;ve" replace="you've" />
-    <item find="(r)" replace="�" />
+    <item find="(r)" replace="®" />
     <item find="Amerian" replace="American" />
     <item find="Berkely" replace="Berkeley" />
     <item find="Broooklyn" replace="Brooklyn" />
@@ -3261,7 +3261,7 @@
     <item find="wtih" replace="with" />
     <item find="wuould" replace="would" />
     <item find="yuo" replace="you" />
-    <item find="(C)" replace="�" />
+    <item find="(C)" replace="©" />
     <item find="Apocolypse" replace="Apocalypse" />
     <item find="Britsh" replace="British" />
     <item find="Chatanooga" replace="Chattanooga" />
@@ -3783,8 +3783,8 @@
     <item find="writen" replace="written" />
     <item find="yeild" replace="yield" />
     <item find="you;d" replace="you'd" />
-    <item find="(R)" replace="�" />
-    <item find="(c)" replace="�" />
+    <item find="(R)" replace="®" />
+    <item find="(c)" replace="©" />
     <item find="Altanta" replace="Atlanta" />
     <item find="Amrica" replace="America" />
     <item find="Britian" replace="Britain" />
@@ -4131,5 +4131,10 @@
     <superscript super="rd" find="3rd" />
     <superscript super="th" find="othernb" />
   </SuperScript>
+ <DoubleQuote>
+  <doublequote begin="“" end="”" />
+ </DoubleQuote>
+ <SimpleQuote>
+  <simplequote begin="‘" end="’" />
+ </SimpleQuote>
 </Word>
-
