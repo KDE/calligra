@@ -127,8 +127,6 @@ void KexiAlterTableDialog::init()
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->addWidget(splitter);
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
-	resize(m_view->sizeHint());
-	m_view->setFocus();
 	resize( preferredSizeHint( m_view->sizeHint() ) );
 	m_view->setFocus();
 	initActions();
