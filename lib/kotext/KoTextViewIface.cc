@@ -522,3 +522,37 @@ void KoTextViewIface::removeComment()
 {
     removeComment();
 }
+
+QString KoTextViewIface::underlineLineStyle() const
+{
+    return lineStyleToString(m_textView->underlineLineStyle());
+}
+
+QString KoTextViewIface::strikeOutLineStyle()const
+{
+    return lineStyleToString(m_textView->strikeOutLineStyle());
+}
+
+QString KoTextViewIface::lineStyleToString( KoTextFormat::LineStyle _style ) const
+{
+    QString strLineType;
+    switch ( _style )
+    {
+    case KoTextFormat::SOLID:
+        strLineType ="solid";
+        break;
+    case KoTextFormat::DASH:
+        strLineType ="dash";
+        break;
+    case KoTextFormat::DOT:
+        strLineType ="dot";
+        break;
+    case KoTextFormat::DASH_DOT:
+        strLineType="dashdot";
+        break;
+    case KoTextFormat::DASH_DOT_DOT:
+        strLineType="dashdotdot";
+        break;
+    }
+    return strLineType;
+}

@@ -25,6 +25,7 @@
 
 #include <qstring.h>
 #include <qcolor.h>
+#include <qrichtext_p.h>
 class KoTextView;
 
 class KoTextViewIface :  virtual public DCOPObject
@@ -137,10 +138,13 @@ k_dcop:
     bool setNoteVariableText(const QString & note) const;
 
     void removeComment();
+    QString underlineLineStyle() const;
+    QString strikeOutLineStyle()const;
 
 private:
     KoTextView *m_textView;
-
+protected:
+    QString lineStyleToString( KoTextFormat::LineStyle _style ) const;
 };
 
 #endif
