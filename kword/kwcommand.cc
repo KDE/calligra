@@ -772,6 +772,7 @@ KWFramePartInternalCommand::KWFramePartInternalCommand( const QString &name, KWP
     KNamedCommand(name),
     m_part(part)
 {
+    m_url = m_part->getChild()->document()->url();
 }
 
 void KWFramePartInternalCommand::execute()
@@ -782,6 +783,7 @@ void KWFramePartInternalCommand::execute()
 void KWFramePartInternalCommand::unexecute()
 {
     m_part->getChild()->document()->setStoreInternal(false);    
+    m_part->getChild()->document()->setUrl( m_url );    
 }
 
 

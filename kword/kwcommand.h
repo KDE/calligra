@@ -20,6 +20,7 @@
 #ifndef KWORD_COMMAND_H
 #define KWORD_COMMAND_H
 #include <kcommand.h>
+#include <kurl.h>
 #include <kocommandhistory.h>
 #include <koGlobal.h>
 #include <koRect.h>
@@ -310,6 +311,7 @@ public:
     void unexecute();
 protected:
     KWPartFrameSet *m_part;
+    KURL m_url;
 };
 
 /**
