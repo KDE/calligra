@@ -40,6 +40,8 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
+	virtual bool changesSelection() const { return true; }
+
 protected:
 	/// Pointer to the created shape.
 	VPath *m_shape;
