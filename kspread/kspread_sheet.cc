@@ -6980,7 +6980,6 @@ void KSpreadSheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
     QString footerCenter= print()->footMid();
     QString footerRight = print()->footRight();
 
-    kdDebug()<<"headerLeft :"<<headerLeft<<" headerCenter :"<<headerCenter<<" headerRight :"<<headerRight<<" footRight :"<<footerRight<<" footerCenter :"<<footerCenter<<" footerRight :"<<footerRight<<endl;
     xmlWriter.startElement( "style:header");
     if ( ( !headerLeft.isEmpty() )
          || ( !headerCenter.isEmpty() )
@@ -7006,12 +7005,13 @@ void KSpreadSheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
     }
     else
     {
-#if 0
-        QDomElement header = doc.createElement( "style:header" );
-    QDomElement text   = doc.createElement( "text:p" );
-    QDomElement name   = doc.createElement( "text:sheet-name" );
-    name.appendChild( doc.createTextNode( "???" ) );
-#endif
+       xmlWriter.startElement( "text:p" );
+
+       xmlWriter.startElement( "text:sheet-name" );
+       xmlWriter.addTextNode( "???" );
+       xmlWriter.endElement();
+
+       xmlWriter.endElement();
     }
     xmlWriter.endElement();
 
@@ -7041,13 +7041,20 @@ void KSpreadSheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
     }
     else
     {
-#if 0
-            QDomElement footer = doc.createElement( "style:footer" );
-    QDomElement text   = doc.createElement( "text:p" );
-    text.appendChild( doc.createTextNode( i18n( "Page " ) ) );
-    QDomElement number = doc.createElement( "text:page-number" );
-    number.appendChild( doc.createTextNode( "1" ) );
-#endif
+
+       xmlWriter.startElement( "text:p" );
+
+       xmlWriter.startElement( "text:sheet-name" );
+       xmlWriter.addTextNode( "Page " ); // ???
+
+       xmlWriter.startElement( "text:page-number" );
+       xmlWriter.addTextNode( "1" ); // ???
+       xmlWriter.endElement();
+
+
+       xmlWriter.endElement();
+
+       xmlWriter.endElement();
     }
     xmlWriter.endElement();
 
