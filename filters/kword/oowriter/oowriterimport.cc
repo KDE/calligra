@@ -433,16 +433,13 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles )
   if ( !master.isNull() )
   {
     kdDebug(30518) << master.attribute( "style:name" ) << endl;
-#if 0 // I don't understand this code
-      QString name( "pm" );
+    QString name( "pm" );
     name += master.attribute( "style:name" );
     kdDebug(30518) << "Master style: '" << name << "' loaded " << endl;
     m_styles.insert( name, new QDomElement( master ) );
 
     master = master.nextSibling().toElement();
-#else
     m_masterPage = master;
-#endif
   }
 
 
