@@ -1244,7 +1244,9 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
                 drawMargins( frame, painter, outerCRect, cg, viewMode );
 
                 painter->restore();
-            }// else kdDebug(32001) << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
+            }
+            //else
+            //    kdDebug(32001) << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
         }
     }
 }
@@ -1261,13 +1263,17 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
 
     if ( drawUnderlyingFrames )
     {
-        // Double-buffering
-        QPixmap* pix = m_doc->doubleBufferPixmap( crect.size() );
-        QPainter* doubleBufPainter = new QPainter;
-        doubleBufPainter->begin( pix );
+        // Double-buffering - not when printing
+        QPainter* doubleBufPainter = painter;
+        QPixmap* pix = 0L;
+        if ( painter->device()->devType() != QInternal::Printer )
+        {
+            pix = m_doc->doubleBufferPixmap( crect.size() );
+            doubleBufPainter = new QPainter;
+            doubleBufPainter->begin( pix );
+        }
 
         // Transparency handling
-        //QRegion region( crect );
         QRect myFrameRect( viewMode->normalToView( m_doc->zoomRect( *frame ) ) );
 #ifdef DEBUG_DRAW
         kdDebug(32001) << "KWFrameSet::drawFrame frame->framesBelow(): " << frame->framesBelow().count() << endl;
@@ -1276,23 +1282,19 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
         for ( ; it.current() ; ++it )
         {
             KWFrame* f = it.current();
-            QRect frameRect( viewMode->normalToView( m_doc->zoomRect( *f ) ) );
-#ifdef DEBUG_DRAW
-            kdDebug(32001) << "KWFrameSet::drawFrame frameRect=" << frameRect << " " << f->frameSet()->getName() << endl;
-#endif
             doubleBufPainter->save();
 
             QRect viewCRect = crect;
             viewCRect.moveBy( myFrameRect.x(), myFrameRect.y() ); // now in view coordinates
 #ifdef DEBUG_DRAW
-            kdDebug(32001) << "KWFrameSet::drawFrame viewCRect=" << viewCRect << " (translating the painter by " << -viewCRect.x() << " " << -viewCRect.y() << endl;
+            kdDebug(32001) << "KWFrameSet::drawFrame " << f->frameSet()->getName() << " viewCRect=" << viewCRect << " (translating the painter by " << -viewCRect.x() << " " << -viewCRect.y() << endl;
 #endif
 
             // The double-buffer pixmap has (0,0) at viewCRect.topLeft(), so we need to
             // translate the double-buffer painter; drawFrameAndBorders will draw using view coordinates.
             doubleBufPainter->translate( -viewCRect.x(), -viewCRect.y() );
 
-            viewCRect &= frameRect; // intersect
+            viewCRect &= viewMode->normalToView( f->outerRect() ); // intersect
             if ( !viewCRect.isEmpty() )
             {
 #ifdef DEBUG_DRAW
@@ -1300,28 +1302,17 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crec
 #endif
                 f->frameSet()->drawFrameAndBorders( f, doubleBufPainter, viewCRect, cg, onlyChanged, resetChanged,
                                                     edit, viewMode, 0L, false );
-#if 0
-                viewCRect.moveBy( -frameRect.x(), -frameRect.y() ); // now in the coordinates for "f"
-                //// TODO KWFrame * settingsFrame = ( f->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-                //KWFrame * settingsFrame = f;
-                doubleBufPainter->translate( -myFrameRect.x(), -myFrameRect.y() );
-                /// TODO: pass viewmode as param if we really need it. Or better, use translated painter in drawFrameBorder
-                    //f->frameSet()->drawFrameBorder( painter, f, settingsFrame, viewCRect, viewMode );
-                    //f->frameSet()->drawMargins( f, painter, viewCRect, cg, viewMode );
-                    doubleBufPainter->translate( frameRect.x(), frameRect.y() );
-                    f->frameSet()->drawFrameContents( f, doubleBufPainter, viewCRect, cg, 0, viewMode );
-#endif
             }
 
             doubleBufPainter->restore();
-            //QRegion clipRegion( region.intersect( frameRect ) );
-            //region -= clipRegion;
         }
 
         drawFrameContents( frame, doubleBufPainter, crect, cg, edit, viewMode );
-        painter->drawPixmap( crect.topLeft(), *pix, crect );
-
-        delete doubleBufPainter;
+        if ( painter->device()->devType() != QInternal::Printer )
+        {
+            painter->drawPixmap( crect.topLeft(), *pix, crect );
+            delete doubleBufPainter;
+        }
     }
     else
     {
