@@ -155,7 +155,8 @@ public:
            STYLE_NUMERIC_PERCENTAGE = 10,
            STYLE_NUMERIC_SCIENTIFIC = 11,
            STYLE_NUMERIC_CURRENCY = 12,
-	   STYLE_NUMERIC_TEXT = 13 };
+	   STYLE_NUMERIC_TEXT = 13,
+           STYLE_HATCH = 14};
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),

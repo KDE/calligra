@@ -27,6 +27,8 @@
 
 class KoGenStyles;
 class KoXmlWriter;
+class QBrush;
+class KoGenStyle;
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -84,6 +86,9 @@ public:
     static QString saveOasisPercentageStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
     static QString saveOasisCurrencyStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
     static QString saveOasisTextStyle( KoGenStyles &mainStyles, const QString & _format, const QString &_prefix = QString::null , const QString &_suffix= QString::null );
+
+    static void saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush );
+    static QString saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrush &brush );
 
 protected:
     /// Add styles to styles map

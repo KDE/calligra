@@ -26,6 +26,7 @@
 #include <qbuffer.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <qbrush.h>
 
 KoOasisStyles::KoOasisStyles()
 {
@@ -1183,4 +1184,99 @@ void KoOasisStyles::addKofficeNumericStyleExtension( KoXmlWriter & elementWriter
          elementWriter.addTextNode( _prefix );
          elementWriter.endElement();
      }
+}
+
+void KoOasisStyles::saveOasisFillStyle( KoGenStyle &styleFill, KoGenStyles& mainStyles, const QBrush & brush )
+{
+    if ( brush.style() == Qt::SolidPattern )
+    {
+        styleFill.addProperty( "draw:fill","solid" );
+        styleFill.addProperty( "draw:fill-color", brush.color().name() );
+    }
+    else if ( brush.style() == Qt::Dense1Pattern )
+    {
+        styleFill.addProperty( "draw:transparency", "94%" );
+        styleFill.addProperty( "draw:fill","solid" );
+        styleFill.addProperty( "draw:fill-color", brush.color().name() );
+    }
+    else if ( brush.style() == Qt::Dense2Pattern )
+    {
+        styleFill.addProperty( "draw:transparency", "88%" );
+        styleFill.addProperty( "draw:fill","solid" );
+        styleFill.addProperty( "draw:fill-color", brush.color().name() );
+    }
+    else if ( brush.style() == Qt::Dense3Pattern )
+    {
+        styleFill.addProperty( "draw:transparency", "63%" );
+        styleFill.addProperty( "draw:fill","solid" );
+        styleFill.addProperty( "draw:fill-color", brush.color().name() );
+    }
+    else if ( brush.style() == Qt::Dense4Pattern )
+    {
+        styleFill.addProperty( "draw:transparency", "50%" );
+        styleFill.addProperty( "draw:fill","solid" );
+        styleFill.addProperty( "draw:fill-color", brush.color().name() );
+    }
+    else if ( brush.style() == Qt::Dense5Pattern )
+    {
+        styleFill.addProperty( "draw:transparency", "37%" );
+        styleFill.addProperty( "draw:fill","solid" );
+        styleFill.addProperty( "draw:fill-color", brush.color().name() );
+    }
+    else if ( brush.style() == Qt::Dense6Pattern )
+    {
+        styleFill.addProperty( "draw:transparency", "12%" );
+        styleFill.addProperty( "draw:fill","solid" );
+        styleFill.addProperty( "draw:fill-color", brush.color().name() );
+    }
+    else if ( brush.style() == Qt::Dense7Pattern )
+    {
+        styleFill.addProperty( "draw:transparency", "6%" );
+        styleFill.addProperty( "draw:fill","solid" );
+        styleFill.addProperty( "draw:fill-color", brush.color().name() );
+    }
+    else //otherstyle
+    {
+        styleFill.addProperty( "draw:fill","hatch" );
+        styleFill.addProperty( "draw:fill-hatch-name", saveOasisHatchStyle( mainStyles,brush ) );
+    }
+
+}
+
+QString KoOasisStyles::saveOasisHatchStyle( KoGenStyles& mainStyles, const QBrush &brush )
+{
+    KoGenStyle hatchStyle( KoGenStyle::STYLE_HATCH /*no family name*/);
+    hatchStyle.addAttribute( "draw:color", brush.color().name() );
+    //hatchStyle.addAttribute( "draw:distance", m_distance ); not implemented into kpresenter
+    switch( brush.style() )
+    {
+    case Qt::HorPattern:
+        hatchStyle.addAttribute( "draw:style", "single" );
+        hatchStyle.addAttribute( "draw:rotation", 0);
+        break;
+    case Qt::BDiagPattern:
+        hatchStyle.addAttribute( "draw:style", "single" );
+        hatchStyle.addAttribute( "draw:rotation", 450);
+        break;
+    case Qt::VerPattern:
+        hatchStyle.addAttribute( "draw:style", "single" );
+        hatchStyle.addAttribute( "draw:rotation", 900);
+        break;
+    case Qt::FDiagPattern:
+        hatchStyle.addAttribute( "draw:style", "single" );
+        hatchStyle.addAttribute( "draw:rotation", 1350);
+        break;
+    case Qt::CrossPattern:
+        hatchStyle.addAttribute( "draw:style", "double" );
+        hatchStyle.addAttribute( "draw:rotation", 0);
+        break;
+    case Qt::DiagCrossPattern:
+        hatchStyle.addAttribute( "draw:style", "double" );
+        hatchStyle.addAttribute( "draw:rotation", 450);
+        break;
+    default:
+        break;
+    }
+
+    return mainStyles.lookup( hatchStyle, "hatch" );
 }

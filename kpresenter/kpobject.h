@@ -449,7 +449,6 @@ public:
     virtual void flip(bool horizontal );
 
 protected:
-    QString saveOasisHatchStyle( KoGenStyles& mainStyles ) const;
     QString saveOasisGradientStyle( KoGenStyles& mainStyles ) const;
     QString saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj ) const;
 

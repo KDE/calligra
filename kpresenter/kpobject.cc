@@ -34,7 +34,7 @@
 
 #include <kapplication.h>
 #include <kooasiscontext.h>
-
+#include "koOasisStyles.h"
 
 #include <stdlib.h>
 #include <fstream>
@@ -1838,58 +1838,7 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
             //todo FIXME when text object doesn't have a background
             if( brush != QBrush() )
             {
-                if ( brush.style() == Qt::SolidPattern )
-                {
-                    styleobjectauto.addProperty( "draw:fill","solid" );
-                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-                }
-                else if ( brush.style() == Qt::Dense1Pattern )
-                {
-                    styleobjectauto.addProperty( "draw:transparency", "94%" );
-                    styleobjectauto.addProperty( "draw:fill","solid" );
-                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-                }
-                else if ( brush.style() == Qt::Dense2Pattern )
-                {
-                    styleobjectauto.addProperty( "draw:transparency", "88%" );
-                    styleobjectauto.addProperty( "draw:fill","solid" );
-                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-                }
-                else if ( brush.style() == Qt::Dense3Pattern )
-                {
-                    styleobjectauto.addProperty( "draw:transparency", "63%" );
-                    styleobjectauto.addProperty( "draw:fill","solid" );
-                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-                }
-                else if ( brush.style() == Qt::Dense4Pattern )
-                {
-                    styleobjectauto.addProperty( "draw:transparency", "50%" );
-                    styleobjectauto.addProperty( "draw:fill","solid" );
-                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-                }
-                else if ( brush.style() == Qt::Dense5Pattern )
-                {
-                    styleobjectauto.addProperty( "draw:transparency", "37%" );
-                    styleobjectauto.addProperty( "draw:fill","solid" );
-                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-                }
-                else if ( brush.style() == Qt::Dense6Pattern )
-                {
-                    styleobjectauto.addProperty( "draw:transparency", "12%" );
-                    styleobjectauto.addProperty( "draw:fill","solid" );
-                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-                }
-                else if ( brush.style() == Qt::Dense7Pattern )
-                {
-                    styleobjectauto.addProperty( "draw:transparency", "6%" );
-                    styleobjectauto.addProperty( "draw:fill","solid" );
-                    styleobjectauto.addProperty( "draw:fill-color", brush.color().name() );
-                }
-                else //otherstyle
-                {
-                    styleobjectauto.addProperty( "draw:fill","hatch" );
-                    styleobjectauto.addProperty( "draw:fill-hatch-name", saveOasisHatchStyle( mainStyles ) );
-                }
+                KoOasisStyles::saveOasisFillStyle( styleobjectauto, mainStyles, brush );
             }
             else
             {
@@ -1915,44 +1864,6 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
         return mainStyles.lookup( styleobjectauto, "gr" );
 }
 
-QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles ) const
-{
-    QBrush brush( getBrush() );
-    KoGenStyle hatchStyle( KPresenterDoc::STYLE_HATCH /*no family name*/);
-    hatchStyle.addAttribute( "draw:color", brush.color().name() );
-    //hatchStyle.addAttribute( "draw:distance", m_distance ); not implemented into kpresenter
-    switch( brush.style() )
-    {
-    case Qt::HorPattern:
-        hatchStyle.addAttribute( "draw:style", "single" );
-        hatchStyle.addAttribute( "draw:rotation", 0);
-        break;
-    case Qt::BDiagPattern:
-        hatchStyle.addAttribute( "draw:style", "single" );
-        hatchStyle.addAttribute( "draw:rotation", 450);
-        break;
-    case Qt::VerPattern:
-        hatchStyle.addAttribute( "draw:style", "single" );
-        hatchStyle.addAttribute( "draw:rotation", 900);
-        break;
-    case Qt::FDiagPattern:
-        hatchStyle.addAttribute( "draw:style", "single" );
-        hatchStyle.addAttribute( "draw:rotation", 1350);
-        break;
-    case Qt::CrossPattern:
-        hatchStyle.addAttribute( "draw:style", "double" );
-        hatchStyle.addAttribute( "draw:rotation", 0);
-        break;
-    case Qt::DiagCrossPattern:
-        hatchStyle.addAttribute( "draw:style", "double" );
-        hatchStyle.addAttribute( "draw:rotation", 450);
-        break;
-    default:
-        break;
-    }
-
-    return mainStyles.lookup( hatchStyle, "hatch" );
-}
 
 
 QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const

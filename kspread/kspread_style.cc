@@ -1099,6 +1099,11 @@ QString KSpreadStyle::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles
     }
 #endif
 
+    if ( featureSet( SBackgroundBrush ) )
+    {
+        //TODO FIXME
+        KoOasisStyles::saveOasisFillStyle( style, mainStyles, m_backGroundBrush );
+    }
     QString _prefix;
     QString _postfix;
     int _precision = -1;
