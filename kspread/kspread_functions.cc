@@ -240,6 +240,7 @@ void KSpreadFunctionRepository::loadFile( const QString& filename )
 	    {
 		group = i18n( e.namedItem( "GroupName" ).toElement().text().latin1() );
 		m_groups.append( group );
+		m_groups.sort();
 		
 		QDomNode n2 = e.firstChild();
 		for( ; !n2.isNull(); n2 = n2.nextSibling() )
