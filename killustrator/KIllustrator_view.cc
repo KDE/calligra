@@ -112,7 +112,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
 
     readConfig();
     kdDebug()<<"KIlluView after readConfig: "<<time.elapsed()<<endl;
-    
+
     // restore default settings
     PStateManager::instance ();
     kdDebug()<<"KIlluView after instance: "<<time.elapsed()<<endl;
@@ -445,7 +445,7 @@ void KIllustratorView::setupCanvas()
 void KIllustratorView::readConfig()
  {
  }
- 
+
 void KIllustratorView::writeConfig()
  {
  }
@@ -619,6 +619,9 @@ void KIllustratorView::popupForSelection ()
 
 void KIllustratorView::popupForRulers()
 {
+    if(!m_pDoc->isReadWrite())
+        return;
+
    if (rulerMenu==0)
    {
       rulerMenu = new KPopupMenu();
@@ -675,12 +678,12 @@ GDocument* KIllustratorView::activeDocument()
 
 void KIllustratorView::insertPartSlot( KIllustratorChild *, GPart *)
  {
-  
+
  }
 
 void KIllustratorView::changeChildGeometrySlot(KIllustratorChild *)
  {
-  
+
  }
 
 
@@ -1270,7 +1273,7 @@ void KIllustratorView::slotLayersPanel(bool b)
  }
 
 void KIllustratorView::slotLoadPalette () {
-   
+
 }
 
 void KIllustratorView::slotViewZoom (const QString& s)
