@@ -21,6 +21,8 @@ INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/kexi \
 	-I$(top_srcdir)/kexi/core/projectWizard \
 	-I$(top_srcdir)/kexi/3rdparty/uuid \
+	-I./startup \
+	-I$(top_srcdir)/kexi/core/startup \
 	$(all_includes)
 
 METASOURCES = AUTO

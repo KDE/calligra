@@ -46,6 +46,7 @@
 #include "kexi.h"
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiConnSelector.h"
+#include "startup/KexiProjectSelectorBase.h"
 #include "startup/KexiProjectSelector.h"
 #include "startup/KexiProjectSet.h"
 #include "startup/KexiNewProjectWizard.h"
@@ -297,6 +298,7 @@ KexiMainWindow::initBrowser()
 	if(!m_browser)
 	{
 		m_browser = new KexiBrowser(this, "kexi/db", 0);
+		m_browser->setCaption(i18n("Navigator"));
 		addToolWindow(m_browser, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 	}
 

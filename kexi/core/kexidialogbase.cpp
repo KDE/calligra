@@ -19,10 +19,14 @@
 
 #include "keximainwindow.h"
 #include "kexidialogbase.h"
-#include "kapplication.h"
+#include "kexicontexthelp_p.h"
+
+#include <kapplication.h>
+
 KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &title)
  : KMdiChildView(title, parent), KXMLGUIClient(),m_isRegistered(false)
 {
+	m_contextHelpInfo=new KexiContextHelpInfo();
 	m_parentWindow=parent;
 	setInstance(parent->instance());
 }
@@ -45,6 +49,14 @@ bool KexiDialogBase::isRegistered(){
 
 KXMLGUIClient *KexiDialogBase::guiClient() {
 	return this;
+}
+
+void KexiDialogBase::setContextHelp(const QString& caption, const QString& text, const QString& iconName) {
+	m_contextHelpInfo->caption=caption;
+	m_contextHelpInfo->text=text;
+	m_contextHelpInfo->text=iconName;
+	updateContextHelp();
+
 }
 
 #include "kexidialogbase.moc"

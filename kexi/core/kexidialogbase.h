@@ -25,6 +25,7 @@
 
 class KexiMainWindow;
 class KActionCollection;
+class KexiContextHelpInfo;
 
 class KexiDialogBase : public KMdiChildView, public KXMLGUIClient
 {
@@ -35,11 +36,17 @@ class KexiDialogBase : public KMdiChildView, public KXMLGUIClient
 		~KexiDialogBase();
 		bool isRegistered();
 		virtual KXMLGUIClient* guiClient();
+		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
+	signals:
+		void updateContextHelp();
 	protected:
+		friend class KexiMainWindow;
 		void registerDialog();
 	private:
 		KexiMainWindow *m_parentWindow;
 		bool m_isRegistered;
+		friend class KexiMainWindow;
+		KexiContextHelpInfo *m_contextHelpInfo;
 };
 
 #endif
