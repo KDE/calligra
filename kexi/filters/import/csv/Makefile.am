@@ -1,4 +1,4 @@
-lib_LTLIBRARIES = kexicsvimport.la
+kde_module_LTLIBRARIES = kexicsvimport.la
 
 kexicsvimport_la_SOURCES = preview.ui kexicsvimport.cpp
 kexicsvimport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
