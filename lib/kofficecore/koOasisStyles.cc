@@ -59,6 +59,8 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
     if ( !officeStyle.isNull() ) {
         m_officeStyle = officeStyle;
         insertStyles( m_officeStyle );
+        insertDrawStyles( m_officeStyle );
+
     }
 
     //kdDebug(30003) << "Styles read in." << endl;
@@ -74,6 +76,22 @@ QValueVector<QDomElement> KoOasisStyles::userStyles() const
         vec[i] = children.item( i ).toElement();
     return vec;
 }
+
+void KoOasisStyles::insertDrawStyles( const QDomElement& styles )
+{
+    for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement e = n.toElement();
+        QString tagName = e.tagName();
+        if ( e.hasAttribute( "draw:name" ) )
+        {
+            QString name = e.attribute( "style:name" );
+            QDomElement* ep = new QDomElement( e );
+            m_drawStyles.insert( name, ep );
+        }
+    }
+}
+
 
 void KoOasisStyles::insertStyles( const QDomElement& styles )
 {

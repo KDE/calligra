@@ -36,6 +36,10 @@ public:
     /// @return master pages ("style:master-page" elements), hashed by name
     const QDict<QDomElement>& masterPages() const { return m_masterPages; }
 
+    /// @return draw styles ("draw:name" element), hashed by name
+    const QDict<QDomElement>& drawStyles() const { return m_drawStyles; }
+
+
     typedef QMap<QString, QString> DataFormatsMap;
     /// Date and time formats found while parsing styles. Used e.g. for fields.
     /// Key: format name. Value:
@@ -44,6 +48,7 @@ public:
 protected:
     /// Add styles to styles map
     void insertStyles( const QDomElement& styles );
+    void insertDrawStyles( const QDomElement& styles );
 
 private:
     void importDateTimeStyle( const QDomElement& parent );
@@ -59,6 +64,7 @@ private:
     QDict<QDomElement>   m_masterPages;
     QDict<QDomElement>   m_listStyles;
 
+    QDict<QDomElement>   m_drawStyles;
     DataFormatsMap m_dateTimeFormats; // maybe generalize to include number formats.
 
     class Private;
