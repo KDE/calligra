@@ -24,6 +24,7 @@
 #include "kspread_view.h"
 #include "kspread_sheet.h"
 #include "kspread_util.h"
+#include <qlabel.h>
 #include <qlayout.h>
 #include <klocale.h>
 
@@ -37,13 +38,21 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
   setMainWidget(page);
   QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
+  QLabel *label = new QLabel( page );
+
+  if(_type==Column) {
+        setCaption( i18n("Show Columns") );
+        label->setText(i18n("Select hidden columns to show:"));
+  }
+  else if(_type==Row) {
+        setCaption( i18n("Show Rows") );
+        label->setText(i18n("Select hidden rows to show:"));
+  }
 
   list=new QListBox(page);
+
+  lay1->addWidget( label );
   lay1->addWidget( list );
-  if(_type==Column)
-        setCaption( i18n("Select Hidden Column to Show") );
-  else if(_type==Row)
-        setCaption( i18n("Select Hidden Row to Show") );
 
   bool showColNumber=m_pView->activeTable()->getShowColumnNumber();
   if(_type==Column)
