@@ -559,7 +559,7 @@ void KSpreadView::initializeGlobalOperationActions()
                                    SLOT( RecalcWorkBook() ), actionCollection(),
                                    "RecalcWorkBook" );
 
-  m_recalc_worksheet = new KAction( i18n("Recalculate Worksheet"), SHIFT + Key_F9,
+  m_recalc_worksheet = new KAction( i18n("Recalculate Sheet"), SHIFT + Key_F9,
                                     this, SLOT( RecalcWorkSheet() ),
                                     actionCollection(), "RecalcWorkSheet" );
 
