@@ -58,7 +58,7 @@
 #define STORE_PROTOCOL_LENGTH 3
 // Warning, keep it sync in koStore.cc
 
-QList<KoDocument> *KoDocument::s_documentList=0L;
+QPtrList<KoDocument> *KoDocument::s_documentList=0L;
 
 using namespace std;
 class KoViewWrapperWidget;
@@ -79,9 +79,9 @@ public:
     {
     }
 
-    QList<KoView> m_views;
-    QList<KoDocumentChild> m_children;
-    QList<KoMainWindow> m_shells;
+    QPtrList<KoView> m_views;
+    QPtrList<KoDocumentChild> m_children;
+    QPtrList<KoMainWindow> m_shells;
 
     bool m_bSingleViewMode;
     mutable bool m_changed;
@@ -159,7 +159,7 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
     : KParts::ReadWritePart( parent, name )
 {
   if(s_documentList==0L)
-    s_documentList=new QList<KoDocument>;
+    s_documentList=new QPtrList<KoDocument>;
   s_documentList->append(this);
 
   d = new KoDocumentPrivate;
@@ -194,14 +194,14 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
 
 KoDocument::~KoDocument()
 {
-  QListIterator<KoDocumentChild> childIt( d->m_children );
+  QPtrListIterator<KoDocumentChild> childIt( d->m_children );
   for (; childIt.current(); ++childIt )
     disconnect( childIt.current(), SIGNAL( destroyed() ),
                 this, SLOT( slotChildDestroyed() ) );
 
   // Tell our views that the document is already destroyed and
   // that they shouldn't try to access it.
-  QListIterator<KoView> vIt( d->m_views );
+  QPtrListIterator<KoView> vIt( d->m_views );
   for (; vIt.current(); ++vIt )
       vIt.current()->setDocumentDeleted();
 
@@ -356,7 +356,7 @@ void KoDocument::setManager( KParts::PartManager *manager )
   if ( d->m_bSingleViewMode && d->m_views.count() == 1 )
     d->m_views.getFirst()->setPartManager( manager );
 
-  QListIterator<KoDocumentChild> it( d->m_children );
+  QPtrListIterator<KoDocumentChild> it( d->m_children );
   for (; it.current(); ++it )
       if ( it.current()->document() )
           manager->addPart( it.current()->document(), false );
@@ -367,11 +367,11 @@ void KoDocument::setReadWrite( bool readwrite )
 {
   KParts::ReadWritePart::setReadWrite( readwrite );
 
-  QListIterator<KoView> vIt( d->m_views );
+  QPtrListIterator<KoView> vIt( d->m_views );
   for (; vIt.current(); ++vIt )
     vIt.current()->updateReadWrite( readwrite );
 
-  QListIterator<KoDocumentChild> dIt( d->m_children );
+  QPtrListIterator<KoDocumentChild> dIt( d->m_children );
   for (; dIt.current(); ++dIt )
     if ( dIt.current()->document() )
       dIt.current()->document()->setReadWrite( readwrite );
@@ -402,7 +402,7 @@ void KoDocument::removeView( KoView *view )
     d->m_views.removeRef( view );
 }
 
-const QList<KoView>& KoDocument::views() const
+const QPtrList<KoView>& KoDocument::views() const
 {
     return d->m_views;
 }
@@ -449,14 +449,14 @@ void KoDocument::slotChildDestroyed()
     d->m_children.removeRef( child );
 }
 
-const QList<KoDocumentChild>& KoDocument::children() const
+const QPtrList<KoDocumentChild>& KoDocument::children() const
 {
   return d->m_children;
 }
 
 KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
 {
-  QListIterator<KoView> it( d->m_views );
+  QPtrListIterator<KoView> it( d->m_views );
   for (; it.current(); ++it )
     if ( (QWidget *)it.current() == widget )
     {
@@ -474,7 +474,7 @@ KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
 
 KoDocument *KoDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
 {
-  QListIterator<KoDocumentChild> it( d->m_children );
+  QPtrListIterator<KoDocumentChild> it( d->m_children );
   for (; it.current(); ++it )
   {
     KoDocument *doc = it.current()->hitTest( pos, matrix );
@@ -487,7 +487,7 @@ KoDocument *KoDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
 
 KoDocumentChild *KoDocument::child( KoDocument *doc )
 {
-  QListIterator<KoDocumentChild> it( d->m_children );
+  QPtrListIterator<KoDocumentChild> it( d->m_children );
   for (; it.current(); ++it )
     if ( it.current()->document() == doc )
       return it.current();
@@ -545,7 +545,7 @@ void KoDocument::paintEverything( QPainter &painter, const QRect &rect, bool tra
 
 void KoDocument::paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view, double zoomX, double zoomY )
 {
-  QListIterator<KoDocumentChild> it( d->m_children );
+  QPtrListIterator<KoDocumentChild> it( d->m_children );
   for (; it.current(); ++it )
   {
     // #### todo: paint only if child is visible inside rect
@@ -775,7 +775,7 @@ bool KoDocument::openURL( const KURL & _url )
       if ( d->m_shells.isEmpty() )
           kdWarning() << "KoDocument::openURL no shell yet !" << endl;
       // Add to recent actions list in our shells
-      QListIterator<KoMainWindow> it( d->m_shells );
+      QPtrListIterator<KoMainWindow> it( d->m_shells );
       for (; it.current(); ++it )
           it.current()->addRecentURL( _url );
   }
@@ -1005,7 +1005,7 @@ void KoDocument::setModified( bool mod )
 void KoDocument::setTitleModified()
 {
     // Update caption in all related windows
-    QListIterator<KoMainWindow> it( d->m_shells );
+    QPtrListIterator<KoMainWindow> it( d->m_shells );
     for (; it.current(); ++it )
         it.current()->updateCaption();
 }
@@ -1100,7 +1100,7 @@ void KoDocument::removeShell( KoMainWindow *shell )
   d->m_shells.removeRef( shell );
 }
 
-const QList<KoMainWindow>& KoDocument::shells() const
+const QPtrList<KoMainWindow>& KoDocument::shells() const
 {
     return d->m_shells;
 }

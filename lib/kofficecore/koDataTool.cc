@@ -240,9 +240,9 @@ void KoDataToolAction::slotActivated()
     emit toolActivated( m_info, m_command );
 }
 
-QList<KAction> KoDataToolAction::dataToolActionList( const QValueList<KoDataToolInfo> & tools, const QObject *receiver, const char* slot )
+QPtrList<KAction> KoDataToolAction::dataToolActionList( const QValueList<KoDataToolInfo> & tools, const QObject *receiver, const char* slot )
 {
-    QList<KAction> actionList;
+    QPtrList<KAction> actionList;
     if ( tools.isEmpty() )
         return actionList;
 

@@ -51,7 +51,7 @@ public:
   QGuardedPtr<KoDocument> m_doc; // our KoDocument
   QGuardedPtr<KParts::PartManager> m_manager;
   double m_zoom;
-  QList<KoViewChild> m_children;
+  QPtrList<KoViewChild> m_children;
   QWidget *m_tempActiveWidget;
   KoViewIface *m_dcopObject;
   bool m_registered;  // are we registered at the part manager?
@@ -433,7 +433,7 @@ void KoView::paintEverything( QPainter &painter, const QRect &rect, bool transpa
 
 KoViewChild *KoView::child( KoView *view )
 {
-  QListIterator<KoViewChild> it( d->m_children );
+  QPtrListIterator<KoViewChild> it( d->m_children );
   for (; it.current(); ++it )
     if ( it.current()->frame()->view() == view )
       return it.current();
@@ -443,7 +443,7 @@ KoViewChild *KoView::child( KoView *view )
 
 KoViewChild *KoView::child( KoDocument *doc )
 {
-  QListIterator<KoViewChild> it( d->m_children );
+  QPtrListIterator<KoViewChild> it( d->m_children );
   for (; it.current(); ++it )
     if ( it.current()->documentChild()->document() == doc )
       return it.current();

@@ -113,7 +113,7 @@ public:
   }
 
   KoDocument *m_rootDoc;
-  QList<KoView> m_rootViews;
+  QPtrList<KoView> m_rootViews;
   KParts::PartManager *m_manager;
 
   KParts::Part *m_activePart;
@@ -122,16 +122,16 @@ public:
   QLabel * statusBarLabel;
   KProgress *m_progress;
 
-  QList<KAction> m_splitViewActionList;
+  QPtrList<KAction> m_splitViewActionList;
   // This additional list is needed, because we don't plug
   // the first list, when an embedded view gets activated (Werner)
-  QList<KAction> m_veryHackyActionList;
+  QPtrList<KAction> m_veryHackyActionList;
   QSplitter *m_splitter;
   KSelectAction *m_orientation;
   KAction *m_removeView;
   KoMainWindowIface *m_dcopObject;
 
-  QList <KAction> m_toolbarList;
+  QPtrList <KAction> m_toolbarList;
 
   bool bMainWindowGUIBuilt;
   bool m_splitted;
@@ -292,7 +292,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
     return;
 
   //kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
-  QList<KoView> oldRootViews = d->m_rootViews;
+  QPtrList<KoView> oldRootViews = d->m_rootViews;
   d->m_rootViews.clear();
   KoDocument *oldRootDoc = d->m_rootDoc;
 
@@ -335,7 +335,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   }
 }
 
-void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QList<KoView> & views )
+void KoMainWindow::setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView> & views )
 {
   d->m_rootDoc = doc;
   d->m_rootViews = views;
@@ -919,7 +919,7 @@ void KoMainWindow::showToolbar( const char * tbName, bool shown )
         tb->hide();
 
     // Update the action appropriately
-    QListIterator<KAction> it( d->m_toolbarList );
+    QPtrListIterator<KAction> it( d->m_toolbarList );
     for ( ; it.current() ; ++it )
         if ( !strcmp( it.current()->name(), tbName ) )
         {
@@ -948,7 +948,7 @@ void KoMainWindow::slotCloseAllViews() {
         d->m_rootDoc->removeShell(this);
         // In case the document is embedded we close all open "extra-shells"
         if(d->m_rootDoc && d->m_rootDoc->isEmbedded()) {
-            QListIterator<KoMainWindow> it(d->m_rootDoc->shells());
+            QPtrListIterator<KoMainWindow> it(d->m_rootDoc->shells());
             while (it.current()) {
                 it.current()->hide();
                 delete it.current(); // this updates the lists' current pointer and thus
@@ -1056,7 +1056,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
   KXMLGUIFactory *factory = guiFactory();
 
-  QList<KParts::Plugin> plugins;
+  QPtrList<KParts::Plugin> plugins;
 
   setUpdatesEnabled( false );
 
@@ -1092,7 +1092,7 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     factory->addClient( d->m_activeView );
 
     plugins = KParts::Plugin::pluginObjects( d->m_activeView );
-    QListIterator<KParts::Plugin> pIt( plugins );
+    QPtrListIterator<KParts::Plugin> pIt( plugins );
     for (; pIt.current(); ++pIt )
       factory->addClient( pIt.current() );
 
@@ -1107,9 +1107,9 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     setAutoSaveSettings( newPart->instance()->instanceName(), false );
 
     // Create and plug toolbar list for Settings menu
-    //QListIterator<KToolBar> it = toolBarIterator();
-    QList<QWidget> toolBarList = factory->containers( "ToolBar" );
-    QListIterator<QWidget> it( toolBarList );
+    //QPtrListIterator<KToolBar> it = toolBarIterator();
+    QPtrList<QWidget> toolBarList = factory->containers( "ToolBar" );
+    QPtrListIterator<QWidget> it( toolBarList );
     for ( ; it.current() ; ++it )
     {
       if ( it.current()->inherits("KToolBar") )

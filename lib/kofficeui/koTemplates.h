@@ -21,7 +21,7 @@
 #ifndef koTemplates_h
 #define koTemplates_h
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qpixmap.h>
@@ -88,7 +88,7 @@ public:
 private:
     QString m_name;
     QStringList m_dirs;
-    QList<KoTemplate> m_templates;
+    QPtrList<KoTemplate> m_templates;
     mutable bool m_touched;
 };
 
@@ -124,7 +124,7 @@ private:
 
     QCString m_templateType;
     KInstance *m_instance;
-    QList<KoTemplateGroup> m_groups;
+    QPtrList<KoTemplateGroup> m_groups;
     KoTemplateGroup *m_defaultGroup;
 };
 

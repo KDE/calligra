@@ -81,7 +81,7 @@ KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
 
 bool KoTemplateGroup::isHidden() const {
 
-    QListIterator<KoTemplate> it(m_templates);
+    QPtrListIterator<KoTemplate> it(m_templates);
     bool hidden=true;
     while(it.current()!=0L && hidden) {
         hidden=it.current()->isHidden();
@@ -92,7 +92,7 @@ bool KoTemplateGroup::isHidden() const {
 
 void KoTemplateGroup::setHidden(bool hidden) const {
 
-    QListIterator<KoTemplate> it(m_templates);
+    QPtrListIterator<KoTemplate> it(m_templates);
     for( ; it.current()!=0L; ++it)
         it.current()->setHidden(hidden);
     m_touched=true;
@@ -117,7 +117,7 @@ bool KoTemplateGroup::add(KoTemplate *t, bool force, bool touch) {
 
 KoTemplate *KoTemplateGroup::find(const QString &name) const {
 
-    QListIterator<KoTemplate> it(m_templates);
+    QPtrListIterator<KoTemplate> it(m_templates);
     while(it.current() && it.current()->name()!=name)
         ++it;
     return it.current();
@@ -200,7 +200,7 @@ void KoTemplateTree::add(KoTemplateGroup *g) {
 
 KoTemplateGroup *KoTemplateTree::find(const QString &name) const {
 
-    QListIterator<KoTemplateGroup> it(m_groups);
+    QPtrListIterator<KoTemplateGroup> it(m_groups);
     while(it.current() && it.current()->name()!=name)
         ++it;
     return it.current();
@@ -240,7 +240,7 @@ void KoTemplateTree::readGroups() {
 
 void KoTemplateTree::readTemplates() {
 
-    QListIterator<KoTemplateGroup> groupIt(m_groups);
+    QPtrListIterator<KoTemplateGroup> groupIt(m_groups);
     for( ; groupIt.current()!=0L; ++groupIt) {
         QStringList dirs=groupIt.current()->dirs();
         for(QStringList::ConstIterator it=dirs.begin(); it!=dirs.end(); ++it) {

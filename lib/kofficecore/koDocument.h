@@ -196,7 +196,7 @@ public:
 
   virtual void removeView( KoView *view );
 
-  const QList<KoView> & views() const;
+  const QPtrList<KoView> & views() const;
 
   int viewCount() const;
 
@@ -384,7 +384,7 @@ public:
    * @return the list of all children. Do not modify the
    *         returned list.
    */
-  const QList<KoDocumentChild>& children() const;
+  const QPtrList<KoDocumentChild>& children() const;
 
   /**
    * @return the KoDocumentChild associated with the given Document, but only if
@@ -414,14 +414,14 @@ public:
    */
   virtual void removeShell( KoMainWindow *shell );
 
-  const QList<KoMainWindow>& shells() const;
+  const QPtrList<KoMainWindow>& shells() const;
 
   int shellCount() const;
 
   /**
    * Returns the list of all the currently opened documents
    */
-  static QList<KoDocument> *documentList() { return s_documentList; }
+  static QPtrList<KoDocument> *documentList() { return s_documentList; }
 
   /**
    * Return a DCOP interface for this document
@@ -476,7 +476,7 @@ protected:
    *
    *  An example implementation may look like this:
    *  <PRE>
-   *  QListIterator<KoDocumentChild> it( children() );
+   *  QPtrListIterator<KoDocumentChild> it( children() );
    *  for( ; it.current(); ++it )
    *  {
    *    if ( !it.current()->loadDocument( _store ) )
@@ -495,7 +495,7 @@ protected:
    *  <PRE>
    *  int i = 0;
    *
-   *  QListIterator<KoDocumentChild> it( children() );
+   *  QPtrListIterator<KoDocumentChild> it( children() );
    *  for( ; it.current(); ++it ) {
    *    QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
    *    if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, internURL ) )
@@ -569,7 +569,7 @@ private:
     KService::Ptr m_nativeService;
     KURL m_strURL;
     bool m_bEmpty;
-    static QList<KoDocument> *s_documentList;
+    static QPtrList<KoDocument> *s_documentList;
     static const int s_defaultAutoSave = 120; // 2 minutes
 };
 

@@ -177,7 +177,7 @@ public:
      *
      * Note that it's the caller's responsibility to delete the actions when they're not needed anymore.
      */
-    static QList<KAction> dataToolActionList( const QValueList<KoDataToolInfo> & tools, const QObject *receiver, const char* slot );
+    static QPtrList<KAction> dataToolActionList( const QValueList<KoDataToolInfo> & tools, const QObject *receiver, const char* slot );
 
 signals:
     void toolActivated( const KoDataToolInfo & info, const QString & command );

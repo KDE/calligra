@@ -235,7 +235,7 @@ protected:
      * Special method for KOShell, to allow switching the root
      * document (and its views) among a set of them.
      */
-    void setRootDocumentDirect( KoDocument *doc, const QList<KoView> & views );
+    void setRootDocumentDirect( KoDocument *doc, const QPtrList<KoView> & views );
 
     /**
      * Create a new empty document.
