@@ -391,6 +391,7 @@ KPresenterDoc::~KPresenterDoc()
     delete m_stickyPage;
     delete m_bgSpellCheck;
     delete m_styleColl;
+    delete m_pKSpellConfig;
 
     tmpSoundFileList.setAutoDelete( true );
     tmpSoundFileList.clear();
