@@ -29,51 +29,51 @@ class SheetPropertiesBase;
 class SheetPropertiesDialog : public KDialogBase
 {
     Q_OBJECT
-    
+
 public:
 
     SheetPropertiesDialog( QWidget* parent = 0 );
-    
+
     ~SheetPropertiesDialog();
-    
+
     virtual void slotDefault();
-    
+
     bool autoCalc() const;
-    
+
     void setAutoCalc( bool b );
-    
+
     bool showGrid() const;
-    
+
     void setShowGrid( bool b );
-    
+
     bool showPageBorders() const;
-    
+
     void setShowPageBorders( bool b );
-    
+
     bool showFormula() const;
-    
+
     void setShowFormula( bool b );
-    
+
     bool hideZero() const;
-    
+
     void setHideZero( bool b );
-    
+
     bool showFormulaIndicator() const;
-    
+
     void setShowFormulaIndicator( bool b );
-    
+
     bool columnAsNumber() const;
-    
+
     void setColumnAsNumber( bool b );
-    
+
     bool lcMode() const;
-    
+
     void setLcMode( bool b );
-    
+
     bool capitalizeFirstLetter() const;
-    
+
     void setCapitalizeFirstLetter( bool b );
-    
+
 private:
     SheetPropertiesBase* d;
 };
