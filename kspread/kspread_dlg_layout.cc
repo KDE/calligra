@@ -804,6 +804,8 @@ void CellLayoutDlg::slotApply()
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( table->doc(), table, rect,title );
         table->doc()->undoBuffer()->appendUndo( undo );
     }
+    borderPage->applyOutline( left, top, right, bottom );
+
     if(right!=0x7FFF && bottom!=0x7FFF)
     {
     for ( int x = left; x <= right; x++ )
@@ -897,7 +899,7 @@ void CellLayoutDlg::slotApply()
                 m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x,false );
         }
     }
-    borderPage->applyOutline( left, top, right, bottom );
+
     // m_pView->drawVisibleCells();
     QRect r;
     r.setCoords( left, top, right, bottom );
@@ -3400,7 +3402,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
 {
 
     if( horizontal->isChanged())
-        {
+    {
         QPen tmpPen( horizontal->getColor(),horizontal->getPenWidth(),horizontal->getPenStyle());
         if( _bottom!=0x7FFF && _right!=0x7FFF)
         {
@@ -3429,13 +3431,31 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 }
 
                 for(int x=_left;x<=_right;x++)
-                        {
+                {
                         ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(x);
                         obj->setTopBorderPen(tmpPen);
+                }
+
+                RowLayout* rw =dlg->getTable()->firstRow();
+                for( ; rw; rw = rw->next() )
+                {
+                if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PTopBorder)  ))
+                        {
+                        for(int i=dlg->left;i<=dlg->right;i++)
+                                {
+                                KSpreadCell *cell = dlg->getTable()->cellAt( i,  rw->row());
+                                if ( cell->isDefault() )
+                                        {
+                                        cell = new KSpreadCell( dlg->getTable(), i,  rw->row() );
+                                        dlg->getTable()->insertCell( cell);
+                                        }
+                                cell->setTopBorderPen(tmpPen);
+                                }
                         }
                 }
+         }
          else if( _right==0x7FFF)
-                {
+         {
                 KSpreadCell*c= dlg->getTable()->firstCell();
                 for( ;c; c = c->nextCell() )
                         {
@@ -3453,10 +3473,8 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(y);
                         obj->setTopBorderPen(tmpPen);
                         }
-
-                }
-         }
-
+        }
+    }
     if( vertical->isChanged())
     {
     QPen tmpPen( vertical->getColor(),vertical->getPenWidth(),vertical->getPenStyle());
@@ -3473,7 +3491,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 }
         }
         else if( _bottom==0x7FFF )
-                {
+        {
                 KSpreadCell*c= dlg->getTable()->firstCell();
                 for( ;c; c = c->nextCell() )
                 {
@@ -3491,9 +3509,26 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(x);
                         obj->setLeftBorderPen( tmpPen );
                         }
-                }
-         else if( _right==0x7FFF)
+                RowLayout* rw =dlg->getTable()->firstRow();
+                for( ; rw; rw = rw->next() )
                 {
+                if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)  ))
+                        {
+                        for(int i=dlg->left;i<=dlg->right;i++)
+                                {
+                                KSpreadCell *cell = dlg->getTable()->cellAt( i,  rw->row());
+                                if ( cell->isDefault() )
+                                        {
+                                        cell = new KSpreadCell( dlg->getTable(), i,  rw->row() );
+                                        dlg->getTable()->insertCell( cell);
+                                        }
+                                cell->setLeftBorderPen( tmpPen );
+                                }
+                        }
+                }
+        }
+         else if( _right==0x7FFF)
+         {
                 KSpreadCell*c= dlg->getTable()->firstCell();
                 for( ;c; c = c->nextCell() )
                         {
@@ -3512,10 +3547,8 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         obj->setLeftBorderPen( tmpPen );
                         }
 
-                }
-    }
-
-
+         }
+  }
  if ( left->isChanged() )
     {
     QPen tmpPen( left->getColor(),left->getPenWidth(),left->getPenStyle());
@@ -3542,6 +3575,24 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 }
                 ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(_left);
                 obj->setLeftBorderPen( tmpPen );
+
+                RowLayout* rw =dlg->getTable()->firstRow();
+                for( ; rw; rw = rw->next() )
+                {
+                        if (rw->row()==_left&& !rw->isDefault() && (rw->hasProperty(KSpreadCell::PLeftBorder)  ))
+                        {
+                        for(int i=dlg->left;i<=dlg->right;i++)
+                                {
+                                KSpreadCell *cell = dlg->getTable()->cellAt( i,  rw->row());
+                                if ( cell->isDefault() )
+                                        {
+                                        cell = new KSpreadCell( dlg->getTable(), i,  rw->row() );
+                                        dlg->getTable()->insertCell( cell);
+                                        }
+                                cell->setLeftBorderPen( tmpPen );
+                                }
+                        }
+                }
         }
     else if( _right==0x7FFF)
         {
@@ -3600,6 +3651,24 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
 
         ColumnLayout *obj=dlg->getTable()->nonDefaultColumnLayout(_right);
         obj->setRightBorderPen(tmpPen);
+
+        RowLayout* rw =dlg->getTable()->firstRow();
+                for( ; rw; rw = rw->next() )
+                {
+                if (rw->row()==dlg->right&& !rw->isDefault() && (rw->hasProperty(KSpreadCell::PRightBorder)  ))
+                        {
+                        for(int i=dlg->left;i<=dlg->right;i++)
+                                {
+                                KSpreadCell *cell = dlg->getTable()->cellAt( i,  rw->row());
+                                if ( cell->isDefault() )
+                                        {
+                                        cell = new KSpreadCell( dlg->getTable(), i,  rw->row() );
+                                        dlg->getTable()->insertCell( cell);
+                                        }
+                                cell->setRightBorderPen(tmpPen);
+                                }
+                        }
+                }
         }
     else if(  _right==0x7FFF)
         {
@@ -3667,7 +3736,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                         }
                 }
 
-        RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(_top);
+        RowLayout *obj=dlg->getTable()->nonDefaultRowLayout(_top-1);
         obj->setBottomBorderPen( tmpPen );
         }
     }
@@ -3777,6 +3846,26 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
                 obj->setFallDiagonalPen( tmpPenFall );
         if ( goUpDiagonal->isChanged() )
                 obj->setGoUpDiagonalPen( tmpPenGoUp );
+        }
+
+        RowLayout* rw =dlg->getTable()->firstRow();
+        for( ; rw; rw = rw->next() )
+        {
+                if ( !rw->isDefault() && (rw->hasProperty(KSpreadCell::PFallDiagonal)
+                ||rw->hasProperty(KSpreadCell::PGoUpDiagonal) ))
+                {
+                for(int i=dlg->left;i<=dlg->right;i++)
+                        {
+                        KSpreadCell *cell = dlg->getTable()->cellAt( i,  rw->row());
+                        if ( cell->isDefault() )
+                                {
+                                cell = new KSpreadCell( dlg->getTable(), i,  rw->row() );
+                                dlg->getTable()->insertCell( cell);
+                                }
+                        cell->setFallDiagonalPen( tmpPenFall );
+                        cell->setGoUpDiagonalPen( tmpPenGoUp );
+                        }
+                }
         }
  }
  else if(  _right==0x7FFF)
