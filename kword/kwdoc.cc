@@ -1041,10 +1041,10 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
         return false;
     }
-    else if ( value != "application/x-kword" )
+    else if ( value != "application/x-kword" && value != "application/vnd.kde.kword" )
     {
         kdError(32001) << "Unknown mime type " << value << endl;
-        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kword, got %1" ).arg( value ) );
+        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kword or application/vnd.kde.kword, got %1" ).arg( value ) );
         return false;
     }
     m_syntaxVersion = KWDocument::getAttribute( word, "syntaxVersion", 0 );
