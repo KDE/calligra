@@ -261,6 +261,32 @@ void OoImpressExport::createDocumentMeta( QDomDocument & docmeta )
             user.appendChild( n.firstChild() );
             meta.appendChild( user );
         }
+        n = i.namedItem( "about" ).namedItem( "keyword" );
+        if ( !n.isNull() )
+        {
+            QDomElement text = n.toElement();
+            QDomElement key = docmeta.createElement( "meta:keywords" );
+            QDomElement keyword = docmeta.createElement( "meta:keyword" );
+            key.appendChild( keyword );
+            keyword.appendChild(  docmeta.createTextNode( text.text() ) );
+            meta.appendChild( key );
+        }
+        n = i.namedItem( "about" ).namedItem( "subject" );
+        if ( !n.isNull() )
+        {
+            QDomElement text = n.toElement();
+            QDomElement subjet = docmeta.createElement( "dc:subject" );
+            subjet.appendChild(  docmeta.createTextNode( text.text() ) );
+            meta.appendChild( subjet );
+        }
+        n = i.namedItem( "about" ).namedItem( "title" );
+        if ( !n.isNull() )
+        {
+            QDomElement text = n.toElement();
+            QDomElement title = docmeta.createElement( "dc:title" );
+            title.appendChild(  docmeta.createTextNode( text.text() ) );
+            meta.appendChild( title );
+        }
     }
 
 //     QDomElement statistic = docmeta.createElement( "meta:document-statistic" );
