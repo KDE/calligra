@@ -557,6 +557,7 @@ protected:
     KPrVariableCollection *m_varColl;
     QColor m_gridColor;
     bool m_refreshSideBar;
+    bool _duplicatePage;
 private:
     QValueList<double> m_horizHelplines;
     QValueList<double> m_vertHelplines;

@@ -141,6 +141,9 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_styleColl=new KoStyleCollection();
     m_insertFilePage = 0;
     m_refreshSideBar = true;
+
+    _duplicatePage=false;
+
     KoStyle* m_standardStyle = new KoStyle( "Standard" );
     m_styleColl->addStyleTemplate( m_standardStyle );
 
@@ -660,7 +663,7 @@ void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomD
     for (; oIt.current(); ++oIt )
     {
         if ( oIt.current()->getType() == OT_PART &&
-             dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == chl )
+             static_cast<KPPartObject*>( oIt.current() )->getChild() == chl )
         {
             QDomElement embedded=doc.createElement("EMBEDDED");
             KPresenterChild* curr = (KPresenterChild*)chl;
@@ -729,8 +732,11 @@ QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
         objects=m_pageList.at(i)->saveObjects( doc, objects, yoffset, m_zoomHandler, saveOnlyPage );
 
     }
-    //offset = 0.0 when it's a sticky page.
-    objects=m_stickyPage->saveObjects( doc, objects, /*yoffset*/0.0, m_zoomHandler, saveOnlyPage );
+    if ( !_duplicatePage ) //don't copy sticky objetc when we duplicate page
+    {
+        //offset = 0.0 when it's a sticky page.
+        objects=m_stickyPage->saveObjects( doc, objects, /*yoffset*/0.0, m_zoomHandler, saveOnlyPage );
+    }
 
     return objects;
 }
@@ -2436,13 +2442,14 @@ void KPresenterDoc::movePage( int from, int to )
 
 void KPresenterDoc::copyPage( int from, int to )
 {
+    _clean = false;
+    _duplicatePage=true;
+
     kdDebug(33001) << "KPresenterDoc::copyPage from=" << from << " to=" << to << endl;
     bool wasSelected = isSlideSelected( from );
     KTempFile tempFile( QString::null, ".kpr" );
     tempFile.setAutoDelete( true );
     savePage( tempFile.name(), from );
-
-    _clean = false;
 
     //insert page.
     KPrPage *newpage=new KPrPage(this);
@@ -2454,6 +2461,8 @@ void KPresenterDoc::copyPage( int from, int to )
     KPrInsertPageCmd *cmd=new KPrInsertPageCmd(i18n("Duplicate Page") ,to, newpage, this );
     cmd->execute();
     addCommand(cmd);
+
+    _duplicatePage=false;
 
     _clean = true;
     m_pageWhereLoadObject=0L;
