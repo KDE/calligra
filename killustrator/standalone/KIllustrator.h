@@ -32,7 +32,6 @@
 #include <ktmainwindow.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
-#include <drag.h>
 
 #include <qlist.h>
 #include "ToolController.h"

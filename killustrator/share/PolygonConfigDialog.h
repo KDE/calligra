@@ -27,9 +27,8 @@
 
 #include <qdialog.h>
 #include <qradiobt.h>
-
 #include <qspinbox.h>
-#include <kslider.h>
+#include <qslider.h>
 
 #include "PolygonTool.h"
 #include "PolygonPreview.h"
@@ -59,7 +58,7 @@ private slots:
 
 private:
   QSpinBox *spinbox;
-  KSlider *slider;
+  QSlider *slider;
   QRadioButton *concaveButton, *convexButton;
   PolygonPreview *preview;
 };

@@ -29,11 +29,11 @@
 #include <qlabel.h>
 #include <qpushbt.h>
 #include <qwidgetstack.h>
+#include <qslider.h>
 
 #include <ktabctl.h>
 #include <kcolordlg.h>
 #include <kspinbox.h>
-#include <kslider.h>
 #include <kcolorbtn.h>
 
 #include "GDocument.h"
@@ -92,7 +92,7 @@ private:
   QComboBox *leftArrows, *rightArrows;
   QPushButton *ellipseKind[3];
   QPushButton *textAlign[3];
-  KSlider* roundnessSlider;
+  QSlider* roundnessSlider;
 
   // Fill Tab
   QRadioButton *fillStyleBttn[5];

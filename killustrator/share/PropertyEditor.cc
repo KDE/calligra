@@ -328,7 +328,7 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     label->setText (i18n ("Roundness:"));
     label->move (10, 140);
 
-    roundnessSlider = new KSlider (KSlider::Horizontal, w);
+    roundnessSlider = new QSlider( Horizontal, w );
     roundnessSlider->setRange (0, 100);
     roundnessSlider->setSteps (10, 50);
     roundnessSlider->move (80, 140);

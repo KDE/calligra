@@ -29,6 +29,7 @@
 #include <qframe.h>
 #include <qclipboard.h>
 #include <qmessagebox.h>
+#include <qcombobox.h>
 #include <unistd.h>
 #include "KIllustrator.h"
 #include "KIllustrator.moc"
@@ -83,11 +84,14 @@
 //#include <kmsgbox.h>
 #include <kurl.h>
 #include <kfiledialog.h>
-#include <kcombo.h>
 #include <qlayout.h>
 #include <unistd.h>
 #include <kimgio.h>
 #include <ktoolbar.h>
+#include <kmenubar.h>
+//#include <kglobal.h>
+#include <kstddirs.h>
+#include <kconfig.h>
 #include "version.h"
 
 #ifdef NEWKDE
@@ -384,7 +388,7 @@ void KIllustrator::initToolBars () {
 			this, SLOT(zoomFactorSlot (int)),
 			true, QSTR_NULL,
 			85);
-  KCombo* combo = toolbar->getCombo (10);
+  QComboBox* combo = toolbar->getCombo (10);
 
   for (int i = 0; i < (int) zFactors.size (); i++) {
     if (zFactors[i] == 1) {
@@ -466,9 +470,7 @@ void KIllustrator::initToolBars () {
 
   /* the color toolbar */
   colorPalette = new KToolBar (this);
-  QString palFile = kapp->kde_datadir ().copy ();
-  palFile += "/killustrator/";
-  palFile += DEFAULT_PALETTE;
+  QString palFile = KGlobal::dirs()->findResource( "appdata", DEFAULT_PALETTE );
 
   parseColorPalette ((const char *) palFile, palette);
 
@@ -1366,7 +1368,7 @@ void KIllustrator::zoomFactorSlot (int idx) {
 }
 
 void KIllustrator::updateZoomFactor (float zFactor) {
-  KCombo* combo = toolbar->getCombo (10);
+  QComboBox* combo = toolbar->getCombo (10);
   for (int i = 0; i < (int) zFactors.size (); i++) {
     if (zFactors[i] == zFactor) {
       combo->setCurrentItem (i);
