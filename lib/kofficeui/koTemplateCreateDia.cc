@@ -353,8 +353,7 @@ void KoTemplateCreateDia::slotSelect() {
         }
         else
         {
-            // ### TODO: find a better error message (but message freeze!)
-            KMessageBox::sorry(0L, i18n( "Only local files are currently supported."));
+            KMessageBox::sorry( 0L, i18n( "Could not open\n%1" ).arg( url.prettyURL() ) );
             return;
         }
     }
