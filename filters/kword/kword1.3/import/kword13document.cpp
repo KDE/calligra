@@ -22,6 +22,7 @@
 #include <qiodevice.h>
 
 #include <kdebug.h>
+#include <ktempfile.h>
 
 #include "kword13utils.h"
 #include "kword13layout.h"
