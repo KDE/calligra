@@ -1315,7 +1315,11 @@ bool GraphicStyle::operator==( const GraphicStyle & graphicStyle ) const
              m_marker_end_width == graphicStyle.m_marker_end_width &&
              m_fill_gradient_name == graphicStyle.m_fill_gradient_name &&
              m_transparency == graphicStyle.m_transparency &&
-             m_textAlignment == graphicStyle.m_textAlignment );
+             m_textAlignment == graphicStyle.m_textAlignment &&
+        m_textMarginLeft == graphicStyle.m_textMarginLeft &&
+        m_textMarginBottom == graphicStyle.m_textMarginBottom &&
+        m_textMarginTop == graphicStyle.m_textMarginTop &&
+        m_textMarginRight == graphicStyle.m_textMarginRight);
 }
 
 ParagraphStyle::ParagraphStyle( QDomElement & e, const uint index )
