@@ -43,7 +43,7 @@ class KEXI_DB_EXPORT Object
 
 	protected:
 		/*! Sets the (localized) error message to \a msg. Use this in subclasses. */
-		void setErrorMsg( const QString &msg );
+		void setErrorMsg(int code,  const QString &msg );
 
 		/*! Clears error flag. */
 		void clearError() { m_errno = 0; m_hasError = false; m_errMsg = QString::null; }

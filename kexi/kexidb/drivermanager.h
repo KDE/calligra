@@ -53,10 +53,10 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 
 		/*! returns list of available drivers names. That drivers can be loaded
 			by first use of driver() method. */
-		const QStringList driversNames();
+		const QStringList driverNames();
 
 		/*! \return info. about driver (service info) */
-		KService* serviceInfo(const QString &name);
+		KService::Ptr serviceInfo(const QString &name);
 
 		//! Returns a map structure of the services. Not necessary for everyday use.
 		const ServicesMap& services() { return m_services; }

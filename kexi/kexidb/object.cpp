@@ -27,8 +27,9 @@ Object::Object()
 	clearError();
 }
 
-void Object::setErrorMsg( const QString &msg )
+void Object::setErrorMsg( int code, const QString &msg )
 {
+	m_errno=code;
 	m_errMsg = msg;
 	m_hasError = !msg.isEmpty();
 }

@@ -97,8 +97,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool duringTransaction();
 
 		/*! driver-specific string escaping */
-		virtual QString escapeString(const QString& str) = 0;
-		virtual QCString escapeString(const QCString& str) = 0;
+		virtual QString escapeString(const QString& str) const = 0;
+		virtual QCString escapeString(const QCString& str) const = 0;
 
 		virtual Cursor* executeQuery( const QString& statement = QString::null) = 0;
 
@@ -128,7 +128,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! For reimplemenation: loads list of databases available for connection
 			and adds the names to \a list. */
-		virtual void drv_getDatabasesList( QStringList &list ) = 0;
+		virtual bool drv_getDatabasesList( QStringList &list ) = 0;
 
 		/*! For reimplemenation: creates new database using connection */
 		virtual bool drv_createDatabase( const QString &dbName = QString::null ) = 0;

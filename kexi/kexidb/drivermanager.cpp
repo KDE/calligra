@@ -21,6 +21,7 @@
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
+#include <kexidb/error.h>
 
 #include <klibloader.h>
 #include <kparts/componentfactory.h>
@@ -80,24 +81,24 @@ void DriverManager::lookupDrivers()
 
 	if (tlist.isEmpty())
 	{
-		setErrorMsg( i18n("Could not find any database drivers.") );
+		setErrorMsg(ERR_DRIVERMANAGER, i18n("Could not find any database drivers.") );
 	}
 }
 
-const QStringList DriverManager::driversNames()
+const QStringList DriverManager::driverNames()
 {
 	if (m_services.isEmpty() && error())
 		return QStringList();
 	return m_services.keys();
 }
 
-KService* DriverManager::serviceInfo(const QString &name)
+KService::Ptr DriverManager::serviceInfo(const QString &name)
 {
 	clearError();
 	if (m_services.contains(name)) {
 		return *m_services.find(name);
 	} else {
-		setErrorMsg( i18n("No such driver service: '%1'.").arg(name) );
+		setErrorMsg(ERR_DRIVERMANAGER, i18n("No such driver service: '%1'.").arg(name) );
 		return 0;
 	}
 }
@@ -113,7 +114,7 @@ Driver* DriverManager::driver(const QCString& name)
 		return drv; //cached
 
 	if (!m_services.contains(name)) {
-		setErrorMsg( i18n("Could not find database driver '%1'.").arg(name) );
+		setErrorMsg(ERR_DRIVERMANAGER, i18n("Could not find database driver '%1'.").arg(name) );
 		return 0;
 	}
 
@@ -125,7 +126,7 @@ Driver* DriverManager::driver(const QCString& name)
 		this, "db", QStringList());
 
 	if (!drv) {
-		setErrorMsg( i18n("Could not load database driver '%1'.").arg(name) );
+		setErrorMsg(ERR_DRIVERMANAGER, i18n("Could not load database driver '%1'.").arg(name) );
 		return 0;
 	}
 	kdDebug() << "KexiDBInterfaceManager::load(): loading succeed: " << name << endl;

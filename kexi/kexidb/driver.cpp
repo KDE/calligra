@@ -18,6 +18,7 @@
 */
 
 #include "driver.h"
+#include "error.h"
 #include "drivermanager.h"
 #include "connection.h"
 #include "connectiondata.h"
@@ -71,7 +72,7 @@ Connection *Driver::createConnection( ConnectionData &conn_data )
 	clearError();
 	if (m_isFileDriver) {
 		if (conn_data.fileName().isEmpty()) {
-			setErrorMsg( i18n("File name expected for file-based database driver.") );
+			setErrorMsg(ERR_MISSING_DB_LOCATION, i18n("File name expected for file-based database driver.") );
 			return 0;
 		}
 	}

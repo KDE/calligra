@@ -18,6 +18,7 @@
 */
 
 #include "connection.h"
+#include "error.h"
 #include "connectiondata.h"
 #include "driver.h"
 #include "table.h"
@@ -68,7 +69,7 @@ bool Connection::connect()
 {
 	clearError();
 	if (m_is_connected) {
-		setErrorMsg( i18n("Connection already established.") );
+		setErrorMsg(ERR_ALREADY_CONNECTED, i18n("Connection already established.") );
 		return false;
 	}
 
@@ -97,7 +98,7 @@ bool Connection::checkConnected()
 		clearError();
 		return true;
 	}
-	setErrorMsg( i18n("Not connected to the database server.") );
+	setErrorMsg(ERR_NO_CONNECTION, i18n("Not connected to the database server.") );
 	return false;
 }
 
@@ -135,7 +136,7 @@ bool Connection::createDatabase( const QString &dbName )
 		return false;
 
 	if (databaseExists( dbName )) {
-		setErrorMsg( i18n("Database '%1' already exists.").arg(dbName) );
+		setErrorMsg(ERR_OBJECT_EXISTS, i18n("Database '%1' already exists.").arg(dbName) );
 		return false;
 	}
 	if (m_driver->isFileDriver()) {
@@ -198,15 +199,15 @@ bool Connection::useDatabase( const QString &dbName )
 		//for file-based db: file must exists and be accessible
 		QFileInfo file(dbName);
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
-			setErrorMsg( i18n("Database file '%1' does not exist.").arg(m_data.fileName()) );
+			setErrorMsg(ERR_OBJECT_NOT_EXISTING, i18n("Database file '%1' does not exist.").arg(m_data.fileName()) );
 			return false;
 		}
 		if (!file.isReadable()) {
-			setErrorMsg( i18n("Database file '%1' is not readable.").arg(m_data.fileName()) );
+			setErrorMsg(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not readable.").arg(m_data.fileName()) );
 			return false;
 		}
 		if (!file.isWritable()) {
-			setErrorMsg( i18n("Database file '%1' is not writable.").arg(m_data.fileName()) );
+			setErrorMsg(ERR_ACCESS_RIGHTS, i18n("Database file '%1' is not writable.").arg(m_data.fileName()) );
 			return false;
 		}
 		//update connection data if filename differs
@@ -338,7 +339,7 @@ bool Connection::beginTransaction()
 	if (!(m_driver->m_features & Driver::Transactions))
 		return true;
 	if (m_transaction) {
-		setErrorMsg( i18n("Transaction already started.") );
+		setErrorMsg(ERR_TRANSACTION_ACTIVE, i18n("Transaction already started.") );
 		return false;
 	}
 	if (drv_beginTransaction()) {
@@ -353,7 +354,7 @@ bool Connection::commitTransaction()
 	if (!(m_driver->m_features & Driver::Transactions))
 		return true;
 	if (!m_transaction) {
-		setErrorMsg( i18n("Transaction not started.") );
+		setErrorMsg(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
 		return false;
 	}
 	bool ret = drv_commitTransaction();
@@ -366,7 +367,7 @@ bool Connection::rollbackTransaction()
 	if (!(m_driver->m_features & Driver::Transactions))
 		return true;
 	if (!m_transaction) {
-		setErrorMsg( i18n("Transaction not started.") );
+		setErrorMsg(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
 		return false;
 	}
 	bool ret = drv_rollbackTransaction();
