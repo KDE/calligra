@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
     KCmdLineArgs::init(argc, argv,
         new KAboutData("KrossPythonTest", "KrossPythonTest",
-            "0.1", "", KAboutData::License_GPL,
+            "0.1", "", KAboutData::License_LGPL,
             "(c) 2004, Sebastian Sauer (mail@dipe.org)\n"
             "http://www.koffice.org/kexi\n"
             "http://www.dipe.org/kross",
