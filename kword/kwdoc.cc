@@ -1791,6 +1791,7 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
                     }
                     devReg.setRects( rs.data(), rs.size() );
                     painter->setClipRegion( devReg );
+                    painter->setPen( Qt::NoPen );
 
                     //kdDebug() << "KWDocument::drawBorders clearEmptySpace in " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
                     painter->fillRect( emptySpaceRegion.boundingRect(), QApplication::palette().active().brush( QColorGroup::Base ) ); // Well, Midlight looks great but isn't WYSIWYG
@@ -1810,8 +1811,12 @@ void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clear
                     // Draw a shadow
                     int topOffset = ( k==0 ) ? offset : 0; // leave a few pixels on top, only for first page
                     QRect shadowRect( rightArea.left(), rightArea.top() + topOffset, offset, pageheight - topOffset );
-                    painter->fillRect( shadowRect.intersect( repaintRect ),
-                                       QApplication::palette().active().brush( QColorGroup::Shadow ) );
+                    shadowRect &= repaintRect; // intersect
+                    if ( !shadowRect.isEmpty() )
+                    {
+                        painter->fillRect( shadowRect,
+                                           QApplication::palette().active().brush( QColorGroup::Shadow ) );
+                    }
                 }
             }
         }
@@ -1965,9 +1970,14 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
             //kdDebug(32002) << "KWDocument::appendPage frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
             //kdDebug(32002) << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
             if ( (frame->pageNum() == thisPageNum ||
-                  (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide)) &&
+                  (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide) )
+                 &&
                  (frame->getNewFrameBehaviour()==Reconnect ||
-                  frame->getNewFrameBehaviour()==Copy) ) {
+                  ( frame->getNewFrameBehaviour()==Copy && !frameSet->isAHeader() && !frameSet->isAFooter() ) )
+                )
+            {
+                // NewFrameBehaviour == Copy is handled here except for headers/footers, which
+                // are created in recalcFrames() anyway.
 
                 switch(frameSet->getFrameType()) {
                     case FT_TEXT:  {
