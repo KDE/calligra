@@ -105,7 +105,7 @@ KoFilter::ConversionStatus KoFilterChain::invokeChain()
     }
 
     if ( !m_chainLinks.current() ) {
-        kdWarning( 35000 ) << "Huh?? Found a null pointer in the chain" << endl;
+        kdWarning( 30500 ) << "Huh?? Found a null pointer in the chain" << endl;
         return KoFilter::StupidError;
     }
 
@@ -133,7 +133,7 @@ QString KoFilterChain::chainOutput() const
 QString KoFilterChain::inputFile()
 {
     if ( m_inputQueried ) {
-        kdWarning( 35000 ) << "You already asked for some source." << endl;
+        kdWarning( 30500 ) << "You already asked for some source." << endl;
         return QString::null;
     }
     m_inputQueried = true;
@@ -155,7 +155,7 @@ QString KoFilterChain::inputFile()
 QString KoFilterChain::outputFile()
 {
     if ( m_outputQueried ) {
-        kdWarning( 35000 ) << "You already asked for some destination." << endl;
+        kdWarning( 30500 ) << "You already asked for some destination." << endl;
         return QString::null;
     }
     m_outputQueried = true;
@@ -188,7 +188,7 @@ KoStoreDevice* KoFilterChain::storageFile( const QString& name, KoStore::Mode mo
         return storageHelper( outputFile(), name, KoStore::Write,
                               &m_outputStorage, &m_outputStorageDevice );
     else {
-        kdWarning( 35000 ) << "Oooops, how did we get here?" << endl;
+        kdWarning( 30500 ) << "Oooops, how did we get here?" << endl;
         return 0;
     }
 }
@@ -196,7 +196,7 @@ KoStoreDevice* KoFilterChain::storageFile( const QString& name, KoStore::Mode mo
 KoDocument* KoFilterChain::inputDocument()
 {
     if ( m_inputQueried ) {
-        kdWarning( 35000 ) << "You already asked for some source." << endl;
+        kdWarning( 30500 ) << "You already asked for some source." << endl;
         return 0;
     }
 
@@ -215,7 +215,7 @@ KoDocument* KoFilterChain::inputDocument()
 KoDocument* KoFilterChain::outputDocument()
 {
     if ( m_outputQueried ) {
-        kdWarning( 35000 ) << "You already asked for some destination." << endl;
+        kdWarning( 30500 ) << "You already asked for some destination." << endl;
         return 0;
     }
 
@@ -307,7 +307,7 @@ void KoFilterChain::finalizeIO()
     // Note: m_*input*Document as we already called manageIO()
     if ( m_inputDocument &&
          static_cast<KoFilterManager::Direction>( filterManagerDirection() ) == KoFilterManager::Export ) {
-        kdDebug( 35000 ) << "Saving the output document to the export file" << endl;
+        kdDebug( 30500 ) << "Saving the output document to the export file" << endl;
         m_inputDocument->saveNativeFormat( filterManagerExportFile() );
         m_inputFile = filterManagerExportFile();
     }
@@ -316,7 +316,7 @@ void KoFilterChain::finalizeIO()
 bool KoFilterChain::createTempFile( KTempFile** tempFile, bool autoDelete )
 {
     if ( *tempFile ) {
-        kdError( 35000 ) << "Ooops, why is there already a temp file???" << endl;
+        kdError( 30500 ) << "Ooops, why is there already a temp file???" << endl;
         return false;
     }
     *tempFile = new KTempFile();
@@ -379,7 +379,7 @@ KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString&
     if ( file.isEmpty() )
         return 0;
     if ( *storage ) {
-        kdDebug( 35000 ) << "Uh-oh, we forgot to clean up..." << endl;
+        kdDebug( 30500 ) << "Uh-oh, we forgot to clean up..." << endl;
         return 0;
     }
 
@@ -390,7 +390,7 @@ KoStoreDevice* KoFilterChain::storageHelper( const QString& file, const QString&
         return storageCleanupHelper( storage );
 
     if ( *device ) {
-        kdDebug( 35000 ) << "Uh-oh, we forgot to clean up the storage device!" << endl;
+        kdDebug( 30500 ) << "Uh-oh, we forgot to clean up the storage device!" << endl;
         ( *storage )->close();
         return storageCleanupHelper( storage );
     }
@@ -411,14 +411,14 @@ KoDocument* KoFilterChain::createDocument( const QString& file )
     url.setPath( file );
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, true );
     if ( t->name() == KMimeType::defaultMimeType() ) {
-        kdError( 35000 ) << "No mimetype found for " << file << endl;
+        kdError( 30500 ) << "No mimetype found for " << file << endl;
         return 0;
     }
 
     KoDocument *doc = createDocument( QCString( t->name().latin1() ) );
 
     if ( !doc || !doc->loadNativeFormat( file ) ) {
-        kdError( 35000 ) << "Couldn't load from the file" << endl;
+        kdError( 30500 ) << "Couldn't load from the file" << endl;
         delete doc;
         return 0;
     }
@@ -430,17 +430,17 @@ KoDocument* KoFilterChain::createDocument( const QCString& mimeType )
     QString constraint( QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimeType ) );
     QValueList<KoDocumentEntry> entries = KoDocumentEntry::query( constraint );
     if ( entries.isEmpty() ) {
-        kdError( 35000 ) << "Couldn't find a KOffice document entry for " << mimeType << endl;
+        kdError( 30500 ) << "Couldn't find a KOffice document entry for " << mimeType << endl;
         return 0;
     }
 
     if ( entries.count() != 1 )
-        kdWarning( 35000 ) << "Huh?? Two document entries for the same mimetype?"
+        kdWarning( 30500 ) << "Huh?? Two document entries for the same mimetype?"
                            << " Will take the first one." << endl;
 
     KoDocument* doc = entries.first().createDoc();
     if ( !doc ) {
-        kdError( 35000 ) << "Couldn't create the document" << endl;
+        kdError( 30500 ) << "Couldn't create the document" << endl;
         return 0;
     }
     return doc;
