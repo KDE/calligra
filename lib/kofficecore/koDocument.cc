@@ -552,7 +552,9 @@ bool KoDocument::openFile()
   {
     // We opened a temporary file (result of an import filter)
     // Set document URL to empty - we don't want to save in /tmp !
-    m_url = KURL();
+    // But only if in readwrite mode (no saving problem otherwise)
+    if ( isReadWrite() )
+      m_url = KURL();
     // and remove temp file
     if(!importedFile.isEmpty())
       unlink( importedFile.ascii() );
