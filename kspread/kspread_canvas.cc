@@ -1506,7 +1506,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  
       case Key_Delete:
 	  
-	  activeTable()->clearSelection( QPoint( markerColumn(), markerRow() ) );
+	  activeTable()->clearTextSelection( QPoint( markerColumn(), markerRow() ) );
 	  m_pView->editWidget()->setText( "" );
 	  return;
       case Key_F2:

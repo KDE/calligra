@@ -3728,7 +3728,7 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
         return ( long_max + 4 );
 }
 
-void KSpreadTable::clearSelection( const QPoint &_marker )
+void KSpreadTable::clearTextSelection( const QPoint &_marker )
 {
     m_pDoc->setModified( true );
     bool selected = ( m_rctSelection.left() != 0 );
@@ -3813,6 +3813,189 @@ void KSpreadTable::clearSelection( const QPoint &_marker )
         emit sig_updateView( this, r );
     }
 }
+
+void KSpreadTable::clearValiditySelection( const QPoint &_marker )
+{
+    m_pDoc->setModified( true );
+    bool selected = ( m_rctSelection.left() != 0 );
+
+    if(areaIsEmpty())
+        return;
+
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+
+      if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoConditional *undo = new KSpreadUndoConditional( m_pDoc, this, m_rctSelection );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
+
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        && !c->isObscured())
+        {
+          c->removeValidity();
+        }
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoConditional *undo = new KSpreadUndoConditional( m_pDoc, this, m_rctSelection );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int col = c->column();
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        && !c->isObscured())
+        {
+          c->removeValidity();
+        }
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    else
+    {
+        QRect r( m_rctSelection );
+        if ( !selected )
+            r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+      if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoConditional *undo = new KSpreadUndoConditional( m_pDoc, this, r );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
+        for ( int x = r.left(); x <= r.right(); x++ )
+            for ( int y = r.top(); y <= r.bottom(); y++ )
+            {
+                KSpreadCell *cell = cellAt( x, y );
+
+                if(!cell->isObscured())
+                {
+                   if ( cell == m_pDefaultCell )
+                   {
+                        cell = new KSpreadCell( this, x, y );
+                        m_cells.insert( cell, x, y );
+                   }
+                   cell->removeValidity();
+                }
+            }
+
+        emit sig_updateView( this, r );
+    }
+}
+
+void KSpreadTable::clearConditionalSelection( const QPoint &_marker )
+{
+    m_pDoc->setModified( true );
+    bool selected = ( m_rctSelection.left() != 0 );
+
+    if(areaIsEmpty())
+        return;
+
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+
+        if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoConditional *undo = new KSpreadUndoConditional( m_pDoc, this, m_rctSelection );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
+
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        && !c->isObscured())
+        {
+          c->removeFirstCondition();
+          c->removeSecondCondition();
+          c->removeThirdCondition();
+        }
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+        if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoConditional *undo = new KSpreadUndoConditional( m_pDoc, this, m_rctSelection );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int col = c->column();
+        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
+        && !c->isObscured())
+        {
+          c->removeFirstCondition();
+          c->removeSecondCondition();
+          c->removeThirdCondition();
+        }
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    else
+    {
+        QRect r( m_rctSelection );
+        if ( !selected )
+            r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+        if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoConditional *undo = new KSpreadUndoConditional( m_pDoc, this, r );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
+        for ( int x = r.left(); x <= r.right(); x++ )
+            for ( int y = r.top(); y <= r.bottom(); y++ )
+            {
+                KSpreadCell *cell = cellAt( x, y );
+
+                if(!cell->isObscured())
+                {
+                   if ( cell == m_pDefaultCell )
+                   {
+                        cell = new KSpreadCell( this, x, y );
+                        m_cells.insert( cell, x, y );
+                   }
+                  cell->removeFirstCondition();
+                  cell->removeSecondCondition();
+                  cell->removeThirdCondition();
+                }
+            }
+
+        emit sig_updateView( this, r );
+    }
+}
+
 
 void KSpreadTable::defaultSelection( const QPoint &_marker )
 {

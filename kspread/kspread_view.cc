@@ -257,7 +257,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_specialPaste = new KAction( i18n("Special Paste..."), "special_paste",0, this, SLOT( specialPaste() ), actionCollection(), "specialPaste" );
     m_editCell = new KAction( i18n("Modify Cell"),"cell_edit", CTRL + Key_M, this, SLOT( editCell() ), actionCollection(), "editCell" );
     m_delete = new KAction( i18n("Delete"),"deletecell", 0, this, SLOT( deleteSelection() ), actionCollection(), "delete" );
-    m_clear = new KAction( i18n("Clear"), 0, this, SLOT( clearSelection() ), actionCollection(), "clear" );
+    m_clearText = new KAction( i18n("Text"), 0, this, SLOT( clearTextSelection() ), actionCollection(), "cleartext" );
+    m_clearComment = new KAction( i18n("Comment"), 0, this, SLOT( clearCommentSelection() ), actionCollection(), "clearcomment" );
+    m_clearValidity = new KAction( i18n("Validity"), 0, this, SLOT( clearValiditySelection() ), actionCollection(), "clearvalidity" );
+    m_clearConditional = new KAction( i18n("Conditional cell attributes"), 0, this, SLOT( clearConditionalSelection() ), actionCollection(), "clearconditional" );
     // ---------------------------- Bernd -----------------------
     //Key_Shift ..
 
@@ -2014,7 +2017,6 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_paste->plug( m_pPopupMenu );
     m_specialPaste->plug( m_pPopupMenu );
     m_delete->plug( m_pPopupMenu );
-    m_clear->plug( m_pPopupMenu );
     m_adjust->plug( m_pPopupMenu );
     m_default->plug( m_pPopupMenu );
     m_areaName->plug( m_pPopupMenu );
@@ -2133,13 +2135,38 @@ void KSpreadView::adjust()
     }
 }
 
-void KSpreadView::clearSelection()
+void KSpreadView::clearTextSelection()
 {
     ASSERT( m_pTable );
-    m_pTable->clearSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    m_pTable->clearTextSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
     updateEditWidget();
 }
+
+void KSpreadView::clearCommentSelection()
+{
+    ASSERT( m_pTable );
+    m_pTable->setSelectionRemoveComment( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+
+    updateEditWidget();
+}
+
+void KSpreadView::clearValiditySelection()
+{
+    ASSERT( m_pTable );
+    m_pTable->clearValiditySelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+
+    updateEditWidget();
+}
+
+void KSpreadView::clearConditionalSelection()
+{
+    ASSERT( m_pTable );
+    m_pTable->clearConditionalSelection( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+
+    updateEditWidget();
+}
+
 
 void KSpreadView::defaultSelection()
 {

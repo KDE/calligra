@@ -419,7 +419,11 @@ public:
      *                In this case the cell on which the marker is will
      *                be cleared.
      */
-    void clearSelection(const QPoint &_marker );
+    void clearTextSelection(const QPoint &_marker );
+
+    void clearValiditySelection(const QPoint &_marker );
+
+    void clearConditionalSelection(const QPoint &_marker );
 
     /**
      * A convenience function which retrieves the data to be pasted

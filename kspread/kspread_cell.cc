@@ -2995,8 +2995,7 @@ else
                         return tmp;
                 }
         }
-//never here
-return  QString("**");
+return  QString("");
 }
 
 /*

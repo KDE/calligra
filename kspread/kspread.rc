@@ -9,7 +9,12 @@
   <Action name="paste"/>
   <Action name="specialPaste"/>
   <Action name="replace"/>
-  <Action name="clear"/>
+  <Menu name="Clear"><text>Clear</text>
+        <Action name="cleartext"/>
+        <Action name="clearcomment"/>
+        <Action name="clearvalidity"/>
+        <Action name="clearconditional"/>
+    </Menu>
   <Action name="delete"/>
   <Action name="mergecell"/>
   <Action name="dissociatecell"/>
