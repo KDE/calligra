@@ -22,6 +22,7 @@
 
 #include <qmessagebox.h>
 #include <kmessagebox.h>
+#include <koFilterChain.h>
 
 #include <kspread_doc.h>
 #include <kspread_table.h>
@@ -67,10 +68,8 @@ QpTableList::table(unsigned pIdx)
 
 // ---------------------------------------------------------------
 
-QpImport::QpImport( KoFilter*   pParent
-                  , const char* pName
-                  )
- : KoFilter(pParent, pName)
+QpImport::QpImport( KoFilter*, const char* )
+ : KoFilter()
 {
 //cout << "Hooray - in QpImport::QpImport" << endl; // ???
 }
@@ -89,26 +88,25 @@ QpImport::InitTableName(int pIdx, QString& pResult)
    }
 }
 
-bool QpImport::filterImport(const QString &file
-                           ,KoDocument *document
-                           ,const QString &from
-                           ,const QString &to
-                           ,const QString &/*config*/
-                           )
+KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCString& to )
 {
     bool bSuccess=true;
+
+    KoDocument* document = m_chain->outputDocument();
+    if ( !document )
+        return KoFilter::StupidError;
 
     kdDebug(30501) << "here we go... " << document->className() << endl;
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
     if(from!="application/x-quattropro" || to!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     kdDebug(30501) << "...still here..." << endl;
@@ -119,15 +117,15 @@ bool QpImport::filterImport(const QString &file
     if(ksdoc->mimeType()!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
 
-    QpIStream lIn( (const char*)file.utf8() );
+    QpIStream lIn( m_chain->inputFile().latin1() );
 
     if( !lIn )
     {
         KMessageBox::sorry( 0L, i18n("QPRO filter can't open input file - please report.") );
-        return false;
+        return KoFilter::FileNotFound;
     }
 
     KSpreadTable *table=0;
@@ -246,7 +244,7 @@ bool QpImport::filterImport(const QString &file
         KMessageBox::sorry( 0L, i18n("Sorry, can't open password protected files.\n"
                                      "The password algorithm has not been published")
                           );
-        return false;
+        return KoFilter::NotImplemented;
       }
 
       delete lRec;
@@ -254,7 +252,10 @@ bool QpImport::filterImport(const QString &file
    } while( lIn );
 
     emit sigProgress(100);
-    return bSuccess;
+    if ( bSuccess )
+        return KoFilter::OK;
+    else
+        return KoFilter::StupidError;
 }
 
 #include <qproimport.moc>

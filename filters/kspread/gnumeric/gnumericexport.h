@@ -40,17 +40,13 @@ class GNUMERICExport : public KoFilter {
 public:
     GNUMERICExport(KoFilter *parent, const char*name);
     virtual ~GNUMERICExport() {}
-    /** do the filtering :) */
 
-    virtual bool filterExport(const QString &file, KoDocument * document,
-                                const QString &from, const QString &to,
-                                const QString &config=QString::null);
-
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 private:
-    
-    QDomElement GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell * cell, 
-			     int currentcolumn, 
+
+    QDomElement GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell * cell,
+			     int currentcolumn,
 			     int currentrow);
 };
 #endif

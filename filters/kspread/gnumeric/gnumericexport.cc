@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <koFilterChain.h>
 #include <qdom.h>
 #include <qstring.h>
 #include <qfile.h>
@@ -54,8 +55,8 @@ class Cell {
 
 
 
-GNUMERICExport::GNUMERICExport(KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) {
+GNUMERICExport::GNUMERICExport(KoFilter *, const char *) :
+                     KoFilter() {
 }
 
 
@@ -273,27 +274,26 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell *
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-bool GNUMERICExport::filterExport(const QString &file,
-					KoDocument * document,
-					const QString &from,
-					const QString &to,
-					const QString &config) {
+KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const QCString& to )
+{
+    qDebug("Exporting GNUmeric");
 
-  qDebug("Exporting GNUmeric");
+    QDomDocument gnumeric_doc=QDomDocument("gmr:Workbook");
 
-  QDomDocument gnumeric_doc=QDomDocument("gmr:Workbook");
+    KoDocument* document = m_chain->inputDocument();
 
-
+    if ( !document )
+        return KoFilter::StupidError;
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
     if(to!="application/x-gnumeric" || from!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     const KSpreadDoc * const ksdoc=(const KSpreadDoc* const)document;
@@ -301,7 +301,7 @@ bool GNUMERICExport::filterExport(const QString &file,
     if( ksdoc->mimeType() != "application/x-kspread" )
     {
         kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     /* This could be Made into a function */
@@ -587,12 +587,12 @@ Hidden="0"/>
     QCString cstr(str.local8Bit()); // I assume people will prefer local8Bit over utf8... Another param ?
 
     gzFile gzfile;
-    gzfile = gzopen( QFile::encodeName(file), "wb");
+    gzfile = gzopen( QFile::encodeName(m_chain->inputFile()), "wb");
 
     if (gzfile==NULL)
       {
         kdError(30501) << "Unable to open output file!" << endl;
-        return false;
+        return KoFilter::FileNotFound;
       }
 
 
@@ -600,7 +600,7 @@ Hidden="0"/>
 
     gzclose(gzfile);
 
-    return true;
+    return KoFilter::OK;
 }
 
 

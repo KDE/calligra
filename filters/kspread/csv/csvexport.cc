@@ -21,6 +21,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <koFilterChain.h>
 #include <qdom.h>
 #include <qstring.h>
 #include <qfile.h>
@@ -47,26 +48,29 @@ class Cell {
 };
 
 
-CSVExport::CSVExport(KoFilter *parent, const char *name) :
-                     KoFilter(parent, name) {
+CSVExport::CSVExport(KoFilter *, const char *) :
+                     KoFilter() {
 }
 
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-bool CSVExport::filterExport(const QString &file, KoDocument * document,
-                         const QString &from, const QString &to,
-                         const QString &config) {
+KoFilter::ConversionStatus CSVExport::convert( const QCString& from, const QCString& to )
+{
+    KoDocument* document = m_chain->inputDocument();
+
+    if ( !document )
+        return KoFilter::StupidError;
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
     if((to!="text/x-csv" && to!="text/plain") || from!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     const KSpreadDoc * ksdoc=static_cast<const KSpreadDoc *>(document);
@@ -74,10 +78,11 @@ bool CSVExport::filterExport(const QString &file, KoDocument * document,
     if( ksdoc->mimeType() != "application/x-kspread" )
     {
         kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     QChar csv_delimiter;
+    QString config; // ###### FIXME: For now we don't have a config parameter
     if(config.isEmpty())
         csv_delimiter = ',';
     else
@@ -163,113 +168,16 @@ bool CSVExport::filterExport(const QString &file, KoDocument * document,
     // Ok, now write to export file
     QCString cstr(str.local8Bit()); // I assume people will prefer local8Bit over utf8... Another param ?
 
-    QFile out(file);
+    QFile out(m_chain->outputFile());
     if(!out.open(IO_WriteOnly)) {
         kdError(30501) << "Unable to open output file!" << endl;
         out.close();
-        return false;
+        return KoFilter::StupidError;
     }
     out.writeBlock(cstr.data(), cstr.length());
 
     out.close();
-    return true;
+    return KoFilter::OK;
 }
 
-/*
-bool CSVExport::filter(const QString &fileIn, const QString &fileOut,
-                       const QString& from, const QString& to,
-                       const QString &config) {
-
-    if(to!="text/x-csv" || from!="application/x-kspread")
-    {
-        kdWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
-        return false;
-    }
-
-    KoStore in=KoStore(QString(fileIn), KoStore::Read);
-    if(!in.open("root", "")) {
-        QApplication::restoreOverrideCursor();
-        KMessageBox::sorry( 0L, i18n("CSV filter can't open input file %1 - please report.").arg( fileIn ) );
-        in.close();
-        return false;
-    }
-    // To be made configurable (filter dialog or dialog box), perhaps
-    // My opinion : CSV means comma separated values, and if we use
-    //  '.' as decimal separator then everything is fine, and the apps
-    // should do the conversion after loading.
-    // But those who wrote French and German versions of Excel didn't think so...
-    //QChar decimal_point = '.';
-    QChar csv_delimiter;
-    if(config.isEmpty())
-        csv_delimiter = ',';
-    else
-        csv_delimiter = config[0];
-
-    // read the whole file
-    QByteArray array=in.read(in.size());
-    QString text = QString::fromUtf8( array.data(), array.size() );
-    QDomDocument doc;
-    doc.setContent( text );
-    QDomElement elem = doc.documentElement();
-    if( elem.attribute( "mime" ) != "application/x-kspread" )
-    {
-        kdWarning(30501) << "Invalid document mimetype " << elem.attribute( "mime" ) << endl;
-        return false;
-    }
-
-    QDomElement map = elem.namedItem("map").toElement();
-    QDomElement table = map.namedItem("table").toElement();
-
-    QString str;
-    QDomNodeList cells = table.childNodes();
-    // Each cell contains a row and a column number.
-    // Damn, and they're not necessarily sorted...
-    // -> we need to store everything and sort it out
-    QSortedList< Cell > list;
-    list.setAutoDelete( true );
-    for ( uint i = 0 ; i < cells.length() ; i++ )
-    {
-        QDomNode cellNode = cells.item( i );
-        QDomElement cell = cellNode.toElement();
-        Cell * newCell = new Cell;
-        newCell->row = cell.attribute("row").toInt();
-        newCell->col = cell.attribute("column").toInt();
-        newCell->text = cell.text();
-        list.inSort( newCell );
-    }
-
-    int currentrow = 1;
-    int currentcolumn = 1;
-    for ( QPtrListIterator<Cell> it ( list ) ; it.current(); ++it )
-    {
-        Cell * cell = it.current();
-
-        for (  ; currentrow < cell->row ; currentrow++ )
-        {
-            str += "\n";
-            currentcolumn = 1;
-        }
-
-        for ( ; currentcolumn < cell->col ; currentcolumn++ )
-          str += csv_delimiter;
-
-        str += cell->text;
-    }
-
-    QCString cstr(str.utf8());
-
-    QFile out(fileOut);
-    if(!out.open(IO_WriteOnly)) {
-        kdError(30501) << "Unable to open output file!" << endl;
-        in.close();
-        out.close();
-        return false;
-    }
-    out.writeBlock(cstr.data(), cstr.length());
-
-    in.close();
-    out.close();
-    return true;
-}
-*/
 #include <csvexport.moc>

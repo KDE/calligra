@@ -22,6 +22,7 @@
 #include <csvimport.h>
 #include <qmessagebox.h>
 #include <kmessagebox.h>
+#include <koFilterChain.h>
 
 // hehe >:->
 #include <kspread_doc.h>
@@ -33,25 +34,29 @@
  perl -e '$i=0;while($i<30000) { print rand().",".rand()."\n"; $i++ }' > file.csv
 */
 
-CSVFilter::CSVFilter(KoFilter *parent, const char*name) :
-                     KoFilter(parent, name) {
+CSVFilter::CSVFilter(KoFilter *, const char*) :
+                     KoFilter() {
 }
 
-bool CSVFilter::filterImport(const QString &file, KoDocument *document,
-                         const QString &from, const QString &to,
-                         const QString &config)
+KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCString& to )
 {
+    QString file( m_chain->inputFile() );
+    KoDocument* document = m_chain->outputDocument();
+
+    if ( !document )
+        return KoFilter::StupidError;
+
     kdDebug(30501) << "here we go... " << document->className() << endl;
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
     if(from!="text/x-csv" && from!="text/plain" || to!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     kdDebug(30501) << "...still here..." << endl;
@@ -62,19 +67,20 @@ bool CSVFilter::filterImport(const QString &file, KoDocument *document,
     if(ksdoc->mimeType()!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     QFile in(file);
     if(!in.open(IO_ReadOnly)) {
         KMessageBox::sorry( 0L, i18n("CSV filter can't open input file - please report.") );
         in.close();
-        return false;
+        return KoFilter::FileNotFound;
     }
 
     QString csv_delimiter = QString::null;
-    if (config != QString::null)
-        csv_delimiter = config[0];
+    // ###### FIXME: disabled for now
+    //if (config != QString::null)
+    //    csv_delimiter = config[0];
 
     QByteArray inputFile(in.size());
     in.readBlock(inputFile.data(), in.size());
@@ -82,7 +88,7 @@ bool CSVFilter::filterImport(const QString &file, KoDocument *document,
 
     CSVDialog *dialog = new CSVDialog(0L, inputFile, csv_delimiter);
     if (!dialog->exec())
-        return false;
+        return KoFilter::UserCancelled;
 
     KSpreadCell *cell;
     KSpreadTable *table=ksdoc->createTable();
@@ -122,7 +128,7 @@ bool CSVFilter::filterImport(const QString &file, KoDocument *document,
 
     emit sigProgress(100);
     delete dialog;
-    return true;
+    return KoFilter::OK;
 }
 
 #include <csvimport.moc>

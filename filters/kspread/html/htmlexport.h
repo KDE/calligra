@@ -34,10 +34,8 @@ class HTMLExport : public KoFilter {
 public:
     HTMLExport(KoFilter *parent, const char*name);
     virtual ~HTMLExport() {}
-    /** do the filtering :) */
-    virtual bool filterExport(const QString &file, KoDocument * document,
-                          const QString &from, const QString &to,
-                          const QString &config=QString::null);
+
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 };
 #endif
 

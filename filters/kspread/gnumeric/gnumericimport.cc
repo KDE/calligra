@@ -23,6 +23,7 @@
 #include <gnumericimport.h>
 #include <qmessagebox.h>
 #include <kmessagebox.h>
+#include <koFilterChain.h>
 #include <qdict.h>
 
 // hehe >:->
@@ -33,8 +34,8 @@
 
 #include <zlib.h>
 
-GNUMERICFilter::GNUMERICFilter(KoFilter *parent, const char*name) :
-                     KoFilter(parent, name) {
+GNUMERICFilter::GNUMERICFilter(KoFilter *, const char*) :
+                     KoFilter() {
 }
 
 /* This converts GNUmeric's color string "0:0:0" to a QColor. */
@@ -507,26 +508,28 @@ void setStyleInfo(QDomNode *sheet, KSpreadTable *table){
 	 an hour or so. --PGE
   */
 
-bool GNUMERICFilter::filterImport(const QString &file,
-					KoDocument *document,
-					const QString &from,
-					const QString &to,
-					const QString &config) {
+
+KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString& from, const QCString& to )
+{
     bool bSuccess=true;
 
     qDebug("Entering GNUmeric Import filter.\n");
+
+    KoDocument* document = m_chain->outputDocument();
+    if ( !document )
+        return KoFilter::StupidError;
 
     kdDebug(30501) << "here we go... " << document->className() << endl;
 
     if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
     {
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
     if(from!="application/x-gnumeric" || to!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
 
     kdDebug(30501) << "...still here..." << endl;
@@ -537,7 +540,7 @@ bool GNUMERICFilter::filterImport(const QString &file,
     if(ksdoc->mimeType()!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
-        return false;
+        return KoFilter::NotImplemented;
     }
 
 
@@ -552,13 +555,13 @@ bool GNUMERICFilter::filterImport(const QString &file,
 
 
     gzFile gzfile;
-    gzfile = gzopen( QFile::encodeName(file), "rb");
+    gzfile = gzopen( QFile::encodeName(m_chain->inputFile()), "rb");
     /* Check for a failure to open... */
 
     if (gzfile==NULL)
       {
         kdWarning(30501) << "Couldn't open the requested file." << endl;
-        return false;
+        return KoFilter::FileNotFound;
       }
 
     int size;
@@ -692,7 +695,10 @@ bool GNUMERICFilter::filterImport(const QString &file,
       }
 
     emit sigProgress(100);
-    return bSuccess;
+    if ( bSuccess )
+        return KoFilter::OK;
+    else
+        return KoFilter::StupidError;
 }
 
 #include <gnumericimport.moc>

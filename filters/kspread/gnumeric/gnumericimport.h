@@ -40,8 +40,7 @@ class GNUMERICFilter : public KoFilter {
 public:
     GNUMERICFilter(KoFilter *parent, const char *name);
     virtual ~GNUMERICFilter() {}
-    virtual bool filterImport(const QString &file, KoDocument *document,
-                                const QString &from, const QString &to,
-                                const QString &config=QString::null);
+
+    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 };
 #endif // GNUMERICFILTER_H
