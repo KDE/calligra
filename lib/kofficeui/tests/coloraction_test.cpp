@@ -41,7 +41,7 @@ TopLevel::TopLevel( QWidget* parent, const char* name) : QMainWindow( parent, na
     QWidget *w = new QWidget( this );
     setCentralWidget( w );
 
-    QBoxLayout* l = new QHBoxLayout( w, 10 );
+    QBoxLayout* l = new QHBoxLayout( w, KDialog::marginHint(), KDialog::spacingHint() );
     QGroupBox* b1 = new QVGroupBox( QString::fromLatin1( "KoColorPanel 1" ), w );
     panel = new KoColorPanel( b1, "panel1" );
     connect( panel, SIGNAL( colorSelected( const QColor& ) ), SLOT( slotColorSelected( const QColor& ) ) );

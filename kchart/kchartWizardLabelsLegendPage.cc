@@ -27,13 +27,13 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     xlabel=bottomparams.axisLabelsFont();
     ylabel=leftparams.axisLabelsFont();
 
-    QGridLayout *grid1 = new QGridLayout(this,2,2,15,15);
+    QGridLayout *grid1 = new QGridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
 
     QGroupBox* tmpQGroupBox;
     tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
     tmpQGroupBox->setFrameStyle( 49 );
 
-    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,4,4,15,7);
+    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,4,4,KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel* titleLA = new QLabel( i18n( "Title:" ),tmpQGroupBox );
     grid2->addWidget(titleLA,0,0);

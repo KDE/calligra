@@ -8,6 +8,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kdialog.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
@@ -21,10 +22,10 @@ KChartComboPage::KChartComboPage( KChartParams* params,
 {
     //QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
 
-    QGridLayout* layout = new QGridLayout(this, 2, 2,15,7 );
+    QGridLayout* layout = new QGridLayout(this, 2, 2,KDialog::marginHint(), KDialog::spacingHint() );
     //toplevel->addLayout( layout );
     QButtonGroup* gb = new QButtonGroup( i18n("HLC Style"), this );
-    QGridLayout *grid1 = new QGridLayout(gb,7,1,15,7);
+    QGridLayout *grid1 = new QGridLayout(gb,7,1,KDialog::marginHint(), KDialog::spacingHint());
     layout->addWidget(gb,0,0);
 
     diamond=new QRadioButton( i18n("Diamond"), gb ); ;

@@ -297,7 +297,7 @@ void KoPageLayoutDia::setupTab1()
         // ------------- unit _______________
         QWidget* unitFrame = new QWidget( tab1 );
         grid1->addWidget( unitFrame, 0, 0, Qt::AlignLeft );
-        QBoxLayout* unitLayout = new QHBoxLayout( unitFrame, 5 );
+        QBoxLayout* unitLayout = new QHBoxLayout( unitFrame, KDialog::marginHint(), KDialog::spacingHint() );
 
         // label unit
         lpgUnit = new QLabel( i18n( "Unit:" ), unitFrame );

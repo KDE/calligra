@@ -40,7 +40,7 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterView *_view )
       view( _view ),
       initialize( true )
 {
-    QBoxLayout *topLayout = new QVBoxLayout( this, 2 );
+    QBoxLayout *topLayout = new QVBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint() );
     textEdit = new KTextEdit( this );
 
     QFont font = KoGlobal::defaultFont();

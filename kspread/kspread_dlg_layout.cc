@@ -117,7 +117,7 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDlg * dlg )
   : QWidget( parent ),
     m_dlg( dlg )
 {
-  QGridLayout * layout = new QGridLayout( this, 1, 1, 11, 6, "layout"); 
+  QGridLayout * layout = new QGridLayout( this, 1, 1, KDialog::marginHint(), KDialog::spacingHint(), "layout");
 
   QGroupBox * groupBox = new QGroupBox( this, "groupBox1" );
   groupBox->setColumnLayout(0, Qt::Vertical );
@@ -1168,7 +1168,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
     QVBoxLayout* layout = new QVBoxLayout( this, 6,10 );
 
     QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
-    QGridLayout *grid = new QGridLayout(grp,10,2,15,7);
+    QGridLayout *grid = new QGridLayout(grp,10,2,KDialog::marginHint(), KDialog::spacingHint());
 
     int fHeight = grp->fontMetrics().height();
     grid->addRowSpacing( 0, fHeight/2 ); // groupbox title
@@ -1204,7 +1204,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
 
     QGroupBox *box2 = new QGroupBox( grp, "Box");
     box2->setTitle(i18n("Preview"));
-    QGridLayout *grid3 = new QGridLayout(box2,1,3,14,7);
+    QGridLayout *grid3 = new QGridLayout(box2,1,3,KDialog::marginHint(), KDialog::spacingHint());
 
     exampleLabel=new QLabel(box2);
     grid3->addWidget(exampleLabel,0,1);
@@ -1223,7 +1223,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDlg *_dlg )
 
     QGroupBox *box = new QGroupBox( this, "Box");
 
-    grid = new QGridLayout(box,3,4,7,7);
+    grid = new QGridLayout(box,3,4,KDialog::marginHint(), KDialog::spacingHint());
 
     postfix = new QLineEdit( box, "LineEdit_1" );
     grid->addWidget(postfix,2,1);
@@ -2623,10 +2623,10 @@ CellFormatPageMisc::CellFormatPageMisc( QWidget* parent, CellFormatDlg *_dlg ) :
     dlg = _dlg;
 
 
-    QGridLayout* layout = new QGridLayout( this, 2,2,7,7 );
+    QGridLayout* layout = new QGridLayout( this, 2,2,KDialog::marginHint(), KDialog::spacingHint() );
     QGroupBox *box = new QGroupBox( this, "Box");
 
-    QGridLayout *grid = new QGridLayout(box,2,4,7,7);
+    QGridLayout *grid = new QGridLayout(box,2,4,KDialog::marginHint(), KDialog::spacingHint());
     QLabel *tmpQLabel;
 
     tmpQLabel = new QLabel( box, "Label_3" );
@@ -2677,7 +2677,7 @@ CellFormatPageMisc::CellFormatPageMisc( QWidget* parent, CellFormatDlg *_dlg ) :
     layout->addWidget(box,0,0);
 
     box = new QGroupBox( this, "Box1");
-    grid = new QGridLayout(box,4,1,7,7);
+    grid = new QGridLayout(box,4,1,KDialog::marginHint(), KDialog::spacingHint());
     dontPrintText= new QCheckBox(i18n("Don't print text"),box);
     dontPrintText->setChecked(dlg->bDontPrintText);
 
@@ -2776,7 +2776,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg ) :
 
   box1 = new QGroupBox( this, "Box1");
   box1->setTitle(i18n("Requested Font"));
-  QGridLayout *grid2 = new QGridLayout(box1,7,3,15,7);
+  QGridLayout *grid2 = new QGridLayout(box1,7,3,KDialog::marginHint(), KDialog::spacingHint());
   int fHeight = box1->fontMetrics().height();
   grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
@@ -2904,7 +2904,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg ) :
 
   box1 = new QGroupBox(this, "Box2");
   box1->setTitle(i18n("Actual Font"));
-  grid2 = new QGridLayout(box1,4,5,15,7);
+  grid2 = new QGridLayout(box1,4,5,KDialog::marginHint(), KDialog::spacingHint());
   grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
   actual_family_label = new QLabel(box1,"afamily");
@@ -3242,11 +3242,11 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
   : QWidget( parent ),
     dlg( _dlg )
 {
-    QGridLayout *grid3 = new QGridLayout(this, 4, 2, 15, 7);
+    QGridLayout *grid3 = new QGridLayout(this, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
     QButtonGroup *grp = new QButtonGroup( i18n("Horizontal"), this);
     grp->setRadioButtonExclusive( true );
 
-    QGridLayout *grid2 = new QGridLayout(grp, 4, 2, 15, 7);
+    QGridLayout *grid2 = new QGridLayout(grp, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
     int fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
     standard = new QRadioButton( i18n("Standard"), grp );
@@ -3273,7 +3273,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     grp = new QButtonGroup( i18n("Vertical"), this);
     grp->setRadioButtonExclusive( true );
 
-    grid2 = new QGridLayout(grp, 4, 1, 15, 7);
+    grid2 = new QGridLayout(grp, 4, 1, KDialog::marginHint(), KDialog::spacingHint());
     fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
     top = new QRadioButton( i18n("Top"), grp );
@@ -3293,7 +3293,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
 
     grp = new QButtonGroup( i18n("Text Option"), this);
     //grp->setRadioButtonExclusive( false );
-    grid2 = new QGridLayout(grp, 3, 1, 15, 7);
+    grid2 = new QGridLayout(grp, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
     fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
     multi = new QCheckBox( i18n("Go to line automatically"), grp);
@@ -3309,7 +3309,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
 
     grp = new QButtonGroup(i18n("Rotation"), this);
 
-    grid2 = new QGridLayout(grp, 2, 1, 15, 7);
+    grid2 = new QGridLayout(grp, 2, 1, KDialog::marginHint(), KDialog::spacingHint());
     fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
     angleRotation=new KIntNumInput((-dlg->textRotation), grp, 10);
@@ -3326,7 +3326,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     }
 
     grp = new QButtonGroup( i18n("Merge Cells"), this);
-    grid2 = new QGridLayout(grp, 2, 1, 15, 7);
+    grid2 = new QGridLayout(grp, 2, 1, KDialog::marginHint(), KDialog::spacingHint());
 
     fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
@@ -3338,7 +3338,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     grid3->addWidget(grp, 2, 0);
 
     grp = new QButtonGroup( i18n("Indent"), this);
-    grid2 = new QGridLayout(grp, 2, 1, 15, 7);
+    grid2 = new QGridLayout(grp, 2, 1, KDialog::marginHint(), KDialog::spacingHint());
     fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
@@ -3351,7 +3351,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDlg *
     grid3->addWidget(grp, 2, 1);
 
     grp = new QButtonGroup( i18n("Size of Cell"), this);
-    grid2 = new QGridLayout(grp, 3, 4, 15, 7);
+    grid2 = new QGridLayout(grp, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
     fHeight = grp->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
@@ -3866,7 +3866,7 @@ CellFormatPageBorder::CellFormatPageBorder( QWidget* parent, CellFormatDlg *_dlg
 
 void CellFormatPageBorder::InitializeGrids()
 {
-  QGridLayout *grid = new QGridLayout(this,5,2,15,15);
+  QGridLayout *grid = new QGridLayout(this,5,2,KDialog::marginHint(), KDialog::spacingHint());
   QGridLayout *grid2 = NULL;
   QGroupBox* tmpQGroupBox = NULL;
 
@@ -3897,7 +3897,7 @@ void CellFormatPageBorder::InitializeGrids()
   tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
   tmpQGroupBox->setTitle( i18n("Border") );
   tmpQGroupBox->setAlignment( AlignLeft );
-  grid2 = new QGridLayout(tmpQGroupBox,6,5,15,7);
+  grid2 = new QGridLayout(tmpQGroupBox,6,5,KDialog::marginHint(), KDialog::spacingHint());
   int fHeight = tmpQGroupBox->fontMetrics().height();
   grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
@@ -3925,7 +3925,7 @@ void CellFormatPageBorder::InitializeGrids()
   tmpQGroupBox->setTitle( i18n("Preselect") );
   tmpQGroupBox->setAlignment( AlignLeft );
 
-  grid2 = new QGridLayout(tmpQGroupBox,1,3,15,7);
+  grid2 = new QGridLayout(tmpQGroupBox,1,3,KDialog::marginHint(), KDialog::spacingHint());
 
   /* the "all" button is different depending on what kind of region is currently
      selected */
@@ -3964,7 +3964,7 @@ void CellFormatPageBorder::InitializeGrids()
   tmpQGroupBox->setTitle( i18n("Pattern") );
   tmpQGroupBox->setAlignment( AlignLeft );
 
-  grid2 = new QGridLayout(tmpQGroupBox,7,2,15,7);
+  grid2 = new QGridLayout(tmpQGroupBox,7,2,KDialog::marginHint(), KDialog::spacingHint());
   fHeight = tmpQGroupBox->fontMetrics().height();
   grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
@@ -3995,7 +3995,7 @@ void CellFormatPageBorder::InitializeGrids()
   grid2->addWidget(tmpQLabel,7,0);
 
   /* tack on the 'customize' border pattern selector */
-  QGridLayout *grid3 = new QGridLayout( 2, 2, 7 );
+  QGridLayout *grid3 = new QGridLayout( this, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
   customize  = new QCheckBox(i18n("Customize"),tmpQGroupBox);
   grid3->addWidget(customize,0,0);
   connect( customize, SIGNAL( clicked()), SLOT(cutomize_chosen_slot()) );
@@ -4029,7 +4029,7 @@ void CellFormatPageBorder::InitializeGrids()
   tmpQGroupBox->setTitle( i18n("Preview") );
   tmpQGroupBox->setAlignment( AlignLeft );
 
-  grid2 = new QGridLayout(tmpQGroupBox,1,1,14,7);
+  grid2 = new QGridLayout(tmpQGroupBox,1,1,KDialog::marginHint(), KDialog::spacingHint());
   fHeight = tmpQGroupBox->fontMetrics().height();
   grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
@@ -5043,7 +5043,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
 
     bBgColorUndefined = !dlg->bBgColor;
 
-    QGridLayout *grid = new QGridLayout(this,5,2,15,15);
+    QGridLayout *grid = new QGridLayout(this,5,2,KDialog::marginHint(), KDialog::spacingHint());
 
     QGroupBox* tmpQGroupBox;
     tmpQGroupBox = new QGroupBox( this, "GroupBox_20" );
@@ -5051,7 +5051,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
     tmpQGroupBox->setTitle( i18n("Pattern") );
     tmpQGroupBox->setAlignment( AlignLeft );
 
-    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,8,3,15,7);
+    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,8,3,KDialog::marginHint(), KDialog::spacingHint());
     int fHeight = tmpQGroupBox->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
@@ -5161,7 +5161,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDlg *_d
     tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
     tmpQGroupBox->setAlignment( AlignLeft );
 
-    grid2 = new QGridLayout(tmpQGroupBox,2,1,14,4);
+    grid2 = new QGridLayout(tmpQGroupBox,2,1,KDialog::marginHint(), KDialog::spacingHint());
     fHeight = tmpQGroupBox->fontMetrics().height();
     grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 

@@ -64,7 +64,7 @@ void LATEXImportDia::createDialog()
 	resize(size());
 	QWidget *page = new QWidget( this );
 	setMainWidget(page);
-	QBoxLayout *mainLayout = new QVBoxLayout(page, 0, spacingHint());
+	QBoxLayout *mainLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
 	styleBox = new QVButtonGroup(i18n("Document Style"), page);
 	mainLayout->addWidget(styleBox);
 

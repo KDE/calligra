@@ -133,7 +133,7 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   grid1->addMultiCellWidget(stylegroup,5,7,0,1);
   stylegroup->setFrameStyle(QFrame::NoFrame);
 
-  QGridLayout *grid2 = new QGridLayout(stylegroup,2,2,15,7);
+  QGridLayout *grid2 = new QGridLayout(stylegroup,2,2,KDialog::marginHint(), KDialog::spacingHint());
 
   trigstyle = new QRadioButton(i18n("Trigonometry mode"),stylegroup,"trigstyle");
   grid2->addWidget(trigstyle,0,0);

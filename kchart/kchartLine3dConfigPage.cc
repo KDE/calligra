@@ -7,6 +7,7 @@
 
 #include <kapplication.h>
 #include <klocale.h>
+#include <kdialog.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
@@ -18,10 +19,10 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
                                                           QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-  QGridLayout* layout = new QGridLayout(this, 2, 2,15,7 );
+  QGridLayout* layout = new QGridLayout(this, 2, 2,KDialog::marginHint(), KDialog::spacingHint() );
 
   QButtonGroup* gb = new QButtonGroup( i18n("3D Line Parameters"), this );
-  QGridLayout *grid1 = new QGridLayout(gb,3,2,15,7);
+  QGridLayout *grid1 = new QGridLayout(gb,3,2,KDialog::marginHint(), KDialog::spacingHint());
   layout->addWidget(gb,0,0);
 
 

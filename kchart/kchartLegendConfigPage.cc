@@ -26,7 +26,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
     QWidget( parent ),_params( params )
 {
   //Layout for 4 blocks
-  QGridLayout* layout = new QGridLayout( this, 2, 2, 15, 7 );
+  QGridLayout* layout = new QGridLayout( this, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
   //1. Block: Legend position
   QButtonGroup* gb = new QButtonGroup( 0, Qt::Vertical, i18n("Legend Position"), this );

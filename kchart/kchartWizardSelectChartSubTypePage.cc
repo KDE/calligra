@@ -26,7 +26,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
     _charttype = _chart->params()->chartType();
     chartSubType=true;
 
-    QGridLayout *grid1 = new QGridLayout(this,2,2,15,15);
+    QGridLayout *grid1 = new QGridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
 
     QVBoxLayout *lay1 = new QVBoxLayout(  );
     lay1->setMargin( KDialog::marginHint() );

@@ -9,6 +9,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kdialog.h>
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -24,9 +25,9 @@ KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* pa
                                                             QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
+    QGridLayout *grid1 = new QGridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
     QGroupBox* gb3 = new QGroupBox( i18n( "Parameter" ), this );
-    QGridLayout *grid3 = new QGridLayout(gb3,8,2,15,7);
+    QGridLayout *grid3 = new QGridLayout(gb3,8,2,KDialog::marginHint(), KDialog::spacingHint());
 
     polarMarker=new QCheckBox(i18n("Polar marker"),gb3);
     grid3->addWidget(polarMarker,2,0);

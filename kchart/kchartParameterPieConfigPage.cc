@@ -9,6 +9,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kdialog.h>
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -24,9 +25,9 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
                                                             QWidget* parent ) :
     QWidget( parent ),_params( params )
 {
-    QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
+    QGridLayout *grid1 = new QGridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
     QGroupBox* gb3 = new QGroupBox( i18n( "Parameter" ), this );
-    QGridLayout *grid3 = new QGridLayout(gb3,4,2,15,7);
+    QGridLayout *grid3 = new QGridLayout(gb3,4,2,KDialog::marginHint(), KDialog::spacingHint());
 
     pie3d=new QCheckBox(i18n("Pie 3D"),gb3);
     grid3->addWidget(pie3d,2,0);

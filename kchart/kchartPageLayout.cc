@@ -35,7 +35,7 @@ KChartPageLayout::KChartPageLayout( KChartParams* _params, QWidget* parent, cons
 
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
-    QGridLayout *grid = new QGridLayout(page, 4, 2, 15);
+    QGridLayout *grid = new QGridLayout(page, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel *lab=new QLabel(i18n("Left:"),page);
     grid->addWidget(lab,0,0);

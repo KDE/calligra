@@ -30,7 +30,7 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
                                             QWidget* parent, KoChart::Data *dat) :
     QWidget( parent ),_params( params ), data(dat)
 {
-  QGridLayout *grid = new QGridLayout(this,5,4,15,7);
+  QGridLayout *grid = new QGridLayout(this,5,4,KDialog::marginHint(), KDialog::spacingHint());
 
   list = new QListBox(this);
   list->resize( list->sizeHint() );

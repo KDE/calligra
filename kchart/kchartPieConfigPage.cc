@@ -26,7 +26,7 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
 {
     //    col=_params->colPie;
     pos=-1;
-    QGridLayout *grid = new QGridLayout(this,10,4,15,7);
+    QGridLayout *grid = new QGridLayout(this,10,4,KDialog::marginHint(), KDialog::spacingHint());
     list = new QListView( this );
     list->resize( list->sizeHint() );
     grid->addMultiCellWidget(list,0,9,0,0);

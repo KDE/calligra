@@ -16,16 +16,16 @@
 
 #include <kapplication.h>
 #include <klocale.h>
-
+#include <kdialog.h>
 
 KChartBarConfigPage::KChartBarConfigPage( QWidget* parent ) :
     QWidget( parent, "Bar diagramm config page" )
 {
-    QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
+    QGridLayout *grid1 = new QGridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
 
     QButtonGroup* gb = new QButtonGroup( i18n( "Overwrite Mode" ), this );
 
-    QGridLayout *grid2 = new QGridLayout(gb,5,1,15,7);
+    QGridLayout *grid2 = new QGridLayout(gb,5,1,KDialog::marginHint(), KDialog::spacingHint());
 
     _sidebysideRB = new QRadioButton( i18n( "&Side by side" ), gb );
     _sidebysideRB->resize( _sidebysideRB->sizeHint() );
@@ -58,7 +58,7 @@ KChartBarConfigPage::KChartBarConfigPage( QWidget* parent ) :
     grid1->addWidget(gb,0,0);
 
     QGroupBox* gb2 = new QGroupBox( i18n( "X-Axis Layout" ), this );
-    QGridLayout *grid3 = new QGridLayout(gb2,3,2,15,7);
+    QGridLayout *grid3 = new QGridLayout(gb2,3,2,KDialog::marginHint(), KDialog::spacingHint());
 
     QLabel* label = new QLabel( i18n( "&Distance between bars as a percentage of bar width" ), gb2 );
     label->resize( label->sizeHint() );

@@ -54,7 +54,7 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc* doc )
 void PgConfDia::setupPageGeneral()
 {
     QFrame* generalPage = addPage( i18n("&General") );
-    QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, 0, spacingHint() );
+    QVBoxLayout *generalLayout = new QVBoxLayout( generalPage, KDialog::marginHint(), KDialog::spacingHint() );
     generalLayout->setAutoAdd( true );
 
     manualSwitch = new QCheckBox( i18n( "&Manual switch to next step" ), generalPage );
@@ -71,7 +71,7 @@ void PgConfDia::setupPageGeneral()
     new QLabel( i18n("Speed:"), generalPage );
 
     QWidget* sp = new QWidget( generalPage );
-    QBoxLayout* speedLayout = new QHBoxLayout( sp, 0, 2 );
+    QBoxLayout* speedLayout = new QHBoxLayout( sp, 0, spacingHint() );
     speedLayout->setAutoAdd( true );
 
     new QLabel( i18n("Slow"), sp );

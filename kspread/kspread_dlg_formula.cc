@@ -69,7 +69,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    QGridLayout *grid1 = new QGridLayout(page,11,2,15,7);
+    QGridLayout *grid1 = new QGridLayout(page,11,2,KDialog::marginHint(), KDialog::spacingHint());
 
     searchFunct = new KLineEdit(page);
     QSizePolicy sp3( QSizePolicy::Preferred, QSizePolicy::Fixed );

@@ -41,7 +41,7 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  QGridLayout *grid1 = new QGridLayout( page,10,3,15,7);
+  QGridLayout *grid1 = new QGridLayout( page,10,3,KDialog::marginHint(), KDialog::spacingHint());
 
   QLabel *lab=new QLabel(page);
   lab->setText(i18n("List:" ));

@@ -179,7 +179,7 @@ void PNGExportDia::setupGUI()
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    QBoxLayout* mainLayout = new QVBoxLayout( page, 0, spacingHint() );
+    QBoxLayout* mainLayout = new QVBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
 
     proportional = new QCheckBox( page, "proportional" );
     proportional->setText( i18n( "Keep ratio" ) );

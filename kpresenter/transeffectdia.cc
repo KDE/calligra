@@ -106,7 +106,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    QBoxLayout *topLayout = new QHBoxLayout( page, 0, spacingHint() );
+    QBoxLayout *topLayout = new QHBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
     QWidget* leftpart = new QWidget( page );
     topLayout->addWidget( leftpart );
     QWidget* rightpart = new QWidget( page );
@@ -114,7 +114,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
     // right-side of the dialog, for showing effect preview
 
-    QVBoxLayout *rightlayout = new QVBoxLayout( rightpart, 0, spacingHint() );
+    QVBoxLayout *rightlayout = new QVBoxLayout( rightpart, KDialog::marginHint(), KDialog::spacingHint() );
     rightlayout->setAutoAdd( true );
 
     effectPreview = new KPEffectPreview( rightpart, doc, view );
@@ -132,7 +132,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     pageEffect = pg->getPageEffect();
     speed = doc->getPresSpeed();
 
-    QVBoxLayout *leftlayout = new QVBoxLayout( leftpart, 0, spacingHint() );
+    QVBoxLayout *leftlayout = new QVBoxLayout( leftpart, KDialog::marginHint(), KDialog::spacingHint() );
     leftlayout->setAutoAdd( true );
 
     new QLabel( i18n("Effect:"), leftpart );
@@ -191,7 +191,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     new QLabel( i18n("Speed:"), leftpart );
 
     QWidget* sp = new QWidget( leftpart );
-    QBoxLayout* speedLayout = new QHBoxLayout( sp, 0, 2 );
+    QBoxLayout* speedLayout = new QHBoxLayout( sp, KDialog::marginHint(), KDialog::spacingHint() );
     speedLayout->setAutoAdd( true );
 
     new QLabel( i18n("Slow"), sp );
@@ -205,7 +205,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
 
 
     QWidget* previewgrp = new QWidget( leftpart );
-    QBoxLayout* previewLayout = new QHBoxLayout( previewgrp, 0, 2 );
+    QBoxLayout* previewLayout = new QHBoxLayout( previewgrp, KDialog::marginHint(), KDialog::spacingHint() );
     previewLayout->setAutoAdd( true );
 
     automaticPreview = new QCheckBox( i18n( "Automatic preview" ), previewgrp );
@@ -231,7 +231,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     connect( checkSoundEffect, SIGNAL( clicked() ), this, SLOT( soundEffectChanged() ) );
 
     QWidget* soundgrp = new QWidget( leftpart );
-    QBoxLayout* soundLayout = new QHBoxLayout( soundgrp, 0, 2 );
+    QBoxLayout* soundLayout = new QHBoxLayout( soundgrp, KDialog::marginHint(), KDialog::spacingHint() );
     soundLayout->setAutoAdd( true );
 
     lSoundEffect = new QLabel( i18n( "File name:" ), soundgrp );
