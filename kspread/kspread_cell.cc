@@ -5110,7 +5110,19 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
             double value = element.attribute( "table:value" ).toDouble( &ok ); 
             if( ok ) setValue( value );
         }
-    
+
+    // number formatted as percentage
+    if( element.hasAttribute( "table:value-type" ) )
+        if( element.attribute( "table:value-type" ) == "percentage" )
+        {
+            bool ok = false;
+            double value = element.attribute( "table:value" ).toDouble( &ok ); 
+            if( ok )
+            {
+                setValue( value );
+                setFormatType( KSpreadFormat::Percentage );
+            }
+        }                    
     
     // cell comment/annotation
     QDomElement annotationElement = element.namedItem( "office:annotation" ).toElement();
