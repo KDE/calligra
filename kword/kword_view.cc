@@ -1142,15 +1142,15 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   QString tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/undo.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
-  m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editUndo", true, i18n("Undo"), -1 );
-  m_vToolBarEdit->setItemEnabled(m_idButtonEdit_Undo,false);
+  m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo", true, i18n("Undo"), -1 );
+  m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
 
   // redo
   tmp = kapp->kde_datadir().copy();
   tmp += "/kword/toolbar/redo.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
-  m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editRedo", true, i18n("Redo"), -1);
-  m_vToolBarEdit->setItemEnabled(m_idButtonEdit_Redo,false);
+  m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo", true, i18n("Redo"), -1);
+  m_vToolBarEdit->setItemEnabled(ID_REDO,false);
   
   m_vToolBarEdit->insertSeparator( -1 );
 

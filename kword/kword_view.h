@@ -335,6 +335,8 @@ protected:
   static const int ID_SUPERSCRIPT = 23;
   static const int ID_BRD_STYLE = 24;
   static const int ID_BRD_WIDTH = 25;
+  static const int ID_REDO = 26;
+  static const int ID_UNDO = 27;
 
 };
 
