@@ -335,6 +335,30 @@ void KPObject::rotateObject(QPainter *paint,KoZoomHandler *_zoomHandler)
     paint->setWorldMatrix( m, true );
 }
 
+
+void KPObject::rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandler)
+{
+    KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
+    double pw = br.width();
+    double ph = br.height();
+    KoRect rr = br;
+    double yPos = -rr.y();
+    double xPos = -rr.x();
+    rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
+
+    double sx = 0;
+    double sy = 0;
+    getShadowCoords( sx, sy,_zoomHandler );
+
+    QWMatrix m;
+    m.translate( _zoomHandler->zoomItX(pw / 2.0), _zoomHandler->zoomItY(ph / 2.0) );
+    m.rotate( angle );
+    m.translate( _zoomHandler->zoomItX(rr.left() + xPos + sx), _zoomHandler->zoomItY(rr.top() + yPos + sy) );
+
+    paint->setWorldMatrix( m, true );
+}
+
+
 /*======================== contain point ? =======================*/
 bool KPObject::contains( const KoPoint &_point,KoZoomHandler *_zoomHandler ) const
 {
@@ -805,25 +829,7 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
         else
         {
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-
-            KoRect br = KoRect( 0, 0, ow, oh );
-            double pw = br.width();
-            double ph = br.height();
-            KoRect rr = br;
-            double yPos = -rr.y();
-            double xPos = -rr.x();
-            rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
-
-            double sx = 0;
-            double sy = 0;
-            getShadowCoords( sx, sy, _zoomHandler );
-
-            QWMatrix m;
-            m.translate( _zoomHandler->zoomItX(pw / 2), _zoomHandler->zoomItY(ph / 2) );
-            m.rotate( angle );
-            m.translate( _zoomHandler->zoomItX( rr.left() + xPos + sx),_zoomHandler->zoomItY( rr.top() + yPos + sy) );
-
-            _painter->setWorldMatrix( m, true );
+            rotateObjectWithShadow(_painter, _zoomHandler);
             paint( _painter, _zoomHandler, true /* drawing shadow */ );
         }
 

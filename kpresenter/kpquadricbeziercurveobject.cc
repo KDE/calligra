@@ -164,25 +164,7 @@ void KPQuadricBezierCurveObject::draw( QPainter *_painter, KoZoomHandler*_zoomHa
         }
         else {
             _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
-
-            KoRect br = KoRect( 0, 0, ow, oh );
-            double pw = br.width();
-            double ph = br.height();
-            KoRect rr = br;
-            double yPos = -rr.y();
-            double xPos = -rr.x();
-            rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
-
-            double sx = 0;
-            double sy = 0;
-            getShadowCoords( sx, sy, _zoomHandler );
-
-            QWMatrix m;
-            m.translate( _zoomHandler->zoomItX(pw / 2), _zoomHandler->zoomItY(ph / 2) );
-            m.rotate( angle );
-            m.translate( _zoomHandler->zoomItX(rr.left() + xPos +  sx), _zoomHandler->zoomItY(rr.top() + yPos + sy) );
-
-            _painter->setWorldMatrix( m, true );
+            rotateObjectWithShadow(_painter,_zoomHandler );
             paint( _painter,_zoomHandler );
         }
 
