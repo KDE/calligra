@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KWORD_FORMULARAMESETEDIT_IFACE_H
+#ifndef KWORD_FORMULAFRAMESETEDIT_IFACE_H
 #define KWORD_FORMULAFRAMESETEDIT_IFACE_H
 
 #include <KoDocumentIface.h>
@@ -59,4 +59,4 @@ private:
 
 };
 
-#endif
+#endif // KWORD_FORMULAFRAMESETEDIT_IFACE_H
