@@ -179,6 +179,7 @@ RTFProperty propertyTable[] =
 	MEMBER(	0L,		"sl",		setNumericProperty,	state.layout.spaceBetween, 0 ),
 	MEMBER(	"@stylesheet",	"snext",	setNumericProperty,	style.next, 0 ),
 	MEMBER(	0L,		"strike",	setToggleProperty,	state.format.strike, 0 ),
+	MEMBER(	0L,		"striked",	setToggleProperty,	state.format.striked, 0 ),
 	MEMBER(	0L,		"sub",		setEnumProperty,	state.format.vertAlign, RTFFormat::SubScript ),
 	MEMBER(	0L,		"super",	setEnumProperty,	state.format.vertAlign, RTFFormat::SuperScript ),
 	PROP(	0L,		"tab",		insertSymbol,		0L, 0x0009 ),
@@ -201,7 +202,7 @@ RTFProperty propertyTable[] =
 	MEMBER(	0L,		"uc",		setNumericProperty,	state.format.uc, 0 ),
 	MEMBER(	0L,		"ul",		setToggleProperty,	state.format.underline, 0 ),
 	MEMBER(	0L,		"uld",		setFlagProperty,	state.format.underline, true ),
-	MEMBER(	0L,		"uldb",		setFlagProperty,	state.format.underline, true ),
+	MEMBER(	0L,		"uldb",		setFlagProperty,	state.format.underlined, true ),
 	MEMBER(	0L,		"ulnone",	setFlagProperty,	state.format.underline, false ),
 	MEMBER(	0L,		"ulw",		setFlagProperty,	state.format.underline, true ),
 	MEMBER(	0L,		"up",		setUpProperty,		state.format.baseline, 6 ),
@@ -264,8 +265,8 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     }
 
     // Verify document type and version (RTF version 1.x)
-    
-    // Change this to > 1 so to be able to open RTF0 documents created by "Ted" etc... 
+
+    // Change this to > 1 so to be able to open RTF0 documents created by "Ted" etc...
     // RTF Version 0 should be compatible with version 1.
 
     token.next();
@@ -698,9 +699,11 @@ void RTFImport::setPlainFormatting( RTFProperty * )
     format.uc		= 1;
     format.vertAlign	= RTFFormat::Normal;
     format.underline	= false;
+    format.underlined   = false;
     format.bold		= false;
     format.italic	= false;
     format.strike	= false;
+    format.striked	= false;
     format.hidden	= false;
     format.caps		= false;
 }
@@ -1050,9 +1053,18 @@ void RTFImport::parseFontTable( RTFProperty * )
 	    QFont qFont( font.name );
 	    qFont.setFixedPitch( (font.fixedPitch == 1) );
 	    qFont.setStyleHint( font.styleHint );
-	    QFontInfo info( qFont );
-
-	    fontTable.insert( state.format.font, info.family().utf8() );
+	    QFontInfo* info=new QFontInfo( font.name );
+	    for(;!qFont.exactMatch();)
+	    {
+		int space=font.name.findRev(' ', font.name.length());
+		if(space==-1)
+		    break;
+		font.name.truncate(space);
+		qFont.setFamily( font.name );
+	    }
+	    delete info;
+	    info=new QFontInfo( font.name );
+	    fontTable.insert( state.format.font, info->family().utf8() );
 	    font.name.truncate( 0 );
 	    font.styleHint = QFont::AnyStyle;
 	    font.fixedPitch = 0;
@@ -1501,16 +1513,24 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 	    node.setAttribute( "value", format.fmt.italic );
 	    node.closeNode( "ITALIC" );
 	}
-	if (!baseFormat || format.fmt.underline != baseFormat->underline)
+	if (!baseFormat || format.fmt.underline != baseFormat->underline || format.fmt.underlined != baseFormat->underlined)
 	{
 	    node.addNode( "UNDERLINE" );
-	    node.setAttribute( "value", format.fmt.underline );
+            QCString st;
+            st.setNum(format.fmt.underline);
+            if ( format.fmt.underlined )
+                st="double";
+	    node.setAttribute( "value", st );
 	    node.closeNode( "UNDERLINE" );
 	}
-	if (!baseFormat || format.fmt.strike != baseFormat->strike)
+	if (!baseFormat || format.fmt.strike != baseFormat->strike || format.fmt.striked != baseFormat->striked)
 	{
 	    node.addNode( "STRIKEOUT" );
-	    node.setAttribute( "value", format.fmt.strike );
+	    QCString st;
+	    st.setNum(format.fmt.strike);
+	    if(format.fmt.striked)
+		st="double";
+	    node.setAttribute( "value", st );
 	    node.closeNode( "STRIKEOUT" );
 	}
 	if (vertAlign != vertAlign0)

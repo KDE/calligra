@@ -123,7 +123,7 @@ struct RTFFormat
     int font, fontSize, baseline;
     int color, bgcolor;
     int uc;
-    bool underline, bold, italic, strike, hidden, caps;
+    bool underline, underlined, bold, italic, strike, striked, hidden, caps;
 };
 
 // Style sheet entry
