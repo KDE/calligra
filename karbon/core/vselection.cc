@@ -118,6 +118,8 @@ VSelection::append( const KoRect& rect, bool selectObjects )
 
 			if( op.visit( *itr.current() ) )
 				success = true;
+			else
+				itr.current()->setState( normal );
 		}
 	}
 

@@ -52,7 +52,7 @@ VSelectNodesTool::activate()
 	if( m_state == normal )
 		view()->statusMessage()->setText( i18n( "EditNode" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
-	view()->part()->document().selection()->setState( VObject::edit );
+	view()->part()->document().selection()->setState( VObject::selected );
 }
 
 void
@@ -183,7 +183,7 @@ VSelectNodesTool::mouseDragRelease()
 		// erase old object:
 		draw();
 
-		view()->part()->document().selection()->clear();
+		view()->part()->document().selection()->append();	// select all
 		view()->part()->document().selection()->append(
 			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(),
 			false );
