@@ -38,6 +38,7 @@
 KexiQueryPartProxy::KexiQueryPartProxy(KexiQueryPart *part,KexiView *view)
  : KexiProjectHandlerProxy(part,view),KXMLGUIClient()
 {
+    setInstance(part->kexiProject()->instance());
 	m_queryPart=part;
 	kdDebug() << "KexiQueryPartProxy::KexiQueryPartProxy()" << endl;
 

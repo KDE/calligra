@@ -39,13 +39,13 @@ class KexiTablePartProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
 		virtual KexiPartPopupMenu	*itemContext(const QString& identifier);
 
 	public slots:
-		virtual void executeItem(const QString& identifier);	
+		virtual void executeItem(const QString& identifier);
 		void slotCreate();
 		void slotOpen(const QString& identifier);
 		void slotAlter(const QString& identifier);
 		void slotDrop(const QString& identifier);
 
-		void slotImport(int filter);
+		void slotImport(/*int filter*/);
 
 	private:
 		KexiTablePart *m_tablePart;

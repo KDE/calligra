@@ -34,7 +34,6 @@
 #include "kexiprojecthandleritem.h"
 #include "kexidatatable.h"
 #include "kexialtertable.h"
-#include "tables/kexitablefiltermanager.h"
 
 #include <kexidberror.h>
 
@@ -43,7 +42,6 @@ KexiTablePart::KexiTablePart(QObject *project,const char *,const QStringList &)
 {
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
 
-	m_filters = new KexiTableFilterManager(this, "tbfm");
 	getTables();
 }
 
