@@ -190,6 +190,9 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   QScrollBar* vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);
   QScrollBar* horzScrollBar = new QScrollBar(QScrollBar::Horizontal,tabSplit);
 
+  QValueList<int> sizes;
+  sizes << tabSplit->width() / 2 << tabSplit->width() / 2;
+  tabSplit->setSizes(sizes);
   QHBoxLayout* tabLayout = new QHBoxLayout();
   tabLayout->addWidget(tabSplit);
 
@@ -392,8 +395,10 @@ void KivioView::setupActions()
   m_selectAll = KStdAction::selectAll(this, SLOT(selectAllStencils()), actionCollection(), "selectAllStencils");
   m_selectNone = KStdAction::deselect(this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils");
 
-  m_groupAction = new KAction( i18n("Group Selected Stencils"), "group", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
-  m_ungroupAction = new KAction( i18n("Ungroup Selected Stencils"), "ungroup", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
+  m_groupAction = new KAction( i18n("Group Selection"), "group", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
+  m_groupAction->setWhatsThis(i18n("Group selected objects into a single stencil"));
+  m_ungroupAction = new KAction( i18n("Ungroup"), "ungroup", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
+  m_ungroupAction->setWhatsThis(i18n("Break up a selected group stencil"));
 
   m_stencilToFront = new KAction( i18n("Bring to Front"), "bring_forward", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
   m_stencilToBack = new KAction( i18n("Send to Back"), "send_backward", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
@@ -409,23 +414,23 @@ void KivioView::setupActions()
   m_arrowHeadsMenuAction->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
 
   /* Create the fg color button */
-  m_setFGColor = new TKSelectColorAction( i18n("Set Foreground Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor" );
-  m_setFGColor->setWhatsThis(i18n("The foreground color allows you to choose a color for the lines of the stencils."));
+  m_setFGColor = new TKSelectColorAction( i18n("Line Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor" );
+  m_setFGColor->setWhatsThis(i18n("The line color allows you to choose a color for the lines of the stencils."));
   connect(m_setFGColor,SIGNAL(activated()),SLOT(setFGColor()));
-  m_setBGColor = new TKSelectColorAction( i18n("Set Background Color"), TKSelectColorAction::FillColor, actionCollection(), "setBGColor" );
+  m_setBGColor = new TKSelectColorAction( i18n("Fill Color"), TKSelectColorAction::FillColor, actionCollection(), "setBGColor" );
   m_setBGColor->setWhatsThis(i18n("You can choose a color for the background of a stencil by using this button."));
   connect(m_setBGColor,SIGNAL(activated()),SLOT(setBGColor()));
 
   // Text bar
-  m_setFontFamily = new KFontAction( i18n( "Set Font Family" ), 0, actionCollection(), "setFontFamily" );
+  m_setFontFamily = new KFontAction( i18n( "Font Family" ), 0, actionCollection(), "setFontFamily" );
   connect( m_setFontFamily, SIGNAL(activated(const QString&)), SLOT(setFontFamily(const QString&)) );
 
-  m_setFontSize = new KFontSizeAction( i18n( "Set Font Size" ), 0, actionCollection(), "setFontSize" );
+  m_setFontSize = new KFontSizeAction( i18n( "Font Size" ), 0, actionCollection(), "setFontSize" );
   connect( m_setFontSize, SIGNAL( fontSizeChanged( int ) ),
            this, SLOT( setFontSize(int ) ) );
 
 
-  m_setTextColor = new TKSelectColorAction( i18n("Set Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
+  m_setTextColor = new TKSelectColorAction( i18n("Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
   connect( m_setTextColor, SIGNAL(activated()), SLOT(setTextColor()) );
 
   m_setBold = new KToggleAction( i18n("Toggle Bold Text"), "text_bold", 0, actionCollection(), "setFontBold" );
@@ -1305,9 +1310,6 @@ void KivioView::updateToolBars()
 
         m_menuTextFormatAction->setEnabled( false );
         m_menuStencilConnectorsAction->setEnabled( false );
-
-        m_editCut->setEnabled(false);
-        m_editCopy->setEnabled(false);
     }
     else
     {
@@ -1359,14 +1361,33 @@ void KivioView::updateToolBars()
             m_setFGColor->setEnabled (false);
             m_setBGColor->setEnabled (false);
         }
-
-        m_editCut->setEnabled(true);
-        m_editCopy->setEnabled(true);
     }
 
     m_pStencilGeometryPanel->setEmitSignals(true);
     m_setArrowHeads->setEmitSignals(true);
     m_pProtectionPanel->updateCheckBoxes();
+
+    if(activePage()->selectedStencils()->count() > 1) {
+      m_groupAction->setEnabled(true);
+    } else {
+      m_groupAction->setEnabled(false);
+    }
+    
+    if(activePage()->selectedStencils()->count() > 0) {
+      m_editCut->setEnabled(true);
+      m_editCopy->setEnabled(true);
+      m_ungroupAction->setEnabled(true);
+      m_stencilToBack->setEnabled(true);
+      m_stencilToFront->setEnabled(true);
+    } else {
+      m_editCut->setEnabled(false);
+      m_editCopy->setEnabled(false);
+      m_ungroupAction->setEnabled(false);
+      m_stencilToBack->setEnabled(false);
+      m_stencilToFront->setEnabled(false);
+      m_setArrowHeads->setEnabled (false);
+      m_arrowHeadsMenuAction->setEnabled (false);
+    }
 }
 
 void KivioView::slotSetStartArrow( int i )
