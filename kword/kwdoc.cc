@@ -1152,6 +1152,11 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles 
         __pgLayout.orientation = ( (properties.attribute("style:print-orientation") != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
         double width = KoUnit::parseValue(properties.attribute("fo:page-width"));
         double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
+        if ( width <= 0 || height <= 0 )
+        {
+            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( width ).arg( height ) );
+            return false;
+        }
         // guessFormat takes millimeters
         if ( __pgLayout.orientation == PG_LANDSCAPE )
             __pgLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(height), POINT_TO_MM(width) );
@@ -1319,6 +1324,12 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         __pgLayout.orientation = static_cast<KoOrientation>( KWDocument::getAttribute( paper, "orientation", 0 ) );
         __pgLayout.ptWidth = getAttribute( paper, "width", 0.0 );
         __pgLayout.ptHeight = getAttribute( paper, "height", 0.0 );
+        if ( __pgLayout.ptWidth <= 0 || __pgLayout.ptHeight <= 0 )
+        {
+            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( __pgLayout.ptWidth ).arg( __pgLayout.ptHeight ) );
+            return false;
+        }
+
         __hf.header = static_cast<KoHFType>( KWDocument::getAttribute( paper, "hType", 0 ) );
         __hf.footer = static_cast<KoHFType>( KWDocument::getAttribute( paper, "fType", 0 ) );
         __hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
