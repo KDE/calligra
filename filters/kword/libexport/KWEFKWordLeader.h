@@ -70,6 +70,7 @@ class KWEFKWordLeader
         bool doFullSpellCheckIgnoreWord (const QString& ignoreword);
         bool doHeader(const HeaderData&);
         bool doFooter(const FooterData&);
+        bool doDeclareNonInlinedFramesets( QValueList<FrameAnchor>& pictureAnchors, QValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
 
         QValueList<FootnoteData> footnoteList;
 

@@ -1100,6 +1100,7 @@ void ProcessDocTag ( QDomNode         myNode,
     ProcessSubtags (myNode, tagProcessingList, leader);
 
     leader->doCloseHead();
+    leader->doDeclareNonInlinedFramesets( leader->m_nonInlinedPictureAnchors, leader->m_nonInlinedTableAnchors );
     leader->doOpenBody();
 
     leader->doFullDocument (paraList);
@@ -1256,6 +1257,14 @@ bool KWEFKWordLeader::doFooter ( const FooterData& footer )
 {
     if ( m_worker )
         return m_worker->doFooter (footer);
+
+    return false;
+}
+
+bool KWEFKWordLeader::doDeclareNonInlinedFramesets( QValueList<FrameAnchor>& pictureAnchors, QValueList<FrameAnchor>& tableAnchors )
+{
+    if ( m_worker )
+        return m_worker->doDeclareNonInlinedFramesets( pictureAnchors, tableAnchors );
 
     return false;
 }

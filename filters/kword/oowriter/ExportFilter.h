@@ -87,6 +87,7 @@ public:
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doVariableSettings(const VariableSettingsData& vs);
     virtual bool doOpenBody (void);
+    virtual bool doDeclareNonInlinedFramesets( QValueList<FrameAnchor>& pictureAnchors, QValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,

@@ -2117,6 +2117,13 @@ bool OOWriterWorker::doVariableSettings(const VariableSettingsData& vs)
     return true;
 }
 
+bool OOWriterWorker::doDeclareNonInlinedFramesets( QValueList<FrameAnchor>& pictureAnchors, QValueList<FrameAnchor>& tableAnchors )
+{
+    m_nonInlinedPictureAnchors = pictureAnchors;
+    m_nonInlinedTableAnchors = tableAnchors;
+    return true;
+}
+
 void OOWriterWorker::declareFont(const QString& fontName)
 {
     if (fontName.isEmpty())
