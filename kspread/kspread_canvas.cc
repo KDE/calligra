@@ -611,10 +611,10 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* table,
         int col = selectionInfo()->marker().x();
         int row = selectionInfo()->marker().y();
         KSpreadCell * cell = table->cellAt( col,row );
-        if ( cell && cell->getValidity() && cell->getValidity()->displayValidationInformation)
+        if ( cell && cell->getValidity(0) && cell->getValidity()->displayValidationInformation)
         {
-            QString title = cell->getValidity()->titleInfo;
-            QString message = cell->getValidity()->messageInfo;
+            QString title = cell->getValidity(0)->titleInfo;
+            QString message = cell->getValidity(0)->messageInfo;
             if ( title.isEmpty() && message.isEmpty() )
                 return;
 
