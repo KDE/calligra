@@ -15,8 +15,3 @@ METASOURCES = AUTO
 service_DATA = kpresenter_ooimpress_import.desktop
 
 servicedir = $(kde_servicesdir)
-
-mimedir = $(kde_mimedir)/application
-mime_DATA = x-ooimpress.desktop
-
-EXTRA_DIST = $(mime_DATA)

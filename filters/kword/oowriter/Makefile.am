@@ -15,8 +15,3 @@ METASOURCES = AUTO
 service_DATA = kword_oowriter_import.desktop
 
 servicedir = $(kde_servicesdir)
-
-mimedir = $(kde_mimedir)/application
-mime_DATA = x-oowriter.desktop
-
-EXTRA_DIST = $(mime_DATA)
