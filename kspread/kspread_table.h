@@ -805,6 +805,11 @@ public:
     const QBrush& emptyBrush() const { return m_emptyBrush; }
     const QColor& emptyColor() const { return m_emptyColor; }
 
+    /**
+    * used for refreshing view when you hide/show scrollbar
+    */
+    void refreshInterface();
+
 signals:
     void sig_updateView( KSpreadTable *_table );
     void sig_updateView( KSpreadTable *_table, const QRect& );
@@ -831,7 +836,7 @@ signals:
     void sig_TableShown( KSpreadTable* table);
     void sig_TableRemoved( KSpreadTable* table);
     void sig_TableActivated( KSpreadTable* );
-
+    void sig_RefreshView( KSpreadTable* );
 
 protected:
     /**

@@ -66,6 +66,7 @@ class DCOPObject;
 #include <koDocument.h>
 #include <koToolBox.h>
 #include <koDataTool.h>
+#include <kglobalsettings.h>
 
 /**
  */
@@ -158,12 +159,21 @@ public:
      */
     KoDocument *hitTest( const QPoint &pos );
 
-
+     /**
+     * hide/show scrollbar
+     */
     void setShowVerticalScrollBar(bool _show) {   m_bVerticalScrollBarShow=_show;}
     void setShowHorizontalScrollBar(bool _show) {   m_bHorizontalScrollBarShow=_show;}
 
     bool getShowVerticalScrollBar() { return  m_bVerticalScrollBarShow;}
     bool getShowHorizontalScrollBar() {  return  m_bHorizontalScrollBarShow;}
+
+    /**
+    * completion mode
+    */
+
+    KGlobalSettings::Completion completionMode( ) { return m_iCompletionMode;}
+    void setCompletionMode( KGlobalSettings::Completion _complMode) {  m_iCompletionMode=_complMode;}
 
     void initConfig();
 
@@ -362,6 +372,7 @@ public slots:
     void slotTableShown( KSpreadTable*_table );
     void slotTableRemoved( KSpreadTable*_table );
     void slotTableActivated( KSpreadTable* table );
+    void slotRefreshView( KSpreadTable* table );
 
     virtual int leftBorder() const;
     virtual int rightBorder() const;
@@ -603,6 +614,11 @@ private:
     */
     bool m_bVerticalScrollBarShow;
     bool m_bHorizontalScrollBarShow;
+
+    /**
+    * completion mode 
+    */
+    KGlobalSettings::Completion m_iCompletionMode;
 };
 
 #endif

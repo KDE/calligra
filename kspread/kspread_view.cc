@@ -120,6 +120,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_dcop = 0;
     m_bLoading =false;
+    m_iCompletionMode=KGlobalSettings::CompletionAuto;
 
     m_bVerticalScrollBarShow=true;
     m_bHorizontalScrollBarShow=true;
@@ -466,6 +467,7 @@ if( config->hasGroup("Parameters" ))
         config->setGroup( "Parameters" );
         m_bHorizontalScrollBarShow=config->readBoolEntry("Horiz ScrollBar",true);
         m_bVerticalScrollBarShow=config->readBoolEntry("Vert ScrollBar",true);
+        m_iCompletionMode=(KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto));
         }
 }
 
@@ -1241,6 +1243,8 @@ void KSpreadView::addTable( KSpreadTable *_t )
                       this, SLOT( slotTableRemoved( KSpreadTable* ) ) );
     QObject::connect( _t, SIGNAL( sig_TableActivated( KSpreadTable* ) ),
                       this, SLOT( slotTableActivated( KSpreadTable* ) ) );
+    QObject::connect( _t, SIGNAL( sig_RefreshView( KSpreadTable* ) ),
+                      this, SLOT( slotRefreshView( KSpreadTable* ) ) );
     // ########### Why do these signals not send a pointer to the table?
     // This will lead to bugs.
     QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
@@ -1300,8 +1304,13 @@ void KSpreadView::setActiveTable( KSpreadTable *_t,bool updateTable )
   m_pCanvas->slotMaxColumn( m_pTable->maxColumn() );
   m_pCanvas->slotMaxRow( m_pTable->maxRow() );
   }
-
 }
+
+void KSpreadView::slotRefreshView( KSpreadTable* )
+{                                                        
+        refreshView();
+}
+
 void KSpreadView::slotTableActivated( KSpreadTable* table )
 {
   m_pTabBar->setActiveTab( table->tableName() );
@@ -1850,7 +1859,7 @@ int KSpreadView::bottomBorder() const
 }
 
 void KSpreadView::refreshView()
-{
+{                                                
     m_pToolWidget->show();
     // If this value (30) is changed then topBorder() needs to
     // be changed, too.

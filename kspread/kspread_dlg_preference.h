@@ -24,6 +24,7 @@
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qrect.h>
 #include <kdialogbase.h>
 #include <knuminput.h>
@@ -63,12 +64,14 @@ public:
   configure( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   void apply();
 
+  void initComboBox();
 protected:
   KSpreadView* m_pView;
   KIntNumInput  *nbPage;
   QCheckBox *showVScrollBar;
   QCheckBox *showHScrollBar;
   KConfig* config;
+  QComboBox *typeCompletion;
 } ;
 
 

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999, 2000 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -167,7 +166,6 @@ parameterLocale::parameterLocale( KSpreadView* _view,QWidget *parent , char *nam
 configure::configure( KSpreadView* _view,QWidget *parent , char *name )
  :QWidget ( parent,name)
  {
-
   m_pView = _view;
   bool vertical=true;
   bool horizontal=true;
@@ -203,10 +201,50 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   lay1->addWidget(showHScrollBar);
   showHScrollBar->setChecked(horizontal);
 
+  QLabel *label=new QLabel(tmpQGroupBox);
+  label->setText(i18n("Completion mode :"));
+  lay1->addWidget(label);
+
+  typeCompletion=new QComboBox( tmpQGroupBox);
+  QStringList listType;
+  listType+=i18n("None");
+  listType+=i18n("Manual");
+  listType+=i18n("Popup");
+  listType+=i18n("Automatic");
+  listType+=i18n("Semi-Automatic");
+  typeCompletion->insertStringList(listType);
+  typeCompletion->setCurrentItem(0);
+  lay1->addWidget(typeCompletion);
+  initComboBox();
   box->addWidget( tmpQGroupBox);
 
 }
 
+void configure::initComboBox()
+{
+switch( m_pView->completionMode( ))
+        {
+        case  KGlobalSettings::CompletionNone:
+                typeCompletion->setCurrentItem(0);
+                break;
+        case  KGlobalSettings::CompletionAuto:
+                typeCompletion->setCurrentItem(3);
+                break;
+        case  KGlobalSettings::CompletionMan:
+                typeCompletion->setCurrentItem(4);
+                break;
+        case  KGlobalSettings::CompletionShell:
+                typeCompletion->setCurrentItem(1);
+                break;
+        case  KGlobalSettings::CompletionPopup:
+                typeCompletion->setCurrentItem(2);
+                break;
+        default :
+                typeCompletion->setCurrentItem(0);
+                break;
+        }
+
+}
 void configure::apply()
 {
 config->setGroup( "Parameters" );
@@ -229,9 +267,30 @@ if( m_pView->vertScrollBar()->isVisible()!=showVScrollBar->isChecked())
         else
                 m_pView->vertScrollBar()->hide();
         m_pView->setShowVerticalScrollBar(showVScrollBar->isChecked());
-        m_pView->refreshView();
+        m_pView->activeTable()->refreshInterface();
         }
-
-
+switch(typeCompletion->currentItem())
+        {
+        case 0:
+                m_pView->setCompletionMode(KGlobalSettings::CompletionNone);
+                config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionNone);
+                break;
+        case 1:
+                m_pView->setCompletionMode(KGlobalSettings::CompletionShell);
+                config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionShell);
+                break;
+        case 2:
+                m_pView->setCompletionMode(KGlobalSettings::CompletionPopup);
+                config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionPopup);
+                break;
+        case 3:
+                m_pView->setCompletionMode(KGlobalSettings::CompletionAuto);
+                config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionAuto);
+                break;
+        case 4:
+                m_pView->setCompletionMode(KGlobalSettings::CompletionMan);
+                config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionMan);
+                break;
+        }
 }
 #include "kspread_dlg_preference.moc"
