@@ -21,8 +21,10 @@
 #define _KEXI_EXPORT_H_
 
 #include <kdeversion.h> /* this will also include <kdelibs_export.h>, if available */
+/* KDE_EXPORT will be defined multiple times without this on kdelibs 3.3 (tested on 3.3.1) */
+#include <kdemacros.h>
 
-/* workaround for KDElibs < 3.4 on !win32 */
+/* workaround for KDElibs < 3.2 on !win32 */
 #ifndef KDE_EXPORT
 # define KDE_EXPORT
 #endif
