@@ -53,6 +53,19 @@ k_dcop:
     virtual void clearValiditySelection();
     virtual void clearConditionalSelection();
 
+    virtual bool insertColumn( int col,int nbCol );
+    virtual bool insertRow( int row,int nbRow);
+    virtual void removeColumn( int col,int nbCol );
+    virtual void removeRow( int row,int nbRow );
+    virtual void borderLeft(const QColor &_color );
+    virtual void borderTop( const QColor &_color );
+    virtual void borderOutline( const QColor &_color );
+    virtual void borderAll( const QColor &_color );
+    virtual void borderRemove( );
+    virtual void borderBottom(const QColor &_color );
+    virtual void borderRight( const QColor &_color );
+
+
 
 private:
     KSpreadTable* m_table;

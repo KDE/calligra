@@ -260,3 +260,58 @@ void KSpreadTableIface::clearConditionalSelection()
     m_table->clearConditionalSelection(m_table->markerRect().topLeft ());
 }
 
+
+bool KSpreadTableIface::insertColumn( int col,int nbCol )
+{
+    return m_table->insertColumn(col,nbCol);
+}
+
+bool KSpreadTableIface::insertRow( int row,int nbRow)
+{
+    return m_table->insertRow(row,nbRow);
+}
+
+void KSpreadTableIface::removeColumn( int col,int nbCol )
+{
+    m_table->removeColumn( col,nbCol );
+}
+
+void KSpreadTableIface::removeRow( int row,int nbRow )
+{
+    m_table->removeRow( row,nbRow );
+}
+
+void KSpreadTableIface::borderLeft(const QColor &_color )
+{
+    m_table->borderLeft(m_table->markerRect().topLeft (),_color);
+}
+
+void KSpreadTableIface::borderTop( const QColor &_color )
+{
+    m_table->borderTop(m_table->markerRect().topLeft (),_color);
+}
+
+void KSpreadTableIface::borderOutline( const QColor &_color )
+{
+    m_table->borderOutline(m_table->markerRect().topLeft (),_color);
+}
+
+void KSpreadTableIface::borderAll( const QColor &_color )
+{
+    m_table->borderAll(m_table->markerRect().topLeft (), _color );
+}
+
+void KSpreadTableIface::borderRemove( )
+{
+    m_table->borderRemove(m_table->markerRect().topLeft ());
+}
+
+void KSpreadTableIface::borderBottom(const QColor &_color )
+{
+    m_table->borderBottom(m_table->markerRect().topLeft (),_color);
+}
+
+void KSpreadTableIface::borderRight( const QColor &_color )
+{
+    m_table->borderRight( m_table->markerRect().topLeft (),_color );
+}
