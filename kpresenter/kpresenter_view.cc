@@ -5369,17 +5369,20 @@ void KPresenterView::spellCheckerDone( const QString & )
     delete m_spell.kspell;
     m_spell.kspell = 0;
 
-    if ( m_spell.bSpellSelection )
-    {
-        KMessageBox::information(this,
-                                 i18n("SpellCheck selection finished."),
-                                 i18n("Spell checking"));
-
-    }
     if ( result != KS_CANCEL && result != KS_STOP )
     {
-        // Try to check another frameset
-        startKSpell();
+        if ( m_spell.bSpellSelection )
+        {
+            KMessageBox::information(this,
+                                     i18n("SpellCheck selection finished."),
+                                     i18n("Spell checking"));
+
+        }
+        else
+        {
+            // Try to check another frameset
+            startKSpell();
+        }
     }
     else
     {
