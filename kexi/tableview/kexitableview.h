@@ -46,7 +46,6 @@ class QTimer;
 
 class KPrinter;
 
-class KexiTableHeader;
 class KexiTableRM;
 class KexiTableItem;
 class KexiTableEdit;
@@ -93,11 +92,11 @@ public:
 
 	QRect		cellGeometry(int row, int col) const;
 	int		columnWidth(int col) const;
-	int		rowHeight(int row) const;
+	int		rowHeight() const;
 	int		columnPos(int col) const;
 	int		rowPos(int row) const;
 	int		columnAt(int pos) const;
-	int		rowAt(int pos) const;
+	int		rowAt(int pos, bool ignoreEnd=false) const;
 
 	void		updateCell(int row, int col);
 //	void		updateRow(int row);
@@ -131,7 +130,7 @@ public:
 
 	bool		m_editOnDubleClick;
 
-	KexiTableHeader	*recordMarker();
+	KexiTableRM	*recordMarker();
 
 	KexiTableList	*contents() { return m_contents; }
 
@@ -164,6 +163,8 @@ public:
 	void triggerUpdate()
 		{   if(!m_pUpdateTimer->isActive()) m_pUpdateTimer->start(1, true); }
 
+	KexiTableRM		*verticalHeader() { return m_pVerticalHeader; }
+
 protected:
 	// painting and layout
 	void	drawContents(QPainter *p, int cx, int cy, int cw, int ch);
@@ -171,7 +172,7 @@ protected:
 	void	paintCell(QPainter* p, KexiTableItem *item, int col, const QRect &cr, bool print=false);
 	void	paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
 	void	updateGeometries();
-	QSize	tableSize() const;
+	virtual QSize tableSize() const;
 
 	// event handling
 	void	contentsMousePressEvent(QMouseEvent*);
@@ -233,7 +234,7 @@ protected:
 
     // foreign widgets
 	QHeader			*m_pTopHeader;
-	KexiTableHeader		*m_pVerticalHeader;
+	KexiTableRM		*m_pVerticalHeader;
 	KexiTableRM		*m_pRecordMarker;
 	KexiTableEdit	*m_pEditor;
 

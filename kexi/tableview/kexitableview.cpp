@@ -50,6 +50,7 @@
 #include "kexitablerm.h"
 #include "kexitableview.h"
 #include "kexitableheader.h"
+#include "kexitablerm.h"
 
 #ifdef USE_KDE
 #include "kexidatetableedit.h"
@@ -77,6 +78,8 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 	m_curCol = -1;
 	m_pCurrentItem = 0;
 	m_pInsertItem = 0;
+	horizontalScrollBar()->raise();
+	verticalScrollBar()->raise();
 	m_pContextMenu = new QPopupMenu(this);
 	menu_id_addRecord = m_pContextMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), CTRL+Key_Insert);
 	menu_id_removeRecord = m_pContextMenu->insertItem(kapp->iconLoader()->loadIcon("button_cancel", KIcon::Small), i18n("Remove Record"), this, SLOT(removeRecord()), CTRL+Key_Delete);
@@ -112,18 +115,18 @@ if(m_rowHeight < 17)
 	m_pTopHeader->setTracking(false);
 	m_pTopHeader->setMovingEnabled(false);
 
-/*	m_pVerticalHeader = new KexiTableRM(this);
+	m_pVerticalHeader = new KexiTableRM(this);
 	m_pVerticalHeader->setCellHeight(m_rowHeight);
 	m_pVerticalHeader->setCurrentRow(-1);
-*/
 
-	m_pVerticalHeader = new KexiTableHeader(this);
+/*	m_pVerticalHeader = new KexiTableHeader(this);
 	m_pVerticalHeader->setOrientation(Vertical);
 	m_pVerticalHeader->setTracking(false);
 	m_pVerticalHeader->setMovingEnabled(false);
 	m_pVerticalHeader->setStretchEnabled(false);
 	m_pVerticalHeader->setResizeEnabled(false);
 	m_pVerticalHeader->setCurrentRow(false);
+*/
 
 //	enableClipper(true);
 	setBackgroundMode(PaletteBackground);
@@ -141,10 +144,12 @@ if(m_rowHeight < 17)
 		KexiTableItem *it;
 		for(it = m_contents->first(); it; it = m_contents->next())
 		{
-			if(!it->isInsertItem())
+			m_pVerticalHeader->addLabel();
+/*			if(!it->isInsertItem())
 				m_pVerticalHeader->addLabel("",  m_rowHeight);
 			else
 				m_pVerticalHeader->addLabel("*",  m_rowHeight);
+*/
 		}
 	}
 
@@ -216,7 +221,7 @@ void KexiTableView::remove(KexiTableItem *item, bool moveCursor/*=true*/)
 {
 	if(m_contents->removeRef(item))
 	{
-		m_pVerticalHeader->removeLabel(m_curRow);
+		m_pVerticalHeader->removeLabel();
 		m_numRows--;
 		if(moveCursor)
 			setCursor(m_curRow);
@@ -248,7 +253,7 @@ void KexiTableView::clear()
 {
 	for(int i=0; i < rows(); i++)
 	{
-		m_pVerticalHeader->removeLabel(i);
+		m_pVerticalHeader->removeLabel();
 	}
 
 	editorCancel();
@@ -270,7 +275,7 @@ void KexiTableView::clearAll()
 {
 	for(int i=0; i < rows(); i++)
 	{
-		m_pVerticalHeader->removeLabel(i);
+		m_pVerticalHeader->removeLabel();
 	}
 
 	editorCancel();
@@ -407,11 +412,12 @@ void KexiTableView::setColumn(int col, QString name, ColumnTyFpe type, bool chan
 */
 void KexiTableView::setSorting(int col, bool ascending/*=true*/)
 {
-	m_sortOrder = ascending;
+//	m_sortOrder = ascending;
 	m_sortedColumn = col;
 	m_pTopHeader->setSortIndicator(col, m_sortOrder);
 	m_contents->setSorting(col, m_sortOrder, columnType(col));
-	sort();
+//	sort();
+	columnSort(col);
 }
 
 void KexiTableView::slotUpdate()
@@ -446,7 +452,7 @@ void KexiTableView::sort()
 	m_pCurrentItem = m_contents->at(m_curRow);
 
 	int cw = columnWidth(m_curCol);
-	int rh = rowHeight(m_curRow);
+	int rh = rowHeight();
 
 //	m_pVerticalHeader->setCurrentRow(m_curRow);
 	center(columnPos(m_curCol) + cw / 2, rowPos(m_curRow) + rh / 2);
@@ -521,7 +527,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 //	kdDebug() << "KexiTableView::drawContents(): maxwc: " << maxwc << endl;
 
 // 	pb->fillRect(maxwc, 0, cw - maxwc, ch, colorGroup().base());
-// 	pb->fillRect(0, rowPos(rowlast) + m_rowHeight, cw, ch, colorGroup().base());
+ 	pb->fillRect(0, rowPos(rowlast) + m_rowHeight, cw, ch, colorGroup().base());
 	pb->fillRect(cx, cy, cw, ch, colorGroup().base());
 	for(r = rowfirst; r <= rowlast; r++, ++it)
 	{
@@ -782,7 +788,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	if (( m_curRow != oldRow) || (m_curCol != oldCol ))
 	{
 		int cw = columnWidth( m_curCol );
-		int rh = rowHeight( m_curRow );
+		int rh = rowHeight();
 		updateCell( m_curRow, m_curCol );
 		ensureVisible( columnPos( m_curCol ) + cw / 2, rowPos( m_curRow ) + rh / 2, cw / 2, rh / 2 );
 		updateCell( oldRow, oldCol );
@@ -1048,7 +1054,7 @@ void KexiTableView::selectRow(int row)
 	if(m_curRow != row)
 	{
 		m_curRow = row;
-		int rh = rowHeight(m_curRow);
+		int rh = rowHeight();
 
 		ensureVisible(0, rowPos(m_curRow) + rh / 2, 0, rh / 2);
 		if (hasFocus() || viewport()->hasFocus())
@@ -1159,10 +1165,10 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 
 #ifdef Q_WS_WIN
 	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow)-1);
-	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow));
+	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight());
 #else
 	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
-	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow)-1);
+	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight()-1);
 #endif
 //	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
 	m_pEditor->show();
@@ -1250,7 +1256,7 @@ void KexiTableView::columnSort(int col)
 //		delete m_pInsertItem;
 		remove(m_pInsertItem);
 		m_pInsertItem = 0;
-		m_pVerticalHeader->removeLabel(rows());
+//		m_pVerticalHeader->removeLabel(rows());
 	}
 
 	if(m_sortedColumn == col)
@@ -1293,7 +1299,7 @@ void KexiTableView::columnWidthChanged( int col, int, int )
 //	updateContents(0, 0, m_pBufferPm->width(), m_pBufferPm->height());
 	if (m_pEditor)
 	{
-		m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow)-1);
+		m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight()-1);
 		moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
 	}
 	updateGeometries();
@@ -1315,7 +1321,7 @@ int KexiTableView::columnWidth(int col) const
     return m_pTopHeader->sectionSize(col);
 }
 
-int KexiTableView::rowHeight(int row) const
+int KexiTableView::rowHeight() const
 {
 	return m_rowHeight;
 }
@@ -1335,12 +1341,12 @@ int KexiTableView::columnAt(int pos) const
     return m_pTopHeader->sectionAt(pos);
 }
 
-int KexiTableView::rowAt(int pos) const
+int KexiTableView::rowAt(int pos, bool ignoreEnd) const
 {
 	pos /=m_rowHeight;
 	if (pos < 0)
 		return 0;
-	if (pos >= m_numRows)
+	if (pos >= m_numRows && !ignoreEnd)
 		return -1;
 	return pos;
 }
@@ -1348,14 +1354,14 @@ int KexiTableView::rowAt(int pos) const
 QRect KexiTableView::cellGeometry(int row, int col) const
 {
     return QRect(columnPos(col), rowPos(row),
-		  columnWidth(col), rowHeight(row));
+		  columnWidth(col), rowHeight());
 }
 
 QSize KexiTableView::tableSize() const
 {
 	if (rows() > 0 && cols() > 0)
 	    return QSize( columnPos( cols() - 1 ) + columnWidth( cols() - 1 ),
-			rowPos( rows()-1 ) + rowHeight( rows() - 1 ));
+			rowPos( rows()-1 ) + rowHeight());
 	return QSize(0,0);
 }
 
@@ -1397,7 +1403,7 @@ void KexiTableView::setCursor(int row, int col/*=-1*/)
 	if ( m_curRow != oldRow || m_curCol != oldCol )
 	{
 //		int cw = columnWidth( m_curCol );
-		int rh = rowHeight( m_curRow );
+		int rh = rowHeight();
 //		ensureVisible( columnPos( m_curCol ) + cw / 2, rowPos( m_curRow ) + rh / 2, cw / 2, rh / 2 );
 //		center(columnPos(m_curCol) + cw / 2, rowPos(m_curRow) + rh / 2, cw / 2, rh / 2);
 		ensureVisible(columnPos(m_curCol), rowPos(m_curRow), columnWidth(m_curCol), rh);
@@ -1501,10 +1507,13 @@ void KexiTableView::slotAutoScroll()
 
 void KexiTableView::inserted()
 {
+	m_pVerticalHeader->addLabel();
+#if 0
 	if(itemAt(m_numRows)->isInsertItem())
 		m_pVerticalHeader->addLabel("*", m_rowHeight);
 	else
 		m_pVerticalHeader->addLabel("", m_rowHeight);
+#endif
 
 }
 
@@ -1581,7 +1590,7 @@ KexiTableView::takeInsertItem()
 }
 
 
-KexiTableHeader* KexiTableView::recordMarker()
+KexiTableRM* KexiTableView::recordMarker()
 {
 	return m_pVerticalHeader;
 }

@@ -48,17 +48,17 @@ public slots:
 	void setInsertRow(int row);
 	void setColor(const QColor &color);
 
+	void addLabel();
+	void removeLabel();
+
 protected:
 	int	m_rowHeight;
 	int	m_offset;
 	int	m_currentRow;
 	int	m_insertRow;
+	int	m_max;
 
 	QColor	m_pointerColor;
-
-	static const char *arrow[];
-	static const char *star[];
-	QPixmap *m_pArrowPixmap;
 };
 
 #endif
