@@ -549,7 +549,6 @@ bool GDocument::insertFromXml (const QDomDocument &document, QList<GObject>& new
 
 bool GDocument::parseBody (const QDomElement &element, QList<GObject>& /*newObjs*/, bool /*markNew*/) {
 
-    qDebug("+++++++++++ parsing +++++++++++");
     GObject* obj = 0L;
     QDict<GObject> refDict;
 

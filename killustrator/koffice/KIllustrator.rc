@@ -94,7 +94,9 @@
 <ToolBar fullWidth="false" name="edit"><Text>Edit</Text>
   <Action name="undo"/>
   <Action name="redo"/>
+  <Separator/>
   <Action name="view_zoom"/>
+  <Separator/>
   <Action name="cut"/>
   <Action name="copy"/>
   <Action name="paste"/>

@@ -52,10 +52,8 @@ void PasteCmd::execute () {
         o->unref ();
     objects.clear ();
     QString buf = QApplication::clipboard ()->text ();
-    qDebug("clipboard: %s", (const char*)buf);
     if (!buf.isEmpty()) {
         if (buf.left(5)=="<?xml") {
-            qDebug("blah - fooo ++++++++++++++++++");
             // KIllustrator objects
             QWMatrix m;
             m.translate(10, 10);
@@ -64,9 +62,7 @@ void PasteCmd::execute () {
             d.setContent(buf);
             document->insertFromXml (d, objects);
             document->unselectAllObjects ();
-            qDebug("back <-------------------");
             for (GObject *o=objects.first(); o!=0L; o=objects.next()) {
-                qDebug("object...");
                 o->ref ();
                 o->transform (m, true);
                 document->selectObject(o);
