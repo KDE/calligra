@@ -9,7 +9,7 @@ AC_MSG_CHECKING([for qsa])
 compile_qsa_plugin="yes"
 
 dnl check header files
-qsa_incdirs=$QTDIR/include
+qsa_incdirs="$QTDIR/include /usr/lib/qt3/include /usr/lib/qt/include /usr/share/qt3/include"
 AC_FIND_FILE(qsinterpreter.h, $qsa_incdirs, qsa_incdir)
 if test ! -r $qsa_incdir/qsinterpreter.h; then
   compile_qsa_plugin="no"
@@ -19,7 +19,7 @@ else
 fi
 
 dnl check libraries
-qsa_libdirs=$QTDIR/lib
+qsa_libdirs="$QTDIR/lib /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib"
 AC_FIND_FILE(libqsa.so, $qsa_libdirs, qsa_libdir)
 if test ! -r $qsa_libdir/libqsa.so; then
   compile_qsa_plugin="no"
