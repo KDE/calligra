@@ -19,7 +19,5 @@ servicetypes_DATA=widgetfactory.desktop
 SUBDIRS = . factories test
 
 messages: rc.cpp
-	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` > rc.cpp
-	$(XGETTEXT) `find . -name "*.cpp" -o -name ".h"` rc.cpp -o $(podir)/kformdesigner.pot
-        rm -f rc.cpp
+	$(XGETTEXT) `find . -name "*.cpp" -o -name ".h"` -o $(podir)/kformdesigner.pot
 
