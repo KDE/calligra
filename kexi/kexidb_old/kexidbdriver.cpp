@@ -20,13 +20,13 @@
 
 #include "kexidbdriver.h"
 
-KexiDBDriver::KexiDBDriver(QString driver)
+KexiDBDriver::KexiDBDriver(QString driver):m_loaded(false),m_db(0),m_service(0)
 {
 	m_driver = driver;
 }
 
 void
-KexiDBDriver::setService(KService *service)
+KexiDBDriver::setService(KService::Ptr service)
 {
 	m_service = service;
 }
@@ -37,7 +37,7 @@ KexiDBDriver::db()
 	return m_db;
 }
 
-KService*
+KService::Ptr
 KexiDBDriver::service() const
 {
 	return m_service;

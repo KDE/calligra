@@ -23,7 +23,7 @@ Boston, MA 02111-1307, USA.
 
 #include "mysqldb.h"
 
-K_EXPORT_COMPONENT_FACTORY(mysqlinterface, KGenericFactory<MySqlDB>( "mysqlinterface" ));
+K_EXPORT_COMPONENT_FACTORY(keximysqlinterface, KGenericFactory<MySqlDB>( "mysqlinterface" ));
 
 MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &args) : KexiDB(parent, name)
 {

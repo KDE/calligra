@@ -32,21 +32,31 @@ KexiDBInterfaceManager::KexiDBInterfaceManager(QObject *parent, const char *name
 	//some initialisations
 //	m_libLoader = KLibLoader::self();
 	lookupDrivers();
-//	load("mySQL");
+// no idea, why this loops infinitly here	load("mySQL");
+
 }
 
 KexiDB*
 KexiDBInterfaceManager::require(QString driver)
 {
+	kdDebug()<<"kexDBIface::require"<<endl;
+
 	if(!m_driverList.find(driver))
 		return 0;
-		
+
+	kdDebug()<<"driver found in list"<<endl;		
 	KexiDBDriver *d = m_driverList.find(driver);
 	if(d->loaded())
 	{
 		return d->db();
 	}
-	
+	else
+	{
+		load(driver);
+		if (d->loaded()) return d->db();
+		kdDebug()<<"KexiDBInterfaceManager::reqiure():couldn't load plugin"<<endl;
+	}
+	return 0;
 }
 
 void
@@ -79,7 +89,9 @@ KexiDBInterfaceManager::load(QString driver)
 			if(d->service())
 			{
 				kdDebug() << "KexiDBInterfaceManager::load(): d->service found" << endl;
-				KexiDB *plugin = KParts::ComponentFactory::createInstanceFromService<KexiDB>(d->service(), this, "driverPlugin", QStringList());
+				kdDebug() << "KexiDBInterfaceManager::load(): library: "<<d->service()->library()<<endl;
+				KexiDB *plugin = KParts::ComponentFactory::createInstanceFromService<KexiDB>(d->service(),
+					this, "driverPlugin", QStringList());
 				
 				if(plugin)
 				{
