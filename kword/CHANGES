@@ -816,3 +816,7 @@ Reggie, 5.2.1999:
   structur viewer scrolls to this embedded object in the text view
 - Fix with activating an embedded part
 - Loading embedded parts doesn't crash anymore
+
+Reggie, 6.2.1999:
+-----------------
+- More work on variables

@@ -94,7 +94,7 @@ public:
 class KWCharVariable : public KWCharAttribute
 {
 public:
-  KWCharVariable() : var() { classId = ID_KWCharVariable; format = 0L; }
+  KWCharVariable(KWordDocument *_doc) : var(_doc) { classId = ID_KWCharVariable; format = 0L; }
   ~KWCharVariable() { format->decRef(); format = 0L; }
 
   virtual KWFormat* getFormat()
