@@ -86,7 +86,7 @@
 #include <KWordViewIface.h>
 #include <kstatusbar.h>
 #include <kstdaccel.h>
-#include <koNoteDia.h>
+#include <koCommentDia.h>
 #include <koDocumentInfo.h>
 
 KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
@@ -472,12 +472,12 @@ void KWView::setupActions()
     actionInsertLink->setToolTip( i18n( "Insert a web address, email address or hyperlink to a file." ) );
     actionInsertLink->setWhatsThis( i18n( "Insert a web address, email address or hyperlink to a file." ) );
 
-    actionInsertNote = new KAction( i18n( "Note" ), 0,
-                                    this, SLOT( insertNote() ),
-                                    actionCollection(), "insert_note" );
-    actionEditNote = new KAction( i18n("Edit Note"), 0,
-                                  this,SLOT(editNote()),
-                                  actionCollection(), "edit_note");
+    actionInsertComment = new KAction( i18n( "Comment" ), 0,
+                                    this, SLOT( insertComment() ),
+                                    actionCollection(), "insert_comment" );
+    actionEditComment = new KAction( i18n("Edit Comment"), 0,
+                                  this,SLOT(editComment()),
+                                  actionCollection(), "edit_comment");
 
 
     // TODO
@@ -1479,7 +1479,7 @@ void KWView::updateReadWrite( bool readwrite )
         actionViewFootNotes->setEnabled( true );
         actionViewEndNotes->setEnabled( true );
         actionViewZoom->setEnabled( true );
-        actionInsertNote->setEnabled( true );
+        actionInsertComment->setEnabled( true );
         actionAllowAutoFormat->setEnabled( true );
         KAction* newView = actionCollection()->action("view_newview");
         if (newView) newView->setEnabled( true );
@@ -2425,7 +2425,7 @@ void KWView::insertLink()
     }
 }
 
-void KWView::insertNote()
+void KWView::insertComment()
 {
     KWTextFrameSetEdit *edit=currentTextEdit();
     if ( !edit )
@@ -2438,12 +2438,12 @@ void KWView::insertNote()
     else
         authorName = authorPage->fullName();
 
-    KoNoteDia *noteDia = new KoNoteDia( this, QString::null,authorName );
-    if( noteDia->exec() )
+    KoCommentDia *commentDia = new KoCommentDia( this, QString::null,authorName );
+    if( commentDia->exec() )
     {
-        edit->insertNote(noteDia->noteText());
+        edit->insertComment(commentDia->commentText());
     }
-    delete noteDia;
+    delete commentDia;
 }
 
 
@@ -4137,7 +4137,7 @@ void KWView::slotFrameSetEditChanged()
 
     bool state = (edit != 0L) && rw;
     actionEditSelectAll->setEnabled(state);
-    actionInsertNote->setEnabled( state );
+    actionInsertComment->setEnabled( state );
     actionFormatDefault->setEnabled( rw);
     actionFormatFont->setEnabled( rw );
     actionFormatFontSize->setEnabled( rw );
@@ -4881,7 +4881,7 @@ bool KWStatisticsDialog::docHasSelection()
     return false;
 }
 
-void KWView::editNote()
+void KWView::editComment()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
@@ -4897,12 +4897,12 @@ void KWView::editNote()
                 kdWarning() << "Author information not found in documentInfo !" << endl;
             else
                 authorName = authorPage->fullName();
-            KoNoteDia *noteDia = new KoNoteDia( this, var->note(), authorName);
-            if( noteDia->exec() )
+            KoCommentDia *commentDia = new KoCommentDia( this, var->note(), authorName);
+            if( commentDia->exec() )
             {
-                var->setNote( noteDia->noteText());
+                var->setNote( commentDia->commentText());
             }
-            delete noteDia;
+            delete commentDia;
         }
     }
 }

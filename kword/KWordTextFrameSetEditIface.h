@@ -46,7 +46,7 @@ k_dcop:
     void copy();
     void paste();
     void insertNonbreakingSpace();
-    void insertNote(const QString &_note);
+    void insertComment(const QString &_comment);
 private:
     KWTextFrameSetEdit *m_framesetedit;
 

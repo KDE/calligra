@@ -2628,11 +2628,11 @@ void KWTextFrameSetEdit::insertLink(const QString &_linkName, const QString & hr
     insertVariable( var);
 }
 
-void KWTextFrameSetEdit::insertNote(const QString &_note)
+void KWTextFrameSetEdit::insertComment(const QString &_comment)
 {
     KoVariable * var = 0L;
     KWDocument * doc = frameSet()->kWordDocument();
-    var = new KoNoteVariable( textFrameSet()->textDocument(),_note, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
+    var = new KoNoteVariable( textFrameSet()->textDocument(),_comment, doc->variableFormatCollection()->format( "STRING" ),  doc->getVariableCollection());
     insertVariable( var);
 }
 
@@ -2805,7 +2805,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
             view->plugActionList( "datatools", actionList );
             KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(variable());
             if( var )
-                popup = view->popupMenu("note_popup");
+                popup = view->popupMenu("comment_popup");
             else
                 popup = view->popupMenu("text_popup");
             Q_ASSERT(popup);

@@ -125,7 +125,7 @@ void KWordTextFrameSetEditIface::insertVariable( const QString & var)
     m_framesetedit->insertVariable(8,14);
 }
 
-void KWordTextFrameSetEditIface::insertNote(const QString &_note)
+void KWordTextFrameSetEditIface::insertComment(const QString &_comment)
 {
-    m_framesetedit->insertNote(_note);
+    m_framesetedit->insertComment(_comment);
 }
