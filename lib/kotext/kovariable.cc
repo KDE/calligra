@@ -2075,7 +2075,7 @@ void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*cont
     else if ( localName == "sender-title" )
         m_subtype = VST_AUTHORTITLE; // Small hack (it's supposed to be about the sender, not about the author)
     else if ( localName == "sender-position" )
-        m_subtype = VST_AUTHORPOSITION; // TODO separate variable
+        m_subtype = VST_AUTHORPOSITION;
     else if ( localName == "sender-phone-private" )
         m_subtype = VST_TELEPHONE_HOME;
     else if ( localName == "sender-phone-work" )
