@@ -43,9 +43,9 @@ killustrator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-FILTER_LIBS = ../filter/libfilter.a
-XML_LIBS = ../xmlutils/libxml.a
-KSHARE_LIBS = ../share/libkillu.a
+FILTER_LIBS = ../filter/libfilter.la
+XML_LIBS = ../xmlutils/libxml.la
+KSHARE_LIBS = ../share/libkillu.la
 killustrator_LDADD   =  $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) \
 	                $(LIB_KFILE) $(LIB_KIMGIO) $(LIBJPEG) $(LIBTIFF)
 
