@@ -114,17 +114,17 @@
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>Start not Earlier then</string>
+                                        <string>Start Not Earlier Then</string>
                                     </property>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>Finish not Later then</string>
+                                        <string>Finish Not Later Then</string>
                                     </property>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>Must Start on</string>
+                                        <string>Must Start On</string>
                                     </property>
                                 </item>
                                 <property name="name">
@@ -143,7 +143,7 @@
                             <cstring>groupBox2</cstring>
                         </property>
                         <property name="title">
-                            <string>Starting date</string>
+                            <string>Starting Date</string>
                         </property>
                         <grid>
                             <property name="name">

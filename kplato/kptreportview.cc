@@ -329,14 +329,14 @@ QString KPTReportView::setDetail(const QString & source, QStringList &properties
 void KPTReportView::openTemplateFile(const QString &file) {
     if (!QFileInfo(file).isFile()) {
         KMessageBox::sorry( this, i18n("Cannot find report template file!"),
-                                                        i18n("Generate report"));
+                                                        i18n("Generate Report"));
         return;
     }
     QFile in;
     in.setName(file);
     if (!in.open(IO_ReadOnly)) {
         KMessageBox::sorry( this, i18n("Cannot open report template file!"),
-                                                        i18n("Generate report"));
+                                                        i18n("Generate Report"));
         return;
     }
     // Try to find out whether it is a mime multi part file
@@ -345,7 +345,7 @@ void KPTReportView::openTemplateFile(const QString &file) {
     {
         in.close();
         KMessageBox::sorry( this, i18n("Cannot read report template file!"),
-                                                        i18n("Generate report"));
+                                                        i18n("Generate Report"));
         return;
     }
 
@@ -362,14 +362,14 @@ void KPTReportView::openTemplateFile(const QString &file) {
     if (!store)
     {
         KMessageBox::sorry( this, i18n("Cannot open report template file!"),
-                                                    i18n("Generate report"));
+                                                    i18n("Generate Report"));
         return;
     }
     bool b = store->open("maindoc.xml");
     if ( !b )
     {
         KMessageBox::sorry( this, i18n("Cannot find the proper report template file!"),
-                                                    i18n("Generate report"));
+                                                    i18n("Generate Report"));
         delete store;
         return;
     }
@@ -383,7 +383,7 @@ void KPTReportView::loadTemplate(QIODevice &dev) {
     int errorColumn;
     if (!templateDoc.setContent( &dev , &errorMsg, &errorLine, &errorColumn)) {
         QString msg = "Parsing template file failed with ";
-        KMessageBox::sorry( this, msg + errorMsg, i18n("Generate report"));
+        KMessageBox::sorry( this, msg + errorMsg, i18n("Generate Report"));
         return;
     }
     loadTemplate(templateDoc);

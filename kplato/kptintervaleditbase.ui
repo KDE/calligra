@@ -61,7 +61,7 @@
                         <cstring>bAddInterval</cstring>
                     </property>
                     <property name="text">
-                        <string>Add interval</string>
+                        <string>Add Interval</string>
                     </property>
                 </widget>
             </hbox>
@@ -69,7 +69,7 @@
         <widget class="QListView" row="0" column="0">
             <column>
                 <property name="text">
-                    <string>Work interval</string>
+                    <string>Work Interval</string>
                 </property>
                 <property name="clickable">
                     <bool>true</bool>

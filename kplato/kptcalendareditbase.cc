@@ -47,7 +47,7 @@ KPTCalendarEditBase::KPTCalendarEditBase( QWidget* parent, const char* name, WFl
 {
     if ( !name )
 	setName( "KPTCalendarEditBase" );
-    KPTCalendarEditBaseLayout = new QHBoxLayout( this, 11, 6, "KPTCalendarEditBaseLayout"); 
+    KPTCalendarEditBaseLayout = new QHBoxLayout( this, 11, 6, "KPTCalendarEditBaseLayout");
 
     groupBox2 = new QGroupBox( this, "groupBox2" );
     groupBox2->setColumnLayout(0, Qt::Vertical );
@@ -67,7 +67,7 @@ KPTCalendarEditBase::KPTCalendarEditBase( QWidget* parent, const char* name, WFl
     dayLayout = new QVBoxLayout( day->layout() );
     dayLayout->setAlignment( Qt::AlignTop );
 
-    layout8 = new QHBoxLayout( 0, 0, 6, "layout8"); 
+    layout8 = new QHBoxLayout( 0, 0, 6, "layout8");
 
     state = new QComboBox( FALSE, day, "state" );
     layout8->addWidget( state );
@@ -87,7 +87,7 @@ KPTCalendarEditBase::KPTCalendarEditBase( QWidget* parent, const char* name, WFl
     intervalList->addColumn( tr2i18n( "Work Interval" ) );
     groupBox4Layout->addWidget( intervalList );
 
-    layout6 = new QHBoxLayout( 0, 0, 6, "layout6"); 
+    layout6 = new QHBoxLayout( 0, 0, 6, "layout6");
 
     startTime = new QTimeEdit( groupBox4, "startTime" );
     layout6->addWidget( startTime );
@@ -96,7 +96,7 @@ KPTCalendarEditBase::KPTCalendarEditBase( QWidget* parent, const char* name, WFl
     layout6->addWidget( endTime );
     groupBox4Layout->addLayout( layout6 );
 
-    layout5 = new QHBoxLayout( 0, 0, 6, "layout5"); 
+    layout5 = new QHBoxLayout( 0, 0, 6, "layout5");
 
     bClear = new QPushButton( groupBox4, "bClear" );
     layout5->addWidget( bClear );
@@ -132,9 +132,9 @@ void KPTCalendarEditBase::languageChange()
     day->setTitle( QString::null );
     bApply->setText( tr2i18n( "Apply" ) );
     groupBox4->setTitle( QString::null );
-    intervalList->header()->setLabel( 0, tr2i18n( "Work interval" ) );
+    intervalList->header()->setLabel( 0, tr2i18n( "Work Interval" ) );
     bClear->setText( tr2i18n( "Clear" ) );
-    bAddInterval->setText( tr2i18n( "Add interval" ) );
+    bAddInterval->setText( tr2i18n( "Add Interval" ) );
 }
 
 }  //KPlato namespace

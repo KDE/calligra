@@ -182,7 +182,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 	//	SLOT(slotEditResource()), actionCollection(), "edit_resource");
 
     // ------ Export (testing)
-    //actionExportGantt = new KAction(i18n("Export ganttview"), "export_gantt", 0, this,
+    //actionExportGantt = new KAction(i18n("Export Ganttview"), "export_gantt", 0, this,
     //    SLOT(slotExportGantt()), actionCollection(), "export_gantt");
     // ------ Settings
     actionConfigure = new KAction(i18n("Configure..."), "configure", 0, this,
@@ -832,7 +832,7 @@ void KPTView::slotAboutToShow(QWidget *widget) {
 void KPTView::renameNode(KPTNode *node, QString name) {
     //kdDebug()<<k_funcinfo<<name<<endl;
     if (node) {
-        KPTNodeModifyNameCmd *cmd = new KPTNodeModifyNameCmd(getPart(), *node, name, i18n("Modify name"));
+        KPTNodeModifyNameCmd *cmd = new KPTNodeModifyNameCmd(getPart(), *node, name, i18n("Modify Name"));
         getPart()->addCommand(cmd);
     }
 }
