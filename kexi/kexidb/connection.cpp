@@ -36,13 +36,14 @@
 
 #include <assert.h>
 
-using namespace KexiDB;
 
-class Connection::Private
+namespace KexiDB {
+
+class ConnectionPrivate
 {
 	public:
-		Private() {
-		}
+		ConnectionPrivate() { }
+		~ConnectionPrivate() { }
 		/*! Default transaction handle. 
 		If transactions are supported: Any operation on database (e.g. inserts)
 		that is started without specifing transaction context, will be performed
@@ -50,6 +51,10 @@ class Connection::Private
 		Transaction m_default_trans;
 		QValueList<Transaction> m_transactions;
 };
+
+}
+
+using namespace KexiDB;
 		
 Connection::Connection( Driver *driver, const ConnectionData &conn_data )
 	: QObject()
@@ -58,7 +63,7 @@ Connection::Connection( Driver *driver, const ConnectionData &conn_data )
 	,m_data(conn_data)
 	,m_is_connected(false)
 	,m_autoCommit(true)
-	,d(new Private())
+	,d(new ConnectionPrivate())
 {
 	m_tables.setAutoDelete(true);
 	m_tables_byname.setAutoDelete(false);//m_tables is owner, not me
@@ -84,7 +89,7 @@ void Connection::destroy()
 
 Connection::~Connection()
 {
-	qDebug("Connection::~Connection()");
+	KexiDBDbg << "Connection::~Connection()" << endl;
 	delete d;
 /*	if (m_driver) {
 		if (m_is_connected) {

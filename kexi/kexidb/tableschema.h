@@ -45,6 +45,8 @@ class Connection;
 class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 {
 	public:
+		typedef QPtrList<TableSchema> List; //!< Type of tables list
+
 		TableSchema(const QString & name);
 		TableSchema();
 		virtual ~TableSchema();

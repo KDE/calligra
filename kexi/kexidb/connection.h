@@ -40,6 +40,7 @@ typedef QValueVector<QVariant> RecordData;
 
 class Cursor;
 class Driver;
+class ConnectionPrivate;
 
 /*! This class represents database connection established with given database source.
 */
@@ -437,8 +438,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 	friend class KexiDB::Cursor;
 
 	private:
-		class Private;
-		Private *d;
+		ConnectionPrivate *d;
 };
 
 } //namespace KexiDB

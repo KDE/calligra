@@ -34,7 +34,7 @@ QuerySchema::QuerySchema()
 	, m_parent_table(0)
 {
 	m_type = KexiDB::QueryObjectType;
-//	m_indices.setAutoDelete( true );
+	m_tables.setAutoDelete(false);
 }
 
 QuerySchema::QuerySchema(TableSchema* tableSchema)
@@ -44,6 +44,7 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 	, m_parent_table(tableSchema)
 {
 	m_type = KexiDB::QueryObjectType;
+	m_tables.setAutoDelete(false);
 	assert(m_parent_table);
 	if (!m_parent_table) {
 		m_name = QString::null;
@@ -71,16 +72,21 @@ void QuerySchema::clear()
 {
 	FieldList::clear();
 	SchemaData::clear();
+	m_aliases.clear();
 	m_parent_table = 0;
+	m_tables.clear();
 //	m_conn = 0;
 }
 
 KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 {
+	if (!field || !field->table())
+		return;
 	FieldList::addField(field);
-	//Check for auto-generated indices:
+	//add a table to list if not exists there
+	if (m_tables.find(field->table())==-1)
+		m_tables.append(field->table());
 
-	//TODO?
 	return *this;
 }
 
@@ -89,10 +95,24 @@ Connection* QuerySchema::connection()
 	return m_parent_table ? m_parent_table->connection() : 0;
 }
 
-void QuerySchema::debug() const
+void QuerySchema::debug()
 {
 	KexiDBDbg << "QUERY " << schemaDataDebugString() << endl;
+	KexiDBDbg << "  PARENT_TABLE=" << (m_parent_table ? m_parent_table->name() :"(NULL)") << endl;
 	FieldList::debug();
+	TableSchema *table;
+	QString table_names;
+    for ( table = m_tables.first(); table; table = m_tables.next() ) {
+		table_names += table->name();
+		table_names += ", ";
+	}
+	KexiDBDbg << "  TABLES: " << table_names << endl;
+	QMap<Field*, QString>::Iterator it;
+	QString aliases;
+	for ( it = m_aliases.begin(); it != m_aliases.end(); ++it ) {
+		aliases += (it.key()->name() + " -> " + it.data() + "\n");
+	}
+	KexiDBDbg << "  ALIASES: " << aliases << endl;
 }
 
 TableSchema* QuerySchema::parentTable() const
@@ -100,4 +120,35 @@ TableSchema* QuerySchema::parentTable() const
 	return m_parent_table;
 }
 
+void QuerySchema::setParentTable(TableSchema *table)
+{ 
+	if (table)
+		m_parent_table=table; 
+}
 
+void QuerySchema::addTable(TableSchema *table)
+{
+	if (!table)
+		return;
+	m_tables.append(table);
+}
+
+void QuerySchema::removeTable(TableSchema *table)
+{
+	if (!table)
+		return;
+	if (m_parent_table == table)
+		m_parent_table = 0;
+	m_tables.remove(table);
+}
+
+void QuerySchema::setAlias(Field *field, const QString& alias)
+{
+	if (!field)
+		return;
+	if (alias.isEmpty()) {
+		m_aliases.remove(field);
+		return;
+	}
+	m_aliases[field] = alias;
+}

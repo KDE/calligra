@@ -22,9 +22,12 @@
 
 #include <qvaluelist.h>
 #include <qstring.h>
+#include <qmap.h>
+#include <qptrlist.h>
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
+#include <kexidb/tableschema.h>
 
 namespace KexiDB {
 
@@ -52,31 +55,78 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		
 		virtual ~QuerySchema();
 		
-//		QStringList primaryKeys() const;
-//		bool hasPrimaryKeys() const;
+		/*! Adds \a field to 
+		 Added field will not be owned by this QuerySchema object,
+		 but still by corresponding TableSchema. 
+		 Note: After adding a field, corresponding table will be automatically 
+		 added to query's tables list if it is not present there (see tables()).
+		 Field bust have its table assigned. */
 		virtual KexiDB::FieldList& addField(KexiDB::Field* field);
 
 //		int id() { return m_id; }
 //		Field::List::iterator fields() { return m_fields.begin(); }
 //js		void addPrimaryKey(const QString& key);
 
-		/*! Removes all fields from the list, clears name and all other properties. 
-			\sa FieldList::clear() */
+		/*! Removes all fields and aliases from the list.
+		 Removes all tables. Sets parent table information to NULL.
+		 Does not destroy any objects though.
+		 clears name and all other properties. 
+		 \sa FieldList::clear() */
 		virtual void clear();
 
 		//! Outputs debug information.
-		virtual void debug() const;
+		virtual void debug();
 
 		/*! If query was created using a connection, 
 			returns this connection object, otherwise NULL. */
 		Connection* connection();
 		
-		/*! Table that is parent to this query. Only potentially-editable fields 
-		 in this query belong to this table. */
+		/*! \return table that is parent to this query. 
+		 Only potentially-editable fields 
+		 in this query belong to this table.
+		 This method also can return NULL if there is no tables at all,
+		 or if previously parent table schema was removed with removeTable(). 
+		 Every query that have at least one table defined, should have 
+		 assigned a parent table. */
 		TableSchema* parentTable() const;
 
-		void setParentTable(TableSchema *table) { m_parent_table=table; }
-	
+		/*! Sets parent table of this query to \a table.
+			This table should be also added to query's tables list
+			using addTable(). If \a table equals NULL, nothing is performed.
+			\sa parentTable() */
+		void setParentTable(TableSchema *table);
+		
+		/*! \return list of tables used in a query. 
+		 This also includes parent table. \sa parentTable() */
+		const TableSchema::List* tables() const { return &m_tables; }
+
+		/*! Adds \a table schema as one of tables used in a query. */
+		void addTable(TableSchema *table);
+
+		/*! Removes \a table schema from this query. 
+		 This does not destroy \a table object but only takes it out of the list. 
+		 If this table was parent for the query, parent table information is also
+		 invalidated. */
+		void removeTable(TableSchema *table);
+		
+		/*! \return true if the query uses \a table. */
+		bool contains(TableSchema *table) { return m_tables.find(table)!=-1; }
+		
+		/*! \return alias of \a field ot empty string 
+		 if there is no alias for \a field 
+		 or if there is no such field within the query defined */
+		QString alias(Field *field) const { return m_aliases[field]; }
+		
+		/*! This is convenience method. 
+		 \return true if \a field has non empty alias defined within the query.
+		 if there is no alias for \a field
+		 or if there is no such field in the query defined, false is returned. */
+		bool hasAlias(Field *field) const { return !m_aliases[field].isEmpty(); }
+
+		/* Sets \a alias for \a field within the query. 
+		 Passing empty sting to \a alias clears alias for given field. */
+		void setAlias(Field *field, const QString& alias);
+
 	protected:
 //		/*! Automatically retrieves query schema via connection. */
 //		QuerySchema(Connection *conn);
@@ -93,6 +143,11 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 			Any data modifications can be performed if we know parent table.
 			If null, query's records cannot be modified. */
 		TableSchema *m_parent_table;
+		
+		/*! List of tables used in a query */
+		TableSchema::List m_tables;
+		
+		QMap<Field*, QString> m_aliases;
 
 	friend class Connection;
 };

@@ -59,7 +59,7 @@ Field::Field(TableSchema *tableSchema)
 	m_defaultValue = QVariant(QString::null);
 }
 
-Field::Field(const QString& name, enum Type ctype,
+Field::Field(const QString& name, Type ctype,
  int cconst, int options, int length, int precision,
  QVariant defaultValue)
 	: m_table(0)
