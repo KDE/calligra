@@ -28,7 +28,7 @@
 VStrokeColorCmd::VStrokeColorCmd( VDocument *doc, VColor *color )
     : VCommand( doc, i18n( "Stroke Color" ) ), m_color( color )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 }
 
 VStrokeColorCmd::~VStrokeColorCmd()
@@ -67,7 +67,7 @@ VStrokeColorCmd::unexecute()
 VStrokeLineWidthCmd::VStrokeLineWidthCmd( VDocument *doc, double width )
     : VCommand( doc, i18n( "Stroke Width" ) ), m_width( width )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 }
 
 VStrokeLineWidthCmd::~VStrokeLineWidthCmd()
@@ -106,7 +106,7 @@ VStrokeLineWidthCmd::unexecute()
 VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke )
     : VCommand( doc, i18n( "Stroke Objects" ) ), m_stroke( stroke )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 	m_gradient = 0L;
 	m_pattern = 0L;
 
@@ -117,7 +117,7 @@ VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke )
 VStrokeCmd::VStrokeCmd( VDocument *doc, VGradient *gradient )
 	: VCommand( doc, i18n( "Stroke Objects" ) ), m_gradient( gradient )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 	m_stroke = 0L;
 	m_pattern = 0L;
 
@@ -128,7 +128,7 @@ VStrokeCmd::VStrokeCmd( VDocument *doc, VGradient *gradient )
 VStrokeCmd::VStrokeCmd( VDocument *doc, VPattern *pattern )
 	: VCommand( doc, i18n( "Stroke Objects" ) ), m_pattern( pattern )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 	m_stroke = 0L;
 	m_gradient = 0L;
 

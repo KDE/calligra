@@ -70,8 +70,8 @@ public:
 	/// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd, bool repaint = false );
 
-	// remove all vobjects which are marked "deleted" and clear command-history:
-	void purgeHistory();
+	// Clear history.
+	void clearHistory();
 
 	bool showStatusBar() const { return m_bShowStatusBar; }
 	void setShowStatusBar( bool b );

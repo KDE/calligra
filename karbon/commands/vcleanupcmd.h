@@ -17,20 +17,27 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "vcleanup.h"
-#include "vlayer.h"
+#ifndef __VCLEANUPCMD_H__
+#define __VCLEANUPCMD_H__
 
-void
-VCleanUp::visitVLayer( VLayer& layer )
+#include "vcommand.h"
+
+
+class VLayer;
+
+
+class VCleanUpCmd : public VCommand
 {
-	VObjectListIterator itr( layer.objects() );
-	for( ; itr.current(); ++itr )
-	{
-		if( itr.current()->state() == VObject::deleted )
-		{
-			delete( itr.current() );
-			layer.take( *itr.current() );
-		}
-	}
-}
+public:
+	VCleanUpCmd( VDocument *doc );
+	virtual ~VCleanUpCmd();
+
+	virtual void execute();
+	virtual void unexecute();
+
+private:
+	virtual void visitVLayer( VLayer& layer );
+};
+
+#endif
 

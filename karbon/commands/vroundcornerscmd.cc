@@ -29,7 +29,7 @@
 VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
 	: VCommand( doc, i18n( "Round Corners" ) )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 
 	m_radius = radius > 0.0 ? radius : 1.0;
 }

@@ -7,32 +7,34 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 noinst_LTLIBRARIES = libkarboncommands.la
 
 noinst_HEADERS = \
+	vcleanupcmd.h \
 	vcommand.h \
 	vdeletecmd.h \
 	vfillcmd.h \
 	vflattencmd.h \
 	vgroupcmd.h \
-	vungroupcmd.h \
 	vinsertknotscmd.h \
 	vroundcornerscmd.h \
 	vshapecmd.h \
 	vstrokecmd.h \
 	vtransformcmd.h \
+	vungroupcmd.h \
 	vwhirlpinchcmd.h \
 	vzordercmd.h
 
 libkarboncommands_la_SOURCES = \
+	vcleanupcmd.cc \
 	vcommand.cc \
 	vdeletecmd.cc \
 	vfillcmd.cc \
 	vflattencmd.cc \
 	vgroupcmd.cc \
-	vungroupcmd.cc \
 	vinsertknotscmd.cc \
 	vroundcornerscmd.cc \
 	vshapecmd.cc \
 	vstrokecmd.cc \
 	vtransformcmd.cc \
+	vungroupcmd.cc \
 	vwhirlpinchcmd.cc \
 	vzordercmd.cc
 

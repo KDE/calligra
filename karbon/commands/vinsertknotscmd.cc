@@ -28,7 +28,7 @@
 VInsertKnotsCmd::VInsertKnotsCmd( VDocument *doc, uint knots )
 		: VCommand( doc, i18n( "Insert Knots" ) )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 
 	m_knots = knots > 0 ? knots : 1;
 }

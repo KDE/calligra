@@ -25,7 +25,7 @@
 VZOrderCmd::VZOrderCmd( VDocument *doc, VOrder state )
 	: VCommand( doc, i18n( "Order Selection" ) ), m_state( state )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 }
 
 VZOrderCmd::~VZOrderCmd()
@@ -38,12 +38,12 @@ VZOrderCmd::execute()
 {
 	if( m_state == sendToBack )
 	{
-		VObjectListIterator itr( m_doc->selection()->objects() );
+		VObjectListIterator itr( document()->selection()->objects() );
 		for ( itr.toLast() ; itr.current() ; --itr )
 		{
 			// remove from old layer
 			VObjectList objects;
-			VLayerListIterator litr( m_doc->layers() );
+			VLayerListIterator litr( document()->layers() );
 
 			for ( ; litr.current(); ++litr )
 			{
@@ -57,12 +57,12 @@ VZOrderCmd::execute()
 	}
 	else if( m_state == bringToFront )
 	{
-		VObjectListIterator itr( m_doc->selection()->objects() );
+		VObjectListIterator itr( document()->selection()->objects() );
 		for ( ; itr.current() ; ++itr )
 		{
 			// remove from old layer
 			VObjectList objects;
-			VLayerListIterator litr( m_doc->layers() );
+			VLayerListIterator litr( document()->layers() );
 
 			for ( ; litr.current(); ++litr )
 			{
@@ -76,11 +76,11 @@ VZOrderCmd::execute()
 	}
 	else if( m_state == up || m_state == down )
 	{
-		VSelection selection = *m_doc->selection();
+		VSelection selection = *document()->selection();
 
 		VObjectList objects;
 
-		VLayerListIterator litr( m_doc->layers() );
+		VLayerListIterator litr( document()->layers() );
 		while( !selection.objects().isEmpty() )
 		{
 			for ( ; litr.current(); ++litr )

@@ -32,7 +32,6 @@
 #include "karbon_part.h"
 #include "karbon_part_iface.h"
 #include "karbon_view.h"
-#include "vcleanup.h"
 #include "vcommand.h"
 #include "vglobal.h"
 #include "vpainter.h"
@@ -40,8 +39,10 @@
 #include "vselection.h"
 #include "vtooldocker.h"
 
+
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
  static const char * CURRENT_DTD_VERSION = "1.2";
+
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -198,13 +199,8 @@ KarbonPart::slotCommandExecuted()
 }
 
 void
-KarbonPart::purgeHistory()
+KarbonPart::clearHistory()
 {
-	// Use the VCleanUp visitor to remove "deleted" objects from all layers:
-	VCleanUp op;
-	op.visit( m_doc );
-
-	// clear command history:
 	m_commandHistory->clear();
 }
 

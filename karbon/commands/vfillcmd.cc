@@ -28,7 +28,7 @@
 VFillCmd::VFillCmd( VDocument *doc, const VFill &fill )
 	: VCommand( doc, i18n( "Fill Objects" ) ), m_fill( fill )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 
 	if( m_selection->objects().count() == 1 )
 		setName( i18n( "Fill Object" ) );

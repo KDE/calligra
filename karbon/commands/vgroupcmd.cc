@@ -28,7 +28,7 @@
 VGroupCmd::VGroupCmd( VDocument *doc )
 	: VCommand( doc, i18n( "Group Objects" ) )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 
 	m_group = 0L;
 }
@@ -41,31 +41,31 @@ VGroupCmd::~VGroupCmd()
 void
 VGroupCmd::execute()
 {
-	m_group = new VGroup( m_doc->activeLayer() );
+	m_group = new VGroup( document()->activeLayer() );
 
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_doc->activeLayer()->take( *itr.current() );
+		document()->activeLayer()->take( *itr.current() );
 		m_group->append( itr.current() );
 	}
 
-	m_doc->append( m_group );
-	m_doc->selection()->clear();
-	m_doc->selection()->append( m_group );
+	document()->append( m_group );
+	document()->selection()->clear();
+	document()->selection()->append( m_group );
 }
 
 void
 VGroupCmd::unexecute()
 {
-	m_doc->selection()->clear();
+	document()->selection()->clear();
 
 	VObjectListIterator itr( m_group->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_doc->selection()->append( itr.current() );
+		document()->selection()->append( itr.current() );
 	}
 
 	VGroup* parent;

@@ -21,10 +21,12 @@
 #ifndef __KARBON_VIEW__
 #define __KARBON_VIEW__
 
+
 #include <koView.h>
 #include <ksharedptr.h>
 #include <koUnit.h>
 #include "vcanvas.h"
+
 
 class DCOPObject;
 class QDockArea;
@@ -40,9 +42,9 @@ class KSelectColorAction;
 class KToggleAction;
 
 class TKUFloatSpinBoxAction;
+
 class VColorDocker;
 class VContextHelpDocker;
-class VToolOptionsDocker;
 class VEllipseTool;
 class VFill;
 class VFlattenDlg;
@@ -50,32 +52,35 @@ class VGradientTool;
 class VInsertKnotsDlg;
 class VPainterFactory;
 class VPolygonTool;
+class VPolylineTool;
 class VRectangleTool;
 class VRotateTool;
 class VRoundCornersDlg;
 class VRoundRectTool;
 class VScaleTool;
-class VSelectTool;
 class VSelectNodesTool;
+class VSelectTool;
 class VShearTool;
 class VSinusTool;
 class VSpiralTool;
 class VStarTool;
-class VPolylineTool;
+class VStateButton;
 class VStroke;
+class VStrokeDocker;
+class VStrokeFillPreview;
 class VTool;
+class VToolOptionsDocker;
 class VTransformDlg;
 class VWhirlPinchDlg;
-class VStateButton;
-class VStrokeFillPreview;
-class VStrokeDocker;
+
 
 class KarbonView : public KoView
 {
 	Q_OBJECT
 
 public:
-	KarbonView( KarbonPart* part, QWidget* parent = 0, const char* name = 0 );
+	KarbonView( KarbonPart* part, QWidget* parent = 0L,
+		const char* name = 0L );
 	virtual ~KarbonView();
 
 	virtual DCOPObject* dcopObject();
@@ -96,8 +101,10 @@ public:
 
 	KarbonPart* part()const { return m_part; }
 
-	VContextHelpDocker* contextHelpDocker() const { return m_contextHelpDocker; }
-	VToolOptionsDocker* toolOptionsDocker() const { return m_toolOptionsDocker; }
+	VContextHelpDocker* contextHelpDocker() const
+		{ return m_contextHelpDocker; }
+	VToolOptionsDocker* toolOptionsDocker() const
+		{ return m_toolOptionsDocker; }
 	
 	void reorganizeGUI();
 	void setNumberOfRecentFiles( int number );
@@ -132,20 +139,20 @@ public slots:
 	void setLineWidth();
 	void selectionChanged();
 
-	// path:
+	// Path.
 	void pathInsertKnots();
 	void pathFlatten();
 	void pathRoundCorners();
 	void pathWhirlPinch();
 
 protected slots:
-	// object related operations:
+	// Object related operations.
 	void objectTrafoTranslate();
 	void objectTrafoScale();
 	void objectTrafoRotate();
 	void objectTrafoShear();
 
-	// shape-tools:
+	// Shape Tools.
 	void ellipseTool();
 	void polygonTool();
 	void rectangleTool();
@@ -161,14 +168,14 @@ protected slots:
 	void gradTool();
 	void polylineTool();
 
-	// view:
+	// View.
 	void viewModeChanged();
 	void zoomChanged();
 	void viewColorManager();
 	void viewStrokeDocker();
 	void viewContextHelp();
 
-	//toolbox dialogs - slots
+	// Toolbox dialogs.
 	void solidFillClicked();
 	void strokeClicked();
 	void slotStrokeChanged(  const VStroke & );

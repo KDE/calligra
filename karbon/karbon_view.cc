@@ -27,14 +27,17 @@
 
 #include <kaction.h>
 #include <kcolordrag.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <koMainWindow.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
-#include <kiconloader.h>
 
-// tools:
+#include "vtooloptionsdocker.h"
+#include "vcontexthelpdocker.h"
+
+// Tools.
 #include "vellipsetool.h"
 #include "vgradienttool.h"
 #include "vpolygontool.h"
@@ -50,7 +53,8 @@
 #include "vstartool.h"
 #include "vpolylinetool.h"
 
-// commands:
+// Commands.
+#include "vcleanupcmd.h"
 #include "vdeletecmd.h"
 #include "vfillcmd.h"
 #include "vflattencmd.h"
@@ -63,7 +67,7 @@
 //#include "vtextcmd.h"
 #include "vwhirlpinchcmd.h"
 
-// dialogs:
+// Dialogs.
 #include "vconfiguredlg.h"
 #include "vfilldlg.h"
 #include "vflattendlg.h"
@@ -73,13 +77,14 @@
 #include "vtransformdlg.h"
 #include "vwhirlpinchdlg.h"
 
-//dockers
+// Dockers.
 #include "vcolordocker.h"
 #include "vcontexthelpdocker.h"
 #include "vstrokedocker.h"
 #include "vtooldocker.h"
 #include "vtooloptionsdocker.h"
 
+// The rest.
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -103,7 +108,7 @@
 
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
-	: KoView( part, parent, name ), m_part( part )
+	: KoView( part, parent, name ), part()( part )
 {
 	setInstance( KarbonFactory::instance() );
 	setAcceptDrops( true );
@@ -161,14 +166,14 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_strokeFillPreview = 0L;
 	m_ColorManager = 0L;
 	m_strokeDocker = 0L;
-	VToolDocker *_toolContainer = m_part->toolContainer();
+	VToolDocker *_toolContainer = part()->toolContainer();
 	if( shell() )
 	{
 		if( !_toolContainer )
 		{
-			_toolContainer = new VToolDocker( m_part, this );
+			_toolContainer = new VToolDocker( part(), this );
 			mainWindow()->addDockWindow( _toolContainer, DockLeft );
-			m_part->setToolContainer( _toolContainer );
+			part()->setToolContainer( _toolContainer );
 		}
 		connect( _toolContainer, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
 		connect( _toolContainer, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
@@ -183,21 +188,21 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 		connect( _toolContainer, SIGNAL( spiralToolActivated() ),		this, SLOT( spiralTool() ) );
 		connect( _toolContainer, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
 		connect( _toolContainer, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
-		m_part->toolContainer()->show();
+		part()->toolContainer()->show();
 		m_strokeFillPreview = _toolContainer->strokeFillPreview();
 		connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
 		connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
 
 		//Create Dockers
-		m_ColorManager = new VColorDocker( m_part, this );
-		m_strokeDocker = new VStrokeDocker( m_part, this );
+		m_ColorManager = new VColorDocker( part(), this );
+		m_strokeDocker = new VStrokeDocker( part(), this );
 		connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
 		connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
 	}
 
-	m_TransformDlg = new VTransformDlg( m_part, this );
+	m_TransformDlg = new VTransformDlg( part(), this );
 
-	setNumberOfRecentFiles( m_part->maxRecentFiles() );
+	setNumberOfRecentFiles( part()->maxRecentFiles() );
 
 	// initial tool is select-tool:
 	m_currentTool = m_selectTool;
@@ -299,8 +304,8 @@ KarbonView::dropEvent ( QDropEvent *e )
 
 		realcolor.set( r, g, b );
 
-		if( m_part )
-			m_part->addCommand( new VFillCmd( &m_part->document(), realcolor ), true );
+		if( part() )
+			part()->addCommand( new VFillCmd( &part()->document(), realcolor ), true );
 
 		selectionChanged();
 	}
@@ -321,7 +326,7 @@ KarbonView::print( KPrinter &printer )
 	// print the doc using QPainter at zoom level 1
 	// TODO : better use eps export?
 	// TODO : use real page layout stuff
-	QPtrListIterator<VLayer> i = m_part->document().layers();
+	QPtrListIterator<VLayer> i = part()->document().layers();
 	KoRect rect( 0, 0, width(), height() );
 	for( ; i.current(); ++i )
 		//if( i.current()->visible() )
@@ -343,7 +348,7 @@ KarbonView::editCopy()
 void
 KarbonView::editPaste()
 {
-	VObjectListIterator itr( m_part->document().selection()->objects() );
+	VObjectListIterator itr( part()->document().selection()->objects() );
 	VObjectList selection;
 	for( ; itr.current() ; ++itr )
 	{
@@ -351,34 +356,34 @@ KarbonView::editPaste()
 		temp->transform( QWMatrix().translate( VGlobal::copyOffset, VGlobal::copyOffset ) );
 		selection.append( temp );
 	}
-	m_part->document().selection()->clear();
+	part()->document().selection()->clear();
 	// Calc new selection
 	VObjectListIterator itr2( selection );
 	for( ; itr2.current() ; ++itr2 )
 	{
-		m_part->insertObject( itr2.current() );
-		m_part->document().selection()->append( itr2.current() );
+		part()->insertObject( itr2.current() );
+		part()->document().selection()->append( itr2.current() );
 	}
-	m_part->repaintAllViews();
+	part()->repaintAllViews();
 }
 
 void
 KarbonView::editSelectAll()
 {
-	m_part->document().selection()->append();
+	part()->document().selection()->append();
 
-	if( m_part->document().selection()->objects().count() > 0 )
-		m_part->repaintAllViews();
+	if( part()->document().selection()->objects().count() > 0 )
+		part()->repaintAllViews();
 	selectionChanged();
 }
 
 void
 KarbonView::editDeselectAll()
 {
-	if( m_part->document().selection()->objects().count() > 0 )
+	if( part()->document().selection()->objects().count() > 0 )
 	{
-		m_part->document().selection()->clear();
-		m_part->repaintAllViews();
+		part()->document().selection()->clear();
+		part()->repaintAllViews();
 	}
 	selectionChanged();
 }
@@ -387,8 +392,8 @@ void
 KarbonView::editDeleteSelection()
 {
 kdDebug() << "*********" << endl;
-	m_part->addCommand(
-		new VDeleteCmd( &m_part->document() ),
+	part()->addCommand(
+		new VDeleteCmd( &part()->document() ),
 		true );
 }
 
@@ -402,49 +407,54 @@ KarbonView::editPurgeHistory()
 		i18n( "C&ontinue" ),	// TODO: is there a constant for this?
 		"edit_purge_history" ) )
 	{
-		m_part->purgeHistory();
+		// Use the VCleanUp command to remove "deleted"
+		// objects from all layers.
+		VCleanUpCmd cmd( &part()->document() );
+		cmd.execute();
+
+		part()->clearHistory();
 	}
 }
 
 void
 KarbonView::selectionBringToFront()
 {
-	m_part->addCommand(
-		new VZOrderCmd( &m_part->document(), VZOrderCmd::bringToFront ), true );
+	part()->addCommand(
+		new VZOrderCmd( &part()->document(), VZOrderCmd::bringToFront ), true );
 }
 
 void
 KarbonView::selectionMoveUp()
 {
-	m_part->addCommand(
-		new VZOrderCmd( &m_part->document(), VZOrderCmd::up ), true );
+	part()->addCommand(
+		new VZOrderCmd( &part()->document(), VZOrderCmd::up ), true );
 }
 
 void
 KarbonView::selectionMoveDown()
 {
-	m_part->addCommand(
-		new VZOrderCmd( &m_part->document(), VZOrderCmd::down ), true );
+	part()->addCommand(
+		new VZOrderCmd( &part()->document(), VZOrderCmd::down ), true );
 }
 
 void
 KarbonView::selectionSendToBack()
 {
-	m_part->addCommand(
-		new VZOrderCmd( &m_part->document(), VZOrderCmd::sendToBack ), true );
+	part()->addCommand(
+		new VZOrderCmd( &part()->document(), VZOrderCmd::sendToBack ), true );
 }
 
 void
 KarbonView::groupSelection()
 {
-	m_part->addCommand( new VGroupCmd( &m_part->document() ), true );
+	part()->addCommand( new VGroupCmd( &part()->document() ), true );
 	selectionChanged();
 }
 
 void
 KarbonView::ungroupSelection()
 {
-	m_part->addCommand( new VUnGroupCmd( &m_part->document() ), true );
+	part()->addCommand( new VUnGroupCmd( &part()->document() ), true );
 	selectionChanged();
 }
 
@@ -473,9 +483,9 @@ kdDebug() << "***" << s.counterClockwise() << endl;
 
 kdDebug() << "***" << t.counterClockwise() << endl;
 
-//	m_part->document().append( p );
+//	part()->document().append( p );
 
-//	m_part->repaintAllViews();
+//	part()->repaintAllViews();
 }
 
 void
@@ -619,7 +629,7 @@ KarbonView::textTool()
 	f.setItalic( m_setFontItalic->isChecked() );
 
 	// TODO : find a way to edit the text, no predefined strings
-	m_part->addCommand( new VTextCmd( m_part, f, "KARBON" ), true );*/
+	part()->addCommand( new VTextCmd( part(), f, "KARBON" ), true );*/
 }
 
 void
@@ -707,8 +717,8 @@ KarbonView::pathInsertKnots()
 {
 	if( m_insertKnotsDlg->exec() )
 	{
-		m_part->addCommand( new VInsertKnotsCmd(
-			&m_part->document(), m_insertKnotsDlg->knots() ), true );
+		part()->addCommand( new VInsertKnotsCmd(
+			&part()->document(), m_insertKnotsDlg->knots() ), true );
 	}
 }
 
@@ -717,8 +727,8 @@ KarbonView::pathFlatten()
 {
 	if( m_flattenDlg->exec() )
 	{
-		m_part->addCommand( new VFlattenCmd(
-			&m_part->document(), m_flattenDlg->flatness() ), true );
+		part()->addCommand( new VFlattenCmd(
+			&part()->document(), m_flattenDlg->flatness() ), true );
 	}
 }
 
@@ -727,8 +737,8 @@ KarbonView::pathRoundCorners()
 {
 	if( m_roundCornersDlg->exec() )
 	{
-		m_part->addCommand( new VRoundCornersCmd(
-			&m_part->document(), m_roundCornersDlg->radius() ), true );
+		part()->addCommand( new VRoundCornersCmd(
+			&part()->document(), m_roundCornersDlg->radius() ), true );
 	}
 }
 
@@ -737,8 +747,8 @@ KarbonView::pathWhirlPinch()
 {
 	if( m_whirlPinchDlg->exec() )
 	{
-		m_part->addCommand( new VWhirlPinchCmd(
-			&m_part->document(),
+		part()->addCommand( new VWhirlPinchCmd(
+			&part()->document(),
 			m_whirlPinchDlg->angle(),
 			m_whirlPinchDlg->pinch(),
 			m_whirlPinchDlg->radius() ), true );
@@ -770,14 +780,14 @@ KarbonView::zoomChanged()
 	}
 	setZoom( zoomFactor );
 	// TODO : I guess we should define a document size member at this point...
-	//kdDebug() << "m_part->pageLayout().ptWidth :" << m_part->pageLayout().ptWidth << endl;
-	//kdDebug() << "m_part->pageLayout().ptHeight :" << m_part->pageLayout().ptHeight << endl;
+	//kdDebug() << "part()->pageLayout().ptWidth :" << part()->pageLayout().ptWidth << endl;
+	//kdDebug() << "part()->pageLayout().ptHeight :" << part()->pageLayout().ptHeight << endl;
 	// TODO : the default shouldnt be necessary?
-	if( int( m_part->pageLayout().ptWidth ) == 0 || int( m_part->pageLayout().ptHeight ) == 0 )
+	if( int( part()->pageLayout().ptWidth ) == 0 || int( part()->pageLayout().ptHeight ) == 0 )
 		m_canvas->resizeContents( int( 600 * zoomFactor ), int( 800 * zoomFactor ) );
 	else
-		m_canvas->resizeContents( int( m_part->pageLayout().ptWidth * zoomFactor ),
-									int( m_part->pageLayout().ptHeight * zoomFactor ) );
+		m_canvas->resizeContents( int( part()->pageLayout().ptWidth * zoomFactor ),
+									int( part()->pageLayout().ptHeight * zoomFactor ) );
 	m_canvas->repaintAll();
 	m_canvas->setFocus();
 }
@@ -787,7 +797,7 @@ KarbonView::solidFillClicked()
 {
 	if( shell() && shell()->rootView() == this )
 	{
-		VFillDlg* dialog = new VFillDlg( m_part );
+		VFillDlg* dialog = new VFillDlg( part() );
 		connect(dialog, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
 		dialog->exec();
 		delete dialog;
@@ -800,7 +810,7 @@ KarbonView::strokeClicked()
 {
 	if( shell() && shell()->rootView() == this )
 	{
-		VStrokeDlg* dialog = new VStrokeDlg( m_part );
+		VStrokeDlg* dialog = new VStrokeDlg( part() );
 		connect(dialog, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
 		dialog->exec();
 		delete dialog;
@@ -811,29 +821,29 @@ KarbonView::strokeClicked()
 void
 KarbonView::slotStrokeChanged( const VStroke &c )
 {
-	m_part->document().selection()->setStroke( c );
+	part()->document().selection()->setStroke( c );
 
-	m_part->addCommand( new VStrokeCmd( &m_part->document(), &c ), true );
+	part()->addCommand( new VStrokeCmd( &part()->document(), &c ), true );
 
-	m_strokeFillPreview->update( *( m_part->document().selection()->stroke() ),
-								 *( m_part->document().selection()->fill() ) );
+	m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
+								 *( part()->document().selection()->fill() ) );
 }
 
 void
 KarbonView::slotFillChanged( const VFill &f )
 {
-	m_part->document().selection()->setFill( f );
+	part()->document().selection()->setFill( f );
 
-	m_part->addCommand( new VFillCmd( &m_part->document(), f ), true );
+	part()->addCommand( new VFillCmd( &part()->document(), f ), true );
 
-	m_strokeFillPreview->update( *( m_part->document().selection()->stroke() ),
-								 *( m_part->document().selection()->fill() ) );
+	m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
+								 *( part()->document().selection()->fill() ) );
 }
 
 void
 KarbonView::slotJoinStyleClicked()
 {
-	VObjectListIterator itr( m_part->document().selection()->objects() );
+	VObjectListIterator itr( part()->document().selection()->objects() );
 	for( ; itr.current() ; ++itr )
 	{
 		VStroke stroke( *( itr.current()->stroke() ) );
@@ -842,13 +852,13 @@ KarbonView::slotJoinStyleClicked()
 		itr.current()->setStroke( stroke );
 	}
 
-	m_part->repaintAllViews();
+	part()->repaintAllViews();
 }
 
 void
 KarbonView::slotCapStyleClicked()
 {
-	VObjectListIterator itr( m_part->document().selection()->objects() );
+	VObjectListIterator itr( part()->document().selection()->objects() );
 	for( ; itr.current() ; ++itr )
 	{
 		VStroke stroke( *( itr.current()->stroke() ) );
@@ -857,7 +867,7 @@ KarbonView::slotCapStyleClicked()
 		itr.current()->setStroke( stroke );
 	}
 
-	m_part->repaintAllViews();
+	part()->repaintAllViews();
 }
 
 void
@@ -871,7 +881,7 @@ KarbonView::setLineWidth()
 void
 KarbonView::setLineWidth( double val)
 {
-	m_part->addCommand( new VStrokeLineWidthCmd( &m_part->document(), val ), true );
+	part()->addCommand( new VStrokeLineWidthCmd( &part()->document(), val ), true );
 	return;
 }
 
@@ -1103,7 +1113,7 @@ KarbonView::reorganizeGUI()
 {
 	if( statusBar() )
 	{
-		if( m_part->showStatusBar() )
+		if( part()->showStatusBar() )
 			statusBar()->show();
 		else
 			statusBar()->hide();
@@ -1153,12 +1163,12 @@ KarbonView::selectionChanged()
 		m_setLineWidth->setValue( part()->document().selection()->objects().getFirst()->stroke()->lineWidth() );
 		if( m_ColorManager->isStrokeDocker() )
 		{
-			VColor *c = new VColor( m_part->document().selection()->objects().getFirst()->stroke()->color() );
+			VColor *c = new VColor ( part()->document().selection()->objects().getFirst()->stroke()->color() );
 			m_ColorManager->setColor( c );
 		}
 		else
 		{
-			VColor *c = new VColor( m_part->document().selection()->objects().getFirst()->fill()->color() );
+			VColor *c = new VColor ( part()->document().selection()->objects().getFirst()->fill()->color() );
 			m_ColorManager->setColor( c );
 		}
 	}

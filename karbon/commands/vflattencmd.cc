@@ -57,7 +57,7 @@
 VFlattenCmd::VFlattenCmd( VDocument *doc, double flatness )
 		: VCommand( doc, i18n( "Flatten" ) )
 {
-	m_selection = m_doc->selection()->clone();
+	m_selection = document()->selection()->clone();
 
 	m_flatness = flatness > 0.0 ? flatness : 1.0;
 }

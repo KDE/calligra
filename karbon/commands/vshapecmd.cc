@@ -41,13 +41,13 @@ VShapeCmd::execute()
 	else
 	{
 		m_shape->setState( VObject::normal );
-		m_shape->setFill( *( m_doc->selection()->fill() ) );
-		m_shape->setStroke( *( m_doc->selection()->stroke() ) );
+		m_shape->setFill( *( document()->selection()->fill() ) );
+		m_shape->setStroke( *( document()->selection()->stroke() ) );
 
 		// Add path:
-		m_doc->append( m_shape );
-		m_doc->selection()->clear();
-		m_doc->selection()->append( m_shape );
+		document()->append( m_shape );
+		document()->selection()->clear();
+		document()->selection()->append( m_shape );
 	}
 }
 
@@ -57,7 +57,7 @@ VShapeCmd::unexecute()
 	if( !m_shape )
 		return;
 
-	m_doc->selection()->take( *m_shape );
+	document()->selection()->take( *m_shape );
 	m_shape->setState( VObject::deleted );
 }
 

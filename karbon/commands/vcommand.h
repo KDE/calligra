@@ -37,7 +37,7 @@ class VCommand : public KNamedCommand, protected VVisitor
 {
 public:
 	VCommand( VDocument* doc, const QString& name )
-		: KNamedCommand( name ), m_doc( doc )
+		: KNamedCommand( name ), m_document( doc )
 	{
 		assert( doc );
 	}
@@ -46,8 +46,10 @@ public:
 	virtual void execute() = 0;
 	virtual void unexecute() {}
 
-protected:
-	VDocument* m_doc;
+	VDocument* document() const { return m_document; }
+
+private:
+	VDocument* m_document;
 };
 
 

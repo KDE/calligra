@@ -17,18 +17,42 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VCLEANUP_H__
-#define __VCLEANUP_H__
+#include <klocale.h>
+
+#include "vcleanupcmd.h"
+#include "vlayer.h"
 
 
-#include "vvisitor.h"
-
-
-class VCleanUp : public VVisitor
+VCleanUpCmd::VCleanUpCmd( VDocument *doc )
+		: VCommand( doc, i18n( "Clean Up" ) )
 {
-public:
-	virtual void visitVLayer( VLayer& layer );
-};
+}
 
-#endif
+VCleanUpCmd::~VCleanUpCmd()
+{
+}
 
+void
+VCleanUpCmd::execute()
+{
+	visit( *document() );
+}
+
+void
+VCleanUpCmd::unexecute()
+{
+}
+
+void
+VCleanUpCmd::visitVLayer( VLayer& layer )
+{
+	VObjectListIterator itr( layer.objects() );
+	for( ; itr.current(); ++itr )
+	{
+		if( itr.current()->state() == VObject::deleted )
+		{
+			delete( itr.current() );
+			layer.take( *itr.current() );
+		}
+	}
+}

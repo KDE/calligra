@@ -10,14 +10,12 @@ noinst_LTLIBRARIES = libkarbonvisitors.la
 
 noinst_HEADERS = \
 	vboolean.h \
-	vcleanup.h \
 	vselectnodes.h \
 	vselectobjects.h \
 	vtransformnodes.h 
 
 libkarbonvisitors_la_SOURCES = \
 	vboolean.cc \
-	vcleanup.cc \
 	vselectnodes.cc \
 	vselectobjects.cc \
 	vtransformnodes.cc 

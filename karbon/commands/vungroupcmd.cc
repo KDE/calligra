@@ -28,7 +28,7 @@
 VUnGroupCmd::VUnGroupCmd( VDocument *doc )
 	: VCommand( doc, i18n( "Ungroup Objects" ) )
 {
-	m_group = dynamic_cast<VGroup *>( m_doc->selection()->objects().getFirst() );
+	m_group = dynamic_cast<VGroup *>( document()->selection()->objects().getFirst() );
 	if( m_group )
 		m_objects = m_group->objects();
 }
@@ -44,13 +44,13 @@ VUnGroupCmd::execute()
 	if( !m_group )
 		return;
 
-	m_doc->selection()->clear();
+	document()->selection()->clear();
 
 	VObjectListIterator itr( m_group->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_doc->selection()->append( itr.current() );
+		document()->selection()->append( itr.current() );
 	}
 
 	VGroup* parent;
@@ -82,12 +82,12 @@ VUnGroupCmd::unexecute()
 	for ( ; itr.current() ; ++itr )
 	{
 		// TODO : remove from corresponding VLayer
-		m_doc->activeLayer()->take( *itr.current() );
+		document()->activeLayer()->take( *itr.current() );
 		m_group->append( itr.current() );
 	}
 
-	m_doc->append( m_group );
-	m_doc->selection()->clear();
-	m_doc->selection()->append( m_group );
+	document()->append( m_group );
+	document()->selection()->clear();
+	document()->selection()->append( m_group );
 }
 

@@ -33,16 +33,16 @@ class KarbonPartIface : virtual public KoDocumentIface
 public:
 	KarbonPartIface( KarbonPart *part_ );
 k_dcop:
-    void selectAllObjects();
-    void deselectAllObjects();
+	void selectAllObjects();
+	void deselectAllObjects();
 
-    bool showStatusBar () const;
-    void setShowStatusBar (bool b);
-    void setUndoRedoLimit( int _undo );
-    void initConfig();
-    int maxRecentFiles() const;
-    void purgeHistory();
-    QString unitName() const;
+	bool showStatusBar () const;
+	void setShowStatusBar (bool b);
+	void setUndoRedoLimit( int _undo );
+	void initConfig();
+	int maxRecentFiles() const;
+	void clearHistory();
+	QString unitName() const;
 
 private:
 	KarbonPart *m_part;
