@@ -1,4 +1,4 @@
-INCLUDES  = -I./core/ $(all_includes)
+INCLUDES  = -I$(srcdir)/core/ $(all_includes)
 
 SUBDIRS = core . data pics
 
