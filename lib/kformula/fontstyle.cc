@@ -19,6 +19,7 @@
 
 #include <qpainter.h>
 #include <qpen.h>
+#include <qfontdatabase.h>
 
 #include "fontstyle.h"
 
@@ -34,9 +35,13 @@ void FontStyle::fillNameTable( SymbolTable::NameTable& names )
     }
 }
 
-static bool fontAvailable( QString fontName )
+static bool fontAvailable( const QString& fontName )
 {
+#if 0 // slloooww
     if ( QFontInfo( QFont( fontName ) ).family().lower() == fontName.lower() )
+#endif
+    QFontDatabase db;
+    if ( db.families().findIndex( fontName ) != -1 ) // ## TODO remove foundry from families list?
         return true;
     else {
         kdWarning(39001) << "Font '" << fontName << "' not found" << endl;
