@@ -35,6 +35,7 @@
 #include <qwmatrix.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
+#include <qregexp.h>
 
 /******************************************************************
  *
@@ -62,7 +63,7 @@ void KPSlidePreview::setPage( QListViewItem *item )
 
     float faktW = static_cast<float>( width() ) / static_cast<float>( doc->getPageSize( 0, 0, 0 ).width() );
     float faktH = static_cast<float>( height() ) / static_cast<float>( doc->getPageSize( 0, 0, 0 ).height() );
-    float fakt = QMIN( faktW, faktH );
+    float fakt = QMIN( faktW, faktH ) - 0.1;
 
     QWMatrix m;
     m.scale( fakt, fakt );
@@ -99,49 +100,53 @@ void KPPresStructObjectItem::setPage( KPBackGround *p, int pgnum )
 }
 
 /*================================================================*/
-void KPPresStructObjectItem::setObject( KPObject *o )
+void KPPresStructObjectItem::setObject( KPObject *o, int num )
 {
     object = o;
     if ( object && parent() ) {
 	switch ( object->getType() ) {
 	case OT_PICTURE:
-	    setText( 0, i18n( "Picture" ) );
+	    setText( 0, i18n( "Picture (%1)" ).arg( num + 1 ) );
 	    setPixmap( 0, BarIcon( "mini_picture" ) );
 	    break;
 	case OT_LINE:
-	    setText( 0, i18n( "Line" ) );
+	    setText( 0, i18n( "Line (%1)" ).arg( num + 1 ) );
 	    setPixmap( 0, BarIcon( "mini_line" ) );
 	    break;
 	case OT_RECT:
-	    setText( 0, i18n( "Rectangle" ) );
+	    setText( 0, i18n( "Rectangle (%1)" ).arg( num + 1 ) );
 	    setPixmap( 0, BarIcon( "mini_rect" ) );
 	    break;
 	case OT_ELLIPSE:
-	    setText( 0, i18n( "Circle/Ellipse" ) );
+	    setText( 0, i18n( "Circle/Ellipse (%1)" ).arg( num + 1 ) );
 	    setPixmap( 0, BarIcon( "mini_circle" ) );
 	    break;
 	case OT_TEXT:
-	    setText( 0, i18n( "Text" ) );
+	    setText( 0, i18n( "Text (%1)" ).arg( num + 1 ) );
 	    setPixmap( 0, BarIcon( "mini_text" ) );
 	    break;
 	case OT_AUTOFORM:
-	    setText( 0, i18n( "Autoform" ) );
+	    setText( 0, i18n( "Autoform (%1)" ).arg( num + 1 ) );
 	    setPixmap( 0, BarIcon( "mini_autoform" ) );
 	    break;
 	case OT_CLIPART:
-	    setText( 0, i18n( "Clipart" ) );
+	    setText( 0, i18n( "Clipart (%1)" ).arg( num + 1 ) );
 	    setPixmap( 0, BarIcon( "mini_clipart" ) );
 	    break;
 	case OT_UNDEFINED:
-	    setText( 0, i18n( "Undefined" ) );
+	    setText( 0, i18n( "Undefined (%1)" ).arg( num + 1 ) );
 	    break;
 	case OT_PIE:
-	    setText( 0, i18n( "Pie/Arc/Chord" ) );
+	    setText( 0, i18n( "Pie/Arc/Chord (%1)" ).arg( num + 1 ) );
 	    setPixmap( 0, BarIcon( "mini_pie" ) );
 	    break;
 	case OT_PART:
-	    setText( 0, i18n( "Embedded Part" ) );
+	    setText( 0, i18n( "Embedded Part (%1)" ).arg( num + 1 ) );
 	    setPixmap( 0, BarIcon( "mini_part" ) );
+	    break;
+	case OT_GROUP:
+	    setText( 0, i18n( "Group Object (%1)" ).arg( num + 1 ) );
+	    setPixmap( 0, BarIcon( "group" ) );
 	    break;
 	}
     }
@@ -203,7 +208,7 @@ void KPPresStructView::setupSlideList()
 	    if ( doc->getPageOfObj( j, 0, 0 ) == (int)i + 1 ) {
 		KPPresStructObjectItem *item_ = new KPPresStructObjectItem( item );
 		item_->setPage( doc->backgroundList()->at( i ), i );
-		item_->setObject( doc->objectList()->at( j ) );
+		item_->setObject( doc->objectList()->at( j ), j );
 	    }
 	}
     }
@@ -224,6 +229,8 @@ void KPPresStructView::setupPagePreview()
     slidePreview = new KPSlidePreview( box, doc, view );
     connect( slides, SIGNAL( selectionChanged( QListViewItem * ) ),
 	     slidePreview, SLOT( setPage( QListViewItem * ) ) );
+    connect( slides, SIGNAL( selectionChanged( QListViewItem * ) ),
+	     this, SLOT( makeStuffVisible( QListViewItem * ) ) );
 }
 
 /*================================================================*/
@@ -231,4 +238,36 @@ void KPPresStructView::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     hsplit->resize( size() );
+}
+
+/*================================================================*/
+void KPPresStructView::makeStuffVisible( QListViewItem *item )
+{
+    if ( !item )
+	return;
+    
+    if ( !item->parent() )
+	view->skipToPage( atoi( item->text( 0 ) ) - 1 );
+    else {
+	QString s = item->text( 0 );
+	QRegExp r( QString::fromLatin1( "([a-zA-Z0-9\\.\\*\\?\\ \\+\\;]*)$" ) );
+	int len;
+	int index = r.match( s, 0, &len );
+	if ( index >= 0 )
+	    s = s.mid( index + 1, len - 2 );
+	else
+	    return;
+	view->getPage()->deSelectAllObj();
+	view->skipToPage( atoi( item->text( 0 ) ) - 1 );
+	int obj = s.toInt() - 1;
+	KPObject *kpobject = doc->objectList()->at( obj );
+	QRect rect( kpobject->getBoundingRect( 0, 0 ) );
+	kpobject->setSelected( TRUE );
+	doc->repaint( kpobject );
+	rect.setLeft( rect.left() - 20 );
+	rect.setTop( rect.top() - 20 );
+	rect.setRight( rect.right() + 20 );
+	rect.setBottom( rect.bottom() + 20 );
+	view->makeRectVisible( rect );
+    }
 }

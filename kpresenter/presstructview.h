@@ -68,7 +68,7 @@ public:
     KPPresStructObjectItem( QListViewItem *parent );
 
     void setPage( KPBackGround *p, int pgnum );
-    void setObject( KPObject *o );
+    void setObject( KPObject *o, int num );
     KPBackGround *getPage();
     int getPageNum();
     KPObject *getObject();
@@ -106,6 +106,9 @@ protected:
     QCheckBox *showPreview;
     KPSlidePreview *slidePreview;
 
+protected slots:
+    void makeStuffVisible( QListViewItem *item );
+    
 signals:
     void presStructViewClosed();
 

@@ -885,7 +885,7 @@ void KPresenterView::screenConfigPages()
 /*========================== screen presStructView  =============*/
 void KPresenterView::screenPresStructView()
 {
-    if ( !presStructView ) {
+//     if ( !presStructView ) {
 	page->deSelectAllObj();
 	page->setToolEditMode( TEM_MOUSE );
 
@@ -893,7 +893,7 @@ void KPresenterView::screenPresStructView()
 	presStructView->setCaption( i18n( "KPresenter - Presentation structure viewer" ) );
 	QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
 	presStructView->show();
-    }
+//     }
 }
 
 /*===============================================================*/
@@ -2938,7 +2938,7 @@ float KPresenterView::getCurrentFaktor()
 {
     if ( !presStarted )
 	return 1.0;
-    
+
     return page->presFakt();
 }
 
