@@ -2357,7 +2357,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     if ( left_pen.style() == Qt::NoPen &&
          ( !m_pObscuringCell || m_pObscuringCell->column() == _col ) )
     {
-        if( table()->getShowGrid() )
+        if( table()->getShowGrid() && !_painter.device()->isExtDev())
         {
             left_offset = 1;
 
@@ -2378,7 +2378,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     if ( top_pen.style() == Qt::NoPen &&
          ( !m_pObscuringCell || m_pObscuringCell->row() == _row ) )
     {
-        if( table()->getShowGrid() )
+        if( table()->getShowGrid() && !_painter.device()->isExtDev())
         {
             top_offset = 1;
 
