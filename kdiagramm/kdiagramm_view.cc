@@ -127,19 +127,19 @@ bool KDiagrammView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _facto
 
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon( "lines.xpm" ) );
+  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon( "lines" ) );
   toolTip = Q2C( i18n( "Lines" ) );
   m_idButtonEdit_Lines = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "modeLines", true, toolTip, -1 );
 
-  pix = OPUIUtils::convertPixmap( BarIcon( "areas.xpm" ) );
+  pix = OPUIUtils::convertPixmap( BarIcon( "areas" ) );
   toolTip = Q2C( i18n( "Areas" ) );
   m_idButtonEdit_Areas = m_vToolBarEdit->insertButton2( pix, 2, SIGNAL( clicked() ), this, "modeAreas", true, toolTip, -1 );
 
-  pix = OPUIUtils::convertPixmap( BarIcon( "bars.xpm" ) );
+  pix = OPUIUtils::convertPixmap( BarIcon( "bars" ) );
   toolTip = Q2C( i18n( "3D-Bars" ) );
   m_idButtonEdit_Bars = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeBars", true, toolTip, -1 );
 
-  pix = OPUIUtils::convertPixmap( BarIcon( "cakes.xpm" ) );
+  pix = OPUIUtils::convertPixmap( BarIcon( "cakes" ) );
   toolTip = Q2C( i18n( "Cakes" ) );
   m_idButtonEdit_Cakes = m_vToolBarEdit->insertButton2( pix , 3, SIGNAL( clicked() ), this, "modeCakes", true, toolTip, -1 );
 
@@ -167,19 +167,19 @@ bool KDiagrammView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   text = Q2C( i18n( "&Edit" ) );
   _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
 
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon( "lines.xpm" ) );
+  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( BarIcon( "lines" ) );
   text = Q2C( i18n("&Lines") );
   m_idMenuEdit_Lines = m_vMenuEdit->insertItem6( pix, text, this, "modeLines", CTRL + Key_L, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap( BarIcon( "areas.xpm" ) );
+  pix = OPUIUtils::convertPixmap( BarIcon( "areas" ) );
   text = Q2C( i18n("&Areas") );
   m_idMenuEdit_Areas = m_vMenuEdit->insertItem6( pix, text, this, "modeAreas", CTRL + Key_A, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap( BarIcon( "bars.xpm" ) );
+  pix = OPUIUtils::convertPixmap( BarIcon( "bars" ) );
   text = Q2C( i18n("&Bars") );
   m_idMenuEdit_Bars = m_vMenuEdit->insertItem6( pix, text, this, "modeBars", CTRL + Key_B, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap( BarIcon( "cakes.xpm" ) );
+  pix = OPUIUtils::convertPixmap( BarIcon( "cakes" ) );
   text = Q2C( i18n("&Cakes") );
   m_idMenuEdit_Cakes = m_vMenuEdit->insertItem6( pix, text, this, "modeCakes", CTRL + Key_C, -1, -1 );
 
