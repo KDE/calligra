@@ -106,14 +106,15 @@ struct bookMark
     QString bookname;
     int paragIndex;
     QString frameSetName;
-    int cursorIndex;
+    int cursorStartIndex;
+    int length;
 };
 
 class KWBookMark
 {
 public:
     KWBookMark(const QString &_name);
-    KWBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos);
+    KWBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos, int _len);
     ~KWBookMark();
     QString bookMarkName()const { return m_name;}
     void setBookMarkName( const QString & _name ) { m_name = _name;}
@@ -121,13 +122,17 @@ public:
     void setFrameSet(KWFrameSet * _frame) { m_frameSet = _frame;}
     KWTextParag *parag() const { return m_parag;}
     void setParag( KWTextParag *_parag ) { m_parag = _parag;}
-    void setBookmarkIndex( int _pos ) { m_index = _pos;}
-    int bookmarkIndex() const  { return m_index ; }
+    void setBookmarkStartIndex( int _pos ) { m_startIndex = _pos;}
+    int bookmarkStartIndex() const  { return m_startIndex ; }
+    void setBookmarkLength( int _length ) { m_length = _length;}
+    int bookmarkLength() const  { return m_length ; }
+
 private:
     QString m_name;
     KWTextParag *m_parag;
     KWFrameSet *m_frameSet;
-    int m_index;
+    int m_startIndex;
+    int m_length;
 };
 
 /******************************************************************/
@@ -650,7 +655,7 @@ public:
     double footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
     void setFootNoteSeparatorLineWidth( double _width){  m_footNoteSeparatorLineWidth=_width;}
 
-    void insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos);
+    void insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos, int _length);
     void deleteBookMark(const QString &_name);
     void renameBookMark(const QString &_oldname, const QString &_newName);
 

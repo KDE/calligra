@@ -5749,7 +5749,9 @@ void KWView::addBookmark()
         KWCreateBookmarkDia dia( m_doc->listOfBookmarkName(), this, 0 );
         if ( dia.exec() ) {
             QString bookName = dia.bookmarkName();
-            m_doc->insertBookMark(bookName, static_cast<KWTextParag*>(edit->cursor()->parag()), edit->textFrameSet(), edit->cursor()->index());
+            int startSel = edit->textDocument()->selectionStartCursor( KoTextDocument::Standard ).index();
+            int endSel = edit->textDocument()->selectionEndCursor( KoTextDocument::Standard ).index();
+            m_doc->insertBookMark(bookName, static_cast<KWTextParag*>(edit->cursor()->parag()), edit->textFrameSet(), startSel, endSel-startSel+1);
         }
     }
 }
@@ -5762,7 +5764,20 @@ void KWView::selectBookmark()
         KWBookMark * book = m_doc->bookMarkByName( bookName );
         if ( book )
         {
-            m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->parag(), book->bookmarkIndex(),true );
+            m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->parag(), book->bookmarkStartIndex(),true );
+            if ( book->bookmarkLength() != 0)
+            {
+                KWTextFrameSetEdit * edit = currentTextEdit();
+                if ( edit )
+                {
+                    edit->textDocument()->removeSelection( KoTextDocument::Standard );
+                    edit->textDocument()->setSelectionStart( KoTextDocument::Standard, edit->cursor() );
+                    edit->cursor()->setIndex(book->bookmarkStartIndex()+book->bookmarkLength() );
+                    edit->textDocument()->setSelectionEnd( KoTextDocument::Standard, edit->cursor());
+                    book->parag()->setChanged( true );
+                    m_doc->slotRepaintChanged( edit->frameSet() );
+                }
+            }
         }
     }
 }

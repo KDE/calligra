@@ -130,15 +130,17 @@ KWBookMark::KWBookMark(const QString &_name)
     : m_name(_name),
       m_parag(0L),
       m_frameSet(0L),
-      m_index( 0 )
+      m_startIndex( 0 ),
+      m_length( 0)
 {
 }
 
-KWBookMark::KWBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos)
+KWBookMark::KWBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos, int _len)
     : m_name(_name),
       m_parag(_parag),
       m_frameSet(_frameSet),
-      m_index( _pos )
+      m_startIndex( _pos ),
+      m_length( _len )
 {
 }
 
@@ -1118,9 +1120,10 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             {
                 bookMark *tmp=new bookMark;
                 tmp->bookname=bookmarkitem.attribute("name");
-                tmp->cursorIndex=bookmarkitem.attribute("cursorIndex").toInt();
+                tmp->cursorStartIndex=bookmarkitem.attribute("cursorIndex").toInt();
                 tmp->frameSetName=bookmarkitem.attribute("frameset");
                 tmp->paragIndex = bookmarkitem.attribute("parag").toInt();
+                tmp->length = bookmarkitem.attribute("length").toInt();
                 m_tmpBookMarkList.append(tmp);
             }
             bookmarkitem=bookmarkitem.nextSibling().toElement();
@@ -2030,7 +2033,9 @@ QDomDocument KWDocument::saveXML()
                 bookElem.setAttribute( "name", book.current()->bookMarkName());
                 bookElem.setAttribute( "frameset", book.current()->frameSet()->getName());
                 bookElem.setAttribute( "parag", book.current()->parag()->paragId());
-                bookElem.setAttribute( "cursorIndex", book.current()->bookmarkIndex());
+                bookElem.setAttribute( "cursorIndex", book.current()->bookmarkStartIndex());
+                bookElem.setAttribute( "length", book.current()->bookmarkLength());
+
             }
         }
     }
@@ -3957,9 +3962,9 @@ void KWDocument::setCursorInProtectedArea( bool b )
     m_cursorInProtectectedArea=b;
 }
 
-void KWDocument::insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos)
+void KWDocument::insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet, int _pos, int _length)
 {
-    KWBookMark *book =new KWBookMark( _name, _parag, _frameSet, _pos);
+    KWBookMark *book =new KWBookMark( _name, _parag, _frameSet, _pos, _length);
     m_bookmarkList.append( book );
 }
 
@@ -4056,7 +4061,8 @@ void KWDocument::initBookmarkList()
                 else
                 {
                     tmp->setParag( parag );
-                    tmp->setBookmarkIndex( book.current()->cursorIndex);
+                    tmp->setBookmarkStartIndex( book.current()->cursorStartIndex);
+                    tmp->setBookmarkLength( book.current()->length);
                     m_bookmarkList.append( tmp );
                 }
             }
