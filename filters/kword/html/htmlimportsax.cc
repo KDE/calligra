@@ -32,7 +32,7 @@
 
 #include <koStore.h>
 
-#include "ImportTags.h"
+//#include "ImportTags.h"
 #include "htmlimportsax.h"
 
 // *Note for the reader of this code*
@@ -600,7 +600,6 @@ bool EndElementP (StackItem* stackItem)
 
 bool StructureParser :: startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
 {
-    //Warning: be careful that the element names can be lower case or upper case (not very XML)
     kdDebug(30503) << indent << " <" << name << ">" << endl; //DEBUG
     indent += "*"; //DEBUG
 
@@ -708,7 +707,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
             {
                 success=StartElementSpan(stackItem,structureStack.current(),QString::null,strStyleAttribute);
             }
-            else if (name=="body")
+            else if (name=="body")     // <===============================================================================================
             {
                 // Just tell that we are the <body> element.
                 stackItem->elementType=ElementTypeBody;
