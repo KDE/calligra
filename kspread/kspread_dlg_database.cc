@@ -649,6 +649,8 @@ void KSpreadDatabaseDlg::accept()
     m_pView->doc()->undoBuffer()->appendUndo( undo );
   }
 
+  m_pView->doc()->emitBeginOperation();
+
   if ( query.first() )
   {
     if ( query.isValid() )
@@ -680,6 +682,7 @@ void KSpreadDatabaseDlg::accept()
         break;
     }
   }
+  m_pView->doc()->emitEndOperation();
 
   KWizard::accept();
 }
