@@ -68,12 +68,16 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     // 2 - draw
 
     p->save();
-    // Determine crect in contents coords
+    // Determine crect in view coords
     QRect crect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
+    //kdDebug() << "KWAnchor::draw crect ( in internal coords ) = " << DEBUGRECT( crect ) << endl;
     QPoint cnPoint = crect.topLeft(); //fallback
     (void) fs->internalToNormal( crect.topLeft(), cnPoint );
+    //kdDebug() << "KWAnchor::draw cnPoint " << cnPoint.x() << "," << cnPoint.y() << endl;
     crect.moveTopLeft( fs->currentViewMode()->normalToView( cnPoint ) );
-    // and go back to contents coord system
+    //kdDebug() << "KWAnchor::draw crect ( in view coords ) = " << DEBUGRECT( crect ) << endl;
+
+    // and make painter go back to view coord system
     QPoint iPoint( 0, paragy );
     if ( fs->internalToNormal( iPoint, cnPoint ) )
     {
@@ -91,6 +95,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     }
 
     p->restore();
+    //kdDebug() << "KWAnchor::draw done" << endl;
 }
 
 QSize KWAnchor::size() const

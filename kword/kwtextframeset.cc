@@ -264,6 +264,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
                                 QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                 KWFrameSetEdit *edit )
 {
+    //kdDebug() << "KWTextFrameSet::drawFrame crect(r)=" << DEBUGRECT( r ) << endl;
     //m_currentDrawnFrame = frame;
     if ( frame->isCopy() )
     {

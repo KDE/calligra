@@ -825,10 +825,10 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                                bool onlyChanged, bool resetChanged,
                                KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
-    /*kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
+    /* kdDebug(32002) << "KWFrameSet::drawContents " << this << " " << getName()
                    << " onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged
                    << " crect= " << DEBUGRECT(crect)
-                   << endl;*/
+                   << endl; */
 
     QListIterator<KWFrame> frameIt( frameIterator() );
     KWFrame * lastRealFrame = 0L;
@@ -847,7 +847,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
         QRect normalFrameRect( m_doc->zoomRect( *frame ) );
         //QRect frameRect( viewMode->normalToView( normalFrameRect ) );
         QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-        //kdDebug(32002) << "KWTFS::drawContents frame=" << frame << " crect=" << DEBUGRECT(r) << endl;
+        //kdDebug(32002) << "                    frame=" << frame << " crect=" << DEBUGRECT(r) << endl;
         r = r.intersect( outerRect ); // Intersect with the outerrect since we draw the border too
         //kdDebug(32002) << "                    framerect=" << DEBUGRECT(*frame) << " intersec=" << DEBUGRECT(r) << " todraw=" << !r.isEmpty() << endl;
         if ( !r.isEmpty() )
@@ -860,7 +860,13 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
             int offsetY = normalFrameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
 
             QRect icrect = viewMode->viewToNormal( r );
-            icrect.moveBy( -offsetX, -offsetY );   // portion of the frame to be drawn, in qrt coords
+            //kdDebug() << "KWFrameSet::drawContents crect after view-to-normal:" << DEBUGRECT( icrect )  << endl;
+            // y=-1 means all (in QRT), so let's not go there !
+            QPoint tl( QMAX( 0, icrect.left() - offsetX ), QMAX( 0, icrect.top() - offsetY ) );
+            icrect.moveTopLeft( tl );
+
+            // icrect is now the portion of the frame to be drawn, in qrt coords
+            //kdDebug() << "KWFrameSet::drawContents in internal coords:" << DEBUGRECT( icrect ) << endl;
 
             // The settings come from this frame
             KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
