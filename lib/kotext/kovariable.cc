@@ -18,7 +18,7 @@
 */
 
 #include "kovariable.h"
-#include "koVariable.moc"
+#include "kovariable.moc"
 #include <koDocumentInfo.h>
 #include <kozoomhandler.h>
 #include <klocale.h>
