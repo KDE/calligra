@@ -203,10 +203,10 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bViewFormattingChars = false;
     m_bShowHelplines = false;
     m_bHelplinesToFront = false;
-    m_bShowGrid = false;
+    m_bShowGrid = true;
     m_bGridToFont = false;
 
-    m_bSnapToGrid= false;
+    m_bSnapToGrid = true;
 
     m_cursorInProtectectedArea=true;
 
@@ -233,8 +233,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     //_pageLayout.unit = KoUnit::U_MM;
     m_indent = MM_TO_POINT( 10.0 );
-    m_gridX = MM_TO_POINT( 10.0 );
-    m_gridY = MM_TO_POINT( 10.0 );
+    m_gridX = MM_TO_POINT( 5.0 );
+    m_gridY = MM_TO_POINT( 5.0 );
 
     oldGridX = m_gridX;
     oldGridY = m_gridY;
@@ -340,11 +340,11 @@ void KPresenterDoc::initConfig()
         setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ));
         setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
         setViewFormattingChars( config->readBoolEntry( "ViewFormattingChars", false ) );
-        setShowGrid( config->readBoolEntry( "ShowGrid" , false ));
+        setShowGrid( config->readBoolEntry( "ShowGrid" , true ));
         setGridToFront(  config->readBoolEntry( "GridToFront" , false ));
         setSnapToGrid( config->readBoolEntry( "SnapToGrid", true ));
-        setGridX( config->readDoubleNumEntry( "ResolutionX", MM_TO_POINT( 10.0 ) ));
-        setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 10.0 ) ));
+        setGridX( config->readDoubleNumEntry( "ResolutionX", MM_TO_POINT( 5.0 ) ));
+        setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 5.0 ) ));
 
         setHelpLineToFront( config->readBoolEntry( "HelpLineToFront" , false ));
         m_bInsertDirectCursor= config->readBoolEntry( "InsertDirectCursor", false );
