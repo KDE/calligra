@@ -158,7 +158,7 @@ void OOWriterWorker::writeStylesXml(void)
     zipWriteData(m_styles);
 
     zipWriteData(" <style:automatic-styles>\n");
-    zipWriteData("  <style:page-master-name style:nmae=\"pm1\">\n");
+    zipWriteData("  <style:page-master-name style:name=\"pm1\">\n");
     
     zipWriteData("   <style:properties ");
 
