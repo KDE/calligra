@@ -87,11 +87,15 @@ class KWEFKWordLeader
         virtual bool doCloseTextFrameSet (void); // Like AbiWord's </section>
 
     public:
-        int m_syntaxVersion; // -1: unknown, 1: KWord 0.8, 2: KWord 1.1 & 1.2, 3: KWord 1.3
-        bool m_oldSyntax; // true if oldSyntax (KWord 0.8)
+        /// -1: unknown, 1: KWord 0.8, 2: KWord 1.1 & 1.2, 3: KWord 1.3
+        int m_syntaxVersion;
+        /// true if oldSyntax (KWord 0.8)
+        bool m_oldSyntax;
         int m_numPages;
         int m_columns;
         double m_columnspacing;
+        /// Name of the current frame set
+        QString m_currentFramesetName;
 
     private:
         KoFilterChain* m_chain;

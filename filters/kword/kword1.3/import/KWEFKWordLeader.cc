@@ -254,11 +254,12 @@ static void ProcessFramesetTag ( QDomNode        myNode,
     int     row       = -1;
     int     cols      = -1;
     int     rows      = -1;
-    QString name;
     QString grpMgr;
 
+    const QString oldName ( leader->m_currentFramesetName );
+
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "name",        "QString", (void *) &name      )
+    attrProcessingList << AttrProcessing ( "name",        leader->m_currentFramesetName )
                        << AttrProcessing ( "frameType",   "int",     (void *) &frameType )
                        << AttrProcessing ( "frameInfo",   "int",     (void *) &frameInfo )
                        << AttrProcessing ( "removable",   "",        NULL                )
@@ -404,7 +405,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             kdDebug (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
 #endif
 
-            FrameAnchor *frameAnchor = findAnchor (name, *paraList);
+            FrameAnchor *frameAnchor = findAnchor ( leader->m_currentFramesetName, *paraList );
 
             if ( frameAnchor )
             {
@@ -427,7 +428,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             }
             else
             {
-                kdWarning (30508) << "ProcessFramesetTag: Couldn't find anchor " << name << endl;
+                kdWarning (30508) << "ProcessFramesetTag: Couldn't find anchor " << leader->m_currentFramesetName << endl;
             }
 
             break;
@@ -440,6 +441,8 @@ static void ProcessFramesetTag ( QDomNode        myNode,
     default:
             kdWarning (30508) << "Unexpected frametype " << frameType << " (in ProcessFramesetTag)" << endl;
     }
+
+    leader->m_currentFramesetName = oldName;
 
 #if 0
     kdDebug (30508) << "ProcessFramesetTag () - End" << endl;
