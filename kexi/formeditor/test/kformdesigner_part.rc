@@ -118,7 +118,7 @@
 <ToolBar name="tools" fullWidth="false" noMerge="1">
 <text>Tools Toolbar</text>
    <Action name="pixmap_collection"/>
-   <Action name="change_style"/>
+  <!-- <Action name="change_style"/> !-->
 </ToolBar>
 <ToolBar name="format" fullWidth="false" noMerge="1">
 <text>Format Toolbar</text>
