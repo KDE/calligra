@@ -262,6 +262,7 @@ public slots:
     void slotUpdateChildGeometry( KWChild *_child );
     void paragDiaOk();
     void styleManagerOk();
+    void fontDiaOk();
     void openPageLayoutDia()  { formatPage(); }
     void newPageLayout( KoPageLayout _layout );
     void newLeftIndent( double _leftIndent);

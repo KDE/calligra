@@ -55,6 +55,8 @@
 #include "kwconfig.h"
 #include "kcharselectdia.h"
 #include "kwcommand.h"
+#include "kwfont.h"
+
 
 #include <koMainWindow.h>
 #include <koDocument.h>
@@ -1497,15 +1499,19 @@ void KWView::insertContents()
 /*===============================================================*/
 void KWView::formatFont()
 {
-    kdDebug() << "KWView::formatFont" << endl;
+    kdDebug(32002) << "KWView::formatFont" << endl;
     QFont tmpFont = tbFont;
+    KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>( gui->canvasWidget()->currentFrameSetEdit() );
+    if (edit) // TODO disable action if not text frameset
+    {
+        KWFontDia *fontDia = new KWFontDia( this, "",tmpFont,actionFormatUnderline->isChecked(),actionFormatSub->isChecked(), actionFormatSuper->isChecked());
+        connect( fontDia, SIGNAL( okClicked() ), this, SLOT( fontDiaOk() ) );
 
-    if ( KFontDialog::getFont( tmpFont ) ) {
-        tbFont = tmpFont;
-        KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
-        if ( edit )
-            edit->setFont(tbFont);
+        fontDia->show();
+        delete fontDia;
     }
+    gui->canvasWidget()->setFocus();
+
 
 #if 0
     QFont tmpFont = tbFont;
@@ -1524,12 +1530,20 @@ void KWView::formatFont()
         actionFormatUnderline->setChecked( tbFont.underline() );
         if ( gui ) {
             gui->canvasWidget()->formatChanged( format );
-#endif
-            gui->canvasWidget()->setFocus();
-#if 0
         }
     }
 #endif
+}
+
+/*===============================================================*/
+void KWView::fontDiaOk()
+{
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
+    if (!edit)
+        return;
+    const KWFontDia * fontDia = static_cast<const KWFontDia*>(sender());
+    if ( edit )
+        edit->setFont(tbFont,fontDia->getUnderline(),fontDia->getSubScript(),fontDia->getSuperScript());
 }
 
 /*===============================================================*/

@@ -2458,10 +2458,22 @@ void KWTextFrameSetEdit::setFamily(const QString &font){
     textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Family );
 }
 
-void KWTextFrameSetEdit::setFont(const QFont &font){
+void KWTextFrameSetEdit::setFont(const QFont &font,bool _underline,bool _subscript,bool _superscript){
     QTextFormat format( *currentFormat );
     format.setFont( font );
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Font /* zoom the font size */);
+    if(!_subscript)
+        {
+            if(!_superscript)
+                format.setVAlign(QTextFormat::AlignNormal);
+            else
+                format.setVAlign(QTextFormat::AlignSuperScript);
+        }
+    else
+        format.setVAlign(QTextFormat::AlignSubScript);
+
+    format.setUnderline( _underline );
+
+    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Font|QTextFormat::VAlign|QTextFormat::Underline /* zoom the font size */);
 }
 
 void KWTextFrameSetEdit::setTextColor(const QColor &color) {
