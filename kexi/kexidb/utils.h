@@ -127,6 +127,10 @@ namespace KexiDB
 			return fieldName + " is NULL";
 		return fieldName + "=" + drv->valueToSQL( t, value );
 	}
+
+	/*! \return identifier for object \a objName of type \a objType
+	 or 0 if such object does not exist. */
+	int idForObjectName( Connection &conn, const QString& objName, int objType );
 }
 
 #endif
