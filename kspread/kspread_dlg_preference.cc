@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1999, 2000, 2001 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 1999, 2000, 2001, 2002, 2003 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -956,15 +956,17 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *na
   config = KSpreadFactory::global()->config();
 
 
-  m_spellConfigWidget = new KSpellConfig( /*box,*/ m_pView->doc()->getKSpellConfig()/*, false*/);
-#if 0
+  m_spellConfigWidget = new KSpellConfig( box, "spell_check",m_pView->doc()->getKSpellConfig()/*, false*/);
+    dontCheckUpperWord = new QCheckBox( i18n("Do not check upper word"),box);
+    dontCheckTitleCase = new QCheckBox( i18n("Do not check title case"),box);
+
     if( config->hasGroup("KSpell kspread") )
     {
         config->setGroup( "KSpell kspread" );
-        m_spellConfigWidget->setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
-        m_spellConfigWidget->setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
+
+        dontCheckUpperWord->setChecked(config->readBoolEntry("KSpell_dont_check_upper_word",false));
+        dontCheckTitleCase->setChecked(config->readBoolEntry("KSpell_dont_check_title_case",false));
     }
-#endif
     //m_spellConfigWidget->addIgnoreList( m_pView->doc()->spellListIgnoreAll() );
 }
 
@@ -984,16 +986,16 @@ void configureSpellPage::apply()
 //  m_spellConfigWidget->saveDictionary();
   KSpreadDoc* doc = m_pView->doc();
   doc->setKSpellConfig(*_spellConfig);
-#if 0
-  bool state=m_spellConfigWidget->dontCheckUpperWord();
+
+    bool state=dontCheckUpperWord->isChecked();
   config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
   doc->setDontCheckUpperWord(state);
 
-  state=m_spellConfigWidget->dontCheckTitleCase();
+  state=dontCheckTitleCase->isChecked();
   config->writeEntry("KSpell_dont_check_title_case",(int)state);
   doc->setDontCheckTitleCase(state);
-#endif
-  m_pView->doc()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
+
+  //m_pView->doc()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
 
   m_pView->slotUpdateView( m_pView->activeTable() );
 }

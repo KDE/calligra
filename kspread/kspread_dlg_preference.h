@@ -168,6 +168,8 @@ protected:
   KSpreadView * m_pView;
   KConfig * config;
     KSpellConfig *m_spellConfigWidget;
+    QCheckBox *dontCheckUpperWord;
+    QCheckBox *dontCheckTitleCase;
 } ;
 
 class KSpreadpreference : public KDialogBase
