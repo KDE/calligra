@@ -357,7 +357,7 @@ QString KoTextFormat::displayedString( QString str )const
     else if ( m_attributeFont== ATT_LOWER)
         return str.lower();
     else if ( m_attributeFont== ATT_SMALL_CAPS)
-        return str;
+        return str.upper();
     else
     {
         kdDebug()<<" Error in AttributeStyle \n";
@@ -374,7 +374,7 @@ QChar KoTextFormat::displayedChar( QChar c )const
     else if ( m_attributeFont== ATT_LOWER)
         return c.lower();
     else if ( m_attributeFont== ATT_SMALL_CAPS)
-        return c;
+        return c.upper();
     else
     {
         kdDebug()<<" Error in AttributeStyle \n";
