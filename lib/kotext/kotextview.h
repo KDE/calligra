@@ -146,7 +146,9 @@ public:
     void removeComment();
     void copyTextOfComment();
 
+    // This is in fact "from selection or cursor"
     KoStyle * createStyleFromSelection(const QString & name);
+    void updateStyleFromSelection(KoStyle* style);
 
     QString underCursorWord();
 

@@ -301,8 +301,8 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
 
     connect (m_canvas, SIGNAL(selectionChanged(bool)),
              actionChangeCase, SLOT(setEnabled(bool)));
-    connect (m_canvas, SIGNAL(selectionChanged(bool)),
-             actionCreateStyleFromSelection, SLOT(setEnabled(bool)));
+    //connect (m_canvas, SIGNAL(selectionChanged(bool)),
+    //         actionCreateStyleFromSelection, SLOT(setEnabled(bool)));
 
     connect( m_canvas, SIGNAL( currentObjectEditChanged() ), this,  SLOT( slotObjectEditChanged()));
 
@@ -6649,7 +6649,7 @@ void KPresenterView::slotObjectEditChanged()
         hasSelection = edit->textObject()->hasSelection();
         actionEditCut->setEnabled(hasSelection);
     }
-    actionCreateStyleFromSelection->setEnabled((edit!=0)&& hasSelection);
+    actionCreateStyleFromSelection->setEnabled(edit!=0);
 
     actionChangeCase->setEnabled( (val && rw && hasSelection ) || (rw && !edit && isText) );
 
@@ -6810,12 +6810,25 @@ void KPresenterView::createStyleFromSelection()
         QPtrListIterator<KoStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
         for ( ; styleIt.current(); ++styleIt )
             list.append( styleIt.current()->name() );
-        KoCreateStyleDia *dia = new KoCreateStyleDia( list , this, 0 );
+        KoCreateStyleDia *dia = new KoCreateStyleDia( QStringList(), this, 0 );
         if ( dia->exec() )
         {
-            KoStyle *style=edit->createStyleFromSelection(dia->nameOfNewStyle());
-            m_pKPresenterDoc->styleCollection()->addStyleTemplate( style );
-            m_pKPresenterDoc->updateAllStyleLists();
+            QString name = dia->nameOfNewStyle();
+            if ( list.contains( name ) ) // update existing style
+            {
+                // TODO confirmation message box
+                KoStyle* style = m_pKPresenterDoc->styleCollection()->findStyle( name );
+                Q_ASSERT( style );
+                if ( style )
+                    edit->updateStyleFromSelection( style );
+            }
+            else // create new style
+            {
+                KoStyle *style = edit->createStyleFromSelection( name );
+                m_pKPresenterDoc->styleCollection()->addStyleTemplate( style );
+                m_pKPresenterDoc->updateAllStyleLists();
+            }
+            showStyle( name );
         }
         delete dia;
     }

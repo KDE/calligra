@@ -230,8 +230,8 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionEditCopy, SLOT(setEnabled(bool)) );
 
-    connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
-             actionCreateStyleFromSelection, SLOT(setEnabled(bool)));
+    //connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+    //         actionCreateStyleFromSelection, SLOT(setEnabled(bool)));
 
     connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionConvertToTextBox, SLOT(setEnabled(bool)));
@@ -1106,7 +1106,7 @@ void KWView::setupActions()
                                         this, SLOT( createStyleFromSelection()),
                                         actionCollection(), "create_style" );
     actionCreateStyleFromSelection->setToolTip( i18n( "Create a new style based on the currently selected text." ) );
-    actionCreateStyleFromSelection->setWhatsThis( i18n( "Create a new style based on the currently selected text." ) );
+    actionCreateStyleFromSelection->setWhatsThis( i18n( "Create a new style based on the currently selected text." ) ); // ## "on the current paragraph, taking the formatting from where the cursor is. Selecting text isn't even needed."
 
     actionConfigureFootEndNote = new KAction( i18n( "&Footnote..." ), 0,
                                         this, SLOT( configureFootEndNote()),
@@ -5591,7 +5591,7 @@ void KWView::slotFrameSetEditChanged()
 #if 0 // KWORD_HORIZONTAL_LINE
     actionInsertHorizontalLine->setEnabled( state);
 #endif
-    actionCreateStyleFromSelection->setEnabled( state && hasSelection);
+    actionCreateStyleFromSelection->setEnabled( state /*&& hasSelection*/);
     actionConvertToTextBox->setEnabled( state && hasSelection);
     actionAddPersonalExpression->setEnabled( state && hasSelection);
     actionSortText->setEnabled( state && hasSelection);
@@ -6219,13 +6219,25 @@ void KWView::createStyleFromSelection()
         {
             list.append( styleIt.current()->name() );
         }
-        KoCreateStyleDia *dia = new KoCreateStyleDia( list , this, 0 );
+        KoCreateStyleDia *dia = new KoCreateStyleDia( QStringList(), this, 0 );
         if ( dia->exec() )
         {
-            KoStyle *style=edit->createStyleFromSelection(dia->nameOfNewStyle());
-            m_doc->styleCollection()->addStyleTemplate( style );
-            m_doc->updateAllStyleLists();
-
+            QString name = dia->nameOfNewStyle();
+            if ( list.contains( name ) ) // update existing style
+            {
+                // TODO confirmation message box
+                KoStyle* style = m_doc->styleCollection()->findStyle( name );
+                Q_ASSERT( style );
+                if ( style )
+                    edit->updateStyleFromSelection( style );
+            }
+            else // create new style
+            {
+                KoStyle *style = edit->createStyleFromSelection( name );
+                m_doc->styleCollection()->addStyleTemplate( style );
+                m_doc->updateAllStyleLists();
+            }
+            showStyle( name );
         }
         delete dia;
     }

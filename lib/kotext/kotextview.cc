@@ -1312,16 +1312,30 @@ void KoTextView::removeComment()
 
 KoStyle * KoTextView::createStyleFromSelection(const QString & name)
 {
-    KoTextCursor startSel = textDocument()->selectionStartCursor( KoTextDocument::Standard );
+    KoTextCursor cursor = *m_cursor;
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
+        cursor = textDocument()->selectionStartCursor( KoTextDocument::Standard );
     KoStyle * style = new KoStyle (name);
-    KoParagLayout layout(m_cursor->parag()->paragLayout());
+    KoParagLayout layout(cursor.parag()->paragLayout());
     layout.style = style;
     style->setFollowingStyle( style );
-    style->format() = *(m_cursor->parag()->at(startSel.index())->format());
+    style->format() = *(cursor.parag()->at(cursor.index())->format());
 
     style->paragLayout() = layout;
-    layout.style = style;
+    // Select this new style - hmm only the parag layout, we don't want to erase any text-formatting
+    cursor.parag()->setParagLayout( style->paragLayout() );
     return style;
+}
+
+void KoTextView::updateStyleFromSelection( KoStyle* style )
+{
+    KoTextCursor cursor = *m_cursor;
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
+        cursor = textDocument()->selectionStartCursor( KoTextDocument::Standard );
+
+    style->paragLayout() = cursor.parag()->paragLayout();
+    style->paragLayout().style = style;
+    style->format() = *(cursor.parag()->at(cursor.index())->format());
 }
 
 void KoTextView::addBookmarks(const QString &url)
