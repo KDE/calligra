@@ -22,6 +22,7 @@
 #include "kptproject.h"
 #include "kptresource.h"
 #include "kptdurationwidget.h"
+#include "kptcalendar.h"
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -169,6 +170,14 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
         groupChanged(item);
     }
 
+    if (p) {
+        KPTStandardWorktime *wt = p->standardWorktime();
+        if (wt) {
+            //FIXME handle decimals
+            effort->setFieldRightscale(0, wt->durationDay().hours()); 
+            effort->setFieldLeftscale(1, wt->durationDay().hours());
+        }
+    }
     effort->setValue(task.effort()->expected());
 
     //TODO: calc optimistic/pessimistic

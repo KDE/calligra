@@ -231,3 +231,13 @@ int KPTDurationWidget::visibleFields()
     }
     return fieldMask;
 }
+
+void KPTDurationWidget::setFieldLeftscale(int f, unsigned ls)
+{
+    m_fields[f].leftScale = ls;
+}
+
+void KPTDurationWidget::setFieldRightscale(int f, unsigned rs)
+{
+    m_fields[f].rightScale = rs;
+}
