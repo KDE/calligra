@@ -1,0 +1,6 @@
+Thu Apr 30 02:08:41 1998  Torben Weis  <weis@localhost>
+
+	* Makefile (CXXFLAGS): Addes libkofficecore
+
+	* kpresenter.idl: Changes 'oneway' to 'slot'
+
