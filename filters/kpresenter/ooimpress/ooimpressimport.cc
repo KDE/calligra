@@ -1194,10 +1194,25 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute( "italic", 1 );
         if ( m_styleStack.hasAttribute( "style:text-underline" ) )
         {
-            if ( m_styleStack.attribute( "style:text-underline" ) == "single" )
+            QString underType = m_styleStack.attribute( "style:text-underline" );
+            QString underLineColor = m_styleStack.attribute( "style:text-underline-color" );
+            if ( underType == "single" )
             {
                 text.setAttribute( "underline", 1 );
                 text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
+                text.setAttribute("underlinecolor", underLineColor);
+            }
+            else if(underType =="double")
+            {
+                text.setAttribute( "underline", "double" );
+                text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
+                text.setAttribute("underlinecolor", underLineColor);
+            }
+            else if( underType == "bold" )
+            {
+                text.setAttribute("underline","single-bold");
+                text.setAttribute("underlinestyleline","solid");
+                text.setAttribute("underlinecolor", underLineColor);
             }
         }
 
