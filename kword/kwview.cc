@@ -4667,6 +4667,13 @@ void KWView::slotCounterStyleSelected()
             // else the suffix remains the default, '.'
             // TODO save this setting, to use the last one selected in the dialog?
             // (same for custom bullet char etc.)
+
+            // 68927: restart numbering, by default, if last parag wasn't numbered
+            if ( currentTextEdit() ) {
+                KoTextParag* parag = currentTextEdit()->cursor()->parag();
+                if ( parag->prev() && !parag->prev()->counter() )
+                    c.setRestartCounter(true);
+            }
         }
 
         QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
