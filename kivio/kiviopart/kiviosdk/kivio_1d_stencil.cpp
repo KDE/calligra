@@ -927,10 +927,13 @@ void Kivio1DStencil::copyBasicInto( Kivio1DStencil *pStencil )
 
 void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
 {
+  if(m_pTextStyle->text().isEmpty()) {
+    return;
+  }
+  
   KoZoomHandler* zoomHandler = pData->zoomHandler;
   KivioPainter *painter = pData->painter;
 
-  int tf;
   int _x, _y, _w, _h;
 
   _x = zoomHandler->zoomItX(m_pTextConn->x());
@@ -939,6 +942,7 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
   _h = 10000000;
 
   QFont f = m_pTextStyle->font();
+  int tf = m_pTextStyle->hTextAlign() | m_pTextStyle->vTextAlign();
 
   f.setPointSizeFloat(f.pointSizeFloat() * (((float)zoomHandler->zoom()) / 100.0));
   painter->setFont(f);
@@ -948,7 +952,6 @@ void Kivio1DStencil::drawText( KivioIntraStencilData *pData )
   QPainter p(&pix);
   p.setPen(m_pTextStyle->color());
   p.setFont(f);
-  tf = m_pTextStyle->hTextAlign() | m_pTextStyle->vTextAlign();
   p.drawText( 0, 0, boundRect.width(), boundRect.height(), tf, m_pTextStyle->text() );
   QBitmap mask;
   mask = pix;
