@@ -21,7 +21,7 @@
 #ifndef __VTRANSFORMDOCKER_H__
 #define __VTRANSFORMDOCKER_H__
 
-#include <vdocker.h>
+#include "vdocker.h"
 
 class KarbonPart;
 class KarbonView;

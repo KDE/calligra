@@ -397,5 +397,5 @@ VCanvas::dropEvent( QDropEvent *e )
 	m_view->dropEvent( e );
 }
 
-#include <vcanvas.moc>
+#include "vcanvas.moc"
 

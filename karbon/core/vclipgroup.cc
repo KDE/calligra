@@ -31,7 +31,7 @@
 #include "vcomposite.h"
 #include "vsegment.h"
 #include <vpainter.h>
-#include <vtext.h>
+#include "vtext.h"
 VClipGroup::VClipGroup( VObject* parent, VState state ) : VGroup( parent, state ) {}
 VClipGroup::VClipGroup( const VClipGroup& group ) : VGroup( group ) {}
 

@@ -21,7 +21,7 @@
 #ifndef __VSTROKEDOCKER_H__
 #define __VSTROKEDOCKER_H__
 
-#include <vdocker.h>
+#include "vdocker.h"
 
 class QHButtonGroup;
 class QWidget;
@@ -38,7 +38,7 @@ class VStrokeDocker : public VDocker
 
 public:
 	 VStrokeDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
- 
+
 public slots:
 	virtual void setStroke( const VStroke & );
 

@@ -21,7 +21,7 @@
 #ifndef __VSTYLEDOCKER_H__
 #define __VSTYLEDOCKER_H__
 
-#include <vdocker.h>
+#include "vdocker.h"
 
 #include <koIconChooser.h>
 #include <qwidget.h>

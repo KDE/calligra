@@ -21,7 +21,7 @@
 #ifndef __VCOLORDOCKER_H__
 #define __VCOLORDOCKER_H__
 
-#include <vdocker.h>
+#include "vdocker.h"
 
 class QTabWidget;
 class QWidget;
@@ -40,7 +40,7 @@ public:
 
 	 virtual bool isStrokeDocker() { return m_isStrokeDocker; };
 	 VColor color() { return *m_Color; }
- 
+
 public slots:
 	virtual void setFillDocker();
 	virtual void setStrokeDocker();

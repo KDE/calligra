@@ -21,7 +21,7 @@
 
 #include <math.h>
 
-#include <vglobal.h>
+#include "vglobal.h"
 
 
 int
