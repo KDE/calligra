@@ -66,6 +66,9 @@
 
 #include <kdebug.h>
 
+#define BORDER_SPACE 1
+
+
 /**
  * A pointer to the decimal separator
  */

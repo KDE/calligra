@@ -19,8 +19,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __kspread_table_h__
-#define __kspread_table_h__
+#ifndef KSPREAD_SHEET
+#define KSPREAD_SHEET
 
 class KSpreadSheet;
 class KSpreadSheetPrint;
@@ -39,7 +39,6 @@ class KoDocumentEntry;
 class KoStyleStack;
 class KoGenStyles;
 class KSpreadGenValidationStyles;
-class QStingList;
 class QWidget;
 class QPainter;
 class QDomElement;
@@ -60,13 +59,10 @@ class KPrinter;
 #include <koOasisStyles.h>
 #include <koxmlwriter.h>
 
-#define BORDER_SPACE 1
-
 #include "kspread_autofill.h"
 #include "kspread_format.h"
 #include "kspread_cell.h"
 #include "kspread_global.h"
-#include "kspread_cluster.h"
 #include "kspread_selection.h"
 
 /********************************************************************
@@ -1320,6 +1316,7 @@ private:
     SheetPrivate* d;
 };
 
+// for compatibility only, remove in the future
 typedef KSpreadSheet KSpreadTable;
 
-#endif
+#endif  // KSPREAD_SHEET

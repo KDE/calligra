@@ -49,6 +49,7 @@
 #include <koStyleStack.h>
 
 #include "ksprsavinginfo.h"
+#include "kspread_cluster.h"
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_global.h"
