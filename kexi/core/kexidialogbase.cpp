@@ -269,9 +269,9 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 	m_currentViewMode = newViewMode;
 	m_newlySelectedView = newView;
 	m_newlySelectedView->setDirty(false);
-	if (!newView->afterSwitchFrom(m_currentViewMode, cancelled)) {
+	if (!newView->afterSwitchFrom(prevViewMode, cancelled)) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
-			<< m_currentViewMode << " restored." << endl; 
+			<< prevViewMode << " restored." << endl; 
 		return false;
 	}
 	m_newlySelectedView = 0;
