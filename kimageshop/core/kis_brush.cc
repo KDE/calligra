@@ -45,7 +45,6 @@ KisBrush::KisBrush(QString file)
   // search and load the brushinfo file
   QFileInfo fi(file);
   file = fi.dirPath() + "/" + fi.baseName() + ".brushinfo";
-  qDebug("%s", file.latin1());
   fi.setFile(file);
   if (fi.exists() && fi.isFile())
     readBrushInfo(file);
@@ -68,7 +67,6 @@ void KisBrush::readBrushInfo(QString file)
   if (spacing > 0)
     m_spacing = spacing;
   m_hotSpot = QPoint(hotspotX, hotspotY);
-  qDebug("blaaaaaahhhhhhhhhhh");
 }
 
 void KisBrush::loadViaQImage(QString file)
