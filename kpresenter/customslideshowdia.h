@@ -28,6 +28,7 @@ class QLineEdit;
 class QMultiLineEdit;
 class QPushButton;
 class KPresenterDoc;
+class QToolButton;
 
 class CustomSlideShowDia : public KDialogBase
 {
@@ -78,13 +79,14 @@ void slotMoveUpSlide();
 
 protected:
     void init();
+    void updateButton();
 
     QListBox *listSlide;
     QListBox *listSlideShow;
-    QPushButton *m_insertSlide;
-    QPushButton *m_removeSlide;
-    QPushButton *m_moveUpSlide;
-    QPushButton *m_moveDownSlide;
+    QToolButton *m_insertSlide;
+    QToolButton *m_removeSlide;
+    QToolButton *m_moveUpSlide;
+    QToolButton *m_moveDownSlide;
     QLineEdit *m_name;
 
 };

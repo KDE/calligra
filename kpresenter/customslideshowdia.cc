@@ -24,7 +24,10 @@
 #include <qlistbox.h>
 #include <qmultilineedit.h>
 #include <qpushbutton.h>
-
+#include <qtoolbutton.h>
+#include <qapplication.h>
+#include <qlayout.h>
+#include <kiconloader.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -58,7 +61,7 @@ CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, KPresenterDoc *_doc, co
   m_pCopy=new QPushButton(i18n("Co&py"),page);
   grid1->addWidget(m_pCopy,4,2);
 
-  m_pAdd->setEnabled(false);
+  //m_pAdd->setEnabled(false);
 
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
@@ -166,43 +169,106 @@ void DefineCustomSlideShow::init()
   QWidget* page = new QWidget( this );
   setMainWidget( page );
 
-  QGridLayout *grid1 = new QGridLayout( page,10,4,KDialog::marginHint(), KDialog::spacingHint());
+  QVBoxLayout *lov = new QVBoxLayout( page );
+  lov->setSpacing( KDialog::spacingHint() );
+  QHBoxLayout *loh = new QHBoxLayout( lov );
 
   QLabel *lab = new QLabel( i18n( "Name" ), page );
-  grid1->addWidget( lab, 0, 0 );
-
+  loh->addWidget( lab );
   m_name = new QLineEdit( page );
-  grid1->addMultiCellWidget( m_name, 0, 0, 1,2 );
+  loh->addWidget( m_name );
 
-  lab = new QLabel( i18n( "Existing slides" ), page );
-  grid1->addWidget( lab, 1, 0 );
+  QHBoxLayout *lo = new QHBoxLayout( lov );
+  lo->setSpacing( KDialog::spacingHint() );
+
+  QVBoxLayout *loAv = new QVBoxLayout( lo );
+  lab = new QLabel( i18n("Existing slides:"), page );
+  loAv->addWidget( lab );
+  listSlide = new QListBox( page );
+  loAv->addWidget( listSlide );
+  lab->setBuddy( listSlide );
+
+  QVBoxLayout *loHBtns = new QVBoxLayout( lo );
+  loHBtns->addStretch( 1 );
+  m_insertSlide = new QToolButton( page );
+  loHBtns->addWidget( m_insertSlide );
+  m_removeSlide = new QToolButton( page );
+  loHBtns->addWidget( m_removeSlide );
+  loHBtns->addStretch( 1 );
+
+  QVBoxLayout *loS = new QVBoxLayout( lo );
+  lab = new QLabel( i18n("Selected slides:"), page );
+  loS->addWidget( lab );
+  listSlideShow = new QListBox( page );
+  loS->addWidget( listSlideShow );
+  lab->setBuddy( listSlideShow );
+
+  QVBoxLayout *loVBtns = new QVBoxLayout( lo );
+  loVBtns->addStretch( 1 );
+  m_moveUpSlide = new QToolButton( page );
+  m_moveUpSlide->setAutoRepeat( true );
+  loVBtns->addWidget( m_moveUpSlide );
+  m_moveDownSlide = new QToolButton( page );
+  m_moveDownSlide->setAutoRepeat( true );
+  loVBtns->addWidget( m_moveDownSlide );
+  loVBtns->addStretch( 1 );
 
 
-  listSlide=new QListBox(page);
-  grid1->addMultiCellWidget(listSlide,2,8,0,0);
+  m_name->setFocus();
 
-  lab = new QLabel( i18n( "Selected slides" ), page );
-  grid1->addWidget( lab, 1, 2 );
+  connect( m_insertSlide, SIGNAL(clicked()), this, SLOT(slotMoveInsertSlide() ) );
+  connect( m_removeSlide, SIGNAL(clicked()), this, SLOT(slotMoveRemoveSlide()) );
+  connect( m_moveUpSlide, SIGNAL(clicked()), this, SLOT( slotMoveUpSlide() ) );
+  connect( m_moveDownSlide, SIGNAL(clicked()), this, SLOT(slotMoveDownSlide()) );
 
-  listSlideShow=new QListBox(page);
-  grid1->addMultiCellWidget(listSlideShow,2,8,2,2);
 
+  m_insertSlide->setIconSet( SmallIconSet( ( QApplication::reverseLayout()? "back" : "forward" ) ) );
+  m_removeSlide->setIconSet( SmallIconSet( (QApplication::reverseLayout()? "forward" : "back") ) );
+  m_moveUpSlide->setIconSet( SmallIconSet( "up" ) );
+  m_moveDownSlide->setIconSet( SmallIconSet( "down" ) );
+
+  updateButton();
+}
+
+void DefineCustomSlideShow::updateButton()
+{
+    int pos = listSlideShow->currentItem();
+    m_moveUpSlide->setEnabled( pos>0 );
+    m_moveDownSlide->setEnabled( pos< ( listSlideShow->count()-1 ) );
+    m_removeSlide->setEnabled( listSlideShow->count()>0 );
 }
 
 void DefineCustomSlideShow::slotMoveUpSlide()
 {
+    int c = listSlideShow->currentItem();
+    if ( c < 1 ) return;
+    QListBoxItem *item = listSlideShow->item( c );
+    listSlideShow->takeItem( item );
+    listSlideShow->insertItem( item, c-1 );
+    listSlideShow->setCurrentItem( item );
+
+    updateButton();
 }
 
 void DefineCustomSlideShow::slotMoveDownSlide()
 {
+    int c = listSlideShow->currentItem();
+    if ( c < 0 || c == int( listSlideShow->count() ) - 1 ) return;
+    QListBoxItem *item = listSlideShow->item( c );
+    listSlideShow->takeItem( item );
+    listSlideShow->insertItem( item, c+1 );
+    listSlideShow->setCurrentItem( item );
+    updateButton();
 }
 
 void DefineCustomSlideShow::slotMoveRemoveSlide()
 {
+    updateButton();
 }
 
 void DefineCustomSlideShow::slotMoveInsertSlide()
 {
+    updateButton();
 }
 
 QStringList DefineCustomSlideShow::customListSlideShow()
