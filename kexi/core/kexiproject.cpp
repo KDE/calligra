@@ -47,7 +47,7 @@
 
 #include "koApplication.h"
 #include "kexi_global.h"
-#include "kexi_utils.h"
+//#include "kexi_utils.h"
 
 #undef JoWenn_VERY_EXPERIMENTAL
 
