@@ -24,6 +24,3 @@ METASOURCES = AUTO
 
 service_DATA = kword_abiword_import.desktop kword_abiword_export.desktop
 servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordabiwordfilter.pot

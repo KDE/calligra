@@ -1,4 +1,4 @@
-// 
+//
 
 /* This file is part of the KDE project
    Copyright (C) 2001, 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
@@ -63,7 +63,7 @@ public:
 protected:
     virtual void setupTranslations( void )
     {
-        KGlobal::locale()->insertCatalogue( "kwordabiwordfilter" );
+        KGlobal::locale()->insertCatalogue( "kofficefilters" );
     }
 };
 

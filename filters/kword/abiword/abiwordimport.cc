@@ -57,7 +57,7 @@ public:
 protected:
     virtual void setupTranslations( void )
     {
-        KGlobal::locale()->insertCatalogue( "kwordabiwordfilter" );
+        KGlobal::locale()->insertCatalogue( "kofficefilters" );
     }
 };
 
