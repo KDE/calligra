@@ -31,7 +31,7 @@
 QCString KoViewIface::newIfaceName()
 {
     static int s_viewIFNumber = 0;
-    QCString name; name.setNum( s_viewIFNumber ); name.prepend("View-");
+    QCString name; name.setNum( s_viewIFNumber++ ); name.prepend("View-");
     return name;
 }
 

@@ -30,7 +30,7 @@
 QCString KoDocumentIface::newIfaceName()
 {
     static int s_docIFNumber = 0;
-    QCString name; name.setNum( s_docIFNumber ); name.prepend("Document-");
+    QCString name; name.setNum( s_docIFNumber++ ); name.prepend("Document-");
     return name;
 }
 
