@@ -20,7 +20,9 @@
 #ifndef _KOFFICE_VERSION_H_
 #define _KOFFICE_VERSION_H_
 
-#define KOFFICE_VERSION_STRING "1.4 Alpha"
+// Remmber to synchronize the version number with the file(s):
+// - koffice/configure.in.in
+#define KOFFICE_VERSION_STRING "1.3post"
 #define KOFFICE_VERSION_MAJOR 1
 #define KOFFICE_VERSION_MINOR 3
 #define KOFFICE_VERSION_RELEASE 90
