@@ -413,9 +413,11 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
             }
         case LayoutData::LS_ATLEAST:
             {
+                // ### TODO: CSS 2 does not known "at-least".
+                // ### TODO:  however draft CCS3 (module 'line') has 'line-stacking-strategy' to tweak this behaviour
                 // We have a at-least line height (in points)
                 const QString height ( QString::number(layout.lineSpacing) ); // ### TODO: rounding?
-                strLayout += "line-height:"; // ### TODO: CSS 2 does not known "at-least".
+                strLayout += "line-height:";
                 strLayout += height;
                 strLayout += "pt; ";
                 break;
