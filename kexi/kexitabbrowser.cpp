@@ -46,6 +46,7 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	//QBoxLayout *layout = boxLayout();  that one changes the orientation dynamically :(
 
 	setResizeEnabled(true);
+	setCloseMode(Always);
 
 	QWidget *box=new QWidget(this);
 	QGridLayout *layout=new QGridLayout(box);
