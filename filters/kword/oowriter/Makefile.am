@@ -24,3 +24,6 @@ METASOURCES = AUTO
 service_DATA = kword_oowriter_import.desktop kword_oowriter_export.desktop
 
 servicedir = $(kde_servicesdir)
+
+messages: rc.cpp
+	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordoowriterfilter.pot
