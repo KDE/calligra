@@ -2,7 +2,7 @@
 <kpartgui name="KivioSelectTool" library="libkivioselecttool" version="2">
 <MenuBar>
   <Menu name="Tools">
-    <Action name="select">
+    <Action name="select" />
   </Menu>
 </MenuBar>
 </kpartgui>

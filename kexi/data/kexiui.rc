@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexi" version="97">
+<kpartgui name="kexi" version="98">
 <MenuBar>
   <Menu name="edit"><text>&amp;Edit</text>
     <Merge/>
@@ -28,7 +28,8 @@
   </Menu>
   <Menu name="help">
     <Menu name="help_licenses" noMerge="1"><text>Other &amp;Licenses</text>
-    <Merge />
+      <Merge />
+    </Menu>
   </Menu>
   <Separator/>
 </MenuBar>
