@@ -415,7 +415,7 @@ void KoView::slotChildChanged( KoDocumentChild *child )
 }
 
 void KoView::setupGlobalActions() {
-    actionNewView = new KAction( i18n( "&New View" ), 0,
+    actionNewView = new KAction( i18n( "&New View" ), "window_new", 0,
         this, SLOT( newView() ),
         actionCollection(), "view_newview" );
 }

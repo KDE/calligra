@@ -190,18 +190,21 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     setCentralWidget( d->m_splitter );
 
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
-    d->m_veryHackyActionList.append(new KAction(i18n("&Close All Views"), 0, this,
-        SLOT(slotCloseAllViews()), actionCollection(), "view_closeallviews"));
+    d->m_veryHackyActionList.append(
+        new KAction(i18n("&Close All Views"), "fileclose",
+                    0, this, SLOT(slotCloseAllViews()),
+                    actionCollection(), "view_closeallviews") );
+
     // set up the action list for the splitter stuff
-    d->m_splitViewActionList.append(new KAction(i18n("&Split View"), 0,
+    d->m_splitViewActionList.append(new KAction(i18n("&Split View"), "view_split", 0,
         this, SLOT(slotSplitView()),
         actionCollection(), "view_split"));
-    d->m_removeView=new KAction(i18n("&Remove View"), 0,
+    d->m_removeView=new KAction(i18n("&Remove View"), "view_remove", 0,
         this, SLOT(slotRemoveView()),
         actionCollection(), "view_rm_splitter");
     d->m_splitViewActionList.append(d->m_removeView);
     d->m_removeView->setEnabled(false);
-    d->m_orientation=new KSelectAction(i18n("Splitter &Orientation"), 0,
+    d->m_orientation=new KSelectAction(i18n("Splitter &Orientation"), "view_orientation", 0,
         this, SLOT(slotSetOrientation()),
         actionCollection(), "view_splitter_orientation");
     QStringList items;
