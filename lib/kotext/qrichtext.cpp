@@ -4313,6 +4313,7 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
     {
         //qDebug( "painting paragraph %p id:%d from line %d", (void*)this, paragId(), m_lineChanged );
         lineStartOfLine( m_lineChanged, &i );
+        line = m_lineChanged - 1; // ++ is the first thing that will happen in the loop
     }
     //else
     //    qDebug( "painting paragraph %p id:%d", (void*)this, paragId() );

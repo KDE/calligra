@@ -175,10 +175,15 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     rect.rRight() += sx;
     rect.rBottom() += sy;
 
+    int offsetY = 0;
     // Start painting from a given line number. Don't know how to make that work
     // when the paragraph has a border though (see KoTextParag::paint).
     if ( parag->lineChanged() > -1 && !parag->hasBorder() )
-        rect.rTop() += zoomHandler->layoutUnitToPixelY( parag->lineY( parag->lineChanged() ) );
+    {
+        offsetY = zoomHandler->layoutUnitToPixelY( parag->lineY( parag->lineChanged() ) );
+        // Skip the lines that are not repainted by moving Top. The bottom doesn't change.
+        rect.rTop() += offsetY;
+    }
 
     QRect crect( cx, cy, cw, ch ); // the overall crect
     QRect ir( rect ); // will be the rect to be repainted
@@ -199,7 +204,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 
 #ifdef DEBUG_PAINTING
     kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG parag->rect=" << parag->rect()
-                   << " pixelRect()=" << ir
+                   << " pixelRect(ir)=" << ir
                    << " crect (pixels)=" << crect
                    << " useDoubleBuffer=" << useDoubleBuffer << endl;
 #endif
@@ -218,6 +223,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 	}
 
     } else {
+        p->save();
 	painter = p;
 	painter->translate( ir.x(), ir.y() );
     }
@@ -242,15 +248,20 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     // Now revert the previous painter translation, and instead make (0,0) the topleft of the PARAGRAPH
     painter->translate( rect.x() - ir.x(), rect.y() - ir.y() );
 #ifdef DEBUG_PAINTING
-//    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG translate " << rect.x() - ir.x() << "," << rect.y() - ir.y() << endl;
+    //kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG translate " << rect.x() - ir.x() << "," << rect.y() - ir.y() << endl;
 #endif
     //painter->setBrushOrigin( painter->brushOrigin() + rect.topLeft() - ir.topLeft() );
 
     // The cliprect is checked in layout units, in KoTextParag::paint
     QRect crect_lu( zoomHandler->pixelToLayoutUnit( crect ) );
 #ifdef DEBUG_PAINTING
-    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG crect_lu=" << crect_lu << endl;
+    //kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG crect_lu=" << crect_lu << endl;
 #endif
+
+    // paintDefault will paint line 'lineChanged' at its normal Y position.
+    // But the buffer-pixmap below starts at Y. We need to translate by -Y
+    // so that the painting happens at the right place.
+    painter->translate( 0, -offsetY );
 
     if ( sx != 0 || sy != 0 )
     {
@@ -278,7 +289,10 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
         p->restore();
 */
     } else {
-	painter->translate( -ir.x(), -ir.y() );
+        // undo previous translations, painter is 'p', i.e. will be used later on
+        p->restore();
+	//painter->translate( -ir.x(), -ir.y() );
+        //painter->translate( 0, +offsetY );
         //painter->setBrushOrigin( painter->brushOrigin() - ir.topLeft() );
     }
 
