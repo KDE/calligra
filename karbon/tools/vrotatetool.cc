@@ -233,11 +233,14 @@ VRotateTool::recalc()
 	VObjectListIterator itr = view()->part()->document().selection()->objects();
 	for ( ; itr.current() ; ++itr )
 	{
-		copy = itr.current()->clone();
-		copy->transform( mat );
-		copy->setState( VObject::edit );
+		if( itr.current()->state() != VObject::deleted )
+		{
+			copy = itr.current()->clone();
+			copy->transform( mat );
+			copy->setState( VObject::edit );
 
-		m_objects.append( copy );
+			m_objects.append( copy );
+		}
 	}
 }
 
