@@ -47,7 +47,7 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
   // A choose should always start at the edited cell
   canvas()->setChooseMarkerRow( canvas()->markerRow() );
   canvas()->setChooseMarkerColumn( canvas()->markerColumn() );
-  
+
   m_blockCheck = FALSE;
 }
 
@@ -61,7 +61,7 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
     // if ( canvas->chooseCursorPosition() >= 0 )
     // m_pEdit->setCursorPosition( canvas->chooseCursorPosition() );
     checkChoose();
-    
+
     canvas()->view()->editWidget()->setText( t );
     // canvas()->view()->editWidget()->setCursorPosition( m_pEdit->cursorPosition() );
 }
@@ -70,7 +70,7 @@ void KSpreadTextEditor::checkChoose()
 {
     if ( m_blockCheck )
 	return;
-    
+
     QString t = m_pEdit->text();
     // QString r = t.mid( t.length() - 1 - canvas()->chooseTextLen(), 1 );
     QString r = t.mid( m_pEdit->cursorPosition() - 1 - canvas()->chooseTextLen(), 1 );
@@ -87,7 +87,7 @@ void KSpreadTextEditor::checkChoose()
     {
 	qDebug("End CHOOSE");
 	canvas()->endChoose();
-    }    
+    }
 }
 
 void KSpreadTextEditor::resizeEvent( QResizeEvent* )
@@ -139,7 +139,7 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 	canvas()->setLastEditorWithFocus( KSpreadCanvas::CellEditor );
 	return FALSE;
     }
-    
+
     if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )
     {
 	QKeyEvent* k = (QKeyEvent*)e;
@@ -155,12 +155,12 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 	// End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
 	if ( e->type() == QEvent::KeyPress && !k->ascii() == 0 )
         {
-	    qDebug("eventFilter End Choose");
+	    kdDebug() << "eventFilter End Choose" << endl;
 	    canvas()->endChoose();
-	    qDebug("Cont");
+	    kdDebug() << "Cont" << endl;
 	}
     }
-    
+
     return FALSE;
 }
 

@@ -153,14 +153,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     hbox->addWidget( m_pOkButton );
     hbox->addSpacing( 6 );
 
-    m_pEditWidget = new KSpreadEditWidget( m_pToolWidget, this );
+    // The line-editor that appears above the table and allows to
+    // edit the cells content. It knows about the two buttons.
+    m_pEditWidget = new KSpreadEditWidget( m_pToolWidget, this, m_pCancelButton, m_pOkButton );
     m_pEditWidget->setFocusPolicy( QWidget::StrongFocus );
     hbox->addWidget( m_pEditWidget, 2 );
     hbox->addSpacing( 2 );
 	
-    QObject::connect( m_pCancelButton, SIGNAL( clicked() ), m_pEditWidget, SLOT( slotAbortEdit() ) );
-    QObject::connect( m_pOkButton, SIGNAL( clicked() ), m_pEditWidget, SLOT( slotDoneEdit() ) );
-
     // The widget on which we display the table
     m_pCanvas = new KSpreadCanvas( m_pFrame, this, doc );
 
@@ -345,7 +344,7 @@ KSpreadView::~KSpreadView()
 }
 
 /*
-// ##### TODO: Move that to KSpreadCanvas
+// Moved that to KSpreadCanvas
 bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 {
     if ( m_pTable == 0L )
@@ -1386,11 +1385,11 @@ void KSpreadView::changeTable( const QString& _name )
     }
 
     setActiveTable( t );
-    
+
     updateEditWidget();
     //refresh toggle button
     m_hideGrid->setChecked( !m_pTable->getShowGrid() );
-    m_showPageBorders->setChecked( m_pTable->isShowPageBorders()); 
+    m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
 
 }
 
@@ -1494,7 +1493,7 @@ void KSpreadView::conditional()
 {
   KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   dlg->show();
- 
+
 }
 
 void KSpreadView::series()

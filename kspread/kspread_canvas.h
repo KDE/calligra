@@ -35,12 +35,14 @@ class KSpreadEditWidget : public QLineEdit
 {
     Q_OBJECT
 public:
-    KSpreadEditWidget( QWidget *_parent, KSpreadView *_gui );
-
-    // void publicKeyPressEvent ( QKeyEvent* _ev );
+    KSpreadEditWidget( QWidget *parent, KSpreadView *gui,
+                       QButton *cancelButton, QButton *okButton);
 
     virtual void setText( const QString& t );
 	
+    // Go into edit mode (enable the buttons)
+    void setEditMode();
+
 public slots:
     void slotAbortEdit();
     void slotDoneEdit();
@@ -50,6 +52,8 @@ protected:
     virtual void focusOutEvent( QFocusEvent* ev );
 
 private:
+    QButton* m_pCancelButton;
+    QButton* m_pOkButton;
     KSpreadView* m_pView;
 };
 
@@ -352,6 +356,11 @@ private:
      * cells once the button is released.
      */
     bool m_bMouseMadeSelection;
+
+    /**
+     * True when the mouse button is pressed
+     */
+    bool m_bMousePressed;
 
     /**
      * If we use the lower right corner of the marker to start autofilling, then this
