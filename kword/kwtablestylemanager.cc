@@ -480,16 +480,6 @@ void KWTableStyleManager::moveUpStyle()
     QString currentStyleName=m_stylesList->currentText ();
     if ( currentStyleName.isEmpty() )
         return;
-    for ( KWTableStyleListItem* p = m_tableStyles.first(); p->changedTableStyle() != 0L; p = m_tableStyles.next(), ++pos )
-    {
-        if ( p->changedTableStyle()->name() == currentStyleName )
-        {
-            m_tableStyles.insert( pos-1, p );
-            m_tableStyles.take( pos+1 );
-            break;
-        }
-    }
-
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
@@ -519,20 +509,6 @@ void KWTableStyleManager::moveDownStyle()
     QString currentStyleName=m_stylesList->currentText ();
     if ( currentStyleName.isEmpty() )
         return;
-
-    for ( KWTableStyleListItem* p = m_tableStyles.first(); p->changedTableStyle() != 0L; p = m_tableStyles.next(), ++pos )
-    {
-        if ( p->changedTableStyle()->name() == currentStyleName )
-        {
-            KWTableStyleListItem * next = m_tableStyles.at(pos+1);
-            if (!next) return;
-
-            m_tableStyles.insert( pos, next );
-            m_tableStyles.take( pos+2 );
-            break;
-        }
-    }
-
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {

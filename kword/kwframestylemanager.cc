@@ -415,17 +415,6 @@ void KWFrameStyleManager::moveUpStyle()
     QString currentStyleName=m_stylesList->currentText ();
     if ( currentStyleName.isEmpty() )
         return;
-
-    for ( KWFrameStyleListItem* p = m_frameStyles.first(); p->changedFrameStyle() != 0L; p = m_frameStyles.next(), ++pos )
-    {
-        if ( p->changedFrameStyle()->name() == currentStyleName )
-        {
-            // We have "prev" "p" and we want "p" "prev"
-            m_frameStyles.insert( pos-1, p ); // "p" "prev" "p"
-            m_frameStyles.take( pos+1 );      // Remove last "p"
-            break;
-        }
-    }
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
@@ -454,18 +443,6 @@ void KWFrameStyleManager::moveDownStyle()
     QString currentStyleName=m_stylesList->currentText ();
     if ( currentStyleName.isEmpty() )
         return;
-    for ( KWFrameStyleListItem* p = m_frameStyles.first(); p->changedFrameStyle() != 0L; p = m_frameStyles.next(), ++pos )
-    {
-        if ( p->changedFrameStyle()->name() == currentStyleName )
-        {
-            KWFrameStyleListItem * next = m_frameStyles.at(pos+1);
-            if (!next) return;
-            // We have "p" "next" and we want "next" "p"
-            m_frameStyles.insert( pos, next ); // "next", "p", "next"
-            m_frameStyles.take( pos+2 );       // Remove last "next"
-            break;
-        }
-    }
 
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
