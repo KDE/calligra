@@ -106,6 +106,31 @@ int KChartParamsIface::pieStart()
     return params->pieStart();
 }
 
+void KChartParamsIface::setExplode( bool explode )
+{
+    params->setExplode(explode);
+}
+
+bool KChartParamsIface::explode() const
+{
+    return params->explode();
+}
+
+void KChartParamsIface::setExplodeFactor( double factor )
+{
+    params->setExplodeFactor(factor);
+}
+
+double KChartParamsIface::explodeFactor() const
+{
+    return params->explodeFactor();
+}
+
+void KChartParamsIface::setThreeDPies( bool threeDPies )
+{
+    params->setThreeDPies(threeDPies);
+}
+
 void KChartParamsIface::hideLegend()
 {
     params->setLegendPosition(KDChartParams::NoLegend);
@@ -146,3 +171,39 @@ void KChartParamsIface::setLineMarker( bool b)
 {
     params->setLineMarker(b);
 }
+
+void KChartParamsIface::setLineWidth( uint width )
+{
+    params->setLineWidth( width );
+}
+
+uint KChartParamsIface::lineWidth() const
+{
+    return params->lineWidth();
+}
+
+bool KChartParamsIface::showGrid()
+{
+    return params->showGrid();
+}
+
+QString KChartParamsIface::header1Text() const
+{
+    return params->header1Text();
+}
+
+void KChartParamsIface::setHeader1Text( const QString& text )
+{
+    params->setHeader1Text(text);
+}
+
+void KChartParamsIface::setHeader2Text( const QString& text )
+{
+    params->setHeader2Text(text);
+}
+
+QString KChartParamsIface::header2Text() const
+{
+    return params->header2Text();
+}
+

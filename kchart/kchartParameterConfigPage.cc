@@ -53,8 +53,8 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     yaxis2 = new QCheckBox( i18n( "Y-Axis2" ), gb1 );
     grid1->addWidget(yaxis2,6,0);
 
-    cross = new QCheckBox( i18n( "Cross" ), gb1 );
-    grid1->addWidget(cross,7,0);
+    lineMarker = new QCheckBox( i18n( "Line Marker" ), gb1 );
+    grid1->addWidget(lineMarker,7,0);
 
     llabel = new QCheckBox( i18n( "Legend" ), gb1 );
     grid1->addWidget(llabel,8,0);
@@ -202,13 +202,13 @@ void KChartParameterConfigPage::init()
 
     if( _params->chartType() == KDChartParams::Line )
     {
-        cross->setEnabled(true);
-        cross->setChecked(_params->lineMarker());
+        lineMarker->setEnabled(true);
+        lineMarker->setChecked(_params->lineMarker());
     }
     else
     {
-        cross->setEnabled(false);
-        cross->setChecked(false);
+        lineMarker->setEnabled(false);
+        lineMarker->setChecked(false);
     }
 
     // PENDING(kalle) Adapt this
@@ -314,5 +314,5 @@ void KChartParameterConfigPage::apply()
     //         }
 
     if( _params->chartType() == KDChartParams::Line )
-        _params->setLineMarker(cross->isChecked());
+        _params->setLineMarker(lineMarker->isChecked());
 }

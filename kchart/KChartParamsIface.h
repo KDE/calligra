@@ -50,13 +50,20 @@ k_dcop:
     //line chart config
     virtual bool lineMarker() const;
     virtual void setLineMarker( bool );
-    
+    virtual void setLineWidth( uint width );
+    virtual uint lineWidth() const;
+
     //pie config
     virtual bool threeDPies();
     virtual void setThreeDPieHeight( int pixels );
     virtual int threeDPieHeight();
     virtual void setPieStart( int degrees );
     virtual int pieStart();
+    virtual void setExplode( bool explode );
+    virtual bool explode() const;
+    virtual void setExplodeFactor( double factor );
+    virtual double explodeFactor() const;
+    virtual void setThreeDPies( bool threeDPies );
 
     //legend
     virtual void hideLegend();
@@ -65,6 +72,13 @@ k_dcop:
     virtual void setLegendTitleText( const QString& text );
     virtual void setLegendSpacing( uint space );
     virtual uint legendSpacing();
+
+    virtual bool showGrid();
+    
+    virtual QString header1Text() const;
+    virtual void setHeader1Text( const QString& text );
+    virtual void setHeader2Text( const QString& text );
+    virtual QString header2Text() const;
 
 private:
     KChartParams *params;
