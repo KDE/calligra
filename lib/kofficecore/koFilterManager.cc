@@ -212,6 +212,8 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
 
   filter->filter( data, mimeType, _native_format );
 
+  filter->destroy();
+
   p = new char[ data.length() ];
   for( CORBA::ULong l = 0; l < data.length(); l++ )
     p[l] = (char)data[l];

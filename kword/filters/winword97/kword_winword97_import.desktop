@@ -1,5 +1,4 @@
-# KDE Config File
-[KDE Desktop Entry]
+[Desktop Entry]
 Name=KWordWinword97Filter
 Name[da]=KWordWinwordFilter
 Name[de]=KWord Winword97-Filter
@@ -9,7 +8,8 @@ Name[hu]=KWordWinword97Szûrõ
 Name[is]=Word97-sía fyrir ritvinnslu
 Name[pl]=Filtr KWorda dla plików Worda97
 Name[ro]=FiltruKwordWinword97
-Exec=kword_winword97.bin --server
+Exec=foo
+CORBAExec=kword_winword97 --server
 Comment=Werner's KWord Winword97 Filter
 Comment[cs]=Wernerùv Winword97 filtr pro KWord
 Comment[da]=Werner's KWord Winword97 filter
@@ -29,10 +29,10 @@ ExportDescription=KWord
 Import=text/winword97
 Patterns=*.doc;
 ImportDescription=MS Word 97
-RepoID=IDL:KOffice/FilterFactory:1.0,
-ActivationMode=shared
+X-KDE-RepoIds=IDL:KOffice/FilterFactory:1.0#KWordWinword97
+X-KDE-ActivationMode=shared
 Type=OpenPart
 Icon=unknown.xpm
 MiniIcon=unknown.xpm
-ServiceType=KOfficeFilter
+ServiceTypes=KOfficeFilter
 

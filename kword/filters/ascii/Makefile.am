@@ -19,12 +19,12 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 idl_DATA =
 idl_HEADERS =
 
-kdelnk_DATA = kword_ascii_import.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/filterlnk
+service_DATA = kword_ascii_import.desktop
+servicedir = $(kde_servicesdir)
 
 datasdir = $(kde_datadir)/koffice/filter
 
-bin_SCRIPTS = kword_ascii
+#bin_SCRIPTS = kword_ascii
 
 messages:
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../kspread_filter.pot

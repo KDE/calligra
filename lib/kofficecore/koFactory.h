@@ -21,6 +21,7 @@
 #define __kofactory_h__
 
 #include "koffice.h"
+#include <komShutdownManager.h>
 
 class KoDocumentFactory : public KOffice::DocumentFactory_skel
 {
@@ -36,7 +37,9 @@ public: \
   virtual ~NAME() { } \
   virtual KOffice::Document_ptr create()  \
   { \
-    return KOffice::Document::_duplicate( new DOC ); \
+    DOC *doc = new DOC; \
+    KOMShutdownManager::self()->watchObject( doc ); \
+    return KOffice::Document::_duplicate( doc ); \
   } \
 };
 

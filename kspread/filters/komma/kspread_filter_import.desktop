@@ -1,5 +1,4 @@
-# KDE Config File
-[KDE Desktop Entry]
+[Desktop Entry]
 Name=KSpreadFilter
 Name[da]=Regnearksfilter
 Name[es]=Filtro KSpread
@@ -9,7 +8,8 @@ Name[is]=Innflutningssíur fyrir töflureikni
 Name[pt]=Filtro de Folhas de Cálculo
 Name[ro]=Filtru Spread
 Name[sv]=Kalkyl-filter
-Exec=kspread_filter.bin --server
+Exec=foo
+CORBAExec=kspread_filter --server
 Comment=Torben's KSpread Filter
 Comment[ca]=El filtre de la fulla de càlcul de Torben
 Comment[cs]=Klient pro ètení diskusních skupin (NEWS)
@@ -34,10 +34,9 @@ Export=application/x-kspread
 ExportDescription=KSpread
 Import=text/plain
 ImportDescription=Komma separated list
-RepoID=IDL:KOffice/FilterFactory:1.0,
-ActivationMode=shared
+X-KDE-RepoIds=IDL:KOffice/FilterFactory:1.0#KSpreadFilter
+X-KDE-ActivationMode=shared
 Type=OpenPart
 Icon=unknown.xpm
 MiniIcon=unknown.xpm
-ServiceType=KOfficeFilter
-
+ServiceTypes=KOfficeFilter

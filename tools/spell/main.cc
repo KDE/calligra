@@ -105,6 +105,7 @@ void SpellChecker::slotDone( char *_buffer )
   delete m_pSpell;
   
   delete this;
+  komapp_orb->shutdown( TRUE );
 }
 
 int main( int argc, char **argv )

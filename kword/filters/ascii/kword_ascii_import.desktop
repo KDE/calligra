@@ -1,5 +1,4 @@
-# KDE Config File
-[KDE Desktop Entry]
+[Desktop Entry]
 Name=KWordAsciiFilter
 Name[de]=KWord ASCII-Filter
 Name[es]=Filtro Ascii KWord
@@ -9,7 +8,8 @@ Name[pl]=Filtr KWorda dla plików ASCII
 Name[pt]=Filtro Ascii para KWord
 Name[ro]=Filtru KWordAscii
 Name[ru]=KWordSpreadFilter
-Exec=kword_ascii.bin --server
+Exec=foo
+CORBAExec=kword_ascii --server
 Comment=Reggie's KWord Ascii Filter
 Comment[cs]=Reggieho ASCII filter pro KWord
 Comment[da]=Reggie's KWord Ascii filter
@@ -29,10 +29,9 @@ Export=application/x-kword
 ExportDescription=KWord
 Import=text/plain
 ImportDescription=ASCII
-RepoID=IDL:KOffice/FilterFactory:1.0,
-ActivationMode=shared
+X-KDE-RepoIds=IDL:KOffice/FilterFactory:1.0#KWordAscii
+X-KDE-ActivationMode=shared
 Type=OpenPart
 Icon=unknown.xpm
 MiniIcon=unknown.xpm
-ServiceType=KOfficeFilter
-
+ServiceTypes=KOfficeFilter

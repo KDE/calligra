@@ -34,249 +34,26 @@
 #include <ksimpleconfig.h>
 #include <klocale.h>
 #include <kapp.h>
+#include <kded_instance.h>
+#include <ktrader.h>
+#include <kactivator.h>
 
-QList<KoPluginEntry> *g_plstPluginEntries = 0L;
+/**
+ * Port to KActivator/KTrader (kded) by Simon Hausmann
+ * (c) 1999 Simon Hausmann <hausmann@kde.org>
+ */
 
-void koScanPluginsError( const char *_file, const char *_entry )
-{
-  warning( i18n( "The plugins config file\n%s\ndoes not conatain a %s=... entry" ), _file, _entry );
-}
-
-void koScanPlugins()
-{
-  CORBA::Object_var obj = opapp_orb->resolve_initial_references ("ImplementationRepository");
-  CORBA::ImplRepository_var imr = CORBA::ImplRepository::_narrow( obj );
-  assert( !CORBA::is_nil( imr ) );
-
-  koScanPlugins( imr );
-}
-
-void koScanPlugins( CORBA::ImplRepository_ptr _imr )
-{
-  QString p = kapp->kde_datadir().copy();
-  p += "/koffice/pluginlnk";
-  koScanPlugins( p, _imr );
-}
-
-void koScanPlugins( const char* _path, CORBA::ImplRepository_ptr _imr )
-{
-  if ( g_plstPluginEntries == 0L )
-    g_plstPluginEntries = new QList<KoPluginEntry>;
-
-  DIR *dp;
-  struct dirent *ep;
-  dp = opendir( _path );
-  if ( dp == 0L )
-    return;
-
-  // Loop thru all directory entries
-  while ( ( ep = readdir( dp ) ) != 0L )
-  {
-    if ( strcmp( ep->d_name, "." ) != 0 && strcmp( ep->d_name, ".." ) != 0 )
-    {
-      QString tmp = ep->d_name;
-      QString file = _path;
-      file += "/";
-      file += ep->d_name;
-      struct stat buff;
-      stat( file.data(), &buff );
-      if ( S_ISDIR( buff.st_mode ) )
-      {
-	koScanPlugins( file, _imr );
-      }
-      else if ( tmp.length() > 7 && tmp.right( 7 ) == ".kdelnk" )
-      {
-	FILE *f = fopen( file, "r" );
-	if ( f == 0L )
-	{
-	  fclose( f );
-	  continue;
-	}
-	
-	koScanPluginFile( file, _imr );
-      }
-    }
-  }
-
-  closedir( dp );
-}
-
-void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr )
-{
-  KSimpleConfig config( _file, true );
-  config.setDesktopGroup();
-
-  QString type = config.readEntry( "Type" );
-  if ( type.isEmpty() )
-  {
-    koScanPluginsError( _file, "Type" );
-    return;
-  }
-  if ( type != "GUIPlugin" )
-  {
-    warning("Not a plugin\n");
-    return;
-  }
-
-  QString icon = config.readEntry( "Icon" );
-  if ( icon.isEmpty() )
-  {
-    koScanPluginsError( _file, "Icon" );
-    return;
-  }
-  QString miniicon = config.readEntry( "MiniIcon" );
-  if ( miniicon.isEmpty() )
-  {
-    koScanPluginsError( _file, "MiniIcon" );
-    return;
-  }
-  bool guiplugin = true;
-
-  QString cmd = config.readEntry( "Exec" );
-  if ( cmd.isEmpty() )
-  {
-    koScanPluginsError( _file, "Exec" );
-    return;
-  }
-  QStrList repoids;
-  if ( config.readListEntry( "RepoID", repoids ) == 0 )
-  {
-    koScanPluginsError( _file, "RepoID" );
-    return;
-  }
-  QStrList menuEntries;
-  if ( config.readListEntry( "MenuEntries", menuEntries ) == 0 )
-  {
-    koScanPluginsError( _file, "MenuEntries" );
-    return;
-  }
-  QStrList toolBarEntries;
-  if ( config.readListEntry( "ToolBarEntries", toolBarEntries ) == 0 )
-  {
-    koScanPluginsError( _file, "ToolBarEntries" );
-    return;
-  }
-  QString name = config.readEntry( "Name" );
-  if ( name.isEmpty() )
-  {
-    QString tmp( _file );
-    int i = tmp.findRev( "/" );
-    if ( i == -1 )
-      return;
-    name = tmp.right( tmp.length() - i - 1 );
-    if ( name.isEmpty() )
-      return;
-  }
-
-  QString comment = config.readEntry( "Comment" );
-  if ( comment.isEmpty() )
-    comment = name.data();
-  QString mode = config.readEntry( "ActivationMode" );
-  if ( mode.isEmpty() )
-  {
-    koScanPluginsError( _file, "ActivationMode" );
-    return;
-  }
-
-  imr_create( name, mode, cmd, repoids, _imr );
-
-  KoPluginEntry* plugin = new KoPluginEntry( name, cmd, mode, comment, icon, miniicon, guiplugin, repoids );
-
-  const char *s;
-  for( s = menuEntries.first(); s != 0L; s = menuEntries.next() )
-  {
-    config.setGroup( s );
-    QString icon = config.readEntry( "Icon" );
-    QString miniicon = config.readEntry( "MiniIcon" );
-    QString name = config.readEntry( "Name" );
-    if ( name.isEmpty() )
-    {
-      QString tmp = s;
-      tmp += "::Name";
-      koScanPluginsError( _file, tmp );
-      continue;
-    }
-    QString slot = config.readEntry( "Slot" );
-    if ( slot.isEmpty() )
-    {
-      QString tmp = s;
-      tmp += "::Slot";
-      koScanPluginsError( _file, tmp );
-      continue;
-    }
-
-    KoPluginEntry::Entry e;
-    e.m_strIcon = icon;
-    e.m_strMiniIcon = miniicon;
-    e.m_strName = name;
-    e.m_strSlot = slot;
-    plugin->addMenuEntry( e );
-  }
-
-  for( s = toolBarEntries.first(); s != 0L; s = toolBarEntries.next() )
-  {
-    config.setGroup( s );
-    QString icon = config.readEntry( "Icon" );
-    QString miniicon = config.readEntry( "MiniIcon" );
-    QString name = config.readEntry( "Name" );
-    if ( name.isEmpty() )
-    {
-      QString tmp = s;
-      tmp += "::Name";
-      koScanPluginsError( _file, tmp );
-      continue;
-    }
-    QString menu = config.readEntry( "Menu" );
-    if ( menu.isEmpty() )
-    {
-      QString tmp = s;
-      tmp += "::Menu";
-      koScanPluginsError( _file, tmp );
-      continue;
-    }
-    QString slot = config.readEntry( "Slot" );
-    if ( slot.isEmpty() )
-    {
-      QString tmp = s;
-      tmp += "::Slot";
-      koScanPluginsError( _file, tmp );
-      continue;
-    }
-
-    KoPluginEntry::Entry e;
-    e.m_strIcon = icon;
-    e.m_strMiniIcon = miniicon;
-    e.m_strName = name;
-    e.m_strSlot = slot;
-    e.m_strMenu = menu;
-
-    plugin->addToolBarEntry( e );
-  }
-
-  g_plstPluginEntries->append( plugin );
-}
-
-KoPluginEntry::KoPluginEntry( const char *_name, const char *_exec, const char *_mode,
-			      const char *_comment, const char *_icon,
-			      const char *_miniicon, bool, QStrList& _repos )
+KoPluginEntry::KoPluginEntry( const QString &_name, const QString &_comment, const QString &_icon,
+			      const QString &_miniicon, bool, CORBA::Object_ptr obj )
 {
   m_strName = _name;
-  m_strExec = _exec;
-  m_strActivationMode = _mode;
   m_strComment = _comment;
-  m_strlstRepoID = _repos;
   m_strIcon = _icon;
   m_strMiniIcon = _miniicon;
+  m_vObj = CORBA::Object::_duplicate( obj );
 
   m_lstMenuEntries.setAutoDelete( false );
   m_lstToolBarEntries.setAutoDelete( false );
-}
-
-QListIterator<KoPluginEntry> KoPluginEntry::plugins()
-{
-  assert( g_plstPluginEntries != 0L );
-
-  return QListIterator<KoPluginEntry>( *g_plstPluginEntries );
 }
 
 void KoPluginEntry::addMenuEntry( const KoPluginEntry::Entry& _entry )
@@ -303,7 +80,7 @@ void KoPluginCallback::callback()
   if ( CORBA::is_nil( obj ) )
     return;
 
-  CORBA::Request_var _req = obj->_request( m_pEntry->m_strSlot );
+  CORBA::Request_var _req = obj->_request( m_pEntry->m_strSlot.ascii() );
   _req->result()->value()->type( CORBA::_tc_void );
   _req->invoke();
 }
@@ -345,6 +122,8 @@ void KoPluginProxy::cleanUp()
   for( ; it.current() != 0L; ++it )
     CORBA::release( it );
   m_lstMenuBarCallbacks.clear();
+  
+  delete m_pEntry;
 }
 
 KOM::Plugin_ptr KoPluginProxy::ref()
@@ -352,26 +131,13 @@ KOM::Plugin_ptr KoPluginProxy::ref()
   if ( !CORBA::is_nil( m_vPlugin ) )
     return KOM::Plugin::_duplicate( m_vPlugin );
 
-  const char *repoid = m_pEntry->repoID().current();
-  assert( repoid );
-  kdebug( KDEBUG_INFO, 30003, "Creating %c", repoid );
-  CORBA::Object_var obj = imr_activate( m_pEntry->name(), repoid );
-  // CORBA::Object_var obj = imr_activate( m_pEntry->name(), "IDL:KOM/PluginFactory:1.0" );
-  if ( CORBA::is_nil( obj ) )
-  {
-    QString tmp;
-    tmp.sprintf( i18n("Could not activate plugin %s").ascii(), m_pEntry->name() );
-    QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
-    return 0L;
-  }
-
-  kdebug( KDEBUG_INFO, 30003, "Got factory" );
-
+  CORBA::Object_var obj = m_pEntry->ref();
+  
   KOM::PluginFactory_var factory = KOM::PluginFactory::_narrow( obj );
   if ( CORBA::is_nil( factory ) )
   {
     QString tmp;
-    tmp.sprintf( i18n("%s is not a plugin").ascii(), m_pEntry->name() );
+    tmp.sprintf( i18n("%s is not a plugin").ascii(), m_pEntry->name().ascii() );
     QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
@@ -383,7 +149,7 @@ KOM::Plugin_ptr KoPluginProxy::ref()
   if ( CORBA::is_nil( m_vPlugin ) )
   {
     QString tmp;
-    tmp.sprintf( i18n("Could not create plugin of type %s").ascii(), m_pEntry->name() );
+    tmp.sprintf( i18n("Could not create plugin of type %s").ascii(), m_pEntry->name().ascii() );
     QMessageBox::critical( 0L, i18n("Error in plugin"), tmp, i18n("OK") );
     return 0L;
   }
@@ -397,10 +163,64 @@ KoPluginManager::KoPluginManager()
 {
   m_lstPlugins.setAutoDelete( true );
 
-  QListIterator<KoPluginEntry> it = KoPluginEntry::plugins();
-  for( ; it.current() != 0L; ++it )
+  KTrader *trader = KdedInstance::self()->ktrader();
+  KActivator *activator = KdedInstance::self()->kactivator();
+
+  KTrader::OfferList offers = trader->query( "KOfficePlugin" );
+  KTrader::OfferList::ConstIterator it = offers.begin();
+  for (; it != offers.end(); ++it )
   {
-    KoPluginProxy *p = new KoPluginProxy( this, it.current() );
+    QString icon = (*it)->icon();
+    //HACK
+    QString miniIcon = (*it)->icon();
+    QString comment = (*it)->comment();
+    
+    QStringList menuEntriesList = (*it)->property( "MenuEntries" )->stringListValue();
+    QStringList toolBarEntriesList = (*it)->property( "ToolBarEntries" )->stringListValue();
+    
+    QString repoId = (*it)->repoIds().getFirst();
+    QString tag = (*it)->name();
+    int tagPos = repoId.findRev( "#" );
+    if ( tagPos != -1 )
+    {
+      tag = repoId.mid( tagPos+1 );
+      repoId.truncate( tagPos );
+    }      
+    
+    CORBA::Object_var obj = activator->activateService( (*it)->name(), repoId, tag );
+    
+    KoPluginEntry *plugin = new KoPluginEntry( (*it)->name(), comment, icon,
+                                               miniIcon, true, obj );
+					      
+    QStringList::ConstIterator it2 = menuEntriesList.begin();
+    for (; it2 != menuEntriesList.end(); ++it2 )
+    {
+      KoPluginEntry::Entry e;
+      
+      e.m_strName = *(it2++);
+      e.m_strIcon = *(it2++);
+      e.m_strMiniIcon = *(it2++);
+      e.m_strSlot = *it2;
+      
+      plugin->addMenuEntry( e );
+    }
+    
+    it2 = toolBarEntriesList.begin();
+    for (; it2 != toolBarEntriesList.end(); ++it2 )
+    {
+      KoPluginEntry::Entry e;
+      
+      e.m_strName = *(it2++);
+      e.m_strIcon = *(it2++);
+      e.m_strMiniIcon = *(it2++);
+      e.m_strSlot = *(it2++);
+      e.m_strMenu = *it2;
+      
+      plugin->addToolBarEntry( e );
+    }
+
+    //the proxy object takes care of deleting the plugin!
+    KoPluginProxy *p = new KoPluginProxy( this, plugin );
     m_lstPlugins.append( p );
   }
 }
@@ -441,7 +261,7 @@ void KoPluginManager::fillToolBar( OpenPartsUI::ToolBarFactory_ptr _factory )
       }
       if ( !it.current()->entry()->m_strMiniIcon.isEmpty() )
       {
-	QString tmp = it.current()->entry()->m_strMiniIcon.data();
+	QString tmp = it.current()->entry()->m_strMiniIcon.ascii();
 	if ( tmp[0] != '/' )
 	{
 	  QString t2 = tmp;

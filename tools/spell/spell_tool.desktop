@@ -1,5 +1,4 @@
-# KDE Config File
-[KDE Desktop Entry]
+[Desktop Entry]
 Name=SpellTool
 Name[ca]=Ortografia
 Name[cs]=N·stoj pro kontrolu pravopisu
@@ -15,7 +14,8 @@ Name[pt]=VerificaÁ„o Ortogr·fica
 Name[ro]=Corector
 Name[ru]=“œ◊≈“À¡ –“¡◊œ–…”¡Œ…—
 Name[sv]=R‰ttstavning
-Exec=spell_tool --server
+Exec=foo
+CORBAExec=spell_tool --server
 Comment=Torben's Spell Tool
 Comment[ca]=L'eina d'ortografia de Torben
 Comment[cs]=Torben˘v n·stoj pro kontrolu pravopisu
@@ -35,11 +35,12 @@ Comment[ru]=“œ◊≈“À¡ –“¡◊œ–…”¡Œ…— Torben'¡
 Comment[sk]=Torbenov kontrolÈr pravopisu
 Comment[sl]=Torbenov Ërkovalnik
 Comment[sv]=Torbens r‰ttstavningsverktyg
-MimeTypes=text/x-single-word,
-RepoID=IDL:DataTools/Tool:1.0,
-ActivationMode=shared
+MimeType=text/x-single-word
+X-KDE-RepoIds=IDL:DataTools/Tool:1.0#SpellTool
+X-KDE-ActivationMode=shared
 Type=DataTool
 Icon=unknown.xpm
 MiniIcon=unknown.xpm
-Commands=spellcheck,
-CommandsI18N=Check spelling,
+Commands=spellcheck
+CommandsI18N=Check spelling
+ServiceTypes=KOfficeTool

@@ -21,6 +21,7 @@
 #include <assert.h>
 
 #include <komAutoLoader.h>
+#include <komShutdownManager.h>
 #include <kom.h>
 
 #include <qmsgbox.h>
@@ -76,7 +77,9 @@ Factory::Factory(CORBA::Object_ptr _obj)
 /*================================================================*/
 KOffice::Filter_ptr Factory::create()
 {
-  return KOffice::Filter::_duplicate(new Filter);
+  Filter *f = new Filter;
+  KOMShutdownManager::self()->watchObject( f );
+  return KOffice::Filter::_duplicate( f );
 }
 
 /*================================================================*/

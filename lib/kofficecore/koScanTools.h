@@ -21,7 +21,7 @@
 #define __koffice_scan_tools_h__
 
 #include <qstring.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qlist.h>
 
 #include <opApplication.h>
@@ -29,39 +29,32 @@
 class KoToolEntry
 {
 public:
-  KoToolEntry( const char *_name, const char *_exec, const char *_mode, const char *_comment,
-	     QStrList& _mimes, QStrList& _repos, QStrList& _commands, QStrList& _commands_i18n );
+  KoToolEntry( const QString &_name, const QString &_comment, const QStringList& _mimes,
+               const QStringList& _commands, const QStringList& _commands_i18n,
+	       CORBA::Object_ptr _ref );
   
-  const char *name() { return m_strName.data(); }
-  const char *exec() { return m_strExec.data(); }
-  const char *comment() { return m_strComment.data(); }
+  QString name() { return m_strName.data(); }
+  QString comment() { return m_strComment.data(); }
+  
+  CORBA::Object_ptr ref() { return CORBA::Object::_duplicate( m_vRef ); }
 
-  bool supports( const char *_mime_type );
+  bool supports( const QString &_mime_type );
  
-  QStrListIterator repoID() { return QStrListIterator( m_strlstRepoID ); }
-  QStrListIterator mimeTypes() { return QStrListIterator( m_strlstMimeTypes ); }
-  QStrListIterator commands() { return QStrListIterator( m_strlstCommands ); }
-  QStrListIterator commandsI18N() { return QStrListIterator( m_strlstCommandsI18N ); }
+  QStringList mimeTypes() { return m_strlstMimeTypes; }
+  QStringList commands() { return m_strlstCommands; }
+  QStringList commandsI18N() { return m_strlstCommandsI18N; }
 
-  static QList<KoToolEntry> findTools( const char *_mime_type );
+  static QList<KoToolEntry> findTools( const QString &_mime_type );
   
 protected:
-  QStrList m_strlstMimeTypes;
-  QStrList m_strlstRepoID;
-  QStrList m_strlstCommands;
-  QStrList m_strlstCommandsI18N;
+  QStringList m_strlstMimeTypes;
+  QStringList m_strlstCommands;
+  QStringList m_strlstCommandsI18N;
   
-  QString m_strExec;
   QString m_strComment;
-  QString m_strActivationMode;
   QString m_strName;
+  CORBA::Object_var m_vRef;
 };
-
-void koScanToolsError( const char *_file, const char *_entry );
-void koScanTools();
-void koScanTools( CORBA::ImplRepository_ptr _imr );
-void koScanTools( const char* _path, CORBA::ImplRepository_ptr _imr );
-void koScanToolFile( const char* _file, CORBA::ImplRepository_ptr _imr );
 
 #endif
 

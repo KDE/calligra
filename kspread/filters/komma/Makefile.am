@@ -19,8 +19,8 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 idl_DATA = 
 idl_HEADERS =  
 
-kdelnk_DATA = kspread_filter_import.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/filterlnk
+service_DATA = kspread_filter_import.desktop
+servicedir = $(kde_servicesdir)
 
 datasdir = $(kde_datadir)/koffice/filter
 datas_DATA = komma.py

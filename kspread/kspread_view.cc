@@ -74,7 +74,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   m_bInitialized = false;
 
   setWidget( this );
-  m_pluginManager.setView( this );
 
   OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
 
@@ -88,6 +87,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   m_bUndo = false;
   m_bRedo = false;
 
+  m_pluginManager = 0L;
   m_pTable = 0L;
 
   m_pPopupMenu = 0L;
@@ -164,6 +164,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
 
 void KSpreadView::init()
 {
+  m_pluginManager = new KoPluginManager();
+  
+  m_pluginManager->setView( this );
+  
   /******************************************************
    * Menu
    ******************************************************/
@@ -232,7 +236,9 @@ void KSpreadView::cleanUp()
 
   m_pDoc->removeView( this );
 
-  m_pluginManager.cleanUp();
+  m_pluginManager->cleanUp();
+  delete m_pluginManager;
+  
   KoViewIf::cleanUp();
 
   cerr << "2) VIEW void KOMBase::incRef() = " << m_ulRefCount << endl;
@@ -540,7 +546,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
     m_vToolBarEdit = 0L;
     m_vToolBarLayout = 0L;
 
-    m_pluginManager.fillToolBar( _factory );
+    m_pluginManager->fillToolBar( _factory );
 
     cerr << "niled" << endl;
     return true;
@@ -651,7 +657,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 
   m_vToolBarLayout->enable( OpenPartsUI::Show );
 
-  m_pluginManager.fillToolBar( _factory );
+  m_pluginManager->fillToolBar( _factory );
 
   /* m_vToolBarLayout->enable( OpenPartsUI::Hide );
   m_vToolBarLayout->setBarPos(OpenPartsUI::Floating);
@@ -1508,14 +1514,18 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 	KoToolEntry* entry;
 	for( entry = tools.first(); entry != 0L; entry = tools.next() )
         {
-	  QStrListIterator it = entry->commandsI18N();
-	  for( ; it.current() != 0L; ++it )
-	    m_pPopupMenu->insertItem( it.current(), m_popupMenuFirstToolId + i++ );
-	  QStrListIterator it2 = entry->commands();
-	  for( ; it2.current() != 0L; ++it2 )
+	  QStringList lst = entry->commandsI18N();
+	  QStringList::ConstIterator it = lst.begin();
+	  
+	  for (; it != lst.end(); ++it )
+	    m_pPopupMenu->insertItem( *it, m_popupMenuFirstToolId + i++ );
+	  
+	  lst = entry->commands();
+          it = lst.begin();
+	  for (; it != lst.end(); ++it )
 	  {
 	    ToolEntry *t = new ToolEntry;
-	    t->command = it2.current();
+	    t->command = *it;
 	    t->entry = entry;
 	    m_lstTools.append( t );
 	  }
@@ -1537,7 +1547,8 @@ void KSpreadView::slotActivateTool( int _id )
 
   ToolEntry* entry = m_lstTools.at( _id - m_popupMenuFirstToolId );
 
-  CORBA::Object_var obj = imr_activate( entry->entry->name(), "IDL:DataTools/Tool:1.0" );
+//  CORBA::Object_var obj = imr_activate( entry->entry->name(), "IDL:DataTools/Tool:1.0" );
+  CORBA::Object_var obj = entry->entry->ref();
   if ( CORBA::is_nil( obj ) )
     // TODO: error message
     return;

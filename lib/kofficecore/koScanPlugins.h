@@ -21,21 +21,22 @@
 #define __koffice_scan_plugins_h__
 
 #include <qstring.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 #include <qlist.h>
 
 #include <opApplication.h>
 #include <openparts_ui.h>
 #include <CORBA.h>
 #include <komBase.h>
+#include <komVar.h>
 
 #include "koffice.h"
 
 class KoPluginEntry
 {
 public:
-  KoPluginEntry( const char *_name, const char *_exec, const char *_mode, const char *_comment,
-		 const char *_icon, const char *_miniicon, bool _is_gui_plugin, QStrList& _repos );
+  KoPluginEntry( const QString &_name, const QString &_comment, const QString &_icon, 
+                 const QString &_miniicon, bool _is_gui_plugin, CORBA::Object_ptr obj );
   
   struct Entry
   {
@@ -46,31 +47,24 @@ public:
     QString m_strSlot;
   };
   
-  const char *name() { return m_strName.data(); }
-  const char *exec() { return m_strExec.data(); }
-  const char *comment() { return m_strComment.data(); }
-  const char *activationMode() { return m_strActivationMode; }
-  const char *icon() { return m_strIcon.data(); }
-  const char *miniIcon() { return m_strMiniIcon.data(); }
+  QString name() { return m_strName; }
+  QString comment() { return m_strComment; }
+  QString icon() { return m_strIcon; }
+  QString miniIcon() { return m_strMiniIcon; }
+  CORBA::Object_ptr ref() { return CORBA::Object::_duplicate( m_vObj ); }
   
   bool isGUIPlugin() { return m_bIsGUIPlugin; }
-  
-  bool supports( const char *_mime_type );
+
+  bool supports( const QString &_mime_type );
  
-  QStrListIterator repoID() { return QStrListIterator( m_strlstRepoID ); }
   QListIterator<Entry> menuEntries() { return QListIterator<Entry>( m_lstMenuEntries ); }
   QListIterator<Entry> toolBarEntries() { return QListIterator<Entry>( m_lstToolBarEntries ); }
 
   void addMenuEntry( const Entry& );
   void addToolBarEntry( const Entry& );
   
-  static QListIterator<KoPluginEntry> plugins();
-  
 protected:
-  QStrList m_strlstMimeTypes;
-  QStrList m_strlstRepoID;
-  QStrList m_strlstCommands;
-  QStrList m_strlstCommandsI18N;
+  QStringList m_strlstMimeTypes;
   
   QString m_strExec;
   QString m_strComment;
@@ -78,18 +72,13 @@ protected:
   QString m_strName;
   QString m_strIcon;
   QString m_strMiniIcon;
+  CORBA::Object_var m_vObj;
   
   bool m_bIsGUIPlugin;
   
   QList<Entry> m_lstMenuEntries;
   QList<Entry> m_lstToolBarEntries;
 };
-
-void koScanPluginsError( const char *_file, const char *_entry );
-void koScanPlugins();
-void koScanPlugins( CORBA::ImplRepository_ptr _imr );
-void koScanPlugins( const char* _path, CORBA::ImplRepository_ptr _imr );
-void koScanPluginFile( const char* _file, CORBA::ImplRepository_ptr _imr );
 
 class KoViewIf;
 class KoPluginManager;
@@ -124,7 +113,7 @@ struct KoPluginProxy
   
   QList<KoPluginCallback> m_lstToolBarCallbacks;
   QList<KoPluginCallback> m_lstMenuBarCallbacks;
-  KOM::Plugin_var m_vPlugin;
+  KOMVar<KOM::Plugin> m_vPlugin;
 };
 
 class KoPluginManager

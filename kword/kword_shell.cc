@@ -391,23 +391,23 @@ void KWordShell::slotFileOpen()
     if ( m_pDoc )
         m_pDoc->enableEmbeddedParts( false );
 
-//   QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-//                               "application/x-kword",
-//                               "*.kwd", "KWord",
-//                               true );
+   QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
+                               "application/x-kword",
+                               "*.kwd", "KWord",
+                               true );
 
-//   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
-//   if ( file.isNull() )
-//     return;
+   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
+   if ( file.isNull() )
+     return;
 
-//   file = KoFilterManager::self()->import( file, "application/x-kword" );
-//   if ( file.isNull() )
-//     return;
+   file = KoFilterManager::self()->import( file, "application/x-kword" );
+   if ( file.isNull() )
+     return;
 
-    QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
-
-    if ( file.isNull() )
-        return;
+//    QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
+//
+//    if ( file.isNull() )
+//        return;
 
     if ( !openDocument( file, "" ) )
     {

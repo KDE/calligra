@@ -563,7 +563,7 @@ protected:
    };
    QList<ToolEntry> m_lstTools;
 
-   KoPluginManager m_pluginManager;
+   KoPluginManager *m_pluginManager;
 
    static KSpreadScripts *m_pGlobalScriptsDialog;
 };

@@ -29,181 +29,78 @@
 #include <ksimpleconfig.h>
 #include <klocale.h>
 #include <kapp.h>
+#include <ktrader.h>
+#include <kactivator.h>
+#include <kded_instance.h>
 
-QList<KoToolEntry> *g_plstToolEntries = 0L;
+/**
+ * Port to KTrader/KActivator (kded) by Simon Hausmann
+ * (c) 1999 Simon Hausmann <hausmann@kde.org>
+ */
 
-void koScanToolsError( const char *_file, const char *_entry )
-{
-  warning( i18n( "The DataTools config file\n%s\ndoes not conatain a %s=... entry" ), _file, _entry );
-}
+//TODO: move all this stuff into koQueryTrader
 
-void koScanTools()
-{
-  CORBA::Object_var obj = opapp_orb->resolve_initial_references ("ImplementationRepository");
-  CORBA::ImplRepository_var imr = CORBA::ImplRepository::_narrow( obj );
-  assert( !CORBA::is_nil( imr ) );
-  
-  koScanTools( imr );
-}
-
-void koScanTools( CORBA::ImplRepository_ptr _imr )
-{
-  QString p = kapp->kde_datadir().copy();
-  p += "/koffice/toollnk";
-  koScanTools( p, _imr );
-}
-
-void koScanTools( const char* _path, CORBA::ImplRepository_ptr _imr )
-{   
-  if ( g_plstToolEntries == 0L )
-    g_plstToolEntries = new QList<KoToolEntry>;
-
-  DIR *dp;
-  struct dirent *ep;
-  dp = opendir( _path );
-  if ( dp == 0L )
-    return;
-  
-  // Loop thru all directory entries
-  while ( ( ep = readdir( dp ) ) != 0L )
-  {
-    if ( strcmp( ep->d_name, "." ) != 0 && strcmp( ep->d_name, ".." ) != 0 )
-    {
-      QString tmp = ep->d_name;
-      QString file = _path;
-      file += "/";
-      file += ep->d_name;
-      struct stat buff;
-      stat( file.data(), &buff );
-      if ( S_ISDIR( buff.st_mode ) )
-      {
-	koScanTools( file, _imr );
-      }
-      else if ( tmp.length() > 7 && tmp.right( 7 ) == ".kdelnk" )
-      {
-	FILE *f = fopen( file, "r" );
-	if ( f == 0L )
-	{
-	  fclose( f );
-	  continue;
-	}
-	
-	koScanToolFile( file, _imr );
-      }
-    }
-  }
-  
-  closedir( dp );
-}
-
-void koScanToolFile( const char* _file, CORBA::ImplRepository_ptr _imr )
-{
-  KSimpleConfig config( _file, true );
-  config.setDesktopGroup();
-  
-  QString type = config.readEntry( "Type" );
-  if ( type.isEmpty() )
-  {
-    koScanToolsError( _file, "Type" );
-    return;
-  }
-  if ( type != "DataTool" )
-  {
-    warning("Not a data tool\n");
-    return;
-  }
-  
-  QString cmd = config.readEntry( "Exec" );
-  if ( cmd.isEmpty() )
-  {
-    koScanToolsError( _file, "Exec" );
-    return;
-  }
-  QStrList repoids;
-  if ( config.readListEntry( "RepoID", repoids ) == 0 )
-  {
-    koScanToolsError( _file, "RepoID" );
-    return;
-  }
-  QStrList mimes;
-  if ( config.readListEntry( "MimeTypes", mimes ) == 0 )
-  {
-    koScanToolsError( _file, "MimeTypes" );
-    return;
-  }
-  QStrList commands;
-  if ( config.readListEntry( "Commands", commands ) == 0 )
-  {
-    koScanToolsError( _file, "Commands" );
-    return;
-  }
-  QStrList commands_i18n;
-  if ( config.readListEntry( "CommandsI18N", commands_i18n ) == 0 )
-  {
-    koScanToolsError( _file, "CommandsI18N" );
-    return;
-  }
-  QString name = config.readEntry( "Name" );
-  if ( name.isEmpty() )
-  {
-    QString tmp( _file );
-    int i = tmp.findRev( "/" );
-    if ( i == -1 )
-      return;
-    name = tmp.right( tmp.length() - i - 1 );
-    if ( name.isEmpty() )
-      return;
-  }
-  
-  QString comment = config.readEntry( "Comment" );
-  if ( comment.isEmpty() )
-    comment = name.data();
-  QString mode = config.readEntry( "ActivationMode" );
-  if ( mode.isEmpty() )
-  {
-    koScanToolsError( _file, "ActivationMode" );
-    return;
-  }
-  
-  imr_create( name, mode, cmd, repoids, _imr );
-
-  g_plstToolEntries->append( new KoToolEntry( name, cmd, mode, comment, mimes, repoids, commands, commands_i18n ) );
-}
-
-QList<KoToolEntry> KoToolEntry::findTools( const char *_mime_type )
+QList<KoToolEntry> KoToolEntry::findTools( const QString &_mime_type )
 {
   QList<KoToolEntry> lst;
+  
+  KTrader *trader = KdedInstance::self()->ktrader();
+  KActivator *activator = KdedInstance::self()->kactivator();
 
-  QListIterator<KoToolEntry> it( *g_plstToolEntries );
-  for( ; it.current() != 0L; ++it )
+  QString mime = _mime_type;
+ 
+//  cerr << "mimetype = "<< mime.ascii() << endl;
+//  cerr << "constr = " << QString("'%1' in ServiceTypes").arg( mime ).ascii() << endl;
+  
+//  KTrader::OfferList offers = trader->query( "KOfficeTool", QString("'%1' in ServiceTypes").arg( mime ) );
+  KTrader::OfferList offers = trader->query( "KOfficeTool" );
+  
+  KTrader::OfferList::ConstIterator it = offers.begin();
+  for (; it != offers.end(); ++it )
   {
-    if( it.current()->supports( _mime_type ) )
-      lst.append( it.current() );
+    cerr << "tool offer : " << (*it)->name().ascii() << endl;
+
+    QString name = (*it)->name();
+    QString comment = (*it)->comment();
+    QStringList mimeTypes = (*it)->serviceTypes();
+    QStringList commands = (*it)->property( "Commands" )->stringListValue();
+    QStringList commandsI18N = (*it)->property( "CommandsI18N" )->stringListValue();
+
+    if ( mimeTypes.find( _mime_type ) == mimeTypes.end() )
+      continue;
+    
+    //strip off tag
+    QString repoId = (*it)->repoIds().getFirst();
+    QString tag = (*it)->name();
+    int tagPos = repoId.findRev( "#" );
+    if ( tagPos != -1 )
+    {
+      tag = repoId.mid( tagPos+1 );
+      repoId.truncate( tagPos );
+    }
+    
+    CORBA::Object_var obj = activator->activateService( name, repoId, tag );
+    
+    lst.append( new KoToolEntry( name, comment, mimeTypes, commands, commandsI18N, obj ) );
   }
   
   return lst;
 }
 
-KoToolEntry::KoToolEntry( const char *_name, const char *_exec, const char *_mode, const char *_comment,
-		      QStrList& _mimes, QStrList& _repos, QStrList& _commands, QStrList& _commands_i18n )
+KoToolEntry::KoToolEntry( const QString &_name, const QString &_comment, const QStringList& _mimes,
+                          const QStringList& _commands, const QStringList& _commands_i18n,
+			  CORBA::Object_ptr _ref )
 {
   m_strName = _name;
-  m_strExec = _exec;
-  m_strActivationMode = _mode;
   m_strComment = _comment;
   m_strlstMimeTypes = _mimes;
-  m_strlstRepoID = _repos;
   m_strlstCommands = _commands;
   m_strlstCommandsI18N = _commands_i18n;
+  m_vRef = CORBA::Object::_duplicate( _ref );
 }
 
-bool KoToolEntry::supports( const char *_mime_type ) 
+bool KoToolEntry::supports( const QString &_mime_type ) 
 {
-  const char *s;
-  for( s = m_strlstMimeTypes.first(); s != 0L; s = m_strlstMimeTypes.next() )
-    if ( strcmp( _mime_type, s ) == 0 )
-      return true;
-  
-  return false;
+  return ( m_strlstMimeTypes.find( _mime_type ) != m_strlstMimeTypes.end() );
 }
 

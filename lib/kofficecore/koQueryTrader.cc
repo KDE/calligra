@@ -101,11 +101,15 @@ vector<KoDocumentEntry> koQueryDocuments( const char *_constr, int _count )
 
     //strip off tag
     QString repoId = (*it)->repoIds().getFirst();
+    QString tag = (*it)->name();
     int tagPos = repoId.findRev( '#' );
     if ( tagPos != -1 )
+    {
+      tag = repoId.mid( tagPos+1 );
       repoId.truncate( tagPos );
+    }      
       
-    d.reference = activator->activateService( (*it)->name(), repoId, (*it)->name() );
+    d.reference = activator->activateService( (*it)->name(), repoId, tag );
         
     lst.push_back( d );
     
@@ -164,11 +168,15 @@ vector<KoFilterEntry> koQueryFilters( const char *_constr, int _count )
     
     //strip off tag
     QString repoId = (*it)->repoIds().getFirst();
+    QString tag = (*it)->name();
     int tagPos = repoId.findRev( '#' );
     if ( tagPos != -1 )
+    {
+      tag = repoId.mid( tagPos+1 );
       repoId.truncate( tagPos );
+    }      
     
-    f.reference = activator->activateService( (*it)->name(), repoId, (*it)->name() );
+    f.reference = activator->activateService( (*it)->name(), repoId, tag );
     
     lst.push_back( f );
     

@@ -56,7 +56,7 @@ public:
 /******************************************************************/
 
 class Filter : virtual public KOMComponent,
-	       virtual public KOffice::Filter_skel
+ 	       virtual public KOffice::Filter_skel
 {
 public:
   Filter();

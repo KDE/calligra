@@ -27,8 +27,6 @@
 #include "KIllustrator.h"
 #include "KIllustrator_shell.h"
 
-#include <koScanTools.h>
-#include <koScanPlugins.h>
 #include <koQueryTypes.h>
 #include <koApplication.h>
 #include <koFactory.h>
@@ -53,8 +51,6 @@ KIllustratorApp::~KIllustratorApp () {
 
 void KIllustratorApp::start () {
   if (withGUI) {
-    koScanTools ();
-    koScanPlugins ();
     if (openFiles.size () == 0) {
       KIllustratorShell *m_pShell = new KIllustratorShell;
       m_pShell->show ();

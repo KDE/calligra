@@ -20,8 +20,6 @@
 // #include <qprinter.h>
 #include <qstringlist.h>
 
-#include <koScanTools.h>
-#include <koScanPlugins.h>
 #include <koQueryTypes.h>
 #include <koIMR.h>
 #include <koApplication.h>
@@ -55,9 +53,6 @@ void KSpreadApp::start()
 {
   if ( g_bWithGUI )
   {
-    koScanTools();
-    koScanPlugins();
- 
     if ( g_openFiles.count() == 0 )
     {
       m_pShell = new KSpreadShell;
@@ -74,11 +69,6 @@ void KSpreadApp::start()
 	m_pShell->openDocument( *it, "" );
       }
     }
-  }
-  else
-  {    
-    koScanTools();
-    koScanPlugins();
   }
 }
 

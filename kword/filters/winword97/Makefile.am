@@ -14,8 +14,8 @@ noinst_HEADERS = main.h
 
 METASOURCES = main.moc
 
-kdelnk_DATA = kword_winword97_import.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/filterlnk
+service_DATA = kword_winword97_import.desktop
+servicedir = $(kde_servicesdir)
 
 datasdir = $(kde_datadir)/koffice/filter
 

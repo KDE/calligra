@@ -15,8 +15,8 @@ METASOURCES =	main.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) datatools.h datatools.cc
 
-kdelnk_DATA = spell_tool.kdelnk
-kdelnkdir = $(kde_datadir)/koffice/toollnk
+service_DATA = spell_tool.desktop
+servicedir = $(kde_servicesdir)
 
 ####### Implicit rules
 
