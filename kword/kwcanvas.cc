@@ -113,6 +113,8 @@ void KWCanvas::repaintAll( bool erase /* = false */ )
 
 void KWCanvas::print( QPainter *painter, KPrinter *printer )
 {
+    QValueList<int> pageList;
+#ifndef HAVE_KDEPRINT
     int from = printer->fromPage();
     int to = printer->toPage();
     kdDebug(32001) << "KWCanvas::print from=" << from << " to=" << to << endl;
@@ -121,19 +123,17 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         from = printer->minPage();
         to = printer->maxPage();
     }
-#ifdef HAVE_KDEPRINT
-    if (  printer->currentPage() )
-    {
-        from = m_gui->getView()->currentPage() + 1;
-        to = from;
-        kdDebug() << "KWCanvas::print currentpage set -> printing " << from << endl;
-    }
+    for ( int i = from; i <= to; i++ )
+        pageList.append( i );
+#else
+    pageList = printer->pageList();
 #endif
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
-                              to - from + 2, this );
+                              pageList.count() + 1, this );
     int j = 0;
     progress.setProgress( 0 );
-        for ( int i = from; i <= to; i++ )
+    QValueList<int>::Iterator it = pageList.begin();
+    for ( ; it != pageList.end(); ++it )
     {
         progress.setProgress( ++j );
         kapp->processEvents();
@@ -141,10 +141,11 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         if ( progress.wasCancelled() )
             break;
 
-        if ( i > from ) printer->newPage();
+        if ( it != pageList.begin() )
+            printer->newPage();
 
         painter->save();
-        int pgNum = i - 1;
+        int pgNum = (*it) - 1;
         int yOffset = doc->pageTop( pgNum );
         kdDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
         QRect pageRect( 0, yOffset, doc->paperWidth(), doc->paperHeight() );
@@ -632,36 +633,32 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     int newRight = frame->right();
     int newBottom = frame->bottom();
 
-    if (top && newTop != y) {
-        bool move = !fs->isAFooter();
-        if (newBottom-y < (int)(minFrameHeight+5))
-            y=newBottom-minFrameHeight-5;
+    if ( top && newTop != y && !fs->isAFooter() )
+    {
+        if (newBottom - y < (int)(minFrameHeight+5))
+            y = newBottom - minFrameHeight - 5;
         y = QMAX( y, (int)doc->ptPageTop( frame->pageNum() ) );
-        if (move)
-            newTop = y;
-    } else if (bottom && newBottom != y) {
-        bool move = !fs->isAHeader();
-        if (y-newTop < (int)(minFrameHeight+5))
-            y=newTop+minFrameHeight+5;
+        newTop = y;
+    } else if ( bottom && newBottom != y && !fs->isAHeader() )
+    {
+        if (y - newTop < (int)(minFrameHeight+5))
+            y = newTop + minFrameHeight + 5;
         y = QMIN( y, (int)doc->ptPageTop( frame->pageNum() + 1 ) );
-        if (move)
-            newBottom = y;
+        newBottom = y;
     }
 
-    if (left && newLeft != x) {
-        bool move = ( !fs->isAHeader() && !fs->isAFooter() );
-        if (newRight-x < (int)minFrameWidth)
-            x=newRight-minFrameWidth-5;
+    if ( left && newLeft != x && !fs->isAHeader() && !fs->isAFooter() )
+    {
+        if (newRight - x < (int)minFrameWidth)
+            x = newRight - minFrameWidth - 5;
         x = QMAX( x, 0 );
-        if (move)
-            newLeft = x;
-    } else if (right && newRight != x) {
-        bool move = ( !fs->isAHeader() && !fs->isAFooter() );
-        if (x-newLeft < (int)minFrameWidth)
-            x=newLeft+minFrameWidth+5;
+        newLeft = x;
+    } else if ( right && newRight != x && !fs->isAHeader() && !fs->isAFooter() )
+    {
+        if (x - newLeft < (int)minFrameWidth)
+            x = newLeft + minFrameWidth + 5; // why +5 ?
         x = QMIN( x, static_cast<int>(doc->ptPaperWidth()) );
-        if (move)
-            newRight = x;
+        newRight = x;
     }
 
     // Keep copy of old rectangle, for repaint()

@@ -51,15 +51,6 @@ class KWStyleManager;
 class KWTableDia;
 class KWView;
 class QResizeEvent;
-class QMouseEvent;
-class QKeyEvent;
-class QDragEnterEvent;
-class QDragMoveEvent;
-class QDragLeaveEvent;
-class QDropEvent;
-class QCloseEvent;
-class QFocusEvent;
-class QShowEvent;
 class KSpell;
 class QScrollView;
 class QSplitter;
@@ -282,18 +273,6 @@ protected:
     void createKWGUI();
 
     virtual void resizeEvent( QResizeEvent *e );
-/*    virtual void keyPressEvent( QKeyEvent *e );
-    virtual void keyReleaseEvent( QKeyEvent *e );
-    virtual void mousePressEvent( QMouseEvent *e );
-    virtual void mouseReleaseEvent( QMouseEvent *e );
-    virtual void mouseMoveEvent( QMouseEvent *e );
-    virtual void focusInEvent( QFocusEvent *e );
-    virtual void showEvent( QShowEvent *e );
-    virtual void dragEnterEvent( QDragEnterEvent *e );
-    virtual void dragMoveEvent( QDragMoveEvent *e );
-    virtual void dragLeaveEvent( QDragLeaveEvent *e );
-    virtual void dropEvent( QDropEvent *e );
-  */
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
     virtual void updateReadWrite( bool readwrite );

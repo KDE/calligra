@@ -772,7 +772,6 @@ void KWTextFrameSet::zoom()
     }
     m_lastFormatted = textdoc->firstParag();
     m_availableHeight = -1; // to be recalculated
-    //formatMore();
     ensureCursorVisible();
 }
 
@@ -2076,6 +2075,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 	cut();
 	break;
     default: {
+            //kdDebug() << "KWTextFrameSetEdit::keyPressEvent ascii=" << e->ascii() << " text=" << e->text()[0].unicode() << endl;
 	    if ( e->text().length() &&
 //               !( e->state() & AltButton ) &&
 		 ( !e->ascii() || e->ascii() >= 32 ) ||
@@ -2266,6 +2266,7 @@ void KWTextFrameSetEdit::startDrag()
 
 KWDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
 {
+    textFrameSet()->unzoom();
     QTextCursor c1 = textDocument()->selectionStartCursor( QTextDocument::Standard );
     QTextCursor c2 = textDocument()->selectionEndCursor( QTextDocument::Standard );
 
@@ -2291,6 +2292,7 @@ KWDrag * KWTextFrameSetEdit::newDrag( QWidget * parent ) const
         text += c2.parag()->string()->toString().left( c2.index() );
         static_cast<KWTextParag *>(c2.parag())->save( elem, 0, c2.index()-1 );
     }
+    textFrameSet()->zoom();
 
     KWDrag *kd = new KWDrag( parent );
     kd->setPlain( text );

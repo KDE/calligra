@@ -660,6 +660,7 @@ void KWView::setupPrinter( KPrinter &prt )
         prt.setOrientation( KPrinter::Landscape );
     else
         prt.setOrientation( KPrinter::Portrait );
+    prt.setCurrentPage( currentPage() + 1 );
 }
 
 void KWView::print( KPrinter &prt )
@@ -2417,74 +2418,6 @@ void KWView::resizeEvent( QResizeEvent *e )
     QWidget::resizeEvent( e );
     if ( gui ) gui->resize( width(), height() );
 }
-
-#if 0
-/*================================================================*/
-void KWView::keyPressEvent( QKeyEvent *e )
-{
-    QApplication::sendEvent( gui, e );
-}
-
-/*================================================================*/
-void KWView::keyReleaseEvent( QKeyEvent */*e*/ )
-{
-    //    QApplication::sendEvent( gui, e );
-}
-
-/*================================================================*/
-void KWView::mousePressEvent( QMouseEvent *e )
-{
-    // My guess is that this is NEVER called...
-    kdDebug() << "KWView::mousePressEvent" << endl;
-    if ( gui )
-        QApplication::sendEvent( gui->canvasWidget(), e );
-}
-
-/*================================================================*/
-void KWView::mouseMoveEvent( QMouseEvent *e )
-{
-    if ( gui )
-        QApplication::sendEvent( gui->canvasWidget(), e );
-}
-
-/*================================================================*/
-void KWView::mouseReleaseEvent( QMouseEvent *e )
-{
-    if ( gui )
-        QApplication::sendEvent( gui->canvasWidget(), e );
-}
-
-/*================================================================*/
-void KWView::focusInEvent( QFocusEvent *e )
-{
-    if ( gui )
-        QApplication::sendEvent( gui->canvasWidget(), e );
-}
-
-/*================================================================*/
-void KWView::dragEnterEvent( QDragEnterEvent *e )
-{
-    QApplication::sendEvent( gui, e );
-}
-
-/*================================================================*/
-void KWView::dragMoveEvent( QDragMoveEvent *e )
-{
-    QApplication::sendEvent( gui, e );
-}
-
-/*================================================================*/
-void KWView::dragLeaveEvent( QDragLeaveEvent *e )
-{
-    QApplication::sendEvent( gui, e );
-}
-
-/*================================================================*/
-void KWView::dropEvent( QDropEvent *e )
-{
-    QApplication::sendEvent( gui, e );
-}
-#endif
 
 void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {

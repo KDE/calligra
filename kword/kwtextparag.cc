@@ -195,11 +195,9 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     int size = m_layout.counter->width( this );
 
     // Draw the complete label.
-    QTextFormat *format = paragFormat();
+    QTextFormat *format = at( 0 )->format(); // paragFormat();
     QFont oldFont = p->font();
     QFont newFont = format->font();
-    // ### Problem is, the paragFormat never changes. It should probably
-    // change when we change the format of the whole paragraph ?
     p->setFont( newFont );
 
     // Now draw any bullet that is required over the space left for it.
