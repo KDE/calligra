@@ -1147,13 +1147,25 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             textData = t.data();
 
         // take care of indentation
-        if ( m_styleStack.hasAttribute( "fo:margin-left" ) )
-            if ( toPoint( m_styleStack.attribute( "fo:margin-left" ) ) != 0 )
+        if ( m_styleStack.hasAttribute( "fo:margin-left" ) ||
+            m_styleStack.hasAttribute( "fo:margin-right" ) ||
+            m_styleStack.hasAttribute( "fo:text-indent"))
+        {
+            double marginLeft =toPoint( m_styleStack.attribute( "fo:margin-left" ) );
+            double marginRight = toPoint( m_styleStack.attribute( "fo:margin-right" ) );
+            double first = toPoint( m_styleStack.attribute("fo:text-indent"));
+            if ( (marginLeft!= 0) || marginRight!=0 || first!=0)
             {
                 QDomElement indent = doc.createElement( "INDENTS" );
-                indent.setAttribute( "left", toPoint( m_styleStack.attribute( "fo:margin-left" ) ) );
+                if( marginLeft != 0)
+                    indent.setAttribute( "left", marginLeft );
+                if( marginRight != 0 )
+                    indent.setAttribute( "right", marginLeft );
+                if( first != 0)
+                    indent.setAttribute( "first", first);
                 p.appendChild( indent );
             }
+        }
 
         QDomElement text = doc.createElement( "TEXT" );
         text.appendChild( doc.createTextNode( textData ) );
