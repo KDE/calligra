@@ -211,9 +211,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     m_percent = new KToggleAction( i18n("Percent format"), "percent", 0, actionCollection(), "percent");
     connect( m_percent, SIGNAL( toggled( bool ) ), this, SLOT( percent( bool ) ) );
-    m_precplus = new KAction( i18n("Increase precision"), "precplus", 0, this,
+    m_precplus = new KAction( i18n("Increase precision"), "prec_plus", 0, this,
 			      SLOT( precisionPlus() ), actionCollection(), "precplus");
-    m_precminus = new KAction( i18n("Decrease precision"), "precminus", 0, this,
+    m_precminus = new KAction( i18n("Decrease precision"), "prec_minus", 0, this,
 			      SLOT( precisionMinus() ), actionCollection(), "precminus");
     m_money = new KToggleAction( i18n("Money format"), "money", 0, actionCollection(), "money");
     connect( m_money, SIGNAL( toggled( bool ) ), this, SLOT( moneyFormat( bool ) ) );
