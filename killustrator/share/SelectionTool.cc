@@ -36,6 +36,8 @@
 #include "RotateCmd.h"
 #include "ShearCmd.h"
 #include "CommandHistory.h"
+#include "units.h"
+#include "PStateManager.h"
 #include <kapp.h>
 #include <klocale.h>
 
@@ -109,8 +111,15 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
   else if (state == S_Scale) {
     state = S_Pick;
     canvas->snapPositionToGrid (xpos, ypos);
-    scale (doc, oldmask, xpos - firstpos.x (), ypos - firstpos.y (),
-	   true);
+    float xoff = xpos - firstpos.x ();
+    float yoff = ypos - firstpos.y ();
+    if (me->state () & ControlButton) {
+      if (xoff > yoff)
+	yoff = xoff;
+      else
+	xoff = yoff;
+    }
+    scale (doc, oldmask, xoff, yoff, true);
   }
   else if (state == S_Translate) {
     state = S_Pick;
@@ -157,6 +166,30 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     //    doc->handle ().setMode (Handle::HMode_Default);
   }
   doc->handle ().setMode (mode, true);
+  if (doc->selectionIsEmpty ()) {
+    emit modeSelected (i18n ("Selection Mode"));
+  }
+  else {
+    Rect box = doc->boundingBoxForSelection ();
+    MeasurementUnit unit = 
+      PStateManager::instance ()->defaultMeasurementUnit ();
+    const char *u = unitToString (unit);
+    float x, y, w, h;
+    x = cvtPtToUnit (unit, box.x ());
+    y = cvtPtToUnit (unit, box.y ());
+    w = cvtPtToUnit (unit, box.width ());
+    h = cvtPtToUnit (unit, box.height ());
+    if (doc->selectionCount () > 1) {
+      sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
+	       i18n ("Multiple Selection"), x, u, y, u, w, u, h, u);
+    }
+    else {
+      GObject *sobj = doc->getSelection ().front ();
+      sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
+	       i18n (sobj->typeName ()), x, u, y, u, w, u, h, u);
+    }
+    emit modeSelected (msgbuf);
+  }
 }
 
 void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc, 
@@ -200,7 +233,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
      */
     if (state == S_Pick) {
       hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
-      if (hmask) {
+      if (hmask && hmask != Handle::HPos_Center) {
 	if (ctype != C_Size) {
 	  ctype = C_Size;
 	  canvas->setCursor (crossCursor);
@@ -211,14 +244,14 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
 	canvas->setCursor (arrowCursor);
       }
 
-      if (me->state () == LeftButton)
+      if (me->state () & LeftButton)
 	state = S_Translate;
     }
     /**********
      * S_Intermediate1
      */
     else if (state == S_Intermediate1) {
-      if (me->state () == LeftButton) {
+      if (me->state () & LeftButton) {
 	//	hmask = doc->handle ().contains (Coord (me->x (), me->y ()));
 	if (ctype == C_Size)
 	  state = S_Scale;
@@ -250,7 +283,7 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
       }
 	
     }
-    if (me->state () == LeftButton) {
+    if (me->state () & LeftButton) {
       canvas->snapPositionToGrid (xpos, ypos);
       float xoff = xpos - firstpos.x ();
       float yoff = ypos - firstpos.y ();
@@ -263,6 +296,12 @@ void SelectionTool::processMouseMoveEvent (QMouseEvent *me, GDocument *doc,
 	  if (ctype != C_Size) {
 	    ctype = C_Size;
 	    canvas->setCursor (crossCursor);
+	  }
+	  if (me->state () & ControlButton) {
+	    if (xoff > yoff)
+	      yoff = xoff;
+	    else
+	      xoff = yoff;
 	  }
 	  scale (doc, oldmask, xoff, yoff);
 	  break;
@@ -475,6 +514,17 @@ void SelectionTool::translate (GDocument* doc, float dx, float dy,
       (*it)->ttransform (m, true);
     }
   }
+
+  MeasurementUnit unit = 
+    PStateManager::instance ()->defaultMeasurementUnit ();
+  const char *u = unitToString (unit);
+  float xval, yval;
+  xval = cvtPtToUnit (unit, dx);
+  yval = cvtPtToUnit (unit, dy);
+
+  sprintf (msgbuf, "%s [%.3f %s, %.3f %s]", 
+	   i18n ("Translate"), xval, u, yval, u);
+  emit modeSelected (msgbuf);
 }
 
 void SelectionTool::rotate (GDocument* doc, float dx, float dy,
@@ -520,6 +570,16 @@ void SelectionTool::rotate (GDocument* doc, float dx, float dy,
       (*it)->ttransform (m3, true);
     }
   }
+  MeasurementUnit unit = 
+    PStateManager::instance ()->defaultMeasurementUnit ();
+  const char *u = unitToString (unit);
+  float xval, yval;
+  xval = cvtPtToUnit (unit, rotCenter.x ());
+  yval = cvtPtToUnit (unit, rotCenter.y ());
+
+  sprintf (msgbuf, "%s [%.3f - %.3f %s, %.3f %s]", 
+	   i18n ("Rotate"), angle, xval, u, yval, u);
+  emit modeSelected (msgbuf);
 }
 
 void SelectionTool::scale (GDocument* doc, int mask, float dx, float dy, 
@@ -566,6 +626,9 @@ void SelectionTool::scale (GDocument* doc, int mask, float dx, float dy,
       (*it)->ttransform (m3, true);
     }
   }
+  sprintf (msgbuf, "%s [%.3f %%, %.3f %%]", 
+	   i18n ("Scale"), sx * 100.0, sy * 100.0);
+  emit modeSelected (msgbuf);
 }
 
 void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy, 
@@ -600,6 +663,9 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
       (*it)->ttransform (m3, true);
     }
   }
+  sprintf (msgbuf, "%s [%.3f %%, %.3f %%]", 
+	   i18n ("Shear"), sx * 100.0, sy * 100.0);
+  emit modeSelected (msgbuf);
 }
 
 void SelectionTool::activate (GDocument* doc, Canvas*) {
@@ -614,7 +680,31 @@ void SelectionTool::activate (GDocument* doc, Canvas*) {
   else
     state = S_Init;
   ctype = C_Arrow;
-  emit modeSelected (i18n ("Selection Mode"));
+
+  if (doc->selectionIsEmpty ()) {
+    emit modeSelected (i18n ("Selection Mode"));
+  }
+  else {
+    Rect box = doc->boundingBoxForSelection ();
+    MeasurementUnit unit = 
+      PStateManager::instance ()->defaultMeasurementUnit ();
+    const char *u = unitToString (unit);
+    float x, y, w, h;
+    x = cvtPtToUnit (unit, box.x ());
+    y = cvtPtToUnit (unit, box.y ());
+    w = cvtPtToUnit (unit, box.width ());
+    h = cvtPtToUnit (unit, box.height ());
+    if (doc->selectionCount () > 1) {
+      sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
+	       i18n ("Multiple Selection"), x, u, y, u, w, u, h, u);
+    }
+    else {
+      GObject *sobj = doc->getSelection ().front ();
+      sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
+	       i18n (sobj->typeName ()), x, u, y, u, w, u, h, u);
+    }
+    emit modeSelected (msgbuf);
+  }
 }
 
 void SelectionTool::deactivate (GDocument* doc, Canvas* canvas) {

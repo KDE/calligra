@@ -256,7 +256,7 @@ bool XfigImport::importFromFile (GDocument *doc) {
       break;
     case 3:
       // a spline
-      cout << "spline\n";
+      parseSpline (fin, doc);
       break;
     case 4:
       // a text
@@ -432,7 +432,7 @@ void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
 
   if (forward_arrow > 0) {
 
-    // forward arow line
+    // forward arrow line
     fin >> arrow_type >> arrow_style >> arrow_thickness 
 	>> arrow_width >> arrow_height;
     oinfo.endArrowId = arrow_ids[arrow_type];
@@ -473,6 +473,74 @@ void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
 }
 
 void XfigImport::parseSpline (istream& fin, GDocument* doc) {
+  int sub_type, line_style, thickness, pen_color, fill_color, depth,
+    pen_style, area_fill, cap_style, forward_arrow, backward_arrow, npoints;
+  float style_val;
+
+  // this should be a spline
+  GPolyline *obj = 0L;
+  fin >> sub_type >> line_style >> thickness >> pen_color >> fill_color
+      >>  depth >> pen_style >> area_fill >> style_val >> cap_style
+      >> forward_arrow >> backward_arrow >> npoints;
+  if (sub_type == 1 || sub_type == 3 || sub_type == 5)
+    obj = new GPolygon ();
+  else
+    obj = new GPolyline ();
+
+  int arrow_type, arrow_style;
+  float arrow_thickness, arrow_width, arrow_height;
+  GObject::OutlineInfo oinfo;
+  oinfo.mask = GObject::OutlineInfo::Custom;
+  oinfo.startArrowId = oinfo.endArrowId = 0;
+
+  if (forward_arrow > 0) {
+
+    // forward arrow line
+    fin >> arrow_type >> arrow_style >> arrow_thickness 
+	>> arrow_width >> arrow_height;
+    oinfo.endArrowId = arrow_ids[arrow_type];
+    if (oinfo.endArrowId == 1 && arrow_style == 0)
+      oinfo.endArrowId = 4;
+    fin.ignore (INT_MAX, '\n');
+  }
+
+  if (backward_arrow > 0) {
+    // backward arrow line
+    fin >> arrow_type >> arrow_style >> arrow_thickness
+	>> arrow_width >> arrow_height;
+    oinfo.startArrowId = arrow_ids[arrow_type];
+    if (oinfo.startArrowId == 1 && arrow_style == 0)
+      oinfo.startArrowId = 4;
+    fin.ignore (INT_MAX, '\n');
+  }
+  // points line
+  for (int i = 0; i < npoints; i++) {
+    int x, y;
+    fin >> x >> y;
+    if ((sub_type == 1 || sub_type == 3 || sub_type == 5) && i == npoints -1)
+      // first point == last point
+      break;
+
+    Coord p (x / fig_resolution, y / fig_resolution);
+    obj->_addPoint (i, p);
+  }
+
+  // control points line
+  for (int i = 0; i < npoints; i++) {
+    float fac;
+    fin >> fac;
+    // ignore it now
+    fin.ignore (INT_MAX, '\n');
+  }
+
+  if (oinfo.startArrowId || oinfo.endArrowId)
+    obj->setOutlineInfo (oinfo);
+
+  // now set the properties
+  setProperties (obj, pen_color, line_style, thickness, area_fill, fill_color);
+
+  // and insert the object
+  objList.push_back (pair<int, GObject*> (depth, obj));
 }
 
 void XfigImport::parseText (istream& fin, GDocument* doc) {

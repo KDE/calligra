@@ -27,7 +27,7 @@
 #include "CommandHistory.h"
 #include "CommandHistory.moc"
 
-#define MAX_HISTSIZE 100
+#define MAX_HISTSIZE 1000
 
 CommandHistory::CommandHistory () {
   index = 0;

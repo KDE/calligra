@@ -743,3 +743,15 @@ void QWinMetaFile::createPenIndirect(short num, short* parm)
   handle->pen.setWidth(parm[1]);
   handle->pen.setColor(color(parm+3));
 }
+
+//-----------------------------------------------------------------------------
+void QWinMetaFile::saveDC(short num, short* parm)
+{
+  mPainter.save ();
+}
+
+//-----------------------------------------------------------------------------
+void QWinMetaFile::restoreDC(short num, short* parm)
+{
+  mPainter.restore ();
+}

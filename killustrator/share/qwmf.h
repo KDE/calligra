@@ -99,6 +99,10 @@ public: // should be protected but cannot
   void setRop(short num, short* parms);
   // Escape (enhanced command set)
   void escape(short num, short* parms);
+  // save drawing context
+  void saveDC(short num, short* parms);
+  // restore drawing context
+  void restoreDC(short num, short* parms);
 
   // do nothing
   void noop(short num, short* parms) { }

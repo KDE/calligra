@@ -1,6 +1,5 @@
 #include <qimage.h>
 #include <qdstream.h>
-
 #include <ctype.h>
 
 /*
@@ -136,13 +135,16 @@ extern "C" void write_gif_image( QImageIO * iio )
 	}
     }
 
+    // I don't know why, but with ncols > 2 the GIF file is not 
+    // corrupted anymore.
+    if (ncols == 2) ncols = 3;
+
     int colorTableSize = 2;
     int colorTableCode = 1;
     while ( colorTableSize < ncols ) {
 	colorTableSize *= 2;
 	colorTableCode++;
     }
-
     // write the file header
     QDataStream * s = new QDataStream( iio->ioDevice() );
     if ( s->device()->writeBlock( need89 ? "GIF89a" : "GIF87a", 6 ) < 6 )

@@ -30,6 +30,8 @@
 #include "Coord.h"
 #include "CreateRectangleCmd.h"
 #include "CommandHistory.h"
+#include "units.h"
+#include "PStateManager.h"
 #include <qkeycode.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -53,6 +55,8 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
     rect->addPoint (2, Coord (xpos, ypos));
     rect->addPoint (3, Coord (xpos, ypos));
     doc->insertObject (rect);
+    emit modeSelected (flag ? i18n ("Create Square") : 
+		       i18n ("Create Rectangle"));
   }
   else if (e->type () == Event_MouseMove) {
     if (rect == NULL)
@@ -62,6 +66,22 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
     rect->setEndPoint (Coord (xpos, ypos));
+    bool flag = me->state () & ControlButton;
+
+    Rect r = rect->boundingBox ();
+    MeasurementUnit unit = 
+      PStateManager::instance ()->defaultMeasurementUnit ();
+    const char *u = unitToString (unit);
+    float xval, yval, wval, hval;
+    xval = cvtPtToUnit (unit, r.x ());
+    yval = cvtPtToUnit (unit, r.y ());
+    wval = cvtPtToUnit (unit, r.width ());
+    hval = cvtPtToUnit (unit, r.height ());
+    
+    sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]", 
+	     flag ? i18n ("Create Square") :
+	     i18n ("Create Rectangle"), xval, u, yval, u, wval, u, hval, u);
+    emit modeSelected (msgbuf);
   }
   else if (e->type () == Event_MouseButtonRelease) {
     if (rect == NULL)

@@ -103,6 +103,7 @@ bool ImageExport::exportToFile (GDocument* doc) {
 
   // now create an image
   QImage img  = pixmap->convertToImage ();
+  img.setAlphaBuffer (true);
   delete pixmap;
 
   // and save the image in requested format

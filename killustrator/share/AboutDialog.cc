@@ -33,9 +33,9 @@
 #include "version.h"
 
 #define ABOUT_INFO "Version "APP_VERSION"\n\nCopyright (C) 1998\n\
-Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)\n\
-Steffen Thorhauer (sth@iti.cs.uni-magdeburg.de)\n\n\
+Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)\n\n\
 Contributions by\n\
+Steffen Thorhauer (sth@iti.cs.uni-magdeburg.de)\n\
 Stefan Taferner (taferner@salzburg.co.at)\n\
 Stephan Kulow (coolo@kde.org)\n\
 Jost Schenck (jost@schenck.de)"

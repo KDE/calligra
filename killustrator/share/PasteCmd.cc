@@ -26,6 +26,7 @@
 #include <strstream.h>
 #include <qclipboard.h>
 #include "PasteCmd.h"
+#include "GText.h"
 
 PasteCmd::PasteCmd (GDocument* doc) 
   : Command(i18n("Paste")) 
@@ -46,17 +47,27 @@ void PasteCmd::execute () {
     objects.clear ();
     const char* buf = QApplication::clipboard ()->text ();
     if (::strlen (buf)) {
-      QWMatrix m;
-      m.translate (10, 10);
-
-      istrstream is (buf);
-      document->insertFromXml (is, objects);
-      document->unselectAllObjects ();
-      for (list<GObject*>::iterator it = objects.begin ();
-	   it != objects.end (); it++) {
-	(*it)->ref ();
-	(*it)->transform (m, true);
-	document->selectObject (*it);
+      if (::strncmp (buf, "<?xml", 5) == 0) {
+	// KIllustrator objects
+	QWMatrix m;
+	m.translate (10, 10);
+	
+	istrstream is (buf);
+	document->insertFromXml (is, objects);
+	document->unselectAllObjects ();
+	for (list<GObject*>::iterator it = objects.begin ();
+	     it != objects.end (); it++) {
+	  (*it)->ref ();
+	  (*it)->transform (m, true);
+	  document->selectObject (*it);
+	}
+      }
+      else {
+	// plain text
+	GText *tobj = new GText ();
+	tobj->setText (buf);
+	objects.push_back (tobj);
+	document->insertObject (tobj);
       }
     }
 }

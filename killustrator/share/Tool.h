@@ -54,7 +54,8 @@ signals:
   void operationDone ();
 
 protected:
- CommandHistory* history;
+  CommandHistory* history;
+  char msgbuf[200];
 };
 
 #endif

@@ -643,7 +643,8 @@ void KIllustrator::initMenu () {
   //  extras->insertItem (i18n ("Dump History"), ID_HISTORY_DUMP);
   connect (extras, SIGNAL (activated (int)), SLOT (menuCallback (int)));
 
-  help->insertItem (i18n ("&Help..."), ID_HELP_HELP);
+  help->insertItem (i18n ("&Contents"), ID_HELP_HELP);
+  help->setAccel (Key_F1, ID_HELP_HELP);
   help->insertSeparator ();
   help->insertItem (i18n ("About..."), ID_HELP_ABOUT_APP);
   /*
@@ -965,6 +966,9 @@ void KIllustrator::menuCallback (int item) {
     scriptDialog->setActiveDocument (document);
     scriptDialog->show ();
     scriptDialog->loadScripts ();
+    break;
+  case ID_HELP_HELP:
+    kapp->invokeHTMLHelp ("", "");
     break;
   case ID_HELP_ABOUT_APP:
   case ID_HELP_ABOUT_KDE:

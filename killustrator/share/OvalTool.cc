@@ -32,6 +32,8 @@
 #include "CreateOvalCmd.h"
 #include "CommandHistory.h"
 #include "EllipseConfigDialog.h"
+#include "units.h"
+#include "PStateManager.h"
 #include <qkeycode.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -58,6 +60,8 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     oval->setStartPoint (pos);
     oval->setEndPoint (pos);
     doc->insertObject (oval);
+    emit modeSelected (flag ? i18n ("Create Circle") : 
+		       i18n ("Create Ellipse"));
   }
   else if (e->type () == Event_MouseMove) {
     if (oval == NULL)
@@ -87,6 +91,21 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     }
     else
       oval->setEndPoint (Coord (xpos, ypos));
+
+    Rect r = oval->boundingBox ();
+    MeasurementUnit unit = 
+      PStateManager::instance ()->defaultMeasurementUnit ();
+    const char *u = unitToString (unit);
+    float xval, yval, wval, hval;
+    xval = cvtPtToUnit (unit, r.x ());
+    yval = cvtPtToUnit (unit, r.y ());
+    wval = cvtPtToUnit (unit, r.width ());
+    hval = cvtPtToUnit (unit, r.height ());
+    
+    sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]", 
+	     oval->isCircle () ? i18n ("Create Circle") :
+	     i18n ("Create Ellipse"), xval, u, yval, u, wval, u, hval, u);
+    emit modeSelected (msgbuf);
   }
   else if (e->type () == Event_MouseButtonRelease) {
     if (oval == NULL)
