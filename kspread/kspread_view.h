@@ -118,7 +118,7 @@ public:
     void addTable( KSpreadTable *_t );
     void removeTable( KSpreadTable *_t );
     void removeAllTables();
-
+    void changeTable( const QString& _name );
     enum PType {TXT_COLOR, FRAME_COLOR, BACK_COLOR};
     QString colorToPixString( QColor c, PType _type );
     void setTextColor(QColor c );
@@ -126,6 +126,7 @@ public:
     void setActiveTable( KSpreadTable *_t );
 
     KSpreadTable* activeTable() { return m_pTable; }
+    KSpreadTabBar* tabBar() { return  m_pTabBar;}
 
     void openPopupMenu( const QPoint &_global );
     void set_bg_color(QColor _bgcolor) { bgColor=_bgcolor;}

@@ -623,6 +623,49 @@ static bool kspreadfunc_variante( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_ecarttype_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,double& avera)
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_ecarttype_helper( context, (*it)->listValue(), result ,avera) )
+	return false;
+	
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      {
+      result += (((*it)->doubleValue()-avera)*((*it)->doubleValue()-avera));
+      }
+    else
+    	return false;
+  }
+
+  return true;
+}
+
+static bool kspreadfunc_ecarttype( KSContext& context )
+{
+  double result = 0.0;
+  double avera = 0.0;
+  int number=0;
+  bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
+
+  if ( b )
+  	{
+  	avera=result/number;
+  	result=0.0;
+  	bool b = kspreadfunc_ecarttype_helper( context, context.value()->listValue(), result,avera );
+    	if(b)
+    		context.setValue( new KSValue(sqrt(result/number )) );
+      	}
+
+  return b;
+}
+
 static bool kspreadfunc_mult_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -687,7 +730,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "average", new KSValue( new KSBuiltinFunction( module, "average", kspreadfunc_average ) ) );
   module->addObject( "variante", new KSValue( new KSBuiltinFunction( module, "variante", kspreadfunc_variante) ) );
   module->addObject( "mult", new KSValue( new KSBuiltinFunction( module, "mult", kspreadfunc_mult) ) );
-
+  module->addObject( "ecartype", new KSValue( new KSBuiltinFunction( module, "ecartype", kspreadfunc_ecarttype) ) );
   return module;
 }
 

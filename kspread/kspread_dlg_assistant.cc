@@ -24,7 +24,7 @@
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
-
+#include "kspread_tabbar.h"
 #include <qlayout.h>
 #include <kapp.h>
 #include <klocale.h>
@@ -37,6 +37,8 @@ KSpreadassistant::KSpreadassistant( KSpreadView* parent, const char* name,QStrin
   m_pView = parent;
 
   formula=_formula;
+  tabname=m_pView->activeTable()->name();
+
 
   table = m_pView->activeTable();
   dx = m_pView->canvasWidget()->markerColumn();
@@ -76,6 +78,14 @@ KSpreadassistant::KSpreadassistant( KSpreadView* parent, const char* name,QStrin
 
 void KSpreadassistant::slotOk()
 {
+
+if(m_pView->activeTable()->name() != tabname)
+	{
+	m_pView->tabBar()->setActiveTab(tabname);
+	
+	m_pView->changeTable( tabname );
+	}
+	
 table->unselect();
 table->setText( dy, dx , m_pRef->text() );
 m_pView->canvasWidget()->hideMarker();
@@ -83,6 +93,9 @@ m_pView->canvasWidget()->setMarkerColumn(dx);
 m_pView->canvasWidget()->setMarkerRow(dy);
 m_pView->editWidget()->setText( m_pRef->text() );
 m_pView->canvasWidget()->showMarker();
+
+
+
 m_pView->editWidget()->setFocus();
 m_pView->editWidget()->setActivate(true);
 accept();
@@ -90,6 +103,13 @@ accept();
 
 void KSpreadassistant::slotClose()
 {
+if(m_pView->activeTable()->name() != tabname)
+	{
+	m_pView->tabBar()->setActiveTab(tabname);
+	m_pView->changeTable( tabname );
+	}
+
+
 table->unselect();
 table->setText( dy, dx , m_pRef->text() );
 m_pView->canvasWidget()->hideMarker();
@@ -99,6 +119,9 @@ if ( m_pRef->text() != 0L )
     m_pView->editWidget()->setText( formula );
 else
     m_pView->editWidget()->setText( "" );
+
+
+
 m_pView->canvasWidget()->showMarker();
 m_pView->editWidget()->setFocus();
 //reactivate the combobox

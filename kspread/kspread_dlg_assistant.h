@@ -47,6 +47,7 @@ public slots:
 
   void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
 
+
 protected:
   KSpreadView* m_pView;
   
@@ -55,6 +56,7 @@ protected:
   QPushButton* m_pClose;
   QString formula;
   KSpreadCell *cell;
+  QString tabname;
 
 
 };

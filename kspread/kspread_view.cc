@@ -1259,6 +1259,22 @@ void KSpreadView::slotChangeTable( const QString& _name )
   warning("Unknown table '%s'\n",_name.ascii());
 }
 
+void KSpreadView::changeTable( const QString& _name )
+{
+  KSpreadTable *t;
+
+  for ( t = m_pDoc->map()->firstTable(); t != 0L; t = m_pDoc->map()->nextTable() )
+  {
+    if ( QString::compare( _name, t->name() ) == 0 )
+    {
+      setActiveTable( t );
+      return;
+    }
+  }
+
+  warning("Unknown table '%s'\n",_name.ascii());
+}
+
 void KSpreadView::slotScrollToFirstTable()
 {
   m_pTabBar->scrollFirst();

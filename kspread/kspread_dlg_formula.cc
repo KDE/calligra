@@ -89,7 +89,7 @@ void KSpreaddlgformula::slotOk()
 
   if ( m_pView->activeTable() != 0L )
     {
-    	if(assistant->isChecked() && (math=="variante" || math =="mult" || math =="average" || math =="sum" || math =="max" || math =="min"))
+    	if(assistant->isChecked() && (math=="variante" || math =="mult" || math =="average" || math =="sum" || math =="max" || math =="min" || math =="ecartype"))
     		{
     	
     		if(m_pView->editWidget()->isActivate() )
@@ -117,7 +117,7 @@ void KSpreaddlgformula::slotOk()
      	int pos;
      	string="";
      		
-     	if(math=="variante" || math =="mult" || math =="average" || math =="sum" || math =="max" || math =="min")
+     	if(math=="variante" || math =="mult" || math =="average" || math =="sum" || math =="max" || math =="min" || math =="ecartype")
 	{
 	    string=":";
 	}
@@ -167,7 +167,7 @@ if ( m_pView->activeTable() != 0L )
 
 void KSpreaddlgformula::slotselected_formula(const QString & string)
 {
-if(string=="variante" || string =="mult" || string =="average" || string =="sum" || string =="max" || string =="min")
+if(string=="variante" || string =="mult" || string =="average" || string =="sum" || string =="max" || string =="min" || string =="ecartype")
 	{
 	
 	assistant->setEnabled(true);
@@ -184,6 +184,7 @@ void KSpreaddlgformula::slotselected(const QString & string)
 QStringList list_stat;
 list_stat+="average";
 list_stat+="variante";
+list_stat+="ecartype";
 
 QStringList list_anal;
 list_anal+="sum";
