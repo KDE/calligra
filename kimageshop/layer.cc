@@ -24,160 +24,155 @@
 Layer::Layer(int ch)
 	: QObject()
 {
-	channels=ch;
-	opacityVal=255;
-	visible=true;
-	linked=false;
-
-	dataChannels=new ChannelData(ch, ChannelData::RGB);
+  channels=ch;
+  opacityVal=255;
+  visible=true;
+  linked=false;
+  
+  dataChannels=new ChannelData(ch, ChannelData::RGB);
   alphaChannel=new ChannelData( 1, ChannelData::ALPHA);
 }
 
 Layer::~Layer()
 {
-	delete dataChannels;
-	delete alphaChannel;
+  delete dataChannels;
+  delete alphaChannel;
 }
 
-void
-Layer::setOpacity(uchar o)
+void Layer::setOpacity(uchar o)
 {
-	opacityVal=o;
-	//	emit layerPropertiesChanged();
-}
-
-
-void
-Layer::loadRGBImage(QImage img, QImage alpha)
-{
-	printf("loadRGBImage img=(%d,%d) alpha=(%d,%d)\n",img.width(),img.height(),
-				 alpha.width(),alpha.height());
-	if (img.depth()!=32)
-		img=img.convertDepth(32);
-
-	if (!alpha.isNull()) {
-		if (alpha.depth()!=32)
-			alpha=alpha.convertDepth(32);
-		alphaChannel->loadViaQImage(alpha);
-	} else {
-		alphaChannel->allocateRect(QRect(QPoint(0,0),img.size()));
-		for(int y=0;y<img.height();y++)
-			for(int x=0;x<img.width();x++)
-				alphaChannel->setPixel(x,y,255);
-	}
-	dataChannels->loadViaQImage(img);
+  opacityVal=o;
+  //	emit layerPropertiesChanged();
 }
 
 
-void
-Layer::loadGrayImage(QImage img, QImage alpha)
+void Layer::loadRGBImage(QImage img, QImage alpha)
 {
-	if (img.depth()!=32)
-		img=img.convertDepth(32);
+  printf("loadRGBImage img=(%d,%d) alpha=(%d,%d)\n",img.width(),img.height(),
+	 alpha.width(),alpha.height());
+  if (img.depth()!=32)
+    img=img.convertDepth(32);
+  
+  if (!alpha.isNull()) {
+    if (alpha.depth()!=32)
+      alpha=alpha.convertDepth(32);
+    alphaChannel->loadViaQImage(alpha);
+  } else {
+    alphaChannel->allocateRect(QRect(QPoint(0,0),img.size()));
+    for(int y=0;y<img.height();y++)
+      for(int x=0;x<img.width();x++)
+	alphaChannel->setPixel(x,y,255);
+  }
+  dataChannels->loadViaQImage(img);
+}
 
-	if (!alpha.isNull()) {
-		if (alpha.depth()!=32)
-			alpha=alpha.convertDepth(32);
-		alphaChannel->loadViaQImage(alpha);  // ie assume R=B=G as above
-	}
-	dataChannels->loadViaQImage(img);
+
+void Layer::loadGrayImage(QImage img, QImage alpha)
+{
+  if (img.depth()!=32)
+    img=img.convertDepth(32);
+  
+  if (!alpha.isNull()) {
+    if (alpha.depth()!=32)
+      alpha=alpha.convertDepth(32);
+    alphaChannel->loadViaQImage(alpha);  // ie assume R=B=G as above
+  }
+  dataChannels->loadViaQImage(img);
 }
 
 
 void Layer::findTileNumberAndOffset(QPoint pt, int *tileNo, int *offset) const
 {
-	pt=pt-dataChannels->tileExtents().topLeft();
-	*tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
-	*offset=(pt.y()%TILE_SIZE)*TILE_SIZE + pt.x()%TILE_SIZE;
+  pt=pt-dataChannels->tileExtents().topLeft();
+  *tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
+  *offset=(pt.y()%TILE_SIZE)*TILE_SIZE + pt.x()%TILE_SIZE;
 }
 
 void Layer::findTileNumberAndPos(QPoint pt, int *tileNo, int *x, int *y) const
 {
-	pt=pt-dataChannels->tileExtents().topLeft();
-	*tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
-	*y=pt.y()%TILE_SIZE;
-	*x=pt.x()%TILE_SIZE;
+  pt=pt-dataChannels->tileExtents().topLeft();
+  *tileNo=(pt.y()/TILE_SIZE)*xTiles() + pt.x()/TILE_SIZE;
+  *y=pt.y()%TILE_SIZE;
+  *x=pt.x()%TILE_SIZE;
 }
 
 QRect Layer::tileRect(int tileNo)
 {
-	return(dataChannels->tileRect(tileNo));
+  return(dataChannels->tileRect(tileNo));
 }
 
 uchar* Layer::channelMem(int tileNo, int ox, int oy, bool alpha) const
 {
-	if (alpha)
-		return alphaChannel->tileBlock()[tileNo]+(oy*TILE_SIZE+ox);
-
-	return dataChannels->tileBlock()[tileNo]+(oy*TILE_SIZE+ox)*channels;
+  if (alpha)
+    return alphaChannel->tileBlock()[tileNo]+(oy*TILE_SIZE+ox);
+  
+  return dataChannels->tileBlock()[tileNo]+(oy*TILE_SIZE+ox)*channels;
 }
 
 
 QRect Layer::imageExtents() const // Extents of the image in canvas coords
 {
-	return dataChannels->imageExtents();
+  return dataChannels->imageExtents();
 }
 
 QRect Layer::tileExtents() const// Extents of the image in canvas coords
 {
-	return dataChannels->tileExtents();
+  return dataChannels->tileExtents();
 }
 
 // TopLeft of the image in the channel (not always 0,0)
 QPoint Layer::channelOffset() const 
 {
-	return dataChannels->offset();
+  return dataChannels->offset();
 }
 
 int Layer::xTiles() const
 {
-	return dataChannels->xTiles();
+  return dataChannels->xTiles();
 }
 
 int Layer::yTiles() const
 {
-	return dataChannels->yTiles();
+  return dataChannels->yTiles();
 }
 
 
-void
-Layer::moveBy(int dx, int dy)
+void Layer::moveBy(int dx, int dy)
 {
-	alphaChannel->moveBy(dx, dy);	
-	dataChannels->moveBy(dx, dy);	
+  alphaChannel->moveBy(dx, dy);	
+  dataChannels->moveBy(dx, dy);	
 }
 
 void Layer::moveTo(int x, int y) const
 {
-	alphaChannel->moveTo(x, y);	
-	dataChannels->moveTo(x, y);	
+  alphaChannel->moveTo(x, y);	
+  dataChannels->moveTo(x, y);	
 }
 
 int Layer::channelLastTileOffsetX() const
 {
-	return dataChannels->lastTileOffsetX();
+  return dataChannels->lastTileOffsetX();
 }
 
 int Layer::channelLastTileOffsetY() const
 {
-	return dataChannels->lastTileOffsetY();
+  return dataChannels->lastTileOffsetY();
 }
 
 bool Layer::boundryTileX(int tile) const
 {
-	return(((tile % xTiles())+1)==xTiles());
+  return(((tile % xTiles())+1)==xTiles());
 }
 
 bool Layer::boundryTileY(int tile) const
 {
-	return(((tile/xTiles())+1)==yTiles());
+  return(((tile/xTiles())+1)==yTiles());
 }
 
-void
-Layer::allocateRect(QRect _r)
+void Layer::allocateRect(QRect _r)
 {
-	alphaChannel->allocateRect(_r);
-	dataChannels->allocateRect(_r);
+  alphaChannel->allocateRect(_r);
+  dataChannels->allocateRect(_r);
 }
 
 void Layer::setPixel(int x, int y, uint pixel)
@@ -192,32 +187,32 @@ uint Layer::getPixel(int x, int y)
 
 void Layer::rotate180()
 {
-	alphaChannel->rotate180();
-	dataChannels->rotate180();
+  alphaChannel->rotate180();
+  dataChannels->rotate180();
 }
 
 void Layer::rotateLeft90()
 {
-	alphaChannel->rotateLeft90();
-	dataChannels->rotateLeft90();
+  alphaChannel->rotateLeft90();
+  dataChannels->rotateLeft90();
 }
 
 void Layer::rotateRight90()
 {
-	alphaChannel->rotateRight90();
-	dataChannels->rotateRight90();
+  alphaChannel->rotateRight90();
+  dataChannels->rotateRight90();
 }
 
 void Layer::mirrorX()
 {
-	alphaChannel->mirrorX();
-	dataChannels->mirrorX();
+  alphaChannel->mirrorX();
+  dataChannels->mirrorX();
 }
 
 void Layer::mirrorY()
 {
-	alphaChannel->mirrorY();
-	dataChannels->mirrorY();
+  alphaChannel->mirrorY();
+  dataChannels->mirrorY();
 }
 
 void Layer::renderOpacityToAlpha()
@@ -225,13 +220,13 @@ void Layer::renderOpacityToAlpha()
   uchar *alpha;
   int xt = xTiles();
   int yt = yTiles();
-
+  
   for(int y = 0; y < yt; y++)
     {
       for(int x = 0; x < xt; x++)
 	{
 	  alpha = channelMem(y * xt + x, 0, 0, true);
-
+	  
 	  for(int y = TILE_SIZE; y; y--)
 	    {
 	      for(int x = TILE_SIZE; x; x--)

@@ -57,7 +57,8 @@ void BrushTool::mousePress(QMouseEvent *e)
 
 void BrushTool::mouseMove(QMouseEvent *e)
 {
-  if(m_dragging)
+  /*
+   if(m_dragging)
     {
       if (!m_pBrush)
 		return;
@@ -102,6 +103,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 	
       m_dragStart = e->pos();
     }
+  */
 }
 
 void BrushTool::mouseRelease(QMouseEvent *e)

@@ -47,19 +47,18 @@
 KImageShopDoc::KImageShopDoc( int width, int height, KoDocument* parent, const char* name )
   : KoDocument( parent, name )
   , m_commands()
+  , w (width)
+  , h (height)
 {
   QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
                     this, SLOT( slotUndoRedoChanged( QString, QString ) ) );
   QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
                     this, SLOT( slotUndoRedoChanged( QStringList, QStringList ) ) );
 
-  w=width;
-  h=height;
-  viewportRect=QRect(0,0,w,h);
-  // SHOW_RECT_COORDS(viewportRect);
+  viewportRect = QRect(0,0,w,h);
 
   QRect tileExtents=::findTileExtents(viewportRect);
-  // SHOW_RECT(tileExtents);
+
   xTiles=tileExtents.width()/TILE_SIZE;	
   yTiles=tileExtents.height()/TILE_SIZE;
 
@@ -73,11 +72,12 @@ KImageShopDoc::KImageShopDoc( int width, int height, KoDocument* parent, const c
       tiles[y*xTiles+x]=new QPixmap(TILE_SIZE,TILE_SIZE);
       tiles[y*xTiles+x]->fill();
     }
+  
   img.create(TILE_SIZE, TILE_SIZE, 32);
-
+  
   channels=3;
   currentLayer=0;
-
+  
   compose=new Layer(channels);
   compose->allocateRect(QRect(0,0, TILE_SIZE,TILE_SIZE));
   

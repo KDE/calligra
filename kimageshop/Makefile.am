@@ -16,14 +16,14 @@ lib_LTLIBRARIES = libkimageshop.la
 
 libkimageshop_la_SOURCES = kimageshop_shell.cc kimageshop_doc.cc kimageshop_view.cc \
 	kimageshop_factory.cc kimageshop_config.cc kimageshop_undo.cc brush.cc \
-	channeldata.cc channel.cc misc.cc layer.cc tool.cc  vec.cc color.cc
+	channeldata.cc misc.cc layer.cc tool.cc  vec.cc color.cc
 
 kimageshop_SOURCES = main.cc
 
 
 noinst_HEADERS =  kimageshop_global.h  kimageshop_shell.h kimageshop_doc.h \
 	kimageshop_view.h kimageshop_factory.h kimageshop_config.h \
-	kimageshop_undo.h vec.h color.h channeldata.h channel.h misc.h layer.h tool.h
+	kimageshop_undo.h vec.h color.h channeldata.h misc.h layer.h tool.h
 
 libkimageshop_la_METASOURCES = kimageshop_shell.moc kimageshop_doc.moc \
 	kimageshop_view.moc kimageshop_factory.moc kimageshop_config.moc layer.moc tool.moc
