@@ -40,11 +40,12 @@ KoApplication::~KoApplication()
 {
   // checking wether start the app as server or not
   QStringList::Iterator it;
-  if( m_params.find( "--server", "-s", true, it ) )
+  if( m_params.paramIsPresent( "--server", "-s", true, it ) )
   {
     m_bWithGUI = false;
-    m_params.del( it );
-  }                                                                                     }
+    m_params.deleteParam( it );
+  }
+}
     
 void KoApplication::start()
 {
@@ -53,11 +54,11 @@ void KoApplication::start()
  
   if( m_bWithGUI )
   {
-    for( uint i = 0; i < m_params.count(); i++ )
+    for( uint i = 0; i < m_params.countParams(); i++ )
     {
-      if( m_params.get( i ).left( 1 ) != "-" )
+      if( m_params.getParam( i ).left( 1 ) != "-" )
       {
-        openFiles.append( m_params.get( i ) );
+        openFiles.append( m_params.getParam( i ) );
       }
     }
     if( openFiles.isEmpty() )
