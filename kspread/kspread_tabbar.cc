@@ -349,19 +349,25 @@ void KSpreadTabBar::renameTab( const QString& old_name, const QString& new_name 
 void KSpreadTabBar::slotRename()
 {
     // Store the current name of the active table
-    KSpreadSheet* table = m_pView->activeTable();
+    KSpreadSheet * table = m_pView->activeTable();
 
     bool ok;
     QString activeName = table->tableName();
     QString newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Enter name:"), activeName, &ok, this );
 
+    rename( table, newName, activeName, ok );
+}
+
+void KSpreadTabBar::rename( KSpreadSheet * table, QString newName, QString const & activeName, bool ok )
+{
     // Have a different name ?
     if ( ok ) // User pushed an OK button.
     {
         while (!util_validateTableName(newName))
         {
             KNotifyClient::beep();
-            KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."), i18n("Change Sheet Name") );
+            KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."), 
+                                      i18n("Change Sheet Name") );
 
             newName = newName.simplifyWhiteSpace();
 
@@ -379,7 +385,7 @@ void KSpreadTabBar::slotRename()
 
             newName = KLineEditDlg::getText( i18n("Rename Sheet"),i18n("Enter name:"), newName, &ok, this );
 
-            if (!ok)
+            if ( !ok )
               return;
         }
 

@@ -68,6 +68,8 @@ public:
      */
     void renameTab( const QString& old_name, const QString& new_name );
 
+    void rename( KSpreadSheet * table, QString name, QString const & activeName, bool ok );
+
     /**
      * Moves the tab with number _from befor tab number _to if @param _before is
      * true _from is inserted before _to. If false it is inserted after.

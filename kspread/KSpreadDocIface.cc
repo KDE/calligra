@@ -149,20 +149,25 @@ QString KSpreadDocIface::moveToValue()const
     case KSpread::Right:
         return QString("right");
         break;
+    case KSpread::BottomFirst:
+        return QString("bottomFirst");
+        break;
     }
     return QString::null;
 }
 
 void KSpreadDocIface::setMoveToValue(const QString & move)
 {
-    if ( move.lower()=="bottom")
+    if ( move.lower()=="bottom" )
         doc->setMoveToValue(KSpread::Bottom);
-    else if ( move.lower()=="top")
+    else if ( move.lower()=="top" )
         doc->setMoveToValue(KSpread::Top);
-    else if ( move.lower()=="left")
+    else if ( move.lower()=="left" )
         doc->setMoveToValue(KSpread::Left);
-    else if ( move.lower()=="right")
+    else if ( move.lower()=="right" )
         doc->setMoveToValue(KSpread::Right);
+    else if ( move.lower()=="bottomfirst" )
+        doc->setMoveToValue(KSpread::BottomFirst);
 }
 
 void KSpreadDocIface::setTypeOfCalc( const QString & calc )
