@@ -104,7 +104,7 @@ void KChartLine3dConfigPage::apply()
     _params->setThreeDLines(line3d->isChecked());
     _params->setThreeDLineXRotation( angle3dX->value() );
     _params->setThreeDLineYRotation( angle3dY->value() );
-    _params->setThreeDLineDepth( depth->value() );
+    _params->setThreeDLineDepth( static_cast<int>( depth->value() ) );
     _params->setThreeDShadowColors( drawShadowColor->isChecked());
     _params->setLineWidth( lineWidth->value() );
 }

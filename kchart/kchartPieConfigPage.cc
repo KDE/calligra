@@ -80,7 +80,7 @@ KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
 
 void KChartPieConfigPage::initList()
 {
-    int index;
+    //int index;
     // PENDING(kalle) Put back in
     //     for( QStringList::Iterator it = _params->legend.begin(); it != _params->legend.end(); ++it ) {
 //         (void)new QCheckListItem( list, (*it),QCheckListItem::CheckBox ) ;
@@ -97,7 +97,7 @@ void KChartPieConfigPage::initList()
 }
 
 
-void KChartPieConfigPage::slotselected(QListViewItem *it)
+void KChartPieConfigPage::slotselected(QListViewItem */*it*/)
 {
     //column : 0
     //cout <<"Select :"<<(it)->text(0).ascii()<<endl;
@@ -120,7 +120,7 @@ void KChartPieConfigPage::changeValue(int val)
     QListViewItemIterator it( list );
     //Select or not CheckBox
     ;
-    int index=0;
+    //int index=0;
     for( ; it.current(); ++it )	{
         // PENDING(kalle) Put back in
         //         index = _params->legend.findIndex(((QCheckListItem*)it.current())->text());
@@ -141,7 +141,7 @@ void KChartPieConfigPage::init()
     QListViewItemIterator it( list );
     //Select or not CheckBox
 
-    int index = 0;
+    //int index = 0;
     for( ; it.current(); ++it )	{
         // PENDING(kalle) Put back in
         //        index = _params->legend.findIndex(((QCheckListItem*)it.current())->text());
@@ -162,7 +162,7 @@ void KChartPieConfigPage::apply()
 {
     QListViewItemIterator it( list );
     //Select or not CheckBox
-    int index = 0;
+    //int index = 0;
     for( ; it.current(); ++it )	{
         // PENDING(kalle) Put back in
         //         index = _params->legend.findIndex(((QCheckListItem*)it.current())->text());

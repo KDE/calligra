@@ -82,7 +82,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     tmpLabel->setText(i18n("Depth 3D: "));
     grid2->addWidget(tmpLabel,1,0);
     depth = new QSpinBox(1, 40, 1, tmpQGroupBox);
-    depth->setValue( _chart->params()->threeDBarDepth() );
+    depth->setValue( static_cast<int>( _chart->params()->threeDBarDepth() ) );
     grid2->addWidget(depth,1,1);
 
     // Bar width is computed automatically in KDChart (and can be

@@ -35,6 +35,8 @@ public:
     void setDefaultUnit(Graphite::Unit unit) { m_default=unit; }
 
     double currentValue() const;
+    // using QSpinBox::setValue doesn't work on all compilers we support :}
+    virtual void setValue( int value ) { QSpinBox::setValue( value ); }
     void setValue(const double &value);
 
     void fixSpinbox();

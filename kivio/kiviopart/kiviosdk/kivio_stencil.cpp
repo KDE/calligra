@@ -42,7 +42,7 @@ KivioStencil::KivioStencil()
         m_pProtection->clearBit(i);
         m_pCanProtect->setBit(i);
     }
-    
+
 }
 
 KivioStencil::~KivioStencil()
@@ -99,11 +99,11 @@ void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
     float newX, newY, newW, newH;
 
     // Handle Width
-    const float HW = 6.0f;
-    const float HWP1 = HW+1.0f;
+    //const float HW = 6.0f;
+    //const float HWP1 = HW+1.0f;
 
     // Handle Width Over 2
-    const float HWo2 = HW/2.0f;
+    //const float HWo2 = HW/2.0f;
 
     float scale = pData->scale;
 
