@@ -96,7 +96,7 @@ void GPart::draw (Painter& p, bool withBasePoints, bool outline) {
   else {
     QRect win = p.window ();
     QRect vPort = p.viewport ();
-    QPicture *pic = child->draw (true);
+    QPicture *pic = child->draw (1.0, true);
     p.setViewport (0, 0, 
 		   vPort.width (), vPort.height ());
     p.translate (r.x (), r.y ());
