@@ -95,7 +95,7 @@ VStrokeCmd::execute()
 		{
 			stroke.setLineCap( m_stroke->lineCap() );
 			stroke.setLineJoin( m_stroke->lineJoin() );
-			stroke.setParent( 0L );
+			stroke.setParent( itr.current() );
 			stroke.setLineWidth( m_stroke->lineWidth() );
 			if( m_stroke->type() == VStroke::none )
 			{
