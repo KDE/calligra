@@ -5652,7 +5652,7 @@ void KWDocument::saveDialogShown()
             }
             else
                 truncate = true;
-        else if ( truncate && (ch.isPunct() || ch == '.' ) )
+        else if ( truncate && (ch.isPunct() || ch == '.' || ch == '\n' ) )
         {
             first_row.truncate(i);
             break;
