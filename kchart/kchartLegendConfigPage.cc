@@ -7,6 +7,7 @@
 
 #include <kapplication.h>
 #include <klocale.h>
+#include <kcolorbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
@@ -66,6 +67,24 @@ KChartLegendConfigPage::KChartLegendConfigPage( KDChartParams* params,
   title=new QLineEdit(gb);
   grid2->addWidget(title,1,0);
 
+
+  lab=new QLabel(i18n("Legend title color:"),gb);
+  grid2->addWidget(lab,2,0);
+
+  legendTitleColor=new KColorButton(gb);
+  grid2->addWidget(legendTitleColor,3,0);
+
+  gb = new QButtonGroup( i18n("Color:"), this );
+  layout->addWidget(gb,0,1);
+
+  QGridLayout *grid3 = new QGridLayout(gb,4,2,15,7);
+
+  lab=new QLabel(i18n("Legend text color:"),gb);
+  grid3->addWidget(lab,0,0);
+
+  legendTextColor=new KColorButton(gb);
+  grid3->addWidget(legendTextColor,1,0);
+
   //it's not good but I don't know how
   //to reduce space
   layout->addColSpacing(1,300);
@@ -107,6 +126,8 @@ void KChartLegendConfigPage::init()
         break;
     }
     title->setText(_params->legendTitleText());
+    legendTitleColor->setColor(_params->legendTitleTextColor());
+    legendTextColor->setColor(_params->legendTextColor());
 }
 
 void KChartLegendConfigPage::apply()
@@ -133,4 +154,6 @@ void KChartLegendConfigPage::apply()
         _params->setLegendPosition(KDChartParams::LegendRight);
 
     _params->setLegendTitleText(title->text());
+    _params->setLegendTitleTextColor(legendTitleColor->color());
+    _params->setLegendTextColor(legendTextColor->color());
 }
