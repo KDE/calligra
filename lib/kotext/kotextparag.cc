@@ -303,6 +303,13 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
     p->restore();
 }
 
+int KoTextParag::breakableTopMargin() const
+{
+    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    return zh->ptToLayoutUnitPixY(
+        m_layout.margins[ QStyleSheetItem::MarginTop ] );
+}
+
 int KoTextParag::topMargin() const
 {
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
@@ -1271,6 +1278,7 @@ void KoTextParag::printRTDebug( int info )
               << hasChanged() << ", valid=" << isValid()
               << ", needsSpellCheck=" << string()->needsSpellCheck()
               << ", wasMovedDown=" << wasMovedDown()
+              // not used << ", lastInFrame=" << isLastInFrame()
               << "] ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
         kdWarning() << "  Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;

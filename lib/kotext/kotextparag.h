@@ -70,6 +70,10 @@ public:
     /** Return the real alignment: Auto is resolved to either Left or Right */
     int resolveAlignment() const;
 
+    /// The part of the top margin that can be broken by a page break
+    /// Obviously the non-breakable part (e.g. border width) is topMargin()-breakableTopMargin()
+    int breakableTopMargin() const;
+
     // Borders
     KoBorder leftBorder() const { return m_layout.leftBorder; }
     KoBorder rightBorder() const { return m_layout.rightBorder; }

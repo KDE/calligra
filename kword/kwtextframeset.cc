@@ -78,7 +78,7 @@ public:
 
     virtual int formatVertically( KoTextDocument*, KoTextParag* parag )
     {
-        return m_textfs->formatVertically( parag );
+        return m_textfs->formatVertically( parag, parag->rect() );
     }
 private:
     KWTextFrameSet *m_textfs;
@@ -1151,18 +1151,18 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space, KoTextP
 }
 
 // helper for formatVertically
-bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd )
+bool KWTextFrameSet::checkVerticalBreak( int & yp, int & hp, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd )
 {
     // We need the "+1" here because when skipping a frame on top, we want to be _under_
     // its bottom. Without the +1, we hit the frame again on the next adjustLMargin call.
 
-    // Check for intersection between the parag (yp -- yp+h) and the break area (breakBegin -- breakEnd)
-    if ( QMAX( yp, breakBegin ) <= QMIN( yp+h, breakEnd ) )
+    // Check for intersection between the parag (yp -- yp+hp) and the break area (breakBegin -- breakEnd)
+    if ( QMAX( yp, breakBegin ) <= QMIN( yp+hp, breakEnd ) )
     {
         if ( !parag || linesTogether ) // Paragraph-level breaking
         {
 #ifdef DEBUG_FORMATVERTICALLY
-            kdDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " h=" << h
+            kdDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " hp=" << hp
                            << " breakEnd+2 [new value for yp]=" << breakEnd+2 << endl;
 #endif
             yp = breakEnd + 1;
@@ -1222,18 +1222,18 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
                 }
             }
             parag->setMovedDown( true );
-            parag->setHeight( h + dy );
+            parag->setHeight( hp + dy );
 #ifdef DEBUG_FORMATVERTICALLY
-            kdDebug(32002) << "Paragraph height set to " << h+dy << endl;
+            kdDebug(32002) << "Paragraph height set to " << hp+dy << endl;
 #endif
-            h += dy;
+            hp += dy;
             return true;
-        }
+        } // End of line-level breaking
     }
     return false;
 }
 
-int KWTextFrameSet::formatVertically( KoTextParag * _parag )
+int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRect )
 {
     KWTextParag *parag = static_cast<KWTextParag *>( _parag );
     if ( !m_doc->viewMode()->shouldFormatVertically() )
@@ -1242,13 +1242,12 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
         return 0;
     }
 
-    QRect paragRect( _parag->rect() );
     int yp = paragRect.y();
     int hp = paragRect.height();
     int oldHeight = hp;
     int oldY = yp;
 
-    // This is called since the 'vertical break' QRT flag is true.
+    // This is called by KoTextFormatter to apply "vertical breaks".
     // End of frames/pages lead to those "vertical breaks".
     // What we do, is adjust the Y accordingly,
     // to implement page-break at the paragraph level and at the line level.
@@ -1257,7 +1256,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
     // But don't forget that formatVertically is called twice for every parag, since the formatting
     // is re-done after moving down.
 
-    bool linesTogether = parag ? parag->linesTogether() : false;
+    bool linesTogether = parag ? parag->linesTogether() : true;
     bool hardFrameBreak = parag ? parag->hardFrameBreakBefore() : false;
     if ( !hardFrameBreak && parag && parag->prev() )
         hardFrameBreak = static_cast<KWTextParag *>(parag->prev())->hardFrameBreakAfter();
@@ -1307,7 +1306,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
             }
 
 #ifdef DEBUG_FORMATVERTICALLY
-            kdDebug(32002) << "KWTextFrameSet::formatVertically frameHeight=" << frameHeight << " bottom=" << bottom << endl;
+            kdDebug(32002) << " formatVertically: frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 #endif
             // don't move down parags that have only one line and are bigger than the page (e.g. floating tables)
             if ( hp < frameHeight || ( parag && parag->lineStartList().count() > 1 ) )
@@ -1368,21 +1367,32 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag )
 
     // ## TODO loop around those three methods until we don't move anymore ?
 
-    // We also use verticalBreak as a hook into the formatting algo, to fix the parag width if necessary.
-    fixParagWidth( parag );
+    if ( parag )
+    {
+        // We also use verticalBreak as a hook into the formatting algo, to fix the parag width if necessary.
+        fixParagWidth( parag );
 
-    if ( hp != oldHeight )
-        parag->setHeight( hp );
-    if ( yp != oldY ) {
-        QRect r = parag->rect();
-        r.moveBy( 0, yp - oldY );
-        parag->setRect( r );
-        parag->setMovedDown( true );
+        if ( hp != oldHeight )
+            parag->setHeight( hp );
+        if ( yp != oldY ) {
+            QRect r = parag->rect();
+            r.moveBy( 0, yp - oldY );
+            parag->setRect( r );
+            parag->setMovedDown( true );
+        }
     }
 #ifdef DEBUG_FORMATVERTICALLY
     kdDebug() << "KWTextFrameSet::formatVertically returning " << ( yp + hp ) - ( oldY + oldHeight ) << endl;
 #endif
     return ( yp + hp ) - ( oldY + oldHeight );
+}
+
+// adjustFlow is called e.g. to break the "top margin" of a paragraph.
+// There is no parag pointer in that case.
+int KWTextFrameSet::adjustFlow( int y, int w, int h )
+{
+    QRect r( 0, y, w, h );
+    return formatVertically( 0L, r );
 }
 
 void KWTextFrameSet::fixParagWidth( KWTextParag* parag )

@@ -221,9 +221,11 @@ public:
     virtual int adjustLMargin( int yp, int h, int margin, int space, KoTextParag* parag );
     /** reimplemented from KoTextFlow, implements flowing around frames etc. */
     virtual int adjustRMargin( int yp, int h, int margin, int space, KoTextParag* parag );
+    /** reimplemented from KoTextParag, adjusts y and returns the shift. */
+    virtual int adjustFlow( int y, int w, int h );
 
     /** Called by KWTextFrameSet. Implements page breaking, breaking around frames, etc. */
-    int formatVertically( KoTextParag *parag );
+    int formatVertically( KoTextParag *parag, const QRect& rect );
 
     /** Make sure this paragraph is formatted
      * If formatting happens, the afterFormatting signal will only be emitted if emitAfterFormatting is true.

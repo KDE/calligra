@@ -59,6 +59,24 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         x += parag->firstLineMargin();
     int curLeft = left;
     int y = doc && doc->addMargins() ? parag->topMargin() : 0;
+    // #57555, top margin doesn't apply if parag at top of page
+    // (but a portion of the margin can be needed, to complete the prev page)
+    // So we apply formatVertically() on the top margin, to find where to break it.
+    if ( !parag->prev() )
+        y = 0; // no top margin on very first parag
+    else if ( parag->breakableTopMargin() )
+    {
+        int shift = doc->flow()->adjustFlow( parag->rect().y(),
+                                             0 /*w, unused*/,
+                                             parag->breakableTopMargin() );
+        if ( shift > 0 )
+        {
+            // The shift is in fact the amount of top-margin that should remain
+            // The remaining portion should be eaten away.
+            y = shift;
+        }
+
+    }
     int h = 0;
     int len = parag->length();
 
@@ -66,7 +84,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     if ( doc )
 	x = doc->flow()->adjustLMargin( y + parag->rect().y(), h + c->height(), x, 4, parag );
     int initialLMargin = x;	      // and remember the resulting adjustement we got
-    int dw = parag->documentVisibleWidth() - ( doc ? ( left != x ? 0 : doc->rightMargin() ) : -4 );
+    int dw = parag->documentVisibleWidth(); // QRT: -(doc?(left!=x?0:doc->rightMargin()):-4);
 
     curLeft = x;
     int rm = parag->rightMargin();
@@ -520,8 +538,9 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     minw = QMAX( minw, tminw );
 
     int m = parag->bottomMargin();
-    if ( parag->next() && doc && !doc->addMargins() )
-	m = QMAX( m, parag->next()->topMargin() );
+    // ##### Does OOo add margins or does it max them?
+    //if ( parag->next() && doc && !doc->addMargins() )
+    //	m = QMAX( m, parag->next()->topMargin() );
     parag->setFullWidth( fullWidth );
     //if ( parag->next() && parag->next()->isLineBreak() )
     //    m = 0;
