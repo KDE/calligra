@@ -25,7 +25,7 @@ libsupport_la_SOURCES = \
 	art_svp_vpath.c \
 	art_svp_vpath_stroke.c \
 	art_vpath.c \
-	art_vpath_dash.c \
+	art_vpath_dash.c
 
 
 INCLUDES = -I$(top_srcdir) -I$(top_builddir)
