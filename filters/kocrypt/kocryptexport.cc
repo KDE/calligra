@@ -17,9 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
+
+// ATTENTION:  If you update the format or crypto algorithm, be sure to
+//             maintain backwards compatibility.
+
 #include <kocryptexport.h>
 #include <kdebug.h>
 #include <qdom.h>
+
+#include "blowfish.h"
+#include "cbc.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -38,7 +45,9 @@ bool KoCryptExport::filter(const QString  &filenameIn,
 int ftype = -1;
 QFile inf(filenameIn);
 QFile outf(filenameOut);
+int blocksize = 64;  // bytes
 
+    // FIXME: we should use a cryptographically strong random function here.
     srand(time(NULL));
 
     if (to == "application/x-kword-crypt" && from == "application/x-kword")
@@ -52,7 +61,12 @@ QFile outf(filenameOut);
         return false;
     }
 
-    // obtain the password and ensure that we can use it.
+    // FIXME: obtain the password and ensure that we can use it.
+
+    BlockCipher *cipher = new BlowFish;
+    BlockCipher *cbc = new CipherBlockChain(cipher);
+
+    if (cbc->blockSize > 0) blocksize = cbc->blockSize();
 
     // create the output file, open the input file.
     outf.open(IO_WriteOnly);
