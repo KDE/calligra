@@ -32,29 +32,33 @@ class KisTool : public QObject
   Q_OBJECT
 
  public:
-  KisTool(KisDoc *doc, KisView *view = 0L);
-  ~KisTool();
+    KisTool(KisDoc *doc, KisView *view = 0L);
+    ~KisTool();
 
-  QString toolName();
-  virtual void optionsDialog();
-
-  void setCursor( const QCursor& );
-  QCursor cursor();
-
+    QString toolName();
+    QCursor cursor();
+    void setCursor( const QCursor& );
+    
+    virtual void optionsDialog();
+    virtual void clearOld(){}
+    
  public slots:
-  virtual void mousePress(QMouseEvent*); 
-  virtual void mouseMove(QMouseEvent*);
-  virtual void mouseRelease(QMouseEvent*);
+
+    virtual void mousePress(QMouseEvent*); 
+    virtual void mouseMove(QMouseEvent*);
+    virtual void mouseRelease(QMouseEvent*);
     
  protected:
-  int zoomed(int n);
-  int zoomedX(int n, bool zoomedImage=true);  
-  int zoomedY(int n, bool zoomedImage=true );
-  QPoint zoomed(QPoint & point, bool zoomedImage=true);
+
+    int zoomed(int n);
+    int zoomedX(int n, bool zoomedImage=true);  
+    int zoomedY(int n, bool zoomedImage=true );
+
+    QPoint zoomed(QPoint & point, bool zoomedImage=true);
   
-  KisDoc  *m_pDoc;
-  KisView *m_pView;
-  QCursor  m_Cursor;
+    KisDoc  *m_pDoc;
+    KisView *m_pView;
+    QCursor  m_Cursor;
 };
 
 #endif

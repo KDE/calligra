@@ -53,7 +53,8 @@ class FillTool : public KisTool
     
   public slots:
     virtual void mousePress(QMouseEvent*); 
-  
+    virtual void optionsDialog();
+      
   protected:
 
     // from gpaint
@@ -71,6 +72,13 @@ class FillTool : public KisTool
     int sRed;
     int sGreen;
     int sBlue;
+
+    int fillOpacity;
+    bool layerAlpha;
+    
+    int toleranceRed;
+    int toleranceGreen;    
+    int toleranceBlue;
 
     KisLayer *fLayer;
 };

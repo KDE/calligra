@@ -124,15 +124,15 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
         
         if(picW > picH)
         {
-            float yFactor = (float)((float)THUMB_SIZE/(float)picH);
-            ysize = (int)(yFactor * (float)picH);
+            float yFactor = (float)((float)(float)picH/(float)picW);
+            ysize = (int)(yFactor * (float)THUMB_SIZE);
             kdDebug() << "ysize is " << ysize << endl;
             if(ysize > 30) ysize = 30;
         }
         else if(picW < picH)
         {
-            float xFactor = (float)((float)THUMB_SIZE/(float)picW);
-            xsize = (int)(xFactor * (float)picW);
+            float xFactor = (float)((float)picW/(float)picH);
+            xsize = (int)(xFactor * (float)THUMB_SIZE);
             kdDebug() << "xsize is " << xsize << endl;            
             if(xsize > 30) xsize = 30;            
         }

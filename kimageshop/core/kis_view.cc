@@ -76,7 +76,11 @@
 #include "kis_dlg_new_layer.h"
 
 // tools
-#include "kis_tool_select.h"
+#include "kis_tool_select_rectangular.h"
+#include "kis_tool_select_polygonal.h"
+#include "kis_tool_select_elliptical.h"
+#include "kis_tool_select_contiguous.h"
+
 #include "kis_tool_paste.h"
 #include "kis_tool_move.h"
 #include "kis_tool_zoom.h"
@@ -112,7 +116,7 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     m_bg = KisColor::white();
 
     // this is the original configuration that works but tools
-    // need to be set up before canvas 
+    // need to be set up before canvas ? 
     
     setupPainter();
     setupCanvas();
@@ -294,7 +298,13 @@ void KisView::setupTabBar()
 
 void KisView::setupTools()
 {
-    m_pSelectTool = new SelectTool( m_pDoc, this, m_pCanvas );
+    m_pZoomTool = new ZoomTool(this);
+
+    m_pRectangularSelectTool = new RectangularSelectTool( m_pDoc, this, m_pCanvas );
+    m_pPolygonalSelectTool = new PolygonalSelectTool( m_pDoc, this, m_pCanvas );
+    m_pEllipticalSelectTool = new EllipticalSelectTool( m_pDoc, this, m_pCanvas );
+    m_pContiguousSelectTool = new ContiguousSelectTool( m_pDoc, this, m_pCanvas );
+
     m_pPasteTool = new PasteTool( m_pDoc, this, m_pCanvas );
     m_pMoveTool = new MoveTool(m_pDoc);
     m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
@@ -302,7 +312,7 @@ void KisView::setupTools()
     m_pPenTool = new PenTool(m_pDoc, this, m_pCanvas, m_pBrush);
     m_pEraserTool = new EraserTool(m_pDoc, this, m_pBrush);
     m_pColorPicker = new ColorPicker(m_pDoc, this);
-    m_pZoomTool = new ZoomTool(this);
+
     m_pGradientTool = new GradientTool( m_pDoc, this, m_pCanvas, m_pGradient );
     m_pLineTool = new LineTool( m_pDoc, this, m_pCanvas );
     m_pPolyLineTool = new PolyLineTool( m_pDoc, this, m_pCanvas );
@@ -345,14 +355,27 @@ void KisView::setupDialogs()
 
 void KisView::setupActions()
 {
-    // selection actions
-
+    // history actions
     m_undo = KStdAction::undo( this, SLOT( undo() ),
         actionCollection(), "undo");
         
     m_redo = KStdAction::redo( this, SLOT( redo() ),
         actionCollection(), "redo");
 
+    // navigation actions
+    new KAction( i18n("Refresh Canvas"),
+        "reload", 0, this, SLOT( slotDocUpdated() ),
+        actionCollection(), "refresh_canvas" );
+    
+    new KAction( i18n("Panic Button"),
+        "stop", 0, this, SLOT( slotHalt() ),
+        actionCollection(), "panic_button" );
+    
+    new KAction( i18n("Gimp"),
+        "wilbur", 0, this, SLOT( slotGimp() ),
+        actionCollection(), "gimp" );
+
+    // selection actions
     m_cut = KStdAction::cut( this, SLOT( cut() ),
         actionCollection(), "cut");
 
@@ -378,7 +401,6 @@ void KisView::setupActions()
         actionCollection(), "select_none");
 
     // import/export actions
-
     new KAction( i18n("Import Image"),
         "wizard", 0, this, SLOT( import_image() ),
         actionCollection(), "import_image" );
@@ -388,7 +410,6 @@ void KisView::setupActions()
         actionCollection(), "export_image" );
 
     // view actions
-
     new KAction( i18n("Zoom &in"),
         "viewmag+", 0, this, SLOT( zoom_in() ),
         actionCollection(), "zoom_in" );
@@ -398,7 +419,6 @@ void KisView::setupActions()
         actionCollection(), "zoom_out" );
 
     // tool settings actions
-
     m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"),
         "gradient_dialog", 0, this, SLOT( dialog_gradient() ),
         actionCollection(), "dialog_gradient");
@@ -408,18 +428,29 @@ void KisView::setupActions()
         actionCollection(), "dialog_gradienteditor");
 
     // tool actions - lots of them
+    m_tool_select_rectangular = new KToggleAction( i18n( "&Rectangular select" ),
+        "rectangular", 0, this,  SLOT( tool_select_rectangular() ),
+        actionCollection(), "tool_select_rectangular" );
 
-    m_tool_select_rect = new KToggleAction( i18n( "&Rectangular select" ),
-        "rectangular", 0, this,  SLOT( tool_select_rect() ),
-        actionCollection(), "tool_select_rect" );
+    m_tool_select_rectangular->setExclusiveGroup( "tools" );
 
-    m_tool_select_rect->setExclusiveGroup( "tools" );
+    m_tool_select_polygonal = new KToggleAction( i18n( "&Polygonal select" ),
+        "handdrawn" , 0, this, SLOT( tool_select_polygonal() ),
+        actionCollection(), "tool_select_polygonal" );
 
-    m_tool_select_polygon = new KToggleAction( i18n( "&Polygon select" ),
-        "rectangular" , 0, this, SLOT( tool_select_rect() ),
-        actionCollection(), "tool_select_polygon" );
+    m_tool_select_polygonal->setExclusiveGroup( "tools" );
 
-    m_tool_select_polygon->setExclusiveGroup( "tools" );
+    m_tool_select_elliptical = new KToggleAction( i18n( "&Elliptical select" ),
+        "elliptical" , 0, this, SLOT( tool_select_elliptical() ),
+        actionCollection(), "tool_select_elliptical" );
+
+    m_tool_select_elliptical->setExclusiveGroup( "tools" );
+
+    m_tool_select_contiguous = new KToggleAction( i18n( "&Contiguous select" ),
+        "contiguous" , 0, this, SLOT( tool_select_contiguous() ),
+        actionCollection(), "tool_select_contiguous" );
+
+    m_tool_select_contiguous->setExclusiveGroup( "tools" );
 
     m_tool_move = new KToggleAction( i18n("&Move tool"),
         "move", 0, this, SLOT( tool_move() ),
@@ -482,7 +513,7 @@ void KisView::setupActions()
     m_tool_colorpicker->setExclusiveGroup( "tools" );
 
     m_tool_gradient = new KToggleAction( i18n("&Gradient tool"),
-        "gradient", 0, this, SLOT( tool_gradient() ),
+        "blend", 0, this, SLOT( tool_gradient() ),
         actionCollection(), "tool_gradient");
 
     m_tool_gradient->setExclusiveGroup( "tools" );
@@ -616,14 +647,14 @@ void KisView::setupActions()
         actionCollection(), "show_statusbar" );
 
     m_side_bar = new KToggleAction( i18n("Show/Hide Sidebar"),
-        "krayon_box", 0, this, SLOT( showSidebar() ),
+        "ok", 0, this, SLOT( showSidebar() ),
         actionCollection(), "show_sidebar" );
 
     (void) KStdAction::saveOptions( this, SLOT( saveOptions() ),
         actionCollection(), "save_options" );
 
     (void) new KAction( i18n("Krayon Preferences"),
-        0, this, SLOT( preferences() ),
+        "edit", 0, this, SLOT( preferences() ),
         actionCollection(), "preferences");
 
 	// krayon box toolbar actions 
@@ -681,6 +712,20 @@ void KisView::setupActions()
     m_layer_mirrorY->setEnabled( false );
 }
 
+void KisView::slotHalt()
+{
+    KMessageBox::error(NULL, 
+        "Save your data now and reboot!", "System Error", FALSE); 
+        
+}
+
+void KisView::slotGimp()
+{
+    KMessageBox::error(NULL, 
+        "Have you lost your mind?", "User Error", FALSE); 
+    // save current image, export to xcf, open in gimp -    
+    // coming!
+}
 
 void KisView::slotTabSelected(const QString& name)
 {
@@ -867,7 +912,7 @@ void KisView::slotDocUpdated(const QRect& rect)
     QPainter p;
 
     p.begin( m_pCanvas );
-    p.scale( zoomFactor(), zoomFactor() ); //jwc
+    p.scale( zoomFactor(), zoomFactor() ); 
     p.translate(xt, yt);
 
     // let the document draw the image
@@ -922,6 +967,7 @@ void KisView::updateCanvas( QRect & ur )
     if (!img)
     {
         kdDebug(0) << "ERROR - no curent image" << endl;
+        
         QPainter p; 
         p.begin(m_pCanvas);
         p.eraseRect(ur);
@@ -1034,7 +1080,10 @@ void KisView::activateTool(KisTool* t)
 {
     if (!t) return;
     
-    if(m_pTool == m_pSelectTool) m_pSelectTool->clearOld();
+    if(m_pTool == m_pRectangularSelectTool) m_pRectangularSelectTool->clearOld();
+    if(m_pTool == m_pPolygonalSelectTool) m_pPolygonalSelectTool->clearOld();    
+    if(m_pTool == m_pEllipticalSelectTool) m_pEllipticalSelectTool->clearOld();
+    if(m_pTool == m_pContiguousSelectTool) m_pContiguousSelectTool->clearOld();
 
     if (m_pTool) QObject::disconnect(m_pTool);
     m_pTool = t;
@@ -1061,9 +1110,24 @@ void KisView::tool_properties()
     m_pTool->optionsDialog();
 }
 
-void KisView::tool_select_rect()
+void KisView::tool_select_rectangular()
 {
-    activateTool(m_pSelectTool);
+    activateTool(m_pRectangularSelectTool);
+}
+
+void KisView::tool_select_polygonal()
+{
+    activateTool(m_pPolygonalSelectTool);
+}
+
+void KisView::tool_select_elliptical()
+{
+    activateTool(m_pEllipticalSelectTool);
+}
+
+void KisView::tool_select_contiguous()
+{
+    activateTool(m_pContiguousSelectTool);
 }
 
 void KisView::tool_move()
@@ -1188,9 +1252,9 @@ void KisView::copy()
         kapp->clipboard()->setImage(cImage); 
         {
             if(kapp->clipboard()->image().isNull())
-                kdDebug() << "clip image is null - KisView::copy()" << endl; 
+                kdDebug() << "clip image is null" << endl; 
             else
-               kdDebug() << "clipb image is NOT null - KisView::copy()" << endl; 
+               kdDebug() << "clip image is NOT null" << endl; 
         }
     }    
 }
@@ -1209,8 +1273,11 @@ void KisView::cut()
         kdDebug() << "m_pDoc->m_Selection.erase() failed" << endl;
 
     // clear old selection outline
-    if(m_pTool == m_pSelectTool)
-        m_pSelectTool->clearOld();
+    if((m_pTool == m_pRectangularSelectTool)
+    || (m_pTool == m_pPolygonalSelectTool)
+    || (m_pTool == m_pEllipticalSelectTool)
+    || (m_pTool == m_pContiguousSelectTool))
+        m_pTool->clearOld();
 
     /* refresh canvas */
     KisImage* img = m_pDoc->current();
@@ -1229,8 +1296,11 @@ void KisView::removeSelection()
         kdDebug() << "m_pDoc->m_Selection.erase() failed" << endl;
 
     // clear old selection outline
-    if(m_pTool == m_pSelectTool)
-        m_pSelectTool->clearOld();
+    if((m_pTool == m_pRectangularSelectTool)
+    || (m_pTool == m_pPolygonalSelectTool)
+    || (m_pTool == m_pEllipticalSelectTool)
+    || (m_pTool == m_pContiguousSelectTool))
+        m_pTool->clearOld();
 
     /* refresh canvas */
     KisImage* img = m_pDoc->current();
@@ -1266,7 +1336,7 @@ void KisView::crop()
 
     if(!m_pDoc->hasSelection())
     {
-        KMessageBox::sorry(NULL, "There is no selection to crop!", "", FALSE); 
+        KMessageBox::sorry(NULL, "No selection to crop!", "", FALSE); 
         return;
     }
     // copy contents of the current selection ot a QImage
@@ -1300,8 +1370,7 @@ void KisView::crop()
     m_pLayerView->layerTable()->updateTable();    
     m_pLayerView->layerTable()->updateAllCells();
 
-    // copy the image into the layer regardless of whether 
-    // a new image or just a new layer was created for it above.
+    // copy the image into the layer 
     if(!m_pDoc->QtImageToLayer(&cImage, this))
     {
          kdDebug(0) << "KisView::inset_layer_image: " 
@@ -1312,7 +1381,7 @@ void KisView::crop()
     // make sure we get size of current image after 
     // layer is added to it - could be larger
     QRect updateRect(m_pDoc->current()->getCurrentLayer()->imageExtents());
-        m_pDoc->current()->markDirty(updateRect);
+    m_pDoc->current()->markDirty(updateRect);
     
     // remove the current clip image which now belongs to the 
     // previous layer - selection also needs to be removed.

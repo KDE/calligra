@@ -52,7 +52,11 @@ class KisChannelView;
 class QScrollBar;
 class KRuler;
 
-class SelectTool;
+class RectangularSelectTool;
+class PolygonalSelectTool;
+class EllipticalSelectTool;
+class ContiguousSelectTool;
+
 class PasteTool;
 class KisKrayon;
 class KisBrush;
@@ -106,7 +110,9 @@ class KisView : public KoView
     void slotSetBGColor(const KisColor&);
 
     void slotTabSelected(const QString& name);
-
+    void slotHalt();
+    void slotGimp();
+    
  signals:
  
     void canvasMousePressEvent( QMouseEvent * );
@@ -174,7 +180,12 @@ class KisView : public KoView
 
     // tool action slots
     void tool_properties();
-    void tool_select_rect();
+
+    void tool_select_rectangular();
+    void tool_select_polygonal();
+    void tool_select_elliptical();
+    void tool_select_contiguous();
+
     void tool_move();
     void tool_zoom();
     void tool_brush();
@@ -269,7 +280,8 @@ class KisView : public KoView
     KToggleAction *m_side_bar;
 
     // tool actions (main toolbar & menu)
-    KToggleAction *m_tool_select_rect, *m_tool_select_polygon, 
+    KToggleAction *m_tool_select_rectangular, *m_tool_select_polygonal,
+    *m_tool_select_elliptical, *m_tool_select_contiguous,
     *m_tool_move, *m_tool_zoom, 
     *m_tool_brush, *m_tool_draw, *m_tool_pen, *m_tool_gradient, 
     *m_tool_colorpicker, *m_tool_fill, *m_tool_stamp, *m_tool_paste,
@@ -280,7 +292,11 @@ class KisView : public KoView
     KisTool               *m_pTool; // currently active tool
 
     // tools    
-    SelectTool      *m_pSelectTool;
+    RectangularSelectTool  *m_pRectangularSelectTool;
+    PolygonalSelectTool    *m_pPolygonalSelectTool;
+    EllipticalSelectTool   *m_pEllipticalSelectTool;
+    ContiguousSelectTool   *m_pContiguousSelectTool;
+
     PasteTool       *m_pPasteTool;
     MoveTool        *m_pMoveTool;
     BrushTool       *m_pBrushTool;
