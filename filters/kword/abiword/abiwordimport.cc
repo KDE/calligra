@@ -1109,7 +1109,7 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
 
 bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCurrent)
 {
-#if 0
+#if 1
     // In KWord, inline tables are inside a paragraph.
     // In AbiWord, tables are outside any paragraph.
 
@@ -1163,7 +1163,7 @@ bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCu
 bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCurrent,
     const QXmlAttributes& attributes)
 {
-#if 0
+#if 1
     if (stackCurrent->elementType!=ElementTypeTable)
     {
         kdError(30506) << "Wrong element type!! Aborting! (in StructureParser::endElementCell)" << endl;
@@ -1205,8 +1205,8 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     framesetsPluralElement.appendChild(framesetElement);
 
     QDomElement frameElementOut(mainDocument.createElement("FRAME"));
-    //frameElementOut.setAttribute("left",28);
-    //frameElementOut.setAttribute("right",798);
+    frameElementOut.setAttribute("left",col*72);
+    frameElementOut.setAttribute("right",col*72+72);
     frameElementOut.setAttribute("top",0);
     frameElementOut.setAttribute("bottom",0);
     frameElementOut.setAttribute("runaround",1);

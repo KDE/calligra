@@ -58,7 +58,7 @@ enum StackItemElementType{
 //  <abiword> (or <awml>), <data>, <styles>, <ignorewords>, <lists>, <metadata>
 //
 // Tags that we do not support (however KWord could):
-//  <bookmark>, <l>, <table>, <cell>
+//  <bookmark>, <l>
 //
 // Tags that we cannot support (lack of support in KWord):
 //  N/A
