@@ -36,12 +36,6 @@ public:
     bool backgroundSpellCheck();
     void setBackgroundSpellCheck( bool _b );
 
-    bool dontCheckUpperWord();
-    void setDontCheckUpperWord( bool _b );
-
-    bool dontCheckTitleCase();
-    void setDontCheckTitleCase( bool _b );
-
     void addIgnoreList( const QStringList & );
     QStringList ignoreList();
 
@@ -53,8 +47,6 @@ public slots:
     void slotClearDictionary();
 private:
     void initDictionaryListWord( );
-    QCheckBox *m_dontCheckUpperWord;
-    QCheckBox *m_dontCheckTitleCase;
     QCheckBox *m_cbBackgroundSpellCheck;
     KEditListBox *m_listignoreall;
     KEditListBox *m_dictionary;

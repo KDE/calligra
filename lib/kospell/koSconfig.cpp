@@ -23,7 +23,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-
+#include <qwhatsthis.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kdebug.h>
@@ -50,7 +50,13 @@ KOSpellConfig::KOSpellConfig (const KOSpellConfig &_ksc)
   , dictlist(0)
   , dictcombo(0)
   , encodingcombo(0)
-    ,clientcombo(0)
+  ,clientcombo(0)
+  ,cbIgnoreCase(0)
+  ,cbIgnoreAccent(0)
+  ,cbSpellWordWithNumber(0)
+  ,cbDontCheckUpperWord(0)
+  ,cbDontCheckTitleCase(0)
+
 {
     m_bIgnoreCase = false;
     m_bIgnoreAccent = false;
@@ -65,6 +71,8 @@ KOSpellConfig::KOSpellConfig (const KOSpellConfig &_ksc)
     setIgnoreList (_ksc.ignoreList());
     setEncoding (_ksc.encoding());
     setSpellWordWithNumber( _ksc.spellWordWithNumber());
+    setDontCheckTitleCase( _ksc.dontCheckTitleCase());
+    setDontCheckUpperWord( _ksc.dontCheckUpperWord());
     setClient (_ksc.client());
 }
 
@@ -78,7 +86,12 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
   , dictlist(0)
   , dictcombo(0)
   , encodingcombo(0)
-    ,clientcombo(0)
+  ,clientcombo(0)
+  ,cbIgnoreCase(0)
+  ,cbIgnoreAccent(0)
+  ,cbSpellWordWithNumber(0)
+  ,cbDontCheckUpperWord(0)
+  ,cbDontCheckTitleCase(0)
 {
     m_bIgnoreCase = false;
     m_bIgnoreAccent = false;
@@ -99,6 +112,8 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
         setEncoding (_ksc->encoding());
         setIgnoreCase ( _ksc->ignoreCase ());
         setIgnoreAccent( _ksc->ignoreAccent());
+        setDontCheckTitleCase( _ksc->dontCheckTitleCase());
+        setDontCheckUpperWord( _ksc->dontCheckUpperWord());
         setClient (_ksc->client());
     }
 
@@ -160,7 +175,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
     {
         QPushButton *pushButton = new QPushButton( i18n("&Help"), this );
         connect( pushButton, SIGNAL(clicked()), this, SLOT(sHelp()) );
-        glay->addWidget(pushButton, 8, 2);
+        glay->addWidget(pushButton, 10, 2);
     }
 
     cbIgnoreCase = new QCheckBox(i18n("Ignore case when checking words"), this );
@@ -172,10 +187,24 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
     cbSpellWordWithNumber = new QCheckBox(i18n("Check words with numbers"), this );
     connect( cbSpellWordWithNumber , SIGNAL(toggled(bool)), this, SLOT(slotSpellWordWithNumber(bool)) );
 
+    cbDontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),this);
+    connect( cbDontCheckUpperWord , SIGNAL(toggled(bool)), this, SLOT(slotDontSpellCheckUpperWord(bool)) );
+
+    QWhatsThis::add( cbDontCheckUpperWord, i18n("This option tells the spell-checker to accept words that are written in uppercase, such as KDE.") );
+
+    cbDontCheckTitleCase= new QCheckBox(i18n("Ignore title case words"),this);
+    connect( cbDontCheckTitleCase , SIGNAL(toggled(bool)), this, SLOT(slotDontCheckTitleCase(bool)) );
+
+    QWhatsThis::add( cbDontCheckTitleCase, i18n("This option tells the spell-checker to accept words starting with an uppercase letter, such as United States."));
+
+
 
     glay->addMultiCellWidget( cbIgnoreCase, 5,5,0 ,2 );
     glay->addMultiCellWidget( cbIgnoreAccent, 6,6,0 ,2 );
     glay->addMultiCellWidget( cbSpellWordWithNumber, 7,7,0 ,2 );
+    glay->addMultiCellWidget( cbDontCheckUpperWord, 8,8,0 ,2 );
+    glay->addMultiCellWidget( cbDontCheckTitleCase, 9,9,0 ,2 );
+
 
     fillInDialog();
 }
@@ -212,7 +241,11 @@ bool KOSpellConfig::readGlobalSettings ()
   setIgnoreCase( kc->readNumEntry( "KSpell_IgnoreCase", 0));
   setIgnoreAccent( kc->readNumEntry( "KSpell_IgnoreAccent", 0));
   setSpellWordWithNumber( kc->readNumEntry("KSpell_SpellWordWithNumber", false));
-    setClient (kc->readNumEntry ("KSpell_Client", KOS_CLIENT_ASPELL));
+
+  setDontCheckTitleCase( kc->readNumEntry("KSpell_dont_check_title_case", false));
+  setDontCheckUpperWord( kc->readNumEntry("KSpell_dont_check_upper_word",false));
+
+  setClient (kc->readNumEntry ("KSpell_Client", KOS_CLIENT_ASPELL));
   return TRUE;
 }
 
@@ -228,7 +261,12 @@ bool KOSpellConfig::writeGlobalSettings ()
   kc->writeEntry ("KSpell_IgnoreCase",(int) ignoreCase(), TRUE, TRUE);
   kc->writeEntry( "KSpell_IgnoreAccent", (int)ignoreAccent(), TRUE, TRUE);
   kc->writeEntry( "KSpell_SpellWordWithNumber", (int)spellWordWithNumber(), TRUE, TRUE);
-    kc->writeEntry ("KSpell_Client", client(),
+
+  kc->writeEntry( "KSpell_dont_check_title_case", (int)dontCheckTitleCase(),TRUE,TRUE);
+  kc->writeEntry( "KSpell_dont_check_upper_word", (int)dontCheckUpperWord(),TRUE,TRUE);
+
+
+  kc->writeEntry ("KSpell_Client", client(),
 		  TRUE, TRUE);
   kc->sync();
   return TRUE;
@@ -237,6 +275,18 @@ bool KOSpellConfig::writeGlobalSettings ()
 void KOSpellConfig::slotSpellWordWithNumber(bool b)
 {
     setSpellWordWithNumber ( b );
+    emit configChanged();
+}
+
+void KOSpellConfig::slotDontSpellCheckUpperWord(bool b)
+{
+    setDontCheckUpperWord(b);
+    emit configChanged();
+}
+
+void KOSpellConfig::slotDontCheckTitleCase(bool b)
+{
+    setDontCheckTitleCase(b);
     emit configChanged();
 }
 
@@ -408,6 +458,12 @@ void KOSpellConfig::fillInDialog ()
 
     cb1->setChecked (noRootAffix());
     cb2->setChecked (runTogether());
+    cbIgnoreCase->setChecked(ignoreCase());
+    cbIgnoreAccent->setChecked(ignoreAccent());
+    cbSpellWordWithNumber->setChecked(spellWordWithNumber());
+    cbDontCheckUpperWord->setChecked(dontCheckUpperWord());
+    cbDontCheckTitleCase->setChecked(dontCheckTitleCase());
+
     encodingcombo->setCurrentItem (encoding());
 
     // get list of available dictionaries
@@ -531,11 +587,8 @@ void KOSpellConfig::setClient (int c)
 {
   iclient = c;
   kdDebug()<<" c :"<<c<<endl;
-  //kdDebug()<<" clientcombo :"<<clientcombo<<endl;
-//#if 0 //fixme !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   if (clientcombo)
       clientcombo->setCurrentItem(c);
-//#endif
 }
 
 int KOSpellConfig::client () const
@@ -736,6 +789,16 @@ bool KOSpellConfig::spellWordWithNumber()const
     return m_bSpellWordWithNumber;
 }
 
+bool KOSpellConfig::dontCheckTitleCase()const
+{
+    return m_bDontCheckTitleCase;
+}
+
+bool KOSpellConfig::dontCheckUpperWord()const
+{
+    return m_bDontCheckUpperWord;
+}
+
 void KOSpellConfig::setReplaceAllList (QStringList _replacelist)
 {
   d->replacelist=_replacelist;
@@ -749,17 +812,43 @@ QStringList KOSpellConfig::replaceAllList () const
 void KOSpellConfig::setIgnoreCase ( bool b )
 {
     m_bIgnoreCase=b;
+    if(cbIgnoreCase)
+      cbIgnoreCase->setChecked(b);
+
 }
 
 void KOSpellConfig::setIgnoreAccent ( bool b )
 {
     m_bIgnoreAccent=b;
+    if(cbIgnoreAccent)
+      cbIgnoreAccent->setChecked(b);
+
 }
 
 void KOSpellConfig::setSpellWordWithNumber ( bool b )
 {
     m_bSpellWordWithNumber = b;
+    if(cbSpellWordWithNumber)
+      cbSpellWordWithNumber->setChecked(b);
+
 }
+
+void KOSpellConfig::setDontCheckTitleCase(bool b)
+{
+    m_bDontCheckTitleCase = b;
+    if(cbDontCheckTitleCase)
+      cbDontCheckTitleCase->setChecked(b);
+
+}
+
+void KOSpellConfig::setDontCheckUpperWord(bool b)
+{
+    m_bDontCheckUpperWord=b;
+    if(cbDontCheckUpperWord)
+      cbDontCheckUpperWord->setChecked(b);
+
+}
+
 
 QStringList KOSpellConfig::s_aspellLanguageList = QStringList();
 QStringList KOSpellConfig::s_aspellLanguageFileName = QStringList();

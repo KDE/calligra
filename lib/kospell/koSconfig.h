@@ -1,6 +1,6 @@
 /* This file is part of the KDE libraries
    Copyright (C) 1997 David Sweet <dsweet@kde.org>
-
+   Copyright (C) 2003 Laurent Montel <montel@kde.org>
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -149,7 +149,9 @@ public:
     void setIgnoreAccent ( bool b );
     void setSpellWordWithNumber ( bool b );
 
-    /**
+    void setDontCheckTitleCase(bool _b);
+    void setDontCheckUpperWord(bool _b);
+/**
      *
      */
     void setEncoding (int enctype);
@@ -168,6 +170,10 @@ public:
     bool spellWordWithNumber()const;
     QStringList ignoreList () const;
     QStringList replaceAllList () const;
+
+    bool dontCheckTitleCase()const;
+    bool dontCheckUpperWord()const;
+
 
     int client () const; //see enums at top of file
     /**
@@ -225,6 +231,8 @@ protected slots:
     void slotIgnoreCase(bool );
     void slotIgnoreAccent(bool);
     void slotSpellWordWithNumber(bool b);
+    void slotDontSpellCheckUpperWord(bool);
+    void slotDontCheckTitleCase(bool);
 
 protected:
     // The options
@@ -236,6 +244,8 @@ protected:
     bool m_bIgnoreCase;
     bool m_bIgnoreAccent;
     bool m_bSpellWordWithNumber;
+    bool m_bDontCheckUpperWord;
+    bool m_bDontCheckTitleCase;
     QString qsdict;		// -d [dict]
     QString qspdict;		// -p [dict]
     QStringList ignorelist;
@@ -248,6 +258,8 @@ int iclient;            // defaults to ispell, may be aspell, too
     QCheckBox *cbIgnoreCase;
     QCheckBox *cbIgnoreAccent;
     QCheckBox *cbSpellWordWithNumber;
+    QCheckBox *cbDontCheckUpperWord;
+    QCheckBox *cbDontCheckTitleCase;
 
     //replace it !!!!!!!!!!!!!!!!!!!!!!!!!!!!
     QStringList langfnames;

@@ -183,14 +183,14 @@ ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
     config = KWFactory::global()->config();
 
     m_spellConfigWidget = new KoSpellConfigWidget( box, m_pView->kWordDocument()->getKOSpellConfig(), true);
-
+#if 0
     if( config->hasGroup("KSpell kword") )
     {
         config->setGroup( "KSpell kword" );
         m_spellConfigWidget->setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
         m_spellConfigWidget->setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
     }
-
+#endif
     m_spellConfigWidget->setBackgroundSpellCheck( m_pView->kWordDocument()->backgroundSpellCheckEnabled() );
     m_spellConfigWidget->addIgnoreList( m_pView->kWordDocument()->spellListIgnoreAll() );
 
@@ -206,20 +206,17 @@ void ConfigureSpellPage::apply()
   config->writeEntry ("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
+  config->writeEntry( "KSpell_dont_check_title_case", (int)_spellConfig->dontCheckTitleCase());
+  config->writeEntry ("KSpell_IgnoreCase",(int) _spellConfig->ignoreCase());
+  config->writeEntry( "KSpell_IgnoreAccent", (int) _spellConfig->ignoreAccent());
+  config->writeEntry( "KSpell_dont_check_upper_word", (int)_spellConfig->dontCheckUpperWord());
+  config->writeEntry( "KSpell_SpellWordWithNumber", (int)_spellConfig->spellWordWithNumber());
   m_spellConfigWidget->saveDictionary();
   KWDocument* doc = m_pView->kWordDocument();
   doc->setKOSpellConfig(*_spellConfig);
 
 
-  bool state=m_spellConfigWidget->dontCheckUpperWord();
-  config->writeEntry ("KSpell_dont_check_upper_word",(int)state);
-  doc->setDontCheckUpperWord(state);
-
-  state=m_spellConfigWidget->dontCheckTitleCase();
-  config->writeEntry("KSpell_dont_check_title_case",(int)state);
-  doc->setDontCheckTitleCase(state);
-
-  state=m_spellConfigWidget->backgroundSpellCheck();
+  bool state=m_spellConfigWidget->backgroundSpellCheck();
   config->writeEntry( "SpellCheck", (int)state );
 
   m_pView->kWordDocument()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );

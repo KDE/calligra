@@ -55,14 +55,6 @@ KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KOSpellConfig *_conf
     m_spellConfig = new KOSpellConfig(tmpQGroupBox, 0L, _config, false );
     grid1->addWidget(m_spellConfig,1,0);
 
-    m_dontCheckUpperWord= new QCheckBox(i18n("Ignore uppercase words"),tmpQGroupBox);
-    QWhatsThis::add( m_dontCheckUpperWord, i18n("This option tells the spell-checker to accept words that are written in uppercase, such as KDE.") );
-    grid1->addWidget(m_dontCheckUpperWord,2,0);
-
-    m_dontCheckTitleCase= new QCheckBox(i18n("Ignore title case words"),tmpQGroupBox);
-    QWhatsThis::add( m_dontCheckTitleCase, i18n("This option tells the spell-checker to accept words starting with an uppercase letter, such as United States."));
-    grid1->addWidget(m_dontCheckTitleCase,3,0);
-
     m_cbBackgroundSpellCheck=new QCheckBox(i18n("Show misspelled words in document"),tmpQGroupBox);
     grid1->addWidget(m_cbBackgroundSpellCheck,4,0);
 
@@ -129,26 +121,6 @@ void KoSpellConfigWidget::setBackgroundSpellCheck( bool _b )
     m_cbBackgroundSpellCheck->setChecked(_b);
 }
 
-bool KoSpellConfigWidget::dontCheckUpperWord()
-{
-    return m_dontCheckUpperWord->isChecked();
-}
-
-void KoSpellConfigWidget::setDontCheckUpperWord( bool _b )
-{
-    m_dontCheckUpperWord->setChecked(_b);
-}
-
-bool KoSpellConfigWidget::dontCheckTitleCase()
-{
-    return m_dontCheckTitleCase->isChecked();
-}
-
-void KoSpellConfigWidget::setDontCheckTitleCase( bool _b )
-{
-    m_dontCheckTitleCase->setChecked( _b);
-}
-
 void KoSpellConfigWidget::slotClearIgnoreAllHistory()
 {
     m_listignoreall->listBox()->clear();
@@ -178,8 +150,13 @@ void KoSpellConfigWidget::setDefault()
     m_spellConfig->setDictFromList( FALSE);
     m_spellConfig->setEncoding (KOS_E_ASCII);
     m_spellConfig->setClient (KOS_CLIENT_ISPELL);
-    m_dontCheckUpperWord->setChecked(false);
-    m_dontCheckTitleCase->setChecked(false);
+
+
+    m_spellConfig->setIgnoreCase(false);
+    m_spellConfig->setIgnoreAccent(false);
+    m_spellConfig->setSpellWordWithNumber(false);
+    m_spellConfig->setDontCheckUpperWord(false);
+    m_spellConfig->setDontCheckTitleCase(false);
     m_cbBackgroundSpellCheck->setChecked(false);
     m_listignoreall->listBox()->clear();
 }

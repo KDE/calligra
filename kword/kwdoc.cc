@@ -408,8 +408,9 @@ void KWDocument::initConfig()
 
       kosconfig.setIgnoreCase( config->readNumEntry( "KSpell_IgnoreCase", 0));
       kosconfig.setIgnoreAccent( config->readNumEntry( "KSpell_IgnoreAccent", 0));
+      kosconfig.setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
+      kosconfig.setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
       kosconfig.setSpellWordWithNumber( config->readNumEntry("KSpell_SpellWordWithNumber", false));
-
 
       setKOSpellConfig( kosconfig );
 
@@ -3832,6 +3833,9 @@ void KWDocument::setKOSpellConfig(KOSpellConfig _kspell)
   m_pKOSpellConfig->setEncoding(_kspell.encoding());
   m_pKOSpellConfig->setIgnoreCase ( _kspell.ignoreCase ());
   m_pKOSpellConfig->setIgnoreAccent( _kspell.ignoreAccent());
+  m_pKOSpellConfig->setDontCheckTitleCase( _kspell.dontCheckTitleCase());
+  m_pKOSpellConfig->setDontCheckUpperWord( _kspell.dontCheckUpperWord() );
+  m_pKOSpellConfig->setSpellWordWithNumber( _kspell.spellWordWithNumber());
   m_pKOSpellConfig->setClient (_kspell.client());
   //FIXME
   //m_bgSpellCheck->setKSpellConfig(_kspell);
