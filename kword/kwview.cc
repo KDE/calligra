@@ -5604,7 +5604,7 @@ void KWView::switchModeView()
     //remove add "zoom to page" not necessary in text mode view
     changeZoomMenu( m_doc->zoom() );
     showZoom( m_doc->zoom() );
-
+    updatePageInfo();
 }
 
 void KWView::configureFootEndNote()
