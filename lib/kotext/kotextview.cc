@@ -766,7 +766,6 @@ bool KoTextView::insertParagraph(const QPoint &pos)
     f = last->at( last->length()-1 )->format();
     int height =f->height();
     int nbParag = (diff / height);
-
     QFontMetrics fm = f->refFontMetrics();
     for (int i = 0; i < nbParag ;i++)
     {
@@ -778,7 +777,19 @@ bool KoTextView::insertParagraph(const QPoint &pos)
         s->setCounter( counter );
         last = s;
     }
-    return (nbParag > 0 );
+    bool createParag = (nbParag > 0 );
+    if ( createParag )
+    {
+        int nbSpace = pos.x()/f->width(' ');
+        QString tmp;
+        for (int i = 0; i< nbSpace; i++)
+        {
+            tmp+=' ';
+        }
+        last->insert( 0, tmp );
+    }
+    return createParag;
+
 }
 
 bool KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
