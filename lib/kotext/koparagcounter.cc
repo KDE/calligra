@@ -236,7 +236,7 @@ void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, b
     invalidate();
 }
 
-void KoParagCounter::saveOasis( KoGenStyle& listStyle )
+void KoParagCounter::saveOasis( KoGenStyle& listStyle ) const
 {
     Q_ASSERT( m_style != STYLE_NONE );
     // We're supposed to invent a display:name and save it in the list style, so OOo displays it.
@@ -245,9 +245,19 @@ void KoParagCounter::saveOasis( KoGenStyle& listStyle )
     // Prepare a sub-xmlwriter for the list-level-style-* element
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
-    KoXmlWriter listLevelWriter( &buffer );  // TODO pass indentation level
+    KoXmlWriter listLevelWriter( &buffer, 3 /*indentation*/ );
     const char* tagName = isBullet() ? "text:list-level-style-bullet" : "text:list-level-style-number";
     listLevelWriter.startElement( tagName );
+
+    saveOasisListLevel( listLevelWriter );
+
+    listLevelWriter.endElement();
+    QString listLevelContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    listStyle.addChildElement( tagName, listLevelContents );
+}
+
+void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter ) const
+{
     listLevelWriter.addAttribute( "text:level", (int)m_depth + 1 );
     // OASIS allows to specify a text:style, the character style to use for the numbering...
     // We currently always format as per the first character of the paragraph, but that's not perfect.
@@ -272,6 +282,7 @@ void KoParagCounter::saveOasis( KoGenStyle& listStyle )
         listLevelWriter.addAttribute( "style:num-prefix", m_prefix );
         listLevelWriter.addAttribute( "style:num-suffix", m_suffix );
         listLevelWriter.addAttribute( "text:display-levels", m_displayLevels );
+        listLevelWriter.addAttribute( "text:start-value", m_startNumber );
         if ( (Style)m_style == STYLE_CUSTOM )
             ; // not implemented
         else
@@ -284,11 +295,7 @@ void KoParagCounter::saveOasis( KoGenStyle& listStyle )
     listLevelWriter.addAttribute( "fo:text-align", KoParagLayout::saveOasisAlignment( (Qt::AlignmentFlags)m_align ) );
     // OASIS has other style properties: text:space-before (indent), text:min-label-width (TODO),
     // text:min-label-distance, style:font-name (for bullets), image size and vertical alignment.
-    listLevelWriter.endElement();
-
-    listLevelWriter.endElement();
-    QString listLevelContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-    listStyle.addChildElement( tagName, listLevelContents );
+    listLevelWriter.endElement(); // style:list-level-properties
 }
 
 int KoParagCounter::number( const KoTextParag *paragraph )

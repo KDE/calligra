@@ -79,6 +79,9 @@ public:
     /// Return a the auto-name for each style, to be used when saving the document.
     QMap<KoParagStyle*, QString> saveOasis( KoGenStyles& styles, int styleType ) const;
 
+    /// Save the text:outline-style element, mostly for OOo.
+    void saveOasisOutlineStyles( KoXmlWriter& writer ) const;
+
     /// @return the list of outline styles
     QValueVector<KoParagStyle *> outlineStyles() const;
 

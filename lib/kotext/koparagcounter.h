@@ -18,9 +18,10 @@
 */
 
 #include <qstring.h>
+class QDomElement;
+class KoXmlWriter;
 class KoGenStyle;
 class KoTextParag;
-class QDomElement;
 class KoTextFormat;
 class KoOasisContext;
 
@@ -65,11 +66,19 @@ public:
      */
     int bulletX();
 
-    /** XML support. */
+    /// KOffice-1.3 loading code
     void load( QDomElement & element );
+    /// KOffice-1.3 saving code
     void save( QDomElement & element );
+    /** Load from OASIS XML
+     * @param heading true if heading, false if normal list
+     * @param level 1-based
+     */
     void loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level );
-    void saveOasis( KoGenStyle& listStyle );
+    /// Save as OASIS XML
+    void saveOasis( KoGenStyle& listStyle ) const;
+    /// Part of saveOasis that is shared with KoStyleCollection::saveOasisOutlineStyles
+    void saveOasisListLevel( KoXmlWriter& listLevelWriter ) const;
 
     bool operator==( const KoParagCounter & c2 ) const;
     bool operator!=( const KoParagCounter & c2 ) const { return !(*this == c2); }
