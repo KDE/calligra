@@ -1697,6 +1697,8 @@ void KSpreadView::initView()
     d->vertScrollBar = new QScrollBar( this, "ScrollBar_2" );
     d->vertScrollBar->setRange( 0, 4096 );
     d->vertScrollBar->setOrientation( QScrollBar::Vertical );
+    d->vertScrollBar->setLineStep(60);  //just random guess based on what feels okay
+    d->vertScrollBar->setPageStep(60);  //This should be controlled dynamically, depending on how many rows are shown
 
     // Edit Bar
     d->toolWidget = new QFrame( this );
@@ -1749,6 +1751,9 @@ void KSpreadView::initView()
 
     d->horzScrollBar->setRange( 0, 4096 );
     d->horzScrollBar->setOrientation( QScrollBar::Horizontal );
+
+    d->vertScrollBar->setLineStep(60); //just random guess based on what feels okay
+    d->vertScrollBar->setPageStep(60);
 
     QObject::connect( d->tabBar, SIGNAL( tabChanged( const QString& ) ), this, SLOT( changeTable( const QString& ) ) );
     QObject::connect( d->tabBar, SIGNAL( tabMoved( unsigned, unsigned ) ),
