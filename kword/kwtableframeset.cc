@@ -2635,6 +2635,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
     }
     KWTableFrameSet::Cell *fs = 0L;
 
+    bool tab=false; // No tab key pressed
     if(moveToOtherCell)
     {
         switch( e->key() ) {
@@ -2684,10 +2685,15 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 }
             }
             break;
+            case QKeyEvent::Key_Backtab:
+                tab=true;
+                if (e->state() & QKeyEvent::ControlButton)
+                    break; // Break if tab was pressed with Control (in *any* key combination)
+                // Do not break
             case QKeyEvent::Key_Left:
             {
                 KoTextCursor *cur = (static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor();
-                if(!cur->parag()->prev()&&cur->index()==0)
+                if ( tab || (!cur->parag()->prev()&&cur->index()==0) )
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
                     int row=cell->firstRow();
@@ -2709,10 +2715,15 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                 }
             }
             break;
+            case QKeyEvent::Key_Tab:
+                tab=true;
+                if (e->state() & QKeyEvent::ControlButton)
+                    break; // Break if tab was pressed with Control (in *any* key combination)
+                // Do not break
             case QKeyEvent::Key_Right:
             {
                 KoTextCursor *cur = (static_cast<KWTextFrameSetEdit *>(m_currentCell))->cursor();
-                if(!cur->parag()->next()&&cur->index()==cur->parag()->string()->length()-1)
+                if( tab || (!cur->parag()->next()&&cur->index()==cur->parag()->string()->length()-1) )
                 {
                     KWTableFrameSet* tableFrame=tableFrameSet();
                     unsigned int row = cell->firstRow();
@@ -2744,7 +2755,15 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
     else
     {
         if ( !textframeSet->textObject()->protectContent() )
-            m_currentCell->keyPressEvent( e );
+        {
+            if (tab && (e->state() & QKeyEvent::ControlButton) )
+            {
+                QKeyEvent event(QEvent::KeyPress, QKeyEvent::Key_Tab, 9, 0, QChar(9));
+                m_currentCell->keyPressEvent( &event );
+            }
+            else
+                m_currentCell->keyPressEvent( e );
+        }
         else
             KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted."));
     }
