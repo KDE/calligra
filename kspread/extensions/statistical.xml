@@ -50,10 +50,43 @@
 	<Type range="true">Double</Type>
       </Parameter>
       <Help>
-	<Text>The KURT() function calculates  an unbiased estimate of the kurtosis of a data set. You have to provide at least 4 values, otherwise an error is returned.</Text>
+	<Text>The KURT() function calculates an unbiased estimate of the kurtosis of a data set. You have to provide at least 4 values, otherwise an error is returned.</Text>
 	<Syntax>KURT(value; value;...)</Syntax>
 	<Example>KURT(A1:A5)</Example>
 	<Example>KURT(21; 33; 54; 23) returns 1.344239</Example>
+        <Related>KURTP</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>KURTP</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Floating point values</Comment>
+	<Type range="true">Double</Type>
+      </Parameter>
+      <Help>
+	<Text>The KURTP() function calculates an population kurtosis of a data set. You have to provide at least 4 values, otherwise an error is returned.</Text>
+	<Syntax>KURTP(value; value;...)</Syntax>
+	<Example>KURTP(A1:A5)</Example>
+	<Example>KURTP(21; 33; 54; 23) returns -1.021</Example>
+        <Related>KURT</Related>
       </Help>
     </Function>
 

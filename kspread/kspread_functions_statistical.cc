@@ -59,6 +59,7 @@ bool kspreadfunc_geomean( KSContext & context );
 bool kspreadfunc_harmean( KSContext & context );
 bool kspreadfunc_hypgeomdist( KSContext & context );
 bool kspreadfunc_kurtosis_est( KSContext & context );
+bool kspreadfunc_kurtosis_pop( KSContext & context );
 bool kspreadfunc_loginv(KSContext& context );
 bool kspreadfunc_lognormdist(KSContext& context );
 bool kspreadfunc_median( KSContext& context );
@@ -115,6 +116,7 @@ void KSpreadRegisterStatisticalFunctions()
   repo->registerFunction( "LOGINV", kspreadfunc_loginv );
   repo->registerFunction( "LOGNORMDIST", kspreadfunc_lognormdist );
   repo->registerFunction( "KURT", kspreadfunc_kurtosis_est );
+  repo->registerFunction( "KURTP", kspreadfunc_kurtosis_pop );
   repo->registerFunction( "MEDIAN", kspreadfunc_median );
   repo->registerFunction( "NEGBINOMDIST", kspreadfunc_negbinomdist );
   repo->registerFunction( "NORMDIST", kspreadfunc_normdist );
@@ -394,7 +396,6 @@ bool kspreadfunc_kurtosis_est( KSContext & context )
 {
   QValueList<KSValue::Ptr> & args = context.value()->listValue();
 
-  double m, s, dxn;
   double x4 = 0.0;
 
   int number = 0;
@@ -410,9 +411,11 @@ bool kspreadfunc_kurtosis_est( KSContext & context )
 
   kdDebug() << "Average: " << avg << endl;
 
+  res = 0.0;
   if ( !kspreadfunc_stddev_helper( context, args, res, avg ) )
     return false;
 
+  res = sqrt( res / ( (double) (number - 1) ) );
   kdDebug() << "Stdev: " << res << endl;
 
   if ( res == 0.0 )
@@ -426,6 +429,43 @@ bool kspreadfunc_kurtosis_est( KSContext & context )
   double t = 3.0 * ( number - 1 ) * ( number - 1 ) / den;
 
   context.setValue( new KSValue( x4 * nth - t ) );
+  return true;
+}
+
+bool kspreadfunc_kurtosis_pop( KSContext & context )
+{
+  QValueList<KSValue::Ptr> & args = context.value()->listValue();
+
+  double x4 = 0.0;
+
+  int number = 0;
+  double res = 0.0;
+
+  if ( !kspreadfunc_average_helper( context, args, res, number) )
+    return false;
+
+  if ( number < 4 )
+    return false;
+
+  double avg = res / (double) number;
+
+  kdDebug() << "Average: " << avg << endl;
+  res = 0.0;
+
+  if ( !kspreadfunc_stddev_helper( context, args, res, avg ) )
+    return false;
+
+  res = sqrt( res / number );
+
+  kdDebug() << "Stdev: " << res << endl;
+
+  if ( res == 0.0 )
+    return false;
+
+  if ( !kspreadfunc_kurt_est_helper( context, args, x4, avg, res ) )
+    return false;
+
+  context.setValue( new KSValue( x4 / number - 3 ) );
   return true;
 }
 
