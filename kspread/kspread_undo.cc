@@ -172,7 +172,7 @@ KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadTable
     m_iColumn= _column;
     m_iNbCol=_nbCol;
     QRect selection;
-    selection.setCoords( _column, 0, _column+m_iNbCol, KS_rowMax );
+    selection.setCoords( _column, 1, _column+m_iNbCol, KS_rowMax );
     QDomDocument doc = _table->saveCellRect( selection );
 
     // Save to buffer
@@ -280,7 +280,7 @@ KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_tab
     m_iRow = _row;
     m_iNbRow=  _nbRow;
     QRect selection;
-    selection.setCoords( 0, _row, KS_colMax, _row+m_iNbRow );
+    selection.setCoords( 1, _row, KS_colMax, _row+m_iNbRow );
     QDomDocument doc = _table->saveCellRect( selection );
 
     // Save to buffer
