@@ -3,14 +3,32 @@
 # This file is part of the KDE project
 # Copyright (C) 2001 Daniel Naber <daniel.naber@t-online.de>
 
-# Extract information from WordNet data files - only for development.
-# cat together all data.* files and call this script.
-# Output is:
-# ;syn1;syn2;...;#hyper1;hyper2;...;
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+# Extract information from WordNet data files - only useful for development.
+# cat together all of WordNet's data.* files and call this script. As a second
+# argument you can use a word frequency list as "Alphabetical frequency list of 
+# the whole corpus (lemmatized)" on http://www.comp.lancs.ac.uk/ucrel/bncfreq/flists.html
+# This will remove all words whcih are not in the list, i.e. words that are rare.
+# 
+# Output of this script is:
+# ;syn1;syn2;...;#;hyper1;hyper2;...;
 
 # TODO:
 # -"close" and "closely" are synonym which can irritate people!?
-# -document this
+# -document this + clean up a bit
 
 use strict;
 
@@ -158,6 +176,7 @@ __EOF
    			$line_result .= "#\n";
 		}
         if( $occurences > 1 || $ct > 0 ) {
+            $line_result =~ s/\((a|p|ip)\)//igs;  # attributive or prenomial use isn't so interesting
 			print "$line_result";
         }
 	}
