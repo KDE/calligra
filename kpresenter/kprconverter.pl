@@ -23,6 +23,12 @@ while (<INPUT>)
     {
       $insideParag=1;
       s/<PARAGRAPH /<P /;
+      # In the old format we had horzAlign="[0|1|2]" 0=left, 1=center, 2=right
+      # In the new one it's align="..." and uses the Qt::AlignmentFlags enums.
+      # Qt::AlignLeft=1, AlignRight=2, AlignHCenter=4
+      $alignment=$1 if(/horzAlign=(\"[0-2]+\")/);
+      $alignment =~ tr/01/14/;
+      s/horzAlign=\"[0-2]+\"/align=$alignment/;
       s/>$/ type=$objType>/;
     }
   elsif (/<\/PARAGRAPH>/)
