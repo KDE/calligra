@@ -270,6 +270,12 @@ void KSpreadCellIface::setFormatNumber(const QString &_formatNumber)
         format=KSpreadCell::fraction_tenth;
     else if(_formatNumber=="fraction_hundredth")
         format=KSpreadCell::fraction_hundredth;
+    else if(_formatNumber=="fraction_one_digit")
+        format=KSpreadCell::fraction_one_digit;
+    else if(_formatNumber=="fraction_two_digits")
+        format=KSpreadCell::fraction_two_digits;
+    else if(_formatNumber=="fraction_three_digits")
+        format=KSpreadCell::fraction_three_digits;
     else
         format=KSpreadCell::Number;
     cell->setFormatNumber( format);
@@ -324,6 +330,81 @@ QString KSpreadCellIface::getFormatNumber() const
         case KSpreadCell::fraction_hundredth:
                 stringFormat="fraction_hundredth";
                 break;
+        case KSpreadCell::fraction_one_digit:
+                stringFormat="fraction_one_digit";
+                break;
+        case KSpreadCell::fraction_two_digits:
+                stringFormat="fraction_two_digits";
+                break;
+        case KSpreadCell::fraction_three_digits:
+                stringFormat="fraction_three_digits";
+                break;
         }
     return stringFormat;
+}
+
+void KSpreadCellIface::setPrecision(int _p)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setPrecision( _p );
+    cell->update();
+}
+
+int KSpreadCellIface::precision() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->precision( m_point.x(), m_point.y() );
+}
+
+void KSpreadCellIface::setTextFontBold(bool _b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setTextFontBold( _b );
+    cell->update();
+}
+
+bool KSpreadCellIface::textFontBold() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->textFontBold( m_point.x(), m_point.y() );
+}
+
+void KSpreadCellIface::setTextFontItalic(bool _b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setTextFontItalic( _b );
+    cell->update();
+}
+
+bool KSpreadCellIface::textFontItalic() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->textFontItalic( m_point.x(), m_point.y() );
+}
+
+
+void KSpreadCellIface::setTextFontUnderline(bool _b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setTextFontUnderline( _b );
+    cell->update();
+}
+
+bool KSpreadCellIface::textFontUnderline() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->textFontUnderline( m_point.x(), m_point.y() );
+}
+
+void KSpreadCellIface::setTextFontStrike(bool _b)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setTextFontStrike( _b );
+    cell->update();
+}
+
+bool KSpreadCellIface::textFontStrike() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->textFontStrike( m_point.x(), m_point.y() );
 }

@@ -43,7 +43,17 @@ k_dcop:
     virtual QString postfix() const;
     virtual void setFormatNumber(const QString &_formatNumber);
     virtual QString getFormatNumber() const;
-
+    virtual void setPrecision(int  _p);
+    virtual int precision() const;
+    //font
+    virtual void setTextFontBold( bool _b );
+    virtual bool textFontBold( ) const;
+    virtual void setTextFontItalic( bool _b );
+    virtual bool textFontItalic( ) const;
+    virtual void setTextFontUnderline( bool _b );
+    virtual bool textFontUnderline(  ) const;
+    virtual void setTextFontStrike( bool _b );
+    virtual bool textFontStrike( ) const;
 private:
     QPoint m_point;
     KSpreadTable* m_table;

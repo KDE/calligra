@@ -793,3 +793,12 @@ DECBIN, DECOCT
 -Add new fraction format (One digit, two digits and three digits)
 Algo gave by jp martin
 -Add functions documentations.
+
+Torben changes:
+-Rewritten drawing code.
+It's very nice.
+Correct some bugs, etc...
+
+2000-07-16-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Add new script functions setTextBold(),setTextUnderLine() etc...
