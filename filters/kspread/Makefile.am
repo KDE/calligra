@@ -1,2 +1,2 @@
-SUBDIRS = csv applixspread qpro html
+SUBDIRS = csv applixspread gnumeric qpro html
 
