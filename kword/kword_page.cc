@@ -4298,11 +4298,6 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 		editPaste( drop->encodedData( "text/plain" ) );
 	}
 	e->acceptAction();
-    } else if ( QTextDrag::canDecode( e ) ) {
-	QString s;
-	QTextDrag::decode( e, s );
-	editPaste( s );
-	e->acceptAction();
     } else if ( QImageDrag::canDecode( e ) ) {
 	QImage pix;
 	QImageDrag::decode( e, pix );
@@ -4377,7 +4372,13 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 	    doc->getAutoFormat().setEnabled( FALSE );
     	}
 	e->accept();
+    } else if ( QTextDrag::canDecode( e ) ) {
+	QString s;
+	QTextDrag::decode( e, s );
+	editPaste( s );
+	e->acceptAction();
     }
+    
     startBlinkCursor();
 }
 
