@@ -137,7 +137,7 @@ buttons around on the toolbar using this dialog.</para>
 <sect2>
 <title>Adding a button to a toolbar</title>
 
-<para>To add a button from a toolbar, you move it from the
+<para>To add a button to a toolbar, you move it from the
 <guilabel>Available Actions</guilabel> box to the <guilabel>Current
 Actions</guilabel> column.</para>
 
@@ -209,6 +209,176 @@ select <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
 
 <para>This will bring up a dialog box.</para>
 
+
+<sect2 id="opt-ui">
+<title>Configure &kword; User Interface.</title>
+
+<para>Clicking <guibutton>Interface</guibutton> will allow you to change
+the following.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+
+<varlistentry>
+<term><guilabel>Show status bar</guilabel></term>
+<listitem><para>Placing a mark in this checkbox makes the statusbar visible in &kword;.  See
+<link linkend="kword-screen">The &kword; Screen</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show Scrollbar</guilabel></term>
+<listitem><para>Placing a mark in this checkbox makes the scrollbar visible in &kword;.  See
+<link linkend="kword-screen">The &kword; Screen</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>PageUp/PageDown moves the caret</guilabel></term>
+<listitem><para>If this checkbox has a mark, then when you press the PageUp and PageDown buttons
+on the keyboard, &kword; moves the text cursor (the caret) down one page.  If there is no mark in this checkbox 
+then &kword; moves the view, but does not change the position of the text cursor. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Number of recent files:</guilabel></term>
+<listitem>
+<para>This determines the maximum number of files that are listed under
+<menuchoice> <guimenu>File</guimenu><guimenuitem>Open
+Recent</guimenuitem></menuchoice> command. You can adjust this value
+from 1-20.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Horizontal grid size:</guilabel></term>
+<listitem><para>Determines the horizontal size of the grid.  When frames and tab stops are placed on the page, they
+are placed on a point in the grid.  This gives your document a more professional look because elements are effectively
+aligned.  You can reduce the grid size if you need finer control of your layout.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Vertical grid size:</guilabel></term>
+<listitem><para>Determines the vertical size of the grid.  When frames and tab stops are placed on the page, they
+are placed on a point in the grid.  This gives your document a more professional look because elements are effectively
+aligned.  You can reduce the grid size if you need finer control of your layout.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Paragraph indent by toolbar buttons:</guilabel></term>
+<listitem><para>Use this spin box to determine how far the paragraph is indented when using the increase indent button
+(<inlinemediaobject><imageobject><imagedata fileref="incindbut.png"
+format="PNG"/></imageobject></inlinemediaobject>) and the decrease indent button
+(<inlinemediaobject><imageobject><imagedata fileref="decindbut.png"
+format="PNG"/></imageobject></inlinemediaobject>).</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Preview Mode - Number of pages per row:</guilabel></term>
+<listitem><para>Determines the number of pages per row in <link linkend="preview-mode-menu">preview mode</link>.
+This determines the size of the pages in preview mode.</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>When you are happy with the changes, simply click
+<guibutton>OK</guibutton>.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
+lost.</para>
+
+<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
+values to their default values.</para>
+
+</sect2>
+
+<sect2 id="opt-document"><title>Configure document options</title>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt4.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<sect3 id="opt-document-defaults"><title>Document defaults</title>
+<variablelist>
+<varlistentry>
+<term><guilabel>Default Column Spacing</guilabel></term>
+<listitem>
+<para>Use this to adjust the default spacing between columns.  For more information on columns see
+<link linkend="columns">Columns</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Default font</guilabel></term>
+<listitem>
+<para>Click on the <guibutton>Choose</guibutton> button, and a new dialog will appear.  Use this dialog to
+choose the default font.  This setting determines the default font used by &kword; until further formatting is done.  You can
+revert any text to this default by selecting
+<menuchoice> <guimenu>Format</guimenu><guimenuitem>Default Format</guimenuitem></menuchoice> from
+the menubar.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect3>
+
+<sect3 id="opt-document-settings"><title>Document settings</title>
+<variablelist>
+<varlistentry>
+<term><guilabel>Autosave every (min):</guilabel></term>
+<listitem>
+<para>You can use this to adjust how often &kword; saves a temporary
+file.  If you set this value to zero, &kword; will not autosave.  You
+can adjust the autosave from zero to 60 minutes.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Starting page number</guilabel></term>
+<listitem>
+<para>Use this text box to determine the starting page number.  For more information on page numbering see
+<link linkend="page-number">Page Numbering</link>.</para>
+<tip><para>This is helpful if you have split a single document into multiple files.</para></tip>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Tab Stop:</guilabel></term>
+<listitem>
+<para>Each &kword; document has a default set of tab stops.  If you add tab stops to your document, the newly added 
+tab stops override the default tabstops.  You can use this text box to define the spacing between default tab stops.</para>
+<para>As an example.  If you enter <userinput>1.5</userinput> in this text box, and the unit of measure is in centimeters, then the 
+first default tab stop will be located 1.5 cm to the right of the left margin of the frame.  The second default tab stop will be located at 3 cm from the 
+left margin, etc....</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect3>
+<sect3 id="opt-document-cursor"><title>Cursor settings</title>
+
+<para>This section of the dialog box has one checkbox labeled <guilabel>Cursor in protected area</guilabel>.  
+When there is a mark in this check box, and you click in a protected frame of your document, a cursor appears.  When the 
+mark is removed from this check box, and you click in a protected frame, there is no cursor visible.</para>
+
+<para>When you are happy with the changes, simply click
+<guibutton>OK</guibutton>.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
+lost.</para>
+
+<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
+values to their default values.</para>
+</sect3>
+</sect2>
+
+
+
 <sect2 id="opt-spell">
 <title>Configure Spelling.</title>
 
@@ -248,29 +418,30 @@ addresses often contain words run together.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Dictionary</guilabel> </term>
+<term><guilabel>Dictionary:</guilabel> </term>
 <listitem><para>This dropdown box is used to select
-the dictionary you want &kword; to use. </para></listitem>
+the dictionary you want &kword; to use from all available dictionaries. </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Encoding</guilabel></term>
+<term><guilabel>Encoding:</guilabel></term>
 <listitem><para>This dropdown box can be used to
 specify which character set you want the speller to use.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Client</guilabel></term>
+<term><guilabel>Client:</guilabel></term>
 <listitem><para>The dropdown box is used to specify
-the spell checking program that &kword; should use.</para>
+the spell checking program that &kword; should use from a list of available programs.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Ignore uppercase words.</guilabel></term>
 <listitem><para>If checked, &kword; will not mark <emphasis>PGE</emphasis> as misspelled,
-but it will mark <emphasis>Pge</emphasis> and <emphasis>pge</emphasis> as misspelled.</para></listitem>
+but it will mark <emphasis>Pge</emphasis> and <emphasis>pge</emphasis> as misspelled. This is useful if your 
+document contains a large number of acronyms.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -286,7 +457,7 @@ remove the mark in this check box..</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Clear Ignore All Word History</guilabel></term>
+<term><guilabel>Clear Ignore All Word History...</guilabel></term>
 <listitem><para>If selected, &kword; will delete all words that have previously 
 been flagged with the <guibutton>Ignore All</guibutton> button.</para></listitem>
 </varlistentry>
@@ -303,210 +474,7 @@ values to their default values.</para>
 
 </sect2>
 
-<sect2 id="opt-ui">
-<title>Configure &kword; User Interface.</title>
 
-<para>Clicking <guibutton>Interface</guibutton> will allow you to change
-the following.</para>
-
-<screenshot>
-<mediaobject>
-<imageobject><imagedata fileref="opt2.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-
-<variablelist>
-<!--<varlistentry>
-<term><guilabel>Show rulers</guilabel></term>
-<listitem><para>Placing a mark in this checkbox makes the rulers visible in &kword;.  See
-<link linkend="rulers">Using Rulers</link> for more information.</para>
-</listitem>
-</varlistentry>  Currently not in CVS dialogs...-->
-
-<varlistentry>
-<term><guilabel>Show status bar</guilabel></term>
-<listitem><para>Placing a mark in this checkbox makes the statusbar visible in &kword;.  See
-<link linkend="kword-screen">The &kword; Screen</link> for more information.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show Scrollbar</guilabel></term>
-<listitem><para>Placing a mark in this checkbox makes the scrollbar visible in &kword;.  See
-<link linkend="kword-screen">The &kword; Screen</link> for more information.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>PageUp/PageDown moves the caret</guilabel></term>
-<listitem><para>If this checkbox has a mark, then when you press the PageUp and PageDown buttons
-on the keyboard, &kword; moves the text cursor (the caret) down one page.  If there is no mark in this checkbox 
-then &kword; moves the view, but does not change the position of the text cursor. </para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Number of recent files</guilabel></term>
-<listitem>
-<para>This determines the maximum number of files that are listed under
-<menuchoice> <guimenu>File</guimenu><guimenuitem>Open
-Recent</guimenuitem></menuchoice> command. You can adjust this value
-from 1-20.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Horizontal grid size</guilabel></term>
-<listitem><para>Determines the horizontal size of the grid.  When frames and tab stops are placed on the page, they
-are placed on a point in the grid.  This gives your document a more professional look because elements are effectively
-aligned.  You can reduce the grid size if you need finer control of your layout.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Vertical grid size</guilabel></term>
-<listitem><para>Determines the vertical size of the grid.  When frames and tab stops are placed on the page, they
-are placed on a point in the grid.  This gives your document a more professional look because elements are effectively
-aligned.  You can reduce the grid size if you need finer control of your layout.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Paragraph indent by toolbar buttons.</guilabel></term>
-<listitem><para>Use this spin box to determine how far the paragraph is indented when using the increase indent button 
-(<inlinemediaobject><imageobject><imagedata fileref="incindbut.png"
-format="PNG"/></imageobject></inlinemediaobject>) and the decrease indent button
-(<inlinemediaobject><imageobject><imagedata fileref="decindbut.png"
-format="PNG"/></imageobject></inlinemediaobject>).</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Preview Mode - Number of pages per row</guilabel></term>
-<listitem><para>Determines the number of pages per row in <link linkend="preview-mode-menu">preview mode</link>. 
-This determines the size of the pages in preview mode.</para></listitem>
-</varlistentry>
-</variablelist>
-
-<para>When you are happy with the changes, simply click
-<guibutton>OK</guibutton>.</para>
-
-<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
-lost.</para>
-
-<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
-values to their default values.</para>
-
-</sect2>
-<sect2 id="opt-misc"><title>Configure miscellaneous options</title>
-<para></para>
-
-<screenshot>
-<mediaobject>
-<imageobject><imagedata fileref="opt3.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-
-<variablelist>
-<varlistentry>
-<term><guilabel>Units</guilabel></term>
-<listitem><para>Select your preferred unit of measurement.  &kword; will use these units for all measurements.  See
-<link linkend="rulers">Using Rulers</link> for more information.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Undo/Redo limit</guilabel></term>
-<listitem><para>Use this spin box or slider to determine how many actions &kword; keeps in its Undo buffer.  Any action that exceeds 
-this number will be forgotten.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Display links.</guilabel></term>
-<listitem><para>Placing a mark in this checkbox makes document links visible in &kword;.  See
-<link linkend="links">Document links</link> for more information.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show comments</guilabel></term>
-<listitem><para>Placing a mark in this checkbox makes document comments visible in &kword;.  See
-<link linkend="comments">Document comments</link> for more information.</para>
-</listitem>
-</varlistentry>
-
-
-
-</variablelist>
-<para>When you are happy with the changes, simply click
-<guibutton>OK</guibutton>.</para>
-
-<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
-lost.</para>
-
-<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
-values to their default values.</para>
-</sect2>
-
-<sect2 id="opt-document"><title>Configure document options</title>
-
-<screenshot>
-<mediaobject>
-<imageobject><imagedata fileref="opt4.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
-
-<sect3 id="opt-document-defaults"><title>Document defaults</title>
-<variablelist>
-<varlistentry>
-<term><guilabel>Default Column Spacing</guilabel></term>
-<listitem>
-<para>Use this to adjust the default spacing between columns.  For more information on columns see
-<link linkend="columns">Columns</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Default font</guilabel></term>
-<listitem>
-<para>Click on the <guibutton>Choose</guibutton> button, and a new dialog will appear.  Use this dialog to
-choose the default font.  This setting determines the default font used by &kword; until further formatting is done.  You can
-revert any text to this default by selecting
-<menuchoice> <guimenu>Format</guimenu><guimenuitem>Default Format</guimenuitem></menuchoice> from
-the menubar.</para>
-</listitem>
-</varlistentry>
-</variablelist>
-</sect3>
-
-<sect3 id="opt-document-settings"><title>Document settings</title>
-<variablelist>
-<varlistentry>
-<term><guilabel>Autosave</guilabel></term>
-<listitem>
-<para>You can use this to adjust how often &kword; saves a temporary
-file.  If you set this value to zero, &kword; will not autosave.  You
-can adjust the autosave from zero to 60 minutes.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Starting page number</guilabel></term>
-<listitem>
-<para>Use this text box to determine the starting page number.  For more information on page numbering see
-<link linkend="page-number">Page Numbering </link>.</para>
-<tip><para>This is helpful if you have split a single document into multiple files.</para></tip>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<para>When you are happy with the changes, simply click
-<guibutton>OK</guibutton>.</para>
-
-<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
-lost.</para>
-
-<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
-values to their default values.</para>
-</sect3>
-</sect2>
 
 <sect2 id="opt-formula"><title>Configure formula options</title>
 
@@ -526,5 +494,107 @@ lost.</para>
 values to their default values.</para>
 
 </sect2>
+<sect2 id="opt-misc"><title>Configure miscellaneous options</title>
+<para></para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<sect3 id="opt-misc-misc"><title>Misc</title>
+<variablelist>
+<varlistentry>
+<term><guilabel>Units</guilabel></term>
+<listitem><para>Select your preferred unit of measurement.  &kword; will use these units for all measurements.  See
+<link linkend="rulers">Using Rulers</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Undo/Redo limit</guilabel></term>
+<listitem><para>Use this spin box or slider to determine how many actions &kword; keeps in its Undo buffer.  Any action that exceeds 
+this number will be forgotten.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Display links</guilabel></term>
+<listitem><para>Placing a mark in this checkbox makes document links visible in &kword;. If there is no mark in this checkbox,
+document links will be hidden.  See
+<link linkend="links">Document links</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Underline all links</guilabel></term>
+<listitem><para>Placing a mark in this checkbox will have &kword; automatically underline a document link when it is created. See
+<link linkend="links">Document links</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Display comments</guilabel></term>
+<listitem><para>Placing a mark in this checkbox makes document comments visible in &kword;.  See
+<link linkend="comments">Document comments</link> for more information.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Display field code</guilabel></term>
+<listitem><para>If there is a mark in this check box, &kword; shows the variable name of document variables,
+rather than the content of the variable in the &kword;
+screen.  If this check box does not have a mark, then &kword; shows the contents of the variables. </para>
+<note><para>This option does not affect the printed output.  The contents of the variables are printed regardless of the state of this
+check box.</para></note>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect3>
+<sect3 id="opt-misc-viewformatting"><title>View Formatting</title>
+
+<para>You can use these four checkboxes to determine what formatting characters are displayed when you have asked &kword; to
+<link linkend="view-formatting-menu">show formatting characters</link>.</para>
+<variablelist>
+
+<varlistentry>
+<term><guilabel>View formatting end paragraph</guilabel></term>
+<listitem><para>Toggles the display of new-line characters on and off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>View formatting space</guilabel></term>
+<listitem><para>Toggles the display of individual spaces on and off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>View formatting tabs</guilabel></term>
+<listitem><para>Toggles the display of tab stops on and off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>View formatting break</guilabel></term>
+<listitem><para>Toggles the display of paragraph marks on and off.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+
+<para>When you are happy with the changes, simply click
+<guibutton>OK</guibutton>.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
+lost.</para>
+
+<para>Clicking on the <guibutton>Defaults</guibutton> button restores all
+values to their default values.</para>
+</sect3>
+</sect2>
+
 </sect1>
 </chapter>

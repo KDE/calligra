@@ -1,7 +1,7 @@
 <chapter id="fundamentals">
 <title>Fundamentals</title>
 
-<para>This next section is covers how to start &kword;, introduces the user to templates and
+<para>This section of the documentation discusses starting &kword;, introduces the user to templates and
 discusses an important difference between two major types of templates.</para>
 
 <sect1 id="starting-kword">

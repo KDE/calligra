@@ -773,7 +773,7 @@ for editing your document.</para>
 </varlistentry>
 
 <varlistentry>
-<term>
+<term id="view-formatting-menu">
 <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Formatting Characters</guimenuitem>
 </menuchoice>
@@ -823,7 +823,7 @@ structure window.</action> For more information, refer to the section entitled
 </menuchoice>
 </term>
 <listitem>
-<para><action>Selecting this option will toggle the rullers off.</action>
+<para><action>Selecting this option will toggle the rulers off.</action>
 Selecting this option again will turn rulers on.  A checkmark before
 the menu entry will show you the current status of this option.  More
 information on rulers can be found under <link
@@ -1000,7 +1000,7 @@ For more information refer to the section entitled
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to mark your place in the document for easy retreiveal.</action>
+<para><action>Allows you to mark your place in the document for easy retrieval.</action>
 For more information refer to the section entitled
 <link linkend="bookmarks">Document Bookmarks</link>.</para>
 </listitem>
@@ -1444,7 +1444,7 @@ using the menubar. </para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Allows you to format the selected frame(s) with a pre-defined framestyle.</action> For more information see the section entitled
+<para><action>Allows you to format the selected frame(s) with a predefined framestyle.</action> For more information see the section entitled
 <link linkend="framestyles">Using frame styles</link>.</para>
 </listitem>
 </varlistentry>
@@ -1500,7 +1500,7 @@ on tables, <link linkend="tables">click here</link>.</para>
 <varlistentry>
 <term id="menu-insert-row">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Insert Row</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Insert Row...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1515,7 +1515,7 @@ equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-delete-row">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Delete Selected Row</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Row</guimenuitem><guimenuitem>Delete Selected Row...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1531,7 +1531,7 @@ is equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-insert-column">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Insert Column</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Insert Column...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1546,7 +1546,7 @@ equivalent to using the menubar.</para>
 <varlistentry>
 <term id="menu-delete-column">
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Delete Selected Column</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Column</guimenuitem><guimenuitem>Delete Selected Column...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1586,12 +1586,11 @@ here</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Split Cells</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Cell</guimenuitem><guimenuitem>Split Cells...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This will split previously joined cells in a
-table.</action>  For more on tables, <link linkend="tables">click
+<para><action>This will split one cell into multiple smaller cells.</action>  For more on tables, <link linkend="tables">click
 here</link>.</para>
 </listitem>
 </varlistentry>
@@ -1635,7 +1634,7 @@ find more about tables in the section entitled <link linkend="tables">Tables</li
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Table</guimenu><guimenuitem>Tablestylist</guimenuitem>
+<guimenu>Table</guimenu><guimenuitem>Table Style Manager...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1645,7 +1644,7 @@ find more about tables in the section entitled <link linkend="tablestyle">Tables
 </varlistentry>
 
 <varlistentry>
-<term>
+<term id="menu-tablestyle">
 <menuchoice>
 <guimenu>Table</guimenu><guimenuitem>Tablestyle</guimenuitem>
 </menuchoice>
@@ -1678,7 +1677,7 @@ find more about tables in the section entitled <link linkend="tablestyle">Tables
 <varlistentry>
 <term id="menu-spell">
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Spellcheck</guimenuitem><guimenuitem>Spelling...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1715,7 +1714,7 @@ For more information see <link linkend="autoformat">Autoformating</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Change Case</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Change Case...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1728,7 +1727,7 @@ Changing Font Case</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Personal Expressions</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Personal Expressions...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1741,7 +1740,7 @@ refer to the section entitled <link linkend="expressions">Expressions</link>.</p
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Custom Variables</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Custom Variables...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1763,7 +1762,7 @@ refer to the section entitled <link linkend="variables">Document variables</link
 </listitem>
 </varlistentry>
 
-<varlistentry>
+<!--<varlistentry>
 <term>
 <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Show related words</guimenuitem>
@@ -1783,12 +1782,12 @@ refer to the section entitled <link linkend="variables">Document variables</link
 <listitem>
 <para>Check the spelling of the specified word.</para>
 </listitem>
-</varlistentry>
+</varlistentry>-->
 
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1804,6 +1803,32 @@ refer to the section entitled <link linkend="variables">Document variables</link
 <title>Settings Menu</title>
 
 <variablelist>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Autocorrection</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to modify the autocorrection options.</action>
+For more on Autocorrection, <link linkend="autocorrect">click
+here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Completion</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to modify the autocompletion options.</action>
+For more see the section on <link linkend="autocomplete">Autocompletion</link>.</para>
+</listitem>
+</varlistentry>
+
 <varlistentry>
 <term>
 <menuchoice>
@@ -1908,31 +1933,6 @@ visible.</action></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Autocorrection</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Allows you to modify the autocorrection options.</action>
-For more on Autocorrection, <link linkend="autocorrect">click
-here</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Completion</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Allows you to modify the autocompletion options.</action>
-For more see the section on <link linkend="autocomplete">Autocompletion</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem>
 </menuchoice>
 </term>
@@ -1957,14 +1957,12 @@ click <link linkend="options-toolbars">here</link></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure
-&kword;...</guimenuitem>
+<guimenu>Settings</guimenu><guimenuitem>Configure &kword;...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Allows you to change miscellaneous</action> &kword;
-options.For details, click <link
-linkend="options-kword">here</link></para>
+options.For details, click <link linkend="options-kword">here</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -2225,6 +2223,11 @@ details. </para>
 </thead>
 <tbody>
 <row><entry>
+<link linkend="menu-tablestyle"><inlinemediaobject><imageobject><imagedata fileref="tblsty.png" format="PNG"/></imageobject></inlinemediaobject></link>
+</entry><entry>
+<link linkend="menu-tablestyle">Set tablestyle</link>
+</entry></row>
+<row><entry>
 <link linkend="menu-insert-row"><inlinemediaobject><imageobject><imagedata fileref="rowin.png" format="PNG"/></imageobject></inlinemediaobject></link>
 </entry><entry>
 <link linkend="menu-insert-row">Insert Row</link>
@@ -2267,6 +2270,7 @@ task from the menubar.  Click on that task for more details. </para>
 <row><entry>Button</entry><entry>Command</entry></row>
 </thead>
 <tbody>
+<row><entry><inlinemediaobject><imageobject><imagedata fileref="tblsty.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Set framestyle</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="bord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle border colors</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="lbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Left Paragraph Border</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="rbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Right Paragraph Border</entry></row>
@@ -2514,7 +2518,7 @@ box is larger.</para>
 
 <para>Along the left side of the dialog box, is a column that contains
 several icons. You can think of each of these icons as a shortcut to
-another subdirectory. If you click on an icon, you will be immediatly
+another subdirectory. If you click on an icon, you will be immediately
 moved to that location.</para>
 
 <para>You can add/edit or delete entries from the Location Bar.
