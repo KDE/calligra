@@ -25,7 +25,9 @@
 #include "AddLineSegmentCmd.h"
 
 AddLineSegmentCmd::AddLineSegmentCmd (GDocument* doc, GPolyline* obj,
-				      int idx, QList<Coord>& pnts) {
+				      int idx, QList<Coord>& pnts) 
+  : Command(i18n("Add Line Segment"))
+{
   document = doc;
   line = obj;
   line->ref ();

@@ -25,16 +25,21 @@
 #include <iostream.h>
 #include "CreatePolylineCmd.h"
 
-CreatePolylineCmd::CreatePolylineCmd (GDocument* doc, GPolyline* line) {
+CreatePolylineCmd::CreatePolylineCmd (GDocument* doc, GPolyline* line) 
+  : Command(i18n("Create Polyline"))
+{
+
   document = doc;
   object = line;
   object->ref ();
 }
 
 CreatePolylineCmd::CreatePolylineCmd (GDocument* doc, 
-				      const QList<Coord>& pts) {
+				      const QList<Coord>& pts)
+  : Command(i18n("Create Polyline"))
+{
   document = doc;
-  object = 0L;
+  object = 0;
   points = pts;
 }
 

@@ -25,14 +25,18 @@
 #include <iostream.h>
 #include "CreateTextCmd.h"
 
-CreateTextCmd::CreateTextCmd (GDocument* doc, GText* obj) {
+CreateTextCmd::CreateTextCmd (GDocument* doc, GText* obj) :
+  Command(i18n("Create Text")) 
+{
   document = doc;
   object = obj;
   object->ref ();
 }
 
 CreateTextCmd::CreateTextCmd (GDocument* doc, const Coord& p, 
-			      const char* str) {
+			      const char* str) :
+  Command(i18n("Create Text"))
+{
   document = doc;
   origin = p;
   text = str;

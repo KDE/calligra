@@ -24,7 +24,7 @@
 
 #include "GroupCmd.h"
 
-GroupCmd::GroupCmd (GDocument* doc) {
+GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group ???")) {
   document = doc;
   group = 0L;
   QListIterator<GObject> it (doc->getSelection ());

@@ -24,14 +24,18 @@
 
 #include "SetTextCmd.h"
 
-SetTextCmd::SetTextCmd (GDocument* doc, GText* obj, const QString& s) {
+SetTextCmd::SetTextCmd (GDocument* doc, GText* obj, const QString& s) 
+  : Command(i18n("Change Text"))
+{
   document = doc;
   object = obj;
   object->ref ();
   state = 0L;
 }
 
-SetTextCmd::SetTextCmd (GDocument* doc, GText* obj, GOState* ostate) {
+SetTextCmd::SetTextCmd (GDocument* doc, GText* obj, GOState* ostate) 
+  : Command(i18n("Change Text"))
+{
   document = doc;
   object = obj;
   object->ref ();

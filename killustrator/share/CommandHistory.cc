@@ -43,6 +43,8 @@ void CommandHistory::addCommand (Command *cmd, bool exec = false) {
     history.removeFirst ();
   else
     index++;
+
+  emit changed(isUndoPossible(), isRedoPossible());
 }
 
 void CommandHistory::undo () {
@@ -53,6 +55,7 @@ void CommandHistory::undo () {
     cmd->unexecute ();
     // and update the history list
     index--;
+    emit changed(isUndoPossible(), isRedoPossible());
   }
 }
 
@@ -61,10 +64,31 @@ void CommandHistory::redo () {
     Command* cmd = history.at (index);
     cmd->execute ();
     index++;
+    emit changed(isUndoPossible(), isRedoPossible());
   }
 }
 
 void CommandHistory::reset () {
   history.clear ();
   index = 0;
+  emit changed(false, false);
 }
+
+QString CommandHistory::getUndoName()
+{
+  if (index > 0) {
+    Command* cmd = history.at (index - 1);
+    return cmd->getName();
+  } else 
+    return 0;
+}
+
+QString CommandHistory::getRedoName()
+{
+  if (index < history.count ())
+    return history.at (index)->getName();
+  else 
+    return 0;
+}
+
+#include "CommandHistory.moc"

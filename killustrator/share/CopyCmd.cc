@@ -25,7 +25,9 @@
 #include <iostream.h>
 #include "CopyCmd.h"
 
-CopyCmd::CopyCmd (GDocument* doc, QList<GObject>& cboard) {
+CopyCmd::CopyCmd (GDocument* doc, QList<GObject>& cboard) 
+  : Command(i18n("Copy"))
+{
   document = doc;
   clipboard = &cboard;
   QListIterator<GObject> it (doc->getSelection ());

@@ -25,7 +25,9 @@
 #include "EditPointCmd.h"
 
 EditPointCmd::EditPointCmd (GDocument* doc, GObject* o,
-			    int idx, float dx, float dy) {
+			    int idx, float dx, float dy) 
+  : Command(i18n("Edit Point"))
+{
   document = doc;
   obj = o;
   obj->ref ();

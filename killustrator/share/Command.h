@@ -32,7 +32,7 @@
 
 class Command {
 protected:
-  Command () {}
+  Command (const QString& n) { name = n; }
 
 public:
   virtual ~Command () {}
@@ -42,6 +42,13 @@ public:
 
   // only undoable commands have to implement this
   virtual void unexecute () {}
+
+  // to save memory we implement this as function
+  const QString& getName() const { return name; }
+
+private:
+  QString name;
+
 };
 
 class ObjectManipCmd : public Command {

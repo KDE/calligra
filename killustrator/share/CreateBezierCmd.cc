@@ -25,7 +25,9 @@
 #include <iostream.h>
 #include "CreateBezierCmd.h"
 
-CreateBezierCmd::CreateBezierCmd (GDocument* doc, GBezier* curve) {
+CreateBezierCmd::CreateBezierCmd (GDocument* doc, GBezier* curve) 
+  : Command(i18n("Create Bezier"))
+{
   document = doc;
   object = curve;
   object->ref ();

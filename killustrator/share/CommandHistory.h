@@ -29,15 +29,27 @@
 
 #include <qlist.h>
 
-class CommandHistory {
+class CommandHistory : public QObject {
+  Q_OBJECT
+
 public:
   CommandHistory ();
+  ~CommandHistory() {};
 
   void addCommand (Command *cmd, bool exec = false);
   void undo ();
   void redo ();
 
   void reset ();
+
+  bool isUndoPossible() const { return (index > 0); } 
+  bool isRedoPossible() const { return (index < history.count()); }
+
+  QString getUndoName(); 
+  QString getRedoName();
+
+signals:
+  void changed(bool undoPossible, bool redoPossible);
 
 private:
   QList<Command> history;

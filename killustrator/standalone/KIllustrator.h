@@ -139,6 +139,7 @@ public slots:
 protected slots:
   void zoomFactorSlot (int);
   void selectColor (int flag, const QBrush& b);
+  void setUndoStatus(bool undoPossible, bool redoPossible);
 
 private:
   static bool closeWindow (KIllustrator* win);

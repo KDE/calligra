@@ -84,197 +84,68 @@ BUILTSOURCES =	Handle.moc GObject.moc GPolyline.moc GPolygon.moc GOval.moc \
 		ToolButton.moc PolygonPreview.moc \
 		TransformationDialog.moc koPageLayoutDia.moc \
 		PStateManager.moc OptionDialog.moc UnitBox.moc \
-		ScriptDialog.moc GLayer.moc LayerDialog.moc
+		ScriptDialog.moc GLayer.moc LayerDialog.moc \
+		CommandHistory.moc
 
 DISTCLEANFILES = $(BUILTSOURCES)
 
 prolog.ps: prolog.ps.in
 	perl ../cleanup_ps < prolog.ps.in > prolog.ps
 
-# add a dependency for every moc file to be full portable
-# I've added a key binding to emacs for this. 
+SUFFIXES = .moc .h
+
+.h.moc:
+	$(MOC) $< -o $@  
+
+findmoc:
+	grep moc $(libkillu_a_SOURCES) | sed -e "s/#include \"/ /; s/\"\$$//"
+
 Handle.cc: Handle.moc
-Handle.moc: Handle.h
-	$(MOC) Handle.h -o Handle.moc
-
 GObject.cc: GObject.moc
-GObject.moc: GObject.h
-	$(MOC) GObject.h -o GObject.moc
-
 GPolyline.cc: GPolyline.moc
-GPolyline.moc: GPolyline.h
-	$(MOC) GPolyline.h -o GPolyline.moc
-
 GPolygon.cc: GPolygon.moc
-GPolygon.moc: GPolygon.h
-	$(MOC) GPolygon.h -o GPolygon.moc
-
 GOval.cc: GOval.moc
-GOval.moc: GOval.h
-	$(MOC) GOval.h -o GOval.moc
-
-GText.cc: GText.moc
-GText.moc: GText.h
-	$(MOC) GText.h -o GText.moc
-
-GGroup.cc: GGroup.moc
-GGroup.moc: GGroup.h
-	$(MOC) GGroup.h -o GGroup.moc
-
-Tool.cc: Tool.moc
-Tool.moc: Tool.h
-	$(MOC) Tool.h -o Tool.moc
-
-RectangleTool.cc: RectangleTool.moc
-RectangleTool.moc: RectangleTool.h
-	$(MOC) RectangleTool.h -o RectangleTool.moc
-
-PolylineTool.cc: PolylineTool.moc
-PolylineTool.moc: PolylineTool.h
-	$(MOC) PolylineTool.h -o PolylineTool.moc
-
-FreeHandTool.cc: FreeHandTool.moc
-FreeHandTool.moc: FreeHandTool.h
-	$(MOC) FreeHandTool.h -o FreeHandTool.moc
-
-OvalTool.cc: OvalTool.moc
-OvalTool.moc: OvalTool.h
-	$(MOC) OvalTool.h -o OvalTool.moc
-
-TextTool.cc: TextTool.moc
-TextTool.moc: TextTool.h
-	$(MOC) TextTool.h -o TextTool.moc
-
-SelectionTool.cc: SelectionTool.moc
-SelectionTool.moc: SelectionTool.h
-	$(MOC) SelectionTool.h -o SelectionTool.moc
-
-EditPointTool.cc: EditPointTool.moc
-EditPointTool.moc: EditPointTool.h
-	$(MOC) EditPointTool.h -o EditPointTool.moc
-
-BezierTool.cc: BezierTool.moc
-BezierTool.moc: BezierTool.h
-	$(MOC) BezierTool.h -o BezierTool.moc
-
-ZoomTool.cc: ZoomTool.moc
-ZoomTool.moc: ZoomTool.h
-	$(MOC) ZoomTool.h -o ZoomTool.moc
-
-ToolController.cc: ToolController.moc
-ToolController.moc: ToolController.h
-	$(MOC) ToolController.h -o ToolController.moc
-
-ToolPalette.cc: ToolPalette.moc
-ToolPalette.moc: ToolPalette.h
-	$(MOC) ToolPalette.h -o ToolPalette.moc
-
-ToolGroup.cc: ToolGroup.moc
-ToolGroup.moc: ToolGroup.h
-	$(MOC) ToolGroup.h -o ToolGroup.moc
-
-ColorField.cc: ColorField.moc
-ColorField.moc: ColorField.h
-	$(MOC) ColorField.h -o ColorField.moc
-
-Canvas.cc: Canvas.moc
-Canvas.moc: Canvas.h
-	$(MOC) Canvas.h -o Canvas.moc
-
-QwViewport.cc: QwViewport.moc
-QwViewport.moc: QwViewport.h
-	$(MOC) QwViewport.h -o QwViewport.moc
-
-GDocument.cc: GDocument.moc
-GDocument.moc: GDocument.h
-	$(MOC) GDocument.h -o GDocument.moc
-
-PropertyEditor.cc: PropertyEditor.moc
-PropertyEditor.moc: PropertyEditor.h
-	$(MOC) PropertyEditor.h -o PropertyEditor.moc
-
-FloatSpinBox.cc: FloatSpinBox.moc
-FloatSpinBox.moc: FloatSpinBox.h
-	$(MOC) FloatSpinBox.h -o FloatSpinBox.moc
-
-ColorComboBox.cc: ColorComboBox.moc
-ColorComboBox.moc: ColorComboBox.h
-	$(MOC) ColorComboBox.h -o ColorComboBox.moc
-
-FontSelector.cc: FontSelector.moc
-FontSelector.moc: FontSelector.h
-	$(MOC) FontSelector.h -o FontSelector.moc
-
-AlignmentDialog.cc: AlignmentDialog.moc
-AlignmentDialog.moc: AlignmentDialog.h
-	$(MOC) AlignmentDialog.h -o AlignmentDialog.moc
-
-Ruler.cc: Ruler.moc
-Ruler.moc: Ruler.h
-	$(MOC) Ruler.h -o Ruler.moc
-
-AboutDialog.cc: AboutDialog.moc
-AboutDialog.moc: AboutDialog.h
-	$(MOC) AboutDialog.h -o AboutDialog.moc
-
 GClipart.cc: GClipart.moc
-GClipart.moc: GClipart.h
-	$(MOC) GClipart.h -o GClipart.moc
-
 GBezier.cc: GBezier.moc
-GBezier.moc: GBezier.h
-	$(MOC) GBezier.h -o GBezier.moc
-
-GridDialog.cc: GridDialog.moc
-GridDialog.moc: GridDialog.h
-	$(MOC) GridDialog.h -o GridDialog.moc
-
-ToolButton.cc: ToolButton.moc
-ToolButton.moc: ToolButton.h
-	$(MOC) ToolButton.h -o ToolButton.moc
-
+GText.cc: GText.moc
+GGroup.cc: GGroup.moc
+Tool.cc: Tool.moc
+PolylineTool.cc: PolylineTool.moc
+FreeHandTool.cc: FreeHandTool.moc
+RectangleTool.cc: RectangleTool.moc
+OvalTool.cc: OvalTool.moc
+TextTool.cc: TextTool.moc
+SelectionTool.cc: SelectionTool.moc
 PolygonTool.cc: PolygonTool.moc
-PolygonTool.moc: PolygonTool.h
-	$(MOC) PolygonTool.h -o PolygonTool.moc
-
-PolygonPreview.cc: PolygonPreview.moc
-PolygonPreview.moc: PolygonPreview.h
-	$(MOC) PolygonPreview.h -o PolygonPreview.moc
-
+ToolController.cc: ToolController.moc
+EditPointTool.cc: EditPointTool.moc
+BezierTool.cc: BezierTool.moc
+ZoomTool.cc: ZoomTool.moc
+ToolGroup.cc: ToolGroup.moc
+ToolPalette.cc: ToolPalette.moc
+ColorField.cc: ColorField.moc
+Canvas.cc: Canvas.moc
+QwViewport.cc: QwViewport.moc
+GDocument.cc: GDocument.moc
+PropertyEditor.cc: PropertyEditor.moc
+FloatSpinBox.cc: FloatSpinBox.moc
+ColorComboBox.cc: ColorComboBox.moc
+FontSelector.cc: FontSelector.moc
+AlignmentDialog.cc: AlignmentDialog.moc
 PolygonConfigDialog.cc: PolygonConfigDialog.moc
-PolygonConfigDialog.moc: PolygonConfigDialog.h
-	$(MOC) PolygonConfigDialog.h -o PolygonConfigDialog.moc
-
+PolygonPreview.cc: PolygonPreview.moc
+GridDialog.cc: GridDialog.moc
+CommandHistory.cc: CommandHistory.moc
+Ruler.cc: Ruler.moc
+AboutDialog.cc: AboutDialog.moc
+ToolButton.cc: ToolButton.moc
 TransformationDialog.cc: TransformationDialog.moc
-TransformationDialog.moc: TransformationDialog.h
-	$(MOC) TransformationDialog.h -o TransformationDialog.moc
-
 koPageLayoutDia.cc: koPageLayoutDia.moc
-koPageLayoutDia.moc: koPageLayoutDia.h
-	$(MOC) koPageLayoutDia.h -o koPageLayoutDia.moc
-
 PStateManager.cc: PStateManager.moc
-PStateManager.moc: PStateManager.h
-	$(MOC) PStateManager.h -o PStateManager.moc
-
 OptionDialog.cc: OptionDialog.moc
-OptionDialog.moc: OptionDialog.h
-	$(MOC) OptionDialog.h -o OptionDialog.moc
-
 UnitBox.cc: UnitBox.moc
-UnitBox.moc: UnitBox.h
-	$(MOC) UnitBox.h -o UnitBox.moc
-
 ScriptDialog.cc: ScriptDialog.moc
-ScriptDialog.moc: ScriptDialog.h
-	$(MOC) ScriptDialog.h -o ScriptDialog.moc
-
-LayerDialog.cc: LayerDialog.moc
-LayerDialog.moc: LayerDialog.h
-	$(MOC) LayerDialog.h -o LayerDialog.moc
-
 GLayer.cc: GLayer.moc
-GLayer.moc: GLayer.h
-	$(MOC) GLayer.h -o GLayer.moc
+LayerDialog.cc: LayerDialog.moc
 
 

@@ -25,14 +25,18 @@
 #include <iostream.h>
 #include "CreateOvalCmd.h"
 
-CreateOvalCmd::CreateOvalCmd (GDocument* doc, GOval* oval) {
+CreateOvalCmd::CreateOvalCmd (GDocument* doc, GOval* oval) : 
+  Command(i18n("Create Oval")) 
+{
   document = doc;
   object = oval;
   object->ref ();
 }
 
 CreateOvalCmd::CreateOvalCmd (GDocument* doc, const Coord& p0, 
-			      const Coord& p1, bool flag) {
+			      const Coord& p1, bool flag) :
+  Command(i18n("Create Oval")) 
+{
   document = doc;
   object = 0L;
   spos = p0;

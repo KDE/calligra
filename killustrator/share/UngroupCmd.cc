@@ -25,7 +25,7 @@
 #include <iostream.h>
 #include "UngroupCmd.h"
 
-UngroupCmd::UngroupCmd (GDocument* doc) {
+UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup ???")) {
   document = doc;
   QListIterator<GObject> it (doc->getSelection ());
   for (; it.current (); ++it) {

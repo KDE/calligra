@@ -25,7 +25,9 @@
 #include <iostream.h>
 #include "CreatePolygonCmd.h"
 
-CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, GPolygon* obj) {
+CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, GPolygon* obj) 
+  : Command(i18n("Create Polygon"))
+{
   document = doc;
   object = obj;
   object->ref ();
@@ -33,7 +35,9 @@ CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, GPolygon* obj) {
 
 CreatePolygonCmd::CreatePolygonCmd (GDocument* doc, const Coord& p0, 
 				    const Coord& p1, int num, int sval, 
-				    bool concaveFlag) {
+				    bool concaveFlag) 
+  : Command(i18n("Create Polygon"))
+{
   document = doc;
   object = 0L;
   spos = p0;

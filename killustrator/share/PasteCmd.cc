@@ -25,7 +25,9 @@
 #include <iostream.h>
 #include "PasteCmd.h"
 
-PasteCmd::PasteCmd (GDocument* doc, QList<GObject>& cboard) {
+PasteCmd::PasteCmd (GDocument* doc, QList<GObject>& cboard) 
+  : Command(i18n("Paste")) 
+{
   document = doc;
   clipboard = &cboard;
 }

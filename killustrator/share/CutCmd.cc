@@ -25,7 +25,9 @@
 #include <iostream.h>
 #include "CutCmd.h"
 
-CutCmd::CutCmd (GDocument* doc, QList<GObject>& cboard) {
+CutCmd::CutCmd (GDocument* doc, QList<GObject>& cboard) 
+  : Command(i18n("Cut"))
+{
   document = doc;
   clipboard = &cboard;
   QListIterator<GObject> it (doc->getSelection ());

@@ -245,6 +245,10 @@ void KIllustrator::setupMainView () {
   tcontroller->toolSelected (0);
 
   canvas->setToolController (tcontroller);
+
+  setUndoStatus(false, false);
+  connect(&cmdHistory, SIGNAL(changed(bool, bool)), 
+	  SLOT(setUndoStatus(bool, bool)));
 }
 
 void KIllustrator::initToolBars () {
@@ -829,6 +833,20 @@ bool KIllustrator::closeWindow (KIllustrator* win) {
     return true;
   }
   return false;
+}
+
+void KIllustrator::setUndoStatus(bool undoPossible, bool redoPossible)
+{
+  // we do this " " trick to avoid double translation of "Undo" and "Undo "
+  edit->setItemEnabled(ID_EDIT_UNDO, undoPossible);
+  if (undoPossible) 
+    edit->changeItem(QString(i18n("Undo")) + " " + cmdHistory.getUndoName(), 
+		     ID_EDIT_UNDO);
+    
+  edit->setItemEnabled(ID_EDIT_REDO, redoPossible);
+  if (redoPossible)
+    edit->changeItem(QString(i18n("Redo")) + " " + cmdHistory.getRedoName(),
+		     ID_EDIT_REDO);
 }
 
 void KIllustrator::quit () {

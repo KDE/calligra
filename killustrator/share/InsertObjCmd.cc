@@ -25,7 +25,9 @@
 #include <iostream.h>
 #include "InsertObjCmd.h"
 
-InsertObjCmd::InsertObjCmd (GDocument* doc, QList<GObject>& objs) {
+InsertObjCmd::InsertObjCmd (GDocument* doc, QList<GObject>& objs) 
+  : Command(i18n("Insert Object"))
+{
   document = doc;
   QListIterator<GObject> it (objs);
   for (; it.current (); ++it) {

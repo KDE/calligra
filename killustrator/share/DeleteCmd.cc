@@ -25,7 +25,7 @@
 #include <iostream.h>
 #include "DeleteCmd.h"
 
-DeleteCmd::DeleteCmd (GDocument* doc) {
+DeleteCmd::DeleteCmd (GDocument* doc) : Command(i18n("Delete")) {
   document = doc;
   QListIterator<GObject> it (doc->getSelection ());
   for (; it.current (); ++it) {

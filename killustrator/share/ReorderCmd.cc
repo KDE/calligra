@@ -24,7 +24,9 @@
 
 #include "ReorderCmd.h"
 
-ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos) {
+ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos) 
+  : Command(i18n("Reorder"))
+{
   objects.resize (doc->selectionCount ());
   oldpos.resize (doc->selectionCount ());
 

@@ -25,14 +25,18 @@
 #include <iostream.h>
 #include "CreateRectangleCmd.h"
 
-CreateRectangleCmd::CreateRectangleCmd (GDocument* doc, GPolygon* obj) {
+CreateRectangleCmd::CreateRectangleCmd (GDocument* doc, GPolygon* obj) :
+  Command(i18n("Create Rectangle"))
+{
   document = doc;
   object = obj;
   object->ref ();
 }
 
 CreateRectangleCmd::CreateRectangleCmd (GDocument* doc, const Coord& p0, 
-					const Coord& p1, bool flag) {
+					const Coord& p1, bool flag) : 
+  Command(i18n("Create Rectangle"))
+{
   document = doc;
   object = 0L;
   spos = p0;
