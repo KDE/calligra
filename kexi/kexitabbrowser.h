@@ -26,12 +26,13 @@
 
 #include <qwidget.h>
 #include <qintdict.h>
+#include <kexidialogbase.h>
 
 class QWidgetStack;
 class KMultiTabBar;
 class KexiBrowser;
 
-class KexiTabBrowser : public QWidget
+class KexiTabBrowser : public KexiDialogBase
 {
 	Q_OBJECT
 
@@ -40,6 +41,8 @@ class KexiTabBrowser : public QWidget
 		~KexiTabBrowser();
 
 		void			generateView();
+
+                virtual KXMLGUIClient *guiClient();
 
 	protected:
 		void			addBrowser(KexiBrowser *browser, QString icon,QString text);

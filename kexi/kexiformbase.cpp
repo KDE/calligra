@@ -289,6 +289,8 @@ KexiFormBase::KexiFormBase(QWidget *parent, const char *name, QString identifier
 	m_activeWidget=0;
 	m_activeMoveWidget=0;
 	m_resizeHandleSet=0;
+	
+	registerAs(DocumentWindow);
 }
 
 int KexiFormBase::dotSpacing()

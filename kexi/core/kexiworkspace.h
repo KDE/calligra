@@ -7,7 +7,7 @@
 class KexiDialogBase;
 class KexiMainWindow;
 
-class KexiWorkspace : public QWorkspace
+class KexiWorkspace : public QWidget
 {
 	Q_OBJECT
 	
@@ -18,6 +18,9 @@ class KexiWorkspace : public QWorkspace
 		void addItem(KexiDialogBase *newItem);
 		
 		unsigned int count() { return no; };
+
+		virtual QSize sizeHint() const;
+		virtual QSize minimumSizeHint() const;
 		
 	protected:
 		unsigned int no;

@@ -19,9 +19,58 @@
  */
 
 #include "kexidialogbase.h"
+#include "kexiapplication.h"
+#include "keximainwindow.h"
+
+#include <kdockwidget.h>
+#include <netwm_def.h>
+#include <qtimer.h>
+
+KexiDialogBase *KexiDialogBase::s_activeDocumentWindow=0;
+KexiDialogBase *KexiDialogBase::s_activeToolWindow=0;
+QPtrList<KexiDialogBase> *KexiDialogBase::s_DocumentWindows=0;
+QPtrList<KexiDialogBase> *KexiDialogBase::s_ToolWindows=0;
 
 KexiDialogBase::KexiDialogBase(QWidget *parent, const char *name) : QWidget(parent, name)
 {
+	if (s_DocumentWindows==0) s_DocumentWindows=new QPtrList<KexiDialogBase>();
+	if (s_ToolWindows==0) s_ToolWindows=new QPtrList<KexiDialogBase>();
+	m_mainWindow=(parent==0)?((KexiApplication*)kapp)->mainWindow():
+			(parent->qt_cast("KexiMainWindow")==0)?
+			((KexiApplication*)kapp)->mainWindow():
+			static_cast<KexiMainWindow*>(parent->qt_cast("KexiMainWindow"));
+	myDock=0;
+//	myDock->toDesktop();
+//	myDock->undock();
+}
+
+void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
+{
+	myDock=m_mainWindow->createDockWidget( "Widget", 0, 0, name());
+	myDock->setWidget(this);
+	myDock->setEnableDocking(KDockWidget::DockFullDocking);
+	myDock->setDockSite(KDockWidget::DockFullDocking);
+	myDock->setDockWindowType(NET::Normal);
+	myDock->setDockWindowTransient(m_mainWindow,true);
+
+	if (wt==DocumentWindow) {
+		if ((s_activeDocumentWindow==0) || (s_activeDocumentWindow->myDock==0))
+			myDock->toDesktop();
+		else
+			myDock->manualDock(s_activeDocumentWindow->myDock,KDockWidget::DockCenter);
+		s_DocumentWindows->insert(0,this);
+		s_activeDocumentWindow=this;
+	}
+	else {
+		if ((s_activeToolWindow==0) || (s_activeToolWindow->myDock==0))
+			myDock->toDesktop();
+		else
+			myDock->manualDock(s_activeToolWindow->myDock,KDockWidget::DockCenter);
+		s_ToolWindows->insert(0,this);
+		s_activeToolWindow=this;
+	}
+	myDock->makeDockVisible();
+
 }
 
 void KexiDialogBase::closeEvent(QCloseEvent *ev)

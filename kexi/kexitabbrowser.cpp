@@ -36,7 +36,7 @@
 #include "kexitabbrowser.h"
 
 KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
-	: QWidget(parent, name)
+	: KexiDialogBase(parent, name)
 {
 	QGridLayout *layout = new QGridLayout(this);
 
@@ -63,6 +63,7 @@ KexiTabBrowser::KexiTabBrowser(QWidget *parent, const char *name)
 	layout->addWidget(m_tabBar,	0,	0);
 	layout->addWidget(m_stack,	0,	1);
 	layout->setColStretch(1, 1);
+	registerAs(ToolWindow);
 }
 
 void
@@ -120,6 +121,13 @@ KexiTabBrowser::slotTabActivated(int id)
 
 KexiTabBrowser::~KexiTabBrowser()
 {
+}
+
+
+KXMLGUIClient *KexiTabBrowser::guiClient()
+{
+	kdDebug()<<"KexiTabBrowser::guiClient() not implemented yet"<<endl;
+	return new KXMLGUIClient();
 }
 
 #include "kexitabbrowser.moc"

@@ -33,7 +33,7 @@ MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent) : KexiDBResult(pare
 	m_field = 0;
 	m_currentRecord = 0;
 	m_numFields = mysql_num_fields(m_result);
-	
+	kdDebug()<<"m_numFields:"<<m_numFields<<endl;
 	//creating field-index
 	int i=0;
 	while((m_field = mysql_fetch_field(m_result)))

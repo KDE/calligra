@@ -23,7 +23,7 @@
 
 #include <qwidget.h>
 #include <kxmlguiclient.h>
-
+#include <qptrlist.h>
 class KexiDialogBase : public QWidget
 {
 	Q_OBJECT
@@ -40,8 +40,18 @@ class KexiDialogBase : public QWidget
 		void closing(KexiDialogBase *);
 	
 	protected:
-	
+		enum WindowType {ToolWindow, DocumentWindow};
+		void registerAs(KexiDialogBase::WindowType wt);
 		void closeEvent(QCloseEvent *ev);
+
+		static KexiDialogBase *s_activeDocumentWindow;
+		static KexiDialogBase *s_activeToolWindow;
+		static QPtrList<KexiDialogBase> *s_DocumentWindows;
+		static QPtrList<KexiDialogBase> *s_ToolWindows;
+
+		class KDockWidget *myDock;
+	private:
+		class KexiMainWindow *m_mainWindow;
 };
 
 #endif
