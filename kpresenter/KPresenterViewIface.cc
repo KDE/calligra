@@ -70,6 +70,11 @@ void KPresenterViewIface::editFind()
     view->editFind();
 }
 
+void KPresenterViewIface::editReplace()
+{
+    view->editReplace();
+}
+
 void KPresenterViewIface::editHeaderFooter()
 {
     view->editHeaderFooter();
