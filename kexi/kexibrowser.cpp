@@ -22,6 +22,7 @@
 #include <kglobal.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
+#include <klineeditdlg.h>
 
 #include <qlayout.h>
 #include <qheader.h>
@@ -210,6 +211,19 @@ void KexiBrowser::slotEdit()
 
 void KexiBrowser::slotCreateTable()
 {
+	bool ok = false;
+	QString name = KLineEditDlg::getText(i18n("New Table"), i18n("Table Name:"), "", &ok, this);
+	
+	if(ok && name.length() > 0)
+	{
+		if(kexi->project()->db()->query("CREATE TABLE " + name + " (id INT(10))"))
+		{
+			KexiAlterTable* kat = new KexiAlterTable(kexi->mainWindow()->workspaceWidget(), name, "alterTable");
+			kat->show();
+			KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_tables, name);
+			item->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
+		}
+	}
 }
 
 void KexiBrowser::slotAlterTable()
