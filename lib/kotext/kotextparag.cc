@@ -571,8 +571,8 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
             // we flush when the value of pixelxadj changes
             flush = flush || ( nextchr->pixelxadj != chr->pixelxadj );
 #endif
-	    // we flush before tabs
-	    flush = flush || ( nextchr->c == '\t' );
+	    // we flush before and after tabs
+	    flush = flush || ( chr->c == '\t' || nextchr->c == '\t' );
 	    // we flush on soft hypens
 	    flush = flush || ( chr->c.unicode() == 0xad );
 	    // we flush on custom items
@@ -651,7 +651,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
 // Called by KoTextParag::paintText
 // Draw a set of characters with the same formattings.
 // Reimplemented here to convert coordinates first, and call @ref drawFormattingChars.
-void KoTextParag::drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
+void KoTextParag::drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
                                    KoTextFormat *format, const QMemArray<int> &selectionStarts,
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line )
@@ -698,7 +698,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     {
       int draw_startX_pix = zh->layoutUnitToPixelX( draw_startX ) /* + at( rightToLeft ? start+draw_len-1 : start )->pixelxadj*/;
 
-      drawParagStringInternal( painter, s, start, draw_len, draw_startX_pix,
+      drawParagStringInternal( painter, str, start, draw_len, draw_startX_pix,
                                lastY_pix, baseLine_pix,
                                draw_bw,
                                h_pix, drawSelections, format, selectionStarts,
@@ -707,7 +707,7 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
 
     if ( !textDocument()->drawingShadow() && textDocument()->drawFormattingChars() )
     {
-        drawFormattingChars( painter, s, start, len,
+        drawFormattingChars( painter, str, start, len,
                              startX, lastY, baseLine, h,
                              startX_pix, lastY_pix, baseLine_pix, bw_pix, h_pix,
                              drawSelections,
@@ -726,7 +726,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
                                    const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh )
 {
 #ifdef DEBUG_PAINT
-    kdDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << endl;
+    kdDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << " : '" << s.mid(start,len) << "'" << endl;
     kdDebug(32500) << "In pixels:  startX=" << startX << " lastY=" << lastY << " baseLine=" << baseLine
                    << " bw=" << bw << " h=" << h << " rightToLeft=" << rightToLeft << endl;
 #endif
