@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=OpenOffice.org Draw Import Filter for Karbon14
+X-KDE-Export=application/x-karbon
+X-KDE-Import=application/vnd.sun.xml.draw
+X-KDE-Weight=1
+X-KDE-Library=liboodrawimport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter
