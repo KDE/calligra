@@ -63,38 +63,18 @@ public:
 
     virtual void cleanUp();
 
-  
-    // C++
-//    virtual int viewCount();
-
- protected:
-    /**
-     * We dont have embedded parts or binary data => No multipart files needed.
-     */
-    virtual bool hasToWriteMultipart() { return false; }
-  
  public:
-    // IDL
-//    virtual CORBA::Boolean initDoc();
-
-    /**
-     * We dont load any children.
-     */
-//    virtual bool loadChildren( KOStore::Store_ptr ) { return true; }
 
     virtual bool save( ostream& out, const char* _format );
 
-    // C++
     KFormulaView* createFormulaView( QWidget* _parent = 0 );
   
-    // C++
 //    virtual void addView( KFormulaView *_view );
 //    virtual void removeView( KFormulaView *_view );
 
     virtual void emitModified();
     virtual bool isEmpty() { return m_bEmpty; };
   
-    // IDL
     void addTextElement(QString cont="");
     void addRootElement();
     BasicElement * addIndex(int index);
