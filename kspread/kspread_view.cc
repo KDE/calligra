@@ -2247,17 +2247,11 @@ void KSpreadView::slotListChoosePopupMenu( )
 void KSpreadView::slotItemSelected( int id)
 {
   QString tmp=m_popupListChoose->text(id);
-  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+  KSpreadCell *cell = m_pTable->nonDefaultCell( m_pCanvas->markerColumn(), 
+						m_pCanvas->markerRow(), true );
 
   if(tmp==cell->text())
     return;
-
-  if ( cell->isDefault() )
-    {
-      cell = new KSpreadCell(m_pTable , m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-      m_pTable->insertCell(cell);
-    }
-
 
   if ( !m_pDoc->undoBuffer()->isLocked() )
     {
