@@ -456,71 +456,71 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 
     // Only edit-mode (and only LMB) allowed on read-only documents (to select text)
     if ( !m_doc->isReadWrite() && ( m_mouseMode != MM_EDIT || e->button() != LeftButton ) )
-       return;
+        return;
     if ( m_printing )
         return;
 
     // This code here is common to all mouse buttons, so that RMB and MMB place the cursor (or select the frame) too
     switch ( m_mouseMode ) {
-        case MM_EDIT:
+    case MM_EDIT:
+    {
+        // See if we clicked on a frame's border
+        bool border = false;
+        KWFrame * frame = m_doc->frameUnderMouse( normalPoint, &border );
+        bool selectedFrame = m_doc->getFirstSelectedFrame() != 0L;
+        // Frame border, or pressing Control or pressing Shift and a frame has already been selected
+        // [We must keep shift+click for selecting text, when no frame is selected]
+        if ( ( frame && border )
+             || e->state() & ControlButton
+             || ( ( e->state() & ShiftButton ) && selectedFrame ) )
         {
-            // See if we clicked on a frame's border
-            bool border = false;
-            KWFrame * frame = m_doc->frameUnderMouse( normalPoint, &border );
-            bool selectedFrame = m_doc->getFirstSelectedFrame() != 0L;
-            // Frame border, or pressing Control or pressing Shift and a frame has already been selected
-            // [We must keep shift+click for selecting text, when no frame is selected]
-            if ( ( frame && border )
-                 || e->state() & ControlButton
-                 || ( ( e->state() & ShiftButton ) && selectedFrame ) )
-            {
-                if ( m_currentFrameSetEdit )
-                    terminateCurrentEdit();
-                mpEditFrame( e, normalPoint );
-            }
-            else
-            {
-                if ( selectAllFrames( false ) )
-                    emit frameSelectedChanged();
-
-                KWFrameSet * fs = frame ? frame->frameSet() : 0L;
-                bool emitChanged = false;
-                if ( fs )
-                {
-                    KWTableFrameSet *table = fs->getGroupManager();
-                    emitChanged = checkCurrentEdit( table ? table : fs );
-                }
-
-                if ( m_currentFrameSetEdit )
-                    m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
-
-                if ( emitChanged ) // emitted after mousePressEvent [for tables]
-                    emit currentFrameSetEditChanged();
-                 emit updateRuler();
-
-
-                 if( m_frameInline)
-                 {
-                     if(m_frameInlineType==FT_TABLE)
-                         insertInlineTable();
-                     else if(m_frameInlineType==FT_PICTURE)
-                         m_gui->getView()->insertInlinePicture();
-                     m_frameInline=false;
-                 }
-            }
-            m_scrollTimer->start( 50 );
+            if ( m_currentFrameSetEdit )
+                terminateCurrentEdit();
+            mpEditFrame( e, normalPoint );
         }
+        else
+        {
+            if ( selectAllFrames( false ) )
+                emit frameSelectedChanged();
+
+            KWFrameSet * fs = frame ? frame->frameSet() : 0L;
+            bool emitChanged = false;
+            if ( fs )
+            {
+                KWTableFrameSet *table = fs->getGroupManager();
+                emitChanged = checkCurrentEdit( table ? table : fs );
+            }
+
+            if ( m_currentFrameSetEdit )
+                m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
+
+            if ( emitChanged ) // emitted after mousePressEvent [for tables]
+                emit currentFrameSetEditChanged();
+            emit updateRuler();
+
+
+            if( m_frameInline)
+            {
+                if(m_frameInlineType==FT_TABLE)
+                    insertInlineTable();
+                else if(m_frameInlineType==FT_PICTURE)
+                    m_gui->getView()->insertInlinePicture();
+                m_frameInline=false;
+            }
+        }
+        m_scrollTimer->start( 50 );
+    }
+    break;
+    case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
+    case MM_CREATE_FORMULA:
+        if ( e->button() == LeftButton )
+            mpCreate( normalPoint );
         break;
-        case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
-        case MM_CREATE_FORMULA:
-            if ( e->button() == LeftButton )
-                mpCreate( normalPoint );
-            break;
-        case MM_CREATE_PIX:
-            if ( e->button() == LeftButton )
-                mpCreatePixmap( normalPoint );
-            break;
-        default: break;
+    case MM_CREATE_PIX:
+        if ( e->button() == LeftButton )
+            mpCreatePixmap( normalPoint );
+        break;
+    default: break;
     }
 
     if ( e->button() == MidButton ) {
@@ -537,7 +537,11 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         // rmb menu
         switch ( m_mouseMode )
         {
-            case MM_EDIT:
+        case MM_EDIT:
+        {
+            if ( viewMode()->type()=="ModeText")
+                m_gui->getView()->openPopupMenuInsideFrame( m_doc->frameSet( 0 )->frame(0), QCursor::pos() );
+            else
             {
                 // See if we clicked on a frame's border
                 bool border = false;
@@ -554,15 +558,16 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                         m_gui->getView()->openPopupMenuChangeAction( QCursor::pos() );
                 }
             }
-            break;
-            case MM_CREATE_TEXT:
-            case MM_CREATE_PART:
-            case MM_CREATE_TABLE:
-            case MM_CREATE_FORMULA:
-            case MM_CREATE_PIX:
-                deleteMovingRect();
-                setMouseMode( MM_EDIT );
-            default: break;
+        }
+        break;
+        case MM_CREATE_TEXT:
+        case MM_CREATE_PART:
+        case MM_CREATE_TABLE:
+        case MM_CREATE_FORMULA:
+        case MM_CREATE_PIX:
+            deleteMovingRect();
+            setMouseMode( MM_EDIT );
+        default: break;
         }
         m_mousePressed = false;
     }
