@@ -605,8 +605,26 @@ QString KSpreadStyle::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles )
 
 QString KSpreadStyle::saveOasisStyleNumericScientific( KoGenStyles&mainStyles )
 {
+    //<number:number-style style:name="N60" style:family="data-style">
+    //  <number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
+    //</number:number-style>
+
     KoGenStyle currentCellStyle( KSpreadDoc::STYLE_NUMERIC_SCIENTIFIC );
-    return "";
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+    elementWriter.startElement( "number:scientific-number" );
+    elementWriter.endElement();
+    if ( featureSet( SPrecision ) )
+        elementWriter.addAttribute( "number:decimal-places", m_precision );
+    //todo add "number:min-integer-digits" ????????
+
+    elementWriter.addAttribute("number:min-exponent-digits", "2" );
+
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentCellStyle.addChildElement( "number", elementContents );
+
+    return mainStyles.lookup( currentCellStyle, "N" );
 }
 
 QString KSpreadStyle::saveOasisStyleNumericDate( KoGenStyles&mainStyles )
