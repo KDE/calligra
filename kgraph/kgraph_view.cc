@@ -18,6 +18,7 @@
 */
 
 #include <qpainter.h>
+#include <qevent.h>
 
 //#include <kaction.h>
 //#include <kstdaction.h>
@@ -34,9 +35,11 @@ KGraphView::KGraphView(KGraphPart *part, QWidget *parent, const char *name)
 
     setInstance(KGraphFactory::global());
     setXMLFile("kgraph.rc");
+
+    m_canvas=new KGCanvas(this, "canvas");
 }
 
-void KGraphView::paintEvent(QPaintEvent *ev) {
+/*void KGraphView::paintEvent(QPaintEvent *ev) {
 
     kdDebug(37001) << "KGraphView::painEvent()" << endl;
 
@@ -49,6 +52,10 @@ void KGraphView::paintEvent(QPaintEvent *ev) {
     koDocument()->paintEverything(painter, ev->rect(), false, this);
 
     painter.end();
+}*/
+
+void KGraphView::resizeEvent(QResizeEvent *ev) {
+    m_canvas->resize(ev->size());
 }
 
 void KGraphView::updateReadWrite(bool /*readwrite*/) {

@@ -20,12 +20,15 @@
 #include <kgcanvas.h>
 
 
-KGCanvas::KGCanvas(QWidget *parent, const char *name) : 
-                   QScrollView(parent, name) {
-    
+KGCanvas::KGCanvas(QWidget *parent, const char *name) :
+                   QScrollView(parent, name, WNorthWestGravity) {
+
     setFocusPolicy(QWidget::StrongFocus);
+    viewport()->setFocusProxy(this);
+    setMouseTracking(true);
+    viewport()->setMouseTracking(true);
     setFocus();
-    setMouseTracking(true);    
+    resizeContents(1000, 1000);
 }
 
 KGCanvas::~KGCanvas() {

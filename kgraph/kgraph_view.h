@@ -21,12 +21,14 @@
 #define KGRAPH_VIEW_H
 
 #include <koView.h>
+#include <kgcanvas.h>
 
-class QPaintEvent;
+//class QPaintEvent;
+class QResizeEvent;
 
 //class KAction;
 class KGraphPart;
-//class KGCanvas;
+
 
 class KGraphView : public KoView {
 
@@ -34,16 +36,21 @@ class KGraphView : public KoView {
 
 public:
     KGraphView(KGraphPart *part, QWidget *parent=0, const char *name=0);
+    ~KGraphView() {}
+
+    virtual QWidget *canvas() { return m_canvas; }
 
 //protected slots:
     //void a_editcut();
 
 protected:
-    void paintEvent(QPaintEvent *ev);
+    //void paintEvent(QPaintEvent *ev);
+    void resizeEvent(QResizeEvent *ev);
 
     virtual void updateReadWrite(bool readwrite);
 
 private:
     //KAction *editcut;
+    KGCanvas *m_canvas;
 };
 #endif

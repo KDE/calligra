@@ -27,7 +27,6 @@
 #include <kgraph_shell.h>
 #include <kgraph_factory.h>
 #include <kgraph_part.h>
-#include <kgcanvas.h>
 
 
 KGraphPart::KGraphPart(QObject *parent, const char *name, bool singleViewMode)
@@ -60,9 +59,9 @@ KoMainWindow *KGraphPart::createShell() {
     return shell;
 }
 
-void KGraphPart::paintContent(QPainter &painter, const QRect &rect, bool /*transparent*/) {
+void KGraphPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/, bool /*transparent*/) {
 
-    kdDebug(37001) << "KGraphPart::painEvent()" << endl;
+    /*    kdDebug(37001) << "KGraphPart::painEvent()" << endl;
     // ####### handle transparency
 
     // Need to draw only the document rectangle described in the parameter rect.
@@ -75,6 +74,7 @@ void KGraphPart::paintContent(QPainter &painter, const QRect &rect, bool /*trans
         painter.drawLine(x*20, top*20, x*20, bottom*20);
     for(int y=left; y<right; ++y)
         painter.drawLine(left*20, y*20, right*20, y*20);
+    */
 }
 
 void KGraphPart::a_editcut() {
