@@ -109,7 +109,7 @@ QString KoDocumentInfo::title() const
         return QString::null;
     }
     else
-        aboutPage->title();
+        return aboutPage->title();
 }
 
 /*****************************************
