@@ -31,7 +31,7 @@ The simplest way to compile this package is:
      `sh ./configure' instead to prevent `csh' from trying to execute
      `configure' itself.
 
-     Running `configure' takes awhile.  While running, it prints some
+     Running `configure' takes a while.  While running, it prints some
      messages telling which features it is checking for.
 
   2. Type `make' to compile the package.
@@ -85,20 +85,15 @@ Installation Names
 ==================
 
    By default, `make install' will install the package's files in
-`/usr/local/bin', `/usr/local/man', etc.  You can specify an
-installation prefix other than `/usr/local' by giving `configure' the
-option `--prefix=PATH'.
+`/usr/local/kde/bin', `/usr/local/kde/lib', etc.  You can specify an
+installation prefix other than `/usr/local/kde' by giving `configure'
+the option `--prefix=PATH'.
 
    You can specify separate installation prefixes for
 architecture-specific files and architecture-independent files.  If you
 give `configure' the option `--exec-prefix=PATH', the package will use
 PATH as the prefix for installing programs and libraries.
 Documentation and other data files will still use the regular prefix.
-
-   In addition, if you use an unusual directory layout you can give
-options like `--bindir=PATH' to specify different values for particular
-kinds of files.  Run `configure --help' for a list of the directories
-you can set and what kinds of files go in them.
 
    If the package supports it, you can cause programs to be installed
 with an extra prefix or suffix on their names by giving `configure' the
@@ -167,9 +162,7 @@ operates.
 `--quiet'
 `--silent'
 `-q'
-     Do not print messages saying which checks are being made.  To
-     suppress all normal output, redirect it to `/dev/null' (any error
-     messages will still be shown).
+     Do not print messages saying which checks are being made.
 
 `--srcdir=DIR'
      Look for the package's source code in directory DIR.  Usually
@@ -180,3 +173,4 @@ operates.
      script, and exit.
 
 `configure' also accepts some other, not widely useful, options.
+
