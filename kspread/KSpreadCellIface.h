@@ -33,6 +33,16 @@ k_dcop:
     virtual bool verticalText() const ;
     virtual void setMultiRow(bool _multi);
     virtual bool multiRow() const;
+    virtual void setAlign(const QString &_align);
+    virtual QString align() const;
+    virtual void setAlignY(const QString &_alignY);
+    virtual QString alignY() const;
+    virtual void setPrefix(const QString &_prefix);
+    virtual QString prefix() const;
+    virtual void setPostfix(const QString &_postfix);
+    virtual QString postfix() const;
+    virtual void setFormatNumber(const QString &_formatNumber);
+    virtual QString getFormatNumber() const;
 
 private:
     QPoint m_point;

@@ -133,3 +133,197 @@ bool KSpreadCellIface::multiRow() const
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->multiRow();
 }
+
+void KSpreadCellIface::setAlign( const QString& _Align )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    KSpreadCell::Align Align;
+    if(_Align=="Left")
+        Align=KSpreadCell::Left;
+    else if(_Align=="Right")
+        Align=KSpreadCell::Right;
+    else if(_Align=="Center")
+        Align=KSpreadCell::Center;
+    else
+        Align=KSpreadCell::Undefined;
+    cell->setAlign( Align);
+    cell->update();
+}
+
+QString KSpreadCellIface::align() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QString alignString;
+    switch(cell->align())
+        {
+        case KSpreadCell::Left :
+                alignString="Left";
+                break;
+        case KSpreadCell::Right :
+                alignString="Right";
+                break;
+        case KSpreadCell::Center :
+                alignString="Center";
+                break;
+        case KSpreadCell::Undefined :
+                alignString="Undefined";
+                break;
+        }
+    return alignString;
+}
+
+void KSpreadCellIface::setAlignY( const QString& _AlignY )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    KSpreadCell::AlignY AlignY;
+    if(_AlignY=="Top")
+        AlignY=KSpreadCell::Top;
+    else if(_AlignY=="Middle")
+        AlignY=KSpreadCell::Middle;
+    else if(_AlignY=="Bottom")
+        AlignY=KSpreadCell::Bottom;
+    else
+        AlignY=KSpreadCell::Middle;
+    cell->setAlignY( AlignY);
+    cell->update();
+}
+
+QString KSpreadCellIface::alignY() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QString alignString;
+    switch(cell->alignY())
+        {
+        case KSpreadCell::Top :
+                alignString="Top";
+                break;
+        case KSpreadCell::Middle :
+                alignString="Middle";
+                break;
+        case KSpreadCell::Bottom :
+                alignString="Bottom";
+                break;
+        }
+    return alignString;
+}
+
+void KSpreadCellIface::setPostfix(const QString &_postfix)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setPostfix( _postfix);
+    cell->update();
+}
+
+QString KSpreadCellIface::prefix() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->prefix();
+}
+
+void KSpreadCellIface::setPrefix(const QString &_prefix)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setPrefix( _prefix);
+    cell->update();
+}
+
+QString KSpreadCellIface::postfix() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->postfix();
+}
+
+void KSpreadCellIface::setFormatNumber(const QString &_formatNumber)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    KSpreadCell::formatNumber format;
+    cell->setFaktor( 1.0);
+    cell->setPrecision(2);
+    if(_formatNumber=="Number")
+        format=KSpreadCell::Number;
+    else if(_formatNumber=="Money")
+        format=KSpreadCell::Money;
+    else if(_formatNumber=="Percentage")
+        {
+        format=KSpreadCell::Percentage;
+        cell->setFaktor( 100.0);
+        }
+    else if(_formatNumber=="Scientific")
+        format=KSpreadCell::Scientific;
+    else if(_formatNumber=="ShortDate")
+        format=KSpreadCell::ShortDate;
+    else if(_formatNumber=="TextDate")
+        format=KSpreadCell::TextDate;
+    else if(_formatNumber=="Time")
+        format=KSpreadCell::Time;
+    else if(_formatNumber=="SecondeTime")
+        format=KSpreadCell::SecondeTime;
+    else if(_formatNumber=="fraction_half")
+        format=KSpreadCell::fraction_half;
+    else if(_formatNumber=="fraction_quarter")
+        format=KSpreadCell::fraction_quarter;
+    else if(_formatNumber=="fraction_eighth")
+        format=KSpreadCell::fraction_eighth;
+    else if(_formatNumber=="fraction_sixteenth")
+        format=KSpreadCell::fraction_sixteenth;
+    else if(_formatNumber=="fraction_tenth")
+        format=KSpreadCell::fraction_tenth;
+    else if(_formatNumber=="fraction_hundredth")
+        format=KSpreadCell::fraction_hundredth;
+    else
+        format=KSpreadCell::Number;
+    cell->setFormatNumber( format);
+    cell->update();
+}
+
+QString KSpreadCellIface::getFormatNumber() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    QString stringFormat;
+    switch( cell->getFormatNumber())
+        {
+        case KSpreadCell::Number:
+                stringFormat="Number";
+                break;
+        case KSpreadCell::Money:
+                stringFormat="Money";
+                break;
+        case KSpreadCell::Percentage:
+                stringFormat="Percentage";
+                break;
+        case KSpreadCell::Scientific:
+                stringFormat="Scientific";
+                break;
+        case KSpreadCell::ShortDate:
+                stringFormat="ShortDate";
+                break;
+        case KSpreadCell::TextDate:
+                stringFormat="TextDate";
+                break;
+        case KSpreadCell::Time:
+                stringFormat="Time";
+                break;
+        case KSpreadCell::SecondeTime:
+                stringFormat="SecondeTime";
+                break;
+        case KSpreadCell::fraction_half:
+                stringFormat="fraction_half";
+                break;
+        case KSpreadCell::fraction_quarter:
+                stringFormat="fraction_quarter";
+                break;
+        case KSpreadCell::fraction_eighth:
+                stringFormat="fraction_eighth";
+                break;
+        case KSpreadCell::fraction_sixteenth:
+                stringFormat="fraction_sixteenth";
+                break;
+        case KSpreadCell::fraction_tenth:
+                stringFormat="fraction_tenth";
+                break;
+        case KSpreadCell::fraction_hundredth:
+                stringFormat="fraction_hundredth";
+                break;
+        }
+    return stringFormat;
+}
