@@ -51,7 +51,7 @@ KPTProject::KPTProject(KPTNode *parent)
     m_endTime = m_startTime;
 
     m_standardWorktime = new KPTStandardWorktime();
-    
+    m_defaultCalendar = new KPTCalendar(*m_standardWorktime);
     m_calendars.setAutoDelete(true);
 
 }
@@ -297,6 +297,7 @@ bool KPTProject::load(QDomElement &element) {
                 KPTStandardWorktime *child = new KPTStandardWorktime();
                 if (child->load(e)) {
                     addStandardWorktime(child);
+                    addDefaultCalendar(child);
                 } else {
                     kdError()<<k_funcinfo<<"Failed to load standard worktime"<<endl;
                     delete child;
@@ -636,6 +637,11 @@ void KPTProject::addStandardWorktime(KPTStandardWorktime * worktime) {
         delete m_standardWorktime; 
         m_standardWorktime = worktime; 
     }
+}
+
+void KPTProject::addDefaultCalendar(KPTStandardWorktime * worktime) {
+    delete m_defaultCalendar;
+    m_defaultCalendar = new KPTCalendar(*worktime);
 }
 
 bool KPTProject::legalToLink(KPTNode *par, KPTNode *child) {

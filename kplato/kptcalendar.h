@@ -205,13 +205,14 @@ public:
 #endif
 };
 
-
+class KPTStandardWorktime;
 class KPTCalendar {
 
 public:
     KPTCalendar();
     KPTCalendar(QString name, KPTCalendar *parent=0);
     KPTCalendar(KPTCalendar *calendar);
+    KPTCalendar(KPTStandardWorktime &wt);
     ~KPTCalendar();
 
     QString name() const { return m_name; }

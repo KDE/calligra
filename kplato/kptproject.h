@@ -136,6 +136,7 @@ public:
      */    
     KPTStandardWorktime *standardWorktime() { return m_standardWorktime; }
     void addStandardWorktime(KPTStandardWorktime * worktime); //FIXME
+    void addDefaultCalendar(KPTStandardWorktime * worktime); //FIXME
 
     /// Check if node par can be linked to node child.
     bool legalToLink(KPTNode *par, KPTNode *child);

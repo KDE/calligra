@@ -24,6 +24,7 @@
 #include <qdom.h>
 #include <qptrlist.h>
 
+#include <klocale.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -478,6 +479,21 @@ KPTCalendar::KPTCalendar(QString name, KPTCalendar *parent)
       m_deleted(false) {
     
     init();
+}
+
+KPTCalendar::KPTCalendar(KPTStandardWorktime &wt)
+    : m_name(i18n("Standard calendar")),
+      m_parent(0),
+      m_deleted(false) {
+    
+    for (int i=-1; i > -1000; i--) {
+        if (setId(QString().setNum(i)))
+            break;
+    }
+    m_days.setAutoDelete(true);
+    m_weeks = new KPTCalendarWeeks();
+    m_weekdays = new KPTCalendarWeekdays(wt.weekdays());
+    
 }
 
 KPTCalendar::~KPTCalendar() {
