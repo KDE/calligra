@@ -20,7 +20,7 @@ function checkname()
       echo "ok, this is a KOfficePart"
     else
       echo '**** KOfficePart not in list of types !'
-      echo Service Types: $fulllist 
+      echo Service Types: $fulllist
       cat $f
       exit 1
     fi
@@ -35,8 +35,8 @@ function checkname()
 IFS=:
 for dir in $applnks; do
   f="$dir/Office/$instance.desktop"
-  checkname $f 
-done 
+  checkname $f
+done
 
 if [ $found = 0 ]; then
   echo
@@ -45,8 +45,8 @@ if [ $found = 0 ]; then
 
   for dir in $applnks; do
     echo Looking under applnk dir: $dir
-    find $dir -name kword.desktop | while read f; do
-      checkname $f 
+    for f in `find $dir -name kword.desktop`; do
+      checkname $f
     done
   done
 fi
