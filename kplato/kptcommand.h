@@ -156,4 +156,54 @@ private:
     QDateTime oldTime;
 };
 
+class KPTNodeIndentCmd : public KNamedCommand
+{
+public:
+    KPTNodeIndentCmd(KPTNode &node, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    KPTNode *m_oldparent, *m_newparent;
+    int m_oldindex, m_newindex;
+};
+
+class KPTNodeUnindentCmd : public KNamedCommand
+{
+public:
+    KPTNodeUnindentCmd(KPTNode &node, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    KPTNode *m_oldparent, *m_newparent;
+    int m_oldindex, m_newindex;
+};
+
+class KPTNodeMoveUpCmd : public KNamedCommand
+{
+public:
+    KPTNodeMoveUpCmd(KPTNode &node, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    int m_oldindex, m_newindex;
+};
+
+class KPTNodeMoveDownCmd : public KNamedCommand
+{
+public:
+    KPTNodeMoveDownCmd(KPTNode &node, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    int m_oldindex, m_newindex;
+};
+
 #endif //KPTCOMMAND_H

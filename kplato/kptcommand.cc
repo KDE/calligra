@@ -189,3 +189,92 @@ void KPTNodeModifyConstraintTimeCmd::unexecute() {
     m_node.setConstraintTime(oldTime);
 }
 
+KPTNodeIndentCmd::KPTNodeIndentCmd(KPTNode &node, QString name)
+    : KNamedCommand(name),
+      m_node(node), m_newparent(0), m_newindex(-1) {
+
+    m_oldparent = node.getParent();
+    m_oldindex = m_oldparent->findChildNode(&node);
+    kdDebug()<<k_funcinfo<<node.name()<<": parent="<<m_oldparent->name()<<" ix="<<m_oldindex<<endl;
+}
+void KPTNodeIndentCmd::execute() {
+    KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
+    if (p && p->indentTask(&m_node)) {
+        m_newparent = m_node.getParent();
+        m_newindex = m_newparent->findChildNode(&m_node);
+        m_node.setParent(m_newparent);
+    }
+}
+void KPTNodeIndentCmd::unexecute() {
+    if (m_newindex != -1) {
+        m_newparent->delChildNode(m_newindex, false);
+        m_oldparent->insertChildNode(m_oldindex, &m_node);
+        m_node.setParent(m_oldparent);
+        m_newindex = -1;
+    }
+}
+
+KPTNodeUnindentCmd::KPTNodeUnindentCmd(KPTNode &node, QString name)
+    : KNamedCommand(name),
+      m_node(node), m_newparent(0),  m_newindex(-1) {
+
+      m_oldparent = node.getParent();
+      m_oldindex = m_oldparent->findChildNode(&node);
+}
+void KPTNodeUnindentCmd::execute() {
+    KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
+    if (p && p->unindentTask(&m_node)) {
+        m_newparent = m_node.getParent();
+        m_newindex = m_newparent->findChildNode(&m_node);
+        m_node.setParent(m_newparent);
+    }
+}
+void KPTNodeUnindentCmd::unexecute() {
+    if (m_newindex != -1) {
+        m_newparent->delChildNode(m_newindex, false);
+        m_oldparent->insertChildNode(m_oldindex, &m_node);
+        m_node.setParent(m_oldparent);
+        m_newindex = -1;
+    }
+}
+
+KPTNodeMoveUpCmd::KPTNodeMoveUpCmd(KPTNode &node, QString name)
+    : KNamedCommand(name),
+      m_node(node), m_newindex(-1) {
+
+      m_oldindex = node.getParent()->findChildNode(&node);
+}
+void KPTNodeMoveUpCmd::execute() {
+    KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
+    if (p && p->moveTaskUp(&m_node)) {
+        m_newindex = m_node.getParent()->findChildNode(&m_node);
+    }
+}
+void KPTNodeMoveUpCmd::unexecute() {
+    if (m_newindex != -1) {
+        m_node.getParent()->delChildNode(m_newindex, false);
+        m_node.getParent()->insertChildNode(m_oldindex, &m_node);
+        m_newindex = -1;
+    }
+}
+
+KPTNodeMoveDownCmd::KPTNodeMoveDownCmd(KPTNode &node, QString name)
+    : KNamedCommand(name),
+      m_node(node), m_newindex(-1) {
+
+      m_oldindex = node.getParent()->findChildNode(&node);
+}
+void KPTNodeMoveDownCmd::execute() {
+    KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
+    if (p && p->moveTaskDown(&m_node)) {
+        m_newindex = m_node.getParent()->findChildNode(&m_node);
+    }
+}
+void KPTNodeMoveDownCmd::unexecute() {
+    if (m_newindex != -1) {
+        m_node.getParent()->delChildNode(m_newindex, false);
+        m_node.getParent()->insertChildNode(m_oldindex, &m_node);
+        m_newindex = -1;
+    }
+}
+

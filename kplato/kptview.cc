@@ -516,27 +516,17 @@ void KPTView::slotDeleteTask()
 void KPTView::slotIndentTask()
 {
     //kdDebug()<<k_funcinfo<<endl;
-
-	KPTNode* task = currentTask();
-
-	// tell the model to do the work for us
-    if (getProject().indentTask( task )) {
-        // display the changes
-        slotUpdate(true);
-    }
+    KPTNode *node = currentTask();
+    KPTNodeIndentCmd *cmd = new KPTNodeIndentCmd(*node, i18n("Indent Task"));
+    getPart()->addCommand(cmd);
 }
 
 void KPTView::slotUnindentTask()
 {
     //kdDebug()<<k_funcinfo<<endl;
-
-	KPTNode* task = currentTask();
-
-	// tell the model to do the work for us
-    if (getProject().unindentTask( task )) {
-        // display the changes
-        slotUpdate(true);
-    }
+    KPTNode *node = currentTask();
+    KPTNodeUnindentCmd *cmd = new KPTNodeUnindentCmd(*node, i18n("Unindent Task"));
+    getPart()->addCommand(cmd);
 }
 
 void KPTView::slotMoveTaskUp()
@@ -555,11 +545,8 @@ void KPTView::slotMoveTaskUp()
 		kdDebug()<<k_funcinfo<<"The root node cannot be moved up"<<endl;
 		return;
 	}
-	// tell the model to do the work for us
-    if (getProject().moveTaskUp( task )) {
-        // display the changes
-        slotUpdate(true);
-    }
+    KPTNodeMoveUpCmd *cmd = new KPTNodeMoveUpCmd(*task, i18n("Move Task Up"));
+    getPart()->addCommand(cmd);
 }
 
 void KPTView::slotMoveTaskDown()
@@ -577,11 +564,8 @@ void KPTView::slotMoveTaskDown()
 		kdDebug()<<k_funcinfo<<"The root node cannot be moved down"<<endl;
 		return;
 	}
-	// tell the model to do the work for us
-    if (getProject().moveTaskDown( task )) {
-        // display the changes
-        slotUpdate(true);
-    }
+    KPTNodeMoveDownCmd *cmd = new KPTNodeMoveDownCmd(*task, i18n("Move Task Down"));
+    getPart()->addCommand(cmd);
 }
 
 void KPTView::slotEditResource() {
