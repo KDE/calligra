@@ -34,26 +34,6 @@ class QPushButton;
 class KColorButton;
 //class KoSpellConfigWidget;
 
-class preference : public QObject
-{
-  Q_OBJECT
-public:
-  preference( KSpreadView* _view,QVBox *box, char *name = 0 );
-  void apply();
-  void slotDefault();
-
-protected:
-  QCheckBox *m_pFormula;
-  QCheckBox *m_pFormulaIndicator;
-  QCheckBox *m_pAutoCalc;
-  QCheckBox *m_pGrid;
-  QCheckBox *m_pColumn;
-  QCheckBox *m_pLcMode;
-  QCheckBox *m_pHideZero;
-  QCheckBox *m_pFirstLetterUpper;
-  KSpreadView* m_pView;
-} ;
-
 class parameterLocale :  public QObject
 {
  Q_OBJECT
@@ -185,7 +165,6 @@ public slots:
   void openPage(int flags);
 private :
   KSpreadView* m_pView;
-  preference *_preferenceConfig;
   configure * _configure;
   miscParameters *_miscParameter;
   colorParameters *_colorParameter;

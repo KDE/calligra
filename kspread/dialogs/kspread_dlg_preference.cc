@@ -46,9 +46,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 
 {
   m_pView=parent;
-  QVBox *page=addVBoxPage(i18n("Preferences"), QString::null,BarIcon("looknfeel",KIcon::SizeMedium));
 
-  _preferenceConfig = new  preference(parent,page );
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
   QVBox *page2=addVBoxPage(i18n("Locale Parameters"), QString::null,BarIcon("gohome",KIcon::SizeMedium));
@@ -73,27 +71,24 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 }
 
 void KSpreadpreference::openPage(int flags)
-{
-    if(flags & KS_PREFERENCES)
+{    
+    if(flags & KS_LOCALE)
         showPage( 0 );
-    else if(flags & KS_LOCALE)
-        showPage( 1 );
     else if(flags & KS_INTERFACE)
-        showPage( 2 );
+        showPage( 1 );
     else if(flags & KS_MISC)
-        showPage( 3 );
+        showPage( 2 );
     else if(flags & KS_COLOR)
-        showPage( 4 );
+        showPage( 3 );
     else if(flags & KS_LAYOUT)
-        showPage( 5 );
+        showPage( 4 );
     else if(flags & KS_SPELLING)
-        showPage( 6 );
+        showPage( 5 );
 }
 
 void KSpreadpreference::slotApply()
 {
   m_pView->doc()->emitBeginOperation( false );
-  _preferenceConfig->apply();
   _configure->apply();
   _miscParameter->apply();
   _colorParameter->apply();
@@ -108,24 +103,19 @@ void KSpreadpreference::slotDefault()
 {
     switch(activePageIndex())
     {
-        case 0:
-            _preferenceConfig->slotDefault();
-            break;
         case 1:
-            break;
-        case 2:
             _configure->slotDefault();
             break;
-        case 3:
+        case 2:
             _miscParameter->slotDefault();
             break;
-        case 4:
+        case 3:
             _colorParameter->slotDefault();
             break;
-        case 5:
+        case 4:
             _layoutPage->slotDefault();
             break;
-        case 6:
+        case 5:
             _spellPage->slotDefault();
             break;
         default:
@@ -133,80 +123,6 @@ void KSpreadpreference::slotDefault()
     }
 }
 
-preference::preference( KSpreadView* _view, QVBox *box, char *name )
- :QObject ( box->parent(),name)
- {
-
-  m_pView = _view;
-
-  QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Sheet"), box, "GroupBox" );
-
-  m_pFormula= new QCheckBox(i18n("Show &formula"),tmpQGroupBox);
-  m_pFormula->setChecked(m_pView->activeTable()->getShowFormula());
-
-  m_pFormulaIndicator= new QCheckBox(i18n("Show &formula indicator"),tmpQGroupBox);
-  m_pFormulaIndicator->setChecked(m_pView->activeTable()->getShowFormulaIndicator());
-
-  m_pGrid=new QCheckBox( i18n("Show &grid"), tmpQGroupBox );
-  m_pGrid->setChecked( m_pView->activeTable()->getShowGrid() );
-
-  m_pColumn=new QCheckBox(i18n("Show c&olumn number"),tmpQGroupBox);
-  m_pColumn->setChecked(m_pView->activeTable()->getShowColumnNumber());
-
-  m_pLcMode=new QCheckBox(i18n("&LC mode"),tmpQGroupBox);
-  m_pLcMode->setChecked(m_pView->activeTable()->getLcMode());
-
-  m_pAutoCalc= new QCheckBox(i18n("&Automatic recalculation"),tmpQGroupBox);
-  m_pAutoCalc->setChecked(m_pView->activeTable()->getAutoCalc());
-
-  m_pHideZero= new QCheckBox(i18n("&Hide zero"),tmpQGroupBox);
-  m_pHideZero->setChecked(m_pView->activeTable()->getHideZero());
-
-  m_pFirstLetterUpper= new QCheckBox(i18n("Convert first letter to &upper case"),tmpQGroupBox);
-  m_pFirstLetterUpper->setChecked(m_pView->activeTable()->getFirstLetterUpper());
-
-}
-
-
-void preference::slotDefault()
-{
-  m_pFormula->setChecked(false);
-  m_pFormulaIndicator->setChecked(true);
-  m_pAutoCalc->setChecked(true);
-  m_pGrid->setChecked(true);
-  m_pColumn->setChecked(false);
-  m_pLcMode->setChecked(false);
-  m_pHideZero->setChecked(false);
-  m_pFirstLetterUpper->setChecked(false);
-}
-
-void preference::apply()
-{
-  if(m_pView->activeTable()->getLcMode()==m_pLcMode->isChecked()
-  && m_pView->activeTable()->getShowColumnNumber()==m_pColumn->isChecked()
-  && m_pView->activeTable()->getShowFormula()==m_pFormula->isChecked()
-  && m_pView->activeTable()->getShowFormulaIndicator()==m_pFormulaIndicator->isChecked()
-  && m_pView->activeTable()->getAutoCalc()==m_pAutoCalc->isChecked()
-  && m_pView->activeTable()->getShowGrid()==m_pGrid->isChecked()
-  && m_pView->activeTable()->getHideZero()==m_pHideZero->isChecked()
-  && m_pView->activeTable()->getFirstLetterUpper()==m_pFirstLetterUpper->isChecked())
-  {
-  //nothing
-  }
-  else
-  {
-        m_pView->doc()->emitBeginOperation( false );
-        m_pView->activeTable()->setLcMode(m_pLcMode->isChecked());
-        m_pView->activeTable()->setShowColumnNumber(m_pColumn->isChecked());
-        m_pView->activeTable()->setShowGrid(m_pGrid->isChecked());
-        m_pView->activeTable()->setShowFormula(m_pFormula->isChecked());
-        m_pView->activeTable()->setShowFormulaIndicator(m_pFormulaIndicator->isChecked());
-        m_pView->activeTable()->setAutoCalc(m_pAutoCalc->isChecked());
-        m_pView->activeTable()->setHideZero(m_pHideZero->isChecked());
-        m_pView->activeTable()->setFirstLetterUpper(m_pFirstLetterUpper->isChecked());
-        m_pView->slotUpdateView( m_pView->activeTable() );
-  }
-}
 
 parameterLocale::parameterLocale( KSpreadView* _view, QVBox *box , char *name )
  :QObject ( box->parent(),name)
