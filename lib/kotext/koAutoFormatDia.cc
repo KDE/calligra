@@ -322,23 +322,19 @@ void KoAutoFormatDia::setupTab1()
             SLOT( slotBulletStyleToggled( bool ) ) );
 
     vbox->addWidget(cbUseBulletStyle);
-
-    QHBoxLayout *hbox = new QHBoxLayout( tab1 );
+    QHBoxLayout *hbox = new QHBoxLayout( );
 
     hbox->addSpacing( 20 );
-
     pbBulletStyle = new QPushButton( tab1 );
     pbBulletStyle->setFixedSize( pbBulletStyle->sizeHint() );
-
     hbox->addWidget( pbBulletStyle );
-
     pbDefaultBulletStyle = new QPushButton( tab1 );
     pbDefaultBulletStyle->setText(i18n("Default"));
     pbDefaultBulletStyle->setFixedSize( pbDefaultBulletStyle->sizeHint() );
-
     hbox->addWidget( pbDefaultBulletStyle );
 
     hbox->addStretch( 1 );
+
     vbox->addItem(hbox);
     vbox->addStretch( 1 );
 
@@ -388,7 +384,7 @@ void KoAutoFormatDia::setupTab2()
 
     vbox->addWidget( cbTypographicDoubleQuotes );
 
-    QHBoxLayout *hbox = new QHBoxLayout( tab2 );
+    QHBoxLayout *hbox = new QHBoxLayout( );
     hbox->addSpacing( 20 );
 
     pbDoubleQuote1 = new QPushButton( tab2 );
@@ -423,7 +419,7 @@ void KoAutoFormatDia::setupTab2()
 
     vbox->addWidget( cbTypographicSimpleQuotes );
 
-    hbox = new QHBoxLayout( tab2 );
+    hbox = new QHBoxLayout( );
     hbox->addSpacing( 20 );
 
     pbSimpleQuote1 = new QPushButton( tab2 );
