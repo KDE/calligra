@@ -44,7 +44,6 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
         KoZoomHandler * zh = kwTextDocument()->paintingZoomHandler();
         if ( doc && doc->viewFormattingChars() && !forPrint )
         {
-            Q_ASSERT( drawSelections == false );
             painter.save();
             QPen pen( cg.color( QColorGroup::Highlight ) );
             painter.setPen( pen );
