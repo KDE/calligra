@@ -31,6 +31,7 @@
 #include <kseparator.h>
 
 #include <qpushbt.h>
+#include <qlabel.h>
 #include <qmlined.h>
 #include <qlayout.h>
 
@@ -38,25 +39,40 @@
 
 DocumentInfo::DocumentInfo (GDocument* doc, QWidget* parent,
 			    const char* name) :
-    QDialog (parent, name, true) {
+  QDialog (parent, name, true) {
   QPushButton* button;
+  gdoc = doc;
 
   setCaption (i18n ("Document Info"));
 
-  QVBoxLayout *vl = new QVBoxLayout (this, 2);
+  QVBoxLayout *vl = new QVBoxLayout (this, 4);
 
   QMultiLineEdit* textfield = new QMultiLineEdit (this);
   textfield->setReadOnly (true);
   vl->addWidget (textfield, 1);
-
+  
+  QLabel *lbKeyWd   = new QLabel(i18n("Keywords:"),this);
+  vl->addWidget(lbKeyWd);
+  edKeyWd= new QLineEdit(this);
+  vl->addWidget(edKeyWd);
+  
+  QLabel *lbComment = new QLabel(i18n("Comment:"),this);
+  vl->addWidget(lbComment);
+  edComnt= new QLineEdit(this);
+  // copy comments from GDocument
+  edComnt->setText("Comment text dummy");
+  vl->addWidget(edComnt);
+    
   // a separator
   KSeparator* sep = new KSeparator (this);
   vl->addWidget (sep);
 
   // the standard buttons
   KButtonBox *bbox = new KButtonBox (this);
-  button = bbox->addButton (i18n ("Done"));
-  connect (button, SIGNAL (clicked ()), SLOT (accept ()));
+  button = bbox->addButton (i18n ("Ok"));
+  connect (button, SIGNAL (clicked ()), this, SLOT (acceptClicked() ));
+  button = bbox->addButton (i18n ("Cancel"));
+  connect (button, SIGNAL (clicked ()), SLOT (reject ()));
   bbox->layout ();
   bbox->setMinimumSize (bbox->sizeHint ());
 
@@ -71,6 +87,16 @@ DocumentInfo::DocumentInfo (GDocument* doc, QWidget* parent,
   QString s;
   doc->printInfo (s);
   textfield->setText ((const char *) s);
+  
+  doc->getKeywords(s);
+  s.replace( QRegExp("&quot;"),"\"" );
+  s.replace( QRegExp("&amp;"), "&" );
+  edKeyWd->setText((const char *)s);
+  
+  doc->getComment(s);
+  s.replace( QRegExp("&quot;"),"\"" );
+  s.replace( QRegExp("&amp;"), "&" );
+  edComnt->setText((const char *)s);
 }
 
 void DocumentInfo::showInfo (GDocument* doc) {
@@ -78,3 +104,16 @@ void DocumentInfo::showInfo (GDocument* doc) {
     dialog.exec ();
 }
 
+
+void DocumentInfo::acceptClicked() {
+  QString s;
+  s = edComnt->text();
+  s.replace( QRegExp("&"), "&amp;" );
+  s.replace( QRegExp("\""),"&quot;" );
+  gdoc->setComment ( s );
+  s = edKeyWd->text();
+  s.replace( QRegExp("&"), "&amp;" );  
+  s.replace( QRegExp("\""),"&quot;" );
+  gdoc->setKeywords( s );
+  accept();
+}

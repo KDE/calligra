@@ -505,6 +505,8 @@ bool GDocument::saveToXml (ostream& os) {
   //  xml.addAttribute ("email", "kus@iti.cs.uni-magdeburg.de");
   xml.addAttribute ("editor", "KIllustrator");
   xml.addAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+  xml.addAttribute ("comment",(const char *)comment);
+  xml.addAttribute ("keywords",(const char *)keywords);
   xml.closeTag ();
 
   xml.startTag ("head"); // <head>
@@ -878,15 +880,25 @@ bool GDocument::readFromXml (istream& is) {
     // check mime type
     list<XmlAttribute>::const_iterator first = 
       elem.attributes ().begin ();
- 
+//    QString strComment, strKeywords;
     while (first != elem.attributes ().end ()) {
       if ((*first).name () == "mime") {
 	const string& v = (*first).stringValue ();
 	if (v != KILLUSTRATOR_MIMETYPE)
 	  return false;
       }
+/*      if ((*first).name () == "comment") {
+        const string& v = (*first).stringValue();
+#warning "This should be done better"
+	strComment = strdup(v);
+      }
+      if ((*first).name () == "keywords") {
+        strKeywords = (*first).stringValue();
+      }*/
       first++;
     }
+/*    comment  = strComment;
+    keywords = strKeywords;*/
   }
 
   if (! xml.readElement (elem) || elem.tag () != "head") return false;
@@ -1227,4 +1239,20 @@ void GDocument::getHelplines (vector<float>& hlines, vector<float>& vlines,
   hlines = hHelplines;
   vlines = vHelplines;
   snap = snapToHelplines;
+}
+
+void GDocument::setComment(QString s){
+  comment = s;
+}
+
+void GDocument::getComment(QString &s){
+  s = comment;
+}
+
+void GDocument::setKeywords(QString s){
+  keywords = s;
+}
+
+void GDocument::getKeywords(QString &s){
+  s = keywords;
 }

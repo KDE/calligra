@@ -26,6 +26,7 @@
 #define DocumentInfo_h_
 
 #include <qdialog.h>
+#include <qlineedit.h>
 
 class GDocument;
 
@@ -36,6 +37,11 @@ protected:
 
 public:
   static void showInfo (GDocument* doc);
+public slots:
+  void acceptClicked();
+private:
+  QLineEdit *edKeyWd, *edComnt;
+  GDocument *gdoc;
 };
 
 #endif

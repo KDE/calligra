@@ -11,6 +11,10 @@ Bugs from above bug page:
   and resize it to fit an A4 page. 
 ------------------------------------
 
+* Keyword/Comment support:
+  Reading from file doesn't work (see GDocument -> readFromXml)
+  
+
 * The menu entries should obey the standard that a ... follows commands which
   exec a dialog(ue), what should appear when a flowing window is open (something
   like "Layer") "..." as with "Layer..." or "" as in Arrange|Transform|* ?

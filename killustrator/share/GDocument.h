@@ -152,6 +152,12 @@ public:
 		     bool snap);
   void getHelplines (vector<float>& hlines, vector<float>& vlines,
 		     bool& snap);
+  
+  void setComment(QString s);
+  void getComment(QString &s);
+  
+  void setKeywords(QString s);
+  void getKeywords(QString &s);
 
 protected:
   void updateHandle ();
@@ -175,6 +181,8 @@ protected:
   bool autoUpdate;
   bool modifyFlag;
   QString filename;
+  QString comment;
+  QString keywords;
   int paperWidth, paperHeight; // pt
   vector<GLayer*> layers; // the array of all layers
   list<GObject*> selection;
