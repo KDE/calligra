@@ -1649,10 +1649,8 @@ void KSpreadView::insertHyperlink()
   dlg.exec();
 }
 
-void KSpreadView::print( KPrinter &prt )
+void KSpreadView::setupPrinter( KPrinter &prt )
 {
-    prt.setFullPage( TRUE );
-    QPainter painter;
 
     //apply page layout parameters
     KoFormat pageFormat = m_pDoc->paperFormat();
@@ -1663,6 +1661,12 @@ void KSpreadView::print( KPrinter &prt )
         prt.setOrientation( KPrinter::Landscape );
     else
         prt.setOrientation( KPrinter::Portrait );
+}
+
+void KSpreadView::print( KPrinter &prt )
+{
+    prt.setFullPage( TRUE );
+    QPainter painter;
 
     painter.begin( &prt );
     // Print the table and tell that m_pDoc is NOT embedded.

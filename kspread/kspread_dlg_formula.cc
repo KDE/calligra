@@ -236,8 +236,13 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
 
 void KSpreadDlgFormula::slotPressReturn()
 {
+    //laurent 2001-07-07 desactivate this code
+    //because kspread crash.
+    //TODO fix it
+    /*
     if( !functions->currentText().isEmpty() )
         slotDoubleClicked( functions->findItem( functions->currentText() ) );
+    */
 }
 
 void KSpreadDlgFormula::slotSearchText(const QString &_text)

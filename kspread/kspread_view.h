@@ -128,6 +128,7 @@ public:
     void insertChild( const QRect& _geometry, KoDocumentEntry& _entry );
 
     virtual void print( KPrinter &printer );
+    virtual void setupPrinter( KPrinter &printer );
 
     void paintContent( QPainter& painter, const QRect& rect, bool transparent );
 
