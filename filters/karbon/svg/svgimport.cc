@@ -379,6 +379,8 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 
 	obj->setFill( gc->fill );
 	obj->setStroke( gc->stroke );
+	QWMatrix mat = parseTransform( e.attribute( "transform" ) );
+	gc->matrix *= mat;
 	obj->transform( gc->matrix );
 	m_gc.push( gc );
 }
@@ -803,6 +805,73 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 			delete path;
 		}
 	}
+}
+
+const double deg2rad = 0.017453292519943295769; // pi/180
+
+QWMatrix
+SvgImport::parseTransform( const QString &transform )
+{
+	QWMatrix result;
+
+	// Split string for handling 1 transform statement at a time
+	QStringList subtransforms = QStringList::split(')', transform);
+	QStringList::ConstIterator it = subtransforms.begin();
+	QStringList::ConstIterator end = subtransforms.end();
+	for(; it != end; ++it)
+	{
+		QStringList subtransform = QStringList::split('(', (*it));
+
+		subtransform[0] = subtransform[0].stripWhiteSpace().lower();
+		subtransform[1] = subtransform[1].simplifyWhiteSpace();
+		QRegExp reg("[a-zA-Z,( ]");
+		QStringList params = QStringList::split(reg, subtransform[1]);
+
+		if(subtransform[0].startsWith(";") || subtransform[0].startsWith(","))
+			subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
+
+		if(subtransform[0] == "rotate")
+		{
+			if(params.count() == 3)
+			{
+				float x = params[1].toFloat();
+				float y = params[2].toFloat();
+
+				result.translate(x, y);
+				result.rotate(params[0].toFloat());
+				result.translate(-x, -y);
+			}
+			else
+				result.rotate(params[0].toFloat());
+		}
+		else if(subtransform[0] == "translate")
+		{
+			if(params.count() == 2)
+				result.translate(params[0].toFloat(), params[1].toFloat());
+			else    // Spec : if only one param given, assume 2nd param to be 0
+				result.translate(params[0].toFloat() , 0);
+		}
+		else if(subtransform[0] == "scale")
+		{
+			if(params.count() == 2)
+				result.scale(params[0].toFloat(), params[1].toFloat());
+			else    // Spec : if only one param given, assume uniform scaling
+				result.scale(params[0].toFloat(), params[0].toFloat());
+		}
+		else if(subtransform[0] == "skewx")
+			result.shear(tan(params[0].toFloat() * deg2rad), 0.0F);
+		else if(subtransform[0] == "skewy")
+			result.shear(tan(params[0].toFloat() * deg2rad), 0.0F);
+		else if(subtransform[0] == "skewy")
+			result.shear(0.0F, tan(params[0].toFloat() * deg2rad));
+		else if(subtransform[0] == "matrix")
+		{
+			if(params.count() >= 6)
+				result.setMatrix(params[0].toFloat(), params[1].toFloat(), params[2].toFloat(), params[3].toFloat(), params[4].toFloat(), params[5].toFloat());
+		}
+	}
+
+	return result;
 }
 
 #include <svgimport.moc>
