@@ -66,7 +66,7 @@ bool DBase::load( const QString& filename )
   // read dBASE version
   Q_UINT8 ver;
   m_stream >> ver;
-  m_version = ver & 0x7f;
+  m_version = ver & 0x7f; // bit 7: has memo ?
 
   // only dBASE V.3 is supported
   if ( m_version != 3 )
@@ -165,7 +165,7 @@ bool DBase::load( const QString& filename )
   }
 
   // set the index to the first record
-  m_stream.device()->at( m_headerLength + 1 );
+  m_stream.device()->at( m_headerLength );
 
   return true;
 }
@@ -183,8 +183,15 @@ QStringList DBase::readRecord( unsigned recno )
   }
 
   // seek to where the record is
-  unsigned filepos = m_headerLength + recno * m_recordLength + 1;
+  unsigned filepos = m_headerLength + recno * m_recordLength;
   m_stream.device()->at( filepos );
+
+  // first char == '*' means the record is deleted
+  // so we just skip it
+  Q_UINT8 delmarker;
+  m_stream >> delmarker;
+  if( delmarker == 0x2a )
+   return result;
 
   // load it
   for( unsigned i=0; i<fields.count(); i++ )

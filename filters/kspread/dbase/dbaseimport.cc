@@ -130,19 +130,24 @@ KoFilter::ConversionStatus DBaseImport::convert( const QCString& from, const QCS
   }  
 
   // process all records
+  unsigned row = 1;
   for( unsigned j=0; j<dbase.recordCount(); j++ )
   {
     QStringList rec = dbase.readRecord( j );
-    for( unsigned i=0; i<rec.count(); i++ )
+    if( rec.count() )
     {
-      root += "<cell row=\"" + QString::number(j+2) + "\"" +
-        "column=\"" + QString::number(i+1) + "\" >\n";
-      root += "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />";
-      root += "<font family=\"" + font.family() + "\"" + 
-        " size=\"" + QString::number(font.pointSizeFloat()) + "\"" + 
-        " weight=\"50\" />";
-      root += "</format>\n";
-      root += "<text>" + rec[i] + "</text></cell>\n";
+      row++;
+      for( unsigned i=0; i<rec.count(); i++ )
+      {
+        root += "<cell row=\"" + QString::number(row) + "\"" +
+          "column=\"" + QString::number(i+1) + "\" >\n";
+        root += "<format><pen width=\"0\" style=\"1\" color=\"#000000\" />";
+        root += "<font family=\"" + font.family() + "\"" + 
+          " size=\"" + QString::number(font.pointSizeFloat()) + "\"" + 
+          " weight=\"50\" />";
+        root += "</format>\n";
+        root += "<text>" + rec[i] + "</text></cell>\n";
+      }
     }
   }
 
