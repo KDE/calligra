@@ -62,7 +62,7 @@ class PartResizeHandler : public EventHandler
     Q_OBJECT
 public:
     PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
-		       KoChild::Gadget gadget, const QPoint& point );
+                       KoChild::Gadget gadget, const QPoint& point );
     ~PartResizeHandler();
 
 protected:
@@ -82,7 +82,7 @@ class PartMoveHandler : public EventHandler
     Q_OBJECT
 public:
     PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
-		     const QPoint& point );
+                     const QPoint& point );
     ~PartMoveHandler();
 
 protected:
@@ -117,6 +117,8 @@ protected:
     bool eventFilter( QObject*, QEvent* );
 
 private:
+    // This is a little helper function to get rid of some duplicated code
+    KoChild *child(KoChild::Gadget &gadget, QPoint &pos, const QMouseEvent *ev);
     KoView* m_view;
 };
 
