@@ -23,6 +23,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+// qt includes
 #include <qevent.h>
 #include <qpainter.h>
 #include <qbutton.h>
@@ -30,6 +31,7 @@
 #include <qstringlist.h>
 #include <qclipboard.h>
 
+// kde includes
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kruler.h>
@@ -42,6 +44,7 @@
 #include <kiconloader.h>
 #include <kapp.h>
 
+// core classes
 #include "kis_view.h"
 #include "kis_doc.h"
 #include "kis_util.h"
@@ -58,15 +61,21 @@
 #include "kis_pluginserver.h"
 #include "kis_selection.h"
 
+// sidebar widgets
 #include "kis_brushchooser.h"
 #include "kis_patternchooser.h"
 #include "kis_krayonchooser.h"
 #include "kis_layerview.h"
 #include "kis_channelview.h"
+
+// dialogs
 #include "kis_dlg_gradient.h"
 #include "kis_dlg_gradienteditor.h"
 #include "kis_dlg_preferences.h"
 #include "kis_dlg_new.h"
+#include "kis_dlg_new_layer.h"
+
+// tools
 #include "kis_tool_select.h"
 #include "kis_tool_paste.h"
 #include "kis_tool_move.h"
@@ -102,8 +111,8 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     m_fg = KisColor::black();
     m_bg = KisColor::white();
 
-// this is the original configuration that works but tools
-// need to be set up before canvas 
+    // this is the original configuration that works but tools
+    // need to be set up before canvas 
     
     setupPainter();
     setupCanvas();
@@ -285,9 +294,8 @@ void KisView::setupTabBar()
 
 void KisView::setupTools()
 {
-
     m_pSelectTool = new SelectTool( m_pDoc, this, m_pCanvas );
-    m_pPasteTool = new PasteTool( m_pDoc, this, m_pCanvas, NULL );
+    m_pPasteTool = new PasteTool( m_pDoc, this, m_pCanvas );
     m_pMoveTool = new MoveTool(m_pDoc);
     m_pBrushTool = new BrushTool(m_pDoc, this, m_pBrush);
     m_pAirBrushTool = new AirBrushTool(m_pDoc, this, m_pBrush);
@@ -300,14 +308,13 @@ void KisView::setupTools()
     m_pPolyLineTool = new PolyLineTool( m_pDoc, this, m_pCanvas );
     m_pRectangleTool = new RectangleTool( m_pDoc, this, m_pCanvas );
     m_pEllipseTool = new EllipseTool( m_pDoc, this, m_pCanvas );
-    m_pFill = new Fill( m_pDoc, this );
+    m_pFillTool = new FillTool( m_pDoc, this );
     m_pStampTool = new StampTool(m_pDoc, this, m_pCanvas, m_pPattern);
     
     // start with pen as active tool
     m_tool_pen->setChecked( true );
     slotSetBrush(m_pBrush);
     activateTool(m_pPenTool);
-    
 }
 
 
@@ -318,14 +325,16 @@ void KisView::setupDialogs()
     m_pGradientDialog->resize( 206, 185 );
     m_pGradientDialog->move( 200, 290 );
     m_pGradientDialog->hide();
-    connect( m_pGradientDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
+    connect( m_pGradientDialog, SIGNAL( sigClosed() ), 
+        SLOT( updateToolbarButtons() ) );
 
     // gradient editor dialog
     m_pGradientEditorDialog = new GradientEditorDialog( m_pDoc, this );
     m_pGradientEditorDialog->resize( 400, 200 );
     m_pGradientEditorDialog->move( 100, 190 );
     m_pGradientEditorDialog->hide();
-    connect( m_pGradientEditorDialog, SIGNAL( sigClosed() ), SLOT( updateToolbarButtons() ) );
+    connect( m_pGradientEditorDialog, SIGNAL( sigClosed() ), 
+        SLOT( updateToolbarButtons() ) );
 
     updateToolbarButtons();
 }
@@ -336,10 +345,11 @@ void KisView::setupDialogs()
 
 void KisView::setupActions()
 {
-    // edit actions
+    // selection actions
 
     m_undo = KStdAction::undo( this, SLOT( undo() ),
         actionCollection(), "undo");
+        
     m_redo = KStdAction::redo( this, SLOT( redo() ),
         actionCollection(), "redo");
 
@@ -352,29 +362,29 @@ void KisView::setupActions()
     m_paste = KStdAction::paste( this, SLOT( paste() ),
         actionCollection(), "paste");
 
-    new KAction( i18n("Remove"),
+    new KAction( i18n("Remove selection"),
         "remove", 0, this, SLOT( removeSelection() ),
         actionCollection(), "remove");
 
-    m_crop = new KAction( i18n("Crop"),
-        0,  this, SLOT( crop() ),
+    m_crop = new KAction( i18n("Copy selection to new layer"),
+        "crop", 0,  this, SLOT( crop() ),
         actionCollection(), "crop");
 
     m_select_all = KStdAction::selectAll( this, SLOT( selectAll() ),
         actionCollection(), "select_all");
 
-    m_unselect_all = new KAction( i18n("Unselect All"),
+    m_unselect_all = new KAction( i18n("Select None"),
         0, this, SLOT( unSelectAll() ),
-        actionCollection(), "unselect_all");
+        actionCollection(), "select_none");
 
     // import/export actions
 
     new KAction( i18n("Import Image"),
-        "wizard", 0, this, SLOT( insert_layer_image() ),
+        "wizard", 0, this, SLOT( import_image() ),
         actionCollection(), "import_image" );
 
     new KAction( i18n("Export Image"),
-        "wizard", 0, this, SLOT( save_layer_image() ),
+        "wizard", 0, this, SLOT( export_image() ),
         actionCollection(), "export_image" );
 
     // view actions
@@ -501,6 +511,13 @@ void KisView::setupActions()
 
     m_tool_ellipse->setExclusiveGroup( "tools" );
 
+    m_tool_paste = new KToggleAction( i18n("&Paste tool"),
+        "editpaste", 0, this, SLOT( tool_paste() ),
+        actionCollection(), "tool_paste");
+
+    m_tool_paste->setExclusiveGroup( "tools" );
+
+
     (void) new KAction( i18n("&Current Tool Properties..."),
         "configure", 0, this, SLOT( tool_properties() ),
         actionCollection(), "current_tool_properties" );
@@ -536,12 +553,12 @@ void KisView::setupActions()
         actionCollection(), "layer_properties" );
 
     (void) new KAction( i18n("I&nsert image as layer..."),
-        0, this, SLOT( insert_layer_image() ),
-        actionCollection(), "insert_layer_image" );
+        0, this, SLOT( insert_image_as_layer() ),
+        actionCollection(), "insert_image_as_layer" );
 
     (void) new KAction( i18n("Save layer as standard image..."),
-        0, this, SLOT( save_layer_image() ),
-        actionCollection(), "save_layer_image" );
+        0, this, SLOT( save_layer_as_image() ),
+        actionCollection(), "save_layer_as_image" );
 
     // layer transformations - should be generic, for selection too
     
@@ -635,9 +652,9 @@ void KisView::setupActions()
         "channel_dialog", 0, this, SLOT( dialog_channels() ),
         actionCollection(), "channels_dialog");
 
-    // help actions - these are standard kde actions
+     // help actions - these are standard kde actions
 
-    m_helpMenu = new KHelpMenu( this );
+      m_helpMenu = new KHelpMenu( this );
 
     (void) KStdAction::helpContents( m_helpMenu, SLOT( appHelpActivated() ), 
         actionCollection(), "help_contents" );
@@ -917,6 +934,8 @@ void KisView::updateCanvas( QRect & ur )
 
     // FIXME: Michael, you scale the whole image, 
     // that makes it dog slow, scale just the area you need.
+    // John - this needs to be done in by creating an intermediate
+    // QPixmap the size of the viewport. 
     p.scale( zoomFactor(), zoomFactor() );
 
     // draw background
@@ -943,14 +962,13 @@ void KisView::updateCanvas( QRect & ur )
     int yt = yPaintOffset() + ur.y() - m_pVert->value();
 
     p.translate(xt, yt);
+  
+    /* kdDebug(0) << "KisView::updateCanvas - paintContents" << endl; 
+    kdDebug(0) << "ur.width(): " << ur.width() 
+               << " ur.height(): " << ur.height() 
+               << endl; */
 
-    // #### This is the place where image is drawn to view ###
-    // john - the common code is NOT repainting the image bitmap,
-    // so use document to do that
-
-    //kdDebug(0) << "KisView::updateCanvas - paintContents called" << endl; 
-    //kdDebug(0) << "ur.width(): " << ur.width() << " ur.height(): " << ur.height() << endl;                 
-
+    // ### This is the place where image is drawn to view ###
     m_pDoc->paintContent(p, ur); 
     p.end();
 }
@@ -1002,7 +1020,7 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
 
     p.translate(xt, yt);
 
-    // #### This is the place where image is drawn to view ###
+    // ### This is the place where image is drawn to view ###
 
     //kdDebug(0) << "KisView::canvasGotPaintEvent - paintEverything called" << endl;     
     //kdDebug(0) << "ur.width(): " <<  ur.width() << " ur.height(): " << ur.height() << endl;             
@@ -1016,8 +1034,7 @@ void KisView::activateTool(KisTool* t)
 {
     if (!t) return;
     
-    if(m_pTool == m_pSelectTool)
-        m_pSelectTool->clearOld();
+    if(m_pTool == m_pSelectTool) m_pSelectTool->clearOld();
 
     if (m_pTool) QObject::disconnect(m_pTool);
     m_pTool = t;
@@ -1111,12 +1128,34 @@ void KisView::tool_ellipse()
 
 void KisView::tool_fill()
 {
-  activateTool( m_pFill );
+  activateTool( m_pFillTool );
 }
 
 void KisView::tool_stamp()
 {
   activateTool( m_pStampTool );
+}
+
+// same as paste action from selection group
+// but paste still needes to be a tool because
+// you can paint with it
+
+void KisView::tool_paste()
+{
+    if(m_pDoc->getClipImage())
+    {
+        m_pPasteTool->setClip();
+        activateTool(m_pPasteTool);
+
+        /* refresh canvas */
+        KisImage* img = m_pDoc->current();
+        QRect updateRect(0, 0, img->width(), img->height());
+        m_pDoc->current()->markDirty(updateRect);
+    }    
+    else
+    {
+        KMessageBox::sorry(NULL, "Nothing to paste!", "", FALSE); 
+    }
 }
 
 /*
@@ -1149,9 +1188,9 @@ void KisView::copy()
         kapp->clipboard()->setImage(cImage); 
         {
             if(kapp->clipboard()->image().isNull())
-                kdDebug() << "clipboard image is null - KisView::copy()" << endl; 
+                kdDebug() << "clip image is null - KisView::copy()" << endl; 
             else
-               kdDebug() << "clipboard image is NOT null - KisView::copy()" << endl; 
+               kdDebug() << "clipb image is NOT null - KisView::copy()" << endl; 
         }
     }    
 }
@@ -1220,17 +1259,81 @@ void KisView::paste()
     }
 }
 
+
 void KisView::crop()
 {
+    kdDebug() << "CROP called" << endl;
+
+    if(!m_pDoc->hasSelection())
+    {
+        KMessageBox::sorry(NULL, "There is no selection to crop!", "", FALSE); 
+        return;
+    }
+    // copy contents of the current selection ot a QImage
+    if(!m_pDoc->setClipImage())
+    {
+        kdDebug() << "m_pDoc->setClipImage() failed" << endl;
+        return;    
+    }    
+    // contents of current selection - make sure it's good
+    if(!m_pDoc->getClipImage())
+    {
+        kdDebug() << "m_pDoc->getClipImage() failed" << endl;
+        return;
+    }
+
+    QImage cImage = *m_pDoc->getClipImage();
+    
+    // add new layer same size as selection rectangle,
+    // then paste cropped image into it at 0,0 offset
+    // keep old image - user can remove it later if he wants
+    // by removing its layer or may want to keep the original.    
+
+    KisImage* img = m_pDoc->current();     
+
+    int width = cImage.width();
+    int height = cImage.height();
+    QRect layerRect(0, 0, width, height);    
+    QString name; name.sprintf("layer %d", img->layerList().count());
+
+    img->addLayer(layerRect, white, false, name);
+    m_pLayerView->layerTable()->updateTable();    
+    m_pLayerView->layerTable()->updateAllCells();
+
+    // copy the image into the layer regardless of whether 
+    // a new image or just a new layer was created for it above.
+    if(!m_pDoc->QtImageToLayer(&cImage, this))
+    {
+         kdDebug(0) << "KisView::inset_layer_image: " 
+                    << "Can't load image into layer." 
+                    << endl;        
+    }
+
+    // make sure we get size of current image after 
+    // layer is added to it - could be larger
+    QRect updateRect(m_pDoc->current()->getCurrentLayer()->imageExtents());
+        m_pDoc->current()->markDirty(updateRect);
+    
+    // remove the current clip image which now belongs to the 
+    // previous layer - selection also needs to be removed.
+    // To crop again, make a selection in current layer first
+    m_pDoc->removeClipImage();
+    m_pDoc->clearSelection();    
 }
+
 
 void KisView::selectAll()
 {
-
+    KisImage *img = m_pDoc->current();
+    if(!img) return;
+    
+    QRect imageR = img->getCurrentLayer()->imageExtents();
+    m_pDoc->setSelection(imageR);
 }
 
 void KisView::unSelectAll()
 {
+    m_pDoc->clearSelection();
 }
 
 /*
@@ -1340,7 +1443,8 @@ void KisView::updateToolbarButtons()
 
 
 /* 
-    Properties dialog for the current layer
+    Properties dialog for the current layer. 
+    Only for changing name and opacity so far.
 */
 
 void KisView::layer_properties()
@@ -1360,12 +1464,30 @@ void KisView::layer_properties()
 }
 
 /*
-    insert new layer into the current image - we need a
-    "new layer" dialog for layer size, properties, etc.
+    insert new layer into the current image - using 
+    "new layer" dialog for layer size (should also
+    have fields for name and opacity) 
 */
 void KisView::insert_layer()
 {
-    m_pLayerView->layerTable()->slotAddLayer();
+    NewLayerDialog *pNewLayerDialog = new NewLayerDialog();
+
+    kdDebug() << "KisView::NewLayerDialog()->exec()" << endl; 
+    pNewLayerDialog->exec();
+    
+    if(!pNewLayerDialog->result() == QDialog::Accepted)
+        return;
+
+    int width = pNewLayerDialog->width();
+    int height = pNewLayerDialog->height();
+
+    KisImage* img = m_pDoc->current();
+    QRect layerRect(0, 0, width, height);       
+    QString name; name.sprintf("layer %d", img->layerList().count());
+
+    img->addLayer(layerRect, white, false, name);
+    m_pLayerView->layerTable()->updateTable();    
+    m_pLayerView->layerTable()->updateAllCells();    
 }
 
 /*
@@ -1414,6 +1536,25 @@ void KisView::previous_layer()
     KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
 }
 
+void KisView::import_image()
+{
+    insert_layer_image(true);
+}
+
+void KisView::export_image()
+{
+    save_layer_image(true);
+}
+
+void KisView::insert_image_as_layer()
+{
+    insert_layer_image(false);
+}
+
+void KisView::save_layer_as_image()
+{
+    save_layer_image(false);
+}
 
 /*
     Insert a standard image like png or jpg into the current layer.
@@ -1423,10 +1564,10 @@ void KisView::previous_layer()
     of the image, including other layers visible and invisible
 */
 
-void KisView::insert_layer_image()
+void KisView::insert_layer_image(bool newImage)
 {
     KURL url = KFileDialog::getOpenURL( getenv("HOME"),
-                KisUtil::readFilters(), 0, i18n("Image file for layer") );
+        KisUtil::readFilters(), 0, i18n("Image file for layer") );
 
     if( !url.isEmpty() )
     {
@@ -1446,27 +1587,80 @@ void KisView::insert_layer_image()
         
         delete filePixmap;
         delete buffer;
-        
+
+        KisImage* img = m_pDoc->current(); 
+        QRect layerRect(0, 0, fileImage.width(), fileImage.height());
+        QString layerName(url.fileName()); 
+
+        // add image from file as new layer for existing image        
+        if(!newImage)
+        { 
+            img->addLayer(layerRect, white, false, layerName);
+            m_pLayerView->layerTable()->updateTable();    
+            m_pLayerView->layerTable()->updateAllCells();    
+        } 
+        // add image from file as new image and append to image list   
+        else
+        {
+            // this creates the new image and appends it to
+            // the image list for the document
+            KisImage *newimg = m_pDoc->newImage(layerName, 
+                layerRect.width(), layerRect.height());
+   
+            // add background layer
+            bgMode bg = bm_White;
+            
+            if (bg == bm_White)
+	            newimg->addLayer(QRect(0, 0, w, h), 
+                    KisColor::white(), false, "background");
+            else if (bg == bm_Transparent)
+	            newimg->addLayer(QRect(0, 0, w, h), 
+                    KisColor::white(), true, "background");
+            else if (bg == bm_ForegroundColor)
+	            newimg->addLayer(QRect(0, 0, w, h), 
+                    KisColor::white(), false, "background");
+            else if (bg == bm_BackgroundColor)
+	            newimg->addLayer(QRect(0, 0, w, h), 
+                    KisColor::white(), false, "background");
+
+            kdDebug() << "KisView ret. from addLayer() for new image" << endl;
+
+            newimg->markDirty(QRect(0, 0, w, h));
+            m_pDoc->setCurrentImage(newimg);
+        }   
+
+        // copy the image into the layer regardless of whether 
+        // a new image or just a new layer was created for it above.
         if(!m_pDoc->QtImageToLayer(&fileImage, this))
         {
-            kdDebug(0) << "KisView::inset_layer_image: " <<
-                "Can't load image into layer." << endl;        
+            kdDebug(0) << "KisView::inset_layer_image: " 
+                       << "Can't load image into layer." 
+                       << endl;        
         }
 
-        KisImage* img = m_pDoc->current();
-        QRect updateRect(0, 0, img->width(), img->height());
+        // make sure we get size of current image after 
+        // layer is added to it - could be larger
+        QRect updateRect(m_pDoc->current()->getCurrentLayer()->imageExtents());
         m_pDoc->current()->markDirty(updateRect);
     }
 }
 
 
-void KisView::save_layer_image()
+void KisView::save_layer_image(bool mergeLayers)
 {
     KURL url = KFileDialog::getSaveURL( getenv("HOME"),
                 KisUtil::readFilters(), 0, i18n("Image file for layer") );
 
     if( !url.isEmpty() )
     {
+        if(mergeLayers)
+        {
+            // should merge them to a scratch layer -
+            // or at least put up a Yes/No dialog to confirm
+            // otherwise layer info will be lost
+            merge_all_layers();    
+        }
+
         //  save as standard image file (jpg, png, xpm, bmp, NO gif)
         if(!m_pDoc->saveAsQtImage(url.path()))
             kdDebug(0) << "Can't save doc as standard qt image" << endl;
@@ -1690,6 +1884,9 @@ void KisView::slotSetKrayon(const KisKrayon* k)
 void KisView::slotSetPattern(const KisPattern* p)
 {
     m_pPattern = p;
+    
+    /* setPattern should actually be a part of the tool
+    base class so all tools can use it without all this */
     
     if (m_pStampTool)
         m_pStampTool->setPattern(p);

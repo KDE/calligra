@@ -34,7 +34,7 @@
 
 KisSelection::KisSelection(KisDoc *doc)
 {
-  pDoc  = doc;
+    pDoc  = doc;
 }
 
 KisSelection::~KisSelection()
@@ -49,11 +49,23 @@ void KisSelection::setRect(QRect & rect)
     selectRect.setBottom(rect.bottom());    
 }
 
+
+void KisSelection::setNull()
+{
+    selectRect.setWidth(0);
+    selectRect.setHeight(0);
+}
+
+
 void KisSelection::setImage(QImage & img)
 {
     selectImage = img;
 }
 
+
+/*
+    erase a selection rectange within a the current layer
+*/
 bool KisSelection::erase()
 {
     KisImage *img = pDoc->current();

@@ -1,9 +1,10 @@
 /*
- *  channelview.cc - part of KImageShop
+ *  channelview.cc - part of Krayon
  *
  *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
  *                1999 Michael Koch    <koch@kde.org>
- *
+ *                2001 John Califf     <jcaliff@compuzone.net>
+ *  
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -23,225 +24,418 @@
 #include <iostream.h>
 
 #include <qhbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qstring.h>
+#include <qslider.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qpopupmenu.h>
-#include <qlayout.h>
 
 #include <kstddirs.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
 
-#include "kis_util.h"
+
 #include "kis_doc.h"
+#include "kis_view.h"
+#include "kis_util.h"
 #include "kis_channelview.h"
 #include "kis_framebutton.h"
 #include "kis_factory.h"
+#include "integerwidget.h"
 
 //#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_name )
   : QWidget( _parent, _name )
 {
-  QVBoxLayout *layout = new QVBoxLayout( this );
+    buttons = new QHBox( this );
+    buttons->setMaximumHeight(15);
+    
+    pbAddChannel = new KisFrameButton( buttons );
+    pbAddChannel->setPixmap( BarIcon( "newlayer" ) );
 
-  ChannelTable* channeltable = new ChannelTable( _doc, this, "channellist" );
-  layout->addWidget( channeltable, 1 );
+    pbRemoveChannel = new KisFrameButton( buttons );
+    pbRemoveChannel->setPixmap( BarIcon( "deletelayer" ) );
 
-  QHBox *buttons = new QHBox( this );
-  layout->addWidget( buttons );
+    pbUp = new KisFrameButton( buttons );
+    pbUp->setPixmap( BarIcon( "raiselayer" ) );
 
-  KisFrameButton* pbAddChannel = new KisFrameButton( buttons );
-  pbAddChannel->setPixmap( BarIcon( "newlayer" ) );
-  connect( pbAddChannel, SIGNAL( clicked() ), channeltable, SLOT( slotAddChannel() ) );
+    pbDown = new KisFrameButton( buttons );
+    pbDown->setPixmap( BarIcon( "lowerlayer" ) );
 
-  KisFrameButton* pbRemoveChannel = new KisFrameButton( buttons );
-  pbRemoveChannel->setPixmap( BarIcon( "deletelayer" ) );
-  connect( pbRemoveChannel, SIGNAL( clicked() ), channeltable, SLOT( slotRemoveChannel() ) );
+    frame = new QHBox( this );
+    frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );    
+
+    channeltable = new ChannelTable( _doc, frame, this, "channellist" );
+
+    connect( pbAddChannel, SIGNAL( clicked() ), 
+        channeltable, SLOT( slotAddChannel() ) );
+    connect( pbRemoveChannel, SIGNAL( clicked() ), 
+        channeltable, SLOT( slotRemoveChannel() ) );
+    connect( pbUp, SIGNAL( clicked() ), 
+        channeltable, SLOT( slotRaiseChannel() ) );
+    connect( pbDown, SIGNAL( clicked() ), 
+        channeltable, SLOT( slotLowerChannel() ) );
+    
+    initGUI();
 }
+
+
+void KisChannelView::initGUI()
+{
+    QVBoxLayout *mainLayout = new QVBoxLayout( this, 2);
+    QHBoxLayout *buttonsLayout = new QHBoxLayout( buttons, 4 );
+
+    buttonsLayout->addWidget(pbAddChannel);
+    buttonsLayout->addWidget(pbRemoveChannel);    
+    buttonsLayout->addWidget(pbUp);
+    buttonsLayout->addWidget(pbDown);
+
+    mainLayout->addWidget( frame);
+    mainLayout->addWidget( buttons);
+}
+
+KisChannelView::~KisChannelView()
+{
+    delete pbAddChannel;
+    delete pbRemoveChannel;
+    delete pbUp;
+    delete pbDown;
+    delete buttons;    
+    delete channeltable;
+    delete frame;
+}
+
+void KisChannelView::showScrollBars( )
+{
+    resizeEvent(0L);
+}
+
 
 ChannelTable::ChannelTable( QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
 {
-  init( 0 );
+    pChannelView = 0L;
+    init( 0 );
 }
 
 ChannelTable::ChannelTable( KisDoc* doc, QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
 {
-  init( doc );
+    pChannelView = 0L;
+    init( doc );
 }
+
+ChannelTable::ChannelTable( KisDoc* doc, QWidget* _parent, 
+    KisChannelView *_channelview, const char* _name )
+    : QTableView( _parent, _name )
+{
+    pChannelView = _channelview;
+    init( doc );
+}
+
 
 void ChannelTable::init( KisDoc* doc )
 {
-  setTableFlags( Tbl_autoHScrollBar | Tbl_autoVScrollBar );
+    setTableFlags( Tbl_autoHScrollBar | Tbl_autoVScrollBar );
+    m_doc = doc;
 
-  m_doc = doc;
+    setBackgroundColor( white );
 
-  setBackgroundColor( white );
+    // load icon pixmaps
+    QString _icon = locate( "kis_pics", "visible.png", KisFactory::global() );
+    mVisibleIcon = new QPixmap;
+    if( !mVisibleIcon->load( _icon ) )
+	    KMessageBox::error( this, "Can't find visible.png", "Canvas" );
+    mVisibleRect = QRect( QPoint( 2,( CELLHEIGHT - mVisibleIcon->height() ) / 2 ), 
+        mVisibleIcon->size() );
 
-  // load icon pixmaps
-  QString _icon = locate( "kis_pics", "eye.png", KisFactory::global() );
-  m_eyeIcon = new QPixmap;
-  if( !m_eyeIcon->load( _icon ) )
-	KMessageBox::error( this, "Can't find eye.png", "Canvas" );
-  m_eyeRect = QRect( QPoint( 2,( CELLHEIGHT - m_eyeIcon->height() ) / 2 ), m_eyeIcon->size() );
+    _icon = locate( "kis_pics", "novisible.png", 
+        KisFactory::global() );
+    mNovisibleIcon = new QPixmap;
+    if( !mNovisibleIcon->load( _icon ) )
+	    KMessageBox::error( this, "Can't find novisible.png", "Canvas" );
 
-  _icon = locate( "kis_pics", "link.png", KisFactory::global() );
-  m_linkIcon = new QPixmap;
-  if( !m_linkIcon->load( _icon ) )
-	KMessageBox::error( this, "Can't find link.png", "Canvas" );
-  m_linkRect = QRect( QPoint( 25,( CELLHEIGHT - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
+    _icon = locate( "kis_pics", "linked.png", KisFactory::global() );
+    mLinkedIcon = new QPixmap;
+    if( !mLinkedIcon->load( _icon ) )
+	    KMessageBox::error( this, "Can't find linked.png", "Canvas" );
+    mLinkedRect = QRect( QPoint( 25,( CELLHEIGHT - mLinkedIcon->height() ) / 2 ), 
+        mLinkedIcon->size() );
 
-  // HACK - the size of the preview image should be configurable somewhere
-  m_previewRect = QRect( QPoint( 40, (CELLHEIGHT - m_linkIcon->height() ) /2 ),
-			 QSize( 15, 15 ) );
+    _icon = locate( "kis_pics", "unlinked.png", KisFactory::global() );
+    mUnlinkedIcon = new QPixmap;
+    if( !mUnlinkedIcon->load( _icon ) )
+	    KMessageBox::error( this, "Can't find unlinked.png", "Canvas" );
 
-  updateTable();
+    mPreviewRect 
+        = QRect( QPoint( 50, (CELLHEIGHT - mLinkedIcon->height() ) /2 ),
+	        mLinkedIcon->size() );
 
-  setCellWidth( CELLWIDTH );
-  setCellHeight( CELLHEIGHT );
-  //  m_selected = m_doc->layerList().count() - 1;
-  
-  updateAllCells();
+    updateTable();
+
+    setCellWidth( CELLWIDTH );
+    setCellHeight( CELLHEIGHT );
     
-  QPopupMenu *submenu = new QPopupMenu();
+    m_selected = m_doc->current()->getCurrentLayer()->numChannels() - 1;
+  
+    updateAllCells();
+    
+    QPopupMenu *submenu = new QPopupMenu();
+    m_contextmenu = new QPopupMenu();
+    m_contextmenu->setCheckable(TRUE);
 
-  m_contextmenu = new QPopupMenu();
+    m_contextmenu->insertItem( i18n( "Visible" ), VISIBLE );
+    m_contextmenu->insertItem( i18n( "Level" ), submenu );
 
-  m_contextmenu->setCheckable(TRUE);
+    m_contextmenu->insertSeparator();
 
-  m_contextmenu->insertItem( i18n( "Visible" ), VISIBLE );
-  m_contextmenu->insertItem( i18n( "Level" ), submenu );
+    m_contextmenu->insertItem( i18n( "Add Channel" ), ADDCHANNEL );
+    m_contextmenu->insertItem( i18n( "Remove Channel"), REMOVECHANNEL );
 
-  m_contextmenu->insertSeparator();
-
-  m_contextmenu->insertItem( i18n( "Add Channel" ), ADDCHANNEL );
-  m_contextmenu->insertItem( i18n( "Remove Channel"), REMOVECHANNEL );
-
-  connect( m_contextmenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
-  connect( submenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
+    connect( m_contextmenu, SIGNAL( activated( int ) ), 
+        SLOT( slotMenuAction( int ) ) );
+    connect( submenu, SIGNAL( activated( int ) ), 
+        SLOT( slotMenuAction( int ) ) );
+    
+    setAutoUpdate(true);     
 }
+
 
 void ChannelTable::paintCell( QPainter* _painter, int _row, int /* _col */)
 {
+    QString tmp;
+    QColor color;
+    //cId channels[MAX_CHANNELS];
+        
+    switch( _row )
+    {
+        case 0 :
+            tmp = i18n( "Red" );
+            color = red;
+            break;
+        case 1 :
+            tmp = i18n( "Green" );
+            color = green;
+            break;
+        case 2 :
+            tmp = i18n( "Blue" );
+            color = blue;
+            break;
+        default :
+            tmp = i18n( "Alpha" );
+            color = gray;
+            break;
+    }
 
-  QString tmp;
+    if( _row == m_selected )
+    {
+        _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, 
+            cellHeight() - 1, color);
+    }
 
-  switch( _row )
-  {
-    case 0 :
-      tmp = i18n( "Red" );
-      break;
-    case 1 :
-      tmp = i18n( "Green" );
-      break;
-    case 2 :
-      tmp = i18n( "Blue" );
-      break;
-    default :
-      tmp = i18n( "Alpha" );
-      break;
-  }
+    style().drawPanel( _painter, mVisibleRect.x(),
+		     mVisibleRect.y(),
+		     mVisibleRect.width(),
+		     mVisibleRect.height(), colorGroup(),
+		     true );
 
-  if( _row == m_selected )
-  {
-    _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, green );
-  }
+    if( /* m_doc->current().channels[_row ]->isVisible()*/ true )
+    {
+        _painter->drawPixmap( mVisibleRect.topLeft(), *mVisibleIcon );
+    }
+    else
+    {
+        _painter->drawPixmap( mVisibleRect.topLeft(), *mNovisibleIcon );
+    }
 
-  if( /* m_doc->layerList().at( _row )->isVisible()*/ true )
-  {
-    _painter->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
-  }
+    style().drawPanel( _painter,    
+                    mPreviewRect.x(), 
+                    mPreviewRect.y(), 
+                    mPreviewRect.width(), 
+                    mPreviewRect.height(),                                     
+                    colorGroup(), true );
 
-  _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
-  _painter->drawText( 80, 20, tmp );
+    _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
+    _painter->drawText( 80, 20, tmp );
 }
+
 
 void ChannelTable::updateTable()
 {
-  m_items = 4;
-  setNumRows( 4 );
-  setNumCols( 1 );
-  resize( sizeHint() );
+    m_items = 4;
+    setNumRows( 4 );
+    setNumCols( 1 );
+    resize( sizeHint() );
 }
 
 void ChannelTable::update_contextmenu( int  )
 {
+    m_contextmenu->setItemChecked( VISIBLE,  true
+        /* m_doc->current()->layerList().at( _index )->visible()*/ );
 }
 
-void ChannelTable::selectChannel( int/* _index*/ )
+void ChannelTable::selectChannel( int _index )
 {
-
+    int currentSel = m_selected;
+    m_selected = -1;
+    
+    updateCell( currentSel, 0 );
+    m_selected = _index;
+    //m_doc->current()->setCurrentLayer( m_selected );
+    updateCell( m_selected, 0 );
 }
 
-void ChannelTable::slotInverseVisibility( int  )
+void ChannelTable::slotInverseVisibility( int _index )
 {
+    //m_doc->current()->layerList().at( _index )->setVisible( !m_doc->current()->layerList().at( _index )->visible() );
+    updateCell( _index, 0 );
+  
+    //m_doc->current()->markDirty( m_doc->current()->layerList().at( _index )->imageExtents() );
 }
 
 void ChannelTable::slotMenuAction( int _id )
 {
-  switch( _id )
-  {
-    case VISIBLE:
-      slotInverseVisibility( m_selected );
-      break;
-    case ADDCHANNEL:
-      slotAddChannel();
-      break;
-    case REMOVECHANNEL:
-      slotRemoveChannel();
-      break;
-    default:
-      cerr << "Michael : unknown context menu action" << endl;
-      break;
-  }
+    switch( _id )
+    {
+        case VISIBLE:
+            slotInverseVisibility( m_selected );
+            break;
+ 
+        case ADDCHANNEL:
+            slotAddChannel();
+            break;
+ 
+        case REMOVECHANNEL:
+            slotRemoveChannel();
+            break;
+ 
+        default:
+             break;
+    }
 }
+
 
 QSize ChannelTable::sizeHint() const
 {
-  return QSize( CELLWIDTH, CELLHEIGHT * 5 );
+    if(pChannelView)
+        return QSize( CELLWIDTH, pChannelView->getFrame()->height());    
+    else 
+        return QSize( CELLWIDTH, CELLHEIGHT * 5 );
+
 }
 
 void ChannelTable::mousePressEvent( QMouseEvent *_event )
 {
-  int row = findRow( _event->pos().y() );
-  QPoint localPoint( _event->pos().x() % cellWidth(), _event->pos().y() % cellHeight() );
+    int row = findRow( _event->pos().y() );
+    QPoint localPoint( _event->pos().x() % cellWidth(), 
+        _event->pos().y() % cellHeight() );
 
-  if( _event->button() & LeftButton )
-  {
-    if( m_eyeRect.contains( localPoint ) )
+    if( _event->button() & LeftButton )
     {
-      slotInverseVisibility( row );
+        if( mVisibleRect.contains( localPoint ) )
+        {
+            slotInverseVisibility( row );
+        }
+        else if( row != -1 )
+        {
+            selectChannel( row );
+        }
     }
-    else if( row != -1 )
+    else if( _event->button() & RightButton )
     {
-      selectChannel( row );
+        selectChannel( row );
+        update_contextmenu( row );
+        m_contextmenu->popup( mapToGlobal( _event->pos() ) );
     }
-  }
-  else if( _event->button() & RightButton )
-  {
-    selectChannel( row );
-    update_contextmenu( row );
-    m_contextmenu->popup( mapToGlobal( _event->pos() ) );
-  }
 }
 
 void ChannelTable::slotAddChannel()
 {
+
 }
 
 void ChannelTable::slotRemoveChannel()
 {
+
 }
 
 void ChannelTable::updateAllCells()
 {
-  for( unsigned int i = 0; i < /* m_doc->layerList().count()*/ 3;  i++ )
-    updateCell( i, 0 );
+    for( unsigned int i = 0; i < /* m_doc->layerList().count()*/ 3;  i++ )
+        updateCell( i, 0 );
 }
+
+void ChannelTable::slotProperties()
+{
+    if( ChannelPropertyDialog::editProperties( 
+         *( m_doc->current()->getCurrentLayer()->firstChannel() ) ) )
+    {
+        //QRect updateRect = m_doc->current()->layerList().at( m_selected )->imageExtents();
+        updateCell( m_selected, 0 );
+        //m_doc->current()->markDirty( updateRect );
+    }
+}
+
+ChannelPropertyDialog::ChannelPropertyDialog( QString _channelname, 
+    uchar _opacity, QWidget *_parent, const char *_name )
+    : QDialog( _parent, _name, true )
+{
+    QGridLayout *layout = new QGridLayout( this, 4, 2, 15, 7 );
+
+    m_name = new QLineEdit( _channelname, this );
+    layout->addWidget( m_name, 0, 1 );
+
+    QLabel *lblName = new QLabel( m_name, i18n( "Name" ), this );
+    layout->addWidget( lblName, 0, 0 );
+
+    m_opacity = new IntegerWidget( 0, 255, this );
+    m_opacity->setValue( _opacity );
+    m_opacity->setTickmarks( QSlider::Below );
+    m_opacity->setTickInterval( 32 );
+    layout->addWidget( m_opacity, 1, 1 );
+
+    QLabel *lblOpacity = new QLabel( m_opacity, i18n( "Opacity" ), this );
+    layout->addWidget( lblOpacity, 1, 0 );
+
+    layout->setRowStretch( 2, 1 );
+
+    QHBox *buttons = new QHBox( this );
+    layout->addMultiCellWidget( buttons, 3, 4, 0, 1 );
+
+    (void) new QWidget( buttons );
+
+    QPushButton *pbOk = new QPushButton( i18n( "OK" ), buttons );
+    pbOk->setDefault( true );
+    QObject::connect( pbOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
+
+    QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), buttons );
+    QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+}
+
+
+bool ChannelPropertyDialog::editProperties( KisChannel &_channel )
+{
+    ChannelPropertyDialog *dialog;
+
+    dialog = new ChannelPropertyDialog(/* _channel.name(), _channel.opacity(),*/ 
+        "red", 255, NULL, "channel_property_dialog" );
+    
+    if( dialog->exec() == Accepted )
+    {
+        //_channel.setName( dialog->m_name->text() );
+        //_channel.setOpacity( dialog->m_opacity->value() );
+
+        return true;
+    }
+    return false;
+}
+
 
 #include "kis_channelview.moc"
 

@@ -32,8 +32,7 @@ class KisSelection;
 class PasteTool : public KisTool
 {
  public:
-    PasteTool(KisDoc *doc, KisView *view, 
-        KisCanvas *canvas, const KisSelection *selection);
+    PasteTool(KisDoc *doc, KisView *view, KisCanvas *canvas);
     ~PasteTool();
   
     QString toolName() { return QString("Paste Tool"); }
@@ -55,7 +54,6 @@ class PasteTool : public KisTool
     This will also contain effects and raster operations to
     be performed on selection and/or area pasted to */
     
-    const KisSelection	*m_pSelection; 
     KisView     *m_pView;
     KisCanvas   *m_pCanvas;
     QImage      clipImage;

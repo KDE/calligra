@@ -999,23 +999,44 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
 }
 
 /*
-    set current selection rectangle for the document
-*/
-
-void KisDoc::setSelectRect(QRect & rect)
+  set selection for document
+*/    
+void KisDoc::setSelection(QRect & rect)
 {
-    selectRect.setLeft(rect.left());
-    selectRect.setTop(rect.top());
-    selectRect.setRight(rect.right());
-    selectRect.setBottom(rect.bottom());    
+    m_pSelection->setRect(rect);
+}
+        
+/*
+  clear selection for document - 
+*/    
+void KisDoc::clearSelection()
+{
+    m_pSelection->setNull();
 }
 
+/*
+  clear selection for document - 
+*/    
+bool KisDoc::hasSelection()
+{
+    return (m_pSelection->getRect().isNull() ? false : true);
+}
+
+
+void KisDoc::removeClipImage()
+{
+    if(m_pClipImage != 0L)
+    { 
+        delete m_pClipImage;
+        m_pClipImage = 0L;
+    }   
+}
 
 /*
     set current selection or clip image for the document
 */
 
-bool KisDoc::setClipImage( )
+bool KisDoc::setClipImage()
 {
     KisImage *img = current();
     KisLayer *lay = img->getCurrentLayer();
@@ -1026,7 +1047,7 @@ bool KisDoc::setClipImage( )
         m_pClipImage = 0L;
     }   
     
-    selectRect = getSelection()->getRect();
+    QRect selectRect = getSelection()->getRect();
      
     m_pClipImage = new QImage(selectRect.width(), selectRect.height(), 32);
     if(!m_pClipImage) return false;
@@ -1130,17 +1151,15 @@ void KisDoc::slotRemoveImage( const QString& _name )
 
 bool KisDoc::slotNewImage()
 {
-    kdDebug() << "KisDoc::slotNewImage" << endl; 
-
     kdDebug() << "KisDoc::slotNewImage:new NewDialog()" << endl; 
-    if (!m_pNewDialog) 
-        m_pNewDialog = new NewDialog();
+    if (!m_pNewDialog) m_pNewDialog = new NewDialog();
 
     kdDebug() << "KisDoc::slotNewImage:NewDialog()->exec()" << endl; 
 
-    /* jwc - this causes bad drawable, invalid window paramater or
-    image, seems harmless, though. Error only occurs when document
-    is first created, not when adding new image tab */
+    /* This causes bad drawable or invalid window paramater.
+    It seems harmless, though, just a message about an Xerror. 
+    Error only occurs when document is first created, not when 
+    adding new image tab */
     m_pNewDialog->exec();
     
     if(!m_pNewDialog->result() == QDialog::Accepted)

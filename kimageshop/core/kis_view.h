@@ -71,7 +71,7 @@ class PolyLineTool;
 class RectangleTool;
 class EllipseTool;
 class ColorPicker;
-class Fill;
+class FillTool;
 class StampTool;
 class QButton;
 
@@ -155,10 +155,8 @@ class KisView : public KoView
     void next_layer();
     void previous_layer();
     void layer_properties();
-            
-    void insert_layer_image();
-    void save_layer_image();
-    
+    void insert_image_as_layer();
+    void save_layer_as_image();
     void layer_rotate180();
     void layer_rotateleft90();
     void layer_rotateright90();
@@ -166,6 +164,8 @@ class KisView : public KoView
     void layer_mirrorY();
 
     // image action slots
+    void import_image();
+    void export_image();
     void add_new_image_tab();
     void remove_current_image_tab();
     void merge_all_layers();
@@ -189,6 +189,7 @@ class KisView : public KoView
     void tool_colorpicker();
     void tool_fill();
     void tool_stamp();
+    void tool_paste();
     
     // settings action slots
     void showMenubar();
@@ -238,6 +239,9 @@ class KisView : public KoView
     int     yScrollOffset() { return m_pVert->value(); }
     void    scrollTo( QPoint p );
 
+    void    insert_layer_image(bool newLayer);
+    void    save_layer_image(bool mergeLayers);
+
     void 	zoom( int x, int y, float zf );
     void    zoom_in( int x, int y );
     void	zoom_out( int x, int y );
@@ -268,7 +272,7 @@ class KisView : public KoView
     KToggleAction *m_tool_select_rect, *m_tool_select_polygon, 
     *m_tool_move, *m_tool_zoom, 
     *m_tool_brush, *m_tool_draw, *m_tool_pen, *m_tool_gradient, 
-    *m_tool_colorpicker, *m_tool_fill, *m_tool_stamp, 
+    *m_tool_colorpicker, *m_tool_fill, *m_tool_stamp, *m_tool_paste,
     *m_tool_airbrush, *m_tool_eraser,
     *m_tool_line, *m_tool_polyline, *m_tool_rectangle, *m_tool_ellipse;
 
@@ -291,7 +295,7 @@ class KisView : public KoView
     RectangleTool   *m_pRectangleTool;
     EllipseTool     *m_pEllipseTool;   
     ColorPicker     *m_pColorPicker;
-    Fill            *m_pFill;
+    FillTool        *m_pFillTool;
     StampTool       *m_pStampTool;
     
     const KisKrayon       *m_pKrayon;   // current krayon for this view   

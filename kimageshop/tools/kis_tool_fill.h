@@ -42,11 +42,11 @@ struct fillpixelinfo
    int y, xl, xr, dy;
 };
 
-class Fill : public KisTool
+class FillTool : public KisTool
 {
   public:
-    Fill(KisDoc *doc, KisView *view);
-    ~Fill();
+    FillTool(KisDoc *doc, KisView *view);
+    ~FillTool();
   
     QString toolName() { return QString("Fill Tool"); }
     bool flood(int startX, int startY);

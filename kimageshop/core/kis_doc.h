@@ -149,16 +149,6 @@ public:
     bool LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect);
 
 	/*
-	 *  set selection rectangle for the document
-	 */    
-    void setSelectRect(QRect & rect);    
-
-	/*
-	 *  set selection rectangle for the document
-	 */    
-    QRect getSelectRect() { return selectRect; }    
-
-	/*
 	 *  set selection or clip rectangle for the document
 	 */    
     bool setClipImage(); 
@@ -169,9 +159,29 @@ public:
     QImage *getClipImage() { return m_pClipImage; }
 
 	/*
+	 *  delete clip image for the document
+	 */    
+    void removeClipImage(); 
+
+	/*
 	 *  get currrent selection for document
 	 */    
     KisSelection *getSelection() { return m_pSelection; }
+    
+    /*
+	 *  set selection for document
+	 */    
+    void setSelection(QRect & r);
+        
+    /*
+	 *  clear selection for document - 
+	 */    
+    void clearSelection();
+
+    /*
+	 *  clear selection for document - 
+	 */    
+    bool hasSelection();
     
 public slots:
     void slotImageUpdated();
@@ -211,7 +221,7 @@ protected:
     /* selection for the document - there can only be one
     no matter how many views or images - possible list of selections 
     may be useful as they can be linked if in same layer */
-    QRect selectRect;    
+   
     KisSelection *m_pSelection;
 };
 

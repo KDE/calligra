@@ -1,9 +1,10 @@
 /*
- *  kis_channelview.h - part of KImageShop
+ *  kis_channelview.h - part of Krayon
  *
  *  Copyright (c) 1999 Andrew Richards <A.Richards@phys.canterbury.ac.nz>
  *                1999 Michael Koch    <koch@kde.org>
  *                2000 Matthias Elter  <elter@kde.org>
+ *                2001 John Califf     <jcaliff@compuzone.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,56 +33,104 @@
 #include <qrect.h>
 
 class KisDoc;
+class KisView;
 class QPopupMenu;
+class QLineEdit;
+class QPixmap;
+class IntegerWidget;
+class ChannelTable;
+class KisChannel;
+class QHBox;
+class KisFrameButton;
+
 
 class KisChannelView : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  KisChannelView( KisDoc* doc, QWidget* _parent = 0,  const char* _name = 0 );
+    KisChannelView( KisDoc* doc, QWidget* _parent = 0,  const char* _name = 0 );
+    ~KisChannelView();  
+    void showScrollBars();
+    ChannelTable *channelTable() { return channeltable; }
+    QHBox *getFrame() { return frame; };
+
+private:
+    void initGUI();
+    ChannelTable *channeltable;
+    QHBox *frame;
+    QHBox *buttons;
+    
+    KisFrameButton *pbAddChannel;
+    KisFrameButton *pbRemoveChannel;
+    KisFrameButton *pbUp;
+    KisFrameButton *pbDown;
 };
 
 class ChannelTable : public QTableView
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
 
-  enum action { VISIBLE, ADDCHANNEL, REMOVECHANNEL, RAISECHANNEL, LOWERCHANNEL };
+    enum action { VISIBLE, ADDCHANNEL, REMOVECHANNEL, RAISECHANNEL, LOWERCHANNEL };
 
-  ChannelTable( QWidget *_parent = 0, const char *_name = 0 );
-  ChannelTable( KisDoc *_doc, QWidget *_parent = 0, const char *_name = 0 );
+    ChannelTable( QWidget *_parent = 0, const char *_name = 0 );
+    ChannelTable( KisDoc *_doc, QWidget *_parent = 0, const char *_name = 0 );
 
-  void updateTable();
-  void updateAllCells();
-  void update_contextmenu( int _index );
+    // this one is used because it keeps a reference to the ChannelView  
+    ChannelTable(KisDoc* doc, QWidget* _parent = 0, 
+        KisChannelView *_channelview = 0, const char* name = 0 );
 
-  void selectChannel( int _index );
-  void slotInverseVisibility( int _index );
+    void updateTable();
+    void updateAllCells();
+    void update_contextmenu( int _index );
 
-  virtual QSize sizeHint() const;
+    void selectChannel( int _index );
+    void slotInverseVisibility( int _index );
+    void slotProperties();
+    virtual QSize sizeHint() const;
 
 public slots:
 
-  void slotMenuAction( int );
-  void slotAddChannel();
-  void slotRemoveChannel();
+    void slotMenuAction( int );
+    void slotAddChannel();
+    void slotRemoveChannel();
 
 protected:
 
-  virtual void paintCell( QPainter*, int _row, int _col );
-  virtual void mousePressEvent( QMouseEvent *_event );
+    virtual void paintCell( QPainter*, int _row, int _col );
+    virtual void mousePressEvent( QMouseEvent *_event );
 
 private:
 
-  void init(KisDoc* doc);
+    void init(KisDoc* doc);
 
-  KisDoc* m_doc;
-  int m_items, m_selected;
-  QPopupMenu* m_contextmenu;
-  QPixmap *m_eyeIcon, *m_linkIcon;
-  QRect m_eyeRect, m_linkRect, m_previewRect;
+    KisDoc* m_doc;
+    KisChannelView* pChannelView;
+    
+    int m_items, m_selected;
+    QPopupMenu* m_contextmenu;
+    QPixmap *mVisibleIcon, *mNovisibleIcon;
+    QPixmap *mLinkedIcon, *mUnlinkedIcon;
+    QRect mVisibleRect, mLinkedRect, mPreviewRect;
+};
+
+class ChannelPropertyDialog : QDialog
+{
+    Q_OBJECT
+
+public:
+
+    static bool editProperties( KisChannel& _channel );
+
+protected:
+
+    ChannelPropertyDialog( QString _channelname, uchar _opacity, 
+    QWidget *_parent, const char *_name );
+
+    QLineEdit *m_name;
+    IntegerWidget *m_opacity;
 };
 
 #endif

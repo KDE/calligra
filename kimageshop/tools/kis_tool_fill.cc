@@ -25,18 +25,18 @@
 #include "kis_cursor.h"
 
 
-Fill::Fill(KisDoc *doc, KisView *view)
+FillTool::FillTool(KisDoc *doc, KisView *view)
   : KisTool(doc, view)
 {
     m_Cursor = KisCursor::pickerCursor();
 }
 
-Fill::~Fill() {}
+FillTool::~FillTool() {}
 
 
 // floodfill based on GPL code in gpaint by Li-Cheng (Andy) Tai
 
-int Fill::is_old_pixel_value(struct fillinfo *info, int x, int y)
+int FillTool::is_old_pixel_value(struct fillinfo *info, int x, int y)
 {
    unsigned char o_r = fLayer->pixel(0, x, y);
    unsigned char o_g = fLayer->pixel(1, x, y);   
@@ -51,7 +51,7 @@ int Fill::is_old_pixel_value(struct fillinfo *info, int x, int y)
 }
 
 
-void Fill::set_new_pixel_value(struct fillinfo *info, int x, int y)
+void FillTool::set_new_pixel_value(struct fillinfo *info, int x, int y)
 {
    fLayer->setPixel(0, x, y, info->r);
    fLayer->setPixel(1, x, y, info->g);   
@@ -63,7 +63,7 @@ void Fill::set_new_pixel_value(struct fillinfo *info, int x, int y)
 
 /* algorithm based on SeedFill.c from GraphicsGems 1 */
 
-void Fill::flood_fill(struct fillinfo *info, int x, int y)
+void FillTool::flood_fill(struct fillinfo *info, int x, int y)
 {
    struct fillpixelinfo stack[STACKSIZE];
    struct fillpixelinfo * sp = stack;
@@ -132,7 +132,7 @@ skip:
 }   
    
 
-void Fill::seed_flood_fill( int x, int y, QRect & frect )
+void FillTool::seed_flood_fill( int x, int y, QRect & frect )
 {
     struct fillinfo fillinfo;
    
@@ -155,15 +155,14 @@ void Fill::seed_flood_fill( int x, int y, QRect & frect )
 }
 
 
-bool Fill::flood(int startX, int startY)
+bool FillTool::flood(int startX, int startY)
 {
     int startx = startX;
     int starty = startY;
     
     KisImage *img = m_pDoc->current();
+    if (!img) return false;    
     KisLayer *lay = img->getCurrentLayer();
-    
-    if (!img) return false;
     if (!lay) return false;
 
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
@@ -202,7 +201,7 @@ bool Fill::flood(int startX, int startY)
 }
 
 
-void Fill::mousePress(QMouseEvent *e)
+void FillTool::mousePress(QMouseEvent *e)
 {
     KisImage * img = m_pDoc->current();
     if (!img) return;
@@ -220,6 +219,10 @@ void Fill::mousePress(QMouseEvent *e)
     if( !img->getCurrentLayer()->imageExtents().contains(pos))
         return;
   
+    /*  need to fill with foreground color on left click,
+    transparent on middle click, and background color on right click,
+    need another paramater or to set color here and pass in */
+    
     if (e->button() == QMouseEvent::LeftButton)
         flood(pos.x(), pos.y());
     else if (e->button() == QMouseEvent::RightButton)

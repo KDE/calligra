@@ -23,7 +23,10 @@
 
 #include <qobject.h>
 #include <qimage.h>
+
 #include "kis_doc.h"
+#include "kis_image.h"
+#include "kis_layer.h"
 
 class KisDoc;
 
@@ -32,21 +35,32 @@ class KisSelection : public QObject
     Q_OBJECT
 
 public:
+
     KisSelection(KisDoc *doc);
     ~KisSelection();
+
+    void setNull();
     bool erase();
     
     QImage & getImage() { return selectImage; }
     void setImage(QImage & img);
+    
     QRect  & getRect() { return selectRect; } 
     void setRect(QRect & rect);
     
 protected:
+
     QImage selectImage;
     QRect selectRect;
           
 private:
+
+    // the document, image and layer for the selection
+
     KisDoc *pDoc;
+    KisImage *pImage;
+    KisLayer *pLayer;
+
 };
 
 #endif

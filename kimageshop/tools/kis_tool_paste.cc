@@ -31,8 +31,7 @@
 #include "kis_cursor.h"
 #include "kis_util.h"
 
-PasteTool::PasteTool(KisDoc *doc, KisView *view, 
-    KisCanvas *canvas, const KisSelection *_selection)
+PasteTool::PasteTool(KisDoc *doc, KisView *view, KisCanvas *canvas)
     : KisTool(doc, view)
 {
     m_dragging = false;
