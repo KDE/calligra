@@ -1137,8 +1137,39 @@ QString convertOasisPenToString( const QPen & pen )
     return s;
 }
 
-QPen convertOasisStringToPen( const QString &str )
+QPen convertOasisStringToPen( const QString &border )
 {
+    QPen pen;
     //string like "0.088cm solid #800000"
+    if (border.isEmpty() || border=="none" || border=="hidden") // in fact no border
+        return pen;
+    //code from koborder, for the moment kspread doesn't use koborder
+    // ## isn't it faster to use QStringList::split than parse it 3 times?
+    QString _width = border.section(' ', 0, 0);
+    QCString _style = border.section(' ', 1, 1).latin1();
+    QString _color = border.section(' ', 2, 2);
+
+    pen.setWidth( ( int )( KoUnit::parseValue( _width, 1.0 ) ) );
+
+    if ( _style =="none" )
+        pen.setStyle( Qt::NoPen );
+    else if ( _style =="solid" )
+        pen.setStyle( Qt::SolidLine );
+    else if ( _style =="dashed" )
+        pen.setStyle( Qt::DashLine );
+    else if ( _style =="dotted" )
+        pen.setStyle( Qt::DotLine );
+    else if ( _style =="dot-dash" )
+        pen.setStyle( Qt::DashDotLine );
+    else if ( _style =="dot-dot-dash" )
+        pen.setStyle( Qt::DashDotDotLine );
+    else
+        kdDebug()<<" style undefined : "<<_style<<endl;
+
+    if ( _color.isEmpty() )
+        pen.setColor( QColor() );
+    else
+        pen.setColor(  QColor( _color ) );
+
     return QPen();
 }
