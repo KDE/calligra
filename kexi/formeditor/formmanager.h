@@ -141,9 +141,12 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void cutWidget();
 		/*! Pastes the XML representation of the copied or cut widget. The widget is
 		  pasted when the user clicks the Form to
-		  indicate the new position of the widget, or at the position of the contextual menu if there is one.
-		 */
+		  indicate the new position of the widget, or at the position of the contextual menu if there is one. */
 		void pasteWidget();
+		/*! Selects all toplevel widgets in trhe current form. */
+		void selectAll();
+		/*! Clears the contents of the selected widget(s) (eg for a line edit or a listview). */
+		void clearWidgetContent();
 
 		void undo();
 		void redo();

@@ -168,16 +168,12 @@ KFormDesignerKDevPart::setupActions()
 	KStdAction::paste(m_manager, SLOT(pasteWidget()), actionCollection());
 	KStdAction::undo(m_manager, SLOT(undo()), actionCollection());
 	KStdAction::redo(m_manager, SLOT(redo()), actionCollection());
-	new KAction(i18n("Preview Form"), "filequickprint", KShortcut(0), this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
+	KStdAction::selectAll(m_manager, SLOT(selectAll()), actionCollection());
+	new KAction(i18n("Delete Widget"), "editdelete", KShortcut(0), m_manager, SLOT((deleteWidget())), actionCollection(), "delete_widget");
+	new KAction(i18n("Preview Form"), "filequickprint", "Ctrl+T", this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
 	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), m_manager, SLOT(editTabOrder()), actionCollection(), "taborder");
 	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), m_manager, SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
 	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), m_manager, SLOT(editConnections()), actionCollection(), "form_connections");
-	//KStdAction::printPreview(this, SLOT(slotPreviewForm()), actionCollection());
-#if KDE_IS_VERSION(3,1,9) //&& !defined(Q_WS_WIN)
-	KStdAction::clear(m_manager, SLOT(deleteWidget()), actionCollection());
-#else
-	//TODO
-#endif
 
 	new KAction(i18n("Lay Out Widgets &Horizontally"), QString::null, KShortcut(0), m_manager, SLOT(layoutHBox()), actionCollection(), "layout_hbox");
 	new KAction(i18n("Lay Out Widgets &Vertically"), QString::null, KShortcut(0), m_manager, SLOT(layoutVBox()), actionCollection(), "layout_vbox");

@@ -65,6 +65,7 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 		   KFormDesigner::Container *container, QValueVector<int> *menuIds);
 		virtual void		startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container);
 		virtual void		previewWidget(const QString &classname, QWidget *widget, KFormDesigner::Container *container);
+		virtual void		clearWidgetContent(const QString &classname, QWidget *w);
 
 		virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
 		         QDomElement &parentNode, QDomDocument &parent);

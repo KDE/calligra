@@ -25,10 +25,11 @@
 #include "objecttree.h"
 #include "utils.h"
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 /// Helper function to clear a list (by removing all children)
-void removeChildrenFromList(WidgetList &list)
+void
+KFormDesigner::removeChildrenFromList(WidgetList &list)
 {
 	for(WidgetListIterator it(list); it.current() != 0; ++it)  {
 		QWidget *w = it.current();
@@ -46,7 +47,8 @@ void removeChildrenFromList(WidgetList &list)
 }
 
 //// Helper functions for event filtering on composed widgets
-void installRecursiveEventFilter(QObject *object, QObject *container)
+void
+KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
 {
 	if(!object->isWidgetType())
 		return;
@@ -63,7 +65,8 @@ void installRecursiveEventFilter(QObject *object, QObject *container)
 		installRecursiveEventFilter(obj, container);
 }
 
-void removeRecursiveEventFilter(QObject *object, QObject *container)
+void
+KFormDesigner::removeRecursiveEventFilter(QObject *object, QObject *container)
 {
 	object->removeEventFilter(container);
 	if(!object->isWidgetType())
@@ -76,7 +79,8 @@ void removeRecursiveEventFilter(QObject *object, QObject *container)
 		removeRecursiveEventFilter(obj, container);
 }
 
-void setRecursiveCursor(QWidget *w, Form *form)
+void
+KFormDesigner::setRecursiveCursor(QWidget *w, Form *form)
 {
 	ObjectTreeItem *tree = form->objectTree()->lookup(w->name());
 	if(tree && ((tree->modifiedProperties()->contains("cursor")) || !tree->children()->isEmpty()) )
@@ -91,4 +95,3 @@ void setRecursiveCursor(QWidget *w, Form *form)
 	delete l;
 }
 
-}

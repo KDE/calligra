@@ -193,6 +193,16 @@ WidgetLibrary::previewWidget(const QString &classname, QWidget *widget, Containe
 	wfactory->factory()->previewWidget(classname, widget, container);
 }
 
+void
+WidgetLibrary::clearWidgetContent(const QString &classname, QWidget *w)
+{
+	WidgetInfo *wfactory = d->widgets[classname];
+	if(!wfactory)
+		return ;
+
+	wfactory->factory()->clearWidgetContent(classname, w);
+}
+
 QString
 WidgetLibrary::displayName(const QString &classname)
 {

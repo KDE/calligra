@@ -179,7 +179,7 @@ FormManager::isPasteEnabled()
 void
 FormManager::undo()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	activeForm()->commandHistory()->undo();
@@ -188,7 +188,7 @@ FormManager::undo()
 void
 FormManager::redo()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	activeForm()->commandHistory()->redo();
@@ -525,6 +525,7 @@ FormManager::previewForm(Form *form, QWidget *container, Form *toForm)
 	else
 		myform = toForm;
 	myform->createToplevel(container);
+	container->setStyle( &(form->widget()->style()) );
 	FormIO::loadFormFromDom(myform, container, domDoc);
 
 	myform->setDesignMode(false);
@@ -551,7 +552,7 @@ FormManager::isTopLevel(QWidget *w)
 void
 FormManager::deleteWidget()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	QPtrList<QWidget> *list = activeForm()->selectedWidgets();
@@ -597,7 +598,7 @@ FormManager::copyWidget()
 void
 FormManager::cutWidget()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	QPtrList<QWidget> *list = activeForm()->selectedWidgets();
@@ -613,7 +614,7 @@ FormManager::pasteWidget()
 {
 	if(!m_domDoc.namedItem("UI").hasChildNodes())
 		return;
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	KCommand *com = new PasteWidgetCommand(m_domDoc, activeForm()->activeContainer(), m_insertPoint);
@@ -871,7 +872,7 @@ FormManager::createLayout(int layoutType)
 void
 FormManager::breakLayout()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	Container *container = activeForm()->activeContainer();
@@ -903,7 +904,7 @@ FormManager::showPropertyBuffer(ObjectPropertyBuffer *buff)
 void
 FormManager::editTabOrder()
 {
-	if(!m_active)
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 	TabStopDialog dlg(m_active->widget()->topLevelWidget());
 	dlg.exec(m_active);
@@ -912,7 +913,7 @@ FormManager::editTabOrder()
 void
 FormManager::slotStyle()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
@@ -928,7 +929,7 @@ FormManager::slotStyle()
 void
 FormManager::editFormPixmapCollection()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	PixmapCollectionEditor dialog(activeForm()->pixmapCollection(), activeForm()->widget()->topLevelWidget());
@@ -938,7 +939,7 @@ FormManager::editFormPixmapCollection()
 void
 FormManager::editConnections()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	ConnectionDialog dialog(activeForm()->widget()->topLevelWidget());
@@ -948,7 +949,7 @@ FormManager::editConnections()
 void
 FormManager::alignWidgets(int type)
 {
-	if(!activeForm() || (activeForm()->selectedWidgets()->count() < 2))
+	if(!activeForm() || !activeForm()->objectTree() || (activeForm()->selectedWidgets()->count() < 2))
 		return;
 
 	QWidget *parentWidget = activeForm()->selectedWidgets()->first()->parentWidget();
@@ -993,7 +994,7 @@ FormManager::alignWidgetsToBottom()
 void
 FormManager::adjustWidgetSize()
 {
-	if(!m_active)
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToFit, *(activeForm()->selectedWidgets()), activeForm());
@@ -1003,7 +1004,7 @@ FormManager::adjustWidgetSize()
 void
 FormManager::alignWidgetsToGrid()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	KCommand *com = new AlignWidgetsCommand(AlignWidgetsCommand::AlignToGrid, *(activeForm()->selectedWidgets()), activeForm());
@@ -1013,7 +1014,7 @@ FormManager::alignWidgetsToGrid()
 void
 FormManager::adjustSizeToGrid()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToGrid, *(activeForm()->selectedWidgets()), activeForm());
@@ -1023,7 +1024,7 @@ FormManager::adjustSizeToGrid()
 void
 FormManager::adjustWidthToSmall()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToSmallWidth, *(activeForm()->selectedWidgets()), activeForm());
@@ -1033,7 +1034,7 @@ FormManager::adjustWidthToSmall()
 void
 FormManager::adjustWidthToBig()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToBigWidth, *(activeForm()->selectedWidgets()), activeForm());
@@ -1043,7 +1044,7 @@ FormManager::adjustWidthToBig()
 void
 FormManager::adjustHeightToSmall()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToSmallHeight, *(activeForm()->selectedWidgets()), activeForm());
@@ -1053,7 +1054,7 @@ FormManager::adjustHeightToSmall()
 void
 FormManager::adjustHeightToBig()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	KCommand *com = new AdjustSizeCommand(AdjustSizeCommand::SizeToBigHeight, *(activeForm()->selectedWidgets()), activeForm());
@@ -1063,7 +1064,7 @@ FormManager::adjustHeightToBig()
 void
 FormManager::bringWidgetToFront()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
@@ -1073,11 +1074,32 @@ FormManager::bringWidgetToFront()
 void
 FormManager::sendWidgetToBack()
 {
-	if(!activeForm())
+	if(!activeForm() || !activeForm()->objectTree())
 		return;
 
 	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
 		w->lower();
+}
+
+void
+FormManager::selectAll()
+{
+	if(!activeForm() || !activeForm()->objectTree())
+		return;
+
+	activeForm()->resetSelection();
+	for(ObjectTreeItem *it = activeForm()->objectTree()->children()->first(); it; it = activeForm()->objectTree()->children()->next())
+		activeForm()->setSelectedWidget(it->widget(), true);
+}
+
+void
+FormManager::clearWidgetContent()
+{
+	if(!activeForm() || !activeForm()->objectTree())
+		return;
+
+	for(QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next())
+		m_lib->clearWidgetContent(w->className(), w);
 }
 
 void

@@ -161,16 +161,13 @@ KFormDesignerPart::setupActions()
 	KStdAction::paste(m_manager, SLOT(pasteWidget()), actionCollection());
 	KStdAction::undo(m_manager, SLOT(undo()), actionCollection());
 	KStdAction::redo(m_manager, SLOT(redo()), actionCollection());
-	new KAction(i18n("Preview Form"), "filequickprint", KShortcut(0), this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
+	KStdAction::selectAll(m_manager, SLOT(selectAll()), actionCollection());
+	new KAction(i18n("Clear Widget Contents"), "editclear", KShortcut(0), m_manager, SLOT(clearWidgetContent()), actionCollection(), "clear_contents");
+	new KAction(i18n("Delete Widget"), "editdelete", KShortcut(0), m_manager, SLOT(deleteWidget()), actionCollection(), "delete_widget");
+	new KAction(i18n("Preview Form"), "filequickprint", "Ctrl+T", this, SLOT(slotPreviewForm()), actionCollection(), "preview_form");
 	new KAction(i18n("Edit Tab Order"), "tab_order", KShortcut(0), m_manager, SLOT(editTabOrder()), actionCollection(), "taborder");
 	new KAction(i18n("Edit Pixmap Collection"), "icons", KShortcut(0), m_manager, SLOT(editFormPixmapCollection()), actionCollection(), "pixmap_collection");
 	new KAction(i18n("Edit Form Connections"), "connections", KShortcut(0), m_manager, SLOT(editConnections()), actionCollection(), "form_connections");
-	//KStdAction::printPreview(this, SLOT(slotPreviewForm()), actionCollection());
-#if KDE_IS_VERSION(3,1,9) //&& !defined(Q_WS_WIN)
-	KStdAction::clear(m_manager, SLOT(deleteWidget()), actionCollection());
-#else
-	//TODO
-#endif
 
 	new KAction(i18n("Lay Out Widgets &Horizontally"), QString::null, KShortcut(0), m_manager, SLOT(layoutHBox()), actionCollection(), "layout_hbox");
 	new KAction(i18n("Lay Out Widgets &Vertically"), QString::null, KShortcut(0), m_manager, SLOT(layoutVBox()), actionCollection(), "layout_vbox");
@@ -335,9 +332,8 @@ KFormDesignerPart::slotWidgetSelected(Form *form, bool multiple)
 	// Enable edit actions
 	ENABLE_ACTION("edit_copy", true);
 	ENABLE_ACTION("edit_cut", true);
-#if KDE_IS_VERSION(3,1,9) //&& !defined(Q_WS_WIN)
-	ENABLE_ACTION("edit_clear", true);
-#endif
+	ENABLE_ACTION("delete_widget", true);
+	ENABLE_ACTION("clear_contents", true);
 
 	// 'Align Widgets' menu
 	ENABLE_ACTION("align_menu", multiple);
@@ -422,6 +418,7 @@ KFormDesignerPart::enableFormActions()
 	ENABLE_ACTION("preview_form", true);
 
 	ENABLE_ACTION("edit_paste", m_manager->isPasteEnabled());
+	ENABLE_ACTION("edit_selectall", true);
 }
 
 void
@@ -430,7 +427,8 @@ KFormDesignerPart::disableWidgetActions()
 	// Disable edit actions
 	ENABLE_ACTION("edit_copy", false);
 	ENABLE_ACTION("edit_cut", false);
-	ENABLE_ACTION("edit_clear", false);
+	ENABLE_ACTION("delete_widget", false);
+	ENABLE_ACTION("clear_contents", false);
 
 	// Disable format functions
 	ENABLE_ACTION("align_menu", false);

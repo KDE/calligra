@@ -492,6 +492,21 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 }
 
 void
+StdWidgetFactory::clearWidgetContent(const QString &classname, QWidget *w)
+{
+	if(classname == "KLineEdit")
+		((KLineEdit*)w)->clear();
+	else if(classname == "KListBox")
+		((KListBox*)w)->clear();
+	else if(classname == "KListView")
+		((KListView*)w)->clear();
+	else if(classname == "KComboBox")
+		((KComboBox*)w)->clear();
+	else if(classname == "KTextEdit")
+		((KTextEdit*)w)->clear();
+}
+
+void
 StdWidgetFactory::changeText(const QString &text)
 {
 	QString n = WidgetFactory::m_widget->className();

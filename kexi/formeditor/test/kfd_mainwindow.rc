@@ -9,6 +9,9 @@
   <Menu noMerge="1" name="edit"><text>&amp;Edit</text>
     <Merge/>
   </Menu>
+  <Menu noMerge="1" name="view"><text>&amp;View</text>
+   <Merge/>
+  </Menu>
   <Menu noMerge="1" name="tools"><text>&amp;Tools</text>
     <Merge/>
   </Menu>

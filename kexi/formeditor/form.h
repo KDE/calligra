@@ -33,7 +33,6 @@ class KActionCollection;
 class KCommandHistory;
 class KCommand;
 class PixmapCollection;
-typedef QPtrList<QWidget> WidgetList;
 
 namespace KFormDesigner {
 
@@ -44,6 +43,7 @@ class ObjectTree;
 class ObjectTreeItem;
 class ConnectionBuffer;
 typedef QPtrList<ObjectTreeItem> ObjectTreeList;
+typedef QPtrList<QWidget> WidgetList;
 
 //! Base (virtual) class for all form widgets
 /*! You need to inherit this class, and implement the drawing functions. This is necessary

@@ -6,8 +6,6 @@
     <Action name="file_new"/>
     <Action name="file_open"/>
     <Separator />
-    <Action name="preview_form"/>
-    <Separator />
     <Action name="file_save"/>
     <Action name="file_save_as"/>
     <Separator/>
@@ -19,8 +17,14 @@
     <Action name="edit_cut" group="edit_paste_merge"/>
     <Action name="edit_copy" group="edit_paste_merge"/>
     <Action name="edit_paste" group="edit_paste_merge"/>
-    <Action name="edit_clear" group="edit_paste_merge"/>
+    <Action name="delete_widget" group="edit_paste_merge"/>
+    <Action name="clear_contents" group="edit_paste_merge"/>
+    <Separator group="edit_select_merge"/>
+    <Action name="edit_select_all" group="edit_select_merge"/>
     <Separator group="edit_paste_merge"/>
+  </Menu>
+  <Menu name="view" noMerge="1">
+    <Action name="preview_form"/>
   </Menu>
   <Menu name="tools" noMerge="1">
    <Action name="taborder"/>
@@ -88,7 +92,8 @@
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="edit_paste"/>
-    <Action name="edit_clear"/>
+    <Action name="delete_widget"/>
+    <Action name="clear_contents"/>
 </ToolBar>
 <ToolBar name="containers" fullWidth="false" noMerge="1">
  <text>Containers</text>

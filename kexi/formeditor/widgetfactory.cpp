@@ -337,6 +337,10 @@ WidgetFactory::slotTextChanged()
 }
 
 void
+WidgetFactory::clearWidgetContent(const QString &, QWidget *)
+{}
+
+void
 WidgetFactory::changeText(const QString&)
 {}
 
