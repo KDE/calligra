@@ -1213,7 +1213,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	    switch ( toolEditMode ) {
 	    case TEM_MOUSE: {
 
-		kdDebug() << "TEM_MOUSE mouse move" << endl;
 		oldMx = ( oldMx / rastX() ) * rastX();
 		oldMy = ( oldMy / rastY() ) * rastY();
 
