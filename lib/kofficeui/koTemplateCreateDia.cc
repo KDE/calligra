@@ -22,6 +22,7 @@
 
 #include <klocale.h>
 #include <kiconloaderdialog.h>
+#include <klineeditdlg.h>
 #include <kapp.h>
 
 #include <qlayout.h>
@@ -31,7 +32,6 @@
 #include <qheader.h>
 #include <qfileinfo.h>
 #include <qmessagebox.h>
-#include <qlinedialog.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qlineedit.h>
@@ -50,7 +50,7 @@
 
 KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_, const QPixmap &pix,
 		     const QStringList &templateRoots_, const QString extension_ )
-    : KDialogBase( parent, "", TRUE, i18n( "Create a Template" ), 
+    : KDialogBase( parent, "", TRUE, i18n( "Create a Template" ),
 		   KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok ),
       extension( extension_ ), file( file_ )
 {
@@ -60,25 +60,25 @@ KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_,
 	     this, SLOT( reject() ) );
 
     QWidget *mainview = new QWidget( this );
-    
+
     QHBoxLayout *layout = new QHBoxLayout( mainview );
     layout->setSpacing( 5 );
-    
+
     QVBoxLayout *left = new QVBoxLayout( layout );
     left->setSpacing( 5 );
-    
+
     QLabel *label = new QLabel( i18n( "Choose the Folder for the Template\n"
-				      "(with a rightclick into the list you can create new folders)" ), 
+				      "(with a rightclick into the list you can create new folders)" ),
 				mainview );
     left->addWidget( label );
-    
+
     folderList = new QListView( mainview );
     left->addWidget( folderList );
-    
+
     folderList->addColumn( "" );
     folderList->header()->hide();
     folderList->setRootIsDecorated( TRUE );
-    
+
     QStringList::ConstIterator it = templateRoots_.begin();
     QString privateData = getenv( "HOME" );
     privateData += "/.kde/share/apps/" + kapp->instanceName() + "/templates/";
@@ -114,7 +114,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_,
 	    file.close();
 	}
     }
-    
+
     if ( !hadPrivateData ) {
 	(void)new QListViewItem( folderList, privateData );
 	system( QString( "mkdir -p \"%1\"" ).arg( privateData ) );
@@ -126,47 +126,47 @@ KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_,
 	     this, SLOT( doubleClicked( QListViewItem * ) ) );
     connect( folderList, SIGNAL( selectionChanged( QListViewItem * ) ),
 	     this, SLOT( selectionChanged( QListViewItem * ) ) );
-    
+
     QVBoxLayout *right = new QVBoxLayout( layout );
-    
+
     QHBoxLayout *tmpLayout = new QHBoxLayout( right );
-    
+
     label = new QLabel( i18n( "Template Name:" ), mainview );
     tmpLayout->addWidget( label );
-    
+
     lined = new QLineEdit( mainview );
     tmpLayout->addWidget( lined );
     connect( lined, SIGNAL( textChanged( const QString & ) ),
 	     this, SLOT( nameChanged( const QString & ) ) );
-    
+
     tmpLayout = new QHBoxLayout( right );
-    
+
     QButtonGroup *grp = new QButtonGroup( mainview );
     grp->hide();
 
     QRadioButton *rb = new QRadioButton( i18n( "&Use generated pixmap" ), mainview );
     rb->setChecked( TRUE );
     tmpLayout->addWidget( rb );
-    grp->insert( rb );    
-    
+    grp->insert( rb );
+
     label = new QLabel( mainview );
     label->setPixmap( pix );
     tmpLayout->addWidget( label );
-    
+
     tmpLayout = new QHBoxLayout( right );
 
     currPixmap = pix;
-    
+
     rb = new QRadioButton( i18n( "&Choose pixmap" ), mainview );
     rb->setChecked( FALSE );
     tmpLayout->addWidget( rb );
-    grp->insert( rb );    
+    grp->insert( rb );
     rb->setEnabled( FALSE );
-    
+
     KIconLoaderButton *ilb = new KIconLoaderButton( mainview );
     tmpLayout->addWidget( ilb );
     ilb->setEnabled( FALSE );
-    
+
     setMainWidget( mainview );
 
     QListViewItemIterator it3( folderList );
@@ -178,7 +178,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_,
     }
 
     lined->setFocus();
-    
+
     resize( sizeHint().width(), 300 );
 }
 
@@ -194,18 +194,18 @@ void KoTemplateCreateDia::createFolder( QListViewItem *item, const QPoint &, int
 {
     if ( !item )
 	return;
-    
+
     if ( item->parent() )
 	item = item->parent();
     if ( item->parent() )
 	item = item->parent();
-    
+
     QPopupMenu m( this );
     int i = m.insertItem( i18n( "&Add Folder..." ) );
     if ( m.exec( QCursor::pos() ) == i ) {
 	QString parent = item->text( 0 );
     	bool ok;
-	QString name = QLineDialog::getText( i18n( "Add Folder to %1\nFolder Name:" ).arg( parent ),
+	QString name = KLineEditDlg::getText( i18n( "Add Folder to %1\nFolder Name:" ).arg( parent ),
 					     QString::null, &ok, this );
 	if ( !name.isEmpty() && ok ) {
 	    QDir dir( parent );
@@ -223,7 +223,7 @@ void KoTemplateCreateDia::createFolder( QListViewItem *item, const QPoint &, int
     }
 }
 
-void KoTemplateCreateDia::selectionChanged( QListViewItem *item ) 
+void KoTemplateCreateDia::selectionChanged( QListViewItem *item )
 {
     if ( item && ( !item->parent() ||
 	( item->parent() && item->parent()->parent() ) ) ) {
@@ -287,13 +287,13 @@ void KoTemplateCreateDia::ok()
 	    break;
 	}
     }
-    
+
     if ( !item ) {
 	QMessageBox::critical( this, i18n( "Create Template" ),
 			       i18n( "Can't create a Template. Please select a Folder in the Folder List!" ) );
 	return;
     }
-    
+
     if ( currName.isEmpty() ) {
 	QMessageBox::critical( this, i18n( "Create Template" ),
 			       i18n( "Can't create a Template. Please enter a Name for the Template!" ) );
@@ -304,7 +304,7 @@ void KoTemplateCreateDia::ok()
     if ( fi.extension().isEmpty() || fi.extension() != "kpt" )
 	currName += "." + extension;
 
-    if ( QFile( item->parent()->text( 0 ) + 
+    if ( QFile( item->parent()->text( 0 ) +
 		item->text( 0 ) + "/" + currName ).exists() ) {
 	if ( QMessageBox::warning( this, i18n( "Create Template" ),
 				   i18n( "A template with the same name (%1) already exists. Do you want "
@@ -314,11 +314,11 @@ void KoTemplateCreateDia::ok()
 
     QString cmd = "cp ";
     cmd += file + " ";
-    cmd += "\"" + item->parent()->text( 0 ) + item->text( 0 ) + 
+    cmd += "\"" + item->parent()->text( 0 ) + item->text( 0 ) +
 	"/" + currName + "\"";
     system( cmd.latin1() );
     currName = fi.baseName();
-    currPixmap.save( item->parent()->text( 0 ) + item->text( 0 ) + 
+    currPixmap.save( item->parent()->text( 0 ) + item->text( 0 ) +
 		     "/" + currName + ".png", "PNG" );
     accept();
 }
