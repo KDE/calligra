@@ -519,6 +519,8 @@ QCursor KWFrameSet::getMouseCursor( unsigned int mx, unsigned int my )
 /*================================================================*/
 void KWFrameSet::save( QDomElement &parentElem )
 {
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -832,6 +834,8 @@ void KWPictureFrameSet::setSize( QSize _imgSize )
 /*================================================================*/
 void KWPictureFrameSet::save( QDomElement & parentElem )
 {
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
     parentElem.appendChild( framesetElem );
 
@@ -874,6 +878,8 @@ void KWPictureFrameSet::load( QDomElement &attributes )
 void KWPictureFrameSet::drawContents( QPainter *painter, const QRect & crect,
                                       QColorGroup &, bool, bool )
 {
+    if ( frames.isEmpty() ) // Deleted frameset
+        return;
     QRect r = kWordDocument()->zoomRect( *frames.first() );
 
     if ( r.size() != m_image.image().size() )
@@ -961,6 +967,8 @@ void KWPartFrameSet::updateFrames()
 /*================================================================*/
 void KWPartFrameSet::save( QDomElement &parentElem )
 {
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
     KWFrameSet::save( parentElem );
 }
 
@@ -1029,13 +1037,16 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
         if ( resetChanged )
             m_changed = false;
 
-        //kdDebug(32001) << "KWFormulaFrameSet::drawContents1" << endl;
-        QRegion reg = frameClipRegion( painter, frames.first(), crect );
-        if ( !reg.isEmpty() ) {
-            painter->save();
-            painter->setClipRegion( reg );
-            formula->draw( *painter, crect, cg );
-            painter->restore();
+        if ( !frames.isEmpty() )
+        {
+            //kdDebug(32001) << "KWFormulaFrameSet::drawContents1" << endl;
+            QRegion reg = frameClipRegion( painter, frames.first(), crect );
+            if ( !reg.isEmpty() ) {
+                painter->save();
+                painter->setClipRegion( reg );
+                formula->draw( *painter, crect, cg );
+                painter->restore();
+            }
         }
     }
 }
@@ -1049,13 +1060,16 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
         if ( resetChanged )
             m_changed = false;
 
-        //kdDebug(32001) << "KWFormulaFrameSet::drawContents2" << endl;
-        QRegion reg = frameClipRegion( painter, frames.first(), crect );
-        if ( !reg.isEmpty() ) {
-            painter->save();
-            painter->setClipRegion( reg );
-            formulaView->draw( *painter, crect, cg );
-            painter->restore();
+        if ( !frames.isEmpty() )
+        {
+            //kdDebug(32001) << "KWFormulaFrameSet::drawContents2" << endl;
+            QRegion reg = frameClipRegion( painter, frames.first(), crect );
+            if ( !reg.isEmpty() ) {
+                painter->save();
+                painter->setClipRegion( reg );
+                formulaView->draw( *painter, crect, cg );
+                painter->restore();
+            }
         }
     }
 }
@@ -1106,7 +1120,7 @@ void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
 void KWFormulaFrameSet::updateFrames()
 {
     KWFrameSet::updateFrames();
-    if ( !formula )
+    if ( !formula || frames.isEmpty() )
         return;
 
     formula->moveTo( kWordDocument()->zoomItX( frames.at(0)->x() ),
@@ -1115,6 +1129,8 @@ void KWFormulaFrameSet::updateFrames()
 
 void KWFormulaFrameSet::save(QDomElement& parentElem)
 {
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
     QDomElement framesetElem = parentElem.ownerDocument().createElement("FRAMESET");
     parentElem.appendChild(framesetElem);
 

@@ -537,6 +537,8 @@ bool KWTextFrameSet::isPTYInFrame( unsigned int _frame, unsigned int _ypos )
 /*================================================================*/
 void KWTextFrameSet::save( QDomElement &parentElem )
 {
+    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+        return;
     unzoom();
 
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
