@@ -262,8 +262,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
     connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
-    connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
-
     setEmpty();
     setModified(false);
 
@@ -1873,6 +1871,8 @@ bool KWDocument::completeLoading( KoStore *_store )
     emit newContentsSize();
     repaintAllViews( true );     // in case any view exists already
     reactivateBgSpellChecking();
+    connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
+
     return TRUE;
 }
 
