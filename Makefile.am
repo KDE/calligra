@@ -1,5 +1,5 @@
 
-SUBDIRS = lib kspread kpresenter kword kformula kdiagramm killustrator kimage kohtml tools plugins trader koshell pics
+SUBDIRS = lib kspread kpresenter kword kformula kdiagramm killustrator kimage kohtml tools plugins trader koshell po pics
 
 AUTOMAKE_OPTIONS = foreign # 1.4
 
@@ -33,5 +33,5 @@ messages:
 	(cd po && $(MAKE) -f Makefile.am merge)
 
 dist-hook:
-	cd $(top_distdir) && perl $(top_srcdir)/admin/automoc -padmin 
+	cd $(top_distdir) && perl $(top_srcdir)/admin/am_edit -padmin 
 
