@@ -21,7 +21,7 @@
 
 #include <kaction.h>
 #include <qstringlist.h>
-
+#include <koffice_export.h>
 namespace TK {
   enum IconMode { IconOnly, IconAndText, TextOnly };
 }
@@ -29,7 +29,7 @@ namespace TK {
 class TKToolBarButton;
 class TKComboBox;
 
-class TKAction : public KAction
+class KOFFICEUI_EXPORT TKAction : public KAction
 { Q_OBJECT
 public:
   TKAction(QObject* parent, const char* name);
@@ -57,7 +57,7 @@ private:
   TKActionPrivate *d;
 };
 /******************************************************************************/
-class TKBaseSelectAction : public TKAction
+class KOFFICEUI_EXPORT TKBaseSelectAction : public TKAction
 { Q_OBJECT
 friend class TKSelectAction;
 public:
@@ -91,7 +91,7 @@ private:
   TKBaseSelectActionPrivate *d;
 };
 /******************************************************************************/
-class TKSelectAction : public TKBaseSelectAction
+class KOFFICEUI_EXPORT TKSelectAction : public TKBaseSelectAction
 { Q_OBJECT
 public:
   TKSelectAction(QObject* parent, const char* name);

@@ -23,14 +23,14 @@
 #include <qwidget.h>
 #include <qptrlist.h>
 #include <qtimer.h>
-
+#include <koffice_export.h>
 class KoToolDockBase;
 class KoTabbedToolDock;
 
 /**
  * Manager class for a collection of floating palette-like dockers.
  */
-class KoToolDockManager : public QObject
+class KOFFICEUI_EXPORT KoToolDockManager : public QObject
 {
 
     Q_OBJECT

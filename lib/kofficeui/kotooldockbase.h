@@ -22,7 +22,7 @@
 #include <qintdict.h>
 #include <qframe.h>
 #include <qtimer.h>
-
+#include <koffice_export.h>
 class QGridLayout;
 class QTabWidget;
 
@@ -228,7 +228,7 @@ private:
  *   * Add button to enable/disable border hiding.
  *   * Make it possible to drag dockers outside the parent view.
  */
-class KoToolDockBase : public QWidget
+class KOFFICEUI_EXPORT KoToolDockBase : public QWidget
 {
 
     Q_OBJECT

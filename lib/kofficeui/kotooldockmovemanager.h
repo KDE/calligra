@@ -26,7 +26,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #endif
-
+#include <koffice_export.h>
 class QTimer;
 class QWidget;
 
@@ -35,7 +35,7 @@ class QWidget;
  * The move manager handles moving tooldocks or other widgets that it
  * can manage, such as the Kivio stencil bar.
  */
-class KoToolDockMoveManager: public QObject
+class KOFFICEUI_EXPORT KoToolDockMoveManager: public QObject
 {
     Q_OBJECT
 

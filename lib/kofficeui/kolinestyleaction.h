@@ -21,9 +21,9 @@
 #define KOLINESTYLEACTION_H
 
 #include "koselectaction.h"
-
+#include <koffice_export.h>
 /** A line style selection action */
-class KoLineStyleAction : public KoSelectAction
+class KOFFICEUI_EXPORT KoLineStyleAction : public KoSelectAction
 {
   Q_OBJECT
   public:
