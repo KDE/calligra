@@ -52,7 +52,7 @@ public:
 	void transform( const QWMatrix& m );
 
 	// for KoIconItem
-    QPixmap& pixmap() const;
+    QPixmap& pixmap() const ;
     QPixmap& thumbPixmap() const;
 
 	bool isValid() const { return m_valid; }

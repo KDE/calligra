@@ -27,6 +27,7 @@
 #include "vgroup.h"
 
 class QDomElement;
+class DCOPObject;
 
 
 /**
@@ -35,7 +36,7 @@ class QDomElement;
  * Objects in a layer can be manipulated and worked on independant of objects
  * in other layers.
  */
- 
+
 class VLayer : public VGroup
 {
 public:
@@ -43,6 +44,7 @@ public:
 	VLayer( const VLayer& layer );
 
 	virtual ~VLayer();
+    virtual DCOPObject* dcopObject();
 
 	virtual void draw( VPainter *painter, const KoRect* rect = 0L ) const;
 
@@ -68,13 +70,14 @@ public:
 
 	void setName( const QString& name ) { m_name = name; }
 	const QString& name() { return m_name; }
-	
+
 	void setSelected( bool state ) { m_selected = state; }
 	bool selected() { return m_selected; }
 
 private:
 	bool    m_selected; /// True if the layer is checked in the layer docker
 	QString m_name;     /// id for the layer
+        DCOPObject *dcop;
 };
 
 #endif

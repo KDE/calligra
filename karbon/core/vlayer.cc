@@ -30,7 +30,7 @@
 #include "vobject.h"
 //#include "vtext.h"
 #include "vvisitor.h"
-
+#include "vlayer_iface.h"
 #include <kdebug.h>
 
 VLayer::VLayer( VObject* parent, VState state )
@@ -45,6 +45,14 @@ VLayer::VLayer( const VLayer& layer )
 
 VLayer::~VLayer()
 {
+}
+
+DCOPObject* VLayer::dcopObject()
+{
+    if ( !dcop )
+	dcop = new VLayerIface( this );
+
+    return dcop;
 }
 
 void
