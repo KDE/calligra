@@ -54,7 +54,7 @@ QPicture* GraphObj::getPic(int,int,int,int)
   if (objType != OT_PICTURE)
     {
       painter.begin(&pic);
-      painter.setClipping(true);
+      //painter.setClipping(true);
       paintObj(&painter);
       painter.end();
     }

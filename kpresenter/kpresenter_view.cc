@@ -513,7 +513,7 @@ void KPresenterView_impl::screenNext()
 	{
 	  yOffset += KPresenterDoc()->getPageSize(1,0,0,page->presFakt()).height()+10; 
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
-	  page->repaint(false);
+	  //page->repaint(false);
 	  page->setFocus();
 	}
       else

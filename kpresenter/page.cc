@@ -1310,8 +1310,8 @@ bool Page::pNext(bool manual)
       else if (clearSubPres)
 	subPresStep = 0;
 
-      if (pageList()->at(currPresPage-1)->pageEffect != PEF_NONE)
-	{
+//       if (pageList()->at(currPresPage-1)->pageEffect != PEF_NONE)
+// 	{
 	  QPixmap _pix1(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  drawPageInPix(_pix1,view->getDiffY());
 
@@ -1326,15 +1326,15 @@ bool Page::pNext(bool manual)
 
 	  drawBack = true;
 	  return true;
-	}
-      else
-	{
-	  currPresPage++;
-	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
-	  currPresStep = (int)presStepList.first();
-	  drawBack = true;
-	  return true;
-	}
+// 	}
+//       else
+// 	{
+// 	  currPresPage++;
+// 	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+// 	  currPresStep = (int)presStepList.first();
+// 	  drawBack = true;
+// 	  return true;
+// 	}
     }
   return false;
 }
@@ -1547,8 +1547,8 @@ void Page::restoreBackColor(unsigned int pgNum)
 
   if (!sameBack)
     {
-      if (!pageList()->at(pgNum)->hasSameCPix && pageList()->at(pgNum)->cPix && _presFakt == 1.0)
-	delete pageList()->at(pgNum)->cPix;
+      //if (!pageList()->at(pgNum)->hasSameCPix && pageList()->at(pgNum)->cPix && _presFakt == 1.0)
+	//delete pageList()->at(pgNum)->cPix;
       if (_presFakt == 1.0)
 	pageList()->at(pgNum)->cPix = new QPixmap(getPageSize(pgNum+1).width(),
 						  getPageSize(pgNum+1).height());
@@ -1592,14 +1592,18 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
   QTime _time;
   int _step = 0,_steps;
   int _h = getPageSize(1,_presFakt).height();
+  int _w = getPageSize(1,_presFakt).width();
   int _y = (height() - _h) / 2;
 
   switch (_effect)
     {
+    case PEF_NONE:
+      {
+	bitBlt(this,0,0,&_pix2,0,0,_pix2.width(),_pix2.height());
+      } break;
     case PEF_CLOSE_HORZ:
       {
 	_steps = 80;
-	int _height = _h / _steps;
 	_time.start();
 
 	for (;;)
@@ -1617,5 +1621,27 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 	      }
 	  }
       } break;
+    case PEF_CLOSE_VERT:
+      {
+	_steps = 80;
+	_time.start();
+
+	for (;;)
+	  {
+	    kapp->processEvents();
+	    if (_step == _steps) break;
+	    else if (_time.elapsed() >= 5)
+	      {
+		_step++;
+		bitBlt(this,0,_y,&_pix2,_pix2.width() / 2 - (_pix2.width()/(2 * _steps)) * _step,
+		       _y,(_pix2.width()/(2 * _steps)) * _step,_h);
+		bitBlt(this,width() - ((_pix2.width()/(2 * _steps)) * _step),_y,&_pix2,
+		       _pix2.width() / 2,_y,(_pix2.width()/(2 * _steps)) * _step,_h);
+		_time.restart();
+	      }
+	  }
+      } break;
     }
 }
+
+
