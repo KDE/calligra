@@ -149,10 +149,20 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
 #endif
                 }
             }
-            // ### Max offset (between pixel-width and proportional width) should be 1 pixel
-            // ### (i.e. rounding problems, not due to strangely-wide chars)
-            // still too much - never bigger otherwise spaces can't compensate
-            pixelww = QMIN( pixelww, zh->layoutUnitToPixelX(ww) );
+            bool breakable = ( lineStart && ( isBreakable( string, i ) || parag->isNewLinesAllowed() && c->c == '\n' ) ); // same test as below
+
+            int ww_topix = zh->layoutUnitToPixelX(ww);
+            // We have to limit the difference between pixel-width and proportional width
+            // to negative differences. Such differences can be compensated on spaces, making
+            // them larger. Positive differences can lead to a 0-sized or even a negative
+            // sized spaces, which we don't want. This doesn't apply to spaces themselves, of course.
+            if ( !breakable && pixelww > ww_topix  ) {
+#ifdef DEBUG_FORMATTER
+                qDebug("pixelww (%d) bigger than lu2pixel(%d)=%d -> setting to %d",
+                       pixelww, ww, ww_topix, ww_topix);
+#endif
+                pixelww = ww_topix;
+            }
 
 	} else if ( c->c == '\t' ) {
 	    int nx = parag->nextTab( i, x );
@@ -386,9 +396,12 @@ int KoTextFormatter::format( QTextDocument *doc, Qt3::QTextParag *parag,
             // Re-sync x and pixelx (this is how we steal white pixels in spaces to compensate for rounding errors)
             //pixelx = zh->layoutUnitToPixelX( x );
             // More complex than that. It's the _space_ that has to grow/shrink
+#ifdef DEBUG_FORMATTER
+            int oldpixelww = pixelww;
+#endif
             pixelww -= pixelx - zh->layoutUnitToPixelX( x );
 #ifdef DEBUG_FORMATTER
-            qDebug("pixelww adjusted by pixelx - x. x=%d pixelx=%d", zh->layoutUnitToPixelX( x ), pixelx);
+            qDebug("pixelww was %d, now %d. Adjusted by pixelx - x. x=%d pixelx=%d", oldpixelww, pixelww, zh->layoutUnitToPixelX( x ), pixelx);
 #endif
 	} else {
 	    // Non-breakable character

@@ -278,21 +278,24 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
 
 int KoTextParag::topMargin() const
 {
-    return KoTextZoomHandler::ptToLayoutUnit(
+    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginTop ]
         + m_layout.topBorder.ptWidth );
 }
 
 int KoTextParag::bottomMargin() const
 {
-    return KoTextZoomHandler::ptToLayoutUnit(
+    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginBottom ]
         + m_layout.bottomBorder.ptWidth );
 }
 
 int KoTextParag::leftMargin() const
 {
-    return KoTextZoomHandler::ptToLayoutUnit(
+    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    return zh->ptToLayoutUnitPixX(
         m_layout.margins[ QStyleSheetItem::MarginLeft ]
         + m_layout.leftBorder.ptWidth )
         + counterWidth() /* in layout units already */;
@@ -300,23 +303,25 @@ int KoTextParag::leftMargin() const
 
 int KoTextParag::rightMargin() const
 {
-    return KoTextZoomHandler::ptToLayoutUnit(
+    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    return zh->ptToLayoutUnitPixX(
         m_layout.margins[ QStyleSheetItem::MarginRight ]
         + m_layout.rightBorder.ptWidth );
 }
 
 int KoTextParag::firstLineMargin() const
 {
-    return KoTextZoomHandler::ptToLayoutUnit(
+    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    return zh->ptToLayoutUnitPixY(
         m_layout.margins[ QStyleSheetItem::MarginFirstLine ] );
 }
 
 int KoTextParag::lineSpacing( int line ) const
 {
-    int shadow=QABS(KoTextZoomHandler::ptToLayoutUnit( shadowDistanceY() ));
+    KoZoomHandler * zh = textDocument()->formattingZoomHandler();
+    int shadow = QABS( zh->ptToLayoutUnitPixY( shadowDistanceY() ) );
     if ( m_layout.lineSpacing >= 0 )
-        return KoTextZoomHandler::ptToLayoutUnit(
-            m_layout.lineSpacing )+shadow;
+        return zh->ptToLayoutUnitPixY( m_layout.lineSpacing ) + shadow;
     else {
         KoTextParag * that = const_cast<KoTextParag *>(this);
         if( line >= (int)that->lineStartList().count() )
@@ -334,11 +339,11 @@ int KoTextParag::lineSpacing( int line ) const
         {
             // Tricky. During formatting height doesn't include the linespacing,
             // but afterwards (e.g. when drawing the cursor), it does !
-            return shadow+ (isValid() ? height / 3 : height / 2);
+            return shadow + (isValid() ? height / 3 : height / 2);
         }
         else if ( m_layout.lineSpacing == KoParagLayout::LS_DOUBLE )
         {
-            return shadow+(isValid() ? height / 2 : height);
+            return shadow + (isValid() ? height / 2 : height);
         }
     }
     kdWarning() << "Unhandled linespacing value : " << m_layout.lineSpacing << endl;
@@ -640,11 +645,12 @@ void KoTextParag::setTabList( const KoTabulatorList &tabList )
     m_layout.setTabList( lst );
     if ( !tabList.isEmpty() )
     {
+        KoZoomHandler* zh = textDocument()->formattingZoomHandler();
         int * tabs = new int[ tabList.count() + 1 ]; // will be deleted by ~QTextParag
         KoTabulatorList::Iterator it = lst.begin();
         unsigned int i = 0;
         for ( ; it != lst.end() ; ++it, ++i )
-            tabs[i] = KoTextZoomHandler::ptToLayoutUnit( (*it).ptPos );
+            tabs[i] = zh->ptToLayoutUnitPixX( (*it).ptPos );
         tabs[i] = 0;
         assert( i == tabList.count() );
         setTabArray( tabs );
@@ -749,14 +755,14 @@ double KoTextParag::shadowDistanceY() const
     case KoParagLayout::SD_LEFT_UP:
     case KoParagLayout::SD_UP:
     case KoParagLayout::SD_RIGHT_UP:
-        return -  m_layout.shadowDistance ;
+        return - m_layout.shadowDistance;
     case KoParagLayout::SD_LEFT:
     case KoParagLayout::SD_RIGHT:
         return 0;
     case KoParagLayout::SD_LEFT_BOTTOM:
     case KoParagLayout::SD_BOTTOM:
     case KoParagLayout::SD_RIGHT_BOTTOM:
-        return m_layout.shadowDistance ;
+        return m_layout.shadowDistance;
     }
     return 0;
 }

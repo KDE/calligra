@@ -93,14 +93,14 @@ int KoTextObject::availableHeight() const
 int KoTextObject::docFontSize( QTextFormat * format ) const
 {
     Q_ASSERT( format );
-    return static_cast<int>( KoTextZoomHandler::layoutUnitToPt( format->font().pointSize() ) );
+    return static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt( format->font().pointSize() ) );
 }
 
 int KoTextObject::zoomedFontSize( int docFontSize ) const
 {
     kdDebug() << "KoTextObject::zoomedFontSize: docFontSize=" << docFontSize
-              << " - in LU: " << KoTextZoomHandler::ptToLayoutUnit( docFontSize ) << endl;
-    return KoTextZoomHandler::ptToLayoutUnit( docFontSize );
+              << " - in LU: " << KoTextZoomHandler::ptToLayoutUnitPt( docFontSize ) << endl;
+    return KoTextZoomHandler::ptToLayoutUnitPt( docFontSize );
 }
 
 void KoTextObject::slotAfterUndoRedo()
@@ -1703,7 +1703,7 @@ void KoTextObject::printRTDebug(int info)
         p->printRTDebug( info );
     }
     if ( info == 1 )
-        textdoc->formatCollection()->debug(); 
+        textdoc->formatCollection()->debug();
 }
 #endif
 
@@ -1748,7 +1748,7 @@ QColor KoTextFormatInterface::textColor() const {
 QFont KoTextFormatInterface::textFont() const {
     QFont fn( currentFormat()->font() );
     // "unzoom" the font size
-    fn.setPointSize( static_cast<int>( KoTextZoomHandler::layoutUnitToPt( fn.pointSize() ) ) );
+    fn.setPointSize( static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt( fn.pointSize() ) ) );
     return fn;
 }
 

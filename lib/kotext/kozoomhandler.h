@@ -40,26 +40,25 @@ public:
     static void setPtToLayoutUnitFactor( int factor ) { m_layoutUnitFactor = factor; }
 
     /** Not zoom dependent. Simply convert a pt value (e.g. a frame)
-     * to high-resolution layout unit coordinates. */
-    static int ptToLayoutUnit( double pt )
-                   // is qRound needed ?
-    { return static_cast<int>( pt * static_cast<double>( m_layoutUnitFactor ) ); }
+     * to high-resolution layout unit coordinates (in pt). */
+    static double ptToLayoutUnitPt( double pt )
+    { return pt * static_cast<double>( m_layoutUnitFactor ); }
     /** Same thing for integer values, e.g. a font size in pt */
-    static int ptToLayoutUnit( int ptSize )
+    static int ptToLayoutUnitPt( int ptSize )
     { return ptSize * m_layoutUnitFactor; }
 
-    static QPoint ptToLayoutUnit( const KoPoint &p )
-    { return QPoint( ptToLayoutUnit( p.x() ),
-                     ptToLayoutUnit( p.y() ) ); }
-    static QRect ptToLayoutUnit( const KoRect &r )
-    { return QRect( ptToLayoutUnit( r.topLeft() ),
-                    ptToLayoutUnit( r.bottomRight() ) ); }
+    static KoPoint ptToLayoutUnitPt( const KoPoint &p )
+    { return KoPoint( ptToLayoutUnitPt( p.x() ),
+                      ptToLayoutUnitPt( p.y() ) ); }
+    static KoRect ptToLayoutUnitPt( const KoRect &r )
+    { return KoRect( ptToLayoutUnitPt( r.topLeft() ),
+                     ptToLayoutUnitPt( r.bottomRight() ) ); }
 
-    static double layoutUnitToPt( int lu )
-    { return static_cast<double>( lu ) / static_cast<double>( m_layoutUnitFactor ); }
-    static KoPoint layoutUnitToPt( const QPoint& p )
-    { return KoPoint( layoutUnitToPt( p.x() ),
-                      layoutUnitToPt( p.y() ) ); }
+    static double layoutUnitPtToPt( double lupt )
+    { return lupt / static_cast<double>( m_layoutUnitFactor ); }
+    static KoPoint layoutUnitPtToPt( const KoPoint& p )
+    { return KoPoint( layoutUnitPtToPt( p.x() ),
+                      layoutUnitPtToPt( p.y() ) ); }
 
 protected:
     /** This being static ensures that the same value is used by all KoZoomHandler instances */
@@ -135,15 +134,13 @@ public:
 
     //// Support for WYSIWYG text layouting /////
 
-    // The pixel <-> layout unit conversions
-    // apply both the pt<->LU conversion, and the zoom level.
-    // Understand that LU is "pixels in the layout unit system",
-    // so there is no need for applying the resolution here.
-    // We call ptToLayoutUnit but we mean pixelToPixelsInLayoutUnit.
+    /** The "[zoomed] view pixel" -> "layout unit pixel" conversions. */
     int pixelToLayoutUnitX( int x ) const
-    { return ptToLayoutUnit( x * 100.0 / static_cast<double>(m_zoom) ); }
+      // No need to apply the resolution here.
+    { return qRound( static_cast<double>( x * m_layoutUnitFactor * 100 ) / static_cast<double>(m_zoom) ); }
     int pixelToLayoutUnitY( int y ) const
-    { return ptToLayoutUnit( y * 100.0 / static_cast<double>(m_zoom) ); }
+      // Same as pixelToLayoutUnitX nowadays
+    { return qRound( static_cast<double>( y * m_layoutUnitFactor * 100 ) / static_cast<double>(m_zoom) ); }
     QPoint pixelToLayoutUnit( const QPoint &p ) const
     { return QPoint( pixelToLayoutUnitX( p.x() ),
                      pixelToLayoutUnitY( p.y() ) ); }
@@ -151,13 +148,16 @@ public:
     { return QRect( pixelToLayoutUnit( r.topLeft() ),
                     pixelToLayoutUnit( r.bottomRight() ) ); }
 
-    int layoutUnitToPixelX( int x ) const
-    { return qRound( layoutUnitToPt( x ) * static_cast<double>(m_zoom) / 100.0 ); }
-    int layoutUnitToPixelY( int y ) const
-    { return qRound( layoutUnitToPt( y ) * static_cast<double>(m_zoom) / 100.0 ); }
+    /** The "layout unit pixel" -> "[zoomed] view pixel" conversions. */
+    int layoutUnitToPixelX( int lupix ) const
+      // No need to apply the resolution here.
+    { return qRound( static_cast<double>( lupix * m_zoom ) / static_cast<double>( m_layoutUnitFactor * 100 ) ); }
+    int layoutUnitToPixelY( int lupix ) const
+      // Same as layoutUnitToPixelX nowadays
+    { return qRound( static_cast<double>( lupix * m_zoom ) / static_cast<double>( m_layoutUnitFactor * 100 ) ); }
 
-    // This variant converts a height, using y as reference.
-    // This prevents rounding problems.
+    /** This variant converts a height, using a reference Y position.
+     * This prevents rounding problems. */
     int layoutUnitToPixelY( int y, int h ) const;
 
     QPoint layoutUnitToPixel( const QPoint &p ) const
@@ -166,6 +166,33 @@ public:
     QRect layoutUnitToPixel( const QRect &r ) const
     { return QRect( layoutUnitToPixel( r.topLeft() ),
                     layoutUnitToPixel( r.bottomRight() ) ); }
+
+    /** Basic pt to pixel and pixel to pt conversions, valid at any zoom level,
+        as well as at the Layout Unit level (and mostly useful for Layout Units).
+        Don't confuse with zoomIt, which also converts pt to pixels, but applying the zoom! */
+    int ptToPixelX( double pt ) const
+    { return qRound( pt * m_resolutionX ); }
+    int ptToPixelY( double pt ) const
+    { return qRound( pt * m_resolutionY ); }
+    QPoint ptToPixel( const KoPoint & p ) const {
+        return QPoint( ptToPixelX( p.x() ), ptToPixelY( p.y() ) );
+    }
+    double pixelXToPt( int x ) const
+    { return static_cast<double>(x) / m_resolutionX; }
+    double pixelYToPt( int y ) const
+    { return static_cast<double>(y) / m_resolutionY; }
+    KoPoint pixelToPt( const QPoint& p ) const {
+        return KoPoint( pixelXToPt( p.x() ), pixelYToPt( p.y() ) );
+    }
+
+    /** The "document pt" -> "Layout Unit pixels" conversions, for convenience */
+    int ptToLayoutUnitPixX( double x_pt ) const
+    { return ptToPixelX( ptToLayoutUnitPt( x_pt ) ); }
+    int ptToLayoutUnitPixY( double y_pt ) const
+    { return ptToPixelY( ptToLayoutUnitPt( y_pt ) ); }
+    QPoint ptToLayoutUnitPix( const KoPoint & p ) const {
+        return QPoint( ptToLayoutUnitPixX( p.x() ), ptToLayoutUnitPixY( p.y() ) );
+    }
 
     /**
      * Given the font size for the font in layout units, in pt (use pointSize())

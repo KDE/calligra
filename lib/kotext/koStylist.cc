@@ -46,7 +46,7 @@
    Otherwise all changes are copied from the changed ones to the origs on OK.
    OK also frees all the changed ones and updates the doc if styles are deleted.
 */
-/* Months later the above seems SOO stupid.. Just should have created a small class 
+/* Months later the above seems SOO stupid.. Just should have created a small class
    containing the orig and the copy and an enum plus some simple methods..
    Well; just keep that for those loonly uninspiring days :) (Thomas Z)
 */
@@ -583,7 +583,7 @@ void KoStyleFontTab::update()
     bool subScript = m_style->format().vAlign() == QTextFormat::AlignSubScript;
     bool superScript = m_style->format().vAlign() == QTextFormat::AlignSuperScript;
     QFont fn = m_style->format().font();
-    fn.setPointSize( (int)m_zoomHandler->layoutUnitToPt( fn.pointSize() ) );
+    fn.setPointSize( (int)m_zoomHandler->layoutUnitPtToPt( fn.pointSize() ) );
     m_chooser->setFont( fn, subScript, superScript );
     m_chooser->setColor( m_style->format().color() );
     QColor col=m_style->format().textBackgroundColor();
@@ -594,7 +594,7 @@ void KoStyleFontTab::update()
 void KoStyleFontTab::save()
 {
     QFont fn = m_chooser->getNewFont();
-    fn.setPointSize( m_zoomHandler->ptToLayoutUnit( fn.pointSize() ) );
+    fn.setPointSize( m_zoomHandler->ptToLayoutUnitPt( fn.pointSize() ) );
     m_style->format().setFont( fn );
     if ( m_chooser->getSubScript() )
         m_style->format().setVAlign( QTextFormat::AlignSubScript );

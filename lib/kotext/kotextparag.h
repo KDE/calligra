@@ -109,8 +109,11 @@ public:
 
     /** Get shadow distance */
     double shadowDistance() const { return m_layout.shadowDistance; }
+    /** Return the X for the shadow distance in pixels (zoomed) */
     int shadowX( KoZoomHandler *zh ) const;
+    /** Return the Y for the shadow distance in pixels (zoomed) */
     int shadowY( KoZoomHandler *zh ) const;
+    /** Return the Y for the shadow distance in pt */
     double shadowDistanceY() const;
 
     /** Get shadow color */

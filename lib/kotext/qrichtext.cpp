@@ -2995,13 +2995,19 @@ int QTextFormat::width( const QChar &c ) const
 	    return fm.width( 'x' ) * 8;
 	if ( ha == AlignNormal ) {
 	    int w;
-	    if ( c.row() )
+	    if ( c.row() ) {
 		w = fm.width( c );
-	    else
+                //qDebug("QTextFormat::width fontsize=%d  NOT LATIN: width=%d", fn.pointSize(), w);
+	    } else {
 		w = widths[ c.unicode() ];
+                //if (w) qDebug("QTextFormat::width fontsize=%d from cache: width=%d", fn.pointSize(), w);
+            }
 	    if ( w == 0 && !c.row() ) {
 		w = fm.width( c );
+                //qDebug("QTextFormat::width font=%s fontsize=%d width=%d height=%d", fn.toString().ascii(), fn.pointSize(), w, fm.height());
 		( (QTextFormat*)this )->widths[ c.unicode() ] = w;
+                assert( w < 65535 );
+                assert( widths[ c.unicode() ] == w );
 	    }
 	    return w;
 	} else {
@@ -3011,6 +3017,7 @@ int QTextFormat::width( const QChar &c ) const
 	    return fm_.width( c );
 	}
     }
+    //qDebug("QTextFormat::width using painter!");
 
     QFont f( fn );
     if ( ha != AlignNormal )

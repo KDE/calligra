@@ -58,13 +58,9 @@ int KoZoomHandler::fontSizeToLayoutUnit( double ptSizeFloat, bool forPrint ) con
 
 double KoZoomHandler::layoutUnitToFontSize( int luSize, bool /*forPrint*/ ) const
 {
-#if 0
-    // This is because we are setting pt sizes (so Qt applies x11AppDpiY already, unless when printing!)
-    return layoutUnitToPt( luSize ) * m_zoomedResolutionY
-        * ( forPrint ? 1.0 : (72.0 / QPaintDevice::x11AppDpiY()) );
-#endif
-    // Pt to pt conversion, we shouldn't need to care about pixel sizes and x11AppDpiY ...
-    return layoutUnitToPt( luSize ) * static_cast<double>(m_zoom) / 100.0;
+    // Pt to pt conversion, we don't need to care about pixel sizes and x11AppDpiY ...
+    return layoutUnitPtToPt( luSize ) * static_cast<double>(m_zoom) / 100.0;
+    // ### Same calculation as layoutUnitToPixel !
 }
 
 int KoZoomHandler::layoutUnitToPixelY( int y, int h ) const

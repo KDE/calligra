@@ -259,6 +259,9 @@ float KoTextFormat::screenPointSize( const KoZoomHandler* zh ) const
 QFont KoTextFormat::screenFont( const KoZoomHandler* zh )
 {
     float pointSize = screenPointSize( zh );
+    /*kdDebug() << "KoTextFormat::screenFont pointSize=" << pointSize << endl;
+    if ( d->m_screenFont )
+    kdDebug() << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;*/
     // Compare if this is the size for which we cached the font metrics.
     // We have to do this very dynamically, because 2 views could be painting the same
     // stuff, with different zoom levels. So no absolute caching possible.
@@ -267,6 +270,7 @@ QFont KoTextFormat::screenFont( const KoZoomHandler* zh )
         delete d->m_screenFont;
         d->m_screenFont = new QFont( font() );
         d->m_screenFont->setPointSizeFloat( pointSize );
+        //kdDebug() << "KoTextFormat::screenFont created new font with size " << pointSize << endl;
     }
     return *d->m_screenFont;
 }
@@ -282,10 +286,12 @@ QFontMetrics KoTextFormat::screenFontMetrics( const KoZoomHandler* zh )
     // stuff, with different zoom levels. So no absolute caching possible.
     if ( !d->m_screenFontMetrics || pointSize != d->m_screenFont->pointSizeFloat() )
     {
+        //kdDebug() << this << " KoTextFormat::screenFontMetrics pointSize=" << pointSize << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;
         QFont f( font() );
         f.setPointSizeFloat( pointSize );
         delete d->m_screenFontMetrics;
         d->m_screenFontMetrics = new QFontMetrics( f );
+        //kdDebug() << "KoTextFormat::screenFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_screenFontMetrics->height() << endl;
     }
     return *d->m_screenFontMetrics;
 }
