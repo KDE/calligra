@@ -3724,6 +3724,71 @@ bool KSpreadCell::testValidity() const
     return (valid || m_Validity == NULL || m_Validity->m_action != Stop);
 }
 
+void KSpreadCell::setValue( bool _b )
+{
+    clearFormula();
+    clearAllErrors();
+
+    m_dValue   = ( _b ? 1.0 : 0.0 );
+    m_dataType = BoolData;
+
+    m_strText  = ( _b ? i18n("True") : i18n("False") );
+    m_strOutText = ( _b ? i18n("True") : i18n("False") );
+
+    // Free all content data
+    delete m_pQML;
+    m_pQML = 0;
+
+    setFlag(Flag_LayoutDirty);
+    m_content = Text;
+
+    // Do not update formulas and stuff here
+    if ( !m_pTable->isLoading() )
+        update();
+}
+
+void KSpreadCell::setValue( QDate _date )
+{
+    clearFormula();
+    clearAllErrors();
+    m_Date = _date;
+    m_strText = util_dateFormat( locale(), _date, formatType() );
+    m_strOutText = m_strText;
+
+    // Free all content data
+    delete m_pQML;
+    m_pQML = 0;
+
+    m_dataType = DateData;
+    setFlag(Flag_LayoutDirty);
+    m_content = Text;
+
+    // Do not update formulas and stuff here
+    if ( !m_pTable->isLoading() )
+        update();
+}
+
+void KSpreadCell::setValue( QTime _time )
+{
+    clearFormula();
+    clearAllErrors();
+    m_Time = _time;
+    m_strText = util_timeFormat( locale(), _time, formatType() );
+    m_strOutText = m_strText;
+
+    // Free all content data
+    delete m_pQML;
+    m_pQML = 0;
+
+    m_dataType = TimeData;
+    setFlag(Flag_LayoutDirty);
+    m_content = Text;
+
+    // Do not update formulas and stuff here
+    if ( !m_pTable->isLoading() )
+        update();
+}
+
 void KSpreadCell::setValue( double _d )
 {
     clearAllErrors();

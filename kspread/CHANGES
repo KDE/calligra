@@ -18,12 +18,13 @@ since 1.2 relase ( 'til 1.3 beta 1 :-)
     - format parsing (date, time, numbers,...), cell height, width
     - print range, page setup, hidden columns/row, comments
 - Added subtotal dialog and formula
+- Paper layout can now be applied to all sheets
 
 
 New functions:
 
 Math:
-- SUBTOTAL
+- SUBTOTAL, POWER, TRUNC
 
 Statistical:
 - VARP, STDEV, VAR, STDEVP
@@ -35,8 +36,11 @@ Database:
 - DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN,
   DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP
 
-Obsolete formulas:
-- variance, stddev (was stddevp in fact)
+Obsolete formulas 
+- stddev (was stddevp in fact)
+
+Obsolete but still usable formulas (do not show up in dialog )
+- variance, pow
 
     
 =====================================================    

@@ -428,7 +428,10 @@ public:
     QDate valueDate() const { return m_Date; }
     QTime valueTime() const { return m_Time; }
 
+    void setValue( bool _b );
     void setValue( double _d );
+    void setValue( QDate _date );
+    void setValue( QTime _time );
     void setDate( QDate const & date, FormatType type );
     void setTime( QTime const & time, FormatType type );
 

@@ -34,28 +34,31 @@ public:
                       const KoPageLayout& layout,
                       const KoHeadFoot& headfoot,
                       int tabs, KoUnit::Unit unit,
-                      KSpreadSheet *table, KSpreadView *view);
+                      KSpreadSheet * sheet, KSpreadView *view);
 
-    bool eventFilter( QObject* obj, QEvent* ev );
+  bool eventFilter( QObject* obj, QEvent* ev );
 
 protected slots:
-    virtual void slotOk();
-    virtual void slotCancel();
-    void slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection );
+virtual void slotOk();
+  virtual void slotCancel();
+  void slotSelectionChanged( KSpreadSheet* _table, const QRect& _selection );
 
 protected:
-    void initTab();
+  void initTab();
 protected:
   virtual void closeEvent ( QCloseEvent * );
+
 private:
-    KSpreadSheet *m_table;
-    QCheckBox *pPrintGrid;
-    QCheckBox *pPrintCommentIndicator;
-    QCheckBox *pPrintFormulaIndicator;
-    QLineEdit *ePrintRange;
-    QLineEdit *eRepeatCols;
-    QLineEdit *eRepeatRows;
-    QLineEdit *m_focus;
+  KSpreadSheet * m_pSheet;
+  KSpreadView  * m_pView;
+  QCheckBox * pApplyToAll;
+  QCheckBox * pPrintGrid;
+  QCheckBox * pPrintCommentIndicator;
+  QCheckBox * pPrintFormulaIndicator;
+  QLineEdit * ePrintRange;
+  QLineEdit * eRepeatCols;
+  QLineEdit * eRepeatRows;
+  QLineEdit * m_focus;
 };
 
 #endif

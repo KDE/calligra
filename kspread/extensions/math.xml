@@ -62,7 +62,7 @@
     </Function>
 
     <Function>
-      <Name>POW</Name>
+      <Name>POWER</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Floating point value</Comment>
@@ -73,10 +73,10 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The POW(x;y) function returns the value of x raised to the power of y.</Text>
-	<Syntax>POW(value;value)</Syntax>
-	<Example>POW(1.2;3.4) equals 1.8572</Example>
-	<Example>POW(2;3) equals 8</Example>
+	<Text>The POWER(x;y) function returns the value of x raised to the power of y.</Text>
+	<Syntax>POWER(value;value)</Syntax>
+	<Example>POWER(1.2;3.4) equals 1.8572</Example>
+	<Example>POWER(2;3) equals 8</Example>
       </Help>
     </Function>
 
@@ -93,6 +93,28 @@
 	<Example>EVEN(1.2) returns 2</Example>
 	<Example>EVEN(2) returns 2</Example>
 	<Related>ODD</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>TRUNC</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Precision</Comment>
+	<Type>Integer</Type>
+      </Parameter>
+      <Help>
+	<Text>The TRUNC() function truncates a numeric value to a certain precision. If the precision is omitted 0 is assumed.</Text>
+	<Syntax>TRUNC(value, precision)</Syntax>
+	<Example>TRUNC(1.2) returns 1</Example>
+	<Example>TRUNC(213.232; 2) returns 213.23</Example>
+	<Related>ROUND</Related>
+	<Related>ROUNDDOWN</Related>
+	<Related>ROUNDUP</Related>
       </Help>
     </Function>
 

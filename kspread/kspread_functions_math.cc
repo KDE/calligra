@@ -86,6 +86,7 @@ bool kspreadfunc_sqrt( KSContext& context );
 bool kspreadfunc_sqrtpi( KSContext& context );
 bool kspreadfunc_sum( KSContext& context );
 bool kspreadfunc_sumsq( KSContext& context );
+bool kspreadfunc_trunc( KSContext& context );
 
 
 bool kspreadfunc_multipleOP( KSContext& context );
@@ -126,6 +127,7 @@ void KSpreadRegisterMathFunctions()
   repo->registerFunction( "MULTINOMIAL", kspreadfunc_multinomial );
   repo->registerFunction( "ODD",         kspreadfunc_odd );
   repo->registerFunction( "POW",         kspreadfunc_pow );
+  repo->registerFunction( "POWER",       kspreadfunc_pow );
   repo->registerFunction( "QUOTIENT",    kspreadfunc_quotient );
   repo->registerFunction( "PRODUCT",     kspreadfunc_product );
   repo->registerFunction( "RAND",        kspreadfunc_rand );
@@ -139,6 +141,7 @@ void KSpreadRegisterMathFunctions()
   repo->registerFunction( "SQRTPI",      kspreadfunc_sqrtpi );
   repo->registerFunction( "SUM",         kspreadfunc_sum );
   repo->registerFunction( "SUMSQ",       kspreadfunc_sumsq );
+  repo->registerFunction( "TRUNC",       kspreadfunc_trunc );
 }
 
 /*********************************************************************
@@ -539,7 +542,6 @@ bool kspreadfunc_sumsq( KSContext& context )
 
   return b;
 }
-
 
 static bool kspreadfunc_max_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,int& inter)
 {
@@ -1307,6 +1309,38 @@ static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Pt
   return true;
 }
 
+bool kspreadfunc_trunc( KSContext & context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  int precision = 0;
+
+  if( KSUtil::checkArgumentsCount( context, 2, "TRUNC", false ) )
+  {
+    if( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+      return false;
+
+    precision = args[1]->intValue();
+  }
+  else
+  {
+    if ( !KSUtil::checkArgumentsCount( context, 1, "TRUNC", true ) )
+      return false;
+  }
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  double result = args[0]->doubleValue();
+
+  int factor = (int) pow( 10, precision );
+
+  result = floor( result * factor ) / factor;
+
+  context.setValue( new KSValue( result ) );
+
+  return true;
+}
+
 // Function: COUNT
 bool kspreadfunc_count( KSContext& context )
 {
@@ -1443,7 +1477,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
   kdDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
 
   KSpreadCell * cell;
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadPoint point( extra[1]->stringValue() );  
   KSpreadPoint point2( extra[3]->stringValue() );
@@ -1571,7 +1605,7 @@ bool kspreadfunc_subtotal( KSContext & context )
   
   KSValue * c = 0;
   KSpreadCell  * cell = 0;
-  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
   KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
 
   kdDebug() << "Range: " << extra[1]->stringValue() << endl;
