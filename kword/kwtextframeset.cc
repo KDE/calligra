@@ -49,6 +49,7 @@
 
 #include <kdebug.h>
 
+//#define DEBUG_MARGINS
 //#define DEBUG_FLOW
 //#define DEBUG_FORMATS
 //#define DEBUG_FORMAT_MORE
@@ -580,7 +581,7 @@ bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpa
 // paragLeftMargin is only used in the breakEnd case
 void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd, int paragLeftMargin )
 {
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "  KWTextFrameSet " << this << "(" << getName() << ") getMargins yp=" << yp
                        << " h=" << h << " called by "
                        << (marginLeft?"adjustLMargin":marginRight?"adjustRMargin":"adjustFlow")
@@ -591,7 +592,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     KWFrame * frame = internalToNormal( QPoint(0, yp), p );
     if (!frame)
     {
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
         kdDebug(32002) << "  getMargins: internalToNormal returned frame=0L for yp=" << yp << " ->aborting with 0 margins" << endl;
 #endif
         // frame == 0 happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
@@ -604,7 +605,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
             *breakEnd = 0;
         return;
     }
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
     else
         kdDebugBody(32002) << "  getMargins: internalToNormal returned frame=" << DEBUGRECT( *frame )
                            << " and p=" << p.x() << "," << p.y() << endl;
@@ -613,12 +614,9 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     int left = kWordDocument()->zoomItX( frame->left() );
     int from = left;
     int to = kWordDocument()->zoomItX( frame->right() );
-#ifdef DEBUG_FLOW
-    int width = to - from;
-#endif
     int bottomSkip = 0;
 
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "  getMargins: looking for frames between " << p.y() << " and " << p.y()+h << endl;
 #endif
     // For every frame on top at this height, we'll move from and to towards each other
@@ -629,7 +627,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
         if ( (*fIt).frame->runAround() == KWFrame::RA_BOUNDINGRECT )
         {
             QRect frameRect = (*fIt).frame->outerRect();
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
             kdDebugBody(32002) << "   getMargins found frame at " << DEBUGRECT(frameRect) << endl;
 #endif
             // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
@@ -637,7 +635,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
             {
                 int availLeft = QMAX( 0, frameRect.left() - from );
                 int availRight = QMAX( 0, to - frameRect.right() );
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
                 kdDebugBody(32002) << "   getMargins availLeft=" << availLeft
                                    << " availRight=" << availRight << endl;
 #endif
@@ -647,7 +645,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                 else
                     // flow text at the right of the frame
                     from = QMAX( from, to - availRight ); // can only go right -> QMAX
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
                 kdDebugBody(32002) << "   getMargins from=" << from << " to=" << to << endl;
 #endif
                 if ( breakEnd )
@@ -656,7 +654,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                     QPoint iPoint;
                     if ( normalToInternal( nPoint, iPoint ) )
                         bottomSkip = QMAX( bottomSkip, iPoint.y() );
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
                     kdDebugBody(32002) << "   getMargins iPoint.y=" << iPoint.y() << " frame's bottom=" << frameRect.bottom()
                                        << " bottomSkip=" << bottomSkip << endl;
 #endif
@@ -678,13 +676,13 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
         *marginLeft = from;
     if ( marginRight )
     {
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
         kdDebug(32002) << "    getMargins " << getName()
                        << " textdoc's width=" << textdoc->width()
                        << " frame's width=" << kWordDocument()->zoomItX( frame->width() )
                        << " to=" << to << endl;
 #endif
-        *marginRight = textdoc->width() /*width*/ - to;
+        *marginRight = textdoc->width() - to;
     }
     if ( breakEnd )
         *breakEnd = bottomSkip; // in internal coord already
@@ -694,7 +692,7 @@ int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 {
     int marginLeft;
     getMargins( yp, h, &marginLeft, 0L, 0L );
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "KWTextFrameSet::adjustLMargin marginLeft=" << marginLeft << endl;
 #endif
     return QTextFlow::adjustLMargin( yp, h, margin + marginLeft, space );
@@ -704,7 +702,7 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 {
     int marginRight;
     getMargins( yp, h, 0L, &marginRight, 0L );
-#ifdef DEBUG_FLOW
+#ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "KWTextFrameSet::adjustRMargin marginRight=" << marginRight << endl;
 #endif
     return QTextFlow::adjustRMargin( yp, h, margin + marginRight, space );
@@ -810,9 +808,13 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
                        << " yp=" << yp
                        << " h=" << h << endl;
 #endif
+
+    // This test is now obsolete, the h < frameHeight test below does it better
+#if 0
     bool movedDown = (parag && parag->prev()) ? parag->prev()->isLastInFrame() : false;
     if ( !movedDown ) // only once. If it doesn't fit on a page, we don't want to do this for ever....
     {                 // Note that we can't use isMovedDown here, because line-level breaking sets it too.
+#endif
         int totalHeight = 0;
         QListIterator<KWFrame> frameIt( frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
@@ -849,11 +851,16 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
                     break;
                 }
 
-                //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
+#ifdef DEBUG_FLOW
+                kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
+#endif
+                // don't move down parags that are bigger than the page (e.g. floating tables)
+                if ( h < frameHeight )
+                {
 
-                // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
-                breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
-
+                    // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
+                    breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
+                }
                 // Some people write a single paragraph over 3 frames! So we have to keep looking...
                 //if ( breaked )
                 //    break;
@@ -863,7 +870,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * _parag, boo
                 break; // we've been past the parag, so stop here
             totalHeight = bottom;
         }
-    }
+    //}
 
     // Another case for a vertical break is frames with the RA_SKIP flag
     QValueListIterator<FrameOnTop> fIt = m_framesOnTop.begin();
