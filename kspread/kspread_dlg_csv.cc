@@ -18,6 +18,7 @@
 */
 
 #include <qbuttongroup.h>
+#include <qcheckbox.h>
 #include <qclipboard.h>
 #include <qcombobox.h>
 #include <qlabel.h>
@@ -59,9 +60,10 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
 
   QWidget* page = new QWidget( this );
   setMainWidget( page );
-  MyDialogLayout = new QGridLayout( page, 4, 4, marginHint(), spacingHint(), "MyDialogLayout");
+  //  MyDialogLayout = new QGridLayout( page, 4, 4, marginHint(), spacingHint(), "MyDialogLayout");
+  MyDialogLayout = new QGridLayout( page, 1, 1, 11, 6, "MyDialogLayout");
 
-  m_table = new QTable( this, "m_table" );
+  m_table = new QTable( page, "m_table" );
   //m_table->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, m_table->sizePolicy().hasHeightForWidth() ) );
   m_table->setNumRows( 0 );
   m_table->setNumCols( 0 );
@@ -69,7 +71,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   MyDialogLayout->addMultiCellWidget( m_table, 3, 3, 0, 3 );
 
   // Delimiter: comma, semicolon, tab, space, other
-  m_delimiterBox = new QButtonGroup( this, "m_delimiterBox" );
+  m_delimiterBox = new QButtonGroup( page, "m_delimiterBox" );
   m_delimiterBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_delimiterBox->sizePolicy().hasHeightForWidth() ) );
   m_delimiterBox->setTitle( i18n( "Delimiter" ) );
   m_delimiterBox->setColumnLayout(0, Qt::Vertical );
@@ -78,6 +80,11 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
   m_delimiterBoxLayout = new QGridLayout( m_delimiterBox->layout() );
   m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addMultiCellWidget( m_delimiterBox, 0, 2, 0, 0 );
+
+  m_ignoreDuplicates = new QCheckBox( page, "m_ignoreDuplicates" );
+  m_ignoreDuplicates->setText( i18n( "Ignore duplicate delimiters" ) );
+
+  MyDialogLayout->addMultiCellWidget( m_ignoreDuplicates, 2, 2, 2, 3 );
 
   m_radioComma = new QRadioButton( m_delimiterBox, "m_radioComma" );
   m_radioComma->setText( i18n( "Comma" ) );
@@ -107,7 +114,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
 
 
   // Format: number, text, currency,
-  m_formatBox = new QButtonGroup( this, "m_formatBox" );
+  m_formatBox = new QButtonGroup( page, "m_formatBox" );
   m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_formatBox->sizePolicy().hasHeightForWidth() ) );
   m_formatBox->setTitle( i18n( "Format" ) );
   m_formatBox->setColumnLayout(0, Qt::Vertical );
@@ -242,6 +249,8 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
           this, SLOT(textquoteSelected(const QString&)));
   connect(m_table, SIGNAL(currentChanged(int, int)),
           this, SLOT(currentCellChanged(int, int)));
+  connect(m_ignoreDuplicates, SIGNAL(stateChanged(int)),
+          this, SLOT(ignoreDuplicatesChanged(int)));
 }
 
 KSpreadCSVDialog::~KSpreadCSVDialog()
@@ -252,6 +261,8 @@ KSpreadCSVDialog::~KSpreadCSVDialog()
 void KSpreadCSVDialog::fillTable()
 {
   int row, column;
+  bool lastCharDelimiter = false;
+  bool ignoreDups = m_ignoreDuplicates->isChecked();
   enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_END_OF_QUOTED_FIELD,
          S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD } state = S_START;
 
@@ -288,7 +299,9 @@ void KSpreadCSVDialog::fillTable()
       }
       else if (x == m_delimiter)
       {
-        ++column;
+        if ((ignoreDups == false) || (lastCharDelimiter == false))
+          ++column;
+        lastCharDelimiter = true;
       }
       else if (x == '\n')
       {
@@ -317,7 +330,9 @@ void KSpreadCSVDialog::fillTable()
         }
         else
         {
-          ++column;
+          if ((ignoreDups == false) || (lastCharDelimiter == false))
+            ++column;
+          lastCharDelimiter = true;
         }
         state = S_START;
       }
@@ -343,7 +358,9 @@ void KSpreadCSVDialog::fillTable()
         }
         else
         {
-          ++column;
+          if ((ignoreDups == false) || (lastCharDelimiter == false))
+            ++column;
+          lastCharDelimiter = true;
         }
         state = S_START;
       }
@@ -364,7 +381,9 @@ void KSpreadCSVDialog::fillTable()
         }
         else
         {
-          ++column;
+          if ((ignoreDups == false) || (lastCharDelimiter == false))
+            ++column;
+          lastCharDelimiter = true;
         }
         state = S_START;
       }
@@ -392,7 +411,9 @@ void KSpreadCSVDialog::fillTable()
         }
         else
         {
-          ++column;
+          if ((ignoreDups == false) || (lastCharDelimiter == false))
+            ++column;
+          lastCharDelimiter = true;
         }
         state = S_START;
       }
@@ -401,6 +422,8 @@ void KSpreadCSVDialog::fillTable()
         field += x;
       }
     }
+    if (x != m_delimiter)
+      lastCharDelimiter = false;
   }
 
   // file with only one line without '\n'
@@ -639,6 +662,11 @@ int KSpreadCSVDialog::getHeader(int col)
 QString KSpreadCSVDialog::getText(int row, int col)
 {
   return m_table->text(row, col);
+}
+
+void KSpreadCSVDialog::ignoreDuplicatesChanged(int)
+{
+  fillTable();
 }
 
 #include <kspread_dlg_csv.moc>

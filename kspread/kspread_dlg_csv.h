@@ -29,6 +29,7 @@ class QHBoxLayout;
 class QGridLayout;
 class QButtonGroup;
 class QComboBox;
+class QCheckBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
@@ -89,6 +90,7 @@ class KSpreadCSVDialog : public KDialogBase
   QComboBox* m_comboQuote;
   QLabel* TextLabel3;
   QLabel* TextLabel2;
+  QCheckBox * m_ignoreDuplicates;
 
   void fillTable();
   void fillComboBox();
@@ -114,6 +116,7 @@ class KSpreadCSVDialog : public KDialogBase
   void textquoteSelected(const QString& mark);
   void currentCellChanged(int, int col);
   void textChanged ( const QString & );
+  void ignoreDuplicatesChanged(int);
 };
 
 #endif // CVSDIALOG_H
