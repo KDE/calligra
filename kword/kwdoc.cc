@@ -1326,6 +1326,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         {
             if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
             {
+                kdDebug() << "ignoring word:" << spellWord.attribute("word") << endl;
                 m_spellListIgnoreAll.append(spellWord.attribute("word"));
             }
             spellWord=spellWord.nextSibling().toElement();

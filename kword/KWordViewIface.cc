@@ -73,7 +73,7 @@ void KWordViewIface::configure()
 
 void KWordViewIface::spelling()
 {
-    view->extraSpelling();
+    view->slotSpellCheck();
 }
 
 void KWordViewIface::autoFormat()

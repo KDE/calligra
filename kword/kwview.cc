@@ -278,7 +278,15 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
 
 KWView::~KWView()
 {
-    clearSelection();
+    clearSpellChecker();
+
+    delete m_searchEntry;
+    m_searchEntry = 0L;
+    delete m_replaceEntry;
+    m_replaceEntry = 0L;
+    if ( m_specialCharDlg )
+        m_specialCharDlg->closeDialog(); // will call slotSpecialCharDlgClosed
+
     // Abort any find/replace
     delete m_findReplace;
     deselectAllFrames(); // don't let resizehandles hang around
@@ -326,45 +334,6 @@ void KWView::slotSetInitialPosition()
     else
         m_gui->canvasWidget()->setContentsPos( 0, 0 );
 }
-
-void KWView::clearSelection()
-{
-#ifdef HAVE_LIBASPELL
-    if(m_spell.kospell)
-    {
-        KWTextFrameSet * fs = 0L;
-        if(m_spell.spellCurrFrameSetNum!=-1)
-        {
-            fs=m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-            Q_ASSERT( fs );
-            if ( fs )
-                fs->removeHighlight();
-        }
-        delete m_spell.kospell;
-    }
-
-#else
-    if(m_spell.kspell)
-    {
-        KWTextFrameSet * fs = 0L;
-        if(m_spell.spellCurrFrameSetNum!=-1)
-        {
-            fs=m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-            Q_ASSERT( fs );
-            if ( fs )
-                fs->removeHighlight();
-        }
-        delete m_spell.kspell;
-    }
-#endif
-    delete m_searchEntry;
-    m_searchEntry = 0L;
-    delete m_replaceEntry;
-    m_replaceEntry = 0L;
-    if ( m_specialCharDlg )
-        m_specialCharDlg->closeDialog(); // will call slotSpecialCharDlgClosed
-}
-
 
 void KWView::changeNbOfRecentFiles(int _nb)
 {
@@ -464,7 +433,7 @@ void KWView::setupActions()
     actionEditFindPrevious = KStdAction::findPrev( this, SLOT( editFindPrevious() ), actionCollection(), "edit_findprevious" );
     actionEditReplace = KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
-    actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
+    /*actionSpellCheck =*/ KStdAction::spelling( this, SLOT( slotSpellCheck() ), actionCollection(), "extra_spellcheck" );
     actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
                                     this, SLOT( deletePage() ),
                                     actionCollection(), "delete_page" );
@@ -2334,7 +2303,7 @@ void KWView::editFind()
     if ( dialog.exec() == QDialog::Accepted )
     {
         delete m_findReplace;
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog ,m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(m_gui->canvasWidget()->viewMode()), edit);
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog, m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(m_gui->canvasWidget()->viewMode()), edit);
         editFindNext();
     }
 }
@@ -3703,47 +3672,29 @@ void KWView::formatFrameSet()
                             i18n("Format Frameset"));
 }
 
-void KWView::extraSpelling()
+void KWView::slotSpellCheck()
 {
 #ifdef HAVE_LIBASPELL
     if (m_spell.kospell) return; // Already in progress
 #else
     if (m_spell.kspell) return; // Already in progress
 #endif
-    m_doc->setReadWrite(false); // prevent editing text
-    m_spell.spellCurrFrameSetNum = -1;
-    m_spell.macroCmdSpellCheck=0L;
+    //m_doc->setReadWrite(false); // prevent editing text - not anymore
+    m_spell.macroCmdSpellCheck = 0L;
     m_spell.replaceAll.clear();
-    m_spell.textFramesets.clear();
-    m_spell.bSpellSelection = false;
-    m_spell.selectionStartPos=0;
-    // Ask each frameset to complete the list of text framesets.
-    // This way table cells are checked too.
-    // ## TODO replace this with 'KWFrameSet::nextTextFrameSet( KWTextFrameSet * )'
-    // to be able to iterate over a changing list of framesets - as needed by background
-    // spell checking in KWDocument.
+    QValueList<KoTextObject *> objects;
     KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit && edit->textFrameSet()->hasSelection())
+    int options = 0;
+    if ( edit && edit->textFrameSet()->hasSelection() )
     {
-        m_spell.textFramesets.append(edit->textFrameSet());
-        m_spell.bSpellSelection = true;
-        m_spell.selectionStartPos = 0;
-        KoTextCursor start = edit->textDocument()->selectionStartCursor( KoTextDocument::Standard );
-        m_spell.selectionStartPos =start.index();
-        for ( int i = 0 ; i < start.parag()->paragId(); i++)
-        {
-            m_spell.selectionStartPos += start.parag()->document()->paragAt( i )->string()->length();
-        }
-        kdDebug()<<" m_spell.selectionStartPos after :"<<m_spell.selectionStartPos<<endl;
-
+        objects.append(edit->textFrameSet()->textObject());
+        options = KFindDialog::SelectedText;
     }
     else
     {
-        for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ ) {
-            KWFrameSet *frameset = m_doc->frameSet( i );
-            frameset->addTextFrameSets(m_spell.textFramesets);
-        }
+        objects = m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(m_gui->canvasWidget()->viewMode());
     }
+    m_spell.textIterator = new KoTextIterator( objects, edit, options );
     startKSpell();
 }
 
@@ -5294,7 +5245,6 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
 void KWView::startKSpell()
 {
 #ifdef HAVE_LIBASPELL
-    // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     if(m_doc->getKSpellConfig())
     {
         m_doc->getKSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
@@ -5320,7 +5270,6 @@ void KWView::startKSpell()
     QObject::connect( m_spell.kospell, SIGNAL( addAutoCorrect (const QString &, const QString &)), this, SLOT( spellAddAutoCorrect( const QString &  ,  const QString & )));
     spellCheckerReady();
 #else
-    // m_spellCurrFrameSetNum is supposed to be set by the caller of this method
     if(m_doc->getKSpellConfig())
     {
         m_doc->getKSpellConfig()->setIgnoreList(m_doc->spellListIgnoreAll());
@@ -5349,163 +5298,139 @@ void KWView::startKSpell()
 
 void KWView::spellCheckerReady()
 {
-    for ( unsigned int i = m_spell.spellCurrFrameSetNum + 1; i < m_spell.textFramesets.count(); i++ ) {
-        KWTextFrameSet *textfs = m_spell.textFramesets.at( i );
-        if(!textfs->isVisible( m_gui->canvasWidget()->viewMode() ))
-            continue;
-        m_spell.spellCurrFrameSetNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
-        //kdDebug() << "KWView::spellCheckerReady spell-checking frameset " << m_spellCurrFrameSetNum << endl;
-
-        QString text = textfs->textDocument()->plainText();
-        if ( m_spell.bSpellSelection)
+    // Spell-check the next paragraph
+    Q_ASSERT( m_spell.textIterator );
+    if ( !m_spell.textIterator->atEnd() )
+    {
+        bool textIsEmpty = true;
+        QString text;
+        while ( textIsEmpty )
         {
-            text = textfs->textDocument()->selectedText(KoTextDocument::Standard);
+            text = m_spell.textIterator->currentText();
+            // Determine if text has any non-space character, otherwise there's nothing to spellcheck
+            for ( uint i = 0 ; i < text.length() ; ++ i )
+                if ( !text[i].isSpace() ) {
+                    textIsEmpty = false;
+                    break;
+                }
+            if ( textIsEmpty )
+                ++(*m_spell.textIterator);
         }
-        bool textIsEmpty=true;
-        // Determine if text has any non-space character, otherwise there's nothing to spellcheck
-        for ( uint i = 0 ; i < text.length() ; ++ i )
-            if ( !text[i].isSpace() ) {
-                textIsEmpty = false;
-                break;
-            }
-        if(textIsEmpty)
-            continue;
-        text += '\n'; // end of last paragraph
-        text += '\n'; // empty line required by kspell
+        //kdDebug(32001) << "Checking " << text << endl;
+        text += '\n'; // end of paragraph
 #ifdef HAVE_LIBASPELL
         m_spell.kospell->check( text);
 #else
+        text += '\n'; // empty line required by kspell
         m_spell.kspell->check( text );
 #endif
-        textfs->textObject()->setNeedSpellCheck(true);
+        /// ??? textfs->textObject()->setNeedSpellCheck(true);
         return;
     }
-    //kdDebug() << "KWView::spellCheckerReady done" << endl;
+    //kdDebug(32001) << "KWView::spellCheckerReady done" << endl;
 
     // Done
-    m_doc->setReadWrite(true);
-#ifdef HAVE_LIBASPELL
-    delete m_spell.kospell;
-    m_spell.kospell=0;
-#else
-    m_spell.kspell->cleanUp();
-    delete m_spell.kspell;
-    m_spell.kspell = 0;
-#endif
-    m_spell.textFramesets.clear();
-    if(m_spell.macroCmdSpellCheck)
-        m_doc->addCommand(m_spell.macroCmdSpellCheck);
-    m_spell.macroCmdSpellCheck=0L;
+    if ( m_spell.textIterator->options() & KFindDialog::SelectedText )
+    {
+        KMessageBox::information(this,
+                                 i18n("SpellCheck selection finished."),
+                                 i18n("Spell checking"));
+    }
+    //m_doc->setReadWrite(true);
+    clearSpellChecker();
 }
 
 void KWView::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
 {
-    //kdDebug() << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
-    KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-    Q_ASSERT( fs );
-    if ( !fs ) return;
-    KoTextParag * p = fs->textDocument()->firstParag();
-    pos += m_spell.selectionStartPos;
-    while ( p && (int)pos >= p->length() )
-    {
-        pos -= p->length();
-        p = p->next();
-    }
-    Q_ASSERT( p );
-    if ( !p ) return;
-    //kdDebug() << "KWView::spellCheckerMisspelling p=" << p->paragId() << " pos=" << pos << " length=" << old.length() << endl;
-    fs->highlightPortion( p, pos, old.length(), m_gui->canvasWidget() );
+    //kdDebug(32001) << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
+    KoTextParag* parag = m_spell.textIterator->currentParag();
+    Q_ASSERT( textobj );
+    Q_ASSERT( parag );
+    if ( !textobj || !parag ) return;
+    KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
+    Q_ASSERT( textdoc );
+    if ( !textdoc ) return;
+    pos += m_spell.textIterator->currentStartIndex();
+    kdDebug(32001) << "KWView::spellCheckerMisspelling parag=" << parag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
+    textdoc->textFrameSet()->highlightPortion( parag, pos, old.length(), m_gui->canvasWidget() );
 }
 
 void KWView::spellCheckerCorrected( const QString &old, const QString &corr, unsigned int pos )
 {
-    kdDebug() << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
-    pos += m_spell.selectionStartPos;
-    KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-    Q_ASSERT( fs );
-    if ( !fs ) return;
-    KoTextParag * p = fs->textDocument()->firstParag();
-    while ( p && (int)pos >= p->length() )
-    {
-        pos -= p->length();
-        p = p->next();
-    }
-    Q_ASSERT( p );
-    if ( !p ) return;
-    fs->highlightPortion( p, pos, old.length(), m_gui->canvasWidget() );
+    //kdDebug(32001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
+    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
+    KoTextParag* parag = m_spell.textIterator->currentParag();
+    Q_ASSERT( textobj );
+    Q_ASSERT( parag );
+    if ( !textobj || !parag ) return;
+    KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
+    Q_ASSERT( textdoc );
+    if ( !textdoc ) return;
+    pos += m_spell.textIterator->currentStartIndex();
+    textdoc->textFrameSet()->highlightPortion( parag, pos, old.length(), m_gui->canvasWidget() );
 
-    KoTextCursor cursor( fs->textDocument() );
-    cursor.setParag( p );
+    KoTextCursor cursor( textdoc );
+    cursor.setParag( parag );
     cursor.setIndex( pos );
     if(!m_spell.macroCmdSpellCheck)
         m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct Misspelled Word"));
-    m_spell.macroCmdSpellCheck->addCommand(fs->textObject()->replaceSelectionCommand(
+    m_spell.macroCmdSpellCheck->addCommand(textobj->replaceSelectionCommand(
         &cursor, corr, KoTextObject::HighlightSelection, QString::null ));
 }
 
 void KWView::spellCheckerDone( const QString & )
 {
-    KWTextFrameSet * fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-    Q_ASSERT( fs );
-    if ( fs )
-        fs->removeHighlight();
+    //kdDebug(32001) << "KWView::spellCheckerDone" << endl;
+    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
+    Q_ASSERT( textobj );
+    KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
+    Q_ASSERT( textdoc );
+    if ( textdoc )
+        textdoc->textFrameSet()->removeHighlight();
 
-    int result;
 #ifdef HAVE_LIBASPELL
-    result= m_spell.kospell->dlgResult();
-    //delete m_spell.kospell;
-    //m_spell.kospell = 0;
+    int result = m_spell.kospell->dlgResult();
 #else
-    result= m_spell.kspell->dlgResult();
-
-    m_spell.kspell->cleanUp();
-    delete m_spell.kspell;
-    m_spell.kspell = 0;
+    int result = m_spell.kspell->dlgResult();
 #endif
     if ( result != KS_CANCEL && result != KS_STOP )
     {
-        if ( m_spell.bSpellSelection )
-        {
-            KMessageBox::information(this,
-                                     i18n("SpellCheck selection finished."),
-                                     i18n("Spell checking"));
-            m_doc->setReadWrite(true);
-#ifdef HAVE_LIBASPELL
-            delete m_spell.kospell;
-            m_spell.kospell = 0;
-#endif
-            clearSpellChecker();
-        }
-        else
-        {
-#ifdef HAVE_LIBASPELL
-            spellCheckerReady();
-#else
-            // Try to check another frameset
-            startKSpell();
-#endif
-        }
+        // Move on to next paragraph
+        ++(*m_spell.textIterator);
+        spellCheckerReady();
     }
-    else
+    else // aborted
     {
-        m_doc->setReadWrite(true);
         clearSpellChecker();
     }
 }
 
 void KWView::clearSpellChecker()
 {
-    m_spell.textFramesets.clear();
-    m_spell.replaceAll.clear();
+    //kdDebug(32001) << "KWView::clearSpellChecker" << endl;
+#ifdef HAVE_LIBASPELL
+    delete m_spell.kospell;
+    m_spell.kospell=0;
+#else
+    if ( m_spell.kspell ) {
+        m_spell.kspell->cleanUp();
+        delete m_spell.kspell;
+        m_spell.kspell = 0;
+    }
+#endif
+    delete m_spell.textIterator;
+    m_spell.textIterator = 0L;
     if(m_spell.macroCmdSpellCheck)
         m_doc->addCommand(m_spell.macroCmdSpellCheck);
     m_spell.macroCmdSpellCheck=0L;
-    m_spell.bSpellSelection= false;
-    m_spell.selectionStartPos = 0;
+    m_spell.replaceAll.clear();
+    //m_doc->setReadWrite(true);
 }
 
-void KWView::spellCheckerFinished()
+void KWView::spellCheckerFinished() // connected to death()
 {
+    //kdDebug(32001) << "KWView::spellCheckerFinished (death)" << endl;
     bool kspellNotConfigured=false;
 #ifdef HAVE_LIBASPELL
     delete m_spell.kospell;
@@ -5524,15 +5449,14 @@ void KWView::spellCheckerFinished()
         KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
     }
 #endif
-    KWTextFrameSet * fs = 0L;
-    if(m_spell.spellCurrFrameSetNum!=-1)
-    {
-        fs = m_spell.textFramesets.at( m_spell.spellCurrFrameSetNum ) ;
-        Q_ASSERT( fs );
-        if ( fs )
-            fs->removeHighlight();
+    KoTextObject* textobj = m_spell.textIterator->currentTextObject();
+    if ( textobj ) {
+        KWTextDocument *textdoc=static_cast<KWTextDocument *>( textobj->textDocument() );
+        if ( textdoc )
+            textdoc->textFrameSet()->removeHighlight();
     }
-    m_doc->setReadWrite(true);
+
+    //m_doc->setReadWrite(true);
     clearSpellChecker();
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)

@@ -76,6 +76,7 @@ class KoParagDia;
 class KWViewMode;
 class KWFrameStyle;
 class KWTableStyle;
+class KoTextIterator;
 
 #ifdef HAVE_LIBASPELL
 class KOSpell;
@@ -163,7 +164,6 @@ public:
     void refreshMenuExpression();
 
     void deleteFrame(bool _warning=true);
-    void clearSelection();
 
     QPopupMenu * popupMenu( const QString& name );
 
@@ -242,7 +242,7 @@ public slots:
     void formatPage();
     void formatFrameSet();
 
-    void extraSpelling();
+    void slotSpellCheck();
     void extraAutoFormat();
     void extraFrameStylist();
     void extraStylist();
@@ -635,7 +635,6 @@ private:
     KAction *actionTablePropertiesMenu;
     KAction *actionTableProperties;
 
-    KAction *actionExtraSpellCheck;
     KAction *actionExtraCreateTemplate;
 
     KAction *actionChangeCase;
@@ -726,16 +725,14 @@ private:
 
     // Spell-checking
     struct {
-	KSpell *kspell;
 #ifdef HAVE_LIBASPELL
         KOSpell *kospell;
+#else
+	KSpell *kspell;
 #endif
-	int spellCurrFrameSetNum;
-	QPtrList<KWTextFrameSet> textFramesets;
 	KMacroCommand * macroCmdSpellCheck;
         QStringList replaceAll;
-        bool bSpellSelection;
-        int selectionStartPos;
+        KoTextIterator * textIterator;
      } m_spell;
 
     KWFrameSet *fsInline;
