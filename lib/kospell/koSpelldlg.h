@@ -59,7 +59,7 @@ class KOSpellDlg : public KDialogBase
     bool progressbar;
 
 public:
-    KOSpellDlg (QWidget *parent, const char *name,
+    KOSpellDlg (QWidget *parent, const char *name, int indexOfLanguage,
                bool _progressbar = FALSE, bool _modal = FALSE, bool _autocorrect = false );
 
     QString replacement () const

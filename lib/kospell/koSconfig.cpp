@@ -360,7 +360,10 @@ KOSpellConfig::fillInDialog ()
     for (unsigned int i=0; i<listOfLanguageFileName().count(); i++)
       {
 	if (listOfLanguageFileName()[i] == dictionary())
+        {
 	  whichelement=i;
+          break;
+        }
       }
 
   dictcombo->setMinimumWidth (dictcombo->sizeHint().width());
@@ -694,6 +697,19 @@ void KOSpellConfig::createListOfLanguages()
 
 }
 
+int KOSpellConfig::indexFromLanguageFileName( const QString &name)
+{
+    int whichelement = 0;
+    for (unsigned int i=0; i<listOfLanguageFileName().count(); i++)
+      {
+	if (listOfLanguageFileName()[i] == name)
+        {
+	  whichelement=i;
+          break;
+        }
+      }
+    return whichelement;
+}
 
 
 #include "koSconfig.moc"

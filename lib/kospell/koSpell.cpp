@@ -237,10 +237,10 @@ KOSpell::setUpDialog (bool reallyuseprogressbar)
     kdDebug()<<" KOSpell::setUpDialog (bool reallyuseprogressbar)*******\n";
     if (ksdlg)
         return;
+    initConfig();
 
     //Set up the dialog box
-    ksdlg=new KOSpellDlg (parent, "dialog",
-                         progressbar && reallyuseprogressbar, modaldlg, autocorrect );
+    ksdlg=new KOSpellDlg (parent, "dialog", KOSpellConfig::indexFromLanguageFileName( ksconfig->dictionary()), progressbar && reallyuseprogressbar, modaldlg, autocorrect );
     ksdlg->setCaption (caption);
     connect (this, SIGNAL ( progress (unsigned int) ),
              ksdlg, SLOT ( slotProgress (unsigned int) ));
@@ -249,7 +249,6 @@ KOSpell::setUpDialog (bool reallyuseprogressbar)
 #endif
     if ( modaldlg )
         ksdlg->setFocus();
-    initConfig();
 }
 
 bool KOSpell::addPersonal (const QString & word)

@@ -171,7 +171,7 @@ public:
     static QStringList listOfLanguageFileName();
     static QString fileNameFromLanguage( const QString & _lang);
     static QString languageFromFileName( const QString &_lang );
-
+    static int indexFromLanguageFileName( const QString &name);
 
 protected:
     void fillInDialog();

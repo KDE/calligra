@@ -38,6 +38,7 @@
 KOSpellDlg::KOSpellDlg(
   QWidget * parent,
   const char * name,
+  int indexOfLanguage,
   bool _progressbar,
   bool _modal,
   bool _autocorrect
@@ -65,7 +66,7 @@ KOSpellDlg::KOSpellDlg(
   language = new QComboBox( w, "language");
 
   language->insertStringList( KOSpellConfig::listOfAspellLanguages());
-
+  language->setCurrentItem( indexOfLanguage);
   QLabel * l_misspelled =
     new QLabel(i18n("Misspelled word:"), w, "l_misspelled");
 
