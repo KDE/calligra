@@ -1,8 +1,7 @@
 #ifndef KSPREAD_VIEW_IFACE_H
 #define KSPREAD_VIEW_IFACE_H
 
-#include <dcopobject.h>
-#include <dcopref.h>
+#include <KoViewIface.h>
 
 #include <qstring.h>
 #include <qrect.h>
@@ -10,7 +9,7 @@
 class KSpreadView;
 class KSpreadCellProxy;
 
-class KSpreadViewIface : virtual public DCOPObject
+class KSpreadViewIface : public KoViewIface
 {
     K_DCOP
 public:

@@ -16,7 +16,7 @@
  ************************************************/
 
 KSpreadViewIface::KSpreadViewIface( KSpreadView* t )
-    : DCOPObject( t )
+    : KoViewIface( t )
 {
     m_view = t;
 }
