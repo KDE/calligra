@@ -435,6 +435,7 @@ protected:
     void insertPolyline( const KoPointArray &_pointArray );
     void insertCubicBezierCurve( const KoPointArray &_pointArray );
     void insertPolygon( const KoPointArray &_pointArray );
+    void insertClosedLine( const KoPointArray &_pointArray );
 
     void selectNext();
     void selectPrev();
@@ -450,6 +451,7 @@ protected:
 
     void drawCubicBezierCurve( int _dx, int _dy );
     void endDrawCubicBezierCurve();
+
 
 #ifndef NDEBUG
     void printRTDebug( int info );

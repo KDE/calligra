@@ -35,4 +35,6 @@ KoSize getBoundingSize( LineEnd figure, int _w, const KoZoomHandler*_zoomHandler
 QString lineEndBeginName( LineEnd type );
 LineEnd lineEndBeginFromString( const QString & name );
 KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed );
+QCursor penCursor(); // pen tool cursor
+QCursor rotateCursor(); // rotate tool cursor
 #endif

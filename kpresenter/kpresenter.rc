@@ -73,6 +73,10 @@
   <Action name="tools_circle"/>
   <Action name="tools_pie"/>
   <Action name="tools_polygon"/>
+  <Action name="tools_closed_freehand"/>
+  <Action name="tools_closed_polyline"/>
+  <Action name="tools_closed_quadricbeziercurve"/>
+  <Action name="tools_closed_cubicbeziercurve"/>
  </Menu>
  <Menu name="Extra"><text>F&amp;ormat</text>
   <Action name="tools_mouse"/>
@@ -198,6 +202,10 @@
   <Action name="tools_circle"/>
   <Action name="tools_pie"/>
   <Action name="tools_polygon"/>
+  <Action name="tools_closed_freehand"/>
+  <Action name="tools_closed_polyline"/>
+  <Action name="tools_closed_quadricbeziercurve"/>
+  <Action name="tools_closed_cubicbeziercurve"/>
 </ToolBar>
 <ToolBar name="toolsToolBar" position="left" fullWidth="false"><Text>Tools</Text>
   <Action name="tools_move"/>

@@ -66,7 +66,8 @@ enum ObjType {
     OT_POLYLINE = 12,
     OT_QUADRICBEZIERCURVE = 13,
     OT_CUBICBEZIERCURVE = 14,
-    OT_POLYGON = 15
+    OT_POLYGON = 15,
+    OT_CLOSED_LINE = 16
 };
 enum SelectionMode {
     SM_NONE = 0,
@@ -231,7 +232,11 @@ enum ToolEditMode {
     INS_PICTURE = 16,
     INS_CLIPART = 17,
     TEM_ROTATE = 18,
-    TEM_ZOOM = 19
+    TEM_ZOOM = 19,
+    INS_CLOSED_FREEHAND = 20,
+    INS_CLOSED_POLYLINE = 21,
+    INS_CLOSED_QUADRICBEZIERCURVE = 22,
+    INS_CLOSED_CUBICBEZIERCURVE = 23
 };
 
 enum PictureMirrorType {

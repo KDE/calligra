@@ -607,14 +607,15 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         if ( e->button() == LeftButton ) {
             mousePressed = true;
 
-            if ( m_drawPolyline && toolEditMode == INS_POLYLINE ) {
+            if ( m_drawPolyline && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) ) {
                 m_dragStartPoint = rasterPoint;
                 m_pointArray.putPoints( m_indexPointArray, 1,m_view->zoomHandler()->unzoomItX( m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y()) );
                 ++m_indexPointArray;
                 return;
             }
 
-            if ( m_drawCubicBezierCurve && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE ) ) {
+            if ( m_drawCubicBezierCurve && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE
+                                             || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE ) ) {
                 if ( m_drawLineWithCubicBezierCurve ) {
                     QPainter p( this );
                     p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
@@ -806,7 +807,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 			axisY = m_boundingRect.center().y();
 		    }
 		} break;
-                case INS_FREEHAND: {
+                case INS_FREEHAND: case INS_CLOSED_FREEHAND: {
                     deSelectAllObj();
                     mousePressed = true;
                     QPoint tmp = applyGrid ( e->pos(),true );
@@ -818,7 +819,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y()) );
                     ++m_indexPointArray;
                 } break;
-                case INS_POLYLINE: {
+                case INS_POLYLINE: case INS_CLOSED_POLYLINE: {
                     deSelectAllObj();
                     mousePressed = true;
                     QPoint tmp = applyGrid ( e->pos(),true );
@@ -832,7 +833,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y()) );
                     ++m_indexPointArray;
                 } break;
-                case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE: {
+                case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:
+                case INS_CLOSED_CUBICBEZIERCURVE: case INS_CLOSED_QUADRICBEZIERCURVE: {
                     deSelectAllObj();
                     mousePressed = true;
                     QPoint tmp = applyGrid ( e->pos(),true );
@@ -867,7 +869,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             }
         }
 
-        if ( e->button() == RightButton && toolEditMode == INS_POLYLINE && !m_pointArray.isNull() && m_drawPolyline ) {
+        if ( e->button() == RightButton && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) && !m_pointArray.isNull() && m_drawPolyline ) {
             if( m_indexPointArray > 1)
             {
                 QPainter p( this );
@@ -905,7 +907,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             return;
         }
 
-        if ( e->button() == RightButton && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE )
+        if ( e->button() == RightButton && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE
+                                             || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE )
              && !m_pointArray.isNull() && m_drawCubicBezierCurve ) {
             if ( m_drawLineWithCubicBezierCurve ) {
                 QPoint point = applyGrid( e->pos(), true);
@@ -918,7 +921,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 m_indexPointArray += 2;
             }
 
-            endDrawCubicBezierCurve();
+            if ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE
+                || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE )
+                endDrawCubicBezierCurve();
 
             mouseMoveEvent( e );
 
@@ -1152,8 +1157,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     _objects.setAutoDelete( false );
     KPObject *kpobject = 0;
 
-    if ( ( m_drawPolyline && toolEditMode == INS_POLYLINE )
-         || ( m_drawCubicBezierCurve && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE ) ) ) {
+    if ( ( m_drawPolyline && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) )
+         || ( m_drawCubicBezierCurve && ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE
+                                          || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE ) ) ) {
         return;
     }
 
@@ -1501,6 +1507,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         if ( !insRect.isNull() ) insertClipart( insRect );
         setToolEditMode( TEM_MOUSE );
     } break;
+    case INS_CLOSED_FREEHAND: {
+        if ( !m_pointArray.isNull() )
+            insertClosedLine( m_pointArray );
+    }break;
     default: break;
     }
     emit objectSelectedChanged();
@@ -1879,7 +1889,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 m_view->penColorChanged( m_view->getPen() );
                 m_view->brushColorChanged( m_view->getBrush() );
 	    } break;
-            case INS_FREEHAND: {
+            case INS_FREEHAND: case INS_CLOSED_FREEHAND: {
                 m_dragEndPoint = QPoint( e->x() , e->y() );
 
                 QPainter p( this );
@@ -1901,7 +1911,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 m_view->penColorChanged( m_view->getPen() );
                 m_view->brushColorChanged( m_view->getBrush() );
             } break;
-            case INS_POLYLINE: {
+            case INS_POLYLINE: case INS_CLOSED_POLYLINE: {
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
@@ -1933,7 +1943,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 m_view->penColorChanged( m_view->getPen() );
                 m_view->brushColorChanged( m_view->getBrush() );
             } break;
-            case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:{
+            case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:
+            case INS_CLOSED_CUBICBEZIERCURVE: case INS_CLOSED_QUADRICBEZIERCURVE:{
                 QPoint tmp = applyGrid( e->pos(), true);
 
                 drawCubicBezierCurve( tmp.x(),
@@ -2006,7 +2017,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
         return;
 
 
-    if ( toolEditMode == INS_POLYLINE && !m_pointArray.isNull() && m_drawPolyline ) {
+    if ( ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) && !m_pointArray.isNull() && m_drawPolyline ) {
         m_dragStartPoint = applyGrid( e->pos(), true);
         m_pointArray.putPoints( m_indexPointArray, 1, m_view->zoomHandler()->unzoomItX(m_dragStartPoint.x()), m_view->zoomHandler()->unzoomItY(m_dragStartPoint.y() ));
         ++m_indexPointArray;
@@ -2015,6 +2026,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
         mouseMoveEvent( e );
         return;
     }
+
 
     if ( toolEditMode != TEM_MOUSE || !editMode ) return;
 
@@ -4369,6 +4381,11 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
             m_activePage->insertQuadricBezierCurve( tmpPoints, tmpAllPoints, _rect, m_view->getPen(),
                                                     m_view->getLineBegin(), m_view->getLineEnd() );
         }
+        else if ( toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE ) {
+            m_activePage->insertClosedLine( tmpAllPoints, _rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
+                                            m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
+                                            m_view->getGXFactor(), m_view->getGYFactor(), toolEditMode );
+        }
     }
     m_pointArray = KoPointArray();
     m_indexPointArray = 0;
@@ -4437,17 +4454,43 @@ void KPrCanvas::insertClipart( const QRect &_r )
 }
 
 /*================================================================*/
+void KPrCanvas::insertClosedLine( const KoPointArray &_pointArray )
+{
+    KoPointArray points( _pointArray );
+    KoRect rect =  points.boundingRect();
+    double ox = rect.x();
+    double oy = rect.y();
+    unsigned int index = 0;
+
+    KoPointArray tmpPoints;
+    KoPointArray::ConstIterator it;
+    for ( it = points.begin(); it != points.end(); ++it ) {
+        KoPoint point = (*it);
+        double tmpX = point.x() - ox;
+        double tmpY = point.y() - oy;
+        tmpPoints.putPoints( index, 1, tmpX,tmpY );
+        ++index;
+    }
+    rect.moveBy( m_view->zoomHandler()->unzoomItX( diffx() ), m_view->zoomHandler()->unzoomItY( diffy() ) );
+
+    m_activePage->insertClosedLine( tmpPoints, rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
+                                    m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
+                                    m_view->getGXFactor(), m_view->getGYFactor(), toolEditMode );
+
+    m_pointArray = KoPointArray();
+    m_indexPointArray = 0;
+}
+
+/*================================================================*/
 void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
 {
     //store m_pointArray if !m_pointArray.isNull()
-    if(toolEditMode == INS_POLYLINE && !m_pointArray.isNull())
-    {
+    if ( ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) && !m_pointArray.isNull())
         endDrawPolyline();
-    }
 
-    if ( ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE ) && !m_pointArray.isNull() )
+    if ( ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE
+           || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE ) && !m_pointArray.isNull() )
         endDrawCubicBezierCurve();
-
 
     exitEditMode();
     toolEditMode = _m;
@@ -4466,6 +4509,10 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
                 setCursor( obj->getCursor( pos, modType,m_view->kPresenterDoc() ) );
         }
     }
+    else if ( toolEditMode == INS_FREEHAND || toolEditMode == INS_CLOSED_FREEHAND )
+        setCursor( penCursor() );
+    else if ( toolEditMode == TEM_ROTATE )
+        setCursor( rotateCursor() );
     else
         setCursor( crossCursor );
 
@@ -4478,7 +4525,12 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
 void KPrCanvas::endDrawPolyline()
 {
     m_drawPolyline = false;
-    insertPolyline( m_pointArray );
+
+    if ( toolEditMode == INS_POLYLINE )
+        insertPolyline( m_pointArray );
+    else if ( toolEditMode == INS_CLOSED_POLYLINE )
+        insertClosedLine( m_pointArray );
+
     emit objectSelectedChanged();
     if ( toolEditMode != TEM_MOUSE && editMode )
         repaint( false );
@@ -5483,7 +5535,7 @@ void KPrCanvas::drawCubicBezierCurve( int _dx, int _dy )
         double _thirdY = m_view->zoomHandler()->unzoomItY( m_dragSymmetricEndPoint.y() ) - _diffY;
         m_CubicBezierThirdPoint = KoPoint( _thirdX, _thirdY );
 
-        if ( toolEditMode == INS_QUADRICBEZIERCURVE ) {
+        if ( toolEditMode == INS_QUADRICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE ) {
             _secondX = _thirdX;
             _secondY = _thirdY;
             m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );

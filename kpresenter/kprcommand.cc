@@ -32,6 +32,7 @@
 #include <kpquadricbeziercurveobject.h>
 #include <kpcubicbeziercurveobject.h>
 #include <kppolygonobject.h>
+#include <kpclosedlineobject.h>
 
 #include <kptextobject.h>
 #include <kppixmapobject.h>
@@ -1095,6 +1096,13 @@ void PenCmd::applyPen(KPObject *kpobject, Pen *tmpPen)
             doc->repaint( obj );
 	}
     } break;
+    case OT_CLOSED_LINE: {
+        KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
+        if( obj ) {
+            obj->setPen( tmpPen->pen );
+            doc->repaint( obj );
+	}
+    } break;
     default: break;
     }
 }
@@ -1286,6 +1294,20 @@ void BrushCmd::applyBrush(KPObject *kpobject, Brush *tmpBrush)
         KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( kpobject );
         if(obj)
 	{
+            obj->setBrush( tmpBrush->brush );
+            obj->setFillType( tmpBrush->fillType );
+            obj->setGColor1( tmpBrush->gColor1 );
+            obj->setGColor2( tmpBrush->gColor2 );
+            obj->setGType( tmpBrush->gType );
+            obj->setGUnbalanced( tmpBrush->unbalanced );
+            obj->setGXFactor( tmpBrush->xfactor );
+            obj->setGYFactor( tmpBrush->yfactor );
+            doc->repaint( obj );
+	}
+    } break;
+    case OT_CLOSED_LINE: {
+        KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
+        if( obj ) {
             obj->setBrush( tmpBrush->brush );
             obj->setFillType( tmpBrush->fillType );
             obj->setGColor1( tmpBrush->gColor1 );

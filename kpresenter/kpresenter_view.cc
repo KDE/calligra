@@ -1020,6 +1020,50 @@ void KPresenterView::toolsConvexOrConcavePolygon()
         actionToolsConvexOrConcavePolygon->setChecked(true);
 }
 
+/*==================== insert closed freehand line =====================*/
+void KPresenterView::toolsClosedFreehand()
+{
+    if ( actionToolsClosedFreehand->isChecked() ) {
+        m_canvas->setToolEditMode( INS_CLOSED_FREEHAND, false );
+        m_canvas->deSelectAllObj();
+    }
+    else
+        actionToolsClosedFreehand->setChecked( true );
+}
+
+/*====================== insert closed polyline =======================*/
+void KPresenterView::toolsClosedPolyline()
+{
+    if ( actionToolsClosedPolyline->isChecked() ) {
+        m_canvas->setToolEditMode( INS_CLOSED_POLYLINE, false );
+        m_canvas->deSelectAllObj();
+    }
+    else
+        actionToolsClosedPolyline->setChecked( true );
+}
+
+/*================ insert closed quadric bezier curve =================*/
+void KPresenterView::toolsClosedQuadricBezierCurve()
+{
+    if ( actionToolsClosedQuadricBezierCurve->isChecked() ) {
+        m_canvas->setToolEditMode( INS_CLOSED_QUADRICBEZIERCURVE, false );
+        m_canvas->deSelectAllObj();
+    }
+    else
+        actionToolsClosedQuadricBezierCurve->setChecked( true );
+}
+
+/*================= insert closed cubic bezier curve ==================*/
+void KPresenterView::toolsClosedCubicBezierCurve()
+{
+    if ( actionToolsClosedCubicBezierCurve->isChecked() ) {
+        m_canvas->setToolEditMode( INS_CLOSED_CUBICBEZIERCURVE, false );
+        m_canvas->deSelectAllObj();
+    }
+    else
+        actionToolsClosedCubicBezierCurve->setChecked( true );
+}
+
 /*===============================================================*/
 void KPresenterView::extraPenBrush()
 {
@@ -2000,6 +2044,30 @@ void KPresenterView::extraLineBeginCircle()
 }
 
 /*===============================================================*/
+void KPresenterView::extraLineBeginLineArrow()
+{
+    setExtraLineBegin( L_LINE_ARROW );
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineBeginDimensionLine()
+{
+    setExtraLineBegin( L_DIMENSION_LINE );
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineBeginDoubleArrow()
+{
+    setExtraLineBegin( L_DOUBLE_ARROW );
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineBeginDoubleLineArrow()
+{
+    setExtraLineBegin( L_DOUBLE_LINE_ARROW );
+}
+
+/*===============================================================*/
 void KPresenterView::setExtraLineBegin(LineEnd lb)
 {
     KPrPage *page=m_canvas->activePage();
@@ -2053,6 +2121,30 @@ void KPresenterView::extraLineEndRect()
 void KPresenterView::extraLineEndCircle()
 {
     setExtraLineEnd(L_CIRCLE);
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineEndLineArrow()
+{
+    setExtraLineEnd( L_LINE_ARROW );
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineEndDimensionLine()
+{
+    setExtraLineEnd( L_DIMENSION_LINE );
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineEndDoubleArrow()
+{
+    setExtraLineEnd( L_DOUBLE_ARROW );
+}
+
+/*===============================================================*/
+void KPresenterView::extraLineEndDoubleLineArrow()
+{
+    setExtraLineEnd( L_DOUBLE_LINE_ARROW );
 }
 
 /*===============================================================*/
@@ -2574,6 +2666,30 @@ void KPresenterView::setupActions()
                                                            this, SLOT( toolsConvexOrConcavePolygon() ),
                                                            actionCollection(), "tools_polygon" );
     actionToolsConvexOrConcavePolygon->setExclusiveGroup( "tools" );
+
+
+    actionToolsClosedFreehand = new KToggleAction( i18n( "Closed &Freehand" ), "closed_freehand", 0,
+                                                   this, SLOT( toolsClosedFreehand() ),
+                                                   actionCollection(), "tools_closed_freehand" );
+    actionToolsClosedFreehand->setExclusiveGroup( "tools" );
+
+
+    actionToolsClosedPolyline = new KToggleAction( i18n( "Closed Po&lyline" ), "closed_polyline", 0,
+                                                   this, SLOT( toolsClosedPolyline() ),
+                                                   actionCollection(), "tools_closed_polyline" );
+    actionToolsClosedPolyline->setExclusiveGroup( "tools" );
+
+
+    actionToolsClosedQuadricBezierCurve = new KToggleAction( i18n( "Closed &Quadric Bezier Curve" ), "closed_quadricbeziercurve", 0,
+                                                             this, SLOT( toolsClosedQuadricBezierCurve() ),
+                                                             actionCollection(), "tools_closed_quadricbeziercurve" );
+    actionToolsClosedQuadricBezierCurve->setExclusiveGroup( "tools" );
+
+
+    actionToolsClosedCubicBezierCurve = new KToggleAction( i18n( "Closed C&ubic Bezier Curve" ), "closed_cubicbeziercurve", 0,
+                                                           this, SLOT( toolsClosedCubicBezierCurve() ),
+                                                           actionCollection(), "tools_closed_cubicbeziercurve" );
+    actionToolsClosedCubicBezierCurve->setExclusiveGroup( "tools" );
 
     // ----------------- text actions
 
@@ -3994,6 +4110,14 @@ void KPresenterView::setupPopupMenus()
     rb_lbegin->insertItem( KPBarIcon("line_rect_begin" ), this, SLOT( extraLineBeginRect() ) );
     rb_lbegin->insertSeparator( -1 );
     rb_lbegin->insertItem( KPBarIcon("line_circle_begin" ), this, SLOT( extraLineBeginCircle() ) );
+    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertItem( KPBarIcon("line_line_arrow_begin" ), this, SLOT( extraLineBeginLineArrow() ) );
+    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertItem( KPBarIcon("line_dimension_line_begin" ), this, SLOT( extraLineBeginDimensionLine() ) );
+    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertItem( KPBarIcon("line_double_arrow_begin" ), this, SLOT( extraLineBeginDoubleArrow() ) );
+    rb_lbegin->insertSeparator( -1 );
+    rb_lbegin->insertItem( KPBarIcon("line_double_line_arrow_begin" ), this, SLOT( extraLineBeginDoubleLineArrow() ) );
     rb_lbegin->setMouseTracking( true );
     rb_lbegin->setCheckable( false );
 
@@ -4007,6 +4131,14 @@ void KPresenterView::setupPopupMenus()
     rb_lend->insertItem( KPBarIcon("line_rect_end" ), this, SLOT( extraLineEndRect() ) );
     rb_lend->insertSeparator( -1 );
     rb_lend->insertItem( KPBarIcon("line_circle_end" ), this, SLOT( extraLineEndCircle() ) );
+    rb_lend->insertSeparator( -1 );
+    rb_lend->insertItem( KPBarIcon("line_line_arrow_end" ), this, SLOT( extraLineEndLineArrow() ) );
+    rb_lend->insertSeparator( -1 );
+    rb_lend->insertItem( KPBarIcon("line_dimension_line_end" ), this, SLOT( extraLineEndDimensionLine() ) );
+    rb_lend->insertSeparator( -1 );
+    rb_lend->insertItem( KPBarIcon("line_double_arrow_end" ), this, SLOT( extraLineEndDoubleArrow() ) );
+    rb_lend->insertSeparator( -1 );
+    rb_lend->insertItem( KPBarIcon("line_double_line_arrow_end" ), this, SLOT( extraLineEndDoubleLineArrow() ) );
     rb_lend->setMouseTracking( true );
     rb_lend->setCheckable( false );
 

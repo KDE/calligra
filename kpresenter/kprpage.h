@@ -160,6 +160,9 @@ public:
 
     void insertPolygon( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
+    void insertClosedLine( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,const QColor &g1, const QColor &g2,
+                           BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode );
+
 
     KCommand *alignObjsLeft(const KoRect &rect = KoRect());
     KCommand *alignObjsCenterH(const KoRect &rect= KoRect());

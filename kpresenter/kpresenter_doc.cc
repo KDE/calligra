@@ -39,6 +39,7 @@
 #include <kpquadricbeziercurveobject.h>
 #include <kpcubicbeziercurveobject.h>
 #include <kppolygonobject.h>
+#include <kpclosedlineobject.h>
 
 #include <qpopupmenu.h>
 #include <qclipboard.h>
@@ -1601,6 +1602,29 @@ KCommand *KPresenterDoc::loadObjects( const QDomElement &element,bool paste )
                 }
                 else
                     insertObjectInPage(offset, kpPolygonObject);
+            } break;
+            case OT_CLOSED_LINE: {
+                KPClosedLineObject *kpClosedLinneObject = new KPClosedLineObject();
+                offset = kpClosedLinneObject->load( obj );
+                if ( sticky && !ignoreSticky) {
+                    m_stickyPage->appendObject( kpClosedLinneObject );
+                    kpClosedLinneObject->setOrig( kpClosedLinneObject->getOrig().x(), offset );
+                    kpClosedLinneObject->setSticky( sticky );
+                }
+                else if ( m_pageWhereLoadObject && paste ) {
+                    kpClosedLinneObject->setOrig( kpClosedLinneObject->getOrig().x(), offset );
+                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert " ) + kpClosedLinneObject->getTypeString(), kpClosedLinneObject, this , m_pageWhereLoadObject );
+                    macro->addCommand( insertCmd );
+                    createMacro = true;
+
+                }
+                else if( m_pageWhereLoadObject &&!paste)
+                {
+                    m_pageWhereLoadObject->appendObject( kpClosedLinneObject );
+                    kpClosedLinneObject->setOrig( kpClosedLinneObject->getOrig().x(), offset );
+                }
+                else
+                    insertObjectInPage( offset, kpClosedLinneObject );
             } break;
             case OT_GROUP: {
                 KPGroupObject *kpgroupobject = new KPGroupObject();

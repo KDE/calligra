@@ -198,6 +198,10 @@ public slots:
     void toolsQuadricBezierCurve();
     void toolsCubicBezierCurve();
     void toolsConvexOrConcavePolygon();
+    void toolsClosedFreehand();
+    void toolsClosedPolyline();
+    void toolsClosedQuadricBezierCurve();
+    void toolsClosedCubicBezierCurve();
 
     // extra menu
     void extraPenBrush();
@@ -590,11 +594,19 @@ protected slots:
     void extraLineBeginArrow();
     void extraLineBeginRect();
     void extraLineBeginCircle();
+    void extraLineBeginLineArrow();
+    void extraLineBeginDimensionLine();
+    void extraLineBeginDoubleArrow();
+    void extraLineBeginDoubleLineArrow();
     void setExtraLineBegin(LineEnd lb);
     void extraLineEndNormal();
     void extraLineEndArrow();
     void extraLineEndRect();
     void extraLineEndCircle();
+    void extraLineEndLineArrow();
+    void extraLineEndDimensionLine();
+    void extraLineEndDoubleArrow();
+    void extraLineEndDoubleLineArrow();
     void setExtraLineEnd(LineEnd le);
 
     void extraPenStyleSolid();
@@ -817,6 +829,10 @@ private:
     KToggleAction *actionToolsQuadricBezierCurve;
     KToggleAction *actionToolsCubicBezierCurve;
     KToggleAction *actionToolsConvexOrConcavePolygon;
+    KToggleAction *actionToolsClosedFreehand;
+    KToggleAction *actionToolsClosedPolyline;
+    KToggleAction *actionToolsClosedQuadricBezierCurve;
+    KToggleAction *actionToolsClosedCubicBezierCurve;
     KoPartSelectAction *actionToolsObject;
 
     KAction *actionTextFont;

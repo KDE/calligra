@@ -37,6 +37,7 @@
 #include <kpquadricbeziercurveobject.h>
 #include <kpcubicbeziercurveobject.h>
 #include <kppolygonobject.h>
+#include <kpclosedlineobject.h>
 #include <kdebug.h>
 #include <koQueryTrader.h>
 #include "kpresenter_doc.h"
@@ -433,6 +434,11 @@ QPen KPrPage::getPen( const QPen &pen ) const
                     return kpobject->getPen();
             }
             break;
+            case OT_CLOSED_LINE: {
+                KPClosedLineObject *kpobject = dynamic_cast<KPClosedLineObject*>( it.current() );
+                if ( kpobject )
+                    return kpobject->getPen();
+            } break;
 	    default: break;
 	    }
 	}
@@ -657,6 +663,11 @@ QBrush KPrPage::getBrush( const QBrush &brush )const
 	      if(obj)
 		return obj->getBrush();
 	    }
+          case OT_CLOSED_LINE: {
+              KPClosedLineObject *kpobject = dynamic_cast<KPClosedLineObject*>( it.current() );
+              if ( kpobject )
+                  return kpobject->getBrush();
+          } break;
 
 	    break;
 	  default: break;
@@ -1282,6 +1293,45 @@ void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const 
     m_doc->addCommand( insertCmd );
 }
 
+/*======================= insert closed line ===========================*/
+void KPrPage::insertClosedLine( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,const QColor &g1, const QColor &g2,
+                                BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode )
+{
+    QString _type;
+    QString _name;
+    if ( _mode == INS_CLOSED_FREEHAND ) {
+        _type = i18n( "Closed Freehand" );
+        _name = i18n( "Insert Closed Freehand" );
+    }
+    else if ( _mode == INS_CLOSED_POLYLINE ) {
+        _type = i18n( "Closed Polyline" );
+        _name = i18n( "Insert Closed Polyline" );
+    }
+    else if ( _mode == INS_CLOSED_QUADRICBEZIERCURVE ) {
+        _type = i18n( "Closed Quadric Bezier Curve" );
+        _name = i18n( "Insert Closed Quadric Bezier Curve" );
+    }
+    else if ( _mode == INS_CLOSED_CUBICBEZIERCURVE ) {
+        _type = i18n( "Closed Cubic Bezier Curve" );
+        _name = i18n( "Insert Closed Cubic Bezier Curve" );
+    }
+
+    KoSize size( r.width(), r.height() );
+
+    KPClosedLineObject *kpClosedLineObject = new KPClosedLineObject( points, size, pen, brush, ft,
+                                                                     g1, g2, gt, unbalanced, xfactor, yfactor, _type );
+    kpClosedLineObject->setOrig( r.x(), r.y() );
+    kpClosedLineObject->setSize( size );
+    kpClosedLineObject->setSelected( true );
+
+
+
+    InsertCmd *insertCmd = new InsertCmd( _name, kpClosedLineObject, m_doc, this );
+    insertCmd->execute();
+    m_doc->addCommand( insertCmd );
+}
+
+
 /*======================== align objects left ===================*/
 KCommand * KPrPage::alignObjsLeft(const KoRect &rect)
 {
@@ -1762,9 +1812,14 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 if(obj)
                 {
                     ptmp->pen = QPen( obj->getPen() );
-                 }
-             }
-             break;
+                }
+            }
+            break;
+            case OT_CLOSED_LINE: {
+                KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
+                if ( obj )
+                    ptmp->pen = QPen( obj->getPen() );
+            } break;
 
             case OT_GROUP:
             {
@@ -1984,6 +2039,19 @@ KCommand * KPrPage::setBrush( const QBrush &brush, FillType ft, const QColor &g1
                  }
              }
              break;
+            case OT_CLOSED_LINE: {
+                KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
+                if( obj ) {
+                    btmp->brush = obj->getBrush();
+                    btmp->fillType = obj->getFillType();
+                    btmp->gColor1 = obj->getGColor1();
+                    btmp->gColor2 = obj->getGColor2();
+                    btmp->gType = obj->getGType();
+                    btmp->unbalanced = obj->getGUnbalanced();
+                    btmp->xfactor = obj->getGXFactor();
+                    btmp->yfactor = obj->getGYFactor();
+                 }
+            } break;
             case OT_GROUP:
             {
                 KPGroupObject *obj=dynamic_cast<KPGroupObject*>( kpobject );
@@ -2076,7 +2144,7 @@ int KPrPage::getPenBrushFlags( QPtrList<KPObject>list ) const
                 flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
                 break;
             case OT_PART:  case OT_ELLIPSE:
-            case OT_TEXT: case OT_CLIPART:
+            case OT_TEXT: case OT_CLIPART: case OT_CLOSED_LINE:
                 flags = flags | StyleDia::SdPen | StyleDia::SdOther;
                 flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
                 break;
@@ -2408,6 +2476,16 @@ KCommand* KPrPage::setBrushColor( const QColor &c, bool fill )
                 KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
                 if(obj)
                 {
+                    btmp->brush = QBrush( obj->getBrush() );
+                    btmp->fillType = obj->getFillType();
+                    btmp->gColor1 = obj->getGColor1();
+                    btmp->gColor2 = obj->getGColor2();
+                    btmp->gType = obj->getGType();
+                }
+            } break;
+            case OT_CLOSED_LINE: {
+                KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
+                if( obj ) {
                     btmp->brush = QBrush( obj->getBrush() );
                     btmp->fillType = obj->getFillType();
                     btmp->gColor1 = obj->getGColor1();

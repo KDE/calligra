@@ -111,8 +111,14 @@
                         8... pie
                         9... part
                         10.. group
+                        11.. freehand
+                        12.. polyline
+                        13.. quadric bezier curve
+                        14.. cubic bezier curve
+                        15.. polygon
+                        16.. closed line
 -->
-<!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT|KEY|LINETYPE|LINEEND|LINEBEGIN|PRESNUM|FILENAME|DISAPPEAR|TIMER|APPEARSOUNDEFFECT|DISAPPEARSOUNDEFFECT|POINTS|SETTINGS|PICTURESETTINGS|PROTECT|RATIO)*>
+<!ELEMENT OBJECT (ORIG|SIZE|SHADOW|EFFECTS|ANGLE|TEXTOBJ|PEN|BRUSH|RNDS|PRESNUM|FILLTYPE|GRADIENT|KEY|LINETYPE|LINEEND|LINEBEGIN|PRESNUM|FILENAME|DISAPPEAR|TIMER|APPEARSOUNDEFFECT|DISAPPEARSOUNDEFFECT|POINTS|SETTINGS|PICTURESETTINGS|PROTECT|RATIO|OBJECTSNAME)*>
 <!ATTLIST OBJECT  type	NMTOKEN #REQUIRED>
 
 <!--	The position of an object in the document.
@@ -183,7 +189,7 @@
 
 <!--    The effect to play sound
                 Attributes:
-                appearSoundFileName      sound name
+                appearSoundFileName      sound name (URL)
                 appearSoundEffect        use or don't use sound with appear object
 -->
 
@@ -195,7 +201,7 @@
 
 <!--    The effect to play sound
                 Attributes:
-                disappearSoundFileName      sound name
+                disappearSoundFileName      sound name (URL)
                 disappearSoundEffect        use or don't use sound with disappear object
 -->
 
@@ -644,3 +650,6 @@
 <!ELEMENT SPELLCHECKIGNORELIST ( SPELLCHECKIGNOREWORD+ )>
 <!ATTLIST SPELLCHECKIGNORELIST #EMPTY>
 <!ELEMENT SPELLCHECKIGNOREWORD word NMTOKEN #REQUIRED >
+
+<!ELEMENT OBJECTSNAME >
+<!ATTLIST NAME CDATA #REQUIRED>
