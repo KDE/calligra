@@ -22,13 +22,14 @@
 #include "kexirelationwidget.h"
 
 #include <qlayout.h>
-#include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qtimer.h>
 
+#include <kcombobox.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <kpushbutton.h>
 
 #include <kexidb/connection.h>
 
@@ -53,13 +54,15 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	QGridLayout *g = new QGridLayout(this);
 	g->addLayout( hlyr, 0, 0 );
 
-	m_tableCombo = new QComboBox(this);
+	m_tableCombo = new KComboBox(this, "tables_combo");
+	m_tableCombo->setInsertionPolicy(QComboBox::NoInsertion);
 	hlyr->addWidget(m_tableCombo);
 	m_tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
-	m_tableCombo->insertStringList(m_conn->tableNames());
-	QStringList tmp=m_conn->tableNames();
+	QStringList tmp = m_conn->tableNames();
+	tmp.sort();
+	m_tableCombo->insertStringList(tmp);
 
-	m_btnAdd = new QPushButton(i18n("&Add"), this);
+	m_btnAdd = new KPushButton(i18n("&Add"), this);
 	hlyr->addWidget(m_btnAdd);
 	hlyr->addStretch(1);
 	connect(m_btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
@@ -123,32 +126,42 @@ KexiRelationWidget::~KexiRelationWidget()
 {
 }
 
+TablesDict* KexiRelationWidget::tables() 
+{
+	return m_relationView->tables();
+}
+
 void
 KexiRelationWidget::slotAddTable()
 {
-	if (m_tableCombo->currentItem()!=-1) //(m_tableCombo->count() > 0)
-	{
-		QString tname = m_tableCombo->text(m_tableCombo->currentItem());
-		KexiDB::TableSchema *t = m_conn->tableSchema(tname);
-		if (t)
-		{
-			m_relationView->addTable(t);
-			kdDebug() << "KexiRelationWidget::slotAddTable(): adding table " << tname << endl;
-		}
+	if (m_tableCombo->currentItem()==-1)
+		return;
+	QString tname = m_tableCombo->text(m_tableCombo->currentItem());
+	KexiDB::TableSchema *t = m_conn->tableSchema(tname);
+	addTable(t);
+}
 
-		int oi=m_tableCombo->currentItem();
-		kdDebug()<<"KexiRelationWidget::slotAddTable(): removing a table from the combo box"<<endl;
-		m_tableCombo->removeItem(m_tableCombo->currentItem());
-		if (m_tableCombo->count()>0)
-		{
-			if (oi>=m_tableCombo->count()) oi=m_tableCombo->count()-1;
-			m_tableCombo->setCurrentItem(oi);
-		}
-		else {
-			m_tableCombo->setEnabled(false);
-			m_btnAdd->setEnabled(false);
-		}
+void
+KexiRelationWidget::addTable(KexiDB::TableSchema *t)
+{
+	if (!t)
+		return;
+	m_relationView->addTable(t);
+	kdDebug() << "KexiRelationWidget::slotAddTable(): adding table " << t->name() << endl;
+
+	int oi=m_tableCombo->currentItem();
+	kdDebug()<<"KexiRelationWidget::slotAddTable(): removing a table from the combo box"<<endl;
+	m_tableCombo->removeItem(m_tableCombo->currentItem());
+	if (m_tableCombo->count()>0)
+	{
+		if (oi>=m_tableCombo->count()) oi=m_tableCombo->count()-1;
+		m_tableCombo->setCurrentItem(oi);
 	}
+	else {
+		m_tableCombo->setEnabled(false);
+		m_btnAdd->setEnabled(false);
+	}
+	emit tableAdded(*t);
 }
 
 

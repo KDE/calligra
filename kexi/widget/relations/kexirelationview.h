@@ -42,7 +42,8 @@ namespace KexiDB
 	class Connection;
 }
 
-typedef QDict<KexiRelationViewTableContainer> TableList;
+typedef QDict<KexiRelationViewTableContainer> TablesDict;
+typedef QDictIterator<KexiRelationViewTableContainer> TablesDictIterator;
 typedef QPtrList<KexiRelationViewConnection> ConnectionList;
 
 struct SourceConnection
@@ -70,6 +71,9 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 	public:
 		KexiRelationView(QWidget *parent, KexiDB::Connection *conn, const char *name=0);
 		~KexiRelationView();
+
+		//! \return a dictionary of added tables
+		TablesDict* tables() { return &m_tables; }
 
 		//! Adds a table \a t to the area. This changes only visual representation.
 		void		addTable(KexiDB::TableSchema *t);
@@ -107,7 +111,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 	protected slots:
 		void		containerMoved(KexiRelationViewTableContainer *c);
 		void		slotListUpdate(QObject *s);
-		void		tableViewEndDrag();
+		void		slotTableViewEndDrag();
 		void		slotTableViewGotFocus();
 //		void		tableHeaderContextMenuRequest(const QPoint& pos);
 
@@ -131,7 +135,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 
 		void removeConnection(KexiRelationViewConnection *conn);
 
-		TableList		m_tables;
+		TablesDict		m_tables;
 //		RelationList		m_connections;
 		bool			m_readOnly;
 //		KexiRelation    	*m_relation;

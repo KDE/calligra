@@ -119,7 +119,7 @@ KexiRelationView::addTable(KexiDB::TableSchema *t)
 	*/
 
 	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, t);
-	connect(c, SIGNAL(endDrag()), this, SLOT(tableViewEndDrag()));
+	connect(c, SIGNAL(endDrag()), this, SLOT(slotTableViewEndDrag()));
 	connect(c, SIGNAL(gotFocus()), this, SLOT(slotTableViewGotFocus()));
 //	connect(c, SIGNAL(headerContextMenuRequest(const QPoint&)), 
 //		this, SLOT(tableHeaderContextMenuRequest(const QPoint&)));
@@ -402,10 +402,11 @@ KexiRelationView::stretchExpandSize()
 	resizeContents(p.x(), p.y());
 }
 
-void KexiRelationView::tableViewEndDrag()
+void KexiRelationView::slotTableViewEndDrag()
 {
 	kdDebug() << "END DRAG!" <<endl;
 	stretchExpandSize();
+
 }
 
 void

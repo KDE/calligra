@@ -24,14 +24,14 @@
 //#include <qwidget.h>
 //#include "kexiactionproxy.h"
 #include "kexiviewbase.h"
+#include "kexirelationview.h"
 
-class QComboBox;
-class QPushButton;
-
-class KexiRelationView;
-class KexiMainWindow;
+class KComboBox;
+class KPushButton;
 class KPopupMenu;
 class KAction;
+
+class KexiMainWindow;
 
 namespace KexiDB
 {
@@ -48,19 +48,25 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidge
 		KexiRelationWidget(KexiMainWindow *win, QWidget *parent, const char *name=0);
 		~KexiRelationWidget();
 
+		//! \return a dictionary of added tables
+		TablesDict* tables();
+
 //		KexiRelationView	*relationView() const { return m_relationView; }
 		void			addTable(QString t);
 
-//	signals:
 //		void openTable(KexiDB::TableSchema* table, bool designMode);
 
 		virtual QSize sizeHint() const;
 
+	signals:
+		void tableAdded(KexiDB::TableSchema& t);
+	
 	public slots:
-		void slotAddTable();
+		void addTable(KexiDB::TableSchema *t);
 		void removeSelectedObject();
 
 	protected slots:
+		void slotAddTable();
 		void tableViewGotFocus();
 		void connectionViewGotFocus();
 		void emptyAreaGotFocus();
@@ -83,8 +89,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase //QWidge
 
 	private:
 		KexiMainWindow *m_win;
-		QComboBox		*m_tableCombo;
-		QPushButton		*m_btnAdd;
+		KComboBox		*m_tableCombo;
+		KPushButton		*m_btnAdd;
 		KexiRelationView	*m_relationView;
 		KexiDB::Connection	*m_conn;
 
