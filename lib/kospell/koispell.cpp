@@ -448,13 +448,21 @@ bool KOISpell::checkWord (const QString & buffer, bool _usedialog, bool synchron
 
   ksdlg->hide();
   if ( synchronous ) {
-    //ready signal is never call, after initialize
+    //ready signal is never called, after initialize
     if ( !m_ready ) {
       connect( this, SIGNAL(ready(KOSpell*)),
-               SLOT(slotSynchronousReady()) );
+               this, SLOT(slotSynchronousReady()) );
+      connect( this, SIGNAL(death()), // in case of init failure
+               this, SLOT(slotSynchronousReady()) );
       //MAGIC 1: here we wait for the initialization to finish
       enter_loop();
+      disconnect( this, SIGNAL(ready(KOSpell*)),
+               this, SLOT(slotSynchronousReady()) );
+      disconnect( this, SIGNAL(death()), // in case of init failure
+               this, SLOT(slotSynchronousReady()) );
     }
+    if ( m_status == Error ) // init failure
+        return false;
     OUTPUT (checkWord2Synchronous);
   }
   else
