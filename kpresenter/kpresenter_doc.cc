@@ -563,7 +563,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		    kppartobject->setOrig( r.x(), r.y() );
 		    kppartobject->setSize( r.width(), r.height() );
 		    _objectList->append( kppartobject );
-		    emit sig_insertObject( ch, kppartobject );
+		    //emit sig_insertObject( ch, kppartobject );
 		} else if ( name == "SETTINGS" ) {
 		    KOMLParser::parseTag( tag.c_str(), name, lst );
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -1240,7 +1240,7 @@ void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    emit sig_insertObject( ch, kppartobject );
+    //emit sig_insertObject( ch, kppartobject );
 
     repaint( false );
 
@@ -1268,12 +1268,14 @@ void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    emit sig_insertObject( ch, kppartobject );
+    //emit sig_insertObject( ch, kppartobject );
 
     repaint( false ); */
 }
 
 /*======================= change child geometry ==================*/
+#if 0
+  // David: this is unused
 void KPresenterDoc::changeChildGeometry( KPresenterChild *_child, const QRect& _rect, int /*_diffx*/, int /*_diffy*/ )
 {
     _child->setGeometry( _rect );
@@ -1283,6 +1285,7 @@ void KPresenterDoc::changeChildGeometry( KPresenterChild *_child, const QRect& _
     //    m_bModified = true;
     setModified(true);
 }
+#endif
 
 /*======================= child iterator =========================*/
 // ### Reggie: I think nobody needs this function any more

@@ -130,7 +130,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     dcop = 0;
 
     m_pKPresenterDoc = 0L;
-    m_bKPresenterModified = false;
+    //m_bKPresenterModified = false;
     m_bUnderConstruction = true;
 
     // init
@@ -180,9 +180,9 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     allowWebPres = true;
 
     m_pKPresenterDoc = _doc;
-    m_bKPresenterModified = true;
+    //m_bKPresenterModified = true;
 
-    QObject::connect( m_pKPresenterDoc, SIGNAL( sig_KPresenterModified() ), this, SLOT( slotKPresenterModified() ) );
+    //QObject::connect( m_pKPresenterDoc, SIGNAL( sig_KPresenterModified() ), this, SLOT( slotKPresenterModified() ) );
 
     createGUI();
 
@@ -2068,17 +2068,20 @@ void KPresenterView::construct()
     m_bUnderConstruction = false;
 
     // We are now in sync with the document
-    m_bKPresenterModified = false;
+    //m_bKPresenterModified = false;
 
     resizeEvent( 0L );
 }
 
 /*======================== document modified ===================*/
+/*
+  // never emitted (David)
 void KPresenterView::slotKPresenterModified()
 {
-    m_bKPresenterModified = true;
+    //m_bKPresenterModified = true;
     update();
 }
+*/
 
 /*=========== take changes for backgr dialog =====================*/
 void KPresenterView::backOk( bool takeGlobal )

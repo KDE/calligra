@@ -125,8 +125,8 @@ public:
     // insert an object
     virtual void insertObject( const QRect&, KoDocumentEntry&, int, int );
 
-    // change geomentry of a child
-    virtual void changeChildGeometry( KPresenterChild*, const QRect&, int, int );
+    // change geometry of a child
+    //virtual void changeChildGeometry( KPresenterChild*, const QRect&, int, int );
 
     // page layout
     void setPageLayout( KoPageLayout, int, int );
@@ -326,14 +326,14 @@ public:
 signals:
 
     // document modified
-    void sig_KPresenterModified();
+    //void sig_KPresenterModified();
 
     // object inserted - removed
-    void sig_insertObject( KPresenterChild *_child, KPPartObject *_kppo );
-    void sig_removeObject( KPresenterChild *_child );
+    //void sig_insertObject( KPresenterChild *_child, KPPartObject *_kppo );
+    //void sig_removeObject( KPresenterChild *_child );
 
     // update child geometry
-    void sig_updateChildGeometry( KPresenterChild *_child );
+    //void sig_updateChildGeometry( KPresenterChild *_child );
 
 protected slots:
     void slotUndoRedoChanged( QString, QString );

@@ -318,7 +318,7 @@ public:
 
 public slots:
     // Document signals
-    void slotKPresenterModified();
+      //void slotKPresenterModified();
 
 protected slots:
     // dialog slots
@@ -398,7 +398,7 @@ protected:
     KPresenterDoc *m_pKPresenterDoc;
 
 // flags
-    bool m_bKPresenterModified;
+    //bool m_bKPresenterModified;
     bool m_bUnderConstruction;
     bool searchFirst, continuePres, exitPres;
 
