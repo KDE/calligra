@@ -5742,6 +5742,9 @@ void KWView::insertFile(const QString & path)
     KoStore* store=KoStore::createStore( path, KoStore::Read );
     if ( store )
     {
+        // We need to load the pictures before we treat framesets
+        // because KWDocument::pasteFrames() calls processPictureRequests().
+        // Considder making a KWDocument::insertFile() instead of using ..pasteFrames()
         bool b = store->open("maindoc.xml");
         if ( !b )
         {
@@ -5754,10 +5757,24 @@ void KWView::insertFile(const QString & path)
         QDomDocument doc;
         doc.setContent( store->device() );
         QDomElement word = doc.documentElement();
-
         m_doc->loadPictureMap( word );
-        hasPictures=true; // ### TODO: we should be smarter!
-        // <PIXMAPS>
+        store->close();
+        m_doc->loadImagesFromStore( store );
+    }
+    if ( store )
+    {
+        bool b = store->open("maindoc.xml");
+        if ( !b )
+        {
+            KMessageBox::sorry( this,
+                                i18n("File name is not a KWord file!."),
+                                i18n("Insert File"));
+            delete store;
+            return;
+        }
+        QDomDocument doc;
+        doc.setContent( store->device() );
+        QDomElement word = doc.documentElement();
 
         QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
         if ( !framesets.isNull() )
@@ -5946,12 +5963,6 @@ void KWView::insertFile(const QString & path)
             }
         }
         store->close();
-    }
-
-    if (store && hasPictures )
-    {
-        m_doc->loadImagesFromStore( store );
-        m_doc->processPictureRequests();
     }
     delete store;
 }
