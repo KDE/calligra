@@ -214,6 +214,8 @@ public:
     void groupObjects();
 
     unsigned int objNums() const;
+    void removeHelpLine();
+    void changeHelpLinePosition(double newPos);
 
 
 public slots:
@@ -278,7 +280,7 @@ protected:
     void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj );
 
     // draw all helpline
-    void drawHelplines(QPainter *painter, const KoRect &rect);
+    void drawHelplines(QPainter *painter, const QRect &rect2);
 
 
     QRect getOldBoundingRect(KPObject *obj);
@@ -357,7 +359,9 @@ protected:
     KPrPage *stickyPage();
     void scrollCanvas(const KoRect& oldPos);
 
-    void moveHelpLine();
+    void moveHelpLine(const QPoint & pos);
+    void tmpMoveHelpLine( const QPoint & newPos);
+
 
 private:
     QValueList<int> pages(const QString &range);
@@ -457,7 +461,8 @@ private:
     int m_zoomBeforePresentation;
     int m_tmpHorizHelpline;
     int m_tmpVertHelpline;
-
+    double tmpHelpLinePosX;
+    double tmpHelpLinePosY;
 };
 
 #endif //PAGE_H

@@ -2984,6 +2984,16 @@ void KPresenterView::setupActions()
     actionEditComment = new KAction( i18n("Edit Comment"), 0,
                                   this,SLOT(editComment()),
                                   actionCollection(), "edit_comment");
+
+    actionRemoveHelpLine = new KAction( i18n( "Remove HelpLine" ), 0,
+                                    this, SLOT( removeHelpLine() ),
+                                    actionCollection(), "remove_helpline" );
+
+
+    actionChangeHelpLinePosition= new KAction( i18n( "Change Help Line Position" ), 0,
+                                    this, SLOT( changeHelpLinePosition() ),
+                                               actionCollection(), "change_helplinepos" );
+
 }
 
 void KPresenterView::textSubScript()
@@ -5698,7 +5708,7 @@ void KPresenterView::viewHelpLines()
 {
     bool state=actionViewShowHelpLine->isChecked();
     m_pKPresenterDoc->setShowHelplines( state );
-    //todo update line
+    m_canvas->repaint(false);
 }
 
 void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
@@ -5708,12 +5718,35 @@ void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
 
 void KPresenterView::addHelpline(const QPoint & pos, bool _horizontal)
 {
-    //todo
+    if ( _horizontal )
+        m_pKPresenterDoc->addHorizHelpline( zoomHandler()->unzoomItY(pos.y()));
+    else
+        m_pKPresenterDoc->addVertHelpline( zoomHandler()->unzoomItX(pos.x()));
+
 }
 
 void KPresenterView::updateHelpLineButton()
 {
     actionViewShowHelpLine->setChecked( m_pKPresenterDoc->showHelplines() );
 }
+
+void KPresenterView::removeHelpLine()
+{
+    m_canvas->removeHelpLine();
+}
+
+void KPresenterView::changeHelpLinePosition()
+{
+    //todo
+    //m_canvas->changeHelpLinePosition( pos );
+}
+
+void KPresenterView::openPopupMenuHelpLine( const QPoint & _point )
+{
+    if(!koDocument()->isReadWrite() )
+        return;
+    static_cast<QPopupMenu*>(factory()->container("helpline_popup",this))->popup(_point);
+}
+
 
 #include <kpresenter_view.moc>

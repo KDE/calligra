@@ -161,6 +161,13 @@ k_dcop:
     bool showHelplines() const;
     void setShowHelplines(bool b);
 
+    void addVertHelpLine( double val);
+
+    void addHoriHelpLine( double val);
+
+    double horizHelpLineValue(int index) const;
+
+    double vertHelpLineValue(int index) const;
 
 private:
     KPresenterDoc *doc;

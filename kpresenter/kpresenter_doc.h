@@ -361,6 +361,10 @@ public:
     void addHorizHelpline(double pos);
     void addVertHelpline(double pos);
 
+    void removeHorizHelpline(int index);
+    void removeVertHelpline( int index );
+
+
     void updateHelpLineButton();
 
 

@@ -441,6 +441,8 @@ public:
     void openPopupMenuPicObject(const QPoint & _point);
     void openPopupMenuPolygonObject( const QPoint &_point );
 
+    void openPopupMenuHelpLine( const QPoint & _point );
+
     void penColorChanged( const QPen & _pen );
     void brushColorChanged( const QBrush & _brush );
 
@@ -545,6 +547,11 @@ protected slots:
     void slotUpdateScrollBarRanges();
     void drawTmpHelpLine( const QPoint & pos, bool _horizontal);
     void addHelpline(const QPoint & pos, bool _horizontal);
+
+    void removeHelpLine();
+
+    void changeHelpLinePosition();
+
 
 // end of protected slots
 protected:
@@ -827,6 +834,10 @@ private:
     KToggleAction *actionAllowAutoFormat;
 
     KAction *actionFormatStylist;
+
+    KAction *actionRemoveHelpLine;
+    KAction *actionChangeHelpLinePosition;
+
 
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;

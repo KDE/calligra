@@ -86,6 +86,8 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
 
     m_tmpHorizHelpline = -1;
     m_tmpVertHelpline = -1;
+    tmpHelpLinePosX = -1;
+    tmpHelpLinePosY = -1;
 
     if ( parent ) {
         mousePressed = false;
@@ -124,7 +126,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_drawLineWithCubicBezierCurve = true;
         m_oldCubicBezierPointArray.putPoints( 0, 4, 0,0, 0,0, 0,0, 0,0 );
         //for test
-        //m_view->kPresenterDoc()->addHorizHelpline(30.0);
+        m_view->kPresenterDoc()->addHorizHelpline(30.0);
     } else {
         m_view = 0;
         hide();
@@ -271,10 +273,10 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         if ( !editMode )
             selectionMode = SM_NONE; // case of screen presentation mode
         drawObjects( &bufPainter, crect, true, selectionMode, true );
-/*
+
         if( editMode && m_view->kPresenterDoc()->showHelplines())
             drawHelplines( &bufPainter, crect);
-*/
+
         bufPainter.end();
 
         bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
@@ -401,30 +403,36 @@ void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCurs
     drawObjectsInPage( painter, rect2, drawCursor, selectionMode, doSpecificEffects,
 		       stickyPage()->objectList());
 
-    if( editMode && m_view->kPresenterDoc()->showHelplines())
-        drawHelplines( painter, rect2);
-
 }
 
-void KPrCanvas::drawHelplines(QPainter *painter, const KoRect &rect)
+void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
 {
     KPresenterDoc *doc=m_view->kPresenterDoc();
+
     if(!doc->isReadWrite())
         return;
-    QValueList<double>::Iterator i;
-    for(i = doc->horizHelplines().begin(); i != doc->horizHelplines().end(); ++i)
+    if( editMode && m_view->kPresenterDoc()->showHelplines())
     {
-        double vi = *i - m_view->zoomHandler()->zoomItY(diffy());
-        if( rect.contains(rect.x(), vi) )
-            painter->drawLine(m_view->zoomHandler()->zoomItX(rect.left()), m_view->zoomHandler()->zoomItY(vi), m_view->zoomHandler()->zoomItX(rect.right()), m_view->zoomHandler()->zoomItY(vi));
+        KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
+        QValueList<double>::Iterator i;
+        QPen _pen = QPen( Qt::black, 1, Qt::DotLine );
+        painter->save();
+        painter->setPen( _pen );
+        for(i = doc->horizHelplines().begin(); i != doc->horizHelplines().end(); ++i)
+        {
+            double vi = *i - m_view->zoomHandler()->zoomItY(diffy());
+            if( rect.contains(rect.x(), vi) )
+                painter->drawLine(m_view->zoomHandler()->zoomItX(rect.left()), m_view->zoomHandler()->zoomItY(vi), m_view->zoomHandler()->zoomItX(rect.right()), m_view->zoomHandler()->zoomItY(vi));
 
-    }
+        }
 
-    for(i = doc->vertHelplines().begin(); i != doc->vertHelplines().end(); ++i)
-    {
-        double vi = *i - m_view->zoomHandler()->zoomItX(diffx());
-        if( rect.contains(vi, rect.y()) )
-            painter->drawLine(m_view->zoomHandler()->zoomItX(vi), m_view->zoomHandler()->zoomItY(rect.top()), m_view->zoomHandler()->zoomItX(vi), m_view->zoomHandler()->zoomItY(rect.bottom()));
+        for(i = doc->vertHelplines().begin(); i != doc->vertHelplines().end(); ++i)
+        {
+            double vi = *i - m_view->zoomHandler()->zoomItX(diffx());
+            if( rect.contains(vi, rect.y()) )
+                painter->drawLine(m_view->zoomHandler()->zoomItX(vi), m_view->zoomHandler()->zoomItY(rect.top()), m_view->zoomHandler()->zoomItX(vi), m_view->zoomHandler()->zoomItY(rect.bottom()));
+        }
+        painter->restore();
     }
 }
 
@@ -623,9 +631,19 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     }
                     else {
                         modType = MT_NONE;
-                        m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()));
-                        m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()));
+                        if( editMode && m_view->kPresenterDoc()->showHelplines())
+                        {
+                            m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()));
+                            m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()));
+                            tmpHelpLinePosX=m_view->zoomHandler()->unzoomItX(e->pos().x());
+                            tmpHelpLinePosY=m_view->zoomHandler()->unzoomItX(e->pos().y());
 
+                        }
+                        else
+                        {
+                            m_tmpVertHelpline = -1;
+                            m_tmpHorizHelpline = -1;
+                        }
                         if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                             deSelectAllObj();
                         if (m_tmpHorizHelpline == -1 && m_tmpVertHelpline ==-1)
@@ -828,7 +846,14 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 }
             } else {
                 QPoint pnt = QCursor::pos();
-                m_view->openPopupMenuMenuPage( pnt );
+                m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()));
+                m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()));
+                if (m_tmpVertHelpline != -1 || m_tmpHorizHelpline != -1)
+                {
+                    m_view->openPopupMenuHelpLine( pnt );
+                }
+                else
+                    m_view->openPopupMenuMenuPage( pnt );
                 mousePressed = false;
             }
 	    modType = MT_NONE;
@@ -988,6 +1013,10 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 }
 
 
+            }
+            if ( m_tmpVertHelpline != -1 || m_tmpHorizHelpline != -1)
+            {
+                moveHelpLine( e->pos() );
             }
         } break;
         case MT_MOVE: {
@@ -1262,8 +1291,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
 	KPObject *kpobject;
 
-	if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
-	     toolEditMode == TEM_MOUSE ) {
+	if ( ( !mousePressed || ( !m_tmpHorizHelpline !=-1 && m_tmpVertHelpline != -1 && modType == MT_NONE ) )&&
+            ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
+	     toolEditMode == TEM_MOUSE  ) {
 	    bool cursorAlreadySet = false;
 	    if ( (int)objectList().count() - 1 >= 0 || (int)stickyPage()->objectList().count() -1>=0 )
             {
@@ -1284,19 +1314,19 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
                 }
 	    }
-            if( m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()))!=-1)
+            if( editMode && m_view->kPresenterDoc()->showHelplines())
             {
-                setCursor ( Qt::sizeVerCursor );
-                cursorAlreadySet = true;
+                if( m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()))!=-1)
+                {
+                    setCursor ( Qt::sizeVerCursor );
+                    cursorAlreadySet = true;
+                }
+                else if ( m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()))!=-1)
+                {
+                    setCursor ( Qt::sizeHorCursor );
+                    cursorAlreadySet = true;
+                }
             }
-            else if ( m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()))!=-1)
-            {
-                setCursor ( Qt::sizeHorCursor );
-                cursorAlreadySet = true;
-            }
-            //kdDebug()<<" horizontal helpline :"<< (m_view->kPresenterDoc()->indexOfHorizHelpline(e->pos().y()))<<endl;
-            //kdDebug()<<" vertical helpline :"<< (m_view->kPresenterDoc()->indexOfVertHelpline(e->pos().x()))<<endl;
-
 
 	    if ( !cursorAlreadySet )
 		setCursor( arrowCursor );
@@ -1317,7 +1347,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		if ( modType == MT_NONE ) {
                     if ( m_tmpVertHelpline !=-1 || m_tmpHorizHelpline !=-1)
                     {
-                        //drawline
+                        tmpMoveHelpLine( e->pos() );
                     }
 		    else if ( drawRubber ) {
 			QPainter p;
@@ -6256,7 +6286,76 @@ unsigned int KPrCanvas::objNums() const
     return (m_activePage->objNums() + m_view->kPresenterDoc()->stickyPage()->objNums());
 }
 
-void KPrCanvas::moveHelpLine()
+
+void KPrCanvas::moveHelpLine( const QPoint & pos)
+{
+    QRect rect = m_activePage->getZoomPageRect();
+
+    if ( m_tmpHorizHelpline != -1)
+    {
+        double vi = m_view->kPresenterDoc()->horizHelplines()[m_tmpHorizHelpline];
+        m_view->kPresenterDoc()->repaint(QRect( rect.left(), m_view->zoomHandler()->zoomItY(vi) -4,  rect.right(), m_view->zoomHandler()->zoomItY(vi) + 4));
+        m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline , m_view->zoomHandler()->unzoomItY(pos.y()));
+
+    }
+    else if ( m_tmpVertHelpline != -1 )
+    {
+        double vi = m_view->kPresenterDoc()->vertHelplines()[m_tmpVertHelpline];
+
+        m_view->kPresenterDoc()->repaint(QRect( m_view->zoomHandler()->zoomItX(vi) -4,  rect.top(), m_view->zoomHandler()->zoomItX(vi) + 4, rect.bottom()));
+        m_view->kPresenterDoc()->updateVertHelpline( m_tmpVertHelpline , m_view->zoomHandler()->unzoomItX(pos.x()));
+    }
+    m_tmpVertHelpline = -1;
+    m_tmpHorizHelpline = -1;
+}
+
+void KPrCanvas::tmpMoveHelpLine( const QPoint & newPos)
+{
+    QPainter p;
+    p.begin( this );
+    p.setRasterOp( NotROP );
+    p.setPen( QPen( black, 0, DotLine ) );
+    QRect rect = m_activePage->getZoomPageRect();
+    if ( m_tmpHorizHelpline != -1)
+    {
+        double vi = tmpHelpLinePosY;
+        p.drawLine(rect.left(), m_view->zoomHandler()->zoomItY(vi), rect.right(), m_view->zoomHandler()->zoomItY(vi));
+
+        p.setPen( QPen( black, 1, DotLine ) );
+
+        vi = m_view->zoomHandler()->unzoomItY(newPos.y());
+
+        p.drawLine(rect.left(), m_view->zoomHandler()->zoomItY(vi), rect.right(), m_view->zoomHandler()->zoomItY(vi));
+        tmpHelpLinePosY = vi;
+    }
+    else if ( m_tmpVertHelpline != -1 )
+    {
+        double vi = tmpHelpLinePosX;
+        p.drawLine(m_view->zoomHandler()->zoomItX(vi), rect.top(), m_view->zoomHandler()->zoomItX(vi),  rect.bottom());
+
+        p.setPen( QPen( black, 1, DotLine ) );
+
+        vi = m_view->zoomHandler()->unzoomItX(newPos.x());
+
+        p.drawLine(m_view->zoomHandler()->zoomItX(vi), rect.top(), m_view->zoomHandler()->zoomItX(vi),  rect.bottom());
+        tmpHelpLinePosY = vi;
+    }
+    p.end();
+
+}
+
+void KPrCanvas::removeHelpLine()
+{
+    if ( m_tmpVertHelpline != -1)
+        m_view->kPresenterDoc()->removeVertHelpline( m_tmpVertHelpline );
+    else if ( m_tmpHorizHelpline != -1)
+        m_view->kPresenterDoc()->removeHorizHelpline( m_tmpHorizHelpline );
+    m_tmpHorizHelpline = -1;
+    m_tmpVertHelpline = -1;
+    repaint(false);
+}
+
+void changeHelpLinePosition( double newPos )
 {
     //todo
 }

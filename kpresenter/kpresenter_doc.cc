@@ -2791,6 +2791,24 @@ void KPresenterDoc::addVertHelpline(double pos)
     m_vertHelplines.append(pos);
 }
 
+void KPresenterDoc::removeHorizHelpline(int index)
+{
+    if ( index >= m_horizHelplines.count())
+        kdDebug()<<" index of remove horiz helpline doesn't exit !\n";
+    else
+        m_horizHelplines.remove(m_horizHelplines[index]);
+}
+
+void KPresenterDoc::removeVertHelpline( int index )
+{
+    if ( index >= m_vertHelplines.count())
+        kdDebug()<<" index of remove vertical helpline doesn't exit !\n";
+    else
+        m_vertHelplines.remove(m_vertHelplines[index]);
+
+}
+
+
 void KPresenterDoc::updateHelpLineButton()
 {
     QPtrListIterator<KoView> it( views() );

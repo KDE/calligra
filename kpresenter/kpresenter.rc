@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="45">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="46">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -569,5 +569,9 @@
    <Separator/>
    <Action name="extra_alignbottom"/>
   </Menu>
+</Menu>
+<Menu name="helpline_popup">
+ <Action name="remove_helpline"/>
+ <Action name="change_helplinepos"/>
 </Menu>
 </kpartgui>
