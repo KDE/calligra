@@ -208,23 +208,6 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
         KCursor::autoHideEventFilter( o, e );
     switch ( e->type() )
     {
-    case QEvent::AccelOverride:
-    {
-        QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
-        if ( m_currentTextObjectView &&
-             (keyev->key()==Key_Home ||keyev->key()==Key_End
-              || keyev->key()==Key_Tab || keyev->key()==Key_Prior
-              || keyev->key()==Key_Next) )
-        {
-            m_currentTextObjectView->keyPressEvent( keyev );
-            return true;
-        }
-        else if ( !m_currentTextObjectView && keyev->key()==Key_Tab  )
-        {
-            keyPressEvent(keyev);
-            return true;
-        }
-    }
     case QEvent::FocusIn:
         if ( m_currentTextObjectView )
             m_currentTextObjectView->focusInEvent();
@@ -235,8 +218,21 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
         return TRUE;
     case QEvent::KeyPress:
     {
+      QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+      if ( m_currentTextObjectView &&
+	   (keyev->key()==Key_Home ||keyev->key()==Key_End
+	   || keyev->key()==Key_Tab || keyev->key()==Key_Prior
+	   || keyev->key()==Key_Next || keyev->key() == Key_Backtab) )
+      {
+	m_currentTextObjectView->keyPressEvent( keyev );
+	return true;
+      }
+      else if ( !m_currentTextObjectView && keyev->key()==Key_Tab  )
+      {
+	keyPressEvent(keyev);
+	return true;
+      }
 #ifndef NDEBUG
-        QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
         // Debug keys
         if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
         {
@@ -2095,6 +2091,7 @@ void KPrCanvas::wheelEvent( QWheelEvent *e )
 
 void KPrCanvas::keyPressEvent( QKeyEvent *e )
 {
+
     if ( !editMode ) {
         switch ( e->key() ) {
         case Key_Space: case Key_Right: case Key_Down:
@@ -2841,7 +2838,7 @@ void KPrCanvas::setTextDepthPlus()
     QPtrListIterator<KoTextFormatInterface> it( lst );
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
-        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, newVal);
+      KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, newVal);
         if ( cmd )
         {
             if ( !macroCmd )

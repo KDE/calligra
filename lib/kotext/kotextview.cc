@@ -237,19 +237,22 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 
         clearUndoRedoInfo = FALSE;
         break;
+    case Key_Backtab:
+      if (e->state() & ShiftButton && m_cursor->parag() && m_cursor->atParagStart() && m_cursor->parag()->counter() && textDecreaseIndent())
+	break;
+      break;
     case Key_Backspace:
         if ( textObject()->hasSelection() ) {
             textObject()->removeSelectedText( m_cursor );
             break;
         }
-	if ( m_cursor->parag() && m_cursor->atParagStart() && m_cursor->parag()->counter() && textDecreaseIndent())
-	  break;
-	if ( !m_cursor->parag()->prev() && m_cursor->atParagStart() )
+	if ( !m_cursor->parag()->prev() &&
+		     -             m_cursor->atParagStart() )
 	{
-		KoTextParag * parag = m_cursor->parag();
-		if ( parag->counter() && parag->counter()->style() != KoParagCounter::STYLE_NONE)
-			textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
-		break;
+	  KoTextParag * parag = m_cursor->parag();
+	  if ( parag->counter() && parag->counter()->style() != KoParagCounter::STYLE_NONE)
+	    textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
+	  break;
 	}
 	textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionBackspace );
 

@@ -254,8 +254,8 @@
   <Action name="format_number"/>
   <Action name="format_bullet"/>
   <Separator/>
-  <Action name="text_depthPlus"/>
   <Action name="text_depthMinus"/>
+  <Action name="text_depthPlus"/>
   <Separator/>
   <Action name="text_color"/>
 </ToolBar>

@@ -3165,10 +3165,11 @@ void KPresenterView::setupActions()
     actionSaveBackgroundPicture= new KAction( i18n( "Save Background Picture..." ), 0,
                                               this, SLOT(backgroundPicture() ),
                                               actionCollection(), "save_bgpicture" );
-
+#if 0
     actionInsertDirectCursor = new KToggleAction( i18n( "Type Anywhere Cursor" ), 0,
                                                   this, SLOT( insertDirectCursor() ),
                                                   actionCollection(), "direct_cursor" );
+#endif
 
     actionSpellIgnoreAll = new KAction( i18n( "Ignore All" ), 0,
                                         this, SLOT( slotAddIgnoreAllWord() ),
@@ -6762,7 +6763,9 @@ void KPresenterView::removeLink()
 
 void KPresenterView::insertDirectCursor()
 {
+#if 0
     insertDirectCursor( actionInsertDirectCursor->isChecked());
+#endif
 }
 
 void KPresenterView::insertDirectCursor(bool b)
@@ -6772,7 +6775,9 @@ void KPresenterView::insertDirectCursor(bool b)
 
 void KPresenterView::updateDirectCursorButton()
 {
+#if 0
     actionInsertDirectCursor->setChecked(m_pKPresenterDoc->insertDirectCursor());
+#endif
 }
 
 void KPresenterView::copyTextOfComment()

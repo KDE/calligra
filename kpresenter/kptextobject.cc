@@ -2068,7 +2068,6 @@ void KPTextView::keyPressEvent( QKeyEvent *e )
   //Calculate position of tooltip for autocompletion
   const QPoint pos = kpTextObject()->cursorPos(m_canvas, cursor());
   textView()->handleKeyPressEvent( e, m_canvas, pos );
- //handleKeyPressEvent(e, m_canvas, m_canvas->mapFromGlobal(QCursor::pos()) );
 }
 
 void KPTextView::keyReleaseEvent( QKeyEvent *e )

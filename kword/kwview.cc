@@ -802,7 +802,7 @@ void KWView::setupActions()
     actionFormatSub->setExclusiveGroup( "valign" );
 
     actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ),
-                                             QApplication::reverseLayout() ? "format_decreaseindent" : "format_increaseindent", 0,
+					     QApplication::reverseLayout() ? "format_decreaseindent" : "format_increaseindent", KShortcut("SHIFT+tab"),
                                              this, SLOT( textIncreaseIndent() ),
                                              actionCollection(), "format_increaseindent" );
 
