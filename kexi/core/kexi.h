@@ -24,9 +24,9 @@
 #include "kexipartmanager.h"
 #include "kexidbconnectionset.h"
 #include "kexiprojectset.h"
+#include "kexivalidator.h"
 #include <kexidb/drivermanager.h>
 
-#include <qvalidator.h>
 
 namespace Kexi
 {
@@ -62,12 +62,14 @@ namespace Kexi
 	KEXICORE_EXPORT QString string2Identifier(const QString &s);
 	
 	//! class validates input for identifier name
-	class KEXICORE_EXPORT IdentifierValidator : public QValidator
+	class KEXICORE_EXPORT IdentifierValidator : public KexiValidator
 	{
 		public:
-			IdentifierValidator(QObject * parent, const char * name = 0);
+			IdentifierValidator(QObject * parent = 0, const char * name = 0);
 			~IdentifierValidator();
 			virtual State validate( QString & input, int & pos) const;
+			virtual Result check(const QString &valueName, QVariant v, 
+				QString &message, QString &details);
 	};
 
 }

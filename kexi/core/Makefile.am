@@ -1,7 +1,8 @@
 include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexicore.la
-libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp keximainwindow.cpp \
+libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp kexivalidator.cpp \
+	keximainwindow.cpp \
 	kexidbconnectionset.cpp kexiprojectset.cpp \
 	kexiactionproxy.cpp kexisharedactionhost.cpp \
 	kexiproject.cpp kexidialogbase.cpp kexiviewbase.cpp \

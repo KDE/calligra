@@ -19,7 +19,10 @@
 
 #include "kexi.h"
 
+#include "kexi_utils.h"
+
 #include <kdebug.h>
+#include <klocale.h>
 
 using namespace Kexi;
 
@@ -68,7 +71,7 @@ QString Kexi::string2Identifier(const QString &s)
 //--------------------------------------------------------------------------------
 
 IdentifierValidator::IdentifierValidator(QObject * parent, const char * name)
-: QValidator(parent,name)
+: KexiValidator(parent,name)
 {
 }
 
@@ -76,7 +79,7 @@ IdentifierValidator::~IdentifierValidator()
 {
 }
 
-QValidator::State IdentifierValidator::validate( QString& input, int& pos) const
+QValidator::State IdentifierValidator::validate( QString& input, int& pos ) const
 {
 	uint i;
 	for (i=0; i<input.length() && input.at(i)==' '; i++)
@@ -91,6 +94,16 @@ QValidator::State IdentifierValidator::validate( QString& input, int& pos) const
 	if((uint)pos>input.length())
 		pos=input.length();
 	return input.isEmpty() ? Valid : Acceptable;
+}
+
+KexiValidator::Result IdentifierValidator::check(const QString &valueName, QVariant v, 
+	QString &message, QString &)
+{
+	if (Kexi::isIdentifier(v.toString()))
+		return KexiValidator::Ok;
+	message = i18n("Value of \"%1\" column must be an identifier.\n"
+		"\"%2\" is not a valid identifier.").arg(valueName).arg(v.toString());
+	return KexiValidator::Error;
 }
 
 //--------------------------------------------------------------------------------
