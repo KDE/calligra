@@ -68,7 +68,7 @@ KoHTMLJob::KoHTMLJob( KMyHTMLView *_view, const char *_url, const char *_dataURL
                this, SLOT(slotJobListEntry(int, UDSEntry &)));
      }  
   
-  enableGUI(false);
+  setGUImode(NONE);
   
   connect(this, SIGNAL(sigFinished(int)),
           this, SLOT(slotJobFinished()));
