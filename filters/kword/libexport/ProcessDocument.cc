@@ -1,8 +1,8 @@
-// $Header$
+//
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
    Copyright (c) 2001 IABG mbH. All rights reserved.
                       Contact: Wolf-Michael Bolle <Bolle@IABG.de>
 
@@ -733,10 +733,10 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
     attrProcessingList << AttrProcessing ("spacingvalue"  , "double", (void *) &spacingValue  );
     ProcessAttributes (myNode, attrProcessingList);
 
-    // KWord pre-1.2 uses "value" attribute (stored in oldValue)
-    // while 1.2 uses "type" and "spacingvalue"
+    // KWord pre-1.2 uses only the "value" attribute (stored in oldValue)
+    // while 1.2 uses mainly "type" and "spacingvalue", while keeping "value" for compatibility
 
-    if( !oldValue.isEmpty() )
+    if ( spacingType.isEmpty() )
     {
         // for old format
         if( oldValue == "oneandhalf" )
