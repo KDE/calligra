@@ -39,7 +39,7 @@ libkwserialletter_interface_la_SOURCES = serialletter_interface.cc serialletter_
 libkwserialletter_interface_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
 libkwserialletter_interface_la_LIBADD = $(LIB_QT) -lDCOP
 
-kwserialletter_servicetype_DATA=kwserialletter.desktop
+kwserialletter_servicetype_DATA=kwmailmerge.desktop
 kwserialletter_servicetypedir=$(kde_servicetypesdir)
 
 ## The kdeinit loadable module

@@ -1,8 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=ServiceType
-X-KDE-ServiceType=KWord/SerialLetterPlugin
-Comment=KWord serial letter plugin
+X-KDE-ServiceType=KWord/MailMergePlugin
+Comment=KWord mailmerge plugin
 Comment[af]=kword reeksnommer brief inplak
 Comment[ar]=ملحق KWord Serial Letter
 Comment[az]=KWord serial hərf databeyzi Əlavəsi
@@ -11,7 +11,7 @@ Comment[da]=KWord serielt brev-indstik
 Comment[de]=Serienbrief-Plugin für KWord
 Comment[es]=Plugin de cartas en serie de KWord
 Comment[fi]=KWord sarjakirjesovelma
-Comment[fr]=Module externe de lettres en série pour kWord
+Comment[fr]=Module externe de lettres en série pour KWord
 Comment[he]=תוסף אותיות סידוריות ל-KWord
 Comment[hu]=KWord körlevélkezelő bővítőmodul
 Comment[lt]=KWord nuoseklaus laiško priedas
@@ -19,6 +19,7 @@ Comment[lv]=KWord seriālas vēstules iespraudnis
 Comment[nl]=KWord serial letter-plugin
 Comment[pt]='Plugin' de cartas do KWord
 Comment[pt_BR]=Plug-in de letra serial do KWord
+Comment[ro]=Modul KWord de scrisori în serie
 Comment[sk]=Modul pre KWord pre sériové listy
 Comment[sl]=Vstavek za urejanje besedila za KWord
 Comment[sv]=Kword-insticksprogram för brevutskick

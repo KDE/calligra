@@ -52,7 +52,7 @@ KWSerialLetterDataBase::KWSerialLetterDataBase( KWDocument *doc_ )
 QStringList KWSerialLetterDataBase::availablePlugins()
 {
 	QStringList tmp;
-	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/SerialLetterPlugin"),QString::null);
+	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),QString::null);
 	for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
 	{
 		tmp.append((*it)->property("X-KDE-InternalName").toString());
@@ -71,7 +71,7 @@ bool KWSerialLetterDataBase::loadPlugin(QString name,QString command)
         if (rejectdcopcall)return false;
 	QString constrain=QString("[X-KDE-InternalName] =='"+name+"'");
 	kdDebug()<<constrain<<endl;
-	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/SerialLetterPlugin"),constrain);
+	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
 	KService::Ptr it=pluginOffers.first();
 	if (it)
 	{
@@ -103,7 +103,7 @@ KWSerialLetterDataSource *KWSerialLetterDataBase::openPluginFor(int type)
 	KWSerialLetterDataSource *ret=0;
 	QString constrain=QString("'%1' in [X-KDE-Capabilities]").arg(((type==KWSLCreate)?KWSLCreate_text:KWSLOpen_text));
 	kdDebug()<<constrain<<endl;
-	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/SerialLetterPlugin"),constrain);
+	KTrader::OfferList pluginOffers=KTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
 
 	//Only for debugging
 	for (KTrader::OfferList::Iterator it=pluginOffers.begin();*it;++it)
@@ -245,7 +245,7 @@ bool KWSerialLetterDataBase::askUserForConfirmationAndConfig(KWSerialLetterDataS
 			return false;
 		}
 	}
-	tmpPlugin->setObjId(QCString(objId()+".SerialLetterPlugin"));
+	tmpPlugin->setObjId(QCString(objId()+".MailMergePlugin"));
 	return true;
 }
 
