@@ -48,6 +48,9 @@ public:
 
     bool parse();
 
+    virtual void sectionStart();
+    virtual void sectionEnd();
+
     virtual void paragraphStart( wvWare::SharedPtr<const wvWare::Word97::PAP> pap );
     virtual void paragraphEnd();
     virtual void runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp );
@@ -56,6 +59,7 @@ public:
 
 private:
     QString getFont(unsigned fc) const;
+    void prepareDocument();
     void processStyles();
     void writeOutParagraph( const QString& styleName, const QString& text );
     // Write a <FORMAT> tag from the given CHP
@@ -69,6 +73,7 @@ private:
     QDomElement m_formats;
     QDomElement m_oldLayout;
     int m_index;
+    int m_sectionNumber;
     const wvWare::Style* m_paragStyle;
     wvWare::SharedPtr<const wvWare::Word97::PAP> m_pap;
     KWordCharacterHandler* m_charHandler;

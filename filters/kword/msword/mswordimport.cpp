@@ -27,7 +27,6 @@
 #include <kgenericfactory.h>
 
 #include <koFilterChain.h>
-#include <koGlobal.h>
 
 #include <document.h>
 
@@ -72,10 +71,6 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
 
 void MSWordImport::prepareDocument( QDomDocument& mainDocument, QDomElement& mainFramesetElement )
 {
-    // TODO: other paper formats
-    KoFormat paperFormat = PG_DIN_A4;
-    KoOrientation paperOrientation = PG_PORTRAIT;
-
     mainDocument.appendChild( mainDocument.createProcessingInstruction( "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
 
     QDomElement elementDoc;
@@ -85,36 +80,6 @@ void MSWordImport::prepareDocument( QDomDocument& mainDocument, QDomElement& mai
     // TODO: We claim to be syntax version 2, but we should verify that it is also true.
     elementDoc.setAttribute("syntaxVersion",2);
     mainDocument.appendChild(elementDoc);
-
-    QDomElement element;
-    element=mainDocument.createElement("ATTRIBUTES");
-    element.setAttribute("processing",0);
-    element.setAttribute("standardpage",1);
-    element.setAttribute("hasHeader",0);
-    element.setAttribute("hasFooter",0);
-    element.setAttribute("unit","mm");
-    elementDoc.appendChild(element);
-
-    QDomElement elementPaper=mainDocument.createElement("PAPER");
-    elementPaper.setAttribute("format",paperFormat);
-    elementPaper.setAttribute("width" ,KoPageFormat::width (paperFormat,paperOrientation) * 72.0 / 25.4);
-    elementPaper.setAttribute("height",KoPageFormat::height(paperFormat,paperOrientation) * 72.0 / 25.4);
-    elementPaper.setAttribute("orientation",PG_PORTRAIT);
-    elementPaper.setAttribute("columns",1);
-    elementPaper.setAttribute("columnspacing",2);
-    elementPaper.setAttribute("hType",0);
-    elementPaper.setAttribute("fType",0);
-    elementPaper.setAttribute("spHeadBody",9);
-    elementPaper.setAttribute("spFootBody",9);
-    elementPaper.setAttribute("zoom",100);
-    elementDoc.appendChild(elementPaper);
-
-    element=mainDocument.createElement("PAPERBORDERS");
-    element.setAttribute("left",28);
-    element.setAttribute("top",42);
-    element.setAttribute("right",28);
-    element.setAttribute("bottom",42);
-    elementPaper.appendChild(element);
 
     QDomElement framesetsPluralElementOut=mainDocument.createElement("FRAMESETS");
     mainDocument.documentElement().appendChild(framesetsPluralElementOut);
@@ -128,6 +93,7 @@ void MSWordImport::prepareDocument( QDomDocument& mainDocument, QDomElement& mai
     framesetsPluralElementOut.appendChild(mainFramesetElement);
 
     QDomElement frameElementOut=mainDocument.createElement("FRAME");
+    ///// Those values are unused. The paper margins make recalcFrames() resize this frame.
     frameElementOut.setAttribute("left",28);
     frameElementOut.setAttribute("top",42);
     frameElementOut.setAttribute("bottom",566);

@@ -28,6 +28,7 @@
 #include <parserfactory.h>
 #include <qfont.h>
 #include <qfontinfo.h>
+#include <koGlobal.h>
 
 
 wvWare::U8 KWordCharacterHandler::hardLineBreak()
@@ -48,12 +49,13 @@ wvWare::U8 KWordCharacterHandler::nonRequiredHyphen()
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement )
     : m_mainDocument( mainDocument ), m_mainFramesetElement( mainFramesetElement ), m_index( 0 ),
-      m_paragStyle( 0L ), m_charHandler( new KWordCharacterHandler ),
+      m_sectionNumber( 0 ), m_paragStyle( 0L ), m_charHandler( new KWordCharacterHandler ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) )
 {
     if ( m_parser ) { // 0 in case of major error (e.g. unsupported format)
         m_parser->setSpecialCharacterHandler( m_charHandler );
         m_parser->setBodyTextHandler( this );
+        prepareDocument();
         processStyles();
     }
 }
@@ -61,6 +63,26 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
 Document::~Document()
 {
     delete m_charHandler;
+}
+
+void Document::prepareDocument()
+{
+    const wvWare::Word97::DOP& dop = m_parser->dop();
+
+    QDomElement elementDoc = m_mainDocument.documentElement();
+
+    QDomElement element;
+    element = m_mainDocument.createElement("ATTRIBUTES");
+    element.setAttribute("processing",0); // WP
+    element.setAttribute("hasHeader",0); // TODO
+    element.setAttribute("hasFooter",0); // TODO
+    element.setAttribute("unit","mm"); // How to figure out the unit to use?
+
+    element.setAttribute("tabStopValue", (double)dop.dxaTab / 20.0 );
+    elementDoc.appendChild(element);
+
+    // FOOTNOTESETTING: use nfcFtnRef for the type of counter
+    // Hmm there's nfcFtnRef2 too.
 }
 
 void Document::processStyles()
@@ -110,6 +132,55 @@ bool Document::parse()
     if ( m_parser )
         return m_parser->parse();
     return false;
+}
+
+void Document::sectionStart()
+{
+    m_sectionNumber++;
+
+    if ( m_sectionNumber == 1 )
+    {
+        // KWord doesn't support a different paper format per section.
+        // So we use the paper format of the first section,
+        // and we apply it to the whole document.
+
+        wvWare::SharedPtr<const wvWare::Word97::SEP> sep = m_parser->currentSep();
+
+        QDomElement elementDoc = m_mainDocument.documentElement();
+        // TODO: other paper formats
+        KoFormat paperFormat = PG_DIN_A4;
+
+        QDomElement elementPaper = m_mainDocument.createElement("PAPER");
+        elementPaper.setAttribute("format",paperFormat);
+        //elementPaper.setAttribute("width" ,KoPageFormat::width (paperFormat,paperOrientation) * 72.0 / 25.4);
+        //elementPaper.setAttribute("height",KoPageFormat::height(paperFormat,paperOrientation) * 72.0 / 25.4);
+        elementPaper.setAttribute("width", (double)sep->xaPage / 20.0);
+        elementPaper.setAttribute("height", (double)sep->yaPage / 20.0);
+        elementPaper.setAttribute("orientation", sep->dmOrientPage == 1 ? PG_LANDSCAPE : PG_PORTRAIT );
+        elementPaper.setAttribute("columns",1); // TODO
+        elementPaper.setAttribute("columnspacing", (double)sep->dxaColumns / 20.0);
+        elementPaper.setAttribute("hType",0); // TODO
+        elementPaper.setAttribute("fType",0); // TODO
+        elementPaper.setAttribute("spHeadBody", (double)sep->dyaHdrTop / 20.0);
+        elementPaper.setAttribute("spFootBody", (double)sep->dyaHdrBottom / 20.0);
+        // elementPaper.setAttribute("zoom",100); // not a doc property in kword
+        elementDoc.appendChild(elementPaper);
+
+        QDomElement element = m_mainDocument.createElement("PAPERBORDERS");
+        element.setAttribute("left", (double)sep->dxaLeft / 20.0);
+        element.setAttribute("top",(double)sep->dyaTop / 20.0);
+        element.setAttribute("right", (double)sep->dxaRight / 20.0);
+        element.setAttribute("bottom", (double)sep->dyaBottom / 20.0);
+        elementPaper.appendChild(element);
+
+        // TODO apply brcTop/brcLeft etc. to the main FRAME
+        // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
+    }
+}
+
+void Document::sectionEnd()
+{
+
 }
 
 void Document::paragraphStart( wvWare::SharedPtr<const wvWare::Word97::PAP> pap )
