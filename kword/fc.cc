@@ -668,9 +668,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter )
     ptPos = 0;
     
     // Calculate the first characters position in screen coordinates
-    if ( parag->getParagLayout()->getFlow() == KWParagLayout::LEFT )
-      ptPos = xShift + left;
-    else if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK )
+//     if ( parag->getParagLayout()->getFlow() == KWParagLayout::LEFT )
+//       ptPos = xShift + left;
+//     else if ( parag->getParagLayout()->getFlow() == KWParagLayout::BLOCK )
       ptPos = xShift + left;
 
     //debug("%d %d %d",ptPos,ptTextLen,xShift + document->getPTColumnWidth());
@@ -879,6 +879,7 @@ void KWFormatContext::apply( KWFormat &_format )
 void KWFormatContext::selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPainter &painter)
 {
   KWChar *text = parag->getText();
+  bool goLeft = false;
 
   KWFormatContext fc(document);
   fc = *this;
@@ -896,6 +897,8 @@ void KWFormatContext::selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPa
 	  cursorGotoLeft(painter);
 	  i = textPos;
 	}
+      if (i == lineStartPos)
+	goLeft = true;
       cursorGotoRight(painter);
       _fc1 = *this;
     }
@@ -912,6 +915,7 @@ void KWFormatContext::selectWord(KWFormatContext &_fc1,KWFormatContext &_fc2,QPa
 	}
       _fc2 = *this;
     }
+  if (goLeft) _fc1.cursorGotoLeft(painter);
 }
 
 void KWFormatContext::calcTextLen()

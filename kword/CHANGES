@@ -168,3 +168,4 @@ Reggie, 3.10.1998:
 - Automatical scrolling when selecting text 
   (there are some redraw problems when selecting text now because of the 
    automatical scrolling)
+- Some bugfixes in KWFormatContext
