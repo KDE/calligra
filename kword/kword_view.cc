@@ -2546,8 +2546,8 @@ QString KWordView::colorToPixString( QColor c, PType _type )
 	line.sprintf( "\". c #%02X%02X%02X \",\n", r, g, b );
 	pix += line.copy();
 
-	pix += "\"                   \",\n";
-	pix += "\"                   \",\n";
+	pix += "\"                     \",\n";
+	pix += "\"                     \",\n";
 	pix += "\"  ................  \",\n";
 	pix += "\"  ................  \",\n";
 	pix += "\"  ................  \",\n";
@@ -2564,8 +2564,8 @@ QString KWordView::colorToPixString( QColor c, PType _type )
 	pix += "\"  ................  \",\n";
 	pix += "\"  ................  \",\n";
 	pix += "\"  ................  \",\n";
-	pix += "\"                   \",\n";
-	pix += "\"                   \";\n";
+	pix += "\"                     \",\n";
+	pix += "\"                     \";\n";
     } break;
     case BACK_COLOR:
     {
@@ -2576,8 +2576,8 @@ QString KWordView::colorToPixString( QColor c, PType _type )
 	line.sprintf( "\"+ c #%02X%02X%02X \",\n", r, g, b );
 	pix += line.copy();
 
-	pix += "\"                   \",\n";
-	pix += "\"                   \",\n";
+	pix += "\"                     \",\n";
+	pix += "\"                     \",\n";
 	pix += "\"  ................  \",\n";
 	pix += "\"  ................  \",\n";
 	pix += "\"  ..++++++++++++..  \",\n";
@@ -2594,8 +2594,8 @@ QString KWordView::colorToPixString( QColor c, PType _type )
 	pix += "\"  ..++++++++++++..  \",\n";
 	pix += "\"  ................  \",\n";
 	pix += "\"  ................  \",\n";
-	pix += "\"                   \",\n";
-	pix += "\"                   \";\n";
+	pix += "\"                     \",\n";
+	pix += "\"                     \";\n";
     } break;
     }
 
