@@ -21,6 +21,7 @@
 #ifndef __colorframe_h__
 #define __colorframe_h__
 
+#include <qrect.h>
 #include <qframe.h>
 #include <qimage.h>
 
@@ -33,15 +34,14 @@ class ColorFrame : public QFrame
  
  public:
   ColorFrame(QWidget *parent = 0L);
-  virtual ~ColorFrame();
 
   const QColor colorAt(const QPoint&);
-  int contentsWidth();
-  int contentsHeight();
-
+  
  protected:
   virtual void drawContents (QPainter *);
   virtual void mousePressEvent (QMouseEvent *);
+  virtual void mouseMoveEvent (QMouseEvent *);
+  virtual void mouseReleaseEvent (QMouseEvent *);
   
  public slots:
   void slotSetColor1(const QColor&);
@@ -56,6 +56,7 @@ class ColorFrame : public QFrame
   QImage    m_pmImage;
   bool      m_colorChanged;
   bool      m_pixChanged;
+  bool      m_dragging;
 };
 
 #endif

@@ -32,15 +32,15 @@ KColor::KColor(int a, int b, int c, colorModel m)
   switch (m)
 	{
 	case RGB:
-	  m_R = static_cast<unsigned char>(a);
-	  m_G = static_cast<unsigned char>(b);
-	  m_B = static_cast<unsigned char>(c);
+	  m_R = a;
+	  m_G = b;
+	  m_B = c;
 	  m_nativeModel = RGB;
 	  break;
 	case HSV:
 	  m_H = a;
-	  m_S = static_cast<unsigned char>(b);
-	  m_V = static_cast<unsigned char>(c);
+	  m_S = b;
+	  m_V = c;
 	  m_nativeModel = HSV;
 	  break;
 	case LAB:
@@ -57,11 +57,19 @@ KColor::KColor(int a, int b, int c, colorModel m)
 
 KColor::KColor(int c, int m, int y, int k)
 {
-  m_C = static_cast<unsigned char>(c);
-  m_M = static_cast<unsigned char>(m);
-  m_Y = static_cast<unsigned char>(y);
-  m_K = static_cast<unsigned char>(k);
+  m_C = c;
+  m_M = m;
+  m_Y = y;
+  m_K = k;
   m_nativeModel = CMYK;
+}
+
+KColor::KColor(const QColor& c)
+{
+  m_R = c.red();
+  m_G = c.green();
+  m_B = c.blue();
+  m_nativeModel = RGB;
 }
 
 KColor::~KColor() {}
@@ -97,7 +105,7 @@ KColor &KColor::operator=(const KColor &c)
   return *this;
 }
 
-void KColor::setRGB (uchar R, uchar G, uchar B)
+void KColor::setRGB (int R, int G, int B)
 {
   m_R = R;
   m_G = G;
@@ -105,7 +113,7 @@ void KColor::setRGB (uchar R, uchar G, uchar B)
   m_nativeModel = RGB;
 }
 
-void KColor::setHSV (int H, uchar S, uchar V)
+void KColor::setHSV (int H, int S, int V)
 {
   m_H = H;
   m_S = S;
@@ -121,7 +129,7 @@ void KColor::setLAB (int L, int a, int b)
   m_nativeModel = LAB;
 }
 
-void KColor::setCMYK (uchar C, uchar M, uchar Y, uchar K)
+void KColor::setCMYK (int C, int M, int Y, int K)
 {
   m_C = C;
   m_M = M;
@@ -130,7 +138,15 @@ void KColor::setCMYK (uchar C, uchar M, uchar Y, uchar K)
   m_nativeModel = CMYK;
 }
 
-void KColor::rgb (uchar *R, uchar *G, uchar *B)
+void KColor::setColor (const QColor& c)
+{
+  m_R = c.red();
+  m_G = c.green();
+  m_B = c.blue();
+  m_nativeModel = RGB;
+}
+
+void KColor::rgb (int *R, int *G, int *B)
 {
   if (!m_nativeModel == RGB)
 	calcRGB();
@@ -140,7 +156,7 @@ void KColor::rgb (uchar *R, uchar *G, uchar *B)
   *B = m_B;
 }
 
-void KColor::hsv (int *H, uchar *S, uchar *V)
+void KColor::hsv (int *H, int *S, int *V)
 {
   if (!m_nativeModel == HSV)
   	calcHSV();
@@ -160,7 +176,7 @@ void KColor::lab (int *L, int *a, int *b)
   *b = m_b;
 }
 
-void KColor::cmyk (uchar *C, uchar *M, uchar *Y, uchar *K)
+void KColor::cmyk (int *C, int *M, int *Y, int *K)
 {
   if (!m_nativeModel == CMYK)
   	calcCMYK();
@@ -169,6 +185,13 @@ void KColor::cmyk (uchar *C, uchar *M, uchar *Y, uchar *K)
   *M = m_M;
   *Y = m_Y;
   *K = m_K;
+}
+
+QColor KColor::color()
+{
+  if (!m_nativeModel == RGB)
+	calcRGB();
+  return QColor(m_R, m_G, m_B);
 }
 
 void KColor::calcRGB()
@@ -263,7 +286,7 @@ void KColor::calcCMYK()
 	}
 }
 
-void KColor::RGBtoHSV(uchar R, uchar G, uchar B, int *H, uchar *S, uchar *V)
+void KColor::RGBtoHSV(int R, int G, int B, int *H, int *S, int *V)
 {
   unsigned int max, min = R;
   unsigned char maxValue = 0; // r=0, g=1, b=2
@@ -276,8 +299,8 @@ void KColor::RGBtoHSV(uchar R, uchar G, uchar B, int *H, uchar *S, uchar *V)
   if (static_cast<unsigned int>(B) < min ) min = B;
   
   int delta = max - min;
-  *V = static_cast<unsigned char>(max); // value
-  *S = static_cast<unsigned char>(max ? (510*delta+max)/(2*max) : 0); // saturation
+  *V = max; // value
+  *S = max ? (510*delta+max)/(2*max) : 0; // saturation
   
   // calc hue
   if (*S == 0)
@@ -308,7 +331,7 @@ void KColor::RGBtoHSV(uchar R, uchar G, uchar B, int *H, uchar *S, uchar *V)
     }
 }
 
-void KColor::RGBtoLAB(uchar R, uchar G, uchar B, int *L, int *a, int *b)
+void KColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
 {
   // Convert between RGB and CIE-Lab color spaces
   // Uses ITU-R recommendation BT.709 with D65 as reference white.
@@ -349,9 +372,9 @@ void KColor::RGBtoLAB(uchar R, uchar G, uchar B, int *L, int *a, int *b)
   *b = static_cast<int>(200.0*(fY - fZ) + 0.5);
 }
 
-void KColor::RGBtoCMYK(uchar R, uchar G, uchar B, uchar *C, uchar *M, uchar *Y, uchar *K)
+void KColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
 {
-  uchar min = (R < G) ? R : G;
+  int min = (R < G) ? R : G;
   *K = (min < B) ? min : B;
   
   *C = 255-(R - *K);
@@ -359,7 +382,7 @@ void KColor::RGBtoCMYK(uchar R, uchar G, uchar B, uchar *C, uchar *M, uchar *Y, 
   *Y = 255-(B - *K);
 }
 
-void KColor::HSVtoRGB(int H, uchar S, uchar V, uchar *R, uchar *G, uchar *B)
+void KColor::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
 {
   *R = *G = *B = V;
   
@@ -396,21 +419,21 @@ void KColor::HSVtoRGB(int H, uchar S, uchar V, uchar *R, uchar *G, uchar *B)
 	}
 }
 
-void KColor::HSVtoLAB(int H, uchar S, uchar V, int *L, int *a, int *b)
+void KColor::HSVtoLAB(int H, int S, int V, int *L, int *a, int *b)
 {
-  uchar R, G, B;
+  int R, G, B;
   HSVtoRGB(H, S, V, &R, &G, &B);
   RGBtoLAB(R, G, B, L, a, b);
 }
 
-void KColor::HSVtoCMYK(int H, uchar S, uchar V, uchar *C, uchar *M, uchar *Y, uchar*K)
+void KColor::HSVtoCMYK(int H, int S, int V, int *C, int *M, int *Y, int*K)
 {
-  uchar R, G, B;
+  int R, G, B;
   HSVtoRGB(H, S, V, &R, &G, &B);
   RGBtoCMYK(R, G, B, C, M, Y, K);
 }
 
-void KColor::LABtoRGB(int L, int a, int b, uchar *R, uchar *G, uchar *B)
+void KColor::LABtoRGB(int L, int a, int b, int *R, int *G, int *B)
 {
   // Convert between RGB and CIE-Lab color spaces
   // Uses ITU-R recommendation BT.709 with D65 as reference white.
@@ -449,42 +472,42 @@ void KColor::LABtoRGB(int L, int a, int b, uchar *R, uchar *G, uchar *B)
   GG = static_cast<int>(-0.969256*X + 1.875992*Y + 0.041556*Z + 0.5);
   BB = static_cast<int>(0.055648*X - 0.204043*Y + 1.057311*Z + 0.5);
   
-  *R = static_cast<unsigned char>(RR < 0 ? 0 : RR > 255 ? 255 : RR);
-  *G = static_cast<unsigned char>(GG < 0 ? 0 : GG > 255 ? 255 : GG);
-  *B = static_cast<unsigned char>(BB < 0 ? 0 : BB > 255 ? 255 : BB);
+  *R = RR < 0 ? 0 : RR > 255 ? 255 : RR;
+  *G = GG < 0 ? 0 : GG > 255 ? 255 : GG;
+  *B = BB < 0 ? 0 : BB > 255 ? 255 : BB;
 }
 
-void KColor::LABtoHSV(int L, int a, int b, int *H, uchar *S, uchar *V)
+void KColor::LABtoHSV(int L, int a, int b, int *H, int *S, int *V)
 {
-  uchar R, G, B;
+  int R, G, B;
   LABtoRGB(L, a, b, &R, &G, &B);
   RGBtoHSV(R, G, B, H, S, V);
 }
 
-void KColor::LABtoCMYK(int L, int a, int b, uchar *C, uchar *M, uchar *Y, uchar*K)
+void KColor::LABtoCMYK(int L, int a, int b, int *C, int *M, int *Y, int*K)
 {
-  uchar R, G, B;
+  int R, G, B;
   LABtoRGB(L, a, b, &R, &G, &B);
   RGBtoCMYK(R, G, B, C, M, Y, K);
 }
 
-void KColor::CMYKtoRGB(uchar C, uchar M, uchar Y, uchar K, uchar *R, uchar *G, uchar *B)
+void KColor::CMYKtoRGB(int C, int M, int Y, int K, int *R, int *G, int *B)
 {
-  *R = static_cast<unsigned char>(255-(C+K));
-  *G = static_cast<unsigned char>(255-(M+K));
-  *B = static_cast<unsigned char>(255-(Y+K));
+  *R = 255-(C+K);
+  *G = 255-(M+K);
+  *B = 255-(Y+K);
 }
 
-void KColor::CMYKtoHSV(uchar C, uchar M, uchar Y, uchar K, int *H, uchar *S, uchar *V)
+void KColor::CMYKtoHSV(int C, int M, int Y, int K, int *H, int *S, int *V)
 {
-  uchar R, G, B;
+  int R, G, B;
   CMYKtoRGB(C, M, Y, K, &R, &G, &B);
   RGBtoHSV(R, G, B, H, S, V);
 }
 
-void KColor::CMYKtoLAB(uchar C, uchar M, uchar Y, uchar K, int *L, int *a, int *b)
+void KColor::CMYKtoLAB(int C, int M, int Y, int K, int *L, int *a, int *b)
 {
-  uchar R, G, B;
+  int R, G, B;
   CMYKtoRGB(C, M, Y, K, &R, &G, &B);
   RGBtoLAB(R, G, B, L, a, b);
 }

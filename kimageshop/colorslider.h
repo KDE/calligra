@@ -53,7 +53,8 @@ class ColorSlider : public QWidget
   void slotValueChanged(int);
 
  signals:
-  void  colorSelected(const QColor&);
+  void colorSelected(const QColor&);
+  void valueChanged(int);
 
  protected:
   SliderWidget *m_pSlider;

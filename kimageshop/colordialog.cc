@@ -96,6 +96,10 @@ ColorChooserWidget::ColorChooserWidget(QWidget *parent) : QWidget(parent)
   connect(m_pRGBWidget, SIGNAL(colorChanged(const QColor &)), this,
 		  SLOT(slotRGBWidgetChanged(const QColor &)));
 
+  // connect Grey widget
+  //connect(m_pGreyWidget, SIGNAL(colorChanged(const QColor &)), this,
+  //		  SLOT(slotGreyWidgetChanged(const QColor &)));
+
   slotShowRGB();
 }
 
@@ -164,22 +168,16 @@ void ColorChooserWidget::slotColorButtonFGChanged(const QColor& c)
 {
   m_pColorFrame->slotSetColor1(c);
   
-  if (m_pColorButton->current() == KDualColorButton::Foreground)
-	{
-	  m_pRGBWidget->slotSetColor(c);
-	  m_pGreyWidget->slotSetColor(c);
-	}
+  m_pRGBWidget->slotSetColor(m_pColorButton->currentColor());
+  m_pGreyWidget->slotSetColor(m_pColorButton->currentColor());
 }
 
 void ColorChooserWidget::slotColorButtonBGChanged(const QColor& c)
 {
   m_pColorFrame->slotSetColor2(c);
 
-  if (m_pColorButton->current() == KDualColorButton::Background)
-	{  
-	  m_pRGBWidget->slotSetColor(c);
-	  m_pGreyWidget->slotSetColor(c);
-	}
+  m_pRGBWidget->slotSetColor(m_pColorButton->currentColor());
+  m_pGreyWidget->slotSetColor(m_pColorButton->currentColor());
 }
 
 void ColorChooserWidget::slotColorButtonCurrentChanged(KDualColorButton::DualColor)
@@ -290,6 +288,7 @@ void ColorChooserWidget::resizeEvent(QResizeEvent *e)
 
 RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
 {
+  m_c = QColor(0,0,0);
   m_pRSlider = new ColorSlider(this);
   m_pRSlider->setMaximumHeight(25);
   m_pRSlider->slotSetRange(0, 255);
@@ -322,14 +321,21 @@ RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
   m_pBIn->setFixedWidth(42);
   m_pBIn->setFixedHeight(20);
 
-  connect(m_pRSlider, SIGNAL(colorSelected(const QColor&)), this,
-		  SLOT(slotRedChanged(const QColor &)));
-  connect(m_pGSlider, SIGNAL(colorSelected(const QColor&)), this,
-		  SLOT(slotGreenChanged(const QColor &)));
-  connect(m_pBSlider, SIGNAL(colorSelected(const QColor&)), this,
-		  SLOT(slotBlueChanged(const QColor &)));
+  // connect color sliders
+  connect(m_pRSlider, SIGNAL(valueChanged(int)), this,
+		  SLOT(slotRSliderChanged(int)));
+  connect(m_pGSlider, SIGNAL(valueChanged(int)), this,
+		  SLOT(slotGSliderChanged(int)));
+  connect(m_pBSlider, SIGNAL(valueChanged(int)), this,
+		  SLOT(slotBSliderChanged(int)));
 
-  //connect(m_pRIn, SIGNAL(valueChanged (int)), m_pRSlider, SLOT(slotSetValue(int)));
+  // connect spin buttons
+  connect(m_pRIn, SIGNAL(valueChanged (int)), this,
+		  SLOT(slotRInChanged(int)));
+  connect(m_pGIn, SIGNAL(valueChanged (int)), this,
+		  SLOT(slotGInChanged(int)));
+  connect(m_pBIn, SIGNAL(valueChanged (int)), this,
+		  SLOT(slotBInChanged(int)));
 }
 
 void RGBWidget::resizeEvent(QResizeEvent *)
@@ -371,49 +377,104 @@ void RGBWidget::resizeEvent(QResizeEvent *)
 
 void RGBWidget::slotSetColor(const QColor&c)
 {
+  m_c = c;
   m_pRSlider->slotSetColor1(QColor(0, c.green(), c.blue()));
   m_pRSlider->slotSetColor2(QColor(255, c.green(), c.blue()));
   m_pRSlider->slotSetValue(c.red());
+  m_pRIn->setValue(c.red());
 
   m_pGSlider->slotSetColor1(QColor(c.red(), 0, c.blue()));
   m_pGSlider->slotSetColor2(QColor(c.red(), 255, c.blue()));
   m_pGSlider->slotSetValue(c.green());
+  m_pGIn->setValue(c.green());
 
   m_pBSlider->slotSetColor1(QColor(c.red(), c.green(), 0));
   m_pBSlider->slotSetColor2(QColor(c.red(), c.green(), 255));
   m_pBSlider->slotSetValue(c.blue());
+  m_pBIn->setValue(c.blue());
 }
   
-void RGBWidget::slotRedChanged(const QColor& c)
+void RGBWidget::slotRSliderChanged(int r)
 {
+  QColor c = QColor(r, m_c.green(), m_c.blue());
   m_pGSlider->slotSetColor1(QColor(c.red(), 0, c.blue()));
   m_pGSlider->slotSetColor2(QColor(c.red(), 255, c.blue()));
 
   m_pBSlider->slotSetColor1(QColor(c.red(), c.green(), 0));
   m_pBSlider->slotSetColor2(QColor(c.red(), c.green(), 255));
 
+  m_pRIn->setValue(c.red());
+  m_c = c;
   emit colorChanged(c);
 }
 
-void RGBWidget::slotGreenChanged(const QColor& c)
+void RGBWidget::slotGSliderChanged(int g)
 {
+  QColor c = QColor(m_c.red(), g, m_c.blue());
   m_pRSlider->slotSetColor1(QColor(0, c.green(), c.blue()));
   m_pRSlider->slotSetColor2(QColor(255, c.green(), c.blue()));
 
   m_pBSlider->slotSetColor1(QColor(c.red(), c.green(), 0));
   m_pBSlider->slotSetColor2(QColor(c.red(), c.green(), 255));
 
+  m_pGIn->setValue(c.green());
+  m_c = c;
   emit colorChanged(c);
 }
 
-void RGBWidget::slotBlueChanged(const QColor& c)
+void RGBWidget::slotBSliderChanged(int b)
 {
+  QColor c = QColor(m_c.red(), m_c.green(), b);
   m_pRSlider->slotSetColor1(QColor(0, c.green(), c.blue()));
   m_pRSlider->slotSetColor2(QColor(255, c.green(), c.blue()));
 
   m_pGSlider->slotSetColor1(QColor(c.red(), 0, c.blue()));
   m_pGSlider->slotSetColor2(QColor(c.red(), 255, c.blue()));
 
+  m_pBIn->setValue(c.blue());
+  m_c = c;
+  emit colorChanged(c);
+}
+
+void RGBWidget::slotRInChanged(int r)
+{
+  QColor c = QColor(r, m_c.green(), m_c.blue());
+  m_pGSlider->slotSetColor1(QColor(c.red(), 0, c.blue()));
+  m_pGSlider->slotSetColor2(QColor(c.red(), 255, c.blue()));
+
+  m_pBSlider->slotSetColor1(QColor(c.red(), c.green(), 0));
+  m_pBSlider->slotSetColor2(QColor(c.red(), c.green(), 255));
+
+  m_pRSlider->slotSetValue(c.red());
+  m_c = c;
+  emit colorChanged(c);
+}
+
+void RGBWidget::slotGInChanged(int g)
+{
+  QColor c = QColor(m_c.red(), g, m_c.blue());
+  m_pRSlider->slotSetColor1(QColor(0, c.green(), c.blue()));
+  m_pRSlider->slotSetColor2(QColor(255, c.green(), c.blue()));
+
+  m_pBSlider->slotSetColor1(QColor(c.red(), c.green(), 0));
+  m_pBSlider->slotSetColor2(QColor(c.red(), c.green(), 255));
+
+  m_pGSlider->slotSetValue(c.green());
+  m_c = c;
+  emit colorChanged(c);
+}
+
+void RGBWidget::slotBInChanged(int b)
+{
+  QColor c = QColor(m_c.red(), m_c.green(), b);
+  m_pRSlider->slotSetColor1(QColor(0, c.green(), c.blue()));
+  m_pRSlider->slotSetColor2(QColor(255, c.green(), c.blue()));
+
+  m_pGSlider->slotSetColor1(QColor(c.red(), 0, c.blue()));
+  m_pGSlider->slotSetColor2(QColor(c.red(), 255, c.blue()));
+
+  m_pBSlider->slotSetValue(c.blue());
+  m_c = c;
   emit colorChanged(c);
 }
 
@@ -434,6 +495,7 @@ RGBWidget::~RGBWidget()
 
 GreyWidget::GreyWidget(QWidget *parent) : QWidget(parent)
 {
+  m_c = QColor(0,0,0);
   m_pVSlider = new ColorSlider(this);
   m_pVSlider->setMaximumHeight(25);
   m_pVSlider->slotSetRange(0, 255);
@@ -448,8 +510,13 @@ GreyWidget::GreyWidget(QWidget *parent) : QWidget(parent)
   m_pVIn->setFixedWidth(42);
   m_pVIn->setFixedHeight(20);
 
-  connect(m_pVSlider, SIGNAL(colorSelected(const QColor&)), this,
-		  SLOT(slotValueChanged(const QColor &)));
+  // connect color slider
+  connect(m_pVSlider, SIGNAL(valueChanged(int)), this,
+  		  SLOT(slotVSliderChanged(int)));
+
+  // connect spin button
+  connect(m_pVIn, SIGNAL(valueChanged(int)), this,
+  		  SLOT(slotVInChanged(int)));
 }
 
 void GreyWidget::resizeEvent(QResizeEvent *)
@@ -484,12 +551,23 @@ void GreyWidget::slotSetColor(const QColor&c)
   m_c = c;
   float v = c.red() + c.green() + c.blue();
   v /= 3;
+  v = 255 - v;
+  m_pVIn->setValue(static_cast<int>(v));
   m_pVSlider->slotSetValue(static_cast<int>(v));
 }
   
-void GreyWidget::slotValueChanged(const QColor& c)
+void GreyWidget::slotVSliderChanged(int v)
 {
-  emit colorChanged(c);
+  m_pVIn->setValue(v);
+  v = 255 - v;
+  emit colorChanged(QColor(v,v,v));
+}
+
+void GreyWidget::slotVInChanged(int v)
+{
+  m_pVSlider->slotSetValue(v);
+  v = 255 - v;
+  emit colorChanged(QColor(v,v,v));
 }
 
 GreyWidget::~GreyWidget()

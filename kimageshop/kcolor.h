@@ -21,7 +21,7 @@
 #ifndef __kcolor_h__
 #define __kcolor_h__
 
-typedef unsigned char uchar;
+#include <qcolor.h>
 
 class KColor
 {
@@ -32,33 +32,36 @@ class KColor
   ~KColor();
   KColor(int a, int b, int c,  colorModel m = RGB);
   KColor(int c, int m, int y,  int k);
+  KColor(const QColor&);
   KColor &operator=( const KColor & );
 
-  void setRGB (uchar R, uchar G, uchar B);
-  void setHSV (int H, uchar S, uchar V);
+  void setRGB (int R, int G, int B);
+  void setHSV (int H, int S, int V);
   void setLAB (int L, int a, int b);
-  void setCMYK (uchar C, uchar M, uchar Y, uchar K);
+  void setCMYK (int C, int M, int Y, int K);
+  void setColor(const QColor&);
 
-  void rgb (uchar *R, uchar *G, uchar *B);
-  void hsv (int *H, uchar *S, uchar *V);
+  void rgb (int *R, int *G, int *B);
+  void hsv (int *H, int *S, int *V);
   void lab (int *L, int *a, int *b);
-  void cmyk (uchar *C, uchar *M, uchar *Y, uchar *K);
+  void cmyk (int *C, int *M, int *Y, int *K);
+  QColor color();
   
-  static void RGBtoHSV(uchar R, uchar G, uchar B, int *H, uchar *S, uchar *V);
-  static void RGBtoLAB(uchar R, uchar G, uchar B, int *L, int *a, int *b);
-  static void RGBtoCMYK(uchar R, uchar G, uchar B, uchar *C, uchar *M, uchar *Y, uchar *K);
+  static void RGBtoHSV(int R, int G, int B, int *H, int *S, int *V);
+  static void RGBtoLAB(int R, int G, int B, int *L, int *a, int *b);
+  static void RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K);
 
-  static void HSVtoRGB(int H, uchar S, uchar V, uchar *R, uchar *G, uchar *B);
-  static void HSVtoLAB(int H, uchar S, uchar V, int *L, int *a, int *b);
-  static void HSVtoCMYK(int H, uchar S, uchar V, uchar *C, uchar *M, uchar *Y, uchar*K);
+  static void HSVtoRGB(int H, int S, int V, int *R, int *G, int *B);
+  static void HSVtoLAB(int H, int S, int V, int *L, int *a, int *b);
+  static void HSVtoCMYK(int H, int S, int V, int *C, int *M, int *Y, int*K);
 
-  static void LABtoRGB(int L, int a, int b, uchar *R, uchar *G, uchar *B);
-  static void LABtoHSV(int L, int a, int b, int *H, uchar *S, uchar *V);
-  static void LABtoCMYK(int L, int a, int b, uchar *C, uchar *M, uchar *Y, uchar*K);
+  static void LABtoRGB(int L, int a, int b, int *R, int *G, int *B);
+  static void LABtoHSV(int L, int a, int b, int *H, int *S, int *V);
+  static void LABtoCMYK(int L, int a, int b, int *C, int *M, int *Y, int*K);
 
-  static void CMYKtoRGB(uchar C, uchar M, uchar Y, uchar K, uchar *R, uchar *G, uchar *B);
-  static void CMYKtoHSV(uchar C, uchar M, uchar Y, uchar K, int *H, uchar *S, uchar *V);
-  static void CMYKtoLAB(uchar C, uchar M, uchar Y, uchar K, int *L, int *a, int *b);
+  static void CMYKtoRGB(int C, int M, int Y, int K, int *R, int *G, int *B);
+  static void CMYKtoHSV(int C, int M, int Y, int K, int *H, int *S, int *V);
+  static void CMYKtoLAB(int C, int M, int Y, int K, int *L, int *a, int *b);
 
   static const KColor black();
   static const KColor white();
@@ -85,10 +88,10 @@ class KColor
   void calcCMYK();
 
  private:
-  uchar m_R, m_G, m_B;      // RGB
-  uchar m_C, m_M, m_Y, m_K; // CMYK
-  int m_H; uchar m_S, m_V;  // HSV
-  int m_L, m_a, m_b;        // LAB
+  int m_R, m_G, m_B;      // RGB
+  int m_C, m_M, m_Y, m_K; // CMYK
+  int m_H, m_S, m_V;      // HSV
+  int m_L, m_a, m_b;      // LAB
 
   colorModel m_nativeModel;
 };

@@ -85,17 +85,13 @@ void ColorSlider::slotSetValue(int value)
 
   m_value = value;
 
-  int range = m_max - m_min +1;
-  //kdebug(KDEBUG_INFO, 0, "range: %d", range);
+  int range = m_max - m_min;
   float v = value;
    if (m_min < 0)
 	v += -m_min;
-
-   //kdebug(KDEBUG_INFO, 0, "value: %f", v);
   
   float factor = v /range;
-  int x = static_cast<int>(factor * m_pColorFrame->contentsWidth());
-  //kdebug(KDEBUG_INFO, 0, "x: %d", x);
+  int x = static_cast<int>(factor * m_pColorFrame->contentsRect().width());
 
   m_pSlider->move(QPoint(x , height()-16));
 }
@@ -104,15 +100,21 @@ void ColorSlider::slotValueChanged(int x)
 {
   if (x < 0)
 	x = 0;
-  if (x > m_pColorFrame->contentsWidth())
-	x = m_pColorFrame->contentsWidth();
+  if (x > m_pColorFrame->contentsRect().width())
+	x = m_pColorFrame->contentsRect().width();
+
+  kdebug(KDEBUG_INFO, 0, "x: %d", x);
   float factor = x;
-  factor /= m_pColorFrame->contentsWidth();
-  int range = m_max - m_min +1;
+  factor /= m_pColorFrame->contentsRect().width();
+  kdebug(KDEBUG_INFO, 0, "factor: %f", factor);
+  int range = m_max - m_min;
+  kdebug(KDEBUG_INFO, 0, "range: %d", range);
   
   m_value = static_cast<int>(factor * range);
+  kdebug(KDEBUG_INFO, 0, "m_value: %d", m_value);
 
-  emit colorSelected(m_pColorFrame->colorAt(QPoint(x, m_pColorFrame->contentsHeight()/2)));
+  emit valueChanged(m_value);
+  emit colorSelected(m_pColorFrame->colorAt(QPoint(x, m_pColorFrame->contentsRect().height()/2)));
 }
 
 SliderWidget::SliderWidget(QWidget *parent) : QFrame(parent)
@@ -162,7 +164,7 @@ void SliderWidget::mouseMoveEvent (QMouseEvent *e)
 		newPos.setX(p->width()- width());
 	  
 	  move(newPos);
-	  emit positionChanged(pos().x());
+	  emit positionChanged(newPos.x());
     }
   else
 	QFrame::mouseMoveEvent(e);

@@ -108,9 +108,13 @@ class RGBWidget : public QWidget
   void slotSetColor(const QColor&);
 
  protected slots:
-  void slotRedChanged(const QColor&);
-  void slotGreenChanged(const QColor&);
-  void slotBlueChanged(const QColor&);
+  void slotRSliderChanged(int);
+  void slotGSliderChanged(int);
+  void slotBSliderChanged(int);
+
+  void slotRInChanged(int);
+  void slotGInChanged(int);
+  void slotBInChanged(int);
 
  signals:
   void colorChanged(const QColor&);
@@ -122,6 +126,7 @@ class RGBWidget : public QWidget
   ColorSlider *m_pRSlider, *m_pGSlider, *m_pBSlider;
   QLabel      *m_pRLabel, *m_pGLabel, *m_pBLabel;
   QSpinBox    *m_pRIn, *m_pGIn, *m_pBIn;
+  QColor       m_c;
 };
 /*
 class HSBWidget : public QWidget
@@ -222,7 +227,8 @@ class GreyWidget : public QWidget
   void slotSetColor(const QColor&);
 
  protected slots:
-  void slotValueChanged(const QColor&);
+  void slotVSliderChanged(int);
+  void slotVInChanged(int);
 
  signals:
   void colorChanged(const QColor&);
