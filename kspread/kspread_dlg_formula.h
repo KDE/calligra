@@ -22,15 +22,11 @@
 #define __kspread_dlg_formula__
 
 #include <qframe.h>
-#include <qdialog.h>
-#include <qcombobox.h>
-#include <qlistbox.h>
+#include <kdialogbase.h>
 
 #include <klineedit.h>
 #include <kcompletion.h>
-#include <qpushbutton.h>
 #include <qlayout.h>
-#include <qlabel.h>
 
 class QTextBrowser;
 class QTabWidget;
@@ -39,10 +35,14 @@ class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 class QLineEdit;
+class QLabel;
+class QListBox;
+class QComboBox;
+class QPushButton;
 
 #include "kspread_functions.h"
 
-class KSpreadDlgFormula : public QDialog
+class KSpreadDlgFormula : public KDialogBase
 {
     Q_OBJECT
 public:
@@ -112,12 +112,10 @@ public:
      * Find out which widget got focus.
      */
     bool eventFilter( QObject* obj, QEvent* ev );
- protected:
-    virtual void closeEvent ( QCloseEvent * ); 
+protected:
+       virtual void closeEvent ( QCloseEvent * ); 
 private:
     KSpreadView* m_pView;
-    QPushButton* m_pOk;
-    QPushButton* m_pClose;
 
     QTabWidget* m_tabwidget;
     QTextBrowser* m_browser;

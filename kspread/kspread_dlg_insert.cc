@@ -27,21 +27,22 @@
 #include <klocale.h>
 #include <qbuttongroup.h>
 #include <kdebug.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
 #include <kmessagebox.h>
 
 KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QRect &_rect,Mode _mode)
-	: QDialog( parent, name, TRUE )
+	: KDialogBase( parent, name, TRUE,"",Ok|Cancel )
 {
   m_pView = parent;
   rect=_rect;
   insRem=_mode;
 
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
+  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
-  QVBoxLayout *lay1 = new QVBoxLayout( this );
-  lay1->setMargin( 5 );
-  lay1->setSpacing( 10 );
-
-  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Insert"),this);
+  QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Insert"),page);
   grp->setRadioButtonExclusive( TRUE );
   grp->layout();
   lay1->addWidget(grp);
@@ -67,16 +68,8 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QRect 
 
   rb1->setChecked(true);
 
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-  m_pOk = bb->addButton( i18n("&OK") );
-  m_pOk->setDefault( TRUE );
-  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
-  bb->layout();
-  lay1->addWidget( bb );
 
-  connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }
 
 void KSpreadinsert::slotOk()
@@ -137,11 +130,6 @@ void KSpreadinsert::slotOk()
     m_pView->updateEditWidget();
 
     accept();
-}
-
-void KSpreadinsert::slotCancel()
-{
-  reject();
 }
 
 

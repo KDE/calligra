@@ -28,8 +28,13 @@
 #include <kmessagebox.h>
 
 #include <qlayout.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qlistbox.h>
 
-
+#include <qmultilineedit.h>
+#include <kconfig.h>
+#include <qlabel.h>
 
 KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
 	: QDialog( parent, name,TRUE )
@@ -79,7 +84,7 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   m_pAdd->setEnabled(false);
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
+  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
   connect( m_pNew, SIGNAL( clicked() ), this, SLOT( slotNew() ) );
@@ -289,11 +294,6 @@ void KSpreadList::slotCopy()
     {
       list->insertItem(list->currentText(),list->count());
     }
-}
-
-void KSpreadList::slotCancel()
-{
-  reject();
 }
 
 

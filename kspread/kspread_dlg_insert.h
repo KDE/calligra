@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2002 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,16 +21,15 @@
 #ifndef __kspread_dlg_insert__
 #define __kspread_dlg_insert__
 
-#include <qdialog.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qcheckbox.h>
+#include <kdialogbase.h>
 
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
+class QCheckBox;
+class QRadioButton;
 
-class KSpreadinsert : public QDialog
+class KSpreadinsert : public KDialogBase
 {
     Q_OBJECT
 public:
@@ -40,13 +39,10 @@ public:
 
 public slots:
     void slotOk();
-    void slotCancel();
 
 private:
   KSpreadView* m_pView;
 
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   QRadioButton *rb1;
   QRadioButton *rb2;
   QRadioButton *rb3;

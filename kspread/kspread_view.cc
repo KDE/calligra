@@ -1014,7 +1014,7 @@ void KSpreadView::insertMathExpr()
     if ( m_pTable == 0L )
         return;
     KSpreadDlgFormula *dlg=new KSpreadDlgFormula( this, "Formula Editor" );
-    dlg->show();
+    dlg->exec();
     // #### Is the dialog deleted when it's closed ? (David)
     // Torben thinks that not.
 }
@@ -1031,7 +1031,7 @@ void KSpreadView::formulaSelection( const QString &_math )
     }
 
     KSpreadDlgFormula *dlg=new KSpreadDlgFormula( this, "Formula Editor",_math );
-    dlg->show();
+    dlg->exec();
 }
 
 void KSpreadView::fontSizeSelected( int _size )

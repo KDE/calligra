@@ -31,15 +31,17 @@
 #include <kdebug.h>
 #include <kbuttonbox.h>
 #include <knumvalidator.h>
+#include <qcombobox.h>
+#include <qlistbox.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
 
 KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName)
-    : QDialog( parent, name )
+    : KDialogBase( parent, name,false,i18n("Formula Editor"), Ok|Cancel )
 {
     m_pView = parent;
     m_focus = 0;
     m_desc = 0;
-
-    setCaption( i18n("Formula Editor") );
 
     KSpreadCell* cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),
 							m_pView->canvasWidget()->markerRow() );
@@ -59,33 +61,36 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
 
     Q_ASSERT( m_pView->canvasWidget()->editor() );
 
-    QGridLayout *grid1 = new QGridLayout(this,11,2,15,7);
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
 
-    searchFunct = new KLineEdit(this);
+    QGridLayout *grid1 = new QGridLayout(page,11,2,15,7);
+
+    searchFunct = new KLineEdit(page);
     QSizePolicy sp3( QSizePolicy::Preferred, QSizePolicy::Fixed );
     searchFunct->setSizePolicy( sp3 );
 
     grid1->addWidget( searchFunct, 0, 0 );
 
-    typeFunction = new QComboBox(this);
+    typeFunction = new QComboBox(page);
     QStringList cats = m_repo.groups();
     cats.prepend( i18n("All") );
     typeFunction->insertStringList( cats  );
     grid1->addWidget( typeFunction, 1, 0 );
 
-    functions = new QListBox(this);
+    functions = new QListBox(page);
     QSizePolicy sp1( QSizePolicy::Preferred, QSizePolicy::Expanding );
     functions->setSizePolicy( sp1 );
     grid1->addWidget( functions, 2, 0 );
 
-    selectFunction = new QPushButton( this );
+    selectFunction = new QPushButton( page );
     selectFunction->setPixmap( BarIcon( "down", KIcon::SizeSmall ) );
     grid1->addWidget( selectFunction, 3, 0 );
 
-    result = new QLineEdit( this );
+    result = new QLineEdit( page );
     grid1->addMultiCellWidget( result, 4, 4, 0, 1 );
 
-    m_tabwidget = new QTabWidget( this );
+    m_tabwidget = new QTabWidget( page );
     QSizePolicy sp2( QSizePolicy::Expanding, QSizePolicy::Expanding );
     m_tabwidget->setSizePolicy( sp2 );
     grid1->addMultiCellWidget( m_tabwidget, 0, 2, 1, 1 );
@@ -138,19 +143,10 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
 
     m_tabwidget->setCurrentPage( index );
 
-    // Create the Ok and Cancel buttons
-    KButtonBox *bb = new KButtonBox( this );
-    bb->addStretch();
-    m_pOk = bb->addButton( i18n("OK") );
-    m_pOk->setDefault( TRUE );
-    m_pClose = bb->addButton( i18n( "Close" ) );
-    bb->layout();
-    grid1->addMultiCellWidget( bb, 5, 5, 0, 1 );
-
     refresh_result = true;
 
-    connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-    connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
+    connect( this, SIGNAL( cancelClicked() ), this, SLOT( slotClose() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
     connect( typeFunction, SIGNAL( activated(const QString &) ),
              this, SLOT( slotActivated(const QString &) ) );
     connect( functions, SIGNAL( highlighted(const QString &) ),
@@ -328,9 +324,10 @@ void KSpreadDlgFormula::slotClose()
         m_pView->canvasWidget()->editor()->setText( m_oldText );
         m_pView->canvasWidget()->editor()->setFocus();
     }
-
     reject();
-    delete this;
+    //laurent 2002-01-03 comment this line otherwise kspread crash
+    //but dialog box is not deleted => not good
+    //delete this;
 }
 
 void KSpreadDlgFormula::slotSelectButton()

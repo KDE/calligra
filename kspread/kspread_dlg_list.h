@@ -21,14 +21,13 @@
 #define __kspread_dlg_list__
 
 #include <qdialog.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
-#include <qlabel.h>
-#include <qmultilineedit.h>
 #include <kconfig.h>
-
+#include <qlistbox.h>
 class KSpreadView;
+class QLineEdit;
+class QPushButton;
+class QMultiLineEdit;
+
 
 class KSpreadList: public QDialog
 {
@@ -39,7 +38,6 @@ public:
 
 public slots:
   void slotOk();
-  void slotCancel();
   void slotDoubleClicked(QListBoxItem *);
   void slotTextClicked(QListBoxItem*);
   void slotRemove();
