@@ -132,6 +132,7 @@ GBezier::GBezier (const QDomElement &element) : GPolyline (element.namedItem("po
 
     wSegment = -1;
     closed=(element.attribute("closed").toInt()==1);
+    calcBoundingBox();
     computePPoints();
 }
 
