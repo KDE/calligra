@@ -536,7 +536,7 @@ StdWidgetFactory::changeText(const QString &text)
 }
 
 void
-StdWidgetFactory::resizeEditor(QWidget *widget, const QString classname)
+StdWidgetFactory::resizeEditor(QWidget *widget, const QString &classname)
 {
 	QSize s = widget->size();
 	QPoint p = widget->pos();
