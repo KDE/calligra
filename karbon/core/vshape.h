@@ -76,6 +76,9 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
+	/// Accept a VVisitor.
+	virtual void accept( VVisitor& /*visitor*/ ) {}
+
 protected:
 	VFill m_fill;
 	VStroke m_stroke;

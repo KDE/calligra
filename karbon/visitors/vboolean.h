@@ -26,8 +26,8 @@ public:
 	VBooleanType type() const { return m_type; }
 	void setType( VBooleanType type ) { m_type = type; }
 
-	virtual void visit( VObject& /*object*/ ) {}
-	void visit( VObject& object1, VObject& object2 );
+	virtual void visit( VShape& /*object*/ ) {}
+	void visit( VShape& object1, VShape& object2 );
 
 	virtual void visitVPath(
 		VPath& path, QPtrList<VSegmentList>& lists );

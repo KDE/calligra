@@ -105,9 +105,6 @@ public:
 	 */
 	virtual void load( const QDomElement& element ) = 0;
 
-	/// Accept a VVisitor.
-	virtual void accept( VVisitor& /*visitor*/ ) {}
-
 	void setParent( VObject* parent ) { m_parent = parent; }
 	VObject* parent() { return m_parent; }
 

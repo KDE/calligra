@@ -8,7 +8,7 @@
 #include "vpath.h"
 
 void
-VBoolean::visit( VObject& object1, VObject& object2 )
+VBoolean::visit( VShape& object1, VShape& object2 )
 {
 	m_lists1 = 0L;
 	m_lists2 = 0L;
