@@ -44,7 +44,7 @@ DESCRIPTION
 #include <qclipboard.h>
 
 // ### TODO : multi page tables
-#define SUPPORT_MULTI_PAGE_TABLES 0
+#undef SUPPORT_MULTI_PAGE_TABLES
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
