@@ -457,12 +457,12 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 		const char *ptr = d.latin1();
 		const char *end = d.latin1() + d.length() + 1;
 
-		double curx, cury, tox, toy, x1, y1, x2, y2;
+		double contrlx, contrly, curx, cury, tox, toy, x1, y1, x2, y2;
 		bool relative;
 		VPath *path = 0L;
 		char command = *(ptr++), lastCommand = ' ';
 
-		curx = cury = 0.0;
+		curx = cury = contrlx = contrly = 0.0;
 		while( ptr < end )
 		{
 			if( *ptr == ' ' )
@@ -560,6 +560,8 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 									   KoPoint( curx + tox, cury + toy ) );
 					else
 						path->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( tox, toy ) );
+					contrlx = relative ? curx + x2 : x2;
+					contrly = relative ? cury + y2 : y2;
 					curx = relative ? curx + tox : tox;
 					cury = relative ? cury + toy : toy;
 
@@ -575,10 +577,14 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 					ptr = getCoord( ptr, toy );
 
 					if(relative)
-						path->curve1To( KoPoint( curx + x2, cury + y2 ),
+						path->curveTo( KoPoint( 2 * cury - contrly, 2 * cury - contrly ),
+									   KoPoint( curx + x2, cury + y2 ),
 									   KoPoint( curx + tox, cury + toy ) );
 					else
-						path->curve1To( KoPoint( x2, y2 ), KoPoint( tox, toy ) );
+						path->curveTo( KoPoint( 2 * cury - contrly, 2 * cury - contrly ),
+									   KoPoint( x2, y2 ), KoPoint( tox, toy ) );
+					contrlx = relative ? curx + x2 : x2;
+					contrly = relative ? cury + y2 : y2;
 					curx = relative ? curx + tox : tox;
 					cury = relative ? cury + toy : toy;
 					break;
@@ -655,6 +661,14 @@ SvgImport::parsePath( VComposite *obj, const QDomElement &e )
 			else
 				command = *(ptr++);
 
+			if( lastCommand != 'C' && lastCommand != 'c' &&
+				lastCommand != 'S' && lastCommand != 's' &&
+				lastCommand != 'Q' && lastCommand != 'q' &&
+				lastCommand != 'T' && lastCommand != 't')
+			{
+				contrlx = curx;
+				contrly = cury;
+			}
 		}
 		if( path )
 		{
