@@ -20,7 +20,7 @@
 #ifndef BACKDIA_H
 #define BACKDIA_H
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qframe.h>
 #include <qdatetime.h>
 
@@ -66,7 +66,7 @@ private:
 /******************************************************************/
 /* class BackDia						  */
 /******************************************************************/
-class BackDia : public QDialog
+class BackDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -99,7 +99,6 @@ private:
     QLabel *lPicName, *picPreview, *lClipName;
     QCheckBox *unbalanced;
     QComboBox *cType, *backCombo, *picView;
-    QPushButton *okBut, *applyBut, *applyGlobalBut, *cancelBut;
     QPushButton *picChoose, *clipChoose;
     KColorButton *color1Choose, *color2Choose;
     QSlider *xfactor, *yfactor;

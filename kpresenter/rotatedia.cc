@@ -90,17 +90,18 @@ void RotatePreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 RotateDia::RotateDia( QWidget* parent, const char* name )
-    : QDialog( parent, name, true )
+    : KDialogBase( parent, name, true )
 {
     // ------------------------ layout
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    layout->setMargin( 5 );
-    layout->setSpacing( 5 );
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
+
     QHBoxLayout *hbox = new QHBoxLayout( layout );
     hbox->setSpacing( 5 );
 
     // ------------------------ angles
-    angle = new QVButtonGroup( i18n( "Angle" ), this);
+    angle = new QVButtonGroup( i18n( "Angle" ), page);
     angle->setExclusive(true);
     angle->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
 
@@ -124,31 +125,13 @@ RotateDia::RotateDia( QWidget* parent, const char* name )
     connect( custom, SIGNAL( valueChanged( double ) ), this, SLOT( degCustomChanged( double ) ) );
 
     // ------------------------ preview
-    rPreview = new RotatePreview( this, "preview" );
+    rPreview = new RotatePreview( page, "preview" );
 
     hbox->addWidget( rPreview );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
+    connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 
-    // ------------------------ buttons
-    KButtonBox *bb = new KButtonBox( this );
-    bb->addStretch();
-
-    okBut = bb->addButton( i18n( "OK" ) );
-    okBut->setAutoRepeat( false );
-    //laurent : comment it fix QT_NO_COMPAT
-    //okBut->setAutoResize( false );
-    okBut->setAutoDefault( true );
-    okBut->setDefault( true );
-    applyBut = bb->addButton( i18n( "Apply" ) );
-    cancelBut = bb->addButton( i18n( "Cancel" ) );
-
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-    connect( applyBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-    connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
-
-    bb->layout();
-
-    layout->addWidget( bb );
 }
 
 /*===================== destructor ===============================*/

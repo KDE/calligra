@@ -20,7 +20,7 @@
 #ifndef ROTATEDIA_H
 #define ROTATEDIA_H
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qframe.h>
 
 class QRadioButton;
@@ -57,7 +57,7 @@ protected:
 /* class RotateDia                                                */
 /******************************************************************/
 
-class RotateDia : public QDialog
+class RotateDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -75,8 +75,6 @@ protected:
     QGroupBox *preview;
     QVButtonGroup *angle;
     RotatePreview *rPreview;
-    QPushButton *okBut, *applyBut, *cancelBut;
-
     float _angle;
 
 protected slots:

@@ -92,20 +92,22 @@ BackDia::BackDia( QWidget* parent, const char* name,
                   const QString &backClip, const QDateTime &clipLM,
                   BackView backPicView, bool _unbalanced,
                   int _xfactor, int _yfactor, KPresenterDoc *doc )
-    : QDialog( parent, name, true ), picLastModified( picLM ), clipLastModified( clipLM )
+    : KDialogBase( parent, name, true, "",KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel|KDialogBase::User1 ), picLastModified( picLM ), clipLastModified( clipLM )
 {
     lockUpdate = true;
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    layout->setMargin( 5 );
-    layout->setSpacing( 5 );
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
+
+
     QHBoxLayout *hbox = new QHBoxLayout( layout );
     hbox->setSpacing( 5 );
     QVBoxLayout *vbox = new QVBoxLayout( hbox );
     vbox->setSpacing( 5 );
 
-    vbox->addWidget( new QLabel( i18n( "Background Type:" ), this ) );
+    vbox->addWidget( new QLabel( i18n( "Background Type:" ), page ) );
 
-    backCombo = new QComboBox( false, this );
+    backCombo = new QComboBox( false, page );
     backCombo->insertItem( i18n( "Color/Gradient" ) );
     backCombo->insertItem( i18n( "Picture" ) );
     backCombo->insertItem( i18n( "Clipart" ) );
@@ -115,7 +117,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     vbox->addWidget( backCombo );
 
-    tabWidget = new QTabWidget( this );
+    tabWidget = new QTabWidget( page );
     vbox->addWidget( tabWidget );
 
     // color/gradient tab ---------------
@@ -232,34 +234,21 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     // ------------------------ preview
 
-    preview = new BackPreview( this, doc );
+    preview = new BackPreview( page, doc );
     hbox->addWidget( preview );
 
     // ------------------------ buttons
 
-    KButtonBox *bb = new KButtonBox( this );
-    bb->addStretch();
-
-    okBut = bb->addButton( i18n( "&OK" ) );
-    applyGlobalBut = bb->addButton( i18n( "Apply &Global" ) );
-    applyBut = bb->addButton( i18n( "&Apply" ) );
-    cancelBut = bb->addButton( i18n( "&Close" ) );
-    okBut->setDefault( true );
-
-    connect( okBut, SIGNAL( clicked() ),
+    connect( this, SIGNAL( okClicked() ),
              this, SLOT( Ok() ) );
-    connect( applyBut, SIGNAL( clicked() ),
+    connect( this, SIGNAL( applyClicked() ),
              this, SLOT( Apply() ) );
-    connect( applyGlobalBut, SIGNAL( clicked() ),
+    connect( this, SIGNAL(  user1Clicked() ),
              this, SLOT( ApplyGlobal() ) );
-    connect( cancelBut, SIGNAL( clicked() ),
-             this, SLOT( reject() ) );
-    connect( okBut, SIGNAL( clicked() ),
+
+    connect( this, SIGNAL( okClicked() ),
              this, SLOT( accept() ) );
-    bb->layout();
-
-    layout->addWidget( bb );
-
+    setButtonText(KDialogBase::User1,i18n( "Apply &Global" ));
     picChanged = clipChanged = true;
     lockUpdate = false;
     updateConfiguration();
