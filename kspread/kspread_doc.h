@@ -291,8 +291,8 @@ public:
   int getIndentValue() {return m_iIndentValue;}
   void setIndentValue(int _val) {m_iIndentValue=_val;}
 
-  MoveTo getMoveToValue() {return m_EMoveTo;}
-  void setMoveToValue(MoveTo _moveTo) {m_EMoveTo=_moveTo;}
+  KSpread::MoveTo getMoveToValue() {return m_EMoveTo;}
+  void setMoveToValue(KSpread::MoveTo _moveTo) {m_EMoveTo=_moveTo;}
 
   /**
   * Show or not error message
@@ -566,7 +566,7 @@ protected:
 
   int m_iIndentValue;
 
-  MoveTo m_EMoveTo;
+  KSpread::MoveTo m_EMoveTo;
 
 
   bool m_bShowError;

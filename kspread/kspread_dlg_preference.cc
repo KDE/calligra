@@ -545,16 +545,16 @@ switch(tmpCompletion )
         }
 switch( m_pView->doc()->getMoveToValue( ))
         {
-        case  Bottom:
+        case  KSpread::Bottom:
                 typeOfMove->setCurrentItem(0);
                 break;
-        case  Left:
+        case  KSpread::Left:
                 typeOfMove->setCurrentItem(3);
                 break;
-        case  Top:
+        case  KSpread::Top:
                 typeOfMove->setCurrentItem(1);
                 break;
-        case  Right:
+        case  KSpread::Right:
                 typeOfMove->setCurrentItem(2);
                 break;
         default :
@@ -628,20 +628,20 @@ void miscParameters::apply()
         config->writeEntry( "Completion Mode", (int)tmpCompletion);
     }
 
-    MoveTo tmpMoveTo=Bottom;
+    KSpread::MoveTo tmpMoveTo=KSpread::Bottom;
     switch(typeOfMove->currentItem())
     {
         case 0:
-            tmpMoveTo=Bottom;
+            tmpMoveTo=KSpread::Bottom;
             break;
         case 1:
-            tmpMoveTo=Top;
+            tmpMoveTo=KSpread::Top;
             break;
         case 2:
-            tmpMoveTo=Right;
+            tmpMoveTo=KSpread::Right;
             break;
         case 3:
-            tmpMoveTo=Left;
+            tmpMoveTo=KSpread::Left;
             break;
     }
     if(tmpMoveTo!=m_pView->doc()->getMoveToValue())
