@@ -605,32 +605,32 @@ Here's a simple example of such an rc-file.
 <example>
 <title>An example of a simple rc-file</title>
 <screen>
-&lt;!DOCTYPE QConfig >&lt;qconfig>
-&lt;menubar>
- &lt;menu name="Edit">&lt;text>Edit&lt;/text>
-  &lt;action name="edit_cut"/>
-  &lt;action name="edit_copy"/>
-  &lt;action name="edit_paste"/>
-  &lt;separator/>
-  &lt;action name="edit_find"/>
- &lt;/menu>
- &lt;menu name="Insert">&lt;text>Insert&lt;/text>
-  &lt;action name="insert_picture"/>
-  &lt;action name="insert_clipart"/>
-  &lt;menu name="Variable">&lt;text>Variable&lt;/text>
-   &lt;action name="insert_var_datefix"/>
-   &lt;action name="insert_var_datevar"/>
-  &lt;/menu>
- &lt;/menu>
-&lt;/menubar>
-&lt;toolbars>
- &lt;toolbar name="edit_toolbar" position="right">
-  &lt;action name="edit_cut"/>
-  &lt;action name="edit_copy"/>
-  &lt;action name="edit_paste"/>
- &lt;/toolbar>
-&lt;/toolbars>
-&lt;/qconfig>
+&lt;!DOCTYPE QConfig &gt;&lt;qconfig&gt;
+&lt;menubar&gt;
+ &lt;menu name="Edit"&gt;&lt;text&gt;Edit&lt;/text&gt;
+  &lt;action name="edit_cut"/&gt;
+  &lt;action name="edit_copy"/&gt;
+  &lt;action name="edit_paste"/&gt;
+  &lt;separator/&gt;
+  &lt;action name="edit_find"/&gt;
+ &lt;/menu&gt;
+ &lt;menu name="Insert"&gt;&lt;text&gt;Insert&lt;/text&gt;
+  &lt;action name="insert_picture"/&gt;
+  &lt;action name="insert_clipart"/&gt;
+  &lt;menu name="Variable"&gt;&lt;text&gt;Variable&lt;/text&gt;
+   &lt;action name="insert_var_datefix"/&gt;
+   &lt;action name="insert_var_datevar"/&gt;
+  &lt;/menu&gt;
+ &lt;/menu&gt;
+&lt;/menubar&gt;
+&lt;toolbars&gt;
+ &lt;toolbar name="edit_toolbar" position="right"&gt;
+  &lt;action name="edit_cut"/&gt;
+  &lt;action name="edit_copy"/&gt;
+  &lt;action name="edit_paste"/&gt;
+ &lt;/toolbar&gt;
+&lt;/toolbars&gt;
+&lt;/qconfig&gt;
 </screen>
 </example>
 
