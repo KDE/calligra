@@ -4,6 +4,7 @@ Type=ServiceType
 X-KDE-ServiceType=KOfficeFilter
 Comment=KOffice Filter
 Comment[af]=Koffice Filter
+Comment[ar]=مِرْشَح KOffice
 Comment[az]=KOffice Süzgəci
 Comment[bg]=Филтър на KOffice
 Comment[br]=Sil KOffice
@@ -44,11 +45,14 @@ Comment[se]=KOffice-silli
 Comment[sk]=Filter Koffice
 Comment[sl]=Filter za KOffice
 Comment[sr]=KOffice-ов филтер
+Comment[sr@Latn]=KOffice-ов филтер
 Comment[sv]=Koffice-filter
-Comment[ta]=KOffice ÅÊ¸ðÊ
+Comment[ta]=KOffice வடிகட்டி
+Comment[tg]=Филтри KOffice
 Comment[th]=ตัวกรองของโปรแกรมชุดสำนักงาน K
 Comment[tr]=KOffice Filtresi
 Comment[uk]=Фільтр KOffice
+Comment[uz]=KOffice филтери
 Comment[ven]=Filithara ya ofisi ya K
 Comment[wa]=Passete po KOffice
 Comment[xh]=Isihluzi se KOffice
@@ -64,7 +68,7 @@ Type=QStringList
 Type=QStringList
 
 [PropertyDef::X-KDE-Weight]
-Type=QString
+Type=int
 
 [PropertyDef::X-KDE-Available]
 Type=QString
