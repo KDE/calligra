@@ -54,7 +54,7 @@ Document::~Document()
 // might just be present under X11.
 QString Document::getFont(unsigned fc)
 {
-    QString font = MsWord::getFont(fc).xstzName;
+    QString font = MsWord::getFont(fc).xszFfn;
 
 #ifdef FONT_DEBUG
     kdDebug() << "MS-FONT: " << font << endl;

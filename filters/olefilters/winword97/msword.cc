@@ -1235,12 +1235,31 @@ void MsWord::readFonts()
         return;
     }
 
-    // Find the number of fonts from the STTBF header.
+    if (m_fib.nFib > s_maxWord6Version)
+    {
+        // Find the number of fonts from the STTBF header.
 
-    ptr += MsWordGenerated::read(ptr, &m_fonts.count);
-    ptr += sizeof(U16);
+        ptr += MsWordGenerated::read(ptr, &m_fonts.count);
+        ptr += sizeof(U16);
+    }
+    else
+    {
+        // Word6 does not record the number of fonts explicitly :-(.
 
-    // Construct the array of styles, and then walk the array reading in the style definitions.
+        ptr += sizeof(U16);
+        while (ptr < ptr2)
+        {
+            FFN data;
+
+	    ptr += read(ptr, &data);
+            m_fonts.count++;
+        kdDebug(s_area) << "MsWord::readFonts: font "<<m_fonts.count<<"="<<data.xszFfn << endl;
+        }
+        ptr = m_tableStream + m_fib.fcSttbfffn;
+    }
+
+    // Construct the array of fonts, and then walk the array reading in the font
+    // definitions.
 
     m_fonts.data = new FFN [m_fonts.count];
     unsigned i = 0;
@@ -1800,10 +1819,20 @@ unsigned MsWord::read(const U8 *in, FFN *out)
     bytes += MsWordGenerated::read(in + bytes, &out->wWeight);
     bytes += MsWordGenerated::read(in + bytes, &out->chs);
     bytes += MsWordGenerated::read(in + bytes, &out->ixchSzAlt);
-    bytes += MsWordGenerated::read(in + bytes, &out->panose[0], sizeof(out->panose));
-    bytes += MsWordGenerated::read(in + bytes, &out->fs[0], sizeof(out->fs)); 
-    unsigned count = (out->cbFfnM1 + 1 - bytes) / 2;
-    bytes += read(m_fib.lid, in + bytes, &out->xstzName, count - 1, true, m_fib.nFib);
+    unsigned count;
+    if (m_fib.nFib > s_maxWord6Version)
+    {
+        bytes += MsWordGenerated::read(in + bytes, &out->panose[0], sizeof(out->panose));
+        bytes += MsWordGenerated::read(in + bytes, &out->fs[0], sizeof(out->fs)); 
+        count = (out->cbFfnM1 + 1 - bytes) / 2;
+    }
+    else
+    {
+        memset(&out->panose[0], 0, sizeof(out->panose));
+        memset(&out->fs[0], 0, sizeof(out->fs));
+        count = (out->cbFfnM1 + 1 - bytes);
+    }
+    bytes += read(m_fib.lid, in + bytes, &out->xszFfn, count - 1, true, m_fib.nFib);
 
     // Set the length to the offset of the last stored byte.
 

@@ -132,7 +132,7 @@ public:
         // followed by a second xsz which records the name of an alternate
         // font to use if the first named font does not exist on this system.
         // Maximal size of xszFfn is 65 characters.
-        QString xstzName;
+        QString xszFfn;
     } FFN;
     unsigned read(const U8 *in, FFN *out);
 
