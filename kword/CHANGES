@@ -1,0 +1,30 @@
+Main changes between KWord-0.8 (KOffice-1.0) and KWord-1.0 (KOffice-1.1)
+========================================================================
+
+New overall design and new formatting engine.
+
+Better zooming; adapts to the DPI settings (of the screen and of the printer)
+This means, if your X server is correctly configured, the page on screen has
+the same size as the real paper page.
+
+Much better performance with huge documents (the text is formatted
+ as a background job, the repainting is done much better etc.).
+ And the files should be smaller than before (smarter way of saving
+ the formatting information)
+
+Real document/view separation, working with different views on the same
+document is fully functional, cursors are in each view.
+
+Brand new formula widget (with doc/view design, zoom support etc.)
+
+Other new features:
+ - Real bullets instead of using characters as bullets.
+ - Right margin for a paragraph.
+ - Undo/redo fully working (all text operations, but also frame operations etc.)
+ 
+Fixes:
+ - Embedding a kpresenter part into kword now works
+ - Copy/Paste and Drag-and-drop work as expected (instead of for full paragraphs only)
+
+When Qt3 is out, KWord will support bi-directional editing of text (for hebrew, arabic etc.).
+
