@@ -31,7 +31,6 @@
 /* END FOR THE DIRTY HACK */
 #include <qguardedptr.h>
 
-#include <koUtils.h>
 #include "defs.h"
 #include "mailmerge_interface.h"
 #include "serialletter_qtsql_base.h"
