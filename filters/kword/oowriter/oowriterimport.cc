@@ -202,11 +202,34 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         // ### In KWord the style says "I'm part of the outline" (TOC)
         // ### In OOo the paragraph says that (text:h)
         // Hence this hack...
-        if ( styleName.startsWith( "Heading" ) )
+        bool outline = styleName.startsWith( "Heading" );
+        if ( outline )
             styleElem.setAttribute( "outline", "true" );
 
         writeFormat( doc, styleElem, 1, 0, 0 );
         writeLayout( doc, styleElem );
+
+        // writeLayout doesn't load the counter. It's modelled differently for parags and for styles.
+        // ### missing info in the format!
+        const int level = styleName.right(1).toInt(); // ## HACK
+        bool listOK = false;
+        if ( level > 0 ) {
+            if ( outline )
+                listOK = pushListLevelStyle( "<outline-style>", m_outlineStyle, level );
+            else {
+                const QString listStyleName = e.attribute( "style:list-style-name" );
+                listOK = !listStyleName.isEmpty();
+                if ( listOK )
+                    listOK = pushListLevelStyle( listStyleName, level );
+            }
+        }
+        if ( listOK ) {
+            const QDomElement listStyle = m_listStyleStack.currentListStyle();
+            // The tag is either text:list-level-style-number or text:list-level-style-bullet
+            bool ordered = listStyle.tagName() == "text:list-level-style-number";
+            writeCounter( doc, styleElem, outline, level, ordered );
+            m_listStyleStack.pop();
+        }
 
         m_styleStack.clear();
     }
@@ -832,80 +855,85 @@ void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutEleme
     if ( m_listStyleStack.hasListStyle() && m_nextItemIsListItem ) {
         bool heading = paragraph.tagName() == "text:h";
         m_nextItemIsListItem = false;
-        const QDomElement listStyle = m_listStyleStack.currentListStyle();
-        const QDomElement listStyleProperties = m_listStyleStack.currentListStyleProperties();
-        QDomElement counter = doc.createElement( "COUNTER" );
-        counter.setAttribute( "numberingtype", heading ? 1 : 0 );
         int level = heading ? paragraph.attribute( "text:level" ).toInt() : m_listStyleStack.level();
-        counter.setAttribute( "depth", level - 1 ); // "depth" starts at 0
-
-        //kdDebug(30518) << "Numbered parag. heading=" << heading << " level=" << level
-        //               << " m_restartNumbering=" << m_restartNumbering << endl;
-
-        if ( m_insideOrderedList || heading ) {
-            counter.setAttribute( "type", Conversion::importCounterType( listStyle.attribute( "style:num-format" ) ) );
-            counter.setAttribute( "lefttext", listStyle.attribute( "style:num-prefix" ) );
-            counter.setAttribute( "righttext", listStyle.attribute( "style:num-suffix" ) );
-            QString dl = listStyle.attribute( "text:display-levels" );
-            if ( dl.isEmpty() )
-                dl = "1";
-            counter.setAttribute( "display-levels", dl );
-            if ( m_restartNumbering != -1 ) {
-                counter.setAttribute( "start", m_restartNumbering );
-                counter.setAttribute( "restart", "true" );
-            } else {
-                // useful?
-                counter.setAttribute( "start", listStyle.attribute( "text:start-value" ) );
-            }
-        }
-        else { // bullets, see 3.3.6 p138
-            counter.setAttribute( "type", 6 );
-            QString bulletChar = listStyle.attribute( "text:bullet-char" );
-            if ( !bulletChar.isEmpty() ) {
-#if 0 // doesn't work well. Fonts lack those symbols!
-                counter.setAttribute( "bullet", bulletChar[0].unicode() );
-                kdDebug() << "bullet code " << bulletChar[0].unicode() << endl;
-                QString fontName = listStyleProperties.attribute( "style:font-name" );
-                counter.setAttribute( "bulletfont", fontName );
-#endif
-                // Reverse engineering, I found those codes:
-                switch( bulletChar[0].unicode() ) {
-                case 8226: // small disc
-                    counter.setAttribute( "type", 10 ); // a disc bullet
-                    break;
-                case 9679: // large disc
-                    counter.setAttribute( "type", 10 ); // a disc bullet
-                    break;
-                case 57356: // losange - TODO in KWord
-                    counter.setAttribute( "type", 10 ); // a disc bullet
-                    break;
-                case 57354: // square
-                    counter.setAttribute( "type", 9 );
-                    break;
-                case 10132: // arrow
-                case 10146: // two-colors right-pointing triangle (TODO)
-                    counter.setAttribute( "bullet", 206 ); // simpler arrow symbol
-                    counter.setAttribute( "bulletfont", "symbol" );
-                    break;
-                case 10007: // cross
-                    counter.setAttribute( "bullet", 212 ); // simpler cross symbol
-                    counter.setAttribute( "bulletfont", "symbol" );
-                    break;
-                case 10004: // checkmark
-                    counter.setAttribute( "bullet", 246 ); // hmm that's sqrt
-                    counter.setAttribute( "bulletfont", "symbol" );
-                    break;
-                default:
-                    counter.setAttribute( "type", 8 ); // circle
-                    break;
-                }
-            } else { // can never happen
-                counter.setAttribute( "type", 10 ); // a disc bullet
-            }
-        }
-
-        layoutElement.appendChild(counter);
+        writeCounter( doc, layoutElement, heading, level, m_insideOrderedList );
     }
+}
+
+void OoWriterImport::writeCounter( QDomDocument& doc, QDomElement& layoutElement, bool heading, int level, bool ordered )
+{
+    const QDomElement listStyle = m_listStyleStack.currentListStyle();
+    //const QDomElement listStyleProperties = m_listStyleStack.currentListStyleProperties();
+    QDomElement counter = doc.createElement( "COUNTER" );
+    counter.setAttribute( "numberingtype", heading ? 1 : 0 );
+    counter.setAttribute( "depth", level - 1 ); // "depth" starts at 0
+
+    //kdDebug(30518) << "Numbered parag. heading=" << heading << " level=" << level
+    //               << " m_restartNumbering=" << m_restartNumbering << endl;
+
+    if ( ordered || heading ) {
+        counter.setAttribute( "type", Conversion::importCounterType( listStyle.attribute( "style:num-format" ) ) );
+        counter.setAttribute( "lefttext", listStyle.attribute( "style:num-prefix" ) );
+        counter.setAttribute( "righttext", listStyle.attribute( "style:num-suffix" ) );
+        QString dl = listStyle.attribute( "text:display-levels" );
+        if ( dl.isEmpty() )
+            dl = "1";
+        counter.setAttribute( "display-levels", dl );
+        if ( m_restartNumbering != -1 ) {
+            counter.setAttribute( "start", m_restartNumbering );
+            counter.setAttribute( "restart", "true" );
+        } else {
+            // useful?
+            counter.setAttribute( "start", listStyle.attribute( "text:start-value" ) );
+        }
+    }
+    else { // bullets, see 3.3.6 p138
+        counter.setAttribute( "type", 6 );
+        QString bulletChar = listStyle.attribute( "text:bullet-char" );
+        if ( !bulletChar.isEmpty() ) {
+#if 0 // doesn't work well. Fonts lack those symbols!
+            counter.setAttribute( "bullet", bulletChar[0].unicode() );
+            kdDebug() << "bullet code " << bulletChar[0].unicode() << endl;
+            QString fontName = listStyleProperties.attribute( "style:font-name" );
+            counter.setAttribute( "bulletfont", fontName );
+#endif
+            // Reverse engineering, I found those codes:
+            switch( bulletChar[0].unicode() ) {
+            case 8226: // small disc
+                counter.setAttribute( "type", 10 ); // a disc bullet
+                break;
+            case 9679: // large disc
+                counter.setAttribute( "type", 10 ); // a disc bullet
+                break;
+            case 57356: // losange - TODO in KWord
+                counter.setAttribute( "type", 10 ); // a disc bullet
+                break;
+            case 57354: // square
+                counter.setAttribute( "type", 9 );
+                break;
+            case 10132: // arrow
+            case 10146: // two-colors right-pointing triangle (TODO)
+                counter.setAttribute( "bullet", 206 ); // simpler arrow symbol
+                counter.setAttribute( "bulletfont", "symbol" );
+                break;
+            case 10007: // cross
+                counter.setAttribute( "bullet", 212 ); // simpler cross symbol
+                counter.setAttribute( "bulletfont", "symbol" );
+                break;
+            case 10004: // checkmark
+                counter.setAttribute( "bullet", 246 ); // hmm that's sqrt
+                counter.setAttribute( "bulletfont", "symbol" );
+                break;
+            default:
+                counter.setAttribute( "type", 8 ); // circle
+                break;
+            }
+        } else { // can never happen
+            counter.setAttribute( "type", 10 ); // a disc bullet
+        }
+    }
+
+    layoutElement.appendChild(counter);
 }
 
 static QDomElement findListLevelStyle( QDomElement& fullListStyle, int level )
@@ -969,6 +997,7 @@ void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDom
         m_restartNumbering = -1;
         if ( listItem.hasAttribute( "text:start-value" ) )
             m_restartNumbering = listItem.attribute( "text:start-value" ).toInt();
+        // ### Oasis: can be p h or list only.
         parseBodyOrSimilar( doc, listItem, currentFramesetElement );
         m_restartNumbering = -1;
     }
@@ -1150,8 +1179,6 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
         pos += length;
     }
 }
-
-
 
 QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement& paragraph )
 {

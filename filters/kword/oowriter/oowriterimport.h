@@ -47,6 +47,7 @@ private:
     bool pushListLevelStyle( const QString& listStyleName, int level );
     bool pushListLevelStyle( const QString& listStyleName, QDomElement& fullListStyle, int level );
     void applyListStyle( QDomDocument& doc, QDomElement& layoutElement, const QDomElement& paragraph );
+    void writeCounter( QDomDocument& doc, QDomElement& layoutElement, bool heading, int level, bool ordered );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
     void parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent, QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos);
     // Reads from m_styleStack, writes the text properties to parentElement
