@@ -17,11 +17,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qcolor.h>
-#include <qfile.h>
-#include <qfont.h>
-#include <qpen.h>
-
 #include "ooimpressimport.h"
 
 #include <kdebug.h>
@@ -30,7 +25,6 @@
 #include <koDocument.h>
 
 #include <kgenericfactory.h>
-#include <kmessagebox.h>
 #include <koFilterChain.h>
 #include <koGlobal.h>
 
@@ -288,54 +282,37 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         // parse all objects
         for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
         {
-            QDomElement e = object.toElement();
+            QDomElement o = object.toElement();
+            QString name = o.tagName();
 
-            // check if we support this object
-            QString name = e.tagName();
-            if ( name != "draw:text-box" )
-                continue;
-
-            // get origin, size, pen and brush of the object
-            // this code is identical for all objects
-            QDomElement o = doc.createElement( "OBJECT" );
-            QDomElement orig = doc.createElement( "ORIG" );
-            orig.setAttribute( "x", CM_TO_POINT(e.attribute("svg:x").toDouble()) );
-            orig.setAttribute( "y", CM_TO_POINT(e.attribute("svg:y").toDouble() + offset) );
-            o.appendChild( orig );
-            QDomElement size = doc.createElement( "SIZE" );
-            size.setAttribute( "width", CM_TO_POINT(e.attribute("svg:width").toDouble()) );
-            size.setAttribute( "height", CM_TO_POINT(e.attribute("svg:height").toDouble()) );
-            o.appendChild( size );
-            QDomElement pen = doc.createElement( "PEN" );
-            o.appendChild( pen );
-            QDomElement brush = doc.createElement( "BRUSH" );
-            o.appendChild( brush );
-
+            QDomElement e;
             if ( name == "draw:text-box" ) // textbox
             {
-                o.setAttribute( "type", 4 );
-                QDomElement textobj = doc.createElement( "TEXTOBJ" );
-                o.appendChild( textobj );
-                for ( QDomNode paragraph = object.firstChild(); !paragraph.isNull();
-                      paragraph = paragraph.nextSibling() )
-                {
-                    QDomElement pa = paragraph.toElement();
-
-                    // only parse paragraphs
-                    if ( pa.tagName() != "text:p" )
-                        continue;
-
-                    QDomElement p = doc.createElement( "P" );
-                    textobj.appendChild( p );
-                    QDomElement name = doc.createElement( "NAME" );
-                    name.setAttribute( "value", pa.attribute( "text:style-name" ) );
-                    p.appendChild( name );
-                    QDomElement text = doc.createElement( "TEXT" );
-                    text.appendChild( doc.createTextNode( pa.text() ) );
-                    p.appendChild( text );
-                }
+                e = parseObject( doc, o, offset );
+                e.setAttribute( "type", 4 );
+                e.appendChild( parseTextBox( doc, o ) );
             }
-            objectElement.appendChild( o );
+            else if ( name == "draw:rect" ) // rectangle
+            {
+                e = parseObject( doc, o, offset );
+                e.setAttribute( "type", 2 );
+            }
+            else if ( name == "draw:circle" || name == "draw:ellipse" ) // circle or ellipse
+            {
+                e = parseObject( doc, o, offset );
+                e.setAttribute( "type", 3 );
+            }
+            else if ( name == "draw:line" ) // line
+            {
+                e = parseLineObject( doc, o, offset );
+            }
+            else
+            {
+                kdDebug() << "Unsupported object '" << name << "'" << endl;
+                continue;
+            }
+
+            objectElement.appendChild( e );
         }
     }
 
@@ -343,6 +320,130 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     docElement.appendChild( pageTitleElement );
     docElement.appendChild( objectElement );
     doccontent.appendChild( doc );
+}
+
+QDomElement OoImpressImport::parseObject( QDomDocument& doc, const QDomElement& object, int offset )
+{
+    // get origin, size, pen and brush of the object
+    // this code is identical for all objects
+    QDomElement objectElement = doc.createElement( "OBJECT" );
+
+    QDomElement orig = doc.createElement( "ORIG" );
+    orig.setAttribute( "x", CM_TO_POINT(object.attribute("svg:x").toDouble()) );
+    orig.setAttribute( "y", CM_TO_POINT(object.attribute("svg:y").toDouble() + offset) );
+    objectElement.appendChild( orig );
+
+    QDomElement size = doc.createElement( "SIZE" );
+    size.setAttribute( "width", CM_TO_POINT(object.attribute("svg:width").toDouble()) );
+    size.setAttribute( "height", CM_TO_POINT(object.attribute("svg:height").toDouble()) );
+    objectElement.appendChild( size );
+
+    QDomElement pen = doc.createElement( "PEN" );
+    objectElement.appendChild( pen );
+
+    QDomElement brush = doc.createElement( "BRUSH" );
+    objectElement.appendChild( brush );
+
+    return objectElement;
+}
+
+QDomElement OoImpressImport::parseLineObject( QDomDocument& doc, const QDomElement& object, int offset )
+{
+    double x1 = object.attribute("svg:x1").toDouble();
+    double y1 = object.attribute("svg:y1").toDouble();
+    double x2 = object.attribute("svg:x2").toDouble();
+    double y2 = object.attribute("svg:y2").toDouble();
+
+    double x = QMIN(x1, x2);
+    double y = QMIN(y1, y2);
+
+    QDomElement objectElement = doc.createElement( "OBJECT" );
+
+    QDomElement orig = doc.createElement( "ORIG" );
+    orig.setAttribute( "x", CM_TO_POINT( x ) );
+    orig.setAttribute( "y", CM_TO_POINT( y + offset) );
+    objectElement.appendChild( orig );
+
+    QDomElement size = doc.createElement( "SIZE" );
+    size.setAttribute( "width", CM_TO_POINT( fabs( x1 - x2 ) ) );
+    size.setAttribute( "height", CM_TO_POINT( fabs( y1 - y2 ) ) );
+    objectElement.appendChild( size );
+
+    QDomElement linetype = doc.createElement( "LINETYPE" );
+    if ( ( x1 < x2 && y1 < y2 ) || ( x1 > x2 && y1 > y2 ) )
+        linetype.setAttribute( "value", 2 );
+    else
+        linetype.setAttribute( "value", 3 );
+
+    objectElement.appendChild( linetype );
+
+    QDomElement pen = doc.createElement( "PEN" );
+    objectElement.appendChild( pen );
+
+    QDomElement brush = doc.createElement( "BRUSH" );
+    objectElement.appendChild( brush );
+    objectElement.setAttribute( "type", 1 );
+
+    return objectElement;
+}
+
+QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement& textBox )
+{
+    QDomElement textObjectElement = doc.createElement( "TEXTOBJ" );
+
+    for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
+    {
+        QDomElement t = text.toElement();
+        QString name = t.tagName();
+
+        QDomElement e;
+        if ( name == "text:p" ) // text paragraph
+            e = parseParagraph( doc, t );
+        else if ( name == "text:unordered-list" || name == "text:ordered-list" ) // listitem
+        {
+            e = parseList( doc, t );
+        }
+        else
+        {
+            kdDebug() << "Unsupported texttype '" << name << "'" << endl;
+            continue;
+        }
+
+        textObjectElement.appendChild( e );
+
+    }
+
+    return textObjectElement;
+}
+
+QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& list )
+{
+    QDomNode item = list.namedItem( "text:list-item" );
+    QDomElement paragraph = item.namedItem( "text:p" ).toElement();
+
+    QDomElement p = parseParagraph( doc, paragraph );
+    QDomElement counter = doc.createElement( "COUNTER" ); // TODO when styles are done
+    counter.setAttribute( "numberingtype", 0 );
+    counter.setAttribute( "type", 10 );
+    counter.setAttribute( "depth", 0 );
+    p.appendChild( counter );
+
+    return p;
+}
+
+QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElement& paragraph )
+{
+    QDomElement p = doc.createElement( "P" );
+
+    QDomElement name = doc.createElement( "NAME" );
+    name.setAttribute( "value", paragraph.attribute( "text:style-name" ) );
+    p.appendChild( name );
+
+    QDomElement text = doc.createElement( "TEXT" );
+    text.appendChild( doc.createTextNode( paragraph.text() ) );
+    p.appendChild( text );
+
+    return p;
 }
 
 #include <ooimpressimport.moc>

@@ -37,6 +37,11 @@ public:
 private:
     void createDocumentInfo( QDomDocument &docinfo );
     void createDocumentContent( QDomDocument &doccontent );
+    QDomElement parseObject( QDomDocument& doc, const QDomElement& object, int offset );
+    QDomElement parseLineObject( QDomDocument& doc, const QDomElement& object, int offset );
+    QDomElement parseTextBox( QDomDocument& doc, const QDomElement& textBox );
+    QDomElement parseList( QDomDocument& doc, const QDomElement& paragraph );
+    QDomElement parseParagraph( QDomDocument& doc, const QDomElement& list );
     KoFilter::ConversionStatus openFile();
 
     QDomDocument    m_content;
