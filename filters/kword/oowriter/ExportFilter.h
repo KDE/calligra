@@ -90,7 +90,7 @@ private:
     QString escapeOOText(const QString& strText) const;
     QString escapeOOSpan(const QString& strText) const;
     QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const;
-    bool makeTableRows( const QString& tableName, const Table& table );
+    bool makeTableRows( const QString& tableName, const Table& table, int firstRowNumber );
     bool makeTable(const FrameAnchor& anchor);
     bool makePicture(const FrameAnchor& anchor);
     bool convertUnknownPicture(const QString& name, const QString& extension, QByteArray& image);
@@ -128,6 +128,7 @@ private:
     ulong m_footnoteNumber; // Number of footnote (for text:id) (increment *before* use)
     /// Number of footnote (for table:name) (increment *before* use)
     ulong m_tableNumber;
+    ulong m_textBoxNumber; ///< Number of a textbox (for draw:text-box) (increment *before* use)
 
     QString m_styles; // Normal paragraph styles (in OO format)
     QString m_contentAutomaticStyles; // Automatic styles for content.xml (in OO format)
