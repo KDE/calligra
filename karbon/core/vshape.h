@@ -57,6 +57,12 @@ public:
 	 */
 	virtual void setState( const VState state ) { m_state = state; }
 
+	/**
+	 * Create an exact copy of this object.
+	 *
+	 */
+	virtual VShape* clone() = 0;
+
 	const VFill& fill() const { return m_fill; }
 	const VStroke& stroke() const { return m_stroke; }
 

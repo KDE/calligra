@@ -173,7 +173,7 @@ KarbonView::editPaste()
 	VObjectList selection;
 	for ( ; itr.current() ; ++itr )
 	{
-		VShape *temp = static_cast<VShape *>( itr.current()->clone() );
+		VShape *temp = itr.current()->clone();
 		temp->transform( QWMatrix().translate( VGlobal::copyOffset, VGlobal::copyOffset ) );
 		selection.append( temp );
 	}

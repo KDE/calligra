@@ -33,7 +33,7 @@ public:
 
     virtual bool isInside( const KoRect& rect ) const;
 
-    virtual VObject* clone();
+    virtual VShape* clone();
 
 	// read-only access to objects:
 	const VObjectList& objects() const { return m_objects; }

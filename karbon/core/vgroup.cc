@@ -28,7 +28,7 @@ VGroup::VGroup( const VGroup& other ) : VShape()
 	// copy objects
 	VObjectListIterator itr = other.m_objects;
 	for ( ; itr.current() ; ++itr )
-		m_objects.append( static_cast<VShape *>( itr.current()->clone() ) );
+		m_objects.append( itr.current()->clone() );
 }
 
 VGroup::~VGroup()
@@ -127,7 +127,7 @@ VGroup::isInside( const KoRect& rect ) const
 	return false;
 }
 
-VObject*
+VShape*
 VGroup::clone()
 {
 	return new VGroup( *this );

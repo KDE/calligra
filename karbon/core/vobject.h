@@ -89,11 +89,6 @@ public:
 		{ return false; };
 
 	/**
-	 * Create an exact copy of this object.
-	 */
-	virtual VObject* clone() = 0;
-
-	/**
 	 * Save this object's state to xml.
 	 */
 	virtual void save( QDomElement& element ) const = 0;

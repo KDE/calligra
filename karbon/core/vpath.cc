@@ -337,7 +337,7 @@ return rect.intersects( boundingBox() );
 */
 }
 
-VObject*
+VShape*
 VPath::clone()
 {
 	return new VPath( *this );

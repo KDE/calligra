@@ -139,7 +139,7 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 		list.setAutoDelete( true );
 	    for( ; itr.current() ; ++itr )
 		{
-			list.append( static_cast<VShape *>( itr.current()->clone() ) );
+			list.append( itr.current()->clone() );
 		}
 		painter->setZoomFactor( view->zoom() );
 		VObjectListIterator itr2 = list;

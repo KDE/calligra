@@ -100,7 +100,7 @@ public:
 	virtual const KoRect& boundingBox() const;
 	virtual bool isInside( const KoRect& rect ) const;
 
-	virtual VObject* clone();
+	virtual VShape* clone();
 
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
