@@ -47,7 +47,6 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     m_showHeaderOnAllPages = true;
     m_hasTmpHeaders = false;
     m_active = true;
-    m_isRendered = false;
     m_cells.setAutoDelete( true );
     frames.setAutoDelete(false);
     //m_anchor = 0L;
@@ -67,7 +66,6 @@ KWTableFrameSet::KWTableFrameSet( KWTableFrameSet &original ) :
     m_showHeaderOnAllPages = original.m_showHeaderOnAllPages;
     m_hasTmpHeaders = original.m_hasTmpHeaders;
     m_active = original.m_active;
-    m_isRendered = original.m_isRendered;
     m_cells.setAutoDelete( true );
     //m_anchor = 0L;
 
@@ -135,8 +133,11 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const QPoint &p
 QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
 {
     KoRect r = boundingRect();
+    if ( r.isNull() )
+        return QSize();
     QRect outerRect( m_doc->zoomRect( r ) );
-    kdDebug() << "floatingFrameSize outerRect initially " << DEBUGRECT( outerRect ) << endl;
+    //kdDebug() << "floatingFrameSize outerRect initially " << DEBUGRECT( outerRect ) << endl;
+    QSize sz = outerRect.size();
     ASSERT( m_anchorTextFs );
     // Need to convert back to internal coords (in case of page breaking)
     QPoint iPoint;
@@ -149,14 +150,10 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
         {
             outerRect.setRight( brnPoint.x() );
             outerRect.setBottom( brnPoint.y() );
-            kdDebug() << "floatingFrameSize outerRect now " << DEBUGRECT( outerRect ) << endl;
+            //kdDebug() << "floatingFrameSize outerRect now " << DEBUGRECT( outerRect ) << endl;
+            sz = outerRect.size();
         }
-        else
-            kdWarning() << "floatingFrameSize: normalToInternal returned 0L for "
-                        << outerRect.right() << "," << outerRect.bottom() << endl;
-    } else
-        kdWarning() << "floatingFrameSize: normalToInternal returned 0L for "
-                    << outerRect.left() << "," << outerRect.top() << endl;
+    }
 
     // TODO: in theory, we'd need to take the max of the borders of each cell
     // on the outside rect, to find the global rect needed. Well, if we assume constant
@@ -165,12 +162,12 @@ QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
     KWFrame * lastCell = m_cells.getLast()->getFrame( 0 );
     if ( firstCell && lastCell )
     {
-        outerRect.rLeft() -= Border::zoomWidthX( firstCell->leftBorder().ptWidth, m_doc, 1 );
-        outerRect.rTop() -= Border::zoomWidthY( firstCell->topBorder().ptWidth, m_doc, 1 );
-        outerRect.rRight() += Border::zoomWidthX( lastCell->rightBorder().ptWidth, m_doc, 1 );
-        outerRect.rBottom() += Border::zoomWidthY( lastCell->bottomBorder().ptWidth, m_doc, 1 );
+        sz.rwidth() += Border::zoomWidthX( firstCell->leftBorder().ptWidth, m_doc, 1 )
+                       + Border::zoomWidthX( lastCell->rightBorder().ptWidth, m_doc, 1 );
+        sz.rheight() += Border::zoomWidthY( firstCell->topBorder().ptWidth, m_doc, 1 )
+                        + Border::zoomWidthY( lastCell->bottomBorder().ptWidth, m_doc, 1 );
     }
-    return outerRect.size();
+    return sz;
 }
 
 KCommand * KWTableFrameSet::anchoredObjectCreateCommand( int /*frameNum*/ )
@@ -247,6 +244,7 @@ KoRect KWTableFrameSet::boundingRect()
     if (!first || !last)
         return KoRect();
 
+    //kdDebug() << "KWTableFrameSet::boundingRect first=" << DEBUGRECT( *first ) << " last=" << DEBUGRECT( *last ) << endl;
     return first->unite( *last );
 }
 
@@ -422,11 +420,13 @@ void KWTableFrameSet::recalcCols(int _col,int _row)
 
 void KWTableFrameSet::recalcRows(int _col, int _row)
 {
+    //kdDebug() << "KWTableFrameSet::recalcRows" << endl;
     // remove automatically added headers
     for ( unsigned int j = 0; j < m_rows; j++ ) {
         Cell *tmp=getCell( j, 0 );
         ASSERT(tmp);
         if ( tmp && tmp->isRemoveableHeader() ) {
+            //kdDebug() << "KWTableFrameSet::recalcRows removing temp row " << j << endl;
             deleteRow( j, false );
             j--;
         }
@@ -606,7 +606,10 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
             if ( y >= m_doc->ptPaperHeight() * m_doc->getPages() )
                 m_doc->appendPage();
 
-            bool addHeaderRow = m_showHeaderOnAllPages;
+            // No header rows for floating tables. If we want one,  then we have to
+            // fix adjustFlow somehow, so that it doesn't move down tables if it can break them
+            // between cells (!)
+            bool addHeaderRow = m_showHeaderOnAllPages && !isFloating();
             if ( addHeaderRow )
             {
                 // Refuse to create a huge header row, it makes no sense
@@ -615,6 +618,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
                     addHeaderRow = false;
             }
             if ( addHeaderRow ) {
+                //kdDebug() << "KWTableFrameSet::recalcRows adding header at row " << j << endl;
                 m_hasTmpHeaders = true;
                 QList<KWFrameSet> listFrameSet=QList<KWFrameSet>();
                 QList<KWFrame> listFrame=QList<KWFrame>();
@@ -652,10 +656,12 @@ void KWTableFrameSet::recalcRows(int _col, int _row)
         }
     }
     m_pageBoundaries.append(m_cells.count());
+    //kdDebug() << "KWTableFrameSet::recalcRows done" << endl;
 }
 
 void KWTableFrameSet::setBoundingRect( KoRect rect )
 {
+    //kdDebug() << "KWTableFrameSet::setBoundingRect" << endl;
     if ( m_widthMode == TblAuto )
     {
         rect.setLeft( m_doc->ptLeftBorder() );
@@ -712,16 +718,18 @@ void KWTableFrameSet::moveBy( double dx, double dy )
 {
     if(dx==0 && dy==0)
         return;
+    kdDebug() << "KWTableFrameSet::moveBy " << dx << "," << dy << endl;
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         m_cells.at( i )->getFrame( 0 )->moveBy( dx, dy );
         if(!m_cells.at( i )->isVisible())
             m_cells.at( i )->setVisible(true);
     }
-    preRender();
     m_doc->updateAllFrames();
 
+/* leads to resizing while formatting, for inline tables, which qrt doesn't support
     recalcCols();
     recalcRows();
+    */
 }
 
 /*void KWTableFrameSet::drawAllRects( QPainter &p, int xOffset, int yOffset )
@@ -1375,25 +1383,6 @@ void KWTableFrameSet::viewFormatting( QPainter &/*painter*/, int )
 {
 }
 
-void KWTableFrameSet::preRender() {
-#if 0
-    for ( unsigned int i = 0; i < m_doc->getNumFrameSets(); i++ ) {
-        if ( m_doc->getCell( i )->getGroupManager() == this) {
-            KWFormatContext fc( doc, i + 1 );
-            fc.init( m_doc->getFirstParag( i ) );
-
-            // and render
-/*
-            if(!isRendered) {
-                while ( fc.makeNextLineLayout());
-                recalcRows();
-            }*/
-        }
-    }
-#endif
-    m_isRendered=true;
-}
-
 /* checks the cells for missing cells or duplicates, will correct
    mistakes.
 */
@@ -1750,6 +1739,7 @@ bool KWTableFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSp
 }
 
 void KWTableFrameSet::finalize( ) {
+    //kdDebug() << "KWTableFrameSet::finalize" << endl;
     recalcRows();
     recalcCols();
     KWFrameSet::finalize();

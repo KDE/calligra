@@ -784,7 +784,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
     }
     else if ( m_boundingRect.bottom() > m_doc->getPages() * m_doc->ptPaperHeight() - 1 )
     {
-        kdDebug() << "KWCanvas::mmEditFrameMove limiting to last page" << endl;
+        //kdDebug() << "KWCanvas::mmEditFrameMove limiting to last page" << endl;
         p.setY( m_doc->getPages() * m_doc->ptPaperHeight() - m_boundingRect.height() - 2 );
         m_boundingRect.moveTopLeft( p );
     }
@@ -803,7 +803,7 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         else
             // Moost of the rect is in the bottom page
             p.setY( bottomPage * m_doc->ptPaperHeight() + 5 /* grmbl, resize handles.... */ );
-        kdDebug() << "KWCanvas::mmEditFrameMove y set to " << p.y() << endl;
+        //kdDebug() << "KWCanvas::mmEditFrameMove y set to " << p.y() << endl;
 
         m_boundingRect.moveTopLeft( p );
     }
@@ -846,15 +846,6 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
                     QRect newRect( frame->outerRect() );
 
                     QRect frameRect( m_viewMode->normalToView( newRect ) );
-#if 0 // replaced with the new autoscroll
-                    // With frames bigger than the viewport, we end scrolling up/down like nonsense.
-                    if ( frameRect.height() < visibleHeight() )
-
-                        ensureVisible( (frameRect.left()+frameRect.right()) / 2,  // point = center of the rect
-                                       (frameRect.top()+frameRect.bottom()) / 2,
-                                       (frameRect.right()-frameRect.left()) / 2,  // margin = half-width of the rect
-                                       (frameRect.bottom()-frameRect.top()) / 2);
-#endif
                     // Repaint only the changed rects (oldRect U newRect)
                     repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
                     // Move resize handles to new position

@@ -92,7 +92,7 @@ public:
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 };
 
-// The 'embedded' view mode (pages below one another)
+// The 'embedded' view mode (usually a single page, no selections)
 class KWViewModeEmbedded : public KWViewMode
 {
 public:
@@ -104,8 +104,8 @@ public:
     virtual QPoint viewToNormal( const QPoint & vPoint ) { return vPoint; }
     virtual QSize contentsSize() {return QSize();}
 
-    virtual void drawPageBorders( QPainter * , const QRect & , const QRegion &  ){}
-    virtual bool drawSelections() {return false;}
+    virtual void drawPageBorders( QPainter *, const QRect &, const QRegion & ){}
+    virtual bool drawSelections() { return false; }
 };
 
 

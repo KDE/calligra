@@ -210,9 +210,6 @@ public:
     * and wrong values will be detected (and corrected) */
     void validate();
 
-    /** Prerender the whole table to resize the table cells so all text will fit. */
-    void preRender();
-
     /** returns true if we have a cell occupying that position */
     bool contains( double mx, double my );
 
@@ -266,7 +263,6 @@ private:
     bool m_showHeaderOnAllPages;
     bool m_hasTmpHeaders;
     bool m_active;
-    bool m_isRendered;
     QList<Cell> m_cells;
     QValueList<int> m_pageBoundaries;
     static const unsigned int tableCellSpacing;

@@ -47,7 +47,7 @@ void KWAnchor::move( int x, int y )
     int paragy = paragraph()->rect().y();
     xpos = x;
     ypos = y;
-    kdDebug() << this << " KWAnchor::move " << x << "," << y << " paragy=" << paragy << endl;
+    //kdDebug() << this << " KWAnchor::move " << x << "," << y << " paragy=" << paragy << endl;
     KWTextFrameSet * fs = textDocument()->textFrameSet();
     QPoint nPoint;
     if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
@@ -152,9 +152,12 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
 QSize KWAnchor::size() const
 {
-    return m_frameset->floatingFrameSize( m_frameNum );
+    QSize sz = m_frameset->floatingFrameSize( m_frameNum );
+    if ( sz.isNull() ) // for some reason, we don't know the size yet
+        return QSize( width, height );
+    else
+        return sz;
 }
-
 
 int KWAnchor::ascent() const
 {
@@ -171,10 +174,13 @@ void KWAnchor::resize()
     {
         width = s.width();
         height = s.height();
-        //kdDebug(32001) << "KWAnchor::resize " << width << "x" << height << endl;
+        kdDebug(32001) << "KWAnchor::resize " << width << "x" << height << endl;
         QTextParag * parag = paragraph();
         if ( parag )
+        {
+            kdDebug(32001) << "KWAnchor::resize invalidating parag " << parag->paragId() << endl;
             parag->invalidate( 0 );
+        }
     }
 }
 
