@@ -2860,6 +2860,8 @@ KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadView *_view ) : QWidget
   
   setBackgroundColor( lightGray );
   setMouseTracking( TRUE );
+  m_bResize = FALSE;
+  m_bSelection = FALSE;
 }
 
 void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
@@ -3133,6 +3135,8 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadView *_view ) : QWidget
   
   setBackgroundColor( lightGray );
   setMouseTracking( TRUE );
+  m_bResize = FALSE;
+  m_bSelection = FALSE;
 }
 
 void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
