@@ -26,6 +26,7 @@
 #include <qbuffer.h>
 #include <kdebug.h>
 #include <ktar.h>
+#include <kapp.h>
 #include <config.h>
 
 #define ROOTPART "root"
@@ -40,7 +41,7 @@ KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIde
   kdDebug(s_area) << "KoStore Constructor filename = " << _filename
     << " mode = " << int(_mode) << endl;
 
-#ifdef HAVE_KDEPRINT // If we have kdeprint, we have kdelibs > 2.1, so we have the new KTar
+#if KDE_VERSION >= 220 // we have the new KTar
   m_pTar = new KTarGz( _filename, "application/x-gzip" );
 #else
   m_pTar = new KTarGz( _filename );
@@ -48,7 +49,7 @@ KoStore::KoStore( const QString & _filename, Mode _mode, const QCString & appIde
 
   m_bGood = m_pTar->open( _mode == Write ? IO_WriteOnly : IO_ReadOnly );
 
-#ifdef HAVE_KDEPRINT // If we have kdeprint, we have kdelibs > 2.1, so we have the new KTar
+#if KDE_VERSION >= 220 // we have the new KTar
   if ( m_bGood && _mode == Write )
       m_pTar->setOrigFileName( appIdentification );
 #endif
