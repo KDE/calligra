@@ -121,7 +121,7 @@ public:
 
     QDomElement save( QDomDocument &doc, const bool saveAsKOffice1Dot1 );
     void load( const QDomElement &element );
-    void loadOasis( QDomElement * stylePage );
+    void loadOasis( const KoStyleStack & styleStack );
 
 protected:
     void drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect );

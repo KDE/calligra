@@ -1001,29 +1001,21 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         m_loadingInfo->clearStyleStack(); // remove all styles
         fillStyleStack( dp, oasisStyles );
         m_loadingInfo->saveStyleStack();
-
         kdDebug ()<<"insert new page "<<endl;
         KPrPage *newpage=new KPrPage(this);
         m_pageList.insert( pos,newpage);
         m_pageList.at(pos)->insertManualTitle(dp.attribute( "draw:name" ));
 
+        if ( m_loadingInfo->styleStack().hasAttribute( "draw:fill" )
+             || m_loadingInfo->styleStack().hasAttribute( "presentation:transition-style" ) )
+        {
+            kdDebug()<<" fill or presentation-style found \n";
+            m_pageList.at(pos)->background()->loadOasis( m_loadingInfo->styleStack() );
+        }
+
+
 	//All animation object for current page is store into this element
 	createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement());
-
-	if ( dp.hasAttribute("draw:style-name"))
-	  {
-	    kdDebug()<<" m_loadingInfo->styleStack() :"<<m_loadingInfo->styleStack().hasAttribute("draw:style-name")<<endl;
-	    kdDebug()<<"dp.attribute(draw:style-name) :"<<dp.attribute("draw:style-name")<<endl;
-	    QDomElement *stylePage = oasisStyles.styles()[ dp.attribute("draw:style-name") ];
-
-	    kdDebug()<<"stylePage :"<<stylePage<<endl;
-	    if( stylePage )
-	    {
-	      kdDebug()<<" load Background \n";
-	      m_pageList.at(pos)->background()->loadOasis( stylePage );
-	    }
-	  }
-
         // parse all objects
         for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
         {

@@ -196,19 +196,19 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     return page;
 }
 
-void KPBackGround::loadOasis(  QDomElement * stylePage )
+void KPBackGround::loadOasis(  const KoStyleStack & styleStack )
 {
     kdDebug()<<"void KPBackGround::loadOasis( const KoStyleStack &styleStack )**********************************\n";
-    kdDebug()<<"stylePage->hasAttribute( draw:fill ) :"<<stylePage->hasAttribute( "draw:fill" )<<endl;
-    if ( stylePage->hasAttribute( "draw:fill" ) )
+    kdDebug()<<"stylePage->hasAttribute( draw:fill ) :"<<styleStack.hasAttribute( "draw:fill" )<<endl;
+    if ( styleStack.hasAttribute( "draw:fill" ) )
     {
         kdDebug()<<" fill page \n";
-        const QString fill = stylePage->attribute( "draw:fill" );
+        const QString fill = styleStack.attribute( "draw:fill" );
         kdDebug()<<" type :"<<fill<<endl;
         if ( fill == "solid" )
         {
             kdDebug()<<"solid \n";
-            setBackColor1(QColor(stylePage->attribute( "draw:fill-color" ) ) );
+            setBackColor1(QColor(styleStack.attribute( "draw:fill-color" ) ) );
             setBackColorType(BCT_PLAIN);
             setBackType(BT_COLOR);
         }
@@ -301,6 +301,65 @@ void KPBackGround::loadOasis(  QDomElement * stylePage )
             }
         }
 #endif
+    }
+    if ( styleStack.hasAttribute("presentation:transition-style"))
+    {
+        kdDebug()<<" have a presentation:transition-style------------\n";
+        const QString effect = styleStack.attribute("presentation:transition-style");
+        kdDebug() << "Transition name: " << effect << endl;
+        PageEffect pef;
+        if (effect=="vertical-stripes" || effect=="vertical-lines") // PEF_BLINDS_VER
+            pef=PEF_BLINDS_VER;
+        else if (effect=="horizontal-stripes" || effect=="horizontal-lines") // PEF_BLINDS_HOR
+            pef=PEF_BLINDS_HOR;
+        else if (effect=="spiralin-left" || effect=="spiralin-right"
+                 || effect== "spiralout-left" || effect=="spiralout-right") // PEF_SURROUND1
+            pef=PEF_SURROUND1;
+        else if (effect=="fade-from-upperleft") // PEF_STRIPS_RIGHT_DOWN
+            pef=PEF_STRIPS_RIGHT_DOWN;
+        else if (effect=="fade-from-upperright") // PEF_STRIPS_LEFT_DOWN
+            pef=PEF_STRIPS_LEFT_DOWN;
+        else if (effect=="fade-from-lowerleft") // PEF_STRIPS_RIGHT_UP
+            pef=PEF_STRIPS_RIGHT_UP;
+        else if (effect=="fade-from-lowerright") // PEF_STRIPS_LEFT_UP
+            pef=PEF_STRIPS_LEFT_UP;
+        else if (effect=="fade-from-top") // PEF_COVER_DOWN
+            pef=PEF_COVER_DOWN;
+        else if (effect=="fade-from-bottom") // PEF_COVER_UP
+            pef=PEF_COVER_UP;
+        else if (effect=="fade-from-left") // PEF_COVER_RIGHT
+            pef=PEF_COVER_RIGHT;
+        else if (effect=="fade-from-right") // PEF_COVER_LEFT
+            pef=PEF_COVER_LEFT;
+        else if (effect=="fade-to-center") // PEF_CLOSE_ALL
+            pef=PEF_CLOSE_ALL;
+        else if (effect=="fade-from-center") // PEF_OPEN_ALL
+            pef=PEF_OPEN_ALL;
+        else if (effect=="open-vertical") // PEF_OPEN_HORZ; really, no kidding ;)
+            pef=PEF_OPEN_HORZ;
+        else if (effect=="open-horizontal") // PEF_OPEN_VERT
+            pef=PEF_OPEN_VERT;
+        else if (effect=="close-vertical") // PEF_CLOSE_HORZ
+            pef=PEF_CLOSE_HORZ;
+        else if (effect=="close-horizontal") // PEF_CLOSE_VERT
+            pef=PEF_CLOSE_VERT;
+        else if (effect=="dissolve") // PEF_DISSOLVE; perfect hit ;)
+            pef=PEF_DISSOLVE;
+        else if (effect=="horizontal-checkerboard") // PEF_CHECKBOARD_ACROSS
+            pef=PEF_CHECKBOARD_ACROSS;
+        else if (effect=="vertical-checkerboard") // PEF_CHECKBOARD_DOWN
+            pef=PEF_CHECKBOARD_DOWN;
+        else if (effect=="roll-from-left") // PEF_UNCOVER_RIGHT
+            pef=PEF_UNCOVER_RIGHT;
+        else if (effect=="roll-from-right") // PEF_UNCOVER_LEFT
+            pef=PEF_UNCOVER_LEFT;
+        else if (effect=="roll-from-bottom") // PEF_UNCOVER_UP
+            pef=PEF_UNCOVER_UP;
+        else if (effect=="roll-from-top") // PEF_UNCOVER_DOWN
+            pef=PEF_UNCOVER_DOWN;
+        else         // we choose a random transition instead of the unsupported ones ;)
+            pef=PEF_RANDOM;
+        setPageEffect( pef );
     }
 }
 
