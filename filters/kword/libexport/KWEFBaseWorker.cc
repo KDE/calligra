@@ -46,7 +46,7 @@ bool KWEFBaseWorker::doFullDocument (const QValueList<ParaData>& paraList, QStri
         return false;
     if (!doFullAllParagraphs(paraList))
         return false;
-    if (!doOpenTextFrameSet())
+    if (!doCloseTextFrameSet())
         return false;
 
     return true;
