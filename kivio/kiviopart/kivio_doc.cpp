@@ -269,7 +269,7 @@ QDomDocument KivioDoc::saveXML()
   return doc;
 }
 
-bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles )
+bool KivioDoc::loadOasis( const QDomDocument& /*doc*/, KoOasisStyles& /*oasisStyles*/ )
 {
     //todo
     return true;
@@ -642,6 +642,7 @@ void KivioDoc::addSpawnerSet( const QString &dirName )
   }
   
   if(!m_loadTimer->isActive()) {
+    emit initProgress();
     m_loadTimer->start(0, false);
   }
 }
@@ -947,6 +948,7 @@ void KivioDoc::loadStencil()
   QString fileName = set->dir() + "/" + set->files()[m_currentFile];
   set->loadFile(fileName);
   m_currentFile++;
+  emit progress(qRound(((float)m_currentFile / (float)set->files().count()) * 100.0));
   
   if(m_currentFile >= set->files().count()) {    
     m_pLstSpawnerSets->append(set);
@@ -962,6 +964,9 @@ void KivioDoc::loadStencil()
     
     if(m_stencilSetLoadQueue.isEmpty()) {
       m_loadTimer->stop();
+      emit endProgress();
+    } else {
+      emit initProgress();
     }
   }
 }

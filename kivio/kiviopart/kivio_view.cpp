@@ -38,6 +38,7 @@
 #include <qtimer.h>
 #include <qbutton.h>
 #include <qclipboard.h>
+#include <qprogressbar.h>
 
 #include <qstringlist.h>
 #include <qstrlist.h>
@@ -151,6 +152,13 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
   m_coordSLbl = new KStatusBarLabel(text, 1000);
   addStatusBarItem(m_coordSLbl, 0, true);
+  
+  // Handle progress information from the doc
+  m_statusBarProgress = 0;
+  
+  connect(m_pDoc, SIGNAL(initProgress()), this, SLOT(initStatusBarProgress()));
+  connect(m_pDoc, SIGNAL(progress(int)), this, SLOT(setStatusBarProgress(int)));
+  connect(m_pDoc, SIGNAL(endProgress()), this, SLOT(removeStatusBarProgress()));
 
   bool isModified = doc->isModified();
   m_pDockManager = new StencilBarDockManager(this);
@@ -224,7 +232,6 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   connect( this, SIGNAL( invalidated() ), m_pCanvas, SLOT( update() ) );
   connect( this, SIGNAL( regionInvalidated( const QRegion&, bool ) ), m_pCanvas, SLOT( repaint( const QRegion&, bool ) ) );
-  connect(m_pCanvas, SIGNAL(zoomChanges()), SLOT(canvasZoomChanged()));
 
   m_pToolDock = new ToolDockManager(canvasBase);
 
@@ -2053,6 +2060,32 @@ void KivioView::partActivateEvent(KParts::PartActivateEvent* event)
   if((event->widget() == this) && event->activated()) {
     updateToolBars();
     clipboardDataChanged();
+  }
+}
+
+void KivioView::initStatusBarProgress()
+{
+  if(!m_statusBarProgress) {
+    m_statusBarProgress = new QProgressBar(100, this);
+    addStatusBarItem(m_statusBarProgress);
+  }
+  
+  m_statusBarProgress->reset();
+}
+
+void KivioView::setStatusBarProgress(int progress)
+{
+  if(m_statusBarProgress) {
+    m_statusBarProgress->setProgress(progress);
+  }
+}
+
+void KivioView::removeStatusBarProgress()
+{
+  if(m_statusBarProgress) {
+    removeStatusBarItem(m_statusBarProgress);
+    delete m_statusBarProgress;
+    m_statusBarProgress = 0;
   }
 }
 

@@ -172,6 +172,10 @@ class KivioDoc : public KoDocument
     void sig_updateGrid();
 
     void unitsChanged(KoUnit::Unit);
+    
+    void initProgress();
+    void progress(int);
+    void endProgress();
 
   protected:
     bool checkStencilsForSpawner( KivioStencilSpawner * );
@@ -241,7 +245,7 @@ class KivioDoc : public KoDocument
     QFont m_font;
     
     QTimer* m_loadTimer;
-    int m_currentFile;
+    unsigned int m_currentFile;
     KivioStencilSpawnerSet* m_currentSet;
     QValueList<KivioStencilSpawnerSet*> m_stencilSetLoadQueue;
 };

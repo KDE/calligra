@@ -59,6 +59,7 @@ class KActionMenu;
 
 class QStringList;
 class QPushButton;
+class QProgressBar;
 class DCOPObject;
 class KoRuler;
 class KoZoomHandler;
@@ -208,6 +209,10 @@ class KivioView : public KoView
 
     void popupTabBarMenu( const QPoint& point );
     
+    void initStatusBarProgress();
+    void setStatusBarProgress(int progress);
+    void removeStatusBarProgress();
+    
   protected slots:
     void slotAddPage( KivioPage *_page );
     void slotPageRenamed( KivioPage* page, const QString& old_name );
@@ -353,6 +358,8 @@ class KivioView : public KoView
     KAction* m_alignAndDistribute;
     KoLineWidthAction* m_lineWidthAction;
     KoLineStyleAction* m_lineStyleAction;
+    
+    QProgressBar* m_statusBarProgress;
 };
 
 #endif
