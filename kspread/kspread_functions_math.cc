@@ -73,7 +73,9 @@ bool kspreadfunc_log2( KSContext& context );
 bool kspreadfunc_log10( KSContext& context );
 bool kspreadfunc_logn( KSContext& context );
 bool kspreadfunc_max( KSContext& context );
+bool kspreadfunc_maxa( KSContext& context );
 bool kspreadfunc_min( KSContext& context );
+bool kspreadfunc_mina( KSContext& context );
 bool kspreadfunc_mod( KSContext& context );
 bool kspreadfunc_mround( KSContext& context );
 bool kspreadfunc_mult( KSContext& context );
@@ -142,7 +144,9 @@ void KSpreadRegisterMathFunctions()
   repo->registerFunction( "LOG10",         kspreadfunc_log10 );
   repo->registerFunction( "LOGN",          kspreadfunc_logn );
   repo->registerFunction( "MAX",           kspreadfunc_max );
+  repo->registerFunction( "MAXA",          kspreadfunc_maxa );
   repo->registerFunction( "MIN",           kspreadfunc_min );
+  repo->registerFunction( "MINA",          kspreadfunc_mina );
   repo->registerFunction( "MOD",           kspreadfunc_mod );
   repo->registerFunction( "MROUND",        kspreadfunc_mround );
   repo->registerFunction( "MULTIPLY",      kspreadfunc_mult );
@@ -682,7 +686,8 @@ bool kspreadfunc_sumsq( KSContext& context )
   return b;
 }
 
-static bool kspreadfunc_max_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,int& inter)
+static bool kspreadfunc_max_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+                                    double & result, int & inter, int mode )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
@@ -692,18 +697,29 @@ static bool kspreadfunc_max_helper( KSContext& context, QValueList<KSValue::Ptr>
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
 
-      if ( !kspreadfunc_max_helper( context, (*it)->listValue(), result,inter ) )
+      if ( !kspreadfunc_max_helper( context, (*it)->listValue(), result, inter, mode ) )
         return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      if ( inter == 0 )
       {
-      if(inter == 0)
-      {
-        result=(*it)->doubleValue();
-        inter=1;
+        result = (*it)->doubleValue();
+        inter  = 1;
       }
-      if(result <  (*it)->doubleValue())
-        result =(*it)->doubleValue();
+      if ( result < (*it)->doubleValue() )
+        result = (*it)->doubleValue();
+    }
+    else if ( mode == 1 && KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
+    {
+      double n = ( (*it)->boolValue() ? 1.0 : 0.0 );
+      if ( inter == 0 )
+      {
+        result = n;
+        inter = 1;
+      }
+      if ( result < n )
+        result = n;
     }
   }
 
@@ -718,7 +734,23 @@ bool kspreadfunc_max( KSContext& context )
   //init first element
   int inter=0;
 
-  bool b = kspreadfunc_max_helper( context, context.value()->listValue(), result ,inter );
+  bool b = kspreadfunc_max_helper( context, context.value()->listValue(), result, inter, 0 );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+// Function: MAXA
+bool kspreadfunc_maxa( KSContext & context )
+{
+  double result = 0.0;
+
+  //init first element
+  int inter = 0;
+
+  bool b = kspreadfunc_max_helper( context, context.value()->listValue(), result, inter, 1 );
 
   if ( b )
     context.setValue( new KSValue( result ) );
@@ -927,28 +959,40 @@ bool kspreadfunc_lcm( KSContext & context )
 
 }
 
-static bool kspreadfunc_min_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,int& inter)
+static bool kspreadfunc_min_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+                                    double & result, int & inter, int mode )
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
 
-  for( ; it != end; ++it )
+  for ( ; it != end; ++it )
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
 
-      if ( !kspreadfunc_min_helper( context, (*it)->listValue(), result,inter ) )
+      if ( !kspreadfunc_min_helper( context, (*it)->listValue(), result, inter, mode ) )
         return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+    {
+      if ( inter == 0 )
       {
-      if(inter == 0)
-      {
-        result=(*it)->doubleValue();
-        inter=1;
+        result = (*it)->doubleValue();
+        inter  = 1;
       }
-      if(result >  (*it)->doubleValue())
-        result =(*it)->doubleValue();
+      if ( result > (*it)->doubleValue() )
+        result = (*it)->doubleValue();
+    }
+    else if ( mode == 1 && KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
+    {
+      double n = ( (*it)->boolValue() ? 1.0 : 0.0 );
+      if ( inter == 0 )
+      {
+        result = n;
+        inter  = 1;
+      }
+      if ( result > n )
+        result = n;
     }
   }
 
@@ -961,9 +1005,25 @@ bool kspreadfunc_min( KSContext& context )
   double result = 0.0;
 
   //init first element
-  int inter=0;
+  int inter = 0;
 
-  bool b = kspreadfunc_min_helper( context, context.value()->listValue(), result ,inter );
+  bool b = kspreadfunc_min_helper( context, context.value()->listValue(), result, inter, 0 );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
+}
+
+// Function: MINA
+bool kspreadfunc_mina( KSContext& context )
+{
+  double result = 0.0;
+
+  //init first element
+  int inter = 0;
+
+  bool b = kspreadfunc_min_helper( context, context.value()->listValue(), result, inter, 1 );
 
   if ( b )
     context.setValue( new KSValue( result ) );
@@ -1101,8 +1161,8 @@ bool kspreadfunc_randbinom( KSContext & context )
   double r = (double) rand() / ( RAND_MAX + 1.0 );
   double t = x;
   double i = 0;
-
-  while (r > t)
+  
+  while (r > t) 
   {
     x *= (((tr - i) * d) / ((1 + i) * (1 - d)));
     i += 1;
@@ -1139,14 +1199,14 @@ bool kspreadfunc_randnegbinom( KSContext & context )
   double r = (double) rand() / ( RAND_MAX + 1.0 );
   double t = x;
   double i = 0;
-
-  while (r > t)
+  
+  while (r > t) 
   {
     x *= ( ( ( f + i ) * ( 1 - d ) ) / (1 + i) ) ;
     i += 1;
     t += x;
   }
-
+  
   context.setValue( new KSValue( i ) );
   return true;
 }
@@ -1164,7 +1224,7 @@ bool kspreadfunc_randbernoulli( KSContext & context )
   double d = args[0]->doubleValue();
   if ( d < 0 || d > 1 )
     return false;
-
+  
   // taken from Gnumeric
   double r = (double) rand() / ( RAND_MAX + 1.0 );
 
@@ -1192,7 +1252,7 @@ bool kspreadfunc_randpoisson( KSContext & context )
   double t = x;
   double i = 0;
 
-  while ( r > t )
+  while ( r > t ) 
   {
     x *= d / ( i + 1 );
     i += 1;
@@ -1430,7 +1490,7 @@ bool kspreadfunc_mround( KSContext& context )
 
   int sign = 1;
 
-  if ( d < 0 )
+  if ( d < 0 ) 
   {
     sign = -1;
     d = -d;
@@ -1612,7 +1672,7 @@ bool kspreadfunc_odd( KSContext& context )
   return true;
 }
 
-static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double & result, int & resultA)
+static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Ptr> & args, double & result )
 {
   QValueList<KSValue::Ptr>::Iterator it  = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
@@ -1621,22 +1681,12 @@ static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Pt
   {
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
-      if ( !kspreadfunc_count_helper( context, (*it)->listValue(), result, resultA ) )
+      if ( !kspreadfunc_count_helper( context, (*it)->listValue(), result ) )
         return false;
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
     {
 	++result;
-        ++resultA;
-    }
-    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
-    {
-      if ( !(*it)->stringValue().isEmpty() )
-        ++resultA;
-    }
-    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
-    {
-      ++resultA;
     }
   }
 
@@ -1687,9 +1737,8 @@ bool kspreadfunc_trunc( KSContext & context )
 bool kspreadfunc_count( KSContext& context )
 {
   double result = 0.0;
-  int resultA = 0;
 
-  bool b = kspreadfunc_count_helper( context, context.value()->listValue(), result, resultA );
+  bool b = kspreadfunc_count_helper( context, context.value()->listValue(), result );
 
   if ( b )
     context.setValue( new KSValue( result ) );
@@ -1697,13 +1746,95 @@ bool kspreadfunc_count( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_counta_helper( KSContext& context, QValueList<KSValue::Ptr> & args, 
+                                       QValueList<KSValue::Ptr> & extra, int & resultA )
+{
+  QValueList<KSValue::Ptr>::Iterator eit  = extra.begin();
+  QValueList<KSValue::Ptr>::Iterator eend = extra.end();
+
+  QValueList<KSValue::Ptr>::Iterator it  = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
+  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * t = 0;
+  KSpreadCell * cell = 0;
+
+  for ( ; eit != eend; ++eit )
+  {
+    kdDebug() << "S:" << (*eit)->stringValue() << endl;
+    int right, left, bottom, top;
+    if ( KSUtil::checkType( context, *eit, KSValue::StringType, true ) )
+    {
+      KSpreadRange range( (*eit)->stringValue(), map );
+      if ( range.range.left() <= 0 || range.range.right() <= 0 )
+      {
+        KSpreadPoint point( (*eit)->stringValue(), map );
+        if ( point.pos.x() <= 0 || point.pos.y() <= 0 )
+          return false;
+
+        right  = point.pos.x();
+        bottom = point.pos.y();
+        left   = right;
+        top    = top;
+
+        if ( !point.isTableKnown() )
+          t = sheet;
+        else
+          t = point.table;
+      }
+      else
+      {
+        right  = range.range.right();
+        bottom = range.range.bottom();
+        left   = range.range.left();
+        top    = range.range.top();
+
+        if ( !range.isTableKnown() )
+          t = sheet;
+        else
+          t = range.table;
+      }
+
+      for ( int x = left; x <= right; ++x )
+      {
+        for ( int y = top; y <= bottom; ++y )
+        {
+          kdDebug() << "Cell: " << x << ", " << y << endl;
+          cell = t->cellAt( x, y );
+          if ( !cell->isDefault() && !cell->isEmpty() )
+          {
+            if ( !cell->strOutText().isEmpty() )
+              ++resultA;
+          }
+        }
+      }
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::StringType, true ) )
+    {
+      kdDebug() << "String value" << endl;
+      if ( !(*it)->stringValue().isEmpty() )
+        ++resultA;
+    }
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
+    {
+      kdDebug() << "Empty" << endl;
+      ++resultA;
+    }
+
+    ++it;
+  }
+
+  return true;
+}
+
 // Function: COUNTA
 bool kspreadfunc_counta( KSContext& context )
 {
-  double result = 0.0;
   int resultA = 0;
 
-  bool b = kspreadfunc_count_helper( context, context.value()->listValue(), result, resultA );
+  bool b = kspreadfunc_counta_helper( context, context.value()->listValue(), 
+                                      context.extraData()->listValue(), resultA );
 
   if ( b )
     context.setValue( new KSValue( resultA ) );
@@ -1712,7 +1843,7 @@ bool kspreadfunc_counta( KSContext& context )
 }
 
 static int kspreadfunc_countif_helper( KSContext& context, KSValue* value,
-  const QString& criteria )
+                                       const QString& criteria )
 {
   if( KSUtil::checkType( context, value, KSValue::DoubleType, false ) )
   {
@@ -1839,7 +1970,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
   kdDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
 
   KSpreadCell * cell;
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
 
   KSpreadPoint point( extra[1]->stringValue() );
   KSpreadPoint point2( extra[3]->stringValue() );
@@ -1968,7 +2099,7 @@ bool kspreadfunc_subtotal( KSContext & context )
 
   KSValue * c = 0;
   KSpreadCell  * cell = 0;
-  KSpreadTable * table = ((KSpreadInterpreter *) context.interpreter() )->table();
+  KSpreadSheet * table = ((KSpreadInterpreter *) context.interpreter() )->table();
   KSpreadMap * map = ((KSpreadInterpreter *) context.interpreter() )->document()->map();
 
   kdDebug() << "Range: " << extra[1]->stringValue() << endl;

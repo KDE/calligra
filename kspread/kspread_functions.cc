@@ -18,6 +18,7 @@ void KSpreadRegisterFinancialFunctions();
 void KSpreadRegisterInformationFunctions();   
 void KSpreadRegisterLogicFunctions();       
 void KSpreadRegisterMathFunctions();        
+void KSpreadRegisterReferenceFunctions();
 void KSpreadRegisterStatisticalFunctions();        
 void KSpreadRegisterTextFunctions();        
 void KSpreadRegisterTrigFunctions();        
@@ -265,6 +266,7 @@ KSpreadFunctionRepository* KSpreadFunctionRepository::self()
         KSpreadRegisterInformationFunctions();   
         KSpreadRegisterLogicFunctions();       
         KSpreadRegisterMathFunctions();        
+        KSpreadRegisterReferenceFunctions();
         KSpreadRegisterStatisticalFunctions();        
         KSpreadRegisterTextFunctions();        
         KSpreadRegisterTrigFunctions();   

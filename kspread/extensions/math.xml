@@ -552,8 +552,44 @@
 	<Syntax>MAX(value;value;...)</Syntax>
 	<Example>MAX(12;5;7) returns 12</Example>
 	<Example>MAX(12.5;2) returns 12.5</Example>
-	<Related>MIN</Related>
 	<Related>COUNT</Related>
+	<Related>MAXA</Related>
+	<Related>MIN</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>MAXA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The MAXA() function returns the largest value given in the parameters without ignoring boolean values. TRUE evaluates to 1, FALSE evaluates to 0.</Text>
+	<Syntax>MAXA(value;value;...)</Syntax>
+	<Example>MAXA(12;5; 7) returns 12</Example>
+	<Example>MAXA(12.5; 2) returns 12.5</Example>
+	<Example>MAXA(0.5; 0.4; TRUE; 0.2) returns 1</Example>
+	<Related>COUNT</Related>
+	<Related>MAX</Related>
+	<Related>MIN</Related>
       </Help>
     </Function>
 
@@ -585,8 +621,44 @@
 	<Syntax>MIN(value;value;...)</Syntax>
 	<Example>MIN(12;5;7) returns 5</Example>
 	<Example>MIN(12.5;2) returns 2</Example>
-	<Related>MAX</Related>
 	<Related>COUNT</Related>
+	<Related>MAX</Related>
+	<Related>MINA</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>MINA</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The MINA() function returns the smallest value given in the parameters without ignoring boolean values: TRUE evaluates to 1, FALSE to 0.</Text>
+	<Syntax>MINA(value;value;...)</Syntax>
+	<Example>MINA(12;5; 7) returns 5</Example>
+	<Example>MINA(12.5; 2) returns 2</Example>
+	<Example>MINA(0.4; 2; FALSE; 0.7) returns 0</Example>
+	<Related>COUNT</Related>
+	<Related>MAX</Related>
+	<Related>MIN</Related>
       </Help>
     </Function>
 
