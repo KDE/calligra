@@ -296,6 +296,20 @@ Detailed TODO for Beta3:
 --ordered set of fields that are visible in popup tableview (ie. just query that is bound with the column)
 -use one and multi-key relations from kexidb
 
+==== ALTER TABLE TODO: =============
+-add a function for editing indices (including multi-field indices)
+  (2 methods: 1) in additional dock 2) in property editor
+-enable "Delete row" action, renamed to "Delete field". 
+-rename "Do you want to remove row.." message to "Do you want to remove field %1"
+-add all missing properties (even when most are not working)
+-add "key" information icon @ the left hand of line with primary key(s)
+-add "index" information icon @ the left hand of line with key(s) that is/are indexed
+-KexiProperty: make it really shared (using QShared?)
+
+2004-02-12
+- typeName() added to KexiPropertyBuffer
+- typeString(), typeGroupString() added to KexiDB::Field
+
 2004-02-10
 - Property editor is now used globally in Kexi (property buffer's change comes from active KexiView)
 - Alter Table Dialog connected to global property editor

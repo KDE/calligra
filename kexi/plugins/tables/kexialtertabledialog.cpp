@@ -47,7 +47,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
  : KexiViewBase(win, parent, name)
 {
 	m_table = &table;
-	m_constraints.resize(101);
+	m_fields.resize(101);
 	m_row = -99;
 	init();
 }
@@ -88,29 +88,30 @@ void KexiAlterTableDialog::init()
 		item->push_back(QVariant(field->helpText()));
 		data->append(item);
 
-		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
-		buff->insert("pkey", KexiProperty("pkey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
+		QString typeName = "KexiDB::Field::" + field->typeGroupString();
+		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this, typeName);
+		buff->add(KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
 		int len = field->length();
 		if(len == 0)
 			len = field->precision();
 
-		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
-		m_constraints.insert(i, buff);
+		buff->insert("len", KexiProperty("length", QVariant(200), i18n("Length")));
+		m_fields.insert(i, buff);
 	}
 
 	//add empty space
 	for (int i=m_table->fieldCount(); i<40; i++) {
-		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
-		buff->insert("pkey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
-		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
-		m_constraints.insert(i, buff);
+//		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
+//		buff->insert("primaryKey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));
+//		buff->insert("len", KexiProperty("len", QVariant(200), i18n("Length")));
+//		m_fields.insert(i, buff);
 		KexiTableItem *item = new KexiTableItem(3);
 		data->append(item);
 	}
 
 	QSplitter *splitter = new QSplitter(Vertical, this);
 
-	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << m_constraints.size() << " items" << endl;
+	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << m_fields.size() << " items" << endl;
 
 	m_view = new KexiTableView(data, splitter, "tableview");
 	m_view->setNavigatorEnabled(false);
@@ -204,7 +205,7 @@ bool KexiAlterTableDialog::beforeSwitchTo(int)
 			KexiDB::Field *f = new KexiDB::Field(nt);
 			f->setName(it->at(0).toString());
 			f->setType((KexiDB::Field::Type)it->at(1).toInt());
-			f->setPrimaryKey(m_constraints.at(i)->find("pkey").data().value().toBool());
+			f->setPrimaryKey(m_fields.at(i)->find("pkey").data().value().toBool());
 
 			nt->addField(f);
 		}
@@ -235,7 +236,7 @@ bool KexiAlterTableDialog::beforeSwitchTo(int)
 
 KexiPropertyBuffer *KexiAlterTableDialog::propertyBuffer()
 {
-	return m_constraints.at(m_view->currentRow());
+	return m_fields.at(m_view->currentRow());
 }
 
 /*

@@ -29,8 +29,6 @@ class KexiTableView;
 class KexiPropertyEditor;
 class KexiPropertyBuffer;
 
-typedef QPtrVector<KexiPropertyBuffer> Constraints;
-
 namespace KexiDB
 {
 	class Cursor;
@@ -40,6 +38,8 @@ namespace KexiDB
 class KexiAlterTableDialog : public KexiViewBase
 {
 	Q_OBJECT
+
+	typedef QPtrVector<KexiPropertyBuffer> FieldsBuffer;
 
 	public:
 		KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, KexiDB::TableSchema &table, 
@@ -69,7 +69,7 @@ class KexiAlterTableDialog : public KexiViewBase
 		KexiTableView *m_view;
 		KexiDB::TableSchema *m_table;
 //		KexiPropertyEditor *m_properties;
-		Constraints m_constraints;
+		FieldsBuffer m_fields;
 		int m_row;
 };
 
