@@ -274,7 +274,8 @@ void BackDia::updateConfiguration()
         return;
 
 #if MASTERPAGE
-    tabWidget->setEnabled( ! m_useMasterBackground->isChecked() );
+    tabWidget->setEnabled( !m_useMasterBackground->isChecked() );
+    backCombo->setEnabled( !m_useMasterBackground->isChecked() );
 #endif
 
     if ( getBackColorType() == BCT_PLAIN )
