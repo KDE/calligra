@@ -180,7 +180,11 @@ KMacroCommand *KPTCalendarListDialog::buildCommand() {
             modified = true;
         }
     }
-    return modified ? cmd : 0;
+    if (modified)
+        return cmd;
+    
+    delete cmd;
+    return 0;
 }
 
 void KPTCalendarListDialog::slotOk() {
