@@ -4132,8 +4132,8 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
 
 void KSpreadSheet::refreshPreference()
 {
-  if(getAutoCalc())
-        recalc();
+  if ( getAutoCalc() )
+    recalc();
 
   emit sig_updateHBorder( this );
   emit sig_updateView( this );
@@ -5756,7 +5756,17 @@ void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo )
     emit sig_updateView( this );
 }
 
-void KSpreadSheet::refreshView(const QRect& rect)
+void KSpreadSheet::updateView()
+{
+  emit sig_updateView( this );
+}
+
+void KSpreadSheet::updateView( QRect const & rect )
+{
+  emit sig_updateView( this, rect );
+}
+
+void KSpreadSheet::refreshView( const QRect & rect )
 {
   // TODO: don't go through all cells when refreshing!
     QRect tmp(rect);

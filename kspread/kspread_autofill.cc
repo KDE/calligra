@@ -557,7 +557,8 @@ void KSpreadSheet::autofill( QRect &src, QRect &dest )
         }
     }
 
-    doc()->emitEndOperation();
+    emit sig_updateView( this );
+    // doc()->emitEndOperation();
 }
 
 

@@ -525,7 +525,7 @@ void KSpreadSortDlg::slotOk()
   delete firstKey;
   firstKey = 0L;
 
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
   accept();
 }
 

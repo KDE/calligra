@@ -179,7 +179,7 @@ KSpreadGoalSeekDlg::~KSpreadGoalSeekDlg()
     m_sourceCell->setValue(m_oldSource);
     m_targetCell->setCalcDirtyFlag();
     m_targetCell->calc();
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
   }
 }
 
@@ -233,7 +233,7 @@ void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _table, const QRec
 void KSpreadGoalSeekDlg::buttonOkClicked()
 {
   KSpreadDoc * pDoc = m_pView->doc();
-  m_pView->doc()->emitBeginOperation( false );
+  pDoc->emitBeginOperation( false );
   if (m_maxIter > 0)
   {
     KSpreadSheet * table = m_pView->activeTable();
@@ -303,7 +303,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
 
     pDoc->emitBeginOperation();
     startCalc( m_sourceCell->value().asFloat(), goal );
-    pDoc->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
 
     return;
   }
@@ -323,7 +323,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
   }
   chooseCleanup();
 
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
   accept();
 
   delete this;
@@ -339,7 +339,7 @@ void KSpreadGoalSeekDlg::buttonCancelClicked()
     m_targetCell->setCalcDirtyFlag();
     m_targetCell->calc();
     m_restored = true;
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
   }
 
   chooseCleanup();

@@ -200,13 +200,12 @@ void KSpreadStyleDlg::slotOk()
 
     if ( sheet )
     {
-      m_view->doc()->emitBeginOperation(false);      
+      m_view->doc()->emitBeginOperation( false );      
       sheet->setSelectionStyle( m_view->selectionInfo(), s );
-      m_view->doc()->emitEndOperation();
     }
   }  
 
-  m_view->slotUpdateView( m_view->activeTable(), m_view->canvasWidget()->visibleCells() );
+  m_view->slotUpdateView( m_view->activeTable() );
   accept();
 }
 

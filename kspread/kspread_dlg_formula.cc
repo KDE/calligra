@@ -305,7 +305,7 @@ void KSpreadDlgFormula::slotOk()
         m_pView->canvasWidget()->editor()->setCursorPosition( pos );
     }
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
     delete this;
 }
@@ -339,7 +339,7 @@ void KSpreadDlgFormula::slotClose()
         m_pView->canvasWidget()->editor()->setFocus();
     }
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     reject();
     //laurent 2002-01-03 comment this line otherwise kspread crash
     //but dialog box is not deleted => not good

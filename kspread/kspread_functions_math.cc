@@ -2064,7 +2064,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
     }
   }
 
-  ((KSpreadInterpreter *) context.interpreter() )->document()->emitBeginOperation();
+  //  ((KSpreadInterpreter *) context.interpreter() )->document()->emitBeginOperation();
 
   double oldCol = args[1]->doubleValue();
   double oldRow = args[3]->doubleValue();
@@ -2108,7 +2108,7 @@ bool kspreadfunc_multipleOP( KSContext& context )
 
   cell1->calc( false );
 
-  ((KSpreadInterpreter *) context.interpreter() )->document()->emitEndOperation();
+  // ((KSpreadInterpreter *) context.interpreter() )->document()->emitEndOperation();
 
   context.setValue( new KSValue( (double) d ) );
 

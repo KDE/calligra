@@ -131,7 +131,7 @@ void KSpreadinsert::slotOk()
 
     m_pView->updateEditWidget();
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
 }
 

@@ -1484,19 +1484,19 @@ void KSpreadView::initCalcMenu()
 
 void KSpreadView::recalcWorkBook()
 {
-  KSpreadSheet *tbl;
-  m_pDoc->emitBeginOperation(true);
+  KSpreadSheet * tbl;
+  m_pDoc->emitBeginOperation( true );
   for ( tbl = m_pDoc->map()->firstTable();
         tbl != 0L;
         tbl = m_pDoc->map()->nextTable() )
   {
     bool b = tbl->getAutoCalc();
-    tbl->setAutoCalc(true);
+    tbl->setAutoCalc( true );
     tbl->recalc();
-    tbl->setAutoCalc(b);
+    tbl->setAutoCalc( b );
   }
 
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::refreshLocale()
@@ -1509,26 +1509,26 @@ void KSpreadView::refreshLocale()
   {
     tbl->updateLocale();
   }
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::recalcWorkSheet()
 {
-  m_pDoc->emitBeginOperation(true);
-  if (m_pTable != 0)
+  m_pDoc->emitBeginOperation( true );
+  if ( m_pTable != 0 )
   {
     bool b = m_pTable->getAutoCalc();
-    m_pTable->setAutoCalc(true);
+    m_pTable->setAutoCalc( true );
     m_pTable->recalc();
-    m_pTable->setAutoCalc(b);
+    m_pTable->setAutoCalc( b );
   }
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
 
 
 void KSpreadView::extraSpelling()
 {
-  if (m_spell.kspell)
+  if ( m_spell.kspell )
     return; // Already in progress
 
   if (m_pTable == 0L)
@@ -2340,23 +2340,23 @@ void KSpreadView::enableInsertRow( bool _b )
 
 void KSpreadView::undo()
 {
-  m_pDoc->emitBeginOperation(false);
+  m_pDoc->emitBeginOperation( false );
   m_pDoc->undo();
 
   updateEditWidget();
 
   resultOfCalc();
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::redo()
 {
-  m_pDoc->emitBeginOperation(false);
+  m_pDoc->emitBeginOperation( false );
   m_pDoc->redo();
 
   updateEditWidget();
   resultOfCalc();
-  m_pDoc->emitEndOperation();
+  m_pDoc->emitEndOperation( m_pTable->visibleRect( m_pCanvas ) );
 }
 
 void KSpreadView::deleteColumn()
@@ -4129,7 +4129,7 @@ void KSpreadView::adjustMapActions( bool mode )
     else
       m_renameTable->setEnabled( true );
   }
-  slotUpdateView( m_pTable );
+  // slotUpdateView( m_pTable );
 }
 
 void KSpreadView::toggleProtectSheet( bool mode )
@@ -5987,7 +5987,7 @@ void KSpreadView::slotUpdateView( KSpreadSheet * _table, const QRect & _rect )
   if ( _table != m_pTable )
     return;
   
-  m_pDoc->emitBeginOperation(false);
+  // m_pDoc->emitBeginOperation( false );
   m_pTable->setRegionPaintDirty( _rect );
   endOperation( _rect );
 }

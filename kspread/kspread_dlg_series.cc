@@ -194,7 +194,7 @@ void KSpreadSeriesDlg::slotOk()
   else
     m_pView->editWidget()->setText( "" );
 
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
   accept();
 }
 

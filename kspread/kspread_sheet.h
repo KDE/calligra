@@ -966,10 +966,20 @@ public:
      */
     void updateCellArea(const QRect &cellArea);
 
-  /**
+    /**
      * Updates every cell on the table
      */
     void update();
+
+    /**
+     * repaints all visible cells
+     */
+    void updateView();
+
+    /**
+     * repaints all visible cells in the given rect
+     */
+    void updateView( QRect const & rect );
 
     /**
      * used to refresh cells when you make redodelete

@@ -163,7 +163,7 @@ void KSpreadSubtotalDlg::slotOk()
     }
   }
 
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
   accept();
 }
 
@@ -176,7 +176,7 @@ void KSpreadSubtotalDlg::slotUser1()
 {
   m_pView->doc()->emitBeginOperation( false );
   removeSubtotalLines();
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
   accept();
 }
 

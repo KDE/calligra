@@ -604,7 +604,7 @@ void KSpreadConditionalDlg::slotOk()
 
   kdDebug() << "Setting conditional list" << endl;
   m_view->activeTable()->setConditional( m_view->selectionInfo(), newList );    
-  m_view->doc()->emitEndOperation();
+  m_view->slotUpdateView( m_view->activeTable(), m_view->selectionInfo()->selection() );
 
   accept();
 }

@@ -815,7 +815,7 @@ void KSpreadUndoSetText::undo()
 	cell->setCellText( "" );
     else
 	cell->setCellText( m_strText );
-    doc()->emitEndOperation();
+    table->updateView( QRect( m_iColumn, m_iRow, 1, 1 ) );
     doc()->undoBuffer()->unlock();
 }
 
@@ -835,7 +835,7 @@ void KSpreadUndoSetText::redo()
     else
 	cell->setCellText( m_strRedoText );
     cell->setFormatType(m_eFormatTypeRedo);
-    doc()->emitEndOperation();
+    table->updateView( QRect( m_iColumn, m_iRow, 1, 1 ) );
     doc()->undoBuffer()->unlock();
 }
 
@@ -1128,8 +1128,8 @@ void KSpreadUndoCellFormat::undo()
     table->updateCell( cell, (*it2).col, (*it2).row );
   }
 
-  table->setRegionPaintDirty(m_rctRect);
-  doc()->emitEndOperation();
+  table->setRegionPaintDirty( m_rctRect );
+  table->updateView( m_rctRect );
 
   doc()->undoBuffer()->unlock();
 }
@@ -1173,7 +1173,7 @@ void KSpreadUndoCellFormat::redo()
   }
 
   table->setRegionPaintDirty( m_rctRect );
-  doc()->emitEndOperation();
+  table->updateView( m_rctRect );
   doc()->undoBuffer()->unlock();
 }
 
@@ -1409,9 +1409,8 @@ void KSpreadUndoSort::undo()
     table->updateCell( cell, (*it2).col, (*it2).row );
   }
 
-  doc()->emitEndOperation();
-
   table->setRegionPaintDirty(m_rctRect);
+  table->updateView( m_rctRect );
 
   doc()->undoBuffer()->unlock();
 }
@@ -1463,7 +1462,7 @@ void KSpreadUndoSort::redo()
       table->updateCell( cell, (*it2).col, (*it2).row );
     }
     table->setRegionPaintDirty(m_rctRect);
-    doc()->emitEndOperation();
+    table->updateView( m_rctRect );
     doc()->undoBuffer()->unlock();
 }
 
@@ -1575,7 +1574,7 @@ void KSpreadUndoDelete::undo()
 
     table->deleteCells( m_selection );
     table->paste( m_data, m_selection );
-    doc()->emitEndOperation();
+    table->updateView( );
 
     if(table->getAutoCalc()) table->recalc();
 
@@ -1617,7 +1616,7 @@ void KSpreadUndoDelete::redo()
 
     table->paste( m_dataRedo, m_selection );
     //table->deleteCells( m_selection );
-    doc()->emitEndOperation();
+    table->updateView();
     table->refreshView( m_selection );
     doc()->undoBuffer()->unlock();
 }
@@ -1685,7 +1684,7 @@ void KSpreadUndoDragDrop::undo()
       table->paste( m_dataSource, m_selectionSource );      
     }
 
-    doc()->emitEndOperation();
+    table->updateView();
 
     if ( table->getAutoCalc() ) 
       table->recalc();
@@ -1710,7 +1709,7 @@ void KSpreadUndoDragDrop::redo()
     if ( m_selectionSource.left() > 0 )
       table->paste( m_dataRedoSource, m_selectionSource );
 
-    doc()->emitEndOperation();
+    table->updateView();
     table->refreshView( m_selectionSource );
     table->refreshView( m_selectionTarget );
     doc()->undoBuffer()->unlock();
@@ -2038,7 +2037,7 @@ void KSpreadUndoChangeAreaTextCell::undo()
       }
     }
 
-    doc()->emitEndOperation();
+    table->updateView();
     doc()->undoBuffer()->unlock();
 }
 
@@ -2097,7 +2096,7 @@ void KSpreadUndoChangeAreaTextCell::redo()
       }
     }
 
-    doc()->emitEndOperation();
+    table->updateView();
     doc()->undoBuffer()->unlock();
 }
 
@@ -2210,7 +2209,7 @@ void KSpreadUndoAutofill::undo()
     table->paste( m_data, m_selection );
     if(table->getAutoCalc()) table->recalc();
 
-    doc()->emitEndOperation();
+    table->updateView();
 
     doc()->undoBuffer()->unlock();
 }
@@ -2228,8 +2227,9 @@ void KSpreadUndoAutofill::redo()
     table->deleteCells( m_selection );
     doc()->undoBuffer()->lock();
     table->paste( m_dataRedo, m_selection );
-    if(table->getAutoCalc()) table->recalc();
-    doc()->emitEndOperation();
+    if ( table->getAutoCalc() ) 
+      table->recalc();
+    table->updateView();
     doc()->undoBuffer()->unlock();
 }
 
@@ -2779,7 +2779,7 @@ void KSpreadUndoCellPaste::undo()
 
     if(table->getAutoCalc())
         table->recalc();
-    doc()->emitEndOperation();
+    table->updateView();
     doc()->undoBuffer()->unlock();
 }
 
@@ -2833,21 +2833,21 @@ void KSpreadUndoCellPaste::redo()
     }
     else
     {
-    if(b_insert)
-        {
-        if(m_iInsertTo==-1)
+      if (b_insert)
+      {
+        if (m_iInsertTo==-1)
                 table->shiftRow(m_selection);
         else if(m_iInsertTo==1)
                 table->shiftColumn(m_selection);
 
-        }
-    table->deleteCells( m_selection );
-    table->paste( m_dataRedo,m_selection );
+      }
+      table->deleteCells( m_selection );
+      table->paste( m_dataRedo, m_selection );
     }
-    if(table->getAutoCalc())
+    if (table->getAutoCalc())
         table->recalc();
 
-    doc()->emitEndOperation();
+    table->updateView();
 
     doc()->undoBuffer()->unlock();
 }
@@ -2957,7 +2957,7 @@ void KSpreadUndoStyleCell::undo()
 	cell->setAction((*it2).action);
       }
     table->setRegionPaintDirty(m_selection);
-    doc()->emitEndOperation();
+    table->updateView( m_selection );
     doc()->undoBuffer()->unlock();
 }
 
@@ -2980,7 +2980,7 @@ void KSpreadUndoStyleCell::redo()
 	cell->setAction((*it2).action);
       }
     table->setRegionPaintDirty(m_selection);
-    doc()->emitEndOperation();
+    table->updateView();
 
     doc()->undoBuffer()->unlock();
 }

@@ -291,7 +291,7 @@ void KSpreadFormatDlg::slotOk()
     m_view->selectionInfo()->setSelection( r.topLeft(), r.bottomRight(),
                                            m_view->activeTable() );
     m_view->doc()->setModified( true );
-    m_view->doc()->emitEndOperation();
+    m_view->slotUpdateView( m_view->activeTable() );
     accept();
 }
 

@@ -110,7 +110,7 @@ void KSpreadspecial::slotOk()
 
     m_pView->doc()->emitBeginOperation( false );
     m_pView->activeTable()->paste( m_pView->selection(), true, sp, op );
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
 }
 

@@ -310,7 +310,7 @@ void KSpreadPaperLayout::slotOk()
         sheet = 0;
     }
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
     delete this;
 }

@@ -61,7 +61,7 @@ void KSpreadpasteinsert::slotOk()
         m_pView->activeTable()->paste( m_pView->selection() ,
                                        true, Normal,OverWrite,true,+1);
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
 }
 

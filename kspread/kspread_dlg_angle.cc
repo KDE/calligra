@@ -64,7 +64,8 @@ void KSpreadAngle::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     m_pView->activeTable()->setSelectionAngle(m_pView->selectionInfo(), -m_pAngle->value());
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
+    // m_pView->doc()->emitEndOperation();
 
     accept();
 }

@@ -124,7 +124,7 @@ void KSpreadShowColRow::slotOk()
 	m_pView->activeTable()->showRow(0,-1,listSelected);
     }
 
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
   accept();
 }
 

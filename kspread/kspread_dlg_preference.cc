@@ -101,7 +101,7 @@ void KSpreadpreference::slotApply()
   _spellPage->apply();
   _localePage->apply();
   m_pView->doc()->refreshInterface();
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
 }
 
 void KSpreadpreference::slotDefault()
@@ -204,7 +204,7 @@ void preference::apply()
         m_pView->activeTable()->setAutoCalc(m_pAutoCalc->isChecked());
         m_pView->activeTable()->setHideZero(m_pHideZero->isChecked());
         m_pView->activeTable()->setFirstLetterUpper(m_pFirstLetterUpper->isChecked());
-        m_pView->doc()->emitEndOperation();
+        m_pView->slotUpdateView( m_pView->activeTable() );
   }
 }
 
@@ -240,7 +240,7 @@ void parameterLocale::apply()
     {
         m_pView->doc()->emitBeginOperation( false );
         m_pView->doc()->refreshLocale();
-        m_pView->doc()->emitEndOperation();
+        m_pView->slotUpdateView( m_pView->activeTable() );
     }
 }
 
@@ -452,7 +452,7 @@ void configure::apply()
         m_oldBackupFile=state;
     }
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
 }
 
 
@@ -945,7 +945,7 @@ void configureLayoutPage::apply()
      config->writeEntry( "Default unit page", unitPage );
      m_pView->doc()->setUnit( (KoUnit::Unit)unitPage );
   }
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
 }
 
 configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *name )
@@ -994,7 +994,7 @@ void configureSpellPage::apply()
   doc->setDontCheckTitleCase(state);
   m_pView->doc()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
 
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
 }
 
 void configureSpellPage::slotDefault()

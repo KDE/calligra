@@ -1154,11 +1154,10 @@ void CellFormatDlg::slotApply()
   // m_pView->drawVisibleCells();
   QRect r;
   r.setCoords( left, top, right, bottom );
-  m_pView->slotUpdateView( m_table, r );
   m_pView->doc()->setModified( true );
   // Update the toolbar (bold/italic/font...)
   m_pView->updateEditWidget();
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_table, r );
 }
 
 

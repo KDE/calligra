@@ -87,7 +87,7 @@ void KSpreadResizeRow::slotOk()
             m_pView->vBorderWidget()->resizeRow( height, i, false );
     }
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
 }
 
@@ -152,7 +152,7 @@ void KSpreadResizeColumn::slotOk()
 
     }
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
 }
 

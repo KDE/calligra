@@ -182,14 +182,14 @@ void KSpreadConsolidate::slotOk()
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||
        h <= ( ( desc == D_BOTH || desc == D_ROW ) ? 1 : 0 ) )
   {
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     KMessageBox::error( this, i18n( "The range\n%1\nis too small" ).arg( *( r.begin() ) ));
     return;
   }
 
   if( (*it).range.bottom()==KS_rowMax || (*it).range.right()== KS_colMax )
   {
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( *( r.begin() ) ));
     return;
   }
@@ -202,7 +202,7 @@ void KSpreadConsolidate::slotOk()
     int h2 = (*it).range.bottom() - (*it).range.top() + 1;
     if((*it).range.bottom()==KS_rowMax || (*it).range.right()== KS_colMax)
     {
-      m_pView->doc()->emitEndOperation();
+      m_pView->slotUpdateView( m_pView->activeTable() );
       KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( r[i]));
       return;
     }
@@ -210,7 +210,7 @@ void KSpreadConsolidate::slotOk()
 	 ( desc == D_ROW && h != h2 ) ||
 	 ( desc == D_COL && w != w2 ) )
     {
-      m_pView->doc()->emitEndOperation();
+      m_pView->slotUpdateView( m_pView->activeTable() );
       QString tmp = i18n( "The ranges\n%1\nand\n%2\nhave different size").arg( *( r.begin() ) ).arg( r[i] );
       KMessageBox::error( this, tmp);
       return;
@@ -232,7 +232,7 @@ void KSpreadConsolidate::slotOk()
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
       if ( t == table && r.intersects( dest ) )
       {
-        m_pView->doc()->emitEndOperation();
+        m_pView->slotUpdateView( m_pView->activeTable() );
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
@@ -301,7 +301,7 @@ void KSpreadConsolidate::slotOk()
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
       if ( t == table && r.intersects( dest ) )
       {
-        m_pView->doc()->emitEndOperation();
+        m_pView->slotUpdateView( m_pView->activeTable() );
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
@@ -382,7 +382,7 @@ void KSpreadConsolidate::slotOk()
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
       if ( t == table && r.intersects( dest ) )
       {
-        m_pView->doc()->emitEndOperation();
+        m_pView->slotUpdateView( m_pView->activeTable() );
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
@@ -484,7 +484,7 @@ void KSpreadConsolidate::slotOk()
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
       if ( t == table && r.intersects( dest ) )
       {
-        m_pView->doc()->emitEndOperation();
+        m_pView->slotUpdateView( m_pView->activeTable() );
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
@@ -570,7 +570,7 @@ void KSpreadConsolidate::slotOk()
     }
   }
   m_pView->updateEditWidget();
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
   accept();
   delete this;
 }

@@ -39,32 +39,32 @@
 
 
 KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
-:  KDialogBase(KDialogBase::IconList,i18n("Insert Link") ,
-		KDialogBase::Ok | KDialogBase::Cancel,
-		KDialogBase::Ok)
+  :  KDialogBase( KDialogBase::IconList,i18n( "Insert Link") ,
+                  KDialogBase::Ok | KDialogBase::Cancel,
+                  KDialogBase::Ok )
 {
   m_pView = parent;
-  QVBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("html",KIcon::SizeMedium));
-  _internetAnchor = new  internetAnchor(parent,page );
+  QVBox *page=addVBoxPage( i18n( "Internet" ), QString::null,BarIcon( "html",KIcon::SizeMedium ) );
+  _internetAnchor = new  internetAnchor( parent,page );
 
-  page=addVBoxPage(i18n("Mail"), QString::null,BarIcon("mail_generic",KIcon::SizeMedium));
-  _mailAnchor = new  mailAnchor(parent,page );
+  page=addVBoxPage( i18n( "Mail" ), QString::null,BarIcon( "mail_generic",KIcon::SizeMedium ) );
+  _mailAnchor = new  mailAnchor( parent,page );
 
-   page=addVBoxPage(i18n("File"), QString::null,BarIcon("filenew",KIcon::SizeMedium));
-  _fileAnchor = new  fileAnchor(parent,page );
+   page=addVBoxPage( i18n( "File" ), QString::null,BarIcon( "filenew",KIcon::SizeMedium ) );
+  _fileAnchor = new  fileAnchor( parent,page );
 
-  page=addVBoxPage(i18n("Cell"), QString::null,BarIcon("misc",KIcon::SizeMedium));
-  _cellAnchor = new  cellAnchor(parent,page );
+  page=addVBoxPage( i18n( "Cell" ), QString::null,BarIcon( "misc",KIcon::SizeMedium ) );
+  _cellAnchor = new  cellAnchor( parent,page );
 
-  connect(this, SIGNAL(okClicked()),this,SLOT(slotOk()));
-  resize(400,300);
+  connect( this, SIGNAL( okClicked( ) ),this,SLOT( slotOk() ) );
+  resize( 400,300 );
 }
 
 void KSpreadLinkDlg::slotOk()
 {
   QString result;
-  switch(activePageIndex())
-    {
+  switch( activePageIndex() )
+  {
     case 0:
       result=_internetAnchor->apply();
       break;
@@ -80,19 +80,19 @@ void KSpreadLinkDlg::slotOk()
     default:
       kdDebug(36001)<<"Error in KSpreadLinkDlg\n";
     }
-  if( !result.isEmpty() )
-    setCellText(result);
+  if (  !result.isEmpty() )
+    setCellText( result );
 }
 
-void KSpreadLinkDlg::setCellText(const QString &_text)
+void KSpreadLinkDlg::setCellText( const QString &_text )
 {
-    m_pView->doc()->emitBeginOperation( false );
+    m_pView->doc()->emitBeginOperation(  false );
 
     KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),m_pView->canvasWidget()->markerRow() );
 
-    if( !cell->isDefault() )
+    if ( !cell->isDefault() )
       {
-	int ret = KMessageBox::warningYesNo( this, i18n("Cell is not empty.\nDo you want to continue?"));
+	int ret = KMessageBox::warningYesNo( this, i18n( "Cell is not empty.\nDo you want to continue?" ) );
 	if ( ret == 4 )
 	  {
 	    reject();
@@ -101,53 +101,54 @@ void KSpreadLinkDlg::setCellText(const QString &_text)
       }
 
     //refresh editWidget
-    if(!_text.isEmpty())
-      {
+    if (!_text.isEmpty() )
+    {
 	m_pView->canvasWidget()->setFocus();
 	m_pView->setText( _text );
 	m_pView->editWidget()->setText( _text );
 	accept();
-      }
+    }
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
+    //m_pView->doc()->emitEndOperation();
 }
 
 
-internetAnchor::internetAnchor( KSpreadView* _view,QWidget *parent , char *name )
- :QWidget ( parent,name)
+internetAnchor::internetAnchor( KSpreadView* _view, QWidget *parent , char *name )
+  : QWidget ( parent,name )
 {
   m_pView=_view;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
-  QVBoxLayout *lay2 = new QVBoxLayout( lay1);
+  QVBoxLayout *lay2 = new QVBoxLayout( lay1 );
   lay2->setSpacing( KDialog::spacingHint() );
 
   QLabel* tmpQLabel;
-  tmpQLabel = new QLabel( this);
+  tmpQLabel = new QLabel( this );
 
-  lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Comment:"));
+  lay2->addWidget(tmpQLabel );
+  tmpQLabel->setText( i18n( "Comment:" ) );
 
   text = new QLineEdit( this );
-  lay2->addWidget(text);
+  lay2->addWidget( text );
 
-  tmpQLabel = new QLabel( this);
-  lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Internet address:"));
+  tmpQLabel = new QLabel( this );
+  lay2->addWidget( tmpQLabel );
+  tmpQLabel->setText( i18n( "Internet address:" ) );
   l_internet = new QLineEdit( this );
 
-  lay2->addWidget(l_internet);
+  lay2->addWidget( l_internet );
 
-  bold=new QCheckBox(i18n("Bold"),this);
+  bold=new QCheckBox( i18n( "Bold" ),this );
 
-  lay2->addWidget(bold);
+  lay2->addWidget( bold );
 
-  italic=new QCheckBox(i18n("Italic"),this);
+  italic=new QCheckBox( i18n( "Italic" ),this );
 
-  lay2->addWidget(italic);
+  lay2->addWidget( italic );
 
-  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  KSeparator* bar1 = new KSeparator(  KSeparator::HLine, this );
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
 
@@ -156,9 +157,9 @@ internetAnchor::internetAnchor( KSpreadView* _view,QWidget *parent , char *name 
 
 QString internetAnchor::apply()
 {
-  if( l_internet->text().isEmpty() || text->text().isEmpty() )
+  if ( l_internet->text().isEmpty() || text->text().isEmpty() )
     {
-	KMessageBox::error( this, i18n("Area text or cell is empty!") );
+	KMessageBox::error( this, i18n( "Area text or cell is empty!" ) );
 	return QString();
     }
   return createLink();
@@ -168,20 +169,20 @@ QString internetAnchor::createLink()
 {
    QString end_link;
   QString link;
-  if(l_internet->text().find("http://")!=-1)
+  if ( l_internet->text().find( "http://" )!=-1 )
     link = "!<a href=\""+l_internet->text()+"\""+">";
   else
     link = "!<a href=\"http://"+l_internet->text()+"\""+">";
 
-  if(bold->isChecked()&&!italic->isChecked())
+  if ( bold->isChecked()&&!italic->isChecked() )
     {
       link+="<b>"+text->text()+"</b></a>";
     }
-  else if (!bold->isChecked()&&italic->isChecked())
+  else if ( !bold->isChecked()&&italic->isChecked() )
     {
       link+="<i>"+text->text()+"</i></a>";
     }
-  else if(bold->isChecked()&&italic->isChecked())
+  else if ( bold->isChecked()&&italic->isChecked() )
     {
       link+="<i><b>"+text->text()+"</b></i></a>";
     }
@@ -194,40 +195,40 @@ QString internetAnchor::createLink()
 }
 
 mailAnchor::mailAnchor( KSpreadView* _view,QWidget *parent , char *name )
- :QWidget ( parent,name)
+ :QWidget ( parent,name )
 {
   m_pView=_view;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( KDialog::marginHint() );
   lay1->setSpacing( KDialog::spacingHint() );
-  QVBoxLayout *lay2 = new QVBoxLayout( lay1);
+  QVBoxLayout *lay2 = new QVBoxLayout( lay1 );
   lay2->setSpacing( KDialog::spacingHint() );
 
   QLabel* tmpQLabel;
-  tmpQLabel = new QLabel( this);
+  tmpQLabel = new QLabel( this );
 
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Comment:"));
+  tmpQLabel->setText(i18n( "Comment:" ) );
 
   text = new QLineEdit( this );
-  lay2->addWidget(text);
+  lay2->addWidget( text );
 
-  tmpQLabel = new QLabel( this);
-  lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Email:"));
+  tmpQLabel = new QLabel( this );
+  lay2->addWidget( tmpQLabel );
+  tmpQLabel->setText( i18n( "Email:" ) );
   l_mail = new QLineEdit( this );
 
-  lay2->addWidget(l_mail);
+  lay2->addWidget( l_mail );
 
-  bold=new QCheckBox(i18n("Bold"),this);
+  bold=new QCheckBox( i18n( "Bold" ),this );
 
-  lay2->addWidget(bold);
+  lay2->addWidget( bold );
 
-  italic=new QCheckBox(i18n("Italic"),this);
+  italic=new QCheckBox( i18n( "Italic" ),this );
 
-  lay2->addWidget(italic);
+  lay2->addWidget( italic );
 
-  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this );
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
 
@@ -236,9 +237,9 @@ mailAnchor::mailAnchor( KSpreadView* _view,QWidget *parent , char *name )
 
 QString mailAnchor::apply()
 {
- if( l_mail->text().isEmpty() || text->text().isEmpty() )
+ if ( l_mail->text().isEmpty() || text->text().isEmpty() )
     {
-	KMessageBox::error( this, i18n("Area Text or mail is empty!") );
+	KMessageBox::error( this, i18n( "Area Text or mail is empty!") );
 	return QString();
     }
   return createLink();
@@ -248,20 +249,20 @@ QString mailAnchor::createLink()
 {
   QString end_link;
   QString link;
-  if(l_mail->text().find("mailto:")!=-1)
-    link = "!<a href=\""+l_mail->text()+"\""+">";
+  if (l_mail->text().find( "mailto:" )!=-1 )
+    link = "!<a href=\"" + l_mail->text()+"\""+">";
   else
     link = "!<a href=\"mailto:"+l_mail->text()+"\""+">";
 
-  if(bold->isChecked()&&!italic->isChecked())
+  if ( bold->isChecked() && !italic->isChecked() )
     {
       link+="<b>"+text->text()+"</b></a>";
     }
-  else if (!bold->isChecked()&&italic->isChecked())
+  else if ( !bold->isChecked() && italic->isChecked() )
     {
       link+="<i>"+text->text()+"</i></a>";
     }
-  else if(bold->isChecked()&&italic->isChecked())
+  else if ( bold->isChecked() && italic->isChecked() )
     {
       link+="<i><b>"+text->text()+"</b></i></a>";
     }
@@ -348,7 +349,7 @@ fileAnchor::fileAnchor( KSpreadView* _view,QWidget *parent , char *name )
 
 QString fileAnchor::apply()
 {
- if( l_file->lineEdit()->text().isEmpty() || text->text().isEmpty() )
+ if ( l_file->lineEdit()->text().isEmpty() || text->text().isEmpty() )
     {
 	KMessageBox::error( this, i18n("Area Text or mail is empty!") );
 	return QString();
@@ -367,14 +368,14 @@ QString fileAnchor::createLink()
   QString end_link;
   QString link;
   QString tmpText=l_file->lineEdit()->text();
-  if(tmpText.find("file:/")!=-1)
+  if (tmpText.find("file:/")!=-1)
     link = "!<a href=\""+tmpText+"\""+">";
-  else if(tmpText.at(0)=='/')
+  else if (tmpText.at(0)=='/')
     link = "!<a href=\"file:"+tmpText+"\""+">";
   else
     link = "!<a href=\"file:"+tmpText+"\""+">";
 
-  if(bold->isChecked()&&!italic->isChecked())
+  if (bold->isChecked()&&!italic->isChecked())
     {
       link+="<b>"+text->text()+"</b></a>";
     }
@@ -382,7 +383,7 @@ QString fileAnchor::createLink()
     {
       link+="<i>"+text->text()+"</i></a>";
     }
-  else if(bold->isChecked()&&italic->isChecked())
+  else if (bold->isChecked()&&italic->isChecked())
     {
       link+="<i><b>"+text->text()+"</b></i></a>";
     }
@@ -439,12 +440,12 @@ cellAnchor::cellAnchor( KSpreadView* _view,QWidget *parent , char *name )
 
 QString cellAnchor::apply()
 {
-  if( l_cell->text().isEmpty() || text->text().isEmpty() )
-    {
-      KMessageBox::error( this, i18n("Area Text or cell is empty!") );
-      return QString();
-    }
-   return createLink();
+  if ( l_cell->text().isEmpty() || text->text().isEmpty() )
+  {
+    KMessageBox::error( this, i18n("Area Text or cell is empty!") );
+    return QString();
+  }
+  return createLink();
 
 }
 
@@ -454,7 +455,7 @@ QString cellAnchor::createLink()
     QString link;
     link = "!<a href=\""+m_pView->activeTable()->tableName()+"!"+l_cell->text().upper()+"\""+">";
 
-    if(bold->isChecked()&&!italic->isChecked())
+    if (bold->isChecked()&&!italic->isChecked())
     {
 	link+="<b>"+text->text()+"</b></a>";
     }
@@ -462,7 +463,7 @@ QString cellAnchor::createLink()
     {
 	link+="<i>"+text->text()+"</i></a>";
     }
-    else if(bold->isChecked()&&italic->isChecked())
+    else if (bold->isChecked()&&italic->isChecked())
     {
 	link+="<i><b>"+text->text()+"</b></i></a>";
     }

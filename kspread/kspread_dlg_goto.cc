@@ -62,7 +62,7 @@ void KSpreadGotoDlg::slotOk()
     else //Location entered in location widget
         result = m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp_upper, m_pView->doc()->map() ) );
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
 
     if ( result )
         accept();

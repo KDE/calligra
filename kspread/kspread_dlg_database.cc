@@ -679,8 +679,8 @@ void KSpreadDatabaseDlg::accept()
         break;
     }
   }
-  m_pView->doc()->emitEndOperation();
 
+  m_pView->slotUpdateView( table );
   KWizard::accept();
 }
 

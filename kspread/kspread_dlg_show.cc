@@ -80,7 +80,7 @@ void KSpreadshow::slotOk()
     }
     m_pView->tabBar()->showTable(listTable);
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
     accept();
 }
 

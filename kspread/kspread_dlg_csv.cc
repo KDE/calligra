@@ -674,7 +674,7 @@ void KSpreadCSVDialog::accept()
     table->emit_updateColumn( c, left + i );
   }
 
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( table );
   QDialog::accept();
 }
 

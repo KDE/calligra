@@ -173,7 +173,7 @@ void KSpreadreference::slotRemove()
       tbl->refreshRemoveAreaName(textRemove);
     }
 
-    m_pView->doc()->emitEndOperation();
+    m_pView->slotUpdateView( m_pView->activeTable() );
   }
 
   if ( !m_list->count() )
@@ -225,7 +225,7 @@ void KSpreadreference::slotOk()
                                            m_pView->activeTable() );
   }
 
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
   accept();
 }
 
@@ -351,7 +351,7 @@ void KSpreadEditAreaName::slotOk()
     sheet->refreshChangeAreaName( m_areaName->text() );
   }
 
-  m_pView->doc()->emitEndOperation();
+  m_pView->slotUpdateView( m_pView->activeTable() );
   accept();
 }
 

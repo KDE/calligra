@@ -2421,7 +2421,7 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter,
 
   // Point the little corner if there is a comment attached
   // to this cell.
-  if ( commentP( cellRef.x(), cellRef.y() )
+  if ( hasProperty( PComment )
        && cellRect.width() > 10.0
        && cellRect.height() > 10.0 
        && ( table()->print()->printCommentIndicator()
@@ -3664,8 +3664,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends, bool as
 
 void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
 {
-
-  m_pTable->doc()->emitBeginOperation(false);
+  m_pTable->doc()->emitBeginOperation( false );
   clearAllErrors();
   m_strText = _text;
 
@@ -3731,7 +3730,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool /*updateDepends*/ )
 
   update();
 
-  m_pTable->doc()->emitEndOperation();
+  m_pTable->doc()->emitEndOperation( QRect( m_iColumn, m_iRow, 1, 1 ) );
 }
 
 void KSpreadCell::update()
