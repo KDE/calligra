@@ -20,10 +20,10 @@
 
 /* vcolorslider.cc */
 
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <kselect.h>
 #include <qlayout.h>
+#include <qlabel.h>
+#include <knuminput.h>
+#include <kselect.h>
 
 #include "vcolorslider.h"
 
@@ -54,9 +54,9 @@ void VColorSlider::init()
 {
 	QHBoxLayout *layout = new QHBoxLayout( this, 3 );
 
-	m_label = new QLabel ( this );
+	m_label = new QLabel( this );
 	m_gradientSelect = new KGradientSelector( KSelector::Horizontal, this );
-	m_spinBox = new QSpinBox ( this );
+	m_spinBox = new KIntSpinBox( this );
 
 	layout->addWidget( m_label );
 	layout->addWidget( m_gradientSelect, 2 );
@@ -66,12 +66,8 @@ void VColorSlider::init()
 	setMinValue( 0 );
 	setMaxValue( 255 );
 
-	connect(
-		m_spinBox, SIGNAL( valueChanged ( int ) ),
-		this, SLOT( updateFrom_spinBox( int ) ) );
-	connect(
-		m_gradientSelect, SIGNAL( valueChanged ( int ) ),
-		this, SLOT( updateFrom_gradientSelect( int ) ) );
+	connect( m_spinBox, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_spinBox( int ) ) );
+	connect( m_gradientSelect, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_gradientSelect( int ) ) );
 
 	layout->activate();
 }

@@ -27,7 +27,7 @@
 #include <qwidget.h>
 
 class QLabel;
-class QSpinBox;
+class KIntNumInput;
 class KGradientSelector;
 
 class VColorSlider : public QWidget
@@ -50,7 +50,7 @@ public slots:
 private:
 	void init();
 	QLabel* m_label;
-	QSpinBox* m_spinBox;
+	KIntSpinBox* m_spinBox;
 	KGradientSelector* m_gradientSelect;
 
 signals:
