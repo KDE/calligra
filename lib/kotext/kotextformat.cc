@@ -281,3 +281,84 @@ int KoTextFormat::width( const QChar& ch ) const
 {
     return KoTextZoomHandler::ptToLayoutUnitPt( screenFontMetrics( 0L, false ).width( ch ) );
 }
+
+//static
+QString KoTextFormat::underlineStyleToString( KoTextFormat::UnderlineLineStyle _lineType )
+{
+    QString strLineType;
+    switch ( _lineType )
+    {
+    case KoTextFormat::U_SOLID:
+        strLineType ="solid";
+        break;
+    case KoTextFormat::U_DASH:
+        strLineType ="dash";
+        break;
+    case KoTextFormat::U_DOT:
+        strLineType ="dot";
+        break;
+    case KoTextFormat::U_DASH_DOT:
+        strLineType="dashdot";
+        break;
+    case KoTextFormat::U_DASH_DOT_DOT:
+        strLineType="dashdotdot";
+        break;
+    }
+    return strLineType;
+}
+
+QString KoTextFormat::strikeOutStyleToString( KoTextFormat::StrikeOutLineStyle _lineType )
+{
+    QString strLineType;
+    switch ( _lineType )
+    {
+    case KoTextFormat::S_SOLID:
+        strLineType ="solid";
+        break;
+    case KoTextFormat::S_DASH:
+        strLineType ="dash";
+        break;
+    case KoTextFormat::S_DOT:
+        strLineType ="dot";
+        break;
+    case KoTextFormat::S_DASH_DOT:
+        strLineType="dashdot";
+        break;
+    case KoTextFormat::S_DASH_DOT_DOT:
+        strLineType="dashdotdot";
+        break;
+    }
+    return strLineType;
+}
+
+KoTextFormat::UnderlineLineStyle KoTextFormat::stringToUnderlineStyle( const QString & _str )
+{
+    if ( _str =="solid")
+        return KoTextFormat::U_SOLID;
+    else if ( _str =="dash" )
+        return KoTextFormat::U_DASH;
+    else if ( _str =="dot" )
+        return KoTextFormat::U_DOT;
+    else if ( _str =="dashdot")
+        return KoTextFormat::U_DASH_DOT;
+    else if ( _str=="dashdotdot")
+        return KoTextFormat::U_DASH_DOT_DOT;
+    else
+        return KoTextFormat::U_SOLID;
+}
+
+KoTextFormat::StrikeOutLineStyle KoTextFormat::stringToStrikeOutStyle( const QString & _str )
+{
+    if ( _str =="solid")
+        return KoTextFormat::S_SOLID;
+    else if ( _str =="dash" )
+        return KoTextFormat::S_DASH;
+    else if ( _str =="dot" )
+        return KoTextFormat::S_DOT;
+    else if ( _str =="dashdot")
+        return KoTextFormat::S_DASH_DOT;
+    else if ( _str=="dashdotdot")
+        return KoTextFormat::S_DASH_DOT_DOT;
+    else
+        return KoTextFormat::S_SOLID;
+}
