@@ -273,7 +273,7 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     KoOasisStyles oasisStyles;
     oasisStyles.createStyleMap( domDoc );
     KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, 0 /*TODO store*/ );
-    *c = textdoc->pasteOasisText( body, context, cursor, doc->styleCollection() );
+    *c = textFs->textObject()->pasteOasisText( body, context, cursor, doc->styleCollection() );
 
     textFs->textObject()->setNeedSpellCheck( true );
     // In case loadFormatting queued any image request

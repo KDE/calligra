@@ -402,6 +402,11 @@ public:
     void loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context, KoStyleCollection * styleColl );
     void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
 
+    // Similar to KoTextDocument::loadOasisText but there's no newline inserted before the first paragraph
+    // or after the last one - so it's possible to paste just a few chars.
+    // It also handles m_lastFormatted
+    KoTextCursor pasteOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextCursor& cursor, KoStyleCollection * styleColl );
+
 #ifndef NDEBUG
     void printRTDebug(int);
 #endif

@@ -1795,7 +1795,7 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
     oasisStyles.createStyleMap( domDoc );
     KPresenterDoc *doc = textdoc->textObject()->kPresenterDocument();
     KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, 0 /*TODO store*/ );
-    *c = textdoc->pasteOasisText( body, context, cursor, doc->styleCollection() );
+    *c = textdoc->textObject()->pasteOasisText( body, context, cursor, doc->styleCollection() );
     textdoc->textObject()->textObject()->setNeedSpellCheck( true );
     // In case loadFormatting queued any image request
 
@@ -1943,20 +1943,20 @@ void KPrDeletePageCmd::unexecute()
     m_doc->updatePresentationButton();
 }
 
-KPrInsertPageCmd::KPrInsertPageCmd( const QString &name, int pageNum, InsertPos pos, 
-                                    KPrPage *page, KPresenterDoc *doc ) 
+KPrInsertPageCmd::KPrInsertPageCmd( const QString &name, int pageNum, InsertPos pos,
+                                    KPrPage *page, KPresenterDoc *doc )
 : KNamedCommand(name)
 , m_doc( doc )
 , m_page( page )
 , m_currentPageNum( pageNum )
-, m_insertPageNum( 0 )  
+, m_insertPageNum( 0 )
 {
     switch( pos )
     {
         case IP_BEFORE:
             m_insertPageNum = m_currentPageNum;
             break;
-        case IP_AFTER:  
+        case IP_AFTER:
             m_insertPageNum = m_currentPageNum + 1;
             break;
     }

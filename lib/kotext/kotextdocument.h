@@ -207,9 +207,6 @@ public:
     // For normal loading nextParagraph and pos are 0.
     KoTextParag* loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph );
 
-    // Similar to loadOasisText but there's no newline inserted before the first paragraph
-    // or after the last one - so it's possible to paste just a few chars.
-    KoTextCursor pasteOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextCursor& cursor, KoStyleCollection * styleColl );
     QString copySelection( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
 
     void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
