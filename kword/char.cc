@@ -298,7 +298,7 @@ QDomElement KWString::save( QDomDocument& d )
     QDomElement e = d.createElement( "TEXT" );
 
     if ( _len_ == 0 )
-	return QDomElement();
+	return e;
 
     unsigned int start = 0;
 

@@ -306,7 +306,8 @@ QDomElement KWParag::save( QDomDocument& doc )
     QDomElement t = text.save( doc );
     if ( t.isNull() )
 	return t;
-
+    e.appendChild( t );
+    
     return e;
 }
 
