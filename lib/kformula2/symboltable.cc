@@ -106,11 +106,17 @@ SymbolTable::SymbolTable()
     addEntry("Psi", 'Y');
     addEntry("Omega", 'W');
 
-    addEntry("rarrow", static_cast<char>(198));
-    addEntry("larrow", static_cast<char>(168));
-    //addEntry("uarrow", static_cast<char>(?));
-    addEntry("darrow", static_cast<char>(216));
-    addEntry("doublearrow", static_cast<char>(180));
+    addEntry("rarrow", static_cast<char>(174));
+    addEntry("larrow", static_cast<char>(172));
+    addEntry("uarrow", static_cast<char>(173));
+    addEntry("darrow", static_cast<char>(175));
+    addEntry("doublearrow", static_cast<char>(171));
+
+    addEntry("leq", static_cast<char>(163));
+    addEntry("geq", static_cast<char>(179));
+    addEntry("neq", static_cast<char>(185));
+
+    addEntry("infinit", static_cast<char>(165));
 }
 
 

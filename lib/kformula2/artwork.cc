@@ -145,10 +145,10 @@ void Artwork::calcSizes(const ContextStyle& style, int parentSize)
         calcCharSize(style, parentSize, static_cast<char>(218));
         break;
     case Sum:
-        calcCharSize(style, parentSize, 'S');
+        calcCharSize(style, parentSize, static_cast<char>(229));
         break;
     case Product:
-        calcCharSize(style, parentSize, 'P');
+        calcCharSize(style, parentSize, static_cast<char>(213));
         break;
     case Arrow:
         setWidth(2000);
@@ -237,10 +237,10 @@ void Artwork::draw(QPainter& painter, const QRect& r, const ContextStyle& style,
         drawCharacter(painter, style, myX, myY, static_cast<char>(218));
         break;
     case Sum:
-        drawCharacter(painter, style, myX, myY, 'S');
+        drawCharacter(painter, style, myX, myY, static_cast<char>(229));
         break;
     case Product:
-        drawCharacter(painter, style, myX, myY, 'P');
+        drawCharacter(painter, style, myX, myY, static_cast<char>(213));
         break;
     case Arrow:
         drawArrow(painter, myX, myY+getHeight()/2, getHeight());
@@ -310,14 +310,14 @@ void Artwork::calcRoundBracket(const ContextStyle& style, int height)
     
     if (height <= style.zoomItY(80)) {
         charHeight = height/2;
-        uppercorner = static_cast<char>(202);
-        lowercorner = static_cast<char>(203);
+        uppercorner = static_cast<char>(230);
+        lowercorner = static_cast<char>(232);
     }
     else {
         charHeight = style.zoomItY(40);
-        uppercorner = static_cast<char>(207);
-        lowercorner = static_cast<char>(211);
-        //line = static_cast<char>(193);
+        uppercorner = static_cast<char>(236);
+        lowercorner = static_cast<char>(238);
+        //line = static_cast<char>(134);
     }
     
     QFont f = style.getSymbolFont();
@@ -361,8 +361,8 @@ void Artwork::drawLeftSmallRoundBracket(QPainter& p, const ContextStyle& style, 
     f.setPointSize(charHeight);
     p.setFont(f);
 
-    char uppercorner = static_cast<char>(202);
-    char lowercorner = static_cast<char>(203);
+    char uppercorner = static_cast<char>(230);
+    char lowercorner = static_cast<char>(232);
     
     QFontMetrics fm(p.fontMetrics());
     QRect upperBound = fm.boundingRect(uppercorner);
@@ -395,9 +395,9 @@ void Artwork::drawLeftBigRoundBracket(QPainter& p, const ContextStyle& style, in
     f.setPointSize(charHeight);
     p.setFont(f);
 
-    char uppercorner = static_cast<char>(207);
-    char lowercorner = static_cast<char>(211);
-    char line = static_cast<char>(193);
+    char uppercorner = static_cast<char>(236);
+    char lowercorner = static_cast<char>(238);
+    char line = static_cast<char>(134);
     
     QFontMetrics fm(p.fontMetrics());
     QRect upperBound = fm.boundingRect(uppercorner);
@@ -444,17 +444,17 @@ void Artwork::calcCurlyBracket(const ContextStyle& style, int height)
     
     if (height <= style.zoomItY(120)) {
         charHeight = height/3;
-        uppercorner = static_cast<char>(202);
-        lowercorner = static_cast<char>(203);
-        line = static_cast<char>(193);
-        middle = static_cast<char>(204);
+        uppercorner = static_cast<char>(230);
+        lowercorner = static_cast<char>(232);
+        line = static_cast<char>(234);
+        middle = static_cast<char>(237);
     }
     else {
         charHeight = style.zoomItY(40);
-        uppercorner = static_cast<char>(207);
-        lowercorner = static_cast<char>(211);
-        line = static_cast<char>(193);
-        middle = static_cast<char>(204);
+        uppercorner = static_cast<char>(236);
+        lowercorner = static_cast<char>(238);
+        line = static_cast<char>(134);
+        middle = static_cast<char>(237);
     }
     
     QFont f = style.getSymbolFont();
@@ -502,10 +502,10 @@ void Artwork::drawLeftSmallCurlyBracket(QPainter& p, const ContextStyle& style, 
     p.setFont(f);
     //p.setPen(Qt::black);
 
-    char uppercorner = static_cast<char>(202);
-    char lowercorner = static_cast<char>(203);
-    char line = static_cast<char>(193);
-    char middle = static_cast<char>(204);
+    char uppercorner = static_cast<char>(230);
+    char lowercorner = static_cast<char>(232);
+    char line = static_cast<char>(234);
+    char middle = static_cast<char>(237);
     
     QFontMetrics fm(p.fontMetrics());
     QRect upperBound = fm.boundingRect(uppercorner);
@@ -543,10 +543,10 @@ void Artwork::drawLeftBigCurlyBracket(QPainter& p, const ContextStyle& style, in
     p.setFont(f);
     //p.setPen(Qt::black);
 
-    char uppercorner = static_cast<char>(207);
-    char lowercorner = static_cast<char>(211);
-    char line = static_cast<char>(193);
-    char middle = static_cast<char>(204);
+    char uppercorner = static_cast<char>(236);
+    char lowercorner = static_cast<char>(238);
+    char line = static_cast<char>(134);
+    char middle = static_cast<char>(237);
     
     QFontMetrics fm(p.fontMetrics());
     QRect upperBound = fm.boundingRect(uppercorner);
