@@ -431,6 +431,8 @@ Parser::parseDocWP5( const QString & filename, int start )
             {
 
             case 0x2000:
+            case 0x0d00:
+            case 0x0b00:
               tokens.append (new Token (Token::SoftSpace));
               break;
 
@@ -440,12 +442,8 @@ Parser::parseDocWP5( const QString & filename, int start )
 
             case 0x0a00:
             case 0x9900:
+            case 0x8c00:
               tokens.append (new Token (Token::HardReturn));
-              break;
-
-            case 0x0d00:
-              tokens.append (new Token (Token::SoftReturn));
-              // FIXME this is actually Soft End of Center/Align
               break;
 
             case 0xc000:
