@@ -8,17 +8,9 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>313</width>
-            <height>54</height>
+            <width>203</width>
+            <height>57</height>
         </rect>
-    </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>1</hsizetype>
-            <vsizetype>1</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
     </property>
     <property name="caption">
         <string>KPTDurationWidget</string>
@@ -27,232 +19,264 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QFrame">
             <property name="name">
-                <cstring>layout2</cstring>
+                <cstring>m_frame</cstring>
             </property>
-            <hbox>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+            </property>
+            <property name="frameShape">
+                <enum>LineEditPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KIconButton">
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>addmonth</cstring>
+                        <cstring>m_layout</cstring>
                     </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>16</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap>image0</pixmap>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Add month</string>
-                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>1</number>
+                        </property>
+                        <property name="spacing">
+                            <number>2</number>
+                        </property>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>m_ddd</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>50</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>0</string>
+                            </property>
+                            <property name="frame">
+                                <bool>false</bool>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignRight</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>m_hhSpace</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>15</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>m_hh</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>m_hh</cstring>
+                            </property>
+                            <property name="text">
+                                <string>00</string>
+                            </property>
+                            <property name="frame">
+                                <bool>false</bool>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignHCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>m_mmColon</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>7</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>m_mm</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>m_mm</cstring>
+                            </property>
+                            <property name="text">
+                                <string>00</string>
+                            </property>
+                            <property name="frame">
+                                <bool>false</bool>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignHCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>m_ssColon</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>7</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>m_ss</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>m_ss</cstring>
+                            </property>
+                            <property name="text">
+                                <string>00</string>
+                            </property>
+                            <property name="frame">
+                                <bool>false</bool>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignHCenter</set>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>m_dot</cstring>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>7</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>.</string>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>m_ms</cstring>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>32</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>000</string>
+                            </property>
+                            <property name="frame">
+                                <bool>false</bool>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
-                <widget class="KIconButton">
-                    <property name="name">
-                        <cstring>addweek</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>16</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap>image1</pixmap>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Add week</string>
-                    </property>
-                </widget>
-                <widget class="KIntNumInput">
-                    <property name="name">
-                        <cstring>days</cstring>
-                    </property>
-                    <property name="minValue">
-                        <number>0</number>
-                    </property>
-                    <property name="maxValue">
-                        <number>9999</number>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Days</string>
-                    </property>
-                </widget>
-                <widget class="KIconButton">
-                    <property name="name">
-                        <cstring>subtractweek</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>16</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap>image2</pixmap>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Subtract week</string>
-                    </property>
-                </widget>
-                <widget class="KIconButton">
-                    <property name="name">
-                        <cstring>subtractmonth</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>16</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="pixmap">
-                        <pixmap>image3</pixmap>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Subtract month</string>
-                    </property>
-                </widget>
-                <widget class="KTimeWidget">
-                    <property name="name">
-                        <cstring>hhmmss</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>HH:MM:SS</string>
-                    </property>
-                </widget>
-            </hbox>
+            </vbox>
         </widget>
     </hbox>
 </widget>
-<images>
-    <image name="image0">
-        <data format="XPM.GZ" length="2013">789c55d55953e2401000e0777e0565bf595bad092424b5b50fe27d80e2ad5bfb30b98400821054dcdaffbe9dee9e512b0ce4cbf4f47466026c6d36ef2f7acdcdadc6b232d5286da643b3686e66abe974fdfbcfafbf8d0d2f6cd22bea34fd8d1f8d8d41d54c9bfdd9735e031302b4bc304e33365867416d407526c6dc59c617e28e9787ec7b75904bff1b3b0e3dd3660fd441222e9d797e5859a7325fa68ed53bce526f6aadf519b5ad77ec2cf59c88a93ea977e42cfda13a2ea4ff421c7945c1f5cd6ab73dba9f94fb63b5bd9f0775acf73317773cade7519de97c81380a243f1eb34de8c592ef521cd9f59d38cbf88e3ad6fa783f033ff4a216bb540751c27eb6d6fc4fe2c8aec7904df974bd16d6dadfad1dd2f8901f26a8c4917d5e5e9c793c8cd5bafe9089635d6fe0e7293494cfb0a7e2d8d3f8426deb5b5aebfef86add2fe07a3bad38d0f14bb5ad7f5b6dd7bf2d36babff8ca4ea85ff219b1d1fd015e9fa865ecf3e2596b3d57ecc4e43a7ee22cf1b7e2c4d7f8ebda71dbc58f9c257e579cf8ea23769a84ea5e6dd34e6cfc8db5e63f65a7ce33716af34dad75fdf8fb94b4d35cd7638f9da5763cef6f1a38f7c599bd9f7775a8f9f8f94a33b2e43b501b8dbf53dbf92271eeabd7b5b3c0f557e2dcce77ee2cfb036a3b5f8b9d3bf3ef4b1ee646cddf075a3c9bff4c5cd8f9f76b17a1f3a1dae6fb601785cd375717e241650f043498604a2dfbbcfa1943fd803916f884431cd17982e5f7181cd3d5094ef1196738a7f6820bca597ec6708e2556b8e2883947adf095aebe7d8999e03bae5dc41c3fe87c4db976b02bff0954c72eee69c43e1ef0e721f988461fcbef2e9ee0a9469c610ffb145f9f9fe305553fd03c977845f5cea9e26b6a73bcc15b7abfa3987b7cd03c8fb84d87873eb6b49e36f507d4422c35cf88dca176cefdd197a80263f99f00a4880e80f6692c18ba3a8644ef9d2a8294236ed187cccd39c112728d29d140014fd883a13db00f234ca094f5e1bd1850d418463091865730a58867ec7edd5398e10ecce10516b0848ace56758eeffb4eb9ba784cf91ea8c590402e1114f3ef67e33fbf6ed969</data>
-    </image>
-    <image name="image1">
-        <data format="XPM.GZ" length="2013">789c55d55953e2401000e0777e45ca79b3b65a032424b5b50fde78a1e0edd63e4c2e211c0a0445b7f6bf6f4f1f516b08952fd3d3d39949606bd3bbbf3cf736b71acbca56a3d44b8776e16d66abe9f4fdf79f5f7f1b1b7ee8e127ea78cd8d1f8d8d7ee5a55eef79963b4082302d3f8cd38c6cd459e06cd4191bf2da3cbe6077fc3c24df8b839cfb3fc871e8db3679200e1276599be6372b75caf365e2587c549beb4dd5529f156bbde3da5ccf051bebe37a47b5b93f14c705f7f7d9915f1454dfb373dbc7fb49c920d6fb7910c7723f2fec8e2ff53c8a33992f666b7e688903718f6c433fe6fc57ec48d77b529bf375c4b1d44beb1134433f6a914b711025e4995af23fb1235d9f2119f3c9fa2dd5d2df750e717c480f97a9d8913e3ff3da34de8cc5b21f2665c7b2fe869eafd0623e4b9eb2635fe20bb1d657a979bf4c22d6fd0bd856f76fe1dc69c581e41ba9399f598af5feb6c5ba5f776ccd07efe404fb39fe926dadcc47eb19b5ac3e5fbe58fae19a9cd85ce69fd4e6f81be7b85dfb989d34c5e7e4340965fd68bf6cdb25a0feb558c747ecb429f3bf91d3ba7f5f2deb3765633cbb290ee5fee8fd4cda692ef9cec859aaf39f8a35ff895af2d17ea441ed1d76168a0fc95966c57bce59507b57acf3afd8b9d6dbaecdfdb7645c6df1ab731ee6ba1ff43e60b19a6fce2e743cbdff055627a6f7bb280a1d7f202ed8fd4a1b18b090408a47f679f53306fb0de450c0130c6184e70994df63608c57273085193cc30bcc61014bcc597ec6508e0a56f08aed0dd6d8dcd93b5efdf81233811dd8853dd8c73c07d8f6e110bd8423e8f27f02d6710c27708a39e614e1da1acee01c47f7f877172e70dc1a8f591de1da25f4b1fa81e4b9826bb8c10a5c0fc7ddd2f71ddcc383e479846d6c2ec68726f5b6a08ddf0184504a9e115eebc811514c1f623c5a5018e0ff0963b0979bc6b4684407c6c6cabd63452631291d998be1735c91d2e4125382358579a236c498573a1b41624a5e1fda8b01468de1c64cf8806b33c5881974bfeea9798623f362e6666196a6c2b395cbf17ddf3157177a98ef0106b87dd6e41c8131ff7e36fe03e431d4bd</data>
-    </image>
-    <image name="image2">
-        <data format="XPM.GZ" length="2093">789c55d55d53d3501006e07b7e4587bd639c57d23669328e1728082a202820e878717292d00f4a817e018effdd3dbb7b824e0ccdd3dd6cf69c0df27aab737972d4d97abd315fb8c5c877fcd03d74b6aae574faf4f3d7dbdf1b9b49d6e17f45b7d3dd7cb5b179bae8f8cef1ecb60e40c9a05e9215be12537495065365aed4a85bebfd8d7a90d4993831a7b5c69fc54596b8bef8c29c96ea716b793ec5fcd4ebf32a7361de6fadfdfa68ebcf9963bf93d6dacf1735f7a7fd8e5a6bbc30178dc6cfd579d234d25fd83cea27bc1e2ff6e6b89eaeb9b0f52cd583c4fae9992b7d1e419da75a1fc762972585d6fbaecee3fedeb4d67ecfcc85f527f348bb5992f7c433739a97e279b4d5bf56e7713fb6cd95f53314737ddbbf79b4e51f04675c2f93978b9ed4797c7f56ad75bd77669b070dd585ed3fc9fb9039aee7c40fea22b1fc8939f6bb88b679fd301756ef3a5ae3b40e1ef48ad4eadd466b3d7a34c7f5f5cd362f0cd4cede07c87a0725c7f57e523b9b27d5666796f9e53d17dfb74b71e96abbffbeb5c6a59fa21fe3b86aadf1b5baecda7a47d1b61fdfc43ec67164cecc69b4e59f06bb7e69f5691a6df14cedbbb6fe13b16fe39aef7d7cfe6170597967cffb648efd7f8cb67c99b74f5befa8abd8df077155399b6769ae6d7f9dba8efdbd0faed2988fafe658ff5d6bcd5faaebd87fde5ae37b629e86f973709db55e996dde90f78b171bebdfab9b584f7e3f1b5e9d597e3f9aa689f7ef9a1bf5e9221e203894f07c562fdfbee4709c50a3c1358618f17589f1ff3998f0b73798e21633dce11e0f9873cdf14b8ed4586089151f6b3ccae70a4ffcedf33f3937d8c13bbce773865decf1e7073ee7d8c781fe8de13ed6f8884f72eef2f159ae0f71c4771febffe3f882139cda1972bef2e7379ce19cbbbfb03adf71892bee23f4127276f003db9c718e045dabd3431fa9f4b12d391906fc33e79c0263ab33e285518892939c5cae4b021af2fa77872a7ef619d5128f471ebec3846c16a123baa6218dda8cbd60de91318d2d670c4713bae1632a192bb9be454933dd1f99c50567dde18aee791e3bbcc64b7ae08c390efe9d292db04f4b5ad19a1ee989af9e438dffe7ceb50e70ccf5bab8204f0d8d358373febcd9f80b360ce837</data>
-    </image>
-    <image name="image3">
-        <data format="XPM.GZ" length="2029">789c55d55b53d3501007f0773e45877d639c95b44d9a8ce303555051a00554d0f121577a87d29be8f8ddddecfe37e88496f3cbeed96cce49db9707ad9bc159ebe0e5de6a9daec7792b1fa58fad8362339f3f7dfff1faf7de7e10b5e42f8e5bedfd177bfbc3752b6f9ddf2fca1a9c09a81344495ea8c95d84b589e1c2cc65639b5f997b4119a96fe0b0b4f82f75120569573d84c3cc3c69acd7a7ad3bb7eb1570021f37b67e7337fa4b61ef77dad8faf96896feacdf71638b77e1a4b2f8c01c0755a5fd3dd4ee06723fb9c613d8efe7164e703f4b732f403fdfe002d7eb99bd3e8770089faad32848acfea539f6f59e35b67a1770827e753dc27614c41df5040ee34c7def46fd3b73ecebf3152ed0cf482df5b19e2b37f24f6a47522fd2878d36e6d89fa7c7c63a9fa630f687727382fd207ddea254eaa5ea853909905fc1deefda6dfb4719ecfb199b53df4fedbfd74942d41bbbad1ead61bfbf43d8f7af63f67a1cc1d83fd2cf532f4b53c49f6ac71247fdbbc656ef4a9da525e2b3c616ffe2c6fd7cae9d743d9faf1b5bfe3b73d6c67a166eccffa0ceb308f9019c227e563bed66a8472337e29fd479e373738eebf1dc8dfd7047c8ff593b2b72ef77eb465c9f973c6cfc5e5d143eff0decfdbead5dc86e62bddbe6b20d1fa965b5e05ded322a7d7f36b0cfd7e74d9a732fcd95d7d3cf4f25ddc0fafd505595d7ebc39579b8f6838953ce389757f17cf63947e2c425577cc7231ecb38e3c9ff393c95b3339ef382eff98197fcc82ba93979ced11a6bdef09677387e4aee939cfdf54fce8c8fb82fc796dff05b797f50adf8984fec3742fa7827e797c8aa6bd4a3f7fc41669fdaf7307fe44f7c26af85c62cf79c2f7820dd0f51e792aff89a3f4bb59dc6fbfc85bf4ac6806ff81675bef1210712d949a42dff3b72f46534e02e4f5067cc21473abfcd3d8e35a31e87b25e89fd6e10cbb52f8810f10c39c7534a71efd211659453816efa7c545b5664422572269c524577728c3463a7e3316734b1f5d1bd184ad694af69467359976bbea28564dcf3c9bf7b4a0f7c4c4b7aa415ad6923a36d5de3ff7d975a277c2af56ee595504aa56548ce9f577b7f01329ad786</data>
-    </image>
-</images>
 <connections>
     <connection>
-        <sender>days</sender>
-        <signal>valueChanged(int)</signal>
+        <sender>m_ddd</sender>
+        <signal>lostFocus()</signal>
         <receiver>KPTDurationWidget</receiver>
-        <slot>days_valueChanged(int)</slot>
+        <slot>dddLostFocus()</slot>
     </connection>
     <connection>
-        <sender>addmonth</sender>
-        <signal>clicked()</signal>
+        <sender>m_hh</sender>
+        <signal>lostFocus()</signal>
         <receiver>KPTDurationWidget</receiver>
-        <slot>addMonth()</slot>
+        <slot>hhLostFocus()</slot>
     </connection>
     <connection>
-        <sender>addweek</sender>
-        <signal>clicked()</signal>
+        <sender>m_mm</sender>
+        <signal>lostFocus()</signal>
         <receiver>KPTDurationWidget</receiver>
-        <slot>addWeek()</slot>
+        <slot>mmLostFocus()</slot>
     </connection>
     <connection>
-        <sender>subtractweek</sender>
-        <signal>clicked()</signal>
+        <sender>m_ss</sender>
+        <signal>lostFocus()</signal>
         <receiver>KPTDurationWidget</receiver>
-        <slot>subtractWeek()</slot>
+        <slot>ssLostFocus()</slot>
     </connection>
     <connection>
-        <sender>subtractmonth</sender>
-        <signal>clicked()</signal>
+        <sender>m_ms</sender>
+        <signal>lostFocus()</signal>
         <receiver>KPTDurationWidget</receiver>
-        <slot>subtractMonth()</slot>
+        <slot>msLostFocus()</slot>
     </connection>
 </connections>
-<tabstops>
-    <tabstop>addmonth</tabstop>
-    <tabstop>addweek</tabstop>
-    <tabstop>days</tabstop>
-    <tabstop>subtractweek</tabstop>
-    <tabstop>subtractmonth</tabstop>
-</tabstops>
 <includes>
     <include location="local" impldecl="in declaration">kptduration.h</include>
+    <include location="global" impldecl="in implementation">qvalidator.h</include>
+    <include location="global" impldecl="in implementation">qregexp.h</include>
     <include location="local" impldecl="in implementation">kptdurationwidget.ui.h</include>
 </includes>
+<forwards>
+    <forward>class QRegExpValidator</forward>
+</forwards>
+<variables>
+    <variable access="private">QString m_decimalPoint;</variable>
+    <variable access="private">QRegExpValidator *m_validator;</variable>
+    <variable access="private">struct FieldDescriptor *m_fields;</variable>
+</variables>
 <signals>
     <signal>valueChanged()</signal>
 </signals>
 <slots>
-    <slot>addWeek()</slot>
-    <slot>addMonth()</slot>
-    <slot>subtractWeek()</slot>
-    <slot>subtractMonth()</slot>
-    <slot access="private">days_valueChanged( int )</slot>
-    <slot access="private">hhmmss_valueChanged( const QTime &amp; )</slot>
+    <slot>setValue( const KPTDuration &amp; newDuration )</slot>
+    <slot access="private">dddLostFocus()</slot>
+    <slot access="private">hhLostFocus()</slot>
+    <slot access="private">mmLostFocus()</slot>
+    <slot access="private">ssLostFocus()</slot>
+    <slot access="private">msLostFocus()</slot>
+    <slot>handleLostFocus( int field )</slot>
 </slots>
 <functions>
-    <function returnType="KPTDuration">value()</function>
-    <function>setValue( const KPTDuration &amp; duration )</function>
+    <function access="private">init()</function>
+    <function access="private" specifier="non virtual">destroy()</function>
+    <function returnType="KPTDuration">value() const</function>
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kicondialog.h</includehint>
-    <includehint>kicondialog.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>kicondialog.h</includehint>
-    <includehint>kicondialog.h</includehint>
-    <includehint>ktimewidget.h</includehint>
-</includehints>
 </UI>
