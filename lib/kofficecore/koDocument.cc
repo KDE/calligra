@@ -324,6 +324,13 @@ KAction *KoDocument::action( const QDomElement &element ) const
   return d->m_views.getFirst()->action( element );
 }
 
+QDomDocument KoDocument::domDocument() const
+{
+//  assert(!d->m_views.isEmpty());
+//  return d->m_views.getFirst()->domDocument();
+    return QDomDocument();
+}
+
 void KoDocument::setManager( KParts::PartManager *manager )
 {
   KParts::ReadWritePart::setManager( manager );
