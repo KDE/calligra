@@ -2380,6 +2380,7 @@ void KPresenterView::setupActions()
 					     this, SLOT( extraAlignObjBottom() ),
 					     actionCollection(), "extra_alignbottom" );
 
+
     actionExtraBackground = new KAction( i18n( "Page Bac&kground..." ), "background", 0,
 					 this, SLOT( extraBackground() ),
 					 actionCollection(), "extra_background" );
@@ -2502,13 +2503,14 @@ void KPresenterView::setupActions()
      // ----------------- colorbar(Brush and Pen) action
 
      actionBrushColor = new TKSelectColorAction( i18n( "Brush Color" ), TKSelectColorAction::FillColor,
-                                                 actionCollection(), "brush_color" );
+                                                 actionCollection(), "brush_color" ,true);
      connect( actionBrushColor, SIGNAL( activated() ), SLOT( brushChosen() ) );
+     actionBrushColor->setDefaultColor(QColor());
 
      actionPenColor = new TKSelectColorAction( i18n( "Pen Color" ), TKSelectColorAction::LineColor,
                                                actionCollection(), "pen_color" );
      connect( actionPenColor, SIGNAL( activated() ), SLOT( penChosen() ) );
-
+     actionPenColor->setDefaultColor(QColor());
     actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ), actionCollection(), "extendobjectheight" );
 
     actionResizeTextObject = new KAction( i18n( "&Resize Object to fit the Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
