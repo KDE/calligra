@@ -20,10 +20,10 @@ noinst_HEADERS = kformula_main.h kformula_doc.h kformula_view.h formuladef.h \
 	kformula.h kformula_shell.h BasicElement.h RootElement.h TextElement.h\
 	BracketElement.h FractionElement.h MatrixElement.h PrefixedElement.h \
 	matrixwidget.h
-SRCMETA = kformula_main.moc kformula_view.moc kformula_doc.moc \
+METASOURCES = kformula_main.moc kformula_view.moc kformula_doc.moc \
 	kformula_shell.moc matrixwidget.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 IDL_INCLUDES = -I$(idldir)
 
@@ -38,11 +38,6 @@ uninstall-local:
 	-rm $(bindir)/kformula
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
 
 ####### Build rules
 
@@ -59,9 +54,5 @@ messages:
 kformula.cc: kformula.h
 kformula_view.h: kformula.h
 kformula_shell.h: kformula.h
-kformula_doc.cc: kformula_doc.moc
-kformula_main.cc: kformula_main.moc kformula.h
-kformula_shell.cc: kformula_shell.moc
-kformula_view.cc: kformula_view.moc
+kformula_main.cc:  kformula.h
 kformula_main.cc: kformula_view.h kformula.h
-matrixwidget.cc: matrixwidget.moc

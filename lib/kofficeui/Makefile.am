@@ -20,39 +20,11 @@ include_HEADERS = koAboutDia.h koPageLayoutDia.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h
 
-SRCMETA = koAboutDia.moc koPartSelectDia.moc koRuler.moc \
+METASOURCES = koAboutDia.moc koPartSelectDia.moc koRuler.moc \
 	  koKoolBar.moc koPartSelectDia_data.moc koTabChooser.moc \
 	  koPageLayoutDia.moc koPrintDia.moc koTemplateChooseDia.moc
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc: 
-	$(MOC) $< -o $@
-
-####### Build rules
-
-koAboutDia.moc: koAboutDia.h
-koAboutDia.cc: koAboutDia.moc
-koPartSelectDia.moc: koPartSelectDia.h
-koPartSelectDia.cc: koPartSelectDia.moc
-koRuler.moc: koRuler.h
-koRuler.cc: koRuler.moc
-koKoolBar.moc: koKoolBar.h
-koKoolBar.cc: koKoolBar.moc
-koPartSelectDia_data.moc: koPartSelectDia_data.h
-koPartSelectDia_data.cc: koPartSelectDia_data.moc
-koTabChooser.moc: koTabChooser.h
-koTabChooser.cc: koTabChooser.moc
-koPageLayoutDia.moc: koPageLayoutDia.h
-koPageLayoutDia.cc: koPageLayoutDia.moc
-koPrintDia.moc: koPrintDia.h
-koPrintDia.cc: koPrintDia.moc
-koTemplateChooseDia.moc: koTemplateChooseDia.h
-koTemplateChooseDia.cc: koTemplateChooseDia.moc
-
-
 
 
 

@@ -20,13 +20,13 @@ noinst_HEADERS = kohtml_main.h kohtml_doc.h kohtml_view.h kohtml_shell.h \
 	kpropgroup.h kpropradio.h kpropspin.h kproptext.h settingsdlg.h \
 	edithtmldlg.h kohtmljob.h
 
-SRCMETA = kohtml_main.moc kohtml_view.moc kohtml_shell.moc kohtml_doc.moc \
+METASOURCES = kohtml_main.moc kohtml_view.moc kohtml_shell.moc kohtml_doc.moc \
 	khtmlwidget_patched.moc khtmlview_patched.moc kpropcheck.moc \
 	kpropcolor.moc kpropcombo.moc kpropdlg.moc kpropfont.moc kpropgroup.moc \
 	kpropradio.moc kpropspin.moc kproptext.moc settingsdlg.moc edithtmldlg.moc \
 	kohtmljob.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 idl_DATA = kohtml.idl
 idl_HEADERS =  kohtml.h
@@ -38,11 +38,6 @@ pics_DATA = kohtml.xpm
 picsdir = $(kde_icondir)/kohtml.xpm
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
 
 ####### Build rules
 
@@ -57,22 +52,22 @@ kohtml.h: kohtml.idl
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kohtml.idl
 
 kkohtml.cc: kohtml.h
-kohtml_view.cc: kohtml.h kohtml_view.moc settingsdlg.h
-kohtml_shell.cc: kohtml.h kohtml_shell.moc
-kohtml_doc.cc: kohtml_doc.moc kohtml.h kfileio.h kohtml_doc.moc
-kohtml_main.cc: kohtml_main.moc kohtml.h kohtml_main.moc
+kohtml_view.cc: kohtml.h settingsdlg.h
+kohtml_shell.cc: kohtml.h 
+kohtml_doc.cc: kohtml.h kfileio.h
+kohtml_main.cc:  kohtml.h
 kfileio.cc: kfileio.h
-khtmlview_patched.cc: khtmlview_patched.h khtmlwidget_patched.h khtmlview_patched.moc
-khtmlwidget_patched.cc: khtmlwidget_patched.h khtmlwidget_patched.moc
-kpropcheck.cc: kpropcheck.h kpropcheck.moc
-kpropcolor.cc: kpropcolor.h kpropcolor.moc
-kpropcombo.cc: kpropcombo.h kpropcombo.moc
-kpropdlg.cc: kpropdlg.h kpropdlg.moc
-kpropfont.cc: kpropfont.h kpropfont.moc
-kpropgroup.cc: kpropgroup.h kpropgroup.moc
-kpropradio.cc: kpropradio.h kpropradio.moc
-kpropspin.cc: kpropspin.h kpropspin.moc
-kproptext.cc: kproptext.h kproptext.moc
-settingsdlg.cc: settingsdlg.h settingsdlg.moc
-edithtmldlg.cc: edithtmldlg.h edithtmldlg.moc
-kohtmljob.cc: kohtmljob.h kohtmljob.moc
+khtmlview_patched.cc: khtmlview_patched.h khtmlwidget_patched.h 
+khtmlwidget_patched.cc: khtmlwidget_patched.h 
+kpropcheck.cc: kpropcheck.h
+kpropcolor.cc: kpropcolor.h
+kpropcombo.cc: kpropcombo.h
+kpropdlg.cc: kpropdlg.h
+kpropfont.cc: kpropfont.h 
+kpropgroup.cc: kpropgroup.h 
+kpropradio.cc: kpropradio.h 
+kpropspin.cc: kpropspin.h 
+kproptext.cc: kproptext.h 
+settingsdlg.cc: settingsdlg.h 
+edithtmldlg.cc: edithtmldlg.h 
+kohtmljob.cc: kohtmljob.h 

@@ -15,10 +15,10 @@ kchart_bin_SOURCES = kchart_main.cc kchart_doc.cc kchart_view.cc kchart.cc kchar
 		sheet.cc sheetdlg.cc table.cc parser.cc
 noinst_HEADERS = kchart_main.h kchart_doc.h kchart_view.h kchart.h kchart_shell.h chart.h \
 		sheet.h sheetdlg.h table.h parser.h
-SRCMETA =	kchart_main.moc kchart_view.moc kchart_doc.moc kchart_shell.moc \
+METASOURCES =	kchart_main.moc kchart_view.moc kchart_doc.moc kchart_shell.moc \
 		sheet.moc sheetdlg.moc table.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA) chart.h chart.cc
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES) chart.h chart.cc
 
 IDL_INCLUDES = -I$(idldir) -I$(interfacedir)
 
@@ -29,11 +29,6 @@ kdelnk_DATA = kchart_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
 
 ####### Build rules
 
@@ -54,13 +49,10 @@ chart.h: ../lib/interfaces/chart.idl
 kchart.cc: kchart.h
 kchart_view.h: kchart.h
 kchart_shell.h: kchart.h
-kchart_doc.cc: kchart_doc.moc
-kchart_main.cc: kchart_main.moc kchart.h chart.h
-kchart_shell.cc: kchart_shell.moc
-kchart_view.cc: kchart_view.moc
+kchart_main.cc:  kchart.h chart.h
 kchart_main.cc: kchart_view.h kchart.h
 kchart.h: chart.h
-sheet.cc: sheet.h sheet.moc
-sheetdlg.cc: sheetdlg.h sheetdlg.moc
+sheet.cc: sheet.h 
+sheetdlg.cc: sheetdlg.h 
 parser.cc: parser.h
-table.cc: table.h table.moc
+table.cc: table.h 

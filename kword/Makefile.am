@@ -20,11 +20,11 @@ noinst_HEADERS = char.h kword_main.h kword_doc.h kword_view.h kword.h kword_shel
 		formats.h frame.h framedia.h stylist.h  kcharselect.h kcharselectdia.h \
 		kword_utils.h searchdia.h preview.h tabledia.h
 
-SRCMETA =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc \
+METASOURCES =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc \
 		kword_page.moc framedia.moc stylist.moc kcharselect.moc kcharselectdia.moc \
 		searchdia.moc tabledia.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 idl_DATA = kword.idl
 idl_HEADERS =  kword.h
@@ -32,14 +32,9 @@ idl_HEADERS =  kword.h
 kdelnk_DATA = kword_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = . toolbar templates
+SUBDIRS = toolbar templates
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
 
 ####### Build rules
 
@@ -56,10 +51,6 @@ kword.h: kword.idl
 kword.cc: kword.h
 kword_view.h: kword.h
 kword_shell.h: kword.h
-kword_doc.cc: kword_doc.moc
-kword_main.cc: kword_main.moc
-kword_shell.cc: kword_shell.moc
-kword_view.cc: kword_view.moc
 kword_main.cc: kword_view.h kword.h
 char.cc: char.h kword.h
 fc.cc: fc.h
@@ -69,17 +60,9 @@ kword_page.cc: kword_page.h
 parag.cc: parag.h
 paraglayout.cc: paraglayout.h kword.h kword_view.h
 formatcollection.cc: formatcollection.h
-paragdia.cc: paragdia.moc
-kword_page.cc: kword_page.moc
 imagecollection.cc: imagecollection.h
 image.cc: image.h
 kword_view.h: kword.h
 frame.cc: frame.h
-framedia.cc: framedia.moc
-stylist.cc: stylist.moc
-kcharselect.cc: kcharselect.moc
-kcharselectdia.cc: kcharselectdia.moc
 kword_utils.cc: kword_utils.h
 stylist.cc: kword.h
-searchdia.cc: searchdia.moc
-tabledia.cc: tabledia.moc

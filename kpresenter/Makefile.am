@@ -46,7 +46,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		rotatecmd.h lowraicmd.h pievaluecmd.h rectvaluecmd.h penbrushcmd.cc \
 		commandhistory.h preview.h
 
-SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
+METASOURCES =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc \
 		page.moc ktextobject.moc backdia.moc styledia.moc \
 		kenumlistdia.moc kcharselect.moc kcharselectdia.moc \
@@ -68,19 +68,14 @@ SRCMETA =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 idl_DATA =	kpresenter.idl
 idl_HEADERS =	kpresenter.h
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 kdelnk_DATA = kpresenter.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = autoformEdit . autoforms pics toolbar templates dtd
+SUBDIRS = autoformEdit autoforms pics toolbar templates dtd
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc 
-
-.h.moc:
-	$(MOC) $< -o $@      
 
 ####### Build rules
 
@@ -95,64 +90,7 @@ kpresenter.h: kpresenter.idl
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kpresenter.idl
 
 kpresenter.cc: kpresenter.h
-kpresenter_doc.cc: kpresenter_doc.moc
-kpresenter_main.cc: kpresenter.h kpresenter_main.moc
-kpresenter_shell.cc: kpresenter.h kpresenter_shell.moc
-kpresenter_view.cc: kpresenter.h kpresenter_view.moc
-backdia.cc: backdia.moc
-page.cc: page.moc kpresenter.h
-ktextobject.cc: ktextobject.moc
-styledia.cc: styledia.moc
-kenumlistdia.cc: kenumlistdia.moc
-kcharselect.cc: kcharselect.moc
-kcharselectdia.cc: kcharselectdia.moc
-optiondia.cc: optiondia.moc
-pgconfdia.cc: pgconfdia.moc
-effectdia.cc: effectdia.moc
-rotatedia.cc: rotatedia.moc
-ksearchdialogs.cc: ksearchdialogs.moc
-shadowdia.cc: shadowdia.moc
-presstructview.cc: presstructview.moc
-delpagedia.cc: delpagedia.moc
-inspagedia.cc: inspagedia.moc
-confpiedia.cc: confpiedia.moc
-spacingdia.cc: spacingdia.moc
-confrectdia.cc: confrectdia.moc
-
-kpobject.cc: kpobject.moc
-kplineobject.cc: kplineobject.moc
-kprectobject.cc: kprectobject.moc
-kpellipseobject.cc: kpellipseobject.moc
-kpautoformobject.cc: kpautoformobject.moc
-kpclipartobject.cc: kpclipartobject.moc
-kptextobject.cc: kptextobject.moc
-kppixmapobject.cc: kppixmapobject.moc
-kpbackground.cc: kpbackground.moc
-kppixmap.cc: kppixmap.moc
-kpclipart.cc: kpclipart.moc
-kpgradient.cc: kpgradient.moc
-kppixmapcollection.cc: kppixmapcollection.moc
-kpgradientcollection.cc: kpgradientcollection.moc
-kppieobject.cc: kppieobject.moc
-kppartobject.cc: kppartobject.moc
-
-command.cc: command.moc
-movecmd.cc: movecmd.moc
-resizecmd.cc: resizecmd.moc
-insertcmd.cc: insertcmd.moc
-deletecmd.cc: deletecmd.moc
-setoptionscmd.cc: setoptionscmd.moc
-chgclipcmd.cc: chgclipcmd.moc
-chgpixcmd.cc: chgpixcmd.moc
-setbackcmd.cc: setbackcmd.moc
-effectcmd.cc: effectcmd.moc
-pgconfcmd.cc: pgconfcmd.moc
-pglayoutcmd.cc: pglayoutcmd.moc
-shadowcmd.cc: shadowcmd.moc
-rotatecmd.cc: rotatecmd.moc
-lowraicmd.cc: lowraicmd.moc
-pievaluecmd.cc: pievaluecmd.moc
-rectvaluecmd.cc: rectvaluecmd.moc
-commandhistory.cc: commandhistory.moc
-shadowcmd.cc: penbrushcmd.moc
-penbrushcmd.cc: penbrushcmd.moc
+kpresenter_main.cc: kpresenter.h 
+kpresenter_shell.cc: kpresenter.h 
+kpresenter_view.cc: kpresenter.h 
+page.cc:  kpresenter.h

@@ -14,23 +14,17 @@ kimage_bin_SOURCES = kimage_main.cc kimage_shell.cc kimage_doc.cc \
 noinst_HEADERS = kimage_main.h kimage_shell.h kimage_doc.h \
 	         kimage.h kimage_view.h
 
-SRCMETA = kimage_main.moc kimage_shell.moc kimage_doc.moc \
-	  kimage_view.moc
+METASOURCES = kimage_main.moc kimage_shell.moc kimage_doc.moc kimage_view.moc
 
 idl_DATA = kimage.idl
 idl_HEADERS = kimage.h
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 kdelnk_DATA = kimage_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc: 
-	$(MOC) $< -o $@
 
 ####### Build rules
 
@@ -46,7 +40,7 @@ kimage.h: kimage.idl
 	$(IDL) $(IDL_FLAGS) kimage.idl
 
 kimage.cc: kimage.h
-kimage_doc.cc: kimage.h kimage_doc.moc
-kimage_main.cc: kimage.h kimage_main.moc
-kimage_shell.cc: kimage.h kimage_shell.moc
-kimage_view.cc: kimage.h kimage_view.moc
+kimage_doc.cc: kimage.h 
+kimage_main.cc: kimage.h
+kimage_shell.cc: kimage.h 
+kimage_view.cc: kimage.h 

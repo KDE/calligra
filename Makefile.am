@@ -1,7 +1,7 @@
 
 SUBDIRS = lib kspread kpresenter kword kformula kdiagramm killustrator kimage kohtml tools plugins trader koshell po pics
 
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign # 1.4
 
 acinclude.m4: admin/acinclude.m4.in admin/libtool.m4.in
 	@cat $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in   > $(top_srcdir)/acinclude.m4 

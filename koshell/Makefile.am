@@ -12,22 +12,17 @@ koshell_bin_SOURCES = koshell_main.cc koshell_shell.cc
 
 noinst_HEADERS = koshell_main.h koshell_shell.h
 
-SRCMETA = koshell_main.moc koshell_shell.moc
+METASOURCES = koshell_main.moc koshell_shell.moc
 
 #idl_DATA = koshell.idl
 #idl_HEADERS = koshell.h
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 #kdelnk_DATA = koshell_part.kdelnk
 #kdelnkdir = $(kde_datadir)/koffice/partlnk
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc: 
-	$(MOC) $< -o $@
 
 ####### Build rules
 
@@ -42,5 +37,3 @@ messages:
 # koshell.h: koshell.idl
 #	$(IDL) $(IDL_FLAGS) koshell.idl
 
-koshell_main.cc: koshell_main.moc
-koshell_shell.cc: koshell_shell.moc

@@ -20,28 +20,22 @@ include_HEADERS = koffice.h koView.h koFrame.h koIMR.h \
 	koApplication.h koPOAMediator.h trader.h koQueryTrader.h \
 	koQueryTypes.h koFilterManager.h typerepo.h
 
-SRCMETA = koFrame.moc koMainWindow.moc koApplication.moc
+libkofficecore_la_METASOURCES = koFrame.moc koMainWindow.moc koApplication.moc
+
+DISTCLEANFILES = $(libkofficecore_la_METASOURCES)
 
 idl_DATA = koffice.idl
 idl_HEADERS =  koffice.h
 
 ####### Implicit rules
 
-SUFFIXES = .h .moc
-
-.h.moc: 
-	$(MOC) $< -o $@
-
 ####### Build rules
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(srcdir) -I$(srcdir)/../store -I$(srcdir)/../interfaces -I$(idldir)
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(srcdir) -I$(srcdir)/../store -I$(interfacedir) -I$(idldir)
 
-koFrame.moc: koFrame.h
-koFrame.cc: koFrame.moc koffice.h
-koMainWindow.moc: koMainWindow.h
-koMainWindow.cc: koMainWindow.moc koffice.h
-koApplication.moc: koApplication.h
-koApplication.cc: koApplication.moc koffice.h
+koFrame.cc: koffice.h
+koMainWindow.cc: koffice.h
+koApplication.cc: koffice.h
 koDocument.cc: koDocument.h
 koDocument.h: koffice.h
 koIMR.cc: trader.h

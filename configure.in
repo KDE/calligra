@@ -1,5 +1,5 @@
 
-AC_PREREQ([2.13])
+dnl AC_PREREQ([2.13])
 
 dnl without this order in this file, autoconf will not work!
 dnl the argument is a source file out of your sources. But

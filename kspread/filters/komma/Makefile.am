@@ -14,9 +14,9 @@ kspread_filter_bin_SOURCES = main.cc
 
 noinst_HEADERS = main.h
 
-SRCMETA = main.moc
+METASOURCES = main.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 idl_DATA = 
 idl_HEADERS =  
@@ -29,11 +29,6 @@ datas_DATA = komma.py
 
 ####### Implicit rules
 
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
-
 ####### Build rules
 
 install-exec-local:
@@ -42,5 +37,5 @@ install-exec-local:
 messages: 
 #	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot  *.cc && mv messages.po ../../kspread_filter.pot
 
-main.cc: main.h main.moc
+main.cc: main.h
 

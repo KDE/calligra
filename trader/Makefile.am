@@ -19,16 +19,11 @@ noinst_HEADERS = parse.h parse_tree.h y.tab.h lookup.h misc.h \
 idl_DATA =
 idl_HEADERS =
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) 
 
 SUBDIRS = data
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc: 
-	$(MOC) $< -o $@
 
 ####### Build rules
 

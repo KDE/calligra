@@ -11,9 +11,9 @@ spell_tool_SOURCES = main.cc datatools.cc
 
 noinst_HEADERS = main.h datatools.h
 
-SRCMETA =	main.moc
+METASOURCES =	main.moc
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES)
 
 idl_DATA = 
 idl_HEADERS =  
@@ -22,11 +22,6 @@ kdelnk_DATA = spell_tool.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/toollnk
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
 
 ####### Build rules
 
@@ -43,4 +38,3 @@ datatools.h: $(idldir)/datatools.idl
 
 main.cc: main.h
 datatools.cc: datatools.h
-main.cc: main.moc

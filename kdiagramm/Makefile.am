@@ -1,5 +1,5 @@
 
-SUBDIRS = . pics
+SUBDIRS = pics
 
 INCLUDES  = $(PYTHONINC) $(MICO_INCLUDES) $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(PYTHONLIB) $(MICO_LDFLAGS) $(KDE_RPATH)
@@ -18,23 +18,18 @@ noinst_HEADERS = kdiagramm_main.h kdiagramm_shell.h kdiagramm_doc.h \
 	         kdiagramm.h kdiagramm_view.h chart.h \
 		 sheet.h table.h parser.h sheetdlg.h
 
-SRCMETA = kdiagramm_main.moc kdiagramm_shell.moc kdiagramm_doc.moc \
+METASOURCES = kdiagramm_main.moc kdiagramm_shell.moc kdiagramm_doc.moc \
 	kdiagramm_view.moc koDiagramm.moc table.moc sheet.moc sheetdlg.moc
 
 idl_DATA = kdiagramm.idl
 idl_HEADERS = kdiagramm.h
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA) chart.h chart.cc
+DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(METASOURCES) chart.h chart.cc
 
 kdelnk_DATA = kdiagramm_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc: 
-	$(MOC) $< -o $@
 
 ####### Build rules
 
@@ -49,17 +44,17 @@ messages:
 kdiagramm.h: kdiagramm.idl
 	$(IDL) $(IDL_FLAGS) kdiagramm.idl
 
-chart.h: ../lib/interfaces/chart.idl
+chart.h: $(top_srcdir)/lib/interfaces/chart.idl
 	$(IDL) $(IDL_FLAGS) ../lib/interfaces/chart.idl
 
 chart.cc: chart.h
-table.cc: table.h table.moc
-sheet.cc: sheet.h sheet.moc
-sheetdlg.cc: sheetdlg.h sheetdlg.moc
+table.cc: table.h 
+sheet.cc: sheet.h 
+sheetdlg.cc: sheetdlg.h 
 parser.cc: parser.h
 kdiagramm.cc: kdiagramm.h
-kdiagramm_doc.cc: kdiagramm.h kdiagramm_doc.moc
-kdiagramm_main.cc: kdiagramm.h kdiagramm_main.moc
-kdiagramm_shell.cc: kdiagramm.h kdiagramm_shell.moc
-kdiagramm_view.cc: kdiagramm.h kdiagramm_view.moc
-koDiagramm.cc: koDiagramm.h koDiagramm.moc
+kdiagramm_doc.cc: kdiagramm.h 
+kdiagramm_main.cc: kdiagramm.h 
+kdiagramm_shell.cc: kdiagramm.h 
+kdiagramm_view.cc: kdiagramm.h 
+koDiagramm.cc: koDiagramm.h 

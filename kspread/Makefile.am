@@ -26,15 +26,15 @@ noinst_HEADERS = kmetaedit.h kspread_emacs.h kspread_main.cc \
 	chart.h y.tab.h dep.tab.h kspread_calc.h kspread_dlg_cons.h \
 	datatools.h kspread_util.h
 
-SRCMETA = kspread_main.moc kspread_shell.moc kspread_doc.moc \
+METASOURCES = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 	kspread_view.moc kspread_tabbar.moc \
 	kspread_table.moc kspread_dlg_layout.moc \
 	kspread_dlg_scripts.moc kspread_part.moc kspread_dlg_cons.moc
 
 idl_DATA = kspread.idl
-idl_HEADERS = kspread.h
+idl_HEADERS = kspread.h chart.h
 
-DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA) chart.h chart.cc
+DISTCLEANFILES = $(idl_HEADERS:.h=.cc) $(idl_HEADERS) $(METASOURCES)
 
 kdelnk_DATA = kspread_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
@@ -45,14 +45,9 @@ kdemimedir = $(kde_mimedir)/application
 py_DATA = KSpread.py KOffice.py KOStore.py OpenPartsUI.py OpenParts.py KOM.py
 pydir = $(kde_includes)/python
 
-SUBDIRS = . pics scripts dtd filters
+SUBDIRS =  pics scripts dtd filters
 
 ####### Implicit rules
-
-SUFFIXES = .h .moc
-
-.h.moc: 
-	$(MOC) $< -o $@
 
 ####### Build rules
 
@@ -70,10 +65,10 @@ install-exec-local:
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot -x $(includedir)/corba.pot  *.cc && mv messages.po ../po/kspread.pot
 
-kspread.h: kspread.idl ../lib/kofficecore/koffice.idl
+kspread.h: kspread.idl $(top_srcdir)/lib/kofficecore/koffice.idl
 	$(IDL) $(IDL_FLAGS) $(srcdir)/kspread.idl
 
-chart.h: ../lib/interfaces/chart.idl
+chart.h: $(interfacedir)/chart.idl
 	$(IDL) $(IDL_FLAGS) $(interfacedir)/chart.idl
 
 datatools.h: $(idldir)/datatools.idl
@@ -81,20 +76,13 @@ datatools.h: $(idldir)/datatools.idl
 
 datatools.cc: datatools.h
 kspread.cc: kspread.h
-kspread_dlg_cons.cc: kspread_dlg_cons.moc
-kspread_dlg_layout.cc: kspread_dlg_layout.moc
-kspread_dlg_paper.cc: kspread_dlg_paper.moc
-kspread_dlg_paper_border.cc: kspread_dlg_paper_border.moc
-kspread_dlg_paper_headings.cc: kspread_dlg_paper_headings.moc
-kspread_dlg_print.cc: kspread_dlg_print.moc
-kspread_dlg_scripts.cc: kspread_dlg_scripts.moc
-kspread_doc.cc: kspread.h kspread_doc.moc
-kspread_main.cc: kspread.h kspread_table.h kspread_main.moc
-kspread_part.cc: kspread.h kspread_part.moc
-kspread_shell.cc: kspread.h kspread_shell.moc
-kspread_tabbar.cc: kspread.h kspread_tabbar.moc
-kspread_table.cc: kspread.h kspread_table.moc
-kspread_view.cc: kspread.h kspread_view.moc kspread_table.h chart.h
+kspread_doc.cc: kspread.h 
+kspread_main.cc: kspread.h kspread_table.h 
+kspread_part.cc: kspread.h 
+kspread_shell.cc: kspread.h 
+kspread_tabbar.cc: kspread.h 
+kspread_table.cc: kspread.h 
+kspread_view.cc: kspread.h  kspread_table.h chart.h
 kspread_table.h: chart.h
 kspread_util.h: kspread.h
 KOM.py: KSpread.py
