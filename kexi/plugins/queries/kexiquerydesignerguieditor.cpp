@@ -21,7 +21,7 @@
 #include "kexiquerydesignerguieditor.h"
 
 #include <qlayout.h>
-#include <qsplitter.h>
+#include <qpainter.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -41,30 +41,36 @@
 #include "kexiquerydocument.h"
 #include "kexidialogbase.h"
 #include "kexidatatable.h"
+#include "kexi_utils.h"
+#include "kexisectionheader.h"
 
 #include "widget/relations/kexirelationwidget.h"
 
 #define MAX_FIELDS 101 //nice prime number
 
+
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name)
  : KexiViewBase(mainWin, parent, name)
 {
-//	setDirty(true);
 	m_conn = mainWin->project()->dbConnection();
 	m_doc = doc;
 
-	QSplitter *s = new QSplitter(Vertical, this);
+	m_spl = new QSplitter(Vertical, this);
+	m_spl->setChildrenCollapsible(false);
 //	KexiInternalPart::createWidgetInstance("relation", win, s, "relation");
-	m_relations = new KexiRelationWidget(mainWin, s, "relations");
+	m_relations = new KexiRelationWidget(mainWin, m_spl, "relations");
+
 //	addActionProxyChild( m_view->relationView() );
 /*	KexiRelationPart *p = win->relationPart();
 	if(p)
 		p->createWidget(s, win);*/
 
-	m_dataTable = new KexiDataTable(mainWin, s, "guieditor_dataTable", false);
+	m_head = new KexiSectionHeader(i18n("Query columns"), Vertical, m_spl);
+//	s->setResizeMode(m_head, QSplitter::KeepSize);
+	m_dataTable = new KexiDataTable(mainWin, m_head, "guieditor_dataTable", false);
 	m_dataTable->tableView()->setSpreadSheetMode();
-	m_dataTable->tableView()->addDropFilter("kexi/field");
-	addActionProxyChild(m_dataTable);
+//	m_dataTable->tableView()->addDropFilter("kexi/field");
+//	setFocusProxy(m_dataTable);
 
 	m_data = new KexiTableViewData();
 	initTable();
@@ -72,15 +78,31 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, 
 	//last column occupies the rest of the area
 	m_dataTable->tableView()->setColumnStretchEnabled( true, m_data->columnsCount()-1 ); 
 	m_dataTable->tableView()->adjustColumnWidthToContents(-1);
+	m_dataTable->tableView()->setDropsAtRowEnabled(true);
+	connect(m_dataTable->tableView(), SIGNAL(dragOverRow(KexiTableItem*,int,QDragMoveEvent*)),
+		this, SLOT(slotDragOverTableRow(KexiTableItem*,int,QDragMoveEvent*)));
+	connect(m_dataTable->tableView(), SIGNAL(droppedAtRow(KexiTableItem*,int,QDropEvent*)),
+		this, SLOT(slotDroppedAtRow(KexiTableItem*,int,QDropEvent*)));
 
 	kdDebug() << "KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor() data = " << m_data << endl;
 //	m_table = new KexiTableView(m_data, s, "designer");
 	QVBoxLayout *l = new QVBoxLayout(this);
-	l->addWidget(s);
+	l->addWidget(m_spl);
 
-	connect(m_dataTable->tableView(), SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
+	addChildView(m_relations);
+//	addActionProxyChild(m_relations);
+	setViewWidget(m_relations);
+	addChildView(m_dataTable);
+//	addActionProxyChild(m_dataTable);
 //	restore();
+	m_relations->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+	m_head->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+	updateGeometry();
+//	m_spl->setResizeMode(m_relations, QSplitter::KeepSize);
+//	m_spl->setResizeMode(m_head, QSplitter::FollowSizeHint);
+	m_spl->setSizes(QValueList<int>()<< 800<<400);
 }
+
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 {
@@ -162,7 +184,7 @@ KexiQueryDesignerGuiEditor::addRow(const QString &tbl, const QString &field)
 }
 
 void
-KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
+KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem *item, int row, QDropEvent *ev)
 {
 	//TODO: better check later if the source is really a table
 	QString srcTable;
@@ -170,7 +192,8 @@ KexiQueryDesignerGuiEditor::slotDropped(QDropEvent *ev)
 	QString dummy;
 
 	KexiFieldDrag::decode(ev,dummy,srcTable,srcField);
-	addRow(srcTable, srcField);
+	//TODO
+//	addRow(srcTable, srcField);
 }
 
 KexiDB::QuerySchema *
@@ -238,6 +261,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled)
 	//update the pointer :)
 	if (mode==Kexi::DesignViewMode) {
 		//todo
+		return true;
 	}
 	else if (mode==Kexi::DataViewMode) {
 		if (!dirty() && parentDialog()->neverSaved()) {
@@ -274,6 +298,20 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata)
 bool KexiQueryDesignerGuiEditor::storeData()
 {
 	return true;
+}
+
+QSize KexiQueryDesignerGuiEditor::sizeHint() const
+{
+	QSize s1 = m_relations->sizeHint();
+	QSize s2 = m_head->sizeHint();
+	return QSize(QMAX(s1.width(),s2.width()), s1.height()+s2.height());
+}
+
+void KexiQueryDesignerGuiEditor::slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e)
+{
+	if (e->provides("kexi/field")) {
+		e->acceptAction(true);
+	}
 }
 
 #include "kexiquerydesignerguieditor.moc"

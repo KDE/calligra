@@ -22,13 +22,16 @@
 #define KEXIQUERYDESIGNERGUIEDITOR_H
 
 #include <qguardedptr.h>
+#include <qsplitter.h>
 
 #include <kexiviewbase.h>
 
 class KexiMainWindow;
 class KexiTableViewData;
 class KexiDataTable;
+class KexiTableItem;
 class KexiRelationWidget;
+class KexiSectionHeader;
 
 namespace KexiPart
 {
@@ -54,6 +57,8 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 		KexiRelationWidget *relationView() const;
 
+		virtual QSize sizeHint() const;
+
 	protected:
 		void			initTable();
 		void			addRow(const QString &tbl, const QString &field);
@@ -65,7 +70,8 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		virtual bool storeData();
 
 	protected slots:
-		void			slotDropped(QDropEvent *ev);
+		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
+		void slotDroppedAtRow(KexiTableItem *item, int row, QDropEvent *ev);
 
 	private:
 		KexiTableViewData *m_data;
@@ -73,6 +79,8 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		QGuardedPtr<KexiDB::Connection> m_conn;
 		KexiRelationWidget *m_relations;
 		KexiQueryDocument *m_doc;
+		KexiSectionHeader *m_head;
+		QSplitter *m_spl;
 };
 
 #endif
