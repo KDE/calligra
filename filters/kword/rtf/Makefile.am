@@ -1,1 +1,1 @@
-SUBDIRS = import export
+SUBDIRS = export
