@@ -645,7 +645,7 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
 void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect,QColorGroup &/*cg*/, KWViewMode *viewMode )
 {
     QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-    //kdDebug(32002) << "KWFrameSet::drawFrameBorder frame: " << frame
+    //kdDebug(32002) << "KWFrameSet::drawMargins frame: " << frame
     //               << " outerRect: " << outerRect << endl;
 
     if ( !crect.intersects( outerRect ) )
@@ -699,6 +699,7 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
 
     painter->save();
     QBrush bgBrush( settingsFrame->backgroundColor() );
+    //bool defaultColor = !bgBrush.color().isValid();
     bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
     painter->setBrush( bgBrush );
 
@@ -1199,6 +1200,57 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
     m_currentDrawnCanvas = 0L;
 }
 
+void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
+                            QColorGroup &cg, bool, bool,
+                            KWFrameSetEdit *edit )
+{
+    if ( crect.isEmpty() )
+        return;
+    // Double-buffering
+    QPixmap* pix = m_doc->doubleBufferPixmap( crect.size() );
+    QPainter* doubleBufPainter = new QPainter;
+    doubleBufPainter->begin( pix );
+
+    // Transparency handling
+    //QRegion region( crect );
+    QRect myFrameRect( m_doc->zoomRect( *frame ) );
+    QPtrList<KWFrame> framesUnderMe = m_doc->framesUnderFrame( frame );
+    //kdDebug() << "KWFrameSet::drawFrame framesUnderMe: " << framesUnderMe.count() << endl;
+    QPtrListIterator<KWFrame> it( framesUnderMe );
+    for ( ; it.current() ; ++it )
+    {
+        KWFrame* f = it.current();
+        QRect frameRect( m_doc->zoomRect( *f ) );
+        //kdDebug() << "KWFrameSet::drawFrame " << crect.intersect( frameRect ) << " " << f->frameSet()->getName() << endl;
+        doubleBufPainter->save();
+
+        QRect theCRect = crect;
+        theCRect.moveBy( myFrameRect.x(), myFrameRect.y() ); // ### TODO normalToView ...
+
+        theCRect &= frameRect; // intersect
+        if ( !theCRect.isEmpty() )
+        {
+            theCRect.moveBy( -frameRect.x(), -frameRect.y() );
+            //// TODO KWFrame * settingsFrame = ( f->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
+            KWFrame * settingsFrame = f;
+            doubleBufPainter->translate( -myFrameRect.x(), -myFrameRect.y() );
+            f->frameSet()->drawFrameBorder( painter, f, settingsFrame, theCRect, m_currentDrawnCanvas->viewMode(), m_currentDrawnCanvas );
+            f->frameSet()->drawMargins( f, painter, theCRect, cg, m_currentDrawnCanvas->viewMode() );
+            doubleBufPainter->translate( frameRect.x(), frameRect.y() );
+            f->frameSet()->drawFrameContents( f, doubleBufPainter, theCRect, cg, 0 );
+        }
+
+        doubleBufPainter->restore();
+        //QRegion clipRegion( region.intersect( frameRect ) );
+        //region -= clipRegion;
+    }
+
+    drawFrameContents( frame, doubleBufPainter, crect, cg, edit );
+    painter->drawPixmap( crect.topLeft(), *pix, crect );
+
+    delete doubleBufPainter;
+}
+
 bool KWFrameSet::contains( double mx, double my )
 {
     QPtrListIterator<KWFrame> frameIt = frameIterator();
@@ -1691,10 +1743,10 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
     }
 }
 
-void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
-                                   QColorGroup &, bool, bool, KWFrameSetEdit * )
+void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,
+                                   QColorGroup &, KWFrameSetEdit * )
 {
-    //kdDebug() << "KWPictureFrameSet::drawFrame crect=" << crect << " size=" << kWordDocument()->zoomItX( frame->innerWidth() ) << "x" << kWordDocument()->zoomItY( frame->innerHeight() ) << endl;
+    //kdDebug() << "KWPictureFrameSet::drawFrameContents crect=" << crect << " size=" << kWordDocument()->zoomItX( frame->innerWidth() ) << "x" << kWordDocument()->zoomItY( frame->innerHeight() ) << endl;
     m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
                   crect.x(), crect.y(), crect.width(), crect.height(), !m_finalSize);
 }

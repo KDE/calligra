@@ -229,6 +229,8 @@ public:
      */
     KWFrame * frameUnderMouse( const QPoint& nPoint, bool* border = 0L, bool firstNonSelected = false );
 
+    QPtrList<KWFrame> framesUnderFrame( KWFrame* frame ) const;
+
     // Return the total number of framesets
     unsigned int getNumFrameSets()
     { return m_lstFrameSet.count(); }
@@ -298,7 +300,16 @@ public:
      **/
      void delayedRepaintAllViews();
 
-
+    /**
+     * Return a double-buffer pixmap of (at least) the given size.
+     */
+    QPixmap* doubleBufferPixmap( const QSize& );
+    /**
+     * Call this when you're done with the double-buffer pixmap (at the
+     * end of the current painting, for all objects that need to be painted).
+     * If it's too big, KWDocument will delete it to save memory.
+     */
+    void maybeDeleteDoubleBufferPixmap();
 
     /**
      * Tell this method when a frame is moved / resized / created / deleted
@@ -861,6 +872,7 @@ private:
     double m_tabStop;
     QStringList m_spellListIgnoreAll;
     KWFrameSet * bgFrameSpellChecked;
+    QPixmap* m_bufPixmap;
 
     class InitialEditing;
     InitialEditing *m_initialEditing;

@@ -247,6 +247,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_clipartMap = 0L;
     m_pasteFramesetsMap = 0L;
     m_initialEditing = 0L;
+    m_bufPixmap = 0L;
     m_varFormatCollection = new KoVariableFormatCollection;
     m_varColl=new KWVariableCollection(new KWVariableSettings() );
 
@@ -346,6 +347,7 @@ KWDocument::~KWDocument()
     delete m_tableTemplateColl;
     delete m_pKSpellConfig;
     delete m_viewMode;
+    delete m_bufPixmap;
 }
 
 void KWDocument::initConfig()
@@ -2712,6 +2714,24 @@ KWFrameSet * KWDocument::frameSetByName( const QString & name )
 
 //#define DEBUG_FRAMESELECT
 
+QPtrList<KWFrame> KWDocument::framesUnderFrame( KWFrame* frame ) const
+{
+    QPtrList<KWFrame> ret;
+    int page = QMIN(m_pages-1, frame->pageNum());
+    QPtrList<KWFrame> frames = framesInPage(page);
+
+    for (KWFrame *f = frames.first();f;f=frames.next()) { // z-order
+        // only consider non-inline frames, they are painted by their hosting frameset.
+        if (f->frameSet()->isFloating())
+            continue;
+        if ( f == frame )
+            break;
+        if ( f->intersects( *frame ) )
+            ret.append( f );
+    }
+    return ret;
+}
+
 KWFrame * KWDocument::deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, bool *border) {
 #ifdef DEBUG_FRAMESELECT
     kdDebug(32001) << "KWDocument::deepestInlineFrame parent=" << parent << " nPoint=" << nPoint << endl;
@@ -4172,6 +4192,32 @@ void KWDocument::initBookmarkList()
         }
     }
     m_tmpBookMarkList.clear();
+}
+
+QPixmap* KWDocument::doubleBufferPixmap( const QSize& s )
+{
+    if ( !m_bufPixmap ) {
+	int w = QABS( s.width() );
+	int h = QABS( s.height() );
+	m_bufPixmap = new QPixmap( w, h );
+    } else {
+	if ( m_bufPixmap->width() < s.width() ||
+	     m_bufPixmap->height() < s.height() ) {
+	    m_bufPixmap->resize( QMAX( s.width(), m_bufPixmap->width() ),
+				QMAX( s.height(), m_bufPixmap->height() ) );
+	}
+    }
+
+    return m_bufPixmap;
+}
+
+void KWDocument::maybeDeleteDoubleBufferPixmap()
+{
+    if ( m_bufPixmap && m_bufPixmap->height() * m_bufPixmap->width() > 400*400 )
+    {
+        delete m_bufPixmap;
+        m_bufPixmap = 0L;
+    }
 }
 
 #include "kwdoc.moc"

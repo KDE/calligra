@@ -533,10 +533,20 @@ public:
      * Draw a particular frame of this frameset.
      * This is called by drawContents and is what framesets must reimplement.
      * @param crect rectangle to be repainted, in the _frame_'s coordinate system (in pixels).
+     * Default implementation does double-buffering and calls drawFrameContents.
      */
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
                             QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                            KWFrameSetEdit *edit ) = 0;
+                            KWFrameSetEdit *edit );
+
+    /**
+     * Implement this one instead of drawFrame to benefit from double-buffering
+     * AND transparency handling (painting frames below this one) automatically.
+     */
+    virtual void drawFrameContents( KWFrame *frame, QPainter *painter, const QRect &crect,
+                                    QColorGroup &cg, KWFrameSetEdit* edit ) {
+        drawFrame( frame, painter, crect, cg, false, false, edit );
+    }
 
     /**
      * Draw a margin of a specific frame of this frameSet
@@ -711,6 +721,7 @@ protected:
     virtual void deleteAnchors();
     virtual void createAnchors( KWTextParag * parag, int index, bool placeHolderExists = false );
 
+
     KWDocument *m_doc;            // Document
     QPtrList<KWFrame> frames;        // Our frames
 
@@ -771,9 +782,8 @@ public:
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
 
-    virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect & crect,
-                            QColorGroup &, bool onlyChanged, bool resetChanged,
-                            KWFrameSetEdit *edit = 0L );
+    virtual void drawFrameContents( KWFrame *frame, QPainter *painter, const QRect & crect,
+                                    QColorGroup &, KWFrameSetEdit *edit );
 
     // Pixmaps can be transparent
     virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
