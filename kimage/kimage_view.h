@@ -73,7 +73,6 @@ protected slots:
 
   // help action slots
   void helpUsingHelp();
-  void helpAboutKImage();
 
 public slots:
 
@@ -97,7 +96,7 @@ private:
   KAction *m_zoomFactor, *m_zoomIn10, *m_zoomOut10, *m_zoomDouble, *m_zoomHalf, *m_zoomMax, *m_zoomMaxAspect;
 
   // help menu
-  KAction *m_helpAbout, *m_helpUsing;
+  KAction *m_helpUsing;
 };
 
 #endif // __kimage_view_h__

@@ -99,6 +99,11 @@ public:
   PositionMode positionMode() { return m_posMode; };
   void setZoomFactor( QPoint _factor ) { m_zoomFactorValue = _factor; };
   QPoint zoomFactor() { return m_zoomFactorValue; };
+
+  QString positionString();
+  void setPositionString( QString );
+  QString sizeString();
+  void setSizeString( QString );
   
 signals:
 

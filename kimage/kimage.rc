@@ -38,7 +38,6 @@
  </Menu>
  <Menu name="Help">
   <Action name="helpUsingHelp"/>
-  <Action name="helpAboutKImage"/> 
  </Menu>
 </MenuBar>
 <ToolBars>

@@ -23,9 +23,9 @@
 #include <qdom.h>
 #include <qtextstream.h>
 #include <qbuffer.h>
+#include <qdatetime.h>
 
 #include <kstddirs.h>
-#include <kmimetype.h>
 #include <kdebug.h>
 #include <kimgio.h>
 
@@ -142,6 +142,7 @@ bool KImageDocument::loadFromURL( const QString& _url )
 {
   cout << "KImageDocument::loadFromURL" << endl;
 
+  // FIXME: crashes because of relative filenames
   if( KImageIO::isSupported( KImageIO::mimeType( _url ) ) )
   {
     initDoc();
@@ -161,24 +162,26 @@ bool KImageDocument::save( ostream& out, const char* )
 {
   QDomDocument doc( "image" );
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  QDomElement spread = doc.createElement( "image" );
-  spread.setAttribute( "author", "Michael Koch" );
-  spread.setAttribute( "email", "koch@kde.org" );
-  spread.setAttribute( "editor", "KImage" );
-  spread.setAttribute( "mime", "application/x-kimage" );
-  doc.appendChild( spread );
+  QDomElement image = doc.createElement( "image" );
+  image.setAttribute( "author", "Michael Koch" );
+  image.setAttribute( "email", "koch@kde.org" );
+  image.setAttribute( "editor", "KImage" );
+  image.setAttribute( "mime", "application/x-kimage" );
+  doc.appendChild( image );
   QDomElement paper = doc.createElement( "paper" );
   paper.setAttribute( "format", paperFormatString() );
   paper.setAttribute( "orientation", orientationString() );
-  spread.appendChild( paper );
+  image.appendChild( paper );
+
   QDomElement borders = doc.createElement( "borders" );
   borders.setAttribute( "left", leftBorder() );
   borders.setAttribute( "top", topBorder() );
   borders.setAttribute( "right", rightBorder() );
   borders.setAttribute( "bottom", bottomBorder() );
-  paper.appendChild( borders );
+  image.appendChild( borders );
+
   QDomElement head = doc.createElement( "head" );
-  paper.appendChild( head );
+  image.appendChild( head );
   if ( !headLeft().isEmpty() )
   {
     QDomElement left = doc.createElement( "left" );
@@ -197,8 +200,9 @@ bool KImageDocument::save( ostream& out, const char* )
     head.appendChild( right );
     right.appendChild( doc.createTextNode( headRight() ) );
   }
+
   QDomElement foot = doc.createElement( "foot" );
-  paper.appendChild( foot );
+  image.appendChild( foot );
   if ( !footLeft().isEmpty() )
   {
     QDomElement left = doc.createElement( "left" );
@@ -218,6 +222,11 @@ bool KImageDocument::save( ostream& out, const char* )
     right.appendChild( doc.createTextNode( footRight() ) );
   }
 
+  QDomElement drawmode = doc.createElement( "drawmode" );
+  image.appendChild( drawmode );
+  drawmode.setAttribute( "position", positionString() );
+  drawmode.setAttribute( "size", sizeString() );
+
   QBuffer buffer;
   buffer.open( IO_WriteOnly );
   QTextStream str( &buffer );
@@ -227,6 +236,98 @@ bool KImageDocument::save( ostream& out, const char* )
   setModified( false );
 
   return true;
+}
+
+QString KImageDocument::positionString()
+{
+  QString result;
+
+  switch( m_posMode )
+  {
+  case LeftTop:
+    result = "topleft";
+    break;
+  case Center:
+    result = "centered";
+    break;
+  }
+
+  return result;
+}
+
+void KImageDocument::setPositionString( QString name )
+{
+  if( name == "centered" )
+  {
+    kdebug( KDEBUG_INFO, 0, "Setting position 'centered'" );
+    m_posMode = Center;
+    return;
+  }
+  else if( name == "topleft" )
+  {
+    kdebug( KDEBUG_INFO, 0, "Setting position 'lefttop'" );
+    m_posMode = LeftTop;
+    return;
+  }
+  
+  kdebug( KDEBUG_ERROR, 0, "Error: Unsupported position, using 'topleft' : " + name );
+
+  m_posMode = LeftTop;
+}
+
+QString KImageDocument::sizeString()
+{
+  QString result;
+
+  switch( m_drawMode )
+  {
+  case OriginalSize:
+    result = "original";
+    break;
+  case FitToView:
+    result = "fittoview";
+    break;
+  case FitWithProps:
+    result = "fitwithprops";
+    break;
+  case ZoomFactor:
+    result = "zoomfactor";
+    break;
+  }
+
+  return result;
+}
+
+void KImageDocument::setSizeString( QString name )
+{
+  if( name == "original" )
+  {
+    kdebug( KDEBUG_INFO, 0, "Setting 'original size'" );
+    m_drawMode = OriginalSize;
+    return;
+  }
+  else if( name == "fittoview" )
+  {
+    kdebug( KDEBUG_INFO, 0, "Setting 'fit to view'" );
+    m_drawMode = FitToView;
+    return;
+  }
+  else if( name == "fitwithprops" )
+  {
+    kdebug( KDEBUG_INFO, 0, "Setting 'fit with props'" );
+    m_drawMode = FitWithProps;
+    return;
+  }
+  else if( name == "zoomfactor" )
+  {
+    kdebug( KDEBUG_INFO, 0, "Setting 'zoomfactor'" );
+    m_drawMode = ZoomFactor;
+    return;
+  }
+  
+  kdebug( KDEBUG_ERROR, 0, "Error: Unsupported drawmode, using 'original' : " + name  );
+
+  m_drawMode = OriginalSize;
 }
 
 bool KImageDocument::completeSaving( KoStore* _store )
@@ -243,17 +344,6 @@ bool KImageDocument::completeSaving( KoStore* _store )
 
   return true;
 }
-
-/*
-bool KImageDocument::loadBinary( istream& _stream, bool _randomaccess, KOStore::Store_ptr _store )
-{
-  kdebug( KDEBUG_INFO, 0, "------------------------ LOADING --------------------" );
-
-  // implement binary loading here.
-
-  kdebug( KDEBUG_INFO, 0, "--------------------- LOADING DONE ------------------" );
-}
-*/
 
 bool KImageDocument::load( istream& in, KoStore* store )
 {
@@ -282,7 +372,6 @@ bool KImageDocument::load( istream& in, KoStore* store )
 }
 
 bool KImageDocument::loadXML( const QDomDocument& doc, KoStore* /* store */ )
-//bool KImageDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
   QString format = "A4", orientation = "Portrait";
   float left = 20.0, right = 20.0, bottom = 20.0, top = 20.0;
@@ -315,21 +404,19 @@ bool KImageDocument::loadXML( const QDomDocument& doc, KoStore* /* store */ )
   QDomElement foot = image.namedItem("foot").toElement();
   foot.attribute( "left" );
   // hier dann schauen of vorhanden : left center right
-  
-/*
-  int cols = data.attribute("cols").toInt(&ok);
-  cerr << "cols readed as:" << cols << "\n";
-  if (!ok)  { return false; }
-  int rows = data.attribute("rows").toInt(&ok);
-  if (!ok)  { return false; }
-  cerr << rows << " x " << cols << "\n";
-  currentData.expand(rows, cols);
-  cerr << "Expanded!";
-  QDomNode n = data.firstChild();
-*/
+
+  QDomElement drawmode = image.namedItem( "drawmode" ).toElement();
+
+  cout << "Michael : position : " << drawmode.attribute( "position" ).data() << endl;
+  cout << "Michael : size : " << drawmode.attribute( "size" ).data() << endl;
+
+  setPositionString( drawmode.attribute( "position" ) );
+  setSizeString( drawmode.attribute( "size" ) );
 
   setPaperLayout( left, top, right, bottom, format, orientation );
   setHeadFootLine( hl, hm, hr, fl, fm, fr );
+
+  if( m_posMode == Center ) cout << "Michael : immernoch centered" << endl;
 
   return true;
 }

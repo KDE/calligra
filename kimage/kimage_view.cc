@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qmessagebox.h>
 #include <qwmatrix.h>
+#include <qmessagebox.h>
 
 #include <kaction.h>
 #include <kfiledialog.h>
@@ -29,6 +29,7 @@
 #include <klineeditdlg.h>
 #include <kdebug.h>
 #include <kimgio.h>
+#include <kmessagebox.h>
 
 #include <koPartSelectDia.h>
 #include <koFilterManager.h>
@@ -53,7 +54,7 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
   m_import = new KAction( i18n( "&Import image..." ), 0, this, SLOT( editImportImage() ), actionCollection(), "editImportImage" );
   m_export = new KAction( i18n( "&Export image..." ), 0, this, SLOT( editExportImage() ), actionCollection(), "editExportImage" );
   m_pageSetup   = new KAction( i18n( "Page &layout" ), 0, this, SLOT( editPageLayout() ), actionCollection(), "editPageLayout" );
-  m_preferences = new KAction( i18n( "Pr&efereces" ), 0, this, SLOT( editPreferences() ), actionCollection(), "editPreferences" );
+  m_preferences = new KAction( i18n( "Pr&eferences" ), 0, this, SLOT( editPreferences() ), actionCollection(), "editPreferences" );
 
   // view actions
   m_viewFactor      = new KAction( i18n( "&Zoom view..." ), 0, this, SLOT( viewZoomFactor() ), actionCollection(), "viewZoomFactor" );
@@ -80,14 +81,12 @@ KImageView::KImageView( KImageDocument* _doc, QWidget* _parent, const char* _nam
   m_zoomMaxAspect  = new KAction( i18n( "Zoom max &aspect" ), 0, this, SLOT( transformZoomMaxAspect() ), actionCollection(), "transformZoomMaxAspect" );
 
   // help actions
-  m_helpAbout = new KAction( i18n( "About K&Image..." ), 0, this, SLOT( helpAboutKImage() ), actionCollection(), "helpAboutKImage" );
-  m_helpUsing = new KAction( i18n( "Using..." ), 0, this, SLOT( helpUsingHelp() ), actionCollection(), "helpUsingHelp" );
+  m_helpUsing = new KAction( i18n( "Contents..." ), 0, this, SLOT( helpUsingHelp() ), actionCollection(), "helpUsingHelp" );
 
   m_undo->setEnabled( false );
   m_redo->setEnabled( false );
 
   m_scrollbars->setEnabled( false );
-  m_info->setEnabled( false );
 
   // FIXME: set the user preferred color
   //setBackgroundColor( darkBlue );
@@ -232,17 +231,14 @@ void KImageView::viewInformations()
     return;
   }
 
-/*
-  // TODO: m_pixmap
-
   QString tmp;
+
   // TODO: show mimetype here
-  QMessageBox::information( this, i18n( "Image information" ),
-    tmp.sprintf( "X-Size : %i\nY-Size : %i\n\nColor depth : %i\n",
-    m_pixmap.size().width(),
-    m_pixmap.size().height(),
-    m_pixmap.depth() ), i18n( "OK" ) );
-*/
+  tmp.sprintf( i18n( "X-Size : %i\nY-Size : %i\n\nColor depth : %i\n" ),
+    doc()->image().size().width(),
+    doc()->image().size().height(),
+    doc()->image().depth() );
+  KMessageBox::information( this, tmp, i18n( "Image information" ) );
 }
 
 void KImageView::viewZoomFactor()
@@ -253,8 +249,7 @@ void KImageView::viewZoomFactor()
     return;
   }
 
-  // FIXME: better title
-  KZoomFactorDialog dlg( NULL, "KImage" );
+  KZoomFactorDialog dlg( NULL, "Set zoom factor - KImage" );
   QPoint factor = doc()->zoomFactor();
 
   if( dlg.getValue( factor ) != QDialog::Accepted )
@@ -286,6 +281,7 @@ void KImageView::viewCentered()
 void KImageView::viewScrollbars()
 {
   // TODO: implement scrollbars
+  // click scrollbars on/off
 }
 
 void KImageView::viewBackgroundColor()
@@ -293,10 +289,11 @@ void KImageView::viewBackgroundColor()
   KColorDialog dlg;
   QColor color;
 
-  // TODO: test this
-  dlg.getColor( color );
-  setBackgroundColor( color );
-  slotUpdateView();
+  if( dlg.getColor( color ) )
+  {
+    setBackgroundColor( color );
+    slotUpdateView();
+  }
 }
 
 void KImageView::transformRotateRight()
@@ -435,10 +432,6 @@ void KImageView::transformZoomMaxAspect()
 void KImageView::helpUsingHelp()
 {
   kapp->invokeHTMLHelp( "kimage/kimage.html", QString::null );
-}
-
-void KImageView::helpAboutKImage()
-{
 }
 
 void KImageView::slotUpdateView()
