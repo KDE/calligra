@@ -215,7 +215,7 @@ before selecting the target area and doing <guimenuitem>Special Paste...
 A1, <userinput>10</userinput> into B1, select both cells and do a <guimenuitem>
 Copy</guimenuitem> then <guimenuitem>Special Paste...</guimenuitem> <guilabel>
 Addition</guilabel> into cells A10 to D15, 5 will be added to A10:A15 and 
-C5:C15, and 10 to B10:B15 and D10:D15.</para>
+C10:C15, and 10 to B10:B15 and D10:D15.</para>
 <para>Note that a modifier value can be a formula as well as a simple numeric 
 value. If it is a formula then &kspread; will adjust the cell references as 
 for a normal <guimenuitem>Paste</guimenuitem> operation.</para>
