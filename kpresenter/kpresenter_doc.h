@@ -106,7 +106,6 @@ public:
     virtual void insertObject( const QRect&, KoDocumentEntry&, int, int );
 
     // change geometry of a child
-    //virtual void changeChildGeometry( KPresenterChild*, const QRect&, int, int );
 
     // page layout
     void setPageLayout( KoPageLayout, int, int );

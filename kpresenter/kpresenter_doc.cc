@@ -1203,27 +1203,6 @@ void KPresenterDoc::insertObject( const QRect& _rect, KoDocumentEntry& _e, int _
     repaint( false );
 }
 
-/*======================= change child geometry ==================*/
-#if 0
-// David: this is unused
-void KPresenterDoc::changeChildGeometry( KPresenterChild *_child, const QRect& _rect, int /*_diffx*/, int /*_diffy*/ )
-{
-    _child->setGeometry( _rect );
-
-    emit sig_updateChildGeometry( _child );
-
-    //	  m_bModified = true;
-    setModified(true);
-}
-#endif
-
-/*======================= child iterator =========================*/
-// ### Reggie: I think nobody needs this function any more
-/* QListIterator<KPresenterChild> KPresenterDoc::childIterator()
-{
-    return QListIterator<KPresenterChild> ( m_lstChildren );
-} */
-
 /*===================== set page layout ==========================*/
 void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 {
@@ -3317,6 +3296,7 @@ void KPresenterDoc::copyObjs( int diffx, int diffy )
             object.setAttribute("type", static_cast<int>( kpobject->getType() ));
             kpobject->moveBy( -diffx, -diffy );
             object.appendChild(kpobject->save( doc ));
+            presenter.appendChild(object);
             kpobject->moveBy( diffx, diffy );
         }
     }
