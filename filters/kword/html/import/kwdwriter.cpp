@@ -80,19 +80,42 @@ KWDWriter::KWDWriter(KoStore *store){
     	tmp=_doc->createElement("NAME");
     	tmp.setAttribute("value","Standard");
     	standard.appendChild(tmp);
-    	
+
     	tmp=_doc->createElement("FOLLOWING");
     	tmp.setAttribute("name","Standard");
     	standard.appendChild(tmp);
     	QDomElement fmt;
-    	
+
     	fmt=_doc->createElement("FORMAT");
     	fmt.setAttribute("id","1");
     	standard.appendChild(fmt);
-    	
+
     	tmp=_doc->createElement("SIZE");
     	tmp.setAttribute("value","12"); // HACK !
     	fmt.appendChild(tmp);
+
+
+#define HEADINGSTYLE(a,b)     standard=_doc->createElement("STYLE");\
+    styles.appendChild(standard);\
+    	tmp=_doc->createElement("NAME");\
+    	tmp.setAttribute("value",#a);\
+    	standard.appendChild(tmp);\
+    	tmp=_doc->createElement("FOLLOWING");\
+    	tmp.setAttribute("name","Standard");\
+    	standard.appendChild(tmp);\
+    	fmt=_doc->createElement("FORMAT");\
+    	fmt.setAttribute("id","1");\
+    	standard.appendChild(fmt);\
+    	tmp=_doc->createElement("SIZE");\
+    	tmp.setAttribute("value",#b);\
+    	fmt.appendChild(tmp);
+
+HEADINGSTYLE(h1,20);
+HEADINGSTYLE(h2,18);
+HEADINGSTYLE(h3,16);
+HEADINGSTYLE(h4,14);
+HEADINGSTYLE(h5,10);
+HEADINGSTYLE(h6,8);
 
 
 }
@@ -265,7 +288,7 @@ QDomElement KWDWriter::addParagraph(QDomElement parent) {
 
 
 
-void KWDWriter::setLayout(QDomElement paragraph, QDomElement layout) {
+QDomElement KWDWriter::setLayout(QDomElement paragraph, QDomElement layout) {
 	QDomElement theLayout;
 	if (layout.isNull())
 		theLayout=_doc->createElement("LAYOUT");
@@ -274,6 +297,7 @@ void KWDWriter::setLayout(QDomElement paragraph, QDomElement layout) {
 	QDomElement oldLayout=currentLayout(paragraph);
 	paragraph.removeChild(oldLayout);
 	paragraph.appendChild(theLayout);
+	return theLayout;
 }
 
 

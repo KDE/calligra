@@ -106,23 +106,24 @@ void KHTMLReader::popState() {
 	if (s->frameset == state()->frameset)
 		{
 			state()->paragraph=s->paragraph;
-			if (state()->layout != s->layout) {
-				startNewLayout(false);
+			if ((state()->layout != s->layout)) {
+				startNewLayout(false,state()->layout);
 			}
-		}
-
-	state()->format=_writer->startFormat(state()->paragraph,state()->format);
+		state()->format=_writer->startFormat(state()->paragraph, state()->format);
+	}
 	delete(s);
 }
 
-
 void KHTMLReader::startNewLayout(bool startNewFormat) {
-	if (_writer->getText(state()->paragraph).isEmpty()) {
-		QDomElement layout;
-		_writer->setLayout(state()->paragraph,layout);
-	} else {
+	QDomElement layout;
+	startNewLayout(startNewFormat,layout);
+}
+
+void KHTMLReader::startNewLayout(bool startNewFormat, QDomElement layout) {
+	if (!(_writer->getText(state()->paragraph).isEmpty())) {
 		startNewParagraph(startNewFormat,true);
 	}
+	state()->layout=_writer->setLayout(state()->paragraph,layout);
 }
 
 
@@ -179,12 +180,10 @@ void KHTMLReader::parseNode(DOM::Node node) {
 	        // get the tag information
 	        go_recursive=parseTag(e);
 	}
-
 	if (go_recursive)
 		for (DOM::Node q=node.firstChild(); !q.isNull(); q=q.nextSibling()) {
 			parseNode(q);
 		}
-
 	popState();
 
 }
@@ -200,9 +199,32 @@ void KHTMLReader::parse_head(DOM::Element e) {
 	}
 }
 
-#define _PP(x) {if (e.tagName().lower() == #x) return parse_##x(e);}
-#define _PF(x,a,b,c) {if (e.tagName().lower() == #x) { _writer->formatAttribute(state()->paragraph, #a,#b,#c); return true;}}
-#define _PL(x,a,b,c) {if (e.tagName().lower() == #x) { startNewParagraph(false,true); _writer->layoutAttribute(state()->paragraph, #a,#b,#c); return true;}}
+#define _PP(x) { \
+	if (e.tagName().lower() == #x) \
+		return parse_##x(e); \
+	}
+
+#define _PF(x,a,b,c) { \
+	if (e.tagName().lower() == #x) \
+	 	{ \
+			 _writer->formatAttribute(state()->paragraph, #a,#b,#c); \
+			 return true; \
+		} \
+	}
+
+// the state->layout=_writer->setLayout is meant to tell popState something changed in the layout, and a new
+// layout should probably be started after closing.
+
+#define _PL(x,a,b,c) { \
+		if (e.tagName().lower() == #x) \
+			{ \
+				state()->layout=_writer->setLayout(state()->paragraph,state()->layout);\
+				if (!(_writer->getText(state()->paragraph).isEmpty())) \
+					startNewParagraph(false,false); \
+				_writer->layoutAttribute(state()->paragraph, #a,#b,#c); \
+				return true; \
+			} \
+		}
 
 
 bool KHTMLReader::parseTag(DOM::Element e) {
@@ -225,6 +247,13 @@ bool KHTMLReader::parseTag(DOM::Element e) {
 	_PL(center,FLOW,align,center);
 	_PL(right,FLOW,align,right);
 	_PL(left,FLOW,align,left);
+
+	_PL(h1,NAME,value,h1);
+	_PL(h2,NAME,value,h2);
+	_PL(h3,NAME,value,h3);
+	_PL(h4,NAME,value,h4);
+	_PL(h5,NAME,value,h5);
+	_PL(h6,NAME,value,h6);
 }
 
 

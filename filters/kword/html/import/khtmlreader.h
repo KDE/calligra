@@ -74,7 +74,8 @@ private:
         KHTMLPart *_html;
         KWDWriter *_writer;
 
-	void startNewLayout(bool startNewFormat=true);
+	void startNewLayout(bool startNewFormat=false);
+	void startNewLayout(bool startNewFormat, QDomElement layout);
         void startNewParagraph(bool startnewformat=true, bool startnewlayout=true);
         bool _it_worked;
 // -----------------------------------------------------
@@ -91,6 +92,8 @@ private:
 	bool parse_hr(DOM::Element e);
 	bool parse_img(DOM::Element e);
 
+
+// -------------------------------------------------------
 
 };
 

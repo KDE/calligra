@@ -146,7 +146,7 @@ public:
 	/**
 	 * copy the given layout, and set it as layout of the given paragraph
 	 **/
-	void setLayout(QDomElement paragraph, QDomElement layout);
+	QDomElement setLayout(QDomElement paragraph, QDomElement layout);
 
 	/**
 	 * returns the text of this paragraph.
