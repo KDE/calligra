@@ -34,12 +34,13 @@
 #include <kexidb/utils.h>
 #include <kexidb/connection.h>
 #include <kexipart.h>
+#include <widgetlibrary.h>
 
 #include "kexidbform.h"
 #include "kexiformview.h"
+#include "kexilabel.h"
 
 #include "kexidbfactory.h"
-#include "formmanager.h"
 
 KexiSubForm::KexiSubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name)
 : QScrollView(parent, name), m_manager(manager), m_form(0), m_widget(0)
@@ -152,6 +153,17 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wLineEdit->setDescription(i18n("A widget to input text"));
 	m_classes.append(wLineEdit);
 
+	/* @todo allow to inherit from stdwidgets' KLineEdit */
+	KFormDesigner::WidgetInfo *wLabel = new KFormDesigner::WidgetInfo(this);
+	wLabel->setPixmap("label");
+	wLabel->setClassName("KexiLabel");
+	wLabel->addAlternateClassName("QLabel", true/*override*/);
+	wLabel->setIncludeFileName("qlabel.h");
+	wLabel->setName(i18n("Text Label"));
+	wLabel->setNamePrefix(i18n("Widget name (see above)", "Label"));
+	wLabel->setDescription(i18n("A widget to display text"));
+	m_classes.append(wLabel);
+	
 	m_propDesc["dataSource"] = i18n("Data source");
 	m_propDesc["formName"] = i18n("Form name");
 }
@@ -172,6 +184,7 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 	kexipluginsdbg << "KexiDBFactory::create() " << this << endl;
 
 	QWidget *w=0;
+	QString text = container->form()->manager()->lib()->textForWidgetName(n, c);
 
 	if(c == "KexiSubForm")
 	{
@@ -181,6 +194,10 @@ KexiDBFactory::create(const QCString &c, QWidget *p, const char *n, KFormDesigne
 	{
 		w = new KexiDBLineEdit(p, n);
 		w->setCursor(QCursor(Qt::ArrowCursor));
+	}
+	else if(c == "KexiLabel")
+	{
+		w = new KexiLabel(text, p, n);
 	}
 
 	return w;
@@ -216,6 +233,8 @@ KexiDBFactory::clearWidgetContent(const QString &classname, QWidget *w)
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
 	if(classname == "KexiDBLineEdit")
 		static_cast<KLineEdit*>(w)->clear();
+	if(classname == "KexiLabel")
+		static_cast<QLabel*>(w)->clear();
 }
 
 QStringList
