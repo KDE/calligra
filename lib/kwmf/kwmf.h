@@ -31,11 +31,11 @@ DESCRIPTION
 #define KWMF_H
 
 #include <qvaluestack.h>
-
+#include <koffice_export.h>
 class QDataStream;
 class QPointArray;
 
-class KWmf
+class KOWMF_EXPORT KWmf
 {
 public:
 
@@ -53,7 +53,7 @@ public:
         QDataStream &stream,
         unsigned size);
 
-    class DrawContext
+    class KOWMF_EXPORT DrawContext
     {
     public:
         DrawContext();
