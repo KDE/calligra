@@ -15,21 +15,21 @@ class QLabel;
 class QDomDocument;
 
 class KSpreadView;
+class KSpreadLayout;
 
 class KSpreadFormatDlg : public QDialog
 {
     Q_OBJECT
 public:
     KSpreadFormatDlg( KSpreadView* view, const char* name = 0 );
-
+    ~KSpreadFormatDlg();
+    
 private slots:
     void slotActivated( int index );
     void slotOk();
 
 private:
     bool parseXML( const QDomDocument& doc );
-    QFont toFont(QDomElement &element) const;
-    QPen toPen(QDomElement &element) const;
 	
     QComboBox* m_combo;
     QLabel* m_label;
@@ -44,18 +44,7 @@ private:
     };
     QValueList<Entry> m_entries;
 
-    struct Cell
-    {
-	KSpreadCell::Align align;
-	KSpreadCell::FloatFormat floatFormat;
-	KSpreadCell::FloatColor floatColor;
-	QColor bgColor;
-	QPen pen;
-	QFont font;
-	QPen leftPen;
-	QPen topPen;
-    };
-    QValueList<Cell> m_cells;
+    KSpreadLayout* m_cells[ 16 ];
 };
 
 #endif

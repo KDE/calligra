@@ -22,6 +22,9 @@
 KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     : QDialog( view, name, TRUE )
 {
+    for( int i = 0; i < 16; ++i )
+	m_cells[ i ] = 0;
+    
     m_view = view;
     setCaption( i18n("Table Style") );
     QVBoxLayout* vbox = new QVBoxLayout( this, 6, 6 );
@@ -64,6 +67,12 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     connect( ok, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     connect( close, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( m_combo, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
+}
+
+KSpreadFormatDlg::~KSpreadFormatDlg()
+{
+    for( int i = 0; i < 16; ++i )
+	delete m_cells[ i ];
 }
 
 void KSpreadFormatDlg::slotActivated( int index )
@@ -119,15 +128,10 @@ void KSpreadFormatDlg::slotOk()
     //
     // Set colors, borders etc.
     //
+
+    // Top left corner
     KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( r.left(), r.top() );
-    cell->setBgColor( m_cells[0].bgColor );
-    cell->setAlign( m_cells[0].align );
-    cell->setFloatFormat( m_cells[0].floatFormat );
-    cell->setFloatColor( m_cells[0].floatColor );
-    cell->setTextPen( m_cells[0].pen );
-    cell->setTextFont( m_cells[0].font );
-    cell->setLeftBorderPen( m_cells[0].leftPen );
-    cell->setTopBorderPen( m_cells[0].topPen );
+    cell->copy( *m_cells[0] );
 	
     // Top column
     int x, y;
@@ -135,43 +139,53 @@ void KSpreadFormatDlg::slotOk()
     {
 	int pos = 1 + ( ( x - r.left() - 1 ) % 2 );
 	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, r.top() );
-	cell->setBgColor( m_cells[ pos ].bgColor );
-	cell->setAlign( m_cells[pos].align );
-	cell->setFloatFormat( m_cells[pos].floatFormat );
-	cell->setFloatColor( m_cells[pos].floatColor );
-	cell->setTextPen( m_cells[pos].pen );
-	cell->setTextFont( m_cells[pos].font );
+	cell->copy( *m_cells[ pos ] );
+	
+	KSpreadLayout* c;
 	if ( x == r.right() )
-	    cell->setTopBorderPen( m_cells[2].topPen );
+	    c = m_cells[2];
 	else
-	    cell->setTopBorderPen( m_cells[1].topPen );
+	    c = m_cells[1];
+
+	if ( c )
+	    cell->setTopBorderPen( c->topBorderPen( 0, 0 ) );
+	
 	if ( x == r.left() + 1 )
-	    cell->setLeftBorderPen( m_cells[1].leftPen );
+	    c = m_cells[1];
 	else
-	    cell->setLeftBorderPen( m_cells[2].leftPen );
+	    c = m_cells[2];
+	
+	if ( c )
+	    cell->setLeftBorderPen( c->leftBorderPen( 0, 0 ) );
     }
-    cell = m_view->activeTable()->nonDefaultCell( r.right() + 1, r.top() );
-    cell->setLeftBorderPen( m_cells[3].leftPen );
+
+    cell = m_view->activeTable()->nonDefaultCell( r.right(), r.top() );
+    if ( m_cells[3] )
+	cell->setRightBorderPen( m_cells[3]->leftBorderPen( 0, 0 ) );
 
     // Left row
     for( y = r.top() + 1; y <= r.bottom(); ++y )
     {
 	int pos = 4 + ( ( y - r.top() - 1 ) % 2 ) * 4;
 	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( r.left(), y );
-	cell->setBgColor( m_cells[ pos ].bgColor );
-	cell->setAlign( m_cells[pos].align );
-	cell->setFloatFormat( m_cells[pos].floatFormat );
-	cell->setFloatColor( m_cells[pos].floatColor );
-	cell->setTextPen( m_cells[pos].pen );
-	cell->setTextFont( m_cells[pos].font );
+	cell->copy( *m_cells[ pos ] );
+
+	KSpreadLayout* c;
 	if ( y == r.bottom() )
-	    cell->setLeftBorderPen( m_cells[8].leftPen );
+	    c = m_cells[8];
 	else
-	    cell->setLeftBorderPen( m_cells[4].leftPen );
+	    c = m_cells[4];
+	
+	if ( c )
+	    cell->setLeftBorderPen( c->leftBorderPen( 0, 0 ) );
+
 	if ( y == r.top() + 1 )
-	    cell->setTopBorderPen( m_cells[4].topPen );
+	    c = m_cells[4];
 	else
-	    cell->setTopBorderPen( m_cells[8].topPen );
+	    c = m_cells[8];
+	
+	if ( c )
+	    cell->setTopBorderPen( c->topBorderPen( 0, 0 ) );
     }
 
     // Body
@@ -180,58 +194,79 @@ void KSpreadFormatDlg::slotOk()
         {
 	    int pos = 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 + ( ( x - r.left() - 1 ) % 2 );
 	    KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, y );
-	    cell->setBgColor( m_cells[ pos ].bgColor );
-	    cell->setAlign( m_cells[pos].align );
-	    cell->setFloatFormat( m_cells[pos].floatFormat );
-	    cell->setFloatColor( m_cells[pos].floatColor );
-	    cell->setTextPen( m_cells[pos].pen );
-	    cell->setTextFont( m_cells[pos].font );
+	    cell->copy( *m_cells[ pos ] );
+
+	    KSpreadLayout* c;
 	    if ( x == r.left() + 1 )
-		cell->setLeftBorderPen( m_cells[ 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 ].leftPen );
+		c = m_cells[ 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 ];
 	    else
-		cell->setLeftBorderPen( m_cells[ 6 + ( ( y - r.top() - 1 ) % 2 ) * 4 ].leftPen );
+		c = m_cells[ 6 + ( ( y - r.top() - 1 ) % 2 ) * 4 ];
+
+	    if ( c )
+		cell->setLeftBorderPen( c->leftBorderPen( 0, 0 ) );
+
 	    if ( y == r.top() + 1 )
-		cell->setTopBorderPen( m_cells[ 5 + ( ( x - r.left() - 1 ) % 2 ) ].topPen );
+		c = m_cells[ 5 + ( ( x - r.left() - 1 ) % 2 ) ];
 	    else
-		cell->setTopBorderPen( m_cells[ 9 + ( ( x - r.left() - 1 ) % 2 ) ].topPen );
+		c = m_cells[ 9 + ( ( x - r.left() - 1 ) % 2 ) ];
+
+	    if ( c )
+		cell->setTopBorderPen( c->topBorderPen( 0, 0 ) );
 	}
 
     // Outer right border
     for( y = r.top(); y <= r.bottom(); ++y )
     {
-	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( r.right() + 1, y );
+	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( r.right(), y );
 	if ( y == r.top() )
-	    cell->setLeftBorderPen( m_cells[3].leftPen );
+        {
+	    if ( m_cells[3] )
+		cell->setRightBorderPen( m_cells[3]->leftBorderPen( 0, 0 ) );
+	}
 	else if ( y == r.right() )
-	    cell->setLeftBorderPen( m_cells[11].leftPen );
+        {
+	    if ( m_cells[11] )
+		cell->setRightBorderPen( m_cells[11]->leftBorderPen( 0, 0 ) );
+	}
 	else
-	    cell->setLeftBorderPen( m_cells[7].leftPen );
+        {
+	    if ( m_cells[7] )
+		cell->setRightBorderPen( m_cells[7]->leftBorderPen( 0, 0 ) );
+	}
     }
 
     // Outer bottom border
     for( x = r.left(); x <= r.right(); ++x )
     {
-	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, r.bottom() + 1 );
+	KSpreadCell* cell = m_view->activeTable()->nonDefaultCell( x, r.bottom() );
 	if ( x == r.left() )
-	    cell->setTopBorderPen( m_cells[12].topPen );
+        {
+	    if ( m_cells[12] )
+		cell->setBottomBorderPen( m_cells[12]->topBorderPen( 0, 0 ) );
+	}
 	else if ( x == r.right() )
-	    cell->setTopBorderPen( m_cells[14].topPen );
+        {
+	    if ( m_cells[14] )
+		cell->setBottomBorderPen( m_cells[14]->topBorderPen( 0, 0 ) );
+	}
 	else
-	    cell->setTopBorderPen( m_cells[13].topPen );
+        {
+	    if ( m_cells[13] )
+		cell->setBottomBorderPen( m_cells[13]->topBorderPen( 0, 0 ) );
+	}
     }
 
-    m_view->activeTable()->setSelection( QRect( 0, 0, 0, 0 ) );
+    m_view->activeTable()->setSelection( QRect(), r.topLeft() );
 
     accept();
 }
 
 bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
 {
-    m_cells.clear();
-    for( int i = 0; i < 15; ++i )
+    for( int i = 0; i < 16; ++i )
     {
-	Cell cell;
-	m_cells.append( cell );
+	delete m_cells[ i ];
+	m_cells[ i ] = 0;
     }
 
     QDomElement e = doc.documentElement().firstChild().toElement();
@@ -239,108 +274,23 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
     {
 	if ( e.tagName() == "cell" )
         {
-	    bool ok;
-	    int row = e.attribute( "row" ).toInt( &ok );
-	    if ( !ok )
-		return false;
-	    int column = e.attribute( "column" ).toInt( &ok );
-	    if ( !ok )
+	    KSpreadTable* table = m_view->activeTable();
+	    KSpreadLayout* cell = new KSpreadLayout( table );
+	    
+	    if ( !cell->load( e.namedItem("format").toElement() ) )
 		return false;
 
-	    Cell cell;
-	    cell.align = KSpreadCell::Undefined;
-	    cell.floatFormat = KSpreadCell::OnlyNegSigned;
-	    cell.floatColor = KSpreadCell::AllBlack;
-	
-	    QDomElement f = e.namedItem( "format" ).toElement();
-	    if ( !f.isNull() )
-	    {
-		if ( f.hasAttribute( "align" ) )
-	        {
-		    cell.align = (KSpreadCell::Align)f.attribute("align").toInt( &ok );
-		    if ( !ok )
-			return FALSE;
-		}
-		if ( f.hasAttribute( "bgcolor" ) )
-		    cell.bgColor = QColor( f.attribute( "bgcolor" ) );
-		if ( f.hasAttribute( "float" ) )
-	        {
-		    cell.floatFormat = (KSpreadCell::FloatFormat)f.attribute("float").toInt( &ok );
-		    if ( !ok )
-			return FALSE;
-		}
-		if ( f.hasAttribute( "floatcolor" ) )
-	        {
-		    cell.floatColor = (KSpreadCell::FloatColor)f.attribute("floatcolor").toInt( &ok );
-		    if ( !ok )
-			return FALSE;
-		}
-
-		QDomElement pen = f.namedItem( "pen" ).toElement();
-		if ( !pen.isNull() )
-		    cell.pen = toPen(pen);
-
-		QDomElement font = f.namedItem( "font" ).toElement();
-		if ( !font.isNull() )
-		    cell.font = toFont(font);
-
-		QDomElement left = f.namedItem( "left-border" ).toElement();
-		if ( !left.isNull() )
-	        {
-		    QDomElement pen = left.namedItem( "pen" ).toElement();
-		    if ( !pen.isNull() )
-			cell.leftPen = toPen(pen);
-		}
-
-		QDomElement top = f.namedItem( "top-border" ).toElement();
-		if ( !top.isNull() )
-	        {
-		    QDomElement pen = top.namedItem( "pen" ).toElement();
-		    if ( !pen.isNull() )
-			cell.topPen = toPen(pen);
-		}
-	    }
-	
-	    m_cells[ (row-1)*4 + (column-1) ] = cell;
+	    int row = e.attribute("row").toInt();
+	    int column = e.attribute("column").toInt();
+	    int i = (row-1)*4 + (column-1);
+	    if ( i < 0 || i >= 16 )
+		return false;
+	    
+	    m_cells[ i ] = cell;
 	}
     }
 
     return TRUE;
 }
 
-QFont KSpreadFormatDlg::toFont(QDomElement &element) const {
-
-    QFont f;
-    f.setFamily( element.attribute( "family" ) );
-
-    bool ok;
-    f.setPointSize( element.attribute("size").toInt( &ok ) );
-    if ( !ok ) return QFont();
-
-    f.setWeight( element.attribute("weight").toInt( &ok ) );
-    if ( !ok ) return QFont();
-
-    if ( element.hasAttribute( "italic" ) )
-	f.setItalic( TRUE );
-
-    if ( element.hasAttribute( "bold" ) )
-	f.setBold( TRUE );
-
-    return f;
-}
-
-QPen KSpreadFormatDlg::toPen(QDomElement &element) const {
-
-  bool ok;
-  QPen p;
-  p.setStyle( (Qt::PenStyle)element.attribute("style").toInt( &ok ) );
-  if ( !ok ) return QPen();
-
-  p.setWidth( element.attribute("width").toInt( &ok ) );
-  if ( !ok ) return QPen();
-
-  p.setColor( QColor( element.attribute("color") ) );
-
-  return p;
-}
 #include "kspread_dlg_format.moc"
