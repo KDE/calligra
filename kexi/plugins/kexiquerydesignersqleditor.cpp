@@ -35,6 +35,8 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const ch
  : QWidget(parent, name)
 {
 	m_doc = KTextEditor::EditorChooser::createDocument(this, "sqlDoc");
+  if (!m_doc)
+    return;
 	m_view = m_doc->createView(this, 0L);
 
 	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface(m_doc);
@@ -63,8 +65,8 @@ QString
 KexiQueryDesignerSQLEditor::getText()
 {
 	KTextEditor::EditInterface *eIface = KTextEditor::editInterface(m_doc);
-	kdDebug() << "KexiQueryDesignerSQLEditor::getText(): iface: " << eIface << " " << eIface->text() << endl;
-	return eIface->text();
+  kdDebug() << "KexiQueryDesignerSQLEditor::getText(): iface: " << eIface << " " << (eIface ? eIface->text() : "") << endl;
+  return eIface ? eIface->text() : QString::null;
 }
 
 KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()

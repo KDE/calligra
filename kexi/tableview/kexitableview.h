@@ -57,7 +57,7 @@ class KexiTableEdit;
 	please use #ifdef USE_KDE if you use kde-classes, thank you
 */
 
-class KexiTableView : public QScrollView
+class KEXIDATATABLE_EXPORT KexiTableView : public QScrollView
 {
 	friend class KexiTableItem;
 
@@ -111,9 +111,11 @@ public:
 	void		setBackgroundAltering(bool altering) { m_bgAltering = altering; }
 	void		setRecordIndicator(bool indicator) { m_recordIndicator = indicator; }
 
+#ifndef KEXI_NO_PRINT
 	// printing
 //	void		setupPrinter(KPrinter &printer);
 	void		print(KPrinter &printer);
+#endif
 
 	// reimplemented for internal reasons
 	QSizePolicy	sizePolicy() const;

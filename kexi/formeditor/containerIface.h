@@ -9,7 +9,7 @@ namespace KFormEditor
 
 	class WidgetContainer;
 
-	class containerIface
+	class KFORMEDITOR_EXPORT containerIface
 	{
 	public:
 	        enum Action{None=0,Activate=1,Move=2,EatEvent=4,MoveEatEvent=6,AllEat=7};

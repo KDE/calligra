@@ -31,7 +31,7 @@
 
 class KexiTableView;
 
-class KexiTableItem
+class KEXIDATATABLE_EXPORT KexiTableItem
 {
 
 public:

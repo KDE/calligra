@@ -30,7 +30,7 @@
 namespace KFormEditor
 {
 
-	class ResizeHandle : public QWidget
+	class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
 	{
 	Q_OBJECT
 	public:
@@ -54,7 +54,7 @@ namespace KFormEditor
 		int m_y;
 	};
 
-	class ResizeHandleSet: public QObject
+	class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
 	{
 	Q_OBJECT
 	public:

@@ -29,7 +29,7 @@ class KexiRelationView;
 class KexiRelationViewTable;
 //class KexiRelationViewTableContainer;
 
-class KexiRelationViewTableContainer : public QFrame
+class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainer : public QFrame
 {
 	Q_OBJECT
 	
@@ -64,7 +64,7 @@ class KexiRelationViewTableContainer : public QFrame
 };
 
 
-class KexiRelationViewTable : public KListView
+class KEXI_HAND_RELAT_EXPORT KexiRelationViewTable : public KListView
 {
 	Q_OBJECT
 
@@ -94,7 +94,7 @@ class KexiRelationViewTable : public KListView
 		KexiRelationView	*m_view;
 };
 
-class KexiRelationViewTableContainerHeader : public QLabel
+class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainerHeader : public QLabel
 {
 	Q_OBJECT
 	public:

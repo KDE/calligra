@@ -26,7 +26,7 @@
 class KListView;
 class EventEditor;
 
-class EventEditorItem : public PropertyEditorItem
+class KFORMEDITOR_EXPORT EventEditorItem : public PropertyEditorItem
 {
 	public:
 		EventEditorItem(EventEditor *parent, QObject *sender, char *event, const QString &classR, const QString &handler,

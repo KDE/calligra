@@ -24,7 +24,7 @@
 #include <qptrlist.h>
 #include "eventeditor.h"
 
-class EventBufferItem
+class KFORMEDITOR_EXPORT EventBufferItem
 {
 	public:
 		EventBufferItem(const QString &sender, const QString &receiver,
@@ -60,7 +60,7 @@ namespace KFormEditor
 {
 	typedef QPtrList<EventBufferItem> EventBufferBase;
 
-	class EventBuffer
+	class KFORMEDITOR_EXPORT EventBuffer
 	{
 		public:
 			EventBuffer();

@@ -26,13 +26,13 @@
 #include "kdebug.h"
 #include <qobject.h>
 
+#define BOOL bool
+
 class QVariant;
-
 class KexiDB;
-
 class KexiDBError;
 
-class KexiDBRecordSet : public QObject
+class KEXIDB_EXPORT KexiDBRecordSet : public QObject
 {
 	Q_OBJECT
 

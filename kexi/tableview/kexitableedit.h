@@ -23,7 +23,7 @@
 #include <qvariant.h>
 #include <qwidget.h>
 
-class KexiTableEdit : public QWidget
+class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 {
 	public:
 		KexiTableEdit(QWidget* parent = 0, const char* name = 0);

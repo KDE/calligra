@@ -27,7 +27,7 @@ class QString;
 
 typedef QMap<int, QString> ErrorList;
 
-class KexiDBError
+class KEXIDB_EXPORT KexiDBError
 {
 	public:
 		KexiDBError();

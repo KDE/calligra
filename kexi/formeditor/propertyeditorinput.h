@@ -25,7 +25,7 @@
 class QLineEdit;
 class QSpinBox;
 
-class PropertyEditorInput : public PropertyEditorEditor
+class KFORMEDITOR_EXPORT PropertyEditorInput : public PropertyEditorEditor
 {
 	Q_OBJECT
 
@@ -44,7 +44,7 @@ class PropertyEditorInput : public PropertyEditorEditor
 
 //INT
 
-class PropertyEditorSpin : public PropertyEditorEditor
+class KFORMEDITOR_EXPORT PropertyEditorSpin : public PropertyEditorEditor
 {
 	Q_OBJECT
 

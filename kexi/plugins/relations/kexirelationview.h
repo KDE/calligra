@@ -38,7 +38,7 @@ class KexiRelationDialog;
 typedef QMap<QString, KexiRelationViewTableContainer*> TableList;
 typedef QPtrList<KexiRelationViewConnection> ConnectionList;
 
-class KexiRelationView : public QScrollView
+class KEXI_HAND_RELAT_EXPORT KexiRelationView : public QScrollView
 {
 	Q_OBJECT
 

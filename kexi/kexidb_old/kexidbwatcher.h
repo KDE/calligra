@@ -23,7 +23,7 @@
 #include <qvariant.h>
 #include <qobject.h>
 
-class KexiDBWatcher : public QObject
+class KEXIDB_EXPORT KexiDBWatcher : public QObject
 {
 	Q_OBJECT
 

@@ -33,7 +33,7 @@
 
 typedef QPtrList<KexiTableItem>		KexiTableListBase;
 
-class KexiTableList : public KexiTableListBase
+class KEXIDATATABLE_EXPORT KexiTableList : public KexiTableListBase
 {
 public: 
 	KexiTableList() : m_key(0), m_order(true), m_type(1) {}

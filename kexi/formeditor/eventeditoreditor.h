@@ -29,7 +29,7 @@ class EventEditorItem;
 class EventEditor;
 class EventDetail;
 
-class EventEditorEditor : public PropertyEditorEditor
+class KFORMEDITOR_EXPORT EventEditorEditor : public PropertyEditorEditor
 {
 	Q_OBJECT
 

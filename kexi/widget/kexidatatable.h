@@ -35,7 +35,7 @@ class KexiView;
 class KexiTableView;
 class KexiDB;
 
-class KexiDataTable : public KexiDialogBase
+class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 {
 	Q_OBJECT
 
@@ -47,7 +47,9 @@ class KexiDataTable : public KexiDialogBase
 		void setDataSet(KexiDBRecordSet *rec);
 
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
+#ifndef KEXI_NO_PRINT
 		virtual void print(KPrinter &printer);
+#endif
 
 	protected slots:
 		void slotItemChanged(KexiTableItem *i, int col, QVariant oldValue);

@@ -24,7 +24,7 @@
 #include <qlabel.h>
 #include <qvariant.h>
 
-class KexiDBLineEdit : public QLineEdit
+class KEXI_HAND_FORM_EXPORT KexiDBLineEdit : public QLineEdit
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
@@ -45,7 +45,7 @@ class KexiDBLineEdit : public QLineEdit
 };
 
 
-class KexiDBLabel : public QLabel
+class KEXI_HAND_FORM_EXPORT KexiDBLabel : public QLabel
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)

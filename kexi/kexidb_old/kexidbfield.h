@@ -24,7 +24,7 @@
 #include <qvariant.h>
 #include <qstring.h>
 
-class KexiDBField
+class KEXIDB_EXPORT KexiDBField
 {
 	public:
 		enum ColumnType

@@ -37,7 +37,7 @@ namespace KFormEditor
 
 	class ResizeHandleSet;
 
-	class WidgetContainer : public QWidget
+	class KFORMEDITOR_EXPORT WidgetContainer : public QWidget
 	{
 
 		Q_OBJECT

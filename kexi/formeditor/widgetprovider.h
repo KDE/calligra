@@ -26,7 +26,7 @@ namespace KFormEditor
 {
 	class WidgetContainer;
 
-class WidgetProvider
+class KFORMEDITOR_EXPORT WidgetProvider
 {
 	public:
 		virtual ~WidgetProvider() {; }

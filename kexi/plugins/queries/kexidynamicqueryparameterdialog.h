@@ -26,7 +26,7 @@
 
 class QVBox;
 
-class KexiDynamicQueryParameterDialog : public KDialogBase
+class KEXI_HAND_QUERY_EXPORT KexiDynamicQueryParameterDialog : public KDialogBase
 {
 	Q_OBJECT
 public:

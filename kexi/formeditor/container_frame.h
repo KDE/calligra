@@ -9,7 +9,7 @@ namespace KFormEditor {
 
 	class WidgetContainer;
 
-	class container_Frame: public QFrame, public KFormEditor::containerIface
+	class KFORMEDITOR_EXPORT container_Frame: public QFrame, public KFormEditor::containerIface
 	{
 	Q_OBJECT
 

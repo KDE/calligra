@@ -113,7 +113,7 @@ KexiBlobTableEdit::value()
 	else
 	{
 		QByteArray value;
-		QFile f(m_tempFile->name());
+		QFile f( m_tempFile->name() );
 		f.open(IO_ReadOnly);
 		QDataStream stream(&f);
 		char* data = (char*) malloc(f.size());

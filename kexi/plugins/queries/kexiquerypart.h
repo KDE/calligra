@@ -25,7 +25,7 @@ class QPixmap;
 #include "kexiprojecthandler.h"
 #include "kexidataprovider.h"
 
-class KexiQueryPart : public KexiProjectHandler, KexiDataProvider
+class KEXI_HAND_QUERY_EXPORT KexiQueryPart : public KexiProjectHandler, KexiDataProvider
 {
 	Q_OBJECT
 

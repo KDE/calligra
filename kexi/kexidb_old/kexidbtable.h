@@ -23,8 +23,7 @@
 #include "kexidbfield.h"
 #include <qstring.h>
 
-
-class KexiDBTable {
+class KEXIDB_EXPORT KexiDBTable {
 public:
 	KexiDBTable(const QString & name);
 	~KexiDBTable();

@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 class QPixmap;
 
-class KexiFormHandler : public KexiProjectHandler
+class KEXI_HAND_FORM_EXPORT KexiFormHandler : public KexiProjectHandler
 {
 	Q_OBJECT
 	

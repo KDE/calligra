@@ -10,5 +10,5 @@ libkformeditor_la_SOURCES = propertyeditor.cpp propertyeditoritem.cpp propertyed
 
 libkformeditor_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXICORE_EXPORT= -DKFORMEDITOR_EXPORT=
 

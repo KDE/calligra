@@ -321,11 +321,13 @@ KexiDataTable::slotRemoveCurrentRecord()
 	}
 }
 
+#ifndef KEXI_NO_PRINT
 void
 KexiDataTable::print(KPrinter &printer)
 {
 	m_tableView->print(printer);
 }
+#endif
 
 KexiDataTable::~KexiDataTable()
 {

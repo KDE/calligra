@@ -25,7 +25,7 @@
 
 #include "kexitableedit.h"
 
-class KexiInputTableEdit : public KexiTableEdit
+class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
 

@@ -27,12 +27,15 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kprinter.h>
 #include <kxmlguiclient.h>
 #include <klineeditdlg.h>
 #include <klistview.h>
 
 #include <koStore.h>
+
+#ifndef KEXI_NO_PRINT
+# include <kprinter.h>
+#endif
 
 #include <kexiDB/kexidberror.h>
 
@@ -138,12 +141,13 @@ KexiQueryDesigner::slotContextHelp(const QString &t, const QString &m)
 	setContextHelp(t, m);
 }
 
+#ifndef KEXI_NO_PRINT
 void
 KexiQueryDesigner::print(KPrinter &p)
 {
 	m_view->print(p);
 }
-
+#endif
 
 void
 KexiQueryDesigner::saveBack()

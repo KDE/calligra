@@ -39,7 +39,7 @@ class KexiDatePicker;
 class QLineEdit;
 class QDate;
 
-class KexiDateTableEdit : public KexiTableEdit
+class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 {
 
 	Q_OBJECT
@@ -60,7 +60,7 @@ class KexiDateTableEdit : public KexiTableEdit
 		void		slotShowDatePicker();
 };
 
-class KexiDatePicker : public KDatePicker
+class KEXIDATATABLE_EXPORT KexiDatePicker : public KDatePicker
 {
 	Q_OBJECT
 

@@ -24,7 +24,7 @@
 
 class KexiDBRecordSet;
 
-class KexiRecordNavigator : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiRecordNavigator : public QWidget
 {
 	Q_OBJECT
 

@@ -28,7 +28,7 @@ class KexiTableItem;
 class PropertyEditor;
 class PropertyEditorItem;
 
-class KexiAlterTable : public KexiDialogBase
+class KEXI_HAND_TBL_EXPORT KexiAlterTable : public KexiDialogBase
 {
 	Q_OBJECT
 	public:

@@ -40,13 +40,12 @@ typedef struct SourceConnection
         QString rcvTable;
         QString srcField;
         QString rcvField;
-
-};
+} SourceConnection;
 
 typedef QValueList<SourceConnection> RelationList;
 typedef QPtrList<KexiDBField> KexiDBTableStruct;
 
-class KexiDB : public QObject
+class KEXIDB_EXPORT KexiDB : public QObject
 {
 	Q_OBJECT
 
@@ -117,12 +116,12 @@ class KexiDB : public QObject
 		virtual unsigned long		affectedRows();
 		virtual KexiDBWatcher		*watcher() { return m_dbwatcher; }
 
-		virtual bool commitWork() {return false;}
+		virtual bool commitWork() { return false; }
 
 		void setRelations(RelationList r) { m_relations = r; }
 		RelationList			relations() { return m_relations; }
 
-		KexiDBDriver		*m_currentDriver;
+//js:		KexiDBDriver		*m_currentDriver;
 		uint us(int i) { return i; }
 				/*!
 		 *  the last error which occured. The pointer must neither be stored by the caller nor

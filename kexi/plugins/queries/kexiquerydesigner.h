@@ -30,7 +30,7 @@ class KexiQueryDesignerGuiEditor;
 class KexiQueryDesignerSQL;
 class KexiDataTable;
 
-class KexiQueryDesigner : public KexiDialogBase
+class KEXI_HAND_QUERY_EXPORT KexiQueryDesigner : public KexiDialogBase
 {
 	Q_OBJECT
 
@@ -51,7 +51,9 @@ class KexiQueryDesigner : public KexiDialogBase
 		void	queryExecuted(QString statement, bool succeed);
 
 	protected:
+#ifndef KEXI_NO_PRINT
 		virtual void print(KPrinter &p);
+#endif
 
 	protected slots:
 		void	viewChanged(QWidget *);

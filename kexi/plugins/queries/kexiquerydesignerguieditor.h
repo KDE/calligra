@@ -64,7 +64,7 @@ typedef QValueList<Condition> ConditionList;
 
 class KexiParameterListEditor;
 
-class KexiQueryDesignerGuiEditor : public QWidget
+class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerGuiEditor : public QWidget
 {
 	Q_OBJECT
 

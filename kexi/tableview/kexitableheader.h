@@ -24,7 +24,7 @@
 
 class QPainter;
 
-class KexiTableHeader : public QHeader
+class KEXIDATATABLE_EXPORT KexiTableHeader : public QHeader
 {
 	Q_OBJECT
 

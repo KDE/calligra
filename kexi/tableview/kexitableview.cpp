@@ -40,7 +40,10 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kprinter.h>
+
+#ifndef KEXI_NO_PRINT
+# include <kprinter.h>
+#endif
 //#endif
 
 #include "kexitablerm.h"
@@ -884,7 +887,9 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
     		e->ignore();
         	break;
 
+#ifndef _WIN32
 	#warning this needs work!
+#endif
 	case Key_Return:
 		if(columnType(m_curCol) != QVariant::Bool && columnEditable(m_curCol))
 			createEditor(m_curRow, m_curCol, "", false);
@@ -1384,6 +1389,7 @@ void KexiTableView::inserted()
 
 }
 
+#ifndef KEXI_NO_PRINT
 void
 KexiTableView::print(KPrinter &printer)
 {
@@ -1445,6 +1451,7 @@ KexiTableView::print(KPrinter &printer)
 //	p.drawLine(60,60,120,150);
 	p.end();
 }
+#endif //!KEXI_NO_PRINT
 
 void
 KexiTableView::takeInsertItem()

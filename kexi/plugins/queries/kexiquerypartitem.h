@@ -30,7 +30,7 @@ class KexiQueryDesigner;
 class KexiTableList;
 class KexiQueryDesigner;
 
-class KexiQueryPartItem: public KexiProjectHandlerItem
+class KEXI_HAND_QUERY_EXPORT KexiQueryPartItem: public KexiProjectHandlerItem
 {
 	Q_OBJECT
 

@@ -47,7 +47,7 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 	QHBox *hbox = new QHBox(this);
 
 	m_tableCombo = new QComboBox(hbox);
-	m_tableCombo->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+	m_tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
 	m_tableCombo->insertStringList(kexiProject()->db()->tableNames());
 	QStringList tmp=kexiProject()->db()->tableNames();
 	for (QStringList::iterator it=tmp.begin();it!=tmp.end();++it)

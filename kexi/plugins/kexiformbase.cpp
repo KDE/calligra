@@ -230,7 +230,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 //	topLevelEditor->setWidgetList(item->widgetList());
 	topLevelEditor->setPropertyBuffer(item->propertyBuffer());
 
-	QDockWindow *editorWindow = new QDockWindow(view->mainWindow(), "edoc");
+	QDockWindow *editorWindow = new QDockWindow( QDockWindow::InDock, view->mainWindow(), "edoc");
 	editorWindow->setCaption(i18n("Properties"));
 	editorWindow->setResizeEnabled(true);
 	view->mainWindow()->moveDockWindow(editorWindow, DockRight);

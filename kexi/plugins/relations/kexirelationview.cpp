@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kdebug.h>
+
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -181,7 +183,9 @@ KexiRelationView::setReadOnly(bool b)
 	for (TableList::iterator it=m_tables.begin();it!=m_tables.end();++it)
 	{
 //		(*it)->setReadOnly(b);
+#ifndef Q_WS_WIN
 		#warning readonly needed
+#endif
 	}
 }
 

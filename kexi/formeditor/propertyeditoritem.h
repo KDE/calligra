@@ -26,7 +26,7 @@
 
 class QStringList;
 
-class PropertyEditorItem : public KListViewItem
+class KFORMEDITOR_EXPORT PropertyEditorItem : public KListViewItem
 {
 	public:
 		PropertyEditorItem(KListView *parent, const QString& name, QVariant::Type type, QVariant value, QObject *o = 0L);

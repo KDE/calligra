@@ -83,7 +83,10 @@ KexiDBInterfaceManager::lookupDrivers()
 	else
 	{
 		KMessageBox::error(0, i18n("Kexi could not find any database drivers!"));
+#ifndef Q_WS_WIN
+    exit(0);
 		exit(0);
+#endif
 	}
 }
 

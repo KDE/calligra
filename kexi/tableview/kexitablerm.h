@@ -30,7 +30,7 @@
   *@author till busch
   */
 
-class KexiTableRM : public QWidget
+class KEXIDATATABLE_EXPORT KexiTableRM : public QWidget
 {
 Q_OBJECT
 

@@ -73,7 +73,7 @@ PropertyEditorList::valueChanged()
  * BOOL-EDITOR       *
  *********************/
 
-PropertyEditorBool::PropertyEditorBool(QWidget *parent, QVariant::Type type, QVariant value, const char *name=0)
+PropertyEditorBool::PropertyEditorBool(QWidget *parent, QVariant::Type type, QVariant value, const char *name)
  : PropertyEditorList(parent, type, value, name)
 {
 	m_combo->insertItem(i18n("true"));

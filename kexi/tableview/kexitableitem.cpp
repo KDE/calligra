@@ -36,7 +36,7 @@ KexiTableItem::KexiTableItem(int numCols)
 	m_pTable = 0;
 }
 
-void KexiTableItem::attach(KexiTableView *tableView, bool sorted=false)
+void KexiTableItem::attach(KexiTableView *tableView, bool sorted)
 {
 	if(!sorted)
 	{

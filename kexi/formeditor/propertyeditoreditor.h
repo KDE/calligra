@@ -23,7 +23,7 @@
 #include <qwidget.h>
 #include <qvariant.h>
 
-class PropertyEditorEditor : public QWidget
+class KFORMEDITOR_EXPORT PropertyEditorEditor : public QWidget
 {
 	Q_OBJECT
 

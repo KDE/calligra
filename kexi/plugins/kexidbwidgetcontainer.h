@@ -36,7 +36,7 @@ namespace KFormEditor
 	class WidgetWatcher;
 };
 
-class KexiDBWidgetContainer : public KFormEditor::WidgetContainer
+class KEXI_HAND_FORM_EXPORT KexiDBWidgetContainer : public KFormEditor::WidgetContainer
 {
 	Q_OBJECT
 

@@ -22,7 +22,7 @@
 
 #include "propertyeditorinput.h"
 
-PropertyEditorInput::PropertyEditorInput(QWidget *parent, QVariant::Type type, QVariant value, const char *name=0)
+PropertyEditorInput::PropertyEditorInput(QWidget *parent, QVariant::Type type, QVariant value, const char *name)
  : PropertyEditorEditor(parent, type, value, name)
 {
 	m_lineedit = new QLineEdit(this);
@@ -50,7 +50,7 @@ PropertyEditorInput::getValue()
 
 //INT
 
-PropertyEditorSpin::PropertyEditorSpin(QWidget *parent, QVariant::Type type, QVariant value, const char *name=0)
+PropertyEditorSpin::PropertyEditorSpin(QWidget *parent, QVariant::Type type, QVariant value, const char *name)
  : PropertyEditorEditor(parent, type, value, name)
 {
 	m_spinBox = new QSpinBox(this);

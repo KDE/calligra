@@ -39,7 +39,7 @@ namespace KFormEditor {
 	class WidgetContainer;
 }
 
-class KexiFormBase : public KexiDialogBase
+class KEXI_HAND_FORM_EXPORT KexiFormBase : public KexiDialogBase
 {
 
 	Q_OBJECT

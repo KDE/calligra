@@ -6,7 +6,7 @@ kde_module_LTLIBRARIES = kexihandler_table.la kexihandler_query.la kexihandler_r
 
 kexihandler_table_la_SOURCES = kexitablepart.cpp kexitablepartproxy.cpp kexialtertable.cpp
 kexihandler_table_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
-kexihandler_table_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatable.la \
+kexihandler_table_la_LIBADD = -lkpath ../core/libkexicore.la ../tableview/libkexidatatable.la \
 		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la ../formeditor/libkformeditor.la
 
 kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquerypartitem.cpp kexiquerypartproxy.cpp \
@@ -15,23 +15,26 @@ kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquery
 				kexiaddparamdialog.cpp kexidynamicqueryparameterdialog.cpp
 
 kexihandler_query_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
-kexihandler_query_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatable.la ../widget/libkexiextendedwidgets.la
+kexihandler_query_la_LIBADD = -lkpath ../core/libkexicore.la ../tableview/libkexidatatable.la ../widget/libkexiextendedwidgets.la
 
 kexihandler_relation_la_SOURCES = kexirelationhandler.cpp kexirelationhandlerproxy.cpp kexirelationview.cpp \
 				kexirelationviewtable.cpp kexirelationdialog.cpp \
 				kexirelationviewconnection.cpp
 kexihandler_relation_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
-kexihandler_relation_la_LIBADD = ../core/libkexicore.la
+kexihandler_relation_la_LIBADD = -lkpath ../core/libkexicore.la
 
 kexihandler_form_la_SOURCES = kexiformbase.cpp kexiformhandler.cpp kexiformhandlerproxy.cpp kexiformhandleritem.cpp kexidbwidgetcontainer.cpp kexidbwidgets.cpp kexiwidgetprovider.cpp
 kexihandler_form_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
-kexihandler_form_la_LIBADD = ../core/libkexicore.la ../formeditor/libkformeditor.la \
+kexihandler_form_la_LIBADD = -lkpath ../core/libkexicore.la ../formeditor/libkformeditor.la \
 		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la
 
 SUBDIRS = . $(scripting_dir) kugar
 #SUBDIRS = . forms
 
-KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+KDE_CXXFLAGS = $(USE_EXCEPTIONS) -DKEXI_HAND_TBL_EXPORT= -DKEXICORE_EXPORT= -DKEXIDB_EXPORT= \
+-DKEXIFILTER_EXPORT= -DKFORMEDITOR_EXPORT= -DKEXI_HAND_TBL_EXPORT= -DKEXI_HAND_QUERY_EXPORT= \
+-DKEXI_HAND_RELAT_EXPORT= -DKEXIEXTWIDGETS_EXPORT= -DKEXI_HAND_FORM_EXPORT= -DKEXIDATATABLE_EXPORT=
+
 
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.

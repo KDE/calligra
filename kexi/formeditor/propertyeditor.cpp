@@ -62,7 +62,7 @@ PropertyEditor::setObject(QObject *object)
 	for(; (name = it.current()) != 0; ++it)
 	{
 		const QMetaProperty *meta = object->metaObject()->property(count, true);
-		if(meta->designable())
+		if(meta->designable( 0 ))
 		{
 //			KListViewItem *i = new KListViewItem(this, *it, meta->type());
 			PropertyEditorItem *i = new PropertyEditorItem(this, *it, object->property(*it).type(), object->property(*it), object);

@@ -24,7 +24,7 @@
 
 class KexiFormHandler;
 
-class KexiFormHandlerProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
+class KEXI_HAND_FORM_EXPORT KexiFormHandlerProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
 {
 	Q_OBJECT
 

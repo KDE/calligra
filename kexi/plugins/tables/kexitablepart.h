@@ -28,7 +28,7 @@ class QPixmap;
 class KexiTablePartProxy;
 class KexiTableFilterManager;
 
-class KexiTablePart : public KexiProjectHandler, public KexiDataProvider
+class KEXI_HAND_TBL_EXPORT KexiTablePart : public KexiProjectHandler, public KexiDataProvider
 {
 	Q_OBJECT
 

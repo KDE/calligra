@@ -254,8 +254,13 @@ KexiAlterTable::changeTable()
 		if(ok)
 		{
 			kdDebug() << "KexiAlterTable::changeTable: Field changed!" << endl;
-			m_tableFields.replace(index, field);
-		}
+#if QT_VERSION < 0x030100
+            m_tableFields.remove(index);
+            m_tableFields.insert(index, field);
+#else
+            m_tableFields.replace(index, field);
+#endif
+        }
 		else
 		{
 			i->setValue(0, field->name());

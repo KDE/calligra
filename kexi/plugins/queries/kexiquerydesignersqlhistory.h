@@ -28,7 +28,7 @@
 
 class QSimpleRichText;
 
-class HistoryEntry
+class KEXI_HAND_QUERY_EXPORT HistoryEntry
 {
 	public:
 		HistoryEntry(bool success, const QTime &time, const QString &statement, int y);
@@ -56,7 +56,7 @@ class HistoryEntry
 
 typedef QPtrList<HistoryEntry> History;
 
-class KexiQueryDesignerSQLHistory : public QScrollView
+class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
 {
 	Q_OBJECT
 

@@ -26,7 +26,7 @@ class KexiQueryDesigner;
 class KexiQueryDesignerSQLEditor;
 class KexiQueryDesignerSQLHistory;
 
-class KexiQueryDesignerSQL : public QWidget
+class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQL : public QWidget
 {
 	Q_OBJECT
 

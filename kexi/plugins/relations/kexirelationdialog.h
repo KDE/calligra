@@ -32,7 +32,7 @@ class KexiDB;
 
 typedef QValueList<SourceConnection> RelationList;
 
-class KexiRelationDialog : public KexiDialogBase
+class KEXI_HAND_RELAT_EXPORT KexiRelationDialog : public KexiDialogBase
 {
 	Q_OBJECT
 

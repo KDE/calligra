@@ -25,7 +25,7 @@
 class QPixmap;
 class QWidget;
 
-class KexiRelationHandler: public KexiProjectHandler
+class KEXI_HAND_RELAT_EXPORT KexiRelationHandler: public KexiProjectHandler
 {
 	Q_OBJECT
 

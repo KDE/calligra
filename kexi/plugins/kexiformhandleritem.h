@@ -34,7 +34,7 @@ namespace KFormEditor
 	class EventBuffer;
 }
 
-class KexiFormHandlerItem : public KexiProjectHandlerItem
+class KEXI_HAND_FORM_EXPORT KexiFormHandlerItem : public KexiProjectHandlerItem
 {
 	Q_OBJECT
 

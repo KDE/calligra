@@ -28,7 +28,7 @@ class QPixmap;
 
 class KexiView;
 
-class KexiQueryPartProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
+class KEXI_HAND_QUERY_EXPORT KexiQueryPartProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
 {
 	Q_OBJECT
 

@@ -236,7 +236,9 @@ KexiDBRecordSet *KexiQueryPartItem::records(QWidget* dpar,KexiDataProvider::Para
 				break;
 			}
 		}
+#ifndef _WIN32
 #warning "HERE SHOULD BE A TRANLATION EG. OF DATE INPUTS TO DATABASSE SPECIFIC FORMATS"
+#endif
 		KexiDataProvider::Parameters::Iterator it;
 		for ( it = params.begin(); it != params.end();++it ) {
 			QRegExp exp1(QString("%1\\W").arg(it.key()),false);

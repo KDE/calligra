@@ -51,7 +51,7 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 	g->addWidget(l, 0, 0);
 
 	QPushButton *btnClose = new QPushButton("x", this, "x");
-	btnClose->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	btnClose->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 	btnClose->setFixedSize(15, 15);
 //	btnClose->setFlat(true);
 
@@ -306,7 +306,7 @@ bool
 KexiRelationViewTable::acceptDrag(QDropEvent *ev) const
 {
 //	kdDebug() << "KexiRelationViewTable::acceptDrag()" << endl;
-	if(ev->provides("kexi/field") && ev->source() != this)
+	if(ev->provides("kexi/field") && ev->source() != (QWidget*)this)
 		return true;
 
 	return false;

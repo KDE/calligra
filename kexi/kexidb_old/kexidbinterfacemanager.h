@@ -42,7 +42,7 @@ typedef QDict<KexiDBDriver> DriverList;
 
 */
 
-class KexiDBInterfaceManager : public QObject
+class KEXIDB_EXPORT KexiDBInterfaceManager : public QObject
 {
 	friend class KexiDB;
 	Q_OBJECT

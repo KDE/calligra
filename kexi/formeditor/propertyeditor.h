@@ -29,7 +29,7 @@
 class PropertyEditorItem;
 class PropertyBuffer;
 
-class PropertyEditor : public KListView
+class KFORMEDITOR_EXPORT PropertyEditor : public KListView
 {
 	Q_OBJECT
 

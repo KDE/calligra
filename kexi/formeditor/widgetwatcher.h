@@ -36,7 +36,7 @@ namespace KFormEditor
 	class WidgetContainer;
 	class EventBuffer;
 
-	class WidgetWatcher : public QObject, public QMap<QString, QObject *>
+	class KFORMEDITOR_EXPORT WidgetWatcher : public QObject, public QMap<QString, QObject *>
 	{
 		Q_OBJECT
 

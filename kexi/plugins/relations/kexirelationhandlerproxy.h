@@ -27,7 +27,7 @@
 
 class KexiView;
 
-class KexiRelationHandlerProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
+class KEXI_HAND_RELAT_EXPORT KexiRelationHandlerProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
 {
 	Q_OBJECT
 

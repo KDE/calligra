@@ -215,7 +215,9 @@ QString
 KexiQueryDesignerGuiEditor::getQuery()
 {
 
+#ifndef _WIN32
 #warning fixme
+#endif
 	//yo, let's get ugly :)
 
 	ConditionList conditions;

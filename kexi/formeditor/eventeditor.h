@@ -30,7 +30,7 @@ namespace KFormEditor
 	class EventBuffer;
 }
 
-class FakeHandler
+class KFORMEDITOR_EXPORT FakeHandler
 {
 	public:
 		FakeHandler() {;}
@@ -43,7 +43,7 @@ class FakeHandler
 
 typedef QMap<QString, FakeHandler *> Fakes;
 
-class EventEditor : public PropertyEditor
+class KFORMEDITOR_EXPORT EventEditor : public PropertyEditor
 {
 	Q_OBJECT
 
