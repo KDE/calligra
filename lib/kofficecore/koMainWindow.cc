@@ -498,6 +498,9 @@ bool KoMainWindow::saveDocument( bool saveas )
         KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
         dialog->setCaption( i18n("Save document as") );
         dialog->setKeepLocation( true );
+#if KDE_VERSION >= 220
+        dialog->setOperationMode( KFileDialog::Saving );
+#endif
         KoFilterManager * filterManager = new KoFilterManager();
         filterManager->prepareDialog(dialog, KoFilterManager::Export,
                                      _native_format, nativeFormatPattern(),
