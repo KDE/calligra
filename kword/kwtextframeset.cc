@@ -2473,7 +2473,8 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 
     cursor = new QTextCursor( textDocument() );
 
-    cursorVisible = TRUE;
+    cursorVisible = false;
+    showCursor();
     blinkTimer = new QTimer( this );
     connect( blinkTimer, SIGNAL( timeout() ),
              this, SLOT( blinkCursor() ) );

@@ -688,7 +688,7 @@ void KWCreateFrameCommand::execute()
     if ( textfs )
         textfs->formatMore();
     m_pDoc->frameChanged( frame );
-    kdDebug()<<"frameSet->getFrameType( :"<<frameSet->getFrameType()<<endl;
+    kdDebug()<<"KWCreateFrameCommand: frameSet->getFrameType() :"<<frameSet->getFrameType()<<endl;
     m_pDoc->refreshDocStructure( frameSet->getFrameType());
 }
 
