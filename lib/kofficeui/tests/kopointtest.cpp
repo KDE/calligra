@@ -1,6 +1,7 @@
 #include <koPoint.h>
 #include <kdebug.h>
 #include <kglobal.h>
+#include <stdlib.h>
 #include <math.h>
 
 bool check( QString txt, bool res, bool expected )
