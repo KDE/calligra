@@ -1582,8 +1582,8 @@ void KWView::insertPicture( const QString &filename, bool isClipart, bool makeIn
     if ( edit && makeInline )
     {
         KWFrameSet * fs = 0L;
-        int width = 0;
-        int height = 0;
+        uint width = 0;
+        uint height = 0;
         if ( isClipart )
         {
             KWClipartFrameSet *frameset = new KWClipartFrameSet( m_doc, QString::null );

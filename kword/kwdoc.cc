@@ -1497,6 +1497,12 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
         frames.append( fs );
         return fs;
     } break;
+    case FT_CLIPART: {
+        KWClipartFrameSet *fs = new KWClipartFrameSet( this, fsname );
+        fs->load( framesetElem, loadFrames );
+        frames.append( fs );
+        return fs;
+    } break;
     case FT_FORMULA: {
         KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
         fs->load( framesetElem, loadFrames );
@@ -1515,6 +1521,12 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
         */
         kdWarning(32001) << "Copying part objects isn't implemented yet" << endl;
     } break;
+    case FT_TABLE:
+        kdWarning(32001) << "Copying tables isn't implemented yet" << endl;
+        break;
+    case FT_BASE:
+        kdWarning(32001) << "FT_BASE !?!?" << endl;
+        break;
     }
 }
 

@@ -34,8 +34,9 @@
 /* Class: KWAutoFormat						  */
 /******************************************************************/
 KWAutoFormat::KWAutoFormat( KWDocument *_doc )
-    : m_doc( _doc ), m_configRead( false ), m_typographicQuotes(), /*m_enabled( true ),*/
+    : m_doc( _doc ), m_configRead( false ),
       m_convertUpperCase( false ), m_convertUpperUpper( false ),
+      m_typographicQuotes(), /*m_enabled( true ),*/
       m_maxlen( 0 )
 {
 }

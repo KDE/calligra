@@ -74,6 +74,7 @@ QByteArray KWDrag::encodedData( const char *mime ) const
         return kword;
     else
         kdWarning() << "KWDrag: unsupported type " << mime << " requested" << endl;
+    return QByteArray();
 }
 
 bool KWDrag::canDecode( QMimeSource* e )

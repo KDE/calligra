@@ -156,8 +156,8 @@ private:
     KWAutoFormatEntryMap m_entries;
     QStringList upperCaseExceptions;
     QStringList twoUpperLetterException;
-    int m_maxlen;
-    int m_maxFindLength;
+    uint m_maxlen;
+    uint m_maxFindLength;
 };
 
 #endif

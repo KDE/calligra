@@ -134,7 +134,7 @@ void KWResizeHandle::mouseReleaseEvent( QMouseEvent *e )
 
 void KWResizeHandle::updateGeometry()
 {
-    KWDocument * doc = frame->getFrameSet()->kWordDocument();
+    //KWDocument * doc = frame->getFrameSet()->kWordDocument();
     QRect newRect( frame->outerRect() );
     QRect frameRect( m_canvas->viewMode()->normalToView( newRect ) );
     switch ( direction ) {

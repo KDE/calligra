@@ -286,8 +286,6 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
 // This can be called by KWResizeHandle::mousePressEvent
 {
     KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
-    double x = docPoint.x();
-    double y = docPoint.y();
     m_mousePressed = true;
     frameMoved = false;
     frameResized = false;
@@ -409,8 +407,8 @@ void KWCanvas::mpCreatePixmap( int mx, int my )
         {
             QPixmap pix( m_pictureFilename );
             // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
-            int width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
-            int height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
+            uint width = qRound( (double)pix.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( QPaintDevice::x11AppDpiX() ) );
+            uint height = qRound( (double)pix.height() * m_doc->zoomedResolutionY() / POINT_TO_INCH( QPaintDevice::x11AppDpiY() ) );
             // Apply reasonable limits
             width = QMIN( width, m_doc->paperWidth() );
             height = QMIN( height, m_doc->paperHeight() );

@@ -47,6 +47,10 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       frameBehaviour( AutoCreateNewFrame ),
       newFrameBehaviour( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
       m_runAroundGap( _gap ),
+      bleft( 0 ),
+      bright( 0 ),
+      btop( 0 ),
+      bbottom( 0 ),
       m_bCopy( false ),
       selected( false ),
       m_pageNum( 0 ),
@@ -56,10 +60,6 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       brd_right( QColor(), Border::SOLID, 0 ),
       brd_top( QColor(), Border::SOLID, 0 ),
       brd_bottom( QColor(), Border::SOLID, 0 ),
-      bleft( 0 ),
-      bright( 0 ),
-      btop( 0 ),
-      bbottom( 0 ),
       frameSet( fs )
 {
     //kdDebug() << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
@@ -579,7 +579,7 @@ void KWFrameSet::setFixed()
 
 KWAnchor * KWFrameSet::createAnchor( KWTextDocument * textdoc, int frameNum )
 {
-    KWFrame * frame = getFrame( frameNum );
+    //KWFrame * frame = getFrame( frameNum );
     KWAnchor * anchor = new KWAnchor( textdoc, this, frameNum );
     //frame->setAnchor( anchor );
     return anchor;

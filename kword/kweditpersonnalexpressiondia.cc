@@ -240,7 +240,7 @@ void KWEditPersonnalExpression::saveFile()
         typeName.appendChild( doc.createTextNode(it.key()  ) );
         lst=it.data();
 
-        for( int i=0;i<lst.count();i++ )
+        for( uint i=0;i<lst.count();i++ )
         {
             QDomElement expr = doc.createElement( "Expression" );
             type.appendChild( expr );

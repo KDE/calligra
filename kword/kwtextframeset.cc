@@ -181,7 +181,7 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
     // if mouseSelection == true : we are under (or at the right of), the frames in pageNum.
     if ( mouseSelection ) // in that case, go for the first frame in the next page.
     {
-        if ( pageNum + 1 >= m_framesInPage.size() + m_firstPage )
+        if ( pageNum + 1 >= (int)m_framesInPage.size() + m_firstPage )
         {
             // Under last frame of last page!
             KWFrame *frame = frames.getLast();
@@ -274,7 +274,7 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
     {
         //kdDebug() << "KWTextFrameSet::moveToPage num=" << num << " pages=" << pages << endl;
         // Find the first frame on page num
-        if ( num < m_firstPage || num >= m_framesInPage.size() + m_firstPage )
+        if ( num < m_firstPage || num >= (int)m_framesInPage.size() + m_firstPage )
             continue; // No frame on that page
 
         //kdDebug() << "KWTextFrameSet::moveToPage ok for first frame in page " << num << endl;
@@ -563,7 +563,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     int left = frame ? kWordDocument()->zoomItX( frame->left() ) : 0;
     int from = left;
     int to = frame ? kWordDocument()->zoomItX( frame->right() ) : 0;
-    int top = frame ? kWordDocument()->zoomItX( frame->top() ) : 0;
+    //int top = frame ? kWordDocument()->zoomItX( frame->top() ) : 0;
     int width = to - from;
     int bottomSkip = 0;
 
@@ -932,11 +932,11 @@ void KWTextFrameSet::updateFrames()
     int oldSize = m_framesInPage.size();
     m_framesInPage.resize( lastPage - m_firstPage + 1 );
     // Clear the old elements
-    int oldElements = QMIN( oldSize, m_framesInPage.size() );
+    int oldElements = QMIN( oldSize, (int)m_framesInPage.size() );
     for ( int i = 0 ; i < oldElements ; ++i )
         m_framesInPage[i]->clear();
     // Initialize the new elements.
-    for ( int i = oldElements ; i < m_framesInPage.size() ; ++i )
+    for ( int i = oldElements ; i < (int)m_framesInPage.size() ; ++i )
         m_framesInPage.insert( i, new QList<KWFrame>() );
 
     // Re-fill the frames list with the frames in the right order,
@@ -976,7 +976,7 @@ void KWTextFrameSet::updateFrames()
 
 const QList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
 {
-    if ( pageNum < m_firstPage || pageNum >= m_framesInPage.size() + m_firstPage )
+    if ( pageNum < m_firstPage || pageNum >= (int)m_framesInPage.size() + m_firstPage )
     {
         kdWarning() << getName() << " framesInPage called for pageNum=" << pageNum << ". "
                     << " Min value: " << m_firstPage
@@ -1068,7 +1068,7 @@ void KWTextFrameSet::printDebug()
 {
     KWFrameSet::printDebug();
     kdDebug() << " -- Frames in page array -- " << endl;
-    for ( int i = 0 ; i < m_framesInPage.size() ; ++i )
+    for ( uint i = 0 ; i < m_framesInPage.size() ; ++i )
     {
         QListIterator<KWFrame> it( *m_framesInPage[i] );
         for ( ; it.current() ; ++it )
@@ -1817,7 +1817,7 @@ bool KWTextFrameSet::canRemovePage( int num )
     //kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage " << num << endl;
 
     // No frame on that page ? ok for us then
-    if ( num < m_firstPage || num >= m_framesInPage.size() + m_firstPage )
+    if ( num < m_firstPage || num >= (int)m_framesInPage.size() + m_firstPage )
         return true;
 
     QListIterator<KWFrame> frameIt( framesInPage( num ) );
@@ -1856,7 +1856,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, const QPoint & nPointBottom )
     // Find last page that is visible
     int maxPage = ( nPointBottom.y() + m_doc->paperHeight() /*equiv. to ceil()*/ ) / m_doc->paperHeight();
     int maxY = 0;
-    if ( maxPage < m_firstPage || maxPage >= m_framesInPage.size() + m_firstPage )
+    if ( maxPage < m_firstPage || maxPage >= (int)m_framesInPage.size() + m_firstPage )
         maxY = m_availableHeight;
     else
     {
@@ -3728,6 +3728,8 @@ void KWTextFrameSetEdit::placeCursor( const QPoint &pos )
 
 void KWTextFrameSetEdit::blinkCursor()
 {
+    //kdDebug() << "KWTextFrameSetEdit::blinkCursor cursorVisible=" << cursorVisible
+    //          << " blinkCursorVisible=" << blinkCursorVisible << endl;
     if ( !cursorVisible )
         return;
     bool cv = cursorVisible;
@@ -4160,7 +4162,6 @@ void KWTextFrameSetEdit::changeCaseOfText(TypeOfCase _type)
         text = textFrameSet()->selectedText();
     if(!text.isEmpty())
     {
-        int i=0;
         switch(_type)
         {
             case UpperCase:
@@ -4170,15 +4171,17 @@ void KWTextFrameSetEdit::changeCaseOfText(TypeOfCase _type)
                 text=text.lower();
                 break;
             case TitleCase:
-                for(i=0;i<text.length();i++)
+                for(uint i=0;i<text.length();i++)
                 {
                     if(text.at(i)!=' ')
+                    {
+                        text=text.replace(i, 1, text.at(i).upper() );
                         break;
+                    }
                 }
-                text=text.replace(i, 1, text.at(i).upper() );
                 break;
             case ToggleCase:
-                for(i=0;i<text.length();i++)
+                for(uint i=0;i<text.length();i++)
                 {
                     QString repl;
                     if(text.at(i).upper()!=text.at(i))
