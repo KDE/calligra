@@ -10,7 +10,7 @@
 #include "vfill.h"
 #include "vcolor.h"
 
-#include <qwidget.h>
+#include <qpaintdevice.h>
 #include <qpixmap.h>
 #include <qpointarray.h>
 
@@ -34,12 +34,12 @@
 
 #include <koPoint.h>
 
-VKoPainter::VKoPainter( QWidget *target, int w, int h ) : VPainter( target, w, h ), m_target( target )
+VKoPainter::VKoPainter( QPaintDevice *target, int w, int h ) : VPainter( target, w, h ), m_target( target )
 {
 	kdDebug() << "w : " << w << endl;
 	kdDebug() << "h : " << h << endl;
-	m_width = ( w > 0 ) ? w : target->width();
-	m_height= ( h > 0 ) ? h : target->height();
+	m_width = w;//( w > 0 ) ? w : target->width();
+	m_height= h;//( h > 0 ) ? h : target->height();
 	m_buffer = 0L;
 	m_path = 0L;
 	m_index = 0;

@@ -11,7 +11,7 @@
 #include <qnamespace.h>
 
 class QWMatrix;
-class QWidget;
+class QPaintDevice;
 class QColor;
 class QPen;
 class QBrush;
@@ -25,7 +25,7 @@ class KoPoint;
 class VPainter
 {
 public:
-	VPainter( QWidget *, int /*w*/ = 0, int /*h*/ = 0 ) {};
+	VPainter( QPaintDevice *, int /*w*/ = 0, int /*h*/ = 0 ) {};
 	virtual ~VPainter() {};
 
 	//
@@ -60,6 +60,9 @@ public:
 
 	// we have to see how this fits in
 	virtual void setRasterOp( Qt::RasterOp ) = 0;
+
+	// access to device
+	virtual QPaintDevice *device() = 0;
 };
 
 #endif

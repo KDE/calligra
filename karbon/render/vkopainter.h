@@ -20,7 +20,7 @@ class QPainter;
 class VKoPainter : public VPainter
 {
 public:
-	VKoPainter( QWidget *target, int w = 0, int h = 0 );
+	VKoPainter( QPaintDevice *target, int w = 0, int h = 0 );
 	virtual ~VKoPainter();
 
     //
@@ -54,6 +54,9 @@ public:
 
 	//
 	virtual void setRasterOp( Qt::RasterOp );
+
+	virtual QPaintDevice *device() { return m_target; } 
+
 private:
 	void clear();
 	void clear( unsigned int color );
@@ -63,7 +66,7 @@ private:
 	ArtBpath *m_path;
 	unsigned int m_index;
 	art_u8 *m_buffer;
-	QWidget *m_target;
+	QPaintDevice *m_target;
 	unsigned int m_width;
 	unsigned int m_height;
 	QWMatrix m_matrix;

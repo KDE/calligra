@@ -16,7 +16,7 @@ class QPainter;
 class VQPainter : public VPainter
 {
 public:
-	VQPainter( QWidget *target, int w = 0, int h = 0 );
+	VQPainter( QPaintDevice *target, int w = 0, int h = 0 );
 	virtual ~VQPainter();
 
     //
@@ -51,12 +51,13 @@ public:
 	//
 	virtual void setRasterOp( Qt::RasterOp );
 
+	virtual QPaintDevice *device() { return m_target; }
 private:
 	double m_zoomFactor;
 	unsigned int m_index;
 	QPointArray m_pa;
 	QPainter *m_painter;
-	QWidget  *m_target;
+	QPaintDevice *m_target;
 	int m_width;
 	int m_height;
 };

@@ -10,13 +10,13 @@
 #include "vcolor.h"
 
 #include <qpainter.h>
-#include <qwidget.h>
+#include <qpaintdevice.h>
 #include <qpen.h>
 
 #include <koPoint.h>
 #include <kdebug.h>
 
-VQPainter::VQPainter( QWidget *target, int w, int h ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h )
+VQPainter::VQPainter( QPaintDevice *target, int w, int h ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h )
 {
 	m_zoomFactor = 1;
 	m_index = 0;

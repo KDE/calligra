@@ -9,7 +9,7 @@
 // painter factory
 
 class VPainter;
-class QWidget;
+class QPaintDevice;
 
 class VPainterFactory
 {
@@ -18,12 +18,12 @@ public:
 	~VPainterFactory();
 
 	VPainter *painter();
-	void setPainter( QWidget *target, int w = 0, int h = 0 );
+	void setPainter( QPaintDevice *target, int w = 0, int h = 0 );
 
 	VPainter *editpainter();
-	void setEditPainter( QWidget *target, int w = 0, int h = 0 );
+	void setEditPainter( QPaintDevice *target, int w = 0, int h = 0 );
 
-	void setWireframePainter( QWidget *target, int w = 0, int h = 0 );
+	void setWireframePainter( QPaintDevice *target, int w = 0, int h = 0 );
 
 private:
 	VPainter *m_painter;
