@@ -140,7 +140,8 @@ private:
     QLabel       *actual_weight_label_data;
     QLabel       *actual_style_label_data;
 
-    QComboBox    *family_combo;
+    //QComboBox    *family_combo;
+    QListBox     *family_combo;
     QComboBox    *size_combo;
     QComboBox    *weight_combo;
     QComboBox    *style_combo;

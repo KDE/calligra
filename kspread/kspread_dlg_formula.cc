@@ -1299,6 +1299,15 @@ void KSpreadDlgFormula::changeFunction()
         tmp.secondElementLabel=i18n("if true");
         tmp.thirdElementLabel=i18n("if false");
         tmp.help=m_funcName+"("+"Exp logic,if true,if false"+")";
+        tmp1+=i18n("The if() function is a conditional function.\n"
+                "This function returns the second parameter\n"
+                "if the condition is True, otherwise it returns\n"
+                "the third parameter.\n");
+
+        tmp1+=i18n("Syntax : %1(bool expr,if true,if false)\n").arg(m_funcName);
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("A1=4, A2=6, if(A1>A2,5,3) returns 3\n");
+        tmp.help=tmp1;
         tmp.firstElementType=type_logic;
         tmp.firstElementType=type_string;
         tmp.firstElementType=type_string;
@@ -1430,8 +1439,12 @@ void KSpreadDlgFormula::changeFunction()
         }
         else if(m_funcName=="find")
         {
-                tmp1="help";
+                tmp1+=i18n("The find() function searches a substring..\n"
+                        "This function returns True if this substring\n"
+                        "exists otherwise it returns False.\n");
                 tmp1+=tmp2;
+                tmp1+=i18n("find(\"Kof\",\"Koffice\") returns True\n"
+                "find(\"kspread\",\"Koffice\") returns False");
         }
         tmp.help=tmp1;
         tmp.firstElementType=type_string;
@@ -1475,7 +1488,12 @@ void KSpreadDlgFormula::changeFunction()
         tmp.thirdElementLabel=i18n("String");
         tmp.fourElementLabel=i18n("String");
         tmp.fiveElementLabel=i18n("String");
-        tmp.help=m_funcName+"("+"string,string,..."+")";
+        tmp1+=i18n("The join() function returns string which is\n"
+                   "the concatenation of the strings passed as parameters\n");
+        tmp1+=i18n("Syntax : %1(String,String,String....)\n").arg(m_funcName);
+        tmp1+=i18n("Example : \n");
+        tmp1+=i18n("join(\"kspread\",\"koffice\",\"kde\") returns kspreadkofficekde\n");
+        tmp.help=tmp1;
         tmp.firstElementType=type_string;
         tmp.secondElementType=type_string;
         tmp.thirdElementType=type_string;

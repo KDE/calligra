@@ -33,6 +33,7 @@
 #include <qlabel.h>
 #include <qpainter.h>
 #include <qlayout.h>
+#include <qfontdatabase.h>
 #include <kcolordlg.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -1180,17 +1181,39 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
   style_label->setText(i18n("Style:"));
   grid2->addWidget(style_label,0,1);
 
-  family_combo = new QComboBox( box1, "Family" );
-  family_combo->insertItem( "", 0 );
-  family_combo->insertItem( "Times" );
-  family_combo->insertItem( "Helvetica" );
-  family_combo->insertItem( "Courier" );
-  family_combo->insertItem( "Symbol" );
+  family_combo = new QListBox( box1, "Family" );
 
-  family_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  grid2->addWidget(family_combo,1,0);
+  QStringList listFont;
+  QFontDatabase *fontDataBase = new QFontDatabase();
+  listFont = fontDataBase->families();
 
-  connect( family_combo, SIGNAL(activated(const QString &)),
+  family_combo->insertStringList( listFont);
+   selFont = dlg->textFont;
+
+
+
+   if ( dlg->bTextFontFamily )
+   {
+        selFont.setFamily( dlg->textFontFamily );
+        kdDebug(36001) << "Family = " << dlg->textFontFamily.data() << endl;
+
+        if( !family_combo->findItem(dlg->textFontFamily))
+                {
+                family_combo->insertItem("",0);
+                family_combo->setCurrentItem(0);
+                }
+        else
+                family_combo->setCurrentItem(family_combo->index(family_combo->findItem(dlg->textFontFamily)));
+   }
+   else
+   {
+        family_combo->insertItem("",0);
+        family_combo->setCurrentItem(0);
+   }
+
+  grid2->addMultiCellWidget(family_combo,1,5,0,0);
+
+  connect( family_combo, SIGNAL(highlighted(const QString &)),
 	   SLOT(family_chosen_slot(const QString &)) );
 
   size_combo = new QComboBox( true, box1, "Size" );
@@ -1201,10 +1224,13 @@ CellLayoutPageFont::CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg ) :
 
   size_combo->insertStringList( lst );
 
+
   size_combo->setInsertionPolicy(QComboBox::NoInsertion);
   grid2->addWidget(size_combo,1,2);
   connect( size_combo, SIGNAL(activated(const QString &)),
 	   SLOT(size_chosen_slot(const QString &)) );
+  connect( size_combo ,SIGNAL( textChanged(const QString &)),
+        this,SLOT(size_chosen_slot(const QString &)));
 
   weight_combo = new QComboBox( box1, "Weight" );
   weight_combo->insertItem( "", 0 );
@@ -1304,7 +1330,7 @@ void CellLayoutPageFont::apply( KSpreadCell *_obj )
 	_obj->setTextColor( textColor );
     if ( size_combo->currentItem() != 0 )
 	_obj->setTextFontSize( selFont.pointSize() );
-    if ( family_combo->currentItem() != 0 )
+    if ( !family_combo->currentText().isEmpty() )
 	_obj->setTextFontFamily( selFont.family() );
     if ( weight_combo->currentItem() != 0 )
 	_obj->setTextFontBold( selFont.bold() );
@@ -1409,10 +1435,7 @@ void CellLayoutPageFont::setCombos()
  textColorButton->setColor( textColor );
 
  // Needed to initialize this font
- selFont = dlg->textFont;
-
- combo = family_combo;
- if ( dlg->bTextFontFamily )
+ /*if ( dlg->bTextFontFamily )
  {
      selFont.setFamily( dlg->textFontFamily );
      kdDebug(36001) << "Family = " << dlg->textFontFamily.data() << endl;
@@ -1422,9 +1445,10 @@ void CellLayoutPageFont::setCombos()
 
      for (int i = 1; i < number_of_entries - 1; i++)
      {
-	 if ( string == (QString) combo->text(i))
+	 if ( string == (QString) family->text(i))
 	 {
-	     combo->setCurrentItem(i);
+
+             family->setCurrentItem(i);
 	     //     kdDebug(36001) << "Found Font " << string.data() << endl;
 	     found = true;
 	     break;
@@ -1432,7 +1456,8 @@ void CellLayoutPageFont::setCombos()
      }
  }
  else
-     combo->setCurrentItem( 0 );
+     family->setCurrentItem(0);
+ */
 
  combo = size_combo;
  if ( dlg->bTextFontSize )
@@ -2746,7 +2771,7 @@ CellLayoutPagePattern::CellLayoutPagePattern( QWidget* parent, CellLayoutDlg *_d
     connect( bgColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetBackgroundColor( const QColor & ) ) );
 
-    notAnyColor=new QPushButton(i18n("Not any Color"),tmpQGroupBox);
+    notAnyColor=new QPushButton(i18n("No Color"),tmpQGroupBox);
     grid3->addWidget(notAnyColor,0,2);
     connect( notAnyColor, SIGNAL( clicked( ) ),
              this, SLOT( slotNotAnyColor(  ) ) );
