@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_DOCUMENT
 #define _TREEBUILD_DOCUMENT
 
-#include <list>
-#include <string>
+#include <qlist.h>
+#include <qstring.h>
 
 class DocumentAcrobatBookmarksIncludeTagNames
 {
@@ -57,7 +57,7 @@ public:
 	DocumentChBarColor( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -77,7 +77,7 @@ public:
 	DocumentChBarPosition( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -137,7 +137,7 @@ public:
 	DocumentFNoteAnchorPos( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -147,7 +147,7 @@ public:
 	DocumentFNoteAnchorPrefix( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -157,7 +157,7 @@ public:
 	DocumentFNoteAnchorSuffix( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -167,7 +167,7 @@ public:
 	DocumentFNoteLabels( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -187,7 +187,7 @@ public:
 	DocumentFNoteNumberPos( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -197,7 +197,7 @@ public:
 	DocumentFNoteNumberPrefix( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -207,7 +207,7 @@ public:
 	DocumentFNoteNumberSuffix( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -217,7 +217,7 @@ public:
 	DocumentFNoteNumStyle( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -227,7 +227,7 @@ public:
 	DocumentFNoteRestart( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -237,7 +237,7 @@ public:
 	DocumentFNoteTag( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -297,7 +297,7 @@ public:
 	DocumentLanguage( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -307,7 +307,7 @@ public:
 	DocumentLineBreakChars( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -327,7 +327,7 @@ public:
 	DocumentMathAlphaCharFontFamily( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -344,7 +344,7 @@ public:
 	DocumentMathFunctions( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -354,7 +354,7 @@ public:
 	DocumentMathGreek( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -504,7 +504,7 @@ public:
 	DocumentMathNumbers( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -594,7 +594,7 @@ public:
 	DocumentMathStrings( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -604,7 +604,7 @@ public:
 	DocumentMathVariables( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -614,7 +614,7 @@ public:
 	DocumentMenuBar( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -624,7 +624,7 @@ public:
 	DocumentNarrowRubiSpaceForJapanese( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -634,7 +634,7 @@ public:
 	DocumentNarrowRubiSpaceForOther( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -664,7 +664,7 @@ public:
 	DocumentPageNumStyle( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -674,7 +674,7 @@ public:
 	DocumentPagePointStyle( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -684,7 +684,7 @@ public:
 	DocumentPageRounding( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -698,7 +698,7 @@ public:
 
 private:
 	DocumentPageScrollingType _type;
-	string _stringvalue;
+	QString _stringvalue;
 	int _intvalue;
 };
 
@@ -723,7 +723,7 @@ public:
 	DocumentParity( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -753,7 +753,7 @@ public:
 	DocumentPunctuationChars( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -953,7 +953,7 @@ public:
 	DocumentTblFNoteAnchorPos( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -963,7 +963,7 @@ public:
 	DocumentTblFNoteAnchorPrefix( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -973,7 +973,7 @@ public:
 	DocumentTblFNoteAnchorSuffix( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -983,7 +983,7 @@ public:
 	DocumentTblFNoteLabels( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -993,7 +993,7 @@ public:
 	DocumentTblFNoteNumberPos( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -1003,7 +1003,7 @@ public:
 	DocumentTblFNoteNumberPrefix( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -1013,7 +1013,7 @@ public:
 	DocumentTblFNoteNumberSuffix( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -1023,7 +1023,7 @@ public:
 	DocumentTblFNoteNumStyle( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -1033,7 +1033,7 @@ public:
 	DocumentTblFNoteTag( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -1166,7 +1166,7 @@ public:
 	DocumentVoMenuBar( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -1176,7 +1176,7 @@ public:
 	DocumentWideRubiSpaceForJapanese( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -1186,7 +1186,7 @@ public:
 	DocumentWideRubiSpaceForOther( const char* );
 	
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -1582,7 +1582,7 @@ private:
  	};
 };
 
-typedef list<DocumentElement*> DocumentElementList;
+typedef QList<DocumentElement> DocumentElementList;
 
 extern DocumentElementList documentelements;
 

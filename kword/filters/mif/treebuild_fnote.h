@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_FNOTE_H
 #define _TREEBUILD_FNOTE_H
 
-#include <list>
+#include <qlist.h>
 
 class FrameID;
 class Para;
@@ -30,7 +30,7 @@ private:
 	};
 };
 
-typedef list<FNoteElement*> FNoteElementList;
+typedef QList<FNoteElement> FNoteElementList;
 
 class FNote
 {

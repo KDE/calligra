@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_GENERAL
 #define _TREEBUILD_GENERAL
 
-#include <list>
-#include <string>
+#include <qlist.h>
+#include <qstring.h>
 
 class ShapeRect;
 class BRect;
@@ -54,23 +54,23 @@ private:
 class String
 {
 public:
-	String( string );
+	String( QString );
 
-	string value() const { return _value; }
+	QString value() const { return _value; }
 
 private:
-	string _value;
+	QString _value;
 };
 
 class Char
 {
 public:
-	Char( string );
+	Char( QString );
 
-	string value() const { return _value; }
+	QString value() const { return _value; }
 
 private:
-	string _value;
+	QString _value;
 };
 
 class TextRectID
@@ -116,7 +116,7 @@ public:
 	MTypeName( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 class MText
@@ -125,7 +125,7 @@ public:
 	MText( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 class MCurrPage
@@ -134,7 +134,7 @@ public:
 	MCurrPage( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 class MarkerElement
@@ -161,7 +161,7 @@ private:
 	};
 };
 
-typedef list<MarkerElement*> MarkerElementList;
+typedef QList<MarkerElement> MarkerElementList;
 
 class Marker
 {
@@ -266,7 +266,7 @@ private:
 
 
 
-typedef list<RectangleElement*> RectangleElementList;
+typedef QList<RectangleElement> RectangleElementList;
 
 class Rectangle
 {
@@ -279,7 +279,7 @@ private:
 	RectangleElementList* _elements;
 };
 
-typedef list<Rectangle*> RectangleList;
+typedef QList<Rectangle> RectangleList;
 
 
 #endif

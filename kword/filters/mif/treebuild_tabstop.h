@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_TABSTOP
 #define _TREEBUILD_TABSTOP
 
-#include <list>
-#include <string>
+#include <qlist.h>
+#include <qstring.h>
 
 class TSX_
 {
@@ -26,7 +26,7 @@ public:
 	TSType( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 class TSLeaderStr
@@ -35,7 +35,7 @@ public:
 	TSLeaderStr( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 class TSDecimalChar
@@ -68,7 +68,7 @@ private:
 	};
 };
 
-typedef list<TabStopElement*> TabStopElementList;
+typedef QList<TabStopElement> TabStopElementList;
 
 class TabStop
 {

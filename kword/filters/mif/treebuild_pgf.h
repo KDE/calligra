@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_PGF
 #define _TREEBUILD_PGF
 
-#include <list>
-#include <string>
+#include <qlist.h>
+#include <qstring.h>
 
 class TabStop;
 class FTag;
@@ -46,7 +46,7 @@ public:
 	PgfTag( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -56,7 +56,7 @@ public:
 	PgfUseNextTag( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -66,7 +66,7 @@ public:
 	PgfNextTag( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -76,7 +76,7 @@ public:
 	PgfAlignment( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -106,7 +106,7 @@ public:
 	PgfFIndentRelative( char const* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -136,7 +136,7 @@ public:
 	PgfTopSeparator( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -146,7 +146,7 @@ public:
 	PgfTopSepAtIndent( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -166,7 +166,7 @@ public:
 	PgfBotSeparator( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -176,7 +176,7 @@ public:
 	PgfBotSepAtIndent( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -196,7 +196,7 @@ public:
 	PgfPlacement( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -206,7 +206,7 @@ public:
 	PgfPlacementStyle( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -216,7 +216,7 @@ public:
 	PgfRunInDefaultPunct( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -246,7 +246,7 @@ public:
 	PgfWithPrev( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -256,7 +256,7 @@ public:
 	PgfWithNext( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -345,7 +345,7 @@ private:
 };
 
 
-typedef list<PgfFontElement*> PgfFontElementList;
+typedef QList<PgfFontElement> PgfFontElementList;
 
 class PgfFont
 {
@@ -365,7 +365,7 @@ public:
 	PgfLineSpacing( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -385,7 +385,7 @@ public:
 	PgfAutoNum( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -405,7 +405,7 @@ public:
 	PgfNumFormat( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -415,7 +415,7 @@ public:
 	PgfNumberFont( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -425,7 +425,7 @@ public:
 	PgfNumAtEnd( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -435,7 +435,7 @@ public:
 	PgfHyphenate( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -485,7 +485,7 @@ public:
 	PgfLetterSpace( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -525,7 +525,7 @@ public:
 	PgfLanguage( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -535,7 +535,7 @@ public:
 	PgfCellAlignment( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -605,7 +605,7 @@ public:
 	PgfYakumonoType ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -638,7 +638,7 @@ public:
 	PgfLocked ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 class PgfNumString
@@ -647,7 +647,7 @@ public:
 	PgfNumString ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 class PgfCellLMarginFixed
@@ -656,7 +656,7 @@ public:
 	PgfCellLMarginFixed ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -666,7 +666,7 @@ public:
 	PgfCellRMarginFixed ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -676,7 +676,7 @@ public:
 	PgfCellTMarginFixed ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -686,7 +686,7 @@ public:
 	PgfCellBMarginFixed ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -846,7 +846,7 @@ private:
 	};
 };
 
-typedef list<PgfElement*> PgfElementList;
+typedef QList<PgfElement> PgfElementList;
 
 class Pgf
 {

@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_TEXTLINE_H
 #define _TREEBUILD_TEXTLINE_H
 
-#include <string>
-#include <list>
+#include <qlist.h>
+#include <qstring.h>
 
 class String;
 class Unique;
@@ -39,7 +39,7 @@ public:
 	TLAlignment( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -49,7 +49,7 @@ public:
 	TLLanguage( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -99,7 +99,7 @@ private:
 
 
 
-typedef list<TextLineElement*> TextLineElementList;
+typedef QList<TextLineElement> TextLineElementList;
 
 class TextLine
 {
@@ -112,7 +112,7 @@ private:
 	TextLineElementList* _elements;
 };
 
-typedef list<TextLine*> TextLineList;
+typedef QList<TextLine> TextLineList;
 
 
 #endif

@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_TEXTFLOW
 #define _TREEBUILD_TEXTFLOW
 
-#include <list>
-#include <string>
+#include <qlist.h>
+#include <qstring.h>
 
 class Notes;
 class Para;
@@ -20,7 +20,7 @@ public:
 	TFTag( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 class TFAutoConnect
@@ -29,7 +29,7 @@ public:
 	TFAutoConnect( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -105,7 +105,7 @@ private:
 	};
 };
 
-typedef list<TextFlowElement*> TextFlowElementList;
+typedef QList<TextFlowElement> TextFlowElementList;
 
 class TextFlow
 {
@@ -118,7 +118,7 @@ private:
 	TextFlowElementList* _elements;
 };
 
-typedef list<TextFlow*> TextFlowList;
+typedef QList<TextFlow> TextFlowList;
 
 extern TextFlowList textflows;
 

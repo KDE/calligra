@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_GRAPHICS_H
 #define _TREEBUILD_GRAPHICS_H
 
-#include <string>
-#include <list>
+#include <qlist.h>
+#include <qstring.h> 
 
 class Pen;
 class Fill;
@@ -62,7 +62,7 @@ public:
 	ObColor( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -92,7 +92,7 @@ public:
 	RunAroundType( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -136,7 +136,7 @@ private:
 };
 
 
-typedef list<GroupElement*> GroupElementList;
+typedef QList<GroupElement> GroupElementList;
 
 class Group
 {
@@ -149,7 +149,7 @@ private:
 	GroupElementList* _elements;
 };
 
-typedef list<Group*> GroupList;
+typedef QList<Group> GroupList;
 
 
 /*********************************************
@@ -161,7 +161,7 @@ public:
 	DashedStyle( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -208,7 +208,7 @@ private:
 };
 
 
-typedef list<DashedPatternElement*> DashedPatternElementList;
+typedef QList<DashedPatternElement> DashedPatternElementList;
 
 class DashedPattern
 {
@@ -221,7 +221,7 @@ private:
 	DashedPatternElementList* _elements;
 };
 
-typedef list<DashedPattern*> DashedPatternList;
+typedef QList<DashedPattern> DashedPatternList;
 
 
 /********************************************
@@ -274,7 +274,7 @@ public:
 	HeadType( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -318,7 +318,7 @@ private:
 };
 
 
-typedef list<ArrowStyleElement*> ArrowStyleElementList;
+typedef QList<ArrowStyleElement> ArrowStyleElementList;
 
 class ArrowStyle
 {
@@ -331,7 +331,7 @@ private:
 	ArrowStyleElementList* _elements;
 };
 
-typedef list<ArrowStyle*> ArrowStyleList;
+typedef QList<ArrowStyle> ArrowStyleList;
 
 
 /***************************************
@@ -372,7 +372,7 @@ private:
 	};
 };
 
-typedef list<EllipseElement*> EllipseElementList;
+typedef QList<EllipseElement> EllipseElementList;
 
 class Ellipse
 {
@@ -385,7 +385,7 @@ private:
 	EllipseElementList* _elements;
 };
 
-typedef list<Ellipse*> EllipseList;
+typedef QList<Ellipse> EllipseList;
 
 
 /****************************************
@@ -437,7 +437,7 @@ private:
 };
 
 
-typedef list<PolygonElement*> PolygonElementList;
+typedef QList<PolygonElement> PolygonElementList;
 
 class Polygon
 {
@@ -450,7 +450,7 @@ private:
 	PolygonElementList* _elements;
 };
 
-typedef list<Polygon*> PolygonList;
+typedef QList<Polygon> PolygonList;
 
 
 
@@ -466,7 +466,7 @@ public:
 	HeadCap( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -476,7 +476,7 @@ public:
 	TailCap( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -564,7 +564,7 @@ private:
 
 
 
-typedef list<PolyLineElement*> PolyLineElementList;
+typedef QList<PolyLineElement> PolyLineElementList;
 
 class PolyLine
 {
@@ -577,7 +577,7 @@ private:
 	PolyLineElementList* _elements;
 };
 
-typedef list<PolyLine*> PolyLineList;
+typedef QList<PolyLine> PolyLineList;
 
 
 

@@ -7,6 +7,7 @@
 
 #include "treebuild_general.h"
 #include "unitconv.h"
+#include <fstream>
 
 Unique::Unique(int value)
 {
@@ -26,13 +27,13 @@ Pen::Pen(int value)
 }
 
 
-String::String( string value )
+String::String( QString value )
 {
 	_value = value;
 }
 
 
-Char::Char( string value )
+Char::Char( QString value )
 {
 	if( value != "Tab" ) {
 		_value = "\t";

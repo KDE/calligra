@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_VARIABLE
 #define _TREEBUILD_VARIABLE
 
-#include <list>
-#include <string>
+#include <qlist.h>
+#include <qstring.h>
 
 class Unique;
 
@@ -19,7 +19,7 @@ public:
 	VariableName( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 class VariableDef
@@ -28,7 +28,7 @@ public:
 	VariableDef( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -49,7 +49,7 @@ private:
 	};
 };
 
-typedef list<VariableElement*> VariableElementList;
+typedef QList<VariableElement> VariableElementList;
 
 class Variable
 {

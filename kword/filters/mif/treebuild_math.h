@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_MATH_H
 #define _TREEBUILD_MATH_H
 
-#include <list>
-#include <string>
+#include <qlist.h>
+#include <qstring.h>
 
 class Unique;
 class BRect;
@@ -20,7 +20,7 @@ public:
 	MathFullForm( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -52,7 +52,7 @@ public:
 	MathAlignment( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -62,7 +62,7 @@ public:
 	MathSize( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -99,7 +99,7 @@ private:
 
 
 
-typedef list<MathElement*> MathElementList;
+typedef QList<MathElement> MathElementList;
 
 class Math
 {
@@ -112,7 +112,7 @@ private:
 	MathElementList* _elements;
 };
 
-typedef list<Math*> MathList;
+typedef QList<Math> MathList;
 
 
 

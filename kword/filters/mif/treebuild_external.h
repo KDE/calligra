@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_EXTERNAL_H
 #define _TREEBUILD_EXTERNAL_H
 
-#include <string>
-#include <list>
+#include <qlist.h>
+#include <qstring.h>
 
 class ExternalData;
 class ImportObFile;
@@ -38,7 +38,7 @@ public:
 	ImportObFile( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -106,7 +106,7 @@ private:
 
 
 
-typedef list<ImportObjectElement*> ImportObjectElementList;
+typedef QList<ImportObjectElement> ImportObjectElementList;
 
 class ImportObject
 {
@@ -119,7 +119,7 @@ private:
 	ImportObjectElementList* _elements;
 };
 
-typedef list<ImportObject*> ImportObjectList;
+typedef QList<ImportObject> ImportObjectList;
 
 
 #endif

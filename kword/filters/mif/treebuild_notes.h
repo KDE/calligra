@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_NOTES
 #define _TREEBUILD_NOTES
 
-#include <list>
+#include <qlist.h>
 
 class FNote;
 
@@ -27,7 +27,7 @@ private:
 	};
 };
 
-typedef list<NotesElement*> NotesElementList;
+typedef QList<NotesElement> NotesElementList;
 
 class Notes
 {

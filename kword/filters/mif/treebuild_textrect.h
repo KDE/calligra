@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_TEXTRECT_H
 #define _TREEBUILD_TEXTRECT_H
 
-#include <string>
 #include <qlist.h>
+#include <qstring.h>
 
 class ShapeRect;
 class BRect;
@@ -83,7 +83,7 @@ public:
 	TRSideheadPlacement( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 

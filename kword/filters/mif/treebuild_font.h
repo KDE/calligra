@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_FONT
 #define _TREEBUILD_FONT
 
-#include <list>
-#include <string>
+#include <qlist.h>
+#include <qstring.h>
 
 class FTag
 {
@@ -17,7 +17,7 @@ public:
 	FTag( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -27,7 +27,7 @@ public:
 	FPostScriptName( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -37,7 +37,7 @@ public:
 	FFamily ( const char* );
 		
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -47,7 +47,7 @@ public:
 	FPlatformName ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -57,7 +57,7 @@ public:
 	FVar( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -67,7 +67,7 @@ public:
 	FWeight ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -77,7 +77,7 @@ public:
 	FAngle ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -87,7 +87,7 @@ public:
 	FEncoding ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -107,7 +107,7 @@ public:
 	FUnderlining( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -117,7 +117,7 @@ public:
 	FOverline( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -127,7 +127,7 @@ public:
 	FStrike( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -137,7 +137,7 @@ public:
 	FChangeBar( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -147,7 +147,7 @@ public:
 	FOutline( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -157,7 +157,7 @@ public:
 	FShadow( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -167,7 +167,7 @@ public:
 	FPairKern( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -177,7 +177,7 @@ public:
 	FTsume( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -187,7 +187,7 @@ public:
 	FCase( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -197,7 +197,7 @@ public:
 	FPosition( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -247,7 +247,7 @@ public:
 	FLanguage( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -257,7 +257,7 @@ public:
 	FLocked( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -277,7 +277,7 @@ public:
 	FColor( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -355,7 +355,7 @@ private:
 	};
 };
 
-typedef list<FontElement*> FontElementList;
+typedef QList<FontElement> FontElementList;
 
 class Font
 {

@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_PAGE_H
 #define _TREEBUILD_PAGE_H
 
-#include <string>
 #include <qlist.h>
+#include <qstring.h>
 
 class Polygon;
 class Unique;
@@ -30,7 +30,7 @@ public:
 	PageType( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -40,7 +40,7 @@ public:
 	PageTag( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -62,7 +62,7 @@ public:
 	PageOrientation( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -82,7 +82,7 @@ public:
 	PageNum( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -92,7 +92,7 @@ public:
 	PageBackground( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 

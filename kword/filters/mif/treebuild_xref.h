@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_XREF
 #define _TREEBUILD_XREF
 
-#include <list>
-#include <string>
+#include <qlist.h>
+#include <qstring.h>
 
 class Unique;
 
@@ -19,7 +19,7 @@ public:
 	XRefSrcText ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -29,7 +29,7 @@ public:
 	XRefSrcFile ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -39,7 +39,7 @@ public:
 	XRefSrcIsElem ( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -59,7 +59,7 @@ public:
 	XRefName( const char* );
 
 private:
-	string _value;
+	QString _value;
 };
 
 class XRefElement
@@ -89,7 +89,7 @@ private:
 	};
 };
 
-typedef list<XRefElement*> XRefElementList;
+typedef QList<XRefElement> XRefElementList;
 
 class XRef
 {

@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_PARA
 #define _TREEBUILD_PARA
 
-#include <list>
+#include <qlist.h>
 
 class Font;
 class Unique;
@@ -58,7 +58,7 @@ private:
 	};
 };
 
-typedef list<ParaElement*> ParaElementList;
+typedef QList<ParaElement> ParaElementList;
 
 class Para
 {
@@ -123,7 +123,7 @@ private:
 	};
 };
 
-typedef list<ParaLineElement*> ParaLineElementList;
+typedef QList<ParaLineElement> ParaLineElementList;
 
 class ParaLine
 {

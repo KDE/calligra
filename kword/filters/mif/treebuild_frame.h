@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_FRAME_H
 #define _TREEBUILD_FRAME_H
 
-#include <list>
-#include <string>
+#include <qlist.h>
+#include <qstring.h>
 
 class FrameID;
 class ImportObject;
@@ -44,7 +44,7 @@ public:
 	Tag( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -54,7 +54,7 @@ public:
 	FrameType( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -84,7 +84,7 @@ public:
 	AnchorAlign( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -94,7 +94,7 @@ public:
 	AnchorBeside( const char* value );
 
 private:
-	string _value;
+	QString _value;
 };
 
 
@@ -181,7 +181,7 @@ private:
 	};
 };
 
-typedef list<FrameElement*> FrameElementList;
+typedef QList<FrameElement> FrameElementList;
 
 class Frame
 {
@@ -194,7 +194,7 @@ private:
 	FrameElementList* _elements;
 };
 
-typedef list<Frame*> FrameList;
+typedef QList<Frame> FrameList;
 
 extern FrameList frames;
 
