@@ -42,7 +42,7 @@
 #include <kcharsets.h>
 
 #include <kformuladocument.h>
-
+#include <koDocumentInfo.h>
 #include <unistd.h>
 #include <math.h>
 
@@ -136,6 +136,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
 #endif
     connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+
+    connect( documentInfo(), SIGNAL( sigDocumentInfoModifed()),this,SLOT(slotDocumentInfoModifed() ) );
 
     m_formulaDocument = new KFormulaDocument(actionCollection(), m_commandHistory);
 
@@ -2558,6 +2560,11 @@ void KWDocument::reorganizeGUI()
    QListIterator<KWView> it( m_lstViews );
    for ( ; it.current() ; ++it )
        it.current()->getGUI()->reorganize();
+}
+
+void KWDocument::slotDocumentInfoModifed()
+{
+    recalcVariables( VT_FIELD );
 }
 
 #include "kwdoc.moc"

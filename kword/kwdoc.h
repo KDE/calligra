@@ -463,6 +463,7 @@ public slots:
 protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted();
+    void slotDocumentInfoModifed();
 
 protected:
     KoView* createViewInstance( QWidget* parent, const char* name );
