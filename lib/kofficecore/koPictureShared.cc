@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 
 #include <kdebug.h>
 #include <kurl.h>
+#include <kfilterdev.h>
 #include <kio/netaccess.h>
 
 #include "koPictureKey.h"
@@ -185,6 +186,25 @@ bool KoPictureShared::loadTmp(QIODevice* io)
         // GIF (87a or 89a)
         strExtension="gif";
     }
+    else if ( ( array[0] == char( 0037 ) ) && ( array[1] == char( 0213 ) ) )
+    {
+        // Gzip
+        QBuffer buffer(array);
+        buffer.open(IO_ReadOnly);
+
+        const bool flag = loadCompressed( &buffer, "application/x-gzip", "tmp" );
+        buffer.close();
+        return flag;
+    }
+    else if ( ( array[0] == 'B' ) && ( array[1] == 'Z' ) && ( array[2] == 'h') )
+    {
+        // BZip2
+        QBuffer buffer(array);
+        buffer.open(IO_ReadOnly);
+        const bool flag = loadCompressed( &buffer, "application/x-bzip2", "tmp" );
+        buffer.close();
+        return flag;
+    }
     else
     {
         kdDebug(30003) << "Cannot identify the type of temp file!"
@@ -311,7 +331,6 @@ void KoPictureShared::clearAndSetMode(const QString& newMode)
 
     const QString mode=newMode.lower();
 
-    // TODO: WMF need to be alone!
     if ((mode=="svg") || (mode=="qpic"))
     {
         m_base=new KoPictureClipart();
@@ -364,6 +383,18 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
         flag=loadWmf(io);
     else if (ext=="tmp") // ### TODO: also remote scripts need this, don't they?
         flag=loadTmp(io);
+    else if ( ext == "bz2" )
+    {
+        flag = loadCompressed( io, "application/x-bzip2", "tmp" );    
+    }
+    else if ( ext == "gz" )
+    {
+        flag = loadCompressed( io, "application/x-gzip", "tmp" );    
+    }
+    else if ( ext == "svgz" )
+    {
+        flag = loadCompressed( io, "application/x-gzip", "svg" );
+    }
     else
     {
         clearAndSetMode(ext);
@@ -381,17 +412,29 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
 bool KoPictureShared::loadFromFile(const QString& fileName)
 {
     kdDebug(30003) << "KoPictureShared::loadFromFile " << fileName << endl;
+    if ( fileName.isEmpty() )
+    {
+        kdError(30003) << "Cannot load file with empty name!" << endl;
+        return false;
+    }
     QFile file(fileName);
+    if (!file.open(IO_ReadOnly))
+        return false;
+    
+    bool flag = false;
     const int pos=fileName.findRev('.');
     if (pos==-1)
     {
-        kdDebug(30003) << "File with no extension! Not supported!" << endl;
-        return false;
+        kdDebug(30003) << "File with no extension!" << endl;
+        // As we have no extension, consider it like a temporary file
+        flag = loadTmp( &file );
     }
-    QString extension=fileName.mid(pos+1);
-    if (!file.open(IO_ReadOnly))
-        return false;
-    const bool flag=load(&file,extension);
+    else
+    {
+        const QString extension( fileName.mid( pos+1 ) );
+        // ### TODO: check if the extension if gz or bz2 and find the previous extension
+        flag = load( &file, extension );
+    }
     file.close();
     return flag;
 }
@@ -455,4 +498,31 @@ void KoPictureShared::clearCache(void)
 {
     if (m_base)
         m_base->clearCache();
+}
+
+bool KoPictureShared::loadCompressed( QIODevice* io, const QString& mimeType, const QString& extension )
+{
+    // ### TODO: check that we do not have an endless recursion
+    QIODevice* in = KFilterDev::device( io, mimeType, false);
+
+    if ( !in )
+    {
+        kdError(30003) << "Cannot create device for uncompressing! Aborting!" << endl;
+        return false;
+    }
+
+        
+    if ( !in->open( IO_ReadOnly ) )
+    {
+        kdError(30003) << "Cannot open file for uncompressing! Aborting!" << endl;
+        delete in;
+        return false;
+    }
+
+    const bool flag = load( in, extension );
+
+    in->close();
+    delete in;  
+
+    return flag;
 }

@@ -188,6 +188,18 @@ protected:
      */
     bool loadTmp(QIODevice* io);
 
+    /**
+     * @internal
+     * Loads a compressed file
+     * 
+     * WARNING: risk of endless recurision, be careful when it is called from @see load
+     *
+     * @param io QIODevice of the compressed file/strea,
+     * @param mimeType mimetype of the (de-)compressor
+     * @param extension extension of the uncompressed file
+     */
+    bool loadCompressed( QIODevice* io, const QString& mimeType, const QString& extension );
+
 protected:
     KoPictureBase* m_base;
     QString m_extension;
