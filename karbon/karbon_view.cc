@@ -249,7 +249,7 @@ KarbonView::updateReadWrite( bool /*rw*/ )
 {}
 
 QWidget*
-KarbonView::canvas() const
+KarbonView::canvas()
 {
 	return m_canvas;
 }
