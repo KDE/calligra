@@ -418,3 +418,8 @@ Reggie, 28.11.1998:
 - Much more speed improvements
 - Improved "Blocksatz" - it doesn't wobble anymore :-)
 - Fixes with scrolling/redraw
+
+Reggie, 29.11.1998:
+-------------------
+- Fixes
+- Return/Enter should be faster now

@@ -38,6 +38,7 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   markerIsVisible = true;
   paint_directly = false;
   has_to_copy = false;
+  redrawAllWhileScrolling = false;
     
   if (doc) calcVisiblePages();
 
@@ -877,6 +878,63 @@ void KWPage::recalcWholeText()
 }
 
 /*================================================================*/
+void KWPage::recalcPage(KWParag *_p)
+{
+  QPainter painter;
+  painter.begin(this);
+
+  calcVisiblePages();
+  KWFormatContext *paintfc = new KWFormatContext(doc,1);
+  for (unsigned i = 0;i < doc->getNumFrameSets();i++)
+    {
+      switch (doc->getFrameSet(i)->getFrameType())
+	{
+	case FT_TEXT:
+	  {
+	    KWParag *p = doc->findFirstParagOfRect(yOffset,firstVisiblePage,i);
+	    if (p)
+	      {
+		paintfc->setFrameSet(i + 1);
+		paintfc->init(p,painter,true,recalcAll);
+		
+		if (i == fc->getFrameSet() - 1 && _p)
+		  {
+		    while (paintfc->getParag() != _p->getNext())
+		    paintfc->makeNextLineLayout(painter);  
+		  }
+		else
+		  {
+		    bool bend = false;
+		    while (!bend)
+		      {
+			if (paintfc->getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
+			    static_cast<int>(paintfc->getPTY() - yOffset) > height() && doc->getColumns() == 1) break;
+			if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->isMostRight() && 
+			    doc->getFrameSet(i)->getNumFrames() > paintfc->getFrame() &&
+			    doc->getFrameSet(i)->getFrame(paintfc->getFrame())->top() - 
+			    static_cast<int>(yOffset) >
+			    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight()) &&
+			    static_cast<int>(paintfc->getPTY() - yOffset) > height())
+			  break;
+			if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->top() - static_cast<int>(yOffset) >
+			    static_cast<int>(lastVisiblePage) * static_cast<int>(ptPaperHeight())) 
+			  break;
+			bend = !paintfc->makeNextLineLayout(painter);
+			if (paintfc->getPage() > lastVisiblePage)
+			  bend = true; 
+		      }
+		  }
+	      }
+	  } break;
+	default: break;
+	}
+    }
+
+  delete paintfc;
+  painter.end();
+}
+
+/*================================================================*/
 void KWPage::paintEvent(QPaintEvent* e)
 {
   QPainter painter;
@@ -1216,38 +1274,45 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  {
 	    frameSet->insertParag(fc->getParag(),I_AFTER);
 	    fc->setTextPos(0);
-	    fc->init(fc->getParag()->getNext(),painter);
-	    fc->cursorGotoLineStart(painter);
+	    recalcPage(0L);
+	    fc->init(fc->getParag()->getNext(),painter,false,false);
 	  }
 	else if (fc->isCursorAtParagStart())
 	  {
 	    frameSet->insertParag(fc->getParag(),I_BEFORE);
 	    fc->setTextPos(0);
-	    fc->init(fc->getParag(),painter);
-	    fc->cursorGotoLineStart(painter);
+	    recalcPage(0L);
+	    fc->init(fc->getParag(),painter,false,false);
 	  }
 	else 
 	  {
 	    bool _insert = fc->isCursorAtLineStart();
 	    frameSet->splitParag(fc->getParag(),tmpTextPos);
-	    fc->init(fc->getParag()->getNext(),painter);
-	    fc->cursorGotoLineStart(painter);
+	    fc->setTextPos(0);
+	    recalcPage(0L);
+	    fc->init(fc->getParag()->getNext(),painter,false,false);
 	    if (_insert)
 	      {
 		frameSet->insertParag(fc->getParag(),I_BEFORE);
-		fc->init(fc->getParag(),painter);
-		fc->cursorGotoLineStart(painter);
+		fc->setTextPos(0);
+		recalcPage(0L);
+		fc->init(fc->getParag(),painter,false,false);
 	      }
 	  }
 
 	painter.end();
 	draw_buffer = false;
 
-	scrollToCursor(*fc);
+	recalcCursor(false,0);
 
 	buffer.fill(white);
-	has_to_copy = false;
-	repaint(false);
+	redrawAllWhileScrolling = true;
+	scrollToCursor(*fc);
+	redrawAllWhileScrolling = false;
+
+ 	painter.begin(this);
+ 	doc->drawMarker(*fc,&painter,xOffset,yOffset);
+ 	painter.end();
 
 	// HACK
 	kbdc.auto_repeat_mode = repeat;
@@ -1679,7 +1744,17 @@ void KWPage::scrollToCursor(KWFormatContext &_fc)
   int cx = isCursorXVisible(_fc);    
 
   if (cx == 0 && cy == 0)
-    return;
+    {
+      if (redrawAllWhileScrolling) 
+	{
+	  repaint(false);
+	  QPainter painter;
+	  painter.begin(this);
+	  doc->drawMarker(_fc,&painter,xOffset,yOffset);
+	  painter.end();
+	}
+      return;
+    }
   
   int oy = yOffset, ox = xOffset;
   if (cy < 0)
@@ -1726,62 +1801,67 @@ void KWPage::scroll(int dx,int dy)
   yOffset -= dy;
   calcVisiblePages(); 
 
-  int x1,y1,x2,y2,w = width(),h = height();
-
-  if (dx > 0) 
+  if (!redrawAllWhileScrolling)
     {
-      x1 = 0;
-      x2 = dx;
-      w -= dx;
-    } 
-  else 
-    {
-      x1 = -dx;
-      x2 = 0;
-      w += dx;
+      int x1,y1,x2,y2,w = width(),h = height();
+      
+      if (dx > 0) 
+	{
+	  x1 = 0;
+	  x2 = dx;
+	  w -= dx;
+	} 
+      else 
+	{
+	  x1 = -dx;
+	  x2 = 0;
+	  w += dx;
+	}
+      
+      if (dy > 0) 
+	{
+	  y1 = 0;
+	  y2 = dy;
+	  h -= dy;
+	} 
+      else 
+	{
+	  y1 = -dy;
+	  y2 = 0;
+	  h += dy;
+	}
+      
+      bitBlt(this,x2,y2,this,x1,y1,w,h);
+      
+      paint_directly = true;
+      
+      if (yOffset > oy)
+	{
+	  dy = abs(dy);
+	  repaint(0,height() - abs(dy),width(),abs(dy),true);
+	}
+      else if (yOffset < oy)
+	{
+	  dy = abs(dy);
+	  repaint(0,0,width(),abs(dy),true);
+	}
+      
+      if (xOffset > ox)
+	{
+	  dx = abs(dx);
+	  repaint(width() - abs(dx),0,abs(dx),height(),true);
+	}
+      else if (xOffset < ox)
+	{
+	  dx = abs(dx);
+	  repaint(0,0,abs(dx),height(),true);
+	}
+      
+      paint_directly = false;
+      has_to_copy = true;
     }
-
-  if (dy > 0) 
-    {
-      y1 = 0;
-      y2 = dy;
-      h -= dy;
-    } 
-  else 
-    {
-      y1 = -dy;
-      y2 = 0;
-      h += dy;
-    }
-
-  bitBlt(this,x2,y2,this,x1,y1,w,h);
-
-  paint_directly = true;
-
-  if (yOffset > oy)
-    {
-      dy = abs(dy);
-      repaint(0,height() - abs(dy),width(),abs(dy),true);
-    }
-  else if (yOffset < oy)
-    {
-      dy = abs(dy);
-      repaint(0,0,width(),abs(dy),true);
-    }
-
-  if (xOffset > ox)
-    {
-      dx = abs(dx);
-      repaint(width() - abs(dx),0,abs(dx),height(),true);
-    }
-  else if (xOffset < ox)
-    {
-      dx = abs(dx);
-      repaint(0,0,abs(dx),height(),true);
-    }
-
-  paint_directly = false;
-  has_to_copy = true;
+  else
+    repaint(false);
 }
 
 /*================================================================*/

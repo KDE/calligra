@@ -101,6 +101,7 @@ void KWordShell::setDocument( KWordDocument *_doc )
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  opToolBar()->setFullWidth(false);
 }
 
 bool KWordShell::newDocument()
@@ -140,6 +141,7 @@ bool KWordShell::newDocument()
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  opToolBar()->setFullWidth(false);
 
   cerr << "*2) VIEW void KOMBase::refcnt() = " << m_pView->_refcnt() << endl;
 
@@ -185,6 +187,7 @@ bool KWordShell::openDocument( const char *_url, const char *_format )
   
   opToolBar()->setItemEnabled( TOOLBAR_PRINT, true );
   opToolBar()->setItemEnabled( TOOLBAR_SAVE, true );
+  opToolBar()->setFullWidth(false);
   
   m_pDoc->setURL(_url);
 

@@ -148,6 +148,7 @@ public:
   void setNormalText();
 
   void recalcCursor(bool _repaint = true,int _pos = -1,KWFormatContext *_fc = 0L);
+  void recalcPage(KWParag *_p);
 
   int getVertRulerPos();
 
@@ -267,6 +268,7 @@ protected:
   KWFrameDia *frameDia;
   KRect insRect;
 
+  bool redrawAllWhileScrolling;
 };
 
 #endif
