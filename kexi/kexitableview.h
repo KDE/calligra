@@ -41,6 +41,7 @@ class QLineEdit;
 class QPopupMenu;
 class QTimer;
 
+class KexiTableHeader;
 class KexiTableRM;
 class KexiTableItem;
 class KexiInputTableEdit;
@@ -111,11 +112,13 @@ public:
 	QSize		minimumSizeHint() const;
 	void		setFont(const QFont &f);
 
+	void		inserted();
+
 	void		emitSelected();
 
 	bool		m_editOnDubleClick;
 
-	KexiTableRM	*recordMarker();
+	KexiTableHeader	*recordMarker();
 
 	KexiTableList	*contents() { return &m_contents; }
 
@@ -204,6 +207,7 @@ protected:
 
     // foreign widgets
 	QHeader			*m_pTopHeader;
+	KexiTableHeader		*m_pVerticalHeader;
 	KexiTableRM		*m_pRecordMarker;
 	KexiInputTableEdit	*m_pEditor;
 

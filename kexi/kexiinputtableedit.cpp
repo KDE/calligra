@@ -53,15 +53,19 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 					break;
 				
 
-				default:
-					setText(ov);
-					break;
+			default:
+				setText(ov);
+				break;
 		}
 	}
 	else
 	{
-		setText(value.toString());
-		setSelection(0, value.toString().length());
+//		qDebug("KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)", text().length());
+//		setText(value.toString());
+		insert(value.toString());
+		qDebug("KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)", text().length());
+		setSelection(0, text().length());
+		selectAll();
 	}
 
 	m_calculatedCell = false;

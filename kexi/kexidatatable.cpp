@@ -96,7 +96,6 @@ KexiDataTable::executeQuery(QString queryStatement)
 		for(uint i = 0; i < m_record->fieldCount(); i++)
 		{
 //			it->setInsertItem(false);
-			kdDebug() << "KexiDataTable::executeQuery(): value()" << endl;
 			it->setValue(i, m_record->value(i));
 //			it->setInsertItem(false);
 		}

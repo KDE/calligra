@@ -1,6 +1,6 @@
 bin_PROGRAMS = kexi
 
-kexi_SOURCES = kexiinputtableedit.cpp kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspace.cpp kexiformbase.cpp kexicreateprojectpage.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp kexiformmanager.cpp kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp
+kexi_SOURCES = kexiinputtableedit.cpp kexidatetableedit.cpp kmultitabbar.cpp kexitabbrowser.cpp kexiwidget.cpp kexitableheader.cpp kexitablerm.cpp  kexitablelist.cpp kexitableitem.cpp kexitableview.cpp kexidatatable.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspace.cpp kexiformbase.cpp kexicreateprojectpage.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp kexiformmanager.cpp kexicreateprojectpageengine.cpp kexicreateprojectpagelocation.cpp kexicreateprojectpagedb.cpp kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp
 
 kexi_LDADD   = $(LIB_KPARTS) kexiDB/libkexidb.la -lkstore
 

@@ -249,10 +249,8 @@ MySqlRecord::next()
 		if(readOnly())
 			return true;
 		
-		kdDebug() << "MySqlRecord::next(): hint: " << MySqlResult::currentRecord() - 1<< ", " << value(m_keyField).toString() << endl;
 		m_keyBuffer.insert(MySqlResult::currentRecord() - 1, value(m_keyField));
 		m_lastItem++;
-		kdDebug() << "MySqlRecord::next(): but: " << m_keyBuffer[MySqlResult::currentRecord() - 1].toString() << " found" << endl;
 		return true;
 	}
 	return false;

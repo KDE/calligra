@@ -23,6 +23,7 @@
 
 #include <qtimer.h>
 //#include <stdarg.h>
+#include "kexitableheader.h"
 #include "kexitableview.h"
 #include "kexitablerm.h"
 #include "kexitableitem.h"
@@ -86,6 +87,7 @@ KexiTableItem::KexiTableItem(KexiTableView *tableView)
 //		m_columns.insert(i, new QVariant);
 
 	tableView->m_contents.append(this);
+	tableView->inserted();
 
 	tableView->m_numRows++;
 	tableView->triggerUpdate();
