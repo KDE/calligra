@@ -574,7 +574,7 @@ public:
     void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
 
     bool insertDirectCursor() const { return m_bInsertDirectCursor; }
-    void setInsertDirectCursor(bool _b){ m_bInsertDirectCursor=_b; }
+    void setInsertDirectCursor(bool _b);
 
 
     // in pt
@@ -733,6 +733,9 @@ public:
 
     QString picturePath()const { return m_picturePath; }
     void setPicturePath( const QString & _path ) { m_picturePath = _path ; }
+
+
+    void updateDirectCursorButton();
 
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );

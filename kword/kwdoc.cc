@@ -4652,5 +4652,16 @@ void KWDocument::setPersonalExpressionPath( const QStringList & lst)
     refreshMenuExpression();
 }
 
+void KWDocument::updateDirectCursorButton()
+{
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+        viewPtr->updateDirectCursorButton();
+}
+
+void KWDocument::setInsertDirectCursor(bool _b)
+{
+    m_bInsertDirectCursor=_b;
+    updateDirectCursorButton();
+}
 
 #include "kwdoc.moc"

@@ -181,6 +181,8 @@ public:
     void updateRulerInProtectContentMode();
     void deselectAllFrames();
     void autoSpellCheck(bool b);
+    void insertDirectCursor(bool b);
+    void updateDirectCursorButton();
 
 public slots:
     void fileStatistics();
@@ -379,6 +381,9 @@ public slots:
     void importStyle();
 
     void createFrameStyle();
+
+    void insertDirectCursor();
+
 protected slots:
     void slotSetInitialPosition();
 
@@ -626,6 +631,9 @@ private:
     KAction *actionImportStyle;
 
     KAction *actionCreateFrameStyle;
+
+    KToggleAction *actionInsertDirectCursor;
+
 
     KoCharSelectDia *m_specialCharDlg;
     KoFontDia *m_fontDlg;
