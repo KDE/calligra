@@ -1983,10 +1983,12 @@ KoTextCursor KoTextObject::pasteOasisText( const QDomElement &bodyElem, KoOasisC
         }
     }
     KoTextParag* p = resultCursor.parag();
+    if ( p ) p = p->next();
     // Remove the additional newline that loadOasisText inserted
     if ( removeNewline && resultCursor.remove() ) {
-        if ( p != resultCursor.parag() && m_lastFormatted == p ) // has been deleted
-            m_lastFormatted = resultCursor.parag()->prev();
+        if ( m_lastFormatted == p ) { // has been deleted
+            m_lastFormatted = resultCursor.parag();
+        }
     }
     return resultCursor;
 }
