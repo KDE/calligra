@@ -2704,6 +2704,11 @@ void KPresenterView::objectSelectedChanged()
     actionEditFind->setEnabled(val);
     actionFormatParag->setEnabled(val);
     actionInsertVariable->setEnabled(val);
+    if(edit)
+    {
+        double leftMargin =edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
+        actionTextDepthMinus->setEnabled( val && leftMargin>0);
+    }
 
     if(!edit)
     {
