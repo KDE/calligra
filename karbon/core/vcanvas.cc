@@ -15,7 +15,7 @@
 #include "vcanvas.h"
 
 VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
-	: QScrollView( view, "canvas", WNorthWestGravity | WResizeNoErase  |
+    : QScrollView( view, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
 	  WRepaintNoErase ), m_part( part ), m_view( view ), m_zoomFactor( 1.0 )
 {
 	viewport()->setFocusPolicy( QWidget::StrongFocus );

@@ -21,7 +21,7 @@
 
 VCDlgSpiral::VCDlgSpiral()
 	: KDialog( 0L, 0, true, Qt::WStyle_Customize |
-		Qt::WStyle_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
+		WType_Dialog | Qt::WStyle_NormalBorder | Qt::WStyle_Title )
 {
 	setCaption( i18n( "Insert Spiral" ) );
 
