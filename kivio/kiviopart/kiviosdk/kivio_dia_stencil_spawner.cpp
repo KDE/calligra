@@ -216,16 +216,16 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 					float lastX= 0.0;
 					float lastY = 0.0;
 					bool absolute = true;
-					
+
 					for(QStringList::Iterator it = points.begin(); it != points.end(); ++it)
 					{
-						// remove the trailing Z 
+						// remove the trailing Z
 						if ( (*it).contains('z') || (*it).contains('Z'))
 						{
-							(*it).replace(QRegExp("z"), "");
-							(*it).replace(QRegExp("Z"), "");
+							(*it).replace("z", "");
+							(*it).replace("Z", "");
 						}
-						
+
 						if (((*it).contains('s') !=0) || ((*it).contains('c') !=0) || ( (*it).contains('l')!=0))
 							absolute = false;
 						else
@@ -272,7 +272,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							it++;
 							y = (*it);
 							m_ylist.append(y.toFloat());
-							
+
 							lastY = y.toFloat();
 							//kdDebug() << "v " << y << endl;
 						}
@@ -292,7 +292,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							x = (*it);
 							m_xlist.append( x.toFloat());
 							lastX = x.toFloat();
-							
+
 							//kdDebug() << "h " << x<< endl;
 						}
 
@@ -312,8 +312,8 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							{
 								x = (*it);
 								++it;
-								y = (*it);	
-							}					
+								y = (*it);
+							}
 							calculateDimensions(x.toFloat()+lastX, y.toFloat()+lastY);
 							lastX += x.toFloat();
 							lastY += y.toFloat();
@@ -334,9 +334,9 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							{
 								x = (*it);
 								++it;
-								y = (*it);	
-							}					
-							calculateDimensions(x.toFloat(), y.toFloat());	
+								y = (*it);
+							}
+							calculateDimensions(x.toFloat(), y.toFloat());
 							lastX = x.toFloat();
 							lastY = y.toFloat();
 						}
@@ -380,7 +380,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 		m_yscale = 30.0/(m_highesty - m_lowesty);
 		m_xscale = 40.0/(m_highestx - m_lowestx);
 	}
-		
+
 	// Add KivioConnectorTarget's
 	QDomElement connectionsElement = diaMain.namedItem("connections").toElement();
 	QDomNode connectionsNode = connectionsElement.firstChild();
@@ -560,11 +560,11 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 					bool isDone = false;
 					while( it != points.end() && !isDone)
 					{
-						// remove the trailing Z 
+						// remove the trailing Z
 						if ( (*it).contains('z') || (*it).contains('Z'))
 						{
-							(*it).replace(QRegExp("z"), "");
-							(*it).replace(QRegExp("Z"), "");
+							(*it).replace("z", "");
+							(*it).replace("Z", "");
 							//isDone = true;
 						}
 						if( (*it).contains('m'))
@@ -649,9 +649,9 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 						{
 							// Line
 							it++;
-							
+
 							currentPointX = (*(it)).toFloat()+lastPointX;
-							
+
 							// Create the line
 							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
 							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
@@ -670,9 +670,9 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 						{
 							// Line
 							it++;
-							
+
 							currentPointX = (*(it)).toFloat();
-							
+
 							// Create the line
 							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
 							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
@@ -691,7 +691,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							// Line
 							it++;
 							currentPointY = (*(it)).toFloat()+lastPointY;
-							
+
 							// Create the line
 							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
 							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
@@ -710,7 +710,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							// Line
 							it++;
 							currentPointY = (*(it)).toFloat();
-							
+
 							// Create the line
 							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
 							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
@@ -739,7 +739,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							l = QStringList::split(",",(*it));
 							currentPointX = (*(l.at(0))).toFloat()+lastPointX;
 							currentPointY = (*(l.at(1))).toFloat()+lastPointY;
-							// Create the bezier 
+							// Create the bezier
 							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
 							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
 							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
@@ -783,7 +783,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							l = QStringList::split(",",(*it));
 							currentPointX = (*(l.at(0))).toFloat();
 							currentPointY = (*(l.at(1))).toFloat();
-							// Create the bezier 
+							// Create the bezier
 							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
 							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
 							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
@@ -823,7 +823,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							l = QStringList::split(",",(*it));
 							currentPointX = (*(l.at(0))).toFloat()+lastPointX;
 							currentPointY = (*(l.at(1))).toFloat()+lastPointY;
-							// Create the bezier 
+							// Create the bezier
  							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
 							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
 							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));
@@ -863,7 +863,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 							l = QStringList::split(",",(*it));
 							currentPointX = (*(l.at(0))).toFloat();
 							currentPointY = (*(l.at(1))).toFloat();
-							// Create the bezier 
+							// Create the bezier
  							QDomElement kivioPointElement = kivio.createElement("KivioPoint");
 							kivioPointElement.setAttribute("x", QString::number(diaPointToKivio(lastPointX,true) * m_xscale));
 							kivioPointElement.setAttribute("y", QString::number(diaPointToKivio(lastPointY, false) * m_yscale));

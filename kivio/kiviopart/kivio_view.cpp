@@ -246,7 +246,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect(vRuler, SIGNAL(openPageLayoutDia()), SLOT(paperLayoutDlg()));
   connect(hRuler, SIGNAL(openPageLayoutDia()), SLOT(paperLayoutDlg()));
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
-  
+
   QGridLayout* layout = new QGridLayout(pRightSide);
   layout->addWidget(hRuler, 0, 1);
   layout->addWidget(vRuler, 1, 0);
@@ -428,7 +428,7 @@ void KivioView::setupActions()
   m_setVTextAlignment = new KivioParagraphAction( true, actionCollection(), "setVTextAlignment" );
   connect( m_setHTextAlignment, SIGNAL(activated(int)), SLOT(setHParaAlign(int)) );
   connect( m_setVTextAlignment, SIGNAL(activated(int)), SLOT(setVParaAlign(int)) );
-  
+
   QWidget* lineWidthWidget = new QWidget(this, "kde toolbar widget");
   QLabel* lineWidthLbl = new QLabel(lineWidthWidget, "kde toolbar widget");
   lineWidthLbl->setPixmap(kapp->iconLoader()->loadIcon("linewidth", KIcon::Toolbar, 22));
@@ -1037,7 +1037,7 @@ void KivioView::setLineWidth()
     while( pStencil )
     {
         int newValue = KoUnit::ptFromUnit(m_setLineWidth->value(), m_pDoc->units());
-        
+
         if ( newValue != pStencil->lineWidth() )
         {
             KivioChangeLineWidthCommand * cmd = new KivioChangeLineWidthCommand( i18n("Change Line Width"), m_pActivePage, pStencil, pStencil->lineWidth(), newValue );
@@ -1046,7 +1046,7 @@ void KivioView::setLineWidth()
             macro->addCommand( cmd );
             createMacro = true;
         }
-        
+
         pStencil = m_pActivePage->selectedStencils()->next();
     }
     if ( createMacro )
@@ -1848,7 +1848,7 @@ void KivioView::setLineWidthUnit(KoUnit::Unit u)
 void KivioView::viewZoom(const QString& s)
 {
   QString z(s);
-  z.replace(QRegExp("%"), "");
+  z.replace("%", "");
   z.simplifyWhiteSpace();
   bool ok = false;
   int zoom = z.toInt(&ok);
@@ -1876,7 +1876,7 @@ void KivioView::changeZoomMenu(int z)
 
     for (QStringList::Iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
     {
-      zs = (*it).replace( QRegExp( "%" ), "" );
+      zs = (*it).replace( "%", "" );
       zs = zs.simplifyWhiteSpace();
       val = zs.toInt(&ok);
       //zoom : limit inferior=10
