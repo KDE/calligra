@@ -99,7 +99,7 @@ bool KPTRelation::load(QDomElement &element, KPTProject &project) {
         return false;
     }
 
-    kdDebug()<<k_funcinfo<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
+    //kdDebug()<<k_funcinfo<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
     return true;
 }
 

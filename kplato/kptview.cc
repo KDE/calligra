@@ -467,7 +467,7 @@ void KPTView::slotOpenNode() {
             break;
         case KPTNode::Type_Task: {
             KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskDialog *dia = new KPTTaskDialog(*task);
+            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().standardWorktime());
             if (dia->exec()) {
                 KMacroCommand *m = dia->buildCommand(getPart());
                 if (m) {
@@ -483,7 +483,7 @@ void KPTView::slotOpenNode() {
             // enter a duration in case we accidentally set a tasks duration to zero
             // and hence, create a milestone
             KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskDialog *dia = new KPTTaskDialog(*task);
+            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().standardWorktime());
             if (dia->exec()) {
                 KMacroCommand *m = dia->buildCommand(getPart());
                 if (m) {

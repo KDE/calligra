@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KPTTaskResourcesPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
@@ -9,136 +9,17 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>751</width>
-            <height>593</height>
+            <width>390</width>
+            <height>224</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KPTTaskResourcesPanelBase</string>
     </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox1</cstring>
-            </property>
-            <property name="title">
-                <string>Effort</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout1</cstring>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QComboBox" row="1" column="0">
-                            <item>
-                                <property name="text">
-                                    <string>Work based</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Fixed duration</string>
-                                </property>
-                            </item>
-                            <property name="name">
-                                <cstring>effortType</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="1" column="2">
-                            <property name="name">
-                                <cstring>textLabel5</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&lt;p align="right"&gt;Pessimistic:&lt;/p&gt;</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>pessimisticValue</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox" row="1" column="3">
-                            <property name="name">
-                                <cstring>pessimisticValue</cstring>
-                            </property>
-                            <property name="prefix">
-                                <string></string>
-                            </property>
-                            <property name="suffix">
-                                <string>%</string>
-                            </property>
-                            <property name="value">
-                                <number>99</number>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>textLabel4_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&lt;p align="right"&gt;Expected effort:&lt;/p&gt;</string>
-                            </property>
-                        </widget>
-                        <widget class="QSpinBox" row="0" column="3">
-                            <property name="name">
-                                <cstring>optimisticValue</cstring>
-                            </property>
-                            <property name="prefix">
-                                <string></string>
-                            </property>
-                            <property name="suffix">
-                                <string>%</string>
-                            </property>
-                            <property name="maxValue">
-                                <number>0</number>
-                            </property>
-                            <property name="minValue">
-                                <number>-99</number>
-                            </property>
-                            <property name="value">
-                                <number>-99</number>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox" row="1" column="1">
-                            <item>
-                                <property name="text">
-                                    <string>No risk</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Low risk</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>High risk</string>
-                                </property>
-                            </item>
-                            <property name="name">
-                                <cstring>risk</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="2">
-                            <property name="name">
-                                <cstring>textLabel4</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&lt;p align="right"&gt;Optimistic:&lt;/p&gt;</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>optimisticValue</cstring>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-            </hbox>
-        </widget>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox22</cstring>

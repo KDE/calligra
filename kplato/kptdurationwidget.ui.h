@@ -85,7 +85,7 @@ void KPTDurationWidget::destroy()
     delete m_validator;
 }
 
-void KPTDurationWidget::setValue(const KPTDuration &newDuration)
+void KPTDurationWidget::setValue(const KPlato::KPTDuration &newDuration)
 {
     int i;
     unsigned v[5];
@@ -273,3 +273,5 @@ void KPTDurationWidget::setFieldScale(int f, unsigned fullScale, unsigned scale)
     m_fields[f].fullScale = fullScale;
     m_fields[f].scale = scale;
 }
+
+

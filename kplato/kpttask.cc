@@ -169,6 +169,9 @@ bool KPTTask::load(QDomElement &element) {
     if (!ok)
         KPTNode::setConstraint(constraint); // hmmm, why do I need KPTNode::?
 
+    m_constraintStartTime = KPTDateTime::fromString(element.attribute("constraint-starttime"));
+    m_constraintEndTime = KPTDateTime::fromString(element.attribute("constraint-endtime"));
+    
     // Load the project children
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
@@ -213,7 +216,7 @@ bool KPTTask::load(QDomElement &element) {
         }
 	}
     }
-
+    //kdDebug()<<k_funcinfo<<m_name<<" loaded"<<endl;
     return true;
 }
 
@@ -235,6 +238,8 @@ void KPTTask::save(QDomElement &element)  {
     me.setAttribute("end",m_endTime.toString());
     me.setAttribute("duration",m_duration.toString());
     me.setAttribute("scheduling",constraintToString());
+    me.setAttribute("constraint-starttime",m_constraintStartTime.toString());
+    me.setAttribute("constraint-endtime",m_constraintEndTime.toString());
 
     m_effort->save(me);
 

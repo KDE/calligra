@@ -71,7 +71,7 @@ void KPTProjectDialog::slotOk() {
     project.setConstraint((KPTNode::ConstraintType) dia->schedulerType->currentItem());
     //FIXME
     project.setStartTime(QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time()));
-    project.setConstraintTime(QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time()));
+    project.setConstraintStartTime(QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time()));
 
     project.setName(dia->namefield->text());
     project.setLeader(dia->leaderfield->text());

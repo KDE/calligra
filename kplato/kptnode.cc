@@ -311,7 +311,7 @@ KPTDuration KPTNode::duration(const KPTDateTime &time, int use, bool backward) {
         return KPTDuration::zeroDuration;
     }
     KPTDuration dur = effort; // use effort as default duration
-    if (m_effort->type() == KPTEffort::Type_WorkBased ||
+    if (m_effort->type() == KPTEffort::Type_Effort ||
         m_effort->type() == KPTEffort::Type_FixedDuration) {
         dur = calcDuration(time, effort, backward);
     } else {
@@ -363,6 +363,8 @@ void KPTNode::setConstraint(QString &type) {
         setConstraint(MustStartOn);
     else if (type == "MustFinishOn")
         setConstraint(MustFinishOn);
+    else if (type == "FixedInterval")
+        setConstraint(FixedInterval);
     else
         setConstraint(ASAP);  // default
 }
@@ -379,8 +381,8 @@ QString KPTNode::constraintToString() const {
         return QString("FinishNotLater");
     else if (m_constraint == MustStartOn)
         return QString("MustStartOn");
-    else if (m_constraint == MustFinishOn)
-        return QString("MustFinishOn");
+    else if (m_constraint == FixedInterval)
+        return QString("FixedInterval");
 
     return QString();
 }
@@ -549,8 +551,8 @@ KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {
   m_expectedEffort = e;
   m_pessimisticEffort = p;
   m_optimisticEffort = o;
-  m_type = Type_WorkBased;
-}
+  m_type = Type_Effort;
+  }
 
 KPTEffort::~KPTEffort() {
 }
@@ -606,8 +608,8 @@ void KPTEffort::save(QDomElement &element) const {
 }
 
 QString KPTEffort::typeToString() const {
-    if (m_type == Type_WorkBased)
-        return QString("WorkBased");
+    if (m_type == Type_Effort)
+        return QString("Effort");
     if (m_type == Type_FixedDuration)
         return QString("Type_FixedDuration");
 
@@ -615,12 +617,32 @@ QString KPTEffort::typeToString() const {
 }
 
 void KPTEffort::setType(QString type) {
-    if (type == "WorkBased")
-        setType(Type_WorkBased);
+    if (type == "Effort")
+        setType(Type_Effort);
     else if (type == "Type_FixedDuration")
         setType(Type_FixedDuration);
     else
-        setType(Type_WorkBased); // default
+        setType(Type_Effort); // default
+}
+
+void KPTEffort::setOptimisticRatio(int percent) {
+    int p = percent>0 ? p = -percent : p = percent;
+    m_optimisticEffort = m_expectedEffort*(100+p)/100;
+}
+int KPTEffort::optimisticRatio() const {
+    if (m_expectedEffort == KPTDuration::zeroDuration)
+        return 0;
+    return (m_optimisticEffort.milliseconds()*100/m_expectedEffort.milliseconds())-100;
+}
+
+void KPTEffort::setPessimisticRatio(int percent) {
+    int p = percent<0 ? p = -percent : p = percent;
+    m_pessimisticEffort = m_expectedEffort*(100+p)/100;
+}
+int KPTEffort::pessimisticRatio() const {
+    if (m_expectedEffort == KPTDuration::zeroDuration)
+        return 0;
+    return m_pessimisticEffort.milliseconds()*100/m_expectedEffort.milliseconds()-100;
 }
 
 // Debugging
@@ -629,7 +651,8 @@ void KPTNode::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
-    kdDebug()<<indent<<s<<" ("<<constraintTime().toString()<<")"<<endl;
+    kdDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")"<<endl;
+    kdDebug()<<indent<<s<<" ("<<constraintEndTime().toString()<<")"<<endl;
     //kdDebug()<<indent<<"  Duration: "<<m_duration.toString()<<endl;
     kdDebug()<<indent<<"  Duration: "<<m_duration.seconds()<<QCString(" secs")<<" ("<<m_duration.toString()<<")"<<endl;
     kdDebug()<<indent<<"  Start time: "<<m_startTime.toString()<<endl;

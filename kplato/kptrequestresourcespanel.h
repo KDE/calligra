@@ -112,8 +112,6 @@ private:
     KPTGroupLVItem *selectedGroup;
     bool m_blockChanged;
     
-    KPTDuration m_origEffort;
-    int m_origEfforttype;
 };
 
 }  //KPlato namespace

@@ -43,7 +43,7 @@ class KPTDuration {
         KPTDuration();
         KPTDuration(const KPTDuration &d);
         KPTDuration(unsigned d, unsigned h, unsigned m, unsigned s=0, unsigned ms=0);
-        KPTDuration(unsigned s);
+        KPTDuration(Q_INT64 seconds);
         ~KPTDuration();
 
         /**

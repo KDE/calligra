@@ -45,7 +45,7 @@ KPTDuration::KPTDuration(unsigned d, unsigned h, unsigned m, unsigned s, unsigne
     m_ms += static_cast<Q_INT64>(d) * 24 * 60 * 60 * 1000;
 }
 
-KPTDuration::KPTDuration(unsigned seconds) {
+KPTDuration::KPTDuration(Q_INT64 seconds) {
     m_ms = seconds * 1000;
 }
 

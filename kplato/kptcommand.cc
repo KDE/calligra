@@ -238,21 +238,40 @@ void KPTNodeModifyConstraintCmd::unexecute() {
         m_part->setCommandType(1);
 }
 
-KPTNodeModifyConstraintTimeCmd::KPTNodeModifyConstraintTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name)
+KPTNodeModifyConstraintStartTimeCmd::KPTNodeModifyConstraintStartTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name)
     : KNamedCommand(name),
       m_part(part),
       m_node(node),
       newTime(dt),
-      oldTime(node.constraintTime()) {
+      oldTime(node.constraintStartTime()) {
 
 }
-void KPTNodeModifyConstraintTimeCmd::execute() {
-    m_node.setConstraintTime(newTime);
+void KPTNodeModifyConstraintStartTimeCmd::execute() {
+    m_node.setConstraintStartTime(newTime);
     if (m_part)
         m_part->setCommandType(1);
 }
-void KPTNodeModifyConstraintTimeCmd::unexecute() {
-    m_node.setConstraintTime(oldTime);
+void KPTNodeModifyConstraintStartTimeCmd::unexecute() {
+    m_node.setConstraintStartTime(oldTime);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTNodeModifyConstraintEndTimeCmd::KPTNodeModifyConstraintEndTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_node(node),
+      newTime(dt),
+      oldTime(node.constraintEndTime()) {
+
+}
+void KPTNodeModifyConstraintEndTimeCmd::execute() {
+    m_node.setConstraintEndTime(newTime);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTNodeModifyConstraintEndTimeCmd::unexecute() {
+    m_node.setConstraintEndTime(oldTime);
     if (m_part)
         m_part->setCommandType(1);
 }
@@ -527,6 +546,42 @@ void KPTModifyEffortCmd::execute() {
 }
 void KPTModifyEffortCmd::unexecute() {
     m_effort->set(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTEffortModifyOptimisticRatioCmd::KPTEffortModifyOptimisticRatioCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_effort(effort),
+      m_oldvalue(oldvalue),
+      m_newvalue(newvalue) {
+}
+void KPTEffortModifyOptimisticRatioCmd::execute() {
+    m_effort->setOptimisticRatio(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTEffortModifyOptimisticRatioCmd::unexecute() {
+    m_effort->setOptimisticRatio(m_oldvalue);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+
+KPTEffortModifyPessimisticRatioCmd::KPTEffortModifyPessimisticRatioCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name)
+    : KNamedCommand(name),
+      m_part(part),
+      m_effort(effort),
+      m_oldvalue(oldvalue),
+      m_newvalue(newvalue) {
+}
+void KPTEffortModifyPessimisticRatioCmd::execute() {
+    m_effort->setPessimisticRatio(m_newvalue);
+    if (m_part)
+        m_part->setCommandType(1);
+}
+void KPTEffortModifyPessimisticRatioCmd::unexecute() {
+    m_effort->setPessimisticRatio(m_oldvalue);
     if (m_part)
         m_part->setCommandType(1);
 }

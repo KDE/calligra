@@ -64,7 +64,7 @@ class KPTNode {
     friend class KPTProject;
 
 public:
-    enum ConstraintType { ASAP, ALAP, StartNotEarlier, FinishNotLater, MustStartOn, MustFinishOn };
+    enum ConstraintType { ASAP, ALAP, StartNotEarlier, FinishNotLater, MustStartOn, MustFinishOn, FixedInterval };
 
     KPTNode(KPTNode *parent = 0);
 
@@ -247,13 +247,15 @@ public:
     int constraint() const { return m_constraint; }
     QString constraintToString() const;
 
-    virtual void setConstraintTime(QDateTime time) { m_constraintTime = time; }
+    virtual void setConstraintStartTime(QDateTime time) { m_constraintStartTime = time; }
+    virtual void setConstraintEndTime(QDateTime time) { m_constraintEndTime = time; }
 
-    virtual KPTDateTime &constraintTime() { return m_constraintTime; }
-    virtual KPTDateTime &startNotEarlier() { return m_constraintTime; }
-    virtual KPTDateTime &finishNotLater() { return m_constraintTime; }
-    virtual KPTDateTime &mustStartOn() { return m_constraintTime; }
-    virtual KPTDateTime &mustFinishOn() { return m_constraintTime; }
+    virtual KPTDateTime &constraintStartTime() { return m_constraintStartTime; }
+    virtual KPTDateTime &constraintEndTime() { return m_constraintEndTime; }
+    virtual KPTDateTime &startNotEarlier() { return m_constraintStartTime; }
+    virtual KPTDateTime &finishNotLater() { return m_constraintEndTime; }
+    virtual KPTDateTime &mustStartOn() { return m_constraintStartTime; }
+    virtual KPTDateTime &mustFinishOn() { return m_constraintEndTime; }
 
     virtual KPTResourceGroupRequest *resourceRequest(KPTResourceGroup *group) const { return 0; }
     virtual void makeAppointments();
@@ -371,9 +373,14 @@ protected:
 
     /**
       * @m_constraintTime is used if any of the constraints
-      * StartNotEarlier, FinishNotLater or MustStartOn is selected
+      * FixedInterval, StartNotEarlier or MustStartOn is selected
       */
-    KPTDateTime m_constraintTime;
+    KPTDateTime m_constraintStartTime;
+    /**
+      * @m_constraintEndTime is used if any of the constraints
+      * FixedInterval, FinishNotLater or MustFinishOn is selected
+      */
+    KPTDateTime m_constraintEndTime;
 
     /**  m_startTime is the calculated start time.
       *  It depends on constraints (i.e. ASAP/ALAP)
@@ -427,7 +434,7 @@ public:
     KPTEffort ( double e, double p = 0, double o = 0);
     ~KPTEffort();
 
-    enum Type { Type_WorkBased = 0,        // Changing amount of resources changes the task duration
+    enum Type { Type_Effort = 0,        // Changing amount of resources changes the task duration
                           Type_FixedDuration = 1     // Changing amount of resources will not change the tasks duration
      };
     Type type() const { return m_type; }
@@ -462,22 +469,22 @@ public:
      * Set the optimistic duration
      * @percent should be a negativ value.
      */
-    void setOptimistic(int percent) {}
+    void setOptimisticRatio(int percent);
     /**
      * Return the @optimistic duaration as deviation from @expected in percent.
      * This should be a negativ value.
      */
-    int optimisticRatio() const { return -10; } // FIXME
+    int optimisticRatio() const;
     /**
      * Set the pessimistic duration
      * @percent should be a positive value.
      */
-    void setPessimistic() {}
+    void setPessimisticRatio(int percent);
     /**
      * Return the @pessimistic duaration as the deviation from @expected in percent.
      * This should be a positive value.
      */
-    int pessimisticRatio() const { return 20; }  // FIXME
+    int pessimisticRatio() const;
 
     /**
      * No effort.
@@ -490,7 +497,7 @@ private:
     KPTDuration m_expectedEffort;
 
     Type m_type;
-
+    
 #ifndef NDEBUG
 public:
     void printDebug(QCString indent);

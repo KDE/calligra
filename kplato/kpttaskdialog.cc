@@ -22,37 +22,40 @@
 #include "kpttask.h"
 #include "kpttaskgeneralpanelbase.h"
 #include "kptrequestresourcespanel.h"
-#include "kpttasknotespanelbase.h"
 #include "kptcommand.h"
+#include "kptdurationwidget.h"
+#include "kptduration.h"
+#include "kptcalendar.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <klocale.h>
 #include <kdatepicker.h>
-#include "kptdurationwidget.h"
 #include <kcommand.h>
 #include <kmessagebox.h>
+#include <ktextedit.h>
+#include <kcombobox.h>
+#include <knuminput.h>
 
-#include <qtextedit.h>
+#include <qlayout.h>
+#include <qlabel.h>
 #include <qdatetimeedit.h>
 #include <qdatetime.h>
 #include <qspinbox.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
-#include <qcombobox.h>
 #include <qlistbox.h>
 #include <qtabwidget.h>
 #include <qtable.h>
 #include <qtextbrowser.h>
 #include <qpushbutton.h>
+#include <qsize.h>
 #include <kdebug.h>
 
 namespace KPlato
 {
 
-KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
+KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, QWidget *p, const char *n)
     : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, n, true, true),
       m_task(task)
 {
@@ -68,21 +71,12 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
     page = addPage(i18n("&Resources"));
     topLayout = new QVBoxLayout(page, 0, spacingHint());
     m_resourcesTab = new KPTRequestResourcesPanel(page, task);
-    m_resourcesTab->effort->setVisibleFields(
-        ~(KPTDurationWidget::Seconds | KPTDurationWidget::Milliseconds));
     topLayout->addWidget(m_resourcesTab);
 
-    page = addPage(i18n("&Notes"));
-    topLayout = new QVBoxLayout(page, 0, spacingHint());
-    m_notesTab = new KPTTaskNotesPanelBase(page);
-    topLayout->addWidget(m_notesTab);
-
-    resize( QSize(0, 0).expandedTo(minimumSizeHint()) );
-    
     // Create some shortcuts.
     m_name = m_generalTab->namefield;
     m_leader = m_generalTab->leaderfield;
-    m_description = m_notesTab->descriptionfield;
+    m_description = m_generalTab->descriptionfield;
     m_id = m_generalTab->idfield;
 
     // Set the state of all the child widgets.
@@ -92,15 +86,28 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QWidget *p, const char *n)
     m_description->setText(task.description());
     m_id->setText(task.id());
     m_generalTab->setSchedulingType(task.constraint());
-    if (task.constraintTime().isValid())
-        m_generalTab->setDateTime(task.constraintTime());
+    if (task.constraintStartTime().isValid())
+        m_generalTab->setStartTime(task.constraintStartTime());
     else
-        m_generalTab->setDateTime(QDateTime::currentDateTime());
-
+        m_generalTab->setStartTime(QDateTime::currentDateTime()); //TODO: proper default time
+    if (task.constraintEndTime().isValid())
+        m_generalTab->setEndTime(task.constraintEndTime());
+    else
+        m_generalTab->setEndTime(QDateTime::currentDateTime()); //TODO: proper default time
+    
+    m_generalTab->setEstimateType(task.effort()->type());
+    m_generalTab->setEstimateFields(KPTDurationWidget::Days|KPTDurationWidget::Hours|KPTDurationWidget::Minutes);
+    if (workTime) {
+        m_generalTab->setEstimateScales(workTime->durationDay().hours());
+    }
+    m_generalTab->setEstimate(task.effort()->expected()); 
+    m_generalTab->setOptimistic(task.effort()->optimisticRatio());
+    m_generalTab->setPessimistic(task.effort()->pessimisticRatio());
+    
     connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOK(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
-    m_generalTab->checkAllFieldsFilled();
     m_name->setFocus();
+    
 }
 
 
@@ -127,13 +134,40 @@ KMacroCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
         cmd->addCommand(new KPTNodeModifyConstraintCmd(part, m_task, c));
         modified = true;
     }
-    if (c == KPTNode::FinishNotLater || c == KPTNode::StartNotEarlier || c == KPTNode::MustStartOn) {
-        cmd->addCommand(new KPTNodeModifyConstraintTimeCmd(part, m_task, m_generalTab->dateTime()));
+    if (m_generalTab->startTime() != m_task.constraintStartTime() &&
+        (c == KPTNode::FixedInterval || c == KPTNode::StartNotEarlier || c == KPTNode::MustStartOn)) {
+        cmd->addCommand(new KPTNodeModifyConstraintStartTimeCmd(part, m_task, m_generalTab->startTime()));
+        modified = true;
+    }
+    if (m_generalTab->endTime() != m_task.constraintEndTime() &&
+        (c == KPTNode::FinishNotLater || c == KPTNode::FixedInterval || c == KPTNode::MustFinishOn)) {
+        cmd->addCommand(new KPTNodeModifyConstraintEndTimeCmd(part, m_task, m_generalTab->endTime()));
         modified = true;
     }
     if (m_id->text() != m_task.id()) {
         
         cmd->addCommand(new KPTNodeModifyIdCmd(part, m_task, m_id->text()));
+        modified = true;
+    }
+    int et = m_generalTab->estimationType();
+    if (et != m_task.effort()->type()) {
+        cmd->addCommand(new KPTModifyEffortTypeCmd(part, m_task.effort(),  m_task.effort()->type(), et));
+        modified = true;
+    }
+    dt = m_generalTab->estimationValue();
+    bool expchanged = dt != m_task.effort()->expected();
+    if ( expchanged ) {
+        cmd->addCommand(new KPTModifyEffortCmd(part, m_task.effort(), m_task.effort()->expected(), dt));
+        modified = true;
+    }
+    int x = m_generalTab->optimistic();
+    if ( x != m_task.effort()->optimisticRatio() || expchanged) {
+        cmd->addCommand(new KPTEffortModifyOptimisticRatioCmd(part, m_task.effort(), m_task.effort()->optimisticRatio(), x));
+        modified = true;
+    }
+    x = m_generalTab->pessimistic();
+    if ( x != m_task.effort()->pessimisticRatio() || expchanged) {
+        cmd->addCommand(new KPTEffortModifyPessimisticRatioCmd(part, m_task.effort(), m_task.effort()->pessimisticRatio(), x));
         modified = true;
     }
     KCommand *m = m_resourcesTab->buildCommand(part);
@@ -158,6 +192,7 @@ void KPTTaskDialog::slotOk() {
     m_resourcesTab->slotOk();
     accept();
 }
+
 
 }  //KPlato namespace
 

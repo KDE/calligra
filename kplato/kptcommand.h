@@ -168,10 +168,10 @@ private:
     KPTNode::ConstraintType oldConstraint;
 };
 
-class KPTNodeModifyConstraintTimeCmd : public KNamedCommand
+class KPTNodeModifyConstraintStartTimeCmd : public KNamedCommand
 {
 public:
-    KPTNodeModifyConstraintTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name=0);
+    KPTNodeModifyConstraintStartTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name=0);
     void execute();
     void unexecute();
 
@@ -181,6 +181,20 @@ private:
     QDateTime newTime;
     QDateTime oldTime;
 };
+class KPTNodeModifyConstraintEndTimeCmd : public KNamedCommand
+{
+public:
+    KPTNodeModifyConstraintEndTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTNode &m_node;
+    QDateTime newTime;
+    QDateTime oldTime;
+};
+
 class KPTNodeModifyIdCmd : public KNamedCommand
 {
 public:
@@ -332,6 +346,32 @@ private:
     KPTPart *m_part;
     KPTEffort *m_effort;
     KPTDuration m_oldvalue, m_newvalue;
+};
+
+class KPTEffortModifyOptimisticRatioCmd : public KNamedCommand
+{
+public:
+    KPTEffortModifyOptimisticRatioCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTEffort *m_effort;
+    int m_oldvalue, m_newvalue;
+};
+
+class KPTEffortModifyPessimisticRatioCmd : public KNamedCommand
+{
+public:
+    KPTEffortModifyPessimisticRatioCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTPart *m_part;
+    KPTEffort *m_effort;
+    int m_oldvalue, m_newvalue;
 };
 
 class KPTModifyEffortTypeCmd : public KNamedCommand

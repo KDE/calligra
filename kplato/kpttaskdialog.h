@@ -25,9 +25,14 @@
 #include "kptresource.h"
 #include <qtable.h>
 
+class KPTDuration;
+
 class KLineEdit;
 class KMacroCommand;
-class QTextEdit;
+class KTextEdit;
+class KComboBox;
+class KDoubleNumInput;
+
 class QDateTimeEdit;
 class QSpinBox;
 class QButtonGroup;
@@ -37,7 +42,6 @@ class QDateTime;
 
 //TODO ui files are not in the KPlato namespace!!
 class KPTTaskGeneralPanelBase;
-class KPTTaskNotesPanelBase;
 
 namespace KPlato
 {
@@ -45,11 +49,12 @@ namespace KPlato
 class KPTRequestResourcesPanel;
 class KPTPart;
 class KPTTask;
+class KPTStandardWorktime;
 
 class KPTTaskDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTTaskDialog(KPTTask &task, QWidget *parent=0, const char *name=0);
+    KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
     KMacroCommand *buildCommand(KPTPart *part);
 
@@ -60,14 +65,12 @@ private:
     KPTTask &m_task;
     KLineEdit *m_name;
     KLineEdit *m_leader;
-    QTextEdit *m_description;
+    KTextEdit *m_description;
     KLineEdit *m_id;
-
+    
     KPTTaskGeneralPanelBase *m_generalTab;
     KPTRequestResourcesPanel *m_resourcesTab;
-    KPTTaskNotesPanelBase *m_notesTab;
 
-    // TODO: Duration and risk fields
 };
 
 } //KPlato namespace

@@ -21,7 +21,6 @@
 #include "kpttask.h"
 #include "kptproject.h"
 #include "kptresource.h"
-#include "kptdurationwidget.h"
 #include "kptcalendar.h"
 
 #include <kdebug.h>
@@ -172,34 +171,11 @@ KPTRequestResourcesPanel::KPTRequestResourcesPanel(QWidget *parent, KPTTask &tas
         groupList->setSelected(item, true);
         groupChanged(item);
     }
-    if (m_worktime && task.effort()->type() == KPTEffort::Type_WorkBased) {
-        //FIXME handle decimals
-        effort->setFieldScale(0, 24, m_worktime->durationDay().hours());
-        effort->setFieldRightscale(0, m_worktime->durationDay().hours());
-        effort->setFieldLeftscale(1, m_worktime->durationDay().hours());
-        //kdDebug()<<k_funcinfo<<"Dayscale="<<m_worktime->durationDay().hours()<<endl;
-    }
-    effort->setValue(task.effort()->expected());
-    m_origEffort = task.effort()->expected();
-    //kdDebug()<<k_funcinfo<<"effort="<<task.effort()->expected().toString()<<endl;
 
-    //TODO: calc optimistic/pessimistic
-    optimisticValue->setValue(task.effort()->optimisticRatio());
-    pessimisticValue->setValue(task.effort()->pessimisticRatio());
-
-    effortType->setCurrentItem(task.effort()->type());
-    m_origEfforttype = task.effort()->type();
     
     connect(groupList, SIGNAL(selectionChanged(QListViewItem*)),  SLOT(groupChanged(QListViewItem*)));
     connect(resourceTable, SIGNAL(valueChanged(int, int)), SLOT(resourceChanged(int, int)));
 //    connect(numUnits, SIGNAL(valueChanged(int)), SLOT(unitsChanged(int)));
-
-
-    connect(effort, SIGNAL(valueChanged()), SLOT(sendChanged()));
-    connect(effortType, SIGNAL(activated(int)), SLOT(sendChanged()));
-    connect(optimisticValue, SIGNAL(valueChanged(int)), SLOT(sendChanged()));
-    connect(pessimisticValue, SIGNAL(valueChanged(int)), SLOT(sendChanged()));
-    connect(risk, SIGNAL(activated(int)), SLOT(sendChanged()));
 
 }
 
@@ -263,14 +239,6 @@ KCommand *KPTRequestResourcesPanel::buildCommand(KPTPart *part) {
                 }
             }
         }
-    }
-    if (effort->value() != m_origEffort) {
-        if (!cmd) cmd = new KMacroCommand("");
-        cmd->addCommand(new KPTModifyEffortCmd(part, m_task.effort(), m_origEffort, effort->value()));
-    }
-    if (effortType->currentItem() != m_origEfforttype) {
-        if (!cmd) cmd = new KMacroCommand("");
-        cmd->addCommand(new KPTModifyEffortTypeCmd(part, m_task.effort(), m_origEfforttype, effortType->currentItem()));
     }
     return cmd;
 }
