@@ -79,7 +79,7 @@ public:
 
 private:
     
-    QArray <uint> gradArray;
+    QMemArray <uint> gradArray;
     QImage gradImage;
         
     int mGradientWidth;

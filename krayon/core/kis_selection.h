@@ -108,7 +108,7 @@ private:
    not include every point in the selection rectangle is
    selected */   
    
-   QArray <int> array; 
+   QMemArray <int> array; 
 
 };
 

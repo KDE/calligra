@@ -57,7 +57,7 @@ protected:
     QTimer *timer;
     KisDoc *m_pDoc;
     
-    QArray <int> brushArray; // array of points in brush
+    QMemArray <int> brushArray; // array of points in brush
     int nPoints;  // number of points marked in array
     
     QPoint  pos; 
