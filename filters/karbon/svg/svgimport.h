@@ -49,6 +49,7 @@ protected:
 		}
 		VFill		fill;
 		VStroke		stroke;
+		QWMatrix	matrix;
 	};
 
 	void parseGroup( VGroup *, const QDomElement & );
