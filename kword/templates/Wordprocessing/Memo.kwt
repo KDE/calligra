@@ -13,7 +13,6 @@
     <TEXT>MEMORANDUM</TEXT>
     <FORMATS>
      <FORMAT id="1" pos="0" len="10" >
-      <FONT name="Helvetica" />
       <SIZE value="30" />
      </FORMAT>
     </FORMATS>
@@ -23,7 +22,6 @@
      <SHADOW direction="5" blue="200" red="195" green="198" distance="4" />
      <FORMAT id="1" pos="0" len="10" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -36,13 +34,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TOPBORDER width="1" style="0" blue="0" red="0" green="0" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -56,21 +52,17 @@
     <FORMATS>
      <FORMAT id="1" pos="0" len="5" >
       <WEIGHT value="75" />
-      <FONT name="Helvetica" />
      </FORMAT>
      <FORMAT id="1" pos="5" len="31" >
-      <FONT name="Helvetica" />
      </FORMAT>
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" pos="0" len="36" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -83,13 +75,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -103,21 +93,17 @@
     <FORMATS>
      <FORMAT id="1" pos="0" len="5" >
       <WEIGHT value="75" />
-      <FONT name="Helvetica" />
      </FORMAT>
      <FORMAT id="1" pos="5" len="23" >
-      <FONT name="Helvetica" />
      </FORMAT>
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" pos="0" len="28" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -130,13 +116,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -149,11 +133,9 @@
     <TEXT>DATE:	#</TEXT>
     <FORMATS>
      <FORMAT id="1" pos="0" len="6" >
-      <FONT name="Helvetica" />
      </FORMAT>
      <FORMAT id="4" pos="6" len="1" >
       <WEIGHT value="50" />
-      <FONT name="Helvetica" />
       <VARIABLE>
        <TYPE key="DATE0MMMM dd, yyyy" type="0" text="marzec 25, 2002" />
        <DATE day="25" month="3" year="2002" fix="0" />
@@ -162,13 +144,11 @@
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" pos="0" len="7" >
       <WEIGHT value="75" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -181,13 +161,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="75" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -200,22 +178,18 @@
     <TEXT>SUBJECT:	&lt;Subject></TEXT>
     <FORMATS>
      <FORMAT id="1" pos="0" len="9" >
-      <FONT name="Helvetica" />
      </FORMAT>
      <FORMAT id="1" pos="9" len="9" >
       <WEIGHT value="50" />
-      <FONT name="Helvetica" />
      </FORMAT>
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" pos="0" len="18" >
       <WEIGHT value="75" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -228,13 +202,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="75" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -247,13 +219,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -266,18 +236,15 @@
     <TEXT>Memorandum  - A record of something which it is desired to remember; a note to help the memory. A brief or informal note in writing of some transaction, or an outline of an intended instrument; an instrument drawn up in a brief and compendious form.</TEXT>
     <FORMATS>
      <FORMAT id="1" pos="0" len="249" >
-      <FONT name="Helvetica" />
      </FORMAT>
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" pos="0" len="249" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -290,13 +257,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -309,18 +274,15 @@
     <TEXT>Memorandum check, a check given as an acknowledgment of indebtedness, but with the understanding that it will not be presented at bank unless the maker fails to take it up on the day the debt becomes due. It usually has Mem. written on its face. </TEXT>
     <FORMATS>
      <FORMAT id="1" pos="0" len="246" >
-      <FONT name="Helvetica" />
      </FORMAT>
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" pos="0" len="246" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -333,18 +295,15 @@
     <TEXT>(Webster's Revised Unabridged Dictionary (1913))</TEXT>
     <FORMATS>
      <FORMAT id="1" pos="0" len="48" >
-      <FONT name="Helvetica" />
      </FORMAT>
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" pos="0" len="48" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -357,13 +316,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -376,13 +333,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -395,18 +350,15 @@
     <TEXT>xx</TEXT>
     <FORMATS>
      <FORMAT id="1" pos="0" len="2" >
-      <FONT name="Helvetica" />
      </FORMAT>
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" pos="0" len="2" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -419,13 +371,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -438,13 +388,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -457,18 +405,15 @@
     <TEXT>Attachment</TEXT>
     <FORMATS>
      <FORMAT id="1" pos="0" len="10" >
-      <FONT name="Helvetica" />
      </FORMAT>
     </FORMATS>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" pos="0" len="10" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -481,13 +426,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -500,13 +443,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -519,13 +460,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -538,13 +477,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -557,13 +494,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -576,13 +511,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -595,13 +528,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -614,13 +545,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -633,13 +562,11 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <TABULATOR ptpos="28.4444" type="0" />
      <TABULATOR ptpos="72" type="0" />
      <TABULATOR ptpos="510.222" type="0" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -655,10 +582,8 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -674,10 +599,8 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -693,10 +616,8 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -712,10 +633,8 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -731,10 +650,8 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -750,10 +667,8 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -769,10 +684,8 @@
     <TEXT></TEXT>
     <LAYOUT>
      <NAME value="Standard" />
-     <FLOW align="left" />
      <FORMAT id="1" >
       <WEIGHT value="50" />
-      <FONT name="Sans serif" />
       <SIZE value="12" />
       <ITALIC value="0" />
       <UNDERLINE value="0" />
@@ -786,12 +699,9 @@
  <STYLES>
   <STYLE>
    <NAME value="Standard" />
-   <FLOW align="left" />
    <FOLLOWING name="Standard" />
    <FORMAT id="1" >
     <WEIGHT value="50" />
-    <FONT name="Sans serif" />
-    <SIZE value="12" />
     <ITALIC value="0" />
     <UNDERLINE value="0" />
     <STRIKEOUT value="0" />
@@ -804,7 +714,6 @@
    <FOLLOWING name="Document Title" />
    <FORMAT id="1" >
     <WEIGHT value="75" />
-    <FONT name="Sans serif" />
     <SIZE value="24" />
     <ITALIC value="0" />
     <UNDERLINE value="0" />
@@ -814,12 +723,10 @@
   </STYLE>
   <STYLE>
    <NAME value="Head 1" />
-   <FLOW align="left" />
    <COUNTER numberingtype="1" righttext="." type="1" depth="0" />
    <FOLLOWING name="Head 1" />
    <FORMAT id="1" >
     <WEIGHT value="75" />
-    <FONT name="Sans serif" />
     <SIZE value="20" />
     <ITALIC value="0" />
     <UNDERLINE value="0" />
@@ -829,12 +736,10 @@
   </STYLE>
   <STYLE>
    <NAME value="Head 2" />
-   <FLOW align="left" />
    <COUNTER numberingtype="1" righttext="." type="1" depth="1" />
    <FOLLOWING name="Head 2" />
    <FORMAT id="1" >
     <WEIGHT value="75" />
-    <FONT name="Sans serif" />
     <SIZE value="16" />
     <ITALIC value="0" />
     <UNDERLINE value="0" />
@@ -844,12 +749,10 @@
   </STYLE>
   <STYLE>
    <NAME value="Head 3" />
-   <FLOW align="left" />
    <COUNTER numberingtype="1" righttext="." type="1" depth="2" />
    <FOLLOWING name="Head 3" />
    <FORMAT id="1" >
     <WEIGHT value="75" />
-    <FONT name="Sans serif" />
     <SIZE value="12" />
     <ITALIC value="0" />
     <UNDERLINE value="0" />
@@ -859,12 +762,10 @@
   </STYLE>
   <STYLE>
    <NAME value="Enumerated List" />
-   <FLOW align="left" />
    <COUNTER numberingtype="0" righttext="." type="1" depth="0" />
    <FOLLOWING name="Enumerated List" />
    <FORMAT id="1" >
     <WEIGHT value="50" />
-    <FONT name="Sans serif" />
     <SIZE value="12" />
     <ITALIC value="0" />
     <UNDERLINE value="0" />
@@ -874,12 +775,10 @@
   </STYLE>
   <STYLE>
    <NAME value="Alphabetical List" />
-   <FLOW align="left" />
    <COUNTER numberingtype="0" righttext=")" type="2" depth="0" />
    <FOLLOWING name="Alphabetical List" />
    <FORMAT id="1" >
     <WEIGHT value="50" />
-    <FONT name="Sans serif" />
     <SIZE value="12" />
     <ITALIC value="0" />
     <UNDERLINE value="0" />
@@ -889,12 +788,10 @@
   </STYLE>
   <STYLE>
    <NAME value="Bullet List" />
-   <FLOW align="left" />
    <COUNTER numberingtype="0" type="10" depth="0" />
    <FOLLOWING name="Bullet List" />
    <FORMAT id="1" >
     <WEIGHT value="50" />
-    <FONT name="Sans serif" />
     <SIZE value="12" />
     <ITALIC value="0" />
     <UNDERLINE value="0" />
