@@ -5,11 +5,17 @@
 #include "element.h"
 
 #include <qstring.h>
+#include <qptrlist.h>
 
 class Env: public Element
 {
+	QPtrList<Element> _children;
+	QString _name;
+
 	public:
 		Env();
+
+		Env(const char*);
 
 		Env(QString);
 
@@ -18,9 +24,8 @@ class Env: public Element
 		QString getName() const { return _name; }
 
 		void setName(QString name) { _name = name; }
-
-	private:
-		QString _name;
+		void setChildren(QPtrList<Element>*);
+		
 };
 
 #endif /* __LATEXPARSER_ENV_H__ */

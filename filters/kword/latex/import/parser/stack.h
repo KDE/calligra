@@ -20,13 +20,10 @@
 #ifndef __STACK_H__
 #define __STACK_H__
 
-/* Type of commands */
-typedef enum EType
-{
-	NONE,
-	ENV,
-	MATH
-};
+
+
+#include <qptrlist.h>
+#include <qptrstack.h>
 
 #define GROUP_STACK_SIZE 10
 
@@ -35,8 +32,11 @@ typedef struct _Stack
 	int name;
 } Stack;
 
-static Stack *stack = 0;
+/*static Stack *stack = 0;
 static int stack_size = GROUP_STACK_SIZE;
 static int stackp = 0;
+static Element * _currentElement = 0;
+static Group* _tree = 0;
+static QPtrStack<Element> _stackElement;*/
 
 #endif /* __STACK_H__ */

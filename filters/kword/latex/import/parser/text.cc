@@ -5,6 +5,10 @@ Text::Text()
 {
 }
 
+Text::Text(const char* text)
+{
+}
+
 Text::~Text()
 {
 }

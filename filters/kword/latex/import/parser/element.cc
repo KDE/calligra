@@ -3,6 +3,7 @@
 
 Element::Element()
 {
+	_type = ELT_NONE;
 }
 
 Element::~Element()

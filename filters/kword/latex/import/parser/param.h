@@ -8,6 +8,7 @@ class Param
 {
 	public:
 		Param();
+		Param(QString key, QString value);
 
 		~Param();
 

@@ -10,6 +10,7 @@ class Text: public Element
 {
 	public:
 		Text();
+		Text(const char * text);
 
 		~Text();
 
