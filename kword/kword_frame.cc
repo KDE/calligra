@@ -377,6 +377,7 @@ QCursor KWFrame::getMouseCursor( int mx, int my, bool table )
     return Qt::arrowCursor;
 }
 
+/*================================================================*/
 FrameInfo KWFrame::getFrameInfo()
 {
     if(frameSet)
@@ -384,6 +385,7 @@ FrameInfo KWFrame::getFrameInfo()
     return (FrameInfo) -1;
 }
 
+/*================================================================*/
 FrameType KWFrame::getFrameType()
 {
     if(frameSet)
@@ -2254,7 +2256,8 @@ void KWGroupManager::recalcCols()
 {
     unsigned int row=0,col=0;
     if(! cells.isEmpty() && isOneSelected(row,col)) {
-        // check/set sizes of frames
+        // ** check/set sizes of frames **
+        // we assume only left or only right pos has changed.
         // check if leftCoordinate is same as rest of tableRow
         Cell *activeCell = getCell(row,col);
         Cell *cell;
@@ -2277,6 +2280,7 @@ void KWGroupManager::recalcCols()
             
         int postAdjust=0;
         if(coordinate != activeCell->frameSet->getFrame(0)->left()) { // left pos changed
+            // we are now going to move the rest of the cells in this column as well.
             for ( unsigned int i = 0; i < rows; i++) {
                 int difference;
                 if(col==0) {// left most cell
@@ -2284,12 +2288,16 @@ void KWGroupManager::recalcCols()
                     if(cell==activeCell)
                         cell=0;
                     else
-                        difference=(activeCell->frameSet->getFrame(0)->left()- coordinate) * -1;
+                        difference=(activeCell->frameSet->getFrame(0)->left() - coordinate) * -1;
                 } else {
                     cell = getCell(i,col-1);
-                    difference=activeCell->frameSet->getFrame(0)->left()- coordinate;
+                    if(cell->row == i) // dont resize joined cells more then ones.
+                        difference=activeCell->frameSet->getFrame(0)->left() - coordinate;
+                    else 
+                        cell=0;
                 }
                 if(cell) {
+                    // rescale this cell with the calculated difference
                     int newWidth=cell->frameSet->getFrame(0)->width() + difference;
                     if(newWidth<minFrameWidth) {
                         if(minFrameWidth-newWidth > postAdjust)
@@ -2298,14 +2306,20 @@ void KWGroupManager::recalcCols()
                     cell->frameSet->getFrame(0)->setWidth(newWidth);
                 }
             }
+
+            // Because we are scaling the cells left of this one, the activeCell has to be
+            // returned to its original size.
             if(col!=0)
                 activeCell->frameSet->getFrame(0)->setWidth(
                   activeCell->frameSet->getFrame(0)->width() +
-                  activeCell->frameSet->getFrame(0)->left()- coordinate);
+                  activeCell->frameSet->getFrame(0)->left() - coordinate); 
+
+            // if we found cells that ware made to small, we adjust them using the postAdjust var.
             for ( unsigned int i = 0; i < rows; i++) {
                 if(col==0) col++;
                 cell = getCell(i,col-1);
-                cell->frameSet->getFrame(0)->setWidth( cell->frameSet->getFrame(0)->width()+postAdjust);
+                if(cell->row == i) 
+                    cell->frameSet->getFrame(0)->setWidth( cell->frameSet->getFrame(0)->width()+postAdjust);
             }
         } else {
             col+=activeCell->cols-1;
@@ -2323,7 +2337,7 @@ void KWGroupManager::recalcCols()
             if(coordinate != activeCell->frameSet->getFrame(0)->right()) { // right pos changed.
                 for ( unsigned int i = 0; i < rows; i++) {
                     Cell *cell = getCell(i,col);
-                    if(cell != activeCell) {
+                    if(cell != activeCell && cell->row == i) {
                         int newWidth= cell->frameSet->getFrame(0)->width() +
                             activeCell->frameSet->getFrame(0)->right() - coordinate;
                         if(newWidth<minFrameWidth) {
@@ -2335,7 +2349,8 @@ void KWGroupManager::recalcCols()
                 }
                 for ( unsigned int i = 0; i < rows; i++) {
                     cell = getCell(i,col);
-                    cell->frameSet->getFrame(0)->setWidth( cell->frameSet->getFrame(0)->width()+postAdjust);
+                    if(cell->row == i) 
+                        cell->frameSet->getFrame(0)->setWidth( cell->frameSet->getFrame(0)->width()+postAdjust);
                 }
             }
         }
@@ -2402,7 +2417,10 @@ void KWGroupManager::recalcRows()
                         difference= (activeCell->frameSet->getFrame(0)->top()- coordinate) * -1;
                 } else {
                     cell = getCell(row-1,i);
-                    difference= activeCell->frameSet->getFrame(0)->top()- coordinate;
+                    if(cell->col == i) // dont resize joined cells more then ones.
+                        difference= activeCell->frameSet->getFrame(0)->top()- coordinate;
+                    else 
+                        cell=0;
                 }
                 if(cell) {
                     int newHeight= cell->frameSet->getFrame(0)->height() + difference;
@@ -2421,8 +2439,9 @@ void KWGroupManager::recalcRows()
                 if(row==0) row++;
                 for ( unsigned int i = 0; i < cols; i++) {
                     cell = getCell(row-1,i);
-                    cell->frameSet->getFrame(0)->setHeight(
-                        cell->frameSet->getFrame(0)->height() + postAdjust);
+                    if(cell->col == i)
+                        cell->frameSet->getFrame(0)->setHeight(
+                            cell->frameSet->getFrame(0)->height() + postAdjust);
                 }
             }
         } else { // bottom pos has changed
@@ -2441,7 +2460,7 @@ void KWGroupManager::recalcRows()
             if(coordinate != activeCell->frameSet->getFrame(0)->bottom()) {
                 for ( unsigned int i = 0; i < cols; i++) {
                     cell = getCell(row,i);
-                    if(cell != activeCell) {
+                    if(cell != activeCell && cell->col == i) {
                         int newHeight= cell->frameSet->getFrame(0)->height() +
                             activeCell->frameSet->getFrame(0)->bottom() - coordinate;
                         if(newHeight<minFrameHeight) {
@@ -2455,7 +2474,7 @@ void KWGroupManager::recalcRows()
             if(postAdjust!=0) {
                 for ( unsigned int i = 0; i < cols; i++) {
                     cell = getCell(row,i);
-                    cell->frameSet->getFrame(0)->setHeight(
+                    if(cell->col == i) cell->frameSet->getFrame(0)->setHeight(
                         cell->frameSet->getFrame(0)->height() + postAdjust);
                 }
             }
@@ -2680,8 +2699,12 @@ void KWGroupManager::insertRow( unsigned int _idx, bool _recalc, bool _removeabl
     QRect r = getBoundingRect();
 
     for ( i = 0; i < cells.count(); i++ ) {
-        if ( cells.at( i )->row == 0 ) w.append( new int( cells.at( i )->frameSet->getFrame( 0 )->width() ) );
-        if ( cells.at( i )->row >= _idx ) cells.at( i )->row++;
+        Cell *cell = cells.at(i);
+        if ( cell->row == 0 ) {
+            for( int rowspan=cell->cols; rowspan>0; rowspan--)
+                w.append( new int( cell->frameSet->getFrame( 0 )->width() / cell->cols ) );
+        }
+        if ( cell->row >= _idx ) cell->row++;
     }
 
     QList<KWTextFrameSet> nCells;

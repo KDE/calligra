@@ -182,7 +182,8 @@ public:
     void drawFrameBorder( QPainter &p, KWFrame *frame, int dx = 0, int dy = 0 );
     void createResizeHandles( KWFrame *frame );
     void removeResizeHandles( KWFrame *frame );
-    void setRuler2Frame( unsigned int _frameset, unsigned int _frame );
+    void setRuler2Frame( unsigned int _frameset, unsigned int _frame ); // depricated.
+    void setRuler2Frame( KWFrame *);
     void setMouseMode( MouseMode _mm );
     int getPageOfRect( QRect _rect );
     void setHilitFrameSet( int _f )

@@ -380,9 +380,9 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
 
     if ( deleteMovingRect ){ // erase old one.
         int drawX, drawWidth, drawY, drawHeight;
-        drawX=frame->left();
+        drawX=frame->left() - contentsX();
         drawWidth=frame->width();
-        drawY=frame->top();
+        drawY=frame->top() - contentsY();
         drawHeight=frame->height();
         if(frame->getFrameSet()->getGroupManager()) { // is table
             if(!(top || bottom)) { /// full height.
@@ -442,9 +442,9 @@ void KWPage::vmmEditFrameResize( int mx, int my , bool top, bool bottom, bool le
     frame->setBottom(newY2);
 
     int drawX, drawWidth, drawY, drawHeight;
-    drawX=frame->left();
+    drawX=frame->left() - contentsX();
     drawWidth=frame->width();
-    drawY=frame->top();
+    drawY=frame->top() - contentsY();
     drawHeight=frame->height();
     if(frame->getFrameSet()->getGroupManager()) { // is table
         if(!(top || bottom)) { /// full height.
@@ -917,8 +917,8 @@ void KWPage::vmrEditFrame( int mx, int my )
 {
     int frameset=0; 
     KWFrame *frame= doc->getFirstSelectedFrame(frameset);
-    /*if ( doc->getProcessingType() == KWordDocument::DTP )
-        setRuler2Frame( frameset, frame ); */
+    if ( doc->getProcessingType() == KWordDocument::DTP )
+        setRuler2Frame( frame );
     gui->getHorzRuler()->setFrameStart( frame->x() );
     
     if ( mouseMoved ) {
@@ -3263,7 +3263,15 @@ void KWPage::frameSizeChanged( KoPageLayout /* _layout */)
 }
 
 /*================================================================*/
-void KWPage::setRuler2Frame( unsigned int _frameset, unsigned int _frame )
+/* this method is depricated, use 
+   void KWPage::setRuler2Frame( KWFrame *frame) instead 
+*/
+void KWPage::setRuler2Frame( unsigned int _frameset, unsigned int _frame ) {
+   setRuler2Frame (doc->getFrameSet( _frameset )->getFrame( _frame ));
+}
+
+/*================================================================*/
+void KWPage::setRuler2Frame( KWFrame *frame)
 {
     if ( doc->getProcessingType() != KWordDocument::DTP ) return;
 
@@ -3271,7 +3279,6 @@ void KWPage::setRuler2Frame( unsigned int _frameset, unsigned int _frame )
     KoColumns _cl;
     KoKWHeaderFooter hf;
     doc->getPageLayout( _layout, _cl, hf );
-    KWFrame *frame = doc->getFrameSet( _frameset )->getFrame( _frame );
 
     unsigned int page = 0;
     for ( int i = 0; i < doc->getPages(); i++ )

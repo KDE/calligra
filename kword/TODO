@@ -8,7 +8,6 @@ Bugs; in order or importance:
 - When table cells are outside of the page (partly is enough) the table-redrawing screws.
 - Refuse to delete anchor.
 - When deleting table delete anchor
-- Revert resizing policy. Implement minimum size of frames.
 
 - Implement correct printing of floating tables.
 
@@ -41,6 +40,10 @@ Missing or incomplete stuff:
 - Toolbars in the settings menu are not updated if they are not shown/reshown
 - The borders dialog doesnt work (settings are not used)
 - runAroundGap does nothing
+- add table methods:
+   split cells
+   refit. (calc best width for every col)
+   
 
 
 cleanup:
@@ -52,9 +55,8 @@ cleanup:
 - char.h does a define "#define kwchar QChar", lets replace all kwchar with QChars in the sources..
 - load and save functions in frame and frameset are mixed up. Should move them to right position
   to save code duplication.
-- All enums should belong to a class, making it save for namespace clashes. Class::Enum-value 
+- All enums should belong to a class, making it safe for namespace clashes. Class::Enum-value 
   should be used everywhere
-- move KWPage::createResizeHandles and KWPage::removeResizeHandles to the frame class
 - A large portion of (at least page.cc) kword uses integets to store framesets and frames, using
   doc->getFrame(int) to retrieve the pointer.
   I would suggest using pointers there, and only storing the frame, since the frameset can be 
