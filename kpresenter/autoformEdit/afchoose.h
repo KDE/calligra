@@ -23,7 +23,6 @@
 #include <qtabdialog.h>
 #include <qwidget.h>
 #include <qlabel.h>
-#include <qstring.h>
 #include <qpushbutton.h>
 #include <qlistbox.h>
 #include <qlist.h>

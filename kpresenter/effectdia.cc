@@ -23,7 +23,6 @@
 #include "effectcmd.h"
 #include "kpobject.h"
 
-#include <qlabel.h>
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qcombobox.h>

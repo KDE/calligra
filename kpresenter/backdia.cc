@@ -26,7 +26,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qwidget.h>
-#include <qevent.h>
 #include <qpainter.h>
 #include <qcombobox.h>
 #include <qslider.h>

@@ -20,7 +20,6 @@
 #include "shadowdia.h"
 #include "shadowdia.moc"
 
-#include <kapp.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <qspinbox.h>

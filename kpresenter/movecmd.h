@@ -20,7 +20,6 @@
 #ifndef movecmd_h
 #define movecmd_h
 
-#include <qpoint.h>
 #include <qlist.h>
 #include <qpoint.h>
 

@@ -35,7 +35,6 @@
 #include <qhbox.h>
 #include <qpalette.h>
 #include <qlabel.h>
-#include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qspinbox.h>

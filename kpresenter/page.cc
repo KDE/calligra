@@ -40,7 +40,6 @@
 #include "page.moc"
 #include "kpresenter_view.h"
 #include "footer_header.h"
-#include "ktextobject.h"
 #include "qwmf.h"
 #include "kpobject.h"
 #include "kpbackground.h"

@@ -25,7 +25,6 @@
 #include <qwidget.h>
 #include <qcolor.h>
 #include <qlist.h>
-#include <qpixmap.h>
 #include <qpicture.h>
 #include <qvaluelist.h>
 

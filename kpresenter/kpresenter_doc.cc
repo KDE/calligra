@@ -429,7 +429,6 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
     if ( !_store )
 	return true;
 
-    //CORBA::String_var u = KURL( url() ).path().latin1();
     QMap< KPPixmapDataCollection::Key, QImage >::Iterator it = _pixmapCollection.getPixmapDataCollection().begin();
 
     int i = 0;
@@ -1107,7 +1106,6 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
 bool KPresenterDoc::completeLoading( KoStore* _store )
 {
     if ( _store ) {
-	// CORBA::String_var str = urlIntern.isEmpty() ? KURL( url() ).path().latin1() : urlIntern.latin1();
 	QString str = urlIntern.isEmpty() ? KURL( url() ).path() : urlIntern;
 	
 	QValueListIterator<KPPixmapDataCollection::Key> it = pixmapCollectionKeys.begin();
