@@ -30,6 +30,7 @@ class KoMainWindow;
 class KoView;
 class KarbonPart;
 class KIntNumInput;
+class VColor;
 class VColorSlider;
 
 class VColorDlg : public QDockWindow
@@ -37,14 +38,14 @@ class VColorDlg : public QDockWindow
 	Q_OBJECT
 
 public:
- 	 VColorDlg( KarbonPart* part, KoView* parent = 0L, const char* name = 0L );
+	 VColorDlg( KarbonPart* part, KoView* parent = 0L, const char* name = 0L );
   
 private:
-	QTabWidget* mTabWidget;
-	QWidget* mRGBWidget;
-	QWidget* mCMYKWidget;
-	KColorPatch* mRGBColorPreview;
-	KColorPatch* mCMYKColorPreview;
+	QTabWidget *mTabWidget;
+	QWidget *mRGBWidget;
+	QWidget *mCMYKWidget;
+	KColorPatch *mRGBColorPreview;
+	KColorPatch *mCMYKColorPreview;
 	QHButtonGroup *mRGBButtonGroup;
 	QHButtonGroup *mCMYKButtonGroup;
 	VColorSlider *mRedSlider;
@@ -54,16 +55,18 @@ private:
 	VColorSlider *mMagentaSlider;
 	VColorSlider *mYellowSlider;
 	VColorSlider *mBlackSlider;
-	KIntNumInput* mRGBOpacity;
-	KIntNumInput* mCMYKOpacity;
+	KIntNumInput *mRGBOpacity;
+	KIntNumInput *mCMYKOpacity;
 	enum ButtonChoice { Outline, Fill };
 	KarbonPart *m_part;
 	
 private slots:
 	void updateRGBColorPreview();
 	void updateCMYKColorPreview();
-	void buttonRGBClicked( int button_ID );
-	void buttonCMYKClicked( int button_ID );
+	void buttonClicked( int button_ID );
+
+protected:
+	VColor *m_Color;
 };
 
 #endif

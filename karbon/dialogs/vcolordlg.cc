@@ -76,7 +76,8 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	//Connections for Sliders
 	connect( mRedSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGBColorPreview() ) );
 	connect( mGreenSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGBColorPreview() ) );
-	connect( mBlueSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGBColorPreview() ) );
+	connect( mBlueSlider, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGBColorPreview() ) );                                                                                              
+	connect( mRGBOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateRGBColorPreview() ) );
 	
 	//Buttons
 	QPushButton *button;
@@ -90,7 +91,7 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	mTabWidget->addTab( mRGBWidget, i18n("RGB") );
 	
 	//Button Connections
-	connect( mRGBButtonGroup, SIGNAL( clicked ( int ) ), this, SLOT( buttonRGBClicked ( int ) ) );
+	connect( mRGBButtonGroup, SIGNAL( clicked ( int ) ), this, SLOT( buttonClicked ( int ) ) );
 	
 	/* ##### CMYK WIDGET ##### */
 	mCMYKWidget = new QWidget( mTabWidget );
@@ -122,6 +123,7 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	mCMYKOpacity = new KIntNumInput( 100, cogroupbox );
 	mCMYKOpacity->setRange( 0, 100, 1, true );
 	mainCMYKLayout->addWidget( cogroupbox, 2, 0 );
+	connect( mCMYKOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateCMYKColorPreview() ) );
 	
 	//Buttons
 	mCMYKButtonGroup = new QHButtonGroup( mCMYKWidget );
@@ -132,65 +134,50 @@ VColorDlg::VColorDlg( KarbonPart* part, KoView* parent, const char* /*name*/ )
 	mainCMYKLayout->addWidget( mCMYKButtonGroup, 3, 0 );
 	
 	//Button Connections
-	connect( mCMYKButtonGroup, SIGNAL( clicked ( int ) ), this, SLOT( buttonCMYKClicked ( int ) ) );
+	connect( mCMYKButtonGroup, SIGNAL( clicked ( int ) ), this, SLOT( buttonClicked ( int ) ) );
 	
 	mainCMYKLayout->activate();
 	mTabWidget->addTab( mCMYKWidget, i18n("CMYK") );
 	
 	setWidget( mTabWidget );
+	
+	m_Color = new VColor();
 }
 
 void VColorDlg::updateRGBColorPreview()
 {
-	QColor color( mRedSlider->value(), mGreenSlider->value(), mBlueSlider->value() );
-	mRGBColorPreview->setColor( color );
+	float r = mRedSlider->value() / 255.0, g = mGreenSlider->value() / 255.0, b = mBlueSlider->value() / 255.0;
+	float op = mRGBOpacity->value() / 100.0;
+	m_Color->setColorSpace( VColor::rgb );
+	m_Color->setValues( &r, &g, &b, 0L );
+	m_Color->setOpacity( op );
+	mRGBColorPreview->setColor( m_Color->toQColor() );
 }
 
 void VColorDlg::updateCMYKColorPreview()
 {
-	/*QColor color( mRedSlider->value(), mGreenSlider->value(), mBlueSlider->value() );
-	mRGBColorPreview->setColor( color );*/
+	float c = mCyanSlider->value() / 100.0, m = mMagentaSlider->value() / 100.0, y = mYellowSlider->value() / 100.0;
+	float k = mBlackSlider->value() / 100.0;
+	float op = mCMYKOpacity->value() / 100.0;
+	m_Color->setColorSpace( VColor::cmyk );
+	m_Color->setValues( &c, &m, &y, &k );
+	m_Color->setOpacity( op );
+	// TODO: Create preview of CMYK color (VColor::toQColor() doesn't suppor this yet)
+	mCMYKColorPreview->setColor( m_Color->toQColor() );
 }
 
-void VColorDlg::buttonRGBClicked( int button_ID )
+void VColorDlg::buttonClicked( int button_ID )
 {
-	VColor color;
-	
-	float r = mRedSlider->value() / 255.0, g = mGreenSlider->value() / 255.0, b = mBlueSlider->value() / 255.0;
-	float op = mRGBOpacity->value() / 100.0;
-	color.setValues( &r, &g, &b, 0L );
-	color.setOpacity( op );
 	switch( button_ID ) {
 	case Fill:
 		if( m_part )
-		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( color ) ), true );
+		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( *m_Color ) ), true );
 		break;
 	case Outline:
 		if( m_part )
-		m_part->addCommand( new VStrokeColorCmd( &m_part->document(), &color ), true );
+		m_part->addCommand( new VStrokeColorCmd( &m_part->document(), m_Color ), true );
 		break;
 	}
-
-}
-
-void VColorDlg::buttonCMYKClicked( int button_ID )
-{
-	/*VColor color;
-	
-	float r = mRedSlider->value() / 255.0, g = mGreenSlider->value() / 255.0, b = mBlueSlider->value() / 255.0;
-	float op = mRGBOpacity->value() / 100.0;
-	color.setValues( &r, &g, &b, 0L );
-	color.setOpacity( op );
-	switch( button_ID ) {
-	case Fill:
-		if( m_part )
-		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( color ) ), true );
-		break;
-	case Outline:
-		if( m_part )
-		m_part->addCommand( new VStrokeColorCmd( &m_part->document(), &color ), true );
-		break;
-	}*/
 }
 
 #include "vcolordlg.moc"
