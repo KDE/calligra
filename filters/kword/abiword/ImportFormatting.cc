@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include "ImportFormatting.h"
+#include "ImportStyle.h"
 
 StackItem::StackItem() : fontSize(0), /* No explicit font size */
     pos(0), italic(false), bold(false), underline(false), strikeout(false),
@@ -61,10 +62,11 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
         }
     }
 
-    kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
     // Style goes first
+    kdDebug(30506)<< "===== from style=\"" << strStyleProps << "\"" << endl;
     abiPropsMap.splitAndAddAbiProps(strStyleProps);
     // Treat the props attributes in the two available flavors: lower case and upper case.
+    kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
     abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
     abiPropsMap.splitAndAddAbiProps(attributes.value("PROPS")); // PROPS is deprecated
 
@@ -146,7 +148,7 @@ void AddFormat(QDomElement& formatElementOut, StackItem* stackItem, QDomDocument
     element=mainDocument.createElement("WEIGHT");
     element.setAttribute("value",stackItem->bold?75:50);
     formatElementOut.appendChild(element); //Append to <FORMAT>
-    
+
     element=mainDocument.createElement("UNDERLINE");
     element.setAttribute("value",stackItem->underline?1:0);
     formatElementOut.appendChild(element); //Append to <FORMAT>
@@ -179,4 +181,145 @@ void AddFormat(QDomElement& formatElementOut, StackItem* stackItem, QDomDocument
         element.setAttribute("blue", stackItem->bgColor.blue());
         formatElementOut.appendChild(element); //Append to <FORMAT>
     }
+}
+
+void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
+    StackItem* stackItem, QDomDocument& mainDocument,
+    const AbiPropsMap& abiPropsMap)
+{
+    QDomElement element;
+    element=mainDocument.createElement("NAME");
+    element.setAttribute("value",strStyleName);
+    layoutElement.appendChild(element);
+
+    element=mainDocument.createElement("FOLLOWING");
+    element.setAttribute("value","Standard"); // TODO: would be "Normal" better?
+    layoutElement.appendChild(element);
+
+    QString strFlow=abiPropsMap["text-align"].getValue();
+    element=mainDocument.createElement("FLOW");
+    if ((strFlow=="left") || (strFlow=="center") || (strFlow=="right") || (strFlow=="justify"))
+    {
+        element.setAttribute("align",strFlow);
+    }
+    else
+    {
+        element.setAttribute("align","left");
+    }
+    layoutElement.appendChild(element);
+
+    QString strLeftMargin=abiPropsMap["margin-left"].getValue();
+    QString strRightMargin=abiPropsMap["margin-right"].getValue();
+    QString strTextIndent=abiPropsMap["text-indent"].getValue();
+
+    if ( !strLeftMargin.isEmpty()
+        || !strRightMargin.isEmpty()
+        || !strTextIndent.isEmpty() )
+    {
+        element=mainDocument.createElement("INDENTS");
+        if (!strLeftMargin.isEmpty())
+            element.setAttribute("left",ValueWithLengthUnit(strLeftMargin));
+        if (!strRightMargin.isEmpty())
+            element.setAttribute("right",ValueWithLengthUnit(strRightMargin));
+        if (!strTextIndent.isEmpty())
+            element.setAttribute("first",ValueWithLengthUnit(strTextIndent));
+        layoutElement.appendChild(element);
+    }
+
+    QString strTopMargin=abiPropsMap["margin-top"].getValue();
+    QString strBottomMargin=abiPropsMap["margin-bottom"].getValue();
+    if (!strTopMargin.isEmpty() || !strBottomMargin.isEmpty() )
+    {
+        element=mainDocument.createElement("OFFSETS");
+        const double margin_top=ValueWithLengthUnit(strTopMargin);
+        const double margin_bottom=ValueWithLengthUnit(strTopMargin);
+        // Zero is propably a valid value!
+        if (!strBottomMargin.isEmpty())
+            element.setAttribute("after",margin_bottom);
+        if (!strTopMargin.isEmpty())
+            element.setAttribute("before",margin_top);
+        layoutElement.appendChild(element);
+    }
+
+    QString strLineHeight=abiPropsMap["line-height"].getValue();
+    if(!strLineHeight.isEmpty())
+    {
+        element=mainDocument.createElement("LINESPACING");
+        double lineHeight;
+        // Do we have a unit symbol or not?
+        bool flag=false;
+        lineHeight=strLineHeight.toDouble(&flag);
+
+        if (flag)
+        {
+            if (lineHeight==1.5)
+            {
+                element.setAttribute("value","oneandhalf");
+            }
+            else if (lineHeight==2.0)
+            {
+                element.setAttribute("value","double");
+            }
+            else if (lineHeight!=1.0)
+            {
+                kdWarning(30506) << "Unsupported line height " << lineHeight << " (Ignoring !)" << endl;
+            }
+        }
+        else
+        {
+            // Something went wrong, so we assume that an unit is specified
+            lineHeight=ValueWithLengthUnit(strLineHeight);
+            if (lineHeight>1.0)
+            {
+                // We have a meaningful value, so use it!
+                element.setAttribute("value",lineHeight);
+            }
+        }
+        layoutElement.appendChild(element);
+    }
+
+    QString strTab=abiPropsMap["tabstops"].getValue();
+    if(!strTab.isEmpty())
+    {
+        QStringList listTab=QStringList::split(",",strTab);
+        for ( QStringList::Iterator it = listTab.begin(); it != listTab.end(); ++it )
+        {
+            QStringList tab=QStringList::split("/",*it);
+            int type;
+            if(tab[1]=="L0")
+                type=0;
+            else if(tab[1]=="C0")
+                type=1;
+            else if(tab[1]=="R0")
+                type=2;
+            else if(tab[1]=="D0")
+                type=3;
+            else
+                type=0;
+            element=mainDocument.createElement("TABULATOR");
+            element.setAttribute("ptpos",ValueWithLengthUnit(tab[0]));
+            element.setAttribute("type",type);
+            layoutElement.appendChild(element);
+        }
+    }
+
+    QDomElement formatElementOut=mainDocument.createElement("FORMAT");
+    layoutElement.appendChild(formatElementOut);
+
+    AddFormat(formatElementOut, stackItem, mainDocument);
+}
+
+void AddStyle(QDomElement& styleElement, const QString& strStyleName,
+    const StyleData& styleData, QDomDocument& mainDocument)
+{
+    // NOTE; styleElement is <STYLE> (singular, not <STYLES> (plural)
+
+    StackItem stackItem;
+    QXmlAttributes attributes; // This is just a dummy for reusing already existing functions (TODO)
+    AbiPropsMap abiPropsMap;
+
+    PopulateProperties(&stackItem, styleData.m_props, attributes, abiPropsMap, false);
+
+    // TODO: level is missing!
+    AddLayout(strStyleName, styleElement, &stackItem, mainDocument, abiPropsMap);
 }

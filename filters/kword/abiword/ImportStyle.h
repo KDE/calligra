@@ -42,6 +42,8 @@ public:
 public:
     void defineNewStyle(const QString& strName, const int level, const QString& strProps);
     StyleDataMap::Iterator useOrCreateStyle(const QString& strName);
+private:
+    QString getDefaultStyle(void);
 };
 
 #endif // _IMPORT_STYLE_H

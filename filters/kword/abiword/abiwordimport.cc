@@ -175,127 +175,8 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
     QDomElement layoutElement=mainDocument.createElement("LAYOUT");
     paragraphElementOut.appendChild(layoutElement);
 
-    QDomElement element;
-    element=mainDocument.createElement("NAME");
-    element.setAttribute("value","Standard");
-    layoutElement.appendChild(element);
-
-    element=mainDocument.createElement("FOLLOWING");
-    element.setAttribute("value","Standard");
-    layoutElement.appendChild(element);
-
-    QString strFlow=abiPropsMap["text-align"].getValue();
-    element=mainDocument.createElement("FLOW");
-    if ((strFlow=="left") || (strFlow=="center") || (strFlow=="right") || (strFlow=="justify"))
-    {
-        element.setAttribute("align",strFlow);
-    }
-    else
-    {
-        element.setAttribute("align","left");
-    }
-    layoutElement.appendChild(element);
-
-    QString strLeftMargin=abiPropsMap["margin-left"].getValue();
-    QString strRightMargin=abiPropsMap["margin-right"].getValue();
-    QString strTextIndent=abiPropsMap["text-indent"].getValue();
-
-    if ( !strLeftMargin.isEmpty()
-        || !strRightMargin.isEmpty()
-        || !strTextIndent.isEmpty() )
-    {
-        element=mainDocument.createElement("INDENTS");
-        if (!strLeftMargin.isEmpty())
-            element.setAttribute("left",ValueWithLengthUnit(strLeftMargin));
-        if (!strRightMargin.isEmpty())
-            element.setAttribute("right",ValueWithLengthUnit(strRightMargin));
-        if (!strTextIndent.isEmpty())
-            element.setAttribute("first",ValueWithLengthUnit(strTextIndent));
-        layoutElement.appendChild(element);
-    }
-
-    QString strTopMargin=abiPropsMap["margin-top"].getValue();
-    QString strBottomMargin=abiPropsMap["margin-bottom"].getValue();
-    if (!strTopMargin.isEmpty() || !strBottomMargin.isEmpty() )
-    {
-        element=mainDocument.createElement("OFFSETS");
-        const double margin_top=ValueWithLengthUnit(strTopMargin);
-        const double margin_bottom=ValueWithLengthUnit(strTopMargin);
-        // Zero is propably a valid value!
-        if (!strBottomMargin.isEmpty())
-            element.setAttribute("after",margin_bottom);
-        if (!strTopMargin.isEmpty())
-            element.setAttribute("before",margin_top);
-        layoutElement.appendChild(element);
-    }
-
-    QString strLineHeight=abiPropsMap["line-height"].getValue();
-    if(!strLineHeight.isEmpty())
-    {
-        element=mainDocument.createElement("LINESPACING");
-        double lineHeight;
-        // Do we have a unit symbol or not?
-        bool flag=false;
-        lineHeight=strLineHeight.toDouble(&flag);
-
-        if (flag)
-        {
-            if (lineHeight==1.5)
-            {
-                element.setAttribute("value","oneandhalf");
-            }
-            else if (lineHeight==2.0)
-            {
-                element.setAttribute("value","double");
-            }
-            else if (lineHeight!=1.0)
-            {
-                kdWarning(30506) << "Unsupported line height " << lineHeight << " (Ignoring !)" << endl;
-            }
-        }
-        else
-        {
-            // Soemthing went wrong, so we assume that an unit is specified
-            lineHeight=ValueWithLengthUnit(strLineHeight);
-            if (lineHeight>1.0)
-            {
-                // We have a meaningful value, so use it!
-                element.setAttribute("value",lineHeight);
-            }
-        }
-        layoutElement.appendChild(element);
-    }
-
-    QString strTab=abiPropsMap["tabstops"].getValue();
-    if(!strTab.isEmpty())
-    {
-        QStringList listTab=QStringList::split(",",strTab);
-        for ( QStringList::Iterator it = listTab.begin(); it != listTab.end(); ++it )
-        {
-            QStringList tab=QStringList::split("/",*it);
-            int type;
-            if(tab[1]=="L0")
-                type=0;
-            else if(tab[1]=="C0")
-                type=1;
-            else if(tab[1]=="R0")
-                type=2;
-            else if(tab[1]=="D0")
-                type=3;
-            else
-                type=0;
-            element=mainDocument.createElement("TABULATOR");
-            element.setAttribute("ptpos",ValueWithLengthUnit(tab[0]));
-            element.setAttribute("type",type);
-            layoutElement.appendChild(element);
-        }
-    }
-
-    QDomElement formatElementOut=mainDocument.createElement("FORMAT");
-    layoutElement.appendChild(formatElementOut);
-
-    AddFormat(formatElementOut, stackItem, mainDocument);
-
+    AddLayout("Standard",layoutElement, stackItem, mainDocument, abiPropsMap);
+    
     return true;
 }
 
@@ -348,7 +229,7 @@ bool StartElementField(StackItem* stackItem, StackItem* stackCurrent, const QXml
 
 bool charactersElementField (StackItem* stackItem, QDomDocument& mainDocument, const QString & ch)
 {
-//todo
+// TODO
     return true;
 }
 
@@ -863,15 +744,47 @@ bool StructureParser::startDocument(void)
 bool StructureParser::endDocument(void)
 {
     // TODO: put styles in the KWord document.
-#if 1
-    kdDebug(30506) << "=== Start Style List ===" << endl;
+    QDomElement stylesPluralElement=mainDocument.createElement("STYLES");
+    mainDocument.documentElement().appendChild(stylesPluralElement);
+
+    kdDebug(30506) << "###### Start Style List ######" << endl;
     StyleDataMap::ConstIterator it;
-    for (it=styleDataMap.begin();it!=styleDataMap.end();it++)
+    
+#if 0
+    // At first, we must get "Standard", as it is the base for <FOLLOWING>
+
+    it=styleDataMap.find("Standard");
+    if (it==styleDataMap.end())
+    {
+        kdWarning(30506) << "Standard style not found!" << endl;
+    }
+    else
     {
         kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
+
+        QDomElement styleElement=mainDocument.createElement("STYLE");
+        stylesPluralElement.appendChild(styleElement);
+
+        AddStyle(styleElement, it.key(),it.data(),mainDocument);
     }
-    kdDebug(30506) << "===  End Style List  ===" << endl;
 #endif
+
+    for (it=styleDataMap.begin();it!=styleDataMap.end();it++)
+    {
+#if 0
+        if (it.key()=="Standard")
+            continue; // We have already done "Standard"
+#endif
+
+        kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
+
+        QDomElement styleElement=mainDocument.createElement("STYLE");
+        stylesPluralElement.appendChild(styleElement);
+
+        AddStyle(styleElement, it.key(),it.data(),mainDocument);
+    }
+    kdDebug(30506) << "######  End Style List  ######" << endl;
+
     return true;
 }
 
@@ -1062,7 +975,7 @@ bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     out.write(strOut,strOut.length());
     out.close();
 
-#if 0
+#if 1
     kdDebug(30506) << qDomDocumentOut.toString();
 #endif
 

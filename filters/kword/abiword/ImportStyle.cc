@@ -19,6 +19,10 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qfont.h>
+
+#include <koGlobal.h>
+
 #include "ImportStyle.h"
 
 StyleData::StyleData(void): m_level(-1)
@@ -29,11 +33,38 @@ StyleDataMap::StyleDataMap(void)
 {
 }
 
+QString StyleDataMap::getDefaultStyle(void)
+{
+    QFont font=KoGlobal::defaultFont();
+    int size=font.pointSize();
+    if (-1==size)
+    {
+        // I am sick of this problem: QFont::pointSize() == -1
+        //   So I am lazy and do not do any conversion (TODO)
+        size=font.pixelSize();
+    }
+
+    QString strReturn;
+
+    // As something is upsetting KWord's style manager, we must define everything!
+    strReturn += "font-family:";
+    strReturn += font.family();
+    strReturn += "; font-size:";
+    strReturn += QString::number(size);
+    strReturn += "pt;";
+
+    //strReturn += "font-style:normal; font-weight:normal; text-decoration:none; color:000000; bgcolor: FFFFFF;";
+    
+    // Note: the last property must have a semi-colon!
+
+    return strReturn;
+}
+
 void StyleDataMap::defineNewStyle(const QString& strName, const int level,
     const QString& strProps)
 {
     // Despite its name, this method can be called multiple times
-    // We must take care that it is still "stable" after that.
+    // We must take care that KWord just gets it only one time.
     StyleDataMap::Iterator it=find(strName);
     if (it==end())
     {
@@ -42,6 +73,8 @@ void StyleDataMap::defineNewStyle(const QString& strName, const int level,
     }
     StyleData& styleData=it.data();
     styleData.m_level=level;
+    // We must add the default style, as KWord's style manager is sensitive
+    styleData.m_props+=getDefaultStyle();
     styleData.m_props+=strProps;
     styleData.m_props+=";"; // Security if other properties are appended later
 }
@@ -55,7 +88,8 @@ StyleDataMap::Iterator StyleDataMap::useOrCreateStyle(const QString& strName)
         // The style is not yet defined!
         StyleData data;
         data.m_level=-1;
-        data.m_props=QString::null;
+        // We must add the default style, as KWord's style manager is sensitive
+        data.m_props=getDefaultStyle();
         it=insert(strName,data);
     }
     return it;

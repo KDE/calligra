@@ -78,11 +78,18 @@ public:
         virtual ~StackItemStack(void) { }
 };
 
+class StyleData;
+
 void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
     const QXmlAttributes& attributes, AbiPropsMap& abiPropsMap,
     const bool allowInit);
 void AddFormat(QDomElement& formatElementOut, StackItem* stackItem,
     QDomDocument& mainDocument);
+void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
+    StackItem* stackItem, QDomDocument& mainDocument,
+    const AbiPropsMap& abiPropsMap);
+void AddStyle(QDomElement& styleElement, const QString& strStyleName,
+    const StyleData& styleData, QDomDocument& mainDocument);
 
 
 #endif // _IMPORT_FORMATTING_H
