@@ -1207,6 +1207,7 @@ void KPresenterView::textColor()
     {
 	OpenPartsUI::Pixmap pix;
 	pix.data = CORBA::string_dup( colorToPixString( tbColor ) );
+	pix.onlyFilename = false;
 	m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
 	page->setTextColor( &tbColor );
     }
@@ -1983,6 +1984,7 @@ void KPresenterView::colorChanged( QColor* color )
     {
 	OpenPartsUI::Pixmap pix;
 	pix.data = CORBA::string_dup( colorToPixString( color->rgb() ) );
+	pix.onlyFilename = false;
 
 	tbColor.setRgb( color->rgb() );
 	m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
@@ -3422,6 +3424,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
     // color
     OpenPartsUI::Pixmap* p = new OpenPartsUI::Pixmap;
     p->data = CORBA::string_dup( colorToPixString( black ) );
+    p->onlyFilename = false;
     pix = p;
     toolTip = Q2C( i18n( "Color" ) );
     m_idButtonText_Color = m_vToolBarText->insertButton2( pix, ID_TEXT_COLOR, SIGNAL( clicked() ), this, "textColor", true, toolTip, -1 );
