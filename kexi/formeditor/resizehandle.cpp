@@ -107,7 +107,9 @@ namespace KFormDesigner {
 	void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 	{
 //		int m_dotSpacing=WidgetContainer::dotSpacing();
+#ifndef Q_WS_WIN
 		#warning FIXME
+#endif
 		int m_dotSpacing=10;
 		if (!m_dragging) return;
 

@@ -39,8 +39,8 @@
 #include <qobjectlist.h>
 
 #include "widgetcontainer.h"
-#include "resizehandle.h"
 #include "containerIface.h"
+#include "resizehandle.h"
 
 namespace KFormEditor {
 
@@ -337,13 +337,13 @@ namespace KFormEditor {
 
 		if (!m_resizeHandleSet)
 		{
-			m_resizeHandleSet=new ResizeHandleSet(m_activeWidget);
+			m_resizeHandleSet=new KFormDesigner::ResizeHandleSet(m_activeWidget);
 			return;
 		}
 		if (m_resizeHandleSet &&(m_resizeHandleSet->widget()!=m_activeWidget))
 		{
 			delete m_resizeHandleSet;
-			m_resizeHandleSet=new ResizeHandleSet(m_activeWidget);
+			m_resizeHandleSet=new KFormDesigner::ResizeHandleSet(m_activeWidget);
 		}
 
 	}

@@ -30,12 +30,13 @@
   *@author lucijan busch
   */
 
-
+namespace KFormDesigner
+{
+	class ResizeHandleSet;
+};
 
 namespace KFormEditor
 {
-
-	class ResizeHandleSet;
 
 	class KFORMEDITOR_EXPORT WidgetContainer : public QWidget
 	{
@@ -91,7 +92,7 @@ namespace KFormEditor
 
 			QWidget *m_activeWidget;
 			QWidget *m_activeMoveWidget;
-			ResizeHandleSet *m_resizeHandleSet;
+			KFormDesigner::ResizeHandleSet *m_resizeHandleSet;
 			WidgetContainer *m_topLevelContainer;
 
 		private:
