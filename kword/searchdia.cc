@@ -711,7 +711,7 @@ void KWSearchDia::slotFamily( const QString & family )
     searchEntry->family = qstrdup( family );
     view->setSearchEntry( searchEntry );
 
-    QFont f = QFont( KGlobal::generalFont() );
+    QFont f = QFont( KGlobalSettings::generalFont() );
     f.setFamily( qstrdup( family ) );
     eSearch->setFont( f );
 }
@@ -850,7 +850,7 @@ void KWSearchDia::replaceAll()
 
         if ( replace && cAsk->isChecked() )
         {
-            int result = KMessageBox::warningYesNoCancel( this, 
+            int result = KMessageBox::warningYesNoCancel( this,
             			i18n( "Replace selected text?" ),
             			i18n( "Replace" ),
 				i18n( "&Replace" ), i18n( "&Skip" ) );
@@ -860,7 +860,7 @@ void KWSearchDia::replaceAll()
 	       // Cancel
 	       break;
 	    }
-	       
+	
 	    if (result == KMessageBox::No)
 	    {
 	        // Skip
@@ -895,7 +895,7 @@ void KWSearchDia::rslotCheckFamily()
     else
     {
         rcmFamily->setEnabled( false );
-        eReplace->setFont( KGlobal::generalFont() );
+        eReplace->setFont( KGlobalSettings::generalFont() );
     }
 }
 
@@ -983,7 +983,7 @@ void KWSearchDia::rslotFamily( const QString & family )
     replaceEntry->family = qstrdup( family );
     view->setReplaceEntry( replaceEntry );
 
-    QFont f = QFont( KGlobal::generalFont() );
+    QFont f = QFont( KGlobalSettings::generalFont() );
     f.setFamily( qstrdup( family ) );
     eReplace->setFont( f );
 }
