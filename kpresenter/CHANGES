@@ -145,4 +145,4 @@ Changes after KPresenter 1.2
 - Use new kospell API
 - Allow to copy/paste image/embedded object from different kpresenter app, thanks to David to implement koStoreDrag
 - Now right button gives spell check result
-
+- Transition effect dialog (with preview)
