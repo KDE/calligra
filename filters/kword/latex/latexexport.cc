@@ -29,7 +29,7 @@
 
 
 typedef KGenericFactory<LATEXExport, KoFilter> LATEXExportFactory;
-K_EXPORT_COMPONENT_FACTORY( liblatexexport, LATEXExportFactory( "latexexport" ) );
+K_EXPORT_COMPONENT_FACTORY( liblatexexport, LATEXExportFactory( "kwordlatexfilter" ) );
 
 
 LATEXExport::LATEXExport(KoFilter *, const char *, const QStringList&) :

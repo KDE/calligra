@@ -35,7 +35,7 @@
 #include <math.h>
 
 typedef KGenericFactory<APPLIXGRAPHICImport, KoFilter> APPLIXGRAPHICImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libapplixgraphicimport, APPLIXGRAPHICImportFactory( "applixgraphicimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libapplixgraphicimport, APPLIXGRAPHICImportFactory( "kontourapplixgraphicsfilter" ) );
 
 
 /******************************************************************************

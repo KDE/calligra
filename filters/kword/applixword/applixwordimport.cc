@@ -33,7 +33,7 @@
 #include <kgenericfactory.h>
 
 typedef KGenericFactory<APPLIXWORDImport, KoFilter> APPLIXWORDImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libapplixwordimport, APPLIXWORDImportFactory( "applixwordimport" ) );
+K_EXPORT_COMPONENT_FACTORY( libapplixwordimport, APPLIXWORDImportFactory( "applixwordfilter" ) );
 
 
 /******************************************************************************
