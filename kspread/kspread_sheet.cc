@@ -2534,17 +2534,17 @@ void KSpreadSheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                   && col >= pos.x()     // Column after the new one : +1
                   && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
               {
-                newPoint += util_encodeColumnLabelText( col + nbCol );
+                newPoint += KSpreadCell::columnName( col + nbCol );
               }
               else if( ref == ColumnRemove
                        && correctTableName
                        && col > pos.x() // Column after the deleted one : -1
                        && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
               {
-                newPoint += util_encodeColumnLabelText( col - nbCol );
+                newPoint += KSpreadCell::columnName( col - nbCol );
               }
               else
-                newPoint += util_encodeColumnLabelText( col );
+                newPoint += KSpreadCell::columnName( col );
 
               // Update row
               if ( point.rowFixed )
