@@ -95,7 +95,7 @@ Filter::Filter()
 void Filter::filter( KOffice::Filter::Data& data, const char *_from, const char *_to )
 {
     if ( QString( _to ) == "application/x-kword" &&
-         QString( _from ) == "text/html" ) 
+         QString( _from ) == "text/html" )
     {
         CORBA::ULong len = data.length();
         if (len == 0)
@@ -123,6 +123,8 @@ void Filter::filter( KOffice::Filter::Data& data, const char *_from, const char 
         str += "<PARAGRAPH>\n";
         str += "<TEXT>";
 
+        bool add = true;
+        
         for ( CORBA::ULong i = 0 ;i < len ; ++i )
         {
             QChar c = buffer[ i ];
@@ -134,10 +136,10 @@ void Filter::filter( KOffice::Filter::Data& data, const char *_from, const char 
                 str += "<TEXT>";
             }
             else if ( c == QChar( '<' ) )
-                str += "&lt;";
+                add = false;
             else if ( c == QChar( '>' ) )
-                str += "&gt;";
-            else
+                add = true;
+            else if ( add )
                 str += c;
         }
 
@@ -157,7 +159,7 @@ void Filter::filter( KOffice::Filter::Data& data, const char *_from, const char 
         delete[] buffer;
     }
     else if ( QString( _from ) == "application/x-kword" &&
-              QString( _to ) == "text/html") 
+              QString( _to ) == "text/html")
     {
         CORBA::ULong len = data.length();
         if (len == 0)
@@ -171,17 +173,17 @@ void Filter::filter( KOffice::Filter::Data& data, const char *_from, const char 
         QString buf( buffer );
         int begin = buf.find( "<DOC" );
         buf.remove( 0, begin - 1 );
-        
+
         mainFunc( buf.latin1() );
-        
+
         QFile f( "/tmp/kword2html" );
         if ( !f.open( IO_ReadOnly ) )
             return;
-                
+
         QTextStream s( &f );
         QString str = s.read();
         f.close();
-        
+
         data.length( str.length() );
         for ( CORBA::ULong i = 0; i < len; ++i )
             data[ i ] = QChar( str[ i ] );
