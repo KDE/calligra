@@ -1315,7 +1315,7 @@ void KPTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted, 
 KCommand * KPTextObject::textContentsToHeight()
 {
     KoTextParag * parag = m_textobj->textDocument()->lastParag();
-    double txtHeight = m_doc->zoomHandler()->unzoomItY( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().bottom() ));
+    double txtHeight = m_doc->zoomHandler()->unzoomItY( m_doc->zoomHandler()->layoutUnitToPixelY( parag->rect().bottom() ))+btop+bbottom;
     if( getRect().height()> txtHeight )
     {
         m_doc->repaint(this);
@@ -1340,14 +1340,14 @@ KCommand * KPTextObject::textObjectToContents()
     if( getRect().height()> txtHeight )
     {
         m_doc->repaint(this);
-        KoSize size= KoSize(m_doc->zoomHandler()->unzoomItX(widthTxt), txtHeight ) - getRect().size();
+        KoSize size= KoSize(m_doc->zoomHandler()->unzoomItX(widthTxt), txtHeight ) - innerRect().size();
         ResizeCmd *cmd = new ResizeCmd( i18n("Resize Text Contents to Height"), KoPoint( 0,0), size, this, m_doc);
         return cmd;
     }
     else
     {
         m_doc->repaint(this);
-        KoSize size= KoSize(m_doc->zoomHandler()->unzoomItX(widthTxt), getRect().height()) - getRect().size();
+        KoSize size= KoSize(m_doc->zoomHandler()->unzoomItX(widthTxt), getRect().height()) - innerRect().size();
         ResizeCmd *cmd = new ResizeCmd( i18n("Resize Text Contents to Height"), KoPoint( 0,0), size, this, m_doc);
         return cmd;
     }
