@@ -130,7 +130,8 @@ AC_TRY_COMPILE([
 #error KDE 3.1
 #endif
 ],
-[],
+[
+],
 	old_kde_version="no"
 	AC_MSG_RESULT(yes)
 ,
