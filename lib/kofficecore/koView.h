@@ -300,6 +300,9 @@ public slots:
 
     virtual void newView();
 
+    void slotActionStatusText( const QString &text );
+    void slotClearStatusText();
+
 protected:
   /**
    * This method handles two events: @ref KParts::PartActivateEvent and @ref KParts::PartSelectEvent.

@@ -120,8 +120,19 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
   QValueList<KAction*> docActions = document->actionCollection()->actions();
   QValueList<KAction*>::ConstIterator it = docActions.begin();
   QValueList<KAction*>::ConstIterator end = docActions.end();
+  KActionCollection *coll = actionCollection();
   for (; it != end; ++it )
-    actionCollection()->insert( *it );
+    coll->insert( *it );
+
+  KStatusBar * sb = statusBar();
+  if ( sb ) // No statusbar in e.g. konqueror
+  {
+      coll->setHighlightingEnabled( true );
+      connect( coll, SIGNAL( actionStatusText( const QString & ) ),
+               this, SLOT( slotActionStatusText( const QString & ) ) );
+      connect( coll, SIGNAL( clearStatusText() ),
+               this, SLOT( slotClearStatusText() ) );
+  }
 }
 
 KoView::~KoView()
@@ -551,6 +562,20 @@ KStatusBar * KoView::statusBar() const
 {
     KoMainWindow *mw = shell();
     return mw ? mw->statusBar() : 0L;
+}
+
+void KoView::slotActionStatusText( const QString &text )
+{
+  KStatusBar *sb = statusBar();
+  if ( sb )
+      sb->message( text );
+}
+
+void KoView::slotClearStatusText()
+{
+  KStatusBar *sb = statusBar();
+  if ( sb )
+      sb->clear();
 }
 
 DCOPObject *KoView::dcopObject()
