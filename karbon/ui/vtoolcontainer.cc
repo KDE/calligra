@@ -10,7 +10,7 @@
 #include "vtoolcontainer.h"
 
 VToolContainer::VToolContainer( const QString& text, QObject* parent, const char* name )
-	: KAction( text, 0L, parent, name )
+	: KAction( text, 0, NULL, NULL, parent, name ) //changed this line to make it compile with most recent kdelibs. REVIEW!!!
 {
 }
 
