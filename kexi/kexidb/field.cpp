@@ -25,7 +25,9 @@
 #include <kexidb/driver.h>
 #include <kexidb/expression.h>
 
+// we use here I18N_NOOP() but this depends on kde libs: TODO: add #ifdefs
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <qdatetime.h>
 
@@ -82,8 +84,7 @@ Field::Field(const QString& name, Type ctype,
 	}
 }
 
-QVariant::Type
-Field::variantType(Type type)
+QVariant::Type Field::variantType(int type)
 {
 	switch(type)
 	{
@@ -121,49 +122,37 @@ Field::~Field() {
 	delete m_expr;
 }
 
-
-// ** NOTE: we'd like use here I18N_NOOP() but this depends on kde libs!...
-QString
-Field::typeName(Type type)
+class Field::FieldTypeNames : public QValueVector<QString>
 {
+public:
+	FieldTypeNames() : QValueVector<QString>()
+	{
+		resize(Field::LastType + 1);
+		this->at(Field::Byte) = I18N_NOOP("Byte");
+		this->at(Field::ShortInteger) = I18N_NOOP("Short integer number");
+		this->at(Field::Integer) = I18N_NOOP("Integer number");
+		this->at(Field::BigInteger) = I18N_NOOP("Big integer number");
+//		this->at(Field::AutoIncrement) = I18N_NOOP("Auto increment number");
+		this->at(Field::Boolean) = I18N_NOOP("True/false value");
+		this->at(Field::Date) = I18N_NOOP("Date");
+		this->at(Field::DateTime) = I18N_NOOP("Date with time");
+		this->at(Field::Time) = I18N_NOOP("Time");
+		this->at(Field::Float) = I18N_NOOP("Single precision number");
+		this->at(Field::Double) = I18N_NOOP("Double precision number");
+		this->at(Field::Text) = I18N_NOOP("Text");
+		this->at(Field::LongText) = I18N_NOOP("Long text");
+		this->at(Field::BLOB) = I18N_NOOP("Object");
+	}
+};
+
+Field::FieldTypeNames Field::m_typeNames;
+
+QString Field::typeName(int type)
+{
+	return m_typeNames.at(type);
+#if 0	
 	switch(type)
 	{
-/*		case SQLLongVarchar:
-			return "Long Varchar";
-		case SQLVarchar:
-			return "Varchar";
-		case SQLInteger:
-			return "Integer";
-		case SQLSmallInt:
-			return "Small Integer";
-		case SQLTinyInt:
-			return "Tiny Integer";
-		case SQLNumeric:
-			return "Numeric";
-		case SQLDouble:
-			return "Double";
-		case SQLBigInt:
-			return "Big Integer";
-		case SQLDecimal:
-			return "Decimal";
-		case SQLFloat:
-			return "Float";
-		case SQLBinary:
-			return "Binary";
-		case SQLLongVarBinary:
-			return "Long Var Binary";
-		case SQLVarBinary:
-			return "Var Binary";
-		case SQLDate:
-			return "Date";
-		case SQLTime:
-			return "Time";
-		case SQLTimeStamp:
-			return "Time Stamp";
-		case SQLBoolean:
-			return "Bool";
-		case SQLInterval:
-			return "Interval";*/
 		case Byte:
 			return "Byte";
 		case ShortInteger:
@@ -196,6 +185,42 @@ Field::typeName(Type type)
 			;
 	}
 	return QString::null;
+#endif
+}
+
+bool Field::isNumericType() const
+{
+	return Field::isNumericType(m_type);
+}
+	
+bool Field::isNumericType( int type )
+{
+	switch (type) {
+	case Field::ShortInteger:
+	case Field::Integer:
+	case Field::BigInteger:
+	case Field::Float:
+	case Field::Double:
+		return true;
+	default:;
+	}
+	return false;
+}
+
+bool Field::isTextType() const
+{
+	return Field::isTextType(m_type);
+}
+
+bool Field::isTextType( int type )
+{
+	switch (type) {
+	case Field::Text:
+	case Field::LongText:
+		return true;
+	default:;
+	}
+	return false;
 }
 
 QString
@@ -545,4 +570,5 @@ void Field::setExpression(KexiDB::Expression *expr)
 		m_expr->m_field = this;
 	}
 }
+
 

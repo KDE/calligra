@@ -342,7 +342,7 @@ void SQLiteCursor::drv_clearBuffer()
 //	m_fieldCount=0;
 	m_records_in_buf=0;
 	m_cols_pointers_mem_size=0;
-	m_at_buffer=false;
+//	m_at_buffer=false;
 	m_records.clear();
 }
 

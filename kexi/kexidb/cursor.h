@@ -282,15 +282,16 @@ class KEXI_DB_EXPORT Cursor: public Object
 		char m_result; //! result of a row fetching
 		
 		//<members related to buffering>
-		uint m_cols_pointers_mem_size; //! size of record's array of pointers to values
 		int m_records_in_buf;          //! number of records currently stored in the buffer
-		QPtrVector<const char*> m_records;//! buffer data
 		bool m_buffering_completed : 1;   //! true if we already have all records stored in the buffer
-		bool m_at_buffer : 1;             //! true if we already point to the buffer with curr_coldata
 		//</members related to buffering>
 	
 	private:
 		bool m_readAhead : 1;
+		
+		//<members related to buffering>
+		bool m_at_buffer : 1;             //! true if we already point to the buffer with curr_coldata
+		//</members related to buffering>
 		
 		class Private;
 		Private *d;

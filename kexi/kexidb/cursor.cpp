@@ -70,7 +70,7 @@ void Cursor::init()
 //		m_fieldCount = m_query->fieldsCount();
 	m_fieldCount = m_query ? m_query->fieldCount() : 0; //do not know
 	//<members related to buffering>
-	m_cols_pointers_mem_size = 0;
+//	m_cols_pointers_mem_size = 0;
 	m_records_in_buf = 0;
 	m_buffering_completed = false;
 	m_at_buffer = false;

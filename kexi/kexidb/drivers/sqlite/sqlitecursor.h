@@ -94,6 +94,9 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 		
 		virtual void drv_clearServerResult();
 
+		uint m_cols_pointers_mem_size; //! size of record's array of pointers to values
+		QPtrVector<const char*> m_records;//! buffer data
+
 		SQLiteCursorData *d;
 
 	friend class SQLiteConnection;

@@ -25,6 +25,7 @@
 #include <qvariant.h>
 #include <qstring.h>
 #include <qpair.h>
+#include <qvaluevector.h>
 
 namespace KexiDB {
 
@@ -62,8 +63,9 @@ class KEXI_DB_EXPORT Field
 			LongText = 12,     /*! other name: Memo. More than 200 bytes*/
 			BLOB = 13,         /*! large binary object */
 
-			LastType = 15,     /*! This line should be at the end of the enum! */
+			LastType = 13,     /*! This line should be at the end of the list of types! */
 			
+			//! special, interanal types:
 			Asterisk = 128     /*! type used in QueryAsterisk subclass objects only,
 			                       not used in table definitions,
 			                       but only in query definitions */
@@ -71,7 +73,7 @@ class KEXI_DB_EXPORT Field
 
 		const int defaultTextLength() { return 200; }
 
-			/*! Groups of types of fields. */
+		/*! Type groups for fields. */
 		enum TypeGroup
 		{
 			InvalidGroup = 0,
@@ -137,29 +139,37 @@ class KEXI_DB_EXPORT Field
 
 		virtual ~Field();
 
-		static QVariant::Type variantType(Type type);
-		static QString typeName(Type type);
+		//! Converts field \a type to QVariant equivalent as accurate as possible
+		static QVariant::Type variantType(int type);
+		//! \return \a type name
+		static inline QString typeName(int type);
 
-		QString		name() const;
+		//! \return field name 
+		inline QString name() const;
 		
 		/*! \return table schema of table that owns this field. */
 		virtual TableSchema* table() const;
 
 		/*! @return true if the field is autoincrement (e.g. integer/numeric) */
-		bool		isAutoIncrement() const { return constraints() & AutoInc; }
+		inline bool isAutoIncrement() const { return constraints() & AutoInc; }
 
 		/*! @return true if the field is member of single-field primary key */
-		bool		isPrimaryKey() const { return constraints() & PrimaryKey; }
+		inline bool isPrimaryKey() const { return constraints() & PrimaryKey; }
 
 		/*! @return true if the field is member of single-field unique key */
-		bool		isUniqueKey() const { return constraints() & Unique; }
+		inline bool isUniqueKey() const { return constraints() & Unique; }
 
 		/*! @return true if the field is member of single-field foreign key */
-		bool		isForeignKey() const { return constraints() & ForeignKey; }
+		inline bool isForeignKey() const { return constraints() & ForeignKey; }
 
 		/*! @return true if the field is not allowed to be null */
-		bool		isNotNull() const { return constraints() & NotNull; }
+		inline bool isNotNull() const { return constraints() & NotNull; }
 
+		inline bool isNumericType() const;
+		static bool isNumericType(int type);
+		inline bool isTextType() const;
+		static bool isTextType(int type);
+                        
 //js: we have m_table for this		/*!
 //		 *	@return the table.column that this field references or QString::null if !foreign_key()
 //		 */
@@ -168,25 +178,26 @@ class KEXI_DB_EXPORT Field
 		int options() const { return m_options; }
 		void setOptions(int options) { m_options = options; }
 
-		virtual QVariant::Type	variantType() const;
-		virtual Type type() const;
-		QString typeName() const;
+		inline QVariant::Type variantType() const;
+		inline Type type() const;
+		inline QString typeName() const;
 		QVariant defaultValue() const;
-		//! length of text is the field type is text
-		int length() const;
-		//! for numeric and other fields that have both length and precision
-		int precision() const; 
-		//!	\return the constraints defined for this field
-		int constraints() const;
+		
+		//! \return length of text is the field type is text
+		inline int length() const;
+		//! \retrun precision for numeric and other fields that have both length and precision
+		inline int precision() const; 
+		//! \return the constraints defined for this field
+		inline int constraints() const;
 		//! \return order of this field in containing table (counting starts from 0)
 		//! (-1 if unspecified)
-		int order() const { return m_order; }
+		inline int order() const { return m_order; }
 		//! \return caption of this field
-		QString caption() const { return m_caption; }
+		inline QString caption() const { return m_caption; }
 		//! \return halp text for this field
-		QString helpText() const { return m_help; }
+		inline QString helpText() const { return m_help; }
 		
-		bool isUnsigned() const; //! if the type has the unsigned attribute
+		inline bool isUnsigned() const; //! if the type has the unsigned attribute
 //		virtual bool isBinary() const;
 
 		void setType(Type t);
@@ -219,7 +230,7 @@ class KEXI_DB_EXPORT Field
 		 Every QueryAsterisk object returns true here,
 		 and every Field object returns false.
 		*/
-		bool isQueryAsterisk() const { return m_type == Asterisk; }
+		inline bool isQueryAsterisk() const { return m_type == Asterisk; }
 		
 		//! \return string for debugging purposes.
 		virtual QString debugString() const;
@@ -253,6 +264,11 @@ class KEXI_DB_EXPORT Field
 		QString m_help;
 
 		Expression *m_expr;
+
+		class FieldTypeNames;
+		
+		//! real i18n'd type names
+		static FieldTypeNames m_typeNames;
 
 	friend class Connection;
 	friend class TableSchema;
