@@ -267,10 +267,8 @@ int ValueCalc::count (const KSpreadValue &range)
 
 int ValueCalc::countA (const KSpreadValue &range)
 {
-    ValueConverter *vc = converter();
-
-    if (!range.isArray())
-        return range.isEmpty() ? 0 : 1;
+  if (!range.isArray())
+    return range.isEmpty() ? 0 : 1;
 
   int res = 0;
 
@@ -283,7 +281,7 @@ int ValueCalc::countA (const KSpreadValue &range)
       if (v.isArray())
         res += countA (v);
       else
-        if (!range.element (c, r).isEmpty())
+        if (!v.isEmpty())
           res++;
     }
 
