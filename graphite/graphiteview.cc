@@ -59,10 +59,10 @@ GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
 
     KoPageLayout layout=KoPageLayoutDia::standardLayout();
 
-    m_vert=new KoRuler(this, m_canvas->viewport(), KoRuler::VERTICAL, layout, 0);
+    m_vert=new KoRuler(this, m_canvas->viewport(), Qt::Vertical, layout, 0);
     m_vert->showMousePos(true);
 
-    m_horiz=new KoRuler(this, m_canvas->viewport(), KoRuler::HORIZONTAL, layout, 0);
+    m_horiz=new KoRuler(this, m_canvas->viewport(), Qt::Horizontal, layout, 0);
     m_horiz->showMousePos(true);
 
     m_canvas->setRulers(m_vert, m_horiz);

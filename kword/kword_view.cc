@@ -2701,9 +2701,9 @@ KWordGUI::KWordGUI( QWidget *parent, bool, KWordDocument *_doc, KWordView *_view
 
     tabChooser = new KoTabChooser( left, KoTabChooser::TAB_ALL );
 
-    r_horz = new KoRuler( left, paperWidget->viewport(), KoRuler::HORIZONTAL, layout,
+    r_horz = new KoRuler( left, paperWidget->viewport(), Qt::Horizontal, layout,
 			  KoRuler::F_INDENTS | KoRuler::F_TABS, tabChooser );
-    r_vert = new KoRuler( left, paperWidget->viewport(), KoRuler::VERTICAL, layout, 0 );
+    r_vert = new KoRuler( left, paperWidget->viewport(), Qt::Vertical, layout, 0 );
     connect( r_horz, SIGNAL( newPageLayout( KoPageLayout ) ), view, SLOT( newPageLayout( KoPageLayout ) ) );
     connect( r_horz, SIGNAL( newLeftIndent( int ) ), paperWidget, SLOT( newLeftIndent( int ) ) );
     connect( r_horz, SIGNAL( newFirstIndent( int ) ), paperWidget, SLOT( newFirstIndent( int ) ) );

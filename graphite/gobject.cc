@@ -41,12 +41,15 @@
 #include <kcolorbtn.h>
 #include <kimageeffect.h>
 #include <kmessagebox.h>
+#include <kwin.h>
+#include <kapp.h>
 
 #include <gobject.h>
 #include <graphitefactory.h>
 #include <graphiteview.h>
 
 #include <kdebug.h>
+
 
 GObjectM9r::GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
 		       GraphiteView *view, const QString &type) :
@@ -117,6 +120,9 @@ void GObjectM9r::createPropertyDialog() {
     if(m_created)
 	return;
 
+    // This should set the app icon for the dialog, too... broken?
+    KWin kwin;
+    kwin.setIcons(this->winId(), kapp->icon(), kapp->miniIcon());
     m_created=true;
     enableButtonOK(true);
     enableButtonApply(false);

@@ -70,6 +70,8 @@ struct KoTabulator {
     KoTabulators type;
 };
 
+class KoRulerPrivate;
+
 /******************************************************************/
 /* Class: KoRuler						  */
 /******************************************************************/
@@ -79,8 +81,6 @@ class KoRuler : public QFrame
     Q_OBJECT
 
 public:
-    enum Orientation {HORIZONTAL, VERTICAL};
-
     static const int F_TABS = 1;
     static const int F_INDENTS = 2;
 
@@ -89,6 +89,9 @@ public:
     ~KoRuler();
 
     void setUnit( const QString& _unit );
+
+    void setZoom( const double& zoom=1.0 );
+    const double& zoom() const { return m_zoom; }
 
     void setPageLayout( KoPageLayout _layout )
     { layout = _layout; repaint( false ); }
@@ -123,7 +126,7 @@ protected:
 		 A_LEFT_INDENT, A_FIRST_INDENT, A_TAB};
 
     void drawContents( QPainter *_painter )
-    { if ( orientation == HORIZONTAL ) drawHorizontal( _painter ); else drawVertical( _painter ); }
+    { orientation == Qt::Horizontal ? drawHorizontal( _painter ) : drawVertical( _painter ); }
 
     void drawHorizontal( QPainter *_painter );
     void drawVertical( QPainter *_painter );
@@ -139,33 +142,20 @@ protected:
     void setupMenu();
     void uncheckMenu();
 
-    Orientation orientation;
-    QWidget *canvas;
-    KoPageLayout layout;
-    int flags;
+    KoRulerPrivate *d;
+
+    Qt::Orientation orientation;
     int diffx, diffy;
+    int i_left, i_first;
+    KoPageLayout layout;
+    QPixmap buffer;
+    double m_zoom;
+    QString unit;
+    bool hasToDelete;
     bool showMPos;
     int mposX, mposY;
-    int i_left, i_first;
-
-    int oldMx, oldMy;
-    bool mousePressed;
-    Action action;
-    bool hasToDelete;
-    QPixmap buffer;
-    bool whileMovingBorderLeft, whileMovingBorderRight; 	
-    bool whileMovingBorderTop, whileMovingBorderBottom;
-    QPixmap pmFirst, pmLeft;
-    KoTabChooser *tabChooser;
-    QList<KoTabulator> tabList;
-    bool removeTab;     // Do we have to remove a tab in the DC Event?
-    int currTab;
     int frameStart;
     bool allowUnits;
-    QPopupMenu *rb_menu;
-    int mMM, mPT, mINCH;
-
-    QString unit;
 
 protected slots:
     void rbPT() { setUnit( QString::fromLatin1("pt") ); emit unitChanged( QString::fromLatin1("pt") ); }

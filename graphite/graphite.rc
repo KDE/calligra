@@ -8,6 +8,7 @@
  <Menu name="view"><text>&amp;View</text>
   <Action name="view_newview"/>
   <ActionList name="view_split"/>
+  <Separator/>
   <Action name="view_zoom"/>
  </Menu>
 </MenuBar>
