@@ -33,11 +33,11 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint &_marker,Mode _mode)
+KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QRect &_rect,Mode _mode)
 	: QDialog( parent, name, TRUE )
 {
   m_pView = parent;
-  marker=_marker;
+  rect=_rect;
   insRem=_mode;
 
 
@@ -53,8 +53,8 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint
   {
     rb1 = new QRadioButton( i18n("Move towards right"), grp );
     rb2 = new QRadioButton( i18n("Move towards bottom"), grp );
-    rb3 = new QRadioButton( i18n("Insert row"), grp );
-    rb4 = new QRadioButton( i18n("Insert column"), grp );
+    rb3 = new QRadioButton( i18n("Insert row(s)"), grp );
+    rb4 = new QRadioButton( i18n("Insert column(s)"), grp );
     setCaption( i18n("Insert cell") );
   }
   else if(insRem==Remove)
@@ -62,8 +62,8 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint
     grp->setTitle(i18n("Remove"));
     rb1 = new QRadioButton( i18n("Move towards left"), grp );
     rb2 = new QRadioButton( i18n("Move towards top"), grp );
-    rb3 = new QRadioButton( i18n("Remove row"), grp );
-    rb4 = new QRadioButton( i18n("Remove column"), grp );
+    rb3 = new QRadioButton( i18n("Remove row(s)"), grp );
+    rb4 = new QRadioButton( i18n("Remove column(s)"), grp );
     setCaption( i18n("Remove cell") );
   }
   else
@@ -89,48 +89,48 @@ void KSpreadinsert::slotOk()
     {
 	if( insRem == Insert )
         {
-	    if ( !m_pView->activeTable()->shiftRow( marker ) )
+	    if ( !m_pView->activeTable()->shiftRow( rect ) )
 		KMessageBox::error( this, i18n("The row is full. Can not move cells to the right.") );
 	}
 	else if( insRem == Remove )
         {
-	    m_pView->activeTable()->unshiftRow(marker);
+	    m_pView->activeTable()->unshiftRow(rect);
 	}
     }
     else if( rb2->isChecked() )
     {
 	if( insRem == Insert )
         {
-	    if ( !m_pView->activeTable()->shiftColumn( marker ) )
+	    if ( !m_pView->activeTable()->shiftColumn( rect ) )
 		KMessageBox::error( this, i18n("The column is full. Can not move cells towards the bottom.") );
 	}
 	else if( insRem == Remove )
         {
-	    m_pView->activeTable()->unshiftColumn( marker );
+	    m_pView->activeTable()->unshiftColumn( rect );
 	}
     }
     else if( rb3->isChecked() )
     {
 	if( insRem == Insert )
         {
-	    if ( !m_pView->activeTable()->insertRow( marker.y() ) )
+	    if ( !m_pView->activeTable()->insertRow( rect.top(),(rect.bottom()-rect.top() ) ) )
 		KMessageBox::error( this, i18n("The row is full. Can not move cells to the right.") );
 	}
 	else if( insRem == Remove )
         {
-	    m_pView->activeTable()->removeRow( marker.y() );
+	    m_pView->activeTable()->removeRow( rect.top(),(rect.bottom()-rect.top() ) );
 	}
     }
     else if( rb4->isChecked() )
     {
 	if( insRem == Insert )
         {
-	    if ( !m_pView->activeTable()->insertColumn( marker.x() ) )
+	    if ( !m_pView->activeTable()->insertColumn( rect.left(),(rect.right()-rect.left() )) )
 		KMessageBox::error( this, i18n("The column is full. Can not move cells towards the bottom.") );
 	}
 	else if( insRem == Remove )
         {
-	    m_pView->activeTable()->removeColumn( marker.x() );
+	    m_pView->activeTable()->removeColumn( rect.left(),(rect.right()-rect.left() ) );
 	}
     }
     else
@@ -139,7 +139,7 @@ void KSpreadinsert::slotOk()
     }
 
     m_pView->updateEditWidget();
-  
+
     accept();
 }
 

@@ -453,11 +453,11 @@ public:
      *         A reason for returning FALSE is that there was a cell
      *         in the right most position.
      */
-    bool shiftRow(const QPoint &_marker );
-    bool shiftColumn( const QPoint& marker );
+    bool shiftRow(const QRect &_rect );
+    bool shiftColumn( const QRect& rect );
 
-    void unshiftColumn( const QPoint& marker );
-    void unshiftRow( const QPoint& marker );
+    void unshiftColumn( const QRect& rect );
+    void unshiftRow( const QRect& rect );
 
     /**
      * Moves all columns which are >= @p col one position to the right and

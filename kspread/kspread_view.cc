@@ -335,9 +335,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                                   actionCollection(), "insertColumn" );
     m_insertRow = new KAction( i18n("Insert Row(s)"), "insert_table_row", 0, this, SLOT( insertRow() ),
                                actionCollection(), "insertRow" );
-    m_insertCell = new KAction( i18n("Insert Cell ..."), "insertcell", 0, this, SLOT( slotInsert() ),
+    m_insertCell = new KAction( i18n("Insert Cell(s) ..."), "insertcell", 0, this, SLOT( slotInsert() ),
                                actionCollection(), "insertCell" );
-    m_removeCell = new KAction( i18n("Remove Cell ..."), "removecell", 0, this, SLOT( slotRemove() ),
+    m_removeCell = new KAction( i18n("Remove Cell(s) ..."), "removecell", 0, this, SLOT( slotRemove() ),
                                actionCollection(), "removeCell" );
     m_cellLayout = new KAction( i18n("Cell Layout..."),"cell_layout", CTRL + Key_L, this, SLOT( layoutDlg() ),
                                actionCollection(), "cellLayout" );
@@ -1873,8 +1873,8 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_pPopupColumn->insertItem( KSBarIcon("resizecol"),i18n("Resize..."), this, SLOT( slotPopupResizeColumn() ) );
     m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
     m_pPopupColumn->insertSeparator();
-    m_pPopupColumn->insertItem( KSBarIcon("insert_table_col"),i18n("Insert Column"), this, SLOT( slotPopupInsertColumn() ) );
-    m_pPopupColumn->insertItem( KSBarIcon("delete_table_col"),i18n("Remove Column"), this, SLOT( slotPopupRemoveColumn() ) );
+    m_pPopupColumn->insertItem( KSBarIcon("insert_table_col"),i18n("Insert Column(s)"), this, SLOT( slotPopupInsertColumn() ) );
+    m_pPopupColumn->insertItem( KSBarIcon("delete_table_col"),i18n("Remove Column(s)"), this, SLOT( slotPopupRemoveColumn() ) );
 
     QObject::connect( m_pPopupColumn, SIGNAL(activated( int ) ), this, SLOT(slotActivateTool( int ) ) );
 
@@ -1885,7 +1885,9 @@ void KSpreadView::slotPopupAdjustColumn()
 {
     if ( !m_pTable )
        return;
-    canvasWidget()->hBorderWidget()->adjustColumn();
+    QRect selection( m_pTable->selectionRect() );
+    for(int i=selection.left();i<=selection.right();i++)
+        canvasWidget()->hBorderWidget()->adjustColumn(i);
 }
 
 void KSpreadView::slotPopupResizeColumn()
@@ -1935,8 +1937,8 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_pPopupRow->insertItem( KSBarIcon("resizerow"),i18n("Resize..."), this, SLOT( slotPopupResizeRow() ) );
     m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
     m_pPopupRow->insertSeparator();
-    m_pPopupRow->insertItem( KSBarIcon("insert_table_row"),i18n("Insert Row"), this, SLOT( slotPopupInsertRow() ) );
-    m_pPopupRow->insertItem( KSBarIcon("delete_table_row"),i18n("Remove Row"), this, SLOT( slotPopupRemoveRow() ) );
+    m_pPopupRow->insertItem( KSBarIcon("insert_table_row"),i18n("Insert Row(s)"), this, SLOT( slotPopupInsertRow() ) );
+    m_pPopupRow->insertItem( KSBarIcon("delete_table_row"),i18n("Remove Row(s)"), this, SLOT( slotPopupRemoveRow() ) );
 
     QObject::connect( m_pPopupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     m_pPopupRow->popup( _point );
@@ -1946,7 +1948,9 @@ void KSpreadView::slotPopupAdjustRow()
 {
     if ( !m_pTable )
        return;
-    canvasWidget()->vBorderWidget()->adjustRow();
+    QRect selection( m_pTable->selectionRect() );
+    for(int i=selection.top();i<=selection.bottom();i++)
+        canvasWidget()->vBorderWidget()->adjustRow(i);
 }
 
 void KSpreadView::slotPopupResizeRow()
@@ -1996,7 +2000,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_areaName->plug( m_pPopupMenu );
     // If there is no selection
     QRect selection( m_pTable->selectionRect() );
-    if(selection.left()==0 )
+    if(selection.right()!=0x7FFF && selection.bottom()!=0x7FFF )
     {
         m_pPopupMenu->insertSeparator();
         m_insertCell->plug( m_pPopupMenu );
@@ -2152,15 +2156,22 @@ void KSpreadView::defaultSelection()
 
 void KSpreadView::slotInsert()
 {
-    KSpreadinsert dlg( this, "Insert", QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),
-                       KSpreadinsert::Insert );
+    QRect r( activeTable()-> selectionRect() );
+    if(r.left()==0)
+        r.setCoords(m_pCanvas->markerColumn(), m_pCanvas->markerRow()
+                ,m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+    KSpreadinsert dlg( this, "Insert", r,KSpreadinsert::Insert );
     dlg.exec();
 }
 
 void KSpreadView::slotRemove()
 {
-    KSpreadinsert dlg( this, "Remove", QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),
-                       KSpreadinsert::Remove );
+    QRect r( activeTable()-> selectionRect() );
+    if(r.left()==0)
+        r.setCoords(m_pCanvas->markerColumn(), m_pCanvas->markerRow()
+                ,m_pCanvas->markerColumn(), m_pCanvas->markerRow());
+
+    KSpreadinsert dlg( this, "Remove", r,KSpreadinsert::Remove );
     dlg.exec();
 }
 

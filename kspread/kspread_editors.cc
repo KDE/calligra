@@ -86,7 +86,7 @@ void KSpreadTextEditor::checkChoose()
       if ( ( r == '*' || r == '|' || r == '&' || r == '-' ||
              r == '+' || r == '/' || r == '!' || r == '(' ||
              r == '^' || r == ',' || r == '%' || r == '[' ||
-             r == '{' || r == '~' || r == '=' ) )
+             r == '{' || r == '~' || r == '=' || r==';' ) )
       {
           kdDebug(36001) << "Start CHOOSE" << endl;
           canvas()->startChoose();

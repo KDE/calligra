@@ -1203,13 +1203,12 @@ void KSpreadUndoAutofill::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoInsertCellRow::KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
+KSpreadUndoInsertCellRow::KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadTable *_table, QRect _rect ) :
     KSpreadUndoAction( _doc )
 {
     title=i18n("Insert cell");
     m_tableName = _table->tableName();
-    m_iRow = _row;
-    m_iColumn = _col;
+    m_rect=_rect;
 }
 
 KSpreadUndoInsertCellRow::~KSpreadUndoInsertCellRow()
@@ -1223,7 +1222,7 @@ void KSpreadUndoInsertCellRow::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-    table->unshiftRow( QPoint(m_iColumn,m_iRow) );
+    table->unshiftRow( m_rect);
     doc()->undoBuffer()->unlock();
 }
 
@@ -1234,7 +1233,7 @@ void KSpreadUndoInsertCellRow::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    table->shiftRow( QPoint(m_iColumn,m_iRow) );
+    table->shiftRow( m_rect);
     doc()->undoBuffer()->unlock();
 }
 
@@ -1245,13 +1244,12 @@ void KSpreadUndoInsertCellRow::redo()
  ***************************************************************************/
 
 
-KSpreadUndoInsertCellCol::KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
+KSpreadUndoInsertCellCol::KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadTable *_table,QRect _rect ) :
     KSpreadUndoAction( _doc )
 {
     title=i18n("Insert cell");
     m_tableName = _table->tableName();
-    m_iRow = _row;
-    m_iColumn = _col;
+    m_rect=_rect;
 }
 
 KSpreadUndoInsertCellCol::~KSpreadUndoInsertCellCol()
@@ -1265,7 +1263,7 @@ void KSpreadUndoInsertCellCol::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-    table->unshiftColumn( QPoint(m_iColumn,m_iRow) );
+    table->unshiftColumn( m_rect);
     doc()->undoBuffer()->unlock();
 }
 
@@ -1276,7 +1274,7 @@ void KSpreadUndoInsertCellCol::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    table->shiftColumn( QPoint(m_iColumn,m_iRow) );
+    table->shiftColumn( m_rect );
     doc()->undoBuffer()->unlock();
 }
 
@@ -1286,16 +1284,13 @@ void KSpreadUndoInsertCellCol::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoRemoveCellRow::KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
+KSpreadUndoRemoveCellRow::KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadTable *_table, QRect rect ) :
     KSpreadUndoAction( _doc )
 {
     title=i18n("Remove cell");
     m_tableName = _table->tableName();
-    m_iRow = _row;
-    m_iColumn = _col;
-    QRect rect;
-    rect.setCoords( _col, _row, _col, _row );
-    QDomDocument doc = _table->saveCellRect( rect );
+    m_rect=rect;
+    QDomDocument doc = _table->saveCellRect( m_rect );
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -1323,8 +1318,8 @@ void KSpreadUndoRemoveCellRow::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-    table->shiftRow( QPoint(m_iColumn,m_iRow) );
-    table->paste( m_data, QPoint(m_iColumn,m_iRow) );
+    table->shiftRow( m_rect );
+    table->paste( m_data, QPoint(m_rect.left(),m_rect.top()) );
     doc()->undoBuffer()->unlock();
 }
 
@@ -1335,7 +1330,7 @@ void KSpreadUndoRemoveCellRow::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    table->unshiftRow( QPoint(m_iColumn,m_iRow) );
+    table->unshiftRow( m_rect);
     doc()->undoBuffer()->unlock();
 }
 
@@ -1345,16 +1340,13 @@ void KSpreadUndoRemoveCellRow::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoRemoveCellCol::KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadTable *_table, int _row,int _col ) :
+KSpreadUndoRemoveCellCol::KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadTable *_table, QRect _rect ) :
     KSpreadUndoAction( _doc )
 {
     title=i18n("Remove cell");
     m_tableName = _table->tableName();
-    m_iRow = _row;
-    m_iColumn = _col;
-    QRect rect;
-    rect.setCoords( _col, _row, _col, _row );
-    QDomDocument doc = _table->saveCellRect( rect );
+    m_rect=_rect;
+    QDomDocument doc = _table->saveCellRect( m_rect );
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -1382,8 +1374,8 @@ void KSpreadUndoRemoveCellCol::undo()
 	return;
 
     doc()->undoBuffer()->lock();
-    table->shiftColumn( QPoint(m_iColumn,m_iRow) );
-    table->paste( m_data, QPoint(m_iColumn,m_iRow) );
+    table->shiftColumn( m_rect );
+    table->paste( m_data, QPoint(m_rect.left(),m_rect.top()) );
     doc()->undoBuffer()->unlock();
 }
 
@@ -1394,7 +1386,7 @@ void KSpreadUndoRemoveCellCol::redo()
 	return;
 
     doc()->undoBuffer()->lock();
-    table->unshiftColumn( QPoint(m_iColumn,m_iRow) );
+    table->unshiftColumn( m_rect );
     doc()->undoBuffer()->unlock();
 }
 

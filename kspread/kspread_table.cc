@@ -2200,21 +2200,31 @@ void KSpreadTable::changeCellTabName(QString old_name,QString new_name)
     }
 }
 
-bool KSpreadTable::shiftRow( const QPoint &_marker )
+bool KSpreadTable::shiftRow( const QRect &rect )
 {
     m_pDoc->setModified( true );
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoInsertCellRow *undo = new KSpreadUndoInsertCellRow( m_pDoc, this,_marker.y(), _marker.x() );
+            KSpreadUndoInsertCellRow *undo = new KSpreadUndoInsertCellRow( m_pDoc, this,rect );
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    bool res = m_cells.shiftRow( _marker );
+    bool res=true;
+    for(int i =rect.top();i<=rect.bottom();i++)
+        for(int j=0;j<=(rect.right()-rect.left());j++)
+        {
+        bool result=m_cells.shiftRow( QPoint(rect.left(),i) );
+        if(!result)
+                res=false;
+         }
 
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( _marker, false, KSpreadTable::ColumnInsert, name() );
-    refreshChart(_marker, false, KSpreadTable::ColumnInsert);
+        {
+        for(int i=rect.top();i<=rect.bottom();i++)
+                it.current()->changeNameCellRef( QPoint(rect.left(),i), false, KSpreadTable::ColumnInsert, name() ,(rect.right()-rect.left()+1));
+        }
+    refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadTable::ColumnInsert);
     recalc(true);
     refreshMergedCell();
     emit sig_updateView( this );
@@ -2222,21 +2232,30 @@ bool KSpreadTable::shiftRow( const QPoint &_marker )
     return res;
 }
 
-bool KSpreadTable::shiftColumn( const QPoint& marker )
+bool KSpreadTable::shiftColumn( const QRect& rect )
 {
     m_pDoc->setModified( true );
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoInsertCellCol *undo = new KSpreadUndoInsertCellCol( m_pDoc, this,marker.y(), marker.x() );
+            KSpreadUndoInsertCellCol *undo = new KSpreadUndoInsertCellCol( m_pDoc, this,rect);
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    bool res = m_cells.shiftColumn( marker );
+    bool res=true;
+    for(int i =rect.left();i<=rect.right();i++)
+        for(int j=0;j<=(rect.bottom()-rect.top());j++)
+        {
+        bool result=m_cells.shiftColumn( QPoint(i,rect.top()) );
+        if(!result)
+                res=false;
+         }
+
 
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( marker, false, KSpreadTable::RowInsert, name() );
-    refreshChart(marker, false, KSpreadTable::RowInsert);
+        for(int i=rect.left();i<=rect.right();i++)
+                it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadTable::RowInsert, name() ,(rect.bottom()-rect.top()+1));
+    refreshChart(/*marker*/QPoint(rect.left(),rect.top()), false, KSpreadTable::RowInsert);
     recalc(true);
     refreshMergedCell();
     emit sig_updateView( this );
@@ -2244,43 +2263,56 @@ bool KSpreadTable::shiftColumn( const QPoint& marker )
     return res;
 }
 
-void KSpreadTable::unshiftColumn( const QPoint& marker )
+void KSpreadTable::unshiftColumn( const QRect & rect )
 {
     m_pDoc->setModified( true );
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoRemoveCellCol *undo = new KSpreadUndoRemoveCellCol( m_pDoc, this,marker.y(), marker.x() );
+            KSpreadUndoRemoveCellCol *undo = new KSpreadUndoRemoveCellCol( m_pDoc, this,rect);
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    m_cells.remove(marker.x(),marker.y());
-    m_cells.unshiftColumn( marker );
+    for(int i =rect.top();i<=rect.bottom();i++)
+        for(int j=rect.left();j<=rect.right();j++)
+               m_cells.remove(j,i);
+
+    for(int i =rect.left();i<=rect.right();i++)
+        for(int j=0;j<=(rect.bottom()-rect.top());j++)
+                m_cells.unshiftColumn( QPoint(i,rect.top()) );
 
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( marker, false, KSpreadTable::RowRemove, name() );
-    refreshChart( marker, false, KSpreadTable::RowRemove );
+        for(int i=rect.left();i<=rect.right();i++)
+                it.current()->changeNameCellRef( QPoint(i,rect.top()), false, KSpreadTable::RowRemove, name(),(rect.bottom()-rect.top()+1) );
+
+    refreshChart( QPoint(rect.left(),rect.top()), false, KSpreadTable::RowRemove );
     refreshMergedCell();
     recalc(true);
     emit sig_updateView( this );
 }
 
-void KSpreadTable::unshiftRow( const QPoint& marker )
+void KSpreadTable::unshiftRow( const QRect & rect )
 {
     m_pDoc->setModified( true );
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-            KSpreadUndoRemoveCellRow *undo = new KSpreadUndoRemoveCellRow( m_pDoc, this,marker.y(), marker.x() );
+            KSpreadUndoRemoveCellRow *undo = new KSpreadUndoRemoveCellRow( m_pDoc, this,rect );
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
+    for(int i =rect.top();i<=rect.bottom();i++)
+        for(int j=rect.left();j<=rect.right();j++)
+                m_cells.remove(j,i);
 
-    m_cells.remove(marker.x(),marker.y());
-    m_cells.unshiftRow( marker );
+    for(int i =rect.top();i<=rect.bottom();i++)
+        for(int j=0;j<=(rect.right()-rect.left());j++)
+                m_cells.unshiftRow( QPoint(rect.left(),i) );
 
     QListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( marker, false, KSpreadTable::ColumnRemove, name() );
-    refreshChart( marker, false, KSpreadTable::ColumnRemove );
+        for(int i=rect.top();i<=rect.bottom();i++)
+                it.current()->changeNameCellRef( QPoint(rect.left(),i), false, KSpreadTable::ColumnRemove, name(),(rect.right()-rect.left()+1) );
+
+    refreshChart(QPoint(rect.left(),rect.top()), false, KSpreadTable::ColumnRemove );
     refreshMergedCell();
     recalc(true);
     emit sig_updateView( this );
@@ -2295,7 +2327,7 @@ bool KSpreadTable::insertColumn( int col, int nbCol )
     }
 
     m_pDoc->setModified( true );
-    bool res=false;
+    bool res=true;
     for(int i=0;i<=nbCol;i++)
         {
         bool result = m_cells.insertColumn( col+i );
@@ -2326,7 +2358,7 @@ bool KSpreadTable::insertRow( int row,int nbRow )
 
     m_pDoc->setModified( true );
 
-    bool res=false;
+    bool res=true;
     for(int i=0;i<=nbRow;i++)
         {
         bool result = m_cells.insertRow( row+i );

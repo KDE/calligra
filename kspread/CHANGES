@@ -1072,4 +1072,8 @@ compatibility with old function you can used against DECHEX, DECOCT, DECBIN
 
 2000-11-16-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
-Now you can insert/remove multiple column/row ( select area )
+-Now you can insert/remove multiple column/row ( select area )
+
+2000-11-20-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now you can insert/remove multiple cells

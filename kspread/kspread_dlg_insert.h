@@ -36,12 +36,12 @@ class KSpreadinsert : public QDialog
 public:
     enum Mode { Insert,Remove};
 
-    KSpreadinsert( KSpreadView* parent, const char* name, const QPoint &_marker, Mode _mode );
+    KSpreadinsert( KSpreadView* parent, const char* name, const QRect &_rect, Mode _mode );
 
 public slots:
     void slotOk();
     void slotClose();
-    
+
 private:
   KSpreadView* m_pView;
 
@@ -51,7 +51,7 @@ private:
   QRadioButton *rb2;
   QRadioButton *rb3;
   QRadioButton *rb4;
-  QPoint  marker;
+  QRect  rect;
   Mode insRem;
 };
 
