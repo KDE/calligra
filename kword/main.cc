@@ -21,6 +21,18 @@
 #include "kword_shell.h"
 
 #include <koApplication.h>
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <klocale.h>
+
+static const char* description=I18N_NOOP("KOffice Word Processor");
+static const char* version="0.1";
+
+static const KCmdLineOptions options[]=
+{
+	{"+[file]", I18N_NOOP("File To Open"),0},
+	{0,0,0}
+};
 
 extern "C"
 {
@@ -29,7 +41,14 @@ extern "C"
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "kword" );
+    KAboutData aboutData( "kword", I18N_NOOP("KWord"),
+        version, description, KAboutData::License_GPL,
+        "(c) 1998-2000, Reginald Stadlbauer");
+    aboutData.addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
+    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::addCmdLineOptions( options );
+
+    KoApplication app;
 
     init_libkword();
 
