@@ -37,7 +37,6 @@
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
-#include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
 
 class KZip;

@@ -50,7 +50,6 @@
 #include "TagProcessing.h"
 #include "ProcessDocument.h"
 #include "KWEFKWordLeader.h"
-#include "KWEFBaseWorker.h"
 
 
 static FrameAnchor *findAnchor ( const KoPictureKey& key,
