@@ -35,7 +35,7 @@ K_EXPORT_COMPONENT_FACTORY(kfile_koffice, KOfficeFactory( "kfile_koffice" ))
 
 KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
                        const QStringList &args)
-    
+
     : KFilePlugin(parent, name, args)
 {
     makeMimeTypeInfo( "application/x-kword" );
@@ -53,7 +53,7 @@ KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
 void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
 {
     KFileMimeTypeInfo* info = addMimeTypeInfo( mimeType );
-    
+
     KFileMimeTypeInfo::GroupInfo* group = 0L;
 
     group = addGroupInfo(info, "DocumentInfo", i18n("Document Information"));
@@ -65,36 +65,39 @@ void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
     item = addItemInfo(group, "Title", i18n("Title"), QVariant::String);
     setHint(item, KFileMimeTypeInfo::Name);
     item = addItemInfo(group, "Abstract", i18n("Abstract"), QVariant::String);
-    setHint(item, KFileMimeTypeInfo::Description);    
+    setHint(item, KFileMimeTypeInfo::Description);
 }
 
 bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint what)
 {
+    if ( info.path().isEmpty() ) // remote file
+        return false;
+
     KFileMetaInfoGroup group = appendGroup(info, "DocumentInfo");
-    
+
     KoStore* store = KoStore::createStore(info.path(), KoStore::Read);
     if ( store && store->open( QString("documentinfo.xml") ) )
     {
         KoStoreDevice dev( store );
         QDomDocument doc;
         doc.setContent( &dev );
-                
+
         QDomNode authorNode = doc.namedItem("document-info").namedItem("author");
         QDomNode aboutNode = doc.namedItem("document-info").namedItem("about");
-        
+
         QString author = stringFromNode(authorNode, "full-name");
         QString title = stringFromNode(aboutNode, "title");
         QString abstract = stringFromNode(aboutNode, "abstract");
-               
+
         appendItem(group, "Author", author);
         appendItem(group, "Title", title);
         appendItem(group, "Abstract", abstract);
-        
+
         store->close();
         delete store;
         return true;
     }
-    delete store;   
+    delete store;
     return false;
 }
 

@@ -85,7 +85,7 @@ static const char * const Information[] =
  {"dc:title"      , I18N_NOOP("Title")      ,
   "dc:creator"    , I18N_NOOP("Author")     ,
   "dc:description", I18N_NOOP("Description"),
-  "dc:subject"    , I18N_NOOP("Subject")    , 
+  "dc:subject"    , I18N_NOOP("Subject")    ,
   dclanguage      , I18N_NOOP("Language")   ,
   0};
 
@@ -115,7 +115,7 @@ static const char * metauserdef   = "meta:user-defined";
 static const char * metafile      = "meta.xml"     ;
 KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
                        const QStringList &args)
-    
+
     : KFilePlugin(parent, name, args)
 {
    int i = 0;
@@ -126,13 +126,13 @@ KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
 void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
 {
     KFileMimeTypeInfo* info = addMimeTypeInfo( mimeType );
-    
+
     userdefined = addGroupInfo(info, UserDefined, i18n("User Defined"));
     addVariableInfo(userdefined, QVariant::String,
 		    KFileMimeTypeInfo::Addable   |
 		    KFileMimeTypeInfo::Removable |
-		    KFileMimeTypeInfo::Modifiable); 
-    
+		    KFileMimeTypeInfo::Modifiable);
+
     KFileMimeTypeInfo::GroupInfo* group = 0L;
     group = addGroupInfo(info, DocumentInfo, i18n("Document Information"));
     KFileMimeTypeInfo::ItemInfo* item;
@@ -151,9 +151,9 @@ void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
 	      case 2:
 		setHint(item, KFileMimeTypeInfo::Description);
 	      default:;
-     }		      
+     }
     }
-      
+
     item = addItemInfo(group, metakeyword, i18n("Keywords"),
 		       QVariant::String);
     setHint(item, KFileMimeTypeInfo::Description);
@@ -170,7 +170,7 @@ void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
       item = addItemInfo(group, Advanced[i], i18n(Advanced[i+1]), typ);
       setHint(item, KFileMimeTypeInfo::Description);
     }
-    
+
     group = addGroupInfo(info, DocStatistics, i18n("Document Statistics"));
     for (i = 0; Statistics[i]; i+=2){
       item = addItemInfo(group, Statistics[i], i18n(Statistics[i+1]),
@@ -197,7 +197,7 @@ int getNumber(QString &str, int * pos){
 	if (!result)
 		return 0;
 	return num;
-}	
+}
 
 void KOfficePlugin::getEditingTime(KFileMetaInfoGroup group1,
 		                   const char * labelid, QString & txt){
@@ -261,6 +261,9 @@ void KOfficePlugin::getDateTime(KFileMetaInfoGroup group1,
 
 bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 {
+    if ( info.path().isEmpty() ) // remote file
+        return false;
+
     KFileMetaInfoGroup group = appendGroup(info, DocumentInfo);
     QDomDocument doc = getMetaDocument(info.path());
     if (doc.isNull())
@@ -284,7 +287,7 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     }
     appendItem(group, metakeyword,
 	       allKeywords);
-    
+
     KFileMetaInfoGroup group1 = appendGroup(info, DocAdvanced);
     for (int i = 0; Advanced[i]; i+=2){
 	    QString txt = stringFromNode(base, Advanced[i]);
@@ -299,7 +302,7 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
 			    case 14:
 				getEditingTime(group1, Advanced[i], txt);
 				break;
-			    default:	
+			    default:
 				appendItem(group1, Advanced[i], txt);}
 		   }
 	    }
@@ -312,7 +315,7 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     	    for (int i = 0; Statistics[i]; i+=2)
 		    addAttributeInfo(dinfo, group2, Statistics[i] );
     }
-    
+
 
     QDomNodeList userList = base.elementsByTagName( metauserdef );
 
@@ -397,7 +400,7 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
   if (base.namedItem(metakeywords).isNull())
     base.appendChild(doc.createElement(metakeywords));
   QDomNode metaKeyNode = base.namedItem(metakeywords);
-   
+
   QDomNodeList childs = doc.elementsByTagName(metakeyword);
   for (int i = childs.length(); i >= 0; --i){
 	  metaKeyNode.removeChild( childs.item(i) );
@@ -460,13 +463,13 @@ bool copyZipToZip( const KZip * src, KZip * dest)
     src_dir = src_dirStack.pop();
     curDirName.append(src_dir->name());
     dirEntries = src_dir->entries();
-      
+
     /* We now iterate over all entries and create entries in dest */
     for ( it = dirEntries.begin(); it != dirEntries.end(); ++it ) {
       if ( *it == metafile )
 	continue;
       curEntry = src_dir->entry( *it );
-      
+
       if (curEntry->isFile()) {
         input_file = dynamic_cast<KArchiveFile*>( curEntry );
 	QByteArray b = input_file->data();
@@ -523,7 +526,7 @@ QIODevice* KOfficePlugin::getData(KArchive &m_zip, int fileMode) const
 
     if ( !m_zip.open(fileMode) || !m_zip.directory())
         return 0;
-    
+
     const KArchiveEntry* entry = m_zip.directory()->entry( metafile );
     if (!entry || entry->isDirectory())
         return 0;
