@@ -1260,6 +1260,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
               if ( !validation_element.isNull() )
               {
                   kdDebug(30521)<<" Cell validation \n";
+
                   //<gmr:Validation Style="0" Type="1" Operator="0" AllowBlank="true" UseDropdown="false">
                   //<gmr:Expression0>745</gmr:Expression0>
                   //<gmr:Expression1>4546</gmr:Expression1>
@@ -1409,12 +1410,27 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
           selTable = table;
 
         QDomElement name = sheet.namedItem( "gmr:Name" ).toElement();
+        QDomElement sheetElement = sheet.toElement();
 
         if ( !name.isNull() )
           table->setTableName( name.text(), false, false );
         else
           table->setTableName( "Sheet" + QString::number( num ), false, false );
         table->enableScrollBarUpdates( false );
+
+        //kdDebug()<<" sheetElement.hasAttribute( DisplayFormulas ) :"<<sheetElement.hasAttribute( "DisplayFormulas" )<<endl;
+        if ( sheetElement.hasAttribute( "DisplayFormulas" ) )
+            table->setShowFormula(sheetElement.attribute( "DisplayFormulas")=="true" );
+        if ( sheetElement.hasAttribute( "HideZero" ) )
+            table->setHideZero( sheetElement.attribute( "HideZero" )=="true" );
+        if ( sheetElement.hasAttribute( "HideGrid" ) )
+            table->setShowGrid( sheetElement.attribute( "HideGrid" )=="false" );
+        if ( sheetElement.hasAttribute( "HideColHeader" ) )
+            ksdoc->setShowColumnHeader( sheetElement.attribute( "HideColHeader" )=="false" );
+        if ( sheetElement.hasAttribute( "HideRowHeader" ) )
+            ksdoc->setShowRowHeader( sheetElement.attribute( "HideRowHeader" )=="false" );
+
+
 
 	setObjectInfo(&sheet, table);
 	setColInfo(&sheet, table);
