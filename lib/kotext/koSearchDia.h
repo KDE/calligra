@@ -60,13 +60,16 @@ public:
         Bold = 8 * KoFindDialog::MinimumUserOption,
         Italic = 16 * KoFindDialog::MinimumUserOption,
         Underline = 32 * KoFindDialog::MinimumUserOption,
-        VertAlign = 64 * KoFindDialog::MinimumUserOption
+        VertAlign = 64 * KoFindDialog::MinimumUserOption,
+        StrikeOut = 128 * KoFindDialog::MinimumUserOption,
+        DoubleUnderLine = 256 * KoFindDialog::MinimumUserOption
     } Options;
 
     KoSearchContext();
 
     QString m_family;
     QColor m_color;
+    QColor m_backGroungColor;
     int m_size;
     KoTextFormat::VerticalAlignment m_vertAlign;
 

@@ -535,6 +535,8 @@ bool KoTextFind::validateMatch( const QString &/*text*/, int index, int matchedl
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::VertAlign)
         {
+            if ( format->vAlign() != m_searchContext->m_vertAlign )
+                return false;
         }
     }
     return true;
@@ -597,6 +599,8 @@ bool KoTextReplace::validateMatch( const QString &/*text*/, int index, int match
         }
         if ( m_searchContext->m_optionsMask & KoSearchContext::VertAlign)
         {
+            if ( format->vAlign() != m_searchContext->m_vertAlign )
+                return false;
         }
 
     }
