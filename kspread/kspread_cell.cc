@@ -1484,9 +1484,6 @@ void KSpreadCell::clearFormula()
 
 bool KSpreadCell::calc(bool delay)
 {
-  if ( !testFlag(Flag_CalcDirty) )
-    return true;
-
   if ( testFlag(Flag_Progress) )
   {
     kdError(36001) << "ERROR: Circle" << endl;
@@ -1502,6 +1499,9 @@ bool KSpreadCell::calc(bool delay)
 //    DO_UPDATE;
     return false;
   }
+
+  if ( !testFlag(Flag_CalcDirty) )
+    return true;
 
   if (delay)
   {

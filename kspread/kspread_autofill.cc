@@ -454,6 +454,8 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
         return;
     }
 
+    doc()->emitBeginOperation();
+
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
       KSpreadUndoAutofill *undo = new KSpreadUndoAutofill( m_pDoc, this, dest );
@@ -505,7 +507,7 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
     {
         if ( src.left() != dest.right() )
             dest.setRight( dest.right() - 1 );
-      
+
         for ( int y = src.top(); y <= src.bottom(); y++ )
         {
             int x;
@@ -546,6 +548,8 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
             fillSequence( srcList, destList, seqList, false );
         }
     }
+
+    doc()->emitEndOperation();
 }
 
 
@@ -554,7 +558,6 @@ void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList,
                                  QPtrList<AutoFillSequence>& _seqList,
                                  bool down)
 {
-    doc()->emitBeginOperation();
 
     /* try finding an interval to use to fill the sequence */
     if (!FillSequenceWithInterval(_srcList, _destList, _seqList, down))
@@ -563,7 +566,6 @@ void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList,
       FillSequenceWithCopy(_srcList, _destList, down);
     }
 
-    doc()->emitEndOperation();
 }
 
 double getDiff(KSpreadCell * cell1, KSpreadCell * cell2, AutoFillSequenceItem::Type type)
