@@ -99,22 +99,8 @@ void KPTGanttView::draw(KPTNode &node)
 		kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
 
 	// Relations
-	QPtrListIterator<KPTNode> nit(m_mainview->getPart()->getProject().childNodeIterator());
-	for ( ; nit.current(); ++nit )
-	{
-		KPTNode *n = nit.current();
-		for (int i = 0; i < n->numDependChildNodes(); ++i)
-		{
-			KPTRelation *rel = n->getDependChildNode(i);
-			if (n->ganttItem() && rel->child()->ganttItem())
-			{
-    			kdDebug()<<k_funcinfo<<"Relations for node="<<n->name()<<" to "<<rel->child()->name()<<endl;
-				//KDGanttViewTaskLink *link = KDGanttViewTaskLink(n->ganttItem(), rel->child()->ganttItem());
+	drawRelations(node);
 
-			}
-		}
-	}
-	setShowTaskLinks(true);
 	setUpdateEnabled(true);
 }
 
@@ -133,7 +119,7 @@ void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &par
 			drawMilestone(parentItem, *n);
 		else
 		    kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
-			
+
 	}
 }
 
@@ -149,7 +135,7 @@ void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node
 	node.setGanttItem(item);
 	delete time;
 	delete dur;
-	
+
 	drawChildren(item, node);
 }
 
@@ -158,14 +144,14 @@ void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node)
 	KPTDuration *time = node.getStartTime();
 	KPTDuration *dur = node.getExpectedDuration();
 	if (node.numChildren() > 0)
-    {	
+    {
 		KPTGanttViewSummaryItem *item = new KPTGanttViewSummaryItem(parentItem, node);
 		item->setStartTime(time->dateTime());
 		time->add(dur);
 		item->setEndTime(time->dateTime());
 		item->setOpen(true);
 		node.setGanttItem(item);
-    	
+
 		drawChildren(item, node);
 	}
 	else
@@ -190,6 +176,27 @@ void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTNode &no
 	item->setOpen(true);
 	node.setGanttItem(item);
 	delete time;
+}
+
+
+void KPTGanttView::drawRelations(KPTNode &node)
+{
+	for (int i = 0; i < node.numDependChildNodes(); ++i)
+	{
+		KPTRelation *rel = node.getDependChildNode(i);
+		if (node.ganttItem() && rel->child()->ganttItem())
+		{
+			kdDebug()<<k_funcinfo<<"Relations for node="<<node.name()<<" to "<<rel->child()->name()<<endl;
+			KDGanttViewTaskLink *link = new KDGanttViewTaskLink(rel->child()->ganttItem(), node.ganttItem());
+		}
+	}
+    // Then my children
+	QPtrListIterator<KPTNode> nit(node.childNodeIterator());
+	for ( ; nit.current(); ++nit )
+	{
+		drawRelations(*(nit.current()));
+	}
+	setShowTaskLinks(true);
 }
 
 void KPTGanttView::currentItemChanged(KDGanttViewItem* item)

@@ -62,6 +62,7 @@ private:
     void drawProject(KDGanttViewSummaryItem *parentItem, KPTNode &node);
     void drawTask(KDGanttViewSummaryItem *parentItem, KPTNode &node);
 	void drawMilestone(KDGanttViewSummaryItem *parentItem, KPTNode &node);
+    void drawRelations(KPTNode &node);
 
 private:    
 	KPTView *m_mainview;
