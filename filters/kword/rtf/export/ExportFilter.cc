@@ -71,7 +71,7 @@ RTFWorker::RTFWorker():
 {
 }
 
-#define FULL_TABLE_SUPPORT
+#undef FULL_TABLE_SUPPORT
 
 bool RTFWorker::makeTable(const FrameAnchor& anchor)
 {
@@ -107,13 +107,14 @@ bool RTFWorker::makeTable(const FrameAnchor& anchor)
             textCellx = QString::null;
         }
         cellCurrent ++; // Should be at least 1
+        const FrameData& frame = (*itCell).frame;
         textCellx += "\\cellx";
-        textCellx += QString::number(cellCurrent*1440); // Dummy position
+        textCellx += QString::number(qRound(PT_TO_TWIP(frame.right)) /*- PT_TO_TWIP(m_paperMarginRight)*/); //right border of cell
 #endif
 
-        QValueList<ParaData> paraList = *(*itCell).paraList;
+        QValueList<ParaData> *paraList = (*itCell).paraList;
         QValueList<ParaData>::ConstIterator it;
-        for (it=paraList.begin();it!=paraList.end();it++)
+        for (it=paraList->begin();it!=paraList->end();it++)
         {
             rowText += ProcessParagraphData( (*it).text,(*it).layout,(*it).formattingList);
             rowText += m_eol;
