@@ -146,7 +146,7 @@ QString Kexi::string2Identifier(const QString &s)
 	} else
 		r+=char2Identifier(c);
 
-	for (uint i=1; i<id.length(); i++) {
+	for (uint i=1; i<id.length(); i++)
 		r+=char2Identifier(id.at(i));
 	return r;
 }
