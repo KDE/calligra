@@ -58,22 +58,22 @@ class KWEFBaseWorker
         virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
             const ValueListFormatData& paraFormatDataList);
         virtual bool doFullPaperFormat (const int format,
-            const double width, const double height, const int orientation); // Like AbiWord's <papersize>
+            const double width, const double height, const int orientation); //< Like AbiWord's <papersize>
         virtual bool doFullPaperBorders (const double top, const double left,
-            const double bottom, const double right); // Like KWord's <PAPERBORDERS>
+            const double bottom, const double right); //< Like KWord's <PAPERBORDERS>
         virtual bool doPageInfo(const int headerType, const int footerType);
         virtual bool doHeader(const HeaderData& header);
         virtual bool doFooter(const FooterData& footer);
-        virtual bool doOpenHead (void); // Like HTML's <HEAD>
-        virtual bool doCloseHead (void); // Like HTML's </HEAD>
-        virtual bool doOpenBody (void); // Like HTML's <BODY>
-        virtual bool doCloseBody (void); // Like HTML's </BODY>
-        virtual bool doOpenStyles (void); // Like HTML's <style>
-        virtual bool doCloseStyles (void); // Like HTML's </style>
-        virtual bool doFullDefineStyle (LayoutData& layout); // Defines a single style
-        virtual bool doOpenSpellCheckIgnoreList (void); // like AbiWord's <ignorewords> and KWord's <SPELLCHECKIGNORELIST>
-        virtual bool doCloseSpellCheckIgnoreList (void); // like AbiWord's </ignorewords> and Kwords </SPELLCHECKIGNORELIST>
-        virtual bool doFullSpellCheckIgnoreWord (const QString& ignoreword); // like AbiWord's <iw> and Kwords </SPELLCHECKIGNOREWORD>
+        virtual bool doOpenHead (void); //< Like HTML's <HEAD>
+        virtual bool doCloseHead (void); //< Like HTML's </HEAD>
+        virtual bool doOpenBody (void); //< Like HTML's <BODY>
+        virtual bool doCloseBody (void); //< Like HTML's </BODY>
+        virtual bool doOpenStyles (void); //< Like HTML's <style>
+        virtual bool doCloseStyles (void); //< Like HTML's </style>
+        virtual bool doFullDefineStyle (LayoutData& layout); //< Defines a single style
+        virtual bool doOpenSpellCheckIgnoreList (void); //< like AbiWord's <ignorewords> and KWord's <SPELLCHECKIGNORELIST>
+        virtual bool doCloseSpellCheckIgnoreList (void); //< like AbiWord's </ignorewords> and Kwords </SPELLCHECKIGNORELIST>
+        virtual bool doFullSpellCheckIgnoreWord (const QString& ignoreword); //< like AbiWord's <iw> and Kwords </SPELLCHECKIGNOREWORD>
     protected:
         KWEFKWordLeader* m_kwordLeader;
 };
