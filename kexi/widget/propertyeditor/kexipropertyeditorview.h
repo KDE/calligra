@@ -24,14 +24,20 @@
 
 class KexiPropertyEditor;
 
+/*! The container (acts as a dock window) for KexiPropertyEditor
+*/
 class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorView : public KexiViewBase
 {
 	Q_OBJECT
 
 	public:
-		KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget *parent, bool returnToAccept, bool AutoSync, const char *name);
-		~KexiPropertyEditorView(){;}
-	
+		KexiPropertyEditorView(KexiMainWindow *mainWin);
+		~KexiPropertyEditorView();
+
+	public slots:
+		virtual void setGeometry( const QRect &r );
+		virtual void resize ( int w, int h );
+
 	protected:
 		KexiPropertyEditor   *m_editor;
 };

@@ -17,14 +17,42 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexipropertyeditor.h"
 #include "kexipropertyeditorview.h"
+#include "kexipropertyeditor.h"
+#include "keximainwindow.h"
 
-KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget *parent, 
-      bool returnToAccept, bool AutoSync, const char *name)
-      : KexiViewBase(mainWin, parent, name)
+#include <klocale.h>
+
+#include <qlayout.h>
+
+
+KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin)
+	: KexiViewBase(mainWin, mainWin, "KexiPropertyEditorView")
 {
-	m_editor = new KexiPropertyEditor(this, returnToAccept, AutoSync, "propeditor");
+	setCaption(i18n("Properties"));
+	//TODO: set a nice icon
+	setIcon(*mainWin->icon());
+
+	QHBoxLayout *lyr = new QHBoxLayout(this);
+	m_editor = new KexiPropertyEditor(this, true /*returnToAccept*/, 
+		true /*AutoSync*/, "propeditor");
+	lyr->addWidget(m_editor);
 }
 
+KexiPropertyEditorView::~KexiPropertyEditorView()
+{
+}
+
+void KexiPropertyEditorView::setGeometry ( const QRect &r )
+{
+	KexiViewBase::setGeometry(r);
+}
+
+void KexiPropertyEditorView::resize (  int w, int h  )
+{
+	KexiViewBase::resize( w, h );
+}
+
+
+#include "kexipropertyeditorview.moc"
 

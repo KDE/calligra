@@ -20,6 +20,7 @@
 
 #include <qheader.h>
 #include <qevent.h>
+#include <qfontmetrics.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -315,9 +316,11 @@ KexiPropertyEditor::reset(bool editorOnly)
 
 QSize KexiPropertyEditor::sizeHint() const
 {
-	if (firstChild())
-		 return QSize(KListView::sizeHint().width(), firstChild()->height()*childCount());
-	return KListView::sizeHint();
+	return QSize( QFontMetrics(font()).width(columnText(0)+columnText(1)+"   "),
+		KListView::sizeHint().height());
+//	if (firstChild())
+//		 return QSize(KListView::sizeHint().width(), firstChild()->height()*childCount());
+//	return KListView::sizeHint();
 }
 
 void
