@@ -27,6 +27,8 @@
 #include <kinstance.h>
 #include <kconfig.h>
 #include <qrichtext_p.h>
+#include <qvector.h>
+
 
 /******************************************************************/
 /* Class: KWAutoFormat						  */
@@ -72,10 +74,13 @@ void KWAutoFormat::readConfig()
 
     QStringList::Iterator fit = find.begin();
     QStringList::Iterator rit = replace.begin();
+    m_maxFindLength=0;
     for ( ; fit != find.end() && rit != replace.end() ; ++fit, ++rit )
     {
         m_entries.insert( ( *fit ), KWAutoFormatEntry( ( *rit ) ) );
+        m_maxFindLength=QMAX(m_maxFindLength,(*fit).length());
     }
+
     buildMaxLen();
 
     if(config->hasKey( "UpperCaseExceptions" ) )
@@ -98,11 +103,17 @@ void KWAutoFormat::saveConfig()
     config->setGroup( "AutoFormatEntries" );
     QStringList find, replace;
     KWAutoFormatEntryMap::Iterator it = m_entries.begin();
+
+    //refresh m_maxFindLength
+    m_maxFindLength=0;
     for ( ; it != m_entries.end() ; ++it )
     {
         find.append( it.key() );
         replace.append( it.data().replace() );
+        m_maxFindLength=QMAX(m_maxFindLength,it.key().length());
+
     }
+
     config->writeEntry( "Find", find );
     config->writeEntry( "Replace", replace );
 
@@ -148,7 +159,7 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
         {
             QString lastWord=getLastWord(parag, index);
             kdDebug() << "KWAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
-            if ( !doAutoCorrect( textEditCursor, parag, index, lastWord ) )
+            if ( !doAutoCorrect( textEditCursor, parag, index ) )
             {
                 if ( m_convertUpperUpper || m_convertUpperCase )
                     doUpperCase( textEditCursor, parag, index, lastWord );
@@ -162,32 +173,56 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
     }
 }
 
-bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word )
+bool KWAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index )
 {
-    KWAutoFormatEntryMap::Iterator it = m_entries.find( word );
-    if ( it != m_entries.end()  )
-    {
-        KWTextDocument * textdoc = parag->textDocument();
-	unsigned int length = word.length();
-        int start = index - length;
-        QTextCursor cursor( parag->document() );
-        cursor.setParag( parag );
-        cursor.setIndex( start );
-        textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
-        cursor.setIndex( start + length );
-        textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
 
-        KWTextFrameSet * textfs = textdoc->textFrameSet();
-        textfs->replaceSelection( textEditCursor, it.data().replace(),
-                                  KWTextFrameSet::HighlightSelection,
-                                  i18n("Autocorrect word") );
-        // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
-        // -> go right
-        textfs->emitHideCursor();
-        textEditCursor->gotoRight();
-        textfs->emitShowCursor();
-        return true;
+    QString * wordArray = new QString[m_maxFindLength+1];
+    {
+        QString word;
+        QTextString *s = parag->string();
+        for ( int i = index - 1; i >= 0; --i )
+        {
+            QChar ch = s->at( i ).c;
+            if ( ch.isSpace() || ch.isPunct() )
+                wordArray[(index - 1)-i]=word;
+            word.prepend( ch );
+            if (((index - 1)-i)==m_maxFindLength)
+                break;
+        }
     }
+    for(int i=m_maxFindLength;i>=0;--i)
+    {
+        if(wordArray[i]!=0)
+        {
+            QString word=wordArray[i];
+            KWAutoFormatEntryMap::Iterator it = m_entries.find( word );
+            if ( it != m_entries.end()  )
+            {
+                KWTextDocument * textdoc = parag->textDocument();
+                unsigned int length = word.length();
+                int start = index - length;
+                QTextCursor cursor( parag->document() );
+                cursor.setParag( parag );
+                cursor.setIndex( start );
+                textdoc->setSelectionStart( KWTextFrameSet::HighlightSelection, &cursor );
+                cursor.setIndex( start + length );
+                textdoc->setSelectionEnd( KWTextFrameSet::HighlightSelection, &cursor );
+
+                KWTextFrameSet * textfs = textdoc->textFrameSet();
+                textfs->replaceSelection( textEditCursor, it.data().replace(),
+                                          KWTextFrameSet::HighlightSelection,
+                                          i18n("Autocorrect word") );
+                // The space/tab/CR that we inserted is still there but delete/insert moved the cursor
+                // -> go right
+                textfs->emitHideCursor();
+                textEditCursor->gotoRight();
+                textfs->emitShowCursor();
+                delete [] wordArray;
+                return true;
+            }
+        }
+    }
+    delete [] wordArray;
     return false;
 }
 

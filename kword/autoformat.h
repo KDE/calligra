@@ -25,6 +25,7 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 #include <qstringlist.h>
+#include <qvector.h>
 
 class KWDocument;
 class KWTextParag;
@@ -137,7 +138,7 @@ public:
     static bool isSeparator( const QChar &c );
 
 protected:
-    bool doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
+    bool doAutoCorrect( QTextCursor* textEditCursor, KWTextParag *parag, int index );
     void doUpperCase( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
     void doSpellCheck( QTextCursor* textEditCursor, KWTextParag *parag, int index, const QString & word );
     void doTypographicQuotes( QTextCursor* textEditCursor, KWTextParag *parag, int index );
@@ -157,6 +158,7 @@ private:
     QStringList upperCaseExceptions;
     QStringList twoUpperLetterException;
     int m_maxlen;
+    int m_maxFindLength;
 };
 
 #endif
