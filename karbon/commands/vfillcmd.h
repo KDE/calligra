@@ -46,7 +46,7 @@ protected:
 
 	VFill m_fill;
 
-	QValueVector<VFill> m_oldcolors;
+	QValueVector<VFill> m_oldfills;
 };
 
 #endif

@@ -44,10 +44,7 @@ VFillCmd::execute()
 	VObjectListIterator itr( m_selection->objects() );
 	for( ; itr.current() ; ++itr )
 	{
-		//if( m_opacity == -1 )
-		//	m_color.setOpacity( itr.current()->fill().color().opacity() );
-
-		m_oldcolors.push_back( VFill( *itr.current()->fill() ) );
+		m_oldfills.push_back( VFill( *itr.current()->fill() ) );
 
 		itr.current()->setFill( m_fill );
 	}
@@ -64,7 +61,7 @@ VFillCmd::unexecute()
 
 	for( ; itr.current() ; ++itr )
 	{
-		itr.current()->setFill( m_oldcolors[ i++ ] );
+		itr.current()->setFill( m_oldfills[ i++ ] );
 	}
 
 	setSuccess( false );

@@ -25,7 +25,7 @@
 
 
 VDeleteCmd::VDeleteCmd( VDocument* doc )
-	: VCommand( doc, i18n( "Delete Objects" ) )
+	: VCommand( doc, i18n( "Delete Objects" ), "editdelete" )
 {
 	m_selection = document()->selection()->clone();
 	document()->selection()->clear();
