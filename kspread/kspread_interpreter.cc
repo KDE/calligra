@@ -1219,8 +1219,11 @@ static bool kspreadfunc_date( KSContext& context )
   if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
     return false;
 
-  context.setValue( new KSValue(KGlobal::locale()->formatDate(QDate(args[0]->intValue(),
-  			args[1]->intValue(),args[2]->intValue()) )));
+  QDate _date;
+  if( _date.setYMD(args[0]->intValue(), args[1]->intValue(), args[2]->intValue()) )
+    context.setValue( new KSValue(KGlobal::locale()->formatDate(_date)));
+  else  
+    context.setValue( new KSValue(QString("Err")) );
 
   return true;
 }
