@@ -22,6 +22,7 @@
 #include <kdebug.h>
 
 #include <koGenStyles.h>
+#include <koStyleStack.h>
 
 #include "vfill.h"
 
@@ -78,7 +79,9 @@ VFill::saveOasis( KoGenStyle &style ) const
 	if( m_type == solid )
 	{
 		style.addProperty( "draw:fill", "solid" );
-		style.addProperty( "draw:fill-color", QColor(m_color).name() );
+		style.addProperty( "draw:fill-color", QColor( m_color ).name() );
+		if( m_color.opacity() < 1 )
+			style.addProperty( "draw:opacity", QString( "%1%" ).arg( m_color.opacity() * 100. ) );
 	}
 	else if( m_type == grad )
 		style.addProperty( "draw:fill", "gradient" );
@@ -86,6 +89,21 @@ VFill::saveOasis( KoGenStyle &style ) const
 		style.addProperty( "draw:fill", "hatch" );
 	else
 		style.addProperty( "draw:fill", "none" );
+}
+
+void
+VFill::loadOasis( const QDomElement &, const KoStyleStack &stack )
+{
+	if( stack.hasAttribute( "draw:fill" ) )
+	{
+		if( stack.attribute( "draw:fill" ) == "solid" )
+		{
+			setType( VFill::solid );
+			setColor( QColor( stack.attribute( "draw:fill-color" ) ) );
+			if( stack.hasAttribute( "draw:opacity" ) )
+				m_color.setOpacity( stack.attribute( "draw:opacity" ).remove( '%' ).toFloat() / 100. );
+		}
+	}
 }
 
 void

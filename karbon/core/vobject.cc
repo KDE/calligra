@@ -154,30 +154,12 @@ VObject::loadOasis( const QDomElement &object, KoOasisContext &context )
 		m_fill = new VFill();
 
 	if( object.hasAttribute( "draw:style-name" ) )
-	{
-		//kdDebug()<<"draw:style-name :"<<object.attribute( "draw:style-name" )<<endl;
 		addStyles( context.oasisStyles().styles()[object.attribute( "draw:style-name" )], context );
-	}
 
 	KoStyleStack &styleStack = context.styleStack();
 	styleStack.setTypeProperties( "graphic" );
-	if( styleStack.hasAttribute( "draw:stroke" ))
-	{
-		if( styleStack.attribute( "draw:stroke" ) == "solid" )
-		{
-			m_stroke->setType( VStroke::solid );
-			m_stroke->setColor( QColor( styleStack.attribute( "svg:stroke-color" ) ) );
-		}
-		if( styleStack.attribute( "draw:fill" ) == "solid" )
-		{
-			m_fill->setType( VFill::solid );
-			m_fill->setColor( QColor( styleStack.attribute( "draw:fill-color" ) ) );
-		}
-	}
-	/*if( object.hasAttribute( "draw:style-name" ) )
-	{
-		const QDomElement *style = styles.styles()[ object.attribute( "draw:style-name" ) ];
-	}*/
+	m_stroke->loadOasis( object, styleStack );
+	m_fill->loadOasis( object, styleStack );
 	return true;
 }
 

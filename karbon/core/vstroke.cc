@@ -21,6 +21,8 @@
 #include <qdom.h>
 
 #include <koGenStyles.h>
+#include <koStyleStack.h>
+#include <koUnit.h>
 
 #include "vobject.h"
 #include "vstroke.h"
@@ -107,8 +109,10 @@ VStroke::saveOasis( KoGenStyle &style ) const
 	if( m_type == solid )
 	{
 		style.addProperty( "draw:stroke", "solid" );
-		style.addProperty( "svg:stroke-color", QColor(m_color).name() );
+		style.addProperty( "svg:stroke-color", QColor( m_color ).name() );
 		style.addPropertyPt( "svg:stroke-width", m_lineWidth );
+		if( m_color.opacity() < 1 )
+			style.addProperty( "svg:stroke-opacity", QString( "%1%" ).arg( m_color.opacity() * 100. ) );
 	}
 	else if( m_type == none )
 		style.addProperty( "draw:stroke", "none" );
@@ -116,6 +120,27 @@ VStroke::saveOasis( KoGenStyle &style ) const
 		style.addProperty( "draw:stroke", "gradient" );
 	else if( m_type == patt )
 		style.addProperty( "draw:stroke", "hatch" );*/
+}
+
+void
+VStroke::loadOasis( const QDomElement &, const KoStyleStack &stack )
+{
+	if( stack.hasAttribute( "draw:stroke" ))
+	{
+		if( stack.attribute( "draw:stroke" ) == "solid" )
+		{
+			setType( VStroke::solid );
+			setColor( QColor( stack.attribute( "svg:stroke-color" ) ) );
+			if( stack.hasAttribute( "svg:stroke-opacity" ) )
+				m_color.setOpacity( stack.attribute( "svg:stroke-opacity" ).remove( '%' ).toFloat() / 100. );
+		}
+		else if( stack.attribute( "draw:stroke" ) == "none" )
+			setType( VStroke::none );
+	}
+	if( stack.hasAttribute( "svg:stroke-width" ) )
+		m_lineWidth = KoUnit::parseValue( stack.attribute( "svg:stroke-width" ) );
+	if( m_lineWidth < 0.0 )
+		m_lineWidth = 0.0;
 }
 
 void
