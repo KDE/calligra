@@ -6,7 +6,7 @@ KSpreadLocale::KSpreadLocale()
 {
 }
 
-void KSpreadLocale::read( const QDomElement& element )
+void KSpreadLocale::load( const QDomElement& element )
 {
     if ( element.hasAttribute( "weekStartsMonday" ) )
     {
@@ -60,9 +60,9 @@ void KSpreadLocale::read( const QDomElement& element )
 	_datefmtshort = element.attribute( "dateFormatShort" );
 }
 
-QDomElement KSpreadLocale::write( QDomDocument& doc ) const
+QDomElement KSpreadLocale::save( QDomDocument& doc ) const
 {
-    QDomElement element = doc.createElement( "Locale" );
+    QDomElement element = doc.createElement( "locale" );
 
     if( m_weekStartsMonday )
 	element.setAttribute( "weekStartsMonday", "True" );

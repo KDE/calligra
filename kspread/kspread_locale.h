@@ -11,8 +11,8 @@ class KSpreadLocale : public KLocale
 public:
     KSpreadLocale();
     
-    void read( const QDomElement& element );
-    QDomElement write( QDomDocument& doc ) const;
+    void load( const QDomElement& element );
+    QDomElement save( QDomDocument& doc ) const;
 };
 
 #endif
