@@ -1766,7 +1766,6 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
                 int x = zh->layoutUnitToPixelX( ch.x ) /*+ ch.pixelxadj*/ + availWidth / 2;
                 int charWidth = format->screenFontMetrics( zh ).width( 'W' );
                 int size = QMIN( availWidth, charWidth ) / 2 ; // actually the half size
-                kdDebug() << "Tab: format=" << format << " x=" << x << " halfsize=" << size << " coming from availWidth=" << availWidth << ", charWidth=" << charWidth << endl;
                 int y = lastY_pix + baseLine_pix - zh->layoutUnitToPixelY( ch.ascent()/2 );
                 int arrowsize = zh->zoomItY( 2 );
                 painter.drawLine( x - size, y, x + size, y );
