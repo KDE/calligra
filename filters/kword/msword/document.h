@@ -46,14 +46,14 @@ public:
     bool hasParser() const { return m_parser != 0L; }
     bool bodyFound() const { return m_bodyFound; }
 
-    virtual void startBody();
-    virtual void endBody();
+    virtual void bodyStart();
+    virtual void bodyEnd();
 
-    virtual void startHeader( wvWare::HeaderData::Type type );
-    virtual void endHeader();
+    virtual void headerStart( wvWare::HeaderData::Type type );
+    virtual void headerEnd();
 
-    virtual void startFootnote();
-    virtual void endFootnote();
+    virtual void footnoteStart();
+    virtual void footnoteEnd();
 
     bool parse();
 

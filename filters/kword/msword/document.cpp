@@ -191,7 +191,7 @@ bool Document::parse()
     return false;
 }
 
-void Document::startBody()
+void Document::bodyStart()
 {
     kdDebug() << k_funcinfo << endl;
 
@@ -209,7 +209,7 @@ void Document::startBody()
     m_bodyFound = true;
 }
 
-void Document::endBody()
+void Document::bodyEnd()
 {
     kdDebug() << k_funcinfo << endl;
     disconnect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
@@ -254,7 +254,7 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
     // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }
 
-void Document::startHeader( wvWare::HeaderData::Type type )
+void Document::headerStart( wvWare::HeaderData::Type type )
 {
     kdDebug() << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")" << endl;
     // Werner says the headers are always emitted in the order of the Type enum.
@@ -295,11 +295,11 @@ void Document::startHeader( wvWare::HeaderData::Type type )
         m_hasFooter = true;*/
 }
 
-void Document::endHeader()
+void Document::headerEnd()
 {
 }
 
-void Document::startFootnote()
+void Document::footnoteStart()
 {
     // Grab data that was stored with the functor, that triggered this parsing
     SubDocument subdoc( m_subdocQueue.front() );
@@ -322,7 +322,7 @@ void Document::startFootnote()
     m_textHandler->setFrameSetElement( framesetElement );
 }
 
-void Document::endFootnote()
+void Document::footnoteEnd()
 {
     kdDebug() << k_funcinfo << endl;
 }
