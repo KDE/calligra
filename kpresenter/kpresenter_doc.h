@@ -409,7 +409,10 @@ protected:
     QDomElement saveAttribute( QDomDocument &doc );
     QDomElement saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list, const QString &_prefix );
 
+    QDomElement saveHelpLines( QDomDocument &doc );
+
     void loadBackground( const QDomElement &element );
+    void loadHelpLines( const QDomElement &element );
     void loadObjects( const QDomElement &element,bool paste=false );
     void loadTitle( const QDomElement &element );
     void loadNote( const QDomElement &element );

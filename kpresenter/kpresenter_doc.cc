@@ -485,6 +485,12 @@ QDomDocument KPresenterDoc::saveXML()
     element.appendChild(_footer->save( doc,0 ));
     presenter.appendChild(element);
 
+    element=doc.createElement("HELPLINES");
+    element.setAttribute("show", static_cast<int>( showHelplines() ));
+    element.appendChild( saveHelpLines( doc ));
+    presenter.appendChild(element);
+
+
     if ( saveOnlyPage == -1 )
         emit sigProgress( 20 );
 
@@ -1051,7 +1057,14 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 }
                 _footer->load(elem);
             }
-        } else if(elem.tagName()=="ATTRIBUTES") {
+        }else if( elem.tagName()=="HELPLINES"){
+            if ( _clean  ) {
+                if(elem.hasAttribute("show")) {
+                    setShowHelplines( static_cast<bool>(elem.attribute("show").toInt() ) );
+                }
+                loadHelpLines( elem );
+            }
+        }else if(elem.tagName()=="ATTRIBUTES") {
             if(elem.hasAttribute("activePage"))
                 activePage=elem.attribute("activePage").toInt();
         } else if(elem.tagName()=="PAGETITLES") {
@@ -2784,5 +2797,17 @@ void KPresenterDoc::updateHelpLineButton()
 	((KPresenterView*)it.current())->updateHelpLineButton();
 
 }
+
+void KPresenterDoc::loadHelpLines( const QDomElement &element )
+{
+    //todo
+}
+
+QDomElement KPresenterDoc::saveHelpLines( QDomDocument &doc )
+{
+    //todo
+    return QDomElement();
+}
+
 
 #include <kpresenter_doc.moc>
