@@ -65,8 +65,8 @@ void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	    origState->unref ();
 	  origState = text->saveState ();
 
-	  text->showCursor (true);
 	  text->updateCursor (pos);
+	  text->showCursor (true);
 	  break;
 	}
 	++it;
