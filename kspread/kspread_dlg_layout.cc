@@ -729,7 +729,7 @@ void CellLayoutDlg::init()
 
     connect( tab, SIGNAL( applyButtonPressed() ), this, SLOT( slotApply() ) );
 
-    tab->show();
+    tab->exec();
 }
 
 QPixmap* CellLayoutDlg::paintFormatPixmap( const char *_string1, const QColor & _color1,
