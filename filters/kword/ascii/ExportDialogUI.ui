@@ -156,7 +156,7 @@
                         <cstring>radioEndOfLineCR</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Carriage return only</string>
+                        <string>&amp;Carriage return only (Mac)</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
