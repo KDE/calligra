@@ -3305,7 +3305,7 @@ void KPresenterView::objectSelectedChanged()
     {
         KPObject *obj=m_canvas->getSelectedObj();
         //disable this action when we select a header/footer
-        if(obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
+        if(obj==m_pKPresenterDoc->header() || obj==m_pKPresenterDoc->footer())
             headerfooterselected=true;
         else
             headerfooterselected=false;
@@ -6688,7 +6688,7 @@ void KPresenterView::slotObjectEditChanged()
         int align = paragLayout->alignment;
         if ( align == Qt::AlignAuto )
             align = Qt::AlignLeft; // ## seems hard to detect RTL here
-        alignChanged(  align );
+        alignChanged( align );
     }
 
     KPTextView *edit=m_canvas->currentTextObjectView();
@@ -6710,12 +6710,13 @@ void KPresenterView::slotObjectEditChanged()
     if(edit)
     {
         double leftMargin =edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
-        actionTextDepthMinus->setEnabled( val && leftMargin>0);
+        actionTextDepthMinus->setEnabled(val && leftMargin>0);
         hasSelection = edit->textObject()->hasSelection();
+        actionEditCut->setEnabled(hasSelection);
     }
     actionCreateStyleFromSelection->setEnabled((edit!=0)&& hasSelection);
 
-    actionChangeCase->setEnabled( (val && rw && hasSelection ) || (rw && !edit && isText));
+    actionChangeCase->setEnabled( (val && rw && hasSelection ) || (rw && !edit && isText) );
 
     if(!edit)
     {
@@ -6725,7 +6726,7 @@ void KPresenterView::slotObjectEditChanged()
         {
             KPObject *obj=m_canvas->getSelectedObj();
             //disable this action when we select a header/footer
-            if(obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
+            if(obj==m_pKPresenterDoc->header() || obj==m_pKPresenterDoc->footer())
                 headerfooterselected=true;
             else
                 headerfooterselected=false;
@@ -6735,6 +6736,7 @@ void KPresenterView::slotObjectEditChanged()
     }
     actionFormatStyleMenu->setEnabled( isText );
     actionFormatStyle->setEnabled(isText);
+
     state=m_canvas->oneObjectTextExist();
     actionEditFind->setEnabled(state);
     actionEditFindNext->setEnabled( state );
