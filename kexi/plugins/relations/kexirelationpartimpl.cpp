@@ -18,8 +18,9 @@
 */
 
 #include "kexirelationmaindlg.h"
-#include "kexirelationdialog.h"
 #include "kexirelationpartimpl.h"
+
+#include <kexirelationwidget.h>
 
 #include <kdebug.h>
 
@@ -37,7 +38,7 @@ QWidget *
 KexiRelationPartImpl::createWidget(const char* /*widgetClass*/, KexiMainWindow* mainWin, 
  QWidget *parent, const char *objName)
 {
-	return new KexiRelationDialog(mainWin, parent, objName);
+	return new KexiRelationWidget(mainWin, parent, objName);
 }
 		
 

@@ -17,17 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kexirelationmaindlg.h"
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 
 #include <qlayout.h>
 
-#include <keximainwindow.h>
-#include <kexiproject.h>
 #include <kexidb/connection.h>
-#include "kexirelationdialog.h"
-#include "kexirelationmaindlg.h"
+
+#include "keximainwindow.h"
+#include "kexiproject.h"
+#include "kexirelationwidget.h"
+#include "kexirelationview.h"
 
 KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *win)
  : KexiDialogBase(win, i18n("Relations"))
@@ -36,8 +39,11 @@ KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *win)
 	setIcon(SmallIcon("relation"));
 	setDocID( win->generatePrivateDocID() );
 
-	m_view = new KexiRelationDialog(win, this);
-
+	m_view = new KexiRelationWidget(win, this);
+	//the view can receive some our actions
+	addActionProxyChild( m_view );
+//	addActionProxyChild( m_view->relationView() );
+	
 	QVBoxLayout *g = new QVBoxLayout(this);
 	g->addWidget(m_view);
 

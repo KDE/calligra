@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,17 +34,25 @@
 #include <kiconloader.h>
 #include <kdeversion.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 
 #include "kexidb/tableschema.h"
 #include "kexidragobjects.h"
 #include "kexirelationviewtable.h"
 #include "kexirelationview.h"
 
-KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView *parent, KexiDB::TableSchema *t)
+#if defined(Q_WS_WIN) || KDE_IS_VERSION(3,2,90)
+# define USE_KMDI_getCaptionColors //we'are using KMDI feature from KDE 3.3
+# include <kmdichildarea.h>
+#endif
+
+KexiRelationViewTableContainer::KexiRelationViewTableContainer(
+	KexiRelationView *parent, KexiDB::TableSchema *t)
  : QFrame(parent,"KexiRelationViewTableContainer" )
+ , m_table(t)
+ , m_parent(parent)
 //	, m_mousePressed(false)
 {
-	m_parent = parent;
 
 //	setFixedSize(100, 150);
 //js:	resize(100, 150);
@@ -54,33 +62,38 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 
 	QVBoxLayout *lyr = new QVBoxLayout(this,4,1); //js: using Q*BoxLayout is a good idea
 
-	//hack to get more space at bottom
-	QSpacerItem *iBottom = new QSpacerItem(10, 10, QSizePolicy::Fixed, QSizePolicy::Fixed);
+	m_tableHeader = new KexiRelationViewTableContainerHeader(m_table->name(), this);
 
-	m_tableHeader = new KexiRelationViewTableContainerHeader(t->name(), this);
 	m_tableHeader->unsetFocus();
 	m_tableHeader->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 	lyr->addWidget(m_tableHeader);
 	connect(m_tableHeader,SIGNAL(moved()),this,SLOT(moved()));
 	connect(m_tableHeader, SIGNAL(endDrag()), this, SIGNAL(endDrag()));
 
-	m_tableView = new KexiRelationViewTable(this, parent, t, "KexiRelationViewTable");
+	m_tableView = new KexiRelationViewTable(this, parent, m_table, "KexiRelationViewTable");
+	//m_tableHeader->setFocusProxy( m_tableView );
 	m_tableView->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
 	m_tableView->setMaximumSize( m_tableView->sizeHint() );
 //	m_tableView->resize( m_tableView->sizeHint() );
-
-	setMinimumSize(m_tableView->sizeHint().width() + 5, m_tableView->sizeHint().height() + m_tableHeader->sizeHint().height() + 6);
-
 	lyr->addWidget(m_tableView, 0);
-	lyr->addItem(iBottom);
 	connect(m_tableView, SIGNAL(tableScrolling()), this, SLOT(moved()));
 	connect(m_tableView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
 		this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)));
 }
 
+KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
+{
+}
+
+KexiDB::TableSchema *KexiRelationViewTableContainer::table()
+{
+	return m_table;
+}
+
 void KexiRelationViewTableContainer::slotContextMenu(KListView *, QListViewItem *, const QPoint &p)
 {
-	m_parent->executePopup(p);
+//	m_parent->executePopup(p);
+	emit contextMenuRequest( p );
 }
 
 void KexiRelationViewTableContainer::moved() {
@@ -194,8 +207,18 @@ KexiRelationViewTableContainer::mouseReleaseEvent(QMouseEvent *ev)
 void KexiRelationViewTableContainer::setFocus()
 {
 	kdDebug() << "SET FOCUS" << endl;
+	//select 1st:
+	if (m_tableView->firstChild()) {
+		if (!m_tableView->selectedItems().first())
+			m_tableView->setSelected( m_tableView->firstChild(), true );
+	}
 	m_tableHeader->setFocus();
-	QFrame::setFocus();
+	m_tableView->setFocus();
+/*	QPalette p = qApp->palette();
+	p.setColor( QPalette::Active, QColorGroup::Highlight, KGlobalSettings::highlightColor() );
+	p.setColor( QPalette::Active, QColorGroup::HighlightedText, KGlobalSettings::highlightedTextColor() );
+	m_tableView->setPalette(p);*/
+
 	raise();
 	repaint();
 	emit gotFocus();
@@ -204,20 +227,26 @@ void KexiRelationViewTableContainer::setFocus()
 void KexiRelationViewTableContainer::unsetFocus()
 {
 	kdDebug() << "UNSET FOCUS" << endl;
-	if (m_tableView->selectedItem()) //unselect item if was selected
-		m_tableView->setSelected(m_tableView->selectedItem(), false);
+//	if (m_tableView->selectedItem()) //unselect item if was selected
+//		m_tableView->setSelected(m_tableView->selectedItem(), false);
+//	m_tableView->clearSelection();
 	m_tableHeader->unsetFocus();
+
+	m_tableView->clearSelection();
+
+//	m_tableView->unsetPalette();
+/*	QPalette p = m_tableView->palette();
+//	p.setColor( QPalette::Active, QColorGroup::Highlight, KGlobalSettings::highlightColor() );
+//	p.setColor( QPalette::Active, QColorGroup::HighlightedText, KGlobalSettings::highlightedTextColor() );
+	p.setColor( QPalette::Active, QColorGroup::Highlight, p.color(QPalette::Active, QColorGroup::Background ) );
+//	p.setColor( QPalette::Active, QColorGroup::Highlight, gray );
+	p.setColor( QPalette::Active, QColorGroup::HighlightedText, p.color(QPalette::Active, QColorGroup::Foreground ) );
+//	p.setColor( QPalette::Active, QColorGroup::Highlight, green );
+//	p.setColor( QPalette::Active, QColorGroup::HighlightedText, blue );
+	m_tableView->setPalette(p);*/
+	
+	clearFocus();
 	repaint();
-}
-
-const QString
-KexiRelationViewTableContainer::table()
-{
-	return m_tableView->table();
-}
-
-KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
-{
 }
 
 
@@ -227,7 +256,7 @@ KexiRelationViewTableContainer::~KexiRelationViewTableContainer()
 //BEGIN KexiRelatoinViewTableContainerHeader
 
 //for compat. with KDE <= 3.2
-#if !defined(Q_WS_WIN) && !KDE_IS_VERSION(3,2,90)
+#ifndef USE_KMDI_getCaptionColors
 void getCaptionColors( const QPalette &pal, 
     QColor &activeBG, QColor &activeFG, QColor &inactiveBG, QColor &inactiveFG )
 {
@@ -261,7 +290,7 @@ KexiRelationViewTableContainerHeader::KexiRelationViewTableContainerHeader(
 {
 	setMargin(1);
 
-#if defined(Q_WS_WIN) || KDE_IS_VERSION(3,2,90)
+#ifdef USE_KMDI_getCaptionColors
 	KMdiChildArea::getCaptionColors( 
 #else
 	getCaptionColors( 
@@ -342,6 +371,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *, QEvent *ev)
 void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev) {
 	kdDebug()<<"KexiRelationViewTableContainerHeader::Mouse Press Event"<<endl;
 	parentWidget()->setFocus();
+	ev->accept();
 	if (ev->button()==Qt::LeftButton) {
 		m_dragging=true;
 		m_grabX=ev->globalPos().x();
@@ -350,7 +380,11 @@ void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev) {
 		m_offsetY=0;
 		return;
 	}
-	QLabel::mousePressEvent(ev);
+	if (ev->button()==Qt::RightButton) {
+		emit static_cast<KexiRelationViewTableContainer*>(parentWidget())
+			->contextMenuRequest(ev->globalPos());
+	}
+//	QLabel::mousePressEvent(ev);
 }
 
 void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
@@ -359,6 +393,7 @@ void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev) {
 		m_dragging=false;
 		emit endDrag();
 	}
+	ev->accept();
 }
 
 //END KexiRelatoinViewTableContainerHeader
@@ -505,6 +540,7 @@ KexiRelationViewTable::slotContentsMoving(int,int)
 void KexiRelationViewTable::contentsMousePressEvent(QMouseEvent *ev)
 {
 	parentWidget()->setFocus();
+	setFocus();
 	KListView::contentsMousePressEvent(ev);
 //	if (ev->button()==Qt::RightButton)
 //		static_cast<KexiRelationView*>(parentWidget())->executePopup(ev->pos());

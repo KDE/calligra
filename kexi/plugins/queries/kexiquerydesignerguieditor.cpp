@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kexiquerydesignerguieditor.h"
+
 #include <qlayout.h>
 #include <qsplitter.h>
 
@@ -35,7 +37,7 @@
 #include <kexitableviewdata.h>
 #include "kexidragobjects.h"
 
-#include "kexiquerydesignerguieditor.h"
+#include "widget/relations/kexirelationwidget.h"
 
 KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiMainWindow *win)
  : QWidget(parent)
@@ -43,7 +45,9 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(QWidget *parent, KexiMain
 	m_conn = win->project()->dbConnection();
 
 	QSplitter *s = new QSplitter(Vertical, this);
-	KexiInternalPart::createWidgetInstance("relation", win, s, "relation");
+//	KexiInternalPart::createWidgetInstance("relation", win, s, "relation");
+	m_relations = new KexiRelationWidget(win, s, "relations");
+//	addActionProxyChild( m_view->relationView() );
 /*	KexiRelationPart *p = win->relationPart();
 	if(p)
 		p->createWidget(s, win);*/
@@ -79,6 +83,11 @@ KexiQueryDesignerGuiEditor::initTable()
 	KexiDB::Field *f4 = new KexiDB::Field(i18n("Condition"), KexiDB::Field::Text);
 	KexiTableViewColumn *col4 = new KexiTableViewColumn(*f4);
 	m_data->addColumn(col4);
+}
+
+KexiRelationWidget *KexiQueryDesignerGuiEditor::relationView() const
+{
+	return m_relations;
 }
 
 void

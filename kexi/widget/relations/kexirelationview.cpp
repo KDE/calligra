@@ -48,7 +48,6 @@
 
 KexiRelationView::KexiRelationView(QWidget *parent, KexiDB::Connection *conn, const char *name)
  : QScrollView(parent, name, WStaticContents)
- , KexiActionProxy(this)
 {
 //	m_relation=relation;
 //	m_relation->incUsageCount();
@@ -60,24 +59,20 @@ KexiRelationView::KexiRelationView(QWidget *parent, KexiDB::Connection *conn, co
 //	connect(relation, SIGNAL(relationListUpdated(QObject *)), this, SLOT(slotListUpdate(QObject *)));
 
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
-	setFocusPolicy(StrongFocus);
+	setFocusPolicy(WheelFocus);
 	setResizePolicy(Manual);
-
-
-	m_conn = conn;
+/*MOVED TO KexiRelationDialog
 	//actions
 	m_tableQueryPopup = new KPopupMenu(this, "m_popup");
-	m_tableQueryPopup->insertTitle(i18n("Table/Query"));
+	m_tableQueryPopup->insertTitle(i18n("Table"));
 	m_connectionPopup = new KPopupMenu(this, "m_connectionPopup");
-	m_connectionPopup->insertTitle(i18n("Connection"));
+	m_connectionPopup->insertTitle(i18n("Relation"));
 	m_areaPopup = new KPopupMenu(this, "m_areaPopup");
 	
-	
-	plugSharedAction("edit_delete",m_tableQueryPopup);
+	plugSharedAction("edit_delete", i18n("Hide table"), m_tableQueryPopup);
 	plugSharedAction("edit_delete",m_connectionPopup);
-	
 	plugSharedAction("edit_delete",this, SLOT(removeSelectedObject()));
-	
+*/	
 #if 0
 	m_removeSelectedTableQueryAction = new KAction(i18n("&Hide Selected Table/Query"), "editdelete", "",
 		this, SLOT(removeSelectedTableQuery()), parent->actionCollection(), "relationsview_removeSelectedTableQuery");
@@ -87,7 +82,7 @@ KexiRelationView::KexiRelationView(QWidget *parent, KexiDB::Connection *conn, co
 		this, SLOT(openSelectedTableQuery()), 0/*parent->actionCollection()*/, "relationsview_openSelectedTableQuery");
 #endif
 
-	invalidateActions();
+//	invalidateActions();
 
 #if 0
 
@@ -99,6 +94,10 @@ KexiRelationView::KexiRelationView(QWidget *parent, KexiDB::Connection *conn, co
 
 	invalidateActions();
 #endif
+}
+
+KexiRelationView::~KexiRelationView()
+{
 }
 
 void
@@ -119,8 +118,12 @@ KexiRelationView::addTable(KexiDB::TableSchema *t)
 
 	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, t);
 	connect(c, SIGNAL(endDrag()), this, SLOT(tableViewEndDrag()));
-	connect(c, SIGNAL(gotFocus()), this, SLOT(tableViewGotFocus()));
-
+	connect(c, SIGNAL(gotFocus()), this, SLOT(slotTableViewGotFocus()));
+//	connect(c, SIGNAL(headerContextMenuRequest(const QPoint&)), 
+//		this, SLOT(tableHeaderContextMenuRequest(const QPoint&)));
+	connect(c, SIGNAL(contextMenuRequest(const QPoint&)), 
+		this, SIGNAL(tableContextMenuRequest(const QPoint&)));
+	
 	addChild(c, 100,100);
 //	c->setFixedSize(110, 160);
 	c->show();
@@ -192,13 +195,15 @@ KexiRelationView::addConnection(SourceConnection conn, bool)
 	m_connectionViews.append(connView);
 	updateContents(connView->connectionRect());
 
+/*luc
+TODO
 	KexiDB::TableSchema *mtable = m_conn->tableSchema(conn.srcTable);
 	KexiDB::TableSchema *ftable = m_conn->tableSchema(conn.rcvTable);
 	KexiDB::IndexSchema *forign = new KexiDB::IndexSchema(ftable);
 
 	forign->addField(mtable->field(conn.srcField));
 	new KexiDB::Reference(forign, mtable->primaryKey());
-
+*/
 #if 0
 	if(!interactive)
 	{
@@ -257,7 +262,7 @@ void
 KexiRelationView::setReadOnly(bool b)
 {
 	m_readOnly=b;
-	invalidateActions();
+//	invalidateActions();
 /*	for (TableList::iterator it=m_tables.begin();it!=m_tables.end();++it)
 	{
 //		(*it)->setReadOnly(b);
@@ -300,39 +305,42 @@ KexiRelationView::contentsMousePressEvent(QMouseEvent *ev)
 		cview->setSelected(true);
 		updateContents(cview->connectionRect());
 		m_selectedConnection = cview;
-		invalidateActions();
+//		invalidateActions();
 
 		if(ev->button() == RightButton) {//show popup
 			kdDebug() << "KexiRelationView::contentsMousePressEvent(): context" << endl;
 //			QPopupMenu m;
 //				m_removeSelectedTableQueryAction->plug( &m );
 //				m_removeSelectedConnectionAction->plug( &m );
-			executePopup( ev->globalPos() );
+			emit connectionContextMenuRequest( ev->globalPos() );
+//			executePopup( ev->globalPos() );
 		}
 		return;
 	}
 	//connection not found
 	clearSelection();
+//	invalidateActions();
 	if(ev->button() == RightButton) {//show popup on view background area
 //		QPopupMenu m;
 //			m_removeSelectedConnectionAction->plug( &m );
-		executePopup(ev->globalPos());
+		emit emptyAreaContextMenuRequest( ev->globalPos() );
+//		executePopup(ev->globalPos());
 	}
 }
 
 void KexiRelationView::clearSelection()
 {
+	if (m_focusedTableView) {
+		m_focusedTableView->unsetFocus();
+		m_focusedTableView = 0;
+//		setFocus();
+//		invalidateActions();
+	}
 	if (m_selectedConnection) {
 		m_selectedConnection->setSelected(false);
 		updateContents(m_selectedConnection->connectionRect());
 		m_selectedConnection = 0;
-		invalidateActions();
-	}
-	if (m_focusedTableView) {
-		m_focusedTableView->unsetFocus();
-		m_focusedTableView = 0;
-		setFocus();
-		invalidateActions();
+//		invalidateActions();
 	}
 }
 
@@ -386,6 +394,12 @@ KexiRelationView::stretchExpandSize()
 	resizeContents(p.x(), p.y());
 }
 
+void KexiRelationView::tableViewEndDrag()
+{
+	kdDebug() << "END DRAG!" <<endl;
+	stretchExpandSize();
+}
+
 void
 KexiRelationView::removeSelectedObject()
 {
@@ -420,23 +434,12 @@ KexiRelationView::removeSelectedObject()
 #endif
 		delete m_selectedConnection;
 		m_selectedConnection = 0;
-		invalidateActions();
+//		invalidateActions();
 	}
 //TODO	else if (
 }
 
-/*void KexiRelationView::removeSelectedTableQuery()
-{
-	//TODO
-}*/
-
-void KexiRelationView::tableViewEndDrag()
-{
-	kdDebug() << "END DRAG!" <<endl;
-	stretchExpandSize();
-}
-
-void KexiRelationView::tableViewGotFocus()
+void KexiRelationView::slotTableViewGotFocus()
 {
 	if (m_focusedTableView == sender())
 		return;
@@ -445,23 +448,27 @@ void KexiRelationView::tableViewGotFocus()
 //	if (m_focusedTableView)
 //		m_focusedTableView->unsetFocus();
 	m_focusedTableView = (KexiRelationViewTableContainer*)sender();
+//	invalidateActions();
+	emit tableViewGotFocus();
+}
+
+/*
+
+void KexiRelationView::tableHeaderContextMenuRequest(const QPoint& pos)
+{
+	if (m_focusedTableView != sender())
+		return;
+	kdDebug() << "HEADER CTXT MENU!" <<endl;
 	invalidateActions();
+	m_tableQueryPopup->exec(pos);	
 }
 
 //! Invalidates all actions availability
 void KexiRelationView::invalidateActions()
 {
-	setAvailable("m_selectedConnection", m_selectedConnection || m_focusedTableView);
-#if 0
-	m_openSelectedTableQueryAction->setEnabled( m_focusedTableView );
-	m_removeSelectedTableQueryAction->setEnabled( !m_readOnly && m_focusedTableView );
-	m_removeSelectedConnectionAction->setEnabled( !m_readOnly && m_selectedConnection );
-#endif
+	setAvailable("edit_delete", m_selectedConnection || m_focusedTableView);
 }
 
-/*! executes popup menu at \a pos, or, 
-	if \a pos not specified: at center of selected table view (if any selected),
-	or at center point of the relations view. */
 void KexiRelationView::executePopup( QPoint pos )
 {
 	if (pos==QPoint(-1,-1)) {
@@ -472,9 +479,6 @@ void KexiRelationView::executePopup( QPoint pos )
 	else if (m_selectedConnection)
 		m_connectionPopup->exec(pos);
 }
-
-KexiRelationView::~KexiRelationView()
-{
-}
+*/
 
 #include "kexirelationview.moc"

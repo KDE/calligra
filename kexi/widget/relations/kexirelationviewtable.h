@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003	Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003		Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ namespace KexiDB
 	class TableSchema;
 }
 
-class KexiRelationViewTableContainer : public QFrame
+class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainer : public QFrame
 {
 	Q_OBJECT
 
@@ -44,7 +44,7 @@ class KexiRelationViewTableContainer : public QFrame
 		~KexiRelationViewTableContainer();
 
 		int			globalY(const QString &field);
-		const QString table();
+		KexiDB::TableSchema *table();
 
 //		virtual QSize sizeHint();
 		
@@ -52,9 +52,10 @@ class KexiRelationViewTableContainer : public QFrame
 		int bottom() { return y() + height() - 1; }
 
 	signals:
-		void			moved(KexiRelationViewTableContainer *);
+		void moved(KexiRelationViewTableContainer *);
 		void endDrag();
 		void gotFocus();
+		void contextMenuRequest(const QPoint& pos);
 
 	public slots:
 		virtual void setFocus();
@@ -74,15 +75,16 @@ class KexiRelationViewTableContainer : public QFrame
 //		int			m_bY;
 //		int			m_grabX;
 //		int			m_grabY;
-
+		KexiDB::TableSchema *m_table;
 		KexiRelationViewTableContainerHeader *m_tableHeader;
-
 		KexiRelationViewTable	*m_tableView;
 		KexiRelationView	*m_parent;
+
+		friend class KexiRelationViewTableContainerHeader;
 };
 
 
-class KexiRelationViewTableItem : public KListViewItem
+class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableItem : public KListViewItem
 {
 	public:
 		KexiRelationViewTableItem(QListView *parent, QListViewItem *after,
@@ -91,7 +93,7 @@ class KexiRelationViewTableItem : public KListViewItem
 };
 
 
-class KexiRelationViewTable : public KListView
+class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTable : public KListView
 {
 	Q_OBJECT
 
@@ -126,7 +128,7 @@ class KexiRelationViewTable : public KListView
 		QPixmap m_keyIcon, m_noIcon;
 };
 
-class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainerHeader : public QLabel
+class KEXIRELATIONSVIEW_EXPORT KexiRelationViewTableContainerHeader : public QLabel
 {
 	Q_OBJECT
 	public:

@@ -23,7 +23,7 @@
 #include <kexidialogbase.h>
 
 class KexiMainWindow;
-class KexiRelationDialog;
+class KexiRelationWidget;
 
 class KexiRelationMainDlg : public KexiDialogBase
 {
@@ -38,7 +38,7 @@ class KexiRelationMainDlg : public KexiDialogBase
 		virtual QString itemIcon();
 
 	private:
-		KexiRelationDialog	*m_view;
+		KexiRelationWidget	*m_view;
 };
 
 #endif

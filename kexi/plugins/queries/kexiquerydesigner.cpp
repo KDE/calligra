@@ -45,6 +45,8 @@
 #include "kexiquerydesignersql.h"
 #include "kexiquerydesigner.h"
 
+#include "widget/relations/kexirelationwidget.h"
+
 KexiQueryDesigner::KexiQueryDesigner(KexiMainWindow *win, const KexiPart::Item &it)
 	: KexiDialogBase(win, it.name())
 {
@@ -60,6 +62,8 @@ KexiQueryDesigner::KexiQueryDesigner(KexiMainWindow *win, const KexiPart::Item &
 //	connect(m_editor, SIGNAL(contextHelp(const QString &, const QString &)), this,
 //	 SLOT(slotContextHelp(const QString &, const QString &)));
 	m_editor = new KexiQueryDesignerGuiEditor(this, win);
+	addActionProxyChild( m_editor->relationView() );
+
 	m_sql = new KexiQueryDesignerSQL(this);
 	m_queryView = new KexiDataTableView(this);
 //	m_queryView = new KexiDataTable(m_view, "Query View", "query_view", this, true);

@@ -28,7 +28,7 @@ class KexiRelationViewTableContainer;
 class KexiRelationView;
 //struct SourceConnection;
 
-class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
+class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 {
 	public:
 

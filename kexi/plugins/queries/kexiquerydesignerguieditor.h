@@ -25,6 +25,7 @@
 class KexiMainWindow;
 class KexiTableViewData;
 class KexiTableView;
+class KexiRelationWidget;
 
 namespace KexiDB
 {
@@ -42,6 +43,8 @@ class KexiQueryDesignerGuiEditor : public QWidget
 
 		KexiDB::QuerySchema	*schema();
 
+		KexiRelationWidget *relationView() const;
+
 	protected:
 		void			initTable();
 		void			addRow(const QString &tbl, const QString &field);
@@ -53,6 +56,7 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		KexiTableViewData	*m_data;
 		KexiTableView		*m_table;
 		KexiDB::Connection	*m_conn;
+		KexiRelationWidget *m_relations;
 };
 
 #endif

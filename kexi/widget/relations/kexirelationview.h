@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,6 @@
 #include <qdict.h>
 
 #include "kexirelationviewconnection.h"
-#include "kexiactionproxy.h"
 
 class QFrame;
 
@@ -54,7 +53,7 @@ struct SourceConnection
 
 };
 
-class KexiRelationView : public QScrollView, public KexiActionProxy
+class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 {
 	Q_OBJECT
 
@@ -67,9 +66,20 @@ class KexiRelationView : public QScrollView, public KexiActionProxy
 
 //		RelationList	getConnections()const { return m_connections; };
 		void setReadOnly(bool);
-		void executePopup( QPoint pos = QPoint(-1,-1) );
+
+		inline KexiRelationViewConnection* selectedConnection() const { return m_selectedConnection; }
+		inline KexiRelationViewTableContainer* focusedTableView() const { return m_focusedTableView; }
+
+	signals:
+		void tableContextMenuRequest( const QPoint& pos );
+		void connectionContextMenuRequest( const QPoint& pos );
+		void emptyAreaContextMenuRequest( const QPoint& pos );
+		void tableViewGotFocus();
 
 	public slots:
+		//! Clears current selection - table/query or connection
+		void clearSelection();
+
 		void		slotTableScrolling(QString);
 //		void		removeSelectedConnection();
 //		void		removeSelectedTableQuery();
@@ -81,9 +91,15 @@ class KexiRelationView : public QScrollView, public KexiActionProxy
 		void		containerMoved(KexiRelationViewTableContainer *c);
 		void		slotListUpdate(QObject *s);
 		void		tableViewEndDrag();
-		void		tableViewGotFocus();
+		void		slotTableViewGotFocus();
+//		void		tableHeaderContextMenuRequest(const QPoint& pos);
 
 	protected:
+
+		/*! executes popup menu at \a pos, or, 
+		 if \a pos not specified: at center of selected table view (if any selected),
+		 or at center point of the relations view. */
+//		void executePopup( QPoint pos = QPoint(-1,-1) );
 
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		void		contentsMousePressEvent(QMouseEvent *ev);
@@ -91,10 +107,10 @@ class KexiRelationView : public QScrollView, public KexiActionProxy
 
 		void		recalculateSize(int width, int height);
 		void		stretchExpandSize();
-		void		invalidateActions();
+//		void		invalidateActions();
 
-		//! Clears current selection - table/query or connection
-		void clearSelection();
+//		void clearTableSelection();
+//		void clearConnSelection();
 
 	private:
 		TableList		m_tables;
@@ -103,17 +119,13 @@ class KexiRelationView : public QScrollView, public KexiActionProxy
 //		KexiRelation    	*m_relation;
 		ConnectionList		m_connectionViews;
 		KexiRelationViewConnection *m_selectedConnection;
-		KexiDB::Connection	*m_conn;
-
-
 		KexiRelationViewTableContainer *m_focusedTableView;
-
+	/*
 		KPopupMenu *m_tableQueryPopup //over table/query
 			, *m_connectionPopup //over connection
 			, *m_areaPopup; //over outer area
 		KAction *m_openSelectedTableQueryAction;
-//		KAction *m_removeSelectedTableQueryAction;
-//		KAction *m_removeSelectedConnectionAction;
+*/
 };
 
 #endif
