@@ -130,14 +130,14 @@ public:
     void updateFrameFormat();
 
     // Table creation support - methods used by KWView to reuse the last settings
-    unsigned int tableRows() { return m_table.rows; }
-    unsigned int tableCols() { return m_table.cols; }
-    int tableWidthMode() { return m_table.width; }
-    int tableHeightMode() { return m_table.height; }
-    bool tableIsFloating() { return m_table.floating; }
+    unsigned int tableRows() const { return m_table.rows; }
+    unsigned int tableCols() const { return m_table.cols; }
+    int tableWidthMode()const { return m_table.width; }
+    int tableHeightMode()const { return m_table.height; }
+    bool tableIsFloating()const { return m_table.floating; }
 
-    unsigned int splitCellRows(){return m_tableSplit.nbRows;}
-    unsigned int splitCellCols(){return m_tableSplit.nbCols;}
+    unsigned int splitCellRows()const{return m_tableSplit.nbRows;}
+    unsigned int splitCellCols()const{return m_tableSplit.nbCols;}
 
     void setSplitCellRows(unsigned int _nb){ m_tableSplit.nbRows=_nb;}
     void setSplitCellCols(unsigned int _nb){ m_tableSplit.nbCols=_nb;}
@@ -147,7 +147,7 @@ public:
                       bool isFloating );
     KWTableFrameSet * getTable();
 
-    KWTableFrameSet *getCurrentTable() { return curTable; }
+    KWTableFrameSet *getCurrentTable()const { return curTable; }
 
     //move canvas to show point dPoint (in doc coordinates)
     void scrollToOffset( const KoPoint & dPoint );
