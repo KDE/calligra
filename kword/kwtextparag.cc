@@ -28,6 +28,7 @@
 #include "kwtextframeset.h"
 #include "variable.h"
 #include "counter.h"
+#include <klocale.h>
 #include <kdebug.h>
 #include <qdom.h>
 #include <qtl.h>
@@ -443,20 +444,50 @@ int KWTextParag::nextTab( int chnum, int x )
                     int w = 0;
                     while ( c < string()->length()-1 && string()->at( c ).c != '\t' )
                     {
-                        ++c;
                         QTextStringChar & ch = string()->at( c );
                         // Determine char width (same code as the one in QTextFormatterBreak[In]Words::format())
                         if ( ch.c.unicode() >= 32 || ch.isCustom() )
                             w += string()->width( c );
                         else
                             w += ch.format()->width( ' ' );
+                        ++c;
                     }
                     if ( type == T_RIGHT )
                         return tArray[ i ] - w;
                     else // T_CENTER
                         return tArray[ i ] - w/2;
                 }
-                case T_DEC_PNT: // TODO
+                case T_DEC_PNT:
+                {
+                    // Look for the next tab (or EOL), and for <digit><dot>
+                    // Default to right-aligned if no decimal point found (behavior from msword)
+                    int c = chnum + 1;
+                    int w = 0;
+                    int decimalPoint = KGlobal::locale()->decimalSymbol()[0].unicode();
+                    bool digitFound = false;
+                    while ( c < string()->length()-1 && string()->at( c ).c != '\t' )
+                    {
+                        QTextStringChar & ch = string()->at( c );
+                        if ( ch.c.isDigit() )
+                            digitFound = true;
+                        else if ( digitFound && ( ch.c == '.' || ch.c.unicode() == decimalPoint ) )
+                        {
+                            w += string()->width( c ) / 2; // center around the decimal point
+                            break;
+                        }
+                        else
+                            digitFound = false; // The digit has to be right before the dot
+
+                        // Determine char width (same code as the one in QTextFormatterBreak[In]Words::format())
+                        if ( ch.c.unicode() >= 32 || ch.isCustom() )
+                            w += string()->width( c );
+                        else
+                            w += ch.format()->width( ' ' );
+
+                        ++c;
+                    }
+                    return tArray[ i ] - w;
+                }
                 default: // case T_LEFT:
                     return tArray[ i ];
                 }
@@ -1156,6 +1187,15 @@ void KWParagLayout::save( QDomElement & parentElem )
         element = doc.createElement( "COUNTER" );
         parentElem.appendChild( element );
         counter->save( element );
+    }
+
+    KoTabulatorList::Iterator it = m_tabList.begin();
+    for ( ; it != m_tabList.end() ; it++ )
+    {
+        element = doc.createElement( "TABULATOR" );
+        parentElem.appendChild( element );
+        element.setAttribute( "type", (*it).type );
+        element.setAttribute( "ptpos", (*it).ptPos );
     }
 }
 
