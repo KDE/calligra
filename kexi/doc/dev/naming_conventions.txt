@@ -1,0 +1,36 @@
+---------------------------------------------------------
+ Kexi Naming Conventions
+ 
+ These rules apply to Kexi Team developers
+ There are also guidelines for future naming decissions.
+ 
+ Started: 2003-10-17
+ Copyright (C) 2003 Kexi Team
+ Kexi home page: http://www.kexi-project.org/
+---------------------------------------------------
+
+1. Namespaces
+To simplify class names and make these names shorter, we use namespaces.
+
+1.1. KexiDB namespace
+
+This denotes KexiDB module. All classes from kexidb/ directory are in KexiDB 
+namespace.KexiDB-compatible database drivers (from kexidb/drivers/ 
+subdirectories are not in this KexiDB namespace.
+
+
+1.2. KexiWindow ???
+
+#TODO
+
+2. Directories
+
+plugins/<subdirs>
+ any plugins like Kexi dialogs for table altering, query desinger, etc.;
+ one subdirectory per plugin; each subdirectory is a KDE module
+ 
+widgets/<subdirs>
+ any widgets that are not dependent on core nor kexidb, thus reusable 
+ in other projects; one subdirectory per widget; all subdirectories are linked 
+ together with static compilation to single common library
+

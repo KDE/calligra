@@ -129,7 +129,8 @@ It seems to be ok, since classes like KexiTablePart already inherits from KexiPr
 2. KexiProjectHandlerProxy --> KexiProjectPart::Proxy
 ..thus it could be consistently named. This also indicated that the class is used 
 as a helper for KexiProjectPart. More, there are already classes like KexiTablePartProxy
-so new name for KexiProjectHandlerProxy is ok.
+so new name for KexiProjectHandlerProxy is ok. Proxy class should be declared 
+inside KexiProjectPart.
 
 3. KexiProjectHandlerItem -> KexiProjectPart::Instance 
 (or KexiProjectPart::Data but Im voting for the former)
@@ -143,6 +144,34 @@ ALSO TODO:
 Jowenn's KexiDataProvider class functionality seems to be something like kexidb now offers.
 
 </RENAME_PROPOSALS>
+
+TODO:
+- In mysql and pgsql drivers Connection::fileName() is reused for socket names.
+  It's not ok. Add another member: localSocketFileName(), because fileName() 
+  is for file-based engines only.
+
+
+2003-10-18  
+- Connection:
+  - useTemporaryDatabaseIfNeeded() added - Because some engines need to have
+   opened any database before executing administrative sql statements 
+   like "create database" or "drop database",
+   this method is used to use appropriate, existing database for this connection.
+  - above method is now used in createDatabase() and dropDatabase() if needed.
+  - QString anyAvailableDatabaseName() - returns name of any (e.g. first found) 
+   database for this connection, eg. "template1" for PostgreSQL.
+  - DriverBehaviour::ALWAYS_AVAILABLE_DATABASE_NAME added when hardcoded value 
+   for above is enough.
+  - setAvailableDatabaseName(const QString& dbName) - This is option that e.g. 
+   application that make use of KexiDB library can set to tune connection 
+   behaviour when it need to temporary connect to any database
+   in the server to do some work (e.g. DROP DATABASE).
+- Connection cleaning up bug fixed a bit.
+- Naming Conventions document added
+
+2003-10-17
+- Driver developers should not change values of several important Connection
+  class members, so these are now private.
 
 2003-10-16
 - KexiTableView:
