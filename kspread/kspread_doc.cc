@@ -56,6 +56,27 @@ static const int CURRENT_SYNTAX_VERSION = 1;
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.2";
 
+class DocPrivate
+{
+public:
+
+  // the map that holds all the tables.
+  KSpreadMap *map;
+
+  // the manager of the styles
+  KSpreadStyleManager * styleManager;
+
+  // used to give every KSpreadSheet a unique default name.
+  int tableId;
+
+  // URL of the this part. This variable is only set if the load() function
+  // had been called with an URL as argument.
+  QString fileURL;
+
+  // syntax version of the opened file
+  int syntaxVersion;
+};
+
 /*****************************************************************************
  *
  * KSpreadDoc
@@ -74,9 +95,13 @@ QPtrList<KSpreadDoc>& KSpreadDoc::documents()
 
 KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-    m_pStyleManager( new KSpreadStyleManager() ),
     m_pageBorderColor( Qt::red )
 {
+  d = new DocPrivate;
+  
+  d->map = 0;
+  d->styleManager = new KSpreadStyleManager();
+  
   QFont f( KoGlobal::defaultFont() );
 
   KSpreadFormat::setGlobalRowHeight( f.pointSizeFloat() + 3 );
@@ -85,7 +110,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   m_plugins.setAutoDelete( false );
 
   m_bDelayCalculation = false;
-  m_syntaxVersion = CURRENT_SYNTAX_VERSION;
+  d->syntaxVersion = CURRENT_SYNTAX_VERSION;
 
   if ( s_docs == 0 )
       s_docs = new QPtrList<KSpreadDoc>;
@@ -101,9 +126,8 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
       setName( tmp.local8Bit());//tmp.latin1() );
   }
 
-  m_iTableId = 1;
+  d->tableId = 1;
   m_dcop = 0;
-  m_pMap = 0L;
   m_bLoading = false;
   m_numOperations = 1; // don't start repainting before the GUI is done...
 
@@ -113,7 +137,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   initInterpreter();
 
-  m_pMap = new KSpreadMap( this, "Map" );
+  d->map = new KSpreadMap( this, "Map" );
 
   m_pUndoBuffer = new KSpreadUndo( this );
 
@@ -179,13 +203,13 @@ bool KSpreadDoc::initDoc()
 	for( int i=0; i<_page; i++ )
 	{
 		KSpreadSheet *t = createTable();
-		m_pMap->addTable( t );
+		d->map->addTable( t );
 	}
 
 	resetURL();
 	setEmpty();
 	initConfig();
-        m_pStyleManager->createBuiltinStyles();
+        d->styleManager->createBuiltinStyles();
 	return true;
     }
 
@@ -249,6 +273,21 @@ void KSpreadDoc::initConfig()
     setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
 }
 
+KSpreadMap* KSpreadDoc::map() const
+{
+  return d->map;
+}
+
+KSpreadStyleManager* KSpreadDoc::styleManager()
+{
+  return d->styleManager;
+}
+
+int KSpreadDoc::syntaxVersion() const
+{
+  return d->syntaxVersion;
+}
+
 KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
 {
     if ( name == 0 )
@@ -258,7 +297,7 @@ KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
 
 bool KSpreadDoc::saveChildren( KoStore* _store )
 {
-  return m_pMap->saveChildren( _store );
+  return d->map->saveChildren( _store );
 }
 
 QDomDocument KSpreadDoc::saveXML()
@@ -288,7 +327,7 @@ QDomDocument KSpreadDoc::saveXML()
        for the whole map as the map paper layout. */
     if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
     {
-        KSpreadSheetPrint* printObject = m_pMap->firstTable()->print();
+        KSpreadSheetPrint* printObject = d->map->firstTable()->print();
 
         QDomElement paper = doc.createElement( "paper" );
         paper.setAttribute( "format", printObject->paperFormatString() );
@@ -385,10 +424,10 @@ QDomDocument KSpreadDoc::saveXML()
         spread.appendChild( data );
     }
 
-    QDomElement s = m_pStyleManager->save( doc );
+    QDomElement s = d->styleManager->save( doc );
     spread.appendChild( s );
 
-    QDomElement e = m_pMap->save( doc );
+    QDomElement e = d->map->save( doc );
     spread.appendChild( e );
 
     setModified( false );
@@ -398,7 +437,7 @@ QDomDocument KSpreadDoc::saveXML()
 
 bool KSpreadDoc::loadChildren( KoStore* _store )
 {
-    return m_pMap->loadChildren( _store );
+    return d->map->loadChildren( _store );
 }
 
 bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
@@ -419,12 +458,12 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     return false;
   }
 
-  m_syntaxVersion = KSpreadDoc::getAttribute( spread, "syntaxVersion", 0 );
-  if ( m_syntaxVersion > CURRENT_SYNTAX_VERSION )
+  d->syntaxVersion = KSpreadDoc::getAttribute( spread, "syntaxVersion", 0 );
+  if ( d->syntaxVersion > CURRENT_SYNTAX_VERSION )
   {
       int ret = KMessageBox::warningContinueCancel(
           0, i18n("This document was created with a newer version of KSpread (syntax version: %1)\n"
-                  "When you open it with this version of KSpread, some information may be lost.").arg(m_syntaxVersion),
+                  "When you open it with this version of KSpread, some information may be lost.").arg(d->syntaxVersion),
           i18n("File Format Mismatch"), i18n("Continue") );
       if ( ret == KMessageBox::Cancel )
       {
@@ -481,12 +520,12 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
   emit sigProgress( 40 );
   // In case of reload (e.g. from konqueror)
-  m_pMap->tableList().clear(); // it's set to autoDelete
+  d->map->tableList().clear(); // it's set to autoDelete
 
   QDomElement styles = spread.namedItem( "styles" ).toElement();
   if ( !styles.isNull() )
   {
-    if ( !m_pStyleManager->loadXML( styles ) )
+    if ( !d->styleManager->loadXML( styles ) )
     {
       setErrorMessage( i18n( "Styles cannot be loaded." ) );
       m_bLoading = false;
@@ -502,14 +541,14 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       m_bLoading = false;
       return false;
   }
-  if ( !m_pMap->loadXML( mymap ) )
+  if ( !d->map->loadXML( mymap ) )
   {
       m_bLoading = false;
       return false;
   }
 
   //Backwards compatibility with older versions for paper layout
-  if ( m_syntaxVersion < 1 )
+  if ( d->syntaxVersion < 1 )
   {
     QDomElement paper = spread.namedItem( "paper" ).toElement();
     if ( !paper.isNull() )
@@ -561,7 +600,7 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
     float bottom = borders.attribute( "bottom" ).toFloat();
 
     //apply to all tables
-    QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
+    QPtrListIterator<KSpreadSheet> it ( d->map->tableList() );
     for( ; it.current(); ++it )
     {
       it.current()->print()->setPaperLayout( left, top, right, bottom,
@@ -607,7 +646,7 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
   fcenter = fcenter.replace( "<table>", "<sheet>" );
   fright  = fright.replace(  "<table>", "<sheet>" );
 
-  QPtrListIterator<KSpreadSheet> it ( m_pMap->tableList() );
+  QPtrListIterator<KSpreadSheet> it ( d->map->tableList() );
   for( ; it.current(); ++it )
   {
     it.current()->print()->setHeadFootLine( hleft, hcenter, hright,
@@ -621,7 +660,7 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 
   m_bLoading = false;
 
-  //  m_pMap->update();
+  //  d->map->update();
 
   kdDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 
@@ -659,9 +698,9 @@ void KSpreadDoc::setDefaultGridPen( const QPen& p )
 KSpreadSheet* KSpreadDoc::createTable()
 {
   QString s( i18n("Sheet%1") );
-  s = s.arg( m_iTableId++ );
-  //KSpreadSheet *t = new KSpreadSheet( m_pMap, s.latin1() );
-  KSpreadSheet *t = new KSpreadSheet( m_pMap, s,s.utf8() );
+  s = s.arg( d->tableId++ );
+  //KSpreadSheet *t = new KSpreadSheet( d->map, s.latin1() );
+  KSpreadSheet *t = new KSpreadSheet( d->map, s,s.utf8() );
   t->setTableName( s, TRUE ); // huh? (Werner)
   return t;
 }
@@ -674,7 +713,7 @@ void KSpreadDoc::resetInterpreter()
   // Update the cell content
   // TODO
   /* KSpreadSheet *t;
-  for ( t = m_pMap->firstTable(); t != 0L; t = m_pMap->nextTable() )
+  for ( t = d->map->firstTable(); t != 0L; t = d->map->nextTable() )
   t->initInterpreter(); */
 
   // Perhaps something changed. Lets repaint
@@ -684,7 +723,7 @@ void KSpreadDoc::resetInterpreter()
 
 void KSpreadDoc::addTable( KSpreadSheet *_table )
 {
-  m_pMap->addTable( _table );
+  d->map->addTable( _table );
 
   setModified( TRUE );
 
@@ -795,7 +834,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     // choose sheet: the first or the active
     KSpreadSheet* table = 0L;
     if ( !m_activeTable )
-        table = m_pMap->firstTable();
+        table = d->map->firstTable();
     else
         table = m_activeTable;
     if ( !table )
@@ -871,8 +910,8 @@ void KSpreadDoc::paintUpdates()
     view->paintUpdates();
   }
 
-  for (table = m_pMap->firstTable(); table != NULL;
-       table = m_pMap->nextTable())
+  for (table = d->map->firstTable(); table != NULL;
+       table = d->map->nextTable())
   {
     table->clearPaintDirtyData();
   }
@@ -1277,9 +1316,11 @@ KSpreadDoc::~KSpreadDoc()
   delete m_dcop;
   s_docs->removeRef(this);
   kdDebug(36001) << "alive 1" << endl;
-  delete m_pMap;
-  delete m_pStyleManager;
+  delete d->map;
+  delete d->styleManager;
   delete m_pKSpellConfig;
+  
+  delete d;
 }
 
 DCOPObject* KSpreadDoc::dcopObject()
@@ -1469,7 +1510,7 @@ void KSpreadDoc::emitEndOperation()
    {
      m_numOperations = 0;
      m_bDelayCalculation = false;
-     for ( t = m_pMap->firstTable(); t != NULL; t = m_pMap->nextTable() )
+     for ( t = d->map->firstTable(); t != NULL; t = d->map->nextTable() )
      {
        //       ElapsedTime etm( "Updating table..." );
        t->update();

@@ -71,6 +71,8 @@ class KSpreadPlugin
   virtual QDomElement saveXML( QDomDocument & doc ) const = 0;
 };
 
+class DocPrivate;
+
 /**
  * This class holds the data that makes up a spreadsheet.
  */
@@ -115,8 +117,8 @@ public:
    */
   void addTable( KSpreadSheet * _table );
 
-  KSpreadMap * map() const { return m_pMap; }
-  KSpreadStyleManager * styleManager() const { return m_pStyleManager; }
+  KSpreadMap * map() const;
+  KSpreadStyleManager * styleManager();
 
   /**
    * @return the locale which was used for creating this document.
@@ -381,7 +383,7 @@ public:
   /**
    * Returns the syntax version of the currently opened file
    */
-  int syntaxVersion( ) const { return m_syntaxVersion; }
+  int syntaxVersion( ) const;
 
   static QString getAttribute(const QDomElement &element, const char *attributeName, const QString &defaultValue)
   {
@@ -464,36 +466,6 @@ protected:
    * Destroys the interpreter.
    */
   void destroyInterpreter();
-
-  /**
-   * Pointer to the map that holds all the tables.
-   */
-  KSpreadMap *m_pMap;
-
-  /**
-   * Pointer to the manager of the styles
-   */
-  KSpreadStyleManager * m_pStyleManager;
-
-  /**
-   * This variable is used to give every KSpreadSheet a unique default name.
-   *
-   * @see #newKSpreadSheet
-   */
-  int m_iTableId;
-
-  /**
-   * The URL of the this part. This variable is only set if the @ref #load function
-   * had been called with an URL as argument.
-   *
-   * @see #load
-   */
-  QString m_strFileURL;
-
-  /**
-  * Contains the syntax version of the opened file
-  */
-  int m_syntaxVersion;
 
   /**
    * This variable hold the KScript Interpreter.
@@ -596,6 +568,12 @@ protected:
 
 private:
 
+  DocPrivate* d;
+
+  // don't allow copy or assignment
+  KSpreadDoc( const KSpreadDoc& );
+  KSpreadDoc& operator=( const KSpreadDoc& );
+  
   /* helper functions for painting */
 
   /**
