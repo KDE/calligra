@@ -67,8 +67,8 @@ public:
 
 	void setDocument(KtablesDoc *);	
 	virtual bool newDocument();
-	virtual bool openDocument(const char *, const char *);
-	virtual bool saveDocument(const char *, const char *);
+	virtual bool openDocument(const char *);
+	virtual bool saveDocument();
 	virtual bool closeDocument();
 	virtual bool closeAllDocuments();
 	virtual void releaseDocument();

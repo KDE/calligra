@@ -29,5 +29,7 @@ METASOURCES = tableselect.moc ktables_server.moc ktables_doc.moc \
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(ktables_SOURCES) -o ../po/ktables.pot
 
+ktables.h: $(top_builddir)/lib/kofficecore/koffice.idl
+
 IDL_FLAGS = --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 

@@ -146,11 +146,14 @@ const QString& KtablesDoc::getTitle() const
 	return m_title;
 }
 
-bool KtablesDoc::openDocument(const char* filename, const char* format)
+bool KtablesDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 {
+/*
+ Not always possible (embedded parts)
 	QFileInfo fileInfo(filename);
 	m_title=fileInfo.fileName();
 	m_path=fileInfo.absFilePath();	
+*/
 	/////////////////////////////////////////////////
 	// TODO: Add your document opening code here
 	/////////////////////////////////////////////////
@@ -159,7 +162,7 @@ bool KtablesDoc::openDocument(const char* filename, const char* format)
 	return true;
 }
 
-bool KtablesDoc::saveDocument(const char* filename, const char* format)
+bool KtablesDoc::save(ostream& out,const char * /* format */)
 {
 
 	/////////////////////////////////////////////////

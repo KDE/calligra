@@ -238,24 +238,21 @@ bool KtablesApp::newDocument()
 }
 
 bool
-KtablesApp::openDocument( const char *p_url, const char *p_format )
+KtablesApp::openDocument( const char *p_url )
 {
-  if ( p_format == 0L || *p_format == 0 )
-    p_format = "application/x-ktables";
-
   if ( m_pDoc && m_pDoc->isEmpty() )
     releaseDocument();
   else if ( m_pDoc && !m_pDoc->isEmpty() )
   {
     KtablesApp *app = new KtablesApp;
     app->show();
-    return app->openDocument( p_url,p_format );
+    return app->openDocument( p_url );
   }
 
   kdebug( KDEBUG_INFO, 0, i18n("Creating new document") );
 
   m_pDoc = new KtablesDoc(0,0);
-  if ( !m_pDoc->loadFromURL( p_url,p_format ) )
+  if ( !m_pDoc->loadFromURL( p_url ) )
   {           kdebug( KDEBUG_INFO,0,"KtablesView::newView()" );
 
     return false;
@@ -280,31 +277,9 @@ KtablesApp::openDocument( const char *p_url, const char *p_format )
 }
 
 bool
-KtablesApp::saveDocument(const char *p_url, const char *p_format)
+KtablesApp::saveDocument()
 {
-  ASSERT( m_pDoc != 0L );
-  CORBA::String_var url;
-  QString file;
-
-  if ( p_url == 0L || *p_url == 0 )
-  {
-    url = m_pDoc->url();
-    p_url = url.in();
-  }
-
-  if ( p_url == 0L || *p_url == 0 )
-  {
-    file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
-
-    if ( file.isNull() )
-      return false;
-    p_url = file.data();
-  }
-
-  if ( p_format == 0L || *p_format == 0 )
-    p_format = "application/x-ktables";
-
-  return m_pDoc->saveToURL( p_url,p_format );
+    return KoMainWindow::saveDocument( "application/x-ktables", "*.ktb", "KTables" );
 }
 
 bool
@@ -408,7 +383,7 @@ void KtablesApp::slotFileSave()
 {
   slotStatusMsg(i18n("Saving file..."));
 	
-	m_pDoc->saveDocument(m_pDoc->getPathName()+m_pDoc->getTitle());
+  saveDocument();
 
   slotStatusMsg(i18n("Ready."));
 }
@@ -417,6 +392,11 @@ void KtablesApp::slotFileSaveAs()
 {
   slotStatusMsg(i18n("Saving file under new filename..."));
 
+  QString _url = m_pDoc->url();
+  m_pDoc->setURL( "" );
+
+  if ( !saveDocument() )
+    m_pDoc->setURL( _url );
 
   slotStatusMsg(i18n("Ready."));
 }

@@ -78,9 +78,6 @@ class KtablesDoc :  public QObject,
 
 	void deleteContents();
 
-  bool openDocument(const char* filename, const char* format=0);
-  bool saveDocument(const char* filename, const char* format=0);
-	
 	void pathName(const char* path_name);
 	const QString& getPathName() const;
 	
@@ -89,6 +86,8 @@ class KtablesDoc :  public QObject,
 	
   char *mimeType() { return  CORBA::string_dup( "application/x-ktables" ); };
   virtual bool hasToWriteMultipart() { return false; };
+  virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
+  virtual bool save( ostream& out,const char * /* format */ );
 
  signals:
  	void sigUpdateView();
