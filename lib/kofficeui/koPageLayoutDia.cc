@@ -113,9 +113,9 @@ void KoPagePreview::drawContents( QPainter *painter )
 KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
 				  const KoPageLayout& _layout,
                                   const KoHeadFoot& _hf, int tabs,
-				  KoUnit::Unit unit )
+				  KoUnit::Unit unit, bool modal )
     : KDialogBase( KDialogBase::Tabbed, i18n("Page Layout"), KDialogBase::Ok | KDialogBase::Cancel,
-                   KDialogBase::Ok, parent, name, true)
+                   KDialogBase::Ok, parent, name, modal)
 {
 
     flags = tabs;

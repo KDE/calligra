@@ -106,7 +106,7 @@ public:
     KoPageLayoutDia( QWidget* parent, const char* name,
 		     const KoPageLayout& layout,
 		     const KoHeadFoot& headfoot,
-		     int tabs, KoUnit::Unit unit );
+		     int tabs, KoUnit::Unit unit, bool modal=true );
 
     /**
      *  Constructor.
