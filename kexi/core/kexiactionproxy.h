@@ -51,7 +51,7 @@ class KEXICORE_EXPORT KexiActionProxy
 		 If \a host is NULL, KexiSharedActionHost::defaultHost() is used.
 		 (you must be sure that it's true) -- it is casted to QObject and assigned as the receiver.*/
 		KexiActionProxy(QObject *receiver , KexiSharedActionHost *host = 0 );
-		~KexiActionProxy();
+		virtual ~KexiActionProxy();
 
 		/*! Activates  action named \a action_name for this proxy. If the action is executed
 		 (accepted), true is returned. */

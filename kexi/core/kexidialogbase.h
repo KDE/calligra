@@ -277,7 +277,6 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		friend class KexiPart::Part;
 		friend class KexiInternalPart;
 		friend class KexiViewBase;
-		friend class KexiPart::Part;
 };
 
 #endif
