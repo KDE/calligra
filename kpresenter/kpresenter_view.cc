@@ -2699,27 +2699,27 @@ void KPresenterView::setupActions()
     connect(actionToolsShapePopup, SIGNAL(activated()), this, SLOT(toolsShapePopup()));
 
     actionToolsRectangle = new KToggleAction( i18n( "&Rectangle" ), "rectangle",
-                                              Key_F7, this, SLOT( toolsRectangle() ),
+                                              0, this, SLOT( toolsRectangle() ),
                                               actionCollection(), "tools_rectangle" );
     actionToolsRectangle->setExclusiveGroup( "tools" );
 
     actionToolsCircleOrEllipse = new KToggleAction( i18n( "&Circle/Ellipse" ), "circle",
-                                                    Key_F8, this, SLOT( toolsCircleOrEllipse() ),
+                                                    0, this, SLOT( toolsCircleOrEllipse() ),
                                                     actionCollection(), "tools_circle" );
     actionToolsCircleOrEllipse->setExclusiveGroup( "tools" );
 
-    actionToolsPie = new KToggleAction( i18n( "&Pie/Arc/Chord" ), "pie", Key_F9,
+    actionToolsPie = new KToggleAction( i18n( "&Pie/Arc/Chord" ), "pie", 0,
                                         this, SLOT( toolsPie() ),
                                         actionCollection(), "tools_pie" );
     actionToolsPie->setExclusiveGroup( "tools" );
 
-    actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", Key_F10,
+    actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", 0,
                                          this, SLOT( toolsText() ),
                                          actionCollection(), "tools_text" );
     actionToolsText->setExclusiveGroup( "tools" );
 
     actionToolsAutoform = new KToggleAction( i18n( "&Autoform" ), "autoform",
-                                             Key_F11, this, SLOT( toolsAutoform() ),
+                                             0, this, SLOT( toolsAutoform() ),
                                              actionCollection(), "tools_autoform" );
     actionToolsAutoform->setExclusiveGroup( "tools" );
 
@@ -2742,7 +2742,7 @@ void KPresenterView::setupActions()
     actionToolsLinePopup->setDelayed(true);
     connect(actionToolsLinePopup, SIGNAL(activated()), this, SLOT(toolsLinePopup()));
 
-    actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", Key_F6,
+    actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", 0,
                                          this, SLOT( toolsLine() ),
                                          actionCollection(), "tools_line" );
     actionToolsLine->setExclusiveGroup( "tools" );
