@@ -54,12 +54,13 @@ public:
                 int pg = page - m_startAtPage; // always >=0
                 switch (m_oddEvenAll) {
                 case Even:
-                    if ( page % 2 == 0 ) // even/odd is for the absolute page number, too confusing otherwise
+                    // we test page, not bg: even/odd is for the absolute page number, too confusing otherwise
+                    if ( page % 2 ) // Even for the user means odd for KWord's 0-based numbering!
                         return pg / 2; // page 0[+start] -> frame 0, page 2[+start] -> frame 1
                     else
                         return -1;
                 case Odd:
-                    if ( page % 2 )
+                    if ( page % 2 == 0 ) // Odd for the user means even for KWord's 0-based numbering!
                         return pg / 2; // page 1 -> 0, page 3 -> 1
                     else
                         return -1;
