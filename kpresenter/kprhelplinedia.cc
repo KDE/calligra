@@ -19,28 +19,38 @@
 
 #include <klocale.h>
 #include <qvbox.h>
-#include "kprhelplinedia.h"
 #include <qlayout.h>
 #include <qlabel.h>
 #include <knuminput.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
-#include "kpresenter_doc.h"
 #include <koUnit.h>
 #include <klineedit.h>
 #include <knumvalidator.h>
+
+#include "kprhelplinedia.h"
+#include "kpresenter_doc.h"
+
+
 KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double limitTop, double limitBottom, KPresenterDoc *_doc, const char *name)
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+    : KDialogBase( parent, name , true, "", Ok | Cancel | User1, Ok, true )
 {
     m_doc=_doc;
+    setButtonText( KDialogBase::User1, i18n("Remove") );
     setCaption( i18n("Change Help Line position") );
     QVBox *page = makeVBoxMainWidget();
     QLabel *lab=new QLabel(i18n("Position:(%1)").arg(m_doc->getUnitName()), page);
     position = new KLineEdit(page);
     position->setText( KoUnit::userValue( QMAX(0.00, value), m_doc->getUnit() ) );
     position->setValidator(new KFloatValidator( 0,9999,true,position ) );
-
+    connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotRemoveHelpLine() ));
     resize( 300,100 );
+}
+
+void KPrMoveHelpLineDia::slotRemoveHelpLine()
+{
+    position->setText("-1");
+    KDialogBase::slotOk();
 }
 
 double KPrMoveHelpLineDia::newPosition()

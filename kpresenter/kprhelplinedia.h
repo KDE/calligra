@@ -36,6 +36,9 @@ public:
 
     double newPosition();
 
+private slots:
+    void slotRemoveHelpLine();
+
 protected:
     KLineEdit* position;
     KPresenterDoc *m_doc;
