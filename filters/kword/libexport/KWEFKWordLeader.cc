@@ -120,6 +120,69 @@ static void ProcessHardBrkTag ( QDomNode myNode, void* tagData, KWEFKWordLeader*
         kdDebug(30508) << "<HARDBRK frame=\"1\"> found" << endl;
 }
 
+static void InsertBookmarkFormatData (const int pos, const QString& name, const bool start,
+    ValueListFormatData &paraFormatDataList)
+{
+    ValueListFormatData::Iterator  paraFormatDataIt;
+
+    FormatData book( start ? 1001 : 1002 , pos, 0 );
+    book.variable.m_text = name;
+
+    for (paraFormatDataIt = paraFormatDataList.begin ();
+        paraFormatDataIt != paraFormatDataList.end ();
+        paraFormatDataIt++)
+    {
+        if ( pos <= (*paraFormatDataIt).pos )
+        {
+            paraFormatDataList.insert ( paraFormatDataIt, book );
+            return;
+
+        }
+        if ( ( pos > (*paraFormatDataIt).pos ) && ( pos < (*paraFormatDataIt).pos + (*paraFormatDataIt).len ) )
+        {
+            // Somewhere in the middle, we have to split the FormatData
+            FormatData split ( *paraFormatDataIt );
+            //const int oldlen = (*paraFormatDataIt).len;
+            split.len = pos - (*paraFormatDataIt).pos;
+            (*paraFormatDataIt).len -= split.len;
+            (*paraFormatDataIt).pos = pos;
+            paraFormatDataList.insert ( paraFormatDataIt, split );
+            paraFormatDataList.insert ( paraFormatDataIt, book );
+            return;
+        }
+    }
+
+    // Still here? So we need to put the bookmark here:
+    paraFormatDataList.append ( book );
+}
+
+
+void KWEFKWordLeader::createBookmarkFormatData( ParaData& paraData )
+{
+    const int paraCount = m_paraCountMap[ m_currentFramesetName ];
+
+    QValueList<Bookmark>::ConstIterator it;
+    for (it = m_bookmarkList.begin(); it != m_bookmarkList.end(); ++it )
+    {
+        if ( (*(it)).m_frameset != m_currentFramesetName )
+        {
+            continue;
+        }
+        // As we always insert before, make first endings, then startings (problem is zero-length bookmark)
+        if ( (*(it)).m_endparag == paraCount )
+        {
+            kdDebug(30520) << "Paragraph: " << paraCount << " end: " << (*(it)).m_name << endl;
+            InsertBookmarkFormatData( (*(it)).m_cursorIndexEnd, (*(it)).m_name, false, paraData.formattingList);
+
+        }
+        if ( (*(it)).m_startparag == paraCount )
+        {
+            kdDebug(30520) << "Paragraph: " << paraCount << " begin: " << (*(it)).m_name << endl;
+            InsertBookmarkFormatData( (*(it)).m_cursorIndexStart, (*(it)).m_name, true, paraData.formattingList);
+        }
+    }
+}
+
 static void ProcessParagraphTag ( QDomNode         myNode,
                                   void            *tagData,
                                   KWEFKWordLeader *leader )
@@ -132,6 +195,13 @@ static void ProcessParagraphTag ( QDomNode         myNode,
 
     AllowNoAttributes (myNode);
 
+    // We need to adjust the paragraph number (0 if first)
+    QMap<QString,int>::Iterator it = leader->m_paraCountMap.find( leader->m_currentFramesetName );
+    if ( it == leader->m_paraCountMap.end() )
+        leader->m_paraCountMap.insert( leader->m_currentFramesetName, 0 );
+    else
+        ++(*it);
+    
     ParaData paraData;
 
     QValueList<TagProcessing> tagProcessingList;
@@ -145,6 +215,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     }
     ProcessSubtags (myNode, tagProcessingList, leader);
 
+    leader->createBookmarkFormatData( paraData );
     CreateMissingFormatData (paraData.text, paraData.formattingList);
 
     // TODO/FIXME: why !paraData.text.isEmpty()
@@ -849,6 +920,42 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
+static void ProcessBookmarkItemTag ( QDomNode myNode, void* tag, KWEFKWordLeader *leader )
+{
+    QValueList<Bookmark> * bookmarkList = static_cast< QValueList<Bookmark> * > ( tag );
+
+    Bookmark bookmark;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList
+        << AttrProcessing ( "name", bookmark.m_name )
+        << AttrProcessing ( "cursorIndexStart", bookmark.m_cursorIndexStart )
+        << AttrProcessing ( "cursorIndexEnd", bookmark.m_cursorIndexEnd )
+        << AttrProcessing ( "frameset", bookmark.m_frameset )
+        << AttrProcessing ( "startparag", bookmark.m_startparag )
+        << AttrProcessing ( "endparag", bookmark.m_endparag )
+        ;
+
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags( myNode, leader );
+    
+    // ### TODO: some verifications
+
+    kdDebug(30520) << "Bookmark: " << bookmark.m_name << " in frameset " << bookmark.m_frameset << endl;
+
+    bookmarkList->append( bookmark );
+}
+
+static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *leader )
+{
+    AllowNoAttributes (myNode);
+
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList << TagProcessing ( "BOOKMARKITEM", ProcessBookmarkItemTag, tag );
+    ProcessSubtags (myNode, tagProcessingList, leader);
+}
+
 /*static*/ void ProcessDocTag ( QDomNode         myNode,
     void* /*tagData*/, KWEFKWordLeader* leader )
 {
@@ -940,6 +1047,7 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
         << TagProcessing ( "PIXMAPS",     ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "CLIPARTS",    ProcessPixmapsTag,      &paraList )
         << TagProcessing ( "EMBEDDED" )
+        << TagProcessing ( "BOOKMARKS",   ProcessBookmarksTag,    &leader->m_bookmarkList )
         ;
 
     // TODO: why are the followings used by KWord 1.2 but are not in its DTD?

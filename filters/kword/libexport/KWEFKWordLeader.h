@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001. 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001. 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +41,8 @@ class KWEFKWordLeader
         KWEFBaseWorker *getWorker(void) const;
         KoFilter::ConversionStatus convert( KoFilterChain* chain,
             const QCString& from, const QCString& to);
+    public: // ### TODO: where to put in the end?
+        void createBookmarkFormatData( ParaData& paraData );
     public: // callbacks
         bool loadSubFile(const QString& fileName, QByteArray& array);
         QIODevice* getSubFileDevice(const QString& fileName);
@@ -87,6 +89,10 @@ class KWEFKWordLeader
         double m_columnspacing;
         /// Name of the current frame set
         QString m_currentFramesetName;
+        /// Number of paragraph in each frameset (for bookmarks)
+        QMap<QString,int> m_paraCountMap;
+        /// List of bookmarks
+        QValueList<Bookmark> m_bookmarkList;
     private:
         KWEFBaseWorker *m_worker;
         KoFilterChain* m_chain;

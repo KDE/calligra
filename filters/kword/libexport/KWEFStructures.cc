@@ -134,6 +134,11 @@ QValueList<ParaData>* VariableData::getFootnotePara(void) const
     return footnotePara;
 }
 
+Bookmark::Bookmark()
+ : m_startparag(-1), m_endparag(-1), m_cursorIndexStart(-1), m_cursorIndexEnd(-1)
+{
+}
+
 void VariableData::setGenericData( const QString& key, const QString& data )
 {
     propertyMap[ key ] = data ;
