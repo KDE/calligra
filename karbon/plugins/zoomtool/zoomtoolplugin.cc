@@ -19,6 +19,7 @@
 */
 
 #include <qevent.h>
+#include <qcursor.h>
 
 #include <klocale.h>
 
@@ -57,7 +58,7 @@ VZoomTool::contextHelp()
 void
 VZoomTool::activate()
 {
-	//view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::crossCursor ) );
 }
 
 QString
