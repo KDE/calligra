@@ -149,12 +149,24 @@ public:
      */
     static KoPageLayout standardLayout();
 
-protected:
-    KoPageLayout getLayout() {return layout;};
+    /**
+     *  Returns the layout
+     */
+    KoPageLayout getLayout() { return layout; };
+    
+    /**
+     *  Returns the header and footer information
+     */
     KoHeadFoot getHeadFoot();
+    
+    /**
+     *  Returns the unit
+     */
+    KoUnit::Unit unit() const { return m_unit; }
+    
+protected:
     KoColumns getColumns();
     KoKWHeaderFooter getKWHeaderFooter();
-    KoUnit::Unit unit() const { return m_unit; }
 
     // setup tabs
     void setupTab1();
