@@ -61,10 +61,12 @@ VDocumentPreview::VDocumentPreview( KarbonView* view, QWidget* parent )
 	setBackgroundMode( Qt::NoBackground );
 	setMouseTracking( true );
 	m_dragging = false;
+	m_docpixmap = 0L;
 } // VDocumentPreview::VDocumentPreview
   
 VDocumentPreview::~VDocumentPreview()
 {
+	delete m_docpixmap;
 } // VDocumentPreview::~VDocumentPreview
 
 bool
@@ -133,7 +135,6 @@ void VDocumentPreview::paintEvent( QPaintEvent* )
 {
 	// TODO : use NotROP, otherwise too slow
 	QPixmap pixmap( width(), height() );
-	VKoPainter p( &pixmap, width(), height() );
 	double xoffset = 0.;
 	double yoffset = 0.;
 	double scaleFactor;
@@ -149,28 +150,37 @@ void VDocumentPreview::paintEvent( QPaintEvent* )
 	}
 	xoffset += 2 / scaleFactor;
 	yoffset += 2 / scaleFactor;
-	p.setWorldMatrix( QWMatrix( 1, 0, 0, -1, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
-	p.setZoomFactor( scaleFactor );
-	KoRect rect( -xoffset, -yoffset, m_document->width() + xoffset, m_document->height() + yoffset );
-	m_document->draw( &p, &rect );
+	if( !m_docpixmap )
+	{
+		m_docpixmap = new QPixmap( width(), height() );
+		VKoPainter p( m_docpixmap, width(), height() );
+		p.setWorldMatrix( QWMatrix( 1, 0, 0, -1, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
+		p.setZoomFactor( scaleFactor );
+		KoRect rect( -xoffset, -yoffset, m_document->width() + xoffset, m_document->height() + yoffset );
+		m_document->draw( &p, &rect );
+		p.end();
+	}
+	bitBlt( &pixmap, 0, 0, m_docpixmap, 0, 0, width(), height() );
+
 	// draw viewport rect
-	VColor c( Qt::red );
-	VStroke stroke( c, 0L, 1.0 / scaleFactor );
-	p.setPen( stroke );
-	p.newPath();
-	double dx = ( m_lastPoint.x() - m_firstPoint.x() ) * m_view->zoom();
-	double dy = ( m_lastPoint.y() - m_firstPoint.y() ) * m_view->zoom();
-	KoPoint p1( dx / scaleFactor, dy / scaleFactor );
-	p1 = m_view->canvasWidget()->toContents( p1 );
-	KoPoint p2( dx / scaleFactor + m_view->canvasWidget()->width(), dy / scaleFactor + m_view->canvasWidget()->height() );
-	p2 = m_view->canvasWidget()->toContents( p2 );
-	p.moveTo( p1 );
-	p.lineTo( KoPoint( p2.x(), p1.y() ) );
-	p.lineTo( KoPoint( p2.x(), p2.y() ) );
-	p.lineTo( KoPoint( p1.x(), p2.y() ) );
-	p.lineTo( p1 );
-	p.strokePath();
-	p.end();
+	{
+		QPainter p( &pixmap );
+		p.setWorldMatrix( QWMatrix( scaleFactor, 0, 0, -scaleFactor, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
+		VColor c( Qt::red );
+		VStroke stroke( c, 0L, 1.0 / scaleFactor );
+		p.setPen( Qt::red );
+		double dx = ( m_lastPoint.x() - m_firstPoint.x() ) * m_view->zoom();
+		double dy = ( m_lastPoint.y() - m_firstPoint.y() ) * m_view->zoom();
+		KoPoint p1( dx / scaleFactor, dy / scaleFactor );
+		p1 = m_view->canvasWidget()->toContents( p1 );
+		KoPoint p2( dx / scaleFactor + m_view->canvasWidget()->width(), dy / scaleFactor + m_view->canvasWidget()->height() );
+		p2 = m_view->canvasWidget()->toContents( p2 );
+		p.drawLine( p1.x(), p1.y(), p2.x(), p1.y() );
+		p.drawLine( p2.x(), p1.y(), p2.x(), p2.y() );
+		p.drawLine( p2.x(), p2.y(), p1.x(), p2.y() );
+		p.drawLine( p1.x(), p2.y(), p1.x(), p1.y() );
+	}
+
 	QPainter pw( &pixmap );
 	pw.setPen( colorGroup().light() );
 	pw.drawLine( 1, 1, 1, height() - 2 );

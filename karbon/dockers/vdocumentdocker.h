@@ -57,6 +57,7 @@ class VDocumentPreview : public QWidget
 		KoPoint m_firstPoint;
 		KoPoint m_lastPoint;
 		bool m_dragging;
+		QPixmap *m_docpixmap;
 }; // VDocumentPreview
 
 class VDocumentTab : public QWidget
