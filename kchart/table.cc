@@ -14,6 +14,7 @@
 
 #include <qpainter.h>
 #include <qdrawutil.h>
+#include <qvaluelist.h>
 
 #include "table.h"
 #include "table.moc"
@@ -34,8 +35,8 @@ SheetTable::SheetTable( int cols, int rows, QWidget *parent,
     setNumRows(rows);
     setNumCols(cols);
 
-    table = QStrList(true);
-    table.setAutoDelete(true);
+    table = QStringList();
+    //table.setAutoDelete(true);
     for (int i = 0;i < rows*cols;i++)
       table.append(0);
 
@@ -68,8 +69,10 @@ SheetTable::~SheetTable()
 void SheetTable::setText( int row, int col, QString s, bool paint )
 {
   //table[index(row,col)].operator=( s.copy() );
-  table.remove(index(row,col));
-  table.insert(index(row,col),s.latin1());
+  
+  table.remove(table.at(index(row,col)));
+  table.insert(table.at(index(row,col)), s);
+  
   int x,y;
     if ( paint && rowYPos( row, &y ) && colXPos( col, &x ))
         repaint( x,y, cellWidth(col), cellHeight(row));
@@ -79,7 +82,8 @@ void SheetTable::setText( int row, int col, QString s, bool paint )
 
 bool SheetTable::hasValue(int row,int col)
 {
-  return !QString(table.at(index(row,col))).simplifyWhiteSpace().isEmpty();
+ //return !QString(table.at(index(row,col))).simplifyWhiteSpace().isEmpty();
+ return !(table[index(row,col)].simplifyWhiteSpace().isEmpty());
 }
 
 void SheetTable::placeInput()
@@ -114,8 +118,7 @@ void SheetTable::paintCell( QPainter *p, int row, int col )
 
     QString str;
     if (!table.isEmpty())
-      //str = table[index(row,col)].copy();
-      str = table.at(index(row,col));
+      str = table[index(row,col)];
     //    if ( str.isEmpty() )
     //  str.sprintf( "%c%d", col+'A', row );
     p->drawText( 1, 1, cellWidth()-2, cellHeight()-2,
