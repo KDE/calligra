@@ -4325,6 +4325,7 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
     QString tmp_op;
     QString tmp;
     QString old;
+
     if( !new_text.isEmpty() && new_text[0] == '=' )
     {
         tmp = new_text.right( new_text.length() - 1 );
@@ -4332,6 +4333,12 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
     else
     {
         tmp = new_text;
+    }
+
+    if ( old_text.isEmpty() && ( op == Add || op == Mul 
+                                 || op == Sub || op == Div ) )
+    {
+      old_text = "=0";
     }
 
     if( !old_text.isEmpty() && old_text[0] == '=' )

@@ -4525,9 +4525,14 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 
                     bool needInsert = FALSE;
                     KSpreadCell* cell = cellAt( col + coff, row + roff );
-                    if ( ( op == OverWrite && sp == Normal ) || cell->isDefault() )
+                    if ( cell->isDefault() )
                     {
                         cell = new KSpreadCell( this, 0, 0 );
+                        needInsert = TRUE;
+                    }
+
+                    if ( op == OverWrite && sp == Normal )
+                    {
                         needInsert = TRUE;
                     }
                     if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op ) )
