@@ -1431,6 +1431,31 @@ public:
      * Set it to ( QPoint (1, 1), QPoint(KS_colMax, KS_rowMax) ) to undefine it
      */
     void setPrintRange( QRect _printRange );
+
+    /**
+     * Returns the columns, which are printed on each page. 
+     * Returns QPair (0, 0) if nothing is defined
+     */
+    QPair<int, int> printRepeatColumns() const { return m_printRepeatColumns; }
+    /**
+     * Sets the columns to be printed on each page.
+     * Only the x-values of the points are used
+     * Set it to QPair (0, 0) to undefine it
+     */
+    void setPrintRepeatColumns( QPair<int, int> _printRepeatColumns );
+
+    /**
+     * Returns the rows, which are printed on each page. 
+     * Returns QPair (0, 0) if nothing is defined
+     */
+    QPair<int, int> printRepeatRows() const { return m_printRepeatRows; }
+    /**
+     * Sets the rows to be printed on each page.
+     * Only the y-values of the points are used
+     * Set it to QPair (0, 0) to undefine it
+     */
+    void setPrintRepeatRows( QPair<int, int> _printRepeatRows );
+
     /**
      * Replaces in _text all _search text parts by _replace text parts.
      * Included is a test to not change if _search == _replace.
@@ -1480,6 +1505,10 @@ public slots:
      * Define the print range with the current selection
      */
     void definePrintRange();
+    /**
+     * Reset the print range to the standard definition (whole sheet)
+     */
+    void resetPrintRange();
 
 protected:
 
@@ -1567,6 +1596,16 @@ protected:
      * Defined printable area
      */
     QRect m_printRange;
+
+    /**
+     * Repeated columns on printout
+     */
+    QPair<int, int> m_printRepeatColumns;
+
+    /**
+     * Repeated rows on printout
+     */
+    QPair<int, int> m_printRepeatRows;
 
     /**
      * Show the grid when making printout

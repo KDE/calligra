@@ -283,7 +283,9 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_paperWidth = PG_A4_WIDTH;
   m_paperHeight = PG_A4_HEIGHT;
   m_orientation = PG_PORTRAIT;
-  m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax ,KS_rowMax ) );
+  m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) );
+  m_printRepeatColumns = qMakePair( 0, 0 );
+  m_printRepeatRows = qMakePair( 0, 0 );
   calcPaperSize();
 
 }
@@ -7318,7 +7320,7 @@ void KSpreadTable::paperLayoutDlg()
     
     // ------------- options ---------------
     QWidget *tab = dlg.addPage(i18n( "Options" ));
-    QGridLayout *grid = new QGridLayout( tab, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( tab, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QCheckBox *pPrintGrid = new QCheckBox ( i18n("Print &grid"), tab );
     pPrintGrid->setChecked( getPrintGrid() );
@@ -7331,14 +7333,39 @@ void KSpreadTable::paperLayoutDlg()
     grid->addWidget( ePrintRange, 1, 1 );
     ePrintRange->setText( util_rangeName( m_printRange ) );
     
+    QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), tab );
+    grid->addWidget( pRepeatRows, 2, 0 );
+
+    QLineEdit *eRepeatRows = new QLineEdit( tab );
+    grid->addWidget( eRepeatRows, 2, 1 );
+    if ( m_printRepeatRows.first != 0 )
+        eRepeatRows->setText( QString().setNum( m_printRepeatRows.first ) );
+    
+    QLabel *pRepeatCols = new QLabel ( i18n("Repeat columns on each page:"), tab );
+    grid->addWidget( pRepeatCols, 3, 0 );
+
+    QLineEdit *eRepeatCols = new QLineEdit( tab );
+    grid->addWidget( eRepeatCols, 3, 1 );
+//    if ( m_printRepeatColumns.top() != 0 )
+//        eRepeatCols->setText( util_rangeName( m_printRepeatColumns ) );
+    
     // --------------- main grid ------------------
     grid->addColSpacing( 0, pPrintGrid->width() );
     grid->addColSpacing( 0, pPrintRange->width() );
+    grid->addColSpacing( 0, pRepeatRows->width() );
+    grid->addColSpacing( 0, pRepeatCols->width() );
     grid->addColSpacing( 1, ePrintRange->width() );
+    grid->addColSpacing( 1, eRepeatRows->width() );
+    grid->addColSpacing( 1, eRepeatCols->width() );
+
     grid->addRowSpacing( 0, pPrintGrid->height() );
     grid->addRowSpacing( 1, pPrintRange->height() );
     grid->addRowSpacing( 1, ePrintRange->height() );
-    grid->setRowStretch( 2, 1 );
+    grid->addRowSpacing( 2, pRepeatRows->height() );
+    grid->addRowSpacing( 2, eRepeatRows->height() );
+    grid->addRowSpacing( 3, pRepeatCols->height() );
+    grid->addRowSpacing( 3, eRepeatCols->height() );
+    grid->setRowStretch( 4, 1 );
     
     int result = dlg.exec();
     if ( result == QDialog::Accepted )
@@ -7418,6 +7445,17 @@ void KSpreadTable::definePrintRange ()
 
         setPrintRange( selection() );
     }
+}
+
+void KSpreadTable::resetPrintRange ()
+{
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+         KSpreadUndoAction* undo = new KSpreadUndoDefinePrintRange( doc(), this );
+         m_pDoc->undoBuffer()->appendUndo( undo );
+    }
+
+    setPrintRange( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) );
 }
 
 void KSpreadTable::replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace )

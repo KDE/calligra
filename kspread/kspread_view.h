@@ -212,6 +212,7 @@ public slots:
     void defaultSelection();
     void paperLayoutDlg();
     void definePrintRange();
+    void resetPrintRange();
     void insertObject();
     void insertFromDatabase();
     void insertFromTextfile();
@@ -480,6 +481,7 @@ private:
     KAction* m_redo;
     KAction* m_paperLayout;
     KAction* m_definePrintRange;
+    KAction* m_resetPrintRange;
     KAction* m_insertFromDatabase;
     KAction* m_insertFromTextfile;
     KAction* m_insertFromClipboard;

@@ -62,7 +62,10 @@
  <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="cellLayout"/>
   <Action name="paperLayout"/>
-  <Action name="definePrintRange"/>
+  <Menu name="Comment"><text>&amp;Print range</text>
+    <Action name="definePrintRange"/>
+    <Action name="resetPrintRange"/>
+  </Menu>
   <Separator/>
   <Menu name="Sheet"><text>&amp;Sheet</text>
   <Action name="removeTable"/>

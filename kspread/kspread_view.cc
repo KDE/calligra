@@ -672,6 +672,11 @@ void KSpreadView::initializeGlobalOperationActions()
                                     "definePrintRange" );
   m_definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
 
+  m_resetPrintRange = new KAction( i18n("Reset Print Range"), 0, this,
+                                   SLOT( resetPrintRange() ), actionCollection(),
+                                   "resetPrintRange" );
+  m_definePrintRange->setToolTip(i18n("Define the print range in the current sheet."));
+
   m_createTemplate = new KAction( i18n( "&Create Template From Document..." ), 0, this, 
                                   SLOT( createTemplate() ), actionCollection(), "createTemplate" ); 
 }
@@ -3967,6 +3972,11 @@ void KSpreadView::paperLayoutDlg()
 void KSpreadView::definePrintRange()
 {
     m_pTable->definePrintRange();
+}
+
+void KSpreadView::resetPrintRange()
+{
+    m_pTable->resetPrintRange();
 }
 
 void KSpreadView::multiRow( bool b )
