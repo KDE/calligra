@@ -3,6 +3,7 @@
 Name=KWordAsciiFilter
 Exec=kword_ascii.bin --server
 Comment=Reggie's KWord Ascii Filter
+Comment[pt_BR]=Filtro do KWord
 Export=application/x-kword
 ExportDescription=KWord
 Import=text/plain
