@@ -12,6 +12,15 @@ VTool::VTool( KarbonView* view )
 {
 }
 
+void
+VTool::cancel()
+{
+	m_isDragging = false;
+
+	// erase old object:
+	drawTemporaryObject();
+}
+
 bool
 VTool::eventFilter( QEvent* event )
 {

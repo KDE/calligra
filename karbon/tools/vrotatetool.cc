@@ -187,11 +187,7 @@ VRotateTool::eventFilter( QEvent* event )
 		// cancel dragging with ESC-key:
 		if ( key_event->key() == Qt::Key_Escape && m_isDragging )
 		{
-			m_isDragging = false;
-
-			// erase old object:
-			drawTemporaryObject();
-
+			cancel();
 			return true;
 		}
 	}

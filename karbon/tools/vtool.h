@@ -34,7 +34,7 @@ protected:
 	virtual void dragCtrlReleased() {}
 	virtual void dragAltPressed() {}
 	virtual void mouseReleased( QMouseEvent * ) {}
-	virtual void cancel() {} // ESC pressed
+	virtual void cancel(); // ESC pressed
 
 	virtual void drawTemporaryObject() = 0;
 
