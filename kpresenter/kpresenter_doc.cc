@@ -954,8 +954,8 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
     ignoreSticky = FALSE;
     bool b=false;
     QDomElement docelem = doc.documentElement();
-    int syntaxVersion = docelem.attribute( "syntaxVersion" ).toInt();
-    if ( (syntaxVersion == 0 || syntaxVersion == 1) && CURRENT_SYNTAX_VERSION > 1 )
+    const int syntaxVersion = docelem.attribute( "syntaxVersion" ).toInt();
+    if ( syntaxVersion < 2 )
     {
         // This is an old style document, before the current TextObject
         // We have kprconverter.pl for it
@@ -964,11 +964,8 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
         // Read the full XML and write it to a temp file
         KTempFile tmpFileIn;
         tmpFileIn.setAutoDelete( true );
-        {
-            dev->reset();
-            QByteArray array = dev->readAll();
-            *tmpFileIn.textStream() << (const char*)array.data();
-        }
+        dev->reset();
+        tmpFileIn.file()->writeBlock( dev->readAll() ); // copy stresm to temp file
         tmpFileIn.close();
 
         // Launch the perl script on it
@@ -981,14 +978,27 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
             return false;
         }
         cmd += " ";
-        cmd += locate( "exe", "kprconverter.pl" ) + " ";
-        cmd += tmpFileIn.name() + " ";
-        cmd += tmpFileOut.name();
+        cmd += locate( "exe", "kprconverter.pl" );
+        cmd += " ";
+        cmd += KProcess::quote( tmpFileIn.name() );
+        cmd += " ";
+        cmd += KProcess::quote( tmpFileOut.name() );
         system( QFile::encodeName(cmd) );
 
         // Build a new QDomDocument from the result
+        QString errorMsg;
+        int errorLine;
+        int errorColumn;
         QDomDocument newdoc;
-        newdoc.setContent( tmpFileOut.file() );
+        if ( ! newdoc.setContent( tmpFileOut.file(), &errorMsg, &errorLine, &errorColumn ) )
+        {
+            kdError (33001) << "Parsing Error! Aborting! (in KPresenterDoc::loadXML)" << endl
+                            << "  Line: " << errorLine << " Column: " << errorColumn << endl
+                            << "  Message: " << errorMsg << endl;
+            setErrorMessage( i18n( "parsing error in the main document (converted from an old KPresenter format) at line %1, column %2\nError message: %3" )
+                .arg( errorLine ).arg( errorColumn ).arg( i18n ( errorMsg.utf8() ) ) );
+            return false;
+        }
         b = loadXML( newdoc );
         ignoreSticky = TRUE;
     }
@@ -1003,7 +1013,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
         startBackgroundSpellCheck();
     }
 
-    kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+    kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     return b;
 }
 
