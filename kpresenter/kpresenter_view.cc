@@ -259,6 +259,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_canvas = 0L;
     m_spell.kospell = 0;
     m_spell.textIterator = 0L;
+    m_spell.macroCmdSpellCheck = 0L;
 
     m_autoPresTimerConnected = false;
     m_actionList.setAutoDelete( true );
@@ -5846,7 +5847,7 @@ void KPresenterView::pddClosed()
 QString KPresenterView::presentationDurationDataFormatChange( int _time )
 {
     QTime time( 0, 0, 0 );
-#if KDE_IS_VERSION(3, 2, 90) 
+#if KDE_IS_VERSION(3, 2, 90)
     return KGlobal::locale()->formatTime( time.addMSecs( _time ), true, true );
 #else
     return KGlobal::locale()->formatTime( time.addMSecs( _time ), true);
