@@ -55,7 +55,7 @@
 #include <assert.h>
 
 //#define DEBUG_MARGINS
-//#define DEBUG_FLOW
+#define DEBUG_FLOW
 //#define DEBUG_FORMATS
 //#define DEBUG_FORMAT_MORE
 //#define DEBUG_VIEWAREA
@@ -628,7 +628,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "  KWTextFrameSet " << this << "(" << getName() << ") getMargins yp=" << yp
                        << " h=" << h << " called by "
-                       << (marginLeft?"adjustLMargin":marginRight?"adjustRMargin":"adjustFlow")
+                       << (marginLeft?"adjustLMargin":marginRight?"adjustRMargin":"formatVertically")
                        << " paragLeftMargin=" << paragLeftMargin
                        << endl;
     // Both or none...
@@ -637,7 +637,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
 #endif
     KoPoint pt;
     // The +h in here is a little hack, for the case where this line is going to
-    // be moved down by adjustFlow. We anticipate, and look at the bottom of the
+    // be moved down by formatVertically. We anticipate, and look at the bottom of the
     // line rather than the top of it, in order to find the bottom frame (the one
     // in which we'll end up). See TODO file for a real solution.
     KWFrame * frame = internalToDocument( QPoint(0, yp+h), pt );
@@ -781,7 +781,7 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
     return QTextFlow::adjustRMargin( yp, h, margin + marginRight, space );
 }
 
-// helper for adjustFlow
+// helper for formatVertically
 bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd )
 {
     // We need the "+1" here because when skipping a frame on top, we want to be _under_
@@ -878,7 +878,7 @@ int KWTextFrameSet::formatVertically( QTextParag * _parag )
     // to implement page-break at the paragraph level and at the line level.
     // It's cumulative (the space of one break will be included in the further
     // paragraph's y position), which makes it easy to implement.
-    // But don't forget that adjustFlow is called twice for every parag, since the formatting
+    // But don't forget that formatVertically is called twice for every parag, since the formatting
     // is re-done after moving down.
 
     KWTextParag *parag = static_cast<KWTextParag *>( _parag );
@@ -888,10 +888,10 @@ int KWTextFrameSet::formatVertically( QTextParag * _parag )
         hardFrameBreak = static_cast<KWTextParag *>(parag->prev())->hardFrameBreakAfter();
 
 #ifdef DEBUG_FLOW
-    kdDebugBody(32002) << "KWTextFrameSet::adjustFlow parag=" << parag
+    kdDebugBody(32002) << "KWTextFrameSet::formatVertically parag=" << parag
                        << " linesTogether=" << linesTogether << " hardFrameBreak=" << hardFrameBreak
                        << " yp=" << yp
-                       << " h=" << h << endl;
+                       << " hp=" << hp << endl;
 #endif
 
     int totalHeight = 0;
@@ -922,17 +922,17 @@ int KWTextFrameSet::formatVertically( QTextParag * _parag )
             {
                 // The paragraph wants a frame break before it, and is in the current frame
                 // The last check is for whether we did the frame break already
-                // (adjustFlow is called twice for each paragraph, if a break was done)
+                // (formatVertically is called twice for each paragraph, if a break was done)
                 yp = bottom /*+ 2*/;
 #ifdef DEBUG_FLOW
-                kdDebug(32002) << "KWTextFrameSet::adjustFlow -> HARD FRAME BREAK" << endl;
-                kdDebug(32002) << "KWTextFrameSet::adjustFlow yp now " << yp << endl;
+                kdDebug(32002) << "KWTextFrameSet::formatVertically -> HARD FRAME BREAK" << endl;
+                kdDebug(32002) << "KWTextFrameSet::formatVertically yp now " << yp << endl;
 #endif
                 break;
             }
 
 #ifdef DEBUG_FLOW
-            kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
+            kdDebug(32002) << "KWTextFrameSet::formatVertically frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 #endif
             // don't move down parags that have only one line and are bigger than the page (e.g. floating tables)
             if ( hp < frameHeight || ( parag && parag->lineStartList().count() > 1 ) )
@@ -962,7 +962,7 @@ int KWTextFrameSet::formatVertically( QTextParag * _parag )
                  checkVerticalBreak( yp, hp, parag, linesTogether,
                                      iTop.y(), iBottom.y() ) )
             {
-                kdDebug(32002) << "KWTextFrameSet::adjustFlow breaking around RA_SKIP frame yp="<<yp<<" hp=" << hp << endl;
+                kdDebug(32002) << "KWTextFrameSet::formatVertically breaking around RA_SKIP frame yp="<<yp<<" hp=" << hp << endl;
                 // We don't "break;" here because there could be another such frame below the first one
                 // We assume that the frames on top are in order ( top to bottom ), btw.
                 // They should be, since updateFrames reorders before updating frames-on-top
@@ -977,7 +977,7 @@ int KWTextFrameSet::formatVertically( QTextParag * _parag )
     getMargins( yp, hp, 0L, 0L, &breakBegin, &breakEnd, parag ? QMAX( parag->firstLineMargin(), parag->leftMargin() ) : 0 );
     if ( breakEnd )
     {
-        kdDebug(32002) << "KWTextFrameSet::adjustFlow no-space case. breakBegin=" << breakBegin
+        kdDebug(32002) << "KWTextFrameSet::formatVertically no-space case. breakBegin=" << breakBegin
                        << " breakEnd=" << breakEnd << " hp=" << hp << endl;
         ASSERT( breakBegin <= breakEnd );
         if ( checkVerticalBreak( yp, hp, parag, linesTogether, breakBegin, breakEnd ) )
@@ -999,7 +999,7 @@ int KWTextFrameSet::formatVertically( QTextParag * _parag )
         if ( parag->hardFrameBreakAfter() )
         {
             QTextFormat * lastFormat = parag->at( parag->length() - 1 )->format();
-            // keep in sync with KWTextFrameSet::adjustFlow
+            // keep in sync with KWTextFrameSet::formatVertically
             QString str = i18n( "--- Frame Break ---" );
             int width = 0;
             for ( int i = 0 ; i < (int)str.length() ; ++i )
@@ -1013,6 +1013,16 @@ int KWTextFrameSet::formatVertically( QTextParag * _parag )
         }
     }
 
+    if ( hp != oldHeight )
+        parag->setHeight( hp );
+    if ( yp != oldY ) {
+        QRect r = parag->rect();
+        r.moveBy( 0, yp - oldY );
+        parag->setRect( r );
+    }
+#ifdef DEBUG_FLOW
+    kdDebug() << "KWTextFrameSet::formatVertically returning " << ( yp + hp ) - ( oldY + oldHeight ) << endl;
+#endif
     return ( yp + hp ) - ( oldY + oldHeight );
 }
 
@@ -1661,7 +1671,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, QTextParag *lastFormatted,
               frames.last()->getFrameBehaviour() == KWFrame::AutoExtendFrame )
     {
         // The + 2 here leaves 2 pixels below the last line. Without it we hit
-        // the "break at end of frame" case in adjustFlow (!!).
+        // the "break at end of frame" case in formatVertically (!!).
         int difference = availHeight - ( bottom + 2 );
         kdDebug(32002) << "formatMore less text than space (AutoExtendFrame) difference=" << difference << endl;
         // There's no point in resizing a copy, so go back to the last non-copy frame

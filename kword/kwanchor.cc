@@ -81,10 +81,12 @@ void KWAnchor::drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw
                    << "  " << DEBUGRECT( QRect( cx,cy,cw,ch ) ) << endl;
 #endif
 
+#if 0 // different coord systems now...
     if ( x != xpos || y != ypos ) { // shouldn't happen I guess ?
         kdDebug() << "rectifying position to " << x << "," << y << endl;
         move( x, y );
     }
+#endif
 
     p->save();
     // Determine crect in view coords
