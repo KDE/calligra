@@ -56,12 +56,13 @@ KoDataToolInfo::KoDataToolInfo( const KService::Ptr& service, KInstance* instanc
 KoDataToolInfo::KoDataToolInfo( const KoDataToolInfo& info )
 {
     m_service = info.service();
+    m_instance = info.instance();
 }
 
 KoDataToolInfo& KoDataToolInfo::operator= ( const KoDataToolInfo& info )
 {
     m_service = info.service();
-
+    m_instance = info.instance();
     return *this;
 }
 

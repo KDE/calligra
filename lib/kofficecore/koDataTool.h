@@ -130,6 +130,7 @@ public:
     KoDataTool* createTool( QObject* parent = 0, const char* name = 0 ) const;
 
     KService::Ptr service() const;
+    KInstance* instance() const { return m_instance; }
 
     /**
      * A DataToolInfo may be invalid if the @ref KService passed to its constructor does
