@@ -258,7 +258,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 			QString field = cItem->getValue(1).toString();
 			QString table = (*m_sourceList.at(tableID));
 
-			query += table + "." + field;
+			query += m_db->escapeName(table) + "." + m_db->escapeName(field);
 
 
 			int iCount;
@@ -279,7 +279,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 			involvedFields.insert(table, field);
 
 			Condition condition;
-			condition.field = table + "." + field;
+			condition.field = m_db->escapeName(table) + "." + m_db->escapeName(field);
 			condition.andCondition = cItem->getValue(3).toString();
 			condition.orCondition = cItem->getValue(4).toString();
 
@@ -327,9 +327,9 @@ KexiQueryDesignerGuiEditor::getQuery()
 						isSrcTable = false;
 
 						JoinField jf;
-						jf.sourceField = (*itRel).rcvTable;
-						jf.eqLeft = (*itRel).srcTable + "." + (*itRel).srcField;
-						jf.eqRight = (*itRel).rcvTable + "." + (*itRel).rcvField;
+						jf.sourceField = m_db->escapeName((*itRel).rcvTable);
+						jf.eqLeft = m_db->escapeName((*itRel).srcTable) + "." + m_db->escapeName((*itRel).srcField);
+						jf.eqRight = m_db->escapeName((*itRel).rcvTable) + "." + m_db->escapeName((*itRel).rcvField);
 						joinFields.append(jf);
 					}
 
@@ -354,7 +354,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 	}
 
 	query += " FROM ";
-	query += maxTable;
+	query += m_db->escapeName(maxTable);
 
 	QStringList joined;
 	for(JoinFields::Iterator itJ = joinFields.begin(); itJ != joinFields.end(); itJ++)
@@ -378,6 +378,7 @@ KexiQueryDesignerGuiEditor::getQuery()
 	}
 
 	int conditionCount = 0;
+	bool openedWhere = false;
 	for(ConditionList::Iterator itC = conditions.begin(); itC != conditions.end(); itC++)
 	{
 		if(!(*itC).andCondition.isEmpty())
@@ -385,19 +386,24 @@ KexiQueryDesignerGuiEditor::getQuery()
 			if(conditionCount != 0)
 				query += " AND ";
 			else
-				query += " WHERE ";
+			{
+				query += " WHERE(";
+				openedWhere = true;
+			}
 
 			QString ccondition = (*itC).andCondition;
 
-			query += (*itC).field + " " + ccondition;
+			query += "(" + (*itC).field + " " + ccondition + ")";
 			conditionCount++;
 		}
 		if(!(*itC).orCondition.isEmpty())
 		{
-			query += " OR " + (*itC).field + " " + (*itC).orCondition;
+			query += " OR (" + (*itC).field + " " + (*itC).orCondition + ")";
 			conditionCount++;
 		}
 	}
+	if (openedWhere)
+		query += ")";
 
 	//ok, we are trying to get the conditions
 
