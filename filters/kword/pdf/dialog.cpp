@@ -42,12 +42,12 @@ SelectionRange::SelectionRange(const QString &s)
     for (QStringList::iterator it = list.begin(); it!=list.end(); ++it) {
         if ( one.exactMatch(*it) ) {
             uint p = (*it).toUInt();
-            r.append( qMakePair(p, p) );
+            r.push_back( qMakePair(p, p) );
         } else if ( range.exactMatch(*it) ) {
             uint p1 = range.cap(1).toUInt();
             uint p2 = range.cap(2).toUInt();
             if ( p1>p2 ) continue;
-            r.append( qMakePair(p1, p2) );
+            r.push_back( qMakePair(p1, p2) );
         }
     }
 
@@ -62,7 +62,7 @@ SelectionRange::SelectionRange(const QString &s)
         if ( i!=0 && r[i].first<=tmp.second )
             tmp.second = kMax(tmp.second, r[i].second);
         else {
-            _ranges.append(r[i]);
+            _ranges.push_back(r[i]);
             tmp = r[i];
             kdDebug(30516) << "selection range: (" << tmp.first << ","
                            << tmp.second << ") " << endl;

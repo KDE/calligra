@@ -81,7 +81,7 @@ class FilterPage : public TextPage
 
     void beginString(GfxState *, double x0, double y0);
     void dump();
-    void addLink(FilterLink *link) { _links.append(link); }
+    void addLink(FilterLink *link) { _links.push_back(link); }
     void clear();
 
  private:

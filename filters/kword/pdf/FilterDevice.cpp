@@ -338,10 +338,10 @@ DPathVector FilterDevice::convertPath(GfxState *state)
                 DPoint dpoint;
                 state->transform(spath->getX(k), spath->getY(k),
                                  &dpoint.x, &dpoint.y);
-                dpath.append(dpoint);
+                dpath.push_back(dpoint);
             }
         }
-        if ( dpath.size()!=0 ) vector.append(dpath);
+        if ( dpath.size()!=0 ) vector.push_back(dpath);
     }
     return vector;
 }

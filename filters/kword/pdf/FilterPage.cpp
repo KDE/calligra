@@ -28,6 +28,18 @@
 #include "misc.h"
 
 
+// qvaluevector bug - qheapsort uses 'count' but qvaluevector has only 'size'
+template <class Container>
+Q_INLINE_TEMPLATES void qHeapSort2( Container &c )
+{
+    if ( c.begin() == c.end() )
+        return;
+
+    // The second last parameter is a hack to retrieve the value type
+    // Do the real sorting here
+    qHeapSortHelper( c.begin(), c.end(), *(c.begin()), (uint)c.size() );
+}
+
 //-----------------------------------------------------------------------------
 int FilterParagraph::findTab(double xMin, double epsilon,
                              bool firstLine) const {
@@ -118,9 +130,9 @@ void FilterPage::prepare()
         for (TextBlock *blk = line->blocks; blk; blk = blk->next) {
             double epsilon = 0.1 * (line->yMax-line->yMin);
             int res = par.findTab(blk->xMin, epsilon, par.nbLines==1);
-            if ( res==-1 ) par.tabs.append(blk->xMin);
+            if ( res==-1 ) par.tabs.push_back(blk->xMin);
         }
-        qHeapSort(par.tabs);
+        qHeapSort2(par.tabs);
 
         // new paragraph ?
         FilterString *nextStr = (line->next ?
@@ -130,7 +142,7 @@ void FilterPage::prepare()
              0.5*(line->next->yMax - line->next->yMin) ||
              nextStr->_frameIndex!=str->_frameIndex ) {
             par.frameIndex = str->_frameIndex;
-            _pars.append(par);
+            _pars.push_back(par);
             par.nbLines = 1;
             par.tabs.clear();
         } else par.nbLines++;
@@ -153,7 +165,7 @@ void FilterPage::prepare()
                 b.pos = pos;
                 b.font =
                     static_cast<FilterString *>(line->blocks->strings)->_font;
-                _pars[i].blocks.append(b);
+                _pars[i].blocks.push_back(b);
                 pos++;
             }
 
@@ -172,7 +184,7 @@ void FilterPage::prepare()
                         b.pos = pos;
                         b.font =
                             static_cast<FilterString *>(blk->strings)->_font;
-                        _pars[i].blocks.append(b);
+                        _pars[i].blocks.push_back(b);
                         pos++;
                     }
                 }
@@ -197,7 +209,7 @@ void FilterPage::prepare()
                         b.text = tmp;
                         pos += tmp.length();
                     }
-                    _pars[i].blocks.append(b);
+                    _pars[i].blocks.push_back(b);
 
                     QFontMetrics fm( b.font->font() );
                     lineHeight = kMax(lineHeight, fm.lineSpacing());
@@ -215,17 +227,17 @@ void FilterPage::prepare()
     int dec = 0;
     for (uint i=0; i<_pars.size(); i++) {
         QValueVector<FilterBlock> blocks;
-        blocks.append(_pars[i].blocks[0]);
+        blocks.push_back(_pars[i].blocks[0]);
         for (uint k=1; k<_pars[i].blocks.size(); k++) {
             FilterBlock &b = _pars[i].blocks[k];
             b.pos += dec;
-            if ( (b.link==blocks.last().link) &&
-                 (*b.font)==(*blocks.last().font) ) {
+            if ( (b.link==blocks.back().link) &&
+                 (*b.font)==(*blocks.back().font) ) {
                 if (b.link) {
-                    blocks.last().linkText += b.linkText;
+                    blocks.back().linkText += b.linkText;
                     dec--;
-                } else blocks.last().text += b.text;
-            } else blocks.append(b);
+                } else blocks.back().text += b.text;
+            } else blocks.push_back(b);
         }
         _pars[i].blocks = blocks;
     }
@@ -238,8 +250,8 @@ void FilterPage::prepare()
         b.font = FilterFont::defaultFont;
         b.pos = 0;
         b.text = "";
-        par.blocks.append(b);
-        _pars.append(par);
+        par.blocks.push_back(b);
+        _pars.push_back(par);
     }
 }
 
@@ -260,7 +272,7 @@ void FilterPage::dump()
             element.setAttribute("ptpos", _pars[i].tabs[k]);
             element.setAttribute("width", 0);
             element.setAttribute("filling", 0);
-            layouts.append(element);
+            layouts.push_back(element);
         }
 
         // indents
@@ -268,13 +280,13 @@ void FilterPage::dump()
         element.setAttribute("left", _pars[i].leftIndent);
         double dx = _pars[i].firstIndent - _pars[i].leftIndent;
         if ( dx!=0 ) element.setAttribute("first", dx);
-        layouts.append(element);
+        layouts.push_back(element);
 
         // offset before
         if ( _pars[i].offset>0 ) {
             QDomElement element = _data.createElement("OFFSETS");
             element.setAttribute("before", _pars[i].offset);
-            layouts.append(element);
+            layouts.push_back(element);
         }
 
         // formats
@@ -286,7 +298,7 @@ void FilterPage::dump()
             QDomDocument document = _data.document();
             bool r = b.font->format(document, element, b.pos, b.text.length());
             if (b.link) b.link->format(document, element, b.pos, b.linkText);
-            if ( r || b.link ) formats.append(element);
+            if ( r || b.link ) formats.push_back(element);
         }
 
         _data.createParagraph(text, layouts, formats);
