@@ -143,6 +143,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
     if ( m_currentFrameSetEdit )
         m_currentFrameSetEdit->focusOutEvent();
     m_printing = true;
+    KWViewMode *viewMode = new KWViewModePrint;
 
     QValueList<int> pageList;
 #ifndef HAVE_KDEPRINT
@@ -184,13 +185,14 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
 
         painter->translate( 0, -yOffset );
         painter->setBrushOrigin( 0, -yOffset );
-        drawDocument( painter, pageRect );
+        drawDocument( painter, pageRect, viewMode );
         kapp->processEvents();
         painter->restore();
     }
     if ( m_currentFrameSetEdit )
         m_currentFrameSetEdit->focusInEvent();
     m_printing = false;
+    delete viewMode;
 }
 
 void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
@@ -199,11 +201,11 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
     {
         // Note: in drawContents, the painter is already to the contents coordinates
         painter->setBrushOrigin( -contentsX(), -contentsY() );
-        drawDocument( painter, QRect( cx, cy, cw, ch ) );
+        drawDocument( painter, QRect( cx, cy, cw, ch ), m_viewMode );
     }
 }
 
-void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
+void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* viewMode )
 {
     //kdDebug(32002) << "KWCanvas::drawDocument crect: " << DEBUGRECT( crect ) << endl;
 
@@ -212,8 +214,8 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
     if ( painter->device()->devType() != QInternal::Printer ) // except when printing
     {
         QRegion emptySpaceRegion( crect );
-        m_doc->createEmptyRegion( crect, emptySpaceRegion, m_viewMode );
-        m_viewMode->drawPageBorders( painter, crect, emptySpaceRegion );
+        m_doc->createEmptyRegion( crect, emptySpaceRegion, viewMode );
+        viewMode->drawPageBorders( painter, crect, emptySpaceRegion );
     }
 
     // Draw all framesets contents
@@ -221,12 +223,12 @@ void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
-        drawFrameSet( frameset, painter, crect, false, true );
+        drawFrameSet( frameset, painter, crect, false, true, viewMode );
     }
 }
 
 void KWCanvas::drawFrameSet( KWFrameSet * frameset, QPainter * painter,
-                             const QRect & crect, bool onlyChanged, bool resetChanged )
+                             const QRect & crect, bool onlyChanged, bool resetChanged, KWViewMode* viewMode )
 {
     if ( !frameset->isVisible() )
         return;
@@ -240,9 +242,9 @@ void KWCanvas::drawFrameSet( KWFrameSet * frameset, QPainter * painter,
     QColorGroup gb = QApplication::palette().active();
     if ( focus && m_currentFrameSetEdit && frameset == m_currentFrameSetEdit->frameSet() )
         // Currently edited frameset
-        m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged, resetChanged, m_viewMode, this );
+        m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged, resetChanged, viewMode, this );
     else
-        frameset->drawContents( painter, crect, gb, onlyChanged, resetChanged, 0L, m_viewMode, this );
+        frameset->drawContents( painter, crect, gb, onlyChanged, resetChanged, 0L, viewMode, this );
 }
 
 void KWCanvas::keyPressEvent( QKeyEvent *e )

@@ -171,10 +171,11 @@ protected:
     virtual void drawContents( QPainter *p, int cx, int cy, int cw, int ch );
     /**
      * The main drawing method.
-     * @param painter
+     * @param painter guess
      * @param crect the area to be repainted, in contents coordinates
+     * @param viewMode the view mode to be used (usually m_viewMode, except when printing)
      */
-    void drawDocument( QPainter *painter, const QRect &crect );
+    void drawDocument( QPainter *painter, const QRect &crect, KWViewMode* viewMode );
     /**
      * Draw page borders, but also clear up the space between the frames and the page borders,
      * draw the page shadow, and the gray area.
@@ -228,7 +229,7 @@ private:
      * @param resetChanged whether the changed flag should be reset to false while redrawing
      */
     void drawFrameSet( KWFrameSet * frameset, QPainter * painter,
-                       const QRect & crect, bool onlyChanged, bool resetChanged );
+                       const QRect & crect, bool onlyChanged, bool resetChanged, KWViewMode* viewMode );
 
     void drawMovingRect( QPainter & p );
     void deleteMovingRect();
