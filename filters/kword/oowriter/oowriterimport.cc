@@ -999,7 +999,7 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         underLineElem.setAttribute( "styleline", styleline );
 
         QString underLineColor = m_styleStack.attribute( "style:text-underline-color" ); // 3.10.23
-        if ( underLineColor != "font-color" )
+        if ( !underLineColor.isEmpty() && underLineColor != "font-color" )
             underLineElem.setAttribute("underlinecolor", underLineColor);
         if ( wordByWord )
             underLineElem.setAttribute("wordbyword", 1);
