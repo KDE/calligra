@@ -78,11 +78,11 @@ unsigned short MsWord::char2unicode(unsigned lid, unsigned char c)
         unsigned char output[2];
         size_t ibuflen = 1;
         size_t obuflen = 2;
-        const char *ibuf;
+        char *ibuf;
         char *obuf;
 
         input[0] = c;
-        ibuf = (const char *)&input[0];
+        ibuf = (char *)&input[0];
         obuf = (char *)&output[0];
         if ((size_t)-1 != iconv(lastIconv, &ibuf, &ibuflen, &obuf, &obuflen))
         {
