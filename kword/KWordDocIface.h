@@ -66,6 +66,12 @@ k_dcop:
 
     virtual void setUndoRedoLimit(int _val);
 
+    bool showRuler() const;
+    bool dontCheckUpperWord();
+    bool dontCheckTitleCase() const;
+    bool showdocStruct() const;
+    bool viewFrameBorders() const; 
+
     virtual void recalcAllVariables();
     virtual void recalcVariables(int _var);
     virtual void recalcVariables(const QString &varName);

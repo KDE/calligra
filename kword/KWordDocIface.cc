@@ -185,3 +185,28 @@ void KWordDocIface::recalcVariables(const QString &varName)
         doc->recalcVariables(256);
 }
 
+
+bool KWordDocIface::showRuler() const
+{
+    return doc->showRuler();
+}
+
+bool KWordDocIface::dontCheckUpperWord()
+{
+    return doc->dontCheckUpperWord();
+}
+
+bool KWordDocIface::dontCheckTitleCase() const
+{
+    return doc->dontCheckTitleCase();
+}
+
+bool KWordDocIface::showdocStruct() const
+{
+    return doc->showdocStruct();
+}
+
+bool KWordDocIface::viewFrameBorders() const
+{
+    return doc->viewFrameBorders();
+}
