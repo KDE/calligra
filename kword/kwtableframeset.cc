@@ -1159,18 +1159,24 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
     // If we created extra rows/cols, adjust the groupmanager counters.
     if(rowsDiff>0) m_rows+= rowsDiff;
     if(colsDiff>0) m_cols+= colsDiff;
-
     // create new cells
     for (unsigned int y = 0; y < intoRows; y++) {
         for (unsigned int x = 0; x < intoCols; x++){
-            if(x==0 && y==0) continue; // the orig cell takes this spot.
+            if(x==0 && y==0)
+                continue; // the orig cell takes this spot.
 
             Cell *lastFrameSet= new Cell( this, y + row, x + col );
 
-            KWFrame *frame = new KWFrame(lastFrameSet,
+            /*Frame *frame = new KWFrame(lastFrameSet,
                     firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
                     firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
                     width, height, RA_NO);
+            */
+            KWFrame *frame=firstFrame->getCopy();
+            frame->setRect(firstFrame->left() + static_cast<int>((width+tableCellSpacing) * x),
+                           firstFrame->top() + static_cast<int>((height+tableCellSpacing) * y),
+                           width, height);
+            frame->setRunAround( RA_NO );
             frame->setFrameBehaviour(AutoExtendFrame);
             frame->setNewFrameBehaviour(NoFollowup);
             lastFrameSet->addFrame( frame );
