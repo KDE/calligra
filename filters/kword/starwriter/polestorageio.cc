@@ -1,4 +1,4 @@
-/* POLE - Portable library to access OLE Storage 
+/* POLE - Portable library to access OLE Storage
    Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -18,6 +18,8 @@
 */
 
 #include <fstream>
+
+#include <stdio.h>
 
 #include <polestorage.h>
 #include <polestorageio.h>
@@ -319,12 +321,12 @@ void StorageIO::flush()
 
   // write the header
 
-  
+
 
   // dirty ?
 }
 
-unsigned long StorageIO::loadBigBlocks( std::vector<unsigned long> blocks, 
+unsigned long StorageIO::loadBigBlocks( std::vector<unsigned long> blocks,
   unsigned char* data, unsigned long maxlen )
 {
   // sentinel
@@ -339,23 +341,25 @@ unsigned long StorageIO::loadBigBlocks( std::vector<unsigned long> blocks,
   {
     unsigned long block = blocks[i];
     if( block < 0 ) continue;
-    file.seekg( bb_size * ( block+1 ) );
+    unsigned long pos =  bb_size * ( block+1 );
     unsigned long p = (bb_size < maxlen-bytes) ? bb_size : maxlen-bytes;
+    if( pos + p > filesize ) p = filesize - pos;
+    file.seekg( pos );
     file.read( data + bytes, p );
     bytes += p;
   }
-  
+
   return bytes;
 }
 
-unsigned long StorageIO::loadBigBlock( unsigned long block, 
+unsigned long StorageIO::loadBigBlock( unsigned long block,
   unsigned char* data, unsigned long maxlen )
 {
   // sentinel
   if( !data ) return 0;
   if( !file.good() ) return 0;
   if( block < 0 ) return 0;
- 
+
   // wraps call for loadBigBlocks
   std::vector<unsigned long> blocks;
   blocks.resize( 1 );
@@ -365,7 +369,7 @@ unsigned long StorageIO::loadBigBlock( unsigned long block,
 }
 
 // return number of bytes which has been read
-unsigned long StorageIO::loadSmallBlocks( std::vector<unsigned long> blocks, 
+unsigned long StorageIO::loadSmallBlocks( std::vector<unsigned long> blocks,
   unsigned char* data, unsigned long maxlen )
 {
   // sentinel
@@ -398,18 +402,18 @@ unsigned long StorageIO::loadSmallBlocks( std::vector<unsigned long> blocks,
     memcpy( data + bytes, buf + offset, p );
     bytes += p;
   }
-  
+
   return bytes;
 }
 
-unsigned long StorageIO::loadSmallBlock( unsigned long block, 
+unsigned long StorageIO::loadSmallBlock( unsigned long block,
   unsigned char* data, unsigned long maxlen )
 {
   // sentinel
   if( !data ) return 0;
   if( !file.good() ) return 0;
   if( block < 0 ) return 0;
- 
+
   // wraps call for loadSmallBlocks
   std::vector<unsigned long> blocks;
   blocks.resize( 1 );

@@ -38,13 +38,20 @@ class StreamIO
 
     unsigned long size();
 
+    void seek( unsigned long pos );
+
+    unsigned long tell();
+
+    int getch();
+
     unsigned long read( unsigned char* data, unsigned long maxlen );
+
+    unsigned long read( unsigned long pos, unsigned char* data, unsigned long maxlen );
 
     StorageIO* io;
 
     Entry* entry;
 
-    unsigned long pos;
 
   private:
 
@@ -53,6 +60,15 @@ class StreamIO
     // no copy or assign
     StreamIO( const StreamIO& );
     StreamIO& operator=( const StreamIO& );
+
+    // pointer for read
+    unsigned long m_pos;
+
+    // simple cache system to speed-up getch()
+    unsigned char* cache_data;
+    unsigned long cache_size;
+    unsigned long cache_pos;
+    void updateCache();
 
 };
 

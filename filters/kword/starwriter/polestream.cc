@@ -1,4 +1,4 @@
-/* POLE - Portable library to access OLE Storage 
+/* POLE - Portable library to access OLE Storage
    Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -17,8 +17,6 @@
    Boston, MA 02111-1307, US
 */
 
-#include <vector>
-
 #include <polestorage.h>
 #include <polestorageio.h>
 #include <polestream.h>
@@ -31,24 +29,30 @@ Stream::Stream( StreamIO* _io ):
 {
 }
 
+// FIXME tell parent we're gone
 Stream::~Stream()
 {
-  // tell parent we're gone
+  delete io;
 }
 
 unsigned long Stream::tell()
 {
-  return io ? io->pos : 0;
+  return io ? io->tell() : 0;
 }
 
 void Stream::seek( unsigned long newpos )
 {
-  if( io ) io->pos = newpos;
+  if( io ) io->seek( newpos );
 }
 
 unsigned long Stream::size()
 {
   return io ? io->entry->size : 0;
+}
+
+int Stream::getch()
+{
+  return io ? io->getch() : -1;
 }
 
 unsigned long Stream::read( unsigned char* data, unsigned long maxlen )

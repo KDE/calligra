@@ -39,6 +39,8 @@ class Stream
 
     void seek( unsigned long pos ); 
 
+    int getch();
+
     unsigned long read( unsigned char* data, unsigned long maxlen );
 
   private:
