@@ -279,14 +279,14 @@ void KWView::setupActions()
     actionExtraCreateTemplate = new KAction( i18n( "&Create Template from Document..." ), 0,
                                              this, SLOT( extraCreateTemplate() ),
                                              actionCollection(), "extra_template" );
-    (void) new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
+    actionFileStatistics = new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
 
     // -------------- Edit actions
     actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
     actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
     actionEditPaste = KStdAction::paste( this, SLOT( editPaste() ), actionCollection(), "edit_paste" );
-    KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
-    KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
+    actionEditFind = KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
+    actionEditReplace = KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
 
@@ -358,10 +358,6 @@ void KWView::setupActions()
     changeZoomMenu( );
 
     // -------------- Insert menu
-    /*actionInsertPicture = new KAction( i18n( "&Picture Inline..." ),"inline_image", Key_F2,
-                        this, SLOT( insertPicture() ),
-                        actionCollection(), "insert_picture" );*/
-
     actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
                         ALT + SHIFT + Key_C,
                         this, SLOT( insertSpecialChar() ),
@@ -421,7 +417,7 @@ void KWView::setupActions()
                                        this, SLOT( insertFormula() ),
                                        actionCollection(), "tools_formula" );
 
-    (void) new KAction( i18n( "&Table..." ), "inline_table",
+    actionInsertTable = new KAction( i18n( "&Table..." ), "inline_table",
                         Key_F5 ,
                         this, SLOT( insertTable() ),
                         actionCollection(), "insert_table" );
@@ -442,11 +438,11 @@ void KWView::setupActions()
     actionFormatFrameSet = new KAction( i18n( "F&rame/Frameset..." ), 0,
                                      this, SLOT( formatFrameSet() ),
                                      actionCollection(), "format_frameset" );
-    (void) new KAction( i18n( "P&age..." ), 0,
+    actionFormatPage = new KAction( i18n( "P&age..." ), 0,
                         this, SLOT( formatPage() ),
                         actionCollection(), "format_page" );
 
-    (void) new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
+    actionFormatStylist = new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
                         this, SLOT( extraStylist() ),
                         actionCollection(), "format_stylist" );
 
@@ -613,7 +609,7 @@ void KWView::setupActions()
     // ---------------------- Tools menu
 
 
-    (void) new KAction( i18n( "&Autocorrection..." ), 0,
+    actionAutoFormat = new KAction( i18n( "&Autocorrection..." ), 0,
                         this, SLOT( extraAutoFormat() ),
                         actionCollection(), "extra_autocorrection" );
 
@@ -626,7 +622,7 @@ void KWView::setupActions()
                                      actionCollection(), "change_case" );
 
     //------------------------ Settings menu
-    KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
+    actionConfigure=KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
 }
 
 
@@ -641,7 +637,7 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
     QStringList files = KWFactory::global()->dirs()->findAllResources( "expression", "*.xml", TRUE );
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
     {
-	createExpressionActions( parentMenu,*it );
+        createExpressionActions( parentMenu,*it );
     }
 }
 
@@ -649,7 +645,7 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
 {
     QFile file( filename );
     if ( !file.open( IO_ReadOnly ) )
-	return;
+        return;
 
     QDomDocument doc;
     doc.setContent( &file );
@@ -857,7 +853,7 @@ void KWView::fileStatistics()
               "<tr><td>" +i18n("Flesch reading ease:")+
               "</td> <td align=\"right\"><b>" +flesch+ "</b></td></tr>"
               "</table></qt>",
-	dlg.plainPage() ) );
+        dlg.plainPage() ) );
     dlg.setInitialSize( QSize( 400, 200 ) ); // not too good for long translations... -> use a real layout and 5 labels
     dlg.show();
 }
@@ -1177,24 +1173,24 @@ void KWView::showFormat( const QTextFormat &currentFormat )
     switch(currentFormat.vAlign())
       {
       case QTextFormat::AlignSuperScript:
-	{
-	  actionFormatSub->setChecked( false );
-	  actionFormatSuper->setChecked( true );
-	  break;
-	}
+        {
+          actionFormatSub->setChecked( false );
+          actionFormatSuper->setChecked( true );
+          break;
+        }
       case QTextFormat::AlignSubScript:
-	{
-	  actionFormatSub->setChecked( true );
-	  actionFormatSuper->setChecked( false );
-	  break;
-	}
+        {
+          actionFormatSub->setChecked( true );
+          actionFormatSuper->setChecked( false );
+          break;
+        }
       case QTextFormat::AlignNormal:
       default:
-	{
-	  actionFormatSub->setChecked( false );
-	  actionFormatSuper->setChecked( false );
-	  break;
-	}
+        {
+          actionFormatSub->setChecked( false );
+          actionFormatSuper->setChecked( false );
+          break;
+        }
       }
 
 }
@@ -1281,7 +1277,6 @@ void KWView::showParagBorders( Border left, Border right,
 void KWView::updateReadWrite( bool readwrite )
 {
     // Disable everything if readonly.
-    // But don't enable everything if readwrite. E.g. "undo" must be initially disabled.
     if ( !readwrite )
     {
         QValueList<KAction*> actions = actionCollection()->actions();
@@ -1290,7 +1285,10 @@ void KWView::updateReadWrite( bool readwrite )
         for (; aIt != aEnd; ++aIt )
             (*aIt)->setEnabled( readwrite );
         // A few harmless actions
-        //actionEditCopy->setEnabled( true ); // depends on selection
+        actionFileStatistics->setEnabled( true );
+        actionExtraCreateTemplate->setEnabled( true );
+        actionViewPageMode->setEnabled( true );
+        actionViewPreviewMode->setEnabled( true );
         actionViewFormattingChars->setEnabled( true );
         actionViewFrameBorders->setEnabled( true );
         actionViewHeader->setEnabled( true );
@@ -1298,7 +1296,28 @@ void KWView::updateReadWrite( bool readwrite )
         actionViewFootNotes->setEnabled( true );
         actionViewEndNotes->setEnabled( true );
         actionViewZoom->setEnabled( true );
+        KAction* newView = actionCollection()->action("view_newview");
+        if (newView) newView->setEnabled( true );
         // Well, the view menu doesn't appear in konq, so this is currently useless...
+    } else
+    {
+        // Don't enable everything if readwrite. E.g. "undo" must be initially disabled.
+        slotFrameSetEditChanged();
+        // Insert
+        actionInsertTable->setEnabled( true );
+        actionToolsCreatePart->setEnabled( true );
+        actionToolsCreatePix->setEnabled( true );
+        actionToolsCreateText->setEnabled( true );
+        // Format
+        actionFormatStylist->setEnabled( true );
+        actionFormatPage->setEnabled( true );
+        // Tools
+        actionExtraSpellCheck->setEnabled( true );
+        actionAutoFormat->setEnabled( true );
+        actionEditCustomVars->setEnabled( true );
+        actionEditPersonnalExpr->setEnabled( true );
+        // Settings
+        actionConfigure->setEnabled( true );
     }
 }
 
@@ -1413,8 +1432,10 @@ void KWView::editFind()
     KWSearchDia dialog( m_gui->canvasWidget(), "find", searchEntry );
     if ( dialog.exec() == QDialog::Accepted )
     {
+        m_doc->setReadWrite(false); // prevent editing text
         KWFindReplace find( m_gui->canvasWidget(), &dialog );
         find.proceed();
+        m_doc->setReadWrite(true);
     }
 }
 
@@ -1427,8 +1448,10 @@ void KWView::editReplace()
     KWReplaceDia dialog( m_gui->canvasWidget(), "replace", searchEntry, replaceEntry );
     if ( dialog.exec() == QDialog::Accepted )
     {
+        m_doc->setReadWrite(false); // prevent editing text
         KWFindReplace replace( m_gui->canvasWidget(), &dialog );
         replace.proceed();
+        m_doc->setReadWrite(true);
     }
 }
 
@@ -2227,6 +2250,7 @@ void KWView::formatFrameSet()
 void KWView::extraSpelling()
 {
     if (m_spell.kspell) return; // Already in progress
+    m_doc->setReadWrite(false); // prevent editing text
     m_spell.spellCurrFrameSetNum = -1;
     m_spell.macroCmdSpellCheck=0L;
 
@@ -3137,6 +3161,7 @@ void KWView::spellCheckerReady()
     //kdDebug() << "KWView::spellCheckerReady done" << endl;
 
     // Done
+    m_doc->setReadWrite(true);
     m_spell.kspell->cleanUp();
     delete m_spell.kspell;
     m_spell.kspell = 0;
@@ -3213,6 +3238,7 @@ void KWView::spellCheckerDone( const QString & )
     }
     else
     {
+        m_doc->setReadWrite(true);
         m_spell.textFramesets.clear();
         m_ignoreWord.clear();
         if(m_spell.macroCmdSpellCheck)
@@ -3238,6 +3264,7 @@ void KWView::spellCheckerFinished()
     ASSERT( fs );
     if ( fs )
         fs->removeHighlight();
+    m_doc->setReadWrite(true);
     m_spell.textFramesets.clear();
     m_ignoreWord.clear();
     if(m_spell.macroCmdSpellCheck)
@@ -3271,6 +3298,8 @@ void KWView::slotFrameSetEditChanged()
     bool hasSelection = edit && edit->textFrameSet()->hasSelection();
     actionEditCut->setEnabled( hasSelection && rw );
     actionEditCopy->setEnabled( hasSelection );
+    actionEditFind->setEnabled( edit && rw );
+    actionEditReplace->setEnabled( edit && rw );
     actionFormatDefault->setEnabled( hasSelection && rw);
     clipboardDataChanged(); // for paste
 
