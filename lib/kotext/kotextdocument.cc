@@ -1483,9 +1483,9 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         }
         else if ( isTextNS && localName == "h" ) // heading
         {
-            kdDebug(32500)<<" heading \n";
+            //kdDebug(32500) << " heading " << endl;
             context.fillStyleStack( tag, KoXmlNS::text, "style-name" );
-            int level = tag.attributeNS( KoXmlNS::text, "level", QString::null ).toInt();
+            int level = tag.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
             bool listOK = false;
             // When a heading is inside a list, it seems that the list prevails.
             // Example:
@@ -1496,7 +1496,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
             // Result: the numbering of the header follows "Numbering 1".
             // So we use the style for the outline level only if we're not inside a list:
             //if ( !context.atStartOfListItem() )
-            // === The new method for this is that we simply override it in parseList, afterwards.
+            // === The new method for this is that we simply override it after loading.
             listOK = context.pushOutlineListLevelStyle( level );
             int restartNumbering = -1;
             if ( tag.hasAttributeNS( KoXmlNS::text, "start-value" ) )
@@ -1545,7 +1545,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
 
 KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph )
 {
-    //kdDebug(30518) << k_funcinfo << "parsing list"<< endl;
+    //kdDebug(32500) << "loadList: " << list.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
 
     const QString oldListStyleName = context.currentListStyleName();
     if ( list.hasAttributeNS( KoXmlNS::text, "style-name" ) )
@@ -1573,7 +1573,10 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
         lastParagraph = loadOasisText( list, context, lastParagraph, styleColl, nextParagraph );
         KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
         // Apply list style to first paragraph inside numbered-parag - there's only one anyway
-        firstListItem->applyListStyle( context, restartNumbering, orderedList, false, level );
+        // Keep the "is outline" property though
+        bool isOutline = firstListItem->counter() && firstListItem->counter()->numbering() == KoParagCounter::NUM_CHAPTER;
+        firstListItem->applyListStyle( context, restartNumbering, orderedList,
+                                       isOutline, level );
     }
     else
     {

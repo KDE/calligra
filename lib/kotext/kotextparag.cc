@@ -1734,6 +1734,11 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         {
             textData = '\n';
         }
+        else if ( isTextNS && localName == "number" ) // text:number
+        {
+            // This is the number in front of a numbered paragraph,
+            // written out to help export filters. We can ignore it.
+        }
         else if ( node.isProcessingInstruction() )
         {
             QDomProcessingInstruction pi = node.toProcessingInstruction();
@@ -1868,7 +1873,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         if ( paragCounter->restartCounter() )
             writer.addAttribute( "text:start-value", paragCounter->startNumber() );
 
-        KoGenStyle listStyle( KoGenStyle::STYLE_LIST /*, no family*/ );
+        KoGenStyle listStyle( KoGenStyle::STYLE_AUTO_LIST /*, no family*/ );
         paragCounter->saveOasis( listStyle );
 
         QString autoListStyleName = mainStyles.lookup( listStyle, "L", true );
@@ -1951,10 +1956,11 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
 void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
 {
+    //kdDebug(32500) << k_funcinfo << "applyListStyle to parag " << this << " heading=" << heading << endl;
     delete m_layout.counter;
     m_layout.counter = new KoParagCounter;
     m_layout.counter->loadOasis( context, restartNumbering, orderedList, heading, level );
-    // need to call invalidateCounters() ? Not during loading at least.
+    // need to call invalidateCounters() ? Not during the initial loading at least.
 }
 
 int KoTextParag::documentWidth() const

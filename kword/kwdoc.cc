@@ -2794,7 +2794,8 @@ void KWDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& 
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
-    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
+
+    styles = mainStyles.styles( KoGenStyle::STYLE_AUTO_LIST );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
@@ -2836,6 +2837,11 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( stylesWriter, mainStyles, "text:list-style", (*it).name, 0 );
     }
     m_styleColl->saveOasisOutlineStyles( *stylesWriter );
     static_cast<KWVariableSettings *>( m_varColl->variableSetting() )->saveOasis( *stylesWriter );

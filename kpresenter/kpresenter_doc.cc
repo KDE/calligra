@@ -1104,7 +1104,7 @@ void KPresenterDoc::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyle
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
+    styles = mainStyles.styles( KoGenStyle::STYLE_AUTO_LIST );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         ( *it ).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
@@ -1366,6 +1366,11 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( stylesWriter, mainStyles, "text:list-style", (*it).name, 0 );
     }
     styles = mainStyles.styles( STYLE_HATCH );
     it = styles.begin();

@@ -582,6 +582,10 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
 
         KoGenStyle listStyle( KoGenStyle::STYLE_LIST /*, no family*/ );
         m_paragLayout.counter->saveOasis( listStyle, true );
+        // This display-name will probably look nicer in OO, but this also means
+        // no re-use possible between list styles...
+        listStyle.addAttribute( "style:display-name",
+                                i18n( "Numbering Style for %1" ).arg( m_displayName ) );
 
         QString autoListStyleName = genStyles.lookup( listStyle, "L", true );
         gs.addAttribute( "style:list-style-name", autoListStyleName );

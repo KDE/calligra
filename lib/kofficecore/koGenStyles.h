@@ -145,13 +145,15 @@ public:
            STYLE_AUTO = 2,
            STYLE_MASTER = 3,
            STYLE_LIST = 4,
-           STYLE_NUMERIC_DATE = 5,
-	   STYLE_NUMERIC_TIME = 6,
-           STYLE_NUMERIC_FRACTION = 7,
-           STYLE_NUMERIC_PERCENTAGE =8,
-           STYLE_NUMERIC_SCIENTIFIC = 9,
-           STYLE_NUMERIC_CURRENCY = 10,
-	   STYLE_NUMERIC_TEXT = 11};
+           STYLE_AUTO_LIST = 5,
+           // 6 is available
+           STYLE_NUMERIC_DATE = 7,
+	   STYLE_NUMERIC_TIME = 8,
+           STYLE_NUMERIC_FRACTION = 9,
+           STYLE_NUMERIC_PERCENTAGE = 10,
+           STYLE_NUMERIC_SCIENTIFIC = 11,
+           STYLE_NUMERIC_CURRENCY = 12,
+	   STYLE_NUMERIC_TEXT = 13 };
 
     /**
      * Start the definition of a new style. Its name will be set later by KoGenStyles::lookup(),

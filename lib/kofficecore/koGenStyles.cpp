@@ -112,7 +112,7 @@ KoGenStyle* KoGenStyles::styleForModification( const QString& name )
 
 void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
-    //kdDebug(30003) << "writing out style " << name << " " << m_attributes["style:display-name"] << endl;
+    kdDebug(30003) << "writing out style " << name << " " << m_attributes["style:display-name"] << " " << m_familyName << endl;
     writer->startElement( elementName );
     if ( !drawElement )
         writer->addAttribute( "style:name", name );
@@ -132,6 +132,10 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
     if ( !m_familyName.isEmpty() )
         const_cast<KoGenStyle *>( this )->
             addAttribute( "style:family", QString::fromLatin1( m_familyName ) );
+    else {
+        if ( qstrcmp( elementName, "style:style" ) )
+            kdWarning(30003) << "User style " << name << " is without family - invalid" << endl;
+    }
 
 #if 0 // #ifndef NDEBUG
     kdDebug() << "style: " << name << endl;
@@ -148,7 +152,11 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
     // only in the final file, not in the caller's code.
     QMap<QString, QString>::const_iterator it = m_attributes.begin();
     for ( ; it != m_attributes.end(); ++it ) {
-        if ( !parentStyle || parentStyle->attribute( it.key() ) != it.data() )
+        bool writeit = true;
+        if ( parentStyle && it.key() != "style:family" // always write the family out
+             && parentStyle->attribute( it.key() ) == it.data() )
+            writeit = false;
+        if ( writeit )
             writer->addAttribute( it.key().utf8(), it.data().utf8() );
     }
     bool createPropertiesTag = propertiesElementName && propertiesElementName[0] != '\0';

@@ -10,7 +10,7 @@
 input="$1"
 
 # Set this to 1 in order to validate the saved oasis document using oasislint
-checkoasis="0"
+checkoasis="1"
 
 appname=kword
 oldextension=kwd
