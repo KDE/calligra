@@ -35,6 +35,8 @@
 #include <qvaluestack.h>
 #include <qmessagebox.h>
 
+#include <klocale.h>
+
 #define DEGTORAD(d) (d)*M_PI/180
 
 #include <math.h>
@@ -780,7 +782,7 @@ uint KDChartPiePainter::findRightPie( uint pie )
 */
 QString KDChartPiePainter::fallbackLegendText( uint dataset ) const
 {
-    return QObject::tr( "Item " ) + QString::number( dataset + 1 );
+    return i18n( "Item %1" ).arg( dataset + 1 );
 }
 
 

@@ -33,6 +33,8 @@
 #include "KDChartAxesPainter.h"
 #include "KDDrawText.h"
 
+#include <klocale.h>
+
 #include <qpainter.h>
 
 /**
@@ -509,7 +511,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
                     maxLabelsWidth = fm.width( *it );
                     strMax = *it;
                 }
-                if ( !(*it).startsWith( "Item ") )
+                if ( !(*it).startsWith( i18n("Item") ) )
                     onlyDefaultLabels = false;
             }
             while ( fm.width( strMax ) > pTextsW && 6.0 < nTxtHeight ) {

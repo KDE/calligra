@@ -58,6 +58,8 @@
 #include <qpaintdevice.h>
 #include <qpaintdevicemetrics.h>
 
+#include <klocale.h>
+
 #define DEGTORAD(d) (d)*M_PI/180
 
 
@@ -2148,7 +2150,7 @@ void KDChartPainter::findLegendTexts( KDChartTableDataBase* data )
 */
 QString KDChartPainter::fallbackLegendText( uint dataset ) const
 {
-    return QObject::tr( "Series " ) + QString::number( dataset + 1 );
+    return i18n( "Series %1" ).arg( dataset + 1 );
 }
 
 

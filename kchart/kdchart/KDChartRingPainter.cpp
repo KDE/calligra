@@ -33,6 +33,8 @@
 #include <qpainter.h>
 #include <qvaluestack.h>
 
+#include <klocale.h>
+
 #include <stdlib.h>
 
 #define DEGTORAD(d) (d)*M_PI/180
@@ -380,7 +382,7 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
 */
 QString KDChartRingPainter::fallbackLegendText( uint dataset ) const
 {
-    return QObject::tr( "Item " ) + QString::number( dataset + 1 );
+    return i18n( "Item %1" ).arg( dataset + 1 );
 }
 
 
