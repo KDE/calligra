@@ -229,7 +229,6 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 		return;
 
 	if (startRowEdit) {
-		//! @todo hide indicator when editing is finished
 		recordNavigator()->showEditingIndicator(true);
 
 		emit rowEditStarted(m_curRow);
@@ -414,6 +413,23 @@ KexiTableViewColumn* KexiFormScrollView::column(int col)
 {
 	const uint id = fieldNumberForColumn(col);
 	return (id >= 0) ? m_data->column( id ) : 0;
+}
+
+void KexiFormScrollView::cancelEditor()
+{
+	if (!dynamic_cast<KexiFormDataItemInterface*>(m_editor))
+		return;
+
+	dynamic_cast<KexiFormDataItemInterface*>(m_editor)->undoChanges();
+	m_editor = 0;
+}
+
+void KexiFormScrollView::updateAfterCancelRowEdit()
+{
+	for (QPtrListIterator<KexiFormDataItemInterface> it(m_dataItems); it.current(); ++it) {
+		it.current()->undoChanges();
+	}
+	recordNavigator()->showEditingIndicator(false);
 }
 
 #include "kexiformscrollview.moc"

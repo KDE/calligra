@@ -524,6 +524,12 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 QScrollView::updateScrollbars() will be usually called here. */
 		virtual void updateWidgetScrollBars() = 0;
 
+		/*! @internal
+		 Updates row appearance after canceling row edit. 
+		 Used by cancelRowEdit(). By default just calls updateRow(m_curRow).
+		 Reimplemented by KexiFormScrollView. */
+		virtual void updateAfterCancelRowEdit();
+
 		//! Handles KexiTableViewData::rowRepaintRequested() signal
 		virtual void slotRowRepaintRequested(KexiTableItem& item) {}
 

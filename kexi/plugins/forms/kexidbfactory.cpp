@@ -125,7 +125,8 @@ void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
 	if (removeOld) 
 		setText(add.toString());
-	setText( m_origValue.toString() + add.toString() );
+	else
+		setText( m_origValue.toString() + add.toString() );
 }
 
 QVariant KexiDBLineEdit::value()

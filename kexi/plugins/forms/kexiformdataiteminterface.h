@@ -68,6 +68,9 @@ class KEXIFORMUTILS_EXPORT KexiFormDataItemInterface : public KexiDataItemInterf
 		/*! Does nothing, because within forms, widgets are always visible. */
 		virtual void showWidget() { }
 
+		/*! Undoes changes made to this item - just resets to original value. */
+		void undoChanges();
+
 	protected:
 		QString m_dataSource;
 		KexiDB::Field *m_field;

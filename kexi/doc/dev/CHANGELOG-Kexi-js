@@ -460,7 +460,11 @@ Forms:
 -change form's object caption to "caption" property, when changed and conversely!
 -new forms should have "dirty" set to true, so user can save them quickly
 
-2005-03-10..25
+2005-03-25
+Forms
+- "cancel cell editing" and "cancel row editing" implemented
+
+2005-03-10..24
 Forms, TableViews
 - APIs for Forms and TableViews more integrated: 
 -- KexiTableEdit now inherits KexiDataItemInterface

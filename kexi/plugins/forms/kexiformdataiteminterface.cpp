@@ -28,3 +28,7 @@ KexiFormDataItemInterface::~KexiFormDataItemInterface()
 {
 }
 
+void KexiFormDataItemInterface::undoChanges()
+{
+	setValueInternal(QString::null, false);
+}

@@ -99,6 +99,9 @@ class KexiFormScrollView :
 		virtual void moveToFirstRecordRequested();
 		virtual void addNewRecordRequested();
 
+		/*! Reverts current editor's value to old one. */
+		virtual void cancelEditor();
+
 	signals:
 		virtual void itemChanged(KexiTableItem *, int row, int col);
 		virtual void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);
@@ -205,6 +208,12 @@ class KexiFormScrollView :
 
 		/*! Reimplementation: used to refresh "editing indicator" visibility. */
 		virtual void initDataContents();
+
+		/*! @internal
+		 Updates row appearance after canceling row edit. 
+		 Reimplemented from KexiDataAwareObjectInterface: just undoes chnages for every data item.
+		 Used by cancelRowEdit(). */
+		virtual void updateAfterCancelRowEdit();
 
 		//virtual bool focusNextPrevChild( bool next );
 

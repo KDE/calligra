@@ -762,12 +762,17 @@ void KexiDataAwareObjectInterface::cancelRowEdit()
 	}
 
 	m_data->clearRowEditBuffer();
-	updateRow(m_curRow);
+	updateAfterCancelRowEdit();
 	
 //! \todo (js): cancel changes for this row!
 	kexidbg << "EDIT ROW CANCELLED." << endl;
 
 	/*emit*/ rowEditTerminated(m_curRow);
+}
+
+void KexiDataAwareObjectInterface::updateAfterCancelRowEdit()
+{
+	updateRow(m_curRow);
 }
 
 void KexiDataAwareObjectInterface::removeEditor()
