@@ -246,7 +246,7 @@ void KoDocumentInfoDlg::addAuthorPage( KoDocumentInfoAuthor *authorInfo )
   d->m_leCountry = new QLineEdit( authorInfo->country(), page );
   layout->addWidget( d->m_leCountry, 10, 1 );
 
-  d->m_pbLoadKABC = new QPushButton( i18n( "Load from Address Book" ), page );
+  d->m_pbLoadKABC = new QPushButton( i18n( "Load From Address Book" ), page );
   layout->addMultiCellWidget( d->m_pbLoadKABC, 11, 11, 0, 1 );
 
   connect( d->m_leFullName, SIGNAL( textChanged( const QString & ) ),

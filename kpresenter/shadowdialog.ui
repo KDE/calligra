@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>KPresenter - Shadow</string>
+        <string>Shadow</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
