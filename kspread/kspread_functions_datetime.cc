@@ -841,7 +841,7 @@ bool kspreadfunc_date( KSContext& context )
   if( _date.setYMD(args[0]->intValue(), args[1]->intValue(), args[2]->intValue()) )
     context.setValue( new KSValue(KGlobal::locale()->formatDate(_date)));
   else
-    context.setValue( new KSValue(QString(i18n("Err"))) );
+    context.setValue( new KSValue(i18n("Err")) );
 
   return true;
 }

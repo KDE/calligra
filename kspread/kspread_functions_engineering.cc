@@ -482,7 +482,7 @@ bool kspreadfunc_bin2dec( KSContext& context )
   bool ok = true;
   long val = str.toLong( &ok, 2 );
   if( !ok )
-    context.setValue( new KSValue( QString(i18n("Err") )));
+    context.setValue( new KSValue( i18n("Err") ));
   else
     context.setValue( new KSValue( val ) );
 
@@ -510,7 +510,7 @@ bool kspreadfunc_bin2oct( KSContext& context )
   bool ok = true;
   long val = str.toLong( &ok, 2 );
   if( !ok )
-    context.setValue( new KSValue( QString(i18n("Err") )));
+    context.setValue( new KSValue( i18n("Err") ));
   else
     context.setValue( new KSValue( QString::number( val, 8 ) ) );
 
@@ -538,7 +538,7 @@ bool kspreadfunc_bin2hex( KSContext& context )
   bool ok = true;
   long val = str.toLong( &ok, 2 );
   if( !ok )
-    context.setValue( new KSValue( QString(i18n("Err") )));
+    context.setValue( new KSValue( i18n("Err") ));
   else
     context.setValue( new KSValue( QString::number( val, 16 ).upper() ) );
 
@@ -566,7 +566,7 @@ bool kspreadfunc_oct2dec( KSContext& context )
   bool ok = true;
   long val = str.toLong( &ok, 8 );
   if( !ok )
-    context.setValue( new KSValue( QString(i18n("Err") )));
+    context.setValue( new KSValue( i18n("Err") ));
   else
     context.setValue( new KSValue( val ) );
 
@@ -594,7 +594,7 @@ bool kspreadfunc_oct2bin( KSContext& context )
   bool ok = true;
   long val = str.toLong( &ok, 8 );
   if( !ok )
-    context.setValue( new KSValue( QString(i18n("Err") )));
+    context.setValue( new KSValue( i18n("Err") ));
   else
     context.setValue( new KSValue( QString::number( val, 2 ) ) );
 
@@ -622,7 +622,7 @@ bool kspreadfunc_oct2hex( KSContext& context )
   bool ok = true;
   long val = str.toLong( &ok, 8 );
   if( !ok )
-    context.setValue( new KSValue( QString(i18n("Err") )));
+    context.setValue( new KSValue( i18n("Err") ));
   else
     context.setValue( new KSValue( QString::number( val, 16 ).upper() ) );
 
@@ -644,7 +644,7 @@ bool kspreadfunc_hex2dec( KSContext& context )
   bool ok;
   long val=tmp.toLong(&ok,16);
   if(!ok)
-        context.setValue( new KSValue( QString(i18n("Err") )));
+        context.setValue( new KSValue( i18n("Err") ));
   else
         context.setValue( new KSValue(val));
 
@@ -666,7 +666,7 @@ bool kspreadfunc_hex2bin( KSContext& context )
   bool ok;
   long val=tmp.toLong(&ok,16);
   if(!ok)
-        context.setValue( new KSValue( QString(i18n("Err") )));
+        context.setValue( new KSValue( i18n("Err") ));
   else
         {
         tmp=tmp.setNum(val,2);
@@ -691,7 +691,7 @@ bool kspreadfunc_hex2oct( KSContext& context )
   bool ok;
   long val=tmp.toLong(&ok,16);
   if(!ok)
-        context.setValue( new KSValue( QString(i18n("Err") )));
+        context.setValue( new KSValue( i18n("Err") ));
   else
         {
         tmp=tmp.setNum(val,8);

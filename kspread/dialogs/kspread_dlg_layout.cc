@@ -3089,9 +3089,9 @@ void CellFormatPageFont::weight_chosen_slot(const QString & weight)
 {
   QString weight_string = weight;
 
-  if ( weight_string == QString(i18n("Normal")))
+  if ( weight_string == i18n("Normal"))
     selFont.setBold(false);
-  if ( weight_string == QString(i18n("Bold")))
+  if ( weight_string == i18n("Bold"))
     selFont.setBold(true);
   emit fontSelected(selFont);
 }
@@ -3100,9 +3100,9 @@ void CellFormatPageFont::style_chosen_slot(const QString & style)
 {
   QString style_string = style;
 
-  if ( style_string == QString(i18n("Roman")))
+  if ( style_string == i18n("Roman"))
     selFont.setItalic(false);
-  if ( style_string == QString(i18n("Italic")))
+  if ( style_string == i18n("Italic"))
     selFont.setItalic(true);
   emit fontSelected(selFont);
 }
