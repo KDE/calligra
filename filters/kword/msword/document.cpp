@@ -616,8 +616,8 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::Word97::PA
             // So we map all bullets to a "custom bullet" in kword.
             if ( text.length() == 1 )
             {
-                int code = text[0].unicode();
-                if ( code & 0xFF00 == 0xF000 ) // see wv2
+                unsigned int code = text[0].unicode();
+                if ( (code & 0xFF00) == 0xF000 ) // see wv2
                     code &= 0x00FF;
                 counterElement.setAttribute( "type", 6 ); // custom
                 counterElement.setAttribute( "bullet", code );
