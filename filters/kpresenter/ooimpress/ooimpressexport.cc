@@ -595,6 +595,7 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
     QDomElement orig = source.namedItem( "ORIG" ).toElement();
     QDomElement size = source.namedItem( "SIZE" ).toElement();
     QDomElement linetype = source.namedItem( "LINETYPE" ).toElement();
+    QDomElement name = source.namedItem( "OBJECTNAME").toElement();
 
     float x1 = orig.attribute( "x" ).toFloat();
     float y1 = orig.attribute( "y" ).toFloat();
@@ -617,6 +618,11 @@ void OoImpressExport::setLineGeometry( QDomElement & source, QDomElement & targe
         target.setAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCM( y1 ) ) );
         target.setAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCM( y2 ) ) );
     }
+
+    QString nameStr = name.attribute("objectName");
+    if( !nameStr.isEmpty() )
+      target.setAttribute( "draw:name", nameStr );
+
 }
 
 #include "ooimpressexport.moc"
