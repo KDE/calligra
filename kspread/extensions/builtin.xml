@@ -952,6 +952,46 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>ROUNDUP</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Digits</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The ROUNDUP(value;[digits]) function returns the round up of value. Digits is the number of digits to which you want to round that number.If digits is zero or omitted, value is rounded up to the nearest integer.</Text>
+	<Syntax>ROUNDUP( value; [digits] )</Syntax>
+	<Example>ROUNDUP(1.252;2) equals 1.26</Example>
+	<Example>ROUNDUP(-1.252;2) equals -1.25</Example>
+                <Example>ROUNDUP(-1.252) equals -1</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ROUNDDOWN</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Digits</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The ROUNDDOWN(value;[digits]) function returns the round down of value. Digits is the number of digits to which you want to round that number.If digits is zero or omitted, value is rounded down to the nearest integer.</Text>
+	<Syntax>ROUNDDOWN( value; [digits] )</Syntax>
+	<Example>ROUNDDOWN(1.252;2) equals 1.25</Example>
+	<Example>ROUNDDOWN(-1.252;2) equals -1.26</Example>
+                <Example>ROUNDDOWN(-1.252) equals -2</Example>
+      </Help>
+    </Function>
+
 
   </Group>
   <Group>

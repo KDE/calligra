@@ -1904,6 +1904,92 @@ static bool kspreadfunc_decbin( KSContext& context )
 }
 
 
+static bool kspreadfunc_rounddown( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  double result=0;
+  int digits=0;
+  if ( !KSUtil::checkArgumentsCount( context, 2, "ROUNDDOWN", true ) )
+        {
+        //just 1 argument => number of decimal =0 by default
+        if ( !KSUtil::checkArgumentsCount( context, 1, "ROUNDDOWN", true ) )
+                return false;
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+            return false;
+        digits=0;
+        }
+  else
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+                return false;
+        digits=args[1]->intValue();
+        }
+  result=floor(args[0]->doubleValue()*pow(10,digits))/pow(10,digits);
+  context.setValue( new KSValue( result) );
+
+  return true;
+}
+
+static bool kspreadfunc_roundup( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  double result=0;
+  int digits=0;
+  if ( !KSUtil::checkArgumentsCount( context, 2, "ROUNDUP", true ) )
+        {
+        //just 1 argument => number of decimal =0 by default
+        if ( !KSUtil::checkArgumentsCount( context, 1, "ROUNDUP", true ) )
+                return false;
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+            return false;
+        digits=0;
+        }
+  else
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+                return false;
+        digits=args[1]->intValue();
+        }
+
+  result=floor(args[0]->doubleValue()*pow(10,digits)+1)/pow(10,digits);
+  context.setValue( new KSValue( result) );
+
+  return true;
+}
+
+static bool kspreadfunc_round( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  double result=0;
+  int digits=0;
+  if ( !KSUtil::checkArgumentsCount( context, 2, "ROUND", true ) )
+        {
+        //just 1 argument => number of decimal =0 by default
+        if ( !KSUtil::checkArgumentsCount( context, 1, "ROUND", true ) )
+                return false;
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+            return false;
+        digits=0;
+        }
+  else
+        {
+        if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+                return false;
+        if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+                return false;
+        digits=args[1]->intValue();
+        }
+  result=floor(args[0]->doubleValue()*pow(10,digits)+0.5)/pow(10,digits);
+  context.setValue( new KSValue( result) );
+
+  return true;
+}
+
+
 static bool kspreadfunc_cell( KSContext& context )
 {
     QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -2037,7 +2123,6 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", kspreadfunc_mid) ) );
   module->addObject( "len", new KSValue( new KSBuiltinFunction( module, "len", kspreadfunc_len) ) );
   module->addObject( "EXACT", new KSValue( new KSBuiltinFunction( module, "EXACT", kspreadfunc_EXACT) ) );
-  //  module->addObject( "STXT", new KSValue( new KSBuiltinFunction( module, "STXT", kspreadfunc_STXT) ) );
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
   module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
   module->addObject( "rand", new KSValue( new KSBuiltinFunction( module, "rand",kspreadfunc_rand) ) );
@@ -2079,6 +2164,9 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "DECBIN", new KSValue( new KSBuiltinFunction( module,"DECBIN",kspreadfunc_decbin) ) );
   module->addObject( "DECOCT", new KSValue( new KSBuiltinFunction( module,"DECOCT",kspreadfunc_decoct) ) );
   module->addObject( "DECHEX", new KSValue( new KSBuiltinFunction( module,"DECHEX",kspreadfunc_dechex) ) );
+  module->addObject( "ROUNDDOWN", new KSValue( new KSBuiltinFunction( module,"ROUNDDOWN",kspreadfunc_rounddown) ) );
+  module->addObject( "ROUNDUP", new KSValue( new KSBuiltinFunction( module,"ROUNDUP",kspreadfunc_roundup) ) );
+  module->addObject( "ROUND", new KSValue( new KSBuiltinFunction( module,"ROUND",kspreadfunc_round) ) );
   return module;
 }
 
