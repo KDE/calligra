@@ -170,6 +170,16 @@ void
 SvgImport::parseGradient( const QDomElement &e )
 {
 	VGradient gradient;
+	if( e.tagName() == "linearGradient" )
+	{
+		gradient.setOrigin( KoPoint( e.attribute( "x1" ).toDouble(), e.attribute( "y1" ).toDouble() ) );
+		gradient.setVector( KoPoint( e.attribute( "x2" ).toDouble(), e.attribute( "y2" ).toDouble() ) );
+	}
+	else
+	{
+		gradient.setType( VGradient::radial );
+	}
+
 	m_gradients.insert( e.attribute( "id" ), gradient );
 }
 
@@ -269,6 +279,10 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 				gc->fill.setType( VFill::none );
 			else if( params.startsWith( "url(" ) )
 			{
+				unsigned int start = params.find("#") + 1;
+				unsigned int end = params.findRev(")");
+				QString key = params.mid( start, end - start );
+				gc->fill.gradient() = m_gradients[ key ];
 				gc->fill.setType( VFill::grad );
 			}
 			else
