@@ -189,8 +189,8 @@ KexiPropertyEditor::showDefaultsButton( bool show )
 	int y = viewportToContents(QPoint(0, itemRect(m_editItem).y())).y();
 	QRect geometry(columnWidth(0), y, columnWidth(1), m_editItem->height());
 
+	m_currentEditor->setGeometry(geometry);
 	if (!show) {
-		m_currentEditor->setGeometry(geometry);
 		m_currentEditor->resize(geometry.width(), geometry.height());
 		m_defaults->hide();
 		return;
