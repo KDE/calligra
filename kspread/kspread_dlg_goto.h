@@ -26,7 +26,7 @@
 class KSpreadView;
 class KSpreadSheet;
 class KSpreadCell;
-class QLineEdit;
+class KLineEdit;
 
 class KSpreadGotoDlg : public KDialogBase
 {
@@ -40,8 +40,8 @@ public slots:
 
 
 protected:
-  KSpreadView* m_pView;  
-  QLineEdit* m_nameCell;
+  KSpreadView* m_pView;
+  KLineEdit* m_nameCell;
 };
 
 #endif
