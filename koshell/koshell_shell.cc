@@ -57,7 +57,7 @@ KoShellWindow::KoShellWindow()
   m_pFrame = new KoShellFrame( m_pLayout );
 
   m_grpFile = m_pKoolBar->insertGroup(i18n("Parts"));
-  QValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false);
+  QValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false,QString());
   QValueList<KoDocumentEntry>::Iterator it = lstComponents.begin();
   for( ; it != lstComponents.end(); ++it )
   {
