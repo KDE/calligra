@@ -48,6 +48,7 @@ KAboutData *newKexiAboutData()
 	aboutData->addAuthor("Seth Kurzenberg",I18N_NOOP("CQL++, SQL assistance"),  "seth@cql.com");
 	aboutData->addAuthor("Laurent Montel", I18N_NOOP("Code cleanings"), "montell@club-internet.fr");
 	aboutData->addAuthor("Till Busch", I18N_NOOP("Bugfixes, Original Table Widget"), "till@bux.at");
+	aboutData->addAuthor("Cedric Pasteur", I18N_NOOP("KexiPropertyEditor and FormDesigner"), "cedric.pasteur@free.fr");
 	aboutData->addAuthor("Jaroslaw Staniek / OpenOffice Polska", I18N_NOOP("Developer, Designer, KexiDB, commercially supported version, win32 port"), "js@iidea.pl");
 	aboutData->addCredit("Daniel Molkentin",I18N_NOOP("Initial design improvements"),  "molkentin@kde.org");
 	aboutData->addCredit("Kristof Borrey", I18N_NOOP("Icons and UI-Research"), "kristof.borrey@skynet.be");
