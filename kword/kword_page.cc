@@ -4611,9 +4611,9 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 
 	QString filename = "/tmp/kword";
 	filename += uid;
-	filename += ".xpm";
+	filename += ".png";
 
-	pix.save( filename, "XPM" );
+	pix.save( filename, "PNG" );
 	KWPictureFrameSet *frameset = new KWPictureFrameSet( doc );
 	frameset->setFileName( filename, QSize( pix.width(), pix.height() ) );
 	KWFrame *frame = new KWFrame( e->pos().x() + contentsX(), e->pos().y() + contentsY(), pix.width(),

@@ -59,6 +59,7 @@
 #include <koFilterManager.h>
 #include <koTemplateChooseDia.h>
 #include <kstddirs.h>
+#include <koStore.h>
 #include <koStoreStream.h>
 #include <shell.h>
 

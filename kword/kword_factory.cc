@@ -21,10 +21,10 @@
 #include "kword_doc.h"
 #include "preview.h"
 
-#include <kimgio.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kstddirs.h>
+#include <kimgio.h>
 #include <kinstance.h>
 
 #include <qstringlist.h>

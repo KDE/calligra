@@ -28,6 +28,7 @@
 #include <qcursor.h>
 #include <qregion.h>
 #include <qpainter.h>
+#include <qpicture.h>
 
 #include "paraglayout.h"
 #include "defs.h"

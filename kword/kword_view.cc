@@ -64,7 +64,6 @@
 #include <kapp.h>
 #include <kfiledialog.h>
 #include <klocale.h>
-#include <kimgio.h>
 #include <qrect.h>
 #undef Bool
 #include <kspell.h>
@@ -72,6 +71,7 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kaction.h>
+#include <kimgio.h>
 #include <kcoloractions.h>
 
 #include <stdlib.h>
