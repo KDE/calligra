@@ -177,10 +177,10 @@ void KOISpell::startIspell()
           The background is that -T does not define something like an
           encoding but -T defines something like a mode. And the potential
           modes are different for each language. (It is defined in ispell's
-          *.aff files.
+          *.aff files.)
           
           Note that ispell called without the appopriate -T means that the
-          language does not have special chacarters (e.g. accents) anymore.
+          language does not have special characters (e.g. accents) anymore.
          */
         
         if (trystart<1)
