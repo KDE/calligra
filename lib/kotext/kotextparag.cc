@@ -374,13 +374,11 @@ int KoTextParag::lineSpacing( int line ) const
         }
         else if ( m_layout.lineSpacingType == KoParagLayout::LS_AT_LEAST )
         {
-            //todo
-            return shadow ;
+            return shadow + (height > zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() )) ? 0 : (zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() )-height);
         }
         else if ( m_layout.lineSpacingType == KoParagLayout::LS_EXACTLY )
         {
-            //todo
-            return shadow ;
+            return zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue()) -height +shadow ;
         }
         else if ( m_layout.lineSpacingType == KoParagLayout::LS_MULTIPLE )
         {
