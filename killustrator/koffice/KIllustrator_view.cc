@@ -487,20 +487,19 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 {
   // we do this " " trick to avoid double translation of "Undo" and "Undo "
   m_rMenuBar->setItemEnabled(m_idMenuEdit_Undo, undoPossible);
-  /*
-    if (undoPossible) 
-    m_rMenuBar->changeItem(QString(i18n("Undo")) + " " + 
-    cmdHistory.getUndoName(), 
-    m_idMenuEdit_Undo);
-  */
-    
+  
+  QString label = i18n("Undo");
+  if (undoPossible) 
+      label += " " + cmdHistory.getUndoName();
+  m_rMenuBar->changeItem(label, m_idMenuEdit_Undo);
+  
   m_rMenuBar->setItemEnabled(m_idMenuEdit_Redo, redoPossible);
-  /*
-    if (redoPossible)
-    m_rMenuBar->changeItem(QString(i18n("Redo")) + " " + 
-    cmdHistory.getRedoName(),
-    m_idMenuEdit_Redo);
-  */
+  
+  label = i18n("Redo");
+  if (redoPossible)
+      label += " " + cmdHistory.getRedoName();
+  
+  m_rMenuBar->changeItem(label, m_idMenuEdit_Redo);
 }
 
 void KIllustratorView::resizeEvent (QResizeEvent* ) {

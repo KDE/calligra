@@ -839,14 +839,19 @@ void KIllustrator::setUndoStatus(bool undoPossible, bool redoPossible)
 {
   // we do this " " trick to avoid double translation of "Undo" and "Undo "
   edit->setItemEnabled(ID_EDIT_UNDO, undoPossible);
+
+  QString label = i18n("Undo");
   if (undoPossible) 
-    edit->changeItem(QString(i18n("Undo")) + " " + cmdHistory.getUndoName(), 
-		     ID_EDIT_UNDO);
-    
+      label += " " + cmdHistory.getUndoName();
+  edit->changeItem(label, ID_EDIT_UNDO);
+  
   edit->setItemEnabled(ID_EDIT_REDO, redoPossible);
+  
+  label = i18n("Redo");
   if (redoPossible)
-    edit->changeItem(QString(i18n("Redo")) + " " + cmdHistory.getRedoName(),
-		     ID_EDIT_REDO);
+      label += " " + cmdHistory.getRedoName();
+  edit->changeItem(label, ID_EDIT_REDO);
+
 }
 
 void KIllustrator::quit () {
