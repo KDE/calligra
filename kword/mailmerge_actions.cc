@@ -82,7 +82,7 @@ protected:
     void leaveEvent( QEvent* ) {};
 #if 0
     void dragEnterEvent( QDragEnterEvent *ev ) {
-        if ( QUriDrag::canDecode( ev ) )
+        if ( KURLDrag::canDecode( ev ) )
             ev->acceptAction();
     }
     void dropEvent( QDropEvent* ev ) {
