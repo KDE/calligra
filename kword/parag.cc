@@ -324,6 +324,11 @@ bool KWParag::load( const QDomElement& element )
     if ( !text.load( element.namedItem( "TEXT" ).toElement() ) )
 	return FALSE;
 
+    // #### replace with something better later
+    for ( unsigned int i = 0; i < text.size(); ++i )
+	if ( !text.data()[ i ].attrib )
+	    setFormat( i, 1, *paragLayout->getFormat() );
+    
     return TRUE;
 }
 

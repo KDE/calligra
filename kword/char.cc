@@ -336,7 +336,8 @@ QDomElement KWString::save( QDomDocument& d )
 /*================================================================*/
 bool KWString::load( const QDomElement &e )
 {
-    return FALSE;
+    insert( 0, "A woooooooooooooonsinn!" );
+    return TRUE;
 }
 
 /*================================================================*/

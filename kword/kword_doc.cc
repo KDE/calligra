@@ -1181,7 +1181,7 @@ bool KWordDocument::loadStyleTemplates( const QDomElement& element )
     QDomElement style = element.firstChild().toElement();
     for ( ; !style.isNull(); style = style.nextSibling().toElement() ) {
 	KWParagLayout *pl = new KWParagLayout( this, FALSE );
-	if ( pl->load( style ) )
+	if ( !pl->load( style ) )
 	    return FALSE;
 	addStyleTemplate( pl );
     }
