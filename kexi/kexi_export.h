@@ -200,9 +200,10 @@
 #else
 
 /* unfinished features visibility */
+/* -- undefined because peopl asked why these doesn't work: --
 # define KEXI_SHOW_UNIMPLEMENTED 
 # define KEXI_STARTUP_SHOW_TEMPLATES 
-# define KEXI_STARTUP_SHOW_RECENT
+# define KEXI_STARTUP_SHOW_RECENT*/
 # define KEXI_SERVER_SUPPORT
 # define KEXI_FORMS_SUPPORT
 #endif
