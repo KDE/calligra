@@ -116,7 +116,7 @@ public:
     void pasteText( QTextCursor * cursor, const QString & text, QTextFormat * currentFormat, bool removeSelected );
 
     /** Set format changes on selection or current cursor */
-    void setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags);
+    void setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags, bool zoomFont = false );
 
     enum KeyboardActionPrivate { // keep in sync with QTextEdit
 	ActionBackspace,
@@ -171,6 +171,7 @@ protected:
     void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
     void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles = false );
     void setLastFormattedParag( QTextParag *parag ) { m_lastFormatted = parag; }
+    QTextFormat * zoomFormatFont( const QTextFormat * f );
 
 private:
     /**

@@ -674,6 +674,17 @@ int KWTextFrameSet::zoomedFontSize( int docFontSize ) const
     return static_cast<int>( static_cast<float>( docFontSize ) * kWordDocument()->zoomedResolutionY() );
 }
 
+QTextFormat * KWTextFrameSet::zoomFormatFont( const QTextFormat * f )
+{
+    QTextFormat format = *f;
+    int origFontSize = format.font().pointSize();
+    format.setPointSize( zoomedFontSize( origFontSize ) );                // zoom it
+    QTextFormat * fcf = textDocument()->formatCollection()->format( &format );   // find it in the collection
+    if ( !m_origFontSizes.find( fcf ) )
+        m_origFontSizes.insert( fcf, new int( origFontSize ) );           // insert in dict if necessary
+    return fcf;
+}
+
 void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
 {
     kdDebug(32001) << "KWTextFrameSet::applyStyleChange " << changedStyle << endl;
@@ -1172,7 +1183,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     undoRedoInfo.text = str;
     readFormats( c1, c2, 0, undoRedoInfo.text );
 
-    QTextFormat * newFormat = textdoc->formatCollection()->format( const_cast<QTextFormat *>( & newStyle->format() ) );
+    QTextFormat * newFormat = zoomFormatFont( & newStyle->format() );
 
     cmd = new QTextFormatCommand( textdoc, firstParag->paragId(), 0, lastParag->paragId(), c2.index(),
                                   undoRedoInfo.text.rawData(), newFormat,
@@ -1637,31 +1648,49 @@ void KWTextFrameSet::checkUndoRedoInfo( QTextCursor * cursor, UndoRedoInfo::Type
     undoRedoInfo.cursor = cursor;
 }
 
-void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags )
+void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFormat, QTextFormat *format, int flags, bool zoomFont )
 {
+    QTextDocument * textdoc = textDocument();
     bool newFormat = ( currentFormat && currentFormat->key() != format->key() );
-    int origFontSize = 0;
     if ( newFormat )
     {
-        if ( currentFormat->font().pointSize() == format->font().pointSize() )
+        int origFontSize = 0;
+        if ( zoomFont ) // The format has an unzoomed font (e.g. setting a style, or a new font size)
         {
-            // Font size not changed -> make it follow
-            int * pDocFontSize = m_origFontSizes.find( format );
-            if ( !pDocFontSize )
-                kdWarning() << format->key() << " not in m_origFontSizes " << endl;
-            else
-                origFontSize = *pDocFontSize;
-        }
-        else
-        {
-            // New font size -> zoom it
             origFontSize = format->font().pointSize();
             format->setPointSize( zoomedFontSize( origFontSize ) );
-            kdDebug() << "KWTextFrameSet::setFormat format " << format->key() << " zoomed to " << format->font().pointSize() << endl;
+            kdDebug() << "KWTextFrameSet::setFormat format " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSize() << endl;
+        }
+        else // The format has a zoomed font already (we're only changing bold/italic, or the family, etc.)
+        {
+            if ( currentFormat->font().pointSize() == format->font().pointSize() )
+            {
+                // read orig size from previous format, to reuse it.
+                int * pDocFontSize = m_origFontSizes.find( currentFormat );
+                if ( !pDocFontSize )
+                    kdWarning() << format->key() << " not in m_origFontSizes " << endl;
+                else
+                    origFontSize = *pDocFontSize;
+            }
+            else // shouldn't happen ?
+                kdWarning() << "Zoomed font, no clue about doc-font-size for it " << currentFormat->key() << " old: " << format->key() << endl;
+        }
+
+        // Find format in collection
+        currentFormat->removeRef();
+        currentFormat = textdoc->formatCollection()->format( format );
+        if ( currentFormat->isMisspelled() ) {
+            currentFormat->removeRef();
+            currentFormat = textdoc->formatCollection()->format( currentFormat->font(), currentFormat->color() );
+        }
+
+        if ( origFontSize > 0 && ! m_origFontSizes.find( currentFormat ) )
+        {
+            kdDebug() << "KWTextFrameSet::setFormat inserting entry for " << currentFormat->key() << "  origFontSize=" << origFontSize << endl;
+            m_origFontSizes.insert( currentFormat, new int( origFontSize ) );
         }
     }
 
-    QTextDocument * textdoc = textDocument();
     if ( textdoc->hasSelection( QTextDocument::Standard ) ) {
         emit hideCursor();
         QString str = textdoc->selectedText( QTextDocument::Standard );
@@ -1687,19 +1716,6 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFor
     }
     //kdDebug(32001) << "KWTextFrameSet::setFormat currentFormat:" << currentFormat->key() << " new format:" << format->key() << endl;
     if ( newFormat ) {
-        currentFormat->removeRef();
-        currentFormat = textdoc->formatCollection()->format( format );
-        if ( currentFormat->isMisspelled() ) {
-            currentFormat->removeRef();
-            currentFormat = textdoc->formatCollection()->format( currentFormat->font(), currentFormat->color() );
-        }
-
-        if ( ! m_origFontSizes.find( currentFormat ) )
-        {
-            kdDebug() << "KWTextFrameSet::setFormat inserting entry for " << currentFormat->key() << "  origFontSize=" << origFontSize << endl;
-            m_origFontSizes.insert( currentFormat, new int( origFontSize ) );
-        }
-
         emit showCurrentFormat();
         //kdDebug(32001) << "KWTextFrameSet::setFormat index=" << cursor->index() << " length-1=" << cursor->parag()->length() - 1 << endl;
         if ( cursor->index() == cursor->parag()->length() - 1 ) {
@@ -2391,7 +2407,7 @@ QString KWTextFrameSetEdit::textFontFamily()const {
 void KWTextFrameSetEdit::setPointSize( int s ){
     QTextFormat format( *currentFormat );
     format.setPointSize( s );
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Size );
+    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Size, true /* zoom the font size */ );
 }
 
 void KWTextFrameSetEdit::setFamily(const QString &font){
@@ -2403,7 +2419,7 @@ void KWTextFrameSetEdit::setFamily(const QString &font){
 void KWTextFrameSetEdit::setFont(const QFont &font){
     QTextFormat format( *currentFormat );
     format.setFont( font );
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Font );
+    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Font /* zoom the font size */);
 }
 
 void KWTextFrameSetEdit::setTextColor(const QColor &color) {
@@ -2441,10 +2457,18 @@ void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 /*===============================================================*/
 void KWTextFrameSetEdit::insertPicture( const QString & file )
 {
-    //TODO
-/*    QMap<QString,QString> attributes;
-    QTextImage * ti = new QTextImage( ... )
-    */
+    QMap<QString,QString> attributes;
+    attributes.insert( QString::fromLatin1("src"), file );
+    QTextImage * custom = new QTextImage( textDocument(), attributes, QString::null, *QMimeSourceFactory::defaultFactory() );
+    QTextParag * curpar = cursor->parag();
+    int index = curpar->length() - 1;
+    if ( index < 0 )
+        index = 0;
+    curpar->append( QChar('p') );
+    curpar->setFormat( index, 1, currentFormat );
+    curpar->at( index )->setCustomItem( custom );
+    curpar->addCustomItem();
+    textDocument()->registerCustomItem( custom, curpar );
 }
 
 // Update the GUI toolbar button etc. to reflect the current cursor position.

@@ -1420,7 +1420,7 @@ void KWView::insertContents()
 void KWView::formatFont()
 {
     kdDebug() << "KWView::formatFont" << endl;
-     QFont tmpFont = tbFont;
+    QFont tmpFont = tbFont;
 
     if ( KFontDialog::getFont( tmpFont ) ) {
         tbFont = tmpFont;
