@@ -18,6 +18,7 @@ private:
 /**
 @short The KoHyphenator class provides an interface to the libhnj hyphenation library
 @author Alexander Dymo (cloudtemple@mksat.net)
+@author Lukas Tinkl (lukas.tinkl@suse.cz)
 
 The KoHyphenator class provides an interface to the libhnj hyphenation library.
 
@@ -39,10 +40,10 @@ public:
         ~KoHyphenator();
 
         /**
-        Checks if the string was hyphenated before and no hyphenation nessesary.
+        Checks if the string was hyphenated before and no hyphenation necessary.
         Currently used with kotext library - things may change ;)
         */
-        static bool isHyphenated(KoTextString *string, int pos, int lastBreak);
+        static bool isHyphenated(KoTextString *string, int /*pos*/, int lastBreak);
 
         /**
         Checks if the letter in position pos is placed before the hyphen.
@@ -54,7 +55,7 @@ public:
 
         /**
         Returns the pointer to the string in hnj_hyphen_hyphenate() format
-        (that is hyphenation function from underligning libhnj library).
+        (that is hyphenation function from underlying libhnj library).
 
         The string is array of integer numbers. Each odd number marks
         that hyphen can be added after the character in the position
@@ -84,7 +85,7 @@ public:
         /**
         Returns the encoding of dictionaty for the language lang.
         */
-        QString encodingForLang(QString lang);
+        const char * encodingForLang(QString lang);
 private:
         HyphenDict *dict(QString &lang);
         std::map<QString, HyphenDict*> dicts;
