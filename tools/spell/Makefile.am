@@ -1,5 +1,5 @@
 
-INCLUDES = -I$(srcdir)/../../lib/kofficecore $(all_includes)
+INCLUDES = -I$(srcdir)/../../lib/kofficecore $(all_includes) -I$(top_srcdir)/lib/kospell
 libkspelltool_la_LIBADD = ../../lib/kofficecore/libkofficecore.la $(LIBKOSPELL) -lkspell
 
 ####### Files
