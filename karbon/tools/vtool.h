@@ -82,7 +82,7 @@ kdDebug() << "*" << endl;
 		}
 		else
 		{
-			m_d2 = atan( ( m_lp.y() - m_fp.y() ) / ( m_lp.x() - m_fp.x() ) );
+			m_d2 = atan2( ( m_lp.y() - m_fp.y() ) , ( m_lp.x() - m_fp.x() ) );
 		}
 
 		// define pi/2 as "0.0":
