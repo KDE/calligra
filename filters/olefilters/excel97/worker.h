@@ -95,6 +95,7 @@ protected:
 	bool op_shrfmla(Q_UINT32 size, QDataStream &body);
 	bool op_sst(Q_UINT32 size, QDataStream &body);
 	bool op_standardwidth(Q_UINT32 size, QDataStream &body);
+	bool op_defcolwidth(Q_UINT32 size, QDataStream &body);
 	bool op_string(Q_UINT32 size, QDataStream &body);
 	bool op_topmargin(Q_UINT32 size, QDataStream &body);
 	bool op_vcenter(Q_UINT32 size, QDataStream &body);
@@ -106,8 +107,10 @@ private:
 	QDomDocument *m_root;
 	QDomElement m_doc, m_paper, m_map, m_borders, *m_table;
 
+	void rk_internal( int row, int column, Q_UINT16 xf, Q_UINT32 number );
+		
 	QPtrList<QDomElement> m_tables;
-    QPtrList<MergeInfo> m_mergeList;
+	QPtrList<MergeInfo> m_mergeList;
 
 	Helper *m_helper;
 
@@ -115,7 +118,7 @@ private:
 	unsigned int m_streamDepth;
 	unsigned int m_chartDepth;
 
-    int m_fontCount, m_footerCount, m_headerCount, m_xfCount;
+	int m_fontCount, m_footerCount, m_headerCount, m_xfCount;
 
 	Q_UINT16 m_biff, m_date1904;
 };

@@ -17,8 +17,14 @@
 */
 
 #include <kdebug.h>
+#include <qdatetime.h>
 #include "helper.h"
 #include "worker.h"
+
+#define ASSERT_SIZE(size,value)		\
+	if ((size) != (value))		\
+		{ kdWarning(30511) << __FUNCTION__ << "wanted<->got size mismatch: " << size << " != " << value << endl; }
+
 
 Worker::Worker()
 {
@@ -77,16 +83,19 @@ void Worker::done()
 	m_helper->done();
 }
 
-bool Worker::op_1904(Q_UINT32, QDataStream &body)
+bool Worker::op_1904(Q_UINT32 size, QDataStream &body)
 {
+	ASSERT_SIZE(size,sizeof(m_date1904));
 	body >> m_date1904;
+	m_helper->setDate1904(m_date1904);
 
 	return true;
 }
 
-bool Worker::op_blank(Q_UINT32, QDataStream &body)
+bool Worker::op_blank(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 row, column, xf;
+	ASSERT_SIZE(size,sizeof(row)+sizeof(column)+sizeof(xf));
 	body >> row >> column >> xf;
 	
 	QDomElement e = m_root->createElement("cell");
@@ -167,9 +176,11 @@ bool Worker::op_bof(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_bottommargin(Q_UINT32, QDataStream &body)
+bool Worker::op_bottommargin(Q_UINT32 size, QDataStream &body)
 {
 	double valueInch;
+	
+	ASSERT_SIZE(size,sizeof(valueInch));
 	body >> valueInch;
 	
 	m_borders.setAttribute("bottom", (valueInch * 2.54));
@@ -230,31 +241,35 @@ bool Worker::op_boundsheet(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_fbi(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_fbi(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 xbase, ybase, height, scalebase, index;
 
+	ASSERT_SIZE(size,5*sizeof(Q_UINT16));
 	body >> xbase >> ybase >> height >> scalebase >> index;
 
-	kdDebug(30511) << "CHART: XBase: " << xbase << " YBase: " << ybase << " Height: " << height << " ScaleBase: " << scalebase << " Index: " << index << endl;
+	kdDebug(30511) << "CHART: XBase: " << xbase << " YBase: " << ybase << " Height: " 
+			<< height << " ScaleBase: " << scalebase << " Index: " << index << endl;
 
 	return true;
 }
 
-bool Worker::op_chart_units(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_units(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 type;
 
+	ASSERT_SIZE(size,sizeof(type));
 	body >> type;
 
 	return (type == 0);
 }
 
-bool Worker::op_chart_chart(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_chart(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 xposr, yposr, xsizer, ysizer;
 	double xpos, ypos, xsize, ysize;
 
+	ASSERT_SIZE(size,4*sizeof(Q_UINT16));
 	body >> xposr >> yposr >> xsizer >> ysizer;
 
 	xpos = xposr / (65535. * 72.);
@@ -274,10 +289,11 @@ bool Worker::op_chart_begin(Q_UINT32, QDataStream &)
 	return true;
 }
 
-bool Worker::op_chart_plotgrowth(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_plotgrowth(Q_UINT32 size, QDataStream &body)
 {
 	Q_INT16 skip, horizontal, vertical;
 
+	ASSERT_SIZE(size,4*sizeof(Q_INT16));
 	body >> skip >> horizontal >> skip >> vertical;
 
 	if(horizontal != -1)
@@ -288,11 +304,12 @@ bool Worker::op_chart_plotgrowth(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_frame(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_frame(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 type, flags;
 	bool borderShadow, autoSize, autoPos;
 
+	ASSERT_SIZE(size,2*sizeof(Q_INT16));
 	body >> type >> flags;
 
 	borderShadow = (type == 4) ? true : false;
@@ -304,7 +321,7 @@ bool Worker::op_chart_frame(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_lineformat(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_lineformat(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT32 color;
 	Q_INT16 weight;
@@ -314,6 +331,7 @@ bool Worker::op_chart_lineformat(Q_UINT32, QDataStream &body)
 	LinePattern pat;
 	LineWeight wgt;
 
+	ASSERT_SIZE(size,sizeof(color)+3*sizeof(Q_UINT16));
 	body >> color;
 	body >> pattern >> weight >> flags;
 
@@ -354,12 +372,13 @@ bool Worker::op_chart_lineformat(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_areaformat(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_areaformat(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 pattern, flags;
 	Q_UINT32 skip;
 	bool autoFormat, swapColors;
 
+	ASSERT_SIZE(size,2*sizeof(skip)+2*sizeof(Q_UINT16));
 	body >> skip >> skip;
 	body >> pattern >> flags;
 
@@ -483,10 +502,11 @@ bool Worker::op_chart_ai(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_dataformat(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_dataformat(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 pointNumber, seriesIndex;
-
+	
+	ASSERT_SIZE(size,2*sizeof(Q_UINT16));
 	body >> pointNumber >> seriesIndex;
 
 	if(pointNumber == 0xffff)
@@ -497,10 +517,11 @@ bool Worker::op_chart_dataformat(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_3dbarshape(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_3dbarshape(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 type;
 
+	ASSERT_SIZE(size,sizeof(Q_UINT16));
 	body >> type;
 
 	switch(type)
@@ -528,10 +549,11 @@ bool Worker::op_chart_3dbarshape(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_sertocrt(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_sertocrt(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 index;
 
+	ASSERT_SIZE(size,sizeof(Q_UINT16));
 	body >> index;
 
 	kdDebug(30511) << "CHART: Series chart group index: " << index << endl;
@@ -539,13 +561,14 @@ bool Worker::op_chart_sertocrt(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_shtprops(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_shtprops(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT8 tmp;
 	Q_UINT16 flags;
 	bool manualFormat, onlyPlotVisibleCells, noResize, hasPositionRecord, ignorePosRecord = false;
 	ChartBlank blanks;
 
+	ASSERT_SIZE(size,sizeof(flags)+sizeof(tmp));
 	body >> flags >> tmp;
 
 	manualFormat = (flags & 0x01) ? true : false;
@@ -586,10 +609,11 @@ bool Worker::op_chart_shtprops(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_axesused(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_axesused(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 axes;
 
+	ASSERT_SIZE(size,sizeof(axes));
 	body >> axes;
 
 	kdDebug(30511) << "CHART: There are " << axes << " Axes!" << endl;
@@ -597,11 +621,12 @@ bool Worker::op_chart_axesused(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_axisparent(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_axisparent(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 index;
 	Q_UINT32 x, y, w, h;
 
+	ASSERT_SIZE(size,sizeof(index)+4*sizeof(Q_UINT32));
 	body >> index;
 	body >> x >> y >> w >> h;
 
@@ -610,11 +635,12 @@ bool Worker::op_chart_axisparent(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_axis(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_axis(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 axisType;
 	Axis ax;
 
+	ASSERT_SIZE(size,sizeof(axisType));
 	body >> axisType;
 
 	if(axisType >= AXIS_MAX)
@@ -787,12 +813,13 @@ bool Worker::op_chart_axislineformat(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_chartformat(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_chartformat(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 flags, zorder, skipl;
 	Q_UINT32 skip;
 	bool varyColor;
 
+	ASSERT_SIZE(size,4*sizeof(skip)+3*sizeof(Q_UINT16));
 	body >> skip >> skip >> skip >> skip;
 	body >> skipl >> flags >> zorder;
 
@@ -806,10 +833,11 @@ bool Worker::op_chart_chartformat(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_siindex(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_siindex(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 index;
 
+	ASSERT_SIZE(size,sizeof(index));
 	body >> index;
 
 	m_chartSeriesCount++;
@@ -819,12 +847,13 @@ bool Worker::op_chart_siindex(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_legend(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_legend(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT32 x, y, w, h;
 	Q_UINT8 tmp;
 	LegendLocation location;
 
+	ASSERT_SIZE(size,4*sizeof(Q_UINT32)+sizeof(tmp));
 	body >> x >> y >> w >> h;
 	body >> tmp;
 
@@ -842,11 +871,12 @@ bool Worker::op_chart_legend(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_chart_bar(Q_UINT32, QDataStream &body)
+bool Worker::op_chart_bar(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 spaceBetweenBar, spaceBetweenCategories, flags;
 	bool horizontalBar, stacked, asPercentage, hasShadow = false;
 
+	ASSERT_SIZE(size,3*sizeof(Q_UINT16));
 	body >> spaceBetweenBar >> spaceBetweenCategories >> flags;
 
 	horizontalBar = (flags & 0x01) ? true : false;
@@ -878,10 +908,11 @@ bool Worker::op_chart_bar(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_codepage(Q_UINT32, QDataStream &body)
+bool Worker::op_codepage(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 cv;
 
+	ASSERT_SIZE(size,sizeof(cv));
 	body >> cv;
 	return true;
 }
@@ -1065,12 +1096,6 @@ bool Worker::op_format(Q_UINT32, QDataStream &body)
 
 bool Worker::op_formula(Q_UINT32 size, QDataStream &body)
 {
-	if(size <= 22)
-	{
-		kdWarning(30511) << "Formula size broken!" << endl;
-		return true;
-	}
-
 	char *store = new char[size];
 	Q_UINT16 row, column, xf, skip;
 	QByteArray a;
@@ -1176,11 +1201,12 @@ bool Worker::op_label(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_labelsst(Q_UINT32, QDataStream &body)
+bool Worker::op_labelsst(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 row, column, xf;
 	Q_UINT32 isst;
 
+	ASSERT_SIZE(size, 3*sizeof(Q_UINT16)+sizeof(isst));
 	body >> row >> column >> xf >> isst;
 	QDomElement e = m_root->createElement("cell");
 	e.appendChild(m_helper->getFormat(xf));
@@ -1223,7 +1249,7 @@ bool Worker::op_mulblank(Q_UINT32 size, QDataStream &body)
 	Q_UINT16 row, xf, count, first;
 
 	body >> row >> first;
-	count = (size - 6) / 2;
+	count = (size - 6) / sizeof(xf);
 	
 	for(int i = 0; i < count; ++i)
 	{
@@ -1238,89 +1264,56 @@ bool Worker::op_mulblank(Q_UINT32 size, QDataStream &body)
 	return true;
 }
 
+
+void Worker::rk_internal( int row, int column, Q_UINT16 xf, Q_UINT32 number )
+{
+	double value = m_helper->GetDoubleFromRK(number);
+
+	xfrec *xwork = static_cast<xfrec *>(m_helper->queryDict(D_XF, xf));
+	if(!xwork)
+	{
+		kdError(30511) << "Missing format definition: " << xf << endl;
+		xf = 0;
+	}
+	// kdWarning(30511) << __FUNCTION__ << " xf/ifmt " << xf << "/" << xwork->ifmt << endl;
+	QString s = m_helper->formatValue(value, xf);
+
+	QDomElement e = m_root->createElement("cell");
+	e.appendChild(m_helper->getFormat(xf));
+	e.setAttribute("row", row+1);
+	e.setAttribute("column", column+1);
+
+	QDomElement text = m_root->createElement("text");
+	text.appendChild(m_root->createTextNode(s));
+
+	e.appendChild(text);
+	m_table->appendChild(e);
+}
+
+bool Worker::op_rk(Q_UINT32, QDataStream &body)
+{
+	Q_UINT32 number;
+	Q_UINT16 row, column, xf;
+
+	body >> row >> column >> xf >> number;
+	rk_internal(row, column, xf, number);
+
+	return true;
+}
+
 bool Worker::op_mulrk(Q_UINT32 size, QDataStream &body)
 {
-	if(size <= 6)
-	{
-		kdWarning(30511) << "Invalid RK array!" << endl;
-		return true;
-	}
-
-	double value = 0;
-
 	QString s;
 
-	Q_UINT16 first, last, row, xf;
-	Q_UINT32 number, t[2];
+	Q_UINT32 number;
+	Q_UINT16 column, row, xf;
 
-	body >> row >> first;
-	last = (size - 6) / 6;
-	for(int i = 0; i < last; ++i)
-	{
+	body >> row >> column;
+
+	int i, last = (size - 6) / (sizeof(xf)+sizeof(number));
+	for(i = 0; i < last; ++i, ++column)	{
 		body >> xf >> number;
-
-		switch(number & 0x03)
-		{
-			case 0:
-				t[0] = 0;
-				t[1] = number & 0xfffffffc;
-				value = *((double*) t);
-				break;
-			case 1:
-				t[0] = 0;
-				t[1] = number & 0xfffffffc;
-				value = *((double*) t) / 100;
-				break;
-			case 2:
-				value = (double) (number >> 2);
-				break;
-			case 3:
-				value = (double) (number >> 2) / 100;
-				break;
-		}
-
-		xfrec *xwork = static_cast<xfrec *>(m_helper->queryDict(D_XF, xf));
-		
-		switch(xwork->ifmt)
-		{
-			case 0:
-				s = QString::number(value);
-				break;
-			case 14: // Dates
-			case 15:
-			case 16:
-			case 17:
-			case 174:
-			case 176:
-			case 177:
-			case 178:
-			case 179:
-			case 180:
-			case 181:
-			case 182:
-			case 183:
-			case 184:
-				int year, month, day;
-				m_helper->getDate((int) value, year, month, day, m_date1904);
-				s.sprintf("%d/%d/%d", year, month, day);
-				break;
-			case 164:
-				s = "'0" + QString::number((int) value);
-				break;
-			default: // Number
-				s = m_helper->locale().formatNumber(value, 5);
-				break;
-		}
-
-		QDomElement e = m_root->createElement("cell");
-		e.appendChild(m_helper->getFormat(xf));
-		e.setAttribute("row", row + 1);
-		e.setAttribute("column", first + i + 1);
-
-		QDomElement text = m_root->createElement("text");
-		text.appendChild(m_root->createTextNode(s));
-		e.appendChild(text);
-		m_table->appendChild(e);
+		rk_internal(row, column, xf, number);
 	}
 
 	return true;
@@ -1338,38 +1331,24 @@ bool Worker::op_note(Q_UINT32, QDataStream &body)
 
 bool Worker::op_number(Q_UINT32, QDataStream &body)
 {
-	double value;
-	QString s;
 	Q_UINT16 row, column, xf;
+	double value;
+	
 	body >> row >> column >> xf >> value;
+	
 	QDomElement e = m_root->createElement("cell");
 	e.appendChild(m_helper->getFormat(xf));
-	e.setAttribute("row", (int) ++row);
-	e.setAttribute("column", (int) ++column);
+	e.setAttribute("row", row+1);
+	e.setAttribute("column", column+1);
 
 	xfrec *xwork = static_cast<xfrec *>(m_helper->queryDict(D_XF, xf));
-	
-	switch(xwork->ifmt)
+	if(!xwork)
 	{
-		case 0x12:
-		case 0x13:
-		case 0x14: // Time
-		case 0x15:
-		case 0x2D:
-		case 0x2E:
-		case 0x2F:
-		case 0xB5:
-		case 0xB6:
-		case 0xB9:
-			int hour, min, second;
-			m_helper->getTime(value, hour, min, second);
-			s.sprintf("%d:%d:%d", hour, min, second);
-			break;
-		default: // Number
-			s = m_helper->locale().formatNumber(value, 5);
-			break;
+		kdError(30511) << "Missing format definition: " << xf << endl;
+		xf = 0;
 	}
-
+	
+	QString s = m_helper->formatValue(value, xf);
 
 	QDomElement text = m_root->createElement("text");
 	text.appendChild(m_root->createTextNode(s));
@@ -1388,88 +1367,18 @@ bool Worker::op_rightmargin(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_rk(Q_UINT32, QDataStream &body)
-{
-	double value = 0;
 
-	QString s;
 
-	Q_UINT32 number, t[2];
-	Q_UINT16 row, column, xf;
-
-	body >> row >> column >> xf >> number;
-
-	switch(number & 0x03)
-	{
-		case 0:
-			t[0] = 0;
-			t[1] = number & 0xfffffffc;
-			value = *((double*) t);
-			break;
-		case 1:
-			t[0] = 0;
-			t[1] = number & 0xfffffffc;
-			value = *((double*) t) / 100;
-			break;
-		case 2:
-			value = (double) (number >> 2);
-			break;
-		case 3:
-			value = (double) (number >> 2) / 100;
-			break;
-	}
-
-	xfrec *xwork = static_cast<xfrec *>(m_helper->queryDict(D_XF, xf));
-	
-	switch(xwork->ifmt)
-	{
-		case 14: // Dates
-		case 15:
-		case 16:
-		case 17:
-		case 174:
-		case 176:
-		case 177:
-		case 178:
-		case 179:
-		case 180:
-		case 181:
-		case 182:
-		case 183:
-		case 184:
-			int year, month, day;
-			m_helper->getDate((int) value, year, month, day, m_date1904);
-			s.sprintf("%d/%d/%d", year, month, day);
-			break;
-		default: // Number
-			s = m_helper->locale().formatNumber(value, 5);
-			break;
-	}
-
-	QDomElement e = m_root->createElement("cell");
-	e.appendChild(m_helper->getFormat(xf));
-	e.setAttribute("row", (int) ++row);
-	e.setAttribute("column", (int) ++column);
-
-	QDomElement text = m_root->createElement("text");
-	text.appendChild(m_root->createTextNode(s));
-
-	e.appendChild(text);
-	m_table->appendChild(e);
-
-	return true;
-}
-
-bool Worker::op_row(Q_UINT32, QDataStream &body)
+bool Worker::op_row(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 rowNr, skip, height, flags, flags2, xf;
 
+	ASSERT_SIZE(size, 8*sizeof(Q_UINT16));
 	body >> rowNr >> skip >> skip >> height >> flags >> flags >> flags >> flags2;
 
 	xf = flags2 & 0xffff;
 
 	xfrec *xwork = static_cast<xfrec *>(m_helper->queryDict(D_XF, xf));
-
 	if(!xwork)
 	{
 		kdError(30511) << "Missing format definition: " << xf << " in row: " << rowNr << endl;
@@ -1477,8 +1386,8 @@ bool Worker::op_row(Q_UINT32, QDataStream &body)
 	}
 	
 	QDomElement row = m_root->createElement("row");
-	row.setAttribute("row", (int) rowNr + 1);
-	row.setAttribute("height", (int) height / 40);
+	row.setAttribute("row", rowNr+1);
+	row.setAttribute("height", height/40);
 	
 	if(flags & 0x30)
 		row.setAttribute("hide", true);
@@ -1555,9 +1464,9 @@ bool Worker::op_shrfmla(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 firstrow, lastrow;
 	Q_UINT8 firstcol, lastcol;
-	Q_UINT16 dataLen;
-	Q_UINT16 temp;
+	Q_UINT16 dataLen, temp;
 
+	ASSERT_SIZE(size,2*sizeof(Q_UINT16)+2*sizeof(Q_UINT8)+2*sizeof(Q_UINT16));
 	body >> firstrow >> lastrow >> firstcol >> lastcol;
 	body >> temp >> dataLen;
 
@@ -1634,17 +1543,31 @@ bool Worker::op_sst(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_standardwidth(Q_UINT32, QDataStream &body)
+bool Worker::op_standardwidth(Q_UINT32 size, QDataStream &body)
 {
 	Q_UINT16 width;
+
+	ASSERT_SIZE(size,2);
+
 	body >> width;
-	
 	kdDebug(30511) << "Standard width :" << width <<endl;
 
 	return true;
 }
 
-bool Worker::op_string(Q_UINT32 bytes, QDataStream &body)
+bool Worker::op_defcolwidth(Q_UINT32 size, QDataStream &body)
+{
+	Q_UINT16 width;
+	
+	ASSERT_SIZE(size,2);
+	
+	body >> width;
+	kdDebug(30511) << "Standard column width :" << width <<endl;
+
+	return true;
+}
+
+bool Worker::op_string(Q_UINT32, QDataStream &body)
 {
 	Q_UINT8 temp;
 	Q_UINT16 length;
@@ -1711,9 +1634,9 @@ bool Worker::op_window2(Q_UINT32, QDataStream &body)
 			m_table->setAttribute("grid", 0);
 
 		if(nOpt & 0x0004)
-			kdDebug(30511) << "Show col/row hearder" << endl;
+			kdDebug(30511) << "Show col/row header" << endl;
 		else
-			kdDebug(30511) << "Hide col/row hearder. Not store in table" << endl;
+			kdDebug(30511) << "Hide col/row header. Not store in table" << endl;
 
 		if(nOpt & 0x0010)
 			m_table->setAttribute("hidezero", 0);

@@ -20,11 +20,12 @@
 #include <qnamespace.h>
 #include <qdatastream.h>
 #include <qstringlist.h>
+#include <qdatetime.h>
 #include "helper.h"
 #include "definitions.h"
 
 Helper::Helper(QDomDocument *root, QPtrList<QDomElement> *tables)
-: m_locale("koffice")
+: m_locale("koffice") 
 {
 	// ### David: I added m_locale to xmltree.h to make this compile
 	//     But setting the language on that locale isn't done at all in here...
@@ -35,6 +36,8 @@ Helper::Helper(QDomDocument *root, QPtrList<QDomElement> *tables)
 	
 	m_todoFormula.setAutoDelete(true);
 	m_formulaList.setAutoDelete(true);
+
+	m_date1904 = 0;
 }
 
 Helper::~Helper()
@@ -352,41 +355,26 @@ void Helper::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 	}
 }
 
-void Helper::getDate(int date, int &year, int &month, int &day, Q_UINT16 date1904)
+QDate Helper::getDate(double _numdays)
 {
-	year = 0;
+	long numdays = (long) _numdays;
 
-	while(date > (((year % 4) == 0) ? 366 : 365))
-		date -= ((year++ % 4) == 0) ? 366 : 365;
-
-	if(date1904 == 1)
-		year += 4;
-
-	if((year % 4) == 0)
-	{
-		for(month = 0; month < 12; ++month)
-		{
-			if(date <= ldays[month])
-				break;
-
-			date -= ldays[month];
-		}
-	}
+	QDate date;
+      
+        /* Excel's strange 1900/1904 modes:
+	 *  1900: day#1 starts at 01.jan.1900,
+	 *  1904: day#1 starts at 02.jan.1904 */
+	if (!m_date1904)
+		date = QDate(1899, 12, 31);
 	else
-	{
-		for(month = 0; month < 12; ++month)
-		{
-			if(date <= ndays[month])
-				break;
+		date = QDate(1903, 12, 31);
+	
+	date = date.addDays(numdays);
 
-			date -= ndays[month];
-		}
-	}
+	if (date.year() >= 1904)
+		date = date.addDays(-1);
 
-	++month;
-
-	day = (date == 0) ? 1 : date;
-	year += 1900;
+	return date;
 }
 
 void Helper::getTime(double time, int &hour,int  &min, int &second)
@@ -400,6 +388,75 @@ void Helper::getTime(double time, int &hour,int  &min, int &second)
 	tmp = (tmp - min) * 60;
 
 	second = (int) tmp;
+}
+
+
+
+		
+#define EXC_RK_INTFLAG 0x02
+#define EXC_RK_100FLAG 0x01
+
+double Helper::GetDoubleFromRK( Q_UINT32 nRKValue )
+{
+    double fVal;
+
+    if( nRKValue & EXC_RK_INTFLAG )
+        fVal = (double) (*((Q_UINT32*) &nRKValue) >> 2); // integer
+    else
+    {
+        // 64-Bit IEEE-Float
+#ifdef __BIGENDIAN
+        *((Q_UINT32*) &fVal + 1) = 0;                     // lower 32 bits = 0
+        *((Q_UINT32*) &fVal) = nRKValue & 0xFFFFFFFC;     // bit 0, 1 = 0
+#else
+        *((Q_UINT32*) &fVal) = 0;                         // lower 32 bits = 0
+        *((Q_UINT32*) &fVal + 1) = nRKValue & 0xFFFFFFFC; // bit 0, 1 = 0
+#endif
+    }
+
+    if( nRKValue & EXC_RK_100FLAG )
+        fVal *= 0.01;
+
+    return fVal;
+}
+
+QString Helper::formatValue( double value, Q_UINT16 xf )
+{
+	QString s;
+
+	// kdWarning(30511) << __FUNCTION__ << " value " << value << " format " << xf << endl;
+
+	switch(xf)
+	{
+		case 14: // Dates
+		case 15:
+		case 16:
+		case 17:
+		
+		case 26: // assume Date-format (normally defined by file)
+		case 28:
+		
+		case 164:
+		case 174:
+		case 176:
+		case 177:
+		case 178:
+		case 179:
+		case 180:
+		case 181:
+		case 182:
+		case 183:
+		case 184:
+			s = locale().formatDate(getDate(value),true);
+			break;
+		default: // Number
+			s = locale().formatNumber(value);
+			break;
+	}
+	// kdWarning(30511) << __FUNCTION__ << " RESULT: " << s << endl;
+
+	return s;
+
 }
 
 const QDomElement Helper::getFormat(Q_UINT16 xf)
@@ -433,8 +490,7 @@ const QDomElement Helper::getFormat(Q_UINT16 xf)
 	if((xwork->align >> 3) & 0x01 == 1)
 		format.setAttribute("multirow", "yes");
 
-	switch(xwork->ifmt)
-	{
+	switch(xwork->ifmt) {
 		case 0x00:  // We need this to avoid 'default'
 			break;
 		case 0x01:  // Number 0
@@ -924,7 +980,7 @@ static const sExcelFunction *ExcelFunction(Q_UINT16 nIndex)
 			return &ExcelFunctions[i];
 	}
 	
-    return 0;
+	return 0;
 }
 
 static QString Excel_ErrorString(Q_UINT8 no)
@@ -990,12 +1046,16 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 
 	parsedFormula.append("=");
 
+	// kdWarning(30511) << "Entering " << __FUNCTION__ << endl;
+	
 	while (!rgce.atEnd())
 	{
 		rgce >> ptg;
 		
 		// Correct ptg parsing!
 		ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
+		
+		// kdWarning(30511) << "Parsing ptg " << QString::number(ptg, 16)  << endl;
 		
 		switch (ptg)
 		{
@@ -1200,8 +1260,8 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				getReference(row, column, refRow, refColumn, biff, shared, rowSign1, colSign1);
 				getReference(row, column, refRowLast, refColumnLast, biff, shared, rowSign2, colSign2);
 
-				str = QString("%1%2%3%4#:%5%6%7%8#").arg(colSign1).arg(refColumn).arg(rowSign1).arg(refRow).arg(colSign2).arg(refColumnLast).arg(rowSign2).arg(refRowLast);
-				kdDebug() << "STR " << str << endl;
+				str = QString("%1%2%3%4#:%5%6%7%8#").arg(colSign1).arg(refColumn).arg(rowSign1).arg(refRow)
+						.arg(colSign2).arg(refColumnLast).arg(rowSign2).arg(refRowLast);
 				parsedFormula.append(str);
 				break;
 			case 0x26:  // ptgMemArea
@@ -1255,7 +1315,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				{
 					Q_UINT16 sheetNumber;
 					rgce >> sheetNumber;
-			        rgce >> refRow >> refRowLast;
+				        rgce >> refRow >> refRowLast;
 					rgce >> refColumn >> refRowLast;
 	
 					QDomElement *sheet = m_tables->at(sheetNumber);
@@ -1267,7 +1327,9 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					getReference(row, column, refRow, refColumn, biff, shared, rowSign1, colSign1);
 					getReference(row, column, refRowLast, refColumnLast, biff, shared, rowSign2, colSign2);
 
-					str = QString("%1!%2%3%4%5#:%6%7%8%9#").arg(str).arg(colSign1).arg(refColumn).arg(rowSign1).arg(refRow).arg(colSign2).arg(refColumnLast).arg(rowSign2).arg(refRowLast);
+					str = QString("%1!%2%3%4%5#:%6%7%8%9#").arg(str).arg(colSign1).arg(refColumn)
+							.arg(rowSign1).arg(refRow).arg(colSign2).arg(refColumnLast)
+							.arg(rowSign2).arg(refRowLast);
 					parsedFormula.append(str);					
 				}
 				else
@@ -1282,6 +1344,8 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				break;
 		}
 	}
+	
+	// kdWarning(30511) << "Leaving " << __FUNCTION__ << endl;
 	
 	return parsedFormula.join("");
 }

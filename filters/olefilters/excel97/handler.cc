@@ -142,7 +142,7 @@ bool Handler::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
 		{ "DCONNAME",				0x0052, 0 /* &Worker::op_dconname */ },
 		{ "DELMENU",				0x00c3, 0 /* &Worker::op_delmenu */ },
 		{ "DEFAULTROWHEIGHT",		0x0025, 0 /* &Worker::op_defaultrowheight */ },
-		{ "DEFCOLWIDTH",			0x0055, 0 /* &Worker::op_defcolwidth */ },
+		{ "DEFCOLWIDTH",			0x0055, &Worker::op_defcolwidth },
 		{ "DELTA",					0x0010, 0 /* &Worker::op_delta */ },
 		{ "DOCROUTE",				0x00b8, 0 /* &Worker::op_docroute */ },
 		{ "DSF",					0x0061, 0 /* &Worker::op_dsf */ },

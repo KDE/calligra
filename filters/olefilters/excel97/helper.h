@@ -116,16 +116,22 @@ public:
 	void addSharedFormula(SharedFormula *formula);
 	
 	void getTime(double time, int &hour,int  &min, int &second);
-	void getDate(int date, int &year, int &month, int &day, Q_UINT16 date1904);
+	QDate getDate(double _numdays);
+	
 	void getFont(Q_UINT16, QDomElement &f, Q_UINT16 fontid);
 	void getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid);
 	
+	double GetDoubleFromRK( Q_UINT32 nRKValue );
+	QString formatValue(double value, Q_UINT16 xf);
+
 	const QString getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgce, Q_UINT16 biff, bool shared = false);
 	const QDomElement getFormat(Q_UINT16 xf);
 
 	PenFormat borderStyleToQtStyle(int penStyle);
 
 	KLocale locale() { return m_locale; }
+
+	void setDate1904(int v) { m_date1904 = v; };
 	
 private:
 	QDomDocument *m_root;
@@ -140,6 +146,8 @@ private:
 	QPtrList<FormulaTodo> m_todoFormula;
 
 	KLocale m_locale;
+
+	int m_date1904;
 };
 
 #endif
