@@ -435,7 +435,7 @@ void KSpreadUndoCellLayout::redo()
  *
  ***************************************************************************/
 
-KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_rect )
+KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable *, QRect &)
     : KSpreadUndoAction( _doc )
 {
   /* rect = _rect;
