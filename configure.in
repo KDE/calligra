@@ -31,7 +31,7 @@ AM_KDE_WITH_NLS
 
 dnl Check for MICO. The argument is the minimal version required.
 KDE_CHECK_MICO()
-KDE_CHECK_MINI_STL([AC_MSG_ERROR([compile mico with --disable-mini-stl])]
+KDE_CHECK_MINI_STL([AC_MSG_ERROR([compile mico with --disable-mini-stl])])
 
 idldir="\$(includedir)/idl"
 AC_SUBST(idldir)
