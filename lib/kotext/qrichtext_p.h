@@ -692,7 +692,7 @@ class Q_EXPORT QTextDocument : public QObject
     friend class QTextCursor;
     friend class QTextEdit;
     friend class QTextParag;
-    friend class KoTextParag;
+    friend class ::KoTextParag;
 
 public:
     enum SelectionIds {

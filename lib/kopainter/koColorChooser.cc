@@ -267,7 +267,7 @@ void RGBWidget::slotBInChanged(int b)
 
 /*          GreyWidget         */
 
-GreyWidget::GreyWidget(KoColorChooser *aCC, QWidget *parent = 0L):
+GreyWidget::GreyWidget(KoColorChooser *aCC, QWidget *parent):
 QWidget(parent)
 {
   mCC = aCC;
