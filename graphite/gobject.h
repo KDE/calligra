@@ -91,8 +91,8 @@ public:
 
     const GraphiteView *view() const { return m_view; }
 
-    // calls drawHandles
-    virtual void draw(QPainter &p) = 0;
+    // the handles() contain the handle rects for mouse over stuff afterwards
+    virtual void draw(QPainter &p);
 
     // return false when you couldn't handle the event
     virtual bool mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
@@ -100,10 +100,11 @@ public:
     virtual bool mouseReleaseEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
     virtual bool mouseDoubleClickEvent(QMouseEvent */*e*/, QRect &/*dirty*/) { return false; }
 
+    // default impl!
     virtual bool keyPressEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
     virtual bool keyReleaseEvent(QKeyEvent */*e*/, QRect &/*dirty*/) { return false; }
 
-    virtual GObject *gobject() = 0;
+    virtual GObject *gobject() { return m_object; }
 
 protected slots:
     // All these slots just tell us that something has been changed
@@ -197,8 +198,8 @@ protected slots:
 
 protected:
     G2DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
-                 GraphiteView *view, const QString &type) :
-        G1DObjectM9r(object, mode, part, view, type) {}
+                 GraphiteView *view, const QString &type, bool gradient=true) :
+        G1DObjectM9r(object, mode, part, view, type), m_gradient(gradient) {}
     virtual void createPropertyDialog();
 
 private slots:
@@ -212,6 +213,7 @@ private:
     QWidgetStack *m_stack;
     KColorButton *m_brushColor;
     QComboBox *m_brushStyle;
+    bool m_gradient;  // do we show the gradient widget?
     KColorButton *m_gradientCA, *m_gradientCB;
     QComboBox *m_gradientStyle;
     QCheckBox *m_unbalanced;

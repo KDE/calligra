@@ -28,7 +28,6 @@
 #include <graphiteview.h>
 #include <graphitefactory.h>
 #include <graphitepart.h>
-//#include <gobjectfactory.h>
 
 // test
 #include <ggroup.h>
@@ -39,6 +38,9 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
 
     setInstance(GraphiteFactory::global());
     m_history=new KCommandHistory(actionCollection());
+    m_pageSize=QPrinter::A4; // make that configurable!!! (TODO)
+    m_pageOrientation=PG_PORTRAIT; // make that configurable!!! (TODO)
+    // TODO: read the page border sizes from config
 
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut" );
 
@@ -46,12 +48,28 @@ GraphitePart::GraphitePart(QWidget *parentWidget, const char *widgetName, QObjec
 }
 
 GraphitePart::~GraphitePart() {
+    delete m_history;
 }
 
 bool GraphitePart::initDoc() {
     // If nothing is loaded, do initialize here (TODO)
     // Show the "template" dia
     return true;
+}
+
+void GraphitePart::setPageSize(const QPrinter::PageSize &pageSize) {
+    m_pageSize=pageSize;
+    // TODO -- update
+}
+
+void GraphitePart::setPageOrientation(const KoOrientation &orientation) {
+    m_pageOrientation=orientation;
+    // TODO -- update
+}
+
+void GraphitePart::setPageBorders(const Graphite::PageBorders &pageBorders) {
+    m_pageBorders=pageBorders;
+    // TODO -- update
 }
 
 void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
@@ -63,6 +81,7 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
     // test
     // TODO: Check the view - if it's the same as "before" -> ok :)
+    // TEST -------------
     GObject *o=new GGroup(QString::fromLatin1("foo"));
     o->rotate(FxPoint(0, 0), 45.0*180.0*M_1_PI);
     GObjectM9r *m=o->createM9r(this, view);
@@ -70,6 +89,7 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     m->mousePressEvent(e, r);
     delete m;
     delete o;
+    // TEST -------------
     // TODO: setGlobalZoom()
 }
 
@@ -121,7 +141,7 @@ void GraphitePart::setGlobalZoom(const double &zoom) {
     if(GraphiteGlobal::self()->zoom()==zoom)
         return;
     GraphiteGlobal::self()->setZoom(zoom);
-    // nodeZero->recalculate();
+    // nodeZero->setDirty();
 }
 
 #include <graphitepart.moc>

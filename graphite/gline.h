@@ -42,7 +42,7 @@ public:
     virtual QDomElement save(QDomDocument &doc) const; // save the line to xml
 
     virtual void draw(QPainter &p, const QRect &rect, bool toPrinter=false);
-    // Do we need this? Maybe even lines should have rectangular handles...
+    // Do we need this? Maybe even lines should have rectangular handles... nah, doesn't look sexy :)
     virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
 
     virtual const GLine *hit(const QPoint &p) const;
@@ -84,8 +84,6 @@ public:
              GraphiteView *view, const QString &type);
     virtual ~GLineM9r();
 
-    virtual void draw(QPainter &p);
-
     virtual bool mouseMoveEvent(QMouseEvent *e, QRect &dirty);
     virtual bool mousePressEvent(QMouseEvent *e, QRect &dirty);
     virtual bool mouseReleaseEvent(QMouseEvent *e, QRect &dirty);
@@ -93,8 +91,6 @@ public:
 
     virtual bool keyPressEvent(QKeyEvent *e, QRect &dirty);
     virtual bool keyReleaseEvent(QKeyEvent *e, QRect &dirty);
-
-    virtual GObject *gobject() { return m_line; }
 
 private:
     GLineM9r(const GLineM9r &rhs);

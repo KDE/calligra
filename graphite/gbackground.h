@@ -62,9 +62,6 @@ public:
               GraphiteView *view, const QString &type);
     virtual ~GBackgroundM9r() {}
 
-    // nothing to draw ;)
-    virtual void draw(QPainter &) {}
-
     // RMB popup on press
     virtual bool mousePressEvent(QMouseEvent *e, QRect &dirty);
 

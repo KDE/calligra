@@ -46,7 +46,6 @@ protected:
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
 
     virtual void viewportPaintEvent(QPaintEvent *e);  // only drawContents()??
-    virtual void viewportResizeEvent(QResizeEvent *e);
 
     virtual void keyPressEvent(QKeyEvent *e) { m_doc->keyPressEvent(e, m_view); }
     virtual void keyReleaseEvent(QKeyEvent *e) { m_doc->keyReleaseEvent(e, m_view); }
@@ -54,8 +53,6 @@ protected:
     // when we don't have focus... (TODO)
     virtual void focusInEvent(QFocusEvent */*e*/) {}
     virtual void focusOutEvent(QFocusEvent */*e*/) {}
-    virtual void resizeEvent(QResizeEvent *e) { QScrollView::resizeEvent(e); }
-    virtual void paintEvent(QPaintEvent *e) { QScrollView::paintEvent(e); }
 
     virtual bool eventFilter(QObject *obj, QEvent *e);
 

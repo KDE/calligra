@@ -408,10 +408,6 @@ GGroupM9r::~GGroupM9r() {
         m_group->setState(GObject::Visible);
 }
 
-void GGroupM9r::draw(QPainter &p) {
-    m_group->drawHandles(p, handles());
-}
-
 bool GGroupM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;

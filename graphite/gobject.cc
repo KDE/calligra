@@ -70,6 +70,10 @@ GObjectM9r::~GObjectM9r() {
     delete m_handles;
 }
 
+void GObjectM9r::draw(QPainter &p) {
+    gobject()->drawHandles(p, handles());
+}
+
 void GObjectM9r::slotChanged(const QString &) {
 
     enableButtonApply(true);
@@ -225,17 +229,16 @@ void G1DObjectM9r::createPropertyDialog() {
 
     m_style=new QComboBox(frame);
     QPainter painter;
-    QPixmap *pm;
+    QPixmap pm(70, 15);
     for(int i=0; i<6; ++i) {
-        pm=new QPixmap(70, 15);
-        pm->fill();
-        painter.begin(pm);
+        pm.fill();
+        painter.begin(&pm);
         painter.setPen(QPen(QColor(Qt::black),
                             static_cast<unsigned int>(2),
                             static_cast<Qt::PenStyle>(i)));
         painter.drawLine(0, 7, 70, 7);
         painter.end();
-        m_style->insertItem(*pm);
+        m_style->insertItem(pm);
     }
     connect(m_style, SIGNAL(activated(int)), this, SLOT(slotChanged(int)));
     m_style->setCurrentItem(gobject()->pen().style());
@@ -309,7 +312,8 @@ void G2DObjectM9r::createPropertyDialog() {
     m_style=new QVButtonGroup(i18n("Fill Style:"), fill);
     QRadioButton *r=new QRadioButton(i18n("None"), m_style);
     r=new QRadioButton(i18n("Brush"), m_style);
-    r=new QRadioButton(i18n("Gradient"), m_style);
+    if(m_gradient)
+        r=new QRadioButton(i18n("Gradient"), m_style);
     leftbox->addWidget(m_style);
     connect(m_style, SIGNAL(clicked(int)),
             this, SLOT(slotChanged(int)));
@@ -453,6 +457,11 @@ void G2DObjectM9r::createPropertyDialog() {
     else
         id=static_cast<int>(gobject()->fillStyle())+1;
 
+    if(gobject()->fillStyle()==GObject::GradientFilled && !m_gradient) {
+        gobject()->setFillStyle(GObject::Brush);
+        id=0;
+    }
+
     m_stack->raiseWidget(id);
     updatePreview(id); // inititalize the pixmap
 }
@@ -480,18 +489,18 @@ void G2DObjectM9r::updatePage() {
 void G2DObjectM9r::updatePreview(int btn) {
 
     QPainter painter;
-    QPixmap *pm=new QPixmap(m_preview->size());
+    QPixmap pm(m_preview->size());
 
-    pm->fill();
+    pm.fill();
     if(btn==1) {
-        painter.begin(pm);
+        painter.begin(&pm);
         painter.fillRect(QRect(QPoint(0, 0), m_preview->size()),
                          QBrush(m_brushColor->color(),
                                 static_cast<Qt::BrushStyle>(m_brushStyle->currentItem()+1)));
         painter.end();
     }
     else if(btn==2) {
-        painter.begin(pm);
+        painter.begin(&pm);
         if(!m_unbalanced->isChecked()) {
             painter.drawImage(QPoint(0, 0),
                               KImageEffect::gradient(m_preview->size(),
@@ -512,7 +521,7 @@ void G2DObjectM9r::updatePreview(int btn) {
         }
         painter.end();
     }
-    m_preview->setBackgroundPixmap(*pm);
+    m_preview->setBackgroundPixmap(pm);
 }
 
 

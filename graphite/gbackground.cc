@@ -23,7 +23,6 @@
 #include <kglobal.h>
 
 #include <gbackground.h>
-//#include <gobjectfactory.h>
 
 
 GBackground::GBackground(const QDomElement &element) :
@@ -106,7 +105,7 @@ GObjectM9r *GBackground::createM9r(GraphitePart *part, GraphiteView *view,
 
 GBackgroundM9r::GBackgroundM9r(GBackground *background, const Mode &mode, GraphitePart *part,
                      GraphiteView *view, const QString &type) :
-    G2DObjectM9r(background, mode, part, view, type), m_background(background) {
+    G2DObjectM9r(background, mode, part, view, type, false), m_background(background) {
 }
 
 bool GBackgroundM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {

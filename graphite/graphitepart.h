@@ -20,7 +20,12 @@
 #ifndef GRAPHITE_PART_H
 #define GRAPHITE_PART_H
 
+#include <qprinter.h>
+
 #include <koDocument.h>
+#include <koGlobal.h>
+
+#include <graphiteglobal.h>
 
 class QPainter;
 class QMouseEvent;
@@ -43,9 +48,16 @@ public:
 
     virtual bool initDoc();
 
-    virtual bool loadXML( QIODevice *, const QDomDocument & ) { return false; }
+    virtual bool loadXML(QIODevice *, const QDomDocument &) { return false; }
 
     KCommandHistory *history() { return m_history; }
+
+    QPrinter::PageSize pageSize() const { return m_pageSize; }
+    void setPageSize(const QPrinter::PageSize &pageSize);
+    KoOrientation pageOrientation() const { return m_pageOrientation; }
+    void setPageOrientation(const KoOrientation &orientation);
+    Graphite::PageBorders pageBorders() const { return m_pageBorders; }
+    void setPageBorders(const Graphite::PageBorders &pageBorders);
 
     // The canvas forwards the Events to us. We test if any
     // object has been hit (z-order!) and handle the event.
@@ -74,9 +86,15 @@ private:
 
     KCommandHistory *m_history;
     QMap<GraphiteView*, GObjectM9r*> m_m9rMap; // relate views to m9rs
-    // TODO: Do we need isLoading() like in KSpread?
     // TODO: If an object is selected, store a pointer
     //       to its M9r here and draw the handles after
     //       drawing the whole tree.
+
+    // TODO: Do we need isLoading() like in KSpread?
+
+    QPrinter::PageSize m_pageSize;
+    KoOrientation m_pageOrientation;
+    Graphite::PageBorders m_pageBorders;
 };
+
 #endif

@@ -79,6 +79,32 @@ void scalePoint(double &x, double &y, const double &xfactor, const double &yfact
 void scalePoint(QPoint &p, const double &xfactor, const double &yfactor, const QPoint &center);
 void scalePoint(FxPoint &p, const double &xfactor, const double &yfactor, const FxPoint &center);
 
+// paper size (portrait, mm)
+// This is the Qt-enum. Use that one as index for the LUT
+//    enum PageSize    { A4, B5, Letter, Legal, Executive,
+//                       A0, A1, A2, A3, A5, A6, A7, A8, A9, B0, B1,
+//                       B10, B2, B3, B4, B6, B7, B8, B9, C5E, Comm10E,
+//                       DLE, Folio, Ledger, Tabloid, NPageSize };
+const short pageWidth[]={ 210, 182, 216, 216, 191, 841, 594, 420,
+                              297, 148, 105, 74, 52, 37, 1030, 728,
+                              32, 515, 364, 257, 128, 91, 64, 45,
+                              163, 105, 110, 210, 432, 279, -1 };
+
+const short pageHeight[]={ 297, 257, 279, 356, 254, 1189, 841, 594,
+                               420, 210, 148, 105, 74, 52, 1456, 1030,
+                               45, 728, 515, 364, 182, 128, 91, 64,
+                               229, 241, 220, 330, 279, 432, -1 };
+
+// page borders in mm
+struct PageBorders {
+    // TODO: Initialize w/ real values
+    PageBorders() : left(20.0), top(20.0), right(20.0), bottom(20.0) {}
+    double left;
+    double top;
+    double right;
+    double bottom;
+};
+
 }; //namespace Graphite
 
 

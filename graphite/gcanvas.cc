@@ -32,7 +32,7 @@ GCanvas::GCanvas(GraphiteView *view, GraphitePart *doc)
     viewport()->setMouseTracking(true);
     setMouseTracking(true);
     setFocus();
-    //viewport()->setBackgroundMode(QWidget::PaletteLight);
+    viewport()->setBackgroundMode(QWidget::PaletteLight);
     installEventFilter(viewport());
     setFrameStyle(QFrame::NoFrame);
 }
@@ -48,11 +48,6 @@ void GCanvas::showMousePos(bool pos) {
         m_vertical->showMousePos(pos);
     if(m_horizontal)
         m_horizontal->showMousePos(pos);
-}
-
-void GCanvas::viewportResizeEvent(QResizeEvent */*e*/) {
-    //kdDebug() << "GCanvas::viewportResizeEvent() width=" << e->size().width()
-    //        << " height=" << e->size().height() << endl;
 }
 
 void GCanvas::contentsMouseMoveEvent(QMouseEvent *e) {
@@ -94,6 +89,7 @@ void GCanvas::viewportPaintEvent(QPaintEvent *e) {
                    << " height=" << visibleHeight()
                    << " | x-offset=" << contentsX()
                    << " y-offet=" << contentsY() << endl;
+
 }
 
 bool GCanvas::eventFilter(QObject *obj, QEvent *e) {

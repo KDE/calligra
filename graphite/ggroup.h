@@ -98,8 +98,6 @@ public:
               GraphiteView *view, const QString &type);
     virtual ~GGroupM9r();
 
-    virtual void draw(QPainter &p);
-
     virtual bool mouseMoveEvent(QMouseEvent *e, QRect &dirty);
     virtual bool mousePressEvent(QMouseEvent *e, QRect &dirty);
     virtual bool mouseReleaseEvent(QMouseEvent *e, QRect &dirty);
@@ -107,8 +105,6 @@ public:
 
     virtual bool keyPressEvent(QKeyEvent *e, QRect &dirty);
     virtual bool keyReleaseEvent(QKeyEvent *e, QRect &dirty);
-
-    virtual GObject *gobject() { return m_group; }
 
 private:
     GGroupM9r(const GGroupM9r &rhs);

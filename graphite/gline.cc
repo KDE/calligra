@@ -370,10 +370,6 @@ GLineM9r::~GLineM9r() {
         m_line->setState(GObject::Visible);
 }
 
-void GLineM9r::draw(QPainter &p) {
-    m_line->drawHandles(p, handles());
-}
-
 bool GLineM9r::mouseMoveEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
     // TODO
     return false;
