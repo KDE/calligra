@@ -269,9 +269,10 @@ Field::setConstraints(uint c)
 {
 	m_constraints = c;
 	//pkey must be unique notnull
-	if (m_constraints & Field::PrimaryKey ) {
+	if (isPrimaryKey()) {
 		m_constraints |= Unique;
 		m_constraints |= NotNull;
+		m_constraints |= NotEmpty;
 	}
 }
 
@@ -431,6 +432,11 @@ Field::setPrimaryKey(bool p)
 {
 	if(isPrimaryKey() != p)
 		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::PrimaryKey);
+	if (p) {//also set implied constraints
+		setUniqueKey(true);
+		setNotNull(true);
+		setNotEmpty(true);
+	}
 }
 
 void
