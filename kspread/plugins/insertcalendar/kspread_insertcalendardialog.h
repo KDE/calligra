@@ -21,10 +21,10 @@
  *   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR *
  *   OTHER DEALINGS IN THE SOFTWARE.                                       *
  ***************************************************************************/
- 
+
 #ifndef KSPREAD_INSERTCALENDARDIALOG_H
 #define KSPREAD_INSERTCALENDARDIALOG_H
- 
+
 #include <kspread_insertcalendardialogbase.h>
 #include <koffice_export.h>
 
@@ -38,117 +38,117 @@ namespace KSpread
 class KSPREAD_EXPORT InsertCalendarDialog : public InsertCalendarDialogBase
 {
   Q_OBJECT
-  
+
   private:
-  
+
     /**
      * Stores a pointer to the currently active date picker frame.
      * This is useful if we want to delete it manually.
      * @see datePickerDeleted
      */
     KDatePicker* m_datePicker;
-  
+
   public:
-  
+
     /**
      * Constructor, initializes functionality.
      * The dates in the dialog initialize to a complete calendar for the
      * current month.
      */
     InsertCalendarDialog(QWidget* parent = 0, const char* name = 0);
-    
+
     /**
      * Virtual destructor.
      */
     virtual ~InsertCalendarDialog();
-    
+
   protected:
-  
+
     /**
      * Creates a KDatePicker frame that is not connected
      * to any date widget. Normally showStartDatePicker
      * of showEndDatePicker use this method to build
      * a generally usable date picker widget and connect
      * it to the appropriate KDateWidget of the dialog.
-     * 
+     *
      * DatePickerDeleted is already connected!
      */
     bool buildDatePickerFrame();
-    
+
   protected slots:
-  
+
     /**
      * Sets the currently active KDatePicker frame to NULL.
      * It's expected that the date picker frame is deleted.
      * @see m_datePicker
      */
     void datePickerDeleted();
-    
+
     /**
      * This slot is reimplemented from QDialog and
      * is connected to the insert button.
      * It also emits a insertCalendar signal.
-     * 
+     *
      * The dialog is closed (not deleted) when
      * this slot is called.
-     * 
+     *
      * @see insertCalendar, reject, QDialog::done
      */
     virtual void accept();
-    
+
     /**
      * This slot is reimplemented from QDialog and
      * is connected to the cancel button.
-     * 
+     *
      * The dialog is closed (not deleted) when
      * this slot is called.
-     * 
+     *
      * @see accept, QDialog::done
      */
     virtual void reject();
-    
+
   public slots:
-  
+
     /**
      * Shows a KDatePicker widget to select the start date.
      * This slot is activated by the select date button.
      */
     void showStartDatePicker();
-    
+
     /**
      * Shows a KDatePicker widget to select the end date.
      * This slot is activated by the select date button.
      */
     void showEndDatePicker();
-    
+
     /**
      * Slot for setting the start date in the KDateWidget.
      * Normally this slot is activated by a KDatePicker widget.
      */
     void setStartDate(QDate);
-    
+
     /**
      * Slot for setting the end date in the KDateWidget.
      * Normally this slot is activated by a KDatePicker widget.
      */
     void setEndDate(QDate);
-    
+
   public:
-  
+
     // METHODS for getting data //
-    
+
     /**
      * @returns the selected start date.
      */
     QDate startDate() const;
-    
+
     /**
      * @returns the selected end date.
      */
     QDate endDate() const;
-    
+
   signals:
-  
+
     /**
      * This signal is emitted when the dialog is
      * accepted - that is, when the Insert button
@@ -157,7 +157,7 @@ class KSPREAD_EXPORT InsertCalendarDialog : public InsertCalendarDialogBase
      * insert calendar plugin to actually insert
      * the calendar with the selected dates.
      */
-    void insertCalendar(QDate from, QDate to);
+    void insertCalendar(const QDate &from, const QDate &to);
 };
 
 }

@@ -24,7 +24,7 @@
 
 #ifndef KSPREAD_PLUGININSERTCALENDAR_H
 #define KSPREAD_PLUGININSERTCALENDAR_H
- 
+
 #include <kparts/plugin.h>
 
 #include <koffice_export.h>
@@ -45,7 +45,7 @@ class InsertCalendarDialog;
  * \class PluginInsertCalender kspread_plugininsertcalendar.h
  * \brief Plugin for inserting a calendar into a spreadsheet.
  * @author Raphael Langerhorst
- * 
+ *
  * The plugin class for the Insert Calendar plugin.
  * This plugin is designed to work in KSpread and
  * makes it possible to insert calendars into
@@ -54,18 +54,18 @@ class InsertCalendarDialog;
 class KSPREAD_EXPORT PluginInsertCalendar : public KParts::Plugin
 {
   Q_OBJECT
-  
+
   protected:
-  
+
     /**
      * This is the parent part of the plugin. It is used
      * to access the spreadsheet and actually insert the
      * calendar.
-     * 
+     *
      * It is set in the constructor.
      */
     KSpreadView* m_kspreadView;
-  
+
     /**
      * This is the dialog used to select the start/end dates
      * of the calendar. It is the user interface of this
@@ -73,41 +73,41 @@ class KSPREAD_EXPORT PluginInsertCalendar : public KParts::Plugin
      * @see InsertCalendarDialog, slotShowDialog, slotInsertCalendar
      */
     InsertCalendarDialog* m_dialog;
-    
+
   public:
-    
+
     /**
      * Constructor. This constructor is usable with KGenericFactory.
      */
     PluginInsertCalendar( QObject *parent, const char *name, const QStringList& args );
-    
+
     /**
      * Virtual destructor.
      */
     virtual ~PluginInsertCalendar();
-     
+
   public:
-  
+
     /**
      * Creates about data for the Insert Calendar plugin.
      */
     static KAboutData* createAboutData();
- 
+
   public slots:
- 
+
      /**
       * This is called from the plugin action, it shows a dialog that
       * allows start and end date selection and various other
       * options. The calendar can then be inserted into a spreadsheet.
       */
      void slotShowDialog();
-     
+
      /**
       * This actually inserts the calendar. It reads the configuration
       * from the insert calendar dialog and builds an calendar in the
       * spreadsheet accordingly.
       */
-     void slotInsertCalendar(QDate start, QDate end);
+     void slotInsertCalendar(const QDate &start, const QDate &end);
 };
 
 }
