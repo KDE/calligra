@@ -258,8 +258,8 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 						drawNode( painter, jtr.current()->ctrlPoint1(), 1, zoomFactor );
 					}
 
-					painter->strokePath();
 					painter->fillPath();
+					painter->strokePath();
 
 
 					// Draw control node2:
@@ -276,8 +276,8 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 						drawNode( painter, jtr.current()->ctrlPoint2(), 1, zoomFactor );
 					}
 
-					painter->strokePath();
 					painter->fillPath();
+					painter->strokePath();
 				}
 
 
@@ -295,8 +295,8 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 					drawNode( painter, jtr.current()->knot(), 1, zoomFactor );
 				}
 
-				painter->strokePath();
 				painter->fillPath();
+				painter->strokePath();
 			}
 		}
 
