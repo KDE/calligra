@@ -1410,7 +1410,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
     const FormatData& formatData)
 {
     // Retrieve text and escape it (and necessary space, tabs and line-break tags)
-    QString partialText(escapeOOSpan(paraText.mid(formatData.pos,formatData.len)));
+    const QString partialText( escapeOOSpan( paraText.mid( formatData.pos, formatData.len ) ) );
 
     if (formatData.text.missing)
     {
@@ -1422,7 +1422,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
         *m_streamOut << "<text:span";
 
         QString styleKey;
-        QString props ( textFormatToStyle(formatLayout,formatData.text,false,styleKey) ); // ### TODO: make const
+        const QString props ( textFormatToStyle(formatLayout,formatData.text,false,styleKey) );
 
         QMap<QString,QString>::ConstIterator it ( m_mapTextStyleKeys.find(styleKey) );
         kdDebug(30518) << "Searching text key: " << styleKey << endl;
@@ -1926,7 +1926,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
         {
             // We have additional properties, so we need an automatic style for the paragraph
             automaticStyle = makeAutomaticStyleName("P", m_automaticParagraphStyleNumber);
-            kdDebug(30518) << "Creating automatic paragraph style: " << automaticStyle << endl;
+            kdDebug(30518) << "Creating automatic paragraph style: " << automaticStyle << " key: " << styleKey << endl;
             m_mapParaStyleKeys[styleKey]=automaticStyle;
 
             m_contentAutomaticStyles += "  <style:style";
