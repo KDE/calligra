@@ -70,6 +70,9 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm
 
 
 		void startup(KexiProjectData* pdata);
+	public slots:
+		/** Inherited from KMdiMainFrm: we need to do some tasks before child is closed */
+		virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true); 
 
 	protected:
 		//! reimplementation of events

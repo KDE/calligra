@@ -71,7 +71,6 @@ class KexiMainWindow::Private
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
 #endif
-		KToggleAction *action_show_nav;
 	Private()
 	{
 	}
@@ -134,7 +133,7 @@ KexiMainWindow::initActions()
 	// PROJECT MENU
 	KAction *action = new KAction(i18n("&New..."), "filenew", KStdAccel::shortcut(KStdAccel::New), 
 		this, SLOT(slotProjectNew()), actionCollection(), "project_new");
-  	action->setWhatsThis(i18n("Create a new project"));
+	action->setWhatsThis(i18n("Create a new project"));
 	KStdAction::open( this, SLOT( slotProjectOpen() ), actionCollection(), "project_open" )
 		->setWhatsThis(i18n("Open an existing project"));
 	d->action_open_recent = new KActionMenu(i18n("Open Recent"), 
@@ -164,8 +163,8 @@ KexiMainWindow::initActions()
 
 	d->action_show_other = new KActionMenu(i18n("Other"), 
 		actionCollection(), "options_show_other");
-	d->action_show_nav = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
-	 actionCollection(), "options_show_nav");
+//	d->action_show_nav = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
+//	 actionCollection(), "options_show_nav");
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
 	 actionCollection(), "options_show_contexthelp");
@@ -176,8 +175,6 @@ KexiMainWindow::initActions()
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
 	//VIEW MENU
-//	d->action_show_browser = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
-//	 actionCollection(), "options_show_nav");
 
 #ifndef KEXI_NO_CTXT_HELP
 //	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
@@ -191,7 +188,7 @@ void KexiMainWindow::invalidateActions()
 {
 	stateChanged("project_opened",m_project ? StateNoReverse : StateReverse);
 	
-	d->action_show_nav->setEnabled(m_project && m_nav);
+//	d->action_show_nav->setEnabled(m_project && m_nav);
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper->setEnabled(m_project);
 #endif
@@ -350,7 +347,7 @@ KexiMainWindow::initNavigator()
 		}
 	}
 	
-	d->action_show_nav->setChecked(m_nav->isVisible());
+//	d->action_show_nav->setChecked(m_nav->isVisible());
 //TODO	m_nav->plugToggleAction(m_actionBrowser);
 
 }
@@ -674,6 +671,13 @@ KexiMainWindow::slotShowErrorMessageFor(const QString &title, KexiDB::Object *ob
 	else {
 		KMessageBox::error(this, msg);
 	}
+}
+
+void
+KexiMainWindow::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
+{
+	m_currentDocumentGUIClient=0;
+	KMdiMainFrm::closeWindow(pWnd, layoutTaskBar);
 }
 
 #include "keximainwindow.moc"
