@@ -19,6 +19,5 @@
 	<Text>View</Text>
 	<Action name="view_mode"/>
 	<Action name="view_zoom"/>
-	<Action name="preview"/>
 </ToolBar>
 </kpartgui>
