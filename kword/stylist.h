@@ -157,13 +157,15 @@ class KWStyleFontTab : public KWStyleManagerTab
     Q_OBJECT
 public:
     KWStyleFontTab( QWidget * parent );
+    ~KWStyleFontTab();
     virtual void update();
     virtual QString tabName();
     virtual void save();
 protected:
     virtual void resizeEvent( QResizeEvent *e );
 private:
-    KWFontChooser * m_chooser;
+    KWFontChooser* m_chooser;
+    KoZoomHandler* m_zoomHandler;
 };
 
 /*

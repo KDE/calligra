@@ -577,19 +577,29 @@ KWStyleFontTab::KWStyleFontTab( QWidget * parent )
     : KWStyleManagerTab( parent )
 {
     m_chooser = new KWFontChooser( this );
+    m_zoomHandler = new KoZoomHandler;
+}
+
+KWStyleFontTab::~KWStyleFontTab()
+{
+    delete m_zoomHandler;
 }
 
 void KWStyleFontTab::update()
 {
     bool subScript = m_style->format().vAlign() == QTextFormat::AlignSubScript;
     bool superScript = m_style->format().vAlign() == QTextFormat::AlignSuperScript;
-    m_chooser->setFont( m_style->format().font(), subScript, superScript );
+    QFont fn = m_style->format().font();
+    fn.setPointSize( (int)m_zoomHandler->layoutUnitToPt( fn.pointSize() ) );
+    m_chooser->setFont( fn, subScript, superScript );
     m_chooser->setColor( m_style->format().color() );
 }
 
 void KWStyleFontTab::save()
 {
-    m_style->format().setFont( m_chooser->getNewFont() );
+    QFont fn = m_chooser->getNewFont();
+    fn.setPointSize( m_zoomHandler->ptToLayoutUnit( fn.pointSize() ) );
+    m_style->format().setFont( fn );
     if ( m_chooser->getSubScript() )
         m_style->format().setVAlign( QTextFormat::AlignSubScript );
     else if ( m_chooser->getSuperScript() )

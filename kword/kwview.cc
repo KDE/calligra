@@ -530,20 +530,6 @@ void KWView::setupActions()
                                      this, SLOT( textColor() ),
                                      actionCollection(), "format_color",true );
     actionFormatColor->setDefaultColor(QColor());
-#if KDE_VERSION < 220
-    // Necessary with kdelibs-2.1.x, because those actions are only in the toolbar
-    KAccel * accel = new KAccel( this );
-    actionFormatBold->plugAccel( accel );
-    actionFormatItalic->plugAccel( accel );
-    actionFormatUnderline->plugAccel( accel );
-    actionFormatStrikeOut->plugAccel( accel );
-
-    actionFormatAlignLeft->plugAccel( accel );
-    actionFormatAlignCenter->plugAccel( accel );
-    actionFormatAlignRight->plugAccel( accel );
-    actionFormatAlignBlock->plugAccel( accel );
-#endif
-
 
     // ---------------------------- frame toolbar actions
 
