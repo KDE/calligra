@@ -306,7 +306,7 @@ QDomElement KWString::save( QDomDocument& d )
     if ( f.isNull() )
 	return f;
     e.appendChild( f );
-
+    
     QString buffer;
 
     for ( unsigned int i = 0; i < _len_; i++ ) {
@@ -915,7 +915,10 @@ void freeChar( KWChar& _char, KWordDocument *_doc )
 /*================================================================*/
 QDomElement KWCharFormat::save( QDomDocument& doc )
 {
-    return format->save( doc );
+    QDomElement e = doc.createElement( "STYLE" );
+    e.setAttribute( "id", format->getId() );
+    
+    return e;
 }
 
 /*================================================================*/

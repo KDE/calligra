@@ -104,7 +104,7 @@ QDomElement KWFormatCollection::save( QDomDocument &doc )
     indexMap.clear();
 
     QDictIterator<KWFormat> it( formats );
-    for ( unsigned int i = 0; it.current(); ++it ) {
+    for ( int i = 0; it.current(); ++it ) {
 	indexMap[ it.current() ] = i++;
 	QDomElement f = it.current()->save( doc, i );
 	if ( f.isNull() )
@@ -116,8 +116,48 @@ QDomElement KWFormatCollection::save( QDomDocument &doc )
 }
 
 /*================================================================*/
-// #### todo
-// void KWFormatCollection::load( KOMLParser&, vector<KOMLAttrib>& )
-// {
-// }
+bool KWFormatCollection::load( const QDomElement& element )
+{
+    reverseIndexMap.clear();
+    QDomElement e = element.firstChild().toElement();
+    for( ; !e.isNull(); e = e.nextSibling().toElement() )
+    {
+	KWFormat f( doc );
+	if ( !f.load( element, doc ) )
+	    return FALSE;
+	
+	// This will insert
+	KWFormat* fm = getFormat( f );
+	if ( !e.hasAttribute( "id" ) )
+	    return FALSE;
+	reverseIndexMap.insert( e.attribute( "id" ).toInt(), fm );
+    }
 
+    return TRUE;
+}
+
+/*================================================================*/
+int KWFormatCollection::getId( const KWFormat &_format )
+{
+    QMap< KWFormat*, int >::Iterator it = indexMap.find( getFormat( _format ) );
+    if ( it == indexMap.end() )
+	return 0;
+    return it.data();
+
+}
+
+/*================================================================*/
+KWFormat* KWFormatCollection::getFormat( int id )
+{
+    QMap< int, KWFormat* >::Iterator it = reverseIndexMap.find( id );
+    if ( it == reverseIndexMap.end() )
+	return -1;
+    return it.data();
+}
+
+/*================================================================*/
+void KWFormatCollection::clearIndexMaps()
+{
+    indexMap.clear();
+    reverseIndexMap.clear();
+}

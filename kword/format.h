@@ -169,6 +169,12 @@ public:
     QDomElement save( QDomDocument &doc, int id = -1 );
     bool load( const QDomElement&, KWordDocument* );
 
+    /**
+      * Used during saving. Instead of saving the same formats again and 
+      * again we just save its index which is known by the @ref KWFormatCollection.
+      */
+    int getId();
+    
 protected:
     /**
      * Pointer to the font we have to use. If this value is 0L we are told

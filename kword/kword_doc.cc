@@ -1011,7 +1011,7 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     __pgLayout.inchRight = border.attribute( "inchRight" ).toInt();
     __pgLayout.inchTop = border.attribute( "inchTop" ).toInt();
     __pgLayout.inchBottom = border.attribute( "inchBottom" ).toInt();
-
+    
     QDomElement attribs = word.namedItem( "ATTRIBUTES" ).toElement();
     if ( attribs.isNull() )
 	return false;
@@ -1020,13 +1020,19 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     _footer = (bool)attribs.attribute( "hasFooter" ).toInt();
     unit = attribs.attribute( "unit" );
 
+    QDomElement fcoll = word.namedItem( "FORMATS" ).toElement();
+    if ( fcoll.isNull() )
+	return FALSE;
+    if ( !formatCollection.load( fcoll ) )
+	return FALSE;
+    
+    if ( !loadStyleTemplates( word.namedItem( "PARAGLAYOUTS" ).toElement() ) )
+	return FALSE;
+
     if ( !footNoteManager.load( word.namedItem( "FOOTNOTE-GLOBAL" ).toElement() ) )
 	return FALSE;
 
     if ( !loadFrameSets( word.namedItem( "FRAMESETS" ).toElement() ) )
-	return FALSE;
-
-    if ( !loadStyleTemplates( word.namedItem( "STYLES" ).toElement() ) )
 	return FALSE;
 
     QDomElement pix = word.namedItem( "PIXMAPS" ).toElement();
@@ -1172,6 +1178,9 @@ bool KWordDocument::loadXML( const QDomDocument& doc, KOStore::Store_ptr )
     entry->setReplace( "®" );
     autoFormat.addAutoFormatEntry( entry );
 
+    // Save some memory
+    formatCollection.clearIndexMaps();
+    
     return true;
 }
 
@@ -1387,6 +1396,9 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 	return FALSE;
     word.appendChild( e );
 
+    QDomElement styles = doc.createElement( "PARAGLAYOUTS" );
+    word.appendChild( styles );
+
     QDomElement fn = footNoteManager.save( doc );
     if ( fn.isNull() )
 	return false;
@@ -1407,9 +1419,6 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 	    fs.appendChild( e );
 	}
     }
-
-    QDomElement styles = doc.createElement( "STYLES" );
-    word.appendChild( styles );
 
     for ( unsigned int j = 0; j < paragLayoutList.count(); j++ )
     {
@@ -1447,6 +1456,9 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     QTextStream str( dev );
     str << doc;
 
+    // Save some memory
+    formatCollection.clearIndexMaps();
+    
     return true;
 }
 

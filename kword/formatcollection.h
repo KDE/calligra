@@ -35,27 +35,38 @@ public:
     KWFormatCollection( KWordDocument *_doc );
     ~KWFormatCollection();
 
+    /**
+      * Uses the @ref reverseIndexMap to map an id to
+      * a loaded KWFormat. This is only useful during loading.
+      */
+    KWFormat *getFormat( int id );
     KWFormat *getFormat( const KWFormat &_format );
     void removeFormat( KWFormat *_format );
 
     QString generateKey( KWFormat *_format )
     { return generateKey( *_format ); }
 
-    const QMap< KWFormat*, unsigned int > &getIndexMap() const {
-	return indexMap;
-    }
-
+    /**
+      * Maps a format to an id. That is useful during saving only.
+      */
+    int getId( const KWFormat &_format );
+    
+    /**
+      * This function is called from KWordDocument after loading/saving.
+      */
+    void clearIndexMaps();
+    
     QDomElement save( QDomDocument &doc );
-    // #### todo
-    //void load( KOMLParser&, vector<KOMLAttrib>& );
-
+    bool load( const QDomElement& );
+    
 protected:
     QString generateKey( const KWFormat &_format );
     KWFormat *findFormat( QString _key );
     KWFormat *insertFormat( QString _key, const KWFormat &_format );
 
     QDict<KWFormat> formats;
-    QMap< KWFormat*, unsigned int > indexMap;
+    QMap< KWFormat*, int > indexMap;
+    QMap< int, KWFormat* > reverseIndexMap;
     KWordDocument *doc;
 
 };

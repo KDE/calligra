@@ -625,7 +625,7 @@ bool KWFrameSet::load( QDomElement& element )
 		t.style = (KWParagLayout::BorderStyle) f.attribute( "tStyle" ).toInt();
 	
 	    if ( f.hasAttribute( "background-color" ) )	
-		c = f.attribute( "background-color" );
+		c = QColor( f.attribute( "background-color" ) );
 
 	    if ( f.hasAttribute( "border-left-mm" ) )
 		lmm = f.attribute( "border-left-mm" ).toInt();

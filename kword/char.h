@@ -36,6 +36,11 @@ public:
 
     virtual QDomElement save( QDomDocument& ) { return QDomElement(); }
     virtual bool load( const QDomElement&, KWordDocument* ) { return false; }
+
+    /**
+      * Poor mans RTTI.
+      */
+    virtual isCharFormat() { return FALSE; }
     
 protected:
     int classId;
@@ -68,6 +73,8 @@ public:
     virtual QDomElement save( QDomDocument& );
     virtual bool load( const QDomElement&, KWordDocument* );
 
+    virtual isCharFormat() { return TRUE; }
+    
 protected:
     KWFormat *format;
 
@@ -91,7 +98,7 @@ public:
 
     virtual QDomElement save( QDomDocument& );
     virtual bool load( const QDomElement&, KWordDocument* );
-    
+
 protected:
     KWImage *image;
 
@@ -126,7 +133,7 @@ public:
 
     virtual QDomElement save( QDomDocument& );
     virtual bool load( const QDomElement&, KWordDocument* );
-    
+
 protected:
     KWVariable *var;
 
@@ -148,7 +155,7 @@ public:
 
     virtual QDomElement save( QDomDocument& );
     virtual bool load( const QDomElement&, KWordDocument* );
-    
+
 protected:
     KWFootNote *fn;
 
