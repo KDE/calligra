@@ -143,6 +143,12 @@ KexiDB::decode(const char *c)
 		    return QString::fromLatin1( c );
 #endif
 		case Local8Bit:
+#if 0
+QTextCodec *tc = QTextCodec::codecForName("CP1250");
+	if (tc) {
+		debug(">>>> %s <<<<",(const char *)tc->toUnicode(c) );
+	}
+#endif
 			return QString::fromLocal8Bit(c);
 	}
 	return QString::null;
@@ -163,7 +169,13 @@ KexiDB::encode(const QString &v)
 			return v.ascii();
 
 		case Local8Bit:
-			return v.local8Bit();
+#if 0
+		QTextCodec *tc = QTextCodec::codecForName("CP1250");
+	if (tc) {
+		debug(">>>> %s <<<<",(const char *)tc->fromUnicode(v) );
+	}
+#endif
+		return v.local8Bit();
 	}
 	return v.latin1();
 }

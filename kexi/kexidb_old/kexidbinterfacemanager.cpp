@@ -59,8 +59,10 @@ void KexiDBInterfaceManager::remRef()
 
 KexiDBInterfaceManager::KexiDBInterfaceManager(const char *name) : QObject(0, name),m_ref(0)
 {
-	//some initialisations
+	//some initializations
 //	m_libLoader = KLibLoader::self();
+
+	s_kexidbinterfacemanager = this;
 	lookupDrivers();
 	//m_part = new KexiDB(this, "database");
 // no idea, why this loops infinitly here	load("mySQL");
@@ -161,8 +163,6 @@ KexiDBInterfaceManager::newDBInstance(const QString &driver)
 	    it should be used in replacement of that one
 	    oh, how we love c++
 	*/
-
-	kdDebug() << "KexDB::add" << endl;
 
 	KexiDB *d = load(driver);
 	if(d)
