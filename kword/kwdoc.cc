@@ -1060,7 +1060,15 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( body.isNull() )
     {
         kdError(30518) << "No office:body found!" << endl;
-        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
+        setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
+        return false;
+    }
+    body = body.namedItem( "office:text" ).toElement();
+    if ( body.isNull() )
+    {
+        kdError(30518) << "No office:text found!" << endl;
+        // ## TODO: print the actual tag that was found, it might help finding the right app to use :)
+        setErrorMessage( i18n( "Invalid KWord document. No office:text tag found." ) );
         return false;
     }
 
