@@ -620,8 +620,8 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	    {
 		KoTextFormat* tmpfmt=new KoTextFormat(*string->at(j).format());
 		tmpfmt->setUnderLineWidth(avg);
-		tmpfmt=format->parent()->format(tmpfmt);
-		string->at(j).setFormat(tmpfmt);
+		string->at(j).setFormat(format->parent()->format(tmpfmt));
+		delete tmpfmt;
 	    }
 	    nc=0;
 	    current=0;
