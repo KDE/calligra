@@ -30,6 +30,7 @@ Boston, MA 02111-1307, USA.
 // the qt db includes
 #include <qsqlresult.h>
 #include <qsqlrecord.h>
+#include <qsqlcursor.h>
 #include <qsqldatabase.h>
 
 //#include <mysql/mysql.h>
@@ -133,6 +134,7 @@ class QtSqlRecord : public KexiDBRecordSet //, public QtSqlResult
 		QSqlQuery	*m_query;
 		QSqlDatabase	*m_db;
 //		QtSqlDB		*m_db;
+//		QSqlCursor	m_record;
 		QSqlRecord	m_record;
 
 		QtSqlRecord	*m_parent; /* parent if current is a insert-buffer */

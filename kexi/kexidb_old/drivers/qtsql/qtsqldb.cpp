@@ -320,23 +320,19 @@ QStringList
 QtSqlDB::tables()
 {
 	kdDebug() << "QtSqlDB::tables()" << endl;
-	if(!m_connectedDB)
-		return QStringList();
-
 	QStringList s;
-
-	query("show tables");
-	QtSqlResult *result = storeResult();
-
-	if(!result)
+	if(!m_connectedDB)
+		return s;
+		
+	QSqlQuery myquery;
+	myquery.exec("show tables");
+	if ( !myquery.isActive() )
 		return s;
 
-	while(result->next())
+	while(myquery.next())
 	{
-		s.append(result->value(0).toString());
+		s.append(myquery.value(0).toString());
 	}
-
-	delete result;
 	return s;
 }
 
@@ -480,7 +476,9 @@ QtSqlDB::escapeName(const QString& str)
 {
 	kdDebug() << _ME  << "QtSqlDB::escapeName(QString) FIXME implement me" << endl;
 
-	return str;
+	QString tmp;
+	tmp = QString("`%1`").arg( str );
+	return tmp;
 }
 unsigned long
 QtSqlDB::lastAuto()

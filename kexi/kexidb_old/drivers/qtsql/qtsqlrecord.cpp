@@ -24,6 +24,7 @@ Boston, MA 02111-1307, USA.
 #include <kexidbwatcher.h>
 
 #include <qsqlrecord.h>
+#include <qsqlindex.h>
 #include <qregexp.h>
 
 #include "qtsqldb.h"
@@ -40,14 +41,18 @@ QtSqlRecord::QtSqlRecord(/*QTSQL_RES*/void *result, QtSqlDB *db, const char *nam
 	kdDebug() << _ME  << "QtSqlRecord()::QtSqlRecord(void *result,...)" << endl;
 //	m_db = db;
 	m_lastItem = 0;
-	m_readOnly = findKey();
+	m_readOnly = false;
+	if ( ! findKey() )
+		m_readOnly = true;
+	if (m_record.field( 0 ) && m_record.field( 0 )->isReadOnly() )
+		m_readOnly = true;
 }
 
 QtSqlRecord::QtSqlRecord(QSqlDatabase *realdb, KexiDB *db, const char *name, const QString& querystatement)
  : KexiDBRecordSet(db, name)
 {
 // FIXME holger
-	kdDebug() << _ME  << "QtSqlRecord()::QtSqlRecord(kexidb, const char*)" << endl;
+	kdDebug() << _ME  << "QtSqlRecord()::QtSqlRecord(kexidb, const char*) qs: _" << querystatement << "_" << endl;
 	m_db = realdb;
 	m_queryString = querystatement;
 	m_query = new QSqlQuery();
@@ -60,21 +65,27 @@ QtSqlRecord::QtSqlRecord(QSqlDatabase *realdb, KexiDB *db, const char *name, con
 		kdDebug() << "query failed." << endl;
 	}
 	m_lastItem = 0;
-	m_readOnly = findKey();
+
 
 	// try to get the table from the querystatement...
-	// TODO: make this foolproof
+	// TODO: make this foolproof`
 	QRegExp rx("(.*) from \`(.*)\`");
+	kdDebug() << "trying to get m_table" << endl;
 	if ( rx.search( m_queryString ) != -1 )
 	{
 		kdDebug() << _ME  << "QtSqlRecord()::QtSqlRecord() before: " << rx.cap(1) << endl;
 		kdDebug() << _ME  << "QtSqlRecord()::QtSqlRecord() after: " << rx.cap(2) << endl;
 		m_table = rx.cap( 2 );
-		m_record = m_db->record( m_table );
 /*		company = rx.cap( 1 );
 		web = rx.cap( 2 );
 		country = rx.cap( 3 );*/
 	}
+	m_record = m_db->record( m_table );
+	m_readOnly = false;
+	if ( ! findKey() )
+		m_readOnly = true;
+	if (m_record.field( 0 ) && m_record.field( 0 )->isReadOnly() )
+		m_readOnly = true;
 	//m_table =
 }
 
@@ -82,27 +93,29 @@ QtSqlRecord::QtSqlRecord(QSqlDatabase *realdb, KexiDB *db, const char *name, con
 bool
 QtSqlRecord::findKey()
 {
-// FIXME holger
 	kdDebug() << _ME  << "QtSqlRecord()::findKey()" << endl;
-// 	for(uint i=0; i < fieldCount(); i++)
-// 	{
-// 		if(QtSqlResult::fieldInfo(i)->primary_key() || QtSqlResult::fieldInfo(i)->unique_key())
-// 		{
-// 			m_keyField = QtSqlResult::fieldInfo(i)->name();
-// 			m_table = QtSqlResult::fieldInfo(i)->table();
-// 			return false;
-// 		}
-// 	}
-//
-// 	kdDebug() << "QtSqlRecrod::findKey(): name is: " << m_keyField << endl;
+	kdDebug() << "mytable : " << m_table << endl;
+	QString myname;
+	myname = m_db->primaryIndex( m_table ).name();
+	kdDebug() << "myindex : " << myname << endl; 
 
-	return true;
+	//and now for some braindamage...
+//	QSqlIndex myindex;
+//	myindex = m_db->primaryIndex( m_table );
+//	for (int i = 0 ; i < myindex.count() ; i++ )
+//	{
+//	    kdDebug() << "columnname: " << myindex.field( i )->name() << endl;
+//	    
+//	}
+	
+	if ( myname.isEmpty() )
+	        return false;
+	return true;	
 }
 
 bool
 QtSqlRecord::readOnly()
 {
-// FIXME holger
 	kdDebug() << _ME  << "QtSqlRecord()::readOnly()" << endl;
 	return m_readOnly;
 }
@@ -159,6 +172,7 @@ KexiDBUpdateRecord *
 QtSqlRecord::update(QMap<QString,QVariant> fieldNameValueMap)
 {
 // FIXME holger
+
 	kdDebug() << _ME  << "QtSqlRecord()::update(qmap)" << endl;
 }
 
@@ -330,14 +344,13 @@ QtSqlRecord::forignUpdate(const QString &field, const QString &value, const QStr
 QVariant
 QtSqlRecord::value(unsigned int column)
 {
-	kdDebug() << _ME  << "QtSqlRecord()::value(uint)" << endl;
-	kdDebug() << _ME  << "QtSqlRecord()::value(uint) column: "<< column << endl;
+//	kdDebug() << _ME  << "QtSqlRecord()::value(uint)" << endl;
+//	kdDebug() << _ME  << "QtSqlRecord()::value(uint) column: "<< column << endl;
 	QVariant res;
 	res = m_query->value( column );
-	kdDebug() << _ME  << "QtSqlRecord()::value(uint) result:" << res.toString() << endl;
+	kdDebug() << _ME  << "QtSqlRecord()::value(uint) column: " << 
+	    column << " result:" << res.toString() << endl;
 	return res;
-//	return QVariant( "lala" );
-// 	return QtSqlResult::value(column);
 }
 
 QVariant
@@ -494,8 +507,9 @@ QtSqlRecord::fieldCount()
 	int i;
 ///	i = m_db->record( m_queryString ).count(); // this doesn't work...
 
-	i = m_db->record( m_table ).count();
-	kdDebug() << _ME  << "QtSqlRecord()::fieldCount() m_queryString: " << m_queryString << endl;
+//	i = m_db->record( m_table ).count();
+	i = m_record.count();
+	kdDebug() << _ME  << "QtSqlRecord()::fieldCount() lala m_queryString: " << m_queryString << endl;
 	kdDebug() << _ME  << "QtSqlRecord()::fieldCount() result: " << i << endl;
 
 // 	return QtSqlResult::numFields();

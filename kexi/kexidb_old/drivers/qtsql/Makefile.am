@@ -4,7 +4,7 @@ INCLUDES = -I$(srcdir)/../.. $(all_includes)
 
 kexiqtsqlinterface_la_METASOURCES = AUTO
 
-kexiqtsqlinterface_la_SOURCES = qtsqldb.cpp qtsqlresult.cpp qtsqlrecord.cpp
+kexiqtsqlinterface_la_SOURCES = qtsqldb.cpp qtsqlrecord.cpp
 
 kexiqtsqlinterface_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lmysqlclient ../../libkexidb.la
 
