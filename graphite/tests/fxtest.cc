@@ -23,7 +23,11 @@
 
 #include <graphiteglobal.h>
 
-void valueOut(const char *prefix, const FxValue &v) {
+void valueOut(const char *prefix, const FxValueX &v) {
+    kdDebug() << prefix << ": v: " << v.value() << " px: " << v.pxValue() << endl;
+}
+
+void valueOut(const char *prefix, const FxValueY &v) {
     kdDebug() << prefix << ": v: " << v.value() << " px: " << v.pxValue() << endl;
 }
 
@@ -51,16 +55,16 @@ int main(int argc, char **argv) {
     kdDebug() << "Global Zoom Factor set to 2.0 (200%)" << endl;
     GraphiteGlobal::self()->setZoom(2.0);
 
-    FxValue v1;
+    FxValueX v1;
     valueOut("FxValue v1()", v1);
-    FxValue v2(100);
+    FxValueX v2(100);
     valueOut("FxValue v2(100)", v2);
-    FxValue v3(100.0);
+    FxValueX v3(100.0);
     valueOut("FxValue v3(100.0)", v3);
 
     GraphiteGlobal::self()->setZoom(2.5);
     kdDebug() << "GraphiteGlobal Zoom Factor set to 2.5 (250%)" << endl;
-    FxValue v4(v3);
+    FxValueX v4(v3);
     valueOut("FxValue v4(v3)", v4);
 
     GraphiteGlobal::self()->setZoom(3.0);
@@ -90,7 +94,8 @@ int main(int argc, char **argv) {
     kdDebug() << "FxPoint p1(): x: v: " << p1.x() << " px: " << p1.pxX() << endl
               << "              y: v: " << p1.y() << " px: " << p1.pxY() << endl;
 
-    FxPoint p2(v1, v2);
+    FxValueY v5(v2.value());
+    FxPoint p2(v1, v5);
     kdDebug() << "FxPoint p2(v1, v2): x: v: " << p2.x() << " px: " << p2.pxX() << endl
               << "                    y: v: " << p2.y() << " px: " << p2.pxY() << endl;
 

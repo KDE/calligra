@@ -279,12 +279,24 @@ public:
     FxValue() : m_value(0.0), m_pixel(0) {}
     explicit FxValue(const int &pixel) { setPxValue(pixel); }
     explicit FxValue(const double &value) : m_value(value) { recalculate(); }
-    FxValue(const FxValue<zoomedResolution> &rhs) : m_value(rhs.value()), m_pixel(rhs.pxValue()) {}
+    FxValue(const FxValue<zoomedResolution> &rhs) : m_value(rhs.value()) { recalculate(); }
     ~FxValue() {}
 
     FxValue &operator=(const FxValue<zoomedResolution> &rhs) {
         m_value=rhs.value();
-        m_pixel=rhs.pxValue();
+        recalculate();
+        return *this;
+    }
+
+    FxValue &operator+=(const FxValue<zoomedResolution> &rhs) {
+        m_value+=rhs.value();
+        recalculate();
+        return *this;
+    }
+
+    FxValue &operator-=(const FxValue<zoomedResolution> &rhs) {
+        m_value-=rhs.value();
+        recalculate();
         return *this;
     }
 
@@ -315,10 +327,25 @@ typedef FxValue<&GraphiteGlobal::zoomedResolutionX> FxValueX;
 typedef FxValue<&GraphiteGlobal::zoomedResolutionY> FxValueY;
 
 // compares the current pixel values!
-inline bool operator==(const FxValueX &lhs, const FxValueX &rhs) { return lhs.pxValue()==rhs.pxValue(); }
-inline bool operator!=(const FxValueX &lhs, const FxValueX &rhs) { return lhs.pxValue()!=rhs.pxValue(); }
-inline bool operator==(const FxValueY &lhs, const FxValueY &rhs) { return lhs.pxValue()==rhs.pxValue(); }
-inline bool operator!=(const FxValueY &lhs, const FxValueY &rhs) { return lhs.pxValue()!=rhs.pxValue(); }
+template <const double& (GraphiteGlobal::* zoomedResolution)() const>
+inline bool operator==(const FxValue<zoomedResolution> &lhs, const FxValue<zoomedResolution> &rhs) {
+    return lhs.pxValue()==rhs.pxValue();
+}
+
+template <const double& (GraphiteGlobal::* zoomedResolution)() const>
+inline bool operator!=(const FxValue<zoomedResolution> &lhs, const FxValue<zoomedResolution> &rhs) {
+    return lhs.pxValue()!=rhs.pxValue();
+}
+
+template <const double& (GraphiteGlobal::* zoomedResolution)() const>
+inline FxValue<zoomedResolution> operator-(const FxValue<zoomedResolution> &lhs, const FxValue<zoomedResolution> &rhs) {
+    return FxValue<zoomedResolution>(lhs.value()-rhs.value());
+}
+
+template <const double& (GraphiteGlobal::* zoomedResolution)() const>
+inline FxValue<zoomedResolution> operator+(const FxValue<zoomedResolution> &lhs, const FxValue<zoomedResolution> &rhs) {
+    return FxValue<zoomedResolution>(lhs.value()+rhs.value());
+}
 
 
 class FxPoint {
@@ -329,9 +356,12 @@ public:
     explicit FxPoint(const QPoint &p) { setPxPoint(p); }
     FxPoint(const int &x, const int &y) { setPxPoint(x, y); }
     FxPoint(const double &x, const double &y) : m_x(x), m_y(y) {}
+    FxPoint(const FxPoint &rhs) : m_x(rhs.fx()), m_y(rhs.fy()) {}
     ~FxPoint() {}
 
     FxPoint &operator=(const FxPoint &rhs) { m_x=rhs.fx(); m_y=rhs.fy(); return *this; }
+    FxPoint &operator+=(const FxPoint &rhs) { m_x+=rhs.fx(); m_y+=rhs.fy(); return *this; }
+    FxPoint &operator-=(const FxPoint &rhs) { m_x-=rhs.fx(); m_y-=rhs.fy(); return *this; }
 
     const FxValueX &fx() const { return m_x; }
     const double &x() const { return m_x.value(); }
@@ -366,6 +396,8 @@ private:
 // compares the px values!
 inline bool operator==(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()==rhs.fx() && lhs.fy()==rhs.fy(); }
 inline bool operator!=(const FxPoint &lhs, const FxPoint &rhs) { return lhs.fx()!=rhs.fx() || lhs.fy()!=rhs.fy(); }
+inline FxPoint operator+(const FxPoint &lhs, const FxPoint &rhs) { return FxPoint(lhs.x()+rhs.x(), lhs.y()+rhs.y()); }
+inline FxPoint operator-(const FxPoint &lhs, const FxPoint &rhs) { return FxPoint(lhs.x()-rhs.x(), lhs.y()-rhs.y()); }
 
 
 class FxRect {
@@ -377,6 +409,7 @@ public:
     FxRect(const double &left, const double &top, const double &width, const double &height) :
         m_tl(left, top), m_br(left+width, top+height) {}
     explicit FxRect(const QRect &rect) { setRect(rect); }  // pxSize, current zoom/res
+    FxRect(const FxRect &rhs) : m_tl(rhs.topLeft()), m_br(rhs.bottomRight()) {}
     ~FxRect() {}
 
     inline bool isNull() const;
@@ -394,8 +427,8 @@ public:
     void setRight(const double &right) { m_br.setX(right); }
     void setBottom(const double &bottom) { m_br.setY(bottom); }
 
-    FxPoint topLeft() const { return FxPoint(m_tl); }
-    FxPoint bottomRight() const { return FxPoint(m_br); }
+    FxPoint topLeft() const { return m_tl; }
+    FxPoint bottomRight() const { return m_br; }
     FxPoint topRight() const { return FxPoint(m_br.fx(), m_tl.fy()); }
     FxPoint bottomLeft() const { return FxPoint(m_tl.fx(), m_br.fy()); }
     FxPoint center() const;
@@ -421,6 +454,7 @@ public:
     void setHeight(const double &height) { m_br.setY(m_tl.y()+height); }
     void setHeight(const int &height) { m_br.setPxY(m_tl.pxY()+height); }
 
+    FxRect &operator=(const FxRect &rhs) { m_tl=rhs.topLeft(); m_br=rhs.bottomRight(); return *this; }
     FxRect &operator|=(const FxRect &rhs);
     FxRect &operator&=(const FxRect &rhs);
     bool contains(const FxPoint &p, bool proper=false) const;
