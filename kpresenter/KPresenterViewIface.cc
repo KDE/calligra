@@ -282,6 +282,11 @@ void KPresenterViewIface::extraPenWidth()
     view->extraPenWidth();
 }
 
+void KPresenterViewIface::screenTransEffect()
+{
+    view->screenTransEffect();
+}
+
 void KPresenterViewIface::screenConfigPages()
 {
     view->screenConfigPages();

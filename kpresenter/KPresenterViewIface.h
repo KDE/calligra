@@ -121,6 +121,8 @@ k_dcop:
     virtual void screenNext();
     virtual void screenLast();
     virtual void screenSkip();
+    virtual void screenTransEffect();
+
 
     // text toolbar
     virtual void sizeSelected( int size );
