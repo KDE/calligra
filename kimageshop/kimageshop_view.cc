@@ -272,9 +272,17 @@ void KImageShopView::createGUI()
   QObject::connect(m_pCanvasView, SIGNAL(sigMouseMove(QMouseEvent*)), this, SLOT(slotCVMouseMove(QMouseEvent*)));
   QObject::connect(m_pCanvasView, SIGNAL(sigMouseRelease(QMouseEvent*)), this, SLOT(slotCVMouseRelease(QMouseEvent*)));
 
-  // create default (move) tool
+  // create move tool
   m_pMoveTool = new MoveTool(m_pDoc);
-  m_pTool = m_pMoveTool;
+
+  // we have no brush -> create a default one
+  QString _image = locate("data", "kimageshop/brushes/brush.jpg");
+  m_pBrush = new brush(_image);
+  m_pBrush->setHotSpot(QPoint(25,25));
+  
+  // create brush tool
+  m_pBrushTool = new BrushTool(m_pDoc, m_pBrush);
+  m_pTool = m_pBrushTool;
   
   // layerlist
   m_pLayerDialog = new LayerDialog(m_pDoc);
