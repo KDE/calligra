@@ -5,7 +5,11 @@
 
 CXXFLAGS = -g -Wall
 
-all: testbf
+all: testbf testsha
+
+testsha: testsha.o sha1.o
+
+testsha.o: testsha.cc sha1.h
 
 testbf: testbf.o blockcipher.o blowfish.o cbc.o
 
@@ -16,6 +20,8 @@ blockcipher.o: blockcipher.cc blockcipher.h
 blowfish.o: blowfish.cc blowfish.h blowfishtables.h blockcipher.h
 
 cbc.o: cbc.cc cbc.h blockcipher.h
+
+sha1.o: sha1.cc sha1.h
 
 # DO NOT DELETE
 

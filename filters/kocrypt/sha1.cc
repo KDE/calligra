@@ -25,7 +25,7 @@
 
 // FIXME: this can be optimized to one instruction on most cpus.
 #define rol(x,y) ((x << y) | (x >> (32-y)))
-#define ror(x,y) rol(x,32-y)
+
 
 #define K1 0x5a827999L
 #define K2 0x6ed9eba1L
@@ -36,7 +36,7 @@
 #define F3(x,y,z) ( ( x & y ) | ( z & ( x | y ) ) )
 #define F4(x,y,z) ( x ^ y ^ z )
 
-#define M(i) ( tm = x[i&0x0f] & x[(i-14)&0x0f]            \
+#define M(i) ( tm = x[i&0x0f] ^ x[(i-14)&0x0f]            \
                   ^ x[(i-8)&0x0f] ^ x[(i-3)&0x0f]         \
                   , (x[i&0x0f] = (tm << 1) | (tm >> 31)))
 
@@ -74,9 +74,10 @@ SHA1::~SHA1() {
 }
 
 
-void SHA1::transform(unsigned char *data) {
+void SHA1::transform(void *data) {
   unsigned int a, b, c, d, e, tm;
   unsigned int x[16];
+  unsigned char *_data = (unsigned char *)data;
 
   a = _h0;
   b = _h1;
@@ -85,16 +86,16 @@ void SHA1::transform(unsigned char *data) {
   e = _h4;
 
 #ifdef WORDS_BIGENDIAN
-  memcpy(x, data, 64);
+  memcpy(x, _data, 64);
 #else
   int i;
   unsigned char *p2;
   for (i = 0, p2 = (unsigned char *)x;
        i < 16; i++, p2 += 4) {
-    p2[3] = *data++;
-    p2[2] = *data++;
-    p2[1] = *data++;
-    p2[0] = *data++;
+    p2[3] = *_data++;
+    p2[2] = *_data++;
+    p2[1] = *_data++;
+    p2[0] = *_data++;
   }
 #endif
 
@@ -194,8 +195,10 @@ bool SHA1::readyToGo() {
 
 
 
-int SHA1::process(unsigned char *block, int len) {
+int SHA1::process(void *block, int len) {
 if (!_init) return -1;
+
+unsigned char *_block = (unsigned char *)block;
 
   int cnt = 0;
   // Flush the buffer before proceeding
@@ -205,32 +208,32 @@ if (!_init) return -1;
     _nblocks++;
   }
 
-  if (!block) return 0;
+  if (!_block) return 0;
 
   if (_count) {
     for (; len && _count < 64; len--, cnt++)
-      _buf[_count++] = *block++;
+      _buf[_count++] = *_block++;
     process(0, 0);       // flush the buffer if necessary
     if (!len) return cnt;
   }
 
   while (len >= 64) {
-    transform(block);
+    transform(_block);
     _count = 0;
     _nblocks++;
     len -= 64;
     cnt += 64;
-    block += 64;
+    _block += 64;
   }
 
   for (; len && _count < 64; len--, cnt++) 
-    _buf[_count++] = *block++;
+    _buf[_count++] = *_block++;
 
   return cnt;
 }
 
 
-const unsigned char *const& SHA1::getHash() {
+const unsigned char *SHA1::getHash() {
 unsigned int t, msb, lsb;
 unsigned char *p;
 
@@ -271,10 +274,10 @@ unsigned char *p;
    _buf[57] = msb >> 16;
    _buf[58] = msb >>  8;
    _buf[59] = msb;
-   _buf[60] = msb >> 24;
-   _buf[61] = msb >> 16;
-   _buf[62] = msb >>  8;
-   _buf[63] = msb;
+   _buf[60] = lsb >> 24;
+   _buf[61] = lsb >> 16;
+   _buf[62] = lsb >>  8;
+   _buf[63] = lsb;
 
    transform(_buf);
 
@@ -295,7 +298,7 @@ unsigned char *p;
 
 #undef X
 
-return _buf;
+return (unsigned char *)_buf;
 }
 
 
