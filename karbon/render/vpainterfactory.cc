@@ -28,7 +28,7 @@ VPainterFactory::painter()
 }
 
 void
-VPainterFactory::setPainter( QWidget *target, int w = 0, int h = 0 )
+VPainterFactory::setPainter( QWidget *target, int w, int h )
 {
 	if( m_painter )
 		delete m_painter;
@@ -42,7 +42,7 @@ VPainterFactory::editpainter()
 }
 
 void
-VPainterFactory::setEditPainter( QWidget *target, int w = 0, int h = 0 )
+VPainterFactory::setEditPainter( QWidget *target, int w, int h )
 {
 	if( m_editpainter )
 		delete m_editpainter;
@@ -50,7 +50,7 @@ VPainterFactory::setEditPainter( QWidget *target, int w = 0, int h = 0 )
 }
 
 void
-VPainterFactory::setWireframePainter( QWidget *target, int w = 0, int h = 0 )
+VPainterFactory::setWireframePainter( QWidget *target, int w, int h )
 {
 	if( m_painter )
 		delete m_painter;

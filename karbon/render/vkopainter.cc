@@ -383,7 +383,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 			ArtVpathDash dash;
 			dash.offset = m_stroke->dashOffset() * ratio;
 			dash.n_dash = m_stroke->dashArray().count();
-			double dashes[ dash.n_dash ];
+			double *dashes = new double[ dash.n_dash ];
 			for( int i = 0; i < dash.n_dash; i++ )
 				dashes[i] = m_stroke->dashArray()[i] * ratio;
 
@@ -393,7 +393,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 			art_free( vec );
 
 			vec = vec2;
-			//delete dashes;
+			delete [] dashes;
 		}
 		// caps translation karbon -> art
 		if( m_stroke->lineCap() == cap_butt )
