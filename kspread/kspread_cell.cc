@@ -1376,7 +1376,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
   else
     _painter.setPen( m_leftBorderPen );
   // Fix a 'bug' in the pens width setting. We still need the upper left corner
-  // of the line but a width > 1 wont work for us.
+  // of the line but a width > 1 won't work for us.
   int dx = (int)ceil( (double)( m_leftBorderPen.width() - 1) / 2.0 * _canvas->zoom() );
   int dy = (int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 * _canvas->zoom() );
   _painter.drawLine( _tx + dx, _ty, _tx + dx, _ty + h );
@@ -1544,7 +1544,7 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
   {
     //_painter.setPen( leftBorderPen );
     // Fix a 'bug' in the pens width setting. We still need the upper left corner
-    // of the line but a width > 1 wont work for us.
+    // of the line but a width > 1 won't work for us.
     QPen pen;
     pen.setColor( leftBorderColor( _col, _row) );
     if ( m_leftBorderPen.style() == Qt::NoPen )

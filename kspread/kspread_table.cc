@@ -3008,6 +3008,7 @@ bool KSpreadTable::hasToWriteMultipart()
 KSpreadTable::~KSpreadTable()
 {
   s_mapTables->remove( m_id );
+  m_dctCells.clear(); // cells destructor needs table to still exist
 
   m_pPainter->end();
   delete m_pPainter;
