@@ -68,6 +68,7 @@ class VTransformDlg;
 class VWhirlPinchDlg;
 class VStateButton;
 class VStrokeFillPreview;
+class VStrokeDocker;
 
 class KarbonView : public KoView
 {
@@ -164,6 +165,7 @@ protected slots:
 	void viewModeChanged();
 	void zoomChanged();
 	void viewColorManager();
+	void viewStrokeDocker();
 	void viewContextHelp();
 
 	//toolbox dialogs - slots
@@ -240,6 +242,7 @@ private:
 	VColorDocker* m_ColorManager;
 	VContextHelpDocker* m_contextHelpDocker;
 	VToolOptionsDocker* m_toolOptionsDocker;
+	VStrokeDocker* m_strokeDocker;
 	
 	//toolbox
 	DCOPObject* m_dcop;

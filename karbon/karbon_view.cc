@@ -79,6 +79,7 @@
 //dockers
 #include "vcolordocker.h"
 #include "vtooldocker.h"
+#include "vstrokedocker.h"
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -160,6 +161,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 	m_strokeFillPreview = 0L;
 	m_ColorManager = 0L;
+	m_strokeDocker = 0L;
 	VToolDocker *_toolContainer = m_part->toolContainer();
 	if( shell() )
 	{
@@ -189,6 +191,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 		//Create Dockers
 		m_ColorManager = new VColorDocker( m_part, this );
+		m_strokeDocker = new VStrokeDocker( m_part, this );
 		connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
 		connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
 	}
@@ -228,6 +231,7 @@ KarbonView::~KarbonView()
 
 	delete( m_contextHelpDocker );
 	delete( m_toolOptionsDocker );
+	delete( m_strokeDocker );
 	
 	// tools:
 	delete( m_ellipseTool );
@@ -882,6 +886,16 @@ KarbonView::viewColorManager()
 	}
 }
 
+void
+KarbonView::viewStrokeDocker()
+{
+	if( m_strokeDocker->isVisible() == false )
+	{
+		mainWindow()->addDockWindow( m_strokeDocker, DockRight );
+		m_strokeDocker->show();
+	}
+}
+
 void 
 KarbonView::viewContextHelp()
 {
@@ -1027,6 +1041,9 @@ KarbonView::initActions()
 	new KAction(
 		i18n( "Context &Help" ), "help", 0, this,
 		SLOT( viewContextHelp() ), actionCollection(), "view_context_help" );
+	new KAction(
+		i18n( "&Stroke" ), "strokedocker", 0, this,
+		SLOT( viewStrokeDocker() ), actionCollection(), "view_stroke_docker" );
 	// view <-----
 
 	// line width
