@@ -53,15 +53,23 @@
 
 
 Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidget *parent, const char *name)
-   : QWidget (parent, name)
+:QWidget (parent, name)
+,hBar(hb)
+,vBar(vb)
+,resolution(res)
+,zoomFactor(1.0)
+,document(doc)
+,pendingRedraws(0)
+,tmpHorizHelpline(-1.0)
+,tmpVertHelpline(-1.)
+,helplinesSnapIsOn(false)
+,helplinesAreOn(false)
+,dragging(false)
+,ensureVisibilityFlag(false)
+,drawBasePoints(false)
+,outlineMode(false)
+,guiActive(false)
 {
-  document = doc;
-  resolution = res;
-  zoomFactor = 1.0;
-  drawBasePoints = false;
-  hBar = hb;
-  vBar = vb;
-
   installEventFilter(this);
 
   vBar->setLineStep(5);
@@ -71,37 +79,27 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
   hBar->setPageStep(50);
   
   //these connections shall only work when caused by the user
-  connect(vBar, SIGNAL(valueChanged(int)), SLOT(scrollY(int)));
-  connect(hBar, SIGNAL(valueChanged(int)), SLOT(scrollX(int)));
+  connect(vBar, SIGNAL(valueChanged(int)), SLOT(scroll()));
+  connect(hBar, SIGNAL(valueChanged(int)), SLOT(scroll()));
 
   connect (document, SIGNAL (changed ()), this, SLOT (repaint ()));
   connect (document, SIGNAL (changed (const Rect&)), this, SLOT (updateRegion (const Rect&)));
-  connect (document, SIGNAL (sizeChanged ()), this, SLOT (calculateSize ()));
+
+  connect (document, SIGNAL (sizeChanged ()), this, SLOT (docSizeChanged()));
+
   connect (document, SIGNAL (handleChanged ()), this, SLOT (repaint ()));
   connect (document, SIGNAL (gridChanged ()), this, SLOT (updateGridInfos ()));
 
   buffer = new QPixmap();
-  //xPaper = 0;
-  //yPaper = 0;
-
-  //adjustScrollBarRanges2();
   
-  helplinesAreOn = helplinesSnapIsOn = false;
-  tmpHorizHelpline = tmpVertHelpline = -1;
   mGridColor = blue;
 
   readGridProperties ();
   updateGridInfos ();
-  calculateSize ();
   
   setFocusPolicy (StrongFocus);
   setMouseTracking (true);
   setBackgroundMode (NoBackground);
-
-  dragging = false;
-  ensureVisibilityFlag = false;
-  outlineMode = false;
-  pendingRedraws = 0;
 }
 
 Canvas::~Canvas()
@@ -112,13 +110,19 @@ Canvas::~Canvas()
 
 void Canvas::resizeEvent(QResizeEvent *e)
 {
+   if (!guiActive) return;
+   //kdDebug()<<"Canvas::resizeEvent() width() "<<width()<<"  height(): "<<height()<<endl;
+   //this happens exactly once on app start, so doing nothing in this case saves some time, aleXXX
+   if ((width()==10) && (height()==10)) return;
    buffer->resize(size());
    //at first this one, since the others depend on the scrollbars
    //this may trigger the signal QScrollBar::valueChanged(), which is connected to
-   //scrollX(), scrollY(), which emit visibleAreaCVhanged(), but the following calls
-   //also chnage the visible areas, and we want to emit the signals only once when we
+   //scroll(), which emit visibleAreaCVhanged(), but the following calls
+   //also change the visible areas, and we want to emit the signals only once when we
    //have finished
    blockSignals(true);
+   hBar->blockSignals(true);
+   vBar->blockSignals(true);
    adjustScrollBarRanges2();
 
    //this one changes
@@ -126,17 +130,13 @@ void Canvas::resizeEvent(QResizeEvent *e)
    //and this one too and depends on the visibleArea
    adjustRelativePaperArea5();
    blockSignals(false);
+   hBar->blockSignals(false);
+   vBar->blockSignals(false);
 
    emit visibleAreaChanged(m_visibleArea);
-   //emit visibleAreaChanged(m_relativePaperArea.left(), m_relativePaperArea.top());
-   //kdDebug()<<"Canvas::resizeEvent() width() "<<width()<<"  height(): "<<height()<<endl;
    //kdDebug()<<"Canvas::resizeEvent() paperArea: ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
    //kdDebug()<<"Canvas::resizeEvent() visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
    //kdDebug()<<"Canvas::resizeEvent() relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
-
-   //we should emit something to tell the outside world that the view has changed
-   //scrollX(hBar->value());
-   //scrollY(vBar->value());
 }
 
 //return the rectangle covered by the paper in points
@@ -221,33 +221,18 @@ void Canvas::adjustRelativePaperArea5()
 };
 
 //connected to QScrollBar::valueChanged()
-void Canvas::scrollX(int v)
+void Canvas::scroll()
 {
+   if (!guiActive) return;
    adjustVisibleArea4();
    adjustRelativePaperArea5();
 
-   //kdDebug()<<"Canvas::scrollX() width() "<<width()<<"  height() "<<height()<<endl;
-   //kdDebug()<<"Canvas::scrollX() paperArea:         ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
-   //kdDebug()<<"Canvas::scrollX() visibleArea:       ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
-   //kdDebug()<<"Canvas::scrollX() relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
+   //kdDebug()<<"Canvas::scroll() width() "<<width()<<"  height "<<height()<<endl;
+   //kdDebug()<<"Canvas::scroll() paperArea:         ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
+   //kdDebug()<<"Canvas::scroll() visibleArea:       ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
+   //kdDebug()<<"Canvas::scroll() relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
    repaint();
    emit visibleAreaChanged(m_visibleArea);
-   //emit visibleAreaChanged(m_relativePaperArea.left(),m_relativePaperArea.top());
-}
- 
-//connected to QScrollBar::valueChanged()
-void Canvas::scrollY(int v)
-{
-   adjustVisibleArea4();
-   adjustRelativePaperArea5();
-
-   //kdDebug()<<"Canvas::scrollY() width() "<<width()<<"  height "<<height()<<endl;
-   //kdDebug()<<"Canvas::scrollY() paperArea:         ( "<<m_paperArea.left()<<" | "<<m_paperArea.top()<<" ) - ( "<<m_paperArea.right()<<" | "<<m_paperArea.bottom()<<" )"<<endl;
-   //kdDebug()<<"Canvas::scrollY() visibleArea:       ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
-   //kdDebug()<<"Canvas::scrollY() relativePaperArea: ( "<<m_relativePaperArea.left()<<" | "<<m_relativePaperArea.top()<<" ) - ( "<<m_relativePaperArea.right()<<" | "<<m_relativePaperArea.bottom()<<" )"<<endl;
-   repaint();
-   emit visibleAreaChanged(m_visibleArea);
-   //emit visibleAreaChanged(m_relativePaperArea.left(),m_relativePaperArea.top());
 }
 
 void Canvas::center(int x, int y)
@@ -260,13 +245,12 @@ void Canvas::center(int x, int y)
 //relative to the center of the paper
 void Canvas::setZoomFactor (float factor, int centerX, int centerY)
 {
+   if (!guiActive) return;
    //kdDebug()<<"Canvas::setZoomFactor() new factor: "<<factor<<" old zoomFactor: "<<zoomFactor<<" centerX: "<<centerX<<" centerY: "<<centerY<<endl;
    //kdDebug()<<"Canvas::setZoomFactor(): visibleArea: ( "<<m_visibleArea.left()<<" | "<<m_visibleArea.top()<<" ) - ( "<<m_visibleArea.right()<<" | "<<m_visibleArea.bottom()<<" )"<<endl;
    //respect zoom factor
-   //centerX+=m_visibleArea.x();
-   //centerY+=m_visibleArea.y();
-   centerX*=factor/zoomFactor;
-   centerY*=factor/zoomFactor;
+   centerX=int(centerX*factor/zoomFactor);
+   centerY=int(centerY*factor/zoomFactor);
    //kdDebug()<<"Canvas::setZoomFactor() adjusted centerX: "<<centerX<<" centerY: "<<centerY<<endl;
 
    zoomFactor = factor;
@@ -294,13 +278,13 @@ void Canvas::setZoomFactor (float factor, int centerX, int centerY)
    vBar->blockSignals(false);
 
    emit visibleAreaChanged(m_visibleArea);
-   //emit visibleAreaChanged(m_relativePaperArea.left(),m_relativePaperArea.top());
    emit zoomFactorChanged (zoomFactor);
 
 };
 
 void Canvas::setZoomFactor (float factor)
 {
+   if (!guiActive) return;
    //the old center should also become the new center
    int centerX((m_visibleArea.right()+m_visibleArea.left())/2);
    int centerY((m_visibleArea.bottom()+m_visibleArea.top())/2);
@@ -308,7 +292,27 @@ void Canvas::setZoomFactor (float factor)
    setZoomFactor(factor,centerX, centerY);
 }
 
+void Canvas::docSizeChanged()
+{
+   //kdDebug()<<"Canvas::docSizeChanged()"<<endl;
+   guiActive=true;
+   blockSignals(true);
+   hBar->blockSignals(true);
+   vBar->blockSignals(true);
 
+   adjustPaperArea1();
+   adjustScrollBarRanges2();
+   adjustScrollBarPositions3(0,0);
+   adjustVisibleArea4();
+   adjustRelativePaperArea5();
+   //kdDebug()<<"Canvas::calcSize(): width: "<<width()<<" height: "<<height()<<endl;
+   buffer->resize(size());
+   repaint();
+
+   blockSignals(false);
+   hBar->blockSignals(false);
+   vBar->blockSignals(false);
+}
 
 /*
     Draw
@@ -316,6 +320,7 @@ void Canvas::setZoomFactor (float factor)
 
 void Canvas::paintEvent (QPaintEvent* e)
 {
+   if (!guiActive) return;
    //kdDebug()<<"Canvas::paintEvent(): width: "<<width()<<" height: "<<height()<<endl;
    pendingRedraws = 0;
 
@@ -371,13 +376,6 @@ void Canvas::paintEvent (QPaintEvent* e)
 
 void Canvas::ensureVisibility (bool flag) {
   ensureVisibilityFlag = flag;
-}
-
-void Canvas::calculateSize ()
-{
-   //kdDebug()<<"Canvas::calcSize(): width: "<<width()<<" height: "<<height()<<endl;
-   buffer->resize(size());
-   repaint();
 }
 
 void Canvas::setToolController (ToolController* tc)
@@ -479,7 +477,7 @@ bool Canvas::eventFilter (QObject *o, QEvent *e)
 
 void Canvas::moveEvent(QMoveEvent *e)
 {
-   kdDebug()<<"Canvas::moveEvent() ****************"<<endl;
+   //kdDebug()<<"Canvas::moveEvent() ****************"<<endl;
    emit visibleAreaChanged(m_visibleArea);
    //emit visibleAreaChanged (e->pos ().x (), e->pos ().y ());
 }

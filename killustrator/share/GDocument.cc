@@ -24,17 +24,18 @@
 
 #include <qfile.h>
 
-#include <GDocument.h>
-#include <GPolygon.h>
-#include <GText.h>
-#include <GPolyline.h>
-#include <GOval.h>
-#include <GBezier.h>
-#include <GClipart.h>
-#include <GGroup.h>
-#include <GPixmap.h>
-#include <GCurve.h>
-#include <GLayer.h>
+#include "GDocument.h"
+
+#include "GPolygon.h"
+#include "GText.h"
+#include "GPolyline.h"
+#include "GOval.h"
+#include "GBezier.h"
+#include "GClipart.h"
+#include "GGroup.h"
+#include "GPixmap.h"
+#include "GCurve.h"
+#include "GLayer.h"
 
 #include <assert.h>
 #include <kdebug.h>
@@ -87,8 +88,10 @@ void GDocument::initialize () {
   pLayout.orientation = PG_PORTRAIT;
   pLayout.mmWidth = PG_A4_WIDTH;
   pLayout.mmHeight = PG_A4_HEIGHT;
-  pLayout.mmLeft = 0; pLayout.mmRight = 0;
-  pLayout.mmTop = 0; pLayout.mmBottom = 0;
+  pLayout.mmLeft = 0;
+  pLayout.mmRight = 0;
+  pLayout.mmTop = 0;
+  pLayout.mmBottom = 0;
   pLayout.unit = PG_MM;
 
   // in pt !!
@@ -116,6 +119,7 @@ void GDocument::initialize () {
   selBoxIsValid = false;
   autoUpdate = true;
   emit changed ();
+  emit sizeChanged();
 }
 
 void GDocument::emitHandleChanged()
@@ -131,6 +135,7 @@ void GDocument::setModified (bool flag) {
 void GDocument::setPaperSize (int width, int height) {
   paperWidth = width;
   paperHeight = height;
+  emit sizeChanged();
 }
 
 int GDocument::getPaperWidth () const {
@@ -178,16 +183,18 @@ unsigned int GDocument::objectCount () const {
   return num;
 }
 
-void GDocument::insertObject (GObject* obj) {
+void GDocument::insertObject (GObject* obj)
+{
 
-    obj->ref ();
-    active_layer->insertObject (obj);
-    connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
-    connect (obj, SIGNAL(changed(const Rect&)),
-             this, SLOT(objectChanged (const Rect&)));
-    setModified ();
-    if (autoUpdate)
-        emit changed ();
+   obj->ref ();
+   active_layer->insertObject (obj);
+   connect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
+   connect (obj, SIGNAL(changed(const Rect&)),
+            this, SLOT(objectChanged (const Rect&)));
+   setModified ();
+   if (autoUpdate)
+      emit changed ();
+   kdDebug()<<"GDocument::insertObject()"<<endl;
 }
 
 void GDocument::selectObject (GObject* obj) {
@@ -736,7 +743,9 @@ KoPageLayout GDocument::pageLayout () {
   return pLayout;
 }
 
-void GDocument::setPageLayout (const KoPageLayout& layout) {
+void GDocument::setPageLayout (const KoPageLayout& layout)
+{
+   kdDebug()<<"GDocument::setPageLayout()"<<endl;
   pLayout = layout;
   switch (layout.unit) {
   case PG_MM:

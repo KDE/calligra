@@ -131,12 +131,10 @@ protected:
   QRect m_visibleArea;
   QRect m_relativePaperArea;
 
-   //return the size of the canvas with current zoom and resolution in pixels
-
-  //QSize currentPaperSizePt() const;
   //if you call more than one of them, thy should be called in the order
   //of the prepended numbers, since they depend on each other
   //(this doesn't mean you have to call all of them), alex
+  //none of the adjust*() functions emits any signal to avoid multiple signals
   void adjustPaperArea1();
   void adjustScrollBarRanges2();
   void adjustScrollBarPositions3(int x, int y);
@@ -175,7 +173,7 @@ signals:
 public slots:
   void updateRegion (const Rect& r);
   void ensureVisibility (bool flag);
-  void calculateSize ();
+  void docSizeChanged();
   void updateGridInfos ();
   
   
@@ -184,8 +182,7 @@ public slots:
 
 private slots:
   void retryUpdateRegion ();
-  void scrollX(int v);
-  void scrollY(int v);
+  void scroll();
 
 private:
   void propagateMouseEvent (QMouseEvent *e);
@@ -218,6 +215,7 @@ private:
   bool ensureVisibilityFlag:1;
   bool drawBasePoints:1;
   bool outlineMode:1;
+  bool guiActive:1;
 };
 
 #endif

@@ -34,7 +34,7 @@
 #include <CommandHistory.h>
 
 #define KILLU_ZOOM_MAX 100
-#define KILLU_ZOOM_MIN 0.01
+#define KILLU_ZOOM_MIN 0.05
 
 ZoomTool::ZoomTool (CommandHistory* history)
 :Tool (history)
