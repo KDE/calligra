@@ -21,7 +21,6 @@
 */
 
 #include <qstring.h>
-#include <qregexp.h>
 #include <qtextcodec.h>
 #include <qfile.h>
 
