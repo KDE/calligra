@@ -16,8 +16,5 @@ METASOURCES = AUTO
 service_DATA = kspread_excel_export.desktop
 servicedir = $(kde_servicesdir)
 
-data_DATA = x-excel.desktop
-datadir = $(kde_mimedir)/application
-
 messages: rc.cpp
 	$(XGETTEXT) *.cc *.cpp -o $(podir)/kspreadexcelfilter.pot
