@@ -43,9 +43,6 @@
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
-#include <TagProcessing.h>
-#include <KWEFBaseClass.h>
-#include <ProcessDocument.h>
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
 
@@ -69,6 +66,9 @@ public:
     virtual bool doFullPaperFormat(const int format,
         const double width, const double height, const int orientation); // Calc AbiWord's <papersize>
     virtual bool doCloseHead(void); // Write <papersize>
+    virtual bool doOpenStyles(void); // AbiWord's <styles>
+    virtual bool doCloseStyles(void); // AbiWord's </styles>
+    virtual bool doFullDefineStyle(LayoutData& layout); // AbiWord's <s></s>
 private:
     void ProcessParagraphData (const QString& paraText, ValueListFormatData& paraFormatDataList);
     QString FormatDataToAbiProps(FormatData& formatData);
@@ -159,7 +159,7 @@ bool AbiWordWorker::doOpenDocument(void)
     *m_streamOut << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
     // NOTE: AbiWord CVS 2001-08-21 has now a DOCTYPE
-    // TODO/FIXME: newest AbiWord versions ahve a new DOCTYPE!
+    // TODO/FIXME: newest AbiWord versions have a new DOCTYPE!
     *m_streamOut << "<!DOCTYPE abw PUBLIC \"-//ABISOURCE//DTD ABW 1.0 Strict//EN\"";
     *m_streamOut << " \"http://www.abisource.com/awml.dtd\">\n";
 
@@ -200,6 +200,18 @@ bool AbiWordWorker::doOpenTextFrameSet(void)
 bool AbiWordWorker::doCloseTextFrameSet(void)
 {
     *m_streamOut << "</section>\n";
+    return true;
+}
+
+bool AbiWordWorker::doOpenStyles(void)
+{
+    *m_streamOut << "<styles>\n";
+    return true;
+}
+
+bool AbiWordWorker::doCloseStyles(void)
+{
+    *m_streamOut << "</styles>\n";
     return true;
 }
 
@@ -361,8 +373,7 @@ bool AbiWordWorker::doFullParagraph(QString& paraText, LayoutData& layout, Value
     QString props;
     QString style;
 
-// TODO: re-implement styles
-#if 0
+#if 1
     style=layout.styleName;
 #else
     if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
@@ -446,7 +457,7 @@ bool AbiWordWorker::doFullParagraph(QString& paraText, LayoutData& layout, Value
     *m_streamOut << "<p";
     if (!style.isEmpty())
     {
-        *m_streamOut << " style=\"" << EscapeXmlText(style) << "\"";
+        *m_streamOut << " style=\"" << EscapeXmlText(style,true,true) << "\"";
     }
     if (!props.isEmpty())
     {
@@ -483,32 +494,22 @@ bool AbiWordWorker::doFullParagraph(QString& paraText, LayoutData& layout, Value
     return true;
 }
 
-// TODO: re-implement styles!
-#if 0
-static void ProcessStyleTag (QDomNode myNode, void *, QString   &strStyles, KWEFBaseClass* exportFilter )
+bool AbiWordWorker::doFullDefineStyle(LayoutData& layout)
 {
-    kdDebug(30506) << "Entering ProcessStyleTag" << endl;
+    *m_streamOut << "<s";
+    
+    // TODO: cook the style name to the standard style names in AbiWord
+    *m_streamOut << " name=\"" << EscapeXmlText(layout.styleName,true,true) << "\"";
 
-    AllowNoAttributes (myNode);
-
-    LayoutData *layout = new LayoutData (); // TODO: memory error recovery
-
-    QString dummy;
-
-    ProcessLayoutTag(myNode, layout, dummy, exportFilter);
-
-    strStyles+="<s name=\"";
-    strStyles+=layout->styleName; // TODO: cook the style name to the standard style names in AbiWord
-    strStyles+="\"";
-    if ( layout->counter.numbering == CounterData::NUM_CHAPTER )
+    if ( layout.counter.numbering == CounterData::NUM_CHAPTER )
     {
-        strStyles+=" level=\"";
-        strStyles+=QString::number(layout->counter.depth+1,10);
-        strStyles+="\"";
+        *m_streamOut << " level=\"";
+        *m_streamOut << QString::number(layout.counter.depth+1,10);
+        *m_streamOut << "\"";
     }
 
     // Add all AbiWord properties collected in the <FORMAT> element
-    QString abiprops = FormatDataToAbiProps(layout->formatData);
+    QString abiprops = FormatDataToAbiProps(layout.formatData);
 
     const int result=abiprops.findRev(";");
     if (result>=0)
@@ -518,34 +519,11 @@ static void ProcessStyleTag (QDomNode myNode, void *, QString   &strStyles, KWEF
     }
 
     //TODO: other layout things
-
-    strStyles+=" props=\"";
-    strStyles+=abiprops;  // Be careful that layout->abiprops might be empty!
-    strStyles+="\"/>\n";
-
-    delete layout;
-
-    kdDebug(30506) << "Exiting ProcessStyleTag" << endl;
+    // TODO/FIXME: what if layout->abiprops might is empty!
+    *m_streamOut << " props=\"" << abiprops << "\"";
+    
+    *m_streamOut << "/>\n";
 }
-
-static void ProcessStylesPluralTag (QDomNode myNode, void *, QString &outputText, KWEFBaseClass* exportFilter )
-{
-    AllowNoAttributes (myNode);
-
-    QString strStyles;
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "STYLE", ProcessStyleTag, NULL ) );
-    ProcessSubtags (myNode, tagProcessingList, strStyles,exportFilter);
-
-    if (!strStyles.isEmpty())
-    {
-        outputText+="<styles>\n";
-        outputText+=strStyles;
-        outputText+="</styles>\n";
-    }
-}
-#endif
 
 bool AbiWordWorker::doFullPaperFormat(const int format,
             const double width, const double height, const int orientation)
