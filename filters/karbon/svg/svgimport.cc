@@ -373,7 +373,7 @@ SvgImport::parseGradient( const QDomElement &e )
 	}
 	parseColorStops( &gradhelper.gradient, e );
 	//gradient.setGradientTransform( parseTransform( e.attribute( "gradientTransform" ) ) );
-	gradhelper.gradientTransform = parseTransform( e.attribute( "gradientTransform" ) );
+	gradhelper.gradientTransform = VComposite::parseTransform( e.attribute( "gradientTransform" ) );
 	m_gradients.insert( e.attribute( "id" ), gradhelper );
 }
 
@@ -527,7 +527,7 @@ SvgImport::setupTransform( const QDomElement &e )
 {
 	GraphicsContext *gc = m_gc.current();
 
-	QWMatrix mat = parseTransform( e.attribute( "transform" ) );
+	QWMatrix mat = VComposite::parseTransform( e.attribute( "transform" ) );
 	gc->matrix = mat * gc->matrix;
 }
 
@@ -741,71 +741,6 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			m_document.append( obj );
 		delete( m_gc.pop() );
 	}
-}
-
-QWMatrix
-SvgImport::parseTransform( const QString &transform )
-{
-	QWMatrix result;
-
-	// Split string for handling 1 transform statement at a time
-	QStringList subtransforms = QStringList::split(')', transform);
-	QStringList::ConstIterator it = subtransforms.begin();
-	QStringList::ConstIterator end = subtransforms.end();
-	for(; it != end; ++it)
-	{
-		QStringList subtransform = QStringList::split('(', (*it));
-
-		subtransform[0] = subtransform[0].stripWhiteSpace().lower();
-		subtransform[1] = subtransform[1].simplifyWhiteSpace();
-		QRegExp reg("[,( ]");
-		QStringList params = QStringList::split(reg, subtransform[1]);
-
-		if(subtransform[0].startsWith(";") || subtransform[0].startsWith(","))
-			subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
-
-		if(subtransform[0] == "rotate")
-		{
-			if(params.count() == 3)
-			{
-				double x = params[1].toDouble();
-				double y = params[2].toDouble();
-
-				result.translate(x, y);
-				result.rotate(params[0].toDouble());
-				result.translate(-x, -y);
-			}
-			else
-				result.rotate(params[0].toDouble());
-		}
-		else if(subtransform[0] == "translate")
-		{
-			if(params.count() == 2)
-				result.translate(params[0].toDouble(), params[1].toDouble());
-			else    // Spec : if only one param given, assume 2nd param to be 0
-				result.translate(params[0].toDouble() , 0);
-		}
-		else if(subtransform[0] == "scale")
-		{
-			if(params.count() == 2)
-				result.scale(params[0].toDouble(), params[1].toDouble());
-			else    // Spec : if only one param given, assume uniform scaling
-				result.scale(params[0].toDouble(), params[0].toDouble());
-		}
-		else if(subtransform[0] == "skewx")
-			result.shear(tan(params[0].toDouble() * VGlobal::pi_180), 0.0F);
-		else if(subtransform[0] == "skewy")
-			result.shear(tan(params[0].toDouble() * VGlobal::pi_180), 0.0F);
-		else if(subtransform[0] == "skewy")
-			result.shear(0.0F, tan(params[0].toDouble() * VGlobal::pi_180));
-		else if(subtransform[0] == "matrix")
-		{
-			if(params.count() >= 6)
-				result.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), params[4].toDouble(), params[5].toDouble());
-		}
-	}
-
-	return result;
 }
 
 #include <svgimport.moc>
