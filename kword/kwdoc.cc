@@ -1232,7 +1232,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         //KWDocument::getAttribute( attributes, "standardpage", QString::null );
         m_headerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasHeader", 0 ) );
         m_footerVisible = static_cast<bool>( KWDocument::getAttribute( attributes, "hasFooter", 0 ) );
-        unitName = KWDocument::getAttribute( attributes, "unit", "pt" );
+        unitName = KWDocument::getAttribute( attributes, "unit", "mm" );
         m_hasTOC =  static_cast<bool>(KWDocument::getAttribute( attributes,"hasTOC", 0 ) );
         m_tabStop = KWDocument::getAttribute( attributes, "tabStopValue", MM_TO_POINT(15) );
         m_initialEditing = new InitialEditing();
@@ -1243,7 +1243,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         m_processingType = WP;
         m_headerVisible = false;
         m_footerVisible = false;
-        unitName = "pt";
+        unitName = "mm";
         m_hasTOC = false;
         m_tabStop = MM_TO_POINT(15);
         delete m_initialEditing;
