@@ -87,8 +87,8 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 	catch(...)
     	{
     		setError();
-		return false;
     	}
+	return false;
 }
 
 //==================================================================================
