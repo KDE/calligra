@@ -192,6 +192,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     grid1->addRowSpacing(rows,0);
 
     floating = new QCheckBox (i18n("Frame is floating"), tab1);
+    if(frame && frame->getFrameSet())
+        floating->setChecked(frame->getFrameSet()->isAnchor());
     floating->setEnabled(false);
     if(frameType == FT_TEXT)
         grid1->addMultiCellWidget(floating,0,0,0,1);
@@ -839,7 +841,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sh->setEnabled( false );
     }
 
-    kdDebug() << "setup tab 4 exit"<<endl;
+    //kdDebug() << "setup tab 4 exit"<<endl;
 }
 
 

@@ -390,6 +390,7 @@ public:
 
     /** Make this frameset anchored (floating) */
     void setAnchor( KWAnchor * anchor ) { m_anchor = anchor; /* TODO... */ }
+    bool isAnchor(){return m_anchor!=0L;}
 
     /** make this frameset part of a groupmanager
      * @see KWTableFrameSet
