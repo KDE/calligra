@@ -52,7 +52,7 @@ KexiDBField::KexiDBField(const QString& t)
 KexiDBField::KexiDBField(const QString& name, enum KexiDBField::ColumnType ctype,
 	int cconst,int length, int precision, bool isUnsigned,
 	bool isBinary, QVariant defaultValue):
-	m_name(name),m_constraints(cconst),m_sqlType(ctype),m_length(length),
+	m_name(name),m_sqlType(ctype),m_constraints(cconst),m_length(length),
 	m_precision(precision),m_unsigned(isUnsigned),m_binary(isBinary),
 	m_defaultValue(defaultValue)
 {
