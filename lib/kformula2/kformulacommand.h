@@ -69,13 +69,29 @@ public:
      */
     virtual bool isSenseless() { return false; }
 
+    // debug
+    static int getEvilDestructionCount() { return evilDestructionCount; }
+
 protected:
+    
+    FormulaCursor* getExecuteCursor();
+    void setExecuteCursor(FormulaCursor* cursor);
+    FormulaCursor* getUnexecuteCursor();
+    void setUnexecuteCursor(FormulaCursor* cursor);
 
     FormulaCursor* getActiveCursor() { return doc->getActiveCursor(); }
 
-    void destroyUndoCursor() { delete undocursor; undocursor = 0; }
-    
     // I would prefer to have private attributes.
+    
+    /**
+     * the list where all elements are stored that are removed
+     * from the tree. Nearly each command needs it.
+     */
+    QList<BasicElement> removedList;
+
+private:
+    
+    void destroyUndoCursor() { delete undocursor; undocursor = 0; }
     
     /**
      * Cursor position before the command execution.
@@ -88,17 +104,11 @@ protected:
     FormulaCursor::CursorData* undocursor;
 
     /**
-     * the list where all elements are stored that are removed
-     * from the tree. Nearly each command needs it.
-     */
-    QList<BasicElement> removedList;
-
-private:
-    
-    /**
      * The container we belong to.
      */
     KFormulaContainer* doc;
+
+    static int evilDestructionCount;
 };
 
 
@@ -239,15 +249,14 @@ private:
 
 /**
  * Add an index. The element that gets the index needs to be there
- * already. Else we would not have gotten the ElementIndexPtr.
+ * already. The cursor needs to point to the place where the index
+ * should be inserted.
  */
 class KFCAddGenericIndex : public KFCAdd
 {
 public:
 
-    KFCAddGenericIndex(KFormulaContainer* document, ElementIndexPtr index);
-
-private:
+    KFCAddGenericIndex(KFormulaContainer* document);
 };
 
 
@@ -264,12 +273,13 @@ class KFCAddIndex : public KFCAddReplacing
 public:
 
     KFCAddIndex(KFormulaContainer* document, IndexElement* element, ElementIndexPtr index);
+    ~KFCAddIndex();
 
     virtual void execute();
     virtual void unexecute();
     
 private:
-    KFCAddGenericIndex addGenericIndex;
+    KFCAddGenericIndex* addIndex;
 };
 
 #endif // __KFORMULACOMMAND_H

@@ -65,7 +65,6 @@ QByteArray KFormulaMimeSource::encodedData ( const char *format ) const
         KFormulaContainer tmpContainer;
 	FormulaCursor *c=tmpContainer.createCursor();
 	c->paste(document);
-	tmpContainer.testDirty();
 	QRect rect=tmpContainer.boundingRect();
     	QPixmap pm(rect.width(),rect.height());
 	pm.fill();

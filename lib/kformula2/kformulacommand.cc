@@ -30,19 +30,49 @@
 #include "sequenceelement.h"
 
 
+int KFormulaCommand::evilDestructionCount = 0;
+
 KFormulaCommand::KFormulaCommand(const QString &name, KFormulaContainer* document)
         : KCommand(name), cursordata(0), undocursor(0), doc(document)
 {
     removedList.setAutoDelete(true);
 
-    FormulaCursor* cursor = getActiveCursor();
-    cursordata = cursor->getCursorData();
+    setExecuteCursor(getActiveCursor());
+    evilDestructionCount++;
 }
 
 KFormulaCommand::~KFormulaCommand()
 {
+    evilDestructionCount--;
     delete undocursor;
     delete cursordata;
+}
+
+FormulaCursor* KFormulaCommand::getExecuteCursor()
+{
+    FormulaCursor* cursor = getActiveCursor();
+    cursor->setCursorData(cursordata);
+    return cursor;
+}
+
+void KFormulaCommand::setExecuteCursor(FormulaCursor* cursor)
+{
+    // assert(cursordata == 0);
+    cursordata = cursor->getCursorData();
+}
+
+FormulaCursor* KFormulaCommand::getUnexecuteCursor()
+{
+    FormulaCursor* cursor = getActiveCursor();
+    cursor->setCursorData(undocursor);
+    destroyUndoCursor();
+    return cursor;
+}
+
+void KFormulaCommand::setUnexecuteCursor(FormulaCursor* cursor)
+{
+    // assert(undocursor == 0);
+    undocursor = cursor->getCursorData();
 }
 
 
@@ -55,19 +85,16 @@ KFCAdd::KFCAdd(const QString &name, KFormulaContainer *document)
 
 void KFCAdd::execute()
 {
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->setCursorData(cursordata);
+    FormulaCursor* cursor = getExecuteCursor();
     cursor->insert(removedList, BasicElement::beforeCursor);
-    undocursor = cursor->getCursorData();
+    setUnexecuteCursor(cursor);
     cursor->setSelection(false);
 }
 
 
 void KFCAdd::unexecute()
 {
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->setCursorData(undocursor);
-    destroyUndoCursor();
+    FormulaCursor* cursor = getUnexecuteCursor();
     cursor->remove(removedList, BasicElement::beforeCursor);
     //cursor->setSelection(false);
     cursor->normalize();
@@ -86,17 +113,14 @@ KFCRemoveSelection::KFCRemoveSelection(KFormulaContainer *document,
 
 void KFCRemoveSelection::execute()
 {
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->setCursorData(cursordata);
+    FormulaCursor* cursor = getExecuteCursor();
     cursor->remove(removedList, dir);
-    undocursor = cursor->getCursorData();
+    setUnexecuteCursor(cursor);
 }
 
 void KFCRemoveSelection::unexecute()
 {
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->setCursorData(undocursor);
-    destroyUndoCursor();
+    FormulaCursor* cursor = getUnexecuteCursor();
     cursor->insert(removedList);
     cursor->setSelection(false);
 }
@@ -117,22 +141,19 @@ KFCRemove::~KFCRemove()
 
 void KFCRemove::execute()
 {
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->setCursorData(cursordata);
+    FormulaCursor* cursor = getExecuteCursor();
     cursor->remove(removedList, dir);
     if (cursor->elementIsSenseless()) {
         simpleRemoveCursor = cursor->getCursorData();
         element = cursor->replaceByMainChildContent();
     }
-    undocursor = cursor->getCursorData();
+    setUnexecuteCursor(cursor);
     cursor->normalize();
 }
 
 void KFCRemove::unexecute()
 {
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->setCursorData(undocursor);
-    destroyUndoCursor();
+    FormulaCursor* cursor = getUnexecuteCursor();
     if (element != 0) {
         cursor->replaceSelectionWith(element);
         element = 0;
@@ -160,19 +181,16 @@ KFCRemoveEnclosing::~KFCRemoveEnclosing()
 
 void KFCRemoveEnclosing::execute()
 {
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->setCursorData(cursordata);
+    FormulaCursor* cursor = getExecuteCursor();
     element = cursor->removeEnclosingElement(direction);
-    undocursor = cursor->getCursorData();
+    setUnexecuteCursor(cursor);
     //cursor->normalize();
     cursor->setSelection(false);
 }
 
 void KFCRemoveEnclosing::unexecute()
 {
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->setCursorData(undocursor);
-    destroyUndoCursor();
+    FormulaCursor* cursor = getUnexecuteCursor();
     cursor->replaceSelectionWith(element);
     cursor->normalize();
     element = 0;
@@ -194,10 +212,9 @@ KFCAddReplacing::~KFCAddReplacing()
 
 void KFCAddReplacing::execute()
 {
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->setCursorData(cursordata);
+    FormulaCursor* cursor = getExecuteCursor();
     cursor->replaceSelectionWith(element);
-    undocursor = cursor->getCursorData();
+    setUnexecuteCursor(cursor);
     cursor->goInsideElement(element);
     element = 0;
 }
@@ -205,9 +222,7 @@ void KFCAddReplacing::execute()
 
 void KFCAddReplacing::unexecute()
 {
-    FormulaCursor* cursor = getActiveCursor();
-    cursor->setCursorData(undocursor);
-    destroyUndoCursor();
+    FormulaCursor* cursor = getUnexecuteCursor();
     element = cursor->replaceByMainChildContent();
     cursor->normalize();
 }
@@ -231,35 +246,35 @@ void KFCAddMatrix::execute()
 
 // ******  Add index command
 
-KFCAddGenericIndex::KFCAddGenericIndex(KFormulaContainer* document,
-                                       ElementIndexPtr index)
-        : KFCAdd(i18n("_:Undo descr.\nAdd any index"), document)
+KFCAddGenericIndex::KFCAddGenericIndex(KFormulaContainer* document)
+        : KFCAdd(i18n("_:Undo descr.\nAdd index"), document)
 {
     addElement(new SequenceElement());
-    
-    FormulaCursor* cursor = getActiveCursor();
-    index->setToIndex(cursor);
-    delete cursordata;
-    cursordata = cursor->getCursorData();
 }
 
 
 KFCAddIndex::KFCAddIndex(KFormulaContainer* document,
                          IndexElement* element, ElementIndexPtr index)
-        : KFCAddReplacing(i18n("_:Undo descr.\nAdd index"), document),
-          addGenericIndex(document, index)
+        : KFCAddReplacing(i18n("_:Undo descr.\nAdd index"), document)
 {
     setElement(element);
+    index->setToIndex(getActiveCursor());
+    addIndex = new KFCAddGenericIndex(document);
+}
+
+KFCAddIndex::~KFCAddIndex()
+{
+    delete addIndex;
 }
 
 void KFCAddIndex::execute()
 {
     KFCAddReplacing::execute();
-    addGenericIndex.execute();
+    addIndex->execute();
 }
 
 void KFCAddIndex::unexecute()
 {
-    addGenericIndex.unexecute();
+    addIndex->unexecute();
     KFCAddReplacing::unexecute();
 }

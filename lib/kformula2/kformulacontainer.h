@@ -39,6 +39,7 @@ class FormulaCursor;
 class FormulaElement;
 class QKeyEvent;
 class QPainter;
+class KCommand;
 class KFormulaCommand;
 
 
@@ -168,11 +169,6 @@ public slots:
     /**
      * Emits a formulaChanged signal if we are dirty.
      */
-    void testDirty();
-
-    /**
-     * Emits a formulaChanged signal if we are dirty.
-     */
     QRect boundingRect();
 
     /**
@@ -182,10 +178,23 @@ public slots:
 
 private:
 
+    /**
+     * Emits a formulaChanged signal if we are dirty.
+     */
+    void testDirty();
+
     void addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index);
+
+    /**
+     * Execute the command if it makes sense.
+     */
+    void execute(KFormulaCommand *command);
+
+    /**
+     * Remove the selection if any.
+     */
     void removeSelection(FormulaCursor* cursor);
 
-    void execute(KFormulaCommand *command);
     
     /**
      * The element tree's root.

@@ -19,22 +19,56 @@
 */
 
 #include <iostream>
+
+#include <kapp.h>
 #include <qpainter.h>
+
+#include <kstdaction.h>
 
 #include "basicelement.h"
 #include "formulacursor.h"
 #include "kformulacontainer.h"
 #include "kformulawidget.h"
 #include "kformulamimesource.h"
-#include <qapp.h>
+
 
 KFormulaWidget::KFormulaWidget(KFormulaContainer* doc, QWidget* parent, const char* name, WFlags f)
-    : QWidget(parent, name, f), document(doc)
+    : QWidget(parent, name, f), cursorVisible(false), document(doc)
 {
     cursor = document->createCursor();
 
     connect(document, SIGNAL(formulaChanged()), this, SLOT(formulaChanged()));
     clipboard = QApplication::clipboard(); 
+
+    accel = new KAccel(this);
+    
+    (openFile = KStdAction::open(this, SLOT(open())))->plugAccel(accel);
+    (saveFile = KStdAction::save(this, SLOT(save())))->plugAccel(accel);
+    (quitAction = KStdAction::quit(kapp, SLOT(quit())))->plugAccel(accel);
+    (undoAction = KStdAction::undo(this, SLOT(undo())))->plugAccel(accel);
+    (redoAction = KStdAction::redo(this, SLOT(redo())))->plugAccel(accel);
+
+    (cutAction = KStdAction::cut(this, SLOT(cut())))->plugAccel(accel);
+    (copyAction = KStdAction::copy(this, SLOT(copy())))->plugAccel(accel);
+    (pasteAction = KStdAction::paste(this, SLOT(paste())))->plugAccel(accel);
+    (selectAllAction = KStdAction::selectAll(this, SLOT(selectAll())))->plugAccel(accel);
+
+    /*
+    integralElement;
+    productElement;
+    sumElement;
+    rootElement;
+    fractionElement;
+    matrixElement;
+
+    generalUpperIndex;
+    generalLowerIndex;
+
+    upperLeftIndex;
+    lowerLeftIndex;
+    upperRightIndex;
+    lowerRightIndex;
+    */
 }
 
 KFormulaWidget::~KFormulaWidget()
@@ -48,15 +82,15 @@ void KFormulaWidget::paintEvent(QPaintEvent*)
     QPainter painter;
     painter.begin(this);
     document->draw(painter);
-    cursor->draw(painter);
     painter.end();
+
+    cursorVisible = false;
+    showCursor();
 }
 
 void KFormulaWidget::keyPressEvent(QKeyEvent* event)
 {
-    QPainter painter;
-    painter.begin(this);
-    cursor->draw(painter);
+    hideCursor();
     
     QChar ch = event->text().at(0);
     if (ch.isPrint()) {
@@ -154,18 +188,6 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         case Qt::Key_F3:
             document->addSymbol(cursor, Artwork::Integral);
             break;
-        case Qt::Key_F4:
-            document->save("test");
-            break;
-        case Qt::Key_F5:
-            document->load("test");
-            break;
-        case Qt::Key_F7:
-            document->undo(cursor);
-            break;
-        case Qt::Key_F8:
-            document->redo(cursor);
-            break;
         default:
             if (state & Qt::ControlButton) {
                 switch (event->key()) {
@@ -187,15 +209,6 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
                 case Qt::Key_R:
                     document->replaceElementWithMainChild(cursor, BasicElement::beforeCursor);
                     break;
-                case Qt::Key_C:
-		    {
-			QDomDocument formula = cursor->copy();
-			clipboard->setData(new KFormulaMimeSource(formula));
-                    }
-		    break;
-                case Qt::Key_V:
-		    document->paste(cursor, clipboard->data());
-                    break;
                 default:
                     //cerr << "Key: " << event->key() << endl;
                     break;
@@ -204,38 +217,28 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         }
     }
 
-    //Is this necessary here ?
-    document->testDirty();
-
-    cursor->draw(painter);
-    painter.end();
+    showCursor();
 }
 
 
 void KFormulaWidget::mousePressEvent(QMouseEvent* event)
 {
-    QPainter painter;
-    painter.begin(this);
-    cursor->draw(painter);
+    hideCursor();
     
     int flags = movementFlag(event->state());
     cursor->mousePress(event->pos(), flags);
 
-    cursor->draw(painter);
-    painter.end();
+    showCursor();
 }
 
 void KFormulaWidget::mouseReleaseEvent(QMouseEvent* event)
 {
-    QPainter painter;
-    painter.begin(this);
-    cursor->draw(painter);
+    hideCursor();
     
     int flags = movementFlag(event->state());
     cursor->mouseRelease(event->pos(), flags);
 
-    cursor->draw(painter);
-    painter.end();
+    showCursor();
 }
 
 void KFormulaWidget::mouseDoubleClickEvent(QMouseEvent* event)
@@ -244,27 +247,73 @@ void KFormulaWidget::mouseDoubleClickEvent(QMouseEvent* event)
 
 void KFormulaWidget::mouseMoveEvent(QMouseEvent* event)
 {
-    QPainter painter;
-    painter.begin(this);
-    cursor->draw(painter);
+    hideCursor();
     
     int flags = movementFlag(event->state());
     cursor->mouseMove(event->pos(), flags);
-    
-    //document->testDirty();
 
-    cursor->draw(painter);
-    painter.end();
+    showCursor();
 }
 
 void KFormulaWidget::wheelEvent(QWheelEvent* event)
 {
 }
 
+
 void KFormulaWidget::formulaChanged()
 {
     update();
 }
+
+
+void KFormulaWidget::open()
+{
+    document->load("test.xml");
+}
+
+void KFormulaWidget::save()
+{
+    document->save("test.xml");
+}
+
+void KFormulaWidget::undo()
+{
+    document->undo(cursor);
+}
+
+void KFormulaWidget::redo()
+{
+    document->redo(cursor);
+}
+
+
+void KFormulaWidget::cut()
+{
+    if (cursor->isSelection()) {
+        copy();
+        document->remove(cursor, BasicElement::beforeCursor);
+    }
+}
+
+void KFormulaWidget::copy()
+{
+    QDomDocument formula = cursor->copy();
+    clipboard->setData(new KFormulaMimeSource(formula));
+}
+
+void KFormulaWidget::paste()
+{
+    document->paste(cursor, clipboard->data());
+}
+
+void KFormulaWidget::selectAll()
+{
+    hideCursor();
+    cursor->moveHome();
+    cursor->moveEnd(FormulaCursor::SelectMovement);
+    showCursor();
+}
+
 
 int KFormulaWidget::movementFlag(int state)
 {
@@ -277,4 +326,28 @@ int KFormulaWidget::movementFlag(int state)
         flag |= FormulaCursor::SelectMovement;
 
     return flag;
+}
+
+void KFormulaWidget::hideCursor()
+{
+    if (cursorVisible) {
+        cursorVisible = false;
+
+        QPainter painter;
+        painter.begin(this);
+        cursor->draw(painter);
+        painter.end();
+    }
+}
+
+void KFormulaWidget::showCursor()
+{
+    if (!cursorVisible) {
+        cursorVisible = true;
+
+        QPainter painter;
+        painter.begin(this);
+        cursor->draw(painter);
+        painter.end();
+    }
 }

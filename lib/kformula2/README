@@ -9,4 +9,34 @@ To test the library do
 make kformulatest
 ./kformulatest
 
+Supported actions include:
+
+Ctrl-O                  open
+Ctrl-S                  save
+Ctrl-Q                  quit
+
+Ctrl-Z                  undo
+Ctrl-Shift-Z            redo
+
+Ctrl-X                  cut
+Ctrl-C                  copy
+Ctrl-V                  paste
+Ctrl-A                  selectAll
+
+---
+
+Ctrl-U                  upper index (symbol/root)
+Ctrl-L                  lower index (symbol)
+
+F1-F3                   different Symbols
+^, _, Ctrl-^, Ctrl-_    standart indexes
+(, [, |                 brackets
+/                       fraction
+\                       root
+#                       matrix
+
+Text, numbers and operators are supported as well.
+
+Please note that the key bindings are subject to change.
+
 See DESIGN to know the structure of the formulas

@@ -25,6 +25,10 @@
 #include <qwidget.h>
 #include <qclipboard.h>
 
+#include <kaccel.h>
+#include <kaction.h>
+
+
 class FormulaCursor;
 class KFormulaContainer;
 
@@ -50,15 +54,58 @@ protected:
 protected slots:
 
     void formulaChanged();
+
+    void open();
+    void save();
+    void undo();
+    void redo();
+
+    void cut();
+    void copy();
+    void paste();
+    void selectAll();
     
 private:
 
     int movementFlag(int state);
 
+    void hideCursor();
+    void showCursor();
+
+    bool cursorVisible;
+
+    KAccel* accel;
+    
+    KAction* openFile;
+    KAction* saveFile;
+    KAction* quitAction;
+    KAction* undoAction;
+    KAction* redoAction;
+
+    KAction* cutAction;
+    KAction* copyAction;
+    KAction* pasteAction;
+    KAction* selectAllAction;
+
+    KAction* integralElement;
+    KAction* productElement;
+    KAction* sumElement;
+    KAction* rootElement;
+    KAction* fractionElement;
+    KAction* matrixElement;
+
+    KAction* generalUpperIndex;
+    KAction* generalLowerIndex;
+
+    KAction* upperLeftIndex;
+    KAction* lowerLeftIndex;
+    KAction* upperRightIndex;
+    KAction* lowerRightIndex;
+    
     KFormulaContainer* document;
     FormulaCursor* cursor;
 
-    QClipboard *clipboard;
+    QClipboard* clipboard;
 };
 
 #endif // __KFORMULAWIDGET_H
