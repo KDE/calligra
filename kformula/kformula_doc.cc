@@ -2,6 +2,7 @@
 #include "formuladef.h"
 #include "BasicElement.h"
 #include "TextElement.h"
+#include "FractionElement.h"
 #include "RootElement.h"
 #include "BracketElement.h"
 
@@ -136,6 +137,37 @@ void KFormulaDocument::addRootElement()
     //RootElement need a child[0] i.e. root content
     theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,4),0);	 
     setActiveElement(newElement); //I prefere to AutoActivate RootContent 
+    emit sig_modified();
+}
+
+void KFormulaDocument::addFractionElement(QString cont)
+{   
+  BasicElement *nextElement;
+  BasicElement *newElement;
+   if(theActiveElement==0L)
+     setActiveElement(theFirstElement);
+  
+        if(theActiveElement->type()==EL_BASIC)  //If current Element is a Basic
+         {					//It change it into a Root
+	  theActiveElement->substituteElement(newElement = new FractionElement(this));
+	  delete theActiveElement;
+          theActiveElement = 0;
+	 }         
+        else 
+	 {
+	 nextElement=theActiveElement->getNext();
+	 if(nextElement!=0L){       //If there's a next insert root before next
+	  nextElement->insertElement(newElement=new FractionElement(this));
+	  }
+	  else              //If there isn't a next append only.
+ 	   activeElement()->setNext(newElement=new FractionElement(this,theActiveElement));
+	 }
+    newElement->setContent(cont);	 
+    setActiveElement(newElement);  
+    //RootElement need a child[0] i.e. numer
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,4),0);	 
+    theActiveElement->setChild(newElement = new BasicElement(this,theActiveElement,5),1);	 
+    //setActiveElement(newElement); //I prefere to AutoActivate RootContent 
     emit sig_modified();
 }
 

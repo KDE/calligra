@@ -537,17 +537,19 @@ void KFormulaView::addRoot()
 
 void KFormulaView::addFraction()
 {
-    debug("##adding Fraction");
+    debug("adding Fraction");
+    m_pDoc->addFractionElement("FMCC10");
 }
 
 void KFormulaView::addVertSpace()
 {
-    debug("##adding VerticalSpace");
+    debug("adding VerticalSpace");
+    m_pDoc->addFractionElement("VULC40");
 }
 
 void KFormulaView::addBracket()
 {
-    debug("##adding parenthesis");
+    debug("adding parenthesis");
     m_pDoc->addBracketElement("[]");
 //    m_rToolBarType->hide();
 }
