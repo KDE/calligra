@@ -1,9 +1,0 @@
-?package(krita):\
-	needs=x11\
-	section=Apps/Graphics\
-	hints="KDE,Bitmap"\
-	kderemove="1"\
-	title="Krita"\
-	longtitle="Krita (Image Manipulation)"\
-	command=krita
-
