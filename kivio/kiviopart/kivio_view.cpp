@@ -292,7 +292,6 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   initActions();
 
-  m_pCanvas->centerPage();
   m_pDoc->setModified(isModified);
 }
 

@@ -114,7 +114,6 @@ class KivioCanvas : public QWidget
     void eraseGuides();
     void paintGuides(bool=true);
 
-    void centerPage();
     void setViewCenterPoint(KivioPoint);
 
     KivioRect visibleArea();
