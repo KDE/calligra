@@ -911,6 +911,12 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
             }
         }
     }
+    if ( startPos > -1 && index > startPos && curFormat) { // Save last format
+        QDomElement formatElem = saveFormat( doc, curFormat, paragFormat(), startPos, index-startPos );
+        if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
+            formatsElem.appendChild( formatElem );
+    }
+
     if (!formatsElem.firstChild().isNull()) // Do we have formats to save ?
         paragElem.appendChild( formatsElem );
 
