@@ -392,6 +392,7 @@ void Document::Attributes::setRuns(
                 object->id = chp->fcPic_fcObj_lTagObj;
                 run = object;
             }
+            text[chpxs[i].startFc] = s_anchor[0];
         }
         else
         {
@@ -452,6 +453,7 @@ void Document::Attributes::setRuns(
                         drawingId = shape.spid;
                         drawingType = "msod";
                     }
+                    text[chpxs[i].startFc] = s_anchor[0];
                     if (found)
                     {
                         kdDebug(s_area) << "Document::Attributes::setRuns: drawing type: " <<
