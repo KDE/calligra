@@ -1296,7 +1296,6 @@ void KSpreadCell::clearFormular()
 
 bool KSpreadCell::calc( bool _makedepend )
 {
-    qDebug("CALC r=%i c=%i", m_iRow, m_iColumn );
   if ( m_bProgressFlag )
   {
     printf("ERROR: Circle\n");
@@ -1320,6 +1319,7 @@ bool KSpreadCell::calc( bool _makedepend )
   if ( !m_bCalcDirtyFlag )
     return true;
 
+  qDebug("CALC r=%i c=%i", m_iRow, m_iColumn );
   m_bLayoutDirtyFlag= true;
   m_bProgressFlag = true;
   m_bCalcDirtyFlag = false;

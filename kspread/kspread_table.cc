@@ -3102,16 +3102,16 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 	    int row = c.attribute( "row" ).toInt() + _yshift;
 	    int col = c.attribute( "column" ).toInt() + _xshift;
 
-	    bool n = FALSE;
+	    bool needInsert = FALSE;
 	    KSpreadCell* cell = cellAt( col, row );
 	    if ( ( op == OverWrite && sp == Normal ) || cell->isDefault() )
 	    {
 		cell = new KSpreadCell( this, 0, 0 );
-		n = TRUE;
+		needInsert = TRUE;
 	    }
 	    if ( !cell->load( c, _xshift, _yshift, sp, op ) )
 		return FALSE;
-	    if ( n )
+	    if ( needInsert )
 		insertCell( cell );
 	}
  else if ( (c.tagName() == "right-most-border")&& ( (sp == Normal) || (sp == Format)) )
