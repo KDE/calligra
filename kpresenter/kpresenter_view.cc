@@ -718,7 +718,7 @@ void KPresenterView::savePicture( const QString& oldName, KoPicture& picture)
         oldFile = url.fileName();
 
     QString mimetype=picture.getMimeType();
-    kdDebug() << "Picture has mime type: " << mimetype << endl;
+    kdDebug(33001) << "Picture has mime type: " << mimetype << endl;
     QStringList mimetypes;
     mimetypes << mimetype;
 
@@ -6378,7 +6378,7 @@ void KPresenterView::slotStyleSelected()
     if ( actionName.startsWith( "style_" ) )
     {
         QString styleStr = actionName.mid(6);
-        kdDebug() << "KPresenterView::slotStyleSelected " << styleStr << endl;
+        kdDebug(33001) << "KPresenterView::slotStyleSelected " << styleStr << endl;
         textStyleSelected( styleStr.toInt() );
     }
 }

@@ -462,7 +462,7 @@ void ThumbBar::slotContentsMoving(int x, int y)
 {
     offsetX = x;
     offsetY = y;
-kdDebug() << "offset x,y = " << x << ", " << y << endl;
+kdDebug(33001) << "offset x,y = " << x << ", " << y << endl;
     refreshItems( true );
 }
 
