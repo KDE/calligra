@@ -53,7 +53,7 @@ KChartParameter3dConfigPage::KChartParameter3dConfigPage(KChartParameters* param
   //depth->setValidator( new KFloatValidator( depth ) );
   depth->setValidator(validate2);
 
-  tmpLabel = new QLabel( i18n( "Bar witdh" ), gb );
+  tmpLabel = new QLabel( i18n( "Bar width" ), gb );
   tmpLabel->resize( tmpLabel->sizeHint() );
   tmpLabel->setAlignment(Qt::AlignCenter);
   grid1->addWidget(tmpLabel,4,0);
