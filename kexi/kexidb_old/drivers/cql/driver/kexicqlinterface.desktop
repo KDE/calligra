@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name = cql
-Comment = cql is a lightweight engine, which is shipped with kexi and can be stored in kexi's projectfile.
+Comment = cql is a lightweight engine, which is shipped with kexi and can be stored in kexi's projectfile.<br><br><i><b>Note: This is driver is in a very experimental stage, do not save important data using it!</i></b>
 X-KDE-Library = kexicqlinterface
 ServiceTypes = KexiDB/Interface
 Type= Service

@@ -43,7 +43,15 @@ CqlRecord::CqlRecord(KexiDB *p, const char *name, SqlHandle *handle, const QStri
 		catch(CqlException &err)
 		{
 			cerr << err << endl;
-			m_error.setup(1,CqlDB::errorText(err));
+			if(force && err.eCode().ecode() == ExceptionCodes::EC_CURSOR_STATE)
+			{
+				m_error.setup(0, "");
+				m_cursor = 0;
+			}
+			else
+			{
+				m_error.setup(1,CqlDB::errorText(err));
+			}
 			//throw KexiDBError(0, CqlDB::errorText(err));
 		}
 	}
@@ -61,7 +69,7 @@ CqlRecord::CqlRecord(KexiDB *p, const char *name, SqlHandle *handle, const QStri
 bool
 CqlRecord::readOnly()
 {
-	return true;
+	return false;
 }
 
 void
@@ -141,6 +149,10 @@ CqlRecord::update(unsigned int record, unsigned int field, QVariant value)
 bool
 CqlRecord::update(unsigned int record, QString field, QVariant value)
 {
+	if(readOnly())
+		return false;
+
+
 }
 
 bool
@@ -204,9 +216,17 @@ CqlRecord::last_id()
 void
 CqlRecord::setupCursor()
 {
+	kdDebug() << "CqlRecord::setupCursor()" << endl;
+
 	unsigned int fields = 0;
+	kdDebug() << "CqlRecord::setupCursor(): cursor: " << m_cursor << endl;
+	kdDebug() << "CqlRecord::setupCursor(): cursor: " << CqlDB::cqlString(m_cursor->cursorName()) << endl;
 	ColumnMetadataList *metalist = m_cursor->describe();
+	if(!metalist)
+		return;
+
 	m_datavector.resize(metalist->size());
+	kdDebug() << "CqlRecord::setupCursor(): fields = " << metalist->size() << endl;
 	for(ColumnMetadata *meta = metalist->first(); meta; meta = metalist->next())
 	{
 		KexiDBField *field = new KexiDBField("ask Seth");
@@ -214,16 +234,9 @@ CqlRecord::setupCursor()
 		field->setColumnType(CqlDB::getInternalDataType(meta->columnType().typeType()));
 		m_fields.insert(fields, field);
 
-//		m_datavector.push_back(CqlString());
-
 		bool null;
 		m_nullvector.push_back(null);
-//		CqlString *s = new CqlString();
-////		CqlString data;
-//		bool flag;
-//		m_cursor->bindColumn(fields, m_datavector.last(), m_nullvector.last(), true);
 		m_cursor->bindColumn(fields, m_datavector[fields], m_nullvector.last(), true);
-//		m_data.insert(fields, s);
 
 		kdDebug() << "CqlRecord::setupCursor: bind cursor " << fields << endl;
 		fields++;

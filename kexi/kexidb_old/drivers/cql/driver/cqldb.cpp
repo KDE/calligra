@@ -157,7 +157,9 @@ CqlDB::queryRecord(QString statement, bool buffer)
 //	try
 //	{
 		CqlRecord *record = new CqlRecord(this, "rec", m_db, rs);
-		if (record->latestError()->kexiErrnoFunction()!=0) {
+		if (record->latestError()->kexiErrnoFunction()!=0)
+		{
+			m_error = *record->latestError();
 			delete record;
 			return 0;
 		}

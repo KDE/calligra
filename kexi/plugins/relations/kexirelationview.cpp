@@ -200,6 +200,8 @@ KexiRelationView::slotListUpdate(QObject *s)
 			}
 		}
 	}
+
+	updateContents();
 }
 
 void
