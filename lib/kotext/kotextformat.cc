@@ -512,7 +512,7 @@ void KoTextFormat::load( KoOasisContext& context )
     addRef();
 }
 
-void KoTextFormat::save( KoGenStyle& gs )
+void KoTextFormat::save( KoGenStyle& gs ) const
 {
     KoGenStyle::PropertyType tt = KoGenStyle::TextType;
     gs.addProperty( "fo:color", col.isValid() ? col.name() : "#000000", tt );

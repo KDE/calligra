@@ -67,7 +67,7 @@ public:
     void loadOasisStyleTemplates( KoOasisContext& context );
     /// Save the entire style collection to OASIS
     /// @p styleType is the STYLE_* value for this style.
-    void saveOasis( KoGenStyles& styles, int styleType );
+    void saveOasis( KoGenStyles& styles, int styleType ) const;
 
 private:
     QPtrList<KoStyle> m_styleList;
@@ -149,7 +149,7 @@ public:
     void loadStyle( QDomElement & styleElem, KoOasisContext& context );
     /// Save the style to OASIS
     /// Don't use, use the method in KoStyleCollection instead
-    QString saveStyle( KoGenStyles& genStyles, int styleType );
+    QString saveStyle( KoGenStyles& genStyles, int styleType, const QString& parentStyleName ) const;
 
     static int getAttribute(const QDomElement &element, const char *attributeName, int defaultValue)
       {

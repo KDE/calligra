@@ -354,7 +354,7 @@ public:
     /// Load a text format from OASIS XML
     void load( KoOasisContext& context );
     /// Save a text format to OASIS XML
-    void save( KoGenStyle& gs );
+    void save( KoGenStyle& gs ) const;
 
 #ifndef NDEBUG
     void printDebug();
