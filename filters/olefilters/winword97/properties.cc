@@ -966,8 +966,8 @@ void Properties::apply(const MsWord::LFO &style)
             m_pap.anld.nfc = level.nfc;
             m_pap.anld.jc = level.jc;
             m_pap.anld.iStartAt = level.iStartAt;
-            kdDebug(MsWord::s_area) << "got startAt " << m_pap.anld.iStartAt <<
-                " from LVLF" << endl;
+            kdDebug(MsWord::s_area) << "startAt from list style:" <<
+                m_pap.anld.iStartAt << endl;
 
             // Apply the variable length parts.
 

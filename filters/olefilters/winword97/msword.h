@@ -299,6 +299,7 @@ private:
     void constructionError(unsigned line, const char *reason);
     static const unsigned s_minWordVersion = 100;
     static const unsigned s_maxWord6Version = 105;
+    static const unsigned s_maxWord7Version = 193;
 
     // Character property handling.
 

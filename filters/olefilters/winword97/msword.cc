@@ -226,6 +226,15 @@ void MsWord::decodeParagraph(
         U32 lfoCount;
         int i;
 
+        // TBD: discretion is the better part of valour! Our list logic below
+        // will give up if we don't do this!
+
+        if (m_fib.nFib > s_maxWord7Version)
+        {
+            gotListParagraph(text, properties.m_pap, chpxs);
+            return;
+        }
+
         // Find the number of LFOs.
 
         ptr += MsWordGenerated::read(ptr, &lfoCount);
@@ -234,8 +243,8 @@ void MsWord::decodeParagraph(
             kdError(s_area) << "MsWord::decodeParagraph: error finding LFO[" <<
                 properties.m_pap.ilfo << "]" << endl;
 
-        // Skip all the LFOs before our one, so that we can traverse the variable
-        // length LFOLVL arrays.
+        // Skip all the LFOs before our one, so that we can traverse the
+        // variable length LFOLVL arrays.
 
         for (i = 1; i < properties.m_pap.ilfo; i++)
         {
@@ -263,12 +272,13 @@ void MsWord::decodeParagraph(
             }
         }
 
-        // We have found the LFO from its 1-based array. Check to see if there are any
-        // overrides for this particular level.
+        // We have found the LFO from its 1-based array. Check to see if there
+        // are any overrides for this particular level.
 
         LFO data;
 
-        // Read our LFO, apply the LSTF and then search any LFOLVLs for a matching level.
+        // Read our LFO, apply the LSTF and then search any LFOLVLs for a
+        // matching level.
 
         ptr += MsWordGenerated::read(ptr, &data);
         properties.apply(data);
@@ -307,8 +317,8 @@ void MsWord::decodeParagraph(
                     // Apply the startAt.
 
                     properties.m_pap.anld.iStartAt = level.iStartAt;
-                    kdDebug(s_area) << "got startAt " << properties.m_pap.anld.iStartAt <<
-                        " from LVLF" << endl;
+                    kdDebug(MsWord::s_area) << "startAt from LVLF:" <<
+                        properties.m_pap.anld.iStartAt << endl;
                 }
                 else
                 if (levelOverride.fStartAt)
@@ -316,8 +326,8 @@ void MsWord::decodeParagraph(
                     // Apply the startAt.
 
                     properties.m_pap.anld.iStartAt = levelOverride.iStartAt;
-                    kdDebug(s_area) << "got startAt " << properties.m_pap.anld.iStartAt <<
-                        " from LFOLVL" << endl;
+                    kdDebug(s_area) << "startAt from LFOLVL:" <<
+                        properties.m_pap.anld.iStartAt << endl;
                 }
                 break;
             };
@@ -717,7 +727,7 @@ void MsWord::getParagraphsFromPapxs(
 
 // Create a cache of information about lists.
 //
-//    m_listLevels: an array of arrays of pointers to LVLFs for each list style in the
+//    m_listStyles: an array of arrays of pointers to LVLFs for each list style in the
 //    LST array. The entries must be looked up using the list id and list level.
 
 void MsWord::getListStyles()
@@ -809,21 +819,34 @@ void MsWord::getStyles()
     {
         // We simply discard parts of the STSHI we do not understand.
 
-        kdDebug(s_area) << "MsWord::getStyles: unsupported STSHI size " << cbStshi << endl;
+        kdDebug(s_area) << "MsWord::getStyles: unsupported STSHI size " <<
+            cbStshi << endl;
+        if (cbStshi >= 20)
+        {
+            kdWarning(s_area) << "MsWord::getStyles: assuming Word 2000" <<
+                endl;
+
+            // Flip ourselves into unsupported territory!
+
+            m_fib.nFib = s_maxWord7Version + 1;
+            kdError(s_area) << "Word 2000 is not fully supported" <<
+                endl;
+        }
         MsWordGenerated::read(ptr, &stshi);
         ptr += cbStshi;
     }
     else
     {
-        // We know that older/smaller STSHIs can simply be zero extended into our STSHI.
-        // So, we overwrite anything that is not valid with zeros.
+        // We know that older/smaller STSHIs can simply be zero extended into
+        // out STSHI. So, we overwrite anything that is not valid with zeros.
 
         ptr += MsWordGenerated::read(ptr, &stshi);
         memset(((char *)&stshi) + cbStshi, 0, sizeof(stshi) - cbStshi);
         ptr -= sizeof(stshi) - cbStshi;
     }
 
-    // Construct the array of styles, and then walk the array reading in the style definitions.
+    // Construct the array of styles, and then walk the array reading in the
+    // style definitions.
 
     m_styles = new Properties *[stshi.cstd];
     for (unsigned i = 0; i < stshi.cstd; i++)
@@ -914,8 +937,12 @@ MsWord::MsWord(
         kdDebug(s_area) << "MsWord::MsWord: no data stream" << endl;
         m_dataStream = m_mainStream;
     }
-    //getAssociatedStrings();
+
+    // We must call getStyles() first, as we use the STSHI size to detect
+    // Word 2000.
+
     getStyles();
+    //getAssociatedStrings();
     getListStyles();
 }
 
