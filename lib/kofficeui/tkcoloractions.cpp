@@ -94,6 +94,7 @@ void TKSelectColorAction::initToolBarButton(TKToolBarButton* b)
   TKAction::initToolBarButton(b);
   b->setDelayedPopup( popupMenu() );
   updatePixmap(b);
+  updatePixmap();
 }
 
 void TKSelectColorAction::updatePixmap()
@@ -105,6 +106,27 @@ void TKSelectColorAction::updatePixmap()
       if ( r->inherits("TKToolBarButton") ) {
         updatePixmap(static_cast<TKToolBarButton*>(r));
       }
+    }
+    else if(w->inherits("QPopupMenu") ) {
+        QPixmap pix =iconSet().pixmap(QIconSet::Automatic,QIconSet::Active);
+        QPainter p(&pix);
+        switch (m_type) {
+            case TextColor:
+                p.fillRect(QRect(0,12,16,5), m_pCurrentColor);
+                break;
+            case LineColor:
+                p.fillRect(QRect(0,13,16,5), m_pCurrentColor);
+                p.fillRect(QRect(3,12,1,1), m_pCurrentColor);
+                break;
+            case FillColor:
+                p.fillRect(QRect(0,13,16,5), m_pCurrentColor);
+                p.fillRect(QRect(1,10,5,3), m_pCurrentColor);
+                break;
+            case Color:
+                break;
+        }
+        p.end();
+        setIconSet( pix );
     }
   }
 }
