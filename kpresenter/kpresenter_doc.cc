@@ -987,15 +987,8 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( !store->close() ) // done with content.xml
         return false;
 
-    KoGenStyle pageLayout( KoGenStyle::STYLE_PAGELAYOUT /*no family needed*/ );
-    //<style:properties fo:margin-top="0.991cm" fo:margin-bottom="0.991cm" fo:margin-left="0.991cm" fo:margin-right="0.991cm" fo:page-width="26.162cm" fo:page-height="18.415cm" style:print-orientation="landscape"/>
-    pageLayout.addPropertyPt( "fo:page-width", m_pageLayout.ptWidth );
-    pageLayout.addPropertyPt( "fo:page-height", m_pageLayout.ptHeight );
-    pageLayout.addProperty( "style:print-orientation", m_pageLayout.orientation == PG_LANDSCAPE ? "landscape" : "portrait" );
-    pageLayout.addPropertyPt( "fo:margin-left", m_pageLayout.ptLeft );
-    pageLayout.addPropertyPt( "fo:margin-top", m_pageLayout.ptTop );
-    pageLayout.addPropertyPt( "fo:margin-right", m_pageLayout.ptRight );
-    pageLayout.addPropertyPt( "fo:margin-bottom", m_pageLayout.ptBottom );
+
+    KoGenStyle pageLayout = m_pageLayout.saveOasis();
     mainStyles.lookup( pageLayout, "pm" );
 
 
