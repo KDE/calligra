@@ -1,7 +1,7 @@
 
 KDE_ICON = kchart
 
-data_DATA = barsubtypedepth.png barsubtypelayer.png barsubtypebeside.png \
+kchartpics_DATA = barsubtypedepth.png barsubtypelayer.png barsubtypebeside.png \
 			barsubtypepercent.png areasubtypedepth.png \
 			areasubtypebeside.png chart_lines.png \
 			chart_3dhiloclose.png chart_area.png chart_bar.png \
@@ -17,4 +17,4 @@ data_DATA = barsubtypedepth.png barsubtypelayer.png barsubtypebeside.png \
 			3DCOMBO_LINE_AREA.png 3DCOMBO_LINE_BAR.png\
 			3DAREA.png 3DLINE.png 3DBAR.png
 			
-datadir = $(kde_datadir)/kchart/pics
+kchartpicsdir = $(kde_datadir)/kchart/pics
