@@ -45,6 +45,8 @@ GraphitePart::GraphitePart(QObject *parent, const char *name, bool singleViewMod
     m_history=new GCommandHistory(undo, redo);
 
     KStdAction::cut(this, SLOT(edit_cut()), actionCollection(), "edit_cut" );
+
+    // Settings -> Configure... (nice dialog to configure e.g. units)
 }
 
 GraphitePart::~GraphitePart() {

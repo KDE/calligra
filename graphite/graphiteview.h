@@ -38,6 +38,9 @@ public:
 
     virtual QWidget *canvas() { return m_canvas->viewport(); }
 
+protected slots:
+    void slotNewView();
+
 protected:
     void resizeEvent(QResizeEvent *ev);
 

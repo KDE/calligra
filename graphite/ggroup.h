@@ -28,7 +28,7 @@ class GGroup : public GObject {
 
 public:
     GGroup(const QString &name=QString::null);
-    // Note: copying changes the iterator for both objects!
+    // Note: copying changes the iterator of both objects!
     GGroup(const GGroup &rhs);
     GGroup(const QDomElement &element);
 
@@ -52,7 +52,6 @@ public:
     virtual QDomElement save(QDomDocument &doc) const;
 
     virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false);
-    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
 
     virtual void setZoom(const short &zoom=100);
 

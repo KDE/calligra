@@ -54,7 +54,8 @@ GObjectM9r::GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
 		KDialogBase::Ok|KDialogBase::Apply|KDialogBase::Cancel,
 		KDialogBase::Ok, view->canvas(), "property dia", true, true),
     m_object(object), m_mode(mode), first_call(true), m_part(part),
-    m_changed(false), m_created(false), m_type(type), m_line(0L), m_view(view) {
+    m_pressed(false), m_changed(false), m_created(false), m_type(type),
+    m_line(0L), m_view(view) {
 
     m_handles=new QList<QRect>;
     m_handles->setAutoDelete(true);
@@ -553,6 +554,105 @@ QDomElement GObject::save(QDomDocument &doc) const {
     return e;
 }
 
+void GObject::drawHandles(QPainter &p, QList<QRect> *handles) {
+
+    p.save();
+    p.setPen(Qt::black);
+    p.setBrush(Qt::black);
+
+    int size;
+    if(m_state==Handles)
+	size=GraphiteGlobal::self()->handleSize();
+    else if(m_state==Rot_Handles)
+	size=GraphiteGlobal::self()->rotHandleSize();
+    else
+	return; // no need to draw handles - shouldn't happen
+
+    int offset=GraphiteGlobal::self()->offset();
+
+    QRect *lt=new QRect(boundingRect().left()-offset,
+			boundingRect().top()-offset, size, size);
+    QRect *t=0L;
+    QRect *rt=new QRect(boundingRect().right()-offset,
+			boundingRect().top()-offset, size, size);
+
+    QRect *lb=new QRect(boundingRect().left()-offset,
+			boundingRect().bottom()-offset, size, size);
+    QRect *b=0L;
+    QRect *rb=new QRect(boundingRect().right()-offset,
+			boundingRect().bottom()-offset, size, size);
+
+    QRect *l=0L;
+    QRect *r=0L;
+
+    if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger()) {
+	int dx=Graphite::double2Int(static_cast<double>(boundingRect().width())*0.5)-offset;
+	t=new QRect(boundingRect().left()+dx, boundingRect().top(), size, size);
+	b=new QRect(boundingRect().left()+dx, boundingRect().bottom(), size, size);
+    }
+    if(boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger()) {
+	int dy=Graphite::double2Int(static_cast<double>(boundingRect().height())*0.5)-offset;
+	l=new QRect(boundingRect().left(), boundingRect().top()+dy, size, size);
+	r=new QRect(boundingRect().right(), boundingRect().top()+dy, size, size);
+    }
+
+    if(m_state==Handles) {
+	p.drawRect(*lt);
+	p.drawRect(*rt);
+	p.drawRect(*lb);
+	p.drawRect(*rb);
+	if(t)
+	    p.drawRect(*t);
+	if(b)
+	    p.drawRect(*b);
+	if(l)
+	    p.drawRect(*l);
+	if(r)
+	    p.drawRect(*r);
+    }
+    else {
+	p.drawEllipse(*lt);
+	p.drawEllipse(*rt);
+	p.drawEllipse(*lb);
+	p.drawEllipse(*rb);
+	if(t)
+	    p.drawEllipse(*t);
+	if(b)
+	    p.drawEllipse(*b);
+	if(l)
+	    p.drawEllipse(*l);
+	if(r)
+	    p.drawEllipse(*r);
+    }
+
+    if(handles) {
+	handles->clear();
+	handles->append(lt);
+	handles->append(rt);
+	handles->append(lb);
+	handles->append(rb);
+	if(t)
+	    handles->append(t);
+	if(b)
+	    handles->append(b);
+	if(l)
+	    handles->append(l);
+	if(r)
+	    handles->append(r);
+    }
+    else {
+	delete lt;
+	delete rt;
+	delete lb;
+	delete rb;
+	delete t;
+	delete b;
+	delete l;
+	delete r;
+    }
+    p.restore();
+}
+
 void GObject::setParent(GObject *parent) const {
 
     if(parent!=this)   // it's illegal to be oneselves parent! (parent==0L -> no parent :)
@@ -560,7 +660,7 @@ void GObject::setParent(GObject *parent) const {
 }
 
 GObject::GObject(const QString &name) : m_name(name), m_state(Visible), m_parent(0L),
-    m_zoom(100), m_angle(0.0), m_boundingRectDirty(true), m_fillStyle(Brush), m_ok(true) {
+    m_zoom(1.0), m_angle(0.0), m_boundingRectDirty(true), m_fillStyle(Brush), m_ok(true) {
 
     m_gradient.type=KImageEffect::VerticalGradient;
     m_gradient.xfactor=1;
@@ -573,7 +673,7 @@ GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
     m_gradient(rhs.gradient()), m_pen(rhs.pen()), m_ok(true) {
 }
 
-GObject::GObject(const QDomElement &element) : m_parent(0L), m_zoom(100),
+GObject::GObject(const QDomElement &element) : m_parent(0L), m_zoom(1.0),
 					       m_boundingRectDirty(true), m_ok(false) {
 
     if(element.tagName()!=QString::fromLatin1("gobject"))

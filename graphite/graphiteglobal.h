@@ -23,6 +23,7 @@
 #include <kimageeffect.h>
 
 class QColor;
+class QPoint;
 
 struct Gradient {
     QColor ca;
@@ -43,6 +44,8 @@ const bool operator!=(const Gradient &lhs, const Gradient &rhs);
 class GraphiteGlobal {
 
 public:
+    enum Unit { MM, Inch, Pt };
+
     static GraphiteGlobal *self();
 
     // size of the "fuzzy" zone for selections
@@ -62,13 +65,17 @@ public:
 
     const int offset() const { return m_offset; }
 
+    const Unit &unit() const { return m_unit; }
+    void setUnit(const Unit &unit);
+    const QString &unitString() const { return m_unitString; }
+
     // more to come...
-    // maybe I'll add a init(...) method which takes a KConfig file
+    // maybe I'll add a init(...) method which takes a KConfig file/pointer
     // and initializes all the "global" vars.
 
 private:
-    GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4), m_rotHandleSize(4),
-		       m_thirdHandleTrigger(20), m_offset(2) {}
+    GraphiteGlobal();
+    // don't try to copy or assing this object
     GraphiteGlobal(const GraphiteGlobal &rhs);
     GraphiteGlobal &operator=(const GraphiteGlobal &rhs);
 
@@ -80,5 +87,99 @@ private:
     int m_rotHandleSize;
     int m_thirdHandleTrigger;
     int m_offset;
+    Unit m_unit;
+    QString m_unitString;
+};
+
+
+class FxValue {
+
+public:
+    FxValue();
+    explicit FxValue(const int &pixel, const double &zoom=1.0,
+		     const int &resolution=72);
+    FxValue(const FxValue &v);
+    ~FxValue() {}
+
+    // compares the current pixel values!
+    FxValue &operator=(const FxValue &rhs);
+    const bool operator==(const FxValue &rhs);
+    const bool operator!=(const FxValue &rhs);
+
+    const double zoom() const { return m_zoom; }
+    void setZoom(const double &zoom);
+
+    const int resolution() const { return m_resolution; }
+    void setResoltuion(const int &resolution);
+
+    const double &value() const { return m_value; }
+    void setValue(const double &value);
+
+    const int &pxValue() const { return m_pixel; }
+    void setPxValue(const int &pixel);
+
+    const double valueUnit() const;  // current unit
+    const double valueMM() const;
+    const double valueInch() const;
+    const double valuePt() const;
+
+private:
+    void recalc();
+
+    double m_value;    // value in mm
+    int m_pixel;       // current pixel value (approximated)
+    double m_zoom;     // 1.0 ^= 100%
+    int m_resolution;  // in dpi (defaults to 72 -> screens)
+};
+
+
+class FxPoint {
+
+public:
+    FxPoint(const FxValue &x, const FxValue &y);
+    explicit FxPoint(const QPoint &p, const double zoom=1.0, const int dpi=72);
+    FxPoint(const int &x, const int &y, const double zoom=1.0,
+	    const int dpi=72);
+    ~FxPoint() {}
+
+    // compares the px values!
+    FxPoint &operator=(const FxPoint &rhs);
+    const bool operator==(const FxPoint &rhs);
+    const bool operator!=(const FxPoint &rhs);
+
+    const double zoom() const;
+    void setZoom(const double &zoom);
+
+    const int resolution() const;
+    void setResoltuion(const int &resolution);
+
+    const FxValue &x() const { return m_x; }
+    void setX(const FxValue &x);
+
+    const FxValue &y() const { return m_y; }
+    void setY(const FxValue &y);
+
+    const int pxX() const { return m_x.pxValue(); }
+    void setPxX(const int &x, double zoom=1.0, int dpi=72);
+
+    const int pxY() const { return m_y.pxValue(); }
+    void setPxY(const int &y, double zoom=1.0, int dpi=72);
+
+    void setPoint(const FxValue &x, const FxValue &y);
+
+    const QPoint pxPoint() { return QPoint(pxX(), pxY()); }
+    void setPxPoint(const int &x, const int &y, const double zoom=1.0,
+		    const int dpi=72);
+
+private:
+    FxValue m_x, m_y;
+};
+
+
+class FxPointArray {
+};
+
+
+class FxRect {
 };
 #endif // GRAPHITE_GLOBAL_H

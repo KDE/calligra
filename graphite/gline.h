@@ -39,6 +39,7 @@ public:
     virtual QDomElement save(QDomDocument &doc) const; // save the line to xml
 
     virtual void draw(QPainter &p, QRegion &reg, const bool toPrinter=false);
+    // Do we need this? Maybe even lines should have rectangular handles...
     virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
 
     virtual const GLine *hit(const QPoint &p) const;

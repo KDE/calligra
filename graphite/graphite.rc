@@ -5,6 +5,10 @@
   <Action name="edit_redo"/>
   <Action name="edit_cut"/>
  </Menu>
+ <Menu name="view"><text>&amp;View</text>
+  <Action name="view_newview"/>
+  <ActionList name="view_split"/>
+ </Menu>
 </MenuBar>
 <ToolBar name="edit_bar" fullWidth="false"><Text>Edit</Text>
   <Action name="edit_undo"/>

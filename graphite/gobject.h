@@ -139,6 +139,7 @@ protected:
     bool first_call; // Whether this is the first call for this M9r (no hit test!)
     GraphitePart *m_part;     // we need that for the history
     QList<QRect> *m_handles;  // contains all the handle rects
+    bool m_pressed;           // mouse button pressed?
     bool m_changed;           // true, if the Apply button is "active"
     bool m_created;           // dia created?
 
@@ -262,10 +263,10 @@ public:
     // Used to draw the handles/rot-handles when selected
     // All handles which are drawn are added to the list if the list
     // is != 0L. Use this list to check "mouseOver" stuff
-    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L) = 0;
+    virtual void drawHandles(QPainter &p, QList<QRect> *handles=0L);
 
-    const int &zoom() const { return m_zoom; }
-    virtual void setZoom(const short &zoom=100) { m_zoom=zoom; }
+    const double &zoom() const { return m_zoom; }
+    virtual void setZoom(const double &zoom=1.0) { m_zoom=zoom; }
     // don't forget to set it for all children! Note: Check, if the zoom is equal to the last
     // one - don't change it, then...
 
@@ -293,7 +294,7 @@ public:
     virtual void scale(const QPoint &origin, const double &xfactor, const double &yfactor) = 0;
     virtual void resize(const QRect &boundingRect) = 0;  // resize, that it fits in this rect
 
-    const State &state() const { return m_state; }               // what's the current state?
+    const State &state() const { return m_state; }              // what's the current state?
     virtual void setState(const State state) { m_state=state; } // set the state
 
     const FillStyle &fillStyle() const { return m_fillStyle; }
@@ -309,10 +310,6 @@ protected:
     GObject(const QString &name=QString::null);
     GObject(const GObject &rhs);
     GObject(const QDomElement &element);
-
-    // This method manipulates the painter (rotate, pen,...)
-    // helper method!
-    virtual void initPainter(QPainter &/*p*/) {}
 
     // zoomIt zooms a value according to the current zoom setting and returns
     // the zoomed value. The original value is not changed
@@ -342,7 +339,7 @@ protected:
     QString m_name;                    // name of the object
     State m_state;                     // are there handles to draw or not?
     mutable GObject *m_parent;
-    int m_zoom;                        // zoom value 100 -> 100% -> 1
+    double m_zoom;                     // zoom value
     mutable double m_angle;            // angle (radians!)
 
     mutable bool m_boundingRectDirty;  // is the cached bounding rect still correct?
@@ -404,25 +401,25 @@ inline const double normalizeDeg(const double &deg) {
 }; // namespace Graphite
 
 inline const double GObject::zoomIt(const double &value) const {
-    if(m_zoom==100)
+    if(m_zoom==1.0)
 	return value;
-    return (static_cast<double>(m_zoom)*value)/100.0;
+    return m_zoom*value;
 }
 
 inline const int GObject::zoomIt(const int &value) const {
-    if(m_zoom==100)
+    if(m_zoom==1.0)
 	return value;
-    return (m_zoom*value)/100;
+    return Graphite::double2Int(m_zoom*static_cast<double>(value));
 }
 
 inline const unsigned int GObject::zoomIt(const unsigned int &value) const {
-    if(m_zoom==100)
+    if(m_zoom==1.0)
 	return value;
-    return (m_zoom*value)/100;
+    return static_cast<unsigned int>(Graphite::double2Int(m_zoom*static_cast<double>(value)));
 }
 
 inline const QPoint GObject::zoomIt(const QPoint &point) const {
-    if(m_zoom==100)
+    if(m_zoom==1.0)
 	return point;
     return QPoint(zoomIt(point.x()), zoomIt(point.y()));
 }

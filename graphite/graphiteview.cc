@@ -20,12 +20,14 @@
 //#include <qpainter.h>
 //#include <qevent.h>
 
-//#include <klocale.h>
-//#include <kdebug.h>
+#include <kaction.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <graphitepart.h>
 #include <graphitefactory.h>
 #include <graphiteview.h>
+#include <graphiteshell.h>
 
 
 GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
@@ -33,6 +35,9 @@ GraphiteView::GraphiteView(GraphitePart *doc, QWidget *parent,
 
     setInstance(GraphiteFactory::global());
     setXMLFile(QString::fromLatin1("graphite.rc"));
+
+    (void) new KAction(i18n("&New View"), 0, this, SLOT(slotNewView()),
+		       actionCollection(), "view_newview");
 
     m_canvas=new GCanvas(this, doc);
 }
@@ -58,6 +63,16 @@ GraphiteView::~GraphiteView() {
 
     painter.end();
 }*/
+
+void GraphiteView::slotNewView() {
+
+    if(koDocument()==0L)
+	kdFatal(37001) << "Huh! No doc?" << endl;
+
+    KoMainWindow *shell = new GraphiteShell;
+    shell->show();
+    shell->setRootDocument(koDocument());
+}
 
 void GraphiteView::resizeEvent(QResizeEvent *ev) {
     m_canvas->resize(ev->size());

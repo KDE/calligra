@@ -188,67 +188,6 @@ void GGroup::draw(QPainter &p, QRegion &reg, const bool toPrinter) {
 	it.current()->draw(p, reg, toPrinter);
 }
 
-void GGroup::drawHandles(QPainter &p, QList<QRect> */*handles*/) {
-
-    p.save();
-    p.setPen(Qt::black);
-    p.setBrush(Qt::black);
-
-    int size;
-    if(m_state==Handles)
-	size=GraphiteGlobal::self()->handleSize();
-    else if(m_state==Rot_Handles)
-	size=GraphiteGlobal::self()->rotHandleSize();
-    else
-	return; // no need to draw handles - shouldn't happen
-
-    int offset=GraphiteGlobal::self()->offset();
-
-    if(m_angle!=0.0) {
-	// TODO
-    }
-    else {
-	// TODO
-	/* code from gline
-	QRect *r1=new QRect(m_a.x()-offset, m_a.y()-offset, size, size);
-	QRect *r2=new QRect(m_b.x()-offset, m_b.y()-offset, size, size);
-	QRect *r3=0L;
-
-	if(boundingRect().width()>GraphiteGlobal::self()->thirdHandleTrigger() ||
-	   boundingRect().height()>GraphiteGlobal::self()->thirdHandleTrigger())
-	    r3=new QRect(m_a.x()+Graphite::double2Int(static_cast<double>(m_b.x()-m_a.x())*0.5)-offset,
-			 m_a.y()+Graphite::double2Int(static_cast<double>(m_b.y()-m_a.y())*0.5)-offset,
-			 size, size);
-
-	if(m_state==Handles) {
-	    p.drawRect(*r1);
-	    p.drawRect(*r2);
-	    if(r3)
-		p.drawRect(*r3);
-	}
-	else {
-	    p.drawEllipse(*r1);
-	    p.drawEllipse(*r2);
-	    if(r3)
-		p.drawEllipse(*r3);
-	}
-
-	if(handles) {
-	    handles->append(r1);
-	    handles->append(r2);
-	    if(r3)
-		handles->append(r3);
-	}
-	else {
-	    delete r1;
-	    delete r2;
-	    delete r3;
-	}
-	*/
-    }
-    p.restore();
-}
-
 void GGroup::setZoom(const short &zoom) {
 
     if(m_zoom==zoom)

@@ -19,6 +19,7 @@
 
 // This file has to be included, or kimageeffect will fail to compile!?!
 #include <qimage.h>
+#include <kdebug.h>
 
 #include <gobject.h>
 #include <graphiteglobal.h>
@@ -61,4 +62,105 @@ void GraphiteGlobal::setHandleSize(const int &handleSize) {
 void GraphiteGlobal::setRotHandleSize(const int &rotHandleSize) {
     m_rotHandleSize=rotHandleSize;
     m_offset=Graphite::double2Int(static_cast<double>(rotHandleSize)*0.5);
+}
+
+void GraphiteGlobal::setUnit(const Unit &unit) {
+
+    m_unit=unit;
+    if(unit==MM)
+	m_unitString=QString::fromLatin1("mm");
+    else if(unit==Inch)
+	m_unitString=QString::fromLatin1("inch");
+    else
+	m_unitString=QString::fromLatin1("pt");
+}
+
+GraphiteGlobal::GraphiteGlobal() : m_fuzzyBorder(3), m_handleSize(4),
+				   m_rotHandleSize(4), m_thirdHandleTrigger(20),
+				   m_offset(2), m_unit(MM) {
+    m_unitString=QString::fromLatin1("mm");
+}
+
+FxValue::FxValue() : m_value(0), m_pixel(0), m_zoom(1.0), m_resolution(72) {
+}
+
+FxValue::FxValue(const int &pixel, const double &zoom, const int &resolution) :
+    m_zoom(zoom), m_resolution(resolution) {
+    setPxValue(pixel);
+}
+
+FxValue::FxValue(const FxValue &v) : m_value(v.value()), m_pixel(v.pxValue()),
+				     m_zoom(v.zoom()), m_resolution(v.resolution()) {
+}
+
+FxValue &FxValue::operator=(const FxValue &rhs) {
+
+    m_value=rhs.value();
+    m_pixel=rhs.pxValue();
+    m_zoom=rhs.zoom();
+    m_resolution=rhs.resolution();
+    return *this;
+}
+
+const bool FxValue::operator==(const FxValue &rhs) {
+
+    if(m_zoom!=rhs.zoom()) {
+	kdDebug(37001) << "FxValue::operator==(): The zoom factor differs!" << endl;
+	return false;
+    }
+    if(m_resolution!=rhs.resolution()) {
+	kdDebug(37001) << "FxValue::operator==(): The resoltuion differs!" << endl;
+	return false;
+    }
+    return m_pixel==rhs.pxValue();
+}
+
+const bool FxValue::operator!=(const FxValue &rhs) {
+    return !(*this==rhs);
+}
+
+void FxValue::setZoom(const double &zoom) {
+
+    m_zoom=zoom;
+    recalc();
+}
+
+void FxValue::setResoltuion(const int &resolution) {
+
+    m_resolution=resolution;
+    recalc();
+}
+
+void FxValue::setValue(const double &value) {
+
+    m_value=value;
+    recalc();
+}
+
+void FxValue::setPxValue(const int &/*pixel*/) {
+}
+
+const double FxValue::valueUnit() const {
+
+    if(GraphiteGlobal::self()->unit()==GraphiteGlobal::MM)
+	return valueMM();
+    else if(GraphiteGlobal::self()->unit()==GraphiteGlobal::Inch)
+	return valueInch();
+    else
+	return valuePt();
+}
+
+const double FxValue::valueMM() const {
+    return 0.0;
+}
+
+const double FxValue::valueInch() const {
+    return 0.0;
+}
+
+const double FxValue::valuePt() const {
+    return 0.0;
+}
+
+void FxValue::recalc() {
 }
