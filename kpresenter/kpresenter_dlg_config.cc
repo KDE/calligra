@@ -307,6 +307,11 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
   _dontCheckTilteCase= new QCheckBox(i18n("Ignore title case words"),tmpQGroupBox);
   grid1->addWidget(_dontCheckTilteCase,3,0);
 
+  cbBackgroundSpellCheck=new QCheckBox(i18n("Show misspelled words in document"),tmpQGroupBox);
+  cbBackgroundSpellCheck->setChecked( m_pView->kPresenterDoc()->backgroundSpellCheckEnabled() );
+  grid1->addWidget(cbBackgroundSpellCheck,4,0);
+
+
   if( config->hasGroup("KSpell kpresenter") )
     {
         config->setGroup( "KSpell kpresenter" );
@@ -335,6 +340,7 @@ void ConfigureSpellPage::apply()
   state=_dontCheckTilteCase->isChecked();
   config->writeEntry("KSpell_dont_check_title_case",(int)state);
   doc->setDontCheckTitleCase(state);
+  doc->enableBackgroundSpellCheck( cbBackgroundSpellCheck->isChecked() );
 }
 
 void ConfigureSpellPage::slotDefault()

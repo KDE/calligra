@@ -85,6 +85,8 @@
 #include "kprvariable.h"
 #include "kpbackground.h"
 #include "notebar.h"
+#include "kprbgspellcheck.h"
+
 using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 2;
@@ -147,6 +149,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     m_varFormatCollection = new KoVariableFormatCollection;
     m_varColl=new KPrVariableCollection;
+    m_bgSpellCheck = new KPrBgSpellCheck(this);
 
     dcop = 0;
     m_kpresenterView = 0;
@@ -259,6 +262,12 @@ void KPresenterDoc::saveConfig()
     KConfig *config = KPresenterFactory::global()->config();
     config->setGroup( "Interface" );
     config->writeEntry( "Zoom", m_zoomHandler->zoom() );
+    if( config->hasGroup("KSpell kpresenter" ) )
+    {
+        config->setGroup( "KSpell kpresenter" );
+        config->writeEntry( "SpellCheck", m_bgSpellCheck->backgroundSpellCheckEnabled() );
+    }
+
 }
 
 void KPresenterDoc::initConfig()
@@ -300,6 +309,8 @@ void KPresenterDoc::initConfig()
         setKSpellConfig(ksconfig);
         setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
         setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
+        m_bgSpellCheck->enableBackgroundSpellCheck(config->readBoolEntry( "SpellCheck", false ));
+
     }
 
     if(config->hasGroup("Misc" ) )
@@ -346,7 +357,7 @@ KPresenterDoc::~KPresenterDoc()
     delete m_varFormatCollection;
     delete dcop;
     delete m_stickyPage;
-
+    delete m_bgSpellCheck;
     tmpSoundFileList.setAutoDelete( true );
     tmpSoundFileList.clear();
 }
@@ -774,6 +785,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
     {
         initConfig();
         setModified(false);
+        startBackgroundSpellCheck();
     }
 
     kdDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
@@ -2308,6 +2320,9 @@ void KPresenterDoc::setKSpellConfig(KSpellConfig _kspell)
   m_pKSpellConfig->setDictFromList(_kspell.dictFromList());
   m_pKSpellConfig->setEncoding(_kspell.encoding());
   m_pKSpellConfig->setClient(_kspell.client());
+
+  m_bgSpellCheck->setKSpellConfig(_kspell);;
+
 }
 
 void KPresenterDoc::recalcVariables( int type )
@@ -2588,6 +2603,34 @@ void KPresenterDoc::saveStyle( KoStyle *sty, QDomElement parentElem )
     QDomElement formatElem = KWTextParag::saveFormat( doc, &sty->format(), 0L, 0, 0 );
     styleElem.appendChild( formatElem );
 #endif
+}
+
+
+void KPresenterDoc::startBackgroundSpellCheck()
+{
+    kdDebug() << "KPresenterDoc::startBackgroundSpellCheck"<<backgroundSpellCheckEnabled() << endl;
+    if(backgroundSpellCheckEnabled())
+    {
+        kdDebug() << "KPresenterDoc::enableBackgroundSpellCheck"<<m_initialActivePage->objectText().count() << endl;
+        //FIXME
+        if(m_initialActivePage->objectText().count()>0)
+        {
+            kdDebug() << "KPresenterDoc::startBackgroundSpellCheck" << endl;
+            m_bgSpellCheck->objectForSpell(m_initialActivePage->textFrameSet (0));
+            m_bgSpellCheck->startBackgroundSpellCheck();
+        }
+    }
+
+}
+
+void KPresenterDoc::enableBackgroundSpellCheck( bool b )
+{
+    m_bgSpellCheck->enableBackgroundSpellCheck(b);
+}
+
+bool KPresenterDoc::backgroundSpellCheckEnabled() const
+{
+    return m_bgSpellCheck->backgroundSpellCheckEnabled();
 }
 
 

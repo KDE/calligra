@@ -34,6 +34,7 @@ class KoVariableFormatCollection;
 class KPrVariableCollection;
 class KTempFile;
 class KoStyle;
+class KPrBgSpellCheck;
 
 #include "kprpage.h"
 
@@ -335,6 +336,11 @@ public:
     void refreshAllNoteBar(int page, const QString &text, KPresenterView *exceptView);
 
 
+    bool backgroundSpellCheckEnabled() const;
+    void enableBackgroundSpellCheck( bool b );
+
+    void startBackgroundSpellCheck();
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -476,7 +482,7 @@ private:
 
     // Cached value for findStyle()
     KoStyle *m_lastStyle;
-
+    KPrBgSpellCheck *m_bgSpellCheck;
 };
 
 #endif

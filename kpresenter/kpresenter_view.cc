@@ -4467,6 +4467,8 @@ void KPresenterView::extraAutoFormat()
     m_pKPresenterDoc->getAutoFormat()->readConfig();
     KoAutoFormatDia dia( this, 0, m_pKPresenterDoc->getAutoFormat() );
     dia.exec();
+    m_pKPresenterDoc->startBackgroundSpellCheck(); // will do so if enabled
+
 }
 
 void KPresenterView::extraSpelling()

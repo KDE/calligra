@@ -76,6 +76,7 @@ private:
     KSpellConfig *_spellConfig;
     QCheckBox *_dontCheckUpperWord;
     QCheckBox *_dontCheckTilteCase;
+    QCheckBox *cbBackgroundSpellCheck;
     KConfig* config;
 };
 
