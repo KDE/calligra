@@ -373,7 +373,12 @@ void KprKword::convert()
                     e.setAttribute( "value", textElem.attribute("fontattribute") );
                     outFormatElem.appendChild( e );
                 }
-
+                if( textElem.hasAttribute("language"))
+                {
+                    QDomElement e = outdoc.createElement("LANGUAGE");
+                    e.setAttribute( "value", textElem.attribute("language") );
+                    outFormatElem.appendChild( e );
+                }
                 if ( !outFormatElem.firstChild().isNull() )
                 {
                     outFormatElem.setAttribute( "id", 1 ); // normal exte
