@@ -5,7 +5,7 @@ class QIODevice;
 #include <qmap.h>
 #include <qptrlist.h>
 
-#include "kwordframeset.h"
+#include "kword13frameset.h"
 
 class KWordDocument
 {

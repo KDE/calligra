@@ -1,5 +1,5 @@
 
-#include "kwordparagraph.h"
+#include "kword13paragraph.h"
 
 void KWordParagraph::xmldump( QTextStream& iostream )
 {

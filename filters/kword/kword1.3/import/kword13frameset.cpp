@@ -1,6 +1,6 @@
 
-#include "kwordutils.h"
-#include "kwordframeset.h"
+#include "kword13utils.h"
+#include "kword13frameset.h"
 
 
 KWordFrameset::KWordFrameset( int frameType, int frameInfo, const QString& name )

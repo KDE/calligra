@@ -1,9 +1,9 @@
 // 
 
 #include "kword13layout.h"
-#include "kwordframeset.h"
-#include "kworddocument.h"
-#include "kwordparser.h"
+#include "kword13frameset.h"
+#include "kword13document.h"
+#include "kword13parser.h"
 
 StackItem::StackItem() : elementType( ElementTypeUnknown ), m_currentFrameset( 0 )
 {

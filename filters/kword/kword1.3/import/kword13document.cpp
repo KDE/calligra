@@ -1,8 +1,8 @@
 #include <qiodevice.h>
 
-#include "kwordutils.h"
+#include "kword13utils.h"
 #include "kword13layout.h"
-#include "kworddocument.h"
+#include "kword13document.h"
 
 KWordDocument::KWordDocument( void )
 {

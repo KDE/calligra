@@ -1,4 +1,4 @@
-#include "kwordutils.h"
+#include "kword13utils.h"
 
 QString EscapeXmlDump( const QString& strIn )
 {

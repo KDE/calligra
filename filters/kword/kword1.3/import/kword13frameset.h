@@ -7,7 +7,7 @@ class QTextStream;
 #include <qstring.h>
 #include <qmap.h>
 
-#include "kwordparagraph.h"
+#include "kword13paragraph.h"
 
 class KWordFrameset
 {
