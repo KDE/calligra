@@ -534,7 +534,7 @@ void KivioDoc::slotDeleteStencilSet( DragBarButton *pBtn, QWidget *w, KivioStack
         // Check for a spawner.  If there is one, the set cannot be deleted
         if( checkStencilsForSpawner( pSpawner )==true )
         {
-            KMessageBox::error(NULL, i18n("Cannot delete stencil set because there are stencils using it's spawners"),
+            KMessageBox::error(NULL, i18n("Cannot delete stencil set because there are stencils using its spawners."),
                 i18n("Cannot Delete Stencil Set"));
             return;
         }
@@ -544,8 +544,8 @@ void KivioDoc::slotDeleteStencilSet( DragBarButton *pBtn, QWidget *w, KivioStack
         {
             if( checkGroupForSpawner( m_pClipboard, pSpawner )==true )
             {
-                if( KMessageBox::questionYesNo(NULL, i18n("The clipboard contains stencils that use these spawners,\nwould you like to delete what is on the clipboard?\n(Saying no will cause this set of spawners to not be removed)"),
-                    i18n("Clear The Clipboard?"))==KMessageBox::Yes )
+                if( KMessageBox::questionYesNo(NULL, i18n("The clipboard contains stencils that use these spawners,\nwould you like to delete what is on the clipboard?\n(Saying no will cause this set of spawners not to be removed)"),
+                    i18n("Clear the clipboard?"))==KMessageBox::Yes )
                 {
                     delete m_pClipboard;
                     m_pClipboard = NULL;

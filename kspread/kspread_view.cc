@@ -1648,7 +1648,7 @@ void KSpreadView::printPreview()
   }
   if(!found)
     {
-      KMessageBox::sorry(this,i18n("Kspread used ghostview for preview.\nPlease install it."),i18n("Program not found!"));
+      KMessageBox::sorry(this,i18n("KSpread uses ghostview for previewing.\nPlease install it."),i18n("Program not found!"));
       m_preview->setEnabled(false);
       return;
     }

@@ -974,7 +974,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>This function returns the numbers of interger or floating argument passed.</Text>
+	<Text>This function returns the count of integer or floating arguments passed.</Text>
 	<Syntax>count( Value;Value;Value... )</Syntax>
 	<Example>count(-5;"kspread";2) returns 2</Example>
 	<Example>count(5) returns 1</Example>
@@ -1051,7 +1051,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The sumsq() function calculates the sum of all the square of values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5)</Text>
+	<Text>The sumsq() function calculates the sum of all the squares of values given as parameters. You can calculate the sum of a range sum(A1:B5) or a list of values like sum(12;5;12.5)</Text>
 	<Syntax>sumsq( values; values; ... )</Syntax>
 	<Example>sumsq(12;5;7) equals 218</Example>
 	<Example>sumsq(12.5;2) equals 173</Example>
