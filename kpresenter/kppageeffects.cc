@@ -35,7 +35,8 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     int height = _pix1.height();
     QTime _time;
     int _step = 0, _steps = 0, _h = 0, _w = 0, _x = 0, _y = 0;
-
+    int hsteps = static_cast<int>( height / speedFaktor );
+    int wsteps = static_cast<int>( width / speedFaktor );
     switch ( effect )
     {
     case PEF_NONE:
@@ -43,7 +44,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         break;
     case PEF_CLOSE_HORZ:
     {
-        _steps = static_cast<int>( static_cast<float>( height ) / speedFaktor );
+        _steps = hsteps;
         _time.start();
 
         for ( ; ; )
@@ -53,7 +54,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             {
                 _step++;
                 _h = ( height/( 2 * _steps ) ) * _step;
-                _h = _h > height / 2 ? height / 2 : _h;
+                _h = kMin( _h, height / 2 );
 
                 bitBlt( canv, 0, 0, &_pix2, 0, height / 2 - _h, width, _h );
                 bitBlt( canv, 0, height - _h, &_pix2, 0, height / 2, width, _h );
@@ -65,7 +66,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     } break;
     case PEF_CLOSE_VERT:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         for ( ; ; )
@@ -75,7 +76,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             {
                 _step++;
                 _w = ( width/( 2 * _steps ) ) * _step;
-                _w = _w > width / 2 ? width / 2 : _w;
+                _w = kMin( _w, width / 2 );
 
                 bitBlt( canv, 0, 0, &_pix2, width / 2 - _w, 0, _w, height );
                 bitBlt( canv, width - _w, 0, &_pix2, width / 2, 0, _w, height );
@@ -87,7 +88,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     } break;
     case PEF_CLOSE_ALL:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         for ( ; ; )
@@ -97,10 +98,10 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             {
                 _step++;
                 _w = ( width/( 2 * _steps ) ) * _step;
-                _w = _w > width / 2 ? width / 2 : _w;
+                _w = kMin( _w, width / 2 );
 
                 _h = ( height/( 2 * _steps ) ) * _step;
-                _h = _h > height / 2 ? height / 2 : _h;
+                _h = kMin( _h, height / 2 );
 
                 bitBlt( canv, 0, 0, &_pix2, 0, 0, _w, _h );
                 bitBlt( canv, width - _w, 0, &_pix2, width - _w, 0, _w, _h );
@@ -115,7 +116,9 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     } break;
     case PEF_OPEN_HORZ:
     {
-        _steps = static_cast<int>( static_cast<float>( height ) / speedFaktor );
+        _y = height / 2;
+        int hdelta = _y / hsteps;
+        int h0 = 0;
         _time.start();
 
         for ( ; ; )
@@ -124,21 +127,23 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _h = ( height / _steps ) * _step;
-                _h = _h > height ? height : _h;
-
-                _y = height / 2;
-
-                bitBlt( canv, 0, _y - _h / 2, &_pix2, 0, _y - _h / 2, width, _h );
+                _h = hdelta * _step;
+                _h = kMin( _h, _y );
+                bitBlt( canv, 0, _y - _h, &_pix2, 0, _y - _h, width, _h - h0 );
+                bitBlt( canv, 0, _y + h0, &_pix2, 0, _y + h0, width, _h - h0 );
+                h0 = _h;
 
                 _time.restart();
             }
-            if ( ( height / _steps ) * _step >= height ) break;
+            if ( hdelta * _step >= _y )
+                break;
         }
     } break;
     case PEF_OPEN_VERT:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _x = width / 2;
+        int wdelta = _x / wsteps;
+        int w0 = 0;
         _time.start();
 
         for ( ; ; )
@@ -147,21 +152,28 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = ( width / _steps ) * _step;
-                _w = _w > width ? width : _w;
-
-                _x = width / 2;
-
-                bitBlt( canv, _x - _w / 2, 0, &_pix2, _x - _w / 2, 0, _w, height );
+                _w = wdelta * _step;
+                _w = kMin( _w, _x );
+                bitBlt( canv, _x - _w, 0,
+                        &_pix2, _x - _w, 0, _w - w0, height );
+                bitBlt( canv, _x + w0, 0,
+                        &_pix2, _x + w0, 0, _w - w0, height );
+                w0 = _w;
 
                 _time.restart();
             }
-            if ( ( width / _steps ) * _step >= width ) break;
+            if ( wdelta * _step >= _x )
+                break;
         }
     } break;
     case PEF_OPEN_ALL:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _x = width / 2;
+        _y = height / 2;
+        int wdelta = _x / wsteps;
+        int hdelta = _y / wsteps;
+        int w0 = 0, h0 = 0;
+
         _time.start();
 
         for ( ; ; )
@@ -170,52 +182,45 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = ( width / _steps ) * _step;
-                _w = _w > width ? width : _w;
+                _w = wdelta * _step;
+                _w = kMin( _w, _x );
 
-                _x = width / 2;
+                _h = hdelta * _step;
+                _h = kMin( _h, _y );
 
-                _h = ( height / _steps ) * _step;
-                _h = _h > height ? height : _h;
-
-                _y = height / 2;
-
-                bitBlt( canv, _x - _w / 2, _y - _h / 2, &_pix2, _x - _w / 2, _y - _h / 2, _w, _h );
+                // drawing rectangles without fill.
+		// horizontal stripes
+                bitBlt( canv, _x - _w, _y - _h,
+                        &_pix2, _x - _w, _y - _h, 2 * _w, _h - h0 );
+                bitBlt( canv, _x - _w, _y + h0,
+                        &_pix2, _x - _w, _y + h0, 2 * _w, _h - h0 );
+                // vertical stripes
+                bitBlt( canv, _x - _w, _y - _h,
+                        &_pix2, _x - _w, _y - _h, _w - w0, 2 * _h );
+                bitBlt( canv, _x + w0, _y - _h,
+                        &_pix2, _x + w0, _y - _h, _w - w0, 2 * _h );
+                w0 = _w;
+                h0 = _h;
 
                 _time.restart();
             }
-            if ( ( width / _steps ) * _step >= width &&
-                 ( height / _steps ) * _step >= height ) break;
+            if ( wdelta * _step >= width &&
+                 hdelta * _step >= height )
+                break;
         }
     } break;
     case PEF_INTERLOCKING_HORZ_1:
-    {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
-        _time.start();
-
-        for ( ; ; )
-        {
-            kapp->processEvents();
-            if ( _time.elapsed() >= 1 )
-            {
-                _step++;
-                _w = ( width / _steps ) * _step;
-                _w = _w > width ? width : _w;
-
-                bitBlt( canv, 0, 0, &_pix2, 0, 0, _w, height / 4 );
-                bitBlt( canv, 0, height / 2, &_pix2, 0, height / 2, _w, height / 4 );
-                bitBlt( canv, width - _w, height / 4, &_pix2, width - _w, height / 4, _w, height / 4 );
-                bitBlt( canv, width - _w, height / 2 + height / 4, &_pix2, width - _w,
-                        height / 2 + height / 4, _w, height / 4 );
-
-                _time.restart();
-            }
-            if ( ( width / _steps ) * _step >= width ) break;
-        }
-    } break;
     case PEF_INTERLOCKING_HORZ_2:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        int w0 = 0;
+        int h4 = height / 4;
+        int loff = 0; // vertical offset for upper stripe coming from left
+        int roff = h4;
+        if ( effect == PEF_INTERLOCKING_HORZ_2 ) {
+            loff = h4;
+            roff = 0;
+        }
+
         _time.start();
 
         for ( ; ; )
@@ -224,47 +229,34 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = ( width / _steps ) * _step;
-                _w = _w > width ? width : _w;
+                _w = ( width / wsteps ) * _step;
+                _w = kMin( _w, width );
 
-                bitBlt( canv, 0, height / 4, &_pix2, 0, height / 4, _w, height / 4 );
-                bitBlt( canv, 0, height / 2 + height / 4, &_pix2, 0, height / 2 + height / 4, _w, height / 4 );
-                bitBlt( canv, width - _w, 0, &_pix2, width - _w, 0, _w, height / 4 );
-                bitBlt( canv, width - _w, height / 2, &_pix2, width - _w, height / 2, _w, height / 4 );
+                bitBlt( canv, w0, loff, &_pix2, w0, loff, _w - w0, h4 );
+                bitBlt( canv, w0, loff + 2 * h4,
+                        &_pix2, w0, loff + 2 * h4, _w - w0, h4 );
+                bitBlt( canv, width - _w, roff,
+                        &_pix2, width - _w, roff, _w - w0, h4 );
+                bitBlt( canv, width - _w, roff + 2 * h4, &_pix2, width - _w,
+                        roff + 2 * h4, _w - w0, h4 );
+                w0 = _w;
 
                 _time.restart();
             }
-            if ( ( width / _steps ) * _step >= width ) break;
+            if ( ( width / wsteps ) * _step >= width ) break;
         }
     } break;
     case PEF_INTERLOCKING_VERT_1:
-    {
-        _steps = static_cast<int>( static_cast<float>( height ) / speedFaktor );
-        _time.start();
-
-        for ( ; ; )
-        {
-            kapp->processEvents();
-            if ( _time.elapsed() >= 1 )
-            {
-                _step++;
-                _h = ( height / _steps ) * _step;
-                _h = _h > height ? height : _h;
-
-                bitBlt( canv, 0, 0, &_pix2, 0, 0, width / 4, _h );
-                bitBlt( canv, width / 2, 0, &_pix2, width / 2, 0, width / 4, _h );
-                bitBlt( canv, width / 4, height - _h, &_pix2, width / 4, height - _h, width / 4, _h );
-                bitBlt( canv, width / 2 + width / 4, height - _h, &_pix2, width / 2 + width / 4, height - _h,
-                        width / 4, _h );
-
-                _time.restart();
-            }
-            if ( ( height / _steps ) * _step >= height ) break;
-        }
-    } break;
     case PEF_INTERLOCKING_VERT_2:
     {
-        _steps = static_cast<int>( static_cast<float>( height ) / speedFaktor );
+        int h0 = 0;
+        int w4 = width / 4;
+        int toff = 0; // horizontal offset for left-most stripe from top
+        int boff = w4;
+        if ( effect == PEF_INTERLOCKING_VERT_2 ) {
+            toff = w4;
+            boff = 0;
+        }
         _time.start();
 
         for ( ; ; )
@@ -273,17 +265,21 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _h = ( height / _steps ) * _step;
-                _h = _h > height ? height : _h;
+                _h = ( height / hsteps ) * _step;
+                _h = kMin( _h, height );
 
-                bitBlt( canv, width / 4, 0, &_pix2, width / 4, 0, width / 4, _h );
-                bitBlt( canv, width / 2 + width / 4, 0, &_pix2, width / 2 + width / 4, 0, width / 4, _h );
-                bitBlt( canv, 0, height - _h, &_pix2, 0, height - _h, width / 4, _h );
-                bitBlt( canv, width / 2, height - _h, &_pix2, width / 2, height - _h, width / 4, _h );
+                bitBlt( canv, toff, h0, &_pix2, toff, h0, w4, _h - h0 );
+                bitBlt( canv, toff + 2 * w4, h0,
+                        &_pix2, toff + 2 * w4, h0, w4, _h - h0 );
+                bitBlt( canv, boff, height - _h,
+                        &_pix2, boff, height - _h, w4, _h - h0 );
+                bitBlt( canv, boff + 2 * w4, height - _h,
+                        &_pix2, boff + 2 * w4, height - _h, w4, _h - h0 );
+                h0 = _h;
 
                 _time.restart();
             }
-            if ( ( height / _steps ) * _step >= height ) break;
+            if ( ( height / hsteps ) * _step >= height ) break;
         }
     } break;
     case PEF_SURROUND1:
@@ -294,7 +290,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         int curr = 1;
         int curr2 = 1;
 
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         for ( ; ; )
@@ -372,7 +368,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     } break;
     case PEF_FLY1:
     {
-        _steps = static_cast<int>( static_cast<float>( height ) / speedFaktor );
+        _steps = hsteps;
         _time.start();
 
         int _psteps = _steps / 5;
@@ -466,7 +462,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     case PEF_BLINDS_HOR:
     {
         int blockSize = height / 8;
-        _steps = static_cast<int>( static_cast<float>( height ) / speedFaktor );
+        _steps = hsteps;
         if( _steps < 1 ) _steps = 1;
 
         _time.start();
@@ -493,7 +489,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     case PEF_BLINDS_VER:
     {
         int blockSize = width / 8;
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );        if( _steps < 1 ) _steps = 1;
+        _steps = wsteps;
 
         _time.start();
 
@@ -518,7 +514,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Box In
     case PEF_BOX_IN:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         _w = _h = 0;
@@ -546,7 +542,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Box Out
     case PEF_BOX_OUT:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         _w = _h = 0;
@@ -572,7 +568,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Checkboard Across
     case PEF_CHECKBOARD_ACROSS:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int blocksize = height / 8;
@@ -608,7 +604,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Checkboard Down
     case PEF_CHECKBOARD_DOWN:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int blocksize = height / 8;
@@ -644,7 +640,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Cover Down
     case PEF_COVER_DOWN:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -671,7 +667,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Uncover Down
     case PEF_UNCOVER_DOWN:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -698,7 +694,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Cover Up
     case PEF_COVER_UP:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -725,7 +721,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Uncover Up
     case PEF_UNCOVER_UP:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -752,7 +748,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Cover Left
     case PEF_COVER_LEFT:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -779,7 +775,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Uncover Left
     case PEF_UNCOVER_LEFT:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -807,7 +803,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Cover Right
     case PEF_COVER_RIGHT:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -834,7 +830,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Uncover Right
     case PEF_UNCOVER_RIGHT:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -862,7 +858,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Cover Left-Up
     case PEF_COVER_LEFT_UP:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -891,7 +887,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Uncover Left-Up
     case PEF_UNCOVER_LEFT_UP:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -922,7 +918,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Cover Left-Down
     case PEF_COVER_LEFT_DOWN:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -951,7 +947,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Uncover Left-Down
     case PEF_UNCOVER_LEFT_DOWN:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -982,7 +978,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Cover Right-Up
     case PEF_COVER_RIGHT_UP:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -1011,7 +1007,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Uncover Right-Up
     case PEF_UNCOVER_RIGHT_UP:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -1042,7 +1038,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Cover Right-Down
     case PEF_COVER_RIGHT_DOWN:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -1071,7 +1067,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Uncover Right-Down
     case PEF_UNCOVER_RIGHT_DOWN:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
         _time.start();
 
         int dheight = height;
@@ -1113,7 +1109,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         for( unsigned c = 0; c < cellno; c++ )
             cells.append( c );
 
-        _steps = static_cast<int>( static_cast<float>( height ) / speedFaktor );
+        _steps = hsteps;
 
         _steps *= 10;
 
@@ -1146,7 +1142,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Strips Left-Up
     case PEF_STRIPS_LEFT_UP:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
 
         unsigned blocks = _steps / 2;
         unsigned blockSize = width / blocks;
@@ -1177,7 +1173,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Strips Left-Down
     case PEF_STRIPS_LEFT_DOWN:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
 
         unsigned blocks = _steps / 2;
         unsigned blockSize = width / blocks;
@@ -1207,7 +1203,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Strips Right-Up
     case PEF_STRIPS_RIGHT_UP:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
 
         unsigned blocks = _steps / 2;
         unsigned blockSize = width / blocks;
@@ -1237,7 +1233,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     // Strips Right-Down
     case PEF_STRIPS_RIGHT_DOWN:
     {
-        _steps = static_cast<int>( static_cast<float>( width ) / speedFaktor );
+        _steps = wsteps;
 
         unsigned blocks = _steps / 2;
         unsigned blockSize = width / blocks;
