@@ -19,9 +19,8 @@ $(BUILDDIR)/build-stamp:
 	fi 
 	test -d $(BUILDDIR) || mkdir $(BUILDDIR) ;\
 	cd $(BUILDDIR) ;\
-	../configure --disable-debug --disable-rpath --enable-final \
-	--libdir=/$(kde_libdir) --includedir=/$(kde_includedir) \
-	--prefix=/$(kde_prefix) --with-qtdir=$(QTDIR)
+	$$PWD/../configure $(configkde) \
+	--libdir=/$(kde_libdir) --includedir=/$(kde_includedir)
 
 	make -C $(BUILDDIR)
 
