@@ -270,8 +270,6 @@ public slots:
     void screenNext();
     void screenLast();
     void screenSkip();
-    void screenPenColor();
-    void screenPenWidth( const QString &w );
 
     // text toolbar
     void sizeSelected( int size );
@@ -950,8 +948,6 @@ private:
     KAction *actionEditFindNext;
     KAction *actionEditFindPrevious;
     KAction *actionEditReplace;
-    KColorAction *actionScreenPenColor;
-    KSelectAction *actionScreenPenWidth;
 
     KAction *actionColorBar;
     KAction *actionExtraDefaultTemplate;

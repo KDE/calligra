@@ -337,16 +337,6 @@ void KPresenterViewIface::screenSkip()
     view->screenSkip();
 }
 
-void KPresenterViewIface::screenPenColor()
-{
-    view->screenPenColor();
-}
-
-void KPresenterViewIface::screenPenWidth( const QString &w )
-{
-    view->screenPenWidth( w );
-}
-
 void KPresenterViewIface::screenViewPage()
 {
     view->screenViewPage();

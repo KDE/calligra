@@ -2562,8 +2562,6 @@ void KPresenterView::initGui()
     actionTextColor->setCurrentColor( Qt::black );
     actionBrushColor->setCurrentColor( Qt::white );
     actionPenColor->setCurrentColor( Qt::black );
-    actionScreenPenColor->setColor( Qt::red );
-    actionScreenPenWidth->setCurrentItem( 2 );
     updateSideBarMenu();
     objectSelectedChanged();
     refreshPageButton();
@@ -3082,18 +3080,6 @@ void KPresenterView::setupActions()
                                     "goto", 0,
                                     this, SLOT( screenSkip() ),
                                     actionCollection(), "screen_skip" );
-
-    actionScreenPenColor = new KColorAction( i18n( "Presentation Pen Colo&r..." ), KColorAction::BackgroundColor, 0,
-                                             this, SLOT( screenPenColor() ),
-                                             actionCollection(), "screen_pencolor" );
-
-    actionScreenPenWidth = new KSelectAction( i18n( "Presentation Pen &Width" ), 0,
-					     actionCollection(), "screen_penwidth" );
-    QStringList lst;
-    lst << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "10";
-    actionScreenPenWidth->setItems( lst );
-    connect( actionScreenPenWidth, SIGNAL( activated( const QString & ) ),
-             this, SLOT( screenPenWidth( const QString & ) ) );
 
      // ----------------- colorbar(Brush and Pen) action
 
@@ -4036,31 +4022,6 @@ void KPresenterView::alignChanged( int align )
         }
     }
 }
-
-/*======================== set pres pen width 1 =================*/
-void KPresenterView::screenPenWidth( const QString &item )
-{
-    int i = item.toInt();
-    QPen p = kPresenterDoc()->presPen();
-    p.setWidth( i );
-    kPresenterDoc()->setPresPen( p );
-}
-
-/*======================== set pres pen color ===================*/
-void KPresenterView::screenPenColor()
-{
-    QColor c = kPresenterDoc()->presPen().color();
-    if ( KColorDialog::getColor( c, Qt::red) )
-    {
-	QPen p = kPresenterDoc()->presPen();
-	p.setColor( c );
-	kPresenterDoc()->setPresPen( p );
-	actionScreenPenColor->blockSignals( true );
-	actionScreenPenColor->setColor( c );
-	actionScreenPenColor->blockSignals( false );
-    }
-}
-
 
 /*====================== change pciture =========================*/
 void KPresenterView::changePicture( const QString & filename )

@@ -164,9 +164,6 @@
   <Action name="screen_next"/>
   <Action name="screen_last"/>
   <Separator/>
-  <Action name="screen_pencolor"/>
-  <Action name="screen_penwidth"/>
-  <Separator/>
   <Action name="screen_presstruct"/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
