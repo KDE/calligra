@@ -458,3 +458,31 @@ void SymbolElement::moveToLowerIndex(FormulaCursor* cursor, Direction direction)
         }
     }
 }
+
+QDomElement SymbolElement::getElementDom(QDomDocument *doc)
+{
+    QDomElement de=doc->createElement("SYMBOL");
+    int sz=getRelativeSize();
+    if(sz!=0) {
+        de.setAttribute("SIZE",sz);
+    }
+    QDomElement con=doc->createElement("CONTENT");
+    con.appendChild(content->getElementDom(doc));
+    de.appendChild(con);
+
+    de.setAttribute("TYPE","not yet implemented");
+    
+    if(hasLower()) {
+        QDomElement ind=doc->createElement("LOWER");
+        ind.appendChild(lower->getElementDom(doc));
+        de.appendChild(ind);
+    }
+    if(hasUpper()) {
+        QDomElement ind=doc->createElement("UPPER");
+        ind.appendChild(upper->getElementDom(doc));
+        de.appendChild(ind);
+    }
+    return de;
+}
+
+

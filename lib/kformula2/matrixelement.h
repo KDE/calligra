@@ -98,6 +98,10 @@ public:
      * For most elements that is the main child.
      */
     virtual void goInside(FormulaCursor* cursor);
+
+
+    virtual QDomElement getElementDom(QDomDocument *doc);
+    
     
 private:
 

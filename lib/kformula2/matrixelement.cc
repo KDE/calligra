@@ -313,3 +313,30 @@ bool MatrixElement::searchElement(BasicElement* element, int& row, int& column)
     }
     return false;
 }
+
+QDomElement MatrixElement::getElementDom(QDomDocument *doc)
+{
+    QDomElement de=doc->createElement("MATRIX");
+    int sz=getRelativeSize();
+    if(sz!=0) {
+         de.setAttribute("SIZE",sz);
+    }
+    uint rows = getRows();
+    uint cols = getColumns();
+   
+    de.setAttribute("ROWS",rows);
+    de.setAttribute("COULMNS",cols); 
+
+    for (uint i = 0; i < rows; i++) {
+        for (uint j = 0; j < cols; j++) {
+    	    QDomElement tmpEleDom=getElement(i,j)->getElementDom(doc);
+            de.appendChild(tmpEleDom);
+    
+	}
+        de.appendChild(doc->createComment("end of row")); 
+    }
+
+    return de;
+}
+
+

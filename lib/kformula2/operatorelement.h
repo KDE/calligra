@@ -44,6 +44,10 @@ public:
      */
     virtual void draw(QPainter& painter, ContextStyle& context, int parentSize, const QPoint& parentOrigin);
 
+    virtual QDomElement getElementDom(QDomDocument *doc);
+
+
+
 private:
 
     /**

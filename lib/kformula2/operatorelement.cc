@@ -53,3 +53,10 @@ void OperatorElement::draw(QPainter& painter, ContextStyle& context, int parentS
                       QPoint(parentOrigin.x()+spaceWidth/2, parentOrigin.y()));
 }
 
+QDomElement OperatorElement::getElementDom(QDomDocument *doc)
+{
+return TextElement::getElementDom(doc);
+}
+
+    
+

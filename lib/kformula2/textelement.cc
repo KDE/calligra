@@ -118,8 +118,6 @@ QDomElement TextElement::getElementDom(QDomDocument *doc)
     }
     //May be this is wrong
     de.setAttribute("CHAR",QString(character));
-    cerr << "TAG: " << (const char *)de.tagName().latin1() << endl;
-    cerr << "end of text" << endl;
     return de;
 }
 

@@ -181,6 +181,9 @@ public:
     virtual bool hasUpperIndex() const { return hasUpper(); }
     virtual bool hasLowerIndex() const { return hasLower(); }
     
+    virtual QDomElement getElementDom(QDomDocument *doc);
+     
+
 private:
 
     void setToContent(FormulaCursor* cursor);
