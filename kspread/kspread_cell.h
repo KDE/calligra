@@ -384,6 +384,20 @@ public:
      * Called by setCellText.
      */
     void setDisplayText( const QString& _text );
+    
+    /**
+     * Sets a link for this cell. For example, setLink( "mailto:joe@somewhere.com" )
+     * will open a new e-mail if this cell is clicked.
+     * Possible choices for link are URL (web, ftp), e-mail address, local file, 
+     * or another cell.
+     */
+    void setLink( const QString& link );
+    
+    /**
+     * Returns the link associated with cell. It is empty if this cell
+     * contains no link.
+     */
+    QString link() const; 
 
     ////////////////////////////////
     //

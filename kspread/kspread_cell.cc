@@ -100,6 +100,10 @@ using namespace KSpreadCell_LNS;
 class CellExtra
 {
 public:
+
+    // Not empty when the cell holds a link
+    QString link;
+
     // Set when the cell contains rich text
     // At the moment, it's used to store hyperlink
     QSimpleRichText *QML;
@@ -4069,6 +4073,27 @@ void KSpreadCell::setDisplayText( const QString& _text )
   }
 
   m_pTable->doc()->emitEndOperation( QRect( d->column, d->row, 1, 1 ) );
+}
+
+void KSpreadCell::setLink( const QString& link )
+{
+  if( link.isEmpty() ) return;
+  
+  d->extra()->link = link;
+  
+  QString t = d->strText;
+  if( t.isEmpty() ) 
+    t = link;
+    
+  // TODO what if strText is already rich-text?
+        
+  t = "!<a href=\"" + link + "\">" + t + +"</a>";;
+  setCellText( t );
+}
+
+QString KSpreadCell::link() const
+{
+  return d->extra()->link;
 }
 
 void KSpreadCell::update()
