@@ -26,7 +26,7 @@ Boston, MA 02111-1307, USA.
 #ifdef Q_WS_WIN
 # include <mysql/config-win.h>
 #endif
-#include <mysql/mysql.h>
+#include <mysql.h>
 #define BOOL bool
 
 namespace KexiDB {
