@@ -17,15 +17,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#include "kolinewidthaction.h"
+#include "kolinestyleaction.h"
 
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
 #include <qwhatsthis.h>
 #include <qmenubar.h>
-#include <qlayout.h>
-#include <qlabel.h>
 
 #include <kpopupmenu.h>
 #include <kapplication.h>
@@ -35,76 +33,65 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-#include <kozoomhandler.h>
-#include <koUnitWidgets.h>
-
-KoLineWidthAction::KoLineWidthAction(const QString &text, const QString& icon,
+KoLineStyleAction::KoLineStyleAction(const QString &text, const QString& icon,
   QObject* parent, const char* name) : KActionMenu(text, icon, parent, name)
 {
-  m_popup = new KPopupMenu(0L,"KoLineWidthAction::popup");
-  m_currentIndex = 0;
-  m_currentWidth = 1.0;
-  m_unit = KoUnit::U_PT;
+  m_popup = new KPopupMenu(0L,"KoLineStyleAction::popup");
+  m_currentStyle = Qt::SolidLine;
   
   createMenu();
 }
 
-KoLineWidthAction::KoLineWidthAction(const QString &text, const QString& icon, const QObject* receiver,
+KoLineStyleAction::KoLineStyleAction(const QString &text, const QString& icon, const QObject* receiver,
   const char* slot, QObject* parent, const char* name) : KActionMenu(text, icon, parent, name)
 {
-  m_popup = new KPopupMenu(0L,"KoLineWidthAction::popup");
-  m_currentIndex = 0;
-  m_currentWidth = 1.0;
-  m_unit = KoUnit::U_PT;
+  m_popup = new KPopupMenu(0L,"KoLineStyleAction::popup");
+  m_currentStyle = Qt::SolidLine;
   
   createMenu();
   
-  connect(this, SIGNAL(newLineWidth(double)), receiver, slot);
+  connect(this, SIGNAL(newLineStyle(int)), receiver, slot);
   connect(popupMenu(), SIGNAL(activated(int)), this, SLOT(execute(int)));
 }
 
-KoLineWidthAction::~KoLineWidthAction()
+KoLineStyleAction::~KoLineStyleAction()
 {
   delete m_popup;
   m_popup = 0;
 }
 
-void KoLineWidthAction::createMenu()
+void KoLineStyleAction::createMenu()
 {
   KPopupMenu* popup = popupMenu();
-  KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
   QBitmap mask;
   QPixmap pix(70, 21);
   QPainter p(&pix, popup);
   int cindex = 0;
   QPen pen;
+  pen.setWidth(2);
 
-  for(int i = 1; i <= 10; i++) {
+  for(int i = 0; i < 6; i++) {
     pix.fill(white);
-    pen.setWidth(zoom.zoomItY(i));
+    pen.setStyle(static_cast<Qt::PenStyle>(i));
     p.setPen(pen);
     p.drawLine(0, 10, pix.width(), 10);
     mask = pix;
     pix.setMask(mask);
     popup->insertItem(pix,cindex++);
   }
-  
-  popup->insertSeparator(cindex++);
-  popup->insertItem(i18n("&Custom..."), cindex++);
 }
 
-KPopupMenu* KoLineWidthAction::popupMenu() const
+KPopupMenu* KoLineStyleAction::popupMenu() const
 {
   return m_popup;
 }
 
-void KoLineWidthAction::popup(const QPoint& global)
+void KoLineStyleAction::popup(const QPoint& global)
 {
   popupMenu()->popup(global);
 }
 
-int KoLineWidthAction::plug(QWidget* widget, int index)
+int KoLineStyleAction::plug(QWidget* widget, int index)
 {
   // This function is copied from KActionMenu::plug
   if (kapp && !kapp->authorizeKAction(name()))
@@ -184,91 +171,17 @@ int KoLineWidthAction::plug(QWidget* widget, int index)
   return -1;
 }
 
-void KoLineWidthAction::execute(int index)
+void KoLineStyleAction::execute(int index)
 {
-  bool ok = false;
-  
-  if((index >= 0) && (index < 10)) {
-    m_currentWidth = (double) index + 1.0;
-    ok = true;
-  } if(index == 11) { // Custom width dialog...
-    KoLineWidthChooser dlg;
-    dlg.setUnit(m_unit);
-    dlg.setWidth(m_currentWidth);
-    
-    if(dlg.exec()) {
-      m_currentWidth = dlg.width();
-      ok = true;
-    }
-  }
-
-  if(ok) {
-    popupMenu()->setItemChecked(m_currentIndex, false);
-    popupMenu()->setItemChecked(index, true);
-    m_currentIndex = index;
-    emit newLineWidth(m_currentWidth);
-  }
+  setCurrentStyle(index);
+  emit newLineStyle(m_currentStyle);
 }
 
-void KoLineWidthAction::setCurrentWidth(double width)
+void KoLineStyleAction::setCurrentStyle(int style)
 {
-  m_currentWidth = width;
-  
-  // Check if it is a standard width...
-  for(int i = 1; i <= 10; i++) {
-    if(KoUnit::toPoint(width) == (double) i) {
-      popupMenu()->setItemChecked(m_currentIndex, false);
-      popupMenu()->setItemChecked(i - 1, true);
-      m_currentIndex = i - 1;
-      return;
-    }
-  }
-
-  //Custom width...
-  popupMenu()->setItemChecked(m_currentIndex, false);
-  popupMenu()->setItemChecked(11, true);
-  m_currentIndex = 11;
+  popupMenu()->setItemChecked(m_currentStyle, false);
+  popupMenu()->setItemChecked(style, true);
+  m_currentStyle = style;
 }
 
-void KoLineWidthAction::setUnit(KoUnit::Unit unit)
-{
-  m_unit = unit;
-}
-
-//////////////////////////////////////////////////
-//
-// KoLineWidthChooser
-//
-
-KoLineWidthChooser::KoLineWidthChooser(QWidget* parent, const char* name)
- : KDialogBase(parent, name, true, i18n("Custom Line Width"), Ok|Cancel, Ok)
-{
-  m_unit = KoUnit::U_PT;
-
-  // Create the ui
-  QWidget* mainWidget = new QWidget(this);
-  setMainWidget(mainWidget);
-  QGridLayout* gl = new QGridLayout(mainWidget, 1, 2, KDialog::marginHint(), KDialog::spacingHint());
-  QLabel* textLbl = new QLabel(i18n("Line Width:"), mainWidget);
-  m_lineWidthUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
-  gl->addWidget(textLbl, 0, 0);
-  gl->addWidget(m_lineWidthUSBox, 0, 1);
-}
-
-double KoLineWidthChooser::width()
-{
-  return KoUnit::ptFromUnit(m_lineWidthUSBox->value(), m_unit);
-}
-
-void KoLineWidthChooser::setUnit(KoUnit::Unit unit)
-{
-  m_unit = unit;
-  m_lineWidthUSBox->setUnit(unit);
-}
-
-void KoLineWidthChooser::setWidth(double width)
-{
-  m_lineWidthUSBox->changeValue(KoUnit::ptToUnit(width, m_unit));
-}
-
-#include "kolinewidthaction.moc"
+#include "kolinestyleaction.moc"

@@ -120,6 +120,7 @@
 #include "kivioarrowheadformatdlg.h"
 
 #include "kolinewidthaction.h"
+#include "kolinestyleaction.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -466,7 +467,10 @@ void KivioView::setupActions()
     actionCollection(), "setLineWidth");
   m_lineWidthAction->setUnit(m_pDoc->units());
   connect(m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_lineWidthAction, SLOT(setUnit(KoUnit::Unit)));
-  
+
+  m_lineStyleAction = new KoLineStyleAction(i18n("Line Style"), "linestyle", this, SLOT(setLineStyle(int)),
+    actionCollection(), "setLineStyle");
+    
   m_paperLayout = new KAction( i18n("Page Layout..."), 0, this, SLOT(paperLayoutDlg()), actionCollection(), "paperLayout" );
   m_insertPage = new KAction( i18n("Insert Page"),"item_add", 0, this, SLOT(insertPage()), actionCollection(), "insertPage" );
   m_removePage = new KAction( i18n("Remove Page"), "item_remove",0,this, SLOT(removePage()), actionCollection(), "removePage" );
@@ -970,6 +974,25 @@ void KivioView::setLineWidth(double width)
   m_pDoc->updateView(m_pActivePage);
 }
 
+void KivioView::setLineStyle(int style)
+{
+  //FIXME: Make this undoable!!!!
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  
+  if(!pStencil)
+    return;
+
+  while(pStencil)
+  {
+    if(style != pStencil->linePattern())
+    {
+      pStencil->setLinePattern(style);
+    }
+  
+    pStencil = m_pActivePage->selectedStencils()->next();
+  }
+}
+
 void KivioView::groupStencils()
 {
     m_pActivePage->groupSelectedStencils();
@@ -1009,6 +1032,11 @@ QColor KivioView::bgColor() const
 double KivioView::lineWidth() const
 {
     return m_lineWidthAction->currentWidth();
+}
+
+int KivioView::lineStyle() const
+{
+  return m_lineStyleAction->currentStyle();
 }
 
 
@@ -1177,6 +1205,7 @@ void KivioView::updateToolBars()
         m_setItalics->setChecked( false );
         m_setUnderline->setChecked( false );
         m_lineWidthAction->setCurrentWidth(1.0);
+        m_lineStyleAction->setCurrentStyle(Qt::SolidLine);
         showAlign(Qt::AlignHCenter);
         showVAlign(Qt::AlignVCenter);
 
@@ -1201,6 +1230,7 @@ void KivioView::updateToolBars()
         m_setUnderline->setChecked( f.underline() );
 
         m_lineWidthAction->setCurrentWidth(pStencil->lineWidth());
+        m_lineStyleAction->setCurrentStyle(pStencil->linePattern());
 
         m_setFGColor->setActiveColor(pStencil->fgColor());
         m_setBGColor->setActiveColor(pStencil->bgColor());

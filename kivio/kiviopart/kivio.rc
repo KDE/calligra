@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="17">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="18">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="edit_undo"/>
@@ -85,12 +85,12 @@
   <Action name="viewZoom"/>
 </ToolBar>
 <ToolBar name="FormatToolBar" fullWidth="false"><text>Format</text>
-  <Action name="arrowHeads"/>
-  <Separator/>
   <Action name="setFGColor"/>
   <Action name="setBGColor"/>
   <Separator/>
+  <Action name="arrowHeads"/>
   <Action name="setLineWidth"/>
+  <Action name="setLineStyle"/>
 </ToolBar>
 <ToolBar name="TextBar" fullWidth="false"><text>Text Format</text>
   <Action name="setFontFamily"/>

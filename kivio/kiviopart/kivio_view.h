@@ -65,6 +65,7 @@ class KoZoomHandler;
 class KoUnitDoubleSpinBox;
 class KStatusBarLabel;
 class KoLineWidthAction;
+class KoLineStyleAction;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -124,6 +125,7 @@ class KivioView : public KoView
     QColor fgColor()const;
     QColor bgColor()const;
     double lineWidth()const;
+    int lineStyle() const;
     void updateButton();
     void insertPage( KivioPage* page );
     void resetLayerPanel();
@@ -213,7 +215,8 @@ class KivioView : public KoView
     void setFontSize( int );
 
     void setLineWidth(double);
-
+    void setLineStyle(int);
+    
     void toggleFontBold(bool);
     void toggleFontItalics(bool);
     void toggleFontUnderline(bool);
@@ -345,6 +348,7 @@ class KivioView : public KoView
     KAction* m_stencilToBack;
     KAction* m_alignAndDistribute;
     KoLineWidthAction* m_lineWidthAction;
+    KoLineStyleAction* m_lineStyleAction;
 };
 
 #endif
