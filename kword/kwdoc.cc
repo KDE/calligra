@@ -321,7 +321,6 @@ void KWDocument::saveConfig()
     config->writeEntry( "Zoom", m_zoom );
     config->writeEntry( "showDocStruct",m_bShowDocStruct);
     config->writeEntry( "viewmode",m_lastViewMode);
-    config->writeEntry( "SpellCheck", m_bgSpellCheck->backgroundSpellCheckEnabled() );
 }
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY )
