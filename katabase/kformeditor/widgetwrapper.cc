@@ -174,7 +174,12 @@ bool WidgetWrapper::eventFilter( QObject* _obj, QEvent* _event )
 
       xpos = xpos > 0 ? xpos : 0;
       ypos = ypos > 0 ? ypos : 0;
- 
+
+      xpos = ( xpos + size().width() ) <= parentWidget()->size().width() ?
+               xpos : parentWidget()->size().width() - size().width();
+      ypos = ( ypos + size().height() ) <= parentWidget()->size().height() ?
+               ypos : parentWidget()->size().height() - size().height();
+
       move( xpos, ypos );
     }
   }
