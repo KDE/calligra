@@ -88,35 +88,29 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
         strExt=filenameOut.mid(result);
     }
 
-    QString strMime; // Mime type of the compressor (default: unknown)
+    QString strMimeType; // Mime type of the compressor
 
     if ((strExt==".gz")||(strExt==".GZ")        //in case of .abw.gz (logical extension)
         ||(strExt==".zabw")||(strExt==".ZABW")) //in case of .zabw (extension used prioritary with AbiWord)
     {
         // Compressed with gzip
         kdDebug(30506) << "Compression: gzip" << endl;
-        // FIXME: Use KQIODeviceGZip, as KFilterDev seems to produce huge gzipped files (WHY?)
-# if 1
-        m_ioDevice = new KQIODeviceGZip(filenameOut);
-# else
-        m_ioDevice = KFilterDev::deviceForFile(filenameOut,"application/x-gzip");
-# endif
+        strMimeType="application/x-gzip";
     }
     else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
         // Compressed with bzip2 (TODO: activate me in the .desktop file and test me!)
         kdDebug(30506) << "Compression: bzip2" << endl;
-        m_ioDevice = KFilterDev::deviceForFile(filenameOut,"application/x-bzip2");
+        strMimeType="application/x-bzip2";
     }
     else
     {
-        // Uncompressed, we cannot use KFiterDev
-        //   KFilterBase is uncooperative for writing uncompressed files
-        //   (as it defaults to "application/x-gzip" if no filter is found)
         kdDebug(30506) << "No compression" << endl;
-        m_ioDevice = new QFile(filenameOut);
+        strMimeType="text/plain";
     }
+
+    m_ioDevice = KFilterDev::deviceForFile(filenameOut,strMimeType);
 
     if (!m_ioDevice)
     {
