@@ -22,7 +22,6 @@
 
 #include <config.h>
 #include <assert.h>
-#include <unistd.h>
 
 #include <qbuffer.h>
 
@@ -1191,20 +1190,14 @@ bool KoDocument::savePreview( KoStore* store )
 {
     QPixmap pix = generatePreview(QSize(256, 256));
     // Reducing to 8bpp reduces file sizes quite a lot.
-    QImageIO imageIO;
-    imageIO.setImage( pix.convertToImage().convertDepth(8, Qt::AvoidDither | Qt::DiffuseDither) );
-
-    // NOTE: we cannot use QDataStream, as it is not 1:1
-    QByteArray imageData;
-    // ### TODO: perhaps use a KoStoreDevice instead
-    QBuffer buffer(imageData);
-    buffer.open(IO_WriteOnly);
-    imageIO.setIODevice(&buffer);
-    imageIO.setFormat("PNG");
-    imageIO.write();
-    buffer.close();
-
-    return store->write( imageData ) == (Q_LONG)imageData.size();
+    const QImage preview ( pix.convertToImage().convertDepth( 8, Qt::AvoidDither | Qt::DiffuseDither) );
+    KoStoreDevice io ( store );
+    if ( !io.open( IO_WriteOnly ) )
+        return false;
+    if ( ! preview.save( &io, "PNG" ) ) // ### TODO What is -9 in quality terms?
+        return false;
+    io.close();
+    return true;
 }
 
 QPixmap KoDocument::generatePreview( const QSize& size )
@@ -1298,7 +1291,7 @@ bool KoDocument::checkAutoSaveFile()
             return ret;
         }
         case KMessageBox::No :
-            unlink( QFile::encodeName( asf ) );
+            QFile::remove( asf );
             return false;
         default: // Cancel
             return false;
@@ -1362,8 +1355,7 @@ bool KoDocument::openURL( const KURL & _url )
                     autosaveOpened = true;
                     break;
                 case KMessageBox::No :
-                    // ### TODO (JJ:) use QFile::remove instead of ::unlink
-                    unlink( QFile::encodeName( asf ) );
+                    QFile::remove( asf );
                     break;
                 default: // Cancel
                     return false;
@@ -1516,7 +1508,7 @@ bool KoDocument::openFile()
 
         // remove temp file - uncomment this to debug import filters
         if(!importedFile.isEmpty())
-            unlink( QFile::encodeName(importedFile) );
+            QFile::remove( importedFile );
     }
 
     if ( ok && d->m_bSingleViewMode )
@@ -2214,10 +2206,10 @@ void KoDocument::removeAutoSaveFiles()
         // Eliminate any auto-save file
         QString asf = autoSaveFile( m_file ); // the one in the current dir
         if ( QFile::exists( asf ) )
-            unlink( QFile::encodeName( asf ) );
+            QFile::remove( asf );
         asf = autoSaveFile( QString::null ); // and the one in $HOME
         if ( QFile::exists( asf ) )
-            unlink( QFile::encodeName( asf ) );
+            QFile::remove( asf );
 }
 
 void KoDocument::setBackupFile( bool _b )
