@@ -9,18 +9,19 @@ VPoint::s_fractInvScale = 1.0/s_fractScale;
 
 
 VPoint::VPoint( const double x, const double y )
-	: m_x( x ), m_y( y ), m_refCount( 1 )
+	: m_x( x ), m_y( y )
 {
 }
 
 VPoint::VPoint( const VPoint& point )
-	: m_x( point.m_x ), m_y( point.m_y ), m_refCount( 1 )
+	: m_x( point.m_x ), m_y( point.m_y )
 {
 }
 
 const QPoint&
-VPoint::getQPoint( const double& zoomFactor ) const
+VPoint::getQPoint( const double zoomFactor ) const
 {
+// TODO: round instead of casting
 	m_QPoint.setX( static_cast<int> ( m_x*zoomFactor ) );
 	m_QPoint.setY( static_cast<int> ( m_y*zoomFactor ) );
 
@@ -29,25 +30,25 @@ VPoint::getQPoint( const double& zoomFactor ) const
 
 // make these functions inline someday :)
 void
-VPoint::moveTo( const double& x, const double& y )
+VPoint::moveTo( const double x, const double y )
 {
 	m_x = x; m_y = y;
 }
 
 void
-VPoint::rmoveTo( const double& x, const double& y )
+VPoint::rmoveTo( const double x, const double y )
 {
 	m_x += x; m_y += y;
 }
 
 void
-VPoint::setX( const double& x )
+VPoint::setX( const double x )
 {
 	m_x = x;
 }
 
 void
-VPoint::setY( const double& y )
+VPoint::setY( const double y )
 {
 	m_y = y;
 }

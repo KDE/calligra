@@ -20,28 +20,25 @@ public:
 	VPoint( const VPoint& point );
 
 	// convert to QPoint and recalculate if necessary:
-	const QPoint& getQPoint( const double& zoomFactor ) const;
+	const QPoint& getQPoint( const double zoomFactor ) const;
 
-	void moveTo( const double& x, const double& y );
-	void rmoveTo( const double& x, const double& y );
+	void moveTo( const double x = 0.0, const double y = 0.0 );
+	void rmoveTo( const double x = 0.0, const double y = 0.0 );
 
 	const double& x() const { return m_x; }
-	void setX( const double& x );
+	void setX( const double x = 0.0 );
 	const double& y() const { return m_y; }
-	void setY( const double& y );
+	void setY( const double y = 0.0 );
 
 //    VPoint& operator= (const VPoint& p) { return *this; }
 	void operator +=( const VPoint& p ) { m_x += p.m_x; m_y += p.m_y; }
 	void operator -=( const VPoint& p ) { m_x -= p.m_x; m_y -= p.m_y; }
 
-	// ref-counting (vpaths share vpoints):
-	unsigned int ref()   { return ++m_refCount; }
-	unsigned int unref() { return --m_refCount; }
-
 	/**
 	* we scale QPoint with fractScale, i.e. we consider fractBits bits
 	* of the fraction of each double-coordinate.
 	*/
+// TODO: is the follwing obsolete?
 	static const char s_fractBits = 12;
 	static const unsigned int s_fractScale = 1 << s_fractBits;
 	static const double s_fractInvScale; // = 1/s_fractScale
@@ -49,8 +46,6 @@ public:
 private:
 	double m_x;
 	double m_y;
-
-	unsigned int m_refCount;	// how many objects use this vpoint ?
 
 	mutable QPoint m_QPoint;	// for painting
 };

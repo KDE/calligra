@@ -14,54 +14,66 @@
 class VAffineMap;
 class VPoint;
 
-// VPaths are the most common high-level objects. They consist of
-// VSegments, which are VLines or VBeziers.
 
-// VSegment is the abstract base class for VLine and VBezier
+// VSegment is the abstract base class for VLine and VBezier. Segments are a
+// help-class for VPath (see below). Segments share exactly one point: the
+// lastPoint of the previos segment.
+
 class VSegment
 {
 public:
-	VSegment() {}
+	VSegment( const double lp_x = 0.0, const double lp_y = 0.0 );
 	virtual ~VSegment();
 
-	virtual const QPointArray& getQPointArray( const double& zoomFactor ) = 0;
+	// Beziers need the previous segment's lastpoint to calculate all their QPoints
+	virtual const QPointArray& getQPointArray( const VSegment& prevSeg,
+		const double& zoomFactor ) const = 0;
+
+	const VPoint& lastPoint() const { return m_lastPoint; }
 
 protected:
-	// m_firstPoint is actually a waste, but helps making segments "autarc"
-	VPoint* m_firstPoint;
-	VPoint* m_lastPoint;
+	// m_firstPoint is a waste, that's why we skip it
+	VPoint m_lastPoint;
 
 	mutable QPointArray m_QPointArray;
 };
 
 
-class VLine : VSegment
+class VLine : public VSegment
 {
 public:
-	VLine() {}
-	~VLine() {}
+	VLine( const double lp_x = 0.0, const double lp_y = 0.0 );
+	virtual ~VLine();
 
-	const QPointArray& getQPointArray( const double& zoomFactor ) {};
+	const QPointArray& getQPointArray(  const VSegment& prevSeg,
+		const double& zoomFactor ) const {};
 };
 
 
-class VBezier : VSegment
+class VCurve : public VSegment
 {
 public:
-	VBezier() {}
-	virtual ~VBezier() {}
+	VCurve(
+		const double fcp_x = 0.0, const double fcp_y = 0.0,
+		const double lcp_x = 0.0, const double lcp_y = 0.0,
+		const double lp_x = 0.0, const double lp_y = 0.0 );
+	virtual ~VCurve();
 
-	const QPointArray& getQPointArray( const double& zoomFactor ) {};
+	const QPointArray& getQPointArray(  const VSegment& prevSeg,
+		const double& zoomFactor ) const {};
 
 private:
-	VPoint* m_firstCtrlPoint;
-	VPoint* m_lastCtrlPoint;
+	VPoint m_firstCtrlPoint;
+	VPoint m_lastCtrlPoint;
 
 	// a bezier lies completely inside the "minmax box" (this information is
 	// usefull for speeding up intersection-calculations):
 	VRect m_minMaxBox;
 };
 
+
+// VPaths are the most common high-level objects. They consist of
+// VSegments, which are VLines or VBeziers.
 
 class VPath : public VObject
 {
@@ -70,39 +82,77 @@ public:
 	virtual ~VPath();
 
 	virtual void draw( QPainter& painter, const QRect& rect,
-		const double& zoomFactor );
+		const double zoomFactor = 1.0 );
 
-	const VPoint* currentPoint() const;
-	const QList<VSegment>& segments() { return m_segments; }
+	const VPoint& currentPoint() const;
+	const VSegment* lastSegment() const { return m_segments.getLast(); };
 
-	// postscript-compliant commands:
-	void moveTo( const double& x, const double& y );
-	void rmoveTo( const double& dx, const double& dy );
-	void lineTo( const double& x, const double& y );
-	void rlineTo( const double& dx, const double& dy );
-	void curveTo( const double& x1, const double& y1, const double& x2,
-			const double& y2, const double& x3, const double& y3 );
-	void rcurveTo( const double& dx1, const double& dy1, const double& dx2,
-			const double& dy2, const double& dx3, const double& dy3 );
-	void arcTo( const double& x1, const double& y1,
-			const double& x2, const double& y2, const double& r );
-	void close();
+	// postscript-like commands:
+	VPath& moveTo( const double x, const double y );
+	VPath& rmoveTo( const double dx, const double dy );
+
+	VPath& lineTo( const double x, const double y );
+	VPath& rlineTo( const double dx, const double dy );
+
+	// curveTo():
+	//
+	//   p1          p2
+	//    O   ____   O
+	//    | _/    \_ |
+	//    |/        \|
+	//    x          x
+	// currP         p3
+	//
+	VPath& curveTo(
+		const double x1, const double y1,
+		const double x2, const double y2,
+		const double x3, const double y3 );
+
+	// curve1To():
+	//
+	//               p2
+	//         ____  O
+	//      __/    \ |
+	//     /        \|
+	//    x          x
+	// currP         p3
+	//
+	VPath& curve1To(
+		const double x2, const double y2,
+		const double x3, const double y3 );
+
+	// curve2To():
+	//
+	//   p1
+	//    O  ____
+	//    | /    \__
+	//    |/        \
+	//    x          x
+	// currP         p3
+	//
+	VPath& curve2To(
+		const double x1, const double y1,
+		const double x3, const double y3 );
+
+	// this is a convenience function to approximate circular arcs with
+	// beziers
+	VPath& arcTo(
+		const double x1, const double y1,
+		const double x2, const double y2, const double r );
+
+	VPath& close();
 	bool isClosed() { return( m_isClosed ); }
 
-	virtual void translate( const double& dx, const double& dy );
-	virtual void rotate( const double& ang );
-	virtual void mirror( const bool horiz = false, const bool verti = false );
-	virtual void scale( const double& sx, const double& sy );
-	virtual void shear( const double& sh, const double& sv );
-	virtual void skew( const double& ang );
-	virtual void apply( const VAffineMap& affmap );
+	virtual VObject& translate( const double dx = 0.0, const double dy = 0.0 );
+	virtual VObject& rotate( const double ang = 0.0 );
+	virtual VObject& mirror( const bool horiz = false, const bool verti = false );
+	virtual VObject& scale( const double sx = 1.0, const double sy = 1.0 );
+	virtual VObject& shear( const double sh = 0.0, const double sv = 1.0 );
+	virtual VObject& skew( const double ang = 0.0 );
+
+	virtual VObject& apply( const VAffineMap& affmap );
 
 private:
-	// we store all used VPoints in m_pointPool. this way, we can apply
-	// operations on them without having to fear dong that unwished multiple times
-	// for shared points.
- 	QList<VPoint>	m_pointPool;
-
 	// m_segments store all segemnts ( lines or beziers)
 	QList<VSegment>	m_segments;
 

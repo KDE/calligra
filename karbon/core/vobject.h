@@ -20,15 +20,16 @@ public:
 	virtual ~VObject() {}
 
 	virtual void draw( QPainter& painter, const QRect& rect,
-		const double& zoomFactor ) = 0;
+		const double zoomFactor ) = 0;
 
-	virtual void translate( const double& dx, const double& dy ) = 0;
-	virtual void rotate( const double& ang ) = 0;
-	virtual void mirror( const bool horiz = false, const bool verti = false ) = 0;
-	virtual void scale( const double& sx, const double& sy ) = 0;
-	virtual void shear( const double& sh, const double& sv ) = 0;
-	virtual void skew( const double& ang ) = 0;
-	virtual void apply( const VAffineMap& affmap ) = 0;
+	virtual VObject& translate( const double dx, const double dy ) = 0;
+	virtual VObject& rotate( const double ang ) = 0;
+	virtual VObject& mirror( const bool horiz = false, const bool verti = false )
+		= 0;
+	virtual VObject& scale( const double sx, const double sy ) = 0;
+	virtual VObject& shear( const double sh, const double sv ) = 0;
+	virtual VObject& skew( const double ang ) = 0;
+	virtual VObject& apply( const VAffineMap& affmap ) = 0;
 
 	const VRect& boundingBox() const { return m_boundingBox; }
 

@@ -11,34 +11,65 @@
 #include "vpath.h"
 #include "vpoint.h"
 
+// TODO: make sure that lastpoint==currenpoint doesnt get removed
+
+VSegment::VSegment( const double lp_x, const double lp_y )
+	: m_lastPoint( lp_x, lp_y )
+{
+}
 
 VSegment::~VSegment()
 {
-	// delete first and last point, if we are the remaining referer:
-	if ( m_firstPoint && m_firstPoint->unref() > 0 )
-		delete( m_firstPoint );
-	if ( m_lastPoint && m_lastPoint->unref() > 0 )
-		delete( m_lastPoint );
 }
 
+// -----------------------------------
+
+VLine::VLine( const double lp_x, const double lp_y )
+	: VSegment( lp_x, lp_y )
+{
+}
+
+VLine::~VLine()
+{
+}
+
+// -----------------------------------
+
+VCurve::VCurve(
+		const double fcp_x, const double fcp_y,
+		const double lcp_x, const double lcp_y,
+		const double lp_x, const double lp_y )
+	: VSegment( lp_x, lp_y ),
+	  m_firstCtrlPoint( fcp_x, fcp_y ),
+	  m_lastCtrlPoint( lcp_x, lcp_y )
+{
+}
+
+VCurve::~VCurve()
+{
+}
+
+// -----------------------------------
 
 VPath::VPath()
-	: VObject(), m_isClosed(false)
+	: VObject(), m_isClosed( false )
 {
 	// create a current point( 0.0, 0.0 ):
-	m_pointPool.append( new VPoint() );
+//
 }
 
 VPath::~VPath()
 {
 // TODO: should we be polite and destruct the QLists as well ?
-	// delete segments. they are then deleting their points.
-	for ( QListIterator<VSegment> i( m_segments ); i.current() ; ++i )
+	// delete segments. they then delete their points.
+
+	QListIterator<VSegment> i( m_segments );
+	for ( ; i.current() ; ++i )
 		delete( i.current() );
 }
 
 void
-VPath::draw( QPainter& painter, const QRect& rect, const double& zoomFactor )
+VPath::draw( QPainter& painter, const QRect& rect, const double zoomFactor )
 {
 // TODO:
 // - think about QPoint-Caching
@@ -140,59 +171,92 @@ VPath::draw( QPainter& painter, const QRect& rect, const double& zoomFactor )
 */
 }
 
-const VPoint*
+const VPoint&
 VPath::currentPoint() const
 {
-	return( m_pointPool.getLast() );
+	return( m_segments.getLast()->lastPoint() );
 }
 
-void
-VPath::moveTo( const double& x, const double& y )
+VPath&
+VPath::moveTo( const double x, const double y )
 {
-// TODO: should it affect last point of a primitive or not ?
-	if ( isClosed() ) return;
-
-	m_pointPool.last()->moveTo( x, y );
-}
-
-void
-VPath::rmoveTo( const double& dx, const double& dy )
-{
-	if ( isClosed() ) return;
-
-	m_pointPool.last()->rmoveTo( dx, dy );
-}
-
-void
-VPath::lineTo( const double& x, const double& y )
-{
-	if ( isClosed() ) return;
+// TODO: what is the postscript-beaviour?
+	if ( isClosed() ) return *this;
 /*
-	m_segments.append( new Segment );
-	m_segments.getLast()->p1 = 0L;
-	m_segments.getLast()->p2 = 0L;
-	m_segments.getLast()->p3 = new VPoint( x, y ); */
+	m_segments.getLast()->lastPoint()->moveTo( x, y ); */
+	return *this;
 }
 
-void
-VPath::curveTo( const double& x1, const double& y1, const double& x2,
-	const double& y2, const double& x3, const double& y3 )
+VPath&
+VPath::rmoveTo( const double dx, const double dy )
 {
-	if ( isClosed() ) return;
-/*
-	m_segments.append( new Segment );
-	m_segments.getLast()->p1 = new VPoint( x1, y1 );
-	m_segments.getLast()->p2 = new VPoint( x2, y2 );
-	m_segments.getLast()->p3 = new VPoint( x3, y3 ); */
+	if ( isClosed() ) return *this;
+
+//	m_segments.getLast()->lastPoint()->rmoveTo( dx, dy );
+	return *this;
 }
 
-void
-VPath::arcTo( const double& x1, const double& y1,
-	const double& x2, const double& y2, const double& r )
+VPath&
+VPath::lineTo( const double x, const double y )
+{
+
+	if ( isClosed() ) return *this;
+/*
+	VPoint* fp = lastSegment()->lastPoint();
+	fp->ref();
+
+	VPoint* lp = new VPoint( x, y );
+	m_pointPool.append( lp );
+
+	m_segments.append( new VLine( fp, lp ) ); */
+	return *this;
+}
+
+VPath&
+VPath::curveTo( const double x1, const double y1,
+	const double x2, const double y2, const double x3, const double y3 )
+{
+	if ( isClosed() ) return *this;
+/*
+	VPoint* fp = lastSegment()->lastPoint();
+	fp->ref();
+
+	VPoint* fcp = new VPoint( x1, y1 );
+	VPoint* lcp = new VPoint( x2, y2 );
+	VPoint* lp  = new VPoint( x3, y3 );
+	m_pointPool.append( fcp );
+	m_pointPool.append( lcp );
+	m_pointPool.append( lp );
+
+	m_segments.append( new VBezier( fp, fcp, lcp, lp ) );
+*/
+	return *this;
+}
+
+VPath&
+VPath::curve1To( const double x2, const double y2,
+	const double x3, const double y3 ) {
+	if ( isClosed() ) return *this;
+//
+	return *this;
+}
+
+VPath&
+VPath::curve2To( const double x1, const double y1,
+	const double x3, const double y3 )
+{
+	if ( isClosed() ) return *this;
+//
+	return *this;
+}
+
+VPath&
+VPath::arcTo( const double x1, const double y1,
+	const double x2, const double y2, const double r )
 {
 	// parts of this routine are inspired by GNU ghostscript
 
-	if ( isClosed() ) return;
+	if ( isClosed() ) return *this;
 /*
 	// we need to calculate the tangent points. therefore calculate tangents
 	// D10=P1P0 and D12=P1P2 first:
@@ -258,12 +322,13 @@ VPath::arcTo( const double& x1, const double& y1,
 		m_segments.getLast()->p2 = new VPoint( bx2, by2 );
 		m_segments.getLast()->p3 = new VPoint( bx3, by3 );
 	} */
+	return *this;
 }
 
-void
+VPath&
 VPath::close()
 {
-	if ( isClosed() ) return;
+	if ( isClosed() ) return *this;
 /*
 // TODO: dont "close" a single line
 	// draw a line if last point differs from first point
@@ -281,57 +346,64 @@ VPath::close()
 
 		m_isClosed = true;
 	} */
+	return *this;
 }
 
-void
-VPath::translate( const double& dx, const double& dy )
+VObject&
+VPath::translate( const double dx, const double dy )
 {
 	VAffineMap affmap;
 	affmap.translate( dx, dy );
 	apply( affmap );
+	return *this;
 }
 
-void
-VPath::rotate( const double& ang )
+VObject&
+VPath::rotate( const double ang )
 {
 	VAffineMap affmap;
 	affmap.rotate( ang );
 	apply( affmap );
+	return *this;
 }
 
-void
+VObject&
 VPath::mirror( const bool horiz, const bool verti )
 {
 	VAffineMap affmap;
 	affmap.mirror( horiz, verti );
 	apply( affmap );
+	return *this;
 }
 
-void
-VPath::scale( const double& sx, const double& sy )
+VObject&
+VPath::scale( const double sx, const double sy )
 {
 	VAffineMap affmap;
 	affmap.scale( sx, sy );
 	apply( affmap );
+	return *this;
 }
 
-void
-VPath::shear( const double& sh, const double& sv )
+VObject&
+VPath::shear( const double sh, const double sv )
 {
 	VAffineMap affmap;
 	affmap.shear( sh, sv );
 	apply( affmap );
+	return *this;
 }
 
-void
-VPath::skew( const double& ang )
+VObject&
+VPath::skew( const double ang )
 {
 	VAffineMap affmap;
 	affmap.skew( ang );
 	apply( affmap );
+	return *this;
 }
 
-void
+VObject&
 VPath::apply( const VAffineMap& affmap )
 {
 /*
@@ -352,4 +424,5 @@ VPath::apply( const VAffineMap& affmap )
 		if ( i.current()->p3 )
 			*(i.current()->p3) = affmap.map( *(i.current()->p3) );
 	} */
+	return *this;
 }
