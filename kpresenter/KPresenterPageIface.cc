@@ -245,3 +245,26 @@ QRect KPresenterPageIface::getPageRect() const
 {
     return m_page->getZoomPageRect();
 }
+
+bool KPresenterPageIface::isSlideSelected()
+{
+    return m_page->isSlideSelected();
+}
+
+void KPresenterPageIface::slideSelected(bool _b)
+{
+    m_page->slideSelected(_b);
+    int pos=m_page->kPresenterDoc()->pageList().findRef(m_page);
+    m_page->kPresenterDoc()->updateSideBarItem(pos);
+}
+
+void KPresenterPageIface::changePicture( const QString & filename )
+{
+    m_page->changePicture(filename);
+}
+
+void KPresenterPageIface::changeClipart( const QString & filename )
+{
+    m_page->changeClipart(filename);
+}
+

@@ -87,6 +87,12 @@ k_dcop:
     virtual int getPieLength( int pieLength )const;
 
     virtual QRect getPageRect()const;
+
+    virtual bool isSlideSelected();
+    virtual void slideSelected(bool _b);
+    virtual void changePicture( const QString & );
+    virtual void changeClipart( const QString & );
+
 private:
     KPrPage *m_page;
 

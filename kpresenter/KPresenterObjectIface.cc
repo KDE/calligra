@@ -112,3 +112,34 @@ int KPresenterObjectIface::getEffect3()
     return (int)obj->getEffect3();
 }
 
+
+void KPresenterObjectIface::setSelected( bool _selected )
+{
+    obj->setSelected(_selected);
+}
+
+void KPresenterObjectIface::rotate( float _angle )
+{
+    obj->rotate(_angle);
+}
+
+void KPresenterObjectIface::setShadowDistance( int _distance )
+{
+    obj->setShadowDistance(_distance);
+}
+
+float KPresenterObjectIface::getAngle() const
+{
+    return obj->getAngle();
+}
+
+void KPresenterObjectIface::setSticky( bool b )
+{
+    obj->setSticky(b);
+}
+
+bool KPresenterObjectIface::isSticky() const
+{
+    return obj->isSticky();
+}
+

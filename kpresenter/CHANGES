@@ -9,3 +9,6 @@ Changes after KPresenter 1.1
 - Add zoom support
 - Improve undo/redo (now we can undo/redo "insert new page"/"delete page"/"paste page"/"Duplicate page")
 - Now kpresenter has real page
+- Limit position/size object to page
+- spell checking/search/find works on all page
+

@@ -52,7 +52,13 @@ k_dcop:
     int getDisappearNum();
     int getEffect3();
 
-    
+    void setSelected( bool _selected );
+    void rotate( float _angle );
+    void setShadowDistance( int _distance );
+    float getAngle() const;
+    void setSticky( bool b );
+    bool isSticky() const ;
+
 private:
     KPObject *obj;
 

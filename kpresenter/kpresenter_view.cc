@@ -4868,7 +4868,8 @@ void KPresenterView::doFindReplace()
         findReplace->proceed();
         aborted = findReplace->aborted();
     }
-
+    m_searchPage=-1;
+    m_initSearchPage=-1;
     delete findReplace;
     if ( !aborted ) // Only if we still exist....
         m_findReplace = 0L;
