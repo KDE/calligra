@@ -12,7 +12,7 @@
 #include <qtextstream.h>
 #include <qwidget.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kcommand.h>

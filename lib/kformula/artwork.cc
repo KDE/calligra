@@ -128,7 +128,7 @@ void Artwork::calcSizes( const ContextStyle& style,
     switch (type) {
     case LeftSquareBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            calcSquareBracket( style, leftSquareBracket, parentSize, mySize );
+            calcRoundBracket( style, leftSquareBracket, parentSize, mySize );
         }
         else {
             calcCharSize( style, mySize, leftSquareBracketChar );
@@ -136,7 +136,7 @@ void Artwork::calcSizes( const ContextStyle& style,
         break;
     case RightSquareBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            calcSquareBracket( style, rightSquareBracket, parentSize, mySize );
+            calcRoundBracket( style, rightSquareBracket, parentSize, mySize );
         }
         else {
             calcCharSize(style, mySize, rightSquareBracketChar);
@@ -144,7 +144,7 @@ void Artwork::calcSizes( const ContextStyle& style,
         break;
     case LeftLineBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            calcSquareBracket( style, leftLineBracket, parentSize, mySize );
+            calcRoundBracket( style, leftLineBracket, parentSize, mySize );
         }
         else {
             calcCharSize(style, mySize, verticalLineChar);
@@ -152,7 +152,7 @@ void Artwork::calcSizes( const ContextStyle& style,
         break;
     case RightLineBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            calcSquareBracket( style, rightLineBracket, parentSize, mySize );
+            calcRoundBracket( style, rightLineBracket, parentSize, mySize );
         }
         else {
             calcCharSize(style, mySize, verticalLineChar);
@@ -288,7 +288,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
     switch (type) {
     case LeftSquareBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            drawLeftSquareBracket( painter, style, myX, myY, parentSize, mySize );
+            drawBigRoundBracket( painter, style, leftSquareBracket, myX, myY, mySize );
         }
         else {
             drawCharacter(painter, style, myX, myY, mySize, leftSquareBracketChar);
@@ -296,7 +296,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         break;
     case RightSquareBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            drawRightSquareBracket( painter, style, myX, myY, parentSize, mySize );
+            drawBigRoundBracket( painter, style, rightSquareBracket, myX, myY, mySize );
         }
         else {
             drawCharacter(painter, style, myX, myY, mySize, rightSquareBracketChar);
@@ -304,7 +304,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         break;
     case LeftCurlyBracket:
         if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
-            drawLeftCurlyBracket( painter, style, myX, myY, parentSize, mySize );
+            drawBigCurlyBracket( painter, style, leftCurlyBracket, myX, myY, mySize );
         }
         else {
             drawCharacter(painter, style, myX, myY, mySize, leftCurlyBracketChar);
@@ -312,7 +312,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         break;
     case RightCurlyBracket:
         if ( !doSimpleCurlyBracket( parentSize, mySize ) ) {
-            drawRightCurlyBracket( painter, style, myX, myY, parentSize, mySize );
+            drawBigCurlyBracket( painter, style, rightCurlyBracket, myX, myY, mySize );
         }
         else {
             drawCharacter(painter, style, myX, myY, mySize, rightCurlyBracketChar);
@@ -320,7 +320,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         break;
     case LeftLineBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            drawLeftLineBracket( painter, style, myX, myY, parentSize, mySize );
+            drawBigRoundBracket( painter, style, leftLineBracket, myX, myY, mySize );
         }
         else {
             drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
@@ -328,7 +328,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         break;
     case RightLineBracket:
         if ( !doSimpleSquareBracket( parentSize, mySize ) ) {
-            drawRightLineBracket( painter, style, myX, myY, parentSize, mySize );
+            drawBigRoundBracket( painter, style, rightLineBracket, myX, myY, mySize );
         }
         else {
             drawCharacter(painter, style, myX, myY, mySize, verticalLineChar);
@@ -348,7 +348,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         break;
     case LeftRoundBracket:
         if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
-            drawLeftRoundBracket( painter, style, myX, myY, parentSize, mySize );
+            drawBigRoundBracket( painter, style, leftRoundBracket, myX, myY, mySize );
         }
         else {
             drawCharacter(painter, style, myX, myY, mySize, leftParenthesisChar);
@@ -356,7 +356,7 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
         break;
     case RightRoundBracket:
         if ( !doSimpleRoundBracket( parentSize, mySize ) ) {
-            drawRightRoundBracket( painter, style, myX, myY, parentSize, mySize );
+            drawBigRoundBracket( painter, style, rightRoundBracket, myX, myY, mySize );
         }
         else {
             drawCharacter(painter, style, myX, myY, mySize, rightParenthesisChar);
@@ -457,7 +457,6 @@ void Artwork::calcCharSize( const ContextStyle& style, luPt height, QChar ch )
 void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style, luPixel x, luPixel y,
                              luPt height, QChar ch )
 {
-    //QFont f = style.getSymbolFont();
     uchar c = style.symbolTable().character( ch );
     QFont f = style.symbolTable().font( ch );
     f.setPointSizeFloat( style.layoutUnitToFontSize( height, false ) );
@@ -476,82 +475,32 @@ void Artwork::drawCharacter( QPainter& painter, const ContextStyle& style, luPix
 void Artwork::calcRoundBracket( const ContextStyle& style, const QChar chars[],
                                 luPt height, luPt charHeight )
 {
-    //char uppercorner = chars[0];
-    //char lowercorner = chars[1];
-    uchar line = style.symbolTable().character( chars[2] );
-
-    QFont f = style.symbolTable().font( chars[0] );
-    //QFont f = style.getSymbolFont();
-    f.setPointSize( charHeight );
-    QFontMetrics fm( f );
-    //LuRect upperBound = fm.boundingRect(uppercorner);
-    //LuRect lowerBound = fm.boundingRect(lowercorner);
-
-    setWidth( fm.width( QChar( line ) ) );
-    setHeight( ( ( height-1 ) / charHeight + 1 ) * charHeight );
-}
-
-void Artwork::drawLeftRoundBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
-                                    luPt height, luPt charHeight )
-{
-    if ( height <= 2*charHeight ) {
-        drawSmallRoundBracket( p, style, leftRoundBracket, x, y, charHeight );
-	//cout << "drawLeftSmallRoundBracket" << endl;
-    }
-    else {
-        drawBigRoundBracket( p, style, leftRoundBracket, x, y, charHeight );
-	//cout << "drawLeftBigRoundBracket" << endl;
-    }
-}
-
-void Artwork::drawRightRoundBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
-                                     luPt height, luPt charHeight )
-{
-    if ( height <= 2*charHeight ) {
-        drawSmallRoundBracket( p, style, rightRoundBracket, x, y, charHeight );
-    }
-    else {
-        drawBigRoundBracket( p, style, rightRoundBracket, x, y, charHeight );
-        //p.drawRect( x, y, getWidth(), getHeight() );
-    }
-}
-
-void Artwork::drawSmallRoundBracket(QPainter& p, const ContextStyle& style, const QChar chars[],
-                                    luPixel x, luPixel y, luPt charHeight)
-{
-    //kdDebug() << "Artwork::drawSmallRoundBracket" << endl;
     uchar uppercorner = style.symbolTable().character( chars[0] );
     uchar lowercorner = style.symbolTable().character( chars[1] );
+    //uchar line = style.symbolTable().character( chars[2] );
 
-    //QFont f = style.getSymbolFont();
     QFont f = style.symbolTable().font( chars[0] );
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
-    p.setFont(f);
+    QFontMetrics fm( f );
+    LuPtRect upperBound = fm.boundingRect( uppercorner );
+    LuPtRect lowerBound = fm.boundingRect( lowercorner );
+    //LuPtRect lineBound = fm.boundingRect( line );
 
-    QFontMetrics fm(p.fontMetrics());
-    QRect upperBound = fm.boundingRect(uppercorner);
-    QRect lowerBound = fm.boundingRect(lowercorner);
+    setWidth( style.ptToLayoutUnitPt( fm.width( QChar( uppercorner ) ) ) );
+    luPt edgeHeight = style.ptToLayoutUnitPt( upperBound.height()+lowerBound.height() );
+    //luPt lineHeight = style.ptToLayoutUnitPt( lineBound.height() );
 
-    pt ptX = style.layoutUnitToPixelX( x );
-    pt ptY = style.layoutUnitToPixelY( y );
-
-    //p.setPen( Qt::gray );
-    //p.drawRect( ptX, ptY, upperBound.width(), upperBound.height() + lowerBound.height() );
-
-    //p.setPen( Qt::black );
-    p.drawText( ptX, ptY-upperBound.top(), QString( QChar( uppercorner ) ) );
-    p.drawText( ptX, ptY+upperBound.height()-lowerBound.top(), QString( QChar( lowercorner ) ) );
+    //setHeight( edgeHeight + ( ( height-edgeHeight-1 ) / lineHeight + 1 ) * lineHeight );
+    setHeight( QMAX( edgeHeight, height ) );
 }
 
 void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const QChar chars[],
                                    luPixel x, luPixel y, luPt charHeight )
 {
-    //kdDebug() << "Artwork::drawBigRoundBracket" << endl;
     uchar uppercorner = style.symbolTable().character( chars[0] );
     uchar lowercorner = style.symbolTable().character( chars[1] );
     uchar line = style.symbolTable().character( chars[2] );
 
-    //QFont f = style.getSymbolFont();
     QFont f = style.symbolTable().font( chars[0] );
     f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
     p.setFont(f);
@@ -565,13 +514,17 @@ void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const
     pt ptY = style.layoutUnitToPixelY( y );
     pt height = style.layoutUnitToPixelY( getHeight() );
 
+//     p.setPen( Qt::red );
+//     //p.drawRect( ptX, ptY, upperBound.width(), upperBound.height() + lowerBound.height() );
+//     p.drawRect( ptX, ptY, style.layoutUnitToPixelX( getWidth() ),
+//                 style.layoutUnitToPixelY( getHeight() ) );
+
+//     p.setPen( Qt::black );
     p.drawText( ptX, ptY-upperBound.top(), QString( QChar( uppercorner ) ) );
     p.drawText( ptX, ptY+height-lowerBound.top()-lowerBound.height(),
                 QString( QChar( lowercorner ) ) );
 
     // for printing
-    // If the world was perfect and the urw-symbol font correct
-    // this could be 0.
     //pt safety = lineBound.height() / 10.0;
     pt safety = 0;
 
@@ -589,143 +542,30 @@ void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const
                 QString( QChar( line ) ) );
 }
 
-
-void Artwork::calcSquareBracket( const ContextStyle& style, const QChar chars[],
-                                 luPt height, luPt charHeight )
-{
-    //char uppercorner = chars[0];
-    //char lowercorner = chars[1];
-    uchar line = style.symbolTable().character( chars[2] );
-
-    //QFont f = style.getSymbolFont();
-    QFont f = style.symbolTable().font( chars[0] );
-    f.setPointSize( charHeight );
-    QFontMetrics fm( f );
-    //LuRect upperBound = fm.boundingRect(uppercorner);
-    //LuRect lowerBound = fm.boundingRect(lowercorner);
-
-    setWidth( fm.width( QChar( line ) ) );
-    setHeight( ( ( height-1 ) / charHeight + 1 ) * charHeight );
-}
-
-void Artwork::drawLeftLineBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
-                                   luPt height, luPt charHeight )
-{
-    if ( height <= 2*charHeight ) {
-        drawSmallRoundBracket( p, style, leftLineBracket, x, y, charHeight );
-    }
-    else {
-        drawBigRoundBracket( p, style, leftLineBracket, x, y, charHeight );
-    }
-}
-
-void Artwork::drawRightLineBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
-                                    luPt height, luPt charHeight )
-{
-    if ( height <= 2*charHeight ) {
-        drawSmallRoundBracket( p, style, rightLineBracket, x, y, charHeight );
-    }
-    else {
-        drawBigRoundBracket( p, style, rightLineBracket, x, y, charHeight );
-    }
-}
-
-void Artwork::drawLeftSquareBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
-                                     luPt height, luPt charHeight )
-{
-    if ( height <= 2*charHeight ) {
-        drawSmallRoundBracket( p, style, leftSquareBracket, x, y, charHeight );
-    }
-    else {
-        drawBigRoundBracket( p, style, leftSquareBracket, x, y, charHeight );
-    }
-}
-
-void Artwork::drawRightSquareBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
-                                      luPt height, luPt charHeight )
-{
-    if ( height <= 2*charHeight ) {
-        drawSmallRoundBracket( p, style, rightSquareBracket, x, y, charHeight );
-    }
-    else {
-        drawBigRoundBracket( p, style, rightSquareBracket, x, y, charHeight );
-    }
-}
-
-
 void Artwork::calcCurlyBracket( const ContextStyle& style, const QChar chars[],
                                 luPt height, luPt charHeight )
 {
-    //char uppercorner = chars[0];
-    //char lowercorner = chars[1];
-    uchar line = style.symbolTable().character( chars[2] );
-    //char middle = chars[3];
-
-    //QFont f = style.getSymbolFont();
-    QFont f = style.symbolTable().font( chars[0] );
-    f.setPointSize( charHeight );
-    QFontMetrics fm( f );
-    //LuRect upperBound = fm.boundingRect(uppercorner);
-    //LuRect lowerBound = fm.boundingRect(lowercorner);
-    //LuRect lineBound = fm.boundingRect(line);
-    //LuRect middleBound = fm.boundingRect(middle);
-
-    setWidth( fm.width( QChar( line ) ) );
-    setHeight( QMAX( ( height-1 ) / charHeight + 1, 3 ) * charHeight );
-}
-
-void Artwork::drawLeftCurlyBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
-                                    luPt height, luPt charHeight )
-{
-    if ( height <= 3*charHeight ) {
-        drawSmallCurlyBracket( p, style, leftCurlyBracket, x, y, charHeight );
-    }
-    else {
-        drawBigCurlyBracket( p, style, leftCurlyBracket, x, y, charHeight );
-    }
-}
-
-void Artwork::drawRightCurlyBracket( QPainter& p, const ContextStyle& style, luPixel x, luPixel y,
-                                     luPt height, luPt charHeight )
-{
-    if ( height <= 3*charHeight ) {
-        drawSmallCurlyBracket( p, style, rightCurlyBracket, x, y, charHeight );
-    }
-    else {
-        drawBigCurlyBracket( p, style, rightCurlyBracket, x, y, charHeight );
-    }
-}
-
-void Artwork::drawSmallCurlyBracket(QPainter& p, const ContextStyle& style, const QChar chars[],
-                                    luPixel x, luPixel y, luPt charHeight)
-{
-    //QFont f = style.getSymbolFont();
-    QFont f = style.symbolTable().font( chars[0] );
-    f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
-    p.setFont(f);
-
     uchar uppercorner = style.symbolTable().character( chars[0] );
     uchar lowercorner = style.symbolTable().character( chars[1] );
-    //char line = chars[2];
+    //uchar line = style.symbolTable().character( chars[2] );
     uchar middle = style.symbolTable().character( chars[3] );
 
-    QFontMetrics fm(p.fontMetrics());
-    QRect upperBound = fm.boundingRect(uppercorner);
-    QRect lowerBound = fm.boundingRect(lowercorner);
-    //LuRect lineBound = fm.boundingRect(line);
-    QRect middleBound = fm.boundingRect(middle);
+    QFont f = style.symbolTable().font( chars[0] );
+    f.setPointSizeFloat( style.layoutUnitToFontSize( charHeight, false ) );
+    QFontMetrics fm( f );
+    LuPtRect upperBound = fm.boundingRect( uppercorner );
+    LuPtRect lowerBound = fm.boundingRect( lowercorner );
+    //LuPtRect lineBound = fm.boundingRect( line );
+    LuPtRect middleBound = fm.boundingRect( middle );
 
-    pt ptX = style.layoutUnitToPixelX( x );
-    pt ptY = style.layoutUnitToPixelY( y );
+    setWidth( style.ptToLayoutUnitPt( fm.width( QChar( uppercorner ) ) ) );
+    luPt edgeHeight = style.ptToLayoutUnitPt( upperBound.height()+
+                                              lowerBound.height()+
+                                              middleBound.height() );
+    //luPt lineHeight = style.ptToLayoutUnitPt( lineBound.height() );
 
-    //p.setPen(Qt::gray);
-    //p.drawRect(x, y, upperBound.width() + offset, upperBound.height() + lowerBound.height() + middleBound.height());
-
-    //p.setPen(Qt::black);
-    p.drawText( ptX,ptY-upperBound.top(), QString( QChar( uppercorner ) ) );
-    p.drawText( ptX, ptY+upperBound.height()-middleBound.top(), QString( QChar( middle ) ) );
-    p.drawText( ptX, ptY+upperBound.height()+middleBound.height()-lowerBound.top(),
-                QString( QChar( lowercorner ) ) );
+    //setHeight( edgeHeight + ( ( height-edgeHeight-1 ) / lineHeight + 1 ) * lineHeight );
+    setHeight( QMAX( edgeHeight, height ) );
 }
 
 void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const QChar chars[],
