@@ -14,13 +14,13 @@ kde_module_LTLIBRARIES = libhtmlimport.la libhtmlexport.la \
 libhtmlexportdia.la
 
 libhtmlimport_la_SOURCES = htmlimport.cc htmlimport_factory.cc\
-htmlimportsax.cc htmlimportwell.cc ImportTags.cc
+htmlimportsax.cc htmlimportwell.cc ImportTags.cc ImportParser.cc
 libhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc
 libhtmlexportdia_la_SOURCES = htmlexportdia.cc htmlexportdia_factory.cc
 
 noinst_HEADERS = htmlimport.h htmlimport_factory.h htmlimportsax.h\
 htmlexport.h htmlexport_factory.h htmlexportdia.h htmlexportdia_factory.h\
-htmlimportwell.h ImportTags.h
+htmlimportwell.h ImportTags.h ImportParser.h
 
 METASOURCES = AUTO
 

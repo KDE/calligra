@@ -19,4 +19,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef HTMLIMPORTWELL_H
+#define HTMLIMPORTWELL_H
+
 bool WellFilter(QTextStream& streamIn, QTextStream& streamOut);
+
+#endif //HTMLIMPORTWELL_H
