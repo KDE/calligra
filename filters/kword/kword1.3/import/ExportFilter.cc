@@ -681,15 +681,15 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         || (formatOrigin.strikeoutWord != formatData.strikeoutWord ) )
     {
         // Strikeout and underline can only have one word-by.word behaviour in OO
-        strElement+="fo:score-spaces=\"";
+        strElement+="fo:score-spaces=\""; // Are space processed?
         if ( formatData.underlineWord || formatData.strikeoutWord )
         {
-            strElement += "true";
+            strElement += "false";
             key += 'W';
         }
         else
         {
-            strElement += "false";
+            strElement += "true";
             key += 'N';
         }
         strElement += "\" ";
