@@ -210,7 +210,8 @@ void GBezier::movePoint (int idx, float dx, float dy) {
   }
 }
 
-const char* GBezier::typeName () {
+QString GBezier::typeName () const
+{
   return I18N ("Bezier curve");
 }
 
