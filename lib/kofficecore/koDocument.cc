@@ -365,7 +365,11 @@ bool KoDocument::saveFile()
 
     if ( backupFile() ) {
         KIO::UDSEntry entry;
+#if KDE_IS_VERSION(3,1,90)
         if ( KIO::NetAccess::stat( url(), entry, 0 ) ) { // this file exists => backup
+#else
+        if ( KIO::NetAccess::stat( url(), entry ) ) { // this file exists => backup
+#endif
             emit sigStatusBarMessage( i18n("Making backup...") );
             KURL backup;
             if ( d->m_backupPath.isEmpty())
