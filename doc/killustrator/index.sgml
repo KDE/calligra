@@ -14,7 +14,7 @@
 
 <!-- Title information -->
 
-<title>The KIllustrator Handbook<img src=logo.gif><P>
+<title>The KIllustrator Handbook<img src=logo.png><P>
 <author>Hagen Höpfner, <tt><htmlurl url="mailto:Hagen.Hoepfner@gmx.de" name="Hagen.Hoepfner@gmx.de"></tt>
 <p>English Translation: Ben Skelton, <tt><htmlurl url="mailto:skeltobc@elec.canterbury.ac.nz" name=" skeltobc@elec.canterbury.ac.nz"</tt> and Winter Laite, <tt><htmlurl url="mailto:winlaite@lobo.net" name=winlaite@lobo.net></tt>
 </p>			
@@ -182,7 +182,7 @@ The second step varies with each of the different 2D-Primitives. Therefore these
 
 <sect1>Freehand tool<label id="fh">
 <P>
-<img src=freehand.gif> In order to draw a freehand line, one proceeds as follows: 
+<img src=freehand.png> In order to draw a freehand line, one proceeds as follows: 
 
 <enum> 
 <item>left-click (and hold) on the canvas where the freehand line is to begin
@@ -192,11 +192,11 @@ The second step varies with each of the different 2D-Primitives. Therefore these
 
 <sect1>Polyline tool
 <p>
-<img src=line.gif> With this tool lines, polylines, and polygons may be drawn. 
+<img src=line.png> With this tool lines, polylines, and polygons may be drawn. 
 
 <sect2>Lines<label id="li">
 <P>
-<img src=line.gif> To draw a line: 
+<img src=line.png> To draw a line: 
 <enum>
 <item>left-click on the canvas at the point where the line is to start 
 <item>release the left mouse button and draw the line by moving the mouse 
@@ -205,7 +205,7 @@ The second step varies with each of the different 2D-Primitives. Therefore these
 
 <sect2>Polylines<label id="pf">
 <P>
-<img src=line.gif> A polyline is a series of connected lines. In order to draw a polyline, proceed as follows:
+<img src=line.png> A polyline is a series of connected lines. In order to draw a polyline, proceed as follows:
 <enum>
 <item>left-click at the point where the polyline is to start
 <item>release the left mouse button and draw the first line
@@ -216,11 +216,11 @@ The second step varies with each of the different 2D-Primitives. Therefore these
 
 <sect2>Polygons<label id="gp">
 <P>
-<img src=line.gif> To draw a polygon follow the steps in drawing polylines. To close the polygon hold down the SHIFT key while clicking the right mouse button to automatically close the polygon. A line from the last left-click to the first left click is automatically drawn. 
+<img src=line.png> To draw a polygon follow the steps in drawing polylines. To close the polygon hold down the SHIFT key while clicking the right mouse button to automatically close the polygon. A line from the last left-click to the first left click is automatically drawn. 
 
 <sect1>Bezier curve tool<label id="be">
 <p>
-<img src=bezier.gif> Drawing Bezier curves is often a problem, however KIllustrator makes it easy. Proceed as follows: 
+<img src=bezier.png> Drawing Bezier curves is often a problem, however KIllustrator makes it easy. Proceed as follows: 
 <enum>
 <item>left-click on the canvas at the point of origin of the Bezier curve  
 <item>determine the rise of the curve segment at this point with the help line - left-click when satisfied 
@@ -230,7 +230,7 @@ The second step varies with each of the different 2D-Primitives. Therefore these
 
 <sect1>Rectangle tool
 <p>
-<img src=rect.gif> In order to draw a rectangle: 
+<img src=rect.png> In order to draw a rectangle: 
 <enum>
 <item>left-click (and hold) on the canvas at the point where a corner point of the rectangle is to be  
 <item>draw the rectangle by moving the mouse while holding down the left mouse button 
@@ -239,13 +239,13 @@ The second step varies with each of the different 2D-Primitives. Therefore these
 To draw a square, press and hold down the CTRL key while drawing the rectangle. 
 <sect1>Regular polygon tool
 <P>
-<img src=polygon.gif> This tool allows the simple drawing of equilateral triangles, squares, and higher order regular polygons. It is much simpler to use this tool for drawing regular polygons than the polyline tool. The procedure here is the following: 
+<img src=polygon.png> This tool allows the simple drawing of equilateral triangles, squares, and higher order regular polygons. It is much simpler to use this tool for drawing regular polygons than the polyline tool. The procedure here is the following: 
 
 <enum>
 <item>left-double click on the regular polygon tool button 
 <item>a dialog opens where the polygon parameters are set 
 	<p>
-	<img src=polygon-setup.gif>
+	<img src=polygon-setup.png>
 	<p>
 <item>make the appropriate adjustments 
 <item>left-click the OK button when finished  
@@ -257,7 +257,7 @@ To draw a square, press and hold down the CTRL key while drawing the rectangle.
 
 <sect1>Ellipse tool<label id="el">
 <P>
-<img src=ellipse.gif> In order to draw an ellipse, proceed as follows: 
+<img src=ellipse.png> In order to draw an ellipse, proceed as follows: 
 <enum>
 <item>left-click (and hold) on one corner point of the bounding box * of the ellipse
 <item>draw the ellipse by moving the mouse while holding down the left mouse button 
@@ -269,7 +269,7 @@ If a circle is to be drawn instead of an ellipse, hold the CTRL key down while d
 
 <sect1>Text tool
 <P>
-<img src=text.gif> This tool adds text to your KIllustrator drawing. The steps are are follows: 
+<img src=text.png> This tool adds text to your KIllustrator drawing. The steps are are follows: 
 <enum>
 <item> left-click on the canvas where the text is to begin 
 <item> type the text
@@ -282,7 +282,7 @@ KIllustrator offers tools that allow the easy modification of drawn primitives, 
 
 <sect1>Rotation
 <p>
-<img src=pfeil.gif> Rotation here describes the rotation of an object about a centre point. Proceed as follows: 
+<img src=pfeil.png> Rotation here describes the rotation of an object about a centre point. Proceed as follows: 
 <enum> 
 <item>left-click on the object to be rotated. The selection frame appears around the object. Left-click again and the transformation frame appears. 
 <item>left-click (and hold) over one of the corner arrows and rotate the object by moving the mouse while holding down the left mouse button.
@@ -291,7 +291,7 @@ KIllustrator offers tools that allow the easy modification of drawn primitives, 
 
 <sect1>Scaling
 <P>
-<img src=pfeil.gif> Scaling an object allows the user to increase or reduce the size of an object. To scale an object:
+<img src=pfeil.png> Scaling an object allows the user to increase or reduce the size of an object. To scale an object:
 <enum>
 <item>left-click on the object to be scaled---the selection frame appears.  
 <item>left-click (and hold) on a point in the selection frame in the direction the object is to be scaled. 
@@ -302,7 +302,7 @@ Proportional scaling can be done by holding down the CTRL key in the third step.
 
 <sect1>Shifting
 <P>
-<img src=pfeil.gif> To shift an object proceed as follows: 
+<img src=pfeil.png> To shift an object proceed as follows: 
 <enum>
 <item>left-click on the object to be shifted 
 <item>with the left mouse button pressed move the mouse to reposition the object
@@ -312,11 +312,11 @@ If you hold down the CTRL key while shifting, the object will be shifted horizon
 
 <sect1>Modifying an object
 <p>
-<img src=point.gif> In the previous sections the transformations of whole objects were presented. We now turn our attention to the manipulation of individual sections of objects. NOTE: Before the object can be modified the object must be selected using the selection tool. 
+<img src=point.png> In the previous sections the transformations of whole objects were presented. We now turn our attention to the manipulation of individual sections of objects. NOTE: Before the object can be modified the object must be selected using the selection tool. 
 
 <sect2>Moving points
 <p>
-<img src=movepoint.gif> For shifting individual points in a object: 
+<img src=movepoint.png> For shifting individual points in a object: 
 <enum>
 <item>left-click (and hold) on the point to be shifted 
 <item>with the left mouse button held move the mouse to reposition the point 
@@ -325,15 +325,15 @@ If you hold down the CTRL key while shifting, the object will be shifted horizon
 
 <sect2>Adding points
 <P>
-<img src=newpoint.gif> This tool adds control points to an object. To add a point left-click on the object at the point where the new control point is desired. 
+<img src=newpoint.png> This tool adds control points to an object. To add a point left-click on the object at the point where the new control point is desired. 
 
 <sect2>Removing points
 <p>
-<img src=rmpoint.gif> With this tool one can delete control points from an object---simply left-click on the point to be deleted. 
+<img src=rmpoint.png> With this tool one can delete control points from an object---simply left-click on the point to be deleted. 
 
 <sect2>Filling objects
 <p>
-<img src=pfeil.gif> To fill an object with a colour select the object and left-click on the desired colour in the colour palette. If the required colour is not in the palette or a pattern fill is required, proceed as follows: 
+<img src=pfeil.png> To fill an object with a colour select the object and left-click on the desired colour in the colour palette. If the required colour is not in the palette or a pattern fill is required, proceed as follows: 
 <enum> 
 <item>select the object to be filled.
 <item>right-click on the object---a popup menu appears. 
@@ -363,17 +363,17 @@ Helplines provide a further mechanism to the Grid when precise drawing is requir
 
 <sect1>Aligning objects
 <p>
-<img src=pfeil.gif> This function allows objects to be aligned with respect to each other and/or the page. For example a group of objects can be aligned such that their left edges are all in line or such that they are evenly distributed throughout the page. Select the object(s) to be Aligned and right-click, select "Align" from the menu and the following dialog appears:
+<img src=pfeil.png> This function allows objects to be aligned with respect to each other and/or the page. For example a group of objects can be aligned such that their left edges are all in line or such that they are evenly distributed throughout the page. Select the object(s) to be Aligned and right-click, select "Align" from the menu and the following dialog appears:
 <p>
 <quote>
-<img src=align.gif>
+<img src=align.png>
 </quote>
 <P>
 NOTE: At the time of writing not all functionality of "Align" has been implemented. It is hoped that further functionality will be added soon. 
 
 <sect1>Aligning text along a path
 <p>
-<img src=pfeil.gif> If the path is already drawn, then one proceeds as follows:
+<img src=pfeil.png> If the path is already drawn, then one proceeds as follows:
 <enum>
 <item>select the text to be aligned 
 <item>choose "Text along Path" from the arrange menu 
@@ -421,7 +421,7 @@ Layers may be thought of as sheets of transparent paper with different pieces of
 There are two main ways to save a file, either via the "File" menu item, or by clicking on the Diskette icon in the list of icons. If you've just created the drawing you're working on, and haven't saved it yet, you will be taken taken to a dialog where you can choose a name. This will happen regardless of which of the two methods you choose.
 <P>
 <quote>
-<img src=save_dialog.gif>
+<img src=save_dialog.png>
 </quote>
 <P>
 If the file already has a name, it will be used unless you select the menu item "Save As".
@@ -432,7 +432,7 @@ You should ALWAYS use the file extension <tt>.kil</tt>. This is the only way to 
 Just as in saving files, there are two ways to load them. You can click on the corresponding icon from the list, or you can use the "Open" item from the "File" menu. Either way brings you to the "Open" dialog.
 <P>
 <quote>
-<img src=open_dialog.gif>
+<img src=open_dialog.png>
 </quote>
 <P>
 Since this dialog form conforms to the KDE standard, we won't go into the workings of every button. If you've selected the file you want to open a preview appears on the right side of the dialog box. Now you can load it by double-clicking the file name, or by clicking on the "OK" button.
@@ -473,7 +473,7 @@ Via the "File" menu and the item "Export" you reach the following Dialog:
 
 <p>
 <quote>
-<img src=export.gif>
+<img src=export.png>
 </quote>
 <P>
 This is very similar to the dialog for saving files. The only difference is the fact that you can choose what format to save the file in.
@@ -487,7 +487,7 @@ This is very similar to the dialog for saving files. The only difference is the 
 
 <sect>Zoom tool
 <p>
-<img src=zoom.gif> Zooming can be performed in two ways. The simplest is to use the drop down box in the main bar to select the required magnification level whose default value is 100%. The second method is to use the magnifying glass in the tool bar. Left-clicking on the canvas with the zoom tool increases the magnification to the next level. The magnification levels are:
+<img src=zoom.png> Zooming can be performed in two ways. The simplest is to use the drop down box in the main bar to select the required magnification level whose default value is 100%. The second method is to use the magnifying glass in the tool bar. Left-clicking on the canvas with the zoom tool increases the magnification to the next level. The magnification levels are:
 
 <itemize>
 <item>50% 
@@ -502,7 +502,7 @@ This is very similar to the dialog for saving files. The only difference is the 
 
 <sect>Handling colours
 <P>
-<img src=pfeil.gif> The colour handling process in KIllustrator is very simple. Generally, a left-click on a colour in the colour palette changes the fill colour of the selected object(s); a right-click changes the outline colour (or the text colour) of the selected object(s). If the desired colour is not in the colour palette, then proceed as follows: 
+<img src=pfeil.png> The colour handling process in KIllustrator is very simple. Generally, a left-click on a colour in the colour palette changes the fill colour of the selected object(s); a right-click changes the outline colour (or the text colour) of the selected object(s). If the desired colour is not in the colour palette, then proceed as follows: 
 
 <enum> 
 <item>select the object whose colour is to be changed.
@@ -510,7 +510,7 @@ This is very similar to the dialog for saving files. The only difference is the 
 <item>choose to change the fill colour or the outline colour from the dialog. 
 <item>press the colour button and the following dialog is displayed: 
 <p>
-   <img src=colour.gif>
+   <img src=colour.png>
 <P>
 <item>left-click in the multi-coloured window and select the desired colour by moving the mouse.  
 <item>release the left mouse button. 
