@@ -60,7 +60,7 @@ private:
     void appendPen( QDomDocument& doc, QDomElement& e );
     void appendBrush( QDomDocument& doc, QDomElement& e );
     void appendShadow( QDomDocument& doc, QDomElement& e );
-    void appendLineEnds( QDomDocument& doc, QDomElement& e, bool _ordreEndStartLine = true );
+    void appendLineEnds( QDomDocument& doc, QDomElement& e, bool _orderEndStartLine = true );
     void appendTextObjectMargin( QDomDocument& doc, QDomElement& e );
     void appendField(QDomDocument& doc, QDomElement& e, const QDomElement& object, uint pos);
 	void createPresentationAnimation(const QDomElement& element);

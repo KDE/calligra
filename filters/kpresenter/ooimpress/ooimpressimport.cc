@@ -496,11 +496,11 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                 fillStyleStack( o );
                 e = doc.createElement( "OBJECT" );
                 e.setAttribute( "type", 1 );
-                bool ordreEndStartLine = appendLineGeometry( doc, e, o, (int)offset );
+                bool orderEndStartLine = appendLineGeometry( doc, e, o, (int)offset );
                 appendPen( doc, e );
                 appendBrush( doc, e );
                 appendShadow( doc, e );
-                appendLineEnds( doc, e, ordreEndStartLine );
+                appendLineEnds( doc, e, orderEndStartLine );
                 appendObjectEffect(doc, e, o, soundElement);
             }
             else if (name=="draw:polyline") { // polyline
@@ -1044,9 +1044,9 @@ void OoImpressImport::appendShadow( QDomDocument& doc, QDomElement& e )
     }
 }
 
-void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e, bool ordreEndStartLine)
+void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e, bool orderEndStartLine)
 {
-    QString attr = ordreEndStartLine ? "draw:marker-start" : "draw:marker-end";
+    QString attr = orderEndStartLine ? "draw:marker-start" : "draw:marker-end";
     if ( m_styleStack.hasAttribute( attr ) )
     {
         QDomElement lineBegin = doc.createElement( "LINEBEGIN" );
@@ -1066,7 +1066,7 @@ void OoImpressImport::appendLineEnds( QDomDocument& doc, QDomElement& e, bool or
             lineBegin.setAttribute( "value", 6 );
         e.appendChild( lineBegin );
     }
-    attr = ordreEndStartLine ? "draw:marker-end" : "draw:marker-start";
+    attr = orderEndStartLine ? "draw:marker-end" : "draw:marker-start";
     if ( m_styleStack.hasAttribute( attr ) )
     {
         QDomElement lineEnd = doc.createElement( "LINEEND" );
