@@ -197,10 +197,13 @@ public:
 
 FormatAlignment::FormatAlignment()
 {
-  d         = new FormatAlignment::Private;
-  d->null   = true;
-  d->alignX = Format::Left;
-  d->alignY = Format::Middle;
+  d = new FormatAlignment::Private;
+  d->null          = true;
+  d->alignX        = Format::Left;
+  d->alignY        = Format::Middle;
+  d->wrap          = false;
+  d->indentLevel   = 0;
+  d->rotationAngle = 0;
 }
 
 // destructor
