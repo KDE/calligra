@@ -3,9 +3,9 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 
-datadir = $(kde_datadir)/kivio/pics
+kiviopicsdir = $(kde_datadir)/kivio/pics
 
-data_DATA = kivio_arrow.xpm 
+kiviopics_DATA = kivio_arrow.xpm
 EXTRA_DIST = \
 		kivio_arrow.xpm
 ##############################################################

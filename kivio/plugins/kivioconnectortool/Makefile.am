@@ -38,6 +38,6 @@ rcdir = $(kde_datadir)/kivio/kpartplugins
 desktop_DATA = kivioconnectortool.desktop
 desktopdir = $(kde_servicesdir)
 
-data_DATA = kivio_connector.xpm kivio_connector_cursor1.xpm kivio_connector_cursor2.xpm
-datadir = $(kde_datadir)/kivio/pics
+kiviopics_DATA = kivio_connector.xpm kivio_connector_cursor1.xpm kivio_connector_cursor2.xpm
+kiviopicsdir = $(kde_datadir)/kivio/pics
 

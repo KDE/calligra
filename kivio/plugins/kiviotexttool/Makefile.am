@@ -38,8 +38,8 @@ rcdir = $(kde_datadir)/kivio/kpartplugins
 desktop_DATA = kiviotexttool.desktop
 desktopdir = $(kde_servicesdir)
 
-data_DATA = kivio_text.xpm kivio_text_cursor.xpm
-datadir = $(kde_datadir)/kivio/pics
+kiviopics_DATA = kivio_text.xpm kivio_text_cursor.xpm
+kiviopicsdir = $(kde_datadir)/kivio/pics
 
 stencil_DATA = Text.sml Text.xpm
 stencildir = $(kde_datadir)/kivio/autoloadStencils

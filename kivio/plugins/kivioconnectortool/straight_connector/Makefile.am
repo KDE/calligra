@@ -1,10 +1,7 @@
-#1########################################################!@#$
-####   Makefile.am generated automatically by KDEStudio   ####
-#### WARNING! All changes made in this part will be lost! ####
-##############################################################
-libdir = $(kde_datadir)/kivio/autoloadStencils
-lib_LTLIBRARIES =libstraight_connector.la
+stencildir = $(kde_datadir)/kivio/autoloadStencils
 
+stencil_LTLIBRARIES =libstraight_connector.la
+stencil_DATA = straight_connector.xpm
 
 libstraight_connector_la_LDFLAGS = -version-info 1
 
@@ -24,21 +21,15 @@ EXTRA_DIST = \
 		straight_connector.cpp\
 		straight_connector.h\
 		straight_connector.xpm
-##############################################################
-####                  END KDEStudio part                  ####
-#2########################################################!@#$
 
 ## This is a very bad hack..... why is this needed ? (David)
 
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(libdir)
-	$(LIBTOOL)  --mode=install $(INSTALL) ./.libs/libstraight_connector.so $(DESTDIR)$(libdir)/straight_connector.ksp;
-
-uninstall-libLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	$(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/straight_connector.ksp;
-
-stencil_DATA = straight_connector.xpm
-stencildir = $(kde_datadir)/kivio/autoloadStencils
+#install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+	#@$(NORMAL_INSTALL)
+	#$(mkinstalldirs) $(DESTDIR)$(libdir)
+	#$(LIBTOOL)  --mode=install $(INSTALL) ./.libs/libstraight_connector.so $(DESTDIR)$(libdir)/straight_connector.ksp;
+#
+#uninstall-libLTLIBRARIES:
+	#@$(NORMAL_UNINSTALL)
+	#$(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/straight_connector.ksp;
 

@@ -3,9 +3,9 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 
-datadir = $(kde_datadir)/kivio/pics
+kiviopicsdir = $(kde_datadir)/kivio/pics
 
-data_DATA = tile_scissors1.xpm tile_skulls1.xpm tile_yellow_swirl.xpm 
+kiviopics_DATA = tile_scissors1.xpm tile_skulls1.xpm tile_yellow_swirl.xpm 
 EXTRA_DIST = \
 		tile_scissors1.xpm\
 		tile_skulls1.xpm\

@@ -1,7 +1,5 @@
 
-
-datadir = $(kde_datadir)/kivio/stencils/Flowcharting/Logic
-logicdir = $(shapedir)/Logic
+logicdir = $(kde_datadir)/kivio/stencils/Flowcharting/Logic
 
 SHAPES = \
 	and.sml \
@@ -26,5 +24,5 @@ SHAPES = \
 
 EXTRA_DIST = $(SHAPES)
 
-data_DATA = $(SHAPES)
+logic_DATA = $(SHAPES)
 

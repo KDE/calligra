@@ -3,9 +3,9 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 SUBDIRS = BasicFlowcharting Logic
-datadir = $(kde_datadir)/kivio/stencils/Flowcharting
+flowchartingdir = $(kde_datadir)/kivio/stencils/Flowcharting
 
-data_DATA = desc icon.xpm 
+flowcharting_DATA = desc icon.xpm
 EXTRA_DIST = \
 		desc\
 		icon.xpm
