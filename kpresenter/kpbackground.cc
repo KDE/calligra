@@ -200,56 +200,108 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
     return page;
 }
 
-void KPBackGround::saveOasisPageEffect( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles )
+QString KPBackGround::saveOasisPageEffect() const
 {
-    if ( pageEffect==PEF_NONE )
-        return;
-    //switch( pageEffect )
-#if 0
-    PEF_NONE = 0,
-    PEF_CLOSE_HORZ = 1,
-    PEF_CLOSE_VERT = 2,
-    PEF_CLOSE_ALL = 3,
-    PEF_OPEN_HORZ = 4,
-    PEF_OPEN_VERT = 5,
-    PEF_OPEN_ALL = 6,
-    PEF_INTERLOCKING_HORZ_1 = 7,
-    PEF_INTERLOCKING_HORZ_2 = 8,
-    PEF_INTERLOCKING_VERT_1 = 9,
-    PEF_INTERLOCKING_VERT_2 = 10,
-    PEF_SURROUND1 = 11,
-    PEF_FLY1 = 12,
-    PEF_BLINDS_HOR = 13,
-    PEF_BLINDS_VER = 14,
-    PEF_BOX_IN = 15,
-    PEF_BOX_OUT = 16,
-    PEF_CHECKBOARD_ACROSS = 17,
-    PEF_CHECKBOARD_DOWN = 18,
-    PEF_COVER_DOWN = 19,
-    PEF_UNCOVER_DOWN = 20,
-    PEF_COVER_UP = 21,
-    PEF_UNCOVER_UP = 22,
-    PEF_COVER_LEFT = 23,
-    PEF_UNCOVER_LEFT = 24,
-    PEF_COVER_RIGHT = 25,
-    PEF_UNCOVER_RIGHT = 26,
-    PEF_COVER_LEFT_UP = 27,
-    PEF_UNCOVER_LEFT_UP = 28,
-    PEF_COVER_LEFT_DOWN = 29,
-    PEF_UNCOVER_LEFT_DOWN = 30,
-    PEF_COVER_RIGHT_UP = 31,
-    PEF_UNCOVER_RIGHT_UP = 32,
-    PEF_COVER_RIGHT_DOWN = 33,
-    PEF_UNCOVER_RIGHT_DOWN = 34,
-    PEF_DISSOLVE = 35,
-    PEF_STRIPS_LEFT_UP = 36,
-    PEF_STRIPS_LEFT_DOWN = 37,
-    PEF_STRIPS_RIGHT_UP = 38,
-    PEF_STRIPS_RIGHT_DOWN = 39,
-    PEF_MELTING = 40,
-    PEF_LAST_MARKER = 41, // only marker, don't use this !
-    PEF_RANDOM = -1
-#endif
+    QString transition;
+    switch( pageEffect )
+    {
+    case PEF_NONE:
+        break;
+    case PEF_CLOSE_HORZ:
+        transition = "close-vertical";
+        break;
+    case PEF_CLOSE_VERT:
+        transition="close-horizontal";
+        break;
+    case PEF_CLOSE_ALL:
+        transition="fade-to-center";
+        break;
+    case PEF_OPEN_HORZ:
+        transition="open-vertical";
+        break;
+    case PEF_OPEN_VERT:
+        transition="open-horizontal";
+        break;
+    case PEF_OPEN_ALL:
+        transition="fade-from-center";
+        break;
+    case PEF_INTERLOCKING_HORZ_1:
+        break;
+    case PEF_INTERLOCKING_HORZ_2:
+        break;
+    case PEF_INTERLOCKING_VERT_1:
+        break;
+    case PEF_INTERLOCKING_VERT_2:
+        break;
+    case PEF_SURROUND1:
+        transition="spiralin-left";
+        break;
+    case PEF_FLY1:
+        break;
+    case PEF_BLINDS_HOR:
+        break;
+    case PEF_BLINDS_VER:
+        break;
+    case PEF_BOX_IN:
+        break;
+    case PEF_BOX_OUT:
+        break;
+    case PEF_CHECKBOARD_ACROSS:
+        break;
+    case PEF_CHECKBOARD_DOWN:
+        break;
+    case PEF_COVER_DOWN:
+        break;
+    case PEF_COVER_UP:
+        break;
+    case PEF_UNCOVER_UP:
+        break;
+    case PEF_COVER_LEFT:
+        break;
+    case PEF_UNCOVER_LEFT:
+        break;
+    case PEF_COVER_RIGHT:
+        break;
+    case PEF_UNCOVER_RIGHT:
+        break;
+    case PEF_COVER_LEFT_UP:
+        break;
+    case PEF_UNCOVER_LEFT_UP:
+        break;
+    case PEF_COVER_LEFT_DOWN:
+        break;
+    case PEF_UNCOVER_LEFT_DOWN:
+        break;
+    case PEF_COVER_RIGHT_UP:
+        break;
+    case PEF_UNCOVER_RIGHT_UP:
+        break;
+    case PEF_COVER_RIGHT_DOWN:
+        break;
+    case PEF_UNCOVER_RIGHT_DOWN:
+        break;
+    case PEF_DISSOLVE:
+        transition="dissolve";
+        break;
+    case PEF_STRIPS_LEFT_UP:
+        transition="fade-from-lowerright";
+        break;
+    case PEF_STRIPS_LEFT_DOWN:
+        transition="fade-from-upperright";
+        break;
+    case PEF_STRIPS_RIGHT_UP:
+        transition="fade-from-lowerleft";
+        break;
+    case PEF_STRIPS_RIGHT_DOWN:
+        transition="fade-from-upperleft";
+        break;
+    case PEF_LAST_MARKER://don't use it !!!
+        break;
+    case PEF_RANDOM:
+        break;
+
+    }
+    return transition;
 }
 
 
@@ -258,6 +310,10 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     KoGenStyle stylepageauto( KPresenterDoc::STYLE_BACKGROUNDPAGEAUTO, "drawing-page" );
     stylepageauto.addProperty( "presentation:background-visible", "true" ); //for the moment it's not implemented into kpresenter
     stylepageauto.addProperty( "presentation:background-objects-visible", "true" );
+    QString transition = saveOasisPageEffect();
+    if ( !transition.isEmpty() )
+        stylepageauto.addProperty( "presentation:transition-style", transition );
+
     switch ( backType )
     {
     case BT_COLOR:

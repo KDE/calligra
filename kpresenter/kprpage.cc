@@ -116,7 +116,6 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     {
         it.current()->saveOasis( xmlWriter,mainStyles );
     }
-    kpbackground->saveOasisPageEffect( store, xmlWriter, posPage, mainStyles );
 
     saveOasisNote( xmlWriter );
     xmlWriter.endElement();
