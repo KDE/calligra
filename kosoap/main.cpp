@@ -28,7 +28,7 @@
 
 static const KCmdLineOptions options[]=
 {
-	{"+[url]", I18N_NOOP("URL To Open"),0},
+	{"+[url]", I18N_NOOP("URL to open"),0},
 	{0,0,0}
 };
 

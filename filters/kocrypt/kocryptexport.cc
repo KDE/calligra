@@ -262,7 +262,7 @@ int rc;
        if (cursize % blocksize != 0) {
          QApplication::setOverrideCursor(Qt::arrowCursor);
          KMessageBox::error(NULL,
-            i18n("Internal error writing file.  Please file a bug report."),
+            i18n("Internal error writing file. Please file a bug report."),
                                   i18n("Encrypted Document Export"));
          QApplication::restoreOverrideCursor();
          return KoFilter::StupidError;

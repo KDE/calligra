@@ -60,7 +60,7 @@
                         <cstring>radioEncodingOther</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Other Encoding:</string>
+                        <string>&amp;Other encoding:</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -104,7 +104,7 @@
                         <cstring>radioEncodingLocal</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Local Encoding</string>
+                        <string>&amp;Local encoding</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -157,7 +157,7 @@
                         <enum>TabFocus</enum>
                     </property>
                     <property name="text">
-                        <string>L&amp;ight: convert to strict (X)HTML</string>
+                        <string>L&amp;ight: Convert to strict (X)HTML</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Convert mainly the document structure (Recommended for exporting to browsers with limited capabilities)</string>
@@ -174,7 +174,7 @@
                         <enum>TabFocus</enum>
                     </property>
                     <property name="text">
-                        <string>&amp;Basic: convert to transitional (X)HTML</string>
+                        <string>&amp;Basic: Convert to transitional (X)HTML</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -188,7 +188,7 @@
                         <cstring>radioModeEnhanced</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Enhanced: convert to (X)HTML with CSS</string>
+                        <string>&amp;Enhanced: Convert to (X)HTML with CSS</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>

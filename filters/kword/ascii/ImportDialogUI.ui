@@ -60,7 +60,7 @@
                         <cstring>radioEncodingLocal</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Local Encoding</string>
+                        <string>&amp;Local encoding</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -71,7 +71,7 @@
                         <cstring>radioEncodingOther</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Other Encoding:</string>
+                        <string>&amp;Other encoding:</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -134,7 +134,7 @@
                         <cstring>radioParagraphAsIs</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;As Is: at the end of line</string>
+                        <string>&amp;As is: At the end of line</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -145,7 +145,7 @@
                         <cstring>radioParagraphSentence</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Sentence: if the end of line is the end of a sentence</string>
+                        <string>&amp;Sentence: If the end of line is the end of a sentence</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -153,7 +153,7 @@
                         <cstring>radioParagraphOldWay</cstring>
                     </property>
                     <property name="text">
-                        <string>Old &amp;Method: if the line is empty or has less than 40 characters</string>
+                        <string>Old &amp;method: If the line is empty or has less than 40 characters</string>
                     </property>
                 </widget>
             </vbox>

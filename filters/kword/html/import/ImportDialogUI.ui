@@ -49,7 +49,7 @@
                         <cstring>textLabelCharset</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Hint For Character Set:</string>
+                        <string>&amp;Hint for character set:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>lineEditCharSet</cstring>
@@ -84,7 +84,7 @@
                         <cstring>radioButtonHintNone</cstring>
                     </property>
                     <property name="text">
-                        <string>Do &amp;not use the hint! (Recommended!)</string>
+                        <string>Do &amp;not use the hint. (Recommended!)</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -95,7 +95,7 @@
                         <cstring>radioButtonHintFallback</cstring>
                     </property>
                     <property name="text">
-                        <string>Use hint only as &amp;fall back!</string>
+                        <string>Use hint only as &amp;fall back.</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -103,7 +103,7 @@
                         <cstring>radioButtonHintForce</cstring>
                     </property>
                     <property name="text">
-                        <string>Force the use of the hint! (For buggy files)</string>
+                        <string>Force the use of the hint. (For buggy files)</string>
                     </property>
                 </widget>
             </vbox>

@@ -50,7 +50,7 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 
   QGridLayout *grid1 = new QGridLayout(box,8,2,15,7);
   label1 = new QLabel(box);
-  label1->setText(i18n("Foreground Color:"));
+  label1->setText(i18n("Foreground color:"));
   grid1->addWidget(label1,0,0);
 
   button1 = new KColorButton( box, "button1" );
@@ -62,7 +62,7 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 
   label2 = new QLabel(box);
   grid1->addWidget(label2,1,0);
-  label2->setText(i18n("Background Color:"));
+  label2->setText(i18n("Background color:"));
 
   button2 = new KColorButton( box, "button2" );
   grid1->addWidget(button2,1,1);
@@ -98,7 +98,7 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 
   cb = new QCheckBox(box);
   grid1->addWidget(cb,3,0);
-  cb->setText(i18n("Set Fixed Precision at:"));
+  cb->setText(i18n("Set fixed precision at:"));
   if(defst->fixed)
     cb->setChecked(true);
 
@@ -122,7 +122,7 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 
   cb2 = new QCheckBox(box);
   grid1->addWidget(cb2,4,0);
-  cb2->setText(i18n("Beep on Error"));
+  cb2->setText(i18n("Beep on error"));
   if(defst->beep)
     cb2->setChecked(true);
 
@@ -133,17 +133,17 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
 
   QGridLayout *grid2 = new QGridLayout(stylegroup,2,2,15,7);
 
-  trigstyle = new QRadioButton(i18n("Trigonometry Mode"),stylegroup,"trigstyle");
+  trigstyle = new QRadioButton(i18n("Trigonometry mode"),stylegroup,"trigstyle");
   grid2->addWidget(trigstyle,0,0);
   trigstyle->adjustSize();
   trigstyle->setChecked(defst->style == 0 );
 
-  statstyle = new QRadioButton(i18n("Statistical Mode"),stylegroup,"Stats");
+  statstyle = new QRadioButton(i18n("Statistical mode"),stylegroup,"Stats");
   grid2->addWidget(statstyle,1,0);
   statstyle->adjustSize();
   statstyle->setChecked(defst->style == 1 );
 
-  tablestyle = new QRadioButton(i18n("Table Mode"),stylegroup,"Table");
+  tablestyle = new QRadioButton(i18n("Table mode"),stylegroup,"Table");
   grid2->addWidget(tablestyle,2,0);
   tablestyle->adjustSize();
 
