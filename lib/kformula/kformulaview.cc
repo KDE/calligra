@@ -50,7 +50,6 @@ struct View::View_Impl {
                 view, SLOT(slotCursorChanged(FormulaCursor*)));
 
         cursor = document->createCursor();
-        cursor->calcCursorSize(smallCursor);
     }
 
     ~View_Impl()
@@ -104,6 +103,7 @@ QRect View::getDirtyArea() const { return impl->dirtyArea; }
 View::View(Container* doc)
 {
     impl = new View_Impl(doc, this);
+    cursor()->calcCursorSize( contextStyle(), smallCursor() );
 }
 
 View::~View()
@@ -114,7 +114,7 @@ View::~View()
 
 QPoint View::getCursorPoint() const
 {
-    return cursor()->getCursorPoint();
+    return contextStyle().layoutUnitToPixel( cursor()->getCursorPoint() );
 }
 
 void View::setReadOnly(bool ro)
@@ -135,9 +135,9 @@ void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
     QPainter p(&buffer);
     p.translate(-formulaRect.x(), -formulaRect.y());
 
-    container()->draw(p, rect, cg);
-    if (cursorVisible()) {
-        cursor()->draw(p, smallCursor());
+    container()->draw( p, rect, cg );
+    if ( cursorVisible() ) {
+        cursor()->draw( p, contextStyle(), smallCursor() );
     }
     int sx = static_cast<int>( QMAX(0, rect.x() - formulaRect.x()) );
     int sy = static_cast<int>( QMAX(0, rect.y() - formulaRect.y()) );
@@ -158,7 +158,7 @@ void View::keyPressEvent(QKeyEvent* event)
         int latin1 = ch.latin1();
         switch (latin1) {
         case '(':
-            container()->getDocument()->addDefaultBracket();
+            container()->document()->addDefaultBracket();
             break;
         case '[':
             container()->addSquareBracket();
@@ -296,8 +296,8 @@ void View::slotCursorMoved(FormulaCursor* c)
 
 void View::slotCursorChanged(FormulaCursor* c)
 {
-    if (c == cursor()) {
-        cursor()->calcCursorSize(smallCursor());
+    if ( c == cursor() ) {
+        c->calcCursorSize( contextStyle(), smallCursor() );
     }
 }
 
@@ -387,13 +387,22 @@ bool View::isEnd() const
 void View::emitCursorChanged()
 {
     if (cursor()->hasChanged() || cursorHasChanged()) {
+        const ContextStyle& context = contextStyle();
+
         cursor()->clearChangedFlag();
         cursorHasChanged() = false;
-        impl->dirtyArea = cursor()->getCursorSize();
-        cursor()->calcCursorSize(smallCursor());
-        impl->dirtyArea |= cursor()->getCursorSize();
+
+        impl->dirtyArea = context.layoutUnitToPixel( cursor()->getCursorSize() );
+        cursor()->calcCursorSize( contextStyle(), smallCursor() );
+        impl->dirtyArea |= context.layoutUnitToPixel( cursor()->getCursorSize() );
+
         emit cursorChanged(cursorVisible(), cursor()->isSelection());
     }
+}
+
+const ContextStyle& View::contextStyle() const
+{
+    return container()->document()->getContextStyle();
 }
 
 KFORMULA_NAMESPACE_END

@@ -49,12 +49,12 @@ MatrixElement::~MatrixElement()
 }
 
 
-BasicElement* MatrixElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                     const KoPoint& point, const KoPoint& parentOrigin)
+BasicElement* MatrixElement::goToPos( FormulaCursor* cursor, bool& handled,
+                                      const LuPoint& point, const LuPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        KoPoint myPos(parentOrigin.x() + getX(),
+        LuPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
 
         uint rows = getRows();
@@ -218,14 +218,14 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void MatrixElement::draw(QPainter& painter, const QRect& rect,
-                         const ContextStyle& style,
-			 ContextStyle::TextStyle tstyle,
-			 ContextStyle::IndexStyle istyle,
-                         const KoPoint& parentOrigin)
+void MatrixElement::draw( QPainter& painter, const LuRect& rect,
+                          const ContextStyle& style,
+                          ContextStyle::TextStyle tstyle,
+                          ContextStyle::IndexStyle istyle,
+                          const LuPoint& parentOrigin )
 {
-    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(rect))
+    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( rect ) )
         return;
 
     uint rows = getRows();

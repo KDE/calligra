@@ -96,13 +96,13 @@ public:
      * Calculates the size of the cursor. Needs to be called before
      * the cursor can be drawn.
      */
-    void calcCursorSize(bool smallCursor);
+    void calcCursorSize( const ContextStyle& context, bool smallCursor );
 
     /**
      * Draws the cursor at its current position.
      * The cursor will always be drawn in xor mode.
      */
-    void draw(QPainter&, bool smallCursor);
+    void draw( QPainter&, const ContextStyle& context, bool smallCursor );
 
 
     // simple cursor movement.
@@ -333,12 +333,12 @@ public:
     /**
      * @returns the point inside the formula widget where the cursor is.
      */
-    QPoint getCursorPoint() const { return cursorPoint; }
+    const LuPoint& getCursorPoint() const { return cursorPoint; }
 
     /**
      * @returns the area the cursor is currently on.
      */
-    QRect getCursorSize() const { return cursorSize; }
+    const LuRect& getCursorSize() const { return cursorSize; }
 
     /**
      * @returns whether we are allowed to alter the document.
@@ -424,13 +424,13 @@ private:
      * The point in the middle of the cursor. Gets updated
      * each time the cursor is drawn.
      */
-    QPoint cursorPoint;
+    LuPoint cursorPoint;
 
     /**
      * The area that is covered by the cursor. Gets updated
      * each time the cursor is drawn.
      */
-    QRect cursorSize;
+    LuRect cursorSize;
 
     /**
      * Tells whether the cursor has been changed. This is set

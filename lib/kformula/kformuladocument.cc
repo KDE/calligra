@@ -36,12 +36,12 @@ KFORMULA_NAMESPACE_BEGIN
 
 struct Document::Document_Impl {
 
-
-    Document_Impl()
+    Document_Impl( KConfig* config )
             : leftBracketChar('('), rightBracketChar(')'),
               syntaxHighlighting(true), formula(0)
     {
-        formulae.setAutoDelete(false);
+        formulae.setAutoDelete( false );
+        readConfig( config );
     }
 
 
@@ -50,6 +50,14 @@ struct Document::Document_Impl {
         if (ownHistory) {
             delete history;
         }
+    }
+
+    void readConfig( KConfig* config ) {
+        config->setGroup( "kformula Color" );
+        syntaxHighlighting = config->readBoolEntry( "syntaxHighlighting",
+                                                    syntaxHighlighting );
+
+        contextStyle.readConfig( config );
     }
 
     // We know our actions, maybe a client is interessted...
@@ -129,10 +137,10 @@ struct Document::Document_Impl {
 };
 
 
-double Document::getXResolution() const { return impl->contextStyle.getXResolution(); }
-double Document::getYResolution() const { return impl->contextStyle.getYResolution(); }
+double Document::getXResolution() const { return impl->contextStyle.zoomedResolutionX(); }
+double Document::getYResolution() const { return impl->contextStyle.zoomedResolutionY(); }
 
-void Document::setResolution(double zX, double zY) { impl->contextStyle.setResolution(zX, zY); }
+//void Document::setResolution(double zX, double zY) { impl->contextStyle.setResolution(zX, zY); }
 
 KCommandHistory* Document::getHistory() const { return impl->history; }
 const SymbolTable& Document::getSymbolTable() const { return impl->table; }
@@ -166,10 +174,11 @@ KToggleAction* Document::getSyntaxHighlightingAction() { return impl->syntaxHigh
 Container* Document::formula() const { return impl->formula; }
 
 
-Document::Document(KActionCollection* collection,
-                                   KCommandHistory* his)
+Document::Document( KConfig* config,
+                    KActionCollection* collection,
+                    KCommandHistory* his )
 {
-    impl = new Document_Impl;
+    impl = new Document_Impl( config );
 
     KGlobal::dirs()->addResourceType("toolbar", KStandardDirs::kde_default("data") + "kformula/pics/");
     createActions(collection);
@@ -186,9 +195,9 @@ Document::Document(KActionCollection* collection,
 }
 
 
-Document::Document(KCommandHistory* his)
+Document::Document( KConfig* config, KCommandHistory* his )
 {
-    impl = new Document_Impl;
+    impl = new Document_Impl( config );
     if (his == 0) {
         impl->history = new KCommandHistory;
         impl->ownHistory = true;
@@ -215,6 +224,20 @@ ContextStyle& Document::getContextStyle( bool forPrinting )
     return impl->contextStyle;
 }
 
+void Document::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
+{
+    impl->contextStyle.setZoomAndResolution( zoom, dpiX, dpiY, updateViews, forPrint );
+    if ( updateViews ) {
+        recalc();
+    }
+}
+
+void Document::setZoom( double zoomX, double zoomY, bool updateViews, bool forPrint )
+{
+    if ( impl->contextStyle.setZoom( zoomX, zoomY, updateViews, forPrint ) && updateViews ) {
+        recalc();
+    }
+}
 
 Container* Document::createFormula()
 {
@@ -609,12 +632,8 @@ void Document::insertSymbol()
 void Document::toggleSyntaxHighlighting()
 {
     impl->syntaxHighlighting = impl->syntaxHighlightingAction->isChecked();
-
-    Container* f;
-    for (f=impl->formulae.first(); f != 0; f=impl->formulae.next()) {
-        // Only to notify all views. We don't expect to get new values.
-        f->recalc();
-    }
+    // Only to notify all views. We don't expect to get new values.
+    recalc();
 }
 
 void Document::delimiterLeft()
@@ -647,6 +666,13 @@ void Document::redo()
 bool Document::hasFormula()
 {
     return (formula() != 0) && (formula()->getActiveCursor() != 0);
+}
+
+void Document::recalc()
+{
+    for ( Container* f = impl->formulae.first(); f != 0; f=impl->formulae.next() ) {
+        f->recalc();
+    }
 }
 
 KFORMULA_NAMESPACE_END

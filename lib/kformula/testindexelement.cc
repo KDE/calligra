@@ -3,6 +3,7 @@
 
 #include <qptrlist.h>
 
+#include <kapp.h>
 #include <kcommand.h>
 
 #include "basicelement.h"
@@ -38,7 +39,7 @@ Test* TestIndexElement::suite()
 void TestIndexElement::setUp()
 {
     history = new KCommandHistory;
-    document = new Document(history);
+    document = new Document( kapp->config(), history );
     container = new Container(document);
     rootElement = container->rootElement();
     cursor = container->createCursor();

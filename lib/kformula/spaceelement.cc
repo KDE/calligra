@@ -54,15 +54,15 @@ void SpaceElement::calcSizes( const ContextStyle& context,
     setMidline( getBaseline() - fm.strikeOutPos() );
 }
 
-void SpaceElement::draw( QPainter& painter, const QRect& r,
+void SpaceElement::draw( QPainter& painter, const LuRect& r,
                          const ContextStyle& context,
                          ContextStyle::TextStyle /*tstyle*/,
                          ContextStyle::IndexStyle /*istyle*/,
-                         const KoPoint& parentOrigin )
+                         const LuPoint& parentOrigin )
 {
-    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
+    LuPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
     //double mySize = context.getAdjustedSize( tstyle );
-    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
+    if (!LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
     if ( painter.device()->devType() != QInternal::Printer ) {

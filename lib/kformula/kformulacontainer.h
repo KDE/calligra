@@ -197,7 +197,7 @@ public:
     /**
      * Moves the formula to a new location.
      */
-    void moveTo(int x, int y);
+    void moveTo( int x, int y );
 
     /**
      * Recalcs the formula and emits the .*Changed signals if needed.
@@ -217,7 +217,7 @@ public:
     /**
      * @returns the document this formula belongs to.
      */
-    Document* getDocument() const;
+    Document* document() const;
 
     virtual const SymbolTable& getSymbolTable() const;
 
@@ -242,7 +242,7 @@ signals:
     /**
      * The formula has changed and needs to be redrawn.
      */
-    void formulaChanged(int width, int height);
+    void formulaChanged( int width, int height );
 
     /**
      * The element is going to leave the formula with and all its children.
@@ -388,7 +388,6 @@ private:
     Container_Impl* impl;
 
     FormulaElement* rootElement() const;
-    Document* document() const;
 
     // debug
     friend class TestFormulaCursor;

@@ -1,5 +1,5 @@
 
-INCLUDES  = $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) -I$(interfacedir) $(all_includes)
+INCLUDES  = $(KOFFICE_INCLUDES) $(KFORMULA_INCLUDES) $(KOTEXT_INCLUDES) -I$(interfacedir) $(all_includes)
 KDE_CXXFLAGS = $(USE_RTTI)
 
 ## The part
@@ -7,7 +7,7 @@ kde_module_LTLIBRARIES = libkformulapart.la
 libkformulapart_la_SOURCES = kformula_doc.cc \
 	kformula_view.cc kformula_factory.cc kformulawidget.cc kfconfig.cc
 libkformulapart_la_LDFLAGS = $(KDE_PLUGIN)
-libkformulapart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KFORMULA)
+libkformulapart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KFORMULA) $(LIB_KOTEXT)
 libkformulapart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module

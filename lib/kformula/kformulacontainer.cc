@@ -190,13 +190,13 @@ void Container::testDirty()
 void Container::recalc()
 {
     impl->dirty = false;
-    rootElement()->calcSizes(document()->getContextStyle());
+    ContextStyle& context = document()->getContextStyle();
+    rootElement()->calcSizes( context );
     emit cursorChanged(getActiveCursor());
 
-    //emit formulaChanged(rootElement->getWidth() + document()->getContextStyle().getEmptyRectWidth() / 2,
-    //                    rootElement->getHeight() + document()->getContextStyle().getEmptyRectHeight() / 2);
-    emit formulaChanged(rootElement()->getWidth(), rootElement()->getHeight());
-    emit cursorMoved(getActiveCursor());
+    emit formulaChanged( context.layoutUnitToPixelX( rootElement()->getWidth() ),
+                         context.layoutUnitToPixelY( rootElement()->getHeight() ) );
+    emit cursorMoved( getActiveCursor() );
 }
 
 bool Container::isEmpty()
@@ -204,11 +204,6 @@ bool Container::isEmpty()
     return rootElement()->countChildren() == 0;
 }
 
-
-Document* Container::getDocument() const
-{
-    return document();
-}
 
 const SymbolTable& Container::getSymbolTable() const
 {
@@ -225,7 +220,8 @@ void Container::draw(QPainter& painter, const QRect& r, const QColorGroup& cg)
 
 void Container::draw(QPainter& painter, const QRect& r)
 {
-    rootElement()->draw(painter, r, document()->getContextStyle(painter.device()->devType() == QInternal::Printer));
+    ContextStyle& context = document()->getContextStyle( painter.device()->devType() == QInternal::Printer );
+    rootElement()->draw( painter, context.pixelToLayoutUnit( r ), context );
 }
 
 
@@ -624,19 +620,24 @@ void Container::execute(Command* command)
 
 QRect Container::boundingRect()
 {
-    return QRect(rootElement()->getX(), rootElement()->getY(),
-                 rootElement()->getWidth(), rootElement()->getHeight());
+    const ContextStyle& context = document()->getContextStyle();
+    return QRect( context.layoutUnitToPixelX( rootElement()->getX() ),
+                  context.layoutUnitToPixelY( rootElement()->getY() ),
+                  context.layoutUnitToPixelX( rootElement()->getWidth() ),
+                  context.layoutUnitToPixelY( rootElement()->getHeight() ) );
 }
 
 int Container::baseline() const
 {
-    return static_cast<int>( rootElement()->getBaseline() );
+    const ContextStyle& context = document()->getContextStyle();
+    return context.layoutUnitToPixelY( rootElement()->getBaseline() );
 }
 
-void Container::moveTo(int x, int y)
+void Container::moveTo( int x, int y )
 {
-    rootElement()->setX(x);
-    rootElement()->setY(y);
+    const ContextStyle& context = document()->getContextStyle();
+    rootElement()->setX( context.pixelToLayoutUnitX( x ) );
+    rootElement()->setY( context.pixelToLayoutUnitY( y ) );
 }
 
 

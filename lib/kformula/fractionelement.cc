@@ -43,13 +43,13 @@ FractionElement::~FractionElement()
 }
 
 
-BasicElement* FractionElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                       const KoPoint& point, const KoPoint& parentOrigin)
+BasicElement* FractionElement::goToPos( FormulaCursor* cursor, bool& handled,
+                                        const LuPoint& point, const LuPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        KoPoint myPos(parentOrigin.x() + getX(),
-                     parentOrigin.y() + getY());
+        LuPoint myPos(parentOrigin.x() + getX(),
+                      parentOrigin.y() + getY());
         e = numerator->goToPos(cursor, handled, point, myPos);
         if (e != 0) {
             return e;
@@ -114,15 +114,14 @@ void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void FractionElement::draw(QPainter& painter, const QRect& r,
-                           const ContextStyle& style,
-                           ContextStyle::TextStyle tstyle,
-			   ContextStyle::IndexStyle istyle,
-			   const KoPoint& parentOrigin)
+void FractionElement::draw( QPainter& painter, const LuRect& r,
+                            const ContextStyle& style,
+                            ContextStyle::TextStyle tstyle,
+                            ContextStyle::IndexStyle istyle,
+                            const LuPoint& parentOrigin )
 {
-    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-
-    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
+    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
     numerator->draw(painter, r, style,
@@ -132,10 +131,13 @@ void FractionElement::draw(QPainter& painter, const QRect& r,
 		      style.convertTextStyleFraction( tstyle ),
 		      style.convertIndexStyleLower( istyle ), myPos);
 
-    if (withLine) {
-        painter.setPen( QPen( style.getDefaultColor(), style.getLineWidth() ) );
-        painter.drawLine( myPos.x(), myPos.y() + getMidline(),
-                          myPos.x() + getWidth(), myPos.y() + getMidline() );
+    if ( withLine ) {
+        painter.setPen( QPen( style.getDefaultColor(),
+                              style.layoutUnitToPixelY( style.getLineWidth() ) ) );
+        painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
+                          style.layoutUnitToPixelY( myPos.y() + getMidline() ),
+                          style.layoutUnitToPixelX( myPos.x() + getWidth() ),
+                          style.layoutUnitToPixelY( myPos.y() + getMidline() ) );
     }
 }
 

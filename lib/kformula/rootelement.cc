@@ -44,12 +44,12 @@ RootElement::~RootElement()
 }
 
 
-BasicElement* RootElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                   const KoPoint& point, const KoPoint& parentOrigin)
+BasicElement* RootElement::goToPos( FormulaCursor* cursor, bool& handled,
+                                    const LuPoint& point, const LuPoint& parentOrigin)
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        KoPoint myPos(parentOrigin.x() + getX(),
+        LuPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
 
         e = content->goToPos(cursor, handled, point, myPos);
@@ -141,14 +141,14 @@ void RootElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle t
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void RootElement::draw(QPainter& painter, const QRect& r,
-                       const ContextStyle& style,
-                       ContextStyle::TextStyle tstyle,
-		       ContextStyle::IndexStyle istyle,
-		       const KoPoint& parentOrigin)
+void RootElement::draw( QPainter& painter, const LuRect& r,
+                        const ContextStyle& style,
+                        ContextStyle::TextStyle tstyle,
+                        ContextStyle::IndexStyle istyle,
+                        const LuPoint& parentOrigin )
 {
-    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
+    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
     content->draw(painter, r, style, tstyle,
@@ -159,32 +159,34 @@ void RootElement::draw(QPainter& painter, const QRect& r,
 		    style.convertIndexStyleUpper(istyle), myPos);
     }
 
-    double x = myPos.x() + rootOffset.x();
-    double y = myPos.y() + rootOffset.y();
+    lu x = myPos.x() + rootOffset.x();
+    lu y = myPos.y() + rootOffset.y();
     //int distX = style.getDistanceX(tstyle);
-    double distY = style.getThinSpace( tstyle );
-    double unit = (content->getHeight() + distY)/ 3;
+    lu distY = style.getThinSpace( tstyle );
+    lu unit = (content->getHeight() + distY)/ 3;
 
-    painter.setPen(QPen(style.getDefaultColor(), 2*style.getLineWidth()));
-    painter.drawLine( static_cast<int>( x+unit/3 ),
-                      static_cast<int>( y+unit+distY/2 ),
-                      static_cast<int>( x+unit/2+unit/3 ),
-                      static_cast<int>( myPos.y()+getHeight() ) );
+    painter.setPen( QPen( style.getDefaultColor(),
+                          style.layoutUnitToPixelX( 2*style.getLineWidth() ) ) );
+    painter.drawLine( style.layoutUnitToPixelX( x+unit/3 ),
+                      style.layoutUnitToPixelY( y+unit+distY/2 ),
+                      style.layoutUnitToPixelX( x+unit/2+unit/3 ),
+                      style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
 
-    painter.setPen(QPen(style.getDefaultColor(), style.getLineWidth()));
+    painter.setPen( QPen( style.getDefaultColor(),
+                          style.layoutUnitToPixelY( style.getLineWidth() ) ) );
 
-    painter.drawLine( static_cast<int>( x+unit+unit/3 ),
-                      static_cast<int>( y+distY/2 ),
-                      static_cast<int>( x+unit/2+unit/3 ),
-                      static_cast<int>( myPos.y()+getHeight() ) );
-    painter.drawLine( static_cast<int>( x+unit+unit/3 ),
-                      static_cast<int>( y+distY/2 ),
-                      static_cast<int>( x+unit+unit/3+content->getWidth() ),
-                      static_cast<int>( y+distY/2 ) );
-    painter.drawLine( static_cast<int>( x+unit/3 ),
-                      static_cast<int>( y+unit+distY/2 ),
-                      x,
-                      static_cast<int>( y+unit+unit/2 ) );
+    painter.drawLine( style.layoutUnitToPixelX( x+unit+unit/3 ),
+                      style.layoutUnitToPixelY( y+distY/2 ),
+                      style.layoutUnitToPixelX( x+unit/2+unit/3 ),
+                      style.layoutUnitToPixelY( myPos.y()+getHeight() ) );
+    painter.drawLine( style.layoutUnitToPixelX( x+unit+unit/3 ),
+                      style.layoutUnitToPixelY( y+distY/2 ),
+                      style.layoutUnitToPixelX( x+unit+unit/3+content->getWidth() ),
+                      style.layoutUnitToPixelY( y+distY/2 ) );
+    painter.drawLine( style.layoutUnitToPixelX( x+unit/3 ),
+                      style.layoutUnitToPixelY( y+unit+distY/2 ),
+                      style.layoutUnitToPixelX( x ),
+                      style.layoutUnitToPixelY( y+unit+unit/2 ) );
 }
 
 /**

@@ -73,7 +73,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_U: document->addGenericUpperIndex(); return;
             case Qt::Key_V: document->paste(); return;
             case Qt::Key_X: document->cut(); return;
-            case Qt::Key_Z: (state & Qt::ShiftButton) ? document->getDocument()->redo() : document->getDocument()->undo(); return;
+            case Qt::Key_Z: (state & Qt::ShiftButton) ? document->document()->redo() : document->document()->undo(); return;
             default:
                 //cerr << "Key: " << event->key() << endl;
                 break;
@@ -146,7 +146,7 @@ int main(int argc, char** argv)
 
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
-    Document* document = new Document;
+    Document* document = new Document( kapp->config() );
     Container* container1 = document->createFormula();
     Container* container2 = document->createFormula();
 

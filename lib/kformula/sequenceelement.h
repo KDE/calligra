@@ -49,8 +49,8 @@ public:
      * This is needed because only the innermost matching element
      * is allowed to set the cursor.
      */
-    virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
-                                  const KoPoint& point, const KoPoint& parentOrigin);
+    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
+                                   const LuPoint& point, const LuPoint& parentOrigin );
 
     // drawing
     //
@@ -81,18 +81,20 @@ public:
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw(QPainter& painter, const QRect& r,
-                      const ContextStyle& context,
-		      ContextStyle::TextStyle tstyle,
-		      ContextStyle::IndexStyle istyle,
-		      const KoPoint& parentOrigin);
+    virtual void draw( QPainter& painter, const LuRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+                       const LuPoint& parentOrigin );
 
-    void calcCursorSize(FormulaCursor* cursor, bool smallCursor);
+    void calcCursorSize( const ContextStyle& context,
+                         FormulaCursor* cursor, bool smallCursor);
 
     /**
      * If the cursor is inside a sequence it needs to be drawn.
      */
-    void drawCursor(FormulaCursor* cursor, QPainter& painter, bool smallCursor);
+    void drawCursor( QPainter& painter, const ContextStyle& context,
+                     FormulaCursor* cursor, bool smallCursor);
 
     // navigation
     //
@@ -296,7 +298,7 @@ protected:
      *
      * @param child the child's number
      */
-    double getChildPosition(uint child);
+    lu getChildPosition( const ContextStyle& context, uint child );
 
 
 private:

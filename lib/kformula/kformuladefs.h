@@ -23,10 +23,35 @@
 
 #include <memory>
 
+#include <qpoint.h>
+#include <qrect.h>
+
+#include <koPoint.h>
+#include <koRect.h>
+
+
 #define KFORMULA_NAMESPACE_BEGIN namespace KFormula {
 #define KFORMULA_NAMESPACE_END }
 
 KFORMULA_NAMESPACE_BEGIN
+
+/**
+ * The type to be used for points. That's the unit the
+ * user thinks with.
+ */
+typedef double pt;
+typedef KoPoint PtPoint;
+typedef KoRect PtRect;
+//typedef KoSize PtSize;
+
+/**
+ * Layout Unit. That's the values we store to get
+ * wysiwyg right.
+ */
+typedef int lu;
+typedef QPoint LuPoint;
+typedef QRect LuRect;
+typedef QSize LuSize;
 
 /**
  * The symbols that are supported by our artwork.

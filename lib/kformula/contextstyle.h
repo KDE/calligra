@@ -18,16 +18,17 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef CONORDINARYSTYLE_H
-#define CONORDINARYSTYLE_H
-
-//KDE Include
-//#include <kconfig.h>
+#ifndef CONTEXTSTYLE_H
+#define CONTEXTSTYLE_H
 
 //Qt Include
 #include <qcolor.h>
 #include <qfont.h>
 #include <qstring.h>
+
+//KDE Include
+#include <kconfig.h>
+#include <kozoomhandler.h>
 
 //Formula include
 #include "kformuladefs.h"
@@ -42,7 +43,7 @@ KFORMULA_NAMESPACE_BEGIN
  * All distances are stored in point. Most methods return pixel
  * values.
  */
-class ContextStyle
+class ContextStyle : public KoZoomHandler
 {
 public:
 
@@ -74,16 +75,13 @@ public:
      */
     ContextStyle();
 
+    void readConfig( KConfig* config );
+
     /**
-     * Build a context style reading settings from config
+     * Sets the zoom by hand. This is to be used in <code>paintContent</code>.
+     * @returns whether there was any change.
      */
-    //ContextStyle(KConfig *config);
-
-
-    double getXResolution() const { return m_zoomedResolutionX; }
-    double getYResolution() const { return m_zoomedResolutionY; }
-
-    void setResolution(double zX, double zY);
+    bool setZoom( double zoomX, double zoomY, bool updateViews, bool forPrint );
 
     bool getSyntaxHighlighting() { return syntaxHighlighting; }
     void setSyntaxHighlighting(bool highlight) { syntaxHighlighting = highlight; }
@@ -109,9 +107,10 @@ public:
 
     double getReductionFactor( TextStyle tstyle ) const;
 
-    double getBaseSize() const;
-    /** Sets the base size as point value. Unzoomed. */
-    void setUnzoomedBaseSize( double pointSize );
+    lu getBaseSize() const;
+
+    // a hack! needs fix.
+    void setBaseSize( pt pointSize );
 
     TextStyle getBaseTextStyle() const { return m_baseTextStyle; }
     bool isScript( TextStyle tstyle ) const { return ( tstyle == scriptStyle ) ||
@@ -120,26 +119,26 @@ public:
     /**
      * TeX like spacings. Zoomed.
      */
-    double getSpace( TextStyle tstyle, SpaceWidths space ) const;
-    double getThinSpace( TextStyle tstyle ) const;
-    double getMediumSpace( TextStyle tstyle ) const;
-    double getThickSpace( TextStyle tstyle ) const;
-    double getQuadSpace( TextStyle tstyle ) const;
+    lu getSpace( TextStyle tstyle, SpaceWidths space ) const;
+    lu getThinSpace( TextStyle tstyle ) const;
+    lu getMediumSpace( TextStyle tstyle ) const;
+    lu getThickSpace( TextStyle tstyle ) const;
+    lu getQuadSpace( TextStyle tstyle ) const;
 
     /**
      * Calculates the font size corresponding to the given TextStyle.
      *
      * Takes into account the current zoom factor.
      **/
-    double getAdjustedSize( TextStyle tstyle ) const;
+    lu getAdjustedSize( TextStyle tstyle ) const;
 
     /**
      * All simple lines like the one that makes up a fraction.
      */
-    double getLineWidth() const;
+    lu getLineWidth() const;
 
-    double getEmptyRectWidth() const;
-    double getEmptyRectHeight() const;
+    lu getEmptyRectWidth() const;
+    lu getEmptyRectHeight() const;
 
     Alignment getMatrixAlignment() const { return center; }
 
@@ -186,60 +185,24 @@ public:
     IndexStyle convertIndexStyleLower( IndexStyle /*istyle*/ ) const {
 	return cramped; }
 
-
-    // Shamelessly stolen from kword. (See kwdoc.h)
-
-    // Input: pt. Output: pixels. Resolution and zoom are applied.
-    int zoomItX( int z ) const {
-        return static_cast<int>(m_zoomedResolutionX * z);
-    }
-    unsigned int zoomItX( unsigned int z ) const {
-        return static_cast<unsigned int>(m_zoomedResolutionX * z);
-    }
-    double zoomItX( double z ) const {
-        return m_zoomedResolutionX * z;
-    }
-    int zoomItY( int z ) const {
-        return static_cast<int>(m_zoomedResolutionY * z);
-    }
-    unsigned int zoomItY( unsigned int z ) const {
-        return static_cast<unsigned int>(m_zoomedResolutionY * z);
-    }
-    double zoomItY( double z ) const {
-        return m_zoomedResolutionY * z;
-    }
-
-    double unzoomItX( double z ) const {
-        return z / m_zoomedResolutionX;
-    }
-    double unzoomItY( double z ) const {
-        return z / m_zoomedResolutionY;
-    }
-
 private:
 
     void setup();
 
     struct TextStyleValues {
 
-        void setup( QFont font, double baseSize, double reduction );
+        void setup( QFont font, lu baseSize, double reduction );
 
-        double thinSpace() const   { return reductionFactor*static_cast<double>( quad )/6.; }
-        double mediumSpace() const { return reductionFactor*static_cast<double>( quad )*2./9.; }
-        double thickSpace() const  { return reductionFactor*static_cast<double>( quad )*5./18.; }
-        double quadSpace() const   { return static_cast<double>( quad ); }
+        lu thinSpace() const   { return static_cast<lu>( reductionFactor*static_cast<double>( quad )/6. ); }
+        lu mediumSpace() const { return static_cast<lu>( reductionFactor*static_cast<double>( quad )*2./9. ); }
+        lu thickSpace() const  { return static_cast<lu>( reductionFactor*static_cast<double>( quad )*5./18. ); }
+        lu quadSpace() const   { return quad; }
 
         double reductionFactor;
-        int quad;
+        lu quad;
     };
 
     TextStyleValues textStyleValues[ 4 ];
-
-    /**
-     * The resolution in pixel/point*zoom.
-     */
-    double m_zoomedResolutionX;
-    double m_zoomedResolutionY;
 
     QFont defaultFont;
     QFont nameFont;
@@ -254,17 +217,6 @@ private:
     QColor emptyColor;
 
     /**
-     * The basic distance. Used everywhere a non specific
-     * distance is needed. (Maybe we should think about this.)
-     */
-    //double distance;
-
-    /**
-     * The space to be left before and after a normal operator.
-     */
-    //double operatorSpace;
-
-    /**
      * The cursors movement style. You need to notify each cursor
      * if you change this.
      */
@@ -273,7 +225,7 @@ private:
     /**
      * The (font) size of the formula's main sequence.
      */
-    double baseSize;
+    pt baseSize;
 
     /**
      * The base text style of the formula.
@@ -283,14 +235,14 @@ private:
     /**
      * The thickness of our lines.
      */
-    double lineWidth;
+    pt lineWidth;
 
     /**
      * The little rect (square in most cases) that marks the
      * empty place where elements might be inserted.
      */
-    double emptyRectWidth;
-    double emptyRectHeight;
+    pt emptyRectWidth;
+    pt emptyRectHeight;
 
     /**
      * true means to center the symbol between its indexes.
@@ -306,4 +258,4 @@ private:
 
 KFORMULA_NAMESPACE_END
 
-#endif // CONORDINARYSTYLE_H
+#endif // CONTEXTSTYLE_H

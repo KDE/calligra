@@ -157,14 +157,15 @@ private:
      */
     void emitCursorChanged();
 
-    struct View_Impl;
-    View_Impl* impl;
-
     FormulaCursor* cursor() const;
     bool& cursorHasChanged();
     bool& cursorVisible();
     bool& smallCursor();
     Container* container() const;
+    const ContextStyle& contextStyle() const;
+
+    struct View_Impl;
+    View_Impl* impl;
 };
 
 KFORMULA_NAMESPACE_END

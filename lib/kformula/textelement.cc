@@ -120,30 +120,36 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void TextElement::draw(QPainter& painter, const QRect& r,
-                       const ContextStyle& context,
-		       ContextStyle::TextStyle tstyle,
-		       ContextStyle::IndexStyle /*istyle*/,
-		       const KoPoint& parentOrigin)
+void TextElement::draw( QPainter& painter, const LuRect& r,
+                        const ContextStyle& context,
+                        ContextStyle::TextStyle tstyle,
+                        ContextStyle::IndexStyle /*istyle*/,
+                        const LuPoint& parentOrigin )
 {
-    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    double mySize = context.getAdjustedSize( tstyle );
-    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
+    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
-    QFont font = getFont(context);
-    font.setPointSizeFloat(mySize);
-    setUpPainter(context, painter);
+    setUpPainter( context, painter );
 
-    painter.setFont(font);
+    lu mySize = context.getAdjustedSize( tstyle );
+    QFont font = getFont( context );
+    font.setPointSize( context.layoutUnitToFontSize( mySize, false ) );
+    painter.setFont( font );
 
     QChar ch = getRealCharacter();
     if ( ch != QChar::null ) {
-        painter.drawText(myPos.x(), myPos.y()+getBaseline(), ch);
+        painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
+                          ch );
     }
     else {
-        painter.setPen( QPen( context.getErrorColor(), context.getLineWidth() ) );
-        painter.drawRect( myPos.x(), myPos.y(), getWidth(), getHeight() );
+        painter.setPen( QPen( context.getErrorColor(),
+                              context.layoutUnitToPixelX( context.getLineWidth() ) ) );
+        painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y() ),
+                          context.layoutUnitToPixelX( getWidth() ),
+                          context.layoutUnitToPixelY( getHeight() ) );
     }
 
     // Debug

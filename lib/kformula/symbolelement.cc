@@ -44,12 +44,12 @@ SymbolElement::~SymbolElement()
 }
 
 
-BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                     const KoPoint& point, const KoPoint& parentOrigin)
+BasicElement* SymbolElement::goToPos( FormulaCursor* cursor, bool& handled,
+                                      const LuPoint& point, const LuPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        KoPoint myPos(parentOrigin.x() + getX(),
+        LuPoint myPos(parentOrigin.x() + getX(),
                       parentOrigin.y() + getY());
 
         e = content->goToPos(cursor, handled, point, myPos);
@@ -197,26 +197,26 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void SymbolElement::draw(QPainter& painter, const QRect& r,
-                         const ContextStyle& style,
-			 ContextStyle::TextStyle tstyle,
-			 ContextStyle::IndexStyle istyle,
-                         const KoPoint& parentOrigin)
+void SymbolElement::draw( QPainter& painter, const LuRect& r,
+                          const ContextStyle& style,
+                          ContextStyle::TextStyle tstyle,
+                          ContextStyle::IndexStyle istyle,
+                          const LuPoint& parentOrigin )
 {
-    KoPoint myPos(parentOrigin.x()+getX(), parentOrigin.y()+getY());
-    double mySize = style.getAdjustedSize( tstyle );
-    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
+    LuPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
+    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
-    symbol.draw(painter, r, style, qRound(mySize), myPos);
-    content->draw(painter, r, style, tstyle, istyle, myPos);
-    if (hasUpper()) {
-        upper->draw(painter, r, style, style.convertTextStyleIndex( tstyle ),
-			 style.convertIndexStyleUpper( istyle ), myPos);
+    lu mySize = style.getAdjustedSize( tstyle );
+    symbol.draw( painter, r, style, mySize, myPos );
+    content->draw( painter, r, style, tstyle, istyle, myPos );
+    if ( hasUpper() ) {
+        upper->draw( painter, r, style, style.convertTextStyleIndex( tstyle ),
+                     style.convertIndexStyleUpper( istyle ), myPos );
     }
-    if (hasLower()) {
-        lower->draw(painter, r, style, style.convertTextStyleIndex( tstyle ),
-			 style.convertIndexStyleLower( istyle ), myPos);
+    if ( hasLower() ) {
+        lower->draw( painter, r, style, style.convertTextStyleIndex( tstyle ),
+                     style.convertIndexStyleLower( istyle ), myPos );
     }
 
     // Debug

@@ -29,12 +29,12 @@ KFORMULA_NAMESPACE_BEGIN
 
 
 void ContextStyle::TextStyleValues::setup( QFont font,
-                                           double baseSize,
+                                           lu baseSize,
                                            double reduction )
 {
     reductionFactor = reduction;
 
-    font.setPointSizeFloat( baseSize );
+    font.setPointSize( baseSize );
     QFontMetrics fm( font );
 
     // Or better the real space required? ( boundingRect )
@@ -43,12 +43,11 @@ void ContextStyle::TextStyleValues::setup( QFont font,
 
 
 ContextStyle::ContextStyle()
-        : m_zoomedResolutionX(1.0), m_zoomedResolutionY(1.0),
-          defaultFont("times"), nameFont("times"), numberFont("times"),
-          operatorFont("times"), symbolFont("symbol",12,QFont::Normal,FALSE),
-          defaultColor(Qt::black), numberColor(Qt::blue),
-          operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
-          emptyColor(Qt::blue)
+    : defaultFont("times"), nameFont("times"), numberFont("times"),
+      operatorFont("times"), symbolFont("symbol",12,QFont::Normal,FALSE),
+      defaultColor(Qt::black), numberColor(Qt::blue),
+      operatorColor(Qt::darkGreen), errorColor(Qt::darkRed),
+      emptyColor(Qt::blue)
 {
     defaultFont.setItalic(true);
 
@@ -57,8 +56,6 @@ ContextStyle::ContextStyle()
     lineWidth = 1;
     emptyRectWidth = 10;
     emptyRectHeight = 10;
-    //distance = 4;
-    //operatorSpace = 4;
     baseSize = 18;
 
     linearMovement = false;
@@ -69,6 +66,24 @@ ContextStyle::ContextStyle()
     setup();
 }
 
+void ContextStyle::readConfig( KConfig* config )
+{
+    config->setGroup( "kformula Color" );
+    defaultColor  = config->readColorEntry( "defaultColor",  &defaultColor );
+    numberColor   = config->readColorEntry( "numberColor",   &numberColor );
+    operatorColor = config->readColorEntry( "operatorColor", &operatorColor );
+    emptyColor    = config->readColorEntry( "emptyColor",    &emptyColor );
+    errorColor    = config->readColorEntry( "errorColor",    &errorColor );
+}
+
+bool ContextStyle::setZoom( double zoomX, double zoomY, bool, bool )
+{
+    bool changes = m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY;
+    m_zoom = 100;
+    m_zoomedResolutionX = zoomX;
+    m_zoomedResolutionY = zoomY;
+    return changes;
+}
 
 QColor ContextStyle::getNumberColor()   const
 {
@@ -123,24 +138,17 @@ void ContextStyle::setEmptyColor( const QColor& color )
     emptyColor = color;
 }
 
-
-void ContextStyle::setResolution(double zX, double zY)
-{
-    m_zoomedResolutionX = zX;
-    m_zoomedResolutionY = zY;
-}
-
 double ContextStyle::getReductionFactor( TextStyle tstyle ) const
 {
     return textStyleValues[ tstyle ].reductionFactor;
 }
 
-double ContextStyle::getAdjustedSize( TextStyle tstyle ) const
+lu ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 {
-    return zoomItY( baseSize*getReductionFactor( tstyle ) );
+    return ptToLayoutUnit( baseSize*getReductionFactor( tstyle ) );
 }
 
-double ContextStyle::getSpace( TextStyle tstyle, SpaceWidths space ) const
+lu ContextStyle::getSpace( TextStyle tstyle, SpaceWidths space ) const
 {
     switch ( space ) {
     case THIN:   return getThinSpace( tstyle );
@@ -151,36 +159,36 @@ double ContextStyle::getSpace( TextStyle tstyle, SpaceWidths space ) const
     return 0;
 }
 
-double ContextStyle::getThinSpace( TextStyle tstyle ) const
+lu ContextStyle::getThinSpace( TextStyle tstyle ) const
 {
-    return zoomItX( textStyleValues[ tstyle ].thinSpace() );
+    return textStyleValues[ tstyle ].thinSpace();
 }
 
-double ContextStyle::getMediumSpace( TextStyle tstyle ) const
+lu ContextStyle::getMediumSpace( TextStyle tstyle ) const
 {
-    return zoomItX( textStyleValues[ tstyle ].mediumSpace() );
+    return textStyleValues[ tstyle ].mediumSpace();
 }
 
-double ContextStyle::getThickSpace( TextStyle tstyle ) const
+lu ContextStyle::getThickSpace( TextStyle tstyle ) const
 {
-    return zoomItX( textStyleValues[ tstyle ].thickSpace() );
+    return textStyleValues[ tstyle ].thickSpace();
 }
 
-double ContextStyle::getQuadSpace( TextStyle tstyle ) const
+lu ContextStyle::getQuadSpace( TextStyle tstyle ) const
 {
-    return zoomItX( textStyleValues[ tstyle ].quadSpace() );
+    return textStyleValues[ tstyle ].quadSpace();
 }
 
 
-double ContextStyle::getBaseSize() const
+lu ContextStyle::getBaseSize() const
 {
-    return zoomItY( baseSize );
+    return ptToLayoutUnit( baseSize );
 }
 
-void ContextStyle::setUnzoomedBaseSize( double size )
+void ContextStyle::setBaseSize( pt size )
 {
     //double newSize = unzoomItY( size );
-    double newSize = size;
+    pt newSize = size;
     if ( newSize != baseSize ) {
         baseSize = newSize;
         setup();
@@ -188,19 +196,19 @@ void ContextStyle::setUnzoomedBaseSize( double size )
 }
 
 
-double ContextStyle::getLineWidth() const
+lu ContextStyle::getLineWidth() const
 {
-    return zoomItY( lineWidth );
+    return ptToLayoutUnit( lineWidth );
 }
 
-double ContextStyle::getEmptyRectWidth() const
+lu ContextStyle::getEmptyRectWidth() const
 {
-    return zoomItY( emptyRectWidth );
+    return ptToLayoutUnit( emptyRectWidth );
 }
 
-double ContextStyle::getEmptyRectHeight() const
+lu ContextStyle::getEmptyRectHeight() const
 {
-    return zoomItY( emptyRectHeight );
+    return ptToLayoutUnit( emptyRectHeight );
 }
 
 
@@ -247,7 +255,7 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) 
 void ContextStyle::setup()
 {
     //double size = getBaseSize();
-    double size = baseSize;
+    lu size = ptToLayoutUnit( baseSize );
     textStyleValues[ displayStyle      ].setup( getSymbolFont(), size, 1. );
     textStyleValues[ textStyle         ].setup( getSymbolFont(), size, 1. );
     textStyleValues[ scriptStyle       ].setup( getSymbolFont(), size, .7 );

@@ -1,5 +1,5 @@
 
-INCLUDES= $(KOFFICE_INCLUDES) $(all_includes) 
+INCLUDES= $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes) 
 
 SUBDIRS = pics
 
@@ -23,7 +23,7 @@ include_HEADERS = kformulacontainer.h kformuladocument.h kformulaview.h \
 	kformuladefs.h kformulaconfigpage.h
 
 libkformula_la_LDFLAGS = -version-info 3:0 -no-undefined
-libkformula_la_LIBADD  = $(LIB_KDEUI) $(all_libraries) $(KDE_RPATH)
+libkformula_la_LIBADD  = $(LIB_KDEUI) $(LIB_KOTEXT) $(all_libraries) $(KDE_RPATH)
 
 libkformula_la_METASOURCES = AUTO
 

@@ -51,7 +51,8 @@ BasicElement::~BasicElement()
 /**
  * Returns the element the point is in.
  */
-BasicElement* BasicElement::goToPos(FormulaCursor*, bool&, const KoPoint& point, const KoPoint& parentOrigin)
+BasicElement* BasicElement::goToPos( FormulaCursor*, bool&,
+                                     const LuPoint& point, const LuPoint& parentOrigin )
 {
     double x = point.x() - (parentOrigin.x() + getX());
     if ((x >= 0) && (x < getWidth())) {
@@ -66,15 +67,15 @@ BasicElement* BasicElement::goToPos(FormulaCursor*, bool&, const KoPoint& point,
 /**
  * Returns our position inside the widget.
  */
-KoPoint BasicElement::widgetPos()
+LuPoint BasicElement::widgetPos()
 {
-    double x = 0;
-    double y = 0;
+    lu x = 0;
+    lu y = 0;
     for (BasicElement* element = this; element != 0; element = element->parent) {
         x += element->getX();
         y += element->getY();
     }
-    return KoPoint(x, y);
+    return LuPoint(x, y);
 }
 
 
@@ -222,7 +223,7 @@ SequenceElement* BasicElement::buildChild(QDomNode& node, QString name)
 
 QString BasicElement::toLatex()
 {
-return "{}";
+    return "{}";
 }
 
 KFORMULA_NAMESPACE_END

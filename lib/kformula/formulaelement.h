@@ -50,7 +50,7 @@ public:
     /**
      * Returns the element the point is in.
      */
-    BasicElement* goToPos(FormulaCursor*, const KoPoint& point);
+    BasicElement* goToPos( FormulaCursor*, const LuPoint& point );
 
     /**
      * Provide fast access to the rootElement for each child.

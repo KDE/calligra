@@ -111,7 +111,7 @@ QByteArray MimeSource::encodedData ( const char *format ) const
 
 	//cerr << "asking image" << endl;
         ContextStyle context;
-        context.setResolution(5, 5);
+        //context.setResolution(5, 5);
 
         rootElement->calcSizes(context);
         QRect rect(rootElement->getX(), rootElement->getY(),

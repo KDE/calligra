@@ -64,17 +64,17 @@ void FormulaCursor::setMark(int mark)
     markPos = mark;
 }
 
-void FormulaCursor::calcCursorSize(bool smallCursor)
+void FormulaCursor::calcCursorSize( const ContextStyle& context, bool smallCursor )
 {
     // We only draw the cursor if its normalized.
     SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
 
     if (sequence != 0) {
-        sequence->calcCursorSize(this, smallCursor);
+        sequence->calcCursorSize( context, this, smallCursor );
     }
 }
 
-void FormulaCursor::draw(QPainter& painter, bool smallCursor)
+void FormulaCursor::draw( QPainter& painter, const ContextStyle& context, bool smallCursor )
 {
     if (readOnly && !isSelection())
         return;
@@ -83,7 +83,7 @@ void FormulaCursor::draw(QPainter& painter, bool smallCursor)
     SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
 
     if (sequence != 0) {
-        sequence->drawCursor(this, painter, smallCursor);
+        sequence->drawCursor( painter, context, this, smallCursor );
     }
 }
 
@@ -189,7 +189,7 @@ bool FormulaCursor::isEnd() const
 void FormulaCursor::mousePress(const QPoint& pos, int flag)
 {
     FormulaElement* formula = getElement()->formula();
-    formula->goToPos( this, KoPoint( pos.x(), pos.y() ) );
+    formula->goToPos( this, pos );
     if (flag & SelectMovement) {
         setSelection(true);
         if (getMark() == -1) {
@@ -209,7 +209,7 @@ void FormulaCursor::mouseMove(const QPoint& point, int)
     int mark = getMark();
 
     FormulaElement* formula = getElement()->formula();
-    formula->goToPos(this, KoPoint( point.x(), point.y() ));
+    formula->goToPos( this, point );
     BasicElement* newElement = getElement();
     int pos = getPos();
 

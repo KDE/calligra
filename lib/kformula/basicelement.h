@@ -24,12 +24,9 @@
 // Qt Include
 #include <qdom.h>
 #include <qlist.h>
-#include <qrect.h>
 #include <qstring.h>
 
 // KDE Include
-#include <koPoint.h>
-#include <koRect.h>
 
 // Formula include
 #include "contextstyle.h"
@@ -118,13 +115,13 @@ public:
      * This is needed because only the innermost matching element
      * is allowed to set the cursor.
      */
-    virtual BasicElement* goToPos(FormulaCursor*, bool& handled,
-                                  const KoPoint& point, const KoPoint& parentOrigin);
+    virtual BasicElement* goToPos( FormulaCursor*, bool& handled,
+                                   const LuPoint& point, const LuPoint& parentOrigin );
 
     /**
      * Returns our position inside the widget.
      */
-    KoPoint widgetPos();
+    LuPoint widgetPos();
 
 
     // drawing
@@ -145,11 +142,11 @@ public:
      * The `parentOrigin' is the point this element's parent starts.
      * We can use our parentPosition to get our own origin then.
      */
-    virtual void draw(QPainter& painter, const QRect& r,
-                      const ContextStyle& context,
-		      ContextStyle::TextStyle tstyle,
-		      ContextStyle::IndexStyle istyle,
-		      const KoPoint& parentOrigin) = 0;
+    virtual void draw( QPainter& painter, const LuRect& r,
+                       const ContextStyle& context,
+                       ContextStyle::TextStyle tstyle,
+                       ContextStyle::IndexStyle istyle,
+                       const LuPoint& parentOrigin ) = 0;
 
 
     // navigation
@@ -284,24 +281,24 @@ public:
     BasicElement* getParent() { return parent; }
     void setParent(BasicElement* p) { parent = p; }
 
-    double getX() const { return m_x; }
-    double getY() const { return m_y; }
+    lu getX() const { return m_x; }
+    lu getY() const { return m_y; }
 
-    void setX(double x) { m_x = x; }
-    void setY(double y) { m_y = y; }
+    void setX( lu x ) { m_x = x; }
+    void setY( lu y ) { m_y = y; }
 
     //QSize getSize() { return size; }
 
-    double getWidth() const { return m_width; }
-    double getHeight() const { return m_height; }
+    lu getWidth() const { return m_width; }
+    lu getHeight() const { return m_height; }
 
     /**
      * Our position inside our parent.
      */
     //KoPoint getParentPosition() { return position; }
 
-    double getBaseline() const { return m_baseline; }
-    double getMidline() const { return m_axis; }
+    lu getBaseline() const { return m_baseline; }
+    lu getMidline() const { return m_axis; }
 
 
     /**
@@ -324,11 +321,11 @@ protected:
 
     //KoPoint getSize() { return KoPoint( m_width, m_height ); }
 
-    void setWidth(double width)   { m_width = width; }
-    void setHeight(double height) { m_height = height; }
+    void setWidth( lu width )   { m_width = width; }
+    void setHeight( lu height ) { m_height = height; }
 
-    void setBaseline(double line) { m_baseline = line; }
-    void setMidline(double axis) { m_axis = axis; }
+    void setBaseline( lu line ) { m_baseline = line; }
+    void setMidline( lu axis ) { m_axis = axis; }
 
     /**
      * Calculates the base line. This is used by all elements
@@ -403,15 +400,15 @@ private:
      * This elements size.
      */
     //QSize size;
-    double m_width;
-    double m_height;
+    lu m_width;
+    lu m_height;
 
     /**
      * Our position relative to our parent.
      */
     //KoPoint position;
-    double m_x;
-    double m_y;
+    lu m_x;
+    lu m_y;
 
     /**
      * The position of our base line from
@@ -421,7 +418,7 @@ private:
      * There are elements (like matrix) that don't have a base line. It is
      * -1 in this case. The alignment is done using the middle line.
      */
-    double m_baseline;
+    lu m_baseline;
 
     /**
      * The position of our middle line from
@@ -429,7 +426,7 @@ private:
      *
      * This will have to go. (?)
      */
-    double m_axis;
+    lu m_axis;
 
     /**
      * The token that describes our type. Please note that we don't

@@ -26,6 +26,7 @@
 
 #include <kaction.h>
 #include <kcommand.h>
+#include <kconfig.h>
 
 #include "kformuladefs.h"
 
@@ -50,14 +51,15 @@ public:
      * @param collection a place to put the document's actions.
      * @param history the undo stack to use. Creates its own if zero.
      */
-    Document(KActionCollection* collection, KCommandHistory* history = 0);
+    Document( KConfig* config,
+              KActionCollection* collection, KCommandHistory* history = 0 );
 
     /**
      * Creates a formula document that doesn't use actions.
      *
      * @param history the undo stack to use. Creates its own if zero.
      */
-    Document(KCommandHistory* history = 0);
+    Document( KConfig* config, KCommandHistory* history = 0 );
 
     ~Document();
 
@@ -66,6 +68,18 @@ public:
      */
     ContextStyle& getContextStyle( bool forPrinting = false );
 
+    /**
+     * Change the zoom factor to @p z (e.g. 150 for 150%)
+     * and/or change the resolution, given in DPI.
+     * Uses the KoZoomHandler.
+     */
+    void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint );
+
+    /**
+     * Sets the zoom by hand. This is to be used in <code>paintContent</code>.
+     */
+    void setZoom( double zoomX, double zoomY, bool updateViews, bool forPrint );
+
     double getXResolution() const;
     double getYResolution() const;
 
@@ -73,7 +87,7 @@ public:
      * Sets the resolution (factor) to be used to draw the formula.
      * Make sure to recalc all formulas after you called this.
      */
-    void setResolution(double zX, double zY);
+    //void setResolution(double zX, double zY);
 
     /**
      * Creates a new formula. The whole idea of the formula document
@@ -183,10 +197,18 @@ private:
      */
     bool hasFormula();
 
+    /**
+     * recalc all formulae.
+     */
+    void recalc();
+
+    /**
+     * @returns the active formula.
+     */
+    Container* formula() const;
+
     struct Document_Impl;
     Document_Impl* impl;
-
-    Container* formula() const;
 };
 
 KFORMULA_NAMESPACE_END

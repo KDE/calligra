@@ -61,12 +61,12 @@ SequenceElement::~SequenceElement()
 /**
  * Returns the element the point is in.
  */
-BasicElement* SequenceElement::goToPos(FormulaCursor* cursor, bool& handled,
-                                       const KoPoint& point, const KoPoint& parentOrigin)
+BasicElement* SequenceElement::goToPos( FormulaCursor* cursor, bool& handled,
+                                        const LuPoint& point, const LuPoint& parentOrigin )
 {
     BasicElement* e = BasicElement::goToPos(cursor, handled, point, parentOrigin);
     if (e != 0) {
-        KoPoint myPos(parentOrigin.x() + getX(),
+        LuPoint myPos(parentOrigin.x() + getX(),
                      parentOrigin.y() + getY());
 
         uint count = children.count();
@@ -132,15 +132,15 @@ bool SequenceElement::isEmpty()
 void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
 {
     if (!isEmpty()) {
-        double mySize = context.getAdjustedSize( tstyle );
-        double width = 0;
-        double toBaseline = 0;
-        double fromBaseline = 0;
+        lu mySize = context.getAdjustedSize( tstyle );
+        lu width = 0;
+        lu toBaseline = 0;
+        lu fromBaseline = 0;
 
         QFont font = context.getDefaultFont();
         font.setPointSizeFloat(mySize);
         QFontMetrics fm(font);
-        double fromMidline = fm.strikeOutPos();
+        lu fromMidline = fm.strikeOutPos();
 
         //uint count = children.count();
 
@@ -149,7 +149,7 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
         for ( ; it.current(); ++it ) {
             BasicElement* child = it.current();
 
-            double spaceBefore = 0;
+            lu spaceBefore = 0;
             if ( isFirstOfToken( child ) ) {
                 spaceBefore = child->getElementType()->getSpaceBefore( context, tstyle );
             }
@@ -192,8 +192,8 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
         setChildrenPositions();
     }
     else {
-        double w = context.getEmptyRectWidth();
-        double h = context.getEmptyRectHeight();
+        lu w = context.getEmptyRectWidth();
+        lu h = context.getEmptyRectHeight();
         setWidth( w );
         setHeight( h );
         setBaseline( h );
@@ -222,15 +222,14 @@ void SequenceElement::setChildrenPositions()
  * The `parentOrigin' is the point this element's parent starts.
  * We can use our parentPosition to get our own origin then.
  */
-void SequenceElement::draw(QPainter& painter, const QRect& r,
-                           const ContextStyle& context,
-                           ContextStyle::TextStyle tstyle,
-			   ContextStyle::IndexStyle istyle,
-			   const KoPoint& parentOrigin)
+void SequenceElement::draw( QPainter& painter, const LuRect& r,
+                            const ContextStyle& context,
+                            ContextStyle::TextStyle tstyle,
+                            ContextStyle::IndexStyle istyle,
+                            const LuPoint& parentOrigin )
 {
-    KoPoint myPos(parentOrigin.x() + getX(),
-                 parentOrigin.y() + getY());
-    if (!QRect(myPos.x(), myPos.y(), getWidth(), getHeight()).intersects(r))
+    LuPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
+    if ( !LuRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
         return;
 
     if (!isEmpty()) {
@@ -248,83 +247,102 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
     }
     else if ( painter.device()->devType() != QInternal::Printer ) {
         painter.setBrush(Qt::NoBrush);
-        painter.setPen(QPen(context.getEmptyColor(), context.getLineWidth()));
-        painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
-//         kdDebug( 40000 ) << "SequenceElement::calcCursorSize: "
-//                   << myPos.x() << " " << myPos.y() << " "
-//                   << getWidth() << " " << getHeight()
-//                   << endl;
+        painter.setPen( QPen( context.getEmptyColor(),
+                              context.layoutUnitToPixelX( context.getLineWidth() ) ) );
+        painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
+                          context.layoutUnitToPixelY( myPos.y() ),
+                          context.layoutUnitToPixelX( getWidth() ),
+                          context.layoutUnitToPixelY( getHeight() ) );
     }
 }
 
 
-void SequenceElement::calcCursorSize(FormulaCursor* cursor, bool smallCursor)
+void SequenceElement::calcCursorSize( const ContextStyle& context,
+                                      FormulaCursor* cursor, bool smallCursor )
 {
-    KoPoint point = widgetPos();
+    LuPoint point = widgetPos();
     uint pos = cursor->getPos();
 
-    double posX = getChildPosition(pos);
-    double height = getHeight();
+    lu posX = getChildPosition( context, pos );
+    lu height = getHeight();
+
+    lu unit = context.ptToLayoutUnit( 1 );
 
     // Here are those evil constants that describe the cursor size.
 
-    if (cursor->isSelection()) {
+    if ( cursor->isSelection() ) {
         uint mark = cursor->getMark();
-        double markX = getChildPosition(mark);
-        double x = QMIN(posX, markX);
-        double width = fabs(posX - markX);
+        lu markX = getChildPosition( context, mark );
+        lu x = QMIN(posX, markX);
+        lu width = abs(posX - markX);
 
-        if (smallCursor) {
-            cursor->cursorSize.setRect(point.x()+x, point.y(), width, height);
+        if ( smallCursor ) {
+            cursor->cursorSize.setRect( point.x()+x, point.y(), width, height );
         }
         else {
-            cursor->cursorSize.setRect(point.x()+x, point.y()-2, width+1, height+4);
+            cursor->cursorSize.setRect( point.x()+x, point.y() - 2*unit,
+                                        width + unit, height + 4*unit );
         }
     }
     else {
-        if (smallCursor) {
-            cursor->cursorSize.setRect(point.x()+posX, point.y(), 1, height);
+        if ( smallCursor ) {
+            cursor->cursorSize.setRect( point.x()+posX, point.y(),
+                                        unit, height );
         }
         else {
-            cursor->cursorSize.setRect(point.x(), point.y()-2, getWidth()+2, height+6);
+            cursor->cursorSize.setRect( point.x(), point.y() - 2*unit,
+                                        getWidth() + unit, height + 6*unit );
         }
     }
 
-    cursor->cursorPoint.setX(point.x()+posX);
-    cursor->cursorPoint.setY(point.y()+getHeight()/2);
+    cursor->cursorPoint.setX( point.x()+posX );
+    cursor->cursorPoint.setY( point.y()+getHeight()/2 );
 }
 
 
 /**
  * If the cursor is inside a sequence it needs to be drawn.
  */
-void SequenceElement::drawCursor(FormulaCursor* cursor, QPainter& painter, bool smallCursor)
+void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context,
+                                  FormulaCursor* cursor, bool smallCursor )
 {
-    painter.setRasterOp(Qt::XorROP);
-    if (cursor->isSelection()) {
-        const QRect& r = cursor->cursorSize;
-        painter.fillRect(r.x(), r.y(), r.width(), r.height(), Qt::white);
+    painter.setRasterOp( Qt::XorROP );
+    if ( cursor->isSelection() ) {
+        const LuRect& r = cursor->getCursorSize();
+        painter.fillRect( context.layoutUnitToPixelX( r.x() ),
+                          context.layoutUnitToPixelY( r.y() ),
+                          context.layoutUnitToPixelX( r.width() ),
+                          context.layoutUnitToPixelY( r.height() ),
+                          Qt::white );
     }
     else {
-        painter.setPen(Qt::white);
-        const QPoint& point = cursor->cursorPoint;
-        const QRect& size = cursor->cursorSize;
-        if (smallCursor) {
-            painter.drawLine(point.x(), size.top(),
-                             point.x(), size.bottom());
+        painter.setPen( QPen( Qt::white,
+                              context.layoutUnitToPixelX( context.getLineWidth() ) ) );
+        const LuPoint& point = cursor->getCursorPoint();
+        const LuRect& size = cursor->getCursorSize();
+        if ( smallCursor ) {
+            painter.drawLine( context.layoutUnitToPixelX( point.x() ),
+                              context.layoutUnitToPixelY( size.top() ),
+                              context.layoutUnitToPixelX( point.x() ),
+                              context.layoutUnitToPixelY( size.bottom() ) );
         }
         else {
-            painter.drawLine(point.x(), size.top(),
-                             point.x(), size.bottom()-1);
-            painter.drawLine(size.left(), size.bottom(),
-                             size.right(), size.bottom());
+            painter.drawLine( context.layoutUnitToPixelX( point.x() ),
+                              context.layoutUnitToPixelY( size.top() ),
+                              context.layoutUnitToPixelX( point.x() ),
+                              context.layoutUnitToPixelY( size.bottom()-1 ) );
+            painter.drawLine( context.layoutUnitToPixelX( size.left() ),
+                              context.layoutUnitToPixelY( size.bottom() ),
+                              context.layoutUnitToPixelX( size.right() ),
+                              context.layoutUnitToPixelY( size.bottom() ) );
         }
     }
-    painter.setRasterOp(Qt::CopyROP);
+    // This might be wrong but probably isn't.
+    painter.setRasterOp( Qt::CopyROP );
 }
 
 
-double SequenceElement::getChildPosition(uint child)
+lu SequenceElement::getChildPosition( const ContextStyle& context, uint child )
 {
     if (child < children.count()) {
         return children.at(child)->getX();
@@ -334,7 +352,7 @@ double SequenceElement::getChildPosition(uint child)
             return children.at(child-1)->getX() + children.at(child-1)->getWidth();
         }
         else {
-            return 2;
+            return context.ptToLayoutUnit( 2 );
         }
     }
 }

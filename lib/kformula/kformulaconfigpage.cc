@@ -104,11 +104,20 @@ ConfigurePage::ConfigurePage( Document* document, KConfig* config, QVBox* box, c
 void ConfigurePage::apply()
 {
     ContextStyle& contextStyle = m_document->getContextStyle();
+    //contextStyle.setSyntaxHighlighting( ... );
     contextStyle.setDefaultColor( defaultColorBtn->color() );
     contextStyle.setNumberColor( numberColorBtn->color() );
     contextStyle.setOperatorColor( operatorColorBtn->color() );
     contextStyle.setEmptyColor( emptyColorBtn->color() );
     contextStyle.setErrorColor( errorColorBtn->color() );
+
+    m_config->setGroup( "kformula Color" );
+    //m_config->writeEntry( "syntaxHighlighting", true );
+    m_config->writeEntry( "defaultColor", defaultColorBtn->color() );
+    m_config->writeEntry( "numberColor",  numberColorBtn->color() );
+    m_config->writeEntry( "operatorColor", operatorColorBtn->color() );
+    m_config->writeEntry( "emptyColor", emptyColorBtn->color() );
+    m_config->writeEntry( "errorColor", errorColorBtn->color() );
 
     // notify!!!
     //document->

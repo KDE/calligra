@@ -58,11 +58,8 @@ KFormulaDoc::KFormulaDoc(QWidget *parentWidget, const char *widgetName, QObject*
     //kdDebug(39001) << "General Settings" << endl;
 
     history = new KCommandHistory(actionCollection());
-    document = new KFormula::Document(actionCollection(), history);
+    document = new KFormula::Document( kapp->config(), actionCollection(), history );
     formula = new KFormula::Container(document);
-
-    document->setResolution( POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiX() ) ),
-                             POINT_TO_INCH( static_cast<double>( QPaintDevice::x11AppDpiY() ) ) );
 
     // the modify flag
     connect(history, SIGNAL(commandExecuted()), this, SLOT(commandExecuted()));
@@ -131,15 +128,12 @@ void KFormulaDoc::paintContent(QPainter& painter, const QRect& rect, bool transp
     // ####### handle transparency and zoom
     // Need to draw only the document rectangle described in the parameter rect.
 
-    if ((zoomX != document->getXResolution()) ||
-        (zoomY != document->getYResolution())) {
-        document->setResolution(zoomX, zoomY);
-        formula->recalc();
+    document->setZoom( zoomX, zoomY, true,
+                       painter.device() && painter.device()->devType() == QInternal::Printer );
+    if ( !transparent ) {
+        painter.fillRect( rect, Qt::white );
     }
-    if (!transparent) {
-        painter.fillRect(rect, Qt::white);
-    }
-    formula->draw(painter, rect);
+    formula->draw( painter, rect );
 }
 
 QString KFormulaDoc::configFile() const

@@ -37,10 +37,10 @@ FormulaElement::FormulaElement(FormulaDocument* container)
 /**
  * Returns the element the point is in.
  */
-BasicElement* FormulaElement::goToPos(FormulaCursor* cursor, const KoPoint& point)
+BasicElement* FormulaElement::goToPos( FormulaCursor* cursor, const LuPoint& point )
 {
     bool handled = false;
-    BasicElement* element = inherited::goToPos(cursor, handled, point, KoPoint());
+    BasicElement* element = inherited::goToPos(cursor, handled, point, LuPoint());
     if (element == 0) {
         //if ((point.x() > getWidth()) || (point.y() > getHeight())) {
             cursor->setTo(this, countChildren());
@@ -66,7 +66,7 @@ void FormulaElement::changed()
  */
 void FormulaElement::calcSizes( ContextStyle& context )
 {
-    context.setUnzoomedBaseSize( getBaseSize() );
+    context.setBaseSize( getBaseSize() );
     inherited::calcSizes( context, context.getBaseTextStyle(),
                           ContextStyle::normal );
 }
@@ -77,9 +77,9 @@ void FormulaElement::calcSizes( ContextStyle& context )
 void FormulaElement::draw( QPainter& painter, const QRect& r,
                            ContextStyle& context )
 {
-    context.setUnzoomedBaseSize( getBaseSize() );
+    context.setBaseSize( getBaseSize() );
     inherited::draw( painter, r, context, context.getBaseTextStyle(),
-                     ContextStyle::normal, KoPoint() );
+                     ContextStyle::normal, LuPoint() );
 }
 
 
