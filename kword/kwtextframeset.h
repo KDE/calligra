@@ -115,7 +115,7 @@ public:
 
     /** Return the available height in pixels (sum of all frames' height, with zoom applied)
      * Used to know if we need to create more pages. */
-    int availableHeight() const;
+    virtual int availableHeight() const;
 
     /** Return true if the last frame is empty */
     bool isFrameEmpty( KWFrame * frame );
