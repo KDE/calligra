@@ -25,6 +25,8 @@
 #define KEXITABBROWSER_H
 
 #include <qwidget.h>
+#include <qobject.h>
+
 #include <qintdict.h>
 #include <kexidialogbase.h>
 

@@ -84,6 +84,7 @@ bool KexiProject::initDoc()
 
 KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )
 {
+	kdDebug() << "KoView* KexiProject::createViewInstance()" << endl;
     return new KexiView( KexiView::MDIWindowMode,this, parent, name );
 }
 
@@ -369,6 +370,8 @@ bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
                 setModified( false );
 //		kexi->mainWindow()->slotProjectModified();
 		emit dbAvaible();
+		emit updateBrowsers();
+		m_dbAvaible = true;
 		kdDebug() << "KexiProject::initDbConnection(): db is avaible now..." << endl;
 		return true;
 	}

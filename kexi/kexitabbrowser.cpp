@@ -38,7 +38,7 @@
 KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	: KexiDialogBase(view,parent, name)
 {
-	connect(kexiProject(),SIGNAL(updateBrowsers()),this,SLOT(generateView()));
+	kdDebug() << "KexiTabBrowser::KexiTabBrowser()" << endl;
 	setCaption("Project");
 	QGridLayout *layout = new QGridLayout(this);
 
@@ -66,6 +66,12 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	layout->addWidget(m_stack,	0,	1);
 	layout->setColStretch(1, 1);
 	registerAs(ToolWindow);
+
+	connect(kexiProject(),SIGNAL(updateBrowsers()),this,SLOT(generateView()));
+	kdDebug() << "KexiTabBrowser::KexiTabBrowser(): connecting to " << kexiProject() << endl;
+
+	if(kexiProject()->dbIsAvaible())
+		generateView();
 }
 
 void
@@ -89,6 +95,7 @@ KexiTabBrowser::addBrowser(KexiBrowser *browser, QString icon, QString text)
 void
 KexiTabBrowser::generateView()
 {
+	kdDebug() << "KexiTabBrowser::generateView()" << endl;
 	m_db->generateView();
 
 	generateTables();

@@ -18,6 +18,8 @@
 #ifndef KEXI_PART_H
 #define KEXI_PART_H
 
+#include <qobject.h>
+
 #include <koDocument.h>
 #include <kexiDB/kexidb.h>
 #include <kexiformmanager.h>
@@ -82,14 +84,15 @@ public:
 signals:
         void dbAvaible();
         void saving(KoStore *);
+	void updateBrowsers();
 
+/*
 #undef signals
 #define signals public
 signals:
 #undef signals
 #define signals protected
-	void updateBrowsers();
-
+*/
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );

@@ -123,7 +123,7 @@ KexiCreateProject::accept()
 	if(static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB())
 	{
 		KWizard::accept();
-		emit m_project->updateBrowsers();
+//		emit m_project->updateBrowsers();
 //		kexi->mainWindow()->browser()->generateView();
 	}
 }

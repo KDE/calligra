@@ -126,7 +126,7 @@ KexiCreateProjectPageDB::connectDB()
 	m_cred.database = data("database").toString();
 	if(project()->initDbConnection(m_cred, data("create").toBool()))
 	{
-		emit project()->updateBrowsers();
+//		emit project()->updateBrowsers();
 #if 0
                 kexi->mainWindow()->browser()->generateView();
 #endif
