@@ -786,11 +786,12 @@ void KivioDoc::addShell(KoMainWindow *shell)
   KoDocument::addShell(shell);
 
   KPopupMenu* help = shell->customHelpMenu();
+  if(help->findItem(12345)) return;   // we allready added the "Get Stencil Sets" item before..
   help->disconnectItem(KHelpMenu::menuAboutApp, 0, 0);
   help->connectItem(KHelpMenu::menuAboutApp, this, SLOT(aboutKivio()));
 
   help->insertSeparator();
-  help->insertItem(BarIcon("kivio"), i18n("Get Stencil Sets"), this, SLOT(aboutGetStencilSets()));
+  help->insertItem(BarIcon("kivio"), i18n("Get Stencil Sets"), this, SLOT(aboutGetStencilSets()), 0, 12345);
 
   shell->menuBar()->removeItemAt(shell->menuBar()->count() - 1);
   shell->menuBar()->insertItem(i18n("&Help"), help);
