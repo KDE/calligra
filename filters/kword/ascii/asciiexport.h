@@ -34,7 +34,7 @@ class ASCIIExport : public KoFilter {
     Q_OBJECT
 
 public:
-    ASCIIExport(KoFilter *parent, const char *name);
+    ASCIIExport(KoFilter *parent, const char *name, const QStringList &);
     virtual ~ASCIIExport() {}
     /** filtering :) */
     virtual bool filter(const QString &fileIn, const QString &fileOut,

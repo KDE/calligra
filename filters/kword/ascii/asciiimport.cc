@@ -36,6 +36,7 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <kgenericfactory.h>
 
 #include <koGlobal.h>
 #include <koStore.h>
@@ -45,7 +46,10 @@
 
 #include <algorithm>          // needed for max(a,b)
 
-ASCIIImport::ASCIIImport(KoFilter *parent, const char *name) :
+typedef KGenericFactory<ASCIIImport, KoFilter> ASCIIImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libasciiimport, ASCIIImportFactory( "asciiimport" ) );
+
+ASCIIImport::ASCIIImport(KoFilter *parent, const char *name, const QStringList &) :
                      KoFilter(parent, name) {
 }
 

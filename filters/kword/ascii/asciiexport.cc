@@ -26,6 +26,7 @@
 #include <qtextstream.h>
 
 #include <kdebug.h>
+#include <kgenericfactory.h>
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
@@ -34,6 +35,9 @@
 #include <ExportDialog.h>
 #include <asciiexport.h>
 #include <asciiexport.moc>
+
+typedef KGenericFactory<ASCIIExport, KoFilter> ASCIIExportFactory;
+K_EXPORT_COMPONENT_FACTORY( libasciiexport, ASCIIExportFactory( "kwordasciifilter" ) );
 
 class ASCIIWorker : public KWEFBaseWorker
 {
@@ -287,7 +291,7 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
 }
 
 
-ASCIIExport::ASCIIExport(KoFilter *parent, const char *name) :
+ASCIIExport::ASCIIExport(KoFilter *parent, const char *name, const QStringList &) :
                      KoFilter(parent, name)
 {
 }

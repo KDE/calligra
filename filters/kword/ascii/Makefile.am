@@ -12,13 +12,11 @@ libasciiexport_la_LIBADD = $(KOFFICE_LIBS) ../libexport/libkwordexportfilters.la
 
 kde_module_LTLIBRARIES = libasciiimport.la libasciiexport.la
 
-libasciiimport_la_SOURCES = asciiimport.cc asciiimport_factory.cc
+libasciiimport_la_SOURCES = asciiimport.cc 
 
-libasciiexport_la_SOURCES = asciiexport.cc asciiexport_factory.cc \
-ExportDialogUI.ui ExportDialog.cc
+libasciiexport_la_SOURCES = asciiexport.cc ExportDialogUI.ui ExportDialog.cc
 
-noinst_HEADERS = asciiimport.h asciiimport_factory.h asciiexport.h \
-asciiexport_factory.h ExportDialog.h
+noinst_HEADERS = asciiimport.h asciiexport.h ExportDialog.h
 
 METASOURCES = AUTO
 
