@@ -1996,8 +1996,8 @@ void KWDocument::appendPage( /*unsigned int _page, bool redrawBackgroundWhenAppe
                                   - it is on the former page and the frame is set to double sided.
                                   - AND the frame is set to be reconnected or copied
                                   -  */
-            kdDebug() << "KWDocument::appendPage frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
-            kdDebug() << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
+            //kdDebug() << "KWDocument::appendPage frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
+            //kdDebug() << "KWDocument::appendPage frame->getNewFrameBehaviour()==" << frame->getNewFrameBehaviour() << " Reconnect=" << Reconnect << endl;
             if ( (frame->pageNum() == thisPageNum ||
                   (frame->pageNum() == thisPageNum -1 && frame->getSheetSide() != AnySide)) &&
                  (frame->getNewFrameBehaviour()==Reconnect ||

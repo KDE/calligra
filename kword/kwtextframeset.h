@@ -169,7 +169,7 @@ private slots:
 
 protected:
     void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
-    void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles = false, bool copyCustomItems = false );
+    void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool copyParagLayouts = false, bool moveCustomItems = false );
     void setLastFormattedParag( QTextParag *parag ) { m_lastFormatted = parag; }
     QTextFormat * zoomFormatFont( const QTextFormat * f );
 
@@ -203,6 +203,7 @@ private:
         QTextCursor *cursor; // basically a "mark" of the view that started this undo/redo info
         // If the view changes, the next call to checkUndoRedoInfo will terminate the previous view's edition
 
+        QMap<int, QTextCustomItem *> customItemsMap; // character position -> qtextcustomitem
         QValueList<KWParagLayout> oldParagLayouts;
         KWParagLayout newParagLayout;
     };

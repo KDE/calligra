@@ -57,6 +57,7 @@ protected:
 #include <kwtextparag.h>
 
 using namespace Qt3;
+typedef QMap<int, QTextCustomItem *> CustomItemsMap;
 
 /**
  * Command created when deleting some text
@@ -65,12 +66,14 @@ class KWTextDeleteCommand : public QTextDeleteCommand
 {
 public:
     KWTextDeleteCommand( QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
-                         const QValueList<KWParagLayout> &oldParagLayouts );
+                         const CustomItemsMap & customItemsMap,
+                         const QValueList<KWParagLayout> & oldParagLayouts );
     //KWTextDeleteCommand( QTextParag *p, int idx, const QArray<QTextStringChar> &str );
     QTextCursor *execute( QTextCursor *c );
     QTextCursor *unexecute( QTextCursor *c );
 protected:
     QValueList<KWParagLayout> m_oldParagLayouts;
+    CustomItemsMap m_customItemsMap;
 };
 
 /**
@@ -80,8 +83,9 @@ class KWTextInsertCommand : public KWTextDeleteCommand
 {
 public:
     KWTextInsertCommand( QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
+                         const CustomItemsMap & customItemsMap,
                          const QValueList<KWParagLayout> &oldParagLayouts )
-        : KWTextDeleteCommand( d, i, idx, str, oldParagLayouts ) {}
+        : KWTextDeleteCommand( d, i, idx, str, customItemsMap, oldParagLayouts ) {}
     //KWTextInsertCommand( QTextParag *p, int idx, const QArray<QTextStringChar> &str )
     //    : KWTextDeleteCommand( p, idx, str ) {}
     Commands type() const { return Insert; };

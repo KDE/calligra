@@ -828,6 +828,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
  	    cursor->parag()->at( cursor->index() )->format()->addRef();
  	    undoRedoInfo.text.at( undoRedoInfo.text.length() - 1 ).setFormat( cursor->parag()->at( cursor->index() )->format() );
  	}
+        // TODO customitem !
 	if ( cursor->remove() )
 	    undoRedoInfo.text += "\n";
 	break;
@@ -854,6 +855,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
  	    cursor->parag()->at( cursor->index() )->format()->addRef();
  	    undoRedoInfo.text.at( 0 ).setFormat( cursor->parag()->at( cursor->index() )->format() );
  	}
+        //TODO customitem
 	undoRedoInfo.index = cursor->index();
 	if ( cursor->remove() ) {
 	    undoRedoInfo.text.remove( 0, 1 );
@@ -901,6 +903,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 		    cursor->parag()->at( i )->format()->addRef();
 		    undoRedoInfo.text.at( oldLen + i - cursor->index() ).setFormat( cursor->parag()->at( i )->format() );
 		}
+                // TODO custom item stuff
 	    }
 	    cursor->killLine();
 	}
@@ -1042,7 +1045,7 @@ void KWTextFrameSet::UndoRedoInfo::clear()
         switch (type) {
             case Insert:
             case Return:
-                cmd = new KWTextInsertCommand( textdoc, id, index, text.rawData(), oldParagLayouts );
+                cmd = new KWTextInsertCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
                 break;
             case Format:
                 cmd = new QTextFormatCommand( textdoc, id, index, eid, eindex, text.rawData(), format, flags );
@@ -1068,7 +1071,7 @@ void KWTextFrameSet::UndoRedoInfo::clear()
 	        break;
             case Delete:
             case RemoveSelected:
-                cmd = new KWTextDeleteCommand( textdoc, id, index, text.rawData(), oldParagLayouts );
+                cmd = new KWTextDeleteCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
                 break;
             case Invalid:
                 break;
@@ -1080,14 +1083,14 @@ void KWTextFrameSet::UndoRedoInfo::clear()
         {
             textdoc->addCommand( cmd );
             textfs->kWordDocument()->addCommand( new KWTextCommand( textfs, /*cmd, */name ) );
-	    //textfs->kWordDocument()->setModified(true);
             //kdDebug(32001) << "KWTextFrameSet::UndoRedoInfo::clear New KWTextCommand : " << name << endl;
         }
     }
-    text = QString::null;
+    text = QString::null; // calls QTextString::clear(), which calls resize(0) on the array, which _detaches_. Tricky.
     id = -1;
     index = -1;
     oldParagLayouts.clear();
+    customItemsMap.clear();
 }
 
 KWTextFrameSet::UndoRedoInfo::UndoRedoInfo( KWTextFrameSet *fs )
@@ -1108,49 +1111,74 @@ bool KWTextFrameSet::UndoRedoInfo::valid() const
 }
 
 // Based on QTextView::readFormats
-void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles, bool copyCustomItems )
+void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool copyParagLayouts, bool moveCustomItems )
 {
     c2.restoreState();
     c1.restoreState();
     if ( c1.parag() == c2.parag() ) {
         for ( int i = c1.index(); i < c2.index(); ++i ) {
-            if ( c1.parag()->at( i )->format() ) {
-                c1.parag()->at( i )->format()->addRef();
-                text.at( oldLen + i - c1.index() ).setFormat( c1.parag()->at( i )->format() );
+            QTextStringChar * ch = c1.parag()->at( i );
+            if ( ch->format() ) {
+                ch->format()->addRef();
+                text.at( oldLen + i - c1.index() ).setFormat( ch->format() );
+            }
+            if ( moveCustomItems && ch->isCustom() )
+            {
+                kdDebug() << "KWTextFrameSet::readFormats moving custom item " << ch->customItem() << " to text's " << oldLen + i - c1.index() << " char"  << endl;
+                undoRedoInfo.customItemsMap.insert( oldLen + i - c1.index(), ch->customItem() );
+                ch->loseCustomItem();
             }
         }
-        if ( fillStyles ) {
+        if ( copyParagLayouts ) {
             undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(c1.parag())->createParagLayout();
         }
     } else {
         int lastIndex = oldLen;
         int i;
         for ( i = c1.index(); i < c1.parag()->length(); ++i ) {
-            if ( c1.parag()->at( i )->format() ) {
-                c1.parag()->at( i )->format()->addRef();
-                text.at( lastIndex ).setFormat( c1.parag()->at( i )->format() );
+            QTextStringChar * ch = c1.parag()->at( i );
+            if ( ch->format() ) {
+                ch->format()->addRef();
+                text.at( lastIndex ).setFormat( ch->format() );
                 lastIndex++;
+            }
+            if ( moveCustomItems && ch->isCustom() )
+            {
+                undoRedoInfo.customItemsMap.insert( lastIndex, ch->customItem() );
+                ch->loseCustomItem();
             }
         }
         lastIndex++;
         QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             for ( int i = 0; i < p->length(); ++i ) {
-                if ( p->at( i )->format() ) {
-                    p->at( i )->format()->addRef();
-                    text.at( i + lastIndex ).setFormat( p->at( i )->format() );
+                QTextStringChar * ch = p->at( i );
+                if ( ch->format() ) {
+                    ch->format()->addRef();
+                    text.at( i + lastIndex ).setFormat( ch->format() );
+                }
+                if ( moveCustomItems && ch->isCustom() )
+                {
+                    undoRedoInfo.customItemsMap.insert( i + lastIndex, ch->customItem() );
+                    ch->loseCustomItem();
                 }
             }
             lastIndex += p->length() + 1;
             p = p->next();
         }
         for ( i = 0; i < c2.index(); ++i ) {
-            if ( c2.parag()->at( i )->format() ) {
-                c2.parag()->at( i )->format()->addRef();
-                text.at( i + lastIndex ).setFormat( c2.parag()->at( i )->format() );
+            QTextStringChar * ch = c2.parag()->at( i );
+            if ( ch->format() ) {
+                ch->format()->addRef();
+                text.at( i + lastIndex ).setFormat( ch->format() );
+            }
+            if ( moveCustomItems && ch->isCustom() )
+            {
+                undoRedoInfo.customItemsMap.insert( i + lastIndex, ch->customItem() );
+                ch->loseCustomItem();
             }
         }
-        if ( fillStyles ) {
+        if ( copyParagLayouts ) {
             QTextParag *p = c1.parag();
             while ( p ) {
                 undoRedoInfo.oldParagLayouts << static_cast<KWTextParag*>(p)->createParagLayout();
@@ -1232,7 +1260,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
     undoRedoInfo.clear();
     undoRedoInfo.type = UndoRedoInfo::Invalid; // same trick
     undoRedoInfo.text = str;
-    readFormats( c1, c2, 0, undoRedoInfo.text );
+    readFormats( c1, c2, 0, undoRedoInfo.text ); // gather char-format info but not paraglayouts nor customitems
 
     QTextFormat * newFormat = zoomFormatFont( & newStyle->format() );
 
@@ -1532,7 +1560,9 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor )
     QTextCursor c1 = textdoc->selectionStartCursor( QTextDocument::Standard );
     QTextCursor c2 = textdoc->selectionEndCursor( QTextDocument::Standard );
     readFormats( c1, c2, oldLen, undoRedoInfo.text, true, true );
+
     textdoc->removeSelectedText( QTextDocument::Standard, cursor );
+
     ensureCursorVisible();
     setLastFormattedParag( cursor->parag() );
     formatMore();
@@ -1748,7 +1778,7 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, QTextFormat * & currentFor
         undoRedoInfo.eid = c2.parag()->paragId();
         undoRedoInfo.eindex = c2.index();
         undoRedoInfo.text = str;
-        readFormats( c1, c2, 0, undoRedoInfo.text );
+        readFormats( c1, c2, 0, undoRedoInfo.text ); // read previous formatting info
         undoRedoInfo.format = format;
         undoRedoInfo.flags = flags;
         undoRedoInfo.clear();

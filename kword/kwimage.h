@@ -22,6 +22,13 @@ public:
 #include <qrichtext_p.h>
 using namespace Qt3;
 
+/*class KWTextCustomItem : public QTextCustomItem
+{
+public:
+    KWTextCustomItem( KWTextDocument *textdoc ) : QTextCustomItem( textdoc ) {}
+
+};*/
+
 /**
  * This class is used by "Insert Picture", i.e. having an image inline in a paragraph.
  */

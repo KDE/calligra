@@ -39,30 +39,69 @@ void KWTextCommand::unexecute()
 
 KWTextDeleteCommand::KWTextDeleteCommand(
     QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
+    const CustomItemsMap & customItemsMap,
     const QValueList<KWParagLayout> &oldParagLayouts )
     : QTextDeleteCommand( d, i, idx, str,
                           QValueList< QVector<QStyleSheetItem> >(),
                           QValueList<QStyleSheetItem::ListStyle>(),
-                          QArray<int>() )
+                          QArray<int>() ),
+      m_oldParagLayouts( oldParagLayouts ),
+      m_customItemsMap( customItemsMap )
 {
     // Note that we don't pass aligns and liststyles to QTextDeleteCommand.
     // We'll handle them here, as part of the rest, since they are in the paraglayouts
-    m_oldParagLayouts = oldParagLayouts;
 }
 
 QTextCursor * KWTextDeleteCommand::execute( QTextCursor *c )
 {
-    QTextCursor * cr = QTextDeleteCommand::execute(c);
-    //Can't see anything special to do here
-    return cr;
+    QTextParag *s = doc ? doc->paragAt( id ) : parag;
+    if ( !s ) {
+        qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
+        return 0;
+    }
+    cursor.setParag( s );
+    cursor.setIndex( index );
+    int len = text.size();
+    // Detach from custom items. They are already in the map, and we don't
+    // want them to be deleted
+    for ( int i = 0; i < len; ++i )
+    {
+        QTextStringChar * ch = cursor.parag()->at( cursor.index() );
+        if ( ch->isCustom() )
+            ch->loseCustomItem();
+        cursor.gotoRight();
+    }
+
+    return QTextDeleteCommand::execute(c);
 }
 
 QTextCursor * KWTextDeleteCommand::unexecute( QTextCursor *c )
 {
     // Keep a ref to the first parag before changing anything
     QTextParag *s = doc ? doc->paragAt( id ) : parag;
+    if ( !s ) {
+        qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
+        return 0;
+    }
+    cursor.setParag( s );
+    cursor.setIndex( index );
     // Let QRichText undo what it can
     QTextCursor * cr = QTextDeleteCommand::unexecute(c);
+    // Set any custom item that we had
+    // CustomItemsMap::Iterator it = m_customItemsMap.begin();
+    // for ( ; it != m_customItemsMap.end(); ++it )
+    if ( !m_customItemsMap.isEmpty() )
+        for ( int i = 0; i < (int)text.size(); ++i )
+        {
+            CustomItemsMap::Iterator it = m_customItemsMap.find( i );
+            if ( it != m_customItemsMap.end() )
+            {
+                kdDebug() << "KWTextDeleteCommand::unexecute setting custom item " << it.data() << endl;
+                cursor.parag()->at( cursor.index() )->setCustomItem( it.data() );
+            }
+            cursor.gotoRight();
+        }
+
     // Now restore the parag layouts (i.e. KWord specific stuff)
     QValueList<KWParagLayout>::Iterator lit = m_oldParagLayouts.begin();
     int i = 0;
