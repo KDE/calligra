@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_GRAPHICS_H
 #define _TREEBUILD_GRAPHICS_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h> 
 
 class Pen;

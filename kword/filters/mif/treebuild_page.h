@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_PAGE_H
 #define _TREEBUILD_PAGE_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class Polygon;

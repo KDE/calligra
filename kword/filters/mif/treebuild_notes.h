@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_NOTES
 #define _TREEBUILD_NOTES
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 class FNote;
 

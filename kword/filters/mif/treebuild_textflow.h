@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_TEXTFLOW
 #define _TREEBUILD_TEXTFLOW
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class Notes;

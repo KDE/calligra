@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_XREF
 #define _TREEBUILD_XREF
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class Unique;

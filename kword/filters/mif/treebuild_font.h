@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_FONT
 #define _TREEBUILD_FONT
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class FTag

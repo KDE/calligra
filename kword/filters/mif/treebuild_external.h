@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_EXTERNAL_H
 #define _TREEBUILD_EXTERNAL_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class ExternalData;

@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_TABSTOP
 #define _TREEBUILD_TABSTOP
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class TSX_

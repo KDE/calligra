@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_GENERAL
 #define _TREEBUILD_GENERAL
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class ShapeRect;

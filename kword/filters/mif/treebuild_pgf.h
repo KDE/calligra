@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_PGF
 #define _TREEBUILD_PGF
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class TabStop;

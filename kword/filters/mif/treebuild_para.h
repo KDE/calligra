@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_PARA
 #define _TREEBUILD_PARA
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 class Font;
 class Unique;

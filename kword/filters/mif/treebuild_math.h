@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_MATH_H
 #define _TREEBUILD_MATH_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class Unique;

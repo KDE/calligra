@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_FNOTE_H
 #define _TREEBUILD_FNOTE_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 class FrameID;
 class Para;

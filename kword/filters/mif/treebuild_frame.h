@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_FRAME_H
 #define _TREEBUILD_FRAME_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class FrameID;

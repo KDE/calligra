@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_VARIABLE
 #define _TREEBUILD_VARIABLE
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class Unique;

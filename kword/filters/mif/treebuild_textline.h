@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_TEXTLINE_H
 #define _TREEBUILD_TEXTLINE_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class String;

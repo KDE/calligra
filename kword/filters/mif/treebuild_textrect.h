@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_TEXTRECT_H
 #define _TREEBUILD_TEXTRECT_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class ShapeRect;

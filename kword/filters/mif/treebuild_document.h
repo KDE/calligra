@@ -8,7 +8,7 @@
 #ifndef _TREEBUILD_DOCUMENT
 #define _TREEBUILD_DOCUMENT
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 class DocumentAcrobatBookmarksIncludeTagNames
