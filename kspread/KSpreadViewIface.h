@@ -1,7 +1,7 @@
 #ifndef KSPREAD_VIEW_IFACE_H
 #define KSPREAD_VIEW_IFACE_H
 
-#include <KoViewIface.h>
+#include <KoViewIface.h>           
 
 #include <qstring.h>
 #include <qrect.h>

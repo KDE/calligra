@@ -948,3 +948,14 @@ int  KSpreadCellIface::getIndent() const
     return cell->getIndent(m_point.x(), m_point.y());
 }
 
+void KSpreadCellIface::setDontPrintText ( bool _print)
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setDontPrintText ( _print);
+}
+
+bool KSpreadCellIface::getDontprintText() const
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    return cell->getDontprintText(m_point.x(), m_point.y());
+}

@@ -112,7 +112,9 @@ k_dcop:
     //indent
     virtual void setIndent(int indent);
     virtual int getIndent() const ;
-
+    //don't print text
+    virtual void setDontPrintText ( bool _b);
+    virtual bool getDontprintText() const ;
 private:
     QPoint m_point;
     KSpreadTable* m_table;
