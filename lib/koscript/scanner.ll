@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <qstring.h>
+#include <kstaticdeleter.h>
 
 #include "koscript_parsenode.h"
 #include "koscript_types.h"
@@ -20,6 +21,7 @@ extern int idl_line_no;
 
 static bool s_kspread;
 KLocale* s_koscript_locale = 0;
+static KStaticDeleter<KLocale> s_defaultLocaleDeleter;
 static KLocale* s_defaultLocale = 0;
 
 static KScript::Long ascii_to_longlong( long base, const char *s )
@@ -431,7 +433,7 @@ void kscriptInitFlex( const char *_code, int extension, KLocale* locale )
    if ( !s_koscript_locale )
    {
         if ( !s_defaultLocale )
-                s_defaultLocale = new KSLocale;
+                s_defaultLocale = s_defaultLocaleDeleter.setObject( new KSLocale );
        s_koscript_locale = s_defaultLocale;
    }
    if ( extension == KSCRIPT_EXTENSION_KSPREAD )
@@ -447,7 +449,7 @@ void kscriptInitFlex( int extension, KLocale* locale )
    if ( !s_koscript_locale )
    {
         if ( !s_defaultLocale )
-                s_defaultLocale = new KSLocale;
+                s_defaultLocale = s_defaultLocaleDeleter.setObject( new KSLocale );
        s_koscript_locale = s_defaultLocale;
    }
    if ( extension == KSCRIPT_EXTENSION_KSPREAD )
@@ -458,6 +460,5 @@ void kscriptInitFlex( int extension, KLocale* locale )
 
 void kspread_mode()
 {
-    printf("+++++++++++++++++++++ Entering KSpread Mode\n");
-    BEGIN(KSPREAD);
+    BEGIN( KSPREAD );
 }

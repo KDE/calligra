@@ -8,6 +8,7 @@
 #include <stdio.h> /* for printf */
 #include <stdlib.h>
 #include <qdir.h>
+#include <iostream>
 
 static KCmdLineOptions options[] =
 {
@@ -47,6 +48,6 @@ int main( int argc, char** argv )
       if ( !ex.isEmpty() )
           printf("%s\n",ex.local8Bit().data());
   }
-
+  cout << endl; // till I can come up with a working "flush" :}
   return 0;
 }

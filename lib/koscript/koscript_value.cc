@@ -6,6 +6,7 @@
 #include "koscript_method.h"
 
 #include <klocale.h>
+#include <kstaticdeleter.h>
 
 // Imported from scanner.ll
 extern KLocale* s_koscript_locale;
@@ -332,13 +333,14 @@ void KSValue::clear()
   typ = Empty;
 }
 
+static KStaticDeleter<QString> typ_to_name_deleter;
 static QString *typ_to_name = 0;
 
 void KSValue::initTypeNameMap()
 {
     if ( typ_to_name ) return;
 
-    typ_to_name = new QString[(int)NTypes];
+    typ_to_name = typ_to_name_deleter.setObject(new QString[(int)NTypes], true);
 
     typ_to_name[(int)Empty] = QString::fromLatin1("<none>");
     typ_to_name[(int)StringType] = QString::fromLatin1("String");
