@@ -895,11 +895,11 @@ QString KoOasisStyles::saveOasisFractionStyle( KoGenStyles &mainStyles, const QS
     }
     while ( format.length() > 0 );
     elementWriter.startElement( "number:fraction" );
-    text= _prefix;
-    addTextNumber(text, elementWriter );
     elementWriter.addAttribute( "number:min-integer-digits", integer );
     elementWriter.addAttribute( "number:min-numerator-digits",numerator );
     elementWriter.addAttribute( "number:min-denominator-digits",denominator );
+    text= _prefix;
+    addTextNumber(text, elementWriter );
     addKofficeNumericStyleExtension( elementWriter, _suffix, _prefix );
 
     //TODO add for future
@@ -946,11 +946,11 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     }
     while ( format.length() > 0 );
     elementWriter.startElement( "number:number" );
-    text= _prefix ;
-    addTextNumber(text, elementWriter );
     elementWriter.addAttribute( "number:decimal-places", decimalplaces );
     elementWriter.addAttribute( "number:min-integer-digits", integerdigits );
     addTextNumber(QString( "%" ), elementWriter );
+    text= _prefix ;
+    addTextNumber(text, elementWriter );
     text =_suffix ;
     addTextNumber(text, elementWriter );
     addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
@@ -1019,12 +1019,12 @@ QString KoOasisStyles::saveOasisScientificStyle( KoGenStyles &mainStyles, const 
     }
     while ( format.length() > 0 );
     elementWriter.startElement( "number:scientific-number" );
-    text =  _prefix ;
-    addTextNumber(text, elementWriter );
     kdDebug()<<" decimalplace :"<<decimalplace<<" integerdigits :"<<integerdigits<<" exponentdigits :"<<exponentdigits<<endl;
     elementWriter.addAttribute( "number:decimal-places", decimalplace );
     elementWriter.addAttribute( "number:min-integer-digits",integerdigits );
     elementWriter.addAttribute( "number:min-exponent-digits",exponentdigits );
+    text =  _prefix ;
+    addTextNumber(text, elementWriter );
     text = _suffix;
     addTextNumber(text, elementWriter );
     addKofficeNumericStyleExtension( elementWriter, _suffix,_prefix );
@@ -1110,9 +1110,17 @@ QString KoOasisStyles::saveOasisTextStyle( KoGenStyles &mainStyles, const QStrin
 
 //This is an extension of numeric style. For the moment we used namespace of oasis format for specific koffice extention. change it for the futur.
 void KoOasisStyles::addKofficeNumericStyleExtension( KoXmlWriter & elementWriter, const QString &_suffix, const QString &_prefix )
-{
-    if ( !_suffix.isEmpty() )
-        elementWriter.addAttribute( "number:suffix", _suffix );
-    if ( !_prefix.isEmpty() )
-        elementWriter.addAttribute( "number:prefix", _prefix );
+ {
+     if ( !_suffix.isEmpty() )
+     {
+         elementWriter.startElement( "number:suffix" );
+         elementWriter.addTextNode( _suffix );
+         elementWriter.endElement();
+     }
+     if ( !_prefix.isEmpty() )
+     {
+         elementWriter.startElement( "number:prefix" );
+         elementWriter.addTextNode( _prefix );
+         elementWriter.endElement();
+     }
 }
