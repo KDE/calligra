@@ -418,8 +418,9 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
                     m_boundingRect |= *c->frame(0);
                 }
             } else
-                m_boundingRect |= *frame;
-
+            {
+                m_boundingRect |= frame->outerKoRect();
+            }
             FrameIndex *index=new FrameIndex( frame );
             FrameResizeStruct *move=new FrameResizeStruct;
 
