@@ -2725,12 +2725,12 @@ void KWView::frameSelectedChanged()
     actionEditDelFrame->setEnabled( !currentTextEdit() && (nbFrame==1));
     actionBackgroundColor->setEnabled( nbFrame >= 1 );
 
-    actionTableInsertRow->setEnabled( table );
-    actionTableInsertCol->setEnabled( table );
-    actionTableDelRow->setEnabled( table );
-    actionTableDelCol->setEnabled( table );
-    actionTableDelete->setEnabled( table );
-    actionTableUngroup->setEnabled( table );
+    actionTableInsertRow->setEnabled( table && nbFrame>0);
+    actionTableInsertCol->setEnabled( table  && nbFrame>0);
+    actionTableDelRow->setEnabled( table && nbFrame>0 );
+    actionTableDelCol->setEnabled( table && nbFrame>0 );
+    actionTableDelete->setEnabled( table && nbFrame>0 );
+    actionTableUngroup->setEnabled( table && nbFrame>0 );
 }
 
 void KWView::docStructChanged(TypeStructDocItem _type)
