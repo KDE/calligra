@@ -77,11 +77,6 @@ bool KisDoc::initDoc()
   return true;
 }
 
-bool KisDoc::hasToWriteMultipart()
-{
-  return true; // Always save to a KoStore, never to a plain XML file.
-}
-
 bool KisDoc::save( ostream& out, const char* )
 {
   cout << " --- KisDoc::save --- " << endl;

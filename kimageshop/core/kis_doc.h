@@ -65,8 +65,6 @@ public:
 	virtual bool completeLoading( KoStore* store );
 	virtual bool completeSaving( KoStore* );
 
-	virtual bool hasToWriteMultipart();
-
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
 	/*
