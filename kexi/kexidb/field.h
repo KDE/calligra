@@ -145,7 +145,7 @@ class KEXI_DB_EXPORT Field
 		static inline QString typeName(int type);
 
 		//! \return field name 
-		inline QString name() const;
+		QString name() const;
 		
 		/*! \return table schema of table that owns this field. */
 		virtual TableSchema* table() const;
@@ -179,16 +179,16 @@ class KEXI_DB_EXPORT Field
 		void setOptions(int options) { m_options = options; }
 
 		inline QVariant::Type variantType() const;
-		inline Type type() const;
+		Type type() const;
 		inline QString typeName() const;
 		QVariant defaultValue() const;
 		
 		//! \return length of text is the field type is text
-		inline int length() const;
+		int length() const;
 		//! \retrun precision for numeric and other fields that have both length and precision
-		inline int precision() const; 
+		int precision() const; 
 		//! \return the constraints defined for this field
-		inline int constraints() const;
+		int constraints() const;
 		//! \return order of this field in containing table (counting starts from 0)
 		//! (-1 if unspecified)
 		inline int order() const { return m_order; }
@@ -197,7 +197,7 @@ class KEXI_DB_EXPORT Field
 		//! \return halp text for this field
 		inline QString helpText() const { return m_help; }
 		
-		inline bool isUnsigned() const; //! if the type has the unsigned attribute
+		bool isUnsigned() const; //! if the type has the unsigned attribute
 //		virtual bool isBinary() const;
 
 		void setType(Type t);
