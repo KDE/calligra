@@ -3,19 +3,23 @@
 
 extern "C"
 {
-	#include <pthread.h>
+#include <pthread.h>
 }
 
-#include <FC/Mutex.h>
+#include <ktlMutex.h>
 
-class RecursiveMutex : public Mutex
+namespace KTL
 {
- public:
-   RecursiveMutex();
-   virtual ~RecursiveMutex();
-   
- private:
-   pthread_mutexattr_t *mutexAttr;
+
+  class RecursiveMutex : public KTL::Mutex {
+  public:
+    RecursiveMutex();
+    virtual ~RecursiveMutex();
+    
+  private:
+    pthread_mutexattr_t *mutexAttr;
+  };
+  
 };
 
 #endif // _RECURSIVEMUTEX_H_INCLUDED

@@ -1,29 +1,33 @@
-#ifndef _CONDITION_H_INCLUDED
-#define _CONDITION_H_INCLUDED 1
+#ifndef _KTLCONDITION_H_INCLUDED
+#define _KTLCONDITION_H_INCLUDED 1
 
 extern "C"
 {
-	#include <pthread.h>
+#include <pthread.h>
 }
 
-class Mutex;
-
-class Condition
+namespace KTL
 {
- public:
-   Condition();
-   ~Condition();
 
-   void wait(Mutex *mutex);
-   // bool timedWait(Mutex *mutex);
+  class Mutex;
 
-   void signal();
-   void broadcast();
+  class Condition {
+  public:
+    Condition();
+    ~Condition();
+    
+    void wait(KTL::Mutex *mutex);
+    // bool timedWait(Mutex *mutex);
+    
+    void signal();
+    void broadcast();
+    
+    pthread_cond_t *_handle() { return &condHandle; }
+    
+  private:
+    pthread_cond_t condHandle;
+  };
 
-   pthread_cond_t *_handle() { return &condHandle; }
-   
- private:
-   pthread_cond_t condHandle;
 };
-
-#endif // _CONDITION_H_INCLUDED
+  
+#endif // _KTLCONDITION_H_INCLUDED

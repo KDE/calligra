@@ -98,15 +98,15 @@ void KTL::Thread::exit()
   ::pthread_exit(NULL);
 }
 
-void Thread::__threadEntry()
+void KTL::Thread::__threadEntry()
 {
   threadProc->threadProc();
 }
 
-void Thread::__signalStarted()
+void KTL::Thread::__signalStarted()
 {
-  ThreadManager *manager =
-    ThreadManager::getThreadManager();
+  KTL::ThreadManager *manager =
+    KTL::ThreadManager::getThreadManager();
   manager->registerThread(threadHandle, this);
   
   emit threadStarted();
@@ -116,7 +116,9 @@ void KTL::Thread::__signalTerminated()
 {
   emit threadEnded();
   
-  ThreadManager *manager =
-    ThreadManager::getThreadManager();
+  KTL::ThreadManager *manager =
+    KTL::ThreadManager::getThreadManager();
   manager->deregisterThread(threadHandle);       
 }
+
+#include "ktlThread.moc"

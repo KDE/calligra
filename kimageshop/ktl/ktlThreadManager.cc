@@ -1,17 +1,17 @@
-#include <FC/ThreadManager.h>
-#include <FC/Thread.h>
+#include <ktlThreadManager.h>
+#include <ktlThread.h>
 
-ThreadManager *ThreadManager::singleton = NULL;
+KTL::ThreadManager *KTL::ThreadManager::singleton = NULL;
 
-ThreadManager::ThreadManager()
+KTL::ThreadManager::ThreadManager()
 {
 }
 
-ThreadManager::~ThreadManager()
+KTL::ThreadManager::~ThreadManager()
 {
 }
 
-void ThreadManager::setCancelStateSelf(Thread::CancelState state)
+void KTL::ThreadManager::setCancelStateSelf(KTL::Thread::CancelState state)
 {
 	switch ( state )
 	{
@@ -23,64 +23,64 @@ void ThreadManager::setCancelStateSelf(Thread::CancelState state)
 	};
 }
 
-void ThreadManager::setCancelTypeSelf(Thread::CancelType cancelType)
+void KTL::ThreadManager::setCancelTypeSelf(KTL::Thread::CancelType cancelType)
 {
         switch ( cancelType )
         {
-          case Thread::Asynchronous:
+          case KTL::Thread::Asynchronous:
                 ::pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, NULL );
                 break;
-          case Thread::Deferred:
+          case KTL::Thread::Deferred:
                 ::pthread_setcanceltype( PTHREAD_CANCEL_DEFERRED, NULL );
         };            
 }
 
-Thread *ThreadManager::getSelfThread()
+KTL::Thread *KTL::ThreadManager::getSelfThread()
 {
 	pthread_t selfThread = pthread_self();
 
 	return threadList[selfThread]; 
 }
 
-ThreadManager *ThreadManager::getThreadManager()
+KTL::ThreadManager *KTL::ThreadManager::getThreadManager()
 {
 	if (singleton == NULL)
-		singleton = new ThreadManager;
+		singleton = new KTL::ThreadManager;
 
 	return singleton;
 }
 
-Thread *ThreadManager::getThread(pthread_t threadHandle)
+KTL::Thread *KTL::ThreadManager::getThread(pthread_t threadHandle)
 {
-	map<pthread_t, Thread *>::const_iterator it;
+	map<pthread_t, KTL::Thread *>::const_iterator it;
 
 	it = threadList.find(threadHandle);
 
 	if ( it == threadList.end() )
-		throw UnknownThreadException("Thread is not known");
+		throw KTL::UnknownThreadException("Thread is not known");
 
 	return it->second; 
 }
 
-void ThreadManager::registerThread(pthread_t threadHandle,
-                                   Thread *thread)
+void KTL::ThreadManager::registerThread(pthread_t threadHandle,
+                                   KTL::Thread *thread)
 {
-	map<pthread_t, Thread *>::const_iterator it;
+	map<pthread_t, KTL::Thread *>::const_iterator it;
 
 	it = threadList.find(threadHandle);
 	if ( it != threadList.end() )
-		throw ThreadRegistrationException("Thread already registered");
+		throw KTL::ThreadRegistrationException("Thread already registered");
 
 	threadList[threadHandle] = thread;
 }
 
-void ThreadManager::deregisterThread(pthread_t threadHandle)
+void KTL::ThreadManager::deregisterThread(pthread_t threadHandle)
 {
-	map<pthread_t, Thread *>::iterator it;
+	map<pthread_t, KTL::Thread *>::iterator it;
 
 	it = threadList.find(threadHandle);
 	if ( it == threadList.end() )
-		throw ThreadRegistrationException("Thread not registered");
+		throw KTL::ThreadRegistrationException("Thread not registered");
 
 	threadList.erase(it);
 }

@@ -12,18 +12,17 @@ extern "C"
 extern void *__entry_threadproc(void *);
 extern void  __cleanup_handler(void *);
 
-DECLARE_EXCEPTION(ThreadException)
-DECLARE_EXCEPTION(NullPointerException)
-
 namespace KTL
 {
+
+  DECLARE_EXCEPTION(ThreadException)
   
   class ThreadProc {
   public:
     virtual void threadProc() = 0;
   };
   
-  class Thread {
+  class Thread : public QObject {
 
     Q_OBJECT
 

@@ -1,8 +1,11 @@
-#ifndef _EXCEPTIONS_H_INCLUDED
-#define _EXCEPTIONS_H_INCLUDED
+#ifndef _KTLEXCEPTIONS_H_INCLUDED
+#define _KTLEXCEPTIONS_H_INCLUDED
 
 
 #include <string>
+
+namespace KTL
+{
 
 class Exception
 {
@@ -15,6 +18,8 @@ class Exception
    string errMsg;
 };
 
+};
+
 #define DECLARE_EXCEPTION(NAME) \
 class NAME : public Exception \
 { \
@@ -23,6 +28,11 @@ public: \
      : Exception(errMsg) {} \
 };
 
+namespace KTL
+{
+
 DECLARE_EXCEPTION(NullPointerException)
+
+}
 
 #endif // _EXCEPTIONS_H_INCLUDED

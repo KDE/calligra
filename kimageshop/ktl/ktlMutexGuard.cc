@@ -1,12 +1,12 @@
-#include <FC/MutexGuard.h>
+#include <ktlMutexGuard.h>
 
-MutexGuard::MutexGuard(Mutex *mutex)
+KTL::MutexGuard::MutexGuard(KTL::Mutex *mutex)
   : mutex(mutex)
 {
 	mutex->lock();
 }
 
-MutexGuard::~MutexGuard()
+KTL::MutexGuard::~MutexGuard()
 {
 	mutex->unlock();
 }

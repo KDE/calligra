@@ -36,7 +36,7 @@ namespace KTL
     void registerThread(pthread_t threadHandle, KTL::Thread *thread);
     void deregisterThread(pthread_t threadHandle);
     
-    map<pthread_t, Thread *> threadList;
+    map<pthread_t, KTL::Thread *> threadList;
     
     ThreadManager();
     static ThreadManager *singleton;
