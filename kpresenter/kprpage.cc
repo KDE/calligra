@@ -2148,12 +2148,17 @@ int KPrPage::getPenBrushFlags( QPtrList<KPObject>list ) const
                 flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
                 break;
             case OT_PART:  case OT_ELLIPSE:
-            case OT_TEXT: case OT_CLIPART: case OT_CLOSED_LINE:
+            case OT_TEXT:  case OT_CLOSED_LINE:
                 flags = flags | StyleDia::SdPen | StyleDia::SdOther;
                 flags = flags | StyleDia::SdBrush | StyleDia::SdGradient;
                 break;
+            case OT_CLIPART:
+                flags |= StyleDia::SdPen | StyleDia::SdBrush | StyleDia::SdGradient;
+                flags |= StyleDia::SdOther; // Misisng in OT_PICTURE
+                break;
             case OT_PICTURE:
-                flags = flags | StyleDia::SdPen | StyleDia::SdPicture;
+                flags |= StyleDia::SdPen | StyleDia::SdPicture | StyleDia::SdBrush ;
+                //flags |= StyleDia::SdGradient; // ### FIXME: it crashes for OT_PICTURE
                 break;
             case OT_AUTOFORM:
             {
