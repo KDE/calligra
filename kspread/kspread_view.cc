@@ -3911,7 +3911,11 @@ void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-     static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
+    if( m_pTabBar )
+    {
+        m_removeTable->setEnabled( m_pTabBar->listshow().count()>1);
+        static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
+    }
 }
 
 void KSpreadView::updateBorderButton()
