@@ -23,7 +23,7 @@
 #include <qdialog.h>
 
 class KexiProject;
-class QComboBox;
+class KexiDataSourceComboBox;
 class QLineEdit;
 
 class KexiDataSourceDlg : public QDialog
@@ -38,7 +38,7 @@ class KexiDataSourceDlg : public QDialog
 		QString		name() const;
 
 	private:
-		QComboBox	*m_ds;
+		KexiDataSourceComboBox	*m_ds;
 		QLineEdit	*m_name;
 };
 

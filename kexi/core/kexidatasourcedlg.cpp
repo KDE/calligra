@@ -28,6 +28,7 @@
 #include "kexiproject.h"
 #include "kexidatasourcedlg.h"
 #include "kexiprojecthandler.h"
+#include "kexidatasourcecombobox.h"
 
 KexiDataSourceDlg::KexiDataSourceDlg(KexiProject *p, QWidget *parent, const char *name)
  : QDialog(parent, name)
@@ -35,22 +36,9 @@ KexiDataSourceDlg::KexiDataSourceDlg(KexiProject *p, QWidget *parent, const char
 	QLabel *lDs = new QLabel(i18n("Data Source:"), this);
 	QLabel *lName = new QLabel(i18n("Name:"), this);
 
-	m_ds = new QComboBox(this);
+	m_ds = new KexiDataSourceComboBox(this,"kdscb",p);
 	m_name = new QLineEdit(this);
 
-	m_ds->insertItem(i18n("none"));
-	KexiProjectHandler::ItemList *tableList = p->handlerForMime("kexi/table")->items();
-	KexiProjectHandler::ItemList *queryList = p->handlerForMime("kexi/query")->items();
-
-	for(KexiProjectHandler::ItemIterator it(*tableList); it.current(); ++it)
-	{
-		m_ds->insertItem(p->handlerForMime("kexi/table")->itemPixmap(), QString("tables/" + (*it)->name()));
-	}
-
-	for(KexiProjectHandler::ItemIterator it(*queryList); it.current(); ++it)
-	{
-		m_ds->insertItem(p->handlerForMime("kexi/query")->itemPixmap(), QString("queries/" + (*it)->name()));
-	}
 
 	QPushButton *btnOk = new QPushButton(i18n("&ok"), this);
 	connect(btnOk, SIGNAL(clicked()), this, SLOT(accept()));
@@ -70,7 +58,7 @@ KexiDataSourceDlg::KexiDataSourceDlg(KexiProject *p, QWidget *parent, const char
 QString
 KexiDataSourceDlg::source() const
 {
-	return m_ds->currentText();
+	return m_ds->globalIdentifier();
 }
 
 QString
