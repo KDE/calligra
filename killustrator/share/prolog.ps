@@ -18,6 +18,23 @@
 	FCol aload pop setrgbcolor
 } bind def
 
+/PStArr [ % Feld mit QT PenStyles
+       []             % SolidLine
+       [7 2]          % DashLine
+       [1 5]          % DotLine
+       [10 3 2 3]     % DashDotLine
+       [10 3 2 3 2 3] % DashDotDotLine
+] def
+
+/SPSt { % Setzen des PenStyles
+       /Style exch def
+       Style 1 ge Style 5 le and
+       { PStArr Style 1 sub get }
+       { [] }
+       ifelse
+       0 setdash
+} bind def
+
 /SMatrix { % Initialisieren der Transformationsmatrix (Array)
 	% Hinterlaesst Originalmatrix auf dem Stack !
 	matrix currentmatrix % Originalmatrix sichern
