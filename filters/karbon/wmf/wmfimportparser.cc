@@ -26,8 +26,7 @@
 #include "wmfimportparser.h"
 
 /*
-bug : epaisseur des traits ? voir table14.wmf
-bug : génère des points infinis ? voir motar.wmf
+bug : see motar.wmf
 */
 
 WMFImportParser::WMFImportParser() : KoWmfRead() {

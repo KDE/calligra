@@ -47,7 +47,6 @@ private:
     void visitVDocument( VDocument& document );
     void visitVPath( VPath& path );
     void visitVText( VText& text );
-    void flattenPath( VPath& segment, double flatness );
     void getBrush( QBrush& brush, const VFill *fill );
     void getPen( QPen& pen, const VStroke *stroke );
     

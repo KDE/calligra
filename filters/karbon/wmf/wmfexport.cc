@@ -41,7 +41,7 @@
 #include "kowmfwrite.h"
 
 /*
-TODO: bs.wmf stroke in red in Word97 and in brown kword ??
+TODO: bs.wmf stroke in red with MSword and in brown with Kword ??
 */
 
 typedef KGenericFactory<WmfExport, KoFilter> WmfExportFactory;
@@ -157,13 +157,13 @@ void WmfExport::visitVComposite( VComposite& composite ) {
 void WmfExport::visitVPath( VPath& path ) {
     VPath *newPath;
     VPathIterator itr( path );
+    VFlattenCmd cmd( 0L, INCH_TO_POINT(0.3 / (double)mDpi) ); 
     QPointArray *pa = new QPointArray( path.count() );            
     int  nbrPoint=0;      // number of points in the path
     
     for( ; itr.current(); ++itr ) {
         switch( itr.current()->type() ) {
-            case VSegment::curve:
-                // convert curveTo into lineTo
+            case VSegment::curve:   // convert curveTo into lineTo
                 newPath = new VPath( mDoc );
                 
                 // newPath duplicate the list of curve
@@ -179,9 +179,8 @@ void WmfExport::visitVPath( VPath& path ) {
                     ++itr;
                 }
                 
-                // flatness proportionnal to the resolution (mDpi)
-                // INCH_TO_POINT(1/mDpi) doesn't give enough precision
-                flattenPath( *newPath, INCH_TO_POINT(0.3 / (double)mDpi) );
+                // flatten the curve
+                cmd.visit( *newPath );
 
                 // adjust the number of points                
                 pa->resize( pa->size() + newPath->count() - 2 );
@@ -224,30 +223,6 @@ void WmfExport::visitVPath( VPath& path ) {
 void WmfExport::visitVText( VText& text ) {
     // TODO: export text
     visitVPath( text.basePath() );
-}
-
-
-// this code is duplicated from flattenPathPlugin.cc
-// TODO: remove WmfExport::flattenPath() if a similar code is recheable
-void WmfExport::flattenPath( VPath& path, double flatness ) {
-	VFlattenCmd cmd( 0L, INCH_TO_POINT(0.3 / (double)mDpi) );
-	cmd.visit( path );
-	return;
-    // Ommit first segment.    
-    /*path.first();
-    while( path.next() ) {
-            while( !path.current()->isFlat( flatness )  ) {
-                // Split at midpoint.
-                path.insert( path.current()->splitAt( 0.5 ) );
-            }
-
-        // Convert to line : join tangent with points
-        if ( path.current()->type() == VSegment::curve ) {
-            path.current()->setPoint( 0, path.current()->prev()->knot() );
-            path.current()->setPoint( 1, path.current()->knot() );
-        }
-        // disabled path.current()->setDegree( 1 );
-    }*/
 }
 
 
