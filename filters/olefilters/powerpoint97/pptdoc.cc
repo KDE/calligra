@@ -51,8 +51,6 @@ void PptDoc::gotSlide(
         QStringList data(QStringList::split(QChar('\r'), text->data, true));
         unsigned j;
 
-    kdDebug() << "textxxxxxxxxxxxxxxxxxxxxxxx" << text->data << endl;
-    kdDebug() << "textxxxxxxxxxxxxxxxxxxxxxxx" << data.join("\n") << endl;
         switch (text->type)
         {
         case 0:

@@ -25,6 +25,7 @@ DESCRIPTION
 
 #include <pptdoc.h>
 #include <qobject.h>
+#include <qstring.h>
 
 class myFile;
 class QDomDocument;
@@ -42,9 +43,9 @@ public:
         const myFile &currentUser);
     ~PptXml();
 
-    const bool convert();
+    bool convert();
 
-    const QDomDocument * const part();
+    const QString getXml() const;
 
 signals:
     // See olefilter.h for information
@@ -81,7 +82,10 @@ private:
 
     bool m_isConverted;
     bool m_success;
-    QDomDocument *m_root;
+    unsigned m_y;
+    QString m_pages;
+    QString m_text;
+    void encode(QString &text);
 
     // Override the base class functions.
 
