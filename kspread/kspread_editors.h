@@ -1,16 +1,14 @@
 #ifndef __kspread_editors_h__
 #define __kspread_editors_h__
 
-#include <klineedit.h>
 #include <kcompletion.h>
-
+#include <qwidget.h>
 class KSpreadCell;
 class KSpreadCanvas;
 
 
-class QWidget;
 class QFont;
-
+class KLineEdit;
 class KSpreadCellEditor : public QWidget
 {
     Q_OBJECT
@@ -18,7 +16,7 @@ public:
     KSpreadCellEditor( KSpreadCell*, KSpreadCanvas* _parent = 0, const char* _name = 0 );
     ~KSpreadCellEditor();
 
-    KSpreadCell* cell() { return m_pCell; }
+    KSpreadCell* cell()const { return m_pCell; }
 
     virtual void handleKeyPressEvent( QKeyEvent* _ev ) = 0;
     virtual void setEditorFont(QFont const & font, bool updateSize) = 0;
@@ -31,7 +29,7 @@ public:
     virtual void cut(){};
     virtual void paste(){};
     virtual void copy(){};
-    KSpreadCanvas* canvas() { return m_pCanvas; }
+    KSpreadCanvas* canvas()const { return m_pCanvas; }
 
 private:
     KSpreadCell* m_pCell;

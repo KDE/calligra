@@ -3,6 +3,7 @@
 #include "kspread_cell.h"
 #include "kspread_doc.h"
 
+#include <klineedit.h>
 #include <qapplication.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
