@@ -1,5 +1,6 @@
 #include "koOasisStyles.h"
 #include <kdebug.h>
+#include <qdom.h>
 
 KoOasisStyles::KoOasisStyles()
 {
@@ -53,10 +54,18 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
 
     //kdDebug(30003) << "Starting reading in office:styles" << endl;
 
-    QDomNode fixedStyles = docElement.namedItem( "office:styles" );
+    QDomElement userStyles = docElement.namedItem( "office:styles" ).toElement();
 
-    if ( !fixedStyles.isNull() )
-        insertStyles( fixedStyles.toElement() );
+    if ( !userStyles.isNull() ) {
+        // Collect user styles
+        QDomNodeList children = userStyles.elementsByTagName( "style:style" );
+        Q_ASSERT( m_userStyles.empty() );
+        m_userStyles.resize( children.length() );
+        for ( unsigned int i = 0 ; i < children.length(); ++i )
+            m_userStyles[i] = children.item( i ).toElement();
+
+        insertStyles( userStyles );
+    }
 
     //kdDebug(30003) << "Styles read in." << endl;
 }
