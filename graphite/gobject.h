@@ -319,11 +319,13 @@ inline void GObject::rotatePoint(int &x, int &y, const double &angle, const QPoi
 
 inline void GObject::rotatePoint(unsigned int &x, unsigned int &y, const double &angle, const QPoint &center) const {
 
-    // This awkward stuff with the two tmp references is a workaround for
+    // This awkward stuff with the tmp variables is a workaround for
     // "old" compilers (egcs-1.1.2 :)
-    int &_x=static_cast<int>(x);
-    int &_y=static_cast<int>(y);
+    int _x=static_cast<int>(x);
+    int _y=static_cast<int>(y);
     rotatePoint(_x, _y, angle, center);
+    x=static_cast<unsigned int>(_x);
+    y=static_cast<unsigned int>(_y);
 }
 
 inline void GObject::rotatePoint(double &x, double &y, const double &angle, const QPoint &center) const {
@@ -364,11 +366,13 @@ inline void GObject::scalePoint(int &x, int &y, const double &xfactor, const dou
 
 inline void GObject::scalePoint(unsigned int &x, unsigned int &y, const double &xfactor,
 			 const double &yfactor, const QPoint &center) const {
-    // This awkward stuff with the two tmp references is a workaround for
+    // This awkward stuff with the tmp variables is a workaround for
     // "old" compilers (egcs-1.1.2 :)
-    int &_x=static_cast<int>(x);
-    int &_y=static_cast<int>(y);
+    int _x=static_cast<int>(x);
+    int _y=static_cast<int>(y);
     scalePoint(_x, _y, xfactor, yfactor, center);
+    x=static_cast<unsigned int>(_x);
+    y=static_cast<unsigned int>(_y);
 }
 
 inline void GObject::scalePoint(double &x, double &y, const double &xfactor, const double &yfactor,
