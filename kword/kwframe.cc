@@ -1181,7 +1181,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
 {
     if ( !frame->isValid() )
     {
-        kdDebug(32002) << "KWFrameSet::drawFrameAndBorders " << getName() << " frame " << frameFromPtr( frame ) << " " << frame  << endl;
+        kdDebug(32002) << "KWFrameSet::drawFrameAndBorders " << getName() << " frame " << frameFromPtr( frame ) << " " << frame << " isn't valid" << endl;
         return;
     }
 

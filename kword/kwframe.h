@@ -607,6 +607,9 @@ public:
      * This is fast since it uses the m_framesInPage array.*/
     const QPtrList<KWFrame> & framesInPage( int pageNum ) const;
 
+    /** Allows to detect that updateFrames() hasn't been called yet (e.g. on loading) */
+    bool hasFramesInPageArray() const { return !m_framesInPage.isEmpty(); }
+
     /** relayout text in frames, so that it flows correctly around other frames */
     virtual void layout() {}
     virtual void invalidate() {}

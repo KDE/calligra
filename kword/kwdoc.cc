@@ -230,6 +230,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     m_viewFrameBorders = true;
     m_repaintAllViewsPending = false;
+    m_recalcFramesPending = -1;
     m_bShowDocStruct = true;
     m_bShowRuler = true;
     m_bDontCheckUpperWord = false;
@@ -2530,15 +2531,30 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
 
 
 void KWDocument::delayedRepaintAllViews() {
-	if (!m_repaintAllViewsPending) {
-		QTimer::singleShot( 0, this, SLOT( slotRepaintAllViews() ) );
-		m_repaintAllViewsPending=true;
-	}
+    if (!m_repaintAllViewsPending) {
+        QTimer::singleShot( 0, this, SLOT( slotRepaintAllViews() ) );
+        m_repaintAllViewsPending=true;
+    }
 }
 
 void KWDocument::slotRepaintAllViews() {
-	m_repaintAllViewsPending=false;
-	repaintAllViews( false );
+    m_repaintAllViewsPending=false;
+    repaintAllViews( false );
+}
+
+void KWDocument::delayedRecalcFrames( int fromPage ) {
+    if ( m_recalcFramesPending == -1 || fromPage < m_recalcFramesPending )
+    {
+        m_recalcFramesPending = fromPage;
+        QTimer::singleShot( 0, this, SLOT( slotRecalcFrames() ) );
+    }
+}
+
+void KWDocument::slotRecalcFrames() {
+    int from = m_recalcFramesPending;
+    m_recalcFramesPending = -1;
+    if ( from != -1 )
+        recalcFrames( from );
 }
 
 void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )

@@ -305,9 +305,14 @@ public:
 
 
     /**
-     * shedule a repaint of all views but don't execute immediately
-     **/
-     void delayedRepaintAllViews();
+     * schedule a repaint of all views but don't execute immediately
+     */
+    void delayedRepaintAllViews();
+
+    /**
+     * schedule a frame layout (e.g. for footnotes) but don't execute immediately
+     */
+    void delayedRecalcFrames( int fromPage );
 
     /**
      * Return a double-buffer pixmap of (at least) the given size.
@@ -726,13 +731,14 @@ signals:
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
-    void slotRepaintAllViews();
     void slotRepaintVariable();
 
     /** calls invalidate() on all framesets  */
     void invalidate();
 
 protected slots:
+    void slotRecalcFrames();
+    void slotRepaintAllViews();
     void slotDocumentRestored();
     void slotCommandExecuted();
     void slotDocumentInfoModifed();
@@ -855,6 +861,7 @@ private:
 
     int m_iNbPagePerRow;
     int m_maxRecentFiles;
+    int m_recalcFramesPending;
 
     QString m_lastViewMode;
     KWVariableCollection *m_varColl;

@@ -1987,7 +1987,7 @@ void KWChangeFootNoteLineSeparatorParametersCommand::changeLineSeparatorParamete
     m_doc->setFootNoteSeparatorLineLength( _length);
     m_doc->setFootNoteSeparatorLineWidth(_width );
     m_doc->setFootNoteSeparatorLineType( _type );
-    m_doc->slotRepaintAllViews();
+    m_doc->repaintAllViews();
 }
 
 

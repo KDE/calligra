@@ -120,13 +120,28 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         checkFootNotes();
 
         bool firstFootNote = true;
-        // For each footnote (called sorted them from bottom to top)
+
+        //// Stay seated... We need to know if there are any footnotes on top of us, although we're going
+        //// to lay them out _AFTER_. But we need their total height for the minY stuff.
+        //// So we first iterate over all footnotes of the page, to get their total height.
+        //// Then we'll reduce this height after every footnote being positionned, so it's always
+        //// the "height on top of us".
+        double totalFootNotesHeight = 0;
+        for ( QPtrListIterator<HeaderFooterFrameset> it( m_footnotes ); it.current() ; ++it )
+        {
+            int frameNum = it.current()->frameNumberForPage( pageNum );
+            if ( frameNum != -1 )
+                totalFootNotesHeight += it.current()->m_height;
+        }
+
+        // For each footnote (caller sorted them from bottom to top)
         for ( QPtrListIterator<HeaderFooterFrameset> it( m_footnotes ); it.current() ; ++it )
         {
             int frameNum = it.current()->frameNumberForPage( pageNum );
             if ( frameNum != -1 )
             {
                 it.current()->m_positioned = true;
+                totalFootNotesHeight -= it.current()->m_height; // as discussed above
                 KWTextFrameSet* fs = it.current()->m_frameset;
 #ifdef DEBUG_FRAMELAYOUT
                 kdDebug(32002) << " Page " << pageNum << ": adding footnote frame " << frameNum << " from " << fs->getName() << endl;
@@ -146,13 +161,10 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 
                 Q_ASSERT ( fs->isFootEndNote() );
 
-                //KWFrame::FrameBehavior fnFrameBehavior = KWFrame::AutoExtendFrame;
-                //KWFootNoteFrameSet* fnfs = static_cast<KWFootNoteFrameSet *>( fs );
-                //KWFootNoteVariable* fnvar = fnfs->footNoteVariable();
-                // The varY() call here is what depends on the maintextframe size
-                /*double minY = fnvar->varY() + it.current()->m_spacing */ /* some spacing */;
+                // This is where we add the "total height of the footnotes on top of this one".
+                // The footnote variable can't be behind them....
 
-                double minY = it.current()->m_minY;
+                double minY = it.current()->m_minY + totalFootNotesHeight;
 #ifdef DEBUG_FRAMELAYOUT
                 kdDebug(32002) << "   footnote: frameHeight=" << frameHeight << " frameTop (" << frameTop << ") <? minY (" << minY << ")" << endl;
 #endif
@@ -163,7 +175,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                     // We do like other WPs: we create a frame on the next page
                     it.current()->m_endAtPage++; // this will do so
 
-                    // In the current page we stop at minY.
+                    // In the current page we stop at minY
                     frameTop = minY;
                     frameHeight = bottom - frameTop;
 #ifdef DEBUG_FRAMELAYOUT
@@ -240,6 +252,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 kdDebug(32002) << " Invalidating from parag " << parag->paragId() << endl;
 #endif
                 fs->textObject()->setLastFormattedParag( parag );
+                fs->textObject()->formatMore();
             }
         }
     }
@@ -343,6 +356,8 @@ void KWFrameLayout::checkFootNotes()
             if ( !fnvar->paragraph() )
                 continue;
             double varY = fnvar->varY();
+            if ( varY == 0 ) // not able to calculate it yet
+                continue;
             hff->m_minY = varY + /*2 * */ hff->m_spacing + 2 /* some spacing */;
             int pageNum = static_cast<int>(varY / m_doc->ptPaperHeight());
             //int pageNum = fnvar->pageNum(); // faster to deduce it from varY

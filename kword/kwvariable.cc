@@ -420,11 +420,13 @@ void KWFootNoteVariable::finalize()
     int framePage = footNoteFrame->pageNum();
     if ( framePage != pageNum )
     {
-        kdDebug(32001) << "Footnote var at page " << pageNum << ", footnote frame at page " << framePage << " -> abortFormatting() and recalcFrames()" << endl;
+        //kdDebug(32001) << "Footnote var '" << text() << "' at page " << pageNum << ", footnote frame at page " << framePage << " -> abortFormatting() and recalcFrames()" << endl;
         KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
         fs->textObject()->abortFormatting();
 
-        m_doc->recalcFrames( QMIN( pageNum, framePage ), -1 );
+        // abortFormatting is a bool in kotextobject. So we need to return there before
+        // starting text layout again.
+        m_doc->delayedRecalcFrames( QMIN( pageNum, framePage ) );
 	m_doc->delayedRepaintAllViews();
     }
 }
@@ -505,14 +507,25 @@ double KWFootNoteVariable::varY() const
     // Find out the position of the footnote variable in document coordinates.
     int paragy = paragraph()->rect().y();
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
+    if ( !fs->hasFramesInPageArray() ) // we need it for internalToDocument
+    {
+        kdDebug(32001) << "KWFootNoteVariable::varY too early, no updateFrames yet" << endl;
+        return 0; // this happens on loading - frame layout is done before text layout
+    }
+    // What we need is "has never been formatted". Not "has just been invalidated"...
+    //if ( !paragraph()->isValid() )
+    //{
+    //    kdDebug(32001) << "KWFootNoteVariable::varY called but paragraph " << paragraph()->paragId() << " not valid" << endl;
+    //    return 0;
+    //}
     KoPoint dPoint;
     //kdDebug(32001) << "KWFootNoteVariable::pageNum position of variable (LU): " << QPoint( x(), paragy + y() + height ) << endl;
     KWFrame* containingFrame = fs->internalToDocument( QPoint( x(), paragy + y() + height ), dPoint );
     if ( containingFrame )
     {
-        //kdDebug(32001) << " found containingFrame " << containingFrame << " page:" << containingFrame->pageNum() << endl;
         // Ok, the (bottom of the) footnote variable is at dPoint.
         double varY = dPoint.y();
+        //kdDebug(32001) << " found containingFrame " << containingFrame << " page:" << containingFrame->pageNum() << "  varY=" << varY << endl;
         //int pageNum = containingFrame->pageNum(); // and at page pageNum
         return varY;
     } else
