@@ -1,7 +1,8 @@
 main
 {
 	print("-------1");
-	doc = findApplication( "kspread", "Document" );
+	app = findApplication( "kspread*" );
+        doc = app.getDocuments() [0];
 	print("-------2");
 	map = doc.map();
 	//	count = app.documentCount();

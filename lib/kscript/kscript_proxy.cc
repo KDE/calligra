@@ -14,6 +14,7 @@
 #include <qvariant.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 /***************************************************
  *
@@ -26,6 +27,16 @@ KSProxy::KSProxy( const QCString& app, const QCString& obj )
 {
   m_propertyProxyCheckDone = false;
   m_supportsPropertyProxy = false;
+
+  // Check for wildcards in the app or the obj name
+  if ( m_app.find('*') != -1 || m_obj.find('*') != -1 )
+  {
+    QByteArray data;
+    if ( ! kapp->dcopClient()->findObject( app, obj, "", data, m_app, m_obj ) )
+      kdWarning() << "Can't find Application '" << m_app << "' Object '" << m_obj << "'" << endl;
+    else
+      kdDebug() << " Application=" << m_app << " Object=" << m_obj << endl;
+  }
 }
 
 KSProxy::~KSProxy()
