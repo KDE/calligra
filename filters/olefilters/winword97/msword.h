@@ -375,16 +375,8 @@ protected:
         QString *names;
     } m_styles;
 
-private:
-    friend class Properties;
-    myFile mainStream;
-    myFile table0Stream;
-    myFile table1Stream;
-    myFile dataStream;
-
+protected:
     // Error handling and reporting support.
-
-public:
     static const int s_area = 30513;
     QString m_constructionError;
     void constructionError(unsigned line, const char *reason);
@@ -401,8 +393,14 @@ private:
     const U8 *m_dataStream;
     FIB m_fib;
 
+    myFile mainStream;
+    myFile table0Stream;
+    myFile table1Stream;
+    myFile dataStream;
+
     // Character property handling.
 
+    friend class Properties;
     void getChpxs(U32 startFc, U32 endFc, CHPXarray &result);
     void getChpxs(const U8 *fkp, U32 startFc, U32 endFc, CHPXarray &result);
 

@@ -26,6 +26,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qdom.h>
+#include <qvaluelist.h>
 #include <qvector.h>
 
 class myFile;
@@ -127,10 +128,7 @@ private:
     virtual void gotTableRow(
         unsigned tableNumber,
         const QString texts[],
-        const Attributes styles[],
-        MsWordGenerated::TAP &row);
-    void gotTableRow(
-        unsigned tableNumber, unsigned rowNumber, const QString texts[], const MsWordGenerated::PAP styles[],
+        const QValueList<Attributes *> styles,
         MsWordGenerated::TAP &row);
 
     // This is where the result will end up!
@@ -155,10 +153,10 @@ private:
     public:
         TableRow(
             const QString texts[],
-            const Attributes styles[],
+            const QValueList<Attributes *> styles,
             MsWordGenerated::TAP &row);
         ~TableRow();
-        QValueList<Attributes> m_styles;
+        QValueList<Attributes *> m_styles;
         QStringList m_texts;
         MsWordGenerated::TAP m_row;
     };

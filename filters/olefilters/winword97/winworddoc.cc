@@ -236,7 +236,7 @@ bool WinWordDoc::convert()
         m_body.append(
             "</DOC>\n");
         m_result = m_body.utf8();
-        kdDebug() << m_result << endl;
+        //kdDebug() << m_result << endl;
         m_isConverted = true;
     }
     return m_success;
@@ -301,10 +301,10 @@ QString WinWordDoc::generateFormat(
 {
     QString format;
     QColor color = colorForNumber(QString::number(chp->ico), -1);
-kdError() <<"------ftc="<<chp->ftc<<endl;
-kdError() <<"      ascii="<<chp->ftcAscii<<" fe="<<chp->ftcFE<<" other="<<chp->ftcOther<<endl;
+
     format.append(QString::fromLatin1("<COLOR red=\"%1\" green=\"%2\" blue=\"%3\"/>\n").arg(color.red()).arg(color.green()).arg(color.blue()));
     format.append("<FONT name=\"");
+    // TBD: We only use the Ascii font code. We should work out how/when to use the FE and Other font codes.
     format.append(getFont(chp->ftcAscii));
     format.append("\"/>\n");
     format.append("<SIZE value=\"");
@@ -344,17 +344,17 @@ QString WinWordDoc::generateFormats(
 {
     QString formats;
     KSharedPtr<Run> run;
-    QValueList<KSharedPtr<Run> >::Iterator it;
+    QValueList<KSharedPtr<Run> >::ConstIterator it;
 
     formats.append("<FORMATS>\n");
-    for ( it = attributes.runs.begin(); it != attributes.runs.end(); ++it)
+
+    for (it = attributes.runs().begin(); it != attributes.runs().end(); ++it)
     {
         run = *it;
         if (typeid(Format) == typeid(*run))
         {
             const MsWordGenerated::CHP *chp = static_cast<Format *>(run.data())->values->getChp();
 
-kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
             if (run->end > run->start)
             {
                 formats.append("<FORMAT id=\"1\" pos=\"");
@@ -474,6 +474,10 @@ kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
             m_embedded.append(
                 "  </EMBEDDED>\n");
         }
+        else
+        {
+            kdError(s_area) << "WinWordDoc::generateFormats: unexpected typeid" << endl;
+        }
     }
     formats.append("</FORMATS>\n");
     return formats;
@@ -496,6 +500,7 @@ void WinWordDoc::gotParagraph(
     Attributes &styles)
 {
     QString xml_friendly = text;
+    const PAP *pap = styles.baseStyle().getPap();
 
     encode(xml_friendly);
     m_body.append("<PARAGRAPH>\n<TEXT>");
@@ -505,7 +510,7 @@ void WinWordDoc::gotParagraph(
     m_body.append(
         " <LAYOUT>\n"
         "  <NAME value=\"");
-    m_body.append(m_styles.names[styles.baseStyle.istd]);
+    m_body.append(m_styles.names[pap->istd]);
     m_body.append("\"/>\n");
     m_body.append(
         " </LAYOUT>\n");
@@ -517,6 +522,7 @@ void WinWordDoc::gotHeadingParagraph(
     Attributes &styles)
 {
     QString xml_friendly = text;
+    const PAP *pap = styles.baseStyle().getPap();
 
     encode(xml_friendly);
     m_body.append("<PARAGRAPH>\n<TEXT>");
@@ -526,7 +532,7 @@ void WinWordDoc::gotHeadingParagraph(
     m_body.append(
         " <LAYOUT>\n"
         "  <NAME value=\"");
-    m_body.append(m_styles.names[styles.baseStyle.istd]);
+    m_body.append(m_styles.names[pap->istd]);
     m_body.append("\"/>\n");
 //    m_body.append("  <COUNTER type=\"");
 //    m_body.append(numbering(styles.baseStyle.anld.nfc));
@@ -544,8 +550,8 @@ void WinWordDoc::gotListParagraph(
 {
     QString paragraph;
     QString xml_friendly = text;
-
-    int styleIndex = styles.baseStyle.istd;
+    const PAP *pap = styles.baseStyle().getPap();
+    int styleIndex = pap->istd;
 
     // If the level has a null style, default to something sane.
     if (styleIndex == 4095)
@@ -566,11 +572,11 @@ void WinWordDoc::gotListParagraph(
     paragraph.append("\"/>\n");
     paragraph.append(
         "  <COUNTER type=\"");
-    paragraph.append(numbering(styles.baseStyle.anld.nfc));
+    paragraph.append(numbering(pap->anld.nfc));
     paragraph.append("\" depth=\"");
-    paragraph.append(QString::number((int)styles.baseStyle.ilvl));
+    paragraph.append(QString::number((int)pap->ilvl));
     paragraph.append("\" bullet=\"183\" start=\"");
-    paragraph.append(QString::number((int)styles.baseStyle.anld.iStartAt));
+    paragraph.append(QString::number((int)pap->anld.iStartAt));
     paragraph.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n");
     paragraph.append(
         " </LAYOUT>\n");
@@ -789,7 +795,7 @@ void WinWordDoc::gotTableEnd(
             encode(xml_friendly);
             cell.append(xml_friendly);
             cell.append("</TEXT>\n");
-            cell.append(generateFormats(m_table[y]->m_styles[x]));
+            cell.append(generateFormats(*m_table[y]->m_styles[x]));
             cell.append("</PARAGRAPH>\n");
             cell.append("</FRAMESET>\n");
             m_tables.append(cell);
@@ -801,7 +807,7 @@ void WinWordDoc::gotTableEnd(
 void WinWordDoc::gotTableRow(
     unsigned tableNumber,
     const QString texts[],
-    const Attributes styles[],
+    const QValueList<Attributes *> styles,
     MsWordGenerated::TAP &row)
 {
     unsigned i;
@@ -927,16 +933,15 @@ char WinWordDoc::numbering(unsigned nfc) const
 
 WinWordDoc::TableRow::TableRow(
     const QString texts[],
-    const Attributes styles[],
+    const QValueList<Attributes *> styles,
     MsWordGenerated::TAP &row)
 {
     m_texts.clear();
-    m_styles.clear();
     for (int i = 0; i < row.itcMac; i++)
     {
         m_texts.append(texts[i]);
-        m_styles.append(styles[i]);
     }
+    m_styles = styles;
     m_row = row;
 }
 

@@ -726,15 +726,6 @@ void MsWord::getParagraphsFromPapxs(
                 chpxs[i].endFc = chpxs[i].startFc + length;
             }
 
-            // TBD: Now eliminate any deleted text.
-
-            for (i = 0; i < chpxs.size(); i++)
-            {
-                // Properties properties = Properties(*this);
-
-                // properties.apply(chpxs[i].data.ptr, chpxs[i].data.count);
-            }
-
             // If we got to the end of the properties, output it. Otherwise, we
             // save it and its CHPXs away for next time around. TBD: Make sure
             // we output any trailing partial paragraph.
@@ -1123,13 +1114,9 @@ void MsWord::parse()
                 prmPtr = &sprm[0];
             }
 
-            // TBD: Now eliminate any deleted text.
+            Properties properties = Properties(*this);
 
-            {
-                Properties properties = Properties(*this);
-
-                properties.apply(prmPtr, prmCount);
-            }
+            properties.apply(prmPtr, prmCount);
             getParagraphsFromBtes(
                 data.fc,
                 data.fc + ((actualEndCp - actualStartCp) * (unicode ? 2 : 1)),
@@ -1320,18 +1307,14 @@ void MsWord::readStyles()
     {
         // We simply discard parts of the STSHI we do not understand.
 
-        kdError(s_area) << "MsWord::readStyles: unsupported STSHI size " <<
-            cbStshi << endl;
         if (cbStshi >= 20)
         {
             kdWarning(s_area) << "MsWord::readStyles: assuming Word 2000" <<
                 endl;
 
-            // Flip ourselves into unsupported territory!
+            // Flip ourselves into unknown territory!
 
             m_fib.nFib = s_maxWord7Version + 1;
-            kdError(s_area) << "Word 2000 is not fully supported" <<
-                endl;
         }
         MsWordGenerated::read(ptr, &stshi);
         ptr += cbStshi;

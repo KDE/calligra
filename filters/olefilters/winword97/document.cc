@@ -29,11 +29,258 @@ DESCRIPTION
 #include <properties.h>
 #include <typeinfo>
 
-void Document::createAttributes(
+Document::Document(
+    const myFile &mainStream,
+    const myFile &table0Stream,
+    const myFile &table1Stream,
+    const myFile &dataStream) :
+        MsWord(
+            mainStream,
+            table0Stream,
+            table1Stream,
+            dataStream)
+{
+}
+
+Document::~Document()
+{
+}
+
+// Paragrpahs end with a control character that we want to suppress.
+QString Document::cleanText(
+    const QString &text)
+{
+    QString cleantext = text;
+    unsigned length = cleantext.length() - 1;
+    QChar last = cleantext[length];
+
+    if ((last == QChar('\r')) ||
+        (last == QChar('\a')))
+        cleantext.truncate(length);
+    return cleantext;
+}
+
+// Return the name of a font. We have to convert the Microsoft font names to something that
+// might just be present under X11.
+QString Document::getFont(unsigned fc)
+{
+    QString font = MsWord::getFont(fc).xstzName;
+    static const unsigned ENTRIES = 6;
+    static QString fuzzyLookup[ENTRIES][2] =
+    {
+        // MS contains      X11 font family
+        // substring.       non-AA name.
+        { "times",          "times" },
+        { "courier",        "courier" },
+        { "andale",         "monotype" },
+        { "monotype.com",   "monotype" },
+        { "georgia",        "times" },
+        { "helvetica",      "helvetica" }
+    };
+
+    // In an anti-aliased X environment, Qt will do a good job of looking up our local
+    // equivalent of the MS font. But, we want to work even on non-AA. So, first, we do
+    // a fuzzy match of some common MS font names.
+    unsigned i;
+
+    font = font.lower();
+    for (i = 0; i < ENTRIES; i++)
+    {
+        // The loop will leave unchanged any MS font name not fuzzy-matched.
+        if (font.find(fuzzyLookup[i][0], 0, FALSE) != -1)
+        {
+            font = fuzzyLookup[i][1];
+            break;
+        }
+    }
+
+    // Use Qt to look up our canonical equivalent of the font name.
+    QFont xFont( font );
+    QFontInfo info( xFont );
+    return info.family();
+}
+
+void Document::gotParagraph(
+    const QString &text,
+    const PAP &pap,
+    const CHPXarray &chpxs)
+{
+    Attributes attributes(this, pap);
+    QString cleantext = cleanText(text);
+
+    attributes.setRuns(cleantext, chpxs);
+    gotParagraph(cleantext, attributes);
+    m_characterPosition += cleantext.length();
+}
+
+void Document::gotHeadingParagraph(
+    const QString &text,
+    const PAP &pap,
+    const CHPXarray &chpxs)
+{
+    Attributes attributes(this, pap);
+    QString cleantext = cleanText(text);
+
+    attributes.setRuns(cleantext, chpxs);
+    gotHeadingParagraph(cleantext, attributes);
+    m_characterPosition += cleantext.length();
+}
+
+void Document::gotListParagraph(
+    const QString &text,
+    const PAP &pap,
+    const CHPXarray &chpxs)
+{
+    Attributes attributes(this, pap);
+    QString cleantext = cleanText(text);
+
+    attributes.setRuns(cleantext, chpxs);
+    gotListParagraph(cleantext, attributes);
+    m_characterPosition += cleantext.length();
+}
+
+void Document::gotTableBegin()
+{
+    m_tableNumber++;
+    gotTableBegin(m_tableNumber);
+}
+
+void Document::gotTableEnd()
+{
+    gotTableEnd(m_tableNumber);
+    m_characterPosition++;
+}
+
+void Document::gotTableRow(
+    const QString texts[],
+    const PAP styles[],
+    const CHPXarray chpxs[],
+    TAP &row)
+{
+    QString *outTexts = new QString[row.itcMac];
+    QValueList<Attributes *> outStyles;
+    unsigned i;
+
+    for (i = 0; i < row.itcMac; i++)
+    {
+        Attributes *attributes = new Attributes(this, styles[i]);
+        QString cleantext = cleanText(texts[i]);
+
+        attributes->setRuns(cleantext, chpxs[i]);
+        outStyles.append(attributes);
+        outTexts[i] = cleantext;
+        m_characterPosition += cleantext.length();
+    }
+    gotTableRow(m_tableNumber, outTexts, outStyles, row);
+    delete [] outTexts;
+}
+
+void Document::parse()
+{
+    m_tableNumber = 0;
+    m_characterPosition = 0;
+    m_imageNumber = 0;
+    MsWord::parse();
+}
+
+Document::Attributes::Attributes(
+    Document *doc,
+    const PAP &baseStyle) :
+    m_baseStyle( *doc )
+{
+    m_doc = doc;
+    m_baseStyle.apply(baseStyle);
+}
+
+Document::Attributes::~Attributes()
+{
+    m_runs.clear();
+}
+
+const Properties &Document::Attributes::baseStyle() const
+{
+    return m_baseStyle;
+}
+
+void Document::Attributes::rewriteField(
     QString &text,
-    const PAP &baseStyle,
-    const CHPXarray &originalChpxs,
-    Attributes &attributes)
+    CHPXarray &chpxs)
+{
+    kdDebug(s_area) << "Document::rewriteField: field: " <<
+        m_field.fieldType << ": " <<
+        chpxs[m_field.start].startFc << "." <<
+        chpxs[m_field.separator].startFc << "." <<
+        chpxs[m_field.end].startFc << ": " <<
+        text.mid(chpxs[m_field.start].startFc, chpxs[m_field.end].startFc - chpxs[m_field.start].startFc + 1) << endl;
+    if (m_field.separator < m_field.start)
+    {
+        kdDebug(s_area) << "Document::rewriteField: missing separator" << endl;
+        m_field.separator = m_field.end;
+    }
+    kdDebug(s_area) << "Document::rewriteField: before: " << text << endl;
+    unsigned lhsLength = chpxs[m_field.separator].startFc - chpxs[m_field.start].startFc;
+    unsigned rhsLength = chpxs[m_field.end].startFc - chpxs[m_field.separator].startFc;
+    unsigned run;
+    int length;
+    QString newLhs;
+    QString newRhs;
+
+    switch (m_field.fieldType)
+    {
+    case FIELD_TYPE_EMBEDDED_OBJECT:
+        break;
+    case 0: // TBD: some (second?, mailto:?) HYPERLINKs look like this!
+    case FIELD_TYPE_HYPERLINK:
+        newRhs = text.mid(chpxs[m_field.separator].startFc + 1, rhsLength - 1);
+        break;
+    default:
+        kdError(s_area) << "Document::rewriteField: unsupported field: " <<
+            m_field.fieldType << endl;
+        return;
+    }
+
+    // Adjust LHS if required.
+
+    {
+        run = m_field.start;
+        text.replace(chpxs[run].startFc, lhsLength + 1, newLhs);
+        length = lhsLength - newLhs.length();
+        chpxs[run].endFc -= length;
+        run++;
+        while (run < chpxs.size())
+        {
+            chpxs[run].startFc -= length;
+            chpxs[run].endFc -= length;
+            run++;
+        }
+    }
+
+    // Adjust RHS if required.
+
+    {
+        run = m_field.separator;
+        text.replace(chpxs[run].startFc, rhsLength + 1, newRhs);
+        length = rhsLength - newRhs.length();
+        chpxs[run].endFc -= length;
+        run++;
+        while (run < chpxs.size())
+        {
+            chpxs[run].startFc -= length;
+            chpxs[run].endFc -= length;
+            run++;
+        }
+    }
+    kdDebug(s_area) << "Document::rewriteField: after: " << text << endl;
+}
+
+const QValueList<KSharedPtr<Document::Run> > &Document::Attributes::runs() const
+{
+    return m_runs;
+}
+
+void Document::Attributes::setRuns(
+    QString &text,
+    const CHPXarray &originalChpxs)
 {
     typedef enum
     {
@@ -78,20 +325,15 @@ void Document::createAttributes(
     unsigned runs;
 
     runs = chpxs.size();
-    attributes.baseStyle = baseStyle;
     for (unsigned i = 0; i < runs; i++)
     {
-        Properties exceptionStyle = Properties(*this);
+        Properties exceptionStyle(m_baseStyle);
         const CHP *chp;
         Run *run;
 
         // Initialise the entry with the base style, then apply the deltas.
 
-kdDebug(s_area) << "Document::createAttributes: hps 1: " <<exceptionStyle.getChp()->hps<< endl;
-        exceptionStyle.apply(baseStyle);
-kdDebug(s_area) << "Document::createAttributes: hps 2: " <<exceptionStyle.getChp()->hps<< endl;
         exceptionStyle.apply(chpxs[i].data.ptr, chpxs[i].data.count);
-kdDebug(s_area) << "Document::createAttributes: hps 3: " <<exceptionStyle.getChp()->hps<< endl;
         chp = exceptionStyle.getChp();
 
         // Check the type of data. If it is a field, then we collect the
@@ -172,7 +414,7 @@ kdDebug(s_area) << "Document::createAttributes: hps 3: " <<exceptionStyle.getChp
                         // A drawing.
 
                         drawingId = chp->fcPic_fcObj_lTagObj;
-                        found = MsWord::getPicture(
+                        found = m_doc->getPicture(
                                     drawingId,
                                     drawingType,
                                     &drawingLength,
@@ -189,8 +431,8 @@ kdDebug(s_area) << "Document::createAttributes: hps 3: " <<exceptionStyle.getChp
 
                         FSPA shape;
 
-                        found = MsWord::getOfficeArt(
-                                    m_characterPosition + chpxs[i].startFc,
+                        found = m_doc->getOfficeArt(
+                                    m_doc->m_characterPosition + chpxs[i].startFc,
                                     shape,
                                     &drawingLength,
                                     &drawingData,
@@ -222,7 +464,7 @@ kdDebug(s_area) << "Document::createAttributes: hps 3: " <<exceptionStyle.getChp
 
                             image->start = chpxs[i].startFc;
                             image->end = chpxs[i].endFc;
-                            m_imageNumber++;
+                            m_doc->m_imageNumber++;
                             image->id = drawingId;
                             image->type = drawingType;
                             image->length = drawingLength;
@@ -233,13 +475,13 @@ kdDebug(s_area) << "Document::createAttributes: hps 3: " <<exceptionStyle.getChp
                     else
                     {
                         kdError(s_area) << "Document::createAttributes: cannot find drawing:" <<
-                            (m_characterPosition + chpxs[i].startFc) << endl;
+                            (m_doc->m_characterPosition + chpxs[i].startFc) << endl;
                     }
                 }
                 break;
             case SPECIAL_FIELD_BEGIN_MARK:
-                MsWord::getField(
-                    m_characterPosition + chpxs[i].startFc,
+                m_doc->getField(
+                    m_doc->m_characterPosition + chpxs[i].startFc,
                     &fieldType);
                 m_field.fieldType = static_cast<fieldTypes>(fieldType);
                 m_field.start = i;
@@ -272,231 +514,6 @@ kdDebug(s_area) << "Document::createAttributes: hps 3: " <<exceptionStyle.getChp
             format->values = new Properties(exceptionStyle);
             run = format;
         }
-        attributes.runs.append( KSharedPtr<Run>( run ) );
+        m_runs.append( KSharedPtr<Run>( run ) );
     }
-}
-
-Document::Document(
-    const myFile &mainStream,
-    const myFile &table0Stream,
-    const myFile &table1Stream,
-    const myFile &dataStream) :
-        MsWord(
-            mainStream,
-            table0Stream,
-            table1Stream,
-            dataStream)
-{
-}
-
-Document::~Document()
-{
-}
-
-// Paragrpahs end with a control character that we want to suppress.
-QString Document::cleanText(
-    const QString &text)
-{
-    QString cleantext = text;
-    unsigned length = cleantext.length() - 1;
-    QChar last = cleantext[length];
-
-    if ((last == QChar('\r')) ||
-        (last == QChar('\a')))
-        cleantext.truncate(length);
-    return cleantext;
-}
-
-// Return the name of a font. We have to convert the Microsoft font names to something that
-// might just be present under X11.
-QString Document::getFont(unsigned fc)
-{
-    QString font = MsWord::getFont(fc).xstzName;
-    static const unsigned ENTRIES = 6;
-    static QString fuzzyLookup[ENTRIES][2] =
-    {
-        // MS contains      X11 font family
-        // substring.       non-AA name.
-        { "times",          "times" },
-        { "courier",        "courier" },
-        { "andale",         "monotype" },
-        { "monotype.com",   "monotype" },
-        { "georgia",        "times" },
-        { "helvetica",      "helvetica" }
-    };
-
-    // In an anti-aliased X environment, Qt will do a good job of looking up our local
-    // equivalent of the MS font. But, we want to work even on non-AA. So, first, we do
-    // a fuzzy match of some common MS font names.
-    unsigned i;
-
-    font = font.lower();
-    for (i = 0; i < ENTRIES; i++)
-    {
-        // The loop will leave unchanged any MS font name not fuzzy-matched.
-        if (font.find(fuzzyLookup[i][0], 0, FALSE) != -1)
-        {
-            font = fuzzyLookup[i][1];
-            break;
-        }
-    }
-
-    // Use Qt to look up our canonical equivalent of the font name.
-    QFont xFont( font );
-    QFontInfo info( xFont );
-    return info.family();
-}
-
-void Document::gotParagraph(
-    const QString &text,
-    const PAP &pap,
-    const CHPXarray &chpxs)
-{
-    Attributes attributes;
-    QString cleantext = cleanText(text);
-
-    createAttributes(cleantext, pap, chpxs, attributes);
-    gotParagraph(cleantext, attributes);
-    m_characterPosition += cleantext.length();
-}
-
-void Document::gotHeadingParagraph(
-    const QString &text,
-    const PAP &pap,
-    const CHPXarray &chpxs)
-{
-    Attributes attributes;
-    QString cleantext = cleanText(text);
-
-    createAttributes(cleantext, pap, chpxs, attributes);
-    gotHeadingParagraph(cleantext, attributes);
-    m_characterPosition += cleantext.length();
-}
-
-void Document::gotListParagraph(
-    const QString &text,
-    const PAP &pap,
-    const CHPXarray &chpxs)
-{
-    Attributes attributes;
-    QString cleantext = cleanText(text);
-
-    createAttributes(cleantext, pap, chpxs, attributes);
-    gotListParagraph(cleantext, attributes);
-    m_characterPosition += cleantext.length();
-}
-
-void Document::gotTableBegin()
-{
-    m_tableNumber++;
-    gotTableBegin(m_tableNumber);
-}
-
-void Document::gotTableEnd()
-{
-    gotTableEnd(m_tableNumber);
-    m_characterPosition++;
-}
-
-void Document::gotTableRow(
-    const QString texts[],
-    const PAP styles[],
-    const CHPXarray chpxs[],
-    TAP &row)
-{
-    QString *outTexts = new QString[row.itcMac];
-    Attributes *outStyles = new Attributes[row.itcMac];
-    unsigned i;
-
-    for (i = 0; i < row.itcMac; i++)
-    {
-        Attributes attributes;
-        QString cleantext = cleanText(texts[i]);
-        createAttributes(cleantext, styles[i], chpxs[i], attributes);
-        outStyles[i] = attributes;
-        outTexts[i] = cleantext;
-        m_characterPosition += cleantext.length();
-    }
-    gotTableRow(m_tableNumber, outTexts, outStyles, row);
-    delete [] outTexts;
-    delete [] outStyles;
-}
-
-void Document::parse()
-{
-    m_tableNumber = 0;
-    m_characterPosition = 0;
-    m_imageNumber = 0;
-    MsWord::parse();
-}
-
-void Document::rewriteField(
-    QString &text,
-    CHPXarray &chpxs)
-{
-    kdDebug(s_area) << "Document::rewriteField: field: " <<
-        m_field.fieldType << ": " <<
-        chpxs[m_field.start].startFc << "." <<
-        chpxs[m_field.separator].startFc << "." <<
-        chpxs[m_field.end].startFc << ": " <<
-        text.mid(chpxs[m_field.start].startFc, chpxs[m_field.end].startFc - chpxs[m_field.start].startFc + 1) << endl;
-    if (m_field.separator < m_field.start)
-    {
-        kdDebug(s_area) << "Document::rewriteField: missing separator" << endl;
-        m_field.separator = m_field.end;
-    }
-    kdDebug(s_area) << "Document::rewriteField: before: " << text << endl;
-    unsigned lhsLength = chpxs[m_field.separator].startFc - chpxs[m_field.start].startFc;
-    unsigned rhsLength = chpxs[m_field.end].startFc - chpxs[m_field.separator].startFc;
-    unsigned run;
-    int length;
-    QString newLhs;
-    QString newRhs;
-
-    switch (m_field.fieldType)
-    {
-    case FIELD_TYPE_EMBEDDED_OBJECT:
-        break;
-    case 0: // TBD: some (second?, mailto:?) HYPERLINKs look like this!
-    case FIELD_TYPE_HYPERLINK:
-        newRhs = text.mid(chpxs[m_field.separator].startFc + 1, rhsLength - 1);
-        break;
-    default:
-        kdError(s_area) << "Document::rewriteField: unsupported field: " <<
-            m_field.fieldType << endl;
-        return;
-    }
-
-    // Adjust LHS if required.
-
-    {
-        run = m_field.start;
-        text.replace(chpxs[run].startFc, lhsLength + 1, newLhs);
-        length = lhsLength - newLhs.length();
-        chpxs[run].endFc -= length;
-        run++;
-        while (run < chpxs.size())
-        {
-            chpxs[run].startFc -= length;
-            chpxs[run].endFc -= length;
-            run++;
-        }
-    }
-
-    // Adjust RHS if required.
-
-    {
-        run = m_field.separator;
-        text.replace(chpxs[run].startFc, rhsLength + 1, newRhs);
-        length = rhsLength - newRhs.length();
-        chpxs[run].endFc -= length;
-        run++;
-        while (run < chpxs.size())
-        {
-            chpxs[run].startFc -= length;
-            chpxs[run].endFc -= length;
-            run++;
-        }
-    }
-    kdDebug(s_area) << "Document::rewriteField: after: " << text << endl;
 }

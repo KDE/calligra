@@ -50,7 +50,7 @@ public:
     // Predefined style from stylesheet.
 
     void apply(const MsWord::U8 *grpprl, unsigned count);
-    void apply(const MsWord::U16 style);
+    void apply(MsWord::U16 style);
     void apply(const MsWord::LFO &style);
     void apply(const MsWord::PAP &style);
     void apply(const MsWord::PAPXFKP &style);
@@ -59,7 +59,7 @@ public:
 
     // Conversion from compact PRM opcode to real opcode.
 
-    static MsWord::U16 getRealOpcode(unsigned shortOpcode); 
+    static MsWord::U16 getRealOpcode(unsigned shortOpcode);
 
     // Get the properties.
 

@@ -903,7 +903,8 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
             }
             else
             {
-                kdWarning(MsWord::s_area) << "Properties::apply: unsupported opcode:" << opcodeValue << endl;
+                kdWarning(MsWord::s_area) << "Properties::apply: unsupported opcode: 0x" <<
+                    QString::number(opcodeValue, 16) << endl;
             }
             break;
         }
@@ -912,17 +913,21 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
 }
 
 // An existing base style.
-void Properties::apply(const MsWord::U16 style)
+void Properties::apply(MsWord::U16 style)
 {
     unsigned originalStyle;
 
     // Save the style index.
-
     originalStyle = m_pap.istd;
 
     // Copy the given style, then restore the style index.
 
+    // If the level has a null style, default to something sane.
+    if (style == 4095)
+        style = 0;
     m_pap = m_document.m_styles.data[style]->m_pap;
+    m_chp = m_document.m_styles.data[style]->m_chp;
+    m_tap = m_document.m_styles.data[style]->m_tap;
     m_pap.istd = originalStyle;
 }
 
@@ -949,10 +954,9 @@ void Properties::apply(const MsWord::LFO &style)
 
             m_pap.istd = data.rgistd[m_pap.ilvl];
 
-            // Build the base PAP if required.
+            // Build the base PAP.
 
-            if (m_pap.istd != 4095)
-                apply(m_pap.istd);
+            apply(m_pap.istd);
 
             MsWord::U8 *ptr2 = (MsWord::U8 *)m_document.m_listStyles[i][m_pap.ilvl];
             MsWord::LVLF level;
@@ -986,21 +990,26 @@ void Properties::apply(const MsWord::LFO &style)
 
 void Properties::apply(const MsWord::PAP &style)
 {
+    // First apply the paragraph, character and other properties of the
+    // paragraph's base style, and then apply the paragraph properties.
+    apply(style.istd);
     m_pap = style;
+
+    // Record the style index.
+    m_pap.istd = style.istd;
 }
 
 // Paragraph property exceptions.
 
 void Properties::apply(const MsWord::PAPXFKP &style)
 {
-    // Record the style index.
-
-    m_pap.istd = style.istd;
-
-    // Build the base PAP then walk the grpprl.
-
+    // First apply the paragraph, character and other properties of the
+    // paragraph's base style, and then apply the exception properties.
     apply(style.istd);
     apply(style.ptr, style.count);
+
+    // Record the style index.
+    m_pap.istd = style.istd;
 }
 
 // Properties height.
@@ -1069,7 +1078,7 @@ void Properties::apply(const MsWord::STD &style)
 // Conversion from compact PRM opcode to real opcode.
 
 MsWord::U16 Properties::getRealOpcode(unsigned shortOpcode)
-{ 
+{
     static const MsWord::U16 rgsprmPrm[0x80] =
     {
         sprmNoop, sprmNoop, sprmNoop, sprmNoop, sprmPIncLvl, sprmPJc,
