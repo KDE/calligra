@@ -248,7 +248,9 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &id
     new_size.setHeight( max_size.height() );
   if (new_size!=frameSize())
     resize(new_size);
-	reparent(m_view->workspaceWidget(),QPoint(0,0),true);
+  
+   m_view->workspace()->addItem(this);
+//	reparent(m_view->workspaceWidget(),QPoint(0,0),true);
   m_registering=false;
 
   m_view->workspace()->activateView(this);

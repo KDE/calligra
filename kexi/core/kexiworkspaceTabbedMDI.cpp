@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,36 +20,73 @@
 #include <kdebug.h>
 
 #include "kexidialogbase.h"
-#include "kexiworkspaceMDI.h"
+#include "kexiworkspaceTabbedMDI.h"
 #include "kexiview.h"
 #include "kexiproject.h"
 #include "kexicontexthelp.h"
+#include <qtoolbutton.h>
+#include <qtooltip.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <qpixmap.h>
+#include <qiconset.h>
+#include <qapplication.h>
+#include <qevent.h>
 
-KexiWorkspaceMDI::KexiWorkspaceMDI(QWidget *parent, const char *name,KexiView *mw) 
-	: QWorkspace(parent, name),KexiWorkspace()
+KexiWorkspaceTabbedMDI::KexiWorkspaceTabbedMDI(QWidget *parent, const char *name,KexiView *mw) 
+	: KTabWidget(parent, name),KexiWorkspace(),no(0),m_activeDialog(0),m_mainwindow(mw)
 {
-	m_mainwindow=mw;
-	no = 0;
-	m_activeDialog=0;
-	connect(this,SIGNAL(windowActivated(QWidget*)),this,SLOT(slotWindowActivated(QWidget*)));
+
+	setHoverCloseButton(true);	
+	m_closeButton = new QToolButton( this );
+    	connect( m_closeButton, SIGNAL( clicked() ), this, SLOT( slotCloseCurrent() ) );
+	m_closeButton->setIconSet( SmallIcon( "tab_remove" ) );
+        m_closeButton->adjustSize();
+        QToolTip::add(m_closeButton, i18n("Close the current tab"));
+        setCornerWidget( m_closeButton, TopRight );
+	m_closeButton->hide();
+	connect(this,SIGNAL(currentChanged(QWidget*)),this,SLOT(slotWindowActivated(QWidget*)));
+	connect(this,SIGNAL(closeRequest(QWidget*)),this,SLOT(slotCloseRequest(QWidget*)));
+
 }
 
-void KexiWorkspaceMDI::addItem(KexiDialogBase *newItem)
+
+void KexiWorkspaceTabbedMDI::slotCloseRequest(QWidget* w) {
+	QCloseEvent cev;
+	QApplication::sendEvent(w,&cev);
+	if (cev.isAccepted()) delete w;
+	no--;
+	if (!no) m_closeButton->hide();
+	kdDebug() << "deleted item; realnumber now" << no << endl;
+
+}
+
+void KexiWorkspaceTabbedMDI::slotCloseCurrent() {
+	slotCloseRequest(currentPage());
+}
+
+void KexiWorkspaceTabbedMDI::addItem(KexiDialogBase *newItem)
 {
+	if (!newItem->icon())
+		addTab(newItem,newItem->caption());
+	else
+		addTab(newItem,QIconSet(*newItem->icon()),newItem->caption());
 	no++;
-        newItem->reparent(this,QPoint(0,0),true);
-	connect(newItem, SIGNAL(closing(KexiDialogBase *)), this, SLOT(takeItem(KexiDialogBase *)));
+	m_closeButton->show();
+
+//	connect(newItem, SIGNAL(closing(KexiDialogBase *)), this, SLOT(takeItem(KexiDialogBase *)));
 	kdDebug() << "item added; realnumber now: " << no << endl;
 }
 
-void KexiWorkspaceMDI::takeItem(KexiDialogBase *delItem)
+void KexiWorkspaceTabbedMDI::takeItem(KexiDialogBase *delItem)
 {
 	no--;
+	if (!no) m_closeButton->hide();
 	kdDebug() << "took item; realnumber now" << no << endl;
 }
 
 
-void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
+void KexiWorkspaceTabbedMDI::slotWindowActivated(QWidget* w)
 {
 	KexiDialogBase *tmp=static_cast<KexiDialogBase*>(w);
 	if (tmp!=0)
@@ -126,27 +162,24 @@ void KexiWorkspaceMDI::slotWindowActivated(QWidget* w)
 }
 
 KexiDialogBase *
-KexiWorkspaceMDI::activeDocumentView()
+KexiWorkspaceTabbedMDI::activeDocumentView()
 {
-	return static_cast<KexiDialogBase*>(activeWindow());
+	return static_cast<KexiDialogBase*>(currentPage());
 }
 
 void
-KexiWorkspaceMDI::activateView(KexiDialogBase *kdb)
+KexiWorkspaceTabbedMDI::activateView(KexiDialogBase *kdb)
 {
 	if(!kdb)
 		return;
+	showPage(kdb);
 
-	slotWindowActivated(kdb);
-	if (kdb->isMaximized())
-		kdb->showMaximized();
-	else //normal or minimized
-		kdb->showNormal();
+//	slotWindowActivated(kdb);
 	kdb->setFocus();
 }
 
-KexiWorkspaceMDI::~KexiWorkspaceMDI()
+KexiWorkspaceTabbedMDI::~KexiWorkspaceTabbedMDI()
 {
 }
 
-#include "kexiworkspaceMDI.moc"
+#include "kexiworkspaceTabbedMDI.moc"

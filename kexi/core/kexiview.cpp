@@ -43,6 +43,7 @@
 #include "kexibrowser.h"
 #include "kexibrowseritem.h"
 #include "kexiworkspaceMDI.h"
+#include "kexiworkspaceTabbedMDI.h"
 #include "kexiworkspaceSDI.h"
 #include "kexiprojectproperties.h"
 #include "KexiViewIface.h"
@@ -133,24 +134,25 @@ void KexiView::finalizeInit()
 void KexiView::initMainDock()
 {
 	(new QVBoxLayout (this))->setAutoAdd(true);
-	m_workspace = new KexiWorkspaceMDI(this, "kexiworkspace", this);
+//	m_workspace = new KexiWorkspaceMDI(this, "kexiworkspace", this);
+	m_workspace = new KexiWorkspaceTabbedMDI(this, "kexiworkspace", this);
 }
 
 void KexiView::initBrowser()
 {
-	QDockWindow *dock = new QDockWindow(m_workspace, "Browser Dock");
-	dock->setResizeEnabled(true);
-	dock->setCloseMode(QDockWindow::Always);
+//	QDockWindow *dock = new QDockWindow(m_workspace, "Browser Dock");
+//	dock->setResizeEnabled(true);
+//	dock->setCloseMode(QDockWindow::Always);
 //		 reparent(w,QPoint(0,0),true);
-	mainWindow()->moveDockWindow(dock, DockLeft);
+//	mainWindow()->moveDockWindow(dock, DockLeft);
 //	w->setCaption(this->caption());
-	addQDockWindow(dock);
+//	addQDockWindow(dock);
 
-	m_browser = new KexiTabBrowser(this, dock, "Document Browser");
-	dock->setCaption(m_browser->caption());
-	dock->setWidget(m_browser);
+	m_browser = new KexiTabBrowser(this, 0, "Document Browser");
+//	dock->setCaption(m_browser->caption());
+//	dock->setWidget(m_browser);
 	m_browser->show(); //TODO: read settings
-	dock->show();
+//	dock->show();
 	m_actionBrowser->setChecked(m_browser->isVisible());
 	m_browser->plugToggleAction(m_actionBrowser);
 

@@ -96,7 +96,7 @@ KexiTabBrowser::KexiTabBrowser(KexiView *view,QWidget *parent, const char *name)
 	slotUpdateBrowsers();
 	connect(kexiProject(),SIGNAL(partListUpdated()),this,SLOT(slotUpdateBrowsers()));
 
-//js	registerAs(KexiDialogBase::ToolWindow);
+	registerAs(KexiDialogBase::ToolWindow);
 }
 
 void

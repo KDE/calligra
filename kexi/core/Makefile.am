@@ -1,7 +1,8 @@
 lib_LTLIBRARIES = libkexicore.la
 libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	kmultitabbar.cpp kexitabbrowser.cpp \
-	kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceMDI.cpp \
+	kexidialogbase.cpp kexibrowseritem.cpp kexiworkspaceMDI.cpp  \
+	kexiworkspaceTabbedMDI.cpp \
 	kexibrowser.cpp kexiview.cpp \
 	KexiViewIface.skel KexiViewIface.cpp KexiProjectIface.skel \
 	kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp \
