@@ -7131,7 +7131,14 @@ void KSpreadTable::updateNewPageListX( int _col )
 {
     if ( _col < m_lnewPageListX.last() )
     {
-        //Find first page
+        //If the new range is after the first entry, we need to delete the whole list
+        if ( m_lnewPageListX.first() < m_printRange.left() )
+        {
+            m_lnewPageListX.clear();
+            m_lnewPageListX.append( m_printRange.left() );
+        }
+
+        //Find the page entry for this column
         QValueList<int>::iterator it;
         it = m_lnewPageListX.find( _col );
         while ( ( it == m_lnewPageListX.end() ) && _col > m_printRange.left() )
@@ -7154,7 +7161,14 @@ void KSpreadTable::updateNewPageListY( int _row )
 {
     if ( _row < m_lnewPageListY.last() )
     {
-        //Find first page
+        //If the new range is after the first entry, we need to delete the whole list
+        if ( m_lnewPageListY.first() < m_printRange.top() )
+        {
+            m_lnewPageListY.clear();
+            m_lnewPageListY.append( m_printRange.top() );
+        }
+
+        //Find the page entry for this row
         QValueList<int>::iterator it;
         it = m_lnewPageListY.find( _row );
         while ( ( it == m_lnewPageListY.end() ) && _row > m_printRange.top() )
@@ -8134,15 +8148,19 @@ void KSpreadTable::setPrintRange( QRect _printRange )
   if ( m_printRange == _printRange )
     return;
 
+  int oldLeft = m_printRange.left();
+  int oldTop = m_printRange.top();
+  m_printRange = _printRange;
+  
   //Refresh calculation of stored page breaks, the lower one of old and new
-  if ( m_printRange.left() != _printRange.left() )
-    updateNewPageListX( QMIN( m_printRange.left(), _printRange.left() ) );
-  if ( m_printRange.top() != _printRange.top() )
-    updateNewPageListY( QMIN( m_printRange.top(), _printRange.top() ) );
+  if ( oldLeft != _printRange.left() )
+    updateNewPageListX( QMIN( oldLeft, _printRange.left() ) );
+  if ( oldTop != _printRange.top() )
+    updateNewPageListY( QMIN( oldTop, _printRange.top() ) );
 
   m_printRange = _printRange;
   m_pDoc->setModified( true );
-
+  
   emit sig_updateView( this );
 }
 
@@ -8214,10 +8232,11 @@ void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
     if ( m_printRepeatColumns == _printRepeatColumns )
         return;
 
-    //Refresh calculation of stored page breaks, the lower one of old and new
-    updateNewPageListX( QMIN( m_printRepeatColumns.first, _printRepeatColumns.first ) );
-
+    int oldFirst = m_printRepeatColumns.first;
     m_printRepeatColumns = _printRepeatColumns;
+
+    //Refresh calculation of stored page breaks, the lower one of old and new
+    updateNewPageListX( QMIN( oldFirst, _printRepeatColumns.first ) );
 
     //Recalcualte the space needed for the repeated columns
     updatePrintRepeatColumnsWidth();
@@ -8241,11 +8260,12 @@ void KSpreadTable::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
     if ( m_printRepeatRows == _printRepeatRows )
         return;
 
-    //Refresh calculation of stored page breaks, the lower one of old and new
-    updateNewPageListY( QMIN( m_printRepeatRows.first, _printRepeatRows.first ) );
-
+    int oldFirst = m_printRepeatRows.first;
     m_printRepeatRows = _printRepeatRows;
-  
+
+    //Refresh calculation of stored page breaks, the lower one of old and new
+    updateNewPageListY( QMIN( oldFirst, _printRepeatRows.first ) );
+
     //Recalcualte the space needed for the repeated rows
     updatePrintRepeatRowsHeight();
 
