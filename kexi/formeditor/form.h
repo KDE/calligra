@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -228,6 +229,15 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		bool			m_autoTabstops;
 
 		PixmapCollection	*m_pixcollection;
+};
+
+//! Helper: this widget is used to create form's surface
+class KFORMEDITOR_EXPORT FormWidget : public QWidget
+{
+	Q_OBJECT
+
+	public:
+		FormWidget( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
 };
 
 }

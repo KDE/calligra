@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,7 +40,7 @@
 
 #include "form.h"
 
-namespace KFormDesigner {
+using namespace KFormDesigner;
 
 Form::Form(FormManager *manager, const char *name)
   : QObject(manager, name)
@@ -426,6 +427,12 @@ Form::~Form()
 	m_resizeHandles.setAutoDelete(false); // otherwise, it tries to delete widgets which doesn't exist anymore
 }
 
+//------------------
+
+FormWidget::FormWidget( QWidget * parent, const char * name, WFlags f )
+ : QWidget(parent, name, f)
+{
 }
 
 #include "form.moc"
+

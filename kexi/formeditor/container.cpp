@@ -314,7 +314,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 					QPainter p(m_container);
 					m_container->repaint(); // TODO: find a less cpu consuming solution
 					p.setBrush(QBrush::NoBrush);
-					p.setPen(QPen(m_container->paletteForegroundColor(), 2));
+//					p.setPen(QPen(m_container->paletteForegroundColor(), 2));
+					p.setPen(QPen(white, 2));
+					p.setRasterOp(XorROP);
 					p.drawRect(m_insertRect);
 				}
 				return true;
@@ -330,7 +332,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 				QPainter p(m_container);
 				m_container->repaint(); // TODO: find a less cpu consuming solution
 				p.setBrush(QBrush::NoBrush);
-				p.setPen(QPen(blue, 1, Qt::DotLine));
+				p.setPen(QPen(white, 1, Qt::DotLine));
+				p.setRasterOp(XorROP);
 				p.drawRect(r);
 				return true;
 			}
@@ -341,7 +344,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 				QPainter p(m_container);
 				m_container->repaint(); // TODO: find a less cpu consuming solution
 				p.setBrush(QBrush::NoBrush);
-				p.setPen(QPen(m_container->paletteForegroundColor(), 2, Qt::DotLine));
+//				p.setPen(QPen(m_container->paletteForegroundColor(), 2, Qt::DotLine));
+				p.setPen(QPen(white, 2, Qt::DotLine));
+				p.setRasterOp(XorROP);
 				m_insertRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()));
 				p.drawRect(m_insertRect);
 				return true;
@@ -386,13 +391,15 @@ Container::eventFilter(QObject *s, QEvent *e)
 			int gridY = Form::gridY();
 
 			QPainter p(m_container);
-			p.setPen( QPen(m_container->paletteForegroundColor(), 1) );
+//			p.setPen( QPen(m_container->paletteForegroundColor(), 1) );
+			p.setPen(QPen(white, 2));
+			p.setRasterOp(XorROP);
 			int cols = m_container->width() / gridX;
 			int rows = m_container->height() / gridY;
 
-			for(int rowcursor = 1; rowcursor < rows; ++rowcursor)
+			for(int rowcursor = 1; rowcursor <= rows; ++rowcursor)
 			{
-				for(int colcursor = 1; colcursor < cols; ++colcursor)
+				for(int colcursor = 1; colcursor <= cols; ++colcursor)
 				{
 					p.drawPoint(-1 + colcursor *gridX, -1 + rowcursor *gridY);
 				}
@@ -433,10 +440,22 @@ Container::eventFilter(QObject *s, QEvent *e)
 void
 Container::setSelectedWidget(QWidget *w, bool add)
 {
-	if(w)
-	{
+	if (w)
 		kdDebug() << "slotSelectionChanged " << w->name()<< endl;
-		w->setFocus();
+
+	//raise selected widget and all possible parents
+	QWidget *wtmp = w;
+	wtmp->raise();
+	while (wtmp && wtmp->parentWidget() && static_cast<QObject*>(wtmp)!=m_form && !wtmp->inherits("KFormDesigner::FormWidget")
+		&& static_cast<QObject*>(wtmp->parentWidget())!=this && static_cast<QObject*>(wtmp->parentWidget())!=m_form) 
+	{
+		wtmp = wtmp->parentWidget();
+		wtmp->raise();
+	}
+
+	if (wtmp)
+	{
+		wtmp->setFocus();
 	}
 
 	if(add && w)

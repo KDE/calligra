@@ -277,12 +277,12 @@ FormManager::createBlankForm(const QString &classname, const char *name, QWidget
 	QWidget *w=0;
 	QString n;
 
-	n = "Form" + QString::number(m_count + 1);
-	w = new QWidget(parent, n.latin1(), Qt::WDestructiveClose);
+	n = i18n("Form") + QString::number(m_count + 1);
+	w = new FormWidget(parent, n.latin1(), Qt::WDestructiveClose);
 
 	form->createToplevel(w, classname);
 	w->setCaption(n);
-	w->setIcon(SmallIcon("kexi"));
+	w->setIcon(SmallIcon("form"));
 	w->resize(350, 300);
 	w->show();
 	w->setFocus();

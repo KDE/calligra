@@ -179,7 +179,14 @@ namespace KFormDesigner {
 		m_dragging=false;
 	}
 
-
+	void ResizeHandle::paintEvent( QPaintEvent *ev )
+	{
+		//draw XORed background
+		QPainter p(this);
+		p.setRasterOp(XorROP);
+		p.fillRect(rect(),white);
+		bitBlt( this, QPoint(0,0), parentWidget(), rect(), XorROP);
+	}
 
 	ResizeHandle::~ResizeHandle()
 	{

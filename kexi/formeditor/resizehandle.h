@@ -42,9 +42,10 @@ namespace KFormDesigner
 	        virtual ~ResizeHandle();
 
 	protected:
-        	        void mousePressEvent(QMouseEvent *ev);
-                	void mouseMoveEvent(QMouseEvent *ev);
-	                void mouseReleaseEvent(QMouseEvent *ev);
+		virtual void mousePressEvent(QMouseEvent *ev);
+		virtual void mouseMoveEvent(QMouseEvent *ev);
+		virtual void mouseReleaseEvent(QMouseEvent *ev);
+		virtual void paintEvent( QPaintEvent *ev );
 	protected slots:
 		bool eventFilter(QObject *obj, QEvent *ev);
 		void updatePos();
