@@ -64,15 +64,16 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		m_part->document().draw( p, r );
 
 		m_bScrolling = false;
-	}
-	p->blit( rect );
 
-	// draw handle:
-	QPainter qpainter( p->device() );
-	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
-	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
+		p->blit( rect );
+	}
 
 	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );
+
+	// draw handle:
+	QPainter qpainter( viewport() );
+	qpainter.setWorldMatrix( QWMatrix().translate( -contentsX(), -contentsY() ) );
+	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 }
 
 void
