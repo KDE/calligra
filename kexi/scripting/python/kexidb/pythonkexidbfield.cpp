@@ -12,9 +12,6 @@
 //#include "pythonkexidb.h"
 #include "../main/pythonutils.h"
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/field.h>
-
 using namespace Kross;
 
 namespace Kross
@@ -26,13 +23,15 @@ namespace Kross
     };
 }
 
-PythonKexiDBField::PythonKexiDBField()
+PythonKexiDBField::PythonKexiDBField(KexiDB::Field* field)
 {
     d = new PythonKexiDBFieldPrivate();
+    d->field = field;
 }
 
 PythonKexiDBField::~PythonKexiDBField()
 {
+    //delete d->field;
     delete d;
 }
 
@@ -167,5 +166,10 @@ int PythonKexiDBField::setattr(const char* n, const Py::Object& value)
         throw Py::AttributeError(QString("Unknown attribute: " + name).latin1());
 
     return 0;
+}
+
+KexiDB::Field* PythonKexiDBField::getField()
+{
+    return d->field;
 }
 

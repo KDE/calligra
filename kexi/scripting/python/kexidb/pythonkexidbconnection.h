@@ -58,8 +58,6 @@ namespace Kross
             Py::Object useDatabase(const Py::Tuple&);
             Py::Object closeDatabase(const Py::Tuple&);
 
-            //bool insertRecord(TableSchema &tableSchema, QValueList<QVariant>& values);
-            //bool insertRecord(FieldList& fields, QValueList<QVariant>& values);
             Py::Object insertRecord(const Py::Tuple&);
 
             //bool createDatabase( const QString &dbName );

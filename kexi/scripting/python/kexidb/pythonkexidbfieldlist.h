@@ -16,9 +16,9 @@
 #include "../CXX/Objects.hxx"
 #include "../CXX/Extensions.hxx"
 
-//#include <kdebug.h>
-//#include <qguardedptr.h>
-
+#include <kexidb/drivermanager.h>
+//#include <kexidb/field.h>
+#include <kexidb/fieldlist.h>
 //#include <kexidb/driver.h>
 //#include <kexidb/connection.h>
 
@@ -34,7 +34,7 @@ namespace Kross
     class PythonKexiDBFieldList : public Py::PythonExtension<PythonKexiDBFieldList>
     {
         public:
-            PythonKexiDBFieldList();
+            explicit PythonKexiDBFieldList(KexiDB::FieldList*);
             virtual ~PythonKexiDBFieldList();
 
             virtual bool accepts(PyObject* pyobj) const;
@@ -50,29 +50,6 @@ namespace Kross
             Py::Object field(const Py::Tuple&);
             Py::Object hasField(const Py::Tuple&);
             Py::Object names(const Py::Tuple&);
-
-            /*
-            // \return number of fields in the list.
-            inline unsigned int fieldCount() const { return m_fields.count(); }
-            // Adds \a field at the and of field list.
-            FieldList& addField(Field *field);
-            // Inserts \a field into a specified position (\a index).
-            // Note: You can reimplement this method but you should still call
-            //this implementation in your subclass.
-            virtual FieldList& insertField(uint index, Field *field);
-            // Removes field from the field list. Use with care.
-            // Note: You can reimplement this method but you should still call
-            // this implementation in your subclass.
-            virtual void removeField(KexiDB::Field *field);
-            // \return field #id or NULL if there is no such a field.
-            inline Field* field(unsigned int id) { return (id < m_fields.count()) ? m_fields.at(id) : 0; }
-            // \return field with name \a name or NULL if there is no such a field.
-            inline Field* field(const QString& name) const { return m_fields_by_name[name.lower()]; }
-            // \return true if this list contains given \a field.
-            inline bool hasField(Field* field) { return m_fields.findRef(field)!=-1; }
-            // \return list of field names for this list.
-            QStringList names() const;
-            */
     };
 
 }

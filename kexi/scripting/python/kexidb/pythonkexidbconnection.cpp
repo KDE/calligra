@@ -210,9 +210,10 @@ Py::Object PythonKexiDBConnection::executeQuery(const Py::Tuple& args)
 
 Py::Object PythonKexiDBConnection::insertRecord(const Py::Tuple& args)
 {
-    PythonUtils::checkArgs(args, 1, 1);
+    PythonUtils::checkArgs(args, 2, 2);
 
     //TODO
+    //bool insertRecord(FieldList& fields, QValueList<QVariant>& values);
 
     return Py::Int(1); // boolean
 }

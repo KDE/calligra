@@ -19,6 +19,8 @@
 #include <kdebug.h>
 //#include <qguardedptr.h>
 
+#include <kexidb/drivermanager.h>
+#include <kexidb/field.h>
 //#include <kexidb/driver.h>
 //#include <kexidb/connection.h>
 
@@ -34,7 +36,7 @@ namespace Kross
     class PythonKexiDBField : public Py::PythonExtension<PythonKexiDBField>
     {
         public:
-            PythonKexiDBField();
+            PythonKexiDBField(KexiDB::Field*);
             virtual ~PythonKexiDBField();
 
             virtual bool accepts(PyObject* pyobj) const;
@@ -42,6 +44,8 @@ namespace Kross
 
             virtual Py::Object getattr(const char*);
             virtual int setattr(const char*, const Py::Object&);
+
+            KexiDB::Field* getField();
 
         private:
             PythonKexiDBFieldPrivate* d;

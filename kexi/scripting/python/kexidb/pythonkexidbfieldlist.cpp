@@ -9,13 +9,9 @@
  ***************************************************************************/
 
 #include "pythonkexidbfieldlist.h"
-//#include "pythonkexidbfield.h"
 //#include "pythonkexidb.h"
-//#include "../main/pythonutils.h"
-
-#include <kexidb/drivermanager.h>
-//#include <kexidb/field.h>
-#include <kexidb/fieldlist.h>
+#include "pythonkexidbfield.h"
+#include "../main/pythonutils.h"
 
 using namespace Kross;
 
@@ -28,14 +24,15 @@ namespace Kross
     };
 }
 
-PythonKexiDBFieldList::PythonKexiDBFieldList()
+PythonKexiDBFieldList::PythonKexiDBFieldList(KexiDB::FieldList* fieldlist)
 {
     d = new PythonKexiDBFieldListPrivate();
-    //d->fieldlist = ;
+    d->fieldlist = fieldlist;
 }
 
 PythonKexiDBFieldList::~PythonKexiDBFieldList()
 {
+    //delete d->fieldlist;
     delete d;
 }
 
@@ -51,47 +48,99 @@ void PythonKexiDBFieldList::init_type(void)
         "The KexiDBFieldList object provides access to the "
         "KexiDB::FieldList class.\n"
     );
+
+    add_varargs_method("fieldCount", &PythonKexiDBFieldList::fieldCount,
+        "uint KexiDBFileList.fieldCount()\n"
+    );
+    add_varargs_method("addField", &PythonKexiDBFieldList::addField,
+        "KexiDBFileList KexiDBFileList.addField(KexiDBField)\n"
+    );
+    add_varargs_method("insertField", &PythonKexiDBFieldList::insertField,
+        "KexiDBFileList KexiDBFileList.insertField(uint,KexiDBField)\n"
+    );
+    add_varargs_method("removeField", &PythonKexiDBFieldList::removeField,
+        "None KexiDBFileList.removeField(KexiDBField)\n"
+    );
+    add_varargs_method("field", &PythonKexiDBFieldList::field,
+        "KexiDBField KexiDBFileList.field()\n"
+    );
+    add_varargs_method("hasField", &PythonKexiDBFieldList::hasField,
+        "boolean KexiDBFileList.hasField(KexiDBField)\n"
+    );
+    add_varargs_method("names", &PythonKexiDBFieldList::names,
+        "list KexiDBFileList.names()\n"
+    );
 }
 
-Py::Object PythonKexiDBFieldList::fieldCount(const Py::Tuple&)
+Py::Object PythonKexiDBFieldList::fieldCount(const Py::Tuple& args)
 {
-    //TODO
+    PythonUtils::checkArgs(args, 0, 0);
+    return Py::Long((unsigned long)d->fieldlist->fieldCount());
+}
+
+Py::Object PythonKexiDBFieldList::addField(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    Py::ExtensionObject<PythonKexiDBField> obj(args[0]);
+    PythonKexiDBField* field = obj.extensionObject();
+    if(! field)
+        throw Py::RuntimeError("KexiDBFieldList.addField(KexiDBField) Failed to determinate the defined KexiDBField object.");
+    d->fieldlist->addField(field->getField());
+    return Py::asObject(this);
+}
+
+Py::Object PythonKexiDBFieldList::insertField(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 2, 2);
+    uint index = PythonUtils::toUInt(args[0]);
+    Py::ExtensionObject<PythonKexiDBField> obj(args[1]);
+    PythonKexiDBField* field = obj.extensionObject();
+    if(! field)
+        throw Py::RuntimeError("KexiDBFieldList.insertField(KexiDBField) Failed to determinate the defined KexiDBField object.");
+    d->fieldlist->insertField(index, field->getField());
+    return Py::asObject(this);
+}
+
+Py::Object PythonKexiDBFieldList::removeField(const Py::Tuple& args)
+{
+    PythonUtils::checkArgs(args, 1, 1);
+    Py::ExtensionObject<PythonKexiDBField> obj(args[0]);
+    PythonKexiDBField* field = obj.extensionObject();
+    if(! field)
+        throw Py::RuntimeError("KexiDBFieldList.removeField(KexiDBField) Failed to determinate the defined KexiDBField object.");
+    d->fieldlist->removeField(field->getField());
     return Py::None();
 }
 
-Py::Object PythonKexiDBFieldList::addField(const Py::Tuple&)
+Py::Object PythonKexiDBFieldList::field(const Py::Tuple& args)
 {
-    //TODO
-    return Py::None();
+    PythonUtils::checkArgs(args, 1, 1);
+    KexiDB::Field* field = 0;
+    if(args.isNumeric())
+        field = d->fieldlist->field( PythonUtils::toUInt(args) );
+    else {
+        QString fieldname = QString(args.as_string().c_str());
+        if(fieldname.isEmpty()) return Py::None();
+        field = d->fieldlist->field(fieldname);
+    }
+    if(! field)
+        throw Py::RuntimeError("KexiDBFieldList.field(fieldname) Failed to determinate KexiDB::Field.");
+    return Py::asObject(new PythonKexiDBField(field));
 }
 
-Py::Object PythonKexiDBFieldList::insertField(const Py::Tuple&)
+Py::Object PythonKexiDBFieldList::hasField(const Py::Tuple& args)
 {
-    //TODO
-    return Py::None();
+    PythonUtils::checkArgs(args, 1, 1);
+    Py::ExtensionObject<PythonKexiDBField> obj(args[0]);
+    PythonKexiDBField* field = obj.extensionObject();
+    if(! field)
+        throw Py::RuntimeError("KexiDBFieldList.hasField(KexiDBField) Failed to determinate the defined KexiDBField object.");
+    return Py::Int(d->fieldlist->hasField(field->getField()));
 }
 
-Py::Object PythonKexiDBFieldList::removeField(const Py::Tuple&)
+Py::Object PythonKexiDBFieldList::names(const Py::Tuple& args)
 {
-    //TODO
-    return Py::None();
-}
-
-Py::Object PythonKexiDBFieldList::field(const Py::Tuple&)
-{
-    //TODO
-    return Py::None();
-}
-
-Py::Object PythonKexiDBFieldList::hasField(const Py::Tuple&)
-{
-    //TODO
-    return Py::None();
-}
-
-Py::Object PythonKexiDBFieldList::names(const Py::Tuple&)
-{
-    //TODO
-    return Py::None();
+    PythonUtils::checkArgs(args, 0, 0);
+    return PythonUtils::toPyObject(d->fieldlist->names());
 }
 
