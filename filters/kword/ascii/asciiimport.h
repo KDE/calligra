@@ -82,11 +82,7 @@ public:
     void WriteOutParagraph( QString name, QString type, QString text,
        int firstindent, int secondindent, QString &str);
 
-    void WriteOutIndents( int firstindent, int secondindent, QString &str);
 
-    int Indent( QString line);
-
-    void EscapeXMLSymbols( QString &text );
 
     void WriteOutTableCell( int table_no, int row, int col, Position *pos,
                           QString &str);
@@ -94,7 +90,6 @@ public:
     bool Table( QString *Line, int *linecount, int no_lines,
             int table_no, QString &tbl, QString &str );
 
-    int MultSpaces(QString text, int index);
 
 
     bool ListItem( QString *Line, int no_lines,
@@ -102,7 +97,11 @@ public:
 
     bool IsListItem( QString FirstLine, QChar mark );
 
-    bool IsWhiteSpace(QChar c);
-
+private:
+    void WriteOutIndents(const int firstindent,const int secondindent, QString &str);
+    QString ASCIIImport::escapeXmlText(const QString& strIn) const;
+    int Indent(const QString& line) const;
+    int MultSpaces(const QString& text, const int index) const;
+    bool IsWhiteSpace(const QChar& c) const;
 };
 #endif // ASCIIIMPORT_H

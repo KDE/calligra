@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2000 Michael Johnson <mikej@xnet.com>
+   Copyright (C) 2001 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,11 +25,14 @@
 #include <unistd.h>
 #endif
 
+#include <qstring.h>
 #include <qregexp.h>
 #include <qtextstream.h>
+
+#include <kdebug.h>
+
 #include <asciiimport.h>
 #include <asciiimport.moc>
-#include <kdebug.h>
 
 ASCIIImport::ASCIIImport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -42,8 +46,6 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
   QString text1;  // text processing string
   QString text;   // text processing string
   QString Line[MAXLINES];  // lines of the paragraph
-  int line_no;  // line number counter
-  bool eof;
   int firstindent;  // amount that the first line of a paragraph is indented
   int secondindent;  // amount the second and remaining lines are indented
   int linecount = 0;  // line counter used to position tables
@@ -51,6 +53,7 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
   int i; // counter
   int length;  // line length
   int begin;  // beginning line number of a paragraph
+  int numLines; // Number of lines of the paragraph
 
 
     if(to!="application/x-kword" || from!="text/plain")
@@ -66,8 +69,12 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
     QString str;
     QString tbl;  // string for table XML
 
-    str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE DOC >\n";
-    str += "<DOC  editor=\"KWord\" mime=\"application/x-kword\">\n";
+    str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    //str += "<!DOCTYPE DOC >\n";
+    str += "<DOC  editor=\"KWord plain text import filter\"";
+    // TODO: We claim to be syntax version 2, but we should verify that it is also true.
+    str += " mime=\"application/x-kword\" syntaxVersion=\"2\">\n";
+    // TODO: other paper formats
     str += "<PAPER format=\"1\" width=\"595\" height=\"841\" orientation=\"0\" columns=\"1\" hType=\"0\" fType=\"0\" >\n";
     str += "<PAPERBORDERS left=\"28\" top=\"42\" right=\"28\" bottom=\"42\" />\n";
     str += "</PAPER>\n";
@@ -78,45 +85,53 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
 
     QTextStream stream(&in);
 
-
-  eof = false;
-
-  while(!eof)
-     {
-     // Read in paragraph
-     for(line_no = 0; line_no < MAXLINES; line_no++)
+    while(!stream.atEnd())
+    {
+        QString strLine;
+        // Read in paragraph
+        for(int line_no = numLines = 0; line_no < MAXLINES; line_no++, numLines++)
         {
+            // TODO: we need to replace QStreamText::readLine,
+            // TODO:   as it does not know anything about Carriage Returns
+            strLine = stream.readLine();
+            if (strLine.isEmpty())
+            {
+                Line[line_no]=QString::null;
+                break;
+            }
 
-        Line[line_no] = stream.readLine();
-        if( Line[line_no].isNull() ) {eof = true; break; }
-        if( Line[line_no].isEmpty() ) break;
-        length = Line[line_no].length();
-        if(Line[line_no].find('-', -1) == (length - 1))
-           Line[line_no].replace(QRegExp("-$"),"");  // remove - at line end
-        else Line[line_no] += " "; // add space to end of line
+            length = strLine.length();
+            // TODO: why not test the character directly, instead of using find?
+            if (strLine.find('-', -1) == (length - 1))
+                strLine.replace(QRegExp("-$"),"");  // remove - at line end
+            else
+                strLine += " "; // add space to end of line
 
+            Line[line_no]=strLine;
         } // for(line_no = 0;
 
-     //   process tables
-     if ( Table( &Line[0], &linecount, line_no, table_no, tbl, str))table_no++;
-     else
+         //   process tables
+        if ( Table( &Line[0], &linecount, numLines, table_no, tbl, str))
+            table_no++;
+        else
         {
         // Process bullet and dash lists
-        if(ListItem( &Line[0], line_no, str))linecount += (line_no + 1);
+        if(ListItem( &Line[0], numLines, str))
+            linecount += (numLines + 1); 
         else
            {
            // Paragraph with no tables or lists
 
            text1 = "";
            begin = 0;  // initial paragraph starts at first line
-           for( i = 0; i < line_no; i++)
+           for( i = 0; i < numLines; i++)
               {
               if( i > 0)
                  {
                  // check for a short line - if short make it a paragraph
                  if(Line[i].length() <= (uint)shortline)
                     {
-                    if(!(i == (line_no - 1) && Line[i-1].length() > (uint)shortline))
+                    if(!(i == (numLines - 1) && Line[i-1].length() > (uint)shortline))
                        // skip if short last line of normal paragraph
                        {
                        // write out paragraph begin to (i - 1)
@@ -126,7 +141,6 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
                        else secondindent = 0;
                        // process the white space to eliminate unwanted spaces
                        text = text1.simplifyWhiteSpace();
-                       EscapeXMLSymbols(text);  // escape <, >, &
                        WriteOutParagraph( "Standard", "", text, firstindent, secondindent, str);
                        text1 = "";  // reinitialize paragraph text
                        begin = i;  // reset paragraph start
@@ -145,14 +159,13 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
               else secondindent = 0;
               // process the white space to eliminate unwanted spaces
               text = text1.simplifyWhiteSpace();
-              EscapeXMLSymbols(text);  // escape <, >, &
               WriteOutParagraph( "Standard", "", text, firstindent, secondindent, str);
 
-           linecount += (line_no + 1);   // increment the line count
+           linecount += ( numLines + 1);  // increment the line count
            }  // else
         }  // else
 
-        if( line_no > 0 )
+        if( numLines > 0 )
            {
            // write out a blank line trailing the paragraph
            WriteOutParagraph( "Standard", "", "", 0, 0, str);
@@ -164,6 +177,7 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
     str += "</FRAMESET>\n";
     if( table_no > 0) str += tbl;
     str += "</FRAMESETS>\n";
+    str += "<!-- We have a problem here somewhere -->\n";
     str+=" <STYLES>\n";
     str+="  <STYLE>\n";
     str+="   <NAME value=\"Standard\" />\n";
@@ -173,8 +187,9 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
     str+="   <FORMAT id=\"1\" >\n";
     str+="    <WEIGHT value=\"50\" />\n";
     str+="    <COLOR blue=\"0\" red=\"0\" green=\"0\" />\n";
-    str+="    <FONT name=\"helvetica\" />\n";
-    str+="    <SIZE value=\"11\" />\n";
+    // TODO: use KControl's default font
+    str+="    <FONT name=\"Helvetica\" />\n";
+    str+="    <SIZE value=\"12\" />\n";
     str+="    <ITALIC value=\"0\" />\n";
     str+="    <UNDERLINE value=\"0\" />\n";
     str+="    <STRIKEOUT value=\"0\" />\n";
@@ -184,7 +199,9 @@ bool ASCIIImport::filter(const QString &fileIn, const QString &fileOut,
     str+=" </STYLES>\n";
     str += "</DOC>\n";
 
-kdDebug() << str << endl;
+#if 1
+    kdDebug(30502) << str << endl;
+#endif
 
     KoStore out=KoStore(QString(fileOut), KoStore::Write);
     if(!out.open("root")) {
@@ -194,7 +211,8 @@ kdDebug() << str << endl;
         return false;
     }
     QCString cstring=str.utf8();
-    out.write((const char*)cstring, cstring.length());
+    // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
+    out.write(cstring,cstring.length());
     out.close();
     in.close();
     return true;
@@ -203,9 +221,9 @@ kdDebug() << str << endl;
 
 
 
- void ASCIIImport::WriteOutParagraph( QString name, QString type, QString text,
+void ASCIIImport::WriteOutParagraph( QString name, QString type, QString text,
     int firstindent, int secondindent, QString &str)
- {
+{
     /* This method writes out a paragraph or a list item (Bullet, Dash)
         in Kword XML to the output string str. The paragraph is indented according
        to the first and second line indentation amounts.
@@ -224,17 +242,10 @@ kdDebug() << str << endl;
 
     str += "<PARAGRAPH>\n";
     str += "<TEXT>";
-    str += text;  // Insert text into string
+    str += escapeXmlText(text);  // Insert text into string
     str += "</TEXT>\n";
     str += "<FORMATS>\n";
-    str += "<FORMAT id=\"1\" pos=\"0\" len=\"";
-
-    QString textlen = QString::number(text.length()); //Get length of text string
-    str += textlen;
-
-    str += "\">\n";
-    str += "<FONT name=\"times\"/>\n";
-    str += "</FORMAT>\n";
+    // we do not need any <FORMAT> child, we are using layout and style
     str += "</FORMATS>\n";
     str += "<LAYOUT>\n";
 
@@ -243,18 +254,19 @@ kdDebug() << str << endl;
     str += "\"/>\n";
 
     str += "<FOLLOWING name=\"";
-    str += name; // name of list type
+    str += name;
     str += "\"/>\n";
 
     // if center justified write out a FLOW command
     //if( justified == center) str += "<FLOW value=\"2\"/>\n";
 
     // If the paragraph is indented, write out indentation elements.
+    // TODO: why not always write identation?
     if (firstindent > 0 || secondindent > 0)         \
              WriteOutIndents( firstindent, secondindent, str);
 
     // If this is a bullet or a dash list, write out a COUNTER element
-    if(type != "")
+    if(type.isEmpty())
        {
        str += "<COUNTER type=\"";
        str += type;  // "6" = bullet "7" = dash
@@ -264,11 +276,13 @@ kdDebug() << str << endl;
        else bullet = "176";    // symbol for a bullet list
        str += bullet;
 
+       // FIXME: not sure if times is the right font for symbols
        str+= "\" start=\"1\" numberingtype=\"0\" lefttext=\"\" righttext=\".\" bulletfont=\"times\" customdef=\"\" />\n";
        }
 
     str += "<FORMAT>\n";
-    str += "<FONT name=\"times\"/>\n";
+    // for now we try with style (TODO: verify that KWord 1.2 works correctly)
+    //str += "<FONT name=\"times\"/>\n";
     str += "</FORMAT>\n";
     str += "</LAYOUT>\n";
     str += "</PARAGRAPH>\n";
@@ -278,106 +292,91 @@ kdDebug() << str << endl;
 }  // WriteOutParagraph
 
 
-
-
-
-void ASCIIImport::WriteOutIndents( int firstindent, int secondindent, QString &str)
+void ASCIIImport::WriteOutIndents(const int firstindent,const int secondindent, QString &str)
 {
+    double size;
 
-double ptsize;
-double inch;
-double mm;
-QString Value;
-QString atValue;
+    str += "<INDENTS ";
 
-   if(firstindent > 0)
-      {
-      ptsize = ptsperchar * (double)firstindent;  // convert indent spaces to points
-      inch = ptsize / 72.0;  // convert to inches
-      mm = inch * 25.4;    // convert to millimeters
+    size = firstindent-secondindent;
+    size *= ptsperchar;  // convert indent spaces to points
 
-      str += "<IFIRST pt=\"";
-      Value = QString::number(ptsize);  // convert number to a string
-      atValue = Value.stripWhiteSpace();  // strip off any white space
-      str += atValue;
-
-      str += "\" mm=\"";
-      Value = QString::number(mm);  // convert number to a string
-      atValue = Value.stripWhiteSpace();  // strip off any white space
-      str += atValue;
-
-      str += "\" inch=\"";
-      Value = QString::number(inch);  // convert number to a string
-      atValue = Value.stripWhiteSpace();  // strip off any white space
-      str += atValue;
-
-      str += "\"/>\n";
-      }  // if( firstindent > 0)
+    str += "first=\"";
+    str += QString::number(size);
+    str += "\" ";
 
 
-   if(secondindent > 0)
-      {
-      ptsize = ptsperchar * (double) secondindent;  // convert indent spaces to points
-      inch = ptsize / 72.0;  // convert to inches
-      mm = inch * 25.4;    // convert to millimeters
+    size = secondindent;
+    size *= ptsperchar;  // convert indent spaces to points
 
-      str += "<ILEFT pt=\"";
-      Value = QString::number(ptsize);  // convert number to a string
-      atValue = Value.stripWhiteSpace();  // strip off any white space
-      str += atValue;
+    str += "left=\"";
+    str += QString::number(size);
+    str += "\" ";
 
-      str += "\" mm=\"";
-      Value = QString::number(mm);  // convert number to a string
-      atValue = Value.stripWhiteSpace();  // strip off any white space
-      str += atValue;
+    str += "right=\"0\"/>\n";
 
-      str += "\" inch=\"";
-      Value = QString::number(inch);  // convert number to a string
-      atValue = Value.stripWhiteSpace();  // strip off any white space
-      str += atValue;
-
-      str += "\"/>\n";
-      }  // if( secondindent > 0)
-
-   }  // WriteOutIndents
+}  // WriteOutIndents
 
 
    /* The Indent method determines the equivalent number of spaces
       at the beginning of a line   */
 
-   int ASCIIImport::Indent( QString line)
-   {
+int ASCIIImport::Indent(const QString& line) const
+{
 
-      QChar c;  // for reading string a character at a time
-      int i;  // counter
-      int count;  // amount of white space at the begining of the line
+    QChar c;  // for reading string a character at a time
+    int count=0;  // amount of white space at the begining of the line
 
-      count = 0;
-      for( i = 0; i < (int)line.length(); i++ )
-         {
-         c = line.at((uint)i);
-         if( c == QChar(' ')) count++;
-         else if( c == QChar('\t')) count += spacespertab;
-         else break;
-         }
+    for( uint i = 0; i < line.length(); i++ )
+    {
+         c = line.at(i);
+         if( c == QChar(' '))
+            count++;
+         else if( c == QChar('\t'))
+            count += spacespertab;
+         else
+            break;
+    }
 
-      return count;
+   return count;
 
-   }  // Indent
+}  // Indent
 
+QString ASCIIImport::escapeXmlText(const QString& strIn) const
+{
+    QString strReturn;
+    QChar ch;
 
-   /* The EscapeXMLSymbols() method escapes symbols used in KWord XML */
+    for (uint i=0; i<strIn.length(); i++)
+    {
+        ch=strIn[i];
+        switch (ch.unicode())
+        {
+        case 38: // &
+            {
+                strReturn+="&amp;";
+                break;
+            }
+        case 60: // <
+            {
+                strReturn+="&lt;";
+                break;
+            }
+        case 62: // >
+            {
+                strReturn+="&gt;";
+                break;
+            }
+        default:
+            {
+                strReturn+=ch;
+                break;
+            }
+        }
+    }
 
-   void ASCIIImport::EscapeXMLSymbols( QString &text )
-   {
-
-   text.replace(QRegExp("&"), "&amp;");
-   text.replace(QRegExp("<"), "&lt;");
-   text.replace(QRegExp(">"), "&gt;");
-
-   return;
-
-   }  // EscapeXMLSymbols
+    return strReturn;
+}
 
     /* The WriteOutTableCell method writes out a single table cell
         in Kword XML to the output string str. The table is sized according
@@ -435,7 +434,7 @@ QString atValue;
    buf = QString::number(pos->bottom); // convert bottom coordinate to string
    str += buf;
 
-   str += "\" runaround=\"0\" bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"1\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0\" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\" />\n";
+   str += "\" runaround=\"0\" autoCreateNewFrame=\"0\" newFrameBehavior=\"1\" />\n";
 
    return;
 
@@ -444,9 +443,10 @@ QString atValue;
 
 
 
-   bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
-                            int table_no, QString &tbl, QString &str )
-      {
+bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
+                         int table_no, QString &tbl, QString &str )
+{
+    return false; // this method is disabled
 
    /* This method examines a paragraph for embedded tables.
       If none are found, it returns. If tables are found then it
@@ -461,7 +461,6 @@ QString atValue;
          QString str  - the output string
       Returns - enum value indicating wheterer a table was processed. */
 
-return false;
       enum LiType{paragraph, table} linetype[MAXLINES];
       struct Tabs tabs[MAXLINES];  // array of structures for tables
       struct Position pos;  // struct to pass cell position
@@ -574,7 +573,6 @@ return false;
                     }
                  // process the white space to eliminate unwanted spaces
                  QString text1 = text.simplifyWhiteSpace();
-                 EscapeXMLSymbols(text1);  // escape <, >, &
                  WriteOutParagraph( "Standard", "", text1 , firstindent, secondindent, str);
                  *linecount += (i - begin);
 
@@ -603,7 +601,6 @@ return false;
                        // calculate position of table cell
                        pos.right = pos.left + (double)width[k] * ptsperchar;
 
-                       EscapeXMLSymbols(text1);  // escape <, >, &
                        WriteOutTableCell( table_no, row, k, &pos, tbl);
                        WriteOutParagraph( "Standard", "", text1 , 0, 0, tbl);
                        tbl += "</FRAMESET>\n";
@@ -627,24 +624,25 @@ return false;
    } // end of Table()
 
    // the following method finds the location of multiple spaces in a string
-   int ASCIIImport::MultSpaces(QString text, int index)
-      {
+int ASCIIImport::MultSpaces(const QString& text, const int index) const
+{
 
-      QChar c;
-      QChar lastchar = 'c'; // previous character - initialize non blank
-      int i;  // counter
-      bool found = false;
-//cout << "length = "  << text.length() << endl;
-      for(i = index; i < (int)text.length(); i++)
-         {
-         c = text.at((uint)i);
-         if( !(c == ' ') && found) return i;
-//cout << "i = " << i << " found = " << found << " c = " << c << " lastchar = " << lastchar << endl;
-         if (c == ' ' && lastchar == ' ') found = true;
-         lastchar = c;
-         }
-      return -1;
-      } // MultSpaces
+    QChar c;
+    QChar lastchar = 'c'; // previous character - initialize non blank
+    bool found = false;
+    // kdDebug(30502) << "length = "  << text.length() << endl;
+    for (uint i = index; i < text.length(); i++)
+    {
+        c = text.at(i);
+    // kdeDebug(30502) << "i = " << i << " found = " << found << " c = " << c << " lastchar = " << lastchar << endl;
+        if ( (c != ' ') && found)
+            return i;
+        else if (c == ' ' && lastchar == ' ')
+            found = true;
+        lastchar = c;
+    }
+    return -1;
+} // MultSpaces
 
    bool ASCIIImport::ListItem( QString *Line, int no_lines,
              QString &str )
@@ -734,7 +732,6 @@ return false;
 
                      // process the white space to eliminate unwanted spaces
                      QString text1 = text.simplifyWhiteSpace();
-                     EscapeXMLSymbols(text1);  // escape <, >, &
                      WriteOutParagraph( "Standard", type, text1 , firstindent, secondindent, str);
 
                      begin = i;
@@ -779,7 +776,6 @@ return false;
 
          // process the white space to eliminate unwanted spaces
          QString text1 = text.simplifyWhiteSpace();
-         EscapeXMLSymbols(text1);  // escape <, >, &
          WriteOutParagraph( "Standard", type, text1 , firstindent, secondindent, str);
 
 
@@ -822,8 +818,10 @@ bool ASCIIImport::IsListItem( QString FirstLine, QChar mark )
   }  // IsListItem
 
 
-  bool ASCIIImport::IsWhiteSpace(QChar c)
-  {
-     if( c == QChar(' ') || c == QChar('\t') ) return true;
-     else return false;
-   } // IsWhiteSpace
+bool ASCIIImport::IsWhiteSpace(const QChar& c) const
+{
+     if ( c == QChar(' ') || c == QChar('\t') )
+        return true;
+     else
+        return false;
+} // IsWhiteSpace
