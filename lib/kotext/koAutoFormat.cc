@@ -584,9 +584,11 @@ void KoAutoFormat::saveConfig()
     data.setAttribute("end", QString(m_typographicDefaultSimpleQuotes.end));
     simpleQuote.appendChild(data);
     begin.appendChild(simpleQuote);
-
-
-    QFile f(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
+    QFile f;
+    if ( m_autoFormatLanguage.isEmpty())
+        f.setName(locateLocal("data", "koffice/autocorrect/"+klocale.languageList().front() + ".xml",m_doc->instance()));
+    else
+        f.setName(locateLocal("data", "koffice/autocorrect/"+m_autoFormatLanguage + ".xml",m_doc->instance()));
     if(!f.open(IO_WriteOnly)) {
         kdWarning()<<"Error during saving autoformat to " << f.name() << endl;
 	return;
