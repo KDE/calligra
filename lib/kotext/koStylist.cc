@@ -348,7 +348,7 @@ void KoStyleManager::save() {
         }
 
         int indexNextStyle = styleIndex( m_styleCombo->currentItem() );
-        m_currentStyle->setFollowingStyle( m_changedStyles.at( indexNextStyle ) );
+        m_currentStyle->setFollowingStyle( m_origStyles.at( indexNextStyle ) ); // point to orig, not changed! (#47377)
         m_currentStyle->setParentStyle( style( m_inheritCombo->currentText() ) );
         m_currentStyle->setOutline( d->cbIncludeInTOC->isChecked() );
     }
@@ -533,19 +533,23 @@ void KoStyleManager::apply() {
             KoStyle *orig = m_origStyles.at(i);
             KoStyle *changed = m_changedStyles.at(i);
 
-            int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
-            int formatChanged = orig->format().compare( changed->format() );
-            //kdDebug(32500) << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
-            //kdDebug(32500) << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeFloat() << endl;
+            if ( orig != changed )
+            {
+                int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
+                int formatChanged = orig->format().compare( changed->format() );
+                //kdDebug(32500) << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
+                //kdDebug(32500) << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeFloat() << endl;
 
-            // Copy everything from changed to orig
-            *orig = *changed;
+                // Copy everything from changed to orig
+                *orig = *changed;
 
-            // Apply the change selectively - i.e. only what changed
-            //applyStyleChange( orig, paragLayoutChanged, formatChanged );
-            StyleChangeDef tmp(paragLayoutChanged, formatChanged);
-            styleChanged.insert( orig, tmp);
-
+                // Apply the change selectively - i.e. only what changed
+                //applyStyleChange( orig, paragLayoutChanged, formatChanged );
+                if ( formatChanged != 0 || paragLayoutChanged != 0 ) {
+                  StyleChangeDef tmp(paragLayoutChanged, formatChanged);
+                  styleChanged.insert( orig, tmp );
+                }
+            }
 
         }// else
          //     kdDebug(32500) << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
