@@ -47,6 +47,7 @@ KSpreadTableName::KSpreadTableName( KSpreadView* _parent, const char* _name, QSt
 
    m_pTableName = new QLineEdit( this );
    m_pTableName->setText( _tableName );
+   m_pTableName->setFocus();
    grid->addWidget( m_pTableName, 1, 0 );
 
    m_pOk = new QPushButton( i18n("Ok"), this );

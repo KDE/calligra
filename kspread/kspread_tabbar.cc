@@ -17,10 +17,16 @@
    Boston, MA 02111-1307, USA.
 */     
 
+#include <qmessagebox.h>
 #include <qpntarry.h>
+#include <qstring.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <klocale.h>
+
+#include "kspread_doc.h"
 #include "kspread_view.h"
 #include "kspread_table.h"
 #include "kspread_dlg_tabname.h"
@@ -29,6 +35,7 @@
 KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent ) : QWidget( (QWidget *)_parent )
 {
     m_pView = _parent;
+    m_pPopupMenu = 0L;
 
     leftTab = 1;
     activeTab = 0;
@@ -130,6 +137,30 @@ void KSpreadTabBar::setActiveTab( const QString& _text )
     repaint();
 }
 
+void KSpreadTabBar::slotRemove( )
+{
+    if ( m_pView->doc()->map()->count() <= 1 )
+    {
+        QApplication::beep();
+        QMessageBox::warning( this, i18n("Remove table"), i18n("You cannot delete the only table of the map."), i18n("OK") ); // FIXME bad english? no english!
+        return;
+    }
+    QApplication::beep();
+    int ret = QMessageBox::warning( this, i18n("Remove table"), i18n("You are going to remove the active table.\nDo you want to continue?"), i18n("Yes"), i18n("No"), QString::null, 1, 1);
+    if ( ret == 0 )
+    {
+        KSpreadTable *tbl = m_pView->activeTable();
+        m_pView->doc()->map()->removeTable( tbl ); 
+		m_pView->removeTable(tbl);
+        delete tbl;
+    }
+}
+
+void KSpreadTabBar::slotRename( )
+{
+    renameTab();
+}
+
 void KSpreadTabBar::paintEvent( QPaintEvent* )
 {
     if ( tabsList.count() == 0 )
@@ -207,6 +238,40 @@ void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, in
     painter.drawText( x + 10, text_y , text );
 }
 
+void KSpreadTabBar::openPopupMenu( const QPoint &_global )
+{
+    if ( m_pPopupMenu != 0L )
+        delete m_pPopupMenu;
+    m_pPopupMenu = new QPopupMenu();
+
+    m_pPopupMenu->insertItem( i18n( "Rename..." ), this, SLOT( slotRename() ) );
+    m_pPopupMenu->insertItem( i18n( "Remove" ), this, SLOT( slotRemove() ) );
+
+    m_pPopupMenu->popup( _global );
+}
+
+void KSpreadTabBar::renameTab()
+{
+    QString activeName;
+    QString newName;
+
+    KSpreadTable* table = m_pView->activeTable();
+    activeName = table->name();
+
+    KSpreadTableName tndlg( (KSpreadView *)this->parentWidget(), "TableName" , activeName );
+    if ( tndlg.exec() )
+    {
+        if ( ( newName = tndlg.tableName() ) != activeName )
+        {
+            table->setName( newName );
+            QStringList::Iterator it = tabsList.find( activeName );
+            (*it) = newName;
+	    repaint();
+        }	
+    }
+}
+
+
 void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 {
     int old_active = activeTab;
@@ -252,27 +317,15 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 	repaint();
 	emit tabChanged( active_text );
     }
+	if ( _ev->button() == RightButton )
+	{
+		openPopupMenu( _ev->globalPos() );
+	}
 }
 
 void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent* _ev )
 {
-    QString activeName;
-    QString newName;
-
-    KSpreadTable* table = m_pView->activeTable();
-    activeName = table->name();
-
-    KSpreadTableName tndlg( (KSpreadView *)this->parentWidget(), "TableName" , activeName );
-    if ( tndlg.exec() )
-    {
-        if ( ( newName = tndlg.tableName() ) != activeName )
-        {
-            table->setName( newName );
-            QStringList::Iterator it = tabsList.find( activeName );
-            (*it) = newName;
-	    repaint();
-        }	
-    }
+    renameTab();
 }
 
 #include "kspread_tabbar.moc"

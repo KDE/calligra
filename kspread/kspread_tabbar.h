@@ -63,10 +63,24 @@ public:
      * Highlights this tab.
      */
     void setActiveTab( const QString& _text );
-    
+
+    /**
+     * Opens a dialog to rename active tab.
+     */
+    void renameTab();
+
+    /**
+     * Open a context menu.
+     */
+    void openPopupMenu( const QPoint &_global );
+ 
 signals:
     void tabChanged( const QString& _text );
-    
+   
+protected slots:
+    void slotRename( );
+	void slotRemove( );
+ 
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent ( QMouseEvent* _ev );
@@ -74,7 +88,15 @@ protected:
 
     void paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y, bool isactive );
 
+    void openPopupMenu( QPoint &_global );
+
     KSpreadView* m_pView;
+
+    /**
+     * Pointer to the last popup menu.
+     * If this pointer is not 0L delete before usage.
+     */
+    QPopupMenu *m_pPopupMenu;
     
     /**
      * List with the names of all tabs. The order in this list determines the
