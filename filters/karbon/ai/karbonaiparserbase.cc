@@ -17,12 +17,14 @@
 
 #include "karbonaiparserbase.h"
 
-#define MERGE_LINESEGMENTS
-#define eps 0.00000001
+#include <core/vcolor.h>
+#include <core/vlayer.h>
+#include <core/vgroup.h>
+#include "aicolor.h"
 
 // generic
-KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_strokeColor(), m_fillColor() {
-  m_curPath.setAutoDelete( TRUE );
+KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output)
+/* , m_strokeColor(), m_fillColor() */ {
 
   // A4, 70 dpi
   m_bbox.llx = 0;
@@ -30,45 +32,37 @@ KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_strokeColor(), m_
   m_bbox.urx = 612;
   m_bbox.ury = 792;
 
-  m_lineWidth = 0;
+/*  m_lineWidth = 0;
   m_flatness = 0;
   m_lineCaps = 0;
   m_lineJoin = 0;
-  m_miterLimit = 10;
+  m_miterLimit = 10; */
   m_windingOrder = 0;
 
   m_fm = FM_NonZero;
+
+  m_curKarbonPath = new VPath();
+
+  m_document = new VDocument();
+  m_layer = NULL;
+  m_combination = NULL;
 }
 
 // generic
 KarbonAIParserBase::~KarbonAIParserBase(){
+  delete m_curKarbonPath;
+
+  delete m_document;
 }
 
 // generic
 void KarbonAIParserBase::parsingStarted(){
-  qDebug ( getHeader().latin1() );
+//  qDebug ( getHeader().latin1() );
 }
 
 // generic
 void KarbonAIParserBase::parsingFinished(){
-  qDebug ( getFooter().latin1() );
-}
-
-// specific
-QString KarbonAIParserBase::getHeader(){
-  QString data;
-  data += "<!DOCTYPE DOC>\n";
-  data += "<DOC mime=\"application/x-karbon\" syntaxVersion=\"0.1\" editor=\"aiimport 0.0.1\">\n";
-  data += " <LAYER name=\"\" visible=\"1\">\n";
-  return data;
-}
-
-// specific
-QString KarbonAIParserBase::getFooter(){
-  QString data;
-  data += " </LAYER>\n";
-  data += "</DOC>\n";
-  return data;
+//  qDebug ( getFooter().latin1() );
 }
 
 // generic
@@ -105,45 +99,66 @@ void KarbonAIParserBase::gotSimpleTag (const char *tagName, Parameters& params){
 
 // generic
 void KarbonAIParserBase::gotPathElement (PathElement &element){
-  PathElement *elem = new PathElement();
-  memcpy (elem, &element, sizeof(PathElement));
-
-  m_curPath.append (elem);
+  switch (element.petype)
+  {
+    case PET_MoveTo :
+      m_curKarbonPath->moveTo (KoPoint (element.pevalue.pointdata.x,element.pevalue.pointdata.y));
+      break;
+    case PET_LineTo :
+      m_curKarbonPath->lineTo (KoPoint (element.pevalue.pointdata.x,element.pevalue.pointdata.y));
+      break;
+    case PET_CurveTo :
+      m_curKarbonPath->curveTo (KoPoint (element.pevalue.bezierdata.x1,element.pevalue.bezierdata.y1),
+                             KoPoint (element.pevalue.bezierdata.x2,element.pevalue.bezierdata.y2),
+                             KoPoint (element.pevalue.bezierdata.x3,element.pevalue.bezierdata.y3));
+      break;
+    case PET_CurveToOmitC1 :
+      m_curKarbonPath->curve1To (KoPoint (element.pevalue.bezierdata.x2,element.pevalue.bezierdata.y2),
+                             KoPoint (element.pevalue.bezierdata.x3,element.pevalue.bezierdata.y3));
+      break;
+    case PET_CurveToOmitC2 :
+      m_curKarbonPath->curve2To (KoPoint (element.pevalue.bezierdata.x1,element.pevalue.bezierdata.y1),
+                             KoPoint (element.pevalue.bezierdata.x3,element.pevalue.bezierdata.y3));
+      break;
+  }
 }
 
 // generic
 void KarbonAIParserBase::gotFillPath (bool closed, bool reset, FillMode fm){
-  qDebug ("found fill path");
+//  qDebug ("found fill path");
   if (!reset) qDebug ("retain filled path");
+
+  if (closed) m_curKarbonPath->close();
 
   if (!reset)
     m_pot = POT_Filled;
   else
   {
-    doOutputCurrentPath (POT_Filled, closed);
+    doOutputCurrentPath2 (POT_Filled);
     m_pot = POT_Other;
   }
-  if (reset) m_curPath.clear();
 }
 
 // generic
 void KarbonAIParserBase::gotIgnorePath (bool closed, bool reset){
-  qDebug ("found ignore path");
+//  qDebug ("found ignore path");
+
+  if (closed) m_curKarbonPath->close();
 
   if (! reset)
     m_pot = POT_Other;
   else
   {
-    doOutputCurrentPath (POT_Ignore, closed);
+    doOutputCurrentPath2 (POT_Ignore);
     m_pot = POT_Other;
   }
-  if (reset) m_curPath.clear();
 }
-
 
 // generic
 void KarbonAIParserBase::gotStrokePath (bool closed) {
-  qDebug ("found stroke path");
+//  qDebug ("found stroke path");
+
+  if (closed) m_curKarbonPath->close();
 
   PathOutputType pot = POT_Stroked;
   if (m_pot != POT_Other)
@@ -151,191 +166,37 @@ void KarbonAIParserBase::gotStrokePath (bool closed) {
     pot = POT_FilledStroked;
   }
 
-  doOutputCurrentPath (pot, closed);
-  m_curPath.clear();
+  doOutputCurrentPath2 (pot);
+
   m_pot = POT_Other;
-}
-
-// specific
-void KarbonAIParserBase::fillColorAttributes (Parameters &parameters, AIColor &color){
-  double c, m, y, k;
-  color.toCMYK (c,m,y,k);
-
-  parameters.append (new Parameter ("colorSpace", "1")); // 1 = CMYK?
-  parameters.append (new Parameter ("v1", QString::number(c)));
-  parameters.append (new Parameter ("v2", QString::number(m)));
-  parameters.append (new Parameter ("v3", QString::number(y)));
-  parameters.append (new Parameter ("v4", QString::number(k)));
-}
-
-
-// specific
-void KarbonAIParserBase::doOutputCurrentPath(PathOutputType type, bool closed){
-  if ((type != POT_Filled) && (type != POT_Stroked) && (type != POT_FilledStroked)) return;
-
-  Parameters params;
-  params.setAutoDelete( TRUE );
-
-  params.append (new Parameter ("fillrule", QString::number(m_windingOrder)));
-  gotStartTag ("PATH", params);
-
-  if ((type == POT_FilledStroked) || (type == POT_Stroked))
-  {
-    params.clear();
-    params.append (new Parameter ("lineWidth", QString::number(m_lineWidth)));
-    params.append (new Parameter ("lineJoin", QString::number(m_lineJoin)));
-    params.append (new Parameter ("lineCap", QString::number(m_lineCaps)));
-    params.append (new Parameter ("miterLimit", QString::number(m_miterLimit)));
-    gotStartTag ("STROKE", params);
-
-    params.clear();
-    fillColorAttributes (params, m_strokeColor);
-    gotSimpleTag ("COLOR", params);
-
-    gotEndTag ("STROKE");
-  }
-
-  if ((type == POT_FilledStroked) || (type == POT_Filled))
-  {
-    params.clear();
-    gotStartTag ("FILL", params);
-
-    params.clear();
-    fillColorAttributes (params, m_fillColor);
-    gotSimpleTag ("COLOR", params);
-
-    gotEndTag ("FILL");
-  }
-
-  // segment data
-
-  params.clear();
-  params.append (new Parameter ("isClosed", closed ? "1" : "0"));
-  gotStartTag ("SEGMENTS", params);
-
-  bool breakPath = FALSE;
-
-  PathElement *elem;
-
-  double curX, curY;
-  double changeX, changeY;
-
-  for ( elem=m_curPath.first(); elem != 0; elem=m_curPath.next() )
-  {
-    params.clear();
-    switch (elem->petype) {
-      case PET_MoveTo :
-        changeX = elem->pevalue.pointdata.x - curX;
-        changeY = elem->pevalue.pointdata.y - curY;
-
-#ifdef MERGE_LINESEGMENTS
-        if ((!breakPath) || (changeX > eps) ||  (changeY > eps))
-        {
-          if (breakPath)
-          {
-            gotEndTag ("SEGMENTS");
-
-            params.append (new Parameter ("isClosed", "1"));
-            gotStartTag ("SEGMENTS", params);
-            params.clear();
-          }
-
-          params.append (new Parameter ("x", QString::number(elem->pevalue.pointdata.x)));
-          params.append (new Parameter ("y", QString::number(elem->pevalue.pointdata.y)));
-          gotSimpleTag ("MOVE", params);
-          breakPath = TRUE;
-          curX = elem->pevalue.pointdata.x;
-          curY = elem->pevalue.pointdata.y;
-        }
-#else
-        if (breakPath)
-        {
-          gotEndTag ("SEGMENTS");
-          gotStartTag ("SEGMENTS", params);
-        }
-
-        params.append (new Parameter ("x", QString::number(elem->pevalue.pointdata.x)));
-        params.append (new Parameter ("y", QString::number(elem->pevalue.pointdata.y)));
-        gotSimpleTag ("MOVE", params);
-        breakPath = TRUE;
-        curX = elem->pevalue.pointdata.x;
-        curY = elem->pevalue.pointdata.y;
-#endif
-
-        break;
-      case PET_LineTo :
-        params.append (new Parameter ("x", QString::number(elem->pevalue.pointdata.x)));
-        params.append (new Parameter ("y", QString::number(elem->pevalue.pointdata.y)));
-        gotSimpleTag ("LINE", params);
-        curX = elem->pevalue.pointdata.x;
-        curY = elem->pevalue.pointdata.y;
-        break;
-      case PET_CurveTo :
-        params.append (new Parameter ("x1", QString::number(elem->pevalue.bezierdata.x1)));
-        params.append (new Parameter ("y1", QString::number(elem->pevalue.bezierdata.y1)));
-        params.append (new Parameter ("x2", QString::number(elem->pevalue.bezierdata.x2)));
-        params.append (new Parameter ("y2", QString::number(elem->pevalue.bezierdata.y2)));
-        params.append (new Parameter ("x3", QString::number(elem->pevalue.bezierdata.x3)));
-        params.append (new Parameter ("y3", QString::number(elem->pevalue.bezierdata.y3)));
-        gotSimpleTag ("CURVE", params);
-        curX = elem->pevalue.bezierdata.x3;
-        curY = elem->pevalue.bezierdata.y3;
-        break;
-      case PET_CurveToOmitC1 :
-        params.append (new Parameter ("x1", QString::number(curX)));
-        params.append (new Parameter ("y1", QString::number(curY)));
-        params.append (new Parameter ("x2", QString::number(elem->pevalue.bezierdata.x2)));
-        params.append (new Parameter ("y2", QString::number(elem->pevalue.bezierdata.y2)));
-        params.append (new Parameter ("x3", QString::number(elem->pevalue.bezierdata.x3)));
-        params.append (new Parameter ("y3", QString::number(elem->pevalue.bezierdata.y3)));
-        gotSimpleTag ("CURVE", params);
-        curX = elem->pevalue.bezierdata.x3;
-        curY = elem->pevalue.bezierdata.y3;
-        break;
-      case PET_CurveToOmitC2 :
-        params.append (new Parameter ("x1", QString::number(elem->pevalue.bezierdata.x1)));
-        params.append (new Parameter ("y1", QString::number(elem->pevalue.bezierdata.y1)));
-        params.append (new Parameter ("x2", QString::number(elem->pevalue.bezierdata.x3)));
-        params.append (new Parameter ("y2", QString::number(elem->pevalue.bezierdata.y3)));
-        params.append (new Parameter ("x3", QString::number(elem->pevalue.bezierdata.x3)));
-        params.append (new Parameter ("y3", QString::number(elem->pevalue.bezierdata.y3)));
-        gotSimpleTag ("CURVE", params);
-        curX = elem->pevalue.bezierdata.x3;
-        curY = elem->pevalue.bezierdata.y3;
-        break;
-      default :
-         qDebug ( "\ntype is %d", elem->petype );
-
-    }
-  }
-
-
-  gotEndTag ("SEGMENTS");
-
-  gotEndTag ("PATH");
 }
 
 // generic
 void KarbonAIParserBase::gotClipPath (bool closed){
-  doOutputCurrentPath (POT_Clip, closed);
 
-  m_curPath.clear();
+  doOutputCurrentPath2 (POT_Clip);
 }
 
 // generic
 void KarbonAIParserBase::gotFillColor (AIColor &color){
-  double r, g, b;
-  color.toRGB (r,g,b);
-  qDebug ("set fillcolor to %f %f %f",r,g,b);
-  m_fillColor = color;
+//  double r, g, b;
+//  color.toRGB (r,g,b);
+//  qDebug ("set fillcolor to %f %f %f",r,g,b);
+//  m_fillColor = color;
+
+  VColor karbonColor = toKarbonColor (color);
+  m_fill.setColor (karbonColor);
 }
 
 // generic
 void KarbonAIParserBase::gotStrokeColor (AIColor &color){
-  double r, g, b;
-  color.toRGB (r,g,b);
-  qDebug ("set strokecolor to %f %f %f",r,g,b);
-  m_strokeColor = color;
+//  double r, g, b;
+//  color.toRGB (r,g,b);
+//  qDebug ("set strokecolor to %f %f %f",r,g,b);
+//  m_strokeColor = color;
+
+  VColor karbonColor = toKarbonColor (color);
+  m_stroke.setColor (karbonColor);
 }
 
 // generic
@@ -347,27 +208,52 @@ void KarbonAIParserBase::gotBoundingBox (int llx, int lly, int urx, int ury){
 }
 
 void KarbonAIParserBase::gotLineWidth (double val){
-  m_lineWidth = val;
+//  m_lineWidth = val;
+  m_stroke.setLineWidth (val);
 }
 
 void KarbonAIParserBase::gotFlatness (double val)
 {
-  m_flatness = val;
+//  m_flatness = val;
+//  m_stroke.setFlatness (val);
 }
 
 void KarbonAIParserBase::gotLineCaps (int val)
 {
-  m_lineCaps = val;
+//  m_lineCaps = val;
+  VLineCap lineCap = cap_butt;
+
+  switch (val)
+  {
+	  case 0 : lineCap = cap_butt; break;
+	  case 1 : lineCap = cap_round; break;
+	  case 2 : lineCap = cap_square; break;
+  }
+
+  m_stroke.setLineCap (lineCap);
 }
 
 void KarbonAIParserBase::gotLineJoin (int val)
 {
-  m_lineJoin = val;
+//  m_lineJoin = val;
+
+  VLineJoin lineJoin = join_miter;
+
+  switch (val)
+  {
+	  case 0 : lineJoin = join_miter; break;
+	  case 1 : lineJoin = join_round; break;
+	  case 2 : lineJoin = join_bevel; break;
+  }
+
+  m_stroke.setLineJoin (lineJoin);
+
 }
 
 void KarbonAIParserBase::gotMiterLimit (double val)
 {
-  m_miterLimit = val;
+//  m_miterLimit = val;
+  m_stroke.setMiterLimit (val);
 }
 
 void KarbonAIParserBase::gotWindingOrder (int val)
@@ -375,3 +261,141 @@ void KarbonAIParserBase::gotWindingOrder (int val)
   m_windingOrder = val;
 }
 
+void KarbonAIParserBase::gotBeginGroup (bool clipping)
+{
+//  qDebug ("start begin group");
+  VGroup *group = new VGroup();
+  m_groupStack.push (group);
+//  qDebug ("end begin group");
+
+}
+
+void KarbonAIParserBase::gotEndGroup (bool clipping)
+{
+//  qDebug ("start end group");
+
+  VGroup *group = m_groupStack.pop();
+
+  if (m_groupStack.isEmpty())
+  {
+    m_layer->insertObject (group);
+  }
+  else
+  {
+    m_groupStack.top()->insertObject (group);
+  }
+
+//  qDebug ("end end group");
+}
+
+void KarbonAIParserBase::gotBeginCombination () {
+  m_ptt = PTT_Combine;
+}
+
+void KarbonAIParserBase::gotEndCombination () {
+//  qDebug ( "got end combination" );
+
+  m_ptt = PTT_Output;
+
+  if (m_combination != NULL)
+  {
+    m_curKarbonPath = m_combination;
+    doOutputCurrentPath2 (POT_Leave);
+  }
+
+  m_combination = NULL;
+}
+
+
+const VColor KarbonAIParserBase::toKarbonColor (const AIColor &color)
+{
+  AIColor temp (color);
+  VColor value;
+
+  double v1, v2, v3, v4;
+  temp.toCMYK (v1, v2, v3, v4);
+
+  float cv1 = v1;
+  float cv2 = v2;
+  float cv3 = v3;
+  float cv4 = v4;
+
+  value.setColorSpace (VColor::cmyk);
+  value.setValues (&cv1, &cv2, &cv3, &cv4);
+
+  return value;
+}
+
+void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
+{
+  if (!m_layer)
+  {
+    m_layer = new VLayer();
+    m_document->insertLayer (m_layer);
+  }
+
+  if (type != POT_Leave)
+  {
+    if ((type != POT_Filled) && (type != POT_Stroked) && (type != POT_FilledStroked)) return;
+    if ((type == POT_Filled) || (type != POT_FilledStroked))
+    {
+/*      VFill fill;
+      fill.setColor (toKarbonColor (m_fillColor));
+      m_curKarbonPath->setFill(fill); */
+      m_curKarbonPath->setFill(m_fill);
+    }
+
+    if ((type == POT_Stroked) || (type != POT_FilledStroked))
+    {
+/*      VStroke stroke;
+      stroke.setColor (toKarbonColor (m_strokeColor));
+      m_curKarbonPath->setStroke (stroke); */
+      m_curKarbonPath->setStroke (m_stroke);
+    }
+  }
+
+  if (m_ptt == PTT_Combine)
+  {
+//    m_pot |= type;
+    if (m_combination == NULL)
+      m_combination = m_curKarbonPath;
+    else
+      m_combination->combine (*m_curKarbonPath);
+
+    m_curKarbonPath = new VPath();
+
+    return;
+  }
+
+  if (m_groupStack.isEmpty())
+  {
+    m_layer->insertObject(m_curKarbonPath);
+  }
+  else
+  {
+    m_groupStack.top()->insertObject(m_curKarbonPath);
+  }
+
+  m_curKarbonPath = new VPath();
+}
+
+bool KarbonAIParserBase::parse (QIODevice& fin, QDomDocument &doc)
+{
+
+  bool res = AIParserBase::parse (fin);
+
+//  qDebug ("document is %s",doc.toString().latin1());
+  if (res)
+  {
+      qDebug ("before save document");
+      m_document->save (doc);
+      qDebug ("after save document");
+  }
+  else
+  {
+    QDomDocument tempDoc;
+    doc = tempDoc;
+  }
+
+  return res;
+}

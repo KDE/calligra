@@ -41,7 +41,8 @@ public:
   // Custom Types
   Operator,
   Reference,
-  Vector,
+  ElementArray,
+  Block,
   ByteArray,
   Byte
     };
@@ -53,7 +54,7 @@ public:
     AIElement( const QCString& );
     AIElement( const char* );
 //    AIElement( const QValueList<AIElement>& );
-    AIElement( const QValueVector<AIElement>& );
+    AIElement( const QValueVector<AIElement>&, Type type = ElementArray);
     AIElement( int );
     AIElement( uint );
     AIElement( double );
@@ -80,7 +81,8 @@ public:
     uint toUInt( bool * ok=0 ) const;
     double toDouble( bool * ok=0 ) const;
 //    const QValueList<AIElement> toList() const;
-    const QValueVector<AIElement> toVector() const;
+    const QValueVector<AIElement> toElementArray() const;
+    const QValueVector<AIElement> toBlock() const;
 
     // Custom types
     const QString toReference() const;
@@ -96,7 +98,8 @@ public:
     uint& asUInt();
     double& asDouble();
 //    QValueList<AIElement>& asList();
-    QValueVector<AIElement>& asVector();
+    QValueVector<AIElement>& asElementArray();
+    QValueVector<AIElement>& asBlock();
 
     // Custom types
     QString& asReference();

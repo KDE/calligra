@@ -41,7 +41,10 @@ AIElement::Private::Private( Private* d )
 /*		case AIElement::List:
 	    value.ptr = new QValueList<AIElement>( *((QValueList<AIElement>*)d->value.ptr) );
 	    break; */
-		case AIElement::Vector:
+		case AIElement::ElementArray:
+	    value.ptr = new QValueVector<AIElement>( *((QValueVector<AIElement>*)d->value.ptr) );
+	    break;
+		case AIElement::Block:
 	    value.ptr = new QValueVector<AIElement>( *((QValueVector<AIElement>*)d->value.ptr) );
 	    break;
 		case AIElement::ByteArray:
@@ -86,7 +89,10 @@ void AIElement::Private::clear()
 /*		case AIElement::List:
 	    delete (QValueList<AIElement>*)value.ptr;
 	    break; */
-		case AIElement::Vector:
+		case AIElement::ElementArray:
+	    delete (QValueVector<AIElement>*)value.ptr;
+	    break;
+		case AIElement::Block:
 	    delete (QValueVector<AIElement>*)value.ptr;
 	    break;
 		case AIElement::ByteArray:
@@ -226,10 +232,10 @@ AIElement::AIElement( double val )
   d->value.ptr = new QValueList<AIElement>( val );
 }  */
 
-AIElement::AIElement( const QValueVector<AIElement>& val )
+AIElement::AIElement( const QValueVector<AIElement>& val, Type type )
 {
   d = new Private;
-  d->typ = Vector;
+  d->typ = type;
   d->value.ptr = new QValueVector<AIElement>( val );
 }
 
@@ -530,12 +536,20 @@ double AIElement::toDouble( bool * ok ) const
   return QValueList<AIElement>();
 } */
 
-const QValueVector<AIElement> AIElement::toVector() const
+const QValueVector<AIElement> AIElement::toElementArray() const
 {
-  if ( d->typ == Vector )
+  if ( d->typ == ElementArray )
 	  return *((QValueVector<AIElement>*)d->value.ptr);
   return QValueVector<AIElement>();
 }
+
+const QValueVector<AIElement> AIElement::toBlock() const
+{
+  if ( d->typ == Block )
+	  return *((QValueVector<AIElement>*)d->value.ptr);
+  return QValueVector<AIElement>();
+}
+
 
 const QByteArray AIElement::toByteArray() const
 {
@@ -631,12 +645,20 @@ uchar& AIElement::asByte()
   return *((QValueList<AIElement>*)d->value.ptr);
 }  */
 
-QValueVector<AIElement>& AIElement::asVector()
+QValueVector<AIElement>& AIElement::asElementArray()
 {
-  if ( d->typ != Vector )
-	  *this = AIElement( toVector() );
+  if ( d->typ != ElementArray )
+	  *this = AIElement( toElementArray() );
   return *((QValueVector<AIElement>*)d->value.ptr);
 }
+
+QValueVector<AIElement>& AIElement::asBlock()
+{
+  if ( d->typ != Block )
+	  *this = AIElement( toBlock() );
+  return *((QValueVector<AIElement>*)d->value.ptr);
+}
+
 
 QByteArray& AIElement::asByteArray()
 {
@@ -694,8 +716,11 @@ bool AIElement::cast( Type t )
 /*    case AIElement::List:
 	    asList();
 	    break; */
-    case AIElement::Vector:
-	    asVector();
+    case AIElement::ElementArray:
+	    asElementArray();
+	    break;
+    case AIElement::Block:
+	    asBlock();
 	    break;
     case AIElement::String:
 	    asString();
@@ -736,8 +761,10 @@ bool AIElement::operator==( const AIElement &v ) const
   switch( d->typ ) {
 /*    case List:
 	     return v.toList() == toList(); */
-    case Vector:
-	     return v.toVector() == toVector();
+    case ElementArray:
+	     return v.toElementArray() == toElementArray();
+    case Block:
+	     return v.toBlock() == toBlock();
     case ByteArray:
 	     return v.toByteArray() == toByteArray();
 

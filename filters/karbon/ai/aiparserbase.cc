@@ -92,12 +92,25 @@ static AIOperationMapping aiMappings[] = {
   { "`", AIO_GsaveIncludeDocument },
   { "~", AIO_Grestore },
 
+  { "u", AIO_BeginGroupNoClip },
+  { "U", AIO_EndGroupNoClip },
+  { "*u", AIO_BeginCombination },
+  { "*U", AIO_EndCombination },
+
   { NULL, AIO_Other }
 };
 
 static PSOperationMapping psMappings[] = {
   { "get", PSO_Get },
   { "exec", PSO_Exec },
+  { "string", PSO_String },
+  { "bind", PSO_Bind },
+  { "def", PSO_Def },
+  { "userdict", PSO_Userdict },
+  { "dict", PSO_Dict },
+  { "dup", PSO_Dup },
+  { "begin", PSO_Begin },
+  { "put", PSO_Put },
   { NULL, PSO_Other },
 };
 
@@ -342,6 +355,12 @@ void AIParserBase::handleElement (AIElement &element)
     QValueVector<AIElement> &elementArray = m_arrayStack.top();
     elementArray.push_back(element);
   }
+  if (m_sink == DS_Block)
+  {
+    if (m_debug) qDebug ("in mode block");
+    QValueVector<AIElement> &elementArray = m_blockStack.top();
+    elementArray.push_back(element);
+  }
   else
   {
     if (m_debug) qDebug ("in mode stack");
@@ -403,6 +422,19 @@ void AIParserBase::gotArrayStart () {
   m_sink = DS_Array;
 }
 
+void AIParserBase::gotBlockStart () {
+  if (m_ignoring) return;
+  if (m_debug) qDebug ("got block start");
+
+//  m_debug = true;
+
+  QValueVector<AIElement> array;
+  m_blockStack.push (array);
+
+  m_sink = DS_Block;
+}
+
+
 void AIParserBase::gotArrayEnd () {
   if (m_ignoring) return;
   if (m_debug) qDebug ("got array end");
@@ -433,6 +465,37 @@ void AIParserBase::gotArrayEnd () {
 //  m_debug = false;
 }
 
+void AIParserBase::gotBlockEnd () {
+  if (m_ignoring) return;
+  if (m_debug) qDebug ("got block end");
+
+  QValueVector<AIElement> stackArray = m_blockStack.pop();
+
+  if (m_blockStack.empty())
+  {
+    if (m_debug) qDebug ("put elements to stack");
+    AIElement realElement (stackArray, AIElement::Block);
+
+    if (m_debug) {
+      qDebug ("going to stack");
+      elementtoa (realElement);
+      qDebug ("done");
+    }
+    m_stack.push (realElement);
+
+    m_sink = DS_Other;
+  }
+  else
+  {
+    if (m_debug) qDebug ("put elements to nest stack level");
+    QValueVector<AIElement> currentTOS = m_blockStack.top();
+    currentTOS.push_back (stackArray);
+  }
+
+//  m_debug = false;
+}
+
+
 void AIParserBase::_handleSetDash()
 {
 //  qDebug ("found dash operation");
@@ -441,7 +504,7 @@ void AIParserBase::_handleSetDash()
   AIElement elem (m_stack.top());
   m_stack.pop();
 
-  const QValueVector<AIElement> aval = elem.toVector();
+  const QValueVector<AIElement> aval = elem.toElementArray();
   gotDash (aval, fval);
 //  qDebug ("dash operation finished");
 }
@@ -464,7 +527,7 @@ void AIParserBase::_handleSetFillPattern()
   AIElement elem (m_stack.top());
   m_stack.pop();
 
-  const QValueVector<AIElement> aval = elem.toVector();
+  const QValueVector<AIElement> aval = elem.toElementArray();
 
   double ka = getDoubleValue();
   double k = getDoubleValue();
@@ -487,7 +550,7 @@ void AIParserBase::_handleSetStrokePattern()
   AIElement elem (m_stack.top());
   m_stack.pop();
 
-  const QValueVector<AIElement> aval = elem.toVector();
+  const QValueVector<AIElement> aval = elem.toElementArray();
 
   double ka = getDoubleValue();
   double k = getDoubleValue();
@@ -568,13 +631,71 @@ void AIParserBase::_handlePSExec() {
 //  qDebug ("handle PS exec");
   m_stack.pop();
 }
+void AIParserBase::_handlePSString() {
+//  qDebug ("handle PS string");
+  m_stack.pop();
+
+  QString name ("stringval");
+  AIElement ref (name,AIElement::Reference);
+  m_stack.push (ref);
+}
+
+void AIParserBase::_handlePSBind() {
+//  qDebug ("handle PS bind");
+  m_stack.pop();
+
+  QString name ("bindentry");
+  AIElement ref (name,AIElement::Reference);
+  m_stack.push (ref);
+}
+
+void AIParserBase::_handlePSUserdict() {
+//  qDebug ("handle PS userdict");
+
+  QString name ("userdict");
+  AIElement ref (name,AIElement::Reference);
+  m_stack.push (ref);
+}
+
+void AIParserBase::_handlePSDict() {
+//  qDebug ("handle PS dict");
+  m_stack.pop();
+  m_stack.pop();
+  m_stack.pop();
+
+  QString name ("dict");
+  AIElement ref (name,AIElement::Reference);
+  m_stack.push (ref);
+}
+
+void AIParserBase::_handlePSDup() {
+//  qDebug ("handle PS get");
+  AIElement &tos = m_stack.top();
+
+  AIElement copy (tos);
+  m_stack.push (copy);
+}
+void AIParserBase::_handlePSBegin() {
+//  qDebug ("handle PS begin");
+  m_stack.pop();
+
+  QString name ("dictionary begin");
+  AIElement ref (name,AIElement::Reference);
+  m_stack.push (ref);
+}
+
+void AIParserBase::_handlePSPut() {
+//  qDebug ("handle PS put");
+  m_stack.pop();
+  m_stack.pop();
+}
 
 void AIParserBase::_handlePatternDefinition()
 {
   AIElement elem (m_stack.top());
   m_stack.pop();
 
-  const QValueVector<AIElement> aval = elem.toVector();
+  const QValueVector<AIElement> aval = elem.toElementArray();
 
   double ury = getDoubleValue();
   double urx = getDoubleValue();
@@ -588,6 +709,16 @@ void AIParserBase::_handlePatternDefinition()
 
   gotPatternDefinition (name.latin1(), aval, llx, lly, urx, ury);
 
+}
+
+void AIParserBase::_handlePSDef() {
+//  qDebug ("handle PS def");
+
+  // name ref
+  m_stack.pop();
+
+  // impl
+  m_stack.pop();
 }
 
 
@@ -635,6 +766,16 @@ void AIParserBase::gotToken (const char *value) {
 
     return;
   }
+  if (m_sink == DS_Block)
+  {
+    if (m_debug) qDebug ("token in block");
+    QString op (value);
+    AIElement realElement (op, AIElement::Operator);
+    handleElement (realElement);
+
+    return;
+  }
+
 //  qDebug ("got token %s",value);
 
   AIOperation op = getAIOperation (value);
@@ -710,6 +851,18 @@ void AIParserBase::gotToken (const char *value) {
       break;
     case AIO_EndGroupClip :
       gotEndGroup (true);
+      break;
+    case AIO_BeginGroupNoClip :
+      gotBeginGroup (false);
+      break;
+    case AIO_EndGroupNoClip :
+      gotEndGroup (false);
+      break;
+    case AIO_BeginCombination :
+      gotBeginCombination ();
+      break;
+    case AIO_EndCombination :
+      gotEndCombination ();
       break;
     case AIO_MoveTo :
       pathElement.petype = PET_MoveTo;
@@ -834,6 +987,7 @@ void AIParserBase::gotToken (const char *value) {
       {
         if (handlePS (value)) return;
       }
+      if (m_debug) stacktoa (m_stack);
       qWarning ( "pushing %s to stack", value );
       QString string(value);
       AIElement element (string, AIElement::Operator);
@@ -854,18 +1008,32 @@ bool AIParserBase::handlePS (const char *operand){
     case PSO_Exec :
       _handlePSExec ();
       return true;
+    case PSO_Def :
+      _handlePSDef ();
+      return true;
+    case PSO_String :
+      _handlePSString ();
+      return true;
+    case PSO_Bind :
+      _handlePSBind ();
+      return true;
+    case PSO_Userdict :
+      _handlePSUserdict ();
+      return true;
+    case PSO_Dict :
+      _handlePSDict ();
+      return true;
+    case PSO_Dup :
+      _handlePSDup ();
+      return true;
+    case PSO_Begin :
+      _handlePSBegin ();
+      return true;
+    case PSO_Put :
+      _handlePSPut ();
+      return true;
   }
   return false;
-}
-
-void AIParserBase::gotBlockStart () {
-  if (m_ignoring) return;
-  AILexer::gotBlockStart();
-}
-
-void AIParserBase::gotBlockEnd () {
-  if (m_ignoring) return;
-  AILexer::gotBlockEnd();
 }
 
 const double AIParserBase::getDoubleValue(void) {
@@ -994,6 +1162,14 @@ void AIParserBase::gotBeginGroup (bool clipping) {
 
 void AIParserBase::gotEndGroup (bool clipping) {
 //  qDebug ( "got end group: %d ", clipping );
+}
+
+void AIParserBase::gotBeginCombination () {
+//  qDebug ( "got begin combination" );
+}
+
+void AIParserBase::gotEndCombination () {
+//  qDebug ( "got end combination" );
 }
 
 void AIParserBase::gotPathElement (PathElement &element) {
@@ -1193,8 +1369,11 @@ const void elementtoa (const AIElement &data)
     case AIElement::Operator :
       qDebug ("string value : %s",data.toOperator().latin1());
       break;
-    case AIElement::Vector :
-      arraytoa (data.toVector());
+    case AIElement::ElementArray :
+      arraytoa (data.toElementArray());
+      break;
+    case AIElement::Block :
+      arraytoa (data.toBlock());
       break;
 
     default :

@@ -159,6 +159,7 @@ static Transition transitions[] = {
   { State_ByteArray2, CATEGORY_DIGIT, State_ByteArray2, Action_Copy},
   { State_ByteArray2, CATEGORY_LETTERHEX, State_ByteArray2, Action_Copy},
   { State_ByteArray2, CATEGORY_ALPHA, State_Token, Action_Copy},
+  { State_ByteArray2, '}', State_Start, Action_ByteArraySpecial},
   { State_ByteArray2, CATEGORY_ANY, State_Start, Action_Abort},
   { State_Start, STOP, State_Start, Action_Abort}
 };
@@ -219,6 +220,12 @@ bool AILexer::parse (QIODevice& fin){
         break;
       case Action_DecodeUnget :
         m_buffer += decode();
+        fin.ungetch(c);
+        break;
+      // in Postscript Quelltext: Kombination F}
+      case Action_ByteArraySpecial :
+        m_curState = State_Token;
+        doOutput();
         fin.ungetch(c);
         break;
       default :

@@ -1,7 +1,8 @@
 kde_module_LTLIBRARIES = libkarbonaiimport.la
 
 libkarbonaiimport_la_LIBADD = \
-	$(top_builddir)/lib/kofficeui/libkofficeui.la
+	$(top_builddir)/lib/kofficeui/libkofficeui.la \
+	../../../karbon/libkarbonpart.la
 
 libkarbonaiimport_la_LDFLAGS = \
 	$(all_libraries) \
@@ -10,6 +11,8 @@ libkarbonaiimport_la_LDFLAGS = \
 
 INCLUDES = \
         $(KOFFICE_INCLUDES) \
+	-I$(top_srcdir)/karbon \
+	-I$(top_srcdir)/karbon/visitors \
 	$(all_includes)
 
 service_DATA = karbon_ai_import.desktop
@@ -21,7 +24,8 @@ noinst_HEADERS = \
 	ailexer.h \
 	aiparserbase.h \
 	karbonaiparserbase.h \
-	aiimport.h 
+	vdocument.h \
+	aiimport.h
 
 libkarbonaiimport_la_SOURCES = \
 	aicolor.cc \
@@ -29,7 +33,8 @@ libkarbonaiimport_la_SOURCES = \
 	ailexer.cc \
 	aiparserbase.cc \
 	karbonaiparserbase.cc \
-	aiimport.cc 
+	vdocument.cc \
+	aiimport.cc
 
 libkarbonaiimport_la_METASOURCES = \
 	AUTO

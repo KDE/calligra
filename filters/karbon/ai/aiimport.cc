@@ -16,9 +16,19 @@
 #include "aiimport.h"
 
 
-typedef KGenericFactory<AiImport, KoFilter> AiImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkarbonaiimport, AiImportFactory( "karbonaiimport" ) );
+class AiImportFactory : KGenericFactory<AiImport, KoFilter>
+{
+public:
+	AiImportFactory( void )
+		: KGenericFactory<AiImport, KoFilter>( "karbonaiimport" )
+	{}
 
+protected:
+	virtual void setupTranslations( void )
+	{
+		KGlobal::locale()->insertCatalogue( "karbonepsfilter" );
+	}
+};
 
 AiImport::AiImport( KoFilter*, const char*, const QStringList& )
 	: KoFilter(), m_result ()
@@ -32,11 +42,10 @@ AiImport::~AiImport()
 KoFilter::ConversionStatus
 AiImport::convert( const QCString& from, const QCString& to )
 {
-	if( from != "application/illustrator" || to != "application/x-karbon" )
+	if ( from != "application/illustrator" || to != "application/x-karbon" )
 	{
 		return KoFilter::NotImplemented;
 	}
-
 	QFile fileIn( m_chain->inputFile() );
 	if( !fileIn.open( IO_ReadOnly ) )
 	{
@@ -44,14 +53,16 @@ AiImport::convert( const QCString& from, const QCString& to )
 		return KoFilter::FileNotFound;
 	}
 
-	if( !parse( fileIn ) )
-	{
+        QDomDocument doc ("DOC");
+
+        if (!parse (fileIn, doc))
+        {
 		fileIn.close();
 		return KoFilter::CreationError;
-	}
-	m_result = getHeader() + m_result + getFooter();
+        }
+	m_result = doc.toString().latin1();
 
-kdDebug() << m_result << endl;
+        kdDebug() << m_result << endl;
 	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
 	if( !storeOut )
 	{

@@ -52,7 +52,8 @@ typedef enum {
   Action_OutputUnget,
   Action_InitTemp,
   Action_CopyTemp,
-  Action_DecodeUnget
+  Action_DecodeUnget,
+  Action_ByteArraySpecial
 } Action;
 
 class AILexer {

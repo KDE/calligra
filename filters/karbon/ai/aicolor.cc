@@ -67,6 +67,7 @@ void AIColor::toRGB (double &r, double &g, double &b)
       r = cdata.graydata;
       g = cdata.graydata;
       b = cdata.graydata;
+      break;
     default :
       qDebug ("unknown colortype %d", ctype);
   }
@@ -88,6 +89,7 @@ void AIColor::toCMYK (double &c, double &m, double &y, double &k)
       m = 0;
       y = 0;
       k = cdata.graydata;
+      break;
     default :
       qDebug ("unknown colortype %d", ctype);
   }

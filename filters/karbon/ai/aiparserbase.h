@@ -42,7 +42,7 @@ typedef enum { TO_FillStroke, TO_Fill, TO_Append, TO_Ignore, TO_Stroke } TextOpe
 typedef enum { FM_NonZero } FillMode;
 typedef enum { FS_Roman, FS_Kanji } FontScript;
 
-typedef enum { DS_Array, DS_Other } DataSink;
+typedef enum { DS_Array, DS_Block, DS_Other } DataSink;
 typedef enum { ST_Setup, ST_Prolog, ST_ProcSet, ST_Encoding, ST_Pattern, ST_Document, ST_BrushPattern, ST_Gradient, ST_Palette, ST_Resource } SectionType;
 
 typedef enum {
@@ -92,12 +92,23 @@ typedef enum {
   /* AI 3 */
   AIO_SetWindingOrder,
 
+  AIO_BeginGroupNoClip, AIO_EndGroupNoClip,
+  AIO_BeginCombination, AIO_EndCombination,
+
   AIO_Other
 } AIOperation;
 
 typedef enum {
   PSO_Get,
   PSO_Exec,
+  PSO_Def,
+  PSO_String,
+  PSO_Bind,
+  PSO_Userdict,
+  PSO_Dict,
+  PSO_Dup,
+  PSO_Begin,
+  PSO_Put,
   PSO_Other
 } PSOperation;
 
@@ -195,6 +206,7 @@ private:
   bool m_debug;
   QValueStack<AIElement> m_stack;
   QValueStack<QValueVector<AIElement> > m_arrayStack;
+  QValueStack<QValueVector<AIElement> > m_blockStack;
   DataSink m_sink;
   ContinuationMode m_continuationMode;
 
@@ -219,6 +231,14 @@ private:
 
   void _handlePSGet();
   void _handlePSExec();
+  void _handlePSDef();
+  void _handlePSString();
+  void _handlePSBind();
+  void _handlePSUserdict();
+  void _handlePSDict();
+  void _handlePSDup();
+  void _handlePSBegin();
+  void _handlePSPut();
 
   void _handleDocumentFonts(const char *data);
   void _handleDocumentFiles(const char *data);
@@ -261,6 +281,8 @@ protected:
   virtual void gotDash (const QValueVector<AIElement>& dashData, double phase);
   virtual void gotBeginGroup (bool clipping);
   virtual void gotEndGroup (bool clipping);
+  virtual void gotBeginCombination ();
+  virtual void gotEndCombination ();
   virtual void gotPathElement (PathElement &element);
   virtual void gotFillPath (bool closed, bool reset, FillMode fm = FM_NonZero);
   virtual void gotStrokePath (bool closed);
