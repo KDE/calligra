@@ -238,6 +238,8 @@ void KprKword::convert()
             QDomElement topBorder = p.namedItem( "TOPBORDER" ).toElement();
             QDomElement bottomBorder = p.namedItem( "BOTTOMBORDER" ).toElement();
 
+            QDomElement shadow=p.namedItem("SHADOW").toElement();
+
             for ( ; !textElem.isNull() ; textElem = textElem.nextSibling().toElement() )
             {
                 int oldLen = text.length();
@@ -341,6 +343,9 @@ void KprKword::convert()
                 case 4:
                     align.setAttribute( "align","center");
                     break;
+                case 8:
+                    align.setAttribute( "align","justify");
+                    break;
                 }
             }
             if(!counter.isNull() )
@@ -361,6 +366,8 @@ void KprKword::convert()
                 layoutElem.appendChild(bottomBorder);
             if(!align.isNull())
                 layoutElem.appendChild(align);
+            if(!shadow.isNull())
+                layoutElem.appendChild(shadow);
             // Only the first parag of the top text object is set to the 'title' style
             isTitle = false;
         }
