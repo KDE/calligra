@@ -344,17 +344,19 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& m
     }
     layoutElement.appendChild(element);
 
+#if 0
+	// The following tabulators were KWord's 0.8 one
+	// We trust now on KWord's 1.0 default tabulators.
     element=layoutElement.ownerDocument().createElement("TABULATOR");
-    element.setAttribute("mmpos","64.2055");
+    element.setAttribute("type","0");
     element.setAttribute("ptpos","182");
-    element.setAttribute("inchpos","2.52778");
     layoutElement.appendChild(element);
 
     element=layoutElement.ownerDocument().createElement("TABULATOR");
-    element.setAttribute("mmpos","128.764");
+    element.setAttribute("type","0");
     element.setAttribute("ptpos","365");
-    element.setAttribute("inchpos","5.06944");
     layoutElement.appendChild(element);
+#endif
 
     QDomElement formatElementOut=layoutElement.ownerDocument().createElement("FORMAT");
     layoutElement.appendChild(formatElementOut);
