@@ -2967,6 +2967,9 @@ void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newA
 {
   KSpreadSheet* table = activeTable();
 
+  if ( ! table )
+      return;
+
   QPoint oldAnchor = selectionInfo()->getChooseAnchor();
   QPoint oldMarker = selectionInfo()->getChooseMarker();
   QPoint chooseCursor = selectionInfo()->getChooseCursor();
@@ -3387,7 +3390,7 @@ void KSpreadCanvas::paintUpdates()
   double topPos = activeTable()->dblRowPos(range.top());
   double leftPos = activeTable()->dblColumnPos(range.left());
 
-  KoPoint dblCorner( leftPos  - xOffset(), topPos - yOffset() );
+  KoPoint dblCorner( leftPos - xOffset(), topPos - yOffset() );
 
   int x;
   int y;

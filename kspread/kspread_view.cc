@@ -1335,11 +1335,12 @@ void KSpreadView::initializeBorderActions()
 
 KSpreadView::~KSpreadView()
 {
-  //  ElapsedTime el( "~KSpreadView" );
-  m_pDoc->increaseNumOperation(); // no paints anymore...
-    deleteEditor( true );
+    //  ElapsedTime el( "~KSpreadView" );
+    m_pDoc->increaseNumOperation(); // no paints anymore...
+    if ( m_pDoc->isReadWrite() ) // make sure we're not embedded in Konq
+        deleteEditor( true );
     if ( !m_transformToolBox.isNull() )
-	delete (&*m_transformToolBox);
+        delete (&*m_transformToolBox);
     /*if (m_sbCalcLabel)
     {
         disconnect(m_sbCalcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
@@ -1349,12 +1350,12 @@ KSpreadView::~KSpreadView()
     delete m_selectionInfo;
     delete m_spell.kspell;
 
-    m_pCanvas->endChoose();
     m_pTable = 0; // set the active table to 0L so that when during destruction
     // of embedded child documents possible repaints in KSpreadSheet are not
     // performed. The repains can happen if you delete an embedded document,
     // which leads to an regionInvalidated() signal emission in KoView, which calls
     // repaint, etc.etc. :-) (Simon)
+    m_pCanvas->endChoose();
 
     delete m_pPopupColumn;
     delete m_pPopupRow;
@@ -6441,9 +6442,9 @@ void KSpreadView::slotChildUnselected( KoDocumentChild* )
 
 void KSpreadView::deleteEditor( bool saveChanges )
 {
-  m_pDoc->emitBeginOperation( false );
-  m_pCanvas->deleteEditor( saveChanges );
-  m_pDoc->emitEndOperation( selectionInfo()->selection() );
+    m_pDoc->emitBeginOperation( false );
+    m_pCanvas->deleteEditor( saveChanges );
+    m_pDoc->emitEndOperation( selectionInfo()->selection() );
 }
 
 DCOPObject * KSpreadView::dcopObject()
