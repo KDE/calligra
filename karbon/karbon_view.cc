@@ -142,6 +142,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_currentTool = m_selectTool;
 	selectTool();
 	reorganizeGUI();
+	zoomChanged();
 }
 
 KarbonView::~KarbonView()
@@ -664,7 +665,10 @@ KarbonView::zoomChanged()
 	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
 	setZoom( zoomFactor );
 	// TODO : I guess we should define a document size member at this point...
-	m_canvas->resizeContents( int( 800 * zoomFactor ), int( 600 * zoomFactor ) );
+	kdDebug() << "m_part->pageLayout().ptWidth :" << m_part->pageLayout().ptWidth << endl;
+	kdDebug() << "m_part->pageLayout().ptHeight :" << m_part->pageLayout().ptHeight << endl;
+	m_canvas->resizeContents( int( m_part->pageLayout().ptWidth * zoomFactor ),
+								int( m_part->pageLayout().ptHeight * zoomFactor ) );
 	m_canvas->repaintAll();
 	m_canvas->setFocus();
 }

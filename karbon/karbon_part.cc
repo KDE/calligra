@@ -8,6 +8,8 @@
 
 #include <kconfig.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <koTemplateChooseDia.h>
 
 #include "karbon_part.h"
 #include "karbon_factory.h"
@@ -57,6 +59,26 @@ DCOPObject* KarbonPart::dcopObject()
 bool
 KarbonPart::initDoc()
 {
+	QString file;
+	KoTemplateChooseDia::ReturnType result;
+
+	result = KoTemplateChooseDia::choose( KarbonFactory::instance(), file, "application/x-karbon",
+										"*.karbon", i18n("Karbon14"), KoTemplateChooseDia::Everything, "karbon_template");
+	m_pageLayout.ptWidth = 10 * 100;
+	m_pageLayout.ptHeight = 20 * 100;
+
+	if( result == KoTemplateChooseDia::Empty )
+	{
+		return true;
+	}
+	else if( result == KoTemplateChooseDia::File )
+	{
+		KURL url;
+		url.setPath( file );
+		bool ok = openURL( url );
+		return ok;
+	}
+
 	return true;
 }
 
