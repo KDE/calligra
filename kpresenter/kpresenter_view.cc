@@ -1017,6 +1017,7 @@ void KPresenterView::screenStop()
 	{
 	  page->close(false);
 	  page->recreate((QWidget*)this,0,KPoint(0,0),true);
+	  page->lower();
 	}
       xOffset = _xOffset;
       yOffset = _yOffset;
