@@ -53,6 +53,8 @@ bool KPresenterShell_impl::openDocument(const char *_filename)
   OPParts::View_var view = m_rDoc->createView();
   view->setPartShell(this);
   setRootPart(view);
+  m_rMenuBar->setItemEnabled(m_idMenuFile_SaveAs,true);
+  m_rToolBarFile->setItemEnabled(m_idButtonFile_Print,true);
 
   return true;
 }

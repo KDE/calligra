@@ -49,6 +49,10 @@
 class KPresenterView_impl;
 class KPresenterDocument_impl;
 
+#ifndef min
+#define min(a,b) ((a)<(b)?(a):(b))
+#endif
+
 /******************************************************************/
 /* class Page - Page                                              */
 /******************************************************************/
@@ -81,10 +85,12 @@ public:
 
   void startScreenPresentation();
   void stopScreenPresentation();
-  bool pNextPage(bool);
-  bool pPrevPage(bool);
+  bool pNext(bool);
+  bool pPrev(bool);
 
   unsigned int presPage() {return currPresPage;}
+  void setPresFakt(float f) {_presFakt = f;}
+  float presFakt() {return _presFakt;}
 
 public slots:
 
@@ -157,6 +163,7 @@ protected:
   KPresenterView_impl *view;
   bool editMode;
   unsigned int currPresPage;
+  float _presFakt;
 
 private slots:
 

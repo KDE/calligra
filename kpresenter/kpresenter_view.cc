@@ -381,7 +381,7 @@ void KPresenterView_impl::screenPrev()
 {
   if (presStarted)
     {
-      if (page->pPrevPage(true))
+      if (page->pPrev(true))
 	{
 	  yOffset -= KPresenterDoc()->getPageSize(0,0,0).height()+10; 
 	  page->repaint(true);
@@ -394,7 +394,7 @@ void KPresenterView_impl::screenNext()
 {
   if (presStarted)
     {
-      if (page->pNextPage(true))
+      if (page->pNext(true))
 	{
 	  yOffset += KPresenterDoc()->getPageSize(0,0,0).height()+10; 
 	  page->repaint(true);

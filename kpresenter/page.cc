@@ -1017,6 +1017,12 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
 /*====================== start screenpresentation ================*/
 void Page::startScreenPresentation()
 {
+  float _presFaktW = (float)width() / (float)getPageSize(0).width() > 1.0 ? 
+    (float)width() / (float)getPageSize(0).width() : 1.0;
+  float _presFaktH = (float)height() / (float)getPageSize(0).height() > 1.0 ? 
+    (float)height() / (float)getPageSize(0).height() : 1.0;
+  _presFakt = min(_presFaktW,_presFaktH);
+
   currPresPage = 1;
   editMode = false;
   drawBack = true;
@@ -1032,8 +1038,8 @@ void Page::stopScreenPresentation()
   repaint(true);
 }
 
-/*===================== next page ================================*/
-bool Page::pNextPage(bool manual)
+/*========================== next ================================*/
+bool Page::pNext(bool manual)
 {
   if (currPresPage+1 > pageNums())
     return false;
@@ -1042,8 +1048,8 @@ bool Page::pNextPage(bool manual)
   return true;
 }
 
-/*===================== prev page ================================*/
-bool Page::pPrevPage(bool manual)
+/*====================== previous ================================*/
+bool Page::pPrev(bool manual)
 {
   if (currPresPage-1 <= 0)
     return false;

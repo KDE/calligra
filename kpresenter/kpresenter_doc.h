@@ -163,10 +163,6 @@ public:
   // url of part
   const char* url() {return m_strFileURL.data();}
 
-  const char* orientationString();
-  
-  QString paperFormatString();
-  
   // ------ C++ ------
   // get output- and unputformats
   virtual QStrList outputFormats();
