@@ -92,6 +92,11 @@ KarbonFactory::aboutData()
 			0,
 			"buis@kde.org",
 			0 );
+		s_aboutData->addAuthor(
+			"Tomislav Lukman",
+			0,
+			"tomislav.lukman@ck.tel.hr",
+			0 );
 // TODO: add the names of some helpfull souls
 	}
 	return s_aboutData;
