@@ -167,7 +167,7 @@ void KSpreadOsziDlg::slotCalc()
     }
     if ( double_result && result2.table == 0 )
     {
-	KMessageBox::error( this, i18n("No table specifiedin ResultY") );
+	KMessageBox::error( this, i18n("No table specified in Result Y") );
 	return;
     }
 
@@ -180,12 +180,12 @@ void KSpreadOsziDlg::slotCalc()
 	
     if ( cell_data1->content() == KSpreadCell::Formula )
     {
-	KMessageBox::error( this, i18n("The DataX cell mast not be a formula") );
+	KMessageBox::error( this, i18n("The Data X cell must not be a formula") );
 	return;
     }
     if ( double_data && cell_data2->content() == KSpreadCell::Formula )
     {
-	KMessageBox::error( this, i18n("The DataY cell mast not be a formula") );
+	KMessageBox::error( this, i18n("The Data Y cell must not be a formula") );
 	return;
     }
     if ( cell_result1->content() != KSpreadCell::Formula )
