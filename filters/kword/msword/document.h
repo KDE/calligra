@@ -43,7 +43,7 @@ public:
     virtual wvWare::U8 nonRequiredHyphen();
 };
 
-class Document : public wvWare::BodyTextHandler
+class Document : public wvWare::TextHandler
 {
 public:
     Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement );
@@ -51,7 +51,7 @@ public:
 
     bool parse();
 
-    virtual void sectionStart();
+    virtual void sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep );
     virtual void sectionEnd();
 
     virtual void paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties );

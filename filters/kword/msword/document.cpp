@@ -58,7 +58,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
 {
     if ( m_parser ) { // 0 in case of major error (e.g. unsupported format)
         m_parser->setInlineReplacementHandler( m_replacementHandler );
-        m_parser->setBodyTextHandler( this );
+        m_parser->setTextHandler( this );
         prepareDocument();
         processStyles();
     }
@@ -142,10 +142,8 @@ bool Document::parse()
     return false;
 }
 
-void Document::sectionStart()
+void Document::sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
 {
-    wvWare::SharedPtr<const wvWare::Word97::SEP> sep = m_parser->currentSep();
-
     m_sectionNumber++;
 
     if ( m_sectionNumber == 1 )
