@@ -93,7 +93,7 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   init();
   entryList->setEnabled(false);
   m_pModify->setEnabled(false);
-  if(list->count()==0)
+  if(list->count()<=2)
     m_pRemove->setEnabled(false);
   resize( 600, 250 );
 
@@ -101,23 +101,48 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
 
 void KSpreadList::init()
 {
-  config = KSpreadFactory::global()->config();
-  config->setGroup( "Parameters" );
-  QStringList other=config->readListEntry("Other list");
-  QString tmp;
-  QStringList lst;
-  for ( QStringList::Iterator it = other.begin(); it != other.end();++it )
+    QString month;
+    month+=i18n("January")+", ";
+    month+=i18n("February")+", ";
+    month+=i18n("March") +", ";
+    month+=i18n("April")+", ";
+    month+=i18n("May")+", ";
+    month+=i18n("June")+", ";
+    month+=i18n("July")+", ";
+    month+=i18n("August")+", ";
+    month+=i18n("September")+", ";
+    month+=i18n("October")+", ";
+    month+=i18n("November")+", ";
+    month+=i18n("December");
+    QStringList lst;
+    lst.append(month);
+
+
+    QString day=i18n("Monday")+", ";
+    day+=i18n("Tuesday")+", ";
+    day+=i18n("Wednesday")+", ";
+    day+=i18n("Thursday")+", ";
+    day+=i18n("Friday")+", ";
+    day+=i18n("Saturday")+", ";
+    day+=i18n("Sunday");
+    lst.append(day);
+
+    config = KSpreadFactory::global()->config();
+    config->setGroup( "Parameters" );
+    QStringList other=config->readListEntry("Other list");
+    QString tmp;
+    for ( QStringList::Iterator it = other.begin(); it != other.end();++it )
     {
-      if((*it)!="\\")
-	tmp+=(*it)+", ";
-      else if( it!=other.begin())
+        if((*it)!="\\")
+            tmp+=(*it)+", ";
+        else if( it!=other.begin())
 	{
-	  tmp=tmp.left(tmp.length()-2);
-	  lst.append(tmp);
-	  tmp="";
+            tmp=tmp.left(tmp.length()-2);
+            lst.append(tmp);
+            tmp="";
 	}
     }
-  list->insertStringList(lst);
+    list->insertStringList(lst);
 }
 
 void KSpreadList::slotDoubleClicked(QListBoxItem *)
@@ -172,13 +197,16 @@ void KSpreadList::slotRemove()
 {
   if(list->currentItem()==-1)
     return;
+  //don't remove the two first line
+  if(list->currentItem()<2)
+      return;
   int ret = KMessageBox::warningYesNo( this, i18n("Do you want really remove this list?"));
   if(ret==4) // reponse = No
     return;
   list->removeItem(list->currentItem ());
   entryList->setEnabled(false);
   entryList->setText("");
-  if(list->count()==0)
+  if(list->count()<=2)
     m_pRemove->setEnabled(false);
 }
 
@@ -192,7 +220,8 @@ void KSpreadList::slotOk()
     }
   QStringList result;
   result.append("\\");
-  for(unsigned int i=0;i<list->count();i++)
+  //don't save the two first line
+  for(unsigned int i=2;i<list->count();i++)
     {
       QStringList tmp=result.split(", ",list->text(i));
       result+=tmp;
@@ -213,7 +242,8 @@ void KSpreadList::slotOk()
 void KSpreadList::slotModify()
 {
 
-  if(list->currentItem ()!=-1 && !entryList->text().isEmpty())
+    //you can modify list but not the two first list
+  if(list->currentItem ()>2 && !entryList->text().isEmpty())
     {
       QString tmp;
       for(int i=0;i<entryList->numLines();i++)
