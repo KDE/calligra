@@ -62,6 +62,19 @@ KWFrame::KWFrame()
   runAroundGap = 1;
   mostRight = false;
   group = 0L;
+
+  brd_left.color = white;
+  brd_left.style = KWParagLayout::SOLID;
+  brd_left.ptWidth = 0;
+  brd_right.color = white;
+  brd_right.style = KWParagLayout::SOLID;
+  brd_right.ptWidth = 0;
+  brd_top.color = white;
+  brd_top.style = KWParagLayout::SOLID;
+  brd_top.ptWidth = 0;
+  brd_bottom.color = white;
+  brd_bottom.style = KWParagLayout::SOLID;
+  brd_bottom.ptWidth = 0;
 }
 
 /*================================================================*/
@@ -74,6 +87,19 @@ KWFrame::KWFrame(const KPoint &topleft,const QPoint &bottomright)
   runAroundGap = 1;
   mostRight = false;
   group = 0L;
+
+  brd_left.color = white;
+  brd_left.style = KWParagLayout::SOLID;
+  brd_left.ptWidth = 0;
+  brd_right.color = white;
+  brd_right.style = KWParagLayout::SOLID;
+  brd_right.ptWidth = 0;
+  brd_top.color = white;
+  brd_top.style = KWParagLayout::SOLID;
+  brd_top.ptWidth = 0;
+  brd_bottom.color = white;
+  brd_bottom.style = KWParagLayout::SOLID;
+  brd_bottom.ptWidth = 0;
 } 
 
 /*================================================================*/
@@ -86,6 +112,19 @@ KWFrame::KWFrame(const KPoint &topleft,const KSize &size)
   runAroundGap = 1;
   mostRight = false;
   group = 0L;
+
+  brd_left.color = white;
+  brd_left.style = KWParagLayout::SOLID;
+  brd_left.ptWidth = 0;
+  brd_right.color = white;
+  brd_right.style = KWParagLayout::SOLID;
+  brd_right.ptWidth = 0;
+  brd_top.color = white;
+  brd_top.style = KWParagLayout::SOLID;
+  brd_top.ptWidth = 0;
+  brd_bottom.color = white;
+  brd_bottom.style = KWParagLayout::SOLID;
+  brd_bottom.ptWidth = 0;
 }    
 
 /*================================================================*/
@@ -98,6 +137,19 @@ KWFrame::KWFrame(int left,int top,int width,int height)
   runAroundGap = 1;
   mostRight = false;
   group = 0L;
+
+  brd_left.color = white;
+  brd_left.style = KWParagLayout::SOLID;
+  brd_left.ptWidth = 0;
+  brd_right.color = white;
+  brd_right.style = KWParagLayout::SOLID;
+  brd_right.ptWidth = 0;
+  brd_top.color = white;
+  brd_top.style = KWParagLayout::SOLID;
+  brd_top.ptWidth = 0;
+  brd_bottom.color = white;
+  brd_bottom.style = KWParagLayout::SOLID;
+  brd_bottom.ptWidth = 0;
 }
 
 /*================================================================*/
@@ -110,6 +162,19 @@ KWFrame::KWFrame(int left,int top,int width,int height,RunAround _ra,int _gap)
   runAroundGap = _gap;
   mostRight = false;
   group = 0L;
+
+  brd_left.color = white;
+  brd_left.style = KWParagLayout::SOLID;
+  brd_left.ptWidth = 0;
+  brd_right.color = white;
+  brd_right.style = KWParagLayout::SOLID;
+  brd_right.ptWidth = 0;
+  brd_top.color = white;
+  brd_top.style = KWParagLayout::SOLID;
+  brd_top.ptWidth = 0;
+  brd_bottom.color = white;
+  brd_bottom.style = KWParagLayout::SOLID;
+  brd_bottom.ptWidth = 0;
 }
 
 /*================================================================*/
@@ -122,6 +187,19 @@ KWFrame::KWFrame(const QRect &_rect)
   runAroundGap = 1;
   mostRight = false;
   group = 0L;
+
+  brd_left.color = white;
+  brd_left.style = KWParagLayout::SOLID;
+  brd_left.ptWidth = 0;
+  brd_right.color = white;
+  brd_right.style = KWParagLayout::SOLID;
+  brd_right.ptWidth = 0;
+  brd_top.color = white;
+  brd_top.style = KWParagLayout::SOLID;
+  brd_top.ptWidth = 0;
+  brd_bottom.color = white;
+  brd_bottom.style = KWParagLayout::SOLID;
+  brd_bottom.ptWidth = 0;
 }
 
 /*================================================================*/
@@ -967,7 +1045,7 @@ void KWPictureFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 /*================================================================*/
 QPicture *KWPartFrameSet::getPicture() 
 { 
-  return child->draw(); 
+  return child->draw(1.0,true); 
 }
 
 /*================================================================*/

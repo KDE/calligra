@@ -15,6 +15,7 @@
 
 #include "kword_doc.h"
 #include "kword_page.h"
+#include "kword_view.h"
 
 #include "searchdia.h"
 #include "searchdia.moc"
@@ -24,13 +25,21 @@
 /******************************************************************/
 
 /*================================================================*/
-KWSearchDia::KWSearchDia(QWidget* parent,const char* name,KWordDocument *_doc,KWPage *_page,KWSearchEntry *_searchEntry,QStrList _fontlist)
+KWSearchDia::KWSearchDia(QWidget* parent,const char* name,KWordDocument *_doc,KWPage *_page,KWordView *_view,
+			 KWSearchEntry *_searchEntry,QStrList _fontlist)
   : QTabDialog(parent,name,false)
 {
   doc = _doc;
   page = _page;
+  view = _view;
   searchEntry = _searchEntry;
   fontlist = _fontlist;
+
+  if (!searchEntry)
+    {
+      searchEntry = new KWSearchEntry();
+      view->setSearchEntry(searchEntry);
+    }
   
   setupTab1();
     
@@ -56,79 +65,114 @@ void KWSearchDia::setupTab1()
   lSearch->resize(lSearch->sizeHint());
   lSearch->setAlignment(AlignBottom);
   sGrid->addWidget(lSearch,1,0);
-
+  
   eSearch = new QLineEdit(gSearch);
   eSearch->resize(eSearch->sizeHint());
   sGrid->addWidget(eSearch,2,0);
+  eSearch->setText(searchEntry->expr);
 
   cCase = new QCheckBox(i18n("Case Sensitive"),gSearch);
   cCase->resize(cCase->sizeHint());
   sGrid->addWidget(cCase,3,0);
+  cCase->setChecked(searchEntry->caseSensitive);
 
   cRegExp = new QCheckBox(i18n("Regular Expression"),gSearch);
   cRegExp->resize(cRegExp->sizeHint());
   sGrid->addWidget(cRegExp,4,0);
+  cRegExp->setChecked(searchEntry->regexp);
 
   cFamily = new QCheckBox(i18n("Check Family"),gSearch);
   cFamily->resize(cFamily->sizeHint());
   sGrid->addWidget(cFamily,1,1);
+  connect(cFamily,SIGNAL(clicked()),this,SLOT(slotCheckFamily()));
+  cFamily->setChecked(searchEntry->checkFamily);
 
   cSize = new QCheckBox(i18n("Check Size"),gSearch);
   cSize->resize(cSize->sizeHint());
   sGrid->addWidget(cSize,2,1);
+  connect(cSize,SIGNAL(clicked()),this,SLOT(slotCheckSize()));
+  cSize->setChecked(searchEntry->checkSize);
 
   cColor = new QCheckBox(i18n("Check Color"),gSearch);
   cColor->resize(cColor->sizeHint());
   sGrid->addWidget(cColor,3,1);
+  connect(cColor,SIGNAL(clicked()),this,SLOT(slotCheckColor()));
+  cColor->setChecked(searchEntry->checkColor);
 
   cBold = new QCheckBox(i18n("Check Bold"),gSearch);
   cBold->resize(cBold->sizeHint());
   sGrid->addWidget(cBold,4,1);
+  connect(cBold,SIGNAL(clicked()),this,SLOT(slotCheckBold()));
+  cBold->setChecked(searchEntry->checkBold);
 
   cItalic = new QCheckBox(i18n("Check Italic"),gSearch);
   cItalic->resize(cItalic->sizeHint());
   sGrid->addWidget(cItalic,5,1);
+  connect(cItalic,SIGNAL(clicked()),this,SLOT(slotCheckItalic()));
+  cItalic->setChecked(searchEntry->checkItalic);
 
   cUnderline = new QCheckBox(i18n("Check Underline"),gSearch);
   cUnderline->resize(cUnderline->sizeHint());
   sGrid->addWidget(cUnderline,6,1);
+  connect(cUnderline,SIGNAL(clicked()),this,SLOT(slotCheckUnderline()));
+  cUnderline->setChecked(searchEntry->checkUnderline);
 
   cVertAlign = new QCheckBox(i18n("Check Vertical Alignment"),gSearch);
   cVertAlign->resize(cVertAlign->sizeHint());
   sGrid->addWidget(cVertAlign,7,1);
+  connect(cVertAlign,SIGNAL(clicked()),this,SLOT(slotCheckVertAlign()));
+  cVertAlign->setChecked(searchEntry->checkVertAlign);
 
   cmFamily = new QComboBox(true,gSearch);
   cmFamily->insertStrList(&fontlist);
   cmFamily->resize(cmFamily->sizeHint());
   sGrid->addWidget(cmFamily,1,2);
+  for (int j = 0;j < cmFamily->count();j++)
+    {
+      if (QString(cmFamily->text(j)) == searchEntry->family)
+	cmFamily->setCurrentItem(j);
+    }
+  connect(cmFamily,SIGNAL(activated(const char*)),this,SLOT(slotFamily(const char*)));
 
   cmSize = new QComboBox(true,gSearch);
   QStrList sizes;
   QString tmp;
-  for (unsigned int i = 4;i <= 100;i++)
+  int curr = 0;
+  for (int i = 4;i <= 100;i++)
     {
       tmp.sprintf("%d",i);
       sizes.append(tmp);
+      if (i == searchEntry->size) curr = i - 4;
     }
   cmSize->insertStrList(&sizes);
   cmSize->resize(cmSize->sizeHint());
   sGrid->addWidget(cmSize,2,2);
+  cmSize->setCurrentItem(curr);
+  connect(cmSize,SIGNAL(activated(const char*)),this,SLOT(slotSize(const char*)));
 
   bColor = new KColorButton(gSearch);
   bColor->resize(bColor->sizeHint());
   sGrid->addWidget(bColor,3,2);
+  bColor->setColor(searchEntry->color);
+  connect(bColor,SIGNAL(changed(const QColor&)),this,SLOT(slotColor(const QColor&)));
 
   cmBold = new QCheckBox(i18n("Bold"),gSearch);
   cmBold->resize(cmBold->sizeHint());
   sGrid->addWidget(cmBold,4,2);
+  cmBold->setChecked(searchEntry->bold);
+  connect(cmBold,SIGNAL(clicked()),this,SLOT(slotBold()));
 
   cmItalic = new QCheckBox(i18n("Italic"),gSearch);
   cmItalic->resize(cmItalic->sizeHint());
   sGrid->addWidget(cmItalic,5,2);
+  cmItalic->setChecked(searchEntry->italic);
+  connect(cmItalic,SIGNAL(clicked()),this,SLOT(slotItalic()));
 
   cmUnderline = new QCheckBox(i18n("Underline"),gSearch);
   cmUnderline->resize(cmUnderline->sizeHint());
   sGrid->addWidget(cmUnderline,6,2);
+  cmUnderline->setChecked(searchEntry->underline);
+  connect(cmUnderline,SIGNAL(clicked()),this,SLOT(slotUnderline()));
   
   cmVertAlign = new QComboBox(false,gSearch);
   cmVertAlign->insertItem(i18n("Normal"),-1);
@@ -136,6 +180,19 @@ void KWSearchDia::setupTab1()
   cmVertAlign->insertItem(i18n("Superscript"),-1);
   cmVertAlign->resize(cmVertAlign->sizeHint());
   sGrid->addWidget(cmVertAlign,7,2);
+  switch (searchEntry->vertAlign)
+    {
+    case KWFormat::VA_NORMAL:
+      cmVertAlign->setCurrentItem(0);
+      break;
+    case KWFormat::VA_SUB:
+      cmVertAlign->setCurrentItem(1);
+      break;
+    case KWFormat::VA_SUPER:
+      cmVertAlign->setCurrentItem(2);
+      break;
+    }
+  connect(cmVertAlign,SIGNAL(activated(int)),this,SLOT(slotVertAlign(int)));
 
   sGrid->addRowSpacing(0,7);
   sGrid->addRowSpacing(1,lSearch->height());
@@ -225,6 +282,14 @@ void KWSearchDia::setupTab1()
   addTab(tab1,i18n("Search && Replace"));
 
   resize(minimumSize());
+
+  slotCheckFamily();
+  slotCheckColor();
+  slotCheckSize();
+  slotCheckBold();
+  slotCheckItalic();
+  slotCheckUnderline();
+  slotCheckVertAlign();
 }
 
 /*================================================================*/
@@ -234,7 +299,7 @@ void KWSearchDia::searchFirst()
   if (expr.isEmpty()) return;
 
   page->removeSelection();
-  page->find(expr,0L,true,cCase->isChecked());
+  page->find(expr,searchEntry,true,cCase->isChecked());
 }
 
 /*================================================================*/
@@ -244,7 +309,157 @@ void KWSearchDia::searchNext()
   if (expr.isEmpty()) return;
 
   page->removeSelection();
-  page->find(expr,0L,false,cCase->isChecked());
+  page->find(expr,searchEntry,false,cCase->isChecked());
 }
 
+/*================================================================*/
+void KWSearchDia::slotCheckFamily()
+{
+  searchEntry->checkFamily = cFamily->isChecked();
+
+  if (cFamily->isChecked())
+    {
+      cmFamily->setEnabled(true);
+      slotFamily(cmFamily->currentText());
+    }
+  else cmFamily->setEnabled(false);
+}
+
+/*================================================================*/
+void KWSearchDia::slotCheckColor()
+{
+  searchEntry->checkColor = cColor->isChecked();
+
+  if (cColor->isChecked())
+    {
+      bColor->setEnabled(true);
+      slotColor(bColor->color());
+    }
+  else bColor->setEnabled(false);
+}
+
+/*================================================================*/
+void KWSearchDia::slotCheckSize()
+{
+  searchEntry->checkSize = cSize->isChecked();
+
+  if (cSize->isChecked())
+    {
+      cmSize->setEnabled(true);
+      slotSize(cmSize->currentText());
+    }
+  else cmSize->setEnabled(false);
+}
+
+/*================================================================*/
+void KWSearchDia::slotCheckBold()
+{
+  searchEntry->checkBold = cBold->isChecked();
+
+  if (cBold->isChecked())
+    {
+      cmBold->setEnabled(true);
+      slotBold();
+    }
+  else cmBold->setEnabled(false);
+}
+
+/*================================================================*/
+void KWSearchDia::slotCheckItalic()
+{
+  searchEntry->checkItalic = cItalic->isChecked();
+
+  if (cItalic->isChecked())
+    {
+      cmItalic->setEnabled(true);
+      slotItalic();
+    }
+  else cmItalic->setEnabled(false);
+}
+
+/*================================================================*/
+void KWSearchDia::slotCheckUnderline()
+{
+  searchEntry->checkUnderline = cUnderline->isChecked();
+
+  if (cUnderline->isChecked())
+    {
+      cmUnderline->setEnabled(true);
+      slotUnderline();
+    }
+  else cmUnderline->setEnabled(false);
+}
+
+/*================================================================*/
+void KWSearchDia::slotCheckVertAlign()
+{
+  searchEntry->checkVertAlign = cVertAlign->isChecked();
+
+  if (cVertAlign->isChecked())
+    {
+      cmVertAlign->setEnabled(true);
+      slotVertAlign(cmVertAlign->currentItem());
+    }
+  else cmVertAlign->setEnabled(false);
+}
+
+/*================================================================*/
+void KWSearchDia::slotFamily(const char* family)
+{
+  searchEntry->family = qstrdup(family);
+  view->setSearchEntry(searchEntry);
+}
+
+/*================================================================*/
+void KWSearchDia::slotSize(const char* size)
+{
+  searchEntry->size = atoi(size);
+  view->setSearchEntry(searchEntry);
+}
+
+/*================================================================*/
+void KWSearchDia::slotColor(const QColor& color)
+{
+  searchEntry->color = QColor(color);
+  view->setSearchEntry(searchEntry);
+}
+
+/*================================================================*/
+void KWSearchDia::slotBold()
+{
+  searchEntry->bold = cmBold->isChecked();
+  view->setSearchEntry(searchEntry);
+}
+
+/*================================================================*/
+void KWSearchDia::slotItalic()
+{
+  searchEntry->italic = cmItalic->isChecked();
+  view->setSearchEntry(searchEntry);
+}
+
+/*================================================================*/
+void KWSearchDia::slotUnderline()
+{
+  searchEntry->underline = cmUnderline->isChecked();
+  view->setSearchEntry(searchEntry);
+}
+
+/*================================================================*/
+void KWSearchDia::slotVertAlign(int num)
+{
+  switch (num)
+    {
+    case 0:
+      searchEntry->vertAlign = KWFormat::VA_NORMAL;
+      break;
+    case 1:
+      searchEntry->vertAlign = KWFormat::VA_SUB;
+      break;
+    case 3:
+      searchEntry->vertAlign = KWFormat::VA_SUPER;
+      break;
+    }
+  view->setSearchEntry(searchEntry);
+}
 

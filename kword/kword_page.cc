@@ -63,7 +63,9 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   mouseMode = MM_EDIT;
 
   setupMenus();
+  inKeyEvent = true;
   setMouseMode(MM_EDIT);
+  inKeyEvent = false;
 
   oldMx = oldMy = 0;
   deleteMovingRect = true;
@@ -524,6 +526,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	      
 	      int frameset = doc->getFrameSet(mx,my);
 	      
+	      selectedFrameSet = selectedFrame = -1;
 	      if (frameset != -1 && doc->getFrameSet(frameset)->getFrameType() == FT_TEXT)
 		{
 		  fc->setFrameSet(frameset + 1);
@@ -545,7 +548,16 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		  doc->setSelection(false);
 		  
 		  if (doc->getProcessingType() == KWordDocument::DTP)
-		    setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
+		    {
+		      int frame = doc->getFrameSet(frameset)->getFrame(mx,my);
+		      if (frame != -1)
+			{
+			  if (doc->getProcessingType() == KWordDocument::DTP)
+			    setRuler2Frame(frameset,frame);
+			}
+		      selectedFrame = frame;
+		      selectedFrameSet = frameset;
+		    }
 		  
 		  gui->getVertRuler()->setOffset(0,-getVertRulerPos());
 		  
@@ -698,8 +710,22 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case MM_EDIT_FRAME:
       {
-	setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
-	gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
+	unsigned int mx = e->x() + xOffset;
+	unsigned int my = e->y() + yOffset;
+	selectedFrameSet = selectedFrame = -1;
+	int frameset = doc->getFrameSet(mx,my),frame;
+	if (frameset != -1)
+	  {
+	    frame = doc->getFrameSet(frameset)->getFrame(mx,my);
+	    if (frame != -1)
+	      {
+		if (doc->getProcessingType() == KWordDocument::DTP)
+		  setRuler2Frame(frameset,frame);
+		gui->getHorzRuler()->setFrameStart(doc->getFrameSet(frameset)->getFrame(frame)->x());
+	      }
+	  }
+	selectedFrame = frame;
+	selectedFrameSet = frameset;
 	doc->recalcFrames();
 	doc->updateAllFrames();
 	recalcAll = true;
@@ -1128,7 +1154,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 		  {
 		    paintfc->setFrameSet(i + 1);
 		    paintfc->init(p,painter,true,recalcAll);
-		    
+
 		    bool bend = false;
 		    while (!bend)
 		      {
@@ -2278,46 +2304,46 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
   KWFrameSet *frameset = 0;
   KWFrame *tmp;
   KRect frame;
+  bool should_draw;
 
-  if (gui->getView()->getViewFrameBorders())
+  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
     {
-      for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+      _painter.setPen(lightGray);
+      should_draw = true;
+      if (static_cast<int>(i) == hiliteFrameSet)
+	_painter.setPen(blue);
+      else if (!gui->getView()->getViewFrameBorders()) should_draw = false;
+      
+      frameset = doc->getFrameSet(i);
+      if (isAHeader(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasHeader() ||
+	  isAFooter(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasFooter() ||
+	  isAWrongHeader(doc->getFrameSet(i)->getFrameInfo(),doc->getHeaderType()) ||
+	  isAWrongFooter(doc->getFrameSet(i)->getFrameInfo(),doc->getFooterType()))
+	continue;
+      for (unsigned int j = 0;j < frameset->getNumFrames();j++)
 	{
-	  _painter.setPen(lightGray);
-	  if (static_cast<int>(i) == hiliteFrameSet)
-	    _painter.setPen(blue);
+	  tmp = frameset->getFrame(j);
+	  frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
 	  
-	  frameset = doc->getFrameSet(i);
-	  if (isAHeader(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasHeader() ||
-	      isAFooter(doc->getFrameSet(i)->getFrameInfo()) && !doc->hasFooter() ||
-	      isAWrongHeader(doc->getFrameSet(i)->getFrameInfo(),doc->getHeaderType()) ||
-	      isAWrongFooter(doc->getFrameSet(i)->getFrameInfo(),doc->getFooterType()))
-	    continue;
-	  for (unsigned int j = 0;j < frameset->getNumFrames();j++)
+	  if (v_area.intersects(frame) && should_draw)
+	    _painter.drawRect(frame);
+	  if (mouseMode == MM_EDIT_FRAME && tmp->isSelected())
 	    {
-	      tmp = frameset->getFrame(j);
-	      frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
-	      
-	      if (v_area.intersects(frame))
-		_painter.drawRect(frame);
-	      if (mouseMode == MM_EDIT_FRAME && tmp->isSelected())
-		{
-		  _painter.save();
-		  _painter.setRasterOp(NotROP);
-		  _painter.fillRect(frame.x(),frame.y(),6,6,black);
-		  _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y(),6,6,black);
-		  _painter.fillRect(frame.x(),frame.y() + frame.height() / 2 - 3,6,6,black);
-		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y(),6,6,black);
-		  _painter.fillRect(frame.x(),frame.y() + frame.height() - 6,6,6,black);
-		  _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y() + frame.height() - 6,6,6,black);
-		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() / 2 - 3,6,6,black);
-		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() - 6,6,6,black);
-		  _painter.restore();
-		}
+	      _painter.save();
+	      _painter.setRasterOp(NotROP);
+	      _painter.fillRect(frame.x(),frame.y(),6,6,black);
+	      _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y(),6,6,black);
+	      _painter.fillRect(frame.x(),frame.y() + frame.height() / 2 - 3,6,6,black);
+	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y(),6,6,black);
+	      _painter.fillRect(frame.x(),frame.y() + frame.height() - 6,6,6,black);
+	      _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y() + frame.height() - 6,6,6,black);
+	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() / 2 - 3,6,6,black);
+	      _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() - 6,6,6,black);
+	      _painter.restore();
 	    }
 	}
     }
-
+    
   _painter.setPen(red);
 
   for (int k = 0;k < doc->getPages();k++)
@@ -2351,11 +2377,19 @@ void KWPage::drawFrameSelection(QPainter &_painter,KWFrame *_frame)
 /*================================================================*/
 void KWPage::frameSizeChanged(KoPageLayout _layout)
 {
-  gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
+  if (mouseMode != MM_EDIT_FRAME)
+    {
+      selectedFrame = fc->getFrame() - 1;
+      selectedFrameSet = fc->getFrameSet() - 1;
+    }
+  else if (selectedFrame == -1 || selectedFrameSet == -1)
+    return;
+
+  gui->getHorzRuler()->setFrameStart(doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame)->x());
 
   if (doc->getProcessingType() != KWordDocument::DTP) return;
 
-  KWFrame *frame = doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1);
+  KWFrame *frame = doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame);
 
   unsigned int page = 0;
   for (int i = 0;i < doc->getPages();i++)
@@ -2367,11 +2401,11 @@ void KWPage::frameSizeChanged(KoPageLayout _layout)
 	}
     }
   
-  doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->setCoords(_layout.ptLeft,
-										   _layout.ptTop + page * ptPaperHeight(),
-										   _layout.ptWidth - _layout.ptRight,
-										   _layout.ptHeight - _layout.ptBottom
-										   + page * ptPaperHeight());
+  doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame)->setCoords(_layout.ptLeft,
+									 _layout.ptTop + page * ptPaperHeight(),
+									 _layout.ptWidth - _layout.ptRight,
+									 _layout.ptHeight - _layout.ptBottom
+									 + page * ptPaperHeight());
   doc->updateAllFrames();
   recalcText();
   recalcCursor();
@@ -2433,6 +2467,15 @@ void KWPage::setMouseMode(MouseMode _mm)
       {
 	setCursor(ibeamCursor);
 	mm_menu->setItemChecked(mm_edit,true);
+	if (!inKeyEvent)
+	  {
+	    gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+	    gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+	    gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
+	    gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
+	    if (doc->getProcessingType() == KWordDocument::DTP)
+	      setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
+	  }
       } break;
     case MM_EDIT_FRAME: 
       {
@@ -2897,9 +2940,9 @@ void KWPage::tabListChanged(QList<KoTabulator> *_tablist)
 }
 
 /*================================================================*/
-bool KWPage::find(QString _expr,KWFormat *_format,bool _first = true,bool _cs = false)
+bool KWPage::find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false)
 {
-  debug("find start");
+  debug("find start %d",_format->checkBold);
   if (_first || !currFindParag)
     {
       for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
@@ -2917,8 +2960,9 @@ bool KWPage::find(QString _expr,KWFormat *_format,bool _first = true,bool _cs = 
 
   while (true)
     {
+      int tmpFindPos = currFindPos;
       currFindPos = currFindParag->find(_expr,_format,currFindPos,_cs);
-      if (currFindPos != -1)
+      if (currFindPos >= 0)
 	{
 	  debug("  => `%s' found at %d",_expr.data(),currFindPos);
 	  debug("  => select text - pos: %d, len: %d, frameset: %d",currFindPos,_expr.length(),currFindFS);
@@ -2930,7 +2974,13 @@ bool KWPage::find(QString _expr,KWFormat *_format,bool _first = true,bool _cs = 
       else
 	{
 	  debug("  => `%s' not found",_expr.data());
-	  if (currFindParag->getNext())
+	  if (currFindPos == -2 && tmpFindPos + _expr.length() < currFindParag->getTextLen())
+	    {
+	      currFindPos = tmpFindPos + _expr.length();
+	      debug(" => going forward (res was -2, this means ony format was wrong)"
+		    " => currFindPos = tmpFindPos + _expr.length() = %d",currFindPos);
+	    }
+	  else if (currFindParag->getNext())
 	    {
 	      currFindParag = currFindParag->getNext();
 	      currFindPos = 0;
@@ -2969,7 +3019,7 @@ bool KWPage::find(QString _expr,KWFormat *_format,bool _first = true,bool _cs = 
 }
 
 /*================================================================*/
-bool KWPage::findRev(QString _expr,KWFormat *_format,bool _first = true,bool _cs = false)
+bool KWPage::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false)
 {
 }
 

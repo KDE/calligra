@@ -40,6 +40,7 @@
 
 class KWordDocument;
 class KWPage;
+class KWordView;
 
 /******************************************************************/
 /* Class: KWSearchDia                                             */
@@ -52,6 +53,18 @@ class KWSearchDia : public QTabDialog
 public:
   struct KWSearchEntry
   {
+    KWSearchEntry() {
+      checkFamily = checkColor = checkSize = checkBold = checkItalic = checkUnderline = checkVertAlign = false;
+      expr = "";
+      family = "times";
+      color = black;
+      size = 12;
+      bold = italic = underline = false;
+      vertAlign = KWFormat::VA_NORMAL;
+      caseSensitive = false;
+      regexp = false;
+    }
+
     QString expr;
     bool checkFamily,checkColor,checkSize,checkBold,checkItalic,checkUnderline,checkVertAlign;
     QString family;
@@ -59,10 +72,11 @@ public:
     int size;
     bool bold,italic,underline;
     KWFormat::VertAlign vertAlign;
-    bool caseSensitive;
+    bool caseSensitive,regexp;
   };
 
-  KWSearchDia(QWidget *parent,const char *name,KWordDocument *_doc,KWPage *_page,KWSearchEntry *_searchEntry,QStrList _fontlist);
+  KWSearchDia(QWidget *parent,const char *name,KWordDocument *_doc,KWPage *_page,KWordView *_view,
+	      KWSearchEntry *_searchEntry,QStrList _fontlist);
 
 protected:
   void setupTab1();
@@ -81,12 +95,27 @@ protected:
 
   KWordDocument *doc;
   KWPage *page;
+  KWordView *view;
   KWSearchEntry *searchEntry;
   QStrList fontlist;
 
 protected slots:
   void searchFirst();
   void searchNext();
+  void slotCheckFamily();
+  void slotCheckColor();
+  void slotCheckSize();
+  void slotCheckBold();
+  void slotCheckItalic();
+  void slotCheckUnderline();
+  void slotCheckVertAlign();
+  void slotFamily(const char*);
+  void slotSize(const char*);
+  void slotColor(const QColor&);
+  void slotBold();
+  void slotItalic();
+  void slotUnderline();
+  void slotVertAlign(int);
 
 };
 

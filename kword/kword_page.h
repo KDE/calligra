@@ -23,6 +23,7 @@
 #include "char.h"
 #include "frame.h"
 #include "framedia.h"
+#include "searchdia.h"
 
 #include <qevent.h>
 #include <math.h>
@@ -169,8 +170,8 @@ public:
 
   void clear() { buffer.fill(white); drawBuffer(); }
 
-  bool find(QString _expr,KWFormat *_format,bool _first = true,bool _cs = false);
-  bool findRev(QString _expr,KWFormat *_format,bool _first = true,bool _cs = false);
+  bool find(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false);
+  bool findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,bool _first = true,bool _cs = false);
   
   void removeSelection();
 
@@ -294,6 +295,7 @@ protected:
   KWParag *currFindParag;
   int currFindPos;
   int currFindFS;
+  int selectedFrameSet,selectedFrame;
 
 };
 

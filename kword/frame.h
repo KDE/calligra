@@ -113,6 +113,15 @@ public:
   void setFrameGroup(KWFrameGroup *fg) { group = fg; }
   KWFrameGroup *getFrameGroup() { return group; }
 
+  KWParagLayout::Border getLeftBorder() { return brd_left; }
+  KWParagLayout::Border getRightBorder() { return brd_right; }
+  KWParagLayout::Border getTopBorder() { return brd_top; }
+  KWParagLayout::Border getBottomBorder() { return brd_bottom; }
+  void setLeftBorder(KWParagLayout::Border _brd) { brd_left = _brd; }
+  void setRightBorder(KWParagLayout::Border _brd) { brd_right = _brd; }
+  void setTopBorder(KWParagLayout::Border _brd) { brd_top = _brd; }
+  void setBottomBorder(KWParagLayout::Border _brd) { brd_bottom = _brd; }
+
 protected:
   RunAround runAround;
   bool selected;
@@ -122,6 +131,8 @@ protected:
 
   QList<KRect> intersections;
   KWFrameGroup *group;
+
+  KWParagLayout::Border brd_left,brd_right,brd_top,brd_bottom;
 
 private:
   KWFrame &operator=(KWFrame &_frame)

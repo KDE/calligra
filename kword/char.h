@@ -3,6 +3,7 @@
 
 #include "format.h"
 #include "image.h"
+#include "searchdia.h"
 
 #include <qimage.h>
 #include <qstring.h>
@@ -128,10 +129,10 @@ public:
   void saveFormat(ostream &out);
   void loadFormat(KOMLParser&,vector<KOMLAttrib>&,KWordDocument*,KWTextFrameSet*);
 
-  int find(QString _expr,KWFormat *_format,int _index,bool _cs);
-  int find(QRegExp _regexp,KWFormat *_format,int _index);
-  int findRev(QString _expr,KWFormat *_format,int _index,bool _cs);
-  int findRev(QRegExp _regexp,KWFormat *_format,int _index);
+  int find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs);
+  int find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index);
+  int findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs);
+  int findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index);
 
 protected:
   KWChar* alloc(unsigned int _size);

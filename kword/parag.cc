@@ -412,22 +412,22 @@ void KWParag::tabListChanged(QList<KoTabulator>* _tabList)
   paragLayout->setTabList(_tabList);
 }
 
-int KWParag::find(QString _expr,KWFormat *_format,int _index,bool _cs)
+int KWParag::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs)
 {
   return text.find(_expr,_format,_index,_cs);
 }
 
-int KWParag::find(QRegExp _regexp,KWFormat *_format,int _index)
+int KWParag::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index)
 {
   return text.find(_regexp,_format,_index);
 }
 
-int KWParag::findRev(QString _expr,KWFormat *_format,int _index,bool _cs)
+int KWParag::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs)
 {
   return text.findRev(_expr,_format,_index,_cs);
 }
 
-int KWParag::findRev(QRegExp _regexp,KWFormat *_format,int _index)
+int KWParag::findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index)
 {
   return text.findRev(_regexp,_format,_index);
 }

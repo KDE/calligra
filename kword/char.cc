@@ -403,7 +403,7 @@ KWChar* KWString::copy(KWChar *_data,unsigned int _len)
   return __data;
 }
 
-int KWString::find(QString _expr,KWFormat *_format,int _index,bool _cs)
+int KWString::find(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs)
 {
   QString str = toString(0,size());
   int res = str.find(_expr,_index,_cs);
@@ -412,19 +412,35 @@ int KWString::find(QString _expr,KWFormat *_format,int _index,bool _cs)
     {
       if (!_format) return res;
 
+      KWFormat *format;
       for (unsigned int i = 0;i < _expr.length();i++)
 	{	
 	  if (_data_[i + res].attrib->getClassId() != ID_KWCharFormat)
-	    return -1;
-	  if (*(dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat()) != *_format)
-	    return -1;
+	    return -2;
+	  
+	  format = dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat();
+	  
+	  if (_format->checkFamily && _format->family != format->getUserFont()->getFontName())
+	    return -2;
+	  if (_format->checkColor && _format->color != format->getColor())
+	    return -2;
+	  if (_format->checkSize && _format->size != format->getPTFontSize())
+	    return -2;
+	  if (_format->checkBold && _format->bold != (format->getWeight() == QFont::Bold))
+	    return -2;
+	  if (_format->checkItalic && _format->italic != format->getItalic())
+	    return -2;
+	  if (_format->checkUnderline && _format->underline != format->getUnderline())
+	    return -2;
+	  if (_format->checkVertAlign && _format->vertAlign != format->getVertAlign())
+	    return -2;
 	}
       return res;
     }
   else return -1;
 }
 
-int KWString::find(QRegExp _regexp,KWFormat *_format,int _index)
+int KWString::find(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index)
 {
   QString str = toString(0,size());
   int res = str.find(_regexp,_index);
@@ -445,7 +461,7 @@ int KWString::find(QRegExp _regexp,KWFormat *_format,int _index)
   else return -1;
 }
 
-int KWString::findRev(QString _expr,KWFormat *_format,int _index,bool _cs)
+int KWString::findRev(QString _expr,KWSearchDia::KWSearchEntry *_format,int _index,bool _cs)
 {
   QString str = toString(0,size());
   int res = str.findRev(_expr,_index,_cs);
@@ -454,19 +470,19 @@ int KWString::findRev(QString _expr,KWFormat *_format,int _index,bool _cs)
     {
       if (!_format) return res;
 
-      for (unsigned int i = 0;i < _expr.length();i++)
-	{	
-	  if (_data_[i + res].attrib->getClassId() != ID_KWCharFormat)
-	    return -1;
-	  if (*(dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat()) != *_format)
-	    return -1;
-	}
+//       for (unsigned int i = 0;i < _expr.length();i++)
+// 	{	
+// 	  if (_data_[i + res].attrib->getClassId() != ID_KWCharFormat)
+// 	    return -1;
+// 	  if (*(dynamic_cast<KWCharFormat*>(_data_[i + res].attrib)->getFormat()) != *_format)
+// 	    return -1;
+// 	}
       return res;
     }
   else return -1;
 }
 
-int KWString::findRev(QRegExp _regexp,KWFormat *_format,int _index)
+int KWString::findRev(QRegExp _regexp,KWSearchDia::KWSearchEntry *_format,int _index)
 {
   QString str = toString(0,size());
   int res = str.findRev(_regexp,_index);
