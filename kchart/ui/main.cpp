@@ -1,9 +1,11 @@
 #include "KChartWizard.h"
+#include "KChart.h"
 
 int main(int argc, char **argv)
 {
   KApplication a(argc,argv);
-  KChartWizard *wiz = new KChartWizard(0, "kwizardtest", false);
+  KChart* chart = new KChart();
+  KChartWizard *wiz = new KChartWizard( chart, 0, "kchartwizard", false );
   a.setMainWidget(wiz);
   wiz->adjustSize();
   wiz->show();

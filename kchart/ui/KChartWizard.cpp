@@ -1,15 +1,18 @@
-/* $Id: $ */
+/* $Id$ */
 
 #include "KChartWizard.h"
 #include "KChartWizardSelectDataPage.h"
 #include "KChartWizardSelectChartTypePage.h"
-#include "KChartWizardSetupChartPage.h"
+#include "KChartWizardSelectChartSubTypePage.h"
+#include "KChartWizardSetupDataPage.h"
+#include "KChartWizardLabelsLegendPage.h"
 #include "KChartWizardSetupAxesPage.h"
 #include <qwidget.h>
 
-KChartWizard::KChartWizard ( QWidget *parent, const char* name, 
+KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name, 
 							 bool modal, WFlags f ) :
-  KWizard( parent, name, modal, f )
+  KWizard( parent, name, modal, f ),
+  _chart( chart )
 {
   // General setup
   setCancelButton();
@@ -21,36 +24,52 @@ KChartWizard::KChartWizard ( QWidget *parent, const char* name,
   setDirectionsReflectsPage(true);
 
   // First page: select the range
-  wizpage1 = new KWizardPage;
-  QWidget* wizwidget1 = new KChartWizardSelectDataPage( this );
-  wizpage1->w = wizwidget1;
-  wizpage1->title = i18n( "Select data" );
-  wizpage1->enabled = true;
-  addPage( wizpage1 );
+  _selectdatapage = new KWizardPage;
+  QWidget* selectdatawidget = new KChartWizardSelectDataPage( this );
+  _selectdatapage->w = selectdatawidget;
+  _selectdatapage->title = i18n( "Select data" );
+  _selectdatapage->enabled = true;
+  addPage( _selectdatapage );
 
   // Second page: select the major chart type
-  wizpage2 = new KWizardPage;
-  QWidget* wizwidget2 = new KChartWizardSelectChartTypePage( this );
-  wizpage2->w = wizwidget2;
-  wizpage2->title = i18n( "Select chart type" );
-  wizpage2->enabled = true;
-  addPage( wizpage2 );
+  _selectcharttypepage = new KWizardPage;
+  QWidget* selectcharttypewidget = new KChartWizardSelectChartTypePage( this );
+  _selectcharttypepage->w = selectcharttypewidget;
+  _selectcharttypepage->title = i18n( "Select chart type" );
+  _selectcharttypepage->enabled = true;
+  addPage( _selectcharttypepage );
 
-  // Third page: chart setup
-  wizpage3 = new KWizardPage;
-  QWidget* wizwidget3 = new KChartWizardSetupChartPage( this );
-  wizpage3->w = wizwidget3;
-  wizpage3->title = i18n( "Chart setup" );
-  wizpage3->enabled = true;
-  addPage( wizpage3 );
+  // Third page: select the minor chart type
+  _selectchartsubtypepage = new KWizardPage;
+  QWidget* selectchartsubtypewidget = new KChartWizardSelectChartSubTypePage( this );
+  _selectchartsubtypepage->w = selectchartsubtypewidget;
+  _selectchartsubtypepage->title = i18n( "Select chart subtype" );
+  _selectchartsubtypepage->enabled = true;
+  addPage( _selectchartsubtypepage );
 
-  // Fourth page: axes setup
-  wizpage4 = new KWizardPage;
-  QWidget* wizwidget4 = new KChartWizardSetupAxesPage( this );
-  wizpage4->w = wizwidget4;
-  wizpage4->title = i18n( "Axes setup" );
-  wizpage4->enabled = true;
-  addPage( wizpage4 );
+  // Fourth page: data setup
+  _setupdatapage = new KWizardPage;
+  QWidget* setupdatawidget = new KChartWizardSetupDataPage( this );
+  _setupdatapage->w = setupdatawidget;
+  _setupdatapage->title = i18n( "Data setup" );
+  _setupdatapage->enabled = true;
+  addPage( _setupdatapage );
+
+  // Fifth page: labels/legends setup
+  _labelslegendpage = new KWizardPage;
+  QWidget* labelslegendwidget = new KChartWizardLabelsLegendPage( this );
+  _labelslegendpage->w = labelslegendwidget;
+  _labelslegendpage->title = i18n( "Labels and legend" );
+  _labelslegendpage->enabled = true;
+  addPage( _labelslegendpage );
+
+  // Sixth page: axes setup
+  _axespage = new KWizardPage;
+  QWidget* axeswidget = new KChartWizardSetupAxesPage( this );
+  _axespage->w = axeswidget;
+  _axespage->title = i18n( "Setup axes" );
+  _axespage->enabled = true;
+  addPage( _axespage );
 
   resize( 400, 300 );
 }
@@ -58,7 +77,10 @@ KChartWizard::KChartWizard ( QWidget *parent, const char* name,
 
 KChartWizard::~KChartWizard()
 {
-  delete wizpage1;
-  delete wizpage2;
-  delete wizpage3;
+  delete _selectdatapage;
+  delete _selectcharttypepage;
+  delete _selectchartsubtypepage;
+  delete _setupdatapage;
+  delete _labelslegendpage;
+  delete _axespage;
 }

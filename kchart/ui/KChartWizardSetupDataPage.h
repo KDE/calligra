@@ -1,15 +1,15 @@
-#ifndef _KCHARTWIZARDSELECTSETUPCHARTPAGE_H
-#define _KCHARTWIZARDSELECTSETUPCHARTPAGE_H
+#ifndef _KCHARTWIZARDSELECTSETUPDATAPAGE_H
+#define _KCHARTWIZARDSELECTSETUPDATAPAGE_H
 
 #include <qwidget.h>
 
 class QRadioButton;
 class QCheckBox;
 
-class KChartWizardSetupChartPage : public QWidget
+class KChartWizardSetupDataPage : public QWidget
 {
 public:
-  KChartWizardSetupChartPage( QWidget* parent );
+  KChartWizardSetupDataPage( QWidget* parent );
 
 private:
   QRadioButton* datacol;

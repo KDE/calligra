@@ -5,14 +5,18 @@ HEADERS     =				\
 		KChartWizard.h 			\
 		KChartWizardSelectDataPage.h		\
 		KChartWizardSelectChartTypePage.h	\
-		KChartWizardSetupChartPage.h		\
+		KChartWizardSelectChartSubTypePage.h	\
+		KChartWizardSetupDataPage.h		\
+		KChartWizardLabelsLegendPage.cpp	\
 		KChartWizardSetupAxesPage.h
 
 SOURCES     =	\
 		KChartWizard.cpp 			\
 		KChartWizardSelectDataPage.cpp		\
 		KChartWizardSelectChartTypePage.cpp		\
-		KChartWizardSetupChartPage.cpp			\
+		KChartWizardSelectChartSubTypePage.cpp	\
+		KChartWizardSetupDataPage.cpp			\
+		KChartWizardLabelsLegendPage.cpp		\
 		KChartWizardSetupAxesPage.cpp			\
 		main.cpp
 
