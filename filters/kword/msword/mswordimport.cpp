@@ -54,9 +54,14 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
     prepareDocument( mainDocument, framesetsElem );
 
     Document document( QFile::encodeName( m_chain->inputFile() ).data(), mainDocument, framesetsElem );
-    document.parse();
+    if ( !document.hasParser() )
+        return KoFilter::WrongFormat;
+    if ( !document.parse() )
+        return KoFilter::ParsingError;
     document.processSubDocQueue();
     document.finishDocument();
+    if ( !document.bodyFound() )
+        return KoFilter::WrongFormat; // this currently happens with Word95 documents
 
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if ( !out ) {

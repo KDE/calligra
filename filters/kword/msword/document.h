@@ -44,6 +44,9 @@ public:
     Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& framesetsElement );
     virtual ~Document();
 
+    bool hasParser() const { return m_parser != 0L; }
+    bool bodyFound() const { return m_bodyFound; }
+
     virtual void startBody();
     virtual void endBody();
 
@@ -79,6 +82,7 @@ private:
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     std::queue<SubDocument> m_subdocQueue;
     unsigned char m_headerFooters; // a mask of HeaderData::Type bits
+    bool m_bodyFound;
 };
 
 #endif // DOCUMENT_H

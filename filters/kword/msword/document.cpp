@@ -35,7 +35,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
     : m_mainDocument( mainDocument ), m_framesetsElement( framesetsElement ),
       m_replacementHandler( new KWordReplacementHandler ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) ),
-      m_headerFooters( 0 )
+      m_headerFooters( 0 ), m_bodyFound( false )
 {
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
@@ -159,6 +159,7 @@ void Document::startBody()
     m_textHandler->setFrameSetElement( mainFramesetElement );
     connect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
              this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
+    m_bodyFound = true;
 }
 
 void Document::endBody()
