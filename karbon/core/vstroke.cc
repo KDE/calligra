@@ -70,10 +70,14 @@ VStroke::save( QDomElement& element ) const
 	element.appendChild( me );
 
 	// save stroke parameters:
-	me.setAttribute( "lineWidth", m_lineWidth );
-	me.setAttribute( "lineCap", m_lineCap );
-	me.setAttribute( "lineJoin", m_lineJoin );
-	me.setAttribute( "miterLimit", m_miterLimit );
+	if( m_lineWidth != 1.0 )
+		me.setAttribute( "lineWidth", m_lineWidth );
+	if( m_lineCap != capButt )
+		me.setAttribute( "lineCap", m_lineCap );
+	if( m_lineJoin != joinMiter )
+		me.setAttribute( "lineJoin", m_lineJoin );
+	if( m_miterLimit != 10.0 )
+		me.setAttribute( "miterLimit", m_miterLimit );
 
 	if( m_type == solid )
 	{
@@ -124,7 +128,7 @@ VStroke::load( const QDomElement& element )
 			m_lineJoin = joinMiter;
 	}
 
-	m_miterLimit = element.attribute( "miterLimit", "0.0" ).toDouble();
+	m_miterLimit = element.attribute( "miterLimit", "10.0" ).toDouble();
 	if( m_miterLimit < 0.0 )
 		m_miterLimit = 0.0;
 
