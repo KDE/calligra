@@ -5232,6 +5232,10 @@ void KWView::changePicture()
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
     oldFile=frameset->image().getKey().filename();
+    KURL url(oldFile);
+    if (!QDir(url.directory()).exists())
+        oldFile = url.fileName();
+
     if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectImage , oldFile ) )
     {
          KWFrameChangePictureClipartCommand *cmd= new KWFrameChangePictureClipartCommand( i18n("Change Picture"), FrameIndex(frame), oldFile, file, true ) ;
@@ -5249,6 +5253,10 @@ void KWView::changeClipart()
 
     KWClipartFrameSet *frameset = static_cast<KWClipartFrameSet *>(frame->frameSet());
     oldFile=frameset->key().filename();
+    KURL url(oldFile);
+    if (!QDir(url.directory()).exists())
+        oldFile = url.fileName();
+
     if ( KWInsertPicDia::selectPictureDia(file, KWInsertPicDia::SelectClipart, oldFile ) )
     {
 
