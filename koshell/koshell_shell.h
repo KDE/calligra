@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2000 David Faure <faure@kde.org>
+   Copyright (C) 2000-2005 David Faure <faure@kde.org>
+   Copyright (C) 2005 Sven Lüppken <sven@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -23,6 +24,7 @@
 
 #include <koMainWindow.h>
 #include <koQueryTrader.h>
+#include <ktabwidget.h>
 #include <qptrlist.h>
 #include <qmap.h>
 #include <qvaluelist.h>
@@ -30,7 +32,6 @@
 class QSplitter;
 class KoKoolBar;
 class KoDocumentEntry;
-class KoShellFrame;
 class KoView;
 class KoShellGUIClient;
 
@@ -64,32 +65,36 @@ protected slots:
   void slotKSLoadCompleted();
   void slotKSLoadCanceled (const QString &);
   void slotNewDocumentName();
+  /**
+    This slot is called whenever the user clicks on a tab to change the document. It looks for the
+    changed widget in the list of all pages and calls switchToPage with the iterator which points
+    to the page corresponding to the widget.
+    @param widget The current widget
+  */
+  void slotUpdatePart( QWidget* widget );
 
-protected:
+private:
 
-  virtual bool queryClose();
-
-  virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
-  void closeDocument();
-  void saveSettings();
-  
   struct Page
   {
     KoDocument *m_pDoc;
     KoView *m_pView;
-    int m_id;
   };
+
+  virtual bool queryClose();
+  virtual bool openDocumentInternal( const KURL & url, KoDocument * newdoc = 0L );
+  void closeDocument();
+  void saveSettings();
+  void switchToPage( QValueList<Page>::Iterator it );
+
 
   QValueList<Page> m_lstPages;
   QValueList<Page>::Iterator m_activePage;
 
-  void switchToPage( QValueList<Page>::Iterator it );
-
   KoKoolBar* m_pKoolBar;
 
   int m_grpFile;
-  int m_grpDocuments;
-  
+
   // Map of available parts (the int is the koolbar item id)
   QMap<int,KoDocumentEntry> m_mapComponents;
 
@@ -98,28 +103,12 @@ protected:
   // Saved between openDocument and setRootDocument
   KoDocumentEntry m_documentEntry;
 
-  KoShellFrame *m_pFrame;
+  KTabWidget *m_pFrame;
 
   KoShellGUIClient *m_client;
-  void createShellGUI();
+  void createShellGUI( bool create = true );
 
   QSplitter *m_pLayout;
-};
-
-///////// class KoShellFrame ////////////
-class KoShellFrame : public QWidget
-{
-  Q_OBJECT
-public:
-  KoShellFrame( QWidget *parent );
-
-  void setView( KoView *view );
-
-protected:
-  virtual void resizeEvent( QResizeEvent * );
-
-private:
-  KoView *m_pView;
 };
 
 //////// class KoShellGUIClient //////////
@@ -127,9 +116,9 @@ private:
 class KoShellGUIClient : public KXMLGUIClient
 {
 public:
-	KoShellGUIClient( KoShellWindow *window );
+  KoShellGUIClient( KoShellWindow *window );
 protected:
-	KToggleAction *sidebar;
+  KToggleAction *sidebar;
 };
 
 #endif // __koshell_window_h__

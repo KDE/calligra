@@ -1,7 +1,8 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Simon Hausmann <hausmann@kde.org>
-   Copyright (C) 2000 David Faure <faure@kde.org>
+   Copyright (C) 2000-2005 David Faure <faure@kde.org>
+   Copyright (C) 2005 Sven Lüppken <sven@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -56,9 +57,11 @@ KoShellWindow::KoShellWindow()
   m_pLayout = new QSplitter( centralWidget() );
   m_pKoolBar = new KoKoolBar( m_pLayout );
 
-  m_pFrame = new KoShellFrame( m_pLayout );
+  m_pFrame = new KTabWidget( m_pLayout );
+  m_pFrame->setTabPosition( KTabWidget::Bottom );
 
   m_grpFile = m_pKoolBar->insertGroup(i18n("Components"));
+
   QValueList<KoDocumentEntry> lstComponents = KoDocumentEntry::query(false,QString());
   QValueList<KoDocumentEntry>::Iterator it = lstComponents.begin();
   for( ; it != lstComponents.end(); ++it )
@@ -90,18 +93,20 @@ KoShellWindow::KoShellWindow()
       }
   }
 
-  m_grpDocuments = m_pKoolBar->insertGroup(i18n("Documents"));
   //m_pKoolBar->insertGroup("Snippets"); //?
 
   QValueList<int> list;
   list.append( KoShellSettings::sidebarWidth() );
   list.append( this->width() - KoShellSettings::sidebarWidth() );
   m_pLayout->setSizes( list );
-  
+
   connect( this, SIGNAL( documentSaved() ),
            this, SLOT( slotNewDocumentName() ) );
 
-  // Not implemented yet
+  connect( m_pFrame, SIGNAL( currentChanged( QWidget* ) ),
+           this, SLOT( slotUpdatePart( QWidget* ) ) );
+
+   // Not implemented yet
   actionCollection()->action("view_split")->setEnabled(false);
   actionCollection()->action("view_splitter_orientation")->setEnabled(false);
 
@@ -203,7 +208,7 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   }
 
   if ( tmpFile ) {
-    //if the laoded file has been a temporary file
+    //if the loaded file has been a temporary file
     //we need to correct a few document settings
     //see description of bug #77574 for additional information
 
@@ -274,25 +279,22 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
   {
     if ( !doc->shells().contains( this ) )
         doc->addShell( this );
-    KoView *v = doc->createView( m_pFrame );
+
+    KoView *v = doc->createView();
     QPtrList<KoView> views;
     views.append(v);
     setRootDocumentDirect( doc, views );
-
-    v->show();
+    
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
     v->setPartManager( partManager() );
-
+    m_pFrame->addTab( v, i18n("Untitled") );
+    v->show();
+    
     // Create a new page for this doc
     Page page;
     page.m_pDoc = doc;
     page.m_pView = v;
-    page.m_id = m_pKoolBar->insertItem( m_grpDocuments,
-                                        DesktopIcon( m_documentEntry.service()->icon() ),
-                                        i18n("Untitled"),
-                                        this, SLOT( slotKoolBar( int, int ) ) );
-    kdDebug() << " New page has id " << page.m_id << " doc is " << doc << endl;
-
+ 
     m_lstPages.append( page );
 
     switchToPage( m_lstPages.fromLast() );
@@ -333,12 +335,12 @@ void KoShellWindow::updateCaption()
 
         if ( !name.isEmpty() ) // else keep Untitled
         {
-	    if ( name.length() > 20 )
-	    {
-	        name.truncate( 17 );
-	        name += "...";
-	    }
-            m_pKoolBar->renameItem( m_grpDocuments, (*it).m_id, name );
+          if ( name.length() > 20 )
+          {
+            name.truncate( 17 );
+            name += "...";
+          }
+          m_pFrame->changeTab( m_pFrame->currentPage(), name );
         }
 
         return;
@@ -353,8 +355,8 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
   {
     // Create new document from a KoDocumentEntry
     m_documentEntry = m_mapComponents[ _item ];
-    kdDebug() << m_documentEntry.service() << endl;
-    kdDebug() << m_documentEntry.name() << endl;
+    kdDebug() << "Service:" << m_documentEntry.service() << endl;
+    kdDebug() << "Name: " << m_documentEntry.name() << endl;
     KoDocument *doc = m_documentEntry.createDoc();
     if (doc)
     {
@@ -369,24 +371,6 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
             delete doc;
     }
   }
-  else if ( _grp == m_grpDocuments )
-  {
-    // Switch to an existing document
-    if ( m_activePage != m_lstPages.end() &&
-         (*m_activePage).m_id == _item )
-      return;
-
-    QValueList<Page>::Iterator it = m_lstPages.begin();
-    while( it != m_lstPages.end() )
-    {
-      if ( (*it).m_id == _item )
-      {
-        switchToPage( it );
-        return;
-      }
-      ++it;
-    }
-  }
 }
 
 void KoShellWindow::slotShowSidebar()
@@ -397,17 +381,26 @@ void KoShellWindow::slotShowSidebar()
 		m_pKoolBar->show();
 }
 
+void KoShellWindow::slotUpdatePart( QWidget* widget )
+{
+  KoView* v = dynamic_cast<KoView*>(widget);
+  if ( v != 0 ) 
+  {
+    QValueList<Page>::Iterator it = m_lstPages.begin();
+    for( ; it != m_lstPages.end(); ++it )
+    {
+      if( (*it).m_pView == v )
+        switchToPage(it);
+    }
+  }
+}
+
 void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
 {
-  // Move away current page (view)
-  if ( m_activePage != m_lstPages.end() )
-    (*m_activePage).m_pView->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
   // Select new active page (view)
   m_activePage = it;
   KoView *v = (*m_activePage).m_pView;
-  // Show it here
-  v->reparent( m_pFrame, 0, QPoint( 0, 0 ), TRUE );
-  m_pFrame->setView( v );
+
   kdDebug() << " setting active part to " << (*m_activePage).m_pDoc << endl;
   // Make it active (GUI etc.)
   partManager()->setActivePart( (*m_activePage).m_pDoc, v );
@@ -415,6 +408,8 @@ void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
   QPtrList<KoView> views;
   views.append(v);
   setRootDocumentDirect( (*m_activePage).m_pDoc, views );
+  // Raise the new page
+  m_pFrame->showPage( v );
   // Fix caption and set focus to the new view
   updateCaption();
   v->setFocus();
@@ -488,8 +483,6 @@ void KoShellWindow::closeDocument()
   if ( KoMainWindow::queryClose() )
   {
     kdDebug() << "Ok for closing document" << endl;
-    m_pFrame->setView( 0L ); // safety measure
-    m_pKoolBar->removeItem( m_grpDocuments, (*m_activePage).m_id );
     (*m_activePage).m_pDoc->removeShell(this);
     Page oldPage = (*m_activePage); // make a copy of the struct
     m_lstPages.remove( m_activePage );
@@ -583,30 +576,13 @@ void KoShellWindow::slotFilePrint()
 }
 */
 
-void KoShellWindow::createShellGUI()
+void KoShellWindow::createShellGUI( bool create )
 {
 	guiFactory()->addClient( m_client );
 }
 
-///////
 
-KoShellFrame::KoShellFrame( QWidget *parent )
- : QWidget( parent )
-{
-  m_pView = 0L;
-}
-
-void KoShellFrame::setView( KoView *view )
-{
-  m_pView = view;
-}
-
-void KoShellFrame::resizeEvent( QResizeEvent * )
-{
-  if ( m_pView )
-    m_pView->setGeometry( 0, 0, width(), height() );
-}
-
+///////////////////
 KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
 {
 	setXMLFile( "koshellui.rc", true, false );
@@ -614,7 +590,7 @@ KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
 	sidebar = new KToggleAction(i18n("Show Sidebar"), "view_choose", 0, window,
 			SLOT( slotShowSidebar() ), actionCollection(), "show_sidebar");
 #if KDE_IS_VERSION(3,2,90)
-        sidebar->setCheckedState(i18n("Hide Sidebar"));
+  sidebar->setCheckedState(i18n("Hide Sidebar"));
 #endif
 	sidebar->setChecked( true );
 }
