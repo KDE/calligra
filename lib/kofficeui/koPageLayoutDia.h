@@ -36,6 +36,7 @@ class QComboBox;
 class QLineEdit;
 class QSpinBox;
 class QRadioButton;
+class QCheckBox;
 class KDoubleNumInput;
 
 enum { FORMAT_AND_BORDERS = 1, HEADER_AND_FOOTER = 2, COLUMNS = 4, DISABLE_BORDERS = 8,
@@ -189,12 +190,12 @@ protected:
 
     KDoubleNumInput *nHSpacing;
     KDoubleNumInput *nFSpacing;
-    QRadioButton *rhSame;
-    QRadioButton *rhFirst;
-    QRadioButton *rhEvenOdd;
-    QRadioButton *rfSame;
-    QRadioButton *rfFirst;
-    QRadioButton *rfEvenOdd;
+    QCheckBox *rhSame_unused; // BIC: remove
+    QCheckBox *rhFirst;
+    QCheckBox *rhEvenOdd;
+    QCheckBox *rfSame_unused; // BIC: remove
+    QCheckBox *rfFirst;
+    QCheckBox *rfEvenOdd;
 
     // layout
     KoPageLayout layout;

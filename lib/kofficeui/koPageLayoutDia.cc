@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <koUnit.h>
 #include <knuminput.h>
+#include <qcheckbox.h>
 
 /******************************************************************/
 /* class KoPagePreview                                            */
@@ -256,22 +257,26 @@ KoColumns KoPageLayoutDia::getColumns()
 /*================================================================*/
 KoKWHeaderFooter KoPageLayoutDia::getKWHeaderFooter()
 {
-    if ( rhSame->isChecked() )
-        kwhf.header = HF_SAME;
+    if ( rhFirst->isChecked() && rhEvenOdd->isChecked() )
+        kwhf.header = HF_FIRST_EO_DIFF;
     else if ( rhFirst->isChecked() )
         kwhf.header = HF_FIRST_DIFF;
     else if ( rhEvenOdd->isChecked() )
         kwhf.header = HF_EO_DIFF;
+    else
+        kwhf.header = HF_SAME;
 
     kwhf.ptHeaderBodySpacing = KoUnit::ptFromUnit( nHSpacing->value(), m_unit );
     kwhf.ptFooterBodySpacing = KoUnit::ptFromUnit( nFSpacing->value(), m_unit );
 
-    if ( rfSame->isChecked() )
-        kwhf.footer = HF_SAME;
+    if ( rfFirst->isChecked() && rfEvenOdd->isChecked() )
+        kwhf.footer = HF_FIRST_EO_DIFF;
     else if ( rfFirst->isChecked() )
         kwhf.footer = HF_FIRST_DIFF;
     else if ( rfEvenOdd->isChecked() )
         kwhf.footer = HF_EO_DIFF;
+    else
+        kwhf.footer = HF_SAME;
 
     return kwhf;
 }
@@ -281,7 +286,7 @@ void KoPageLayoutDia::setupTab1()
 {
     QWidget *tab1 = addPage(i18n( "Format and Borders" ));
 
-    QGridLayout *grid1 = new QGridLayout( tab1, 5, 2, 15, 7 );
+    QGridLayout *grid1 = new QGridLayout( tab1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lpgUnit;
     if ( !( flags & DISABLE_UNIT ) ) {
@@ -307,7 +312,7 @@ void KoPageLayoutDia::setupTab1()
 
     // -------------- page format -----------------
     QGroupBox *formatFrame = new QGroupBox( i18n( "Page Format" ), tab1 );
-    QGridLayout *formatGrid = new QGridLayout( formatFrame, 4, 2, 15, 7 );
+    QGridLayout *formatGrid = new QGridLayout( formatFrame, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     // label format
     QLabel *lpgFormat = new QLabel( i18n( "\nFormat:" ), formatFrame );
@@ -378,7 +383,7 @@ void KoPageLayoutDia::setupTab1()
 
     // --------------- page borders ---------------
     QGroupBox *borderFrame = new QGroupBox( i18n( "Page Borders" ), tab1 );
-    QGridLayout *borderGrid = new QGridLayout( borderFrame, 4, 2, 15, 7 );
+    QGridLayout *borderGrid = new QGridLayout( borderFrame, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     // label left
     QLabel *lbrLeft = new QLabel( i18n( "\nLeft:" ), borderFrame );
@@ -497,7 +502,7 @@ void KoPageLayoutDia::setValuesTab1Helper() {
 void KoPageLayoutDia::setupTab2()
 {
     QWidget *tab2 = addPage(i18n( "Header and Footer" ));
-    QGridLayout *grid2 = new QGridLayout( tab2, 7, 3, 6, 6 );
+    QGridLayout *grid2 = new QGridLayout( tab2, 7, 3, KDialog::marginHint(), KDialog::spacingHint() );
 
     // ------------- header ---------------
     QLabel *lHead = new QLabel( i18n( "Head line:" ), tab2 );
@@ -567,7 +572,7 @@ void KoPageLayoutDia::setupTab3()
 {
     QWidget *tab3 = addPage(i18n( "Columns" ));
 
-    QGridLayout *grid3 = new QGridLayout( tab3, 5, 2, 15, 7 );
+    QGridLayout *grid3 = new QGridLayout( tab3, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *lColumns = new QLabel( i18n( "Columns:" ), tab3 );
     grid3->addWidget( lColumns, 0, 0 );
@@ -617,26 +622,22 @@ void KoPageLayoutDia::setupTab4()
     QString str = KoUnit::unitDescription(m_unit);
 
     QWidget *tab4 = addPage(i18n( "Header and Footer" ));
-    QGridLayout *grid4 = new QGridLayout( tab4, 3, 1, 15, 7 );
+    QGridLayout *grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     QButtonGroup *gHeader = new QButtonGroup( i18n( "Header" ), tab4 );
-    gHeader->setExclusive( true );
-    QGridLayout *headerGrid = new QGridLayout( gHeader, 5, 2, 15, 7 );
+    QGridLayout *headerGrid = new QGridLayout( gHeader, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    rhSame = new QRadioButton( i18n( "Same header for all pages" ), gHeader );
-    gHeader->insert( rhSame );
-    headerGrid->addMultiCellWidget( rhSame, 1, 1, 0, 1 );
-    if ( kwhf.header == HF_SAME ) rhSame->setChecked( true );
-
-    rhFirst = new QRadioButton( i18n( "Different header for the first page" ), gHeader );
+    rhFirst = new QCheckBox( i18n( "Different header for the first page" ), gHeader );
     gHeader->insert( rhFirst );
-    headerGrid->addMultiCellWidget( rhFirst, 2, 2, 0, 1 );
-    if ( kwhf.header == HF_FIRST_DIFF ) rhFirst->setChecked( true );
+    headerGrid->addMultiCellWidget( rhFirst, 1, 1, 0, 1 );
+    if ( kwhf.header == HF_FIRST_DIFF || kwhf.header == HF_FIRST_EO_DIFF )
+        rhFirst->setChecked( true );
 
-    rhEvenOdd = new QRadioButton( i18n( "Different header for even and odd pages" ), gHeader );
+    rhEvenOdd = new QCheckBox( i18n( "Different header for even and odd pages" ), gHeader );
     gHeader->insert( rhEvenOdd );
-    headerGrid->addMultiCellWidget( rhEvenOdd, 3, 3, 0, 1 );
-    if ( kwhf.header == HF_EO_DIFF ) rhEvenOdd->setChecked( true );
+    headerGrid->addMultiCellWidget( rhEvenOdd, 2, 2, 0, 1 );
+    if ( kwhf.header == HF_EO_DIFF || kwhf.header == HF_FIRST_EO_DIFF )
+        rhEvenOdd->setChecked( true );
 
     QLabel *lHSpacing = new QLabel( i18n("Spacing between header and body (%1):").arg(str), gHeader );
     lHSpacing->setAlignment( AlignRight | AlignVCenter );
@@ -647,48 +648,24 @@ void KoPageLayoutDia::setupTab4()
 
     nHSpacing->setValue( KoUnit::ptToUnit( kwhf.ptHeaderBodySpacing, m_unit ) );
 
-    headerGrid->addColSpacing( 0, rhSame->width() / 2 );
-    headerGrid->addColSpacing( 1, rhSame->width() / 2 );
-    headerGrid->addColSpacing( 0, rhFirst->width() / 2 );
-    headerGrid->addColSpacing( 1, rhFirst->width() / 2 );
-    headerGrid->addColSpacing( 0, rhEvenOdd->width() / 2 );
-    headerGrid->addColSpacing( 1, rhEvenOdd->width() / 2 );
-    headerGrid->addColSpacing( 0, lHSpacing->width() );
-    headerGrid->addColSpacing( 1, nHSpacing->width() );
-    headerGrid->setColStretch( 1, 1 );
-
-    headerGrid->addRowSpacing( 0, 7 );
-    headerGrid->addRowSpacing( 1, rhSame->height() );
-    headerGrid->addRowSpacing( 2, rhFirst->height() );
-    headerGrid->addRowSpacing( 3, rhEvenOdd->height() );
-    headerGrid->addRowSpacing( 4, lHSpacing->height() );
-    headerGrid->addRowSpacing( 4, nHSpacing->height() );
-    headerGrid->setRowStretch( 0, 0 );
-    headerGrid->setRowStretch( 1, 0 );
-    headerGrid->setRowStretch( 2, 0 );
-    headerGrid->setRowStretch( 3, 0 );
-    headerGrid->setRowStretch( 4, 0 );
+    headerGrid->addRowSpacing( 0, KDialog::spacingHint() );
 
     grid4->addWidget( gHeader, 0, 0 );
 
     QButtonGroup *gFooter = new QButtonGroup( i18n( "Footer" ), tab4 );
-    gFooter->setExclusive( true );
-    QGridLayout *footerGrid = new QGridLayout( gFooter, 5, 2, 15, 7 );
+    QGridLayout *footerGrid = new QGridLayout( gFooter, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    rfSame = new QRadioButton( i18n( "Same footer for all pages" ), gFooter );
-    gFooter->insert( rfSame );
-    footerGrid->addMultiCellWidget( rfSame, 1, 1, 0, 1 );
-    if ( kwhf.footer == HF_SAME ) rfSame->setChecked( true );
-
-    rfFirst = new QRadioButton( i18n( "Different footer for the first page" ), gFooter );
+    rfFirst = new QCheckBox( i18n( "Different footer for the first page" ), gFooter );
     gFooter->insert( rfFirst );
-    footerGrid->addMultiCellWidget( rfFirst, 2, 2, 0, 1 );
-    if ( kwhf.footer == HF_FIRST_DIFF ) rfFirst->setChecked( true );
+    footerGrid->addMultiCellWidget( rfFirst, 1, 1, 0, 1 );
+    if ( kwhf.footer == HF_FIRST_DIFF || kwhf.footer == HF_FIRST_EO_DIFF )
+        rfFirst->setChecked( true );
 
-    rfEvenOdd = new QRadioButton( i18n( "Different footer for even and odd pages" ), gFooter );
+    rfEvenOdd = new QCheckBox( i18n( "Different footer for even and odd pages" ), gFooter );
     gFooter->insert( rfEvenOdd );
-    footerGrid->addMultiCellWidget( rfEvenOdd, 3, 3, 0, 1 );
-    if ( kwhf.footer == HF_EO_DIFF ) rfEvenOdd->setChecked( true );
+    footerGrid->addMultiCellWidget( rfEvenOdd, 2, 2, 0, 1 );
+    if ( kwhf.footer == HF_EO_DIFF || kwhf.footer == HF_FIRST_EO_DIFF )
+        rfEvenOdd->setChecked( true );
 
     QLabel *lFSpacing = new QLabel( i18n("Spacing between footer and body (%1):").arg(str), gFooter );
     lFSpacing->setAlignment( AlignRight | AlignVCenter );
@@ -698,38 +675,13 @@ void KoPageLayoutDia::setupTab4()
     footerGrid->addWidget( nFSpacing, 4, 1 );
 
     nFSpacing->setValue(KoUnit::ptToUnit( kwhf.ptFooterBodySpacing, m_unit ) );
-    footerGrid->addColSpacing( 0, rfSame->width() / 2 );
-    footerGrid->addColSpacing( 1, rfSame->width() / 2 );
-    footerGrid->addColSpacing( 0, rfFirst->width() / 2 );
-    footerGrid->addColSpacing( 1, rfFirst->width() / 2 );
-    footerGrid->addColSpacing( 0, rfEvenOdd->width() / 2 );
-    footerGrid->addColSpacing( 1, rfEvenOdd->width() / 2 );
-    footerGrid->addColSpacing( 0, lFSpacing->width() );
-    footerGrid->addColSpacing( 1, nFSpacing->width() );
-    footerGrid->setColStretch( 1, 1 );
 
-    footerGrid->addRowSpacing( 0, 7 );
-    footerGrid->addRowSpacing( 1, rfSame->height() );
-    footerGrid->addRowSpacing( 2, rfFirst->height() );
-    footerGrid->addRowSpacing( 3, rfEvenOdd->height() );
-    footerGrid->addRowSpacing( 4, lFSpacing->height() );
-    footerGrid->addRowSpacing( 4, nFSpacing->height() );
-    footerGrid->setRowStretch( 0, 0 );
-    footerGrid->setRowStretch( 1, 0 );
-    footerGrid->setRowStretch( 2, 0 );
-    footerGrid->setRowStretch( 3, 0 );
-    footerGrid->setRowStretch( 4, 0 );
+    footerGrid->addRowSpacing( 0, KDialog::spacingHint() );
 
-    grid4->addWidget( gFooter, 1, 0 );
+    grid4->addWidget( gFooter, 2, 0 );
 
-    grid4->addColSpacing( 0, gHeader->width() );
-    grid4->addColSpacing( 0, gFooter->width() );
-    grid4->setColStretch( 0, 1 );
-
-    grid4->addRowSpacing( 0, gHeader->height() );
-    grid4->addRowSpacing( 1, gFooter->height() );
-    grid4->setRowStretch( 2, 0 );
-    grid4->setRowStretch( 2, 1 );
+    grid4->setRowStretch( 1, 1 ); // between the groupboxes
+    grid4->setRowStretch( 3, 10 ); // bottom
 }
 
 /*====================== update the preview ======================*/
