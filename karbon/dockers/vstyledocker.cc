@@ -141,7 +141,6 @@ ClipartWidget::ClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonPa
 
 	m_buttonGroup->setInsideMargin( 3 );
 	m_importClipartButton->setEnabled( false );
-	m_deleteClipartButton->setEnabled( false );
 
 	//setFrameStyle( Box | Sunken );
 	layout->setMargin( 3 );
@@ -157,6 +156,8 @@ ClipartWidget::ClipartWidget( QPtrList<VClipartIconItem>* clipartItems, KarbonPa
 		m_clipartChooser->addItem( item );
 
 	m_clipartItem = ( clipartItems->first() ) ? clipartItems->first()->clone() : 0;
+	if( !m_clipartItem )
+		m_deleteClipartButton->setEnabled( false );
 }
 
 ClipartWidget::~ClipartWidget()
