@@ -25,6 +25,7 @@
 #include <iostream.h>
 
 #include <utils.h>
+#include <qaccel.h>
 #include "KIllustrator_shell.h"
 #include "KIllustrator_view.h"
 #include "KIllustrator_view.moc"
@@ -223,9 +224,11 @@ void KIllustratorView::setupMenu () {
     m_idMenuEdit = m_rMenuBar->insertMenu (CORBA::string_dup (i18n ("&Edit")));
   
     m_idMenuEdit_Undo = 
-      m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Undo")), 
-			      m_idMenuEdit, this, 
-			      CORBA::string_dup ("editUndo"));
+	m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Undo")), 
+				m_idMenuEdit, this, 
+				CORBA::string_dup ("editUndo"));
+    m_rMenuBar->setAccel(CTRL + Key_Z, m_idMenuEdit_Undo);
+
     m_idMenuEdit_Redo = 
       m_rMenuBar->insertItem (CORBA::string_dup (i18n ("Redo")), 
 			      m_idMenuEdit, this, 
