@@ -26,10 +26,11 @@
 #include <qdrawutil.h>
 #include <qstyle.h>
 
+#include <kdeversion.h>
 #include <kapplication.h>
-#include <kglobalsettings.h>
 #include <kiconeffect.h>
 #include <kiconloader.h>
+#include <kglobalsettings.h>
 
 // Delay in ms before delayed popup pops up
 #define POPUP_DELAY 500
@@ -441,8 +442,12 @@ QSize TKToolBarButton::minimumSizeHint() const
 void TKToolBarButton::showMenu()
 {
   QPoint p ( mapToGlobal( QPoint( 0, 0 ) ) );
-  QRect desk = KGlobalSettings::desktopGeometry(this);
-  if ( p.y() + height() + d->m_popup->height() > desk.height() )
+#if KDE_IS_VERSION(3,1,90)
+  const int deskHeight = KGlobalSettings::desktopGeometry(this).height();
+#else
+  const int deskHeight = QApplication::desktop()->height();
+#endif
+  if ( p.y() + height() + d->m_popup->height() > deskHeight )
       p.setY( p.y() - d->m_popup->height() );
   else
       p.setY( p.y() + height( ));
