@@ -199,18 +199,18 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     if ( m_doc->isReadWrite() )
     {
         connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
-                 this, SLOT(/*setEnabled(bool)*/slotChangeCutState(bool )) );
+                 this, SLOT(slotChangeCutState(bool )) );
+        connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+                 this, SLOT(slotChangeCaseState(bool )));
     }
     else
     {
         actionEditCut->setEnabled( false );
+        actionChangeCase->setEnabled( false );
     }
 
     connect( m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionEditCopy, SLOT(setEnabled(bool)) );
-
-    connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
-             /*actionChangeCase*/this, SLOT(/*setEnabled(bool)*/slotChangeCaseState(bool )));
 
     connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionCreateStyleFromSelection, SLOT(setEnabled(bool)));
