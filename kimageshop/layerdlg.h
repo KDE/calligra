@@ -54,7 +54,7 @@ class LayerDialog : public KFloatingTabDialog
 
 public:
 
-  LayerDialog( KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
+  LayerDialog( KImageShopDoc* doc, QWidget* _parent = 0 );
 
   static QPixmap *m_eyeIcon, *m_linkIcon;
   static QRect m_eyeRect, m_linkRect;

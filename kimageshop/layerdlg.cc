@@ -107,8 +107,8 @@ ChannelTab::ChannelTab( KImageShopDoc *_doc, QWidget *_parent, const char *_name
   connect( pbDown, SIGNAL( clicked() ), channelview, SLOT( slotLowerChannel() ) );
 }
 
-LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_name, WFlags )
-  : KFloatingTabDialog(_parent, _name)
+LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent )
+  : KFloatingTabDialog( _parent, "layerdialog" )
 {
   setCaption( i18n( "Layers&Channels" ) );
   if( !m_eyeIcon )
@@ -128,8 +128,8 @@ LayerDialog::LayerDialog( KImageShopDoc *_doc, QWidget *_parent, const char *_na
     m_linkRect = QRect( QPoint( 25,( CELLHEIGHT - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
   }
 
-  m_pLayerTab = new LayerTab(_doc, this, _name);
-  m_pChannelTab =  new ChannelTab(_doc, this, _name);
+  m_pLayerTab = new LayerTab( _doc, this, "layertab" );
+  m_pChannelTab =  new ChannelTab(_doc, this, "channeltab" );
   
   addTab(m_pLayerTab, i18n("Layers"));
   addTab(m_pChannelTab, i18n("Channels"));
