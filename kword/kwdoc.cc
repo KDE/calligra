@@ -345,6 +345,7 @@ KWDocument::~KWDocument()
     delete m_tableStyleColl;
     delete m_tableTemplateColl;
     delete m_pKSpellConfig;
+    delete m_viewMode;
 }
 
 void KWDocument::initConfig()
