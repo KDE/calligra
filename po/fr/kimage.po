@@ -1,0 +1,66 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kimage\n"
+"POT-Creation-Date: 1998-10-04 15:32+0200\n"
+"PO-Revision-Date: 1998-10-04 16:13+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: img_doc.cc:63 img_doc.cc:68 img_doc.cc:89 img_doc.cc:94 img_doc.cc:349
+msgid "KImage Error"
+msgstr "Erreur dans KImage"
+
+#: img_doc.cc:68 img_doc.cc:94
+msgid "Only local files are supported"
+msgstr "Seulement les fichiers locaux sont supportés"
+
+#: img_doc.cc:349
+msgid "Could not init"
+msgstr "Impossible d'initialiser"
+
+#: img_view.cc:214
+msgid "&Insert ..."
+msgstr "&Insérer ..."
+
+#: img_view.cc:218
+msgid "Im&port ..."
+msgstr "Im&porter ..."
+
+#: img_view.cc:220
+msgid "&Export ..."
+msgstr "E&xporter..."
+
+#: img_view.cc:225
+msgid "&Fit To Window"
+msgstr "&ajuster à la fenêtre"
+
+#: img_view.cc:245
+msgid "Darker"
+msgstr ""
+
+#: img_view.cc:293
+#, c-format
+msgid ""
+"Could not open\n"
+"%s"
+msgstr "Impossible d'ouvrir\n"
+""
+"%s"
+
+#: img_view.cc:294 img_view.cc:309
+msgid "IO Error"
+msgstr ""
+
+#: img_view.cc:308
+#, c-format
+msgid ""
+"Could not write\n"
+"%s\n"
+"Perhaps permission denied."
+msgstr ""
+"In %s\n"
+"Impossible d'écrire.\n"
+"Peut-être n'avez-vous pas les droits."
