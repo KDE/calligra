@@ -26,7 +26,7 @@
 
 #include "kivio_stencil.h"
 
-// #define HAVE_PYTHON
+#define HAVE_PYTHON
 
 #ifdef HAVE_PYTHON
 
@@ -102,7 +102,7 @@ protected:
     /**
     *   set style settings from dict, return tru if need to use fill... methods or false if draw...
     */
-    virtual void setStyle( KivioPainter *p, PyObject *style, int &fillStyle );
+    virtual void setStyle( KivioIntraStencilData *d, PyObject *style, int &fillStyle );
     QColor readColor( PyObject *color ); // used by setStyle
 
 

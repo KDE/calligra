@@ -61,15 +61,15 @@ shapes = {
                    "h" : 20
                    },
           "rect3" :{
-                   "type"  : "RoundRect",
+                   "type"  : "Ellipse",
                    "color" : [250,40,40],
-                   "selected" : { "color":[40,220,40] },
+                   "selected" : { "color":[40,200,40] },
                    "x" : x+15,
                    "y" : y+15,
                    "w" : 20,
                    "h" : 20,
-                   "rx": 8,
-                   "ry": 8
+                   "rx": 15,
+                   "ry": 15
                    },
           "text"  : {
                    "type" : "TextBox",

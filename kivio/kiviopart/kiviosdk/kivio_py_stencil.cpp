@@ -48,11 +48,11 @@ KivioPyStencil::KivioPyStencil()
    double y2 = m_y+m_h;
 
 
-   vars = Py_BuildValue( "{s:d,s:d,s:d,s:d,s:d,s:d,s:{}}", "x", m_x, "y", m_y, "w", m_w, "h", m_h, "x2", x2, "y2", y2 , "style");
+   vars = Py_BuildValue( "{s:d,s:d,s:d,s:d,s:d,s:d,s:{},s:[],s:[],s:{}}",
+                            "x", m_x, "y", m_y, "w", m_w, "h", m_h, "x2", x2, "y2", y2 , "style","connectors","connector_targets","shapes");
 
 
    resizeCode = "";
-
 }
 
 KivioPyStencil::~KivioPyStencil()
@@ -387,11 +387,11 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
        int fill = KivioFillStyle::kcsNone;
 
        // if style dosn't defined for shape, applay default for stencil
-       setStyle( d->painter, PyDict_GetItemString( vars, "style" ) , fill );
-       setStyle( d->painter, shape, fill );
+       setStyle( d, PyDict_GetItemString( vars, "style" ) , fill );
+       setStyle( d, shape, fill );
 
        if ( isSelected() )
-         setStyle( d->painter, PyDict_GetItemString( shape, "selected" ) , fill );
+         setStyle( d, PyDict_GetItemString( shape, "selected" ) , fill );
 
        if ( outlined )
           fill = KivioFillStyle::kcsNone;
@@ -429,12 +429,6 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
        }
 
        if ( stype == "textbox" ) {
-//           QFont f = pShapeData->textFont();
-//           f.setPointSize( f.pointSize() * _scale );
-//           painter->setFont( f );
-//           painter->setTextColor( pShapeData->textColor() );
-
-
           int tf = vTextAlign() | hTextAlign();
           QString text = getStringFromDict(shape,"text");
           if ( !text.isEmpty() )
@@ -633,13 +627,17 @@ KivioConnectorTarget *KivioPyStencil::connectToTarget( KivioConnectorPoint *p, f
     return NULL;
 }
 
-void KivioPyStencil::setStyle( KivioPainter *p, PyObject *s, int &fillStyle )
+void KivioPyStencil::setStyle( KivioIntraStencilData *d, PyObject *s, int &fillStyle )
 {
     if ( !s )
         return;
 
     if ( !PyDict_Check(s) )
         return;
+
+    KivioPainter *p = d->painter;
+    double scale = d->scale;
+
 
     PyObject *color = PyDict_GetItemString(s,"color");
     if ( color ) {
@@ -665,7 +663,7 @@ void KivioPyStencil::setStyle( KivioPainter *p, PyObject *s, int &fillStyle )
     PyObject *lineWidth = PyDict_GetItemString(s,"linewidth");
     if ( lineWidth ) {
         float lw = getDoubleFromDict(s,"linewidth");
-        p->setLineWidth( lw );
+        p->setLineWidth( lw*scale );
     }
 
 
@@ -677,6 +675,19 @@ void KivioPyStencil::setStyle( KivioPainter *p, PyObject *s, int &fillStyle )
 
         if ( sfill == "none" )
             fillStyle = KivioFillStyle::kcsNone;
+    }
+
+    QString  sfont = getStringFromDict(s,"font");
+    int      fontSize = int(getDoubleFromDict(s,"fontsize")*scale);
+
+    if ( !sfont.isEmpty() ) {
+        if ( !fontSize )
+            fontSize = int( 12*scale );
+        p->setFont( QFont( sfont, fontSize ) );
+    }
+    else {
+        if ( fontSize )
+            p->setFont( QFont( "times", fontSize ) );
     }
 
 }
