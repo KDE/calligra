@@ -901,7 +901,7 @@ DCOPObject* KSpreadDoc::dcopObject()
     return m_dcop;
 }
 
-void KSpreadDoc::addAreaName(QRect &_rect,QString name,QString tableName)
+void KSpreadDoc::addAreaName(const QRect &_rect,const QString & name,const QString & tableName)
 {
   setModified( true );
   Reference tmp;
@@ -911,7 +911,7 @@ void KSpreadDoc::addAreaName(QRect &_rect,QString name,QString tableName)
   m_refs.append( tmp);
 }
 
-void KSpreadDoc::removeArea( QString name)
+void KSpreadDoc::removeArea( const QString & name)
 {
   QValueList<Reference>::Iterator it2;
   for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
@@ -924,7 +924,7 @@ void KSpreadDoc::removeArea( QString name)
         }
 }
 
-void KSpreadDoc::changeAreaTableName(QString oldName,QString tableName)
+void KSpreadDoc::changeAreaTableName(const QString & oldName,const QString & tableName)
 {
   QValueList<Reference>::Iterator it2;
   for ( it2 = m_refs.begin(); it2 != m_refs.end(); ++it2 )
@@ -1001,7 +1001,7 @@ for( ; !tmp.isNull(); tmp=tmp.nextSibling().toElement()  )
     }
 }
 
-void KSpreadDoc::addStringCompletion(QString stringCompletion)
+void KSpreadDoc::addStringCompletion(const QString &stringCompletion)
 {
    if(listCompletion.items().contains(stringCompletion)==0)
            listCompletion.addItem(stringCompletion);

@@ -258,14 +258,14 @@ public:
 
   static QList<KSpreadDoc>& documents();
 
-  void addAreaName(QRect &_rect,QString name,QString tableName);
+  void addAreaName(const QRect &_rect,const QString & name,const QString & tableName);
   QValueList<Reference> listArea(){return m_refs;}
-  void removeArea( QString name);
+  void removeArea( const QString &name);
 
   KCompletion & completion(){return listCompletion;}
-  void addStringCompletion(QString stringCompletion);
+  void addStringCompletion(const QString & stringCompletion);
 
-  void changeAreaTableName(QString oldName,QString tableName);
+  void changeAreaTableName(const QString & oldName,const QString &tableName);
 
   /**
   * hide/show scrollbar
