@@ -26,6 +26,8 @@ public:
 
 	virtual bool initDoc();
 
+    virtual bool loadOasis( const QDomDocument&, KoOasisStyles& );
+
 	virtual bool loadXML( QIODevice *, const QDomDocument & );
 //	virtual QDomDocument saveXML();
 
@@ -40,7 +42,7 @@ private:
 	KURL m_docURL;
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );
-	
+
 public slots:
 	void setForcedUserTemplate(const QString &name){;}
 
@@ -50,4 +52,4 @@ private slots:
 };
 
 
-#endif 
+#endif

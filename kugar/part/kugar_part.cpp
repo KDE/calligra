@@ -48,6 +48,13 @@ KugarPart::~KugarPart()
 //	closeURL();
 }
 
+bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles& )
+{
+    //todo
+    return true;
+}
+
+
 bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc)
 {
 	m_docURL=url();
@@ -102,7 +109,7 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc)
                 KMessageBox::sorry(0,i18n("Unable to open data file: %1").arg(m_file));
 	}
 
-        return ok;	
+        return ok;
 }
 
 bool KugarPart::initDoc()
@@ -180,7 +187,7 @@ void KugarPart::slotPreferredTemplate(const QString &tpl)
                     if (KIO::NetAccess::download(tmpURL,localtpl))
                         isTemp=true;
                     else
-                    KMessageBox::sorry(0,i18n("Unable to download template file: %1").arg(url.prettyURL()));			
+                    KMessageBox::sorry(0,i18n("Unable to download template file: %1").arg(url.prettyURL()));
 		    }
 	    }
         }
@@ -223,7 +230,7 @@ void KugarPart::slotPreferredTemplate(const QString &tpl)
 				else
 				{
 					KoStore *tmpStore=KoStore::createStore(localtpl,KoStore::Read);
-					if (tmpStore->open("maindoc.xml")) 
+					if (tmpStore->open("maindoc.xml"))
 					{
 						if (!m_reportEngine -> setReportTemplate(tmpStore->device()))
 							KMessageBox::sorry(0,i18n("%1 is not a valid Kugar Designer template file.").arg(localtpl));
@@ -232,8 +239,8 @@ void KugarPart::slotPreferredTemplate(const QString &tpl)
 						tmpStore->close();
 					}
 					else
-						KMessageBox::sorry(0,i18n("%1 is not a valid Kugar Designer template file.").arg(localtpl));	
-					
+						KMessageBox::sorry(0,i18n("%1 is not a valid Kugar Designer template file.").arg(localtpl));
+
 					delete tmpStore;
 				}
 
