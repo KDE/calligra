@@ -3,7 +3,7 @@ KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
 	$(KOTEXT_INCLUDES) $(all_includes)
 
-kde_module_LTLIBRARIES = libkwserialletter_interface.la libkwordpart.la
+kde_module_LTLIBRARIES = libkwordpart.la
 
 ## The part
 libkwordpart_la_SOURCES = kwfactory.cc kwdoc.cc kwview.cc kwcanvas.cc  \
@@ -27,12 +27,13 @@ libkwordpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkwordpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformula.la -lkspell
 METASOURCES = AUTO
 
+lib_LTLIBRARIES = kword.la libkwserialletter_interface.la
+
 ## The serial letter interface library
 libkwserialletter_interface_la_SOURCES = serialletter_interface.cc
 libkwserialletter_interface_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 
 ## The kdeinit loadable module
-lib_LTLIBRARIES = kword.la
 kword_la_SOURCES = main.cc
 kword_la_LDFLAGS = $(all_libraries) -avoid-version -module
 kword_la_LIBADD = ../lib/kofficecore/libkofficecore.la
