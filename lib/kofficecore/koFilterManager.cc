@@ -209,12 +209,27 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
     QValueList<KoFilterDialogEntry> vec1 = KoFilterDialogEntry::query( service );
 
     ps=new PreviewStack(0L, "preview stack", this);
+
+    // create a nice default dialog with and info button (-> msgbox)
     QWidget *d=new QWidget(ps, "default preview");
+    QBoxLayout *mbox=new QVBoxLayout(d, 10);
     QString tmp=i18n("Sorry, no preview available.");
     QLabel *l=new QLabel(i18n(tmp), d);
     l->setMinimumSize(l->sizeHint());
-    l->move(10, 5);
-    d->setMinimumWidth(l->sizeHint().width()+20);
+    mbox->addStretch(5);
+    mbox->addWidget(l);
+    mbox->addStretch(2);
+    QBoxLayout *centered=new QHBoxLayout(d);
+    mbox->addLayout(centered);
+    QPushButton *info=new QPushButton(i18n("&Info"), d);
+    ps->connect(info, SIGNAL(clicked()), ps, SLOT(slotInfo()));
+    info->setMinimumSize(info->sizeHint());
+    centered->addStretch(5);
+    centered->addWidget(info, 3);
+    centered->addStretch(5);
+    mbox->addStretch(5);
+    mbox->activate();
+
     ps->addWidget(d, 0);  // default Widget
 
     unsigned long id;                 // id for the next widget
@@ -244,8 +259,8 @@ const bool KoFilterManager::prepareDialog( KFileDialog *dialog,
                 while(tmp[tmp.length()-k]!=QChar('.')) {
                     ++k;
                 }
-                kDebugInfo(30003, "Extension:");
-                kDebugInfo(30003, tmp.right(k));
+                //kDebugInfo(30003, "Extension:");
+                //kDebugInfo(30003, tmp.right(k));
                 dialogMap.insert(tmp.right(k), id);
             }
             ps->addWidget(filterdia, id);
@@ -440,10 +455,14 @@ void PreviewStack::showPreview(const KURL &url) {
     }
     if(tmp[foo-k]==QChar('.')) {
         extension=tmp.right(k);
-        kDebugInfo(30003, extension);
+        //kDebugInfo(30003, extension);
         raiseWidget(mgr->findWidget(extension));
     }
     else
         raiseWidget(0);
+}
+
+void PreviewStack::slotInfo() {
+    kDebugInfo(30003, "Info clicked...");
 }
 #endif

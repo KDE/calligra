@@ -29,6 +29,8 @@
 #include <qlabel.h>
 
 #ifndef USE_QFD
+#include <qlayout.h>
+#include <qpushbutton.h>
 #include <kfiledialog.h>
 #endif
 #include <kurl.h>
@@ -179,6 +181,7 @@ public:
 
 public slots:
     void showPreview(const KURL &url);
+    void slotInfo();
 
 private:
     const KoFilterManager * const mgr;
