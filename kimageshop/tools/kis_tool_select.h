@@ -32,32 +32,31 @@ class KisView;
 class SelectTool : public KisTool
 {
 public:
+    SelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
+    ~SelectTool();
 
-  SelectTool( KisDoc* _doc, KisView* _view, KisCanvas* _canvas );
-  ~SelectTool();
+    virtual QString toolName() { return QString( "SelectTool" ); }
 
-  virtual QString toolName() { return QString( "SelectTool" ); }
+    virtual void mousePress( QMouseEvent *_event );
+    virtual void mouseMove( QMouseEvent *_event );
+    virtual void mouseRelease( QMouseEvent *_event );
 
-  virtual void mousePress( QMouseEvent *_event );
-  virtual void mouseMove( QMouseEvent *_event );
-  virtual void mouseRelease( QMouseEvent *_event );
-
-protected:
-
-  void drawRect( const QPoint&, const QPoint& ); 
+    void clearOld();
 
 protected:
+    void drawRect( const QPoint&, const QPoint& ); 
 
-  QPoint     m_dragStart;
-  QPoint     m_dragEnd;
-  bool       m_dragging;
-  bool       m_drawn;   
-  bool       m_init;
+protected:
+    QPoint     m_dragStart;
+    QPoint     m_dragEnd;
+    bool       m_dragging;
+    bool       m_drawn;   
+    bool       m_init;
 
-  KisView   *m_view;  
-  KisCanvas *m_canvas;
+    KisView   *m_view;  
+    KisCanvas *m_canvas;
 
-  QRect      m_selectRect;
+    QRect      m_selectRect;
 };
 
 #endif //__selecttool_h__

@@ -34,6 +34,13 @@ KisPattern::KisPattern(QString file)
     loadViaQImage(file);
 }
 
+KisPattern::KisPattern(int formula)
+  : IconItem()
+{
+    m_valid    = false;
+    loadViaFormula(formula);
+}
+
 KisPattern::~KisPattern()
 {
     delete m_pImage;
@@ -62,6 +69,42 @@ void KisPattern::loadViaQImage(QString file)
  
     m_valid = true;
     qDebug("Loading pattern: %s",file.latin1());
+}
+
+/*
+    load pattern from a formula or algorithm - these will
+    algorithms and/or predefined Qt patterns 
+*/
+
+void KisPattern::loadViaFormula(int formula)
+{
+    // load via QImage
+    m_pImage = new QImage(64, 64, 32);
+
+    if (m_pImage->isNull())
+    {
+        m_valid = false;
+        qDebug("Failed to load pattern: %d", formula);
+    }
+
+    *m_pImage = m_pImage->convertDepth(32);
+
+    // create pixmap for preview dialog
+    m_pPixmap = new QPixmap;
+    m_pPixmap->convertFromImage(*m_pImage, QPixmap::AutoColor);
+
+    switch(formula)
+    {
+        default:
+            m_pPixmap->fill(Qt::white);        
+            break;    
+    }
+
+    m_w = m_pImage->width();
+    m_h = m_pImage->height();
+ 
+    m_valid = true;
+    qDebug("Loading pattern: %d", formula);
 }
 
 QPixmap& KisPattern::pixmap() const 

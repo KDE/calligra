@@ -8,3 +8,7 @@ data_DATA = deletelayer.png lowerlayer.png newlayer.png raiselayer.png \
 	    gradient.png tab_first.png tab_left.png \
 	    tab_right.png tab_last.png
 
+KDE_ICON = kimageshop
+
+
+

@@ -46,6 +46,20 @@ SelectTool::~SelectTool()
 {
 }
 
+void SelectTool::clearOld()
+{
+   if (m_pDoc->isEmpty()) return;
+        
+   if(m_dragStart.x() != -1)
+        drawRect( m_dragStart, m_dragEnd ); 
+
+    QRect updateRect(0, 0, m_pDoc->current()->width(), 
+        m_pDoc->current()->height());
+    m_view->updateCanvas(updateRect);
+
+    m_dragStart = QPoint(-1,-1);
+    m_dragEnd =   QPoint(-1,-1);
+}
 
 void SelectTool::mousePress( QMouseEvent* event )
 {
@@ -54,13 +68,14 @@ void SelectTool::mousePress( QMouseEvent* event )
 
     if( event->button() == LeftButton )
     {
-        if(m_drawn && !m_init) // erase old rectangle
+        if(m_drawn) // erase old rectangle
         {
             m_drawn = false;
+           
             if(m_dragStart.x() != -1)
                 drawRect( m_dragStart, m_dragEnd ); 
         }
-        
+                
         m_init = false;
         m_dragging = true;
         m_dragStart = event->pos();
@@ -124,7 +139,7 @@ void SelectTool::mouseRelease( QMouseEvent* event )
             m_selectRect.setBottom(m_dragStart.y());            
         }
                     
-        m_pDoc->setSelectRect(m_selectRect);
+        m_pDoc->getSelection()->setRect(m_selectRect);
 
         kdDebug(0) << "selectRect" 
             << " left: "   << m_selectRect.left() 

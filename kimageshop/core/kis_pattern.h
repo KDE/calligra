@@ -31,25 +31,26 @@ class QImage;
 
 class KisPattern : public IconItem
 {
- public:
-  KisPattern(QString file);
-  virtual ~KisPattern();
+    public:
+        KisPattern(QString file);
+        KisPattern(int formula);
+        virtual ~KisPattern();
 
-  bool      isValid()   	      const { return m_valid;    }
-  QPixmap&  pixmap() const;
-  QImage*   image() const;
-  QSize     size()                    const { return QSize(m_w, m_h); } 
-  int       width()                   const { return m_w; }
-  int       height()                  const { return m_h; }
+        bool      isValid()	const { return m_valid; }
+        QPixmap&  pixmap()  const;
+        QImage*   image()   const;
+        QSize     size()    const { return QSize(m_w, m_h); } 
+        int       width()   const { return m_w; }
+        int       height()  const { return m_h; }
 
- private:
-  void      loadViaQImage(QString file);
+    private:
+        void      loadViaQImage(QString file);
+        void      loadViaFormula(int formula);
+        bool      m_valid;
+        int       m_w, m_h;
 
-  bool      m_valid;
-  int       m_w, m_h;
-
-  QImage   *m_pImage;
-  QPixmap  *m_pPixmap;
+        QImage   *m_pImage;
+        QPixmap  *m_pPixmap;
 };
 
 #endif

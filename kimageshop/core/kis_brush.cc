@@ -57,7 +57,6 @@ KisBrush::KisBrush(QString file, bool monochrome, bool special)
 }
 
 
-
 KisBrush::~KisBrush()
 {
     delete [] m_pData;
@@ -76,6 +75,7 @@ void KisBrush::readBrushInfo(QString file)
 
     if (spacing > 0)
         m_spacing = spacing;
+
     m_hotSpot = QPoint(hotspotX, hotspotY);
 }
 
@@ -116,16 +116,15 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
         p = (QRgb*)img.scanLine(h);
         
         for (int w = 0; w < m_w; w++)
-	{
-	    // no need to use qGray here, we have converted the image 
-            //to grayscale already 
+	    {
+	        // no need to use qGray here, we have converted the image 
+            // to grayscale already 
             if(monochrome)
-	        m_pData[m_w * h + w] = 255 - qRed(*(p+w)); 
+	            m_pData[m_w * h + w] = 255 - qRed(*(p+w)); 
             else    
-	        m_pData[m_w * h + w] = *(p+w); // jwc            
-	}      
+	            m_pData[m_w * h + w] = *(p+w); // jwc            
+	    }      
     }
-
  
     m_valid = true;
     
@@ -144,15 +143,11 @@ void KisBrush::setHotSpot(QPoint pt)
     int x = pt.x();
     int y = pt.y();
 
-    if (x < 0)
-        x = 0;
-    else if (x >= m_w)
-        x = m_w-1;
+    if (x < 0) x = 0;
+    else if (x >= m_w) x = m_w-1;
 
-    if (y < 0)
-        y = 0;
-    else if (y >= m_h)
-        y = m_h-1;
+    if (y < 0) y = 0;
+    else if (y >= m_h) y = m_h-1;
   
     m_hotSpot = QPoint(x,y);
 }
@@ -166,10 +161,8 @@ uchar KisBrush::value(int x, int y) const
 
 uchar* KisBrush::scanline(int i) const
 {
-    if (i < 0)
-        i = 0;
-    if (i >= m_h)
-        i = m_h-1;
+    if (i < 0) i = 0;
+    if (i >= m_h) i = m_h-1;
         
     return (m_pData + m_w * i);
 }
@@ -187,8 +180,8 @@ void KisBrush::dump() const
     {
         for (int w = 0; w < m_w; w++) 
         {
-	    qDebug("%d", m_pData[m_w * h + w]);
-	}
+	        qDebug("%d", m_pData[m_w * h + w]);
+	    }
     }
 }
 

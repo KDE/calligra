@@ -32,46 +32,46 @@
 
 KisResourceServer::KisResourceServer()
 {
-  m_brushes.setAutoDelete(true);
-  m_pattern.setAutoDelete(true);
+    m_brushes.setAutoDelete(true);
+    m_pattern.setAutoDelete(true);
 
-  // image formats
-  QStringList formats;
-  formats << "*.png" << "*.tif" << "*.xpm" << "*.bmp" << "*.jpg" << "*.gif";
+    // image formats
+    QStringList formats;
+    formats << "*.png" << "*.tif" << "*.xpm" << "*.bmp" << "*.jpg" << "*.gif";
 
-  // init vars
-  QStringList  lst;
-  QString      format, file;
+    // init vars
+    QStringList  lst;
+    QString      format, file;
 
-  // find brushes
-  for ( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
+    // find brushes
+    for ( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
     {
       format = *it;
 	  QStringList l = KisFactory::global()->dirs()->findAllResources("kis_brushes", format, false, true);
 	  lst += l;
 	}
   
-  // load brushes
-  for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
+    // load brushes
+    for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
     {
       file = *it;
       (void) loadBrush( file );
     }
 
-  // reset vars
-  lst.clear();
-  format = file = "";
+    // reset vars
+    lst.clear();
+    format = file = "";
   
-  // find pattern
-  for ( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
+    // find pattern
+    for ( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
     {
       format = *it;
 	  QStringList l = KisFactory::global()->dirs()->findAllResources("kis_pattern", format, false, true);
 	  lst += l;
 	}
   
-  // load pattern
-  for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
+    // load pattern
+    for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
     {
       file = *it;
       (void) loadPattern( file );
@@ -80,35 +80,37 @@ KisResourceServer::KisResourceServer()
 
 KisResourceServer::~KisResourceServer()
 {
-  m_brushes.clear();
-  m_pattern.clear();
+    m_brushes.clear();
+    m_pattern.clear();
 }
 
 const KisBrush * KisResourceServer::loadBrush( const QString& filename )
 {
-  KisBrush *brush = new KisBrush( filename, true, false );
+    KisBrush *brush = new KisBrush( filename, true, false );
 
-  if ( brush->isValid() )
-      m_brushes.append(brush);
-  else {
-    delete brush;
-    brush = 0L;
-  }
+    if ( brush->isValid() )
+        m_brushes.append(brush);
+    else 
+    {
+        delete brush;
+        brush = 0L;
+    }
 
-  return brush;
+    return brush;
 }
 
 const KisPattern * KisResourceServer::loadPattern( const QString& filename )
 {
-  KisPattern *pattern = new KisPattern( filename );
+    KisPattern *pattern = new KisPattern( filename );
 
-  if ( pattern->isValid() )
-      m_pattern.append(pattern);
-  else {
-    delete pattern;
-    pattern = 0L;
-  }
+    if ( pattern->isValid() )
+        m_pattern.append(pattern);
+    else 
+    {
+        delete pattern;
+        pattern = 0L;
+    }
 
-  return pattern;
+    return pattern;
 }
 

@@ -35,32 +35,28 @@ KisLayer::KisLayer(const QString& name, cMode cm, uchar bd)
     m_current = 0;
     m_opacity= 255;
 
-#ifndef JOHN
     calcNumChannels();
 
     // FIXME: Implement non-RGB modes.
     if (cm == cm_RGB || cm == cm_RGBA)
     {
         m_ch[0] = new KisChannel(ci_Red, m_bitDepth);
-	m_ch[1] = new KisChannel(ci_Green, m_bitDepth);
-	m_ch[2] = new KisChannel(ci_Blue, m_bitDepth);
+	    m_ch[1] = new KisChannel(ci_Green, m_bitDepth);
+	    m_ch[2] = new KisChannel(ci_Blue, m_bitDepth);
 
-	if (cm == cm_RGBA)
-	    m_ch[3] = new KisChannel(ci_Alpha, m_bitDepth);
+	    if (cm == cm_RGBA)
+	        m_ch[3] = new KisChannel(ci_Alpha, m_bitDepth);
     }
-#endif    
 }
 
 
 KisLayer::~KisLayer()
 {
-#ifndef JOHN
     for (uchar i = 0; i < m_channels; i++)
 	delete m_ch[i];
-#endif        
 }
 
-#ifndef JOHN
+
 
 KisChannel* KisLayer::firstChannel()
 {
@@ -72,10 +68,11 @@ KisChannel* KisLayer::firstChannel()
 KisChannel* KisLayer::nextChannel()
 {
     m_current++;
+    
     if (m_current < m_channels)
-	return m_ch[m_current];
+	    return m_ch[m_current];
     else
-	return 0;
+	    return 0;
 }
 
 
@@ -83,29 +80,29 @@ void KisLayer::calcNumChannels()
 {
     switch (m_cMode)
     {
-	case cm_Indexed:
-	case cm_Greyscale:
-	  m_channels = 1;
-	  return;
+	    case cm_Indexed:
+	    case cm_Greyscale:
+	        m_channels = 1;
+	        return;
 
-	case cm_RGB:
-	case cm_Lab:
-	  m_channels = 3;
-	  return;
+	    case cm_RGB:
+	    case cm_Lab:
+	        m_channels = 3;
+	        return;
 
-	case cm_RGBA:
-	case cm_CMYK:
-	case cm_LabA:
-	  m_channels = 4;
-	  return;
+	    case cm_RGBA:
+	    case cm_CMYK:
+	    case cm_LabA:
+	        m_channels = 4;
+	        return;
 
-	case cm_CMYKA:
-	  m_channels = 5;
-	  return;
+	    case cm_CMYKA:
+	        m_channels = 5;
+	        return;
 
-	default:
-	  m_channels = 0;
-	  return;
+	    default:
+	        m_channels = 0;
+	        return;
     }
 }
 
@@ -155,13 +152,13 @@ int KisLayer::yTiles() const
 void KisLayer::moveBy(int dx, int dy)
 {
     for (uchar i = 0; i < m_channels; i++)
-	m_ch[i]->moveBy(dx, dy);
+	    m_ch[i]->moveBy(dx, dy);
 }
 
 void KisLayer::moveTo(int x, int y) const
 {
     for (uchar i = 0; i < m_channels; i++)
-	m_ch[i]->moveTo(x, y);
+	    m_ch[i]->moveTo(x, y);
 }
 
 
@@ -191,10 +188,8 @@ bool KisLayer::boundryTileY(int tile) const
 
 void KisLayer::allocateRect(QRect r)
 {
-kdDebug(0) << "KisLayer::allocateRect(QRect r): entering" << endl;
-  for (uchar i = 0; i < m_channels; i++)
-	m_ch[i]->allocateRect(r);
-kdDebug(0) << "KisLayer::allocateRect(QRect r): leaving" << endl;        
+    for (uchar i = 0; i < m_channels; i++)
+	    m_ch[i]->allocateRect(r);
 }
 
 
@@ -230,7 +225,7 @@ uchar KisLayer::pixel(uchar channel, uint x, uint y)
 void KisLayer::clear(const KisColor& c, bool transparent )
 {
     if (!m_cMode == cm_RGB && !m_cMode == cm_RGBA)
-	return;
+	    return;
 
     uchar r = static_cast<uchar>(c.R());
     uchar g = static_cast<uchar>(c.G());
@@ -241,31 +236,34 @@ void KisLayer::clear(const KisColor& c, bool transparent )
     kdDebug(0) << "yTiles(): " << yTiles() << "xTiles(): " << xTiles() << endl;
 
     for(int y = 0; y < yTiles(); y++)
+    {
         for(int x = 0; x < xTiles(); x++)
         {
-	    // set the alpha channel
-	    if (alpha)
-	    {
-		if (transparent)
-	            memset(channelMem(3, y * xTiles() + x, 0, 0), 0 , TILE_SIZE*TILE_SIZE);
-		else
-		    memset(channelMem(3, y * xTiles() + x, 0, 0), 255 , TILE_SIZE*TILE_SIZE);
-	    }
+	        // set the alpha channel
+	        if (alpha)
+	        {
+		        if (transparent)
+	                memset(channelMem(3, y * xTiles() + x, 0, 0), 0 , TILE_SIZE*TILE_SIZE);
+		        else
+		            memset(channelMem(3, y * xTiles() + x, 0, 0), 255 , TILE_SIZE*TILE_SIZE);
+	        }
 
-	    uchar* ptr0 = channelMem(0, y * xTiles() + x, 0, 0);
-	    uchar* ptr1 = channelMem(1, y * xTiles() + x, 0, 0);
-	    uchar* ptr2 = channelMem(2, y * xTiles() + x, 0, 0);
+	        uchar* ptr0 = channelMem(0, y * xTiles() + x, 0, 0);
+	        uchar* ptr1 = channelMem(1, y * xTiles() + x, 0, 0);
+	        uchar* ptr2 = channelMem(2, y * xTiles() + x, 0, 0);
 	
-	    // set data channels to color
-	    for(int y = 0; y < TILE_SIZE; y++)
-		for(int x = 0; x < TILE_SIZE; x++)
-		{
-		    *(ptr0 + (y * TILE_SIZE + x)) = r;
-		    *(ptr1 + (y * TILE_SIZE + x)) = g;
-		    *(ptr2 + (y * TILE_SIZE + x)) = b;
-		}
+	        // set data channels to color
+	        for(int y = 0; y < TILE_SIZE; y++)
+            {
+		        for(int x = 0; x < TILE_SIZE; x++)
+		        {
+		            *(ptr0 + (y * TILE_SIZE + x)) = r;
+		            *(ptr1 + (y * TILE_SIZE + x)) = g;
+		            *(ptr2 + (y * TILE_SIZE + x)) = b;
+		        }
+            }
         }
+    }    
 }
-#endif
 
 #include "kis_layer.moc"

@@ -30,33 +30,35 @@
 
 #include "kis_dlg_rename.h"
 
-KisDlgRename::KisDlgRename(QString oldname, QWidget *parent, const char *name, bool modal, WFlags f)
+KisDlgRename::KisDlgRename(QString oldname, QWidget *parent, 
+    const char *name, bool modal, WFlags f)
   : KDialog ( parent, name, modal, f)
 {
-  QGridLayout *layout = new QGridLayout( this, 3, 2, 15, 7 );
+    QGridLayout *layout = new QGridLayout( this, 3, 2, 15, 7 );
 
-  m_pEdit = new QLineEdit( oldname, this );
-  layout->addWidget( m_pEdit, 0, 1 );
+    m_pEdit = new QLineEdit( oldname, this );
+    layout->addWidget( m_pEdit, 0, 1 );
 
-  QLabel *label1 = new QLabel( m_pEdit, i18n( "Name" ), this );
-  layout->addWidget( label1, 0, 0 );
+    QLabel *label1 = new QLabel( m_pEdit, i18n( "Name" ), this );
+    layout->addWidget( label1, 0, 0 );
 
-  layout->setRowStretch( 1, 1 );
+    layout->setRowStretch( 1, 1 );
 
-  QHBox *buttons = new QHBox( this );
-  layout->addMultiCellWidget( buttons, 2, 2, 0, 1 );
+    QHBox *buttons = new QHBox( this );
+    layout->addMultiCellWidget( buttons, 2, 2, 0, 1 );
 
-  (void) new QWidget( buttons );
+    (void) new QWidget( buttons );
 
-  QPushButton *pbOk = new QPushButton( i18n( "OK" ), buttons );
-  pbOk->setDefault( true );
-  QObject::connect( pbOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
+    QPushButton *pbOk = new QPushButton( i18n( "OK" ), buttons );
+    pbOk->setDefault( true );
+    QObject::connect( pbOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
 
-  QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), buttons );
-  QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    QPushButton *pbCancel = new QPushButton( i18n( "Cancel" ), buttons );
+    QObject::connect( pbCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 }
+
 
 QString KisDlgRename::name()
 {
-  return m_pEdit->text();
+    return m_pEdit->text();
 }

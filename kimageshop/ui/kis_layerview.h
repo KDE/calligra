@@ -32,6 +32,7 @@
 #define MAXROWS	    8
 
 class KisDoc;
+class KisView;
 class QPopupMenu;
 class QLineEdit;
 class QPixmap;
@@ -45,6 +46,7 @@ class KisLayerView : public QWidget
 
 public:
   KisLayerView( KisDoc* doc, QWidget* _parent = 0,  const char* _name = 0 );
+  void showScrollBars();
 };
 
 class LayerTable : public QTableView
@@ -93,6 +95,9 @@ private:
   void init(KisDoc* doc);
 
   KisDoc* m_doc;
+  KisView* m_view;
+  KisLayerView* m_layerview;
+  
   int m_items, m_selected;
   QPopupMenu* m_contextmenu;
   QPixmap *m_eyeIcon, *m_linkIcon;

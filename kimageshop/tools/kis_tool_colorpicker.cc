@@ -41,7 +41,7 @@ KisColor ColorPicker::pick(int x, int y)
 
     // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	return KisColor::white();
+	    return KisColor::white();
 
     int r = lay->pixel(0, x, y);
     int g = lay->pixel(1, x, y);
@@ -67,6 +67,7 @@ void ColorPicker::mousePress(QMouseEvent *e)
   
     if (e->button() == QMouseEvent::LeftButton)
         m_pView->slotSetFGColor(pick(e->pos().x(), e->pos().y()));
+        
     else if (e->button() == QMouseEvent::RightButton)
         m_pView->slotSetBGColor(pick(e->pos().x(), e->pos().y()));
 }

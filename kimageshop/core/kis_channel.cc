@@ -142,7 +142,7 @@ void KisChannel::allocateRect(QRect newRect)
     if (m_tileRect.contains(newRect))
     {
         m_imgRect = m_imgRect.unite(newRect);
-	return;
+	    return;
     }
   
   // make a newTileExtents rect which contains m_imgRect and newRect
@@ -173,10 +173,10 @@ void KisChannel::allocateRect(QRect newRect)
     // zero new tile pointers
     for(int yTile = 0; yTile < newYTiles; yTile++) 
     {
-	for(int xTile = 0; xTile < newXTiles; xTile++) 
+	    for(int xTile = 0; xTile < newXTiles; xTile++) 
         {
-	    newData[yTile * newXTiles + xTile] = 0;
-	}
+	        newData[yTile * newXTiles + xTile] = 0;
+	    }
     }
   
     // these are where the old tiles start in the new tile block
@@ -210,13 +210,13 @@ void KisChannel::allocateRect(QRect newRect)
     for(int y = minYTile; y <= maxYTile; y++)
         for(int x = minXTile; x <= maxXTile; x++)
             if (m_tiles[(y * m_xTiles) + x] == 0)
-	    {
-	        m_tiles[(y * m_xTiles) + x] = new uchar [TILE_SIZE * TILE_SIZE];
+	        {
+	            m_tiles[(y * m_xTiles) + x] = new uchar [TILE_SIZE * TILE_SIZE];
                 
-		if (m_id == ci_Alpha) // FIXME: set good init values for all cId's
-		    memset(m_tiles[(y * m_xTiles) + x], 0, TILE_SIZE * TILE_SIZE);
-		else
-		    memset(m_tiles[(y * m_xTiles) + x], 255, TILE_SIZE * TILE_SIZE);
+		        if (m_id == ci_Alpha) // FIXME: set good init values for all cId's
+		            memset(m_tiles[(y * m_xTiles) + x], 0, TILE_SIZE * TILE_SIZE);
+		        else
+		            memset(m_tiles[(y * m_xTiles) + x], 255, TILE_SIZE * TILE_SIZE);
             }
 }
 
@@ -239,11 +239,11 @@ bool KisChannel::writeToStore( KoStore *store)
 
     for(uint ty = 0; ty < m_yTiles; ty++)
     {
-	for(uint tx = 0; tx < m_xTiles; tx++)
+	    for(uint tx = 0; tx < m_xTiles; tx++)
         {
-	    for(int y = 0; y < TILE_SIZE; y++)
+	        for(int y = 0; y < TILE_SIZE; y++)
             {
-	        for(int x = 0; x < TILE_SIZE; x++)
+	            for(int x = 0; x < TILE_SIZE; x++)
                 {
                     /* write raw data to byte array stream, and thereby to
                     the byte array associated with it, at each pixel 

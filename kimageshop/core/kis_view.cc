@@ -168,6 +168,11 @@ void KisView::setupSideBar()
     connect(m_pSideBar, SIGNAL(bgColorChanged(const KisColor&)), this,
 		  SLOT(slotSetBGColor(const KisColor&)));
                   
+    connect(this, SIGNAL(fgColorChanged(const KisColor&)), m_pSideBar,
+		  SLOT(slotSetFGColor(const KisColor&)));
+    connect(this, SIGNAL(bgColorChanged(const KisColor&)), m_pSideBar,
+		  SLOT(slotSetBGColor(const KisColor&)));
+
     m_side_bar->setChecked( true );                  
 }
 
@@ -310,13 +315,10 @@ void KisView::setupActions()
 {
     // edit actions
   
-    // jwc - no undo - redo yet
-#if 0    
     m_undo = KStdAction::undo( this, SLOT( undo() ), 
         actionCollection(), "undo");
     m_redo = KStdAction::redo( this, SLOT( redo() ), 
         actionCollection(), "redo");
-#endif
   
     m_cut = KStdAction::cut( this, SLOT( cut() ), 
         actionCollection(), "cut");
@@ -326,6 +328,17 @@ void KisView::setupActions()
         
     m_paste = KStdAction::paste( this, SLOT( paste() ), 
         actionCollection(), "paste");
+
+    m_crop = new KAction( i18n("Crop"),
+        0,  this, SLOT( crop() ), 
+        actionCollection(), "crop");
+
+    m_select_all = KStdAction::selectAll( this, SLOT( selectAll() ), 
+        actionCollection(), "select_all");
+
+    m_unselect_all = new KAction( i18n("Unselect All"), 
+        0, this, SLOT( unSelectAll() ), 
+        actionCollection(), "unselect_all");
 
     // import/export actions
 
@@ -526,8 +539,8 @@ void KisView::setupActions()
     // disable at startup unused actions
 
     // jwc - no undo - redo yet
-    //m_undo->setEnabled( false );
-    //m_redo->setEnabled( false );
+    m_undo->setEnabled( false );
+    m_redo->setEnabled( false );
 
     m_layer_rotate180->setEnabled( false );
     m_layer_rotate270->setEnabled( false );  
@@ -543,6 +556,10 @@ void KisView::slotTabSelected(const QString& name)
     resizeEvent(0L);
 }
 
+void KisView::showScrollBars()
+{
+    resizeEvent(0L);
+}
 
 void KisView::resizeEvent(QResizeEvent*)
 {
@@ -878,6 +895,9 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
 void KisView::activateTool(KisTool* t)
 {
     if (!t) return;
+    
+    if(m_pTool == m_pSelectTool)
+        m_pSelectTool->clearOld();
 
     if (m_pTool) QObject::disconnect(m_pTool);
     m_pTool = t;
@@ -997,8 +1017,12 @@ void KisView::cut()
     if(m_pDoc->getClipImage())
         kapp->clipboard()->setImage(*(m_pDoc->getClipImage()));    
         
-    if(!m_pDoc->m_pSelection->erase())
+    if(!m_pDoc->getSelection()->erase())
         kdDebug() << "m_pDoc->m_Selection.erase() failed" << endl;
+
+    // clear old selection outline
+    if(m_pTool == m_pSelectTool)
+        m_pSelectTool->clearOld();
 
     /* refresh canvas */
     KisImage* img = m_pDoc->current();
@@ -1020,10 +1044,21 @@ void KisView::paste()
     }    
     else
     {
-        kdDebug() << "Nothing to paste" << endl;
+        KMessageBox::sorry(NULL, "Nothing to paste!", "", FALSE); 
     }
 }
 
+void KisView::crop()
+{
+}
+
+void KisView::selectAll()
+{
+}
+
+void KisView::unSelectAll()
+{
+}
 
 /*
  *      dialog action slots
@@ -1102,7 +1137,7 @@ void KisView::updateToolbarButtons()
 
 
 /*
- * layer action slots
+ *  layer action slots
  */
 
 /* 
@@ -1111,20 +1146,8 @@ void KisView::updateToolbarButtons()
 
 void KisView::insert_layer()
 {
-    KMessageBox::sorry(NULL, 
-    "Please use layers tab on sidebar for layer operations.", 
-    "", FALSE);          
-    
-#if 0
-    m_pDoc->CopyToLayer(this);
-    KisImage* img = m_pDoc->current();
-    if (!img) return;
-
-    QRect updateRect(0, 0, img->width(), img->height());
-    m_pDoc->current()->markDirty(updateRect);
-#endif    
+    KMessageBox::sorry(NULL, "Please use layers tab on sidebar.", "", FALSE); 
 }
-
 
 /*
     Insert a standard image like png or jpg into the current layer.
@@ -1223,14 +1246,13 @@ void KisView::layer_mirrorY()
  * image action slots
  */
 
+
 void KisView::add_new_image_tab()
 {
-    if (m_pDoc->current())
-    {
-	    if(!m_pDoc->slotNewImage())
-            kdDebug(0) << "Couldn't add image tab" << endl;
-    }
+    if(!m_pDoc->slotNewImage())
+        kdDebug(0) << "Couldn't add image tab" << endl;
 }
+
 
 void KisView::remove_current_image_tab()
 {
@@ -1383,21 +1405,32 @@ void KisView::slotSetBrush(const KisBrush* b)
     m_pSideBar->slotSetBrush(*b);
 }
 
+/*
+    The new foreground color should show up in the color selector 
+    via signal sent to colorselector
+*/
+
 void KisView::slotSetFGColor(const KisColor& c)
 {
     m_fg = c;
+    emit fgColorChanged(c);
 }
 
+/*
+    The new background color should show up in the color selector 
+    via signal sent to colorselector
+*/
 
 void KisView::slotSetBGColor(const KisColor& c)
 {
     m_bg = c;
+    emit bgColorChanged(c);
 }
 
 
 void KisView::slotUndoRedoChanged( QString /*undo*/, QString /*redo*/ )
 {
-  //####### FIXME
+  // FIXME
 #if 0
   m_undo->setEnabled( !undo.isEmpty() );
   m_redo->setEnabled( !redo.isEmpty() );
@@ -1407,8 +1440,7 @@ void KisView::slotUndoRedoChanged( QString /*undo*/, QString /*redo*/ )
 
 void KisView::slotUndoRedoChanged( QStringList /*undo*/, QStringList /*redo*/ )
 {
-  //####### FIXME
-
+  // FIXME
 #if 0
   if( undo.count() )
   {

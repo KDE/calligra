@@ -33,7 +33,7 @@
 IconChooser::IconChooser( QWidget *parent, QSize iconSize, const char *name )
   : QTableView( parent, name )
 {
-    setTableFlags(  Tbl_autoVScrollBar |  Tbl_clipCellPainting | Tbl_cutCellsH |
+    setTableFlags(  Tbl_vScrollBar |  Tbl_clipCellPainting | Tbl_cutCellsH |
 		    Tbl_snapToGrid );
     QTableView::setBackgroundColor(white);
 

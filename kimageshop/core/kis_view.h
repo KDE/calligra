@@ -78,7 +78,8 @@ class KisView : public KoView
 
     KisCanvas* kisCanvas() { return m_pCanvas; }
     void updateCanvas(  QRect & ur );
-    
+    void showScrollBars( );
+        
  public slots:
  
     void slotDocUpdated();
@@ -95,6 +96,8 @@ class KisView : public KoView
     void canvasMousePressEvent( QMouseEvent * );
     void canvasMouseMoveEvent( QMouseEvent * );
     void canvasMouseReleaseEvent( QMouseEvent * );
+    void bgColorChanged(const KisColor & );
+    void fgColorChanged(const KisColor & );     
 
  public slots:
 
@@ -109,7 +112,10 @@ class KisView : public KoView
     void copy();
     void cut();
     void paste();
-
+    void crop();
+    void selectAll();
+    void unSelectAll();
+    
     // dialog action slots
     void dialog_gradient();
     void dialog_gradienteditor();
@@ -204,7 +210,8 @@ class KisView : public KoView
     *m_layer_mirrorX, *m_layer_mirrorY; 
         
     // edit actions
-    KAction *m_undo, *m_redo, *m_copy, *m_cut, *m_paste;
+    KAction *m_undo, *m_redo, *m_copy, *m_cut, *m_paste, *m_crop,
+        *m_select_all, *m_unselect_all;
 
     // dialog actions
     KToggleAction *m_dialog_gradient, *m_dialog_gradienteditor;

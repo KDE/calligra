@@ -43,8 +43,6 @@ class KisImage : public QObject
     Q_OBJECT
 
  public:
-    //KisImage( const QString& name, int width = 512, int height = 512,
-    //			  cMode cm = cm_RGBA, uchar bitDepth = 8 );
     
     KisImage( const QString& name, int width, int height,
     			  cMode cm = cm_RGBA, uchar bitDepth = 8 );
@@ -61,9 +59,7 @@ class KisImage : public QObject
 
     cMode   colorMode()    { return m_cMode; } 
     uchar   bitDepth()     { return m_bitDepth; }
-#ifdef JOHN
-    QPixmap *imagePixmap;    
-#endif    
+
     void setName(const QString& n)    { m_name = n; }
     void setAuthor(const QString& a)  { m_author = a; }
     void setEmail(const QString& e)  { m_email = e; }
@@ -92,7 +88,6 @@ class KisImage : public QObject
     void mergeVisibleLayers();
     void mergeLinkedLayers();
     void mergeLayers(QList<KisLayer>);
-
         
  signals:
     void updated();
@@ -106,9 +101,10 @@ class KisImage : public QObject
     void compositeImage( QRect _rect );
     void compositeTile( int x, int y, KisLayer *dstLay = 0, int dstTile = -1 );
     void convertTileToPixmap( KisLayer *lay, int tileNo, QPixmap *pix );
-    void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay, KisLayer *dstLay, int dstTile );
+    void renderLayerIntoTile( QRect tileBoundary, const KisLayer *srcLay, 
+        KisLayer *dstLay, int dstTile );
     void renderTileQuadrant( const KisLayer *srcLay, int srcTile, KisLayer *dstLay,
-			     int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
+	    int dstTile, int srcX, int srcY, int dstX, int dstY, int w, int h );
     void setUpVisual();
     void convertImageToPixmap( QImage *img, QPixmap *pix );
         

@@ -73,6 +73,7 @@ class KisLayer : public QObject
 	bool    boundryTileX(int tile) const;
 	bool    boundryTileY(int tile) const;
 	void    allocateRect(QRect _r);
+    
 	void    setPixel(uchar channel, uint x, uint y, uchar val);
 	uchar   pixel(uchar channel, uint x, uint y);
 

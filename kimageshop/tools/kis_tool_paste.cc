@@ -140,29 +140,29 @@ bool PasteTool::pasteColor(QPoint pos)
         for (int x = sx; x <= ex; x++)
 	    {
             // destination binary values by channel
-	    r = lay->pixel(0, startx + x, starty + y);
-	    g = lay->pixel(1, startx + x, starty + y);
-	    b = lay->pixel(2, startx + x, starty + y);
+	        r = lay->pixel(0, startx + x, starty + y);
+	        g = lay->pixel(1, startx + x, starty + y);
+	        b = lay->pixel(2, startx + x, starty + y);
 
             // pixel value in scanline at x offset to right
             uint *p = (uint *)qimg->scanLine(y) + x;
             
-	    lay->setPixel(0, startx + x, starty + y, qRed(*p));
-	    lay->setPixel(1, startx + x, starty + y, qGreen(*p));
-	    lay->setPixel(2, startx + x, starty + y, qBlue(*p));
+	        lay->setPixel(0, startx + x, starty + y, qRed(*p));
+	        lay->setPixel(1, startx + x, starty + y, qGreen(*p));
+	        lay->setPixel(2, startx + x, starty + y, qBlue(*p));
                        	  
             if (alpha)
 	        {
-	        a = lay->pixel(3, startx + x, starty + y);
+	            a = lay->pixel(3, startx + x, starty + y);
 
-              /* v = a + bv;
-		      if (v < 0 ) v = 0;
-		      if (v > 255 ) v = 255;
-		      a = (uchar) v; */
+                /* v = a + bv;
+		        if (v < 0 ) v = 0;
+		        if (v > 255 ) v = 255;
+		        a = (uchar) v; */
 			  
-		  lay->setPixel(3, startx + x, starty + y, a);
-	    }
-	  } 
+		        lay->setPixel(3, startx + x, starty + y, a);
+	        }
+	    } 
     }
 
     return true;

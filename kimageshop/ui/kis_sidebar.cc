@@ -18,8 +18,11 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <stdlib.h>
+
 #include <kglobalsettings.h>
 #include <kdualcolorbtn.h>
+#include <kstddirs.h>
 #include <kdebug.h> 
 
 #include "kis_sidebar.h"
@@ -451,12 +454,16 @@ void ChooserFrame::slotColorSelected(const KisColor& c)
 
 ControlFrame::ControlFrame( QWidget* parent, const char* name ) : QFrame( parent, name )
 {
+    QString defaultPattern = getenv("KDEDIR") + QString("/")
+        + KStandardDirs::kde_default("data") 
+        + "kimageshop/patterns/Mystique.xpm";
+
     setFrameStyle(Panel | Raised);
     setLineWidth(1);
 
     m_pColorButton = new KDualColorButton(this);
     m_pBrushWidget = new KisBrushWidget(this);
-    //m_pPatternWidget = new KisPatternWidget(this); //jwc
+    m_pPatternWidget = new KisPatternWidget(this, defaultPattern.latin1()); 
 
     connect(m_pColorButton, SIGNAL(fgChanged(const QColor &)), this,
 	    SLOT(slotFGColorSelected(const QColor &)));
@@ -491,14 +498,14 @@ void ControlFrame::slotSetBrush(const KisBrush& b)
 
 void ControlFrame::slotSetPattern(const KisPattern& b)
 {
-    //m_pPatternWidget->slotSetPattern(b); //jwc
+    m_pPatternWidget->slotSetPattern(b); //jwc
 }
 
 void ControlFrame::resizeEvent ( QResizeEvent * )
 {
     m_pColorButton->setGeometry( 4, 4, 34, 34 );
     m_pBrushWidget->setGeometry( 42, 4, 34, 34 );
-    //m_pPatternWidget->setGeometry( 80, 4, 34, 34 ); //jwc
+    m_pPatternWidget->setGeometry( 80, 4, 34, 34 ); //jwc
 }
 
 void ControlFrame::slotSetFGColor(const KisColor& c)

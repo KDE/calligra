@@ -29,20 +29,24 @@ class KisDoc;
 
 class KisSelection : public QObject 
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  KisSelection(KisDoc *doc);
-  ~KisSelection();
-  bool erase();
-  
-  QImage selectionImage;
-  QRect selectionRect;
-  
+    KisSelection(KisDoc *doc);
+    ~KisSelection();
+    bool erase();
+    
+    QImage & getImage() { return selectImage; }
+    void setImage(QImage & img);
+    QRect  & getRect() { return selectRect; } 
+    void setRect(QRect & rect);
+    
 protected:
+    QImage selectImage;
+    QRect selectRect;
           
 private:
-  KisDoc *pDoc;
+    KisDoc *pDoc;
 };
 
 #endif

@@ -39,6 +39,7 @@
 #include <kmessagebox.h>
 
 #include "kis_doc.h"
+#include "kis_view.h"
 #include "kis_util.h"
 #include "kis_layerview.h"
 #include "kis_factory.h"
@@ -77,6 +78,11 @@ KisLayerView::KisLayerView( KisDoc *_doc, QWidget *_parent, const char *_name )
     connect( pbDown, SIGNAL( clicked() ), layertable, SLOT( slotLowerLayer() ) );
 }
 
+void KisLayerView::showScrollBars( )
+{
+    resizeEvent(0L);
+}
+
 LayerTable::LayerTable( QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
 {
@@ -90,12 +96,14 @@ LayerTable::LayerTable( KisDoc* doc, QWidget* _parent, const char* _name )
 }
 
 
-void LayerTable::init( KisDoc* doc )
+void LayerTable::init( KisDoc* doc)
 {
-    setTableFlags( Tbl_autoHScrollBar | Tbl_autoVScrollBar );
+    setTableFlags(Tbl_vScrollBar | Tbl_autoHScrollBar);
 
     m_doc = doc;
-
+    //m_view = view;
+    //m_layerview = layerview;
+        
     setBackgroundColor( white );
 
     // load icon pixmaps
@@ -114,8 +122,9 @@ void LayerTable::init( KisDoc* doc )
         m_linkIcon->size() );
 
     // HACK - the size of the preview image should be configurable somewhere
-    m_previewRect = QRect( QPoint( 50, (CELLHEIGHT - m_linkIcon->height() ) /2 ),
-	 m_linkIcon->size() );
+    m_previewRect 
+        = QRect( QPoint( 50, (CELLHEIGHT - m_linkIcon->height() ) /2 ),
+	        m_linkIcon->size() );
 
     updateTable();
 
@@ -149,8 +158,8 @@ void LayerTable::init( KisDoc* doc )
 
     connect( m_contextmenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
     connect( submenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
-
     connect( doc, SIGNAL( layersUpdated()), this, SLOT( slotDocUpdated () ) );
+    setAutoUpdate(true); //jwc
 }
 
 void LayerTable::slotDocUpdated()
@@ -207,7 +216,6 @@ void LayerTable::updateTable()
         m_items = m_doc->current()->layerList().count();
         setNumRows( m_items );
         setNumCols( 1 );
-        
     }
     else
     {
@@ -215,8 +223,11 @@ void LayerTable::updateTable()
         setNumRows( 0 );
         setNumCols( 0 );
     }
-    updateScrollBars(); //jwc
+    
     resize( sizeHint() );
+    //m_view->showScrollBars();
+    //m_layerview->showScrollBars();
+    repaint(); 
 }
 
 void LayerTable::update_contextmenu( int _index )
@@ -353,6 +364,7 @@ void LayerTable::slotAddLayer()
 
     updateTable();
     updateAllCells();
+    resizeEvent(0L);
 }
 
 
@@ -433,7 +445,6 @@ void LayerTable::slotFrontLayer()
 
 void LayerTable::slotBackgroundLayer()
 {
-
   if( m_selected != 0 )
   {
     m_doc->current()->setBackgroundLayer( m_selected );
@@ -449,8 +460,9 @@ void LayerTable::slotBackgroundLayer()
 
 void LayerTable::updateAllCells()
 {
-    for( int i = 0; i < (int)m_doc->current()->layerList().count(); i++ )
-        updateCell( i, 0 );
+    if(m_doc->current())
+        for( int i = 0; i < (int)m_doc->current()->layerList().count(); i++ )
+            updateCell( i, 0 );
 }
 
 

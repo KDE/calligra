@@ -26,7 +26,7 @@
 #include <qstringlist.h>
 
 #include <koDocument.h>
-//#include <koUndo.h> //jwc
+#include "koUndo.h" 
 
 #include <iostream.h>
 #include "kis_image.h"
@@ -76,7 +76,7 @@ public:
 	/*
 	 * KOffice undo/redo.
 	 */
-    //KoCommandHistory* commandHistory() { return &m_commands; }; //jwc
+    KoCommandHistory* commandHistory() { return &m_commands; }; 
 
 	/*
 	 * Use QPainter p to paint a rectangular are of the current image.
@@ -101,7 +101,7 @@ public:
 	/*
 	 * Return the name of the current image.
 	 */
-    QString  currentImage();
+    QString currentImage();
 
 	/*
 	 * Make img the current image.
@@ -118,6 +118,11 @@ public:
 	 */
     QStringList images();
 
+	/*
+	 * Rename an image
+	 */
+    void renameImage(QString & oldName, QString & newName);
+    
 	/*
 	 *  save current image as Qt image (standard image formats)
 	 */    
@@ -159,11 +164,10 @@ public:
     QImage *getClipImage() { return m_pClipImage; }
 
 	/*
-	 *  currrent selection for document
+	 *  get currrent selection for document
 	 */    
-
-    KisSelection *m_pSelection;
-
+    KisSelection *getSelection() { return m_pSelection; }
+    
 public slots:
     void slotImageUpdated();
     void slotImageUpdated( const QRect& rect);
@@ -185,8 +189,8 @@ protected:
     views of the same data */
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
-    /* undo/redo - currently nonfunctional */
-    //KoCommandHistory  m_commands; 
+    /* undo/redo */
+    KoCommandHistory m_commands; 
     
     /* list of images for the document - each document can have multiple 
     images and each image must have at least one layer. however, a document
@@ -199,11 +203,11 @@ protected:
     NewDialog * m_pNewDialog;
     QImage    * m_pClipImage;
     
-    /* selection rectangle for the document - there can only be one
+    /* selection for the document - there can only be one
     no matter how many views or images - possible list of selections 
-    may be useful later, but list is questionable because current 
-    selection is tied to gui focus in current layer */
-    QRect     selectRect;    
+    may be useful as they can be linked if in same layer */
+    QRect selectRect;    
+    KisSelection *m_pSelection;
 };
 
 #endif // __kis_doc_h__

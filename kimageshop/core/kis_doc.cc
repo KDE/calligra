@@ -64,6 +64,7 @@
 #include "kis_layer.h"
 #include "kis_channel.h"
 #include "kis_selection.h"
+#include "koUndo.h"
 
 #define KIS_DEBUG(AREA, CMD)
 
@@ -72,10 +73,8 @@
 */
 
 KisDoc::KisDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ) //jwc
-
-//  : KoDocument( parentWidget, parent, parent, name, singleViewMode )
-//  , m_commands()
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ) 
+    , m_commands()
 {
 kdDebug(0) << "KisDoc::KisDoc() entering" << endl;
 
@@ -162,17 +161,10 @@ bool KisDoc::initDoc()
 
 QDomDocument KisDoc::saveXML( )
 {
-    //CopyToLayer();
-    
     cout << " --- KisDoc::saveXML --- " << endl;
     KisImage *img = m_pCurrent;
     
-    // can't return false from this 
-    // if (!img) return false;
-
     // FIXME: implement saving of non-RGB modes.
-    // if (img->colorMode() != cm_RGB  && img->colorMode() != cm_RGBA)
-    //    return false;
 
     QDomDocument doc( "image" );
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -209,18 +201,17 @@ kdDebug(0) << "cMode: " <<  static_cast<int>(img->colorMode()) << endl;
     // layer elements
 kdDebug(0) << "layer elements" << endl;
 
-
     QList<KisLayer> l_lst = img->layerList();
     for (KisLayer *lay = l_lst.first(); lay != 0; lay = l_lst.next())
     {
         QDomElement layer = doc.createElement( "layer" );
 
-	layer.setAttribute( "name", lay->name() );
-	layer.setAttribute( "x", lay->imageExtents().x() );
-	layer.setAttribute( "y", lay->imageExtents().y() );
-	layer.setAttribute( "width", lay->imageExtents().width() );
+	    layer.setAttribute( "name", lay->name() );
+	    layer.setAttribute( "x", lay->imageExtents().x() );
+	    layer.setAttribute( "y", lay->imageExtents().y() );
+	    layer.setAttribute( "width", lay->imageExtents().width() );
         layer.setAttribute( "height", lay->imageExtents().height() );
-	layer.setAttribute( "opacity", static_cast<int>(lay->opacity()) );
+	    layer.setAttribute( "opacity", static_cast<int>(lay->opacity()) );
 
 kdDebug(0) << "name: " <<  lay->name() << endl;          
 kdDebug(0) << "x: " << lay->imageExtents().x()   << endl;                  
@@ -229,44 +220,44 @@ kdDebug(0) << "width: " << lay->imageExtents().width()   << endl;
 kdDebug(0) << "height: " << lay->imageExtents().height()   << endl;        
 kdDebug(0) << "opacity: " <<  static_cast<int>(lay->opacity())  << endl;        
 
-	if (lay->visible())
-		layer.setAttribute( "visible", "true" );
-	else
-		layer.setAttribute( "visible", "false" );
+	    if (lay->visible())
+		    layer.setAttribute( "visible", "true" );
+	    else
+		    layer.setAttribute( "visible", "false" );
 
-	if (lay->linked())
-		layer.setAttribute( "linked", "true" );
-	else
-		layer.setAttribute( "linked", "false" );
+	    if (lay->linked())
+		    layer.setAttribute( "linked", "true" );
+	    else
+		    layer.setAttribute( "linked", "false" );
 
-	layer.setAttribute( "bitDepth", static_cast<int>(lay->bitDepth()) );
-	layer.setAttribute( "cMode", static_cast<int>(lay->colorMode()) );
+	    layer.setAttribute( "bitDepth", static_cast<int>(lay->bitDepth()) );
+	    layer.setAttribute( "cMode", static_cast<int>(lay->colorMode()) );
 
 kdDebug(0) << "opacity: " <<  static_cast<int>(lay->bitDepth())  << endl;
 kdDebug(0) << "opacity: " <<  static_cast<int>(lay->colorMode())  << endl;        
 
-	layers.appendChild( layer );
+	    layers.appendChild( layer );
 
-	// channels element - variable, normally maximum of 4 channels
-	QDomElement channels = doc.createElement( "channels" );
-	layer.appendChild( channels );
+	    // channels element - variable, normally maximum of 4 channels
+	    QDomElement channels = doc.createElement( "channels" );
+	    layer.appendChild( channels );
 
 kdDebug(0) << "channel elements" << endl;
 
-	// channel elements
-	for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
-	{
-	    QDomElement channel = doc.createElement( "channel" );
+	    // channel elements
+	    for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
+	    {
+	        QDomElement channel = doc.createElement( "channel" );
 
-	    channel.setAttribute( "cId", static_cast<int>(ch->channelId()) );
-	    channel.setAttribute( "bitDepth", static_cast<int>(ch->bitDepth()) );
+	        channel.setAttribute( "cId", static_cast<int>(ch->channelId()) );
+	        channel.setAttribute( "bitDepth", static_cast<int>(ch->bitDepth()) );
 
 kdDebug(0) << "cId: " <<  static_cast<int>(ch->channelId())  << endl;
 kdDebug(0) << "bitDepth: " <<  static_cast<int>(ch->bitDepth())  << endl;            
 
-	    channels.appendChild( channel );
+	        channels.appendChild( channel );
 
-	} // end of channels loop
+	    } // end of channels loop
     } // end of layers loop
 
     setModified( false );
@@ -275,14 +266,14 @@ kdDebug(0) << "bitDepth: " <<  static_cast<int>(ch->bitDepth())  << endl;
 
 /*
     Save extra, document-specific data outside xml format as defined by
-    DTD for this document type.  However, it is appended to the saved
+    DTD for this document type.  It is appended to the saved
     xml document in gzipped format using the store methods of koffice
     common code koffice/lib/store/ as an internal file, not a real, 
     separate file in the filesystem.
     
     In this case it's the binary image data
-    Krayon can only handle rgb and rgba formats for now, by channel for each 
-    layer of the image saved in binary format
+    Krayon can only handle rgb and rgba formats for now, 
+    by channel for each layer of the image saved in binary format
     
     ko virtual method implemented
 */
@@ -291,8 +282,8 @@ bool KisDoc::completeSaving( KoStore* store )
 {
 kdDebug(0) << "KisDoc::completeSaving() entering" << endl;
 
-    if ( !store )         return false;
-    if (!m_pCurrent)      return false;
+    if (!store)         return false;
+    if (!m_pCurrent)    return false;
 
     QList<KisLayer> layers = m_pCurrent->layerList();
 
@@ -323,7 +314,6 @@ kdDebug(0) << "KisDoc::completeSaving() leaving" << endl;
 
 bool KisDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
-
 kdDebug(0) << "KisDoc::loadXML() entering" << endl;
 
     if ( doc.doctype().name() != "image" )
@@ -427,13 +417,13 @@ kdDebug(0) << "bitDepth: " << bd << endl;
 	      if (channel.tagName() != "channel" ) continue;
 
           cout << "--- channel ---" << endl;
+          
 	      c = c.nextSibling();
 	    }
 	    l = l.nextSibling();
     }
 
-    /* add background layer 
-    jwc - should only do this for a new document, not 
+    /* add background layer : should only do this for a new document, not 
     when loading an existing image - for existing document,
     but will do for now */
     
@@ -505,17 +495,21 @@ kdDebug() << "KisDoc::setCurrentImage entering" << endl;
 
     m_pCurrent = img;
 
-    QObject::connect( m_pCurrent, SIGNAL( updated() ),
+    if(m_pCurrent)
+    {
+        // connect new current image
+        QObject::connect( m_pCurrent, SIGNAL( updated() ),
 		    this, SLOT( slotImageUpdated() ) );
-    QObject::connect( m_pCurrent, SIGNAL( updated( const QRect& ) ),
+        QObject::connect( m_pCurrent, SIGNAL( updated( const QRect& ) ),
 		    this, SLOT( slotImageUpdated( const QRect& ) ) );
-    QObject::connect( m_pCurrent, SIGNAL( layersUpdated() ),
+        QObject::connect( m_pCurrent, SIGNAL( layersUpdated() ),
 		    this, SLOT( slotLayersUpdated() ) );
-
+    }
+    
     emit imageListUpdated();
     emit layersUpdated();
     emit docUpdated();
-
+    
 kdDebug() << "KisDoc::setCurrentImage leaving" << endl; 
 }
 
@@ -533,12 +527,11 @@ kdDebug() << "KisDoc::setCurrentImage entering" << endl; //jwc
 
     while (img)
     {
-      if (img->name() == _name)
-	  {
-	    setCurrentImage(img);
-	    return;
-	  }
-        
+        if (img->name() == _name)
+	    {
+	        setCurrentImage(img);
+	        return;
+	    }
         img = m_Images.next();
     }
    
@@ -547,6 +540,32 @@ kdDebug() << "KisDoc::setCurrentImage leaving" << endl; //jwc
 }
 
 
+/*
+    rename an image - from menu or click on image tab
+*/
+
+void KisDoc::renameImage(QString & oldName, QString & newName)
+{
+    KisImage *img = m_Images.first();
+
+    while (img)
+    {
+        if(img->name() == oldName)
+        {
+            img->setName(newName);
+            break;
+        }
+        img = m_Images.next();
+    }
+    
+    emit imageListUpdated();
+}
+
+
+/*
+    build list of images by name
+*/
+
 QStringList KisDoc::images()
 {
     QStringList lst;
@@ -554,8 +573,8 @@ QStringList KisDoc::images()
 
     while (img)
     {
-      lst.append(img->name());
-      img = m_Images.next();
+        lst.append(img->name());
+        img = m_Images.next();
     }
     
     return lst;
@@ -582,10 +601,11 @@ KisImage* KisDoc::current()
     return m_pCurrent;
 }
 
+
 /*
     KisDoc destructor - Note that since this is MDI, each image
     in the list must be deleted to free up all memory.  While
-    there is only ONE KOffice "document", there are multiple 
+    there is only ONE Koffice "document", there are multiple 
     images you can load and work with in any session
 */
 
@@ -595,6 +615,17 @@ KisDoc::~KisDoc()
 
     while (img)
     {
+        // disconnect old current image
+        if(img == m_pCurrent)
+        {
+            QObject::disconnect( m_pCurrent, SIGNAL( updated() ),
+	            this, SLOT( slotImageUpdated() ) );
+            QObject::disconnect( m_pCurrent, SIGNAL( updated( const QRect& ) ),
+	            this, SLOT( slotImageUpdated( const QRect& ) ) );
+            QObject::disconnect( m_pCurrent, SIGNAL( layersUpdated() ),
+                this, SLOT( slotLayersUpdated() ) );
+        }
+        
         delete img;
         img = m_Images.next();
     }
@@ -667,6 +698,9 @@ bool KisDoc::saveAsQtImage( QString file)
 
     // now create an image
     QImage img  = pixmap->convertToImage ();
+    
+    // need to pass in bool flag for whether or not to set
+    // alpha buffer depending on image and savefile type
     // img.setAlphaBuffer (true);
 
     // clean up destiation pixmap    
@@ -683,8 +717,7 @@ void KisDoc::CopyToLayer(KisView *pView)
     unsigned int w = (unsigned int) current()->width();
     unsigned int h = (unsigned int) current()->height();
     
-    /* prepare a pixmap for drawing the same size as the current
-    image */
+    /* prepare a pixmap for drawing - same size as current image */
     
     QPixmap *buffer = new QPixmap (w, h);
     if (buffer == 0L)
@@ -764,7 +797,8 @@ bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
     /* if dealing with 1 or 8 bit images, convert to 16 bit */
     if(qimage->depth() < 16)
     {
-        QImage Converted = qimage->smoothScale(qimage->width(), qimage->height());
+        QImage Converted 
+            = qimage->smoothScale(qimage->width(), qimage->height());
         qimg = &Converted;
     }
     
@@ -858,6 +892,9 @@ bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
     raster operations,  and many other neat effects.  -jwc-
 */
 
+// this belongs in either the image class or selection class, 
+// and is not used yet - not finished.  doesn't really belong in document - jwc
+
 bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
 {
     KisImage *img = current();
@@ -871,11 +908,13 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
 	  return false;
 
+    bool grayScale = false;
+    
     /* if dealing with 1 or 8 bit images, convert to 16 bit */
-    if(qimage->depth() < 16)
+    if(qimage->depth() < 16 && !grayScale)
     {
-        QImage Converted = qimage->smoothScale(qimage->width(), 
-            qimage->height());
+        QImage Converted 
+            = qimage->smoothScale(qimage->width(), qimage->height());
         qimg = &Converted;
     }
     
@@ -909,48 +948,48 @@ bool KisDoc::LayerToQtImage(QImage *qimage, KisView *pView, QRect & clipRect)
     {
         sl = qimg->scanLine(y);
 
-      for (int x = sx; x <= ex; x++)
-	  {
-        // destination binary values by channel
-	    r = lay->pixel(0, startx + x, starty + y);
-	    g = lay->pixel(1, startx + x, starty + y);
-	    b = lay->pixel(2, startx + x, starty + y);
-
-        // source binary value for grayscale - not used here
-	    bv = *(sl + x);
-            
-        // skip black pixels in source - only for gray scale 
-	    // if (bv == 0) continue;
-
-        // inverse of gray scale binary value - the darker the higher
-        // the value
-	    invbv = 255 - bv;
-
-	    r = ((red * bv) + (r * invbv))/255;
-	    g = ((green * bv) + (g * invbv))/255;
-        b = ((blue * bv) + (b * invbv))/255;
-
-        uint *p = (uint *)qimg->scanLine(y) + x;
-            
-	    lay->setPixel(0, startx + x, starty + y, qRed(*p));
-	    lay->setPixel(1, startx + x, starty + y, qGreen(*p));
-	    lay->setPixel(2, startx + x, starty + y, qBlue(*p));
-                       	  
-        if (alpha)
+        for (int x = sx; x <= ex; x++)
 	    {
-#if 0
-	      a = lay->pixel(3, startx + x, starty + y);
+            // destination binary values by channel
+	        r = lay->pixel(0, startx + x, starty + y);
+	        g = lay->pixel(1, startx + x, starty + y);
+	        b = lay->pixel(2, startx + x, starty + y);
+            if(grayScale)
+                 a = lay->pixel(3, startx + x, starty + y);        
 
-		  v = a + bv;
-		  if (v < 0 ) v = 0;
-		  if (v > 255 ) v = 255;
-		  a = (uchar) v;
-			  
-		  lay->setPixel(3, startx + x, starty + y, a);
-#endif
-	    }
-	  } 
-  }
+            if(grayScale)
+            {
+                // source binary value for grayscale - not used here
+	            bv = *(sl + x);
+            
+                // skip black pixels in source - only for gray scale 
+	            if (bv == 0) continue;
+
+                // inverse of gray scale binary value  
+                // the darker the higher the value
+	            invbv = 255 - bv;
+
+	            r = ((red * bv) + (r * invbv))/255;
+	            g = ((green * bv) + (g * invbv))/255;
+                b = ((blue * bv) + (b * invbv))/255;
+                
+                if(alpha)
+                {
+		            v = a + bv;
+		            if (v < 0 ) v = 0;
+		            if (v > 255 ) v = 255;
+		            a = (uchar) v;
+                }              
+            }
+        
+            uint *p = (uint *)qimg->scanLine(y) + x;
+            
+            if(!alpha)
+                *p = qRgb(r, g, b);
+            else
+                *p = qRgba(r, g, b, a);            
+	    } 
+    }
     
     return true;
 }
@@ -982,6 +1021,8 @@ bool KisDoc::setClipImage( )
         delete m_pClipImage;
         m_pClipImage = 0L;
     }   
+    
+    selectRect = getSelection()->getRect();
      
     m_pClipImage = new QImage(selectRect.width(), selectRect.height(), 32);
     if(!m_pClipImage) return false;
@@ -1009,21 +1050,21 @@ bool KisDoc::setClipImage( )
     // in image layer, using channel data at x+dx, y+dy offset into layer 
     for (int y = 0; y < dy; y++)
     {
-      for (int x = 0; x < dx; x++)
-	  {
+        for (int x = 0; x < dx; x++)
+	    {
             // source binary values by channel
-	    r = lay->pixel(0, sx + x, sy + y);
-	    g = lay->pixel(1, sx + x, sy + y);
-	    b = lay->pixel(2, sx + x, sy + y);
+	        r = lay->pixel(0, sx + x, sy + y);
+	        g = lay->pixel(1, sx + x, sy + y);
+	        b = lay->pixel(2, sx + x, sy + y);
             
-        // dest binary data in scanline at x offset
-        // is set at this point
-        p = (uint *)m_pClipImage->scanLine(y) + x;
-        *p = qRgb(r, g, b);
-      }
-  }
+            // dest binary data in scanline at x offset
+            // is set at this point
+            p = (uint *)m_pClipImage->scanLine(y) + x;
+            *p = qRgb(r, g, b);
+        }
+    }
     
-  return true;    
+    return true;    
 }
 
 
@@ -1047,21 +1088,27 @@ void KisDoc::removeImage( KisImage *img )
         m_Images.remove(img);
         delete img;
         setCurrentImage(m_Images.first());
-    }
-    else
-    {
-        KMessageBox::sorry(NULL, "You must keep at least one image.", 
-            "", FALSE);          
-    }
-    
-#if 0    
-    if (m_Images.isEmpty())
-        setCurrentImage(0L);
-    else
-        setCurrentImage(m_Images.last()); // #### FIXME
-#endif        
-}
 
+    }
+    else // last image
+    {
+        // disconnect image - should always be current image
+#if 0
+        if(img == m_pCurrent)
+        {
+            QObject::disconnect( m_pCurrent, SIGNAL( updated() ),
+	            this, SLOT( slotImageUpdated() ) );
+            QObject::disconnect( m_pCurrent, SIGNAL( updated( const QRect& ) ),
+	            this, SLOT( slotImageUpdated( const QRect& ) ) );
+            QObject::disconnect( m_pCurrent, SIGNAL( layersUpdated() ),
+                this, SLOT( slotLayersUpdated() ) );
+        }
+#endif        
+        m_Images.remove(img);
+        delete img;
+        setCurrentImage(0L);
+    }
+}
 
 
 void KisDoc::slotRemoveImage( const QString& _name )
@@ -1086,7 +1133,7 @@ void KisDoc::slotRemoveImage( const QString& _name )
 
 bool KisDoc::slotNewImage()
 {
-    kdDebug() << "###### KisDoc::slotNewImage #######" << endl; 
+    kdDebug() << "#### KisDoc::slotNewImage ####" << endl; 
 
     if (!m_pNewDialog) m_pNewDialog = new NewDialog();
     m_pNewDialog->show();
@@ -1099,7 +1146,7 @@ bool KisDoc::slotNewImage()
     bgMode bg = m_pNewDialog->backgroundMode();
     cMode cm = m_pNewDialog->colorMode();
 
-    kdDebug() << "###### KisDoc::slotNewImage: w: "<< w << "h: " << h << "######" << endl; 
+    kdDebug() << "### KisDoc::slotNewImage: w: "<< w << "h: " << h << "###" << endl; 
 
     QString name, desiredName;
     int numero = 1;
@@ -1120,7 +1167,6 @@ bool KisDoc::slotNewImage()
             }
             currentImg = m_Images.next();
         }
-        
         runs++;
                     
     } while(runs < m_Images.count());
@@ -1130,7 +1176,7 @@ bool KisDoc::slotNewImage()
     KisImage *img = newImage(name, w, h, cm, 8);
     if (!img) return false;
 
-    kdDebug() << "##### KisDoc::slotNewImage: returned from newImage() ######" << endl; 
+    kdDebug() << "### KisDoc::slotNewImage: returned from newImage() ####" << endl; 
 
     // add background layer
 
@@ -1178,14 +1224,12 @@ KoView* KisDoc::createViewInstance( QWidget* parent, const char* name )
     if(name == 0) name = "View";    
     KisView* view = new KisView( this, parent, name );
     
-//jwc - undo-redo nonfunctional  
+    // undo-redo   
 
-#if 0 
     QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
                     view, SLOT( slotUndoRedoChanged( QString, QString ) ) );
     QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QStringList, QStringList ) ),
                     view, SLOT( slotUndoRedoChanged( QStringList, QStringList ) ) );
-#endif                    
     
     return (view);
 }
@@ -1212,7 +1256,7 @@ void KisDoc::paintContent( QPainter& painter,
 {
     if (m_pCurrent)
     {
-        // kdDebug(0) <<  "KisDoc::paintContent  called -valid m_pCurrent" << endl; 
+        // kdDebug(0) <<  "KisDoc::paintContent() called"  << endl; 
         m_pCurrent->paintPixmap( &painter, rect );
     }
     else
@@ -1229,12 +1273,12 @@ void KisDoc::paintPixmap(QPainter *p, QRect area)
 {
     if (m_pCurrent)
     {
-        //kdDebug(0) <<  "KisDoc::paintContent  called - valid m_pCurrent" << endl;     
+        //kdDebug(0) <<  "KisDoc::paintPixmap() called" << endl;     
         m_pCurrent->paintPixmap(p, area);
     }
     else
     {
-        kdDebug(0) <<  "###Error KisDoc::paintPixmap called - no m_pCurrent" << endl;     
+        kdDebug(0) <<  "###Error KisDoc::paintPixmap() called - no m_pCurrent" << endl;     
     }    
 }
 

@@ -112,7 +112,7 @@ KInstance* KisFactory::global()
 	    KStandardDirs::kde_default("data") + "kimageshop/brushes/");
 
 	s_global->dirs()->addResourceType("kis_pattern",
-            KStandardDirs::kde_default("data") + "kimageshop/pattern/");
+            KStandardDirs::kde_default("data") + "kimageshop/patterns/");
 
 	s_global->dirs()->addResourceType("kis_gradients",
 	    KStandardDirs::kde_default("data") + "kimageshop/gradients/");

@@ -66,7 +66,7 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
     
     for(int y = 0; y < m_yTiles; y++)
         for(int x = 0; x < m_xTiles; x++)
-	    m_dirty[y * m_xTiles + x] = false;
+	        m_dirty[y * m_xTiles + x] = false;
 
     setUpVisual();
     QPixmap::setDefaultOptimization( QPixmap::NoOptim );
@@ -95,33 +95,28 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
     uchar* ptr0 = m_pBGLay->channelMem(0, 0, 0, 0); // red
     uchar* ptr1 = m_pBGLay->channelMem(1, 0, 0, 0); // green
     uchar* ptr2 = m_pBGLay->channelMem(2, 0, 0, 0); // blue
-    uchar* ptr3 =0;                                 // appha    
+    uchar* ptr3 =0;                                 // alpha    
 
     if (m_cMode == cm_RGBA)
-	ptr3 = m_pBGLay->channelMem(3, 0, 0, 0);
+	    ptr3 = m_pBGLay->channelMem(3, 0, 0, 0);
 
     for( int y = 0; y < TILE_SIZE; y++)
         for(int x = 0; x < TILE_SIZE; x++)
-	{
-	    uchar v = 128+63*((x/16+y/16)%2);
-	    *(ptr0 + (y * TILE_SIZE + x)) = v;
-	    *(ptr1 + (y * TILE_SIZE + x)) = v;
-	    *(ptr2 + (y * TILE_SIZE + x)) = v;
-	    if (m_cMode == cm_RGBA)
-		  *(ptr3 + (y * TILE_SIZE + x)) = 255;
-	}
+	    {
+	        uchar v = 128+63*((x/16+y/16)%2);
+	        *(ptr0 + (y * TILE_SIZE + x)) = v;
+	        *(ptr1 + (y * TILE_SIZE + x)) = v;
+	        *(ptr2 + (y * TILE_SIZE + x)) = v;
+	        if (m_cMode == cm_RGBA)
+		        *(ptr3 + (y * TILE_SIZE + x)) = 255;
+	    }
 
     compositeImage(QRect()); 
 
     /* note - 32 bit pixmaps may not show up on 16 bit display and will
      crash it !!!  Without depth paramater will use native format
-    imagePixmap = new QPixmap(w, h, 32); */
+    imagePixmap = new QPixmap(w, h, 32); does not work! */
 
-#ifdef JOHN
-    imagePixmap = new QPixmap(w, h);
-    imagePixmap->fill();
-#endif
-    
     // start update timer
     m_pUpdateTimer = new QTimer(this);
     connect( m_pUpdateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateTimeOut()) );
@@ -132,43 +127,39 @@ KisImage::~KisImage()
 {
     qDebug("~KisImage()");
     
-#ifdef JOHN
-    delete imagePixmap;
-#endif
-
     for( int y = 0; y < m_yTiles; y++)
         for( int x = 0; x < m_xTiles; x++)
-	    delete m_ptiles[y * m_xTiles + x];
+	        delete m_ptiles[y * m_xTiles + x];
 
     delete m_ptiles;
 
     if ((visual!=unknown) && (visual!=rgb888x))
         free(m_pImgData);
-        
 }
+
 
 void KisImage::markDirty( QRect r )
 {
     for(int y = 0; y < m_yTiles; y++)
         for(int x = 0; x < m_xTiles; x++)
             if (r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE)))
-		m_dirty[y * m_xTiles + x] = true;
+		        m_dirty[y * m_xTiles + x] = true;
 }
 
 
 void KisImage::slotUpdateTimeOut()
 {
     for(int y = 0; y < m_yTiles; y++)
-	for(int x = 0; x < m_xTiles; x++)
+	  for(int x = 0; x < m_xTiles; x++)
 	    if (m_dirty[y * m_xTiles + x])
 	        compositeImage(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE));
 
     for(int y = 0; y < m_yTiles; y++)
-        for(int x = 0; x < m_xTiles; x++)
+      for(int x = 0; x < m_xTiles; x++)
 	    if (m_dirty[y * m_xTiles + x])
 	    {
 	        m_dirty[y * m_xTiles + x] = false;
-		emit updated(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE));
+		    emit updated(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE));
 	    }
 }
 
@@ -178,7 +169,6 @@ void KisImage::paintContent( QPainter& painter,
 {
     paintPixmap( &painter, rect);
 }
-
 
 
 void KisImage::paintPixmap(QPainter *p, QRect area)
@@ -193,80 +183,69 @@ void KisImage::paintPixmap(QPainter *p, QRect area)
     int r = area.right();
     int b = area.bottom();
     
-#if 0
-    p->drawPixmap(l, t,     /* offset into destination */
-        *imagePixmap,       /* pixmap - not ptr */
-        l, t,               /* offset into source */
-        r-l, b - t          /* amount of source to copy */  
-    );
-#endif
-
-    //kdDebug(0) << "#### KisImage::paintPixmap() ####" << endl;
     //qDebug("KisImage::paintPixmap l: %d; t: %d; r: %d; b: %d", l, t, r, b);
  
     for(int y=0; y < m_yTiles; y++)
     {
         for(int x=0; x < m_xTiles; x++)
-	{
+	    {
             QRect tileRect(x*TILE_SIZE, y*TILE_SIZE, TILE_SIZE, TILE_SIZE);
 
-	    int xt = x*TILE_SIZE;
-	    int yt = y*TILE_SIZE;
-	    //qDebug("tile: %d", y*m_xTiles+x);
+	        int xt = x*TILE_SIZE;
+	        int yt = y*TILE_SIZE;
+	        //qDebug("tile: %d", y*m_xTiles+x);
 
-	    if (tileRect.intersects(QRect(0, 0, m_width, m_height)) 
-                && tileRect.intersects(area))
-	    {
-	        if (m_ptiles[y*m_xTiles+x]->isNull())
-		    continue;
+	        if (tileRect.intersects(QRect(0, 0, m_width, m_height)) 
+            && tileRect.intersects(area))
+	        {
+	            if (m_ptiles[y*m_xTiles+x]->isNull())
+		            continue;
 	      
-	        if (xt < l)
-		{
-		    startX = 0;
-		    pixX = l - xt;
-		}
-	        else
-		{
-		    startX = xt - l;
-		    pixX = 0;
-		}
+	            if (xt < l)
+		        {
+		            startX = 0;
+		            pixX = l - xt;
+		        }
+	            else
+		        {
+		            startX = xt - l;
+		            pixX = 0;
+		        }
 
-	        clipX = r - xt - pixX;
+	            clipX = r - xt - pixX;
 	      
-	        if (yt < t)
-		{
-		    startY = 0;
-		    pixY = t - yt;
-		}
-	        else
-		{
-		    startY = yt - t;
-		    pixY = 0;
-		}
-	        clipY = b - yt - pixY;
+	            if (yt < t)
+		        {
+		            startY = 0;
+		            pixY = t - yt;
+		        }
+	            else
+		        {
+		            startY = yt - t;
+		            pixY = 0;
+		        }
+                
+	            clipY = b - yt - pixY;
 
-	        if (clipX <= 0)
-		    clipX = -1;
-	        if (clipY <= 0)
-		    clipY = -1;
+	            if (clipX <= 0)
+		            clipX = -1;
+	            if (clipY <= 0)
+		            clipY = -1;
 
-	        //qDebug("clipX %d clipY %d", clipX, clipY);
-	        //qDebug("pixX %d pixY %d", pixX, pixY);
+	            //qDebug("clipX %d clipY %d", clipX, clipY);
+	            //qDebug("pixX %d pixY %d", pixX, pixY);
 	      
-	        p->drawPixmap(startX, startY, *m_ptiles[y*m_xTiles+x], pixX, pixY, clipX, clipY);
-                //impPainter->drawPixmap(startX, startY, *m_ptiles[y*m_xTiles+x], pixX, pixY, clipX, clipY);
-	    }     
-	}
+	            p->drawPixmap(startX, startY, *m_ptiles[y*m_xTiles+x], 
+                    pixX, pixY, clipX, clipY);
+	        }     
+	    }
     }
-    
     // KisTimer::stop("paintImage ");
 }
 
 
-
 void KisImage::setUpVisual()
 {
-
     QPixmap p;
     Display *dpy    =   p.x11Display();
     int displayDepth=   p.x11Depth();
@@ -299,8 +278,8 @@ void KisImage::setUpVisual()
             printf("ximage: bytes_per_line=%d\n",m_pxi->bytes_per_line);
             if (visual!=rgb888x) 
             {
-		m_pImgData=new char[m_pxi->bytes_per_line*TILE_SIZE];
-		m_pxi->data=m_pImgData;
+		        m_pImgData=new char[m_pxi->bytes_per_line*TILE_SIZE];
+		        m_pxi->data=m_pImgData;
             }
         }
     }
@@ -312,17 +291,11 @@ void KisImage::addLayer(const QRect& rect, const KisColor& c,
 {
 kdDebug(0) << "KisImage::addLayer() : entering" << endl; 
     KisLayer *lay = new KisLayer(name, m_cMode, m_bitDepth);
-
-#ifndef JOHN
-
+kdDebug(0) << "KisImage::addLayer() : new allocated" << endl; 
     lay->allocateRect(rect);
 kdDebug(0) << "KisImage::addLayer() : returned from lay->allocateRect()" << endl;         
     lay->clear(c, tr);
 kdDebug(0) << "KisImage::addLayer() : returned from lay->clear()" << endl;         
-
-#endif
-    
-kdDebug(0) << "KisImage::addLayer() : returned from lay->claer()" << endl;         
     m_layers.append(lay);
 kdDebug(0) << "KisImage::addLayer() : returned from m_layers->append()" << endl;             
     m_pCurrentLay=lay;
@@ -368,7 +341,7 @@ void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
 
     // Set the background
     for (uchar i = 0; i < dstLay->numChannels(); i++)
-  	memcpy(dstLay->channelMem(i, dstTile, 0, 0), 
+  	    memcpy(dstLay->channelMem(i, dstTile, 0, 0), 
             m_pBGLay->channelMem(i, dstTile, 0, 0), TILE_SIZE * TILE_SIZE);
 
     // Find the tiles boundary in KisImage coordinates
@@ -378,19 +351,21 @@ void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
     KisLayer *lay=m_layers.first();
     
     while(lay) 
-    { // Go through each layer and find its contribution to this tile
+    { 
+        // Go through each layer and find its contribution to this tile
         l++;
         //printf("layer: %s opacity=%d\n",lay->name().data(), lay->opacity());
         if ((lay->visible()) &&
-	(tileBoundary.intersects(lay->imageExtents()))) 
+	    (tileBoundary.intersects(lay->imageExtents()))) 
         {
-        // The layer is part of the tile. Find out the 1-4 tiles of the channel
-        // which are in it and render the appropriate proportions of each
-        //TIME_START;
-        //printf("*** compositeTile %d,%d\n",x,y);
-        renderLayerIntoTile(tileBoundary, lay, dstLay, dstTile);
-        //TIME_END("renderLayerIntoTile");
+            // The layer is part of the tile. Find out the 1-4 tiles of the channel
+            // which are in it and render the appropriate proportions of each
+            //TIME_START;
+            //printf("*** compositeTile %d,%d\n",x,y);
+            renderLayerIntoTile(tileBoundary, lay, dstLay, dstTile);
+            //TIME_END("renderLayerIntoTile");
         }
+        
         lay=m_layers.next();
     }
 }
@@ -400,20 +375,18 @@ void KisImage::compositeTile(int x, int y, KisLayer *dstLay, int dstTile)
 void KisImage::compositeImage(QRect r)
 {
     //KisTimer::start();
-
     for(int y = 0; y < m_yTiles; y++)
         for(int x = 0; x < m_xTiles; x++)
             if (r.isNull() || r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE)))
-	    {
-		  if (m_cMode == cm_RGBA) // set the alpha channel to opaque
-			memset(m_pComposeLay->channelMem(3, 0, 0, 0),255, TILE_SIZE*TILE_SIZE);
-		  compositeTile(x,y, m_pComposeLay, 0);
-		  convertTileToPixmap(m_pComposeLay, 0, m_ptiles[y*m_xTiles+x]);
-	    }
+	        {
+		        if (m_cMode == cm_RGBA) // set the alpha channel to opaque
+			        memset(m_pComposeLay->channelMem(3, 0, 0, 0),255, TILE_SIZE*TILE_SIZE);
+		        compositeTile(x,y, m_pComposeLay, 0);
+		        convertTileToPixmap(m_pComposeLay, 0, m_ptiles[y*m_xTiles+x]);
+	        }
 
     //KisTimer::stop("compositeImage");
     emit updated(r);
-    
 }
 
 
@@ -422,14 +395,14 @@ void KisImage::compositeImage(QRect r)
 */    
 
 void KisImage::renderLayerIntoTile(QRect tileBoundary, const KisLayer *srcLay,
-																 KisLayer *dstLay, int dstTile)
+          KisLayer *dstLay, int dstTile)
 {
     int tileNo, tileOffsetX, tileOffsetY, xTile, yTile;
 
     //puts("renderLayerIntoTile");
 
     srcLay->findTileNumberAndPos(tileBoundary.topLeft(), &tileNo,
-															 &tileOffsetX, &tileOffsetY);
+								 &tileOffsetX, &tileOffsetY);
     xTile=tileNo%srcLay->xTiles();
     yTile=tileNo/srcLay->xTiles();
     KIS_DEBUG(render, showi(tileNo); );
@@ -461,9 +434,9 @@ void KisImage::renderLayerIntoTile(QRect tileBoundary, const KisLayer *srcLay,
     {
         maxLayerY=srcLay->channelLastTileOffsetY();
         
-	if (tileOffsetY>=0)
-	    renderQ3=false;
-	KIS_DEBUG(render, showi(maxLayerX); );
+	    if (tileOffsetY>=0)
+	        renderQ3=false;
+	    KIS_DEBUG(render, showi(maxLayerX); );
     }
     
     if (tileOffsetY==0)
@@ -609,20 +582,20 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
     uchar *dptr2 = dstLay->channelMem(2, dstTile, dstX, dstY);
     uchar *dptr3 = 0;
     if (m_cMode == cm_RGBA)
-	dptr3 = dstLay->channelMem(3, dstTile, dstX, dstY);
+	    dptr3 = dstLay->channelMem(3, dstTile, dstX, dstY);
 
     uchar *sptr0 = srcLay->channelMem(0, srcTile, srcX, srcY);
     uchar *sptr1 = srcLay->channelMem(1, srcTile, srcX, srcY);
     uchar *sptr2 = srcLay->channelMem(2, srcTile, srcX, srcY);
     uchar *sptr3 = 0;
     if (m_cMode == cm_RGBA)
-	sptr3 = srcLay->channelMem(3, srcTile, srcX, srcY);
+	    sptr3 = srcLay->channelMem(3, srcTile, srcX, srcY);
 
     uchar opac,invOpac;
     for(int y = h; y; y--)
     {
         for(int x = w; x; x--)
-	{
+	    {
 	    // for prepultiply => invOpac=255-(*alpha*opacity)/255;
 		  
 	    if (m_cMode == cm_RGBA)
@@ -636,7 +609,7 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 		  *dptr3++ = *sptr3 + *dptr3 - (*sptr3 * *dptr3)/255;
 		  sptr3++;
 	    }
-            else
+        else
 	    {
 		  invOpac = 255-opacity;
 		  *dptr0++ = (*dptr0  * invOpac + *sptr0++ * opacity)/255;
@@ -696,14 +669,14 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
                 uchar *qimg=image->bits();
                 
                 for(int y=0;y<TILE_SIZE;y++)
-		    for(int x=0;x<TILE_SIZE;x++) 
+		            for(int x=0;x<TILE_SIZE;x++) 
                     {
-		        s =(*qimg++)>>3;
-			s|=(*qimg++ & 252)<<3;
-			s|=(*qimg++ & 248)<<8;
-			qimg++;
-			*ptr++=s;
-		    }
+		                s =(*qimg++)>>3;
+			            s|=(*qimg++ & 252)<<3;
+			            s|=(*qimg++ & 248)<<8;
+			            qimg++;
+			            *ptr++=s;
+		            }
             }
                 break;
 
@@ -715,7 +688,7 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
         }
         
         XPutImage(pix->x11Display(), pix->handle(), qt_xget_readonly_gc(),
-	      m_pxi, 0,0, 0,0, TILE_SIZE, TILE_SIZE);
+	        m_pxi, 0,0, 0,0, TILE_SIZE, TILE_SIZE);
     
         //TIME_END("fast convertImageToPixmap");
     }
@@ -741,13 +714,13 @@ void KisImage::convertTileToPixmap(KisLayer *lay, int tileNo, QPixmap *pix)
     for(int y = 0; y < TILE_SIZE; y++)
     {
         uchar *ptr = m_img.scanLine(y);
-	for(int x = TILE_SIZE; x; x--)
-	{
-	    *ptr++ = *ptr0++;
-	    *ptr++ = *ptr1++;
-	    *ptr++ = *ptr2++;
-	    ptr++;
-	}
+	    for(int x = TILE_SIZE; x; x--)
+	    {
+	        *ptr++ = *ptr0++;
+	        *ptr++ = *ptr1++;
+	        *ptr++ = *ptr2++;
+	        ptr++;
+	    }
     }
 
     // Construct the relevant pixmap
@@ -796,7 +769,7 @@ void KisImage::mergeLinkedLayers()
     while(lay)
     {
         if (lay->linked())
-	    l.append(lay);
+	        l.append(lay);
         lay = m_layers.next();
     }
     
@@ -845,25 +818,25 @@ void KisImage::mergeLayers(QList<KisLayer> list)
         QRect tileBoundary;
   
         for(int y=minYTile; y<=maxYTile; y++)
-	{
-	    for(int x=minXTile; x<=maxXTile; x++)
 	    {
-	        int dstTile = y * a->xTiles() + x;
-	        tileBoundary = a->tileRect(dstTile);
-	        renderLayerIntoTile(tileBoundary, b, a, dstTile);
+	        for(int x=minXTile; x<=maxXTile; x++)
+	        {
+	            int dstTile = y * a->xTiles() + x;
+	            tileBoundary = a->tileRect(dstTile);
+	            renderLayerIntoTile(tileBoundary, b, a, dstTile);
+	        }
 	    }
-	}
       
         list.remove(b);
         m_layers.remove(b);
         
         if( m_pCurrentLay == b )
-	{
-	    if(m_layers.count() != 0)
-	        m_pCurrentLay = m_layers.at(0);
-	    else
-	        m_pCurrentLay = NULL;
-	}
+	    {
+	        if(m_layers.count() != 0)
+	            m_pCurrentLay = m_layers.at(0);
+	        else
+	            m_pCurrentLay = NULL;
+	    }
         
         delete b;
     }

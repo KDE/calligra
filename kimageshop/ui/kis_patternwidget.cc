@@ -23,33 +23,39 @@
 #include "kis_pattern.h"
 #include "kis_patternwidget.h"
 
-KisPatternWidget::KisPatternWidget( QWidget* parent, const char* name ) : QFrame( parent, name )
+KisPatternWidget::KisPatternWidget( QWidget* parent, const char* name ) 
+    : QFrame( parent, name )
 {
-  setBackgroundColor( white );
-  setFrameStyle( Panel | Sunken );
+    setBackgroundColor( white );
+    setFrameStyle( Panel | Sunken );
+    
+    if (name) 
+        m_pPattern = new KisPattern(name);
+    else    
+        m_pPattern = new KisPattern(0);    
 }
 
 void KisPatternWidget::slotSetPattern( const KisPattern& b)
 {
-  m_pPattern = &b;
-  repaint();
+    m_pPattern = &b;
+    repaint();
 }
 
 void KisPatternWidget::drawContents ( QPainter *p )
 {
-  if (!m_pPattern || !m_pPattern->isValid())
-    return;
+    if (!m_pPattern || !m_pPattern->isValid())
+        return;
   
-  int x = 0;
-  int y = 0;
+    int x = 0;
+    int y = 0;
 
-  if (m_pPattern->width() < contentsRect().x())
-    x = (contentsRect().x() - m_pPattern->width()) / 2;
+    if (m_pPattern->width() < contentsRect().x())
+        x = (contentsRect().x() - m_pPattern->width()) / 2;
 
-  if (m_pPattern->height() < contentsRect().y())
-    y = (contentsRect().y() - m_pPattern->height()) / 2;
+    if (m_pPattern->height() < contentsRect().y())
+        y = (contentsRect().y() - m_pPattern->height()) / 2;
 
-  p->drawPixmap(x, y, m_pPattern->pixmap()); 
+    p->drawPixmap(x, y, m_pPattern->pixmap()); 
 }
 
 void KisPatternWidget::mousePressEvent ( QMouseEvent * )

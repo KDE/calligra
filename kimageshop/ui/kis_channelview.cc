@@ -104,7 +104,9 @@ void ChannelTable::init( KisDoc* doc )
   setCellWidth( CELLWIDTH );
   setCellHeight( CELLHEIGHT );
   //  m_selected = m_doc->layerList().count() - 1;
-
+  
+  updateAllCells();
+    
   QPopupMenu *submenu = new QPopupMenu();
 
   m_contextmenu = new QPopupMenu();
@@ -116,16 +118,16 @@ void ChannelTable::init( KisDoc* doc )
 
   m_contextmenu->insertSeparator();
 
-  m_contextmenu->insertItem( i18n( "Add Layer" ), ADDCHANNEL );
-  m_contextmenu->insertItem( i18n( "Remove Layer"), REMOVECHANNEL );
+  m_contextmenu->insertItem( i18n( "Add Channel" ), ADDCHANNEL );
+  m_contextmenu->insertItem( i18n( "Remove Channel"), REMOVECHANNEL );
 
   connect( m_contextmenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
   connect( submenu, SIGNAL( activated( int ) ), SLOT( slotMenuAction( int ) ) );
 }
 
-void ChannelTable::paintCell( QPainter* _painter, int _row, int )
+void ChannelTable::paintCell( QPainter* _painter, int _row, int /* _col */)
 {
-#if 0
+
   QString tmp;
 
   switch( _row )
@@ -149,22 +151,20 @@ void ChannelTable::paintCell( QPainter* _painter, int _row, int )
     _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, green );
   }
 
-  if( m_doc->layerList().at( _row )->isVisible() )
+  if( /* m_doc->layerList().at( _row )->isVisible()*/ true )
   {
     _painter->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
   }
 
   _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
   _painter->drawText( 80, 20, tmp );
-#endif  
-
 }
 
 void ChannelTable::updateTable()
 {
-  m_items = 0;
-  setNumRows( 0 );
-  setNumCols( 0 );
+  m_items = 4;
+  setNumRows( 4 );
+  setNumCols( 1 );
   resize( sizeHint() );
 }
 
@@ -239,8 +239,8 @@ void ChannelTable::slotRemoveChannel()
 
 void ChannelTable::updateAllCells()
 {
-  //for( unsigned int i = 0; i < m_doc->layerList().count(); i++ )
-  //  updateCell( i, 0 );
+  for( unsigned int i = 0; i < /* m_doc->layerList().count()*/ 3;  i++ )
+    updateCell( i, 0 );
 }
 
 #include "kis_channelview.moc"
