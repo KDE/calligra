@@ -3706,7 +3706,10 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
                     break;
                 }*/
                 QString text = e->text();
-                textFrameSet()->insert( cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
+                if(textFrameSet()->hasSelection() )
+                    frameSet()->kWordDocument()->addCommand(textFrameSet()->replaceSelection(  cursor, text, QTextDocument::Standard , i18n("Insert Text")));
+                else
+                    textFrameSet()->insert( cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
 
                 KWAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
                 if ( autoFormat )
