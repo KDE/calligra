@@ -383,7 +383,13 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 	else if(classname == "QLabel")
 	{
 		QLabel *label = static_cast<QLabel*>(w);
-		createEditor(label->text(), label, label->geometry(), label->alignment());
+		if(label->textFormat() == RichText)
+		{
+			m_widget = w;
+			editText();
+		}
+		else
+			createEditor(label->text(), label, label->geometry(), label->alignment());
 		return;
 	}
 	else if(classname == "KPushButton")
@@ -464,7 +470,7 @@ StdWidgetFactory::changeText(const QString &text)
 	int width;
 	if(n == "QLabel") // labels are resized to fit the text
 	{
-		w->resize( s.width() + 4, s.height() + 4);
+		w->resize(w->sizeHint());
 		WidgetFactory::m_editor->resize(w->size());
 		return;
 	}
@@ -725,6 +731,9 @@ StdWidgetFactory::editText()
 		changeProperty("textFormat", "RichText", m_container);
 		changeProperty("text", text, m_container);
 	}
+
+	if(classname == "QLabel")
+		m_widget->resize(m_widget->sizeHint());
 }
 
 void

@@ -218,24 +218,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 					return true;
 				}
 			}
-			// we are inserting a widget or drawing a selection rect in the form
-			if((/*s == m_container &&*/ m_form->manager()->inserting()) || ((s == m_container) && !m_toplevel))
-			{
-				int tmpx,tmpy;
-				int gridX = Form::gridX();
-				int gridY = Form::gridY();
-				tmpx = int((float)mev->x()/((float)gridX)+0.5); // snap to grid
-				tmpx*=gridX;
-				tmpy = int((float)mev->y()/((float)gridY)+0.5);
-				tmpy*=gridX;
 
-				m_insertBegin = QPoint(tmpx, tmpy);
-				if(m_form->formWidget())
-					m_form->formWidget()->initRect();
-				return true;
-			}
-
-			if(((mev->state() == ControlButton) || (mev->state() == ShiftButton)) )//&& (!m_form->manager()->inserting())) // multiple selection mode
+			if(((mev->state() == ControlButton) || (mev->state() == ShiftButton)) && (!m_form->manager()->inserting())) // multiple selection mode
 			{
 				if(m_selected.findRef(m_moving) != -1) // widget is already selected
 				{
@@ -259,6 +243,23 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else// if(!m_form->manager()->inserting())
 				setSelectedWidget(m_moving, false);
+
+			// we are inserting a widget or drawing a selection rect in the form
+			if((/*s == m_container &&*/ m_form->manager()->inserting()) || ((s == m_container) && !m_toplevel))
+			{
+				int tmpx,tmpy;
+				int gridX = Form::gridX();
+				int gridY = Form::gridY();
+				tmpx = int((float)mev->x()/((float)gridX)+0.5); // snap to grid
+				tmpx*=gridX;
+				tmpy = int((float)mev->y()/((float)gridY)+0.5);
+				tmpy*=gridX;
+
+				m_insertBegin = QPoint(tmpx, tmpy);
+				if(m_form->formWidget())
+					m_form->formWidget()->initRect();
+				return true;
+			}
 
 			m_grab = QPoint(mev->x(), mev->y());
 

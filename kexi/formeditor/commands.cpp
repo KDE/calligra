@@ -235,16 +235,7 @@ InsertWidgetCommand::execute()
 	m_container->m_insertRect = m_insertRect;
 	// a label is resized to just fit its contents
 	if(w->inherits("QLabel"))
-	{
-		QLabel *label = (QLabel*)w;
-		if(!label->text().isEmpty()) // text pixmap
-		{
-			QFontMetrics fm = w->fontMetrics();
-			m_container->m_insertRect = QRect(m_insertRect.x(), m_insertRect.y(), fm.width( label->text() ) + 4 , fm.height() + 4);
-		}
-		else if(!label->pixmap()->isNull()) // picture pixmap
-			m_container->m_insertRect = QRect(m_insertRect.x(), m_insertRect.y(), label->pixmap()->width(), label->pixmap()->height());
-	}
+		m_container->m_insertRect = QRect(m_insertRect.topLeft(), w->sizeHint());
 	// if the insertRect is invalid (ie only one point), we use widget' size hint
 	else if/*(!m_container->m_insertRect.isValid() || */( (m_insertRect.width() < 21) && (m_insertRect.height() < 21))
 	{
