@@ -3363,181 +3363,198 @@ bool KSpreadCell::loadRightMostBorder( const QDomElement& cell, int _xshift, int
 
 QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 {
-  QDomElement cell = doc.createElement( "cell" );
-  cell.setAttribute( "row", m_iRow - _y_offset );
-  cell.setAttribute( "column", m_iColumn - _x_offset );
+    // Save the position of this cell
+    QDomElement cell = doc.createElement( "cell" );
+    cell.setAttribute( "row", m_iRow - _y_offset );
+    cell.setAttribute( "column", m_iColumn - _x_offset );
 
-  if ( !action().isEmpty() )
-      cell.setAttribute( "action", action() );
+    if ( !action().isEmpty() )
+	cell.setAttribute( "action", action() );
 
-  QDomElement format = doc.createElement( "format" );
-  cell.appendChild( format );
-  format.setAttribute( "align", (int)m_eAlign );
-  format.setAttribute( "alignY", (int)m_eAlignY );
+    //
+    // Save the formatting information
+    //
+    QDomElement format = doc.createElement( "format" );
+    cell.appendChild( format );
+    format.setAttribute( "align", (int)m_eAlign );
+    format.setAttribute( "alignY", (int)m_eAlignY );
 
-  if ( m_bgColor.isValid() )
-    format.setAttribute( "bgcolor", m_bgColor.name() );
-  if ( multiRow() )
-    format.setAttribute( "multirow", "yes" );
-  if ( style() )
-      format.setAttribute( "style", (int)style() );
-  if ( verticalText() )
-      format.setAttribute( "verticaltext", "yes" );
-  if ( isForceExtraCells() )
-  {
-    format.setAttribute( "colspan", extraXCells() );
-    format.setAttribute( "rowspan", extraYCells() );
-  }
+    if ( m_bgColor.isValid() )
+	format.setAttribute( "bgcolor", m_bgColor.name() );
+    if ( multiRow() )
+	format.setAttribute( "multirow", "yes" );
+    if ( style() )
+	format.setAttribute( "style", (int)style() );
+    if ( verticalText() )
+	format.setAttribute( "verticaltext", "yes" );
+    if ( isForceExtraCells() )	
+    {
+	format.setAttribute( "colspan", extraXCells() );
+	format.setAttribute( "rowspan", extraYCells() );
+    }
 
-  format.setAttribute( "precision", precision() );
-  if ( !prefix().isEmpty() )
-    format.setAttribute( "prefix", prefix() );
-  if ( !postfix().isEmpty() )
-    format.setAttribute( "postfix", postfix() );
+    format.setAttribute( "precision", precision() );
+    if ( !prefix().isEmpty() )
+	format.setAttribute( "prefix", prefix() );
+    if ( !postfix().isEmpty() )
+	format.setAttribute( "postfix", postfix() );
 
-  format.setAttribute( "float", (int)floatFormat() );
-  format.setAttribute( "floatcolor", (int)floatColor() );
-  format.setAttribute( "faktor", m_dFaktor );
+    format.setAttribute( "float", (int)floatFormat() );
+    format.setAttribute( "floatcolor", (int)floatColor() );
+    format.setAttribute( "faktor", m_dFaktor );
 
-  format.setAttribute( "format",(int) getFormatNumber() );
+    format.setAttribute( "format",(int) getFormatNumber() );
 
-  if(m_rotateAngle!=0)
-      format.setAttribute( "angle",m_rotateAngle);
-  if ( m_textFont != m_pTable->defaultCell()->textFont() )
-    format.appendChild( createElement( "font", m_textFont, doc ) );
-  if ( textFontUnderline())
-  	{
+    if(m_rotateAngle!=0)
+	format.setAttribute( "angle",m_rotateAngle);
+    if ( m_textFont != m_pTable->defaultCell()->textFont() )
+	format.appendChild( createElement( "font", m_textFont, doc ) );
+    if ( textFontUnderline())
+    {
   	QDomElement underline = doc.createElement( "underline" );
   	underline.setAttribute( "val",(int)textFontUnderline());
   	format.appendChild( underline );
-  	}
-  if ( textFontStrike())
-  	{
+    }
+    if ( textFontStrike())
+    {
   	QDomElement strike = doc.createElement( "strike" );
   	strike.setAttribute( "val",(int)textFontStrike());
   	format.appendChild( strike );
-  	}
-  if ( m_textPen != m_pTable->defaultCell()->textPen() )
-  {
-    if(m_conditionIsTrue)
-    {
-	m_textPen.setColor( textColor() );
     }
-    format.appendChild( createElement( "pen", m_textPen, doc ) );
-  }
-  format.setAttribute( "brushcolor",m_backGroundBrush.color().name() );
-  format.setAttribute( "brushstyle",(int)m_backGroundBrush.style());
+    if ( m_textPen != m_pTable->defaultCell()->textPen() )
+    {
+	if(m_conditionIsTrue)
+        {
+	    m_textPen.setColor( textColor() );
+	}
+	format.appendChild( createElement( "pen", m_textPen, doc ) );
+    }
+    format.setAttribute( "brushcolor",m_backGroundBrush.color().name() );
+    format.setAttribute( "brushstyle",(int)m_backGroundBrush.style());
 
-  QDomElement left = doc.createElement( "left-border" );
-  left.appendChild( createElement( "pen", m_leftBorderPen, doc ) );
-  format.appendChild( left );
+    QDomElement left = doc.createElement( "left-border" );
+    left.appendChild( createElement( "pen", m_leftBorderPen, doc ) );
+    format.appendChild( left );
 
-  QDomElement top = doc.createElement( "top-border" );
-  top.appendChild( createElement( "pen", m_topBorderPen, doc ) );
-  format.appendChild( top );
+    QDomElement top = doc.createElement( "top-border" );
+    top.appendChild( createElement( "pen", m_topBorderPen, doc ) );
+    format.appendChild( top );
 
-  QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
-  fallDiagonal.appendChild( createElement( "pen", m_fallDiagonalPen, doc ) );
-  format.appendChild( fallDiagonal );
+    QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
+    fallDiagonal.appendChild( createElement( "pen", m_fallDiagonalPen, doc ) );
+    format.appendChild( fallDiagonal );
 
-  QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
-  goUpDiagonal.appendChild( createElement( "pen", m_goUpDiagonalPen, doc ) );
-  format.appendChild( goUpDiagonal );
+    QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
+    goUpDiagonal.appendChild( createElement( "pen", m_goUpDiagonalPen, doc ) );
+    format.appendChild( goUpDiagonal );
 
-  if(m_rotateAngle!=0)
-      format.setAttribute( "angle",m_rotateAngle);
+    if(m_rotateAngle!=0)
+	format.setAttribute( "angle",m_rotateAngle);
 
-  if((m_firstCondition!=0)||(m_secondCondition!=0)||(m_thirdCondition!=0))
-	{
+    if((m_firstCondition!=0)||(m_secondCondition!=0)||(m_thirdCondition!=0))
+    {
   	QDomElement condition = doc.createElement("condition");
 
   	if(m_firstCondition!=0)
-  		{
-  		QDomElement first=doc.createElement("first");
-  		first.setAttribute("cond",(int)m_firstCondition->m_cond);
-  		first.setAttribute("val1",m_firstCondition->val1);
-  		first.setAttribute("val2",m_firstCondition->val2);
-	  	first.setAttribute("color",m_firstCondition->colorcond.name());
-	  	first.appendChild( createElement( "font", m_firstCondition->fontcond, doc ) );
-
-  		condition.appendChild(first);
-  		}
-  	if(m_secondCondition!=0)
-  		{
-  		QDomElement second=doc.createElement("second");
-  		second.setAttribute("cond",(int)m_secondCondition->m_cond);
-  		second.setAttribute("val1",m_secondCondition->val1);
-  		second.setAttribute("val2",m_secondCondition->val2);
-	  	second.setAttribute("color",m_secondCondition->colorcond.name());
- 		second.appendChild( createElement( "font", m_secondCondition->fontcond, doc ) );
-
-
-  		condition.appendChild(second);
-  		}
-	if(m_thirdCondition!=0)
-  		{
-  		QDomElement third=doc.createElement("third");
-  		third.setAttribute("cond",(int)m_thirdCondition->m_cond);
-  		third.setAttribute("val1",m_thirdCondition->val1);
-  		third.setAttribute("val2",m_thirdCondition->val2);
-	  	third.setAttribute("color",m_thirdCondition->colorcond.name());
- 		third.appendChild( createElement( "font", m_thirdCondition->fontcond, doc ) );
-
-
-  		condition.appendChild(third);
-  		}
-  	cell.appendChild( condition );
-  	}
-  if ( !m_strComment.isEmpty() )
         {
+	    QDomElement first=doc.createElement("first");
+	    first.setAttribute("cond",(int)m_firstCondition->m_cond);
+	    first.setAttribute("val1",m_firstCondition->val1);
+	    first.setAttribute("val2",m_firstCondition->val2);
+	    first.setAttribute("color",m_firstCondition->colorcond.name());
+	    first.appendChild( createElement( "font", m_firstCondition->fontcond, doc ) );
+
+	    condition.appendChild(first);
+	}
+  	if(m_secondCondition!=0)
+        {
+	    QDomElement second=doc.createElement("second");
+	    second.setAttribute("cond",(int)m_secondCondition->m_cond);
+	    second.setAttribute("val1",m_secondCondition->val1);
+	    second.setAttribute("val2",m_secondCondition->val2);
+	    second.setAttribute("color",m_secondCondition->colorcond.name());
+	    second.appendChild( createElement( "font", m_secondCondition->fontcond, doc ) );
+
+
+	    condition.appendChild(second);
+	}
+	if(m_thirdCondition!=0)
+        {
+	    QDomElement third=doc.createElement("third");
+	    third.setAttribute("cond",(int)m_thirdCondition->m_cond);
+	    third.setAttribute("val1",m_thirdCondition->val1);
+	    third.setAttribute("val2",m_thirdCondition->val2);
+	    third.setAttribute("color",m_thirdCondition->colorcond.name());
+	    third.appendChild( createElement( "font", m_thirdCondition->fontcond, doc ) );
+
+
+	    condition.appendChild(third);
+	}
+  	cell.appendChild( condition );
+    }
+    if ( !m_strComment.isEmpty() )
+    {
         QDomElement comment = doc.createElement( "comment" );
         comment.appendChild( doc.createCDATASection( m_strComment ) );
         cell.appendChild( comment );
-        }
-  if ( !m_strText.isEmpty() )
-  {
-    if ( isFormular() )
-    {
-      QDomElement text = doc.createElement( "text" );
-      text.appendChild( doc.createTextNode( encodeFormular() ) );
-      cell.appendChild( text );
     }
-    else if ( content() == RichText || content() == VisualFormula )
+    
+    //
+    // Save the text
+    //
+    if ( !m_strText.isEmpty() )
     {
-      QDomElement text = doc.createElement( "text" );
-      text.appendChild( doc.createCDATASection( m_strText ) );
-      cell.appendChild( text );
+	// Formulars need to be encoded to enshure that they
+	// are position independent.
+	if ( isFormular() )
+        {
+	    QDomElement text = doc.createElement( "text" );
+	    text.appendChild( doc.createTextNode( encodeFormular() ) );
+	    cell.appendChild( text );
+	}
+	// Have to be saved in some CDATA section because of too many
+	// special charatcers.
+	else if ( content() == RichText || content() == VisualFormula )
+        {
+	    QDomElement text = doc.createElement( "text" );
+	    text.appendChild( doc.createCDATASection( m_strText ) );
+	    cell.appendChild( text );	    
+	}
+	else if( (getFormatNumber()==ShortDate || getFormatNumber()==TextDate)&& m_bDate )
+        {
+	    QDomElement text = doc.createElement( "text" );
+	    QString tmp;
+	    tmp=tmp.setNum(m_Date.year())+"/"+tmp.setNum(m_Date.month())+"/"+tmp.setNum(m_Date.day());
+	    text.appendChild( doc.createTextNode( tmp ) );
+	    cell.appendChild( text );
+	}
+	else if( (getFormatNumber()==Time || getFormatNumber()==SecondeTime)&& m_bTime )
+        {
+	    QDomElement text = doc.createElement( "text" );
+	    QString tmp;
+	    tmp=m_Time.toString();
+	    text.appendChild( doc.createTextNode( tmp ) );
+	    cell.appendChild( text );
+	}
+	else
+        {
+	    QDomElement text = doc.createElement( "text" );
+	    text.appendChild( doc.createTextNode( m_strText ) );
+	    cell.appendChild( text );
+	}
     }
-    else if( (getFormatNumber()==ShortDate || getFormatNumber()==TextDate)&& m_bDate )
-    {
-      QDomElement text = doc.createElement( "text" );
-      QString tmp;
-      tmp=tmp.setNum(m_Date.year())+"/"+tmp.setNum(m_Date.month())+"/"+tmp.setNum(m_Date.day());
-      text.appendChild( doc.createTextNode( tmp ) );
-      cell.appendChild( text );
-    }
-    else if( (getFormatNumber()==Time || getFormatNumber()==SecondeTime)&& m_bTime )
-    {
-      QDomElement text = doc.createElement( "text" );
-      QString tmp;
-      tmp=m_Time.toString();
-      text.appendChild( doc.createTextNode( tmp ) );
-      cell.appendChild( text );
-    }
-    else
-    {
-      QDomElement text = doc.createElement( "text" );
-      text.appendChild( doc.createTextNode( m_strText ) );
-      cell.appendChild( text );
-    }
-  }
 
-  return cell;
+    return cell;
 }
 
 bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm, Operation op )
 {
     bool ok;
+    
+    //
+    // First of all determine in which row and column this
+    // cell belongs.
+    //
     m_iRow = cell.attribute( "row" ).toInt( &ok ) + _yshift;
     if ( !ok ) return false;
     m_iColumn = cell.attribute( "column" ).toInt( &ok ) + _xshift;
@@ -3558,6 +3575,9 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	return false;
     }
 
+    //
+    // Load formatting information.
+    //
     QDomElement f = cell.namedItem( "format" ).toElement();
     if ( !f.isNull() && ( pm == Normal || pm == Format || pm == NoBorder ) )
     {
@@ -3589,12 +3609,16 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Assignment
 	    setAlignY( a );
 	}
+
 	if ( f.hasAttribute( "bgcolor" ) )
 	    setBgColor( QColor( f.attribute( "bgcolor" ) ) );
+	
 	if ( f.hasAttribute( "multirow" ) )
 	    setMultiRow( true );
-        if ( f.hasAttribute( "verticaltext" ) )
+        
+	if ( f.hasAttribute( "verticaltext" ) )
 	    setVerticalText( true );
+	
 	if ( f.hasAttribute( "colspan" ) )
         {
 	    int i = f.attribute("colspan").toInt( &ok );
@@ -3609,6 +3633,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    if ( i > 0 )
 		m_bForceExtraCells = true;
 	}
+	
 	if ( f.hasAttribute( "rowspan" ) )
         {
 	    int i = f.attribute("rowspan").toInt( &ok );
@@ -3623,11 +3648,13 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    if ( i > 0 )
 		m_bForceExtraCells = true;
 	}
+
         if(m_bForceExtraCells)
         {
             forceExtraCells(m_iColumn,m_iRow,m_iExtraXCells,m_iExtraYCells);
         }
-        if ( f.hasAttribute( "precision" ) )
+        
+	if ( f.hasAttribute( "precision" ) )
         {
 	    int i = f.attribute("precision").toInt( &ok );
 	    if ( i < -1 )
@@ -3637,6 +3664,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    }
 	    m_iPrecision = i;
 	}
+	
 	if ( f.hasAttribute( "float" ) )
         {
 	    FloatFormat a = (FloatFormat)f.attribute("float").toInt( &ok );
@@ -3649,6 +3677,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Assignment
 	    setFloatFormat( a );
 	}
+	
 	if ( f.hasAttribute( "floatcolor" ) )
         {
 	    FloatColor a = (FloatColor)f.attribute("floatcolor").toInt( &ok );
@@ -3661,6 +3690,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Assignment
 	    setFloatColor( a );
 	}
+	
 	if ( f.hasAttribute( "faktor" ) )
         {
 	    m_dFaktor = f.attribute("faktor").toDouble( &ok );
@@ -3677,10 +3707,10 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
 
         if ( f.hasAttribute( "brushstyle" ) )
-                {
-	        setBackGroundBrushStyle((Qt::BrushStyle) f.attribute( "brushstyle" ).toInt(&ok)  );
-                if(!ok) return false;
-                }
+        {
+	    setBackGroundBrushStyle((Qt::BrushStyle) f.attribute( "brushstyle" ).toInt(&ok)  );
+	    if(!ok) return false;
+	}
 
 	QDomElement pen = f.namedItem( "pen" ).toElement();
 	if ( !pen.isNull() )
@@ -3692,24 +3722,24 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 
   	QDomElement underline = f.namedItem( "underline" ).toElement();
 	if ( !underline.isNull() )
-		{
-		if ( underline.hasAttribute( "val" ) )
-        		{
-	    		setTextFontUnderline((bool)underline.attribute("val").toInt( &ok ));
-	    		if ( !ok ) return false;
-	    		}
-
-		}
+        {
+	    if ( underline.hasAttribute( "val" ) )
+	    {
+		setTextFontUnderline((bool)underline.attribute("val").toInt( &ok ));
+		if ( !ok ) return false;
+	    }
+	}
+	
         QDomElement strike = f.namedItem( "strike" ).toElement();
 	if ( !strike.isNull() )
-		{
-		if ( strike.hasAttribute( "val" ) )
-        		{
-	    		setTextFontStrike((bool)strike.attribute("val").toInt( &ok ));
-	    		if ( !ok ) return false;
-	    		}
-
-		}
+        {
+	    if ( strike.hasAttribute( "val" ) )
+	    {
+		setTextFontStrike((bool)strike.attribute("val").toInt( &ok ));
+		if ( !ok ) return false;
+	    }
+	}
+	
 	QDomElement left = f.namedItem( "left-border" ).toElement();
 	if ( !left.isNull() && pm != NoBorder )
         {
@@ -3742,8 +3772,6 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 		setGoUpDiagonalPen( toPen(pen) );
 	}
 
-
-
 	m_strPrefix = f.attribute( "prefix" );
 	m_strPostfix = f.attribute( "postfix" );
         if ( f.hasAttribute( "angle" ) )
@@ -3754,7 +3782,9 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
         }
     }
 
-
+    //
+    // Load the condition section of a cell.
+    //
     QDomElement condition = cell.namedItem( "condition" ).toElement();
     if ( !condition.isNull())
     {
@@ -3843,21 +3873,29 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    if ( !font.isNull() )
 		m_thirdCondition->fontcond=toFont(font) ;
 	}
-
     }
-    QDomCDATASection comment = cell.namedItem( "comment" ).firstChild().toCDATASection();
+    
+    //
+    // Load the comment
+    //
+    QDomElement comment = cell.namedItem( "comment" ).toElement();
     if ( !comment.isNull() && ( pm == ::Normal || pm == ::Comment || pm == ::NoBorder ))
     {
-        QString t = comment.data();
+        QString t = comment.text();
 	//t = t.stripWhiteSpace();
-        setComment(t);
+        setComment( t );
     }
 
+    //
+    // The real content of the cell is loaded here. It is stored in
+    // the "text" tag, which contains either a text or a CDATA section.
+    //
     QDomElement text = cell.namedItem( "text" ).toElement();
     if ( !text.isNull() && ( pm == ::Normal || pm == ::Text || pm == ::NoBorder ) )
     {
 	QString t = text.text();
 	t = t.stripWhiteSpace();
+	// A formula like =A1+A2 ?
         if( t[0] == '=' )
         {
 	    t = decodeFormular( t, m_iColumn, m_iRow );
@@ -3865,45 +3903,48 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
             // Set the cell's text, and don't calc dependencies yet (see comment for setCellText)
             setCellText( pasteOperation( t, m_strText, op ), false );
         }
-        else if( getFormatNumber()==ShortDate || getFormatNumber()==TextDate)
+	// A date
+        else if( getFormatNumber() == ShortDate || getFormatNumber() == TextDate)
         {
-        int pos;
-        int pos1;
-        int year=-1;
-        int month=-1;
-        int day=-1;
-        pos=t.find('/');
-        year=t.mid(0,pos).toInt();
-        pos1=t.find('/',pos+1);
-        month=t.mid(pos+1,((pos1-1)-pos)).toInt();
-        day=t.right(t.length()-pos1-1).toInt();
-        m_Date=QDate(year,month,day);
-        if(m_Date.isValid() )
-                setCellText(KGlobal::locale()->formatDate(m_Date,true),false);
-        else
+	    int pos;
+	    int pos1;
+	    int year = -1;
+	    int month = -1;
+	    int day = -1;
+	    pos = t.find('/');
+	    year = t.mid(0,pos).toInt();
+	    pos1 = t.find('/',pos+1);
+	    month = t.mid(pos+1,((pos1-1)-pos)).toInt();
+	    day = t.right(t.length()-pos1-1).toInt();
+	    m_Date = QDate(year,month,day);
+	    if(m_Date.isValid() )
+                setCellText( KGlobal::locale()->formatDate( m_Date, true ), false );
+	    else
                 setCellText( pasteOperation( t, m_strText, op ), false );
         }
-        else if( getFormatNumber()==Time || getFormatNumber()==SecondeTime)
+	// A Time
+        else if( getFormatNumber() == Time || getFormatNumber() == SecondeTime )
         {
-        int hours=-1;
-        int minutes=-1;
-        int seconde=-1;
-        int pos,pos1;
-        pos=t.find(':');
-        hours=t.mid(0,pos).toInt();
-        pos1=t.find(':',pos+1);
-        minutes=t.mid(pos+1,((pos1-1)-pos)).toInt();
-        seconde=t.right(t.length()-pos1-1).toInt();
-        m_Time=QTime(hours,minutes,seconde);
-        if(!m_Time.isNull() )
+	    int hours = -1;
+	    int minutes = -1;
+	    int second = -1;
+	    int pos, pos1;
+	    pos = t.find(':');
+	    hours = t.mid(0,pos).toInt();
+	    pos1 = t.find(':',pos+1);
+	    minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
+	    second = t.right(t.length()-pos1-1).toInt();
+	    m_Time = QTime(hours,minutes,second);
+	    if(!m_Time.isNull() )
                 setCellText(KGlobal::locale()->formatTime(m_Time,true),false);
-        else
+	    else
                 setCellText( pasteOperation( t, m_strText, op ), false );
         }
+	// A Text, QML or a visual formula
         else
         {
-        // Set the cell's text, and don't calc dependencies yet (see comment for setCellText)
-        setCellText( pasteOperation( t, m_strText, op ), false );
+	    // Set the cell's text, and don't calc dependencies yet (see comment for setCellText)
+	    setCellText( pasteOperation( t, m_strText, op ), false );
         }
     }
 

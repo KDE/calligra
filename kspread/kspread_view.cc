@@ -247,7 +247,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_paste = KStdAction::paste( this, SLOT( paste() ), actionCollection(), "paste" );
     m_cut = KStdAction::cut( this, SLOT( cutSelection() ), actionCollection(), "cut" );
     m_specialPaste = new KAction( i18n("Special Paste..."), "special_paste",0, this, SLOT( specialPaste() ), actionCollection(), "specialPaste" );
-    m_editCell = new KAction( i18n("Edit Cell"),"cell_edit", CTRL + Key_E, this, SLOT( editCell() ), actionCollection(), "editCell" );
+    m_editCell = new KAction( i18n("Modify Cell"),"cell_edit", CTRL + Key_M, this, SLOT( editCell() ), actionCollection(), "editCell" );
     m_delete = new KAction( i18n("Delete"),"deletecell", 0, this, SLOT( deleteSelection() ), actionCollection(), "delete" );
     m_clear = new KAction( i18n("Clear"), 0, this, SLOT( clearSelection() ), actionCollection(), "clear" );
     m_adjust = new KAction( i18n("Adjust row and column"), 0, this, SLOT( adjust() ), actionCollection(), "adjust" );
@@ -351,13 +351,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 	     this, SLOT( formulaSelection( const QString& ) ) );
 
     // Insert menu
-    (void) new KAction( i18n("Formula..."), "funct", 0, this, SLOT( insertFormula() ),
+    (void) new KAction( i18n("&Math expression ..."), "funct", 0, this, SLOT( insertFormula() ),
                         actionCollection(), "insertFormula" );
-    (void) new KAction( i18n("Series..."),"series", 0, this, SLOT( series() ), actionCollection(), "series" );
-    (void) new KAction( i18n("Anchor..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
-    (void) new KAction( i18n("Object..."), "parts", 0, this, SLOT( insertObject() ),
+    (void) new KAction( i18n("&Series ..."),"series", 0, this, SLOT( series() ), actionCollection(), "series" );
+    (void) new KAction( i18n("&Anchor ..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
+    (void) new KAction( i18n("&Object ..."), "parts", 0, this, SLOT( insertObject() ),
                         actionCollection(), "insertPart");
-    (void) new KAction( i18n("Chart"), "chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
+    (void) new KAction( i18n("&Chart"), "chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
 
     m_autoSum = new KAction( i18n("AutoSum"), "black_sum", 0, this, SLOT( autoSum() ),
                              actionCollection(), "autoSum" );
