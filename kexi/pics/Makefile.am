@@ -11,7 +11,7 @@ icon_ICON = button button_no test_it db form form_edit forms lineedit business_u
 	navigator_new check combo groupbox line listbox listview progress radio slider spin mouse_pointer widgetstack dateedit datetimeedit timeedit textedit \
 	pixmaplabel select_item spring signalslot \
 	grid aoleft aoright aotop aobottom \
-	aowidest aotallest aoshortest aonarrowest aogrid aopos2grid \
+	aowidest aotallest aoshortest aonarrowest aogrid aofit aopos2grid \
 	new_sign raise lower
 
 icondir = $(kde_datadir)/kexi/icons
