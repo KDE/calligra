@@ -59,6 +59,9 @@ Underline?
 === KWord syntax variants ===
 Files where the supposed children of <VARIABLE> are directly children of <FORMAT id="4">
 
+=== OASIS questions ===
+How to transform "keepAspectRatio" for picture/image?
+
 === File kofficetests/documents/export/kword/para/chapter.kwd ===
 [File of syntax 1]
 What are those (Table of content support?)

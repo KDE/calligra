@@ -22,6 +22,7 @@
 #ifndef _FILTER_KWORD_1_3__KWORDFRAMESET_H
 #define _FILTER_KWORD_1_3__KWORDFRAMESET_H
 
+class QString;
 class QTextStream;
 
 #include <qstring.h>
@@ -36,6 +37,7 @@ public:
     virtual ~KWord13Frameset( void );
 public:
     virtual bool addParagraph(const KWord13Paragraph& para);
+    virtual bool setKey( const QString& key );
     virtual void xmldump( QTextStream& iostream );
 public:
     int m_numFrames; ///< Number of frames
@@ -64,6 +66,7 @@ public:
     KWord13PictureFrameset( int frameType, int frameInfo, const QString& name );
     virtual ~KWord13PictureFrameset( void );
 public:
+    virtual bool setKey( const QString& key );
     virtual void xmldump( QTextStream& iostream );
 public:
     QString m_pictureKey;

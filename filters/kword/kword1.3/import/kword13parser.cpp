@@ -278,7 +278,7 @@ bool KWord13Parser::startElementParagraph( const QString&, const QXmlAttributes&
 
 bool KWord13Parser::startElementFrame( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem )
 {
-    if ( stackItem->elementType == KWord13TypeFrameset )
+    if ( stackItem->elementType == KWord13TypeFrameset || stackItem->elementType == KWord13TypePictureFrameset )
     {
         stackItem->elementType = KWord13TypeEmpty;
         if ( stackItem->m_currentFrameset )
@@ -352,10 +352,6 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
             m_kwordDocument->m_footEndNoteFramesetList.append( frameset );
             stackItem->m_currentFrameset = m_kwordDocument->m_footEndNoteFramesetList.current();
         }
-        // ### frameType == 2 or 5 : image/picture or clipart
-        // ### frameType == 6 : horizontal line (however KWord did not save it correctly)
-        // ### frameType == 4 : formula
-        // ### frametype == 3 : embedded (but only in <SETTINGS>)
         else
         {
             kdError(30520) << "Unknown text frameset!" << endl;
@@ -363,6 +359,22 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
             stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
         }
     }
+    else if ( ( frameType == 2 ) // picture or image
+        || ( frameType == 5 ) ) // ciipart
+    {
+        if ( !frameInfo )
+        {
+            kdWarning(30520) << "Unknown FrameInfo for pictures: " << frameInfo << endl;
+        }
+        stackItem->elementType = KWord13TypePictureFrameset;
+        KWord13PictureFrameset* frameset = new KWord13PictureFrameset( frameType, frameInfo, attributes.value( "name" ) );
+        m_kwordDocument->m_otherFramesetList.append( frameset );
+        stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
+        // ### TODO: keepAspectRatio (but how to transform it to OASIS)
+    }
+    // ### frameType == 6 : horizontal line (however KWord did not save it correctly)
+    // ### frameType == 4 : formula
+    // ### frametype == 3 : embedded (but only in <SETTINGS>)
     else
     {
         // Frame of unknown/unsupported type
@@ -407,18 +419,31 @@ bool KWord13Parser::startElementKey( const QString& name, const QXmlAttributes& 
             attributes.value( "msec" ) ) );
     kdDebug(30520) << "Picture key: " << key << endl;
             
-    if ( stackItem->elementType != KWord13TypePicturesPlural )
-        return true; // Not child of <PICTURES>, <PIXMAPS> or <CLIPARTS>
-        
-    KWord13Picture* pic = new KWord13Picture;
-    pic->m_storeName = attributes.value( "name" );
-    if ( pic->m_storeName.isEmpty() )
+    if ( stackItem->elementType == KWord13TypePicturesPlural )
     {
-        kdError(30520) << "Picture defined without store name! Aborting!" << endl;
-        return false; // Assume parse error
+        KWord13Picture* pic = new KWord13Picture;
+        pic->m_storeName = attributes.value( "name" );
+        if ( pic->m_storeName.isEmpty() )
+        {
+            kdError(30520) << "Picture defined without store name! Aborting!" << endl;
+            return false; // Assume parse error
+        }
+        // ### TODO: catch duplicate keys (should not happen but who knows?)
+        m_kwordDocument->m_pictureDict.insert( key, pic );
     }
-    // ### TODO: catch duplicate keys (should not happen but who knows?)
-    m_kwordDocument->m_pictureDict.insert( key, pic );
+    else if ( stackItem->elementType == KWord13TypePictureFrameset )
+    {
+        // ### TODO: error messages?
+        if ( stackItem->m_currentFrameset )
+        {
+            stackItem->m_currentFrameset->setKey( key );
+        }
+    }
+    else
+    {
+        // Not child of <PICTURES>, <PIXMAPS>, <CLIPARTS> or <FRAMESET>
+        // ### TODO: parse error?
+    }
     return true;
 }
 

@@ -44,7 +44,7 @@ enum KWord13StackItemType
     KWord13TypeEmpty,       ///< Element is empty
     KWord13TypeDocument,    ///< Element is the document ( \<DOC\> )
     KWord13TypePaper,       ///< \<PAPER\>
-    KWord13TypeFrameset,    ///< \<FRAMESET\>
+    KWord13TypeFrameset,    ///< \<FRAMESET\> (with exceptions)
     KWord13TypeUnknownFrameset, ///< a \<FRAMESET\> which is not supported
     KWord13TypeParagraph,   ///< \<PARAGRAPH\>
     KWord13TypeText,        ///< \<TEXT\>
@@ -53,7 +53,8 @@ enum KWord13StackItemType
     KWord13TypeLayoutFormatOne,///< \<FORMAT id="1"\> as child of \<LAYOUT\>
     KWord13TypeFormatsPlural,///< \<FORMATS\>, as child of \<PARAGRAPH\>
     KWord13TypeVariable,        ///< \<FORMAT id="4"\> or \<VARIABLE\>
-    KWord13TypePicturesPlural   ///< \<PICTURES\>, \<PIXMAPS\> or \<CLIPARTS\>
+    KWord13TypePicturesPlural,  ///< \<PICTURES\>, \<PIXMAPS\> or \<CLIPARTS\>
+    KWord13TypePictureFrameset ///< \<FRAMESET typeInfo="2"\> (picture, image, clipart)
 };
 
 class KWord13StackItem

@@ -36,7 +36,13 @@ KWord13Frameset::~KWord13Frameset( void )
 
 bool KWord13Frameset::addParagraph(const KWord13Paragraph&)
 {
-    kdDebug(30520) << "Cannot add paragraph! Not a text frameset!" << endl;
+    kdWarning(30520) << "Cannot add paragraph! Not a text frameset!" << endl;
+    return false;
+}
+
+bool KWord13Frameset::setKey(const QString&)
+{
+    kdWarning(30520) << "Cannot set a key! Not a picture frameset!" << endl;
     return false;
 }
 
@@ -79,6 +85,12 @@ KWord13PictureFrameset::KWord13PictureFrameset( int frameType, int frameInfo, co
 
 KWord13PictureFrameset::~KWord13PictureFrameset( void )
 {
+}
+
+bool KWord13PictureFrameset::setKey(const QString& key)
+{
+    m_pictureKey = key;
+    return true;
 }
 
 void KWord13PictureFrameset::xmldump( QTextStream& iostream )
