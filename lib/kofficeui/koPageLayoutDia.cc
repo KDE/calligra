@@ -1079,7 +1079,8 @@ void KoPageLayoutDia::changed(QLineEdit *line, double &mm, double &pt, double &i
 
     if ( line->text().length() == 0 && retPressed )
         line->setText( i18n("0.00") );
-
+    if ( line->text().toDouble()<0)
+        line->setText( i18n("0.00") );
     switch ( layout.unit ) {
         case PG_MM: {
             mm = line->text().toDouble();
