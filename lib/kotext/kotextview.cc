@@ -1276,9 +1276,9 @@ void KoTextView::copyTextOfComment()
             KURL::List lst;
             lst.append( var->note() );
             QApplication::clipboard()->setSelectionMode(true);
-            QApplication::clipboard()->setData(KURLDrag::newDrag(lst) );
+            QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
             QApplication::clipboard()->setSelectionMode(false);
-            QApplication::clipboard()->setData( KURLDrag::newDrag(lst) );
+            QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
         }
     }
 }
@@ -1342,9 +1342,9 @@ void KoTextView::copyLink()
         KURL::List lst;
         lst.append( var->url() );
         QApplication::clipboard()->setSelectionMode(true);
-        QApplication::clipboard()->setData(KURLDrag::newDrag(lst) );
+        QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
         QApplication::clipboard()->setSelectionMode(false);
-        QApplication::clipboard()->setData( KURLDrag::newDrag(lst) );
+        QApplication::clipboard()->setData( new KURLDrag(lst, 0, 0) );
     }
 }
 
