@@ -51,11 +51,11 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 					QWidget* parent, int flags,
 					KoChart::Data *dat ) :
     QTabDialog( parent, "Chart config dialog", true ),
-    _params( params ),
+    m_params( params ),
 
-    _subTypePage(0),
-    _headerfooterpage(0),
-    _axespage(0),
+    m_subTypePage(0),
+    m_headerfooterpage(0),
+    m_axespage(0),
 
     _colorpage(0),
     _parameter3dpage(0),
@@ -79,27 +79,27 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     }
     else if(flags & KC_HEADERFOOTER)
     {
-        _headerfooterpage=new KChartHeaderFooterConfigPage(_params,this);
-        addTab( _headerfooterpage,i18n("Header/Footer"));
+        m_headerfooterpage=new KChartHeaderFooterConfigPage(m_params,this);
+        addTab( m_headerfooterpage,i18n("Header/Footer"));
     }
     else if(flags & KC_COLORS )
     {
-        _colorpage = new KChartColorConfigPage( _params,  this, dat );
+        _colorpage = new KChartColorConfigPage( m_params,  this, dat );
         addTab( _colorpage, i18n( "&Colors" ) );
     }
     else if( flags & KC_FONT )
     {
-        _parameterfontpage = new KChartFontConfigPage(_params,this, dat );
+        _parameterfontpage = new KChartFontConfigPage(m_params,this, dat );
         addTab( _parameterfontpage, i18n( "&Font" ) );
     }
     else if( flags & KC_BACK )
     {
-        _backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
+        _backgroundpixpage = new KChartBackgroundPixmapConfigPage( m_params, this );
         addTab( _backgroundpixpage, i18n( "&Background" ) );
     }
     else if( flags & KC_LEGEND )
     {
-        _parameterLegend = new KChartLegendConfigPage(_params,this );
+        _parameterLegend = new KChartLegendConfigPage(m_params,this );
         addTab( _parameterLegend,i18n("Legend"));
     }
     else if( flags & KC_ALL )
@@ -107,57 +107,57 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         initSubtypePage();
 
 	// The Header/Footer tab
-        _headerfooterpage=new KChartHeaderFooterConfigPage(_params, this);
-        addTab( _headerfooterpage, i18n("Header/Footer"));
+        m_headerfooterpage=new KChartHeaderFooterConfigPage(m_params, this);
+        addTab( m_headerfooterpage, i18n("Header/Footer"));
 
 	// Add axes tab if applicable.
-        if( _params->chartType() != KDChartParams::Pie
-	    && _params->chartType() != KDChartParams::Ring )	{
-            _axespage = new KChartParameterConfigPage(_params,this );
-            addTab( _axespage, i18n( "&Axes" ) );
+        if( m_params->chartType() != KDChartParams::Pie
+	    && m_params->chartType() != KDChartParams::Ring )	{
+            m_axespage = new KChartParameterConfigPage(m_params,this );
+            addTab( m_axespage, i18n( "&Axes" ) );
 
-        } else if( _params->chartType() != KDChartParams::Ring ) {
+        } else if( m_params->chartType() != KDChartParams::Ring ) {
 	    // FIXME: I don't understand this tab.  /ingwa
-            _parameterpiepage = new KChartParameterPieConfigPage(_params,this );
+            _parameterpiepage = new KChartParameterPieConfigPage(m_params,this );
             addTab( _parameterpiepage, i18n( "&Axes" ) );
 
-            _piepage = new KChartPieConfigPage(_params, this );
+            _piepage = new KChartPieConfigPage(m_params, this );
             addTab( _piepage, i18n( "&Pie" ) );
         }
 
-        _colorpage = new KChartColorConfigPage( _params,  this, dat );
+        _colorpage = new KChartColorConfigPage( m_params,  this, dat );
         addTab( _colorpage, i18n( "&Colors" ) );
 
-        _parameterfontpage = new KChartFontConfigPage(_params,this, dat );
+        _parameterfontpage = new KChartFontConfigPage(m_params,this, dat );
         addTab( _parameterfontpage, i18n( "&Font" ) );
 
-        _backgroundpixpage = new KChartBackgroundPixmapConfigPage( _params, this );
+        _backgroundpixpage = new KChartBackgroundPixmapConfigPage( m_params, this );
         addTab( _backgroundpixpage, i18n( "&Background" ) );
 
-        _parameterLegend = new KChartLegendConfigPage(_params,this );
+        _parameterLegend = new KChartLegendConfigPage(m_params,this );
         addTab( _parameterLegend,i18n("Legend"));
 
-        if( _params->chartType() == KDChartParams::Bar )
+        if( m_params->chartType() == KDChartParams::Bar )
         {
-            _parameter3dpage = new KChartParameter3dConfigPage(_params,this );
+            _parameter3dpage = new KChartParameter3dConfigPage(m_params,this );
             addTab( _parameter3dpage,i18n("3D Parameters"));
         }
-        else if( _params->chartType() == KDChartParams::Line)
+        else if( m_params->chartType() == KDChartParams::Line)
         {
-            _linepage3d= new KChartLine3dConfigPage(_params,this);
+            _linepage3d= new KChartLine3dConfigPage(m_params,this);
             addTab( _linepage3d,i18n("3D Line Parameters"));
         }
-        else if( _params->chartType() == KDChartParams::Polar)
+        else if( m_params->chartType() == KDChartParams::Polar)
         {
-            _polarpage=new KChartParameterPolarConfigPage(_params,this);
+            _polarpage=new KChartParameterPolarConfigPage(m_params,this);
             addTab( _polarpage,i18n("Polar Parameters"));
         }
 
-        if( _params->chartType() == KDChartParams::HiLo &&
-            ( _params->hiLoChartSubType() == KDChartParams::HiLoClose ||
-              _params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) ) {
+        if( m_params->chartType() == KDChartParams::HiLo &&
+            ( m_params->hiLoChartSubType() == KDChartParams::HiLoClose ||
+              m_params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) ) {
             // PENDING(kalle) Combo page needs to be redone completely.
-            //         _hlcChart=new KChartComboPage(_params,this);
+            //         _hlcChart=new KChartComboPage(m_params,this);
 //         addTab( _hlcChart, i18n( "HLC Chart" ) );
         }
     }
@@ -185,19 +185,19 @@ void KChartConfigDialog::apply()
     // color page
 
     // PENDING(kalle) Replace with equivalents
-    //     _params->BGColor = _colorpage->backgroundColor();
-    //     _params->PlotColor = _colorpage->plotColor();
-    //_params->EdgeColor = _colorpage->edgeColor();
-    //     _params->VolColor = _colorpage->volColor();
+    //     m_params->BGColor = _colorpage->backgroundColor();
+    //     m_params->PlotColor = _colorpage->plotColor();
+    //m_params->EdgeColor = _colorpage->edgeColor();
+    //     m_params->VolColor = _colorpage->volColor();
 
     if(_colorpage)
     {
 
-        KDChartAxisParams leftparams = _params->axisParams( KDChartAxisParams::AxisPosLeft );
+        KDChartAxisParams leftparams = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
         leftparams.setAxisGridColor( _colorpage->gridColor() );
-        _params->setOutlineDataColor( _colorpage->lineColor() );
-        KDChartAxisParams rightparams = _params->axisParams( KDChartAxisParams::AxisPosRight );
-        KDChartAxisParams bottomparams = _params->axisParams( KDChartAxisParams::AxisPosBottom );
+        m_params->setOutlineDataColor( _colorpage->lineColor() );
+        KDChartAxisParams rightparams = m_params->axisParams( KDChartAxisParams::AxisPosRight );
+        KDChartAxisParams bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
         if( _colorpage->xTitleColor().isValid() )
             bottomparams.setAxisLineColor( _colorpage->xTitleColor() );
         else
@@ -213,14 +213,14 @@ void KChartConfigDialog::apply()
         bottomparams.setAxisLabelsColor( _colorpage->xLabelColor() );
         leftparams.setAxisLabelsColor( _colorpage->yLabelColor() );
         rightparams.setAxisLabelsColor( _colorpage->yLabel2Color() );
-        _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
-        _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
-        _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparams );
+        m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
+        m_params->setAxisParams( KDChartAxisParams::AxisPosLeft,   leftparams );
+        m_params->setAxisParams( KDChartAxisParams::AxisPosRight,  rightparams );
     }
-    if((_piepage&& _parameterpiepage) ||  _axespage )
+    if((_piepage && _parameterpiepage) ||  m_axespage )
     {
-        if( _params->chartType() != KDChartParams::Pie )
-            _axespage->apply();
+        if( m_params->chartType() != KDChartParams::Pie )
+            m_axespage->apply();
         else
         {
             _parameterpiepage->apply();
@@ -228,10 +228,10 @@ void KChartConfigDialog::apply()
         }
     }
 
-    if( _parameter3dpage && _params->chartType() == KDChartParams::Bar  )
+    if( _parameter3dpage && m_params->chartType() == KDChartParams::Bar  )
         _parameter3dpage->apply();
 
-    if( _linepage3d && _params->chartType() == KDChartParams::Line)
+    if( _linepage3d && m_params->chartType() == KDChartParams::Line)
         _linepage3d->apply();
 
     if(_parameterfontpage)
@@ -240,12 +240,12 @@ void KChartConfigDialog::apply()
     if(_colorpage)
         _colorpage->apply();
 
-    if( _subTypePage )
-        _subTypePage->apply();
+    if( m_subTypePage )
+        m_subTypePage->apply();
 
-    if( _params->chartType() == KDChartParams::HiLo &&
-        ( _params->hiLoChartSubType() == KDChartParams::HiLoClose ||
-          _params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) )
+    if( m_params->chartType() == KDChartParams::HiLo &&
+        ( m_params->hiLoChartSubType() == KDChartParams::HiLoClose ||
+          m_params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) )
     {
         /* if( _hlcChart)
            _hlcChart->apply();*/
@@ -256,12 +256,12 @@ void KChartConfigDialog::apply()
 
 
     //     for( uint i = 0; i < NUMDATACOLORS; i++ )
-    // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
+    // 	m_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
     if(_parameterLegend)
         _parameterLegend->apply();
 
-    if(_headerfooterpage)
-        _headerfooterpage->apply();
+    if (m_headerfooterpage)
+        m_headerfooterpage->apply();
     if( _polarpage)
         _polarpage->apply();
 
@@ -278,10 +278,10 @@ void KChartConfigDialog::defaults()
     // color page
     if(_colorpage)
     {
-        _colorpage->setLineColor( _params->outlineDataColor() );
-        KDChartAxisParams leftparams( _params->axisParams( KDChartAxisParams::AxisPosLeft ) );
-        KDChartAxisParams rightparams( _params->axisParams( KDChartAxisParams::AxisPosRight ) );
-        KDChartAxisParams bottomparams( _params->axisParams( KDChartAxisParams::AxisPosBottom ) );
+        _colorpage->setLineColor( m_params->outlineDataColor() );
+        KDChartAxisParams leftparams( m_params->axisParams( KDChartAxisParams::AxisPosLeft ) );
+        KDChartAxisParams rightparams( m_params->axisParams( KDChartAxisParams::AxisPosRight ) );
+        KDChartAxisParams bottomparams( m_params->axisParams( KDChartAxisParams::AxisPosBottom ) );
         _colorpage->setGridColor( leftparams.axisGridColor() );
         _colorpage->setXTitleColor( bottomparams.axisLineColor() );
         _colorpage->setYTitleColor( leftparams.axisLineColor() );
@@ -290,17 +290,17 @@ void KChartConfigDialog::defaults()
         _colorpage->setYLabelColor( leftparams.axisLabelsColor() );
         _colorpage->setYLabel2Color( rightparams.axisLabelsColor() );
         // PENDING(kalle) Replace with KDChart equivalents
-        //     _colorpage->setBackgroundColor( _params->BGColor );
-        //     _colorpage->setPlotColor( _params->PlotColor );
-        //     _colorpage->setVolColor( _params->VolColor );
-        //_colorpage->setEdgeColor( _params->EdgeColor );
+        //     _colorpage->setBackgroundColor( m_params->BGColor );
+        //     _colorpage->setPlotColor( m_params->PlotColor );
+        //     _colorpage->setVolColor( m_params->VolColor );
+        //_colorpage->setEdgeColor( m_params->EdgeColor );
     }
 
-    if( _axespage || (_piepage && _parameterpiepage))
+    if (m_axespage || (_piepage && _parameterpiepage))
     {
-        if( _params->chartType() != KDChartParams::Pie )
+        if( m_params->chartType() != KDChartParams::Pie )
         {
-            _axespage->init();
+            m_axespage->init();
         }
         else
         {
@@ -309,23 +309,23 @@ void KChartConfigDialog::defaults()
         }
     }
 
-    if(_parameter3dpage && _params->chartType() == KDChartParams::Bar  )
+    if(_parameter3dpage && m_params->chartType() == KDChartParams::Bar  )
         _parameter3dpage->init();
 
-    if( _linepage3d && _params->chartType() == KDChartParams::Line)
+    if( _linepage3d && m_params->chartType() == KDChartParams::Line)
         _linepage3d->init();
 
     if(_parameterfontpage)
         _parameterfontpage->init();
 
-    if( _subTypePage )
-        _subTypePage->init();
+    if( m_subTypePage )
+        m_subTypePage->init();
 
 /*    if( _hlcChart)
     {
-        if( _params->chartType() == KDChartParams::HiLo &&
-            ( _params->hiLoChartSubType() == KDChartParams::HiLoClose ||
-              _params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) ) {
+        if( m_params->chartType() == KDChartParams::HiLo &&
+            ( m_params->hiLoChartSubType() == KDChartParams::HiLoClose ||
+              m_params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) ) {
             _hlcChart->init();
         }
         }*/
@@ -334,10 +334,10 @@ void KChartConfigDialog::defaults()
     if(_parameterLegend)
         _parameterLegend->init();
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
-//      	_colorpage->setDataColor( i, _params->dataColor( i ) );
+//      	_colorpage->setDataColor( i, m_params->dataColor( i ) );
 
-    if(_headerfooterpage)
-        _headerfooterpage->init();
+    if (m_headerfooterpage)
+        m_headerfooterpage->init();
     if(_polarpage)
         _polarpage->init();
 }
@@ -345,26 +345,26 @@ void KChartConfigDialog::defaults()
 
 void KChartConfigDialog::initSubtypePage()
 {
-    switch( _params->chartType() ) {
+    switch( m_params->chartType() ) {
     case KDChartParams::Bar:
-        _subTypePage = new KChartBarSubTypeChartPage( _params, this );
+        m_subTypePage = new KChartBarSubTypeChartPage( m_params, this );
         break;
     case KDChartParams::Area:
-        _subTypePage = new KChartAreaSubTypeChartPage( _params, this );
+        m_subTypePage = new KChartAreaSubTypeChartPage( m_params, this );
         break;
     case KDChartParams::Line:
-        _subTypePage = new KChartLineSubTypeChartPage( _params, this );
+        m_subTypePage = new KChartLineSubTypeChartPage( m_params, this );
         break;
     case KDChartParams::HiLo:
-        _subTypePage = new KChartHiloSubTypeChartPage( _params, this );
+        m_subTypePage = new KChartHiloSubTypeChartPage( m_params, this );
         break;
     case KDChartParams::Polar:
-        _subTypePage = new KChartPolarSubTypeChartPage( _params, this );
+        m_subTypePage = new KChartPolarSubTypeChartPage( m_params, this );
         break;
     default:
         ; // do nothing
     }
-    addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+    addTab( m_subTypePage, i18n( "Chart &Subtype" ) );
 }
 
 }  //KChart namespace

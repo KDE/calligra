@@ -57,11 +57,11 @@ signals:
     void dataChanged();
 
 protected:
-    KChartParams* _params;
+    KChartParams                 *m_params;
 
-    KChartSubTypeChartPage       *_subTypePage;
-    KChartHeaderFooterConfigPage *_headerfooterpage;
-    KChartParameterConfigPage    *_axespage;
+    KChartSubTypeChartPage       *m_subTypePage;
+    KChartHeaderFooterConfigPage *m_headerfooterpage;
+    KChartParameterConfigPage    *m_axespage;
 
     //KChartGeometryConfigPage* _geompage;
     KChartColorConfigPage* _colorpage;
