@@ -275,7 +275,10 @@ int KSpreadTable::leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas )
     {
         // Should never happen
         if ( col == 0x8000 )
+	{
+	    kdDebug(36001) << "KSpreadTable:leftColumn: invalid column\n";
             return 1;
+	}
         _left += columnLayout( col )->width( _canvas );
         col++;
         x += columnLayout( col )->width( _canvas );
@@ -295,7 +298,10 @@ int KSpreadTable::rightColumn( int _xpos, KSpreadCanvas *_canvas )
     {
         // Should never happen
         if ( col == 0x8000 )
+	{
+	    kdDebug(36001) << "KSpreadTable:rightColumn: invalid column\n";
             return 0x8000;
+	}
         x += columnLayout( col )->width( _canvas );
         col++;
     }
@@ -319,7 +325,10 @@ int KSpreadTable::topRow( int _ypos, int & _top, KSpreadCanvas *_canvas )
     {
         // Should never happen
         if ( row == 0x8000 )
+	{
+	    kdDebug(36001) << "KSpreadTable:topRow: invalid row\n";
             return 1;
+	}
         _top += rowLayout( row )->height( _canvas );
         row++;
         y += rowLayout( row )->height( _canvas);
@@ -339,7 +348,10 @@ int KSpreadTable::bottomRow( int _ypos, KSpreadCanvas *_canvas )
     {
         // Should never happen
         if ( row == 0x8000 )
+	{
+	    kdDebug(36001) << "KSpreadTable:bottomRow: invalid row\n";
             return 0x8000;
+	}
         y += rowLayout( row )->height( _canvas );
         row++;
     }
@@ -356,7 +368,10 @@ int KSpreadTable::columnPos( int _col, KSpreadCanvas *_canvas )
     {
         // Should never happen
         if ( col == 0x8000 )
+	{
+	    kdDebug(36001) << "KSpreadTable:columnPos: invalid column\n";
             return x;
+	}
 
         x += columnLayout( col )->width( _canvas );
     }
@@ -373,7 +388,10 @@ int KSpreadTable::rowPos( int _row, KSpreadCanvas *_canvas )
     {
         // Should never happen
         if ( row == 0x8000 )
+	{
+	    kdDebug(36001) << "KSpreadTable:rowPos: invalid row\n";
             return y;
+	}
 
         y += rowLayout( row )->height( _canvas );
     }
