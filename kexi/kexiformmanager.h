@@ -11,6 +11,7 @@ class KexiWorkspace;
 class QWidget;
 
 class KexiProject;
+class KexiView;
 
 class KexiFormManager
 {
@@ -25,7 +26,7 @@ public:
 	bool deleteForm(const QString& name);
 	QString newForm() ;
 	void clear();
-	void showForm(const QString& name, Mode, QWidget *parent);
+	void showForm(const QString& name, Mode, KexiView *view);
 
 protected:
 	class Item
