@@ -105,7 +105,7 @@ protected:
 
 public:
     // IDL
-    virtual CORBA::Boolean initDoc();
+    virtual bool initDoc();
 
     // C++
     virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
@@ -121,12 +121,12 @@ public:
     KWordView* createWordView( QWidget* _parent = 0 );
 
     // IDL
-    virtual void viewList( KOffice::Document::ViewList*& _list );
+    virtual void viewList( KOffice::Document::ViewList & _list );
 
-    virtual char* mimeType()
-    { return CORBA::string_dup( MIME_TYPE ); }
+    virtual QCString mimeType()
+    { return MIME_TYPE; }
 
-    virtual CORBA::Boolean isModified()
+    virtual bool isModified()
     { return m_bModified; }
 
     virtual KOffice::MainWindow_ptr createMainWindow();
@@ -389,8 +389,8 @@ protected:
 
     virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
 
-    virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
-		       CORBA::Float _scale );
+    virtual void draw( QPaintDevice*, long int _width, long int _height,
+		       float _scale );
 
     void loadFrameSets( KOMLParser&, vector<KOMLAttrib>& );
     void loadStyleTemplates( KOMLParser&, vector<KOMLAttrib>& );

@@ -25,7 +25,6 @@
 #include <qfont.h>
 #include <qbrush.h>
 #include <qstringlist.h>
-#include <qstrlist.h>
 
 #include "kword.h"
 #include "format.h"
@@ -170,9 +169,9 @@ public:
     virtual void helpAboutKOffice();
     virtual void helpAboutKDE();
 
-    virtual void textStyleSelected( const CORBA::WChar *style );
-    virtual void textSizeSelected( const CORBA::WChar *size );
-    virtual void textFontSelected( const CORBA::WChar *font );
+    virtual void textStyleSelected( const QString &style );
+    virtual void textSizeSelected( const QString &size );
+    virtual void textFontSelected( const QString &font );
     virtual void textBold();
     virtual void textItalic();
     virtual void textUnderline();
@@ -181,7 +180,7 @@ public:
     virtual void textAlignCenter();
     virtual void textAlignRight();
     virtual void textAlignBlock();
-    virtual void textLineSpacing( const CORBA::WChar *spc );
+    virtual void textLineSpacing( const QString &spc );
     virtual void textEnumList();
     virtual void textUnsortList();
     virtual void textSuperScript();
@@ -191,15 +190,15 @@ public:
     virtual void textBorderTop();
     virtual void textBorderBottom();
     virtual void textBorderColor();
-    virtual void textBorderWidth( const CORBA::WChar *width );
-    virtual void textBorderStyle( const CORBA::WChar *style );
+    virtual void textBorderWidth( const QString &width );
+    virtual void textBorderStyle( const QString &style );
     virtual void frameBorderLeft();
     virtual void frameBorderRight();
     virtual void frameBorderTop();
     virtual void frameBorderBottom();
     virtual void frameBorderColor();
-    virtual void frameBorderWidth( const CORBA::WChar *width );
-    virtual void frameBorderStyle( const CORBA::WChar *style );
+    virtual void frameBorderWidth( const QString &width );
+    virtual void frameBorderStyle( const QString &style );
     virtual void frameBackColor();
 
     virtual void formulaPower();
@@ -215,10 +214,10 @@ public:
     virtual void formulaLeftSub();
     
     virtual void setMode( KOffice::View::Mode _mode );
-    virtual void setFocus( CORBA::Boolean mode );
+    virtual void setFocus( bool mode );
 
     // C++
-    virtual CORBA::Boolean printDlg();
+    virtual bool printDlg();
 
     virtual void setFormat( const KWFormat &_format, bool _check = true,
 			    bool _update_page = true, bool _redraw = true );
@@ -258,7 +257,7 @@ public slots:
     void openPageLayoutDia()  { formatPage(); }
     void newPageLayout( KoPageLayout _layout );
     void spellCheckerReady();
-    void spellCheckerMisspelling( char*, QStrList*, unsigned );
+    void spellCheckerMisspelling( char*, QStringList, unsigned );
     void spellCheckerCorrected( char*, char*, unsigned );
     void spellCheckerDone( char* );
     void searchDiaClosed();
@@ -297,181 +296,181 @@ protected:
 
     // edit menu
     OpenPartsUI::Menu_var m_vMenuEdit;
-    CORBA::Long m_idMenuEdit_Undo;
-    CORBA::Long m_idMenuEdit_Redo;
-    CORBA::Long m_idMenuEdit_Cut;
-    CORBA::Long m_idMenuEdit_Copy;
-    CORBA::Long m_idMenuEdit_Paste;
-    CORBA::Long m_idMenuEdit_SelectAll;
-    CORBA::Long m_idMenuEdit_Find;
-    CORBA::Long m_idMenuEdit_DeleteFrame;
-    CORBA::Long m_idMenuEdit_ReconnectFrame;
-    CORBA::Long m_idMenuEdit_CustomVars;
-    CORBA::Long m_idMenuEdit_SerialLetterDataBase;
+    long int m_idMenuEdit_Undo;
+    long int m_idMenuEdit_Redo;
+    long int m_idMenuEdit_Cut;
+    long int m_idMenuEdit_Copy;
+    long int m_idMenuEdit_Paste;
+    long int m_idMenuEdit_SelectAll;
+    long int m_idMenuEdit_Find;
+    long int m_idMenuEdit_DeleteFrame;
+    long int m_idMenuEdit_ReconnectFrame;
+    long int m_idMenuEdit_CustomVars;
+    long int m_idMenuEdit_SerialLetterDataBase;
 
     // view menu
     OpenPartsUI::Menu_var m_vMenuView;
-    CORBA::Long m_idMenuView_NewView;
-    CORBA::Long m_idMenuView_FormattingChars;
-    CORBA::Long m_idMenuView_FrameBorders;
-    CORBA::Long m_idMenuView_TableGrid;
-    CORBA::Long m_idMenuView_Header;
-    CORBA::Long m_idMenuView_Footer;
-    CORBA::Long m_idMenuView_FootNotes;
-    CORBA::Long m_idMenuView_EndNotes;
+    long int m_idMenuView_NewView;
+    long int m_idMenuView_FormattingChars;
+    long int m_idMenuView_FrameBorders;
+    long int m_idMenuView_TableGrid;
+    long int m_idMenuView_Header;
+    long int m_idMenuView_Footer;
+    long int m_idMenuView_FootNotes;
+    long int m_idMenuView_EndNotes;
 
     // insert menu
     OpenPartsUI::Menu_var m_vMenuInsert;
-    CORBA::Long m_idMenuInsert_Picture;
-    CORBA::Long m_idMenuInsert_Clipart;
-    CORBA::Long m_idMenuInsert_SpecialChar;
-    CORBA::Long m_idMenuInsert_FrameBreak;
-    CORBA::Long m_idMenuInsert_Variable;
+    long int m_idMenuInsert_Picture;
+    long int m_idMenuInsert_Clipart;
+    long int m_idMenuInsert_SpecialChar;
+    long int m_idMenuInsert_FrameBreak;
+    long int m_idMenuInsert_Variable;
     OpenPartsUI::Menu_var m_vMenuInsert_Variable;
-    CORBA::Long m_idMenuInsert_VariableDateFix;
-    CORBA::Long m_idMenuInsert_VariableDateVar;
-    CORBA::Long m_idMenuInsert_VariableTimeFix;
-    CORBA::Long m_idMenuInsert_VariableTimeVar;
-    CORBA::Long m_idMenuInsert_VariablePageNum;
-    CORBA::Long m_idMenuInsert_VariableCustom;
-    CORBA::Long m_idMenuInsert_VariableSerialLetter;
-    CORBA::Long m_idMenuInsert_FootNoteEndNote;
+    long int m_idMenuInsert_VariableDateFix;
+    long int m_idMenuInsert_VariableDateVar;
+    long int m_idMenuInsert_VariableTimeFix;
+    long int m_idMenuInsert_VariableTimeVar;
+    long int m_idMenuInsert_VariablePageNum;
+    long int m_idMenuInsert_VariableCustom;
+    long int m_idMenuInsert_VariableSerialLetter;
+    long int m_idMenuInsert_FootNoteEndNote;
 
     // format menu
     OpenPartsUI::Menu_var m_vMenuFormat;
-    CORBA::Long m_idMenuFormat_Font;
-    CORBA::Long m_idMenuFormat_Color;
-    CORBA::Long m_idMenuFormat_Paragraph;
-    CORBA::Long m_idMenuFormat_Page;
-    CORBA::Long m_idMenuFormat_Numbering;
-    CORBA::Long m_idMenuFormat_Style;
-    CORBA::Long m_idMenuFormat_FrameSet;
+    long int m_idMenuFormat_Font;
+    long int m_idMenuFormat_Color;
+    long int m_idMenuFormat_Paragraph;
+    long int m_idMenuFormat_Page;
+    long int m_idMenuFormat_Numbering;
+    long int m_idMenuFormat_Style;
+    long int m_idMenuFormat_FrameSet;
 
     // extra menu
     OpenPartsUI::Menu_var m_vMenuExtra;
-    CORBA::Long m_idMenuExtra_Spelling;
-    CORBA::Long m_idMenuExtra_AutoFormat;
-    CORBA::Long m_idMenuExtra_Stylist;
-    CORBA::Long m_idMenuExtra_Options;
+    long int m_idMenuExtra_Spelling;
+    long int m_idMenuExtra_AutoFormat;
+    long int m_idMenuExtra_Stylist;
+    long int m_idMenuExtra_Options;
 
     // tools menu
     OpenPartsUI::Menu_var m_vMenuTools;
-    CORBA::Long m_idMenuTools_Edit;
-    CORBA::Long m_idMenuTools_EditFrame;
-    CORBA::Long m_idMenuTools_CreateText;
-    CORBA::Long m_idMenuTools_CreatePix;
-    CORBA::Long m_idMenuTools_Clipart;
-    CORBA::Long m_idMenuTools_Table;
-    CORBA::Long m_idMenuTools_KSpreadTable;
-    CORBA::Long m_idMenuTools_Formula;
-    CORBA::Long m_idMenuTools_Part;
+    long int m_idMenuTools_Edit;
+    long int m_idMenuTools_EditFrame;
+    long int m_idMenuTools_CreateText;
+    long int m_idMenuTools_CreatePix;
+    long int m_idMenuTools_Clipart;
+    long int m_idMenuTools_Table;
+    long int m_idMenuTools_KSpreadTable;
+    long int m_idMenuTools_Formula;
+    long int m_idMenuTools_Part;
 
     // table menu
     OpenPartsUI::Menu_var m_vMenuTable;
-    CORBA::Long m_idMenuTable_InsertRow;
-    CORBA::Long m_idMenuTable_InsertCol;
-    CORBA::Long m_idMenuTable_DeleteRow;
-    CORBA::Long m_idMenuTable_DeleteCol;
-    CORBA::Long m_idMenuTable_JoinCells;
-    CORBA::Long m_idMenuTable_SplitCells;
-    CORBA::Long m_idMenuTable_UngroupTable;
-    CORBA::Long m_idMenuTable_Delete;
+    long int m_idMenuTable_InsertRow;
+    long int m_idMenuTable_InsertCol;
+    long int m_idMenuTable_DeleteRow;
+    long int m_idMenuTable_DeleteCol;
+    long int m_idMenuTable_JoinCells;
+    long int m_idMenuTable_SplitCells;
+    long int m_idMenuTable_UngroupTable;
+    long int m_idMenuTable_Delete;
 
     // help menu
     OpenPartsUI::Menu_var m_vMenuHelp;
-    CORBA::Long m_idMenuHelp_Contents;
+    long int m_idMenuHelp_Contents;
 
     // edit toolbar
     OpenPartsUI::ToolBar_var m_vToolBarEdit;
-    CORBA::Long m_idButtonEdit_Undo;
-    CORBA::Long m_idButtonEdit_Redo;
-    CORBA::Long m_idButtonEdit_Cut;
-    CORBA::Long m_idButtonEdit_Copy;
-    CORBA::Long m_idButtonEdit_Paste;
-    CORBA::Long m_idButtonEdit_Spelling;
-    CORBA::Long m_idButtonEdit_Find;
+    long int m_idButtonEdit_Undo;
+    long int m_idButtonEdit_Redo;
+    long int m_idButtonEdit_Cut;
+    long int m_idButtonEdit_Copy;
+    long int m_idButtonEdit_Paste;
+    long int m_idButtonEdit_Spelling;
+    long int m_idButtonEdit_Find;
 
     // insert toolbar
     OpenPartsUI::ToolBar_var m_vToolBarInsert;
-    CORBA::Long m_idButtonInsert_Picture;
-    CORBA::Long m_idButtonInsert_Clipart;
-    CORBA::Long m_idButtonInsert_SpecialChar;
+    long int m_idButtonInsert_Picture;
+    long int m_idButtonInsert_Clipart;
+    long int m_idButtonInsert_SpecialChar;
 
     // text toolbar
     OpenPartsUI::ToolBar_var m_vToolBarText;
-    CORBA::Long m_idComboText_Style;
-    CORBA::Long m_idComboText_FontSize;
-    CORBA::Long m_idComboText_FontList;
-    CORBA::Long m_idComboText_LineSpacing;
-    CORBA::Long m_idButtonText_Bold;
-    CORBA::Long m_idButtonText_Italic;
-    CORBA::Long m_idButtonText_Underline;
-    CORBA::Long m_idButtonText_Color;
-    CORBA::Long m_idButtonText_ARight;
-    CORBA::Long m_idButtonText_ACenter;
-    CORBA::Long m_idButtonText_ALeft;
-    CORBA::Long m_idButtonText_ABlock;
-    CORBA::Long m_idButtonText_EnumList;
-    CORBA::Long m_idButtonText_UnsortList;
-    CORBA::Long m_idButtonText_SuperScript;
-    CORBA::Long m_idButtonText_SubScript;
-    CORBA::Long m_idButtonText_BorderLeft;
-    CORBA::Long m_idButtonText_BorderRight;
-    CORBA::Long m_idButtonText_BorderTop;
-    CORBA::Long m_idButtonText_BorderBottom;
-    CORBA::Long m_idButtonText_BorderColor;
-    CORBA::Long m_idComboText_BorderWidth;
-    CORBA::Long m_idComboText_BorderStyle;
+    long int m_idComboText_Style;
+    long int m_idComboText_FontSize;
+    long int m_idComboText_FontList;
+    long int m_idComboText_LineSpacing;
+    long int m_idButtonText_Bold;
+    long int m_idButtonText_Italic;
+    long int m_idButtonText_Underline;
+    long int m_idButtonText_Color;
+    long int m_idButtonText_ARight;
+    long int m_idButtonText_ACenter;
+    long int m_idButtonText_ALeft;
+    long int m_idButtonText_ABlock;
+    long int m_idButtonText_EnumList;
+    long int m_idButtonText_UnsortList;
+    long int m_idButtonText_SuperScript;
+    long int m_idButtonText_SubScript;
+    long int m_idButtonText_BorderLeft;
+    long int m_idButtonText_BorderRight;
+    long int m_idButtonText_BorderTop;
+    long int m_idButtonText_BorderBottom;
+    long int m_idButtonText_BorderColor;
+    long int m_idComboText_BorderWidth;
+    long int m_idComboText_BorderStyle;
 
     // tools toolbar
     OpenPartsUI::ToolBar_var m_vToolBarTools;
-    CORBA::Long m_idButtonTools_Edit;
-    CORBA::Long m_idButtonTools_EditFrame;
-    CORBA::Long m_idButtonTools_CreateText;
-    CORBA::Long m_idButtonTools_CreatePix;
-    CORBA::Long m_idButtonTools_Clipart;
-    CORBA::Long m_idButtonTools_Table;
-    CORBA::Long m_idButtonTools_KSpreadTable;
-    CORBA::Long m_idButtonTools_Formula;
-    CORBA::Long m_idButtonTools_Part;
+    long int m_idButtonTools_Edit;
+    long int m_idButtonTools_EditFrame;
+    long int m_idButtonTools_CreateText;
+    long int m_idButtonTools_CreatePix;
+    long int m_idButtonTools_Clipart;
+    long int m_idButtonTools_Table;
+    long int m_idButtonTools_KSpreadTable;
+    long int m_idButtonTools_Formula;
+    long int m_idButtonTools_Part;
 
     // frame toolbar
     OpenPartsUI::ToolBar_var m_vToolBarFrame;
-    CORBA::Long m_idButtonFrame_BorderLeft;
-    CORBA::Long m_idButtonFrame_BorderRight;
-    CORBA::Long m_idButtonFrame_BorderTop;
-    CORBA::Long m_idButtonFrame_BorderBottom;
-    CORBA::Long m_idButtonFrame_BorderColor;
-    CORBA::Long m_idComboFrame_BorderWidth;
-    CORBA::Long m_idComboFrame_BorderStyle;
-    CORBA::Long m_idButtonFrame_BackColor;
+    long int m_idButtonFrame_BorderLeft;
+    long int m_idButtonFrame_BorderRight;
+    long int m_idButtonFrame_BorderTop;
+    long int m_idButtonFrame_BorderBottom;
+    long int m_idButtonFrame_BorderColor;
+    long int m_idComboFrame_BorderWidth;
+    long int m_idComboFrame_BorderStyle;
+    long int m_idButtonFrame_BackColor;
 
     // table toolbar
     OpenPartsUI::ToolBar_var m_vToolBarTable;
-    CORBA::Long m_idButtonTable_InsertRow;
-    CORBA::Long m_idButtonTable_DeleteRow;
-    CORBA::Long m_idButtonTable_InsertCol;
-    CORBA::Long m_idButtonTable_DeleteCol;
+    long int m_idButtonTable_InsertRow;
+    long int m_idButtonTable_DeleteRow;
+    long int m_idButtonTable_InsertCol;
+    long int m_idButtonTable_DeleteCol;
 
     // formula toolbar
     OpenPartsUI::ToolBar_var m_vToolBarFormula;
-    CORBA::Long m_idButtonFormula_Power;
-    CORBA::Long m_idButtonFormula_Subscript;
-    CORBA::Long m_idButtonFormula_Parentheses;
-    CORBA::Long m_idButtonFormula_AbsValue;
-    CORBA::Long m_idButtonFormula_Brackets;
-    CORBA::Long m_idButtonFormula_Fraction;
-    CORBA::Long m_idButtonFormula_Root;
-    CORBA::Long m_idButtonFormula_Integral;
-    CORBA::Long m_idButtonFormula_Matrix;
-    CORBA::Long m_idButtonFormula_LeftSuper;
-    CORBA::Long m_idButtonFormula_LeftSub;
+    long int m_idButtonFormula_Power;
+    long int m_idButtonFormula_Subscript;
+    long int m_idButtonFormula_Parentheses;
+    long int m_idButtonFormula_AbsValue;
+    long int m_idButtonFormula_Brackets;
+    long int m_idButtonFormula_Fraction;
+    long int m_idButtonFormula_Root;
+    long int m_idButtonFormula_Integral;
+    long int m_idButtonFormula_Matrix;
+    long int m_idButtonFormula_LeftSuper;
+    long int m_idButtonFormula_LeftSub;
 
     // text toolbar values
     QFont tbFont;
     QColor tbColor;
     QStringList fontList;
-    QStrList styleList;
+    QStringList styleList;
 
     KWordGUI *gui;
     bool m_bShowGUI;

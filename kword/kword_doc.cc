@@ -143,7 +143,7 @@ KWordDocument::KWordDocument()
 }
 
 /*================================================================*/
-CORBA::Boolean KWordDocument::initDoc()
+bool KWordDocument::initDoc()
 {
     pageLayout.unit = PG_MM;
     pages = 1;
@@ -1299,7 +1299,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
 bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 {
     if ( _store ) {
-	CORBA::String_var str = urlIntern.isEmpty() ? KURL( url() ).path().latin1() : urlIntern.latin1();
+	QString str = urlIntern.isEmpty() ? KURL( url() ).path().latin1() : urlIntern.latin1();
 
 	QStringList::Iterator it = pixmapKeys.begin();
 	QStringList::Iterator nit = pixmapNames.begin();
@@ -1309,20 +1309,20 @@ bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
 	    if ( !( *nit ).isEmpty() )
 		u = *nit;
 	    else {
-		u = str.in();
+		u = str;
 		u += "/";
 		u += *it;
 	    }
 
 	    QImage img;
 
-	    if ( _store->open( u, 0L ) ) {
+	    if ( _store->open( u, "" ) ) {
 		istorestream in( _store );
 		in >> img;
 		_store->close();
 	    } else {
 		u.prepend( "file:" );
-		if ( _store->open( u, 0L ) ) {
+		if ( _store->open( u, "" ) ) {
 		    istorestream in( _store );
 		    in >> img;
 		    _store->close();
@@ -1451,7 +1451,7 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
     if ( !_store )
 	return TRUE;
 
-    CORBA::String_var u = KURL( url() ).path().latin1();
+    QString u = KURL( url() ).path().latin1();
     QDictIterator<KWImage> it = imageCollection.iterator();
 
     QStringList keys, images;
@@ -1468,7 +1468,8 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	    format = "BMP";
 
 	QString u2 = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
-	QString mime = "image/" + format.lower();
+	QCString mime ( "image/" );
+        mime += format.lower().ascii();
         if ( !isStoredExtern() )
           u2.prepend( m_strURL + "/" );
 	
@@ -1510,7 +1511,7 @@ bool KWordDocument::saveChildren( KOStore::Store_ptr _store, const char *_path )
 	// set the child document's url to an internal url (ex: "tar:/0/1")
 	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
 	KOffice::Document_var doc = it.current()->document();
-        if ( !doc->saveToStore( _store, 0L, internURL ) )
+        if ( !doc->saveToStore( _store, "", internURL ) )
           return false;
     }
     return true;
@@ -1539,15 +1540,14 @@ KOffice::MainWindow_ptr KWordDocument::createMainWindow()
 }
 
 /*================================================================*/
-void KWordDocument::viewList( OpenParts::Document::ViewList*& _list )
+void KWordDocument::viewList( OpenParts::Document::ViewList & _list )
 {
-    ( *_list ).length( m_lstViews.count() );
+    _list.clear();
 
-    int i = 0;
     QListIterator<KWordView> it( m_lstViews );
     for( ; it.current(); ++it )
     {
-	( *_list )[ i++ ] = OpenParts::View::_duplicate( it.current() );
+	_list.append ( OpenParts::View::_duplicate( it.current() ) );
     }
 }
 
@@ -1628,7 +1628,7 @@ QListIterator<KWordChild> KWordDocument::childIterator()
 }
 
 /*================================================================*/
-void KWordDocument::draw( QPaintDevice *, CORBA::Long, CORBA::Long, CORBA::Float )
+void KWordDocument::draw( QPaintDevice *, long int, long int, float )
 {
 }
 
