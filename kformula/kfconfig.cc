@@ -40,18 +40,18 @@ KFConfig::KFConfig( KFormulaPartView* parent )
     _page = new KFormula::ConfigurePage( parent->document()->getDocument(), this,
                                          KFormulaFactory::global()->config(),
                                          page1 );
-    QVBox* page2 = addVBoxPage( i18n( "Math Fonts" ), i18n( "Math Fonts Settings" ),
-                               BarIcon( "kformula", KIcon::SizeMedium ) );
-    _mathFontPage = new KFormula::MathFontsConfigurePage( parent->document()->getDocument(), this,
-                                         KFormulaFactory::global()->config(),
-                                         page2 );
+//     QVBox* page2 = addVBoxPage( i18n( "Math Fonts" ), i18n( "Math Fonts Settings" ),
+//                                BarIcon( "kformula", KIcon::SizeMedium ) );
+//     _mathFontPage = new KFormula::MathFontsConfigurePage( parent->document()->getDocument(), this,
+//                                          KFormulaFactory::global()->config(),
+//                                          page2 );
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }
 
 void KFConfig::slotApply()
 {
-    _mathFontPage->apply();
+//     _mathFontPage->apply();
 
     // The "normal" page triggers the recalc and must be called last
     // for this reason.
@@ -65,9 +65,9 @@ void KFConfig::slotDefault()
     case 0:
         _page->slotDefault();
         break;
-    case 1:
-        _mathFontPage->slotDefault();
-        break;
+//     case 1:
+//         _mathFontPage->slotDefault();
+//         break;
     default:
         break;
     }

@@ -25,6 +25,9 @@
 #include <koGlobal.h>
 
 #include "contextstyle.h"
+#include "esstixfontstyle.h"
+#include "symbolfontstyle.h"
+
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -54,13 +57,36 @@ ContextStyle::ContextStyle()
     linearMovement = false;
     centerSymbol = false;
     m_syntaxHighlighting = true;
+
+    m_fontStyle = 0;
 }
+
+
+ContextStyle::~ContextStyle()
+{
+    delete m_fontStyle;
+}
+
 
 void ContextStyle::init()
 {
     setup();
-    table.init( this );
+    m_fontStyle = new EsstixFontStyle();
+    if ( !m_fontStyle->init( this ) ) {
+        delete m_fontStyle;
+
+        // The SymbolFontStyle is always expected to work.
+        m_fontStyle = new SymbolFontStyle();
+        m_fontStyle->init( this );
+    }
 }
+
+
+const SymbolTable& ContextStyle::symbolTable() const
+{
+    return *( m_fontStyle->symbolTable() );
+}
+
 
 void ContextStyle::readConfig( KConfig* config )
 {
@@ -199,7 +225,7 @@ const QStringList& ContextStyle::requestedFonts() const
 void ContextStyle::setRequestedFonts( const QStringList& list )
 {
     m_requestedFonts = list;
-    table.init( this );
+    //table.init( this );
 }
 
 double ContextStyle::getReductionFactor( TextStyle tstyle ) const

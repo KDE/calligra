@@ -25,6 +25,7 @@
 //#include <koUnit.h>
 
 #include "kformulamathmlread.h"
+#include "symboltable.h"
 
 KFORMULA_NAMESPACE_BEGIN
 using namespace std;

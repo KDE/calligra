@@ -16,7 +16,8 @@ libkformula_la_SOURCES	= basicelement.cc contextstyle.cc formulacursor.cc \
 	symboltable.cc kformulamathmlread.cc \
 	kformulainputfilter.cc kformulaview.cc \
 	spaceelement.cc kformulaconfigpage.cc \
-	symbolaction.cc
+	symbolaction.cc \
+	fontstyle.cc symbolfontstyle.cc esstixfontstyle.cc
 
 #include_HEADERS = kformulacontainer.h kformuladocument.h kformulaview.h \
 #	kformuladefs.h kformulaconfigpage.h

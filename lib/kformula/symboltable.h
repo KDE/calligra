@@ -93,8 +93,6 @@ private:
 };
 
 
-struct InternFontTable;
-
 /**
  * The symbol table.
  *
@@ -119,6 +117,7 @@ public:
     QChar unicode( QString name ) const;
     QString name( QChar symbol ) const;
 
+    const CharTableEntry& entry( QChar symbol, CharStyle style=normalChar ) const;
     QFont font( QChar symbol, CharStyle style=normalChar ) const;
     uchar character( QChar symbol, CharStyle style=normalChar ) const;
     CharClass charClass( QChar symbol, CharStyle style=normalChar ) const;
@@ -147,15 +146,15 @@ public:
 
     bool esstixDelimiter() const { return m_esstixDelimiter; }
 
-private:
-
-    UnicodeTable& unicodeTable( CharStyle style );
-    const UnicodeTable& unicodeTable( CharStyle style ) const;
-
     void initFont( const InternFontTable* table,
                    const char* fontname,
                    const NameTable& tempNames,
                    CharStyle style );
+
+private:
+
+    UnicodeTable& unicodeTable( CharStyle style );
+    const UnicodeTable& unicodeTable( CharStyle style ) const;
 
     /**
      * The chars from unicode.
@@ -187,6 +186,9 @@ private:
     SymbolFontHelper symbolFontHelper;
 
     bool m_esstixDelimiter;
+
+    // An empty entry that's used if nothing was found.
+    CharTableEntry dummyEntry;
 };
 
 KFORMULA_NAMESPACE_END

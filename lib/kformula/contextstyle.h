@@ -34,9 +34,13 @@
 
 //Formula include
 #include "kformuladefs.h"
-#include "symboltable.h"
+
 
 KFORMULA_NAMESPACE_BEGIN
+
+class FontStyle;
+class SymbolTable;
+
 
 /**
  * Contains all the style information for the formela. The idea
@@ -77,6 +81,7 @@ public:
      * Build a default context style
      */
     ContextStyle();
+    ~ContextStyle();
 
     void init();
     void readConfig( KConfig* config );
@@ -87,7 +92,10 @@ public:
     /**
      * @returns our symbol table.
      */
-    const SymbolTable& symbolTable() const { return table; }
+    const SymbolTable& symbolTable() const;
+
+    const FontStyle& fontStyle() const { return *m_fontStyle; }
+
 
     void setZoomAndResolution( int zoom, int dpiX, int dpiY );
 
@@ -303,7 +311,9 @@ private:
     /**
      * The symbols/names that are "known" to the system.
      */
-    SymbolTable table;
+    //SymbolTable table;
+
+    FontStyle* m_fontStyle;
 };
 
 KFORMULA_NAMESPACE_END

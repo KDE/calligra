@@ -43,7 +43,7 @@ public slots:
 
 private:
     KFormula::ConfigurePage* _page;
-    KFormula::MathFontsConfigurePage* _mathFontPage;
+//     KFormula::MathFontsConfigurePage* _mathFontPage;
 };
 
 #endif

@@ -140,6 +140,16 @@ enum CharStyle {
 
 
 /**
+ * The struct used to store static font data.
+ */
+struct InternFontTable {
+    short unicode;
+    uchar pos;
+    CharClass cl;
+};
+
+
+/**
  * Wether we want to insert to the left of the cursor
  * or right of it.
  * The same for deletion.
