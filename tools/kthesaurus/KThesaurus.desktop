@@ -1,0 +1,27 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KThesaurus
+Name[be]=K Тэзаўрус
+Name[bg]=KThesaurus (богатство на думи)
+Name[eo]=Tezaŭro
+Name[hr]=Tezaurus
+Name[ja]=シソーラス
+Name[lv]=KTezaurs
+Name[pt]=Sinónimos
+Name[pt_BR]=Ferramenta Thesaurus
+Name[sl]=KTezaver
+Name[sv]=Kthesaurus
+Name[xx]=xx
+Name[zh_TW]=KDE 同意字
+Type=Application
+Icon=kthesaurus
+Exec=kthesaurus
+GenericName=Related Words
+GenericName[da]=Relaterede ord
+GenericName[el]=Συγγενικές λέξεις
+GenericName[he]=מילים קשורות
+GenericName[hr]=Srodne riječi
+GenericName[pt_BR]=Palavras relacionadas 
+GenericName[sv]=Relaterade ord
+GenericName[tr]=İlgili Kelimeler
+X-KDE-StartupNotify=true
