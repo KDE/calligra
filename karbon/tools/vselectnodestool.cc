@@ -163,11 +163,9 @@ VSelectNodesTool::mouseDragRelease()
 		view()->part()->document().selection()->setState( VObject::selected );
 		VTranslateCmd *cmd = new VTranslateCmd(
 				&view()->part()->document(),
-				qRound( ( last().x() - first().x() ) * ( 1.0 / view()->zoom() ) ),
-				qRound( ( last().y() - first().y() ) * ( 1.0 / view()->zoom() ) ) );
+				qRound( ( last().x() - first().x() ) ),
+				qRound( ( last().y() - first().y() ) ) );
 		view()->part()->addCommand( cmd, true );
-
-//			view()->part()->repaintAllViews();
 	}
 	else
 	{
@@ -206,8 +204,8 @@ VSelectNodesTool::recalc()
 	{
 		// move operation
 		QWMatrix mat;
-		mat.translate(	( last().x() - first().x() ) / view()->zoom(),
-						( last().y() - first().y() ) / view()->zoom() );
+		mat.translate(	( last().x() - first().x() ),
+						( last().y() - first().y() ) );
 
 		// Copy selected objects and transform:
 		m_objects.clear();
