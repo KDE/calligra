@@ -62,6 +62,8 @@ public:
     virtual void setAppearSoundEffectFileName( const QString &_a_fileName );
     virtual void setDisappearSoundEffectFileName( const QString &_d_fileName );
 
+    virtual void setShadowParameter(int _distance,ShadowDirection _direction,const QColor &_color);
+
     virtual ObjType getType() const
     { return OT_GROUP; }
     virtual QString getTypeString() const
