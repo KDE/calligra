@@ -38,13 +38,12 @@ void KWordPartFrameSetIface::startEditing()
     if ( m_partFrameSet->isDeleted() )
         return; // DCOPRef();
     KWDocument *doc = m_partFrameSet->kWordDocument();
-    QPtrList <KWView> lst = doc->getAllViews();
-    KWView* view = lst.getFirst();
+    KWView* view = doc->getAllViews().first();
     KoDocument* part = m_partFrameSet->getChild()->document();
     if ( !part || !view )
         return;
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart( part, view );
     /* return DCOPRef( kapp->dcopClient()->appId(),
-		    (static_cast<KWPartFrameSetEdit *>( lst.at(0)->getGUI()->canvasWidget()->currentFrameSetEdit()))->dcopObject()->objId() ); */
+		    (static_cast<KWPartFrameSetEdit *>( canvas->currentFrameSetEdit()))->dcopObject()->objId() ); */
 }

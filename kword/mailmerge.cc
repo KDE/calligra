@@ -188,14 +188,14 @@ KWMailMergeDataSource *KWMailMergeDataBase::loadPlugin(const QString& name)
 }
 
 bool KWMailMergeDataBase::isSampleRecord() {
-	return (0>doc->getMailMergeRecord());
+	return (0>doc->mailMergeRecord());
 }
 
 QString KWMailMergeDataBase::getValue( const QString &name, int record ) const
 {
 	if (plugin)
 	{
-		if (record==-1) record=doc->getMailMergeRecord();
+		if (record==-1) record=doc->mailMergeRecord();
 		return plugin->getValue(name,record);
 	}
 	else
@@ -340,7 +340,7 @@ KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList
   descriptionLabel->setAlignment( WordBreak );
   descriptionLabel->setFrameShape( QFrame::Box );
   descriptionLabel->setFrameShadow( QFrame::Sunken );
-  
+
   QSize old_sizeHint;
   for ( KTrader::OfferList::Iterator it = pluginOffers.begin(); *it; ++it )
   {
@@ -351,7 +351,7 @@ KWMailMergeChoosePluginDialog::KWMailMergeChoosePluginDialog( KTrader::OfferList
         descriptionLabel->setMinimumSize(descriptionLabel->sizeHint() );
   }
   descriptionLabel->show();
-  
+
   connect( chooser, SIGNAL( activated( int ) ),
            this, SLOT( pluginChanged( int ) ) );
 

@@ -185,7 +185,13 @@ public:
     QPtrList<KAction> &variableActionList() { return m_variableActionList; }
     QPtrList<KAction> &tableActions() { return m_tableActionList; }
 
-    static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWordText, bool &providesKWord, bool &providesFormula );
+    enum { // bitfield
+        ProvidesImage = 1,
+        ProvidesPlainText = 2,
+        ProvidesOasis = 4,
+        ProvidesFormula = 8
+    };
+    static int checkClipboard( QMimeSource *data );
 
     bool insertInlinePicture();
 
@@ -216,6 +222,8 @@ public:
     void tableInsertCol(uint col, KWTableFrameSet *table = 0);
     int tableDeleteRow(const QValueList<uint>& rows, KWTableFrameSet *table = 0);
     int tableDeleteCol(const QValueList<uint>& cols, KWTableFrameSet *table = 0);
+
+    void pasteData( QMimeSource* data );
 
 public slots:
     void fileStatistics();

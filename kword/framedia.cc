@@ -478,13 +478,13 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         grid1->addWidget(sideHeads, row, 0);
 
         sideGrid = new QGridLayout( sideHeads, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
-        sideTitle1 = new QLabel ( i18n("Size (%1):").arg(doc->getUnitName()),sideHeads);
+        sideTitle1 = new QLabel ( i18n("Size (%1):").arg(doc->unitName()),sideHeads);
         sideTitle1->resize(sideTitle1->sizeHint());
         sideGrid->addWidget(sideTitle1,1,0);
         sideWidth= new QLineEdit(sideHeads,"");
         sideWidth->setMaxLength(6);
         sideGrid->addWidget(sideWidth,1,1);
-        sideTitle2 = new QLabel( i18n("Gap size (%1):").arg(doc->getUnitName()),sideHeads);
+        sideTitle2 = new QLabel( i18n("Gap size (%1):").arg(doc->unitName()),sideHeads);
         sideTitle2->resize(sideTitle2->sizeHint());
         sideGrid->addWidget(sideTitle2,2,0);
         sideGap = new QLineEdit(sideHeads,"");
@@ -646,7 +646,7 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
 
     tabLayout->addWidget( runSideGroup );
 
-    m_raDistConfigWidget = new KWFourSideConfigWidget( doc, i18n("Distance between frame and text (%1)").arg(doc->getUnitName()), tab2 );
+    m_raDistConfigWidget = new KWFourSideConfigWidget( doc, i18n("Distance between frame and text (%1)").arg(doc->unitName()), tab2 );
     if ( frame )
         m_raDistConfigWidget->setValues( QMAX(0.00, frame->runAroundLeft()),
                                          QMAX(0.00, frame->runAroundRight()),
@@ -918,7 +918,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         Absolute
     */
 
-    grp1 = new QGroupBox( i18n("Position (%1)").arg(doc->getUnitName()), tab4 );
+    grp1 = new QGroupBox( i18n("Position (%1)").arg(doc->unitName()), tab4 );
     QGridLayout* pGrid = new QGridLayout( grp1, 3, 4, KDialog::marginHint(), KDialog::spacingHint() );
 
     lx = new QLabel( i18n( "Left:" ), grp1 );
@@ -977,7 +977,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     grid4->addMultiCellWidget( grp1, row, row, 0,1 );
 
     if(frame) {
-        m_paddingConfigWidget = new KWFourSideConfigWidget( doc, i18n("Margins (%1)").arg(doc->getUnitName()), tab4 );
+        m_paddingConfigWidget = new KWFourSideConfigWidget( doc, i18n("Margins (%1)").arg(doc->unitName()), tab4 );
         m_paddingConfigWidget->setValues( QMAX(0.00, frame->paddingLeft()),
                                           QMAX(0.00, frame->paddingRight()),
                                           QMAX(0.00, frame->paddingTop()),
@@ -1002,10 +1002,10 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         // Can't use frame->pageNum() here since frameset might be 0
         int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->numPages()-1 );
 
-        sx->setValue( KoUnit::toUserValue( frame->x(), doc->getUnit() ) );
-        sy->setValue( KoUnit::toUserValue( frame->y() - (pageNum * doc->ptPaperHeight()), doc->getUnit() ) );
-        sw->setValue( KoUnit::toUserValue( frame->width(), doc->getUnit() ) );
-        sh->setValue( KoUnit::toUserValue( frame->height(), doc->getUnit() ) );
+        sx->setValue( KoUnit::toUserValue( frame->x(), doc->unit() ) );
+        sy->setValue( KoUnit::toUserValue( frame->y() - (pageNum * doc->ptPaperHeight()), doc->unit() ) );
+        sw->setValue( KoUnit::toUserValue( frame->width(), doc->unit() ) );
+        sh->setValue( KoUnit::toUserValue( frame->height(), doc->unit() ) );
 
         calcRatio();
 
@@ -1071,9 +1071,9 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         // TODO port to KoUnitDoubleSpinBox
         // and TODO show a special value when frames have a different width/height
         if ( sw->isEnabled() )
-            sw->setValue( KoUnit::toUserValue( commonWidth, doc->getUnit() ) );
+            sw->setValue( KoUnit::toUserValue( commonWidth, doc->unit() ) );
         if ( sh->isEnabled() )
-            sh->setValue( KoUnit::toUserValue( commonHeight, doc->getUnit() ) );
+            sh->setValue( KoUnit::toUserValue( commonHeight, doc->unit() ) );
         if(table)
             floating->setText( i18n( "Table is inline" ) );
     }
@@ -1824,12 +1824,12 @@ bool KWFrameDia::applyChanges()
     double uRight = 0.0;
     if(tab4) { // TAB Geometry
         if ( frame ) {
-            px = QMAX( 0, KoUnit::fromUserValue( sx->value(), doc->getUnit() ) );
+            px = QMAX( 0, KoUnit::fromUserValue( sx->value(), doc->unit() ) );
             int pageNum = QMIN( static_cast<int>( frame->y() / doc->ptPaperHeight() ), doc->numPages() - 1 );
-            py = QMAX( 0, KoUnit::fromUserValue( sy->value(),doc->getUnit() ) ) + pageNum * doc->ptPaperHeight();
+            py = QMAX( 0, KoUnit::fromUserValue( sy->value(),doc->unit() ) ) + pageNum * doc->ptPaperHeight();
         }
-        pw = QMAX( KoUnit::fromUserValue( sw->value(), doc->getUnit() ), 0 );
-        ph = QMAX( KoUnit::fromUserValue( sh->value(), doc->getUnit() ), 0 );
+        pw = QMAX( KoUnit::fromUserValue( sw->value(), doc->unit() ), 0 );
+        ph = QMAX( KoUnit::fromUserValue( sh->value(), doc->unit() ), 0 );
         if ( m_paddingConfigWidget )
         {
             uLeft = m_paddingConfigWidget->leftValue();
@@ -2113,10 +2113,10 @@ KWFourSideConfigWidget::KWFourSideConfigWidget( KWDocument* _doc, const QString&
 // Called right after the ctor, so m_synchronize can't be checked
 void KWFourSideConfigWidget::setValues( double left, double right, double top, double bottom )
 {
-    m_inputLeft->setValue( KoUnit::toUserValue( left, doc->getUnit() ) );
-    m_inputRight->setValue( KoUnit::toUserValue( right, doc->getUnit() ) );
-    m_inputTop->setValue( KoUnit::toUserValue( top, doc->getUnit() ) );
-    m_inputBottom->setValue( KoUnit::toUserValue( bottom, doc->getUnit() ) );
+    m_inputLeft->setValue( KoUnit::toUserValue( left, doc->unit() ) );
+    m_inputRight->setValue( KoUnit::toUserValue( right, doc->unit() ) );
+    m_inputTop->setValue( KoUnit::toUserValue( top, doc->unit() ) );
+    m_inputBottom->setValue( KoUnit::toUserValue( bottom, doc->unit() ) );
 }
 
 void KWFourSideConfigWidget::slotValueChanged( double val )
@@ -2135,22 +2135,22 @@ void KWFourSideConfigWidget::slotValueChanged( double val )
 
 double KWFourSideConfigWidget::leftValue() const
 {
-    return KoUnit::fromUserValue( m_inputLeft->value(), doc->getUnit() );
+    return KoUnit::fromUserValue( m_inputLeft->value(), doc->unit() );
 }
 
 double KWFourSideConfigWidget::rightValue() const
 {
-    return KoUnit::fromUserValue( m_inputRight->value(), doc->getUnit() );
+    return KoUnit::fromUserValue( m_inputRight->value(), doc->unit() );
 }
 
 double KWFourSideConfigWidget::topValue() const
 {
-    return KoUnit::fromUserValue( m_inputTop->value(), doc->getUnit() );
+    return KoUnit::fromUserValue( m_inputTop->value(), doc->unit() );
 }
 
 double KWFourSideConfigWidget::bottomValue() const
 {
-    return KoUnit::fromUserValue( m_inputBottom->value(), doc->getUnit() );
+    return KoUnit::fromUserValue( m_inputBottom->value(), doc->unit() );
 }
 
 // not needed, setEnabled does it

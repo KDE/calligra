@@ -97,7 +97,7 @@ KWConfig::KWConfig( KWView* parent )
 
   QVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula Defaults"),
                               loadIcon("kformula") );
-  m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->getFormulaDocument(),
+  m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->formulaDocument(),
                                              this, KWFactory::global()->config(), page5 );
 
   QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc Settings"),
@@ -112,7 +112,7 @@ KWConfig::KWConfig( KWView* parent )
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 
   connect( m_interfacePage, SIGNAL( unitChanged( int ) ), SLOT( unitChanged( int ) ) );
-  unitChanged( parent->kWordDocument()->getUnit() );
+  unitChanged( parent->kWordDocument()->unit() );
 }
 
 void KWConfig::unitChanged( int u )
@@ -217,7 +217,7 @@ void ConfigureSpellPage::apply()
 
   m_spellConfigWidget->save();
 
-  m_pView->kWordDocument()->addIgnoreWordAllList(
+  m_pView->kWordDocument()->setSpellCheckIgnoreList(
       m_pView->broker()->settings()->currentIgnoreList() );
   //FIXME reactivate just if there are changes.
   doc->enableBackgroundSpellCheck( m_pView->broker()->settings()->backgroundCheckerEnabled() );
@@ -249,7 +249,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     bool oldShowScrollBar = true;
     oldNbRecentFiles=10;
     int nbPagePerRow=4;
-    KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
+    KoUnit::Unit unit = m_pView->kWordDocument()->unit();
     if( config->hasGroup("Interface") )
     {
         config->setGroup( "Interface" );
@@ -430,7 +430,7 @@ void ConfigureInterfacePage::setUnit( KoUnit::Unit unit )
     m_unitCombo->blockSignals( true );
     m_unitCombo->setCurrentItem( unit );
     m_unitCombo->blockSignals( false );
-    // We need to set it in the doc immediately, because much code here uses doc->getUnit()
+    // We need to set it in the doc immediately, because much code here uses doc->unit()
     m_pView->kWordDocument()->setUnit( unit );
 
     gridX->setUnit( unit );
@@ -443,10 +443,10 @@ void ConfigureInterfacePage::slotDefault()
     KWDocument * doc = m_pView->kWordDocument();
     m_unitCombo->setCurrentItem( KoUnit::U_CM );
     emit unitChanged( m_unitCombo->currentItem() );
-    gridX->setValue( KoUnit::toUserValue( 10, doc->getUnit() ) );
-    gridY->setValue( KoUnit::toUserValue( 10, doc->getUnit() ) );
+    gridX->setValue( KoUnit::toUserValue( 10, doc->unit() ) );
+    gridY->setValue( KoUnit::toUserValue( 10, doc->unit() ) );
     m_nbPagePerRow->setValue(4);
-    double newIndent = KoUnit::toUserValue( MM_TO_POINT( 10 ), doc->getUnit() );
+    double newIndent = KoUnit::toUserValue( MM_TO_POINT( 10 ), doc->unit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
     showStatusBar->setChecked(true);
@@ -486,16 +486,16 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
 
     KWDocument* doc = m_pView->kWordDocument();
     m_displayLink=new QCheckBox(i18n("Display &links"),gbMiscGroup);
-    m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
+    m_displayLink->setChecked(doc->variableCollection()->variableSetting()->displayLink());
     m_underlineLink=new QCheckBox(i18n("&Underline all links"),gbMiscGroup);
-    m_underlineLink->setChecked(doc->getVariableCollection()->variableSetting()->underlineLink());
+    m_underlineLink->setChecked(doc->variableCollection()->variableSetting()->underlineLink());
 
 
     m_displayComment=new QCheckBox(i18n("Display c&omments"),gbMiscGroup);
-    m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
+    m_displayComment->setChecked(doc->variableCollection()->variableSetting()->displayComment());
 
     m_displayFieldCode=new QCheckBox(i18n("Display field code"),gbMiscGroup);
-    m_displayFieldCode->setChecked(doc->getVariableCollection()->variableSetting()->displayFieldCode());
+    m_displayFieldCode->setChecked(doc->variableCollection()->variableSetting()->displayFieldCode());
 
 
     QVGroupBox* gbViewFormatting = new QVGroupBox( i18n("View Formatting"), box, "view_formatting" );
@@ -538,48 +538,48 @@ KCommand *ConfigureMiscPage::apply()
     }
     KMacroCommand * macroCmd=0L;
     bool b=m_displayLink->isChecked();
-    if(doc->getVariableCollection()->variableSetting()->displayLink()!=b)
+    if(doc->variableCollection()->variableSetting()->displayLink()!=b)
     {
         if(!macroCmd)
         {
             macroCmd=new KMacroCommand(i18n("Change Display Link Command"));
         }
-        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, doc->getVariableCollection()->variableSetting()->displayLink() ,b, KWChangeVariableSettingsCommand::VS_DISPLAYLINK);
+        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, doc->variableCollection()->variableSetting()->displayLink() ,b, KWChangeVariableSettingsCommand::VS_DISPLAYLINK);
 
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
     b=m_underlineLink->isChecked();
-    if(doc->getVariableCollection()->variableSetting()->underlineLink()!=b)
+    if(doc->variableCollection()->variableSetting()->underlineLink()!=b)
     {
         if(!macroCmd)
         {
             macroCmd=new KMacroCommand(i18n("Change Display Link Command"));
         }
-        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, doc->getVariableCollection()->variableSetting()->underlineLink() ,b, KWChangeVariableSettingsCommand::VS_UNDERLINELINK);
+        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, doc->variableCollection()->variableSetting()->underlineLink() ,b, KWChangeVariableSettingsCommand::VS_UNDERLINELINK);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
 
     b=m_displayComment->isChecked();
-    if(doc->getVariableCollection()->variableSetting()->displayComment()!=b)
+    if(doc->variableCollection()->variableSetting()->displayComment()!=b)
     {
         if(!macroCmd)
         {
             macroCmd=new KMacroCommand(i18n("Change Display Link Command"));
         }
-        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, doc->getVariableCollection()->variableSetting()->displayComment() ,b, KWChangeVariableSettingsCommand::VS_DISPLAYCOMMENT);
+        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change Display Link Command"), doc, doc->variableCollection()->variableSetting()->displayComment() ,b, KWChangeVariableSettingsCommand::VS_DISPLAYCOMMENT);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
     b=m_displayFieldCode->isChecked();
-    if(doc->getVariableCollection()->variableSetting()->displayFieldCode()!=b)
+    if(doc->variableCollection()->variableSetting()->displayFieldCode()!=b)
     {
         if(!macroCmd)
         {
             macroCmd=new KMacroCommand(i18n("Change Display Field Code Command"));
         }
-        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change Display Field Code Command"), doc, doc->getVariableCollection()->variableSetting()->displayFieldCode() ,b, KWChangeVariableSettingsCommand::VS_DISPLAYFIELDCODE);
+        KWChangeVariableSettingsCommand *cmd=new KWChangeVariableSettingsCommand( i18n("Change Display Field Code Command"), doc, doc->variableCollection()->variableSetting()->displayFieldCode() ,b, KWChangeVariableSettingsCommand::VS_DISPLAYFIELDCODE);
         cmd->execute();
         macroCmd->addCommand(cmd);
     }
@@ -651,7 +651,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     gbDocumentDefaults->setInsideSpacing( KDialog::spacingHint() );
 
     double ptColumnSpacing=3;
-    KoUnit::Unit unit = doc->getUnit();
+    KoUnit::Unit unit = doc->unit();
     if( config->hasGroup("Document defaults") )
     {
         config->setGroup( "Document defaults" );
@@ -754,14 +754,14 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     QHBox* hbStartingPage = new QHBox( gbDocumentSettings );
     QLabel* labelStartingPage = new QLabel(i18n("Starting page number:"), hbStartingPage);
 
-    m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
+    m_oldStartingPage=doc->variableCollection()->variableSetting()->startingPage();
     m_variableNumberOffset=new KIntNumInput(hbStartingPage);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);
     labelStartingPage->setBuddy( m_variableNumberOffset );
 
     QHBox* hbTabStop = new QHBox( gbDocumentSettings );
-    new QLabel(i18n("Tab stop (%1):").arg(doc->getUnitName()), hbTabStop);
+    new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), hbTabStop);
     m_tabStopWidth = new KoUnitDoubleSpinBox( hbTabStop,
                                               MM_TO_POINT(2),
                                               doc->ptPaperWidth(),

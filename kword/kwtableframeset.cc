@@ -2363,6 +2363,13 @@ void KWTableFrameSet::setZOrder()
 void KWTableFrameSet::convertTableToText()
 {
     // TODO port to OASIS (see KWTextFrameSetEdit::newDrag)
+    // and don't mess up the clipboard....
+
+    // Copy/paste individual cells (without using the clipboard...)
+    // into a hidden textframeset (or just textdoc)
+    // then cut the whole text into a KoStore-in-QByteArray, return that.
+    // In KWView we'd still build a command with delete_table+paste_text.
+#if 0
     QDomDocument domDoc( "PARAGRAPHS" );
     QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
     domDoc.appendChild( elem );
@@ -2379,7 +2386,7 @@ void KWTableFrameSet::convertTableToText()
     kd->setKWord( domDoc.toCString() );
     kdDebug(32001) << "convertTableToText " << domDoc.toCString() << endl;
     QApplication::clipboard()->setData( kd );
-
+#endif
 }
 
 #ifndef NDEBUG

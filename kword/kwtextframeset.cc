@@ -584,16 +584,16 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
                 case KWPgNumVariable::VST_PGNUM_CURRENT:
                     //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
                     //          << " and invalidating parag " << var->paragraph() << endl;
-                    var->setPgNum( theFrame->pageNum()  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
+                    var->setPgNum( theFrame->pageNum()  + kWordDocument()->variableCollection()->variableSetting()->startingPage());
                     break;
                 case KWPgNumVariable::VST_CURRENT_SECTION:
                     var->setSectionTitle( kWordDocument()->sectionTitle( theFrame->pageNum() ) );
                     break;
                 case KWPgNumVariable::VST_PGNUM_PREVIOUS:
-                    var->setPgNum( QMAX(theFrame->pageNum()-1,0)   + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
+                    var->setPgNum( QMAX(theFrame->pageNum()-1,0)   + kWordDocument()->variableCollection()->variableSetting()->startingPage());
                     break;
                 case KWPgNumVariable::VST_PGNUM_NEXT:
-                    var->setPgNum( QMIN(theFrame->pageNum()+1, theFrame->pageNum()+1)  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
+                    var->setPgNum( QMIN(theFrame->pageNum()+1, theFrame->pageNum()+1)  + kWordDocument()->variableCollection()->variableSetting()->startingPage());
                     break;
                 }
 
@@ -1652,56 +1652,6 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
     }
 
     return framesetElem;
-}
-
-KWFrame* KWTextFrameSet::loadOasisTextBox( const QDomElement& frameTag, const QDomElement& tag, KoOasisContext& context )
-{
-    // Text frame chains. When seeing frame 'B' is chained to this frame A when loading,
-    // we store 'B' -> A, so that when loading B we can add it to A's frameset.
-    // If we load B first, no problem: when loading A we can chain.
-    // This is all made simpler by the fact that we don't have manually configurable order in KWord...
-    // But it's made more complex by the fact that frames don't have names in KWord (framesets do).
-    // Hence the framename temporary storage in KWLoadingInfo
-
-    KWTextFrameSet* fs = 0;
-    QString frameName = frameTag.attributeNS( KoXmlNS::draw, "name", QString::null );
-    QString chainNextName = tag.attributeNS( KoXmlNS::draw, "chain-next-name", QString::null );
-    if ( !chainNextName.isEmpty() ) { // 'B' in the above example
-        kdDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
-        // Check if we already loaded that frame (then we need to go 'before' it)
-        KWFrame* nextFrame = m_doc->loadingInfo()->frameByName( chainNextName );
-        if ( nextFrame ) {
-            fs = dynamic_cast<KWTextFrameSet *>( nextFrame->frameSet() );
-            chainNextName = QString::null; // already found, no need to store it
-            kdDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->getName() : QString::null ) << endl;
-        }
-    }
-    KWFrame* prevFrame = m_doc->loadingInfo()->chainPrevFrame( frameName );
-    //kdDebug(32001) << "Loading " << frameName << " : chainPrevFrame=" << prevFrame << endl;
-    if ( prevFrame ) {
-        if ( fs ) // we are between prevFrame and nextFrame. They'd better be for the same fs!!
-            Q_ASSERT( fs == prevFrame->frameSet() );
-        fs = dynamic_cast<KWTextFrameSet *>( prevFrame->frameSet() );
-        //kdDebug(32001) << "  found " << prevFrame << " -> frameset " << fs->getName() << endl;
-    }
-    KWFrame* frame = 0;
-    if ( !fs ) {
-        fs = new KWTextFrameSet( m_doc, frameTag, context );
-        m_doc->addFrameSet( fs, false );
-        frame = fs->loadOasis( frameTag, tag, context );
-    } else { // Adding frame to existing frameset
-        context.styleStack().save();
-        context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
-        frame = fs->loadOasisTextFrame( frameTag, tag, context );
-        context.styleStack().restore();
-    }
-
-    m_doc->loadingInfo()->storeFrameName( frame, frameName );
-
-    if ( !chainNextName.isEmpty() ) {
-        m_doc->loadingInfo()->storeNextFrame( frame, chainNextName );
-    }
-    return frame;
 }
 
 KWFrame* KWTextFrameSet::loadOasisTextFrame( const QDomElement& frameTag, const QDomElement &tag, KoOasisContext& context )
@@ -2939,6 +2889,7 @@ bool KWTextFrameSet::sortText(sortType type)
                 parag->save(elem);
             }
         }
+#if 0
         KWTextDrag *kd = new KWTextDrag( 0L );
         kd->setFrameSetNumber( -1 );
         kd->setKWord( domDoc.toCString() );
@@ -2947,6 +2898,7 @@ bool KWTextFrameSet::sortText(sortType type)
         textDocument()->setSelectionStart( KoTextDocument::Standard, &c1 );
         c2.setIndex( c2.parag()->length()-1 );
         textDocument()->setSelectionEnd( KoTextDocument::Standard, &c2 );
+#endif
     }
     return true;
 }
@@ -2958,7 +2910,7 @@ KWFootNoteFrameSet * KWTextFrameSet::insertFootNote( NoteType noteType, KWFootNo
 {
      kdDebug() << "KWTextFrameSetEdit::insertFootNote " << endl;
      KWDocument * doc = m_doc;
-     KWFootNoteVariable * var = new KWFootNoteVariable( textDocument(), doc->variableFormatCollection()->format( "NUMBER" ), doc->getVariableCollection(), doc );
+     KWFootNoteVariable * var = new KWFootNoteVariable( textDocument(), doc->variableFormatCollection()->format( "NUMBER" ), doc->variableCollection(), doc );
      var->setNoteType( noteType );
      var->setNumberingType( numType );
      if ( numType == KWFootNoteVariable::Manual )
@@ -2979,8 +2931,8 @@ KWFootNoteFrameSet * KWTextFrameSet::insertFootNote( NoteType noteType, KWFootNo
 
 MouseMeaning KWTextFrameSet::getMouseMeaningInsideFrame( const KoPoint& dPoint )
 {
-    if (m_doc->getVariableCollection()->variableSetting()->displayLink()
-        && m_doc->getVariableCollection()->variableSetting()->underlineLink() )
+    if (m_doc->variableCollection()->variableSetting()->displayLink()
+        && m_doc->variableCollection()->variableSetting()->underlineLink() )
     {
         QPoint iPoint;
         if ( documentToInternal( dPoint, iPoint ) ) {
@@ -3048,21 +3000,19 @@ void KWTextFrameSetEdit::slotFrameDeleted( KWFrame *frm )
 void KWTextFrameSetEdit::paste()
 {
     QMimeSource *data = QApplication::clipboard()->data();
-    QCString returnedTypeMime;
-    // Check for any oasis mimetype (we also accept pasting e.g. kpresenter data)
-    if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime) )
+    int provides = KWView::checkClipboard( data );
+    pasteData( data, provides );
+}
+
+void KWTextFrameSetEdit::pasteData( QMimeSource* data, int provides )
+{
+    if ( provides & KWView::ProvidesOasis )
     {
-        kdDebug() << k_funcinfo << "returnedTypeMime=" << returnedTypeMime << endl;
-        QByteArray arr = data->encodedData( returnedTypeMime );
-        Q_ASSERT( !arr.isEmpty() );
-        if ( arr.size() )
-        {
-            KCommand *cmd = textFrameSet()->pasteOasis( cursor(), arr, true );
-            if ( cmd )
-                frameSet()->kWordDocument()->addCommand(cmd);
-        }
+        KCommand* cmd = pasteOasisCommand( data );
+        if ( cmd )
+            frameSet()->kWordDocument()->addCommand(cmd);
     }
-    else
+    else if ( provides & KWView::ProvidesPlainText )
     {
         // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
         // In particular it handles charsets (in the mimetype).
@@ -3070,6 +3020,24 @@ void KWTextFrameSetEdit::paste()
         if ( !text.isEmpty() )
             textObject()->pasteText( cursor(), text, currentFormat(), true );
     }
+    else {
+        kdWarning(32002) << "Unhandled case in KWTextFrameSetEdit::pasteData: provides=" << provides << endl;
+    }
+}
+
+KCommand* KWTextFrameSetEdit::pasteOasisCommand( QMimeSource* data )
+{
+    // Find which mimetype it was (could be oasis text, oasis presentation etc.)
+    QCString returnedTypeMime;
+    if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime) )
+    {
+        kdDebug() << k_funcinfo << "returnedTypeMime=" << returnedTypeMime << endl;
+        QByteArray arr = data->encodedData( returnedTypeMime );
+        Q_ASSERT( !arr.isEmpty() );
+        if ( arr.size() )
+            return textFrameSet()->pasteOasis( cursor(), arr, true );
+    }
+    return 0;
 }
 
 void KWTextFrameSetEdit::cut()
@@ -3093,7 +3061,7 @@ bool KWTextFrameSetEdit::doIgnoreDoubleSpace(KoTextParag * parag,
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat())
     {
-        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->autoFormat();
         if(  autoFormat )
         {
             return autoFormat->doIgnoreDoubleSpace( parag, index,ch );
@@ -3108,7 +3076,7 @@ void KWTextFrameSetEdit::doAutoFormat( KoTextCursor* cursor, KoTextParag *parag,
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat() )
     {
-        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->autoFormat();
         if( autoFormat )
             autoFormat->doAutoFormat( cursor, parag, index, ch, textObject());
     }
@@ -3118,7 +3086,7 @@ bool KWTextFrameSetEdit::doCompletion( KoTextCursor* cursor, KoTextParag *parag,
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat() )
     {
-        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->autoFormat();
         if( autoFormat )
             return autoFormat->doCompletion(  cursor, parag, index, textObject());
     }
@@ -3129,7 +3097,7 @@ bool KWTextFrameSetEdit::doToolTipCompletion( KoTextCursor* cursor, KoTextParag 
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat() )
     {
-        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->autoFormat();
         if( autoFormat )
             return autoFormat->doToolTipCompletion(  cursor, parag, index, textObject(), keyPressed);
     }
@@ -3140,7 +3108,7 @@ void KWTextFrameSetEdit::showToolTipBox(KoTextParag *parag, int index, QWidget *
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat() )
     {
-        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->autoFormat();
         if( autoFormat )
             autoFormat->showToolTipBox(parag, index, widget, pos);
     }
@@ -3150,7 +3118,7 @@ void KWTextFrameSetEdit::removeToolTipCompletion()
 {
     if( textFrameSet()->kWordDocument()->allowAutoFormat() )
     {
-        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->getAutoFormat();
+        KoAutoFormat * autoFormat = textFrameSet()->kWordDocument()->autoFormat();
         if( autoFormat )
             autoFormat->removeToolTipCompletion();
     }
@@ -3182,14 +3150,18 @@ void KWTextFrameSetEdit::startDrag()
     if ( !frameSet()->kWordDocument()->isReadWrite() )
         drag->dragCopy();
     else {
-        if ( drag->drag() && QDragObject::target() != m_canvas && QDragObject::target() != m_canvas->viewport() ) {
+        bool move = ( drag->drag() );
+        if ( move )
+        {
 #if 0
-            //This is when dropping text _out_ of KWord. Since we have Move and Copy
-            //options (Copy being accessed by pressing CTRL), both are possible.
-            //But is that intuitive enough ? Doesn't the user expect a Copy in all cases ?
-            //Losing the selection when dropping out of kword seems quite unexpected to me.
-            //Undecided about this........
-            textObject()->removeSelectedText( cursor() );
+            if ( QDragObject::target() != m_canvas && QDragObject::target() != m_canvas->viewport() ) {
+                //This is when dropping text _out_ of KWord. Since we have Move and Copy
+                //options (Copy being accessed by pressing CTRL), both are possible.
+                //But is that intuitive enough ? Doesn't the user expect a Copy in all cases ?
+                //Losing the selected text when dropping out of kword seems quite unexpected to me.
+                //Undecided about this........
+                textObject()->removeSelectedText( cursor() );
+            }
 #endif
         }
     }
@@ -3406,7 +3378,7 @@ bool KWTextFrameSetEdit::openLink( KoLinkVariable* variable )
 {
     KWTextFrameSet* fs = textFrameSet();
     KWDocument* doc = fs->kWordDocument();
-    if ( doc->getVariableCollection()->variableSetting()->displayLink() ) {
+    if ( doc->variableCollection()->variableSetting()->displayLink() ) {
 
         const QString url = variable->url();
         if( url.startsWith("bkm://") )
@@ -3444,7 +3416,8 @@ void KWTextFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *e, const QPoint &, 
 
 void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
 {
-    if ( !frameSet()->kWordDocument()->isReadWrite() || !KWTextDrag::canDecode( e ) )
+    int provides = KWView::checkClipboard( e );
+    if ( !frameSet()->kWordDocument()->isReadWrite() || provides == 0 )
     {
         e->ignore();
         return;
@@ -3454,29 +3427,36 @@ void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
 
 void KWTextFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &nPoint, const KoPoint & )
 {
-    if ( !frameSet()->kWordDocument()->isReadWrite() || !KWTextDrag::canDecode( e ) )
+    int provides = KWView::checkClipboard( e );
+    if ( !frameSet()->kWordDocument()->isReadWrite() || provides == 0 )
     {
         e->ignore();
         return;
     }
-    QPoint iPoint;
-    KoPoint dPoint = frameSet()->kWordDocument()->unzoomPoint( nPoint );
-    if ( textFrameSet()->documentToInternal( dPoint, iPoint ) )
+    // place cursor - unless dropping an image. well it's hard to know if the user
+    // wants the dropped image to be inline or absolute positioned.
+    if ( provides & ( KWView::ProvidesOasis | KWView::ProvidesPlainText | KWView::ProvidesFormula ) )
     {
-        textObject()->emitHideCursor();
-        placeCursor( iPoint );
-        textObject()->emitShowCursor();
-        e->acceptAction(); // here or out of the if ?
+        QPoint iPoint;
+        KoPoint dPoint = frameSet()->kWordDocument()->unzoomPoint( nPoint );
+        if ( textFrameSet()->documentToInternal( dPoint, iPoint ) )
+        {
+            textObject()->emitHideCursor();
+            placeCursor( iPoint );
+            textObject()->emitShowCursor();
+        }
     }
+    e->acceptAction();
 }
 
 void KWTextFrameSetEdit::dragLeaveEvent( QDragLeaveEvent * )
 {
 }
 
-void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const KoPoint & )
+void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const KoPoint &, KWView* view )
 {
-    if ( frameSet()->kWordDocument()->isReadWrite() && KWTextDrag::canDecode( e ) )
+    int provides = KWView::checkClipboard( e );
+    if ( frameSet()->kWordDocument()->isReadWrite() && provides )
     {
         e->acceptAction();
         KoTextCursor dropCursor( textDocument() );
@@ -3485,69 +3465,39 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
         if ( !textFrameSet()->documentToInternal( dPoint, dropPoint ) )
             return; // Don't know where to paste
 
-        KMacroCommand * macroCmd = 0;
         dropCursor.place( dropPoint, textDocument()->firstParag() );
         kdDebug(32001) << "KWTextFrameSetEdit::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
 
         if ( ( e->source() == m_canvas ||
                e->source() == m_canvas->viewport() ) &&
-               e->action() == QDropEvent::Move ) {
-            // TODO move this to the drag() code - drag() returns true when a move was requested
-            // Probably needed: call acceptAction() here and accept() in the other cases
+               e->action() == QDropEvent::Move &&
+              // this is the indicator that the source and dest text objects are the same
+             textDocument()->hasSelection( KoTextDocument::Standard ) ) {
 
-            const int numberFrameSet = KWTextDrag::decodeFrameSetNumber( e );
-            //kdDebug()<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;
-            //KWFrameSet *frameset= frameSet()->kWordDocument()->frameSet( numberFrameSet );
-            KWFrameSet *frameset= frameSet()->kWordDocument()->textFrameSetFromIndex( numberFrameSet, false );
-            KWTextFrameSet *tmp=dynamic_cast<KWTextFrameSet*>(frameset);
-            tmp=tmp ? tmp:textFrameSet();
-            if( tmp )
+            KCommand *cmd = textView()->prepareDropMove( dropCursor );
+            if(cmd)
             {
-                bool dropInSameObj= ( tmp == textFrameSet());
-                KCommand *cmd=textView()->dropEvent(tmp->textObject(), dropCursor, dropInSameObj);
-                if(cmd)
-                {
-                    macroCmd = new KMacroCommand(i18n("Move Text"));
+                KMacroCommand* macroCmd = new KMacroCommand( i18n( "Move Text" ) );
+                macroCmd->addCommand(cmd);
+
+                cmd = pasteOasisCommand( e );
+                if ( cmd )
                     macroCmd->addCommand(cmd);
-                    //relayout textframeset after a dnd otherwise autoextend
-                    //frameset is not re-layout
-                    tmp->layout();
-                    textFrameSet()->layout();
-                }
-                else
-                {
-                    return;
-                }
+                //relayout textframeset after a dnd otherwise autoextend
+                //frameset is not re-layouted
+                textFrameSet()->layout();
+                frameSet()->kWordDocument()->addCommand( macroCmd );
             }
+            return;
         }
         else
         {   // drop coming from outside -> forget about current selection
             textDocument()->removeSelection( KoTextDocument::Standard );
             textObject()->selectionChangedNotify();
         }
-        QCString returnedTypeMime;
-        if ( KWTextDrag::provides( e, KoTextObject::acceptSelectionMimeType(),returnedTypeMime ))
-        {
-            QByteArray arr = e->encodedData( returnedTypeMime );
-            if ( arr.size() )
-            {
-                KCommand *cmd = textFrameSet()->pasteOasis( cursor(), arr, false );
-                if ( cmd )
-                {
-                    if ( !macroCmd )
-                        macroCmd = new KMacroCommand(i18n("Paste Text"));
-                    macroCmd->addCommand(cmd);
-                }
-            }
-        }
-        else
-        {
-            QString text;
-            if ( QTextDrag::decode( e, text ) )
-                textObject()->pasteText( cursor(), text, currentFormat(), false );
-        }
-        if ( macroCmd )
-            frameSet()->kWordDocument()->addCommand(macroCmd);
+
+        // The cursor is already correctly positioned, all we need to do is to "paste" the dropped data.
+        view->pasteData( e );
     }
 }
 
@@ -3719,14 +3669,14 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
 void KWTextFrameSetEdit::insertLink(const QString &_linkName, const QString & hrefName)
 {
     KWDocument * doc = frameSet()->kWordDocument();
-    KoVariable * var = new KoLinkVariable( textFrameSet()->textDocument(), _linkName, hrefName, doc->variableFormatCollection()->format( "STRING" ), doc->getVariableCollection() );
+    KoVariable * var = new KoLinkVariable( textFrameSet()->textDocument(), _linkName, hrefName, doc->variableFormatCollection()->format( "STRING" ), doc->variableCollection() );
     insertVariable( var );
 }
 
 void KWTextFrameSetEdit::insertComment(const QString &_comment)
 {
     KWDocument * doc = frameSet()->kWordDocument();
-    KoVariable * var = new KoNoteVariable( textFrameSet()->textDocument(), _comment, doc->variableFormatCollection()->format( "STRING" ), doc->getVariableCollection() );
+    KoVariable * var = new KoNoteVariable( textFrameSet()->textDocument(), _comment, doc->variableFormatCollection()->format( "STRING" ), doc->variableCollection() );
     insertVariable( var, 0,false/*don't delete selected text*/ );
 }
 
@@ -3734,7 +3684,7 @@ void KWTextFrameSetEdit::insertComment(const QString &_comment)
 void KWTextFrameSetEdit::insertCustomVariable( const QString &name)
 {
      KWDocument * doc = frameSet()->kWordDocument();
-     KoVariable * var = new KoCustomVariable( textFrameSet()->textDocument(), name, doc->variableFormatCollection()->format( "STRING" ), doc->getVariableCollection());
+     KoVariable * var = new KoCustomVariable( textFrameSet()->textDocument(), name, doc->variableFormatCollection()->format( "STRING" ), doc->variableCollection());
      insertVariable( var );
 }
 
@@ -3780,7 +3730,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
         KoCustomVarDialog dia( m_canvas );
         if ( dia.exec() == QDialog::Accepted )
         {
-            KoCustomVariable *v = new KoCustomVariable( textFrameSet()->textDocument(), dia.name(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
+            KoCustomVariable *v = new KoCustomVariable( textFrameSet()->textDocument(), dia.name(), doc->variableFormatCollection()->format( "STRING" ),doc->variableCollection() );
             v->setValue( dia.value() );
             var = v;
             refreshCustomMenu = true;
@@ -3788,14 +3738,14 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
     }
     else if ( type == VT_MAILMERGE )
     {
-        KWMailMergeVariableInsertDia dia( m_canvas, doc->getMailMergeDataBase() );
+        KWMailMergeVariableInsertDia dia( m_canvas, doc->mailMergeDataBase() );
         if ( dia.exec() == QDialog::Accepted )
         {
-            var = new KWMailMergeVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection(),doc );
+            var = new KWMailMergeVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->variableCollection(),doc );
         }
     }
     else
-        var = doc->getVariableCollection()->createVariable( type, subtype, doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(), doc, 0);
+        var = doc->variableCollection()->createVariable( type, subtype, doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(), doc, 0);
     if ( var)
         insertVariable( var, 0L /*means currentFormat()*/, true, refreshCustomMenu);
 }
@@ -3953,10 +3903,10 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     actionList = dataToolActionList(doc->instance(), word, singleWord);
 
     KoVariable* var = variable();
-    doc->getVariableCollection()->setVariableSelected(var);
+    doc->variableCollection()->setVariableSelected(var);
     if ( var )
     {
-        variableList = doc->getVariableCollection()->popupActionList();
+        variableList = doc->variableCollection()->popupActionList();
     }
 
     if( variableList.count()>0)

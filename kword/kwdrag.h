@@ -27,31 +27,16 @@
  * Drag object for a text selection
  * Contains the text as plain/text (without formatting) and as kword XML (with formatting)
  */
-class KWTextDrag : public QTextDrag
+class KWTextDrag
 {
-    Q_OBJECT
-
 public:
-    KWTextDrag( QWidget *dragSource = 0L, const char *name = 0L );
-
-    void setPlain( const QString &_plain ) { setText( _plain ); }
-    void setKWord( const QCString &_kword ) { kword = _kword; }
-
-    virtual QByteArray encodedData( const char *mime ) const;
-    virtual const char* format( int i ) const;
-
     static bool canDecode( QMimeSource* e );
 
     static const char * selectionMimeType();
 
-    void setFrameSetNumber( int number );
-
     static int decodeFrameSetNumber( QMimeSource *e );
     static bool provides( QMimeSource* e, const char* acceptMimeType, QCString &returnedTypeMime);
 
-protected:
-    QCString kword;
-    int m_framesetNumber;
 };
 
 #endif

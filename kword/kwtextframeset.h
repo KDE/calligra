@@ -151,6 +151,9 @@ public:
     /// Load a complete textbox (frame and text)
     KWFrame* loadOasis( const QDomElement& frame, const QDomElement &bodyElem, KoOasisContext& context );
 
+    /// Load a frame and add it to this frameset - called by KWOasisLoader
+    KWFrame* loadOasisTextFrame( const QDomElement& frameTag, const QDomElement &tag, KoOasisContext& context );
+
     /// Save the contents of a frame (i.e. the text)
     void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
     /// Save a complete textbox (frame and text)
@@ -300,8 +303,6 @@ public:
     QString copyTextParag( KoXmlWriter& writer, KoSavingContext& context, int selectionId );
     bool sortText(sortType type);
 
-    KWFrame* loadOasisTextBox( const QDomElement& frame, const QDomElement& tag, KoOasisContext& context );
-
 signals:
     /** Tell the Edit object that this frame got deleted */
     void frameDeleted( KWFrame* frame );
@@ -334,7 +335,6 @@ private:
     double footNoteSize( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
     bool createNewPageAndNewFrame( KoTextParag* lastFormatted, int difference );
-    KWFrame* loadOasisTextFrame( const QDomElement& frameTag, const QDomElement &tag, KoOasisContext& context );
 
 private:
     /** The contained text object */
@@ -392,7 +392,7 @@ public:
     virtual void dragEnterEvent( QDragEnterEvent * );
     virtual void dragMoveEvent( QDragMoveEvent *, const QPoint &, const KoPoint & );
     virtual void dragLeaveEvent( QDragLeaveEvent * );
-    virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint & );
+    virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint &, KWView* view );
     virtual void focusInEvent();
     virtual void focusOutEvent();
     virtual void selectAll();
@@ -436,6 +436,9 @@ public:
     bool openLink( KoLinkVariable* variable );
     /// Called by KWView when using the action
     void openLink();
+
+    void pasteData( QMimeSource* data, int provides );
+    KCommand* pasteOasisCommand( QMimeSource* data );
 
 public slots:
     // Reimplemented from KWFrameSet and connected to KoTextView's signals

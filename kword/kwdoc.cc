@@ -39,6 +39,7 @@
 #include "kwloadinginfo.h"
 #include "kwdrag.h"
 #include "paragvisitors.h"
+#include "kwoasisloader.h"
 
 #include <koPictureCollection.h>
 #include <koTemplateChooseDia.h>
@@ -50,7 +51,6 @@
 #include <koAutoFormat.h>
 #include <kovariable.h>
 #include <kformuladocument.h>
-#include <koOasisStyles.h>
 #include <koApplication.h>
 #include <kooasiscontext.h>
 #include <kocommandhistory.h>
@@ -60,7 +60,7 @@
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
 #include <koOasisStore.h>
-#include <koOasisSettings.h>
+#include <koOasisStyles.h>
 #include <koxmlns.h>
 #include <kodom.h>
 
@@ -73,6 +73,10 @@
 #include <kmessagebox.h>
 #include <kspell.h>
 #include <kstandarddirs.h>
+
+#ifdef HAVE_LIBKSPELL2
+#include <kspell2/settings.h>
+#endif
 
 #include <qfileinfo.h>
 #include <qregexp.h>
@@ -157,7 +161,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_tabStop = MM_TO_POINT( 15.0 );
     m_processingType = WP;
 
-    m_lstViews.setAutoDelete( false );
     m_lstChildren.setAutoDelete( true );
 //    varFormats.setAutoDelete(true);
     m_lstFrameSet.setAutoDelete( true );
@@ -751,7 +754,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
             Q_ASSERT( firstHeader );
             Q_ASSERT( oddHeader );
             Q_ASSERT( evenHeader );
-            switch ( getHeaderType() ) {
+            switch ( headerType() ) {
             case HF_SAME:
                 oddHeader->setVisible( true );
                 evenHeader->setVisible( false );
@@ -806,7 +809,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
             Q_ASSERT( firstFooter );
             Q_ASSERT( oddFooter );
             Q_ASSERT( evenFooter );
-            switch ( getFooterType() ) {
+            switch ( footerType() ) {
             case HF_SAME:
                 oddFooter->setVisible( true );
                 evenFooter->setVisible( false );
@@ -1136,7 +1139,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         // Answer: margins of the <style:header-footer> element
     }
 
-    m_loadingInfo = new KWLoadingInfo;
+    createLoadingInfo();
+    KWOasisLoader oasisLoader( this );
 
     // <text:page-sequence> oasis extension for DTP (2003-10-27 post by Daniel)
     m_processingType = ( !KoDom::namedItemNS( body, KoXmlNS::text, "page-sequence" ).isNull() )
@@ -1188,24 +1192,24 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         kdDebug() << "Found header-left" << endl;
         hasEvenOddHeader = true;
         __hf.header = HF_EO_DIFF; // ###
-        loadOasisHeaderFooter( headerLeftElem, hasEvenOddHeader, headerStyle, context );
+        oasisLoader.loadOasisHeaderFooter( headerLeftElem, hasEvenOddHeader, headerStyle, context );
     }
     QDomElement headerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header" );
     if ( !headerElem.isNull() ) {
         kdDebug() << "Found header" << endl;
-        loadOasisHeaderFooter( headerElem, hasEvenOddHeader, headerStyle, context );
+        oasisLoader.loadOasisHeaderFooter( headerElem, hasEvenOddHeader, headerStyle, context );
     }
     QDomElement footerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer-left" );
     if ( !footerLeftElem.isNull() ) {
         kdDebug() << "Found footer-left" << endl;
         hasEvenOddFooter = true;
         __hf.footer = HF_EO_DIFF; // ###
-        loadOasisHeaderFooter( footerLeftElem, hasEvenOddFooter, footerStyle, context );
+        oasisLoader.loadOasisHeaderFooter( footerLeftElem, hasEvenOddFooter, footerStyle, context );
     }
     QDomElement footerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer" );
     if ( !footerElem.isNull() ) {
         kdDebug() << "Found footer" << endl;
-        loadOasisHeaderFooter( footerElem, hasEvenOddFooter, footerStyle, context );
+        oasisLoader.loadOasisHeaderFooter( footerElem, hasEvenOddFooter, footerStyle, context );
     }
 
     // TODO embedded objects
@@ -1230,83 +1234,11 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
     if ( !settings.isNull() )
     {
-        loadOasisSettings( settings );
+        oasisLoader.loadOasisSettings( settings );
     }
     //printDebug();
 
     return true;
-}
-
-void KWDocument::loadOasisSettings( const QDomDocument&settingsDoc )
-{
-    KoOasisSettings settings( settingsDoc );
-    KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
-    if ( !viewSettings.isNull() )
-    {
-        setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
-    }
-    loadOasisIgnoreList( settings );
-    m_varColl->variableSetting()->loadOasis( settings );
-}
-
-static QString headerTypeToFramesetName( const QString& tagName, bool hasEvenOdd )
-{
-    if ( tagName == "style:header" )
-        return hasEvenOdd ? i18n("Odd Pages Header") : i18n( "Header" );
-    if ( tagName == "style:header-left" )
-        return i18n("Even Pages Header");
-    if ( tagName == "style:footer" )
-        return hasEvenOdd ? i18n("Odd Pages Footer") : i18n( "Footer" );
-    if ( tagName == "style:footer-left" )
-        return i18n("Even Pages Footer");
-    kdWarning(32001) << "Unknown tag in headerTypeToFramesetName: " << tagName << endl;
-    // ######
-    //return i18n("First Page Header");
-    //return i18n("First Page Footer");
-    return QString::null;
-}
-
-static KWFrameSet::Info headerTypeToFrameInfo( const QString& tagName, bool /*hasEvenOdd*/ )
-{
-    if ( tagName == "style:header" )
-        return KWFrameSet::FI_ODD_HEADER;
-    if ( tagName == "style:header-left" )
-        return KWFrameSet::FI_EVEN_HEADER;
-    if ( tagName == "style:footer" )
-        return KWFrameSet::FI_ODD_FOOTER;
-    if ( tagName == "style:footer-left" )
-        return KWFrameSet::FI_EVEN_FOOTER;
-
-    // ### return KWFrameSet::FI_FIRST_HEADER; TODO
-    // ### return KWFrameSet::FI_FIRST_FOOTER; TODO
-    return KWFrameSet::FI_BODY;
-}
-
-void KWDocument::loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisContext& context )
-{
-    const QString tagName = headerFooter.tagName();
-    bool isHeader = tagName.startsWith( "style:header" );
-
-    KWTextFrameSet *fs = new KWTextFrameSet( this, headerTypeToFramesetName( tagName, hasEvenOdd ) );
-    fs->setFrameSetInfo( headerTypeToFrameInfo( tagName, hasEvenOdd ) );
-    m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
-
-    if ( !style.isNull() )
-        context.styleStack().push( style );
-    KWFrame* frame = new KWFrame( fs, 29, isHeader?0:567, 798-29, 41 );
-    frame->loadCommonOasisProperties( context, fs );
-    frame->setFrameBehavior( KWFrame::AutoExtendFrame );
-    frame->setNewFrameBehavior( KWFrame::Copy );
-    fs->addFrame( frame );
-    if ( !style.isNull() )
-        context.styleStack().pop(); // don't let it be active when parsing the text
-
-    fs->loadOasisContent( headerFooter, context );
-
-    if ( isHeader )
-        m_headerVisible = true;
-    else
-        m_footerVisible = true;
 }
 
 // called before loading
@@ -1317,7 +1249,7 @@ void KWDocument::clear()
     m_pictureRequests.clear();
     m_anchorRequests.clear();
     m_footnoteVarRequests.clear();
-    m_spellListIgnoreAll.clear();
+    m_spellCheckIgnoreList.clear();
     m_pageColumns.columns = 1;
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 
@@ -1410,7 +1342,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         }
     }
 
-    m_loadingInfo = new KWLoadingInfo;
+    createLoadingInfo();
 
     // Looks like support for the old way of naming images internally,
     // see completeLoading.
@@ -1543,10 +1475,10 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     setPageLayout( __pgLayout, __columns, __hf, false );
 
-    getVariableCollection()->variableSetting()->load(word );
+    variableCollection()->variableSetting()->load(word );
     //by default display real variable value
     if ( !isReadWrite())
-        getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
+        variableCollection()->variableSetting()->setDisplayFieldCode(false);
 
     emit sigProgress(10);
 
@@ -1617,7 +1549,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         while ( !spellWord.isNull() )
         {
             if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
-                m_spellListIgnoreAll.append(spellWord.attribute("word"));
+                m_spellCheckIgnoreList.append(spellWord.attribute("word"));
             spellWord=spellWord.nextSibling().toElement();
         }
     }
@@ -1792,6 +1724,7 @@ void KWDocument::endOfLoading()
                  SIGNAL( mainTextHeightChanged() ) );
     }
 
+    deleteLoadingInfo();
 }
 
 void KWDocument::startBackgroundSpellCheck()
@@ -2257,7 +2190,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
 
 void KWDocument::loadImagesFromStore( KoStore *_store )
 {
-    if ( _store ) {
+    if ( _store && !m_pictureMap.isEmpty() ) {
         m_pictureCollection->readFromStore( _store, m_pictureMap );
         m_pictureMap.clear(); // Release memory
     }
@@ -2265,8 +2198,8 @@ void KWDocument::loadImagesFromStore( KoStore *_store )
 
 bool KWDocument::completeLoading( KoStore *_store )
 {
+    // Old-XML stuff. No-op when loading OASIS.
     loadImagesFromStore( _store );
-
     processPictureRequests();
     processAnchorRequests();
     processFootNoteRequests();
@@ -2302,11 +2235,21 @@ bool KWDocument::completeLoading( KoStore *_store )
     // Load bookmarks
     initBookmarkList();
 
-    // Delete loading info
+    return true;
+}
+
+KWLoadingInfo* KWDocument::createLoadingInfo()
+{
+    Q_ASSERT( !m_loadingInfo );
+    m_loadingInfo = new KWLoadingInfo();
+    return m_loadingInfo;
+}
+
+void KWDocument::deleteLoadingInfo()
+{
+    Q_ASSERT( m_loadingInfo );
     delete m_loadingInfo;
     m_loadingInfo = 0;
-
-    return true;
 }
 
 void KWDocument::processPictureRequests()
@@ -2548,109 +2491,6 @@ void KWDocument::completePasting()
     repaintAllViews();
     delete m_pasteFramesetsMap;
     m_pasteFramesetsMap = 0L;
-}
-
-// Warning, this method has no undo/redo support, it is *called* by the undo/redo commands.
-QValueList<KWFrame *> KWDocument::insertOasisData( KoStore* store, KoTextCursor* cursor )
-{
-    QValueList<KWFrame *> frames;
-    if ( store->bad() || !store->hasFile( "content.xml" ) )
-    {
-        kdError(32001) << "Invalid ZIP store in memory" << endl;
-        if ( !store->hasFile( "content.xml" ) )
-            kdError(32001) << "No content.xml file" << endl;
-        return frames;
-    }
-    store->disallowNameExpansion();
-
-    KoOasisStore oasisStore( store );
-    QDomDocument contentDoc;
-    QString errorMessage;
-    bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, errorMessage );
-    if ( !ok ) {
-        kdError(32001) << "Error parsing content.xml: " << errorMessage << endl;
-        return frames;
-    }
-
-    KoOasisStyles oasisStyles;
-    QDomDocument stylesDoc;
-    (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
-    // Load styles from style.xml
-    oasisStyles.createStyleMap( stylesDoc );
-    // Also load styles from content.xml
-    oasisStyles.createStyleMap( contentDoc );
-
-    QDomElement content = contentDoc.documentElement();
-
-    QDomElement body( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
-    if ( body.isNull() ) {
-        kdError(32001) << "No office:body found!" << endl;
-        return frames;
-    }
-    // We then want to use whichever element is the child of <office:body>,
-    // whether that's <office:text> or <office:presentation> or whatever.
-    QDomElement iter, realBody;
-    forEachElement( iter, body ) {
-        realBody = iter;
-    }
-    if ( realBody.isNull() ) {
-        kdError(32001) << "No element found inside office:body!" << endl;
-        return frames;
-    }
-
-    KoOasisContext context( this, *m_varColl, oasisStyles, store );
-    if ( cursor )
-    {
-        KWTextDocument * textdoc = static_cast<KWTextDocument *>(cursor->parag()->document());
-        KWTextFrameSet * textFs = textdoc->textFrameSet();
-
-        *cursor = textFs->textObject()->pasteOasisText( realBody, context, *cursor, styleCollection() );
-
-        textFs->textObject()->setNeedSpellCheck( true );
-    }
-    else // No cursor available, load only the frames
-    {
-        // The main loop from KoTextDocument::loadOasisText but for frames only
-        // (can't paste text if there is no text-frameset being edited, where would it go?)
-        QDomElement tag;
-        forEachElement( tag, realBody )
-        {
-            context.styleStack().save();
-            const QString bodyTagLocalName = tag.localName();
-            kdDebug() << k_funcinfo << bodyTagLocalName << endl;
-            if ( bodyTagLocalName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
-            {
-                // From KWTextDocument::loadFrame:
-                QDomElement elem;
-                forEachElement( elem, tag )
-                {
-                    if ( elem.namespaceURI() != KoXmlNS::draw )
-                        continue;
-                    const QString localName = elem.localName();
-                    if ( localName == "text-box" )
-                    {
-                        kdDebug()<<" TODO: text-box\n";
-                        // Hmmmm why is a text fs always needed? Won't be there in DTP mode...
-                        //return m_textfs->loadOasisTextBox( tag, elem, context );
-                    }
-                    else if ( localName == "image" )
-                    {
-                        KWFrameSet* fs = new KWPictureFrameSet( this, tag, elem, context );
-                        addFrameSet( fs, false );
-                        frames.append( fs->frame( 0 ) );
-                    }
-                }
-            }
-#if 0 // TODO OASIS table:table
-            else if ( bodyTagLocalName == "table" && tag.namespaceURI() == KoXmlNS::table )
-                ;
-#endif
-        }
-    }
-
-    //kdDebug() << "KWOasisPasteCommand::execute calling doc->completePasting" << endl;
-    completeOasisPasting();
-    return frames;
 }
 
 void KWDocument::completeOasisPasting()
@@ -2919,7 +2759,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter, SaveFla
 
         settingsWriter.startElement("config:config-item-set");
         settingsWriter.addAttribute("config:name", "configuration-settings");
-        settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellListIgnoreAll.join( "," ) );
+        settingsWriter.addConfigItem("SpellCheckerIgnoreList", m_spellCheckIgnoreList.join( "," ) );
         settingsWriter.endElement(); // config:config-item-set
 
         m_varColl->variableSetting()->saveOasis( settingsWriter );
@@ -3059,17 +2899,6 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
     if ( !embeddedObjects.isEmpty() )
         m_doc->saveEmbeddedObjects( topElem, embeddedObjects );
 #endif
-}
-
-void KWDocument::loadOasisIgnoreList( const KoOasisSettings& settings )
-{
-    KoOasisSettings::Items configurationSettings = settings.itemSet( "configuration-settings" );
-    if ( !configurationSettings.isNull() )
-    {
-        const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        kdDebug()<<" ignorelist :"<<ignorelist<<endl;
-        m_spellListIgnoreAll = QStringList::split( ',', ignorelist );
-    }
 }
 
 void KWDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles )
@@ -3246,7 +3075,7 @@ QDomDocument KWDocument::saveXML()
     docattrs.setAttribute( "standardpage", 1 );
     docattrs.setAttribute( "hasHeader", static_cast<int>(isHeaderVisible()) );
     docattrs.setAttribute( "hasFooter", static_cast<int>(isFooterVisible()) );
-    docattrs.setAttribute( "unit", KoUnit::unitName(getUnit()) );
+    docattrs.setAttribute( "unit", KoUnit::unitName(unit()) );
     docattrs.setAttribute( "hasTOC", static_cast<int>(m_hasTOC));
     docattrs.setAttribute( "tabStopValue", m_tabStop );
 
@@ -3293,7 +3122,7 @@ QDomDocument KWDocument::saveXML()
             }
         }
     }
-    getVariableCollection()->variableSetting()->save(kwdoc );
+    variableCollection()->variableSetting()->save(kwdoc );
 
     QDomElement framesets = doc.createElement( "FRAMESETS" );
     kwdoc.appendChild( framesets );
@@ -3380,11 +3209,11 @@ QDomDocument KWDocument::saveXML()
     QDomElement mailMerge=m_slDataBase->save(doc);
     kwdoc.appendChild(mailMerge);
 
-    if( !m_spellListIgnoreAll.isEmpty() )
+    if( !m_spellCheckIgnoreList.isEmpty() )
     {
         QDomElement spellCheckIgnore = doc.createElement( "SPELLCHECKIGNORELIST" );
         kwdoc.appendChild( spellCheckIgnore );
-        for ( QStringList::ConstIterator it = m_spellListIgnoreAll.begin(); it != m_spellListIgnoreAll.end(); ++it )
+        for ( QStringList::ConstIterator it = m_spellCheckIgnoreList.begin(); it != m_spellCheckIgnoreList.end(); ++it )
         {
             QDomElement spellElem = doc.createElement( "SPELLCHECKIGNOREWORD" );
             spellCheckIgnore.appendChild( spellElem );
@@ -3511,16 +3340,14 @@ void KWDocument::addView( KoView *_view )
 {
     m_lstViews.append( (KWView*)_view );
     KoDocument::addView( _view );
-    QPtrListIterator<KWView> it( m_lstViews );
-    for ( ; it.current() ; ++it )
-        it.current()->deselectAllFrames();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
+        (*it)->deselectAllFrames();
+    }
 }
 
 void KWDocument::removeView( KoView *_view )
 {
-    m_lstViews.setAutoDelete( FALSE );
-    m_lstViews.removeRef( static_cast<KWView*>(_view) );
-    m_lstViews.setAutoDelete( TRUE );
+    m_lstViews.remove( static_cast<KWView*>(_view) );
     KoDocument::removeView( _view );
 }
 
@@ -3592,8 +3419,8 @@ QPixmap KWDocument::generatePreview( const QSize& size )
     // (due to KWCanvas::slotNewContentsSize)
     // ##### One day when we have real doc/view separation in kotextparag, we shouldn't mess with
     // the real view's resolution, we should instead create a fake view for the preview itself.
-    for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-        viewPtr->getGUI()->canvasWidget()->setUpdatesEnabled( false );
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
+        (*it)->getGUI()->canvasWidget()->setUpdatesEnabled( false );
     }
     Q_ASSERT( !m_bGeneratingPreview );
     m_bGeneratingPreview = true;
@@ -3604,8 +3431,8 @@ QPixmap KWDocument::generatePreview( const QSize& size )
     setZoom( oldZoom );
     newZoomAndResolution( false, false );
 
-    for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
-        viewPtr->getGUI()->canvasWidget()->setUpdatesEnabled( true );
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
+        (*it)->getGUI()->canvasWidget()->setUpdatesEnabled( true );
     }
     m_bGeneratingPreview = false;
     if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() ) {
@@ -3698,7 +3525,8 @@ void KWDocument::slotRecalcFrames() {
 void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 {
     //kdDebug(32001) << "KWDocument::repaintAllViewsExcept" << endl;
-    for ( KWView * viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
+        KWView* viewPtr = *it;
         if ( viewPtr != _view /*&& viewPtr->getGUI() && viewPtr->getGUI()->canvasWidget()*/ ) {
             viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
         }
@@ -3708,7 +3536,8 @@ void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 void KWDocument::setUnit( KoUnit::Unit _unit )
 {
     m_unit = _unit;
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
+        KWView* viewPtr = *it;
         if ( viewPtr->getGUI() ) {
             viewPtr->getGUI()->getHorzRuler()->setUnit( m_unit );
             viewPtr->getGUI()->getVertRuler()->setUnit( m_unit );
@@ -3718,8 +3547,8 @@ void KWDocument::setUnit( KoUnit::Unit _unit )
 
 void KWDocument::updateAllStyleLists()
 {
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->updateStyleList();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->updateStyleList();
 }
 
 void KWDocument::updateStyleListOrder( const QStringList &list )
@@ -3739,21 +3568,21 @@ void KWDocument::applyStyleChange( KoStyleChangeDefMap changed )
 
 void KWDocument::updateAllFrameStyleLists()
 {
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->updateFrameStyleList();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->updateFrameStyleList();
 }
 
 void KWDocument::updateAllTableStyleLists()
 {
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->updateTableStyleList();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->updateTableStyleList();
 }
 
 void KWDocument::repaintAllViews( bool erase )
 {
     //kdDebug(32001) << "KWDocument::repaintAllViews" << endl;
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->getGUI()->canvasWidget()->repaintAll( erase );
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->getGUI()->canvasWidget()->repaintAll( erase );
 }
 
 QPtrList<KWFrame> KWDocument::framesToCopyOnNewPage( int afterPageNum ) const // can be -1 for 'before page 0'
@@ -4644,27 +4473,25 @@ bool KWDocument::hasEndNotes() const
 
 void KWDocument::updateHeaderButton()
 {
-    QPtrListIterator<KWView> it( m_lstViews );
-    for ( ; it.current() ; ++it )
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
     {
-        it.current()->updateHeaderFooterButton();
-        it.current()->updateHeader();
+        (*it)->updateHeaderFooterButton();
+        (*it)->updateHeader();
     }
 }
 
 void KWDocument::updateFooterButton()
 {
-    QPtrListIterator<KWView> it( m_lstViews );
-    for ( ; it.current() ; ++it )
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
     {
-        it.current()->updateHeaderFooterButton();
-        it.current()->updateFooter();
+        (*it)->updateHeaderFooterButton();
+        (*it)->updateFooter();
     }
 }
 
 
-bool KWDocument::isOnlyOneFrameSelected() {
-    return getSelectedFrames().count()==1;
+bool KWDocument::isOnlyOneFrameSelected() const {
+    return getSelectedFrames().count() == 1;
 }
 
 void KWDocument::setFramePadding( double l, double r, double t, double b )
@@ -4768,7 +4595,7 @@ void KWDocument::slotRepaintVariable()
 #endif
 }
 
-int KWDocument::getMailMergeRecord() const
+int KWDocument::mailMergeRecord() const
 {
     return slRecordNum;
 }
@@ -4863,7 +4690,7 @@ void KWDocument::printDebug()
     kdDebug() << "size: x:" << ptLeftBorder()<< ", y:"<<ptTopBorder() << ", w:"<< ptPaperWidth() << ", h:"<<ptPaperHeight()<<endl;
     kdDebug() << "Header visible: " << isHeaderVisible() << endl;
     kdDebug() << "Footer visible: " << isFooterVisible() << endl;
-    kdDebug() << "Units: " << getUnit() <<endl;
+    kdDebug() << "Units: " << unit() <<endl;
     kdDebug() << "# Framesets: " << numFrameSets() <<endl;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( unsigned int iFrameset = 0; fit.current() ; ++fit, iFrameset++ )
@@ -4904,7 +4731,7 @@ void KWDocument::invalidate(const KWFrameSet *skipThisFrameSet)
             it.current()->invalidate();
 }
 
-KFormula::Document* KWDocument::getFormulaDocument()
+KFormula::Document* KWDocument::formulaDocument()
 {
     KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document();
     if (!formulaDocument) {
@@ -4927,9 +4754,9 @@ void KWDocument::slotRepaintChanged( KWFrameSet * frameset )
 {
     // This has to be a loop instead of a signal, so that we can
     // send "true" for the last view (see KWFrameSet::drawContents)
-    QPtrListIterator<KWView> it( m_lstViews );
-    for ( ; it.current() ; ++it )
-        it.current()->getGUI()->canvasWidget()->repaintChanged( frameset, it.atLast() );
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
+        (*it)->getGUI()->canvasWidget()->repaintChanged( frameset, it == m_lstViews.fromLast() );
+    }
 }
 
 void KWDocument::refreshFrameBorderButton()
@@ -4938,11 +4765,9 @@ void KWDocument::refreshFrameBorderButton()
     KWFrame *frame= getFirstSelectedFrame();
     if (frame)
     {
-        QPtrListIterator<KWView> it( m_lstViews );
         frame = KWFrameSet::settingsFrame(frame);
-        for ( ; it.current() ; ++it )
-        {
-            it.current()->showFrameBorders( frame->leftBorder(), frame->rightBorder(), frame->topBorder(), frame->bottomBorder() );
+        for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
+            (*it)->showFrameBorders( frame->leftBorder(), frame->rightBorder(), frame->topBorder(), frame->bottomBorder() );
         }
     }
 }
@@ -5128,14 +4953,13 @@ void KWDocument::deleteSelectedFrames()
 
 void KWDocument::reorganizeGUI()
 {
-   QPtrListIterator<KWView> it( m_lstViews );
-   for ( ; it.current() ; ++it )
-       it.current()->getGUI()->reorganize();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->getGUI()->reorganize();
 }
 
 void KWDocument::slotDocumentInfoModifed()
 {
-    if (!getVariableCollection()->variableSetting()->displayFieldCode())
+    if (!variableCollection()->variableSetting()->displayFieldCode())
         recalcVariables( VT_FIELD );
 }
 
@@ -5194,18 +5018,14 @@ QColor KWDocument::defaultBgColor( QPainter * painter )
 void KWDocument::renameButtonTOC(bool b)
 {
     m_hasTOC=b;
-    QPtrListIterator<KWView> it( m_lstViews );
-    for ( ; it.current() ; ++it )
-    {
-        it.current()->renameButtonTOC(b);
-    }
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->renameButtonTOC(b);
 }
 
 void KWDocument::refreshMenuExpression()
 {
-    QPtrListIterator<KWView> it( m_lstViews );
-    for ( ; it.current() ; ++it )
-        it.current()->refreshMenuExpression();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->refreshMenuExpression();
 }
 
 void KWDocument::frameSelectedChanged()
@@ -5215,27 +5035,23 @@ void KWDocument::frameSelectedChanged()
 
 void KWDocument::updateZoomRuler()
 {
-    QPtrListIterator<KWView> it( m_lstViews );
-    for ( ; it.current() ; ++it )
-    {
-        it.current()->getGUI()->getHorzRuler()->setZoom( zoomedResolutionX() );
-        it.current()->getGUI()->getVertRuler()->setZoom( zoomedResolutionY() );
-        it.current()->slotUpdateRuler();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
+        (*it)->getGUI()->getHorzRuler()->setZoom( zoomedResolutionX() );
+        (*it)->getGUI()->getVertRuler()->setZoom( zoomedResolutionY() );
+        (*it)->slotUpdateRuler();
     }
 }
 
 void KWDocument::updateRulerFrameStartEnd()
 {
-    QPtrListIterator<KWView> it( m_lstViews );
-    for ( ; it.current() ; ++it )
-        it.current()->slotUpdateRuler();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->slotUpdateRuler();
 }
 
 void KWDocument::updateFrameStatusBarItem()
 {
-    QPtrListIterator<KWView> it( m_lstViews );
-    for ( ; it.current() ; ++it )
-        it.current()->updateFrameStatusBarItem();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->updateFrameStatusBarItem();
 }
 
 int KWDocument::undoRedoLimit() const
@@ -5251,8 +5067,8 @@ void KWDocument::setUndoRedoLimit(int val)
 
 void KWDocument::setGridX(double _gridx) {
     m_gridX = _gridx;
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->getGUI()->getHorzRuler()->setGridSize(_gridx);
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->getGUI()->getHorzRuler()->setGridSize(_gridx);
 }
 
 QValueList<KoTextObject *> KWDocument::visibleTextObjects(KWViewMode *viewmode) const
@@ -5273,8 +5089,8 @@ QValueList<KoTextObject *> KWDocument::visibleTextObjects(KWViewMode *viewmode) 
 
 void KWDocument::refreshGUIButton()
 {
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->initGUIButton();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->initGUIButton();
 }
 
 void KWDocument::enableBackgroundSpellCheck( bool b )
@@ -5282,8 +5098,8 @@ void KWDocument::enableBackgroundSpellCheck( bool b )
 #ifdef HAVE_LIBKSPELL2
     m_bgSpellCheck->setEnabled(b);
 #endif
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->updateBgSpellCheckingState();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->updateBgSpellCheckingState();
 }
 
 bool KWDocument::backgroundSpellCheckEnabled() const
@@ -5422,21 +5238,22 @@ QString KWDocument::sectionTitle( int pageNum ) const
     return QString::null;
 }
 
-void KWDocument::addIgnoreWordAll( const QString & word)
+
+void KWDocument::setSpellCheckIgnoreList( const QStringList& lst )
 {
-    // ### missing: undo/redo support
-    if( m_spellListIgnoreAll.findIndex( word )==-1)
-        m_spellListIgnoreAll.append( word );
-    //m_bgSpellCheck->addIgnoreWordAll( word );
+    m_spellCheckIgnoreList = lst;
+#ifdef HAVE_LIBKSPELL2
+    m_bgSpellCheck->settings()->setCurrentIgnoreList( m_spellCheckIgnoreList );
+#endif
     setModified( true );
 }
 
-// seems to be used only by the DCOP interface
-void KWDocument::clearIgnoreWordAll( )
+void KWDocument::addSpellCheckIgnoreWord( const QString & word )
 {
-    m_spellListIgnoreAll.clear();
-    //m_bgSpellCheck->clearIgnoreWordAll();
-    setModified( true );
+    // ### missing: undo/redo support
+    if( m_spellCheckIgnoreList.findIndex( word ) == -1 )
+        m_spellCheckIgnoreList.append( word );
+    setSpellCheckIgnoreList( m_spellCheckIgnoreList );
 }
 
 int KWDocument::maxZOrder( int pageNum) const
@@ -5478,8 +5295,8 @@ KWFrameSet * KWDocument::textFrameSetFromIndex( unsigned int _num, bool onlyRead
 
 void KWDocument::updateTextFrameSetEdit()
 {
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->slotFrameSetEditChanged();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->slotFrameSetEditChanged();
 
 }
 
@@ -5559,11 +5376,11 @@ void KWDocument::switchViewMode( KWViewMode * newViewMode )
     //perhaps it's not a good idea to store m_modeView into kwcanvas.
     //but it's necessary for the futur when kword will support
     //different view mode in different view.
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->getGUI()->canvasWidget()->switchViewMode( m_viewMode );
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->getGUI()->canvasWidget()->switchViewMode( m_viewMode );
 
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->switchModeView();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->switchModeView();
     emit newContentsSize();
     updateResizeHandles();
 
@@ -5574,8 +5391,8 @@ void KWDocument::switchViewMode( KWViewMode * newViewMode )
     layout();
 
     repaintAllViews( true );
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->getGUI()->canvasWidget()->ensureCursorVisible();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->getGUI()->canvasWidget()->ensureCursorVisible();
 }
 
 void KWDocument::changeBgSpellCheckingState( bool b )
@@ -5624,15 +5441,15 @@ void KWDocument::testAndCloseAllFrameSetProtectedContent()
 {
     if ( !m_cursorInProtectectedArea )
     {
-        for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-            viewPtr->testAndCloseAllFrameSetProtectedContent();
+        for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+            (*it)->testAndCloseAllFrameSetProtectedContent();
     }
 }
 
 void KWDocument::updateRulerInProtectContentMode()
 {
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->updateRulerInProtectContentMode();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->updateRulerInProtectContentMode();
 }
 
 
@@ -5801,8 +5618,8 @@ void KWDocument::setPersonalExpressionPath( const QStringList & lst)
 
 void KWDocument::updateDirectCursorButton()
 {
-    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
-        viewPtr->updateDirectCursorButton();
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->updateDirectCursorButton();
 }
 
 void KWDocument::setInsertDirectCursor(bool _b)

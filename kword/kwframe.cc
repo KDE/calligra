@@ -241,9 +241,9 @@ void KWFrame::copySettings(KWFrame *frm)
 // Insert all resize handles
 void KWFrame::createResizeHandles() {
     removeResizeHandles();
-    QPtrList <KWView> pages = frameSet()->kWordDocument()->getAllViews();
-    for (int i=pages.count() -1; i >= 0; i--)
-        createResizeHandlesForPage(pages.at(i)->getGUI()->canvasWidget());
+    QValueList<KWView *> views = frameSet()->kWordDocument()->getAllViews();
+    for ( int i = views.count() - 1; i >= 0; --i )
+        createResizeHandlesForPage( views[i]->getGUI()->canvasWidget() );
 }
 
 // Insert 8 resize handles which will be drawn in param canvas
@@ -1828,8 +1828,8 @@ bool KWFrameSet::isVisible( KWViewMode* viewMode ) const
     if ( isFloating() && !anchorFrameset()->isVisible( viewMode ) )
          return false;
 
-    KoHFType ht = m_doc->getHeaderType();
-    KoHFType ft = m_doc->getFooterType();
+    KoHFType ht = m_doc->headerType();
+    KoHFType ft = m_doc->footerType();
     switch( m_info )
     {
     case FI_FIRST_HEADER:

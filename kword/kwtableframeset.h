@@ -772,8 +772,8 @@ public:
     virtual void dragMoveEvent( QDragMoveEvent * e, const QPoint &n, const KoPoint &d );
     virtual void dragLeaveEvent( QDragLeaveEvent * e )
     { if ( m_currentCell ) m_currentCell->dragLeaveEvent( e ); }
-    virtual void dropEvent( QDropEvent * e, const QPoint &n, const KoPoint &d )
-    { if ( m_currentCell ) m_currentCell->dropEvent( e, n, d ); } // TODO check current cell
+    virtual void dropEvent( QDropEvent * e, const QPoint &n, const KoPoint &d, KWView* view )
+    { if ( m_currentCell ) m_currentCell->dropEvent( e, n, d, view ); } // TODO check current cell
 
     virtual void focusInEvent() { if ( m_currentCell ) m_currentCell->focusInEvent(); }
     virtual void focusOutEvent() { if ( m_currentCell ) m_currentCell->focusOutEvent(); }

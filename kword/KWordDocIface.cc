@@ -65,7 +65,7 @@ double KWordDocIface::ptPageTop( int pgNum )const
 
 QString KWordDocIface::unitName()const
 {
-    return doc->getUnitName();
+    return doc->unitName();
 }
 
 void KWordDocIface::recalcAllVariables()
@@ -176,32 +176,32 @@ void KWordDocIface::setShowStatusBar( bool _status )
 
 int KWordDocIface::startingPage()const
 {
-    return doc->getVariableCollection()->variableSetting()->startingPage();
+    return doc->variableCollection()->variableSetting()->startingPage();
 }
 
 void KWordDocIface::setStartingPage(int nb)
 {
-    doc->getVariableCollection()->variableSetting()->setStartingPage(nb);
+    doc->variableCollection()->variableSetting()->setStartingPage(nb);
     doc->recalcVariables(VT_PGNUM);
 }
 
 bool KWordDocIface::displayLink()const
 {
-    return doc->getVariableCollection()->variableSetting()->displayLink();
+    return doc->variableCollection()->variableSetting()->displayLink();
 }
 
 void KWordDocIface::setDisplayLink(bool b)
 {
-    doc->getVariableCollection()->variableSetting()->setDisplayLink(b);
+    doc->variableCollection()->variableSetting()->setDisplayLink(b);
     doc->recalcVariables(VT_LINK);
 }
 
 bool KWordDocIface::setCustomVariableValue(const QString & varname, const QString & value)
 {
-    bool exist=doc->getVariableCollection()->customVariableExist(varname);
+    bool exist=doc->variableCollection()->customVariableExist(varname);
     if(exist)
     {
-        doc->getVariableCollection()->setVariableValue( varname, value );
+        doc->variableCollection()->setVariableValue( varname, value );
         doc->recalcVariables(VT_CUSTOM);
     }
     else
@@ -212,8 +212,8 @@ bool KWordDocIface::setCustomVariableValue(const QString & varname, const QStrin
 
 QString KWordDocIface::customVariableValue(const QString & varname)const
 {
-    if(doc->getVariableCollection()->customVariableExist(varname))
-        return doc->getVariableCollection()->getVariableValue( varname );
+    if(doc->variableCollection()->customVariableExist(varname))
+        return doc->variableCollection()->getVariableValue( varname );
     return QString::null;
 }
 
@@ -264,232 +264,232 @@ void KWordDocIface::reactivateBgSpellChecking()
 
 void KWordDocIface::setConfigUpperCase( bool _uc )
 {
-    doc->getAutoFormat()->configUpperCase(_uc);
+    doc->autoFormat()->configUpperCase(_uc);
 }
 
 void KWordDocIface::setConfigUpperUpper( bool _uu )
 {
-    doc->getAutoFormat()->configUpperUpper(_uu);
+    doc->autoFormat()->configUpperUpper(_uu);
 }
 
 void KWordDocIface::setConfigAdvancedAutocorrect( bool _aa )
 {
-    doc->getAutoFormat()->configAdvancedAutocorrect( _aa );
+    doc->autoFormat()->configAdvancedAutocorrect( _aa );
 
 }
 
 void KWordDocIface::setConfigAutoDetectUrl(bool _au)
 {
-    doc->getAutoFormat()->configAutoDetectUrl(_au);
+    doc->autoFormat()->configAutoDetectUrl(_au);
 }
 
 void KWordDocIface::setConfigIgnoreDoubleSpace( bool _ids)
 {
-    doc->getAutoFormat()->configIgnoreDoubleSpace(_ids);
+    doc->autoFormat()->configIgnoreDoubleSpace(_ids);
 }
 
 bool KWordDocIface::configUpperCase() const
 {
-    return doc->getAutoFormat()->getConfigUpperCase();
+    return doc->autoFormat()->getConfigUpperCase();
 }
 
 bool KWordDocIface::configUpperUpper() const
 {
-    return doc->getAutoFormat()->getConfigUpperUpper();
+    return doc->autoFormat()->getConfigUpperUpper();
 }
 
 bool KWordDocIface::configAdvancedAutoCorrect() const
 {
-    return doc->getAutoFormat()->getConfigAdvancedAutoCorrect();
+    return doc->autoFormat()->getConfigAdvancedAutoCorrect();
 
 }
 bool KWordDocIface::configAutoDetectUrl() const
 {
-    return doc->getAutoFormat()->getConfigAutoDetectUrl();
+    return doc->autoFormat()->getConfigAutoDetectUrl();
 
 }
 
 bool KWordDocIface::configIgnoreDoubleSpace() const
 {
-    return doc->getAutoFormat()->getConfigIgnoreDoubleSpace();
+    return doc->autoFormat()->getConfigIgnoreDoubleSpace();
 }
 
 bool KWordDocIface::configRemoveSpaceBeginEndLine() const
 {
-    return doc->getAutoFormat()->getConfigIgnoreDoubleSpace();
+    return doc->autoFormat()->getConfigIgnoreDoubleSpace();
 }
 
 bool KWordDocIface::configUseBulletSyle() const
 {
-    return doc->getAutoFormat()->getConfigUseBulletSyle();
+    return doc->autoFormat()->getConfigUseBulletSyle();
 }
 
 void KWordDocIface::setConfigRemoveSpaceBeginEndLine( bool _space)
 {
-    doc->getAutoFormat()->configRemoveSpaceBeginEndLine(_space);
+    doc->autoFormat()->configRemoveSpaceBeginEndLine(_space);
 }
 
 void KWordDocIface::setConfigUseBulletStyle( bool _ubs)
 {
-    doc->getAutoFormat()->configUseBulletStyle(_ubs);
+    doc->autoFormat()->configUseBulletStyle(_ubs);
 }
 
 bool KWordDocIface::configAutoChangeFormat() const
 {
-    return doc->getAutoFormat()->getConfigAutoChangeFormat();
+    return doc->autoFormat()->getConfigAutoChangeFormat();
 }
 
 void KWordDocIface::setConfigAutoChangeFormat( bool _auto)
 {
-    doc->getAutoFormat()->configAutoChangeFormat(_auto);
+    doc->autoFormat()->configAutoChangeFormat(_auto);
 }
 
 bool KWordDocIface::configAutoReplaceNumber() const
 {
-    return doc->getAutoFormat()->getConfigAutoReplaceNumber();
+    return doc->autoFormat()->getConfigAutoReplaceNumber();
 }
 
 void KWordDocIface::setConfigAutoReplaceNumber( bool b )
 {
-    doc->getAutoFormat()->configAutoReplaceNumber(b);
+    doc->autoFormat()->configAutoReplaceNumber(b);
 }
 
 void KWordDocIface::setConfigAutoNumberStyle( bool b )
 {
-    doc->getAutoFormat()->configAutoNumberStyle(b);
+    doc->autoFormat()->configAutoNumberStyle(b);
 }
 
 bool KWordDocIface::configAutoNumberStyle() const
 {
-    return doc->getAutoFormat()->getConfigAutoNumberStyle();
+    return doc->autoFormat()->getConfigAutoNumberStyle();
 }
 
 void KWordDocIface::setConfigCompletion( bool b )
 {
-    doc->getAutoFormat()->configCompletion( b );
+    doc->autoFormat()->configCompletion( b );
 }
 
 bool KWordDocIface::configCompletion() const
 {
-    return doc->getAutoFormat()->getConfigCompletion();
+    return doc->autoFormat()->getConfigCompletion();
 }
 
 void KWordDocIface::setConfigToolTipCompletion( bool b )
 {
-    doc->getAutoFormat()->configToolTipCompletion( b );
+    doc->autoFormat()->configToolTipCompletion( b );
 }
 
 bool KWordDocIface::configToolTipCompletion() const
 {
-    return doc->getAutoFormat()->getConfigToolTipCompletion();
+    return doc->autoFormat()->getConfigToolTipCompletion();
 }
 
 void KWordDocIface::setConfigAppendSpace( bool b)
 {
-    doc->getAutoFormat()->configAppendSpace( b );
+    doc->autoFormat()->configAppendSpace( b );
 }
 
 bool KWordDocIface::configAppendSpace() const
 {
-    return doc->getAutoFormat()->getConfigAppendSpace();
+    return doc->autoFormat()->getConfigAppendSpace();
 }
 
 void KWordDocIface::setConfigMinWordLength( uint val )
 {
-    doc->getAutoFormat()->configMinWordLength( val );
+    doc->autoFormat()->configMinWordLength( val );
 }
 
 uint KWordDocIface::configMinWordLength() const
 {
-    return doc->getAutoFormat()->getConfigMinWordLength();
+    return doc->autoFormat()->getConfigMinWordLength();
 }
 
 void KWordDocIface::setConfigNbMaxCompletionWord( uint val )
 {
-    doc->getAutoFormat()->configNbMaxCompletionWord( val );
+    doc->autoFormat()->configNbMaxCompletionWord( val );
 }
 
 uint KWordDocIface::configNbMaxCompletionWord() const
 {
-    return doc->getAutoFormat()->getConfigNbMaxCompletionWord();
+    return doc->autoFormat()->getConfigNbMaxCompletionWord();
 }
 
 void KWordDocIface::setConfigAddCompletionWord( bool b )
 {
-    doc->getAutoFormat()->configAddCompletionWord( b );
+    doc->autoFormat()->configAddCompletionWord( b );
 }
 
 bool KWordDocIface::configAddCompletionWord() const
 {
-    return doc->getAutoFormat()->getConfigAddCompletionWord();
+    return doc->autoFormat()->getConfigAddCompletionWord();
 }
 
 bool KWordDocIface::configIncludeTwoUpperUpperLetterException() const
 {
-    return doc->getAutoFormat()->getConfigIncludeTwoUpperUpperLetterException();
+    return doc->autoFormat()->getConfigIncludeTwoUpperUpperLetterException();
 }
 
 void KWordDocIface::setConfigIncludeTwoUpperUpperLetterException( bool b)
 {
-    doc->getAutoFormat()->configIncludeTwoUpperUpperLetterException( b );
+    doc->autoFormat()->configIncludeTwoUpperUpperLetterException( b );
 }
 
 bool KWordDocIface::configIncludeAbbreviation() const
 {
-    return doc->getAutoFormat()->getConfigIncludeAbbreviation();
+    return doc->autoFormat()->getConfigIncludeAbbreviation();
 }
 
 void KWordDocIface::setConfigIncludeAbbreviation( bool b)
 {
-    doc->getAutoFormat()->configIncludeAbbreviation( b );
+    doc->autoFormat()->configIncludeAbbreviation( b );
 }
 
 bool KWordDocIface::displayComment() const
 {
-    return doc->getVariableCollection()->variableSetting()->displayComment();
+    return doc->variableCollection()->variableSetting()->displayComment();
 }
 
 void KWordDocIface::setDisplayComment( bool b)
 {
-    doc->getVariableCollection()->variableSetting()->setDisplayComment( b );
+    doc->variableCollection()->variableSetting()->setDisplayComment( b );
     doc->recalcVariables(VT_NOTE);
 }
 
 
 bool KWordDocIface::displayFieldCode()const
 {
-    return doc->getVariableCollection()->variableSetting()->displayFieldCode();
+    return doc->variableCollection()->variableSetting()->displayFieldCode();
 }
 
 void KWordDocIface::setDisplayFieldCode( bool b)
 {
-    doc->getVariableCollection()->variableSetting()->setDisplayFieldCode( b );
+    doc->variableCollection()->variableSetting()->setDisplayFieldCode( b );
     doc->recalcVariables(VT_ALL);
 }
 
 bool KWordDocIface::configAutoSuperScript() const
 {
-    return doc->getAutoFormat()->getConfigAutoSuperScript();
+    return doc->autoFormat()->getConfigAutoSuperScript();
 }
 
 void KWordDocIface::setConfigAutoSuperScript( bool b)
 {
-    doc->getAutoFormat()->configAutoSuperScript( b );
+    doc->autoFormat()->configAutoSuperScript( b );
 }
 
 void KWordDocIface::addIgnoreWordAll( const QString &word )
 {
-    doc->addIgnoreWordAll( word );
+    doc->addSpellCheckIgnoreWord( word );
 }
 
 void KWordDocIface::clearIgnoreWordAll( )
 {
-    doc->clearIgnoreWordAll();
+    doc->setSpellCheckIgnoreList( QStringList() );
 }
 
 QStringList KWordDocIface::spellListIgnoreAll() const
 {
-    return doc->spellListIgnoreAll();
+    return doc->spellCheckIgnoreList();
 }
 
 
@@ -582,16 +582,16 @@ QStringList KWordDocIface::listOfBookmarkName()const
 
 QString KWordDocIface::configAutoFormatLanguage( )const
 {
-    return doc->getAutoFormat()->getConfigAutoFormatLanguage( );
+    return doc->autoFormat()->getConfigAutoFormatLanguage( );
 }
 
 bool KWordDocIface::configCapitalizeNameOfDays() const
 {
-    return doc->getAutoFormat()->getConfigCapitalizeNameOfDays();
+    return doc->autoFormat()->getConfigCapitalizeNameOfDays();
 }
 
 void KWordDocIface::setConfigCapitalizeNameOfDays( bool b)
 {
-    doc->getAutoFormat()->configCapitalizeNameOfDays( b );
+    doc->autoFormat()->configCapitalizeNameOfDays( b );
 }
 

@@ -51,13 +51,14 @@ protected:
         {
             validDrag = false;
 
+#if 0             // what was the goal here?
 	KWTextDrag *drag=new KWTextDrag(m_mw);
 //	drag->setKWord(" <!DOCTYPE PARAGRAPHS> <PARAGRAPHS> <PARAGRAPH>  <TEXT>fsfsd</TEXT>  <LAYOUT>   <NAME value=\"Standard\" />   <FLOW align=\"left\" />   <FORMAT id=\"1\" pos=\"0\" len=\"5\" >    <WEIGHT value=\"50\" />    <FONT name=\"helvetica\" />    <SIZE value=\"12\" />    <ITALIC value=\"0\" />    <UNDERLINE value=\"0\" />    <STRIKEOUT value=\"0\" />    <VERTALIGN value=\"0\" />   </FORMAT>  </LAYOUT> </PARAGRAPH></PARAGRAPHS>");
 	drag->setKWord(" <!DOCTYPE PARAGRAPHS> <PARAGRAPHS> <PARAGRAPH>  <TEXT>fsfsd</TEXT> </PARAGRAPH> </PARAGRAPHS>");
 //	drag->setKWord("<TEXT>fsfsd</TEXT>");
 
 	drag->dragCopy();
-
+#endif
         }
     }
     void mouseReleaseEvent( QMouseEvent * )

@@ -236,7 +236,7 @@ KWMailMergeVariable::KWMailMergeVariable( KoTextDocument *textdoc, const QString
 
 QString KWMailMergeVariable::value() const
 {
-    return m_doc->getMailMergeDataBase()->getValue( m_varValue.toString() );
+    return m_doc->mailMergeDataBase()->getValue( m_varValue.toString() );
 }
 
 QString KWMailMergeVariable::text(bool realValue)
@@ -245,7 +245,7 @@ QString KWMailMergeVariable::text(bool realValue)
         return fieldCode();
     // ## should use a format maybe
     QString v = value();
-    if (m_doc->getMailMergeDataBase()->isSampleRecord() )
+    if (m_doc->mailMergeDataBase()->isSampleRecord() )
         return "<" + v + ">";
     return v;
 }

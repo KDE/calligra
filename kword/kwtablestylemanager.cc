@@ -630,7 +630,7 @@ void KWTableStyleManager::changeStyle()
     save();
 
 // 1. Execute stylist
-    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc, m_doc->styleCollection()->styleList());
+    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->unit(),m_doc, m_doc->styleCollection()->styleList());
     styleManager->exec();
 
 // 2. Apply changes

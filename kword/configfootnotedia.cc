@@ -53,7 +53,7 @@ void KWConfigFootNoteDia::setupTab1()
     QVBox * page = addVBoxPage( i18n( "Footnotes" ) );
     m_footNoteConfig = new KoCounterStyleWidget( false, true, false, page );
     //m_footNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
-    m_footNoteConfig->setCounter (static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->footNoteCounter() );
+    m_footNoteConfig->setCounter (static_cast<KWVariableSettings*>(m_doc->variableCollection()->variableSetting())->footNoteCounter() );
 }
 
 void KWConfigFootNoteDia::setupTab2()
@@ -61,7 +61,7 @@ void KWConfigFootNoteDia::setupTab2()
     QVBox * page = addVBoxPage( i18n( "Endnotes" ) );
     m_endNoteConfig = new KoCounterStyleWidget( false, true/*onlyStyleLetter*/,false, page );
     //m_endNoteConfig->numTypeChanged( KoParagCounter::NUM_LIST );
-    m_endNoteConfig->setCounter (static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->endNoteCounter() );
+    m_endNoteConfig->setCounter (static_cast<KWVariableSettings*>(m_doc->variableCollection()->variableSetting())->endNoteCounter() );
 }
 
 
@@ -167,14 +167,14 @@ void KWConfigFootNoteDia::slotOk()
 {
     KMacroCommand * macro = 0L;
     KCommand *cmd = 0L;
-    KoParagCounter counter =static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->footNoteCounter();
+    KoParagCounter counter =static_cast<KWVariableSettings*>(m_doc->variableCollection()->variableSetting())->footNoteCounter();
     if (counter != m_footNoteConfig->counter() )
     {
         macro = new KMacroCommand(i18n("Change End-/Footnote Variable Settings"));
         cmd= new KWChangeFootEndNoteSettingsCommand( i18n("Change End-/Footnote Variable Settings") , counter, m_footNoteConfig->counter() ,true ,m_doc);
         macro->addCommand(cmd );
     }
-    counter = static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->endNoteCounter();
+    counter = static_cast<KWVariableSettings*>(m_doc->variableCollection()->variableSetting())->endNoteCounter();
     if (counter != m_endNoteConfig->counter() )
     {
         if ( !macro )

@@ -69,7 +69,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
 
     // The newly created formula is not yet part of the formula
     // document. It will be added when a frame is created.
-    formula = _doc->getFormulaDocument()->createFormula( -1, false );
+    formula = _doc->formulaDocument()->createFormula( -1, false );
 
     // With the new drawing scheme (drawFrame being called with translated painter)
     // there is no need to move the KFormulaContainer anymore, it remains at (0,0).
@@ -268,7 +268,7 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
 {
     if (!formulaElem.isNull()) {
         if (formula == 0) {
-            formula = m_doc->getFormulaDocument()->createFormula( -1, false );
+            formula = m_doc->formulaDocument()->createFormula( -1, false );
             connect(formula, SIGNAL(formulaChanged(double, double)),
                     this, SLOT(slotFormulaChanged(double, double)));
             connect( formula, SIGNAL( errorMsg( const QString& ) ),
@@ -442,6 +442,11 @@ void KWFormulaFrameSetEdit::cut()
 void KWFormulaFrameSetEdit::paste()
 {
     formulaView->getDocument()->paste();
+}
+
+void KWFormulaFrameSetEdit::pasteData( QMimeSource* /*data*/, int /*provides*/ )
+{
+    paste(); // TODO use data, for DnD
 }
 
 void KWFormulaFrameSetEdit::selectAll()

@@ -147,7 +147,10 @@ public:
     // (special case of variable())
     KoLinkVariable *linkVariable();
 
-    KCommand *dropEvent( KoTextObject *, KoTextCursor dropCursor, bool dropInSameObj );
+    /// A "drop move" will move the selected text to the given cursor position.
+    /// This method only takes care of "removing the selected text"
+    /// if the drop cursor isn't in the selected text (and !protectContent).
+    KCommand *prepareDropMove( KoTextCursor dropCursor );
 
     void removeComment();
     void copyTextOfComment();

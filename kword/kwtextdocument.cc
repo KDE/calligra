@@ -33,6 +33,7 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+#include "kwoasisloader.h"
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textfs->kWordDocument(), fc, formatter, false ), m_textfs( textfs )
@@ -110,15 +111,17 @@ KWFrame* KWTextDocument::loadFrame( const QDomElement& tag, KoOasisContext& cont
         if ( elem.namespaceURI() != KoXmlNS::draw )
             continue;
         const QString localName = elem.localName();
+        KWDocument* doc = m_textfs->kWordDocument();
         if ( localName == "text-box" )
         {
             kdDebug()<<" append text-box\n";
-            return m_textfs->loadOasisTextBox( tag, elem, context );
+            KWOasisLoader loader( doc );
+            return loader.loadOasisTextBox( tag, elem, context );
         }
         else if ( localName == "image" )
         {
-            KWFrameSet* fs = new KWPictureFrameSet( m_textfs->kWordDocument(), tag, elem, context );
-            m_textfs->kWordDocument()->addFrameSet( fs, false );
+            KWFrameSet* fs = new KWPictureFrameSet( doc, tag, elem, context );
+            doc->addFrameSet( fs, false );
             return fs->frame(0);
         }
     }

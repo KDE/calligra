@@ -140,12 +140,13 @@ public:
     //virtual void dragEnterEvent( QDragEnterEvent * ) {}
     //virtual void dragMoveEvent( QDragMoveEvent *, const QPoint &, const KoPoint & ) {}
     //virtual void dragLeaveEvent( QDragLeaveEvent * ) {}
-    //virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint & ) {}
+    //virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint &, KWView* ) {}
     virtual void focusInEvent();
     virtual void focusOutEvent();
     virtual void copy();
     virtual void cut();
     virtual void paste();
+    virtual void pasteData( QMimeSource* data, int provides );
     virtual void selectAll();
 
     /** Moves the cursor to the first position */

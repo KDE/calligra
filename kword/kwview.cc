@@ -62,6 +62,7 @@
 #include "splitcellsdia.h"
 #include "tabledia.h"
 #include "paragvisitors.h"
+#include "kwoasisloader.h"
 
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
@@ -1418,7 +1419,7 @@ void KWView::refreshCustomMenu()
     actionInsertVariable->insert(actionInsertCustom, 0);
 
     actionInsertCustom->popupMenu()->clear();
-    QPtrListIterator<KoVariable> it( m_doc->getVariableCollection()->getVariables() );
+    QPtrListIterator<KoVariable> it( m_doc->variableCollection()->getVariables() );
     KAction * act=0;
     QStringList lst;
     QString varName;
@@ -1480,7 +1481,7 @@ void KWView::insertNewCustomVariable()
 
 void KWView::showFormulaToolbar( bool show )
 {
-    m_doc->getFormulaDocument()->setEnabled( show );
+    m_doc->formulaDocument()->setEnabled( show );
     if(shell())
       shell()->showToolbar( "formula_toolbar", show );
 }
@@ -1544,8 +1545,8 @@ void KWView::updateFrameStatusBarItem()
         }
         if ( nbFrame == 1 )
         {
-            KoUnit::Unit unit = m_doc->getUnit();
-            QString unitName = m_doc->getUnitName();
+            KoUnit::Unit unit = m_doc->unit();
+            QString unitName = m_doc->unitName();
             KWFrame * frame = m_doc->getFirstSelectedFrame();
             m_sbFramesLabel->setText( i18n( "Statusbar info", "%1. Frame: %2, %3  -  %4, %5 (width: %6, height: %7) (%8)" )
                                       .arg( frame->frameSet()->getName() )
@@ -1582,41 +1583,47 @@ void KWView::clipboardDataChanged()
         return;
     }
     QMimeSource *data = QApplication::clipboard()->data();
-    bool providesImage, providesKWordText, providesKWord, providesFormula;
-    checkClipboard( data, providesImage, providesKWordText, providesKWord, providesFormula );
-    if ( providesImage || providesKWord || providesFormula )
+    const int provides = checkClipboard( data );
+    if ( provides & ( ProvidesImage | ProvidesOasis | ProvidesFormula ) )
         actionEditPaste->setEnabled( true );
     else
     {
-        // KWord text requires a framesetedit
-        actionEditPaste->setEnabled( edit && providesKWordText );
+        // Plain text requires a framesetedit
+        actionEditPaste->setEnabled( edit && ( provides & ProvidesPlainText ) );
     }
 }
 
-// TODO use a bitfield (defined with an enum) instead of all those bools?
-// Just to avoid errors when mixing the order up...
-void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWordText, bool &providesKWord, bool &providesFormula )
+int KWView::checkClipboard( QMimeSource *data )
 {
-    // QImageDrag::canDecode( data ) is very very slow in Qt 2 (n*m roundtrips)
-    // Workaround....
+    int provides = 0;
     QValueList<QCString> formats;
     const char* fmt;
     for (int i=0; (fmt = data->format(i)); i++)
         formats.append( QCString( fmt ) );
 
-    providesImage = false;
+#if 0 // not needed anymore
+    // QImageDrag::canDecode( data ) is very very slow in Qt 2 (n*m roundtrips)
+    // Workaround....
     QStrList fileFormats = QImageIO::inputFormats();
-    for ( fileFormats.first() ; fileFormats.current() && !providesImage ; fileFormats.next() )
+    for ( fileFormats.first() ; fileFormats.current() && !provides ; fileFormats.next() )
     {
         QCString format = fileFormats.current();
         QCString type = "image/" + format.lower();
-        providesImage = ( formats.findIndex( type ) != -1 );
+        if ( ( formats.findIndex( type ) != -1 ) )
+            provides |= ProvidesImage;
     }
-    providesFormula = formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1;
-    // providesKWordText is true for kword text and for plain text, we send both to KWTextFrameSetEdit::paste
-    providesKWordText = formats.findIndex( KWTextDrag::selectionMimeType() ) != -1 || formats.findIndex( "text/plain" ) != -1;
-    providesKWord = formats.findIndex( KoStoreDrag::mimeType("application/x-kword") ) != -1;
-    //kdDebug() << "KWView::checkClipboard providesFormula=" << providesFormula << " providesKWordText=" << providesKWordText << " providesImage=" << providesImage << " providesKWord=" << providesKWord << endl;
+#endif
+    if ( QImageDrag::canDecode( data ) )
+        provides |= ProvidesImage;
+    if ( formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1 )
+        provides |= ProvidesFormula;
+    if ( formats.findIndex( "text/plain" ) != -1 )
+        provides |= ProvidesPlainText;
+    QCString returnedTypeMime;
+    if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime ) )
+        provides |= ProvidesOasis;
+    //kdDebug(32001) << "KWView::checkClipboard provides=" << provides << endl;
+    return provides;
 }
 
 /*=========================== file print =======================*/
@@ -1646,10 +1653,10 @@ void KWView::setupPrinter( KPrinter &prt )
 
 void KWView::print( KPrinter &prt )
 {
-    bool displayFieldCode = m_doc->getVariableCollection()->variableSetting()->displayFieldCode();
+    bool displayFieldCode = m_doc->variableCollection()->variableSetting()->displayFieldCode();
     if ( displayFieldCode )
     {
-        m_doc->getVariableCollection()->variableSetting()->setDisplayFieldCode(false);
+        m_doc->variableCollection()->variableSetting()->setDisplayFieldCode(false);
         m_doc->recalcVariables(  VT_ALL );
     }
 
@@ -1686,7 +1693,7 @@ void KWView::print( KPrinter &prt )
 
     bool serialLetter = FALSE;
 
-    QPtrList<KoVariable> vars = m_doc->getVariableCollection()->getVariables();
+    QPtrList<KoVariable> vars = m_doc->variableCollection()->getVariables();
     KoVariable *v = 0;
     for ( v = vars.first(); v; v = vars.next() ) {
         if ( v->type() == VT_MAILMERGE ) {
@@ -1695,11 +1702,11 @@ void KWView::print( KPrinter &prt )
         }
     }
 
-    if ( !m_doc->getMailMergeDataBase() ) serialLetter=FALSE;
+    if ( !m_doc->mailMergeDataBase() ) serialLetter=FALSE;
 	else
 	{
-		m_doc->getMailMergeDataBase()->refresh(false);
-                if (m_doc->getMailMergeDataBase()->getNumRecords() == 0 )  serialLetter = FALSE;
+		m_doc->mailMergeDataBase()->refresh(false);
+                if (m_doc->mailMergeDataBase()->getNumRecords() == 0 )  serialLetter = FALSE;
 	}
 
     //float left_margin = 0.0;
@@ -1764,11 +1771,11 @@ void KWView::print( KPrinter &prt )
             m_gui->canvasWidget()->print( &painter, &prt );
         else
         {
-            for ( int i = 0; i < m_doc->getMailMergeDataBase()->getNumRecords(); ++i ) {
+            for ( int i = 0; i < m_doc->mailMergeDataBase()->getNumRecords(); ++i ) {
                 m_doc->setMailMergeRecord( i );
-		m_doc->getVariableCollection()->recalcVariables(VT_MAILMERGE);
+		m_doc->variableCollection()->recalcVariables(VT_MAILMERGE);
                 m_gui->canvasWidget()->print( &painter, &prt );
-                if ( i < m_doc->getMailMergeDataBase()->getNumRecords() - 1 )
+                if ( i < m_doc->mailMergeDataBase()->getNumRecords() - 1 )
                     prt.newPage();
             }
             m_doc->setMailMergeRecord( -1 );
@@ -1795,14 +1802,14 @@ void KWView::print( KPrinter &prt )
 
     if ( displayFieldCode )
     {
-        m_doc->getVariableCollection()->variableSetting()->setDisplayFieldCode(true);
+        m_doc->variableCollection()->variableSetting()->setDisplayFieldCode(true);
         m_doc->recalcVariables(  VT_ALL );
     }
     else
-        m_doc->getVariableCollection()->recalcVariables(VT_MAILMERGE);
+        m_doc->variableCollection()->recalcVariables(VT_MAILMERGE);
 
     painter.end(); // this is what triggers the printing
-    m_doc->getVariableCollection()->variableSetting()->setLastPrintingDate(QDateTime::currentDateTime());
+    m_doc->variableCollection()->variableSetting()->setLastPrintingDate(QDateTime::currentDateTime());
     m_doc->recalcVariables( VT_DATE );
 }
 
@@ -1854,9 +1861,9 @@ void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rig
   KoRuler * hRuler = m_gui ? m_gui->getHorzRuler() : 0;
   if ( hRuler )
   {
-      hRuler->setFirstIndent( KoUnit::toUserValue( _firstLine, m_doc->getUnit() ) );
-      hRuler->setLeftIndent( KoUnit::toUserValue( _leftMargin, m_doc->getUnit() ) );
-      hRuler->setRightIndent( KoUnit::toUserValue( _rightMargin, m_doc->getUnit() ) );
+      hRuler->setFirstIndent( KoUnit::toUserValue( _firstLine, m_doc->unit() ) );
+      hRuler->setLeftIndent( KoUnit::toUserValue( _leftMargin, m_doc->unit() ) );
+      hRuler->setRightIndent( KoUnit::toUserValue( _rightMargin, m_doc->unit() ) );
       hRuler->setDirection( rtl );
       actionFormatDecreaseIndent->setEnabled( _leftMargin>0);
   }
@@ -2288,38 +2295,43 @@ void KWView::editCopy()
 void KWView::editPaste()
 {
     QMimeSource *data = QApplication::clipboard()->data();
-    bool providesImage, providesKWordText, providesKWord, providesFormula;
-    checkClipboard( data, providesImage, providesKWordText, providesKWord, providesFormula );
-    Q_ASSERT( providesImage || providesKWordText || providesKWord || providesFormula );
+    pasteData( data );
+}
+
+// paste or drop
+void KWView::pasteData( QMimeSource* data )
+{
+    int provides = checkClipboard( data );
+    Q_ASSERT( provides != 0 );
 
     // formula must be the first as a formula is also available as image
-    if ( providesFormula ) {
+    if ( provides & ProvidesFormula ) {
         KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
         if ( edit && edit->frameSet()->type() == FT_FORMULA ) {
-            edit->paste();
+            edit->pasteData( data, ProvidesFormula );
         }
         else {
             insertFormula( data );
         }
     }
-    else // pasting frames
+    else // pasting text and/or frames
     {
         deselectAllFrames();
-        if ( providesKWord || providesKWordText ) { // TODO merge those two [once everything works]
-            KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-            if ( edit )
-                edit->paste();
-
+        KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+        if ( edit && ( ( provides & ProvidesOasis ) || ( provides & ProvidesPlainText ) ) )
+            edit->pasteData( data, provides );
+        else if ( ( provides & ProvidesOasis ) ) {
             QCString returnedTypeMime;
             // Not editing a frameset? We can't paste plain text then... only entire frames.
             if ( KWTextDrag::provides( data, KoTextObject::acceptSelectionMimeType(), returnedTypeMime) )
             {
-                QByteArray arr = data->encodedData( returnedTypeMime );
+                const QByteArray arr = data->encodedData( returnedTypeMime );
                 if( !arr.isEmpty() )
                 {
                     QBuffer buffer( arr );
                     KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
-                    QValueList<KWFrame *> frames = m_doc->insertOasisData( store, 0 );
+                    KWOasisLoader oasisLoader( m_doc );
+                    QValueList<KWFrame *> frames = oasisLoader.insertOasisData( store, 0 /* no cursor */ );
                     delete store;
                     QValueList<KWFrame *>::ConstIterator it = frames.begin();
                     for ( ; it != frames.end() ; ++it )
@@ -2328,7 +2340,7 @@ void KWView::editPaste()
                 }
             }
         }
-        else { // providesImage, must be after providesKWord
+        else { // providesImage, must be after providesOasis
             KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
             m_gui->canvasWidget()->pasteImage( data, docPoint );
         }
@@ -2723,9 +2735,9 @@ void KWView::editCustomVariable()
 
 void KWView::editCustomVars()
 {
-    KoCustomVariablesDia dia( this, m_doc->getVariableCollection()->getVariables() );
+    KoCustomVariablesDia dia( this, m_doc->variableCollection()->getVariables() );
     QStringList listOldCustomValue;
-    QPtrListIterator<KoVariable> oldIt( m_doc->getVariableCollection()->getVariables() );
+    QPtrListIterator<KoVariable> oldIt( m_doc->variableCollection()->getVariables() );
     for ( ; oldIt.current() ; ++oldIt )
     {
         if(oldIt.current()->type()==VT_CUSTOM)
@@ -2735,7 +2747,7 @@ void KWView::editCustomVars()
     {
         m_doc->recalcVariables( VT_CUSTOM );
         //temporaly hack, for the moment we can't undo/redo change custom variables
-        QPtrListIterator<KoVariable> it( m_doc->getVariableCollection()->getVariables() );
+        QPtrListIterator<KoVariable> it( m_doc->variableCollection()->getVariables() );
         KMacroCommand * macroCommand = 0L;
         int i=0;
         for ( ; it.current() ; ++it )
@@ -2759,9 +2771,9 @@ void KWView::editCustomVars()
 
 void KWView::editMailMergeDataBase()
 {
-	m_doc->getMailMergeDataBase()->showConfigDialog(this);
+	m_doc->mailMergeDataBase()->showConfigDialog(this);
 #if 0
-    KWMailMergeEditor *dia = new KWMailMergeEditor( this, m_doc->getMailMergeDataBase() );
+    KWMailMergeEditor *dia = new KWMailMergeEditor( this, m_doc->mailMergeDataBase() );
     dia->exec();
     // Don't know if we really need this so it's commented out (SL)
     // m_gui->canvasWidget()->repaintAll( FALSE );
@@ -3448,7 +3460,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
         m_paragDlg = new KoParagDia( this, "",
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                      KoParagDia::PD_BORDERS |
-                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_doc->getUnit(),edit->textFrameSet()->frame(0)->width() ,(!edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager()), edit->frameSet()->isFootEndNote());
+                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_doc->unit(),edit->textFrameSet()->frame(0)->width() ,(!edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager()), edit->frameSet()->isFootEndNote());
         m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
@@ -3486,7 +3498,7 @@ void KWView::slotApplyParag()
                 macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
         }
-        m_gui->getHorzRuler()->setLeftIndent( KoUnit::toUserValue( m_paragDlg->leftIndent(), m_doc->getUnit() ) );
+        m_gui->getHorzRuler()->setLeftIndent( KoUnit::toUserValue( m_paragDlg->leftIndent(), m_doc->unit() ) );
 
     }
 
@@ -3499,7 +3511,7 @@ void KWView::slotApplyParag()
                 macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
             macroCommand->addCommand(cmd);
         }
-        m_gui->getHorzRuler()->setRightIndent( KoUnit::toUserValue( m_paragDlg->rightIndent(), m_doc->getUnit() ) );
+        m_gui->getHorzRuler()->setRightIndent( KoUnit::toUserValue( m_paragDlg->rightIndent(), m_doc->unit() ) );
     }
     if(m_paragDlg->isSpaceBeforeChanged())
     {
@@ -3531,7 +3543,7 @@ void KWView::slotApplyParag()
             macroCommand->addCommand(cmd);
         }
         m_gui->getHorzRuler()->setFirstIndent(
-            KoUnit::toUserValue( m_paragDlg->firstLineIndent(), m_doc->getUnit() ) );
+            KoUnit::toUserValue( m_paragDlg->firstLineIndent(), m_doc->unit() ) );
     }
 
     if(m_paragDlg->isAlignChanged())
@@ -3659,7 +3671,7 @@ void KWView::formatPage()
     else
         flags |= DISABLE_BORDERS;
 
-    KoUnit::Unit unit = m_doc->getUnit();
+    KoUnit::Unit unit = m_doc->unit();
     KoUnit::Unit oldUnit = unit;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit, this ) )
@@ -3725,8 +3737,8 @@ void KWView::slotSpellCheck()
 
 void KWView::extraAutoFormat()
 {
-    m_doc->getAutoFormat()->readConfig();
-    KoAutoFormatDia dia( this, 0, m_doc->getAutoFormat() );
+    m_doc->autoFormat()->readConfig();
+    KoAutoFormatDia dia( this, 0, m_doc->autoFormat() );
     dia.exec();
     m_doc->startBackgroundSpellCheck(); // will do so if enabled
 }
@@ -3780,7 +3792,7 @@ void KWView::extraStylist()
         if (edit->cursor() && edit->cursor()->parag() && edit->cursor()->parag()->style())
             activeStyleName = edit->cursor()->parag()->style()->displayName();
     }
-    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc, m_doc->styleCollection()->styleList(), activeStyleName );
+    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->unit(),m_doc, m_doc->styleCollection()->styleList(), activeStyleName );
     styleManager->exec();
     delete styleManager;
     if ( edit )
@@ -5572,7 +5584,7 @@ void KWView::spellCheckerFinished()
 
 void KWView::spellAddAutoCorrect (const QString & originalword, const QString & newword)
 {
-    m_doc->getAutoFormat()->addAutoFormatEntry( originalword, newword );
+    m_doc->autoFormat()->addAutoFormatEntry( originalword, newword );
 }
 
 void KWView::configure()
@@ -6036,7 +6048,7 @@ void KWView::configureHeaderFooter()
 
     KoHeadFoot hf;
     int flags = KW_HEADER_AND_FOOTER;
-    KoUnit::Unit unit = m_doc->getUnit();
+    KoUnit::Unit unit = m_doc->unit();
     KoUnit::Unit oldUnit = unit;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, cl, kwhf, flags, unit ) ) {
@@ -6292,20 +6304,20 @@ void KWView::copyTextOfComment()
 
 void KWView::configureCompletion()
 {
-    m_doc->getAutoFormat()->readConfig();
-    KoCompletionDia dia( this, 0, m_doc->getAutoFormat() );
+    m_doc->autoFormat()->readConfig();
+    KoCompletionDia dia( this, 0, m_doc->autoFormat() );
     dia.exec();
 }
 
 void KWView::applyAutoFormat()
 {
-    m_doc->getAutoFormat()->readConfig();
+    m_doc->autoFormat()->readConfig();
     KMacroCommand *macro = 0L;
     QValueList<KoTextObject *> list(m_doc->visibleTextObjects(m_gui->canvasWidget()->viewMode()));
     QValueList<KoTextObject *>::Iterator fit = list.begin();
     for ( ; fit != list.end() ; ++fit )
     {
-        KCommand *cmd = m_doc->getAutoFormat()->applyAutoFormat( *fit );
+        KCommand *cmd = m_doc->autoFormat()->applyAutoFormat( *fit );
         if ( cmd )
         {
             if ( !macro )
@@ -7045,7 +7057,6 @@ void KWView::convertTableToText()
             deleteFrame( false );
             m_gui->canvasWidget()->editTextFrameSet( frameset, parag, pos );
             QMimeSource *data = QApplication::clipboard()->data();
-            // Hmm, we could reuse the result of KWView::checkClipboard...
             if ( data->provides( KWTextDrag::selectionMimeType() ) )
             {
                 QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
@@ -7094,7 +7105,6 @@ void KWView::convertToTextBox()
         if ( edit )
         {
             QMimeSource *data = QApplication::clipboard()->data();
-            // Hmm, we could reuse the result of KWView::checkClipboard...
             if ( data->provides( KWTextDrag::selectionMimeType() ) )
             {
                 QByteArray arr = data->encodedData( KWTextDrag::selectionMimeType() );
@@ -7119,7 +7129,7 @@ void KWView::slotAddIgnoreAllWord()
 {
     KWTextFrameSetEdit* edit = currentTextEdit();
     if ( edit )
-        m_doc->addIgnoreWordAll( edit->currentWordOrSelection() );
+        m_doc->addSpellCheckIgnoreWord( edit->currentWordOrSelection() );
 }
 
 void KWView::sortText()
@@ -7435,9 +7445,9 @@ KWGUI::KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *_view )
     tabChooser->setReadWrite(doc->isReadWrite());
 
     r_horz = new KoRuler( left, canvas->viewport(), Qt::Horizontal, layout,
-                          KoRuler::F_INDENTS | KoRuler::F_TABS, doc->getUnit(), tabChooser );
+                          KoRuler::F_INDENTS | KoRuler::F_TABS, doc->unit(), tabChooser );
     r_horz->setReadWrite(doc->isReadWrite());
-    r_vert = new KoRuler( left, canvas->viewport(), Qt::Vertical, layout, 0, doc->getUnit() );
+    r_vert = new KoRuler( left, canvas->viewport(), Qt::Vertical, layout, 0, doc->unit() );
     connect( r_horz, SIGNAL( newPageLayout( const KoPageLayout & ) ), view, SLOT( newPageLayout( const KoPageLayout & ) ) );
     r_vert->setReadWrite(doc->isReadWrite());
 

@@ -56,169 +56,169 @@ void KWordFormulaFrameSetEditIface::selectAll()
 
 void KWordFormulaFrameSetEditIface::addThinSpace()
 {
-   m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addThinSpace();
+   m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addThinSpace();
 }
 
 void KWordFormulaFrameSetEditIface::addMediumSpace()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addMediumSpace();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addMediumSpace();
 }
 
 void KWordFormulaFrameSetEditIface::addThickSpace()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addThickSpace();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addThickSpace();
 }
 
 void KWordFormulaFrameSetEditIface::addQuadSpace()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addQuadSpace();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addQuadSpace();
 }
 
 void KWordFormulaFrameSetEditIface::addBracket( int left, int right )
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()
         ->wrapper()->addBracket( static_cast<KFormula::SymbolType>( left ),
                                  static_cast<KFormula::SymbolType>( right ) );
 }
 
 void KWordFormulaFrameSetEditIface::addParenthesis()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addParenthesis();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addParenthesis();
 }
 
 void KWordFormulaFrameSetEditIface::addSquareBracket()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addSquareBracket();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addSquareBracket();
 }
 
 void KWordFormulaFrameSetEditIface::addCurlyBracket()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addCurlyBracket();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addCurlyBracket();
 }
 
 void KWordFormulaFrameSetEditIface::addLineBracket()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addLineBracket();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addLineBracket();
 }
 
 void KWordFormulaFrameSetEditIface::addFraction()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addFraction();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addFraction();
 }
 
 void KWordFormulaFrameSetEditIface::addRoot()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addRoot();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addRoot();
 }
 
 void KWordFormulaFrameSetEditIface::addIntegral()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addIntegral();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addIntegral();
 }
 
 void KWordFormulaFrameSetEditIface::addProduct()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addProduct();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addProduct();
 }
 
 void KWordFormulaFrameSetEditIface::addSum()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addSum();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addSum();
 }
 
 void KWordFormulaFrameSetEditIface::addMatrix()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addMatrix();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addMatrix();
 }
 
 void KWordFormulaFrameSetEditIface::addMatrix( uint rows, uint columns )
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addMatrix( rows, columns );
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addMatrix( rows, columns );
 }
 
 void KWordFormulaFrameSetEditIface::addOneByTwoMatrix()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addOneByTwoMatrix();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addOneByTwoMatrix();
 }
 
 void KWordFormulaFrameSetEditIface::addNameSequence()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addNameSequence();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addNameSequence();
 }
 
 void KWordFormulaFrameSetEditIface::addLowerLeftIndex()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addLowerLeftIndex();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addLowerLeftIndex();
 }
 
 void KWordFormulaFrameSetEditIface::addUpperLeftIndex()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addUpperLeftIndex();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addUpperLeftIndex();
 }
 
 void KWordFormulaFrameSetEditIface::addLowerRightIndex()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addLowerRightIndex();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addLowerRightIndex();
 }
 
 void KWordFormulaFrameSetEditIface::addUpperRightIndex()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addUpperRightIndex();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addUpperRightIndex();
 }
 
 void KWordFormulaFrameSetEditIface::addGenericLowerIndex()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addGenericLowerIndex();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addGenericLowerIndex();
 }
 
 void KWordFormulaFrameSetEditIface::addGenericUpperIndex()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addGenericUpperIndex();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addGenericUpperIndex();
 }
 
 void KWordFormulaFrameSetEditIface::removeEnclosing()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->removeEnclosing();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->removeEnclosing();
 }
 
 void KWordFormulaFrameSetEditIface::makeGreek()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->makeGreek();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->makeGreek();
 }
 
 void KWordFormulaFrameSetEditIface::insertSymbol( const QString &name )
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->insertSymbol( name );
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->insertSymbol( name );
 }
 
 void KWordFormulaFrameSetEditIface::appendColumn()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->appendColumn();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->appendColumn();
 }
 
 void KWordFormulaFrameSetEditIface::insertColumn()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->insertColumn();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->insertColumn();
 }
 
 void KWordFormulaFrameSetEditIface::removeColumn()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->removeColumn();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->removeColumn();
 }
 
 void KWordFormulaFrameSetEditIface::appendRow()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->appendRow();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->appendRow();
 }
 
 void KWordFormulaFrameSetEditIface::insertRow()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->insertRow();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->insertRow();
 }
 
 void KWordFormulaFrameSetEditIface::removeRow()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->removeRow();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->removeRow();
 }
 
 void KWordFormulaFrameSetEditIface::moveLeft( int flag )
@@ -273,5 +273,5 @@ void KWordFormulaFrameSetEditIface::addText( const QString &str )
 
 void KWordFormulaFrameSetEditIface::addNegThinSpace()
 {
-    m_framesetedit->formulaFrameSet()->kWordDocument()->getFormulaDocument()->wrapper()->addNegThinSpace();
+    m_framesetedit->formulaFrameSet()->kWordDocument()->formulaDocument()->wrapper()->addNegThinSpace();
 }

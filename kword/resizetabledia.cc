@@ -75,7 +75,7 @@ void KWResizeTableDia::setupTab1()
     }
     else
         value->setValue( type == ROW ? (rowSelected+1) : (colSelected+1) );
-    rc = new QLabel( type == ROW ? i18n( "Height (%1):" ).arg(doc->getUnitName()) : i18n( "Width (%1):" ).arg(doc->getUnitName()), page );
+    rc = new QLabel( type == ROW ? i18n( "Height (%1):" ).arg(doc->unitName()) : i18n( "Width (%1):" ).arg(doc->unitName()), page );
     position= new KDoubleNumInput( page );
     position->setRange(0.01, 9999, 1, false);
     slotValueChanged( value->value());
@@ -93,7 +93,7 @@ bool KWResizeTableDia::doResize()
         {
             FrameIndex index( frm );
             KoRect newRect( frm->normalize() );
-            newRect.setHeight( KoUnit::fromUserValue(  position->value(), doc->getUnit() ));
+            newRect.setHeight( KoUnit::fromUserValue(  position->value(), doc->unit() ));
             FrameResizeStruct resizeStruct( frm->normalize(), frm->minFrameHeight(), newRect );
             KWFrameResizeCommand * cmd = new KWFrameResizeCommand( i18n("Resize Column"), index, resizeStruct );
             cmd->execute();
@@ -107,7 +107,7 @@ bool KWResizeTableDia::doResize()
         {
             FrameIndex index( frm );
             KoRect newRect( frm->normalize() );
-            newRect.setWidth( KoUnit::fromUserValue(  position->value(), doc->getUnit() ));
+            newRect.setWidth( KoUnit::fromUserValue(  position->value(), doc->unit() ));
             FrameResizeStruct resizeStruct( frm->normalize(), frm->minFrameHeight(), newRect );
             KWFrameResizeCommand * cmd =new KWFrameResizeCommand( i18n("Resize Column"), index, resizeStruct );
             cmd->execute();
@@ -124,7 +124,7 @@ void KWResizeTableDia::slotValueChanged( int pos)
         KWFrame *frm = table->getCell( pos-1, 0 )->frame(0);
         if (frm)
         {
-            position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().height()), doc->getUnit() ) );
+            position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().height()), doc->unit() ) );
         }
 
     }
@@ -133,7 +133,7 @@ void KWResizeTableDia::slotValueChanged( int pos)
         KWFrame *frm = table->getCell( 0, pos-1 )->frame(0);
         if (frm)
         {
-            position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().width()), doc->getUnit() ) );
+            position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().width()), doc->unit() ) );
         }
     }
 }

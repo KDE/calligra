@@ -23,30 +23,6 @@
 #include <kdebug.h>
 #include <kotextobject.h>
 
-/******************************************************************/
-/* Class: KWTextDrag                                               */
-/******************************************************************/
-
-KWTextDrag::KWTextDrag( QWidget *dragSource, const char *name )
-    : QTextDrag( dragSource, name )
-{
-}
-
-QByteArray KWTextDrag::encodedData( const char *mime ) const
-{
-    if ( ( strcmp( selectionMimeType(), mime ) == 0 )|| QString( mime ).startsWith( KoTextObject::acceptSelectionMimeType()))
-        return kword;
-    else if( strcmp( "application/x-kword-framesetnumber", mime ) == 0)
-    {
-        QByteArray a;
-        QCString s (  QString::number(m_framesetNumber).local8Bit() );
-	a.resize( s.length() + 1 ); // trailing zero
-	memcpy( a.data(), s.data(), s.length() + 1 );
-        return a;
-    }
-    else
-        return QTextDrag::encodedData(mime);
-}
 
 bool KWTextDrag::provides( QMimeSource* e, const char* acceptMimeType, QCString &returnedTypeMime)
 {
@@ -69,25 +45,9 @@ bool KWTextDrag::canDecode( QMimeSource* e )
     return QTextDrag::canDecode(e);
 }
 
-const char* KWTextDrag::format( int i ) const
-{
-    if ( i < 4 ) // HACK, but how to do otherwise ??
-        return QTextDrag::format(i);
-    else if ( i == 4 )
-        return selectionMimeType();
-    else if ( i == 5 )
-        return "application/x-kword-framesetnumber";
-    else return 0;
-}
-
 const char * KWTextDrag::selectionMimeType()
 {
     return "application/vnd.oasis.opendocument.text";
-}
-
-void KWTextDrag::setFrameSetNumber( int number )
-{
-    m_framesetNumber = number;
 }
 
 int KWTextDrag::decodeFrameSetNumber( QMimeSource *e )

@@ -28,6 +28,7 @@
 #include "kwtextparag.h"
 #include "kwanchor.h"
 #include "kwvariable.h"
+#include "kwoasisloader.h"
 
 #include <kotextobject.h>
 #include <koOasisStyles.h>
@@ -260,8 +261,9 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
     QBuffer buffer( m_data );
 
     KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
-
-    textdoc->textFrameSet()->kWordDocument()->insertOasisData( store, c );
+    KWDocument* kwdoc = textdoc->textFrameSet()->kWordDocument();
+    KWOasisLoader loader( kwdoc );
+    loader.insertOasisData( store, c );
 
     delete store;
 
@@ -1566,13 +1568,13 @@ KWChangeStartingPageCommand::KWChangeStartingPageCommand( const QString &name, K
 
 void KWChangeStartingPageCommand::execute()
 {
-    m_doc->getVariableCollection()->variableSetting()->setStartingPage(newStartingPage);
+    m_doc->variableCollection()->variableSetting()->setStartingPage(newStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
 }
 
 void KWChangeStartingPageCommand::unexecute()
 {
-    m_doc->getVariableCollection()->variableSetting()->setStartingPage(oldStartingPage);
+    m_doc->variableCollection()->variableSetting()->setStartingPage(oldStartingPage);
     m_doc->recalcVariables( VT_PGNUM );
 }
 
@@ -1590,19 +1592,19 @@ void KWChangeVariableSettingsCommand::changeValue( bool b )
     switch(type)
     {
     case VS_DISPLAYLINK:
-        m_doc->getVariableCollection()->variableSetting()->setDisplayLink(b);
+        m_doc->variableCollection()->variableSetting()->setDisplayLink(b);
         m_doc->recalcVariables( VT_LINK );
         break;
     case  VS_UNDERLINELINK:
-        m_doc->getVariableCollection()->variableSetting()->setUnderlineLink(b);
+        m_doc->variableCollection()->variableSetting()->setUnderlineLink(b);
         m_doc->recalcVariables( VT_LINK );
         break;
     case VS_DISPLAYCOMMENT:
-        m_doc->getVariableCollection()->variableSetting()->setDisplayComment(b);
+        m_doc->variableCollection()->variableSetting()->setDisplayComment(b);
         m_doc->recalcVariables( VT_NOTE );
         break;
     case VS_DISPLAYFIELDCODE:
-        m_doc->getVariableCollection()->variableSetting()->setDisplayFieldCode(b);
+        m_doc->variableCollection()->variableSetting()->setDisplayFieldCode(b);
         //hack necessary otherwise footnote frameset is not refreshing
         //and footnote is not resize.
         m_doc->displayFootNoteFieldCode();
@@ -1868,11 +1870,11 @@ void KWChangeFootEndNoteSettingsCommand::changeCounter( KoParagCounter counter)
 {
     if (m_footNote )
     {
-        static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->changeFootNoteCounter(counter );
+        static_cast<KWVariableSettings*>(m_doc->variableCollection()->variableSetting())->changeFootNoteCounter(counter );
     }
     else
     {
-        static_cast<KWVariableSettings*>(m_doc->getVariableCollection()->variableSetting())->changeEndNoteCounter(counter );
+        static_cast<KWVariableSettings*>(m_doc->variableCollection()->variableSetting())->changeEndNoteCounter(counter );
     }
     m_doc->changeFootNoteConfig();
 }

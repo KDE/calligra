@@ -42,10 +42,11 @@ DCOPRef KWordTextFrameSetIface::startEditing()
     if ( m_frametext->isDeleted() )
         return DCOPRef();
     KWDocument *doc=m_frametext->kWordDocument();
-    QPtrList <KWView> lst=doc->getAllViews();
-    lst.at(0)->getGUI()->canvasWidget()->editFrameSet(m_frametext, true);
+    QValueList<KWView *> views = doc->getAllViews();
+    KWCanvas* canvas = views.first()->getGUI()->canvasWidget();
+    canvas->editFrameSet(m_frametext, true);
     return DCOPRef( kapp->dcopClient()->appId(),
-		    (static_cast<KWTextFrameSetEdit *>( lst.at(0)->getGUI()->canvasWidget()->currentFrameSetEdit()))->dcopObject()->objId() );
+		    (static_cast<KWTextFrameSetEdit *>( canvas->currentFrameSetEdit()))->dcopObject()->objId() );
 }
 
 bool KWordTextFrameSetIface::hasSelection() const

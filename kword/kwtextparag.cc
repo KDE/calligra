@@ -686,7 +686,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                         int correct = 0;
                         if (typeElem.hasAttribute( "correct" ))
                             correct = typeElem.attribute("correct").toInt();
-                        KoVariable * var =doc->getVariableCollection()->createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc, correct, true , loadFootNote);
+                        KoVariable * var =doc->variableCollection()->createVariable( type, -1, doc->variableFormatCollection(), varFormat,kwTextDocument(),doc, correct, true , loadFootNote);
                         if ( var )
                         {
                             var->load( varElem );

@@ -2275,9 +2275,8 @@ void KWCanvas::insertPart( const KoDocumentEntry &entry )
 
 void KWCanvas::contentsDragEnterEvent( QDragEnterEvent *e )
 {
-    bool providesImage, providesKWordText, providesKWord, providesFormula;
-    KWView::checkClipboard( e, providesImage, providesKWordText, providesKWord, providesFormula );
-    if ( providesImage || KURLDrag::canDecode( e ) )
+    int provides = KWView::checkClipboard( e );
+    if ( ( provides & KWView::ProvidesImage ) || KURLDrag::canDecode( e ) )
     {
         m_imageDrag = true;
         e->acceptAction();
@@ -2329,6 +2328,8 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
         pasteImage( e, docPoint );
     } else if ( KURLDrag::canDecode( e ) ) {
 
+        // TODO ask (with a popupmenu) between inserting a link and inserting the contents
+
         KURL::List lst;
         KURLDrag::decode( e, lst );
 
@@ -2362,9 +2363,12 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
             KIO::NetAccess::removeTempFile( filename );
         }
     }
-    else if ( m_currentFrameSetEdit )
+    else
     {
-        m_currentFrameSetEdit->dropEvent( e, normalPoint, docPoint );
+        if ( m_currentFrameSetEdit )
+            m_currentFrameSetEdit->dropEvent( e, normalPoint, docPoint, m_gui->getView() );
+        else
+            m_gui->getView()->pasteData( e );
     }
     m_mousePressed = false;
     m_imageDrag = false;

@@ -38,9 +38,11 @@ DCOPRef KWordFormulaFrameSetIface::startEditing()
 {
     if ( m_formulaFrame->isDeleted() )
         return DCOPRef();
-    KWDocument *doc=m_formulaFrame->kWordDocument();
-    QPtrList <KWView> lst=doc->getAllViews();
-    lst.at(0)->getGUI()->canvasWidget()->editFrameSet(m_formulaFrame );
+    KWDocument *doc = m_formulaFrame->kWordDocument();
+    QValueList<KWView *> views = doc->getAllViews();
+    KWCanvas* canvas = views.first()->getGUI()->canvasWidget();
+    canvas->editFrameSet( m_formulaFrame );
     return DCOPRef( kapp->dcopClient()->appId(),
-		    (static_cast<KWFormulaFrameSetEdit *>( lst.at(0)->getGUI()->canvasWidget()->currentFrameSetEdit()))->dcopObject()->objId() );
+		    ( static_cast<KWFormulaFrameSetEdit *>( canvas->currentFrameSetEdit() ) )
+                    ->dcopObject()->objId() );
 }

@@ -385,13 +385,14 @@ public:
     virtual void dragEnterEvent( QDragEnterEvent * ) {}
     virtual void dragMoveEvent( QDragMoveEvent *, const QPoint &, const KoPoint & ) {}
     virtual void dragLeaveEvent( QDragLeaveEvent * ) {}
-    virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint & ) {}
+    virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint &, KWView* ) {}
     virtual void focusInEvent() {}
     virtual void focusOutEvent() {}
     virtual void copy() {}
     virtual void cut() {}
     virtual void paste() {}
     virtual void selectAll() {}
+    virtual void pasteData( QMimeSource* /*data*/, int /*provides*/ ) {}
 
     /** Show a popup menu - called when right-clicking inside a frame of this frameset.
      * The default implementation calls the frameset's showPopup.

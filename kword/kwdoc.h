@@ -78,17 +78,14 @@ namespace KFormula {
 }
 
 class KoTextParag;
-class KoOasisContext;
 class KoOasisSettings;
 
 #include "kwanchorpos.h" // legacy loading stuff
 #include "kwview.h"
-//#include "kwbookmark.h"
 class KWBookMark;
 #include "defs.h" // for MouseMeaning
 
 #include <koDocument.h>
-//#include <koGlobal.h>
 #include <kozoomhandler.h>
 #include <koUnit.h>
 #include <koPictureKey.h>
@@ -142,6 +139,8 @@ class KWDocument : public KoDocument, public KoZoomHandler
     Q_PROPERTY( int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit )
 
 public:
+    friend class KWOasisLoader;
+
     KWDocument( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KWDocument();
 
@@ -346,9 +345,6 @@ public:
      */
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false, bool dontCreateFootNote = false, bool selectFrames = true );
 
-    /// OASIS version of pasteFrames and oasis-text-pasting. TODO: dontCreateFootNote
-    QValueList<KWFrame *> insertOasisData( KoStore* store, KoTextCursor* cursor );
-
     void insertEmbedded( KoStore *store, QDomElement topElem, KMacroCommand * macroCmd, double offset );
     void completePasting();
     void completeOasisPasting();
@@ -370,7 +366,7 @@ public:
     KoPictureCollection *pictureCollection() { return m_pictureCollection; }
     KoVariableFormatCollection *variableFormatCollection()const { return m_varFormatCollection; }
 
-    QPtrList <KWView> getAllViews() { return m_lstViews; }
+    QValueList<KWView *> getAllViews() const { return m_lstViews; }
 
     /**
      * Insert a new page after another,
@@ -481,23 +477,23 @@ public:
     /// @param flags see KWFrameLayout
     void recalcFrames( int fromPage = 0, int toPage = -1, uint flags = 0 );
 
-    KoHFType getHeaderType() const { return m_pageHeaderFooter.header; }
-    KoHFType getFooterType() const { return m_pageHeaderFooter.footer; }
+    KoHFType headerType() const { return m_pageHeaderFooter.header; }
+    KoHFType footerType() const { return m_pageHeaderFooter.footer; }
     const KoKWHeaderFooter& headerFooterInfo() const { return m_pageHeaderFooter; }
 
-    bool isOnlyOneFrameSelected();
+    bool isOnlyOneFrameSelected() const;
     void setFramePadding( double l, double r, double t, double b );
     void setFrameCoords( double x, double y, double w, double h );
 
     // The user-chosen global unit
-    QString getUnitName()const { return KoUnit::unitName( m_unit ); }
-    KoUnit::Unit getUnit()const { return m_unit; }
+    QString unitName() const { return KoUnit::unitName( m_unit ); }
+    KoUnit::Unit unit() const { return m_unit; }
     void setUnit( KoUnit::Unit _unit );
 
     void addCommand( KCommand * cmd );
 
     KoCommandHistory * commandHistory() const { return m_commandHistory; }
-    KoAutoFormat * getAutoFormat() const { return m_autoFormat; }
+    KoAutoFormat * autoFormat() const { return m_autoFormat; }
 
     /**
      * This is used upon loading, to delay certain things until completeLoading,
@@ -528,10 +524,10 @@ public:
 
     void recalcVariables( int type );
 
-    KWVariableCollection *getVariableCollection()const {return m_varColl;}
+    KWVariableCollection *variableCollection() const { return m_varColl; }
 
-    KWMailMergeDataBase *getMailMergeDataBase() const { return m_slDataBase; }
-    int getMailMergeRecord() const;
+    KWMailMergeDataBase *mailMergeDataBase() const { return m_slDataBase; }
+    int mailMergeRecord() const;
     void setMailMergeRecord( int r );
 
     bool backgroundSpellCheckEnabled() const;
@@ -659,7 +655,7 @@ public:
     /**
      * @returns the document for the formulas
      */
-    KFormula::Document* getFormulaDocument();
+    KFormula::Document* formulaDocument();
 
     void reorganizeGUI();
     /** necessary to update resize handle when you change layout
@@ -733,12 +729,10 @@ public:
     void updateHeaderButton();
     void updateFooterButton();
 
-    QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
-    void addIgnoreWordAllList( const QStringList & _lst)
-        { m_spellListIgnoreAll = _lst;}
+    QStringList spellCheckIgnoreList() const { return m_spellCheckIgnoreList; }
+    void setSpellCheckIgnoreList( const QStringList& lst );
+    void addSpellCheckIgnoreWord( const QString & );
 
-    void addIgnoreWordAll( const QString & );
-    void clearIgnoreWordAll( );
     void updateTextFrameSetEdit();
     void changeFootNoteConfig();
     void displayFootNoteFieldCode();
@@ -818,7 +812,10 @@ public:
     bool globalHyphenation() const { return m_bGlobalHyphenation; }
     void setGlobalHyphenation ( bool _hyphen );
 
+    KWLoadingInfo* createLoadingInfo();
     KWLoadingInfo* loadingInfo() const { return m_loadingInfo; }
+    void deleteLoadingInfo();
+
 #ifdef HAVE_LIBKSPELL2
     KWBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
 #endif
@@ -884,10 +881,8 @@ protected:
     void loadDefaultTableStyleTemplates();
     void loadDefaultTableTemplates();
 
-    void loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisContext& context );
     void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, SaveFlag saveFlag ) const;
     void saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const;
-    void loadOasisSettings( const QDomDocument&settingsDoc );
 
     QValueList<KoPictureKey> savePictureList();
 
@@ -895,8 +890,6 @@ protected:
     void saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store,
                              KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
                              QString* plainText ) const;
-
-    void loadOasisIgnoreList( const KoOasisSettings& settings );
 
 private:
     void clear();
@@ -915,7 +908,7 @@ private:
 
 
     // Variables:
-    QPtrList<KWView> m_lstViews;
+    QValueList<KWView *> m_lstViews;
     QPtrList<KWChild> m_lstChildren;
 
     KoColumns m_pageColumns;
@@ -1025,7 +1018,7 @@ private:
     QValueVector< QString > m_sectionTitles;
 
     double m_tabStop;
-    QStringList m_spellListIgnoreAll;
+    QStringList m_spellCheckIgnoreList;
     QPixmap* m_bufPixmap;
 
     KWLoadingInfo* m_loadingInfo;
