@@ -4554,6 +4554,9 @@ void KWPage::doAutoScroll()
     int mx = pos.x() + contentsX();
     int my = pos.y() + contentsY();
 
+    if ( pos.y() < 0 || pos.y() > viewport()->height() )
+        ensureVisible( contentsX(), my, 0, 5 );
+    
     int frameset = doc->getFrameSet( mx, my );
 
     if ( frameset != -1 && frameset == static_cast<int>( fc->getFrameSet() ) - 1 &&
@@ -4569,7 +4572,7 @@ void KWPage::doAutoScroll()
         fc->cursorGotoPixelLine( mx, my );
         fc->cursorGotoPixelInLine( mx, my );
 
-        scrollToCursor( *fc );
+        //scrollToCursor( *fc );
 
         _painter.begin( viewport() );
         doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );

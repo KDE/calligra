@@ -1303,3 +1303,7 @@ Reggie, 14.6.1999:
 - More work on flicker-freeness and optimations
 - tell dialogs about their parent, so that the window manager
   can do some optimations
+
+Reggie, 15.6.1999:
+------------------
+- Reimplemented autoscrolling when setting the cursor with the mouse
