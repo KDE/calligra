@@ -59,7 +59,7 @@ KoSearchContextUI::KoSearchContextUI( KoSearchContext *ctx, QWidget *parent )
 
 void KoSearchContextUI::slotShowOptions()
 {
-    KoFormatDia * dlg = new KoFormatDia( m_parent, m_ctx );
+    KoFormatDia * dlg = new KoFormatDia( m_parent, i18n("Formatting Options"), m_ctx );
     if ( dlg->exec())
     {
         dlg->ctxOptions( );
@@ -496,8 +496,8 @@ bool KoTextReplace::validateMatch( const QString &text, int index, int matchedle
     return m_findReplace->validateMatch( text, index, matchedlength );
 }
 
-KoFormatDia::KoFormatDia( QWidget* parent, KoSearchContext *_ctx ,  const char* name)
-    : KDialogBase( parent, name, true, i18n("Formatting Options"), Ok|Cancel|User1 |User2 ),
+KoFormatDia::KoFormatDia( QWidget* parent, const QString & _caption, KoSearchContext *_ctx ,  const char* name)
+    : KDialogBase( parent, name, true, _caption, Ok|Cancel|User1 |User2 ),
       m_ctx(_ctx)
 {
     QWidget *page = new QWidget( this );

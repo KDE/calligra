@@ -256,7 +256,7 @@ class KoFormatDia: public KDialogBase
 {
     Q_OBJECT
 public:
-    KoFormatDia( QWidget* parent, KoSearchContext *_ctx, const char* name=0L);
+    KoFormatDia( QWidget* parent, const QString & _caption, KoSearchContext *_ctx, const char* name=0L);
     //apply to parameter to context !
     void ctxOptions( );
 
