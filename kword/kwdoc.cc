@@ -1316,6 +1316,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     }
 #endif
 
+    emit newContentsSize();
     repaintAllViews( true );     // in case any view exists already
 
     //kdDebug(32001) << "KWDocument::loadXML done" << endl;
@@ -2224,6 +2225,7 @@ void KWDocument::removePage( int num )
     emit pageNumChanged();
     recalcVariables( VT_PGNUM );
     recalcFrames();
+    emit newContentsSize();
 }
 
 KWFrameSet * KWDocument::getFrameSetByName( const QString & name )
