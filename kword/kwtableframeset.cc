@@ -257,7 +257,7 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
     kdDebug(32004) << "KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
     //for(unsigned int i=0; i < m_rowPositions.count() ; i++) kdDebug(32004) << "row: " << i << " = " << m_rowPositions[i] << endl;
 
-    if(m_cells.isEmpty()) return; // assertion
+    Q_ASSERT( !m_cells.isEmpty() );
 
     // check/set sizes of frames
     unsigned int row=0,col=0;
@@ -1417,6 +1417,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
      */
     painter.save();
     QPen previewLinePen( lightGray ); // TODO use qcolorgroup
+    QPen minsizeLinePen( red ); // TODO use qcolorgroup
     QColor defaultBorderColor = KoTextFormat::defaultTextColor( &painter );
     const int minborder = 1;
     bool drawPreviewLines = !(painter.device()->devType() == QInternal::Printer ||
@@ -1547,7 +1548,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         }
                         double top=m_rowPositions[topRow]-offset;
 
-                        int toRow=QMIN(row,bottomRow);
+                        unsigned int toRow=QMIN(row,bottomRow);
                         offset=0.0;
                         if(border->ptWidth > 0 && toRow!=bottomRow) {
                             if(cell) offset=cell->topBorder();
@@ -1585,6 +1586,22 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                     border=&(cell->frame(0)->leftBorder());
             }
             row+=cell?cell->m_rows:1;
+        }
+    }
+
+    if(drawPreviewLines) {
+        painter.setPen( minsizeLinePen );
+        for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
+            Cell *cell = m_cells.at( i );
+            double y = cell->frame(0)->top() + cell->frame(0)->minFrameHeight() + 1.5;
+            if(y >= cell->frame(0)->bottom()) continue;
+            y=m_doc->zoomItY(y);
+            QPoint topLeft = viewMode->normalToView(QPoint(m_doc->zoomItX(cell->frame(0)->left()), y));
+            QPoint bottomRight = viewMode->normalToView(QPoint(m_doc->zoomItX(cell->frame(0)->right()), y));
+            QRect line = QRect(topLeft, bottomRight);
+            if(crect.intersects( line )) {
+                painter.drawLine( line.left(), line.top(), line.right(), line.bottom());
+            }
         }
     }
 
@@ -1660,6 +1677,7 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
 {
     int _row = KWDocument::getAttribute( framesetElem, "row", 0 );
     if(_row <0) _row =0;
+    unsigned int row=_row;
     int _col = KWDocument::getAttribute( framesetElem, "col", 0 );
     if(_col <0) _col =0;
     int _rows = KWDocument::getAttribute( framesetElem, "rows", 1 );
@@ -1667,7 +1685,7 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
     int _cols = KWDocument::getAttribute( framesetElem, "cols", 1 );
     if(_cols <0) _cols =0;
 
-    while(m_rowPositions.count() <= static_cast<unsigned int>(_row + _rows)) {
+    while(m_rowPositions.count() <= static_cast<unsigned int>(row + _rows + m_pageBoundaries.count())) {
         QValueList<double>::iterator tmp = m_rowPositions.end();
         m_rowPositions.insert(tmp,0);
     }
@@ -1676,14 +1694,26 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
         m_colPositions.insert(tmp,0);
     }
 
-    Cell *cell = new Cell( this, _row, _col, QString::null /*unused*/ );
+    Cell *cell = new Cell( this, row, _col, QString::null /*unused*/ );
     QString autoName = cell->getName();
     //kdDebug(32004) << "KWTableFrameSet::loadCell autoName=" << autoName << endl;
     cell->load( framesetElem, loadFrames );
     cell->m_rows = _rows;
     cell->m_cols = _cols;
+
+    if(m_pageBoundaries.count() > 0) {
+        unsigned int adjustment=0;
+        QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
+        while(pageBound != m_pageBoundaries.end() && (*pageBound) <= row + adjustment) {
+            adjustment++;
+            pageBound++;
+        }
+        row+=adjustment;
+    }
+
+    //kdDebug(32004) << "loading cell (" << row << "," << _col << ")\n";
     if(cell->frame(0)) {
-        cell->frame(0)->setMinFrameHeight(cell->frame(0)->height());
+        cell->frame(0)->setMinFrameHeight(cell->frame(0)->height()); // TODO run the formatter over the text here
         QValueList<double>::iterator tmp = m_colPositions.at(_col);
         if(*tmp == 0) (*tmp) = cell->frame(0)->left();
         else (*tmp) = (cell->frame(0)->left() + *tmp) / 2;
@@ -1692,16 +1722,40 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
         if(*tmp == 0) (*tmp) = cell->frame(0)->right();
         else (*tmp) = (cell->frame(0)->right() + *tmp) / 2;
 
-        tmp = m_rowPositions.at(_row);
+        tmp = m_rowPositions.at(row);
         if(*tmp == 0) (*tmp) = cell->frame(0)->top();
-        else (*tmp) = (cell->frame(0)->top() + *tmp) / 2;
+        else {
+            if (static_cast<int>(*tmp/m_doc->ptPaperHeight()) < static_cast<int>(cell->frame(0)->top()/m_doc->ptPaperHeight())) {
+                //kdDebug(32004) << "This cell is on a new page" << endl;
+                QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
+                while(pageBound != m_pageBoundaries.end() && (*pageBound) < row) ++pageBound;
+                if(*pageBound!=row) {
+                    m_pageBoundaries.insert(pageBound,row++);
+                    ++tmp;
+                    m_rowPositions.insert(tmp,cell->frame(0)->top());
+                }
+            } else
+                (*tmp) = (cell->frame(0)->top() + *tmp) / 2;
+        }
 
-        tmp = m_rowPositions.at(_row+_rows);
+        tmp = m_rowPositions.at(row+_rows);
         if(*tmp == 0) (*tmp) = cell->frame(0)->bottom();
-        else (*tmp) = (cell->frame(0)->bottom() + *tmp) / 2;
+        else { // untested...
+            if (static_cast<int>(*tmp/m_doc->ptPaperHeight()) > static_cast<int>(cell->frame(0)->top()/m_doc->ptPaperHeight())) {
+                //kdDebug(32004) << "next cell is on a new page" << endl;
+                QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
+                while(pageBound != m_pageBoundaries.end() && (*pageBound) < row) ++pageBound;
+                if(*pageBound!=row) {
+                    m_pageBoundaries.insert(pageBound,row++);
+                    m_rowPositions.insert(tmp,cell->frame(0)->bottom());
+                } 
+            } else
+                (*tmp) = (cell->frame(0)->bottom() + *tmp) / 2;
+        }
     }
     if ( !useNames )
         cell->setName( autoName );
+
     return cell;
 }
 
@@ -1736,7 +1790,11 @@ bool KWTableFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSp
 
 void KWTableFrameSet::finalize( ) {
     //kdDebug(32004) << "KWTableFrameSet::finalize" << endl;
-    recalcRows();
+
+    for ( unsigned int i = 0; i < m_cells.count(); i++ )
+        position(m_cells.at( i ));
+
+    //recalcRows();
     recalcCols();
     KWFrameSet::finalize();
 }
@@ -2051,7 +2109,7 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
                             row=tableFrame->getRows()-1;
                         }
                         fs=tableFrame->getCell(row,col);
-                        if(fs && fs->m_row != row) {
+                        if(fs && fs->m_row != static_cast<unsigned int>(row)) {
                             col=fs->m_col -1;
                             fs=0;
                         }
