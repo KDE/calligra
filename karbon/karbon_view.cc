@@ -1002,9 +1002,9 @@ KarbonView::initActions()
 
 	// set up join style widget
 	m_joinStyle = new VStateButton( this );
-	m_joinStyle->addState( new QPixmap( "pics/hi22-action-14_shear.png" ) );
-    m_joinStyle->addState( new QPixmap( "pics/hi22-action-14_star.png" ) );
-    m_joinStyle->addState( new QPixmap( "pics/hi22-action-14_rotate.png" ) );
+	m_joinStyle->addState( new QPixmap( "pics/hi16-action-join_bevel.png" ) );
+    m_joinStyle->addState( new QPixmap( "pics/hi16-action-join_miter.png" ) );
+    m_joinStyle->addState( new QPixmap( "pics/hi16-action-join_round.png" ) );
     m_joinStyle->setState( 0 );
 #if KDE_VERSION >= 305
 	new KWidgetAction( m_joinStyle, i18n("Set Join Style"), 0, this, SLOT( slotJoinStyleClicked() ), actionCollection(), "setJoinStyle" );
