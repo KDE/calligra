@@ -5,12 +5,12 @@
 
 noinst_LTLIBRARIES =libui.la
 
-
-
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
-	-I$(top_srcdir)/kivio/kiviopart/tklib $(KOFFICE_INCLUDES) $(all_includes)
-libui_la_METASOURCES = AUTO
+	-I$(top_srcdir)/kivio/kiviopart/tklib\
+	$(KOFFICE_INCLUDES) $(all_includes)
+
+METASOURCES = AUTO
 libui_la_SOURCES = \
 		guidessetupdialogbase.ui\
 		guidessetupdialog.cpp\
@@ -25,27 +25,6 @@ libui_la_SOURCES = \
 		enternamedialogbase.ui\
 		viewitemrenamedialog.cpp\
 		kivio_birdeye_panel.cpp\
-		kivio_birdeye_panel_base.ui
-EXTRA_DIST = \
-		guidessetupdialogbase.ui\
-		guidessetupdialog.cpp\
-		guidessetupdialog.h\
-		guides1pagebase.ui\
-		guides2pagebase.ui\
-		guides1page.cpp\
-		guides1page.h\
-		guides2page.cpp\
-		guides2page.h\
-		aligndialog.ui\
-		gridsetupdialog.ui\
-		kiviooptionsdialogbase.ui\
-		kiviooptionsdialog.cpp\
-		kiviooptionsdialog.h\
-		enternamedialogbase.ui\
-		viewitemrenamedialog.cpp\
-		viewitemrenamedialog.h\
-		kivio_birdeye_panel.cpp\
-		kivio_birdeye_panel.h\
 		kivio_birdeye_panel_base.ui
 ##############################################################
 ####                  END KDEStudio part                  ####
