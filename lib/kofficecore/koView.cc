@@ -77,9 +77,6 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
   QValueList<KAction*>::ConstIterator end = docActions.end();
   for (; it != end; ++it )
     actionCollection()->insert( *it );
-
-  // tell the document, that we are "alive"
-  document->addView(this);
 }
 
 KoView::~KoView()

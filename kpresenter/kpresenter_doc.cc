@@ -3807,7 +3807,9 @@ KoMainWindow* KPresenterDoc::createShell()
 /*================================================================*/
 KoView* KPresenterDoc::createView( QWidget* parent, const char* name )
 {
-    return new KPresenterView( this, parent, name );
+    KPresenterView *view=new KPresenterView( this, parent, name );
+    addView(view);
+    return view;
 }
 
 /*================================================================*/

@@ -173,7 +173,9 @@ bool KIllustratorDocument::initDoc()
 
 KoView* KIllustratorDocument::createView( QWidget* parent, const char* name )
 {
-    return new KIllustratorView( parent, name, this );
+    KIllustratorView *view=new KIllustratorView( parent, name, this );
+    addView(view);
+    return view;
 }
 
 KoMainWindow* KIllustratorDocument::createShell()
