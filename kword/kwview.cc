@@ -1277,7 +1277,7 @@ void KWView::insertSpecialChar()
         return;
     QString f = font().family();
     QChar c=' ';
-    if ( KCharSelectDia::selectChar( f, c, false ) )
+    if ( KCharSelectDia::selectChar( f, c ) )
             edit->insertSpecialChar(c);
 }
 
