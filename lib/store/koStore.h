@@ -25,7 +25,7 @@
 #include <qiodevice.h>
 
 class QBuffer;
-class KTarGz;
+class KTar;
 
 /**
  * Saves and loads koffice documents using a tar file called "the tar store".
@@ -42,7 +42,7 @@ public:
    * if _mode is KoStore::Write
    * Opens a Tar Store for reading if _mode is KoStore::Read.
    * @param appIdentification a string that identifies the application,
-   * to be written in the gzip header (see KTarGz::setOrigFileName)
+   * to be written in the gzip header (see KTar::setOrigFileName)
    */
   KoStore( const QString & _filename, Mode _mode, const QCString & appIdentification = "" );
 
@@ -67,6 +67,13 @@ public:
    * Close the file inside the store
    */
   void close();
+
+  /**
+   * Get a device for reading a file from the store directly
+   * (slightly faster than read() calls)
+   * You need to call @ref open first, and @ref close afterwards.
+   */
+  QIODevice* device() const;
 
   /**
    * Read data from the currently opened file. You can also use the streams
@@ -159,9 +166,13 @@ protected:
   // Current size of the file named m_sName
   QIODevice::Offset m_iSize;
 
-  KTarGz * m_pTar;
+  // The tar archive
+  KTar * m_pTar;
+  // The stream for the current read or write operation
+  // When reading, it comes directly from KArchiveFile::device()
+  // When writing, it buffers the data into m_byteArray
+  QIODevice * m_stream;
   QByteArray m_byteArray;
-  QBuffer * m_stream;
 
   bool m_bIsOpen;
   bool m_bGood;

@@ -33,7 +33,9 @@ class KoStoreDevice : public QIODevice
 {
 public:
   // Note: KoStore::open() should be called before calling this.
-  KoStoreDevice( KoStore * store ) : m_store(store) {}
+  KoStoreDevice( KoStore * store ) : m_store(store) {
+      setType( IO_Direct );
+  }
   ~KoStoreDevice() {}
 
   bool open( int m ) {

@@ -157,6 +157,9 @@ bool KoStore::open( const QString & _name )
 
     m_strFiles.append( m_sName );
     m_iSize = 0;
+    m_byteArray.resize( 0 );
+    m_stream = new QBuffer( m_byteArray );
+    m_stream->open( IO_WriteOnly );
   }
   else if ( m_mode == Read )
   {
@@ -174,16 +177,14 @@ bool KoStore::open( const QString & _name )
       return false;
     }
     KTarFile * f = (KTarFile *) entry;
-    m_byteArray = f->data();
-    // warning, m_byteArray can be bigger than f->data().size() (if a previous file was bigger)
-    // this is why we never use m_byteArray.size()
+    m_byteArray.resize( 0 );
+    delete m_stream;
+    m_stream = f->device();
     m_iSize = f->size();
   }
   else
     assert( 0 );
 
-  m_stream = new QBuffer( m_byteArray );
-  m_stream->open( (m_mode == Write) ? IO_WriteOnly : IO_ReadOnly );
   m_bIsOpen = true;
 
   return true;
@@ -206,6 +207,7 @@ void KoStore::close()
     kdDebug(s_area) << "Writing file " << m_sName << " into TAR archive. size "
 		   << m_iSize << endl;
     m_pTar->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() );
+    m_byteArray.resize( 0 ); // save memory
   }
 
   delete m_stream;
@@ -272,9 +274,7 @@ Q_LONG KoStore::read( char *_buffer, Q_ULONG _len )
   if ( _len == 0 )
     return 0;
 
-  m_stream->readBlock( _buffer, _len );
-
-  return _len;
+  return m_stream->readBlock( _buffer, _len );
 }
 
 bool KoStore::embed( const QString &dest, KoStore &store, const QString &src )
@@ -349,7 +349,7 @@ bool KoStore::embed( const QString &dest, KoStore &store, const QString &src )
     }
     else
     {
-kdDebug(s_area) << "KoStore: is file " << endl;
+      kdDebug(s_area) << "KoStore: is file " << endl;
       if ( ( open( destDir + entries[i] ) && store.open( srcDir + entries[i] ) ) )
       {
         kdDebug(s_area) << "KoStore: embedding file " << entries[i] << endl;
@@ -422,4 +422,13 @@ QIODevice::Offset KoStore::at() const
 bool KoStore::atEnd() const
 {
   return m_stream->atEnd();
+}
+
+QIODevice* KoStore::device() const
+{
+  if ( !m_bIsOpen )
+    kdWarning(s_area) << "KoStore: You must open before asking for a device" << endl;
+  if ( m_mode != Read )
+    kdWarning(s_area) << "KoStore: Can not get device from store that is opened for writing" << endl;
+  return m_stream;
 }
