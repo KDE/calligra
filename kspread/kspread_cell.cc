@@ -450,24 +450,18 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
                         int col = 0;
                         //used when there is a lower reference cell
                         //example =a1
+                        //now calculate the row as integer value
                         int offset='a'-'A';
-                        if ( buffer.length() >= 2 )
+                        int counterColumn = 0;
+                        for ( uint i=0; i < buffer.length(); i++ )
                         {
-                            if(buffer[0] >= 'A' && buffer[0] <= 'Z')
-                                col += 26 * ( buffer[0].latin1() - 'A' + 1 );  // okay here (Werner)
-                            else if( buffer[0]>= 'a' && buffer[0] <= 'z' )
-                                 col += 26 * ( buffer[0].latin1() - 'A' + 1 -offset );
-                            if(buffer[1] >= 'A' && buffer[1] <= 'Z')
-                                col += buffer[1].latin1() - 'A' + 1;
-                            else if( buffer[1]>= 'a' && buffer[1] <= 'z' )
-                                 col +=  buffer[1].latin1() - 'A' + 1 -offset ;
+                            counterColumn = (int) pow(26 , buffer.length() - i - 1);
+                            if(buffer[i] >= 'A' && buffer[i] <= 'Z')
+                                col += counterColumn * ( buffer[i].latin1() - 'A' + 1);  // okay here (Werner)
+                            else if( buffer[i] >= 'a' && buffer[i] <= 'z' )
+                                 col += counterColumn * ( buffer[i].latin1() - 'A' - offset + 1 );
                         }
-                        else {
-                            if(buffer[0] >= 'A' && buffer[0] <= 'Z')
-                                col += buffer[0].latin1() - 'A' + 1;
-                            else if( buffer[0]>= 'a' && buffer[0] <= 'z' )
-                                col += buffer[0].latin1() - 'A' + 1 -offset ;
-                        }
+
                         if ( fix1 )
                             erg += QString( "$%1" ).arg( col );
                         else
