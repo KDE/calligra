@@ -189,18 +189,9 @@ void KoHTMLDoc::openURL( const char *_url, CORBA::Boolean reload )
   if ( u.isMalformed() )
     return;
 
-#warning "Reggie: I had to ifdef out some stuff here because of changes in KURL. Simon, please fix that!"
-  
-#if 0
-  KURLList l1, l2;
-  KURL::split( url, l1 );
-  KURL::split( m_strCurrentURL, l2 );
+  QString anchor = u.htmlRef();
 
-  QString anchor = l1.getLast()->ref();
-
-  l1.getLast()->setRef("");
-  l2.getLast()->setRef("");
-#endif
+  QString old = m_strCurrentURL;
   
   m_strCurrentURL = u.url();
 
@@ -209,10 +200,8 @@ void KoHTMLDoc::openURL( const char *_url, CORBA::Boolean reload )
   m_bLoadError = false;
   m_bDocumentDone = false;
 
-#if 0
-  if ( (!((bool)reload)) && urlcmp( l1, l2 ) )
+  if ( (!((bool)reload)) && urlcmp( u.url(), old, true, true ) )
     {
-      KURL::decode( anchor );
       QListIterator<KMyHTMLView> it( m_lstHTMLViews );
       for (; it.current(); ++it)
         it.current()->gotoAnchor( anchor );
@@ -226,7 +215,6 @@ void KoHTMLDoc::openURL( const char *_url, CORBA::Boolean reload )
 
       documentStarted();
     }
-#endif
 }
 
 void KoHTMLDoc::documentStarted()
@@ -683,21 +671,7 @@ void KoHTMLDoc::viewFinished( KMyHTMLView *view )
 
 void KoHTMLDoc::requestImage( KMyHTMLView *view, const char *url, bool reload )
 {
-#warning "Reggie: I had to ifdef out some stuff here because of changes in KURL. Simon, please fix that!"
-
-#if 0
-  KURLList lst;
-  KURL::split( view->getKHTMLWidget()->getDocumentURL().url(), lst );
-  KURL u( *lst.getLast(), url );
-  QString dataURL = url;
-
-  if ( strcmp( u.protocol(), lst.getLast()->protocol() ) == 0 )
-     {
-       *lst.getLast() = u;
-       KURL::join( lst, dataURL );
-     }
-
-  KoHTMLJob *job = new KoHTMLJob( view, url, dataURL, KoHTMLJob::Image, reload );
+  KoHTMLJob *job = new KoHTMLJob( view, url, url, KoHTMLJob::Image, reload );
 
   QObject::connect( job, SIGNAL(jobData( KoHTMLJob *, const char *, int, bool )),
                     this, SLOT(slotJobData( KoHTMLJob *, const char *, int, bool )));
@@ -707,7 +681,6 @@ void KoHTMLDoc::requestImage( KMyHTMLView *view, const char *url, bool reload )
   m_lstJobs.append( job );
 
   job->start();		
-#endif
 }
 
 void KoHTMLDoc::cancelImage( KMyHTMLView *view, const char *url )
