@@ -836,13 +836,6 @@ void KWFrameSet::updateFrames()
     if ( frames.isEmpty() )
         return; // No frames. This happens when the frameset is deleted (still exists for undo/redo)
 
-    // hack: table cells are not handled here, since they're not in the doc's frameset list.
-    // ( so 'this' will never be found, and the whole method is useless )
-    // TODO: hmm, well, store the "parent of this frameset", whether doc or frameset,
-    // and look for the frameset list there. Hmm.
-    if ( grpMgr )
-        return;
-
     // Not visible ? Don't bother then.
     if ( !isVisible() )
         return;
@@ -883,11 +876,13 @@ void KWFrameSet::updateFrames()
     // We'll use this information in various methods (adjust[LR]Margin, drawContents etc.)
     // So we want it cached.
     QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
+    // Look for the one that's in the document's list. Table cells aren't.
+    KWFrameSet* thisFrameSet = grpMgr ? grpMgr : this;
     bool foundThis = false;
     for (; framesetIt.current(); ++framesetIt )
     {
         KWFrameSet *frameSet = framesetIt.current();
-        if ( frameSet == this )
+        if ( frameSet == thisFrameSet )
             foundThis = true;
 
         if ( !frameSet->isVisible() )

@@ -493,7 +493,7 @@ kdDebug(32004) << "new pageBound: " << breakRow << " for " << m_rowPositions[lin
             if(pageNumber > m_doc->getPages()) m_doc->appendPage();
         }
 if(diff > 0)  kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
-        if(diff > 0) 
+        if(diff > 0)
             (*j) = (*j) + diff;
 
         lineNumber++;
@@ -1423,7 +1423,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
 
     /*  Draw the borders on top of the lines stores in the m_rowPositions and m_colPositions arrays.
      *  check the relevant cells for borders and thus line thickness.
-     *  We move the outer lines (on row==0 and col==0 plus on col=getCols() etc) a bit so they will stay 
+     *  We move the outer lines (on row==0 and col==0 plus on col=getCols() etc) a bit so they will stay
      *  inside the boundry of the table!
      */
     painter.save();
@@ -1540,7 +1540,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
                     unsigned int topRow=startRow;
                     do { // draw minimum of one line per page.
-                        while(*(pageBound) < topRow && pageBound!=m_pageBoundaries.end())
+                        while(pageBound!=m_pageBoundaries.end() && *(pageBound) < topRow )
                             pageBound++;
 
                         unsigned int bottomRow;
@@ -1579,7 +1579,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                                 int borderWidth = KoBorder::zoomWidthX( border->ptWidth, m_doc, minborder );
                                 painter.setPen(KoBorder::borderPen( *border, borderWidth, defaultBorderColor ));
                             }
-                            //kdDebug(32004) << "Paint: painter.drawVerticalLine(" << line.left() << ","  << line.top() << "," <<  line.right() << ","  << line.bottom() << ")\n"; 
+                            //kdDebug(32004) << "Paint: painter.drawVerticalLine(" << line.left() << ","  << line.top() << "," <<  line.right() << ","  << line.bottom() << ")\n";
                             painter.drawLine( line.left(), line.top(), line.right(), line.bottom());
                         }
 
@@ -1759,7 +1759,7 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
                 if(*pageBound!=row) {
                     m_pageBoundaries.insert(pageBound,row++);
                     m_rowPositions.insert(tmp,cell->frame(0)->bottom());
-                } 
+                }
             } else
                 (*tmp) = (cell->frame(0)->bottom() + *tmp) / 2;
         }
@@ -1962,7 +1962,7 @@ void KWTableFrameSet::Cell::addFrame(KWFrame *_frame, bool recalc) {
 
 double KWTableFrameSet::Cell::leftBorder() {
     double b = frame(0)->leftBorder().ptWidth;
-    if(b==0.0) 
+    if(b==0.0)
         return 0.0;
     if(m_col==0) // left most cell
         return b;
