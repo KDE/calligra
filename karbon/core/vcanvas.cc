@@ -33,15 +33,16 @@ resizeContents( 800, 600 );
 }
 
 void
+VCanvas::focusInEvent( QFocusEvent * )
+{
+}
+
+void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
 	//kdDebug() << " e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
 	VPainter *p = m_view->painterFactory()->painter();
 	p->blit( e->rect() );
-	//kdDebug() << "VCanvas::viewportPaintEvent" << endl;
-	//drawDocument( 0, QRect( 0, 0, width(), height() ) );
-	/*VPainter *p = m_view->painterFactory()->painter();
-	p->end();*/
 }
 
 void

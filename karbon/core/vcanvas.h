@@ -25,6 +25,7 @@ public:
 	void setZoomFactor( double zoom ) { m_zoomFactor = zoom; }
 
 protected:
+	virtual void focusInEvent( QFocusEvent * );
 	virtual void viewportPaintEvent( QPaintEvent* );
 	virtual void drawContents( QPainter* painter, int clipx, int clipy,
 		int clipw, int cliph  );
