@@ -939,7 +939,7 @@ TxtParagraph::HorzAlign KTextObject::horzAlign(int p = -1)
 }
 
 /*=================== get QPicture of the obj ====================*/
-QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false)
+QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1)
 {
   QPainter p;
 
@@ -949,6 +949,9 @@ QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false)
   p.setClipRect(_x,_y,_w,_h);
   ystart = 0;
   
+  from = min(from,to);
+  to = max(from,to);
+
   if (paragraphList.count() == 1 && paragraphAt(0)->lines() == 1 && 
       paragraphAt(0)->lineAt(0)->items() == 1 && !presMode)
     {
@@ -962,7 +965,8 @@ QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false)
     {
       for (unsigned i = 0;i < paragraphs();i++)
 	{
-	  paintCell(&p,i,0);
+	  if (from == -1 && to == -1 || from <= i && to >= i)
+	    paintCell(&p,i,0);
 	  ystart += cellHeights.at(i)->wh;
 	}
     }

@@ -449,7 +449,7 @@ public:
   void showScrollbar() {setTableFlags(Tbl_vScrollBar);}
 
   // get QPicture of the object
-  QPicture* getPic(int,int,int,int,bool presMode=false);
+  QPicture* getPic(int,int,int,int,bool presMode=false,int from=-1,int to=-1);
 
   // resize
   void resize(int w,int h)

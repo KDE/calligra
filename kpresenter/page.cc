@@ -41,6 +41,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       editMode = true;
       currPresPage = 1;
       currPresStep = 0;
+      subPresStep = 0;
       _presFakt = 1.0;
     }
   else 
@@ -235,8 +236,22 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	      } break;
 	    case OT_TEXT: /* text */
 	      {
- 		objPtr->objPic = objPtr->textObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),
-							 objPtr->ow,objPtr->oh,!editMode);
+		if (!editMode)
+		  {
+		    switch (objPtr->effect2)
+		      {
+		      case EF2T_PARA:
+			objPtr->objPic = objPtr->textObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),
+								 objPtr->ow,objPtr->oh,!editMode,0,subPresStep);
+			break;
+		      default:
+			objPtr->objPic = objPtr->textObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),
+								 objPtr->ow,objPtr->oh,!editMode);
+		      }
+		  }
+		else
+		  objPtr->objPic = objPtr->textObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),
+							   objPtr->ow,objPtr->oh,!editMode);
  		painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
  		objPtr->objPic->play(painter);
  		painter->resetXForm();
@@ -1142,6 +1157,7 @@ void Page::startScreenPresentation()
   drawBack = true;
   presStepList = view->KPresenterDoc()->reorderPage(1,diffx(),diffy(),_presFakt);
   currPresStep = (int)presStepList.first();
+  subPresStep = 0;
   repaint(true);
   setFocusPolicy(QWidget::StrongFocus);
   setFocus();
@@ -1198,6 +1214,26 @@ bool Page::pNext(bool manual)
 {
   if ((int*)currPresStep < presStepList.last())
     {
+
+      for (unsigned int i = 0;i < objList()->count();i++)
+	{
+	  objPtr = objList()->at(i);
+	  if (getPageOfObj(objPtr->objNum,_presFakt) == currPresPage && objPtr->presNum == currPresStep
+	      && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
+	    {
+	      if (subPresStep < objPtr->textObj->paragraphs()-1)
+		{
+		  subPresStep++;
+		  drawBack = false;
+		  repaint(drawBack);
+		  drawBack = true;
+		  return false;
+		}
+	      else
+		subPresStep = 0;
+	    }
+	}
+      
       presStepList.find((int*)currPresStep);
       currPresStep = (int)presStepList.next();
       drawBack = false;
@@ -1209,6 +1245,24 @@ bool Page::pNext(bool manual)
     {
       if (currPresPage+1 > pageNums())
 	{
+
+	  for (unsigned int i = 0;i < objList()->count();i++)
+	    {
+	      objPtr = objList()->at(i);
+	      if (getPageOfObj(objPtr->objNum,_presFakt) == currPresPage && objPtr->presNum == currPresStep
+		  && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
+		{
+		  if (subPresStep < objPtr->textObj->paragraphs()-1)
+		    {
+		      subPresStep++;
+		      drawBack = false;
+		      repaint(drawBack);
+		      drawBack = true;
+		      return false;
+		    }
+		}
+	    }
+
 	  presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
 	  currPresStep = (int)presStepList.last();
 	  drawBack = false;
@@ -1216,6 +1270,26 @@ bool Page::pNext(bool manual)
 	  drawBack = true;
 	  return false;
 	}
+
+      for (unsigned int i = 0;i < objList()->count();i++)
+	{
+	  objPtr = objList()->at(i);
+	  if (getPageOfObj(objPtr->objNum,_presFakt) == currPresPage && objPtr->presNum == currPresStep
+	      && objPtr->objType == OT_TEXT && objPtr->effect2 != EF2_NONE)
+	    {
+	      if (subPresStep < objPtr->textObj->paragraphs()-1)
+		{
+		  subPresStep++;
+		  drawBack = false;
+		  repaint(drawBack);
+		  drawBack = true;
+		  return false;
+		}
+	      else
+		subPresStep = 0;
+	    }
+	}
+
       currPresPage++;
       presStepList = view->KPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
       currPresStep = (int)presStepList.first();

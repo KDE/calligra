@@ -40,7 +40,7 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   sprintf(str,"%d",view->KPresenterDoc()->objList()->at(_objNum-1)->presNum);
   eNum->setText(str);
 
-  lEffect = new QLabel("Effect: ",this);
+  lEffect = new QLabel("Effect (appearing): ",this);
   lEffect->move(10,eNum->y()+eNum->height()+20);
   lEffect->resize(lEffect->sizeHint());
 
@@ -58,7 +58,37 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   cEffect->move(max(lEffect->width(),lNum->width())+15,lEffect->y()-5);
   cEffect->resize(cEffect->sizeHint());
 
-  resize(max(cEffect->x()+cEffect->width(),eNum->x()+eNum->width())+10,cEffect->y()+cEffect->height()+10);
+  lEffect2 = new QLabel("Effect (object specific): ",this);
+  lEffect2->move(cEffect->x()+cEffect->width()+20,eNum->y()+eNum->height()+20);
+  lEffect2->resize(lEffect2->sizeHint());
+
+  cEffect2 = new QComboBox(false,this,"cEffect2");
+  cEffect2->insertItem("No Effect");
+
+  switch (view->KPresenterDoc()->objList()->at(_objNum-1)->objType)
+    {
+    case OT_TEXT:
+      {
+	cEffect2->insertItem("Paragraph after paragraph");
+      } break;
+    }
+
+  if (view->KPresenterDoc()->objList()->at(_objNum-1)->effect2 == EF_NONE)
+    cEffect2->setCurrentItem((int)view->KPresenterDoc()->objList()->at(_objNum-1)->effect2);
+  else
+    {
+      switch (view->KPresenterDoc()->objList()->at(_objNum-1)->objType)
+	{
+	case OT_TEXT:
+	  cEffect2->setCurrentItem((int)view->KPresenterDoc()->objList()->at(_objNum-1)->effect2+TxtObjOffset);
+	  break;
+	}
+    }
+
+  cEffect2->move(lEffect2->x()+lEffect2->width()+5,lEffect2->y()-5);
+  cEffect2->resize(cEffect2->sizeHint());
+
+  resize(cEffect2->x()+cEffect2->width()+10,cEffect->y()+cEffect->height()+10);
 
   cancelBut = new QPushButton(this,"BCancel");
   cancelBut->setText("Cancel");
@@ -83,7 +113,7 @@ EffectDia::EffectDia(QWidget* parent,const char* name,int _pageNum,int _objNum,K
   connect(cancelBut,SIGNAL(clicked()),this,SLOT(reject()));
   connect(okBut,SIGNAL(clicked()),this,SLOT(accept()));
 
-  resize(max(cEffect->x()+cEffect->width(),eNum->x()+eNum->width())+10,okBut->y()+okBut->height()+10);
+  resize(cEffect2->x()+cEffect2->width()+10,okBut->y()+okBut->height()+10);
 }
 
 /*===================== destructor ===============================*/
@@ -96,6 +126,7 @@ void EffectDia::slotEffectDiaOk()
 {
   view->KPresenterDoc()->objList()->at(objNum-1)->presNum = atoi(eNum->text());
   view->KPresenterDoc()->objList()->at(objNum-1)->effect = (Effect)cEffect->currentItem();
+  view->KPresenterDoc()->objList()->at(objNum-1)->effect2 = (Effect2)cEffect2->currentItem();
 
   emit effectDiaOk();
 }

@@ -50,8 +50,8 @@ public:
   ~EffectDia();                                             
 
 protected:
-  QComboBox *cEffect;
-  QLabel *lEffect,*lNum;
+  QComboBox *cEffect,*cEffect2;
+  QLabel *lEffect,*lEffect2,*lNum;
   KRestrictedLine *eNum;
   QPushButton *cancelBut,*okBut;
 

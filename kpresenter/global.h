@@ -36,6 +36,10 @@ enum LineType {LT_HORZ,LT_VERT,LT_LU_RD,LT_LD_RU};
 enum RectType {RT_NORM,RT_ROUND};
 enum ModifyType {MT_NONE,MT_MOVE,MT_RESIZE_UP,MT_RESIZE_DN,MT_RESIZE_LF,MT_RESIZE_RT,MT_RESIZE_LU,MT_RESIZE_LD,MT_RESIZE_RU,MT_RESIZE_RD};
 enum Effect {EF_NONE = 0};
+enum Effect2 {EF2_NONE = 0,EF2T_PARA = 1};
+
+// offsets of the effects in the Effect2 enum accoording to a objType
+const int TxtObjOffset = 0;
 
 // page background
 enum BCType {BCT_PLAIN = 0,BCT_GHORZ = 1,BCT_GVERT = 2};
@@ -71,6 +75,7 @@ struct PageObjects
   QPicture *objPic;
   unsigned int presNum;
   Effect effect;
+  Effect2 effect2;
 };
 
 #endif //GLOBAL_H

@@ -159,7 +159,7 @@ protected:
   GraphObj *graphPtr;
   KPresenterView_impl *view;
   bool editMode;
-  unsigned int currPresPage,currPresStep;
+  unsigned int currPresPage,currPresStep,subPresStep;
   float _presFakt;
   QList<int> presStepList;
 
