@@ -637,6 +637,7 @@ KSpreadDoc::~KSpreadDoc()
   s_docs->removeRef(this);
   kdDebug(36001) << "alive 1" << endl;
   delete m_pMap;
+  delete m_pKSpellConfig;
 }
 
 DCOPObject* KSpreadDoc::dcopObject()

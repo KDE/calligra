@@ -318,6 +318,12 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   (void)new KSpreadToolTip( this );
 }
 
+KSpreadCanvas::~KSpreadCanvas()
+{
+    delete m_scrollTimer;
+}
+
+
 bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
 {
     if ( !o || !e )
@@ -1617,7 +1623,7 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
 }
 
 void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
-{  
+{
   KSpreadTable * table = activeTable();
   QString tmp;
   if ( !table )
@@ -1696,7 +1702,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 			case KSpread::Right:
 			    tmpMoveTo=KSpread::Left;
 			}
-		} 
+		}
 
 //if( _ev->state() != Qt::ControlButton ){
       switch( _ev->key() )
@@ -2389,7 +2395,7 @@ void KSpreadCanvas::convertToTime( KSpreadCell * cell )
     cell->setValue( getDouble( cell ) );
 
   cell->setFormatType( KSpreadLayout::SecondeTime );
-            
+
   QTime time(0, 0, 0);
   time = time.addSecs( (int) cell->valueDouble() );
   int msec = (int) ( (cell->valueDouble() - (int) cell->valueDouble())* 1000 );
@@ -2408,7 +2414,7 @@ void KSpreadCanvas::convertToDate( KSpreadCell * cell )
   cell->setFactor( 1.0 );
 
   QDate date(1900, 1, 1);
-          
+
   date = date.addDays( (int) cell->valueDouble() - 1 );
   cell->setCellText( util_dateFormat(m_pDoc->locale(), date, KSpreadCell::ShortDate) );
 }
@@ -2419,7 +2425,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
     return false;
 
   int key = _ev->key();
-  if ( key != Key_Exclam && key != Key_At && key != Key_Ampersand 
+  if ( key != Key_Exclam && key != Key_At && key != Key_Ampersand
        && key != Key_Dollar && key != Key_Percent && key != Key_AsciiCircum
        && key != Key_NumberSign )
     return false;
@@ -2584,7 +2590,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
           cell->setFormatType( KSpreadCell::Number );
           cell->setPrecision( 2 );
           break;
-          
+
          case Key_Dollar:
           convertToMoney( cell );
           break;
@@ -2673,7 +2679,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
           cw->setRightBorderPen( pen );
         }
         break;
-        
+
        default:
         return false;
       }
@@ -2732,7 +2738,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         {
           pen = QPen( m_pView->borderColor(), 1, SolidLine);
           cell->setBottomBorderPen( pen );
-        }       
+        }
         if ( col == rect.left() )
         {
           pen = QPen( m_pView->borderColor(), 1, SolidLine);

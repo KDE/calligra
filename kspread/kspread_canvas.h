@@ -101,6 +101,7 @@ public:
     enum EditorType { CellEditor, FormulaEditor, EditWidget };
 
     KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* _doc );
+    ~KSpreadCanvas( );
 
     /**
      * Called from @ref KSpreadView to complete the construction. Has to
