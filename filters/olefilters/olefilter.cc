@@ -109,7 +109,11 @@ KoFilter::ConversionStatus OLEFilter::convert( const QCString& from, const QCStr
     }
 
     QString fileOut( m_chain->outputFile() );
-    store=new KoStore(fileOut, KoStore::Write, to);
+    QCString appIdentification( "KOffice " );
+    appIdentification += to;
+    appIdentification += '\004';
+    appIdentification += '\006';
+    store=new KoStore(fileOut, KoStore::Write, appIdentification);
     if(store->bad()) {
         kdError(s_area) << "OLEFilter::filter(): Unable to open output file! " << fileOut << endl;
         delete [] olefile.data;

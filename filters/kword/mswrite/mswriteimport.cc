@@ -90,7 +90,8 @@ int MSWRITE_PROJECT::openFiles (const char *_infilename, const char *_outfilenam
 
 	// opens the output store
 	strcpy (outfilename, _outfilename);
-	outfile = new KoStore (QString (outfilename), KoStore::Write);
+	outfile = new KoStore (QString (outfilename), KoStore::Write,
+                               "KOffice application/x-kword\004\006");
 
 	return 0;
 }

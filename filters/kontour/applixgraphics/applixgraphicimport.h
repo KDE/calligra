@@ -20,12 +20,7 @@
 #ifndef APPLIXGRAPHICIMPORT_H
 #define APPLIXGRAPHICIMPORT_H
 
-#include <qstring.h>
-#include <qfile.h>
-#include <qobject.h>
-
 #include <koFilter.h>
-#include <koStore.h>
 
 
 class APPLIXGRAPHICImport : public KoFilter {
@@ -73,7 +68,4 @@ class applixGraphicsRect : public applixGraphicsLine
    applixGraphicsRect (); // Constructor
 };
 
-
-
 #endif // APPLIXGRAPHICIMPORT_H
-

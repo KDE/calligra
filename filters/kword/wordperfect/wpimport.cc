@@ -58,28 +58,23 @@ KoFilter::ConversionStatus WPImport::convert( const QCString& from, const QCStri
 
 
   // prepare storage
-  KoStore out=KoStore( QString(m_chain->outputFile()), KoStore::Write );
+  KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
 
-  // store output document
-  if( out.open( "root" ) )
+  if( out )
     {
       QCString cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-
-      out.write( (const char*) cstring, cstring.length() );
-      out.close();
-
+      out->writeBlock( (const char*) cstring, cstring.length() );
     }
 
   // store document info
   if( !documentInfo.isEmpty() )
-      if( out.open( "documentinfo.xml" ) )
+      out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
+      if( out )
       {
 	  QCString cstring = documentInfo.utf8();
 	  cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-
-	  out.write( (const char*) cstring, cstring.length() );
-	  out.close();
+	  out->writeBlock( (const char*) cstring, cstring.length() );
       }
 
   return KoFilter::OK;

@@ -25,6 +25,7 @@
 #include <unistd.h>
 #endif
 
+#include <qfile.h>
 #include <qtextstream.h>
 #include <qmessagebox.h>
 #include <applixgraphicimport.h>

@@ -44,7 +44,8 @@ KoFilter::ConversionStatus HTMLImport::convert( const QCString& from, const QCSt
 	if(to!="application/x-kword" || from!="text/html")
 		return KoFilter::NotImplemented;
 
-	KoStore *k= new KoStore(m_chain->outputFile(),KoStore::Write);
+        QCString appIdentification( "KOffice application/x-kword\004\006" );
+	KoStore *k= new KoStore(m_chain->outputFile(),KoStore::Write, appIdentification);
 	KWDWriter *w= new KWDWriter(k);
 	KHTMLReader h(w);
 	KURL url;

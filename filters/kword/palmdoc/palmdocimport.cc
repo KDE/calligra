@@ -52,9 +52,10 @@ KoFilter::ConversionStatus PalmDocImport::convert( const QCString& from, const Q
      return KoFilter::NotImplemented;
 
   PalmDoc doc;
-  doc.load( m_chain->inputFile().latin1() );
-  
-  if( doc.result() == PalmDoc::InvalidFormat ) 
+  QString inputFile( m_chain->inputFile() );
+  doc.load( inputFile.latin1() );
+
+  if( doc.result() == PalmDoc::InvalidFormat )
     return KoFilter::NotImplemented;
   if( doc.result() == PalmDoc::ReadError )
     return KoFilter::FileNotFound;
@@ -62,35 +63,31 @@ KoFilter::ConversionStatus PalmDocImport::convert( const QCString& from, const Q
   QString root = processPlainDocument( doc.text() );
 
   // prepare storage
-  KoStore out=KoStore( QString(m_chain->outputFile()), KoStore::Write );
+  KoStoreDevice *out=m_chain->storageFile( "root", KoStore::Write );
 
-  // store output document
-  if( out.open( "root" ) )
+  if( out )
     {
       QCString cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-
-      out.write( (const char*) cstring, cstring.length() );
-      out.close();
+      out->writeBlock( (const char*) cstring, cstring.length() );
     }
 
   QString docTitle = doc.name();
   if( docTitle.isEmpty() )
   {
-    QFileInfo info( m_chain->inputFile() );
+    QFileInfo info( inputFile );
     docTitle = info.baseName();
   }
 
   QString documentInfo = processDocumentInfo( docTitle );
 
   // store document info
-  if( out.open( "documentinfo.xml" ) )
+  out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
+  if( out )
     {
        QCString cstring = documentInfo.utf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-
-       out.write( (const char*) cstring, cstring.length() );
-       out.close();
+       out->writeBlock( (const char*) cstring, cstring.length() );
      }
 
   return KoFilter::OK;
@@ -101,7 +98,7 @@ QString PalmDocImport::processPlainParagraph( QString text )
   QString formats, layout, result;
 
   // specify FORMAT (just empty element)
-  formats.append ( "  <FORMAT id=\"1\" pos=\"0\" len=\"" + 
+  formats.append ( "  <FORMAT id=\"1\" pos=\"0\" len=\"" +
     QString::number( text.length() )+ "\">\n" );
   formats.append ( "  </FORMAT>\n" );
 
