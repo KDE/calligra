@@ -305,3 +305,11 @@ Changes after KWord-1.2
 - Load pictures only one time when inserting from file (Good for remote files)
 - Hyphenation support. Configurable as a character property (to disable hyphenation on specific words).
 - New checkbox in the style manager: "Include in table of contents".
+
+Changes after KWord-1.3-beta1
+=============================
+
+- Frames default to "auto-resize" mode instead of "auto-create-new-page"
+- Better handing of "auto-resize" mode (manually-set size acts as minimum size)
+- New: PDF import filter
+
