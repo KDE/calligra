@@ -5897,21 +5897,32 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
     if(!isLoading()&&makeUndo)
         loadSelectionUndo( doc, _xshift,_yshift,insert,insertTo);
 
+    int rowsInClpbrd =  e.attribute( "rows" ).toInt();
+    int columnsInClpbrd =  e.attribute( "columns" ).toInt();
+    // find size of rectangle that we want to paste to (either clipboard size or current selection)
+    const int pasteWidth = ( selectionRect().left() != 0 && selectionRect().width() >= columnsInClpbrd &&
+                             selectionRect().right() != 0x7fff && e.namedItem( "rows" ).toElement().isNull() ) 
+        ? selectionRect().width() : columnsInClpbrd;
+    const int pasteHeight = ( selectionRect().left() != 0 && selectionRect().height() >= rowsInClpbrd &&
+                              selectionRect().bottom() != 0x7fff && e.namedItem( "columns" ).toElement().isNull() ) 
+        ? selectionRect().height() : rowsInClpbrd;
+    //kdDebug(36001) << "loadSelection: paste area has size " << pasteHeight << " rows * "
+    //               << pasteWidth << " columns " << endl;
+    //kdDebug(36001) << "loadSelection: " << rowsInClpbrd << " rows and "
+    //               << columnsInClpbrd << " columns in clipboard." << endl;
+
     if ( !e.namedItem( "columns" ).toElement().isNull() )
     {
         _yshift = 0;
 
-        QDomElement columns = e.namedItem( "columns" ).toElement();
-
         // Clear the existing columns
-        int count = columns.attribute("count").toInt();
-        for( int i = 1; i <= count; ++i )
+        for( int i = 1; i <= pasteWidth; ++i )
         {
             if(!insert)
-                {
+            {
                 m_cells.clearColumn( _xshift + i );
                 m_columns.removeElement( _xshift + i );
-                }
+            }
         }
 
         // Insert column layouts
@@ -5934,11 +5945,8 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
     {
         _xshift = 0;
 
-        QDomElement rows = e.namedItem( "rows" ).toElement();
-
-        // Clear the existing columns
-        int count = rows.attribute("count").toInt();
-        for( int i = 1; i <= count; ++i )
+        // Clear the existing rows
+        for( int i = 1; i <= pasteHeight; ++i )
         {
             m_cells.clearRow( _yshift + i );
             m_rows.removeElement( _yshift + i );
@@ -5958,9 +5966,8 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
             }
         }
     }
-    bool refreshChart=false;
-    int refresCol=0;
-    int refreshRow=0;
+
+    KSpreadCell* refreshCell = 0;
     QDomElement c = e.firstChild().toElement();
     for( ; !c.isNull(); c = c.nextSibling().toElement() )
     {
@@ -5968,36 +5975,39 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
         {
             int row = c.attribute( "row" ).toInt() + _yshift;
             int col = c.attribute( "column" ).toInt() + _xshift;
-
-            bool needInsert = FALSE;
-            KSpreadCell* cell = cellAt( col, row );
-            if ( ( op == OverWrite && sp == Normal ) || cell->isDefault() )
+            // tile the selection with the clipboard contents
+            for(int roff=0; row-_yshift+roff<=pasteHeight; roff += rowsInClpbrd)
             {
-                cell = new KSpreadCell( this, 0, 0 );
-                needInsert = TRUE;
-            }
-            if ( !cell->load( c, _xshift, _yshift, sp, op ) )
-            {
-                if ( needInsert )
-                  delete cell;
-            }
-            else
-              if ( needInsert )
-                insertCell( cell );
-            if(!refreshChart)
+                for(int coff=0; col-_xshift+coff<=pasteWidth; coff += columnsInClpbrd)
                 {
-                refreshChart=cell->updateChart(false);
-                refresCol=col;
-                refreshRow=row;
+                    //kdDebug(36001) << "loadSelection: cell at " << (row+roff) << "," << (col+coff) << " with roff,coff= "
+                    //               << roff << "," << coff << endl;
+
+                    bool needInsert = FALSE;
+                    KSpreadCell* cell = cellAt( col + coff, row + roff );
+                    if ( ( op == OverWrite && sp == Normal ) || cell->isDefault() )
+                    {
+                        cell = new KSpreadCell( this, 0, 0 );
+                        needInsert = TRUE;
+                    }
+                    if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op ) )
+                    {
+                        if ( needInsert )
+                            delete cell;
+                    }
+                    else {
+                        if ( needInsert )
+                            insertCell( cell );
+                        if( !refreshCell && cell->updateChart( false ) )
+                            refreshCell = cell;
+                    }
                 }
+            }
         }
     }
     //refresh chart after that you paste all cells
-    if(refreshChart)
-        {
-        KSpreadCell* cell = cellAt( refresCol, refreshRow );
-        cell->updateChart();
-        }
+    if ( refreshCell )
+        refreshCell->updateChart();
     m_pDoc->setModified( true );
 
     if(!isLoading())
@@ -6013,65 +6023,48 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
 void KSpreadTable::loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift,bool insert,int insertTo)
 {
     QDomElement e = doc.documentElement();
+    QDomElement c = e.firstChild().toElement();
+    int rowsInClpbrd =  e.attribute( "rows" ).toInt();
+    int columnsInClpbrd =  e.attribute( "columns" ).toInt();
+    // find rect that we paste to
+    const int pasteWidth = ( selectionRect().left() != 0 && selectionRect().width() >= columnsInClpbrd &&
+                             selectionRect().right() != 0x7fff && e.namedItem( "rows" ).toElement().isNull() ) 
+        ? selectionRect().width() : columnsInClpbrd;
+    const int pasteHeight = ( selectionRect().left() != 0 && selectionRect().height() >= rowsInClpbrd &&
+                              selectionRect().bottom() != 0x7fff && e.namedItem( "columns" ).toElement().isNull() ) 
+        ? selectionRect().height() : rowsInClpbrd;
     QRect rect;
     if ( !e.namedItem( "columns" ).toElement().isNull() )
     {
-        QDomElement columns = e.namedItem( "columns" ).toElement();
-        int count = columns.attribute("count").toInt();
         if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, count, 0, _xshift,_yshift,rect,insert );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, pasteWidth, 0, _xshift,_yshift,rect,insert );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
         if(insert)
-                 insertColumn(  _xshift+1,count-1,false);
-    return;
+                 insertColumn(  _xshift+1,pasteWidth-1,false);
+	return;
     }
 
     if ( !e.namedItem( "rows" ).toElement().isNull() )
     {
-        QDomElement rows = e.namedItem( "rows" ).toElement();
-        int count = rows.attribute("count").toInt();
         if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,count, _xshift,_yshift,rect,insert );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,pasteHeight, _xshift,_yshift,rect,insert );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
-    if(insert)
-        insertRow(  _yshift+1,count-1,false);
-    return;
+	if(insert)
+	    insertRow(  _yshift+1,pasteHeight-1,false);
+	return;
     }
 
-    QDomElement c = e.firstChild().toElement();
-    int left=0;
-    int right=0;
-    int top=0;
-    int bottom=0;
-    for( ; !c.isNull(); c = c.nextSibling().toElement() )
-    {
-        if ( c.tagName() == "cell" )
-        {
-            int row = c.attribute( "row" ).toInt() + _yshift;
-            int col = c.attribute( "column" ).toInt() + _xshift;
-            if(left==0)
-                left=col;
-            left=QMIN(col,left);
-            right=QMAX(col,right);
-            if(top==0)
-                top=row;
-            top=QMIN(top,row);
-            bottom=QMAX(bottom,row);
-        }
+    rect.setRect( _xshift+1, _yshift+1, pasteWidth, pasteHeight );
 
-    }
-    rect.setCoords(left,top,right,bottom);
-
-    c = e.firstChild().toElement();
     if(!c.isNull())
     {
         if ( !m_pDoc->undoBuffer()->isLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,0, _xshift,_yshift,rect,insert,insertTo );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( m_pDoc, this, 0,0,_xshift,_yshift,rect,insert,insertTo );
                 m_pDoc->undoBuffer()->appendUndo( undo );
         }
     if(insert)
@@ -6634,16 +6627,18 @@ void KSpreadTable::printPage( QPainter &_painter, const QRect& page_range, const
 
 QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 {
+    QDomDocument doc( "spreadsheet-snippet" );
+    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    QDomElement spread = doc.createElement( "spreadsheet-snippet" );
+    spread.setAttribute( "rows", _rect.bottom() - _rect.top() + 1 );
+    spread.setAttribute( "columns", _rect.right() - _rect.left() + 1 );
+    doc.appendChild( spread );
+
     //
     // Entire rows selected ?
     //
     if ( _rect.right() == 0x7fff )
     {
-        QDomDocument doc( "spreadsheet-snippet" );
-        doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-        QDomElement spread = doc.createElement( "spreadsheet-snippet" );
-        doc.appendChild( spread );
-
         QDomElement rows = doc.createElement("rows");
         rows.setAttribute( "count", _rect.bottom() - _rect.top() + 1 );
         spread.appendChild( rows );
@@ -6681,11 +6676,6 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     //
     if ( _rect.bottom() == 0x7fff )
     {
-        QDomDocument doc( "spreadsheet-snippet" );
-        doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-        QDomElement spread = doc.createElement( "spreadsheet-snippet" );
-        doc.appendChild( spread );
-
         QDomElement columns = doc.createElement("columns");
         columns.setAttribute( "count", _rect.right() - _rect.left() + 1 );
         spread.appendChild( columns );
@@ -6717,11 +6707,6 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
 
         return doc;
     }
-
-    QDomDocument doc( "spreadsheet-snippet" );
-    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement spread = doc.createElement( "spreadsheet-snippet" );
-    doc.appendChild( spread );
 
     // Save all cells.
     /*KSpreadCell* c = m_cells.firstCell();

@@ -1198,3 +1198,11 @@ a text which is in kwrite and kspread)
 ----------------------------------------------------
 Now there is a menu when you click on statusbar to select
 the calc which made when you select an area
+
+2001-03-27-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+Apply patch from Alexander Bürger <acfb@stw-bonn.de>
+Now when you copy/paste and you select an area you fill
+all the area.
+Thanks a lot.
+
