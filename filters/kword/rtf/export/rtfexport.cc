@@ -31,7 +31,9 @@ paraNumberingType type[10];  // type of paragraph numbering for 10 levels
 // paragraph numbers for ten levels
 char paraNumber[10] = {0,0,0,0,0,0,0,0,0,0};
 QString pageMarkup;  // global to store page size markup
-QString bookMarkup;  // markup bor document info file
+QString bookMarkup;  // markup for document info file
+QString colorHeader; // color table markup
+QValueList<ColorTable> colorTable; // used to create color table markup
 
 /***************************************************************************/
 
@@ -65,6 +67,17 @@ QString text;  // used for processing paragraph text
                case 1: // Paragraph
                   {
 
+                  // generate the text color markup
+                  if( (*paraFormatDataIt).text.red   >= 0 &&
+                      (*paraFormatDataIt).text.blue  >= 0 &&
+                      (*paraFormatDataIt).text.green >= 0   )
+                     {
+                     outputText += "{" + colorMarkup( (*paraFormatDataIt).text.red,
+                                                      (*paraFormatDataIt).text.blue,
+                                                      (*paraFormatDataIt).text.green,
+                                                      colorTable, colorHeader  );
+                     }  // end if
+
                   // create rtf markup to handle font sizes
                   if((*paraFormatDataIt).text.fontSize >= 0)
                      {
@@ -79,7 +92,16 @@ QString text;  // used for processing paragraph text
                       outputText += "\\i";
 
                   if ( (*paraFormatDataIt).text.underline )
-                      outputText += "\\u";
+                      outputText += "\\ul";
+
+                  if ( (*paraFormatDataIt).text.strikeout )
+                      outputText += "\\strike{";
+
+                  if ( (*paraFormatDataIt).text.vertalign == 1 )  // Subscript
+                      outputText += "\\sub{";
+
+                  if ( (*paraFormatDataIt).text.vertalign == 2 )  // superscript
+                      outputText += "\\super{";
 
                   // create the font markup for the specified font
                   outputText += fontMarkup( (*paraFormatDataIt).text.fontName,
@@ -97,8 +119,17 @@ QString text;  // used for processing paragraph text
 
                   outputText += " " + text;  // prepend a space to terminate RTF commands
 
+                  if ( (*paraFormatDataIt).text.vertalign == 2 )  // end superscript
+                      outputText += "}";
+
+                  if ( (*paraFormatDataIt).text.vertalign == 1 )  // end Subscript
+                      outputText += "}";
+
+                  if ( (*paraFormatDataIt).text.strikeout )  // end strikeout
+                      outputText += "}";
+
                   if ( (*paraFormatDataIt).text.underline )
-                      outputText += "\\u0";  // delimit underline
+                      outputText += "\\ul0";  // delimit underline
 
                   if ( (*paraFormatDataIt).text.italic )
                       outputText += "\\i0";  // delimit italics
@@ -110,8 +141,15 @@ QString text;  // used for processing paragraph text
                      {
                      outputText += "}";  // delimit font size command
                      }
-                  }  // end case 1:
+                  // end the text color markup
+                  if( (*paraFormatDataIt).text.red   >= 0 &&
+                      (*paraFormatDataIt).text.blue  >= 0 &&
+                      (*paraFormatDataIt).text.green >= 0   )
+                     {
+                     outputText += "}";
+                     }
                   break;
+                  }  // end case 1:
 
                case 2:   // pictures
 #if 0
@@ -164,12 +202,12 @@ QString text;  // used for processing paragraph text
 }  // end ProcessParagraphData
 
 
-//***************************************************************************/
+/***************************************************************************/
 
 // ProcessPictureData () takes the available picture data, makes a
 // copy of the image file into *.sgml.d/pictures/*.* from KoStore
 // pictures/*.*, and creates the necessary Latex tags for it.
-//***************************************************************************/
+/***************************************************************************/
 
 /*void ProcessPictureData ( Picture  &picture,
                           int       picturePos,
@@ -303,30 +341,23 @@ void ProcessTableData ( Table   &table,
            currentRow = (*cell).row;
 
            }  // end if( (*cell).row ...
+
         // The following produces RTF markup for cell borders
         if((*cell).right.style >= 0)  // right border
            {
-           tableText += "\\clbrdrr\\brdrs\\brdrw";
-           int num = (*cell).right.width * 20;
-           tableText += QString::number( num );
+           tableText += borderMarkup( "\\clbrdrr", &(*cell).right );
            }
         if((*cell).left.style >= 0)  // left border
            {
-           tableText += "\\clbrdrl\\brdrs\\brdrw";
-           int num = (*cell).left.width * 20;
-           tableText += QString::number( num );
+           tableText += borderMarkup( "\\clbrdrl", &(*cell).left );
            }
         if((*cell).top.style >= 0)  // top border
            {
-           tableText += "\\clbrdrt\\brdrs\\brdrw";
-           int num = (*cell).top.width * 20;
-           tableText += QString::number( num );
+           tableText += borderMarkup( "\\clbrdrt", &(*cell).top );
            }
         if((*cell).bottom.style >= 0)  // bottom border
            {
-           tableText += "\\clbrdrb\\brdrs\\brdrw";
-           int num = (*cell).bottom.width * 20;
-           tableText += QString::number( num );
+           tableText += borderMarkup( "\\clbrdrb", &(*cell).bottom );
            }
 
         // cellx  - right position of cell in twips = 1/20 point
@@ -342,7 +373,7 @@ void ProcessTableData ( Table   &table,
     if ( currentRow >= 0 )
     {
         tableText += cellText;
-        tableText += "\\row\n";  // delimit last row
+        tableText += "\\row\\par\n";  // delimit last row
     }
 
     // insert the table in the location specified by the anchor
@@ -403,11 +434,21 @@ bool ProcessStoreFile ( QString   storeFileName,
 // It is the starting point in the file converson process.
 
 bool RTFExport::filter ( const QString  &filenameIn,
-                         const QString  &filenameOut,
-                         const QString  &from,
-                         const QString  &to,
-                         const QString  &             )
+                                   const QString  &filenameOut,
+                                   const QString  &from,
+                                   const QString  &to,
+                                   const QString  &             )
 {
+
+    // The following initializes the color table
+    colorTable << ColorTable(0,0,0)     << ColorTable(0,0,255)     << ColorTable(0,255,255)
+               << ColorTable(0,255,0)   << ColorTable(255,0,255)   << ColorTable(255,0,0)
+               << ColorTable(255,255,0) << ColorTable(255,255,255) << ColorTable(0,0,128)
+               << ColorTable(0,128,128) << ColorTable(0,128,0)     << ColorTable(128,0,128)
+               << ColorTable(128,0,0)   << ColorTable(128,128,0)   << ColorTable(128,128,128);
+    colorHeader = "{\\colortbl;\\red0\\green0\\blue0;\\red0\\green0\\blue255;\\red0\\green255\\blue255;\\red0\\green255\\blue0;\\red255\\green0\\blue255;\\red255\\green0\\blue0;\n";
+    colorHeader += "\\red255\\green255\\blue0;\\red255\\green255\\blue255;\\red0\\green0\\blue128;\\red0\\green128\\blue128;\\red0\\green128\\blue0;\\red128\\green0\\blue128;\\red128\\green0\\blue0;\\red128\\green128\\blue0;\\red128\\green128\\blue128;\\red192\\green192\\blue192;";
+
 
     if ( to != "text/rtf" || from != "application/x-kword" )
     {
@@ -432,9 +473,8 @@ bool RTFExport::filter ( const QString  &filenameIn,
     stringBufOut += "}";
 
     // insert the color table
-    stringBufOut += "{\\colortbl;\\red0\\green0\\blue0;\\red0\\green0\\blue255;\\red0\\green255\\blue255;\\red0\\green255\\blue0;\\red255\\green0\\blue255;\\red255\\green0\\blue0;\n";
-    stringBufOut += "\\red255\\green255\\blue0;\\red255\\green255\\blue255;\\red0\\green0\\blue128;\\red0\\green128\\blue128;\\red0\\green128\\blue0;\\red128\\green0\\blue128;\\red128\\green0\\blue0;\\red128\\green128\\blue0;\\red128\\green128\\blue128;\\red192\\green192\\blue192;}\n";
-
+    stringBufOut += colorHeader;
+    stringBufOut += "}\n";  // terminate color header string
 
     // Insert the string from docinfoExport
     stringBufOut += docInf;  // add document author, title, operator
@@ -465,6 +505,60 @@ bool RTFExport::filter ( const QString  &filenameIn,
     return true;
 }  // enf filter()
 
+
+/***************************************************************************/
+// Rich Text Format uses a table to define colors and text colors are then
+// referred to by their position in the color table using the command \cfN.
+// The table must be searched for a given color and, if not found, color table
+// markup must be created.
+
+QString colorMarkup(int red, int blue, int green,
+                 QValueList< ColorTable > &colorTable,
+                 QString &colorHeader)
+   {
+   int counter;  // counts position in font table starting at 1
+   QValueList < ColorTable > ::Iterator colorTableIt;
+   ColorTable entry; // for new entries
+   QString color;  // Holds RTF markup for the color
+
+      counter = 1;  // initialize table entry counter
+
+      // search color table for this color
+      for( colorTableIt =  colorTable.begin();
+           colorTableIt != colorTable.end();
+           colorTableIt++ )
+         {
+         if((*colorTableIt).red   == red &&
+            (*colorTableIt).blue  == blue &&
+            (*colorTableIt).green == green  )  // check for match
+               {
+               color = "\\cf";  //markup for forground color selection
+               color += QString::number(counter);
+               return color;
+               }  // end if((*fontTableIt).fontName == fontName)
+         counter++;  // increment counter
+
+         }  // end for colorTableIt = colorTable.begin()
+
+   // Color not found in table. Create color table markup
+   entry.red =   red;  // enter color into color table
+   entry.blue =  blue;
+   entry.green = green;
+   colorTable << entry;
+
+   color = "\\cf";  //markup for font definition or selection
+   color += QString::number(counter);
+
+   colorHeader += ";";  // start a header entry
+   colorHeader += "\\red"; // color definition
+   colorHeader += QString::number(red);
+   colorHeader += "\\green";
+   colorHeader += QString::number(green);
+   colorHeader += "\\blue";
+   colorHeader += QString::number(blue);
+   return color;  // this is the font selection markup
+
+   }  // end colorMarkup
 
 /***************************************************************************/
 
@@ -621,7 +715,7 @@ QString escapeRTFsymbols( QString text)
 
 /***************************************************************************/
 // The following function encodes the kword unicode characters into
-// RTF seven bit ansii. This affects any 8 bit characters. They are encoded
+// RTF seven bit ansi. This affects any 8 bit characters. They are encoded
 // as 4 byte escapes in the form of \'XX where XX is the 2 byte hex conversion of the
 // 8 bit character.
 QString encodeSevenBit( QString text)
@@ -676,34 +770,47 @@ QString listStart( QString font, int fontSize, QString listMarker)
 
    } // end listStart()
 
+/*************************************************************************/
 // This function completes the markup for a bullet item or the first item
-// of a numbered list. All types of lists fontType are done - numeric, alphabetical,
+// of a numbered list. It also creates the multi-level list numbering
+// header definitions.
+// All types of lists are done - numeric, alphabetical,
 // roman numerals in upper or lower case.
 QString listMarkup( int firstIndent,int listType, int startNumber, int depth,
                     int fontSize, QString font,
-                    QString preceedingText, QString followingText)
+                    QString preceedingText, QString followingText,
+                    bool section, bool multiLevel)
    {
 
    QString markup;
    QString level;  // Numbering level markup
-
-      markup += "\\pard";
-      markup += font;
-      if( fontSize > 0 )
-         {
-         markup += "\\fs";
-         markup += QString::number((2 * fontSize));
-         }
-      markup += "\\fi-720";
-   if( firstIndent > 0)
+   if( !section )
       {
-      markup += "\\li";
-      markup += QString::number( firstIndent);
-      }
-   else markup += "\\li720";
-   markup += "{\\*\\pn ";
-   level = "\\pnlvl";  // RTF paragraph level command
-   level += QString::number(depth + 1);  // level markup formed for numbered lists
+      markup += "\\pard";
+      markup += "\\fi-720";
+      if( firstIndent > 0)
+         {
+         markup += "\\li";
+         markup += QString::number( firstIndent);
+         }
+      else markup += "\\li720";
+   }  // end if (!section )
+   if(section)
+     {
+     level = "";
+     markup += "{\\*\\pnseclvl";
+     markup += QString::number( depth + 1 );
+     }
+   else
+     {
+     markup += "{\\*\\pn ";
+     if( multiLevel )
+        {
+        level = "\\pnlvl";  // RTF paragraph level command
+        level += QString::number(depth + 1);  // level number
+        }
+     else level = "\\pnlvlbody";  // use this for regular numbering
+     }
    switch (listType)
       {
       case 1:  // Numeric
@@ -713,12 +820,12 @@ QString listMarkup( int firstIndent,int listType, int startNumber, int depth,
          }
       case 2: // lower case alphabetical
          {
-         markup += (level + "\\pnlctr");
+         markup += (level + "\\pnlcltr");
          break;
          }
       case 3:  // upper case alphabetical
          {
-         markup += (level + "\\pnuctr");
+         markup += (level + "\\pnucltr");
          break;
          }
       case 4: // lower case roman
@@ -741,13 +848,26 @@ QString listMarkup( int firstIndent,int listType, int startNumber, int depth,
 
       }  // end switch
 
-   if( depth >= 0 ) markup += "\\pnprev1";  // markup for multi level numbering
-   markup += "\\pnstart";
+   if( depth >= 0  && multiLevel)
+         markup += "\\pnprev1";  // markup for multi level numbering
    if( startNumber >= 0)
       {
+      markup += "\\pnstart";
       markup += QString::number( startNumber);
       }
    markup += "\\pnindent720\\pnhang";
+
+      if( fontSize > 0 )
+         {
+         markup += "\\pnfs";
+         markup += QString::number((2 * fontSize));
+         }
+
+      if( font != "" )
+         {
+         font.insert( 1, "pn" );
+         markup += font;
+         }
 
    if( preceedingText != "" && preceedingText != "{" && preceedingText != "}" )
       {
@@ -765,7 +885,7 @@ QString listMarkup( int firstIndent,int listType, int startNumber, int depth,
    markup += "}";
    return markup;
 
-   }  // end ListMarkup()
+   }  // end listMarkup()
 
 
 /***************************************************************************/
@@ -1017,10 +1137,10 @@ void ProcessParagraph ( QString &paraText,
     double indent;  // used to calculate indents
     bool listIndicator;  // used to process list numbering
     QValueList<FormatData>   formatList; // combined format lists
+    bool header = false;  // indicates paragraph is a page header or a footer
 
     // combine format data in layout and formats
     formatList = combineFormatData( paraFormatDataList, paraFormatDataFormats );
-
 
     // calculate indentations
     if( layout.idFirst > 0)
@@ -1036,14 +1156,79 @@ void ProcessParagraph ( QString &paraText,
        }
     else leftIndent = 0;
 
+    // Check if a header or footer is indicated and generate appropriate markup
+    if( paraText.length() > 0 )
+       {
+       switch( (*docData).frameInfo )
+          {
+          case 1: // header - all pages
+             {
+             outputText += "{\\header";
+             header = true;
+             break;
+             }
+          case 2: // odd (left) page header
+             {
+             outputText += "\\facingp{\\headerl";
+             header = true;
+             break;
+             }
+          case 3: // even (right) page header
+             {
+             outputText += "\\facingp{\\headerr";
+             header = true;
+             break;
+             }
+          case 4: // all page footer
+             {
+             outputText += "{\\footer";
+             header = true;
+             break;
+             }
+          case 5: // odd (left) page footer
+             {
+             outputText += "\\facingp{\\footerl";
+             header = true;
+             break;
+             }
+          case 6: // even (right) page footer
+             {
+             outputText += "\\facingp{\\footerl";
+             header = true;
+             break;
+             }
+          } // emd switch( (*docData),.frameInfo )
+       }  // end if( paraText.length() > 0 )
+       // The following produces RTF markup for paragraph borders
+       if(layout.rightBorder.style >= 0)  // right border
+          {
+          outputText += borderMarkup( "\\brdrr", &layout.rightBorder );
+          }
+       if(layout.leftBorder.style >= 0)  // left border
+          {
+          outputText += borderMarkup( "\\brdrl", &layout.leftBorder );
+          }
+       if(layout.topBorder.style >= 0)  // top border
+          {
+          outputText += borderMarkup( "\\brdrt", &layout.topBorder );
+          }
+       if(layout.bottomBorder.style >= 0)  // bottom border
+          {
+          outputText += borderMarkup( "\\brdrb", &layout.bottomBorder );
+          }
 
     // get the font name and size for list numbering
     it = formatList.begin();
     fontName = (*it).text.fontName;
     fontSize = (*it).text.fontSize;
-    if( !(*docData).grpMgr )  // check not table
-         outputText += "\n\\pard ";  // set paragraph settings to defaults in not table
-
+    // check whether paragraph defaults should be set
+    if( !(*docData).grpMgr )
+          {
+          if( !layout.tabularData.isEmpty() )
+             {
+             ProcessTabData( layout.tabularData );
+             }
+          }
     paraLayout = layout.layout;   // copy layout string
 
     if ( paraLayout == "Head 1" )
@@ -1058,16 +1243,34 @@ void ProcessParagraph ( QString &paraText,
                                       layout.start );
         // create the font markup for a head1 heading
         font = fontMarkup( "helvetica", fontTable, fontHeader );
+        if( !(*docData).head1 )  // check if paragraph numbering has started
+           {
+           // Create the multi level list section markup for head1,2,3
+           outputText += listMarkup( firstIndent,
+                         1, layout.start, 0,
+                         fontSize, font,
+                         layout.lefttext, layout.righttext, true, true );
+           outputText += listMarkup( firstIndent,
+                         1, layout.start, 1,
+                         fontSize, font,
+                         layout.lefttext, layout.righttext, true, true );
+           outputText += listMarkup( firstIndent,
+                         1, layout.start, 2,
+                         fontSize, font,
+                         layout.lefttext, layout.righttext, true, true );
+
+           }  // end if( !(*docData).head1 )
+
         // Generate the beginning paragraph numbering info
         outputText += listStart( font, 24, listMarker);
 
-//        if( !(*docData).head1 )
+        if( !(*docData).head1 )
            {
            // Generate the additional markup for automatic numbering - once only
            outputText += listMarkup( firstIndent,
                                   1, layout.start, layout.depth,
                                   fontSize, font,
-                                  layout.lefttext, layout.righttext );
+                                  layout.lefttext, layout.righttext, false, true );
            (*docData).head1 = true;
            }
         // extract heading text
@@ -1088,13 +1291,13 @@ void ProcessParagraph ( QString &paraText,
         // Generate the beginning paragraph numbering info
         outputText += listStart( font, 16, listMarker);
 
-//        if( !(*docData).head2 )
+        if( !(*docData).head2 )
            {
            // Generate the additional markup for automatic numbering - once only
            outputText += listMarkup( firstIndent,
                                   1, layout.start, layout.depth,
                                   fontSize, font,
-                                  layout.lefttext, layout.righttext );
+                                  layout.lefttext, layout.righttext, false, true );
            (*docData).head2 = true;
            }
 
@@ -1115,13 +1318,13 @@ void ProcessParagraph ( QString &paraText,
         // Generate the beginning paragraph numbering info
         outputText += listStart( font, 12, listMarker);
 
-//        if( !(*docData).head3 )
+        if( !(*docData).head3 )
            {
            // Generate the additional markup for automatic numbering - once only
            outputText += listMarkup( firstIndent,
                                  1, layout.start, layout.depth,
                                  fontSize, font,
-                                 layout.lefttext, layout.righttext );
+                                 layout.lefttext, layout.righttext, false, true );
            (*docData).head3 = true;
            }
 
@@ -1148,7 +1351,7 @@ void ProcessParagraph ( QString &paraText,
         outputText += listMarkup( firstIndent ,
                                  6, layout.start, layout.depth,
                                  fontSize, font,
-                                 listMarker, layout.righttext );
+                                 listMarker, layout.righttext, false, false );
 
         (*docData).bulletList = true;
         // output list item text
@@ -1184,7 +1387,7 @@ void ProcessParagraph ( QString &paraText,
         (*docData).bulletList       = false;
         (*docData).alphabeticalList = false;
 
-        // generate the paragragraph number string
+         // generate the paragragraph number string
         listMarker = paragraphNumber( listIndicator, layout.depth,
                                       layout.start );
         // create the font markup for an enumerated list
@@ -1192,13 +1395,14 @@ void ProcessParagraph ( QString &paraText,
         // Generate the beginning paragraph numbering info
         outputText += listStart( font, fontSize, listMarker);
 
-//        if ( !(*docData).enumeratedList )
-        {
-        // Generate the additional markup for automatic numbering - once only
-        outputText += listMarkup( firstIndent ,
-                                 layout.type, layout.start, layout.depth,
-                                 fontSize, font,
-                                 layout.lefttext, layout.righttext );
+        if ( !listIndicator )
+           {
+           // Generate the additional markup for automatic numbering - once only
+           outputText += listMarkup( firstIndent ,
+                                     layout.type, layout.start, layout.depth,
+                                     fontSize, font,
+                                     layout.lefttext, layout.righttext,
+                                     false, false );
         }
 
 
@@ -1233,13 +1437,14 @@ void ProcessParagraph ( QString &paraText,
         // Generate the beginning paragraph numbering info
         outputText += listStart( font, fontSize, listMarker);
 
-//        if ( !(*docData).alphabeticalList )
-          {
+        if ( !listIndicator )
+           {
            // Generate the additional markup for automatic numbering - once only
            outputText += listMarkup( firstIndent ,
                                  layout.type, layout.start, layout.depth,
                                  fontSize, font,
-                                 layout.lefttext, layout.righttext );
+                                 layout.lefttext, layout.righttext,
+                                 false, false );
 
            }
 
@@ -1258,6 +1463,8 @@ void ProcessParagraph ( QString &paraText,
             kdError (KDEBUG_RTFFILTER) << "Unknown layout " + paraLayout + "!" << endl;
         }
 
+       if( !(*docData).grpMgr )  // check not table
+             outputText += "\n\\pard ";  // set paragraph settings to defaults in not table
        if(firstIndent > 0)
           outputText += ("\\fi" + QString::number(firstIndent) + " ");
        if(leftIndent > 0)
@@ -1283,6 +1490,112 @@ void ProcessParagraph ( QString &paraText,
 //        if( !(*docData).grpMgr )  // check not table
            outputText += "\n\\par"; // delimit paragraph if not table cell
     }
-
+   if( header )  // terminate header or footer group if indicated
+      {
+      outputText += "}";
+      }
 }  // end ProcessParagraph()
 
+
+/************************************************************/
+// This procedure processes the Tab settings
+// RTF set tab command <tab kind>? \txN. N is from left margin.
+// RTF tab kinds \tqr \tqc \tqdec for right, center or decimal aligned
+// kword tabs measured from frame (page) border?
+// In rtf each paragraph can have it's own tab settings.
+
+QString ProcessTabData( QValueList < TabularData > &tabData )
+   {
+   QValueList < TabularData > ::Iterator tabIt;
+   QString markup = "";
+   int tabpos;
+
+   for( tabIt = tabData.begin(); tabIt != tabData.end(); tabIt++ )
+      {
+      switch( (*tabIt).type )
+         {
+         case 0:  // left - no markup needed
+            {
+            break;
+            }
+         case 1: // center
+            {
+            markup += "\\tqc\\tx";
+            tabpos = (*tabIt).ptpos;
+            tabpos *= 20; // convert points to twips
+            markup += QString::number( tabpos );
+            break;
+            }
+         case 2: // right
+            {
+            markup += "\\tqr\\tx";
+            tabpos = (*tabIt).ptpos;
+            tabpos *= 20; // convert points to twips
+            markup += QString::number( tabpos );
+            break;
+            }
+         case 3: // decimal align
+            {
+            markup += "\\tqdec\\tx";
+            tabpos = (*tabIt).ptpos;
+            tabpos *= 20; // convert points to twips
+            markup += QString::number( tabpos );
+            break;
+            }
+         }  // end switch
+
+      } // end for
+   return markup;
+   }  // end ProcessTabData
+
+QString borderMarkup (QString borderId, BorderStyle *border )
+   {
+   // This function creates markup for paragraph and table cell borders
+   // It selects various markups for different border styles and colors
+
+   QString markup;  // border markup
+   QString color;   // corder color markup
+
+   markup = borderId;  // First command in the sequence is passed from calling prog
+
+   switch ((*border).style)
+      {
+      case 0:  // solid line border
+         {
+         markup += "\\brdrs";
+         break;
+         }
+      case 1:  // dashed borders
+         {
+         markup += "\\brdrdash";
+         break;
+         }
+      case 2:
+         {
+         markup += "\\brdrdot";
+         break;
+         }
+      case 3: // dash-dot border
+         {
+         markup += "\\brdrdash";  // make into a dashed border
+         break;
+         }
+      case 4:  // dash-dot-dot border
+         {
+         markup += "\\brdrdot";  // make into a dotted border
+         }
+
+      }  // end switch()
+
+   int num = (*border).width * 20;
+   markup += QString::number( num );  // border width
+
+   color = colorMarkup( border->red, border->blue, border->green,
+                        colorTable, colorHeader);
+   if( !(color == "") )  // check for color info
+      {
+      markup += color.insert( 1, "brdr" );
+      }
+   return markup;
+
+   }  // end borderMarkup
