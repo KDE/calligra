@@ -124,3 +124,6 @@ Add triple click (select a paragraph)
 
 Add Dcop Interface
 
+Rewrite of tables where positioning is much more fool-proof and table-borders actually work.
+More intelligent table-cell-scaling for cells with mixed text lengths
+
