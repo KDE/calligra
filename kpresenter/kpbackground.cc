@@ -226,23 +226,23 @@ void KPBackGround::loadOasis(KoOasisContext & context )
 {
     KoStyleStack& styleStack = context.styleStack();
     kdDebug()<<"KPBackGround::loadOasis()\n";
-    kdDebug()<<"stylePage->hasAttribute( draw:fill ) :"<<styleStack.hasAttribute( "draw:fill" )<<endl;
+    kdDebug()<<"stylePage->hasAttribute( draw:fill ) :"<<styleStack.hasAttribute( "draw:fill", QString::null, "drawing-page" )<<endl;
 
-    if ( styleStack.hasAttribute( "draw:fill" ) )
+    if ( styleStack.hasAttribute( "draw:fill", QString::null, "drawing-page" ) )
     {
         kdDebug()<<" fill page \n";
-        const QString fill = styleStack.attribute( "draw:fill" );
+        const QString fill = styleStack.attribute( "draw:fill", QString::null, "drawing-page" );
         kdDebug()<<" type :"<<fill<<endl;
         if ( fill == "solid" )
         {
             kdDebug()<<"solid \n";
-            setBackColor1(QColor(styleStack.attribute( "draw:fill-color" ) ) );
+            setBackColor1(QColor(styleStack.attribute( "draw:fill-color", QString::null, "drawing-page" ) ) );
             setBackColorType(BCT_PLAIN);
             setBackType(BT_COLOR);
         }
         else if ( fill == "bitmap" )
         {
-            QString style = styleStack.attribute( "draw:fill-image-name" );
+            QString style = styleStack.attribute( "draw:fill-image-name", QString::null, "drawing-page" );
             QDomElement* draw =context.oasisStyles().drawStyles()[style];
 
             const QString href( draw->attribute("xlink:href") );
@@ -270,9 +270,9 @@ void KPBackGround::loadOasis(KoOasisContext & context )
                 pictureCollection()->insertPicture( key, backPicture );
             }
 
-            if ( styleStack.hasAttribute( "style:repeat" ) )
+            if ( styleStack.hasAttribute( "style:repeat", QString::null, "drawing-page" ) )
             {
-                QString repeat = styleStack.attribute( "style:repeat" );
+                QString repeat = styleStack.attribute( "style:repeat", QString::null, "drawing-page" );
                 if ( repeat == "stretch" )
                     setBackView( BV_ZOOM );
                 else if ( repeat == "no-repeat" )
@@ -288,7 +288,7 @@ void KPBackGround::loadOasis(KoOasisContext & context )
         else if ( fill == "gradient" )
         {
             kdDebug()<<"gradient \n";
-            QString style = styleStack.attribute( "draw:fill-gradient-name" );
+            QString style = styleStack.attribute( "draw:fill-gradient-name", QString::null, "drawing-page" );
             QDomElement *draw = context.oasisStyles().drawStyles()[style];
             if ( draw )
             {
@@ -370,10 +370,10 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             }
         }
     }
-    if ( styleStack.hasAttribute("presentation:transition-style"))
+    if ( styleStack.hasAttribute("presentation:transition-style", QString::null, "drawing-page"))
     {
         kdDebug()<<" have a presentation:transition-style------------\n";
-        const QString effect = styleStack.attribute("presentation:transition-style");
+        const QString effect = styleStack.attribute("presentation:transition-style", QString::null, "drawing-page");
         kdDebug() << "Transition name: " << effect << endl;
         PageEffect pef;
         if (effect=="vertical-stripes" || effect=="vertical-lines") // PEF_BLINDS_VER
@@ -429,7 +429,7 @@ void KPBackGround::loadOasis(KoOasisContext & context )
             pef=PEF_RANDOM;
         setPageEffect( pef );
     }
-    if ( styleStack.hasChildNode("presentation:sound"))
+    if ( styleStack.hasChildNode("presentation:sound", "drawing-page"))
     {
 #if 0 //load sound file store it into kpresenter_doc "m_page->kPresenterDoc()"
         QString soundUrl = storeSound(m_styleStack.childNode("presentation:sound").toElement(),
