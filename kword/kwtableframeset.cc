@@ -74,6 +74,11 @@ KWTableFrameSet::~KWTableFrameSet()
     m_doc = 0L;
 }
 
+KWFrameSetEdit * KWTableFrameSet::createFrameSetEdit( KWCanvas * canvas )
+{
+    return new KWTableFrameSetEdit( this, canvas );
+}
+
 /*================================================================*/
 void KWTableFrameSet::addCell( Cell *cell )
 {
@@ -648,7 +653,7 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
                 needFinetune=true;
                 colStart.append(cell->getFrame( 0 )->left());
             } else {
-                for( int rowspan=cell->m_cols; rowspan>0; rowspan--) 
+                for( int rowspan=cell->m_cols; rowspan>0; rowspan--)
 {
                 colStart.append(cell->getFrame( 0 )->left() + (cell->getFrame( 0 )->width() / cell->m_cols)*(rowspan - 1) );
 }
@@ -1232,8 +1237,8 @@ bool KWTableFrameSet::Cell::isAboveOrLeftOf( unsigned row, unsigned col )
     return ( m_row < row ) || ( ( m_row == row ) && ( m_col < col ) );
 }
 
-void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect, 
-        QColorGroup & cg, bool onlyChanged, bool resetChanged ) 
+void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
+        QColorGroup & cg, bool onlyChanged, bool resetChanged )
 {
     for (unsigned int i=0; i < m_cells.count() ; i++)
         m_cells.at(i)->drawContents( painter, crect, cg, onlyChanged, resetChanged );

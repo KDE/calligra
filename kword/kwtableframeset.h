@@ -37,6 +37,7 @@ DESCRIPTION
 using namespace Qt3;
 
 class KWDocument;
+class KWTableFrameSetEdit;
 class QPainter;
 
 /**
@@ -86,6 +87,8 @@ public:
     KWTableFrameSet( KWTableFrameSet &original );
     // destructor
     virtual ~KWTableFrameSet();
+
+    virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * canvas );
 
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged );
