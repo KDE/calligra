@@ -235,7 +235,6 @@ bool KOSpell::initConfig()
     }
     speller = to_aspell_speller(ret);
     config = aspell_speller_config(speller);
-    kdDebug()<<" dddddddddddddddddddddddddssssssssssssssccccccccc\n";
     return true;
 }
 
@@ -307,7 +306,6 @@ QStringList KOSpell::resultCheckWord( const QString &_word )
 {
     if (_word.isEmpty())
         return QStringList();
-    kdDebug()<<" before !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
     kdDebug()<<" aspell_config_retrieve(config, lang) :"<<aspell_config_retrieve(config, "lang")<<endl;
     QStringList result;
     const AspellWordList *wl = aspell_speller_suggest(speller, _word.latin1(), -1);
