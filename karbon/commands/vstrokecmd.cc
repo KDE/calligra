@@ -30,8 +30,8 @@ VStrokeCmd::execute()
 	VObjectListIterator itr( m_selection->objects() );
 	for ( ; itr.current() ; ++itr )
 	{
-		if( m_opacity == -1 )
-			m_color.setOpacity( itr.current()->stroke()->color().opacity() );
+		//if( m_opacity == -1 )
+		//	m_color.setOpacity( itr.current()->stroke()->color().opacity() );
 
 		m_oldcolors.push_back( *itr.current()->stroke() );
 
