@@ -872,6 +872,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         // We can ignore the version mismatch for now. We will actually have to use it
         // when the syntax is extended in an incompatible manner.
     }
+    // Looks like support for the old way of naming images internally,
+    // see completeLoading.
     value = KWDocument::getAttribute( word, "url", QString::null );
     if ( value != QString::null )
     {
@@ -892,7 +894,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         __hf.footer = static_cast<KoHFType>( KWDocument::getAttribute( paper, "fType", 0 ) );
         getPointBasedAttribute( __hf, HeaderBodySpacing, paper, "spHeadBody", 0.0 );
         getPointBasedAttribute( __hf, FooterBodySpacing, paper, "spFootBody", 0.0 );
-        __columns.columns = KWDocument::getAttribute( paper, "columns", 0 );
+        __columns.columns = KWDocument::getAttribute( paper, "columns", 1 );
         getPointBasedAttribute( __columns, ColumnSpacing, paper, "columnspacing", 0.0 );
         m_zoom = KWDocument::getAttribute( paper, "zoom", 100 );
         if(m_zoom!=100)
