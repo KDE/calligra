@@ -152,6 +152,8 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     connect( &inputTimer, SIGNAL( timeout() ),
 	     this, SLOT( noInput() ) );
     formatFC = new KWFormatContext( doc, 1 );
+
+    pasteLaterData = 0;
 }
 
 /*================================================================*/
@@ -3812,7 +3814,8 @@ bool KWPage::findRev( QString _expr, KWSearchDia::KWSearchEntry *_format,
 		{
 		    for ( int i = currFindFS - 1; i >= 0; i-- )
 		    {
-			if ( doc->getFrameSet( i )->getFrameType() == FT_TEXT && doc->getFrameSet( i )->getFrameInfo() == FI_BODY )
+			if ( doc->getFrameSet( i )->getFrameType() == FT_TEXT &&
+			     doc->getFrameSet( i )->getFrameInfo() == FI_BODY )
 			{
 			    currFindParag = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getLastParag();
 			    currFindPos = currFindParag->getTextLen() - 1;
@@ -4331,9 +4334,15 @@ void KWPage::startDrag()
     QClipboard *cb = QApplication::clipboard();
     drag->setKWord( cb->data()->encodedData( MIME_TYPE ) );
     drag->setPlain( cb->data()->encodedData( "text/plain" ) );
-    if ( drag->drag() )
-	doc->deleteSelectedText( fc );
-
+    if ( drag->drag() ) {
+	if ( pasteLaterData.isEmpty() ) {
+	    doc->deleteSelectedText( fc );
+	    doc->setSelection( FALSE );
+	    recalcCursor();
+	}
+	pasteLaterData = 0;
+    }
+	
     if ( blinking )
 	startBlinkCursor();
 }
@@ -4346,7 +4355,7 @@ void KWPage::viewportDragEnterEvent( QDragEnterEvent *e )
 	 QTextDrag::canDecode( e ) ||
 	 QImageDrag::canDecode( e ) ||
 	QUriDrag::canDecode( e ) )
-	e->acceptAction();
+	e->accept();//Action();
 }
 
 /*================================================================*/
@@ -4414,9 +4423,9 @@ void KWPage::viewportDragMoveEvent( QDragMoveEvent *e )
 		gui->getHorzRuler()->setTabList( fc->getParag()->getParagLayout()->getTabList() );
 	    }
 
-	    e->acceptAction();
+	    e->accept();//Action();
 	} else {
-	    e->acceptAction();
+	    e->accept();//Action();
 	    doc->drawMarker( *fc, &_painter, contentsX(), contentsY() );
 	    markerIsVisible = TRUE;
 	    _painter.end();
@@ -4438,13 +4447,35 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 
     if ( KWordDrag::canDecode( e ) ) {
 	if ( drop->provides( MIME_TYPE ) ) {
-	    if ( drop->encodedData( MIME_TYPE ).size() )
+	    if ( drop->encodedData( MIME_TYPE ).size() ) {
+		if ( ( drop->source() == this || drop->source() == viewport() ) && 
+		     TRUE /*drop->action() == QDropEvent::Move*/ ) { // #### todo
+		    KWFormatContext oldFc( doc, fc->getFrameSet() );
+		    oldFc = *fc;
+		    doc->deleteSelectedText( fc );	
+		    doc->setSelection( FALSE );
+		    *fc = oldFc;
+		    recalcCursor();
+		    pasteLaterData = drop->encodedData( MIME_TYPE );
+		}
 		editPaste( drop->encodedData( MIME_TYPE ), MIME_TYPE );
+	    }
 	} else if ( drop->provides( "text/plain" ) ) {
-	    if ( drop->encodedData( "text/plain" ).size() )
+	    if ( drop->encodedData( "text/plain" ).size() ) {
+		if ( ( drop->source() == this || drop->source() == viewport() ) &&
+		     TRUE /*drop->action() == QDropEvent::Move*/ ) { // #### todo
+		    KWFormatContext oldFc( doc, fc->getFrameSet() );
+		    oldFc = *fc;
+		    doc->deleteSelectedText( fc );	
+		    doc->setSelection( FALSE );
+		    *fc = oldFc;
+		    recalcCursor();
+		    pasteLaterData = drop->encodedData( "text/plain" );
+		}
 		editPaste( drop->encodedData( "text/plain" ) );
+	    }
 	}
-	e->acceptAction();
+	e->accept();//Action();
     } else if ( QImageDrag::canDecode( e ) ) {
 	QImage pix;
 	QImageDrag::decode( e, pix );
@@ -4471,7 +4502,7 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 	QString cmd = "rm -f ";
 	cmd += filename;
 	system( cmd.ascii() );
-	e->acceptAction();
+	e->accept();//Action();
     } else if ( QUriDrag::canDecode( e ) ) {
 
 	QStringList lst;
@@ -4525,7 +4556,7 @@ void KWPage::viewportDropEvent( QDropEvent *e )
 	QString s;
 	QTextDrag::decode( e, s );
 	editPaste( s );
-	e->acceptAction();
+	e->accept();//Action();
     }
 
     startBlinkCursor();

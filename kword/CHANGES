@@ -1457,3 +1457,7 @@ Reggie, 29.8.1999:
 ------------------
 - Fixed a redraw bug (always repaint new area when scrolling)
 - Some other fixes
+
+Reggie, 31.8.1999:
+------------------
+- Improved DnD, Copy/Move works now :-)
