@@ -23,9 +23,12 @@
 
 #include <kexi.h>
 #include <kexipart.h>
+#include <kexipartdatasource.h>
 #include <kexipartitem.h>
+#include <kexidb/fieldlist.h>
 
 class KexiMainWin;
+class KexiTableDataSource;
 
 class KexiTablePart : public KexiPart::Part
 {
@@ -44,11 +47,24 @@ class KexiTablePart : public KexiPart::Part
 
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
 			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
+
+		virtual KexiPart::DataSource *dataSource();
+
 	protected:
 //		virtual KexiDialogBase* createInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
 		virtual void initPartActions( KActionCollection *col );
 		virtual void initInstanceActions( KActionCollection *col );
+};
+
+class KexiTableDataSource : public KexiPart::DataSource
+{
+	public:
+		KexiTableDataSource(KexiPart::Part *part);
+		~KexiTableDataSource();
+
+		virtual KexiDB::FieldList *fields(KexiProject *project, const KexiPart::Item &item);
+		virtual KexiDB::Cursor *cursor(KexiProject *project, const KexiPart::Item &item, bool buffer);
 };
 
 #endif

@@ -160,8 +160,35 @@ bool KexiTablePart::remove(KexiMainWindow *win, KexiPart::Item &item)
 	return true;
 }
 
+KexiPart::DataSource *
+KexiTablePart::dataSource()
+{
+	return new KexiTableDataSource(this);
+}
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_table, KGenericFactory<KexiTablePart> )
+
+KexiTableDataSource::KexiTableDataSource(KexiPart::Part *part)
+ : KexiPart::DataSource(part)
+{
+}
+
+KexiTableDataSource::~KexiTableDataSource()
+{
+}
+
+KexiDB::FieldList *
+KexiTableDataSource::fields(KexiProject *project, const KexiPart::Item &it)
+{
+	kdDebug() << "KexiTableDataSource::fields(): " << it.name() << endl;
+	return project->dbConnection()->tableSchema(it.name());
+}
+
+KexiDB::Cursor *
+KexiTableDataSource::cursor(KexiProject *project, const KexiPart::Item &it, bool buffer)
+{
+	return 0;
+}
 
 #include "kexitablepart.moc"
 
