@@ -19,20 +19,20 @@
 
 #include "koxmlns.h"
 
-const char* const KoXmlNS::office = "urn:oasis:names:tc:openoffice:xmlns:office:1.0";
-const char* const KoXmlNS::meta = "urn:oasis:names:tc:openoffice:xmlns:meta:1.0";
-const char* const KoXmlNS::config = "urn:oasis:names:tc:openoffice:xmlns:config:1.0";
-const char* const KoXmlNS::text = "urn:oasis:names:tc:openoffice:xmlns:text:1.0";
-const char* const KoXmlNS::table = "urn:oasis:names:tc:openoffice:xmlns:table:1.0";
-const char* const KoXmlNS::draw = "urn:oasis:names:tc:openoffice:xmlns:drawing:1.0";
-const char* const KoXmlNS::presentation = "urn:oasis:names:tc:openoffice:xmlns:presentation:1.0";
-const char* const KoXmlNS::dr3d = "urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0";
-const char* const KoXmlNS::chart = "urn:oasis:names:tc:openoffice:xmlns:chart:1.0";
-const char* const KoXmlNS::form = "urn:oasis:names:tc:openoffice:xmlns:form:1.0";
-const char* const KoXmlNS::script = "urn:oasis:names:tc:openoffice:xmlns:script:1.0";
-const char* const KoXmlNS::style = "urn:oasis:names:tc:openoffice:xmlns:style:1.0";
-const char* const KoXmlNS::number = "urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0";
-const char* const KoXmlNS::manifest = "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0";
+const char* const KoXmlNS::office = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
+const char* const KoXmlNS::meta = "urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
+const char* const KoXmlNS::config = "urn:oasis:names:tc:opendocument:xmlns:config:1.0";
+const char* const KoXmlNS::text = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
+const char* const KoXmlNS::table = "urn:oasis:names:tc:opendocument:xmlns:table:1.0";
+const char* const KoXmlNS::draw = "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0";
+const char* const KoXmlNS::presentation = "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0";
+const char* const KoXmlNS::dr3d = "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0";
+const char* const KoXmlNS::chart = "urn:oasis:names:tc:opendocument:xmlns:chart:1.0";
+const char* const KoXmlNS::form = "urn:oasis:names:tc:opendocument:xmlns:form:1.0";
+const char* const KoXmlNS::script = "urn:oasis:names:tc:opendocument:xmlns:script:1.0";
+const char* const KoXmlNS::style = "urn:oasis:names:tc:opendocument:xmlns:style:1.0";
+const char* const KoXmlNS::number = "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0";
+const char* const KoXmlNS::manifest = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
 
 const char* const KoXmlNS::math = "http://www.w3.org/1998/Math/MathML";
 const char* const KoXmlNS::svg = "http://www.w3.org/2000/svg";

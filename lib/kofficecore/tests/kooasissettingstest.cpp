@@ -73,7 +73,7 @@ int main( int, char** ) {
 
     const QCString xml = "\
 <?xml version=\"1.0\" encoding=\"UTF-8\"?> \
-<office:document-settings xmlns:office=\"urn:oasis:names:tc:openoffice:xmlns:office:1.0\" xmlns:config=\"urn:oasis:names:tc:openoffice:xmlns:config:1.0\"> \
+<office:document-settings xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\" xmlns:config=\"urn:oasis:names:tc:openoffice:xmlns:config:1.0\"> \
  <office:settings> \
   <config:config-item-set config:name=\"view-settings\"> \
     <config:config-item config:name=\"unit\" config:type=\"string\">mm</config:config-item> \
