@@ -1307,6 +1307,13 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     } break;
     case INS_TEXT: {
         if ( !insRect.isNull() ) {
+            if ( m_drawSymetricObject )
+            {
+                m_drawSymetricObject = false;
+                insRect.moveBy( -insRect.width(), -insRect.height());
+                insRect.setSize( 2*insRect.size() );
+            }
+
             KPTextObject* kptextobject = insertTextObject( insRect );
             setToolEditMode( TEM_MOUSE );
 
@@ -1423,6 +1430,13 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     case INS_TABLE:
     case INS_FORMULA: {
         if ( !insRect.isNull() ) {
+            if ( m_drawSymetricObject )
+            {
+                m_drawSymetricObject = false;
+                insRect.moveBy( -insRect.width(), -insRect.height());
+                insRect.setSize( 2*insRect.size() );
+            }
+
             KPPartObject *kpPartObject = insertObject( insRect );
             setToolEditMode( TEM_MOUSE );
 
@@ -1437,14 +1451,24 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     } break;
     case INS_AUTOFORM: {
         bool reverse = insRect.left() > insRect.right() || insRect.top() > insRect.bottom();
-        if ( !insRect.isNull() ) insertAutoform( insRect, reverse );
+        if ( !insRect.isNull() )
+        {
+            if ( m_drawSymetricObject )
+            {
+                m_drawSymetricObject = false;
+                insRect.moveBy( -insRect.width(), -insRect.height());
+                insRect.setSize( 2*insRect.size() );
+            }
+            insertAutoform( insRect, reverse );
+        }
         setToolEditMode( TEM_MOUSE );
     } break;
     case INS_FREEHAND:
         if ( !m_pointArray.isNull() ) insertFreehand( m_pointArray );
         break;
     case INS_POLYGON:
-        if ( !m_pointArray.isNull() ) insertPolygon( m_pointArray );
+        if ( !m_pointArray.isNull() )
+            insertPolygon( m_pointArray );
         break;
     case INS_PICTURE: {
         if ( !insRect.isNull() ) insertPicture( insRect );
@@ -1618,11 +1642,35 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		p.setBrush( NoBrush );
 		p.setRasterOp( NotROP );
 		if ( insRect.width() != 0 && insRect.height() != 0 )
-		    p.drawRect( insRect );
+                {
+                    if ( !m_drawSymetricObject)
+                        p.drawRect( insRect );
+                    else
+                    {
+                        QRect tmpRect( insRect );
+                        tmpRect.moveBy( -insRect.width(), -insRect.height());
+                        tmpRect.setSize( 2*insRect.size() );
+                        p.drawRect( tmpRect );
+                    }
+                }
+
+
 		insRect.setRight( ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx() );
 		insRect.setBottom( ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy() );
                 limitSizeOfObject();
-		p.drawRect( insRect );
+
+                QRect tmpRect( insRect );
+
+                if ( e->state() & AltButton )
+                {
+                    m_drawSymetricObject = true;
+                    tmpRect.moveBy( -insRect.width(), -insRect.height());
+                    tmpRect.setSize( 2*insRect.size() );
+                }
+                else
+                    m_drawSymetricObject = false;
+
+		p.drawRect( tmpRect );
 		p.end();
 
 		mouseSelectedObject = true;
