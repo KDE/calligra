@@ -421,7 +421,7 @@ void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
         QRect pageRect=activePage()->getZoomPageRect();
         for(i = doc->horizHelplines().begin(); i != doc->horizHelplines().end(); ++i)
         {
-            double vi = *i + m_view->zoomHandler()->zoomItY(diffy());
+            double vi = *i ;
             if( rect.contains(rect.x(), vi) )
                 painter->drawLine(pageRect.left(), m_view->zoomHandler()->zoomItY(vi), pageRect.right(), m_view->zoomHandler()->zoomItY(vi));
 
@@ -429,7 +429,7 @@ void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
 
         for(i = doc->vertHelplines().begin(); i != doc->vertHelplines().end(); ++i)
         {
-            double vi = *i + m_view->zoomHandler()->zoomItX(diffx());
+            double vi = *i ;
             if( rect.contains(vi, rect.y()) )
                 painter->drawLine(m_view->zoomHandler()->zoomItX(vi), pageRect.top(), m_view->zoomHandler()->zoomItX(vi), pageRect.bottom());
         }
@@ -635,8 +635,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         {
                             m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy()));
                             m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()));
-                            tmpHelpLinePosX=m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx());
-                            tmpHelpLinePosY=m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy());
+                            tmpHelpLinePosX=m_view->zoomHandler()->unzoomItX(e->pos().x());
+                            tmpHelpLinePosY=m_view->zoomHandler()->unzoomItY(e->pos().y());
 
                         }
                         else
@@ -6294,15 +6294,14 @@ void KPrCanvas::moveHelpLine( const QPoint & pos)
     if ( m_tmpHorizHelpline != -1)
     {
         double vi = m_view->kPresenterDoc()->horizHelplines()[m_tmpHorizHelpline];
-        m_view->kPresenterDoc()->repaint(QRect( rect.left(), m_view->zoomHandler()->zoomItY(vi) -4 - diffy(),  rect.right(), m_view->zoomHandler()->zoomItY(vi) + 4 - diffy()));
+        m_view->kPresenterDoc()->repaint(QRect( rect.left(), m_view->zoomHandler()->zoomItY(vi) -4 ,  rect.right(), m_view->zoomHandler()->zoomItY(vi) + 4 ));
         m_view->kPresenterDoc()->updateHorizHelpline( m_tmpHorizHelpline , m_view->zoomHandler()->unzoomItY(pos.y()+diffy()));
-
     }
     else if ( m_tmpVertHelpline != -1 )
     {
         double vi = m_view->kPresenterDoc()->vertHelplines()[m_tmpVertHelpline];
 
-        m_view->kPresenterDoc()->repaint(QRect( m_view->zoomHandler()->zoomItX(vi) -4 - diffx(),  rect.top(), m_view->zoomHandler()->zoomItX(vi) + 4 -diffx(), rect.bottom()));
+        m_view->kPresenterDoc()->repaint(QRect( m_view->zoomHandler()->zoomItX(vi) -4 ,  rect.top(), m_view->zoomHandler()->zoomItX(vi) + 4 , rect.bottom()));
         m_view->kPresenterDoc()->updateVertHelpline( m_tmpVertHelpline , m_view->zoomHandler()->unzoomItX(pos.x()+diffx()));
     }
     m_tmpVertHelpline = -1;
@@ -6318,12 +6317,12 @@ void KPrCanvas::tmpMoveHelpLine( const QPoint & newPos)
     QRect rect = m_activePage->getZoomPageRect();
     if ( m_tmpHorizHelpline != -1)
     {
-        double vi = tmpHelpLinePosY;
+        double vi = tmpHelpLinePosY ;
         p.drawLine(rect.left(), m_view->zoomHandler()->zoomItY(vi), rect.right(), m_view->zoomHandler()->zoomItY(vi));
 
         p.setPen( QPen( black, 1, DotLine ) );
 
-        vi = m_view->zoomHandler()->unzoomItY(newPos.y() - diffy());
+        vi = m_view->zoomHandler()->unzoomItY(newPos.y());
 
         p.drawLine(rect.left(), m_view->zoomHandler()->zoomItY(vi), rect.right(), m_view->zoomHandler()->zoomItY(vi));
         tmpHelpLinePosY = vi;
@@ -6335,7 +6334,7 @@ void KPrCanvas::tmpMoveHelpLine( const QPoint & newPos)
 
         p.setPen( QPen( black, 1, DotLine ) );
 
-        vi = m_view->zoomHandler()->unzoomItX(newPos.x() - diffx());
+        vi = m_view->zoomHandler()->unzoomItX(newPos.x());
 
         p.drawLine(m_view->zoomHandler()->zoomItX(vi), rect.top(), m_view->zoomHandler()->zoomItX(vi),  rect.bottom());
         tmpHelpLinePosX = vi;
