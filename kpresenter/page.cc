@@ -90,7 +90,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
         tmpObjs.setAutoDelete( false );
         setAcceptDrops( true );
         inEffect = false;
-        ratio = 0;
+        ratio = 0.0;
         keepRatio = false;
         mouseSelectedObject = false;
         selectedObjectPosition = -1;
@@ -446,7 +446,7 @@ void Page::mousePressEvent( QMouseEvent *e )
 void Page::mouseReleaseEvent( QMouseEvent *e )
 {
     if ( e->button() != LeftButton ) {
-        ratio = 0;
+        ratio = 0.0;
         keepRatio = false;
         return;
     }
@@ -731,7 +731,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
     modType = MT_NONE;
     resizeObjNum = -1;
     mouseMoveEvent( e );
-    ratio = 0;
+    ratio = 0.0;
     keepRatio = false;
 }
 
@@ -754,8 +754,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		    if ( QRect( pnt.x() - diffx(), pnt.y() - diffy(), s.width(), s.height() ).
 			 contains( QPoint( e->x(), e->y() ) ) ) {
 			if ( kpobject->isSelected() ) {
-			    int dy = diffy();
-			    setCursor( kpobject->getCursor( QPoint( e->x(), e->y() ), diffx(), dy, modType ) );
+			    setCursor( kpobject->getCursor( QPoint( e->x(), e->y() ), diffx(), diffy(), modType ) );
 			    cursorAlreadySet = true;
 			    break;
 			}
@@ -810,7 +809,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
 				break;
 			kpobject->moveBy( QPoint( dx, dy ) );
-			kpobject->resizeBy( QSize( -dx, -dy ) );
+			kpobject->resizeBy( -dx, -dy );
 			resizeObject();
 		    } break;
 		    case MT_RESIZE_LF: {
@@ -819,21 +818,21 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
 				break;
 			kpobject->moveBy( QPoint( dx, 0 ) );
-			kpobject->resizeBy( QSize( -dx, -dy ) );
+			kpobject->resizeBy( -dx, -dy );
 			resizeObject();
 		    } break;
 		    case MT_RESIZE_LD: {
 			if ( keepRatio && ratio != 0.0 )
 			    break;
 			kpobject->moveBy( QPoint( dx, 0 ) );
-			kpobject->resizeBy( QSize( -dx, dy ) );
+			kpobject->resizeBy( -dx, dy );
 			resizeObject();
 		    } break;
 		    case MT_RESIZE_RU: {
 			if ( keepRatio && ratio != 0.0 )
 			    break;
 			kpobject->moveBy( QPoint( 0, dy ) );
-			kpobject->resizeBy( QSize( dx, -dy ) );
+			kpobject->resizeBy( dx, -dy );
 			resizeObject();
 		    } break;
 		    case MT_RESIZE_RT: {
@@ -841,7 +840,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 			if ( keepRatio && ratio != 0.0 )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
 				break;
-			kpobject->resizeBy( QSize( dx, dy ) );
+			kpobject->resizeBy( dx, dy );
 			resizeObject();
 		    } break;
 		    case MT_RESIZE_RD: {
@@ -857,7 +856,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
 				break;
 			kpobject->moveBy( QPoint( 0, dy ) );
-			kpobject->resizeBy( QSize( -dx, -dy ) );
+			kpobject->resizeBy( -dx, -dy );
 			resizeObject();
 		    } break;
 		    case MT_RESIZE_DN: {
@@ -865,7 +864,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 			if ( keepRatio && ratio != 0.0 )
 			    if ( !calcRatio( dx, dy, kpobject, ratio ) )
 				break;
-			kpobject->resizeBy( QSize( dx, dy ) );
+			kpobject->resizeBy( dx, dy );
 			resizeObject();
 		    } break;
 		    default: break;

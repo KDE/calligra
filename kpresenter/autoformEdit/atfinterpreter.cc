@@ -334,7 +334,6 @@ void ATFInterpreter::interpret()
                     {
                         coordPtr->pntY = value;
                         coord.a = QString::null;
-                        coord.a = QString::null;
                         coord.b = QString::null;
                         coord.c = QString::null;
                         coord.d = QString::null;

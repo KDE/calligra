@@ -3638,13 +3638,7 @@ void KPresenterDoc::groupObjects()
 	    objs.append( kpobject );
     }
 
-    if ( objs.count() < 2 )
-	// Shouldn't the action be disabled, to prevent this? (David)
-	KMessageBox::information( 0,  // TODO: provide a parent widget
-				  i18n( "You have to select at least 2 objects\n"
-					"which should be grouped together!"),
-				  i18n( "Group Objects" ) );
-    else {
+    if ( objs.count() > 1 ) {
 	GroupObjCmd *groupObjCmd = new GroupObjCmd( i18n( "Group Objects" ), objs, this );
 	addCommand( groupObjCmd );
 	groupObjCmd->execute();
