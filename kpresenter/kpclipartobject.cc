@@ -63,15 +63,6 @@ KPClipartObject &KPClipartObject::operator=( const KPClipartObject & )
 /*================================================================*/
 void KPClipartObject::setClipart( const KoPictureKey & key )
 {
-    /*if ( !_lastModified.isValid() )
-    {
-        QFileInfo inf( _filename );
-        _lastModified = inf.lastModified();
-    }*/
-
-    //if ( picture )
-    //    clipartCollection->removeRef( key );
-
     m_clipart = clipartCollection->findPicture( key );
     if ( m_clipart.isNull() )
         kdWarning() << "Clipart not found in collection " << key.toString() << endl;
@@ -102,9 +93,6 @@ double KPClipartObject::load(const QDomElement &element)
         // try to find a FILENAME tag if the KEY is not available...
         e=element.namedItem("FILENAME").toElement();
         if(!e.isNull()) {
-            /*KPClipart key( e.attribute("filename"),
-                           QDateTime( clipartCollection->tmpDate(),
-                           clipartCollection->tmpTime() ) );*/
             // Loads from the disk directly (unless it's in the collection already?)
             m_clipart = clipartCollection->loadPicture( e.attribute("filename") );
         }
