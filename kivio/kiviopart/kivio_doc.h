@@ -119,7 +119,7 @@ public:
   int units() { return m_units; }
 
   KivioGridData grid() { return gridData; }
-  void setGrid(KivioGridData g) { gridData = g;}
+  void setGrid(KivioGridData g) { gridData = g; emit sig_updateGrid();}
 
   ViewItemList* viewItems() { return viewItemList; }
 
@@ -143,6 +143,7 @@ signals:
   void sig_updateView(KivioPage*);
   void sig_pageNameChanged(KivioPage*, const QString&);
   void sig_deleteStencilSet( DragBarButton*, QWidget *, KivioStackBar * );
+  void sig_updateGrid();
 
   void unitsChanged(int);
 

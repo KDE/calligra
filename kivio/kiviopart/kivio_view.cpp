@@ -250,6 +250,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect( m_pDoc, SIGNAL( sig_updateView(KivioPage*) ), SLOT(slotUpdateView(KivioPage*)) );
   connect( m_pDoc, SIGNAL( sig_pageNameChanged(KivioPage*,const QString&)), SLOT(slotPageRenamed(KivioPage*,const QString&)) );
 
+  connect( m_pDoc, SIGNAL( sig_updateGrid()),SLOT(slotUpdateGrid()));
+
   initActions();
 
   m_pCanvas->centerPage();
@@ -779,8 +781,11 @@ void KivioView::toggleShowGrid(bool b)
   KivioGridData d = m_pDoc->grid();
   d.isShow = b;
   m_pDoc->setGrid(d);
+}
 
-  m_pCanvas->update();
+void KivioView::slotUpdateGrid()
+{
+    m_pCanvas->update();
 }
 
 void KivioView::toggleSnapGrid(bool b)

@@ -185,6 +185,7 @@ protected slots:
   void slotAddPage( KivioPage *_page );
   void slotPageRenamed( KivioPage* page, const QString& old_name );
   void slotUpdateView( KivioPage *_page );
+  void slotUpdateGrid();
 
   void setFGColor();
   void setBGColor();
