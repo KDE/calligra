@@ -20,12 +20,12 @@
 #ifndef kptduration_h
 #define kptduration_h
 
-#include <qdatetime.h> 
+#include <qdatetime.h>
 
 class KPTDuration;
 
 /**
- * The duration class can be used to store a timespan in a convenient format. 
+ * The duration class can be used to store a timespan in a convenient format.
  * The timespan can be in length in many many hours down to miliseconds.
  */
 class KPTDuration {
@@ -46,7 +46,7 @@ class KPTDuration {
         void const set(QDateTime newTime);
 
         int duration() const { return zero.secsTo(m_theTime); }
-        
+
         bool   operator==( const KPTDuration &d ) const { return m_theTime == d.m_theTime; }
         bool   operator!=( const KPTDuration &d ) const { return m_theTime != d.m_theTime; }
         bool   operator<( const KPTDuration &d ) const { return m_theTime < d.m_theTime; }
@@ -56,7 +56,7 @@ class KPTDuration {
         KPTDuration &operator = ( const KPTDuration &d ) { set(d); return *this;}
 
         QString toString() const { return m_theTime.time().toString(); }
-        
+
         QDateTime dateTime() const { return m_theTime; }
         QDate date() const { return m_theTime.date(); }
         QTime time() const { return m_theTime.time(); }

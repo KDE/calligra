@@ -57,7 +57,7 @@
 #include <kdeversion.h>
 #include <kxmlguifactory.h>
 
-KPTView::KPTView(KPTPart* part, QWidget* parent, const char* name)
+KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     : KoView(part, parent, "Main View"),
     m_ganttview(0),
     m_ganttlayout(0),
@@ -116,8 +116,8 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* name)
 		SLOT(slotConfigure()), actionCollection(), "configure");
 
     // ------ Popup
-    new KAction(i18n("Open..."), "node_open", 0, this,
-		SLOT(slotOpenNode()), actionCollection(), "node_open");
+    new KAction(i18n("Node properties..."), "node_properties", 0, this,
+		SLOT(slotOpenNode()), actionCollection(), "node_properties");
 
             
     // ------------------- Actions with a key binding and no GUI item

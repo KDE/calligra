@@ -44,7 +44,7 @@
     setSorting(-1); // Off
     setShowSortIndicator(false);
     addColumn(i18n("Project"));
-    addColumn(i18n("Leader"));
+    addColumn(i18n("Responsible"));
     addColumn(i18n("Description"));
     displayProject();
     

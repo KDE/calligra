@@ -103,7 +103,7 @@ protected:
 
 #ifndef NDEBUG
 public:
-    void printDebug(bool children, QCString indent) 
+    void printDebug(bool /*children*/, QCString indent) 
         {   
             indent += "  ";
             kdDebug()<<indent<<" Earliest start: "<<earliestStart.dateTime().toString()<<endl;

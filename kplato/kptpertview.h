@@ -42,7 +42,7 @@ class QListViewItem;
 
     ~KPTPertView();
     
-	void zoom(double zoom) {}
+	void zoom(double /*zoom*/) {}
 	
     void draw();
     KPTView *mainView();

@@ -3,23 +3,23 @@ SUBDIRS = templates pics
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
 libkplatopart_la_SOURCES =  kptmilestone.cc kptnode.cc kptproject.cc \
-	kptrelation.cc kptresource.cc kpttask.cc \
-	kptduration.cc kptfactory.cc kptpart.cc kptview.cc \
-	kptprojectdialog.cc kpttaskdialog.cc kptnodeitem.cc \
-    kptmilestonedialog.cc kptresourcedialog.cc \
-    kptganttcanvas.cc kpttimescale.cc kptganttview.cc kptprojectlist.cc \
+    kptrelation.cc kptresource.cc kpttask.cc \
+    kptduration.cc kptfactory.cc kptpart.cc kptview.cc \
+    kptprojectdialog.cc kpttaskdialog.cc kptnodeitem.cc \
+    kptmilestonedialog.cc kptganttcanvas.cc kpttimescale.cc \
+    kptganttview.cc kptprojectlist.cc kptresourcespanel.cc \
     kptpertview.cc kptpertcanvas.cc kptrelationdialog.cc \
-	kptcanvasitem.cc
+    kptcanvasitem.cc kptprojectdialogbase.ui resourcespanelbase.ui
 
 noinst_HEADERS = defs.h kptaboutdata.h kptduration.h kptfactory.h \
-	kptmilestone.h kptnode.h kptpart.h kptproject.h kptrelation.h \
-	kptresource.h kpttask.h kptterminalnode.h kptview.h \
-	kptprojectdialog.h kpttaskdialog.h kptnodeitem.h \
-    kptmilestonedialog.h kptresourcedialog.h \
-    kptganttcanvas.h kpttimescale.h kptganttview.h kptprojectlist.h \
+    kptmilestone.h kptnode.h kptpart.h kptproject.h kptrelation.h \
+    kptresource.h kpttask.h kptterminalnode.h kptview.h \
+    kptprojectdialog.h kpttaskdialog.h kptnodeitem.h \
+    kptmilestonedialog.h kptganttcanvas.h kpttimescale.h \
+    kptganttview.h kptprojectlist.h kptcanvasitem.h \
     kptpertview.h kptpertcanvas.h kptrelationdialog.h \
-	kptcanvasitem.h
-	
+    kptresourcespanel.h
+
 ## The part
 kde_module_LTLIBRARIES = libkplatopart.la
 libkplatopart_la_LDFLAGS = $(KDE_PLUGIN)

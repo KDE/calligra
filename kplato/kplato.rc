@@ -25,9 +25,9 @@
 	</Menu>
     </MenuBar>
     <Menu name="node_popup">
-        <Action name="node_open"/>
         <Action name="edit_cut"/>
         <Action name="edit_copy"/>
         <Action name="edit_paste"/>
+        <Action name="node_properties"/>
     </Menu>
 </kpartgui>

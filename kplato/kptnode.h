@@ -202,7 +202,7 @@ public:
     const KPTDuration& expectedDuration(const KPTDuration &start);
 
     virtual void drawGanttBar(QCanvas*, KPTTimeScale*, int , int) {;}
-    virtual void drawPert(KPTPertCanvas *view, QCanvas*, int) {;}
+    virtual void drawPert(KPTPertCanvas * /*view */, QCanvas*, int) {;}
     virtual void drawPertRelations(QCanvas*) {;}
     
     virtual void setStartNotEarlier(KPTDuration time) { sneTime = time; }
