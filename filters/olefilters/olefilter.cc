@@ -152,7 +152,7 @@ void OLEFilter::slotSavePart(
         tempFile.file()->writeBlock(data, length);
         tempFile.close();
         QString result = mgr->import(tempFile.name(), mimeType, config, m_prefixOut + id.mid(sizeof("tar:") - 1));
-        unlink(tempFile.name().local8Bit());
+        tempFile.unlink();
         partMap.insert(key, id);
         mimeMap.insert(key, mimeType);
 
