@@ -33,8 +33,7 @@ KAboutData *newKexiAboutData()
 {
 	KAboutData *aboutData=new KAboutData( "kexi", KEXI_APP_NAME,
 		KEXI_VERSION_STRING, description, KAboutData::License_LGPL,
-		I18N_NOOP(	"(c) 2002, 2003, Kexi Team\n"
-					"(c) 2003, OpenOffice Polska Ltd.\n"), 
+		(QString(I18N_NOOP(	"(c) 2002-%1, Kexi Team\n" ))+"(c) 2003-2004, OpenOffice Polska Ltd.\n").arg("2004"), 
 		I18N_NOOP(	"This software is developed by Kexi Team - an international group\n"
 					"of independent developers, with additional assistance and support\n"
 					"from the OpenOffice Polska company.\n\n"
