@@ -1,7 +1,5 @@
-#include <qimage.h>
+#include <kimgio.h>
 #include "formats.h"
-
-extern void read_jpeg_jfif(QImageIO *);
 
 //static int numFormats= 6;
 static int numFormats= 5;
@@ -9,10 +7,10 @@ static int numFormats= 5;
 static FormatRecord formatlist[]= {
 {
 	 "JPEG",
-	 FormatRecord::ReadFormat,
+	 FormatRecord::InternalFormat | FormatRecord::ReadFormat,
 	 "^\377\330\377\340",
 	 "*.jpeg *.jpg",
-	 read_jpeg_jfif, 0,
+	 0, 0,
 	   },
 {
 	 "BMP",
@@ -73,6 +71,8 @@ void FormatManager::init(FormatRecord formatlist[])
 				 0, 
 				 rec->read_format, rec->write_format);
    }
+   // Register the ones implemented by kimgio (tiff, jpeg, png, ...)
+   kimgioRegister();
 }
 	  
 const QStrList *FormatManager::formats(void)

@@ -6,8 +6,9 @@ LDADD = autoformEdit/atfinterpreter.o autoformEdit/afchoose.o \
 	../lib/store/libkstore.la \
 	../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	-lkparts -lkpartsui -lkom -lkfile -lkfm -lkstore -lkdeui -lkdeutil -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
-	-ljpeg $(LIBSOCKET) -ldl
+	-lkparts -lkpartsui -lkom -lkfile -lkfm -lkstore $(LIB_KIMGIO) \
+        -lkdeui -lkdeutil -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
+	$(LIBSOCKET) -ldl
 
 ####### Files
 
@@ -16,7 +17,7 @@ bin_PROGRAMS = kpresenter.bin
 kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	kpresenter_view.cc kpresenter_shell.cc kpresenter.cc \
 	backdia.cc page.cc ktextobject.cc styledia.cc \
-	jpeg.cc formats.cc qwmf.cc kenumlistdia.cc kcharselect.cc \
+	formats.cc qwmf.cc kenumlistdia.cc kcharselect.cc \
 	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
 	kpresenter_utils.cc rotatedia.cc ksearchdialogs.cc \
 	shadowdia.cc presstructview.cc delpagedia.cc inspagedia.cc \
@@ -34,7 +35,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter_shell.h kpresenter.h \
 		backdia.h page.h ktextobject.h styledia.h \
-		jpeg.h formats.h qwmf.h global.h \
+		formats.h qwmf.h global.h \
 		kenumlistdia.h kcharselect.h kcharselectdia.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
 		rotatedia.h ksearchdialogs.h shadowdia.h presstructview.h \

@@ -5,8 +5,9 @@ LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/store/libkstore.la \
 	../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	-lkparts -lkpartsui -lkom -lkfile -lkfm -lkdeui -lkdeutil -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
-	-ljpeg $(LIBSOCKET) -ldl
+	-lkparts -lkpartsui -lkom -lkfile -lkfm $(LIB_KIMGIO) -lkdeui \
+	-lkdeutil -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
+	$(LIBSOCKET) -ldl
 
 ####### Files
 
@@ -15,12 +16,12 @@ bin_PROGRAMS = kword.bin
 kword_bin_SOURCES = char.cc kword_main.cc kword_doc.cc kword_view.cc kword.cc kword_shell.cc \
 		fc.cc font.cc format.cc kword_page.cc parag.cc paraglayout.cc \
 		formatcollection.cc paragdia.cc imagecollection.cc image.cc \
-		jpeg.cc formats.cc frame.cc framedia.cc
+		formats.cc frame.cc framedia.cc
 
 noinst_HEADERS = char.h kword_main.h kword_doc.h kword_view.h kword.h kword_shell.h \
 		fc.h font.h format.h kword_page.h parag.h paraglayout.h \
 		formatcollection.h paragdia.h imagecollection.h image.h \
-		jpeg.h formats.h frame.h framedia.h
+		formats.h frame.h framedia.h
 
 SRCMETA =	kword_main.moc kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc \
 		kword_page.moc framedia.moc
