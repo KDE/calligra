@@ -248,15 +248,16 @@ void KoTextIterator::nextTextObject()
                 m_currentParag = (*m_currentTextObj)->textDocument()->firstParag();
         } else {
             if ( m_currentTextObj == m_lstObjects.begin() )
+                m_currentParag = 0L; // done
+            else
             {
                 --m_currentTextObj;
                 m_currentParag = (*m_currentTextObj)->textDocument()->lastParag();
-            } else
-                m_currentParag = 0L; // done
+            }
         }
     }
     // loop in case this new textobject is not visible
-    while ( m_currentTextObj != m_lstObjects.end() && !(*m_currentTextObj)->isVisible() );
+    while ( m_currentParag && !(*m_currentTextObj)->isVisible() );
 }
 
 bool KoTextIterator::atEnd() const
@@ -278,6 +279,7 @@ QString KoTextIterator::currentText() const
 QPair<int, QString> KoTextIterator::currentTextAndIndex() const
 {
     Q_ASSERT( m_currentParag );
+    Q_ASSERT( m_currentParag->string() );
     QString str = m_currentParag->string()->toString();
     str.truncate( str.length() - 1 ); // damn trailing space
     bool forw = ! ( m_options & KFindDialog::FindBackwards );
