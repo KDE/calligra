@@ -219,6 +219,14 @@ void CSVDialog::fillTable()
         }
     }
 
+    // file with only one line without '\n'
+    if (field.length() > 0)
+    {
+      setText(row - m_startline, column, field);
+      ++row;
+      field = "";
+    }
+    
     adjustRows( row - m_startline );
 
     for (column = 0; column < m_dialog->m_table->numCols(); ++column)
@@ -309,6 +317,7 @@ void CSVDialog::returnPressed()
 void CSVDialog::textChanged ( const QString & )
 {
     m_dialog->m_radioOther->setChecked ( true );
+    delimiterClicked(4); // other
 }
 
 void CSVDialog::formatClicked(int id)

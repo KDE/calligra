@@ -106,6 +106,10 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
 
     int numRows = dialog->getRows();
     int numCols = dialog->getCols();
+
+    if (numRows == 0)
+      ++numRows;
+
     int step = 100 / numRows * numCols;
     int value = 0;
 
