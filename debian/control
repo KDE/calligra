@@ -2,7 +2,7 @@ Source: koffice
 Build-Depends: autoconf, automake, libtool, debhelper, gettext, kdelibs-dev (>= 4:2.1.1)
 Section: x11
 Priority: optional
-Maintainer: Ivan E. Moore II <rkrusty@debian.org>
+Maintainer: Debian QA Group <debian-qa@lists.debian.org>
 Standards-Version: 3.5.0
 
 Package: koffice-dev

@@ -1,6 +1,9 @@
 koffice (2.1-cvs20010323-1) unstable; urgency=low
  
   * New upstream CVS pull
+  * Remove duplicate menu entry (Closes: #90298)
+  * Minor build fixes
+  * Change Maintainer to Debian QA
  
  -- Ivan E. Moore II <rkrusty@debian.org>  Fri, 23 Mar 2001 02:30:00 -0700
 
