@@ -638,8 +638,7 @@ bool KWEFKWordLeader::loadKoStoreFile(const QString& fileName, QByteArray& array
     }
     else
     {
-        // Note: we do not worry too much if we cannot open the document info!
-        kdWarning (30508) << "Unable to open" << fileName << "sub-file!" << endl;
+        kdWarning (30508) << "Unable to open " << fileName << " sub-file in KoStore " << m_filenameIn << endl;
         return false;
     }
     return true;
@@ -654,6 +653,9 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
         return KoFilter::NotImplemented;
     }
 
+    // We must save the input file name, as KoFilterChain::inputFile can only be called once!!
+    m_filenameIn=chain->inputFile();
+    kdDebug(30508) << "Setting m_filenameIn: " << m_filenameIn << endl;
 
     if ( !doOpenFile (chain->outputFile(),to) )
     {
@@ -669,7 +671,7 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
         return KoFilter::StupidError;
     }
 
-    KoStore koStoreIn (chain->inputFile(), KoStore::Read);  // TODO
+    KoStore koStoreIn (m_filenameIn, KoStore::Read);  // TODO
     QByteArray byteArrayIn;
 
     if ( koStoreIn.open ( "documentinfo.xml" ) )
@@ -690,7 +692,6 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     {
         byteArrayIn = koStoreIn.read ( koStoreIn.size () );
         koStoreIn.close ();
-        m_filenameIn=chain->inputFile();
 
         kdDebug (30508) << "Processing KWord File (KoStore)..." << endl;
         ProcessStoreFile (byteArrayIn, ProcessDocTag, this);
@@ -700,13 +701,14 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
         // We were not able to open maindoc.xml
         // But perhaps we have an untarred, uncompressed file
         //  (it might happen with koconverter)
-        QFile file (chain->inputFile());
+        QFile file (m_filenameIn);
         if (file.open (IO_ReadOnly))
         {
             byteArrayIn = file.readAll ();
             file.close ();
 
-            // DO *not* set m_filenameIn as we have not any KoStore
+            // Do *not* set m_filenameIn as we have not any KoStore
+	    m_filenameIn=QString::null; // PROVISORY
 
             kdDebug (30508) << "Processing KWord File (QFile)..." << endl;
             ProcessStoreFile (byteArrayIn, ProcessDocTag, this);
