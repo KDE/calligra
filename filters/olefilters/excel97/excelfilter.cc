@@ -112,7 +112,7 @@ bool ExcelFilter::filter()
             contSize += size;
         if (readAhead == 0) break; // we are at the end of the file
 
-        emit sigProgress(count/length*100);
+        emit sigProgress((int)(count*100/length));
     }
     m_ready = true;
 
