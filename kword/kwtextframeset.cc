@@ -452,7 +452,7 @@ void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRec
         int docHeight = textDocument()->lastParag()->pixelRect(m_doc).bottom() + 1;
         QRect frameRect = m_doc->zoomRect( (theFrame->innerRect()) );
 
-        int totalHeight = m_doc->zoomItY( frames.last()->internalY() + frames.last()->innerRect().height() );
+        int totalHeight = m_doc->zoomItY( frames.last()->internalY() + frames.last()->innerHeight() );
 
         QRect blank( 0, docHeight, frameRect.width(), totalHeight + frameRect.height() - docHeight );
         //kdDebug(32002) << this << " Blank area: " << DEBUGRECT(blank) << endl;
@@ -792,8 +792,8 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     // Note: it is very important that this method works in internal coordinates.
     // Otherwise, parags broken at the line-level (e.g. between two columns) are seen
     // as still in one piece, and we miss the frames in the 2nd column.
-    int from = m_doc->ptToLayoutUnitPixX( theFrame->bLeft());
-    int to = m_doc->ptToLayoutUnitPixX( theFrame->width()-theFrame->bRight());
+    int from = 0;
+    int to = m_doc->ptToLayoutUnitPixX( theFrame->innerWidth());
     bool init = false;
 
 #ifdef DEBUG_MARGINS
@@ -1700,7 +1700,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
     // Handle the case where the last frame is empty, so we may want to
     // remove the last page.
     else if ( frames.count() > 1 && !lastFormatted && !isAHeader() && !isAFooter()
-              && bottom < availHeight - m_doc->ptToLayoutUnitPixY( frames.last()->height() ) )
+              && bottom < availHeight - m_doc->ptToLayoutUnitPixY( frames.last()->innerHeight() ) )
     {
 #ifdef DEBUG_FORMAT_MORE
         kdDebug(32002) << "formatMore too much space (" << bottom << ", " << availHeight << ") , trying to remove last frame" << endl;
@@ -1895,7 +1895,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
         QPtrListIterator<KWFrame> frameIt( framesInPage( maxPage ) );
         for ( ; frameIt.current(); ++frameIt )
         {
-            maxY = QMAX( maxY, m_doc->ptToLayoutUnitPixY( frameIt.current()->internalY() + frameIt.current()->height() ) );
+            maxY = QMAX( maxY, m_doc->ptToLayoutUnitPixY( frameIt.current()->internalY() + frameIt.current()->innerHeight() ) );
         }
     }
 #ifdef DEBUG_VIEWAREA

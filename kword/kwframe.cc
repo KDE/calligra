@@ -1006,9 +1006,9 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
         }
 
         QRect r(crect);
-        QRect normalFrameRect( m_doc->zoomRect( *frame ) );
-        normalFrameRect.setTop( normalFrameRect.top()+m_doc->zoomItY(frame->bTop()));
-        normalFrameRect.setBottom( normalFrameRect.bottom()-m_doc->zoomItY(frame->bBottom()));
+        QRect normalFrameRect( m_doc->zoomRect( frame->innerRect() ) );
+        //normalFrameRect.setTop( normalFrameRect.top()+m_doc->zoomItY(frame->bTop()));
+        //normalFrameRect.setBottom( normalFrameRect.bottom()-m_doc->zoomItY(frame->bBottom()));
 
         QRect frameRect( viewMode->normalToView( normalFrameRect ) );
         r = r.intersect( frameRect );
@@ -1584,8 +1584,8 @@ void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
                                    QColorGroup &, bool, bool, KWFrameSetEdit * )
 {
     //kdDebug() << "KWPictureFrameSet::drawFrame crect=" << DEBUGRECT(crect) << endl;
-    m_image.draw( *painter, kWordDocument()->zoomItX(frame->bLeft()), kWordDocument()->zoomItY(frame->bTop()), kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
-                  crect.x(), crect.y(), crect.width(), crect.height() );
+    m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
+                  crect.x(), crect.y(), crect.width(), crect.height());
 }
 
 bool KWPictureFrameSet::isFrameAtPos( KWFrame* frame, const QPoint& nPoint, bool )
@@ -1682,7 +1682,7 @@ void KWClipartFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRec
     {
         kdDebug() << "Trying to draw Clipart " << &m_clipart << endl;
     }
-    m_clipart.draw( *painter, kWordDocument()->zoomItX(frame->bLeft()), kWordDocument()->zoomItY(frame->bTop()), kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
+    m_clipart.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ), kWordDocument()->zoomItY( frame->innerHeight() ),
                     crect.x(), crect.y(), crect.width(), crect.height() );
 }
 
@@ -1733,7 +1733,7 @@ void KWPartFrameSet::drawFrame( KWFrame* frame, QPainter * painter, const QRect 
 
         // We have to define better what the rect that we pass, means. Does it include zooming ? (yes I think)
         // Does it define the area to be repainted only ? (here it doesn't, really, but it should)
-        QRect rframe( kWordDocument()->zoomItX(frame->bLeft()), kWordDocument()->zoomItY(frame->bTop()), kWordDocument()->zoomItX( frame->innerWidth() ),
+        QRect rframe( 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ),
                       kWordDocument()->zoomItY( frame->innerHeight() ) );
         //kdDebug() << "rframe=" << DEBUGRECT( rframe ) << endl;
 
