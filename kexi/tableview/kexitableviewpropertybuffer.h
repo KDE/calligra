@@ -115,8 +115,6 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 		//! Called on clearing tableview's data: just clears all buffers.
 		void slotRefreshRequested();
 
-		void bufferDestroying() {}
-
 	protected:
 		KexiPropertyBuffer::Vector m_buffers; //!< prop. buffers vector
 
