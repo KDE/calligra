@@ -401,6 +401,12 @@ void KWTextFrameSet::layout()
     formatMore();
 }
 
+void KWTextFrameSet::invalidate()
+{
+    m_lastFormatted = textdoc->firstParag();
+    textdoc->invalidate(); // lazy layout, real update follows upon next repaint
+}
+
 int KWTextFrameSet::paragraphs()
 {
     int paragraphs = 0;
@@ -408,12 +414,6 @@ int KWTextFrameSet::paragraphs()
     for ( ; parag ; parag = parag->next() )
         paragraphs++;
     return paragraphs;
-}
-
-void KWTextFrameSet::invalidate()
-{
-    m_lastFormatted = textdoc->firstParag();
-    textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
 bool KWTextFrameSet::statistics( QProgressDialog *progress, ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words,

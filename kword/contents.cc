@@ -78,6 +78,12 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         }
         p = static_cast<KWTextParag *>(p->next());
     }
+    // Set a hard frame break after the last TOC parag
+    prevTOCParag->setPageBreaking( prevTOCParag->pageBreaking() | KWParagLayout::HardFrameBreakAfter );
+
+    // Format paragraphs, to take this page break into account and update page numbers
+    fs->layout();
+    fs->updateFrames();
 
     // Now add the page numbers, and apply the style
     QMap<KWTextParag *, KWTextParag *>::Iterator mapIt = paragMap.begin();
@@ -102,8 +108,6 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         KWTextFormat * newFormat = fs->zoomFormatFont( & tocStyle->format() );
         parag->setFormat( 0, parag->string()->length(), newFormat );
     }
-    // Set a hard frame break after the last TOC parag
-    prevTOCParag->setPageBreaking( prevTOCParag->pageBreaking() | KWParagLayout::HardFrameBreakAfter );
     return c;
 }
 
