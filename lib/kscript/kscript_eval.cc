@@ -15,6 +15,7 @@
 #include <kregexp.h>
 
 #include <qfileinfo.h>
+#include <klocale.h>
 
 // Get a left and right operand for arithmetic
 // operations like add, mul, div etc. If leftexpr
@@ -243,7 +244,7 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
     if ( context.value()->cast( KSValue::DoubleType ) )
       return true;
 
-    QString tmp( "Unary Operator + not defined for type %1" );
+    QString tmp( i18n("Unary Operator + not defined for type %1") );
     context.setException( new KSException( "UnknownOperation", tmp.arg( context.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
@@ -308,7 +309,7 @@ bool KSEval_t_plus_sign( KSParseNode* node, KSContext& context )
       }
       break;
     default:
-      QString tmp( "Operator + not defined for type %1" );
+      QString tmp( i18n("Operator + not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
@@ -335,7 +336,7 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
       return true;
     }
 
-    QString tmp( "Unary Operator - not defined for type %1" );
+    QString tmp( i18n("Unary Operator - not defined for type %1") );
     context.setException( new KSException( "UnknownOperation", tmp.arg( context.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
@@ -371,7 +372,7 @@ bool KSEval_t_minus_sign( KSParseNode* node, KSContext& context )
 	return true;
       }
     default:
-      QString tmp( "Operator - not defined for type %1" );
+      QString tmp( i18n("Operator - not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
@@ -413,7 +414,7 @@ bool KSEval_t_asterik( KSParseNode* node, KSContext& context )
 	return true;
       }
     default:
-      QString tmp( "Operator * not defined for type %1" );
+      QString tmp( i18n("Operator * not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
@@ -465,7 +466,7 @@ bool KSEval_t_solidus( KSParseNode* node, KSContext& context )
 	return true;
       }
     default:
-      QString tmp( "Operator / not defined for type %1" );
+      QString tmp( i18n("Operator / not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
@@ -593,7 +594,7 @@ bool KSEval_class_header( KSParseNode* node, KSContext& context )
   KSValue* v = context.scope()->object( node->getIdent() );
   if ( v )
   {
-    QString tmp( "The symbol %1 is defined twice" );
+    QString tmp( i18n("The symbol %1 is defined twice") );
     context.setException( new KSException( "SymbolDefinedTwice", tmp.arg( node->getIdent() ), node->getLineNo() ) );
     return false;
   }
@@ -637,7 +638,7 @@ bool KSEval_func_dcl( KSParseNode* node, KSContext& context )
   // Are parameters left ?
   if ( !context.value()->listValue().isEmpty() )
   {
-    QString tmp( "%1 arguments are not needed" );
+    QString tmp( i18n("%1 arguments are not needed") );
     context.setException( new KSException( "TooManyArguments", tmp.arg( context.value()->listValue().count() ), node->getLineNo() ) );
     context.scope()->popLocalScope();
     return false;
@@ -695,7 +696,7 @@ bool KSEval_assign_expr( KSParseNode* node, KSContext& context )
 
   if ( l.value()->mode() != KSValue::LeftExpr )
   {
-    context.setException( new KSException( "NoLeftExpr", "Expected a left expression in assignment", node->getLineNo() ) );
+    context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
     return false;
   }
 
@@ -704,7 +705,7 @@ bool KSEval_assign_expr( KSParseNode* node, KSContext& context )
   {
     if ( !r.value()->cast( KSValue::CharType ) )
     {
-      QString tmp( "From %1 to Char" );
+      QString tmp( i18n("From %1 to Char") );
       context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
@@ -741,7 +742,7 @@ bool KSEval_t_equal( KSParseNode* node, KSContext& context )
 
   if ( !r.value()->cast( l.value()->type() ) )
   {
-    QString tmp( "From %1 to %2" );
+    QString tmp( i18n("From %1 to %2") );
     context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ).arg( l.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
@@ -758,7 +759,7 @@ bool KSEval_t_notequal( KSParseNode* node, KSContext& context )
 
   if ( !r.value()->cast( l.value()->type() ) )
   {
-    QString tmp( "From %1 to %2" );
+    QString tmp( i18n("From %1 to %2") );
     context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ).arg( l.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
@@ -807,7 +808,7 @@ bool KSEval_t_less_or_equal( KSParseNode* node, KSContext& context )
 	return true;
       }
     default:
-      QString tmp( "Operator <= not defined for type %1" );
+      QString tmp( i18n("Operator <= not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
@@ -854,7 +855,7 @@ bool KSEval_t_greater_or_equal( KSParseNode* node, KSContext& context )
 	return true;
       }
     default:
-      QString tmp( "Operator >= not defined for type %1" );
+      QString tmp( i18n("Operator >= not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
@@ -869,7 +870,7 @@ bool KSEval_t_array( KSParseNode* node, KSContext& context )
 
   if ( !r.value()->cast( KSValue::IntType ) )
   {
-    QString tmp( "From %1 to Integer in array index" );
+    QString tmp( i18n("From %1 to Integer in array index") );
     context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
@@ -878,7 +879,7 @@ bool KSEval_t_array( KSParseNode* node, KSContext& context )
 
   if ( index < 0 )
   {
-    QString tmp( "Negative array index %1");
+    QString tmp( i18n("Negative array index %1"));
     context.setException( new KSException( "IndexOutOfRange", tmp.arg( index ), node->getLineNo() ) );
     return false;
   }
@@ -890,7 +891,7 @@ bool KSEval_t_array( KSParseNode* node, KSContext& context )
 
     if ( index >= len && !context.leftExpr() )
     {
-      QString tmp( "Too large index %1");
+      QString tmp( i18n("Too large index %1"));
       context.setException( new KSException( "IndexOutOfRange", tmp.arg( index ), node->getLineNo() ) );
       return false;
     }
@@ -911,7 +912,7 @@ bool KSEval_t_array( KSParseNode* node, KSContext& context )
 
   if ( !l.value()->cast( KSValue::ListType ) )
   {
-    QString tmp( "From %1 to List" );
+    QString tmp( i18n("From %1 to List") );
     context.setException( new KSException( "CastingError", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
@@ -921,7 +922,7 @@ bool KSEval_t_array( KSParseNode* node, KSContext& context )
   {
     if ( !context.leftExpr() )
     {
-      QString tmp( "Too large index %1");
+      QString tmp( i18n("Too large index %1"));
       context.setException( new KSException( "IndexOutOfRange", tmp.arg( index ), node->getLineNo() ) );
       return false;
     }
@@ -945,14 +946,14 @@ bool KSEval_t_dict( KSParseNode* node, KSContext& context )
 
   if ( !r.value()->cast( KSValue::StringType ) )
   {
-    QString tmp( "From %1 to String in dict" );
+    QString tmp( i18n("From %1 to String in dict") );
     context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
 
   if ( !l.value()->cast( KSValue::MapType ) )
   {
-    QString tmp( "From %1 to Map" );
+    QString tmp( i18n("From %1 to Map") );
     context.setException( new KSException( "CastingError", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
@@ -980,7 +981,7 @@ bool KSEval_t_dict( KSParseNode* node, KSContext& context )
     //    we can not provide a left expression
     else
     {
-      context.setException( new KSException( "NoLeftExpr", "Expected a left expression", node->getLineNo() ) );
+      context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression"), node->getLineNo() ) );
       return false;
     }
   }
@@ -1026,7 +1027,7 @@ bool KSEval_func_param_in( KSParseNode* node, KSContext& context )
     }
     else
     {
-      QString tmp( "Argument for parameters %1 missing" );
+      QString tmp( i18n("Argument for parameters %1 missing") );
       context.setException( new KSException( "ToFewArguments", tmp.arg( node->getIdent() ), node->getLineNo() ) );
       return false;
     }
@@ -1058,7 +1059,7 @@ bool KSEval_func_param_out( KSParseNode* node, KSContext& context )
   // No more arguments ?
   if ( context.value()->listValue().isEmpty() )
   {
-    QString tmp( "Argument for parameters %1 missing" );
+    QString tmp( i18n("Argument for parameters %1 missing") );
     context.setException( new KSException( "ToFewArguments", tmp.arg( node->getIdent() ), node->getLineNo() ) );
     return false;
   }
@@ -1068,7 +1069,7 @@ bool KSEval_func_param_out( KSParseNode* node, KSContext& context )
   // Is the argument not a leftexpr ?
   if ( arg->mode() != KSValue::LeftExpr )
   {
-    QString tmp( "LeftExpr needed for parameter %1" );
+    QString tmp( i18n("LeftExpr needed for parameter %1") );
     context.setException( new KSException( "NoLeftExpr", tmp.arg( node->getIdent() ), node->getLineNo() ) );
     return false;
   }
@@ -1092,7 +1093,7 @@ bool KSEval_func_param_inout( KSParseNode* node, KSContext& context )
   // No more arguments ?
   if ( context.value()->listValue().isEmpty() )
   {
-    QString tmp( "Argument for parameters %1 missing" );
+    QString tmp( i18n("Argument for parameters %1 missing") );
     context.setException( new KSException( "ToFewArguments", tmp.arg( node->getIdent() ), node->getLineNo() ) );
     return false;
   }
@@ -1102,7 +1103,7 @@ bool KSEval_func_param_inout( KSParseNode* node, KSContext& context )
   // Is the argument not a leftexpr ?
   if ( arg->mode() != KSValue::LeftExpr )
   {
-    QString tmp( "LeftExpr needed for parameter %1" );
+    QString tmp( i18n("LeftExpr needed for parameter %1") );
     context.setException( new KSException( "NoLeftExpr", tmp.arg( node->getIdent() ), node->getLineNo() ) );
     return false;
   }
@@ -1134,7 +1135,7 @@ bool KSEval_t_func_call( KSParseNode* node, KSContext& context )
   if ( !l.value()->cast( KSValue::FunctionType ) && !l.value()->cast( KSValue::ClassType ) &&
        !l.value()->cast( KSValue::MethodType ) && !l.value()->cast( KSValue::StructClassType ) )
   {
-    QString tmp( "From %1 to Function" );
+    QString tmp( i18n("From %1 to Function") );
     context.setException( new KSException( "CastingError", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
@@ -1441,7 +1442,7 @@ bool KSEval_t_dict_element( KSParseNode* node, KSContext& context )
 
   if ( !l.value()->cast( KSValue::StringType ) )
   {
-    QString tmp( "From %1 to String" );
+    QString tmp( i18n("From %1 to String") );
     context.setException( new KSException( "CastingError", tmp.arg( r.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
@@ -1479,7 +1480,7 @@ bool KSEval_t_while( KSParseNode* node, KSContext& context )
 
     if ( !l.value()->implicitCast( KSValue::BoolType ) )
     {
-      QString tmp( "From %1 to Boolean" );
+      QString tmp( i18n("From %1 to Boolean") );
       context.setException( new KSException( "CastingError", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
@@ -1594,7 +1595,7 @@ bool KSEval_t_incr( KSParseNode* node, KSContext& context )
 
   if ( context.value()->mode() != KSValue::LeftExpr )
   {
-    context.setException( new KSException( "NoLeftExpr", "Expected a left expression in assignment", node->getLineNo() ) );
+    context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
     return false;
   }
 
@@ -1624,7 +1625,7 @@ bool KSEval_t_decr( KSParseNode* node, KSContext& context )
 
   if ( context.value()->mode() != KSValue::LeftExpr )
   {
-    context.setException( new KSException( "NoLeftExpr", "Expected a left expression in assignment", node->getLineNo() ) );
+    context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
     return false;
   }
 
@@ -1681,7 +1682,7 @@ bool KSEval_t_less( KSParseNode* node, KSContext& context )
 	return true;
       }
     default:
-      QString tmp( "Operator < not defined for type %1" );
+      QString tmp( i18n("Operator < not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
@@ -1728,7 +1729,7 @@ bool KSEval_t_greater( KSParseNode* node, KSContext& context )
 	return true;
       }
     default:
-      QString tmp( "Operator > not defined for type %1" );
+      QString tmp( i18n("Operator > not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }
@@ -1851,7 +1852,7 @@ bool KSEval_t_subst( KSParseNode* node, KSContext& context )
 
     if ( l.value()->mode() != KSValue::LeftExpr )
     {
-	context.setException( new KSException( "NoLeftExpr", "Expected a left expression in substitute", node->getLineNo() ) );
+	context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in substitute"), node->getLineNo() ) );
 	return false;
     }
 
@@ -1908,7 +1909,7 @@ bool KSEval_t_not( KSParseNode* node, KSContext& context )
 
   if ( !context.value()->cast( KSValue::BoolType ) )
   {
-    QString tmp( "Unary Operator ! not defined for type %1" );
+    QString tmp( i18n("Unary Operator ! not defined for type %1") );
     context.setException( new KSException( "UnknownOperation", tmp.arg( context.value()->typeName() ), node->getLineNo() ) );
     return false;
   }
@@ -1991,7 +1992,7 @@ bool KSEval_destructor_dcl( KSParseNode* node, KSContext& context )
   // Are parameters left ?
   if ( !context.value()->listValue().isEmpty() )
   {
-    QString tmp( "%1 arguments are not needed" );
+    QString tmp( i18n("%1 arguments are not needed") );
     context.setException( new KSException( "TooManyArguments", tmp.arg( context.value()->listValue().count() ), node->getLineNo() ) );
     context.scope()->popLocalScope();
     return false;
@@ -2025,7 +2026,7 @@ bool KSEval_signal_dcl( KSParseNode* node, KSContext& context )
   // Are parameters left ?
   if ( context.value()->listValue().count() != (uint)context.tmpInt )
   {
-    QString tmp( "%1 arguments are not needed" );
+    QString tmp( i18n("%1 arguments are not needed") );
     context.setException( new KSException( "TooManyArguments", tmp.arg( context.value()->listValue().count() - context.tmpInt ), node->getLineNo() ) );
     return false;
   }
@@ -2079,7 +2080,7 @@ bool KSEval_signal_param( KSParseNode* node, KSContext& context )
     }
     else
     {
-      QString tmp( "Argument for parameters %1 missing" );
+      QString tmp( i18n("Argument for parameters %1 missing") );
       context.setException( new KSException( "ToFewArguments", tmp.arg( node->getIdent() ), node->getLineNo() ) );
       return false;
     }
@@ -2385,7 +2386,7 @@ extern bool KSEval_from( KSParseNode* node, KSContext& context )
 	    KSValue* v = m->object( *sit );
 	    if ( !v )
 	    {
-		QString tmp( "The module %1 does not contain a symbol named %2" );
+		QString tmp( i18n("The module %1 does not contain a symbol named %2") );
 		context.setException( new KSException( "SymbolUnknown",
 						       tmp.arg( node->getIdent() ).arg( *sit ),
 						       node->getLineNo() ) );
@@ -2407,7 +2408,7 @@ bool KSEval_plus_assign( KSParseNode* node, KSContext& context )
 
     if ( l.value()->mode() != KSValue::LeftExpr )
     {
-	context.setException( new KSException( "NoLeftExpr", "Expected a left expression in assignment", node->getLineNo() ) );
+	context.setException( new KSException( "NoLeftExpr", i18n("Expected a left expression in assignment"), node->getLineNo() ) );
 	return false;
     }
 
@@ -2438,7 +2439,7 @@ bool KSEval_plus_assign( KSParseNode* node, KSContext& context )
 	}
 	break;
     default:
-      QString tmp( "Operator += not defined for type %1" );
+      QString tmp( i18n("Operator += not defined for type %1") );
       context.setException( new KSException( "UnknownOperation", tmp.arg( l.value()->typeName() ), node->getLineNo() ) );
       return false;
     }

@@ -3,6 +3,7 @@
 #include "kscript_struct.h"
 #include "kscript_object.h"
 #include "kscript_class.h"
+#include <klocale.h>
 
 bool KSUtil::checkArgumentsCount( KSContext& context, uint count, const QString& name, bool fatal )
 {
@@ -54,31 +55,31 @@ bool KSUtil::checkType( KSContext& context, const KSValue::Ptr& v, KSValue::Type
 
 void KSUtil::castingError( KSContext& context, const QString& from, const QString& to )
 {
-  QString tmp( "From %1 to %2" );
+  QString tmp( i18n("From %1 to %2") );
   context.setException( new KSException( "CastingError", tmp.arg( from ).arg( to ), -1 ) );
 }
 
 void KSUtil::castingError( KSContext& context, KSValue* v, KSValue::Type t )
 {
-  QString tmp( "From %1 to %2" );
+  QString tmp( i18n("From %1 to %2") );
   context.setException( new KSException( "CastingError", tmp.arg( v->typeName() ).arg( KSValue::typeToName( t ) ), -1 ) );
 }
 
 void KSUtil::argumentsMismatchError( KSContext& context, const QString& methodname )
 {
-  QString tmp( "Arguments did not match the methods %1 parameter list" );
+  QString tmp( i18n("Arguments did not match the methods %1 parameter list") );
   context.setException( new KSException( "ParameterMismatch", tmp.arg( methodname ) ) );
 }
 
 void KSUtil::tooFewArgumentsError( KSContext& context, const QString& methodname )
 {
-  QString tmp( "Too few arguments for method %1" );
+  QString tmp( i18n("Too few arguments for method %1") );
   context.setException( new KSException( "TooFewArguments", tmp.arg( methodname ), -1 ) );
 }
 
 void KSUtil::tooManyArgumentsError( KSContext& context, const QString& methodname )
 {
-  QString tmp( "Too many arguments  for method %1" );
+  QString tmp( i18n("Too many arguments  for method %1") );
   context.setException( new KSException( "TooManyArguments", tmp.arg( methodname ), -1 ) );
 }
 

@@ -3,6 +3,8 @@
 #include "kscript_object.h"
 #include "kscript.h"
 
+#include <klocale.h>
+
 /***************************************************
  *
  * KSStructClass
@@ -32,7 +34,7 @@ KSValue::Ptr KSStructClass::member( KSContext& context, const QString& name )
   KSNamespace::Iterator it = m_space.find( name );
   if ( it == m_space.end() )
   {
-    QString tmp( "Unknown symbol '%1' in struct of type %2 of module '%3'" );
+    QString tmp( i18n("Unknown symbol '%1' in struct of type %2 of module '%3'") );
     context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( m_name ).arg( module()->name() ) ) );
     return 0;
   }
@@ -79,7 +81,7 @@ KSValue::Ptr KSStruct::member( KSContext& context, const QString& name )
   if ( it != m_class->nameSpace()->end() )
     return it.data();
 
-  QString tmp( "Unknown symbol '%1' in object of struct '%2'" );
+  QString tmp( i18n("Unknown symbol '%1' in object of struct '%2'") );
   context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( getClass()->name() ) ) );
   return 0;
 }
@@ -88,7 +90,7 @@ bool KSStruct::setMember( KSContext& context, const QString& name, const KSValue
 {
   if ( !m_class->vars().contains( name ) )
   {
-    QString tmp( "Unknown symbol '%1' in object of struct '%2'" );
+    QString tmp( i18n("Unknown symbol '%1' in object of struct '%2'") );
     context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( getClass()->name() ) ) );
     return false;
   }
@@ -174,7 +176,7 @@ KSValue::Ptr KSBuiltinStruct::member( KSContext& context, const QString& name )
     if ( getClass()->hasVariable( name ) )
 	return( ((KSBuiltinStructClass*)getClass())->property( context, m_object, name ) );
 
-    QString tmp( "Unknown symbol '%1' in object of struct '%2'" );
+    QString tmp( i18n("Unknown symbol '%1' in object of struct '%2'") );
     context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( getClass()->name() ) ) );
     return 0;
 }
@@ -183,7 +185,7 @@ bool KSBuiltinStruct::setMember( KSContext& context, const QString& name, const 
 {
     if ( !getClass()->vars().contains( name ) )
     {
-	QString tmp( "Unknown variable '%1' in object of struct '%2'" );
+	QString tmp( i18n("Unknown variable '%1' in object of struct '%2'") );
 	context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( getClass()->name() ) ) );
 	return FALSE;
     }
@@ -196,7 +198,7 @@ bool KSBuiltinStruct::setMember( KSContext& context, const QString& name, const 
     // Standard error: The variable is readonly
     if ( !b )
     {
-	QString tmp( "The variable '%1' in object of struct '%2' is readonly" );
+	QString tmp( i18n("The variable '%1' in object of struct '%2' is readonly") );
 	context.setException( new KSException( "ReadOnly", tmp.arg( name ).arg( getClass()->name() ) ) );
 	return FALSE;
     }

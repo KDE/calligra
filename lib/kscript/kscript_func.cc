@@ -9,6 +9,7 @@
 #include <kapp.h>
 #include <dcopclient.h>
 
+#include <klocale.h>
 #include <iostream.h>
 
 bool KSScriptFunction::call( KSContext& context )
@@ -77,7 +78,7 @@ static bool ksfunc_length( KSContext& context )
   }
   else
   {
-    QString tmp( "Can not calculate length of a %1 value" );
+    QString tmp( i18n("Can not calculate length of a %1 value") );
     context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
     return false;
   }
@@ -130,7 +131,7 @@ static bool ksfunc_isEmpty( KSContext& context )
     }
     else
     {
-	QString tmp( "Can not determine emptiness of a %1 value" );
+	QString tmp( i18n("Can not determine emptiness of a %1 value") );
 	context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
 	return false;
     }
@@ -164,7 +165,7 @@ static bool ksfunc_toInt( KSContext& context )
     }
   }
 
-  QString tmp( "Can not calulcate a numerical value from a %1 value" );
+  QString tmp( i18n("Can not calulcate a numerical value from a %1 value") );
   context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
   return false;
 }
@@ -195,7 +196,7 @@ static bool ksfunc_toFloat( KSContext& context )
     }
   }
 
-  QString tmp( "Can not calulcate a floating point value from a %1 value" );
+  QString tmp( i18n("Can not calulcate a floating point value from a %1 value") );
   context.setException( new KSException( "CastingError", tmp.arg( args[0]->typeName() ), -1 ) );
   return false;
 }
@@ -274,7 +275,7 @@ static bool ksfunc_connect( KSContext& context )
   args[1]->methodValue()->function()->ref();
   if ( !o->connect( sig, args[1]->methodValue()->object()->objectValue(), args[1]->methodValue()->function() ) )
   {
-    QString tmp( "The method %1 is no signal" );
+    QString tmp( i18n("The method %1 is no signal") );
     context.setException( new KSException( "NoSignal", tmp.arg( sig ), -1 ) );
     return false;
   }

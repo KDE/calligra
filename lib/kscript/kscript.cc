@@ -16,6 +16,7 @@
 
 #include <kglobal.h>
 #include <kstddirs.h>
+#include <klocale.h>
 
 KSInterpreter::KSInterpreter()
 {
@@ -134,7 +135,7 @@ bool KSInterpreter::runModule( KSContext& context, const QString& name )
       return runModule( context, name, libfile, lst );
   }
 
-  QString tmp( "Could not find module %1" );
+  QString tmp( i18n("Could not find module %1") );
   context.setException( new KSException( "IOError", tmp.arg( name ) ) );
   return false;
 }
@@ -158,7 +159,7 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
   FILE* f = fopen( filename, "r" );
   if ( !f )
   {
-    QString tmp( "Could not open file %1" );
+    QString tmp( i18n("Could not open file %1") );
     result.setException( new KSException( "IOError", tmp.arg( filename ) ) );
     return false;
   }
@@ -295,7 +296,7 @@ bool KSInterpreter::runModule( KSContext& result, const QString& name, const QSt
 
 bool KSInterpreter::processExtension( KSContext& context, KSParseNode* node )
 {
-  QString tmp( "The interpreter does not support an extended syntax you are using.");
+  QString tmp( i18n("The interpreter does not support an extended syntax you are using."));
   context.setException( new KSException( "UnsupportedSyntaxExtension", tmp, node->getLineNo() ) );
 
   return false;

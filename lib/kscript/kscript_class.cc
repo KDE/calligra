@@ -3,6 +3,8 @@
 #include "kscript_func.h"
 #include "kscript_parsenode.h"
 
+#include <klocale.h>
+
 KSScriptObject* KSScriptClass::createObject( KSClass* c )
 {
   return new KSScriptObject( c );
@@ -40,7 +42,7 @@ bool KSScriptClass::constructor( KSParseNode* node, KSContext& context )
     {
       if ( cl )
       {
-	QString tmp( "Multiple inheritcance of builtin classes is not allowed\nThe classes are %1 and %2.\n");
+	QString tmp( i18n("Multiple inheritcance of builtin classes is not allowed\nThe classes are %1 and %2.\n"));
 	context.setException( new KSException( "CastingError", tmp.arg( cl->name() ).arg( (*sit)->classValue()->name() ), node->getLineNo() ) );
 	return false;
       }
@@ -56,7 +58,7 @@ bool KSScriptClass::constructor( KSParseNode* node, KSContext& context )
   {
     if ( !context.value()->listValue().isEmpty() )
     {
-      QString tmp( "Default constructor of class %1 does not take any arguments" );
+      QString tmp( i18n("Default constructor of class %1 does not take any arguments") );
       context.setException( new KSException( "CastingError", tmp.arg( m_name ), node->getLineNo() ) );
       return false;
     }
@@ -101,7 +103,7 @@ KSValue::Ptr KSClass::member( KSContext& context, const QString& name )
   KSNamespace::Iterator it = m_space.find( name );
   if ( it == m_space.end() )
   {
-    QString tmp( "Unknown symbol '%1' in object of module '%2'" );
+    QString tmp( i18n("Unknown symbol '%1' in object of module '%2'") );
     context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( m_name ) ) );
     return 0;
   }

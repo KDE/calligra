@@ -3,6 +3,8 @@
 #include "kscript_util.h"
 #include "kscript.h"
 
+#include <klocale.h>
+
 KSObject::KSObject( KSClass* c ) : QShared(), m_class( c )
 {
   m_status = Alive;
@@ -137,7 +139,7 @@ bool KSObject::disconnect( KSContext& context )
     {
       if ( !m_class->hasSignal( args[0]->stringValue() ) )
       {
-	QString tmp("The signal %1 does not exist in class %2");
+	QString tmp(i18n("The signal %1 does not exist in class %2"));
 	context.setException( new KSException( "UnknownSignal", tmp.arg( args[0]->stringValue() ).arg( m_class->name() ), -1 ) );
 	return false;
       }
@@ -194,7 +196,7 @@ bool KSObject::disconnect( KSContext& context )
       {
 	if ( !m_class->hasSignal( args[0]->stringValue() ) )
         {
-	  QString tmp("The signal %1 does not exist in class %2");
+	  QString tmp(i18n("The signal %1 does not exist in class %2"));
 	  context.setException( new KSException( "UnknownSignal", tmp.arg( args[0]->stringValue() ).arg( m_class->name() ), -1 ) );
 	  return false;
 	}
@@ -305,7 +307,7 @@ KSValue::Ptr KSObject::member( KSContext& context, const QString& name )
     KSValue *v = m_scope.object( name, false );
     if ( !v )
     {
-	QString tmp( "Unknown symbol '%1' in object of class '%2'" );
+	QString tmp( i18n("Unknown symbol '%1' in object of class '%2'") );
 	context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( getClass()->name() ) ) );
 	return 0;
     }

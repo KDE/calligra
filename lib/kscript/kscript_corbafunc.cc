@@ -11,6 +11,8 @@
 #include "kscript.h"
 #include "kscript_parsenode.h"
 
+#include <klocale.h>
+
 /**********************************
  *
  * Marshalling and Demarshalling
@@ -123,7 +125,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
 
       if ( !x->_is_a( _tc->id() ) )
       {
-	QString tmp( "While unpacking a CORBA datatype, an object of type %1 was expected but %2 found" );
+	QString tmp( i18n("While unpacking a CORBA datatype, an object of type %1 was expected but %2 found") );
 	context.setException( new KSException( "UnpackingError", tmp.arg( _tc->id() ).arg( x->_repoid() ) ) );
 	return false;
       }
@@ -137,7 +139,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
 
       if ( !c || !c->type() == KSValue::InterfaceType )
       {
-	QString tmp( "Did not find an interface for the repoid %1. Seems to be an error of the idl compiler." );
+	QString tmp(i18n( "Did not find an interface for the repoid %1. Seems to be an error of the idl compiler.") );
 	context.setException( new KSException( "UnpackingError", tmp.arg( _tc->id() ) ) );
 	return false;
       }
@@ -208,7 +210,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
 
       if ( !c || !c->type() == KSValue::StructClassType )
       {
-	QString tmp( "Did not find a struct for the repoid %1. Seems to be an error of the idl compiler." );
+	QString tmp( i18n("Did not find a struct for the repoid %1. Seems to be an error of the idl compiler.") );
 	context.setException( new KSException( "UnpackingError", tmp.arg( _tc->id() ) ) );
 	return false;
       }
@@ -238,7 +240,7 @@ bool ksUnpack( KSContext& context, KSValue* _arg, CORBA::Any& _any, CORBA::TypeC
 
       if ( !c || !c->type() == KSValue::StructClassType )
       {
-	QString tmp( "Did not find a struct for the repoid %1. Seems to be an error of the idl compiler." );
+	QString tmp( i18n("Did not find a struct for the repoid %1. Seems to be an error of the idl compiler.") );
 	context.setException( new KSException( "UnpackingError", tmp.arg( _tc->id() ) ) );
 	return false;
       }
@@ -390,7 +392,7 @@ bool ksPack( KSContext& context, CORBA::Any& _any, KSValue* _arg, CORBA::TypeCod
 	}
       }
 
-      QString tmp( "The value %1 is no known enumerator\nPossible values are:\n" );
+      QString tmp( i18n("The value %1 is no known enumerator\nPossible values are:\n") );
       for ( CORBA::ULong i = 0; i < _tc->member_count(); i++ )
       {
 	tmp += _tc->member_name(i);
@@ -558,7 +560,7 @@ bool ksPack( KSContext& context, CORBA::Any& _any, KSValue* _arg, CORBA::TypeCod
 	KSValue::Ptr v = _arg->structValue()->member( context, _tc->member_name( i ) );
 	if ( !v )
 	{
-	  QString tmp( "The struct misses the member %1" );
+	  QString tmp( i18n("The struct misses the member %1") );
 	  context.setException( new KSException( "MissingMember", tmp.arg( _tc->member_name( i ) ) ) );
 	  return false;
 	}
@@ -801,7 +803,7 @@ bool KSCorbaFunc::call( KSContext& context )
     }
 
     // Raise a default excpetion
-    QString tmp( "An unexpected CORBA exception occured\n%1" );
+    QString tmp( i18n("An unexpected CORBA exception occured\n%1") );
     context.setException( new KSException( "CORBAException", tmp.arg( _ex->_repoid() ), -1 ) );
     return false;
   }

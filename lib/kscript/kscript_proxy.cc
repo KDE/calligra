@@ -12,6 +12,7 @@
 #include <qstring.h>
 #include <qdatastream.h>
 #include <qvariant.h>
+#include <klocale.h>
 
 /***************************************************
  *
@@ -89,7 +90,7 @@ bool KSProxy::call( KSContext& context, const QString& name )
         {
 	    if ( !first )
 		func += ",";
-	
+
 	    if ( m_supportsPropertyProxy && first && ( name == getPropMethod || name == setPropMethod ) )
 	    {
 	      func += "QCString";
@@ -117,7 +118,7 @@ bool KSProxy::call( KSContext& context, const QString& name )
     QCString replyType;
     if ( !kapp->dcopClient()->call( m_app, m_obj, func.latin1(), data, replyType, reply ) )
     {
-	QString tmp( "Could not call method %1 in app %2, object %3" );
+	QString tmp( i18n("Could not call method %1 in app %2, object %3") );
 	context.setException( new KSException( "UnknownName", tmp.arg( func.latin1() ).arg( m_app ).arg( m_obj ) ) );
 	return FALSE;
     }

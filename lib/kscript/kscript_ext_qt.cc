@@ -21,6 +21,7 @@
 
 #include <qmetaobject.h>
 #include <qvariant.h>
+#include <klocale.h>
 
 #undef CHECKTYPE
 #define CHECKTYPE( context, v, type ) if ( !checkType( context, v, type ) ) return FALSE;
@@ -337,7 +338,7 @@ bool KS_Qt_Object::setMember( KSContext& context, const QString& name, const KSV
     QVariant var;
     if ( !pack( context, var, v ) )
     {
-      QString tmp( "Unknown property '%1' in object of class '%2'" );
+      QString tmp( i18n("Unknown property '%1' in object of class '%2'") );
       context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( m_object->className() ) ) );
       return FALSE;
     }
@@ -463,7 +464,7 @@ KSValue::Ptr KS_Qt_Object::unpack( KSContext& context, QVariant& var )
 	return KSQt::Point::convert( context, var.toPoint() );
     }
 
-    QString e( "KScript does not understand the property type %1" );
+    QString e( i18n("KScript does not understand the property type %1") );
     e = e.arg( var.typeName() );
     context.setException( new KSException( "Unsupported", e ) );
 	
@@ -693,7 +694,7 @@ bool KS_Qt_Object::checkDoubleConstructor( KSContext& context, const QString& na
 {
   if ( m_object )
   {
-    QString tmp( "The constructor of the class %1 was called twice." );
+    QString tmp( i18n("The constructor of the class %1 was called twice.") );
     context.setException( new KSException( "ConstructorCalledTwice", tmp.arg( name ), -1 ) );
     return false;
   }
@@ -705,7 +706,7 @@ bool KS_Qt_Object::checkLive( KSContext& context, const QString& name )
 {
   if ( !m_object )
   {
-    QString tmp( "The method %1 was called before the constructor or after the destructor" );
+    QString tmp( i18n("The method %1 was called before the constructor or after the destructor" ));
     context.setException( new KSException( "MethodCalledBeforeConstructor", tmp.arg( name ), -1 ) );
     return false;
   }

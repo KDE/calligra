@@ -27,7 +27,7 @@ KSValue::Ptr KSQObject::member( KSContext& context, const QString& prop )
 {
     if ( m_ptr.isNull() )
     {
-	context.setException( new KSException( "NullPointer", "QObject already dead" ) );
+	context.setException( new KSException( "NullPointer", i18n("QObject already dead") ) );
 	return KSValue::Ptr( 0 );
     }
 
@@ -36,7 +36,7 @@ KSValue::Ptr KSQObject::member( KSContext& context, const QString& prop )
     const QMetaProperty *property = meta->property( prop, TRUE );
     if ( !property )
     {
-	QString tmp( "Unknown property '%1' in object of class '%2'" );
+	QString tmp( i18n("Unknown property '%1' in object of class '%2'") );
 	context.setException( new KSException( "UnknownName", tmp.arg( prop ).arg( m_ptr->className() ) ) );
 	return KSValue::Ptr( 0 );
     }
@@ -57,7 +57,7 @@ bool KSQObject::setMember( KSContext& context, const QString& prop, const KSValu
 {
     if ( m_ptr.isNull() )
     {
-	context.setException( new KSException( "NullPointer", "QObject already dead" ) );
+	context.setException( new KSException( "NullPointer", i18n("QObject already dead") ) );
 	return FALSE;
     }
 
@@ -69,7 +69,7 @@ bool KSQObject::setMember( KSContext& context, const QString& prop, const KSValu
 	QVariant var;
 	if ( !pack( context, var, v ) )
         {
-	    QString tmp( "Unknown property '%1' in object of class '%2'" );
+	    QString tmp( i18n("Unknown property '%1' in object of class '%2'") );
 	    context.setException( new KSException( "UnknownName", tmp.arg( prop ).arg( m_ptr->className() ) ) );
 	    return FALSE;
 	}
@@ -78,7 +78,7 @@ bool KSQObject::setMember( KSContext& context, const QString& prop, const KSValu
     }
     else
     {
-	QString tmp( "Unknown property '%1' in object of class '%2'" );
+	QString tmp( i18n("Unknown property '%1' in object of class '%2'") );
 	context.setException( new KSException( "UnknownName", tmp.arg( prop ).arg( m_ptr->className() ) ) );
 	return FALSE;
     }
@@ -192,7 +192,7 @@ KSValue::Ptr KSQObject::unpack( KSContext& context, QVariant& var )
 	return KSQt::Point::convert( context, var.toPoint() );
     }
 
-    QString e( "KScript does not understand the property type %1" );
+    QString e( i18n("KScript does not understand the property type %1") );
     e = e.arg( var.typeName() );
     context.setException( new KSException( "Unsupported", e ) );
 	

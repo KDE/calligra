@@ -2,6 +2,7 @@
 #include "kscript_context.h"
 #include "kscript_util.h"
 
+#include <klocale.h>
 #include <qapplication.h>
 
 KSClass_QApplication::KSClass_QApplication( KSModule* m ) : KSScriptClass( m, "QApplication", 0 )
@@ -27,7 +28,7 @@ bool KSObject_QApplication::ksQApplication( KSContext& context )
 
   if ( object() )
   {
-    QString tmp( "The constructor of the class QApplication was called twice." );
+    QString tmp( i18n("The constructor of the class QApplication was called twice.") );
     context.setException( new KSException( "ConstructorCalledTwice", tmp, -1 ) );
     return false;
   }
@@ -48,7 +49,7 @@ bool KSObject_QApplication::ksQApplication_exec( KSContext& context )
 
   if ( !object() )
   {
-    QString tmp( "The method QApplication::exec was called before the QApplication constructor or after the QApplication destructor" );
+    QString tmp( i18n("The method QApplication::exec was called before the QApplication constructor or after the QApplication destructor") );
     context.setException( new KSException( "MethodCalledBeforeConstructor", tmp, -1 ) );
     return false;
   }

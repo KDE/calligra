@@ -65,7 +65,7 @@ bool KSInterface::constructor( KSContext& context )
     CORBA::Object_ptr obj = orb()->string_to_object( args[0]->stringValue() );
     if ( CORBA::is_nil( obj ) )
     {
-      QString tmp( "The IOR seems to be malformed or invalid" );
+      QString tmp( i18n("The IOR seems to be malformed or invalid") );
       context.setException( new KSException( "InvalidIOR", tmp.arg( args[0]->stringValue() ) ) );
       return false;
     }
@@ -108,7 +108,7 @@ KSValue::Ptr KSInterface::member( KSContext& context, const QString& name )
   KSNamespace::Iterator it = m_space.find( name );
   if ( it == m_space.end() )
   {
-    QString tmp( "Unknown symbol '%1' in object of module '%2'" );
+    QString tmp( i18n("Unknown symbol '%1' in object of module '%2'") );
     context.setException( new KSException( "UnknownName", tmp.arg( name ).arg( m_name ) ) );
     return 0;
   }
