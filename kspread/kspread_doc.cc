@@ -47,6 +47,7 @@
 
 #include <kscript_context.h>
 #include <kstddirs.h>
+#include <kdebug.h>
 
 using namespace std;
 
@@ -358,13 +359,13 @@ bool KSpreadDoc::loadXML( const QDomDocument& doc, KoStore* )
 
 bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 {
-  cerr << "------------------------ COMPLETING --------------------" << endl;
+  kdDebug(36001) << "------------------------ COMPLETING --------------------" << endl;
 
   m_bLoading = false;
 
   m_pMap->update();
 
-  cerr << "------------------------ COMPLETION DONE --------------------" << endl;
+  kdDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 
   setModified( FALSE );
 
@@ -661,7 +662,7 @@ void KSpreadDoc::initInterpreter()
   QMap<QString,QString>::Iterator mip = m.begin();
   for( ; mip != m.end(); ++mip )
   {
-    kdDebug() << "SCRIPT="<<  mip.key() << ", " << mip.data() << endl;
+    kdDebug(36001) << "SCRIPT="<<  mip.key() << ", " << mip.data() << endl;
     KSContext context;
     QStringList args;
     if ( !m_pInterpreter->runModule( context, mip.key(), mip.data(), args ) )

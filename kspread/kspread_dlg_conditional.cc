@@ -33,6 +33,7 @@
 #include <qstringlist.h>
 #include <kfontdialog.h>
 #include <knumvalidator.h>
+#include <kdebug.h>
 
 KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* name )
         : QWidget( _parent )
@@ -60,7 +61,7 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* 
 //  preview->setLineWidth( 1 );
   preview->setText(i18n("Preview"));
   grid2->addWidget(preview,1,1);
-    
+
   choose=new QComboBox(gb);
   choose->resize( choose->sizeHint() );
   grid2->addWidget(choose,0,1);
@@ -74,7 +75,7 @@ KSpreadWidgetconditional::KSpreadWidgetconditional(QWidget *_parent,const char* 
   edit2->resize( edit2->sizeHint() );
   grid2->addWidget(edit2,0,3);
   edit2->setValidator( new KFloatValidator( edit2 ) );
-  
+
   color=new KColorButton(gb);
   color->resize( color->sizeHint() );
   color->setColor(Qt::black);
@@ -232,7 +233,7 @@ double KSpreadWidgetconditional::getBackFirstValue()
 {
 QString tmp;
 tmp=edit1->text();
-return (tmp.toDouble()); 
+return (tmp.toDouble());
 }
 
 double KSpreadWidgetconditional::getBackSecondValue()
@@ -281,7 +282,7 @@ switch(  choose->currentItem())
                 result=Different;
                 break;
          default:
-                cout <<"Erreur in list\n";
+	        kdDebug(36001) << "Erreur in list" << endl;
                 break;
         }
 
@@ -395,7 +396,7 @@ if(firstCond->typeOfCondition()!=None)
      tmpCond[0].val2=0;
      tmpCond[0].val1=0;
    }
- 
+
  if(secondCond->typeOfCondition()!=None)
    {
      tmpCond[1].val1=secondCond->getBackFirstValue();
@@ -419,7 +420,7 @@ if(firstCond->typeOfCondition()!=None)
      tmpCond[1].val2=0;
      tmpCond[1].val1=0;
    }
- 
+
  if(thirdCond->typeOfCondition()!=None)
    {
      tmpCond[2].val1=thirdCond->getBackFirstValue();
@@ -443,13 +444,13 @@ if(firstCond->typeOfCondition()!=None)
      tmpCond[2].val2=0;
      tmpCond[2].val1=0;
    }
- 
+
  m_pView->activeTable()->setConditional( QPoint(  m_pView->canvasWidget()->markerColumn(),
 						  m_pView->canvasWidget()->markerRow() ), tmpCond );
 
  accept();
- 
- 
+
+
 }
 
 

@@ -29,7 +29,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <qrect.h>
-
+#include <kdebug.h>
 
 
 KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
@@ -126,7 +126,7 @@ switch(id)
 		combo->insertStringList(list_column);
 		break;
 	default :
-		cout <<"Error in signal : pressed(int id)\n";
+	        kdDebug(36001) << "Error in signal : pressed(int id)" << endl;
 		break;
 	}
 
@@ -184,11 +184,11 @@ switch(_sort)
 			}
 		else
 			{
-			cout <<"Err in radiobutton\n";
+			        kdDebug(36001) << "Err in radiobutton" << endl;
 			}
 		break;
 	default :
-		cout <<"ERR in _sort\n";
+	        kdDebug(36001) << "ERR in _sort" << endl;
 		break;
 	}
  accept();

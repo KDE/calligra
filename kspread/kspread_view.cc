@@ -83,6 +83,7 @@
 #include "toolbox.h"
 
 #include "KSpreadViewIface.h"
+#include <kdebug.h>
 
 /*****************************************************************************
  *
@@ -1428,7 +1429,7 @@ void KSpreadView::changeTable( const QString& _name )
     KSpreadTable *t = m_pDoc->map()->findTable( _name );
     if ( !t )
     {
-	qDebug("Unknown table '%s'\n",_name.latin1());
+	kdDebug(36001) << "Unknown table " << _name.latin1() << endl;
 	return;
     }
 
@@ -1984,7 +1985,7 @@ void KSpreadView::slotActivateTool( int _id )
   KoDataTool* tool = entry->info.createTool();
   if ( !tool )
   {
-      qDebug("Could not create Tool");
+      kdDebug(36001) << "Could not create Tool" << endl;
       return;
   }
 

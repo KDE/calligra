@@ -6,6 +6,7 @@
 
 #include <kapp.h>
 #include <dcopclient.h>
+#include <kdebug.h>
 
 /*********************************************
  *
@@ -111,7 +112,7 @@ QString KSpreadTableIface::name() const
 bool KSpreadTableIface::processDynamic( const QCString& fun, const QByteArray& data,
 					QCString& replyType, QByteArray &replyData )
 {
-    qDebug("Calling '%s'", fun.data());
+    kdDebug(36001) << "Calling '" << fun.data() << "'" << endl;
     // Does the name follow the pattern "foobar()" ?
     uint len = fun.length();
     if ( len < 3 )

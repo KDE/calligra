@@ -1,25 +1,26 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include "kspread_part.h"
 #include "kspread_gui.h"
-#include <iostream.h>
+//#include <iostream.h>
+#include <kdebug.h>
 
 /*****************************************************************************
  *
@@ -42,11 +43,11 @@ KSpreadPart::~KKSpreadPart()
 bool KSpreadPart::save( const char *_url, bool _append )
 {
     StoreDevice dev( _append, _url );
-    
+
     Store store( &dev );
     if ( store.ioDevice() == 0L || !store.ioDevice()->isOpen() )
     {
-	warning( "Could not open store with URL '%s'\n",_url );
+	kdDebug(36001) << "Could not open store with URL " << _url << endl;
 	return false;
     }
 
@@ -59,7 +60,7 @@ bool KSpreadPart::load( const char *_url, long int _offset, long int _size )
     Store store( &dev );
     if ( store.ioDevice() == 0L || !store.ioDevice()->isOpen() )
     {
-	warning( "Could not open store with URL '%s'\n",_url );
+	kdDebug(36001) << "Could not open store with URL " << _url << endl;
 	return false;
     }
     OBJECT root = store.getRootObject();
@@ -70,7 +71,7 @@ OBJECT KSpreadPart::writeToStore(Store &store )
 {
     TYPE t_KSpreadPart = store.registerType( "KDE:KKSpreadPart:KXclPart" );
     PROPERTY p_parts = store.registerProperty( "KDE:KSpreadPart:Parts" );
-    
+
     OBJECT root = store.newObject( t_KSpreadPart );
     store.setRootObject( root );
     store.setAuthor( "Torben Weis" );
@@ -78,7 +79,7 @@ OBJECT KSpreadPart::writeToStore(Store &store )
     OBJECT obj = writePartsToStore( store );
     store.writeObjectReferenceValue( root, p_parts, obj );
     store.release();
-    
+
     return true;
 }
 
@@ -87,27 +88,27 @@ bool KSpreadPart::readFromStore (Store &store, OBJECT _obj )
     TYPE t_KSpreadPart;
     if ( ( t_KSpreadPart = store.findType( "KDE:KKSpreadPart:KXclPart" ) ) == 0 )
     {
-	warning("Could not find type KDE:KSpreadPart:KKSpreadPart\n");
+	kdWarning(36001) << "Could not find type KDE:KSpreadPart:KKSpreadPart" << endl;
 	return false;
     }
     PROPERTY p_parts;
     if ( ( p_parts = store.findProperty( "KDE:KSpreadPart:Parts" ) ) == 0 )
     {
-	warning("Could not find type KDE:KSpreadPart:Parts\n");
+	kdWarning(36001) << "Could not find type KDE:KSpreadPart:Parts" << endl;
 	return false;
     }
 
     QString author = store.getAuthor();
-    printf("Author = '%s'\n",author.data());
-    
+    kdDebug(36001) << "Author = " << author.data() << endl;
+
     OBJECT obj;
     if ( !store.readObjectReferenceValue( _obj, p_parts, obj ) )
-	fatal( "Could not find parts value\n" );
+	kdError(36001) << "Could not find parts value" << endl;
     if ( !readPartsFromStore( pGui, store, obj ) )
-	fatal( "Could not read list\n");
+	kdError(36001) << "Could not read list" << endl;
 
     store.release();
-    
+
     return true;
 }
 
@@ -134,14 +135,14 @@ ChartCellBinding* KSpreadTable::createChartCellBinding( PartFrame *_frame, const
   a = _frame->part()->api( "IDL:Chart:1.0" );
 
   CHART::Chart_ptr ptr;
-  
+
   if ( *a >>= ptr )
   {
-    printf("Chart_ptr = %x\n",ptr);
-    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    kdDebug(36001) << "Chart_ptr = " << ptr << endl;
+    kdDebug(36001) << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
     CHART::Chart_var v;
     v = CHART::Chart::_duplicate( ptr );
-    
+
     CHART::Matrix matrix;
      matrix.columns = 3;
     matrix.rows = 3;
@@ -164,18 +165,18 @@ ChartCellBinding* KSpreadTable::createChartCellBinding( PartFrame *_frame, const
     range.right = 3;
     range.bottom = 3;
     ChartCallback_impl* cb = new ChartCallback_impl( this );
-    printf("Doing the filling now\n");
-    
+    kdDebug(36001) << "Doing the filling now" << endl;
+
     // ptr->fill( range, matrix, CHART::Callback::_duplicate( cb ) );
     ptr->fill_dummy( range, matrix );
-    
-    printf("Back\n");
-    
+
+    kdDebug(36001) << "Back" << endl;
+
     return new ChartCellBinding( this, _rect, ptr );
   }
   else
-    fatal( "Could not find interface\n");
-  
+    kdError(36001) << "Could not find interface" << endl;
+
   return 0L;
 }
 
@@ -195,7 +196,7 @@ void ChartCellBinding::cellChanged( Object* )
 {
     if ( bIgnoreChanges )
 	return;
-    
+
     // chartPart->update();
 }
 

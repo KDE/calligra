@@ -29,6 +29,7 @@
 #include <qfiledlg.h>
 #include <qstrlist.h>
 #include <qmsgbox.h>
+#include <kdebug.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -111,7 +112,7 @@ void   AIBase::drawIt( QPainter *p)
 
 void   AIBase::printOut(QPainter *p)
 {
-  fprintf(stderr,"AIBASE.CPP: Print Out!");
+  kdDebug(36001) << "AIBASE.CPP: Print Out!" << endl;
   invertColor();
   drawIt(p);
   invertColor();

@@ -182,7 +182,7 @@ void KSpreadScripts::slotEdit()
     dir += t2.data();
 
     editor->show();
-    printf("EDITOR Opening '%s'\n",dir.data());
+    kdDebug(36001) <<  "EDITOR Opening " << dir.data() << endl;
     editor->openFile( dir ); */
 }
 

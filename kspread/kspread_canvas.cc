@@ -111,7 +111,7 @@ void KSpreadEditWidget::setEditMode( bool mode )
 
 void KSpreadEditWidget::focusOutEvent( QFocusEvent* ev )
 {
-  kdDebug() << "EditWidget lost focus" << endl;
+  kdDebug(36001) << "EditWidget lost focus" << endl;
   // See comment about setLastEditorWithFocus
   m_pCanvas->setLastEditorWithFocus( KSpreadCanvas::EditWidget );
 
@@ -210,7 +210,7 @@ void KSpreadCanvas::endChoose()
 
   activeTable()->setChooseRect( QRect( 0, 0, 0, 0 ) );
   m_pView->setActiveTable( m_chooseStartTable );
-  qDebug("endChoose len=0");
+  kdDebug(36001) << "endChoose len=0" << endl;
   length_namecell = 0;
   m_bChoose = FALSE;
   m_chooseStartTable = 0;
@@ -273,7 +273,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
 
 void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_select )
 {
-  kdDebug() << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
+  kdDebug(36001) << "KSpreadCanvas::gotoLocation" << " x=" << x << " y=" << y <<
     " table=" << table << " make_select=" << (make_select ? "true" : "false" ) << endl;
   if ( table )
     m_pView->setActiveTable( table );
@@ -290,13 +290,13 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   int xpos = table->columnPos( x, this );
   int ypos = table->rowPos( y, this );
 
-  //kdDebug() << "KSpreadCanvas::gotoLocation : zoom=" << zoom() << endl;
+  //kdDebug(36001) << "KSpreadCanvas::gotoLocation : zoom=" << zoom() << endl;
   int minX = (int) (100 * zoom()); // less than that, we scroll
   int minY = (int) (50 * zoom());
   int maxX = (int) (width() - 100 * zoom()); // more than that, we scroll
   int maxY = (int) (height() - 50 * zoom());
-  //kdDebug() << "KSpreadCanvas::gotoLocation : height=" << height() << endl;
-  //kdDebug() << "KSpreadCanvas::gotoLocation : width=" << width() << endl;
+  //kdDebug(36001) << "KSpreadCanvas::gotoLocation : height=" << height() << endl;
+  //kdDebug(36001) << "KSpreadCanvas::gotoLocation : width=" << width() << endl;
 
   if ( xpos < minX )
     horzScrollBar()->setValue( xOffset() + xpos - minX );
@@ -989,9 +989,9 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   if ( !activeTable() )
     return;
 
-  qDebug("------------PAINT EVENT %i,%i %i|%i widget %i:%i", _ev->rect().x(), _ev->rect().y(),
-         _ev->rect().width(), _ev->rect().height(), width(), height() );
-
+  kdDebug(36001) << "------------PAINT EVENT " << _ev->rect().x() << ", " << _ev->rect().y()
+		 << " " << _ev->rect().width() << "|" << _ev->rect().height() << " widget "
+		 << width() << ":" << height() << endl;
   hideMarker();
 
   QPainter painter;
@@ -1003,7 +1003,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   QPoint tl = m.map( _ev->rect().topLeft() );
   QPoint br = m.map( _ev->rect().bottomRight() );
 
-  qDebug("Mapped topleft to %i:%i", tl.x(), tl.y() );
+  kdDebug(36001) << "Mapped topleft to " << tl.x() << ":" << tl.y() << endl;
 
   painter.save();
 
@@ -1055,7 +1055,7 @@ void KSpreadCanvas::focusInEvent( QFocusEvent* )
   if ( !m_pEditor )
     return;
 
-  kdDebug() << "m_bChoose : " << ( m_bChoose ? "true" : "false" ) << endl;
+  kdDebug(36001) << "m_bChoose : " << ( m_bChoose ? "true" : "false" ) << endl;
   // If we are in editing mode, we redirect the
   // focus to the CellEditor or EditWidget
   // And we know which, using lastEditorWithFocus.
@@ -1063,11 +1063,11 @@ void KSpreadCanvas::focusInEvent( QFocusEvent* )
   if ( lastEditorWithFocus() == EditWidget )
   {
     m_pView->editWidget()->setFocus();
-    kdDebug() << "Focus to EditWidget" << endl;
+    kdDebug(36001) << "Focus to EditWidget" << endl;
     return;
   }
 
-  kdDebug() << "Redirecting focus to editor" << endl;
+  kdDebug(36001) << "Redirecting focus to editor" << endl;
   m_pEditor->setFocus();
 }
 
@@ -1346,13 +1346,13 @@ void KSpreadCanvas::createEditor( EditorType ed )
     {
       w = min_w;
       h = min_h;
-      qDebug("DEFAULT");
+      kdDebug(36001) << "DEFAULT" << endl;
     }
     else
     {
       w = cell->extraWidth() + 1;
       h = cell->extraHeight() + 1;
-      qDebug("HEIGHT=%i EXTRA=%i", min_h, h );
+      kdDebug(36001) << "HEIGHT=" << min_h << " EXTRA=" << h << endl;
     }
     int xpos = table->columnPos( markerColumn(), this );
     int ypos = table->rowPos( markerRow(), this );
@@ -1365,9 +1365,9 @@ void KSpreadCanvas::createEditor( EditorType ed )
     m_pEditor->setGeometry( xpos, ypos, w, h );
     m_pEditor->setMinimumSize( QSize( min_w, min_h ) );
     m_pEditor->show();
-    qDebug("FOCUS1");
+    kdDebug(36001) << "FOCUS1" << endl;
     m_pEditor->setFocus();
-    qDebug("FOCUS2");
+    kdDebug(36001) << "FOCUS2" << endl;
   }
 }
 
@@ -1379,8 +1379,9 @@ void KSpreadCanvas::createEditor( EditorType ed )
 
 void KSpreadCanvas::updateCellRect( const QRect &_rect )
 {
-  qDebug("======================= UPDATE RECT %i,%i %i,%i==================",
-         _rect.x(), _rect.y(), _rect.width(), _rect.height() );
+  kdDebug(36001) << "======================= UPDATE RECT " << _rect.x() << ", "
+		 << _rect.y() << ", " << _rect.width() << ", " << _rect.height()
+		 << " ==================" << endl;
 
   KSpreadTable *table = activeTable();
   if ( !table )
@@ -1446,7 +1447,8 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
   int ypos;
   int w, h;
   QRect selection( activeTable()->selectionRect() );
-  // printf("selection: %i %i %i\n",selection.left(), selection.right(), selection.bottom() );
+  // kdDebug(36001) << "selection: " << selection.left() << " " << selection.right()
+  //                << " " << selection.bottom() << endl;
 
   if ( selection.left() == 0 || selection.right() == 0x7fff || selection.bottom() == 0x7fff )
   {
@@ -1512,7 +1514,7 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
 
   if ( _new.left() == 0 || !m_bChoose || !m_pEditor )
   {
-    qDebug("updateChooseMarker len=0");
+    kdDebug(36001) << "updateChooseMarker len=0" << endl;
     length_namecell = 0;
     return;
   }
@@ -1522,7 +1524,8 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
   // ##### Torben: Clean up here!
   QString name_cell;
 
-  kDebugInfo( "%s,%s", m_chooseStartTable->tableName().ascii(), table->tableName().ascii());
+  kdDebug(36001) << m_chooseStartTable->tableName().local8Bit() << ", " 
+		 << table->tableName().local8Bit() << endl;
   if( m_chooseStartTable != table )
   {
     if ( _new.left() >= _new.right() && _new.top() >= _new.bottom() )
@@ -1541,7 +1544,7 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
   int old = length_namecell;
   length_namecell= name_cell.length();
   length_text = m_pEditor->text().length();
-  qDebug("updateChooseMarker2 len=%i", length_namecell);
+  kdDebug(36001) << "updateChooseMarker2 len=" << length_namecell << endl;
 
   QString text = m_pEditor->text();
   QString res = text.left( m_pEditor->cursorPosition() - old ) + name_cell + text.right( text.length() - m_pEditor->cursorPosition() );
@@ -1551,7 +1554,7 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
   m_pEditor->setText( res );
   ((KSpreadTextEditor*)m_pEditor)->blockCheckChoose( FALSE );
   m_pEditor->setCursorPosition( pos + length_namecell );
-  qDebug("old=%i len=%i pos=%i", old, length_namecell, pos );
+  kdDebug(36001) << "old=" << old << " len=" << length_namecell << " pos=" << pos << endl;
   // m_pEditor->setText(m_pEditor->text().left(length_text-old)+ name_cell);
 
   /*
@@ -1715,7 +1718,7 @@ void KSpreadCanvas::drawCell( KSpreadCell *_cell, int _col, int _row )
   int right = left + _cell->extraWidth() - m_iXOffset;
   int bottom = top + _cell->extraHeight() - m_iYOffset;
 
-  qDebug("left=%i right=%i extra=%i", left, right, _cell->extraWidth() );
+  kdDebug(36001) << "left=" << left << " right=" << right << " extra=" << _cell->extraWidth() << endl;
 
   QPoint tl( left, top );
   QPoint br( right, bottom );

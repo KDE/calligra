@@ -33,6 +33,8 @@
 #include <list>
 #include <cassert>
 
+#include <kdebug.h>
+
 KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 	: QDialog( parent, name )
 {
@@ -258,7 +260,7 @@ void KSpreadConsolidate::slotOk()
     {
       KSpreadTable *t = (*it).table;
       assert( t );
-      debug("FROM %i to %i",(*it).range.left(),(*it).range.right());
+      kdDebug(36001) << "FROM " << (*it).range.left() << " to " << (*it).range.right() << endl;
       for( int x = (*it).range.left(); x <= (*it).range.right() ; ++x )
       {
 	KSpreadCell *c = t->cellAt( x, (*it).range.top() );

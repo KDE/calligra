@@ -24,14 +24,14 @@ KInstance* KSpreadFactory::s_global = 0;
 KSpreadFactory::KSpreadFactory( QObject* parent, const char* name )
     : KLibFactory( parent, name )
 {
-    kdDebug() << "KSpreadFactory::KSpreadFactory()" << endl;
-    (void)global(); 
+    kdDebug(36001) << "KSpreadFactory::KSpreadFactory()" << endl;
+    (void)global();
     (void)new KSpreadAppIface;
 }
 
 KSpreadFactory::~KSpreadFactory()
 {
-  kdDebug() << "KSpreadFactory::~KSpreadFactory()" << endl;
+  kdDebug(36001) << "KSpreadFactory::~KSpreadFactory()" << endl;
   if ( s_global )
   {
     delete s_global->aboutData();
@@ -43,7 +43,7 @@ QObject* KSpreadFactory::create( QObject* parent, const char* name, const char* 
 {
 /*    if ( parent && !parent->inherits("KoDocument") )
     {
-	qDebug("KSpreadFactory: parent does not inherit KoDocument");
+	kdDebug(36001) << "KSpreadFactory: parent does not inherit KoDocument" << endl;
 	return 0;
     }
 */

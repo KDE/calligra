@@ -616,7 +616,7 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 	    p++;
 	    if ( row <= 0 || col <= 0 )
 	    {
-		printf("ERROR: out of range\n");
+		kdError(36001) << "ERROR: out of range" << endl;
 		return QString( _text );
 	    }
 	    if ( fix1 )
@@ -689,7 +689,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // m_pQML->setWidth( &_painter, max_width );
     int h = m_pQML->height();
     int w = m_pQML->width();
-    debug("QML w=%i max=%i",w,max_width);
+    kdDebug(36001) << "QML w=" << w << " max=" << max_width << endl;
 
     m_richWidth=w;
     m_richHeight=h;
@@ -779,7 +779,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     QSize size = m_pVisualFormula->size();
     int h = size.height();
     int w = size.width();
-    printf("Formula w=%i h=%i\n",w,h);
+    kdDebug(36001) << "Formula w=" << w << " h=" << h << endl;
     m_richWidth=w;
     m_richHeight=h;
     // Occupy the needed extra cells in horizontal direction
@@ -872,7 +872,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       decimal_point = KGlobal::locale()->decimalSymbol()[0].latin1();
       // Hmm we should use QChar here and QString a lot more around
       // here... (David)
-      qDebug( "decimal_point is '%c'", decimal_point );
+      kdDebug(36001) << "decimal_point is '" << decimal_point << "'" << endl;
       // HACK
       if ( decimal_point == 0 )
 	  decimal_point = '.';
@@ -890,7 +890,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // the zeros later. Is 8 ok ?
     int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
     QString localizedNumber = KGlobal::locale()->formatNumber(v, p);
-    qDebug("LOCALIZED NUMBER is %s", localizedNumber.latin1() );
+    kdDebug(36001) << "LOCALIZED NUMBER is " << localizedNumber.local8Bit() << endl;
 
 
 
@@ -953,8 +953,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     m_textPen.setColor( m_textColor );
     m_strOutText = ptext;
   }
-  
-  
+
+
   _painter.setPen( m_textPen );
   verifyCondition();
   if(m_conditionIsTrue &&!m_pTable->getShowFormular())
@@ -1321,7 +1321,7 @@ if(tmpCondition!=0 && tmpCondition->m_cond!=None && !m_pTable->getShowFormular()
                 break;
 
                 default:
-                        cout<<"Pb in Conditional\n";
+		        kdDebug(36001) << "Pb in Conditional" << endl;
 
                         m_conditionIsTrue=false;
                         break;
@@ -1363,7 +1363,7 @@ if ( a == KSpreadCell::Undefined )
   }
 if(m_pTable->getShowFormular())
       a = KSpreadCell::Left;
-      
+
 switch( a )
   {
   case KSpreadCell::Left:
@@ -1435,7 +1435,7 @@ if ( a == KSpreadCell::Undefined )
   }
 if(m_pTable->getShowFormular())
       a = KSpreadCell::Left;
-      
+
 switch( a )
   {
   case KSpreadCell::Left:
@@ -1470,13 +1470,13 @@ bool KSpreadCell::makeDepend( const char *_p, KSpreadDepend ** _dep, bool _secon
       KSpreadTable *t = m_pTable->map()->findTable( n );
       if ( t == 0L )
       {
-	printf("ERROR: Unknown table name '%s'\n",n.data() );
+	kdError(36001) << "ERROR: Unknown table name " << n.data() << endl;
 	return FALSE;
       }
 
       if ( _second )
       {
-	printf("ERROR: KSpreadTable name not allowed in 2nd corner of a A1:D5 construct.\n");
+	kdError(36001) << "ERROR: KSpreadTable name not allowed in 2nd corner of a A1:D5 construct." << endl;
 	return FALSE;
       }
 
@@ -1630,7 +1630,7 @@ bool KSpreadCell::calc( bool _makedepend )
 {
   if ( m_bProgressFlag )
   {
-    printf("ERROR: Circle\n");
+    kdError(36001) << "ERROR: Circle" << endl;
     m_bError = true;
     m_bValue = false;
     m_bBool = false;
@@ -1651,7 +1651,7 @@ bool KSpreadCell::calc( bool _makedepend )
   if ( !m_bCalcDirtyFlag )
     return true;
 
-  qDebug("CALC r=%i c=%i", m_iRow, m_iColumn );
+  kdDebug(36001) << "CALC r=" << m_iRow << " c=" << m_iColumn << endl;
   m_bLayoutDirtyFlag= true;
   m_bProgressFlag = true;
   m_bCalcDirtyFlag = false;
@@ -2043,7 +2043,7 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
 	}
 	if(m_pTable->getShowFormular())
 	    a = KSpreadCell::Left;	
-	    
+	
 	switch( a )
 	{
 	case KSpreadCell::Left:
@@ -2711,7 +2711,7 @@ void KSpreadCell::setText( const QString& _text )
 
     if ( !m_pTable->isLoading() )
 	if ( !makeFormular() )
-	    printf("ERROR: Syntax ERROR\n");
+	    kdError(36001) << "ERROR: Syntax ERROR" << endl;
     // A Hack!!!! For testing only
     // QString ret = encodeFormular( column, row );
     // decodeFormular( ret, column, row );
@@ -3003,12 +3003,12 @@ bool KSpreadCell::loadBottomMostBorder( const QDomElement& cell, int _xshift, in
     // Validation
     if ( m_iRow < 1 || m_iRow > 0xFFFF )
     {
-	cerr << "Value out of Range Cell:row=" << m_iRow << endl;
+	kdDebug(36001) << "Value out of Range Cell:row=" << m_iRow << endl;
 	return false;
     }
     if ( m_iColumn < 1 || m_iColumn > 0xFFFF )
     {
-	cerr << "Value out of Range Cell:column=" << m_iColumn << endl;
+	kdDebug(36001) << "Value out of Range Cell:column=" << m_iColumn << endl;
 	return false;
     }
 
@@ -3030,12 +3030,12 @@ bool KSpreadCell::loadRightMostBorder( const QDomElement& cell, int _xshift, int
     // Validation
     if ( m_iRow < 1 || m_iRow > 0xFFFF )
     {
-	cerr << "Value out of Range Cell:row=" << m_iRow << endl;
+	kdDebug(36001) << "Value out of Range Cell:row=" << m_iRow << endl;
 	return false;
     }
     if ( m_iColumn < 1 || m_iColumn > 0xFFFF )
     {
-	cerr << "Value out of Range Cell:column=" << m_iColumn << endl;
+	kdDebug(36001) << "Value out of Range Cell:column=" << m_iColumn << endl;
 	return false;
     }
 
@@ -3198,12 +3198,12 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     // Validation
     if ( m_iRow < 1 || m_iRow > 0xFFFF )
     {
-	cerr << "Value out of Range Cell:row=" << m_iRow << endl;
+	kdDebug(36001) << "Value out of Range Cell:row=" << m_iRow << endl;
 	return false;
     }
     if ( m_iColumn < 1 || m_iColumn > 0xFFFF )
     {
-	cerr << "Value out of Range Cell:column=" << m_iColumn << endl;
+	kdDebug(36001) << "Value out of Range Cell:column=" << m_iColumn << endl;
 	return false;
     }
 
@@ -3218,7 +3218,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Validation
 	    if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
 	    {
-		cerr << "Value of of range Cell::align=" << (unsigned int)a << endl;
+		kdDebug(36001) << "Value of of range Cell::align=" << (unsigned int)a << endl;
 		return false;
 	    }
 	    // Assignment
@@ -3232,7 +3232,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Validation
 	    if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
 	    {
-		cerr << "Value of of range Cell::alignY=" << (unsigned int)a << endl;
+		kdDebug(36001) << "Value of of range Cell::alignY=" << (unsigned int)a << endl;
 		return false;
 	    }
 	    // Assignment
@@ -3249,7 +3249,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Validation
 	    if ( i < 0 || i > 0xFFF )
 	    {
-		cerr << "Value out of range Cell::colspan=" << i << endl;
+		kdDebug(36001) << "Value out of range Cell::colspan=" << i << endl;
 		return false;
 	    }
 	    m_iExtraXCells = i;
@@ -3263,7 +3263,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Validation
 	    if ( i < 0 || i > 0xFFF )
 	    {
-		cerr << "Value out of range Cell::rowspan=" << i << endl;
+		kdDebug(36001) << "Value out of range Cell::rowspan=" << i << endl;
 		return false;
 	    }
 	    m_iExtraYCells = i;
@@ -3275,7 +3275,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    int i = f.attribute("precision").toInt( &ok );
 	    if ( i < -1 )
 	    {
-		cerr << "Value out of range Cell::precision=" << i << endl;
+		kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
 		return false;
 	    }
 	    m_iPrecision = i;
@@ -3286,7 +3286,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    if ( !ok ) return false;
 	    if ( (unsigned int)a < 1 || (unsigned int)a > 3 )
 	    {
-		cerr << "Value of of range Cell::float=" << (unsigned int)a << endl;
+		kdDebug(36001) << "Value of of range Cell::float=" << (unsigned int)a << endl;
 		return false;
 	    }
 	    // Assignment
@@ -3298,7 +3298,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    if ( !ok ) return false;
 	    if ( (unsigned int)a < 1 || (unsigned int)a > 2 )
 	    {
-		cerr << "Value of of range Cell::floatcolor=" << (unsigned int)a << endl;
+		kdDebug(36001) << "Value of of range Cell::floatcolor=" << (unsigned int)a << endl;
 		return false;
 	    }
 	    // Assignment

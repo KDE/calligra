@@ -169,7 +169,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
         {
         functions->setCurrentItem(functions->index(functions->findItem(formulaName)));
         slotDoubleClicked(functions->findItem(formulaName));
-        
+
         }
     if(functions->currentItem()==-1)
         selectFunction->setEnabled(false);
@@ -442,7 +442,7 @@ QString KSpreadDlgFormula::make_formula( const QString& _text,type_create elemen
 	{
 	    //find other "
 	    int pos_car=text.find("\"",1);
-            // cout <<"Index : "<<pos_car<<endl;
+            // kdDebug(36001) << "Index : " << pos_car << endl;
             if(pos_car==-1)
 	    {
 		//so don't find "
@@ -568,7 +568,7 @@ void KSpreadDlgFormula::slotDoubleClicked(QListBoxItem *)
     }
     if(funct.nb_param>5)
     {
-        cout <<"Error in param->nb_param";
+        kdDebug(36001) << "Error in param->nb_param" << endl;
     }
 
     if(result->cursorPosition()<m_oldLength)

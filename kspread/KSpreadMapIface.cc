@@ -6,6 +6,7 @@
 
 #include <kapp.h>
 #include <dcopclient.h>
+#include <kdebug.h>
 
 KSpreadMapIface::KSpreadMapIface( KSpreadMap* map )
     : DCOPObject( map )
@@ -27,11 +28,11 @@ DCOPRef KSpreadMapIface::table( int index )
     KSpreadTable* t = m_map->tableList().at( index );
     if ( !t )
     {
-	qDebug("+++++ No table found at index %i", index );
+	kdDebug(36001) << "+++++ No table found at index " << index << endl;
 	return DCOPRef();
     }
 
-    qDebug("+++++++ Returning table %s", t->QObject::name() );
+    kdDebug(36001) << "+++++++ Returning table " << t->QObject::name() << endl;
 
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
@@ -69,11 +70,11 @@ DCOPRef KSpreadMapIface::insertTable( const QString& name )
 {
     if ( m_map->findTable( name ) )
 	return table( name );
-    
+
     KSpreadTable* t = new KSpreadTable( m_map, name );
     t->setTableName( name );
     m_map->doc()->addTable( t );
-    
+
     return table( name );
 }
 
@@ -84,16 +85,16 @@ bool KSpreadMapIface::processDynamic(const QCString &fun, const QByteArray &data
     uint len = fun.length();
     if ( len < 3 )
 	return FALSE;
-    
+
     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
 	return FALSE;
-    
+
     KSpreadTable* t = m_map->findTable( fun.left( len - 2 ).data() );
     if ( !t )
 	return FALSE;
 
     replyType = "DCOPRef";
     QDataStream out( replyData, IO_WriteOnly );
-    out << DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );    
+    out << DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
     return TRUE;
 }

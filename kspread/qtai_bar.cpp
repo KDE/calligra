@@ -26,6 +26,7 @@
 #include <qfiledlg.h>
 #include <qstrlist.h>
 #include <qmsgbox.h>
+#include <kdebug.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,7 +50,7 @@ AIBar::AIBar(QWidget *parent,const char *name,int n)
   if ((actual=(double*)malloc(nbars*sizeof(double)))==NULL) {
     actual=NULL;
     nbars=0;
-    fprintf(stderr,"Can't alloc memory for actual!\n");
+    kdDebug(36001) << "Can't alloc memory for actual!" << endl;
     exit(-1);
   }
 

@@ -75,18 +75,18 @@ void KSpreadTextEditor::checkChoose()
     QString t = m_pEdit->text();
     // QString r = t.mid( t.length() - 1 - canvas()->chooseTextLen(), 1 );
     QString r = t.mid( m_pEdit->cursorPosition() - 1 - canvas()->chooseTextLen(), 1 );
-    kdDebug() << "r='" << r << "'" << endl;
+    kdDebug(36001) << "r='" << r << "'" << endl;
     if ( t.left(1) == "=" && ( r == "*" || r == "|" || r == "&" || r == "-" ||
 			       r == "+" || r == "/" || r == "!" || r == "(" ||
 			       r == "^" || r == "," || r == "%" || r == "[" ||
 			       r == "{" || r == "~" || r == "=" ) )
     {
-	kdDebug() << "Start CHOOSE" << endl;
+	kdDebug(36001) << "Start CHOOSE" << endl;
 	canvas()->startChoose();
     }
     else
     {
-	kdDebug() << "End CHOOSE" << endl;
+	kdDebug(36001) << "End CHOOSE" << endl;
 	canvas()->endChoose();
     }
 }
@@ -156,9 +156,9 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
 	// End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
 	if ( e->type() == QEvent::KeyPress && !k->ascii() == 0 )
         {
-	    kdDebug() << "eventFilter End Choose" << endl;
+	    kdDebug(36001) << "eventFilter End Choose" << endl;
 	    canvas()->endChoose();
-	    kdDebug() << "Cont" << endl;
+	    kdDebug(36001) << "Cont" << endl;
 	}
     }
 
@@ -195,7 +195,7 @@ KSpreadFormulaEditor::~KSpreadFormulaEditor()
 
 void KSpreadFormulaEditor::resizeEvent( QResizeEvent* )
 {
-  kdDebug() << "FORMULA w=" << width() << " h=" << height() << endl;
+  kdDebug(36001) << "FORMULA w=" << width() << " h=" << height() << endl;
   m_pEdit->setGeometry( 0, 0, width(), height() );
 }
 

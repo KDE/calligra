@@ -53,6 +53,7 @@
 #include <koStream.h>
 
 #include <strstream.h>
+#include <kdebug.h>
 
 #include "../kchart/kchart_part.h"
 
@@ -134,12 +135,12 @@ ChartBinding::~ChartBinding()
 
 void ChartBinding::cellChanged( KSpreadCell* )
 {
-  cout << "######### void ChartBinding::cellChanged( KSpreadCell* )" << endl;
+  kdDebug(36001) << "######### void ChartBinding::cellChanged( KSpreadCell* )" << endl;
 
   if ( m_bIgnoreChanges )
     return;
 
-  cout << "with=" << m_rctDataArea.width() << "  height=" << m_rctDataArea.height() << endl;
+  kdDebug(36001) << "with=" << m_rctDataArea.width() << "  height=" << m_rctDataArea.height() << endl;
 
   KChartData matrix( m_rctDataArea.height(), m_rctDataArea.width() );
 
@@ -863,14 +864,14 @@ for ( int incr=start;incr<=end; )
 	else if(mode==Row)
 	    posx++;
         else
-            cout <<"Error in Series::mode\n";
+            kdDebug(36001) << "Error in Series::mode" << endl;
 
         if(type==Linear)
 	    incr=incr+step;
 	else if(type==Geometric)
 	    incr=incr*step;
         else
-            cout <<"Error in Series::type\n";
+            kdDebug(36001) << "Error in Series::type" << endl;
 	}
 
 }
@@ -1042,7 +1043,7 @@ void KSpreadTable::insertRightCell( const QPoint &_marker )
       {
 	if ( list[ k ]->column() == i && list[k]->row()==_marker.y() && !list[ k ]->isDefault() )
 	{
-	  printf("Moving Cell %i %i\n",list[k]->column(),list[k]->row());
+	  kdDebug(36001) << "Moving Cell " << list[k]->column() << " " << list[k]->row() << endl;
 	  int key = list[ k ]->row() | ( list[ k ]->column() * 0x10000 );
 	  m_dctCells.remove( key );
 	
@@ -1897,7 +1898,7 @@ void KSpreadTable::onlyRow(SortingOrder mode)
 		    }
 		    else
 		    {
-			cout <<"Err in SortingOrder\n";
+			kdDebug(36001) << "Err in SortingOrder" << endl;
 		    }
 		}
 	    }
@@ -1942,7 +1943,7 @@ void KSpreadTable::onlyColumn(SortingOrder mode)
 		    }
 		    else
 		    {
-			cout <<"Err in SortingOrder\n";
+			kdDebug(36001) << "Err in SortingOrder" << endl;
 		    }
 		}
 	    }
@@ -2333,7 +2334,7 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
     if(!currency)
     	{
     	currency = KGlobal::locale()->currencySymbol();
-	cout <<"Money:" <<currency.ascii()<<endl;
+	kdDebug(36001) << "Money:" << currency.ascii() << endl;
     	}
     bool selected = ( m_rctSelection.left() != 0 );
     QString tmp=" "+currency;
@@ -2930,7 +2931,7 @@ void KSpreadTable::insertColumn( unsigned long int _column )
 	if ( list[ k ]->column() == (int)i && !list[ k ]->isDefault() )
 	{
 	
-	printf("Moving Cell %i %i\n",list[k]->column(),list[k]->row());
+	kdDebug(36001) << "Moving Cell " << list[k]->column() << " " << list[k]->row() << endl;
 	int key = list[ k ]->row() | ( list[ k ]->column() * 0x10000 );
 	m_dctCells.remove( key );
 	
@@ -3375,7 +3376,7 @@ void KSpreadTable::paste( const QPoint &_marker, PasteMode sp, Operation op )
 
     QByteArray b = mime->encodedData( "application/x-kspread-snippet" );
 
-    qDebug("Parsing %i bytes", b.size() );
+    kdDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
     QBuffer buffer( b );
     buffer.open( IO_ReadOnly );
@@ -3637,7 +3638,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
     // Calculate all pages, but if we are embedded, print only the first one
     while ( bottom < cell_range.bottom() /* && page_list.count() == 0 */ )
     {
-	qDebug("bottom=%i bottom_range=%i", bottom, cell_range.bottom() );
+	kdDebug(36001) << "bottom=" << bottom << " bottom_range=" << cell_range.bottom() << endl;
 	
 	// Up to this column everything is already printed
 	int right = 0;
@@ -3645,7 +3646,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 	int left = 1;
 	while ( right < cell_range.right() )
         {
-	    qDebug("right=%i right_range=%i", right, cell_range.right() );
+	    kdDebug(36001) << "right=" << right << " right_range=" << cell_range.right() << endl;
 		
 	    QRect *page_range = new QRect;
 	    page_list.append( page_range );
@@ -3745,7 +3746,8 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen&
 {
   int ypos = 0;
 
-  qDebug("Rect x=%i y=%i, w=%i h=%i",page_range->left(), page_range->top(), page_range->width(), page_range->height() );
+  kdDebug(36001) << "Rect x=" << page_range->left() << " y=" << page_range->top() << ", w="
+		 << page_range->width() << " h="  << page_range->height() << endl;
   for ( int y = page_range->top(); y <= page_range->bottom() + 1; y++ )
   {
     RowLayout *row_lay = rowLayout( y );
@@ -3779,15 +3781,15 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen&
   QListIterator<KSpreadChild> chl( m_lstChildren );
   for( ; chl.current(); ++chl )
   {
-    cout << "Printing child ....." << endl;
+    kdDebug(36001) << "Printing child ....." << endl;
     // HACK, dont display images that reside outside the paper
     _painter.translate( chl.current()->geometry().left(),
 			chl.current()->geometry().top() );
     QPicture* pic;
     pic = chl.current()->draw();
-    cout << "Fetched picture data" << endl;
+    kdDebug(36001) << "Fetched picture data" << endl;
     _painter.drawPicture( *pic );
-    cout << "Played" << endl;
+    kdDebug(36001) << "Played" << endl;
     _painter.translate( - chl.current()->geometry().left(),
 			- chl.current()->geometry().top() );
   }
@@ -4172,14 +4174,14 @@ void KSpreadTable::emit_updateColumn( ColumnLayout *_layout, int _column )
 
 void KSpreadTable::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _data )
 {
-    cerr << "Createing document" << endl;
+    kdDebug(36001) << "Creating document" << endl;
     KoDocument* doc = _e.createDoc();
-    cerr << "Created" << endl;
+    kdDebug(36001) << "Created" << endl;
     if ( !doc )
 	// Error message is already displayed, so just return
 	return;
 
-   cerr << "NOW FETCHING INTERFACE" << endl;
+   kdDebug(36001) << "NOW FETCHING INTERFACE" << endl;
 
    doc->initDoc();
 
@@ -4416,13 +4418,13 @@ bool ChartChild::loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttr
 		m_pBinding = new ChartBinding( m_table, tagToRect( lst2 ), this );
 	    else
 	    {
-		cerr << "Unknown tag '" << tag2 << "' in BINDING" << endl;
+		kdDebug(36001) << "Unknown tag '" << tag2.c_str() << "' in BINDING" << endl;
 		return FALSE;
 	    }
 	}
 	if ( !parser.close( (string &) tag ) )
 	{
-	    cerr << "ERR: Closing BINDING" << endl;
+	    kdDebug(36001) << "ERR: Closing BINDING" << endl;
 	    return false;
 	}
 	

@@ -34,6 +34,7 @@
 #include "kspread_dlg_tabname.h"
 #include "kspread_tabbar.h"
 #include "kspread_map.h"
+#include <kdebug.h>
 
 KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent )
     : QWidget( (QWidget *)_parent )
@@ -63,7 +64,7 @@ void KSpreadTabBar::removeTab( const QString& _text )
     int i = tabsList.findIndex( _text );
     if ( i == -1 )
     {
-	printf("ERROR: KSpreadTable '%s' not found\n", _text.ascii() );
+	kdError(36001) << "ERROR: KSpreadTable '" << _text.local8Bit() << "' not found" << endl;
 	return;
     }
 
@@ -170,7 +171,7 @@ void KSpreadTabBar::scrollLast()
     int i = tabsList.count();
     int x = 0;
 
-	cout << "i: " << i << " rt: " << m_rightTab << "\n";
+	kdDebug(36001) << "i: " << i << " rt: " << m_rightTab << endl;
 
 	if ( m_rightTab == i )
 	return;
@@ -362,7 +363,7 @@ void KSpreadTabBar::renameTab( const QString& old_name, const QString& new_name 
 {
     QStringList::Iterator it = tabsList.find( old_name );
     (*it) = new_name;
-	    
+	
     update();
 }
 

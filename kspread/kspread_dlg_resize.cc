@@ -29,7 +29,8 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-#include <iostream.h>
+//#include <iostream.h>
+#include <kdebug.h>
 
 KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize re)
 	: QDialog( parent, name )
@@ -63,7 +64,7 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
 		label=i18n("Width");
 		break;
 	default :
-		cout <<"Err in type_resize\n";
+	        kdDebug(36001) <<"Err in type_resize" << endl;
 		break;
 	}
 
@@ -102,7 +103,7 @@ switch(type)
 		m_pView->hBorderWidget()->resizeColumn(new_size );
 		break;
 	default :
-		cout <<"Err in type_resize\n";
+	        kdDebug(36001) <<"Err in type_resize" << endl;
 		break;
 	}
 }

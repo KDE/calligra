@@ -17,6 +17,7 @@
 
 #include <dcopobject.h>
 #include <dcopclient.h>
+#include <kdebug.h>
 
 /***************************************************************
  *
@@ -69,7 +70,8 @@ void makeDepends( KSContext& context, KSParseNode* node, KSpreadMap* m, KSpreadT
     if ( node->getType() == t_cell )
     {
       KSParseNodeExtraPoint* extra = new KSParseNodeExtraPoint( node->getStringLiteral(), m, t );
-      printf("--------------------- Got dep %i|%i\n",extra->point()->pos.x(),extra->point()->pos.y());
+      kdDebug(36001) << "--------------------- Got dep " << extra->point()->pos.x() << "|"
+		     << extra->point()->pos.y() << endl;
       KSpreadDepend* d = new KSpreadDepend;
       d->m_iColumn = extra->point()->pos.x();
       d->m_iRow = extra->point()->pos.y();
@@ -456,12 +458,12 @@ static bool kspreadfunc_sum_helper( KSContext& context, QValueList<KSValue::Ptr>
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       {
       result += (*it)->doubleValue();
-      //cout <<"Value : " << (*it)->doubleValue()<<endl;
+      //kdDebug(36001) << "Value : " << (*it)->doubleValue() << endl;
       }
     else
       return false;
   }
-  //cout <<"Quit :\n";
+  //kdDebug(36001) << "Quit :" << endl;
   return true;
 }
 

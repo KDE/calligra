@@ -31,6 +31,7 @@
 #include <qpainter.h>
 #include <kcolordlg.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <kstddirs.h>
 
 KSpreadPatternSelect::KSpreadPatternSelect( QWidget *parent, const char * ) : QFrame( parent )
@@ -370,7 +371,7 @@ void CellLayoutDlg::init()
         painter.fillRect( 0, 0, 100, 12, BDiagPattern );
         painter.end();
     }
-    
+
     tab = new QTabDialog( 0L, 0L, TRUE );
     tab->setGeometry( tab->x(), tab->y(), 420, 400 );
 
@@ -394,9 +395,9 @@ void CellLayoutDlg::init()
 
     // tab->setApplyButton();
     tab->setCancelButton();
-    
+
     tab->setCaption(i18n("Cell Layout"));
-    
+
     connect( tab, SIGNAL( applyButtonPressed() ), this, SLOT( slotApply() ) );
     // connect( tab, SIGNAL(cancelButtonPressed()), SLOT(setup()) );
 
@@ -955,12 +956,12 @@ void CellLayoutPageFont::display_example(const QFont& font)
   example_label->setFont(font);
   example_label->repaint();
 
-  printf("FAMILY 2 '%s' %i\n",font.family().ascii(), font.pointSize());
+  kdDebug(36001) << "FAMILY 2 '" << font.family().ascii() << "' " << font.pointSize() << endl;
 
   QFontInfo info = example_label->fontInfo();
   actual_family_label_data->setText(info.family());
 
-  printf("FAMILY 3 '%s' %i\n",info.family().latin1(), info.pointSize());
+  kdDebug(36001) << "FAMILY 3 '" << info.family().latin1() << "' " << info.pointSize() << endl;
 
   string.setNum(info.pointSize());
   actual_size_label_data->setText(string);
@@ -990,7 +991,7 @@ void CellLayoutPageFont::setCombos()
  if ( dlg->bTextFontFamily )
  {
      selFont.setFamily( dlg->textFontFamily );
-     printf("Family = %s\n",dlg->textFontFamily.data());
+     kdDebug(36001) << "Family = " << dlg->textFontFamily.data() << endl;
      number_of_entries =  family_combo->count();
      string = dlg->textFontFamily;
      found = false;
@@ -1000,7 +1001,7 @@ void CellLayoutPageFont::setCombos()
 	 if ( string == (QString) combo->text(i))
 	 {
 	     combo->setCurrentItem(i);
-	     //     printf("Found Font %s\n",string.data());
+	     //     kdDebug(36001) << "Found Font " << string.data() << endl;
 	     found = true;
 	     break;
 	 }
@@ -1012,7 +1013,7 @@ void CellLayoutPageFont::setCombos()
  combo = size_combo;
  if ( dlg->bTextFontSize )
  {
-     printf("SIZE=%i\n",dlg->textFontSize);
+     kdDebug(36001) << "SIZE=" << dlg->textFontSize << endl;
      selFont.setPointSize( dlg->textFontSize );
      number_of_entries = size_combo->count();
      string.setNum( dlg->textFontSize );
@@ -1022,7 +1023,7 @@ void CellLayoutPageFont::setCombos()
 	 if ( string == (QString) combo->text(i)){
 	     combo->setCurrentItem(i);
 	     found = true;
-	     // printf("Found Size %s setting to item %d\n",string.data(),i);
+	     // kdDebug(36001) << "Found Size " << string.data() << " setting to item " i << endl;
 	     break;
 	 }
      }
@@ -1157,7 +1158,7 @@ setColor( Qt::black );
 setChanged(true);
 }
 
-KSpreadBord::KSpreadBord( QWidget *parent, const char *_name ) 
+KSpreadBord::KSpreadBord( QWidget *parent, const char *_name )
     : QFrame( parent, _name )
 {
 }

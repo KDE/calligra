@@ -24,7 +24,8 @@
 #include <stdlib.h>
 
 #include <qdom.h>
-#include <iostream>
+//#include <iostream>
+#include <kdebug.h>
 
 using namespace std;
 
@@ -109,7 +110,7 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
   setTextFontFamily( _l.textFontFamily() );
   setTextFontBold( _l.textFontBold() );
   setTextFontItalic( _l.textFontItalic() );
-  setTextFontUnderline( _l.textFontUnderline() ); 
+  setTextFontUnderline( _l.textFontUnderline() );
   setPrefix( _l.prefix() );
   setPostfix( _l.postfix() );
 }
@@ -225,12 +226,12 @@ bool RowLayout::load( const QDomElement& row )
   // Validation
   if ( m_fHeight < 1 )
   {
-    cerr << "Value height=" << m_fHeight << " out of range" << endl;
+    kdDebug(36001) << "Value height=" << m_fHeight << " out of range" << endl;
     return false;
   }
   if ( m_iRow < 1 || m_iRow >= 0xFFFF )
   {
-    cerr << "Value row=" << m_iRow << " out of range" << endl;
+    kdDebug(36001) << "Value row=" << m_iRow << " out of range" << endl;
     return false;
   }
 
@@ -310,12 +311,12 @@ bool ColumnLayout::load( const QDomElement& col )
   // Validation
   if ( m_fWidth < 1 )
   {
-    cerr << "Value width=" << m_fWidth << " out of range" << endl;
+    kdDebug(36001) << "Value width=" << m_fWidth << " out of range" << endl;
     return false;
   }
   if ( m_iColumn < 1 || m_iColumn >= 0xFFFF )
   {
-    cerr << "Value col=" << m_iColumn << " out of range" << endl;
+    kdDebug(36001) << "Value col=" << m_iColumn << " out of range" << endl;
     return false;
   }
 

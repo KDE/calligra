@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <qbuttongroup.h>
+#include <kdebug.h>
 
 KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint &_marker,Mode _mode)
 	: QDialog( parent, name )
@@ -65,7 +66,7 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QPoint
   	setCaption( i18n("Remove cell") );
   	}
   else
-  	cout <<"Error in kspread_dlg_insert\n";
+        kdDebug(36001) << "Error in kspread_dlg_insert" << endl;
 
   rb1->setChecked(true);
 
@@ -139,7 +140,7 @@ else if(rb4->isChecked())
 	}
 else
 	{
-	cout <<"Error in kspread_dlg_insert\n";
+	kdDebug(36001) << "Error in kspread_dlg_insert" << endl;
 	}
 accept();
 }
@@ -157,21 +158,21 @@ KSpreadTable *tbl;
   	{
   	for( ; it.current(); ++it )
   	it.current()->changeNameCellRef(marker.x(),KSpreadTable::ColumnInsert,m_pTable->name());
-            }   
+            }
 else if(insertOrRemove==inserRow)
   	{
   	for( ; it.current(); ++it )
-  		it.current()->changeNameCellRef(marker.y(),KSpreadTable::RowInsert,m_pTable->name());         
+  		it.current()->changeNameCellRef(marker.y(),KSpreadTable::RowInsert,m_pTable->name());
 	}
   else if(insertOrRemove==removeRow)
   	{
   	for( ; it.current(); ++it )
-  		it.current()->changeNameCellRef(marker.y(),KSpreadTable::RowRemove,m_pTable->name());         
+  		it.current()->changeNameCellRef(marker.y(),KSpreadTable::RowRemove,m_pTable->name());
 	}
    else if(insertOrRemove==removeColumn)
   	{
   	for( ; it.current(); ++it )
-	  it.current()->changeNameCellRef(marker.x(),KSpreadTable::ColumnRemove,m_pTable->name());  		         
+	  it.current()->changeNameCellRef(marker.x(),KSpreadTable::ColumnRemove,m_pTable->name());  		
 	}
    else if(insertOrRemove==insertCellColumn)
   	{
@@ -181,17 +182,17 @@ else if(insertOrRemove==inserRow)
    else if(insertOrRemove==insertCellRow)
   	{
   	for( ; it.current(); ++it )
-  	it.current()->changeNameCellRef2(marker,KSpreadTable::RowInsert,m_pTable->name());       
-   	}   
+  	it.current()->changeNameCellRef2(marker,KSpreadTable::RowInsert,m_pTable->name());
+   	}
   else if(insertOrRemove==removeCellColumn)
   	{
   	for( ; it.current(); ++it )
-  	it.current()->changeNameCellRef2(marker,KSpreadTable::ColumnRemove,m_pTable->name());         
-	}   
+  	it.current()->changeNameCellRef2(marker,KSpreadTable::ColumnRemove,m_pTable->name());
+	}
 else if(insertOrRemove==removeCellRow)
   	{
   	for( ; it.current(); ++it )
-  	it.current()->changeNameCellRef2(marker,KSpreadTable::RowRemove,m_pTable->name());          
+  	it.current()->changeNameCellRef2(marker,KSpreadTable::RowRemove,m_pTable->name());
 	}
 
 
