@@ -45,7 +45,7 @@ class KexiQueryPart : public KexiPart::Part
 
 		virtual bool remove(KexiMainWindow *win, const KexiPart::Item &item);
 
-		virtual QWidget* createView(QWidget *parent, KexiDialogBase* dialog, 
+		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
 			const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 
 		KexiQueryDocument	*data(KexiDB::Connection *conn, const KexiPart::Item &item);

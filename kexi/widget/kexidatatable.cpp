@@ -31,6 +31,7 @@
 
 #include "kexidatatableview.h"
 #include "kexidatatable.h"
+#include "kexidialogbase.h"
 
 //KexiDataTable::KexiDataTable(KexiMainWindow *win, const QString &caption)
 KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, const char *name)
@@ -60,11 +61,22 @@ void KexiDataTable::init()
 	connect(m_view, SIGNAL(rowEditStarted(int)), this, SLOT(slotUpdateRowActions(int)));
 	connect(m_view, SIGNAL(rowEditTerminated(int)), this, SLOT(slotUpdateRowActions(int)));
 
-
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->addWidget(m_view);
+
+	//resize to preferred size
+/*	QSize preferredSize = m_view->sizeHint();
+	KexiDialogBase* dlg = parentDialog();
+	if (dlg && dlg->mdiParent()) {
+		QRect r = dlg->mdiParent()->mdiAreaContentsRect();
+		preferredSize = preferredSize.boundedTo( QSize(
+			r.width() - 10,
+			r.height() - dlg->mdiParent()->captionHeight() - 10
+		) );
+	}*/
+
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
-	resize(m_view->sizeHint());
+	resize( preferredSizeHint( m_view->sizeHint() ) );
 //js	m_view->show();
 //	setFocusProxy(m_view);
 	m_view->setFocus();

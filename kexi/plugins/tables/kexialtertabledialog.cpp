@@ -67,7 +67,6 @@ void KexiAlterTableDialog::init()
 
 	m_view = new KexiTableView(data, this, "tableview");
 	setFocusProxy(m_view);
-	
 /*
 	connect(m_view, SIGNAL(cellSelected(int,int)), this, SLOT(slotCellSelected(int,int)));
 	//! before closing - we'are accepting editing
@@ -81,7 +80,7 @@ void KexiAlterTableDialog::init()
 	QVBoxLayout *box = new QVBoxLayout(this);
 	box->addWidget(m_view);
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
-	resize(m_view->sizeHint());
+	resize( preferredSizeHint( m_view->sizeHint() ) );
 	m_view->setFocus();
 	initActions();
 }

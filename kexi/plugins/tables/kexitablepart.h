@@ -42,7 +42,7 @@ class KexiTablePart : public KexiPart::Part
 
 //		virtual QString instanceName() const;
 
-		virtual QWidget* createView(QWidget *parent, KexiDialogBase* dialog, 
+		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
 			const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
 	protected:
 //		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode);

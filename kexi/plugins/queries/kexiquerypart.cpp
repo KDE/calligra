@@ -46,7 +46,7 @@ KexiQueryPart::~KexiQueryPart()
 {
 }
 
-QWidget*
+KexiViewBase*
 KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog,  const KexiPart::Item &item, int viewMode)
 {
 	kdDebug() << "KexiQueryPart::createView()" << endl;

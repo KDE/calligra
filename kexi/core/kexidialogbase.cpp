@@ -73,10 +73,10 @@ QSize KexiDialogBase::minimumSizeHint() const
 
 QSize KexiDialogBase::sizeHint() const
 {
-	QWidget *v = m_stack->visibleWidget();
+	KexiViewBase *v = static_cast<KexiViewBase*>(m_stack->visibleWidget());
 	if (!v)
 		return KMdiChildView::sizeHint();
-	return v->sizeHint();
+	return v->preferredSizeHint( v->sizeHint() );
 }
 
 /*
@@ -173,19 +173,20 @@ bool KexiDialogBase::switchToViewMode( int viewMode )
 	if (!supportsViewMode(viewMode))
 		return false;
 
-	QWidget *widget = m_stack->widget(viewMode);
-	if (!widget) {
+	KexiViewBase *view = (m_stack->widget(viewMode) && m_stack->widget(viewMode)->inherits("KexiViewBase"))
+		? static_cast<KexiViewBase*>(m_stack->widget(viewMode)) : 0;
+	if (!view) {
 		//ask the part to create view for the new mode
-		widget = m_part->createView(m_stack, this, *m_item, viewMode);
-		if (!widget) {
+		view = m_part->createView(m_stack, this, *m_item, viewMode);
+		if (!view) {
 			//js TODO error?
 			return false;
 		}
-		m_stack->addWidget(widget, viewMode);
+		m_stack->addWidget(view, viewMode);
 	}
-	if (!widget->inherits("KexiViewBase"))
-		return false;
-	KexiViewBase *view = static_cast<KexiViewBase*>(widget);
+//	if (!view->inherits("KexiViewBase"))
+//		return false;
+//	KexiViewBase *view = static_cast<KexiViewBase*>(widget);
 	m_stack->raiseWidget(view);
 	view->afterSwitchFrom(m_currentViewMode);
 	m_currentViewMode = viewMode;

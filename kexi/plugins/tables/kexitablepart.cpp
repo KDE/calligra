@@ -105,7 +105,7 @@ KexiTablePart::execute(KexiMainWindow *win, const KexiPart::Item &item)
 
 //KexiDialogBase*
 //KexiTablePart::createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode)
-QWidget* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog, 
+KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog, 
 	const KexiPart::Item &item, int viewMode)
 {
 	KexiMainWindow *win = dialog->mainWin();

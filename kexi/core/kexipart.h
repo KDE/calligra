@@ -29,6 +29,7 @@
 class KexiMainWindow;
 class KActionCollection;
 class KexiDialogBase;
+class KexiViewBase;
 
 namespace KexiPart
 {
@@ -70,7 +71,7 @@ class KEXICORE_EXPORT Part : public QObject
 
 		inline GUIClient *instanceGuiClient() const { return m_instanceGuiClient; }
 
-		virtual QWidget* createView(QWidget *parent, KexiDialogBase* dialog, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
+		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 	protected:
 //		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 

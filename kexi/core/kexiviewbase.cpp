@@ -20,6 +20,7 @@
 #include "kexiviewbase.h"
 
 #include "keximainwindow.h"
+#include "kexidialogbase.h"
 
 KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : QWidget(parent, name)
@@ -45,6 +46,27 @@ bool KexiViewBase::beforeSwitchTo(int /* mode */)
 bool KexiViewBase::afterSwitchFrom(int /* mode */)
 {
 	return true;
+}
+
+KexiDialogBase* KexiViewBase::parentDialog()
+{
+	QWidget *wi=this;
+	while ((wi = wi->parentWidget()) && !wi->inherits("KexiDialogBase"))
+		;
+	return (wi && wi->inherits("KexiDialogBase")) ? static_cast<KexiDialogBase*>(wi) : 0;
+}
+
+QSize KexiViewBase::preferredSizeHint(const QSize& otherSize)
+{
+	KexiDialogBase* dlg = parentDialog();
+	if (dlg && dlg->mdiParent()) {
+		QRect r = dlg->mdiParent()->mdiAreaContentsRect();
+		return otherSize.boundedTo( QSize(
+			r.width() - 10,
+			r.height() - dlg->mdiParent()->captionHeight() - dlg->pos().y() - 10
+		) );
+	}
+	return otherSize;
 }
 
 #include "kexiviewbase.moc"

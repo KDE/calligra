@@ -1291,7 +1291,16 @@ void KexiMainWindow::detachWindow(KMdiChildView *pWnd,bool bShow)
 
 void KexiMainWindow::attachWindow(KMdiChildView *pWnd, bool /*bShow*/, bool bAutomaticResize)
 {
+//	if (bAutomaticResize || w->size().isEmpty() || (w->size() == QSize(1,1))) {
 	KMdiMainFrm::attachWindow(pWnd,true,bAutomaticResize);
+	//for dialogs in normal state: decrease dialog's height if it exceeds area contents
+	if (pWnd->mdiParent()->state() == KMdiChildFrm::Normal 
+		&& pWnd->geometry().bottom() > pWnd->mdiParent()->mdiAreaContentsRect().bottom()) 
+	{
+		QRect r = pWnd->geometry();
+		r.setBottom( pWnd->mdiParent()->mdiAreaContentsRect().bottom() - 5 );
+		pWnd->setGeometry( r );
+	}
 	// update icon - from large to small
 	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->itemIcon() ) );
 //	pWnd->mdiParent()->setIcon( SmallIcon( static_cast<KexiDialogBase *>(pWnd)->part()->info()->itemIcon() ) );

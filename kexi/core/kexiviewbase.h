@@ -25,6 +25,7 @@
 #include "kexiactionproxy.h"
 
 class KexiMainWindow;
+class KexiDialogBase;
 
 class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 {
@@ -34,7 +35,18 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
 		virtual ~KexiViewBase();
 
+		//! \return kexi main window that contain this view
 		inline KexiMainWindow *mainWin() const { return m_mainWin; }
+
+		//! \return parent KexiDialogBase that contains this view, or 0 if no dialog contain this view
+		KexiDialogBase* parentDialog();
+
+		/*! \return preferred size hint, that can be used to resize the view.
+		 It is computed using maximum of (a) \a otherSize and (b) current KMDI dock area's size, 
+		 so the view won't exceed this maximum size. The method is used e.g. in KexiDialogBase::sizeHint().
+		 If you reimplement this method, dont forget to return value of 
+		 yoursize.boundedTo( KexiViewBase::preferredSizeHint(otherSize) ). */
+		virtual QSize preferredSizeHint(const QSize& otherSize);
 
 	public slots:
 

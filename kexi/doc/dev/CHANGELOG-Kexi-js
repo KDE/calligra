@@ -227,6 +227,49 @@ TODO:
 - KMdiChildArea::getCaptionColors - change to KGlobalSettings::inactiveTextColor(), etc.
   (for win32 - reimpl. KGlobalSettings::inactiveTextColor() with code from getCaptionColors())
 
+HINT: removing Qt::WStaticContents from KExiTableView ctor fixed repaint problem
+  the problem was with repainting when hscrollbar disapperars....
+
+
+FIXIT::::::::::::::
+	js: Do you have repaint / resize problems of the document views in tabbed or ideal mode too ?
+js^	jowenn: you can publish a screenshot of one? i cant tell if i have the same problem as you
+jowenn	one moment
+jowenn	http://www.jowenn.at/tmp/img.png
+jowenn	after chaning view or resizing the window is works. Only a small part (the top left tables gets repainted otherwise)
+js^	jowenn: ah i see - this is because empty TVs and these not-db-aware are not finished yet
+js^	and query shows empty
+jowenn	happens with a table with data too, there it only loses one repaint event though, when the project navigator collapses
+js^	jowenn: i agree, will be fixed, thx, btw - i've fixed one crash on main window now. 
+:::::::::::FIXIT::::::::::::::
+
+
+FIXIT::: CRASH!! in kexidb
+lucijan	#2 <signal handler called>
+lucijan	#3 0x414dbf54 in strdup () from /lib/tls/libc.so.6
+lucijan	js^: yes simply add a new kexi__object but o_caption as NULL
+::FIXIT
+
+2004-01-19
+RESIZING HELL RESOLVED
+- KexiDialogBase resizing fixed for maximize state: only resize a dialog if it is in normal state
+- KexiMainWindow: for dialogs in normal state: decrease dialog's height if it exceeds area contents
+- KexiViewBase: 
+   -preferred size hint introduced;
+   -parentDialgo() convenience method added for getting view's dialog parent.
+
+2004-01-17
+- KexiDialogBase: minimum height fixed: added height of its caption
+- KexiTableView: repainting of bottom contents FINALLY FIXED
+- ALTER TABLE Dialog impl. started
+- query part: crashes removed when no sql string defined for query; by default "visible" column is true
+- relation view: 
+   -for global db relations -all tables are shown (will be customized later)
+   -open table/design table actions fixed
+- bool Kexi::isIdentifier(QString) added for convenience
+- KexiDB: Tables and queries with invalid names (that are not valid identifiers) are skipped on lookup
+- KexiProject: The same for any objects and KexiProject level
+
 2004-01-14
 CORE API CHANGED:
 - Kexi Dialogs : view modes functionality added -- KexiViewBase, and integrated with KexiMainWindow 
@@ -234,6 +277,10 @@ CORE API CHANGED:
 - KexiDockBase removed because if KexiViewBase existence
 - If a dialog is already opened in given mode and user have dbl-clicked on the Navigator, 
   the dialog is not switched to other mode
+
+- InternalParts and dialogs without multiple modes FIXED
+- KexiTableView: when cursor is moved down and navigator covers the cursor's area, 
+ area is scrolled up.
 
 2004-01-13
 KexiActionProxy:

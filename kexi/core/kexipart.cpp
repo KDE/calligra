@@ -100,7 +100,9 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, const KexiPart::Item &it
 		//js TODO ERROR???
 	}
 
-	dlg->resize(dlg->sizeHint());
+	if (dlg->mdiParent()->state()==KMdiChildFrm::Normal) //only resize dialog if it is in normal state
+		dlg->resize(dlg->sizeHint());
+
 	dlg->setMinimumSize(dlg->minimumSizeHint().width(),dlg->minimumSizeHint().height());
 
 //	QWidget *view = createView(dlg->stack(), dlg, item, viewMode);
