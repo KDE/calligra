@@ -154,7 +154,7 @@ public slots:
     void viewHeader();
     void insertComment();
     void editComment();
-
+    void viewHelpLines();
 
     // insert menu
     void insertPage();
@@ -542,6 +542,8 @@ protected slots:
 
     void refreshAllVariable();
     void slotUpdateScrollBarRanges();
+    void drawTmpHelpLine( const QPoint & pos, bool _horizontal);
+    void addHelpline(const QPoint & pos, bool _horizontal);
 
 // end of protected slots
 protected:
@@ -673,6 +675,8 @@ private:
 
     KToggleAction *actionViewShowSideBar;
     KToggleAction *actionViewShowNoteBar;
+
+    KToggleAction *actionViewShowHelpLine;
 
     KAction *actionInsertPage;
     KAction *actionInsertPicture;

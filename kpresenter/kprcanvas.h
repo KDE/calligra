@@ -277,6 +277,10 @@ protected:
 
     void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj );
 
+    // draw all helpline
+    void drawHelplines(QPainter *painter, const KoRect &rect);
+
+
     QRect getOldBoundingRect(KPObject *obj);
 
     void drawCurrentPageInPix( QPixmap& );
@@ -449,6 +453,9 @@ private:
     KoPoint m_hotSpot; // when moving frame(s)
 
     int m_zoomBeforePresentation;
+    int m_tmpHorizHelpline;
+    int m_tmpVertHelpline;
+
 };
 
 #endif //PAGE_H

@@ -84,6 +84,9 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     m_xOffset = 0;
     m_yOffset = 0;
 
+    m_tmpHorizHelpline = -1;
+    m_tmpVertHelpline = -1;
+
     if ( parent ) {
         mousePressed = false;
 	drawContour = false;
@@ -390,6 +393,32 @@ void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCurs
 		       stickyPage()->objectList());
 
 }
+
+void KPrCanvas::drawHelplines(QPainter *painter, const KoRect &rect)
+{
+    KPresenterDoc *doc=m_view->kPresenterDoc();
+    if(!doc->isReadWrite())
+        return;
+    QValueList<double>::Iterator i;
+    for(i = doc->horizHelplines().begin(); i != doc->horizHelplines().end(); ++i)
+    {
+/*
+        int vi = qRound(*i * zoomFactor()) + mYOffset;
+        if(vi >= rect.top() && vi <= rect.bottom())
+        painter->drawHorizLineRGB(rect.left(), rect.right(), vi, Qt::blue);
+*/
+    }
+
+    for(i = doc->vertHelplines().begin(); i != doc->vertHelplines().end(); ++i)
+    {
+/*
+        int hi = qRound(*i * zoomFactor()) + mXOffset;
+        if(hi >= rect.left() && hi <= rect.right())
+        painter->drawVertLineRGB(hi, rect.top(), rect.bottom(), Qt::blue);
+*/
+    }
+}
+
 
 /*================================================================*/
 // This one is used to generate the pixmaps for the HTML presentation,
@@ -1239,6 +1268,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
                 }
 	    }
+            //kdDebug()<<" horizontal helpline :"<< (m_view->kPresenterDoc()->indexOfHorizHelpline(e->pos().y()))<<endl;
+            //kdDebug()<<" vertical helpline :"<< (m_view->kPresenterDoc()->indexOfVertHelpline(e->pos().x()))<<endl;
+
+
 	    if ( !cursorAlreadySet )
 		setCursor( arrowCursor );
 	    else
@@ -1464,8 +1497,12 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 	oldMy = e->y();
 	p.end();
     }
+
     if ( !editMode && !drawMode && !presMenu->isVisible() && fillBlack )
+    {
 	setCursor( blankCursor );
+    }
+
 }
 
 /*==================== mouse double click ========================*/

@@ -344,6 +344,24 @@ public:
     void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
 
 
+    bool showHelplines() const {return m_bShowHelplines; }
+    void setShowHelplines(bool b);
+
+    QValueList<double> &horizHelplines() {return m_horizHelplines; }
+    QValueList<double> &vertHelplines() {return m_vertHelplines; }
+
+    void horizHelplines(const QValueList<double> &lines);
+    void vertHelplines(const QValueList<double> &lines);
+
+    int indexOfHorizHelpline(double pos);
+    int indexOfVertHelpline(double pos);
+    void updateHorizHelpline(int idx, double pos);
+    void updateVertHelpline(int idx, double pos);
+
+    void addHorizHelpline(double pos);
+    void addVertHelpline(double pos);
+
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -463,6 +481,7 @@ protected:
     bool m_bShowRuler;
     bool m_bShowStatusBar;
     bool m_bAllowAutoFormat;
+    bool m_bShowHelplines;
 
     double m_indent; // in pt
 
@@ -473,8 +492,12 @@ protected:
     KPrVariableCollection *m_varColl;
 
 private:
-    KPresenterView *m_kpresenterView;;
+    QValueList<double> m_horizHelplines;
+    QValueList<double> m_vertHelplines;
+
     QPtrList<KPrPage> m_pageList;
+
+    KPresenterView *m_kpresenterView;;
     KPrPage *m_initialActivePage;
     KPrPage *m_pageWhereLoadObject;
     KPrPage *m_stickyPage;

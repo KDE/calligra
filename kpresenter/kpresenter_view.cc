@@ -2361,6 +2361,8 @@ void KPresenterView::initGui()
 
     actionAllowAutoFormat->setChecked( m_pKPresenterDoc->allowAutoFormat() );
 
+    actionViewShowHelpLine->setChecked( m_pKPresenterDoc->showHelplines() );
+
     m_pKPresenterDoc->updateZoomRuler();
     updatePageInfo();
 }
@@ -2428,6 +2430,9 @@ void KPresenterView::setupActions()
                                           this, SLOT( viewFooter() ),
                                           actionCollection(), "view_footer" );
 
+    actionViewShowHelpLine= new KToggleAction( i18n( "HelpLines" ), 0,
+                                          this, SLOT( viewHelpLines() ),
+                                          actionCollection(), "view_helplines" );
 
     // ---------------- insert actions
 
@@ -5687,6 +5692,23 @@ void KPresenterView::editComment()
             delete commentDia;
         }
     }
+}
+
+void KPresenterView::viewHelpLines()
+{
+    bool state=actionViewShowHelpLine->isChecked();
+    m_pKPresenterDoc->setShowHelplines( state );
+    //todo update line
+}
+
+void KPresenterView::drawTmpHelpLine( const QPoint & pos, bool _horizontal)
+{
+    //todo
+}
+
+void KPresenterView::addHelpline(const QPoint & pos, bool _horizontal)
+{
+    //todo
 }
 
 #include <kpresenter_view.moc>

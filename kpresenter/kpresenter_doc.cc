@@ -186,6 +186,9 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_bDontCheckTitleCase=false;
     m_bShowRuler=true;
     m_bAllowAutoFormat = true;
+
+    m_bShowHelplines = false;
+
     usedSoundFile = QStringList();
     haveNotOwnDiskSoundFile = QStringList();
 
@@ -2718,6 +2721,61 @@ void KPresenterDoc::changeBackGroundSpellCheckTextObject(KPTextObject *obj)
     m_bgSpellCheck->startBackgroundSpellCheck();
 }
 
+void KPresenterDoc::setShowHelplines(bool b)
+{
+    //todo update canvas
+    m_bShowHelplines = b;
+}
+
+void KPresenterDoc::horizHelplines(const QValueList<double> &lines)
+{
+    m_horizHelplines = lines;
+
+}
+
+void KPresenterDoc::vertHelplines(const QValueList<double> &lines)
+{
+    m_vertHelplines = lines;
+}
+
+int KPresenterDoc::indexOfHorizHelpline(double pos)
+{
+    int ret = 0;
+    for(QValueList<double>::Iterator i = m_horizHelplines.begin(); i != m_horizHelplines.end(); ++i, ++ret)
+        if(pos - 4.0 < *i && pos + 4.0 > *i)
+            return ret;
+    return -1;
+}
+
+int KPresenterDoc::indexOfVertHelpline(double pos)
+{
+    int ret = 0;
+    for(QValueList<double>::Iterator i = m_vertHelplines.begin(); i != m_vertHelplines.end(); ++i, ++ret)
+        if(pos - 4.0 < *i && pos + 4.0 > *i)
+            return ret;
+    return -1;
+
+}
+
+void KPresenterDoc::updateHorizHelpline(int idx, double pos)
+{
+    m_horizHelplines[idx] = pos;
+}
+
+void KPresenterDoc::updateVertHelpline(int idx, double pos)
+{
+    m_vertHelplines[idx] = pos;
+}
+
+void KPresenterDoc::addHorizHelpline(double pos)
+{
+    m_horizHelplines.append(pos);
+}
+
+void KPresenterDoc::addVertHelpline(double pos)
+{
+    m_vertHelplines.append(pos);
+}
 
 
 #include <kpresenter_doc.moc>
