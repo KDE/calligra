@@ -18,16 +18,30 @@
 */
 
 #include "KWordTextFrameSetIface.h"
-
+#include "KWordViewIface.h"
 #include "kwtextframeset.h"
+#include <KoTextViewIface.h>
+#include "kwview.h"
 #include <kotextobject.h>
+#include "kwcanvas.h"
+#include "kwdoc.h"
 #include <kapplication.h>
 #include <dcopclient.h>
+
 
 KWordTextFrameSetIface::KWordTextFrameSetIface( KWTextFrameSet *_frame )
     : DCOPObject()
 {
    m_frametext = _frame;
+}
+
+DCOPRef KWordTextFrameSetIface::startEditing()
+{
+    KWDocument *doc=m_frametext->kWordDocument();
+    QPtrList <KWView> lst=doc->getAllViews();
+    lst.at(0)->getGUI()->canvasWidget()->checkCurrentTextEdit(m_frametext);
+    return DCOPRef( kapp->dcopClient()->appId(),
+		    (static_cast<KWTextFrameSetEdit *>( lst.at(0)->getGUI()->canvasWidget()->currentFrameSetEdit()))->dcopObject()->objId() );
 }
 
 bool KWordTextFrameSetIface::hasSelection() const

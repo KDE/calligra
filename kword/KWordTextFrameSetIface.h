@@ -26,6 +26,7 @@
 #include <qstring.h>
 #include <qcolor.h>
 class KWTextFrameSet;
+class KWordViewIface;
 
 class KWordTextFrameSetIface :  virtual public DCOPObject
 {
@@ -34,6 +35,7 @@ public:
     KWordTextFrameSetIface( KWTextFrameSet *_frametext );
 
 k_dcop:
+    virtual DCOPRef startEditing();
     bool hasSelection() const;
     int numberOfParagraphs();
     QString name() const;

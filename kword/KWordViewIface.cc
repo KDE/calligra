@@ -30,7 +30,6 @@ KWordViewIface::KWordViewIface( KWView *view_ )
     view = view_;
 }
 
-
 void KWordViewIface::fileStatistics()
 {
     view->fileStatistics();

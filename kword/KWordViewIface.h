@@ -31,7 +31,7 @@ class KWordViewIface : public KoViewIface
     K_DCOP
 public:
     KWordViewIface( KWView *view_ );
-
+    KWView * getView(){return view;}
 k_dcop:
     virtual void fileStatistics();
     virtual void editFind();
@@ -59,7 +59,6 @@ k_dcop:
     virtual void formatFont();
     virtual void formatParagraph();
     virtual void formatPage();
-
 private:
     KWView *view;
 

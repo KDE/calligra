@@ -170,6 +170,9 @@ public:
 
     void inlinePictureStarted();
 
+    bool checkCurrentTextEdit( KWFrameSet * fs );
+
+
 protected:
     void applyGrid( KoPoint &p );
     void applyAspectRatio( double ratio, KoRect& insRect );
@@ -209,8 +212,6 @@ protected:
 
     void terminateCurrentEdit();
     bool checkCurrentEdit( KWFrameSet * fs );
-    //for dnd
-    bool checkCurrentTextEdit( KWFrameSet * fs );
 
     void insertInlineTable();
 
