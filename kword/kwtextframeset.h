@@ -138,7 +138,7 @@ public:
                              const QString & cmdName = QString::null );
     void replaceSelection( QTextCursor * cursor, const QString & replacement,
                            int selectionId, const QString & cmdName );
-    KCommand * removeSelectedTextCommand( QTextCursor * cursor, int selectionId );
+    KCommand * removeSelectedTextCommand( QTextCursor * cursor, int selectionId ,KWAnchor * anchor=0L);
 
     void undo();
     void redo();

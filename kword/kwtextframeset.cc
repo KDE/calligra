@@ -2621,7 +2621,7 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId, 
     undoRedoInfo.clear();
 }
 
-KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int selectionId )
+KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int selectionId,KWAnchor * anchor )
 {
     undoRedoInfo.clear();
     textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
@@ -2635,14 +2635,28 @@ KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int 
 
     textdoc->removeSelectedText( selectionId, cursor );
 
+    KMacroCommand *macro=new KMacroCommand(QString::null);
+
     QTextCommand * cmd = new KWTextDeleteCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
                                                   undoRedoInfo.text.rawData(),
                                                   undoRedoInfo.customItemsMap,
                                                   undoRedoInfo.oldParagLayouts );
-    textdoc->addCommand( cmd );
+    textdoc->addCommand(cmd);
+
+    if(anchor)
+    {
+        KCommand *itemCmd = anchor->deleteCommand();
+        macro->addCommand(itemCmd);
+        itemCmd->execute(); // the item-specific delete stuff hasn't been done
+        anchor->setDeleted( true );
+    }
+
+
     undoRedoInfo.type = UndoRedoInfo::Invalid; // we don't want clear() to create a command
     undoRedoInfo.clear();
-    return new KWTextCommand( this, /*cmd, */QString::null );
+    macro->addCommand(new KWTextCommand( this, /*cmd, */QString::null ));
+
+    return macro;
 }
 
 void KWTextFrameSet::replaceSelection( QTextCursor * cursor, const QString & replacement,
@@ -3045,7 +3059,8 @@ KCommand * KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )
     textdoc->setSelectionStart( HighlightSelection, &c );
     c.setIndex( anchor->index() + 1 );
     textdoc->setSelectionEnd( HighlightSelection, &c );
-    KCommand *cmd = removeSelectedTextCommand( &c, HighlightSelection );
+    KCommand *cmd = removeSelectedTextCommand( &c, HighlightSelection,anchor );
+
     m_doc->repaintAllViews();
     return cmd;
 }
