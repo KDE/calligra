@@ -238,7 +238,15 @@
                 strikeOut (0 | 1) #REQUIRED
                 whitespace NMTOKEN #IMPLIED
 		color	CDATA	#REQUIRED
-                textbackcolor CDATA #REQUIRES>
+                textbackcolor CDATA #REQUIRES
+                VERTALIGN CDATA #REQUIRE>
+
+<!-- VERTALIGN
+            Super/sub script.
+            0 = Normal
+            1 = Subscript 
+            2 = Superscript
+-->
 
 <!ELEMENT PEN EMPTY>
 <!ATTLIST PEN	color   CDATA	#REQUIRED
