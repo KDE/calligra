@@ -433,13 +433,13 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     resolutionX->setValidator( new KFloatValidator( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()) ,true, resolutionX ) );
     grid->addWidget(resolutionX ,1,0);
 
-    lab=new QLabel(i18n("Resolution X: (%1)").arg(doc->getUnitName()), tmpQGroupBox);
+    lab=new QLabel(i18n("Resolution Y: (%1)").arg(doc->getUnitName()), tmpQGroupBox);
     grid->addWidget(lab ,2,0);
 
     resolutionY = new KLineEdit(tmpQGroupBox);
     resolutionY->setText( KoUnit::userValue( doc->getGridY(), doc->getUnit() ) );
     resolutionY->setValidator( new KFloatValidator( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()) ,true, resolutionY ) );
-    grid->addWidget(resolutionY , 2,0);
+    grid->addWidget(resolutionY , 3,0);
 }
 
 void ConfigureMiscPage::apply()
