@@ -486,13 +486,13 @@ public:
     KAction* adjust;
 
     // sheet/workbook operations
-    KAction* insertTable;
-    KAction* menuInsertTable;
-    KAction* removeTable;
-    KAction* renameTable;
-    KAction* hideTable;
-    KAction* showTable;
-    KAction* tableFormat;
+    KAction* insertSheet;
+    KAction* menuInsertSheet;
+    KAction* removeSheet;
+    KAction* renameSheet;
+    KAction* hideSheet;
+    KAction* showSheet;
+    KAction* autoFormat;
     KAction* areaName;
     KAction* showArea;
     KAction* insertSeries;
@@ -911,34 +911,34 @@ void ViewPrivate::initActions()
   actions->adjust->setToolTip(i18n("Adjusts row/column size so that the contents will fit."));
 
   // -- sheet/workbook actions --
-  actions->insertTable = new KAction( i18n("Insert Sheet"),"inserttable",
+  actions->insertSheet = new KAction( i18n("Insert Sheet"),"inserttable",
       0, view, SLOT( insertTable() ), ac, "insertTable" );
-  actions->insertTable->setToolTip(i18n("Insert a new sheet."));
+  actions->insertSheet->setToolTip(i18n("Insert a new sheet."));
 
   // same action as insertTable, but without 'insert' in the caption
-  actions->menuInsertTable = new KAction( i18n("&Sheet"),"inserttable",
+  actions->menuInsertSheet = new KAction( i18n("&Sheet"),"inserttable",
       0, view, SLOT( insertTable() ), ac, "menuInsertTable" );
-  actions->menuInsertTable->setToolTip(i18n("Insert a new sheet."));
+  actions->menuInsertSheet->setToolTip(i18n("Insert a new sheet."));
 
-  actions->removeTable = new KAction( i18n("Remove Sheet"), "delete_table",
+  actions->removeSheet = new KAction( i18n("Remove Sheet"), "delete_table",
       0, view, SLOT( removeTable() ), ac, "removeTable" );
-  actions->removeTable->setToolTip(i18n("Remove the active sheet."));
+  actions->removeSheet->setToolTip(i18n("Remove the active sheet."));
 
-  actions->renameTable=new KAction( i18n("Rename Sheet..."),
+  actions->renameSheet=new KAction( i18n("Rename Sheet..."),
       0, view, SLOT( slotRename() ), ac, "renameTable" );
-  actions->renameTable->setToolTip(i18n("Rename the active sheet."));
+  actions->renameSheet->setToolTip(i18n("Rename the active sheet."));
 
-  actions->showTable = new KAction(i18n("Show Sheet..."),
+  actions->showSheet = new KAction(i18n("Show Sheet..."),
       0, view, SLOT( showTable()), ac, "showTable" );
-  actions->showTable->setToolTip(i18n("Show a hidden sheet."));
+  actions->showSheet->setToolTip(i18n("Show a hidden sheet."));
 
-  actions->hideTable = new KAction(i18n("Hide Sheet"),
+  actions->hideSheet = new KAction(i18n("Hide Sheet"),
       0, view, SLOT( hideTable() ), ac, "hideTable" );
-  actions->hideTable->setToolTip(i18n("Hide the active sheet."));
+  actions->hideSheet->setToolTip(i18n("Hide the active sheet."));
 
-  actions->tableFormat = new KAction( i18n("AutoFormat..."),
+  actions->autoFormat = new KAction( i18n("AutoFormat..."),
       0, view, SLOT( tableFormat() ), ac, "tableFormat" );
-  actions->tableFormat->setToolTip(i18n("Set the worksheet formatting."));
+  actions->autoFormat->setToolTip(i18n("Set the worksheet formatting."));
 
   actions->areaName = new KAction( i18n("Area Name..."),
       0, view, SLOT( setAreaName() ), ac, "areaname" );
@@ -1350,7 +1350,7 @@ void ViewPrivate::adjustActions( bool mode )
   actions->borderOutline->setEnabled( mode );
   actions->borderRemove->setEnabled( mode );
   actions->borderColor->setEnabled( mode );
-  actions->removeTable->setEnabled( mode );
+  actions->removeSheet->setEnabled( mode );
   actions->autoSum->setEnabled( mode );
   //   actions->scripts->setEnabled( mode );
   actions->defaultFormat->setEnabled( mode );
@@ -1383,7 +1383,7 @@ void ViewPrivate::adjustActions( bool mode )
   actions->createStyle->setEnabled( mode );
   actions->selectStyle->setEnabled( mode );
 
-  actions->tableFormat->setEnabled( false );
+  actions->autoFormat->setEnabled( false );
   actions->sort->setEnabled( false );
   actions->mergeCell->setEnabled( false );
   actions->insertChartFrame->setEnabled( false );
@@ -1397,9 +1397,9 @@ void ViewPrivate::adjustActions( bool mode )
   actions->fillDown->setEnabled( false );
 
   if ( mode && doc && workbook && !workbook->isProtected() )
-    actions->renameTable->setEnabled( true );
+    actions->renameSheet->setEnabled( true );
   else
-    actions->renameTable->setEnabled( false );
+    actions->renameSheet->setEnabled( false );
 
   view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
 }
@@ -1429,25 +1429,25 @@ void ViewPrivate::adjustActions( KSpreadSheet* sheet, KSpreadCell* cell )
 
 void ViewPrivate::adjustWorkbookActions( bool mode )
 {
-  actions->hideTable->setEnabled( mode );
-  actions->showTable->setEnabled( mode );
-  actions->insertTable->setEnabled( mode );
-  actions->menuInsertTable->setEnabled( mode );
-  actions->removeTable->setEnabled( mode );
+  actions->hideSheet->setEnabled( mode );
+  actions->showSheet->setEnabled( mode );
+  actions->insertSheet->setEnabled( mode );
+  actions->menuInsertSheet->setEnabled( mode );
+  actions->removeSheet->setEnabled( mode );
 
   if ( mode )
   {
     if ( activeSheet && !activeSheet->isProtected() )
     {
       bool state = ( workbook->visibleSheets().count() > 1 );
-      actions->removeTable->setEnabled( state );
-      actions->hideTable->setEnabled( state );
+      actions->removeSheet->setEnabled( state );
+      actions->hideSheet->setEnabled( state );
     }
-    actions->showTable->setEnabled( workbook->hiddenSheets().count() > 0 );
+    actions->showSheet->setEnabled( workbook->hiddenSheets().count() > 0 );
     if ( activeSheet->isProtected() )
-      actions->renameTable->setEnabled( false );
+      actions->renameSheet->setEnabled( false );
     else
-      actions->renameTable->setEnabled( true );
+      actions->renameSheet->setEnabled( true );
   }
 }
 
@@ -2321,7 +2321,7 @@ void KSpreadView::initialPosition()
     updateBorderButton();
     updateShowTableMenu();
 
-    d->actions->tableFormat->setEnabled(false);
+    d->actions->autoFormat->setEnabled(false);
     d->actions->sort->setEnabled(false);
     d->actions->mergeCell->setEnabled(false);
     d->actions->createStyle->setEnabled(false);
@@ -2504,13 +2504,13 @@ void KSpreadView::updateReadWrite( bool readwrite )
   d->actions->undo->setEnabled( false );
   if ( !d->doc || !d->workbook || d->workbook->isProtected() )
   {
-    d->actions->showTable->setEnabled( false );
-    d->actions->hideTable->setEnabled( false );
+    d->actions->showSheet->setEnabled( false );
+    d->actions->hideSheet->setEnabled( false );
   }
   else
   {
-    d->actions->showTable->setEnabled( true );
-    d->actions->hideTable->setEnabled( true );
+    d->actions->showSheet->setEnabled( true );
+    d->actions->hideSheet->setEnabled( true );
   }
   d->actions->gotoCell->setEnabled( true );
   d->actions->viewZoom->setEnabled( true );
@@ -3652,8 +3652,8 @@ void KSpreadView::insertTable()
 
   if ( d->workbook->visibleSheets().count() > 1 )
   {
-    d->actions->removeTable->setEnabled( true );
-    d->actions->hideTable->setEnabled( true );
+    d->actions->removeSheet->setEnabled( true );
+    d->actions->hideSheet->setEnabled( true );
   }
 
   d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
@@ -6386,7 +6386,7 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_table,
 
     bool simpleSelection = d->selectionInfo->singleCellSelection()
       || colSelected || rowSelected;
-    d->actions->tableFormat->setEnabled( !simpleSelection );
+    d->actions->autoFormat->setEnabled( !simpleSelection );
     d->actions->sort->setEnabled( !simpleSelection );
     d->actions->mergeCell->setEnabled( !simpleSelection );
     d->actions->fillRight->setEnabled( !simpleSelection );
@@ -6760,21 +6760,21 @@ void KSpreadView::popupTabBarMenu( const QPoint & _point )
     bool state = ( d->workbook->visibleSheets().count() > 1 );
     if ( d->activeSheet && d->activeSheet->isProtected() )
     {
-      d->actions->removeTable->setEnabled( false );
-      d->actions->hideTable->setEnabled( false );
+      d->actions->removeSheet->setEnabled( false );
+      d->actions->hideSheet->setEnabled( false );
     }
     else
     {
-      d->actions->removeTable->setEnabled( state);
-      d->actions->hideTable->setEnabled( state );
+      d->actions->removeSheet->setEnabled( state);
+      d->actions->hideSheet->setEnabled( state );
     }
     if ( !d->doc || !d->workbook || d->workbook->isProtected() )
     {
-      d->actions->insertTable->setEnabled( false );
-      d->actions->renameTable->setEnabled( false );
-      d->actions->showTable->setEnabled( false );
-      d->actions->hideTable->setEnabled( false );
-      d->actions->removeTable->setEnabled( false );
+      d->actions->insertSheet->setEnabled( false );
+      d->actions->renameSheet->setEnabled( false );
+      d->actions->showSheet->setEnabled( false );
+      d->actions->hideSheet->setEnabled( false );
+      d->actions->removeSheet->setEnabled( false );
     }
     static_cast<QPopupMenu*>(factory()->container("menupage_popup",this))->popup(_point);
   }
@@ -6796,8 +6796,8 @@ void KSpreadView::removeTable( KSpreadSheet *_t )
   setActiveTable( d->workbook->findTable( d->workbook->visibleSheets().first() ));
 
   bool state = d->workbook->visibleSheets().count() > 1;
-  d->actions->removeTable->setEnabled( state );
-  d->actions->hideTable->setEnabled( state );
+  d->actions->removeSheet->setEnabled( state );
+  d->actions->hideSheet->setEnabled( state );
   d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
@@ -6811,8 +6811,8 @@ void KSpreadView::insertTable( KSpreadSheet* table )
   }
 
   bool state = ( d->workbook->visibleSheets().count() > 1 );
-  d->actions->removeTable->setEnabled( state );
-  d->actions->hideTable->setEnabled( state );
+  d->actions->removeSheet->setEnabled( state );
+  d->actions->hideSheet->setEnabled( state );
   d->doc->emitEndOperation( table->visibleRect( d->canvas ) );
 }
 
@@ -6825,9 +6825,9 @@ void KSpreadView::updateShowTableMenu()
 {
   d->doc->emitBeginOperation( false );
   if ( d->activeSheet->isProtected() )
-    d->actions->showTable->setEnabled( false );
+    d->actions->showSheet->setEnabled( false );
   else
-    d->actions->showTable->setEnabled( d->workbook->hiddenSheets().count() > 0 );
+    d->actions->showSheet->setEnabled( d->workbook->hiddenSheets().count() > 0 );
   d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
