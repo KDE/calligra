@@ -157,7 +157,7 @@ FormManager::createActions(KActionCollection *parent, KMainWindow *client)
         	}
 	}
 
-	m_style->setToolTip(i18n("Set the current style to view."));
+	m_style->setToolTip(i18n("Set the current view style."));
 	m_style->setMenuAccelsEnabled(true);
 	actions.append(m_style);
 

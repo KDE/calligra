@@ -261,8 +261,7 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 
 ==== Query GUI Designer TODO: ======
 - add tables dropping from the browser
-- add a dialog for inserting multiple tables a time
-- make actions work
+- add a dialog for inserting multiple tables at a time
 - fix connections drawing
 - make "1" and "inf" signs a bit larger (scalable)
 - 'criteria' and 'totals' are unused yet
@@ -310,15 +309,15 @@ TODO: RENAME IN FORMS:
  -s/HBox/Horizontal Box ?
  -s/VBox/Vertical Box ?
  -s/Grid/Grid Box
- -s/A widget with this name already exists. Please choose another name or rename 
+ +s/A widget with this name already exists. Please choose another name or rename 
 this widget before./A widget with this name already exists. Please choose another name or rename existing widget.
- -s/Set the current style to view./Set the current view style.
- -app name: s/A KDE KPart Application/
- -s/&Name :/&Name:/
- -s/&Size :/&Size:/
- -s/Edit Pixmap Collection : %1/Edit Pixmap Collection: %1/
- -s/Do you really want/Do you want
- -"<qt>Do you really want to remove <b>%1</b> from %2 ?</qt>" -impossible 
+ +s/Set the current style to view./Set the current view style.
+ +app name: s/A KDE KPart Application/
+ +s/&Name :/&Name:/
+ +s/&Size :/&Size:/
+ +s/Edit Pixmap Collection : %1/Edit Pixmap Collection: %1/
+ +s/Do you really want/Do you want
+ +"<qt>Do you really want to remove <b>%1</b> from %2 ?</qt>" -impossible 
    to effectively translate
  
 TODO:

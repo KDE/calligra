@@ -33,7 +33,7 @@ These are disabled by default after Kexi installation.
 <ul>
 <li>File-based projects are only supported</li>
 <li>Table designer works only for new designs, altering existing table not available</li>
-<li>Queries: saving, comupting totals, setting criterias is temporary not available. 
+<li>Queries: saving, computing totals, setting criterias is temporary not available. 
 Execution works without joining.</li>
 </ul>
 </p>

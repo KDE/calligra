@@ -8,8 +8,7 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
-static const char description[] =
-    I18N_NOOP("A KDE KPart Application");
+static const char description[] = "A KDE KPart Application";
 
 static const char version[] = "0.1";
 
@@ -21,7 +20,7 @@ static KCmdLineOptions options[] =
 
 int main(int argc, char **argv)
 {
-    KAboutData about("test", I18N_NOOP("test"), version, description,
+    KAboutData about("test", "test", version, description,
                      KAboutData::License_GPL, "(C) 2003 Cédric Pasteur", 0, 0, "cedric.pasteur@free.fr");
     about.addAuthor( "Cédric Pasteur", 0, "cedric.pasteur@free.fr" );
     KCmdLineArgs::init(argc, argv, &about);

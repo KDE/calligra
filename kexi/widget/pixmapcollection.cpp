@@ -148,7 +148,7 @@ LoadIconDialog::LoadIconDialog(QWidget *parent)
 	QGridLayout *l = new QGridLayout(frame, 2, 3, 0, 6);
 
 	// Name input
-	QLabel *name = new QLabel(i18n("&Name :"), frame);
+	QLabel *name = new QLabel(i18n("&Name:"), frame);
 	l->addWidget(name, 0, 0);
 	name->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 	m_nameInput = new KLineEdit("kexi", frame);
@@ -156,7 +156,7 @@ LoadIconDialog::LoadIconDialog(QWidget *parent)
 	name->setBuddy(m_nameInput);
 
 	// Choose size
-	QLabel *size = new QLabel(i18n("&Size :"), frame);
+	QLabel *size = new QLabel(i18n("&Size:"), frame);
 	l->addWidget(size, 1, 0);
 	size->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 
@@ -222,7 +222,8 @@ QString LoadIconDialog::iconName()
 
 /// Pixmap Collection Editor Dialog
 PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWidget *parent)
-: KDialogBase(parent, "pixcollection_dialog", true, i18n("Edit Pixmap Collection : %1").arg(collection->collectionName()), Close, Close, false)
+: KDialogBase(parent, "pixcollection_dialog", true, 
+	i18n("Edit Pixmap Collection: %1").arg(collection->collectionName()), Close, Close, false)
 {
 	m_collection = collection;
 	QFrame *frame = makeMainWidget();
@@ -298,8 +299,9 @@ PixmapCollectionEditor::removeItem()
 {
 	QIconViewItem *item = m_iconView->currentItem();
 
-	int confirm = KMessageBox::questionYesNo(parentWidget(), i18n("<qt>Do you really want to remove <b>%1</b> from %2 ?</qt>").arg(item->text())
-	   .arg(m_collection->collectionName()));
+	int confirm = KMessageBox::questionYesNo(parentWidget(), QString("<qt>")+
+		i18n("Do you want to remove item \"%1\" from collection \"%2\"?")
+		.arg(item->text()).arg(m_collection->collectionName()) + "</qt>");
 	if(confirm == KMessageBox::No)
 		return;
 
