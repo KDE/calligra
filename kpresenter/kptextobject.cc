@@ -123,6 +123,9 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
              m_doc, SLOT( slotRepaintChanged( KPTextObject * ) ) );
     connect(m_textobj, SIGNAL( showFormatObject(const KoTextFormat &) ),
              SLOT( slotFormatChanged(const KoTextFormat &)) );
+    connect( m_textobj, SIGNAL( afterFormatting( int, KoTextParag*, bool* ) ),
+             SLOT( slotAfterFormatting( int, KoTextParag*, bool* ) ) );
+
 }
 
 KPTextObject::~KPTextObject()
@@ -1054,6 +1057,15 @@ void KPTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
     m_textobj->applyStyleChange( changedStyle, paragLayoutChanged, formatChanged );
 }
 
+
+void KPTextObject::slotAfterFormatting( int, KoTextParag* lastFormatted, bool* )
+{
+    if( lastFormatted )
+    {
+        setSize( getRect().width(), m_doc->zoomHandler()->layoutUnitPtToPt(lastFormatted->rect().height())+getRect().height());
+        m_textobj->setLastFormattedParag( 0 );
+    }
+}
 
 KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
     : KoTextView( txtObj->textObject() )
