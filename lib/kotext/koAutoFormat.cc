@@ -1084,9 +1084,9 @@ KCommand *KoAutoFormat::autoFormatWord( KoTextCursor* textEditCursor, KoTextPara
         {
             KoAutoFormatEntry* it = 0L;
             if ( _allLanguages )
-                it = m_allLanguages[_wordArray[i].lower()];
+                it = m_allLanguages[ _wordArray[i] ];
             else
-                it = m_entries[_wordArray[i].lower()];
+                it = m_entries[ _wordArray[i] ];
             if ( _wordArray[i]!=0  && it )
             {
                 unsigned int length = _wordArray[i].length();
