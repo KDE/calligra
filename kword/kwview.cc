@@ -425,7 +425,7 @@ void KWView::setupActions()
     actionExtraCreateTemplate->setToolTip( i18n( "Save this document and use it later as a template" ) );
     actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
 
-    actionFileStatistics = new KAction( i18n( "Statistics..." ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
+    actionFileStatistics = new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
     actionFileStatistics->setToolTip( i18n( "Sentence, word and letter counts for this document" ) );
     actionFileStatistics->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
     // -------------- Edit actions
@@ -618,7 +618,7 @@ void KWView::setupActions()
                                             actionCollection(), "insert_variable" );
 
     // The last argument is only needed if a submenu is to be created
-    addVariableActions( VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("Document &Information...") );
+    addVariableActions( VT_FIELD, KoFieldVariable::actionTexts(), actionInsertVariable, i18n("Document &Information") );
     addVariableActions( VT_DATE, KoDateVariable::actionTexts(), actionInsertVariable, i18n("&Date") );
     addVariableActions( VT_TIME, KoTimeVariable::actionTexts(), actionInsertVariable, i18n("&Time") );
     addVariableActions( VT_PGNUM, KoPgNumVariable::actionTexts(), actionInsertVariable, i18n("&Page") );
@@ -709,14 +709,14 @@ void KWView::setupActions()
     actionFormatPage->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
 
 
-    actionFormatFrameStylist = new KAction( i18n( "&Frame Style Manager..." ), 0 /*shortcut?*/,
+    actionFormatFrameStylist = new KAction( i18n( "&Frame Style Manager" ), 0 /*shortcut?*/,
                                 this, SLOT( extraFrameStylist() ),
                                 actionCollection(), "frame_stylist" );
     actionFormatFrameStylist->setToolTip( i18n( "Change attributes of framestyles." ) );
     actionFormatFrameStylist->setWhatsThis( i18n( "Change background and borders of framestyles.<p>Multiple framestyles can be changed using the dialog box." ) );
 
 
-    actionFormatStylist = new KAction( i18n( "&Style Manager..." ), ALT + CTRL + Key_S,
+    actionFormatStylist = new KAction( i18n( "&Style Manager" ), ALT + CTRL + Key_S,
                         this, SLOT( extraStylist() ),
                         actionCollection(), "format_stylist" );
     actionFormatStylist->setToolTip( i18n( "Change attributes of styles." ) );
