@@ -1,8 +1,117 @@
-<sect1 id="graphics"><title>Graphics</title><para></para>
-<sect2 id="insert-graphics"><title>Insert Pictures</title><para></para></sect2>
-<sect2 id="insert-clipart"><title>Insert Clipart</title><para></para></sect2>
-<sect2 id="resize-Graphics"><title>Resize Graphics</title><para></para></sect2>
-<sect2 id="move-graphics"><title>Move Graphics</title><para></para></sect2>
-<sect2 id="delete-graphics"><title>Delete Graphics</title><para></para></sect2>
+<sect1 id="graphics"><title>Graphics</title>
+<para>&kword; is very good at handling textual information.  &kword; can also be used to incorporate
+graphical images with text.  </para>
+<para>Pictures can be inserted into a document as either <emphasis>framed</emphasis> or <emphasis>inline</emphasis> images.</para>
+<para>Framed images are pictures that have a frame around them.  The frame around a picture functions 
+exactly the same as a frame around text.  It contains the picture and determines the size and shape of the picture.</para>
+<para>An inline image has frame around it, but this frame is inserted <emphasis>within</emphasis> the current text
+frame. If text is inserted in front of the picture, the picture travels down the frame just like any text would.  This means the picture will
+stay in the same area of the page as the text that surrounds it.</para>
+<para>Framed pictures, on the other hand, need to be moved by hand on the page.  </para>
+<sect2 id="insert-graphics"><title>Insert Graphics</title>
+<para>There are three ways to insert a picture into a document:</para>
+<itemizedlist>
+<listitem>
+<para>By selecting <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Picture</guimenuitem></menuchoice> from
+the Menu Bar</para>
+</listitem>
+
+<listitem>
+<para>Using the keyboard shortcut: <keycap>F3</keycap></para>
+</listitem>
+
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="fpicture.png"
+format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
+</listitem>
+</itemizedlist>
+
+<para>All three methods create a file selection dialog to appear.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="insgrph1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Use this dialog to select the picture.</para>
+
+<para>For more information on using this dialog, click <link linkend="file-dialog">here</link>.</para>
+
+<para>Once the appropriate picture file is located, click on the filename once with the &LMB;.  Click
+<guibutton>OK</guibutton> to continue.</para>
+<para>A new dialog box appears.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="insgrph2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The right half of this dialog box contains a preview window.  The picture should be visible in this window.</para>
+<para>The left part of this box contains one button and two checkboxes.</para>
+<variablelist>
+<varlistentry>
+<term><guibutton>Choose Image</guibutton></term>
+<listitem><para>Click this button and &kword; will open a
+new file dialog to open a different picture.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Insert Picture Inline</guilabel></term>
+<listitem><para>If there is a mark in this checkbox, the picture will be an inline picture.  If there is no mark, a new frame will be
+created.  For details on the differences, see the <link linkend="graphics">introduction</link>.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Retain original aspect ratio</guilabel></term>
+<listitem><para>Aspect ratio is defined in the &kword; <link linkend="defaspectratio">glossary</link>..</para>
+<para>If a there is a mark in this checkbox, &kword; will not allow any change the aspect ratio of the picture.  This prevents
+inappropriate stretching and compressing of the image.  It will still be possible to change the overall size of the image, but it 
+will not be possible to change the horizontal measurement without also changing the vertical measurement.</para>
+<para>If there is no mark in this checkbox, the horizontal and vertical sizes of the picture can be changed independently.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<para>To insert the picture, click <guibutton>OK</guibutton>.  To abort the picture entirely, click <guibutton>Cancel</guibutton>.</para>
+<para>If an inline picture was selected, click with the mouse in the appropriate location.   The picture will be inserted.</para>
+<para>If a framed picture was selected, the mouse cursor will change to crosshairs.  Locate one corner of the location of the new picture
+frame with the mouse.  Click and hold the &LMB; down.  Drag the cursor to adjust the size of the picture frame.  When the size of the 
+picture frame is correct, release the &LMB;.  &kword; will insert the picture into the frame, and resize the picture to fit within the
+frame.</para>
+</sect2>
+<sect2 id="resize-Graphics"><title>Changing the size of a picture</title>
+<para>Resizing a picture is done by changing the size of the frame that surrounds it.  &kword; will automatically change the picture to fill the
+entire frame.</para>
+<para>For information on changing the size of a frame, see <link linkend="resize-frame">Resizing frames</link>. </para>
+</sect2>
+<sect2 id="move-graphics"><title>Move Pictures</title>
+<para>The only way to move an inline image around on the page, is to alter the flow of the text that surrounds it.  If this
+is causing problems, the picture can always be <link linkend="switch-graphics">changed to a framed picture</link>.</para>
+<para>To move a framed picture in &kword; is the same as <link linkend="move-frame">moving any frame</link> in &kword;.</para>
+<para></para>
+</sect2>
+<sect2 id="delete-graphics"><title>Delete Graphics</title>
+<para>To delete a graphic in &kword;, simply <link linkend="delete-frame">delete the frame</link> around it.</para>
+</sect2>
+<sect2 id="switch-graphics"><title>Switching between inline and framed pictures</title>
+<para>Switching between inline pictures and framed pictures is easy in &kword;.</para>
+<sect3 id="inline-to-frame"><title>Change an inline picture to a framed picture</title>
+<para>To change in inline picture to a framed picture, click on the desired picture with the &LMB; once.  This selects the frame
+of the picture.</para>
+<para>Now click and hold with the &RMB; and a submenu will appear.  In the submenu, is a menu item labeled
+<guilabel>Inline frame</guilabel>, with a mark in front of it.  Select this option by clicking with the &LMB;.</para>
+<para>The frame is now
+an independent and can be moved around freely.</para>
+</sect3>
+<sect3 id="frame-to-inline"><title>Change a framed picture to an inline picture</title>
+<para>To change a framed picture into an inline picture, click on the desired picture with the &LMB; once.  This selects the frame
+of the picture.</para>
+<para>Now click and hold with the &RMB; and a submenu will appear.  In the submenu, is a menu item labeled
+<guilabel>Inline frame</guilabel>.  Select this option by clicking with the &LMB;.</para>
+<para>&kword; has now converted this to an inline frame.</para>
+<note><para>&kword; tries to make a reasonable estimation of where in the text the inline image should be inserted.</para>
+</note>
+</sect3>
+</sect2>
 </sect1>
 

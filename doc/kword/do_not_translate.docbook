@@ -3,47 +3,52 @@
 
 <para>Please do not translate this file.....IT WILL BE DELETED PRIOR TO RELEASE!</para> 
 <para>Listed below, is the status of each section of the documentation as I see it.</para>
-<para>If the section is listed as <emphasis>Done</emphasis>, it is in final form to my knowledge. Please let me know of any comments or any inaccuracies you notice.</para>
-<para>If the section is listed as <emphasis>Needs Updates</emphasis> or <emphasis>Not Written</emphasis>, I am still interested in any comments you have, but it still needs work.</para>
+<para>If the section is listed as <emphasis>Written</emphasis>, it is in near final form to my knowledge. I hope to be able to
+check each section individually prior to release.  Please let me <email>mpmcbride7@yahoo.com</email> know of any comments or any inaccuracies you notice.</para>
+<para>If the section is listed as <emphasis>Needs Updates</emphasis> or <emphasis>Not Written</emphasis>, 
+I am still interested in any comments you have, but it still needs major work.</para>
+<para>If the section is listed as <emphasis>Checked</emphasis>, then the chapter has been reviewed a second time for content, flow and 
+crosslinking.  The section has been run through a spell checker, checkXML and meinproc and is correct
+as of the date included in the note.</para>
 
 <informaltable>
 <tgroup cols="3">
 <tbody>
 <row><entry>Introduction</entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Introduction </entry><entry>Done</entry></row>
-<row><entry></entry><entry>What parts of this guide should I read? </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Introduction </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>What parts of this guide should I read? </entry><entry>Checked (March 19, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Fundamentals </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Starting KWord </entry><entry>Done</entry></row>
-<row><entry></entry><entry>An Introduction to Templates </entry><entry>Done</entry></row>
-<row><entry></entry><entry>The difference between Text Oriented and Page Layout templates </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Starting KWord </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>An Introduction to Templates </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>The difference between Text Oriented and Page Layout templates </entry><entry>Checked (March 19, 2002)</entry></row>
 <row><entry></entry></row>
 
-<row><entry>Step by Step Tutorial </entry><entry></entry><entry>Done</entry></row>
+<row><entry>Step by Step Tutorial </entry><entry></entry><entry>Checked (March 19, 2002)</entry></row>
 
 <row><entry></entry></row>
 
 <row><entry>The KWord Screen </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Overview </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Using Rulers </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Overview </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Using Rulers </entry><entry>Checked (March 19, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>DG:Document Storage and Printing </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Beginning a New Document </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Saving a Document </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Retrieving a Saved Document </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Printing A Document </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Beginning a New Document </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Saving a Document </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Retrieving a Saved Document </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Printing A Document </entry><entry>Checked (March 19, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>DG: Editing your Document </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Selecting Text </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Using Multiple Views </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Undo/Redo </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Cut/Copy/Paste and the Clipboard </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Selecting Text </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Using Multiple Views </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Undo/Redo </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Cut/Copy/Paste and the Clipboard </entry><entry>Checked (March 19, 2002)</entry></row>
 <row><entry></entry><entry>Finding and Replacing Text </entry><entry>Stable-Needs Updates-Questions pending</entry></row>
-<row><entry></entry><entry>Spell Checking </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Autocorrection </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Spell Checking </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Autocorrection </entry><entry>Written-Unstable-Message changes</entry></row>
 <row><entry></entry></row>
 
 <row><entry>DG: Document Layout </entry><entry></entry><entry></entry></row>
@@ -51,51 +56,53 @@
 <row><entry></entry><entry>Working with Frames </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Setting the Properties for a Frame/Formatting Frames </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Formatting paragraph </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Using Tab Stops </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Using Tab Stops </entry><entry>Checked (March 24, 2002)</entry></row>
 <row><entry></entry><entry>Formatting Characters </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Styles </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Columns </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Tables </entry><entry>Unstable-Needs Updates</entry></row>
 <row><entry></entry><entry>Headers/Footers </entry><entry>Needs Updates</entry></row>
-<row><entry></entry><entry>Creating Templates/Saving a document as a template </entry><entry>Done</entry></row>
+<row><entry></entry><entry>Creating Templates/Saving a document as a template </entry><entry>Checked (March 19, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>DG: More than just text </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Introduction </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Graphics </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Insert Table of Contents </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Inserting Date and Time </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Page Numbering </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Custom Letters and Numbers </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Inserting Variables </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Inserting links </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Inserting expressions </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Endnotes/Footnotes </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Insert KOffice Data </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Formulas </entry><entry>Not Written</entry></row>
+<row><entry></entry><entry>Introduction </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Documentation Information </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Graphics </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Table of Contents </entry><entry>Checked (March 19, 2002)</entry></row>
+<row><entry></entry><entry>Document Variables </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Personal expressions </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Document links </entry><entry>Stable-Not Written</entry></row>
+<!--<row><entry></entry><entry>Endnotes/Footnotes </entry><entry>Stable-Not Written</entry></row> -->
+<row><entry></entry><entry>KOffice Data </entry><entry>Not Stable-Not Written-March 12</entry></row>
+<row><entry></entry><entry>Formulas </entry><entry>Unstable-Not Written</entry></row>
+<row><entry></entry></row>
+
+<row><entry>Advanced Topics </entry><entry></entry><entry></entry></row>
+<row><entry></entry><entry>Mail Merge </entry><entry>Not Written</entry></row>
+<row><entry></entry><entry>Document structure </entry><entry>Not Written</entry></row>
 <row><entry></entry></row>
 
 <row><entry>How do I... </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>How do I get the pages numbers on the outsides of the pages ...</entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>How do I get the chapter name on the top of each page? </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>How do I create a .pdf file to post on the web? </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>How do I change the Quit and Close commands so they ... </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>How do I remove template categories from the open dialog. </entry><entry>Not Written</entry></row>
+<row><entry></entry><entry>How do I get the pages numbers on the outsides of the pages ...</entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>How do I create a .pdf file to post on the web? </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>How do I remove template categories from the open dialog. </entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>The Menu Items/Tool Bars </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>Introduction to Menu Bars and Tool Bars </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Hiding, Changing, and Moving Tool Bars </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Basic Menu Bar </entry><entry>Done except for description of Custom Variables</entry></row>
-<row><entry></entry><entry>Formatting ToolBar </entry><entry>Done</entry></row>
-<row><entry></entry><entry>File Toolbar </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Insert Toolbar </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Edit Toolbar </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Paragraph Toolbar </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Table ToolBar </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Border Toolbar </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Formula Toolbar </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Selecting Colors from a Color dialog </entry><entry>Not Written</entry></row>
+<row><entry></entry><entry>Introduction to Menu Bars and Tool Bars </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Hiding, Changing, and Moving Tool Bars </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>The &kword; Menu Bar </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Formatting ToolBar </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>File Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Insert Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Edit Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Paragraph Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Table ToolBar </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Border Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Formula Toolbar </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Selecting Colors from a Color dialog </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Selecting files from the file dialog </entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>KWord Options </entry><entry></entry><entry></entry></row>
@@ -104,46 +111,49 @@
 <row><entry></entry><entry>KWord Options </entry><entry>Needs Updates</entry></row>
 <row><entry></entry></row>
 
-<row><entry>Questions and Answers </entry><entry></entry><entry>Not Written</entry></row>
+<row><entry>Questions and Answers </entry><entry></entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry></row>
 
-<row><entry>Credits and Licenses </entry><entry></entry><entry>Needs Updates</entry></row>
+<row><entry>Credits and Licenses </entry><entry></entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Installation </entry><entry></entry><entry></entry></row>
-<row><entry></entry><entry>How to obtain KWord </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Requirements </entry><entry>Done</entry></row>
-<row><entry></entry><entry>Compilation and Installation </entry><entry>Done</entry></row>
+<row><entry></entry><entry>How to obtain KWord </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Requirements </entry><entry>Checked (March 23, 2002)</entry></row>
+<row><entry></entry><entry>Compilation and Installation </entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry></row>
 
-<row><entry>KWord Command Line Options </entry><entry></entry><entry>Done</entry></row>
+<row><entry>KWord Command Line Options </entry><entry></entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Import/Export Filters </entry><entry></entry><entry></entry></row>
 <row><entry></entry><entry>Abiword Filter </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>AmiPro Filter </entry><entry>Written</entry></row>
 <row><entry></entry><entry>Applixware Filter </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>ASCII Filter </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>HTML Filter (HTML 4.01) </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>LaTeX Filter </entry><entry>Not Written</entry></row>
 <row><entry></entry><entry>Maker Interchange Format (MIF)/Adobe Framemaker Filter </entry><entry>Not Written</entry></row>
+<row><entry></entry><entry>Microsoft Word 97 and Word 2000 Filter </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>Palmdoc Filter </entry><entry>Written</entry></row>
 <row><entry></entry><entry>Rich Text File (RTF) Filter </entry><entry>Needs Updates</entry></row>
 <row><entry></entry><entry>Star Writer Filter </entry><entry>Not Written</entry></row>
-<row><entry></entry><entry>Microsoft Word 97 and Word 2000 Filter </entry><entry>Needs Updates</entry></row>
+<row><entry></entry><entry>WML Filter </entry><entry>Written</entry></row>
+<row><entry></entry><entry>WordPerfect Filter </entry><entry>Written</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Key Bindings Summary </entry><entry></entry><entry>Needs Updates</entry></row>
 <row><entry></entry></row>
 
-<row><entry>KWord file format </entry><entry></entry><entry>Done</entry></row>
+<row><entry>KWord file format </entry><entry></entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry></row>
 
-<row><entry>Glossary</entry><entry></entry><entry>Done</entry></row>
+<row><entry>Glossary</entry><entry></entry><entry>Checked (March 23, 2002)</entry></row>
 <row><entry></entry></row>
 
 <row><entry>Sections to be added</entry><entry></entry><entry></entry></row>
 <row><entry></entry><entry>Thesaurus</entry><entry></entry></row>
-<row><entry></entry><entry>Document Info Dialog</entry><entry></entry></row>
-<row><entry></entry><entry>Mail Merge</entry><entry></entry></row>
+<row><entry></entry><entry>Chapter Numbers</entry><entry></entry></row>
 
 </tbody>
 </tgroup>
@@ -151,9 +161,10 @@
 
 <sect1 id="deleteme-misc">
 <title>Misc issues</title>
-<para>"Collate" option in print dialog is always greyed out.....Jan 26</para>
 <para>Find dialog - Formatting characters.  Either new screenshots or description 
 of button, depending on development (Feb 20)</para>
 <para>"NL", "CR", "Unicode point", and "ASCII/Latin-1 Character" pattern matching (Feb 20)</para>
+<para>Add info for autospellcheck..</para>
+
 </sect1>
 </chapter>

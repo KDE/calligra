@@ -1,9 +1,8 @@
 <chapter id="fundamentals">
 <title>Fundamentals</title>
 
-<para>This next section is designed to show you how to start &kword; and
-some basic but important concepts you should understand when using
-&kword;</para>
+<para>This next section is covers how to start &kword;, introduces the user to templates and
+discusses an important difference between two major types of templates.</para>
 
 <sect1 id="starting-kword">
 <title>Starting &kword;</title>
@@ -42,109 +41,60 @@ automatically start &kword; and begin editing the file.</para>
 <sect1 id="template-intro">
 <title>An Introduction to Templates</title>
 
-<para>OK, so the first question you may have is:</para>
+<para>OK, so the first question a new user may have is:</para>
 
 <para><emphasis>Why do I need to use a frames based word processor, when
-I am perfectly happy writing my letters on my current, page layout, word
+I am perfectly happy writing my letters on my current (page layout) word
 processor? </emphasis></para>
 
 <para>Well the good news is, adjusting to a frames based word processor
-is easy and once you select a template, &kword; can act just like the
-page layout word processor you are used to.  There are templates
+is easy and once a template is selected, &kword; can act just like a
+page layout word processor.  There are templates
 available for simple correspondence and day to day use.</para>
 
-<para>When you need to generate a more complex document (newsletters,
-posters, &etc;), however, you will not need to switch to a different
+<para>When a more complex document (newsletters,
+posters, &etc;) needs to be created, you will not need to switch to a different
 application to generate these special documents. There are templates in
-&kword; which will help you generate your newsletters or other more
+&kword; which will help generate newsletters or other more
 complicated documents.</para>
 
-<para>OK. So now that you are willing to give this a try, we should talk
-briefly about what templates are, what templates can do for you and how
-you work with templates.</para>
-
 <para><emphasis>What are templates and what can they do for
-me</emphasis></para>
+the user?</emphasis></para>
 
-<para>A template can be thought of as an initial mold for your
-document.</para>
+<para>A template can be thought of as an initial mold for a document.</para>
 
-<para>When we sit down to write a document, we already have an idea of
-what the final product will look like. If you are writing a letter to a
-business, you want a document with only one column, which goes all the
-way across the page, and from top to bottom of the page.  When you sit
-down to author a newsletter for a local organization, however, you may
+<para>When a user sits down to write a document, they already have an idea of
+what the final product will look like. If they are writing a letter to a
+business, a document with only one column, which goes all the
+way across the page, and from top to bottom of the page is appropriate.  When a user sits
+down to author a newsletter for a local organization, however, they may
 want a large title across the top, and several columns for quick news
 articles.</para>
 
-<para>With &kword;, you can use this predetermined notion of how your
-document should look too make your work easier.  By using a template,
-you can create a set of frames to approximate this final layout. For
-your business letter, you can select one large frame that covers the
-page from top to bottom and side to side (excluding margins of
-course). For that newsletter, however, you may decide that a two or
-three column document is more to your liking. Once you select this
-template, &kword; will create the frames for you.</para>
+<para>With &kword;, this predetermined notion of how the
+document should look is used to select a template.  By using a template, 
+a set of frames is created to approximate this final layout. For
+a business letter, a document with one large frame that covers the
+page from top to bottom and side to side would be selected. 
+For a newsletter, however, a two or
+three column document is more appropriate. Once this
+template is selected, &kword; will create the frames automatically.</para>
 
-<para><emphasis>What if I decide later to change my
-layout</emphasis></para>
+<para><emphasis>What if the user decides to change the
+layout after a template is selected?</emphasis></para>
 
-<para>This is not a problem. If you begin your document as a single
-column document and decide later that two columns is better for your
-needs, you can add another column. The purpose of templates is not to
-limit your ability to change your layout, but rather to take some of the
-work load off you whenever possible.  Choosing the correct template when
-you begin your document will simplify the formatting (as opposed to
-always selecting the default template and making your changes later.),
-but it is also important to remember that choosing the wrong template
-will not limit your work.</para>
+<para>This is not a problem. If a document begins as a single
+column document and it is decided later that two columns is better, another column can be added. 
+The purpose of templates is not to
+limit the ability to change the layout of a document, but rather to take some of the
+work load off the user whenever possible.  Choosing the correct template when
+beginning a document will simplify the formatting (as opposed to
+always selecting the default template and making changes later).
+Choosing the wrong template
+will not limit the flexibility of the document later on.</para>
 
-<para><emphasis>Working with frames (aka Your First
-Document)</emphasis></para>
-
-<para>The following section, consists of one important topic which
-you should understand before we continue, followed by a step by step
-walk through of the most important functions you will need to understand
-to complete a complex document. We will generate the start of a
-newsletter using this tutorial. If you do not want to complete the
-tutorial, or have questions about a specific aspect of frames, you can
-use the following list of steps to jump directly to that section of the
-tutorial:</para>
-
-<orderedlist numeration="arabic">
-<listitem>
-<para><link linkend="wp-vs-dtp">The difference between Text Oriented and
-Page Layout templates</link></para>
-</listitem>
-<listitem>
-<para><link linkend="choose-template">Choosing the initial
-template</link></para>
-</listitem>
-<listitem>
-<para><link linkend="tutorial-frame-select">Selecting a frame and
-entering text into that frame</link></para>
-</listitem>
-<listitem>
-<para><link linkend="tutorial-resize-frame">Changing the size of a
-frame</link></para>
-</listitem>
-<listitem>
-<para><link linkend="tutorial-move-frame">Moving a frame on the
-page</link></para>
-</listitem>
-<listitem>
-<para><link linkend="tutorial-add-frame">Adding a new frame and making text flow
-between two frames</link></para>
-</listitem>
-<listitem>
-<para><link linkend="tutorial-del-frame">Deleting a frame</link></para>
-</listitem>
-</orderedlist>
-
-<para>This tutorial is designed to be done in order, starting with <link
-linkend="wp-vs-dtp">The difference between Text Oriented and Page Layout
-templates.</link> I recommend going through the tutorial in order at
-least once.</para>
+<para>The following section, consists of one more important topic which
+you should understand before we begin using &kword;.</para>
 
 </sect1>
 
@@ -152,7 +102,7 @@ least once.</para>
 <title>The difference between Text Oriented and Page Layout
 templates</title>
 
-<para>Before we begin with the tutorial, it is important that the
+<para>It is vital that the
 difference between Text Oriented and Page Layout templates is clear in
 your mind.</para>
 

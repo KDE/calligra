@@ -3,7 +3,7 @@
 
 <para>This section of the documentation will cover everything you need
 to know about starting a new document, saving a document, retrieving a
-saved document and printing a docuemnt.</para> 
+saved document and printing a document.</para> 
 
 <sect1 id="new-doc">
 <title>Beginning a New Document</title>
@@ -121,7 +121,7 @@ with that template.</para>
 
 <tip>
 <para>For faster access to a template, simply double click on the
-template, and &kword; will immediatly load that template.</para>
+template, and &kword; will immediately load that template.</para>
 </tip>
 
 </sect2>
@@ -131,7 +131,7 @@ template, and &kword; will immediatly load that template.</para>
 
 <para>Click on the <guibutton>Choose</guibutton> button, and an new
 dialog box is revealed.  For more details on this dialog box refer to
-<link linkend="loading">Retreiving a saved document</link>.</para>
+<link linkend="loading">Retrieving a saved document</link>.</para>
 
 <sect3 id="loading-recent-doc">
 <title>Open a Recent Document</title>
@@ -146,7 +146,7 @@ will load the template.</para>
 <title>Loading an Empty Document</title>
 
 <para>This is the default action, and begins a new document in Text Oriented Mode, with one frame per page.
-This is an excellent choice for every day correspondance, or general
+This is an excellent choice for every day correspondence, or general
 word processing.  Simply click <guibutton>OK</guibutton> to
 begin.</para>
 
@@ -201,7 +201,7 @@ filename.  &kword; automatically executes the <link
 linkend="command-save-as"><guimenuitem>Save As...</guimenuitem></link>
 command so you can provide a file name. </para>
 
-<para>&kword; does not report a sucessful save.  Therefore, if the file
+<para>&kword; does not report a successful save.  Therefore, if the file
 was saved without incident, &kword; will return you to editing your
 document.</para>
 
@@ -213,7 +213,7 @@ bar.  If there are unsaved changes, the titlebar will have
 <mediaobject>
 <imageobject>
 <imagedata fileref="saved2.png" format="PNG"/></imageobject>
-<caption><para>The document still has unsaved changes</para></caption>
+<!--<caption><para>The document still has unsaved changes</para></caption>-->
 </mediaobject>
 </screenshot>
 
@@ -225,7 +225,7 @@ probelm with the save, an error box will appear.</para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="saved1.png" format="PNG"/></imageobject>
-<caption><para>Saved Successfully</para></caption>
+<!--<caption><para>Saved Successfully</para></caption>-->
 </mediaobject>
 </screenshot>
 
@@ -260,8 +260,7 @@ previous location.</para></important>
 <sect3 id="command-save-as-dlg">
 <title>Using the dialog box</title>
 
-<para>When you select the <guimenuitem>Save As...</guimenuitem>
-function, a dialog appears.</para>
+<para>When you select <guimenuitem>Save As...</guimenuitem> a dialog appears.</para>
 
 <screenshot>
 <mediaobject>
@@ -270,134 +269,14 @@ function, a dialog appears.</para>
 </mediaobject>
 </screenshot>
 
-<para>Lets look at this dialog more closely:</para>
+<para>For more information on using this dialog, see the section entitled
+<link linkend="file-dialog">Using the file dialog</link>.</para>
 
-<para><emphasis>Toolbar</emphasis></para>
-
-<para>This dialog shows my current directory is <filename
-class="directory">/home/mmcbride/kword</filename>.  You can see this
-by the textbox at the top of the dialog.  If you click on this drop
-down box, you will see common and recently visited directories.  By
-selecting one of these directories, you will be immediatly moved to
-that directory and the dialog box will update the file list.</para>
-
-<para>The large box below that shows I currently have 1 folder in this
-directory, entitled <filename>Past Work</filename>, and 2 files
-(<filename>Job Description</filename> and
-<filename>Resume</filename>).</para>
-
-<para>In the upper left corner, is a blue arrow pointed up.  This
-arrow will take you up one level in the directory structure.</para>
-
-<para>The next two buttons are backwards and forward buttons.  These
-buttons work just like an internet browser, where you can use the back
-button to travel to the previous directory, and the forward button to
-advance into a directory you just came from.</para>
-
-<para>Next to the arrow buttons, is a button that looks like a house.
-Clicking this will take you to your home directory.</para>
-
-<para>Next to the home button, is a reload button.  Clicking this
-button, causes &kword; to reload the current directory in the event
-things have changed.</para>
-
-<para>Next to the reload button, is a button with a grey ribbon on it.
-This button allows you to set and navigate through bookmarks.  This is
-a quick way to jump to commonly accessed directories.  By clicking
-this button, a submenu appears which allows you to add bookmarks or
-jump to a new bookmark.</para>
-
-<para>Next to the bookmark button, is a button with a gear on it.
-Clicking this button brings up a sub menu with several entries:</para>
-<para>
-<variablelist>
-<varlistentry>
-<term><guimenuitem>New Directory</guimenuitem></term>
-<listitem>
-<para>Create a new subdirectory in the current directory.  &kword; will automatically move you into this new subdirectory once it is created.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Delete</guimenuitem></term>
-<listitem>
-<para>This will delete the selected file, not the current
-document.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Sorting</guimenuitem></term>
-<listitem>
-<para>This will bring up another submenu.  You can sort the files by
-filename, by date, or by size.  Selecting the
-<guimenuitem>Reverse</guimenuitem> option will reverse the sort
-order.  Selecting <guimenuitem>Directories First</guimenuitem> will
-place the directories above all other files in the dialog box.
-Selecting <guimenuitem>Case insensitive</guimenuitem> will sort
-filenames regardless of capitalization.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>View</guimenuitem></term>
-<listitem>
-<para>This will also bring up a submenu.  You can use the options in
-this submenu to change the appearance of the file dialog.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Properties</guimenuitem></term>
-<listitem>
-<para>If you have selected a file in the dialog box, when you select
-this option you will be given all of the properties of the selected
-file.</para>
-</listitem>
-</varlistentry>
-</variablelist>
-</para>
-<para><emphasis>Location Bar</emphasis></para>
-
-<para>Along the left side of the dialog box, is a column that contains
-several icons. You can think of each of these icons as a shortcut to
-another subdirectory. If you click on an icon, you will be immediatly
-moved to that location.</para>
-
-<para>You can add/edit or delete entries from the Location Bar.
-Simply click with the &RMB; and a small submenu will appear.</para>
-
-<para><emphasis>File Name and Filters</emphasis></para>
-
-
-<para>The text box labled <guilabel>Location</guilabel> is blank,
-which indicates this file does not currently have a filename at
-all.</para>
-
-<para>The text box labled <guilabel>Filter</guilabel> shows we intend to
-save this as a &kword; file.  Using &kword;, you can save the file as other
-formats.  For information on other filters, see the section on <link
-linkend="filters">Filters</link>.</para>
-
-<para>There is a <guibutton>Cancel</guibutton> button, if you click this
-button, the save will be aborted, and you will return to editing the
-document.</para>
-
-<para>There is an <guibutton>OK</guibutton> button, which will be used
-when we have selected the correct location, correct format and correct
-filename.  Clicking this button saves the file.</para>
-
-<para>Using this dialog, you can move through the directory tree to find
-a location to save your document in.</para>
-
-<para>To enter a folder click on that folder.  To exit that folder,
-click the blue up arrow button.</para>
-
-<para>When you are in the correct folder, you can type a name into the
-<guilabel>Location</guilabel> box. There is no need to put a <literal
+<para>When you are in the folder you want to save the file in, type a filename into the
+<guilabel>Location</guilabel> box.</para>
+<tip><para> There is no need to put a <literal
 role="extension">.kwd</literal> at the end of your filename, &kword;
-will do this for you.</para>
-
+will do this for you.</para></tip>
 
 <note>
 <para>&UNIX; filenames are more flexible than many other operating
@@ -405,8 +284,8 @@ systems.  Filenames can:</para>
 
 <itemizedlist spacing="compact">
 <listitem><para>be of nearly any length</para></listitem>
-<listitem><para>be any comination of upper and lower case letters</para></listitem>
-<listitem><para>include spaces and puncuation</para></listitem>
+<listitem><para>be any combination of upper and lower case letters</para></listitem>
+<listitem><para>include spaces and punctuation</para></listitem>
 </itemizedlist>
 
 <para>Filenames should not:</para>
@@ -416,9 +295,7 @@ systems.  Filenames can:</para>
 <listitem><para>begin with a space or period</para></listitem>
 <listitem><para>end with a common file extension (<literal
 role="extension">.ps</literal>,<literal
-role="extension">.pdf</literal>,etc).  This will tell &kword; to try to
-export to that filetype.  &kword; has only certain specific <link
-linkend="filters">filters</link>.</para>
+role="extension">.pdf</literal>,etc). </para>
 </listitem>
 </itemizedlist>
 </note>
@@ -426,7 +303,7 @@ linkend="filters">filters</link>.</para>
 <para>Once you have entered the correct information you can click on
 <guibutton>OK</guibutton> to complete the save.</para>
 
-<para>&kword; does not report a sucessful save.  Therefore, if the file
+<para>&kword; does not report a successful save.  Therefore, if the file
 was saved without incident, &kword; will return you to editing your
 document.  If there is a probelm with the save, an error box will
 appear.</para>
@@ -485,134 +362,14 @@ on the toolbar.</para>
 </mediaobject>
 </screenshot>
 
-<para>Lets look at this dialog more closely:</para>
+<para>For more information on using this dialog, see the section entitled
+<link linkend="file-dialog">Using the file dialog</link>.</para>
 
-<para><emphasis>Toolbar</emphasis></para>
-
-<para>This dialog shows my current directory is <filename
-class="directory">/home/mmcbride/kword</filename>.  You can see this
-by the textbox at the top of the dialog.  If you click on this drop
-down box, you will see common and recently visited directories.  By
-selecting one of these directories, you will be immediatly moved to
-that directory and the dialog box will update the file list.</para>
-
-<para>The large box below that shows I currently have 1 folder in this
-directory, entitled <filename>Past Work</filename>, and 2 files
-(<filename>Job Description</filename> and
-<filename>Resume</filename>).</para>
-
-<para>In the upper left corner, is a blue arrow pointed up.  This
-arrow will take you up one level in the directory structure.</para>
-
-<para>The next two buttons are backwards and forward buttons.  These
-buttons work just like an internet browser, where you can use the back
-button to travel to the previous directory, and the forward button to
-advance into a directory you just came from.</para>
-
-<para>Next to the arrow buttons, is a button that looks like a house.
-Clicking this will take you to your home directory.</para>
-
-<para>Next to the home button, is a reload button.  Clicking this
-button, causes &kword; to reload the current directory in the event
-things have changed.</para>
-
-<para>Next to the reload button, is a button with a grey ribbon on it.
-This button allows you to set and navigate through bookmarks.  This is
-a quick way to jump to commonly accessed directories.  By clicking
-this button, a submenu appears which allows you to add bookmarks or
-jump to a new bookmark.</para>
-
-<para>Next to the bookmark button, is a button with a gear on it.
-Clicking this button brings up a sub menu with several entries:</para>
-<para>
-<variablelist>
-<varlistentry>
-<term><guimenuitem>New Directory</guimenuitem></term>
-<listitem>
-<para>Create a new subdirectory in the current directory.  &kword; will automatically move you into this new subdirectory once it is created.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Delete</guimenuitem></term>
-<listitem>
-<para>This will delete the selected file, not the current
-document.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Sorting</guimenuitem></term>
-<listitem>
-<para>This will bring up another submenu.  You can sort the files by
-filename, by date, or by size.  Selecting the
-<guimenuitem>Reverse</guimenuitem> option will reverse the sort
-order.  Selecting <guimenuitem>Directories First</guimenuitem> will
-place the directories above all other files in the dialog box.
-Selecting <guimenuitem>Case insensitive</guimenuitem> will sort
-filenames regardless of capitalization.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>View</guimenuitem></term>
-<listitem>
-<para>This will also bring up a submenu.  You can use the options in
-this submenu to change the appearance of the file dialog.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guimenuitem>Properties</guimenuitem></term>
-<listitem>
-<para>If you have selected a file in the dialog box, when you select
-this option you will be given all of the properties of the selected
-file.</para>
-</listitem>
-</varlistentry>
-</variablelist>
-</para>
-<para><emphasis>Location Bar</emphasis></para>
-
-<para>Along the left side of the dialog box, is a column that contains
-several icons. You can think of each of these icons as a shortcut to
-another subdirectory. If you click on an icon, you will be immediatly
-moved to that location.</para>
-
-<para>You can add/edit or delete entries from the Location Bar.
-Simply click with the &RMB; and a small submenu will appear.</para>
-
-<para><emphasis>File Name and Filters</emphasis></para>
-
-
-<para>The text box labled <guilabel>Location</guilabel> is blank,
-which indicates this file does not currently have a filename at
-all.</para>
-
-<para>The text box labled <guilabel>Filter</guilabel> says we are showing all
-supported file types.  This allows &kword; to load multiple file types.</para>
-
-<tip>
-<para>Another function of the <guilabel>Filter</guilabel> box, is to act
-as a file mask. A file mask hides all the files that &kword; believes
-are unimportant to your current task.  When the &kword; filetype is set
-to &kword; file, the dialog box only shows folders, and files ending in
-<literal role="extension">.kwd</literal>.  If it says <guilabel>All supported
-files</guilabel>, all files will be displayed.</para>
-</tip>
-
-<para>Using this dialog, you can move through the directory tree to find
-a location to load your document from.</para>
-
-<para>To enter a folder, you double click on that folder.  To exit that
-folder click the blue up arrow button.</para>
+<para>Use this dialog to locate the document you want to load.  Once located, click
+once with the &LMB; on the filename.  Click <guibutton>OK</guibutton>.  The file will be loaded.</para>
 
 <para>There is a <guibutton>Cancel</guibutton> button, if you click this
 button, the load will be aborted.</para>
-
-<para>There is a <guibutton>OK</guibutton> button, which will be used
-when we have selected the correct filename.</para>
-
 </sect2>
 </sect1>
 
@@ -671,7 +428,7 @@ pages, click <guibutton>Expand</guibutton></para>
 
 <note><para>Depending on which printing system your computer uses, you may find that you have 
 more printing options then those described below.  What is described here, is available on 
-<emphasis>all</emphasis> systems.</para></note>
+<emphasis>most</emphasis> systems.</para></note>
 
 <para>Once you click <guibutton>Expand</guibutton>, the dialog box changes to:</para>
 
@@ -683,9 +440,9 @@ more printing options then those described below.  What is described here, is av
 </screenshot>
 
 <para>Under <guilabel>Page Selection</guilabel>, you can select either
-to print the whole document (the default), print the page the cursor is
+to print the whole document (select <guilabel>All</guilabel>), print the page the cursor is
 located on (simply select <guilabel>Current</guilabel>), or print a range of pages.  If you select the
-<guilabel>Print Range</guilabel> option, enter your page range in the text boxe
+<guilabel>Print Range</guilabel> option, enter your page range in the text box
 provided. (Example:  3-13)</para>
 
 <para>In the drop down box labeled <guilabel>Page Set</guilabel> you can tell &kword; to

@@ -1,7 +1,457 @@
-<sect1 id="date-time"><title>Inserting Date and Time</title><para></para></sect1>
-<sect1 id="page-number"><title>Page Numbering </title><para></para></sect1>
-<sect1 id="custom-letter"><title>Custom Letter and Numbering.</title><para></para></sect1>
-<sect1 id="variables"><title>Inserting Variables </title><para></para></sect1>
-<sect1 id="expressions"><title>Expressions </title><para></para></sect1>
-<sect1 id="links"><title>Links </title><para></para></sect1>
-<sect1 id="endnotes-and-footnotes"><title>Endnotes/Footnotes</title><para></para></sect1>
+<sect1 id="variables"><title>Document Variables </title>
+<para>A variable is a simple way of allowing &kword; to modify the document in <emphasis>very</emphasis>
+specific ways to reflect the changing nature of the document or report.</para>
+<para>A variable can be a number (such as a page number, the total number of pages in a document, etc), 
+a selection of words (clients name, product name, the documents filename, etc), 
+a date, a time, or nearly anything you desire.</para>
+<para>Once the variable is defined, a <emphasis>placeholder</emphasis> is inserted in the document.
+&kword; will replace this placeholder with the value of that variable each time the placeholder is used.</para>
+<para>Variables can either be <emphasis>fixed</emphasis> (which means that once inserted, their value does not
+change), or <emphasis>variable</emphasis> (where the placeholder is 
+<link linkend="update-variables">updated by &kword;</link> to reflect
+the current value of the variable).</para>
+<para>This chapter will begin with a few examples of commonly used variables (
+<link linkend="insert-date">date</link>,
+<link linkend="insert-time">time</link>, and
+<link linkend="page-number">page numbers</link>),
+then detail the
+<link linkend="misc-variable">remaining variables</link>
+ available to you.  Finally, it will detail how to
+<link linkend="custom-variables">create 
+custom variables</link> for documents.</para>
+
+<sect2 id="date-time"><title>Date and Time</title>
+<para>Many letters, reports and documents contain
+information about the dates or times they correspond to.  The date and time
+information may establish the creation of a document (which will remained
+fixed as long as the document is around), or the date and time may serve as
+a notice of the last date of modification (which would change with each passing day).</para>
+<para>&kword; allows for both fixed and variable date and time variables in the document.</para>
+<sect3 id="insert-date"><title>Insert Date</title>
+<para>To insert the date in the document, simply place the cursor in the text box where the date 
+should be inserted and select
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Date</guimenuitem>
+</menuchoice> from the menubar.  This will bring up two selections:
+<guimenuitem>Current date (fixed)</guimenuitem> and <guimenuitem>Current date (variable)</guimenuitem>.</para>
+
+<variablelist>
+<varlistentry>
+<term><guimenuitem>Current date (fixed)</guimenuitem></term>
+<listitem><para>Selecting this option will insert the current date into the current cursor position.
+This date is determined by checking with the computers system clock.  Once entered, this value
+will not change, even when &kword; is asked to <link linkend="update-variables">update the document
+variables</link>.</para>
+<para>This item is ideal for dates of document creation, or when including data in a report from todays work.
+Compare this choice to <guimenuitem>Current date (variable)</guimenuitem>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Current date (variable)</guimenuitem></term>
+<listitem><para>Selecting this option will insert the current date into the current cursor position.
+This date is determined by checking with the computers system clock.  This value will
+change when &kword; is asked to <link linkend="update-variables">update the document
+variables</link>.</para>
+<para>This option is good for any point in the document where the current date is always wanted.
+Compare this choice to <guimenuitem>Current date (fixed)</guimenuitem></para></listitem>
+</varlistentry>
+
+</variablelist>
+<para>Once the date has been selected, a dialog box will appear.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="insdate.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The top dropdown box determines the layout of the variable.  Your choices are:</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Locale</guilabel></term>
+<listitem><para>This inserts the date in the format specified in the
+KDE Control Center.</para>
+<para>To select this option, simply make sure the upper drop down box says
+<guilabel>Locale</guilabel>.  A preview of the date format will appear below the
+<guilabel>Custom</guilabel> checkbox.  If satisfied click <guibutton>OK</guibutton>.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Preformmated date strings</term>
+<listitem><para>&kword; comes with 12 predefined date strings. These predefined strings will
+be all that are needed in most circumstances. Simply select the predefined string in the upper
+drop down box.  A preview of the date format will appear below the <guilabel>Custom</guilabel>
+checkbox.  If satisfied click <guibutton>OK</guibutton>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Custom String</term>
+<listitem><para>If the appropriate format for the date can not be found, it is possible to create custom 
+date format strings.</para>
+<para>A date format string consists of a list of letters and numbers which follow
+specific rules (which are outlined below) to create the completed date.</para>
+<para>The date format string consists of <emphasis>placeholders</emphasis> and
+<emphasis>separators</emphasis>.  The placeholders are defined in the following three tables.</para>
+<para><emphasis>Days</emphasis></para>
+<informaltable>
+<tgroup cols="5">
+<tbody>
+<row><entry>Day placeholders</entry><entry>d</entry><entry>dd</entry><entry>ddd</entry><entry>dddd</entry></row>
+<row><entry>Example</entry><entry>6</entry><entry>06</entry><entry>Thu</entry><entry>Thursday</entry></row>
+</tbody></tgroup></informaltable>
+<para><emphasis>Months</emphasis></para>
+<informaltable>
+<tgroup cols="3">
+<tbody>
+<row><entry>Month placeholders</entry><entry>M</entry><entry>MM</entry><entry>MMM</entry><entry>MMMM</entry></row>
+<row><entry>Example</entry><entry>3</entry><entry>03</entry><entry>Mar</entry><entry>March</entry></row>
+</tbody></tgroup></informaltable>
+<para><emphasis>Year</emphasis></para>
+<informaltable>
+<tgroup cols="3">
+<tbody>
+<row><entry>Year placeholders</entry><entry>yy</entry><entry>yyyy</entry></row>
+<row><entry>Example</entry><entry>02</entry><entry>2002</entry></row>
+</tbody></tgroup></informaltable>
+<para>Simply combine placeholders with normal text (separators) to create completed date strings. </para>
+
+<para>For example:</para>
+<para><quote>MM/dd/yyyy</quote> is translated to 03/06/2002</para>
+<para>and</para>
+<para><quote>MMMM d, yyyy</quote> becomes March 6, 2002</para>
+<para>Notice that only the placeholders change.  Spaces, commas, slashes and other text remains unchanged.</para>
+<note><para>It is important to remember that placeholders are case sensitive.
+<quote>DD</quote> is not a placeholder,
+ only <quote>dd</quote>.</para></note>
+<para>To create a custom date string, place a mark in the <guilabel>Custom</guilabel> checkbox.</para>
+<para>Now type placeholders and separators text into the upper drop down box.  Alternatively
+select the format from the <guilabel>Insert</guilabel>
+dropdown box, and the
+placeholder will be inserted into the date format string at the cursor location.</para>
+<para>A preview of the current date
+string is visible below the <guilabel>Custom></guilabel> checkbox.  Click <guibutton>OK</guibutton> when 
+the date format string is correct to insert the variable into the document.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect3>
+<sect3 id="insert-time"><title>Insert Time</title>
+<para>To insert the time in the document, simply place the cursor in the text box where the time should
+be inserted and select
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Time</guimenuitem>
+</menuchoice> from the menubar.  This will bring up two selections:
+<guimenuitem>Current time (fixed)</guimenuitem> and <guimenuitem>Current time (variable)</guimenuitem>.</para>
+
+<variablelist>
+<varlistentry>
+<term><guimenuitem>Current time (fixed)</guimenuitem></term>
+<listitem><para>Selecting this option will insert the current time into the current cursor position.
+This time is determined by checking with the computers system clock.  Once entered, this value
+will not change, even when &kword; is asked to <link linkend="update-variables">update the document
+variables</link>.</para>
+<para>This item is ideal for timestamps.
+Compare this choice to <guimenuitem>Current time (variable)</guimenuitem>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Current time (variable)</guimenuitem></term>
+<listitem><para>Selecting this option will insert the current time into the current cursor position.
+This time is determined by checking with the computers system clock.  This value will
+change when &kword; is asked to <link linkend="update-variables">update the document
+variables</link>.</para>
+<para>This option is good for any point in your document where the current time is always wanted.
+Compare this choice to <guimenuitem>Current time (fixed)</guimenuitem></para></listitem>
+</varlistentry>
+
+</variablelist>
+<para>This brings up a dialog box.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="instime.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The top dropdown box determins the layout of the variable.  The choices are:</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Locale</guilabel></term>
+<listitem><para>This inserts the time in the format specified in the
+KDE Control Center.</para>
+<para>To select this option, simply make sure the upper drop down box says
+<guilabel>Locale</guilabel>.  A preview of the time format will appear below the
+<guilabel>Custom</guilabel> checkbox.  If satisfied click <guibutton>OK</guibutton>.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Preformmated time strings</term>
+<listitem><para>&kword; comes with 5 predefined date strings. These predefined strings will
+be all that are needed in most circumstances. Simply select the predefined string in the upper
+drop down box.  A preview of the time format will appear below the <guilabel>Custom</guilabel>
+checkbox.  If satisfied click <guibutton>OK</guibutton>.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Custom String</term>
+<listitem><para>If the appropriate format can not be found, a custom
+time format string can be created.</para>
+<para>A time format string consists of a list of letters and numbers which follow
+specific rules (which are outlined below) to create the completed time.</para>
+<para>The time format string consists of <emphasis>placeholders</emphasis> and
+<emphasis>seperators</emphasis>.  The placeholders are defined in the following five tables.</para>
+<para><emphasis>Hours</emphasis></para>
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row><entry>Hour placeholders</entry><entry>h</entry><entry>hh</entry></row>
+<row><entry>Example</entry><entry>6</entry><entry>06</entry></row>
+</tbody></tgroup></informaltable>
+<para><emphasis>Minutes</emphasis></para>
+<informaltable>
+<tgroup cols="3">
+<tbody>
+<row><entry>Minutes placeholders</entry><entry>m</entry><entry>mm</entry></row>
+<row><entry>Example</entry><entry>3</entry><entry>03</entry></row>
+</tbody></tgroup></informaltable>
+<para><emphasis>Seconds</emphasis></para>
+<informaltable>
+<tgroup cols="3">
+<tbody>
+<row><entry>Seconds placeholders</entry><entry>s</entry><entry>ss</entry></row>
+<row><entry>Example</entry><entry>2</entry><entry>02</entry></row>
+</tbody></tgroup></informaltable>
+<para><emphasis>Milliseconds</emphasis></para>
+<informaltable>
+<tgroup cols="1">
+<tbody>
+<row><entry>Milliseconds placeholders</entry><entry>zzz</entry></row>
+<row><entry>Example</entry><entry>022</entry></row>
+</tbody></tgroup></informaltable>
+<para><emphasis>Seconds</emphasis></para>
+<informaltable>
+<tgroup cols="3">
+<tbody>
+<row><entry>AM/PM placeholders</entry><entry>ap</entry><entry>AP</entry></row>
+<row><entry>Example</entry><entry>am</entry><entry>AM</entry></row>
+</tbody></tgroup></informaltable>
+
+<para>Simply combine placeholders with normal text (separators) to create completed time strings. </para>
+
+<para>For example:</para>
+<para><quote>hh:mm:ss</quote> becomes 06:23:13</para>
+<para>and</para>
+<para><quote>h:mm ap</quote> becomes 6:23 am</para>
+<para>Notice that only the placeholders change.  Spaces, colons and other text remains unchanged.</para>
+<note><para>It is important to remember that placeholders are case sensitive.
+<quote>HH</quote> is not a placeholder,
+ only <quote>hh</quote></para></note>
+<para>To create a custom time string, place a mark in the <guilabel>Custom</guilabel> checkbox.</para>
+<para>Type the placeholders and seperator text into the upper drop down box.  Alternatively,
+you can select the format from the <guilabel>Insert</guilabel>
+dropdown box, and the
+placeholder will be inserted into the time format string at the cursor location.</para>
+<para>A preview of the current time
+string is visible below the <guilabel>Custom></guilabel> checkbox.  Click <guibutton>OK</guibutton> when
+the time format string is correct to insert the variable into your document.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect3>
+</sect2>
+<sect2 id="page-number"><title>Page Numbering </title>
+<para>Inserting page numbers is easy in &kword;.</para>
+<para>There are two variables that relate to page numbers:  <emphasis>Current page</emphasis>
+and <emphasis>Number of pages</emphasis></para>
+<para>To insert the current page number, place the cursor where you want the page number and select
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page Number</guimenuitem>
+</menuchoice> from the menubar.  The page number will be inserted at the current cursor location.</para>
+<para>To insert the total number of pages, place the cursor where you want the variable and select
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Number of Pages</guimenuitem>
+</menuchoice> from the menubar.  The total number of pages will be inserted.</para>
+<note><para>Page numbers are updated dynamically as the document
+is edited.</para></note>
+<tip><para>Page numbers are usually best located within
+<link linkend="headers-and-footers">headers and footers</link>.  This ensures that
+every page will have a page number at the appropriate place.</para></tip>
+</sect2>
+<sect2 id="misc-variable"><title>Other Variables </title>
+<para>&kword; provides other commonly used variables that you might find useful. This set of variables
+are specific to the document.  You can insert these variables by selecting
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Property</guimenuitem>
+</menuchoice> from the menubar.  This will bring up a list of variables.  The variables are detailed below.
+<informaltable>
+<tgroup cols="3">
+<thead>
+<row><entry>Variable</entry><entry>Example</entry><entry>Details</entry></row>
+</thead>
+<tbody>
+<row><entry>Filename</entry><entry>Resume.kwd</entry><entry>Inserts the file name of the document.</entry></row>
+<row><entry>Directory Name</entry><entry>/home/mmcbride/kword</entry><entry>This is the directory name for
+the document. The filename is not included in the directory name variable.</entry></row>
+<row><entry>Author Name</entry><entry>Mike McBride</entry><entry>The name of the author as specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Email</entry><entry>mpmcbride7@yahoo.com</entry><entry>The email address
+of the author as specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Company Name</entry><entry>KDE</entry><entry>The company name specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Directory and Filename</entry><entry>/home/mmcbride/kword/Resume.kwd</entry><entry>The directory
+and filename of the current file.</entry></row>
+<row><entry>Filename without extension</entry><entry>Resume</entry><entry>This removes the file name
+suffix (usually .kwd) from the filename.</entry></row>
+<row><entry>Telephone</entry><entry>Any valid telephone number</entry><entry>The telephone number specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Fax</entry><entry>Any valid telephone number</entry><entry>The fax machine number specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Country</entry><entry>United States</entry><entry>The country name specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Document Title</entry><entry>My Resume</entry><entry>The document title specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Document Abstract</entry><entry>This is a current resume.</entry>
+<entry>The document abstract specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Postal code</entry><entry>Any valid postal code</entry><entry>The postal code specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>City</entry><entry>Philadelphia</entry><entry>The postal code specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+<row><entry>Street</entry><entry>123 Main St.</entry><entry>The street address specified in the
+<link linkend="documentinfo">Document information</link> box.</entry></row>
+</tbody></tgroup></informaltable></para>
+<note><para>Uninitialized variables will appear as &lt;none&gt;, until you define their
+value in the
+<link linkend="documentinfo">Document information</link> box.</para></note>
+</sect2>
+<sect2 id="custom-variables"><title>Custom Variables </title>
+<para>&kword; has many predefined variables.  You may encounter documents where it would be nice
+to define your own variables for a document.  </para>
+<para>Using <emphasis>Custom Variables</emphasis>, you can create an unlimited number of variables for each document.</para>
+<sect3 id="new-custom-variables"><title>Create a new custom variable</title>
+<para>To create a new custom variable, place the cursor at the location in the document to insert the new variable.</para>
+<para>Select <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Custom</guimenuitem>
+<guimenuitem>New</guimenuitem></menuchoice> from the menubar.  This will bring up a dialog box.</para>
+<para>Enter the variable name in the drop down box provided.</para>
+<para>Click <guibutton>OK</guibutton> to create the new variable name and insert it at the current
+cursor location.  Click <guibutton>Cancel</guibutton> to cancel the creation of the new variable.</para>
+<note><para>When you initially create a new variable, it does not have a value.  &kword; will insert
+a placeholder (&lt;none&gt;) in the document to mark the location of the variable.  Once you
+<link linkend="edit-custom-variables">Edit the value of a custom variable</link>, &kword; will replace 
+the placeholder with the new value.</para></note>
+<para>It is now possible to <link linkend="insert-custom-variables">insert this new variable</link> at any
+place in your document.</para>
+</sect3>
+<sect3 id="edit-custom-variables"><title>Edit a custom variables value</title>
+<para>In order for variables to be useful, you need to be able to give them a value, and be able to
+change that value easily.  To change the value of a variable (or give it an initial value):</para>
+<para>Select <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Custom</guimenuitem>
+<guimenuitem>Custom Variables</guimenuitem></menuchoice> from the menubar.
+This will bring up a dialog box.</para>
+<para>Each custom variable has a line in this table.  The first column is the name of the variable, and
+the second column is the value.</para>
+<para>To change the value of a variables, simply click within the text box to the right of
+the variable name. Enter the desired value.</para>
+<para>When all the changes have been complete, simply click <guibutton>OK</guibutton> and all the 
+variables will be updated.</para>
+</sect3>
+<sect3 id="insert-custom-variables"><title>Insert a custom variable</title>
+<para>To insert a new custom variable Select <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Custom</guimenuitem>
+</menuchoice> from the menubar. The custom variable is listed in the submenu.  Click on the name of
+the variable and &kword; will insert the variable, with its current value, at the cursor location.</para>
+</sect3>
+</sect2>
+<sect2 id="update-variables"><title>Updating All Variable Values </title>
+<para>You can tell &kword; to update all variable values (to make sure all variables are set to their
+current values).  This is <emphasis>especially</emphasis> important with dates and times.</para>
+<para>Simply select <menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Refresh all variables</guimenuitem>
+</menuchoice> from the menubar.</para>
+</sect2>
+<sect2 id="update-variables-one"><title>Updating One Date or Time Variable Value </title>
+<para>You can tell &kword; to update a single date or time variable value, and leave the others unchanged.</para>
+<para>Simply place the cursor over the variable you want to update and click with the &RMB;. A small menu will appear which will show 
+several new date or time formatting options and the option to change either dates or times to fixed or variable time formats.  Simply select 
+the new option and this variable will be updated.</para>
+</sect2>
+</sect1>
+<sect1 id="expressions"><title>Expressions </title>
+<para>Expressions are a way to quickly insert common phrases into a document.  Once an expression has been selected, the
+text is inserted into &kword;.</para>
+<note><para>  Expressions are different from variables.  Expressions are inserted as regular text, and can only be
+changed later by manually editing the text. Variables, insert a placeholder in the document which can be updated at
+a later date.</para></note>
+<sect2 id="expressions-insert"><title>Using expressions</title>
+<para>To use an expression could not be easier.</para>
+<para>Simply place the cursor at the location you want the expression inserted and select
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Expression</guimenuitem>
+</menuchoice> from the menubar.  This will give you a submenu with groups of expressions.  Select the group that is appropriate
+for your expression.  This will bring up a list of expressions available to you.  Select the appropriate expression.</para>
+<para>Once selected, that expression will be inserted at the cursor position.</para>
+</sect2>
+<sect2 id="expressions-add"><title>Add new expressions</title>
+<para>Adding an expression is accomplished by selecting <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Edit personal expressions</guimenuitem>
+</menuchoice> from the menubar. This will bring up a dialog box. </para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="expression.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The drop down box at the top shows you what group the current expression list is 
+from.  <emphasis>Custom</emphasis> is the group name in the example above</para>
+<note><para>You will need to create a new group the first time you want to add a new expression.  &kword;
+ will not allow the user to edit or remove any predefined expressions.</para></note>
+<para>The left side of the dialog box lists all the available expressions for that group.
+There are no expressions yet in the example above.</para>
+<para>You manipulate the expressions with the six buttons to the right.</para>
+<variablelist>
+<varlistentry>
+<term><guibutton>Add group</guibutton></term>
+<listitem><para>Click this button to add a new expression group.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guibutton>Delete Group</guibutton></term>
+<listitem><para>Deletes the currently selected group and all the expressions within the group.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guibutton>Rename Group</guibutton></term>
+<listitem><para>Changes the name of the currently selected group.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guibutton>Add new expression</guibutton></term>
+<listitem><para>Click this button and a small dialog box appears.  Enter your expression in the dialog box.  
+Click <guibutton>OK</guibutton>.  The expression is now part of the current group.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guibutton>Delete expression</guibutton></term>
+<listitem><para>Removes the currently selected expression.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guibutton>Rename expression</guibutton></term>
+<listitem><para>Changes the contents of the currently selected expression.</para></listitem>
+</varlistentry>
+</variablelist>
+<para>When you are satisfied with all your changes, click <guibutton>OK</guibutton>.</para>
+<para>Click <guibutton>Cancel</guibutton> to abort changes.</para>
+</sect2>
+</sect1>
+<sect1 id="links"><title>Document Links </title>
+<para></para>
+</sect1>
+<!-- Not currently implemented in kword.....
+<sect1 id="endnotes-and-footnotes"><title>Endnotes/Footnotes</title><para></para></sect1> -->
+

@@ -308,5 +308,16 @@ lost.</para>
 values to their default values.</para>
 
 </sect2>
+<sect2 id="opt-misc"><title>Configure miscellaneous options</title>
+<para></para>
+</sect2>
+
+<sect2 id="opt-document"><title>Configure document options</title>
+<para></para>
+</sect2>
+
+<sect2 id="opt-formula"><title>Configure formula options</title>
+<para></para>
+</sect2>
 </sect1>
 </chapter>

@@ -1,14 +1,21 @@
 <chapter id="tutorial">
 <title>Step by Step Tutorial</title>
+<para>This section is a step by step
+walk through of the most important functions needed to understand how
+to create and manipulate a complex document. This tutorial will generate the start of a
+newsletter as an example document. </para>
+
+<para>I recommend going through the tutorial in order at
+least once if you are new to frame based word processors.</para>
 
 <sect1 id="choose-template">
 <title>Tutorial: Choosing the initial template</title>
 
-<note><para>The steps to this tutorial are numbered from 1 thru 21.
+<note><para>The steps to this tutorial are numbered from 1 to 21.
 Beneath each step, is text in <emphasis>italics</emphasis>. This text
 will explain what the previous step in the tutorial accomplished.</para></note>
 
-<para>When you first start &kword; (or <link linkend="file">start a new
+<para>When you first <link linkend="starting-kword">start &kword;</link> (or <link linkend="new-doc">start a new
 document</link> after &kword; is running), a dialog appears.</para>
 
 <mediaobject>
@@ -20,7 +27,7 @@ document</link> after &kword; is running), a dialog appears.</para>
 <para><emphasis>This dialog box is used to:</emphasis></para>
 <orderedlist numeration="arabic">
 <listitem>
-<para><emphasis>To select the initial template for your new
+<para><emphasis>Select the initial template for your new
 document</emphasis></para>
 </listitem>
 <listitem>
@@ -33,16 +40,15 @@ started.</emphasis></para>
 </listitem>
 </orderedlist>
 
-<para>For your first document:</para>
-
-<para>Step 1: Select Template</para>
-<para>Click on the <guilabel>Page Layout</guilabel> tab.</para>
+<para>Step 1: Click on the <guilabel>Page Layout</guilabel> tab.</para>
 
 <mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut1.png"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
 
 <para><emphasis>This will list the Page Layout templates available on
-your system.</emphasis></para>
+your system. For information on the differences between Page Layout and Text Oriented templates, see the section entitled 
+<link linkend="wp-vs-dtp">The difference between Text Oriented and Page Layout
+templates</link>.</emphasis></para>
 
 <para>Step 2: Now select the <guilabel>Simple Layout</guilabel> icon by
 clicking once with the left button of your mouse.</para>
@@ -71,7 +77,7 @@ a separate frame.</emphasis></para>
 <title>Tutorial: Selecting a frame and entering text into that frame</title>
 
 <para><emphasis>To begin entering text (or adding any sort of data for
-that matter), to a document, you must first let the computer know which
+that matter) into a document, its important to let &kword; know which
 frame to put the data in.</emphasis></para>
 
 <note>
@@ -82,8 +88,8 @@ is located.</para>
 <para>When the cursor is located over toolbars, scrollbars, menu buttons or other areas
 <emphasis>outside the document</emphasis>, the cursor changes to an arrow. You should already be
 familiar with this type of cursor when using other &kde; programs. </para>
-<para>When <emphasis>inside the document</emphasis>, there are two seperate cursor types which alternate automatically
-based on how close to a frame edge the cursor is currently located. This mode allows you to move and resize frames in the page.</para>
+<para>When <emphasis>inside the document</emphasis>, there are two separate cursor types which alternate automatically
+based on how close to a frame edge the cursor is currently located.</para>
 <para>When the mouse cursor is near the edge of a frame, the cursor will change into two intersecting lines
 with arrows on all four points.  Clicking the left mouse button now will select the nearest frame.  </para>
 <para>As you move the cursor away from the edge of the frame, the cursor will change into the text entry cursor.
@@ -98,9 +104,8 @@ Clicking the left mouse button at this time will tell &kword; to insert text int
 fileref="Tut4.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject>
 
-<para><emphasis>This selects a frame.  You can tell this is the current
-frame because a cursor appears in the upper left
-corner. </emphasis></para>
+<para><emphasis>This tells &kword; to insert text into this frame.  A cursor appears in the upper left
+corner of the frame. </emphasis></para>
 
 <para>Step 6: Enter the following text into the keyboard: <userinput>KWord Press Release</userinput>.</para>
 
@@ -108,15 +113,15 @@ corner. </emphasis></para>
 newsletter.</emphasis></para>
 
 <para>Step 7: Select <emphasis>KWord Press Release</emphasis> by placing
-the mouse cursor on the left end of the text.  Click once with the
-<mousebutton>left</mousebutton> mouse button and drag the mouse cursor
-to the right.  Selected text will be white text on dark
-background.</para>
+the mouse cursor on the right end of the text.  Click once with the
+&LMB; and drag the mouse cursor
+to the left..  Selected text will be white text on dark
+background.  When all the text has been selected, release the &LMB;.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut7.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
-
+<para><emphasis>This defines what text is going to be altered with Step 8.</emphasis></para>
 <para>Step 8: Click inside the text size drop down box.  Change this
 number to 36.</para>
 
@@ -124,7 +129,7 @@ number to 36.</para>
 fileref="Tut8.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
-<para><emphasis>This changes the size of the text to one more
+<para><emphasis>This changes the size of the selected text to one more
 appropriate for a title.</emphasis></para>
 
 </sect1>
@@ -277,8 +282,7 @@ fileref="Tut18.png"/></imageobject>
 <textobject><phrase>Screen shot</phrase></textobject></mediaobject></para>
 
 <para><emphasis>Notice that your cursor immediately jumps to the frame
-below the newly created text frame.  That is because that lower left
-frame is the first frame in the current frameset.</emphasis></para>
+to the left.  That is because the left frame is the first frame in the current frameset.</emphasis></para>
 
 <para>Step 19: Begin typing.  You will need to type quite a bit, but
 keep typing.  When you run out of space in the text frame, you will see
@@ -293,12 +297,12 @@ fileref="Tut19.png"/></imageobject>
 <sect1 id="tutorial-del-frame"> 
 <title>Tutorial: Deleting a frame</title>
 
-<para>Now we will delete an unneeded frame. (Yes I know, we just created
-a new frame, but &kword; will forgive you being fickle).  We will delete
+<para>Now we will delete an unneeded frame. (Yes, we just created
+a new frame, but &kword; will forgive an indecisive user.).  We will delete
 the long text frame on the right side of the page.</para>
 
 <para>Step 20: Place the mouse cursor over the frame border of the right
-hand text frame (Watch for the cursor to change), and click with the left mouse button.</para>
+hand text frame (Remember: watch for the cursor to change), and click with the &LMB;.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut21.png"/></imageobject>

@@ -42,7 +42,7 @@
 <firstname>Mike</firstname>
 <surname>McBride</surname>
 <affiliation>
-
+<address><email>mpmcbride7@yahoo.com</email></address>
 </affiliation>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
@@ -54,7 +54,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-03-03</date>
+<date>2002-23-03</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -104,8 +104,8 @@ Environment.  Other applications in &koffice; include:
 <listitem><para>&kspread; (A fully functional spreadsheet.)</para></listitem>
 <listitem><para>&kpresenter; (A presentation creator.)</para></listitem>
 <listitem><para>&kontour; (A vector drawing program.)</para></listitem>
-<!-- <listitem>&krayon; (A bitmap image editor)</listitem> -->
 <listitem><para>&kivio; (A flowchart creator)</para></listitem>
+<listitem><para>&krita; (A raster drawing program.)</para></listitem>
 <listitem><para>&kugar; (A report generation tool.)  </para></listitem>
 <listitem><para>&kchart; (A chart and graph creator.)</para></listitem>
 <listitem><para>and a simple integrated office desktop, to help organize your
@@ -115,8 +115,7 @@ work.</para></listitem>
 <para>
 All &koffice; applications were designed from the beginning to take
 advantage of the features of &kde;. Because of this, &kword; (like
-all of &koffice;), supports drag and drop, theming, and many other
-advanced features you expect from todays desktop environment.
+all of &koffice;), supports many advanced features you expect from todays desktop environment.
 </para>
 
 <para>
@@ -159,7 +158,7 @@ frame, flows easily and automatically into the next.
 
 <para>
 In addition to text, you can include virtually anything inside a frame.
-A frame can contain a spreadsheet, clip-art, pictures, a database form,
+A frame can contain a spreadsheet, pictures, a database form,
 or nearly any piece of data. Since each page can have any number of
 frames, documents can appear quite sophisticated while still remaining
 easy to edit.
@@ -211,14 +210,14 @@ different headers for even and odd pages, or the same headers
 throughout.</para>
 </listitem>
 <listitem>
-<para>Search through your document for text.  You can further refine
+<para>Search through your document for text.  <!--You can further refine
 your search by specifying font, format, font size and many other
-features of the text. By adding wild-cards to your search, the search and
+features of the text. -->By adding wild-cards to your search, the search and
 replace functions can become very powerful.</para>
 </listitem>
-<listitem>
+<!--<listitem>
 <para>Complete footnote and end-note support.</para>
-</listitem>
+</listitem>-->
 <listitem>
 <para>Tables. You can either use the table formatting capabilities of
 &kword;, or you can import any spreadsheet from &kspread;.</para>
@@ -245,13 +244,15 @@ easier on any computer, and with any font size. </para>
 formula editor.</para>
 </listitem>
 <listitem>
-<para>You can have KWord auto-correct many of the most common spelling and puntuation mistakes.</para>
+<para>You can have &kword; auto-correct many of the most common spelling and punctuation mistakes.</para>
 </listitem>
 <listitem>
-<para>KWord can check the spelling of your document.</para>
+<para>&kword; can check the spelling of your document. &kword; can automatically mark misspelled words as you type.</para>
 </listitem>
 <listitem>
 <para>You can access an on-line thesaurus (English only) to find the exact word you are looking for.</para>
+</listitem><listitem>
+<para>&kword; can automatically create a table of contents, and keep it up to date.</para>
 </listitem>
 </itemizedlist>
 
@@ -269,18 +270,17 @@ the conclusion that reading this manual from cover to cover, is an
 unreasonable (and fortunately unnecessary) task.</para>
 
 <para>Since different users will have different needs, each section of
-this manual is self-contained.  You are not expected to have read all of
+this manual is self-contained.  The user is not expected to have read all of
 the previous sections of the manual to find the instructions
 useful.</para>
 
 <para>This user guide is designed to be helpful to a wide variety of
-users, from the very experienced, to the novice user.  Each user will
-have different needs from this manual.  To help you determine what you
-should read and what you can wait on, I have prepared a suggested
-reading list for three levels of user.</para>
+users, from the very experienced, to the novice user.  To help determine what
+should read before starting to work with &kword;, I have prepared a suggested
+reading list for three levels of users.</para>
 
-<para>If you read each of these sections <emphasis>before</emphasis> you
-start using &kword;, you will find that using &kword; is easy.</para>
+<para>If each of these sections is read <emphasis>before</emphasis>
+ staring to use &kword;, using &kword; will be easier.</para>
 
 <informaltable>
 <tgroup cols="3">
@@ -321,21 +321,19 @@ or <application>Applixware</application>.)</entry>
 
 <row>
 <entry>Advanced User</entry>
-<entry>Comfortable with other frames based word processors (Frame Maker,
+<entry>Comfortable with other frames based word processors (<application>Frame Maker</application>,
 &etc;).</entry>
 <entry><simplelist type="vert" columns="1">
-<member><link linkend="wp-vs-dtp">The difference between Word processing and DTP templates</link></member>
+<member><link linkend="wp-vs-dtp">The difference between Text Oriented and Page Layout templates</link></member>
 </simplelist></entry></row>
 </tbody></tgroup>
 </informaltable>
 
-<para>These sections will help you get started initially. You can then
-refer to the other parts of this manual as needed to help you with
-specific questions or situations.</para>
+<para>These sections will help with the basic information. As other specific questions or situations arise, the
+other sections of this manual can be used as a reference.</para>
 
-<para>Obviously this will not cover everyones needs.  What I hope it
-will do, however, is help you determine which parts of the manual you
-need to read before you begin using &kword;.</para>
+<para>Obviously this will not cover everyones needs.  Please use it as a guide to help 
+determine which parts of the manual will be helpful to read before you begin using &kword;.</para>
 
 </sect1>
 
@@ -383,7 +381,32 @@ document.</para>
 </chapter>
 
 <chapter id="guides-4"><title>Detailed Guides: More than just text</title>
-<sect1 id="dg4intro"><title>Introduction</title><para></para></sect1>
+<para>Up to this point in the documentation, we have been focusing on text.  That is about to change!</para>
+<para>This chapter will discuss inserting a table of contents, graphics, page numbers, links to web pages and how to
+insert other types of &koffice; data into a document.</para>
+<para>This chapter will also cover document information and its relationship to document variables.</para>
+<sect1 id="documentinfo"><title>Entering Document information </title>
+<para>&kword; can store information about the author and the document in the same file as the text and data of the document.</para>
+<para>Entering this information into &kword;, you can do two things:</para>
+<orderedlist>
+<listitem><para>This information will always be available for reference.  This is especially important in situations where 
+there are many possible authors (employees) and hundreds (or thousands) of documents.</para></listitem>
+<listitem><para>The information supplied here, can be used to automatically fill this information in using
+<link linkend="variables">document variables</link>.</para></listitem>
+</orderedlist>
+<para>To enter document information, simply select <menuchoice>
+<guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem>
+</menuchoice> from the menubar.  This will bring up a dialog box with two tabs.</para>
+<para>The first tab is labled <guilabel>Author</guilabel> and has blanks to enter the authors name, title, company and contact
+information (email address, telephone numbers and physical address).</para>
+<tip><para>The authors name, company, email address, telephone number, fax number and address can be accessed through
+<link linkend="variables">document variables</link>.</para></tip>
+<para>The second tab is labled <guilabel>About</guilabel>. Enter a document title and an abstract.</para>
+<tip><para>Both the document title and the abstract can be accessed through
+<link linkend="variables">document variables</link>.</para></tip>
+<para>When finished entering the information, click <guibutton>OK</guibutton> to apply the changes.
+If any document variables were changed, &kword; will update their values throughout the document.</para>
+</sect1>
 &graphics;
 &toc;
 &misc;
@@ -393,46 +416,135 @@ document.</para>
 <!--&guides4; -->
 
 <!-- **************************************************************************************************** -->
+<chapter id="advanced-topics"><title>Advanced Topics</title>
+<sect1 id="mail-merge"><title>Mail Merge</title><para></para></sect1>
+<sect1 id="doc-structure"><title>Document Structure</title><para></para></sect1>
+</chapter>
+
+<!-- **************************************************************************************************** -->
 <chapter id="quickdirty">
-<title>How do I...</title><para></para>
-
-<sect1 id="qd1">
+<title>How do I...</title>
+<para>The next part of &kword; documentation is designed to provide examples on how to solve specific
+problems using &kword;.</para>
+<para>Each section is a self contained list of steps, and refers the reader to other sections of the documentation
+for more complete information on different aspects of &kword;.</para>
+<para>These examples were selected to:</para>
+<itemizedlist>
+<listitem><para>Show how &kword; might function differently from other word processors you are used to.</para></listitem>
+<listitem><para>Show how to combine several elements to create the desired document.</para></listitem>
+<listitem><para>Illustrate the power of &kword;.</para></listitem>
+</itemizedlist>
+<para>You can use these examples as recipes for your document, or modify them to create the look or content
+you desire.</para>
+<sect1 id="qd-page-numbers">
 <title>How do I get the pages numbers on the outsides of the pages and
-the title in the middle of the header(like a novel)?</title>
-
-<para></para>
-
+the title in the middle of the header (like a novel)?</title>
+<para>This first example shows how you can combine tables and variables in a header to create a common format to your document.</para>
+<note><para>Your document must be at least 2 pages long <emphasis>before</emphasis> you begin this procedure. </para></note>
+<orderedlist>
+<listitem><para>Select <menuchoice><guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Click on the <guilabel>About</guilabel> tab.</para></listitem>
+<listitem><para>Click once in the text box labeled <guilabel>Document Title</guilabel> with the &LMB; and enter
+the desired document title.</para></listitem>
+<listitem><para>Click on the <guibutton>OK</guibutton> button.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Page</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Click on the <guilabel>Header and Footer</guilabel> tab.</para></listitem>
+<listitem><para>Select <guilabel>Different header for even and odd pages</guilabel>.</para></listitem>
+<listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>View</guimenu><guimenuitem>Header</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Move to an odd numbered page in your document, and click in the header box.</para></listitem>
+<listitem><para>Press <keycap>F5</keycap> to insert a table in the header.</para></listitem>
+<listitem><para>The insert table dialog will appear.  Change the initial values to:</para>
+<itemizedlist>
+<listitem><para><guilabel>Number of Rows</guilabel>: 1</para></listitem>
+<listitem><para><guilabel>Number of Columns</guilabel>: 3</para></listitem>
+<listitem><para><guilabel>Cell Heights</guilabel>: Manual</para></listitem>
+<listitem><para><guilabel>Cell Heights</guilabel>: Manual</para></listitem>
+<listitem><para>Make sure the table is <guilabel>Inline</guilabel>.</para></listitem>
+</itemizedlist>
+<para>Then click <guibutton>OK</guibutton>.</para>
+</listitem>
+<listitem><para>Click in the header again with the &LMB;, to show the table.</para></listitem>
+<listitem><para>In the right column of the table, click with the &LMB;.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Page Number</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Click the <guibutton>Right Text Align</guibutton> button (<inlinemediaobject><imageobject><imagedata
+fileref="alignRight.png" format="PNG"/></imageobject></inlinemediaobject>)
+on the toolbar.</para></listitem>
+<listitem><para>Click once in the center column with the &LMB;.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Property</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Click the <guibutton>Center Text Align</guibutton> button (<inlinemediaobject><imageobject><imagedata
+fileref="alignCenter.png" format="PNG"/></imageobject></inlinemediaobject>)
+on the toolbar.</para></listitem>
+<listitem><para>Move to an even numbered page in your document, and click in the header box.</para></listitem>
+<listitem><para>Press <keycap>F5</keycap> to insert a table in the header.</para></listitem>
+<listitem><para>The insert table dialog will appear.  Change the initial values to:</para>
+<itemizedlist>
+<listitem><para><guilabel>Number of Rows</guilabel>: 1</para></listitem>
+<listitem><para><guilabel>Number of Columns</guilabel>: 3</para></listitem>
+<listitem><para><guilabel>Cell Heights</guilabel>: Manual</para></listitem>
+<listitem><para><guilabel>Cell Heights</guilabel>: Manual</para></listitem>
+<listitem><para>Make sure the table is <guilabel>Inline</guilabel>.</para></listitem>
+</itemizedlist>
+<para>Then click <guibutton>OK</guibutton>.</para>
+</listitem>
+<listitem><para>Click in the header again with the &LMB;, to show the table.</para></listitem>
+<listitem><para>In the left column of the table, click with the &LMB;.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Page Number</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Click once in the center column with the &LMB;.</para></listitem>
+<listitem><para>Select <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem>
+<guimenuitem>Property</guimenuitem><guimenuitem>Document Title</guimenuitem></menuchoice>
+from the menubar.</para></listitem>
+<listitem><para>Click the <guibutton>Center Text Align</guibutton> button (<inlinemediaobject><imageobject><imagedata
+fileref="alignCenter.png" format="PNG"/></imageobject></inlinemediaobject>)
+on the toolbar.</para></listitem>
+</orderedlist>
+<para>That completes the procedure. Your document now has the title of the document in the center along the top of each page, and
+the page numbers on the outside corners of the pages.  </para>
+<para>If you want page numbers on the bottom of the pages, you can use <link linkend="headers-and-footers">Footers</link> instead of
+headers in your document.</para>
+<para>To adjust the look of the tables, including where their margins are, see the section entitled 
+<link linkend="tables">Tables</link>.</para>
 </sect1>
 
-<sect1 id="qd2">
-<title>How do I get the chapter name on the top of each
-page?</title>
-
-<para></para>
-
-</sect1>
-
-<sect1 id="qd3">
+<sect1 id="qd-pdf">
 <title>How do I create a <literal role="extension">.pdf</literal> file
 to post on the web?</title>
+<para>&kword; differs slightly from other word processors here.  Instead of saving your file as a 
+<literal role="extension">.pdf</literal> file, you <emphasis>print</emphasis> your file to create the
+<literal role="extension">.pdf</literal> file.</para>
+<para>When you are ready to create a <literal role="extension">.pdf</literal> file from your document:</para>
 
-<para></para>
-
+<orderedlist>
+<listitem><para>Select <menuchoice><guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice>
+from the menubar.</para>
+<para>This will bring up the print dialog.</para></listitem>
+<listitem><para>In the drop-down box labled <guilabel>Name</guilabel>, select <guilabel>Print to File (PDF/Acrobat)</guilabel></para></listitem>
+<listitem><para>Enter your desired filename in the <guilabel>Output file</guilabel> text box.</para></listitem>
+<listitem><para>If you wish to make any changes to the PDF formatting, select <guibutton>Properties</guibutton>.</para>
+<para>A complete explanation to all these properties, is beyond the scope of this document.</para></listitem>
+<listitem><para>Click <guibutton>OK</guibutton>.</para></listitem>
+</orderedlist>
+<para>Your PDF file will be created and seved at the location specified in <guilabel>Output file</guilabel>.  This file can be uploaded
+onto any website.</para>
+<para>For more information on printing in &kde;, visit <ulink url="http://printing.kde.org">The KDE Print webpage</ulink>.</para>
+<para>For more information on <literal role="extension">.pdf</literal> files, visit 
+<ulink url="http://www.pdfzone.com/resources/index.html">The PDFZone Resources page</ulink></para>
 </sect1>
 
-<sect1 id="qd4">
-<title>How do I change the Quit and Close commands so they resemble
-&Microsoft; Office?</title>
-
-<para></para>
-
-</sect1>
-
-
-<sect1 id="qd5">
+<sect1 id="qd-template-remove">
 <title>How do I remove template categories from the open dialog.</title>
 
-<para>hint:  .templates</para>
+<para>Templates can only be removed using the template creation dialog. For instructions, click
+<link linkend="template-delete-group">Removing template group</link>.</para>
 </sect1>
 
 </chapter>
@@ -448,11 +560,13 @@ to post on the web?</title>
 <qandaset id="faq">
 <qandaentry>
 <question>
-<para>When I try to load a document, it does not appear in my dialog
-box, but I know I saved it there (file extensions)</para>
+<para>When I try to load a document or picture, it does not appear in my dialog
+box, but I know I saved it there. Why can't I see it?</para>
 </question>
 <answer>
-<para></para>
+<para>Check to make sure that you have selected the correct file type in the <link linkend="file-dialog">open dialog box</link>.  
+If you save a file in one format, but ask
+&kword; to show you the files from another format, you will not see your saved file.</para>
 </answer>
 </qandaentry>
 
@@ -462,16 +576,8 @@ box, but I know I saved it there (file extensions)</para>
 What is a <literal role="extension">kwt</literal> file?</para>
 </question>
 <answer>
-<para></para>
-</answer>
-</qandaentry>
-
-<qandaentry>
-<question>
-<para>How do I delete an entire frame-set?</para>
-</question>
-<answer>
-<para>By deleting the last frame of the frame-set.</para>
+<para>A <literal role="extension">kwd</literal> file is a &kword; document.  </para>
+<para>A <literal role="extension">kwt</literal> file is a &kword; template file.  </para>
 </answer>
 </qandaentry>
 
@@ -480,7 +586,12 @@ What is a <literal role="extension">kwt</literal> file?</para>
 <para>Where can I get updates?</para>
 </question>
 <answer>
-<para></para>
+<para>For updates to &kword; you should always check the following sites:</para>
+<para>The &koffice; website (<ulink url="http://koffice.kde.org">http://koffice.kde.org</ulink>) is the first place to look for updates.
+Any software updates, bug fixes or announcements of new releases of &koffice; will be found here. </para>
+<para>KDE Apps (<ulink url="http://apps.kde.com">http://apps.kde.com</ulink>) is a good place to find software for &kde; in general. 
+To locate updates and additions to &kword; choose the category <emphasis>Office: Suites: KOffice</emphasis>.  Here you can find
+additional templates, and other updates that are developed outside of the &kword; development team.</para>
 </answer>
 </qandaentry>
 
@@ -489,30 +600,10 @@ What is a <literal role="extension">kwt</literal> file?</para>
 <para>How do themes affect &kword;</para>
 </question>
 <answer>
-<para></para>
-</answer>
-</qandaentry>
-
-<qandaentry>
-<question id="drag-drop">
-<para>Drag and Drop with &kword;</para>
-</question>
-<answer>
-<para></para>
-</answer>
-</qandaentry>
-
-<qandaentry>
-<question>
-<para>How do I insert a new frame into a frame-set between two frames
-that already exist?</para>
-</question>
-<answer>
-<para></para>
+<para>&kword; (like all of &koffice;) is completely themeable.  You can use any QT or &kde; theme to customize the look of &kword;.</para>
 </answer>
 </qandaentry>
 </qandaset>
-
 </chapter>
 <!-- **************************************************************************************************** -->
 
@@ -524,25 +615,34 @@ that already exist?</para>
 
 <itemizedlist>
 <title>&kword; Developers</title>
-<listitem><para>Reginald Stadlebauer <email>reggie@kde.org</email></para></listitem>
-<listitem><para>Thomas Zander <email>zander@earthling.net</email></para></listitem>
-<listitem><para>Laurent Montel <email>lmontel@mandrakesoft.com</email></para></listitem>
-<listitem><para>David Faure<email>david@mandrakesoft.com</email></para></listitem>
-<listitem><para>Torben Weis <email>weis@kde.org</email></para></listitem>
+<listitem><para>David Faure <email>dfaure@kde.org</email></para></listitem>
+<listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
 <listitem><para>Simon Hausmann <email>hausmann@kde.org</email></para></listitem>
-<listitem><para>Werner Trobin <email>trobin@kde.org</email></para></listitem>
 <listitem><para>Stephan Kulow <email>coolo@kde.org</email></para></listitem>
+<listitem><para>Sven L&uuml;ppken <email>sven@kde.org></email></para></listitem>
+<listitem><para>Laurent Montel <email>lmontel@mandrakesoft.com</email></para></listitem>
+<listitem><para>Reginald Stadlbauer <email>reggie@kde.org</email></para></listitem>
+<listitem><para>Werner Trobin <email>trobin@kde.org</email></para></listitem>
+<listitem><para>Torben Weis <email>weis@kde.org</email></para></listitem>
+<listitem><para>Thomas Zander <email>zander@kde.org</email></para></listitem>
+
 </itemizedlist>
 
 <itemizedlist>
 <title>&kword; Import/Export Filter developers</title>
-<listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
 <listitem><para>Enno Bartels <email>ebartels@nwn.de</email></para></listitem>
-<listitem><para>Nicolas Goutte<email>nicog@snafu.de</email></para></listitem>
-<listitem><para>Michael Johnson<email>mikej@xnet.com</email></para></listitem>
 <listitem><para>Wolf-Michael Bolle <email>Bolle@ID-PRO.de</email></para></listitem>
-<listitem><para>Robert Jacolin <email>rjacolin@ifrance.com</email></para></listitem>
 <listitem><para>Matthias Kalle Dalheimer <email>mailto:kalle@dalheimer.de</email></para></listitem>
+<listitem><para>Clarence Dang <email>CTRL_CD@bigpond.com</email></para></listitem>
+<listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
+<listitem><para>Nicolas Goutte <email>nicog@snafu.de</email></para></listitem>
+<listitem><para>Tomasz Grobelny <email>grotk@poczta.onet.pl</email></para></listitem>
+<listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
+<listitem><para>Ariya Hidayat <email>ariyahidayat@yahoo.de</email></para></listitem>
+<listitem><para>Robert Jacolin <email>rjacolin@ifrance.com</email></para></listitem>
+<listitem><para>Michael Johnson <email>mikej@xnet.com</email></para></listitem>
+<!--<listitem><para>Alexandros Karypidis<email>mailto:karypid@inf.uth.gr</email></para></listitem>-->
+<listitem><para>Ewald Snel <email>ewald@rambo.its.tudelft.nl</email></para></listitem>
 </itemizedlist>
 
 <itemizedlist>
@@ -766,6 +866,94 @@ export that?)</para></listitem>
 </informaltable>
 </sect2>
 </sect1>
+
+<sect1 id="filter-ami">
+<title><application>AmiPro</application> Filter</title>
+
+<variablelist>
+<varlistentry>
+<term>Status</term>
+<listitem>
+<para>The <application>AmiPro</application> filter is in the early
+stages, and should be used with caution.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Developer</term>
+<listitem>
+<para>Ariya Hidayat <email>ariyahidayat@yahoo.de</email></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><application>AmiPro</application> Information.</term>
+<listitem>
+<para><application>AmiPro</application> was a wordprocessor from Lotus, part of its SmartSuite
+package.</para>
+<note><para><application>AmiPro</application> is different from WordPro, which is the
+successor of <application>AmiPro</application> but with totally different file format (hence not
+supported by this filter).</para></note>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<sect2 id="ami-import">
+<title>Import <application>AmiPro</application> files into &kword;</title>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row>
+<entry>Features</entry>
+<entry><itemizedlist>
+<listitem><para>Can import all text</para></listitem>
+<listitem><para>Supported formatting: bold, italic, underline, subscript, superscript, strikethrough
+(word underline and double-underline still treated as underline)</para></listitem>
+<listitem><para>Supports paragraph align</para></listitem>
+<listitem><para>Linespaces: single, double, one-and-half, custom</para></listitem>
+<listitem><para>Styles (still not complete, but it works)</para></listitem>
+</itemizedlist></entry>
+</row>
+<row>
+<entry>Still to be done.</entry>
+<entry><itemizedlist>
+<listitem><para>Finish Style import</para></listitem>
+<listitem><para>All other document formatting</para></listitem>
+</itemizedlist>
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</sect2>
+
+<sect2 id="ami-export">
+<title>Export &kword; files into <application>AmiPro</application>
+files</title>
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row>
+<entry>Features</entry>
+<entry><itemizedlist>
+<listitem><para>Export formatted text (bold, italic, underline, subscript, superscript, strikethrough)</para></listitem>
+</itemizedlist></entry>
+</row>
+<row>
+<entry>Still to be done.</entry>
+<entry><itemizedlist>
+<listitem><para>All other document formatting</para></listitem>
+</itemizedlist>
+</entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+
+</sect2>
+</sect1>
+
 
 <sect1 id="filter-applixware">
 <title><application>Applixware</application> Filter</title>
@@ -1005,9 +1193,142 @@ or not?)</para></listitem>
 
 <sect1 id="filter-latex">
 <title>LaTeX Filter</title>
-
 <para></para>
+</sect1>
 
+<sect1 id="filter-word97">
+<title>&Microsoft; <application>Word 97</application> and
+<application>Word 2000</application> Filter</title>
+
+<variablelist>
+<varlistentry>
+<term>Status</term>
+<listitem>
+<para>The &Microsoft; <application>Word 97/2000</application> export
+filter is not currently functioning.  The import filter is working, but
+has some known limitations. It should be used with caution.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Developers</term>
+<listitem>
+<para>Wolf-Michael Bolle <email>Bolle@ID-PRO.de</email> and Michael
+Johnson<email>mailto:mikejl@xnet.com</email>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>&Microsoft; Word File Format:</term>
+<listitem>
+<para>
+Can be located within &Microsoft;s MSDN, but rumor has it that it may have
+been lost or removed.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<sect2 id="word-import">
+<title>Import &Microsoft; <application>Word</application> files into
+&kword;.</title>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row>
+<entry>Features</entry>
+<entry><itemizedlist>
+<listitem><para>numbered headings</para></listitem>
+<listitem><para>lists (bulleted, numbered, lettered)</para></listitem>
+<listitem><para>body text with some formatting (bold, italic, underline,
+superscript, subscript)</para></listitem>
+<listitem><para>word-builtin colors</para></listitem>
+<listitem><para>tables</para></listitem>
+<listitem><para>i18n support</para></listitem>
+</itemizedlist>
+</entry>
+</row>
+<row>
+<entry>Still to be done.</entry>
+<entry><itemizedlist>
+<listitem><para>Embedded objects (with some
+restrictions)</para></listitem>
+<listitem><para>Header and footer support.</para></listitem>
+<listitem><para>many more..</para></listitem>
+</itemizedlist></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</sect2>
+
+<sect2 id="word-export">
+<title>Export &kword; files for use in &Microsoft;
+<application>Word</application>.</title>
+
+<para>This is currently not functioning</para>
+
+</sect2>
+</sect1>
+
+<sect1 id="filter-palmdoc">
+<title>Palmdoc Filter</title>
+
+<variablelist>
+<varlistentry>
+<term>Status</term>
+<listitem>
+<para>The PalmDoc filter is completed and usable.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Developer</term>
+<listitem>
+<para>Ariya Hidayat <email>ariyahidayat@yahoo.de</email></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Palm Doc Information</term>
+<listitem>
+<para>Palm Doc file format is not tied to any particular application.  Instead, it is the defacto standard file
+format for long documents in the &PalmOS;.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<sect2 id="palmdoc-import">
+<title>Import PalmDoc files into &kword;</title>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row>
+<entry>Features</entry>
+<entry><para>Can import all text (compressed or plain)</para>
+</entry></row>
+<row><entry>Still to be done</entry>
+<entry><para>Support for another (open) document format, perhaps RichReader or zTXT</para></entry>
+</row>
+</tbody></tgroup></informaltable>
+</sect2>
+
+<sect2 id="palmdoc-export">
+<title>Export &kword; files to PalmDoc files.</title>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row>
+<entry>Features</entry>
+<entry><para>All text is saved as a compressed PalmDoc file.</para>
+</entry></row>
+<row><entry>Still to be done</entry>
+<entry><para>Support for other document formats</para></entry>
+</row>
+</tbody></tgroup></informaltable>
+</sect2>
 </sect1>
 
 <sect1 id="filter-mif">
@@ -1158,41 +1479,38 @@ supported.</para>
 
 </sect1>
 
-<sect1 id="filter-word97">
-<title>&Microsoft; <application>Word 97</application> and
-<application>Word 2000</application> Filter</title>
+<sect1 id="filter-wml">
+<title>Wireless Markup Language (WML) Filter</title>
 
 <variablelist>
 <varlistentry>
 <term>Status</term>
 <listitem>
-<para>The &Microsoft; <application>Word 97/2000</application> export
-filter is not currently functioning.  The import filter is working, but
-has some known limitations. It should be used with caution.</para>
+<para>The Wireless Markup Language <acronym>WML</acronym> filter is usable, but may contain bugs.
+Use with caution on critical information.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term>Developers</term>
+<term>Developer</term>
 <listitem>
-<para>Wolf-Michael Bolle <email>Bolle@ID-PRO.de</email> and Michael
-Johnson<email>mailto:mikejl@xnet.com</email>.</para>
+<para>Ariya Hidayat <email>ariyahidayat@yahoo.de</email></para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term>&Microsoft; Word File Format:</term>
+<term>Wireless Markup Language Information</term>
 <listitem>
-<para>
-Can be located within &Microsoft;s MSDN, but rumor has it that it may have
-been lost or removed.</para>
+<para>WML is another markup-language, intended
+to display information on handheld. It's very much like HTML in general.</para>
+<para>For the official specification, visit the
+<ulink url="http://www.wapforum.org/what/technical.htm">WAP forum technical pages</ulink>.</para>
 </listitem>
 </varlistentry>
 </variablelist>
 
-<sect2 id="word-import">
-<title>Import &Microsoft; <application>Word</application> files into
-&kword;.</title>
+<sect2 id="wml-import">
+<title>Import <acronym>WML</acronym> files into &kword;</title>
 
 <informaltable>
 <tgroup cols="2">
@@ -1200,38 +1518,111 @@ been lost or removed.</para>
 <row>
 <entry>Features</entry>
 <entry><itemizedlist>
-<listitem><para>numbered headings</para></listitem>
-<listitem><para>lists (bulleted, numbered, lettered)</para></listitem>
-<listitem><para>body text with some formatting (bold, italic, underline,
-superscript, subscript)</para></listitem>
-<listitem><para>word-builtin colors</para></listitem>
-<listitem><para>tables</para></listitem>
-<listitem><para>i18n support</para></listitem>
+<listitem><para>Can import all text along with formatting (bold, italics, underline)</para></listitem>
+<listitem><para>Support paragraph align (left, center, right)</para></listitem>
+<listitem><para>Support &lt;BIG&gt; and &lt;SMALL&gt;</para></listitem>
+<listitem><para>Support hyperlink</para></listitem>
+</itemizedlist>
+</entry></row>
+<row><entry>Still to be done</entry>
+<entry><itemizedlist>
+<listitem><para>Image (WBMP format, monochrome BMP for handheld)</para></listitem>
+<listitem><para>Text encoding</para></listitem>
+<listitem><para>Tables</para></listitem>
 </itemizedlist>
 </entry>
 </row>
+</tbody></tgroup></informaltable>
+</sect2>
+<sect2 id="wml-export">
+<title>Export &kword; files to <acronym>WML</acronym> files.</title>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
 <row>
-<entry>Still to be done.</entry>
+<entry>Features</entry>
 <entry><itemizedlist>
-<listitem><para>Embedded objects (with some
-restrictions)</para></listitem>
-<listitem><para>Header and footer support.</para></listitem>
-<listitem><para>many more..</para></listitem>
+<listitem><para>Formatted text</para></listitem>
+</itemizedlist></entry></row>
+<row><entry>Still to be done</entry>
+<entry><itemizedlist>
+<listitem><para>Card title</para></listitem>
+<listitem><para>Text encoding</para></listitem>
+<listitem><para>Images</para></listitem>
+<listitem><para>Hyperlinks</para></listitem>
 </itemizedlist></entry>
 </row>
-</tbody>
-</tgroup>
-</informaltable>
+</tbody></tgroup></informaltable>
 </sect2>
-
-<sect2 id="word-export">
-<title>Export &kword; files for use in &Microsoft;
-<application>Word</application>.</title>
-
-<para>This is currently not functioning</para>
-
-</sect2>  
 </sect1>
+
+<sect1 id="filter-wordperfect">
+<title>Wordperfect Filter</title>
+
+<variablelist>
+<varlistentry>
+<term>Status</term>
+<listitem>
+<para>The Wordperfect filter is usable, but may contain bugs.
+Use with caution on critical information. Currently you can only import files into &kword;.  No export ability available.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Developer</term>
+<listitem>
+<para>Ariya Hidayat <email>ariyahidayat@yahoo.de</email></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Wordperfect</term>
+<listitem>
+<para>Wordperfect is a wordprocessor from Corel.  You can visit the Corel Website at 
+<ulink url="http://www.corel.com/">www.corel.com</ulink>. </para>
+<para></para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<sect2 id="wordperfect-import">
+<title>Import Wordperfect files into &kword;</title>
+
+<informaltable>
+<tgroup cols="2">
+<tbody>
+<row>
+<entry>Features</entry>
+<entry><itemizedlist>
+<listitem><para>Can import all text</para></listitem>
+<listitem><para>Support Wordperfect 5.x and Wordperfect 6/7/8 documents</para></listitem>
+<listitem><para>Font information: size, typeface, color, etc</para></listitem>
+<listitem><para>Wordperfect extended character converted to Unicode</para></listitem>
+<listitem><para>Character formatting: bold, italics, underline, strikeout, superscript, subscript</para></listitem>
+<listitem><para>Paragraph layout: linespacing, justification</para></listitem>
+<listitem><para>Page settings: margins</para></listitem>
+<listitem><para>Document summary: title, author, abstract</para></listitem>
+</itemizedlist>
+</entry></row>
+<row><entry>Still to be done</entry>
+<entry><itemizedlist>
+<listitem><para>Headers and footers</para></listitem>
+<listitem><para>Multicolumn pages</para></listitem>
+<listitem><para>Styles</para></listitem>
+<listitem><para>Tables</para></listitem>
+</itemizedlist>
+</entry>
+</row>
+</tbody></tgroup></informaltable>
+</sect2>
+<sect2 id="wordperfect-export">
+<title>Export &kword; files to WordPerfect files.</title>
+<para>Not currently available.</para>
+</sect2>
+</sect1>
+
+
 
 </appendix>
 
@@ -1487,11 +1878,13 @@ interchange</emphasis>. This is what many people mean when they say
 <glossentry id="defaspectratio">
 <glossterm>Aspect Ratio</glossterm>
 <glossdef>
-<para>This is the ratio of the measurement of a screen or document
+<para>This is the ratio of the measurement of a screen, picture or document
 horizontally compared to the vertical measurement.  All standard
-computer monitors have the same aspect ratio, regardless of their 
+computer monitors have the same aspect ratio, regardless of their
 resolution. Any &kword; document that conforms to the standard
 screen will look good on any monitor.</para>
+<para>For many images, it is important to maintain the aspect ratio.  This prevents
+distortion to the picture.</para>
 </glossdef>
 </glossentry>
 
@@ -1722,11 +2115,19 @@ Web.</para>
 </glossdef>
 </glossentry>
 
+<glossentry id="defhue">
+<glossterm><acronym>Hue</acronym></glossterm>
+<glossdef>
+<para>Hue is a more technically correct term for what we generally refer to as <emphasis>color</emphasis>.</para>
+<para>Examples of hues include red, green, blue and purple.</para>
+</glossdef>
+</glossentry>
+
 <glossentry id="defkde2">
 <glossterm>&kde;</glossterm>
 <glossdef>
 <para>Stands for the <emphasis>K Desktop Environment</emphasis>.  Part of &kde; is
-required for &kword; to operate.  The KDesktop Environment is a user
+required for &kword; to operate.  The K Desktop Environment is a user
 interface which allows users to manipulate files and operate programs
 graphically.  For more information, please visit <ulink
 url="http://www.kde.org">www.kde.org</ulink>.</para>
@@ -1800,6 +2201,17 @@ very easy to use.</para>
 </glossdef>
 </glossentry>
 
+<glossentry id="defsaturation">
+<glossterm><acronym>Saturation</acronym></glossterm>
+<glossdef>
+<para>Saturation refers to the subjective quantity of a specific hue in a color.  Colors with a low saturation appear more white.
+Colors with high saturation appear more richly colored.</para>
+<para>This is a set of four red dots which increase in saturation from right to left.
+<inlinemediaobject><imageobject><imagedata
+fileref="saturation.png" format="PNG"/></imageobject></inlinemediaobject></para>
+</glossdef>
+</glossentry>
+
 <glossentry id="defscalingpicture">
 <glossterm>Scaling Pictures</glossterm>
 <glossdef>
@@ -1864,6 +2276,28 @@ fileref="filetb.png" format="PNG"
 align="center"/></imageobject></inlinemediaobject></para>
 </glossdef>
 </glossentry>
+
+<glossentry id="defurl">
+<glossterm>URL</glossterm>
+<glossdef>
+<para>URL is an abbreviation for Universal Resource Locater.  A universal resource locater is 
+the technical term for what is commonly referred to as a websites address.</para>
+<para>Examples of URLs include <ulink url="http://koffice.kde.org">http://www.koffice.kde.org</ulink> and
+<ulink url="http://www.kde.org">http://www.kde.org</ulink></para>
+</glossdef>
+</glossentry>
+
+<glossentry id="defvalue">
+<glossterm><acronym>Value (color)</acronym></glossterm>
+<glossdef>
+<para>Color value refers to how bright or dark a color is.  Colors with low value are more black in appearance.  Colors with high 
+value are more richly colored.</para>
+<para>This is a set of four red dots which increase in value from right to left.
+<inlinemediaobject><imageobject><imagedata
+fileref="value.png" format="PNG"/></imageobject></inlinemediaobject></para>
+</glossdef>
+</glossentry>
+
 
 <glossentry id="defvectorimage">
 <glossterm>Vector Image</glossterm>

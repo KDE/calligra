@@ -3,18 +3,18 @@
 
 <para>&kword; comes with several pre-defined templates (both
 Page Layout and Text Oriented templates), which are designed
-to get you started on your documents.</para>
+to provide initial formatting of documents.</para>
 
-<para>If, however, you often use the same format for a custom document over and
-over, you may want to create a template which more
-exactly matches your needs.</para>
+<para>If, however, the same format for a custom document is used over and
+over, &kword; can create a template which more
+exactly matches the documents needs.</para>
 
-<para>You can create an unlimited number of templates in &kword;, and
-you can organize them into categories for easy recall.</para>
+<para>An unlimited number of templates can be created in &kword;, and
+they can be organized into categories for easy recall.</para>
 <sect2 id="template-add"><title>Creating a new template</title>
-<para>You create these templates by first generating the layout in
-&kword; based on one of the pre-defined templates, and then you save the
-file.  Instead of saving it as a traditional file, you save it as a
+<para>Templates are created by first generating the layout in
+&kword; based on one of the pre-defined templates, and then saving the
+file.  Instead of saving it as a traditional file, it is saved as a
 template.</para>
 
 <para>What follows, is a step by step process to save the current
@@ -22,9 +22,9 @@ document as a template.</para>
 
 <procedure>
 <step>
-<para>When the document is like you want, Select <menuchoice>
+<para>When the document is a completed template, Select <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Create Template From
-Document</guimenuitem></menuchoice> from the Menu bar.</para>
+Document</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>This brings up a dialog:</para>
 
@@ -34,47 +34,47 @@ Document</guimenuitem></menuchoice> from the Menu bar.</para>
 </mediaobject>
 </screenshot>
 
-<para>This dialog helps you organize your templates into
+<para>This dialog helps organize the templates into
 groups (categories).</para>
 </step>
-<step><para>Select the group you want to place your new template into.</para>
+<step><para>Select the group to place the new template into.</para>
 <note><para>To create a new group to place templates in, simply click the button
-labeled <guibutton>Add Group</guibutton>. A dialog box will appear asking for the 
-name of your new group.  Click <guibutton>OK</guibutton> and the new group is created.</para></note>
+labeled <guibutton>Add Group</guibutton>. A dialog box will appear asking for the
+name of the new group.  Click <guibutton>OK</guibutton> and the new group is created.</para></note>
 </step>
 <step>
-<para>Type in a name for your template in the text box labeled <guilabel>Name</guilabel>.</para>
+<para>Type in a name for the template in the text box labeled <guilabel>Name</guilabel>.</para>
 </step>
 
-<step><para>Select the icon you want shown for your new template by 
+<step><para>Select the icon for your new template by
 using the radio buttons on the right</para>
 <para>&kword; has a default icon, which is shown below both options.</para>
-<para>If you want to change the icon, select <guilabel>Custom</guilabel> and a dialog box will appear.
-Simply select your icon using the dialog box.  Click <guibutton>OK</guibutton> when you have selected your icon.</para>
+<para>To change the icon, select <guilabel>Custom</guilabel> and a dialog box will appear.
+Simply select the desired icon using the dialog box.  Click <guibutton>OK</guibutton> when the icon is selected.</para>
 </step>
 
 <step><para>Click <guibutton>OK</guibutton>.</para></step>
 
 </procedure>
 
-<para>Once you have saved your template, the next time you open a
-document, you will see your new category/new template in the open file
+<para>Once you have saved the template, the next time you open a
+document, your new category/new template will appear in the open file
 dialog.</para>
 </sect2>
 <sect2 id="template-delete"><title>Removing a template</title>
 <para>To delete a template, follow these steps:</para>
 <procedure>
 <step>
-<para>When the document is like you want, Select <menuchoice>
+<para>Select <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Create Template From
-Document</guimenuitem></menuchoice> from the Menu bar.</para>
+Document</guimenuitem></menuchoice> from the menubar.</para>
 <para>This will bring up a dialog</para>
 </step>
-<step><para>Click on the small plus sign (+) in front of the template group the desired template is located in</para>
+<step><para>Click on the small plus sign (+) in front of the template group where the template can be found.</para>
 </step>
 <step><para>Click once on the template name</para></step>
 <step><para>Click on the button labeled <guibutton>Remove</guibutton>.</para></step>
-<step><para>A small dialog box will appear verifying that you did intend to delete
+<step><para>A small dialog box will appear verifying that you do intend to delete
 the template.  Simply click <guibutton>Yes</guibutton>.</para></step>
 </procedure>
 <para>The template is now deleted.</para>
@@ -83,14 +83,14 @@ the template.  Simply click <guibutton>Yes</guibutton>.</para></step>
 <para>To delete a group of templates, follow these steps:</para>
 <procedure>
 <step>
-<para>When the document is like you want, Select <menuchoice>
+<para>Select <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Create Template From
-Document</guimenuitem></menuchoice> from the Menu bar.</para>
+Document</guimenuitem></menuchoice> from the menubar.</para>
 <para>This will bring up a dialog</para>
 </step>
 <step><para>Click once on the group name</para></step>
 <step><para>Click on the button labeled <guibutton>Remove</guibutton>.</para></step>
-<step><para>A small dialog box will appear verifying that you did intend to delete
+<step><para>A small dialog box will appear verifying that you do intend to delete
 the group of templates.  Simply click <guibutton>Yes</guibutton>.</para></step>
 </procedure>
 <para>The group and all of the templates within the group are now deleted.</para>

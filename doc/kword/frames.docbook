@@ -309,6 +309,10 @@ frame set you want, and the currently selected frame will be added
 
 </sect2>
 
+<sect2 id="raise-frame"><title>Raise and Lower Frames</title>
+<para></para>
+</sect2>
+
 <sect2 id="hard-break">
 <title>Hard Frame Breaks</title>
 

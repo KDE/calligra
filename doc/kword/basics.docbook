@@ -14,13 +14,13 @@ screen, it is divided into 4 major areas:</para>
 (which remains at the top of all programs run under
 &kde;).</para></listitem>
 
-<listitem><para><link linkend="da">The Menu
+<listitem><para><link linkend="mb">The Menu
 Bar</link>.</para></listitem>
 
-<listitem><para><link linkend="mb">an assortment of
+<listitem><para><link linkend="tb">an assortment of
 Toolbars</link>.</para></listitem>
 
-<listitem><para><link linkend="tb">and the Document
+<listitem><para><link linkend="da">and the Document
 Area</link>.</para></listitem>
 </orderedlist>
 
@@ -32,14 +32,14 @@ Area</link>.</para></listitem>
 <variablelist>
 <varlistentry>
 <term><emphasis><anchor id="kde-frame"/>The KDE Titlebar.</emphasis></term>
-<listitem><para>The &kde; Titlebar surrounds all applications run under &kde;.
+<listitem><para>The &kde; titlebar surrounds all applications run under &kde;.
 For more information on the titlebar, please see the &kde; User Guide.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><emphasis><anchor id="mb"/>The Menubar</emphasis></term>
 
-<listitem><para>The Menu Bar provides access to all of &kword;'s functions and
+<listitem><para>The menubar provides access to all of &kword;'s functions and
 options.  Each part of the &kword; menubar is detailed in the section
 entitled: <link linkend="basic-menubar">The Basic Menu Bar</link>.</para>
 </listitem>
@@ -47,8 +47,8 @@ entitled: <link linkend="basic-menubar">The Basic Menu Bar</link>.</para>
 <varlistentry>
 <term><emphasis><anchor id="tb"/>The Toolbars</emphasis></term>
 
-<listitem><para>The Toolbars provide shortcuts to commonly used functions.
-&kword; uses 8 tool bars, with similar functions grouped together.</para>
+<listitem><para>The toolbars provide shortcuts to commonly used functions.
+&kword; uses 8 toolbars, with similar functions grouped together.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -65,8 +65,8 @@ Rulers</link>.</para>
 </listitem>
 
 
-<listitem><para><emphasis>Scrollbars</emphasis> - The scroll bars are used to move through a &kword; document
-quickly.  The &kword; scroll bar functions similar to all scroll bars in
+<listitem><para><emphasis>Scrollbars</emphasis> - The scrollbars are used to move through a &kword; document
+quickly.  The &kword; scrollbars functions similar to all scrollbars in
 &kde; or &Windows;.</para>
 </listitem>
 
@@ -148,8 +148,8 @@ will appear.</para>
 can be switched off.</para><para> Simply select <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure
 Kword</guimenuitem></menuchoice> from the Menu Bar.  Click on the
-<guibutton>Interface</guibutton> button.  The top check box will let you
-toggle the rulers on and off.</para> 
+<guibutton>Interface</guibutton> button.  The check box labeled <guilabel>Show Rulers</guilabel>
+ will let you toggle the rulers on and off.</para> 
 </note>
 
 </sect1>

@@ -28,10 +28,10 @@ commonly used functions.</para>
 manipulation of &kword;'s toolbars to suit your needs.</para>
 
 <para>The second part of this section, takes a detailed look at each
-menu bar function, and each tool bar button, and provides you with a
-brief summary of its action.  Most of these menu bar functions and
+menubar function, and each standard toolbar button, and provides you with a
+brief summary of its action.  Most of these menubar functions and
 tool bar buttons also provide you with a link to more detailed
-information.</para>
+information located elsewhere in the &kword; Handbook.</para>
 
 </sect1>
 
@@ -76,17 +76,13 @@ size.</para>
 
 <note>
 <para>Alternatively place the cursor over on the toolbar you want to
-flatten, and click with the <mousebutton>right</mousebutton> mouse
-button.</para>
-
-<para>The mouse must be on the background of the toolbar, not over a
-button to use this option.</para>
+flatten, and click with the &RMB;.</para>
 
 <para>A small menu will appear at the mouse cursor.  Select
 <guimenuitem>Flat</guimenuitem>.</para>
 
 <para>To restore this menu to its original size and position, place
-the mouse cursor over the stipled area near the menu bar, and click
+the mouse cursor over the stippled area near the menu bar, and click
 with the &LMB;.</para>
 </note>
 
@@ -125,7 +121,7 @@ edges of the &kword; screen.</para>
 position, for example, you move the toolbar into a horizontal position
 below the Document Area, and along the bottom of the &kword;
 window. By locating a tool bar in the <guilabel>Left</guilabel>
-position,however, you move the toolbar into a verticle position to the
+position,however, you move the toolbar into a vertical position to the
 left of the Document Area, and along the left edge of the &kword;
 window.</para>
 
@@ -197,7 +193,7 @@ format="PNG"/></imageobject> </inlinemediaobject></entry>
 </informaltable>
 
 <para>To change the appearance of a toolbar, place the cursor over on
-the toolbar you want to minimize, and click with the &RMB;.</para>
+the toolbar you want to change, and click with the &RMB;.</para>
 
 <para>A small menu will appear at the mouse cursor.  Select
 <guimenuitem>Text position</guimenuitem>. This will open a submenu,
@@ -328,7 +324,7 @@ As...</guimenuitem>
 </term>
 <listitem>
 <para><action>Allows you to save your file under another name or another
-format.</action>  For more details, see <link linkend="saving">Saving a
+format.</action>  For more details, see <link linkend="command-save-as">Saving a
 Document</link>.</para> 
 </listitem>
 </varlistentry>
@@ -378,7 +374,7 @@ score will be marked as approximated.</para>
 <para>The Flesch score is defined for English text only, but the basic
 idea should work for many other languages, too.</para>
 
-<para>Click <guibutton>OK</guibutton> button to dismiss the
+<para>Click <guibutton>OK</guibutton> to dismiss the
 window.</para>
 </listitem>
 </varlistentry>
@@ -432,6 +428,7 @@ the menubar.</para>
 the document</action> (such as Authors name, Addresses, Phone numbers,
 Abstract, &etc;). This information is saved with the document for later
 classification.</para> 
+<para>For more information, see <link linkend="documentinfo">Document Information</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -617,7 +614,7 @@ the menubar.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Immediatly highlights all text of the current
+<para><action>Immediately highlights all text of the current
 frameset.</action></para>
 
 <para>Typing <keycombo
@@ -663,20 +660,6 @@ Text</link>.</para>
 action="simul">&Ctrl;<keycap>R</keycap></keycombo> is equivalent to
 using the menubar.</para></listitem>
 </varlistentry>
-
-<varlistentry>
-<term id="menu-serial-letter">
-<menuchoice>
-<guimenu>Edit</guimenu><guimenuitem>Serial Letter Database</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Create/edit a database of letters for custom numbering.</action> 
-For more information See <link linkend="custom-letter">Using Custom Numbers 
-and Letters</link>.</para>
-</listitem>
-</varlistentry>
-
 </variablelist>
 </sect2>
 
@@ -690,7 +673,7 @@ and Letters</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This will create a new view of your docuement.</action>
+<para><action>This will create a new view of your document.</action>
 For more information on views, refer to the section entitled <link
 linkend="views">Using Multiple Views</link>.</para>
 </listitem>
@@ -703,8 +686,8 @@ linkend="views">Using Multiple Views</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This will close all views except the current
-view.</action> For more information on views, refer to the section
+<para><action>This will close all views including the current view. This will also quit &kword;.</action> 
+For more information on views, refer to the section
 entitled <link linkend="views">Using Multiple Views</link>.</para>
 </listitem>
 </varlistentry>
@@ -716,7 +699,7 @@ entitled <link linkend="views">Using Multiple Views</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This will split the view.</action>  The orientation of the
+<para><action>This will split the current view.</action>  The orientation of the
 split is determined by the <guimenuitem>Splitter
 Orientation</guimenuitem>.  For more information on views, refer to the
 section entitled <link linkend="views">Using Multiple
@@ -761,9 +744,9 @@ Views</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>For more
-information on views, refer to the section entitled <link
-linkend="views">Using Multiple Views</link>.</para>
+<para>When this option is selected, &kword; will show you how your page looks in a WYSIWYG environment.  This is the standard view
+for editing your document.</para>
+<para>Compare this with <guimenuitem>Preview View</guimenuitem>.</para>
 </listitem>
 </varlistentry>
 
@@ -774,9 +757,12 @@ linkend="views">Using Multiple Views</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>For more
-information on views, refer to the section entitled <link
-linkend="views">Using Multiple Views</link>.</para>
+<para>This changes &kword; from a single page view, to a multiple page view suitable for evaluating document flow and formatting.</para>
+<para>The number of pages shown in preview mode can be adjusted by selecting <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure &kword;</guimenuitem>
+</menuchoice> from the menubar.  Then select <guilabel>Interface</guilabel> from the sidebar.  Near the bottom of the dialog box is a spin
+box labled <guilabel>Preview mode - Number of pages per row</guilabel>.
+Adjust this spin box to increase or decrease the size of the preview pages.</para>
 </listitem>
 </varlistentry>
 
@@ -802,7 +788,7 @@ will turn the display of these characters off.</action></para>
 </term>
 <listitem>
 <para><action>Clicking on this option toggles the display of the borders
-to frames.  Normally, &kword; draws a grey line around each frame, so
+to frames.  Normally, &kword; draws a gray line around each frame, so
 that know the borders of the frames.  If you want this option turned
 off, you can select this option.  Selecting this option again will turn
 the borders back on.  </action></para>
@@ -818,8 +804,8 @@ the borders back on.  </action></para>
 <listitem>
 <para><action>Clicking on this option toggles the display of the document
 structure window.</action> Selecting this option again will turn
-the window back on.  For more information, refer to the section entitled 
-Document Structure.</para>
+the window back on.  For more information, refer to the section entitled
+<link linkend="doc-structure">Document Structure</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -909,7 +895,8 @@ not found on the keyboard.</action></para>
 <listitem>
 <para><action>This will enter a special character which will force text
 into the next connected text frame.</action> More information can be
-found in <link linkend="frames">Working with Frames</link>.</para> 
+found at <link linkend="hard-break">Hard Frame Breaks</link> located in the <link linkend="frames">Working with Frames</link>
+section.</para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>Return</keycap></keycombo> is equivalent to
@@ -925,8 +912,8 @@ using the menubar. </para>
 </term>
 <listitem>
 <para><action>This will insert a Table of Contents at the current cursor
-position.</action>  More detailed information can be found <link
-linkend="toc">here</link>.</para>
+position.</action>  More detailed information can be found in <link
+linkend="toc">Table of Contents</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -943,7 +930,7 @@ specific information about page numbers <link
 linkend="page-number">here</link>.  More information about Date and
 Times can be found under <link linkend="date-time">Inserting the Date
 and Time</link>. More information on other variables can be found <link
-linkend="variables">Special Variables</link>.</para>
+linkend="variables">Document Variables</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -955,7 +942,7 @@ linkend="variables">Special Variables</link>.</para>
 </term>
 <listitem>
 <para><action>Selecting this option will allow you to insert common
-phrases.</action> The phrases are organised into categories. For
+phrases.</action> The phrases are organized into categories. For
 information on using and adding expressions refer to the section
 entitled <link linkend="expressions">Expressions</link>.</para>
 </listitem>
@@ -964,14 +951,14 @@ entitled <link linkend="expressions">Expressions</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Links</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Link</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>Allows you to connect text to an external web page, 
 email address or files</action>
 For more information refer to the section entitled 
-<link linkend="expressions">Expressions</link>.</para>
+<link linkend="links">Document Links</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1017,12 +1004,12 @@ automatically insert a picture from a file into the new frame.</action>
 After selecting this menu item or toolbar button, a dialog box will be
 opened, so you may select the picture file from your system. (For help
 with this dialog box, please see <link
-linkend="insert-graphics">Inserting a Picture</link>.)  Once you have
+linkend="insert-graphics">Inserting Graphics</link>.)  Once you have
 selected the file you want, click on the <guibutton>OK</guibutton>
 button.  &kword; will close the dialog box, and your cursor will change
 to cross hairs.  Locate the cursor on the page where you would like to
 locate one corner of your picture.  Click and hold the
-<mousebutton>right</mousebutton> mouse button, then drag the mouse.
+&RMB;, then drag the mouse.
 This will create a border which represents the final size of the picture
 in your document.  When you are happy with the size of the picture,
 release the mouse button and the picture will be inserted in your new
@@ -1061,8 +1048,8 @@ the menubar.</para>
 </term>
 <listitem>
 <para><action>This will allow you to create a table in the current
-cursor location.</action> For more information, please see <link
-linkend="tables">Working with Tables</link>.</para> 
+cursor location.</action> For more information, please see the section entitled <link
+linkend="tables">Tables</link>.</para>
 
 <para>Typing <keycombo action="simul"><keycap>F5</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
@@ -1081,13 +1068,23 @@ menubar.</para>
 <listitem>
 <para><action>Creates a new frame, and opens a dialog box listing each
 of the &koffice; applications. This will allow you to insert any data
-into your &kword; document.</action></para> 
+into your &kword; document.</action></para>
 <para>Clicking <inlinemediaobject><imageobject><imagedata fileref="kpart.png"
 format="PNG"/></imageobject></inlinemediaobject> is equivalent to
 using the menubar. </para>
 </listitem>
 </varlistentry>
 
+<varlistentry>
+<term id="menu-scan-image">
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Scan...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to access your scanner for inserting data into your document.</action></para>
+</listitem>
+</varlistentry>
 </variablelist>
 
 </sect2>
@@ -1104,7 +1101,8 @@ using the menubar. </para>
 </term>
 <listitem>
 <para><action> Automatically changes all formating back to the 
-default settings.</action></para>
+default settings for the selected text.</action></para>
+<para>The default format can be set with the <link linkend="opt-document">Document Configuration</link> options.</para>
 </listitem>
 </varlistentry>
 
@@ -1121,7 +1119,7 @@ default settings.</action></para>
 <listitem>
 <para><action> Allows you to change the formatting characteristics of
 the selected text.</action> For more details, go to <link
-linkend="format-characters">Character Formating</link></para>
+linkend="format-characters">Formating Characters</link></para>
 
 <para>Typing <keycombo
 action="simul">&Ctrl;&Alt;<keycap>F</keycap></keycombo> is equivalent to
@@ -1142,7 +1140,7 @@ using the menubar. </para>
 <listitem>
 <para><action>To change the indenting, spacing between paragraphs, text flow,
 tab stops, numbering and borders.</action> For more details, go to <link
-linkend="format-para">paragraph Formating</link>.</para>
+linkend="format-para">Formating Paragraphs</link>.</para>
 <para>Typing <keycombo
 action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo> is equivalent to
 using the menubar.</para>
@@ -1187,7 +1185,9 @@ using the menubar. </para>
 </menuchoice>
 </term>
 <listitem>
-<para>Allows you to select a style for the selected text.  For more
+<para>Allows you to select a style for the selected text.  Selecting this option shows a submenu
+listing all available paragraphs styles. Select the correct style and the paragraph style will be changed.</para>
+<para>For more
 information go to <link linkend="styles">Styles</link></para>
 </listitem>
 </varlistentry>
@@ -1195,7 +1195,7 @@ information go to <link linkend="styles">Styles</link></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Formulas</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Formula</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1241,11 +1241,57 @@ before the frame is deleted.</action></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Edit</guimenu><guimenuitem>Frame Background Color</guimenuitem>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Raise Frame</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will allow you to raise the frame up one level.</action> For more information see the section entitled
+<link linkend="raise-frame">Raise and Lower frames</link>.</para>
+<para>Typing <keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo> is equivalent to
+using the menubar. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>L</keycap></keycombo>
+</shortcut>
+<guimenu>Edit</guimenu><guimenuitem>Lower Frame</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will allow you to lower the frame down one level.</action> For more information see the section entitled
+<link linkend="raise-frame">Raise and Lower frames</link>.</para>
+<para>Typing <keycombo action="simul">&Ctrl;&Shift;<keycap>L</keycap></keycombo> is equivalent to
+using the menubar. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Text Background Color</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para><action>This will allow you to change the background color of the current frame.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Configure Frame Border</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>This will allow you to change the border surrounding the current frame.  When selected, a submenu will 
+appear with all available border styles.  Select the correct style and the borders are instantly changed.</action></para>
 </listitem>
 </varlistentry>
 
@@ -1330,7 +1376,7 @@ is equivalent to using the menubar.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This will convert two (or more) seperate cells into a
+<para><action>This will convert two (or more) separate cells into a
 single cell.</action> For more on tables, <link linkend="tables">click
 here</link>.</para>
 </listitem>
@@ -1369,7 +1415,7 @@ linkend="tables">click here</link>.</para>
 </term>
 <listitem>
 <para><action>Deletes the table the cursor is in.</action>  You can
-find more about tables in the section <xref linkend="tables"/>.</para>
+find more about tables in the section entitled <link linkend="tables">Tables</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1398,17 +1444,6 @@ equivalent to using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Custom Variables</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Not fully functional yet.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
 </menuchoice>
 </term>
@@ -1428,7 +1463,7 @@ here</link>.</para>
 <listitem>
 <para><action>Allows you to set the case of all selected text.</action> 
 For more information see <link linkend="change-font-case">
-Automatically Formatting Case</link>.</para>
+Changing Font Case</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1452,7 +1487,7 @@ refer to the section entitled <link linkend="expressions">Expressions</link>.</p
 </menuchoice>
 </term>
 <listitem>
-<para><action>Begin mail merge.</action></para>
+<para>Begin <link linkend="mail-merge">mail merge</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1568,8 +1603,7 @@ visible.</action></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Key
-Bindings</guimenuitem>
+<guimenu>Settings</guimenu><guimenuitem>Configure Shortcuts...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1581,7 +1615,7 @@ details, click <link linkend="options-keybindings">here</link></para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Toolbars</guimenuitem>
+<guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1594,7 +1628,7 @@ click <link linkend="options-toolbars">here</link></para>
 <term>
 <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure
-&kword;</guimenuitem>
+&kword;...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1630,8 +1664,11 @@ character dialog</link>.</para>
 </mediaobject>
 </screenshot>
 
-<informaltable frame="none">
+<informaltable>
 <tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
 <tbody>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="chfontbut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Font Face</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Character Size</entry></row>
@@ -1658,8 +1695,11 @@ task from the menubar.  Click on that task for more details. </para>
 </mediaobject>
 </screenshot>
 
-<informaltable frame="none">
+<informaltable>
 <tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
 <tbody>
 <row><entry>
 <link linkend="menu-new"><inlinemediaobject><imageobject><imagedata fileref="filenew2.png" format="PNG"/></imageobject></inlinemediaobject></link>
@@ -1702,8 +1742,11 @@ task from the menubar.  Click on that task for more details. </para>
 </mediaobject>
 </screenshot>
 
-<informaltable frame="none">
+<informaltable>
 <tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
 <tbody>
 <row><entry>
 <link linkend="menu-create-table"><inlinemediaobject><imageobject><imagedata fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject></link>
@@ -1748,8 +1791,11 @@ task for more details. </para>
 </mediaobject>
 </screenshot>
 
-<informaltable frame="none">
+<informaltable>
 <tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
 <tbody>
 <row><entry>
 <link linkend="menu-undo"><inlinemediaobject><imageobject><imagedata fileref="undo.png" format="PNG"/></imageobject></inlinemediaobject></link>
@@ -1809,8 +1855,11 @@ a task from the menubar.  Click on that task for more details. </para>
 </mediaobject>
 </screenshot>
 
-<informaltable frame="none">
+<informaltable>
 <tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
 <tbody>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="chstylebut.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Select Character Style</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="alignLeft.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Left Text Align Button</entry></row>
@@ -1838,8 +1887,11 @@ details. </para>
 </mediaobject>
 </screenshot>
 
-<informaltable frame="none">
+<informaltable>
 <tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
 <tbody>
 <row><entry>
 <link linkend="menu-insert-row"><inlinemediaobject><imageobject><imagedata fileref="rowin.png" format="PNG"/></imageobject></inlinemediaobject></link>
@@ -1878,8 +1930,11 @@ task from the menubar.  Click on that task for more details. </para>
 </mediaobject>
 </screenshot>
 
-<informaltable frame="none">
+<informaltable>
 <tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
 <tbody>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="bord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle border colors</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="lbord.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Toggle Left Paragraph Border</entry></row>
@@ -1907,8 +1962,11 @@ a task from the menubar.  Click on that task for more details. </para>
 </mediaobject>
 </screenshot>
 
-<informaltable frame="none">
+<informaltable>
 <tgroup cols="2">
+<thead>
+<row><entry>Button</entry><entry>Command</entry></row>
+</thead>
 <tbody>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formsqrt.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add or Change Square Root</entry></row>
 <row><entry><inlinemediaobject><imageobject><imagedata fileref="formfrac.png" format="PNG"/></imageobject></inlinemediaobject></entry><entry>Add or Change Fraction</entry></row>
@@ -1933,8 +1991,225 @@ a task from the menubar.  Click on that task for more details. </para>
 
 <sect1 id="select-colors">
 <title>Selecting Colors from a Color dialog</title>
+<para>&kword; uses a common dialog box any time the user needs to select a color for an object (text, backgrounds, borders, etc.).</para>
+<para>This section will go into some detail on how to use this color dialog to choose the best color for your object.</para>
+<para>When it is necessary to select a color, a dialog box appears.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="colorseldlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>The color dialog is an incredibly flexible dialog box, which makes it possible to select colors in one of six different methods:</para>
+<variablelist>
+<varlistentry>
+<term>Spectrum selectors</term>
+<listitem><para>The spectrum selectors consists of a square to adjust <link linkend="defhue">Hue</link> and
+<link linkend="defsaturation">Saturation</link>, and a tall narrow box to adjust <link linkend="defvalue">Value</link>.</para>
+<para>The white cross hairs in the box show the currently selected color on the spectrum.  Drag the cross hairs up to increase
+<link linkend="defsaturation">saturation</link>.  Drag down to decrease <link linkend="defsaturation">saturation</link>.  Move the
+cross hairs left or right to change the <link linkend="defhue">hue</link>.</para>
+<para>To adjust the <link linkend="defvalue">value</link> of the color, use the tall, narrow box to move the black arrow.  Sliding the
+arrow up increases the color's <link linkend="defvalue">value</link>.  Sliding the arrow down decreases the color's
+<link linkend="defvalue">value</link>.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>Hue, Saturation and Value</term>
+<listitem><para>Using the three spin boxes labled <guilabel>H</guilabel>,<guilabel>S</guilabel> and <guilabel>V</guilabel>, a user can
+specify the <link linkend="defhue">Hue</link> (Range 0-359), <link linkend="defsaturation">Saturation</link> (Range 0-255) 
+and <link linkend="defvalue">Value</link> (Range 0-255)
+respectively.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Red, Green and Blue</term>
+<listitem><para>Using the three spin boxes labled <guilabel>R</guilabel>,<guilabel>G</guilabel> and <guilabel>B</guilabel>, a user can
+specify the amount of Red, Green and Blue to be mixed to form the current color.  All three boxes can be set to any value from 0-255.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Palates</term>
+<listitem><para>A palate is a group of related colors.  These colors are all made available for easy selection according to a meaningful
+association.</para>
+<para>To select a new palate, click on the drop down box at the top of the palate selection area.  
+You will be presented with several choices:</para>
+<para><guilabel>Recent Colors</guilabel> - This is a list of the most recently used colors in your document.  You can use this palate to
+maintain consistency.  As each new color is selected, it is automatically added to the recent colors palate.</para>
+<para><guilabel>Custom Colors</guilabel> - You can create your own custom palate.  This is done by selecting a 
+color using one of the other
+color selection options, and clicking on <guibutton>Add to Custom Colors</guibutton>.  
+That color is now added to your custom color palate.</para>
+<para><guilabel>40 Colors</guilabel> - This is a list of 40 commonly used colors.  This is a good palate to choose from if some of the people
+viewing your document will be on machines with limited color capability.</para>
+<para><guilabel>Web Colors</guilabel> - This is a predefined palate of colors that you might find useful for designing web pages.</para>
+<para><guilabel>Royal Colors</guilabel> - This is a predefined palate of colors including numerous shades of purple and yellow.</para>
+<para><guilabel>Named Colors</guilabel> - This is a list of color names.  The names are based on standard X server color
+names.  The names are designed to give descriptive names to each color.  Simply select the name you want. </para>
+<para>Once you have selected a palate, you will be presented with a small square showing each color available in the palate. To 
+select a color from the palate, simply click on the square of the desired color.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Eye dropper</term>
+<listitem><para>The eye dropper can be used to sample a color from the screen.  </para>
+<para>When the eye dropper button is clicked, the cursor becomes crosshairs.  Simply place the crosshairs over any spot on the screen
+and click once.  &kword; will detect the selected color and automatically change the current color to match the selection.</para>
+<para>This is especially useful for matching color elements between previously created elements and new items.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
+</listitem></varlistentry>
+<varlistentry>
+<term>HTML code</term>
+<listitem><para>If you know the HTML color code you want to use, you can enter it into the text box labeled 
+<guilabel>HTML</guilabel>.</para>
+<para>For more information on HTML color codes, visit the
+<ulink url="http://hotwired.lycos.com/webmonkey/reference/color_codes/">Web monkey</ulink> color code page.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+<para>Once the color is selected, click <guibutton>OK</guibutton> to make that the current color for your text, border, etc.</para>
+<para>Click <guibutton>Cancel</guibutton> to abort the color selection.</para>
+</sect1>
+<sect1 id="file-dialog">
+<title>Selecting files using the file dialog</title>
+<para>&kword; uses a common dialog box for all file related actions (saving, loading, or selecting new files 
+for insertion into the document). An example is shown below.</para>
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="savedlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>This section  will look more closely at the dialogs and detail their use.</para>
 
-<para></para>
+<para>The large box below that shows I currently have 1 folder in this
+directory, entitled <filename>Past Work</filename>, and 2 files
+(<filename>Job Description</filename> and
+<filename>Resume</filename>).</para>
 
+<para><emphasis>Toolbar</emphasis></para>
+
+<para>This example dialog shows the current directory is <filename
+class="directory">/home/mmcbride/kword</filename>.  You can see this
+by the textbox at the top of the dialog.  If you click on this drop
+down box, you will see common and recently visited directories.  By
+selecting one of these directories, you will be immediately moved to
+that directory and the dialog box will update the file list.</para>
+
+<para>In the upper left corner, is a blue arrow pointed up.  This
+arrow will take you up one level in the directory structure.</para>
+
+<para>The next two buttons are backwards and forward buttons.  These
+buttons work just like an internet browser, where you can use the back
+button to travel to the previous directory, and the forward button to
+advance into a directory you just came from.</para>
+
+<para>Next to the arrow buttons, is a button that looks like a house.
+Clicking this will take you to your home directory.</para>
+
+<para>Next to the home button, is a reload button.  Clicking this
+button, causes &kword; to reload the current directory if new files have been
+added or deleted.</para>
+
+<para>Next to the reload button, is a button with a grey ribbon on it.
+This button allows you to set and navigate through bookmarks.  This is
+a quick way to jump to commonly accessed directories.  By clicking
+this button, a submenu appears which allows you to add bookmarks or
+jump to a new bookmark.</para>
+
+<para>Next to the bookmark button, is a button with a gear on it.
+Clicking this button brings up a sub menu with several entries:</para>
+<para>
+<variablelist>
+<varlistentry>
+<term><guimenuitem>New Directory</guimenuitem></term>
+<listitem>
+<para>Create a new subdirectory in the current directory.  &kword; will automatically move you into this new subdirectory once it is created.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Delete</guimenuitem></term>
+<listitem>
+<para>This will delete the selected file, not the current
+document.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Sorting</guimenuitem></term>
+<listitem>
+<para>This will bring up another submenu.  You can sort the files by
+filename, by date, or by size.  Selecting the
+<guimenuitem>Reverse</guimenuitem> option will reverse the sort
+order.  Selecting <guimenuitem>Directories First</guimenuitem> will
+place the directories above all other files in the dialog box.
+Selecting <guimenuitem>Case insensitive</guimenuitem> will sort
+filenames regardless of capitalization.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>View</guimenuitem></term>
+<listitem>
+<para>This will also bring up a submenu.  You can use the options in
+this submenu to change the appearance of the file dialog.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Properties</guimenuitem></term>
+<listitem>
+<para>If you have selected a file in the dialog box, when you select
+this option you will be given all of the properties of the selected
+file.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</para>
+<para><emphasis>Location Bar</emphasis></para>
+
+<para>Along the left side of the dialog box, is a column that contains
+several icons. You can think of each of these icons as a shortcut to
+another subdirectory. If you click on an icon, you will be immediatly
+moved to that location.</para>
+
+<para>You can add/edit or delete entries from the Location Bar.
+Simply click with the &RMB; and a small submenu will appear.</para>
+
+<para><emphasis>File Name and Filters</emphasis></para>
+
+
+<para>The text box labled <guilabel>Location</guilabel> is blank,
+which indicates no file is currently selected. This text box will contain the 
+filename of the currently selected file when loading new documents or files into
+&kword;.  When saving a file, you will enter the desired filename in this text box.</para>
+
+<para>The text box labled <guilabel>Filter</guilabel> shows we are only looking
+at &kword; files.  By clicking on the drop down box, you can select from several
+different file formats.  You can also select <guilabel>All supported files</guilabel> to display
+all files that are supported by &kword;.  The file types available will change depending on
+the specific task at hand.</para>
+
+<para>There is a <guibutton>Cancel</guibutton> button, if you click this
+button, the action will be aborted, and you will return to editing the
+document.</para>
+
+<para>There is an <guibutton>OK</guibutton> button, which will be used
+when we have selected the correct filename.</para>
+
+<para>Using this dialog, you can move through the directory tree to find
+any location on your computer.</para>
+
+<para>To enter a folder click on that folder.  To exit that folder,
+click the blue up arrow button.</para>
+
+<note><para>This dialog box is used in many different tasks in &kword;.  The task will determine the exact effect
+of the information you have entered into this dialog box.  For more information on the exact effect, see the documentation on that task.
+</para></note>
 </sect1>
 </chapter>

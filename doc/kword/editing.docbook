@@ -3,16 +3,18 @@
 
 <para>This section of the guide will cover more advanced features of
 data editing.  This section focuses entirely on text data.  For working
-with other types of data, please see the <link linkend="guides-3">next
-section</link>.</para>
+with other types of data, please see the section enttitled <link linkend="guides-4">More Than Just Text</link>.</para>
 
 <sect1 id="select">
 <title>Selecting Text</title>
 
-<para>For many editing and formatting functions in &kword;, you will
-want to perform a certain action (bold face, underline,&etc;) to a
-certain section of text, not the document as a whole. You specify which
-text you want to alter by selecting (highlighting) the text you want changed.</para>
+<para>For many editing and formatting functions in &kword;, certain action (bold face, underline,&etc;) should be 
+applied to a
+certain section of text, not the document as a whole. Specify which
+text should be altered by selecting (highlighting) the text you want changed.</para>
+
+<para>Selected text has a dark background to seperate it from
+unselected text.</para>
 
 <screenshot>
 <mediaobject>
@@ -21,23 +23,34 @@ text you want to alter by selecting (highlighting) the text you want changed.</p
 </mediaobject>
 </screenshot>
 
-<para>Selected text has a dark background to seperate it from
-unselected text. You select text by designating a start and an end
+<para>Select text by designating a start and an end
 point.  All the text in between the start and end point is selected
 text.</para>
 
-<para>You can select text with either the <link linkend="select-with-keyboard">keyboard</link> or the <link linkend="select-with-mouse">mouse</link>. </para>
+<para>Text can be selected with either the <link linkend="select-with-mouse">mouse</link> or the <link linkend="select-with-keyboard">keyboard</link>. </para>
+
+<sect2 id="select-with-mouse">
+<title>Using The Mouse</title>
+
+<para>To select text with the mouse, hold down the
+&LMB; and drag the cursor. This
+selects all text between the initial click of &LMB; and the
+current position of the mouse cursor.  When the mouse button is released, the start and endpoints will become fixed.</para>
+
+</sect2>
 
 <sect2 id="select-with-keyboard">
 <title>Using The Keyboard</title>
-
+<para>To use the keyboard, &kword; takes the initial position of the text cursor as the start point.  
+Use the following key combinations to move the endpoint to the desired location.
+</para>
 <informaltable><tgroup cols="2" align="left">
 <thead><row><entry align="center">Key Combination</entry><entry align="left">Function</entry></row></thead>
 <tbody>
-<row><entry align="center"><keycombo action="simul">&Shift;<keycap>Left Arrow</keycap></keycombo></entry><entry>Move selection one character to the left.</entry></row>
-<row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Left Arrow</keycap></keycombo></entry><entry>Move selection one word to the left.</entry></row>
-<row><entry align="center"><keycombo action="simul">&Shift;<keycap>Right Arrow</keycap></keycombo></entry><entry>Move selection one character to the Right.</entry></row>
-<row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Right Arrow</keycap></keycombo></entry><entry>Move selection one word to the Right.</entry></row>
+<row><entry align="center"><keycombo action="simul">&Shift;<keycap>Left Arrow</keycap></keycombo></entry><entry>Move endpoint one character to the left.</entry></row>
+<row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Left Arrow</keycap></keycombo></entry><entry>Move endpoint one word to the left.</entry></row>
+<row><entry align="center"><keycombo action="simul">&Shift;<keycap>Right Arrow</keycap></keycombo></entry><entry>Move endpoint one character to the Right.</entry></row>
+<row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Right Arrow</keycap></keycombo></entry><entry>Move endpoint one word to the Right.</entry></row>
 
 <row><entry align="center"><keycombo action="simul">&Shift;<keycap>Up Arrow</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the character directly up one line.</entry></row>
 <row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Up Arrow</keycap></keycombo></entry><entry>Selects all characters from the start of the selection, to the first character of the line directly above.</entry></row>
@@ -60,94 +73,102 @@ text.</para>
 <row><entry align="center"><keycombo action="simul">&Ctrl;&Shift;<keycap>Page-Down</keycap></keycombo></entry><entry>Moves the current endpoint down one page.  The endpoint is locate at the first character of this page.</entry></row>
 
 </tbody></tgroup></informaltable>
-
+<para>Once the start and endpoints have been defined, all text between the startpoint and endpoint is selected.</para>
 </sect2>
 
-<sect2 id="select-with-mouse">
-<title>Using The Mouse</title>
 
-<para>To select text with the mouse, hold down the
-<mousebutton>left</mousebutton> mouse button and drag the cursor. This
-selects all text between the initial click of the mouse button and the
-current position of the mouse cursor.  When you release the mouse
-button, the start and endpoints will become fixed.</para>
-
-</sect2>
 </sect1>
 
 <sect1 id="views">
 <title>Using Multiple Views</title>
 <sect2 id="views-intro">
 <title>Introduction</title>
-<para>When you are editing very large documents, there will be times when you want to be able to quickly edit two parts of the document.  In a situation such as this, you can have &kword; open additional windows to edit the <emphasis>same</emphasis> document.</para>
-<para>These new windows are called <emphasis>Views</emphasis>, since they provide you with a different viewpoint of the the same document.</para>
-<para>Views are very important tools when working with large documents.  You can set one view to edit one part of the document, and using the other view, freely move through the document making updates and changes.  These changes are automatically revealed in all views.</para>
+<para>When editing very large documents, there will be times when it is helpful to 
+edit two parts of the document.  In a situation such as this, 
+&kword; can open additional windows to edit the <emphasis>same</emphasis> document.</para>
+<para>These new windows are called <emphasis>Views</emphasis>, since they provide 
+a different viewpoint of the the same document.</para>
+<para>Views are very important tools when working with large documents.
+Set one view to edit one part of the document, and using the other view, freely
+move through the document making updates and changes.  These changes are automatically revealed in all views.</para>
 </sect2>
 
 <sect2 id="views-new">
 <title>Creating a new view</title>
-<para>Creating a new view creates an entirely new window, with toolbars, menubars etc.  You should compare this with the <link linkend="views-split">Split View</link> command.</para>
+<para>Creating a new view creates an entirely new window, with toolbars, menubars etc.
+Compare this with the <link linkend="views-split">Split View</link> command.</para>
 
 <para>To create a new view select <menuchoice><guimenu>View</guimenu><guimenuitem>New View</guimenuitem>
 </menuchoice> from the menubar. </para>
 
-<para>A new window will be created.  You can alter your document from either view.  Updates in one window will be immediatly visible in the other.</para>
+<para>A new window will be created.  Alterations to your document can be made in either view.
+Updates in one window will be immediatly visible in the other.</para>
 
 </sect2>
 
 <sect2 id="views-split">
 <title>Splitting the current view into two seperate views. </title>
-<para>You can split one view into two views.  Both views are contained within one window, and use the same toolbars, menubars, etc.  Contrast this to the effect of the <link linkend="views-new">New View</link> command.</para>
+<para>It is also possible to split one view into two views.  Both views are contained within one window, and
+use the same toolbars, menubars, etc.  Contrast this to the effect of the <link linkend="views-new">New View</link> command.</para>
 
-<para>To split the current view, select <menuchoice><guimenu>View</guimenu><guimenuitem>Split View</guimenuitem></menuchoice> from the menubar. </para>
+<para>To split the current view, select
+<menuchoice><guimenu>View</guimenu><guimenuitem>Split View</guimenuitem></menuchoice> from the menubar. </para>
 
-<para>The current document area will be split into two views. You can alter your document in either view.  Updates in either view will be immediatly visible in the other.  </para>
+<para>The current document area will be split into two views. Alterations to your document can be made in either view.
+Updates in one window will be immediatly visible in the other.</para>
 
-<para>The views can either be split horizontally or vertically.  You can find out how to change the orientation in the next section.</para>
+<tip><para>The views can either be split horizontally or vertically.  See the next section for instructions.</para></tip>
 </sect2>
 
 <sect2 id="views-split-orientation">
 <title>Changing the split view orientation </title>
-<para>To change the direction that the views are split, simply select <menuchoice><guimenu>View</guimenu><guimenuitem>Splitter Orientation</guimenuitem></menuchoice> from the menubar. This will show a submenu.  Select either <guilabel>Horizontal</guilabel> or <guilabel>Vertical</guilabel>.</para>
+<para>To change the direction that the views are split, simply select
+<menuchoice><guimenu>View</guimenu><guimenuitem>Splitter Orientation</guimenuitem></menuchoice> from the menubar.
+This will show a submenu.  Select either <guilabel>Horizontal</guilabel> or <guilabel>Vertical</guilabel>.</para>
 
-<para>All views will immediatly change to the new orientation.</para>
+<para>All views in the current window will immediatly change to the new orientation.</para>
 </sect2>
 
 <sect2 id="views-adjust-size">
 <title>Changing the size of views </title>
-<para>You can adjust the relative sizes of each view by using your mouse.</para>
-<para>To adjust the view size, look at the border between the scrollbar of one window (the upper or right view) and the ruler of the other view (the lower or left view).  There is a solid border which appears raised between the scrollbar and the ruler. As you pass the mouse cursor over this bar, it changes from an arrow to double lines with double arrows.</para>
-<para>When the mouse cursor changes, click once with the &LMB; and hold the button down.  Drag that border to the new location.  When you release the mouse button, the views will change to the new proportions.</para>
+<para>The relative sizes of each view can be adjusted with your mouse.</para>
+<para>To adjust the view size, look at the border between the scrollbar of one window
+(the upper or right view) and the ruler of the other view (the lower or left view).  There is a
+solid border which appears raised between the scrollbar and the ruler. As the mouse cursor passes 
+over this bar, it changes from an arrow to double lines with double arrows.</para>
+<para>When the mouse cursor changes, click once with the &LMB; and hold the button
+down.  Drag that border to the new location.  When the mouse button is released, the
+views will change to the new proportions.</para>
 
 </sect2>
 
 <sect2 id="views-remove">
 <title>Remove View </title>
-<para>To remove a view, simply click the mouse cursor in the view you want to delete.  Then select <menuchoice><guimenu>View</guimenu><guimenuitem>Remove View</guimenuitem></menuchoice> from the menubar.</para>
+<para>To remove a view, simply click the mouse cursor in the view to be deleted.
+Then select <menuchoice><guimenu>View</guimenu><guimenuitem>Remove View</guimenuitem></menuchoice>
+from the menubar.</para>
 </sect2>
 
 <sect2 id="views-close">
-<title>Close all views </title><para>To close all views,  select <menuchoice><guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem></menuchoice> from the menubar.</para>
-
+<title>Close all views </title><para>To close all views,  select
+<menuchoice><guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem></menuchoice>
+from the menubar.</para>
 </sect2>
-
-
 </sect1>
 
 <sect1 id="undo-redo">
 <title>Undo/Redo</title>
 
-<para>It happens all the time.  You are working on a document, and you
-make a change.  Then you realize, that change is not what you wanted to do at
-all!</para>  
+<para>It happens all the time.  While working on a document, a change is made.
+The change was wrong, now you want to back out of your changes.</para>
 
-<para>Fortunately, &kword; has a solution for you.</para>
+<para>Fortunately, &kword; has a solution.</para>
 
-<para>Each time you make a change to a document, &kword; remembers what
-the change was.  If you decide to remove some of the changes, you can
+<para>Each time a change is made to a document, &kword; remembers what
+the change was.  &kword; can
 <emphasis>Undo</emphasis> each change one at a a time. </para>
 
-<para>As an example, you are writing a business letter. You type in the following sentance:</para>
+<para>As an example, you are writing a business letter and type in the following sentance:</para>
 
 <para><quote>It is a pleasure for me to give you this letter of introduction to your newest employee.</quote></para>
 
@@ -157,31 +178,32 @@ the change was.  If you decide to remove some of the changes, you can
 
 <para>You decide it was better the first time and you want to change it back.</para>
 
-<para>Simply select 
+<para>Simply select
 <menuchoice><guimenu>Edit</guimenu><guimenuitem>Undo</guimenuitem></menuchoice> from
-the menubar.</para> 
+the menubar.</para>
 
 <para>The text now reads <quote>pleasure</quote> again.</para>
 
-<para>If, after you Undo a change, and then decide you would rather have left it <quote>joy</quote>, 
-you can select 
+<para>If, after you Undo a change, and then decide you would rather have left it <quote>joy</quote>,
+Select
 <menuchoice><guimenu>Edit</guimenu><guimenuitem>Redo</guimenuitem></menuchoice> and
 the Undo is reversed.</para>
 
 <note>
-<para>Sometimes it is not possible for &kword; to undo an edit.  You
-will be informed of this when you select the <guimenu>Edit</guimenu>
-function, it will replace the <guimenuitem>Undo</guimenuitem> function
+<para>Sometimes it is not possible for &kword; to undo an edit.  In these instances, &kword; 
+will replace the <guimenuitem>Undo</guimenuitem> function
 with <guimenuitem>No Undo Possible</guimenuitem>.</para>
 
-<para>Othertimes, &kword; will only perform a partial undo of your previous task.  
-This is because &kword; processes changes to documents differently then you might 
-initially expect.  Simply select 
-<menuchoice><guimenu>Edit</guimenu><guimenuitem>Undo</guimenuitem></menuchoice> 
-again, and more of your edits will be undone.</para>
+<para>Othertimes, &kword; will only perform a partial undo of the previous task.
+This is because &kword; processes changes to documents differently then might
+initially be expected.  Simply select
+<menuchoice><guimenu>Edit</guimenu><guimenuitem>Undo</guimenuitem></menuchoice>
+again, and more of the edits will be undone.</para>
 </note>
-<para>By default, &kword; keeps track of the last 30 edits to your document.  This number can be adjusted up or down.  For details, see <link linkend="options-kword">Configuring &kword;</link>.</para>
-<para>The <emphasis>Undo</emphasis> and <emphasis>Redo</emphasis> commands can be accessed from the menubar (as in the examples above) or from the toolbar.</para>
+<para>By default, &kword; keeps track of the last 30 edits to the document.
+This number can be adjusted up or down.  For details, see <link linkend="opt-misc">Configuring &kword;</link>.</para>
+<para>The <emphasis>Undo</emphasis> and <emphasis>Redo</emphasis> commands can
+be accessed from the menubar (as in the examples above) or from the toolbar.</para>
 
 <informaltable><tgroup cols="2">
 <thead>
@@ -200,23 +222,23 @@ again, and more of your edits will be undone.</para>
 
 <para>The <quote>clipboard</quote> is a concept familiar to most people
 who have used modern word processors. It is a piece of your computers
-memory which is set aside as a temporary storage space.  You can
-<quote>Cut</quote> or <quote>Copy</quote> text from your document into
-the clipboard.  You can then move to another part of the document or to 
+memory which is set aside as a temporary storage space.  Text can be
+<quote>Cut</quote> or <quote>Copied</quote> from your document into
+the clipboard.  Now move to another part of the document or to
 another application entirely, and <quote>Paste</quote> this text at the new
 location. </para>
 
 <para>The most common use for the clipboard is to move or copy text
-which you have already entered into one part of your document to another
+which has already entered into one part of the document to another
 part of the same document or to another document entirely.</para>
 
 <para>This concept is probably best described with an example.</para>
 
-<para>To do this, we will begin with a test sentence</para>
+<para>To do this, we begin with a test sentence</para>
 
 <para><quote>The big, red fox jumped over the lazy dog.</quote></para>
 
-<para>Using the mouse or keyboard, you select the phrase <quote>big,
+<para>Using the mouse or keyboard, select the phrase <quote>big,
 red</quote>.</para>
 
 <para>Now select <menuchoice>
@@ -226,7 +248,7 @@ the menubar.</para>
 <para><emphasis>This has moved a copy of the selected text to the
 clipboard.</emphasis></para>
 
-<para>You now place the mouse cursor between <quote>lazy</quote> and
+<para>Now place the mouse cursor between <quote>lazy</quote> and
 <quote>dog</quote> and click once.</para>
 
 <para>Now select <menuchoice>
@@ -237,7 +259,8 @@ from the menubar.</para>
 
 <para><quote>The big, red fox jumped over the lazy big, red dog</quote></para>
 
-<para>You are not limited to text when using the clipboard.  The clipboard can contain tables, pictures, spreadsheets or any other type of information.</para>
+<para>The clipboard is not limited to text.
+The clipboard can contain tables, pictures, spreadsheets or any other type of information.</para>
 <sect2 id="local-copy">
 <title>The Copy Command</title>
 
@@ -257,16 +280,17 @@ on the toolbar.</para>
 </listitem>
 
 <listitem>
-<para>You can use the keyboard shortcut: <keycombo
+<para>Using the keyboard shortcut: <keycombo
 action="simul">&Ctrl;<keycap>C</keycap></keycombo></para>
 </listitem>
 
 <listitem>
-<para>After the text is selected, click once with the &RMB; and hold the button down. A small submenu will appear.  Simply select <guilabel>Copy</guilabel></para>
+<para>After the text is selected, click once with the &RMB; and hold the button down. 
+A small submenu will appear.  Simply select <guilabel>Copy</guilabel></para>
 </listitem>
 
 <listitem>
-<para>You can use the mouse to highlight the text.  That text is
+<para>Use the mouse to highlight the text.  That text is
 automatically moved into the clipboard.</para>
 </listitem>
 </itemizedlist>
@@ -295,10 +319,11 @@ fileref="editcut.png" format="PNG"/></imageobject></inlinemediaobject>
 on the toolbar.</para>
 </listitem>
 <listitem>
-<para>After the text is selected, click once with the &RMB; and hold the button down. A small submenu will appear.  Simply select <guilabel>Cut</guilabel></para>
+<para>After the text is selected, click once with the &RMB; and hold the button down. 
+A small submenu will appear.  Simply select <guilabel>Cut</guilabel></para>
 </listitem>
 <listitem>
-<para>You can use the keyboard shortcut: <keycombo
+<para>Using the keyboard shortcut: <keycombo
 action="simul">&Ctrl;<keycap>X</keycap></keycombo></para>
 </listitem>
 </itemizedlist>
@@ -328,13 +353,13 @@ on the toolbar.</para>
 </listitem>
 
 <listitem>
-<para>Place the cursor where you want to insert the contents of the clipboard 
-to be inserted. Click once with the &RMB; and hold the button down. A small 
+<para>Place the cursor where the contents of the clipboard
+should be inserted. Click once with the &RMB; and hold the button down. A small
 submenu will appear.  Simply select <guilabel>Paste</guilabel></para>
 </listitem>
 
 <listitem>
-<para>You can use the keyboard shortcut: <keycombo
+<para>Using the keyboard shortcut: <keycombo
 action="simul">&Ctrl;<keycap>V</keycap></keycombo></para>
 </listitem>
 </itemizedlist>
@@ -355,11 +380,9 @@ is <emphasis>replaced</emphasis> with the contents of the
 clipboard.</para> 
 </note>
 
-<para>Remember: You are not limited to the bounds of one document.  If
-you <guimenuitem>Copy</guimenuitem> (or <guimenuitem>Cut</guimenuitem>)
-text from a document, you can <guimenuitem>Paste</guimenuitem> this text
-into another open document.  You are also not limited to pasting data into 
-&kword;.  You can paste the contents of the clipboard into any &kde; application.</para>
+<tip><para>The clipboard is not limited to the bounds of the current document.  If
+text is copied (or cut) from a document, this text can be pasted
+into another open document, or another &kde; application entirely.</para></tip>
 
 </sect2>
 </sect1>
@@ -761,7 +784,8 @@ or <emphasis>KWord</emphasis> (one), or <emphasis>KWoooooooooord</emphasis> (ten
 <para>Once selected, &kword; will insert a plus sign (+) into your string. &kword; will
 match any string of text that contains <emphasis>one or more</emphasis> of the previous 
 characters behind the asterisk.</para>
-<para>Thus:  <emphasis>KWo*rd</emphasis> will find or replace any instance of <emphasis>KWord</emphasis> (one), or <emphasis>KWoooooooooord</emphasis> (ten).</para>
+<para>Thus:  <emphasis>KWo*rd</emphasis> will find or replace any instance of 
+<emphasis>KWord</emphasis> (one), or <emphasis>KWoooooooooord</emphasis> (ten).</para>
 <para>It will not match:  <emphasis>KWrd</emphasis> (zero).</para>
 </listitem>
 </varlistentry>
@@ -869,7 +893,7 @@ Examples of whitespace characters are spaces, tabs, and carrage returns.</para><
 <listitem>
 <para>By selecting <menuchoice>
 <guimenu>Tools</guimenu><guimenuitem>Spelling...</guimenuitem></menuchoice>
-from the Menu bar</para>
+from the menubar</para>
 </listitem>
 
 <listitem>
@@ -879,7 +903,7 @@ the toolbar.</para>
 </listitem>
 </itemizedlist>
 
-<para>Spell Checking your document is controlled through a dialog
+<para>Spell checking your document is controlled through a dialog
 box.</para>
 
 <screenshot>
@@ -912,15 +936,15 @@ occurance.</para>
 <term><guibutton>Replace All</guibutton></term>
 <listitem>
 <para>Replaces all occurances of the current word with the
-suggested word.</para>
+suggested word through the entire document.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guibutton>Ignore</guibutton></term>
 <listitem>
-<para>Do not make any changes to this occurance.  Ask me if this
-word appears again.</para>
+<para>Do not make any changes to this occurance.  Ask again if this
+word appears further down in the document.</para>
 </listitem>
 </varlistentry>
 
@@ -928,7 +952,7 @@ word appears again.</para>
 <term><guibutton>Ignore All</guibutton></term>
 <listitem>
 <para>Do not make any changes to this or any other occurance of this word.  Do not
-ask me about this word again.</para>
+ask about this word again.</para>
 </listitem>
 </varlistentry>
 
@@ -956,23 +980,23 @@ ask me about this word again.</para>
 <varlistentry>
 <term><guibutton>Help</guibutton></term>
 <listitem>
-<para>Loads this help file.</para>
+<para>Loads a help file for the spell checker.</para>
 </listitem>
 </varlistentry>
 </variablelist>
 
-<para>When the entire document has been checked, &kword; will return you
-to editing your document.</para>
+<para>When the entire document has been checked, &kword; will return the cursor to the same spot 
+in the document that the spell checking was begun.</para>
 
 <note>
-<para>If your document does not have any spelling errors, &kword; does
-not provide you with a dialog box.  When you start the spell check, it
-will proceed to check all of your document against the dictionary, and
+<para>If the document does not have any spelling errors, &kword; does
+not show a dialog box.  When spell checking is started, it
+will proceed to check all of the document against the dictionary, and
 then exit the spell check dialog box.  With short documents, you may
 miss the dialog box.  &kword; has spell checked the document!</para>
 </note>
 
-<para>There are several options for configuring your spelling application.  
+<para>There are several options for configuring the spelling application used.
 For more details, please see the section entitled
 <link linkend="opt-spell">Configure Spelling</link>.</para>
 
@@ -1034,6 +1058,58 @@ in certain instances.  For more details, see the section entitled
 <link linkend="autocorrection-exceptions">Autocorrection Exceptions</link>.</para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term><guilabel>Auto detect URL</guilabel></term>
+<listitem>
+<para>When selected, &kword; will scan text for patterns which suggest a certain section
+of text is a <link linkend="defurl">URL</link> and automatically creates a link.</para>
+<para>For more details on links, see the section entitled
+<link linkend="links">Document Links</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Ignore Double Spaces</guilabel></term>
+<listitem>
+<para>When checked, &kword; will ignore the second space typed.  
+This prevents users from adding double spaces between words or sentances</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Remove space at the begin and end line</guilabel></term>
+<listitem>
+<para>When selected, &kword; will automatically remove spaces at the beginning and/or the end of a line of text.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Automatic *Bold* _Underline_</guilabel></term>
+<listitem>
+<para>When selected, &kword; will look for words surrounded by asterisks ( * ).  It will remove the asterisks and change the font of all
+words in between the two asterisks to bold face.</para>
+<para>&kword; will also look for words surrounded by underscores ( _ ).  It will remove the underscores and underline all
+words in between the two underscores.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Replace 1/2... with ½</guilabel></term>
+<listitem>
+<para>When selected, &kword; will automatically change 1/2, 1/3 and 3/4 to their single character equivilants.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Use bullet style -*</guilabel></term>
+<listitem>
+<para>When selected, &kword; will look for lines that begin with <emphasis>- </emphasis>, and automatically convert the paragraph style
+to a bulleted list.</para>
+</listitem>
+</varlistentry>
+
+
 </variablelist>
 </sect2>
 
