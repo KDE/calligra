@@ -214,7 +214,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"uldb",		setFlagProperty,	state.format.underlined, true ),
 	MEMBER(	0L,		"ulnone",	setFlagProperty,	state.format.underline, false ),
 	MEMBER(	0L,		"ulth",		setFlagProperty,	state.format.underlineThick, true ),
-	MEMBER(	0L,		"ulw",		setFlagProperty,	state.format.underline, true ),
+	MEMBER(	0L,		"ulw",		setFlagProperty,	state.format.underlineWordByWord, true ),
 	MEMBER(	0L,		"up",		setUpProperty,		state.format.baseline, 6 ),
 	MEMBER(	0L,		"v",		setToggleProperty,	state.format.hidden, 0 ),
 	MEMBER(	"@pict",	"wbitmap",	setEnumProperty,	picture.type, RTFPicture::BMP ),
@@ -732,7 +732,8 @@ void RTFImport::setPlainFormatting( RTFProperty * )
     format.underlineDot		= false;
     format.underlineDashDot	= false;
     format.underlineDashDotDot	= false;
-    
+    format.underlineWordByWord	= false;
+
     // Do not reset format.uc !
 }
 
@@ -1800,10 +1801,11 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
             || format.fmt.underlineThick != baseFormat->underlineThick
             || format.fmt.underlineDot != baseFormat->underlineDot
             || format.fmt.underlineDashDot != baseFormat->underlineDashDot
-            || format.fmt.underlineDashDotDot != baseFormat->underlineDashDotDot )
+            || format.fmt.underlineDashDotDot != baseFormat->underlineDashDotDot
+            || format.fmt.underlineWordByWord != baseFormat->underlineWordByWord )
 	{
 	    node.addNode( "UNDERLINE" );
-            QCString st,styleline;
+            QCString st,styleline,wordbyword("0");
             st.setNum(format.fmt.underline);
             if ( format.fmt.underlined )
                 st="double";
@@ -1832,7 +1834,14 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
                 st="1";
                 styleline="dashdotdot";
             }
+            else if (format.fmt.underlineWordByWord )
+            {
+                st="1";
+                styleline="solid";
+                wordbyword="1";
+            }
             node.setAttribute( "value", st );
+            node.setAttribute( "wordbyword", wordbyword );
             if ( !styleline.isEmpty() )
                 node.setAttribute( "styleline", styleline );
 

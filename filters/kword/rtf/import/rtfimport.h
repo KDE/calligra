@@ -133,7 +133,7 @@ struct RTFFormat
     int color, bgcolor;
     int uc;
     bool underline, underlined, bold, italic, strike, striked, hidden, caps;
-    bool underlineDash, underlineThick, underlineDot, underlineDashDot, underlineDashDotDot;
+    bool underlineDash, underlineThick, underlineDot, underlineDashDot, underlineDashDotDot, underlineWordByWord;
 };
 
 // Style sheet entry
