@@ -2,7 +2,7 @@
 
 INCLUDES = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS =  $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD =  libaf.a $(KOFFICE_LIBS) -lkpartsui -lkparts -lkom $(LIB_KIO) $(LIBMICO) $(LIB_KFILE) -lm
+LDADD =  libaf.a $(LIB_KOFFICEUI)
 
 bin_PROGRAMS = kautoformEdit
 

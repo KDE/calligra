@@ -5,7 +5,7 @@ SUBDIRS = core ui pics
 INCLUDES  = $(MICO_INCLUDES)  -I$(srcdir)/ui -I$(srcdir)/core \
 	$(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS =   $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD =  $(KOFFICE_LIBS) -lkom -lop $(LIB_KFILE) $(LIBMICO) 
+LDADD =  $(LIB_KOFFICEUI)
 
 ####### Files
 

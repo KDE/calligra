@@ -4,9 +4,7 @@ LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 FILTER_LIBS = ./../filter/libfilter.a
 XML_LIBS = ./../xmlutils/libxml.a
 KSHARE_LIBS = ./../share/libkillu.a
-LDADD = $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) $(KOFFICE_LIBS) \
-	-lkparts -lkpartsui -lkom $(LIBMICO) $(LIB_KIO) $(LIBQIMGIO) \
-	$(LIB_KFILE) $(LIB_KIMGIO)
+LDADD = $(FILTER_LIBS) $(KSHARE_LIBS) $(XML_LIBS) $(LIB_KOFFICEUI)
 
 ####### Files
 
