@@ -41,9 +41,9 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-        kdError(30502) << "Unable to open input file!" << endl;
-        in.close();
-        return false;
+	kdError(30502) << "Unable to open input file!" << endl;
+	in.close();
+	return false;
     }
 
     QString str;
@@ -62,8 +62,12 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
     str += "<TEXT>";
 
     QTextStream stream(&in);
+    int step=in.size()/50;
+    int value=0;
+    int i=0;
     while(!stream.atEnd())
     {
+	++i;
         QChar c;
 	stream >> c;
         if ( c == QChar( '\n' ) )
@@ -77,21 +81,23 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
             str += "&lt;";
         else if ( c == QChar( '>' ) )
             str += "&gt;";
+        else if( c == QChar( '&' ) )
+	    str+="&amp;";
         else
             str += c;
+	if(i>step) {
+	    i=0;
+	    value+=2;
+	    emit sigProgress(value);
+	}
     }
+    emit sigProgress(100);
 
     str += "</TEXT>\n";
     str += "</PARAGRAPH>\n";
     str += "</FRAMESET>\n";
     str += "</FRAMESETS>\n";
     str += "</DOC>\n";
-
-    // test
-    emit sigProgress(50);
-    sleep(2);
-    emit sigProgress(60);
-    sleep(2);
 
     KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
     if(!out.open("root")) {

@@ -42,18 +42,30 @@ const bool ASCIIExport::filter(const QCString &fileIn, const QCString &fileOut,
     QByteArray array=in.read(0xffffffff);
     QString buf=QString::fromUtf8((const char*)array, array.size());
 
+    int step=buf.length()/50;
+    int value=0;
+    int k=0;
+    emit sigProgress(0);
+
     QString str;
 
     int i = buf.find( "<TEXT>" );
     while ( i != -1 )
     {
+	k+=i;
         int j = buf.find( "</TEXT>", i );
         if ( j - ( i + 6 ) > 0 )
         {
+	    // FIXME: &lt; &gt; &amp; (Werner)
             str += buf.mid( i + 6, j - ( i + 6 ) );
             str += "\n";
         }
         i = buf.find( "<TEXT>", j );
+	if(k>step) {
+	    k=0;
+	    value+=2;
+	    emit sigProgress(value);
+	}
     }
 
     QFile out(fileOut);
