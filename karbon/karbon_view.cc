@@ -257,11 +257,12 @@ KarbonView::canvas() const
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 {
+	double centerX = double( m_canvas->contentsX() + m_canvas->visibleWidth() / 2 ) / double( m_canvas->contentsWidth() );
+	double centerY = double( m_canvas->contentsY() + m_canvas->visibleHeight() / 2 ) / double( m_canvas->contentsHeight() );
 	m_painterFactory->painter()->resize( width(), height() );
 	m_painterFactory->editpainter()->resize( width(), height() );
 	m_canvas->resize( width(), height() );
-	//kdDebug() << "Moving to : " << m_canvas->contentsHeight() - height() << endl;
-	m_canvas->setContentsPos( 0, m_canvas->contentsHeight() - height() );
+	m_canvas->setViewport( centerX, centerY );
 	reorganizeGUI();
 }
 
