@@ -770,16 +770,22 @@ KarbonView::initActions()
 	m_viewAction->setEditable( false );
 
 	QStringList stl;
-	stl
-	<< i18n( "    25%" )
-	<< i18n( "    50%" )
-	<< i18n( "   100%" )
-	<< i18n( "   200%" )
-	<< i18n( "   300%" )
-	<< i18n( "   400%" )
-	<< i18n( "   800%" )
-	<< i18n( "Whole Page" )
-	<< i18n( "  Width" );
+        // xgettext:no-c-format
+	stl << i18n( "    25%" );
+        // xgettext:no-c-format
+	stl << i18n( "    50%" );
+        // xgettext:no-c-format
+	stl << i18n( "   100%" );
+        // xgettext:no-c-format
+	stl << i18n( "   200%" );
+        // xgettext:no-c-format
+	stl << i18n( "   300%" );
+        // xgettext:no-c-format
+	stl << i18n( "   400%" );
+        // xgettext:no-c-format
+	stl << i18n( "   800%" );
+	stl << i18n( "Whole Page" )
+            << i18n( "  Width" );
 
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setEditable( true );
