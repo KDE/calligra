@@ -343,16 +343,30 @@ void KoAutoFormat::readConfig(bool force)
         QDomElement doubleQuote = de.namedItem( "DoubleQuote" ).toElement();
         if(!doubleQuote.isNull())
         {
-            QDomNodeList nl = doubleQuote.childNodes();
-            m_typographicDefaultDoubleQuotes.begin =  nl.item(0).toElement().attribute("begin")[0];
-            m_typographicDefaultDoubleQuotes.end = nl.item(0).toElement().attribute("end")[0];
+            QDomElement childItem = doubleQuote.namedItem("doublequote").toElement();
+            if ( !childItem.isNull() )
+            {
+                QString attr = childItem.attribute( "begin" );
+                if ( !attr.isEmpty() )
+                    m_typographicDefaultDoubleQuotes.begin = attr[0];
+                attr = childItem.attribute( "end" );
+                if ( !attr.isEmpty() )
+                    m_typographicDefaultDoubleQuotes.end = attr[0];
+            }
         }
         QDomElement simpleQuote = de.namedItem( "SimpleQuote" ).toElement();
         if(!simpleQuote.isNull())
         {
-            QDomNodeList nl = simpleQuote.childNodes();
-            m_typographicDefaultSimpleQuotes.begin =  nl.item(0).toElement().attribute("begin")[0];
-            m_typographicDefaultSimpleQuotes.end = nl.item(0).toElement().attribute("end")[0];
+            QDomElement childItem = simpleQuote.namedItem("simplequote").toElement();
+            if ( !childItem.isNull() )
+            {
+                QString attr = childItem.attribute( "begin" );
+                if ( !attr.isEmpty() )
+                    m_typographicDefaultSimpleQuotes.begin = attr[0];
+                attr = childItem.attribute( "end" );
+                if ( !attr.isEmpty() )
+                    m_typographicDefaultSimpleQuotes.end = attr[0];
+            }
         }
     }
 
