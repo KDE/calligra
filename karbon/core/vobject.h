@@ -19,7 +19,7 @@ class VCommand;
 class VObject
 {
 public:
-	enum VState { normal, edit, deleted, invisible };
+	enum VState { normal=0, selected=1, edit=2, deleted=3, invisible=4 };
 
 	VObject()
 		: m_state( normal ) {}
@@ -28,14 +28,15 @@ public:
 	virtual void draw( QPainter& painter, const QRect& rect,
 		const double zoomFactor ) = 0;
 
-	virtual VCommand* accept( const VTool& tool ) { return tool.manipulate( this ); }
+	virtual VCommand* accept( const VTool& tool )
+		{ return tool.manipulate( this ); }
 
 	virtual VObject& transform( const QWMatrix& m ) = 0;
 
-	QRect boundingBox() const { return QRect(); }
+	virtual QRect boundingBox() const { return QRect(); }
 
 	void setState( const VState state ) { m_state = state; }
-	bool state() const { return m_state; }
+	VState state() const { return m_state; }
 
 private:
 	VState m_state;

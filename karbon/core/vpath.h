@@ -119,6 +119,8 @@ public:
 	// apply an affine map:
 	virtual VObject& transform( const QWMatrix& m );
 
+	virtual QRect boundingBox() const;
+
 private:
 	QPtrList<VSegment> m_segments;
 };
