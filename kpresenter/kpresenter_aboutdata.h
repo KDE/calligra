@@ -33,11 +33,11 @@ KAboutData * newKPresenterAboutData()
                                            I18N_NOOP("(c) 1998-2002, The KPresenter Team"), 0,
                                            "http://www.koffice.org/kpresenter/");
     aboutData->addAuthor("Reginald Stadlbauer",I18N_NOOP("original author"), "reggie@kde.org");
-    aboutData->addAuthor("Werner Trobin", I18N_NOOP("current maintainer"), "trobin@kde.org");
+    aboutData->addAuthor("Laurent Montel", I18N_NOOP("current maintainer"), "lmontel@mandrakesoft.com");
+    aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
     aboutData->addAuthor("David Faure", 0, "dfaure@kde.org");
     aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
     aboutData->addAuthor("Lukáš Tinkl", 0, "lukas@kde.org");
-    aboutData->addAuthor("Laurent Montel", 0, "lmontel@mandrakesoft.com");
     return aboutData;
 }
 
