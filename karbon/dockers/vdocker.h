@@ -21,6 +21,14 @@
 #ifndef __VDOCKER_H__
 #define __VDOCKER_H__
 
+#ifdef Always
+#undef Always
+#undef Never
+#undef KeyPress
+#undef KeyRelease
+#endif
+
+
 #include <qdockwindow.h>
 
 /* This is the base class for all Karbon14 dockers. Smaller font is used to save screen space

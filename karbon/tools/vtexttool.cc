@@ -563,7 +563,9 @@ void VTextTool::mouseDragRelease()
 	m_text = 0L;
 	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
+#ifdef HAVE_KARBONTEXT
 	m_editedText->traceText();
+#endif
 	m_creating = true;
 	
 	drawEditedText();
@@ -587,8 +589,9 @@ void VTextTool::textChanged()
 	m_editedText->setFont( m_optionsWidget->font() );
 	m_editedText->setPosition( m_optionsWidget->position() );
 	m_editedText->setAlignment( m_optionsWidget->alignment() );
+#ifdef HAVE_KARBONTEXT
 	m_editedText->traceText();
-	
+#endif	
 	drawEditedText();
 } // VTextTool::textChanged
 
@@ -668,7 +671,9 @@ void VTextTool::visitVComposite( VComposite& composite )
 	m_text = 0L; 
 	m_editedText = new VText( m_optionsWidget->font(), *composite.paths().getFirst(), m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
+#ifdef HAVE_KARBONTEXT
 	m_editedText->traceText();
+#endif
 	m_creating = true;
 
 	drawEditedText();
@@ -679,7 +684,9 @@ void VTextTool::visitVPath( VPath& path )
 	m_text = 0L; 
 	m_editedText = new VText( m_optionsWidget->font(), path, m_optionsWidget->position(), m_optionsWidget->alignment(), m_optionsWidget->text() );
 	m_editedText->setState( VObject::edit );
+#ifdef HAVE_KARBONTEXT
 	m_editedText->traceText();
+#endif
 	m_creating = true;
 
 	drawEditedText();
@@ -763,7 +770,9 @@ void VTextTool::VTextCmd::execute()
 		m_text->setText( m_textModifications->newText );
 		m_text->setUseShadow( m_textModifications->newUseShadow );
 		m_text->setShadow( m_textModifications->newShadowAngle, m_textModifications->newShadowDistance, m_textModifications->newTranslucentShadow );
+#ifdef HAVE_KARBONTEXT
 		m_text->traceText();
+#endif
 		m_text->setState( VObject::normal );
 	}
 
@@ -789,7 +798,9 @@ void VTextTool::VTextCmd::unexecute()
 		m_text->setText( m_textModifications->oldText );
 		m_text->setUseShadow( m_textModifications->oldUseShadow );
 		m_text->setShadow( m_textModifications->oldShadowAngle, m_textModifications->oldShadowDistance, m_textModifications->oldTranslucentShadow );
+#ifdef HAVE_KARBONTEXT
 		m_text->traceText();
+#endif
 		m_text->setState( VObject::normal );
 	}
 

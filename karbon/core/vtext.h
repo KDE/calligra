@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+   Boston, MA 0214111-1307, USA.
 */
 
 #ifndef __VTEXT_H__
@@ -35,6 +35,10 @@ class VGroup;
 
 typedef QPtrList<VComposite> VCompositeList;
 typedef QPtrListIterator<VComposite> VCompositeListIterator;
+
+#ifdef Above
+#undef Above
+#endif
 
 class VText : public VObject
 {

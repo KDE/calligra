@@ -54,4 +54,4 @@ libkarboncore_la_METASOURCES = \
 	AUTO
 
 libkarboncore_la_LDFLAGS = $(KDE_RPATH) $(LIBFREETYPE_RPATH)
-libkarboncore_la_LIBADD = $(LIBFREETYPE_LIBS) -lfontconfig
+libkarboncore_la_LIBADD = $(LIBFREETYPE_LIBS) $(FONTCONFIG_LIBS)

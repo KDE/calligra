@@ -365,8 +365,10 @@ VText::load( const QDomElement& element )
 		}
 	}
 	// if no glyphs yet, trace them
+#ifdef HAVE_KARBONTEXT
 	if( m_glyphs.count() == 0 )
 		traceText();
+#endif
 	m_boundingBoxIsInvalid = true;
 }
 
