@@ -180,7 +180,7 @@ void KSpreadCell::copyLayout( int _column, int _row )
   	tmpCondition->fontcond=o->getThirdCondition(0)->fontcond;
   	tmpCondition->m_cond=o->getThirdCondition(0)->m_cond;
     }
-    setComment( o->comment() );
+    setComment( o->comment(_column, _row) );
     setAngle( o->getAngle(_column, _row) );
     setFormatNumber( o->getFormatNumber(_column, _row) );
 }
@@ -252,7 +252,7 @@ void KSpreadCell::defaultStyle()
 
   m_conditionIsTrue=false;
   m_numberOfCond=-1;
-  m_strComment="";
+  setComment("");
   setVerticalText(false);
   setAngle(m_rotateAngle);
   setFormatNumber(KSpreadCell::Number);
@@ -3243,17 +3243,6 @@ void KSpreadCell::decPrecision()
     m_iPrecision--;
     m_bLayoutDirtyFlag = TRUE;
   }
-}
-
-void KSpreadCell::setComment( const QString& c )
-{
-    m_strComment = c;
-    m_bLayoutDirtyFlag = TRUE;
-}
-
-QString KSpreadCell::comment() const
-{
-    return m_strComment;
 }
 
 void KSpreadCell::setCellText( const QString& _text, bool updateDepends )

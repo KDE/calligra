@@ -57,8 +57,8 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
     lay1->addWidget( bb);
 
     KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
-    if(!cell->comment().isEmpty())
-        multiLine->setText(cell->comment());
+    if(!cell->comment(marker.x(),marker.y()).isEmpty())
+        multiLine->setText(cell->comment(marker.x(),marker.y()));
 
     connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );

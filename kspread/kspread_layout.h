@@ -69,7 +69,8 @@ public:
 		     PVerticalText = 0x40000,
                      PPrecision = 0x80000,
                      PFormatNumber = 0x100000,
-                     PAngle = 0x200000};
+                     PAngle = 0x200000,
+                     PComment = 0x400000};
 
     KSpreadLayout( KSpreadTable *_table );
     virtual ~KSpreadLayout();
@@ -166,6 +167,7 @@ public:
 
     virtual void setAngle(int _angle);
 
+    virtual void setComment( const QString& c );
 
     ////////////////////////////////
     //
@@ -262,6 +264,8 @@ public:
     virtual formatNumber getFormatNumber(int col, int row )const ;
 
     virtual int getAngle(int col, int row) const;
+
+    virtual QString comment(int col, int row) const;
 
     KSpreadTable* table() { return m_pTable; }
     const KSpreadTable* table() const { return m_pTable; }
@@ -399,6 +403,11 @@ protected:
     * default is null
     */
     int m_rotateAngle;
+
+     /**
+     * Stores a comment string.
+     */
+    QString m_strComment;
 
 private:
     void setProperty( Properties p );

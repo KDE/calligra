@@ -392,9 +392,9 @@ public:
 
     void setSelectionAngle( const QPoint &_marker,int _value);
 
-    void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
-    void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
-    void setSelectionBorderColor( const QPoint &_marker, QColor bd_Color );
+    void setSelectionTextColor( const QPoint &_marker, const QColor &tbColor );
+    void setSelectionbgColor( const QPoint &_marker, const QColor &bg_Color );
+    void setSelectionBorderColor( const QPoint &_marker, const QColor &bd_Color );
 
     /**
      * @param _marker is used if there is no selection currently.
@@ -477,13 +477,13 @@ public:
     /**
      * Install borders
      */
-    void borderLeft( const QPoint &_marker,QColor _color );
-    void borderTop( const QPoint &_marker,QColor _color );
-    void borderOutline( const QPoint &_marker,QColor _color );
-    void borderAll( const QPoint &_marker,QColor _color );
+    void borderLeft( const QPoint &_marker,const QColor &_color );
+    void borderTop( const QPoint &_marker,const QColor &_color );
+    void borderOutline( const QPoint &_marker,const QColor &_color );
+    void borderAll( const QPoint &_marker,const QColor &_color );
     void borderRemove( const QPoint &_marker );
-    void borderBottom( const QPoint &_marker,QColor _color );
-    void borderRight( const QPoint &_marker,QColor _color );
+    void borderBottom( const QPoint &_marker,const QColor &_color );
+    void borderRight( const QPoint &_marker,const QColor &_color );
 
     void setConditional( const QPoint &_marker,KSpreadConditional tmp[3] );
 

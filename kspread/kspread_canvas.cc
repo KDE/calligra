@@ -2888,7 +2888,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
         return;
 
     // Get the comment
-    QString comment= cell->comment();
+    QString comment= cell->comment(col,row);
 
     // Determine position and width of the current cell.
     cell = table->cellAt( col, row );

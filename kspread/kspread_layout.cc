@@ -74,7 +74,7 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_textPen.setColor( QApplication::palette().active().text() );
     m_eFormatNumber=KSpreadLayout::Number;
     m_rotateAngle=0;
-
+    m_strComment="";
     QFont font( "Helvetica", 12 );
     m_textFont = font;
 }
@@ -109,6 +109,7 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
     m_bVerticalText = _l.m_bVerticalText;
     m_eFormatNumber = _l.m_eFormatNumber;
     m_rotateAngle = _l.m_rotateAngle;
+    m_strComment = _l.m_strComment;
 }
 
 void KSpreadLayout::clearProperties()
@@ -872,6 +873,18 @@ void KSpreadLayout::setAngle(int _angle)
     layoutChanged();
 }
 
+void KSpreadLayout::setComment( const QString& _comment )
+{
+    if ( _comment.isEmpty() )
+        clearProperty( PComment );
+    else
+        setProperty( PComment );
+
+    m_strComment=_comment;
+    layoutChanged();
+}
+
+
 /////////////
 //
 // Get methods
@@ -1271,6 +1284,19 @@ int KSpreadLayout::getAngle( int col, int row ) const
 
     return m_rotateAngle;
 }
+
+QString KSpreadLayout::comment( int col, int row ) const
+{
+    if ( !hasProperty( PComment ) )
+    {
+	const KSpreadLayout* l = fallbackLayout( col, row );
+	if ( l )
+	    return l->comment( col, row );
+    }
+
+    return m_strComment;
+}
+
 
 /////////////
 //

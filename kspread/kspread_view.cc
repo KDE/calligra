@@ -487,7 +487,7 @@ void KSpreadView::updateEditWidget()
     else
         m_money->setChecked( FALSE );
 
-    if( cell->comment().isEmpty() )
+    if( cell->comment(m_pCanvas->markerColumn(), m_pCanvas->markerRow()).isEmpty() )
         m_removeComment->setEnabled( FALSE );
     else
         m_removeComment->setEnabled( TRUE );
@@ -1823,7 +1823,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
     m_pPopupMenu->insertSeparator();
     m_addModifyComment->plug( m_pPopupMenu );
-    if( !cell->comment().isEmpty() )
+    if( !cell->comment(m_pCanvas->markerColumn(), m_pCanvas->markerRow()).isEmpty() )
     {
         //m_showComment->plug( m_pPopupMenu );
         m_removeComment->plug( m_pPopupMenu );

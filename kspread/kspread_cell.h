@@ -276,9 +276,6 @@ public:
 
     void setAction( const QString& _action ) { m_strAction = _action; }
 
-    void setComment( const QString& c );
-    QString comment() const;
-
     ////////////////////////////////
     //
     // Methods for querying layout stuff.
@@ -919,10 +916,6 @@ protected:
     KSpreadCell* m_nextCell;
     KSpreadCell* m_previousCell;
 
-    /**
-     * Stores a comment string.
-     */
-    QString m_strComment;
 };
 
 #endif

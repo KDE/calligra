@@ -1295,7 +1295,7 @@ void KSpreadTable::setSelectionRemoveComment( const QPoint &_marker)
 }
 
 
-void KSpreadTable::setSelectionTextColor( const QPoint &_marker, QColor tb_Color )
+void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &tb_Color )
 {
     m_pDoc->setModified( true );
 
@@ -1371,7 +1371,7 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, QColor tb_Color
     }
 }
 
-void KSpreadTable::setSelectionbgColor( const QPoint &_marker, QColor bg_Color )
+void KSpreadTable::setSelectionbgColor( const QPoint &_marker, const QColor &bg_Color )
 {
 m_pDoc->setModified( true );
 
@@ -1447,7 +1447,7 @@ m_pDoc->setModified( true );
     }
 }
 
-void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, QColor bd_Color )
+void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, const QColor &bd_Color )
 {
     bool selected = ( m_rctSelection.left() != 0 );
 
@@ -2145,7 +2145,7 @@ QString KSpreadTable::replaceText(QString _cellText,QString _find,QString _repla
     }
 }
 
-void KSpreadTable::borderBottom( const QPoint &_marker,QColor _color )
+void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
 {
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
@@ -2172,7 +2172,7 @@ void KSpreadTable::borderBottom( const QPoint &_marker,QColor _color )
     emit sig_updateView( this, r );
 }
 
-void KSpreadTable::borderRight( const QPoint &_marker,QColor _color )
+void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
 {
     QRect r( m_rctSelection );
     if ( m_rctSelection.left() == 0 )
@@ -2198,8 +2198,7 @@ void KSpreadTable::borderRight( const QPoint &_marker,QColor _color )
     emit sig_updateView( this, r );
 }
 
-// #### Use const QColor& here
-void KSpreadTable::borderLeft( const QPoint &_marker, QColor _color )
+void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
 {
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
@@ -2223,7 +2222,7 @@ void KSpreadTable::borderLeft( const QPoint &_marker, QColor _color )
     emit sig_updateView( this, r );
 }
 
-void KSpreadTable::borderTop( const QPoint &_marker,QColor _color )
+void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
 {
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
@@ -2250,17 +2249,65 @@ void KSpreadTable::borderTop( const QPoint &_marker,QColor _color )
     emit sig_updateView( this, r );
 }
 
-// #### Use const QColor& here
-void KSpreadTable::borderOutline( const QPoint &_marker,QColor _color )
+void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
 {
-    borderRight( _marker,_color );
-    borderLeft(_marker,_color );
-    borderTop(_marker,_color );
-    borderBottom(_marker,_color );
+    QRect r( m_rctSelection );
+    if ( m_rctSelection.left()==0 )
+	r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+    KSpreadUndoCellLayout *undo;
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
+    for ( int x = r.left(); x <= r.right(); x++ )
+    {
+	int y = r.top();
+	KSpreadCell *cell = cellAt( x, y );
+	if ( cell == m_pDefaultCell )
+        {
+	    cell = new KSpreadCell( this, x, y );
+	    m_cells.insert( cell, x, y );
+	}
+  	cell->setTopBorderStyle( SolidLine );
+   	cell->setTopBorderColor( _color );
+    	cell->setTopBorderWidth( 2 );
+    }
+    for ( int y = r.top(); y <= r.bottom(); y++ )
+    {
+	int x = r.left();
+	KSpreadCell *cell = nonDefaultCell( x, y );
+        cell->setLeftBorderStyle( SolidLine );
+   	cell->setLeftBorderColor( _color );
+    	cell->setLeftBorderWidth( 2 );
+    }
+    for ( int y = r.top(); y <= r.bottom(); y++ )
+    {
+	int x = r.right();
+	KSpreadCell *cell = nonDefaultCell( x, y );
+        cell->setRightBorderStyle( SolidLine );
+   	cell->setRightBorderColor( _color );
+    	cell->setRightBorderWidth( 2 );
+    }
+    for ( int x = r.left(); x <= r.right(); x++ )
+    {
+	int y = r.bottom();
+	KSpreadCell *cell = cellAt( x, y );
+	if ( cell == m_pDefaultCell )
+        {
+	    cell = new KSpreadCell( this, x, y );
+	    m_cells.insert( cell, x, y );
+	}
+        cell->setBottomBorderStyle( SolidLine );
+        cell->setBottomBorderColor( _color );
+        cell->setBottomBorderWidth( 2 );
+    }
+
+    emit sig_updateView( this, r );
+
 }
 
-// #### Use const QColor& here
-void KSpreadTable::borderAll( const QPoint &_marker,QColor _color )
+void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
 {
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )

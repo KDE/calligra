@@ -846,3 +846,9 @@ is red)
 ----------------------------------------------------
 -Now format works
 -You can put different date format.
+
+2000-07-29-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Move "Comment" code to kspread_layout
+=>undo works with "comment"
+-bug fix

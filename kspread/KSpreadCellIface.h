@@ -27,6 +27,7 @@ k_dcop:
     virtual void setTextColor(int r,int g,int b);
     virtual QString textColor()const ;
     virtual void setComment(const QString &_comment);
+    virtual QString comment()const;
     virtual void setAngle(int angle);
     virtual int angle() const ;
     virtual void setVerticalText(bool _vertical);

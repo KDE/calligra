@@ -25,6 +25,12 @@ void KSpreadCellIface::setText( const QString& text )
     cell->setCellText( text );
 }
 
+QString KSpreadCellIface::comment() const
+{
+    KSpreadCell* cell = m_table->cellAt( m_point );
+    return cell->comment(m_point.x(), m_point.y());
+}
+
 void KSpreadCellIface::setComment( const QString& comment )
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
