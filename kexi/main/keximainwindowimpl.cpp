@@ -1305,6 +1305,7 @@ KexiMainWindowImpl::storeSettings()
 
 //	saveWindowSize( d->config ); //instance()->config() );
 	saveMainWindowSettings( d->config, "MainWindow" );
+	d->config->setGroup("MainWindow");
 	d->config->writeEntry("MDIMode", mdiMode());
 //	config->sync();
 	d->config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
