@@ -136,26 +136,29 @@ void KChartFontConfigPage::changeIndex(int newindex)
 void KChartFontConfigPage::changeLabelFont()
 {
   if(list->currentText()==i18n("Title")) {
-	if (KFontDialog::getFont( title,false,this ) == QDialog::Rejected )
-	  return;
+    if (KFontDialog::getFont( title,false,this,true,&titleIsRelative ) == QDialog::Rejected)
+      return;
   } else if(list->currentText()==i18n("X-Title")) {
-	if (KFontDialog::getFont( xtitle,false,this ) == QDialog::Rejected )
-	  return;
+    if (KFontDialog::getFont( xtitle,false,this,true,&xtitleIsRelative ) == QDialog::Rejected)
+      return;
   } else if(list->currentText()==i18n("Y-Title")) {
-	if (KFontDialog::getFont( ytitle,false,this ) == QDialog::Rejected )
-	  return;
+    if (KFontDialog::getFont( ytitle,false,this,true,&ytitleIsRelative ) == QDialog::Rejected)
+      return;
   } else if(list->currentText()==i18n("X-Axis")) {
-	if (KFontDialog::getFont( xaxis,false,this ) == QDialog::Rejected )
-	  return;
+    if (KFontDialog::getFont( xaxis,false,this,true,&xaxisIsRelative ) == QDialog::Rejected)
+      return;
   } else if(list->currentText()==i18n("Y-Axis")) {
-	if (KFontDialog::getFont( yaxis,false,this ) == QDialog::Rejected )
-	  return;
+    if (KFontDialog::getFont( yaxis,false,this,true,&yaxisIsRelative ) == QDialog::Rejected)
+      return;
   } else if(list->currentText()==i18n("Label")) {
-	if (KFontDialog::getFont( label,false,this ) == QDialog::Rejected )
-	  return;
+    if (KFontDialog::getFont( label,false,this,true,&labelIsRelative ) == QDialog::Rejected)
+      return;
+//  } else if(list->currentText()==i18n("Legend")) {
+//    if (KFontDialog::getFont( legend,false,this,true,&legendIsRelative ) == QDialog::Rejected)
+//      return;
   }
   else {
-	kdDebug( 35001 ) << "Pb in listBox" << endl;
+    kdDebug( 35001 ) << "Pb in listBox" << endl;
   }
 }
 
@@ -166,12 +169,22 @@ void KChartFontConfigPage::init()
     KDChartAxisParams rightparms = _params->axisParams( KDChartAxisParams::AxisPosRight );
     KDChartAxisParams bottomparms = _params->axisParams( KDChartAxisParams::AxisPosBottom );
     xaxis = bottomparms.axisLabelsFont();
+    xaxisIsRelative = bottomparms.axisLabelsFontUseRelSize();
+    if( xaxisIsRelative )
+      xaxis.setPointSize( bottomparms.axisLabelsFontRelSize() );
     yaxis = leftparms.axisLabelsFont();
+    yaxisIsRelative = leftparms.axisLabelsFontUseRelSize();
+    if( yaxisIsRelative )
+      yaxis.setPointSize( leftparms.axisLabelsFontRelSize() );
+    // PENDING(khz) Add support for the other 6 possible axes
 
-    title=_params->header1Font();
-    // PENDING(kalle) Adapt
+    title = _params->headerFooterFont( KDChartParams::HdFtPosHeader );
+    titleIsRelative = _params->headerFooterFontUseRelSize( KDChartParams::HdFtPosHeader );
+    if( titleIsRelative )
+      title.setPointSize( _params->headerFooterFontRelSize( KDChartParams::HdFtPosHeader ) );
+    // PENDING(khz) Add support for the other 16 possible hd/ft areas
 
-    //   title = _params->titleFont();
+
 //   xtitle = _params->xTitleFont();
 //   ytitle = _params->yTitleFont();
 //   label = _params->labelFont();
@@ -193,15 +206,40 @@ void KChartFontConfigPage::apply()
     KDChartAxisParams leftparms = _params->axisParams( KDChartAxisParams::AxisPosLeft );
     KDChartAxisParams rightparms = _params->axisParams( KDChartAxisParams::AxisPosRight );
     KDChartAxisParams bottomparms = _params->axisParams( KDChartAxisParams::AxisPosBottom );
-    //laurent 2001-11-09 I don't know why when we apply true, chart is not
-    //redraw correctly
-    // bottomparms.setAxisLabelsFont( xaxis, true );
-    bottomparms.setAxisLabelsFont( xaxis, false );
-    leftparms.setAxisLabelsFont( yaxis, true );
+
+    leftparms.setAxisLabelsFont( yaxis, !yaxisIsRelative );
+    if( yaxisIsRelative )
+      leftparms.setAxisLabelsFontRelSize( yaxis.pointSize() );
+    // PENDING(khz) change right axis handling
+    // use left axis settings for the right axis as well
+    //   (this must be changed, khz 14.12.2001)
+    rightparms.setAxisLabelsFont( yaxis, !yaxisIsRelative );
+    if( yaxisIsRelative )
+      rightparms.setAxisLabelsFontRelSize( yaxis.pointSize() );
+    bottomparms.setAxisLabelsFont( xaxis, !xaxisIsRelative );
+    if( xaxisIsRelative )
+      bottomparms.setAxisLabelsFontRelSize( xaxis.pointSize() );
+    // PENDING(khz) Add support for the other 6 possible axes
+
     _params->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
-    _params->setHeader1Font(title);
+    _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader,
+                                  title,
+                                  titleIsRelative,
+                                  title.pointSize() );
+    // PENDING(khz) change hd2 and ft handling
+    // use header settings for header 2 and footer as well
+    //   (this must be changed, khz 14.12.2001)
+    _params->setHeaderFooterFont( KDChartParams::HdFtPosHeader2,
+                                  title,
+                                  titleIsRelative,
+                                  title.pointSize() );
+    _params->setHeaderFooterFont( KDChartParams::HdFtPosFooter,
+                                  title,
+                                  titleIsRelative,
+                                  title.pointSize() );
+    // PENDING(khz) Add support for the other 16 possible hd/ft areas
 
 //     _params->setXTitleFont(xtitle);
 //     _params->setYTitleFont(ytitle);
@@ -211,7 +249,7 @@ void KChartFontConfigPage::apply()
   //   for(unsigned int i=0;i<extColor.count();i++)
 //     _params->ExtColor.setColor(i,extColor.color(i));
 
-  for(int i =0;i<data->rows();i++)
+  for(uint i =0;i<data->rows();i++)
       if(i<_params->maxDataColor())
           _params->setDataColor(i,extColor.color(i));
 }

@@ -42,6 +42,14 @@ private:
     QFont label;
     QFont yaxis;
     QFont xaxis;
+    QFont legend;
+    bool titleIsRelative;
+    bool xtitleIsRelative;
+    bool ytitleIsRelative;
+    bool labelIsRelative;
+    bool yaxisIsRelative;
+    bool xaxisIsRelative;
+    bool legendIsRelative;
     KChartColorArray extColor;
     int index;
     KoChart::Data *data;
