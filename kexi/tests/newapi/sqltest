@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # fast parser testing using sqlite database
 # Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
@@ -17,7 +17,7 @@ fi
 temp=`mktemp /tmp/$0.XXXXXX`
 
 kexidbtest -test parser sqlite "$1" "$REPLY" 2> $temp || \
-	cat $temp && [ "$3" == "-v" ] && cat $temp
+	cat $temp && test "$3" = "-v" && cat $temp
 
 rm -f $temp
 
