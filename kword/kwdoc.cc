@@ -180,7 +180,7 @@ KWBookMark::KWBookMark(const QString &_name)
 {
 }
 
-KWBookMark::KWBookMark(const QString &_name, KWTextParag *_startParag, KWTextParag *_endParag,KWFrameSet *_frameSet, int _pos, int _end)
+KWBookMark::KWBookMark(const QString &_name, KoTextParag *_startParag, KoTextParag *_endParag,KWFrameSet *_frameSet, int _pos, int _end)
     : m_name(_name),
       m_startParag(_startParag),
       m_endParag(_endParag),
@@ -4741,7 +4741,7 @@ void KWDocument::updateRulerInProtectContentMode()
 
 void KWDocument::insertBookMark(const QString &_name, KWTextParag *_startparag,KWTextParag *_endparag, KWFrameSet *_frameSet, int _start, int _end)
 {
-    KWBookMark *book =new KWBookMark( _name, _startparag,_endparag, _frameSet, _start, _end);
+    KWBookMark *book = new KWBookMark( _name, _startparag, _endparag, _frameSet, _start, _end );
     m_bookmarkList.append( book );
 }
 
@@ -4821,23 +4821,22 @@ void KWDocument::spellCheckParagraphDeleted( KoTextParag *_parag,  KWTextFrameSe
     m_bgSpellCheck->spellCheckParagraphDeleted( _parag, frm->textObject());
 }
 
-void KWDocument::paragraphDeleted( KoTextParag *_parag,  KWFrameSet *frm)
+void KWDocument::paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm )
 {
-    if (m_bookmarkList.count()==0)
+    if ( m_bookmarkList.isEmpty() )
         return;
     QPtrListIterator<KWBookMark> book(m_bookmarkList);
-    for ( ; book.current() ; ++book )
-    {
-        if ( (book.current()->startParag()==_parag ||
-             book.current()->endParag()==_parag) &&
-             book.current()->frameSet()==frm)
-        {
-            book.current()->setStartParag(0L);
-            book.current()->setEndParag(0L);
-            return;
+    for ( ; book.current() ; ++book ) {
+        KWBookMark* bk = book.current();
+        if ( bk->frameSet()==frm ) {
+            // Adjust bookmark to point to a valid paragraph, below or above the deleted one.
+            // The old implementation turned the bookmark into a useless one. OOo simply deletes the bookmark...
+            if ( bk->startParag() == _parag )
+                bk->setStartParag( _parag->next() ? _parag->next() : _parag->prev() );
+            if ( bk->endParag() == _parag )
+                bk->setEndParag( _parag->next() ? _parag->next() : _parag->prev() );
         }
     }
-    return;
 }
 
 void KWDocument::initBookmarkList()
