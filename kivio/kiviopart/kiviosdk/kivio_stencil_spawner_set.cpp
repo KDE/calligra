@@ -47,7 +47,7 @@ KivioStencilSpawnerSet::~KivioStencilSpawnerSet()
         delete m_pSpawners;
         m_pSpawners = NULL;
     }
-    kdDebug() << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - StencilSpawnerSet " <<  m_name << " deleted" << endl;
+    kdDebug(43000) << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - StencilSpawnerSet " <<  m_name << " deleted" << endl;
 }
 
 
@@ -108,7 +108,7 @@ bool KivioStencilSpawnerSet::loadDir( const QString &dirName )
 
     for( int i=0; i<(int)d.count(); i++ )
     {
-       kdDebug() << "SpawnerSet: " << fileName << endl;
+       kdDebug(43000) << "SpawnerSet: " << fileName << endl;
         fileName = dirName + "/" + d[i];
         loadFile(fileName);
     }
@@ -171,7 +171,7 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
 
    if( f.open( IO_ReadOnly )==false )
    {
-      kdDebug() << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set description: " <<
+      kdDebug(43000) << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set description: " <<
 	 dir << "/desc" << endl;
       return dir.right(dir.length() - dir.findRev('/')-1);
    }
@@ -192,7 +192,7 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
       }
    }
 
-   kdDebug() << "KivioStencilSpawnerSet::readTitle() - No title found in "
+   kdDebug(43000) << "KivioStencilSpawnerSet::readTitle() - No title found in "
 	     << dir << "/desc" << endl;
 
    return "";
@@ -232,7 +232,7 @@ QString KivioStencilSpawnerSet::readId( const QString &dir )
 
    if( f.open( IO_ReadOnly )==false )
    {
-      kdDebug() << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
+      kdDebug(43000) << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
 	 dir << "/desc" << endl;
       return "";
    }
@@ -255,7 +255,7 @@ QString KivioStencilSpawnerSet::readId( const QString &dir )
       node = node.nextSibling();
    }
 
-   kdDebug() << "KivioStencilSpawnerSet::readId() - No id found in "
+   kdDebug(43000) << "KivioStencilSpawnerSet::readId() - No id found in "
 	     << dir << "/desc" << endl;
 
    return "";

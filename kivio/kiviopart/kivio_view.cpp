@@ -897,7 +897,7 @@ void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
 {
     if( !pSpawner )
     {
-       kdDebug() << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
+       kdDebug(43000) << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
         return;
     }
 
@@ -1648,11 +1648,11 @@ void KivioView::exportPage()
 
    if(!m_pDoc->exportPage( m_pActivePage, fileName, &dlg ))
    {
-      kdDebug() << "KivioView::exportPage() failed\n";
+      kdDebug(43000) << "KivioView::exportPage() failed\n";
       return;
    }
 
-   kdDebug() << "KivioView::exportPage() succeeded\n";
+   kdDebug(43000) << "KivioView::exportPage() succeeded\n";
 }
 
 void KivioView::openPopupMenuMenuPage( const QPoint & _point )

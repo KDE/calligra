@@ -26,7 +26,7 @@
 
 #include <kdebug.h>
 
-#define PAINTER_CHECK() { if(!m_pPainter) { kdDebug() << "KivioScreenPainter::PAINTER_CHECK() - no QPainter exists." << endl; } }
+#define PAINTER_CHECK() { if(!m_pPainter) { kdDebug(43000) << "KivioScreenPainter::PAINTER_CHECK() - no QPainter exists." << endl; } }
 
 
 KivioScreenPainter::KivioScreenPainter()
@@ -49,7 +49,7 @@ KivioScreenPainter::~KivioScreenPainter()
 {
     if( m_pPainter )
     {
-       kdDebug() << "KivioScreenPainter::~KivioScreenPainter - A QPainter slipped through the cracks" << endl;
+       kdDebug(43000) << "KivioScreenPainter::~KivioScreenPainter - A QPainter slipped through the cracks" << endl;
         delete m_pPainter;
         m_pPainter = NULL;
     }
@@ -69,7 +69,7 @@ bool KivioScreenPainter::start( QPaintDevice *dev )
     // Bomb out if one exists already
     if( m_pPainter )
     {
-       kdDebug() << "KivioScreenPainter::start() - A QPainter already exists" << endl;
+       kdDebug(43000) << "KivioScreenPainter::start() - A QPainter already exists" << endl;
         return false;
     }
 
@@ -92,7 +92,7 @@ bool KivioScreenPainter::stop()
     // called @ref start().
     if( !m_pPainter )
     {
-       kdDebug() <<"KivioScreenPainter::stop() called without previous call to start" << endl;
+       kdDebug(43000) <<"KivioScreenPainter::stop() called without previous call to start" << endl;
         return false;
     }
 
@@ -211,15 +211,15 @@ void KivioScreenPainter::fillRect( float x1, float y1, float w1, float h1 )
             break;
 
         case KivioFillStyle::kcsGradient:
-	   kdDebug() << "KivioScreenPainter::fillRect() - Gradient not supported yet" << endl;
+	   kdDebug(43000) << "KivioScreenPainter::fillRect() - Gradient not supported yet" << endl;
             return;
 
         case KivioFillStyle::kcsNone:
-	   kdDebug() << "KivioScreenPainter::fillRect() - don't call fillRect() without wanting to fill it!" << endl;
+	   kdDebug(43000) << "KivioScreenPainter::fillRect() - don't call fillRect() without wanting to fill it!" << endl;
             return;
 
         default:
-	   kdDebug() << "KivioScreenpainter::fillRect() - unknown color style" << endl;
+	   kdDebug(43000) << "KivioScreenpainter::fillRect() - unknown color style" << endl;
             return;
     }
 
@@ -281,15 +281,15 @@ void KivioScreenPainter::fillRoundRect( float x1, float y1, float w1, float h1, 
             break;
 
         case KivioFillStyle::kcsGradient:
-	   kdDebug() << "fillRoundRect() - Gradient not supported yet" << endl;
+	   kdDebug(43000) << "fillRoundRect() - Gradient not supported yet" << endl;
             return;
 
         case KivioFillStyle::kcsNone:
-	   kdDebug() << "don't call fillRoundRect() without wanting to fill it!" << endl;
+	   kdDebug(43000) << "don't call fillRoundRect() without wanting to fill it!" << endl;
             return;
 
         default:
-           kdDebug() << "fillRoundRect() - unknown color style" << endl;
+           kdDebug(43000) << "fillRoundRect() - unknown color style" << endl;
             return;
     }
 
@@ -349,15 +349,15 @@ void KivioScreenPainter::fillPie( float x1, float y1, float w1, float h1, float 
             break;
 
         case KivioFillStyle::kcsGradient:
-	   kdDebug() << "fillPie() - Gradient not supported yet" << endl;
+	   kdDebug(43000) << "fillPie() - Gradient not supported yet" << endl;
             return;
 
         case KivioFillStyle::kcsNone:
-	   kdDebug() << "don't call fillPie() without wanting to fill it!" << endl;
+	   kdDebug(43000) << "don't call fillPie() without wanting to fill it!" << endl;
             return;
 
         default:
-	   kdDebug() << "fillPie() - unknown color style" << endl;
+	   kdDebug(43000) << "fillPie() - unknown color style" << endl;
             return;
     }
 
@@ -417,15 +417,15 @@ void KivioScreenPainter::fillChord( float x1, float y1, float w1, float h1, floa
             break;
 
         case KivioFillStyle::kcsGradient:
-	   kdDebug() << "fillChord() - Gradient not supported yet" << endl;
+	   kdDebug(43000) << "fillChord() - Gradient not supported yet" << endl;
             return;
 
         case KivioFillStyle::kcsNone:
-	   kdDebug() << "don't call fillChord() without wanting to fill it!" << endl;
+	   kdDebug(43000) << "don't call fillChord() without wanting to fill it!" << endl;
             return;
 
         default:
-	   kdDebug() << "fillChord() - unknown color style" << endl;
+	   kdDebug(43000) << "fillChord() - unknown color style" << endl;
             return;
     }
 
@@ -481,15 +481,15 @@ void KivioScreenPainter::fillEllipse( float x1, float y1, float w1, float h1 )
             break;
 
         case KivioFillStyle::kcsGradient:
-	   kdDebug() << "fillEllipse() - Gradient not supported yet" << endl;
+	   kdDebug(43000) << "fillEllipse() - Gradient not supported yet" << endl;
             return;
 
         case KivioFillStyle::kcsNone:
-	   kdDebug() << "don't call fillEllipse() without wanting to fill it!" << endl;
+	   kdDebug(43000) << "don't call fillEllipse() without wanting to fill it!" << endl;
             return;
 
         default:
-	   kdDebug() << "fillEllipse() - unknown color style" << endl;
+	   kdDebug(43000) << "fillEllipse() - unknown color style" << endl;
             return;
     }
 
@@ -589,7 +589,7 @@ void KivioScreenPainter::drawPolygon( QPtrList<KivioPoint> *pList )
             break;
 
         case KivioFillStyle::kcsGradient:
-            kdDebug() << "drawPolygon() - Gradient not supported yet" << endl;
+            kdDebug(43000) << "drawPolygon() - Gradient not supported yet" << endl;
             return;
 
         case KivioFillStyle::kcsNone:
@@ -597,7 +597,7 @@ void KivioScreenPainter::drawPolygon( QPtrList<KivioPoint> *pList )
             return;
 
         default:
-            kdDebug() << "drawPolygon() - unknown color style" << endl;
+            kdDebug(43000) << "drawPolygon() - unknown color style" << endl;
             return;
     }
 
@@ -640,7 +640,7 @@ void KivioScreenPainter::drawPolygon( QPointArray &pArray )
             break;
 
         case KivioFillStyle::kcsGradient:
-	   kdDebug() << "drawPolygon() - Gradient not supported yet" << endl;
+	   kdDebug(43000) << "drawPolygon() - Gradient not supported yet" << endl;
             return;
 
         case KivioFillStyle::kcsNone:
@@ -648,7 +648,7 @@ void KivioScreenPainter::drawPolygon( QPointArray &pArray )
             return;
 
         default:
-	   kdDebug() << "drawPolygon() - unknown color style" << endl;
+	   kdDebug(43000) << "drawPolygon() - unknown color style" << endl;
             return;
     }
 
@@ -704,7 +704,7 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 || !pPoint4 )
             {
-                kdDebug() << "drawClosedPath() - incorrect # of bezier points" << endl;
+                kdDebug(43000) << "drawClosedPath() - incorrect # of bezier points" << endl;
                 return;
             }
 
@@ -712,7 +712,7 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
                 pPoint3->pointType() != KivioPoint::kptBezier ||
                 pPoint4->pointType() != KivioPoint::kptBezier )
             {
-                kdDebug() << "drawClosedPath() - bezier curves must have 4 points" << endl;
+                kdDebug(43000) << "drawClosedPath() - bezier curves must have 4 points" << endl;
                 return;
             }
 
@@ -736,13 +736,13 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 )
             {
-                kdDebug() << "drawClosedPath() - incorrect # of arc points" << endl;
+                kdDebug(43000) << "drawClosedPath() - incorrect # of arc points" << endl;
                 return;
             }
             if( pPoint2->pointType() != KivioPoint::kptArc ||
                 pPoint3->pointType() != KivioPoint::kptArc )
             {
-                kdDebug() << "drawClosedPath() - Arc points must come in triplets" << endl;
+                kdDebug(43000) << "drawClosedPath() - Arc points must come in triplets" << endl;
                 return;
             }
 
@@ -757,7 +757,7 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
         } // end pointtype==arc
         else
         {
-          kdDebug() << "drawClosedPath() - Unknown point type discovered. WOOO!!!" << endl;
+          kdDebug(43000) << "drawClosedPath() - Unknown point type discovered. WOOO!!!" << endl;
         }
 
         pPoint = pPointList->next();
@@ -788,11 +788,11 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
             break;
 
         case KivioFillStyle::kcsGradient:
-            kdDebug() << "drawClosedPath() - Gradient unsupported" << endl;
+            kdDebug(43000) << "drawClosedPath() - Gradient unsupported" << endl;
             break;
 
         default:
-            kdDebug() << "drawClosedPath() - Unknown colors style" << endl;
+            kdDebug(43000) << "drawClosedPath() - Unknown colors style" << endl;
             break;
     }
 }
@@ -824,7 +824,7 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 || !pPoint4 )
             {
-                kdDebug() << "drawOpenPath() - incorrect # of bezier points" << endl;
+                kdDebug(43000) << "drawOpenPath() - incorrect # of bezier points" << endl;
                 return;
             }
 
@@ -832,7 +832,7 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
                 pPoint3->pointType() != KivioPoint::kptBezier ||
                 pPoint4->pointType() != KivioPoint::kptBezier )
             {
-                kdDebug() << "drawOpenPath() - bezier curves must have 4 points" << endl;
+                kdDebug(43000) << "drawOpenPath() - bezier curves must have 4 points" << endl;
                 return;
             }
 
@@ -856,13 +856,13 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 )
             {
-                kdDebug() << "drawOpenPath() - incorrect # of arc points" << endl;
+                kdDebug(43000) << "drawOpenPath() - incorrect # of arc points" << endl;
                 return;
             }
             if( pPoint2->pointType() != KivioPoint::kptArc ||
                 pPoint3->pointType() != KivioPoint::kptArc )
             {
-                kdDebug() << "drawOpenPath() - Arc points must come in triplets" << endl;
+                kdDebug(43000) << "drawOpenPath() - Arc points must come in triplets" << endl;
                 return;
             }
 
@@ -877,7 +877,7 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
         } // end pointtype==arc
         else
         {
-            kdDebug() << "drawOpenPath() - Unknown point type discovered. WOOO!!!" << endl;
+            kdDebug(43000) << "drawOpenPath() - Unknown point type discovered. WOOO!!!" << endl;
         }
 
         pPoint = pPointList->next();

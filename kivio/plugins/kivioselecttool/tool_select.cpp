@@ -117,7 +117,7 @@ void SelectTool::processEvent( QEvent* e )
 
 void SelectTool::activate()
 {
-  kdDebug() << "SelectTool activate" << endl;
+  kdDebug(43000) << "SelectTool activate" << endl;
   m_pCanvas->setCursor(arrowCursor);
   m_mode = stmNone;
 }
@@ -600,7 +600,7 @@ void SelectTool::continueResizing(const QPoint &pos)
 
     if( !pData )
     {
-       kdDebug() << "SelectTool::continueResizing() - Original geometry not found" << endl;
+       kdDebug(43000) << "SelectTool::continueResizing() - Original geometry not found" << endl;
         return;
     }
 
@@ -719,7 +719,7 @@ void SelectTool::continueResizing(const QPoint &pos)
             break;
 
         default:
-            kdDebug() << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle << endl;
+            kdDebug(43000) << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle << endl;
             break;
     }
 
@@ -1009,7 +1009,7 @@ void SelectTool::showPopupMenu( const QPoint &pos )
   if(m_pMenu) {
     m_pMenu->popup( pos );
   } else {
-    kdDebug() << "What no popup! *ARGH*!" << endl;
+    kdDebug(43000) << "What no popup! *ARGH*!" << endl;
   }
 }
 
@@ -1035,7 +1035,7 @@ void SelectTool::editText()
   Tool *t = controller()->findTool("Text");
   if( !t )
   {
-    kdDebug() << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
+    kdDebug(43000) << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
       return;
   }
 

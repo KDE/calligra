@@ -46,7 +46,7 @@ void KivioProtectionPanel::togWidth(bool on)
         }
         else
         {
-            kdDebug() << "Attempt to set width-protection of a stencil which does not support it.\n";
+            kdDebug(43000) << "Attempt to set width-protection of a stencil which does not support it.\n";
         }
         pStencil = m_pView->activePage()->selectedStencils()->next();
     }
@@ -78,7 +78,7 @@ void KivioProtectionPanel::togHeight(bool on)
         }
         else
         {
-            kdDebug() << "Attempt to set height-protection of a stencil which does not support it.\n";
+            kdDebug(43000) << "Attempt to set height-protection of a stencil which does not support it.\n";
         }
 
         pStencil = m_pView->activePage()->selectedStencils()->next();
@@ -111,7 +111,7 @@ void KivioProtectionPanel::togAspect(bool on)
         }
         else
         {
-            kdDebug() << "Attempt to set height-protection of a stencil which does not support it.\n";
+            kdDebug(43000) << "Attempt to set height-protection of a stencil which does not support it.\n";
         }
 
         pStencil = m_pView->activePage()->selectedStencils()->next();
@@ -144,7 +144,7 @@ void KivioProtectionPanel::togDelete(bool on)
         }
         else
         {
-            kdDebug() << "Attempt to set delete-protection of a stencil which does not support it.\n";
+            kdDebug(43000) << "Attempt to set delete-protection of a stencil which does not support it.\n";
         }
 
         pStencil = m_pView->activePage()->selectedStencils()->next();
@@ -177,7 +177,7 @@ void KivioProtectionPanel::togX(bool on)
         }
         else
         {
-            kdDebug() << "Attempt to set X-protection of a stencil which does not support it.\n";
+            kdDebug(43000) << "Attempt to set X-protection of a stencil which does not support it.\n";
         }
 
         pStencil = m_pView->activePage()->selectedStencils()->next();
@@ -211,7 +211,7 @@ void KivioProtectionPanel::togY(bool on)
         }
         else
         {
-            kdDebug() << "Attempt to set Y-protection of a stencil which does not support it.\n";
+            kdDebug(43000) << "Attempt to set Y-protection of a stencil which does not support it.\n";
         }
 
         pStencil = m_pView->activePage()->selectedStencils()->next();

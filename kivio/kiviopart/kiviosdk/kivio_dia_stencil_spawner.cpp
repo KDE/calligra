@@ -79,7 +79,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 
 	if(f.open(IO_ReadOnly) == false)
 	{
-		kdDebug() << "KivioDiaStencilSpawner::load() - Error opening stencil: " << file << endl;
+		kdDebug(43000) << "KivioDiaStencilSpawner::load() - Error opening stencil: " << file << endl;
 		return false;
 	}
 	dia.setContent(&f);
@@ -450,7 +450,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 					QStringList styles = QStringList::split(";", svgChild.attribute("style"));
 					for( uint idx = 0; idx < styles.count(); idx++)
 					{
-						//kdDebug() << "Style: " << styles[idx] << endl;
+						//kdDebug(43000) << "Style: " << styles[idx] << endl;
 						if( isClosed && styles[idx].contains("fill:"))
 						{
 							QDomElement fillStyle = kivio.createElement("KivioFillStyle");

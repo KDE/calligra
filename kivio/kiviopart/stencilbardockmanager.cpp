@@ -292,7 +292,7 @@ void StencilBarDockManager::setDoc( KivioDoc *p )
 {
     if( m_pDoc )
     {
-       kdDebug() << "StencilBarDockManager::setDoc() - This should never be called twice - error!!" << endl;
+       kdDebug(43000) << "StencilBarDockManager::setDoc() - This should never be called twice - error!!" << endl;
         return;
     }
     m_pDoc = p;

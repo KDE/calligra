@@ -341,7 +341,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
             } // end if m_shapeType==kstTextBox
             else
             {
-	       kdDebug() << "KivioShapeData::loadXML() - Loading KivioText, but this is not a textbox!" << endl;
+	       kdDebug(43000) << "KivioShapeData::loadXML() - Loading KivioText, but this is not a textbox!" << endl;
             }
         }
 

@@ -219,7 +219,7 @@ bool KivioGroupStencil::loadXML( const QDomElement &e, KivioLayer *pLayer )
             }
             else
             {
-	       kdDebug() << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
+	       kdDebug(43000) << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
             }
         }
         else if( name == "KivioSMLStencil" || name == "KivioPyStencil" )
@@ -231,7 +231,7 @@ bool KivioGroupStencil::loadXML( const QDomElement &e, KivioLayer *pLayer )
             }
             else
             {
-	       kdDebug() << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
+	       kdDebug(43000) << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
             }
         }
 

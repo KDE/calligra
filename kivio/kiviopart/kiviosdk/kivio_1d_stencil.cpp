@@ -360,7 +360,7 @@ void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
 
   if( !p )
   {
-    kdDebug() << "Kivio1DStencil::customDrag() - KivioConnectorPoint id: " << (id - (kctCustom+1)) << "  not found\n" << endl;
+    kdDebug(43000) << "Kivio1DStencil::customDrag() - KivioConnectorPoint id: " << (id - (kctCustom+1)) << "  not found\n" << endl;
     return;
   }
 

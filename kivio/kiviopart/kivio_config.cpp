@@ -187,7 +187,7 @@ KivioConfig *KivioConfig::s_config=0L;
 KivioConfig::KivioConfig( const QString &fileName )
     : KSimpleConfig( fileName, false )
 {
-   kdDebug() << "KivioConfig - created" << endl;
+   kdDebug(43000) << "KivioConfig - created" << endl;
 
     QColor *defColor = new QColor(0x4BD2FF/* 154, 250, 154 */);
     m_stencilBGType  = (KivioConfig::StencilBGType)readNumEntry( "StencilBackgroundType", (int)sbgtColor );
@@ -210,20 +210,20 @@ KivioConfig::KivioConfig( const QString &fileName )
                 m_pStencilBGPixmap = NULL;
             }
             m_stencilBGType = sbgtColor;
-            kdDebug() << "KivioConfig - Unable to load " << m_stencilBGFile << endl;
+            kdDebug(43000) << "KivioConfig - Unable to load " << m_stencilBGFile << endl;
         }
         else
         {
-	   kdDebug() << "KivioConfig::KivioConfig() - loaded background" << endl;
+	   kdDebug(43000) << "KivioConfig::KivioConfig() - loaded background" << endl;
         }
     }
 
     m_pConnectorTargetPixmap = new QPixmap( (const char **)connectorTarget_xpm);
     m_pLockPixmap = new QPixmap( (const char **)lock_xpm);
 
-    kdDebug() << "KivioConfig::KivioConfig() - StencilBackgroundType: " <<  m_stencilBGType << endl;
-    kdDebug() << "KivioConfig::KivioConfig() - StencilBackgroundFile: " << m_stencilBGFile << endl;
-    kdDebug() << "KivioConfig::KivioConfig() - StencilBackgroundColor: " << m_stencilBGColor.red()
+    kdDebug(43000) << "KivioConfig::KivioConfig() - StencilBackgroundType: " <<  m_stencilBGType << endl;
+    kdDebug(43000) << "KivioConfig::KivioConfig() - StencilBackgroundFile: " << m_stencilBGFile << endl;
+    kdDebug(43000) << "KivioConfig::KivioConfig() - StencilBackgroundColor: " << m_stencilBGColor.red()
 	      << " " << m_stencilBGColor.green() << " " <<  m_stencilBGColor.blue() << endl;
 
     writeConfig();
@@ -256,7 +256,7 @@ KivioConfig::~KivioConfig()
        m_pLockPixmap = NULL;
     }
 
-    kdDebug() << "KivioConfig::~KivioConfig() - deleted" << endl;
+    kdDebug(43000) << "KivioConfig::~KivioConfig() - deleted" << endl;
 }
 
 

@@ -55,7 +55,7 @@ KivioStencil::KivioStencil()
 
 KivioStencil::~KivioStencil()
 {
-    kdDebug()<<" KivioStencil::~KivioStencil() !"<<this<<endl;
+    kdDebug(43000)<<" KivioStencil::~KivioStencil() !"<<this<<endl;
     if( m_pProtection )
     {
         delete m_pProtection;

@@ -664,7 +664,7 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
   // do so now.
   if( m_pDragStencil )
   {
-    kdDebug() << "KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!" << endl;
+    kdDebug(43000) << "KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!" << endl;
     delete m_pDragStencil;
     m_pDragStencil = 0L;
   }
@@ -976,7 +976,7 @@ void KivioCanvas::dropEvent( QDropEvent *e )
     KivioPage *pPage = activePage();
     if( !pPage )
     {
-       kdDebug() << "KivioCanvas::dropEvent() - No active page for stencil to drop on" << endl;
+       kdDebug(43000) << "KivioCanvas::dropEvent() - No active page for stencil to drop on" << endl;
         return;
     }
 

@@ -90,7 +90,7 @@ void ConnectorTool::processEvent( QEvent* e )
 
 void ConnectorTool::activate()
 {
-   kdDebug() << "ConnectorTool activate" << endl;
+   kdDebug(43000) << "ConnectorTool activate" << endl;
     m_pCanvas->setCursor(*m_pConnectorCursor1);
     m_mode = stmNone;
     m_pStencil = 0;
@@ -158,7 +158,7 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
   KivioStencilSpawner* ss = doc->findInternalStencilSpawner("Dave Marotti - Straight Connector");
 
   if (!ss) {
-    kdDebug() << "ConnectorTool: Failed to find StencilSpawner!" << endl;
+    kdDebug(43000) << "ConnectorTool: Failed to find StencilSpawner!" << endl;
     return false;
   }
 

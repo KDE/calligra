@@ -191,7 +191,7 @@ void ZoomTool::activate()
 
 void ZoomTool::deactivate()
 {
-  kdDebug() << "ZoomTool DeActivate" << endl;
+  kdDebug(43000) << "ZoomTool DeActivate" << endl;
 
   m_pCurrent = 0L;
 

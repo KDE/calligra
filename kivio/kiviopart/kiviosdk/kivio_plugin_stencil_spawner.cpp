@@ -57,7 +57,7 @@ bool KivioPluginStencilSpawner::load( const QString &f )
 
 	 if( !fac)
 	 {
-	 	kdDebug() << "Failed to load: " << m_fileName << endl;
+	 	kdDebug(43000) << "Failed to load: " << m_fileName << endl;
 	 	return false;
 	}
     // Get the icon

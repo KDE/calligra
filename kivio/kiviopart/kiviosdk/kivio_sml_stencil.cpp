@@ -364,7 +364,7 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 
             case KivioShapeData::kstNone:
             default:
-                kdDebug() << "*** KivioShape::Paint AHHHHH!!! NO SHAPE!" << endl;
+                kdDebug(43000) << "*** KivioShape::Paint AHHHHH!!! NO SHAPE!" << endl;
                 break;
         }
 
@@ -891,7 +891,7 @@ void KivioSMLStencil::drawArc( KivioShape *pShape, KivioIntraStencilData *pData 
       break;
 
     case KivioFillStyle::kcsGradient:               // Gradient
-      kdDebug() << "KivioSMLStenciL::drawArc() - gradient fill unimplemented" << endl;
+      kdDebug(43000) << "KivioSMLStenciL::drawArc() - gradient fill unimplemented" << endl;
       break;
 
     case KivioFillStyle::kcsPixmap:
@@ -1015,7 +1015,7 @@ void KivioSMLStencil::drawClosedPath( KivioShape *pShape, KivioIntraStencilData 
         break;
 
       case KivioFillStyle::kcsGradient:               // Gradient
-        kdDebug() << "KivioSMLStencil::drawClosedPath() - gradient fill unimplemented" << endl;
+        kdDebug(43000) << "KivioSMLStencil::drawClosedPath() - gradient fill unimplemented" << endl;
         break;
 
       case KivioFillStyle::kcsPixmap:
@@ -1066,7 +1066,7 @@ void KivioSMLStencil::drawEllipse( KivioShape *pShape, KivioIntraStencilData *pD
       break;
 
     case KivioFillStyle::kcsGradient:               // Gradient
-      kdDebug() << "KivioSMLStencil::drawEllipse() - gradient fill unimplemented" << endl;
+      kdDebug(43000) << "KivioSMLStencil::drawEllipse() - gradient fill unimplemented" << endl;
       break;
 
     case KivioFillStyle::kcsPixmap:
@@ -1200,7 +1200,7 @@ void KivioSMLStencil::drawRoundRectangle( KivioShape *pShape, KivioIntraStencilD
       break;
 
     case KivioFillStyle::kcsGradient:               // Gradient
-      kdDebug() << "KivioSMLStenciL::drawRoundRectangle() - gradient fill unimplemented" << endl;
+      kdDebug(43000) << "KivioSMLStenciL::drawRoundRectangle() - gradient fill unimplemented" << endl;
       break;
 
     case KivioFillStyle::kcsPixmap:
@@ -1260,7 +1260,7 @@ void KivioSMLStencil::drawPolygon( KivioShape *pShape, KivioIntraStencilData *pD
       break;
 
     case KivioFillStyle::kcsGradient:               // Gradient
-      kdDebug() << "KivioSMLStenciL::drawPolygon() - gradient fill unimplemented" << endl;
+      kdDebug(43000) << "KivioSMLStenciL::drawPolygon() - gradient fill unimplemented" << endl;
       break;
 
     case KivioFillStyle::kcsPixmap:
@@ -1509,7 +1509,7 @@ void KivioSMLStencil::updateGeometry()
   KivioConnectorTarget *pTarget, *pOriginal;
   double _x, _y;
   double defWidth, defHeight;
-  //kdDebug() << "m_x = " << m_x << " m_y = " << m_y << endl;
+  //kdDebug(43000) << "m_x = " << m_x << " m_y = " << m_y << endl;
 
   defWidth = m_pSpawner->defWidth();
   defHeight = m_pSpawner->defHeight();
