@@ -335,7 +335,7 @@ private:
     void moveObject( int x, int y, bool key );
     void resizeObject( ModifyType _modType, int _dx, int _dy );
 
-    void raiseObject();
+    void raiseObject( KPObject *_kpobject );
     void lowerObject();
     int selectedObjectPosition;
 

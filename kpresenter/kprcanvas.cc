@@ -537,7 +537,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         if ( kpobject ) {
                             selectObj( kpobject );
                             modType = MT_NONE;
-                            raiseObject();
+                            raiseObject( kpobject );
                         }
                     }
                     else {
@@ -4777,20 +4777,20 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     oldBoundingRect = getOldBoundingRect(kpobject);
 }
 
-void KPrCanvas::raiseObject()
+void KPrCanvas::raiseObject( KPObject *_kpobject )
 {
     if ( selectedObjectPosition == -1 ) {
-        KPObject *kpobject;
-
         if ( m_activePage->numSelected() == 1 ) { // execute this if user selected is one object.
-            for ( kpobject = objectList().first(); kpobject != 0; kpobject = objectList().next() ) {
-                if ( kpobject->isSelected() ) {
-                    selectedObjectPosition = objectList().at();
-                    objectList().remove( selectedObjectPosition );
-                    objectList().append( kpobject );
-                    break;
-                }
+            QPtrList<KPObject> _list = objectList();
+            _list.setAutoDelete( false );
+
+            if ( _kpobject->isSelected() ) {
+                selectedObjectPosition = objectList().find( _kpobject );
+                _list.take( selectedObjectPosition );
+                _list.append( _kpobject );
             }
+
+            m_activePage->setObjectList( _list );
         }
         else
             selectedObjectPosition = -1;
@@ -4799,15 +4799,15 @@ void KPrCanvas::raiseObject()
 
 void KPrCanvas::lowerObject()
 {
-    KPObject *kpobject;
+    KPObject *kpobject = objectList().last();
+    QPtrList<KPObject> _list = objectList();
+    _list.setAutoDelete( false );
 
-    for ( kpobject = objectList().first(); kpobject != 0; kpobject = objectList().next() ) {
-        if ( kpobject->isSelected() ) {
-            objectList().remove( objectList().at() );
-            objectList().insert( selectedObjectPosition, kpobject );
-            break;
-        }
+    if ( kpobject->isSelected() ) {
+        _list.take( _list.count() - 1 );
+        _list.insert( selectedObjectPosition, kpobject );
     }
+    m_activePage->setObjectList( _list );
 }
 
 void KPrCanvas::playSound( const QString &soundFileName )
