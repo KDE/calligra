@@ -109,13 +109,9 @@ usr/lib/libolefilter.so
 usr/lib/libolefilter.la
 usr/lib/libmsodimport.so
 usr/lib/libmsodimport.la
-usr/lib/libwmfimport.so
-usr/lib/libwmfimport.la
 usr/share/lintian/overrides/koffice-libs
 usr/share/services/killustrator_msod_import.desktop
-usr/share/services/killustrator_wmf_import.desktop
 usr/share/mimelnk/image/x-msod.desktop
-usr/share/mimelnk/image/x-wmf.desktop
 usr/share/templates/.source/Presentation.kpt
 usr/share/templates/.source/TextDocument.kwt
 usr/share/templates/.source/SpreadSheet.ksp
