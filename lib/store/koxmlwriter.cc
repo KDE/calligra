@@ -61,14 +61,14 @@ KoXmlWriter::KoXmlWriter( QIODevice* dev, const char* rootElemName )
         addAttribute( "xmlns:script", "urn:oasis:names:tc:openoffice:xmlns:script:1.0" );
         addAttribute( "xmlns:style", "urn:oasis:names:tc:openoffice:xmlns:style:1.0" );
         addAttribute( "xmlns:number", "urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" );
+        addAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML" );
+        addAttribute( "xmlns:svg", "http://www.w3.org/2000/svg" );
+        addAttribute( "xmlns:fo", "http://www.w3.org/1999/XSL/Format" );
     }
     // missing: office:version="1.0"
 
     addAttribute( "xmlns:dc", "http://purl.org/dc/elements/1.1/" );
     addAttribute( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
-    addAttribute( "xmlns:math", "http://www.w3.org/1998/Math/MathML" );
-    addAttribute( "xmlns:fo", "http://www.w3.org/1999/XSL/Format" );
-    addAttribute( "xmlns:svg", "http://www.w3.org/2000/svg" );
 }
 
 KoXmlWriter::~KoXmlWriter()
@@ -81,16 +81,18 @@ void KoXmlWriter::startDocument( const char* rootElemName, const char* publicId,
 {
     Q_ASSERT( m_tags.isEmpty() );
     writeCString( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-    writeCString( "<!DOCTYPE " );
-    writeCString( rootElemName );
+    // There isn't much point in a doctype if there's no DTD to refer to
+    // (I'm told that files that are validated by a RelaxNG schema cannot refer to the schema)
     if ( publicId ) {
+        writeCString( "<!DOCTYPE " );
+        writeCString( rootElemName );
         writeCString( " PUBLIC \"" );
         writeCString( publicId );
         writeCString( "\" \"" );
         writeCString( systemId );
         writeCString( "\"" );
+        writeCString( ">\n" );
     }
-    writeCString( ">\n" );
 }
 
 void KoXmlWriter::endDocument()

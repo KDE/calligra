@@ -109,7 +109,7 @@ bool KoDocumentInfo::saveOasis( KoStore* store )
     xmlWriter.startElement( "office:meta" );
 
     xmlWriter.startElement( "meta:generator");
-    xmlWriter.addTextNode( QString( "KOffice %1" ).arg( VERSION ) );
+    xmlWriter.addTextNode( QString( "KOffice/%1" ).arg( VERSION ) );
     xmlWriter.endElement();
     QStringList lst = pages();
     QStringList::ConstIterator it = lst.begin();
