@@ -122,7 +122,8 @@ VSelection::clear()
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
 	{
-		itr.current()->setState( normal );
+		if( itr.current()->state() != deleted )
+			itr.current()->setState( normal );
 	}
 
 	m_objects.clear();
