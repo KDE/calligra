@@ -29,7 +29,7 @@ class KoDocument;
 /**
  * This is an abstract base class for filters. Please reimplement the
  * method you "like best" (i.e. best matching your needs for the filter).
- * See http://koffice.kde.org/filters/index.html for further information
+ * See http://www.koffice.org/filters/ for further information
  * on filter development!
  * @ref KoFilterManager
  *
