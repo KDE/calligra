@@ -29,12 +29,13 @@
 
 #include "mswritelib.h"
 
+
 // KDE debug area for mswritefilter
-#define MSWRITE_DEBUG_AREA		30509
+const int MSWRITE_DEBUG_AREA = 30509;
 
 
-// KOffice Store Library does not allow more than one file to be open at a time
-// so we store objects in this structure temporarily (TODO: ask for change to lib)
+// KoStore can only have 1 file open at a time
+// so we store objects in this structure temporarily
 class MSWRITE_OBJECT_DATA
 {
 public:
@@ -52,7 +53,7 @@ public:
 
 	~MSWRITE_OBJECT_DATA ()
 	{
-		delete [] m_data;
+		if (m_data) delete [] m_data;
 	}
 };
 
@@ -66,7 +67,7 @@ private:
 	void warning (const char *format, ...);
 	void error (const char *format, ...);
 
-	int openFiles (const char *infilename, const char *outfilename);
+	int openFiles (const char *infilename);
 	void closeFiles (void);
 
 	int infileRead (void *, size_t, size_t);
@@ -119,8 +120,7 @@ private:
 
 	// files
 	FILE *m_infile;
-	KoStore *m_outfile;
-	char m_infilename [FILENAME_MAX + 1], m_outfilename [FILENAME_MAX + 1];
+	KoStoreDevice *m_outfile;
 	bool m_wantPureConversion;
 
 	// page/margin dimensions
@@ -138,7 +138,6 @@ private:
 	int m_lineSpacingFromAbove;
 
 	// picture counters
-	QString m_objectPrefix;
 	int m_numPixmap, m_numClipart;
 	QString m_objectFrameset;
 	QString m_pixmaps;

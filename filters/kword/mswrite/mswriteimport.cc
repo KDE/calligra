@@ -80,20 +80,15 @@ void MSWRITEImport::error (const char *format, ...)
 // file operations
 //
 
-int MSWRITEImport::openFiles (const char *infilename, const char *outfilename)
+int MSWRITEImport::openFiles (const char *infilename)
 {
 	// open input file
-	strcpy (m_infilename, infilename);
-	m_infile = fopen (m_infilename, "rb");
+	m_infile = fopen (infilename, "rb");
 	if (!m_infile)
 	{
 		error ("input file open error\n");
 		return 1;
 	}
-
-	// opens the output store
-	strcpy (m_outfilename, outfilename);
-	m_outfile = KoStore::createStore (QFile::encodeName (m_outfilename), KoStore::Write, "application/x-kword");
 
 	return 0;
 }
@@ -102,10 +97,10 @@ void MSWRITEImport::closeFiles (void)
 {
 	if (m_outfile)
 	{
-		delete (m_outfile);
-		m_outfile = (KoStore *) NULL;
+		m_outfile->close ();
+		m_outfile = (KoStoreDevice *) NULL;
 	}
-
+	
 	if (m_infile)
 	{
 		fclose (m_infile);
@@ -194,7 +189,8 @@ int MSWRITEImport::documentStartWrite (const int firstPageNumber)
 	}
 
 	// open maindoc.xml
-	if (!m_outfile->open ("root"))
+	m_outfile = m_chain->storageFile ("root", KoStore::Write);
+	if (!m_outfile)
 	{
 		error ("Cannot open root in store\n");
 		return 1;
@@ -268,6 +264,7 @@ int MSWRITEImport::documentEndWrite (void)
 
 	// close maindoc.xml
 	m_outfile->close ();
+	m_outfile = (KoStoreDevice *) NULL;
 
 	//
 	// output object data
@@ -278,19 +275,21 @@ int MSWRITEImport::documentEndWrite (void)
 
 	for (int i = 0; i < m_objectUpto; i++)
 	{
-		debug ("outputting: m_objectData [%i] (\"%s/%s\")   (length: %i)\n",
+		debug ("outputting: m_objectData [%i] (\"%s\")   (length: %i)\n",
 					i,
-					(const char *) m_objectPrefix.utf8 (), (const char *) m_objectData [i].m_nameInStore.utf8 (),
+					(const char *) m_objectData [i].m_nameInStore.utf8 (),
 					m_objectData [i].m_dataLength);
 
 		// open file for object in store
-		if (!m_outfile->open (m_objectPrefix + (QString) "/" + m_objectData [i].m_nameInStore))
+		m_outfile = m_chain->storageFile (m_objectData [i].m_nameInStore, KoStore::Write);
+		if (!m_outfile)
 		{
 			error ("can't open image in store (%s)\n", (const char *) m_objectData [i].m_nameInStore.utf8 ());
 			return 1;
 		}
 
-		if (m_outfile->write (m_objectData [i].m_data, m_objectData [i].m_dataLength) == false)
+		if (m_outfile->writeBlock (m_objectData [i].m_data, m_objectData [i].m_dataLength)
+				!= (Q_LONG) m_objectData [i].m_dataLength)
 		{
 			error ("cannot write m_objectData [%i].data to store (len: %i)\n",
 						i, m_objectData [i].m_dataLength);
@@ -299,6 +298,7 @@ int MSWRITEImport::documentEndWrite (void)
 
 		// close object in store
 		m_outfile->close ();
+		m_outfile = (KoStoreDevice *) NULL;
 	}
 
 	delete [] m_objectData;
@@ -770,7 +770,9 @@ void MSWRITEImport::delayOutput (const bool yes)
 int MSWRITEImport::delayOutputFlush (void)
 {
 	QCString strUtf8 = m_heldOutput.utf8 ();
-	return (m_outfile->write (strUtf8, strUtf8.length ()) == false);
+	int strLength = strUtf8.length ();
+
+	return (m_outfile->writeBlock (strUtf8, strLength) != strLength);
 }
 
 // text output functions
@@ -790,7 +792,8 @@ int MSWRITEImport::textWrite_lowLevel (const char *str)
 	}
 	else
 	{
-		return (m_outfile->write (str, strlen (str)) == false);
+		int strLength = strlen (str);
+		return (m_outfile->writeBlock (str, strLength) != strLength);
 	}
 #endif
 }
@@ -806,7 +809,9 @@ int MSWRITEImport::textWrite_lowLevel (const QString &str)
 	else
 	{
 		QCString strUtf8 = str.utf8 ();
-		return (m_outfile->write (strUtf8, strUtf8.length ()) == false);
+		int strLength = strUtf8.length ();
+		
+		return (m_outfile->writeBlock (strUtf8, strLength) != strLength);
 	}
 }
 
@@ -944,7 +949,7 @@ int MSWRITEImport::imageStartWrite (const int imageType, const int outputLength,
 
 		m_formatOutput += imageName;
 
-		fileInStore += "pictures/picture" + QString::number (m_numPixmap) + ".bmp";
+		fileInStore = "pictures/picture" + QString::number (m_numPixmap) + ".bmp";
 	}
 	else if (imageType == MSWRITE_OBJECT_WMF)
 	{
@@ -953,7 +958,7 @@ int MSWRITEImport::imageStartWrite (const int imageType, const int outputLength,
 
 		m_formatOutput += imageName;
 
-		fileInStore += "cliparts/clipart" + QString::number (m_numClipart) + ".wmf";
+		fileInStore = "cliparts/clipart" + QString::number (m_numClipart) + ".wmf";
 	}
 	else
 	{
@@ -1093,10 +1098,10 @@ MSWRITEImport::MSWRITEImport (KoFilter *, const char *, const QStringList &)
 						: KoFilter()
 {
 	m_wantPureConversion = true;
-		
+
 	m_pageBreak = 0;
 	m_needAnotherParagraph = false;
-	
+
 	m_charInfoCountLenLast = 0;
 
 	m_lineSpacingFromAbove = 0;
@@ -1108,7 +1113,9 @@ MSWRITEImport::MSWRITEImport (KoFilter *, const char *, const QStringList &)
 	m_objectUpto = 0;
 
 	m_infile = (FILE *) NULL;
-	m_outfile = (KoStore *) NULL;
+	m_outfile = (KoStoreDevice *) NULL;
+
+	m_objectData = (MSWRITE_OBJECT_DATA *) NULL;
 
 	m_codec = NULL;
 	m_decoder = NULL;
@@ -1117,7 +1124,8 @@ MSWRITEImport::MSWRITEImport (KoFilter *, const char *, const QStringList &)
 // destructor
 MSWRITEImport::~MSWRITEImport ()
 {
-	delete (m_decoder);
+	if (m_decoder) delete m_decoder;
+	if (m_objectData) delete [] m_objectData;
 
 	closeFiles ();
 }
@@ -1136,13 +1144,9 @@ KoFilter::ConversionStatus MSWRITEImport::convert (const QCString &from, const Q
 	if (to != "application/x-kword" || from != "application/x-mswrite")
 		return KoFilter::NotImplemented;
 
-	QString prefixOut = "tar:"; // ###### TODO
-	m_objectPrefix = prefixOut;
-	debug ("prefixOut: \"%s\"\n", (const char *) prefixOut.utf8 ());
-
-	if (openFiles (m_chain->inputFile().utf8 (), m_chain->outputFile().utf8 ()))
+	if (openFiles (m_chain->inputFile().utf8 ()))
 	{
-		error ("could not open files\n");
+		error ("Could not open files\n");
 		return KoFilter::FileNotFound;
 	}
 
@@ -1160,7 +1164,7 @@ KoFilter::ConversionStatus MSWRITEImport::convert (const QCString &from, const Q
 
 	if (MSWRITE_IMPORT_LIB::filter ())
 	{
-		error ("could not filter document\n");
+		error ("Could not filter document\n");
 		return KoFilter::StupidError;
 	}
 
