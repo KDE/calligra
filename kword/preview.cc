@@ -79,7 +79,7 @@ class PixmapView : public QScrollView
 {
 public:
     PixmapView( QWidget *parent )
-	: QScrollView( parent ) {}
+	: QScrollView( parent ) { viewport()->setBackgroundMode( PaletteBase ); }
 
     void setPixmap( const QPixmap &pix ) {
 	pixmap = pix;
