@@ -323,7 +323,7 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 	}
 }
 
-void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent* _ev )
+void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent*  )
 {
     renameTab();
 }

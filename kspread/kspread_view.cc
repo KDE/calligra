@@ -1018,7 +1018,7 @@ void KSpreadView::slotChangeTable( const QString& _name )
     }
   }
 
-  warning("Unknown table '%s'\n",_name);
+  warning("Unknown table '%s'\n",_name.ascii());
 }
 
 void KSpreadView::slotScrollToFirstTable()
