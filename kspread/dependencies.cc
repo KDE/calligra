@@ -22,7 +22,6 @@
 
 #include "formula.h"
 
-#include "docbase.h"
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
 

@@ -1231,7 +1231,7 @@ void ViewPrivate::adjustActions( bool mode )
   actions->fillUp->setEnabled( false );
   actions->fillDown->setEnabled( false );
 
-  if ( mode && !view->doc()->doc()->map()->isProtected() )
+  if ( mode && !view->doc()->map()->isProtected() )
     actions->renameSheet->setEnabled( true );
   else
     actions->renameSheet->setEnabled( false );
@@ -2236,7 +2236,7 @@ void KSpreadView::initialPosition()
     kdDebug() << "KSpreadView::initialPosition" << endl;
 
     // Loading completed, pick initial worksheet
-    QPtrListIterator<KSpreadSheet> it( doc()->doc()->map()->sheetList() );
+    QPtrListIterator<KSpreadSheet> it( doc()->map()->sheetList() );
     for( ; it.current(); ++it )
       addSheet( it.current() );
 
@@ -2247,7 +2247,7 @@ void KSpreadView::initialPosition()
     }
 
     if ( !tbl )
-        tbl = doc()->doc()->map()->initialActiveSheet();
+        tbl = doc()->map()->initialActiveSheet();
     if ( tbl )
       setActiveSheet( tbl );
     else
@@ -3335,7 +3335,7 @@ void KSpreadView::slotSheetRemoved( KSpreadSheet *_t )
       //so you must recalc sheets when remove areaname
       KSpreadSheet * tbl;
 
-      for ( tbl = doc()->doc()->map()->firstSheet(); tbl != 0L; tbl = doc()->doc()->map()->nextSheet() )
+      for ( tbl = doc()->map()->firstSheet(); tbl != 0L; tbl = doc()->map()->nextSheet() )
       {
         tbl->refreshRemoveAreaName((*it).ref_name);
       }
@@ -5871,7 +5871,7 @@ void KSpreadView::zoomPlus()
 
 void KSpreadView::removeSheet()
 {
-  if ( doc()->doc()->map()->count() <= 1 || ( doc()->doc()->map()->visibleSheets().count() <= 1 ) )
+  if ( doc()->map()->count() <= 1 || ( doc()->map()->visibleSheets().count() <= 1 ) )
   {
     KNotifyClient::beep();
     KMessageBox::sorry( this, i18n("You cannot delete the only sheet."), i18n("Remove Sheet") ); // FIXME bad english? no english!
@@ -6380,7 +6380,7 @@ void KSpreadView::popupTabBarMenu( const QPoint & _point )
     {
       d->actions->removeSheet->setEnabled( state);
       d->actions->hideSheet->setEnabled( state );
-      d->actions->showSheet->setEnabled( doc()->doc()->map()->hiddenSheets().count()>0 );
+      d->actions->showSheet->setEnabled( doc()->map()->hiddenSheets().count()>0 );
     }
     if ( !doc() || !doc()->map() || doc()->map()->isProtected() )
     {

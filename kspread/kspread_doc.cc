@@ -66,7 +66,6 @@
 #include "ksploadinginfo.h"
 #include "damages.h"
 
-#include "docbase.h"
 #include "valuecalc.h"
 #include "valueconverter.h"
 #include "valueformatter.h"
@@ -89,7 +88,13 @@ class DocPrivate
 {
 public:
 
-  DocInfo *docinfo;
+  KSpreadMap *map;
+  KLocale *locale;
+  KSpreadStyleManager *styleManager;
+  ValueParser *parser;
+  ValueFormatter *formatter;
+  ValueConverter *converter;
+  ValueCalc *calc;
 
   KSpreadSheet *activeSheet;
     KSPLoadingInfo *m_loadingInfo;
@@ -169,24 +174,19 @@ QValueList<KSpreadDoc*> DocPrivate::s_docs;
 int DocPrivate::s_docId = 0;
 
 KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-  : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-  DocBase (0)
+  : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   d = new DocPrivate;
   d->m_loadingInfo = 0L;
   
-  d->docinfo = new DocInfo;
-  d->docinfo->doc = this;
-  di = d->docinfo;
+  d->map = new KSpreadMap( this, "Map" );
+  d->locale = new KSpreadLocale;
+  d->styleManager = new KSpreadStyleManager();
 
-  d->docinfo->map = new KSpreadMap( this, "Map" );
-  d->docinfo->styleManager = new KSpreadStyleManager();
-  d->docinfo->locale = new KSpreadLocale;
-
-  d->docinfo->parser = new KSpread::ValueParser( d->docinfo->locale );
-  d->docinfo->converter = new KSpread::ValueConverter ( d->docinfo->parser );
-  d->docinfo->calc = new KSpread::ValueCalc( d->docinfo->converter );
-  d->docinfo->formatter = new KSpread::ValueFormatter( d->docinfo->converter );
+  d->parser = new KSpread::ValueParser( d->locale );
+  d->converter = new KSpread::ValueConverter ( d->parser );
+  d->calc = new KSpread::ValueCalc( d->converter );
+  d->formatter = new KSpread::ValueFormatter( d->converter );
   
   d->activeSheet = 0;
 
@@ -271,19 +271,16 @@ KSpreadDoc::~KSpreadDoc()
 
   delete d->spellConfig;
 
-  delete d->docinfo->locale;
-  delete d->docinfo->map;
-  delete d->docinfo->styleManager;
-  delete d->docinfo->parser;
-  delete d->docinfo->formatter;
-  delete d->docinfo->converter;
-  delete d->docinfo->calc;
-  delete d->docinfo;
+  delete d->locale;
+  delete d->map;
+  delete d->styleManager;
+  delete d->parser;
+  delete d->formatter;
+  delete d->converter;
+  delete d->calc;
 
   delete d;
 }
-
-
 
 QValueList<KSpreadDoc*> KSpreadDoc::documents()
 {
@@ -368,7 +365,41 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     return false;
 }
 
+KLocale *KSpreadDoc::locale () const
+{ 
+  return d->locale; 
+};
 
+KSpreadMap *KSpreadDoc::map () const 
+{ 
+  return d->map;
+};
+
+KSpreadStyleManager *KSpreadDoc::styleManager () const 
+{ 
+  return d->styleManager; 
+};
+
+KSpread::ValueParser *KSpreadDoc::parser () const 
+{ 
+  return d->parser; 
+};
+
+KSpread::ValueFormatter *KSpreadDoc::formatter () const
+{ 
+  return d->formatter; 
+};
+
+KSpread::ValueConverter *KSpreadDoc::converter () const 
+{ 
+  return d->converter; 
+};
+
+KSpread::ValueCalc *KSpreadDoc::calc () const
+{ 
+  return d->calc; 
+};
+  
 void KSpreadDoc::saveConfig()
 {
     if ( isEmbedded() ||!isReadWrite())

@@ -20,7 +20,6 @@
 
 #include "commands.h"
 #include "damages.h"
-#include "docbase.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"

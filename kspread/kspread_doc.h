@@ -67,8 +67,6 @@ class KSpellConfig;
 
 #include <kspread_global.h>
 
-#include "docbase.h"
-
 #include <koscript_context.h>
 
 #define MIME_TYPE "application/x-kspread"
@@ -91,6 +89,10 @@ class KSpreadPlugin
 namespace KSpread
 {
 class Damage;
+class ValueParser;
+class ValueConverter;
+class ValueFormatter;
+class ValueCalc;
 }
 
 
@@ -99,8 +101,7 @@ class DocPrivate;
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSPREAD_EXPORT KSpreadDoc : public KoDocument, public KoZoomHandler,
-    public KSpread::DocBase
+class KSPREAD_EXPORT KSpreadDoc : public KoDocument, public KoZoomHandler
 {
   Q_OBJECT
   Q_PROPERTY( bool getShowRowHeader READ getShowRowHeader )
@@ -145,6 +146,14 @@ public:
    */
   virtual QCString mimeType() const { return MIME_TYPE; }
 
+  KLocale *locale () const;
+  KSpreadMap *map () const;
+  KSpreadStyleManager *styleManager () const;
+  KSpread::ValueParser *parser () const;
+  KSpread::ValueFormatter *formatter () const;
+  KSpread::ValueConverter *converter () const;
+  KSpread::ValueCalc *calc () const;
+  
   /**
    * Adds a command to the command history. The command itself
    * would not be executed.
@@ -568,12 +577,12 @@ public:
    * hourglass
    */
   virtual void emitBeginOperation();
-
+  
   /**
    * Mark the end of an operation and triggers repaints/calculations.
    * See above comment to emitBeginOperation(bool).
    */
-  void emitEndOperation();
+  virtual void emitEndOperation();
 
   /**
    * s.a. difference does only specified tasks and thats why it improves performance

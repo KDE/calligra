@@ -12,7 +12,6 @@ libkspreadcommon_la_SOURCES =  \
         commands.cc \
         damages.cc \
         dependencies.cc \
-				docbase.cc \
         formula.cc \
 	functions.cc \
 	stylecluster.cc \
