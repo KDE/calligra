@@ -2230,7 +2230,7 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         return false;
     } else {
         if ( slideListIterator == slideList.begin() ) {
-            presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage );
+            presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage - 1 );
             currPresStep = *presStepList.begin();
             repaint( false );
             return false;

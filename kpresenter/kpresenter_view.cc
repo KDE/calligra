@@ -532,7 +532,7 @@ void KPresenterView::editDuplicatePage()
 {
     m_pKPresenterDoc->copyPage( currPg, currPg+1 );
     setRanges();
-    skipToPage( currPg+1 ); // go to the new page
+    skipToPage( currPg ); // go to the new page
     updateSideBarMenu();
 }
 

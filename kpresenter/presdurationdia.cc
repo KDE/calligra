@@ -22,7 +22,6 @@
 #include "kpresenter_doc.h"
 #include <qheader.h>
 #include <qvbox.h>
-#include <qcheckbox.h>
 #include <qlayout.h>
 
 #include <kdebug.h>
@@ -37,7 +36,7 @@
 KPPresDurationDia::KPPresDurationDia( QWidget *parent, const char *name,
                                       KPresenterDoc *_doc,
                                       QStringList _durationListString, const QString &_durationString )
-    : KDialogBase( parent, name, false, "", KDialogBase::Close ), 
+    : KDialogBase( parent, name, false, "", KDialogBase::Close ),
       doc( _doc )
 {
     m_durationListString = _durationListString;
@@ -64,15 +63,16 @@ void KPPresDurationDia::setupSlideList( QWidget *_page )
 {
     slides = new KListView( _page );
     slides->addColumn( i18n( "Slide No." ) );
-    slides->addColumn( i18n( "Time" ) );
+    slides->addColumn( i18n( "Slide Time" ) );
     slides->addColumn( i18n( "Slide Title" ) );
     slides->header()->setMovingEnabled( false );
     slides->setAllColumnsShowFocus( true );
-    slides->setRootIsDecorated( true );
+    slides->setRootIsDecorated( false );
     slides->setSorting( -1 );
 
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
         KListViewItem *item = new KListViewItem( slides );
+        item->setPixmap( 0, KPBarIcon( "newslide" ) );
         item->setText( 0, QString( "%1" ).arg( i + 1 ) );
         item->setText( 1, *m_durationListString.at( i ) );
         item->setText( 2, doc->pageList().at( i )->pageTitle( i18n( "Slide %1" ).arg( i + 1 ) ) );

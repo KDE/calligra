@@ -482,7 +482,7 @@ QDomDocument KPresenterDoc::saveXML()
             QPtrListIterator<KPObject> oIt(m_pageList.at(i)->objectList());
             for (; oIt.current(); ++oIt )
             {
-                int offset=i*m_pageList.at(i)->getZoomPageRect().height();
+                int offset=i*m_pageList.at(i)->getPageRect().height();
                 if ( oIt.current()->getType() == OT_PART &&
                      dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == chl.current() )
                 {
@@ -549,11 +549,11 @@ QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         if ( saveOnlyPage != -1 && saveOnlyPage!=i)
             continue;
-        yoffset=i*m_pageList.at(i)->getZoomPageRect().height();
+        yoffset=i*m_pageList.at(i)->getPageRect().height(); // yoffset is not zoom value !!
         objects=m_pageList.at(i)->saveObjects( doc, objects, yoffset, m_zoomHandler, saveOnlyPage );
 
     }
-    yoffset=m_stickyPage->getZoomPageRect().height();
+    yoffset=m_stickyPage->getPageRect().height();
     //save sticky object
     //todo FIXME saveOnlyPage !!!!!!!!!!!!
     objects=m_stickyPage->saveObjects( doc, objects, yoffset, m_zoomHandler, saveOnlyPage );
@@ -1651,10 +1651,14 @@ void KPresenterDoc::takePage(KPrPage *_page)
     //active previous page
     emit sig_changeActivePage(_page );
 
-    repaint( false );
+    //repaint( false );
+
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
         static_cast<KPresenterView*>(it.current())->skipToPage(pos-1);
+
+    repaint( false );
+
     emit sig_updateMenuBar();
 }
 
