@@ -1883,7 +1883,7 @@ void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
     m_textobj->saveOasisContent( writer, context );
 }
 
-void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context )
+void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
     // TODO save the frame stuff
     writer.startElement( "draw:text-box" );

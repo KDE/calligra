@@ -155,7 +155,7 @@ public:
     /// Save the contents of a frame (i.e. the text)
     void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
     /// Save a complete textbox (frame and text)
-    void saveOasis( KoXmlWriter& writer, KoSavingContext& context );
+    void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
     virtual void finalize();
     virtual void zoom( bool forPrint );

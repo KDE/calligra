@@ -808,7 +808,7 @@ protected:
     /** save the common attributes for the frameset */
     void saveCommon( QDomElement &parentElem, bool saveFrames );
 
-    void saveOasisCommon( KoXmlWriter &xmlWriter );
+    void saveOasisCommon( KoXmlWriter &xmlWriter )const;
 
     /**Determine the clipping rectangle for drawing the contents of @p frame with @p painter
      * in the rectangle delimited by @p crect.

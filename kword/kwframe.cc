@@ -1516,7 +1516,7 @@ MouseMeaning KWFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
     return isMoveable() ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
 }
 
-void KWFrameSet::saveOasisCommon( KoXmlWriter &xmlWriter )
+void KWFrameSet::saveOasisCommon( KoXmlWriter &xmlWriter ) const
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
