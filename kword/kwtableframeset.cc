@@ -2054,8 +2054,7 @@ KCommand *KWTableFrameSet::setProtectContent ( bool _protect )
 {
     QPtrListIterator<Cell> it( m_cells );
     Cell *cell;
-    bool createMacro = false;
-    KMacroCommand *macro = new KMacroCommand( i18n("Protect Content"));
+    KMacroCommand *macro = 0L;
     while ( (cell = it.current()) != 0 ) {
         ++it;
         if (cell->frame( 0 )->isSelected()) {
@@ -2063,16 +2062,13 @@ KCommand *KWTableFrameSet::setProtectContent ( bool _protect )
             {
                 KWProtectContentCommand *cmd = new KWProtectContentCommand( i18n("Protect Content"), cell , _protect);
                 cell->setProtectContent( _protect );
+                if ( !macro )
+                    macro = new KMacroCommand( i18n("Protect Content"));
                 macro->addCommand( cmd );
-                createMacro = true;
             }
         }
     }
-    if ( createMacro )
-        return macro;
-    else
-        delete macro;
-    return 0L;
+    return macro;
 }
 
 KWTextFrameSet* KWTableFrameSet::nextTextObject( KWFrameSet *obj )

@@ -102,28 +102,28 @@ void KWConfig::openPage(int flags)
 
 void KWConfig::slotApply()
 {
-    KMacroCommand *macro = new KMacroCommand( i18n("Change config"));
-    bool createMacro = false;
+    KMacroCommand *macro = 0L;
     m_spellPage->apply();
     m_interfacePage->apply();
     KCommand * cmd = m_miscPage->apply();
     if ( cmd )
     {
+        if ( !macro )
+            macro = new KMacroCommand( i18n("Change config"));
         macro->addCommand(cmd);
-        createMacro = true;
     }
 
     cmd=m_defaultDocPage->apply();
     if ( cmd )
     {
+        if ( !macro )
+            macro = new KMacroCommand( i18n("Change config"));
+
         macro->addCommand( cmd );
-        createMacro = true;
     }
     m_formulaPage->apply();
-    if (createMacro )
+    if (macro)
         m_doc->addCommand( macro );
-    else
-        delete macro;
 }
 
 void KWConfig::slotDefault()
