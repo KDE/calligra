@@ -126,7 +126,7 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
     if ( parent )
     {
       if ( parent->inherits( "KoDocument" ) )
-        d->m_bSingleViewMode = ((KoDocument *)parent)->singleViewMode();
+        d->m_bSingleViewMode = ((KoDocument *)parent)->isSingleViewMode();
       else if ( parent->inherits( "KParts::Part" ) )
         d->m_bSingleViewMode = true;
     }
@@ -157,7 +157,7 @@ KoDocument::~KoDocument()
   delete d;
 }
 
-bool KoDocument::singleViewMode() const
+bool KoDocument::isSingleViewMode() const
 {
   return d->m_bSingleViewMode;
 }

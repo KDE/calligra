@@ -90,7 +90,7 @@ public:
    * Tells whether this document is in singleview mode. This mode can only be set
    * in the constructor.
    */
-  bool singleViewMode() const;
+  bool isSingleViewMode() const;
 
   /**
    * Is the document embedded?

@@ -82,7 +82,7 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 KoView::~KoView()
 {
   kdDebug(30003) << "KoView::~KoView " << this << endl;
-  if ( d->m_manager && !koDocument()->singleViewMode() )
+  if ( d->m_manager && !koDocument()->isSingleViewMode() )
     d->m_manager->removePart( koDocument() );
 
   delete d;
@@ -101,7 +101,7 @@ bool KoView::hasDocumentInWindow( KoDocument *doc )
 void KoView::setPartManager( KParts::PartManager *manager )
 {
   d->m_manager = manager;
-  if ( !koDocument()->singleViewMode() )
+  if ( !koDocument()->isSingleViewMode() )
     d->m_manager->addPart( koDocument(), false );
 }
 
@@ -426,7 +426,7 @@ void KoView::newView() {
     KoMainWindow *shell = thisDocument->createShell();
     shell->setRootDocument(thisDocument);
     shell->show();
-} 
+}
 
 
 class KoViewChild::KoViewChildPrivate
