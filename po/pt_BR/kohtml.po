@@ -1,0 +1,434 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-01-28 03:25+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+
+#: edithtmldlg.cc:36
+msgid "KoHTML: HTML Editor"
+msgstr "KoHTML: Editor HTML"
+
+#: edithtmldlg.cc:47 kohtml_doc.cc:516 kohtml_shell.cc:325 kohtml_shell.cc:339
+#: kohtml_shell.cc:408 kohtml_shell.cc:415
+msgid "Ok"
+msgstr "Ok"
+
+#: kfileio.cc:26
+msgid "File I/O Error"
+msgstr "Erro de E/S de arquivo"
+
+#: kfileio.cc:47
+#, c-format
+msgid ""
+"The specified file does not exist:\n"
+"%s"
+msgstr ""
+
+#: kfileio.cc:54
+#, c-format
+msgid ""
+"This is a directory and not a file:\n"
+"%s"
+msgstr ""
+
+#: kfileio.cc:61
+#, c-format
+msgid ""
+"You do not have read permissions to the file:\n"
+"%s"
+msgstr ""
+
+#: kfileio.cc:72
+#, c-format
+msgid ""
+"Could not read file:\n"
+"%s"
+msgstr ""
+
+#: kfileio.cc:75
+#, c-format
+msgid ""
+"Could not open file:\n"
+"%s"
+msgstr ""
+
+#: kfileio.cc:78
+#, c-format
+msgid ""
+"Error while reading file:\n"
+"%s"
+msgstr ""
+
+#: kfileio.cc:95
+#, c-format
+msgid "Could only read %u bytes of %u."
+msgstr ""
+
+#: kfileio.cc:124
+#, c-format
+msgid ""
+"File %s exists.\n"
+"Do you want to replace it ?"
+msgstr ""
+
+#: kfileio.cc:144
+#, c-format
+msgid ""
+"Failed to make a backup copy of %s.\n"
+"Continue anyway ?"
+msgstr ""
+
+#: kfileio.cc:156 kfileio.cc:174
+#, c-format
+msgid ""
+"Could not write to file:\n"
+"%s"
+msgstr ""
+
+#: kfileio.cc:159
+#, c-format
+msgid ""
+"Could not open file for writing:\n"
+"%s"
+msgstr ""
+
+#: kfileio.cc:163
+#, c-format
+msgid ""
+"Error while writing file:\n"
+"%s"
+msgstr ""
+
+#: kfileio.cc:180
+#, c-format
+msgid "Could only write %d bytes of %d."
+msgstr ""
+
+#: kohtml_doc.cc:298
+msgid "KoHTML: No document loaded!"
+msgstr ""
+
+#: kohtml_doc.cc:516 kohtml_shell.cc:325 kohtml_view.cc:638
+msgid "KoHTML Error"
+msgstr ""
+
+#: kohtml_doc.cc:516
+msgid "Could not initialize child document"
+msgstr ""
+
+#: kohtml_doc.cc:720
+msgid "KoHTML IO Error"
+msgstr ""
+
+#: kohtml_doc.cc:720
+msgid "Abort"
+msgstr ""
+
+#: kohtml_shell.cc:68
+msgid ""
+"The document has been modified\n"
+"Do you want to save it ?"
+msgstr ""
+
+#: kohtml_shell.cc:278
+msgid "&Open File..."
+msgstr ""
+
+#: kohtml_shell.cc:279
+msgid "Open &URL..."
+msgstr ""
+
+#: kohtml_shell.cc:282
+msgid "&Save as..."
+msgstr ""
+
+#: kohtml_shell.cc:325
+msgid "Could not create new document"
+msgstr ""
+
+#: kohtml_shell.cc:338
+#, c-format
+msgid ""
+"Could not open\n"
+"%s"
+msgstr ""
+
+#: kohtml_shell.cc:339 kohtml_shell.cc:408 kohtml_shell.cc:415
+msgid "IO Error"
+msgstr ""
+
+#: kohtml_shell.cc:407
+#, c-format
+msgid ""
+"Could not save\n"
+"%s"
+msgstr ""
+
+#: kohtml_shell.cc:415
+msgid "Could not save file"
+msgstr ""
+
+#: kohtml_view.cc:237 kohtml_view.cc:599
+msgid "Ready."
+msgstr ""
+
+#: kohtml_view.cc:289
+msgid "Forward"
+msgstr ""
+
+#: kohtml_view.cc:292
+msgid "Home"
+msgstr ""
+
+#: kohtml_view.cc:295
+msgid "Reload Page"
+msgstr ""
+
+#: kohtml_view.cc:303 openurldlg.cc:80
+msgid "Open URL"
+msgstr ""
+
+#: kohtml_view.cc:313
+msgid "Settings"
+msgstr ""
+
+#: kohtml_view.cc:318
+msgid "Insert Object"
+msgstr ""
+
+#: kohtml_view.cc:321
+msgid "Edit current HTML code"
+msgstr ""
+
+#: kohtml_view.cc:327
+msgid "Location : "
+msgstr ""
+
+#: kohtml_view.cc:329
+msgid "Current Location"
+msgstr ""
+
+#: kohtml_view.cc:376
+msgid "&Object..."
+msgstr ""
+
+#: kohtml_view.cc:381
+msgid "Edit HTML code"
+msgstr ""
+
+#: kohtml_view.cc:383
+msgid "Bookmarks"
+msgstr ""
+
+#: kohtml_view.cc:387
+msgid "Add Bookmark"
+msgstr ""
+
+#: kohtml_view.cc:388
+msgid "Edit Bookmarks"
+msgstr ""
+
+#: kohtml_view.cc:398
+msgid "Settings..."
+msgstr ""
+
+#: kohtml_view.cc:402
+msgid "Show/Hide Tool&bar"
+msgstr ""
+
+#: kohtml_view.cc:403
+msgid "Show/Hide &Statusbar"
+msgstr ""
+
+#: kohtml_view.cc:523
+msgid "meta:/(manually edited code)"
+msgstr ""
+
+#: kohtml_view.cc:585
+msgid "Copies the selected section to the clipboard"
+msgstr ""
+
+#: kohtml_view.cc:586
+msgid "Inserts an embedded object into the document"
+msgstr ""
+
+#: kohtml_view.cc:587
+msgid "Edit the current html code"
+msgstr ""
+
+#: kohtml_view.cc:588
+msgid "Change user settings"
+msgstr ""
+
+#: kohtml_view.cc:589
+msgid "Enables / disables the toolbar"
+msgstr ""
+
+#: kohtml_view.cc:590
+msgid "Enables / disables the statusbar"
+msgstr ""
+
+#: kohtml_view.cc:591
+msgid "Add the current url to the bookmark list"
+msgstr ""
+
+#: kohtml_view.cc:592
+msgid "Edit the bookmark list"
+msgstr ""
+
+#: kohtml_view.cc:593
+msgid "Load the previous document in the history"
+msgstr ""
+
+#: kohtml_view.cc:594
+msgid "Load the next document in the history"
+msgstr ""
+
+#: kohtml_view.cc:595
+msgid "Load the start document"
+msgstr ""
+
+#: kohtml_view.cc:596
+msgid "Reload the current document"
+msgstr ""
+
+#: kohtml_view.cc:597
+msgid "Stop loading the current document"
+msgstr ""
+
+#: kohtml_view.cc:598
+msgid "Open an URL dialog"
+msgstr ""
+
+#: kohtml_view.cc:636
+msgid "Malformed URL\n"
+msgstr ""
+
+#: kohtml_view.cc:891
+msgid "KOffice HTML Viewer"
+msgstr ""
+
+#: kohtml_view.cc:1004
+msgid "Open URL..."
+msgstr ""
+
+#: kohtml_view.cc:1005
+msgid "Open URL in new window..."
+msgstr ""
+
+#: kohtml_view.cc:1006
+msgid "Copy URL to clipboard"
+msgstr ""
+
+#: kohtmljob.cc:142
+#, c-format
+msgid ""
+"error while loading:\n"
+"%s\n"
+"error message:\n"
+"%s"
+msgstr ""
+
+#: kpropdlg.cc:115
+msgid "Prev"
+msgstr ""
+
+#: kpropdlg.cc:116
+msgid "Next"
+msgstr ""
+
+#: openurldlg.cc:39
+msgid "KoHTML: Open URL"
+msgstr ""
+
+#: openurldlg.cc:43
+msgid ""
+"Enter the World Wide Web location (URL) or specify\n"
+"the local file you would like to open:"
+msgstr ""
+
+#: openurldlg.cc:67
+msgid "Choose File..."
+msgstr ""
+
+#: settingsdlg.cc:42
+msgid "KoHTML: Preferences"
+msgstr ""
+
+#: settingsdlg.cc:44
+msgid "General"
+msgstr ""
+
+#: settingsdlg.cc:50
+msgid "Colors"
+msgstr ""
+
+#: settingsdlg.cc:70
+msgid "Browser starts with"
+msgstr ""
+
+#: settingsdlg.cc:71
+msgid "Blank page"
+msgstr ""
+
+#: settingsdlg.cc:72
+msgid "Home page"
+msgstr ""
+
+#: settingsdlg.cc:76
+msgid "Home Page"
+msgstr ""
+
+#: settingsdlg.cc:80
+msgid "Clicking the Home button brings you to this page."
+msgstr ""
+
+#: settingsdlg.cc:83
+msgid "Location:"
+msgstr ""
+
+#: settingsdlg.cc:113
+msgid "Small"
+msgstr ""
+
+#: settingsdlg.cc:114
+msgid "Medium"
+msgstr ""
+
+#: settingsdlg.cc:115
+msgid "Large"
+msgstr ""
+
+#: settingsdlg.cc:119
+msgid "Standard Font"
+msgstr ""
+
+#: settingsdlg.cc:123
+msgid "Fixed Font"
+msgstr ""
+
+#: settingsdlg.cc:132
+msgid "Background Color"
+msgstr ""
+
+#: settingsdlg.cc:136
+msgid "URL Link Color"
+msgstr ""
+
+#: settingsdlg.cc:140
+msgid "Normal Text Color"
+msgstr ""
+
+#: settingsdlg.cc:144
+msgid "Followed Link Color"
+msgstr ""
