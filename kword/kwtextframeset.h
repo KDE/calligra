@@ -261,6 +261,8 @@ public:
 
     virtual KWFrameSetEdit* currentTextEdit(){return this;}
 
+    virtual QString getPopupName() { return "text_popup";} 
+
     virtual void terminate();
 
     /**

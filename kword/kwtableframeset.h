@@ -249,6 +249,8 @@ public:
 
     virtual KWFrameSetEdit* currentTextEdit();
 
+    virtual QString getPopupName() { return "text_popup";} 
+
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged )
     {

@@ -2393,16 +2393,13 @@ void KWView::openPopupMenuEditText( const QPoint & _point )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    // #### HACK. Make a virtual method in KWFrameSetEdit !
-    KWTextFrameSetEdit *edit = currentTextEdit();
+
+    KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+    QString menuName;
     if (edit)
-        ((QPopupMenu*)factory()->container("text_popup",this))->popup(_point);
-    else
-    {
-        KWFormulaFrameSetEdit *formulaEdit = dynamic_cast<KWFormulaFrameSetEdit *>( gui->canvasWidget()->currentFrameSetEdit() );
-        if (formulaEdit)
-            ((QPopupMenu*)factory()->container("Formula",this))->popup(_point);
-    }
+        menuName=edit->getPopupName();
+    if(!menuName.isEmpty())
+        ((QPopupMenu*)factory()->container(menuName,this))->popup(_point);
 }
 
 void KWView::openPopupMenuChangeAction( const QPoint & _point )

@@ -249,6 +249,8 @@ public:
      */
     virtual KWFrameSetEdit* currentTextEdit() { return 0L; }
 
+    virtual QString getPopupName() { return QString();} 
+
     /**
      * Called before destruction, when terminating edition - use to e.g. hide cursor
      */
@@ -628,6 +630,8 @@ public:
     {
         return static_cast<KWFormulaFrameSet*>(frameSet());
     }
+
+    virtual QString getPopupName() { return "Formula";} 
 
     /**
      * Paint this frameset in "has focus" mode (e.g. with a cursor)
