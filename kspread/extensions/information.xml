@@ -12,7 +12,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The INFO() returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns path of the current directory, "numfile" returns number of active documents, "release" returns version of KSpread as text, "recalc" returns the current recalculation mode: returns "Automatic" or "Manual".</Text>
+	<Text>The INFO() returns information about the current operating environment. Parameter type specifies what type of information you want to return. It is one of the following: "directory" returns path of the current directory, "numfile" returns number of active documents, "release" returns version of KSpread as text, "recalc" returns the current recalculation mode: "Automatic" or "Manual", "system" returns name of the operating environment, "osversion" returns current operating system.</Text>
 	<Syntax>INFO(type)</Syntax>
       </Help>
     </Function>
@@ -173,7 +173,7 @@
       <Name>VERSION</Name>
       <Type>String</Type>
       <Help>
-	<Text>Returns the KSpread version as a string</Text>
+	<Text>Returns the KSpread version as a string. This function is obsolete and will be removed in future version of KSpread. It is provided only for compatibility. Please use function INFO("release") instead.</Text>
 	<Syntax>VERSION()</Syntax>
 	</Help>
     </Function>

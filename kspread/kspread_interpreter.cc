@@ -591,7 +591,6 @@ static const functionEntry funcTab[] = {
   { "ISEVEN", kspreadfunc_iseven },
   { "ISDATE", kspreadfunc_isdate },
   { "ISTIME", kspreadfunc_istime },
-  { "VERSION", kspreadfunc_version },
   { "FILENAME", kspreadfunc_filename },
   { "TYPE", kspreadfunc_type },
   { "COUNTBLANK", kspreadfunc_countblank },
@@ -685,6 +684,7 @@ static const functionEntry funcTab[] = {
   { "DECBIN", kspreadfunc_dec2bin },
   { "DECOCT", kspreadfunc_dec2oct },
   { "ISLOGIC", kspreadfunc_islogical }, // obsolete, use ISLOGICAL
+  { "VERSION", kspreadfunc_version }, // obsolete, use INFO("release")
 
   // end  marker
   { NULL, NULL }

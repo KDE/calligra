@@ -15,6 +15,8 @@
 #include <qdir.h>
 #include <config.h>
 
+#include <sys/utsname.h>
+
 // Function: INFO
 bool kspreadfunc_info( KSContext& context )
 {
@@ -28,51 +30,73 @@ bool kspreadfunc_info( KSContext& context )
 
   QString type = args[0]->stringValue().lower();
 
-  QString result;
-
   if ( type == "directory" )
-    result = QDir::currentDirPath();
-  else
-  if ( type == "release" )
-    result = VERSION;
-  else
-  if ( type == "numfile" )
-    result = QString::number( KSpreadDoc::documents().count() );
-  else
-  if ( type == "recalc" )
+  { 
+    context.setValue( new KSValue( QDir::currentDirPath() ) );
+    return true;
+  }
+
+  else if ( type == "release" )
+  { 
+    context.setValue( new KSValue( QString( VERSION ) ) );
+    return true;
+  }
+
+  else if ( type == "numfile" )
   {
+    context.setValue( new KSValue( (int)KSpreadDoc::documents().count() ) );
+    return true;
+  }
+
+  else if ( type == "recalc" )
+  {
+    QString result;
     if ( ( (KSpreadInterpreter *) context.interpreter() )->document()->delayCalculation() )
       result = i18n( "Manual" );
     else
       result = i18n( "Automatic" );
-  }
-  else
-  if (type == "memavail")
-  {
-  }
-  else
-  if (type == "memused")
-  {
-  }
-  else
-  if (type == "origin")
-  {
-  }
-  else
-  if (type == "system")
-  {
-  }
-  else
-  if (type == "totmem")
-  {
-  }
-  else
-  if (type == "osversion")
+    context.setValue( new KSValue( result ) );
+    return true;
+  } 
+
+  else if (type == "memavail")
   {
   }
 
-  context.setValue( new KSValue( result) );
-  return true;
+  else if (type == "memused")
+  {
+  }
+
+  else if (type == "origin")
+  {
+  }
+
+  else if (type == "system")
+  {
+    struct utsname name;
+    if( uname( &name ) >= 0 )
+    {
+       context.setValue( new KSValue( QString( name.sysname ) ) );
+       return true;
+    }   
+  }
+
+  else if (type == "totmem")
+  {
+  }
+
+  else if (type == "osversion")
+  {
+    struct utsname name;
+    if( uname( &name ) >= 0 )
+    {
+       QString os = QString("%1 %2").arg( name.sysname ).arg( name.release );
+       context.setValue( new KSValue( os ) );
+       return true;
+    }
+  }
+
+  return false;
 }
 
 // Function: ISBLANK
