@@ -594,6 +594,7 @@ static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<For
             outputText+=(*paraFormatDataIt).fontName; // TODO: add alternative font names
             outputText+="\"";
             // Give the font size relatively (be kind with people with impered vision)
+            // TODO: option to give absolute font sizes
             int size=(*paraFormatDataIt).fontSize;
             // 12pt is considered the normal size // TODO: relative to layout!
             if (size>0)
@@ -605,6 +606,10 @@ static void ProcessParagraphDataTransitional ( QString &paraText, QValueList<For
                 if (size)
                 {
                     outputText+=" size=\""; // in XML numbers must be quoted!
+                    if (size>0)
+                    {
+                        outputText+="+";
+                    }
                     outputText+=QString::number(size,10);
                     outputText+="\"";
                 }
