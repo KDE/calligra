@@ -33,9 +33,9 @@ VSinusDlg::VSinusDlg( KarbonPart *part,QWidget* parent, const char* name )
  	outerbox->addWidget( group );
 
 	// add width/height-input:
-	new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), group );
+	m_widthLabel =new QLabel( i18n( "Width(%1):" ).arg(m_part->getUnitName()), group );
 	m_width = new KDoubleNumInput( 0, group );
-	new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), group );
+	m_heightLabel =new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), group );
 	m_height = new KDoubleNumInput( 0, group );
 	new QLabel( i18n( "Periods:" ), group );
 	m_periods = new QSpinBox( group );
@@ -99,6 +99,12 @@ void
 VSinusDlg::setPeriods( uint value )
 {
 	m_periods->setValue( value );
+}
+
+void VSinusDlg::refreshUnit ()
+{
+    m_widthLabel->setText(i18n( "Width(%1):" ).arg(m_part->getUnitName()));
+    m_heightLabel->setText( i18n( "Height(%1):" ).arg(m_part->getUnitName()));
 }
 
 #include "vsinusdlg.moc"

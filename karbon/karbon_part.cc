@@ -233,6 +233,15 @@ void KarbonPart::initUnit()
     }
 }
 
+void KarbonPart::setUnit(KoUnit::Unit _unit)
+{
+    m_unit=_unit;
+    QPtrListIterator<KoView> itr( views() );
+    for( ; itr.current(); ++itr )
+    {
+        static_cast<KarbonView*>( itr.current() )->setUnit(_unit);
+    }
+}
 
 #include "karbon_part.moc"
 

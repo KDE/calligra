@@ -29,6 +29,11 @@ VSinusTool::~VSinusTool()
 	delete( m_dialog );
 }
 
+void VSinusTool::refreshUnit()
+{
+    m_dialog->refreshUnit();
+}
+
 void
 VSinusTool::activate()
 {

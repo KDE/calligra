@@ -10,6 +10,7 @@
 
 class KDoubleNumInput;
 class KarbonPart;
+class QLabel;
 
 class VEllipseDlg : public KDialog
 {
@@ -22,11 +23,13 @@ public:
 	double height() const;
 	void setWidth( double value );
 	void setHeight( double value );
-
+    void refreshUnit ();
 private:
 	KDoubleNumInput* m_width;
 	KDoubleNumInput* m_height;
     KarbonPart*m_part;
+    QLabel *m_heightLabel;
+    QLabel *m_widthLabel;
 };
 
 #endif

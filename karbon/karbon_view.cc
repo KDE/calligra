@@ -1103,5 +1103,14 @@ KarbonView::selectionChanged()
 	}
 }
 
+void KarbonView::setUnit(KoUnit::Unit /*_unit*/)
+{
+    m_ellipseTool->refreshUnit();
+    m_rectangleTool->refreshUnit();
+    m_sinusTool->refreshUnit();
+    m_starTool->refreshUnit();
+    m_roundRectTool->refreshUnit();
+}
+
 #include "karbon_view.moc"
 

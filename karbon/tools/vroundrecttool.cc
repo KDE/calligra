@@ -30,6 +30,11 @@ VRoundRectTool::~VRoundRectTool()
 	delete( m_dialog );
 }
 
+void VRoundRectTool::refreshUnit()
+{
+    m_dialog->refreshUnit();
+}
+
 void
 VRoundRectTool::activate()
 {

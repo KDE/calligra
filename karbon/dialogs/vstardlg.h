@@ -25,12 +25,15 @@ public:
 	void setInnerR( double value );
 	void setOuterR( double value );
 	void setEdges( uint value );
-
+    void refreshUnit ();
 private:
 	KDoubleNumInput* m_innerR;
 	KDoubleNumInput* m_outerR;
 	QSpinBox* m_edges;
     KarbonPart*m_part;
+    QLabel *m_innerRLabel;
+    QLabel *m_outerRLabel;
+
 };
 
 #endif

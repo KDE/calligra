@@ -17,10 +17,11 @@ class VEllipseTool : public VShapeTool
 public:
 	VEllipseTool( KarbonView* view );
 	virtual ~VEllipseTool();
-	
+
 	virtual void activate();
 
 	virtual VPath* shape( bool decide = false ) const;
+    void refreshUnit();
 
 private:
 	VEllipseDlg* m_dialog;

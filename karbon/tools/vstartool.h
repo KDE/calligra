@@ -23,7 +23,7 @@ public:
 	virtual VPath* shape( bool decide = false ) const;
 
 	virtual void showDialog() const;
-
+    void refreshUnit();
 private:
 	VStarDlg* m_dialog;
 };

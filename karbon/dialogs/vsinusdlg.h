@@ -11,6 +11,7 @@
 class KDoubleNumInput;
 class QSpinBox;
 class KarbonPart;
+class QLabel;
 class VSinusDlg : public KDialog
 {
 	Q_OBJECT
@@ -24,12 +25,15 @@ public:
 	void setWidth( double value );
 	void setHeight( double value );
 	void setPeriods( uint value );
-
+    void refreshUnit ();
 private:
 	KDoubleNumInput* m_width;
 	KDoubleNumInput* m_height;
 	QSpinBox* m_periods;
     KarbonPart*m_part;
+    QLabel *m_heightLabel;
+    QLabel *m_widthLabel;
+
 };
 
 #endif

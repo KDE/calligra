@@ -28,6 +28,12 @@ VRectangleTool::~VRectangleTool()
 	delete( m_dialog );
 }
 
+void VRectangleTool::refreshUnit()
+{
+    m_dialog->refreshUnit();
+}
+
+
 void
 VRectangleTool::activate()
 {

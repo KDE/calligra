@@ -29,6 +29,11 @@ VEllipseTool::~VEllipseTool()
 	delete( m_dialog );
 }
 
+void VEllipseTool::refreshUnit()
+{
+    m_dialog->refreshUnit();
+}
+
 void
 VEllipseTool::activate()
 {

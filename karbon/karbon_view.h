@@ -8,7 +8,7 @@
 
 #include <koView.h>
 #include <ksharedptr.h>
-
+#include <koUnit.h>
 #include "vcanvas.h"
 
 class DCOPObject;
@@ -81,6 +81,7 @@ public:
 	void setLineWidth( double val);
 
 	QLabel* statusMessage() const { return m_status; }
+    void setUnit(KoUnit::Unit _unit);
 
 
 public slots:

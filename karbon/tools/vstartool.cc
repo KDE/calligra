@@ -24,6 +24,12 @@ VStarTool::VStarTool( KarbonView* view )
 	m_dialog->setEdges( 5 );
 }
 
+void VStarTool::refreshUnit()
+{
+    m_dialog->refreshUnit();
+}
+
+
 VStarTool::~VStarTool()
 {
 	delete( m_dialog );

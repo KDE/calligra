@@ -21,7 +21,7 @@ public:
 	virtual void activate();
 
 	virtual VPath* shape( bool decide = false ) const;
-
+    void refreshUnit();
 private:
 	VRectangleDlg* m_dialog;
 };
