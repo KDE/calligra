@@ -84,7 +84,7 @@ bool KIllustratorDocument::loadXML (QIODevice *, const QDomDocument &doc)
     // now look for part objects in order to create the child list
     QListIterator<GPage> p(m_gdocument->getPages());
     for ( ; p.current(); ++p)
-    { 
+    {
       QListIterator<GLayer> i((*p)->getLayers());
       for ( ; i.current(); ++i)
       {
@@ -102,8 +102,8 @@ bool KIllustratorDocument::loadXML (QIODevice *, const QDomDocument &doc)
       }
       return true;
     }
-    return false;
   }
+  return false;
 }
 
 bool KIllustratorDocument::loadChildren (KoStore* store)
