@@ -797,11 +797,11 @@ void KoStylePreview::drawContents( QPainter *painter )
     painter->restore();
 }
 
-KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine, double _frameWidth,QWidget * parent, const char * name )
+KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameWidth,QWidget * parent, const char * name )
         : KoParagLayoutWidget( KoParagDia::PD_SPACING, parent, name ), m_unit( unit )
 {
     QString unitName = KoUnit::unitName( m_unit );
-    QGridLayout *mainGrid = new QGridLayout( this, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *mainGrid = new QGridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     // mainGrid gives equal space to each groupbox, apparently
     // I tried setRowStretch but the result is awful (much space between them and not equal!)
@@ -865,27 +865,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
         indentGrid->setRowStretch( i, 1 );
     mainGrid->addWidget( indentFrame, 0, 0 );
 
-    // --------------- End of page /frame ---------------
-    QGroupBox * endFramePage = new QGroupBox( i18n( "Behavior at &End of Frame/Page" ), this );
-    QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 4, 1,
-                                                      KDialog::marginHint(), KDialog::spacingHint() );
-
-    cKeepLinesTogether = new QCheckBox( i18n("&Keep lines together"),endFramePage);
-    endFramePageGrid->addWidget( cKeepLinesTogether, 1, 0 );
-    cHardBreakBefore = new QCheckBox( i18n("Insert break before paragraph"),endFramePage);
-    endFramePageGrid->addWidget( cHardBreakBefore, 2, 0 );
-    cHardBreakAfter = new QCheckBox( i18n("Insert break after paragraph"),endFramePage);
-    endFramePageGrid->addWidget( cHardBreakAfter, 3, 0 );
-
-    endFramePageGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
-    for ( int i = 0 ; i < endFramePageGrid->numRows()-1 ; ++i )
-        endFramePageGrid->setRowStretch( 0, 0 );
-    endFramePageGrid->setRowStretch( endFramePageGrid->numRows()-1, 1 );
-    mainGrid->addWidget( endFramePage, 2, 0 );
-
-    endFramePage->setEnabled(breakLine);
-
-    // --------------- line spacing ---------------
+        // --------------- line spacing ---------------
     QGroupBox * spacingFrame = new QGroupBox( i18n( "Line &Spacing" ), this, "spacingFrame" );
     QGridLayout * spacingGrid = new QGridLayout( spacingFrame, 2, 1,
                                                  KDialog::marginHint(), KDialog::spacingHint() );
@@ -912,7 +892,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     spacingGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
     for ( int i = 1 ; i < spacingGrid->numRows() ; ++i )
         spacingGrid->setRowStretch( i, 1 );
-    mainGrid->addWidget( spacingFrame, 4, 0 );
+    mainGrid->addWidget( spacingFrame, 1, 0 );
 
     eSpacing->setEnabled( true );
 
@@ -943,7 +923,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     pSpaceGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
     for ( int i = 1 ; i < pSpaceGrid->numRows() ; ++i )
         pSpaceGrid->setRowStretch( i, 1 );
-    mainGrid->addWidget( pSpaceFrame, 6, 0 );
+    mainGrid->addWidget( pSpaceFrame, 2, 0 );
 
     // --------------- preview --------------------
     prev1 = new KPagePreview( this, "KPagePreview" );
@@ -1009,17 +989,6 @@ double KoIndentSpacingWidget::lineSpacing() const
                                : QMAX(0, KoUnit::fromUserValue( eSpacing->value(), m_unit ));
 }
 
-int KoIndentSpacingWidget::pageBreaking() const
-{
-    int pb = 0;
-    if ( cKeepLinesTogether->isChecked() )
-        pb |= KoParagLayout::KeepLinesTogether;
-    if ( cHardBreakBefore->isChecked() )
-        pb |= KoParagLayout::HardFrameBreakBefore;
-    if ( cHardBreakAfter->isChecked() )
-        pb |= KoParagLayout::HardFrameBreakAfter;
-    return pb;
-}
 
 void KoIndentSpacingWidget::display( const KoParagLayout & lay )
 {
@@ -1078,10 +1047,6 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     eSpacing->setValue( (_type == KoParagLayout::LS_MULTIPLE) ? QMAX( 1, _spacing )
                         : KoUnit::toUserValue( _spacing, m_unit ) );
 
-    cKeepLinesTogether->setChecked( lay.pageBreaking & KoParagLayout::KeepLinesTogether );
-    cHardBreakBefore->setChecked( lay.pageBreaking & KoParagLayout::HardFrameBreakBefore );
-    cHardBreakAfter->setChecked( lay.pageBreaking & KoParagLayout::HardFrameBreakAfter );
-    // ## preview support for end-of-frame ?
 }
 
 void KoIndentSpacingWidget::save( KoParagLayout & lay )
@@ -1093,7 +1058,6 @@ void KoIndentSpacingWidget::save( KoParagLayout & lay )
     lay.margins[QStyleSheetItem::MarginFirstLine] = firstLineIndent();
     lay.margins[QStyleSheetItem::MarginTop] = spaceBeforeParag();
     lay.margins[QStyleSheetItem::MarginBottom] = spaceAfterParag();
-    lay.pageBreaking = pageBreaking();
 }
 
 QString KoIndentSpacingWidget::tabName()
@@ -1156,41 +1120,79 @@ void KoIndentSpacingWidget::afterChanged( double _val )
     prev1->setAfter( _val );
 }
 
-KoParagAlignWidget::KoParagAlignWidget( QWidget * parent, const char * name )
+
+KoParagAlignWidget::KoParagAlignWidget( bool breakLine, QWidget * parent, const char * name )
         : KoParagLayoutWidget( KoParagDia::PD_ALIGN, parent, name )
 {
-    QGridLayout *grid = new QGridLayout( this, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( this, 3, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
-    QLabel * lAlign = new QLabel( i18n( "Align:" ), this );
-    grid->addWidget( lAlign, 0, 0 );
+    QVGroupBox * AlignGroup = new QVGroupBox( i18n( "Alignment" ), this );
+        
+    QLabel * lAlign = new QLabel( i18n( "Align:" ), AlignGroup );
+//    AlignGroup->addWidget( lAlign, 0, 0 );
 
-    rLeft = new QRadioButton( i18n( "&Left" ), this );
-    grid->addWidget( rLeft, 1, 0 );
+    rLeft = new QRadioButton( i18n( "&Left" ), AlignGroup );
+//    AlignGroup->addWidget( rLeft, 1, 0 );
     connect( rLeft, SIGNAL( clicked() ), this, SLOT( alignLeft() ) );
 
-    rCenter = new QRadioButton( i18n( "C&enter" ), this );
-    grid->addWidget( rCenter, 2, 0 );
+    rCenter = new QRadioButton( i18n( "C&enter" ), AlignGroup );
+//    AlignGroup->addWidget( rCenter, 2, 0 );
     connect( rCenter, SIGNAL( clicked() ), this, SLOT( alignCenter() ) );
 
-    rRight = new QRadioButton( i18n( "&Right" ), this );
-    grid->addWidget( rRight, 3, 0 );
+    rRight = new QRadioButton( i18n( "&Right" ), AlignGroup );
+//    grid->addWidget( rRight, 3, 0 );
     connect( rRight, SIGNAL( clicked() ), this, SLOT( alignRight() ) );
 
-    rJustify = new QRadioButton( i18n( "&Justify" ), this );
-    grid->addWidget( rJustify, 4, 0 );
+    rJustify = new QRadioButton( i18n( "&Justify" ), AlignGroup );
+//    grid->addWidget( rJustify, 4, 0 );
     connect( rJustify, SIGNAL( clicked() ), this, SLOT( alignJustify() ) );
 
     clearAligns();
     rLeft->setChecked( true );
+    
+    grid->addWidget(AlignGroup, 0, 0);
 
+    // --------------- End of page /frame ---------------
+    QGroupBox * endFramePage = new QGroupBox( i18n( "Behavior at &End of Frame/Page" ), this );
+    QGridLayout * endFramePageGrid = new QGridLayout( endFramePage, 4, 1,
+                                                      KDialog::marginHint(), KDialog::spacingHint() );
+
+    cKeepLinesTogether = new QCheckBox( i18n("&Keep lines together"),endFramePage);
+    endFramePageGrid->addWidget( cKeepLinesTogether, 1, 0 );
+    cHardBreakBefore = new QCheckBox( i18n("Insert break before paragraph"),endFramePage);
+    endFramePageGrid->addWidget( cHardBreakBefore, 2, 0 );
+    cHardBreakAfter = new QCheckBox( i18n("Insert break after paragraph"),endFramePage);
+    endFramePageGrid->addWidget( cHardBreakAfter, 3, 0 );
+
+    endFramePageGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
+    for ( int i = 0 ; i < endFramePageGrid->numRows()-1 ; ++i )
+        endFramePageGrid->setRowStretch( 0, 0 );
+    endFramePageGrid->setRowStretch( endFramePageGrid->numRows()-1, 1 );
+    grid->addWidget( endFramePage, 2, 0 );
+
+    endFramePage->setEnabled(breakLine);
+    
     // --------------- preview --------------------
     prev2 = new KPagePreview2( this, "KPagePreview2" );
-    grid->addMultiCellWidget( prev2, 0, 5, 1, 1 );
+    grid->addMultiCellWidget( prev2, 0, 2, 1, 1 );
 
     // --------------- main grid ------------------
     grid->setColStretch( 1, 1 );
-    grid->setRowStretch( 5, 1 );
+    grid->setRowStretch( 1, 1 );
 }
+
+int KoParagAlignWidget::pageBreaking() const
+{
+    int pb = 0;
+    if ( cKeepLinesTogether->isChecked() )
+        pb |= KoParagLayout::KeepLinesTogether;
+    if ( cHardBreakBefore->isChecked() )
+        pb |= KoParagLayout::HardFrameBreakBefore;
+    if ( cHardBreakAfter->isChecked() )
+        pb |= KoParagLayout::HardFrameBreakAfter;
+    return pb;
+}
+
 
 void KoParagAlignWidget::display( const KoParagLayout & lay )
 {
@@ -1212,12 +1214,19 @@ void KoParagAlignWidget::display( const KoParagLayout & lay )
         case Qt::AlignJustify:
             rJustify->setChecked( true );
             break;
+	    
+    cKeepLinesTogether->setChecked( lay.pageBreaking & KoParagLayout::KeepLinesTogether );
+    cHardBreakBefore->setChecked( lay.pageBreaking & KoParagLayout::HardFrameBreakBefore );
+    cHardBreakAfter->setChecked( lay.pageBreaking & KoParagLayout::HardFrameBreakAfter );
+    // ## preview support for end-of-frame ?
+
     }
 }
 
 void KoParagAlignWidget::save( KoParagLayout & lay )
 {
     lay.alignment = align();
+    lay.pageBreaking = pageBreaking();
 }
 
 int KoParagAlignWidget::align() const
@@ -1232,7 +1241,7 @@ int KoParagAlignWidget::align() const
 
 QString KoParagAlignWidget::tabName()
 {
-    return i18n( "Al&ignment" );
+    return i18n( "General &Layout" );
 }
 
 void KoParagAlignWidget::alignLeft()
@@ -2064,12 +2073,12 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
     if ( m_flags & PD_SPACING )
     {
         QVBox * page = addVBoxPage( i18n( "Indent && S&pacing" ) );
-        m_indentSpacingWidget = new KoIndentSpacingWidget( unit, breakLine,_frameWidth,page, "indent-spacing" );
+        m_indentSpacingWidget = new KoIndentSpacingWidget( unit,_frameWidth,page, "indent-spacing" );
     }
     if ( m_flags & PD_ALIGN )
     {
-        QVBox * page = addVBoxPage( i18n( "Al&ignment" ) );
-        m_alignWidget = new KoParagAlignWidget( page, "align" );
+        QVBox * page = addVBoxPage( i18n( "General &Layout" ) );
+        m_alignWidget = new KoParagAlignWidget( breakLine, page, "align" );
     }
     if ( m_flags & PD_BORDERS )
     {

@@ -80,11 +80,11 @@ KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
     addTab( fontTab );
 
     KoStyleParagTab *newTab = new KoStyleParagTab( m_tabs );
-    newTab->setWidget( new KoIndentSpacingWidget( unit, true,-1/*no limit*/,newTab ) );
+    newTab->setWidget( new KoIndentSpacingWidget( unit, -1/*no limit*/,newTab ) );
     addTab( newTab );
 
     newTab = new KoStyleParagTab( m_tabs );
-    newTab->setWidget( new KoParagAlignWidget( newTab ) );
+    newTab->setWidget( new KoParagAlignWidget( true, newTab ) );
     addTab( newTab );
 
     newTab = new KoStyleParagTab( m_tabs );

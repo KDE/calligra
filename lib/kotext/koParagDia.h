@@ -32,6 +32,7 @@
 #include "koparagcounter.h"
 #include <knuminput.h>
 #include <qgroupbox.h>
+#include <qvgroupbox.h>
 
 class KButtonBox;
 class KColorButton;
@@ -99,7 +100,7 @@ class KoIndentSpacingWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine, double _frameWidth, QWidget * parent,const char * name = 0 );
+    KoIndentSpacingWidget( KoUnit::Unit unit, double _frameWidth, QWidget * parent,const char * name = 0 );
     virtual ~KoIndentSpacingWidget() {}
 
     virtual void display( const KoParagLayout & lay );
@@ -113,7 +114,6 @@ public:
     double spaceBeforeParag() const;
     double spaceAfterParag() const;
     double lineSpacing() const;
-    int pageBreaking() const;
     KoParagLayout::SpacingType lineSpacingType() const;
 private slots:
     void leftChanged( double );
@@ -128,7 +128,6 @@ private:
 
     KDoubleNumInput *eLeft, *eRight, *eFirstLine, *eBefore, *eAfter, *eSpacing;
     QComboBox *cSpacing;
-    QCheckBox *cKeepLinesTogether, *cHardBreakBefore, *cHardBreakAfter;
     KPagePreview *prev1;
     KoUnit::Unit m_unit;
 };
@@ -140,14 +139,15 @@ class KoParagAlignWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoParagAlignWidget( QWidget * parent, const char * name = 0 );
+    KoParagAlignWidget(bool breakLine, QWidget * parent, const char * name = 0 );
     virtual ~KoParagAlignWidget() {}
 
     virtual void display( const KoParagLayout & lay );
     virtual void save( KoParagLayout & lay );
     //virtual bool isModified();
     virtual QString tabName();
-
+    
+    int pageBreaking() const;
     int align() const;
 
 protected slots:
@@ -161,6 +161,7 @@ protected:
 
 private:
     QRadioButton *rLeft, *rCenter, *rRight, *rJustify;
+    QCheckBox *cKeepLinesTogether, *cHardBreakBefore, *cHardBreakAfter;
     KPagePreview2 *prev2;
 };
 
@@ -464,10 +465,10 @@ public:
     double spaceAfterParag() const { return m_indentSpacingWidget->spaceAfterParag(); }
     double lineSpacing() const { return m_indentSpacingWidget->lineSpacing(); }
     KoParagLayout::SpacingType lineSpacingType() const{ return m_indentSpacingWidget->lineSpacingType(); }
-    int pageBreaking() const { return m_indentSpacingWidget->pageBreaking(); }
 
     // tab 2
     int align() const { return m_alignWidget->align(); }
+    int pageBreaking() const { return m_alignWidget->pageBreaking(); }
 
     // tab 3
     KoBorder leftBorder() const { return m_borderWidget->leftBorder(); }
