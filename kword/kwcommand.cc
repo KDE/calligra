@@ -397,11 +397,12 @@ void KWFrameResizeCommand::execute()
         //repaintTableHeaders( table );
     }
     KWDocument * doc = frameSet->kWordDocument();
-
-    if(frameSet->isAHeader() || frameSet->isAFooter())
+    if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY ) // header/footer/footnote
         doc->recalcFrames();
+
     frame->updateRulerHandles();
 
+    //update frames
     doc->frameChanged( frame );
 }
 
@@ -427,7 +428,7 @@ void KWFrameResizeCommand::unexecute()
         //repaintTableHeaders( table );
     }
     KWDocument * doc = frameSet->kWordDocument();
-    if(frameSet->isAHeader() || frameSet->isAFooter())
+    if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY ) // header/footer/footnote
         doc->recalcFrames();
 
     frame->updateRulerHandles();

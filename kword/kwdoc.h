@@ -320,7 +320,7 @@ public:
     void setHeaderVisible( bool h );
     void setFooterVisible( bool f );
 
-    void recalcFrames();
+    void recalcFrames( int fromPage = 0, int toPage = -1 );
 
     KoHFType getHeaderType() { return m_pageHeaderFooter.header; }
     KoHFType getFooterType() { return m_pageHeaderFooter.footer; }
@@ -448,7 +448,7 @@ public:
 
     bool showdocStruct() const {return  m_bShowDocStruct;}
 	void setShowDocStruct(bool _b){m_bShowDocStruct=_b;}
-	
+
     bool allowAutoFormat() const { return m_bAllowAutoFormat; }
     void setAllowAutoFormat(bool _b){ m_bAllowAutoFormat=_b; }
 

@@ -2190,11 +2190,13 @@ void KWTextFrameSet::renumberFootNotes()
     QPtrListIterator< KWFootNoteVariable > vit( lst );
     for ( ; vit.current() ; ++vit, ++varNumber )
     {
-        if ( varNumber != vit.current()->num() )
+        KWFootNoteVariable* var = vit.current();
+        if ( varNumber != var->num() )
         {
-            vit.current()->setNum( varNumber );
-            vit.current()->paragraph()->invalidate(0);
-            vit.current()->paragraph()->setChanged( true );
+            var->setNum( varNumber );
+            var->frameSet()->setName( i18n("Footnote %1").arg( varNumber ) );
+            var->paragraph()->invalidate(0);
+            var->paragraph()->setChanged( true );
             needRepaint = true;
         }
     }
@@ -2855,13 +2857,12 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType )
      KWFootNoteFrameSet *fs = new KWFootNoteFrameSet( doc, i18n( "Footnotes" ) );
      fs->setFrameSetInfo( KWFrameSet::FI_FOOTNOTE );
 
-     /// ### temporary code
-            int i = m_currentFrame->pageNum();
-            KWFrame *frame = new KWFrame(fs, doc->ptLeftBorder(),
-                i * doc->ptPaperHeight() + doc->ptPaperHeight() - doc->ptTopBorder() - 20,
-                doc->ptPaperWidth() - doc->ptLeftBorder() - doc->ptRightBorder(), 20 );
-            frame->setFrameBehavior(KWFrame::AutoExtendFrame);
-            fs->addFrame( frame );
+     int pageNum = m_currentFrame->pageNum();
+     // Place the frame on the correct page, but the exact coordinates
+     // will be determined by recalcFrames (KWFrameLayout)
+     KWFrame *frame = new KWFrame(fs, 0, pageNum * doc->ptPaperHeight() + 1, 20, 20 );
+     frame->setFrameBehavior(KWFrame::AutoExtendFrame);
+     fs->addFrame( frame );
 
      doc->addFrameSet( fs );
 
@@ -2873,6 +2874,9 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType )
 
      // Re-number footnote variables
      textFrameSet()->renumberFootNotes();
+
+     // Layout the footnote frame
+     doc->recalcFrames( pageNum, -1 ); // we know that for sure nothing changed before this page.
 }
 
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )

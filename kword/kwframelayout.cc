@@ -2,7 +2,7 @@
 #include "kwtextframeset.h"
 #include "kwdoc.h"
 
-//#define DEBUG_FRAMELAYOUT
+#define DEBUG_FRAMELAYOUT
 
 #ifdef NDEBUG
 #undef DEBUG_FRAMELAYOUT
@@ -19,11 +19,6 @@ KWFrameLayout::HeaderFooterFrameset::HeaderFooterFrameset( KWTextFrameSet* fs, i
         m_height = 20; // whatever. The text layout will resize it.
 }
 
-/*struct PageInfo {
-    double top;
-    double bottom;
-};*/
-
 void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int numColumns,
                             QPtrList<HeaderFooterFrameset>& info,
                             int fromPage, int toPage )
@@ -36,7 +31,7 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
     for ( ; itdbg.current() ; ++itdbg )
     {
         HeaderFooterFrameset* hff = itdbg.current();
-        kdDebug(32002) << "  " << hff->m_frameset->getName()
+        kdDebug(32002) << " * " << hff->m_frameset->getName()
                        << " pages: " << hff->m_startAtPage << "-" << (hff->m_endAtPage==-1?QString("(all)"):QString::number(hff->m_endAtPage))
                        << " page selection: " << (hff->m_oddEvenAll==HeaderFooterFrameset::Odd ? "odd" :
                                                   hff->m_oddEvenAll==HeaderFooterFrameset::Even ? "even" : "all")
@@ -45,16 +40,14 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
 #endif
     double ptColumnWidth = doc->ptColumnWidth();
 
-    // Prepare page array
-    //PageInfo* pagesArray = new PageInfo[ toPage - fromPage + 1 ];
+    // The main loop is: "for each page". We lay out each page separately.
     for ( int pageNum = fromPage ; pageNum <= toPage ; ++pageNum )
     {
-        //pagesArray[pageNum].top = doc->ptTopBorder();
-        //pagesArray[pageNum].bottom = doc->ptPaperHeight() - doc->ptBottomBorder();
         double top = pageNum * doc->ptPaperHeight() + doc->ptTopBorder();
         double bottom = doc->ptPaperHeight() - doc->ptBottomBorder();
         double left = doc->ptLeftBorder();
         double right = doc->ptPaperWidth() - doc->ptRightBorder();
+        Q_ASSERT( left < right );
 
         // For each frameset.... we have to assume they have been correctly sorted
         QPtrListIterator<HeaderFooterFrameset> it( info );
@@ -76,21 +69,25 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
                     rect.setRect( left, bottom - it.current()->m_height, right - left, it.current()->m_height );
                     bottom -= it.current()->m_height + it.current()->m_spacing;
                 }
+                Q_ASSERT( bottom > 0 );
+                Q_ASSERT( top < bottom );
 #ifdef DEBUG_FRAMELAYOUT
                 kdDebug(32002) << "     rect:" << rect << "   - new top:bottom: " << top << ":" << bottom << endl;
 #endif
                 resizeOrCreateHeaderFooter( fs, frameNum, rect );
             }
         }
+
         // All headers/footers/footnotes for this page have been done,
         // now resize the frame from the main textframeset (if any)
         if ( mainTextFrameSet )
         {
             for ( int col = 0; col < numColumns; col++ ) {
+                Q_ASSERT( bottom > top );
                 // Calculate wanted rect for this frame
                 KoRect rect( left + col * ( ptColumnWidth + doc->ptColumnSpacing() ),
                              top, ptColumnWidth, bottom - top );
-                int frameNum = pageNum * numColumns + col;
+                uint frameNum = pageNum * numColumns + col;
 #ifdef DEBUG_FRAMELAYOUT
                 kdDebug(32002) << " KWFrameLayout::layout page " << pageNum << " resizing main text frame " << frameNum << " to " << rect << endl;
 #endif
@@ -106,6 +103,7 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
             }
         }
     }
+
     // Final cleanup: delete all frames after m_currentFrame in each frameset
     QPtrListIterator<HeaderFooterFrameset> it( info );
     for ( ; it.current() ; ++it )
@@ -119,8 +117,6 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
             fs->delFrame( fs->getNumFrames() - 1 );
         }
     }
-
-    //delete [] pagesArray;
 }
 
 void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect )

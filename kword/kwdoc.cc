@@ -504,6 +504,8 @@ double KWDocument::ptColumnWidth() const
 class KWFootNoteFrameSetList : public QPtrList<KWFootNoteFrameSet>
 {
 protected:
+    // Compare the order of the associated variables - and return a REVERSED result
+    // (we want the footnotes from bottom to top)
     virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
     {
         KWFootNoteFrameSet* fsa = ((KWFootNoteFrameSet *)a);
@@ -515,7 +517,7 @@ protected:
             int numa = fsa->footNoteVariable()->num();
             int numb = fsb->footNoteVariable()->num();
             if (numa == numb) return 0;
-            if (numa < numb) return -1;
+            if (numa > numb) return -1; // > instead of <, to reverse the list.
             return 1;
         }
         return -1; // whatever
@@ -523,15 +525,13 @@ protected:
 };
 
 /* append headers and footers if needed, and create enough pages for all the existing frames */
-void KWDocument::recalcFrames()
+void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
 {
     //kdDebug(32002) << "KWDocument::recalcFrames" << endl;
     if ( m_lstFrameSet.isEmpty() )
         return;
 
     KWFrameSet *frameset = m_lstFrameSet.getFirst();
-
-    double ptColumnWidth = this->ptColumnWidth();
 
     KWTextFrameSet *firstHeader = 0L, *evenHeader = 0L, *oddHeader = 0L;
     KWTextFrameSet *firstFooter = 0L, *evenFooter = 0L, *oddFooter = 0L;
@@ -675,11 +675,11 @@ void KWDocument::recalcFrames()
     // In the list it will have to be from top and from bottom:
     // Header, Footer, Footnote from bottom to top
 
+    footnotesList.sort();
     QPtrListIterator<KWFootNoteFrameSet> fnfsIt( footnotesList );  // fnfs == "footnote frameset"
     for ( ; fnfsIt.current() ; ++fnfsIt )
     {
         KWFootNoteFrameSet* fnfs = fnfsIt.current();
-        KWFootNoteVariable* var = fnfs->footNoteVariable();
         KWFrame* frame = fnfs->getNumFrames() > 0 ? fnfs->frame(0) : 0L;
         int pageNum = frame ? frame->pageNum() : 0;
         headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
@@ -747,7 +747,9 @@ void KWDocument::recalcFrames()
         // so the headers and footers are at the edge of the page....
     }
 
-    KWFrameLayout::layout( this, frameset, m_pageColumns.columns, headerFooterList, 0, m_pages-1 );
+    if ( toPage == -1 )
+        toPage = m_pages - 1;
+    KWFrameLayout::layout( this, frameset, m_pageColumns.columns, headerFooterList, fromPage, toPage );
 
 }
 
