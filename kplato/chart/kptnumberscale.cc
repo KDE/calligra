@@ -32,6 +32,9 @@ namespace KPlato
 
 KPTNumberScale::KPTNumberScale(QWidget *parent, bool left, int offsetTop, int offsetBottom)
     : QCanvasView(parent),
+      m_rangeMin(0.0),
+      m_rangeMax(100.0),
+      m_prec(0),
       m_min(0),
       m_max(0),
       m_left(left),
@@ -112,7 +115,7 @@ void KPTNumberScale::draw() {
         //kdDebug()<<k_funcinfo<<"range="<<range<<" rest="<<rest<<" numInter="<<numInter<<" unitsPrInterval="<<unitsPrInterval<<endl;
         double v = m_rangeMin;
         for (int i = 0; i <= numInter; i++) {
-            kdDebug()<<k_funcinfo<<v<<endl;
+            //kdDebug()<<k_funcinfo<<v<<endl;
             l.append(QString().setNum(v, 'f', m_prec));
             m_intervals.append(v);
             m_max = v;
