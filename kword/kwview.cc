@@ -115,7 +115,7 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
 
     dcop = 0;
     dcopObject(); // build it
-
+    m_personalShortCut=0L;
     fsInline=0L;
     m_spell.kspell = 0;
     m_border.left.color = white;
@@ -254,6 +254,7 @@ KWView::~KWView()
     }
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
+    delete m_personalShortCut;
     delete m_sbPageLabel;
     delete fsInline;
     delete dcop;
@@ -1107,8 +1108,14 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
     QValueList<KAction *> actions = lst;
     QValueList<KAction *>::ConstIterator it = lst.begin();
     QValueList<KAction *>::ConstIterator end = lst.end();
+    delete m_personalShortCut;
+    m_personalShortCut = new QMap<QString, KShortcut>();
     for (; it != end; ++it )
     {
+        if ( !(*it)->shortcut().toString().isEmpty())
+        {
+            m_personalShortCut->insert((*it)->text(), KShortcut( (*it)->shortcut()));
+        }
         delete *it;
     }
 
@@ -1118,6 +1125,9 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
     {
         createExpressionActions( parentMenu,*it );
     }
+    delete m_personalShortCut;
+    m_personalShortCut=0L;
+
 }
 
 void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& filename )
@@ -1160,8 +1170,16 @@ void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& fi
                         if ( e2.tagName() == "Expression" )
                         {
                             QString text = i18n( e2.namedItem( "Text" ).toElement().text().utf8() );
-                            KAction * act = new KAction( text, 0, this, SLOT( insertExpression() ),
+                            KAction * act = 0L;
+                            if ( m_personalShortCut && m_personalShortCut->contains(text))
+                            {
+                                act = new KAction( text, (*m_personalShortCut)[text], this, SLOT( insertExpression() ),
                                                          actionCollection(), "expression-action" );
+
+                            }
+                            else
+                                act = new KAction( text, 0, this, SLOT( insertExpression() ),
+                                                   actionCollection(), "expression-action" );
                             act->setGroup("expression-action");
                             subMenu->insert( act );
                         }

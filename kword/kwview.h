@@ -29,6 +29,7 @@
 
 #include <koPageLayoutDia.h>
 #include <koView.h>
+#include <kshortcut.h>
 class DCOPObject;
 
 class KWDocStruct;
@@ -641,6 +642,8 @@ private:
      } m_spell;
 
     KWFrameSet *fsInline;
+    QMap<QString, KShortcut> *m_personalShortCut;
+
 };
 
 /******************************************************************/
