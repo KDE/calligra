@@ -6,7 +6,7 @@ libkarbonpngexport_la_LIBADD = \
 	../../../karbon/libkarbonpart.la
 
 INCLUDES = \
-	$(KOFFICE_INCLUDES) \
+	$(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) \
 	-I$(top_srcdir)/karbon \
 	-I$(top_srcdir)/karbon/core \
 	-I$(top_srcdir)/karbon/render \
