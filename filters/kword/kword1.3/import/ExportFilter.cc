@@ -1036,6 +1036,11 @@ QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) c
 bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table, int firstRowNumber )
 {
 #ifdef ALLOW_TABLE
+    // ### TODO: rows
+    // ### TODO:  be careful that covered-cell can be due vertical spanning.
+    // ### TODO:  One way to find is the difference between the row variables (or against the last known column)
+    // ### TODO:  be careful that fully-covered rows might exist.
+    
     *m_streamOut << "<table:table-row>\n";
     int rowCurrent = firstRowNumber;
 
@@ -1046,7 +1051,6 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
     for ( QValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
         itCell != table.cellList.end(); ++itCell)
     {
-        // ### TODO: rows
         if ( rowCurrent != (*itCell).row )
         {
             rowCurrent = (*itCell).row;
@@ -1851,6 +1855,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
             }
         case LayoutData::LS_MULTIPLE:
             {
+                // ### FIXME: lineSpacing is not an integer anymore
                 const QString mult ( QString::number( qRound( layout.lineSpacing ) * 100 ) );
                 props += "fo:line-height=\"";
                 props += mult;
