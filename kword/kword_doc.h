@@ -58,9 +58,6 @@ class QPrinter;
 #include <koPageLayoutDia.h>
 #include <koTemplateChooseDia.h>
 
-#define MIME_TYPE "application/x-kword"
-#define KWordRepoID "IDL:KWord/KWordDocument:1.0"
-
 /******************************************************************/
 /* Class: KWordChild                                              */
 /******************************************************************/
@@ -300,7 +297,7 @@ public:
   void copySelectedText();
   void setFormat(KWFormat &_format);
 
-  void paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWFormat *_format = 0L);
+  void paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWFormat *_format = 0L,const QString &_mime = "text/plain");
 
   void appendPage(unsigned int _page,QPainter &_painter);
 

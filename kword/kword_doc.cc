@@ -35,6 +35,7 @@
 #include <unistd.h>
 
 #include "kword_doc.moc"
+#include "clipbrd_dnd.h"
 
 #include <qevent.h>
 
@@ -2305,6 +2306,8 @@ void KWordDocument::copySelectedText()
 
   QString clipString = "";
 
+  KWParag *firstParag = 0L,*parag = 0L;
+  
   if (selStart.getParag() == selEnd.getParag())
     {
       if (selStart.getTextPos() < selEnd.getTextPos())
@@ -2318,7 +2321,10 @@ void KWordDocument::copySelectedText()
 	  tmpFC2 = selStart;
 	}
 
-      clipString = tmpFC1.getParag()->getKWString()->toString(tmpFC1.getTextPos(),tmpFC2.getTextPos() - tmpFC1.getTextPos());
+      clipString = tmpFC1.getParag()->getKWString()->toString(tmpFC1.getTextPos(),tmpFC2.getTextPos() - tmpFC1.getTextPos() - 1);
+      firstParag = new KWParag(*tmpFC1.getParag());
+      firstParag->deleteText(tmpFC2.getTextPos(),firstParag->getTextLen() - tmpFC2.getTextPos());
+      firstParag->deleteText(0,tmpFC1.getTextPos());
     }
   else
     {
@@ -2357,7 +2363,26 @@ void KWordDocument::copySelectedText()
     }
 
   QClipboard *cb = QApplication::clipboard();
-  cb->setText(clipString.data());
+  
+  string clip_string;
+  tostrstream out(clip_string);
+  
+  parag = firstParag;
+  out << otag << "<PARAGRAPHS>" << endl;
+  while (parag)
+    {
+      out << otag << "<PARAGRAPH>" << endl;
+      parag->save(out);
+      out << etag << "</PARAGRAPH>" << endl;
+      parag = parag->getNext();
+    }
+  out << etag << "</PARAGRAPHS>" << endl;
+  
+  KWordDrag *d = new KWordDrag;
+  d->setPlain(clipString);
+  d->setKWord(clip_string.c_str());
+  
+  cb->setData(d);
 }
 
 /*================================================================*/
@@ -2414,49 +2439,113 @@ void KWordDocument::setFormat(KWFormat &_format)
 }
 
 /*================================================================*/
-void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWFormat *_format = 0L)
+void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWFormat *_format = 0L,const QString &_mime = "text/plain")
 {
   QStrList strList;
+  KWParag *firstParag = 0L,*parag = 0L,*parag2 = 0L;
   int index;
   QPainter painter;
 
   if (_string.isEmpty()) return;
 
-  while (true)
+  // ----------------- MIME type text/plain
+  if (_mime == "text/plain")
     {
-      index = _string.find('\n',0);
-      if (index == -1) break;
+      while (true)
+	{
+	  index = _string.find('\n',0);
+	  if (index == -1) break;
 
-      if (index > 0 && !_string.left(index).simplifyWhiteSpace().isEmpty())
-	strList.append(QString(_string.left(index)));
-      _string.remove(0,index + 1);
+	  if (index > 0 && !_string.left(index).simplifyWhiteSpace().isEmpty())
+	    strList.append(QString(_string.left(index)));
+	  _string.remove(0,index + 1);
+	}
+
+      if (!_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty())
+	strList.append(QString(_string));
+    }
+  // -------------- MIME type application/x-kword
+  else if (_mime == MIME_TYPE)
+    {
+      istrstream in(_string.ascii());
+      if (!in)
+	return;
+	
+      KOMLStreamFeed feed(in);
+      KOMLParser parser(&feed);
+      
+      string tag;
+      vector<KOMLAttrib> lst;
+      string name;
+
+      if (!parser.open("PARAGRAPHS",tag))
+	{
+	  cerr << "Missing PARAGRAPHS" << endl;
+	  return;
+	}
+
+      while (parser.open(0L,tag))
+	{
+	  KOMLParser::parseTag(tag.c_str(),name,lst);
+
+	  if (name == "PARAGRAPH")
+	    {
+	      KOMLParser::parseTag(tag.c_str(),name,lst);
+	      vector<KOMLAttrib>::const_iterator it = lst.begin();
+	      for(;it != lst.end();it++)
+		{
+		}
+	  
+	      parag2 = new KWParag(dynamic_cast<KWTextFrameSet*>(getFrameSet(_fc->getFrameSet() - 1)),this,0L,0L,defaultParagLayout);
+	      parag2->load(parser,lst);
+	      if (!firstParag)
+		firstParag = parag2;
+	      parag2->setPrev(parag);
+	      if (parag) parag->setNext(parag2);
+	      parag = parag2;
+	    }
+	  else ;
+	  
+	  if (!parser.close(tag))
+	    return;
+	
+	}
     }
 
-  if (!_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty())
-    strList.append(QString(_string));
-
-  if (!strList.isEmpty())
+  if ((_mime == "text/plain" && !strList.isEmpty()) || (_mime == MIME_TYPE && firstParag))
     {
-      if (strList.count() == 1)
+      if ((_mime == "text/plain" && strList.count() == 1) || (_mime == MIME_TYPE && !firstParag->getNext()))
 	{
-	  QString str;
-	  unsigned int len;
-	  KWFormat *format = _format;
-	  if (!format)
+	  if (_mime == "text/plain")
 	    {
-	      format = new KWFormat(this);
-	      format->setDefaults(this);
-	    }
-	  str = QString(strList.at(0));
-	  len = str.length();
-	  _fc->getParag()->insertText(_fc->getTextPos(),str);
-	  _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
+	      QString str;
+	      unsigned int len;
+	      KWFormat *format = _format;
+	      if (!format)
+		{
+		  format = new KWFormat(this);
+		  format->setDefaults(this);
+		}
+	      str = QString(strList.at(0));
+	      len = str.length();
+	      _fc->getParag()->insertText(_fc->getTextPos(),str);
+	      _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
 
-	  painter.begin(_page);
-	  for (unsigned int j = 0;j < len;j++)
-	    _fc->cursorGotoRight(painter);
-	  painter.end();
-	  delete format;
+	      painter.begin(_page);
+	      for (unsigned int j = 0;j < len;j++)
+		_fc->cursorGotoRight(painter);
+	      painter.end();
+	      delete format;
+	    }
+	  else
+	    {
+	      parag = _fc->getParag();
+	      parag2 = parag->getNext();
+	      parag->setNext(firstParag);
+	      firstParag->setNext(parag2);
+	      firstParag->setPrev(parag);
+	      if (parag2) parag2->setPrev(parag);
+	    }
 	}
       else if (strList.count() == 2)
 	{

@@ -130,7 +130,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 {
   if (!hasFocus())
     gui->getView()->sendFocusEvent();
-      
+
   mouseMoved = true;
 
   if (mousePressed)
@@ -580,7 +580,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 void KWPage::mousePressEvent(QMouseEvent *e)
 {
   if (gui->getView()) gui->getView()->sendFocusEvent();
-  
+
   if (editNum != -1)
     {
       if (doc->getFrameSet(editNum)->getFrameType() == FT_PART)
@@ -763,8 +763,17 @@ void KWPage::mousePressEvent(QMouseEvent *e)
     case MidButton:
       {
 	QClipboard *cb = QApplication::clipboard();
-	if (cb->text())
-	  editPaste(cb->text());
+
+	if (cb->data()->provides(MIME_TYPE))
+	  {
+	    if (cb->data()->encodedData(MIME_TYPE).size())
+	      editPaste(cb->data()->encodedData(MIME_TYPE),MIME_TYPE);
+	  }
+	else if (cb->data()->provides("text/plain"))
+	  {
+	    if (cb->data()->encodedData("text/plain").size())
+	      editPaste(cb->data()->encodedData("text/plain"));
+	  }
       } break;
     case RightButton:
       {
@@ -1112,9 +1121,9 @@ void KWPage::editCopy()
 }
 
 /*================================================================*/
-void KWPage::editPaste(QString _string)
+void KWPage::editPaste(QString _string,const QString &_mime = "text/plain")
 {
-  doc->paste(fc,_string,this);
+  doc->paste(fc,_string,this,0L,_mime);
   buffer.fill(white);
   doc->setSelection(false);
   recalcText();

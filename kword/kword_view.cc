@@ -34,6 +34,9 @@
 
 #include <kapp.h>
 
+#include "clipbrd_dnd.h"
+#include "defs.h"
+
 #define DEBUG
 
 // Qt bug
@@ -682,9 +685,18 @@ void KWordView::editCopy()
 void KWordView::editPaste()
 {
   QClipboard *cb = QApplication::clipboard();
-  if (cb->text())
-    gui->getPaperWidget()->editPaste(cb->text());
-
+  
+  if (cb->data()->provides(MIME_TYPE))
+    {
+      if (cb->data()->encodedData(MIME_TYPE).size())
+	gui->getPaperWidget()->editPaste(cb->data()->encodedData(MIME_TYPE),MIME_TYPE);
+    }
+  else if (cb->data()->provides("text/plain"))
+    {
+      if (cb->data()->encodedData("text/plain").size())
+	gui->getPaperWidget()->editPaste(cb->data()->encodedData("text/plain"));
+    }
+  
   sendFocusEvent();
 }
 

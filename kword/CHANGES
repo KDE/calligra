@@ -905,3 +905,13 @@ Reggie, 9.3.1999:
 Reggie, 10.3.1999:
 ------------------
 - Fixes
+
+Reggie, 11.3.1999:
+------------------
+- Implemented KWordDrag which will be used for storing data on the clipboard and for DnD
+- Using new features (QMimeSource stuff) of the QClipboard
+- Text is copied as text/plain and in native KWord format (application/x-kword) to the clipboard (using KWordDrag as QMimeSource)
+  (only partly implemented)
+- When pasting text: If native KWord format (application/x-kword) is provided, this is used, else text/plain is used
+  (only partly implemented) 
+=> when cut/copy/pasting between or in KWord documents, formatting is copied/pasted too now

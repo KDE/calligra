@@ -158,7 +158,7 @@ public:
 
   void editCut();
   void editCopy();
-  void editPaste(QString _string);
+  void editPaste(QString _string,const QString &_mime = "text/plain");
 
   void recalcText();
   void recalcWholeText(bool _cursor = false,bool _fast = false);
@@ -200,7 +200,7 @@ public:
   KWGroupManager *getTable();
 
   void insertVariable(VariableType type);
-  
+
 public slots:
   void newLeftIndent(int _left);
   void newFirstIndent(int _first);

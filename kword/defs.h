@@ -4,6 +4,9 @@
 #include <iostream.h>
 #include <qstring.h>
 
+#define MIME_TYPE "application/x-kword"
+#define KWordRepoID "IDL:KWord/KWordDocument:1.0"
+
 // #define ZOOM(vx) ((vx)*ZoomZ/ZoomN)
 #define ZOOM(vx) (vx)
 // #define UNZOOM(px) ((px)*ZoomN/ZoomZ)
@@ -60,19 +63,19 @@ public:
     _inch = unit._inch;
   }
 
-  inline void setPT(unsigned int __pt)  
+  inline void setPT(unsigned int __pt)
     { _pt = __pt; _mm = POINT_TO_MM(_pt); _inch = POINT_TO_INCH(_pt); }
-  inline void setMM(float ___mm) 
+  inline void setMM(float ___mm)
     { _mm = ___mm; _pt = MM_TO_POINT(_mm); _inch = MM_TO_INCH(_mm); }
-  inline void setINCH(float __inch) 
+  inline void setINCH(float __inch)
     { _inch = __inch; _mm = INCH_TO_MM(_inch); _pt = INCH_TO_POINT(_inch); }
-  inline void setPT_MM(unsigned int __pt,float ___mm) 
+  inline void setPT_MM(unsigned int __pt,float ___mm)
     { _pt = __pt; _mm = ___mm; _inch = MM_TO_INCH(_mm); }
-  inline void setPT_INCH(unsigned int __pt,float __inch) 
+  inline void setPT_INCH(unsigned int __pt,float __inch)
     { _pt = __pt; _inch = __inch; _mm = INCH_TO_MM(_inch); }
-  inline void setMM_INCH(float ___mm,float __inch) 
+  inline void setMM_INCH(float ___mm,float __inch)
     { _mm = ___mm; _inch = __inch; _pt = MM_TO_POINT(_mm); }
-  inline void setPT_MM_INCH(unsigned int __pt,float ___mm,float __inch) 
+  inline void setPT_MM_INCH(unsigned int __pt,float ___mm,float __inch)
     { _pt = __pt; _mm = ___mm; _inch = __inch; }
 
   inline const unsigned int pt() { return _pt; }
@@ -82,7 +85,7 @@ public:
   KWUnit &operator=(const KWUnit &unit);
 
   static const KWUnits unitType(const QString _unit);
-    
+
 protected:
   unsigned int _pt;
   float _mm;
@@ -90,7 +93,7 @@ protected:
 
 };
 
-inline KWUnit &KWUnit::operator=(const KWUnit &unit) 
+inline KWUnit &KWUnit::operator=(const KWUnit &unit)
 {
   _pt = unit._pt;
   _mm = unit._mm;
