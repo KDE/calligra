@@ -76,6 +76,11 @@ public:
         const double width, const double height, const int orientation);
     virtual bool doFullPaperBorders (const double top, const double left,
         const double bottom, const double right);
+    /**
+     * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
+     * @since 1.4
+     */
+    virtual bool doFullPaperFormatOther ( const int columns, const double columnspacing, const int numPages );        
     virtual bool doOpenStyles(void);
     virtual bool doCloseStyles(void);
     virtual bool doFullDefineStyle(LayoutData& layout);
@@ -159,9 +164,10 @@ private:
     QMap<QString,QString> m_mapTextStyleKeys; ///< Map of keys to automatic text styles
     QMap<QString,QString> m_mapParaStyleKeys; ///< Map of keys to automatic paragraph styles
     VariableSettingsData m_varSet; ///< KWord's \<VARIABLESETTINGS\>
+    int m_numPages; ///< Number of pages @note if the input file comes from a filter, this data is often missing.
+    double m_columnspacing; ///< Spacing between columns
+    int m_columns; ///< Number of columns
 private: // Variable that would need a link/glue from libexport
-    double m_columnspacing; ///< Spacing between columns \todo: connection to libexport
-    int m_columns; ///< Number of columns \todo: connection to libexport
     QValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors  \todo: connection to libexport
     QValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables  \todo: connection to libexport
 

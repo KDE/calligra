@@ -513,8 +513,6 @@ void OOWriterWorker::writeMetaXml(void)
 
     zipWriteData( "  <meta:document-statistic" );
 
-// ### TODO: m_numPages is not given to the Worker
-#if 0
     // KWord files coming from import filters mostly do not have no page count
     if ( m_numPages > 0 )
     {
@@ -522,7 +520,6 @@ void OOWriterWorker::writeMetaXml(void)
         zipWriteData( QString::number ( m_numPages ) );
         zipWriteData( "\"" );
     }
-#endif
 
     zipWriteData( " meta:image-count=\"" ); // This is not specified in the OO specification section 2.1.19
     zipWriteData( QString::number ( m_pictureNumber ) );
@@ -2095,6 +2092,14 @@ bool OOWriterWorker::doFullPaperBorders (const double top, const double left,
     m_paperBorderLeft=left;
     m_paperBorderBottom=bottom;
     m_paperBorderRight=right;
+    return true;
+}
+
+bool OOWriterWorker::doFullPaperFormatOther ( const int columns, const double columnspacing, const int numPages )
+{
+    m_columns = columns;
+    m_columnspacing = columnspacing;
+    m_numPages = numPages;
     return true;
 }
 
