@@ -35,6 +35,7 @@
 bool MapEntities::addEntity(const QString& strName, const uint value)
 {
     insert(strName,value);
+    return true;
 }
 
 bool MapEntities::initMapEntities (void)
