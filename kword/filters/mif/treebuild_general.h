@@ -11,6 +11,16 @@
 #include <list>
 #include <string>
 
+class ShapeRect;
+class BRect;
+class GroupID;
+class DashedPattern;
+class RunAroundGap;
+class RunAroundType;
+class Separation;
+class PenWidth;
+class ObColor;
+class Fill;
 class Unique
 {
 public:
@@ -171,5 +181,98 @@ class KumihanCatalog
 {
 	//PENDING(kalle) Stuff missing here
 };
+
+
+class ShapeRect
+{
+public:
+	ShapeRect( double x, const char* unitx,
+			   double y, const char* unity,
+			   double w, const char* unitw,
+			   double h, const char* unith );
+
+private:
+	double _x;
+	double _y;
+	double _w;
+	double _h;
+};
+
+
+class BRect
+{
+public:
+	BRect( double x, const char* unitx,
+		   double y, const char* unity,
+		   double w, const char* unitw,
+		   double h, const char* unith );
+
+private:
+	double _x;
+	double _y;
+	double _w;
+	double _h;
+};
+
+
+class RectangleElement
+{
+public:
+	enum RectangleElementType { T_Unique, T_Separation, T_ObColor,
+								T_ShapeRect, T_BRect, T_Pen,
+								T_PenWidth, T_Fill, T_DashedPattern,
+								T_RunAroundGap, T_RunAroundType, T_GroupID };
+
+	RectangleElement( Unique* element );
+	RectangleElement( Separation* element );
+	RectangleElement( ObColor* element );
+	RectangleElement( ShapeRect* element );
+	RectangleElement( BRect* element );
+	RectangleElement( Fill* element );
+	RectangleElement( Pen* element );
+	RectangleElement( PenWidth* element );
+	RectangleElement( DashedPattern* element );
+	RectangleElement( RunAroundType* element );
+	RectangleElement( RunAroundGap* element );
+	RectangleElement( GroupID* element );
+	
+	RectangleElementType type() const { return _type; }
+
+private:
+	RectangleElementType _type;
+
+	union {
+		Unique* _unique;
+		Separation* _separation;
+		ObColor* _obcolor;
+		ShapeRect* _shaperect;
+		BRect* _brect;
+		Fill* _fill;
+		Pen* _pen;
+		PenWidth* _penwidth;
+		DashedPattern* _dashedpattern;
+		RunAroundGap* _runaroundgap;
+		RunAroundType* _runaroundtype;
+		GroupID* _groupid;
+	};
+};
+
+
+
+typedef list<RectangleElement*> RectangleElementList;
+
+class Rectangle
+{
+public:
+	Rectangle( RectangleElementList* elements );
+
+	RectangleElementList* elements() const { return _elements; }
+
+private:
+	RectangleElementList* _elements;
+};
+
+typedef list<Rectangle*> RectangleList;
+
 
 #endif

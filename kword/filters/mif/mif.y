@@ -24,6 +24,94 @@ void warning( char*s, char* t );
 	int    integer;
 	char*  string;
 	int    cmd;
+	Frame* mif_frame;
+	FrameElement* mif_frameelement;
+	FrameElementList* mif_frameelementlist;
+	Tag* mif_tag;
+	Fill* mif_fill;
+	PenWidth* mif_penwidth;
+	Separation* mif_separation;
+	ObColor* mif_obcolor;
+	DashedPattern* mif_dashedpattern;
+	DashedPatternElement* mif_dashedpatternelement;
+	DashedPatternElementList* mif_dashedpatternelementlist;
+	DashedStyle* mif_dashedstyle;
+	DashSegment* mif_dashsegment;
+	NumSegments* mif_numsegments;
+	Angle* mif_angle;
+	RunAroundGap* mif_runaroundgap;
+	RunAroundType* mif_runaroundtype;
+	ShapeRect* mif_shaperect;
+	BRect* mif_brect;
+	FrameType* mif_frametype;
+	NSOffset* mif_nsoffset;
+	BLOffset* mif_bloffset;
+	AnchorAlign* mif_anchoralign;
+	Cropped* mif_cropped;
+	ImportObject* mif_importobject;
+	ImportObjectElement* mif_importobjectelement;
+	ImportObjectElementList* mif_importobjectelementlist;
+	ExternalData* mif_externaldata;
+	BitmapDPI* mif_bitmapdpi;
+	ImportObFile* mif_importobfile;
+	FlipLR* mif_fliplr;
+	NativeOrigin* mif_nativeorigin;
+	Math* mif_math;
+	MathElement* mif_mathelement;
+	MathElementList* mif_mathelementlist;
+	MathFullForm* mif_mathfullform;
+	MathLineBreak* mif_mathlinebreak;
+	MathOrigin* mif_mathorigin;
+	MathAlignment* mif_mathalignment;
+	MathSize* mif_mathsize;
+	PageElementList* mif_pageelementlist;
+	PageElement* mif_pageelement;
+	TextRect* mif_textrect;
+	TextLine* mif_textline;
+	PolyLine* mif_polyline;
+	PageNum* mif_pagenum;
+	PageBackground* mif_pagebackground;
+	Rectangle* mif_rectangle;
+	Polygon* mif_polygon;
+	Ellipse* mif_ellipse;
+	EllipseElement* mif_ellipseelement;
+	EllipseElementList* mif_ellipseelementlist;
+	Group* mif_group;
+	GroupElement* mif_groupelement;
+	GroupElementList* mif_groupelementlist;
+	GroupID* mif_groupid;
+	RectangleElement* mif_rectangleelement;
+	RectangleElementList* mif_rectangleelementlist;
+	TextRectElement* mif_textrectelement;
+	TextRectElementList* mif_textrectelementlist;
+	TRNumColumns* mif_trnumcolumns;
+	TRColumnGap* mif_trcolumngap;
+	TRColumnBalance* mif_trcolumnbalance;
+	TRSideheadWidth* mif_trsideheadwidth;
+	TRSideheadGap* mif_trsideheadgap;
+	TRSideheadPlacement* mif_trsideheadplacement;
+	TRNext* mif_trnext;
+	TextLineElement* mif_textlineelement;
+	TextLineElementList* mif_textlineelementlist;
+	TLOrigin* mif_tlorigin;
+	TLAlignment* mif_tlalignment;
+	PolyLineElement* mif_polylineelement;
+	PolyLineElementList* mif_polylineelementlist;
+	HeadCap* mif_headcap;
+	TailCap* mif_tailcap;
+	ArrowStyle* mif_arrowstyle;
+	ArrowStyleElement* mif_arrowstyleelement;
+	ArrowStyleElementList* mif_arrowstyleelementlist;
+	TipAngle* mif_tipangle;
+	BaseAngle* mif_baseangle;
+	Length* mif_length;
+	HeadType* mif_headtype;
+	ScaleHead* mif_scalehead;
+	ScaleFactor* mif_scalefactor;
+	NumPoints* mif_numpoints;
+	Point* mif_point;
+	PolygonElement* mif_polygonelement;
+	PolygonElementList* mif_polygonelementlist;
 	KumihanCatalog* mif_kumihancatalog;
 	MarkerTypeCatalog* mif_markertypecatalog;
 	MType* mif_mtype;
@@ -159,36 +247,36 @@ void warning( char*s, char* t );
 	DocumentWindowRect* mif_dwindowrect;
 	String* mif_string;
 	Char* mif_char;
-TextRectID* mif_textrectid;
-Variable* mif_variable;
-VariableElement* mif_variableelement;
-VariableElementList* mif_variableelementlist;
-ATbl* mif_atbl;
-AFrame* mif_aframe;
-Marker* mif_marker;
-MarkerElement* mif_markerelement;
-MarkerElementList* mif_markerelementlist;
-XRefEnd* mif_xrefend;
-Para* mif_para;
-ParaElement* mif_paraelement;
-ParaElementList* mif_paraelementlist;
-ParaLine* mif_paraline;
-ParaLineElement* mif_paralineelement;
-ParaLineElementList* mif_paralineelementlist;
-FNote* mif_fnote;
-FNoteElement* mif_fnoteelement;
-FNoteElementList* mif_fnoteelementlist;
-Unique* mif_unique;
-FrameID* mif_id;
-Pen* mif_pen;
-Notes* mif_notes;
-NotesElement* mif_noteselement;
-NotesElementList* mif_noteselementlist;
-XRefSrcText* mif_xrefsrctext;
-XRefSrcFile* mif_xrefsrcfile;
-XRefSrcIsElem* mif_xrefsrciselem;
-XRefLastUpdate* mif_xreflastupdate;
-VariableName* mif_variablename;
+	TextRectID* mif_textrectid;
+	Variable* mif_variable;
+	VariableElement* mif_variableelement;
+	VariableElementList* mif_variableelementlist;
+	ATbl* mif_atbl;
+	AFrame* mif_aframe;
+	Marker* mif_marker;
+	MarkerElement* mif_markerelement;
+	MarkerElementList* mif_markerelementlist;
+	XRefEnd* mif_xrefend;
+	Para* mif_para;
+	ParaElement* mif_paraelement;
+	ParaElementList* mif_paraelementlist;
+	ParaLine* mif_paraline;
+	ParaLineElement* mif_paralineelement;
+	ParaLineElementList* mif_paralineelementlist;
+	FNote* mif_fnote;
+	FNoteElement* mif_fnoteelement;
+	FNoteElementList* mif_fnoteelementlist;
+	Unique* mif_unique;
+	FrameID* mif_id;
+	Pen* mif_pen;
+	Notes* mif_notes;
+	NotesElement* mif_noteselement;
+	NotesElementList* mif_noteselementlist;
+	XRefSrcText* mif_xrefsrctext;
+	XRefSrcFile* mif_xrefsrcfile;
+	XRefSrcIsElem* mif_xrefsrciselem;
+	XRefLastUpdate* mif_xreflastupdate;
+	VariableName* mif_variablename;
 	VariableDef* mif_variabledef;
 	XRefName* mif_xrefname;
 	XRef* mif_xref;
@@ -197,6 +285,12 @@ VariableName* mif_variablename;
 	Font* mif_font;
 	FontElementList* mif_fontelementlist;
 	FontElement* mif_fontelement;
+	Page* mif_page;
+	PageType* mif_pagetype;
+	PageTag* mif_pagetag;
+	PageSize* mif_pagesize;
+	PageOrientation* mif_pageorientation;
+	PageAngle* mif_pageangle;
 	TextFlow* mif_textflow;
 	TextFlowElement* mif_textflowelement;
 	TextFlowElementList* mif_textflowelementlist;
@@ -1020,7 +1114,103 @@ VariableName* mif_variablename;
 %type <mif_pgf> tag_pgf
 %type <mif_pgfelementlist> pgf_elements
 %type <mif_textflow> tag_textflow
+%type <mif_page> tag_page
+%type <mif_pageelementlist> page_elements
+%type <mif_pageelement> page_element
+%type <mif_pagetype> tag_pagetype
+%type <mif_pagetag> tag_pagetag
+%type <mif_pagesize> tag_pagesize
+%type <mif_pageorientation> tag_pageorientation
+%type <mif_pageangle> tag_pageangle
 %type <string> unit
+%type <mif_textrect> tag_textrect
+%type <mif_textline> tag_textline
+%type <mif_polyline> tag_polyline
+%type <mif_frame> tag_frame
+%type <mif_frameelementlist> frame_elements
+%type <mif_frameelement> frame_element
+%type <mif_penwidth> tag_penwidth
+%type <mif_fill> tag_fill
+%type <mif_separation> tag_separation
+%type <mif_obcolor> tag_obcolor
+%type <mif_dashedpattern> tag_dashedpattern
+%type <mif_dashedstyle> tag_dashedstyle
+%type <mif_dashedpatternelementlist> dashedpattern_elements
+%type <mif_dashedpatternelement> dashedpattern_element
+%type <mif_angle> tag_angle
+%type <mif_shaperect> tag_shaperect
+%type <mif_brect> tag_brect
+%type <mif_frametype> tag_frametype
+%type <mif_nsoffset> tag_nsoffset
+%type <mif_bloffset> tag_bloffset
+%type <mif_anchoralign> tag_anchoralign
+%type <mif_cropped> tag_cropped
+%type <mif_importobject> tag_importobject
+%type <mif_tag> tag_tag
+%type <mif_runaroundgap> tag_runaroundgap
+%type <mif_runaroundtype> tag_runaroundtype
+%type <mif_math> tag_math
+%type <mif_numsegments> tag_numsegments
+%type <mif_dashsegment> tag_dashsegment
+%type <mif_pagenum> tag_pagenum
+%type <mif_importobjectelementlist> importobject_elements
+%type <mif_importobjectelement> importobject_element
+%type <mif_importobfile> tag_importobfile
+%type <mif_fliplr> tag_fliplr
+%type <mif_nativeorigin> tag_nativeorigin
+%type <mif_bitmapdpi> tag_bitmapdpi
+%type <mif_externaldata> externaldata
+%type <mif_pagebackground> tag_pagebackground
+%type <mif_mathelementlist> math_elements
+%type <mif_mathelement> math_element
+%type <mif_mathfullform> tag_mathfullform
+%type <mif_mathlinebreak> tag_mathlinebreak
+%type <mif_mathorigin> tag_mathorigin
+%type <mif_mathalignment> tag_mathalignment
+%type <mif_mathsize> tag_mathsize
+%type <mif_rectangle> tag_rectangle
+%type <mif_polygon> tag_polygon
+%type <mif_group> tag_group
+%type <mif_ellipse> tag_ellipse
+%type <mif_rectangleelementlist> rectangle_elements
+%type <mif_rectangleelement> rectangle_element
+%type <mif_groupid> tag_groupid
+%type <mif_textrectelementlist> textrect_elements
+%type <mif_textrectelement> textrect_element
+%type <mif_trnumcolumns> tag_trnumcolumns
+%type <mif_trcolumngap> tag_trcolumngap
+%type <mif_trcolumnbalance> tag_trcolumnbalance
+%type <mif_trsideheadgap> tag_trsideheadgap
+%type <mif_trsideheadwidth> tag_trsideheadwidth
+%type <mif_trsideheadplacement> tag_trsideheadplacement
+%type <mif_trnext> tag_trnext
+%type <mif_textlineelementlist> textline_elements
+%type <mif_textlineelement> textline_element
+%type <mif_tlorigin> tag_tlorigin
+%type <mif_tlalignment> tag_tlalignment
+%type <mif_polylineelementlist> polyline_elements
+%type <mif_polylineelement> polyline_element
+%type <mif_headcap> tag_headcap
+%type <mif_tailcap> tag_tailcap
+%type <mif_arrowstyle> tag_arrowstyle
+%type <mif_arrowstyleelementlist> arrowstyle_elements
+%type <mif_arrowstyleelement> arrowstyle_element
+%type <mif_numpoints> tag_numpoints
+%type <mif_point> tag_point
+%type <mif_tipangle> tag_tipangle
+%type <mif_baseangle> tag_baseangle
+%type <mif_length> tag_length
+%type <mif_headtype> tag_headtype
+%type <mif_scalehead> tag_scalehead
+%type <mif_scalefactor> tag_scalefactor
+%type <mif_polygonelementlist> polygon_elements
+%type <mif_polygonelement> polygon_element
+%type <mif_ellipseelementlist> ellipse_elements
+%type <mif_ellipseelement> ellipse_element
+%type <mif_groupelementlist> group_elements
+%type <mif_groupelement> group_element
+
+
 
 %left '+' '-' '*' '/' UMINUS
 
@@ -1048,6 +1238,7 @@ tag:				tag_aframes
 				|	tag_markertypecatalog
 				|	tag_miffile
 				|	tag_page
+					{ pages.push_front( $1 ); }
 				|	tag_pgfcatalog
 				|	tag_rulingcatalog
 				|	tag_tblcatalog
@@ -3121,36 +3312,63 @@ aframes_element:		tag_frame
 ;
 
 tag_frame:		'<' FRAME frame_elements '>'
+				{ $$ = new Frame( $3 ); }
 ;
 
 frame_elements:	frame_element
-		|		frame_elements frame_element
+				{ FrameElementList* list = new FrameElementList;
+				  list->push_front( $1 ); $$ = list; }
+		|		frame_element frame_elements
+				{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 
 frame_element:			tag_frameid
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_unique
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_pen
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_penwidth
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_fill
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_separation
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_obcolor
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_dashedpattern
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_angle
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_shaperect
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_brect
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_frametype
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_nsoffset
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_bloffset
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_anchoralign
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_cropped
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_importobject
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_textrect
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_tag
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_polyline
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_runaroundgap
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_runaroundtype
+						{ $$ = new FrameElement( $1 ); }
 				|		tag_math
+						{ $$ = new FrameElement( $1 ); }
 ;
 
 tag_frameid:	'<' FRAMEID INTEGER '>'
@@ -3158,6 +3376,7 @@ tag_frameid:	'<' FRAMEID INTEGER '>'
 ;
 
 tag_tag:		'<' TAG SQSTRING '>'
+				{ $$ = new Tag( $3 ); }
 ;
 
 tag_unique:		'<' UNIQUE INTEGER '>'
@@ -3169,104 +3388,147 @@ tag_pen:		'<' PEN INTEGER '>'
 ;
 
 tag_fill:		'<' FILL INTEGER '>'
+				{ $$ = new Fill( $3 ); }
 ;
 
 tag_penwidth:	'<' PENWIDTH REAL unit '>'
+				{ $$ = new PenWidth( $3, $4 ); }
 ;
 
 tag_separation:	'<' SEPARATION INTEGER '>'
+				{ $$ = new Separation( $3 ); }
 ;
 
 tag_obcolor:	'<' OBCOLOR SQSTRING '>'
+				{ $$ = new ObColor( $3 ); }
 ;
 
 tag_dashedpattern:		'<' DASHEDPATTERN dashedpattern_elements '>'
+						{ $$ = new DashedPattern( $3 ); }
 ;
 
 dashedpattern_elements: dashedpattern_element
-					|	dashedpattern_elements dashedpattern_element
+						{ DashedPatternElementList* list = new DashedPatternElementList;
+						  list->push_front( $1 ); $$ = list; }
+					|	dashedpattern_element dashedpattern_elements
+						{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 dashedpattern_element:	tag_dashedstyle
+						{ $$ = new DashedPatternElement( $1 ); }
 					|	tag_numsegments
+						{ $$ = new DashedPatternElement( $1 ); }
 					|	tag_dashsegment
+						{ $$ = new DashedPatternElement( $1 ); }
 ;
 
 
 tag_dashedstyle:		'<' DASHEDSTYLE ID '>'
+						{ $$ = new DashedStyle( $3 ); }
 ;
 
 
 tag_numsegments:		'<' NUMSEGMENTS INTEGER '>'
+						{ $$ = new NumSegments( $3 ); }
 ;
 
 tag_dashsegment:		'<' DASHSEGMENT REAL unit '>'
+						{ $$ = new DashSegment( $3, $4 ); }
 ;
 
 
 tag_angle:		'<' ANGLE REAL '>'
+						{ $$ = new Angle( $3 ); }
 ;
 
 tag_runaroundgap:		'<' RUNAROUNDGAP REAL unit '>'
+						{ $$ = new RunAroundGap( $3, $4 ); }
 ;
 
 tag_runaroundtype:		'<' RUNAROUNDTYPE ID '>'
+						{ $$ = new RunAroundType( $3 ); }
 ;
 
 tag_shaperect:	'<' SHAPERECT REAL unit REAL unit REAL unit REAL unit '>'
+						{ $$ = new ShapeRect( $3, $4, $5, $6, $7, $8, $9, $10 ); }
 ;
 
 tag_brect:	'<' BRECT REAL unit REAL unit REAL unit REAL unit '>'
+						{ $$ = new BRect( $3, $4, $5, $6, $7, $8, $9, $10 ); }
 ;
 
 tag_frametype:	'<' FRAMETYPE ID '>'
+						{ $$ = new FrameType( $3 ); }
 ;
 
 tag_nsoffset:	'<' NSOFFSET REAL unit '>'
+						{ $$ = new NSOffset( $3, $4 ); }
 ;
 
 tag_bloffset:	'<' BLOFFSET REAL unit '>'
+						{ $$ = new BLOffset( $3, $4 ); }
 ;
 
 tag_anchoralign:		'<' ANCHORALIGN ID '>'
+						{ $$ = new AnchorAlign( $3 ); }
 ;
 
 tag_cropped:	'<' CROPPED ID '>'
+						{ $$ = new Cropped( $3 ); }
 ;
 
 tag_importobject:		'<' IMPORTOBJECT importobject_elements '>'
+						{ $$ = new ImportObject( $3 ); }
 ;
 
 importobject_elements:	importobject_element
-				|		importobject_elements importobject_element
+						{ ImportObjectElementList* list = new ImportObjectElementList;
+						  list->push_front( $1 ); $$ = list; }
+				|		importobject_element importobject_elements
+						{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 importobject_element:	tag_unique
+						{ $$ = new ImportObjectElement( $1 ); }
 				|		tag_importobfile
+						{ $$ = new ImportObjectElement( $1 ); }
 				|		tag_shaperect
+						{ $$ = new ImportObjectElement( $1 ); }
 				|		tag_brect
+						{ $$ = new ImportObjectElement( $1 ); }
 				|		tag_fliplr
+						{ $$ = new ImportObjectElement( $1 ); }
 				|		tag_nativeorigin
+						{ $$ = new ImportObjectElement( $1 ); }
 				|		tag_bitmapdpi
+						{ $$ = new ImportObjectElement( $1 ); }
 				|		tag_runaroundtype
+						{ $$ = new ImportObjectElement( $1 ); }
 				|		tag_runaroundgap
+						{ $$ = new ImportObjectElement( $1 ); }
 				|		externaldata
+						{ $$ = new ImportObjectElement( $1 ); }
 ;
 
 /* PENDING(kalle) Do something about this */
 externaldata:
+		{ $$ = 0; }
 ;
 
 tag_bitmapdpi:	'<' BITMAPDPI INTEGER '>'
+				{ $$ = new BitmapDPI( $3 ); }
 ;
 
 tag_importobfile:		'<' IMPORTOBFILE SQSTRING '>'
+				{ $$ = new ImportObFile( $3 ); }
 ;
 
 tag_fliplr:		'<' FLIPLR ID '>'
+				{ $$ = new FlipLR( $3 ); }
 ;
 
 tag_nativeorigin:		'<' NATIVEORIGIN REAL unit REAL unit '>'
+				{ $$ = new NativeOrigin( $3, $4, $5, $6 ); }
 ;
 
 
@@ -3275,34 +3537,50 @@ tag_nativeorigin:		'<' NATIVEORIGIN REAL unit REAL unit '>'
  * Math-related stuff
  *******************/
 tag_math:		'<' MATH math_elements '>'
+				{ $$ = new Math( $3 ); }
 ;
 
 math_elements:	math_element
+				{ MathElementList* list = new MathElementList;
+				  list->push_front( $1 ); $$ = list; }
 				| math_element math_elements
+				{ $2->push_front( $1 ); $$ = $2;  }
 ;
 
 math_element:	tag_unique
+				{ $$ = new MathElement( $1 ); }
 			|	tag_brect
+				{ $$ = new MathElement( $1 ); }
 			|	tag_mathfullform
+				{ $$ = new MathElement( $1 ); }
 			|	tag_mathlinebreak
+				{ $$ = new MathElement( $1 ); }
 			|	tag_mathorigin
+				{ $$ = new MathElement( $1 ); }
 			|	tag_mathalignment
+				{ $$ = new MathElement( $1 ); }
 			|	tag_mathsize
+				{ $$ = new MathElement( $1 ); }
 ;
 
 tag_mathfullform:		'<' MATHFULLFORM SQSTRING '>'
+						{ $$ = new MathFullForm( $3 ); }
 ;
 
 tag_mathlinebreak:		'<' MATHLINEBREAK REAL unit '>'
+						{ $$ = new MathLineBreak( $3, $4 ); }
 ;
 
 tag_mathorigin:			'<' MATHORIGIN REAL unit REAL unit '>'
+						{ $$ = new MathOrigin( $3, $4, $5, $6 ); }
 ;
 
 tag_mathalignment:		'<' MATHALIGNMENT ID '>'
+						{ $$ = new MathAlignment( $3 ); }
 ;
 
 tag_mathsize:			'<' MATHSIZE ID '>'
+						{ $$ = new MathSize( $3 ); }
 ;
 
 
@@ -3604,276 +3882,445 @@ tag_xrefend:	'<' XREFEND '>'
  * Page-related stuff
  ******************************/
 tag_page:		'<' PAGE page_elements '>'
+				{ $$ = new Page( $3 ); }
 ;
 
 page_elements:	page_element
-		|		page_elements page_element
+				{ PageElementList* list = new PageElementList;
+				  list->push_front( $1 ); $$ = list; }
+		|		page_element page_elements
+				{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 page_element:	tag_unique
+				{ $$ = new PageElement( $1 ); }
 		|		tag_pagetype
+				{ $$ = new PageElement( $1 ); }
 		|		tag_pagetag
+				{ $$ = new PageElement( $1 ); }
 		|		tag_pagesize
+				{ $$ = new PageElement( $1 ); }
 		|		tag_pageorientation
+				{ $$ = new PageElement( $1 ); }
 		|		tag_pageangle
+				{ $$ = new PageElement( $1 ); }
 		|		tag_textrect
+				{ $$ = new PageElement( $1 ); }
 		|		tag_textline
+				{ $$ = new PageElement( $1 ); }
 		|		tag_polyline
+				{ $$ = new PageElement( $1 ); }
 		|		tag_frame
+				{ $$ = new PageElement( $1 ); }
 		|		tag_pagenum
+				{ $$ = new PageElement( $1 ); }
 		|		tag_pagebackground
+				{ $$ = new PageElement( $1 ); }
 		|		tag_rectangle
+				{ $$ = new PageElement( $1 ); }
 		|		tag_runaroundtype
+				{ $$ = new PageElement( $1 ); }
 		|		tag_runaroundgap
+				{ $$ = new PageElement( $1 ); }
 		|		tag_polygon
+				{ $$ = new PageElement( $1 ); }
 		|		tag_group
+				{ $$ = new PageElement( $1 ); }
 		|		tag_ellipse
+				{ $$ = new PageElement( $1 ); }
 ;
 
 
 tag_pagenum:	'<' PAGENUM SQSTRING '>'
+				{ $$ = new PageNum( $3 ); }
 ;
 
 tag_pagebackground:		'<' PAGEBACKGROUND SQSTRING '>'
+						{ $$ = new PageBackground( $3 ); }
 ;
 
 tag_pagetype:	'<' PAGETYPE ID '>'
+						{ $$ = new PageType( $3 ); }
 ;
 
 tag_pagetag:	'<' PAGETAG SQSTRING '>'
+						{ $$ = new PageTag( $3 ); }
 ;
 
 tag_pagesize:	'<'	PAGESIZE REAL unit REAL unit '>'
+						{ $$ = new PageSize( $3, $4, $5, $6 ); }
 ;
 
 tag_pageorientation:	'<' PAGEORIENTATION ID '>'
+						{ $$ = new PageOrientation( $3 ); }
 ;
 
 tag_pageangle:	'<' PAGEANGLE REAL '>'
+						{ $$ = new PageAngle( $3 ); }
 ;
 
 
 tag_rectangle:	'<' RECTANGLE rectangle_elements '>'
+						{ $$ = new Rectangle( $3 ); }
 ;
 
 rectangle_elements:		rectangle_element
-				|		rectangle_elements rectangle_element
+						{ RectangleElementList* list = new RectangleElementList;
+						  list->push_front( $1 ); $$ = list; }
+				|		rectangle_element rectangle_elements
+						{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 rectangle_element:		tag_unique
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_fill
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_pen
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_penwidth
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_separation
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_obcolor
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_dashedpattern
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_runaroundgap
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_runaroundtype
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_shaperect
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_brect
+						{ $$ = new RectangleElement( $1 ); }
 				|		tag_groupid
+						{ $$ = new RectangleElement( $1 ); }
 ;
 
 tag_textrect:	'<'	TEXTRECT textrect_elements '>'
+				{ $$ = new TextRect( $3 ); }
 ;
 
 textrect_elements:		textrect_element
-				|		textrect_elements textrect_element
+						{ TextRectElementList* list = new TextRectElementList;
+						  list->push_front( $1 ); $$ = list; }
+				|		textrect_element textrect_elements
+						{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 textrect_element:		tag_frameid
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_unique
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_pen
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_fill
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_penwidth
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_separation
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_obcolor
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_dashedpattern
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_angle
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_shaperect
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_brect
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_trnumcolumns
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_trcolumngap
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_trcolumnbalance
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_trsideheadwidth
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_trsideheadgap
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_trsideheadplacement
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_trnext
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_runaroundgap
+						{ $$ = new TextRectElement( $1 ); }
 				|		tag_runaroundtype
+						{ $$ = new TextRectElement( $1 ); }
 ;
 
 tag_trnumcolumns:		'<' TRNUMCOLUMNS INTEGER '>'
+						{ $$ = new TRNumColumns( $3 ); }
 ;
 
 tag_trcolumngap:		'<' TRCOLUMNGAP REAL unit '>'
+						{ $$ = new TRColumnGap( $3, $4 ); }
 ;
 
 tag_trcolumnbalance:	'<' TRCOLUMNBALANCE ID '>'
+						{ $$ = new TRColumnBalance( $3 ); }
 ;
 
 tag_trsideheadwidth:	'<' TRSIDEHEADWIDTH REAL unit '>'
+						{ $$ = new TRSideheadWidth( $3, $4 ); }
 ;
 
 tag_trsideheadgap:		'<'	TRSIDEHEADGAP REAL unit '>'
+						{ $$ = new TRSideheadGap( $3, $4 ); }
 ;
 
 tag_trsideheadplacement:		'<' TRSIDEHEADPLACEMENT ID '>'
+						{ $$ = new TRSideheadPlacement( $3 ); }
 ;
 
 tag_trnext:		'<' TRNEXT INTEGER '>'
+						{ $$ = new TRNext( $3 ); }
 ;
 
 tag_textline:	'<' TEXTLINE textline_elements '>'
+						{ $$ = new TextLine( $3 ); }
 ;
 
 textline_elements:		textline_element
-				|		textline_elements textline_element
+						{ TextLineElementList* list = new TextLineElementList;
+						  list->push_front( $1 ); $$ = list; }
+				|		textline_element textline_elements
+						{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 textline_element:		tag_unique
+						{ $$ = new TextLineElement( $1 ); }
 				|		tag_separation
+						{ $$ = new TextLineElement( $1 ); }
 				|		tag_obcolor
+						{ $$ = new TextLineElement( $1 ); }
 				|		tag_dashedpattern
+						{ $$ = new TextLineElement( $1 ); }
 				|		tag_tlorigin
+						{ $$ = new TextLineElement( $1 ); }
 				|		tag_tlalignment
+						{ $$ = new TextLineElement( $1 ); }
 				|		tag_font
+						{ $$ = new TextLineElement( $1 ); }
 				|		tag_string
+						{ $$ = new TextLineElement( $1 ); }
 				|		tag_runaroundgap
+						{ $$ = new TextLineElement( $1 ); }
 				|		tag_runaroundtype
+						{ $$ = new TextLineElement( $1 ); }
 				|		tag_groupid
+						{ $$ = new TextLineElement( $1 ); }
 ;
 
 tag_tlorigin:	'<' TLORIGIN REAL unit REAL unit '>'
+				{ $$ = new TLOrigin( $3, $4, $5, $6 ); }
 ;
 
 tag_tlalignment:		'<' TLALIGNMENT ID '>'
+				{ $$ = new TLAlignment( $3 ); }
 ;
 
 tag_polyline:	'<' POLYLINE polyline_elements '>'
+				{ $$ = new PolyLine( $3 ); }
 ;
 
 polyline_elements:		polyline_element
-				|		polyline_elements polyline_element
+						{ PolyLineElementList* list = new PolyLineElementList;
+						  list->push_front( $1 ); $$ = list; }
+				|		polyline_element polyline_elements
+						{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 polyline_element:		tag_unique
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_pen
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_penwidth
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_headcap
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_tailcap
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_arrowstyle
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_numpoints
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_point
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_groupid
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_runaroundgap
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_runaroundtype
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_fill
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_separation
+						{ $$ = new PolyLineElement( $1 ); }
 				|		tag_obcolor
+						{ $$ = new PolyLineElement( $1 ); }
 ;
 
 tag_headcap:	'<' HEADCAP ID '>'
+				{ $$ = new HeadCap( $3 ); }
 ;
 
 tag_tailcap:	'<' TAILCAP ID '>'
+				{ $$ = new TailCap( $3 ); }
 ;
 
 tag_arrowstyle:	'<' ARROWSTYLE arrowstyle_elements '>'
+				{ $$ = new ArrowStyle( $3 ); }
 ;
 
 arrowstyle_elements:	arrowstyle_element
-				|		arrowstyle_elements arrowstyle_element
+						{ ArrowStyleElementList* list = new ArrowStyleElementList;
+						  list->push_front( $1 ); $$ = list; }
+				|		arrowstyle_element arrowstyle_elements
+						{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 arrowstyle_element:		tag_tipangle
+						{ $$ = new ArrowStyleElement( $1 ); }
 				|		tag_baseangle
+						{ $$ = new ArrowStyleElement( $1 ); }
 				|		tag_length
+						{ $$ = new ArrowStyleElement( $1 ); }
 				|		tag_headtype
+						{ $$ = new ArrowStyleElement( $1 ); }
 				|		tag_scalehead
+						{ $$ = new ArrowStyleElement( $1 ); }
 				|		tag_scalefactor
+						{ $$ = new ArrowStyleElement( $1 ); }
 ;
 
 tag_tipangle:	'<' TIPANGLE INTEGER '>'
+				{ $$ = new TipAngle( $3 ); }
 ;
 
 tag_baseangle:	'<'	BASEANGLE INTEGER '>'
+				{ $$ = new BaseAngle( $3 ); }
 ;
 
 tag_length:		'<' LENGTH REAL unit '>'
+				{ $$ = new Length( $3, $4 ); }
 ;
 
 tag_headtype:	'<'	HEADTYPE ID '>'
+				{ $$ = new HeadType( $3 ); }
 ;
 
 tag_scalehead:	'<'	SCALEHEAD ID '>'
+				{ $$ = new ScaleHead( $3 ); }
 ;
 
 tag_scalefactor:		'<' SCALEFACTOR REAL unit '>'
+				{ $$ = new ScaleFactor( $3, $4 ); }
 ;
 
 tag_numpoints:	'<' NUMPOINTS INTEGER '>'
+				{ $$ = new NumPoints( $3 ); }
 ;
 
 tag_point:		'<' POINT REAL unit REAL unit '>'
+				{ $$ = new Point( $3, $4, $5, $6 ); }
 ;
 
 tag_polygon:	'<' POLYGON polygon_elements '>'
+				{ $$ = new Polygon( $3 ); }
 ;
 
 polygon_elements:		polygon_element
+						{ PolygonElementList* list = new PolygonElementList;
+						  list->push_front( $1 ); $$ = list; }
 				|		polygon_element polygon_elements
+						{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 polygon_element:		tag_unique
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_groupid
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_pen
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_fill
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_penwidth
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_separation
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_obcolor
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_dashedpattern
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_runaroundgap
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_runaroundtype
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_numpoints
+						{ $$ = new PolygonElement( $1 ); }
 				|		tag_point
+						{ $$ = new PolygonElement( $1 ); }
 ;
 
 
 tag_ellipse:	'<' ELLIPSE ellipse_elements '>'
+						{ $$ = new Ellipse( $3 ); }
 ;
 
 ellipse_elements:		ellipse_element
-				|		ellipse_elements ellipse_element
+						{ EllipseElementList* list = new EllipseElementList;
+						  list->push_front( $1 ); $$ = list; }
+				|		ellipse_element ellipse_elements
+						{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 ellipse_element:		tag_unique
+						{ $$ = new EllipseElement( $1 ); }
 				|		tag_groupid
+						{ $$ = new EllipseElement( $1 ); }
 				|		tag_pen
+						{ $$ = new EllipseElement( $1 ); }
 				|		tag_fill
+						{ $$ = new EllipseElement( $1 ); }
 				|		tag_separation
+						{ $$ = new EllipseElement( $1 ); }
 				|		tag_obcolor
+						{ $$ = new EllipseElement( $1 ); }
 				|		tag_shaperect
+						{ $$ = new EllipseElement( $1 ); }
 				|		tag_brect
+						{ $$ = new EllipseElement( $1 ); }
 ;
 
 
 tag_groupid:	'<' GROUPID INTEGER '>'
+				{ $$ = new GroupID( $3 ); }
 ;
 
 
 tag_group:		'<' GROUP group_elements '>'
+				{ $$ = new Group( $3 ); }
 ;
 
 group_elements:	group_element
-			|	group_elements group_element
+				{ GroupElementList* list = new GroupElementList;
+				  list->push_front( $1 ); $$ = list; }
+			|	group_element group_elements
+				{ $2->push_front( $1 ); $$ = $2; }
 ;
 
 group_element:	tag_frameid
+				{ $$ = new GroupElement( $1 ); }
 		|		tag_unique
+				{ $$ = new GroupElement( $1 ); }
 		|		tag_runaroundgap
+				{ $$ = new GroupElement( $1 ); }
 		|		tag_runaroundtype
+				{ $$ = new GroupElement( $1 ); }
 		|		tag_groupid
+				{ $$ = new GroupElement( $1 ); }
 ;
 
 
