@@ -710,6 +710,7 @@ void KoFontChooser::slotStrikeOutTypeChanged( int _val)
 {
     m_changedFlags |= KoTextFormat::StrikeOut;
     m_strikeOutType->setEnabled( _val!=0 );
+    d->m_wordByWord->setEnabled( _val!=0 );
 }
 
 void KoFontChooser::slotSubScriptClicked()
@@ -867,7 +868,7 @@ void KoFontChooser::setStrikeOutlineType(KoTextFormat::StrikeOutType nb)
         break;
     }
     m_strikeOutType->setEnabled( d->m_strikeOut->currentItem()!= 0);
-
+    d->m_wordByWord->setEnabled( d->m_strikeOut->currentItem()!= 0);	
     m_changedFlags = 0;
 }
 
