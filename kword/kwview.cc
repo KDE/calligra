@@ -2025,7 +2025,8 @@ void KWView::insertLink()
     QString ref;
     if(KWInsertLinkDia::createLinkDia(link, ref))
     {
-        edit->insertLink(link, ref);
+        if(!link.isEmpty() && !ref.isEmpty())
+            edit->insertLink(link, ref);
     }
 }
 

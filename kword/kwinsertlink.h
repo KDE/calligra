@@ -23,6 +23,45 @@
 #include <kdialogbase.h>
 
 class QLineEdit;
+class KURLRequester;
+
+
+class internetLinkPage : public QWidget
+{
+  Q_OBJECT
+public:
+  internetLinkPage( QWidget *parent = 0, char *name = 0 );
+  QString linkName();
+  QString hrefName();
+private:
+  QString createInternetLink();
+  QLineEdit* m_linkName, *m_hrefName;
+};
+
+class mailLinkPage : public QWidget
+{
+  Q_OBJECT
+public:
+  mailLinkPage( QWidget *parent = 0, char *name = 0 );
+  QString linkName();
+  QString hrefName();
+private:
+  QString createMailLink();
+  QLineEdit* m_linkName, *m_hrefName;
+};
+
+class fileLinkPage : public QWidget
+{
+  Q_OBJECT
+public:
+  fileLinkPage( QWidget *parent = 0, char *name = 0 );
+  QString linkName();
+  QString hrefName();
+private:
+  QString createFileLink();
+  QLineEdit* m_linkName;
+  KURLRequester* m_hrefName;
+};
 
 class KWInsertLinkDia : public KDialogBase
 {
@@ -38,9 +77,11 @@ public:
 protected slots:
     virtual void slotOk();
     void slotTextChanged ( const QString & );
+
 private:
-    QLineEdit *m_hrefName;
-    QLineEdit *m_linkName;
+    fileLinkPage *fileLink;
+    mailLinkPage *mailLink;
+    internetLinkPage *internetLink;
 };
 
 #endif
