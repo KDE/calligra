@@ -37,12 +37,12 @@ IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib
 BUILT_SOURCES = trader.h typerepo.h
 
 #koffice.cc: koffice.h
-#koffice.h: koffice.idl $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl
+#koffice.h: koffice.idl $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl $(micodir)/include/CORBA.h
 #	$(IDL) $(IDL_FLAGS) $(srcdir)/koffice.idl
 trader.cc: trader.h
-trader.h: trader.idl
+trader.h: trader.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(srcdir)/trader.idl
 typerepo.cc: typerepo.h
-typerepo.h: typerepo.idl trader.idl
+typerepo.h: typerepo.idl trader.idl $(micodir)/include/CORBA.h
 	$(IDL) $(IDL_FLAGS) $(srcdir)/typerepo.idl
 
