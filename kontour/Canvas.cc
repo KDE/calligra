@@ -73,8 +73,8 @@ Canvas::Canvas(GDocument *doc, float res, QScrollBar *hb, QScrollBar *vb, QWidge
 {
   installEventFilter(this);
 
-  vBar->setLineStep(5);
-  hBar->setLineStep(5);
+  vBar->setLineStep(10);
+  hBar->setLineStep(10);
 
   vBar->setPageStep(50);
   hBar->setPageStep(50);
@@ -385,6 +385,15 @@ void Canvas::setToolController (ToolController* tc)
 }
 
 /*******************[Events]*******/
+
+void Canvas::wheelEvent( QWheelEvent *e )
+{
+  e->accept();
+  if( (e->delta()<0))
+    vBar->addLine();
+  else
+    vBar->subtractLine();
+}
 
 void Canvas::mousePressEvent (QMouseEvent* e)
 {
