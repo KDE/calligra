@@ -631,7 +631,9 @@ void InsertCmd::execute()
     doc->objectList()->append( object );
     object->addToObjList();
     if ( object->getType() == OT_TEXT )
+    {
 	( (KPTextObject*)object )->recalcPageNum( doc );
+    }
     doc->repaint( object );
 }
 
@@ -642,6 +644,8 @@ void InsertCmd::unexecute()
     if ( doc->objectList()->findRef( object ) != -1 ) {
 	doc->objectList()->take( doc->objectList()->findRef( object ) );
 	object->removeFromObjList();
+        if ( object->getType() == OT_TEXT )
+            doc->terminateEditing( (KPTextObject*)object );
     }
     doc->repaint( oldRect );
 }

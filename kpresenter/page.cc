@@ -114,6 +114,9 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
     installEventFilter( this );
     KCursor::setAutoHideCursor( this, true, true );
 
+    connect( view->kPresenterDoc(), SIGNAL( sig_terminateEditing( KPTextObject * ) ),
+             this, SLOT( terminateEditing( KPTextObject * ) ) );
+
 }
 
 /*======================== destructor ============================*/
@@ -4280,6 +4283,17 @@ QRect Page::getDrawRect( const QPointArray &_points )
     QRect rect = QRect( topLeft, bottomRight );
 
     return rect;
+}
+
+void Page::terminateEditing( KPTextObject *textObj )
+{
+    if ( m_currentTextObjectView && m_currentTextObjectView->kpTextObject() == textObj )
+    {
+        m_currentTextObjectView->terminate();
+        delete m_currentTextObjectView;
+        m_currentTextObjectView = 0L;
+        editNum = -1 ;
+    }
 }
 
 #include <page.moc>

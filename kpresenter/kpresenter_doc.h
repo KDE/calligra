@@ -376,6 +376,11 @@ public:
 
     void updateRuler();
 
+
+    // Tell all views to stop editing this frameset, if they were doing so
+    void terminateEditing( KPTextObject * textObj )
+    { emit sig_terminateEditing( textObj ); }
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );
@@ -391,6 +396,7 @@ signals:
     void sig_refreshMenuCustomVariable();
     void pageNumChanged();
     void sig_updateRuler();
+    void sig_terminateEditing( KPTextObject * );
 
 protected slots:
     void slotDocumentRestored();

@@ -354,5 +354,6 @@ private slots:
     void switchingMode();
     void slotGotoPage();
     void slotExitPres();
+    void terminateEditing( KPTextObject * );
 };
 #endif //PAGE_H
