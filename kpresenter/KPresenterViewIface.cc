@@ -325,11 +325,6 @@ void KPresenterViewIface::screenSkip()
     view->screenSkip();
 }
 
-void KPresenterViewIface::screenFullScreen()
-{
-    view->screenFullScreen();
-}
-
 void KPresenterViewIface::screenPenColor()
 {
     view->screenPenColor();

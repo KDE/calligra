@@ -8,6 +8,7 @@ class KPresenterDoc;
 class KPresenterView;
 class QDropEvent;
 class QPopupMenu;
+class SideBarItem;
 
 class SideBar : public KListView
 {
@@ -19,13 +20,16 @@ public:
     void setOn( int pg, bool on );
     QSize sizeHint() const { return QSize( 120, KListView::sizeHint().height() ); }
     void updateItem( int pagenr );
+    // Called by SideBarItem
+    void itemStateChange( SideBarItem * item, bool state );
 
 protected:
     void contentsDropEvent( QDropEvent *e );
 
-signals:
+signals: // all page numbers 0-based
     void showPage( int i );
     void movePage( int from, int to );
+    void selectPage( int i, bool );
 
 public slots:
     void rebuildItems();

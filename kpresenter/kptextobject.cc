@@ -60,10 +60,10 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
 }
 
 /*================================================================*/
-KPTextObject &KPTextObject::operator=( const KPTextObject & )
-{
-    return *this;
-}
+//KPTextObject &KPTextObject::operator=( const KPTextObject & )
+//{
+//    return *this;
+//}
 
 /*======================= set size ===============================*/
 void KPTextObject::setSize( int _width, int _height )
@@ -74,8 +74,11 @@ void KPTextObject::setSize( int _width, int _height )
     KPObject::setSize( _width, _height );
     if ( move )
         return;
-    ktextobject.resize( ext ); // hack, somehow se should rather get rid of the delayed resize in KTextEdit
-    qApp->processEvents();
+    ktextobject.resize( ext );
+    // hack, somehow se should rather get rid of the delayed resize in KTextEdit
+    QApplication::sendPostedEvents( &ktextobject, QEvent::Resize );
+    // WTH ? This creates the ficlker when going fullscreen ! (DF)
+    // qApp->processEvents();
 
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize() );
@@ -88,7 +91,8 @@ void KPTextObject::resizeBy( int _dx, int _dy )
     if ( move )
         return;
     ktextobject.resize( ext );
-    qApp->processEvents(); // hack, somehow se should rather get rid of the delayed resize in KTextEdit
+    QApplication::sendPostedEvents( &ktextobject, QEvent::Resize );
+    //qApp->processEvents(); // hack, somehow se should rather get rid of the delayed resize in KTextEdit
 
     if ( fillType == FT_GRADIENT && gradient )
         gradient->setSize( getSize() );
@@ -690,7 +694,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
 /*================================================================*/
 void KPTextObject::recalcPageNum( KPresenterDoc *doc )
 {
-    int h = doc->getPageSize( 0, 0, 0 ).height();
+    int h = doc->getPageRect( 0, 0, 0 ).height();
     int pgnum = -1;
     for ( unsigned int i = 0; i < doc->getPageNums(); ++i ) {
         if ( (int)orig.y() <= ( (int)i + 1 ) * h ) {

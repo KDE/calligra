@@ -4,6 +4,19 @@
 #include <qtimer.h>
 #include <kdebug.h>
 
+class SideBarItem : public QCheckListItem
+{
+public:
+    SideBarItem( QListView * parent )
+     : QCheckListItem( parent, QString::null, QCheckListItem::CheckBox )
+     {}
+
+    virtual void stateChange(bool b)
+    {
+        static_cast<SideBar*>(listView())->itemStateChange( this, b );
+    }
+};
+
 SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     : KListView( parent ), doc( d ), view( v )
 {
@@ -33,25 +46,19 @@ SideBar::SideBar( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
 
 void SideBar::rebuildItems()
 {
-    // Map: page number -> checked
-    QMap< int, bool > checkedMap;
-    QListViewItemIterator it( this );
-    for ( ; it.current(); ++it )
-	checkedMap.insert( it.current()->text(1).toInt(), ( (QCheckListItem*)it.current() )->isOn() );
-
     clear();
     // Rebuild all the items
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
-	QCheckListItem *item = new QCheckListItem( this, "", QCheckListItem::CheckBox );
+	QCheckListItem *item = new SideBarItem( this );
 	QString title = doc->getPageTitle( i, i18n( "Slide %1" ).arg( i + 1 ) );
-	QMap< int, bool >::Iterator bit = checkedMap.find( i + 1 );
-	item->setOn( bit != checkedMap.end() ? *bit : TRUE );
+        //kdDebug() << "SideBar::rebuildItems slide " << i+1 << " selected:" << doc->isSlideSelected( i ) << endl;
+        item->setOn( doc->isSlideSelected( i ) );
 	item->setText( 1, QString::number( i + 1 ) ); // page number
 	item->setText( 0, title );
     }
 }
 
-void SideBar::updateItem( int pagenr )
+void SideBar::updateItem( int pagenr /* 0-based */)
 {
     // Find item
     QListViewItemIterator it( this );
@@ -61,10 +68,16 @@ void SideBar::updateItem( int pagenr )
         {
             QString title = doc->getPageTitle( pagenr, i18n( "Slide %1" ).arg( pagenr + 1 ) );
             it.current()->setText( 0, title );
+            static_cast<SideBarItem*>(it.current())->setOn( doc->isSlideSelected( pagenr ) );
             return;
         }
     }
     kdWarning() << "Item for page " << pagenr << " not found" << endl;
+}
+
+void SideBar::itemStateChange( SideBarItem * item, bool state )
+{
+    emit selectPage( item->text( 1 ).toInt() - 1, state );
 }
 
 void SideBar::itemClicked( QListViewItem *i )
@@ -154,3 +167,5 @@ void SideBar::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
     pageMenu->setItemEnabled( delPageId, doc->getPageNums() > 1 );
     pageMenu->popup( pnt );
 }
+
+#include "sidebar.moc"

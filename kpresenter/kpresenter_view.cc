@@ -164,8 +164,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     dcopObject(); // build it
 
     m_pKPresenterDoc = 0L;
-    //m_bKPresenterModified = false;
-    m_bUnderConstruction = true;
 
     // init
     backDia = 0;
@@ -213,9 +211,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     sticky = FALSE;
 
     m_pKPresenterDoc = _doc;
-    //m_bKPresenterModified = true;
-
-    //QObject::connect( m_pKPresenterDoc, SIGNAL( sig_KPresenterModified() ), this, SLOT( slotKPresenterModified() ) );
 
     createGUI();
 
@@ -876,20 +871,20 @@ void KPresenterView::extraOptions()
     optionDia = new OptionDia( this, "OptionDia" );
     optionDia->setCaption( i18n( "KPresenter - Options" ) );
     QObject::connect( optionDia, SIGNAL( applyButtonPressed() ), this, SLOT( optionOk() ) );
-    optionDia->setRastX( kPresenterDoc()->getRastX() );
-    optionDia->setRastY( kPresenterDoc()->getRastY() );
-    optionDia->setBackCol( kPresenterDoc()->getTxtBackCol() );
+    optionDia->setRastX( kPresenterDoc()->rastX() );
+    optionDia->setRastY( kPresenterDoc()->rastY() );
+    optionDia->setBackCol( kPresenterDoc()->txtBackCol() );
     optionDia->show();
 }
 
 /*===============================================================*/
 void KPresenterView::extraCreateTemplate()
 {
-    QPixmap pix( QSize( m_pKPresenterDoc->getPageSize( 0, 0, 0 ).width(),
-			m_pKPresenterDoc->getPageSize( 0, 0, 0 ).height() ) );
+    QPixmap pix( QSize( m_pKPresenterDoc->getPageRect( 0, 0, 0 ).width(),
+			m_pKPresenterDoc->getPageRect( 0, 0, 0 ).height() ) );
     pix.fill( Qt::white );
     int i = getCurrPgNum() - 1;
-    page->drawPageInPix2( pix, i * m_pKPresenterDoc->getPageSize( 0, 0, 0 ).height(), i );
+    page->drawPageInPix2( pix, i * m_pKPresenterDoc->getPageRect( 0, 0, 0 ).height(), i );
 
     QWMatrix m;
     m.scale( 60.0 / (float)pix.width(), 45.0 / (float)pix.height() );
@@ -1034,9 +1029,17 @@ void KPresenterView::screenAssignEffect()
 /*========================== screen start =======================*/
 void KPresenterView::screenStart()
 {
-    page->setToolEditMode( TEM_MOUSE );
+    startScreenPres( -1 ); // all selected pages
+}
 
-    int curPg = getCurrPgNum();
+void KPresenterView::screenViewPage()
+{
+    startScreenPres( getCurrPgNum() ); // current page only
+}
+
+void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
+{
+    page->setToolEditMode( TEM_MOUSE );
 
     if ( page && !presStarted ) {
 	// disable screensaver
@@ -1052,53 +1055,48 @@ void KPresenterView::screenStart()
 
 	page->deSelectAllObj();
 	presStarted = true;
-	int dw = QApplication::desktop()->width();
-	int dh = QApplication::desktop()->height();
-	float _presFaktW = static_cast<float>( dw ) /
-			   static_cast<float>( kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).width() ) >
+	int deskw = QApplication::desktop()->width();
+	int deskh = QApplication::desktop()->height();
+        QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false );
+	float _presFaktW = static_cast<float>( deskw ) /
+			   static_cast<float>( pgRect.width() ) >
 			   1.0 ?
-			   static_cast<float>( dw ) /
-			   static_cast<float>( kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).width() )
+			   static_cast<float>( deskw ) /
+			   static_cast<float>( pgRect.width() )
 			   : 1.0;
-	float _presFaktH = static_cast<float>( dh ) /
-			   static_cast<float>( kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height() ) >
-			   1.0 ? static_cast<float>( dh ) /
-			   static_cast<float>( kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height() )
+	float _presFaktH = static_cast<float>( deskh ) /
+			   static_cast<float>( pgRect.height() ) >
+			   1.0 ? static_cast<float>( deskh ) /
+			   static_cast<float>( pgRect.height() )
 			   : 1.0;
 	float _presFakt = QMIN(_presFaktW,_presFaktH);
-	page->setPresFakt( _presFakt );
+        kdDebug() << "KPresenterView::startScreenPres page->setPresFakt " << _presFakt << endl;
 
-	_xOffset = xOffset;
-	_yOffset = yOffset;
+	xOffsetSaved = xOffset;
+	yOffsetSaved = yOffset;
 	xOffset = 0;
 	yOffset = 0;
 
-	if ( dw > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).width() )
-	    xOffset -= ( dw -
-			 kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).width() ) / 2;
-	if ( dh > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() )
-	    yOffset -= ( dh -
-			 kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
+        // Center the slide in the screen, if it's smaller...
+        pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, _presFakt, false );
+        kdDebug() << "                                pgRect: " << pgRect.x() << "," << pgRect.y()
+                  << " " << pgRect.width() << "x" << pgRect.height() << endl;
+	if ( deskw > pgRect.width() )
+	    xOffset -= ( deskw - pgRect.width() ) / 2;
+	if ( deskh > pgRect.height() )
+	    yOffset -= ( deskh - pgRect.height() ) / 2;
 
 	vert->setEnabled( false );
 	horz->setEnabled( false );
 	m_bShowGUI = false;
-	page->setBackgroundColor( black );
-	page->reparent( ( QWidget* )0L, 0, QPoint( 0, 0 ), FALSE );
+        page->reparent( ( QWidget* )0L, 0, QPoint( 0, 0 ), FALSE );
 	page->showFullScreen();
-	page->topLevelWidget()->setBackgroundColor( black );
 	page->setFocusPolicy( QWidget::StrongFocus );
-	page->setFocus();
-	page->repaint( FALSE );
-	page->startScreenPresentation( TRUE, curPg );
-
-	yOffset = ( page->presPage() - 1 ) *
-		  kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
-	if ( dh > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() )
-	    yOffset -= ( dh -
-			 kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
+	//page->setFocus(); done in gotoPage
+	page->startScreenPresentation( _presFakt, pgNum );
 
 	actionScreenStart->setEnabled( false );
+	actionScreenViewPage->setEnabled( false );
 
 	if ( !kPresenterDoc()->spManualSwitch() ) {
 	    continuePres = true;
@@ -1114,14 +1112,12 @@ void KPresenterView::screenStop()
     if ( presStarted ) {
 	continuePres = false;
 	exitPres = true;
-	if ( true ) { //m_rToolBarScreen->isButtonOn( m_idButtonScreen_Full ) )
-	    page->showNormal();
-	    page->hide();
-	    page->reparent( pageBase, 0, QPoint( 0, 0 ), true );
-	    page->lower();
-	}
-	xOffset = _xOffset;
-	yOffset = _yOffset;
+        page->showNormal();
+        page->hide();
+        page->reparent( pageBase, 0, QPoint( 0, 0 ), true );
+        page->lower();
+	xOffset = xOffsetSaved;
+	yOffset = yOffsetSaved;
 	page->stopScreenPresentation();
 	presStarted = false;
 	vert->setEnabled( true );
@@ -1140,6 +1136,7 @@ void KPresenterView::screenStop()
 	    kill( screensaver_pid, SIGCONT );
 	}
 	actionScreenStart->setEnabled( true );
+	actionScreenViewPage->setEnabled( true );
 	pageBase->resizeEvent( 0 );
     }
 }
@@ -1162,7 +1159,7 @@ void KPresenterView::screenFirst()
 	if ( !presStarted ) {
 	    currPg = 0;
 	    vert->setValue( 0 );
-	    yOffset = kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height()  * currPg;
+	    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height()  * currPg;
 	    page->repaint( FALSE );
 	    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
 	    pgPrev->setEnabled( currPg > 0 );
@@ -1174,16 +1171,15 @@ void KPresenterView::screenFirst()
     }
 }
 
-/*========================== screen pevious =====================*/
+/*========================== screen previous =====================*/
 void KPresenterView::screenPrev()
 {
     if ( presStarted ) {
 	if ( page->pPrev( true ) ) {
-	    yOffset = ( page->presPage() - 1 ) *
-		      kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
-	    if ( page->height() > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() )
-		yOffset -= ( page->height() -
-			     kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
+            QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, page->presFakt(), false );
+	    yOffset = ( page->presPage() - 1 ) * pgRect.height();
+	    if ( page->height() > pgRect.height() )
+		yOffset -= ( page->height() - pgRect.height() ) / 2;
 	    page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
 	    page->repaint( false );
 	    page->setFocus();
@@ -1201,11 +1197,10 @@ void KPresenterView::screenNext()
 {
     if ( presStarted ) {
 	if ( page->pNext( true ) ) {
-	    yOffset = ( page->presPage() - 1 ) *
-		      kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height();
-	    if ( page->height() > kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() )
-		yOffset -= ( page->height() -
-			     kPresenterDoc()->getPageSize( 0, 0, 0, page->presFakt(), false ).height() ) / 2;
+            QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, page->presFakt(), false );
+	    yOffset = ( page->presPage() - 1 ) * pgRect.height();
+	    if ( page->height() > pgRect.height() )
+		yOffset -= ( page->height() - pgRect.height() ) / 2;
 	    page->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
 	    page->setFocus();
 	} else {
@@ -1230,7 +1225,7 @@ void KPresenterView::screenLast()
 	if ( !presStarted ) {
 	    currPg = m_pKPresenterDoc->getPageNums() - 1;
 	    vert->setValue( 0 );
-	    yOffset = kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height()  * currPg;
+	    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height()  * currPg;
 	    page->repaint( FALSE );
 	    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
 	    pgPrev->setEnabled( currPg > 0 );
@@ -1245,12 +1240,6 @@ void KPresenterView::screenLast()
 /*========================== screen skip =======================*/
 void KPresenterView::screenSkip()
 {
-}
-
-/*========================== screen full screen ================*/
-void KPresenterView::screenFullScreen()
-{
-    qWarning( "Screenpresentations only work in FULLSCREEN mode at the moment!" );
 }
 
 /*===============================================================*/
@@ -1666,11 +1655,11 @@ void KPresenterView::createGUI()
 {
     splitter = new QSplitter( this );
 
-    sidebar = new SideBar( splitter, m_pKPresenterDoc, ( KPresenterView* )this );
+    sidebar = new SideBar( splitter, m_pKPresenterDoc, this );
     connect( sidebar, SIGNAL( movePage( int, int ) ),
 	     m_pKPresenterDoc, SLOT( movePage( int, int ) ) );
-    connect( sidebar, SIGNAL( movePage( int, int ) ),
-	     this, SLOT( updateSideBar( int, int ) ) );
+    connect( sidebar, SIGNAL( selectPage( int, bool ) ),
+	     m_pKPresenterDoc, SLOT( selectPage( int, bool ) ) );
 
     // setup page
     pageBase = new PageBase( splitter, this );
@@ -1703,7 +1692,7 @@ void KPresenterView::createGUI()
 
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
-    sidebar->rebuildItems();
+    //sidebar->rebuildItems(); the constructor does it already !
     sidebar->setCurrentItem( sidebar->firstChild() );
     sidebar->setSelected( sidebar->firstChild(), TRUE );
 }
@@ -1718,9 +1707,6 @@ void KPresenterView::initGui()
     actionEditUndo->setEnabled( false );
     actionEditRedo->setEnabled( false );
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
-    QMap<int, bool> slides = m_pKPresenterDoc->getSelectedSlides();
-    for ( QMap<int, bool>::ConstIterator it = slides.begin(); it != slides.end(); ++it )
-	sidebar->setOn( it.key(), *it );
 }
 
 void KPresenterView::guiActivateEvent( KParts::GUIActivateEvent *ev )
@@ -2047,6 +2033,11 @@ void KPresenterView::setupActions()
 				     this, SLOT( screenStart() ),
 				     actionCollection(), "screen_start" );
 
+    actionScreenViewPage = new KAction( i18n( "&View current page" ),
+				     "viewmag", 0,
+				     this, SLOT( screenViewPage() ),
+				     actionCollection(), "screen_viewpage" );
+
     actionScreenFirst = new KAction( i18n( "&Go to Start" ),
 				     "start", Key_Home,
 				     this, SLOT( screenFirst() ),
@@ -2102,31 +2093,6 @@ void KPresenterView::setupActions()
 
 
 }
-
-/*====================== construct ==============================*/
-void KPresenterView::construct()
-{
-    if ( m_pKPresenterDoc == 0L && !m_bUnderConstruction ) return;
-
-    assert( m_pKPresenterDoc != 0L );
-
-    m_bUnderConstruction = false;
-
-    // We are now in sync with the document
-    //m_bKPresenterModified = false;
-
-    resizeEvent( 0L );
-}
-
-/*======================== document modified ===================*/
-/*
-  // never emitted (David)
-void KPresenterView::slotKPresenterModified()
-{
-    //m_bKPresenterModified = true;
-    update();
-}
-*/
 
 /*=========== take changes for backgr dialog =====================*/
 void KPresenterView::backOk( bool takeGlobal )
@@ -2353,11 +2319,11 @@ void KPresenterView::scrollV( int value )
     if ( !presStarted ) {
 	int yo = yOffset;
 
-	yOffset = 	kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height() * currPg + value;
+	yOffset = 	kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg + value;
 	page->scroll( 0, yo - yOffset );
 
 	if ( v_ruler )
-	    v_ruler->setOffset( 0, -kPresenterDoc()->getPageSize( getCurrPgNum() - 1, xOffset, yOffset, 1.0, false ).y() );
+	    v_ruler->setOffset( 0, -kPresenterDoc()->getPageRect( getCurrPgNum() - 1, xOffset, yOffset, 1.0, false ).y() );
     }
 }
 
@@ -2812,12 +2778,12 @@ void KPresenterView::setRanges()
 {
     if ( vert && horz && page && m_pKPresenterDoc ) {
 	vert->setSteps( 10, page->height() );
-	vert->setRange( 0, QMAX( 0, m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).height()  - page->height() ) );
-	horz->setSteps( 10, m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).width() +
+	vert->setRange( 0, QMAX( 0, m_pKPresenterDoc->getPageRect( 0, xOffset, yOffset, 1.0, false ).height()  - page->height() ) );
+	horz->setSteps( 10, m_pKPresenterDoc->getPageRect( 0, xOffset, yOffset, 1.0, false ).width() +
 			16 - page->width() );
-	int range = m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).width() +
+	int range = m_pKPresenterDoc->getPageRect( 0, xOffset, yOffset, 1.0, false ).width() +
 		16 - page->width() < 0 ? 0 :
-	    m_pKPresenterDoc->getPageSize( 0, xOffset, yOffset, 1.0, false ).width() + 16 - page->width();
+	    m_pKPresenterDoc->getPageRect( 0, xOffset, yOffset, 1.0, false ).width() + 16 - page->width();
 	horz->setRange( 0, range );
     }
 }
@@ -2833,7 +2799,7 @@ void KPresenterView::skipToPage( int num )
     currPg = num;
     emit currentPageChanged( currPg );
     sidebar->setCurrentPage( currPg );
-    yOffset = kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height() * currPg;
+    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
     page->repaint( FALSE );
 }
 
@@ -3017,7 +2983,7 @@ void KPresenterView::nextPage()
  	return;
     currPg++;
     vert->setValue( 0 );
-    yOffset = kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height() * currPg;
+    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
     page->repaint( FALSE );
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
@@ -3031,7 +2997,7 @@ void KPresenterView::prevPage()
  	return;
     currPg--;
     vert->setValue( 0 );
-    yOffset = kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height()  * currPg;
+    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height()  * currPg;
     page->repaint( FALSE );
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
@@ -3039,6 +3005,7 @@ void KPresenterView::prevPage()
     sidebar->setCurrentPage( currPg );
 }
 
+/*
 QValueList<int> KPresenterView::selectedSlides() const
 {
     QListViewItemIterator it( sidebar );
@@ -3058,15 +3025,16 @@ QMap<int, bool > KPresenterView::selectedSlideMap() const
 	map.insert( it.current()->text( 1 ).toInt() - 1, ( (QCheckListItem*)it.current() )->isOn() );
     return map;
 }
+*/
 
-void KPresenterView::updateSideBar( int, int pg )
+void KPresenterView::updateSideBar( int newCurrentPg )
 {
     sidebar->blockSignals( TRUE );
     sidebar->rebuildItems();
     sidebar->blockSignals( FALSE );
-    currPg = pg;
+    currPg = newCurrentPg;
     vert->setValue( 0 );
-    yOffset = kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height()  * currPg;
+    yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height()  * currPg;
     page->repaint( FALSE );
     pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
     pgPrev->setEnabled( currPg > 0 );
@@ -3087,3 +3055,4 @@ void KPresenterView::viewShowSideBar()
     else
         sidebar->show();
 }
+

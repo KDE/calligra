@@ -20,8 +20,6 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#define KPRESENTER_VERSION "pre-Beta1"
-
 #include <qsize.h>
 
 #include <kiconloader.h>

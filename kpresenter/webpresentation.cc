@@ -188,17 +188,17 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
 /*================================================================*/
 void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
 {
-    QPixmap pix( QSize( doc->getPageSize( 0, 0, 0, 1.0, false ).width(),
-                        doc->getPageSize( 0, 0, 0, 1.0, false ).height() ) );
+    QPixmap pix( QSize( doc->getPageRect( 0, 0, 0, 1.0, false ).width(),
+                        doc->getPageRect( 0, 0, 0, 1.0, false ).height() ) );
     QString filename;
     QString format = imageFormat( imgFormat );
     int p;
 
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
-        pix.resize( QSize( doc->getPageSize( 0, 0, 0, 1.0, false ).width(),
-                           doc->getPageSize( 0, 0, 0, 1.0, false ).height() ) );
+        pix.resize( QSize( doc->getPageRect( 0, 0, 0, 1.0, false ).width(),
+                           doc->getPageRect( 0, 0, 0, 1.0, false ).height() ) );
         pix.fill( Qt::white );
-        view->getPage()->drawPageInPix2( pix, i * doc->getPageSize( 0, 0, 0, 1.0, false ).height(), i );
+        view->getPage()->drawPageInPix2( pix, i * doc->getPageRect( 0, 0, 0, 1.0, false ).height(), i );
         filename = QString( "%1/pics/slide_%2.%3" ).arg( path ).arg( i + 1 ).arg( format );
         if ( zoom != 100 ) {
             QWMatrix m;

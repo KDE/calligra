@@ -59,9 +59,10 @@ class QKeyEvent;
 class QPainter;
 class KPPixmapObject;
 
-/******************************************************************/
-/* class Page - Page                                              */
-/******************************************************************/
+/**********************************************************************/
+/* class Page - There is ONE instance of this class for a given view  */
+/* It manages the graphical representation of all the objects         */
+/**********************************************************************/
 class Page : public QWidget
 {
     Q_OBJECT
@@ -91,19 +92,20 @@ public:
     KTextEdit* kTxtObj();
     KPTextObject* kpTxtObj();
 
-    void startScreenPresentation( bool, int );
+    // Start a screen presentation
+    // All pages if curPgNum is -1, otherwise just curPgNum (1-based)
+    void startScreenPresentation( float presFakt, int curPgNum = -1);
     void stopScreenPresentation();
     bool pNext( bool );
     bool pPrev( bool );
 
-    unsigned int presPage() { return currPresPage; }
-    int presStep() { return currPresStep; }
-    void setPresFakt( float f ) { _presFakt = f; }
-    float presFakt() { return _presFakt; }
-    int numPresSteps() { return presStepList.count(); }
-    int numPresPages() { return slideList.count(); }
+    unsigned int presPage() const { return currPresPage; }
+    int presStep() const { return currPresStep; }
+    float presFakt() const { return _presFakt; }
+    int numPresSteps() const { return presStepList.count(); }
+    int numPresPages() const { return slideList.count(); }
 
-    bool canAssignEffect( QList<KPObject> &objs );
+    bool canAssignEffect( QList<KPObject> &objs ) const;
 
     void keyPressEvent( QKeyEvent *e );
 
@@ -170,21 +172,23 @@ protected:
     // get - set data
     QList<KPBackGround> *backgroundList();
     QList<KPObject> *objectList();
+    const QList<KPBackGround> *backgroundList() const;
+    const QList<KPObject> *objectList() const;
     unsigned int objNums();
-    int diffx( int i = -1 );
-    int diffy( int i = -1 );
+    int diffx() const;
+    int diffy() const;
     unsigned int currPgNum();
-    unsigned int rastX();
-    unsigned int rastY();
-    QColor txtBackCol();
-    bool spInfinitLoop();
-    bool spManualSwitch();
-    QRect getPageSize( unsigned int p, float fakt=1.0, bool decBorders = true );
+    unsigned int rastX() const;
+    unsigned int rastY() const;
+    QColor txtBackCol() const;
+    bool spInfinitLoop() const;
+    bool spManualSwitch() const;
+    QRect getPageRect( unsigned int p, float fakt=1.0, bool decBorders = true );
     unsigned int pageNums();
     int getPageOfObj( int i, float fakt = 1.0 );
     float objSpeedFakt();
     float pageSpeedFakt();
-    bool calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio );
+    bool calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio ) const;
 
     void _repaint( bool erase=true );
     void _repaint( QRect r );
@@ -232,6 +236,7 @@ protected:
     unsigned int currPresPage, currPresStep, subPresStep;
     unsigned int oldPresPage, oldPresStep, oldSubPresStep;
     float _presFakt;
+    int m_showOnlyPage; // 1-based (-1 = all)
     QValueList<int> presStepList, slideList;
     QValueList<int>::Iterator slideListIterator;
     int PM_DM, PM_SM;
@@ -242,6 +247,8 @@ protected:
     ToolEditMode toolEditMode;
     QRect insRect;
     KoDocumentEntry partEntry;
+    // List of objects to draw, from the previous step in the presentation
+    // (those that remain on screen between two steps)
     QList <KPObject> tmpObjs;
     QString autoform;
     bool inEffect, keepRatio;

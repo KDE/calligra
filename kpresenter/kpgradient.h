@@ -42,17 +42,17 @@ public:
     virtual ~KPGradient()
     {}
 
-    virtual QColor getColor1()
+    virtual QColor getColor1() const
     { return color1; }
-    virtual QColor getColor2()
+    virtual QColor getColor2() const
     { return color2; }
-    virtual BCType getBackColorType()
+    virtual BCType getBackColorType() const
     { return bcType; }
-    virtual bool getUnbalanced()
+    virtual bool getUnbalanced() const
     { return unbalanced; }
-    virtual int getXFactor()
+    virtual int getXFactor() const
     { return xFactor; }
-    virtual int getYFactor()
+    virtual int getYFactor() const
     { return yFactor; }
 
     virtual void setColor1( QColor _color )
@@ -68,9 +68,9 @@ public:
     virtual void setYFactor( int i )
     { yFactor = i; paint(); }
 
-    virtual QPixmap* getGradient()
+    virtual QPixmap* getGradient() const
     { return (QPixmap*)&pixmap; }
-    virtual QSize getSize()
+    virtual QSize getSize() const
     { return pixmap.size(); }
 
     virtual void setSize( QSize _size ) {

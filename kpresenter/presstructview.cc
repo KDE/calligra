@@ -56,13 +56,13 @@ void KPSlidePreview::setPage( QListViewItem *item )
     if ( !item )
         return;
 
-    QPixmap pix( QSize( doc->getPageSize( 0, 0, 0 ).width(), doc->getPageSize( 0, 0, 0 ).height() ) );
+    QPixmap pix( doc->getPageRect( 0, 0, 0 ).size() );
     pix.fill( Qt::white );
     int i = ( (KPPresStructObjectItem*)item )->getPageNum();
-    view->getPage()->drawPageInPix2( pix, i * doc->getPageSize( 0, 0, 0 ).height(), i );
+    view->getPage()->drawPageInPix2( pix, i * doc->getPageRect( 0, 0, 0 ).height(), i );
 
-    float faktW = static_cast<float>( width() ) / static_cast<float>( doc->getPageSize( 0, 0, 0 ).width() );
-    float faktH = static_cast<float>( height() ) / static_cast<float>( doc->getPageSize( 0, 0, 0 ).height() );
+    float faktW = static_cast<float>( width() ) / static_cast<float>( doc->getPageRect( 0, 0, 0 ).width() );
+    float faktH = static_cast<float>( height() ) / static_cast<float>( doc->getPageRect( 0, 0, 0 ).height() );
     float fakt = QMIN( faktW, faktH ) - 0.1;
 
     QWMatrix m;

@@ -41,6 +41,8 @@ class DCOPObject;
 
 /******************************************************************/
 /* Class: KPBackGround                                            */
+/* The background for a given page.                               */
+/* Stored in KPresenterDoc's list of backgrounds.                 */
 /******************************************************************/
 
 class KPBackGround
@@ -48,80 +50,80 @@ class KPBackGround
 public:
     KPBackGround( KPPixmapCollection *_pixmapCollection, KPGradientCollection *_gradientCollection,
                   KPClipartCollection *_clipartCollection, KPresenterDoc *_doc );
-    virtual ~KPBackGround()
+    ~KPBackGround()
     {; }
 
-    virtual DCOPObject* dcopObject();
+    DCOPObject* dcopObject();
 
-    virtual void setBackType( BackType _backType )
+    void setBackType( BackType _backType )
     { backType = _backType; }
-    virtual void setBackView( BackView _backView )
+    void setBackView( BackView _backView )
     { backView = _backView; }
-    virtual void setBackColor1( QColor _color )
+    void setBackColor1( QColor _color )
     { removeGradient(); backColor1 = _color; }
-    virtual void setBackColor2( QColor _color )
+    void setBackColor2( QColor _color )
     { removeGradient(); backColor2 = _color; }
-    virtual void setBackColorType( BCType _bcType )
+    void setBackColorType( BCType _bcType )
     { removeGradient(); bcType = _bcType; }
-    virtual void setBackUnbalanced( bool _unbalanced )
+    void setBackUnbalanced( bool _unbalanced )
     { removeGradient(); unbalanced = _unbalanced; }
-    virtual void setBackXFactor( int _xfactor )
+    void setBackXFactor( int _xfactor )
     { removeGradient(); xfactor = _xfactor; }
-    virtual void setBackYFactor( int _yfactor )
+    void setBackYFactor( int _yfactor )
     { removeGradient(); yfactor = _yfactor; }
     void setBackPixmap( const QString &_filename, QDateTime _lastModified );
-    virtual void setBackClipFilename(  const QString &_filename, QDateTime _lastModified );
-    virtual void setPageEffect( PageEffect _pageEffect )
+    void setBackClipFilename(  const QString &_filename, QDateTime _lastModified );
+    void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
-    virtual KPPixmapDataCollection::Key getKey()
+    KPPixmapDataCollection::Key getKey()
     { return key.dataKey; }
 
 
-    virtual void setSize( QSize _size )
-    { removeGradient(); ext = _size; footerHeight = 0; }
-    virtual void setSize( int _width, int _height )
-    { removeGradient(); ext = QSize( _width, _height ); footerHeight = 0; }
+    void setBgSize( QSize _size, bool visible = true );
 
-    virtual BackType getBackType()
+    //void setBgSize( int width, int height )
+    //{ setBgSize( QSize( width, height ) ); }
+
+    BackType getBackType() const
     { return backType; }
-    virtual BackView getBackView()
+    BackView getBackView() const
     { return backView; }
-    virtual QColor getBackColor1()
+    QColor getBackColor1() const
     { return backColor1; }
-    virtual QColor getBackColor2()
+    QColor getBackColor2() const
     { return backColor2; }
-    virtual BCType getBackColorType()
+    BCType getBackColorType() const
     { return bcType; }
-    virtual QString getBackPixFilename()
+    QString getBackPixFilename() const
     { return key.dataKey.filename; }
-    virtual QString getBackClipFilename()
+    QString getBackClipFilename() const
     { return clipKey.filename; }
-    virtual PageEffect getPageEffect()
+    PageEffect getPageEffect() const
     { return pageEffect; }
-    virtual bool getBackUnbalanced()
+    bool getBackUnbalanced() const
     { return unbalanced; }
-    virtual int getBackXFactor()
+    int getBackXFactor() const
     { return xfactor; }
-    virtual int getBackYFactor()
+    int getBackYFactor() const
     { return yfactor; }
 
-    virtual QSize getSize()
+    QSize getSize() const
     { return ext; }
 
-    virtual void draw( QPainter *_painter, QPoint _offset, bool _drawBorders );
+    void draw( QPainter *_painter, QPoint _offset, bool _drawBorders );
 
-    virtual void restore();
+    void restore();
 
-    virtual void save( QTextStream& out );
-    virtual void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
+    void save( QTextStream& out );
+    void load( KOMLParser& parser, QValueList<KOMLAttrib>& lst );
 
 protected:
-    virtual void drawBackColor( QPainter *_painter );
-    virtual void drawBackPix( QPainter *_painter );
-    virtual void drawBackClip( QPainter *_painter );
-    virtual void drawBorders( QPainter *_painter );
-    virtual void drawHeaderFooter( QPainter *_painter, const QPoint &_offset );
-    virtual void removeGradient();
+    void drawBackColor( QPainter *_painter );
+    void drawBackPix( QPainter *_painter );
+    void drawBackClip( QPainter *_painter );
+    void drawBorders( QPainter *_painter );
+    void drawHeaderFooter( QPainter *_painter, const QPoint &_offset );
+    void removeGradient();
 
     BackType backType;
     BackView backView;

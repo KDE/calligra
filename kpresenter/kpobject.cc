@@ -31,6 +31,7 @@
 #include <komlWriter.h>
 
 #include <kapp.h>
+#include <kdebug.h>
 
 #include <fstream.h>
 #include <math.h>
@@ -108,7 +109,7 @@ QRect KPObject::getBoundingRect( int _diffx, int _diffy )
 }
 
 /*======================== contain point ? =======================*/
-bool KPObject::contains( QPoint _point, int _diffx, int _diffy )
+bool KPObject::contains( QPoint _point, int _diffx, int _diffy ) const
 {
     if ( angle == 0.0 )
     {
@@ -140,7 +141,7 @@ bool KPObject::contains( QPoint _point, int _diffx, int _diffy )
 }
 
 /*================================================================*/
-bool KPObject::intersects( QRect _rect, int _diffx, int _diffy )
+bool KPObject::intersects( QRect _rect, int _diffx, int _diffy ) const
 {
     if ( angle == 0.0 )
     {
@@ -172,7 +173,7 @@ bool KPObject::intersects( QRect _rect, int _diffx, int _diffy )
 }
 
 /*======================== get cursor ============================*/
-QCursor KPObject::getCursor( QPoint _point, int _diffx, int _diffy, ModifyType &_modType )
+QCursor KPObject::getCursor( QPoint _point, int _diffx, int _diffy, ModifyType &_modType ) const
 {
     int px = _point.x();
     int py = _point.y();
@@ -261,6 +262,7 @@ void KPObject::zoom( float _fakt )
 /*==================== zoom orig =================================*/
 void KPObject::zoomOrig()
 {
+    ASSERT(zoomed);
     zoomed = false;
 
     orig = oldOrig;

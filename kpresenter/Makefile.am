@@ -1,8 +1,5 @@
-
 KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
-
-####### Files
 
 bin_PROGRAMS = kpresenter
 bin_SCRIPTS = kprconverter.pl
@@ -30,7 +27,7 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
 	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
-	textdialog.cc sidebar.cpp \
+	textdialog.cc sidebar.cc \
 	insertpagedia.ui generalconfig.ui
 
 libkpresenterpart_la_LDFLAGS = -avoid-version -module -no-undefined

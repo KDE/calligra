@@ -79,10 +79,7 @@ void BackPreview::drawContents( QPainter *p )
 void BackPreview::resizeEvent( QResizeEvent *e )
 {
     QFrame::resizeEvent( e );
-    back->setSize( QSize( contentsRect().width(),
-                          contentsRect().height() ) );
-    if ( isVisible() )
-        back->restore();
+    back->setBgSize( contentsRect().size(), isVisible() );
 }
 
 /******************************************************************/
@@ -325,61 +322,61 @@ void BackDia::updateConfiguration()
 }
 
 /*=============================================================*/
-BackType BackDia::getBackType()
+BackType BackDia::getBackType() const
 {
     return (BackType)backCombo->currentItem();
 }
 
 /*=============================================================*/
-BackView BackDia::getBackView()
+BackView BackDia::getBackView() const
 {
     return (BackView)picView->currentItem();
 }
 
 /*=============================================================*/
-QColor BackDia::getBackColor1()
+QColor BackDia::getBackColor1() const
 {
     return color1Choose->color();
 }
 
 /*=============================================================*/
-QColor BackDia::getBackColor2()
+QColor BackDia::getBackColor2() const
 {
     return color2Choose->color();
 }
 
 /*=============================================================*/
-BCType BackDia::getBackColorType()
+BCType BackDia::getBackColorType() const
 {
     return (BCType)cType->currentItem();
 }
 
 /*=============================================================*/
-QString BackDia::getBackPixFilename()
+QString BackDia::getBackPixFilename() const
 {
     return chosenPic;
 }
 
 /*=============================================================*/
-QString BackDia::getBackClipFilename()
+QString BackDia::getBackClipFilename() const
 {
     return chosenClip;
 }
 
 /*=============================================================*/
-bool BackDia::getBackUnbalanced()
+bool BackDia::getBackUnbalanced() const
 {
     return unbalanced->isChecked();
 }
 
 /*=============================================================*/
-int BackDia::getBackXFactor()
+int BackDia::getBackXFactor() const
 {
     return xfactor->value();
 }
 
 /*=============================================================*/
-int BackDia::getBackYFactor()
+int BackDia::getBackYFactor() const
 {
     return yfactor->value();
 }

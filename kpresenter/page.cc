@@ -155,6 +155,7 @@ Page::~Page()
 /*============================ draw contents ====================*/
 void Page::draw( QRect _rect, QPainter *p )
 {
+    kdDebug() << "Page::draw" << endl;
     p->save();
     editMode = false;
     fillBlack = false;
@@ -165,6 +166,7 @@ void Page::draw( QRect _rect, QPainter *p )
 
     drawPageInPainter( p, view->getDiffY(), _rect );
 
+    kdDebug() << "Page::draw *** setting currPresPage to 1" << endl;
     currPresPage = 1;
     currPresStep = 0;
     subPresStep = 0;
@@ -177,16 +179,16 @@ void Page::draw( QRect _rect, QPainter *p )
 /*======================== paint event ===========================*/
 void Page::paintEvent( QPaintEvent* paintEvent )
 {
+    kdDebug() << "Page::paintEvent " << paintEvent->rect().x() << "," << paintEvent->rect().y()
+              << " " << paintEvent->rect().width() << "x" << paintEvent->rect().height() << endl;
     QPainter painter;
 
     painter.begin( &buffer );
 
-    if ( editMode || !editMode && !fillBlack )
-	painter.fillRect( paintEvent->rect().x(), paintEvent->rect().y(),
-			  paintEvent->rect().width(), paintEvent->rect().height(), white );
+    if ( editMode || !fillBlack )
+	painter.fillRect( paintEvent->rect(), white );
     else
-	painter.fillRect( paintEvent->rect().x(), paintEvent->rect().y(),
-			  paintEvent->rect().width(), paintEvent->rect().height(), black );
+	painter.fillRect( paintEvent->rect(), black );
 
     painter.setClipping( true );
     painter.setClipRect( paintEvent->rect() );
@@ -196,28 +198,38 @@ void Page::paintEvent( QPaintEvent* paintEvent )
 
     painter.end();
 
-    bitBlt( this, paintEvent->rect().x(), paintEvent->rect().y(), &buffer,
-	    paintEvent->rect().x(), paintEvent->rect().y(), paintEvent->rect().width(), paintEvent->rect().height() );
+    bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
 }
 
 /*======================= draw background ========================*/
 void Page::drawBackground( QPainter *painter, QRect rect )
 {
-    KPBackGround *kpbackground = 0;
-
-    for ( int i = 0; i < static_cast<int>( backgroundList()->count() ); i++ ) {
-	kpbackground = backgroundList()->at( i );
-	if ( ( rect.intersects( QRect( getPageSize( i, _presFakt ) ) ) && editMode ) ||
+    QListIterator<KPBackGround> it(*backgroundList());
+    for ( int i = 0 ; it.current(); ++it, ++i ) {
+	if ( ( rect.intersects( getPageRect( i, _presFakt ) ) && editMode ) ||
 	     ( !editMode && static_cast<int>( currPresPage ) == i + 1 ) ) {
+            //kdDebug() << "Page::drawBackground drawing bg for page " << i+1 << " editMode=" << editMode << endl;
 	    if ( editMode ) {
 		if ( !ignoreSkip && painter->device()->devType() != QInternal::Printer && i != (int)view->getCurrPgNum() - 1 )
+                {
+                    //kdDebug() << "Page::drawBackground skipping drawing" << endl;
 		    continue;
-		kpbackground->draw( painter, QPoint( getPageSize( i, _presFakt ).x(),
-						     getPageSize( i, _presFakt ).y() ), editMode );
+                }
+		it.current()->draw( painter, getPageRect( i, _presFakt ).topLeft(), editMode );
 	    } else {
-		kpbackground->draw( painter, QPoint( getPageSize( i, _presFakt, false ).x() +
+                QRect pgRect = getPageRect( i, _presFakt, false );
+                /*kdDebug() << "Page::drawBackground pgRect: " << pgRect.x() << "," << pgRect.y()
+                          << " " << pgRect.width() << "x" << pgRect.height() << endl;
+
+                kdDebug() << " with borders, topleft is: " << pgRect.x() +
+                    view->kPresenterDoc()->getLeftBorder() * _presFakt
+                          << "," << pgRect.y() +
+                    view->kPresenterDoc()->getTopBorder() * _presFakt
+                          << endl;
+                */
+		it.current()->draw( painter, QPoint( pgRect.x() +
 						     view->kPresenterDoc()->getLeftBorder() * _presFakt,
-						     getPageSize( i, _presFakt, false ).y() +
+						     pgRect.y() +
 						     view->kPresenterDoc()->getTopBorder() * _presFakt ),
 				    editMode );
 	    }
@@ -228,16 +240,17 @@ void Page::drawBackground( QPainter *painter, QRect rect )
 /*========================= draw objects =========================*/
 void Page::drawObjects( QPainter *painter, QRect rect )
 {
-    KPObject *kpobject = 0;
-
     int pgNum = editMode ? (int)view->getCurrPgNum() : currPresPage;
+    kdDebug() << "Page::drawObjects ----- pgNum=" << pgNum << " currPresStep=" << currPresStep << " _presFakt=" << _presFakt << endl;
 
-    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-	kpobject = objectList()->at( i );
+    QListIterator<KPObject> it(*objectList());
+    for ( int i = 0 ; it.current(); ++it, ++i ) {
+        KPObject *kpobject = it.current();
 	int pg = getPageOfObj( i, _presFakt );
+        if (i<10) kdDebug() << "Page::drawObjects object " << i << " page " << pg << " getPresNum=" << kpobject->getPresNum() << endl;
 
 	if ( kpobject->isSticky() ||
-	     ( rect.intersects( kpobject->getBoundingRect( diffx( i ), diffy( i ) ) ) && editMode ) ||
+	     ( rect.intersects( kpobject->getBoundingRect( diffx(), diffy() ) ) && editMode ) ||
 	     ( !editMode && pg == static_cast<int>( currPresPage ) &&
 	       kpobject->getPresNum() <= static_cast<int>( currPresStep ) &&
 	       ( !kpobject->getDisappear() || kpobject->getDisappear() &&
@@ -246,6 +259,7 @@ void Page::drawObjects( QPainter *painter, QRect rect )
  		continue;
 
 	    if ( !editMode && static_cast<int>( currPresStep ) == kpobject->getPresNum() && !goingBack ) {
+                kdDebug() << "                 setSubPresStep " << subPresStep << endl;
 		kpobject->setSubPresStep( subPresStep );
 		kpobject->doSpecificEffects( true, false );
 	    }
@@ -254,15 +268,14 @@ void Page::drawObjects( QPainter *painter, QRect rect )
 		 editMode && painter->device()->devType() != QInternal::Printer && pg != pgNum )
 		continue;
 
-	    int dx = diffx( i );
-	    int dy = diffy( i );
 	    QPoint op;
 	    if ( kpobject->isSticky() ) {
 		op = kpobject->getOrig();
-		kpobject->setOrig( op.x(), op.y() - pg * getPageSize( 0, _presFakt ).height() + pgNum * getPageSize( 0, _presFakt ).height() );
+		kpobject->setOrig( op.x(), op.y() - pg * getPageRect( 0, _presFakt ).height() + pgNum * getPageRect( 0, _presFakt ).height() );
 	    }
 
-	    kpobject->draw( painter, dx, dy );
+            kdDebug() << "                 drawing object at " << diffx() << "," << diffy() << endl;
+	    kpobject->draw( painter, diffx(), diffy() );
 	    kpobject->setSubPresStep( 0 );
 	    kpobject->doSpecificEffects( false );
 	    if ( kpobject->isSticky() )
@@ -525,6 +538,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                                                       QPoint( mx - firstX, my - firstY ),
                                                       _objects, view->kPresenterDoc() );
                 view->kPresenterDoc()->commands()->addCommand( moveByCmd );
+                view->kPresenterDoc()->setModified( true );
             } else
                 if ( (int)objectList()->count() - 1 >= 0 ) {
                     for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
@@ -546,6 +560,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -562,6 +577,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -578,6 +594,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -594,6 +611,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -610,6 +628,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -626,6 +645,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -642,6 +662,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -658,6 +679,7 @@ void Page::mouseReleaseEvent( QMouseEvent *e )
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+                view->kPresenterDoc()->setModified( true );
             }
             kpobject = objectList()->at( resizeObjNum );
             kpobject->setMove( false );
@@ -1103,8 +1125,7 @@ void Page::resizeEvent( QResizeEvent *e )
     if ( editMode )
         QWidget::resizeEvent( e );
     else
-        QWidget::resizeEvent( new QResizeEvent( QSize( QApplication::desktop()->width(),
-                                                       QApplication::desktop()->height() ),
+        QWidget::resizeEvent( new QResizeEvent( QApplication::desktop()->size(),
                                                 e->oldSize() ) );
     if ( editMode )
         buffer.resize( size() );
@@ -1113,27 +1134,23 @@ void Page::resizeEvent( QResizeEvent *e )
 /*========================== get object ==========================*/
 int Page::getObjectAt( int x, int y )
 {
-    KPObject *kpobject = 0;
-
-    if ( (int)objectList()->count() - 1 >= 0 ) {
-        for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- ) {
-            kpobject = objectList()->at( i );
-            if ( kpobject->contains( QPoint( x, y ), diffx(), diffy() ) )
-                return i;
-        }
+    for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0 ; i-- ) {
+        KPObject * kpobject = objectList()->at( i );
+        if ( kpobject->contains( QPoint( x, y ), diffx(), diffy() ) )
+            return i;
     }
 
     return -1;
 }
 
 /*================================================================*/
-int Page::diffx( int /*i*/ )
+int Page::diffx() const
 {
     return view->getDiffX();
 }
 
 /*================================================================*/
-int Page::diffy( int /*i*/ )
+int Page::diffy() const
 {
     return view->getDiffY();
 }
@@ -1740,99 +1757,128 @@ KPTextObject *Page::haveASelectedKPTextObj()
 }
 
 /*====================== start screenpresentation ================*/
-void Page::startScreenPresentation( bool zoom, int curPgNum )
+void Page::startScreenPresentation( float presFakt, int curPgNum /* 1-based */)
 {
+    _presFakt = presFakt;
+    m_showOnlyPage = curPgNum;
+    //kdDebug() << "Page::startScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
+    //kdDebug() << "                              _presFakt=" << _presFakt << endl;
+
     presMenu->setItemChecked( PM_SM, true );
     presMenu->setItemChecked( PM_DM, false );
 
     setCursor( waitCursor );
-    KPObject *kpobject = 0;
-
     tmpObjs.clear();
 
     exitEditMode();
 
-    int i;
+    kdDebug() << "Page::startScreenPresentation Zooming backgrounds" << endl;
+    // Zoom backgrounds to the correct size for full screen
+    if ( m_showOnlyPage == -1 )
+    {
+        // Maybe we should do this on demand ?
+        QListIterator<KPBackGround> it(*backgroundList());
+        for ( int i = 0 ; it.current(); ++it, ++i )
+	    it.current()->setBgSize( getPageRect( i, _presFakt ).size() );
+    }
+    else
+        backgroundList()->at( m_showOnlyPage-1 )->setBgSize( getPageRect( m_showOnlyPage-1, _presFakt ).size() );
 
-    if ( zoom ) {
-	float _presFaktW = static_cast<float>( qApp->desktop()->width() ) / static_cast<float>( getPageSize( 0, 1.0, false ).width() ) >
-			   0.0 ?
-			   static_cast<float>( qApp->desktop()->width() ) /
-	    static_cast<float>( getPageSize( 0, 1.0, false ).width() ) : 1.0;
-	float _presFaktH = static_cast<float>( qApp->desktop()->height() ) / static_cast<float>( getPageSize( 0, 1.0, false ).height() ) >
-			   0.0 ?
-			   static_cast<float>( qApp->desktop()->height() ) /
-	    static_cast<float>( getPageSize( 0, 1.0, false ).height() ) :
-			   1.0;
-	_presFakt = QMIN(_presFaktW,_presFaktH);
-    } else {
-	_presFakt = 1.0;
+    kdDebug() << "Page::startScreenPresentation Zooming objects" << endl;
+    // Zoom objects to the correct size for full screen
+    // (might need a progress bar!)
+    QListIterator<KPObject> it(*objectList());
+    for ( int i = 0 ; it.current(); ++it, ++i )
+    {
+        int objPage = getPageOfObj( i, _presFakt ); // 1-based
+	// We need to zoom ALL objects, even to show only one page.
+	// Otherwise, the non-zoomed ones would interfer, being at the wrong page
+        //if ( m_showOnlyPage == -1 || m_showOnlyPage == objPage )
+        //{
+            //kdDebug() << "Zooming object " << i << endl;
+            it.current()->zoom( _presFakt );
+            //kdDebug() << "Zooming object " << i << " - done" << endl;
+            it.current()->drawSelection( false );
+
+            // Objects to draw initially are those on first page (or m_showOnlyPage page, if set)
+            if ( (m_showOnlyPage == -1 && objPage == 1) || m_showOnlyPage == objPage )
+            {
+                //kdDebug() << "Adding object " << i << " in page " << objPage << endl;
+                tmpObjs.append( it.current() );
+            }
+        //}
     }
 
-    KPBackGround *kpbackground = 0;
+    KPresenterDoc * doc = view->kPresenterDoc();
+    if ( doc->hasHeader() && doc->header() )
+	doc->header()->zoom( _presFakt );
+    if ( doc->hasFooter() && doc->footer() )
+	doc->footer()->zoom( _presFakt );
 
-    for ( i = 0; i < static_cast<int>( backgroundList()->count() ); i++ ) {
-	kpbackground = backgroundList()->at( i );
-	kpbackground->setSize( getPageSize( i, _presFakt ).width(), getPageSize( i, _presFakt ).height() );
-	kpbackground->restore();
+    if ( m_showOnlyPage != -1 ) // only one page
+    {
+        slideList.clear();
+        slideList << m_showOnlyPage;
     }
-
-    for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-	kpobject = objectList()->at( i );
-	kpobject->zoom( _presFakt );
-	kpobject->drawSelection( false );
-
-	if ( getPageOfObj( i, _presFakt ) == 1 )
-	    tmpObjs.append( kpobject );
+    else // all selected pages
+    {
+        slideList = doc->selectedSlides();
+        // ARGLLLRGLRLGRLG selectedSlides gets us 0-based numbers,
+        // and here we want 1-based numbers !
+        QString debugstr;
+        for ( QValueList<int>::Iterator it = slideList.begin() ; it != slideList.end(); ++ it )
+        {
+            *it = (*it)+1;
+            debugstr += QString::number(*it) + ',';
+        }
+        kdDebug() << "selectedSlides : " << debugstr << endl;
     }
-
-    if ( view->kPresenterDoc()->hasHeader() && view->kPresenterDoc()->header() )
-	view->kPresenterDoc()->header()->zoom( _presFakt );
-    if ( view->kPresenterDoc()->hasFooter() && view->kPresenterDoc()->footer() )
-	view->kPresenterDoc()->footer()->zoom( _presFakt );
-
-    slideList = view->kPresenterDoc()->getSlides( curPgNum, view );
+    ASSERT( slideList.count() );
     slideListIterator = slideList.begin();
-    currPresPage = *slideListIterator;
-    editMode = false;
-    drawMode = false;
-    presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
-    currPresStep = *presStepList.begin();
-    subPresStep = 0;
-    repaint( false );
+
     setCursor( blankCursor );
 
-    view->kPresenterDoc()->getHeaderFooterEdit()->updateSizes();
+    currPresPage = (unsigned int) -1; // force gotoPage to do something
+    gotoPage( *slideListIterator );
+
+    doc->getHeaderFooterEdit()->updateSizes();
+    //kdDebug() << "Page::startScreenPresentation - done" << endl;
 }
 
 /*====================== stop screenpresentation =================*/
 void Page::stopScreenPresentation()
 {
+    //kdDebug() << "Page::stopScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
     setCursor( waitCursor );
-    KPObject *kpobject = 0;
-    KPBackGround *kpbackground = 0;
-    int i;
 
-    for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ )
+    QListIterator<KPObject> it(*objectList());
+    for ( int i = 0 ; it.current(); ++it, ++i )
     {
-        kpobject = objectList()->at( i );
-        kpobject->zoomOrig();
-        kpobject->drawSelection( true );
+        if ( it.current()->isZoomed() )
+        {
+            //kdDebug() << "Page::stopScreenPresentation zooming back object " << i << endl;
+            it.current()->zoomOrig();
+            it.current()->drawSelection( true );
+        }
     }
 
     _presFakt = 1.0;
 
-    for ( i = 0; i < static_cast<int>( backgroundList()->count() ); i++ )
+    // Zoom backgrounds back
+    if ( m_showOnlyPage == -1 )
     {
-        kpbackground = backgroundList()->at( i );
-        kpbackground->setSize( getPageSize( i ).width(), getPageSize( i ).height() );
-        kpbackground->restore();
+        QListIterator<KPBackGround> it(*backgroundList());
+        for ( int i = 0 ; it.current(); ++it, ++i )
+	    it.current()->setBgSize( getPageRect( i ).size() );
     }
+    else
+        backgroundList()->at( m_showOnlyPage-1 )->setBgSize( getPageRect( m_showOnlyPage-1 ).size() );
 
-    if ( view->kPresenterDoc()->hasHeader() && view->kPresenterDoc()->header() )
-        view->kPresenterDoc()->header()->zoomOrig();
-    if ( view->kPresenterDoc()->hasFooter() && view->kPresenterDoc()->footer() )
-        view->kPresenterDoc()->footer()->zoomOrig();
+    KPresenterDoc * doc = view->kPresenterDoc();
+    if ( doc->hasHeader() && doc->header() )
+        doc->header()->zoomOrig();
+    if ( doc->hasFooter() && doc->footer() )
+        doc->footer()->zoomOrig();
 
     goingBack = false;
     currPresPage = 1;
@@ -1854,9 +1900,10 @@ bool Page::pNext( bool )
 
     if ( (int)currPresStep < *( --presStepList.end() ) )
     {
-        for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
+        QListIterator<KPObject> oit(*objectList());
+        for ( int i = 0 ; oit.current(); ++oit, ++i )
         {
-            kpobject = objectList()->at( i );
+            kpobject = oit.current();
             if ( getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage )
                  && kpobject->getPresNum() == static_cast<int>( currPresStep )
                  && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
@@ -1870,6 +1917,7 @@ bool Page::pNext( bool )
 
         if ( addSubPres )
         {
+            kdDebug() << "Page::pNext addSubPres" << endl;
             subPresStep++;
             doObjEffects();
             return false;
@@ -1879,6 +1927,7 @@ bool Page::pNext( bool )
 
         QValueList<int>::Iterator it = presStepList.find( currPresStep );
         currPresStep = *( ++it );
+        kdDebug() << "Page::pNext setting currPresStep to " << currPresStep << endl;
 
         if ( currPresStep == 0 )
         {
@@ -1895,18 +1944,17 @@ bool Page::pNext( bool )
         QValueList<int>::Iterator test(  slideListIterator );
         if ( ++test == slideList.end() )
         {
-            for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
+            kdDebug() << "Page::pNext last slide -> again" << endl;
+            QListIterator<KPObject> it(*objectList());
+            for ( int i = 0 ; it.current(); ++it, ++i )
             {
-                kpobject = objectList()->at( i );
+                kpobject = it.current();
                 if ( getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage )
                      && kpobject->getPresNum() == static_cast<int>( currPresStep )
                      && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
                 {
                     if ( static_cast<int>( subPresStep ) < kpobject->getSubPresSteps() )
-                    {
-                        if ( static_cast<int>( subPresStep ) < kpobject->getSubPresSteps() )
-                            addSubPres = true;
-                    }
+                        addSubPres = true;
                 }
             }
 
@@ -1925,9 +1973,10 @@ bool Page::pNext( bool )
             return false;
         }
 
-        for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ )
+        QListIterator<KPObject> oit(*objectList());
+        for ( int i = 0 ; oit.current(); ++oit, ++i )
         {
-            kpobject = objectList()->at( i );
+            kpobject = oit.current();
             if ( getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage )
                  && kpobject->getPresNum() == static_cast<int>( currPresStep )
                  && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
@@ -1952,6 +2001,7 @@ bool Page::pNext( bool )
         drawPageInPix( _pix1, view->getDiffY() );
 
         currPresPage = *( ++slideListIterator );
+        kdDebug() << "Page::pNext going to page " << currPresPage << endl;
 
         tmpObjs.clear();
         for ( int j = 0; j < static_cast<int>( objectList()->count() ); j++ )
@@ -1964,9 +2014,10 @@ bool Page::pNext( bool )
         currPresStep = *presStepList.begin();
 
         QPixmap _pix2( QApplication::desktop()->width(), QApplication::desktop()->height() );
-        int yOffset = ( presPage() - 1 ) * view->kPresenterDoc()->getPageSize( 0, 0, 0, presFakt(), false ).height();
-        if ( height() > view->kPresenterDoc()->getPageSize( 0, 0, 0, presFakt(), false ).height() )
-            yOffset -= ( height() - view->kPresenterDoc()->getPageSize( 0, 0, 0, presFakt(), false ).height() ) / 2;
+        int pageHeight = view->kPresenterDoc()->getPageRect( 0, 0, 0, presFakt(), false ).height();
+        int yOffset = ( presPage() - 1 ) * pageHeight;
+        if ( height() > pageHeight )
+            yOffset -= ( height() - pageHeight ) / 2;
         drawPageInPix( _pix2, yOffset );
 
         QValueList<int>::Iterator it( slideListIterator );
@@ -2013,15 +2064,12 @@ bool Page::pPrev( bool /*manual*/ )
 }
 
 /*================================================================*/
-bool Page::canAssignEffect( QList<KPObject> &objs )
+bool Page::canAssignEffect( QList<KPObject> &objs ) const
 {
-    KPObject *kpobject;
-
-    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-        kpobject = objectList()->at( i );
-        if ( kpobject->isSelected() )
-            objs.append( kpobject );
-    }
+    QListIterator<KPObject> oIt( *objectList() );
+    for (; oIt.current(); ++oIt )
+        if ( oIt.current()->isSelected() )
+            objs.append( oIt.current() );
 
     return !objs.isEmpty();
 }
@@ -2029,6 +2077,7 @@ bool Page::canAssignEffect( QList<KPObject> &objs )
 /*================================================================*/
 void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*/ )
 {
+    kdDebug() << "Page::drawPageInPix2" << endl;
     ignoreSkip = TRUE;
     currPresPage = pgnum + 1;
     int _yOffset = view->getDiffY();
@@ -2037,16 +2086,11 @@ void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*
     QPainter p;
     p.begin( &_pix );
 
-    KPObject *kpobject = 0L;
-    int i;
-
-    for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-        kpobject = objectList()->at( i );
-        kpobject->drawSelection( false );
-    }
+    QListIterator<KPObject> oIt( *objectList() );
+    for (; oIt.current(); ++oIt )
+        oIt.current()->drawSelection( false );
 
     bool _editMode = editMode;
-
     editMode = false;
     drawBackground( &p, _pix.rect() );
     editMode = _editMode;
@@ -2057,17 +2101,17 @@ void Page::drawPageInPix2( QPixmap &_pix, int __diffy, int pgnum, float /*_zoom*
 
     view->setDiffY( _yOffset );
 
-    for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ )
-    {
-        kpobject = objectList()->at( i );
-        kpobject->drawSelection( true );
-    }
+    oIt.toFirst();
+    for (; oIt.current(); ++oIt )
+        oIt.current()->drawSelection( true );
+
     ignoreSkip = FALSE;
 }
 
 /*==================== draw a page in a pixmap ===================*/
 void Page::drawPageInPix( QPixmap &_pix, int __diffy )
 {
+    kdDebug() << "Page::drawPageInPix" << endl;
     ignoreSkip = TRUE;
     int _yOffset = view->getDiffY();
     view->setDiffY( __diffy );
@@ -2084,9 +2128,10 @@ void Page::drawPageInPix( QPixmap &_pix, int __diffy )
     ignoreSkip = FALSE;
 }
 
-/*==================== draw a page in a pixmap ===================*/
+/*==================== draw a page in a painter ===================*/
 void Page::drawPageInPainter( QPainter* painter, int __diffy, QRect _rect )
 {
+    kdDebug() << "Page::drawPageInPainter" << endl;
     ignoreSkip = TRUE;
     int _yOffset = view->getDiffY();
     view->setDiffY( __diffy );
@@ -2536,14 +2581,13 @@ void Page::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 /*================================================================*/
 void Page::doObjEffects()
 {
-    KPObject *kpobject = 0;
-    int i;
     QPixmap screen_orig( kapp->desktop()->width(), kapp->desktop()->height() );
     bool drawn = false;
 
     // YABADABADOOOOOOO.... That's a hack :-)
     if ( subPresStep == 0 && currPresPage > 0 )
     {
+        kdDebug() << "Page::doObjEffects - in the strange hack" << endl;
         inEffect = true;
         QPainter p;
         p.begin( &screen_orig );
@@ -2566,9 +2610,10 @@ void Page::doObjEffects()
         bitBlt( &screen_orig, 0, 0, this, 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
     QPixmap *screen = new QPixmap( screen_orig );
 
-    for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ )
+    QListIterator<KPObject> oit(*objectList());
+    for ( int i = 0 ; oit.current(); ++oit, ++i )
     {
-        kpobject = objectList()->at( i );
+        KPObject *kpobject = oit.current();
         if ( getPageOfObj( i, _presFakt ) == static_cast<int>( currPresPage )
              && kpobject->getPresNum() == static_cast<int>( currPresStep ) )
         {
@@ -2722,9 +2767,9 @@ void Page::doObjEffects()
 
                 changes.clear();
 
-                for ( i = 0; i < static_cast<int>( _objList.count() ); i++ )
+                for ( int i = 0; i < static_cast<int>( _objList.count() ); i++ )
                 {
-                    kpobject = _objList.at( i );
+                    KPObject * kpobject = _objList.at( i );
                     int _w =  kapp->desktop()->width() - ( kpobject->getOrig().x() - diffx() );
                     int _h =  kapp->desktop()->height() - ( kpobject->getOrig().y() - diffy() );
                     int ox = 0, oy = 0, ow = 0, oh = 0;
@@ -3089,7 +3134,7 @@ void Page::doObjEffects()
                 }
 
                 QRect *changed;
-                for ( i = 0; i < static_cast<int>( changes.count() ); i++ )
+                for ( int i = 0; i < static_cast<int>( changes.count() ); i++ )
                 {
                     changed = changes.at( i );
                     bitBlt( this, changed->x(), changed->y(), screen, changed->x(), changed->y(), changed->width(), changed->height() );
@@ -3105,6 +3150,7 @@ void Page::doObjEffects()
 
     if ( !effects )
     {
+        kdDebug() << "Page::doObjEffects no effects" << endl;
         QPainter p;
         p.begin( this );
         p.drawPixmap( 0, 0, screen_orig );
@@ -3113,6 +3159,7 @@ void Page::doObjEffects()
     }
     else
     {
+        kdDebug() << "Page::doObjEffects effects" << endl;
         QPainter p;
         p.begin( screen );
         drawObjects( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ) );
@@ -3204,7 +3251,7 @@ void Page::print( QPainter *painter, QPrinter *printer, float left_margin, float
     progress.setProgress( 0 );
 
     if ( printer->fromPage() > 1 )
-        view->setDiffY( ( printer->fromPage() - 1 ) * ( getPageSize( 1, 1.0, false ).height() ) -
+        view->setDiffY( ( printer->fromPage() - 1 ) * ( getPageRect( 1, 1.0, false ).height() ) -
                         MM_TO_POINT( top_margin ) );
 
     for ( i = printer->fromPage(); i <= printer->toPage(); i++ )
@@ -3219,15 +3266,15 @@ void Page::print( QPainter *painter, QPrinter *printer, float left_margin, float
         if ( i > printer->fromPage() ) printer->newPage();
 
         painter->resetXForm();
-        painter->fillRect( getPageSize( 0 ), white );
+        painter->fillRect( getPageRect( 0 ), white );
 
-        drawPageInPainter( painter, view->getDiffY(), getPageSize( i - 1 ) );
+        drawPageInPainter( painter, view->getDiffY(), getPageRect( i - 1 ) );
         kapp->processEvents();
 
         painter->resetXForm();
         kapp->processEvents();
 
-        view->setDiffY( i * ( getPageSize( 1, 1.0, false ).height() ) - MM_TO_POINT( top_margin ) );
+        view->setDiffY( i * ( getPageRect( 1, 1.0, false ).height() ) - MM_TO_POINT( top_margin ) );
     }
 
     setToolEditMode( toolEditMode );
@@ -3237,8 +3284,9 @@ void Page::print( QPainter *painter, QPrinter *printer, float left_margin, float
     progress.setProgress( printer->toPage() - printer->fromPage() + 2 );
     kapp->setWinStyleHighlightColor( c );
 
-    for ( i = 0; i < static_cast<int>( objectList()->count() ); i++ )
-        objectList()->at( i )->drawSelection( true );
+    QListIterator<KPObject> oIt( *objectList() );
+    for (; oIt.current(); ++oIt )
+        oIt.current()->drawSelection( true );
 
     currPresPage = 1;
     currPresStep = 0;
@@ -3496,7 +3544,7 @@ void Page::dropEvent( QDropEvent *e )
         QCursor c = cursor();
         setCursor( waitCursor );
         doc->insertPicture( tmpFile.name(), e->pos().x(), e->pos().y() +
-                            ( currPgNum() - 1) * getPageSize( 0 ).height() );
+                            ( currPgNum() - 1) * getPageRect( 0 ).height() );
         setCursor( c );
 
         e->accept();
@@ -3527,7 +3575,7 @@ void Page::dropEvent( QDropEvent *e )
                     QCursor c = cursor();
                     setCursor( waitCursor );
                     doc->insertPicture( filename, e->pos().x(), e->pos().y() +
-                                        ( currPgNum() - 1) * getPageSize( 0 ).height() );
+                                        ( currPgNum() - 1) * getPageRect( 0 ).height() );
                     setCursor( c );
                 } else if ( mimetype.contains( "text" ) ) {
                     QCursor c = cursor();
@@ -3573,22 +3621,7 @@ void Page::slotGotoPage()
     setCursor( blankCursor );
     int pg = currPresPage;
     pg = KPGotoPage::gotoPage( view->kPresenterDoc(), _presFakt, slideList, pg, this );
-
-    if ( pg != static_cast<int>( currPresPage ) ) {
-        currPresPage = pg;
-        slideListIterator = slideList.find( currPresPage );
-        editMode = false;
-        drawMode = false;
-        presStepList = view->kPresenterDoc()->reorderPage( currPresPage, diffx(), diffy(), _presFakt );
-        currPresStep = *presStepList.begin();
-        subPresStep = 0;
-
-        int yo = view->kPresenterDoc()->getPageSize( 0, 0, 0, presFakt(), false ).height() * ( pg - 1 );
-        view->setDiffY( yo );
-        resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
-        repaint( false );
-        setFocus();
-    }
+    gotoPage( pg );
 }
 
 /*================================================================*/
@@ -3596,6 +3629,7 @@ void Page::gotoPage( int pg )
 {
     if ( pg != static_cast<int>( currPresPage ) ) {
         currPresPage = pg;
+        //kdDebug() << "Page::gotoPage currPresPage=" << currPresPage << endl;
         slideListIterator = slideList.find( currPresPage );
         editMode = false;
         drawMode = false;
@@ -3603,8 +3637,10 @@ void Page::gotoPage( int pg )
         currPresStep = *presStepList.begin();
         subPresStep = 0;
 
-        int yo = view->kPresenterDoc()->getPageSize( 0, 0, 0, presFakt(), false ).height() * ( pg - 1 );
+        int yo = view->kPresenterDoc()->getPageRect( 0, 0, 0, presFakt(), false ).height() * ( pg - 1 );
+        // ## shouldn't this center the slide if it's smaller ? (see KPresenterView::startScreenPresentation)
         view->setDiffY( yo );
+        //kdDebug() << "Page::gotoPage :   setDiffY " << yo << endl;
         resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
         repaint( false );
         setFocus();
@@ -3664,9 +3700,17 @@ QList<KPBackGround> *Page::backgroundList()
 {
     return view->kPresenterDoc()->backgroundList();
 }
+const QList<KPBackGround> *Page::backgroundList() const
+{
+    return view->kPresenterDoc()->backgroundList();
+}
 
 /*================================================================*/
 QList<KPObject> *Page::objectList()
+{
+    return view->kPresenterDoc()->objectList();
+}
+const QList<KPObject> *Page::objectList() const
 {
     return view->kPresenterDoc()->objectList();
 }
@@ -3684,39 +3728,39 @@ unsigned int Page::currPgNum()
 }
 
 /*================================================================*/
-unsigned int Page::rastX()
+unsigned int Page::rastX() const
 {
     return view->kPresenterDoc()->rastX();
 }
 
 /*================================================================*/
-unsigned int Page::rastY()
+unsigned int Page::rastY() const
 {
     return view->kPresenterDoc()->rastY();
 }
 
 /*================================================================*/
-QColor Page::txtBackCol()
+QColor Page::txtBackCol() const
 {
     return view->kPresenterDoc()->txtBackCol();
 }
 
 /*================================================================*/
-bool Page::spInfinitLoop()
+bool Page::spInfinitLoop() const
 {
     return view->kPresenterDoc()->spInfinitLoop();
 }
 
 /*================================================================*/
-bool Page::spManualSwitch()
+bool Page::spManualSwitch() const
 {
     return view->kPresenterDoc()->spManualSwitch();
 }
 
 /*================================================================*/
-QRect Page::getPageSize( unsigned int p, float fakt, bool decBorders )
+QRect Page::getPageRect( unsigned int p, float fakt, bool decBorders )
 {
-    return view->kPresenterDoc()->getPageSize( p, diffx(), diffy(), fakt, decBorders );
+    return view->kPresenterDoc()->getPageRect( p, diffx(), diffy(), fakt, decBorders );
 }
 
 /*================================================================*/
@@ -3728,7 +3772,12 @@ unsigned int Page::pageNums()
 /*================================================================*/
 int Page::getPageOfObj( int i, float fakt )
 {
-    return view->kPresenterDoc()->getPageOfObj( i, diffx(), diffy(), fakt );
+    // This works much better with 0,0 than with diffx, diffy
+    // (the objects don't appear in the view-current-page-fullscreen feature IIRC)
+    // See comment in KPresenterDoc::getPageOfObj. Passing diffx/diffy
+    // seems useless to me, but if it changes something, then it's not
+    // that useless... This needs to be cleaned up :)  (DF)
+    return view->kPresenterDoc()->getPageOfObj( i, 0 /*diffx()*/, 0 /*diffy()*/, fakt );
 }
 
 /*================================================================*/
@@ -3920,7 +3969,7 @@ void Page::switchingMode()
 }
 
 /*================================================================*/
-bool Page::calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio )
+bool Page::calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio ) const
 {
     if ( abs( dy ) > abs( dx ) )
         dx = static_cast<int>( static_cast<double>( dy ) * ratio );
@@ -3989,7 +4038,7 @@ void Page::picViewOrig640x480()
 {
     KPPixmapObject *obj = 0;
     QSize origSize = getPixmapOrigSize( obj );
-    QSize pgSize = view->kPresenterDoc()->getPageSize( 0, 0, 0 ).size();
+    QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
     QSize presSize( 640, 480 );
     if ( origSize == QSize( -1, -1 ) || !obj )
         return;
@@ -4002,7 +4051,7 @@ void Page::picViewOrig800x600()
 {
     KPPixmapObject *obj = 0;
     QSize origSize = getPixmapOrigSize( obj );
-    QSize pgSize = view->kPresenterDoc()->getPageSize( 0, 0, 0 ).size();
+    QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
     QSize presSize( 800, 600 );
     if ( origSize == QSize( -1, -1 ) || !obj )
         return;
@@ -4015,7 +4064,7 @@ void Page::picViewOrig1024x768()
 {
     KPPixmapObject *obj = 0;
     QSize origSize = getPixmapOrigSize( obj );
-    QSize pgSize = view->kPresenterDoc()->getPageSize( 0, 0, 0 ).size();
+    QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
     QSize presSize( 1024, 768 );
     if ( origSize == QSize( -1, -1 ) || !obj )
         return;
@@ -4028,7 +4077,7 @@ void Page::picViewOrig1280x1024()
 {
     KPPixmapObject *obj = 0;
     QSize origSize = getPixmapOrigSize( obj );
-    QSize pgSize = view->kPresenterDoc()->getPageSize( 0, 0, 0 ).size();
+    QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
     QSize presSize( 1280, 1024 );
     if ( origSize == QSize( -1, -1 ) || !obj )
         return;
@@ -4041,7 +4090,7 @@ void Page::picViewOrig1600x1200()
 {
     KPPixmapObject *obj = 0;
     QSize origSize = getPixmapOrigSize( obj );
-    QSize pgSize = view->kPresenterDoc()->getPageSize( 0, 0, 0 ).size();
+    QSize pgSize = view->kPresenterDoc()->getPageRect( 0, 0, 0 ).size();
     QSize presSize( 1600, 1200 );
     if ( origSize == QSize( -1, -1 ) || !obj )
         return;
@@ -4067,16 +4116,17 @@ void Page::scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize,
                                           obj, view->kPresenterDoc() );
     resizeCmd->execute();
     view->kPresenterDoc()->commands()->addCommand( resizeCmd );
+    view->kPresenterDoc()->setModified( true );
 }
 
 void Page::setTextBackground( KPTextObject *obj )
 {
-    QPixmap pix( getPageSize( 0 ).size() );
+    QPixmap pix( getPageRect( 0 ).size() );
     QPainter painter( &pix );
     backgroundList()->at( view->getCurrPgNum() - 1 )->draw( &painter, QPoint( 0, 0 ), FALSE );
     QPixmap bpix( obj->getSize() );
     bitBlt( &bpix, 0, 0, &pix, obj->getOrig().x(), obj->getOrig().y() -
-	    getPageSize( 0 ).height() * ( view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );
+	    getPageRect( 0 ).height() * ( view->getCurrPgNum() - 1 ), bpix.width(), bpix.height() );
     QBrush b( white, bpix );
     QPalette pal( obj->getKTextObject()->palette() );
     pal.setBrush( QColorGroup::Base, b );

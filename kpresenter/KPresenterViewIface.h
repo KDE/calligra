@@ -105,7 +105,6 @@ k_dcop:
     virtual void screenNext();
     virtual void screenLast();
     virtual void screenSkip();
-    virtual void screenFullScreen();
     virtual void screenPenColor();
     virtual void screenPenWidth( const QString &w );
 

@@ -347,11 +347,6 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const QString &_path )
 /*========================== save ===============================*/
 bool KPresenterDoc::saveToStream(QIODevice * dev)
 {
-    KPresenterView *view = (KPresenterView*)firstView(); // ####### do some syncing between views
-    if ( view )
-	selectedSlides = view->selectedSlideMap();
-
-
     QTextStream out( dev );
     out.setEncoding(QTextStream::UnicodeUTF8);
     KPObject *kpobject = 0L;
@@ -402,8 +397,8 @@ bool KPresenterDoc::saveToStream(QIODevice * dev)
     out << indent << "<PRESSPEED value=\"" << static_cast<int>( presSpeed ) << "\"/>" << endl;
 
     out << otag << "<SELSLIDES>" << endl;
-    QMap<int,bool>::Iterator sit = selectedSlides.begin();
-    for ( ; sit != selectedSlides.end(); ++sit )
+    QMap<int,bool>::Iterator sit = m_selectedSlides.begin();
+    for ( ; sit != m_selectedSlides.end(); ++sit )
 	out << indent << "<SLIDE nr=\"" << sit.key() << "\" show=\"" << ( *sit ) << "\"/>" << endl;
     out << etag << "</SELSLIDES>" << endl;
 
@@ -531,7 +526,7 @@ void KPresenterDoc::saveObjects( QTextStream& out )
 	    << "\" sticky=\"" << (int)kpobject->isSticky() << "\">" << endl;
 	QPoint orig = kpobject->getOrig();
 	if ( saveOnlyPage != -1 )
-	    kpobject->moveBy( 0, -saveOnlyPage * getPageSize( 0, 0, 0 ).height() );
+	    kpobject->moveBy( 0, -saveOnlyPage * getPageRect( 0, 0, 0 ).height() );
 	kpobject->save( out );
 	if ( saveOnlyPage != -1 )
 	    kpobject->setOrig( orig );
@@ -958,7 +953,9 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
 			else if ( ( *it ).m_strName == "show" )
 			    show = static_cast<bool>( ( *it ).m_strValue.toInt() );
 		    }
-		    selectedSlides.insert( nr, show );
+                    if ( nr >= 0 )
+                        m_selectedSlides.insert( nr, show );
+                    kdDebug() << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
 		} else
 		    kdError() << "Unknown tag '" << tag << "' in SELSLIDES" << endl;
 
@@ -1085,14 +1082,16 @@ bool KPresenterDoc::loadXML( KOMLParser & parser )
     addToRecentlyOpenedList( url().url() );
 
     if ( allSlides ) {
-	QMap<int,bool>::Iterator sit = selectedSlides.begin();
-	for ( ; sit != selectedSlides.end(); ) {
+        //kdDebug() << "KPresenterDoc::loadXML allSlides" << endl;
+	QMap<int,bool>::Iterator sit = m_selectedSlides.begin();
+	for ( ; sit != m_selectedSlides.end(); ) {
 	    int k = sit.key();
 	    sit++;
-	    selectedSlides.replace( k, TRUE );
+	    m_selectedSlides.replace( k, TRUE );
 	}
     }
 
+    setModified(false);
     return true;
 }
 
@@ -1110,8 +1109,8 @@ void KPresenterDoc::loadBackground( KOMLParser& parser, QValueList<KOMLAttrib>& 
 	    insertNewPage( 0, 0, false );
 	    KPBackGround *kpbackground = _backgroundList.last();
 	    kpbackground->load( parser, lst );
-	    if ( !selectedSlides.contains( _backgroundList.count() - 1 ) )
-		selectedSlides.insert( _backgroundList.count() - 1, true );
+	    if ( !m_selectedSlides.contains( _backgroundList.count() - 1 ) )
+		m_selectedSlides.insert( _backgroundList.count() - 1, true );
 	} else
 	    kdWarning() << "Unknown tag '" << tag << "' in BACKGROUND" << endl;
 
@@ -1364,9 +1363,8 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	if ( _clean )
 	    setPageLayout( __pgLayout, 0, 0 );
 	else {
-	    QRect r = getPageSize( 0, 0, 0 );
-	    _backgroundList.last()->setSize( r.width(), r.height() );
-	    _backgroundList.last()->restore();
+	    QRect r = getPageRect( 0, 0, 0 );
+	    _backgroundList.last()->setBgSize( r.size() );
 	}
 
 	KPObject *kpobject = 0;
@@ -1462,15 +1460,10 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
     //	return;
 
     _pageLayout = pgLayout;
-    QRect r = getPageSize( 0, diffx, diffy );
+    QRect r = getPageRect( 0, diffx, diffy );
 
-    for ( int i = 0; i < static_cast<int>( _backgroundList.count() ); i++ ) {
-	if ( QSize( r.width(), r.height() ) != _backgroundList.at( i )->getSize() ) {
-	    _backgroundList.at( i )->setSize( r.width(), r.height() );
-	    _backgroundList.at( i )->restore();
-	}
-    }
-
+    for ( int i = 0; i < static_cast<int>( _backgroundList.count() ); i++ )
+        _backgroundList.at( i )->setBgSize( r.size() );
 
     QString unit;
     switch ( _pageLayout.unit ) {
@@ -1496,9 +1489,8 @@ unsigned int KPresenterDoc::insertNewPage( int diffx, int diffy, bool _restore )
     _backgroundList.append( kpbackground );
 
     if ( _restore ) {
-	QRect r = getPageSize( 0, diffx, diffy );
-	_backgroundList.last()->setSize( r.width(), r.height() );
-	_backgroundList.last()->restore();
+	QRect r = getPageRect( 0, diffx, diffy );
+	_backgroundList.last()->setBgSize( r.size() );
 	repaint( false );
     }
 
@@ -1521,7 +1513,7 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt" );
 	_clean = clean;
-	objStartY = getPageSize( _backgroundList.count() - 1, 0, 0 ).y() + getPageSize( _backgroundList.count() - 1,
+	objStartY = getPageRect( _backgroundList.count() - 1, 0, 0 ).y() + getPageRect( _backgroundList.count() - 1,
 											0, 0 ).height();
 	bool ok = loadNativeFormat( fileName );
 	objStartY = 0;
@@ -3001,7 +2993,7 @@ void KPresenterDoc::insertPicture( QString filename, int diffx, int diffy, int _
     insertCmd->execute();
     _commands.addCommand( insertCmd );
 
-    QRect s = getPageSize( 0, 0, 0 );
+    QRect s = getPageRect( 0, 0, 0 );
     float fakt = 1;
     if ( kppixmapobject->getSize().width() > s.width() )
 	fakt = (float)s.width() / (float)kppixmapobject->getSize().width();
@@ -3318,7 +3310,6 @@ QValueList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int dif
 	}
     }
 
-    setModified(true);
     return orderList;
 }
 
@@ -3326,28 +3317,26 @@ QValueList<int> KPresenterDoc::reorderPage( unsigned int num, int diffx, int dif
 int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt )
 {
     QRect rect;
+    int deskw = QApplication::desktop()->width();
 
-    KPObject *kpobject = 0;
-
-    for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
-	kpobject = objectList()->at( i );
-	if ( i == objNum ) {
-	    for ( int j = 0; j < static_cast<int>( _backgroundList.count() ); j++ ) {
-		rect = getPageSize( j, diffx, diffy, fakt, false );
-		rect.setWidth( QApplication::desktop()->width() );
-		if ( rect.intersects( kpobject->getBoundingRect( diffx, diffy ) ) ) {
-		    QRect r = rect.intersect( kpobject->getBoundingRect( diffx, diffy ) );
-		    if ( r.width() * r.height() > ( kpobject->getBoundingRect( diffx, diffy ).width() * kpobject->getBoundingRect( diffx, diffy ).height() ) / 4 )
-			return j+1;
-		}
-	    }
-	}
+    // Are diffx/diffy really necessary here ? It seems to me we would
+    // get the same result with 0,0 instead, since this stuff surely
+    // doesn't depend on the scrollbar positions, nor the current page (DF).
+    KPObject * kpobject = objectList()->at( objNum );
+    for ( int j = 0; j < static_cast<int>( _backgroundList.count() ); j++ ) {
+        rect = getPageRect( j, diffx, diffy, fakt, false );
+        rect.setWidth( deskw );
+        if ( rect.intersects( kpobject->getBoundingRect( diffx, diffy ) ) ) {
+            QRect r = rect.intersect( kpobject->getBoundingRect( diffx, diffy ) );
+            if ( r.width() * r.height() > ( kpobject->getBoundingRect( diffx, diffy ).width() * kpobject->getBoundingRect( diffx, diffy ).height() ) / 4 )
+                return j+1;
+        }
     }
     return -1;
 }
 
 /*================== get size of page ===========================*/
-QRect KPresenterDoc::getPageSize( unsigned int num, int diffx, int diffy, float fakt , bool decBorders )
+QRect KPresenterDoc::getPageRect( unsigned int num, int diffx, int diffy, float fakt , bool decBorders )
 {
     int pw, ph, bl = static_cast<int>(_pageLayout.ptLeft);
     int br = static_cast<int>(_pageLayout.ptRight);
@@ -3369,7 +3358,7 @@ QRect KPresenterDoc::getPageSize( unsigned int num, int diffx, int diffy, float 
     pw = static_cast<int>( static_cast<float>( pw ) * fakt );
     ph = static_cast<int>( static_cast<float>( ph ) * fakt );
 
-    return QRect( -diffx + bl, -diffy + bt + num * bt + num * bb + num * ph, pw, ph );
+    return QRect( -diffx + bl, -diffy + bt + num * ( bt + bb + ph ), pw, ph );
 }
 
 /*================================================================*/
@@ -3394,7 +3383,7 @@ int KPresenterDoc::getBottomBorder()
 void KPresenterDoc::deletePage( int _page )
 {
     KPObject *kpobject = 0;
-    int _h = getPageSize( 0, 0, 0 ).height();
+    int _h = getPageRect( 0, 0, 0 ).height();
 
     deSelectAllObj();
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
@@ -3422,7 +3411,7 @@ void KPresenterDoc::deletePage( int _page )
 int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate, const QString &theFile )
 {
     KPObject *kpobject = 0;
-    int _h = getPageSize( 0, 0, 0 ).height();
+    int _h = getPageRect( 0, 0, 0 ).height();
 
     if ( _insPos == IP_BEFORE )
 	_page--;
@@ -3458,7 +3447,7 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 
     if ( _insPos == IP_AFTER )
 	_page++;
-    objStartY = getPageSize( _page - 1, 0, 0 ).y() + getPageSize( _page - 1, 0, 0 ).height();
+    objStartY = getPageRect( _page - 1, 0, 0 ).y() + getPageRect( _page - 1, 0, 0 ).height();
     loadNativeFormat( fileName );
     objStartY = 0;
     _clean = true;
@@ -3644,7 +3633,7 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int )
     loadObjects( parser, lst, true );
 
     repaint( false );
-    setModified(FALSE );
+    setModified( true );
 }
 
 /*================= deselect all objs ===========================*/
@@ -3663,7 +3652,7 @@ void KPresenterDoc::alignObjsLeft()
     QList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int _x = getPageSize( 1, 0, 0 ).x();
+    int _x = getPageRect( 1, 0, 0 ).x();
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
@@ -3686,8 +3675,8 @@ void KPresenterDoc::alignObjsCenterH()
     QList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int _x = getPageSize( 1, 0, 0 ).x();
-    int _w = getPageSize( 1, 0, 0 ).width();
+    int _x = getPageRect( 1, 0, 0 ).x();
+    int _w = getPageRect( 1, 0, 0 ).width();
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
@@ -3711,7 +3700,7 @@ void KPresenterDoc::alignObjsRight()
     QList<QPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int _w = getPageSize( 1, 0, 0 ).x() + getPageSize( 1, 0, 0 ).width();
+    int _w = getPageRect( 1, 0, 0 ).x() + getPageRect( 1, 0, 0 ).width();
 
     for ( int i = 0; i < static_cast<int>( objectList()->count() ); i++ ) {
 	kpobject = objectList()->at( i );
@@ -3741,7 +3730,7 @@ void KPresenterDoc::alignObjsTop()
 	if ( kpobject->isSelected() ) {
 	    pgnum = getPageOfObj( i, 0, 0 );
 	    if ( pgnum != -1 ) {
-		_y = getPageSize( pgnum - 1, 0, 0 ).y();
+		_y = getPageRect( pgnum - 1, 0, 0 ).y();
 		_objects.append( kpobject );
 		_diffs.append( new QPoint( 0, _y - kpobject->getOrig().y() ) );
 	    }
@@ -3768,8 +3757,8 @@ void KPresenterDoc::alignObjsCenterV()
 	if ( kpobject->isSelected() ) {
 	    pgnum = getPageOfObj( i, 0, 0 );
 	    if ( pgnum != -1 ) {
-		_y = getPageSize( pgnum - 1, 0, 0 ).y();
-		_h = getPageSize( pgnum - 1, 0, 0 ).height();
+		_y = getPageRect( pgnum - 1, 0, 0 ).y();
+		_h = getPageRect( pgnum - 1, 0, 0 ).height();
 		_objects.append( kpobject );
 		_diffs.append( new QPoint( 0, ( _h - kpobject->getSize().height() ) / 2 -
 					   kpobject->getOrig().y() + _y ) );
@@ -3797,7 +3786,7 @@ void KPresenterDoc::alignObjsBottom()
 	if ( kpobject->isSelected() ) {
 	    pgnum = getPageOfObj( i, 0, 0 );
 	    if ( pgnum != -1 ) {
-		_h = getPageSize( pgnum - 1, 0, 0 ).y() + getPageSize( pgnum - 1, 0, 0 ).height();
+		_h = getPageRect( pgnum - 1, 0, 0 ).y() + getPageRect( pgnum - 1, 0, 0 ).height();
 		_objects.append( kpobject );
 		_diffs.append( new QPoint( 0, _h - kpobject->getSize().height() - kpobject->getOrig().y() ) );
 	    }
@@ -3861,7 +3850,7 @@ int KPresenterDoc::getPenBrushFlags()
 QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title, float fakt )
 {
     QList<KPTextObject> objs;
-    QRect rect = getPageSize( pgNum, 0, 0, fakt );
+    QRect rect = getPageRect( pgNum, 0, 0, fakt );
 
     KPObject *kpobject = 0L;
     KPTextObject *tmp = 0L;
@@ -3909,12 +3898,6 @@ void KPresenterDoc::setFooter( bool b )
 }
 
 /*================================================================*/
-QValueList<int> KPresenterDoc::getSlides( int, KPresenterView *view )
-{
-    return view->selectedSlides();
-}
-
-/*================================================================*/
 void KPresenterDoc::makeUsedPixmapList()
 {
     usedPixmaps.clear();
@@ -3956,7 +3939,7 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
     QListIterator<KPBackGround> bIt( _backgroundList );
     for (; bIt.current(); ++bIt, i++ )
     {
-        QRect r = getPageSize( i, 0, 0, 1.0, false );
+        QRect r = getPageRect( i, 0, 0, 1.0, false );
         if ( rect.intersects( r ) )
             bIt.current()->draw( &painter, QPoint( r.x(), r.y() ), false );
     }
@@ -4038,4 +4021,38 @@ void KPresenterDoc::movePage( int from, int to )
     InsertPos ipos;
     ipos = IP_BEFORE;
     insertPage( to, ipos, FALSE, file );
+    // Update the views
+    KoView* view = firstView();
+    for( ; view; view = nextView() )
+        static_cast<KPresenterView*>(view)->updateSideBar( to );
 }
+
+void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
+{
+    ASSERT( pgNum >= 0 );
+    m_selectedSlides.replace( pgNum, select );
+    kdDebug() << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
+    // Update the views
+    KoView* view = firstView();
+    for( ; view; view = nextView() )
+        static_cast<KPresenterView*>(view)->updateSideBarItem( pgNum );
+}
+
+bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ ) const
+{
+    if ( m_selectedSlides.contains(pgNum) )
+        return m_selectedSlides[ pgNum ];
+    return true;
+}
+
+QValueList<int> KPresenterDoc::selectedSlides() const /* returned list is 0-based */
+{
+    QValueList<int> result;
+    QMap<int, bool >::ConstIterator it = m_selectedSlides.begin();
+    QMap<int, bool >::ConstIterator end = m_selectedSlides.end();
+    for (  ; it != end; ++it )
+        if ( it.data() )
+            result << it.key();
+    return result;
+}
+

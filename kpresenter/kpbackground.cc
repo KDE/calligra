@@ -629,3 +629,14 @@ DCOPObject* KPBackGround::dcopObject()
 
     return dcop;
 }
+
+/*=============================================================*/
+void KPBackGround::setBgSize( QSize _size, bool visible )
+{
+    if ( _size != getSize() )
+    {
+        removeGradient(); ext = _size; footerHeight = 0;
+        if (visible)
+            restore();
+    }
+}

@@ -109,8 +109,10 @@ public:
     virtual void setupPrinter( QPrinter &printer );
     virtual void print( QPrinter &printer );
 
+    /* moved to doc
     QValueList<int> selectedSlides() const;
     QMap<int, bool > selectedSlideMap() const;
+    */
 
 signals:
     void currentPageChanged( int );
@@ -118,117 +120,116 @@ signals:
 
 public slots:
     // edit menu
-    virtual void editUndo();
-    virtual void editRedo();
-    virtual void editCut();
-    virtual void editCopy();
-    virtual void editPaste();
-    virtual void editDelete();
-    virtual void editSelectAll();
-    virtual void editDuplicatePage();
-    virtual void editDelPage();
-    virtual void editFind();
-    virtual void editHeaderFooter();
+    void editUndo();
+    void editRedo();
+    void editCut();
+    void editCopy();
+    void editPaste();
+    void editDelete();
+    void editSelectAll();
+    void editDuplicatePage();
+    void editDelPage();
+    void editFind();
+    void editHeaderFooter();
 
     // view menu
     void viewShowSideBar();
 
     // insert menu
-    virtual void insertPage();
-    virtual void insertPicture();
-    virtual void insertClipart();
+    void insertPage();
+    void insertPicture();
+    void insertClipart();
 
     // tools menu
-    virtual void toolsMouse();
-    virtual void toolsLine();
-    virtual void toolsRectangle();
-    virtual void toolsCircleOrEllipse();
-    virtual void toolsPie();
-    virtual void toolsText();
-    virtual void toolsAutoform();
-    virtual void toolsDiagramm();
-    virtual void toolsTable();
-    virtual void toolsFormula();
-    virtual void toolsObject();
+    void toolsMouse();
+    void toolsLine();
+    void toolsRectangle();
+    void toolsCircleOrEllipse();
+    void toolsPie();
+    void toolsText();
+    void toolsAutoform();
+    void toolsDiagramm();
+    void toolsTable();
+    void toolsFormula();
+    void toolsObject();
 
     // extra menu
-    virtual void extraPenBrush();
-    virtual void extraConfigPie();
-    virtual void extraConfigRect();
-    virtual void extraRaise();
-    virtual void extraLower();
-    virtual void extraRotate();
-    virtual void extraShadow();
-    //    virtual void extraAlignObj();
-    virtual void extraBackground();
-    virtual void extraLayout();
-    virtual void extraOptions();
-    virtual void extraLineBegin();
-    virtual void extraLineEnd();
-    virtual void extraWebPres();
-    virtual void extraCreateTemplate();
-    virtual void extraDefaultTemplate();
-    virtual void extraGroup();
-    virtual void extraUnGroup();
+    void extraPenBrush();
+    void extraConfigPie();
+    void extraConfigRect();
+    void extraRaise();
+    void extraLower();
+    void extraRotate();
+    void extraShadow();
+    //    void extraAlignObj();
+    void extraBackground();
+    void extraLayout();
+    void extraOptions();
+    void extraLineBegin();
+    void extraLineEnd();
+    void extraWebPres();
+    void extraCreateTemplate();
+    void extraDefaultTemplate();
+    void extraGroup();
+    void extraUnGroup();
 
-    virtual void extraAlignObjLeft();
-    virtual void extraAlignObjCenterH();
-    virtual void extraAlignObjRight();
-    virtual void extraAlignObjTop();
-    virtual void extraAlignObjCenterV();
-    virtual void extraAlignObjBottom();
+    void extraAlignObjLeft();
+    void extraAlignObjCenterH();
+    void extraAlignObjRight();
+    void extraAlignObjTop();
+    void extraAlignObjCenterV();
+    void extraAlignObjBottom();
 
-    virtual void extraAlignObjs();
+    void extraAlignObjs();
 
     // screen menu
-    virtual void screenConfigPages();
-    virtual void screenPresStructView();
-    virtual void screenAssignEffect();
-    virtual void screenStart();
-    virtual void screenStop();
-    virtual void screenPause();
-    virtual void screenFirst();
-    virtual void screenPrev();
-    virtual void screenNext();
-    virtual void screenLast();
-    virtual void screenSkip();
-    virtual void screenFullScreen();
-    virtual void screenPenColor();
-    virtual void screenPenWidth( const QString &w );
+    void screenConfigPages();
+    void screenPresStructView();
+    void screenAssignEffect();
+    void screenStart();
+    void screenViewPage();
+    void screenStop();
+    void screenPause();
+    void screenFirst();
+    void screenPrev();
+    void screenNext();
+    void screenLast();
+    void screenSkip();
+    void screenPenColor();
+    void screenPenWidth( const QString &w );
 
     // text toolbar
-    virtual void sizeSelected();
-    virtual void fontSelected();
-    virtual void textBold();
-    virtual void textItalic();
-    virtual void textUnderline();
-    virtual void textColor();
-    virtual void textAlignLeft();
-    virtual void textAlignCenter();
-    virtual void textAlignRight();
-    virtual void mtextFont();
-    virtual void textEnumList();
-    virtual void textUnsortList();
-    virtual void textNormalText();
-    virtual void textDepthPlus();
-    virtual void textDepthMinus();
-    virtual void textSettings();
-    virtual void textContentsToHeight();
-    virtual void textObjectToContents();
-    virtual void textInsertPageNum();
+    void sizeSelected();
+    void fontSelected();
+    void textBold();
+    void textItalic();
+    void textUnderline();
+    void textColor();
+    void textAlignLeft();
+    void textAlignCenter();
+    void textAlignRight();
+    void mtextFont();
+    void textEnumList();
+    void textUnsortList();
+    void textNormalText();
+    void textDepthPlus();
+    void textDepthMinus();
+    void textSettings();
+    void textContentsToHeight();
+    void textObjectToContents();
+    void textInsertPageNum();
 
     // color bar
-    virtual void penChosen( const QColor &c );
-    virtual void brushChosen( const QColor &c );
+    void penChosen( const QColor &c );
+    void brushChosen( const QColor &c );
 
     void skipToPage( int _num );
     void nextPage();
     void prevPage();
 
 public:
-    // create GUI - construct
+    // create GUI
     virtual void createGUI();
-    virtual void construct();
 
     // get - set offsets
     int getDiffX() const { return xOffset; }
@@ -236,7 +237,7 @@ public:
     void setDiffX( int _x ) {xOffset = _x; }
     void setDiffY( int _y ) {yOffset = _y; }
 
-    // get current pagenum
+    // get current pagenum, 1-based
     unsigned int getCurrPgNum();
 
     // return pointer to document
@@ -313,6 +314,7 @@ public:
      */
     int canvasYOffset() const;
 
+    void updateSideBar( int newCurrentPg );
     void updateSideBarItem( int pagenr );
 
 protected slots:
@@ -353,19 +355,19 @@ protected slots:
     void unitChanged( QString );
 
     void search();
-    void updateSideBar( int, int );
 
 protected:
 
 // ********* functions ***********
 
 // resize event
-    void resizeEvent( QResizeEvent* );
+    virtual void resizeEvent( QResizeEvent* );
     virtual void dragEnterEvent( QDragEnterEvent *e );
     virtual void dragMoveEvent( QDragMoveEvent *e );
     virtual void dragLeaveEvent( QDragLeaveEvent *e );
     virtual void dropEvent( QDropEvent *e );
 
+    virtual void keyPressEvent( QKeyEvent* );
     virtual void wheelEvent( QWheelEvent *e );
 
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
@@ -376,31 +378,26 @@ protected:
     void setupScrollbars();
     void setupRulers();
 
-    void keyPressEvent( QKeyEvent* );
-
+    void startScreenPres( int pgNum = -1 );
     void doAutomaticScreenPres();
 
     virtual void updateReadWrite( bool readwrite );
 
 // ********** variables **********
 
-// document
+    // document
     KPresenterDoc *m_pKPresenterDoc;
 
-// flags
-    //bool m_bKPresenterModified;
-    bool m_bUnderConstruction;
+    // flags
     bool continuePres, exitPres;
 
     // right button popup menus
     QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend;
 
-    int W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, P_COL;
-
     // scrollbars
     QScrollBar *vert, *horz;
     int xOffset, yOffset;
-    int _xOffset, _yOffset;
+    int xOffsetSaved, yOffsetSaved; // saved when going fullscreen
 
     // dialogs
     BackDia *backDia;
@@ -447,7 +444,7 @@ protected:
     bool m_bShowGUI;
     bool presStarted;
     bool allowWebPres;
-    int currPg;
+    int currPg; // 0-based
 
     QSize oldSize;
 
@@ -532,6 +529,7 @@ protected:
     KAction *actionScreenPresStructView;
     KAction *actionScreenAssignEffect;
     KAction *actionScreenStart;
+    KAction *actionScreenViewPage;
     KAction *actionScreenStop;
     KAction *actionScreenPause;
     KAction *actionScreenFirst;
@@ -539,7 +537,6 @@ protected:
     KAction *actionScreenNext;
     KAction *actionScreenLast;
     KAction *actionScreenSkip;
-    KAction *actionScreenFullScreen;
     KAction *actionScreenPenColor;
     KAction *actionScreenPenWidth;
 

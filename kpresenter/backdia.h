@@ -85,20 +85,20 @@ public:
 	     BackView backPicView, bool _unbalanced,
 	     int _xfactor, int _yfactor, KPresenterDoc *doc );
 
-    QColor getBackColor1();
-    QColor getBackColor2();
-    BCType getBackColorType();
-    BackType getBackType();
-    QString getBackPixFilename();
-    QString getBackClipFilename();
-    BackView getBackView();
-    bool getBackUnbalanced();
-    int getBackXFactor();
-    int getBackYFactor();
+    QColor getBackColor1() const;
+    QColor getBackColor2() const;
+    BCType getBackColorType() const;
+    BackType getBackType() const;
+    QString getBackPixFilename() const;
+    QString getBackClipFilename() const;
+    BackView getBackView() const;
+    bool getBackUnbalanced() const;
+    int getBackXFactor() const;
+    int getBackYFactor() const;
 
 protected:
     void showEvent( QShowEvent *e );
-    
+
 private:
     QLabel *lPicName, *picPreview, *lClipName;
     QCheckBox *unbalanced;
@@ -112,7 +112,7 @@ private:
     BackPreview *preview;
     bool picChanged, clipChanged, lockUpdate;
     QDateTime picLastModified, clipLastModified;
-    
+
 private slots:
     void selectPic();
     void selectClip();

@@ -109,30 +109,31 @@ public:
     { return shadowDirection; }
     virtual QColor getShadowColor()
     { return shadowColor; }
-    virtual QSize getSize()
+    virtual QSize getSize() const
     { return ext; }
-    virtual QPoint getOrig()
+    virtual QPoint getOrig() const
     { return orig; }
-    virtual Effect getEffect()
+    virtual Effect getEffect() const
     { return effect; }
-    virtual Effect2 getEffect2()
+    virtual Effect2 getEffect2() const
     { return effect2; }
-    virtual int getPresNum()
-    { return presNum; }
-    virtual int getSubPresSteps()
-    { return 0; }
-    virtual bool getDisappear()
-    { return disappear; }
-    virtual int getDisappearNum()
-    { return disappearNum; }
-    virtual Effect3 getEffect3()
+    virtual Effect3 getEffect3() const
     { return effect3; }
+    virtual int getPresNum() const
+    { return presNum; }
+    virtual int getSubPresSteps() const
+    { return 0; }
+    virtual bool getDisappear() const
+    { return disappear; }
+    virtual int getDisappearNum() const
+    { return disappearNum; }
 
     virtual void drawSelection( bool _dSelection )
     { dSelection = _dSelection; }
 
     virtual void zoom( float _fakt );
     virtual void zoomOrig();
+    virtual bool isZoomed() const { return zoomed; }
     virtual void setOwnClipping( bool _ownClipping )
     { ownClipping = _ownClipping; }
     virtual void setSubPresStep( int _subPresStep )
@@ -142,9 +143,9 @@ public:
 
     virtual void draw( QPainter *_painter, int _diffx, int _diffy );
 
-    virtual bool contains( QPoint _point, int _diffx, int _diffy );
-    virtual bool intersects( QRect _rect, int _diffx, int _diffy );
-    virtual QCursor getCursor( QPoint _point, int _diffx, int _diffy, ModifyType &_modType );
+    virtual bool contains( QPoint _point, int _diffx, int _diffy ) const;
+    virtual bool intersects( QRect _rect, int _diffx, int _diffy ) const;
+    virtual QCursor getCursor( QPoint _point, int _diffx, int _diffy, ModifyType &_modType ) const;
 
     virtual void activate( QWidget * /*_widget*/, int /*diffx*/, int /*diffy*/ )
     {; }
@@ -183,22 +184,25 @@ protected:
     Effect2 effect2;
     Effect3 effect3;
     int presNum, disappearNum;
-    bool disappear;
+    bool disappear:1;
 
-    bool selected, dSelection;
-    bool zoomed;
+    bool selected:1;
+    bool dSelection:1;
+    bool zoomed:1;
+
     float presFakt;
     QPoint oldOrig;
     QSize oldExt;
     int subPresStep;
-    bool specEffects;
-    bool onlyCurrStep;
-    bool ownClipping;
 
-    bool inObjList;
+    bool specEffects:1;
+    bool onlyCurrStep:1;
+    bool ownClipping:1;
+
+    bool inObjList:1;
+    bool move:1;
+    bool sticky:1;
     int cmds;
-    bool move;
-    bool sticky;
 
     DCOPObject *dcop;
 

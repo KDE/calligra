@@ -122,15 +122,15 @@ public:
 
     // page layout
     void setPageLayout( KoPageLayout, int, int );
-    KoPageLayout pageLayout() {return _pageLayout; }
+    KoPageLayout pageLayout() const { return _pageLayout; }
 
     // insert a page
     unsigned int insertNewPage( int, int, bool _restore=true );
     bool insertNewTemplate( int, int, bool clean=false );
 
-    // get number of pages nad objects
-    unsigned int getPageNums() {return _backgroundList.count(); }
-    unsigned int objNums() {return _objectList->count(); }
+    // get number of pages and objects
+    unsigned int getPageNums() const { return _backgroundList.count(); }
+    unsigned int objNums() const { return _objectList->count(); }
 
     // background
     void setBackColor( unsigned int, QColor, QColor, BCType, bool, int, int );
@@ -197,33 +197,32 @@ public:
                          QColor, BCType, QString, bool ,int, int, int, int );
 
     // get list of pages and objects
-    QList<KPBackGround> *backgroundList() {return &_backgroundList; }
-    QList<KPObject> *objectList() {return _objectList; }
+    QList<KPBackGround> *backgroundList() { return &_backgroundList; }
+    QList<KPObject> *objectList() { return _objectList; }
+    const QList<KPBackGround> *backgroundList() const { return &_backgroundList; }
+    const QList<KPObject> *objectList() const { return _objectList; }
 
     // get - set raster
-    unsigned int rastX() {return _rastX; }
-    unsigned int rastY() {return _rastY; }
-    unsigned int getRastX() {return _rastX; }
-    unsigned int getRastY() {return _rastY; }
+    unsigned int rastX() const { return _rastX; }
+    unsigned int rastY() const { return _rastY; }
     void setRasters( unsigned int rx, unsigned int ry, bool _replace = true );
 
     // get - set options for editmodi
-    QColor txtBackCol() {return _txtBackCol; }
-    QColor getTxtBackCol() {return _txtBackCol; }
-    void setTxtBackCol( QColor c ) {_otxtBackCol = _txtBackCol; _txtBackCol = c; }
+    QColor txtBackCol() const { return _txtBackCol; }
+    void setTxtBackCol( QColor c ) { _otxtBackCol = _txtBackCol; _txtBackCol = c; }
 
     // get - set roundedness
-    unsigned int getRndX() {return _xRnd; }
-    unsigned int getRndY() {return _yRnd; }
+    unsigned int getRndX() const { return _xRnd; }
+    unsigned int getRndY() const { return _yRnd; }
 
     // get values for screenpresentations
-    bool spInfinitLoop() {return _spInfinitLoop; }
-    bool spManualSwitch() {return _spManualSwitch; }
-    void setInfinitLoop( bool il ) {_spInfinitLoop = il; }
-    void setManualSwitch( bool ms ) {_spManualSwitch = ms; }
+    bool spInfinitLoop() const { return _spInfinitLoop; }
+    bool spManualSwitch() const { return _spManualSwitch; }
+    void setInfinitLoop( bool il ) { _spInfinitLoop = il; }
+    void setManualSwitch( bool ms ) { _spManualSwitch = ms; }
 
     // size of page
-    QRect getPageSize( unsigned int, int, int, float fakt=1.0, bool decBorders = true );
+    QRect getPageRect( unsigned int num, int diffx, int diffy, float fakt=1.0, bool decBorders = true );
 
     // delete/reorder obejcts
     void deleteObjs( bool _add = true );
@@ -239,9 +238,10 @@ public:
 
     // stuff for screen-presentations
     QValueList<int> reorderPage( unsigned int, int, int, float fakt = 1.0 );
-    int getPageOfObj( int, int, int, float fakt = 1.0 );
+    // Returns the page on which the object @p objNum is, 1-based.
+    int getPageOfObj( int objNum, int diffx, int diffy, float fakt = 1.0 );
 
-    QPen presPen() {return _presPen; }
+    QPen presPen() const { return _presPen; }
     void setPresPen( QPen p ) {_presPen = p; }
 
     int numSelected();
@@ -266,7 +266,7 @@ public:
     void alignObjsBottom();
     void replaceObjs();
 
-    PresSpeed getPresSpeed() { return presSpeed; }
+    PresSpeed getPresSpeed() const { return presSpeed; }
     void setPresSpeed( PresSpeed _presSpeed ) { presSpeed = _presSpeed; }
 
     int getLeftBorder();
@@ -296,8 +296,9 @@ public:
     void setFooter( bool b );
     KPFooterHeaderEditor *getHeaderFooterEdit() { return headerFooterEdit; }
 
-    QValueList<int> getSlides( int currPgNum, KPresenterView *view );
-    QMap<int, bool > getSelectedSlides() const { return selectedSlides; }
+    bool isSlideSelected( int pgNum ) const;
+    QValueList<int> selectedSlides() const;
+    QMap<int, bool > selectedSlidesMap() const { return m_selectedSlides; }
 
     virtual DCOPObject* dcopObject();
 
@@ -315,6 +316,7 @@ public:
 
 public slots:
     void movePage( int from, int to );
+    void selectPage( int pgNum, bool select );
 
 signals:
 
@@ -362,13 +364,9 @@ protected:
         QString pix_string;
     };
 
-    // list of views and children
-    // QList<KPresenterView> m_lstViews;
-    // QList<KPresenterChild> m_lstChildren;
-    KPresenterView *viewPtr;
-
-    // page layout and background
+    // page layout
     KoPageLayout _pageLayout;
+    // List of backgrounds (one per page)
     QList<KPBackGround> _backgroundList;
 
     // list of objects
@@ -419,7 +417,7 @@ protected:
 
     int saveOnlyPage;
     KTextEditFormatCollection *fCollection;
-    QMap<int, bool> selectedSlides;
+    QMap<int, bool> m_selectedSlides;
     bool ignoreSticky;
 
 };
