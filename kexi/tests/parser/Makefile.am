@@ -1,5 +1,7 @@
 bin_PROGRAMS = kexidbparser
 
+noinst_PROGRAMS = kexidbparser
+
 INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
 
 kexidbparser_SOURCES = main.cpp

@@ -1,5 +1,7 @@
 bin_PROGRAMS = kexidbtest kexidbmysqlcursor #kexidbfirebirdcursor
 
+noinst_PROGRAMS = kexidbtest kexidbmysqlcursor
+
 INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
 
 SUBDIRS = .

@@ -1,5 +1,7 @@
 bin_PROGRAMS = kexitableviewtest  #kexidbfirebirdcursor
 
+noinst_PROGRAMS = kexitableviewtest
+
 INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
 
 SUBDIRS = .

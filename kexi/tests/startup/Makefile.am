@@ -1,5 +1,7 @@
 bin_PROGRAMS = kexistartuptest
 
+noinst_PROGRAMS = kexistartuptest
+
 INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
 
 SUBDIRS = .
