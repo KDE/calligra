@@ -21,6 +21,7 @@
 #define koPoint_h
 
 #include <qwmatrix.h>
+#include <math.h>
 
 /**
  * A point whose coordinates are floating-point values ( "double"s ).
@@ -70,8 +71,12 @@ public:
     {
       return (p.x() >= m_x - range && p.x() <= m_x + range && p.y() >= m_y - range && p.y() <= m_y + range);
     }
-//static
-    static double getAngle( const KoPoint &,const KoPoint & );
+
+    static double getAngle( const KoPoint& p1, const KoPoint& p2 ) {
+	double a = atan2( p2.x() - p1.x(), p2.y() - p1.y() ) + M_PI;
+	return ( - ( a * 360 ) / ( 2 * M_PI ) - 90 );
+    }
+
 private:
     double m_x, m_y;
 };
@@ -87,5 +92,6 @@ inline KoPoint operator*( const KoPoint &p, const double &c )
 
 inline KoPoint operator*( const double &c, const KoPoint &p )
 { return KoPoint( p.m_x*c, p.m_y*c ); }
+
 
 #endif
