@@ -1021,8 +1021,7 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                 fillStyleStack( o, oasisStyles );
                 if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
                 {
-                    fillStyleStack( o, oasisStyles );
-                    KPPieObject *kppieobject = new KPPieObject();
+                   KPPieObject *kppieobject = new KPPieObject();
                     kppieobject->loadOasis(o, m_styleStack);
                     newpage->appendObject(kppieobject);
                 }
@@ -1083,7 +1082,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         m_styleStack.restore();
     }
 
-    //todo load format
     setModified(false);
 
     ignoreSticky = TRUE;
