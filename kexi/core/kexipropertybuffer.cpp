@@ -35,6 +35,7 @@ KexiPropertyBuffer::KexiPropertyBuffer(QObject *parent, const QString &type_name
 
 KexiPropertyBuffer::~KexiPropertyBuffer()
 {
+	emit destroying();
 }
 
 void

@@ -80,7 +80,9 @@ class KEXICORE_EXPORT KexiPropertyBuffer : public QObject, public QDict<KexiProp
 		/*! This signal is emitted when \a property has changed 
 		   (i.e. when changeProperty() was called).
 		*/
-		void	propertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);//const QString &property, const QVariant &value);
+		void propertyChanged(KexiPropertyBuffer &buf, KexiProperty &property);//const QString &property, const QVariant &value);
+
+		void destroying();
 
 	protected:
 		QString m_typeName;
