@@ -21,6 +21,7 @@
 #include <qclipboard.h>
 #include <qmessagebox.h>
 #include <qdict.h>
+#include <qtextstream.h>
 
 #include "kword_doc.h"
 #include "kword_page.h"
@@ -1149,7 +1150,7 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
     if ( e.isNull() )
 	return FALSE;
     word.appendChild( e );
-    
+
     QDomElement fn = footNoteManager.save( doc );
     if ( fn.isNull() )
 	return false;
@@ -1253,8 +1254,8 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
 	const char* p = buffer.buffer().data();
 	for( int i = 0; i < len; ++i )
 	    data[i] = *p++;
-	_store.write( data );
-	_store.close();
+	_store->write( data );
+	_store->close();
  	keys.append( it.currentKey() );
  	images.append( it.current()->getFilename() );
     }
@@ -2397,17 +2398,17 @@ void KWordDocument::copySelectedText()
 
     QString clip_string;
     parag2 = firstParag;
-    
+
     QDomDocument d( "PARAGRAPHS" );
     QDomElement e = d.createElement( "PARAGRAPHS" );
     while( parag2 ) {
-	QDomElement p = parag2->save( doc );
+	QDomElement p = parag2->save( d );
 	if ( p.isNull() )
 	    return p;
 	e.appendChild( p );
 	parag2 = parag2->getNext();
     }
-    
+
     {
 	QTextStream str( clip_string, IO_WriteOnly );
 	str << d;
