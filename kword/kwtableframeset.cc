@@ -34,12 +34,6 @@ DESCRIPTION
 #include <kotextobject.h> // for customItemChar !
 #include <qpopupmenu.h>
 
-// I changed this to 1 because it fixes cell border drawing in the normal case
-// and because e.g. msword has no big cell-spacing by default.
-// The real fix here would be to have a spacing per line and per row, that depends
-// on the border (max of the borders of all cells on the line)
-const unsigned int KWTableFrameSet::tableCellSpacing = 1; // 3;
-
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
 {
