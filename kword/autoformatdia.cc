@@ -41,6 +41,23 @@
 #include <qlabel.h>
 
 
+KWAutoFormatLineEdit::KWAutoFormatLineEdit ( QWidget * parent, const char * name )
+    : QLineEdit(parent,name)
+{
+}
+
+void KWAutoFormatLineEdit::keyPressEvent ( QKeyEvent *ke )
+{
+    if( ke->key()  == QKeyEvent::Key_Return ||
+        ke->key()  == QKeyEvent::Key_Enter )
+    {
+        emit keyReturnPressed();
+        return;
+    }
+    QLineEdit::keyPressEvent (ke);
+}
+
+
 /******************************************************************/
 /* Class: KWAutoFormatExceptionWidget                             */
 /******************************************************************/
@@ -51,8 +68,9 @@ KWAutoFormatExceptionWidget::KWAutoFormatExceptionWidget(QWidget *parent, const 
     m_bAbbreviation=_abreviation;
     m_listException=_list;
     QGridLayout *grid = new QGridLayout(this, 7, 2,2,2);
-    exceptionLine = new QLineEdit( this );
+    exceptionLine = new KWAutoFormatLineEdit( this );
     grid->addWidget(exceptionLine,1,0);
+    connect(exceptionLine,SIGNAL(keyReturnPressed()),this,SLOT(slotAddException()));
 
     QLabel *lab=new QLabel(name,this);
     grid->addMultiCellWidget(lab,0,0,0,1);
@@ -200,14 +218,19 @@ void KWAutoFormatDia::setupTab2()
     QHBox *text = new QHBox( right );
     text->setSpacing( 3 );
     text->setMargin( 3 );
-    m_find = new KLineEdit( text );
+    m_find = new KWAutoFormatLineEdit( text );
     connect( m_find, SIGNAL( textChanged( const QString & ) ),
 	     SLOT( slotfind( const QString & ) ) );
+    connect( m_find, SIGNAL( keyReturnPressed() ),
+             SLOT( slotAddEntry()));
+
     pbSpecialChar1 = new QPushButton( "...", text );
     connect(pbSpecialChar1,SIGNAL(clicked()),this,SLOT(chooseSpecialChar1()));
-    m_replace = new KLineEdit( text );
+    m_replace = new KWAutoFormatLineEdit( text );
     connect( m_replace, SIGNAL( textChanged( const QString & ) ),
 	     SLOT( slotfind2( const QString & ) ) );
+    connect( m_replace, SIGNAL( keyReturnPressed() ),
+             SLOT( slotAddEntry()));
     pbSpecialChar2 = new QPushButton( "...", text );
     connect(pbSpecialChar2,SIGNAL(clicked()),this,SLOT(chooseSpecialChar2()));
     m_pListView = new KListView( right );
@@ -316,6 +339,8 @@ void KWAutoFormatDia::editEntryList(const QString &key,const QString &newFindStr
 
 void KWAutoFormatDia::slotAddEntry()
 {
+    if(!pbAdd->isEnabled())
+        return;
     QString repl = m_replace->text();
     QString find = m_find->text();
     if(repl.isEmpty() || find.isEmpty())

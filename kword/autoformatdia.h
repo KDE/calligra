@@ -22,6 +22,7 @@
 #define autoformatdia_h
 
 #include <kdialogbase.h>
+#include <qlineedit.h>
 #include "autoformat.h"
 
 class QPushButton;
@@ -31,9 +32,23 @@ class QHBox;
 class KCharSelect;
 class KListView;
 class KLineEdit;
-class QLineEdit;
 class QListBox;
 
+
+/**
+ *
+ */
+class KWAutoFormatLineEdit : public QLineEdit
+{
+    Q_OBJECT
+public:
+    KWAutoFormatLineEdit ( QWidget * parent, const char * name=0 );
+
+protected:
+    virtual void keyPressEvent ( QKeyEvent * );
+ signals:
+    void keyReturnPressed();
+};
 
 /******************************************************************/
 /* Class: KWAutoFormatExceptionWidget                             */
@@ -55,7 +70,7 @@ protected slots:
 
  private:
     QListBox *exceptionList;
-    QLineEdit *exceptionLine;
+    KWAutoFormatLineEdit *exceptionLine;
     QPushButton *pbAddException,*pbRemoveException;
 
     QStringList m_listException;
@@ -88,7 +103,7 @@ protected:
     QPushButton *pbQuote1, *pbQuote2, /**pbEdit,*/ *pbRemove, *pbAdd, *pbDefault,
                 *pbSpecialChar1, *pbSpecialChar2;
     KCharSelect *charselect;
-    KLineEdit *m_find, *m_replace;
+    KWAutoFormatLineEdit *m_find, *m_replace;
     KListView *m_pListView;
 
     QChar oBegin, oEnd;
