@@ -10,7 +10,7 @@
 
 extern "C"
 {
-    void* init_libkillustratorpart()
+    void* init_libkontourpart()
     {
         return new KIllustratorFactory;
     }
@@ -57,12 +57,12 @@ KInstance* KIllustratorFactory::global()
 {
     if ( !s_global )
       s_global = new KInstance(aboutData ());
-    s_global->dirs ()->addResourceType ("killustrator_template",
+    s_global->dirs ()->addResourceType ("kontour_template",
                                         KStandardDirs::kde_default("data") +
-                                        "killustrator/templates/");
-    s_global->dirs ()->addResourceType ("killustrator_palettes",
+                                        "kontour/templates/");
+    s_global->dirs ()->addResourceType ("kontour_palettes",
                                         KStandardDirs::kde_default("data") +
-                                        "killustrator/palettes/");
+                                        "kontour/palettes/");
     // Tell the iconloader about share/apps/koffice/icons
     s_global->iconLoader()->addAppDir("koffice");
     return s_global;

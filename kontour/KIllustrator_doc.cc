@@ -215,10 +215,10 @@ bool KIllustratorDocument::insertNewTemplate (int, int, bool) {
 
   ret = KoTemplateChooseDia::choose (KIllustratorFactory::global(),
                                      templ,
-                                     "application/x-killustrator", "*.kil",
-                                     i18n("KIllustrator"),
+                                     "application/x-kontour", "*.kil",
+                                     i18n("Kontour"),
                                      KoTemplateChooseDia::Everything,
-                                     "killustrator_template");
+                                     "kontour_template");
   if (ret == KoTemplateChooseDia::Template) {
     QFileInfo fileInfo (templ);
     QString fileName (fileInfo.dirPath (true) + "/" +
