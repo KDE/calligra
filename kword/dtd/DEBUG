@@ -1,0 +1,12 @@
+How to debug KWord's DTD?
+
+You can debug this DTD with xmllint (from libxml2)
+But before you have to prepare the ungzipped, untarred KWord file (let's call the file maindoc.xml)
+
+You have to replace:
+    <!DOCTYPE DOC>
+by
+    <!DOCTYPE DOC SYSTEM "file:/the-path-to-this-DTD/kword.dtd">
+
+Then you can do:
+    xmllint --valid maindoc.xml
