@@ -1384,10 +1384,12 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             text.setAttribute( "color", m_styleStack.attribute( "fo:color" ) );
         if ( m_styleStack.hasAttribute( "fo:font-family" ) )
         {
-            // 'Thorndale' is not known outside OpenOffice so we substitute it
-            // with 'Times New Roman' that looks nearly the same.
+            // 'Thorndale/Albany' are not known outside OpenOffice so we substitute them
+            // with 'Times New Roman/Arial' that look nearly the same.
             if ( m_styleStack.attribute( "fo:font-family" ) == "Thorndale" )
                 text.setAttribute( "family", "Times New Roman" );
+            else if ( m_styleStack.attribute( "fo:font-family" ) == "Albany" )
+                text.setAttribute( "family", "Arial" );
             else
                 text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
         }
@@ -1477,7 +1479,6 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             }
             else if ( underType == "wave" )
             {
-                //TODO not implemented into kpresenter
                 text.setAttribute( "underline", "wave" );
                 text.setAttribute( "underlinestyleline", "solid" );
                 text.setAttribute( "underlinecolor", underLineColor );
@@ -1946,7 +1947,8 @@ QDomElement OoImpressImport::saveHelper(const QString &tmpText, QDomDocument &do
     return element;
 }
 
-void OoImpressImport::appendPolylineGeometry(QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset)
+void OoImpressImport::appendPolylineGeometry(QDomDocument& doc, QDomElement& e,
+                                             const QDomElement& object, int offset)
 {
     QDomElement orig = doc.createElement("ORIG" );
     orig.setAttribute("x", toPoint(object.attribute("svg:x")));
