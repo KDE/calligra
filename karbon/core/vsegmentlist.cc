@@ -212,7 +212,7 @@ VSegmentList::curve1To( const KoPoint& p2, const KoPoint& p3 )
 bool
 VSegmentList::curve2To( const KoPoint& p1, const KoPoint& p3 )
 {
-	if( isClosed() );
+	if( isClosed() ) return false;
 
 	VSegment* s = new VSegment();
 	s->setType( segment_curve2 );
@@ -227,59 +227,71 @@ bool
 VSegmentList::arcTo(
 	const KoPoint& p1, const KoPoint& p2, const double r )
 {
-	// this routine is inspired by GNU ghostscript.
+	// this routine is inspired by code in GNU ghostscript.
 
-	if( isClosed() ) return false;
+	//           |- P1B3 -|
+	//
+	//           |- - - T12- - -|
+	//
+	//  -   - P1 x....__--o.....x P2
+	//  |   |    :  _/    B3
+	// P1B0      : /
+	//      |    :/
+	//  |        |
+	//  -  T10   o B0
+	//           |
+	//      |    |
+	//           |
+	//      |    |
+	//      -    x P0
+
+	if( isClosed() || r < 0.0 ) return false;
 
 	// we need to calculate the tangent points. therefore calculate tangents
-	// D10=P1P0 and D12=P1P2 first:
-	KoPoint d10 = currentPoint() - p1;
-	KoPoint d12 = p2 - p1;
+	// T10=P1P0 and T12=P1P2 first:
+	KoPoint t10 = currentPoint() - p1;
+	KoPoint t12 = p2 - p1;
 
 	// calculate distance squares:
-	double dsq10 = d10.x()*d10.x() + d10.y()*d10.y();
-	double dsq12 = d12.x()*d12.x() + d12.y()*d12.y();
+	double dsqT10 = t10.x() * t10.x() + t10.y() * t10.y();
+	double dsqT12 = t12.x() * t12.x() + t12.y() * t12.y();
 
-	// we now calculate tan(a/2) where a is the angular between D10 and D12.
-	// we take advantage of D10*D12=d10*d12*cos(a), |D10xD12|=d10*d12*sin(a)
-	// (cross product) and tan(a/2)=sin(a)/[1-cos(a)].
-	double num   = d10.x() * d12.y() - d10.y() * d12.x();
+	// we now calculate tan(a/2) where a is the angle between T10 and T12.
+	// we benefit from the facts T10*T12 = t10*t12*cos(a), |T10xT12| = t10*t12*sin(a)
+	// (cross product) and tan(a/2) = sin(a)/[1-cos(a)].
+	double num   = t10.x() * t12.y() - t10.y() * t12.x();
 	double denom =
-		sqrt( dsq10 * dsq12 )
-		- d10.x() * d12.x()
-		+ d10.y() * d12.y();
+		sqrt( dsqT10 * dsqT12 )
+			- t10.x() * t12.x()
+			+ t10.y() * t12.y();
 
 	if( 1.0 + denom == 1.0 )	// points are co-linear
 		lineTo( p1 );	// just add a line to first point
     else
     {
-		// calculate distances from P1 to tangent points:
-		double dist = fabs( r*num / denom );
-		double d1t0 = dist / sqrt(dsq10);
-		double d1t1 = dist / sqrt(dsq12);
+		// |P1B0| = |P1B3| = r * tan(a/2):
+		double dP1B0 = fabs( r * num / denom );
 
-// TODO: check for r<0
+		// B0 = P1 + |P1B0| * T10/|T10|:
+		KoPoint b0 = p1 + t10 * ( dP1B0 / sqrt( dsqT10 ) );
 
-		KoPoint b0 = p1 + d10 * d1t0;
-
-		// if b0 deviates from current point, add a line to it:
-// TODO: decide via radius<XXX or sthg?
+		// if B0 deviates from current point P0, add a line to it:
 		if( b0 !=  currentPoint() )
 			lineTo( b0 );
 
-		KoPoint b3 = p1 + d12 * d1t1;
+		// B3 = P1 + |P1B3| * T12/|T12|:
+		KoPoint b3 = p1 + t12 * ( dP1B0 / sqrt( dsqT12 ) );
+
 
 		// the two bezier-control points are located on the tangents at a fraction
 		// of the distance [tangent points<->tangent intersection].
 		double distsq =
-			( p1.x() - b0.x() )*( p1.x() - b0.x() ) +
-			( p1.y() - b0.y() )*( p1.y() - b0.y() );
-		double rsq = r*r;
+			( p1.x() - b0.x() ) * ( p1.x() - b0.x() ) +
+			( p1.y() - b0.y() ) * ( p1.y() - b0.y() );
+		double rsq = r * r;
 		double fract;
 
-// TODO: make this nicer?
-
-		if( distsq >= rsq * 1.0e8 ) // r is very small
+		if( distsq >= rsq * VGlobal::veryLargeNumber ) // r is very small
 			fract = 0.0; // dist==r==0
 		else
 			fract = ( 4.0 / 3.0 ) / ( 1.0 + sqrt( 1.0 + distsq / rsq ) );

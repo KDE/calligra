@@ -4,8 +4,10 @@
 */
 
 #include <math.h>
+
 #include <qdom.h>
 
+#include "vglobal.h"
 #include "vsegment.h"
 #include "vsegmentlist.h"
 
@@ -31,7 +33,7 @@ height(
 		( b.y() - a.y() ) * ( b.y() - a.y() ) );
 
 	// if norm is very small, simply use distance AP:
-	if( norm < 1.0e-6 )
+	if( norm < VGlobal::verySmallNumber )
 		return
 			sqrt(
 				( p.x() - a.x() ) * ( p.x() - a.x() ) +
@@ -68,7 +70,7 @@ bool
 VSegment::isFlat( double flatness ) const
 {
 	if(
-		m_prev == 0L ||
+		!m_prev ||
 		m_type == segment_begin ||
 		m_type == segment_line ||
 		m_type == segment_end )
@@ -92,6 +94,24 @@ VSegment::isFlat( double flatness ) const
 				< flatness;
 
 	return false;
+}
+
+double
+VSegment::length() const
+{
+	if( !m_prev )
+		return 0.0;
+
+// TODO: length for all other segment types:
+	if( m_type == segment_line )
+		return
+			sqrt(
+				( m_point[2].x() - m_prev->m_point[2].x() ) *
+				( m_point[2].x() - m_prev->m_point[2].x() ) +
+				( m_point[2].y() - m_prev->m_point[2].y() ) *
+				( m_point[2].y() - m_prev->m_point[2].y() ) );
+	else
+		return 0.0;
 }
 
 KoRect
@@ -146,7 +166,7 @@ VSegment::boundingBox() const
 VSegment*
 VSegment::splitAt( double t )
 {
-	if( m_type == segment_begin )
+	if( !m_prev || m_type == segment_begin )
 		return 0L;
 
 	VSegment* segment = new VSegment();
@@ -198,6 +218,7 @@ void
 VSegment::convertToCurve( double t )
 {
 	if(
+		!m_prev ||
 		m_type == segment_begin ||
 		m_type == segment_end )
 	{

@@ -89,8 +89,8 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_flattenDlg->setFlatness( 5.0 );
 
 	m_whirlPinchDlg = new VWhirlPinchDlg();
-	m_whirlPinchDlg->setAngle( 90.0 );
-	m_whirlPinchDlg->setPinch( 0.5 );
+	m_whirlPinchDlg->setAngle( 20.0 );
+	m_whirlPinchDlg->setPinch( 0.0 );
 	m_whirlPinchDlg->setRadius( 100.0 );
 
 	

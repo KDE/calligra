@@ -18,7 +18,11 @@ namespace VGlobal
 	const double sqrt2		=  1.41421356237309504880;	// sqrt(2)
 	const double one_7		=  0.14285714285714285714;	// 1/7
 
+	const double veryLargeNumber = 1.0e8;
+	const double verySmallNumber = 1.0e-8;
+
 	const double flatnessTolerance	= 0.5;
+
 
 	const short copyOffset = 10;        /// the amount at which copied objects get offset in x and y direction
 	const short maxRecentFiles = 10;    /// default max. number of files shown in open recent menu item

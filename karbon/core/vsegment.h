@@ -58,6 +58,10 @@ public:
 	/// Returns true if segment is flat.
 	bool isFlat( double flatness = VGlobal::flatnessTolerance ) const;
 
+// TODO: currently return 0.0 for segments != lines:
+	/// Returns the arc length.
+	double length() const;
+
 	/// Calculates the bounding box.
 	KoRect boundingBox() const;
 
