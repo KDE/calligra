@@ -256,6 +256,9 @@ void KSpreadCell::defaultStyle()
   setVerticalText(false);
   setAngle(m_rotateAngle);
   setFormatNumber(Number);
+  if(m_Validity!=0)
+        delete m_Validity;
+  m_Validity=0;
 }
 
 void KSpreadCell::layoutChanged()
@@ -4611,6 +4614,16 @@ KSpreadCell::~KSpreadCell()
     if ( m_pVisualFormula )
         delete m_pVisualFormula;
 
+    if(m_firstCondition!=0)
+        delete m_firstCondition;
+    if(m_thirdCondition!=0)
+        delete m_thirdCondition;
+    if(m_secondCondition!=0)
+        delete m_secondCondition;
+
+    if(m_Validity!=0)
+        delete m_Validity;
+
     // Unobscure cells.
     for( int x = 0; x <= m_iExtraXCells; ++x )
         for( int y = (x == 0) ? 1 : 0; // avoid looking at (+0,+0)
@@ -4620,6 +4633,7 @@ KSpreadCell::~KSpreadCell()
         if ( cell )
             cell->unobscure();
     }
+
 }
 
 bool KSpreadCell::operator > ( const KSpreadCell & cell ) const
