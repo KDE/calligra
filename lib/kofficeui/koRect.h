@@ -122,8 +122,18 @@ bool operator!=(const KoRect &lhs, const KoRect &rhs);
 /** Show the position and size of a rectangle (use within kdDebug) */
 #define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
 
+#include <kdebug.h>
+
+inline kdbgstream operator<<( kdbgstream str, const KoPoint & r )  { str << "(" << r.x() << ", " << r.y() << ")"; return str; }
+inline kndbgstream operator<<( kndbgstream str, const KoPoint & )  { return str; }
+
+//inline kdbgstream operator<<( kdbgstream str, const KoRect & r )  { str << "[" << r.left() << ", " << r.top() << " - " << r.right() << ", " << r.bottom() << "]"; return str; }
+inline kdbgstream operator<<( kdbgstream str, const KoRect & r )  { str << "[" << r.left() << "," << r.top() << " " << r.width() << "x" << r.height() << "]"; return str; }
+inline kndbgstream operator<<( kndbgstream str, const KoRect & )  { return str; }
+
 /** Show the rectangles that form a region (use as a standalone statement) */
 #define DEBUGREGION(reg) { QMemArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
                            kdDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
+// You can know use kdDebug() << theregion << endl; (kdebugclasses.h)
 
 #endif
