@@ -1629,10 +1629,14 @@ void KPTextView::updateUI( bool updateFormat, bool force  )
         m_paragLayout.margins[QStyleSheetItem::MarginRight] = parag->margin(QStyleSheetItem::MarginRight);
         m_canvas->getView()->showRulerIndent( m_paragLayout.margins[QStyleSheetItem::MarginLeft], m_paragLayout.margins[QStyleSheetItem::MarginFirstLine], m_paragLayout.margins[QStyleSheetItem::MarginRight] );
     }
-    m_paragLayout.setTabList( parag->tabList() );
-    KoRuler * hr = m_canvas->getView()->getHRuler();
-    if ( hr )
-        hr->setTabList( parag->tabList() );
+
+    if( m_paragLayout.tabList() != parag->tabList() )
+    {
+        m_paragLayout.setTabList( parag->tabList() );
+        KoRuler * hr = m_canvas->getView()->getHRuler();
+        if ( hr )
+            hr->setTabList( parag->tabList() );
+    }
 }
 
 void KPTextView::ensureCursorVisible()
