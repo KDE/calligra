@@ -325,6 +325,9 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
             text += '\n';
         text += s;
     }
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
+    KWTextFrameSet * textFs = textdoc->textFrameSet();
+    textFs->unzoom();
 
     cursor.insert( text, true );
 
@@ -372,9 +375,10 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
         parag = static_cast<KWTextParag *>(parag->next());
     }
     // In case loadFormatting queued any image request
-    KWTextDocument * textdoc = static_cast<KWTextDocument *>(c->parag()->document());
-    KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+    KWDocument * doc = textFs->kWordDocument();
     doc->processImageRequests();
+
+    textFs->zoom();
 
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();
