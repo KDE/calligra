@@ -1110,9 +1110,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
          has something to do with calculating how much room the text needs in
          those cases?
       */
-      if (( align(_col,_row) == KSpreadCell::Left ||
-            align(_col,_row) == KSpreadCell::Undefined) &&
-          !isNumeric() && !isBool())
+      if ( align(_col,_row) == KSpreadCell::Left ||
+           align(_col,_row) == KSpreadCell::Undefined)
       {
         if (c - m_iColumn > m_iMergedXCells)
         {
@@ -1447,7 +1446,7 @@ bool KSpreadCell::makeFormula()
   {
     clearFormula();
 
-    setFlag(Flag_Error);
+    setFlag(Flag_ParseError);
     m_strFormulaOut = "####";
     m_dataType = StringData; // correct?
     m_dValue = 0.0;
@@ -1487,7 +1486,7 @@ bool KSpreadCell::calc(bool delay)
   if ( testFlag(Flag_Progress) )
   {
     kdError(36001) << "ERROR: Circle" << endl;
-    setFlag(Flag_Error);
+    setFlag(Flag_CircularCalculation);
     m_strFormulaOut = "####";
     m_dataType = StringData; // correct?
     setFlag(Flag_LayoutDirty);
@@ -1539,7 +1538,7 @@ bool KSpreadCell::calc(bool delay)
 	if ( !cell->calc( delay ) )
         {
 	  m_strFormulaOut = "####";
-	  setFlag(Flag_Error);
+	  setFlag(Flag_DependancyError);
 	  m_dataType = StringData; //correct?
           clearFlag(Flag_Progress);
 	  if ( m_style == ST_Select )
@@ -1562,9 +1561,10 @@ bool KSpreadCell::calc(bool delay)
     // If we got an error during evaluation ...
     if ( m_pCode )
       {
-      setFlag(Flag_Error);
-      m_strFormulaOut = "####";
-      m_dataType = StringData; //correct?
+// these should be set by the evaluate routine...
+//      setFlag(Flag_Error);
+//      m_strFormulaOut = "####";
+//      m_dataType = StringData; //correct?
       setFlag(Flag_LayoutDirty);
       DO_UPDATE;
       // Print out exception if any
@@ -1592,7 +1592,7 @@ bool KSpreadCell::calc(bool delay)
   else if ( context.value()->type() == KSValue::DoubleType )
   {
     m_dValue = context.value()->doubleValue();
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_dataType = NumericData;
     checkNumberFormat(); // auto-chooses number or scientific
     // Format the result appropriately
@@ -1601,7 +1601,7 @@ bool KSpreadCell::calc(bool delay)
   else if ( context.value()->type() == KSValue::IntType )
   {
     m_dValue = (double)context.value()->intValue();
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_dataType = NumericData;
 
     checkNumberFormat(); // auto-chooses number or scientific
@@ -1610,7 +1610,7 @@ bool KSpreadCell::calc(bool delay)
   }
   else if ( context.value()->type() == KSValue::BoolType )
   {
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_dataType = BoolData;
     m_dValue = context.value()->boolValue() ? 1.0 : 0.0;
     m_strFormulaOut = context.value()->boolValue() ? i18n("True") : i18n("False");
@@ -1618,7 +1618,7 @@ bool KSpreadCell::calc(bool delay)
   }
   else if ( context.value()->type() == KSValue::TimeType )
   {
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_dataType = TimeData;
     m_Time = context.value()->timeValue();
 
@@ -1637,7 +1637,7 @@ bool KSpreadCell::calc(bool delay)
   }
   else if ( context.value()->type() == KSValue::DateType)
   {
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_dataType = DateData;
     m_Date = context.value()->dateValue();
     FormatType tmpFormat = formatType();
@@ -1655,7 +1655,7 @@ bool KSpreadCell::calc(bool delay)
   else if ( context.value()->type() == KSValue::Empty )
   {
     m_dValue = 0.0;
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_dataType = StringData;
     // Format the result appropriately
     setFormatType(Number);
@@ -1666,7 +1666,7 @@ bool KSpreadCell::calc(bool delay)
     if ( m_pQML )
       delete m_pQML;
     m_pQML = 0;
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_dataType = StringData;
     m_strFormulaOut = context.value()->toString( context );
     if ( !m_strFormulaOut.isEmpty() && m_strFormulaOut[0] == '!' )
@@ -2038,7 +2038,7 @@ void KSpreadCell::paintCommentIndicator(QPainter& painter, QPoint corner,
 
 // small blue rectangle if this cell holds a formula
 void KSpreadCell::paintFormulaIndicator(QPainter& painter, QPoint corner,
-                                        QPoint cellRef)
+                                        QPoint /* cellRef */)
 {
   if( isFormula() && m_pTable->getShowFormulaIndicator() )
   {
@@ -2643,6 +2643,7 @@ QString KSpreadCell::textDisplaying( QPainter &_painter)
        return localizedNumber;
      }
    }
+   /* What is this doing and is it broken with the new error handling? */
    QString str("####");
    int i;
    for(i=4;i!=0;i--)
@@ -3031,7 +3032,7 @@ void KSpreadCell::setCellText( const QString& _text, bool updateDepends )
 
 void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
 {
-  clearFlag(Flag_Error);
+  clearAllErrors();
   m_strText = _text;
 
   // Free all content data
@@ -3304,7 +3305,7 @@ bool KSpreadCell::testValidity()
 
 void KSpreadCell::setValue( double _d )
 {
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_strText = QString::number( _d );
 
     // Free all content data
@@ -3313,7 +3314,7 @@ void KSpreadCell::setValue( double _d )
 
     clearFormula();
 
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_dataType = NumericData;
     m_dValue = _d;
     setFlag(Flag_LayoutDirty);
@@ -3439,7 +3440,7 @@ bool KSpreadCell::updateChart(bool refresh)
 void KSpreadCell::checkTextInput()
 {
     // Goal of this method: determine m_dataType, and the value of the cell
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_dValue = 0;
 
     Q_ASSERT( m_content == Text );
@@ -4080,7 +4081,7 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
     m_strText = pasteOperation( t, m_strText, op );
 
     setFlag(Flag_LayoutDirty);
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_content = Formula;
 
     if ( !m_pTable->isLoading() ) // i.e. when pasting
@@ -4122,7 +4123,7 @@ bool KSpreadCell::loadCellData(QDomElement text, Operation op )
     if ( newStyleLoading )
     {
       m_dValue = 0.0;
-      clearFlag(Flag_Error);
+      clearAllErrors();
       switch ( m_dataType ) {
       case BoolData:
       {
@@ -4329,7 +4330,7 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
 
         tmp_op = decodeFormula( tmp_op, m_iColumn, m_iRow );
         setFlag(Flag_LayoutDirty);
-        clearFlag(Flag_Error);
+        clearAllErrors();
         m_content = Formula;
 
         return tmp_op;
@@ -4358,7 +4359,7 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
         clearFormula();
         tmp_op = decodeFormula( tmp_op, m_iColumn, m_iRow );
         setFlag(Flag_LayoutDirty);
-        clearFlag(Flag_Error);
+        clearAllErrors();
         m_content = Formula;
 
         return tmp_op;
@@ -4366,7 +4367,7 @@ QString KSpreadCell::pasteOperation( QString new_text, QString old_text, Operati
 
     new_text = decodeFormula( new_text, m_iColumn, m_iRow );
     setFlag(Flag_LayoutDirty);
-    clearFlag(Flag_Error);
+    clearAllErrors();
     m_content = Formula;
 
     return new_text;
@@ -4579,7 +4580,17 @@ void KSpreadCell::SetConditionList(QValueList<KSpreadConditional> newList)
 
 bool KSpreadCell::hasError() const
 {
-  return testFlag(Flag_Error);
+  return ( testFlag(Flag_ParseError) ||
+           testFlag(Flag_CircularCalculation) ||
+           testFlag(Flag_DependancyError));
+
+}
+
+void KSpreadCell::clearAllErrors()
+{
+  clearFlag(Flag_ParseError);
+  clearFlag(Flag_CircularCalculation);
+  clearFlag(Flag_DependancyError);
 }
 
 bool KSpreadCell::calcDirtyFlag()

@@ -594,6 +594,11 @@ public:
     bool hasError() const;
 
     /**
+     * Clear all error flags from the cell.
+     */
+    void clearAllErrors();
+
+    /**
      * Calculates the layout of the cell, i,e, determines what should be shown
      * for this cell, m_strOutText.
      */
@@ -658,19 +663,21 @@ public:
     QString dataTypeToString( DataType dt ) const;
     DataType stringToDataType( const QString& str ) const;
 
-  /* descriptions of the flags are just below */
+    /* descriptions of the flags are just below */
     enum CellFlags{
     /* this uses the same flags variable as KSpreadLayout.  The least significant
        16 bits are reserved for the base class, and the most significant 16
        have been left for this subclass to use. */
-      Flag_Error =          0x00010000,
-      Flag_LayoutDirty =    0x00020000,
-      Flag_CalcDirty =      0x00040000,
-      Flag_Progress =       0x00080000,
-      Flag_UpdatingDeps =   0x00100000,
-      Flag_DisplayDirty =   0x00200000,
-      Flag_ForceExtra =     0x00400000,
-      Flag_CellTooShort =   0x00800000
+      Flag_LayoutDirty           = 0x00010000,
+      Flag_CalcDirty             = 0x00020000,
+      Flag_Progress              = 0x00040000,
+      Flag_UpdatingDeps          = 0x00080000,
+      Flag_DisplayDirty          = 0x00100000,
+      Flag_ForceExtra            = 0x00200000,
+      Flag_CellTooShort          = 0x00400000,
+      Flag_ParseError            = 0x00800000,
+      Flag_CircularCalculation   = 0x01000000,
+      Flag_DependancyError       = 0x02000000
     };
 
     void clearFlag( CellFlags flag );
