@@ -430,168 +430,194 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
 
 }
 
-void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList,
+
+void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, 
+				 QPtrList<KSpreadCell>& _destList,
                                  QPtrList<AutoFillSequence>& _seqList )
 {
     doc()->emitBeginOperation();
-    QPtrList<AutoFillDeltaSequence> deltaList;
-    deltaList.setAutoDelete( TRUE );
 
-    // What is the interval (block)? If your table looks like this:
-    // 1 3 5 7 9
-    // then the interval has the length 1 and the delta list is [2].
-    // 2 200 3 300 4 400
-    // Here the interval has length 2 and the delta list is [1,100]
-
-
-    // How big is the interval. It is in the range from [2...n/2].
-    // The case of an interval of length n is handled below.
-    //
-    // We try to find the shortest interval.
-    for ( unsigned int step = 1; step <= _seqList.count() / 2; step++ )
+    /* try finding an interval to use to fill the sequence */
+    if (!FillSequenceWithInterval(_srcList, _destList, _seqList))
     {
-        // If the interval is of length 'step' then the _seqList size must
-        // be a multiple of 'step'
-        if ( _seqList.count() % step == 0 )
-        {
-            // Be optimistic
-            bool ok = TRUE;
-            deltaList.clear();
-
-            // Gueess the delta by looking at cells 0...2*step-1
-            //
-            // Since the interval may be of length 'step' we calculate the delta
-            // between cells 0 and step, 1 and step+1, ...., step-1 and 2*step-1
-            for ( unsigned int t = 0; t < step; t++ )
-            {
-                deltaList.append( new AutoFillDeltaSequence( _seqList.at(t), _seqList.at(t+step) ) );
-                if ( !deltaList.getLast()->isOk() )
-                    ok = FALSE;
-            }
-
-            // Verify the delta by looking at cells step..._seqList.count()
-            //
-            // We only looked at the cells 0 ... '2*step-1'.
-            // Now test wether the cells from "(tst-1) * step + s" share the same delta
-            // with the cell "tst * step + s" for all test=1..._seqList.count()/step and
-            // for all s=0...step-1.
-            for ( unsigned int tst = 1; ok && ( tst * step < _seqList.count() ); tst++ )
-            {
-                for ( unsigned int s = 0; ok && ( s < step ); s++ )
-                {
-                    if ( !_seqList.at( (tst-1) * step + s )->matches( _seqList.at( tst * step + s ),
-                                                                       deltaList.at( s ) ) )
-                        ok = FALSE;
-                }
-            }
-
-            // Did we find a valid interval ?
-            if ( ok )
-            {
-                // Start iterating with the first cell
-                KSpreadCell *cell = _destList.first();
-                unsigned int s = 0;
-                // Amount of intervals (blocks)
-                int block = _seqList.count() / step;
-                // Loop over all destination cells
-                while ( cell )
-                {
-                    // End of block? -> start again from beginning
-                    if ( s == step )
-                    {
-                        block++;
-                        s = 0;
-                    }
-                    // Set the value of 'cell' by adding 'block' times the delta tp the value
-                    // of cell 's'.
-                    _seqList.at( s )->fillCell( _srcList.at( s ), cell, deltaList.at( s ), block );
-                    // Next cell
-                    cell = _destList.next();
-                    s++;
-                }
-
-                return;
-            }
-        }
+      /* if no interval was found, just copy down through */
+      FillSequenceWithCopy(_srcList, _destList);
     }
 
-    // We did not find any valid interval. So just copy over the marked
-    // area.
-    KSpreadCell *cell = _destList.first();
-    unsigned int s = 0;
-    unsigned int incre=1;
-    while ( cell )
-    {
-        if ( s == _srcList.count() )
-            s = 0;
-        if ( !_srcList.at( s )->text().isEmpty() )
-        {
-            if ( _srcList.at( s )->isFormula() )
-            {
-                QString d = _srcList.at( s )->encodeFormula();
-                cell->setCellText( cell->decodeFormula( d ), true );
-            }
-            else if(_srcList.at( s )->isNumeric() && _srcList.count()==1)
-                {
-                double val=(_srcList.at( s )->valueDouble())+incre;
-                incre++;
-                QString tmp;
-                tmp=tmp.setNum(val);
-                cell->setCellText( tmp, true );
-                }
-            else if(_srcList.at( s )->isDate() && _srcList.count()==1)
-                {
-                    QDate tmpDate=(_srcList.at( s )->valueDate());
-                    tmpDate=tmpDate.addDays( incre );
-                    incre++;
-                    cell->setCellText(doc()->locale()->formatDate(tmpDate,true),true);
-                }
-             else if(_srcList.at( s )->isTime() && _srcList.count()==1)
-                {
-                    if(incre==1)
-                        incre=60;
-                    QTime tmpTime=(_srcList.at( s )->valueTime());
-                    //add a minute
-                    tmpTime=tmpTime.addSecs( incre );
-                    incre+=60;
-                    cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
-                }
-	    else if(AutoFillSequenceItem::month->find( _srcList.at( s )->text())!=0L && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != AutoFillSequenceItem::month->end() && _srcList.count()==1)
-	      {
-		QString strMonth=_srcList.at( s )->text();
-		int i = AutoFillSequenceItem::month->findIndex( strMonth );
-		int k = (i+incre) % AutoFillSequenceItem::month->count();
-		cell->setCellText((*AutoFillSequenceItem::month->at( k )));
-		incre++;
-	      }
-	    else if(AutoFillSequenceItem::day->find( _srcList.at( s )->text())!=0L && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != AutoFillSequenceItem::day->end() && _srcList.count()==1)
-	      {
-		QString strDay=_srcList.at( s )->text();
-		int i = AutoFillSequenceItem::day->findIndex( strDay );
-		int k = (i+incre) % AutoFillSequenceItem::day->count();
-		cell->setCellText((*AutoFillSequenceItem::day->at( k )));
-		incre++;
-	      }
-            else
-            {
-                QRegExp number("(\\d+)");
-                int pos =number.search(_srcList.at( s )->text());
-                if( pos )
-                {
-                    QString tmp=number.cap(1);
-                    int num=tmp.toInt();
-                    cell->setCellText(_srcList.at( s )->text().replace(number,QString::number(num+incre)));
-                    incre++;
-                }
-                else
-                    cell->setCellText( _srcList.at( s )->text(), true );
-            }
-        }
-        else
-            cell->setCellText( "", true );
-        cell->copyLayout( _srcList.at( s ) );
-        cell = _destList.next();
-        s++;
-    }
     doc()->emitEndOperation();
+}
+
+
+bool KSpreadTable::FillSequenceWithInterval
+(QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList, 
+ QPtrList<AutoFillSequence>& _seqList)
+{
+  QPtrList<AutoFillDeltaSequence> deltaList;
+  deltaList.setAutoDelete( TRUE );
+  bool ok = false;
+
+  // What is the interval (block)? If your table looks like this:
+  // 1 3 5 7 9
+  // then the interval has the length 1 and the delta list is [2].
+  // 2 200 3 300 4 400
+  // Here the interval has length 2 and the delta list is [1,100]
+  
+
+  // How big is the interval. It is in the range from [2...n/2].
+  // The case of an interval of length n is handled below.
+  //
+  // We try to find the shortest interval.
+  for ( unsigned int step = 1; step <= _seqList.count() / 2; step++ )
+  {
+    // If the interval is of length 'step' then the _seqList size must
+    // be a multiple of 'step'
+    if ( _seqList.count() % step == 0 )
+    {
+      // Be optimistic
+      ok = true;
+
+      deltaList.clear();
+      
+      // Guess the delta by looking at cells 0...2*step-1
+      //
+      // Since the interval may be of length 'step' we calculate the delta
+      // between cells 0 and step, 1 and step+1, ...., step-1 and 2*step-1
+      for ( unsigned int t = 0; t < step; t++ )
+      {
+	deltaList.append( new AutoFillDeltaSequence( _seqList.at(t), 
+						     _seqList.at(t+step) ) );
+	ok = deltaList.getLast()->isOk();
+      }
+
+      /* Verify the delta by looking at cells step..._seqList.count()
+	 We only looked at the cells 0 ... '2*step-1'.
+	 Now test wether the cells from "(tst-1) * step + s" share the same delta
+	 with the cell "tst * step + s" for all test=1..._seqList.count()/step 
+	 and for all s=0...step-1.
+      */
+      for ( unsigned int tst = 1; ok && ( tst * step < _seqList.count() ); 
+	    tst++ )
+      {
+	for ( unsigned int s = 0; ok && ( s < step ); s++ )
+	{
+	  if ( !_seqList.at( (tst-1) * step + s )->
+	       matches( _seqList.at( tst * step + s ), deltaList.at( s ) ) )
+	    ok = FALSE;
+	}
+      }
+
+      // Did we find a valid interval ?
+      if ( ok )
+      {
+	// Start iterating with the first cell
+	KSpreadCell *cell = _destList.first();
+	unsigned int s = 0;
+	// Amount of intervals (blocks)
+	int block = _seqList.count() / step;
+	// Loop over all destination cells
+	while ( cell )
+	{
+	  // End of block? -> start again from beginning
+	  if ( s == step )
+	  {
+	    block++;
+	    s = 0;
+	  }
+	  // Set the value of 'cell' by adding 'block' times the delta tp the 
+	  // value of cell 's'.
+	  _seqList.at( s )->fillCell( _srcList.at( s ), cell, 
+				      deltaList.at( s ), block );
+	  // Next cell
+	  cell = _destList.next();
+	  s++;
+	}
+      }
+    }
+  }
+  return ok;
+  
+}
+
+void KSpreadTable::FillSequenceWithCopy
+(QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList)
+{
+  // We did not find any valid interval. So just copy over the marked
+  // area.
+  KSpreadCell *cell = _destList.first();
+  unsigned int s = 0;
+  unsigned int incre=1;
+  while ( cell )
+  {
+    if ( s == _srcList.count() )
+      s = 0;
+    if ( !_srcList.at( s )->text().isEmpty() )
+    {
+      if ( _srcList.at( s )->isFormula() )
+      {
+	QString d = _srcList.at( s )->encodeFormula();
+	cell->setCellText( cell->decodeFormula( d ), true );
+      }
+      else if(_srcList.at( s )->isNumeric() && _srcList.count()==1)
+      {
+	double val=(_srcList.at( s )->valueDouble())+incre;
+	incre++;
+	QString tmp;
+	tmp=tmp.setNum(val);
+	cell->setCellText( tmp, true );
+      }
+      else if(_srcList.at( s )->isDate() && _srcList.count()==1)
+      {
+	QDate tmpDate=(_srcList.at( s )->valueDate());
+	tmpDate=tmpDate.addDays( incre );
+	incre++;
+	cell->setCellText(doc()->locale()->formatDate(tmpDate,true),true);
+      }
+      else if(_srcList.at( s )->isTime() && _srcList.count()==1)
+      {
+	if(incre==1)
+	  incre=60;
+	QTime tmpTime=(_srcList.at( s )->valueTime());
+	//add a minute
+	tmpTime=tmpTime.addSecs( incre );
+	incre+=60;
+	cell->setCellText(doc()->locale()->formatTime(tmpTime,true),true);
+      }
+      else if(AutoFillSequenceItem::month->find( _srcList.at( s )->text())!=0L && AutoFillSequenceItem::month->find( _srcList.at( s )->text()) != AutoFillSequenceItem::month->end() && _srcList.count()==1)
+      {
+	QString strMonth=_srcList.at( s )->text();
+	int i = AutoFillSequenceItem::month->findIndex( strMonth );
+	int k = (i+incre) % AutoFillSequenceItem::month->count();
+	cell->setCellText((*AutoFillSequenceItem::month->at( k )));
+	incre++;
+      }
+      else if(AutoFillSequenceItem::day->find( _srcList.at( s )->text())!=0L && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != AutoFillSequenceItem::day->end() && _srcList.count()==1)
+      {
+	QString strDay=_srcList.at( s )->text();
+	int i = AutoFillSequenceItem::day->findIndex( strDay );
+	int k = (i+incre) % AutoFillSequenceItem::day->count();
+	cell->setCellText((*AutoFillSequenceItem::day->at( k )));
+	incre++;
+      }
+      else
+      {
+	QRegExp number("(\\d+)");
+	int pos =number.search(_srcList.at( s )->text());
+	if( pos )
+	{
+	  QString tmp=number.cap(1);
+	  int num=tmp.toInt();
+	  cell->setCellText(_srcList.at( s )->text().replace(number,QString::number(num+incre)));
+	  incre++;
+	}
+	else
+	  cell->setCellText( _srcList.at( s )->text(), true );
+      }
+    }
+    else
+      cell->setCellText( "", true );
+    cell->copyLayout( _srcList.at( s ) );
+    cell = _destList.next();
+    s++;
+  }
+  return;
 }

@@ -1055,6 +1055,15 @@ protected:
     typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
 
     SelectionType workOnCells( const QPoint& _marker, CellWorker& worker );
+
+private:
+    bool FillSequenceWithInterval (QPtrList<KSpreadCell>& _srcList, 
+				   QPtrList<KSpreadCell>& _destList, 
+				   QPtrList<AutoFillSequence>& _seqList);
+
+    void FillSequenceWithCopy (QPtrList<KSpreadCell>& _srcList, 
+			       QPtrList<KSpreadCell>& _destList);
+
 };
 
 #endif
