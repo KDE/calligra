@@ -31,6 +31,7 @@
 #include <koDocumentInfo.h>
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
+#include <kmdcodec.h>
 #include <koFilterChain.h>
 #include <koGlobal.h>
 
@@ -514,14 +515,22 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
       if ( !cell )
         cell = table->nonDefaultCell( columns, row );
 
-      kdDebug() << "Default style: " << e.attribute( "style:parent-style-name" ) << endl;
-      KSpreadFormat * layout = m_defaultStyles[e.attribute( "style:parent-style-name" )];
+      QString psName( "Default" );
+      if ( e.hasAttribute( "style:parent-style-name" ) )
+        psName = e.attribute( "style:parent-style-name" );
+     
+      kdDebug() << "Default style: " << psName << endl;
+      KSpreadFormat * layout = m_defaultStyles[psName];
 
       if ( layout )
         cell->copy( *layout );
 
-      kdDebug() << "Style: " << e.attribute( "table:style-name" ) << endl;
-      QDomElement * st = m_styles[ e.attribute( "table:style-name" ) ];
+      QDomElement * st = 0;
+      if ( e.hasAttribute( "table:style-name" ) )
+      { 
+        kdDebug() << "Style: " << e.attribute( "table:style-name" ) << endl;
+        st = m_styles[ e.attribute( "table:style-name" ) ];
+      }
       if ( st )
       {
         kdDebug() << "Style: adapting " << endl;
@@ -565,6 +574,18 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
         }
       }
     }
+    else
+    {
+      if ( !cell )
+        cell = table->nonDefaultCell( columns, row );
+
+      QString psName( "Default" );
+      kdDebug() << "Default style: " << psName << endl;
+      KSpreadFormat * layout = m_defaultStyles[psName];
+
+      if ( layout )
+        cell->copy( *layout );
+    }
     if ( e.hasAttribute( "table:formula" ) )
     {
       isFormula = true;
@@ -579,6 +600,8 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
     {
       if ( !cell )
         cell = table->nonDefaultCell( columns, row );
+
+      cell->setCellText( text );
 
       QString value = e.attribute( "table:value" );
       QString type  = e.attribute( "table:value-type" );
@@ -1303,9 +1326,39 @@ bool OpenCalcImport::parseBody( int numOfTables )
     if ( !readRowsAndCells( t, table ) )
       return false;
 
+    if ( t.hasAttribute( "table:protected" ) )
+    {
+      QCString passwd( "" );
+      if ( t.hasAttribute( "table:protection-key" ) )
+      {        
+        QString p = t.attribute( "table:protection-key" );
+        QCString str( p.latin1() );
+        kdDebug() << "Decoding password: " << str << endl;
+        passwd = KCodecs::base64Decode( str );
+      }
+      kdDebug() << "Password hash: '" << passwd << "'" << endl;
+      table->setProtected( passwd );
+    }
+
     progress += step;
     emit sigProgress( progress );
     sheet = sheet.nextSibling();
+  }
+
+  QDomElement b = body.toElement();
+  if ( b.hasAttribute( "table:structure-protected" ) )
+  {
+    QCString passwd( "" );
+    if ( b.hasAttribute( "table:protection-key" ) )
+    {
+      QString p = b.attribute( "table:protection-key" );
+      QCString str( p.latin1() );
+      kdDebug() << "Decoding password: " << str << endl;
+      passwd = KCodecs::base64Decode( str );
+    }
+    kdDebug() << "Password hash: '" << passwd << "'" << endl;
+
+    m_doc->map()->setProtected( passwd );
   }
 
   emit sigProgress( 98 );
@@ -1799,6 +1852,47 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
   {
     if ( property.attribute( "style:print-content" ) == "false" )
       layout->setDontPrintText( false );
+  }
+  if ( property.hasAttribute( "style:cell-protect" ) )
+  {
+    QString prot( property.attribute( "style:cell-protect" ) );
+    if ( prot == "none" )
+    {
+      layout->setNotProtected( true );
+      layout->setHideFormula( false );
+      layout->setHideAll( false );
+    }
+    else if ( prot == "formula-hidden" )
+    {
+      layout->setNotProtected( true );
+      layout->setHideFormula( true );
+      layout->setHideAll( false );
+    }
+    else if ( prot == "protected formula-hidden" )
+    {
+      layout->setNotProtected( false );
+      layout->setHideFormula( true );
+      layout->setHideAll( false );
+    }
+    else if ( prot == "hidden-and-protected" )
+    {
+      layout->setNotProtected( false );
+      layout->setHideFormula( false );
+      layout->setHideAll( true );
+    }
+    else if ( prot == "protected" )
+    {
+      layout->setNotProtected( false );
+      layout->setHideFormula( false );
+      layout->setHideAll( false );
+    }
+    else if ( prot == "formula-hidden" )
+    {
+      layout->setHideAll( false );
+      layout->setHideFormula( true );
+      layout->setNotProtected( true );
+    }
+    kdDebug() << "Cell " << prot << endl;
   }
 
   if ( property.hasAttribute( "fo:padding-left" ) )
