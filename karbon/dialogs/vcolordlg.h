@@ -18,48 +18,26 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VCOLORTAB_H
-#define __VCOLORTAB_H
+#ifndef __VCOLORDLG_H__
+#define __VCOLORDLG_H__
 
-#include <qtabwidget.h>
+#include <kdialogbase.h>
 
-class QColor;
-class KHSSelector;
-class KIntSpinBox;
-class KGradientSelector;
-class KColorPatch;
-class KIntNumInput;
 class VColor;
+class VColorTab;
+class VFill;
 
-class VColorTab : public QTabWidget
+class VColorDlg : public KDialogBase
 {
 	Q_OBJECT
 
 public:
-	VColorTab( const VColor &c, QWidget* parent = 0L, const char* name = 0L );
+	VColorDlg( const VColor &c, QWidget* parent = 0L, const char* name = 0L );
 
 	VColor Color();
 
 private:
-	QWidget* mRGBWidget;
-	KHSSelector* mColorSelector;
-	KIntSpinBox* mRed;
-	KIntSpinBox* mGreen;
-	KIntSpinBox* mBlue;
-	KIntSpinBox* mHue;
-	KIntSpinBox* mSaturation;
-	KIntSpinBox* mValue;
-	KIntNumInput* mOpacity;
-	KGradientSelector* mSelector;
-	KColorPatch* mOldColor;
-	KColorPatch* mColorPreview;
-
-private slots:
-	void slotUpdateFromRGBSpinBoxes();
-	void slotUpdateFromHSVSpinBoxes();
-	void slotVChanged( int );
-	void slotHSChanged( int, int );
+	VColorTab* m_colortab;
 };
-
 #endif
 

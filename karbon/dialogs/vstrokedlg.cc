@@ -169,7 +169,7 @@ void VStrokeDlg::slotOKClicked()
 {
 	m_stroke.setLineWidth ( m_setLineWidth->value() );
 
-	m_stroke.setColor( m_colortab->getColor() );
+	m_stroke.setColor( m_colortab->Color() );
 
 	if( m_part && m_part->document().selection()->objects().count() > 0 )
 		m_part->addCommand( new VStrokeCmd( &m_part->document(), &m_stroke ), true );

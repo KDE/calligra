@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 The Karbon Developers
+   Copyright (C) 2002 - 2005, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,12 +23,13 @@
 #include <koPoint.h>
 
 #include "karbon_part.h"
+#include "vcolordlg.h"
 #include "vfill.h"
-#include "vfilldlg.h"
+#include "vfillcmd.h"
 #include "vkopainter.h"
 #include "vselection.h"
 #include "vstroke.h"
-#include "vstrokedlg.h"
+#include "vstrokecmd.h"
 #include "vstrokefillpreview.h"
 
 #define PANEL_SIZEX		50.0
@@ -137,25 +138,23 @@ VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
 			ex >= FILL_TOPX && ex <= FILL_BOTTOMX &&
 			ey >= FILL_TOPY && ey <= FILL_BOTTOMY )
 		{
-			VFillDlg* dialog = new VFillDlg( m_part );
-			connect( dialog, SIGNAL( fillChanged( const VFill & ) ),
-				this, SIGNAL( fillChanged( const VFill & ) ) );
-			dialog->exec();
+			VColorDlg* dialog = new VColorDlg( m_fill->color(), this );
+			if( dialog->exec() == QDialog::Accepted )
+			{
+				if( m_part && m_part->document().selection() ) m_part->addCommand( new VFillCmd( &m_part->document(), VFill( dialog->Color() ) ), true );
+			}
 			delete dialog;
-			disconnect( dialog, SIGNAL( fillChanged( const VFill & ) ),
-				this, SIGNAL( fillChanged( const VFill & ) ) );
 		}
 		else if(
 			ex >= STROKE_TOPX && ex <= STROKE_BOTTOMX
 			&& ey >= STROKE_TOPY && ey <= STROKE_BOTTOMY )
 		{
-			VStrokeDlg* dialog = new VStrokeDlg( m_part );
-			connect( dialog, SIGNAL( strokeChanged( const VStroke & ) ),
-				this, SIGNAL( strokeChanged( const VStroke & ) ) );
-			dialog->exec();
+			VColorDlg* dialog = new VColorDlg( m_stroke->color(), this );
+			if( dialog->exec() == QDialog::Accepted )
+			{
+				if( m_part && m_part->document().selection() ) m_part->addCommand( new VStrokeCmd( &m_part->document(), dialog->Color() ), true );
+			}
 			delete dialog;
-			disconnect( dialog, SIGNAL( strokeChanged( const VStroke & ) ),
-				this, SIGNAL( strokeChanged( const VStroke & ) ) );
 		}
 	}
 	return false;

@@ -18,30 +18,29 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VFILLDLG_H__
-#define __VFILLDLG_H__
+#include <klocale.h>
 
-#include <kdialogbase.h>
+#include "karbon_part.h"
+#include "vcolor.h"
+#include "vcolordlg.h"
+#include "vcolortab.h"
 
-class KarbonPart;
-class VColorTab;
-
-class VFillDlg : public KDialogBase
+VColorDlg::VColorDlg( const VColor &c, QWidget* parent, const char* name )
+	: KDialogBase ( parent, name, true, i18n( "Uniform Color" ),
+		KDialogBase::Ok | KDialogBase::Cancel )
 {
-	Q_OBJECT
+	m_colortab = new VColorTab( VColor( c ), this, name );
 
-public:
-	VFillDlg( KarbonPart* part, QWidget* parent = 0L, const char* name = 0L );
+	setMainWidget( m_colortab );
+	setFixedSize( baseSize() );
+}
 
-private:
-	VColorTab* m_colortab;
-	KarbonPart *m_part;
+VColor
+VColorDlg::Color()
+{
+	return m_colortab->Color();
+}
 
-signals:
-	void fillChanged( const VFill & );
 
-private slots:
-	void slotApplyButtonPressed();
-};
-#endif
+#include "vcolordlg.moc"
 

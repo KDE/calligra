@@ -8,16 +8,14 @@ noinst_LTLIBRARIES = \
 	libkarbondialogs.la
 
 noinst_HEADERS = \
+	vcolordlg.h \
 	vconfiguredlg.h \
-	vfilldlg.h \
-	vcolortab.h \
-	vstrokedlg.h 
+	vcolortab.h
 
 libkarbondialogs_la_SOURCES = \
+	vcolordlg.cc \
 	vconfiguredlg.cc \
-	vfilldlg.cc \
-	vcolortab.cc \
-	vstrokedlg.cc 
+	vcolortab.cc
 
 libkarbondialogs_la_METASOURCES = \
 	AUTO

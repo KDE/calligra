@@ -63,10 +63,8 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mColorPreview = new KColorPatch( groupbox );
 
 	QColor color( c );
-
 	mOldColor->setColor( color );
 	mColorPreview->setColor( color );
-	connect( mColorPreview, SIGNAL( colorChanged( const QColor & ) ), this, SLOT( slotUpdate( const QColor & ) ) );
 	mainLayout->addWidget( groupbox, 0, 2 );
 
 	//Components
@@ -168,24 +166,17 @@ void VColorTab::slotUpdateFromHSVSpinBoxes()
 	mBlue->blockSignals( false );
 }
 
-VColor VColorTab::getColor()
+VColor VColorTab::Color()
 {
 	kdDebug() << "VColorTab::slotApplyButtonPressed" << endl;
 	float r = mRed->value() / 255.0, g = mGreen->value() / 255.0, b = mBlue->value() / 255.0;
 	float op = mOpacity->value() / 100.0;
 
-	VColor color;
-	color.set( r, g, b );
-	color.setOpacity( op );
+	VColor c;
+	c.set( r, g, b );
+	c.setOpacity( op );
 
-	return color;
-}
-
-void VColorTab::slotUpdate( const QColor & )
-{
-	/*mRed->setValue( color->red() );
-	mGreen->setValue( color->green() );
-	mBlue->setValue( color->blue() );*/
+	return c;
 }
 
 void VColorTab::slotHSChanged( int h, int s )
