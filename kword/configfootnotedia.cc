@@ -97,7 +97,7 @@ void KWConfigFootNoteDia::setupTab3()
 
     QVButtonGroup *bgSeparatorType = new QVButtonGroup( i18n( "Separator Line Type" ), page );
 
-    lab = new QLabel(i18n("Type of Line:"), bgSeparatorType);
+    lab = new QLabel(i18n("Type of line:"), bgSeparatorType);
     m_cbLineType = new QComboBox( bgSeparatorType );
     QStringList lst;
     lst <<i18n("Solid");

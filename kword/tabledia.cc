@@ -141,7 +141,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
     else
     if (m_useMode==EDIT)
     {
-        cbReapplyTemplate1 = new QCheckBox( i18n("Re-apply template to table"), tab1 );
+        cbReapplyTemplate1 = new QCheckBox( i18n("Reapply template to table"), tab1 );
         grid->addMultiCellWidget( cbReapplyTemplate1, 9, 9, 0, 2);
 
         connect( cbReapplyTemplate1, SIGNAL( toggled ( bool )  ), this, SLOT( slotSetReapply( bool ) ) );
@@ -204,7 +204,7 @@ void KWTableDia::setupTab2(const QString & _templateName )
 
     if (m_useMode==EDIT)
     {
-        cbReapplyTemplate2 = new QCheckBox( i18n("Re-apply template to table"), tab2 );
+        cbReapplyTemplate2 = new QCheckBox( i18n("Reapply template to table"), tab2 );
         grid->addWidget( cbReapplyTemplate2, 1, 0);
 
         grid->setRowStretch( 0, 1);

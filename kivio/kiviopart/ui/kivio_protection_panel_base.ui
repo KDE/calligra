@@ -43,7 +43,7 @@
             <string>&amp;X position</string>
         </property>
         <property name="toolTip" stdset="0">
-            <string>Toggles the ability to protect the x position of the selected stencil(s)</string>
+            <string>Toggles the ability to protect the x position of the selected stencils</string>
         </property>
     </widget>
     <widget class="QCheckBox">
@@ -62,7 +62,7 @@
             <string>&amp;Y position</string>
         </property>
         <property name="toolTip" stdset="0">
-            <string>Toggles the ability to protect the y position of the selected stencil(s)</string>
+            <string>Toggles the ability to protect the y position of the selected stencils</string>
         </property>
     </widget>
     <widget class="QCheckBox">
@@ -81,7 +81,7 @@
             <string>&amp;Height</string>
         </property>
         <property name="toolTip" stdset="0">
-            <string>Toggles the ability to change the height of the selected stencil(s)</string>
+            <string>Toggles the ability to change the height of the selected stencils</string>
         </property>
     </widget>
     <widget class="QCheckBox">
@@ -100,7 +100,7 @@
             <string>&amp;Width</string>
         </property>
         <property name="toolTip" stdset="0">
-            <string>Toggles the ability to change the width of the selected stencil(s)</string>
+            <string>Toggles the ability to change the width of the selected stencils</string>
         </property>
     </widget>
     <widget class="QCheckBox">
@@ -119,7 +119,7 @@
             <string>&amp;Aspect ratio</string>
         </property>
         <property name="toolTip" stdset="0">
-            <string>Toggles the ability to change the aspect ratio of the selected stencil(s)</string>
+            <string>Toggles the ability to change the aspect ratio of the selected stencils</string>
         </property>
     </widget>
     <widget class="QCheckBox">
@@ -138,7 +138,7 @@
             <string>&amp;Deletion</string>
         </property>
         <property name="toolTip" stdset="0">
-            <string>Toggles the ability to delete the selected stencil(s)</string>
+            <string>Toggles the ability to delete the selected stencils</string>
         </property>
     </widget>
 </widget>

@@ -635,7 +635,7 @@ KoDateVariable::KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariable
 
 QString KoDateVariable::fieldCode()
 {
-    return (m_subtype == VST_DATE_FIX)?i18n("Date(Fixed)"):i18n("Date");
+    return (m_subtype == VST_DATE_FIX)?i18n("Date (Fixed)"):i18n("Date");
 }
 
 void KoDateVariable::recalc()
@@ -798,7 +798,7 @@ KoTimeVariable::KoTimeVariable( KoTextDocument *textdoc, int subtype, KoVariable
 
 QString KoTimeVariable::fieldCode()
 {
-    return (m_subtype == VST_TIME_FIX)?i18n("Time(Fixed)"):i18n("Time");
+    return (m_subtype == VST_TIME_FIX)?i18n("Time (Fixed)"):i18n("Time");
 }
 
 

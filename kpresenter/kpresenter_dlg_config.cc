@@ -514,11 +514,11 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
 
 
     tmpQGroupBox = new QGroupBox( box, "GroupBox" );
-    tmpQGroupBox->setTitle(i18n("SideBar"));
+    tmpQGroupBox->setTitle(i18n("Sidebar"));
 
     grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
-    cbSideBarRefresh = new QCheckBox( i18n("Refresh SideBar item"), tmpQGroupBox);
+    cbSideBarRefresh = new QCheckBox( i18n("Refresh sidebar item"), tmpQGroupBox);
     cbSideBarRefresh->setChecked(m_oldRefreshSideBar);
     grid->addWidget(cbSideBarRefresh, 0, 0);
 

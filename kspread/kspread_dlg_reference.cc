@@ -245,7 +245,7 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
   KSpreadEditAreaNameLayout->addMultiCellLayout( Layout1, 3, 3, 0, 1 );
 
   QLabel * TextLabel4 = new QLabel( this, "TextLabel4" );
-  TextLabel4->setText( i18n( "Cell(s):" ) );
+  TextLabel4->setText( i18n( "Cells:" ) );
 
   KSpreadEditAreaNameLayout->addWidget( TextLabel4, 2, 0 );
 
@@ -263,7 +263,7 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
   KSpreadEditAreaNameLayout->addWidget( m_sheets, 1, 1 );
 
   QLabel * TextLabel2 = new QLabel( this, "TextLabel2" );
-  TextLabel2->setText( i18n( "Area Name:" ) );
+  TextLabel2->setText( i18n( "Area name:" ) );
 
   KSpreadEditAreaNameLayout->addWidget( TextLabel2, 0, 0 );
 

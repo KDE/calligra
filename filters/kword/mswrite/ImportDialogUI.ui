@@ -73,7 +73,7 @@
                         <cstring>radioEncodingOther</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Other Encoding:</string>
+                        <string>&amp;Other encoding:</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
@@ -104,7 +104,7 @@
                         <cstring>radioEncodingDefault</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Default Encoding (CP 1252)</string>
+                        <string>&amp;Default encoding (CP 1252)</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -149,7 +149,7 @@
                     </sizepolicy>
                 </property>
                 <property name="text">
-                    <string>Compensate for &amp;Linespacing Differences</string>
+                    <string>Compensate for &amp;linespacing differences</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string></string>
@@ -171,7 +171,7 @@
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Enable &amp;Image Positioning</string>
+                    <string>Enable &amp;image positioning</string>
                 </property>
                 <property name="checked">
                     <bool>true</bool>

@@ -164,7 +164,7 @@ KWImportFrameTableStyleDia::KWImportFrameTableStyleDia( KWDocument *_doc, const 
     m_typeStyle = _type;
     m_list =_list;
     QVBox *page = makeVBoxMainWidget();
-    new QLabel(i18n("Select Style to import:"), page);
+    new QLabel(i18n("Select style to import:"), page);
     m_listStyleName = new QListBox( page );
     m_listStyleName->setSelectionMode( QListBox::Multi );
     loadFile();
