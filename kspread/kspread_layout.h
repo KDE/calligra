@@ -44,7 +44,8 @@ public:
     enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
     enum FloatColor { NegRed = 1, AllBlack = 2 };
     enum formatNumber { Number=0,Money=10,Percentage=25,Scientific=30,ShortDate=35,TextDate=36, Time=50,
-    SecondeTime=51,fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
+    SecondeTime=51,Time_format1=52,Time_format2=53,Time_format3=54,
+    fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
      fraction_tenth=74,fraction_hundredth=75,fraction_one_digit=76,
      fraction_two_digits=77,fraction_three_digits=78,
      date_format1=200,date_format2=201,date_format3=202,date_format4=203,

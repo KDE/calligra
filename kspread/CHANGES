@@ -1016,3 +1016,9 @@ thanks a lot
 
 *laurent
 some fixes
+
+
+2000-10-23-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Add new time format ( 10:05:5 AM, 10:05 AM, 10 h 05 min 5 s )
+-Some fix.

@@ -793,7 +793,10 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
         ||((int)(dlg->formatNumber)>=200 && (int)(dlg->formatNumber)<=217))
                 date->setChecked(true);
         else if(dlg->formatNumber==KSpreadCell::Time ||
-        dlg->formatNumber==KSpreadCell::SecondeTime)
+        dlg->formatNumber==KSpreadCell::SecondeTime
+        ||dlg->formatNumber==KSpreadCell::Time_format1
+        ||dlg->formatNumber==KSpreadCell::Time_format2
+        ||dlg->formatNumber==KSpreadCell::Time_format3)
                 time->setChecked(true);
         else if(dlg->formatNumber==KSpreadCell::fraction_half ||
         dlg->formatNumber==KSpreadCell::fraction_quarter ||
@@ -905,11 +908,22 @@ else if(time->isChecked())
 
         list+=KGlobal::locale()->formatTime(QTime::currentTime(),false);
         list+=KGlobal::locale()->formatTime(QTime::currentTime(),true);
+        QString tmp;
+        list+=tmp.setNum(10)+":"+tmp.setNum(35) +" " + i18n("PM");
+        list+=tmp.setNum(10)+":"+tmp.setNum(35)+":"+tmp.setNum(25)+" " + i18n("PM");
+        list+=tmp.setNum(10)+" "+i18n("h")+" "+tmp.setNum(35)+" "+i18n("min")+" "+tmp.setNum(25)  +" "+ i18n("s");
+
         listFormat->insertStringList(list);
         if( dlg->formatNumber==KSpreadCell::Time )
                 listFormat->setCurrentItem(0);
         else if(dlg->formatNumber==KSpreadCell::SecondeTime)
                 listFormat->setCurrentItem(1);
+        else if(dlg->formatNumber==KSpreadCell::Time_format1)
+                listFormat->setCurrentItem(2);
+        else if(dlg->formatNumber==KSpreadCell::Time_format2)
+                listFormat->setCurrentItem(3);
+        else if(dlg->formatNumber==KSpreadCell::Time_format3)
+                listFormat->setCurrentItem(4);
         else
                 listFormat->setCurrentItem(0);
         }
@@ -1165,10 +1179,34 @@ else if(dlg->m_bTime)
         {
         if(time->isChecked())
                 {
+                QString tmp;
+                QString tmpTime;
                 if( listFormat->currentItem()==0)
                         exampleLabel->setText(KGlobal::locale()->formatTime(dlg->m_time,false));
                 else if(listFormat->currentItem()==1)
                         exampleLabel->setText(KGlobal::locale()->formatTime(dlg->m_time,true));
+                else if(listFormat->currentItem()==2)
+                        {
+                        if( dlg->m_time.hour()>12)
+                                tmp=QString().sprintf("%02d", dlg->m_time.hour()-12)+":"+QString().sprintf("%02d",dlg->m_time.minute()) +" "+ i18n("PM");
+                        else
+                                tmp=QString().sprintf("%02d", dlg->m_time.hour())+":"+QString().sprintf("%02d",dlg->m_time.minute()) +" "+ i18n("AM");
+                        exampleLabel->setText(tmp);
+                        }
+                else if(listFormat->currentItem()==3)
+                        {
+
+                        if( dlg->m_time.hour()>12)
+                                tmp=QString().sprintf("%02d", dlg->m_time.hour()-12)+":"+QString().sprintf("%02d",dlg->m_time.minute()) +":"+QString().sprintf("%02d",dlg->m_time.second())+" "+ i18n("PM");
+                        else
+                                tmp=QString().sprintf("%02d", dlg->m_time.hour())+":"+QString().sprintf("%02d",dlg->m_time.minute()) +":"+QString().sprintf("%02d",dlg->m_time.second())+" "+ i18n("AM");
+                        exampleLabel->setText(tmp);
+                        }
+                else if(listFormat->currentItem()==4)
+                        {
+                        tmp=QString().sprintf("%02d",dlg->m_time.hour())+" "+i18n("h")+" "+QString().sprintf("%02d",dlg->m_time.minute())+" "+i18n("min")+" "+QString().sprintf("%02d",dlg->m_time.second())  +" "+ i18n("s");
+                        exampleLabel->setText(tmp);
+                        }
                 }
         else
                 exampleLabel->setText(dlg->cellText);
@@ -1456,6 +1494,12 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
                 _obj->setFormatNumber(KSpreadCell::Time );
         else if(listFormat->currentItem()==1)
                 _obj->setFormatNumber(KSpreadCell::SecondeTime );
+        else if(listFormat->currentItem()==2)
+                _obj->setFormatNumber(KSpreadCell::Time_format1 );
+        else if(listFormat->currentItem()==3)
+                _obj->setFormatNumber(KSpreadCell::Time_format2 );
+        else if(listFormat->currentItem()==4)
+                _obj->setFormatNumber(KSpreadCell::Time_format3 );
         }
     else if(money->isChecked())
         _obj->setFormatNumber(KSpreadCell::Money);
@@ -2347,9 +2391,10 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
 
 
     QGridLayout *grid3 = new QGridLayout(tmpQGroupBox,2,2,0,7);
-    tmpQLabel = new QLabel( tmpQGroupBox, "Customize" );
-    tmpQLabel->setText( i18n("Customize") );
-    grid3->addWidget(tmpQLabel,0,0);
+    customize  = new QCheckBox(i18n("Customize"),tmpQGroupBox);
+    grid3->addWidget(customize,0,0);
+    connect( customize, SIGNAL( clicked()),
+           SLOT(cutomize_chosen_slot()) );
 
     size=new QComboBox(true,tmpQGroupBox);
     grid3->addWidget(size,1,1);
@@ -2602,8 +2647,27 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
   connect( size ,SIGNAL( activated(int)),this,SLOT(slotChangeStyle(int)));
   preview->slotSelect();
   pattern1->slotSelect();
+  style->setEnabled(false);
+  size->setEnabled(false);
   preview->setPattern( black , 1, DotLine );
   this->resize( 400, 400 );
+}
+
+
+void CellLayoutPageBorder::cutomize_chosen_slot()
+{
+        if(customize->isChecked())
+                {
+                style->setEnabled(true);
+                size->setEnabled(true);
+                }
+        else
+                {
+                style->setEnabled(false);
+                size->setEnabled(false);
+                pattern1->slotSelect();
+                preview->setPattern( black , 1, DotLine );
+                }
 }
 
 void CellLayoutPageBorder::slotChangeStyle(const QString &)

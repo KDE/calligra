@@ -1554,6 +1554,29 @@ QString KSpreadCell::createTimeFormat( )
         tmp = locale()->formatTime(m_Time,false);
     else if(m_eFormatNumber == SecondeTime )
         tmp = locale()->formatTime(m_Time,true);
+    else if(m_eFormatNumber == Time_format1)
+        {// 9 : 01 AM
+        QString tmpTime;
+        if( m_Time.hour()>12)
+                tmp=QString().sprintf("%02d", m_Time.hour()-12)+":"+QString().sprintf("%02d",m_Time.minute()) +" "+ i18n("PM");
+        else
+                tmp=QString().sprintf("%02d", m_Time.hour())+":"+QString().sprintf("%02d",m_Time.minute()) +" "+ i18n("AM");
+        }
+    else if(m_eFormatNumber == Time_format2)
+        { //9 : 01 :5 AM
+        QString tmpTime;
+        if( m_Time.hour()>12)
+                tmp=QString().sprintf("%02d", m_Time.hour()-12)+":"+QString().sprintf("%02d",m_Time.minute()) +":"+QString().sprintf("%02d",m_Time.second())+" "+ i18n("PM");
+        else
+                tmp=QString().sprintf("%02d", m_Time.hour())+":"+QString().sprintf("%02d",m_Time.minute()) +":"+QString().sprintf("%02d",m_Time.second())+" "+ i18n("AM");
+        }
+    else if(m_eFormatNumber == Time_format3)
+        { // 9 h 01 min 28 s
+        QString tmpTime;
+        tmp=QString().sprintf("%02d",m_Time.hour())+" "+i18n("h")+" "+QString().sprintf("%02d",m_Time.minute())+" "+i18n("min")+" "+QString().sprintf("%02d",m_Time.second())  +" "+ i18n("s");
+        }
+    else
+            tmp = locale()->formatTime(m_Time,false);
     return tmp;
 }
 
@@ -2096,14 +2119,16 @@ bool KSpreadCell::calc( bool _makedepend )
     m_Time=context.value()->timeValue();
 
     //change format
-    if( m_eFormatNumber != SecondeTime)
+    if( m_eFormatNumber != SecondeTime &&  m_eFormatNumber != Time_format1 &&  m_eFormatNumber != Time_format2
+    && m_eFormatNumber != Time_format3)
         {
         m_strFormularOut = locale()->formatTime(m_Time,false);
         setFormatNumber(Time);
         }
     else
         {
-        m_strFormularOut = locale()->formatTime(m_Time,true);
+        //m_strFormularOut = locale()->formatTime(m_Time,true);
+        m_strFormularOut = createTimeFormat();
         }
   }
   else if ( context.value()->type() == KSValue::DateType)
@@ -3692,7 +3717,8 @@ void KSpreadCell::checkValue()
     {
         m_bTime = true;
         m_dValue = 0;
-        if( m_eFormatNumber!=SecondeTime)
+        if( m_eFormatNumber!=SecondeTime && m_eFormatNumber!=Time_format1
+        && m_eFormatNumber!=Time_format2 && m_eFormatNumber!=Time_format3)
                 setFormatNumber(Time);
         m_Time=tmpTime;
         m_strText=locale()->formatTime(m_Time,true);
@@ -3877,7 +3903,10 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
             text.appendChild( doc.createTextNode( tmp ) );
             cell.appendChild( text );
         }
-        else if( (getFormatNumber(m_iColumn,m_iRow)==Time || getFormatNumber(m_iColumn,m_iRow)==SecondeTime)&& m_bTime )
+        else if( (getFormatNumber(m_iColumn,m_iRow)==Time || getFormatNumber(m_iColumn,m_iRow)==SecondeTime
+        || getFormatNumber(m_iColumn,m_iRow)==Time_format1
+        || getFormatNumber(m_iColumn,m_iRow)==Time_format2
+        || getFormatNumber(m_iColumn,m_iRow)==Time_format3 )&& m_bTime )
         {
             QDomElement text = doc.createElement( "text" );
             QString tmp;
@@ -4113,7 +4142,9 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
                 setCellText( pasteOperation( t, m_strText, op ), false );
         }
         // A Time
-        else if( getFormatNumber(m_iColumn,m_iRow) == Time || getFormatNumber(m_iColumn,m_iRow) == SecondeTime )
+        else if( getFormatNumber(m_iColumn,m_iRow) == Time || getFormatNumber(m_iColumn,m_iRow) == SecondeTime
+        || getFormatNumber(m_iColumn,m_iRow) == Time_format1|| getFormatNumber(m_iColumn,m_iRow) == Time_format2
+        || getFormatNumber(m_iColumn,m_iRow) == Time_format3 )
         {
             int hours = -1;
             int minutes = -1;

@@ -316,6 +316,7 @@ public slots:
     void slotPressEvent(QMouseEvent *_ev);
     void slotChangeStyle(int );
     void slotChangeStyle(const QString & );
+    void cutomize_chosen_slot();
 
 protected:
     KSpreadBorderButton *top;
@@ -343,7 +344,7 @@ protected:
     QComboBox* size;
     QComboBox* style;
     KColorButton* color;
-
+    QCheckBox* customize;
     QColor currentColor;
     KSpreadBorder *area;
     CellLayoutDlg *dlg;
