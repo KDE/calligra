@@ -19,7 +19,6 @@
 #include "kivio_dlg_pageshow.h"
 #include "kivio_view.h"
 #include "kivio_canvas.h"
-#include "kivio_tabbar.h"
 #include "kivio_page.h"
 #include "kivio_command.h"
 #include "kivio_doc.h"
@@ -32,6 +31,7 @@
 #include <qstrlist.h>
 #include <qptrlist.h>
 #include <kdebug.h>
+#include <kotabbar.h>
 
 KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
 : KDialogBase( parent, name, true, i18n("Show Page"), Ok|Cancel, Ok )
@@ -68,13 +68,9 @@ void KivioPageShow::slotOk()
   QString text;
   if (list->currentItem()!=-1) {
     text=list->text(list->currentItem());
-    m_pView->tabBar()->showPage(text);
+    //m_pView->tabBar()->showPage(text);
     KivioPage * page = m_pView->doc()->map()->findPage( text );
-    if ( page )
-    {
-        KivioShowPageCommand * cmd = new KivioShowPageCommand( i18n("Show Page"),  page);
-        m_pView->doc()->addCommand( cmd);
-    }
+    page->setHidden( false );
   }
   accept();
 }

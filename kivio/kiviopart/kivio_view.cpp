@@ -71,6 +71,7 @@
 #include <kozoomhandler.h>
 #include <koUnitWidgets.h>
 #include <koApplication.h>
+#include <kotabbar.h>
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"
@@ -80,7 +81,6 @@
 #include "kivio_doc.h"
 #include "kivio_canvas.h"
 #include "kivio_stencil_spawner.h"
-#include "kivio_tabbar.h"
 #include "kivio_zoomaction.h"
 #include "kivio_grid_data.h"
 #include "kivio_config.h"
@@ -167,7 +167,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   QSplitter* tabSplit = new QSplitter(pRightSide);
 
   // Tab Bar
-  m_pTabBar = new KivioTabBar(tabSplit,this);
+  m_pTabBar = new KoTabBar(tabSplit);
   connect( m_pTabBar,
            SIGNAL(tabChanged(const QString&)),
            SLOT( changePage(const QString&)));
@@ -573,8 +573,7 @@ void KivioView::insertPage( KivioPage* page )
     if( !page->isHidden() ) {
     m_pTabBar->addTab(page->pageName());
     setActivePage(page);
-  } else {
-    m_pTabBar->addHiddenTab(page->pageName());
+  updateMenuPage();
   }
 }
 
@@ -582,7 +581,8 @@ void KivioView::removePage( KivioPage *_t )
 {
   QString m_pageName=_t->pageName();
   m_pTabBar->removeTab( _t->pageName() );
-  setActivePage( m_pDoc->map()->findPage( m_pTabBar->listshow().first() ));
+  QString n = m_pDoc->map()->visiblePages().first();
+  setActivePage( m_pDoc->map()->findPage( n ) );
 }
 
 void KivioView::renamePage()
@@ -702,6 +702,8 @@ void KivioView::showPage()
   KivioPageShow* dlg = new KivioPageShow(this,"Page show");
   dlg->exec();
   delete dlg;
+  m_pTabBar->setTabs( m_pDoc->map()->visiblePages() );
+  updateMenuPage();
 }
 
 int KivioView::leftBorder() const
@@ -731,7 +733,7 @@ void KivioView::paperLayoutDlg()
 
 void KivioView::removePage()
 {
-  if ( doc()->map()->count() <= 1 || m_pTabBar->listshow().count()<=1 ) {
+  if ( doc()->map()->count() <= 1 || doc()->map()->visiblePages().count()<=1 ) {
     QApplication::beep();
     KMessageBox::sorry( this, i18n("You cannot delete the only page of the document."), i18n("Remove Page") );
     return;
@@ -1711,9 +1713,10 @@ void KivioView::openPopupMenuMenuPage( const QPoint & _point )
 
 void KivioView::updateMenuPage()
 {
-    bool state = (doc()->map()->count() > 1 && m_pTabBar->listshow().count()>1);
+    bool state = (doc()->map()->count() > 1 && doc()->map()->visiblePages().count()>1);
     m_removePage->setEnabled(state);
-    m_hidePage->setEnabled( state );
+    m_hidePage->setEnabled( doc()->map()->visiblePages().count()>1 );
+    m_showPage->setEnabled( doc()->map()->hiddenPages().count()>0 );
 }
 
 void KivioView::updateButton()
@@ -1733,7 +1736,7 @@ void KivioView::slotPageHidden( KivioPage* page )
 
 void KivioView::slotPageShown( KivioPage* page )
 {
-    m_pTabBar->showPage( page->pageName() );
+    m_pTabBar->setTabs( m_pDoc->map()->visiblePages() );
 }
 
 void KivioView::resetLayerPanel()

@@ -47,6 +47,7 @@ class KivioStencilGeometryPanel;
 class KivioViewManagerPanel;
 
 class KoDocumentEntry;
+class KoTabBar;
 
 class KAction;
 class KSelectAction;
@@ -98,7 +99,7 @@ class KivioView : public KoView
     void setActiveSpawnerSet( KivioStencilSpawnerSet* );
     KivioStencilSpawnerSet *activeSpawnerSet();
 
-    KivioTabBar* tabBar()const { return  m_pTabBar;}
+    KoTabBar* tabBar()const { return  m_pTabBar;}
     ToolDockManager* toolDockManager() { return m_pToolDock; }
     void openPopupMenuMenuPage( const QPoint & _point );
     void updateMenuPage( );
@@ -275,7 +276,7 @@ class KivioView : public KoView
     QPushButton *m_pTabBarLeft;
     QPushButton *m_pTabBarRight;
     QPushButton *m_pTabBarLast;
-    KivioTabBar *m_pTabBar;
+    KoTabBar *m_pTabBar;
 
     KAction* m_paperLayout;
     KAction* m_insertPage;
