@@ -361,3 +361,5 @@ Reggie, 14.7.1999:
 - Fixed random adding of spaces in the textobject
 - Some other small textobject fixes
 - Fixes with headers and footers
+- Implemented gap for text objects
+- Improved extending contents of a textobj to the object height

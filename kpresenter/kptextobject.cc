@@ -250,6 +250,8 @@ void KPTextObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 	    {
 		if ( ( *it ).m_strName == "objType" )
 		    ktextobject.setObjType( ( KTextObject::ObjType )atoi( ( *it ).m_strValue.c_str() ) );
+		else if ( ( *it ).m_strName == "gap" )
+		    ktextobject.setGap( atoi( ( *it ).m_strValue.c_str() ) );
 		else
 		    cerr << "Unknown attrib TEXTOBJ:'" << ( *it ).m_strName << "'" << endl;
 	    }
@@ -599,7 +601,8 @@ void KPTextObject::saveKTextObject( ostream& out )
     QFont font;
     bool lastWasSpace = false;
 
-    out << otag << "<TEXTOBJ objType=\"" << static_cast<int>( ktextobject.objType() ) << "\">" << endl;
+    out << otag << "<TEXTOBJ objType=\"" << static_cast<int>( ktextobject.objType() ) 
+	<< "\" gap=\"" << ktextobject.getGap() << "\">" << endl;
     out << indent << "<ENUMLISTTYPE type=\"" << ktextobject.enumListType().type << "\" before=\""
 	<< ktextobject.enumListType().before.utf8().data() << "\" after=\""
 	<< ktextobject.enumListType().after.utf8().data()

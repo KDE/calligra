@@ -812,7 +812,7 @@ public:
      * Returns the left indent.
      */
     int getLeftIndent() { return _leftIndent; }
-
+    
     /**
      * Set the left indent of this paragraph
      */
@@ -1879,6 +1879,12 @@ public:
     void extendContents2Height();
 
     QSize neededSize();
+
+    void setGap( int g );
+    
+    int getGap() const {
+	return gap;
+    }
     
 signals:
 
@@ -1993,6 +1999,7 @@ protected:
     int getParagNum( TxtParagraph *_parag );
     int getLeftIndent();
     int getLeftIndent( int _parag );
+    int getRightIndent() { return gap; }
 
 protected slots:
     void clipCut() {cutRegion(); }
@@ -2053,7 +2060,7 @@ protected:
 
     QList<int> changedParagraphs;
 
-    int linebreak_width;
+    int linebreak_width, gap;
     int _width;
 
     bool composerMode;

@@ -1376,11 +1376,11 @@ void KPresenterView::textSpacing()
 	    spacingDia = 0;
 	}
 
-	spacingDia = new SpacingDia( this, obj->getLineSpacing(), obj->getDistBefore(), obj->getDistAfter() );
+	spacingDia = new SpacingDia( this, obj->getLineSpacing(), obj->getDistBefore(), obj->getDistAfter(), obj->getGap() );
 	spacingDia->setMaximumSize( spacingDia->width(), spacingDia->height() );
 	spacingDia->setMinimumSize( spacingDia->width(), spacingDia->height() );
 	spacingDia->setCaption( i18n( "KPresenter - Spacings" ) );
-	QObject::connect( spacingDia, SIGNAL( spacingDiaOk( int, int, int ) ), this, SLOT( spacingOk( int, int, int ) ) );
+	QObject::connect( spacingDia, SIGNAL( spacingDiaOk( int, int, int, int ) ), this, SLOT( spacingOk( int, int, int, int ) ) );
 	spacingDia->show();
     }
 }
@@ -1659,7 +1659,7 @@ void KPresenterView::slotMoveEnd( KoFrame* /*_frame*/ )
 void KPresenterView::backOk( bool takeGlobal )
 {
     SetBackCmd *setBackCmd = new SetBackCmd( i18n( "Set Background" ), backDia->getBackColor1(),
-					     backDia->getBackColor2(), backDia->getBackColorType(), 
+					     backDia->getBackColor2(), backDia->getBackColorType(),
 					     backDia->getBackUnbalanced(),
 					     backDia->getBackXFactor(), backDia->getBackYFactor(),
 					     backDia->getBackPixFilename(), backDia->getBackClipFilename(),
@@ -1874,20 +1874,19 @@ void KPresenterView::confRectOk()
 }
 
 /*================================================================*/
-void KPresenterView::spacingOk( int _lineSpacing, int _distBefore, int _distAfter )
+void KPresenterView::spacingOk( int _lineSpacing, int _distBefore, int _distAfter, int _gap )
 {
-    if ( page->kTxtObj() )
-    {
+    if ( page->kTxtObj() ) {
 	page->kTxtObj()->setLineSpacing( _lineSpacing );
 	page->kTxtObj()->setDistBefore( _distBefore );
 	page->kTxtObj()->setDistAfter( _distAfter );
-    }
-    else if ( page->haveASelectedTextObj() )
-    {
+	page->kTxtObj()->setGap( _gap );
+    } else if ( page->haveASelectedTextObj() ) {
 	KTextObject *obj = page->haveASelectedTextObj();
 	obj->setAllLineSpacing( _lineSpacing );
 	obj->setAllDistBefore( _distBefore );
 	obj->setAllDistAfter( _distAfter );
+	obj->setGap( _gap );
 	repaint( false );
     }
 }

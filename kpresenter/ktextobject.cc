@@ -1498,6 +1498,7 @@ KTextObject::KTextObject( QWidget *parent, const char *name, ObjType ot,
 			  unsigned int c, unsigned int r, int __width )
     : QTableView( parent, name )
 {
+    gap = 0;
     // init the objects
     _parent = parent;
     doRepaints = true;
@@ -4626,7 +4627,7 @@ void KTextObject::enterEvent( QEvent* )
 int KTextObject::cellWidth( int i )
 {
     if ( i < numCols() )
-	return cellWidths.at( i )->wh;
+	return cellWidths.at( i )->wh - gap;
     else return 0;
 }
 
@@ -6213,13 +6214,13 @@ void KTextObject::decDepth()
 /*================================================================*/
 int KTextObject::getLeftIndent()
 {
-    return getLeftIndent( txtCursor->positionParagraph() );
+    return getLeftIndent( txtCursor->positionParagraph() ) + gap;
 }
 
 /*================================================================*/
 int KTextObject::getLeftIndent( int _parag )
 {
-    return paragraphList.at( _parag )->getLeftIndent();
+    return paragraphList.at( _parag )->getLeftIndent() + gap;
 }
 
 /*================================================================*/
@@ -6238,6 +6239,14 @@ int KTextObject::getDistBefore()
 int KTextObject::getDistAfter()
 {
     return paragraphList.at( txtCursor->positionParagraph() )->getDistAfter();
+}
+
+/*================================================================*/
+void KTextObject::setGap( int g )
+{
+    gap = g;
+    recalc();
+    repaint( true );
 }
 
 /*================================================================*/
@@ -6337,24 +6346,32 @@ void KTextObject::extendContents2Height()
 {
     _modified = true;
 
-    if ( paragraphList.count() == 1 )
-    {
-	if ( lines() < 2 )
-	    return;
-
+    if ( paragraphList.count() == 1 ) {
 	setAllDistBefore( 0 );
 	setAllDistAfter( 0 );
 	setAllLineSpacing( 0 );
 
+	if ( lines() < 2 ) {
+	    int h = paragraphList.at( 0 )->height();
+	    int dh = height() - h;
+	    int ah = dh / 2;
+	    if ( ah < 0 ) ah = 0;
+	    
+	    paragraphList.at( 0 )->setDistBefore( ah );
+	    paragraphList.at( 0 )->setDistAfter( ah );
+	  
+	    recalc();
+	    return;
+	}
+
 	int h = paragraphList.at( 0 )->height();
 	int dh = height() - h;
-	int ah = dh / lines();
+	int ah = dh / ( lines() + 1 );
 	if ( ah < 0 ) ah = 0;
 
+	paragraphList.at( 0 )->setDistBefore( ah );
 	paragraphList.at( 0 )->setLineSpacing( ah );
-    }
-    else
-    {
+    } else {
 	setAllDistBefore( 0 );
 	setAllDistAfter( 0 );
 	setAllLineSpacing( 0 );
@@ -6365,10 +6382,11 @@ void KTextObject::extendContents2Height()
 	    h += paragraphList.at( i )->height();
 
 	int dh = height() - h;
-	int ah = dh / ( paragraphList.count() - 1 );
+	int ah = dh / ( paragraphList.count() + 1 );
 	ah /= 2;
 	if ( ah < 0 ) ah = 0;
 
+	paragraphList.at( 0 )->setDistBefore( ah );
 	for ( i = 0; i < paragraphList.count() - 1; i++ )
 	    paragraphList.at( i )->setDistAfter( ah );
     }

@@ -33,7 +33,7 @@
 /******************************************************************/
 
 /*==================== constructor ===============================*/
-SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int _distAfter )
+SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int _distAfter, int _gap )
     : QDialog( parent, "", true )
 {
     QString str;
@@ -71,11 +71,23 @@ SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int 
     str.sprintf( "%d", _distAfter );
     eDistAfter->setText( str );
 
-    int m = max(max(eDistBefore->x(),eDistAfter->x()),eLineSpacing->x());
+    lGap = new QLabel( i18n( "Gap ( pt )" ), this );
+    lGap->move( 10, eDistAfter->y() + eDistAfter->height() + 10 );
+    lGap->resize( lGap->sizeHint() );
+
+    eGap = new QLineEdit( this );
+    eGap->setValidator( new QIntValidator( eGap ) );
+    eGap->move( lGap->width() + 15, lGap->y() );
+    eGap->resize( eGap->sizeHint().width() / 2, eGap->sizeHint().height() );
+    str.sprintf( "%d", _gap );
+    eGap->setText( str );
+
+    int m = QMAX( QMAX( QMAX( eGap->x(), eDistBefore->x() ), eDistAfter->x() ), eLineSpacing->x() );
 
     eLineSpacing->move( m, eLineSpacing->y() );
     eDistBefore->move( m, eDistBefore->y() );
     eDistAfter->move( m, eDistAfter->y() );
+    eGap->move( m, eGap->y() );
 
     cancelBut = new QPushButton( this, "BCancel" );
     cancelBut->setText( i18n( "Cancel" ) );
@@ -87,13 +99,13 @@ SpacingDia::SpacingDia( QWidget* parent, int _lineSpacing, int _distBefore, int 
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
 
-    int butW = max(cancelBut->sizeHint().width(),okBut->sizeHint().width());
+    int butW = QMAX( cancelBut->sizeHint().width() , okBut->sizeHint().width() );
     int butH = cancelBut->sizeHint().height();
 
     cancelBut->resize( butW, butH );
     okBut->resize( butW, butH );
 
-    cancelBut->move( eDistAfter->x() + eDistAfter->width() - cancelBut->width(), eDistAfter->y() + eDistAfter->height() + 20 );
+    cancelBut->move( eGap->x() + eGap->width() - cancelBut->width(), eGap->y() + eGap->height() + 20 );
     okBut->move( cancelBut->x() - okBut->width() - 5, cancelBut->y() );
 
     connect( okBut, SIGNAL( clicked() ), this, SLOT( slotSpacingDiaOk() ) );
@@ -109,8 +121,9 @@ void SpacingDia::slotSpacingDiaOk()
     int _lineSpacing = atoi( eLineSpacing->text() );
     int _distBefore = atoi( eDistBefore->text() );
     int _distAfter = atoi( eDistAfter->text() );
+    int _gap = atoi( eGap->text() );
 
-    emit spacingDiaOk( _lineSpacing, _distBefore, _distAfter );
+    emit spacingDiaOk( _lineSpacing, _distBefore, _distAfter, _gap );
 }
 
 

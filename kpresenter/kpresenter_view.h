@@ -290,10 +290,10 @@ public:
     QColor getGColor2() {return gColor2; }
     BCType getGType() {return gType; }
     FillType getFillType() {return fillType; }
-    bool getGUnbalanced() { return gUnbalanced; } 
+    bool getGUnbalanced() { return gUnbalanced; }
     int getGXFactor() { return gXFactor; }
     int getGYFactor() { return gYFactor; }
-    
+
     void setTool( ToolEditMode toolEditMode );
 
     int getRndX() { return rndX; }
@@ -343,7 +343,7 @@ protected slots:
     void insPageOk( int, InsPageMode, InsertPos );
     void confPieOk();
     void confRectOk();
-    void spacingOk( int, int, int );
+    void spacingOk( int, int, int, int );
 
     // scrolling
     void scrollH( int );
