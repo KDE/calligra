@@ -1514,9 +1514,12 @@ QStringList KoNoteVariable::actionTexts()
 
 QString KoNoteVariable::text()
 {
-    //for a note return just a "space" we can look at
-    //note when we "right button"
-    return QString(" ");
+    if (m_varColl->variableSetting()->displayFiedCode())
+        return fieldCode();
+    else
+        //for a note return just a "space" we can look at
+        //note when we "right button"
+        return QString(" ");
 
 }
 
