@@ -4775,6 +4775,47 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
       QString formula( convertFormulaToOasisFormat( text() ) );
       xmlwriter.addAttribute( "table:formula", formula );
     }
+    else if ( content() == RichText )//|| content() == VisualFormula )
+    {
+        kdDebug()<<"Link found \n";
+        xmlwriter.startElement( "text:p" );
+        xmlwriter.startElement( "text:a" );
+        xmlwriter.addAttribute( " xlink:href", "url" );//TODO
+        xmlwriter.addTextNode( "Text" );//TODO
+        xmlwriter.endElement();
+        xmlwriter.endElement();
+        //<text:p>
+        //<text:a xlink:href="http://www.kde.org/">sdffd</text:a>
+        //</text:p>
+#if 0
+            QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
+    if ( !textP.isNull() )
+    {
+        QDomElement subText = textP.firstChild().toElement();
+        if ( !subText.isNull() )
+        {
+            // something in <text:p>, e.g. links
+            text = subText.text();
+
+            if ( subText.hasAttributeNS( KoXmlNS::xlink, "href" ) )
+            {
+                QString link = subText.attributeNS( KoXmlNS::xlink, "href", QString::null );
+                text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
+                d->extra()->QML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
+                d->strText = text;
+            }
+        }
+        else
+        {
+            text = textP.text(); // our text, could contain formating for value or result of formul
+            setCellText( text );
+            setValue( text );
+        }
+    }
+
+#endif
+    }
+
     if ( isForceExtraCells() )
     {
       int colSpan = mergedXCells() + 1;
@@ -4994,24 +5035,24 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
     {
         QDomElement subText = textP.firstChild().toElement();
         if ( !subText.isNull() )
-  {
+        {
             // something in <text:p>, e.g. links
             text = subText.text();
 
             if ( subText.hasAttributeNS( KoXmlNS::xlink, "href" ) )
-      {
+            {
                 QString link = subText.attributeNS( KoXmlNS::xlink, "href", QString::null );
                 text = "!<a href=\"" + link + "\"><i>" + text + "</i></a>";
                 d->extra()->QML = new QSimpleRichText( text.mid(1),  QApplication::font() );//, m_pTable->widget() );
                 d->strText = text;
-      }
-  }
+            }
+        }
         else
-  {
+        {
             text = textP.text(); // our text, could contain formating for value or result of formul
             setCellText( text );
             setValue( text );
-  }
+        }
     }
     bool isFormula = false;
     if ( element.hasAttributeNS( KoXmlNS::table, "formula" ) )
@@ -5157,11 +5198,11 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         }
         else if( valuetype == "string" )
         {
-          QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
+            QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
             if ( value.isEmpty() )
                 value = element.attributeNS( KoXmlNS::office, "string-value", QString::null );
-          setValue( value );
-          setFormatType (Text_format);
+            setValue( value );
+            setFormatType (Text_format);
         }
         else
             kdDebug()<<" type of value found : "<<valuetype<<endl;
