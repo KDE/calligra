@@ -596,14 +596,16 @@ static bool kspreadfunc_average( KSContext& context )
   int number=0;
   bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
 
-  if ( b )
-    context.setValue( new KSValue( result/number ) );
+  if ( number == 0 )
+      return false;
 
+  if ( b )
+    context.setValue( new KSValue( result / (double)number ) );
 
   return b;
 }
 
-static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result,double& avera)
+static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result, double avera)
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
   QValueList<KSValue::Ptr>::Iterator end = args.end();
@@ -617,7 +619,7 @@ static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue:
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       {
-      result += (((*it)->doubleValue()-avera)*((*it)->doubleValue()-avera));
+      result += ( (*it)->doubleValue() - avera ) * ( (*it)->doubleValue() - avera );
       }
     else
       return false;
@@ -630,16 +632,19 @@ static bool kspreadfunc_variance( KSContext& context )
 {
   double result = 0.0;
   double avera = 0.0;
-  int number=0;
+  int number = 0;
   bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
+
+  if ( number == 0 )
+      return false;
 
   if ( b )
   {
-    avera=result/number;
-    result=0.0;
-    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result,avera );
+    avera = result / (double)number;
+    result = 0.0;
+    bool b = kspreadfunc_variance_helper( context, context.value()->listValue(), result, avera );
     if(b)
-      context.setValue( new KSValue(result/number ) );
+      context.setValue( new KSValue(result / (double)number ) );
   }
 
   return b;
@@ -1034,7 +1039,7 @@ static bool kspreadfunc_EXACT( KSContext& context )
   return true;
 }
 
-
+/*
 static bool kspreadfunc_STXT( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1054,6 +1059,7 @@ static bool kspreadfunc_STXT( KSContext& context )
   context.setValue( new KSValue(tmp));
   return true;
 }
+*/
 
 static bool kspreadfunc_ENT( KSContext& context )
 {
@@ -2002,7 +2008,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "mid", new KSValue( new KSBuiltinFunction( module, "mid", kspreadfunc_mid) ) );
   module->addObject( "len", new KSValue( new KSBuiltinFunction( module, "len", kspreadfunc_len) ) );
   module->addObject( "EXACT", new KSValue( new KSBuiltinFunction( module, "EXACT", kspreadfunc_EXACT) ) );
-  module->addObject( "STXT", new KSValue( new KSBuiltinFunction( module, "STXT", kspreadfunc_STXT) ) );
+  //  module->addObject( "STXT", new KSValue( new KSBuiltinFunction( module, "STXT", kspreadfunc_STXT) ) );
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
   module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
   module->addObject( "REPT", new KSValue( new KSBuiltinFunction( module, "REPT",kspreadfunc_REPT) ) );
