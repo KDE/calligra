@@ -169,6 +169,10 @@ k_dcop:
 
     double vertHelpLineValue(int index) const;
 
+    //return false if we can remove help line
+    bool removeVertHelpLine( int index );
+    bool removeHorizHelpLine( int index );
+
 private:
     KPresenterDoc *doc;
 

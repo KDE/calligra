@@ -541,18 +541,19 @@ void KPresenterDocIface::setShowHelplines(bool b)
 {
     doc->setShowHelplines(b);
     doc->updateHelpLineButton();
+    doc->repaint( false );
 }
 
 void KPresenterDocIface::addVertHelpLine( double val)
 {
     doc->addVertHelpline(val);
-    //todo update canvas
+    doc->repaint( false );
 }
 
 void KPresenterDocIface::addHoriHelpLine( double val)
 {
     doc->addHorizHelpline(val);
-    //todo update canvas
+    doc->repaint( false );
 }
 
 double KPresenterDocIface::horizHelpLineValue(int index) const
@@ -572,3 +573,22 @@ double KPresenterDocIface::vertHelpLineValue(int index) const
     }
     return doc->vertHelplines()[index];
 }
+
+bool KPresenterDocIface::removeVertHelpLine( int index )
+{
+    if ( index >= doc->vertHelplines().count())
+        return false;
+    doc->removeVertHelpline( index );
+    doc->repaint( false );
+    return true;
+}
+
+bool KPresenterDocIface::removeHorizHelpLine( int index )
+{
+    if ( index >= doc->horizHelplines().count())
+        return false;
+    doc->removeHorizHelpline( index );
+    doc->repaint( false );
+    return true;
+}
+
