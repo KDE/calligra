@@ -14,6 +14,7 @@
 
 #include <qdatetime.h>
 #include <qtextcodec.h>
+#include <qcolor.h>
 
 #include <kdebug.h>
 
@@ -22,8 +23,7 @@
 
 DomNode::DomNode()
 {
-    setBuffer( array );
-    clear();
+    clear(0);
 }
 
 /**
@@ -32,15 +32,13 @@ DomNode::DomNode()
  */
 DomNode::DomNode( const char *doctype )
 {
-    setBuffer( array );
-    open( IO_WriteOnly );
     documentLevel	= 1;
     hasChildren		= false;
     hasAttributes	= false;
-    writeBlock( "<?xml version = '1.0' encoding = 'UTF-8'?><!DOCTYPE ", 52 );
-    writeBlock( doctype, strlen( doctype ) );
-    writeBlock( " ><", 3 );
-    writeBlock( doctype, strlen( doctype ) );
+    cstr += "<?xml version = '1.0' encoding = 'UTF-8'?><!DOCTYPE " ;
+    cstr += doctype;
+    cstr += " ><";
+    cstr += doctype;
 }
 
 /**
@@ -49,10 +47,7 @@ DomNode::DomNode( const char *doctype )
  */
 void DomNode::clear( int level )
 {
-    close();
-    array.truncate( 0 );
-    setBuffer( array );
-    open( IO_WriteOnly ); // do *not* use IO_Truncate (QT 3.1.x resizes QBuffer to 1)
+    cstr.resize(0);
     documentLevel	= level;
     hasChildren		= true;
     hasAttributes	= false;
@@ -65,8 +60,8 @@ void DomNode::clear( int level )
 void DomNode::addNode( const char *name )
 {
     closeTag( true );
-    writeBlock( " <", 2 );
-    writeBlock( name, strlen( name ) );
+    cstr += " <";
+    cstr += name;
     hasChildren = false;
     ++documentLevel;
 }
@@ -91,15 +86,13 @@ void DomNode::addTextNode( const char *text, QTextCodec* codec )
         .replace('<',"&lt;")
         .replace('>',"&gt;");  // Needed for the sequence ]]>
 
-    QCString cstr(unicode.utf8());
-
-    writeBlock( cstr, cstr.length() );
+    cstr += unicode.utf8();
 }
 
 /**
  * Add border to existing frameset (see KWord DTD).
  */
-void DomNode::addBorder( int id, QColor &color, int style, double width )
+void DomNode::addBorder( int id, const QColor &color, int style, double width )
 {
     char attr[16];
     sprintf( attr, "%cRed", id );
@@ -118,7 +111,7 @@ void DomNode::addBorder( int id, QColor &color, int style, double width )
  * Add color attributes to document node.
  * @param color the color
  */
-void DomNode::addColor( QColor &color )
+void DomNode::addColor( const QColor &color )
 {
     setAttribute( "red", color.red() );
     setAttribute( "green", color.green() );
@@ -142,10 +135,10 @@ void DomNode::addRect( int left, int top, int right, int bottom )
  * @param filename the filename of the image
  * @param name the relative path to the image in the store (optional)
  */
-void DomNode::addKey( QDateTime dt, const char *filename, const char *name )
+void DomNode::addKey( const QDateTime& dt, const char *filename, const char *name )
 {
-    QDate date = dt.date();
-    QTime time = dt.time();
+    const QDate date = dt.date();
+    const QTime time = dt.time();
 
     addNode( "KEY" );
     setAttribute( "filename", filename );
@@ -198,12 +191,12 @@ void DomNode::addFrame( int left, int top, int right, int bottom,
  */
 void DomNode::setAttribute( const char *attribute, const char *value )
 {
-    putch( ' ' );
-    writeBlock( attribute, strlen( attribute ) );
-    putch( '=' );
-    putch( '"' );
-    writeBlock( value, strlen( value ) );
-    putch( '"' );
+    cstr += ' ';
+    cstr += attribute;
+    cstr += '=';
+    cstr += '"';
+    cstr += value;
+    cstr += '"';
     hasAttributes = true;
 }
 
@@ -237,20 +230,20 @@ void DomNode::closeNode( const char *name )
     {
 	if (hasAttributes)
 	{
-	    putch( ' ' );
+	    cstr += ' ';
 	}
-	putch( '/' );
+	cstr += '/';
     }
     else
     {
-	writeBlock( "</", 2 );
-	writeBlock( name, strlen( name ) );
+	cstr += "</";
+	cstr += name;
     }
-    writeBlock( ">\n", 2 );
+    cstr += ">\n";
 
     for (int i=--documentLevel; i > 1; i--)
     {
-	putch( ' ' );
+	cstr += ' ';
     }
     hasChildren = true;
 }
@@ -265,17 +258,17 @@ void DomNode::closeTag( bool nl )
     {
 	if (hasAttributes)
 	{
-	    putch( ' ' );
+	    cstr += ' ';
 	}
-	putch( '>' );
+	cstr += '>';
 
 	if (nl)
 	{
-	    putch( '\n' );
+	    cstr += '\n';
 
-	    for (int i=documentLevel; i > 1; i--)
+	    for (int i=0; i<documentLevel; i++)
 	    {
-		putch( ' ' );
+		cstr += ' ';
 	    }
 	}
 	hasChildren = true;
@@ -287,25 +280,38 @@ void DomNode::closeTag( bool nl )
  * Appends a child node.
  * @param child the node to append to this document node
  */
-void DomNode::appendNode( DomNode &child )
+void DomNode::appendNode( const DomNode &child )
 {
-    QByteArray &arr = child.data();
-    closeTag( (arr.size() >= 2 && (arr[0] == '<' || arr[1] == '<')) );
-    writeBlock( arr );
+    const QCString childCStr ( child.toCString() );
+    closeTag( (childCStr.length() >= 2 && (childCStr[0] == '<' || childCStr[1] == '<')) );
+    cstr += childCStr;
+}
+
+/**
+ * Appends XML text to node
+ */
+void DomNode::append( const QCString& str)
+{
+    cstr += str;
+}
+
+void DomNode::append( const char ch)
+{
+    cstr += ch;
 }
 
 /**
  * Returns true if node is empty.
  */
-bool DomNode::isEmpty(  )
+bool DomNode::isEmpty( void ) const
 {
-    return array.isEmpty();
+    return cstr.isEmpty();
 }
 
 /**
  * Returns the data of the document node.
  */
-QByteArray &DomNode::data()
+QCString DomNode::toCString( void ) const
 {
-    return array;
+    return cstr;
 }

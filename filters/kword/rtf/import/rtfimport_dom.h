@@ -12,14 +12,13 @@
 #ifndef __RTFIMPORT_DOM_H__
 #define __RTFIMPORT_DOM_H__
 
-#include <qbuffer.h>
-#include <qcolor.h>
 #include <qcstring.h>
-#include <qdatetime.h>
 
+class QColor;
+class QDateTime;
 class QTextCodec;
 
-class DomNode : public QBuffer
+class DomNode
 {
 public:
     DomNode();
@@ -28,10 +27,10 @@ public:
     void clear( int level=0 );
     void addNode( const char *name );
     void addTextNode( const char *text, QTextCodec* codec );
-    void addBorder( int id, QColor &color, int style, double width );
-    void addColor( QColor &color );
+    void addBorder( int id, const QColor &color, int style, double width );
+    void addColor( const QColor &color );
     void addRect( int left, int top, int right, int bottom );
-    void addKey( QDateTime dt, const char *filename, const char *name = 0L );
+    void addKey( const QDateTime& dt, const char *filename, const char *name = 0L );
     void addFrameSet( const char *name, int frameType, int frameInfo );
     void addFrame( int left, int top, int right, int bottom,
 		   int autoCreateNewFrame, int newFrameBehaviour,
@@ -41,12 +40,14 @@ public:
     void setAttribute( const char *name, double value );
     void closeNode( const char *name );
     void closeTag( bool nl );
-    void appendNode( DomNode &child );
-    bool isEmpty();
-    QByteArray &data();
+    void appendNode( const DomNode &child );
+    void append( const QCString& str);
+    void append( const char ch);
+    bool isEmpty() const;
+    QCString toCString() const;
 
 private:
-    QByteArray array;
+    QCString cstr;
     int documentLevel;
     bool hasChildren;
     bool hasAttributes;

@@ -28,6 +28,7 @@
 #include <qptrlist.h>
 
 
+class DomNode;
 class RTFImport;
 
 
@@ -168,7 +169,7 @@ struct RTFTableCell
 struct RTFTableRow
 {
     QValueList<RTFTableCell> cells;
-    QValueList<QByteArray> frameSets;
+    QValueList<QCString> frameSets;
     RTFLayout::Alignment alignment;
     int height;
     int left;
@@ -178,7 +179,7 @@ struct RTFTableRow
 struct KWFormat
 {
     RTFFormat fmt;
-    QByteArray xmldata;
+    QCString xmldata;
     uint id, pos, len;
 };
 
@@ -189,7 +190,7 @@ struct RTFTextState
     DomNode cell;	// table cell(s)
     DomNode text;	// plain text (for paragraph or table cell)
     QValueList<KWFormat> formats;
-    QValueList<QByteArray> frameSets;
+    QValueList<QCString> frameSets;
     QValueList<RTFTableRow> rows;
     uint table, length;
 };
@@ -269,7 +270,7 @@ public:
     void addImportedPicture( const QString& rawFileName );
     void addDateTime( const QString& format, const bool isDate, RTFFormat& fmt );
     void finishTable();
-    void writeOutPart( const char *name, QByteArray &array );
+    void writeOutPart( const char *name, const DomNode &node );
 
 
     RTFTokenizer token;

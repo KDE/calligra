@@ -293,7 +293,10 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     // This filter only supports RTF to KWord conversion
     if ((from != "text/rtf") || (to != "application/x-kword"))
         return KoFilter::NotImplemented;
-
+    
+    QTime debugTime;
+    debugTime.start();
+    
     // Open input file
     inFileName = m_chain->inputFile();
     QFile in( inFileName );
@@ -639,9 +642,11 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     docInfo.closeNode( "document-info" );
 
     // Write out main document and document info
-    writeOutPart( "root", mainDoc.data() );
-    writeOutPart( "documentinfo.xml", docInfo.data() );
+    writeOutPart( "root", mainDoc );
+    writeOutPart( "documentinfo.xml", docInfo );
     in.close();
+
+    kdDebug(30515) << "RTF FILTER TIME: " << debugTime.elapsed() << endl;
 
     return KoFilter::OK;
 }
@@ -933,7 +938,7 @@ void RTFImport::insertTableCell( RTFProperty * )
     insertParagraph();
     state.layout.inTable = b;
     //}}
-    textState->frameSets << textState->cell.data();
+    textState->frameSets << textState->cell.toCString();
     textState->cell.clear( 3 );
 }
 
@@ -1355,8 +1360,14 @@ void RTFImport::parsePicture( RTFProperty * )
         }
 
         kdDebug(30515) << "Picture: " << pictName << " Frame: " << frameName << endl;
+
         // Store picture
-        writeOutPart( pictName, picture.bits );
+        KoStoreDevice* dev = m_chain->storageFile( pictName, KoStore::Write );
+        if ( dev )
+            dev->writeBlock(picture.bits.data(),picture.bits.size());
+        else
+            kdError(30515) << "Could not save: " << pictName << endl;
+
 
         // Add anchor to rich text destination
         addAnchor( frameName );
@@ -1715,13 +1726,13 @@ void RTFImport::addVariable(DomNode& spec, int type, QCString key, RTFFormat* fm
 
 	node.appendNode(spec);
     node.closeNode( "VARIABLE" );
-    kwFormat.xmldata = node.data();
+    kwFormat.xmldata = node.toCString();
     kwFormat.id  = 4;
     kwFormat.pos = textState->length++;
     kwFormat.len = 1;
     if(fmt)
 	kwFormat.fmt = *fmt;
-    textState->text.putch( '#' );
+    textState->text.append( '#' );
     textState->formats << kwFormat;
 }
 
@@ -1787,7 +1798,7 @@ void RTFImport::parseRichText( RTFProperty * )
 	    // Check and store format changes
 	    if (textState->formats.count() == 0 ||
 		memcmp( &textState->formats.last().fmt,
-			&state.format, sizeof(RTFFormat) )||textState->formats.last().xmldata.count())
+			&state.format, sizeof(RTFFormat) )|| (!textState->formats.last().xmldata.isEmpty()))
 	    {
 		kwFormat.fmt = state.format;
 		kwFormat.id  = 1;
@@ -1903,11 +1914,11 @@ void RTFImport::addAnchor( const char *instance )
     node.setAttribute( "type", "frameset" );
     node.setAttribute( "instance", instance );
     node.closeNode( "ANCHOR" );
-    kwFormat.xmldata = node.data();
+    kwFormat.xmldata = node.toCString();
     kwFormat.id  = 6;
     kwFormat.pos = textState->length++;
     kwFormat.len = 1;
-    textState->text.putch( '#' );
+    textState->text.append( '#' );
     textState->formats << kwFormat;
 }
 
@@ -2127,7 +2138,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
     {
 	// Variable or anchor
 	node.closeTag( true );
-	node.writeBlock( format.xmldata );
+	node.append( format.xmldata );
     }
     node.closeNode( "FORMAT" );
 }
@@ -2328,7 +2339,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
  */
 void RTFImport::finishTable()
 {
-    QByteArray emptyArray;
+    QCString emptyArray;
     QValueList<int> cellx;
     int left = 0, right = 0;
 
@@ -2438,7 +2449,7 @@ void RTFImport::finishTable()
 		frameSets.setAttribute( "bkBlue", color.blue() );
 	    }
 	    frameSets.closeNode( "FRAME" );
-	    frameSets.writeBlock( row.frameSets[k] );
+	    frameSets.append( row.frameSets[k] );
 	    frameSets.closeNode( "FRAMESET" );
 	    x1 = x2;
 	}
@@ -2453,11 +2464,14 @@ void RTFImport::finishTable()
  * @param name the internal name of the part
  * @param array the data to write
  */
-void RTFImport::writeOutPart( const char *name, QByteArray &array )
+void RTFImport::writeOutPart( const char *name, const DomNode& node )
 {
     KoStoreDevice* dev = m_chain->storageFile( name, KoStore::Write );
     if ( dev )
-        dev->writeBlock( array.data(), array.size() );
+    {
+        const QCString cstr( node.toCString() );
+        dev->writeBlock( cstr.data(), cstr.length() ); // QCString, so do not use QIODevice::writeBlock(const QByteArray& data)
+    }
     else
         kdError(30515) << "Could not write part " << name << endl;
 }
