@@ -1946,6 +1946,12 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  return;
       default:
 
+          if (m_pEditor && (_ev->key() == Key_F4))
+          {
+              m_pEditor->handleKeyPressEvent( _ev );
+              _ev->accept();
+              return;
+          }
 
 	  // No null character ...
 	  if ( _ev->text().isEmpty() || !m_pView->koDocument()->isReadWrite() )
