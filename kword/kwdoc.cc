@@ -204,18 +204,17 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_slDataBase = new KWSerialLetterDataBase( this );
     slRecordNum = -1;
 
-    // Get default font from KDE
-    m_defaultFont = KGlobalSettings::generalFont();
-    // ####### Not needed in 3.0?
-    //KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
-    m_defaultFont.setPointSize( ptToLayoutUnit( m_defaultFont.pointSize() ) );
-
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
     m_pKSpellConfig=0;
     m_hasTOC=false;
 
     initConfig();
     getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
+
+    // Get default font from KDE
+    m_defaultFont = KGlobalSettings::generalFont();
+    // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
+    m_defaultFont.setPointSize( ptToLayoutUnit( QFontInfo(m_defaultFont).pointSize() ) );
 
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
