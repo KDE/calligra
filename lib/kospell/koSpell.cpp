@@ -322,7 +322,7 @@ void KOSpell::nextWord()
                 break;
             word.append(ch);
         }
-        offset+= i+1;
+        offset+= i - lastpos+1;
 
         if(d->m_bIgnoreTitleCase && word==word.upper())
             word ="";
