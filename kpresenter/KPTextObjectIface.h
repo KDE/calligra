@@ -61,6 +61,15 @@ k_dcop:
     QString textFontFamily()const;
     QColor textBackgroundColor()const;
 
+    bool textDoubleUnderline() const;
+    bool textItalic() const;
+    bool textBold() const;
+    bool textUnderline()const;
+    bool textStrikeOut()const;
+    bool textSubScript() const;
+    bool textSuperScript() const;
+
+
 private:
     KPTextObject *m_textobject;
 };

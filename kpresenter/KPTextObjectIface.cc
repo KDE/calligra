@@ -152,6 +152,41 @@ QColor KPTextObjectIface::textBackgroundColor() const
     return m_textobject->textObject()->textBackgroundColor();
 }
 
+bool KPTextObjectIface::textDoubleUnderline() const
+{
+    return m_textobject->textObject()->textDoubleUnderline();
+}
+
+bool KPTextObjectIface::textItalic() const
+{
+    return m_textobject->textObject()->textItalic();
+}
+
+bool KPTextObjectIface::textBold() const
+{
+    return m_textobject->textObject()->textBold();
+}
+
+bool KPTextObjectIface::textUnderline()const
+{
+    return m_textobject->textObject()->textUnderline();
+}
+
+bool KPTextObjectIface::textStrikeOut()const
+{
+    return m_textobject->textObject()->textStrikeOut();
+}
+
+bool KPTextObjectIface::textSubScript() const
+{
+    return m_textobject->textObject()->textSubScript();
+}
+
+bool KPTextObjectIface::textSuperScript() const
+{
+    return m_textobject->textObject()->textSuperScript();
+}
+
 void KPTextObjectIface::setTextFamilyFont(const QString &font)
 {
     KCommand *cmd=m_textobject->textObject()->setFamilyCommand(font);
