@@ -31,7 +31,7 @@
 
 extern "C"
 {
-    void* init_kpresenter()
+    void* init_libkpresenter()
     {
 	/**
 	 * Initialize KPresenter stuff
