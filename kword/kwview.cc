@@ -1611,6 +1611,8 @@ void KWView::changeZoomMenu( int zoom )
     {
 	if( lst.contains( i18n( "Zoom to width" ) ) == 0 )
 	    lst << i18n( "Zoom to width" );
+        if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
+            lst << i18n( "Zoom to Whole Page" );
 
         QValueList<int> list;
         QString z;
@@ -1639,6 +1641,7 @@ void KWView::changeZoomMenu( int zoom )
     else
     {
           lst << i18n( "Zoom to width" );
+          lst << i18n( "Zoom to Whole Page" );
           lst << "33%";
           lst << "50%";
           lst << "75%";
@@ -1798,7 +1801,7 @@ void KWView::viewZoom( const QString &s )
     KWCanvas * canvas = m_gui->canvasWidget();
     int zoom;
 
-    if( z != i18n( "Zoom to width" ) )
+    if( z != i18n( "Zoom to width" ) && z!=i18n( "Zoom to Whole Page" ) )
     {
     	z = z.replace( QRegExp( "%" ), "" );
     	z = z.simplifyWhiteSpace();
@@ -1806,7 +1809,15 @@ void KWView::viewZoom( const QString &s )
     }
     else
     {
-        zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->ptPaperWidth() ) );
+        if( z==i18n("Zoom to width"))
+            zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->ptPaperWidth() ) );
+        else if( z==i18n( "Zoom to Whole Page" ))
+        {
+            double height=m_doc->resolutionY() * m_doc->ptPaperHeight();
+            double width=m_doc->resolutionX() * m_doc->ptPaperWidth();
+            zoom = QMIN(qRound( static_cast<double>(canvas->visibleHeight() * 100 ) / height  ),qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width  ));
+        }
+
         ok = true;
     }
     //bad value
