@@ -55,7 +55,7 @@
 
 /*================================================================*/
 KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
-    : QScrollView( parent, "" ), format( _doc ),
+    : QScrollView( parent, "", WNorthWestGravity ), format( _doc ),
       blinkTimer( this ), scrollTimer( this ), cachedParag( 0L ),
       cachedContentsPos( QPoint( -1, -1 ) ), _setErase( true ),
       _resizing( false ), redrawOnlyCurrFrameset( false ), currFrameSet( -1 )
@@ -4389,17 +4389,17 @@ void KWPage::resizeContents( int w, int h )
 /*================================================================*/
 void KWPage::resizeEvent( QResizeEvent *e )
 {
-    _resizing = true;
+    //_resizing = true;
     QScrollView::resizeEvent( e );
-    _resizing = false;
+    //_resizing = false;
 }
 
 /*================================================================*/
 void KWPage::viewportResizeEvent( QResizeEvent *e )
 {
-    _resizing = true;
-    _erase = false;
-    _setErase = true;
+    //_resizing = true;
+    //_erase = false;
+    //_setErase = true;
     QScrollView::viewportResizeEvent( e );
     calcVisiblePages();
 }

@@ -2658,7 +2658,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
     selectionOnOff();
 
     gui->getPaperWidget()->repaintScreen( true );
-    
+
     return true;
 }
 
