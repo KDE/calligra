@@ -570,29 +570,15 @@ void KWFrame::load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVers
     m_zOrder = frameElem.attribute( "z-index" ).toInt();
 }
 
-void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet )
+// This is shared with table cells - so, no runaround and newframebehavior etc.
+// Only background, borders, padding.
+void KWFrame::loadBorderProperties( KoStyleStack& styleStack )
 {
-    KoStyleStack& styleStack = context.styleStack();
-    styleStack.setTypeProperties( "graphic" );
-    // padding. fo:padding for 4 values or padding-left/right/top/bottom (3.11.29 p228)
+    // padding. fo:padding for 4 values or padding-left/right/top/bottom
     m_paddingLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "left" ) );
     m_paddingRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "right" ) );
     m_paddingTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "top" ) );
     m_paddingBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding", "bottom" ) );
-
-#if 0 // not allowed in the current OASIS spec
-    // margins, i.e. runAroundGap. fo:margin for 4 values or padding-left/right/top/bottom
-    m_runAroundLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "left" ) );
-    m_runAroundRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "right" ) );
-    m_runAroundTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "top" ) );
-    m_runAroundBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "bottom" ) );
-#endif
-    // margins, i.e. runAroundGap. fo:margin-left/right/top/bottom
-    m_runAroundLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ) );
-    m_runAroundRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-right" ) );
-    m_runAroundTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-top" ) );
-    m_runAroundBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-bottom" ) );
-
 
     // background color (3.11.25)
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
@@ -620,6 +606,27 @@ void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* fr
         m_borderBottom.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "bottom") );
     }
     // TODO more refined border spec for double borders (3.11.28)
+}
+
+void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet )
+{
+    KoStyleStack& styleStack = context.styleStack();
+    styleStack.setTypeProperties( "graphic" );
+
+    loadBorderProperties( styleStack );
+
+#if 0 // not allowed in the current OASIS spec
+    // margins, i.e. runAroundGap. fo:margin for 4 values or padding-left/right/top/bottom
+    m_runAroundLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "left" ) );
+    m_runAroundRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "right" ) );
+    m_runAroundTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "top" ) );
+    m_runAroundBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin", "bottom" ) );
+#endif
+    // margins, i.e. runAroundGap. fo:margin-left/right/top/bottom
+    m_runAroundLeft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ) );
+    m_runAroundRight = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-right" ) );
+    m_runAroundTop = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-top" ) );
+    m_runAroundBottom = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-bottom" ) );
 
     // This attribute isn't part of the OASIS spec. Doesn't matter since it doesn't affect rendering
     // of existing documents, only editing (and only KWord has this kind of option until now).
@@ -680,8 +687,9 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles ) co
     // the caller fills in the child element, then closes draw:frame
 }
 
-// shared between startOasisFrame and table cells
-void KWFrame::saveCommonStyleProperties( KoGenStyle& frameStyle ) const
+// shared between startOasisFrame and table cells.
+// Only background, borders, padding.
+void KWFrame::saveBorderProperties( KoGenStyle& frameStyle ) const
 {
     // Background: color and transparency
     // OOo seems to use style:background-transparency="100%", but the schema allows background-color=transparent
@@ -720,6 +728,24 @@ void KWFrame::saveCommonStyleProperties( KoGenStyle& frameStyle ) const
         if ( m_paddingBottom != 0 )
             frameStyle.addPropertyPt( "fo:padding-bottom", m_paddingBottom );
     }
+}
+
+QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
+{
+    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "graphic" );
+    QString protect;
+    if ( frameSet()->protectContent() )
+        protect = "content";
+    if ( frameSet()->isProtectSize() ) // ## should be moved for frame
+    {
+        if ( !protect.isEmpty() )
+            protect+=" ";
+        protect+="size";
+    }
+    if ( !protect.isEmpty() )
+        frameStyle.addProperty( "style:protect", protect );
+
+    saveBorderProperties( frameStyle );
 
 #if 0 // not allowed in the current OASIS spec
     if ( m_runAroundLeft != 0 && ( ( m_runAroundLeft == m_runAroundRight )
@@ -740,24 +766,6 @@ void KWFrame::saveCommonStyleProperties( KoGenStyle& frameStyle ) const
 #if 0 // not allowed in the current OASIS spec
     }
 #endif
-}
-
-QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
-{
-    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "graphic" );
-    QString protect;
-    if ( frameSet()->protectContent() )
-        protect = "content";
-    if ( frameSet()->isProtectSize() ) // ## should be moved for frame
-    {
-        if ( !protect.isEmpty() )
-            protect+=" ";
-        protect+="size";
-    }
-    if ( !protect.isEmpty() )
-        frameStyle.addProperty( "style:protect", protect );
-
-    saveCommonStyleProperties( frameStyle );
 
     if ( runAround() == KWFrame::RA_SKIP )
         frameStyle.addProperty( "style:wrap", "none" );

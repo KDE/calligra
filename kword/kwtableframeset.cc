@@ -2085,6 +2085,13 @@ void KWTableFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context )
     for ( uint row = 0; row < getRows(); ++row )
     {
         writer.startElement( "table:table-row" );
+
+        KoGenStyle rowStyle( KWDocument::STYLE_TABLE_ROW, "table-row" );
+        rowStyle.addPropertyPt( "table:row-height", m_rowPositions[row+1] - m_rowPositions[row] );
+        // TODO is min-row-height or use-optimal-row-height necessary?
+        const QString rowStyleName = context.mainStyles().lookup( rowStyle, "row" );
+        writer.addAttribute( "table:style-name", rowStyleName );
+
         for ( uint col = 0; col < getCols(); ++col )
         {
             Cell* cell = getCell(row, col);
@@ -2096,9 +2103,9 @@ void KWTableFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context )
             {
                 writer.startElement( "table:table-cell" );
 
-                // Style
+                // Style: background, border, padding.
                 KoGenStyle cellStyle( KWDocument::STYLE_TABLE_CELL, "table-cell" );
-                cell->frame( 0 )->saveCommonStyleProperties( cellStyle );
+                cell->frame( 0 )->saveBorderProperties( cellStyle );
                 const QString colStyleName = context.mainStyles().lookup( cellStyle, "cell" );
                 writer.addAttribute( "table:style-name", colStyleName );
 
@@ -2176,19 +2183,19 @@ void KWTableFrameSet::loadOasis( const QDomElement& tableTag, KoOasisContext& co
 
     uint row = 0;
     uint column = 0;
-    parseInsideOfTable( tableTag, context, columnLefts, row, column );
+    parseInsideOfTable( tableTag, context, columnLefts, row, column, 0 );
 }
 
 void KWTableFrameSet::parseInsideOfTable( const QDomElement& parent, KoOasisContext& context,
-                                          const QMemArray<double> & columnLefts, uint& row, uint& column )
+                                          const QMemArray<double> & columnLefts, uint& row, uint& column,
+                                          double currentRowHeight )
 {
-    kdDebug(32004) << "parseInsideOfTable: columnLefts.size()=" << columnLefts.size() << endl;
+    kdDebug(32004) << "parseInsideOfTable" << endl;
     KoStyleStack& styleStack = context.styleStack();
 
     QDomElement e;
     forEachElement( e, parent )
     {
-        styleStack.save();
         const QString localName = e.localName();
         const QString ns = e.namespaceURI();
         if ( ns != KoXmlNS::table ) {
@@ -2196,9 +2203,10 @@ void KWTableFrameSet::parseInsideOfTable( const QDomElement& parent, KoOasisCont
             continue;
         }
 
+        styleStack.save();
         if ( localName == "table-cell" )
         {
-            loadOasisCell( e, context, columnLefts, row, column );
+            loadOasisCell( e, context, columnLefts, row, column, currentRowHeight );
             ++column;
         }
         else if ( localName == "covered-table-cell" )
@@ -2207,20 +2215,23 @@ void KWTableFrameSet::parseInsideOfTable( const QDomElement& parent, KoOasisCont
         }
         else if ( localName == "table-row" )
         {
-            context.fillStyleStack( e, KoXmlNS::table, "style-name" ); // just in case
+            context.fillStyleStack( e, KoXmlNS::table, "style-name" );
+            // Load row height in case it was set - note that it might not be set (e.g. OOo)
+            double rowHeight = styleStack.attributeNS( KoXmlNS::table, "row-height" ).toDouble();
             column = 0;
-            parseInsideOfTable( e, context, columnLefts, row, column );
+            parseInsideOfTable( e, context, columnLefts, row, column, rowHeight );
             ++row;
         }
         else if ( localName == "table-header-rows" ) // ###TODO
         {
-            parseInsideOfTable( e, context, columnLefts, row, column );
+            // TODO: do we need to fillStyleStack?
+            parseInsideOfTable( e, context, columnLefts, row, column, currentRowHeight );
         }
         else if ( localName == "table-column" )
         {
             // Already treated in loadOasis, we do not need to do anything here!
         }
-        // TODO sub-table
+        // TODO sub-table [ add to stack and expand at end of table loading ]
         else
         {
             kdWarning(32004) << "Skipping element " << localName << " (in parseInsideOfTable)" << endl;
@@ -2231,7 +2242,8 @@ void KWTableFrameSet::parseInsideOfTable( const QDomElement& parent, KoOasisCont
 }
 
 void KWTableFrameSet::loadOasisCell( const QDomElement& element, KoOasisContext& context,
-                                     const QMemArray<double> & columnLefts, uint row, uint column )
+                                     const QMemArray<double> & columnLefts, uint row, uint column,
+                                     double currentRowHeight )
 {
     //kdDebug(32004) << k_funcinfo << element.localName() << " " << row << "," << column << endl;
 
@@ -2258,26 +2270,25 @@ void KWTableFrameSet::loadOasisCell( const QDomElement& element, KoOasisContext&
     addCell( cell ); // rowSpan/colSpan have changed -> update array
 
     double width = columnLefts[ QMIN( column+colSpan, columnLefts.size()-1 ) ] - columnLefts[column];
-    KWFrame* frame = new KWFrame( cell, columnLefts[column], 0, width, 20 );
+    double height = currentRowHeight > 0 ? currentRowHeight : 20;
+    KWFrame* frame = new KWFrame( cell, columnLefts[column], 0, width, height );
+    if ( currentRowHeight > 0 )
+        frame->setMinFrameHeight( height ); // ensure that text formatting won't resize it down
     frame->setRunAround( KWFrame::RA_NO );
     frame->setFrameBehavior( KWFrame::AutoExtendFrame );
     frame->setNewFrameBehavior( KWFrame::NoFollowup );
     cell->addFrame( frame, false );
 
-    styleStack.setTypeProperties( "table-cell" );
     context.fillStyleStack( element, KoXmlNS::table, "style-name" );
+    styleStack.setTypeProperties( "table-cell" );
 
-    // TODO
-    //loadCommonFrameProperties(frameElementOut);
+    cell->frame( 0 )->loadBorderProperties( styleStack );
 
     cell->loadOasisContent( element, context );
     afterLoadingCell( cell );
-
-    cell->layout(); // compute size
-    kdDebug() << k_funcinfo << *frame << endl;
-    frame->setMinFrameHeight( frame->height() );
 }
 
+// Old XML
 QDomElement KWTableFrameSet::save( QDomElement &parentElem, bool saveFrames ) {
     // When saving to a file, we don't have anything specific to the frameset to save.
     // Save the cells only.
@@ -2286,6 +2297,7 @@ QDomElement KWTableFrameSet::save( QDomElement &parentElem, bool saveFrames ) {
     return QDomElement(); // No englobing element for tables...
 }
 
+// Old XML
 QDomElement KWTableFrameSet::toXML( QDomElement &parentElem, bool saveFrames )
 {
     QDomElement framesetElem = parentElem.ownerDocument().createElement( "FRAMESET" );
@@ -2296,6 +2308,7 @@ QDomElement KWTableFrameSet::toXML( QDomElement &parentElem, bool saveFrames )
     return framesetElem;
 }
 
+// Old XML
 void KWTableFrameSet::fromXML( QDomElement &framesetElem, bool loadFrames, bool useNames )
 {
     KWFrameSet::load( framesetElem, false ); // Load the frameset attributes
@@ -2308,6 +2321,7 @@ void KWTableFrameSet::fromXML( QDomElement &framesetElem, bool loadFrames, bool 
     }
 }
 
+// Old XML
 KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, bool loadFrames, bool useNames )
 {
     int _row = KWDocument::getAttribute( framesetElem, "row", 0 );
@@ -2341,6 +2355,7 @@ KWTableFrameSet::Cell* KWTableFrameSet::loadCell( QDomElement &framesetElem, boo
     return cell;
 }
 
+// Shared between old xml and oasis
 void KWTableFrameSet::afterLoadingCell( Cell* cell )
 {
     uint row = cell->firstRow();

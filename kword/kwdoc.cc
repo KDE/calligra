@@ -1714,8 +1714,6 @@ void KWDocument::endOfLoading()
 
     //kdDebug(32001) << "KWDocument::loadXML done" << endl;
 
-    setModified( false );
-
     // Connect to notifications from main text-frameset
     if ( frameset ) {
         connect( frameset->textObject(), SIGNAL( chapterParagraphFormatted( KoTextParag * ) ),
@@ -1723,6 +1721,8 @@ void KWDocument::endOfLoading()
         connect( frameset, SIGNAL( mainTextHeightChanged() ),
                  SIGNAL( mainTextHeightChanged() ) );
     }
+
+    // Note that more stuff will happen in completeLoading
 }
 
 void KWDocument::startBackgroundSpellCheck()
@@ -2235,6 +2235,8 @@ bool KWDocument::completeLoading( KoStore *_store )
     initBookmarkList();
 
     deleteLoadingInfo();
+
+    setModified( false );
 
     return true;
 }

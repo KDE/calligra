@@ -32,6 +32,7 @@
 #include "koborder.h"
 
 
+class KoStyleStack;
 class KCommand;
 class KWAnchor;
 class KWCanvas;
@@ -285,10 +286,11 @@ public:
      */
     void load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVersion );
     void loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet );
+    void loadBorderProperties( KoStyleStack& styleStack );
 
     QString saveOasisFrameStyle( KoGenStyles& mainStyles ) const;
     void startOasisFrame( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles ) const;
-    void saveCommonStyleProperties( KoGenStyle& frameStyle ) const;
+    void saveBorderProperties( KoGenStyle& frameStyle ) const;
 
     void setMinFrameHeight(double h);
     double minFrameHeight(void)const {return m_minFrameHeight;}

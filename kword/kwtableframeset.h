@@ -592,9 +592,11 @@ private:
     void addCellToArray( Cell* cell );
     void afterLoadingCell( Cell* cell );
     void parseInsideOfTable( const QDomElement& parent, KoOasisContext& context,
-                             const QMemArray<double> & columnLefts, uint& row, uint& column );
+                             const QMemArray<double> & columnLefts, uint& row, uint& column,
+                             double currentRowHeight );
     void loadOasisCell( const QDomElement& element, KoOasisContext& context,
-                        const QMemArray<double> & columnLefts, uint row, uint column );
+                        const QMemArray<double> & columnLefts, uint row, uint column,
+                        double currentRowHeight );
 
    /**
      * @brief position an individual cell in the grid
