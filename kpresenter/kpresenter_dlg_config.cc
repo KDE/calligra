@@ -88,9 +88,13 @@ KPConfig::KPConfig( KPresenterView* parent )
                         BarIcon("colorize", KIcon::SizeMedium) );
     _colorBackground = new configureColorBackground( parent, page );
 
+#ifdef HAVE_LIBKSPELL2
     page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
                         BarIcon("spellcheck", KIcon::SizeMedium) );
     _spellPage=new configureSpellPage(parent, page);
+#else
+    _spellPage=0;
+#endif
 
     page = addVBoxPage( i18n("Misc"), i18n("Misc"),
                         BarIcon("misc", KIcon::SizeMedium) );
@@ -137,7 +141,7 @@ void KPConfig::slotApply()
     KMacroCommand *macro = 0L;
     _interfacePage->apply();
     _colorBackground->apply();
-    _spellPage->apply();
+    if (_spellPage) _spellPage->apply();
     m_pathPage->apply();
     KCommand *cmd = _miscPage->apply();
     if ( cmd )
@@ -170,7 +174,7 @@ void KPConfig::slotDefault()
         _colorBackground->slotDefault();
         break;
     case 2:
-        _spellPage->slotDefault();
+        if (_spellPage) _spellPage->slotDefault();
         break;
     case 3:
         _miscPage->slotDefault();
@@ -367,13 +371,16 @@ configureSpellPage::configureSpellPage( KPresenterView *_view, QWidget *parent, 
 {
     m_pView=_view;
     config = KPresenterFactory::global()->config();
+#ifdef HAVE_LIBKSPELL2
     m_spellConfigWidget = new ConfigWidget( _view->broker(), parent );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
+#endif
 }
 
 void configureSpellPage::apply()
 {
 
+#ifdef HAVE_LIBKSPELL2
     KPresenterDoc* doc = m_pView->kPresenterDoc();
     m_spellConfigWidget->save();
 
@@ -383,6 +390,7 @@ void configureSpellPage::apply()
     //FIXME reactivate just if there are changes.
     doc->enableBackgroundSpellCheck( m_pView->broker()->settings()->backgroundCheckerEnabled() );
     doc->reactivateBgSpellChecking();
+#endif
 }
 
 void configureSpellPage::slotDefault()
