@@ -29,59 +29,62 @@
 #include <qlineedit.h>
 #include <kmessagebox.h>
 
-KSpreadarea::KSpreadarea( KSpreadView* parent, const char* name,const QPoint &_marker )
-	: KDialogBase( parent, name,TRUE,i18n("Area Name"),Ok|Cancel )
+KSpreadarea::KSpreadarea( KSpreadView * parent, const char * name, const QPoint & _marker )
+  : KDialogBase( parent, name, TRUE, i18n("Area Name"), Ok | Cancel )
 {
-  m_pView = parent;
-  marker=_marker;
+  m_pView  = parent;
+  m_marker = _marker;
 
-  QWidget *page = new QWidget( this );
+  QWidget * page = new QWidget( this );
   setMainWidget(page);
-  QVBoxLayout *lay1 = new QVBoxLayout( page, 0, spacingHint() );
+  QVBoxLayout * lay1 = new QVBoxLayout( page, 0, spacingHint() );
 
-  areaName=new QLineEdit(page);
-  lay1->addWidget( areaName );
-  areaName->setFocus();
-  connect ( areaName, SIGNAL(textChanged ( const QString & )), this, SLOT(slotAreaNamechanged( const QString &)));
+  m_areaName = new QLineEdit(page);
+  lay1->addWidget( m_areaName );
+  m_areaName->setFocus();
+  connect ( m_areaName, SIGNAL(textChanged ( const QString & )), this, SLOT(slotAreaNamechanged( const QString &)));
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
-  enableButtonOK(!areaName->text().isEmpty());
+  enableButtonOK(!m_areaName->text().isEmpty());
 
 }
 
 void KSpreadarea::slotAreaNamechanged( const QString & text)
 {
-    enableButtonOK(!text.isEmpty());
+  enableButtonOK(!text.isEmpty());
 }
 
 void KSpreadarea::slotOk()
 {
-  if( !areaName->text().isEmpty())
+  QString tmp(m_areaName->text());
+  if( !tmp.isEmpty() )
   {
-        QRect rect( m_pView->activeTable()->selectionRect() );
-        if ( rect.left() == 0 || rect.top() == 0 ||
-                rect.right() == 0 || rect.bottom() == 0 )
-                {
-                rect.setCoords( marker.x(), marker.y(), marker.x(),marker.y() );
-                }
-        bool newName=true;
-        QValueList<Reference>::Iterator it;
-        QValueList<Reference> area=m_pView->doc()->listArea();
-        for ( it = area.begin(); it != area.end(); ++it )
-    	        {
-    	        if(areaName->text()==(*it).ref_name)
-                        newName=false;
-    	        }
-        if(newName)
-                {
-                m_pView->doc()->addAreaName(rect,areaName->text(),m_pView->activeTable()->tableName());
-                accept();
-                }
-        else
-                KMessageBox::error( this, i18n("This name is already used."));
+    tmp = tmp.lower();
+
+    QRect rect( m_pView->activeTable()->selectionRect() );
+    if ( rect.left() == 0 || rect.top() == 0 
+         || rect.right() == 0 || rect.bottom() == 0 )
+    {
+      rect.setCoords( m_marker.x(), m_marker.y(), m_marker.x(), m_marker.y() );
+    }
+    bool newName = true;
+    QValueList<Reference>::Iterator it;
+    QValueList<Reference> area = m_pView->doc()->listArea();
+    for ( it = area.begin(); it != area.end(); ++it )
+    {
+      if(tmp == (*it).ref_name)
+        newName = false;
+    }
+    if (newName)
+    {
+      m_pView->doc()->addAreaName(rect, tmp, m_pView->activeTable()->tableName());
+      accept();
+    }
+    else
+      KMessageBox::error( this, i18n("This name is already used."));
   }
   else
   {
-        KMessageBox::error( this, i18n("Area text is empty!") );
+    KMessageBox::error( this, i18n("Area text is empty!") );
   }
 }
 

@@ -20,8 +20,10 @@
 #include <qapplication.h>
 #include <qtimer.h>
 
-KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent, KSpreadView * _view )
-  : QLineEdit( _parent, "KSpreadLocationEditWidget" )
+KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent, 
+                                                      KSpreadView * _view )
+    : QLineEdit( _parent, "KSpreadLocationEditWidget" ),
+      m_pView(_view)
 {
     m_pView = _view;
 }
@@ -45,38 +47,69 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     case Key_Return:
     case Key_Enter:
         {
-            QValueList<Reference>::Iterator it;
-	    QValueList<Reference> area=m_pView->doc()->listArea();
-	    for ( it = area.begin(); it != area.end(); ++it )
-		{
-		    if((*it).ref_name==text())
-			{
-			    QString tmp;
-			    tmp=(*it).table_name;
-			    tmp+="!";
-			    tmp+=util_rangeName((*it).rect);
-			    m_pView->canvasWidget()->gotoLocation( KSpreadRange(tmp, m_pView->doc()->map()));
-			    return;
-			}
-		}
-
 	    QString tmp;
+            QString ltext = text();
+            tmp = ltext.lower();
+            QValueList<Reference>::Iterator it;
+	    QValueList<Reference> area = m_pView->doc()->listArea();
+	    for ( it = area.begin(); it != area.end(); ++it )
+            {
+                if ((*it).ref_name == tmp)
+                {
+                    QString tmp;
+                    tmp = (*it).table_name;
+                    tmp += "!";
+                    tmp += util_rangeName((*it).rect);
+                    m_pView->canvasWidget()->gotoLocation( KSpreadRange(tmp, m_pView->doc()->map()));
+                    return;
+                }
+            }
+            
             int pos;
 
             // Set the cell component to uppercase:
             // Table1!a1 -> Table1!A2
-            pos = text().find('!');
+            pos = ltext.find('!');
             if( pos !=- 1 )
-                tmp = text().left(pos)+text().mid(pos).upper();
+                tmp = ltext.left(pos)+ltext.mid(pos).upper();
             else
-                tmp=text().upper();
+                tmp = ltext.upper();
 
             // Selection entered in location widget
-            if ( text().contains( ':' ) )
+            if ( ltext.contains( ':' ) )
                 m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp, m_pView->doc()->map() ) );
             // Location entered in location widget
             else
-                m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp, m_pView->doc()->map() ));
+            {
+                KSpreadPoint point( tmp, m_pView->doc()->map());
+                bool validName = true;
+                for (int i = 0; i < ltext.length(); ++i)
+                {
+                    if (!ltext[i].isLetter())
+                    {
+                        validName = false;
+                        break;
+                    }
+                }
+                if ( !point.isValid() && validName)
+                {
+                    QRect rect( m_pView->activeTable()->selectionRect() );
+                    KSpreadTable * t = m_pView->activeTable();
+                    if ( rect.left() == 0 || rect.top() == 0 ||
+                         rect.right() == 0 || rect.bottom() == 0 )
+                    {
+                        rect.setCoords( t->marker().x(), t->marker().y(), 
+                                        t->marker().x(), t->marker().y() );
+                    }
+                    // set area name on current selection/cell
+                    
+                    m_pView->doc()->addAreaName(rect, ltext.lower(),
+                                                t->tableName());
+                }
+                
+                if (!validName)
+                    m_pView->canvasWidget()->gotoLocation( point );
+            }
 
             // Set the focus back on the canvas.
             m_pView->canvasWidget()->setFocus();

@@ -27,20 +27,20 @@ class QPushButton;
 class QLineEdit;
 class QLabel;
 
-class KSpreadarea: public KDialogBase
+class KSpreadarea : public KDialogBase
 {
   Q_OBJECT
 public:
-  KSpreadarea( KSpreadView* parent, const char* name,const QPoint &_marker );
-
+  KSpreadarea( KSpreadView * parent, const char * name, const QPoint & _marker );
 
 public slots:
   void slotOk();
-    void slotAreaNamechanged( const QString & text);
+  void slotAreaNamechanged( const QString & text);
+
 protected:
-  KSpreadView* m_pView;
-  QLineEdit* areaName;
-  QPoint  marker;
+  KSpreadView * m_pView;
+  QLineEdit   * m_areaName;
+  QPoint        m_marker;
 };
 
 #endif

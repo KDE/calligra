@@ -42,13 +42,13 @@ public slots:
   void slotRemove();
   void slotHighlighted(QListBoxItem *);
 protected:
-  KSpreadView* m_pView;
+  KSpreadView * m_pView;
 
-  QListBox * list;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
-  QPushButton* m_pRemove;
-  QLabel *rangeName;
+  QListBox    * m_list;
+  QPushButton * m_pOk;
+  QPushButton * m_pCancel;
+  QPushButton * m_pRemove;
+  QLabel      * m_rangeName;
 };
 
 #endif
