@@ -56,6 +56,7 @@
 #include "ExportFilterSpartan.h"
 #include "ExportFilterDirect.h"
 #include "ExportFilterStyle.h"
+#include "ExportFilterFullPower.h"
 
 // Every tag has its own processing function. All of those functions
 // have the same parameters since the functions are passed to
