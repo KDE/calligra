@@ -24,7 +24,7 @@
 #include "kwtextframeset.h"
 #include <koVariable.h>
 #include <koparagcounter.h>
-#include "variable.h"
+#include "kwvariable.h"
 #include <klocale.h>
 #include <kdebug.h>
 #include <assert.h>

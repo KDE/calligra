@@ -23,7 +23,7 @@
 #include "kwcommand.h"
 #include "kwtableframeset.h"
 #include "kwanchor.h"
-#include "variable.h"
+#include "kwvariable.h"
 #include <kotextobject.h>
 
 #include <kdebug.h>

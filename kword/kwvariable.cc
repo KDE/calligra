@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "variable.h"
+#include "kwvariable.h"
 #include <koVariable.h>
 #include "mailmerge.h"
 #include "kwdoc.h"

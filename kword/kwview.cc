@@ -67,7 +67,7 @@
 #include "splitcellsdia.h"
 #include "stylist.h"
 #include "tabledia.h"
-#include "variable.h"
+#include "kwvariable.h"
 #include "KWordViewIface.h"
 
 #include <kaccel.h>

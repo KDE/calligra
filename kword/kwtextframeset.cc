@@ -45,7 +45,7 @@
 #include <kotextformatter.h>
 #include <krun.h>
 #include <kmessagebox.h>
-#include "variable.h"
+#include "kwvariable.h"
 #include <koChangeCaseDia.h>
 #include "KWordTextFrameSetIface.h"
 #include "KWordTextFrameSetEditIface.h"

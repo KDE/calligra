@@ -21,7 +21,7 @@
 #include "kwtextframeset.h"
 #include "KWordFrameSetIface.h"
 #include "kwdoc.h"
-#include "variable.h"
+#include "kwvariable.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <koVariable.h>

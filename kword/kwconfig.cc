@@ -40,7 +40,7 @@
 #include "kwcanvas.h"
 #include "kwviewmode.h"
 #include "kwcommand.h"
-#include "variable.h"
+#include "kwvariable.h"
 
 #include <koVariable.h>
 #include <kformulaconfigpage.h>
