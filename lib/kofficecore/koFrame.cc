@@ -235,6 +235,10 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
       QPoint p = parentWidget()->mapFromGlobal( ev->globalPos() );
       move( QPoint( p.x() + d->m_framePos.x() - d->m_mousePressPos.x(),
 		    p.y() + d->m_framePos.y() - d->m_mousePressPos.y() ) );
+      // The other modes change the geometry so they call resizeEvent.
+      // This one doesn't, so it has to emit geometryChangedby itself.
+      emit geometryChanged();
+      //kdDebug() << "KoFrame::mouseMoveEvent koFrame position is " << x() << "," << y() << endl;
   }
   else if ( d->m_mode == 1 )
   {
