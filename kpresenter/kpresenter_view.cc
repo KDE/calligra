@@ -7414,4 +7414,9 @@ void KPresenterView::imageEffect()
     }
 }
 
+void KPresenterView::spellAddAutoCorrect (const QString & originalword, const QString & newword)
+{
+    m_pKPresenterDoc->getAutoFormat()->addAutoFormatEntry( originalword, newword );
+}
+
 #include <kpresenter_view.moc>
