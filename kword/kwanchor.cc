@@ -89,7 +89,9 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     QPoint cnPoint = crect.topLeft(); //fallback
     (void) fs->internalToNormal( crect.topLeft(), cnPoint );
     //kdDebug() << "KWAnchor::draw cnPoint " << cnPoint.x() << "," << cnPoint.y() << endl;
-    crect.moveTopLeft( fs->currentViewMode()->normalToView( cnPoint ) );
+    cnPoint = fs->currentViewMode()->normalToView( cnPoint );
+    crect.setLeft( cnPoint.x() );
+    crect.setTop( cnPoint.y() );
     QPoint brnPoint; // bottom right in normal coords
     if ( fs->internalToNormal( crect.bottomRight(), brnPoint ) )
     {
@@ -114,13 +116,9 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     QColorGroup cg2( cg );
     m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fs->currentDrawnCanvas() );
 
-    if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer ) {
-        QPoint nPoint;
-        if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
-        {
-            QPoint vPoint = fs->currentViewMode()->normalToView( nPoint );
-            p->fillRect( QRect( vPoint.x(), vPoint.y(), width, height ), QBrush( cg.highlight(), QBrush::Dense4Pattern) );
-        }
+    if ( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer )
+    {
+        p->fillRect( crect, QBrush( cg.highlight(), QBrush::Dense4Pattern) );
     }
 
     p->restore();

@@ -122,7 +122,6 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const QPoint &p
         kdDebug() << "KWTableFrameSet::moveFloatingFrame " << kopos.x() << "," << kopos.y() << endl;
         KoPoint offset = kopos - currentPos;
         moveBy( offset.x(), offset.y() );
-        // ## TODO apply page breaking
 
         // Recalc all "frames on top" everywhere
         kWordDocument()->updateAllFrames();
@@ -135,9 +134,29 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const QPoint &p
 
 QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
 {
-    // ## TODO cut into one rectangle per page
     KoRect r = boundingRect();
     QRect outerRect( m_doc->zoomRect( r ) );
+    kdDebug() << "floatingFrameSize outerRect initially " << DEBUGRECT( outerRect ) << endl;
+    ASSERT( m_anchorTextFs );
+    // Need to convert back to internal coords (in case of page breaking)
+    QPoint iPoint;
+    if ( m_anchorTextFs->normalToInternal( outerRect.topLeft(), iPoint ) )
+    {
+        outerRect.setLeft( iPoint.x() );
+        outerRect.setTop( iPoint.y() );
+        QPoint brnPoint; // bottom right in internal coords
+        if ( m_anchorTextFs->normalToInternal( outerRect.bottomRight(), brnPoint ) )
+        {
+            outerRect.setRight( brnPoint.x() );
+            outerRect.setBottom( brnPoint.y() );
+            kdDebug() << "floatingFrameSize outerRect now " << DEBUGRECT( outerRect ) << endl;
+        }
+        else
+            kdWarning() << "floatingFrameSize: normalToInternal returned 0L for "
+                        << outerRect.right() << "," << outerRect.bottom() << endl;
+    } else
+        kdWarning() << "floatingFrameSize: normalToInternal returned 0L for "
+                    << outerRect.left() << "," << outerRect.top() << endl;
 
     // TODO: in theory, we'd need to take the max of the borders of each cell
     // on the outside rect, to find the global rect needed. Well, if we assume constant
