@@ -25,12 +25,12 @@
 #ifndef Arrow_h_
 #define Arrow_h_
 
-#include <iostream.h>
 #include <qintdict.h>
 #include <qpointarray.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include "Coord.h"
+#include <Coord.h>
+
+class QPixmap;
+class QPainter;
 
 class Arrow {
 public:

@@ -22,11 +22,15 @@
 
 */
 
+#include <Arrow.h>
+
+#include <qpixmap.h>
+#include <qpainter.h>
 #include <qcolor.h>
-#include "Arrow.h"
-#include "version.h"
-#include "Painter.h"
+
 #include <kstaticdeleter.h>
+
+#include <Painter.h>
 
 #if 0
 static QCOORD sysArrow_1[] = { -5, -3, 10, 0, -5, 3 };
@@ -79,7 +83,7 @@ QPixmap& Arrow::leftPixmap () {
     p.scale (2, 2);
     p.drawLine (5, 5, 35, 5);
     //    draw (p, Coord (10, 5), black, 1, 180);
-    draw (p, Coord (5, 5), QT_PRFX::black, 1, 180);
+    draw (p, Coord (5, 5), Qt::black, 1, 180);
     p.end ();
   }
   return *lpreview;
@@ -95,7 +99,7 @@ QPixmap& Arrow::rightPixmap () {
     //    p.drawLine (0, 5, 10, 5);
     //    draw (p, Coord (10, 5), black, 1, 0);
     p.drawLine (0, 5, 20, 5);
-    draw (p, Coord (20, 5), QT_PRFX::black, 1, 0);
+    draw (p, Coord (20, 5), Qt::black, 1, 0);
     p.end ();
   }
   return *rpreview;
@@ -113,7 +117,7 @@ void Arrow::draw (QPainter& p, const Coord& c, const QColor& color,
   if (fill)
     p.setBrush (color);
   else
-    p.setBrush (QT_PRFX::white);
+    p.setBrush (Qt::white);
   p.setPen (color);
   p.drawPolygon (points);
   p.restore ();
