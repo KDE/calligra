@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, Laurent MONTEL <lmontel@mandrakesoft.com>
+   
+   Copyright 2002 Laurent Montel <montel@kde.org>
+   Copyright 2002 John Dailey <dailey@vt.edu>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
