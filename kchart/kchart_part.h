@@ -76,7 +76,8 @@ public:
     virtual void  setCanChangeValue(bool b )   { m_bCanChangeValue = b;    }
 
     void  initNullChart();
-    void  initTestChart();
+    // Functions that generate templates (not used yet):
+    void  generateBarChartTemplate();
 
 public slots:
     void  slotModified();

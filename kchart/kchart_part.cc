@@ -133,6 +133,11 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	return true;
     }
     else if ( ret == KoTemplateChooseDia::Template ) {
+		//TODO: Activate this for KOffice 1.5/2.0
+// 		if ( f.endsWith("/templates/chart/.source/BarChart.chrt") ) {
+// 			generateBarChartTemplate();
+// 			return true;
+// 		}
         QFileInfo fileInfo( f );
         QString fileName( fileInfo.dirPath( true ) + "/" +
             fileInfo.baseName() + ".chrt" );
@@ -169,7 +174,7 @@ void KChartPart::initNullChart()
 }
 
 
-void KChartPart::initTestChart()
+void KChartPart::generateBarChartTemplate()
 {
     int  col;
     int  row;
@@ -190,12 +195,12 @@ void KChartPart::initTestChart()
 
 		// Fill column label, but only on the first iteration.
 		if (row == 0) {
-		    m_colLabels << QString("Column %1").arg(col + 1);
+		    m_colLabels << i18n("Column %1").arg(col + 1);
 		}
             }
 
 	    // Fill row label.
-	    m_rowLabels << QString("Row %1").arg(row + 1);
+	    m_rowLabels << i18n("Row %1").arg(row + 1);
 	}
     }
 }

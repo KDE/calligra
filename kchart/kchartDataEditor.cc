@@ -2,8 +2,10 @@
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qregexp.h>
 #include <qwhatsthis.h>
 #include <qtooltip.h>
+#include <qvalidator.h>
 
 #include <kinputdialog.h>
 #include <klocale.h>
@@ -104,6 +106,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     // Create the main table.
     m_table = new QTable(page);
     m_table->setSelectionMode(QTable::NoSelection);
+	m_table->setFocus();
 
     // Create the Rows setting
     m_rowsLA = new QLabel( i18n("# Rows:" ), page );
@@ -215,6 +218,13 @@ void kchartDataEditor::setData( KoChart::Data* dat )
         colsCount = dat->usedCols();
     }
 
+	// Empty table
+	if ( rowsCount==0 && colsCount==0 ) {
+		m_table->setNumRows(1);
+		m_table->setNumCols(1);
+		resize(600, 300);
+		return;
+	}
     // Initiate widgets with the correct rows and columns.
     m_rowsSB->setValue(rowsCount);
     m_colsSB->setValue(colsCount);
@@ -266,6 +276,14 @@ void kchartDataEditor::getData( KoChart::Data* dat )
     dat->setUsedRows( numRows );
     dat->setUsedCols( numCols );
 
+	// Empty table
+	if ( numRows==1 && numCols==1 && m_table->horizontalHeader()->label(0).isEmpty()
+			&& m_table->verticalHeader()->label(0).isEmpty()
+			&& m_table->text(0, 0).isEmpty() ) {
+		dat->expand(0,0);
+		return;
+	}
+
     // Get all the data.
     for (int row = 0;row < numRows; row++) {
         for (int col = 0;col < numCols; col++) {
@@ -295,6 +313,8 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
     int       numRows = m_rowsSB->value();
 
     rowHeader->setLabel(0, "");
+	if ( numRows==1 && m_colsSB->value()==1 && m_table->text(0, 0).isEmpty() )
+		return;
     for (row = 0; row < numRows; row++) {
 	rowHeader->setLabel(row, rowLabels[row]);
     }
@@ -326,6 +346,8 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
     int  numCols = m_colsSB->value();
 
     colHeader->setLabel(0, "");
+	if ( m_rowsSB->value()==1 && numCols==1 && m_table->text(0, 0).isEmpty() )
+		return;
     for (col = 0; col < numCols; col++) {
 	colHeader->setLabel(col, colLabels[col]);
     }
@@ -484,14 +506,15 @@ void kchartDataEditor::setCols(int cols)
 //
 void kchartDataEditor::column_clicked(int column)
 {
+	bool ok;
     QString name = KInputDialog::getText(i18n("Column name"), 
 					 i18n("Type a new column name:"), 
 					 m_table->horizontalHeader()->label(column),
-					 0, this);
+					 &ok, this, 0, new QRegExpValidator(QRegExp(".*"), this) );
 
     // Rename the column.
-    if ( !name.isEmpty() ) {
-        m_table->horizontalHeader()->setLabel(column, name);
+    if ( ok ) {
+    m_table->horizontalHeader()->setLabel(column, name);
 	m_modified = true;
     }
 }
@@ -501,14 +524,15 @@ void kchartDataEditor::column_clicked(int column)
 //
 void kchartDataEditor::row_clicked(int row)
 {
+	bool ok;
     QString name = KInputDialog::getText(i18n("Row name"),
 					 i18n("Type a new row name:"), 
 					 m_table->verticalHeader()->label(row),
-					 0, this);
+					 &ok, this, 0, new QRegExpValidator(QRegExp(".*"), this) );
 
     // Rename the row.
-    if ( !name.isEmpty() ) {
-        m_table->verticalHeader()->setLabel(row, name);
+    if ( ok ) {
+    m_table->verticalHeader()->setLabel(row, name);
 	m_modified = true;
     }
 }
