@@ -183,7 +183,7 @@ void KChartView::edit()
     KDChartParams* params=((KChartPart*)koDocument())->params();
 
     KoChart::Data *dat = (( (KChartPart*)koDocument())->data());
-    qDebug( "***Before calling editor: cols = %d, rows = %d, usedCols = %d, usedRows = %d", dat->cols(), dat->rows(), dat->usedCols(), dat->usedRows() );
+    kdDebug(35001)<<"***Before calling editor: cols ="<<dat->cols()<<" , rows = "<<dat->rows()<<" , usedCols = "<<dat->usedCols()<<"  usedRows = "<<dat->usedRows()<<endl;
     ed.setData(dat);
     QStringList lst;
     for(int i =0;i<dat->rows();i++)
@@ -194,7 +194,7 @@ void KChartView::edit()
     }
     ed.getData(dat);
     ed.getLegend(params);
-    qDebug( "***After calling editor: cols = %d, rows = %d, usedCols = %d, usedRows = %d", dat->cols(), dat->rows(), dat->usedCols(), dat->usedRows() );
+    kdDebug(35001)<<"***After calling editor: cols ="<<dat->cols()<<" , rows = "<<dat->rows()<<" , usedCols = "<<dat->usedCols()<<"  usedRows = "<<dat->usedRows()<<endl;
     repaint();
 }
 
