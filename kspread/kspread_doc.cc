@@ -697,21 +697,21 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_FRACTION );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:fraction", (*it).name, 0 /*TODO ????*/  );
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 /*TODO ????*/  );
     }
 
     //TODO FIME !!!!!
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_PERCENTAGE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:percentage", (*it).name, 0 /*TODO ????*/  );
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:percentage-style", (*it).name, 0 /*TODO ????*/  );
     }
 
     //TODO FIME !!!!!
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_CURRENCY );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:currency", (*it).name, 0 /*TODO ????*/  );
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:currency-style", (*it).name, 0 /*TODO ????*/  );
     }
 
     styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_SCIENTIFIC );
