@@ -161,7 +161,7 @@ public:
   void setDataArea( const QRect& _data );
   void update();
   
-  virtual bool loadDocument( KOStore::Store_ptr _store, const char *_format );
+  virtual bool loadDocument( KOStore::Store_ptr _store );
   virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
   virtual bool save( ostream& out );
   
@@ -232,7 +232,7 @@ public:
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
     virtual bool loadChildren( KOStore::Store_ptr _store );
  
-    virtual void makeChildList( KOffice::Document_ptr _doc, const char *_path );
+    virtual bool saveChildren( KOStore::Store_ptr _store, const char *_path );
     /*
      * @return true if one of the direct children wants to
      *              be saved embedded. If there are no children or if
@@ -270,7 +270,7 @@ public:
      */
     RowLayout* nonDefaultRowLayout( int _row );
     /**
-     * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
+     * @param _no_scrollbar_update won't change the scrollbar if set to true disregarding
      *                             whether _column/_row are bigger than
      *                             m_iMaxRow/m_iMaxColumn. May be overruled by
      *                             @ref #m_bScrollbarUpdates.
@@ -285,7 +285,7 @@ public:
      * @returns the pointer to the cell that is visible at a certain position. That means If the cell
      *          at this position is obscured then the obscuring cell is returned.
      *
-     * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
+     * @param _no_scrollbar_update won't change the scrollbar if set to true disregarding
      *                             whether _column/_row are bigger than
      *                             m_iMaxRow/m_iMaxColumn. May be overruled by
      *                             @ref #m_bScrollbarUpdates.
@@ -294,7 +294,7 @@ public:
     /**
      * If no special KSpreadCell exists for this position then a new one is created.
      *
-     * @param _no_scrollbar_update wont change the scrollbar if set to true disregarding
+     * @param _no_scrollbar_update won't change the scrollbar if set to true disregarding
      *                             whether _column/_row are bigger than
      *                             m_iMaxRow/m_iMaxColumn. May be overruled by
      *                             @ref #m_bScrollbarUpdates.

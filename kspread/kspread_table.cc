@@ -2752,7 +2752,7 @@ bool KSpreadTable::loadChildren( KOStore::Store_ptr _store )
 {
   QListIterator<KSpreadChild> it( m_lstChildren );
   for( ; it.current(); ++it )
-    if ( !it.current()->loadDocument( _store, it.current()->mimeType() ) )
+    if ( !it.current()->loadDocument( _store ) )
       return false;
 
   return true;
@@ -2985,21 +2985,19 @@ QListIterator<KSpreadChild> KSpreadTable::childIterator()
   return QListIterator<KSpreadChild> ( m_lstChildren );
 }
 
-void KSpreadTable::makeChildList( KOffice::Document_ptr _doc, const char *_path )
+bool KSpreadTable::saveChildren( KOStore::Store_ptr _store, const char *_path )
 {
   int i = 0;
 
   QListIterator<KSpreadChild> it( m_lstChildren );
   for( ; it.current(); ++it )
   {
-    QString tmp;
-    tmp.sprintf("/%i", i++ );
-    QString path( _path );
-    path += tmp.data();
-
+    QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
     KOffice::Document_var doc = it.current()->document();
-    doc->makeChildList( _doc, path );
+    if ( !doc->saveToStore( _store, 0L, path ) )
+      return false;
   }
+  return true;
 }
 
 bool KSpreadTable::hasToWriteMultipart()
@@ -3216,11 +3214,11 @@ bool ChartChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
   return true;
 }
 
-bool ChartChild::loadDocument( KOStore::Store_ptr _store, const char *_format )
+bool ChartChild::loadDocument( KOStore::Store_ptr _store )
 {
   cerr << "######################### CC:loadDoc ################" << endl;
 
-  bool res = KSpreadChild::loadDocument( _store, _format );
+  bool res = KSpreadChild::loadDocument( _store );
   if ( !res )
     return res;
 

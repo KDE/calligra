@@ -154,24 +154,21 @@ bool KSpreadShell::newDocument()
   return true;
 }
 
-bool KSpreadShell::openDocument( const char *_url, const char *_format )
+bool KSpreadShell::openDocument( const char *_url )
 {
-  if ( _format == 0L || *_format == 0 )
-    _format = "application/x-kspread";
-
   if ( m_pDoc && m_pDoc->isEmpty() )
     releaseDocument();
   else if ( m_pDoc && !m_pDoc->isEmpty() )
   {
     KSpreadShell *s = new KSpreadShell();
     s->show();
-    return s->openDocument( _url, _format );
+    return s->openDocument( _url );
   }
 
   cerr << "Creating new document" << endl;
 
   m_pDoc = new KSpreadDoc;
-  if ( !m_pDoc->loadFromURL( _url, _format ) )
+  if ( !m_pDoc->loadFromURL( _url ) )
   {
     delete m_pDoc;
     m_pDoc = 0L;
@@ -307,7 +304,7 @@ void KSpreadShell::slotFileOpen()
   if ( file.isNull() )
     return;
 
-  if ( !openDocument( file, "" ) )
+  if ( !openDocument( file ) )
   {
     QString tmp( i18n( "Could not open\n%1" ).arg( file.data() ) );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );

@@ -40,6 +40,7 @@ METASOURCES = kspread_main.moc kspread_shell.moc kspread_doc.moc \
 	kspread_dlg_sort.moc  kspread_dlg_create.moc kspread_dlg_anchor.moc kspread_dlg_assistant2.moc
 
 idl_DATA = kspread.idl
+kspread.h : $(top_builddir)/lib/kofficecore/koffice.idl
 
 # DISTCLEANFILES = KOStore.py KOffice.py KSpread.py OpenPartsUI.py OpenParts.py KOM.py 
 

@@ -166,16 +166,17 @@ KSpreadTable* KSpreadMap::findTable( const char *_name )
     return 0L;
 }
 
-void KSpreadMap::makeChildList( KOffice::Document_ptr _doc, const char *_path )
+bool KSpreadMap::saveChildren( KOStore::Store_ptr _store, const char *_path )
 {
   QListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
   {
-    QString path( _path );
-    path += "/";
-    path += it.current()->name();
-    it.current()->makeChildList( _doc, path );
+    // set the child document's url to an internal url (ex: "tar:/0/1")
+    QString path = QString( "%1/%2" ).arg( _path ).arg( it.current()->name() );
+    if ( !it.current()->saveChildren( _store, path ) )
+      return false;
   }
+  return true;
 }
 
 bool KSpreadMap::loadChildren( KOStore::Store_ptr _store )

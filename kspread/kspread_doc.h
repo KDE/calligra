@@ -287,7 +287,7 @@ protected:
   /**
    * Overloaded function of @ref KoDocument.
    */
-  virtual void makeChildListIntern( KOffice::Document_ptr _root, const char *_path );
+  virtual bool saveChildren( KOStore::Store_ptr _store, const char *_path );
   
   /**
    * @return true if one of the direct children wants to

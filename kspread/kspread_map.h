@@ -58,7 +58,7 @@ public:
   virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
   virtual bool loadChildren( KOStore::Store_ptr _store );
   
-  void makeChildList( KOffice::Document_ptr _doc, const char *_path );
+  bool saveChildren( KOStore::Store_ptr _store, const char *_path );
   /*
    * @return true if one of the direct children wants to
    *              be saved embedded. If there are no children or if
@@ -74,7 +74,7 @@ public:
   void addTable( KSpreadTable *_table );
   
   /**
-   * @param _tables becomes removed from the map. This wont delete the table.
+   * @param _tables becomes removed from the map. This won't delete the table.
    */
   void removeTable( KSpreadTable *_table );
 

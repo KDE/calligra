@@ -114,8 +114,6 @@ void KSpreadDoc::cleanUp()
     m_pMap = 0L;
   }
 
-  m_lstAllChildren.clear();
-
   KoDocument::cleanUp();
 }
 
@@ -164,9 +162,9 @@ int KSpreadDoc::viewCount()
   return m_lstViews.count();
 }
 
-void KSpreadDoc::makeChildListIntern( KOffice::Document_ptr _root, const char *_path )
+bool KSpreadDoc::saveChildren( KOStore::Store_ptr _store, const char *_path )
 {
-  m_pMap->makeChildList( _root, _path );
+  return m_pMap->saveChildren( _store, _path );
 }
 
 bool KSpreadDoc::hasToWriteMultipart()
