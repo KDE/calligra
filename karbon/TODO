@@ -10,8 +10,6 @@ GUI:
 REAL BUGS:
 -	patterns dont zoom
 -	VSelectionTool has an offset error relative to the handle nodes in the VSelection.
--	VSelection shouldnt have "QRect* m_qrect;" but KoRect. QRect/QPoints are a lowlevel detail.
-	All tools and other classes should use KoPoint and KoRect.
 -	fix i18n singular/plural
 -	zooming has problems (zoom out: shapes and selection coords are different. zoom back:
 	canvas is "fragmented")

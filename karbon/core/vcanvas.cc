@@ -192,11 +192,11 @@ VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 	int clipw, int cliph  )
 {
 	//kdDebug() << "VCanvas::drawContents" << endl;
-	drawDocument( painter, QRect( clipx, clipy, clipw, cliph ) );
+	drawDocument( painter, KoRect( clipx, clipy, clipw, cliph ) );
 }
 
 void
-VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjects )
+VCanvas::drawDocument( QPainter* /*painter*/, const KoRect& rect, bool drawVObjects )
 {
 	//kdDebug() << "drawDoc rect : " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
 	VPainter* p = m_view->painterFactory()->painter();
@@ -208,8 +208,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 		setYMirroring( false );
 		drawPage( p );
 
-		KoRect krect = KoRect::fromQRect( rect );
-		m_part->document().draw( p, &krect );
+		m_part->document().draw( p, &rect );
 
 		p->end();
 	}
@@ -233,7 +232,7 @@ VCanvas::repaintAll( bool drawVObjects )
 	//if( m_view->layersDocker() )
 	//	m_view->layersDocker()->updatePreviews();
 	//drawContents( 0, 0, 0, width(), height() );
-	drawDocument( 0, QRect( 0, 0, width(), height() ), drawVObjects );
+	drawDocument( 0, KoRect( 0, 0, width(), height() ), drawVObjects );
 	//viewport()->repaint( erase );
 }
 

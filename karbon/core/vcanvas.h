@@ -49,7 +49,7 @@ protected:
 	virtual void viewportPaintEvent( QPaintEvent* );
 	virtual void drawContents( QPainter* painter, int clipx, int clipy,
 		int clipw, int cliph  );
-	void drawDocument( QPainter* painter, const QRect& rect, bool drawVObjects = true );
+	void drawDocument( QPainter* painter, const KoRect& rect, bool drawVObjects = true );
 
 	virtual void resizeEvent( QResizeEvent* event );
 
