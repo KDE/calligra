@@ -333,7 +333,7 @@ void DefineCustomSlideShow::slotMoveInsertSlide()
     QListBoxItem *item = listSlide->firstItem();
     while ( item ) {
         if ( item->isSelected() ) {
-            listSlideShow->insertItem( item->text(), 0 );
+            listSlideShow->insertItem( item->text(), ( listSlideShow->count() )  );
         }
         item = item->next();
     }
