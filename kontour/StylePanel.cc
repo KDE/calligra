@@ -44,6 +44,7 @@
 #include "GObject.h"
 #include "GStyle.h"
 #include "GStyleList.h"
+#include "SetPropertyCmd.h"
 #include "BrushCells.h"
 
 OutlinePanel::OutlinePanel(KontourView *aView, QWidget *parent, const char *name):
@@ -252,7 +253,10 @@ void OutlinePanel::slotChangeLineWidth(int l)
   }
   else
   {
-    mView->activeDocument()->activePage()->getSelection().first()->style()->outlineWidth(l);
+    kdDebug() << "+" << endl;
+    SetOutlineWidthCmd *cmd = new SetOutlineWidthCmd(mView->activeDocument(), l);
+    KontourDocument *doc = (KontourDocument *)mView->koDocument();
+    doc->history()->addCommand(cmd);
   }
   slotUpdate();
 }
@@ -366,7 +370,7 @@ void PaintPanel::slotChangeFilled(int f)
   }
   else
   {
-    //SetPropertieCmd
+    //SetPropertyCmd
   }
   slotUpdate();
 }

@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -34,16 +34,54 @@
 class SetPropertyCmd : public Command
 {
 public:
-  SetPropertyCmd(GDocument *aGDoc, const GStyle &s);
+  SetPropertyCmd(GDocument *aGDoc, const QString &name);
   ~SetPropertyCmd();
 
-  void execute();
   void unexecute();
 
-private:
-  GStyle st;
+protected:
   QPtrVector<GObject> objects;
   QMemArray<GStyle> states;
+};
+
+class SetOutlineCmd : public SetPropertyCmd
+{
+public:
+  SetOutlineCmd(GDocument *aGDoc, bool b);
+  void execute();
+
+private:
+  bool outline;
+};
+
+class SetOutlineOpacityCmd : public SetPropertyCmd
+{
+public:
+  SetOutlineOpacityCmd(GDocument *aGDoc, int o);
+  void execute();
+
+private:
+  int opacity;
+};
+
+class SetOutlineColorCmd : public SetPropertyCmd
+{
+public:
+  SetOutlineColorCmd(GDocument *aGDoc, const KoColor &c);
+  void execute();
+
+private:
+  KoColor color;
+};
+
+class SetOutlineWidthCmd : public SetPropertyCmd
+{
+public:
+  SetOutlineWidthCmd(GDocument *aGDoc, int w);
+  void execute();
+
+private:
+  int width;
 };
 
 #endif
