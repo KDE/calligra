@@ -265,6 +265,7 @@ public slots:
     void tableDeleteCol();
     void tableJoinCells();
     void tableSplitCells();
+    void tableSplitCells(int col, int row);
     void tableProtectCells();
     void tableUngroupTable();
     void tableDelete();
@@ -472,7 +473,6 @@ protected:
     void borderShowValues();
     void borderSet();
 
-    void tableSplitCells(int col, int row);
 
     void startKSpell();
     void clearSpellChecker();

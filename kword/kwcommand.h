@@ -36,6 +36,8 @@ class KWFrameSet;
 class KWTableStyle;
 class KWTableTemplate;
 class KWTableFrameSet;
+class RemovedRow;
+class RemovedColumn; 
 class KWPartFrameSet;
 class KWDocument;
 class KoCustomVariable;
@@ -491,16 +493,17 @@ class KWInsertColumnCommand : public KNamedCommand
 public:
     /* for the last parameter, _maxRight, you should pass the maximum offset that the table can use at its right (normally m_maxRight - m_pTable->boundingRect().left())*/
     KWInsertColumnCommand( const QString &name, KWTableFrameSet * _table, int _pos, double _maxRight);
-    ~KWInsertColumnCommand() {}
+    ~KWInsertColumnCommand();
 
     void execute();
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QPtrList<KWFrameSet> m_ListFrameSet;
+    RemovedColumn *m_rc;
     unsigned int m_colPos;
     double m_maxRight; // this is the maximum x of the right part of the table (used so that the table does no go off the page)
     double m_oldWidth; // will be 0 after execute() if the width of the table was not changed by the operation
+    bool m_inserted;
 };
 
 
@@ -511,14 +514,15 @@ class KWInsertRowCommand : public KNamedCommand
 {
 public:
     KWInsertRowCommand( const QString &name, KWTableFrameSet * _table, int _pos);
-    ~KWInsertRowCommand() {}
+    ~KWInsertRowCommand();
 
     void execute();
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QPtrList<KWFrameSet> m_ListFrameSet;
+    RemovedRow *m_rr;
     unsigned int m_rowPos;
+    bool m_inserted;
 };
 
 /**
@@ -528,17 +532,15 @@ class KWRemoveRowCommand : public KNamedCommand
 {
 public:
     KWRemoveRowCommand( const QString &name, KWTableFrameSet * _table, int _pos);
-    ~KWRemoveRowCommand() {}
+    ~KWRemoveRowCommand();
 
     void execute();
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QPtrList<KWFrameSet> m_ListFrameSet;
-    QPtrList<KWFrame> m_copyFrame;
-    unsigned int m_rowPos;
+    RemovedRow *m_rr; 
+    uint m_rowPos;
 };
-
 
 /**
  * Command created when removing a column
@@ -547,15 +549,14 @@ class KWRemoveColumnCommand : public KNamedCommand
 {
 public:
     KWRemoveColumnCommand( const QString &name, KWTableFrameSet * _table, int _pos);
-    ~KWRemoveColumnCommand() {}
+    ~KWRemoveColumnCommand();
 
     void execute();
     void unexecute();
 protected:
     KWTableFrameSet *m_pTable;
-    QPtrList<KWFrameSet> m_ListFrameSet;
-    QPtrList<KWFrame> m_copyFrame;
-    unsigned int m_colPos;
+    RemovedColumn *m_rc; 
+    uint m_colPos;
 };
 
 /**

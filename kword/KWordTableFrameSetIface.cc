@@ -61,10 +61,15 @@ void KWordTableFrameSetIface::deselectAll()
 
 DCOPRef KWordTableFrameSetIface::getCell( int pos )
 {
-    if( pos>=(int)m_table->getNumCells())
+    // This method now sucks
+    KWTableFrameSet::TableIter i(m_table);
+    int p = 0;
+    for(; i && p <= pos; ++i,++p)
+    if( ! i.current() )
         return DCOPRef();
+    
     return DCOPRef( kapp->dcopClient()->appId(),
-		    m_table->getCell(pos)->dcopObject()->objId() );
+	    i->dcopObject()->objId() );
 }
 
 DCOPRef KWordTableFrameSetIface::getCell( uint row, uint col )

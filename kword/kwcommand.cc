@@ -1108,17 +1108,17 @@ KWUngroupTableCommand::KWUngroupTableCommand( const QString &name, KWTableFrameS
     m_pTable(_table)
 {
     m_ListFrame.clear();
-    for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
-        m_ListFrame.append(m_pTable->getCell( i ));
+    for ( KWTableFrameSet::TableIter i(m_pTable); i ; ++i ) {
+        m_ListFrame.append( i.current() );
     }
 }
 
 void KWUngroupTableCommand::execute()
 {
     KWDocument * doc = m_pTable->kWordDocument();
-    for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
-        m_pTable->getCell( i )->setGroupManager( 0L );
-        doc->addFrameSet(m_pTable->getCell( i ));
+    for ( KWTableFrameSet::TableIter i(m_pTable) ; i ; ++i ) {
+        i->setGroupManager( 0L );
+        doc->addFrameSet( i.current() );
     }
     m_pTable->ungroup();
     doc->removeFrameSet(m_pTable);
@@ -1202,12 +1202,17 @@ void KWDeleteTableCommand::unexecute()
 KWInsertColumnCommand::KWInsertColumnCommand( const QString &name, KWTableFrameSet * _table, int _col, double _maxRight ):
     KNamedCommand(name),
     m_pTable(_table),
+    m_rc(new RemovedColumn()),
     m_colPos(_col),
     m_maxRight(_maxRight),
     m_oldWidth(0)
 {
     Q_ASSERT(m_pTable);
-    m_ListFrameSet.clear();
+}
+
+KWInsertColumnCommand::~KWInsertColumnCommand()
+{
+    delete m_rc;
 }
 
 void KWInsertColumnCommand::execute()
@@ -1224,11 +1229,11 @@ void KWInsertColumnCommand::execute()
         double newColSize = newTableWidth / (m_pTable->getCols()+1);
         double resizeTableWidth = m_maxRight - m_pTable->boundingRect().left();
         m_pTable->resizeWidth(resizeTableWidth - newColSize);
-        m_pTable->insertCol(m_colPos, m_ListFrameSet, QPtrList<KWFrame>(), newColSize);
+        m_pTable->insertNewCol(m_colPos, newColSize);
     }
     else
     {   // simply insert the column without asking for a specific size :
-        m_pTable->insertCol(m_colPos, m_ListFrameSet);
+        m_pTable->insertNewCol(m_colPos);
     }
     Q_ASSERT(m_pTable->boundingRect().right() <= m_maxRight);
     doc->updateAllFrames();
@@ -1241,17 +1246,9 @@ void KWInsertColumnCommand::unexecute()
 {
     kdDebug() << "KWInsertColumnCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    if(m_ListFrameSet.isEmpty())
-    {
-        for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
-            KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
-            if(cell->firstCol() == m_colPos)
-                m_ListFrameSet.append(cell);
-        }
-    }
     doc->terminateEditing(m_pTable);
     doc->frameSelectedChanged();
-    m_pTable->deleteCol( m_colPos);
+    m_pTable->deleteCol(m_colPos, *m_rc);
     // now undo the resize of the table if necessary:
     if (m_oldWidth) {
         // yes, the table was resized, let's undo that :
@@ -1268,17 +1265,28 @@ void KWInsertColumnCommand::unexecute()
 KWInsertRowCommand::KWInsertRowCommand( const QString &name, KWTableFrameSet * _table, int _row ):
     KNamedCommand(name),
     m_pTable(_table),
-    m_rowPos(_row)
+    m_rr(new RemovedRow()),
+    m_rowPos(_row),
+    m_inserted(false)
 {
     Q_ASSERT(m_pTable);
-    m_ListFrameSet.clear();
+}
+
+KWInsertRowCommand::~KWInsertRowCommand()
+{
+    delete m_rr;
 }
 
 void KWInsertRowCommand::execute()
 {
     kdDebug() << "KWInsertRowCommand::execute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    m_pTable->insertRow( m_rowPos,m_ListFrameSet);
+    if(m_inserted) 
+        m_pTable->reInsertRow(*m_rr);
+    else {
+        m_inserted = true;
+        m_pTable->insertNewRow(m_rowPos);  //only happens the first time
+    }
     doc->updateAllFrames();
     doc->layout();
     doc->updateResizeHandles( );
@@ -1289,16 +1297,10 @@ void KWInsertRowCommand::unexecute()
 {
     kdDebug() << "KWInsertRowCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    if(m_ListFrameSet.isEmpty())
-    {
-        for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ ) {
-            KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
-            if(cell->firstRow() == m_rowPos)
-                m_ListFrameSet.append(cell);
-        }
-    }
+    
     doc->terminateEditing(m_pTable);
-    m_pTable->deleteRow( m_rowPos);
+    m_pTable->deleteRow( m_rowPos, *m_rr);
+
     doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
@@ -1307,14 +1309,18 @@ void KWInsertRowCommand::unexecute()
 }
 
 
-
-
 KWRemoveRowCommand::KWRemoveRowCommand( const QString &name, KWTableFrameSet * _table, int _row ):
     KNamedCommand(name),
     m_pTable(_table),
+    m_rr(new RemovedRow()),
     m_rowPos(_row)
 {
     Q_ASSERT(m_pTable);
+}
+
+KWRemoveRowCommand::~KWRemoveRowCommand()
+{
+    delete m_rr;
 }
 
 void KWRemoveRowCommand::execute()
@@ -1323,19 +1329,8 @@ void KWRemoveRowCommand::execute()
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
 
-    m_ListFrameSet.clear();
-    m_copyFrame.clear();
-    for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ )
-    {
-        KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
-        if(cell->firstRow() == m_rowPos)
-        {
-            m_ListFrameSet.append(cell);
-            m_copyFrame.append(cell->frame(0)->getCopy());
-        }
-    }
+    m_pTable->deleteRow( m_rowPos, *m_rr);
 
-    m_pTable->deleteRow( m_rowPos);
     doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
@@ -1347,20 +1342,25 @@ void KWRemoveRowCommand::unexecute()
 {
     kdDebug() << "KWRemoveRowCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    m_pTable->insertRow( m_rowPos,m_ListFrameSet,m_copyFrame);
+    m_pTable->reInsertRow(*m_rr);
     doc->updateAllFrames();
     doc->layout();
     doc->updateResizeHandles( );
     doc->repaintAllViews();
 }
 
-
 KWRemoveColumnCommand::KWRemoveColumnCommand( const QString &name, KWTableFrameSet * _table, int _col ):
     KNamedCommand(name),
     m_pTable(_table),
+    m_rc(new RemovedColumn()),
     m_colPos(_col)
 {
     Q_ASSERT(m_pTable);
+}
+
+KWRemoveColumnCommand::~KWRemoveColumnCommand()
+{
+    delete m_rc;
 }
 
 void KWRemoveColumnCommand::execute()
@@ -1369,19 +1369,7 @@ void KWRemoveColumnCommand::execute()
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
 
-    m_ListFrameSet.clear();
-    m_copyFrame.clear();
-    for ( unsigned int i = 0; i < m_pTable->getNumCells(); i++ )
-    {
-        KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->getCell( i ));
-        if(cell->firstCol() == m_colPos)
-        {
-            m_ListFrameSet.append(cell);
-            m_copyFrame.append(cell->frame(0)->getCopy());
-        }
-    }
-
-    m_pTable->deleteCol( m_colPos);
+    m_pTable->deleteCol( m_colPos, *m_rc);
     doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
@@ -1393,7 +1381,7 @@ void KWRemoveColumnCommand::unexecute()
 {
     kdDebug() << "KWRemoveColumnCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    m_pTable->insertCol( m_colPos,m_ListFrameSet,m_copyFrame);
+    m_pTable->reInsertCol(*m_rc);
     doc->updateAllFrames();
     doc->layout();
     doc->updateResizeHandles( );

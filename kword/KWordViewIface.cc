@@ -245,6 +245,11 @@ void KWordViewIface::tableSplitCells()
     view->tableSplitCells();
 }
 
+void KWordViewIface::tableSplitCells(uint rows, uint cols)
+{
+    view->tableSplitCells(cols, rows);
+}
+
 void KWordViewIface::tableUngroupTable()
 {
     view->tableUngroupTable();

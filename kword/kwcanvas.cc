@@ -547,7 +547,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     KWTableFrameSet::Cell *cell = table->getCellByPos( table->leftWithoutBorder(), m_doc->unzoomItY(normalPoint.y())  );
                     if (cell)
                     {
-                        table->selectRow( cell->getRow() );
+                        table->selectRow( cell->firstRow() );
                         curTable = table;
                         emit frameSelectedChanged();
                     }
@@ -558,7 +558,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                     KWTableFrameSet::Cell *cell = table->getCellByPos( m_doc->unzoomItX(normalPoint.x()), table->topWithoutBorder()  );
                     if (cell)
                     {
-                        table->selectCol( cell->getColumn() );
+                        table->selectCol( cell->firstCol() );
                         curTable = table;
                         emit frameSelectedChanged();
                     }
@@ -1068,8 +1068,8 @@ void KWCanvas::mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed )
         //kdDebug() << "KWCanvas::mmEditFrameMove TABLESMOVED" << endl;
         for ( unsigned int i = 0; i < tablesMoved.count(); i++ ) {
             KWTableFrameSet *table = tablesMoved.at( i );
-            for ( unsigned k = 0; k < table->getNumCells(); k++ ) {
-                KWFrame * frame = table->getCell( k )->frame( 0 );
+            for ( KWTableFrameSet::TableIter k(table) ; k ; ++k ) {
+                KWFrame * frame = k->frame( 0 );
                 QRect oldRect( m_viewMode->normalToView( frame->outerRect() ) );
                 frame->moveTopLeft( frame->topLeft() + _move );
                 // Calculate new rectangle for this frame

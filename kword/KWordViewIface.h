@@ -59,6 +59,7 @@ k_dcop:
     virtual int  tableDeleteCol(uint col);
     virtual void tableJoinCells();
     virtual void tableSplitCells();
+    virtual void tableSplitCells(uint rows, uint cols);
     virtual void tableUngroupTable();
 
     virtual void insertPicture();

@@ -30,6 +30,7 @@ DESCRIPTION
 #include <kwframe.h>
 #include <kwtextframeset.h>
 #include <qptrlist.h>
+#include <qvaluevector.h>
 #include <qobject.h>
 #include <qstring.h>
 #include <korichtext.h>
@@ -40,6 +41,8 @@ class QPainter;
 class KWAnchor;
 class KWordFrameSetIface;
 
+class RemovedRow;
+class RemovedColumn;
 /**
  * Class: KWTableFrameSet
  *
@@ -64,6 +67,12 @@ public:
         unsigned int m_row, m_col;
         unsigned int m_rows, m_cols;
 
+        bool m_isJoinedCell;
+        bool m_marker;
+        void calcIfJoinedCell() {
+            m_isJoinedCell = ( (m_rows > 1) || (m_cols > 1) );
+	}
+
     public:
         // constructor
         Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString & name = QString::null );
@@ -83,13 +92,25 @@ public:
 
         void setFirstRow(uint row) { m_row = row; }
         void setFirstCol(uint col) { m_col = col; }
-        void setRowSpan(uint rows) { m_rows = rows; }
-        void setColSpan(uint cols) { m_cols = cols; }
+        void setRowSpan(uint rows) { 
+	    m_rows = rows;
+            calcIfJoinedCell();
+       	}
+        void setColSpan(uint cols) {
+            m_cols = cols;
+            calcIfJoinedCell();
+        }
 	       
+        bool isFirstGridPosn(uint row, uint col) const {
+		return (row == m_row) && (col == m_col);
+	}	
+	
+	bool isFirstGridPosnFast(uint row, uint col) const {
+		if(!m_isJoinedCell) return true;
+		return (row == m_row) && (col == m_col);
+	}	
         virtual void addFrame(KWFrame *_frame, bool recalc = true);
 
-        uint getRow() const {return m_row;}
-        uint getColumn() const {return m_col;}
         KWTableFrameSet *table() const { return grpMgr; }
         bool isAboveOrLeftOf( unsigned row, unsigned col ) const;
         bool containsCell( unsigned row, unsigned col ) const;
@@ -107,14 +128,20 @@ public:
          * set zorder for all frames in this cell
          */
         void setZOrder();
+        bool isJoinedCell() const { return m_isJoinedCell; }
+        void clearMark() { m_marker = false; }
+        void setMark() { m_marker = true; }
+        bool marked() { return m_marker; }
+
     };
     friend class Cell;
 
     // Represents a row, for direct access to cells with m_rowArray[row][column]
     class Row {
     public:
-        Cell* operator[] ( int i ) const { return i < (int)size() ? m_cellArray[i] : 0; }
+        Cell* operator[] ( uint i ) const { return i < size() ? m_cellArray[i] : 0; }
         uint size() const { return m_cellArray.size(); }
+        uint count() const { return m_cellArray.count(); }
 
         void addCell( Cell *cell );
         void removeCell( Cell* cell );
@@ -125,6 +152,114 @@ public:
 
     };
 
+    /** The three different types of TableIterators */
+    enum {VISIT_GRID = 1, VISIT_CELL = 2, CHECKED = 3};
+
+    /**
+      All the TableIterator templates are the same, except for the pre-increment
+      operator (operator++). There is a specialised version of this 
+      operator method for each iterator type:
+
+      VISIT_GRID: This iterator visits each grid position once, ie every
+      location in the m_rowArray rows. When some cells are joined, this 
+      iterator will visit those cells more than once.
+
+      VISIT_CELL: This iterator visits each cell in the table once, whether
+      or not some of the cells are joined. If you want to visit all the cells
+      fast and perform some read-only operation, this is the one to use.
+
+      CHECKED: Also visits each cell once, but has some other benefits. Slower.
+
+      Note that all the iterators have restrictions on the state that the 
+      table data structures are in before and while they are being used. 
+      This includes m_rowArray, the Rows and Cells but not m_colPositions and
+      m_rowPositions, as they are not used during the traversal.
+      The conditions include: 
+      ( A ) All positions in m_rowArray must be occupied by a valid cell, ie must
+      not be null.
+      ( B ) The Cell instance variables (m_row, m_rows, etc) must correctly 
+      correspond to where the cells are in m_rowArray.
+      ( C ) The m_rows and m_cols instance variables of the table are also correct.
+      Taken together, these conditions are pretty much equivalent to the 
+      validate() function passing. These conditions may not hold in the middle
+      of a method when table data structures are being manipulated.
+
+      This table shows what conditions are necessary for each type of iterator:
+
+                                      A      B      C
+      TableIterator<VISIT_GRID>    |  x   |      |  x   |
+      TableIterator<VISIT_CELL>    |  x   |  x   |  x   |
+      TableIterator<CHECKED>       |      |      |  x   |
+      MarkedIterator               |  x   |      |  x   |
+
+      The only iterator that can be used when their are null positions in the 
+      table is the checked iterator.
+      Note that both the Checked and Marked Iterators traverse the table twice, 
+      once to clear the m_marked members in the cells (done in constructor) and
+      then again to do the actual traversal. Because they use m_marked, only one
+      of these iterators can be used at once.
+
+      Don't use these classes directly in code, use the provided typedefs. That
+      makes it easy to do more crazy template stuff later on. :-)  Templates
+      are used here rather than inheritance to avoid virtual call overhead.
+    */
+    template<int VisitStyle = VISIT_CELL>
+    class TableIterator {
+    public:
+	/**
+	 *	@param The table to iterate over. The current item is set to the Cell
+	 *	at row 0, column 0
+	 */	
+	TableIterator (KWTableFrameSet *table);
+
+	Cell* toFirstCell ();
+        void goToCell(Cell*);
+
+	operator Cell* () const { return m_cell; }
+	Cell * current() const;
+	Cell * operator->() { return m_cell; }
+	Cell * operator++ ();
+
+    protected:
+	KWTableFrameSet *m_table;
+	void set_limits(uint left, uint right, uint high, uint low)
+	{
+            m_limit[LEFT] = left;
+            m_limit[RIGHT] = right;
+            m_limit[HIGH] = high;
+            m_limit[LOW] = low;
+	}
+    private:
+	
+	Cell *m_cell;
+	uint m_row;
+	uint m_col;
+
+	enum Direction {LEFT, RIGHT, HIGH, LOW};
+	static const uint DIRECTION_SIZE = 4;	
+	uint m_limit[DIRECTION_SIZE];
+    };
+
+    typedef TableIterator<VISIT_CELL> TableIter;
+    typedef TableIterator<VISIT_GRID> GridIter;
+    typedef TableIterator<CHECKED> CheckedIter;
+
+    /** 
+     * This iterator does not look at the Cell instance variables 
+     * during traversal, (except m_marker), so they can be safely 
+     * changed during the traversal. However, to the user it does 
+     * not visit every grid position, it visits each cell once.
+     * (in spite of the fact that it inherits from a grid-visiting
+     * iterator .
+     * Only one MarkedIterator can be used at once.  See TableIterator
+     */    
+    class MarkedIterator : public GridIter {
+    public:
+        MarkedIterator(KWTableFrameSet *table);
+        Cell *operator++();	// overriden from base but not virtual   
+
+    };
+    
 
     /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
@@ -158,7 +293,6 @@ public:
                            KWFrameSetEdit *, KWViewMode *, bool ) {}
 
     // Frameset management
-    Cell *getCell( int i ) { return m_cells.at( i ); }
     Cell *getCell( unsigned int row, unsigned int col );
     Cell *getCellByPos( double x, double y );
 
@@ -213,13 +347,13 @@ public:
     int rowEdgeAt( double y ) const;
 
     /** returns the number of rows */
-    unsigned int getRows()const { return m_rows; }
+    unsigned int getRows() const { return m_rows; }
     /** returns the number of columns */
-    unsigned int getCols()const { return m_colPositions.count()-1; }
+    unsigned int getCols() const { return m_cols; }
 
     /** returns the number of cells the table contains, this includes
      * temporary headers. */
-    unsigned int getNumCells()const { return m_cells.count(); }
+    unsigned int getNumCells()const { return m_nr_cells; }
 
     /** returns the fact if one cell (==frame) has been selected */
     bool hasSelectedFrame();
@@ -265,21 +399,27 @@ public:
     bool isOneSelected( unsigned int &row, unsigned int &col );
 
     /** insert a row of new cells, use the getCols() call to decide how many cells are created */
-    void insertRow( unsigned int _idx,QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(),QPtrList<KWFrame>listFrame=QPtrList<KWFrame>(), bool _recalc = true, bool _removeable = false );
+    void insertNewRow( uint _idx, bool _recalc = true, bool _removeable = false );
     /** insert a column of new cells use the getRows() call to decide how many cells are created */
-    void insertCol( unsigned int _idx,QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(), QPtrList<KWFrame> listFrame=QPtrList<KWFrame>(), double width = KWTableFrameSet::m_sDefaultColWidth);
+    void insertNewCol( uint _idx, double width = KWTableFrameSet::m_sDefaultColWidth);
 
-    /** remove all the cells in a certain row */
-    void deleteRow( unsigned int _idx, bool _recalc = true );
-    /** remove all the cells in a certain col */
-    void deleteCol( unsigned int _idx);
+    /** Remove all the cells in a certain row */
+    void deleteRow( uint _idx, RemovedRow &rr, bool _recalc = true);
+    
+    /** remove all the cells in a certain column */
+    void deleteCol( uint _idx, RemovedColumn &rc);
+
+    /** replace a row that was removed with deleteRow() */
+    void reInsertRow(RemovedRow &row);
+    /** replace a column that was removed with deleteCol() */
+    void reInsertCol(RemovedColumn &col);	
 
     // the boolean actually works, but is not saved (to xml) yet :(
     void setShowHeaderOnAllPages( bool s ) { m_showHeaderOnAllPages = s; }
-    bool getShowHeaderOnAllPages()const { return m_showHeaderOnAllPages; }
+    bool getShowHeaderOnAllPages() const { return m_showHeaderOnAllPages; }
 
     /** redraw contents of temp headers. */
-    bool hasTempHeaders()const { return m_hasTmpHeaders; }
+    bool hasTempHeaders() const { return m_hasTmpHeaders; }
 
     /** release the constrains of the table and allow all frames to be
      * edited apart from each other. (ps. there is no way back..) */
@@ -292,7 +432,9 @@ public:
     /** merge cells to one cell. Will loose all text not in top-left cell */
     KCommand *joinCells(unsigned int colBegin=0,unsigned int rowBegin=0, unsigned int colEnd=0,unsigned int rowEnd=0);
     /** split selected cell into a number of cells */
-    KCommand * splitCell(unsigned int intoRows, unsigned int intoCols, int _col=-1, int _row=-1,QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(),QPtrList<KWFrame>listFrame=QPtrList<KWFrame>());
+    KCommand * splitCell(unsigned int intoRows, unsigned int intoCols, int _col=-1, int _row=-1,
+        QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(),
+        QPtrList<KWFrame>listFrame=QPtrList<KWFrame>());
 
     /** display formatting information */
     void viewFormatting( QPainter &painter, int zoom );
@@ -399,12 +541,24 @@ private:
     /** returns the absolute top-position of the row in the grid */
     double getPositionOfRow(unsigned int row, bool bottom=false);
 
-    unsigned int m_rows;
+    void insertEmptyColumn(uint index);
+    /** 
+     *  insert a row in m_rowArray at position index. rows after 
+     *  the inserted row are moved back.
+     */
+    void insertRowVector(uint index, Row *row);
+    /**
+     *  remove the row from m_rowArray at position index.
+     *  rows after are moved forward
+     *  @return the removed row
+     */
+    Row* removeRowVector(uint index);
+
+    unsigned int m_rows, m_cols, m_nr_cells;
     bool m_showHeaderOnAllPages;
     bool m_hasTmpHeaders;
     bool m_active;
-    QPtrVector< Row > m_rowArray; // the new data structure
-    QPtrList<Cell> m_cells; // the old data structure (will disappear)
+    QPtrVector< Row > m_rowArray;
 
     /** The list of page boundaries.
     *   Each page the table spans has an entry in this list which points to the last _line_
@@ -413,8 +567,101 @@ private:
     *   empty.
     */
     QValueList<unsigned int> m_pageBoundaries;
-    unsigned int redrawFromCol;
+    unsigned int m_redrawFromCol;
     QValueList<double> m_rowPositions, m_colPositions;
+};
+
+
+// all three templates specialise operator++
+template<>	
+KWTableFrameSet::Cell*
+KWTableFrameSet::TableIterator<KWTableFrameSet::VISIT_CELL>::operator++ ();
+
+template<>	
+KWTableFrameSet::Cell*
+KWTableFrameSet::TableIterator<KWTableFrameSet::VISIT_GRID>::operator++ ();
+
+template<>	
+KWTableFrameSet::Cell*
+KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::operator++ ();
+
+template<int VisitStyle>
+KWTableFrameSet::TableIterator<VisitStyle>::TableIterator(KWTableFrameSet *table) :
+	m_table(table)
+{
+	Q_ASSERT(m_table);
+	set_limits(0, m_table->getCols() - 1, 0, m_table->getRows() - 1);
+	toFirstCell();
+}
+
+// CHECKED specialises the constructor 
+template<>
+KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::TableIterator(KWTableFrameSet *table);
+
+	
+template<int VisitStyle>
+KWTableFrameSet::Cell* 
+KWTableFrameSet::TableIterator<VisitStyle>::toFirstCell (){
+	m_cell = m_table->getCell(m_limit[HIGH], m_limit[LEFT]);
+	Q_ASSERT(m_cell);
+	m_row = m_cell->firstRow();
+	m_col = m_cell->firstCol();
+	return m_cell;
+}
+
+template<int VisitStyle>
+void 
+KWTableFrameSet::TableIterator<VisitStyle>::goToCell(KWTableFrameSet::Cell *cell)
+{
+	m_cell = cell;
+	m_row = m_cell->firstRow();
+	m_col = m_cell->firstCol();
+}
+
+// CHECKED specialises to first cell
+template<>
+KWTableFrameSet::Cell* 
+KWTableFrameSet::TableIterator<KWTableFrameSet::CHECKED>::toFirstCell ();
+
+
+template<int VisitStyle>
+KWTableFrameSet::Cell* 
+KWTableFrameSet::TableIterator<VisitStyle>::current() const {
+	return m_cell;
+}
+
+/**
+ * RemovedRow and RemovedColumn implement the Memento design pattern
+ */
+class RemovedRow {
+
+    KWTableFrameSet::Row *m_row;
+    // The row index that this row used to occupy
+    uint m_index;
+    double m_rowHeight;
+
+    uint index() const { return m_index; }
+    double height() const { return m_rowHeight; }
+    KWTableFrameSet::Row *takeRow();
+    KWTableFrameSet::Row *row() { return m_row; }
+
+    friend class KWTableFrameSet;
+public:
+    RemovedRow();
+    ~RemovedRow();
+};
+
+class RemovedColumn {
+
+    QPtrList<KWTableFrameSet::Cell> m_column;
+    QValueList<bool> m_removed;
+    uint m_index;
+    double m_width;
+    bool m_initialized;
+
+    friend class KWTableFrameSet;
+public:
+    RemovedColumn();
 };
 
 /**

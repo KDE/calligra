@@ -3839,7 +3839,7 @@ int KWView::tableDeleteRow(const QValueList<uint>& rows, KWTableFrameSet *table 
 
     KMacroCommand *macro = new KMacroCommand(i18n("Remove Rows"));
 
-    for (uint i = 0 ; i < rows.count() ; i++) {
+    for (int i = rows.count() - 1; i >= 0 ; i--) {
         KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove Row"),
             table, rows[i] );
         macro->addCommand(cmd);
@@ -3865,7 +3865,7 @@ int KWView::tableDeleteCol(const QValueList<uint>& cols, KWTableFrameSet *table)
 
     KMacroCommand *macro = new KMacroCommand(i18n("Remove Columns"));
 
-    for (uint i = 0 ; i < cols.count() ; i++) {
+    for (int i = cols.count() - 1;  i >= 0; i--) {
         KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove Column"),
             table, cols[i] );
         macro->addCommand(cmd);
