@@ -1,11 +1,10 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="1">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="2">
 <MenuBar>
  <Menu name="edit"><text>&amp;Edit</text>
    <Action name="copyStencil"/>
    <Separator/>
    <Action name="selectAllStencils"/>
    <Action name="unselectAllStencils"/>
-   <Separator/>
  </Menu>
  <Menu name="view"><text>&amp;View</text>
    <Action name="showPageBorders"/>
@@ -14,7 +13,6 @@
    <Action name="showRulers"/>
    <Action name="showGrid"/>
    <Action name="showGuides"/>
-   <Separator/>
  </Menu>
 </MenuBar>
 <ToolBar name="mainToolBar"><text>View</text>

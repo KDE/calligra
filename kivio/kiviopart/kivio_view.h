@@ -307,6 +307,9 @@ private:
     KToggleAction* showRulers;
     KToggleAction* showGrid;
     KToggleAction* showGuides;
+    KAction *m_selectAll;
+    KAction *m_selectNone;
+    KAction *m_editCopy;
   bool m_bShowPageBorders;
   bool m_bShowPageMargins;
   bool m_bShowRulers;

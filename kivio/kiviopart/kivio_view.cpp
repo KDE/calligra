@@ -353,11 +353,11 @@ void KivioView::setupActions()
   (void) new KAction( i18n("Align && Distribute..."), ALT+Key_A, this, SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
 
   KStdAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
-  KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
+  m_editCopy=KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
   KStdAction::paste( this, SLOT(pasteStencil()), actionCollection(), "pasteStencil" );
 
-  KStdAction::selectAll( this, SLOT( selectAllStencils() ), actionCollection(), "selectAllStencils" );
-  (void) new KAction( i18n("Select None"), CTRL+SHIFT+Key_A, this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils" );
+  m_selectAll=KStdAction::selectAll( this, SLOT( selectAllStencils() ), actionCollection(), "selectAllStencils" );
+  m_selectNone=new KAction( i18n("Select None"), CTRL+SHIFT+Key_A, this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils" );
 
   (void) new KAction( i18n("Group Selected Stencils"), "group_stencils", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
   (void) new KAction( i18n("Ungroup Selected Stencils"), "ungroup_stencils", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
@@ -516,6 +516,9 @@ void KivioView::updateReadWrite( bool readwrite )
       showRulers->setEnabled( true );
       showGrid->setEnabled( true );
       showGuides->setEnabled( true );
+      m_selectAll->setEnabled( true );
+      m_selectNone->setEnabled( true );
+      m_editCopy->setEnabled( true );
   }
   m_showPage->setEnabled( true );
   m_hidePage->setEnabled( true );
