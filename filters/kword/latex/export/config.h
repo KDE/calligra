@@ -110,16 +110,16 @@ class Config
 		void setEmbeded(bool emb) { _isEmbeded = emb; }
 		/** The class can be article, book, letter, report or slides. It's the type of the
 		 * latex document. */
-		void setClass(QString lclass) { _class = lclass; }
-		void setQuality(QString quality) { _quality = quality; }
+		void setClass(const QString &lclass) { _class = lclass; }
+		void setQuality(const QString &quality) { _quality = quality; }
 		void setDefaultFontSize(int size) { _defaultFontSize = size; }
 
 		void convertPictures(bool state) { _convertPictures = state; }
-		void setPicturesDir(QString dir) { _picturesDir = dir; }
+		void setPicturesDir(const QString &dir) { _picturesDir = dir; }
 
-		void setEncoding(QString enc) { _encoding = enc; }
-		void addLanguage(QString l) { _languagesList.append(l); }
-		void setDefaultLanguage(QString l) { _defaultLanguage = l; }
+		void setEncoding(const QString &enc) { _encoding = enc; }
+		void addLanguage(const QString &l) { _languagesList.append(l); }
+		void setDefaultLanguage(const QString &l) { _defaultLanguage = l; }
 		
 		void setIndentation(int indent) { _tabulation = indent; }
 		
