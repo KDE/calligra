@@ -51,7 +51,7 @@ public:
 	MSWriteImportFactory () : KGenericFactory <MSWriteImport, KoFilter> ("kwordmswriteimport")
 	{
 	}
-	
+
 protected:
 	virtual void setupTranslations (void)
 	{
@@ -70,17 +70,17 @@ class WRIDevice : public MSWrite::Device
 {
 private:
 	FILE *m_infp;
-	
+
 public:
 	WRIDevice () : m_infp (NULL)
 	{
 	}
-	
+
 	~WRIDevice ()
 	{
 		closeFile ();
 	}
-	
+
 	bool openFile (const char *fileName)
 	{
 		m_infp = fopen (fileName, "rb");
@@ -92,7 +92,7 @@ public:
 
 		return true;
 	}
-	
+
 	bool closeFile (void)
 	{
 		if (m_infp)
@@ -102,13 +102,13 @@ public:
 				error (MSWrite::Error::FileError, "could not close input file\n");
 				return false;
 			}
-			
+
 			m_infp = NULL;
 		}
-		
+
 		return true;
 	}
-	
+
 	bool read (MSWrite::Byte *buf, const MSWrite::DWord numBytes)
 	{
 		if (fread (buf, 1, (size_t) numBytes, m_infp) != (size_t) numBytes)
@@ -116,16 +116,16 @@ public:
 			error (MSWrite::Error::FileError, "could not read from input file\n");
 			return false;
 		}
-			
+
 		return true;
 	}
-	
+
 	bool write (const MSWrite::Byte *, const MSWrite::DWord)
 	{
 		error (MSWrite::Error::InternalError, "writing to an input file?\n");
 		return false;
 	}
-	
+
 	bool seek (const long offset, const int whence)
 	{
 		if (fseek (m_infp, offset, whence))
@@ -133,25 +133,25 @@ public:
 			error (MSWrite::Error::InternalError, "could not seek input file\n");
 			return false;
 		}
-			
+
 		return true;
 	}
-	
+
 	long tell (void)
 	{
 		return ftell (m_infp);
 	}
-	
+
 	void debug (const char *s)
 	{
 		kdDebug (30509) << s;
 	}
-	
+
 	void debug (const int i)
 	{
 		kdDebug (30509) << i;
 	}
-	
+
 	void error (const int errorCode, const char *message,
 					const char * /*file*/ = "", const int /*lineno*/ = 0,
 					MSWrite::DWord /*tokenValue*/ = NoToken)
@@ -226,9 +226,9 @@ private:
 	bool m_hasHeader, m_isHeaderOnFirstPage;
 	bool m_hasFooter, m_isFooterOnFirstPage;
 	bool m_writeHeaderFirstTime, m_writeFooterFirstTime;
-	
+
 	int inWhat;
-	
+
 	enum inWhatPossiblities
 	{
 		Nothing,
@@ -236,7 +236,7 @@ private:
 		Footer,
 		Body
 	};
-	
+
 	int m_startingPageNumber;
 
 	KoFilterChain *m_chain;
@@ -260,7 +260,7 @@ private:
 	// picture counters
 	int m_numPictures;
 	QString m_pictures;
-	
+
 	QString m_objectFrameset;
 
 	MSWrite::List <WRIObject> m_objectList;
@@ -269,12 +269,12 @@ private:
 	bool m_paraIsImage;
 
 	MSWriteImport *m_koLink;
-	
+
 	// XML output that is held back until after "Text Frameset 1" is output
 	// (i.e. header & footer must come after the Body in KWord)
 	bool m_delayOutput;
 	QString m_heldOutput;
-	
+
 	void delayOutput (const bool yes)
 	{
 		m_delayOutput = yes;
@@ -287,7 +287,7 @@ private:
 
 		if (m_outfile->writeBlock (strUtf8, strLength) != strLength)
 			ErrorAndQuit (MSWrite::Error::FileError, "could not write delayed output\n");
-		
+
 		m_heldOutput = "";
 		return true;
 	}
@@ -324,7 +324,7 @@ public:
 	{
 		m_chain = chain;
 	}
-	
+
 	bool writeDocumentBegin (const MSWrite::Word,
 						 				const MSWrite::PageLayout *pageLayout)
 	{
@@ -339,7 +339,7 @@ public:
 		//
 		// store page dimensions for now
 		//
-		
+
 		// page width & height
 		m_pageWidth = Twip2Point (pageLayout->getPageWidth ());
 		m_pageHeight = Twip2Point (pageLayout->getPageHeight ());
@@ -369,7 +369,7 @@ public:
 				  				<< " footerFromTop: " << m_footerFromTop << endl;
 
 		m_startingPageNumber = pageLayout->getPageNumberStart ();
-		
+
 		return true;
 	}
 
@@ -384,7 +384,7 @@ public:
 		if (m_hasHeader)
 			if (m_headerFromTop < m_topMargin)
 				m_topMargin = m_headerFromTop;
-		
+
 		if (m_hasFooter)
 			if (m_pageHeight - m_footerFromTop < m_bottomMargin)
 				m_bottomMargin = m_pageHeight - m_footerFromTop;
@@ -394,7 +394,7 @@ public:
 								<< "  topMargin: " << m_topMargin
 								<< "  bottomMargin: %i" << m_bottomMargin
 								<< endl;
-		
+
 		// start document
 		// TODO: error checking
 		writeTextInternal ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -434,7 +434,7 @@ public:
 
 		return true;
 	}
-	
+
 	bool writeDocumentEnd (const MSWrite::Word, const MSWrite::PageLayout *)
 	{
 		kdDebug (30509) << "writeDocumentEnd()" << endl;
@@ -483,22 +483,22 @@ public:
 		/*if (m_objectUpto != getNumObjects ())
 			warning ("m_objectUpto (%i) != getNumObjects() (%i) -- this is probably because OLE is unimplemented\n",
 						m_objectUpto, getNumObjects ());*/
-		
+
 		MSWrite::List <WRIObject>::Iterator it;
 		for (it = m_objectList.begin (); it != m_objectList.end (); it++)
 		{
 			kdDebug (30509) << "outputting object \'" << (*it).m_nameInStore
 					  				<< "\'   (length: " << (*it).m_dataLength << ")"
 									<< endl;
-			
+
 			if (!(*it).m_data)
 				ErrorAndQuit (MSWrite::Error::InternalError, "image data not initialised\n");
-				
+
 			// open file for object in store
 			m_outfile = m_chain->storageFile ((*it).m_nameInStore, KoStore::Write);
 			if (!m_outfile)
 				ErrorAndQuit (MSWrite::Error::FileError, "could not open image in store\n");
-			
+
 			if (m_outfile->writeBlock ((const char *) (*it).m_data, (*it).m_dataLength)
 				!= (Q_LONG) (*it).m_dataLength)
 				ErrorAndQuit (MSWrite::Error::FileError, "could not write image to store\n");
@@ -507,18 +507,18 @@ public:
 			m_outfile->close ();
 			m_outfile = NULL;
 		}
-		
+
 		return true;
 	}
 
-	
+
 	bool writeFooterBegin (void)
 	{
 		kdDebug (30509) << "writeFooterBegin()" << endl;
 
 		inWhat = Footer;
 		m_hasFooter = true;
-		
+
 		// footers must go after body in KWord
 		delayOutput (true);
 
@@ -532,7 +532,7 @@ public:
 		kdDebug (30509) << "writeFooterEnd()" << endl;
 
 		inWhat = Nothing;
-		
+
 		if (!m_writeFooterFirstTime)
 			writeTextInternal ("</FRAMESET>");
 		delayOutput (false);
@@ -546,12 +546,12 @@ public:
 
 		inWhat = Header;
 		m_hasHeader = true;
-		
+
 		// headers must go after body in KWord
 		delayOutput (true);
 
 		// header frameset will be written in writeParaInfoBegin()
-		
+
 		return true;
 	}
 
@@ -560,24 +560,24 @@ public:
 		kdDebug (30509) << "writeHeaderEnd()" << endl;
 
 		inWhat = Nothing;
-		
+
 		if (!m_writeHeaderFirstTime)
 			writeTextInternal ("</FRAMESET>");
 		delayOutput (false);
 
 		return true;
 	}
-	
+
 	bool writeBodyBegin (void)
 	{
 		kdDebug (30509) << "writeBodyBegin()" << endl;
 
 		inWhat = Body;
-		
+
 		// writeFooterBegin() and writeHeaderBegin() have been called by now
 		// so we have enough information to actually write about them
 		writeDocumentBeginForReal ();
-		
+
 		writeTextInternal ("<FRAMESET frameType=\"1\" frameInfo=\"0\" name=\"Text Frameset 1\" visible=\"1\">");
 		// TODO: runaround?
 		writeTextInternal ("<FRAME runaround=\"1\" autoCreateNewFrame=\"1\" newFrameBehavior=\"0\" copy=\"0\""
@@ -592,7 +592,7 @@ public:
 		kdDebug (30509) << "writeBodyEnd()" << endl;
 
 		inWhat = Nothing;
-		
+
 		// <PAGEBREAKING hardFrameBreakAfter=\"true\"/>" may have been in the last paragraph
 		// and for "hardFrameBreakAfter" to do its work, we need one more final paragraph!
 		if (m_needAnotherParagraph)
@@ -790,14 +790,14 @@ public:
 
 			if (!m_objectList.addToBack ())
 				ErrorAndQuit (MSWrite::Error::OutOfMemory, "could not allocate memory for object\n");
-			
+
 			WRIObject &obj = *m_objectList.begin (false);
 			obj.m_nameInStore = fileInStore;
 			obj.m_dataLength = image->getExternalImageSize ();
 			obj.m_data = new MSWrite::Byte [obj.m_dataLength];
 			if (!obj.m_data)
 				ErrorAndQuit (MSWrite::Error::OutOfMemory, "could not allocate memory for object data\n");
-			
+
 			// if anchored images could be positioned properly, this wouldn't be needed
 			m_objectHorizOffset = double (Twip2Point (image->getIndent ()));
 			m_paraIsImage = true;
@@ -808,11 +808,11 @@ public:
 			{
 				if (!writeTextInternal ("[OLE unsupported]")) return false;
 			}
-			
+
 			m_paraIsImage = false;
 		}
 
-		
+
 		return true;
 	}
 
@@ -1136,12 +1136,12 @@ public:
 		// must be OLE, TODO: implement OLE properly
 		if (!m_paraIsImage)
 			return true;
-			
+
 		WRIObject &obj = *m_objectList.begin (false);
 
 		if (!obj.m_data)
 			ErrorAndQuit (MSWrite::Error::InternalError, "object data not initialised\n");
-				
+
 		// consistency check: aren't going to write past end of array?
 		if (obj.m_dataUpto + length > obj.m_dataLength)
 		{
@@ -1178,7 +1178,7 @@ public:
 		{
 			// output a plain string still in wrong Character Set
 			// (hopefully the user won't notice)
-			strUnicode = (const char *) string;	
+			strUnicode = (const char *) string;
 		}
 
 		// update character information counter (after charset conversion)
@@ -1209,7 +1209,7 @@ public:
 		else
 		{
 			int strLength = strlen ((const char *) str);
-			
+
 			if (m_outfile->writeBlock ((const char *) str, strLength) != strLength)
 			{
 				ErrorAndQuit (MSWrite::Error::FileError, "could not write to maindoc.xml\n");
@@ -1246,7 +1246,7 @@ public:
 	{
 		return writeTextInternal (QString::number (num));
 	}
-	
+
 	bool writeTextInternal (const char *format, ...)
 	{
 		va_list list;
@@ -1298,7 +1298,7 @@ public:
 	{
 		return true;	// ignore CR
 	}
-	
+
 	// write newline unless end-of-paragraph
 	// (this is the support for paragraphs with multiple newlines)
 	bool writeNewLine (const bool endOfParagraph)
@@ -1311,7 +1311,7 @@ public:
 		else
 			return true;
 	}
-	
+
 	// aka "soft hyphen"
 	bool writeOptionalHyphen (void)
 	{
@@ -1323,7 +1323,7 @@ public:
 	{
 		m_koLink = kofficeLink;
 	}
-		
+
 	void sigProgress (const int value)
 	{
 		m_koLink->sigProgress (value);
@@ -1389,7 +1389,7 @@ KoFilter::ConversionStatus MSWriteImport::convert (const QCString &from, const Q
 	debug ("DIALOG DELETE\n");
 	//delete dialog;
 #endif
-	
+
 	// create the Device that will read from the .WRI file
 	m_device = new WRIDevice;
 	if (!m_device)
@@ -1397,15 +1397,15 @@ KoFilter::ConversionStatus MSWriteImport::convert (const QCString &from, const Q
 		kdError (30509) << "Could not allocate memory for device" << endl;
 		return KoFilter::OutOfMemory;
 	}
-	
+
 	// open the .WRI file
-	if (!m_device->openFile (m_chain->inputFile ().latin1 ()))
+	if (!m_device->openFile (QFile::encodeName(m_chain->inputFile ())))
 	{
 		kdError (30509) << "Could not open \'" << m_chain->inputFile () << "\'" << endl;
 		return KoFilter::FileNotFound;
 	}
-	
-	
+
+
 	// create Parser that will interpret the .WRI file and call the Generator
 	m_parser = new MSWrite::InternalParser;
 	if (!m_parser)
@@ -1413,11 +1413,11 @@ KoFilter::ConversionStatus MSWriteImport::convert (const QCString &from, const Q
 		kdError (30509) << "Could not allocate memory for parser" << endl;
 		return KoFilter::OutOfMemory;
 	}
-	
+
 	// tell the Parser to use the Device to read from the .WRI file
 	m_parser->setDevice (m_device);
 
-	
+
 	// create Generator that will produce the .KWD file
 	m_generator = new KWordGenerator;
 	if (!m_generator)
@@ -1425,21 +1425,21 @@ KoFilter::ConversionStatus MSWriteImport::convert (const QCString &from, const Q
 		kdError (30509) << "Could not allocate memory for generator" << endl;
 		return KoFilter::OutOfMemory;
 	}
-	
+
 	// give the Generator the Device for error-handling purposes
 	m_generator->setDevice (m_device);
-	
+
 	// give the Generator the chain
 	m_generator->setFilterChain (m_chain);
-	
+
 	// hand over sigProgess to give some feedback to the user
 	m_generator->setKOfficeLink (this);
-	
-	
+
+
 	// hook up Generator to Parser
 	m_parser->setGenerator (m_generator);
 
-	
+
 	// filter!
 	if (!m_parser->parse ())
 	{
@@ -1480,7 +1480,7 @@ KoFilter::ConversionStatus MSWriteImport::convert (const QCString &from, const Q
 		kdWarning (30509) << "Unknown error: " << errorCode << endl;
 		return KoFilter::StupidError;
 	}
-		
+
 	return KoFilter::OK;
 }
 

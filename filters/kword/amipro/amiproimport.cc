@@ -86,7 +86,7 @@ static QString AmiProFormatAsXML( AmiProFormat format )
   QString italic = format.italic ? "1" : "0";
   QString strikeout = format.strikethrough ? "1" : "0";
   QString vertalign = format.superscript ? "2" : format.subscript ? "1" : "0";
-  QString underline = format.double_underline ? "double" : 
+  QString underline = format.double_underline ? "double" :
     format.underline|format.word_underline ? "1" : "0";
 
   result = "<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
@@ -103,7 +103,7 @@ static QString AmiProFormatAsXML( AmiProFormat format )
   return result;
 }
 
-// helper function to convert AmiPro list of formats to KWord FORMATS 
+// helper function to convert AmiPro list of formats to KWord FORMATS
 static QString AmiProFormatListAsXML( AmiProFormatList& formatList )
 {
   QString result;
@@ -202,7 +202,7 @@ static QString AmiProStyleAsXML( const AmiProStyle& style )
   QString italic = style.italic ? "1" : "0";
   QString strikeout = style.strikethrough ? "1" : "0";
   QString vertalign = style.superscript ? "2" : style.subscript ? "1" : "0";
-  QString underline = style.double_underline ? "double" : 
+  QString underline = style.double_underline ? "double" :
     style.underline|style.word_underline ? "1" : "0";
 
   QString align;
@@ -264,7 +264,7 @@ static QString AmiProStyleListAsXML( AmiProStyleList& styleList )
     result.append( "</STYLES>\n" );
   }
 
-  return result; 
+  return result;
 }
 
 AmiProConverter::AmiProConverter()
@@ -330,7 +330,7 @@ KoFilter::ConversionStatus AmiProImport::convert( const QCString& from, const QC
   AmiProConverter *converter = new AmiProConverter;
   parser->setListener( converter );
 
-  parser->process( m_chain->inputFile().latin1() );
+  parser->process( QFile::encodeName(m_chain->inputFile()) );
 
   if( converter->root.isEmpty() )
     return KoFilter::StupidError;

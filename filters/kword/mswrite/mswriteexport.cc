@@ -44,6 +44,7 @@
 #include "libmswrite.h"
 
 #include "mswriteexport.h"
+#include <qfile.h>
 
 
 class MSWriteExportFactory : KGenericFactory <MSWriteExport, KoFilter>
@@ -52,7 +53,7 @@ public:
 	MSWriteExportFactory () : KGenericFactory <MSWriteExport, KoFilter> ("kwordmswriteexport")
 	{
 	}
-	
+
 protected:
 	virtual void setupTranslations (void)
 	{
@@ -73,12 +74,12 @@ public:
 	WRIDevice () : m_outfp (NULL), m_outfp_pos (0), m_outfp_eof (0)
 	{
 	}
-	
+
 	~WRIDevice ()
 	{
 		closeFile ();
 	}
-	
+
 	bool openFile (const char *fileName)
 	{
 		m_outfp = fopen (fileName, "wb");
@@ -87,10 +88,10 @@ public:
 			error (MSWrite::Error::FileError, "could not open file for writing\n");
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	bool closeFile (void)
 	{
 		if (m_outfp)
@@ -100,19 +101,19 @@ public:
 				error (MSWrite::Error::FileError, "could not close output file\n");
 				return false;
 			}
-			
+
 			m_outfp = NULL;
 		}
-		
+
 		return true;
 	}
-	
+
 	bool read (MSWrite::Byte *, const MSWrite::DWord)
 	{
 		error (MSWrite::Error::InternalError, "reading from an output file?\n");
 		return false;
 	}
-	
+
 	bool write (const MSWrite::Byte *buf, const MSWrite::DWord numBytes)
 	{
 		size_t cwrite = fwrite (buf, 1, numBytes, m_outfp);
@@ -121,15 +122,15 @@ public:
 			error (MSWrite::Error::FileError, "could not write to output file\n");
 			return false;
 		}
-		
+
 		// keep track of where we are up to in the output file and where EOF is
-		m_outfp_pos += numBytes;	
+		m_outfp_pos += numBytes;
 		if (m_outfp_pos > m_outfp_eof)
 			m_outfp_eof = m_outfp_pos;
-		
+
 		return true;
 	}
-	
+
 	bool seek (const long offset, const int whence)
 	{
 		long absloc;
@@ -148,7 +149,7 @@ public:
 			error (MSWrite::Error::InternalError, "invalid whence passed to WRIDevice::seek\n");
 			return false;
 		}
-		
+
 		if (absloc > m_outfp_eof)
 		{
 			kdDebug (30509) << "Want to seek to " << absloc
@@ -162,7 +163,7 @@ public:
 							"could not seek to EOF in output file\n");
 				return false;
 			}
-				
+
 			MSWrite::Byte *zero = new MSWrite::Byte [absloc - m_outfp_eof];
 			if (!zero)
 			{
@@ -173,7 +174,7 @@ public:
 			memset (zero, 0, absloc - m_outfp_eof);
 			if (!write (zero, absloc - m_outfp_eof)) return false;
 			delete [] zero;
-			
+
 			m_outfp_eof = absloc;
 			m_outfp_pos = absloc;
 			return true;
@@ -192,12 +193,12 @@ public:
 			}
 		}
 	}
-	
+
 	long tell (void)
 	{
 		return ftell (m_outfp);
 	}
-	
+
 	void debug (const char *s)
 	{
 		kdDebug (30509) << s;
@@ -226,12 +227,12 @@ class KWordMSWriteWorker : public KWEFBaseWorker
 private:
 	WRIDevice *m_device;
 	MSWrite::InternalGenerator *m_generator;
-	
+
 	MSWrite::PageLayout m_pageLayout;
 	MSWrite::Word m_pageHeight, m_pageWidth,
 						m_topMargin, m_leftMargin, m_bottomMargin, m_rightMargin;
 	MSWrite::Word m_pageNumberStart;
-						
+
 	// for charset conversion
 	QTextCodec *m_codec;
 	QTextEncoder *m_encoder;
@@ -261,7 +262,7 @@ private:
 								m_isIncreasing (true)
 		{
 		}
-		
+
 		int m_upto;
 		CounterData::Style m_style;
 		QString m_leftText, m_rightText;
@@ -270,7 +271,7 @@ private:
 		bool m_isIncreasing;	// like not a bullet
 		// TODO: custom things
 	};
-	
+
 	QValueList <CounterInfo> m_listCounterList;
 #endif
 
@@ -290,21 +291,21 @@ public:
 			m_encoder = m_codec->makeEncoder();
 		else
 			kdWarning (30509) << "Cannot convert to Win Charset!" << endl;
-	
+
 		m_device = new WRIDevice;
 		if (!m_device)
 		{
 			kdError (30509) << "Could not allocate memory for Device" << endl;
 			return;
 		}
-		
+
 		m_generator = new MSWrite::InternalGenerator;
 		if (!m_generator)
 		{
 			m_device->error (MSWrite::Error::OutOfMemory, "could not allocate memory for InternalGenerator\n");
 			return;
 		}
-		
+
 		m_generator->setDevice (m_device);
 	}
 
@@ -314,43 +315,43 @@ public:
 		delete m_device;
 		delete m_encoder;
 	}
-	
+
 	int getError (void) const
 	{
 		return m_device->bad ();
 	}
-	
+
 	bool doOpenFile (const QString &outFileName, const QString &)
 	{
 		// constructor failed?
 		if (!m_device || !m_generator)
 			return false;
-		
-		if (!m_device->openFile (outFileName.latin1 ())) return false;
-		
+
+		if (!m_device->openFile (QFile::encodeName(outFileName))) return false;
+
 		return true;
 	}
-	
+
 	bool doCloseFile (void)
 	{
 		if (!m_device->closeFile ()) return false;
 		return true;
 	}
-	 
+
 	bool doOpenDocument (void)
 	{
 		kdDebug (30509) << "doOpenDocument ()" << endl;
-		
+
 		// We can't open the document here because we don't yet have
 		// PageLayout * as doFullPaperFormat() and doFullPaperBorders()
 		// haven't been called yet.
-		// 
+		//
 		// doTrulyOpenDocument truly opens the document and is called by
 		// doOpenBody()
-		
+
 		return true;
 	}
-	
+
 	bool doTrulyOpenDocument (void)
 	{
 		// TODO: Write's UI doesn't allow the user to change Height or Width so
@@ -362,24 +363,24 @@ public:
 		m_pageLayout.setLeftMargin (m_leftMargin);
 		m_pageLayout.setTextHeight (m_pageHeight - m_topMargin - m_bottomMargin);
 		m_pageLayout.setTextWidth (m_pageWidth - m_leftMargin - m_rightMargin);
-		
+
 		// TODO: libexport
 		// headerFromTop
 		// footerFromTop
-				
+
 		if (!m_generator->writeDocumentBegin (MSWrite::Format::Write_3_0,
 															&m_pageLayout)) return false;
-		
+
 		return true;
 	}
-		
+
 	bool doCloseDocument (void)
 	{
 		kdDebug (30509) << "doCloseDocument ()" << endl;
-		
+
 		if (!m_generator->writeDocumentEnd (MSWrite::Format::Write_3_0,
 														&m_pageLayout)) return false;
-		
+
 		return true;
 	}
 
@@ -394,10 +395,10 @@ public:
 								<< orientation << ")" << endl;
 
 		// TODO: does "format" or "orientation" matter?
-		
+
 		m_pageHeight = MSWrite::Word (Point2Twip (height));
 		m_pageWidth = MSWrite::Word (Point2Twip (width));
-		
+
 		return true;
 	}
 
@@ -421,7 +422,7 @@ public:
 	bool doVariableSettings (const VariableSettingsData &varSettings)
 	{
 		m_pageNumberStart = MSWrite::Word (varSettings.startingPageNumber);
-		
+
 		kdDebug (30509) << "doVariableSettings pageNumberStart="
 								<< m_pageNumberStart << endl;
 		return true;
@@ -455,7 +456,7 @@ public:
 			m_isHeaderOnFirstPage = false;	// just a guess
 			break;
 		}
-		
+
 		m_footerType = footerType;
 		switch (footerType)
 		{
@@ -472,7 +473,7 @@ public:
 			m_isFooterOnFirstPage = false;	// just a guess
 			break;
 		}
-		
+
 		return true;
 	}
 
@@ -483,14 +484,14 @@ public:
 			if (para.first ().text.isEmpty ())
 				return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	bool doHeader (const HeaderData &header)
 	{
 		kdDebug (30509) << "doHeader (header.page=" << header.page << ")" << endl;
-	
+
 		if (isParaListEmpty (header.para))
 		{
 			kdDebug (30509) << "\tEmpty, ignoring" << endl;
@@ -519,12 +520,12 @@ public:
 			break;
 		}
 	#endif
-		
+
 		m_hasHeader = true;
 		m_headerData.push_back (header);
 		return true;
 	}
-        
+
 	bool doFooter (const FooterData &footer)
 	{
 		kdDebug (30509) << "doFooter (footer.page=" << footer.page << ")" << endl;
@@ -557,29 +558,29 @@ public:
 			break;
 		}
 	#endif
-		
+
 		m_hasFooter = true;
 		m_footerData.push_back (footer);
 		return true;
 	}
-	
+
 	bool doOpenBody (void)
 	{
 		kdDebug (30509) << "doOpenBody ()" << endl;
-		
+
 		//
 		// Document Start
 		//
 		if (!doTrulyOpenDocument ()) return false;
-		
-		
+
+
 		//
 		// Footers followed by Headers (in this order)
 		//
 
 		bool wroteFooter = false;
 		m_inWhat = Footer;
-			
+
 		for (QValueList <FooterData>::Iterator it = m_footerData.begin ();
 				it != m_footerData.end ();
 				it++)
@@ -601,7 +602,7 @@ public:
 
 		bool wroteHeader = false;
 		m_inWhat = Header;
-		
+
 		for (QValueList <HeaderData>::Iterator it = m_headerData.begin ();
 			it != m_headerData.end ();
 			it++)
@@ -613,15 +614,15 @@ public:
 					if (!m_generator->writeHeaderBegin ()) return false;
 					wroteHeader = true;
 				}
-				
+
 				if (!doFullParagraphList ((*it).para)) return false;
 				it = --m_headerData.erase (it);
 			}
 		}
-		if (wroteHeader)	
+		if (wroteHeader)
 			if (!m_generator->writeHeaderEnd ()) return false;
-		
-			
+
+
 		//
 		// Body Start
 		//
@@ -631,7 +632,7 @@ public:
 		// KWord doesn't have a PageTable but we must emit the pageNew
 		// signal at least once
 		if (!m_generator->writePageNew ()) return false;
-		
+
 		// dump remaining header paragraphs at the start of the body
 		for (QValueList <HeaderData>::Iterator it = m_headerData.begin ();
 				it != m_headerData.end ();
@@ -641,7 +642,7 @@ public:
 			if (!doFullParagraphList ((*it).para)) return false;
 			it = --m_headerData.erase (it);
 		}
-		
+
 		// dump remaining footer paragraphs too
 		for (QValueList <FooterData>::Iterator it = m_footerData.begin ();
 				it != m_footerData.end ();
@@ -651,16 +652,16 @@ public:
 			if (!doFullParagraphList ((*it).para)) return false;
 			it = --m_footerData.erase (it);
 		}
-	
+
 		return true;
 	}
-	
+
 	bool doCloseBody (void)
 	{
 		kdDebug (30509) << "doCloseBody ()" << endl;
-		
+
 		if (!m_generator->writeBodyEnd ()) return false;
-		
+
 		return true;
 	}
 
@@ -670,13 +671,13 @@ public:
 	{
 	private:
 		QBuffer *m_buffer;
-		
+
 	public:
 		QBufferDevice (QBuffer *buffer)
 		{
 			m_buffer = buffer;
 		}
-		
+
 		bool read (MSWrite::Byte *buf, const MSWrite::DWord numBytes)
 		{
 			if (m_buffer->readBlock ((char *) buf, (Q_ULONG) numBytes) != Q_LONG (numBytes))
@@ -687,7 +688,7 @@ public:
 			else
 				return true;
 		}
-		
+
 		bool write (const MSWrite::Byte *buf, const MSWrite::DWord numBytes)
 		{
 			if (m_buffer->writeBlock ((char *) buf, (Q_ULONG) numBytes) != Q_LONG (numBytes))
@@ -698,7 +699,7 @@ public:
 			else
 				return true;
 		}
-		
+
 		// normally we must write zeros if we seek past EOF
 		// but we know that won't happen :)
       bool seek (const long offset, const int whence)
@@ -719,27 +720,27 @@ public:
 				error (MSWrite::Error::InternalError, "unknown seek\n");
 				return false;
 			}
-			
+
 			if (absoffset > long (m_buffer->size ()))
 			{
 				error (MSWrite::Error::InternalError, "seek past EOF unimplemented\n");
 				return false;
 			}
-			
+
 			if (!m_buffer->at (absoffset))
 			{
 				error (MSWrite::Error::FileError, "QBuffer could not seek (not really a FileError)\n");
 				return false;
 			}
-			
+
 			return true;
 		}
-		
+
       long tell (void)
 		{
 			return long (m_buffer->at ());
 		}
-		
+
 		void debug (const char *s)
 		{
 			kdDebug (30509) << s;
@@ -748,7 +749,7 @@ public:
 		{
 			kdDebug (30509) << i;
 		}
-		
+
 		void error (const int errorCode, const char *message,
 						const char * /*file*/ = "", const int /*lineno*/ = 0,
 						MSWrite::DWord /*token*/ = MSWrite::Device::NoToken)
@@ -762,7 +763,7 @@ public:
 			}
 		}
 	};
-	
+
 	class WMFRecord : public MSWrite::NeedsDevice
 	{
 	public:
@@ -996,7 +997,7 @@ public:
 		// Assume that we are already 72dpi
 		if (dotsPerMeter <= 0)
 			return double (measurement);
-		
+
 		// 2834.65 = 100 / 2.54 * 72
 		return double (measurement) * 2834.65 / double (dotsPerMeter);
 	}
@@ -1033,15 +1034,15 @@ public:
 		// So we convert all images to WMF for convenience.
 		// We don't even bother saving Monochrome BMPs "as is" because
 		// there's no point (just save it in WMF to make life easier)
-		// 
+		//
 		// But a Standard WMF is basically a BMP with some headers/GDI calls
 		// so the conversion process is like this:
 		//
 		// start->WMF->finish
 		// start->BMP->WMF->finish
 		// start->???->BMP->WMF->finish
-		// 
-		
+		//
+
 		double imageActualWidth = -1, imageActualHeight = -1;
 		MSWrite::DWord imageSize = 0;
 
@@ -1306,12 +1307,12 @@ public:
 		{
 			if (!doFullParagraphList (*(*it).paraList)) return false;
 		}
-		
+
 		return true;
 	}
 
 #if 0
-	// stolen directly from lib/kotext/koparagcounter.cc	
+	// stolen directly from lib/kotext/koparagcounter.cc
 	QString getRomanNumber (const int n)
 	{
 		const QCString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
@@ -1352,19 +1353,19 @@ public:
 				kdWarning (30509) << "Unknown counter.numbering: "
 										<< counter.numbering << endl;
 			}
-			
+
 			return true;
 		}
 
 		bool setValues = false;
 		int currentDepth = m_listCounterList.count () - 1;
-		
+
 		kdDebug (30509) << "counter.depth=" << counter.depth
 								<< " currentDepth=" << currentDepth << endl;
 		if (counter.depth < currentDepth)
 		{
 			kdDebug (30509) << "depth<current, therefore deleting after" << endl;
-			
+
 			for (QValueList <CounterInfo>::Iterator it
 					= m_listCounterList.at (counter.depth + 1);
 					it != m_listCounterList.end ();
@@ -1385,7 +1386,7 @@ public:
 		{
 			kdDebug (30509) << "new list of more depth: "
 									<< counter.depth - currentDepth << endl;
-			
+
 			for (int i = 0; i < counter.depth - currentDepth; i++)
 			{
 				CounterInfo newOne;
@@ -1393,7 +1394,7 @@ public:
 			}
 			setValues = true;
 		}
-		
+
 		CounterInfo &ci = *m_listCounterList.at (counter.depth);
 
 		// in a new list?
@@ -1409,19 +1410,19 @@ public:
 			ci.m_customCharacter = counter.customCharacter;
 
 			// TODO customFont
-			
+
 			kdDebug (30509) << "new list: upto=" << ci.m_upto << " "
 									<< "style=" << ci.m_style << " "
 									<< "leftText=" << ci.m_leftText << " "
 									<< "rightText=" << ci.m_rightText << " "
 									<< "customChar=" << ci.m_customCharacter << endl;
 		}
-		
+
 
 		// is this list increasing?
 		// prefix text
 		QString nextText = ci.m_leftText;
-		
+
 		switch (ci.m_style)
 		{
 		default:
@@ -1445,7 +1446,7 @@ public:
 			ci.m_upto++;
 			ci.m_isIncreasing = true;
 			break;
-		}	
+		}
 		case CounterData::STYLE_ALPHAB_U:
 		{
 			QString cache;
@@ -1496,7 +1497,7 @@ public:
 			nextText += '#';
 			ci.m_isIncreasing = false;
 			break;
-		}	
+		}
 		// filled circle
 		case CounterData::STYLE_DISCBULLET:
 		{
@@ -1511,10 +1512,10 @@ public:
 			ci.m_isIncreasing = false;
 			break;
 		}}
-		
+
 		// suffix text
 		nextText += ci.m_rightText;
-		
+
 		if (ci.m_isIncreasing)
 		{
 			if (counter.depth > 0)
@@ -1614,11 +1615,11 @@ public:
 
 		// TODO: fontAttribute;
 	}
-	
+
 	static MSWrite::Word getClosestLineSpacing (const double points)
 	{
 		const double twips = Point2Twip (points);
-		
+
 	#if 1
 		if (twips < double ((MSWrite::LineSpacing::Single + MSWrite::LineSpacing::OneAndAHalf) / 2))
 			return MSWrite::LineSpacing::Single;
@@ -1630,7 +1631,7 @@ public:
 		return MSWrite::Word (twips);
 	#endif
 	}
-	
+
 	bool doFullParagraphList (const QValueList <ParaData> &paraList)
 	{
 		for (QValueList <ParaData>::ConstIterator it = paraList.begin ();
@@ -1639,23 +1640,23 @@ public:
 		{
 			if (!doFullParagraph (*it)) return false;
 		}
-	
+
 		return true;
 	}
-	
+
 	bool doFullParagraph (const ParaData &paraData)
 	{
 		return doFullParagraph (paraData.text,
 							 			paraData.layout,
 										paraData.formattingList);
 	}
-	
+
 	bool doFullParagraph (const QString &paraText,
 						 			const LayoutData &layout,
 									const ValueListFormatData &paraFormatDataList)
 	{
 		MSWrite::FormatParaProperty paraProp;
-		
+
 		if (m_inWhat == Body)
 			paraProp.setIsNormalParagraph (true);
 		else
@@ -1671,9 +1672,9 @@ public:
 				paraProp.setIsOnFirstPage (m_isFooterOnFirstPage);
 			}
 		}
-		
+
 		paraProp.setIsText (true);
-		
+
 		// Alignment
 		if (!layout.alignment.isEmpty ())
 		{
@@ -1689,7 +1690,7 @@ public:
 			else
 				kdWarning (30509) << "Unknown Alignment: " << layout.alignment << endl;
 		}
-		
+
 		// Indentation
 		if (layout.indentFirst) paraProp.setLeftIndentFirstLine (MSWrite::Short (Point2Twip (layout.indentFirst)));
 		if (layout.indentLeft >= 0) paraProp.setLeftIndent (MSWrite::Word (Point2Twip (layout.indentLeft)));
@@ -1733,7 +1734,7 @@ public:
 				tabIt++)
 		{
 			MSWrite::FormatParaPropertyTabulator tab;
-			
+
 			// Write's UI only supports 12 as opposed to the 14 supposedly
 			// supported in the file so let's play it safe and quit when
 			// we reach 12
@@ -1756,17 +1757,17 @@ public:
 			// double m_width;
 			if ((*tabIt).m_filling != TabulatorData::TF_NONE)
 				kdWarning (30509) <<  "Write does not support Tabulator Filling" << endl;
-			
+
 			paraProp.addTabulator (&tab);
 			numTabs++;
 		}
-		
+
 		// TODO: double      marginTop;      // space before the paragraph  (a negative value means invalid)
 		// TODO: double      marginBottom;   // space after the paragraph (a negative value means invalid)
 
 		// TODO: QString     styleName;
 		// TODO: QString     styleFollowing;
-		
+
 		if (!m_generator->writeParaInfoBegin (&paraProp)) return false;
 
 		// get this paragraph's "default formatting"
@@ -2064,20 +2065,20 @@ public:
 				stringWin = substring.utf8 ();
 			}
 
-			
+
 			// output encoded text
 			if (!m_generator->writeText ((const MSWrite::Byte *) (const char *) stringWin))
 				return false;
 
 			upto += length;
-			
+
 			// special character?
 			if (specialLocation != INT_MAX)
 			{
 			#ifdef DEBUG_PROCESS_TEXT
 				kdDebug (30509) << "Found special character!" << endl;
 			#endif
-			
+
 				// output special character
 				if (specialLocation == softHyphen)
 				{
@@ -2134,7 +2135,7 @@ KoFilter::ConversionStatus MSWriteExport::convert (const QCString &from, const Q
 {
 	kdDebug (30509) << "MSWriteExport $Date$ using LibMSWrite "
 			  				<< MSWrite::Version << endl;
-	
+
 	if (to != "application/x-mswrite" || from != "application/x-kword")
 	{
 		kdError (30509) << "Internal error!  Filter not implemented?" << endl;
@@ -2181,15 +2182,15 @@ KoFilter::ConversionStatus MSWriteExport::convert (const QCString &from, const Q
 	case MSWrite::Error::OutOfMemory:
 		kdDebug (30509) << "Error::OutOfMemory" << endl;
 		return KoFilter::OutOfMemory;
-		
+
 	case MSWrite::Error::InternalError:
 		kdDebug (30509) << "Error::InternalError" << endl;
 		return KoFilter::InternalError;
-		
+
 	case MSWrite::Error::Unsupported:
 		kdDebug (30509) << "Error::Unsupported" << endl;
 		return KoFilter::InternalError;
-	
+
 	case MSWrite::Error::FileError:
 		kdDebug (30509) << "Error::FileError" << endl;
 		return KoFilter::CreationError;

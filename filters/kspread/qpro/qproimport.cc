@@ -34,6 +34,7 @@
 #include <qproformula.h>
 #include <qpro/stream.h>
 #include <qpro/record_factory.h>
+#include <qfile.h>
 
 typedef KGenericFactory<QpImport, KoFilter> QPROImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libqproimport, QPROImportFactory( "kspreadqprofilter" ) );
@@ -124,7 +125,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
         return KoFilter::NotImplemented;
     }
 
-    QpIStream lIn( m_chain->inputFile().latin1() );
+    QpIStream lIn( QFile::encodeName(m_chain->inputFile()) );
 
     if( !lIn )
     {
