@@ -472,7 +472,7 @@ bool KoAutoFormat::doAutoCorrect( QTextCursor* textEditCursor, KoTextParag *para
     // This allows an o(n) behaviour instead of an o(n^2).
     for(int i=m_maxFindLength;i>0;--i)
     {
-        KoAutoFormatEntryMap::ConstIterator it = m_entries.find(wordArray[i]);
+        KoAutoFormatEntryMap::ConstIterator it = m_entries.find((wordArray[i].lower()));
         if ( wordArray[i]!=0 && it!=m_entries.end() )
         {
             unsigned int length = wordArray[i].length();
