@@ -68,6 +68,10 @@ public:
     // Used to know if we need to create more pages.
     int availableHeight() const;
 
+    // Return true if the last frame is empty
+    bool isLastFrameEmpty();
+    virtual bool canRemovePage( int num );
+
     // Views notify the KWTextFrameSet of which area of the text
     // they're looking at, so that formatMore() ensures it's always formatted
     // correctly.

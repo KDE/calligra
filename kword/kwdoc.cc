@@ -1966,7 +1966,7 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
      emit pageNumChanged();
 }
 
-bool KWDocument::canRemovePage( int num, KWFrame *f )
+bool KWDocument::canRemovePage( int num )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
@@ -1974,18 +1974,11 @@ bool KWDocument::canRemovePage( int num, KWFrame *f )
         KWFrameSet * frameSet = fit.current();
         if ( frameSet->getFrameInfo() != FI_BODY ) // if header/footer/footnote
             continue;
-        if ( processingType() == WP && frameSet == getFrameSet(0) )
-            continue;
-        QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
-        for ( ; frameIt.current(); ++frameIt )
-        {
-            KWFrame * frm = frameIt.current();
-            if ( frm != f && frm->pageNum() == num )
-                return FALSE;
-        }
+        if ( !frameSet->canRemovePage( num ) )
+            return false;
     }
-    kdDebug(32002) << "KWDocument::canRemovePage " << num << " frame=" << f << "-> TRUE" << endl;
-    return TRUE;
+    kdDebug(32002) << "KWDocument::canRemovePage " << num << "-> TRUE" << endl;
+    return true;
 }
 
 void KWDocument::removePage( int num )

@@ -369,6 +369,9 @@ public:
 
     KWDocument* kWordDocument() const { return m_doc; }
 
+    // Return true if page @p num can be removed, as far as this frameset is concerned
+    virtual bool canRemovePage( int num );
+
     // only used for headers and footers...
     void setCurrent( int i ) { m_current = i; }
     int getCurrent() { return m_current; }

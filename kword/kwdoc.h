@@ -346,7 +346,7 @@ public:
         spellCheck = b;
     }
 
-    bool canRemovePage( int num, KWFrame *f );
+    bool canRemovePage( int num );
 
     /**
      * @return the conversion factor between pt and pixel, that

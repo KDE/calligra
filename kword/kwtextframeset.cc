@@ -1219,7 +1219,8 @@ void KWTextFrameSet::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
     QTextParag *lastFormatted = m_lastFormatted;
-    kdDebug(32002) << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
+    kdDebug(32002) << "KWTextFrameSet::formatMore " << name()
+                   << " lastFormatted id=" << lastFormatted->paragId()
                    << " to=" << to << " viewsBottom=" << viewsBottom
                    << " availableHeight=" << m_availableHeight << endl;
 
@@ -1240,10 +1241,9 @@ void KWTextFrameSet::formatMore()
         kdDebug() << "KWTextFrameSet::formatMore bottom=" << bottom << " lastFormatted=" << lastFormatted << endl;
     }
     kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. "
-                   << " i=" << i << " to=" << to
-                   << " bottom=" << bottom
-                   << " Setting m_lastFormatted to " << lastFormatted
-                   << endl;
+      << " bottom=" << bottom
+      << " Setting m_lastFormatted to " << lastFormatted
+      << endl;
     m_lastFormatted = lastFormatted;
 
     if ( bottom != -1 && ( ( bottom > m_availableHeight ) ||   // this parag is already off page
@@ -1355,16 +1355,24 @@ void KWTextFrameSet::formatMore()
             kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << bottom << ", " << m_availableHeight << ") , trying to remove last frame" << endl;
             int lastPage = m_doc->getPages() - 1;
             // Last frame is empty -> try removing last page, and more if necessary
+#if 0
             while ( lastPage > 0 && frames.count() > 1 && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
             {
                 lastPage = m_doc->getPages()-1;
-                if(m_doc->canRemovePage(lastPage, frames.last())) {
+                if(m_doc->canRemovePage(lastPage)) {
 kdDebug() << "Deleting page: " << lastPage<< "\n";
                     m_doc->removePage( lastPage );
                 } else if(m_doc->processingType() == KWDocument::WP && m_doc->getFrameSet(0) == this) {
                     break;
                 } else
                     delFrame(frames.last());
+            }
+#endif
+            // Second try, without hacks :)
+            while ( lastPage > 0 && m_doc->canRemovePage( lastPage ) )
+            {
+                m_doc->removePage( lastPage );
+                lastPage = m_doc->getPages()-1;
             }
         }
 
@@ -1375,6 +1383,38 @@ kdDebug() << "Deleting page: " << lastPage<< "\n";
         interval = QMAX( 0, interval );
         //kdDebug(32002) << "KWTextFrameSet::formatMore all formatted" << endl;
     }
+}
+
+bool KWTextFrameSet::isLastFrameEmpty()
+{
+    QTextParag * lastParag = textdoc->lastParag();
+    ensureFormatted( lastParag );
+    int bottom = lastParag->rect().top() + lastParag->rect().height();
+    return bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() );
+}
+
+bool KWTextFrameSet::canRemovePage( int num )
+{
+    KWFrame * copyFrame = 0;
+    QListIterator<KWFrame> frameIt( frameIterator() );
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        KWFrame * frame = frameIt.current();
+        if ( frame->pageNum() == num )
+        {
+            bool isEmpty = ( frame == frames.last() && isLastFrameEmpty() );
+            kdDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage"
+                      << " found a frame on page " << num << " empty:" << isEmpty << endl;
+            // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
+            if ( !copyFrame && !isEmpty )
+                return false;
+        }
+        if ( frame->getNewFrameBehaviour() != Copy )
+            copyFrame = 0L;
+        else if ( !copyFrame )
+            copyFrame = frame;
+    }
+    return true;
 }
 
 void KWTextFrameSet::doChangeInterval()

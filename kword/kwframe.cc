@@ -978,6 +978,27 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     } else return QRegion();
 }
 
+bool KWFrameSet::canRemovePage( int num )
+{
+    KWFrame * copyFrame = 0;
+    QListIterator<KWFrame> frameIt( frameIterator() );
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        KWFrame * frame = frameIt.current();
+        if ( frame->pageNum() == num )
+        {
+            // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame
+            if ( !copyFrame )
+                return false;
+        }
+        if ( frame->getNewFrameBehaviour() != Copy )
+            copyFrame = 0L;
+        else if ( !copyFrame )
+            copyFrame = frame;
+    }
+    return true;
+}
+
 #ifndef NDEBUG
 void KWFrameSet::printDebug()
 {
