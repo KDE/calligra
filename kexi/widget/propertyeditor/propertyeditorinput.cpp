@@ -18,17 +18,19 @@
    Boston, MA 02111-1307, USA.
 */
 #include <qiconset.h>
+#include <qtoolbutton.h>
 
+#include <kiconloader.h>
 #include <klineedit.h>
 #include <knuminput.h>
-#include <qtoolbutton.h>
-#include <kiconloader.h>
 #include <klocale.h>
-
+#include <kglobal.h>
 #include <kdebug.h>
 
 #include "propertyeditorinput.h"
 #include "kexiproperty.h"
+
+#include <limits.h>
 
 PropertyEditorInput::PropertyEditorInput(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
@@ -152,7 +154,8 @@ PropertyEditorDblSpin::PropertyEditorDblSpin(QWidget *parent, KexiProperty *prop
 {
 	m_spinBox = new PropDoubleSpinBox(this);
 	m_spinBox->resize(width(), height());
-	m_spinBox->setValue(property->value().toDouble());
+	setValue( property->value() );
+//	m_spinBox->setValue(property->value().toDouble());
 	m_spinBox->show();
 
 	setWidget(m_spinBox);
@@ -168,7 +171,8 @@ PropertyEditorDblSpin::value()
 void
 PropertyEditorDblSpin::setValue(const QVariant &value)
 {
-	m_spinBox->setValue(value.toDouble());
+	double v = value.toDouble();
+	m_spinBox->setValue(v);
 }
 
 void

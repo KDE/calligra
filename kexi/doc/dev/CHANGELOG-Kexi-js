@@ -306,6 +306,11 @@ Detailed TODO for Beta3:
 -add "index" information icon @ the left hand of line with key(s) that is/are indexed
 -KexiProperty: make it really shared (using QShared?)
 
+==== Property Editor TODO: =========
+- text does not fit well inside combobox editor
+- double editor should be klineedit with doublevalidator, not spinbox
+- update parent property (e.g. Rect) on child's change
+
 2004-02-17
 - KexiDB::typeStringsForGroup() ustility function added
 - KexiDB::Field: array of field type names fixed
@@ -314,13 +319,16 @@ Kexi Property Framework improved:
    created two properties: x and y
 - pointer to a parent property is kept, if present
 - all data is stored in KexiProperty and KexiPropertyBuffer, not just in GUI objects
-
+- editoritem text for composed values (like Rectangle) now displayed properly
+- reverting to default works properly for properties of type 'list' 
 
 2004-02-12
 - typeName() added to KexiPropertyBuffer
 - typeString(), typeGroupString() added to KexiDB::Field
 - KexiDB Utils: typeNamesForGroup() and typesForGroup() utility functions added
 - KexiPropertyEditorList crash fixed for StringList type
+- By default, sorting is disabled (properties are in order of insert time)
+- KexiPropertyEditor: fixed value changes for prop. children
 
 2004-02-10
 - Property editor is now used globally in Kexi (property buffer's change comes from active KexiView)

@@ -200,7 +200,13 @@ KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 		         m_sync : (bool)m_editItem->property()->autoSync();
 		if(m_buffer && sync)
 		{
-			m_buffer->changeProperty(m_editItem->name(), value);//getComposedValue());
+			if (m_editItem->property()->parent()) {
+				m_editItem->property()->setValue( value );
+			}
+			else {
+				m_buffer->changeProperty(m_editItem->name(), value);//getComposedValue());
+			}
+
 /*			if(m_editItem->depth()==1) {
 				m_buffer->changeProperty(m_editItem->name().latin1(), value);
 			}
@@ -235,7 +241,14 @@ KexiPropertyEditor::slotEditorAccept(KexiPropertySubEditor *editor)
 		if(m_buffer)
 		{
 			m_buffer->debug();
-			m_buffer->changeProperty(m_editItem->name(), value);//getComposedValue());
+
+			if (m_editItem->property()->parent()) {
+				m_editItem->property()->setValue( value );
+			}
+			else {
+				m_buffer->changeProperty(m_editItem->name(), value);
+			}
+
 /*			if(m_editItem->depth()==1) {
 				m_buffer->changeProperty(m_editItem->name().latin1(), value);
 			}
