@@ -3,7 +3,6 @@
 ####### General stuff
 
 INCLUDES= $(all_includes) $(MICO_INCLUDES)
-AM_CXXFLAGS = -DINCLUDE_MOC_BULLSHIT
 
 ####### Files
 

@@ -1,9 +1,8 @@
 /* $Id$ */
 
 #include "KChartData.h"
-#ifdef INCLUDE_MOC_BULLSHIT
+
 #include "KChartData.moc"
-#endif
 
 #ifdef __FreeBSD__
 #include <float.h>
@@ -54,9 +53,7 @@ void KChartData::setXValue( uint pos, const char* value )
 	  xdata->insert( i, 0 );
   }
 
-  // Make a private copy of the string.
   QString* string = new QString( value );
-  string->detach();
 
   xdata->insert( pos, string );
 

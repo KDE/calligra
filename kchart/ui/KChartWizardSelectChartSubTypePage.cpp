@@ -10,7 +10,8 @@
 #include <qlabel.h>
 #include <qobjcoll.h>
 
-#include <kapp.h>
+#include <kiconloader.h>
+#include <klocale.h>
 
 KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent, KChart* chart ) :
   QWidget( parent ),
@@ -43,8 +44,10 @@ void KChartWizardSelectChartSubTypePage::chartSubTypeSelected( int type )
 
 void KChartWizardSelectChartSubTypePage::createChildren( int no )
 {
+  /*
   if( no != _no )
 	return; // that was for another page
+  */
 
   _charttype = _chart->chartType(); // note new chart type
 
@@ -80,8 +83,7 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 	_normalbarsPB->setOn( true );
 	_normalbarsPB->show();
 	_typeBG->insert( _normalbarsPB, SideBySide );
-	_normalbarsPM.load( KApplication::kde_toolbardir() + "/chart_normalbars.gif" );
-	_normalbarsPB->setPixmap( _normalbarsPM );
+	_normalbarsPB->setPixmap( BarIcon( "chart_normalbars") );
 	QLabel* normalbarsLA = new QLabel( i18n( "Normal" ), this );
 	normalbarsLA->show();
 	normalbarsLA->setGeometry( 10, 104, 94, 20 );
@@ -98,8 +100,7 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 						  barsontopFR->contentsRect().height() );
 	_barsontopPB->show();
 	_typeBG->insert( _barsontopPB, OnTop );
-	_barsontopPM.load( KApplication::kde_toolbardir() + "/chart_barsontop.gif" );
-	_barsontopPB->setPixmap( _barsontopPM );
+	_barsontopPB->setPixmap( BarIcon( "chart_barsontop" ) );
 	QLabel* barsontopLA = new QLabel( i18n( "On Top" ), this );
 	barsontopLA->setGeometry( 104, 104, 94, 20 );
 	barsontopLA->setAlignment( AlignCenter );
@@ -116,8 +117,7 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 							barsinfrontFR->contentsRect().height() );
 	_barsinfrontPB->show();
 	_typeBG->insert( _barsinfrontPB, InFront );
-	_barsinfrontPM.load( KApplication::kde_toolbardir() + "/chart_barsinfront.gif" );
-	_barsinfrontPB->setPixmap( _barsinfrontPM );
+	_barsinfrontPB->setPixmap( BarIcon( "chart_barsinfront" ) );
 	QLabel* barsinfrontLA = new QLabel( i18n( "In Front" ), this );
 	barsinfrontLA->setGeometry( 198, 104, 94, 20 );
 	barsinfrontLA->setAlignment( AlignCenter );
@@ -143,6 +143,5 @@ void KChartWizardSelectChartSubTypePage::createChildren( int no )
 }
 
 
-#ifdef INCLUDE_MOC_BULLSHIT
+
 #include "KChartWizardSelectChartSubTypePage.moc"
-#endif

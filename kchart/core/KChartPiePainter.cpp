@@ -22,6 +22,7 @@ KChartPiePainter::KChartPiePainter( KChart* chart ) :
 
   _chart->setValueFont( QFont( "courier", 10 ) );
   _chart->setLabelFont( QFont( "courier", 12 ) );
+  _angleoffset = 0;
 }
 
 
@@ -81,13 +82,13 @@ bool KChartPiePainter::setupCoords( QPaintDevice* paintdev )
 
   // setup the data colour list if it does no exist yet
   if( _chart->_datacolors.count() == 0 ) {
-	_chart->_datacolors.setColor( 0, red );
-	_chart->_datacolors.setColor( 1, green );
-	_chart->_datacolors.setColor( 2, blue );
-	_chart->_datacolors.setColor( 3, yellow );
-	_chart->_datacolors.setColor( 4, magenta );
-	_chart->_datacolors.setColor( 5, cyan );
-	_chart->_datacolors.setColor( 6, darkYellow );
+	_chart->_datacolors.setColor( 0, Qt::red );
+	_chart->_datacolors.setColor( 1, Qt::green );
+	_chart->_datacolors.setColor( 2, Qt::blue );
+	_chart->_datacolors.setColor( 3, Qt::yellow );
+	_chart->_datacolors.setColor( 4, Qt::magenta );
+	_chart->_datacolors.setColor( 5, Qt::cyan );
+	_chart->_datacolors.setColor( 6, Qt::darkYellow );
   }
 
   return true;
@@ -102,7 +103,7 @@ void KChartPiePainter::drawText( QPainter* painter )
 	painter->setFont( _chart->_titlefont );
 	QFontMetrics fm( _chart->_titlefont );
 	painter->drawText( tx, _chart->_topmargin, fm.width( _chart->_title ), 
-					   fm.height(), AlignLeft, _chart->_title );
+					   fm.height(), Qt::AlignLeft, _chart->_title );
   }
 
   QPaintDeviceMetrics pdm( painter->device() );
@@ -113,7 +114,7 @@ void KChartPiePainter::drawText( QPainter* painter )
 	painter->setFont( _chart->_xlabelfont );
 	painter->setPen( _chart->_labelcolor );
 	painter->drawText( tx, ty, fm.width( _chart->_xlabel ),
-					   fm.height(), AlignLeft, _chart->_xlabel );
+					   fm.height(), Qt::AlignLeft, _chart->_xlabel );
   }
 }
 
@@ -148,8 +149,8 @@ void KChartPiePainter::drawData( QPainter* painter )
 	QColor datacolor = chooseDataColor( i );
 	painter->setPen( datacolor );
 	// Create two brushes for filled and non-filled rectangles
-	QBrush filledbrush( datacolor, SolidPattern );
-	QBrush emptybrush( datacolor, NoBrush );
+	QBrush filledbrush( datacolor, Qt::SolidPattern );
+	QBrush emptybrush( datacolor, Qt::NoBrush );
 
 	// Set the angle of the pie slice
 	int pa = pb;
@@ -202,7 +203,7 @@ void KChartPiePainter::putLabel( QPainter* painter, int x, int y,
   QFontMetrics fm( _chart->_valuefont );
   painter->setFont( _chart->_valuefont );
   painter->setPen( _chart->_textcolor );
-  painter->drawText( x, y, fm.width( label ), fm.height(), AlignLeft,
+  painter->drawText( x, y, fm.width( label ), fm.height(), Qt::AlignLeft,
 					 label );
 }
 

@@ -1,7 +1,6 @@
 #ifndef _KCHARTWIZARDSELECTCHARTSUBTYPEPAGE_H
 #define _KCHARTWIZARDSELECTCHARTSUBTYPEPAGE_H
 
-#include <qpixmap.h>
 #include <qwidget.h>
 
 #include <KChartTypes.h>
@@ -33,9 +32,6 @@ private:
   QPushButton* _normalbarsPB;
   QPushButton* _barsontopPB;
   QPushButton* _barsinfrontPB;
-  QPixmap _normalbarsPM;
-  QPixmap _barsontopPM;
-  QPixmap _barsinfrontPM;
 };
 
 

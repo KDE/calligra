@@ -57,10 +57,10 @@ int main( int argc, char **argv )
 	legends.append( "debits" );
 	cw6.chart()->setLegends( legends );
 	KChartColorArray colorarray;
-	colorarray.setColor( 0, green );
-	colorarray.setColor( 1, red );
+	colorarray.setColor( 0, Qt::green );
+	colorarray.setColor( 1, Qt::red );
 	cw6.chart()->setDataColors( &colorarray );
-	cw6.chart()->setAxisLabelColor( black );
+	cw6.chart()->setAxisLabelColor( Qt::black );
 	cw6.chart()->setLegendPlacement( RightBottom );
 	cw6.chart()->setZeroAxisOnly( 0 );
 

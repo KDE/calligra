@@ -16,9 +16,7 @@
 
 #include <kdebug.h>
 
-#ifdef INCLUDE_MOC_BULLSHIT
 #include "KChart.moc"
-#endif
 
 KChart::KChart( KChartType type ) :
   _charttype( type )
@@ -60,7 +58,7 @@ void KChart::setChartType( KChartType charttype )
   else if( _charttype == Pie3D )
 	_cp = new KChartPie3DPainter( this );
   else {
-	KDEBUG( KDEBUG_WARN, 34001, "Unknown chart type selected, choosing bars" );
+	kdebug( KDEBUG_WARN, 34001, "Unknown chart type selected, choosing bars" );
 	_cp = new KChartBarsPainter( this );
   };
 

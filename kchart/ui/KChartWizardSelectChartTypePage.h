@@ -1,7 +1,6 @@
 #ifndef _KCHARTWIZARDSELECTCHARTTYPEPAGE_H
 #define _KCHARTWIZARDSELECTCHARTTYPEPAGE_H
 
-#include <qpixmap.h>
 #include <qwidget.h>
 
 class QFrame;
@@ -29,13 +28,6 @@ private:
   QPushButton* _pointsPB;
   QPushButton* _piePB;
   QPushButton* _pie3DPB;
-  QPixmap _barsPM;
-  QPixmap _linesPM;
-  QPixmap _linespointsPM;
-  QPixmap _areaPM;
-  QPixmap _pointsPM;
-  QPixmap _piePM;
-  QPixmap _pie3DPM;
 };
 
 

@@ -260,13 +260,13 @@ bool KChartAxesPainter::setupCoords( QPaintDevice* paintdev )
 	
   // set up the data colour list if it does not exist yet
   if( _chart->_datacolors.count() == 0 ) {
-	_chart->_datacolors.setColor( 0, red );
-	_chart->_datacolors.setColor( 1, green );
-	_chart->_datacolors.setColor( 2, blue );
-	_chart->_datacolors.setColor( 3, yellow );
-	_chart->_datacolors.setColor( 4, magenta );
-	_chart->_datacolors.setColor( 5, cyan );
-	_chart->_datacolors.setColor( 6, darkYellow );
+	_chart->_datacolors.setColor( 0, Qt::red );
+	_chart->_datacolors.setColor( 1, Qt::green );
+	_chart->_datacolors.setColor( 2, Qt::blue );
+	_chart->_datacolors.setColor( 3, Qt::yellow );
+	_chart->_datacolors.setColor( 4, Qt::magenta );
+	_chart->_datacolors.setColor( 5, Qt::cyan );
+	_chart->_datacolors.setColor( 6, Qt::darkYellow );
   }
 
   // more sanity checks
@@ -418,7 +418,7 @@ void KChartAxesPainter::drawText( QPainter* painter )
 	painter->setPen( _chart->_textcolor );
 	QFontMetrics fm( _chart->_titlefont );
 	painter->drawText( titlex, titley, fm.width( _chart->_title ), fm.height(), 
-					   AlignLeft, _chart->_title );
+					   Qt::AlignLeft, _chart->_title );
   }
 
   // x label
@@ -432,7 +432,7 @@ void KChartAxesPainter::drawText( QPainter* painter )
 	painter->setPen( _chart->_labelcolor );
 	QFontMetrics fm( _chart->_xlabelfont );
 	painter->drawText( xlabelx, xlabely, fm.width( _chart->_xlabel ), fm.height(), 
-					   AlignLeft, _chart->_xlabel );
+					   Qt::AlignLeft, _chart->_xlabel );
   }
 
   // y label
@@ -448,7 +448,7 @@ void KChartAxesPainter::drawText( QPainter* painter )
 	QPoint pos( ylabelx, ylabely );
 	pos = painter->xFormDev( pos ); // convert position back to user coords
 	painter->drawText( pos.x(), pos.y(), fm.width( _chart->_y1label ), fm.height(),
-					   AlignLeft, _chart->_y1label );
+					   Qt::AlignLeft, _chart->_y1label );
 	painter->resetXForm();
   }
 
@@ -466,7 +466,7 @@ void KChartAxesPainter::drawText( QPainter* painter )
 	QPoint pos( ylabel2x, ylabel2y );
 	pos = painter->xFormDev( pos ); // convert position back to user coords
 	painter->drawText( pos.x(), pos.y(), fm.width( _chart->_y2label ), fm.height(),
-					   AlignLeft, _chart->_y2label );
+					   Qt::AlignLeft, _chart->_y2label );
 	painter->resetXForm();
   }
 }
@@ -476,12 +476,12 @@ void KChartAxesPainter::drawAxes( QPainter* painter )
 {
   if( _chart->_boxaxis ) {
 	painter->setPen( _chart->_fgcolor );
-	painter->setBrush( NoBrush );
+	painter->setBrush( Qt::NoBrush );
 	painter->drawRect( QRect( QPoint( _chart->_left, _chart->_top ), 
 							  QPoint( _chart->_right, _chart->_bottom) ) );
   } else {
 	painter->setPen( _chart->_fgcolor );
-	painter->setBrush( NoBrush );
+	painter->setBrush( Qt::NoBrush );
 	painter->drawLine( _chart->_left, _chart->_top, _chart->_left, _chart->_bottom );
 	if( !_chart->_zeroaxisonly ) 
 	  painter->drawLine( _chart->_left, _chart->_bottom, _chart->_right, _chart->_bottom );
@@ -534,7 +534,7 @@ void KChartAxesPainter::drawTicks( QPainter* painter )
 	  painter->setPen( _chart->_axislabelcolor );
 	  QFontMetrics fm( _chart->_yaxisfont );
 	  painter->drawText( xy.x(), xy.y(), 
-						 fm.width( labelstr ), fm.height(), AlignLeft, labelstr );
+						 fm.width( labelstr ), fm.height(), Qt::AlignLeft, labelstr );
 	}
   }
 
@@ -572,7 +572,7 @@ void KChartAxesPainter::drawTicks( QPainter* painter )
 	painter->setFont( _chart->_xaxisfont );
 	QFontMetrics fm( _chart->_xaxisfont );
 	painter->drawText( xy.x(), yt, fm.width( text ), fm.height(), 
-					   AlignLeft, text );
+					   Qt::AlignLeft, text );
   }
 }
 
@@ -606,7 +606,7 @@ void KChartAxesPainter::drawLegend( QPainter* painter )
 	painter->setFont( _chart->_legendfont );
 	painter->setPen( _chart->_fgcolor );
 	painter->drawText( xe, ys, fm.width( _chart->_legends.at( legend ) ),
-					   fm.height(), AlignLeft, _chart->_legends.at( legend ) );
+					   fm.height(), Qt::AlignLeft, _chart->_legends.at( legend ) );
 
 	x += _chart->_legendelementwidth;
 
@@ -626,8 +626,8 @@ void KChartAxesPainter::drawLegendMarker( QPainter* painter, int number,
 
   y += (int)rint( _chart->_legendelementheight/2 - _chart->_legendmarkerheight/2 );
 
-  QBrush filledbrush( datacolor, SolidPattern );
-  QBrush emptybrush( datacolor, NoBrush );
+  QBrush filledbrush( datacolor, Qt::SolidPattern );
+  QBrush emptybrush( datacolor, Qt::NoBrush );
   QRect rect( QPoint( x, y ),
 			  QPoint( x + _chart->_legendmarkerwidth, y + _chart->_legendmarkerheight ) );
   painter->setBrush( filledbrush );

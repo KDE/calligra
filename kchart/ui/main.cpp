@@ -1,19 +1,5 @@
-#include "KChartWizard.h"
-#include "KChart.h"
-#include "KChartWidget.h"
-#include "KChartData.h"
-
-KChart* chart;
-KChartWizard* wiz;
-
-class MyReceiver : public QObject
-{
-  Q_OBJECT
-
-public slots:
-  void showChart();
-};
-
+#include "main.h"
+#include <kapp.h>
 
 void MyReceiver::showChart()
 {
@@ -21,8 +7,6 @@ void MyReceiver::showChart()
   cw->resize( 400, 300 );
   cw->show();
 }
-
-
 
 int main(int argc, char **argv)
 {
@@ -58,13 +42,13 @@ int main(int argc, char **argv)
   data2.setYValue( 1, 7, 3 );
   data2.setYValue( 1, 8, 4 );
   
-  chart = new KChart();
+  KChart * chart = new KChart();
   chart->setChartData( &data2 );
-  wiz = new KChartWizard( chart, 0, "kchartwizard", false );
+  KChartWizard * wiz = new KChartWizard( chart, 0, "kchartwizard", false );
   wiz->setDataArea( "A1:C4" );
   a.setMainWidget(wiz);
 
-  MyReceiver* rec = new MyReceiver;
+  MyReceiver* rec = new MyReceiver( wiz ) ;
   QObject::connect( wiz, SIGNAL( okclicked() ), rec, SLOT( showChart() ) );
 
   wiz->adjustSize();
@@ -73,4 +57,3 @@ int main(int argc, char **argv)
 }
 
 #include "main.moc"
-

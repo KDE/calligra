@@ -35,32 +35,34 @@ signals:
 					bool firstColIsLabel );
 
 private:
-  KChartWizardSelectDataPage* selectDataPage() const {
-	return (KChartWizardSelectDataPage*)_selectdatapage->w;
+  /*
+  QWidget* selectDataPage() const {
+	return _selectdatapagew;
   }
-  KChartWizardSelectChartTypePage* selectChartTypePage() const {
-	return (KChartWizardSelectChartTypePage*)_selectcharttypepage->w;
+  QWidget* selectChartTypePage() const {
+	return _selectcharttypepage;
   }
-  KChartWizardSelectChartSubTypePage* selectChartSubTypePage() const {
-	return (KChartWizardSelectChartSubTypePage*)_selectchartsubtypepage->w;
+  QWidget* selectChartSubTypePage() const {
+	return _selectchartsubtypepage;
   }
-  KChartWizardSetupDataPage* setupDataPage() const {
-	return (KChartWizardSetupDataPage*)_setupdatapage->w;
+  QWidget* setupDataPage() const {
+	return _setupdatapage;
   }
-  KChartWizardLabelsLegendPage* labelsLegendPage() const {
-	return (KChartWizardLabelsLegendPage*)_labelslegendpage->w;
+  QWidget* labelsLegendPage() const {
+	return _labelslegendpage;
   }
-  KChartWizardSetupAxesPage* axesPage() const {
-	return (KChartWizardSetupAxesPage*)_axespage->w;
+  QWidget* axesPage() const {
+	return _axespage;
   }
+  */
 
   KChart* _chart;
-  KWizardPage* _selectdatapage;
-  KWizardPage* _selectcharttypepage;
-  KWizardPage* _selectchartsubtypepage;
-  KWizardPage* _setupdatapage;
-  KWizardPage* _labelslegendpage;
-  KWizardPage* _axespage;
+  QWidget* _selectdatapage;
+  QWidget* _selectcharttypepage;
+  QWidget* _selectchartsubtypepage;
+  QWidget* _setupdatapage;
+  QWidget* _labelslegendpage;
+  QWidget* _axespage;
 };
 
 #endif

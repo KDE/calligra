@@ -10,8 +10,7 @@
 #include <qlined.h>
 #include <qchkbox.h>
 #include <qgrpbox.h>
-#include <kintegerline.h>
-#include <kapp.h>
+#include <klocale.h>
 
 KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent, 
 													  KChart* chart ) :
@@ -57,9 +56,9 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   QLabel* ticklengthLA = new QLabel( i18n( "Tick length:" ), this );
   ticklengthLA->setGeometry( 270, 90, 70, 30 );
   
-  KIntegerLine* ticklengthED = new KIntegerLine( this );
+  QLineEdit* ticklengthED = new QLineEdit( this ); // todo KFloatValidator
   ticklengthED->setGeometry( 340, 90, 40, 30 );
-  ticklengthED->setValue( _chart->tickLength() );
+  ticklengthED->setText( QString().setNum(_chart->tickLength()) );
   connect( ticklengthED, SIGNAL( valueChanged( int ) ),
 		   _chart, SLOT( setTickLength( int ) ) );
 
@@ -67,9 +66,9 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
 									this );
   yticksnumLA->setGeometry( 400, 90, 150, 30 );
   
-  KIntegerLine* yticksnumED = new KIntegerLine( this );
+  QLineEdit* yticksnumED = new QLineEdit( this ); // todo KFloatValidator
   yticksnumED->setGeometry( 550, 90, 30, 30 );
-  yticksnumED->setValue( _chart->yTicksNum() );
+  yticksnumED->setText( QString().setNum(_chart->yTicksNum()) );
   connect( yticksnumED, SIGNAL( valueChanged( int ) ),
 		   _chart, SLOT( setYTicksNum( int ) ) );
 
@@ -86,9 +85,9 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   QLabel* showeveryxLA = new QLabel( i18n( "Show every" ), this );
   showeveryxLA->setGeometry( 270, 190, 70, 30 );
 
-  KIntegerLine* showeveryxED = new KIntegerLine( this );
+  QLineEdit* showeveryxED = new QLineEdit( this ); // todo KFloatValidator
   showeveryxED->setGeometry( 340, 190, 20, 30 );
-  showeveryxED->setValue( _chart->xLabelSkip() );
+  showeveryxED->setText( QString().setNum(_chart->xLabelSkip()) );
   connect( showeveryxED, SIGNAL( valueChanged( int ) ),
 		   _chart, SLOT( setXLabelSkip( int ) ) );
 
@@ -106,9 +105,9 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
   QLabel* showeveryyLA = new QLabel( i18n( "Show every" ), this );
   showeveryyLA->setGeometry( 270, 250, 70, 30 );
 
-  KIntegerLine* showeveryyED = new KIntegerLine( this );
+  QLineEdit* showeveryyED = new QLineEdit( this ); // todo KFloatValidator
   showeveryyED->setGeometry( 340, 250, 20, 30 );
-  showeveryyED->setValue( _chart->yLabelSkip() );
+  showeveryyED->setText( QString().setNum(_chart->yLabelSkip()) );
   connect( showeveryyED, SIGNAL( valueChanged( int ) ),
 		   _chart, SLOT( setYLabelSkip( int ) ) );
 

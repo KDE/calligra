@@ -23,7 +23,7 @@ public:
 protected:
   QPoint cartesian( int, int, int, int, int );
   void putLabel( QPainter* painter, int x, int y, const char* label );
-  const int _angleoffset = 0;
+  int _angleoffset;
   bool setupCoords( QPaintDevice* );
 
   int _xcenter;

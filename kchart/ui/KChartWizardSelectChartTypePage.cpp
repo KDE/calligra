@@ -9,9 +9,8 @@
 #include <qpushbt.h>
 #include <qlabel.h>
 
-#include <kapp.h>
-
-#include <stdio.h>
+#include <klocale.h>
+#include <kiconloader.h>
 
 KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* parent, KChart* chart ) :
   QWidget( parent ),
@@ -29,8 +28,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _barsPB->resize( barsFR->contentsRect().width(), 
 				  barsFR->contentsRect().height() );
   _typeBG->insert( _barsPB, Bars );
-  _barsPM.load( KApplication::kde_toolbardir() + "/chart_bars.gif" );
-  _barsPB->setPixmap( _barsPM );
+  _barsPB->setPixmap( BarIcon( "chart_bars" ) );
   QLabel* barsLA = new QLabel( i18n( "Bars" ), this );
   barsLA->setGeometry( 10, 104, 94, 20 );
   barsLA->setAlignment( AlignCenter );
@@ -44,8 +42,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _linesPB->resize( linesFR->contentsRect().width(), 
 				  linesFR->contentsRect().height() );
   _typeBG->insert( _linesPB, Lines );
-  _linesPM.load( KApplication::kde_toolbardir() + "/chart_lines.gif" );
-  _linesPB->setPixmap( _linesPM );
+  _linesPB->setPixmap( BarIcon( "chart_lines") );
   QLabel* linesLA = new QLabel( i18n( "Lines" ), this );
   linesLA->setGeometry( 104, 104, 94, 20 );
   linesLA->setAlignment( AlignCenter );
@@ -59,8 +56,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _pointsPB->resize( pointsFR->contentsRect().width(), 
 				  pointsFR->contentsRect().height() );
   _typeBG->insert( _pointsPB, Points );
-  _pointsPM.load( KApplication::kde_toolbardir() + "/chart_points.gif" );
-  _pointsPB->setPixmap( _pointsPM );
+  _pointsPB->setPixmap( BarIcon( "chart_points") );
   QLabel* pointsLA = new QLabel( i18n( "Points" ), this );
   pointsLA->setGeometry( 198, 104, 94, 20 );
   pointsLA->setAlignment( AlignCenter );
@@ -74,8 +70,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _linespointsPB->resize( linespointsFR->contentsRect().width(), 
 				  linespointsFR->contentsRect().height() );
   _typeBG->insert( _linespointsPB, LinesPoints );
-  _linespointsPM.load( KApplication::kde_toolbardir() + "/chart_linespoints.gif" );
-  _linespointsPB->setPixmap( _linespointsPM );
+  _linespointsPB->setPixmap( BarIcon( "chart_linespoints") );
   QLabel* linespointsLA = new QLabel( i18n( "Lines and Points" ), this );
   linespointsLA->setGeometry( 292, 104, 94, 20 );
   linespointsLA->setAlignment( AlignCenter );
@@ -89,8 +84,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _areaPB->resize( areaFR->contentsRect().width(), 
 				  areaFR->contentsRect().height() );
   _typeBG->insert( _areaPB , Area);
-  _areaPM.load( KApplication::kde_toolbardir() + "/chart_area.gif" );
-  _areaPB->setPixmap( _areaPM );
+  _areaPB->setPixmap( BarIcon( "chart_area") );
   QLabel* areaLA = new QLabel( i18n( "Areas" ), this );
   areaLA->setGeometry( 10, 218, 94, 20 );
   areaLA->setAlignment( AlignCenter );
@@ -104,8 +98,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _piePB->resize( pieFR->contentsRect().width(), 
 				  pieFR->contentsRect().height() );
   _typeBG->insert( _piePB, Pie );
-  _piePM.load( KApplication::kde_toolbardir() + "/chart_pie.gif" );
-  _piePB->setPixmap( _piePM );
+  _piePB->setPixmap( BarIcon( "chart_pie") );
   QLabel* pieLA = new QLabel( i18n( "Pie" ), this );
   pieLA->setGeometry( 104, 218, 94, 20 );
   pieLA->setAlignment( AlignCenter );
@@ -119,8 +112,7 @@ KChartWizardSelectChartTypePage::KChartWizardSelectChartTypePage( QWidget* paren
   _pie3DPB->resize( pie3DFR->contentsRect().width(), 
 				  pie3DFR->contentsRect().height() );
   _typeBG->insert( _pie3DPB, Pie3D );
-  _pie3DPM.load( KApplication::kde_toolbardir() + "/chart_pie3D.gif" );
-  _pie3DPB->setPixmap( _pie3DPM );
+  _pie3DPB->setPixmap( BarIcon( "chart_pie3D") );
   QLabel* pie3DLA = new QLabel( i18n( "3D Pie" ), this );
   pie3DLA->setGeometry( 198, 218, 94, 20 );
   pie3DLA->setAlignment( AlignCenter );
@@ -140,6 +132,5 @@ void KChartWizardSelectChartTypePage::chartTypeSelected( int type )
   _chart->setChartType( (KChartType)type );
 }
 
-#ifdef INCLUDE_MOC_BULLSHIT
+
 #include "KChartWizardSelectChartTypePage.moc"
-#endif

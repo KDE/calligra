@@ -3,7 +3,6 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir)/../core $(all_includes) $(MICO_INCLUDES)
-CXXFLAGS = $(CXXFLAGS) -O -DINCLUDE_MOC_BULLSHIT
 
 ####### Files
 
@@ -21,17 +20,13 @@ include_HEADERS = KChartWizard.h
 noinst_PROGRAMS = test
 noinst_HEADERS = KChartWizardLabelsLegendPage.h KChartWizardSelectDataPage.h \
 	KChartWizardSelectChartSubTypePage.h KChartWizardSelectChartTypePage.h \
-	KChartWizardSetupAxesPage.h KChartWizardSetupDataPage.h
+	KChartWizardSetupAxesPage.h KChartWizardSetupDataPage.h main.h
 
 METASOURCES = KChartWizardSelectChartTypePage.moc \
 		KChartWizardLabelsLegendPage.moc \
 		KChartWizard.moc \
 		KChartWizardSelectChartSubTypePage.moc \
-		KChartWizardSetupDataPage.moc 
-
-$(srcdir)/main.cpp: main.moc
-main.moc: main.cpp
-	$(MOC) $(srcdir)/main.cpp -o main.moc
+		KChartWizardSetupDataPage.moc main.moc
 
 test_SOURCES = main.cpp 
 

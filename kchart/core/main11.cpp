@@ -75,12 +75,12 @@ int main( int argc, char **argv )
 	cw11.chart()->setLongTicks( true );
 	cw11.chart()->setXTicks( false );
 	KChartColorArray colors;
-	colors.setColor( 0, darkGreen );
-	colors.setColor( 1, darkRed );
-	colors.setColor( 2, darkYellow );
-	colors.setColor( 3, magenta );
+	colors.setColor( 0, Qt::darkGreen );
+	colors.setColor( 1, Qt::darkRed );
+	colors.setColor( 2, Qt::darkYellow );
+	colors.setColor( 3, Qt::magenta );
 	cw11.chart()->setDataColors( &colors );
-	PenStyle linetypes[4] = { SolidLine, DashLine, DotLine, DashDotLine };
+	Qt::PenStyle linetypes[4] = { Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine };
 	cw11.chart()->setLineTypes( linetypes, 4 );
 	cw11.chart()->setLegendMarkerWidth( 24 );
 	cw11.chart()->setLineWidth( 3 );

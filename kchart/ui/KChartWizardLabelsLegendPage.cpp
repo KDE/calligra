@@ -10,7 +10,7 @@
 #include <qradiobt.h>
 #include <qlabel.h>
 
-#include <kapp.h>
+#include <klocale.h>
 
 KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KChart* chart ) :
   QWidget( parent ),
@@ -95,9 +95,4 @@ KChartWizardLabelsLegendPage::~KChartWizardLabelsLegendPage()
   _chart->removeAutoUpdate( preview );
 }
 
- 
-#ifdef INCLUDE_MOC_BULLSHIT
 #include "KChartWizardLabelsLegendPage.moc"
-#endif
-
-

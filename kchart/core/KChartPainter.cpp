@@ -21,12 +21,12 @@ KChartPainter::KChartPainter( KChart* chart ) :
   _chart->_rightmargin = 0;
   
   // the colours
-  _chart->_bgcolor = white;
-  _chart->_fgcolor = darkBlue;
-  _chart->_textcolor = darkBlue;
-  _chart->_labelcolor = darkBlue;
-  _chart->_axislabelcolor = darkBlue;
-  _chart->_accentcolor = gray;
+  _chart->_bgcolor = Qt::white;
+  _chart->_fgcolor = Qt::darkBlue;
+  _chart->_textcolor = Qt::darkBlue;
+  _chart->_labelcolor = Qt::darkBlue;
+  _chart->_axislabelcolor = Qt::darkBlue;
+  _chart->_accentcolor = Qt::gray;
 
   // draw in transparent mode?
   _chart->_transparency = false;
@@ -78,8 +78,8 @@ QPainter* KChartPainter::setupPaintDev( QPaintDevice* paintdev )
   painter->eraseRect( painter->window() );
 
   // (Other colors to be set when used.)
-  painter->setBackgroundMode( _chart->_transparency ? TransparentMode :
-							  OpaqueMode );
+  painter->setBackgroundMode( _chart->_transparency ? Qt::TransparentMode :
+							  Qt::OpaqueMode );
 
   return painter;
 }

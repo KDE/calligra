@@ -38,8 +38,8 @@ void KChartBarsPainter::drawData( QPainter* painter )
 		QColor datacolor = chooseDataColor( dataset );
 		painter->setPen( datacolor );
 		// Create two brushes for filled and non-filled rectangles
-		QBrush filledbrush( datacolor, SolidPattern );
-		QBrush emptybrush( datacolor, NoBrush );
+		QBrush filledbrush( datacolor, Qt::SolidPattern );
+		QBrush emptybrush( datacolor, Qt::NoBrush );
 		
 		// get coordinates of top and center of bar
 		QPoint xpt = valToPixel( i+1, 
@@ -92,8 +92,8 @@ void KChartBarsPainter::drawData( QPainter* painter )
 	  QColor datacolor = chooseDataColor( dataset );
 	  painter->setPen( datacolor );
 	  // Create two brushes for filled and non-filled rectangles
-	  QBrush filledbrush( datacolor, SolidPattern );
-	  QBrush emptybrush( datacolor, NoBrush );
+	  QBrush filledbrush( datacolor, Qt::SolidPattern );
+	  QBrush emptybrush( datacolor, Qt::NoBrush );
 
 	  // loop over the positions in the current dataset
 	  for( uint i = 0; i <= _chart->chartData()->maxPos(); i++ ) {

@@ -48,8 +48,8 @@ void KChartAreaPainter::drawData( QPainter* painter )
 	points.setPoint( pointno, xy );
 
 	// Draw a filled line and a line polygon
-	QBrush filledbrush( datacolor, SolidPattern );
-	QBrush emptybrush( _chart->_accentcolor, NoBrush );
+	QBrush filledbrush( datacolor, Qt::SolidPattern );
+	QBrush emptybrush( _chart->_accentcolor, Qt::NoBrush );
 	painter->setPen( datacolor );
 	painter->setBrush( filledbrush );
 	painter->drawPolygon( points );
@@ -58,7 +58,7 @@ void KChartAreaPainter::drawData( QPainter* painter )
 	painter->drawPolygon( points );
 
 	// Draw the accent lines
-	QPen dashedpen( _chart->_accentcolor, 0, DashLine );
+	QPen dashedpen( _chart->_accentcolor, 0, Qt::DashLine );
 	painter->setPen( dashedpen );
 	for( uint i = 1; i < _chart->chartData()->maxPos(); i++ ) {
 	  if( !_chart->chartData()->hasYValue( ds, i ) )

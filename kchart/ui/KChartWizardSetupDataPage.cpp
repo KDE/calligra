@@ -124,6 +124,5 @@ void KChartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
 }
 
 
-#ifdef INCLUDE_MOC_BULLSHIT
+
 #include "KChartWizardSetupDataPage.moc"
-#endif

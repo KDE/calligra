@@ -50,13 +50,13 @@ bool KChartPie3DPainter::setupCoords( QPaintDevice* paintdev )
 
   // setup the data colour list if it does no exist yet
   if( _chart->_datacolors.count() == 0 ) {
-	_chart->_datacolors.setColor( 0, red );
-	_chart->_datacolors.setColor( 1, green );
-	_chart->_datacolors.setColor( 2, blue );
-	_chart->_datacolors.setColor( 3, yellow );
-	_chart->_datacolors.setColor( 4, magenta );
-	_chart->_datacolors.setColor( 5, cyan );
-	_chart->_datacolors.setColor( 6, darkYellow );
+	_chart->_datacolors.setColor( 0, Qt::red );
+	_chart->_datacolors.setColor( 1, Qt::green );
+	_chart->_datacolors.setColor( 2, Qt::blue );
+	_chart->_datacolors.setColor( 3, Qt::yellow );
+	_chart->_datacolors.setColor( 4, Qt::magenta );
+	_chart->_datacolors.setColor( 5, Qt::cyan );
+	_chart->_datacolors.setColor( 6, Qt::darkYellow );
   }
 
   return true;
@@ -97,8 +97,8 @@ void KChartPie3DPainter::drawData( QPainter* painter )
 	QColor datacolor = chooseDataColor( i );
 	painter->setPen( datacolor );
 	// Create two brushes for filled and non-filled rectangles
-	QBrush filledbrush( datacolor, SolidPattern );
-	QBrush emptybrush( datacolor, NoBrush );
+	QBrush filledbrush( datacolor, Qt::SolidPattern );
+	QBrush emptybrush( datacolor, Qt::NoBrush );
 
 	// Set the angle of the pie slice
 	int pa = pb;

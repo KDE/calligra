@@ -1,9 +1,8 @@
 /* $Id$ */
 
 #include "KChartWidget.h"
-#ifdef INCLUDE_MOC_BULLSHIT
+
 #include "KChartWidget.moc"
-#endif
 #include "KChartData.h"
 
 KChartWidget::KChartWidget( KChartType charttype, QWidget* parent, 

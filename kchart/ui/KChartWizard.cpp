@@ -17,6 +17,7 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
   _chart( chart )
 {
   // General setup
+  /*
   setCancelButton();
   setOkButton();
   setDefaultButton();
@@ -24,56 +25,32 @@ KChartWizard::KChartWizard ( KChart* chart, QWidget *parent, const char* name,
   setEnablePopupMenu(true);
   setEnableArrowButtons(true);
   setDirectionsReflectsPage(true);
+  */
 
   // First page: select the range
-  _selectdatapage = new KWizardPage;
-  QWidget* selectdatawidget = new KChartWizardSelectDataPage( this );
-  _selectdatapage->w = selectdatawidget;
-  _selectdatapage->title = i18n( "Select data" );
-  _selectdatapage->enabled = true;
-  addPage( _selectdatapage );
+  _selectdatapage = new KChartWizardSelectDataPage( this );
+  addPage( _selectdatapage, i18n( "Select data" ) );
 
   // Second page: select the major chart type
-  _selectcharttypepage = new KWizardPage;
-  QWidget* selectcharttypewidget = new KChartWizardSelectChartTypePage( this,
-																		_chart );
-  _selectcharttypepage->w = selectcharttypewidget;
-  _selectcharttypepage->title = i18n( "Select chart type" );
-  _selectcharttypepage->enabled = true;
-  addPage( _selectcharttypepage );
+  _selectcharttypepage =  new KChartWizardSelectChartTypePage( this, _chart );
+  addPage( _selectcharttypepage, i18n( "Select chart type" ) );
 
   // Third page: select the minor chart type
-  _selectchartsubtypepage = new KWizardPage;
-  QWidget* selectchartsubtypewidget = new KChartWizardSelectChartSubTypePage( this, _chart );
-  _selectchartsubtypepage->w = selectchartsubtypewidget;
-  _selectchartsubtypepage->title = i18n( "Select chart subtype" );
-  _selectchartsubtypepage->enabled = true;
-  int page = addPage( _selectchartsubtypepage );
-  ((KChartWizardSelectChartSubTypePage*)selectchartsubtypewidget)->setNumber( page );
+  _selectchartsubtypepage = new KChartWizardSelectChartSubTypePage( this, _chart );
+  addPage( _selectchartsubtypepage, i18n( "Select chart subtype" ) );
+  //((KChartWizardSelectChartSubTypePage*)selectchartsubtypewidget)->setNumber( page );
 
   // Fourth page: data setup
-  _setupdatapage = new KWizardPage;
-  QWidget* setupdatawidget = new KChartWizardSetupDataPage( this, _chart );
-  _setupdatapage->w = setupdatawidget;
-  _setupdatapage->title = i18n( "Data setup" );
-  _setupdatapage->enabled = true;
-  addPage( _setupdatapage );
+  _setupdatapage = new KChartWizardSetupDataPage( this, _chart );
+  addPage( _setupdatapage, i18n( "Data setup" ) );
 
   // Fifth page: labels/legends setup
-  _labelslegendpage = new KWizardPage;
-  QWidget* labelslegendwidget = new KChartWizardLabelsLegendPage( this, _chart );
-  _labelslegendpage->w = labelslegendwidget;
-  _labelslegendpage->title = i18n( "Labels and legend" );
-  _labelslegendpage->enabled = true;
-  addPage( _labelslegendpage );
+  _labelslegendpage = new KChartWizardLabelsLegendPage( this, _chart );
+  addPage( _labelslegendpage, i18n( "Labels and legend" ) );
 
   // Sixth page: axes setup
-  _axespage = new KWizardPage;
-  QWidget* axeswidget = new KChartWizardSetupAxesPage( this, _chart );
-  _axespage->w = axeswidget;
-  _axespage->title = i18n( "Setup axes" );
-  _axespage->enabled = true;
-  addPage( _axespage );
+  _axespage = new KChartWizardSetupAxesPage( this, _chart );
+  addPage( _axespage, i18n( "Setup axes" ) );
 
   resize( 400, 500 );
 }
@@ -92,13 +69,13 @@ KChartWizard::~KChartWizard()
 
 void KChartWizard::setDataArea( QString area )
 {
-  selectDataPage()->rangeED->setText( area );
+  ((KChartWizardSelectDataPage*)_selectdatapage)->rangeED->setText( area );
 }
 
 
 QString KChartWizard::dataArea() const
 {
-  return selectDataPage()->rangeED->text();
+  return ((KChartWizardSelectDataPage*)_selectdatapage)->rangeED->text();
 }
 
 
@@ -110,6 +87,5 @@ void KChartWizard::emitNeedNewData( const char* area, int rowcol,
 }
 
 
-#ifdef INCLUDE_MOC_BULLSHIT
+
 #include "KChartWizard.moc"
-#endif
