@@ -37,6 +37,7 @@
 #include <qtoolbutton.h>
 #include <qtimer.h>
 #include <qbutton.h>
+#include <qclipboard.h>
 
 #include <qstringlist.h>
 #include <qstrlist.h>
@@ -118,6 +119,7 @@
 #include "kiviotextformatdlg.h"
 #include "kiviostencilformatdlg.h"
 #include "kivioarrowheadformatdlg.h"
+#include "kiviodragobject.h"
 
 #include "kolinewidthaction.h"
 #include "kolinestyleaction.h"
@@ -303,6 +305,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   m_pDoc->setModified(isModified);
   pluginManager()->activateDefaultTool();
+  clipboardDataChanged();  // Enable/disable the paste action
 }
 
 KivioView::~KivioView()
@@ -392,6 +395,7 @@ void KivioView::setupActions()
   m_editCut = KStdAction::cut( this, SLOT(cutStencil()), actionCollection(), "cutStencil" );
   m_editCopy = KStdAction::copy( this, SLOT(copyStencil()), actionCollection(), "copyStencil" );
   m_editPaste = KStdAction::paste( this, SLOT(pasteStencil()), actionCollection(), "pasteStencil" );
+  connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
 
   m_selectAll = KStdAction::selectAll(this, SLOT(selectAllStencils()), actionCollection(), "selectAllStencils");
   m_selectNone = KStdAction::deselect(this, SLOT(unselectAllStencils()), actionCollection(), "unselectAllStencils");
@@ -1218,6 +1222,9 @@ void KivioView::updateToolBars()
 
         m_menuTextFormatAction->setEnabled( false );
         m_menuStencilConnectorsAction->setEnabled( false );
+        
+        m_editCut->setEnabled(false);
+        m_editCopy->setEnabled(false);
     }
     else
     {
@@ -1269,6 +1276,9 @@ void KivioView::updateToolBars()
             m_setFGColor->setEnabled (false);
             m_setBGColor->setEnabled (false);
         }
+    
+        m_editCut->setEnabled(true);
+        m_editCopy->setEnabled(true);
     }
 
     m_pStencilGeometryPanel->setEmitSignals(true);
@@ -2053,6 +2063,23 @@ QPtrList<KAction> KivioView::layerActionList()
   tmp.append(m_stencilToBack);
   
   return tmp;
+}
+
+void KivioView::clipboardDataChanged()
+{
+  QMimeSource* data = QApplication::clipboard()->data();
+  KivioDragObject decoder(this);
+  bool paste = decoder.canDecode(data);
+  m_editPaste->setEnabled(paste);
+  kdDebug() << "PASTE: " << paste << endl;
+}
+
+void KivioView::partActivateEvent(KParts::PartActivateEvent* event)
+{
+  if((event->widget() == this) && event->activated()) {
+    updateToolBars();
+    clipboardDataChanged();
+  }
 }
 
 #include "kivio_view.moc"

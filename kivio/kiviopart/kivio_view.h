@@ -77,8 +77,10 @@ class KoLineStyleAction;
 using namespace Kivio;
 
 class KivioView : public KoView
-{ Q_OBJECT
-    friend class KivioCanvas;
+{ 
+  Q_OBJECT
+  friend class KivioCanvas;
+  
   public:
     KivioView( QWidget *_parent, const char *_name, KivioDoc *_doc );
     ~KivioView();
@@ -256,11 +258,14 @@ class KivioView : public KoView
     void textFormat();
     void stencilFormat();
     void arrowHeadFormat();
+    
+    void clipboardDataChanged();
   protected:
     void setupActions();
     void initActions();
 
     virtual void updateReadWrite( bool readwrite );
+    virtual void partActivateEvent(KParts::PartActivateEvent* event);
 
     void changeZoomMenu(int z = 0);
     void showZoom(int z);
