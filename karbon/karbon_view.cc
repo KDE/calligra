@@ -243,6 +243,7 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 		m_toolbox = 0L;
 		delete m_toolFactory;
 		m_toolFactory = 0L;
+		m_currentTool = 0L;
 		return ;
 	}
 
