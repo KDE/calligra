@@ -1146,7 +1146,7 @@ void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const 
 }
 
 /*======================== align objects left ===================*/
-void KPrPage::alignObjsLeft()
+KCommand * KPrPage::alignObjsLeft()
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1179,10 +1179,11 @@ void KPrPage::alignObjsLeft()
 	_diffs.setAutoDelete( true );
 	_diffs.clear();
     }
+    return moveByCmd2;
 }
 
 /*==================== align objects center h ===================*/
-void KPrPage::alignObjsCenterH()
+KCommand * KPrPage::alignObjsCenterH()
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1217,10 +1218,11 @@ void KPrPage::alignObjsCenterH()
          _diffs.setAutoDelete(true);
          _diffs.clear();
     }
+    return moveByCmd2;
 }
 
 /*==================== align objects right ======================*/
-void KPrPage::alignObjsRight()
+KCommand * KPrPage::alignObjsRight()
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1251,10 +1253,11 @@ void KPrPage::alignObjsRight()
 	_diffs.setAutoDelete( true );
 	_diffs.clear();
     }
+    return moveByCmd2;
 }
 
 /*==================== align objects top ========================*/
-void KPrPage::alignObjsTop()
+KCommand *KPrPage::alignObjsTop()
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1288,10 +1291,11 @@ void KPrPage::alignObjsTop()
 	_diffs.setAutoDelete( true );
 	_diffs.clear();
     }
+    return moveByCmd2;
 }
 
 /*==================== align objects center v ===================*/
-void KPrPage::alignObjsCenterV()
+KCommand * KPrPage::alignObjsCenterV()
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1327,9 +1331,10 @@ void KPrPage::alignObjsCenterV()
         _diffs.setAutoDelete(true);
         _diffs.clear();
     }
+    return moveByCmd2;
 }
 
-void KPrPage::alignObjsBottom()
+KCommand * KPrPage::alignObjsBottom()
 {
     MoveByCmd2 *moveByCmd2=0L;
     bool newPosition=false;
@@ -1363,6 +1368,7 @@ void KPrPage::alignObjsBottom()
 	_diffs.setAutoDelete( true );
 	_diffs.clear();
     }
+    return moveByCmd2;
 }
 
 

@@ -1852,37 +1852,147 @@ void KPresenterView::brushChosen()
 /*======================= align object left =====================*/
 void KPresenterView::extraAlignObjLeft()
 {
-    m_canvas->activePage()->alignObjsLeft();
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) left" ));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    cmd=m_canvas->activePage()->alignObjsLeft();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->alignObjsLeft();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        m_pKPresenterDoc->addCommand(macro);
+    else
+        delete macro;
 }
 
 /*======================= align object center h =================*/
 void KPresenterView::extraAlignObjCenterH()
 {
-    m_canvas->activePage()->alignObjsCenterH();
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) centered (horizontal)"));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    cmd=m_canvas->activePage()->alignObjsCenterH();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->alignObjsCenterH();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        m_pKPresenterDoc->addCommand(macro);
+    else
+        delete macro;
+
 }
 
 /*======================= align object right ====================*/
 void KPresenterView::extraAlignObjRight()
 {
-    m_canvas->activePage()->alignObjsRight();
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) right" ));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    cmd=m_canvas->activePage()->alignObjsRight();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->alignObjsRight();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        m_pKPresenterDoc->addCommand(macro);
+    else
+        delete macro;
 }
 
 /*======================= align object top ======================*/
 void KPresenterView::extraAlignObjTop()
 {
-    m_canvas->activePage()->alignObjsTop();
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) top" ));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    cmd=m_canvas->activePage()->alignObjsTop();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->alignObjsTop();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        m_pKPresenterDoc->addCommand(macro);
+    else
+        delete macro;
 }
 
 /*======================= align object center v =================*/
 void KPresenterView::extraAlignObjCenterV()
 {
-    m_canvas->activePage()->alignObjsCenterV();
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) center / vertical" ));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    cmd=m_canvas->activePage()->alignObjsCenterV();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->alignObjsCenterV();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        m_pKPresenterDoc->addCommand(macro);
+    else
+        delete macro;
+
 }
 
 /*======================= align object bottom ===================*/
 void KPresenterView::extraAlignObjBottom()
 {
-    m_canvas->activePage()->alignObjsBottom();
+    KMacroCommand *macro= new KMacroCommand(i18n( "Align object(s) bottom" ));
+    bool createMacro=false;
+    KCommand *cmd=0L;
+    cmd=m_canvas->activePage()->alignObjsBottom();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    cmd=stickyPage()->alignObjsBottom();
+    if(cmd)
+    {
+        macro->addCommand(cmd);
+        createMacro=true;
+    }
+    if(createMacro)
+        m_pKPresenterDoc->addCommand(macro);
+    else
+        delete macro;
 }
 
 /*===============================================================*/
