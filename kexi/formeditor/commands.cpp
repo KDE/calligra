@@ -232,7 +232,8 @@ InsertWidgetCommand::execute()
 		return;
 
 	m_container->m_insertRect = m_insertRect;
-	if(!m_container->m_insertRect.isValid()) // if the insertRect is invalid (ie only one point), we use widget' size hint
+	// if the insertRect is invalid (ie only one point), we use widget' size hint
+	if/*(!m_container->m_insertRect.isValid() || */( (m_insertRect.width() < 21) && (m_insertRect.height() < 21))
 	{
 		QSize s = w->sizeHint();
 		if(s.isEmpty())

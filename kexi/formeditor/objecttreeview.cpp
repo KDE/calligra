@@ -43,10 +43,10 @@ ObjectTreeViewItem::ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeIte
 	m_item = item;
 }
 
-ObjectTreeViewItem::ObjectTreeViewItem(KListView *list)
- : KListViewItem(list)
+ObjectTreeViewItem::ObjectTreeViewItem(KListView *list, ObjectTreeItem *item)
+ : KListViewItem(list, item ? item->name() : QString::null, item ? item->className() : QString::null)
 {
-	m_item = 0;
+	m_item = item;
 }
 
 const QString
@@ -64,13 +64,15 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 	int margin = listView()->itemMargin();
 	if(column == 1)
 	{
-		if(depth()==0)
+		//if(depth()==0)
+		if(!m_item)
 			return;
 		KListViewItem::paintCell(p, cg, column, width, align);
 	}
 	else
 	{
-		if(depth()==0)
+		//if(depth()==0)
+		if(!m_item)
 			return;
 
 		p->fillRect(0,0,width, height(), QBrush(backgroundColor()));
@@ -86,7 +88,14 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 		if(isSelected())
 			f.setBold(true);
 		p->setFont(f);
-		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, m_item->name());
+		if(depth() == 0) // for edit tab order dialog
+		{
+			QString iconName = ((ObjectTreeView*)listView())->pixmapForClass(m_item->widget()->className());
+			p->drawPixmap(margin, (height() - IconSize(KIcon::Small))/2 , SmallIcon(iconName));
+			p->drawText(QRect(2*margin + IconSize(KIcon::Small),0,width, height()-1), Qt::AlignVCenter, m_item->name());
+		}
+		else
+			p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, m_item->name());
 		p->restore();
 
 		p->setPen( QColor(200,200,200) ); //like in t.v.
@@ -141,7 +150,8 @@ void
 ObjectTreeViewItem::setup()
 {
 	KListViewItem::setup();
-	if(depth()==0)
+	//if(depth()==0)
+	if(!m_item)
 		setHeight(0);
 }
 

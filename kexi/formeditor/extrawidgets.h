@@ -78,8 +78,10 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 	Q_OBJECT
 
 	public:
-		EditListViewDialog(QListView *listview, QWidget *parent);
+		EditListViewDialog(QWidget *parent);
 		~EditListViewDialog(){;}
+
+		int exec(QListView *listview);
 
 	public slots:
 		// Columns page

@@ -139,7 +139,8 @@ WidgetFactory::editRichText(QWidget *w, QString &text)
 void
 WidgetFactory::editListView(QListView *listview)
 {
-	EditListViewDialog dlg(listview, ((QWidget*)listview)->topLevelWidget());
+	EditListViewDialog dlg(((QWidget*)listview)->topLevelWidget());
+	dlg.exec(listview);
 }
 
 bool

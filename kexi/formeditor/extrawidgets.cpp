@@ -230,16 +230,10 @@ RichTextDialog::slotVerticalAlignmentChanged(VerticalAlignment align)
 // A Dialog to edit the contents of a listview ////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 
-EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
+EditListViewDialog::EditListViewDialog(QWidget *parent)
 //js(kde3.2 dependent) : KDialogBase(Tabbed, 0/* WFlags */, parent, "editlistview_dialog", true, i18n("Edit listview contents"), Ok|Cancel, Ok, false)
 : KDialogBase(Tabbed, i18n("Edit listview contents"), Ok|Cancel, Ok, parent, "editlistview_dialog", true /* modal */, false)
 {
-	if(!listview)
-	{
-		kdDebug() << "EditListViewDialog ERROR: no listview " << endl;
-		return;
-	}
-
 	m_column = addPage(i18n("Columns"));
 	m_contents = addPage(i18n("Contents"));
 
@@ -296,27 +290,8 @@ EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
 	m_listview->setSorting(-1);
 	layout->addWidget(m_listview);
 	m_listview->setFocus();
-
-	// We copy the contents of the listview into our listview
-	for(int i = 0; i < listview->columns(); i++)
-	{
-		m_listview->addColumn(listview->columnText(i), listview->columnWidth(i));
-		m_listview->header()->setClickEnabled(listview->header()->isClickEnabled(i), i);
-		m_listview->header()->setResizeEnabled(listview->header()->isResizeEnabled(i), i);
-		m_listview->header()->setStretchEnabled(listview->header()->isStretchEnabled(i), i);
-		m_listview->setRenameable(i, true);
-	}
-	QListViewItem *item = listview->firstChild();
-	while(item)
-	{
-		loadChildNodes(m_listview, item, 0);
-		item = item->nextSibling();
-	}
-
 	connect(m_listview, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
-	m_listview->setSelected(m_listview->firstChild(), true);
-	if(!m_listview->firstChild())
-		updateButtons(0);
+	connect(m_listview, SIGNAL(moved(QListViewItem*, QListViewItem*, QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
 
 	/////////////////// Setup the columns page ////////////////
 	QHBoxLayout *hbox = new QHBoxLayout(m_column, 0, 6);
@@ -368,14 +343,49 @@ EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
 	m_listbox->setFocus();
 	hbox->insertWidget(0, m_listbox);
 	hbox->addWidget(m_editor);
-	for(int i = 0; i < listview->columns(); i++)
-		m_listbox->insertItem(listview->columnText(i));
 	connect(m_listbox, SIGNAL(currentChanged(QListBoxItem*)), this, SLOT(updateItemProperties(QListBoxItem*)));
-	m_listbox->setSelected(0, true);
 
 	//// Init dialog and display it ////////////////////////
 	setInitialSize(QSize(500, 300), true);
-	if( exec() == QDialog::Accepted)
+
+}
+
+int
+EditListViewDialog::exec(QListView *listview)
+{
+	if(!listview)
+	{
+		kdDebug() << "EditListViewDialog ERROR: no listview " << endl;
+		return 0;
+	}
+
+	// We copy the contents of the listview into our listview
+	for(int i = 0; i < listview->columns(); i++)
+	{
+		m_listview->addColumn(listview->columnText(i), listview->columnWidth(i));
+		m_listview->header()->setClickEnabled(listview->header()->isClickEnabled(i), i);
+		m_listview->header()->setResizeEnabled(listview->header()->isResizeEnabled(i), i);
+		m_listview->header()->setStretchEnabled(listview->header()->isStretchEnabled(i), i);
+		m_listview->setRenameable(i, true);
+	}
+	QListViewItem *item = listview->firstChild();
+	while(item)
+	{
+		loadChildNodes(m_listview, item, 0);
+		item = item->nextSibling();
+	}
+
+	m_listview->setSelected(m_listview->firstChild(), true);
+	if(!m_listview->firstChild())
+		updateButtons(0);
+
+	for(int i = 0; i < listview->columns(); i++)
+		m_listbox->insertItem(listview->columnText(i));
+	m_listbox->setSelected(0, true);
+
+	// and we exec the dialog
+	int r =  KDialogBase::exec();
+	if(r == QDialog::Accepted)
 	{
 		listview->clear();
 		// We copy the contents of our listview back in the listview
@@ -400,6 +410,7 @@ EditListViewDialog::EditListViewDialog(QListView *listview, QWidget *parent)
 			item = item->nextSibling();
 		}
 	}
+	return r;
 }
 
 /// Columns page slots ///////
@@ -659,22 +670,7 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 
 	m_treeview->m_form = 0;
 	connect(m_treeview, SIGNAL(currentChanged(QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
-/*moved to exec()
-	m_treeview->m_form = form;
-	m_treeview->setItemsMovable(true);
-	m_treeview->setDragEnabled(true);
-	m_treeview->setDropVisualizer(true);
-	m_treeview->setAcceptDrops(true);
-	m_treeview->setFocus();
-	l->addWidget(m_treeview, 0, 0);
-
-	ObjectTreeViewItem *topItem = new ObjectTreeViewItem(m_treeview);
-	topItem->setOpen(true);
-	if(form->autoTabStops())
-		form->autoAssignTabStops();
-	for(ObjectTreeItem *it = form->tabStops()->last(); it; it = form->tabStops()->prev())
-		new ObjectTreeViewItem(topItem, it);
-	*/
+	connect(m_treeview, SIGNAL(moved(QListViewItem*, QListViewItem*, QListViewItem*)), this, SLOT(updateButtons(QListViewItem*)));
 
 	QVBoxLayout *vbox = new QVBoxLayout();
 	l->addLayout(vbox, 0, 1);
@@ -705,15 +701,15 @@ int TabStopDialog::exec(Form *form)
 	m_treeview->clear();
 	m_treeview->m_form = form;
 
-	ObjectTreeViewItem *topItem = new ObjectTreeViewItem(m_treeview);
-	topItem->setOpen(true);
+	//ObjectTreeViewItem *topItem = new ObjectTreeViewItem(m_treeview);
+	//topItem->setOpen(true);
 	if(form->autoTabStops())
 		form->autoAssignTabStops();
 	for(ObjectTreeItem *it = form->tabStops()->last(); it; it = form->tabStops()->prev())
-		new ObjectTreeViewItem(topItem, it);
+		new ObjectTreeViewItem(m_treeview, it);
 
 	m_check->setChecked(form->autoTabStops());
-	
+
 	int r = KDialogBase::exec();
 	if( r == QDialog::Accepted)
 	{
@@ -725,13 +721,14 @@ int TabStopDialog::exec(Form *form)
 		}
 
 		form->tabStops()->clear();
-		ObjectTreeViewItem *item = (ObjectTreeViewItem*)topItem->itemBelow();
+		//ObjectTreeViewItem *item = (ObjectTreeViewItem*)topItem->itemBelow();
+		ObjectTreeViewItem *item = (ObjectTreeViewItem*)m_treeview->firstChild();
 		while(item)
 		{
 			ObjectTreeItem *tree = item->objectTree();
 			if(tree)
 				form->tabStops()->append(tree);
-			item = (ObjectTreeViewItem*)item->itemBelow();
+			item = (ObjectTreeViewItem*)item->nextSibling();
 		}
 	}
 	return r;
@@ -763,7 +760,7 @@ TabStopDialog::updateButtons(QListViewItem *item)
 		return;
 	}
 
-	m_buttons[BUp]->setEnabled( (item->itemAbove() && (item->itemAbove()->parent() == item->parent())) );
+	m_buttons[BUp]->setEnabled( (item->itemAbove() /*&& (item->itemAbove()->parent() == item->parent()))*/ ));
 	m_buttons[BDown]->setEnabled(item->nextSibling());
 }
 

@@ -32,7 +32,7 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 {
 	public:
 		ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeItem *item);
-		ObjectTreeViewItem(KListView *list);
+		ObjectTreeViewItem(KListView *list, ObjectTreeItem *item=0);
 		~ObjectTreeViewItem() {;}
 
 		//! \return the item name, ie the ObjectTreeItem name
