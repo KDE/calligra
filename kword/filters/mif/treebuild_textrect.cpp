@@ -7,6 +7,9 @@
 
 #include "treebuild_textrect.h"
 #include "unitconv.h"
+#include "treebuild_general.h"
+
+#include <qlist.h>
 
 TextRect::TextRect(TextRectElementList * elements)
 {
@@ -189,5 +192,41 @@ TRNext::TRNext(int value)
 	_value = value;
 }
 
+
+/*!
+ * Return the ID of the TextRect object.
+ */
+int TextRect::id()
+{
+	QListIterator<TextRectElement> ei( *_elements );
+	TextRectElement* el = ei.current();
+	while( el ) {
+		++ei;
+		if( el->type() == TextRectElement::T_FrameID ) {
+			FrameID* fid = el->frameID();
+			return fid->id();
+		}
+		el = ei.current();
+	}
+	return -1;
+}
+
+
+/*!
+ * Return the BRect of the TextRect object.
+ */
+BRect* TextRect::bRect()
+{
+	QListIterator<TextRectElement> ei( *_elements );
+	TextRectElement* el = ei.current();
+	while( el ) {
+		++ei;
+		if( el->type() == TextRectElement::T_BRect ) {
+			return el->bRect();
+		}
+		el = ei.current();
+	}
+	return 0;
+}
 
 

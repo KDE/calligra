@@ -9,7 +9,7 @@
 #define _TREEBUILD_TEXTRECT_H
 
 #include <string>
-#include <list>
+#include <qlist.h>
 
 class ShapeRect;
 class BRect;
@@ -135,6 +135,10 @@ public:
 
 	TextRectElementType type() const { return _type; }
 
+	FrameID* frameID() const { return _type == T_FrameID ? 
+								   _frameid : 0; } 
+	BRect* bRect() const { return _type == T_BRect ? _brect : 0; }
+
 private:
 	TextRectElementType _type;
 	union {
@@ -162,7 +166,7 @@ private:
 };
 
 
-typedef list<TextRectElement*> TextRectElementList;
+typedef QList<TextRectElement> TextRectElementList;
 
 class TextRect
 {
@@ -170,12 +174,14 @@ public:
 	TextRect( TextRectElementList* elements );
 
 	TextRectElementList* elements() const { return _elements; }
+	int id();
+	BRect* bRect();
 
 private:
 	TextRectElementList* _elements;
 };
 
-typedef list<TextRect*> TextRectList;
+typedef QList<TextRect> TextRectList;
 
 
 #endif

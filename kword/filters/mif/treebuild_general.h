@@ -36,6 +36,7 @@ class FrameID
 {
 public:
 	FrameID( int );
+	int id() const { return _value; }
 
 private:
 	int _value;
@@ -76,6 +77,7 @@ class TextRectID
 {
 public:
 	TextRectID( int );
+	int id() const { return _value; }
 
 private:
 	int _value;
@@ -206,6 +208,11 @@ public:
 		   double y, const char* unity,
 		   double w, const char* unitw,
 		   double h, const char* unith );
+
+	double x() const { return _x; }
+	double y() const { return _y; }
+	double width() const { return _w; }
+	double height() const { return _h; }
 
 private:
 	double _x;

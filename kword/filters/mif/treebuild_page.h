@@ -8,8 +8,8 @@
 #ifndef _TREEBUILD_PAGE_H
 #define _TREEBUILD_PAGE_H
 
-#include <list>
 #include <string>
+#include <qlist.h>
 
 class Polygon;
 class Unique;
@@ -129,6 +129,8 @@ public:
 
 	PageElementType type() const { return _type; }
 
+	TextRect* textRect() const { return _type == T_TextRect ?
+									 _textrect : 0; }
 
 private:
 	PageElementType _type;
@@ -154,7 +156,7 @@ private:
 	};
 };
 
-typedef list<PageElement*> PageElementList;
+typedef QList<PageElement> PageElementList;
 
 class Page
 {
@@ -167,7 +169,7 @@ private:
 	PageElementList* _elements;
 };
 
-typedef list<Page*> PageList;
+typedef QList<Page> PageList;
 
 extern PageList pages;
 

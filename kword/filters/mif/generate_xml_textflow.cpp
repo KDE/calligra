@@ -53,7 +53,6 @@ void generate_xml_textflow_element::out_begin()
 {
 	// PENDING(kalle) Adjust attributes
 	xmloutstr << "  <FRAMESET frameType=\"1\" autoCreateNewFrame=\"1\">" << endl;
-	xmloutstr << "   <FRAME left=\"28\" top=\"42\" right=\"566\" bottom=\"400\"/>" << endl;
 }
 
 void generate_xml_textflow_element::out_end()
