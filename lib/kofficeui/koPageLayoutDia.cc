@@ -67,13 +67,24 @@ KoPagePreview::~KoPagePreview()
 /*=================== set layout =================================*/
 void KoPagePreview::setPageLayout( const KoPageLayout &_layout )
 {
-    pgWidth = POINT_TO_MM(_layout.ptWidth) * 0.5;
-    pgHeight = POINT_TO_MM(_layout.ptHeight) * 0.5;
+    // resolution[XY] is in pixel per pt
+    double resolutionX = POINT_TO_INCH( static_cast<double>(KoGlobal::dpiX()) );
+    double resolutionY = POINT_TO_INCH( static_cast<double>(KoGlobal::dpiY()) );
 
-    pgX = POINT_TO_MM(_layout.ptLeft) * 0.5;
-    pgY = POINT_TO_MM(_layout.ptTop) * 0.5;
-    pgW = pgWidth - ( POINT_TO_MM(_layout.ptLeft) + POINT_TO_MM(_layout.ptRight) ) * 0.5;
-    pgH = pgHeight - ( POINT_TO_MM(_layout.ptTop) + POINT_TO_MM(_layout.ptBottom) ) * 0.5;
+    pgWidth = _layout.ptWidth * resolutionX;
+    pgHeight = _layout.ptHeight * resolutionY;
+
+    double zh = 110.0 / pgHeight;
+    double zw = 110.0 / pgWidth;
+    double z = QMIN( zw, zh );
+
+    pgWidth *= z;
+    pgHeight *= z;
+
+    pgX = _layout.ptLeft * resolutionX * z;
+    pgY = _layout.ptTop * resolutionY * z;
+    pgW = pgWidth - ( _layout.ptLeft + _layout.ptRight ) * resolutionX * z;
+    pgH = pgHeight - ( _layout.ptTop + _layout.ptBottom ) * resolutionY * z;
 
     repaint( true );
 }
