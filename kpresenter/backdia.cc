@@ -386,23 +386,13 @@ int BackDia::getBackYFactor() const
 void BackDia::selectPic()
 {
     KURL url;
-    KFileDialog fd( QString::null,
-  //i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" )
-    KImageIO::pattern(KImageIO::Reading), 0, 0, true );
-    //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
-    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
+    fd.setPreviewWidget( new KImageFilePreview( &fd ) );
+
     if ( fd.exec() == QDialog::Accepted )
     {
         url = fd.selectedURL();
-/*
-        if (!url.isLocalFile())
-        {
-          KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
-          return;
-        }
-        chosenPic = url.path();
-*/
+
         chosenPic = QString::null;
         if (!KIO::NetAccess::download( url, chosenPic ))
           return;
@@ -419,10 +409,9 @@ void BackDia::selectPic()
 void BackDia::selectClip()
 {
     KURL url;
-    KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
-    //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
-    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
+    //fd.setPreviewWidget( new KImageFilePreview( &fd ) );
+
     if ( fd.exec() == QDialog::Accepted )
     {
         url = fd.selectedURL();
@@ -437,4 +426,3 @@ void BackDia::selectClip()
         // Problem : when to remove the temp file ?
     }
 }
-

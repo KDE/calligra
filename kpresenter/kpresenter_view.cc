@@ -442,9 +442,8 @@ void KPresenterView::insertPicture()
     QString file;
     KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setCaption(i18n("Insert Picture"));
-    //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
-    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    fd.setPreviewWidget( new KImageFilePreview( &fd ) );
+
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
 	url = fd.selectedURL();
@@ -473,11 +472,10 @@ void KPresenterView::insertClipart()
     page->deSelectAllObj();
     QString file;
 
-    KFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
+    KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Insert Clipart"));
-    //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
-    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    //fd.setPreviewWidget( new KImageFilePreview( &fd ) );
+
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
 	url = fd.selectedURL();
@@ -2381,9 +2379,8 @@ void KPresenterView::changePicture( unsigned int, const QString & filename )
 
     KFileDialog fd( filename, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setCaption(i18n("Select new Picture"));
-    //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
-    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    fd.setPreviewWidget( new KImageFilePreview( &fd ) );
+
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
       url = fd.selectedURL();
@@ -2409,11 +2406,10 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
     QFileInfo fileInfo( filename );
     QString file;
 
-    KFileDialog fd( filename, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, true );
+    KFileDialog fd( filename, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Select new Clipart"));
-    //fd.setPreviewMode( false, true );
-    fd.setPreviewWidget( new KImagePreview( &fd ) );
-    //fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    //fd.setPreviewWidget( new KImageFilePreview( &fd ) );
+
     KURL url;
     if ( fd.exec() == QDialog::Accepted )
 	url = fd.selectedURL();
