@@ -27,6 +27,7 @@
 #include "kpbackground.h"
 #include <koRect.h>
 #include <kostyle.h>
+#include <qvariant.h>
 class KURL;
 class KPTextView;
 class KPObject;
@@ -96,6 +97,11 @@ public:
     void copyObjs(QDomDocument &doc, QDomElement &presenter) const;
 
     KPObject* getSelectedObj() const;
+    KPPixmapObject* getSelectedImage() const;
+
+    ImageEffect getImageEffect(ImageEffect eff) const;
+    KCommand * setImageEffect(ImageEffect eff, QVariant param1, QVariant param2, QVariant param3);
+
     void groupObjects();
     KCommand * ungroupObjects();
     void raiseObjs( bool forward );

@@ -46,10 +46,11 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	kprbgspellcheck.cc kprhelplinedia.cc confpicturedia.cc \
 	KPPolyLineObjectIface.skel KPPolyLineObjectIface.cc \
 	kprduplicateobjdia.cc kppageeffects.cc kpclosedlineobject.cc \
-	kprimportstyledia.cc
+	kprimportstyledia.cc \
+	imageEffectDia.cc imageEffectBase.ui
 
 libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell  -lqtmcop -lkmedia2_idl -lsoundserver_idl -lartskde
+libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell  -lqtmcop -lkmedia2_idl -lsoundserver_idl -lartskde -lkdefx
 libkpresenterpart_la_METASOURCES = AUTO
 
 ## The kdeinit loadable module
@@ -90,7 +91,8 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		KPCubicbeziercurveObjectIface.h textpreview.h \
 		rotationdialogimpl.h KPFreehandObjectIface.h kprstylemanager.h \
 		kprbgspellcheck.h kprhelplinedia.h confpicturedia.h \
-		KPPolyLineObjectIface.h kprduplicateobjdia.h kppageeffects.h kpclosedlineobject.h kprimportstyledia.h
+		KPPolyLineObjectIface.h kprduplicateobjdia.h kppageeffects.h kpclosedlineobject.h kprimportstyledia.h \
+		imageEffectDia.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

@@ -206,6 +206,7 @@ public:
 
     int numberOfObjectSelected() const;
     KPObject *getSelectedObj() const;
+    KPPixmapObject *getSelectedImage() const;
 
     int getPenBrushFlags() const;
     bool getEditMode() const { return editMode; }
@@ -301,6 +302,7 @@ public:
     bool getPictureSwapRGB( bool swapRGB ) const;
     bool getPictureGrayscal( bool grayscal ) const;
     int getPictureBright( int bright ) const;
+    ImageEffect getImageEffect(ImageEffect eff) const;
     QPixmap getPicturePixmap() const;
     KCommand *setProtectContent( bool b );
     void closeObject(bool _close);

@@ -39,6 +39,7 @@ class StyleDia;
 class PgConfDia;
 class RotationDialogImpl;
 class ShadowDialogImpl;
+class ImageEffectDia;
 class KPPresStructView;
 class ConfPieDia;
 class ConfRectDia;
@@ -319,6 +320,7 @@ public slots:
     void picViewOrig1600x1200();
 
     void chPic();
+    void imageEffect();
 
     void textSubScript();
     void textSuperScript();
@@ -751,6 +753,7 @@ private:
     PgConfDia *pgConfDia;
     RotationDialogImpl *rotateDia;
     ShadowDialogImpl *shadowDia;
+    ImageEffectDia *imageEffectDia;
     KPPresStructView *presStructView;
     KPPresDurationDia *presDurationDia;
 
@@ -954,6 +957,8 @@ private:
     KAction *actionChangePic;
     KAction *actionExtraSpellCheck;
     KAction *actionFormatDefault;
+
+    KAction *actionImageEffect;
 
     KAction *actionInsertComment;
     KAction *actionEditComment;

@@ -20,10 +20,8 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <qsize.h>
 #include <kiconloader.h>
 #include <kpresenter_factory.h>
-#include <koSize.h>
 #define KPBarIcon( x ) BarIcon( x, KPresenterFactory::global() )
 
 #define MAX_UNDO_REDO 100
@@ -175,6 +173,34 @@ enum PageEffect {
     PEF_LAST_MARKER = 40, // only marker, don't use this !
     PEF_RANDOM = -1
 };
+
+enum ImageEffect {
+    IE_NONE = -1,
+    IE_CHANNEL_INTENSITY = 0,
+    IE_FADE = 1,
+    IE_FLATTEN = 2,
+    IE_INTENSITY = 3,
+    IE_DESATURATE = 4,
+    IE_CONTRAST = 5,
+    IE_NORMALIZE = 6,
+    IE_EQUALIZE = 7,
+    IE_THRESHOLD = 8,
+    IE_SOLARIZE = 9,
+    IE_EMBOSS = 10,
+    IE_DESPECKLE = 11,
+    IE_CHARCOAL = 12,
+    IE_NOISE = 13,
+    IE_BLUR = 14,
+    IE_EDGE = 15,
+    IE_IMPLODE = 16,
+    IE_OIL_PAINT = 17,
+    IE_SHARPEN = 18,
+    IE_SPREAD = 19,
+    IE_SHADE = 20,
+    IE_SWIRL = 21,
+    IE_WAVE = 22
+};
+
 enum LineEnd {
     L_NORMAL = 0,
     L_ARROW,

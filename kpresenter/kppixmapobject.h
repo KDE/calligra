@@ -21,6 +21,7 @@
 #define kppixmapobject_h
 
 #include <qdatetime.h>
+#include <qvariant.h>
 
 #include <kpobject.h>
 #include <koPictureCollection.h>
@@ -80,11 +81,23 @@ public:
     bool getPictureGrayscal() const { return grayscal; }
     int getPictureBright() const { return bright; }
 
+    ImageEffect getImageEffect() const {return m_effect;}
+    QVariant getIEParam1() const {return m_ie_par1;}
+    QVariant getIEParam2() const {return m_ie_par2;}
+    QVariant getIEParam3() const {return m_ie_par3;}
+    void setImageEffect(ImageEffect eff) { m_effect = eff; }
+    void setIEParams(QVariant p1, QVariant p2, QVariant p3) {
+        m_ie_par1=p1;
+        m_ie_par2=p2;
+        m_ie_par3=p3;
+    }
+
     void setPictureMirrorType(const PictureMirrorType &_mirrorType) { mirrorType = _mirrorType; }
     void setPictureDepth(int _depth) { depth = _depth; }
     void setPictureSwapRGB(bool _swapRGB) { swapRGB = _swapRGB; }
     void setPictureGrayscal(bool _grayscal) { grayscal = _grayscal; }
     void setPictureBright(int _bright) { bright = _bright; }
+
     KoPicture picture() const { return image;}
     void loadImage( const QString & fileName );
 
@@ -98,7 +111,7 @@ protected:
      * Draws the shadow
      */
     void drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandler);
-    
+
     QPixmap generatePixmap(KoZoomHandler*_zoomHandler);
 
     KoPictureCollection *imageCollection;
@@ -109,6 +122,12 @@ protected:
     bool swapRGB;
     bool grayscal;
     int bright;
+
+    //image effect and its params
+    ImageEffect m_effect;
+    QVariant m_ie_par1;
+    QVariant m_ie_par2;
+    QVariant m_ie_par3;
 };
 
 #endif

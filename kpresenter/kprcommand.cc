@@ -2921,3 +2921,67 @@ void KPrChangeTabStopValueCommand::unexecute()
 {
     m_doc->setTabStopValue ( m_oldValue );
 }
+
+ImageEffectCmd::ImageEffectCmd(const QString &_name, QPtrList<ImageEffectSettings> &_oldSettings,
+                               ImageEffectSettings _newSettings, QPtrList<KPObject> &_objects,
+                               KPresenterDoc *_doc )
+    :KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects )
+{
+    objects.setAutoDelete( false );
+    oldSettings.setAutoDelete( false );
+    doc = _doc;
+    newSettings = _newSettings;
+
+    m_page = doc->findSideBarPage( objects );
+
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
+}
+
+ImageEffectCmd::~ImageEffectCmd()
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+    oldSettings.setAutoDelete( true );
+    oldSettings.clear();
+}
+
+void ImageEffectCmd::execute()
+{
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it ) {
+        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( it.current() );
+        if ( obj ) {
+            obj->setImageEffect(newSettings.effect);
+            obj->setIEParams(newSettings.param1, newSettings.param2, newSettings.param3);
+        }
+    }
+    doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
+}
+
+void ImageEffectCmd::unexecute()
+{
+    for ( unsigned int i = 0; i < objects.count(); ++i ) {
+        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( objects.at(i) );
+        if ( obj ) {
+            obj->setImageEffect(oldSettings.at( i )->effect);
+            obj->setIEParams(oldSettings.at( i )->param1, oldSettings.at( i )->param2,
+                             oldSettings.at( i )->param3);
+        }
+    }
+    doc->repaint( false );
+
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
+}

@@ -101,11 +101,11 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     m_drawSymetricObject = false;
     if ( parent ) {
         mousePressed = false;
-	drawContour = false;
+        drawContour = false;
         modType = MT_NONE;
         resizeObjNum = 0L;
         editNum = 0L;
-	rotateNum = 0L;
+        rotateNum = 0L;
         setBackgroundMode( Qt::NoBackground );
         m_view = _view;
         setupMenus();
@@ -204,7 +204,7 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
         if ( m_currentTextObjectView &&
              (keyev->key()==Key_Home ||keyev->key()==Key_End
               || keyev->key()==Key_Tab || keyev->key()==Key_Prior
-                 || keyev->key()==Key_Next) )
+              || keyev->key()==Key_Next) )
         {
             m_currentTextObjectView->keyPressEvent( keyev );
             return true;
@@ -231,19 +231,19 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
         if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
         {
             switch ( keyev->key() ) {
-                case Key_P: // 'P' -> paragraph debug
-                    printRTDebug( 0 );
-                    break;
-                case Key_V: // 'V' -> verbose parag debug
-                    printRTDebug( 1 );
-                    break;
-                default:
-                    break;
+            case Key_P: // 'P' -> paragraph debug
+                printRTDebug( 0 );
+                break;
+            case Key_V: // 'V' -> verbose parag debug
+                printRTDebug( 1 );
+                break;
+            default:
+                break;
             }
         }
 #endif
     }
-        break;
+    break;
     default:
         break;
     }
@@ -306,9 +306,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         if ( editMode )
         {
             if ( doc->showGrid() && doc->gridToFront())
-            {
                 drawGrid( &bufPainter, crect);
-            }
 
             if ( doc->showHelplines() && doc->helpLineToFront())
             {
@@ -354,7 +352,8 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect ) const
     else
     {
         // TODO use m_pageList
-        m_view->kPresenterDoc()->pageList().at( currPresPage-1 )->background()->draw( painter, m_view->zoomHandler(), rect, false );
+        m_view->kPresenterDoc()->pageList().at( currPresPage-1 )->background()->draw( painter, m_view->zoomHandler(),
+                                                                                      rect, false );
     }
 }
 
@@ -385,22 +384,24 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
         if( m_view->kPresenterDoc()->isHeaderFooter(it.current()) || it.current()->isProtect())
             selectionMode=SM_PROTECT;
 
-	if (
-	     ( rect2.intersects( it.current()->getBoundingRect(m_view->zoomHandler() ) ) && editMode ) ||
-	     ( !editMode &&
-	       it.current()->getPresNum() <= static_cast<int>( currPresStep ) &&
-	       ( !it.current()->getDisappear() || it.current()->getDisappear() &&
-		 it.current()->getDisappearNum() > static_cast<int>( currPresStep ) ) ) )
+        if (
+            ( rect2.intersects( it.current()->getBoundingRect(m_view->zoomHandler() ) ) && editMode ) ||
+            ( !editMode &&
+              it.current()->getPresNum() <= static_cast<int>( currPresStep ) &&
+              ( !it.current()->getDisappear() || it.current()->getDisappear() &&
+                it.current()->getDisappearNum() > static_cast<int>( currPresStep ) ) ) )
 
         {
- 	    if ( inEffect && it.current()->getPresNum() >= static_cast<int>( currPresStep ) )
- 		continue;
+            if ( inEffect && it.current()->getPresNum() >= static_cast<int>( currPresStep ) )
+                continue;
 
-	    if ( !editMode && doSpecificEffects && static_cast<int>( currPresStep ) == it.current()->getPresNum() && !goingBack ) {
+            if ( !editMode && doSpecificEffects && static_cast<int>( currPresStep ) == it.current()->getPresNum()
+                 && !goingBack )
+            {
                 //kdDebug(33001) << "                 setSubPresStep " << subPresStep << endl;
-		it.current()->setSubPresStep( subPresStep );
-		it.current()->doSpecificEffects( true, false );
-	    }
+                it.current()->setSubPresStep( subPresStep );
+                it.current()->doSpecificEffects( true, false );
+            }
             //kdDebug(33001) << "                 drawing object at " << diffx() << "," << diffy() << "  and setting subpresstep to 0 !" << endl;
             if ( drawCursor && it.current()->getType() == OT_TEXT && m_currentTextObjectView )
             {
@@ -411,20 +412,19 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
                                              false /*onlyChanged. Pass as param ?*/,
                                              m_currentTextObjectView->cursor(), true /* idem */ );
                 }
-		else
+                else
                     it.current()->draw( painter, m_view->zoomHandler(), selectionMode,
-					((it.current())->isSelected()) && drawContour );
+                                        ((it.current())->isSelected()) && drawContour );
             }
             else
             {
                 it.current()->draw( painter, m_view->zoomHandler(), selectionMode,
-				    ((it.current())->isSelected()) && drawContour );
+                                    ((it.current())->isSelected()) && drawContour );
             }
-	    it.current()->setSubPresStep( 0 );
-	    it.current()->doSpecificEffects( false );
-	}
+            it.current()->setSubPresStep( 0 );
+            it.current()->doSpecificEffects( false );
+        }
     }
-
 }
 
 /*========================= draw objects =========================*/
@@ -436,12 +436,11 @@ void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCurs
 
     //objects in current page
     drawObjectsInPage( painter, rect2, drawCursor, selectionMode, doSpecificEffects,
-		       m_view->kPresenterDoc()->pageList().at(pgNum-1)->objectList());
+                       m_view->kPresenterDoc()->pageList().at(pgNum-1)->objectList());
 
     //draw sticky object
     drawObjectsInPage( painter, rect2, drawCursor, selectionMode, doSpecificEffects,
-		       stickyPage()->objectList());
-
+                       stickyPage()->objectList());
 }
 
 void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
@@ -3462,7 +3461,7 @@ void KPrCanvas::doObjEffects()
         inEffect = true;
         QPainter p;
         p.begin( &screen_orig );
-	QRect desktopRect = QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
+        QRect desktopRect = QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
         drawBackground( &p, desktopRect );
         drawObjects( &p, desktopRect, false, SM_NONE, true );
         p.end();
@@ -6175,7 +6174,7 @@ void KPrCanvas::flipObject( bool _horizontal )
     if ( lst.isEmpty())
         return;
 
-    KMacroCommand *macro = new KMacroCommand( i18n("Flips Object"));
+    KMacroCommand *macro = new KMacroCommand( i18n("Flip Objects"));
     QPtrListIterator<KPObject> it2( lst );
     for ( ; it2.current() ; ++it2 ) {
         KCommand * cmd= new KPrFlipObjectCommand(i18n("Flip"), m_view->kPresenterDoc(),  _horizontal , it2.current());
@@ -6876,4 +6875,21 @@ void KPrCanvas::alignVertical( VerticalAlignmentType _type )
 
     if ( macro )
         m_view->kPresenterDoc()->addCommand( macro );
+}
+
+ImageEffect KPrCanvas::getImageEffect(ImageEffect eff) const
+{
+    ImageEffect value = m_activePage->getImageEffect(eff);
+    if (value != eff)
+        return value;
+    return stickyPage()->getImageEffect(eff);
+}
+
+KPPixmapObject * KPrCanvas::getSelectedImage() const
+{
+    KPPixmapObject *obj=activePage()->getSelectedImage();
+    if(obj)
+        return obj;
+    obj=stickyPage()->getSelectedImage();
+    return obj;
 }

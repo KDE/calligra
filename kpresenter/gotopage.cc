@@ -61,7 +61,7 @@ KPGotoPage::KPGotoPage( const KPresenterDoc *doc,
         // cut ultra long titles...
         if(t.length() > 30) {
             t.truncate(30);
-            t+=i18n("...");
+            t+="...";
         }
         spinbox->insertItem( QString( "%1 - %2" ).arg( *it ).arg( t ), -1 );
         if ( *it == start )

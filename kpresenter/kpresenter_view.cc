@@ -41,6 +41,7 @@
 #include <effectdia.h>
 #include <rotationdialogimpl.h>
 #include "shadowdialogimpl.h"
+#include "imageEffectDia.h"
 #include <presstructview.h>
 
 #include <koAutoFormat.h>
@@ -218,6 +219,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     pgConfDia = 0;
     rotateDia = 0;
     shadowDia = 0;
+    imageEffectDia = 0;
     presStructView = 0;
     presDurationDia = 0;
     v_ruler = 0;
@@ -364,7 +366,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
 DCOPObject* KPresenterView::dcopObject()
 {
     if ( !dcop )
-	dcop = new KPresenterViewIface( this );
+        dcop = new KPresenterViewIface( this );
 
     return dcop;
 }
@@ -511,9 +513,9 @@ void KPresenterView::print( KPrinter &prt )
 void KPresenterView::editCut()
 {
     if ( !m_canvas->currentTextObjectView() ) {
-	m_canvas->setToolEditMode( TEM_MOUSE );
+        m_canvas->setToolEditMode( TEM_MOUSE );
         m_canvas->copyObjs();
-	m_canvas->deleteObjs();
+        m_canvas->deleteObjs();
     } else {
         if ( !m_canvas->currentTextObjectView()->kpTextObject()->isProtectContent())
             m_canvas->currentTextObjectView()->cut();
@@ -524,10 +526,10 @@ void KPresenterView::editCut()
 void KPresenterView::editCopy()
 {
     if ( !m_canvas->currentTextObjectView() ) {
-	m_canvas->setToolEditMode( TEM_MOUSE );
-	m_canvas->copyObjs();
+        m_canvas->setToolEditMode( TEM_MOUSE );
+        m_canvas->copyObjs();
     } else {
-	m_canvas->currentTextObjectView()->copy();
+        m_canvas->currentTextObjectView()->copy();
     }
 }
 
@@ -574,8 +576,8 @@ void KPresenterView::editSelectAll()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( !edit ) {
-	m_canvas->setToolEditMode( TEM_MOUSE );
-	m_canvas->selectAllObj();
+        m_canvas->setToolEditMode( TEM_MOUSE );
+        m_canvas->selectAllObj();
     }
     else
         edit->selectAll();
@@ -585,8 +587,8 @@ void KPresenterView::editDeSelectAll()
 {
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( !edit ) {
-	m_canvas->setToolEditMode( TEM_MOUSE );
-	m_canvas->deSelectAllObj();
+        m_canvas->setToolEditMode( TEM_MOUSE );
+        m_canvas->deSelectAllObj();
     }
     else
         edit->selectAll(false);
@@ -633,16 +635,17 @@ void KPresenterView::insertPage()
     InsertPageDia dia( this, 0, TRUE );
     QString templ = locateLocal( "appdata", "default.kpr" );
     if ( !QFile::exists( templ ) ) {
-	dia.radioDifferent->setChecked( TRUE );
-	dia.radioDefault->setEnabled( FALSE );
+        dia.radioDifferent->setChecked( TRUE );
+        dia.radioDefault->setEnabled( FALSE );
     }
     if ( dia.exec() != QDialog::Accepted )
-	return;
+        return;
     InsertPos pos = (InsertPos)dia.locationCombo->currentItem();
-    int pg = m_pKPresenterDoc->insertNewPage( i18n("Insert new page"),currPg, pos, dia.radioDifferent->isChecked(), QString::null );
+    int pg = m_pKPresenterDoc->insertNewPage( i18n("Insert new page"), currPg, pos,
+                                              dia.radioDifferent->isChecked(), QString::null );
     setRanges();
     if ( pg != -1 )
-	skipToPage( pg );
+        skipToPage( pg );
     updateSideBarMenu();
 }
 
@@ -1130,18 +1133,14 @@ void KPresenterView::extraPenBrush()
     {
         KPObject *obj=m_canvas->getSelectedObj();
         //disable this action when we select a header/footer
-        if(obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
-        {
+        if (obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
             canHaveStickyObj = false;
-        }
     }
     bool txtObj = (m_canvas->selectedTextObjs().count()> 0 );
     styleDia = new StyleDia( this, "StyleDia", m_pKPresenterDoc, canHaveStickyObj, state,txtObj && state );
 
     if ( state )
-    {
         styleDia->setSize( m_canvas->getSelectedObj()->getRect());
-    }
 
     int nbStickyObjSelected= m_pKPresenterDoc->stickyPage()->numSelected();
     int nbActivePageObjSelected = m_canvas->activePage()->numSelected();
@@ -1210,14 +1209,13 @@ void KPresenterView::extraLower()
 void KPresenterView::extraRotate()
 {
     if ( m_canvas->numberOfObjectSelected() > 0 ) {
-
-	if ( !rotateDia ) {
-	    rotateDia = new RotationDialogImpl( this );
-	    connect( rotateDia, SIGNAL( apply() ), this, SLOT( rotateOk() ) );
-	}
-	rotateDia->setAngle( m_canvas->getSelectedObj()->getAngle() );
-	m_canvas->setToolEditMode( TEM_MOUSE );
-	rotateDia->exec();
+        if ( !rotateDia ) {
+            rotateDia = new RotationDialogImpl( this );
+            connect( rotateDia, SIGNAL( apply() ), this, SLOT( rotateOk() ) );
+        }
+        rotateDia->setAngle( m_canvas->getSelectedObj()->getAngle() );
+        m_canvas->setToolEditMode( TEM_MOUSE );
+        rotateDia->exec();
     }
 }
 
@@ -1226,22 +1224,22 @@ void KPresenterView::extraShadow()
 {
     if ( m_canvas->numberOfObjectSelected() > 0 ) {
 
-	if ( !shadowDia ) {
-	    shadowDia = new ShadowDialogImpl( this );
-	    shadowDia->resize( shadowDia->minimumSize() );
-	    connect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
-	}
+        if ( !shadowDia ) {
+            shadowDia = new ShadowDialogImpl( this );
+            shadowDia->resize( shadowDia->minimumSize() );
+            connect( shadowDia, SIGNAL( apply() ), this, SLOT( shadowOk() ) );
+        }
 
-	KPObject *object=m_canvas->getSelectedObj();
-	shadowDia->setShadowDirection( object->getShadowDirection() );
-	if ( object->getShadowDistance() != 0 )
-	    shadowDia->setShadowDistance( object->getShadowDistance() );
-	else
-	    shadowDia->setShadowDistance( 3 );
+        KPObject *object=m_canvas->getSelectedObj();
+        shadowDia->setShadowDirection( object->getShadowDirection() );
+        if ( object->getShadowDistance() != 0 )
+            shadowDia->setShadowDistance( object->getShadowDistance() );
+        else
+            shadowDia->setShadowDistance( 3 );
 
-	shadowDia->setShadowColor( object->getShadowColor() );
-	m_canvas->setToolEditMode( TEM_MOUSE );
-	shadowDia->exec();
+        shadowDia->setShadowColor( object->getShadowColor() );
+        m_canvas->setToolEditMode( TEM_MOUSE );
+        shadowDia->exec();
     }
 }
 
@@ -1261,16 +1259,16 @@ void KPresenterView::extraBackground()
 
     KPrPage *page=m_canvas->activePage();
     backDia = new BackDia( this, "InfoDia", page->getBackType(  ),
-			  page->getBackColor1(  ),
-			   page->getBackColor2(  ),
-			   page->getBackColorType(  ),
-			   page->getBackPixKey(  ).filename(),
+                           page->getBackColor1(  ),
+                           page->getBackColor2(  ),
+                           page->getBackColorType(  ),
+                           page->getBackPixKey(  ).filename(),
                            page->getBackPixKey(  ).lastModified(),
-			   page->getBackView(),
-			   page->getBackUnbalanced(),
-			   page->getBackXFactor(),
-			   page->getBackYFactor( ),
-			   page );
+                           page->getBackView(),
+                           page->getBackUnbalanced(),
+                           page->getBackXFactor(),
+                           page->getBackYFactor( ),
+                           page );
     backDia->setCaption( i18n( "Page Background" ) );
     QObject::connect( backDia, SIGNAL( backOk( bool ) ), this, SLOT( backOk( bool ) ) );
     backDia->exec();
@@ -1290,10 +1288,10 @@ void KPresenterView::extraLayout()
     KoUnit::Unit unit = oldUnit;
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, FORMAT_AND_BORDERS, unit ) ) {
-	PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ),
-						    pgLayout, oldLayout, unit, oldUnit,kPresenterDoc() );
-	pgLayoutCmd->execute();
-	kPresenterDoc()->addCommand( pgLayoutCmd );
+        PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ),
+                                                    pgLayout, oldLayout, unit, oldUnit,kPresenterDoc() );
+        pgLayoutCmd->execute();
+        kPresenterDoc()->addCommand( pgLayoutCmd );
         updateRuler();
     }
 }
@@ -1316,10 +1314,10 @@ void KPresenterView::extraCreateTemplate()
     m_pKPresenterDoc->savePage( tempFile.name(), getCurrPgNum() - 1);
 
     KoTemplateCreateDia::createTemplate( "kpresenter_template", KPresenterFactory::global(),
-					 tempFile.name(), pix, this);
+                                         tempFile.name(), pix, this);
     KPresenterFactory::global()->dirs()->addResourceType("kpresenter_template",
-							 KStandardDirs::kde_default( "data" ) +
-							 "kpresenter/templates/");
+                                                         KStandardDirs::kde_default( "data" ) +
+                                                         "kpresenter/templates/");
 }
 
 void KPresenterView::extraDefaultTemplate()
@@ -1332,7 +1330,7 @@ void KPresenterView::extraDefaultTemplate()
 void KPresenterView::extraWebPres()
 {
     if ( !allowWebPres )
-	return;
+        return;
 
     KURL url;
     QString config = QString::null;
@@ -1346,18 +1344,18 @@ void KPresenterView::extraWebPres()
     }
     else if ( ret == KMessageBox::Yes )
     {
-	url = KFileDialog::getOpenURL( QString::null, i18n("*.kpweb|KPresenter HTML Presentation (*.kpweb)") );
+        url = KFileDialog::getOpenURL( QString::null, i18n("*.kpweb|KPresenter HTML Presentation (*.kpweb)") );
 
-	if( url.isEmpty() )
-	  return;
+        if( url.isEmpty() )
+            return;
 
-	if( !url.isLocalFile() )
-	{
-	  KMessageBox::sorry( this, i18n( "Only local files are currently supported." ) );
-	  return;
-	}
+        if( !url.isLocalFile() )
+        {
+            KMessageBox::sorry( this, i18n( "Only local files are currently supported." ) );
+            return;
+        }
 
-	config = url.path();
+        config = url.path();
     }
 
     KPWebPresentationWizard::createWebPresentation( config, m_pKPresenterDoc, this );
@@ -1420,13 +1418,13 @@ void KPresenterView::screenConfigPages()
     KPrPage *page=m_canvas->activePage();
     pgConfDia = new PgConfDia( this, "PageConfig",
                                kPresenterDoc()->spInfiniteLoop(),
-			       kPresenterDoc()->spManualSwitch(),
+                               kPresenterDoc()->spManualSwitch(),
                                getCurrPgNum(),
-			       page->getPageEffect(),
-			       kPresenterDoc()->getPresSpeed(),
-			       page->getPageTimer(),
-			       page->getPageSoundEffect(),
-			       page->getPageSoundFileName(),
+                               page->getPageEffect(),
+                               kPresenterDoc()->getPresSpeed(),
+                               page->getPageTimer(),
+                               page->getPageSoundEffect(),
+                               page->getPageSoundFileName(),
                                kPresenterDoc()->presentationDuration() );
     pgConfDia->setCaption( i18n( "Page Configuration for Screen Presentations" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
@@ -1599,7 +1597,6 @@ void KPresenterView::screenStop()
         }
 
 
-
         if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() )
             setPresentationDuration( m_canvas->presPage() - 1 );
 
@@ -1613,12 +1610,12 @@ void KPresenterView::screenStop()
 
 	if ( m_screenSaverWasEnabled )
 	{
-            // start screensaver again
-            QByteArray data;
-            QDataStream arg(data, IO_WriteOnly);
-            arg << true;
-            if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
-                kdWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
+        // start screensaver again
+        QByteArray data;
+        QDataStream arg(data, IO_WriteOnly);
+        arg << true;
+        if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
+            kdWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
 	}
 
         actionScreenStart->setEnabled( true );
@@ -1644,16 +1641,16 @@ void KPresenterView::screenFirst()
 {
     if ( m_canvas->currentTextObjectView() )
 #if 0
-	m_canvas->currentTextObjectView()->home();
+        m_canvas->currentTextObjectView()->home();
 #else
     ;
 #endif
     else {
-	if ( !presStarted ) {
+        if ( !presStarted ) {
             skipToPage( 0 );
-	} else {
-	    gotoPresPage( 1 );
-	}
+        } else {
+            gotoPresPage( 1 );
+        }
     }
 }
 
@@ -1668,22 +1665,22 @@ void KPresenterView::screenPrev()
             setCurrentTimer( 1 );
             m_canvas->setNextPageTimer( true );
         }
-	if ( m_canvas->pPrev( true ) ) {
+        if ( m_canvas->pPrev( true ) ) {
 #if 0 // TODO currentPage-- instead
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, m_canvas->presFakt(), false );
-	    yOffset = ( m_canvas->presPage() - 1 ) * pgRect.height();
-	    if ( m_canvas->height() > pgRect.height() )
-		yOffset -= ( m_canvas->height() - pgRect.height() ) / 2;
+            yOffset = ( m_canvas->presPage() - 1 ) * pgRect.height();
+            if ( m_canvas->height() > pgRect.height() )
+                yOffset -= ( m_canvas->height() - pgRect.height() ) / 2;
 #endif
-	    m_canvas->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
-	    m_canvas->repaint( false );
-	    m_canvas->setFocus();
-	} else {
-	    m_canvas->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
-	    m_canvas->setFocus();
-	}
+            m_canvas->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
+            m_canvas->repaint( false );
+            m_canvas->setFocus();
+        } else {
+            m_canvas->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
+            m_canvas->setFocus();
+        }
     } else {
-	prevPage();
+        prevPage();
     }
 }
 
@@ -1693,26 +1690,26 @@ void KPresenterView::screenNext()
     if ( m_canvas->currentTextObjectView() )
         return;
     if ( presStarted ) {
-	if ( m_canvas->pNext( true ) ) {
+        if ( m_canvas->pNext( true ) ) {
 #if 0 // TODO currentPage-- instead
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, m_canvas->presFakt(), false );
-	    yOffset = ( m_canvas->presPage() - 1 ) * pgRect.height();
-	    if ( m_canvas->height() > pgRect.height() )
-		yOffset -= ( m_canvas->height() - pgRect.height() ) / 2;
+            yOffset = ( m_canvas->presPage() - 1 ) * pgRect.height();
+            if ( m_canvas->height() > pgRect.height() )
+                yOffset -= ( m_canvas->height() - pgRect.height() ) / 2;
 #endif
-	    m_canvas->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
-	    m_canvas->setFocus();
+            m_canvas->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
+            m_canvas->setFocus();
 
             if ( !kPresenterDoc()->spManualSwitch() ) {
                 setCurrentTimer( 1 );
                 m_canvas->setNextPageTimer( true );
             }
-	} else {
-	    m_canvas->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
-	    m_canvas->setFocus();
-	}
+        } else {
+            m_canvas->resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
+            m_canvas->setFocus();
+        }
     } else {
-	nextPage();
+        nextPage();
     }
 }
 
@@ -1721,20 +1718,20 @@ void KPresenterView::screenLast()
 {
     if ( m_canvas->currentTextObjectView() )
 #if 0
-	m_canvas->currentTextObjectView()->end();
+        m_canvas->currentTextObjectView()->end();
 #else
     ;
 #endif
     else {
-	if ( !presStarted )
+        if ( !presStarted )
         {
-	    skipToPage( m_pKPresenterDoc->getPageNums() - 1 );
-	}
+            skipToPage( m_pKPresenterDoc->getPageNums() - 1 );
+        }
         else
         {
 
-	    gotoPresPage( getNumPresPages() );
-	}
+            gotoPresPage( getNumPresPages() );
+        }
     }
 }
 
@@ -1991,7 +1988,7 @@ void KPresenterView::penChosen()
             macro->addCommand(cmd);
         }
         cmd=stickyPage()->setPen( e_pen, page->getLineBegin( lineBegin ), page->getLineEnd( lineEnd ),
-                          PenCmd::Color, page->objectList() );
+                                  PenCmd::Color, page->objectList() );
         if(cmd)
         {
             if (!macro )
@@ -2003,12 +2000,12 @@ void KPresenterView::penChosen()
         else
         {
             pen.setColor( c );
-	}
+        }
     }
     else
     {
-	tbColor = c;
-	m_canvas->setTextColor( tbColor );
+        tbColor = c;
+        m_canvas->setTextColor( tbColor );
     }
 }
 
@@ -2434,9 +2431,9 @@ void KPresenterView::createGUI()
     {
         sidebar = new SideBar( splitter, m_pKPresenterDoc, this );
         connect( sidebar, SIGNAL( movePage( int, int ) ),
-	         m_pKPresenterDoc, SLOT( movePage( int, int ) ) );
+                 m_pKPresenterDoc, SLOT( movePage( int, int ) ) );
         connect( sidebar, SIGNAL( selectPage( int, bool ) ),
-	         m_pKPresenterDoc, SLOT( selectPage( int, bool ) ) );
+                 m_pKPresenterDoc, SLOT( selectPage( int, bool ) ) );
         connect( sidebar, SIGNAL( showPage( int ) ),
                  this, SLOT( skipToPage( int ) ) );
         // This sucks when resizing the window
@@ -2454,11 +2451,11 @@ void KPresenterView::createGUI()
     m_canvas=new KPrCanvas( pageBase, "Canvas", this );
 
     QObject::connect( m_canvas, SIGNAL( fontChanged( const QFont & ) ),
-		      this, SLOT( fontChanged( const QFont & ) ) );
+                      this, SLOT( fontChanged( const QFont & ) ) );
     QObject::connect( m_canvas, SIGNAL( colorChanged( const QColor & ) ),
-		      this, SLOT( colorChanged( const QColor & ) ) );
+                      this, SLOT( colorChanged( const QColor & ) ) );
     QObject::connect( m_canvas, SIGNAL( alignChanged( int ) ),
-		      this, SLOT( alignChanged( int ) ) );
+                      this, SLOT( alignChanged( int ) ) );
     QObject::connect( m_canvas, SIGNAL( updateSideBarItem( int ) ),
                       this, SLOT( updateSideBarItem( int ) ) );
     QObject::connect( m_canvas, SIGNAL( objectSelectedChanged()),
@@ -2572,19 +2569,19 @@ void KPresenterView::setupActions()
     m_pKPresenterDoc->clipboardDataChanged(); // set paste's initial state
 
     actionEditDelete = new KAction( i18n( "&Delete" ), "editdelete", CTRL + Key_Delete,
-				    this, SLOT( editDelete() ),
-				    actionCollection(), "edit_delete" );
+                                    this, SLOT( editDelete() ),
+                                    actionCollection(), "edit_delete" );
     actionEditSelectAll = KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_selectall" );
     actionEditDeSelectAll= KStdAction::deselect( this, SLOT( editDeSelectAll()), actionCollection(), "edit_deselectall");
     /*actionEditCopyPage = */new KAction( i18n( "Copy Page" ), "editcopy",
                                           0, this, SLOT( editCopyPage() ),
                                           actionCollection(), "edit_copypage" );
     actionEditDuplicatePage = new KAction( i18n( "Duplicate Page" ), "newslide",
-					   0, this, SLOT( editDuplicatePage() ),
-					   actionCollection(), "edit_duplicatepage" );
+                                           0, this, SLOT( editDuplicatePage() ),
+                                           actionCollection(), "edit_duplicatepage" );
     actionEditDelPage = new KAction( i18n( "Delete &Page..." ), "delslide", 0,
-				     this, SLOT( editDelPage() ),
-				     actionCollection(), "edit_delpage" );
+                                     this, SLOT( editDelPage() ),
+                                     actionCollection(), "edit_delpage" );
 
     actionEditSearch=KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
     actionEditReplace=KStdAction::replace( this, SLOT( editReplace() ), actionCollection(), "edit_replace" );
@@ -2612,51 +2609,51 @@ void KPresenterView::setupActions()
                                           actionCollection(), "view_footer" );
 
     actionViewShowHelpLine= new KToggleAction( i18n( "Help Lines" ), 0,
-                                          this, SLOT( viewHelpLines() ),
-                                          actionCollection(), "view_helplines" );
+                                               this, SLOT( viewHelpLines() ),
+                                               actionCollection(), "view_helplines" );
 
     actionViewShowGrid = new KToggleAction( i18n( "Grid" ), 0,
-                                          this, SLOT( viewGrid() ),
-                                          actionCollection(), "view_grid" );
+                                            this, SLOT( viewGrid() ),
+                                            actionCollection(), "view_grid" );
     actionViewGridToFront= new KToggleAction( i18n( "Grid to Front" ), 0,
-                                          this, SLOT( viewGridToFront() ),
-                                          actionCollection(), "view_gridtofront" );
+                                              this, SLOT( viewGridToFront() ),
+                                              actionCollection(), "view_gridtofront" );
 
     actionViewSnapToGrid= new KToggleAction( i18n( "Snap to Grid" ), 0,
-                                          this, SLOT(viewSnapToGrid() ),
-                                          actionCollection(), "view_snaptogrid" );
+                                             this, SLOT(viewSnapToGrid() ),
+                                             actionCollection(), "view_snaptogrid" );
 
     actionViewHelpLineToFront= new KToggleAction( i18n( "Help Line to Front" ), 0,
-                                          this, SLOT( viewHelpLineToFront() ),
-                                          actionCollection(), "view_helplinetofront" );
+                                                  this, SLOT( viewHelpLineToFront() ),
+                                                  actionCollection(), "view_helplinetofront" );
 
 
     // ---------------- insert actions
 
     actionInsertPage = new KAction( i18n( "&Page..." ), "newslide", Key_F2,
-				    this, SLOT( insertPage() ),
-				    actionCollection(), "insert_page" );
+                                    this, SLOT( insertPage() ),
+                                    actionCollection(), "insert_page" );
 
     actionInsertPicture = new KAction( i18n( "P&icture..." ), "frame_image", Key_F3,
-				       this, SLOT( insertPicture() ),
-				       actionCollection(), "insert_picture" );
+                                       this, SLOT( insertPicture() ),
+                                       actionCollection(), "insert_picture" );
 
     // ----------------- tools actions
 
     actionToolsMouse = new KToggleAction( i18n( "&Mouse" ), "frame_edit", Key_F5,
-					  this, SLOT( toolsMouse() ),
-					  actionCollection(), "tools_mouse" );
+                                          this, SLOT( toolsMouse() ),
+                                          actionCollection(), "tools_mouse" );
     actionToolsMouse->setExclusiveGroup( "tools" );
     actionToolsMouse->setChecked( true );
 
     actionToolsRotate = new KToggleAction( i18n( "&Rotate" ), "rotate", 0,
-					   this, SLOT( toolsRotate() ),
-					   actionCollection(), "tools_rotate" );
+                                           this, SLOT( toolsRotate() ),
+                                           actionCollection(), "tools_rotate" );
     actionToolsRotate->setExclusiveGroup( "tools" );
 
     actionToolsZoom = new KToggleAction( i18n( "&Zoom" ), "viewmag", 0,
-					   this, SLOT( toolsZoom() ),
-					   actionCollection(), "tools_zoom" );
+                                         this, SLOT( toolsZoom() ),
+                                         actionCollection(), "tools_zoom" );
     actionToolsZoom->setExclusiveGroup( "tools" );
 
     actionToolsShapePopup = new KActionMenu( i18n( "&Shape" ), "rectangle",
@@ -2665,44 +2662,43 @@ void KPresenterView::setupActions()
     connect(actionToolsShapePopup, SIGNAL(activated()), this, SLOT(toolsShapePopup()));
 
     actionToolsRectangle = new KToggleAction( i18n( "&Rectangle" ), "rectangle",
-					      Key_F7, this, SLOT( toolsRectangle() ),
-					      actionCollection(), "tools_rectangle" );
+                                              Key_F7, this, SLOT( toolsRectangle() ),
+                                              actionCollection(), "tools_rectangle" );
     actionToolsRectangle->setExclusiveGroup( "tools" );
 
-    actionToolsCircleOrEllipse = new KToggleAction( i18n( "&Circle/Ellipse" ),
-						    "circle", Key_F8,
-						    this, SLOT( toolsCircleOrEllipse() ),
-						    actionCollection(), "tools_circle" );
+    actionToolsCircleOrEllipse = new KToggleAction( i18n( "&Circle/Ellipse" ), "circle",
+                                                    Key_F8, this, SLOT( toolsCircleOrEllipse() ),
+                                                    actionCollection(), "tools_circle" );
     actionToolsCircleOrEllipse->setExclusiveGroup( "tools" );
 
     actionToolsPie = new KToggleAction( i18n( "&Pie/Arc/Chord" ), "pie", Key_F9,
-					this, SLOT( toolsPie() ),
-					actionCollection(), "tools_pie" );
+                                        this, SLOT( toolsPie() ),
+                                        actionCollection(), "tools_pie" );
     actionToolsPie->setExclusiveGroup( "tools" );
 
     actionToolsText = new KToggleAction( i18n( "&Text" ), "frame_text", Key_F10,
-					 this, SLOT( toolsText() ),
-					 actionCollection(), "tools_text" );
+                                         this, SLOT( toolsText() ),
+                                         actionCollection(), "tools_text" );
     actionToolsText->setExclusiveGroup( "tools" );
 
     actionToolsAutoform = new KToggleAction( i18n( "&Autoform" ), "autoform",
-					     Key_F11, this, SLOT( toolsAutoform() ),
-					     actionCollection(), "tools_autoform" );
+                                             Key_F11, this, SLOT( toolsAutoform() ),
+                                             actionCollection(), "tools_autoform" );
     actionToolsAutoform->setExclusiveGroup( "tools" );
 
     actionToolsDiagramm = new KToggleAction( i18n( "&Diagram" ), "frame_chart", Key_F12,
-					   this, SLOT( toolsDiagramm() ),
-					   actionCollection(), "tools_diagramm" );
+                                             this, SLOT( toolsDiagramm() ),
+                                             actionCollection(), "tools_diagramm" );
     actionToolsDiagramm->setExclusiveGroup( "tools" );
 
     actionToolsTable = new KToggleAction( i18n( "Ta&ble"), "frame_spreadsheet", 0,
-					   this, SLOT( toolsTable() ),
-					   actionCollection(), "tools_table" );
+                                          this, SLOT( toolsTable() ),
+                                          actionCollection(), "tools_table" );
     actionToolsTable->setExclusiveGroup( "tools" );
 
     actionToolsObject = new KoPartSelectAction( i18n( "&Object" ), "frame_query",
-                                                    this, SLOT( toolsObject() ),
-                                                    actionCollection(), "tools_object" );
+                                                this, SLOT( toolsObject() ),
+                                                actionCollection(), "tools_object" );
 
     actionToolsLinePopup = new KActionMenu( i18n( "&Line" ), "line",
                                             actionCollection(), "tools_linepopup" );
@@ -2710,8 +2706,8 @@ void KPresenterView::setupActions()
     connect(actionToolsLinePopup, SIGNAL(activated()), this, SLOT(toolsLinePopup()));
 
     actionToolsLine = new KToggleAction( i18n( "&Line" ), "line", Key_F6,
-					 this, SLOT( toolsLine() ),
-					 actionCollection(), "tools_line" );
+                                         this, SLOT( toolsLine() ),
+                                         actionCollection(), "tools_line" );
     actionToolsLine->setExclusiveGroup( "tools" );
 
     actionToolsFreehand = new KToggleAction( i18n( "&Freehand" ), "freehand", 0,
@@ -2770,31 +2766,29 @@ void KPresenterView::setupActions()
 
     // ----------------- text actions
 
-    actionTextFont = new KAction( i18n( "&Font..." ), 0,
-				   this, SLOT( mtextFont() ),
-				   actionCollection(), "text_font" );
+    actionTextFont = new KAction( i18n( "&Font..." ), 0, this, SLOT( mtextFont() ),
+                                  actionCollection(), "text_font" );
 
-    actionTextFontSize = new KFontSizeAction( i18n( "Font Size" ), 0,
-					      actionCollection(), "text_fontsize" );
+    actionTextFontSize = new KFontSizeAction( i18n( "Font Size" ), 0, actionCollection(), "text_fontsize" );
     connect( actionTextFontSize, SIGNAL( fontSizeChanged( int ) ),
-	     this, SLOT( sizeSelected( int ) ) );
+             this, SLOT( sizeSelected( int ) ) );
 
     actionTextFontFamily = new KFontAction( i18n( "Font Family" ), 0,
-					      actionCollection(), "text_fontfamily" );
+                                            actionCollection(), "text_fontfamily" );
     connect( actionTextFontFamily , SIGNAL( activated( const QString & ) ),
-	     this, SLOT( fontSelected( const QString & ) ) );
+             this, SLOT( fontSelected( const QString & ) ) );
 
     actionTextBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
-					   this, SLOT( textBold() ),
-					   actionCollection(), "text_bold" );
+                                        this, SLOT( textBold() ),
+                                        actionCollection(), "text_bold" );
 
     actionTextItalic = new KToggleAction( i18n( "&Italic" ), "text_italic", CTRL + Key_I,
-					   this, SLOT( textItalic() ),
-					   actionCollection(), "text_italic" );
+                                          this, SLOT( textItalic() ),
+                                          actionCollection(), "text_italic" );
 
     actionTextUnderline = new KToggleAction( i18n( "&Underline" ), "text_under", CTRL + Key_U,
-					   this, SLOT( textUnderline() ),
-					   actionCollection(), "text_underline" );
+                                             this, SLOT( textUnderline() ),
+                                             actionCollection(), "text_underline" );
 
     actionFormatStrikeOut = new KToggleAction( i18n( "&Strike Out" ), "text_strike", 0 ,
                                                this, SLOT( textStrikeOut() ),
@@ -2807,33 +2801,30 @@ void KPresenterView::setupActions()
 
 
     actionTextAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", ALT + Key_L,
-				       this, SLOT( textAlignLeft() ),
-				       actionCollection(), "text_alignleft" );
+                                             this, SLOT( textAlignLeft() ),
+                                             actionCollection(), "text_alignleft" );
     actionTextAlignLeft->setExclusiveGroup( "align" );
     actionTextAlignLeft->setChecked( true );
 
     actionTextAlignCenter = new KToggleAction( i18n( "Align &Center" ), "text_center", ALT + Key_C,
-					 this, SLOT( textAlignCenter() ),
-					 actionCollection(), "text_aligncenter" );
+                                               this, SLOT( textAlignCenter() ),
+                                               actionCollection(), "text_aligncenter" );
     actionTextAlignCenter->setExclusiveGroup( "align" );
 
     actionTextAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", ALT + Key_R,
-					this, SLOT( textAlignRight() ),
-					actionCollection(), "text_alignright" );
+                                              this, SLOT( textAlignRight() ),
+                                              actionCollection(), "text_alignright" );
     actionTextAlignRight->setExclusiveGroup( "align" );
 
     actionTextAlignBlock = new KToggleAction( i18n( "Align &Block" ), "text_block", CTRL + Key_J,
-                                        this, SLOT( textAlignBlock() ),
-                                        actionCollection(), "text_alignblock" );
+                                              this, SLOT( textAlignBlock() ),
+                                              actionCollection(), "text_alignblock" );
     actionTextAlignBlock->setExclusiveGroup( "align" );
 
 
-
-    actionFormatNumber = new KActionMenu( i18n( "Number" ),
-                                          "enum_list", actionCollection(), "format_number" );
+    actionFormatNumber = new KActionMenu( i18n( "Number" ), "enum_list", actionCollection(), "format_number" );
     actionFormatNumber->setDelayed( false );
-    actionFormatBullet = new KActionMenu( i18n( "Bullet" ),
-                                          "unsorted_list", actionCollection(), "format_bullet" );
+    actionFormatBullet = new KActionMenu( i18n( "Bullet" ), "unsorted_list", actionCollection(), "format_bullet" );
     actionFormatBullet->setDelayed( false );
     QPtrList<KoCounterStyleWidget::StyleRepresenter> stylesList;
     KoCounterStyleWidget::makeCounterRepresenterList( stylesList );
@@ -2855,42 +2846,42 @@ void KPresenterView::setupActions()
             actionFormatNumber->insert( act );
     }
     actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ),  QApplication::reverseLayout() ?"format_decreaseindent" : "format_increaseindent",
-				       CTRL + Key_Plus, this, SLOT( textDepthPlus() ),
-				       actionCollection(), "text_depthPlus" );
+                                       CTRL + Key_Plus, this, SLOT( textDepthPlus() ),
+                                       actionCollection(), "text_depthPlus" );
 
     actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), QApplication::reverseLayout() ?"format_increaseindent" : "format_decreaseindent",
-					CTRL + Key_Minus, this, SLOT( textDepthMinus() ),
-					actionCollection(), "text_depthMinus" );
+                                        CTRL + Key_Minus, this, SLOT( textDepthMinus() ),
+                                        actionCollection(), "text_depthMinus" );
 
     actionTextExtentCont2Height = new KAction( i18n( "Extend Contents to Object &Height" ), 0,
-					       this, SLOT( textContentsToHeight() ),
-					       actionCollection(), "text_con2hei" );
+                                               this, SLOT( textContentsToHeight() ),
+                                               actionCollection(), "text_con2hei" );
 
     actionTextExtendObj2Cont = new KAction( i18n( "&Extend Object to fit Contents" ), 0,
-					    this, SLOT( textObjectToContents() ),
-					    actionCollection(), "text_obj2cont" );
+                                            this, SLOT( textObjectToContents() ),
+                                            actionCollection(), "text_obj2cont" );
 
     actionTextInsertPageNum = new KAction( i18n( "&Insert Page Number" ), "pgnum", 0,
-					   this, SLOT( textInsertPageNum() ),
-					   actionCollection(), "text_inspgnum" );
+                                           this, SLOT( textInsertPageNum() ),
+                                           actionCollection(), "text_inspgnum" );
 
     // ----------------- format actions
 
     actionExtraPenBrush = new KAction( i18n( "&Properties..." ), "penbrush", 0,
-				       this, SLOT( extraPenBrush() ),
-				       actionCollection(), "extra_properties" );
+                                       this, SLOT( extraPenBrush() ),
+                                       actionCollection(), "extra_properties" );
 
     actionExtraArrangePopup = new KAction( i18n( "Arra&nge Objects" ), "arrange", 0,
                                            this, SLOT(extraArrangePopup()),
                                            actionCollection(), "extra_arrangepopup" );
 
     actionExtraRaise = new KAction( i18n( "Ra&ise Objects" ), "raise",
-				    CTRL +SHIFT+ Key_R, this, SLOT( extraRaise() ),
-				    actionCollection(), "extra_raise" );
+                                    CTRL+SHIFT+Key_R, this, SLOT( extraRaise() ),
+                                    actionCollection(), "extra_raise" );
 
     actionExtraLower = new KAction( i18n( "&Lower Objects" ), "lower", CTRL +SHIFT+ Key_L,
-				    this, SLOT( extraLower() ),
-				    actionCollection(), "extra_lower" );
+                                    this, SLOT( extraLower() ),
+                                    actionCollection(), "extra_lower" );
 
     actionExtraBringForward= new KAction( i18n( "Bring to Front" ), "bring_forward",
                                           0, this, SLOT( extraBringForward() ),
@@ -2903,150 +2894,147 @@ void KPresenterView::setupActions()
 
 
     actionExtraRotate = new KAction( i18n( "R&otate Objects..." ), "rotate_cw", 0,
-				     this, SLOT( extraRotate() ),
-				     actionCollection(), "extra_rotate" );
+                                     this, SLOT( extraRotate() ),
+                                     actionCollection(), "extra_rotate" );
 
     actionExtraShadow = new KAction( i18n( "&Shadow Objects..." ), "shadow", 0,
-				     this, SLOT( extraShadow() ),
-				     actionCollection(), "extra_shadow" );
+                                     this, SLOT( extraShadow() ),
+                                     actionCollection(), "extra_shadow" );
 
     actionExtraAlignObjLeft = new KAction( i18n( "Align &Left" ), "aoleft", 0,
-					   this, SLOT( extraAlignObjLeft() ),
-					   actionCollection(), "extra_alignleft" );
+                                           this, SLOT( extraAlignObjLeft() ),
+                                           actionCollection(), "extra_alignleft" );
 
     actionExtraAlignObjCenterH = new KAction( i18n( "Align Center (&horizontally)" ),
-					      "aocenterh", 0,
-					      this, SLOT( extraAlignObjCenterH() ),
-					      actionCollection(), "extra_aligncenterh" );
+                                              "aocenterh", 0,
+                                              this, SLOT( extraAlignObjCenterH() ),
+                                              actionCollection(), "extra_aligncenterh" );
 
     actionExtraAlignObjRight = new KAction( i18n( "Align &Right" ), "aoright", 0,
-					    this, SLOT( extraAlignObjRight() ),
-					    actionCollection(), "extra_alignright" );
+                                            this, SLOT( extraAlignObjRight() ),
+                                            actionCollection(), "extra_alignright" );
 
     actionExtraAlignObjTop = new KAction( i18n( "Align &Top" ), "aotop", 0,
-					  this, SLOT( extraAlignObjTop() ),
-					  actionCollection(), "extra_aligntop" );
+                                          this, SLOT( extraAlignObjTop() ),
+                                          actionCollection(), "extra_aligntop" );
 
     actionExtraAlignObjCenterV = new KAction( i18n( "Align Center (&vertically)" ),
-					      "aocenterv", 0,
-					      this, SLOT( extraAlignObjCenterV() ),
-					      actionCollection(), "extra_aligncenterv" );
+                                              "aocenterv", 0,
+                                              this, SLOT( extraAlignObjCenterV() ),
+                                              actionCollection(), "extra_aligncenterv" );
 
     actionExtraAlignObjBottom = new KAction( i18n( "Align &Bottom" ), "aobottom", 0,
-					     this, SLOT( extraAlignObjBottom() ),
-					     actionCollection(), "extra_alignbottom" );
+                                             this, SLOT( extraAlignObjBottom() ),
+                                             actionCollection(), "extra_alignbottom" );
 
 
     actionExtraBackground = new KAction( i18n( "Page Bac&kground..." ), "background", 0,
-					 this, SLOT( extraBackground() ),
-					 actionCollection(), "extra_background" );
+                                         this, SLOT( extraBackground() ),
+                                         actionCollection(), "extra_background" );
 
     actionExtraLayout = new KAction( i18n( "Page La&yout..." ), 0,
-				     this, SLOT( extraLayout() ),
-				     actionCollection(), "extra_layout" );
+                                     this, SLOT( extraLayout() ),
+                                     actionCollection(), "extra_layout" );
 
     actionExtraConfigure = new KAction( i18n( "Configure KPresenter..." ),
-					"configure", 0,
-					this, SLOT( extraConfigure() ),
-					actionCollection(), "extra_configure" );
+                                        "configure", 0,
+                                        this, SLOT( extraConfigure() ),
+                                        actionCollection(), "extra_configure" );
 
     actionExtraWebPres = new KAction( i18n( "Create &HTML Slideshow..." ),
-				      "webpres", 0,
-				      this, SLOT( extraWebPres() ),
-				      actionCollection(), "extra_webpres" );
+                                      "webpres", 0,
+                                      this, SLOT( extraWebPres() ),
+                                      actionCollection(), "extra_webpres" );
 
     actionExtraCreateTemplate = new KAction( i18n( "Template Manager..." ), 0,
-					     this, SLOT( extraCreateTemplate() ),
-					     actionCollection(), "extra_template" );
+                                             this, SLOT( extraCreateTemplate() ),
+                                             actionCollection(), "extra_template" );
 
     actionExtraDefaultTemplate = new KAction( i18n( "Use Current Slide as Default Template" ), 0,
-					     this, SLOT( extraDefaultTemplate() ),
-					     actionCollection(), "extra_defaulttemplate" );
+                                              this, SLOT( extraDefaultTemplate() ),
+                                              actionCollection(), "extra_defaulttemplate" );
 
     actionExtraAlignObjs = new KAction( i18n("Align O&bjects"), "alignobjs", 0,
-					this, SLOT( extraAlignObjs() ),
-					actionCollection(), "extra_alignobjs" );
+                                        this, SLOT( extraAlignObjs() ),
+                                        actionCollection(), "extra_alignobjs" );
 
     actionExtraLineBegin = new KAction( i18n("Line Begin"), "line_begin", 0,
-					this, SLOT( extraLineBegin() ),
-					actionCollection(), "extra_linebegin" );
+                                        this, SLOT( extraLineBegin() ),
+                                        actionCollection(), "extra_linebegin" );
 
     actionExtraLineEnd = new KAction( i18n("Line End"), "line_end", 0,
-				      this, SLOT( extraLineEnd() ),
-				      actionCollection(), "extra_lineend" );
+                                      this, SLOT( extraLineEnd() ),
+                                      actionCollection(), "extra_lineend" );
 
     actionExtraPenStyle = new KAction( i18n("Pen Style"), "pen_style", 0,
-					this, SLOT( extraPenStyle() ),
-					actionCollection(), "extra_penstyle" );
+                                       this, SLOT( extraPenStyle() ),
+                                       actionCollection(), "extra_penstyle" );
 
     actionExtraPenWidth = new KAction( i18n("Pen Width"), "pen_width", 0,
-					this, SLOT( extraPenWidth() ),
-					actionCollection(), "extra_penwidth" );
+                                       this, SLOT( extraPenWidth() ),
+                                       actionCollection(), "extra_penwidth" );
 
     actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 0,
-				    this, SLOT( extraGroup() ),
-				    actionCollection(), "extra_group" );
+                                    this, SLOT( extraGroup() ),
+                                    actionCollection(), "extra_group" );
 
     actionExtraUnGroup = new KAction( i18n( "&Ungroup Objects" ),
-				    "ungroup", 0,
-				    this, SLOT( extraUnGroup() ),
-				    actionCollection(), "extra_ungroup" );
+                                      "ungroup", 0, this, SLOT( extraUnGroup() ),
+                                      actionCollection(), "extra_ungroup" );
 
     // ----------------- screenpresentation actions
 
-    actionScreenConfigPages = new KAction( i18n( "&Configure Pages..." ),
-					   0,
-					   this, SLOT( screenConfigPages() ),
-					   actionCollection(), "screen_configpages" );
+    actionScreenConfigPages = new KAction( i18n( "&Configure Pages..." ), 0,
+                                           this, SLOT( screenConfigPages() ),
+                                           actionCollection(), "screen_configpages" );
 
-    actionScreenPresStructView = new KAction( i18n( "&Open Presentation Structure Editor..." ),
-					   0,
-					   this, SLOT( screenPresStructView() ),
-					   actionCollection(), "screen_presstruct" );
+    actionScreenPresStructView = new KAction( i18n( "&Open Presentation Structure Editor..." ), 0,
+                                              this, SLOT( screenPresStructView() ),
+                                              actionCollection(), "screen_presstruct" );
 
     actionScreenAssignEffect = new KAction( i18n( "&Assign Effect..." ),
-					   "effect", 0,
-					   this, SLOT( screenAssignEffect() ),
-					   actionCollection(), "screen_assigneffect");
+                                            "effect", 0,
+                                            this, SLOT( screenAssignEffect() ),
+                                            actionCollection(), "screen_assigneffect");
 
     actionScreenStart = new KAction( i18n( "&Start" ),
-				     "1rightarrow", 0,
-				     this, SLOT( screenStart() ),
-				     actionCollection(), "screen_start" );
+                                     "1rightarrow", 0,
+                                     this, SLOT( screenStart() ),
+                                     actionCollection(), "screen_start" );
 
     actionScreenViewPage = new KAction( i18n( "&View Current Page" ),
-				     "viewmag", 0,
-				     this, SLOT( screenViewPage() ),
-				     actionCollection(), "screen_viewpage" );
+                                        "viewmag", 0,
+                                        this, SLOT( screenViewPage() ),
+                                        actionCollection(), "screen_viewpage" );
 
     actionScreenFirst = new KAction( i18n( "&Go to Start" ),
-				     "start", Key_Home,
-				     this, SLOT( screenFirst() ),
-				     actionCollection(), "screen_first" );
+                                     "start", Key_Home,
+                                     this, SLOT( screenFirst() ),
+                                     actionCollection(), "screen_first" );
 
     actionScreenPrev = new KAction( i18n( "&Previous Slide" ),
-				     "back", Key_Prior,
-				     this, SLOT( screenPrev() ),
-				     actionCollection(), "screen_prev" );
+                                    "back", Key_Prior,
+                                    this, SLOT( screenPrev() ),
+                                    actionCollection(), "screen_prev" );
 
     actionScreenNext = new KAction( i18n( "&Next Slide" ),
-				     "forward", Key_Next,
-				     this, SLOT( screenNext() ),
-				     actionCollection(), "screen_next" );
+                                    "forward", Key_Next,
+                                    this, SLOT( screenNext() ),
+                                    actionCollection(), "screen_next" );
 
     actionScreenLast = new KAction( i18n( "Go to &End" ),
-				     "finish", Key_End,
-				     this, SLOT( screenLast() ),
-				     actionCollection(), "screen_last" );
+                                    "finish", Key_End,
+                                    this, SLOT( screenLast() ),
+                                    actionCollection(), "screen_last" );
 
     actionScreenSkip = new KAction( i18n( "Goto &Page..." ),
-				     "goto", 0,
-				     this, SLOT( screenSkip() ),
-				     actionCollection(), "screen_skip" );
+                                    "goto", 0,
+                                    this, SLOT( screenSkip() ),
+                                    actionCollection(), "screen_skip" );
 
     actionScreenPenColor = new KColorAction( i18n( "Presentation Pen Colo&r..." ), KColorAction::BackgroundColor, 0,
-					     this, SLOT( screenPenColor() ),
-					     actionCollection(), "screen_pencolor" );
+                                             this, SLOT( screenPenColor() ),
+                                             actionCollection(), "screen_pencolor" );
 
     actionScreenPenWidth = new KSelectAction( i18n( "Presentation Pen &Width" ), 0,
 					     actionCollection(), "screen_penwidth" );
@@ -3054,61 +3042,67 @@ void KPresenterView::setupActions()
     lst << "1" << "2" << "3" << "4" << "5" << "6" << "7" << "8" << "9" << "10";
     actionScreenPenWidth->setItems( lst );
     connect( actionScreenPenWidth, SIGNAL( activated( const QString & ) ),
-	     this, SLOT( screenPenWidth( const QString & ) ) );
+             this, SLOT( screenPenWidth( const QString & ) ) );
 
      // ----------------- colorbar(Brush and Pen) action
 
-     actionBrushColor = new TKSelectColorAction( i18n( "Brush Color..." ), TKSelectColorAction::FillColor,
+    actionBrushColor = new TKSelectColorAction( i18n( "Brush Color..." ), TKSelectColorAction::FillColor,
                                                  actionCollection(), "brush_color" ,true);
-     connect( actionBrushColor, SIGNAL( activated() ), SLOT( brushChosen() ) );
-     actionBrushColor->setDefaultColor(QColor());
+    connect( actionBrushColor, SIGNAL( activated() ), SLOT( brushChosen() ) );
+    actionBrushColor->setDefaultColor(QColor());
 
-     actionPenColor = new TKSelectColorAction( i18n( "Pen Color..." ), TKSelectColorAction::LineColor,
+    actionPenColor = new TKSelectColorAction( i18n( "Pen Color..." ), TKSelectColorAction::LineColor,
                                                actionCollection(), "pen_color" );
-     connect( actionPenColor, SIGNAL( activated() ), SLOT( penChosen() ) );
-     actionPenColor->setDefaultColor(QColor());
-    actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ), actionCollection(), "extendobjectheight" );
+    connect( actionPenColor, SIGNAL( activated() ), SLOT( penChosen() ) );
+    actionPenColor->setDefaultColor(QColor());
+    actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ),
+                                            actionCollection(), "extendobjectheight" );
 
-    actionResizeTextObject = new KAction( i18n( "&Resize Object to fit Contents" ),0, this, SLOT( textObjectToContents() ), actionCollection(), "resizetextobject" );
+    actionResizeTextObject = new KAction( i18n( "&Resize Object to fit Contents" ),0, this, SLOT( textObjectToContents() ),
+                                          actionCollection(), "resizetextobject" );
 
 //     actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
 // 				       this, SLOT( extraPenBrush() ),
 // 				       actionCollection(), "object_properties" );
     actionRenamePage=new KAction(i18n( "&Rename Page..." ),0,this,
-                     SLOT( renamePageTitle() ),
-                     actionCollection(), "rename_page" );
+                                 SLOT( renamePageTitle() ),
+                                 actionCollection(), "rename_page" );
 
     actionPicOriginalSize = new KAction( i18n( "Sca&le to Original Size" ), 0, this,
                                          SLOT( picViewOriginalSize() ),
                                          actionCollection(), "pic_original_size" );
 
     actionPic640x480=new KAction(i18n( "640x480" ),0,this,
-                     SLOT( picViewOrig640x480() ),
-                     actionCollection(), "pic_640_480" );
+                                 SLOT( picViewOrig640x480() ),
+                                 actionCollection(), "pic_640_480" );
 
     actionPic800x600=new KAction(i18n( "800x600" ),0,this,
-                     SLOT( picViewOrig800x600() ),
-                     actionCollection(), "pic_800_600" );
+                                 SLOT( picViewOrig800x600() ),
+                                 actionCollection(), "pic_800_600" );
 
     actionPic1024x768=new KAction(i18n( "1024x768" ),0,this,
-                     SLOT( picViewOrig1024x768() ),
-                     actionCollection(), "pic_1024_768" );
+                                  SLOT( picViewOrig1024x768() ),
+                                  actionCollection(), "pic_1024_768" );
 
     actionPic1280x1024=new KAction(i18n( "1280x1024" ),0,this,
-                     SLOT( picViewOrig1280x1024() ),
-                     actionCollection(), "pic_1280_1024" );
+                                   SLOT( picViewOrig1280x1024() ),
+                                   actionCollection(), "pic_1280_1024" );
 
     actionPic1600x1200=new KAction(i18n( "1600x1200" ),0,this,
-                     SLOT( picViewOrig1600x1200() ),
-                     actionCollection(), "pic_1600_1200" );
+                                   SLOT( picViewOrig1600x1200() ),
+                                   actionCollection(), "pic_1600_1200" );
 
-    actionChangePic=new KAction( i18n( "&Change Picture..." ),"frame_image"
-                                 ,0,this,SLOT( chPic() ),
-                     actionCollection(), "change_picture" );
+    actionChangePic=new KAction( i18n( "&Change Picture..." ),"frame_image",0,this,
+                                 SLOT( chPic() ), actionCollection(), "change_picture" );
+
+
+    actionImageEffect = new KAction( i18n("Image &effect..."), 0, this,
+                                     SLOT(imageEffect()), actionCollection(), "image_effect");
+
 
     actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
-                                              this, SLOT( textSuperScript() ),
-                                              actionCollection(), "format_super" );
+                                           this, SLOT( textSuperScript() ),
+                                           actionCollection(), "format_super" );
     actionFormatSuper->setExclusiveGroup( "valign" );
     actionFormatSub = new KToggleAction( i18n( "Subscript" ), "sub", 0,
                                               this, SLOT( textSubScript() ),
@@ -3148,33 +3142,33 @@ void KPresenterView::setupActions()
                                      actionCollection(), "format_paragraph" );
 
     actionFormatDefault=new KAction( i18n( "Default Format" ), 0,
-                                          this, SLOT( textDefaultFormat() ),
-                                          actionCollection(), "text_default" );
+                                     this, SLOT( textDefaultFormat() ),
+                                     actionCollection(), "text_default" );
 
     actionOpenLink = new KAction( i18n( "Open Link" ), 0,
-                                     this, SLOT( openLink() ),
-                                     actionCollection(), "open_link" );
+                                  this, SLOT( openLink() ),
+                                  actionCollection(), "open_link" );
 
     actionChangeLink=new KAction( i18n("Change Link..."), 0,
                                   this,SLOT(changeLink()),
                                   actionCollection(), "change_link");
 
     actionCopyLink = new KAction( i18n( "Copy Link" ), 0,
-                                     this, SLOT( copyLink() ),
-                                     actionCollection(), "copy_link" );
+                                  this, SLOT( copyLink() ),
+                                  actionCollection(), "copy_link" );
 
     actionRemoveLink = new KAction( i18n( "Remove Link" ), 0,
-                                     this, SLOT( removeLink() ),
-                                     actionCollection(), "remove_link" );
+                                    this, SLOT( removeLink() ),
+                                    actionCollection(), "remove_link" );
 
 
     actionAddLinkToBookmak = new KAction( i18n( "Add to bookmark" ), 0,
-                                     this, SLOT( addToBookmark() ),
-                                     actionCollection(), "add_to_bookmark" );
+                                          this, SLOT( addToBookmark() ),
+                                          actionCollection(), "add_to_bookmark" );
 
     actionEditCustomVarsEdit = new KAction( i18n( "&Custom Variables..." ), 0,
-                                        this, SLOT( editCustomVars() ),
-                                        actionCollection(), "edit_vars" );
+                                            this, SLOT( editCustomVars() ),
+                                            actionCollection(), "edit_vars" );
 
     actionEditCustomVars = new KAction( i18n( "Edit Variable..." ), 0,
                                         this, SLOT( editCustomVariable() ),
@@ -3512,8 +3506,8 @@ void KPresenterView::afChooseOk( const QString & c )
 {
     QFileInfo fileInfo( c );
     QString fileName = locate( "autoforms",
-			       fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf",
-			       KPresenterFactory::global() );
+                               fileInfo.dirPath( false ) + "/" + fileInfo.baseName() + ".atf",
+                               KPresenterFactory::global() );
 
     m_canvas->deSelectAllObj();
     m_canvas->setToolEditMode( INS_AUTOFORM );
@@ -3619,7 +3613,8 @@ void KPresenterView::styleOk()
     {
         KoRect rect = styleDia->getNewSize();
         KoRect oldRect = m_canvas->getSelectedObj()->getRect();
-        cmd = new ResizeCmd( i18n("Change Size"), rect.topLeft()-oldRect.topLeft(), rect.size() - oldRect.size(), m_canvas->getSelectedObj(), m_pKPresenterDoc );
+        cmd = new ResizeCmd( i18n("Change Size"), rect.topLeft()-oldRect.topLeft(), rect.size() - oldRect.size(),
+                             m_canvas->getSelectedObj(), m_pKPresenterDoc );
         cmd->execute();
         macro->addCommand(cmd);
         if ( styleDia->isAllTextObject() )
@@ -3636,9 +3631,11 @@ void KPresenterView::styleOk()
             {
                 MarginsStruct _MarginsBegin(obj);
 
-                MarginsStruct _MarginsEnd( styleDia->marginsLeft(),styleDia->marginsTop(), styleDia->marginsRight(), styleDia->marginsBottom());
+                MarginsStruct _MarginsEnd( styleDia->marginsLeft(), styleDia->marginsTop(),
+                                           styleDia->marginsRight(), styleDia->marginsBottom());
 
-                KPrChangeMarginCommand * cmd = new KPrChangeMarginCommand( i18n("Change Margins"), obj, _MarginsBegin, _MarginsEnd,kPresenterDoc() );
+                KPrChangeMarginCommand * cmd = new KPrChangeMarginCommand( i18n("Change Margins"), obj,
+                                                                           _MarginsBegin, _MarginsEnd,kPresenterDoc() );
                 cmd->execute();
                 macro->addCommand(cmd);
             }
@@ -3802,18 +3799,18 @@ void KPresenterView::styleOk()
             rndY = confRectDia->getRndY();
         }
 
-	pen = confPenDia->getPen();
-	brush = confBrushDia->getBrush();
-	lineBegin = confPenDia->getLineBegin();
-	lineEnd = confPenDia->getLineEnd();
-	fillType = confBrushDia->getFillType();
-	gColor1 = confBrushDia->getGColor1();
-	gColor2 = confBrushDia->getGColor2();
-	gType = confBrushDia->getGType();
-	gUnbalanced = confBrushDia->getGUnbalanced();
-	gXFactor = confBrushDia->getGXFactor();
-	gYFactor = confBrushDia->getGYFactor();
-	sticky = bSticky;
+        pen = confPenDia->getPen();
+        brush = confBrushDia->getBrush();
+        lineBegin = confPenDia->getLineBegin();
+        lineEnd = confPenDia->getLineEnd();
+        fillType = confBrushDia->getFillType();
+        gColor1 = confBrushDia->getGColor1();
+        gColor2 = confBrushDia->getGColor2();
+        gType = confBrushDia->getGType();
+        gUnbalanced = confBrushDia->getGUnbalanced();
+        gXFactor = confBrushDia->getGXFactor();
+        gYFactor = confBrushDia->getGYFactor();
+        sticky = bSticky;
         keepRatio = styleDia->isSticky();
         protect = styleDia->isProtected();
         protectContent = styleDia->isProtectContent();
@@ -3867,7 +3864,7 @@ void KPresenterView::rotateOk()
     cmd=stickyPage()->rotateObj(_newAngle);
     if( cmd)
     {
-                if ( !macro )
+        if ( !macro )
             macro=new KMacroCommand(i18n( "Change Rotation" ));
 
         macro->addCommand(cmd);
@@ -3917,9 +3914,9 @@ unsigned int KPresenterView::getCurrPgNum() const
 void KPresenterView::scrollH( int value )
 {
     if ( !presStarted ) {
-	m_canvas->scrollX( value );
-	if ( h_ruler )
-	    h_ruler->setOffset( value, 0 );
+        m_canvas->scrollX( value );
+        if ( h_ruler )
+            h_ruler->setOffset( value, 0 );
     }
 }
 
@@ -3928,8 +3925,8 @@ void KPresenterView::scrollV( int value )
 {
     if ( !presStarted ) {
         m_canvas->scrollY( value );
-	if ( v_ruler )
-	    v_ruler->setOffset( 0, value );
+        if ( v_ruler )
+            v_ruler->setOffset( 0, value );
     }
 }
 
@@ -3952,33 +3949,33 @@ void KPresenterView::fontChanged( const QFont &font )
 /*====================== color changed ==========================*/
 void KPresenterView::colorChanged( const QColor &color )
 {
-  tbColor = color;
-  actionTextColor->setEnabled( true );
-  actionTextColor->setCurrentColor( tbColor );
+    tbColor = color;
+    actionTextColor->setEnabled( true );
+    actionTextColor->setCurrentColor( tbColor );
 }
 
 /*====================== align changed ==========================*/
 void KPresenterView::alignChanged( int align )
 {
     if ( align != tbAlign ) {
-	tbAlign = align;
-	if ( ( align & AlignLeft ) == AlignLeft ) {
-	    actionTextAlignLeft->blockSignals( true );
-	    actionTextAlignLeft->setChecked( true );
-	    actionTextAlignLeft->blockSignals( false );
-	} else if ( ( align & AlignHCenter ) == AlignHCenter ||
-		    ( align & AlignCenter ) == AlignCenter ) {
-	    actionTextAlignCenter->blockSignals( true );
-	    actionTextAlignCenter->setChecked( true );
-	    actionTextAlignCenter->blockSignals( false );
-	} else if ( ( align & AlignRight ) == AlignRight ) {
-	    actionTextAlignRight->blockSignals( true );
-	    actionTextAlignRight->setChecked( true );
-	    actionTextAlignRight->blockSignals( false );
-	} else if ( (align & AlignJustify ) == AlignJustify ) {
-	    actionTextAlignBlock->blockSignals( true );
-	    actionTextAlignBlock->setChecked( true );
-	    actionTextAlignBlock->blockSignals( false );
+        tbAlign = align;
+        if ( ( align & AlignLeft ) == AlignLeft ) {
+            actionTextAlignLeft->blockSignals( true );
+            actionTextAlignLeft->setChecked( true );
+            actionTextAlignLeft->blockSignals( false );
+        } else if ( ( align & AlignHCenter ) == AlignHCenter ||
+                    ( align & AlignCenter ) == AlignCenter ) {
+            actionTextAlignCenter->blockSignals( true );
+            actionTextAlignCenter->setChecked( true );
+            actionTextAlignCenter->blockSignals( false );
+        } else if ( ( align & AlignRight ) == AlignRight ) {
+            actionTextAlignRight->blockSignals( true );
+            actionTextAlignRight->setChecked( true );
+            actionTextAlignRight->blockSignals( false );
+        } else if ( (align & AlignJustify ) == AlignJustify ) {
+            actionTextAlignBlock->blockSignals( true );
+            actionTextAlignBlock->setChecked( true );
+            actionTextAlignBlock->blockSignals( false );
         }
     }
 }
@@ -4037,7 +4034,7 @@ void KPresenterView::changePicture( const QString & filename )
 void KPresenterView::resizeEvent( QResizeEvent *e )
 {
     if ( !presStarted )
-	QWidget::resizeEvent( e );
+        QWidget::resizeEvent( e );
 
     QSize s = e ? e->size() : size();
     splitter->setGeometry( 0, 0, s.width(), s.height() );
@@ -4153,7 +4150,7 @@ void KPresenterView::dropEvent( QDropEvent *e )
 /*===============================================================*/
 void KPresenterView::getPageMouseWheelEvent( QWheelEvent *e )
 {
-  QApplication::sendEvent( vert, e );
+    QApplication::sendEvent( vert, e );
 }
 
 /*======================= key press event =======================*/
@@ -4387,7 +4384,8 @@ void KPresenterView::setupRulers()
 {
     tabChooser = new KoTabChooser( pageBase, KoTabChooser::TAB_ALL );
     tabChooser->setReadWrite(kPresenterDoc()->isReadWrite());
-    h_ruler = new KoRuler( pageBase, m_canvas, Qt::Horizontal, kPresenterDoc()->pageLayout(), KoRuler::F_INDENTS | KoRuler::F_TABS, kPresenterDoc()->getUnit(), tabChooser );
+    h_ruler = new KoRuler( pageBase, m_canvas, Qt::Horizontal, kPresenterDoc()->pageLayout(),
+                           KoRuler::F_INDENTS | KoRuler::F_TABS, kPresenterDoc()->getUnit(), tabChooser );
     h_ruler->changeFlags(0);
 
     h_ruler->setReadWrite(kPresenterDoc()->isReadWrite());
@@ -4444,10 +4442,10 @@ void KPresenterView::unitChanged( QString u )
 void KPresenterView::setRanges()
 {
     if ( vert && horz && m_canvas && m_pKPresenterDoc ) {
-	vert->setSteps( 10, m_canvas->height() );
-	vert->setRange( 0, QMAX( 0, m_canvas->activePage()->getZoomPageRect().height()  - m_canvas->height() ) );
-	horz->setSteps( 10, m_canvas->width() );
-	horz->setRange( 0, QMAX( 0, m_canvas->activePage()->getZoomPageRect().width() + 16 - m_canvas->width() ) );
+        vert->setSteps( 10, m_canvas->height() );
+        vert->setRange( 0, QMAX( 0, m_canvas->activePage()->getZoomPageRect().height()  - m_canvas->height() ) );
+        horz->setSteps( 10, m_canvas->width() );
+        horz->setRange( 0, QMAX( 0, m_canvas->activePage()->getZoomPageRect().width() + 16 - m_canvas->width() ) );
     }
 }
 
@@ -4492,13 +4490,13 @@ void KPresenterView::updatePageParameter()
         cornersValue = page->getCornersValue(cornersValue);
         sharpnessValue = page->getSharpnessValue(sharpnessValue);
 
-        QPixmap tmpPix;
+        //QPixmap tmpPix;
         mirrorType = page->getPictureMirrorType(mirrorType);
         depth = page->getPictureDepth(depth);
         swapRGB = page->getPictureSwapRGB(swapRGB);
         grayscal = page->getPictureGrayscal(grayscal);
         bright = page->getPictureBright(bright);
-        tmpPix = page->getPicturePixmap();
+        //tmpPix = page->getPicturePixmap(); //### wtf?
 
         lineBegin=page->getLineEnd( lineBegin );
         lineEnd=page->getLineBegin( lineEnd );
@@ -4552,41 +4550,41 @@ void KPresenterView::setTool( ToolEditMode toolEditMode )
 {
     switch ( toolEditMode ) {
     case TEM_MOUSE:
-	actionToolsMouse->setChecked( true );
-	break;
+        actionToolsMouse->setChecked( true );
+        break;
     case TEM_ROTATE:
-	actionToolsRotate->setChecked( true );
-	break;
+        actionToolsRotate->setChecked( true );
+        break;
     case TEM_ZOOM:
-	actionToolsZoom->setChecked( true );
-	break;
+        actionToolsZoom->setChecked( true );
+        break;
     case INS_LINE:
-	actionToolsLine->setChecked( true );
-	break;
+        actionToolsLine->setChecked( true );
+        break;
     case INS_RECT:
-	actionToolsRectangle->setChecked( true );
-	break;
+        actionToolsRectangle->setChecked( true );
+        break;
     case INS_ELLIPSE:
-	actionToolsCircleOrEllipse->setChecked( true );
-	break;
+        actionToolsCircleOrEllipse->setChecked( true );
+        break;
     case INS_PIE:
-	actionToolsPie->setChecked( true );
-	break;
+        actionToolsPie->setChecked( true );
+        break;
     case INS_DIAGRAMM:
-	actionToolsDiagramm->setChecked( true );
-	break;
+        actionToolsDiagramm->setChecked( true );
+        break;
     case INS_TABLE:
-	actionToolsTable->setChecked( true );
-	break;
+        actionToolsTable->setChecked( true );
+        break;
     case INS_FORMULA:
-	actionToolsFormula->setChecked( true );
-	break;
+        actionToolsFormula->setChecked( true );
+        break;
     case INS_TEXT:
-	actionToolsText->setChecked( true );
-	break;
+        actionToolsText->setChecked( true );
+        break;
     case INS_AUTOFORM:
-	actionToolsAutoform->setChecked( true );
-	break;
+        actionToolsAutoform->setChecked( true );
+        break;
     default: // Shut up gcc -Wall
         break; // Shut up gcc 3.x
     }
@@ -4651,7 +4649,7 @@ void KPresenterView::setCanvasYOffset( int _y )
 int KPresenterView::getCurrentPresPage() const
 {
     if ( !presStarted )
-	return -1;
+        return -1;
 
     return m_canvas->presPage();
 }
@@ -4660,7 +4658,7 @@ int KPresenterView::getCurrentPresPage() const
 int KPresenterView::getCurrentPresStep() const
 {
     if ( !presStarted )
-	return -1;
+        return -1;
 
     return m_canvas->presStep();
 }
@@ -4669,7 +4667,7 @@ int KPresenterView::getCurrentPresStep() const
 int KPresenterView::getPresStepsOfPage() const
 {
     if ( !presStarted )
-	return -1;
+        return -1;
 
     return m_canvas->numPresSteps();
 }
@@ -4678,7 +4676,7 @@ int KPresenterView::getPresStepsOfPage() const
 int KPresenterView::getNumPresPages() const
 {
     if ( !presStarted )
-	return -1;
+        return -1;
 
     return m_canvas->numPresPages();
 }
@@ -7409,10 +7407,48 @@ void KPresenterView::addWordToDictionary()
     if ( edit && m_pKPresenterDoc->backgroundSpellCheckEnabled() )
     {
         QString word = edit->wordUnderCursor( *edit->cursor() );
-        if ( !word.isEmpty())
-            m_pKPresenterDoc->addWordToDictionary( word);
+        if ( !word.isEmpty() )
+            m_pKPresenterDoc->addWordToDictionary( word );
     }
 }
 
+void KPresenterView::imageEffect()
+{
+    if (m_canvas->numberOfObjectSelected() > 0) {
+        imageEffectDia = new ImageEffectDia(this);
+
+        KPPixmapObject *object=m_canvas->getSelectedImage();
+
+        imageEffectDia->setPixmap(object->getOriginalPixmap());
+        imageEffectDia->setEffect(object->getImageEffect(), object->getIEParam1(), object->getIEParam2(),
+                                  object->getIEParam3());
+
+        m_canvas->setToolEditMode(TEM_MOUSE);
+
+        if (imageEffectDia->exec()==QDialog::Accepted) {
+            KMacroCommand *macro=0L;
+
+            KCommand *cmd=m_canvas->activePage()->setImageEffect(imageEffectDia->getEffect(), imageEffectDia->getParam1(),
+                                                                 imageEffectDia->getParam2(), imageEffectDia->getParam3());
+            if (cmd) {
+                if (!macro)
+                    macro=new KMacroCommand(i18n("Change Image Effect"));
+                macro->addCommand(cmd);
+            }
+            cmd=stickyPage()->setImageEffect(imageEffectDia->getEffect(), imageEffectDia->getParam1(),
+                                             imageEffectDia->getParam2(), imageEffectDia->getParam3());
+            if (cmd) {
+                if (!macro)
+                    macro=new KMacroCommand(i18n("Change Image Effect"));
+                macro->addCommand(cmd);
+            }
+            if (macro)
+                kPresenterDoc()->addCommand(macro);
+        }
+
+        delete imageEffectDia;
+        imageEffectDia = 0L;
+    }
+}
 
 #include <kpresenter_view.moc>

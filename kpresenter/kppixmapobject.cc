@@ -17,11 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+// for getenv ()
+#include <stdlib.h>
 #include <float.h>
-#include <kppixmapobject.h>
-#include <kpgradient.h>
-
-#include "KPPixmapObjectIface.h"
 
 #include <qbuffer.h>
 #include <qpainter.h>
@@ -32,10 +30,13 @@
 #include <qimage.h>
 
 #include <kdebug.h>
+#include <kimageeffect.h>
 #include <koSize.h>
 #include <kozoomhandler.h>
-// for getenv ()
-#include <stdlib.h>
+
+#include "kppixmapobject.h"
+#include "kpgradient.h"
+#include "KPPixmapObjectIface.h"
 
 /******************************************************************/
 /* Class: KPPixmapObject                                          */
@@ -53,6 +54,10 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     swapRGB = false;
     grayscal = false;
     bright = 0;
+    m_effect = IE_NONE;
+    m_ie_par1 = QVariant();
+    m_ie_par2 = QVariant();
+    m_ie_par3 = QVariant();
 }
 
 /*================== overloaded constructor ======================*/
@@ -69,6 +74,10 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoP
     swapRGB = false;
     grayscal = false;
     bright = 0;
+    m_effect = IE_NONE;
+    m_ie_par1 = QVariant();
+    m_ie_par2 = QVariant();
+    m_ie_par3 = QVariant();
 
     setPixmap( key );
 }
@@ -76,7 +85,7 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoP
 DCOPObject* KPPixmapObject::dcopObject()
 {
     if ( !dcop )
-	dcop = new KPPixmapObjectIface( this );
+        dcop = new KPPixmapObjectIface( this );
     return dcop;
 }
 
@@ -114,8 +123,19 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
     elemSettings.setAttribute( "swapRGB", static_cast<int>( swapRGB ) );
     elemSettings.setAttribute( "grayscal", static_cast<int>( grayscal ) );
     elemSettings.setAttribute( "bright", bright );
-
     fragment.appendChild( elemSettings );
+
+    if (m_effect!=IE_NONE) {
+        QDomElement imageEffects = doc.createElement("EFFECTS");
+        imageEffects.setAttribute("type", static_cast<int>(m_effect));
+        if (m_ie_par1.isValid())
+            imageEffects.setAttribute("param1", m_ie_par1.toString());
+        if (m_ie_par2.isValid())
+            imageEffects.setAttribute("param2", m_ie_par2.toString());
+        if (m_ie_par3.isValid())
+            imageEffects.setAttribute("param3", m_ie_par3.toString());
+        fragment.appendChild( imageEffects );
+    }
 
     return fragment;
 }
@@ -210,6 +230,28 @@ double KPPixmapObject::load(const QDomElement &element)
         swapRGB = false;
         grayscal = false;
         bright = 0;
+    }
+
+    e = element.namedItem( "EFFECTS" ).toElement();
+    if (!e.isNull()) {
+        if (e.hasAttribute("type"))
+            m_effect = static_cast<ImageEffect>(e.attribute("type").toInt());
+        if (e.hasAttribute("param1"))
+            m_ie_par1 = QVariant(e.attribute("param1"));
+        else
+            m_ie_par1 = QVariant();
+        if (e.hasAttribute("param2"))
+            m_ie_par2 = QVariant(e.attribute("param2"));
+        else
+            m_ie_par2 = QVariant();
+        if (e.hasAttribute("param3"))
+            m_ie_par3 = QVariant(e.attribute("param3"));
+        else
+            m_ie_par3 = QVariant();
+    }
+    else
+    {
+        m_effect = IE_NONE;
     }
 
     return offset;
@@ -378,7 +420,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         QPixmap _pixmap = generatePixmap( _zoomHandler );
 #endif
 
-        if (mirrorType != PM_NORMAL || swapRGB || grayscal || bright != 0) {
+        if (mirrorType != PM_NORMAL || swapRGB || grayscal || bright != 0 || m_effect!=IE_NONE) {
             QPixmap tmpPix = changePictureSettings( _pixmap ); // hmm, what about caching that pixmap?
             _painter->drawPixmap( rect, tmpPix );
         }
@@ -509,6 +551,105 @@ QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
                 }
             }
         }
+    }
+
+    switch (m_effect) {
+    case IE_CHANNEL_INTENSITY: {
+        KImageEffect::channelIntensity(_tmpImage, m_ie_par1.toDouble()/100.0,
+                                       static_cast<KImageEffect::RGBComponent>(m_ie_par2.toInt()));
+        break;
+    }
+    case IE_FADE: {
+        KImageEffect::fade(_tmpImage, m_ie_par1.toDouble(), m_ie_par2.toColor());
+        break;
+    }
+    case IE_FLATTEN: {
+        KImageEffect::flatten(_tmpImage, m_ie_par1.toColor(), m_ie_par2.toColor());
+        break;
+    }
+    case IE_INTENSITY: {
+        KImageEffect::intensity(_tmpImage, m_ie_par1.toDouble()/100.0);
+        break;
+    }
+    case IE_DESATURATE: {
+        KImageEffect::desaturate(_tmpImage, m_ie_par1.toDouble());
+        break;
+    }
+    case IE_CONTRAST: {
+        KImageEffect::contrast(_tmpImage, m_ie_par1.toInt());
+        break;
+    }
+    case IE_NORMALIZE: {
+        KImageEffect::normalize(_tmpImage);
+        break;
+    }
+    case IE_EQUALIZE: {
+        KImageEffect::equalize(_tmpImage);
+        break;
+    }
+    case IE_THRESHOLD: {
+        KImageEffect::threshold(_tmpImage, m_ie_par1.toInt());
+        break;
+    }
+    case IE_SOLARIZE: {
+        KImageEffect::solarize(_tmpImage, m_ie_par1.toDouble());
+        break;
+    }
+    case IE_EMBOSS: {
+        KImageEffect::emboss(_tmpImage);
+        break;
+    }
+    case IE_DESPECKLE: {
+        KImageEffect::despeckle(_tmpImage);
+        break;
+    }
+    case IE_CHARCOAL: {
+        KImageEffect::charcoal(_tmpImage, m_ie_par1.toDouble());
+        break;
+    }
+    case IE_NOISE: {
+        KImageEffect::addNoise(_tmpImage, static_cast<KImageEffect::NoiseType>(m_ie_par1.toInt()));
+        break;
+    }
+    case IE_BLUR: {
+        KImageEffect::blur(_tmpImage, m_ie_par1.toDouble());
+        break;
+    }
+    case IE_EDGE: {
+        KImageEffect::edge(_tmpImage, m_ie_par1.toDouble());
+        break;
+    }
+    case IE_IMPLODE: {
+        KImageEffect::implode(_tmpImage, m_ie_par1.toDouble());
+        break;
+    }
+    case IE_OIL_PAINT: {
+        KImageEffect::oilPaint(_tmpImage, m_ie_par1.toInt());
+        break;
+    }
+    case IE_SHARPEN: {
+        KImageEffect::sharpen(_tmpImage, m_ie_par1.toDouble());
+        break;
+    }
+    case IE_SPREAD: {
+        KImageEffect::spread(_tmpImage, m_ie_par1.toInt());
+        break;
+    }
+    case IE_SHADE: {
+        KImageEffect::shade(_tmpImage, m_ie_par1.toBool(), m_ie_par2.toDouble(), m_ie_par3.toDouble());
+        break;
+    }
+    case IE_SWIRL: {
+        KImageEffect::swirl(_tmpImage, m_ie_par1.toDouble());
+        break;
+    }
+    case IE_WAVE: {
+        KImageEffect::wave(_tmpImage, m_ie_par1.toDouble(), m_ie_par2.toDouble());
+        break;
+    }
+    case IE_NONE:
+    default:
+        break;
     }
 
     _tmpPixmap.convertFromImage( _tmpImage );

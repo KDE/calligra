@@ -35,6 +35,7 @@
 #include <kocommand.h>
 #include <koPoint.h>
 #include <koSize.h>
+#include <qvariant.h>
 
 class KPresenterDoc;
 class KPTextObject;
@@ -676,6 +677,38 @@ protected:
     QPtrList<PictureSettings> oldSettings;
     QPtrList<KPObject> objects;
     PictureSettings newSettings;
+    KPrPage *m_page;
+
+};
+
+/******************************************************************/
+/* Class: ImageEffectCmd                                          */
+/******************************************************************/
+
+class ImageEffectCmd : public KNamedCommand
+{
+public:
+    struct ImageEffectSettings
+    {
+        ImageEffect effect;
+        QVariant param1;
+        QVariant param2;
+        QVariant param3;
+    };
+
+    ImageEffectCmd(const QString &_name, QPtrList<ImageEffectSettings> &_oldSettings,
+                   ImageEffectSettings _newSettings, QPtrList<KPObject> &_objects,
+                   KPresenterDoc *_doc );
+    ~ImageEffectCmd();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KPresenterDoc *doc;
+    QPtrList<ImageEffectSettings> oldSettings;
+    QPtrList<KPObject> objects;
+    ImageEffectSettings newSettings;
     KPrPage *m_page;
 
 };
