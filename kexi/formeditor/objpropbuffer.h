@@ -82,6 +82,9 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		bool    showProperty(QObject *obj, const QString &property);
 		void    createAlignProperty(const QMetaProperty *meta, QObject *obj);
 		void    saveAlignProperty();
+		QString descFromName(const QString &name);
+		QString descFromValue(const QString &name);
+		QStringList descList(const QStringList &list);
 	
 	private:
 		QObject		*m_object;

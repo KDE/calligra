@@ -23,6 +23,8 @@
 #include <qmetaobject.h>
 #include <qvariant.h>
 
+#include <klocale.h>
+
 #include "objecttree.h"
 #include "form.h"
 #include "formmanager.h"
@@ -100,6 +102,7 @@ ObjectPropertyBuffer::setObject(QWidget *widg)
 			if(!showProperty(obj, meta->name()))
 				continue;
 
+			QString desc = descFromName(meta->name());
 			if(meta->isEnumType())
 			{
 				QStrList keys = meta->enumKeys();
@@ -109,12 +112,14 @@ ObjectPropertyBuffer::setObject(QWidget *widg)
 				}
 				else
 				{
+					QStringList values = descList(QStringList::fromStrList(keys));
+					
 					add(new KexiProperty(meta->name(), meta->valueToKey(obj->property(meta->name()).toInt()),
-						QStringList::fromStrList(keys), QStringList::fromStrList(keys), meta->name()));
+						QStringList::fromStrList(keys), values, desc));
 				}
 			}
 			else
-				add(new KexiProperty(meta->name(), obj->property(meta->name()), meta->name()));
+				add(new KexiProperty(meta->name(), obj->property(meta->name()), desc));
 		}
 	}
 
@@ -130,7 +135,7 @@ ObjectPropertyBuffer::showProperty(QObject *obj, const QString &property)
 	if(!m_manager->isTopLevel(w))
 	{
 		QStringList list;
-		list << "caption" << "icon" << "sizeIncrement" << "iconT21ext";
+		list << "caption" << "icon" << "sizeIncrement" << "iconText";
 		if(!(list.grep(property)).isEmpty())
 			return false;
 	}
@@ -180,6 +185,42 @@ ObjectPropertyBuffer::checkModifiedProp()
 	}
 }
 
+QString
+ObjectPropertyBuffer::descFromName(const QString &name)
+{
+	if(name == "name") return i18n("Name");
+	if(name == "paletteBackgroundPixmap")  return i18n("Background Pixmap");
+	if(name == "enabled") return i18n("Enabled");
+	if(name == "geometry") return i18n("Geometry");
+	if(name == "font") return i18n("Font");
+	if(name == "cursor") return i18n("Cursor");
+
+	return name;
+}
+
+QStringList
+ObjectPropertyBuffer::descList(const QStringList &strlist)
+{
+	QStringList desc;
+	QStringList list = strlist;
+
+	for(QStringList::iterator it = list.begin(); it != list.end(); ++it)
+	{
+		desc += descFromValue(*it);
+	}
+	return desc;
+}
+
+QString
+ObjectPropertyBuffer::descFromValue(const QString &name)
+{
+	if(name == "NoBackground") return i18n("No Background");
+	if(name == "PaletteForeground") return i18n("Palette Foreground");
+	if(name == "AutoText") return i18n("Auto");
+
+	return name;
+}
+
 void
 ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *obj)
 {
@@ -203,7 +244,7 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *ob
 	kdDebug() << "Hor value is " << value << endl;
 
 	list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
-	add(new KexiProperty("hAlign", value, list, list, "Horizontal alignment"));
+	add(new KexiProperty("hAlign", value, list, descList(list), i18n("Horizontal alignment")));
 
 	list.clear();
 
@@ -216,9 +257,9 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *ob
 	kdDebug() << "Vet value is " << value << endl;
 
 	list << "AlignTop" << "AlignVCenter" << "AlignBottom";
-	add(new KexiProperty("vAlign", value, list, list, "Vertical Alignment"));
+	add(new KexiProperty("vAlign", value, list, descList(list), i18n("Vertical Alignment")));
 
-	add(new KexiProperty("wordbreak", QVariant(false, 3), "Word Break"));
+	add(new KexiProperty("wordbreak", QVariant(false, 3), i18n("Word Break")));
 }
 
 void

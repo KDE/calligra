@@ -40,6 +40,7 @@ ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidg
 	m_name = name;
 	m_widget = widget;
 	m_container = container;
+	m_parent = 0;
 }
 
 bool

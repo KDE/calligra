@@ -210,10 +210,10 @@ FormManager::createBlankForm(const QString &classname, const char *name)
 	w->setFocus();
 
 	m_forms.append(form);
-	m_buffer->setObject(w);
 	m_treeview->setForm(form);
 	m_active = form;
 	m_count++;
+	m_buffer->setObject(w);
 
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
@@ -235,10 +235,10 @@ FormManager::loadForm()
 	}
 
 	m_forms.append(form);
-	m_buffer->setObject(form->toplevelContainer()->widget());
 	m_treeview->setForm(form);
 	m_active = form;
 	m_count++;
+	m_buffer->setObject(form->toplevelContainer()->widget());
 
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
@@ -251,6 +251,7 @@ FormManager::loadForm()
 void
 FormManager::saveForm()
 {
+	m_buffer->checkModifiedProp();
 	if (activeForm())
 		FormIO::saveForm(activeForm());
 }
@@ -258,7 +259,11 @@ FormManager::saveForm()
 bool
 FormManager::isTopLevel(QWidget *w)
 {
-	return (w && w->parentWidget() == m_parent);
+	ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->name());
+	if(item)
+		return (!item->parent());
+	else
+	kdDebug() << "THE IREL GHSGHSGHSGSHJGSHJSGKKJS" << endl;
 }
 
 void
