@@ -325,19 +325,10 @@ public:
    */
   void setBackup( bool r );
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "BACKUP"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -385,9 +376,6 @@ public:
   */
   virtual ~BOFRecord();
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
   /**
@@ -413,14 +401,8 @@ public:
   */
   const char* typeAsString() const;
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "BOF"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -447,19 +429,10 @@ public:
    */
   BlankRecord();
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "BLANK"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -528,19 +501,10 @@ public:
    */
   const char* errorCodeAsString() const;
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "BOOLERR"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -582,19 +546,10 @@ public:
    */
   void setBottomMargin( double m );
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "BOTTOMMARGIN"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -689,19 +644,10 @@ public:
    */
   unsigned bofPosition() const;
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
   
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "BOUNDSHEET"; }
   
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -747,19 +693,10 @@ public:
    */
   void setAutoCalc( bool r );
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "CALCMODE"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -867,19 +804,10 @@ public:
    */
   void setOutlineLevel( unsigned l );
   
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "COLINFO"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -931,19 +859,10 @@ public:
    */
   void setBase1904( bool r );
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "DATEMODE"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1031,19 +950,10 @@ public:
    */
   void setLastColumn( unsigned r );
   
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "DIMENSION"; }
   
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
   
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1078,19 +988,10 @@ public:
    */
   virtual ~EOFRecord();
   
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "EOF"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1266,19 +1167,10 @@ public:
    */  
   void setUnderline( unsigned u );
   
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "FONT"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1316,19 +1208,10 @@ public:
    */
   void setFooter( const UString& f );
   
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "FOOTER"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1406,14 +1289,8 @@ public:
    */
   void setFormatString( const UString& fs );
     
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "FORMAT"; }
   
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
 private:
@@ -1451,19 +1328,10 @@ public:
    */
   void setResult( const Value& v );
   
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "FORMULA"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1505,19 +1373,10 @@ public:
    */
   void setHeader( const UString& h );
   
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "HEADER"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1565,19 +1424,10 @@ public:
    */
   void setLabel( const UString& l );
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "LABEL"; }
   
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1620,19 +1470,10 @@ public:
    */
   unsigned sstIndex() const;
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "LABELSST"; }
   
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1674,19 +1515,10 @@ public:
    */
   void setLeftMargin( double m );
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "LEFTMARGIN"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1747,19 +1579,10 @@ public:
    */
   unsigned lastColumn( unsigned i ) const;
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
   
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "MERGEDCELLS"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1794,9 +1617,6 @@ public:
    */
   virtual ~MulBlankRecord();
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
   /**
@@ -1804,14 +1624,8 @@ public:
    */
   unsigned xfIndex( unsigned i ) const;
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "MULBLANK"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1851,9 +1665,6 @@ public:
    */
   virtual ~MulRKRecord();
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
   /**
@@ -1884,14 +1695,8 @@ public:
    */
   double asFloat( unsigned i ) const;
   
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "MULRK"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1928,9 +1733,6 @@ public:
    */
   virtual ~NumberRecord();
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
   
   /**
@@ -1947,14 +1749,8 @@ public:
    */
   void setNumber( double f );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "NUMBER"; }
   
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -1996,19 +1792,10 @@ public:
    */
   unsigned count() const;
   
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "PALETTE"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -2052,19 +1839,10 @@ public:
    */
   void setRightMargin( double m );
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "RIGHTMARGIN"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -2099,9 +1877,6 @@ public:
    */
   virtual ~RKRecord();
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
   
   /**
@@ -2148,14 +1923,8 @@ public:
    */
   void setFloat( double f );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "RK"; }
   
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -2243,19 +2012,10 @@ public:
    */
   void setHidden( bool h );
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "ROW"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -2308,19 +2068,10 @@ public:
    */
   void setLabel( const UString& l );
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "RSTRING"; }
   
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -2356,9 +2107,6 @@ public:
    */ 
   virtual ~SSTRecord();
 
-  /**
-   \reimpl
-   */  
   virtual void setData( unsigned size, const unsigned char* data );
   
   /**
@@ -2373,14 +2121,8 @@ public:
    */  
   UString stringAt( unsigned index ) const;
   
-  /**
-   \reimpl
-   */  
   virtual const char* name(){ return "SST"; }
   
-  /**
-   \reimpl
-   */  
   virtual void dump( std::ostream& out ) const;
   
 private:
@@ -2423,19 +2165,10 @@ public:
    */
   void setTopMargin( double m );
 
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
 
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "TOPMARGIN"; }
 
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
@@ -2929,19 +2662,10 @@ public:
    */
   void setPatternBackColor( unsigned color );
   
-  /**
-   \reimpl
-   */
   virtual const char* name(){ return "XF"; }
   
-  /**
-   \reimpl
-   */
   virtual void setData( unsigned size, const unsigned char* data );
   
-  /**
-   \reimpl
-   */
   virtual void dump( std::ostream& out ) const;
 
 private:
