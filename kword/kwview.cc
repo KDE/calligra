@@ -66,6 +66,8 @@
 #include <koFrame.h>
 #include <kotextobject.h>
 
+#include <kformulamimesource.h>
+
 #include <ktempfile.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -1101,19 +1103,19 @@ void KWView::clipboardDataChanged()
         return;
     }
     QMimeSource *data = QApplication::clipboard()->data();
-    bool providesImage, providesKWord;
-    checkClipboard( data, providesImage, providesKWord );
+    bool providesImage, providesKWord, providesFormula;
+    checkClipboard( data, providesImage, providesKWord, providesFormula );
     // Is there an image in the clipboard ?
     if ( providesImage )
         actionEditPaste->setEnabled( true );
     else
     {
         // Is there kword XML in the clipboard ?
-        actionEditPaste->setEnabled( edit && providesKWord );
+        actionEditPaste->setEnabled( edit && ( providesKWord || providesFormula ) );
     }
 }
 
-void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord )
+void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord, bool &providesFormula )
 {
     // QImageDrag::canDecode( data ) is very very slow in Qt 2 (n*m roundtrips)
     // Workaround....
@@ -1130,6 +1132,7 @@ void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &provi
         QCString type = "image/" + format.lower();
         providesImage = ( formats.findIndex( type ) != -1 );
     }
+    providesFormula = formats.findIndex( KFormula::MimeSource::selectionMimeType() ) != -1;
     providesKWord = formats.findIndex( KWTextDrag::selectionMimeType() ) != -1
                  || formats.findIndex( KWDrag::selectionMimeType() ) != -1;
 }
@@ -1550,9 +1553,19 @@ void KWView::editPaste()
     if ( data->provides( KWDrag::selectionMimeType() ) )
         m_gui->canvasWidget()->pasteFrames();
     else {
-        bool providesImage, providesKWord;
-        checkClipboard( data, providesImage, providesKWord );
-        if ( providesImage )
+        bool providesImage, providesKWord, providesFormula;
+        checkClipboard( data, providesImage, providesKWord, providesFormula );
+        // formula must be the first as a formula is also available as image
+        if ( providesFormula ) {
+            KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+            if ( edit && edit->frameSet()->type() == FT_FORMULA ) {
+                edit->paste();
+            }
+            else {
+                insertFormula( data );
+            }
+        }
+        else if ( providesImage )
         {
 
             KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
@@ -2796,7 +2809,7 @@ void KWView::insertTable()
     delete tableDia;
 }
 
-void KWView::insertFormula()
+void KWView::insertFormula( QMimeSource* source )
 {
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
@@ -2805,6 +2818,12 @@ void KWView::insertFormula()
         m_doc->addFrameSet( frameset, false ); // done first since the frame number is stored in the undo/redo
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
         frameset->addFrame( frame, false );
+        if ( source ) {
+            QByteArray data = source->encodedData( KFormula::MimeSource::selectionMimeType() );
+            QDomDocument formula;
+            formula.setContent( data );
+            frameset->paste( formula );
+        }
         edit->insertFloatingFrameSet( frameset, i18n("Insert Formula") );
         frameset->finalize(); // done last since it triggers a redraw
 
@@ -3803,7 +3822,16 @@ void KWView::slotFrameSetEditChanged()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     bool rw = koDocument()->isReadWrite();
-    bool hasSelection = edit && edit->textFrameSet()->hasSelection();
+    bool hasSelection = false;
+    if ( edit ) {
+        hasSelection = edit->textFrameSet()->hasSelection();
+    }
+    else {
+        KWFrameSetEdit * e = m_gui->canvasWidget()->currentFrameSetEdit();
+        if ( e && e->frameSet()->type() == FT_FORMULA ) {
+            hasSelection = true;
+        }
+    }
     actionEditCut->setEnabled( hasSelection && rw );
     actionEditCopy->setEnabled( hasSelection );
     actionEditFind->setEnabled( edit && rw );
@@ -3828,7 +3856,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatAlignRight->setEnabled(state);
     actionFormatAlignBlock->setEnabled(state);
     actionFormatIncreaseIndent->setEnabled(state);
-    actionChangeCase->setEnabled( hasSelection && state);
+    actionChangeCase->setEnabled( edit && hasSelection && state);
     actionInsertLink->setEnabled(state);
 
     bool goodleftMargin=false;

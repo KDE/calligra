@@ -809,6 +809,7 @@ public:
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
+    void paste( QDomNode& formulaElem );
 
     /** Apply the new zoom/resolution - values are to be taken from kWordDocument() */
     virtual void zoom( bool forPrint );
@@ -828,6 +829,7 @@ protected slots:
 private:
     KFormula::Container* formula;
     bool m_changed;
+    bool m_loading;
 };
 
 

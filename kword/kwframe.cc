@@ -1807,8 +1807,9 @@ void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, c
 /* Class: KWFormulaFrameSet                                       */
 /******************************************************************/
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
-    : KWFrameSet( _doc ), m_changed( false )
+    : KWFrameSet( _doc ), m_changed( false ), m_loading( false )
 {
+    kdDebug(32001) << "KWFormulaFrameSet::KWFormulaFrameSet" << endl;
     formula = _doc->getFormulaDocument()->createFormula();
     // With the new drawing scheme (drawFrame being called with translated painter)
     // there is no need to move the KFormulaContainer anymore, it remains at (0,0).
@@ -1844,6 +1845,7 @@ KWordFrameSetIface* KWFormulaFrameSet::dcopObject()
 
 KWFormulaFrameSet::~KWFormulaFrameSet()
 {
+    kdDebug(32001) << "KWFormulaFrameSet::~KWFormulaFrameSet" << endl;
     delete formula;
 }
 
@@ -1893,13 +1895,14 @@ void KWFormulaFrameSet::slotFormulaChanged( double width, double height )
 
     updateFrames();
     kWordDocument()->layout();
-    if ( ( oldWidth != width ) || ( oldHeight != height ) ) {
+    if ( !m_loading && ( ( oldWidth != width ) || ( oldHeight != height ) ) ) {
         kWordDocument()->repaintAllViews( false );
         kWordDocument()->updateRulerFrameStartEnd();
     }
 
     m_changed = true;
-    emit repaintChanged( this );
+    //if ( !m_loading )
+    //    emit repaintChanged( this );
 }
 
 void KWFormulaFrameSet::updateFrames()
@@ -1926,7 +1929,13 @@ void KWFormulaFrameSet::load(QDomElement& attributes, bool loadFrames)
 {
     KWFrameSet::load(attributes, loadFrames);
     QDomElement formulaElem = attributes.namedItem("FORMULA").toElement();
+    paste( formulaElem );
+}
+
+void KWFormulaFrameSet::paste( QDomNode& formulaElem )
+{
     if (!formulaElem.isNull()) {
+        m_loading = true;
         if (formula == 0) {
             formula = m_doc->getFormulaDocument()->createFormula();
             connect(formula, SIGNAL(formulaChanged(double, double)),
@@ -1935,6 +1944,7 @@ void KWFormulaFrameSet::load(QDomElement& attributes, bool loadFrames)
         if (!formula->load(formulaElem)) {
             kdError(32001) << "Error loading formula" << endl;
         }
+        m_loading = false;
     }
     else {
         kdError(32001) << "Missing FORMULA tag in FRAMESET" << endl;

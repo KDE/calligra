@@ -157,7 +157,7 @@ public:
 
     QPtrList<KAction> &dataToolActionList() { return m_actionList; }
 
-    static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord );
+    static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord, bool &providesFormula );
 
     void insertInlinePicture();
 
@@ -208,7 +208,7 @@ public slots:
     void extraCreateTemplate();
 
     void toolsCreateText();
-    void insertFormula();
+    void insertFormula( QMimeSource* source=0 );
     void toolsPart();
 
     void tableInsertRow();
