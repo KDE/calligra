@@ -707,3 +707,4 @@ void TKUFloatSpinBox::setValue(double value,int unit)
 {
   TKFloatSpinBox::setValue( cvtPtToUnit(m_unit,cvtUnitToPt((MeasurementUnit)unit,value)) );
 }
+#include "tkfloatspinbox.moc"

@@ -24,3 +24,4 @@ void TKButtonGroupController::slotClicked(int id)
     }
   }
 }
+#include "tkbuttongroupcontroller.moc"

@@ -124,3 +124,4 @@ void TKComboBox::activate()
   emit activated(currentItem());
 }
 
+#include "tkcombobox.moc"

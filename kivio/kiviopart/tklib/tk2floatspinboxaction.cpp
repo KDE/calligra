@@ -262,3 +262,4 @@ void TKPositionAction::setPos(double v1, double v2, int unit)
   m_action1->setValue(v1,unit);
   m_action2->setValue(v2,unit);
 }
+#include "tk2floatspinboxaction.moc"

@@ -342,3 +342,4 @@ QStringList unitsNamesList()
 
   return items;
 }
+#include "tkunits.moc"

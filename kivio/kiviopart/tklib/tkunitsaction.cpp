@@ -39,3 +39,4 @@ TKUnitsAction::TKUnitsAction(QObject* parent, const char* name)
 TKUnitsAction::~TKUnitsAction()
 {
 }
+#include "tkunitsaction.moc"
