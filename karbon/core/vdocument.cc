@@ -29,8 +29,8 @@
 
 #include <kdebug.h>
 
-static unsigned short VDocument::DOC_OFFSETX = 20;
-static unsigned short VDocument::DOC_OFFSETY = 20;
+unsigned short VDocument::DOC_OFFSETX = 20;
+unsigned short VDocument::DOC_OFFSETY = 20;
 
 VDocument::VDocument()
 	: VObject( 0L ),
