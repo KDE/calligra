@@ -109,6 +109,7 @@ GPolygon::GPolygon (const QDomElement &element, Kind pkind)
           w = element.attribute("width").toFloat();
           h = element.attribute("height").toFloat();
           Roundness = element.attribute("rounding").toFloat();
+          points.clear();
           points.append (new Coord (x, y));
           points.append (new Coord (x + w, y));
           points.append (new Coord (x + w, y + h));
