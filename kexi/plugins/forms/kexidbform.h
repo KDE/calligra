@@ -21,11 +21,10 @@
 #define KEXIDBFORM_H
 
 #include <kexiviewbase.h>
-#include <kexipartitem.h>
 #include <form.h>
+#include "kexiformpart.h"
 
 class KexiFormPart;
-class KexiFormPartItem;
 class KexiMainWindow;
 class KexiPropertyBuffer;
 
@@ -50,8 +49,8 @@ class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 	Q_PROPERTY(bool RecordNavigator READ navigatorShown WRITE showRecordNavigator DESIGNABLE true)
 
 	public:
-		KexiDBForm(KexiFormPart *m, KexiFormPartItem &i, KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn, bool preview);
-		~KexiDBForm();
+		KexiDBForm(/*KexiFormPartItem &i,*/ KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn, bool preview);
+		virtual ~KexiDBForm();
 
 		QString datasource() const { return m_ds; }
 		bool navigatorShown() const { return m_nav; }
@@ -64,6 +63,7 @@ class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 		void drawRect(const QRect& r, int type);
 		void initRect();
 		void clearRect();
+		void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
 
 	protected slots:
 		void managerPropertyChanged(KexiPropertyBuffer *b);
@@ -77,15 +77,19 @@ class KexiDBForm : public KexiViewBase, public KFormDesigner::FormWidget
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
 		virtual bool storeData();
 
+		KexiFormPart::TempData* tempData() const {
+			return static_cast<KexiFormPart::TempData*>(parentDialog()->tempData()); }
+
+		KexiFormPart* formPart() const { return static_cast<KexiFormPart*>(part()); }
+		KFormDesigner::Form*   form() const;
+		void  setForm(KFormDesigner::Form *f);
+
 	private:
 		QString m_ds;
 		KexiPropertyBuffer *m_buffer;
 		bool m_nav;
-		KexiFormPart *m_part;
 		KexiDB::Connection *m_conn;
-		KexiFormPartItem m_item;
 		QWidget *m_preview;
-		int m_id;
 
 		QPixmap buffer; //!< stores grabbed entire form's area for redraw
 		QRect prev_rect; //!< previously selected rectangle

@@ -21,13 +21,11 @@
 #define KEXITABLEPART_H
 
 #include <qdom.h>
+#include <qcstring.h>
+
 #include <kexi.h>
 #include <kexipart.h>
-#include <kexipartitem.h>
-#include <qdict.h>
-
-class KexiMainWin;
-
+#include <kexidialogbase.h>
 
 namespace KFormDesigner
 {
@@ -40,31 +38,13 @@ namespace KexiDB
 	class FieldList;
 }
 
-class KexiFormPartItem
-{
-	public:
-		KexiFormPartItem();
-		KexiFormPartItem(KexiPart::Item &it, KFormDesigner::Form *f);
-		~KexiFormPartItem();
-
-		void  setForm(KFormDesigner::Form *form) { m_form = form; }
-		KFormDesigner::Form *form() { return m_form; }
-		KexiPart::Item item() { return m_item; }
-
-	private:
-		KFormDesigner::Form *m_form;
-		KexiPart::Item m_item;
-};
-
-typedef QMap<int, KexiFormPartItem> FormCache;
-
 class KexiFormPart : public KexiPart::Part
 {
 	Q_OBJECT
 
 	public:
 		KexiFormPart(QObject *parent, const char *name, const QStringList &);
-		~KexiFormPart();
+		virtual ~KexiFormPart();
 
 		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
 
@@ -75,11 +55,17 @@ class KexiFormPart : public KexiPart::Part
 
 		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 
-		QByteArray loadForm(KexiDB::Connection *, const KexiPart::Item &item);
-		void saveForm(KexiDB::Connection *, const KexiPart::Item &item, const QByteArray &data);
+		//QByteArray loadForm(KexiDB::Connection *, const KexiPart::Item &item);
+		//void saveForm(KexiDB::Connection *, const KexiPart::Item &item, const QByteArray &data);
 
-		KexiFormPartItem form(int id) const { return m_forms[id]; }
-		void addForm(int id, const KexiFormPartItem &item) { m_forms.insert(id, item); }
+		class TempData : public KexiDialogTempData
+		{
+			public:
+				TempData(QObject* parent);
+				QGuardedPtr<KFormDesigner::Form> form;
+				QGuardedPtr<KFormDesigner::Form> previewForm;
+				QByteArray  tempForm;
+		};
 
 	protected:
 //		virtual void initPartActions( KActionCollection *col );
@@ -87,8 +73,7 @@ class KexiFormPart : public KexiPart::Part
 		virtual void initActions();
 
 	private:
-		KFormDesigner::FormManager *m_manager;
-		FormCache m_forms;
+		QGuardedPtr<KFormDesigner::FormManager> m_manager;
 };
 
 #endif

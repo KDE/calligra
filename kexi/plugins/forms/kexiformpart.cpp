@@ -17,37 +17,25 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kexiformpart.h"
-
-
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
 #include "kexiviewbase.h"
 #include "keximainwindow.h"
 #include "kexiproject.h"
-#include "kexipartinfo.h"
+#include <kexipartitem.h>
+#include <kexidialogbase.h>
 
 #include <kexidb/connection.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/cursor.h>
-
 #include <kexidb/fieldlist.h>
 #include <kexidb/field.h>
-
-#include <kexidialogbase.h>
-#include <kexidatasourcewizard.h>
-//#include <kexidatasourcecombo.h>
 
 #include <form.h>
 #include <formIO.h>
 #include <formmanager.h>
-#include <objecttreeview.h>
 
 #include "kexidbform.h"
-//#include <kexipropertyeditor.h>
-
-#define NO_DSWIZARD
+#include "kexiformpart.h"
 
 KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
@@ -89,7 +77,7 @@ void KexiFormPart::initInstanceActions( int mode, KActionCollection *col )
 
 void KexiFormPart::initActions()
 {
-//	new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()), 
+//	new KAction(i18n("Check query"), "test_it", 0, this, SLOT(slotCheckQuery()),
 //		m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");
 
 	m_manager->createActions(actionCollectionForMode(Kexi::DesignViewMode), 0);
@@ -105,61 +93,14 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	if (!win || !win->project() || !win->project()->dbConnection())
 		return 0;
 
-	KexiFormPartItem it = m_forms[item.identifier()];
-	KFormDesigner::Form *form = 0;
-	KexiDB::FieldList *fields = 0;
-	if(it.form())
-	{
-		// The form has been deleted, we need to create a new one
-		form = new KFormDesigner::Form(m_manager);
-		it.setForm(form);
-		kdDebug() << "KexiFormPart::createView(): using existing form: [" << item.identifier() << "] " << it.form() << endl;
+	if (!dialog->tempData()) {
+		dialog->setTempData( new KexiFormPart::TempData(dialog) );
 	}
-	else
-	{
-		if(item.identifier() < 0)
-		{
-#ifndef NO_DSWIZARD
-			kdDebug() << "KexiFormPart::createView(): booting wizard..." << endl;
-			KexiDataSourceWizard *w = new KexiDataSourceWizard(win, win);
-			if(!w->exec())
-			{
-				delete w;
-				return 0;
-			}
-			else
-			{
-				fields = w->fields();
-
-				delete w;
-			}
-			kdDebug() << "KexiFormPart::createView(): wizard done!" << endl;
-#endif
-		}
-		else
-		{
-			fields = 0;
-		}
-
-		form = new KFormDesigner::Form(m_manager);
-		KexiFormPartItem n(item, form);
-		m_forms.insert(item.identifier(), n);
-		it = n;
-		kdDebug() << "KexiFormPart::createView(): creating form: [" << item.identifier() << "] " << it.form() << endl;
-	}
+	KexiFormPart::TempData *tempData = static_cast<KexiFormPart::TempData*>(dialog->tempData());
 
 	KexiDBForm *view = 0;
-	KFormDesigner::ObjectTreeView *tree = new KFormDesigner::ObjectTreeView(0, "tree");
-	view = new KexiDBForm(this, it, win, parent, item.name().latin1(), win->project()->dbConnection(), (viewMode == Kexi::DataViewMode));
-	m_manager->setEditors(0, tree);
-	view->initForm();
-
-	if(fields)
-	{
-		QDomDocument dom;
-		generateForm(fields, dom);
-		KFormDesigner::FormIO::loadFormFromDom(form, view, dom);
-	}
+	view = new KexiDBForm(/*this, it, */win, parent, item.name().latin1(),
+		win->project()->dbConnection(), (viewMode == Kexi::DataViewMode));
 
 	return view;
 }
@@ -317,20 +258,13 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
 	uiElement.appendChild(baseWidget);
 }
 
-KexiFormPartItem::KexiFormPartItem()
+//----------------
+
+KexiFormPart::TempData::TempData(QObject* parent)
+ : KexiDialogTempData(parent)
 {
-	m_form = 0;
 }
 
-KexiFormPartItem::KexiFormPartItem(KexiPart::Item &it, KFormDesigner::Form *f)
-{
-	m_item = it;
-	m_form = f;
-}
-
-KexiFormPartItem::~KexiFormPartItem()
-{
-}
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_form, KGenericFactory<KexiFormPart> )
 
