@@ -4016,7 +4016,7 @@ void KPresenterView::changePicture( const QString & filename )
     if (!KIO::NetAccess::download( url, file ))
         return;
 
-    if ( !file.isEmpty() && (file!=filename))
+    if ( !file.isEmpty() /*&& (file!=filename)*/)
       m_canvas->changePicture( file );
 }
 
