@@ -430,6 +430,16 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
 
     switch( elementType )
     {
+    case KSpread_Any:
+	{
+		bool isNumber;
+		double tmp = m_pView->doc()->locale()->readNumber( _text, &isNumber );
+		Q_UNUSED( tmp );
+
+		//In case of number or boolean return _text, else return value as KSpread_String
+		if ( isNumber || _text.upper() =="FALSE" || _text.upper() == "TRUE" )
+			return _text;
+	}
     case KSpread_String:
 	{
 	    // Does the text start with quotes?
@@ -486,8 +496,6 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
     case KSpread_Boolean:
 	return _text;
     case KSpread_Int:
-	return _text;
-    case KSpread_Any:
 	return _text;
     }
 
