@@ -19,35 +19,11 @@
 
 #include "signalhandler.h"
 
-#include "interpreter.h"
 #include "qtobject.h"
 #include "../main/scriptcontainer.h"
+#include "signalconnection.h"
 
 using namespace Kross::Api;
-
-/* SignalConnection */
-
-SignalConnection::SignalConnection(SignalHandler* signalhandler)
-    : QObject(signalhandler)
-    , m_signalhandler(signalhandler)
-{
-}
-
-void SignalConnection::callback()
-{
-    QObject* obj = (QObject*)sender();
-    if(! obj) //FIXME is it wise to throw exceptions within slots?
-        throw RuntimeException("SignalHandler::callback() failed cause sender is not a QObject.");
-
-    kdDebug() << QString("SignalConnection::callback() sender='%1' signal='%2' function='%3'")
-                 .arg(obj->name()).arg(signal).arg(function) << endl;
-
-    //TODO parse arguments
-
-    m_signalhandler->m_scriptcontainer->callFunction(function);
-}
-
-/* SignalHandler */
 
 SignalHandler::SignalHandler(ScriptContainer* scriptcontainer, QtObject* qtobj)
     : QObject(scriptcontainer) //QObject(qtobj ? qtobj->getObject() : scriptcontainer)

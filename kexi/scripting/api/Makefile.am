@@ -8,6 +8,7 @@ libkrossapi_la_SOURCES = \
     list.cpp \
     argument.cpp \
     qtobject.cpp \
+    signalconnection.cpp \
     signalhandler.cpp \
     script.cpp \
     interpreter.cpp

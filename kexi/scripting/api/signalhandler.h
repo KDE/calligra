@@ -34,28 +34,12 @@ namespace Kross { namespace Api {
     // Forward declarations.
     class ScriptContainer;
     class QtObject;
-    class SignalHandler;
+    class SigalConnection;
 
-    class SignalConnection : public QObject
-    {
-            Q_OBJECT
-
-        public:
-            SignalConnection(SignalHandler* signalhandler);
-            virtual ~SignalConnection() {}
-
-            QGuardedPtr<QObject> senderobj;
-            //QGuardedPtr<QObject> receiver;
-            const char* signal;
-            QString function;
-
-        private:
-            SignalHandler* m_signalhandler;
-
-        public slots:
-            void callback();
-    };
-
+    /**
+     * The SignalHandler spends us the bridge between
+     * Qt QObject instances and our underlying Kross-API.
+     */
     class SignalHandler : public QObject
     {
             Q_OBJECT
