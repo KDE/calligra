@@ -1,5 +1,5 @@
 Source: koffice
-Build-Depends: autoconf, automake, libtool, debhelper, libqt2.2-dev (>= 2:2.2.3-4), kdelibs3-dev (>= 4:2.1-20010118-0), jade, sgml-base, docbook, libpng2-dev, libz-dev, libtiff3g-dev, docbook, gettext, docbook-stylesheets, xlibs-dev
+Build-Depends: autoconf, automake, libtool, debhelper, libqt2.2-dev (>= 2:2.2.3-8), kdelibs3-dev (>= 4:2.1-20010122-0), jade, sgml-base, docbook, libpng2-dev, libz-dev, libtiff3g-dev, docbook, gettext, docbook-stylesheets, xlibs-dev
 Section: x11
 Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
