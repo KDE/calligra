@@ -1544,7 +1544,10 @@ void KoTextObject::ensureFormatted( KoTextParag * parag, bool emitAfterFormattin
 
     while ( !parag->isValid() )
     {
-        Q_ASSERT( m_lastFormatted );
+        if ( !m_lastFormatted ) {
+            kdWarning() << "ensureFormatted for parag " << parag << " " << parag->paragId() << " still not formatted, but m_lastFormatted==0" << endl;
+            return;
+        }
         // The paragid diff is "a good guess". The >=1 is a safety measure ;)
         bool ret = formatMore( QMAX( 1, parag->paragId() - m_lastFormatted->paragId() ), emitAfterFormatting );
         if ( !ret ) // aborted
