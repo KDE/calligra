@@ -86,7 +86,7 @@ void PBPreview::drawContents( QPainter *painter )
 	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
 			   colorGroup().base() );
 	KoSize diff1( 0, 0 ), diff2( 0, 0 );
-	int _w = pen.width();
+        double _w =_zoomHandler->zoomItX( pen.width());
 
 	if ( lineBegin != L_NORMAL )
 	    diff1 = getBoundingSize( lineBegin, _w,_zoomHandler );
@@ -95,16 +95,17 @@ void PBPreview::drawContents( QPainter *painter )
 	    diff2 = getBoundingSize( lineEnd, _w,_zoomHandler );
 
 	if ( lineBegin != L_NORMAL )
-	    drawFigure( lineBegin, painter, QPoint( diff1.width() / 2, contentsRect().height() / 2 ),
+	    drawFigure( lineBegin, painter, KoPoint( diff1.width() / 2, contentsRect().height() / 2 ),
 			pen.color(), _w, 180.0,_zoomHandler );
 
 	if ( lineEnd != L_NORMAL )
-	    drawFigure( lineEnd, painter, QPoint( contentsRect().width() - diff2.width() / 2,
+	    drawFigure( lineEnd, painter, KoPoint( contentsRect().width() - diff2.width() / 2,
 						  contentsRect().height() / 2 ), pen.color(), _w, 0.0,_zoomHandler );
 
 	painter->setPen( pen );
-	painter->drawLine( diff1.width() / 2, contentsRect().height() / 2,
-			  contentsRect().width() - diff2.width() / 2, contentsRect().height()/2 );
+	painter->drawLine( _zoomHandler->zoomItX (diff1.width() / 2), _zoomHandler->zoomItY (contentsRect().height() / 2),
+			  _zoomHandler->zoomItX (contentsRect().width() - diff2.width() / 2), _zoomHandler->zoomItY (contentsRect().height()/2) );
+
     } else if ( paintType == Brush ) {
 	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
 			   colorGroup().base() );
