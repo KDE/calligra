@@ -164,7 +164,7 @@ CORBA::Boolean KWordDocument::initDoc()
     return false;
 #endif
 
-    
+
     // ----------------------------- remove from here
     _loaded = true;
     pixmapKeys.clear();
@@ -281,7 +281,7 @@ CORBA::Boolean KWordDocument::initDoc()
     __hf.inchFooterBodySpacing = POINT_TO_INCH( 10 );
 
     frames.clear();
-    
+
     KWTextFrameSet *t = new KWTextFrameSet( this );
     KWFrame *frm = new KWFrame( getPTLeftBorder(), getPTTopBorder(),
 				getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),
@@ -291,7 +291,7 @@ CORBA::Boolean KWordDocument::initDoc()
     pa->insertText( 0, " " );
     pa->setFormat( 0, 1, *defaultParagLayout->getFormat() );
     frames.append( t );
-    
+
     switch ( KWUnit::unitType( unit ) ) {
     case U_MM: __pgLayout.unit = PG_MM;
 	break;
@@ -1442,6 +1442,9 @@ bool KWordDocument::save( QIODevice* dev, KOStore::Store_ptr, const char* format
 	    return false;
 	word.appendChild( e );
     }
+
+    QTextStream str( dev );
+    str << doc;
 
     return true;
 }
@@ -2638,8 +2641,6 @@ void KWordDocument::copySelectedText()
     QDomElement e = d.createElement( "PARAGRAPHS" );
     while( parag2 ) {
 	QDomElement p = parag2->save( d );
-	if ( p.isNull() )
-	    return p;
 	e.appendChild( p );
 	parag2 = parag2->getNext();
     }
