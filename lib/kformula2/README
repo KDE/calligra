@@ -13,6 +13,7 @@ Supported actions include:
 
 Ctrl-O                  open (to "test.xml")
 Ctrl-S                  save (from "test.xml")
+Ctrl-M			open (from "mathml.xml")
 Ctrl-Q                  quit
 
 Ctrl-Z                  undo

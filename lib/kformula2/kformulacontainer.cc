@@ -17,7 +17,7 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
+  
 #include <qapp.h>
 #include <qdom.h>
 #include <qevent.h>
@@ -47,6 +47,7 @@
 #include "symbolelement.h"
 #include "textelement.h"
 #include "textsymbolelement.h"
+#include "kformulamathmlread.h"
 
 
 KFormulaContainer::KFormulaContainer(KFormulaDocument* doc)
@@ -517,11 +518,35 @@ void KFormulaContainer::load(QString file)
     f.close();
 }
 
+void KFormulaContainer::loadMathMl(QString file)
+{
+    QFile f(file);
+    if (!f.open(IO_ReadOnly)) {
+        cerr << "Error" << endl;
+        return;
+    }
+    QDomDocument doc;
+    if (!doc.setContent(&f)) {
+        f.close();
+        return;
+    }
+    MathMl2KFormula filter(&doc);
+        cerr << "Filtering" << endl;
+
+    filter.startConversion();
+    if(filter.isDone())
+        if (load(filter.getKFormulaDom())) {
+    	    getHistory()->clear();
+	}
+    f.close();
+}
+
 /**
  * Loads a formula from the document.
  */
 bool KFormulaContainer::load(QDomDocument doc)
 {
+cerr << "Loading" << endl;
     QDomElement fe = doc.firstChild().toElement();
     if (!fe.isNull()) {
         FormulaElement* root = new FormulaElement(this);

@@ -116,6 +116,12 @@ public:
 
     /**
      * Load function.
+     * Load the formula from the specified file containing MathML .
+     */
+    void loadMathMl(QString file);
+
+    /**
+     * Load function.
      * Load the formula from the specified file.
      */
     void load(QString file);

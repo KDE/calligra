@@ -51,6 +51,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_C: document->copy(); return;
             case Qt::Key_D: document->replaceElementWithMainChild(BasicElement::afterCursor); return;
             case Qt::Key_L: document->addGenericLowerIndex(); return;
+            case Qt::Key_M: document->loadMathMl("mathml.xml"); return;
             case Qt::Key_O: document->load("test.xml"); return;
             case Qt::Key_Q: kapp->quit(); return;
             case Qt::Key_R: document->replaceElementWithMainChild(BasicElement::beforeCursor); return;
