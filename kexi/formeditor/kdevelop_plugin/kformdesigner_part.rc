@@ -2,27 +2,25 @@
 <kpartgui name="kfd_part" version="1">
 
 <MenuBar>
-  <Menu name="file" noMerge="1"><text>&amp;File</text>
-    <Action name="file_save" group="save_merge"/>
-    <Action name="file_save_as" group="save_merge"/>
-    <Action name="preview_form" group="print_merge"/>
-  </Menu>
-
-  <Menu name="edit" noMerge="1"><text>&amp;Edit</text>
+  <Menu name="edit" noMerge="1">
     <Action name="edit_undo" group="edit_undo_merge"/>
     <Action name="edit_redo" group="edit_undo_merge"/>
     <Separator group="edit_undo_merge"/>
     <Action name="edit_cut" group="edit_paste_merge"/>
     <Action name="edit_copy" group="edit_paste_merge"/>
     <Action name="edit_paste" group="edit_paste_merge"/>
-    <Action name="edit_clear" group="edit_paste_merge"/>
+    <Action name="delete_widget" group="edit_paste_merge"/>
+    <Action name="clear_contents" group="edit_paste_merge"/>
+    <Action name="edit_select_all" group="edit_select_merge"/>
     <Separator group="edit_paste_merge"/>
   </Menu>
-  <Menu name="tools" noMerge="1"><text>&amp;Tools</text>
-   <Action name="taborder" group="tools_operations"/>
-   <Action name="change_style" group="tools_operations"/>
-   <Action name="pixmap_collection" group="tools_operations"/>
-   <Action name="form_connections" group="tools_operations"/>
+  <Menu name="tools" noMerge="1">
+  <Merge/>
+  <Separator/>
+   <Action name="taborder"/>
+   <Action name="change_style"/>
+   <Action name="pixmap_collection"/>
+   <Action name="form_connections"/>
   </Menu>
   <Menu name="widgets" noMerge="1">
    <text>&amp;Widgets</text>
@@ -30,6 +28,7 @@
    <Action name="pointer"/>
    <Action name="drag_connection"/>
    <Separator/>
+   <Action name="library_widget_SubForm"/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KTabWidget"/>
    <Action name="library_widget_QWidgetStack"/>
@@ -71,22 +70,21 @@
   </Menu>
 </MenuBar>
 
-<ToolBar name="mainToolBar" noMerge="1"><text>Main Toolbar</text>
-    <Action name="file_open" group="file_operations"/> 
-    <Action name="file_save" group="file_operations"/>
-    <Separator group="file_operations"/>
-    <Action name="preview_form" group="print_merge"/>
-    <Separator group="print_merge"/>
-    <Action name="edit_undo" group="edit_operations"/>
-    <Action name="edit_redo" group="edit_operations"/>
-    <Separator group="edit_operations"/>
-    <Action name="edit_cut" group="edit_operations"/>
-    <Action name="edit_copy" group="edit_operations"/>
-    <Action name="edit_paste" group="edit_operations"/>
-    <Action name="edit_clear" group="edit_operations"/>
+<ToolBar name="fileToolBar" noMerge="1"><text>Main Toolbar</text>
+    <Action name="preview_form"/>
+    <Separator/>
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
+    <Separator/>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="edit_paste"/>
+    <Action name="delete_widget"/>
+    <Action name="clear_contents"/>
 </ToolBar>
 <ToolBar name="containers" fullWidth="false" noMerge="1">
  <text>Containers</text>
+   <Action name="library_widget_SubForm"/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KTabWidget"/>
    <Action name="library_widget_QWidgetStack"/>
@@ -117,7 +115,8 @@
    <Action name="library_widget_Spring"/>
    <ActionList name="undo_actions" />
 </ToolBar>
-<ToolBar name="toolsToolBar" noMerge="1"><text>Tools Toolbar</text>
+<ToolBar name="tools" fullWidth="false" noMerge="1">
+<text>Tools Toolbar</text>
    <Action name="pixmap_collection"/>
    <Action name="change_style"/>
 </ToolBar>
