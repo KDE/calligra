@@ -39,7 +39,10 @@ KoVariable *KWVariableCollection::createVariable( int type, int subtype, KoVaria
     if(type ==VT_PGNUM)
         var = new KWPgNumVariable( textdoc,subtype, coll->format( "NUMBER" ),this,m_doc  );
     else
-        var = KoVariableCollection::createVariable( type, subtype,  coll,varFormat, textdoc,doc);
+	if (type==VT_MAILMERGE)
+	var = new KWMailMergeVariable(textdoc,QString::null,coll->format("STRING"),this,m_doc);
+	   else	
+           var = KoVariableCollection::createVariable( type, subtype,  coll,varFormat, textdoc,doc);
     return var;
 }
 

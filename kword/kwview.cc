@@ -1317,6 +1317,8 @@ void KWView::print( KPrinter &prt )
     m_gui->canvasWidget()->setUpdatesEnabled(true);
     m_gui->canvasWidget()->viewport()->setCursor( ibeamCursor );
     m_doc->repaintAllViews();
+
+    m_doc->getVariableCollection()->recalcVariables(VT_MAILMERGE);
 }
 
 void KWView::showFormat( const KoTextFormat &currentFormat )
