@@ -226,7 +226,7 @@ void KWView::clearSelection()
         delete searchEntry;
     if (replaceEntry)
         delete replaceEntry;
-    if(!m_specialCharDlg)
+    if(m_specialCharDlg)
         delete m_specialCharDlg;
 }
 
