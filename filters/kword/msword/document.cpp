@@ -154,7 +154,7 @@ void Document::startBody()
     // TODO: "name" attribute (needs I18N)
     m_framesetsElement.appendChild(mainFramesetElement);
 
-    createInitialFrame( mainFramesetElement );
+    createInitialFrame( mainFramesetElement, 42, 566 );
 
     m_textHandler->setFrameSetElement( mainFramesetElement );
     connect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
@@ -227,7 +227,9 @@ void Document::startHeader( unsigned char type )
     // TODO: "name" attribute (needs I18N)
     m_framesetsElement.appendChild(framesetElement);
 
-    createInitialFrame( framesetElement );
+    bool isHeader = Conversion::isHeader( type );
+
+    createInitialFrame( framesetElement, isHeader?0:567, isHeader?41:567+41 );
 
     m_textHandler->setFrameSetElement( framesetElement );
 
@@ -245,17 +247,17 @@ void Document::endHeader()
 
 }
 
-void Document::createInitialFrame( QDomElement& parentFramesetElem )
+void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom )
 {
     QDomElement frameElementOut = parentFramesetElem.ownerDocument().createElement("FRAME");
     // Those values are unused. The paper margins make recalcFrames() resize this frame.
-    frameElementOut.setAttribute("left",28);
-    frameElementOut.setAttribute("top",42);
-    frameElementOut.setAttribute("bottom",566);
-    frameElementOut.setAttribute("right",798);
-    frameElementOut.setAttribute("runaround",1);
-    frameElementOut.setAttribute("autoCreateNewFrame",1);
-    parentFramesetElem.appendChild(frameElementOut);
+    frameElementOut.setAttribute( "left", 28 );
+    frameElementOut.setAttribute( "right", 798 );
+    frameElementOut.setAttribute( "top", top );
+    frameElementOut.setAttribute( "bottom", bottom );
+    frameElementOut.setAttribute( "runaround", 1 );
+    frameElementOut.setAttribute( "autoCreateNewFrame", 1 );
+    parentFramesetElem.appendChild( frameElementOut );
 }
 
 void Document::pushSubDocument( const wvWare::HeaderFunctor& functor /*const SubDocument& subdoc*/ )

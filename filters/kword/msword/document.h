@@ -70,7 +70,7 @@ protected slots:
 
 private:
     void processStyles();
-    void createInitialFrame( QDomElement& parentFramesetElem );
+    void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom );
 
     QDomDocument& m_mainDocument;
     QDomElement& m_framesetsElement;

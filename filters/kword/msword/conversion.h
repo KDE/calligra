@@ -74,7 +74,7 @@ namespace Conversion
     // Convert a mask of Header Types to the fType value for KWord
     int headerMaskToFType( unsigned char mask );
 
-    //bool isHeader( unsigned char type );
+    bool isHeader( unsigned char type );
 };
 
 #endif

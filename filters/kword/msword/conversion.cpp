@@ -214,7 +214,6 @@ QString Conversion::headerTypeToFramesetName( unsigned char type )
     return QString::null;
 }
 
-/*
 bool Conversion::isHeader( unsigned char type )
 {
     switch (type) {
@@ -225,7 +224,6 @@ bool Conversion::isHeader( unsigned char type )
     }
     return false;
 }
-*/
 
 int Conversion::headerMaskToHType( unsigned char mask )
 {
