@@ -1449,7 +1449,8 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
     {
         for (unsigned i = 0; i < count; i++)
         {
-            bytes += MsWordGenerated::read(in + bytes, &char16);
+            if (nFib > s_maxWord6Version)
+                bytes += MsWordGenerated::read(in + bytes, &char16);
             *out += QChar(char16);
         }
     }
@@ -1461,7 +1462,6 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
             *out += char2unicode(lid, char8);
         }
     }
-    kdDebug() << "unicode: " << unicode << " " << *out << endl;
     return bytes;
 }
 
