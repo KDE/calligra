@@ -3230,7 +3230,7 @@ void KSpreadCell::decPrecision()
   if ( !isNumeric() )
     return;
   int preciTmp = precision( column(), row() );
-  kdDebug(36001) << "decPrecision: tmpPreci = " << tmpPreci << endl;
+//  kdDebug(36001) << "decPrecision: tmpPreci = " << tmpPreci << endl;
   if ( precision(column(),row()) == -1 )
   {
     int pos = m_strOutText.find( decimal_point );
