@@ -464,7 +464,7 @@ void MyIconCanvas::load( KoTemplateGroup *group )
     for(KoTemplate *t=group->first(); t!=0L; t=group->next()) {
         if(t->isHidden())
             continue;
-        QIconViewItem *item = new QIconViewItem(this, t->name(), t->loadPicture());
+        QIconViewItem *item = new KIconViewItem(this, t->name(), t->loadPicture());
         item->setKey(t->name());
         item->setDragEnabled(false);
         item->setDropEnabled(false);
