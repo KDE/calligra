@@ -91,20 +91,20 @@ public:
   virtual bool loadXML( const QDomElement& );
   bool isLoading();
 
-  bool isHidden() { return m_bPageHide; }
+  bool isHidden()const { return m_bPageHide; }
   void setHidden(bool hidden) { m_bPageHide=hidden; }
 
   void setMap( KivioMap* _map ) { m_pMap = _map; }
 
-  KivioDoc* doc() { return m_pDoc; }
-  KivioMap* map() { return m_pMap; }
+  KivioDoc* doc()const { return m_pDoc; }
+  KivioMap* map()const { return m_pMap; }
 
   KivioPage *findPage( const QString & _name );
 
   void print( KivioPSPrinter * );
   void print( QPainter &painter, KPrinter *_printer );
   void update();
-  int id() { return m_id; }
+  int id()const { return m_id; }
   static KivioPage* find( int _id );
 
   TKPageLayout paperLayout() { return m_pPageLayout; }

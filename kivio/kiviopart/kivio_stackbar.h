@@ -38,7 +38,7 @@ public:
   void deletePageAndButton(DragBarButton*);
   void showPage(QWidget*);
 
-  QWidget* visiblePage(){ return m_visiblePage; }
+  QWidget* visiblePage()const { return m_visiblePage; }
 
 signals:
   void aboutToShow(QWidget*);

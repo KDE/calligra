@@ -58,6 +58,11 @@ KivioTabBar::KivioTabBar( QWidget* parent, KivioView* view )
   setFixedHeight(16);
 }
 
+KivioTabBar::~KivioTabBar()
+{
+    delete m_pAutoScrollTimer;
+}
+
 void KivioTabBar::addTab( const QString& _text )
 {
   tabsList.append( _text );

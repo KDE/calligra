@@ -119,7 +119,7 @@ public:
   KivioGroupStencil *clipboard();
   void setClipboard( KivioGroupStencil * );
 
-  int units() { return m_units; }
+  int units()const { return m_units; }
 
   KivioGridData grid() { return gridData; }
   void setGrid(KivioGridData g) { gridData = g; emit sig_updateGrid();}

@@ -88,7 +88,7 @@ public:
 
   ToolController* toolsController() { return m_pTools; }
   KivioCanvas* canvasWidget() const { return m_pCanvas; }
-  KivioDoc* doc() { return m_pDoc; }
+  KivioDoc* doc()const { return m_pDoc; }
 
   void addPage( KivioPage* );
   void removePage( KivioPage* );
@@ -98,7 +98,7 @@ public:
   void setActiveSpawnerSet( KivioStencilSpawnerSet* );
   KivioStencilSpawnerSet *activeSpawnerSet();
 
-  KivioTabBar* tabBar() { return  m_pTabBar;}
+  KivioTabBar* tabBar()const { return  m_pTabBar;}
   ToolDockManager* toolDockManager() { return m_pToolDock; }
   void openPopupMenuMenuPage( const QPoint & _point );
   void updateMenuPage( );
@@ -112,11 +112,11 @@ public:
   virtual int canvasXOffset() const;
   virtual int canvasYOffset() const;
 
-  bool isSnapGuides() { return m_bSnapGuides; }
-  bool isShowGuides() { return m_bShowGuides; }
-  bool isShowRulers() { return m_bShowRulers; }
-  bool isShowPageBorders() { return m_bShowPageBorders; }
-  bool isShowPageMargins() { return m_bShowPageMargins; }
+  bool isSnapGuides()const { return m_bSnapGuides; }
+  bool isShowGuides()const { return m_bShowGuides; }
+  bool isShowRulers()const { return m_bShowRulers; }
+  bool isShowPageBorders()const { return m_bShowPageBorders; }
+  bool isShowPageMargins()const { return m_bShowPageMargins; }
 
   virtual int leftBorder() const;
   virtual int rightBorder() const;

@@ -42,7 +42,7 @@ class KivioTabBar : public QWidget
     Q_OBJECT
 public:
     KivioTabBar( QWidget* parent, KivioView* view );
-
+    ~KivioTabBar();
     /**
      * Adds a tab to the bar and paints it. The tab does not become active.
      * call @ref #setActiveTab to do so.
@@ -185,11 +185,11 @@ protected:
      * If no tab is being moved this value is 0.
      */
     int m_moveTab;
-	
+
     /**
      * Indicates whether a tab is being moved using the mouse and in which
      * direction.
-     */ 	
+     */
     int m_moveTabFlag;
 
     /**
