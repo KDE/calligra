@@ -26,6 +26,8 @@ public:
 	void setState( const VState state );
 	// clear the group without deleting the objects
 	void empty();
+	void insertObject( const VObject* object );
+
 
 	virtual void transform( const QWMatrix& m );
 

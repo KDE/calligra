@@ -154,3 +154,10 @@ VGroup::load( const QDomElement& element )
 		}
 	}
 }
+
+void
+VGroup::insertObject( const VObject* object )
+{
+	// put new objects "on top" by appending them:
+	m_objects.append( object );
+}
