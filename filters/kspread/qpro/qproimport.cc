@@ -28,6 +28,7 @@
 #include <kspread_doc.h>
 #include <kspread_sheet.h>
 #include <kspread_cell.h>
+#include <kspread_map.h>
 
 #include <qproimport.h>
 
@@ -134,8 +135,6 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
     }
 
     KSpreadSheet *table=0;
-//    KSpreadSheet *table=ksdoc->createTable();
-//    ksdoc->addTable(table);
 
     QString field;
     int value=0;
@@ -169,13 +168,12 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
 
          if( table == 0 )
          {
-            table=ksdoc->createSheet();
+            table=ksdoc->map()->addNewSheet();
             // set up a default name for the table
             table->setSheetName( lTableNames.name(lPageIdx)
                                , TRUE
                                );
             lTableNames.table(lPageIdx, table);
-            ksdoc->addSheet(table);
          }
          break;
 
@@ -206,14 +204,13 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
                // we're about to reference a table that hasn't been created yet.
                // setText gets upset about this, so create a blank table
 
-               KSpreadSheet* lNewTable=ksdoc->createSheet();
+               KSpreadSheet* lNewTable=ksdoc->map()->addNewSheet();
 
                // set up a default name for the table
                lNewTable->setSheetName( lTableNames.name(lIdx)
                                       , TRUE
                                       );
                lTableNames.table(lIdx, lNewTable);
-               ksdoc->addSheet(lNewTable);
             }
          }
 

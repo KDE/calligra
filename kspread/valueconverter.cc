@@ -22,31 +22,13 @@
 #include "kspread_locale.h"
 #include "valueparser.h"
 
-#include <kstaticdeleter.h>
-
 using namespace KSpread;
 
-ValueConverter* ValueConverter::_self = 0;
-static KStaticDeleter<ValueConverter> valueconverter_sd;
-
-ValueConverter::ValueConverter ()
+ValueConverter::ValueConverter (DocInfo *docinfo) : DocBase (docinfo)
 {
 }
 
-ValueConverter::~ValueConverter ()
-{
-  _self = 0;
-}
-
-ValueConverter * ValueConverter::self ()
-{
-  if (!_self)
-    valueconverter_sd.setObject( _self, new ValueConverter() );
-  return _self;
-}
-
-KSpreadValue ValueConverter::asBoolean (const KSpreadValue &value,
-    KLocale *locale) const
+KSpreadValue ValueConverter::asBoolean (const KSpreadValue &value) const
 {
   KSpreadValue val;
   bool ok;  
@@ -64,12 +46,12 @@ KSpreadValue ValueConverter::asBoolean (const KSpreadValue &value,
       val.setValue ((value.asFloat() == 0.0) ? false : true);
     break;
     case KSpreadValue::String:
-      val = ValueParser::self()->tryParseBool (value.asString(), locale, &ok);
+      val = parser()->tryParseBool (value.asString(), &ok);
       if (!ok)
         val.setValue (false);
     break;
     case KSpreadValue::Array:
-      val = asBoolean (value.element (0, 0), locale);
+      val = asBoolean (value.element (0, 0));
     break;
     case KSpreadValue::CellRange:
       /* NOTHING */
@@ -82,8 +64,7 @@ KSpreadValue ValueConverter::asBoolean (const KSpreadValue &value,
   return val;
 }
 
-KSpreadValue ValueConverter::asInteger (const KSpreadValue &value,
-    KLocale *locale) const
+KSpreadValue ValueConverter::asInteger (const KSpreadValue &value) const
 {
   KSpreadValue val;
   bool ok;
@@ -102,13 +83,13 @@ KSpreadValue ValueConverter::asInteger (const KSpreadValue &value,
       val.setValue (value.asInteger());
     break;
     case KSpreadValue::String:
-      val.setValue ((int) ValueParser::self()->tryParseNumber
-          (value.asString(), locale, &ok).asFloat());
+      val.setValue ((int) parser()->tryParseNumber
+          (value.asString(), &ok).asFloat());
       if (!ok)
         val.setValue (0);
     break;
     case KSpreadValue::Array:
-      val = asInteger (value.element (0, 0), locale);
+      val = asInteger (value.element (0, 0));
     break;
     case KSpreadValue::CellRange:
       /* NOTHING */
@@ -121,8 +102,7 @@ KSpreadValue ValueConverter::asInteger (const KSpreadValue &value,
   return val;
 }
 
-KSpreadValue ValueConverter::asFloat (const KSpreadValue &value,
-    KLocale *locale) const
+KSpreadValue ValueConverter::asFloat (const KSpreadValue &value) const
 {
   KSpreadValue val;
   bool ok;
@@ -141,13 +121,12 @@ KSpreadValue ValueConverter::asFloat (const KSpreadValue &value,
       val = value;
     break;
     case KSpreadValue::String:
-      val = ValueParser::self()->tryParseNumber (value.asString(),
-          locale, &ok);
+      val = parser()->tryParseNumber (value.asString(), &ok);
       if (!ok)
         val.setValue (0.0);
     break;
     case KSpreadValue::Array:
-      val = asFloat (value.element (0, 0), locale);
+      val = asFloat (value.element (0, 0));
     break;
     case KSpreadValue::CellRange:
       /* NOTHING */
@@ -160,8 +139,7 @@ KSpreadValue ValueConverter::asFloat (const KSpreadValue &value,
   return val;
 }
 
-KSpreadValue ValueConverter::asString (const KSpreadValue &value,
-    KLocale *locale) const
+KSpreadValue ValueConverter::asString (const KSpreadValue &value) const
 {
   // This is a simpler version of ValueFormatter... We cannot use that one,
   // as we sometimes want to generate the string differently ...
@@ -176,8 +154,8 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value,
       val = QString::null;
     break;
     case KSpreadValue::Boolean:
-      val.setValue (value.asBoolean() ? locale->translate ("True") :
-          locale->translate ("False"));
+      val.setValue (value.asBoolean() ? locale()->translate ("True") :
+          locale()->translate ("False"));
     break;
     case KSpreadValue::Integer:
     {
@@ -185,11 +163,11 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value,
       if (fmt == KSpreadValue::fmt_Percent)
         val = QString::number (value.asInteger() * 100) + " %";
       else if (fmt == KSpreadValue::fmt_DateTime)
-        val = locale->formatDateTime (value.asDateTime());
+        val = locale()->formatDateTime (value.asDateTime());
       else if (fmt == KSpreadValue::fmt_Date)
-        val = locale->formatDate (value.asDate());
+        val = locale()->formatDate (value.asDate());
       else if (fmt == KSpreadValue::fmt_Time)
-        val = locale->formatTime (value.asTime());
+        val = locale()->formatTime (value.asTime());
       else
         val = QString::number (value.asInteger());
     }
@@ -197,16 +175,16 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value,
     case KSpreadValue::Float:
       fmt = value.format();
       if (fmt == KSpreadValue::fmt_DateTime)
-        val = locale->formatDateTime (value.asDateTime());
+        val = locale()->formatDateTime (value.asDateTime());
       else if (fmt == KSpreadValue::fmt_Date)
-        val = locale->formatDate (value.asDate(), true);
+        val = locale()->formatDate (value.asDate(), true);
       else if (fmt == KSpreadValue::fmt_Time)
-        val = locale->formatTime (value.asTime());
+        val = locale()->formatTime (value.asTime());
       else
       {
         //convert the number, change decimal point from English to local
         s = QString::number (value.asFloat(), 'g', 10);
-        decimal_point = locale->decimalSymbol()[0];
+        decimal_point = locale()->decimalSymbol()[0];
         if (decimal_point && ((pos = s.find ('.')) != -1))
           s = s.replace (pos, 1, decimal_point);
         if (fmt == KSpreadValue::fmt_Percent)
@@ -218,7 +196,7 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value,
       val = value;
     break;
     case KSpreadValue::Array:
-      val = asString (value.element (0, 0), locale);
+      val = asString (value.element (0, 0));
     break;
     case KSpreadValue::CellRange:
       /* NOTHING */
@@ -231,8 +209,7 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value,
   return val;
 }
 
-KSpreadValue ValueConverter::asDateTime (const KSpreadValue &value,
-    KLocale *locale) const
+KSpreadValue ValueConverter::asDateTime (const KSpreadValue &value) const
 {
   KSpreadValue val;
   bool ok;
@@ -255,14 +232,13 @@ KSpreadValue ValueConverter::asDateTime (const KSpreadValue &value,
     break;
     case KSpreadValue::String:
       //no DateTime parser, so we parse as Date, hoping for the best ...
-      val = ValueParser::self()->tryParseDate (value.asString(),
-          locale, &ok);
+      val = parser()->tryParseDate (value.asString(), &ok);
       if (!ok)
         val.setValue (QDateTime::currentDateTime());
       val.setFormat (KSpreadValue::fmt_DateTime);
     break;
     case KSpreadValue::Array:
-      val = asDateTime (value.element (0, 0), locale);
+      val = asDateTime (value.element (0, 0));
     break;
     case KSpreadValue::CellRange:
       /* NOTHING */
@@ -275,8 +251,7 @@ KSpreadValue ValueConverter::asDateTime (const KSpreadValue &value,
   return val;
 }
 
-KSpreadValue ValueConverter::asDate (const KSpreadValue &value,
-    KLocale *locale) const
+KSpreadValue ValueConverter::asDate (const KSpreadValue &value) const
 {
   KSpreadValue val;
   bool ok;
@@ -298,13 +273,12 @@ KSpreadValue ValueConverter::asDate (const KSpreadValue &value,
       val.setFormat (KSpreadValue::fmt_Date);
     break;
     case KSpreadValue::String:
-      val = ValueParser::self()->tryParseDate (value.asString(),
-          locale, &ok);
+      val = parser()->tryParseDate (value.asString(), &ok);
       if (!ok)
         val.setValue (QDate::currentDate());
     break;
     case KSpreadValue::Array:
-      val = asDate (value.element (0, 0), locale);
+      val = asDate (value.element (0, 0));
     break;
     case KSpreadValue::CellRange:
       /* NOTHING */
@@ -317,8 +291,7 @@ KSpreadValue ValueConverter::asDate (const KSpreadValue &value,
   return val;
 }
 
-KSpreadValue ValueConverter::asTime (const KSpreadValue &value,
-    KLocale *locale) const
+KSpreadValue ValueConverter::asTime (const KSpreadValue &value) const
 {
   KSpreadValue val;
   bool ok;
@@ -340,13 +313,12 @@ KSpreadValue ValueConverter::asTime (const KSpreadValue &value,
       val.setFormat (KSpreadValue::fmt_Time);
     break;
     case KSpreadValue::String:
-      val = ValueParser::self()->tryParseTime (value.asString(),
-          locale, &ok);
+      val = parser()->tryParseTime (value.asString(), &ok);
       if (!ok)
         val.setValue (QTime::currentTime());
     break;
     case KSpreadValue::Array:
-      val = asTime (value.element (0, 0), locale);
+      val = asTime (value.element (0, 0));
     break;
     case KSpreadValue::CellRange:
       /* NOTHING */

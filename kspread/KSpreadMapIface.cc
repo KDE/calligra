@@ -94,9 +94,8 @@ DCOPRef KSpreadMapIface::insertSheet( const QString& name )
     if ( m_map->findSheet( name ) )
         return sheet( name );
 
-    KSpreadSheet* t = new KSpreadSheet( m_map, name );
+    KSpreadSheet* t = m_map->addNewSheet ();
     t->setSheetName( name );
-    m_map->doc()->addSheet( t );
 
     return sheet( name );
 }

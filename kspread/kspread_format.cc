@@ -80,7 +80,7 @@ void KSpreadFormat::defaultStyleFormat()
     delete m_pStyle;
 
   if ( m_pSheet )
-    m_pStyle = m_pSheet->doc()->styleManager()->defaultStyle();
+    m_pStyle = m_pSheet->styleManager()->defaultStyle();
 
   delete m_strComment;
 }
@@ -1146,7 +1146,7 @@ bool KSpreadFormat::loadOasisStyleProperties( KoStyleStack & styleStack, const K
 #endif
     if (  styleStack.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
     {
-        KSpreadStyle * s = m_pSheet->doc()->styleManager()->style( styleStack.attributeNS( KoXmlNS::style, "parent-style-name" ) );
+        KSpreadStyle * s = m_pSheet->styleManager()->style( styleStack.attributeNS( KoXmlNS::style, "parent-style-name" ) );
 
         //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
         if ( s )
@@ -2059,12 +2059,6 @@ void KSpreadFormat::setCurrency( int type, QString const & symbol )
   c.symbol = symbol.simplifyWhiteSpace();
   c.type   = type;
 
-  if ( c.symbol.length() < 1 )
-  {
-    c.type   = 0;
-    c.symbol = locale()->currencySymbol();
-  }
-
   m_pStyle = m_pStyle->setCurrency( c );
 }
 
@@ -2759,11 +2753,6 @@ bool KSpreadFormat::isDefault() const
   return TRUE;
 }
 
-KLocale * KSpreadFormat::locale()const
-{
-  return m_pSheet->doc()->locale();
-}
-
 /*****************************************************************************
  *
  * RowFormat
@@ -2774,7 +2763,7 @@ KLocale * KSpreadFormat::locale()const
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pSheet->emit_updateRow( this, m_iRow );
 
 RowFormat::RowFormat( KSpreadSheet * _sheet, int _row )
-  : KSpreadFormat( _sheet, _sheet->doc()->styleManager()->defaultStyle() )
+  : KSpreadFormat( _sheet, _sheet->styleManager()->defaultStyle() )
 {
     m_next = 0;
     m_prev = 0;
@@ -3024,7 +3013,7 @@ bool RowFormat::isDefault() const
 #define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pSheet->emit_updateColumn( this, m_iColumn );
 
 ColumnFormat::ColumnFormat( KSpreadSheet * _sheet, int _column )
-  : KSpreadFormat( _sheet, _sheet->doc()->styleManager()->defaultStyle() )
+  : KSpreadFormat( _sheet, _sheet->styleManager()->defaultStyle() )
 {
   m_bDisplayDirtyFlag = false;
   m_fWidth = g_colWidth;
@@ -3656,7 +3645,6 @@ KSpreadCurrency::KSpreadCurrency(QString const & code, currencyFormat format)
       else
       {
         m_type = 0;
-        //        m_code = locale()->currentCurrencySymbol();
       }
     }
     else if ( code.find( '$' ) != -1 )

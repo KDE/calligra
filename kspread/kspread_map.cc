@@ -38,12 +38,13 @@
 
 bool KSpreadMap::respectCase = true;
 
-KSpreadMap::KSpreadMap( KSpreadDoc *_doc, const char* name )
-  : QObject( _doc, name ),
-    m_pDoc( _doc ),
+KSpreadMap::KSpreadMap (KSpread::DocInfo *docinfo, const char* name)
+  : QObject( docinfo->doc, name ),
+    DocBase (docinfo),
     m_initialActiveSheet( 0 ),
     m_initialMarkerColumn( 0 ),
     m_initialMarkerRow( 0 ),
+    tableId (1),
     m_dcop( 0 )
 {
   m_lstSheets.setAutoDelete( true );
@@ -59,9 +60,29 @@ void KSpreadMap::setProtected( QCString const & passwd )
   m_strPassword = passwd;
 }
 
+KSpreadSheet* KSpreadMap::createSheet()
+{
+  QString s( i18n("Sheet%1") );
+  s = s.arg( tableId++ );
+  KSpreadSheet *t = new KSpreadSheet (di, s,s.utf8());
+  t->setSheetName( s, TRUE ); // huh? (Werner)
+  return t;
+}
+
 void KSpreadMap::addSheet( KSpreadSheet *_sheet )
 {
   m_lstSheets.append( _sheet );
+
+  doc()->setModified( TRUE );
+
+  emit sig_addSheet( _sheet );
+}
+
+KSpreadSheet *KSpreadMap::addNewSheet ()
+{
+  KSpreadSheet *t = createSheet ();
+  addSheet (t);
+  return t;
 }
 
 void KSpreadMap::moveSheet( const QString & _from, const QString & _to, bool _before )
@@ -256,8 +277,7 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
             {
                 if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
                 {
-                    KSpreadSheet* sheet = m_pDoc->createSheet();
-                    m_pDoc->addSheet( sheet );
+                    KSpreadSheet* sheet = addNewSheet();
                     sheet->setSheetName( sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
                 }
             }
@@ -278,7 +298,7 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
                 if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
                 {
                     QString name = sheetElement.attributeNS( KoXmlNS::table, "name", QString::null );
-                    KSpreadSheet* sheet = m_pDoc->map()->findSheet( name );
+                    KSpreadSheet* sheet = findSheet( name );
                     if( sheet )
                         sheet->loadOasis( sheetElement , oasisStyles );
                 }
@@ -301,7 +321,7 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
   if ( n.isNull() )
   {
       // We need at least one sheet !
-      m_pDoc->setErrorMessage( i18n("This document has no sheets (tables).") );
+      doc()->setErrorMessage( i18n("This document has no sheets (tables).") );
       return false;
   }
   while( !n.isNull() )
@@ -309,8 +329,7 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
     QDomElement e = n.toElement();
     if ( !e.isNull() && e.tagName() == "table" )
     {
-      KSpreadSheet *t = m_pDoc->createSheet();
-      m_pDoc->addSheet( t );
+      KSpreadSheet *t = addNewSheet();
       if ( !t->loadXML( e ) )
         return false;
     }
@@ -421,11 +440,6 @@ DCOPObject * KSpreadMap::dcopObject()
     return m_dcop;
 }
 
-KSpreadDoc * KSpreadMap::doc() const
-{
-    return m_pDoc;
-}
-
 void KSpreadMap::takeSheet( KSpreadSheet * sheet )
 {
     int pos = m_lstSheets.findRef( sheet );
@@ -472,3 +486,6 @@ QStringList KSpreadMap::hiddenSheets() const
 
     return result;
 }
+
+#include "kspread_map.moc"
+

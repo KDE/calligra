@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-             (C) 1999-2002 The KSpread Team
+             (C) 1999-2005 The KSpread Team
                            www.koffice.org/kspread
 
    This library is free software; you can redistribute it and/or
@@ -66,6 +66,7 @@ class KoOasisSettings;
 #include <koOasisStyles.h>
 #include <koxmlwriter.h>
 
+#include "docbase.h"
 #include "kspread_autofill.h"
 #include "kspread_format.h"
 #include "kspread_cell.h"
@@ -233,7 +234,7 @@ class SheetPrivate;
 
 /**
  */
-class KSPREAD_EXPORT KSpreadSheet : public QObject
+class KSPREAD_EXPORT KSpreadSheet : public QObject, public KSpread::DocBase
 {
     friend class KSpreadCell;
 
@@ -252,7 +253,8 @@ public:
 
     enum LayoutDirection { LeftToRight, RightToLeft };
 
-    KSpreadSheet( KSpreadMap *_map, const QString &sheetName, const char *_name=0L );
+    KSpreadSheet (KSpread::DocInfo *docinfo, const QString &sheetName,
+        const char *_name=0L );
     ~KSpreadSheet();
 
     virtual bool isEmpty( unsigned long int x, unsigned long int y ) const;
@@ -812,14 +814,6 @@ public:
      * Hides or shows this sheets
      */
     void setHidden( bool hidden );
-
-    /**
-     * For internal use only.
-     */
-    void setMap( KSpreadMap* _map );
-
-    KSpreadDoc* doc()const ;
-    KSpreadMap* map()const ;
 
     /**
      * @return a painter for the hidden widget ( @ref #widget ).

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998,  1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 - 2003 The KSpread Team
+   Copyright (C) 1999 - 2005 The KSpread Team
                              www.koffice.org/kspread
 
    This library is free software; you can redistribute it and/or
@@ -224,9 +224,6 @@ const char * KSpreadTextDrag::selectionMimeType()
 class SheetPrivate
 {
 public:
-
-  KSpreadMap *workbook;
-  KSpreadDoc *doc;
   DCOPObject* dcop;
 
   QString name;
@@ -315,8 +312,9 @@ KSpreadSheet* KSpreadSheet::find( int _id )
   return (*s_mapSheets)[ _id ];
 }
 
-KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &sheetName, const char *_name )
-  : QObject( map, _name )
+KSpreadSheet::KSpreadSheet (KSpread::DocInfo *docinfo,
+    const QString &sheetName, const char *_name )
+  : QObject( docinfo->map, _name ), DocBase (docinfo)
 {
   if ( s_mapSheets == 0L )
     s_mapSheets = new QIntDict<KSpreadSheet>;
@@ -325,12 +323,10 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &sheetName, const cha
 
   d->id = s_id++;
   s_mapSheets->insert( d->id, this );
-  d->workbook = map;
-  d->doc = map->doc();
 
   d->layoutDirection = LeftToRight;
 
-  d->defaultFormat = new KSpreadFormat( this, d->doc->styleManager()->defaultStyle() );
+  d->defaultFormat = new KSpreadFormat (this, styleManager()->defaultStyle());
 
   d->emptyPen.setStyle( Qt::NoPen );
 
@@ -348,7 +344,7 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &sheetName, const cha
   d->rows.setAutoDelete( true );
   d->columns.setAutoDelete( true );
 
-  d->defaultCell = new KSpreadCell( this, d->doc->styleManager()->defaultStyle(), 0, 0 );
+  d->defaultCell = new KSpreadCell( this, di, styleManager()->defaultStyle(), 0, 0);
   d->defaultRowFormat = new RowFormat( this, 0 );
   d->defaultRowFormat->setDefault();
   d->defaultColumnFormat = new ColumnFormat( this, 0 );
@@ -387,27 +383,12 @@ KSpreadSheet::KSpreadSheet( KSpreadMap* map, const QString &sheetName, const cha
   d->print = new KSpreadSheetPrint( this );
 
   //initialize dependencies
-  d->dependencies = new KSpread::DependencyManager (this);
+  d->dependencies = new KSpread::DependencyManager (this, di);
 }
 
 QString KSpreadSheet::sheetName() const
 {
   return d->name;
-}
-
-void KSpreadSheet::setMap( KSpreadMap* map )
-{
-  d->workbook = map;
-}
-
-KSpreadDoc* KSpreadSheet::doc() const
-{
-  return d->doc;
-}
-
-KSpreadMap* KSpreadSheet::map() const
-{
-  return d->workbook;
 }
 
 int KSpreadSheet::id() const
@@ -1035,9 +1016,9 @@ KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
   KSpreadCell * cell = 0;
 
   if ( _style )
-    cell = new KSpreadCell( this, _style, _column, _row );
+    cell = new KSpreadCell( this, di, _style, _column, _row );
   else
-    cell = new KSpreadCell( this, _column, _row );
+    cell = new KSpreadCell( this, di, _column, _row );
 
   insertCell( cell );
 
@@ -1054,10 +1035,10 @@ void KSpreadSheet::setText( int _row, int _column, const QString& _text, bool as
         NO_MODIFICATION_POSSIBLE;
     }
 
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
-        KSpreadUndoSetText *undo = new KSpreadUndoSetText( d->doc, this, cell->text(), _column, _row,cell->formatType() );
-        d->doc->addCommand( undo );
+        KSpreadUndoSetText *undo = new KSpreadUndoSetText( doc(), this, cell->text(), _column, _row,cell->formatType() );
+        doc()->addCommand( undo );
     }
 
     // The cell will force a display refresh itself, so we dont have to care here.
@@ -1086,10 +1067,10 @@ void KSpreadSheet::setCalcDirtyFlag()
 
 void KSpreadSheet::recalc()
 {
-  //  d->doc->emitBeginOperation(true);
+  //  emitBeginOperation(true);
   //  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
   setCalcDirtyFlag();
-  //  d->doc->emitEndOperation();
+  //  emitEndOperation();
   emit sig_updateView( this );
 }
 
@@ -1108,7 +1089,7 @@ void KSpreadSheet::valueChanged (KSpreadCell *cell)
   d->dependencies->cellChanged (c);
 
   //nobody else seems to be setting the modified flag, so we do it here
-  d->doc->setModified (true);
+  doc()->setModified (true);
 }
 
 /*
@@ -1234,7 +1215,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
 		    if ( cell == d->defaultCell )
 			// '&& worker.create_if_default' unnecessary as never used in type A
 		    {
-			cell = new KSpreadCell( this, i, rw->row() );
+			cell = new KSpreadCell( this, di, i, rw->row() );
 			insertCell( cell );
 		    }
 		}
@@ -1243,12 +1224,12 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
     }
 
     // create an undo action
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
-	KSpreadUndoAction *undo = worker.createUndoAction( d->doc, this, r );
+	KSpreadUndoAction *undo = worker.createUndoAction( doc(), this, r );
         // test if the worker has an undo action
         if ( undo != 0L )
-	    d->doc->addCommand( undo );
+	    doc()->addCommand( undo );
     }
 
     // complete rows selected ?
@@ -1319,7 +1300,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
 			//     before the undo object is created, aren't they?
 			if ( cell == d->defaultCell )
 			{
-			    cell = new KSpreadCell( this, i, rw->row() );
+			    cell = new KSpreadCell( this, di, i, rw->row() );
 			    insertCell( cell );
 			}
 			worker.doWork( cell, false, i, rw->row() );
@@ -1343,7 +1324,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
 		{
 		    if ( worker.create_if_default && cell == d->defaultCell )
 		    {
-			cell = new KSpreadCell( this, x, y );
+			cell = new KSpreadCell( this, di, x, y );
 			insertCell( cell );
 		    }
                     if ( cell != d->defaultCell )
@@ -1371,12 +1352,11 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
 
   KSpreadSheet::SelectionType result;
 
-  d->doc->emitBeginOperation();
-  // d->doc->setCalculationDelay();
+  emitBeginOperation();
 
   // create cells in rows if complete columns selected
   KSpreadCell * cell;
-  KSpreadStyle * s = doc()->styleManager()->defaultStyle();
+  KSpreadStyle * s = styleManager()->defaultStyle();
 
   if ( !worker.type_B && selected && util_isColumnSelected(selection) )
   {
@@ -1393,12 +1373,12 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
   }
 
   // create an undo action
-  if ( !d->doc->undoLocked() )
+  if ( !doc()->undoLocked() )
   {
-    KSpreadUndoAction * undo = worker.createUndoAction(d->doc, this, selection);
+    KSpreadUndoAction * undo = worker.createUndoAction(doc(), this, selection);
     // test if the worker has an undo action
     if ( undo != 0L )
-      d->doc->addCommand( undo );
+      doc()->addCommand( undo );
   }
 
   // complete rows selected ?
@@ -1509,7 +1489,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
         {
           if ( cell == d->defaultCell && worker.create_if_default )
           {
-            cell = new KSpreadCell( this, s, x, y );
+            cell = new KSpreadCell( this, di, s, x, y );
             insertCell( cell );
           }
           if ( cell != d->defaultCell )
@@ -1523,7 +1503,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
     result = CellRegion;
   }
 
-  //  d->doc->emitEndOperation();
+  // emitEndOperation();
   emit sig_updateView( this );
 
   if (worker.emit_signal)
@@ -2055,11 +2035,11 @@ void KSpreadSheet::setSeries( const QPoint &_marker, double start, double end, d
 
   kdDebug() << "Saving undo information" << endl;
 
-  if ( !d->doc->undoLocked() )
+  if ( !doc()->undoLocked() )
   {
     KSpreadUndoChangeAreaTextCell *undo = new
-      KSpreadUndoChangeAreaTextCell( d->doc, this, undoRegion );
-    d->doc->addCommand( undo );
+      KSpreadUndoChangeAreaTextCell( doc(), this, undoRegion );
+    doc()->addCommand( undo );
   }
 
   kdDebug() << "Saving undo information done" << endl;
@@ -2329,10 +2309,10 @@ void KSpreadSheet::changeCellTabName( QString const & old_name, QString const & 
 bool KSpreadSheet::shiftRow( const QRect &rect,bool makeUndo )
 {
     KSpreadUndoInsertCellRow * undo = 0;
-    if ( !d->doc->undoLocked()  &&makeUndo)
+    if ( !doc()->undoLocked()  &&makeUndo)
     {
-        undo = new KSpreadUndoInsertCellRow( d->doc, this, rect );
-        d->doc->addCommand( undo );
+        undo = new KSpreadUndoInsertCellRow( doc(), this, rect );
+        doc()->addCommand( undo );
     }
 
     bool res=true;
@@ -2366,10 +2346,10 @@ bool KSpreadSheet::shiftRow( const QRect &rect,bool makeUndo )
 bool KSpreadSheet::shiftColumn( const QRect& rect,bool makeUndo )
 {
     KSpreadUndoInsertCellCol * undo = 0;
-    if ( !d->doc->undoLocked()  &&makeUndo)
+    if ( !doc()->undoLocked()  &&makeUndo)
     {
-        undo = new KSpreadUndoInsertCellCol( d->doc, this,rect);
-        d->doc->addCommand( undo );
+        undo = new KSpreadUndoInsertCellCol( doc(), this,rect);
+        doc()->addCommand( undo );
     }
 
     bool res=true;
@@ -2404,10 +2384,10 @@ bool KSpreadSheet::shiftColumn( const QRect& rect,bool makeUndo )
 void KSpreadSheet::unshiftColumn( const QRect & rect,bool makeUndo )
 {
     KSpreadUndoRemoveCellCol * undo = 0;
-    if ( !d->doc->undoLocked() && makeUndo )
+    if ( !doc()->undoLocked() && makeUndo )
     {
-        undo = new KSpreadUndoRemoveCellCol( d->doc, this, rect );
-        d->doc->addCommand( undo );
+        undo = new KSpreadUndoRemoveCellCol( doc(), this, rect );
+        doc()->addCommand( undo );
     }
 
     for(int i =rect.top();i<=rect.bottom();i++)
@@ -2435,10 +2415,10 @@ void KSpreadSheet::unshiftColumn( const QRect & rect,bool makeUndo )
 void KSpreadSheet::unshiftRow( const QRect & rect,bool makeUndo )
 {
     KSpreadUndoRemoveCellRow * undo = 0;
-    if ( !d->doc->undoLocked() && makeUndo )
+    if ( !doc()->undoLocked() && makeUndo )
     {
-        undo = new KSpreadUndoRemoveCellRow( d->doc, this, rect );
-        d->doc->addCommand( undo );
+        undo = new KSpreadUndoRemoveCellRow( doc(), this, rect );
+        doc()->addCommand( undo );
     }
     for(int i =rect.top();i<=rect.bottom();i++)
         for(int j=rect.left();j<=rect.right();j++)
@@ -2465,10 +2445,10 @@ void KSpreadSheet::unshiftRow( const QRect & rect,bool makeUndo )
 bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
 {
     KSpreadUndoInsertColumn * undo = 0;
-    if ( !d->doc->undoLocked() && makeUndo)
+    if ( !doc()->undoLocked() && makeUndo)
     {
-        undo = new KSpreadUndoInsertColumn( d->doc, this, col, nbCol );
-        d->doc->addCommand( undo );
+        undo = new KSpreadUndoInsertColumn( doc(), this, col, nbCol );
+        doc()->addCommand( undo );
     }
 
     bool res=true;
@@ -2508,10 +2488,10 @@ bool KSpreadSheet::insertColumn( int col, int nbCol, bool makeUndo )
 bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
 {
     KSpreadUndoInsertRow *undo = 0;
-    if ( !d->doc->undoLocked() && makeUndo)
+    if ( !doc()->undoLocked() && makeUndo)
     {
-        undo = new KSpreadUndoInsertRow( d->doc, this, row, nbRow );
-        d->doc->addCommand( undo );
+        undo = new KSpreadUndoInsertRow( doc(), this, row, nbRow );
+        doc()->addCommand( undo );
     }
 
     bool res=true;
@@ -2551,10 +2531,10 @@ bool KSpreadSheet::insertRow( int row, int nbRow, bool makeUndo )
 void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
 {
     KSpreadUndoRemoveColumn *undo = 0;
-    if ( !d->doc->undoLocked() && makeUndo)
+    if ( !doc()->undoLocked() && makeUndo)
     {
-        undo = new KSpreadUndoRemoveColumn( d->doc, this, col, nbCol );
-        d->doc->addCommand( undo );
+        undo = new KSpreadUndoRemoveColumn( doc(), this, col, nbCol );
+        doc()->addCommand( undo );
     }
 
     for( int i = 0; i <= nbCol; ++i )
@@ -2588,10 +2568,10 @@ void KSpreadSheet::removeColumn( int col, int nbCol, bool makeUndo )
 void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
 {
     KSpreadUndoRemoveRow *undo = 0;
-    if ( !d->doc->undoLocked() && makeUndo )
+    if ( !doc()->undoLocked() && makeUndo )
     {
-        undo = new KSpreadUndoRemoveRow( d->doc, this, row, nbRow );
-        d->doc->addCommand( undo );
+        undo = new KSpreadUndoRemoveRow( doc(), this, row, nbRow );
+        doc()->addCommand( undo );
     }
 
     for( int i=0; i<=nbRow; i++ )
@@ -2624,14 +2604,14 @@ void KSpreadSheet::removeRow( int row, int nbRow, bool makeUndo )
 
 void KSpreadSheet::hideRow( int _row, int nbRow, QValueList<int>_list )
 {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
       KSpreadUndoHideRow *undo ;
       if( nbRow!=-1 )
-	undo= new KSpreadUndoHideRow( d->doc, this, _row, nbRow );
+	undo= new KSpreadUndoHideRow( doc(), this, _row, nbRow );
       else
-	undo= new KSpreadUndoHideRow( d->doc, this, _row, nbRow, _list );
-      d->doc->addCommand( undo  );
+	undo= new KSpreadUndoHideRow( doc(), this, _row, nbRow, _list );
+      doc()->addCommand( undo  );
     }
 
     RowFormat *rl;
@@ -2663,14 +2643,14 @@ void KSpreadSheet::emitHideRow()
 
 void KSpreadSheet::showRow( int _row, int nbRow, QValueList<int>_list )
 {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
       KSpreadUndoShowRow *undo;
       if(nbRow!=-1)
-        undo = new KSpreadUndoShowRow( d->doc, this, _row,nbRow );
+        undo = new KSpreadUndoShowRow( doc(), this, _row,nbRow );
       else
-	undo = new KSpreadUndoShowRow( d->doc, this, _row,nbRow, _list );
-      d->doc->addCommand( undo );
+	undo = new KSpreadUndoShowRow( doc(), this, _row,nbRow, _list );
+      doc()->addCommand( undo );
     }
 
     RowFormat *rl;
@@ -2698,14 +2678,14 @@ void KSpreadSheet::showRow( int _row, int nbRow, QValueList<int>_list )
 
 void KSpreadSheet::hideColumn( int _col, int nbCol, QValueList<int>_list )
 {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
         KSpreadUndoHideColumn *undo;
 	if( nbCol!=-1 )
-	  undo= new KSpreadUndoHideColumn( d->doc, this, _col, nbCol );
+	  undo= new KSpreadUndoHideColumn( doc(), this, _col, nbCol );
 	else
-	  undo= new KSpreadUndoHideColumn( d->doc, this, _col, nbCol, _list );
-        d->doc->addCommand( undo );
+	  undo= new KSpreadUndoHideColumn( doc(), this, _col, nbCol, _list );
+        doc()->addCommand( undo );
     }
 
     ColumnFormat *cl;
@@ -2738,14 +2718,14 @@ void KSpreadSheet::emitHideColumn()
 
 void KSpreadSheet::showColumn( int _col, int nbCol, QValueList<int>_list )
 {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
       KSpreadUndoShowColumn *undo;
       if( nbCol != -1 )
-	undo = new KSpreadUndoShowColumn( d->doc, this, _col, nbCol );
+	undo = new KSpreadUndoShowColumn( doc(), this, _col, nbCol );
       else
-	undo = new KSpreadUndoShowColumn( d->doc, this, _col, nbCol, _list );
-      d->doc->addCommand( undo );
+	undo = new KSpreadUndoShowColumn( doc(), this, _col, nbCol, _list );
+      doc()->addCommand( undo );
     }
 
     ColumnFormat *cl;
@@ -3029,10 +3009,10 @@ void KSpreadSheet::replace( const QString &_find, const QString &_replace, long 
         canvas, SLOT( replace( const QString &, int, int,int, const QRect & ) ) );
 
     // Now do the replacing...
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
-        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( d->doc, this, region );
-        d->doc->addCommand( undo );
+        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( doc(), this, region );
+        doc()->addCommand( undo );
     }
 
     QRect cellRegion( 0, 0, 0, 0 );
@@ -3075,12 +3055,12 @@ void KSpreadSheet::borderBottom( KSpreadSelection* selectionInfo,
   // Complete rows selected ?
   if ( util_isRowSelected(selection) )
   {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
       QString title = i18n("Change Border");
       KSpreadUndoCellFormat * undo =
-        new KSpreadUndoCellFormat( d->doc, this, selection, title );
-      d->doc->addCommand( undo );
+        new KSpreadUndoCellFormat( doc(), this, selection, title );
+      doc()->addCommand( undo );
     }
 
     int row = selection.bottom();
@@ -3107,12 +3087,12 @@ void KSpreadSheet::borderBottom( KSpreadSelection* selectionInfo,
   }
   else
   {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
       QString title=i18n("Change Border");
       KSpreadUndoCellFormat *undo =
-        new KSpreadUndoCellFormat( d->doc, this, selection,title );
-      d->doc->addCommand( undo );
+        new KSpreadUndoCellFormat( doc(), this, selection,title );
+      doc()->addCommand( undo );
     }
 
     KSpreadCell* cell;
@@ -3144,12 +3124,12 @@ void KSpreadSheet::borderRight( KSpreadSelection* selectionInfo,
   else if ( util_isColumnSelected(selection) )
   {
 
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
       QString title = i18n("Change Border");
       KSpreadUndoCellFormat * undo =
-        new KSpreadUndoCellFormat( d->doc, this, selection, title );
-      d->doc->addCommand( undo );
+        new KSpreadUndoCellFormat( doc(), this, selection, title );
+      doc()->addCommand( undo );
     }
 
     int col = selection.right();
@@ -3190,12 +3170,12 @@ void KSpreadSheet::borderRight( KSpreadSelection* selectionInfo,
   }
   else
   {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
       QString title=i18n("Change Border");
       KSpreadUndoCellFormat *undo =
-        new KSpreadUndoCellFormat( d->doc, this, selection, title );
-      d->doc->addCommand( undo );
+        new KSpreadUndoCellFormat( doc(), this, selection, title );
+      doc()->addCommand( undo );
     }
 
     KSpreadCell* cell;
@@ -3224,11 +3204,11 @@ void KSpreadSheet::borderLeft( KSpreadSelection* selectionInfo,
   {
     RowFormat* rw =d->rows.first();
 
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
       KSpreadUndoCellFormat *undo =
-        new KSpreadUndoCellFormat( d->doc, this, selection, title );
-      d->doc->addCommand( undo );
+        new KSpreadUndoCellFormat( doc(), this, selection, title );
+      doc()->addCommand( undo );
     }
 
     int col = selection.left();
@@ -3266,11 +3246,11 @@ void KSpreadSheet::borderLeft( KSpreadSelection* selectionInfo,
   }
   else
   {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
-      KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( d->doc, this,
+      KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( doc(), this,
                                                                selection,title );
-      d->doc->addCommand( undo );
+      doc()->addCommand( undo );
     }
 
     KSpreadCell* cell;
@@ -3299,11 +3279,11 @@ void KSpreadSheet::borderTop( KSpreadSelection* selectionInfo,
   // Complete rows selected ?
   if ( util_isRowSelected(selection) )
   {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
       KSpreadUndoCellFormat * undo =
-        new KSpreadUndoCellFormat( d->doc, this, selection, title );
-      d->doc->addCommand( undo );
+        new KSpreadUndoCellFormat( doc(), this, selection, title );
+      doc()->addCommand( undo );
     }
 
     int row = selection.top();
@@ -3326,11 +3306,11 @@ void KSpreadSheet::borderTop( KSpreadSelection* selectionInfo,
   // so it's the same as in no rows/columns selected
   else
   {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
       KSpreadUndoCellFormat *undo =
-        new KSpreadUndoCellFormat( d->doc, this, selection, title );
-      d->doc->addCommand( undo );
+        new KSpreadUndoCellFormat( doc(), this, selection, title );
+      doc()->addCommand( undo );
     }
 
     KSpreadCell* cell;
@@ -3351,12 +3331,12 @@ void KSpreadSheet::borderOutline( KSpreadSelection* selectionInfo,
 {
   QRect selection( selectionInfo->selection() );
 
-  if ( !d->doc->undoLocked() )
+  if ( !doc()->undoLocked() )
   {
     QString title = i18n("Change Border");
-    KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( d->doc, this,
+    KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( doc(), this,
                                                              selection, title );
-    d->doc->addCommand( undo );
+    doc()->addCommand( undo );
   }
 
   QPen pen( _color, 1, SolidLine );
@@ -3694,10 +3674,10 @@ void KSpreadSheet::sortByRow( const QRect &area, int key1, int key2, int key3,
 
   doc()->emitBeginOperation();
 
-  if ( !d->doc->undoLocked() )
+  if ( !doc()->undoLocked() )
   {
-    KSpreadUndoSort *undo = new KSpreadUndoSort( d->doc, this, target );
-    d->doc->addCommand( undo );
+    KSpreadUndoSort *undo = new KSpreadUndoSort( doc(), this, target );
+    doc()->addCommand( undo );
   }
 
   if (target.topLeft() != r.topLeft())
@@ -4034,10 +4014,10 @@ void KSpreadSheet::sortByColumn( const QRect &area, int key1, int key2, int key3
   }
   QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
 
-  if ( !d->doc->undoLocked() )
+  if ( !doc()->undoLocked() )
   {
-    KSpreadUndoSort *undo = new KSpreadUndoSort( d->doc, this, target );
-    d->doc->addCommand( undo );
+    KSpreadUndoSort *undo = new KSpreadUndoSort( doc(), this, target );
+    doc()->addCommand( undo );
   }
 
   doc()->emitBeginOperation();
@@ -4433,7 +4413,7 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
   // as a user.
   if (!ref1->isFormula() && !ref2->isFormula())
   {
-    KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
+    KSpreadCell *tmp = new KSpreadCell( this, di, -1, -1 );
 
     tmp->copyContent( ref1 );
     ref1->copyContent( ref2 );
@@ -5348,7 +5328,7 @@ void KSpreadSheet::fillSelection( KSpreadSelection * selectionInfo, int directio
     break;
   }
 
-  d->doc->setModified( true );
+  this->doc()->setModified( true );
 }
 
 
@@ -5427,10 +5407,10 @@ void KSpreadSheet::setConditional( KSpreadSelection* selectionInfo,
                                    QValueList<KSpreadConditional> const & newConditions)
 {
   QRect selection(selectionInfo->selection());
-  if ( !d->doc->undoLocked() )
+  if ( !doc()->undoLocked() )
   {
-    KSpreadUndoConditional * undo = new KSpreadUndoConditional( d->doc, this, selection );
-    d->doc->addCommand( undo );
+    KSpreadUndoConditional * undo = new KSpreadUndoConditional( doc(), this, selection );
+    doc()->addCommand( undo );
   }
 
   int l = selection.left();
@@ -5637,10 +5617,10 @@ QString KSpreadSheet::copyAsText( KSpreadSelection* selectionInfo )
         QPoint p( c->column(), c->row() );
         if ( selection.contains( p ) )
         {
-          top = QMIN( top, c->row() );
-          left = QMIN( left, c->column() );
-          bottom = QMAX( bottom, c->row() );
-          right = QMAX( right, c->column() );
+          top = QMIN( top, (unsigned) c->row() );
+          left = QMIN( left, (unsigned) c->column() );
+          bottom = QMAX( bottom, (unsigned) c->row() );
+          right = QMAX( right, (unsigned) c->column() );
 
           if ( c->strOutText().length() > max )
                  max = c->strOutText().length();
@@ -5651,9 +5631,9 @@ QString KSpreadSheet::copyAsText( KSpreadSelection* selectionInfo )
     ++max;
 
     QString result;
-    for ( int y = top; y <= bottom; ++y)
+    for ( unsigned y = top; y <= bottom; ++y)
     {
-      for ( int x = left; x <= right; ++x)
+      for ( unsigned x = left; x <= right; ++x)
       {
         KSpreadCell *cell = cellAt( x, y );
         result += cellAsText( cell, max );
@@ -5771,17 +5751,17 @@ void KSpreadSheet::pasteTextPlain( QString &_text, QRect pasteArea)
   KSpreadCell * cell = nonDefaultCell( mx, my );
   if ( rows == 1 )
   {
-    if ( !d->doc->undoLocked() )
+    if ( !doc()->undoLocked() )
     {
-      KSpreadUndoSetText * undo = new KSpreadUndoSetText( d->doc, this , cell->text(), mx, my, cell->formatType() );
-      d->doc->addCommand( undo );
+      KSpreadUndoSetText * undo = new KSpreadUndoSetText( doc(), this , cell->text(), mx, my, cell->formatType() );
+      doc()->addCommand( undo );
     }
   }
   else
   {
       QRect rect(mx, my, mx, my + rows - 1);
-      KSpreadUndoChangeAreaTextCell * undo = new KSpreadUndoChangeAreaTextCell( d->doc, this , rect );
-      d->doc->addCommand( undo );
+      KSpreadUndoChangeAreaTextCell * undo = new KSpreadUndoChangeAreaTextCell( doc(), this , rect );
+      doc()->addCommand( undo );
   }
 
   i = 0;
@@ -5954,7 +5934,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
             if ( isProtected() && !cell->notProtected( col + coff, row + roff ) )
               continue;
 
-            cellBackup = new KSpreadCell(this, cell->column(), cell->row());
+            cellBackup = new KSpreadCell(this, di, cell->column(), cell->row());
             cellBackup->copyAll(cell);
 
             if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op, pasteFC ) )
@@ -5991,7 +5971,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
     */
     if ( refreshCell )
         refreshCell->updateChart();
-    d->doc->setModified( true );
+    this->doc()->setModified( true );
 
     if(!isLoading())
         refreshMergedCell();
@@ -6003,11 +5983,11 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
     return true;
 }
 
-void KSpreadSheet::loadSelectionUndo( const QDomDocument & doc, const QRect &loadArea,
+void KSpreadSheet::loadSelectionUndo( const QDomDocument & d, const QRect &loadArea,
                                       int _xshift, int _yshift, bool insert,
                                       int insertTo)
 {
-    QDomElement e = doc.documentElement();
+    QDomElement e = d.documentElement();
     QDomElement c = e.firstChild().toElement();
     int rowsInClpbrd =  e.attribute( "rows" ).toInt();
     int columnsInClpbrd =  e.attribute( "columns" ).toInt();
@@ -6023,10 +6003,10 @@ void KSpreadSheet::loadSelectionUndo( const QDomDocument & doc, const QRect &loa
     QRect rect;
     if ( !e.namedItem( "columns" ).toElement().isNull() )
     {
-        if ( !d->doc->undoLocked() )
+        if ( !doc()->undoLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( d->doc, this, pasteWidth, 0, _xshift,_yshift,rect,insert );
-                d->doc->addCommand( undo );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( doc(), this, pasteWidth, 0, _xshift,_yshift,rect,insert );
+                doc()->addCommand( undo );
         }
         if(insert)
                  insertColumn(  _xshift+1,pasteWidth-1,false);
@@ -6035,10 +6015,10 @@ void KSpreadSheet::loadSelectionUndo( const QDomDocument & doc, const QRect &loa
 
     if ( !e.namedItem( "rows" ).toElement().isNull() )
     {
-        if ( !d->doc->undoLocked() )
+        if ( !doc()->undoLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( d->doc, this, 0,pasteHeight, _xshift,_yshift,rect,insert );
-                d->doc->addCommand( undo );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( doc(), this, 0,pasteHeight, _xshift,_yshift,rect,insert );
+                doc()->addCommand( undo );
         }
 	if(insert)
 	    insertRow(  _yshift+1,pasteHeight-1,false);
@@ -6049,10 +6029,10 @@ void KSpreadSheet::loadSelectionUndo( const QDomDocument & doc, const QRect &loa
 
     if(!c.isNull())
     {
-        if ( !d->doc->undoLocked() )
+        if ( !doc()->undoLocked() )
         {
-                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( d->doc, this, 0,0,_xshift,_yshift,rect,insert,insertTo );
-                d->doc->addCommand( undo );
+                KSpreadUndoCellPaste *undo = new KSpreadUndoCellPaste( doc(), this, 0,0,_xshift,_yshift,rect,insert,insertTo );
+                doc()->addCommand( undo );
         }
     if(insert)
         {
@@ -6079,11 +6059,11 @@ bool KSpreadSheet::testAreaPasteInsert()const
 
     QBuffer buffer( b );
     buffer.open( IO_ReadOnly );
-    QDomDocument doc;
-    doc.setContent( &buffer );
+    QDomDocument d;
+    d.setContent( &buffer );
     buffer.close();
 
-    QDomElement e = doc.documentElement();
+    QDomElement e = d.documentElement();
     if ( !e.namedItem( "columns" ).toElement().isNull() )
         return false;
 
@@ -6169,17 +6149,17 @@ void KSpreadSheet::deleteCells( const QRect& rect )
         c->forceExtraCells( c->column(), c->row(),
                             c->extraXCells(), c->extraYCells() );
     }
-    d->doc->setModified( true );
+    doc()->setModified( true );
 }
 
 void KSpreadSheet::deleteSelection( KSpreadSelection* selectionInfo, bool undo )
 {
     QRect r( selectionInfo->selection() );
 
-    if ( undo && !d->doc->undoLocked() )
+    if ( undo && !doc()->undoLocked() )
     {
-        KSpreadUndoDelete *undo = new KSpreadUndoDelete( d->doc, this, r );
-        d->doc->addCommand( undo );
+        KSpreadUndoDelete *undo = new KSpreadUndoDelete( doc(), this, r );
+        doc()->addCommand( undo );
     }
 
     // Entire rows selected ?
@@ -6266,7 +6246,7 @@ void KSpreadSheet::mergeCells( const QRect &area )
   // sanity check
   if( isProtected() )
     return;
-  if( d->workbook->isProtected() )
+  if( map()->isProtected() )
     return;
 
   // no span ?
@@ -6340,19 +6320,19 @@ bool KSpreadSheet::testListChoose(KSpreadSelection* selectionInfo)
 
 QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era )
 {
-    QDomDocument doc( "spreadsheet-snippet" );
-    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement spread = doc.createElement( "spreadsheet-snippet" );
+    QDomDocument dd( "spreadsheet-snippet" );
+    dd.appendChild( dd.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    QDomElement spread = dd.createElement( "spreadsheet-snippet" );
     spread.setAttribute( "rows", _rect.bottom() - _rect.top() + 1 );
     spread.setAttribute( "columns", _rect.right() - _rect.left() + 1 );
-    doc.appendChild( spread );
+    dd.appendChild( spread );
 
     //
     // Entire rows selected ?
     //
     if ( util_isRowSelected( _rect ) )
     {
-        QDomElement rows = doc.createElement("rows");
+        QDomElement rows = dd.createElement("rows");
         rows.setAttribute( "count", _rect.bottom() - _rect.top() + 1 );
         spread.appendChild( rows );
 
@@ -6364,7 +6344,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era
             {
                 QPoint p( c->column(), c->row() );
                 if ( _rect.contains( p ) )
-                    spread.appendChild( c->save( doc, 0, _rect.top() - 1, copy, copy, era ) );
+                    spread.appendChild( c->save( dd, 0, _rect.top() - 1, copy, copy, era ) );
             }
         }
 
@@ -6376,13 +6356,13 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era
             lay = rowFormat( y );
             if ( lay && !lay->isDefault() )
             {
-                QDomElement e = lay->save( doc, _rect.top() - 1, copy );
+                QDomElement e = lay->save( dd, _rect.top() - 1, copy );
                 if ( !e.isNull() )
                     spread.appendChild( e );
             }
         }
 
-        return doc;
+        return dd;
     }
 
     //
@@ -6390,7 +6370,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era
     //
     if ( util_isColumnSelected( _rect ) )
     {
-        QDomElement columns = doc.createElement("columns");
+        QDomElement columns = dd.createElement("columns");
         columns.setAttribute( "count", _rect.right() - _rect.left() + 1 );
         spread.appendChild( columns );
 
@@ -6402,7 +6382,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era
             {
                 QPoint p( c->column(), c->row() );
                 if ( _rect.contains( p ) )
-                    spread.appendChild( c->save( doc, _rect.left() - 1, 0, copy, copy, era ) );
+                    spread.appendChild( c->save( dd, _rect.left() - 1, 0, copy, copy, era ) );
             }
         }
 
@@ -6414,13 +6394,13 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era
             lay = columnFormat( x );
             if ( lay && !lay->isDefault() )
             {
-                QDomElement e = lay->save( doc, _rect.left() - 1, copy );
+                QDomElement e = lay->save( dd, _rect.left() - 1, copy );
                 if ( !e.isNull() )
                     spread.appendChild( e );
             }
         }
 
-        return doc;
+        return dd;
     }
 
     // Save all cells.
@@ -6437,21 +6417,21 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era
 	    cell = cellAt( i, j );
 	    if ( cell == d->defaultCell )
 	    {
-		cell = new KSpreadCell( this, i, j );
+		cell = new KSpreadCell( this, di, i, j );
 		insertCell( cell );
 		insert=true;
 	    }
-	    spread.appendChild( cell->save( doc, _rect.left() - 1, _rect.top() - 1, true, copy, era ) );
+	    spread.appendChild( cell->save( dd, _rect.left() - 1, _rect.top() - 1, true, copy, era ) );
 	    if( insert )
 	        d->cells.remove(i,j);
 	}
 
-    return doc;
+    return dd;
 }
 
-QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
+QDomElement KSpreadSheet::saveXML( QDomDocument& dd )
 {
-    QDomElement sheet = doc.createElement( "table" );
+    QDomElement sheet = dd.createElement( "table" );
     sheet.setAttribute( "name", d->name );
 
 
@@ -6466,7 +6446,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     sheet.setAttribute( "printGrid", (int)d->print->printGrid() );
     sheet.setAttribute( "printCommentIndicator", (int)d->print->printCommentIndicator() );
     sheet.setAttribute( "printFormulaIndicator", (int)d->print->printFormulaIndicator() );
-    if ( d->doc->specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
+    if ( doc()->specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
       sheet.setAttribute( "formular", (int)d->showFormula); //Was named different
     else
       sheet.setAttribute( "showFormula", (int)d->showFormula);
@@ -6486,61 +6466,61 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     }
 
     // paper parameters
-    QDomElement paper = doc.createElement( "paper" );
+    QDomElement paper = dd.createElement( "paper" );
     paper.setAttribute( "format", d->print->paperFormatString() );
     paper.setAttribute( "orientation", d->print->orientationString() );
     sheet.appendChild( paper );
 
-    QDomElement borders = doc.createElement( "borders" );
+    QDomElement borders = dd.createElement( "borders" );
     borders.setAttribute( "left", d->print->leftBorder() );
     borders.setAttribute( "top", d->print->topBorder() );
     borders.setAttribute( "right", d->print->rightBorder() );
     borders.setAttribute( "bottom", d->print->bottomBorder() );
     paper.appendChild( borders );
 
-    QDomElement head = doc.createElement( "head" );
+    QDomElement head = dd.createElement( "head" );
     paper.appendChild( head );
     if ( !d->print->headLeft().isEmpty() )
     {
-      QDomElement left = doc.createElement( "left" );
+      QDomElement left = dd.createElement( "left" );
       head.appendChild( left );
-      left.appendChild( doc.createTextNode( d->print->headLeft() ) );
+      left.appendChild( dd.createTextNode( d->print->headLeft() ) );
     }
     if ( !d->print->headMid().isEmpty() )
     {
-      QDomElement center = doc.createElement( "center" );
+      QDomElement center = dd.createElement( "center" );
       head.appendChild( center );
-      center.appendChild( doc.createTextNode( d->print->headMid() ) );
+      center.appendChild( dd.createTextNode( d->print->headMid() ) );
     }
     if ( !d->print->headRight().isEmpty() )
     {
-      QDomElement right = doc.createElement( "right" );
+      QDomElement right = dd.createElement( "right" );
       head.appendChild( right );
-      right.appendChild( doc.createTextNode( d->print->headRight() ) );
+      right.appendChild( dd.createTextNode( d->print->headRight() ) );
     }
-    QDomElement foot = doc.createElement( "foot" );
+    QDomElement foot = dd.createElement( "foot" );
     paper.appendChild( foot );
     if ( !d->print->footLeft().isEmpty() )
     {
-      QDomElement left = doc.createElement( "left" );
+      QDomElement left = dd.createElement( "left" );
       foot.appendChild( left );
-      left.appendChild( doc.createTextNode( d->print->footLeft() ) );
+      left.appendChild( dd.createTextNode( d->print->footLeft() ) );
     }
     if ( !d->print->footMid().isEmpty() )
     {
-      QDomElement center = doc.createElement( "center" );
+      QDomElement center = dd.createElement( "center" );
       foot.appendChild( center );
-      center.appendChild( doc.createTextNode( d->print->footMid() ) );
+      center.appendChild( dd.createTextNode( d->print->footMid() ) );
     }
     if ( !d->print->footRight().isEmpty() )
     {
-      QDomElement right = doc.createElement( "right" );
+      QDomElement right = dd.createElement( "right" );
       foot.appendChild( right );
-      right.appendChild( doc.createTextNode( d->print->footRight() ) );
+      right.appendChild( dd.createTextNode( d->print->footRight() ) );
     }
 
     // print range
-    QDomElement printrange = doc.createElement( "printrange-rect" );
+    QDomElement printrange = dd.createElement( "printrange-rect" );
     QRect _printRange = d->print->printRange();
     int left = _printRange.left();
     int right = _printRange.right();
@@ -6565,13 +6545,13 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     sheet.appendChild( printrange );
 
     // Print repeat columns
-    QDomElement printRepeatColumns = doc.createElement( "printrepeatcolumns" );
+    QDomElement printRepeatColumns = dd.createElement( "printrepeatcolumns" );
     printRepeatColumns.setAttribute( "left", d->print->printRepeatColumns().first );
     printRepeatColumns.setAttribute( "right", d->print->printRepeatColumns().second );
     sheet.appendChild( printRepeatColumns );
 
     // Print repeat rows
-    QDomElement printRepeatRows = doc.createElement( "printrepeatrows" );
+    QDomElement printRepeatRows = dd.createElement( "printrepeatrows" );
     printRepeatRows.setAttribute( "top", d->print->printRepeatRows().first );
     printRepeatRows.setAttribute( "bottom", d->print->printRepeatRows().second );
     sheet.appendChild( printRepeatRows );
@@ -6589,7 +6569,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     {
         if ( !c->isDefault() )
         {
-            QDomElement e = c->save( doc );
+            QDomElement e = c->save( dd );
             if ( !e.isNull() )
                 sheet.appendChild( e );
         }
@@ -6601,7 +6581,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     {
         if ( !rl->isDefault() )
         {
-            QDomElement e = rl->save( doc );
+            QDomElement e = rl->save( dd );
             if ( e.isNull() )
                 return QDomElement();
             sheet.appendChild( e );
@@ -6614,14 +6594,14 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
     {
         if ( !cl->isDefault() )
         {
-            QDomElement e = cl->save( doc );
+            QDomElement e = cl->save( dd );
             if ( e.isNull() )
                 return QDomElement();
             sheet.appendChild( e );
         }
     }
 
-    QPtrListIterator<KoDocumentChild> chl( d->doc->children() );
+    QPtrListIterator<KoDocumentChild> chl( doc()->children() );
     for( ; chl.current(); ++chl )
     {
        if ( ((KSpreadChild*)chl.current())->sheet() == this )
@@ -6632,10 +6612,10 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
             // stupid hack :-( has anybody a better solution?
             if ( child->inherits("ChartChild") )
             {
-                e = ((ChartChild *) child)->save( doc );
+                e = ((ChartChild *) child)->save( dd );
             }
             else
-                e = chl.current()->save( doc );
+                e = chl.current()->save( dd );
 
             if ( e.isNull() )
                 return QDomElement();
@@ -6648,7 +6628,7 @@ QDomElement KSpreadSheet::saveXML( QDomDocument& doc )
 
 bool KSpreadSheet::isLoading()
 {
-    return d->doc->isLoading();
+    return doc()->isLoading();
 }
 
 void KSpreadSheet::checkContentDirection( QString const & name )
@@ -7462,10 +7442,10 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
                 {
                     addText( text, xmlWriter );
 #if 0 //FIXME
-                    QDomElement t = doc.createElement( "text:date" );
+                    QDomElement t = dd.createElement( "text:date" );
                     t.setAttribute( "text:date-value", "0-00-00" );
                     // todo: "style:data-style-name", "N2"
-                    t.appendChild( doc.createTextNode( QDate::currentDate().toString() ) );
+                    t.appendChild( dd.createTextNode( QDate::currentDate().toString() ) );
                     parent.appendChild( t );
 #endif
                 }
@@ -7495,7 +7475,7 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
                 }
                 else if ( var == "<author>" )
                 {
-                    KoDocumentInfo       * docInfo    = d->doc->documentInfo();
+                    KoDocumentInfo       * docInfo    = doc()->documentInfo();
                     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
 
                     text += authorPage->fullName();
@@ -7504,7 +7484,7 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
                 }
                 else if ( var == "<email>" )
                 {
-                    KoDocumentInfo       * docInfo    = d->doc->documentInfo();
+                    KoDocumentInfo       * docInfo    = doc()->documentInfo();
                     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
 
                     text += authorPage->email();
@@ -7513,7 +7493,7 @@ void KSpreadSheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) 
                 }
                 else if ( var == "<org>" )
                 {
-                    KoDocumentInfo       * docInfo    = d->doc->documentInfo();
+                    KoDocumentInfo       * docInfo    = doc()->documentInfo();
                     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor*>( docInfo->page( "author" ) );
 
                     text += authorPage->company();
@@ -7567,7 +7547,7 @@ void KSpreadSheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings 
     int cursorX = items.parseConfigItemInt( "CursorPositionX" );
     int cursorY = items.parseConfigItemInt( "CursorPositionY" );
 
-    d->doc->loadingInfo()->addMarkerSelection( this, QPoint( cursorX, cursorY ) );
+    doc()->loadingInfo()->addMarkerSelection( this, QPoint( cursorX, cursorY ) );
     kdDebug()<<"d->hideZero :"<<d->hideZero<<" d->showGrid :"<<d->showGrid<<" d->firstLetterUpper :"<<d->firstLetterUpper<<" cursorX :"<<cursorX<<" cursorY :"<<cursorY<< endl;
 
     d->showFormulaIndicator = items.parseConfigItemBool("ShowFormulaIndicator" );
@@ -7739,8 +7719,8 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
     d->name = sheet.attribute( "name" );
     if ( d->name.isEmpty() )
     {
-        d->doc->setErrorMessage( i18n("Invalid document. Sheet name is empty.") );
-        return false;
+      doc()->setErrorMessage( i18n("Invalid document. Sheet name is empty.") );
+      return false;
     }
 
     bool detectDirection = true;
@@ -7790,7 +7770,7 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
 
     /* so we don't panic over finding ourself in the follwing test*/
     d->name = "";
-    while (d->workbook->findSheet(testName) != NULL)
+    while (map()->findSheet(testName) != NULL)
     {
       nameSuffix++;
       testName = baseName + '_' + QString::number(nameSuffix);
@@ -7981,7 +7961,7 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
         QDomElement e = n.toElement();
         if ( !e.isNull() && e.tagName() == "cell" )
         {
-            KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
+            KSpreadCell *cell = new KSpreadCell( this, di, 0, 0 );
             if ( cell->load( e, 0, 0 ) )
                 insertCell( cell );
             else
@@ -8005,7 +7985,7 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
         }
         else if ( !e.isNull() && e.tagName() == "object" )
         {
-            KSpreadChild *ch = new KSpreadChild( d->doc, this );
+            KSpreadChild *ch = new KSpreadChild( doc(), this );
             if ( ch->load( e ) )
                 insertChild( ch );
             else
@@ -8013,7 +7993,7 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
         }
         else if ( !e.isNull() && e.tagName() == "chart" )
         {
-            ChartChild *ch = new ChartChild( d->doc, this );
+            ChartChild *ch = new ChartChild( doc(), this );
             if ( ch->load( e ) )
                 insertChild( ch );
             else
@@ -8065,7 +8045,7 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
 
 bool KSpreadSheet::loadChildren( KoStore* _store )
 {
-    QPtrListIterator<KoDocumentChild> it( d->doc->children() );
+    QPtrListIterator<KoDocumentChild> it( doc()->children() );
     for( ; it.current(); ++it )
     {
         if ( ((KSpreadChild*)it.current())->sheet() == this )
@@ -8091,22 +8071,22 @@ void KSpreadSheet::addCellBinding( CellBinding *_bind )
 {
   d->cellBindings.append( _bind );
 
-  d->doc->setModified( true );
+  doc()->setModified( true );
 }
 
 void KSpreadSheet::removeCellBinding( CellBinding *_bind )
 {
   d->cellBindings.removeRef( _bind );
 
-  d->doc->setModified( true );
+  doc()->setModified( true );
 }
 
 KSpreadSheet* KSpreadSheet::findSheet( const QString & _name )
 {
-  if ( !d->workbook )
+  if ( !map() )
     return 0L;
 
-  return d->workbook->findSheet( _name );
+  return map()->findSheet( _name );
 }
 
 // ###### Torben: Use this one instead of d->cells.insert()
@@ -8191,22 +8171,22 @@ void KSpreadSheet::emit_updateColumn( ColumnFormat *_format, int _column )
 void KSpreadSheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _data )
 {
     kdDebug(36001) << "Creating document" << endl;
-    KoDocument* doc = _e.createDoc();
+    KoDocument* dd = _e.createDoc();
     kdDebug(36001) << "Created" << endl;
-    if ( !doc )
+    if ( !dd )
         // Error message is already displayed, so just return
         return;
 
     kdDebug(36001) << "NOW FETCHING INTERFACE" << endl;
 
-    if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
+    if ( !dd->initDoc(KoDocument::InitDocEmbedded) )
         return;
 
-    ChartChild * ch = new ChartChild( d->doc, this, doc, _rect );
+    ChartChild * ch = new ChartChild( doc(), this, dd, _rect );
     ch->setDataArea( _data );
     ch->update();
     ch->chart()->setCanChangeValue( false  );
-    // d->doc->insertChild( ch );
+    // doc()->insertChild( ch );
     //insertChild( ch );
 
     KoChart::WizardExtension * wiz = ch->chart()->wizardExtension();
@@ -8219,16 +8199,16 @@ void KSpreadSheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const Q
 
 void KSpreadSheet::insertChild( const QRect& _rect, KoDocumentEntry& _e )
 {
-    KoDocument* doc = _e.createDoc( d->doc );
-    if ( !doc )
+    KoDocument* d = _e.createDoc( doc() );
+    if ( !d )
     {
         kdDebug() << "Error inserting child!" << endl;
         return;
     }
-    if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
+    if ( !d->initDoc(KoDocument::InitDocEmbedded) )
         return;
 
-    KSpreadChild* ch = new KSpreadChild( d->doc, this, doc, _rect );
+    KSpreadChild* ch = new KSpreadChild( doc(), this, d, _rect );
 
     insertChild( ch );
 }
@@ -8236,7 +8216,7 @@ void KSpreadSheet::insertChild( const QRect& _rect, KoDocumentEntry& _e )
 void KSpreadSheet::insertChild( KSpreadChild *_child )
 {
     // m_lstChildren.append( _child );
-    d->doc->insertChild( _child );
+    doc()->insertChild( _child );
 
     /* TODO - handle this */
 //    emit sig_polygonInvalidated( _child->framePointArray() );
@@ -8272,7 +8252,7 @@ bool KSpreadSheet::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
 
-    QPtrListIterator<KoDocumentChild> it( d->doc->children() );
+    QPtrListIterator<KoDocumentChild> it( doc()->children() );
     for( ; it.current(); ++it )
     {
         if ( ((KSpreadChild*)it.current())->sheet() == this )
@@ -8386,7 +8366,7 @@ bool KSpreadSheet::setSheetName( const QString& name, bool init, bool /*makeUndo
     for ( ; it.current(); ++it )
         it.current()->changeCellTabName( old_name, name );
 
-    d->doc->changeAreaSheetName( old_name, name );
+    doc()->changeAreaSheetName( old_name, name );
     emit sig_nameChanged( this, old_name );
 
     setName(name.utf8());
@@ -8398,7 +8378,7 @@ bool KSpreadSheet::setSheetName( const QString& name, bool init, bool /*makeUndo
 
 void KSpreadSheet::updateLocale()
 {
-  d->doc->emitBeginOperation(true);
+  emitBeginOperation(true);
   setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
 
   KSpreadCell* c = d->cells.firstCell();
@@ -8408,7 +8388,7 @@ void KSpreadSheet::updateLocale()
       c->setDisplayText( _text );
   }
   emit sig_updateView( this );
-  //  d->doc->emitEndOperation();
+  //  doc()->emitEndOperation();
 }
 
 KSpreadCell* KSpreadSheet::getFirstCellColumn(int col) const

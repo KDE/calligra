@@ -229,17 +229,14 @@ protected:
  *
  */
 
-class Formula
+class Formula : public DocBase
 {
   public:
   
     /*
      * Creates a formula.
      */
-    Formula (KSpreadCell *_cell);
-    
-    /** create a formula without cell information */
-    Formula (KLocale *locale);
+    Formula (DocInfo *docinfo, KSpreadCell *_cell = 0);
     
     /*
      * Destroys the formula.

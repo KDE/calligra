@@ -25,30 +25,31 @@
 #include "tester.h"
 
 #include <kspread_value.h>
+#include <docbase.h>
 
 class KLocale;
 
 namespace KSpread
 {
 
-class FormulaParserTester: public Tester
+class FormulaParserTester: public Tester, public DocBase
 {
 public:
-  FormulaParserTester(KLocale *locale);
+  FormulaParserTester(DocInfo *docinfo);
   virtual QString name();
   virtual void run();
 private:
-  void checkParse( const char *file, int line, const char* msg, const QString&, const QString&, KLocale* );
+  void checkParse( const char *file, int line, const char* msg, const QString&, const QString& );
 };
 
-class FormulaEvalTester: public Tester
+class FormulaEvalTester: public Tester, public DocBase
 {
 public:
-  FormulaEvalTester(KLocale *locale);
+  FormulaEvalTester(DocInfo *docinfo);
   virtual QString name();
   virtual void run();
 private:
-  void checkEval( const char *file, int line, const char* msg, const QString&, const KSpreadValue&, KLocale* );
+  void checkEval( const char *file, int line, const char* msg, const QString&, const KSpreadValue& );
 };
 
 } // namespace KSpread

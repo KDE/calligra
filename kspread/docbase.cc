@@ -1,10 +1,10 @@
 /* This file is part of the KDE project
-   Copyright 2004 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
-   version 2 of the License.
+   version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,40 +17,24 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KSPREAD_TEST_RUNNER
-#define KSPREAD_TEST_RUNNER
+#include "docbase.h"
 
-#include <kdialogbase.h>
+#include "kspread_doc.h"
 
-class KLocale;
-class KSpreadSheet;
+using namespace KSpread;
 
-namespace KSpread
+DocBase::DocBase (DocInfo *priv)
 {
-
-struct DocInfo;
-
-class Tester;
-
-class TestRunner : public KDialogBase
-{
-Q_OBJECT
-
-public:
-  TestRunner(DocInfo *di, KSpreadSheet *sheet);
-  ~TestRunner();
-  
-  void addTester( Tester* tester );
-  
-private slots:
-  void runTest();
-  
-private:
-  class Private;
-  Private* d;
-};
-
+  di = priv;
 }
 
-#endif // KSPREAD_TEST_RUNNER
+void DocBase::emitBeginOperation (bool waitCursor)
+{
+  doc()->emitBeginOperation (waitCursor);
+}
+
+void DocBase::emitEndOperation ()
+{
+  doc()->emitEndOperation ();
+}
 

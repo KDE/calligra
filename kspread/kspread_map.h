@@ -21,7 +21,6 @@
 #define __kspread_map_h__
 
 class KSpreadChanges;
-class KSpreadDoc;
 class KSpreadMap;
 
 class KoStore;
@@ -41,19 +40,21 @@ class KoOasisSettings;
 #include <qintdict.h>
 #include <qobject.h>
 
+#include "docbase.h"
 #include "kspread_sheet.h"
 
 /**
   A map is a simple container for all sheets. Usually a complete map
   is saved in one file.
  */
-class KSPREAD_EXPORT KSpreadMap : public QObject
+class KSPREAD_EXPORT KSpreadMap : public QObject, public KSpread::DocBase
 {
+Q_OBJECT
 public:
   /**
    * Created an empty map.
    */
-  KSpreadMap( KSpreadDoc *_doc, const char* name = 0 );
+  KSpreadMap (KSpread::DocInfo *docinfo, const char* name = 0);
   /**
    * This deletes all sheets contained in this map.
    */
@@ -91,8 +92,17 @@ public:
   int initialMarkerColumn()const { return m_initialMarkerColumn; }
   int initialMarkerRow()const { return m_initialMarkerRow; }
 
+  /**
+   * @return a pointer to a new KSpreadSheet. The KSpreadSheet is not added
+   *         to the map nor added to the GUI.
+   */
+  KSpreadSheet * createSheet();
+  /** add sheet to the map, making it active */
   void addSheet( KSpreadSheet *_sheet );
 
+  /** add a new sheet to the map, returning a pointer to it */
+  KSpreadSheet *addNewSheet ();
+  
   /**
    * Use the @ref #nextSheet function to get all the other sheets.
    * Attention: Function is not reentrant.
@@ -134,8 +144,6 @@ public:
 
   virtual DCOPObject* dcopObject();
 
-  KSpreadDoc * doc()const;
-
   void takeSheet( KSpreadSheet * sheet );
   void insertSheet( KSpreadSheet * sheet );
 
@@ -144,17 +152,18 @@ public:
 
     static bool respectCase;
 
+signals:
+
+  /**
+   * Emitted if a new table is added to the document.
+   */
+  void sig_addSheet( KSpreadSheet *_table );
 private:
   /**
    * List of all sheets in this map. The list has autodelete turned on.
    */
   QPtrList<KSpreadSheet> m_lstSheets;
   QPtrList<KSpreadSheet> m_lstDeletedSheets;
-
-  /**
-   * Pointer to the part which holds this map.
-   */
-  KSpreadDoc *m_pDoc;
 
   /**
    * Password to protect the map from being changed.
@@ -166,6 +175,9 @@ private:
   KSpreadSheet * m_initialActiveSheet;
   int m_initialMarkerColumn;
   int m_initialMarkerRow;
+  
+  // used to give every KSpreadSheet a unique default name.
+  int tableId;
 
   DCOPObject* m_dcop;
 };

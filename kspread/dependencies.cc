@@ -22,6 +22,7 @@
 
 #include "formula.h"
 
+#include "docbase.h"
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
 
@@ -36,9 +37,9 @@ namespace KSpread {
 
 
 /** d-pointer of DependencyManager */
-class DependencyList {
+class DependencyList : public DocBase {
  public:
-  DependencyList (KSpreadSheet *s) { sheet = s; };
+  DependencyList (DocInfo *docinfo, KSpreadSheet *s);
   ~DependencyList () { reset (); };
   /** clear internal structures */
   void reset ();
@@ -102,9 +103,9 @@ class DependencyList {
 
 using namespace KSpread;
 
-DependencyManager::DependencyManager (KSpreadSheet *s)
+DependencyManager::DependencyManager (KSpreadSheet *s, DocInfo *di)
 {
-  deps = new DependencyList (s);
+  deps = new DependencyList (di, s);
 }
 
 DependencyManager::~DependencyManager ()
@@ -160,6 +161,11 @@ RangeList DependencyManager::getDependencies (const KSpreadPoint &cell)
 QValueList<KSpreadPoint> DependencyManager::getDependants (const KSpreadPoint &cell)
 {
   return deps->getDependants (cell);
+}
+
+DependencyList::DependencyList (DocInfo *docinfo, KSpreadSheet *s)
+    : DocBase (docinfo), sheet (s)
+{
 }
 
 void DependencyList::reset ()
@@ -549,7 +555,7 @@ RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
 
   //TODO: when the new parser is in use, KSpreadCell will hold a Formula
   //instance, hence we'll be able to use that one directly
-  Formula formula (c);
+  Formula formula (di, c);
   formula.setExpression (c->text());
   
   kdDebug(36001) << "Retrieving dependencies for cell with text \"" <<

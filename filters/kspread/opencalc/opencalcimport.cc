@@ -1430,8 +1430,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
       continue;
     }
 
-    table = m_doc->createSheet();
-    m_doc->addSheet( table );
+    table = m_doc->map()->addNewSheet();
 
     table->setSheetName( t.attributeNS( ooNS::table, "name", QString::null ), true, false );
     kdDebug()<<" table->name()"<<table->name()<<endl;

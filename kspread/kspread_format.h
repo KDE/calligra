@@ -359,8 +359,6 @@ public:
     KSpreadSheet* sheet() { return m_pSheet; }
     const KSpreadSheet* sheet() const { return m_pSheet; }
 
-    KLocale* locale()const;
-
     virtual bool hasProperty( Properties p, bool withoutParent = false ) const;
 
     /**

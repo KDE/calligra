@@ -90,12 +90,14 @@ KSpreadValue function_sin( const Formula* formula, QValueVector<KSpreadValue> ar
   Commented out as we have no locale available. The way used to handle
   locale pointers needs to be changed, we now have three zillions pointers
   all pointing to the same object...
+  Also, we don't have the converter ready ... That should be done by the
+  repository, before giving the call to us
   
   KSpreadValue result;
   if( args.count() != 1 )
     return KSpreadValue::errorVALUE();
     
-  KSpreadValue angle = ValueConverter::self()->asFloat( args[0] );
+  KSpreadValue angle = converter()->asFloat( args[0] );
   if( angle.isError() )
     return KSpreadValue::errorVALUE();
   

@@ -1461,15 +1461,17 @@ void CellFormatPageFloat::slotChangeState()
             list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),false);
             list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),true);
             QDateTime tmpTime (QDate (1, 1, 1900), QTime (10, 35, 25));
-            KSpread::ValueFormatter *fmt = KSpread::ValueFormatter::self();
-            list+= fmt->timeFormat(dlg->locale(), tmpTime, Time_format1);
-            list+= fmt->timeFormat(dlg->locale(), tmpTime, Time_format2);
-            list+= fmt->timeFormat(dlg->locale(), tmpTime, Time_format3);
-            list+= fmt->timeFormat(dlg->locale(), tmpTime, Time_format4);
-            list+= fmt->timeFormat(dlg->locale(), tmpTime, Time_format5);
-            list+= ( fmt->timeFormat(dlg->locale(), tmpTime, Time_format6) + i18n(" (=[mm]::ss)") );
-            list+= ( fmt->timeFormat(dlg->locale(), tmpTime, Time_format7) + i18n(" (=[hh]::mm::ss)") );
-            list+= ( fmt->timeFormat(dlg->locale(), tmpTime, Time_format8) + i18n(" (=[hh]::mm)") );
+
+
+            KSpread::ValueFormatter *fmt = dlg->getDoc()->formatter();
+            list+= fmt->timeFormat(tmpTime, Time_format1);
+            list+= fmt->timeFormat(tmpTime, Time_format2);
+            list+= fmt->timeFormat(tmpTime, Time_format3);
+            list+= fmt->timeFormat(tmpTime, Time_format4);
+            list+= fmt->timeFormat(tmpTime, Time_format5);
+            list+= ( fmt->timeFormat(tmpTime, Time_format6) + i18n(" (=[mm]::ss)") );
+            list+= ( fmt->timeFormat(tmpTime, Time_format7) + i18n(" (=[hh]::mm::ss)") );
+            list+= ( fmt->timeFormat(tmpTime, Time_format8) + i18n(" (=[hh]::mm)") );
             listFormat->insertStringList(list);
 
             if ( cellFormatType == Time_format )
@@ -1513,17 +1515,6 @@ void CellFormatPageFloat::slotChangeState()
     makeformat();
 }
 
-/*
-void CellFormatPageFloat::makeDateFormat()
-{
-    //baaaah...
-    KSpread::ValueFormatter *fmt = KSpread::ValueFormatter::self();
-    tmp= fmt->dateFormat( dlg->locale(), dlg->m_time.date(), tmpFormat);
-    exampleLabel->setText(tmp);
-}
-*/
-
-
 void CellFormatPageFloat::init()
 {
     QStringList list;
@@ -1532,50 +1523,52 @@ void CellFormatPageFloat::init()
     QDate tmpDate( 2000,2,18);
     list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), true);
     list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), false);
-    KSpread::ValueFormatter *fmt = KSpread::ValueFormatter::self();
+    
+    KSpread::ValueFormatter *fmt = dlg->getDoc()->formatter();
+
     /*18-Feb-00*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format1);
+    list+=fmt->dateFormat( tmpDate, date_format1);
     /*18-Feb-1999*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format2);
+    list+=fmt->dateFormat( tmpDate, date_format2);
     /*18-Feb*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format3);
+    list+=fmt->dateFormat( tmpDate, date_format3);
     /*18-2*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format4);
+    list+=fmt->dateFormat( tmpDate, date_format4);
     /*18/2/00*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format5);
+    list+=fmt->dateFormat( tmpDate, date_format5);
     /*18/5/1999*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format6);
+    list+=fmt->dateFormat( tmpDate, date_format6);
     /*Feb-99*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format7);
+    list+=fmt->dateFormat( tmpDate, date_format7);
     /*February-99*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format8);
+    list+=fmt->dateFormat( tmpDate, date_format8);
     /*February-1999*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format9);
+    list+=fmt->dateFormat( tmpDate, date_format9);
     /*F-99*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format10);
+    list+=fmt->dateFormat( tmpDate, date_format10);
     /*18/Feb*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format11);
+    list+=fmt->dateFormat( tmpDate, date_format11);
     /*18/2*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format12);
+    list+=fmt->dateFormat( tmpDate, date_format12);
     /*18/Feb/1999*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format13);
+    list+=fmt->dateFormat( tmpDate, date_format13);
     /*2000/Feb/18*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format14);
+    list+=fmt->dateFormat( tmpDate, date_format14);
     /*2000-Feb-18*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format15);
+    list+=fmt->dateFormat( tmpDate, date_format15);
     /*2000-2-18*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format16);
+    list+=fmt->dateFormat( tmpDate, date_format16);
     /*2 february 2000*/
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format17);
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format18);
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format19);
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format20);
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format21);
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format22);
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format23);
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format24);
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format25);
-    list+=fmt->dateFormat( dlg->locale(), tmpDate, date_format26);
+    list+=fmt->dateFormat( tmpDate, date_format17);
+    list+=fmt->dateFormat( tmpDate, date_format18);
+    list+=fmt->dateFormat( tmpDate, date_format19);
+    list+=fmt->dateFormat( tmpDate, date_format20);
+    list+=fmt->dateFormat( tmpDate, date_format21);
+    list+=fmt->dateFormat( tmpDate, date_format22);
+    list+=fmt->dateFormat( tmpDate, date_format23);
+    list+=fmt->dateFormat( tmpDate, date_format24);
+    list+=fmt->dateFormat( tmpDate, date_format25);
+    list+=fmt->dateFormat( tmpDate, date_format26);
 
     listFormat->insertStringList(list);
     if ( cellFormatType == ShortDate_format )
@@ -1743,8 +1736,8 @@ void CellFormatPageFloat::makeformat()
   QString tmp;
   
   updateFormatType();
-  KSpread::ValueFormatter *fmt = KSpread::ValueFormatter::self();
-  tmp = fmt->formatText (dlg->value, dlg->locale(), newFormatType,
+  KSpread::ValueFormatter *fmt = dlg->getDoc()->formatter();
+  tmp = fmt->formatText (dlg->value, newFormatType,
       precision->value());
   if (tmp.length() > 50)
     tmp = tmp.left (50);

@@ -22,6 +22,7 @@
 
 class KLocale;
 
+#include "docbase.h"
 #include "kspread_value.h"
 
 namespace KSpread {
@@ -31,25 +32,18 @@ The ValueConverter class can convert KSpreadValue between various different
 formats.
 */
 
-class ValueConverter {
+class ValueConverter : public DocBase {
  public:
-  /** returns an instance of this class */
-  static ValueConverter *self();
-  /** destructor */
-  ~ValueConverter ();
- 
-  KSpreadValue asBoolean (const KSpreadValue &value, KLocale *locale) const;
-  KSpreadValue asInteger (const KSpreadValue &value, KLocale *locale) const;
-  KSpreadValue asFloat (const KSpreadValue &value, KLocale *locale) const;
-  KSpreadValue asString (const KSpreadValue &value, KLocale *locale) const;
-  KSpreadValue asDateTime (const KSpreadValue &value, KLocale *locale) const;
-  KSpreadValue asDate (const KSpreadValue &value, KLocale *locale) const;
-  KSpreadValue asTime (const KSpreadValue &value, KLocale *locale) const;
- 
- protected:
   /** constructor */
-  ValueConverter ();
-  static ValueConverter *_self;
+  ValueConverter (DocInfo *docinfo);
+ 
+  KSpreadValue asBoolean (const KSpreadValue &value) const;
+  KSpreadValue asInteger (const KSpreadValue &value) const;
+  KSpreadValue asFloat (const KSpreadValue &value) const;
+  KSpreadValue asString (const KSpreadValue &value) const;
+  KSpreadValue asDateTime (const KSpreadValue &value) const;
+  KSpreadValue asDate (const KSpreadValue &value) const;
+  KSpreadValue asTime (const KSpreadValue &value) const;
 };
 
 

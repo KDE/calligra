@@ -67,6 +67,8 @@ class KSpellConfig;
 
 #include <kspread_global.h>
 
+#include "docbase.h"
+
 #include <koscript_context.h>
 
 #define MIME_TYPE "application/x-kspread"
@@ -97,7 +99,8 @@ class DocPrivate;
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSPREAD_EXPORT KSpreadDoc : public KoDocument, public KoZoomHandler
+class KSPREAD_EXPORT KSpreadDoc : public KoDocument, public KoZoomHandler,
+    public KSpread::DocBase
 {
   Q_OBJECT
   Q_PROPERTY( bool getShowRowHeader READ getShowRowHeader )
@@ -136,16 +139,6 @@ public:
    * Returns list of all documents.
    */
   static QValueList<KSpreadDoc*> documents();
-
-  /**
-   * Returns the workbook which holds all the sheets.
-   */
-  KSpreadMap* workbook() const;
-
-  /**
-   * \deprecated Use workbook().
-   */
-  KSpreadMap* map() const { return workbook(); }
 
   /**
    * Returns the MIME type of KSpread document.
@@ -198,11 +191,6 @@ public:
   KoCommandHistory* commandHistory();
 
   /**
-   * Returns the style manager for this document.
-   */
-  KSpreadStyleManager* styleManager();
-
-  /**
    * Returns the unit used to display margins.
    */
   KoUnit::Unit unit() const;
@@ -228,11 +216,6 @@ public:
    * \deprecated Use unitName().
    */
   QString getUnitName() const { return unitName(); }
-
-  /**
-   * Returns the locale which was used for creating this document.
-   */
-  KLocale* locale();
 
   /**
    * Returns the syntax version of the currently opened file
@@ -465,22 +448,6 @@ public:
 
   virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
 
-
-  /**
-   * @return a pointer to a new KSpreadSheet. The KSpreadSheet is not added to the map
-   *         nor added to the GUI.
-   */
-  KSpreadSheet * createSheet();
-
-  /**
-   * Adds a KSpreadSheet to the GUI and makes it active. In addition the KSpreadSheet is
-   * added to the map.
-   *
-   * @see KSpreadView
-   * @see KSpreadMap
-   */
-  void addSheet( KSpreadSheet * _sheet );
-
   /**
    * Change the zoom factor to @p z (e.g. 150 for 150%)
    * and/or change the resolution, given in DPI.
@@ -674,10 +641,6 @@ public slots:
 
 signals:
   // Document signals
-  /**
-   * Emitted if a new sheet is added to the document.
-   */
-  void sig_addSheet( KSpreadSheet *_sheet );
   /**
    * Emitted if all views have to be updated.
    */

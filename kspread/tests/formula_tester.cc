@@ -23,16 +23,14 @@
 #include <formula.h>
 #include <kspread_value.h>
 
-KLocale *t_locale;
-
-#define CHECK_PARSE(x,y)  checkParse(__FILE__,__LINE__,#x,x,y,t_locale)
-#define CHECK_EVAL(x,y)  checkEval(__FILE__,__LINE__,#x,x,y,t_locale)
+#define CHECK_PARSE(x,y)  checkParse(__FILE__,__LINE__,#x,x,y)
+#define CHECK_EVAL(x,y)  checkEval(__FILE__,__LINE__,#x,x,y)
 
 using namespace KSpread;
 
-FormulaParserTester::FormulaParserTester(::KLocale *locale): Tester()
+FormulaParserTester::FormulaParserTester(DocInfo *docinfo): Tester(),
+    DocBase (docinfo)
 {
-  t_locale = locale;
 }
 
 QString FormulaParserTester::name()
@@ -84,11 +82,11 @@ static QString describeTokenCodes( const QString& tokenCodes )
 }
 
 void FormulaParserTester::checkParse( const char *file, int line, const char* msg, 
-  const QString& formula, const QString& tokenCodes, ::KLocale *locale )
+  const QString& formula, const QString& tokenCodes )
 {
   testCount++;
   
-  Formula f (locale);
+  Formula f (di);
   QString expr = formula;
   expr.prepend( '=' );
   f.setExpression( expr );
@@ -167,9 +165,9 @@ void FormulaParserTester::run()
   CHECK_PARSE( "+1.23E", QString::null );  
 }
 
-FormulaEvalTester::FormulaEvalTester(KLocale *locale): Tester()
+FormulaEvalTester::FormulaEvalTester(DocInfo *docinfo): Tester(),
+    DocBase(docinfo)
 {
-  t_locale = locale;
 }
 
 QString FormulaEvalTester::name()
@@ -178,11 +176,11 @@ QString FormulaEvalTester::name()
 }
 
 void FormulaEvalTester::checkEval( const char *file, int line, const char* msg, 
-  const QString& formula, const KSpreadValue& expected, KLocale *locale )
+  const QString& formula, const KSpreadValue& expected )
 {
   testCount++;
   
-  Formula f (locale);
+  Formula f (di);
   QString expr = formula;
   expr.prepend( '=' );
   f.setExpression( expr );

@@ -75,7 +75,6 @@ class CanvasPrivate
     int  length_text;
 
     KSpreadView *view;
-    KSpreadDoc* doc;
     QTimer* scrollTimer;
 };
 
@@ -87,8 +86,9 @@ class CanvasPrivate
  *
  ****************************************************************/
 
-KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* _doc )
-  : QWidget( _parent, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase ),
+KSpreadCanvas::KSpreadCanvas (KSpreadView *_view, KSpread::DocInfo *docinfo)
+  : QWidget( _view, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase ),
+    DocBase (docinfo),
     m_dragStart( -1, -1 ),
     m_dragging( false )
 {
@@ -110,7 +110,6 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
   m_dXOffset = 0.0;
   m_dYOffset = 0.0;
   d->view = _view;
-  d->doc = _doc;
   // m_eAction = DefaultAction;
   m_eMouseAction = NoAction;
   m_bGeometryStarted = false;
@@ -146,11 +145,6 @@ KSpreadCanvas::~KSpreadCanvas()
 KSpreadView* KSpreadCanvas::view() const
 {
   return d->view;
-}
-
-KSpreadDoc* KSpreadCanvas::doc() const
-{
-  return d->doc;
 }
 
 bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
@@ -289,7 +283,7 @@ QScrollBar* KSpreadCanvas::vertScrollBar() const
 
 KSpreadSheet* KSpreadCanvas::findSheet( const QString& _name ) const
 {
-  return d->doc->map()->findSheet( _name );
+  return map()->findSheet( _name );
 }
 
 KSpreadSheet* KSpreadCanvas::activeSheet() const
@@ -987,7 +981,7 @@ void KSpreadCanvas::processLeftClickAnchor()
     }
     else
     {
-        gotoLocation( KSpreadPoint( m_strAnchor, d->doc->map() ) );
+        gotoLocation( KSpreadPoint( m_strAnchor, map() ) );
     }
 }
 
@@ -1283,7 +1277,7 @@ void KSpreadCanvas::wheelEvent( QWheelEvent* _ev )
 
 void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 {
-  if ( d->doc->isLoading() )
+  if ( doc()->isLoading() )
     return;
 
   KSpreadSheet* sheet = activeSheet();
@@ -1322,9 +1316,9 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 
   QRect vr( QPoint(left_col, top_row),
             QPoint(right_col, bottom_row) );
-  d->view->doc()->emitBeginOperation( false );
+  doc()->emitBeginOperation( false );
   sheet->setRegionPaintDirty( vr );
-  d->view->doc()->emitEndOperation( vr );
+  doc()->emitEndOperation( vr );
 }
 
 void KSpreadCanvas::focusInEvent( QFocusEvent* )
@@ -1444,13 +1438,13 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
   {
     if ( KSpreadTextDrag::target() == _ev->source() )
     {
-      if ( !d->doc->undoLocked() )
+      if ( !doc()->undoLocked() )
       {
         KSpreadUndoDragDrop * undo
-          = new KSpreadUndoDragDrop( d->doc, sheet, selectionInfo()->selection(),
+          = new KSpreadUndoDragDrop( doc(), sheet, selectionInfo()->selection(),
                                      QRect( col, row, selectionInfo()->selection().width(),
                                             selectionInfo()->selection().height() ) );
-        d->doc->addCommand( undo );
+        doc()->addCommand( undo );
         makeUndo = false;
       }
       sheet->deleteSelection( selectionInfo(), false );
@@ -1694,7 +1688,7 @@ void KSpreadCanvas::processEnterKey(QKeyEvent* event)
      direction, not extends the selection
   */
   QRect r( moveDirection( direction, false ) );
-  d->doc->emitEndOperation( r );
+  doc()->emitEndOperation( r );
 }
 
 void KSpreadCanvas::processArrowKey( QKeyEvent *event)
@@ -1746,7 +1740,7 @@ void KSpreadCanvas::processArrowKey( QKeyEvent *event)
   }
 
   QRect r( moveDirection( direction, makingSelection ) );
-  d->doc->emitEndOperation( r );
+  doc()->emitEndOperation( r );
 }
 
 void KSpreadCanvas::processEscapeKey(QKeyEvent * event)
@@ -1757,7 +1751,7 @@ void KSpreadCanvas::processEscapeKey(QKeyEvent * event)
   event->accept(); // ?
   QPoint cursor = cursorPos();
 
-  d->doc->emitEndOperation( QRect( cursor, cursor ) );
+  doc()->emitEndOperation( QRect( cursor, cursor ) );
 }
 
 bool KSpreadCanvas::processHomeKey(QKeyEvent* event)
@@ -1813,7 +1807,7 @@ bool KSpreadCanvas::processHomeKey(QKeyEvent* event)
 
     if ( selectionInfo()->marker() == destination )
     {
-      d->doc->emitEndOperation( QRect( destination, destination ) );
+      doc()->emitEndOperation( QRect( destination, destination ) );
       return false;
     }
 
@@ -1840,7 +1834,7 @@ bool KSpreadCanvas::processEndKey( QKeyEvent *event )
     if ( m_pEditor->inherits("KSpreadTextEditor") )
       QApplication::sendEvent( m_pEditWidget, event );
     // TODO: What to do for a formula editor ?
-    d->doc->emitEndOperation( QRect( marker, marker ) );
+    doc()->emitEndOperation( QRect( marker, marker ) );
     return false;
   }
   else
@@ -1858,7 +1852,7 @@ bool KSpreadCanvas::processEndKey( QKeyEvent *event )
     QPoint destination( col, marker.y() );
     if ( destination == marker )
     {
-      d->doc->emitEndOperation( QRect( destination, destination ) );
+      doc()->emitEndOperation( QRect( destination, destination ) );
       return false;
     }
 
@@ -1881,7 +1875,7 @@ bool KSpreadCanvas::processPriorKey(QKeyEvent *event)
   QPoint destination(marker.x(), QMAX(1, marker.y() - 10));
   if ( destination == marker )
   {
-    d->doc->emitEndOperation( QRect( destination, destination ) );
+    doc()->emitEndOperation( QRect( destination, destination ) );
     return false;
   }
 
@@ -1905,7 +1899,7 @@ bool KSpreadCanvas::processNextKey(QKeyEvent *event)
 
   if ( marker == destination )
   {
-    d->doc->emitEndOperation( QRect( destination, destination ) );
+    doc()->emitEndOperation( QRect( destination, destination ) );
     return false;
   }
 
@@ -1921,7 +1915,7 @@ void KSpreadCanvas::processDeleteKey(QKeyEvent* /* event */)
 
   QPoint cursor = cursorPos();
 
-  d->doc->emitEndOperation( QRect( cursor, cursor ) );
+  doc()->emitEndOperation( QRect( cursor, cursor ) );
   return;
 }
 
@@ -1935,7 +1929,7 @@ void KSpreadCanvas::processF2Key(QKeyEvent* /* event */)
 
   QPoint cursor = cursorPos();
 
-  d->doc->emitEndOperation( QRect( cursor, cursor ) );
+  doc()->emitEndOperation( QRect( cursor, cursor ) );
   return;
 }
 
@@ -1951,7 +1945,7 @@ void KSpreadCanvas::processF4Key(QKeyEvent* event)
   }
   QPoint cursor = cursorPos();
 
-  d->doc->emitEndOperation( QRect( cursor, cursor ) );
+  doc()->emitEndOperation( QRect( cursor, cursor ) );
   return;
 }
 
@@ -1977,7 +1971,7 @@ void KSpreadCanvas::processOtherKey(QKeyEvent *event)
 
   QPoint cursor = cursorPos();
 
-  d->doc->emitEndOperation( QRect( cursor, cursor ) );
+  doc()->emitEndOperation( QRect( cursor, cursor ) );
 
   return;
 }
@@ -2286,7 +2280,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
 
   if ( marker == destination )
   {
-    d->doc->emitEndOperation( QRect( destination, destination ) );
+    doc()->emitEndOperation( QRect( destination, destination ) );
     return false;
   }
 
@@ -2318,7 +2312,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   // passed to the parent.
   _ev->accept();
 
-  d->doc->emitBeginOperation(false);
+  emitBeginOperation(false);
   switch( _ev->key() )
   {
    case Key_Return:
@@ -2392,13 +2386,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
   //most process*Key methods call emitEndOperation, this only gets called in some situations
   // (after some move operations)
-  d->doc->emitEndOperation( sheet->visibleRect( this ) );
+  doc()->emitEndOperation( sheet->visibleRect( this ) );
   return;
 }
 
 void KSpreadCanvas::processIMEvent( QIMEvent * event )
 {
-  d->doc->emitBeginOperation( false );
+  emitBeginOperation( false );
   if ( !m_pEditor && !m_bChoose )
   {
     // Switch to editing mode
@@ -2418,7 +2412,7 @@ void KSpreadCanvas::processIMEvent( QIMEvent * event )
   else
     cursor = selectionInfo()->cursorPosition();
 
-  d->doc->emitEndOperation( QRect( cursor, cursor ) );
+  doc()->emitEndOperation( QRect( cursor, cursor ) );
 }
 
 bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
@@ -2436,16 +2430,16 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
   KSpreadSheet * sheet = activeSheet();
   QRect rect = selection();
 
-  d->doc->emitBeginOperation(false);
+  emitBeginOperation(false);
   sheet->setRegionPaintDirty( rect );
   int right  = rect.right();
   int bottom = rect.bottom();
 
-  if ( !d->doc->undoLocked() )
+  if ( !doc()->undoLocked() )
   {
     QString dummy;
-    KSpreadUndoCellFormat * undo = new KSpreadUndoCellFormat( d->doc, sheet, rect, dummy );
-    d->doc->addCommand( undo );
+    KSpreadUndoCellFormat * undo = new KSpreadUndoCellFormat( doc(), sheet, rect, dummy );
+    doc()->addCommand( undo );
   }
 
   if ( util_isRowSelected(selection()) )
@@ -2476,7 +2470,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
 
        case Key_Dollar:
         rw->setFormatType (Money_format);
-        rw->setPrecision( d->doc->locale()->fracDigits() );
+        rw->setPrecision( doc()->locale()->fracDigits() );
         break;
 
        case Key_Percent:
@@ -2509,13 +2503,13 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        default:
-         d->doc->emitEndOperation( rect );
+         doc()->emitEndOperation( rect );
         return false;
       }
       sheet->emit_updateRow( rw, r );
     }
 
-    d->doc->emitEndOperation( rect );
+    doc()->emitEndOperation( rect );
     return true;
   }
 
@@ -2548,7 +2542,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
 
        case Key_Dollar:
         cw->setFormatType( Money_format );
-        cw->setPrecision( d->doc->locale()->fracDigits() );
+        cw->setPrecision( doc()->locale()->fracDigits() );
         break;
 
        case Key_Percent:
@@ -2581,12 +2575,12 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
         break;
 
        default:
-         d->doc->emitEndOperation( rect );
+         doc()->emitEndOperation( rect );
          return false;
       }
       sheet->emit_updateColumn( cw, c );
     }
-    d->doc->emitEndOperation( rect );
+    doc()->emitEndOperation( rect );
     return true;
   }
 
@@ -2604,7 +2598,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
   } // for top .. bottom
   _ev->accept();
 
-  d->doc->emitEndOperation( rect );
+  doc()->emitEndOperation( rect );
   return true;
 }
 
@@ -2920,10 +2914,10 @@ void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newA
     selectionInfo()->setChooseCursor(sheet, newMarker);
   }
 
-  d->doc->emitBeginOperation();
+  emitBeginOperation();
   setSelectionChangePaintDirty(sheet, oldChooseRect, newChooseRect);
   repaint();
-  d->doc->emitEndOperation();
+  doc()->emitEndOperation();
 
   /* this signal is used in the formula editor to update the text display */
   emit d->view->sig_chooseSelectionChanged(activeSheet(), newChooseRect);
@@ -3448,7 +3442,7 @@ void KSpreadCanvas::clipoutChildren( QPainter& painter, QWMatrix& matrix )
   if ( rgn.isEmpty() )
     rgn = QRegion( QRect( 0, 0, width(), height() ) );
 
-  QPtrListIterator<KoDocumentChild> itChild( d->doc->children() );
+  QPtrListIterator<KoDocumentChild> itChild( doc()->children() );
   for( ; itChild.current(); ++itChild )
   {
 //    if ( ((KSpreadChild*)it.current())->sheet() == sheet &&
@@ -3464,7 +3458,7 @@ void KSpreadCanvas::clipoutChildren( QPainter& painter, QWMatrix& matrix )
 void KSpreadCanvas::paintChildren( QPainter& painter, QWMatrix& matrix )
 {
   painter.setWorldMatrix( matrix );
-  QPtrListIterator<KoDocumentChild> itChild( d->doc->children() );
+  QPtrListIterator<KoDocumentChild> itChild( doc()->children() );
   itChild.toFirst();
   for( ; itChild.current(); ++itChild )
   {
@@ -3473,8 +3467,8 @@ void KSpreadCanvas::paintChildren( QPainter& painter, QWMatrix& matrix )
     {
       // #### todo: paint only if child is visible inside rect
       painter.save();
-      d->doc->paintChild( itChild.current(), painter, d->view,
-        d->doc->zoomedResolutionX(), d->doc->zoomedResolutionY() );
+      doc()->paintChild( itChild.current(), painter, d->view,
+        doc()->zoomedResolutionX(), doc()->zoomedResolutionY() );
       painter.restore();
     }
   }

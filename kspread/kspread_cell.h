@@ -53,6 +53,7 @@ class KSpreadGenValidationStyles;
 #include <qstrlist.h>
 #include <qdatetime.h>
 
+#include "docbase.h"
 #include "kspread_format.h"
 #include "kspread_global.h"
 #include "kspread_condition.h"
@@ -106,15 +107,16 @@ class CellPrivate;
  * default cell. @ref #isDefault tells wether a cell is the default one
  * or not.
  */
-class KSPREAD_EXPORT KSpreadCell : public KSpreadFormat
+class KSPREAD_EXPORT KSpreadCell : public KSpreadFormat,
+    public KSpread::DocBase
 {
   friend class SelectPrivate;
   friend class KSpreadConditions;
 public:
 
-    KSpreadCell( KSpreadSheet *_sheet, int _column, int _row );
-    KSpreadCell( KSpreadSheet *_sheet, KSpreadStyle * _style,
-		 int _column, int _row );
+  KSpreadCell (KSpreadSheet *_sheet, KSpread::DocInfo *docinfo, int _column, int _row);
+  KSpreadCell (KSpreadSheet *_sheet, KSpread::DocInfo *docinfo,
+        KSpreadStyle * _style, int _column, int _row);
 
     /**
      * @see #sheetDies
@@ -466,6 +468,11 @@ public:
      * @reimp
      */
     void setBottomBorderPen( const QPen& p );
+
+    /**
+     * @reimp
+     */
+    virtual void setCurrency( int type, QString const & symbol );
 
     //////////////////////
     //

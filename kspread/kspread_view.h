@@ -33,6 +33,7 @@
 #include <qvaluelist.h>
 
 #include <koView.h>
+#include "docbase.h"
 
 class QScrollBar;
 
@@ -76,66 +77,42 @@ class Damage;
  *  \li tab bar to select active worksheet
  *
  */
-class KSPREAD_EXPORT KSpreadView : public KoView
+class KSPREAD_EXPORT KSpreadView : public KoView, public KSpread::DocBase
 {
     friend class KSpreadCanvas;
 
     Q_OBJECT
 public:
 
-    /**
-     * Creates a new view.
-     */
-    KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc *_doc );
+    /** Creates a new view */
+    KSpreadView( QWidget *_parent, const char *_name,
+        KSpread::DocInfo *docinfo );
 
-    /**
-     * Destroys the view.
-     */
+    /** Destroys the view */
     ~KSpreadView();
 
-    /**
-     * Returns the corresponding document for this view.
-     */
-    KSpreadDoc* doc() const;
-
-    /**
-     * Returns the canvas of the view.
-     */
+    /** Returns the canvas of the view */
     KSpreadCanvas* canvasWidget() const;
 
-    /**
-     * Returns the column header.
-     */
+    /** Returns the column header */
     KSpreadHBorder* hBorderWidget() const;
 
-    /**
-     * Returns the row header.
-     */
+    /** Returns the row header */
     KSpreadVBorder* vBorderWidget() const;
 
-    /**
-     * Returns the horizontal scrollbar.
-     */
+    /** Returns the horizontal scrollbar */
     QScrollBar* horzScrollBar() const;
 
-    /**
-     * Returns the vertical scrollbar.
-     */
+    /** Returns the vertical scrollbar */
     QScrollBar* vertScrollBar() const;
 
-    /**
-     * Returns the editor widget.
-     */
+    /** Returns the editor widget */
     KSpreadEditWidget* editWidget() const;
 
-    /**
-     * Returns the location widget.
-     */
+    /** Returns the location widget */
     KSpreadComboboxLocationEditWidget* posWidget() const;
 
-    /**
-     * Returns the tab bar.
-     */
+    /** Returns the tab bar */
     KoTabBar* tabBar() const;
 
     void setZoom( int zoom, bool updateViews ); // change the zoom value

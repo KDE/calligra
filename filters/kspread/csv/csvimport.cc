@@ -32,6 +32,7 @@
 #include <koFilterManager.h>
 #include <kspread_doc.h>
 #include <kspread_global.h>
+#include <kspread_map.h>
 #include <kspread_sheet.h>
 #include <kspread_style.h>
 #include <kspread_style_manager.h>
@@ -109,8 +110,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     ElapsedTime t( "Filling data into document" );
 
     KSpreadCell *cell;
-    KSpreadSheet *sheet=ksdoc->createSheet();
-    ksdoc->addSheet(sheet);
+    KSpreadSheet *sheet=ksdoc->map()->addNewSheet();
 
     int numRows = dialog->getRows();
     int numCols = dialog->getCols();

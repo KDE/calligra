@@ -20,9 +20,8 @@
 #ifndef KSPREAD_VALUECALC
 #define KSPREAD_VALUECALC
 
+#include "docbase.h"
 #include "kspread_value.h"
-
-class KLocale;
 
 namespace KSpread {
 
@@ -36,14 +35,9 @@ on all datatypes, but since all of them can be applied on both
 doubles and GnuMP-based numbers, that is not of much concern ;)
 */
 
-class ValueCalc {
+class ValueCalc : public DocBase {
  public:
-  static void setLocale (KLocale *l) { locale = l; };
-
-  /** returns an instance of this class */
-  static ValueCalc *self();
-  /** destructor */
-  ~ValueCalc ();
+  ValueCalc (DocInfo *docinfo);
 
   /** basic arithmetic operations */
   KSpreadValue add (const KSpreadValue &a, const KSpreadValue &b);
@@ -70,13 +64,8 @@ class ValueCalc {
   KSpreadValue min (const KSpreadValue &range);
 
  protected:
-  ValueCalc() {};
-  static ValueCalc *_self;
-
   /** return result formatting, based on these two values */
   KSpreadValue::Format format (KSpreadValue::Format a, KSpreadValue::Format b);
-
-  static KLocale *locale;
 };
 
 }  //namespace KSpread

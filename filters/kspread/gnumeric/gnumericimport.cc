@@ -36,6 +36,7 @@
 
 // hehe >:->
 #include <kspread_doc.h>
+#include <kspread_map.h>
 #include <kspread_sheet.h>
 #include <kspread_sheetprint.h>
 #include <kspread_cell.h>
@@ -953,11 +954,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, KSpreadCell * ksp
   int lastPos = 0;
 
   if (formatString[l - 1] == '%')
-  {
     kspread_cell->setFormatType(Percentage_format);
-	//TODO fixme !!!!!!
-    //kspread_cell->setFactor(100);
-  }
   else if (formatString[0] == '$')
   {
     kspread_cell->setFormatType(Money_format);
@@ -1933,9 +1930,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     while (!sheet.isNull())
     {
         ++currentTab;
-	table = ksdoc->createSheet();
-
-	ksdoc->addSheet(table);
+        table = ksdoc->map()->addNewSheet();
 
         if ( currentTab == selectedTab )
           selTable = table;

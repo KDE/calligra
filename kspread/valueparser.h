@@ -23,11 +23,11 @@
 
 #include <qdatetime.h>
 
+#include "docbase.h"
 #include "kspread_global.h"
 #include "kspread_value.h"
 
 class KSpreadCell;
-class KLocale;
 
 namespace KSpread {
 
@@ -35,29 +35,24 @@ namespace KSpread {
 /**
 The ValueParser parses a text input from the user, generating
 KSpreadValue in the desired format.
-It follows the Singleton pattern.
 */
 
-class ValueParser {
+class ValueParser : public DocBase {
  public:
-  /** returns an instance of this class */
-  static ValueParser *self();
-  /** destructor */
-  ~ValueParser ();
+  /** constructor */
+  ValueParser (DocInfo *docinfo);
   
   /** try to parse the text in a given cell and set value accordingly */
   void parse (const QString& str, KSpreadCell *cell);
 
   /** try to parse given text, don't set any cell attributes though */
-  KSpreadValue parse (const QString &str, KLocale *locale);
+  KSpreadValue parse (const QString &str);
   
-  KSpreadValue tryParseBool (const QString& str, KLocale *locale, bool *ok = 0);
-  KSpreadValue tryParseNumber (const QString& str, KLocale *locale, bool *ok = 0);
-  KSpreadValue tryParseDate (const QString& str, KLocale *locale, bool *ok = 0);
-  KSpreadValue tryParseTime (const QString& str, KLocale *locale, bool *ok = 0);
+  KSpreadValue tryParseBool (const QString& str, bool *ok = 0);
+  KSpreadValue tryParseNumber (const QString& str, bool *ok = 0);
+  KSpreadValue tryParseDate (const QString& str, bool *ok = 0);
+  KSpreadValue tryParseTime (const QString& str, bool *ok = 0);
  protected:
-  ValueParser() {};
-  static ValueParser *_self;
 
   // Try to parse the text as a bool/number/date/time/etc.
   // Helpers for parse.
@@ -67,8 +62,8 @@ class ValueParser {
   bool tryParseTime (const QString& str, KSpreadCell *cell);
   
   /** converts a string to a date/time value */
-  QDateTime readTime (const QString & intstr, KLocale * locale,
-      bool withSeconds, bool * ok, bool & duration);
+  QDateTime readTime (const QString & intstr, bool withSeconds, bool *ok,
+      bool & duration);
 
   /** a helper function to read integers */
   int readInt (const QString &str, uint &pos);

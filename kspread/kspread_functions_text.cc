@@ -39,6 +39,8 @@
 #include "kspread_util.h"
 #include "kspread_value.h"
 #include "valueconverter.h"
+// this is due to one ugly hack below:
+#include "docbase.h"
 
 // prototypes
 bool kspreadfunc_char( KSContext& context );
@@ -907,7 +909,11 @@ bool kspreadfunc_t( KSContext& context )
   else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
     val.setValue (args[0]->boolValue());
     
-  val = KSpread::ValueConverter::self()->asString (val, KGlobal::locale());
+  KSpread::DocInfo di;
+  di.locale = KGlobal::locale();
+  KSpread::ValueConverter converter (&di);
+
+  val = converter.asString (val);
   
   context.setValue( new KSValue( val.asString() ));
   return true;
@@ -955,7 +961,11 @@ bool kspreadfunc_text( KSContext& context )
   else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
     val.setValue (args[0]->boolValue());
     
-  val = KSpread::ValueConverter::self()->asString (val, KGlobal::locale());
+  KSpread::DocInfo di;
+  di.locale = KGlobal::locale();
+  KSpread::ValueConverter converter (&di);
+
+  val = converter.asString (val);
   
   context.setValue( new KSValue( val.asString() ));
   return true;
@@ -1054,7 +1064,11 @@ bool kspreadfunc_value( KSContext& context )
   else if( KSUtil::checkType( context, args[0], KSValue::BoolType, false ) )
     val.setValue (args[0]->boolValue());
     
-  val = KSpread::ValueConverter::self()->asFloat (val, KGlobal::locale());
+  KSpread::DocInfo di;
+  di.locale = KGlobal::locale();
+  KSpread::ValueConverter converter (&di);
+
+  val = converter.asString (val);
   
   context.setValue( new KSValue( val.asFloat() ));
   

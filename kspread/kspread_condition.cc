@@ -23,11 +23,11 @@
 
 #include "kspread_cell.h"
 #include "kspread_condition.h"
-#include "kspread_doc.h"
-#include "kspread_sheet.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
 #include "kspread_util.h"
+
+#include <koGenStyles.h>
 
 #include <koxmlwriter.h>
 #include <koxmlns.h>
@@ -406,7 +406,7 @@ void KSpreadConditions::loadOasisConditions( const QDomElement & element )
 {
     kdDebug()<<"void KSpreadConditions::loadOasisConditions( const QDomElement & element )\n";
     QDomElement elementItem( element );
-    KSpreadStyleManager * manager = m_cell->sheet()->doc()->styleManager();
+    KSpreadStyleManager * manager = m_cell->styleManager();
 
     while ( !elementItem.isNull() )
     {
@@ -553,7 +553,7 @@ void KSpreadConditions::loadConditions( const QDomElement & element )
   QDomNodeList nodeList = element.childNodes();
   KSpreadConditional newCondition;
   bool ok;
-  KSpreadStyleManager * manager = m_cell->sheet()->doc()->styleManager();
+  KSpreadStyleManager * manager = m_cell->styleManager();
 
   for ( int i = 0; i < (int)(nodeList.length()); ++i )
   {

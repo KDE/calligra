@@ -28,30 +28,14 @@
 #include <kcalendarsystem.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kstaticdeleter.h>
 
 #include <float.h>
 #include <math.h>
 
 using namespace KSpread;
 
-ValueFormatter* ValueFormatter::_self = 0;
-static KStaticDeleter<ValueFormatter> valueformatter_sd;
-
-ValueFormatter::ValueFormatter ()
+ValueFormatter::ValueFormatter (DocInfo *docinfo) : DocBase (docinfo)
 {
-}
-
-ValueFormatter::~ValueFormatter ()
-{
-  _self = 0;
-}
-
-ValueFormatter * ValueFormatter::self ()
-{
-  if (!_self)
-    valueformatter_sd.setObject( _self, new ValueFormatter() );
-  return _self;
 }
 
 QString ValueFormatter::formatText (KSpreadCell *cell, FormatType fmtType)
@@ -67,17 +51,17 @@ QString ValueFormatter::formatText (KSpreadCell *cell, FormatType fmtType)
   QString prefix = cell->prefix (cell->column(), cell->row());
   QString postfix = cell->postfix (cell->column(), cell->row());
 
-  return formatText (cell->value(), cell->locale(), fmtType, precision,
+  return formatText (cell->value(), fmtType, precision,
       floatFormat, prefix, postfix);
 }
 
-QString ValueFormatter::formatText (const KSpreadValue &value, KLocale *locale,
+QString ValueFormatter::formatText (const KSpreadValue &value,
     FormatType fmtType, int precision, KSpreadFormat::FloatFormat floatFormat,
     const QString &prefix, const QString &postfix)
 {
   //if we have an array, use its first element
   if (value.isArray())
-    return formatText (value.element (0, 0), locale, fmtType, precision,
+    return formatText (value.element (0, 0), fmtType, precision,
         floatFormat, prefix, postfix);
 
   QString str;
@@ -90,18 +74,18 @@ QString ValueFormatter::formatText (const KSpreadValue &value, KLocale *locale,
   //text
   if (fmtType == Text_format)
   {
-    str = ValueConverter::self()->asString (value, locale).asString();
+    str = converter()->asString (value).asString();
     if (!str.isEmpty() && str[0]=='\'' )
       str = str.mid(1);
   }
   
   //date
   else if (formatIsDate (fmtType))
-    str = dateFormat (locale, value.asDate(), fmtType);
+    str = dateFormat (value.asDate(), fmtType);
     
   //time
   else if (formatIsTime (fmtType))
-    str = timeFormat (locale, value.asDateTime(), fmtType);
+    str = timeFormat (value.asDateTime(), fmtType);
     
   //fraction
   else if (formatIsFraction (fmtType))
@@ -110,26 +94,25 @@ QString ValueFormatter::formatText (const KSpreadValue &value, KLocale *locale,
   //another
   else
   {
-    QChar decimal_point = locale->decimalSymbol()[0];
+    QChar decimal_point = locale()->decimalSymbol()[0];
     if ( decimal_point.isNull() )
       decimal_point = '.';
 
     //some cell parameters ...
-    double v = ValueConverter::self()->asFloat (value, locale).asFloat();
+    double v = converter()->asFloat (value).asFloat();
 
     // Always unsigned ?
     if ((floatFormat == KSpreadCell::AlwaysUnsigned) && (v < 0.0))
       v *= -1.0;
 
     // Make a string out of it.
-    str = createNumberFormat (locale, v,
-      precision, locale->currencySymbol(), fmtType,
-      (floatFormat == KSpreadCell::AlwaysSigned));
+    str = createNumberFormat (v, precision, fmtType,
+        (floatFormat == KSpreadCell::AlwaysSigned));
 
     // Remove trailing zeros and the decimal point if necessary
     // unless the number has no decimal point
     if (precision == -1)
-      removeTrailingZeros (str, locale, decimal_point);
+      removeTrailingZeros (str, decimal_point);
   }
     
   if (!prefix.isEmpty())
@@ -211,20 +194,19 @@ FormatType ValueFormatter::determineFormatting (const KSpreadValue &value,
 }
 
 
-void ValueFormatter::removeTrailingZeros (QString &str, KLocale *locale,
-    QChar decimal_point)
+void ValueFormatter::removeTrailingZeros (QString &str, QChar decimal_point)
 {
   if (str.find (decimal_point) < 0)
     //no decimal point -> nothing to do
     return;
   
   int start = 0;
+  int cslen = locale()->currencySymbol().length();
   if (str.find ('%') != -1)
     start = 2;
-  else if (str.find (locale->currencySymbol()) ==
-      ((int) (str.length() -
-      locale->currencySymbol().length())))
-    start = locale->currencySymbol().length() + 1;
+  else if (str.find (locale()->currencySymbol()) ==
+      ((int) (str.length() - cslen)))
+    start = cslen + 1;
   else if ((start = str.find ('E')) != -1)
     start = str.length() - start;
   else
@@ -246,8 +228,7 @@ void ValueFormatter::removeTrailingZeros (QString &str, KLocale *locale,
   }
 }
 
-QString ValueFormatter::createNumberFormat (KLocale *locale,
-    double value, int precision, const QString &currencySymbol,
+QString ValueFormatter::createNumberFormat ( double value, int precision,
     FormatType fmt, bool alwaysSigned)
 {
   // if precision is -1, ask for a huge number of decimals, we'll remove
@@ -278,16 +259,17 @@ QString ValueFormatter::createNumberFormat (KLocale *locale,
   switch (fmt)
   {
     case Number_format:
-      localizedNumber = locale->formatNumber(value, p);
+      localizedNumber = locale()->formatNumber(value, p);
       break;
     case Percentage_format:
-      localizedNumber = locale->formatNumber (value, p)+ " %";
+      localizedNumber = locale()->formatNumber (value, p)+ " %";
       break;
     case Money_format:
-      localizedNumber = locale->formatMoney (value, currencySymbol, p );
+      localizedNumber = locale()->formatMoney (value, 
+          locale()->currencySymbol(), p );
       break;
     case Scientific_format:
-      decimal_point = locale->decimalSymbol()[0];
+      decimal_point = locale()->decimalSymbol()[0];
       localizedNumber = QString::number (value, 'E', p);
       if ((pos = localizedNumber.find ('.')) != -1)
         localizedNumber = localizedNumber.replace (pos, 1, decimal_point);
@@ -300,7 +282,7 @@ QString ValueFormatter::createNumberFormat (KLocale *locale,
 
   //prepend positive sign if needed
   if (alwaysSigned && value >= 0 )
-    if (locale->positiveSign().isEmpty())
+    if (locale()->positiveSign().isEmpty())
       localizedNumber='+'+localizedNumber;
 
   return localizedNumber;
@@ -427,14 +409,13 @@ QString ValueFormatter::fractionFormat (double value, FormatType fmtType)
   }
 }
 
-QString ValueFormatter::timeFormat (KLocale * locale, const QDateTime &dt,
-    FormatType fmtType)
+QString ValueFormatter::timeFormat (const QDateTime &dt, FormatType fmtType)
 {
   if (fmtType == Time_format)
-    return locale->formatTime(dt.time(), false);
+    return locale()->formatTime(dt.time(), false);
 
   if (fmtType == SecondeTime_format)
-    return locale->formatTime(dt.time(), true);
+    return locale()->formatTime(dt.time(), true);
 
   int h = dt.time().hour();
   int m = dt.time().minute();
@@ -499,32 +480,31 @@ QString ValueFormatter::timeFormat (KLocale * locale, const QDateTime &dt,
     return QString("%1:%2").arg(h, 1).arg(minute, 2);
   }
 
-  return locale->formatTime( dt.time(), false );
+  return locale()->formatTime( dt.time(), false );
 }
 
-QString ValueFormatter::dateFormat (KLocale *locale, const QDate &date,
-    FormatType fmtType)
+QString ValueFormatter::dateFormat (const QDate &date, FormatType fmtType)
 {
   QString tmp;
   if (fmtType == ShortDate_format) {
-    tmp = locale->formatDate(date, true);
+    tmp = locale()->formatDate(date, true);
   }
   else if (fmtType == TextDate_format) {
-    tmp = locale->formatDate(date, false);
+    tmp = locale()->formatDate(date, false);
   }
   else if (fmtType == date_format1) {  /*18-Feb-99 */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "-" + locale->calendar()->monthString(date, true) + "-";
+    tmp += "-" + locale()->calendar()->monthString(date, true) + "-";
     tmp += QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format2) {  /*18-Feb-1999 */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "-" + locale->calendar()->monthString(date, true) + "-";
+    tmp += "-" + locale()->calendar()->monthString(date, true) + "-";
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format3) {  /*18-Feb */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "-" + locale->calendar()->monthString(date, true);
+    tmp += "-" + locale()->calendar()->monthString(date, true);
   }
   else if (fmtType == date_format4) {  /*18-05 */
     tmp = QString().sprintf("%02d", date.day());
@@ -541,24 +521,24 @@ QString ValueFormatter::dateFormat (KLocale *locale, const QDate &date,
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format7) {  /*Feb-99 */
-    tmp = locale->calendar()->monthString(date, true) + "-";
+    tmp = locale()->calendar()->monthString(date, true) + "-";
     tmp += QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format8) {  /*February-99 */
-    tmp = locale->calendar()->monthString(date, false) + "-";
+    tmp = locale()->calendar()->monthString(date, false) + "-";
     tmp += QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format9) {  /*February-1999 */
-    tmp = locale->calendar()->monthString(date, false) + "-";
+    tmp = locale()->calendar()->monthString(date, false) + "-";
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format10) {  /*F-99 */
-    tmp = locale->calendar()->monthString(date, false).at(0) + "-";
+    tmp = locale()->calendar()->monthString(date, false).at(0) + "-";
     tmp += QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format11) {  /*18/Feb */
     tmp = QString().sprintf("%02d", date.day()) + "/";
-    tmp += locale->calendar()->monthString(date, true);
+    tmp += locale()->calendar()->monthString(date, true);
   }
   else if (fmtType == date_format12) {  /*18/02 */
     tmp = QString().sprintf("%02d", date.day()) + "/";
@@ -566,17 +546,17 @@ QString ValueFormatter::dateFormat (KLocale *locale, const QDate &date,
   }
   else if (fmtType == date_format13) {  /*18/Feb/1999 */
     tmp = QString().sprintf("%02d", date.day());
-    tmp += "/" + locale->calendar()->monthString(date, true) + "/";
+    tmp += "/" + locale()->calendar()->monthString(date, true) + "/";
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format14) {  /*2000/Feb/18 */
     tmp = QString::number(date.year());
-    tmp += "/" + locale->calendar()->monthString(date, true) + "/";
+    tmp += "/" + locale()->calendar()->monthString(date, true) + "/";
     tmp += QString().sprintf("%02d", date.day());
   }
   else if (fmtType == date_format15) {  /*2000-Feb-18 */
     tmp = QString::number(date.year());
-    tmp += "-" + locale->calendar()->monthString(date, true) + "-";
+    tmp += "-" + locale()->calendar()->monthString(date, true) + "-";
     tmp += QString().sprintf("%02d", date.day());
   }
   else if (fmtType == date_format16) {  /*2000-02-18 */
@@ -586,7 +566,7 @@ QString ValueFormatter::dateFormat (KLocale *locale, const QDate &date,
   }
   else if (fmtType == date_format17) {  /*2 february 2000 */
     tmp = QString().sprintf("%d", date.day());
-    tmp += " " + locale->calendar()->monthString(date, false) + " ";
+    tmp += " " + locale()->calendar()->monthString(date, false) + " ";
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format18) {  /*02/18/1999 */
@@ -600,17 +580,17 @@ QString ValueFormatter::dateFormat (KLocale *locale, const QDate &date,
     tmp += "/" + QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format20) {  /*Feb/18/99 */
-    tmp = locale->calendar()->monthString(date, true);
+    tmp = locale()->calendar()->monthString(date, true);
     tmp += "/" + QString().sprintf("%02d", date.day());
     tmp += "/" + QString::number(date.year()).right(2);
   }
   else if (fmtType == date_format21) {  /*Feb/18/1999 */
-    tmp = locale->calendar()->monthString(date, true);
+    tmp = locale()->calendar()->monthString(date, true);
     tmp += "/" + QString().sprintf("%02d", date.day());
     tmp += "/" + QString::number(date.year());
   }
   else if (fmtType == date_format22) {  /*Feb-1999 */
-    tmp = locale->calendar()->monthString(date, true) + "-";
+    tmp = locale()->calendar()->monthString(date, true) + "-";
     tmp += QString::number(date.year());
   }
   else if (fmtType == date_format23) {  /*1999 */
@@ -626,11 +606,11 @@ QString ValueFormatter::dateFormat (KLocale *locale, const QDate &date,
   }
   else if (fmtType == date_format26) {  /*2000/Feb/18 */
     tmp = QString::number(date.year());
-    tmp += "/" + locale->calendar()->monthString(date, true);
+    tmp += "/" + locale()->calendar()->monthString(date, true);
     tmp += "/" + QString().sprintf("%02d", date.day());
   }
   else
-    tmp = locale->formatDate(date, true);
+    tmp = locale()->formatDate(date, true);
 
   // Missing compared with gnumeric:
   //  "m/d/yy h:mm",    /* 20 */

@@ -65,7 +65,12 @@
 #include "commands.h"
 #include "ksploadinginfo.h"
 #include "damages.h"
+
+#include "docbase.h"
 #include "valuecalc.h"
+#include "valueconverter.h"
+#include "valueformatter.h"
+#include "valueparser.h"
 
 #include "KSpreadDocIface.h"
 
@@ -84,18 +89,14 @@ class DocPrivate
 {
 public:
 
-  KSpreadMap* workbook;
-  KSpreadStyleManager* styleManager;
+  DocInfo *docinfo;
+
   KSpreadSheet *activeSheet;
     KSPLoadingInfo *m_loadingInfo;
   static QValueList<KSpreadDoc*> s_docs;
   static int s_docId;
 
   DCOPObject* dcop;
-
-
-  // used to give every KSpreadSheet a unique default name.
-  int sheetId;
 
   // URL of the this part. This variable is only set if the load() function
   // had been called with an URL as argument.
@@ -134,7 +135,6 @@ public:
   QValueList<KSpread::Damage*> damages;
 
   // document properties
-  KSpreadLocale locale;
   KoUnit::Unit unit;
   int syntaxVersion;
   bool verticalScrollBar:1;
@@ -169,13 +169,26 @@ QValueList<KSpreadDoc*> DocPrivate::s_docs;
 int DocPrivate::s_docId = 0;
 
 KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-  : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+  : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+  DocBase (0)
 {
   d = new DocPrivate;
   d->m_loadingInfo = 0L;
-  d->workbook = new KSpreadMap( this, "Map" );
-  d->styleManager = new KSpreadStyleManager();
-  d->activeSheet= 0;
+  
+  d->docinfo = new DocInfo;
+  d->docinfo->doc = this;
+  di = d->docinfo;
+
+  d->docinfo->map = new KSpreadMap( d->docinfo, "Map" );
+  d->docinfo->styleManager = new KSpreadStyleManager();
+  d->docinfo->locale = new KSpreadLocale;
+
+  d->docinfo->parser = new KSpread::ValueParser (d->docinfo);
+  d->docinfo->formatter = new KSpread::ValueFormatter (d->docinfo);
+  d->docinfo->converter = new KSpread::ValueConverter (d->docinfo);
+  d->docinfo->calc = new KSpread::ValueCalc (d->docinfo);
+  
+  d->activeSheet = 0;
 
   d->pageBorderColor = Qt::red;
   d->configLoadFromFile = false;
@@ -192,7 +205,6 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   setInstance( KSpreadFactory::global(), false );
 
-  d->sheetId = 1;
   d->dcop = 0;
   d->isLoading = false;
   d->numOperations = 1; // don't start repainting before the GUI is done...
@@ -241,9 +253,6 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->spellConfig = 0;
   d->dontCheckUpperWord = false;
   d->dontCheckTitleCase = false;
-
-  //set locale for ValueCalc
-  KSpread::ValueCalc::self()->setLocale (&d->locale);
 }
 
 KSpreadDoc::~KSpreadDoc()
@@ -260,9 +269,16 @@ KSpreadDoc::~KSpreadDoc()
 
   delete d->commandHistory;
 
-  delete d->workbook;
-  delete d->styleManager;
   delete d->spellConfig;
+
+  delete d->docinfo->locale;
+  delete d->docinfo->map;
+  delete d->docinfo->styleManager;
+  delete d->docinfo->parser;
+  delete d->docinfo->formatter;
+  delete d->docinfo->converter;
+  delete d->docinfo->calc;
+  delete d->docinfo;
 
   delete d;
 }
@@ -291,15 +307,12 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
         }
 
         for( int i=0; i<_page; i++ )
-        {
-                KSpreadSheet *t = createSheet();
-                d->workbook->addSheet( t );
-        }
+          KSpreadSheet *t = map()->addNewSheet();
 
         resetURL();
         setEmpty();
         initConfig();
-        d->styleManager->createBuiltinStyles();
+        styleManager()->createBuiltinStyles();
 
         return true;
     }
@@ -330,16 +343,13 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 		_page=config->readNumEntry( "NbPage",1 ) ;
 	}
 
-	for( int i=0; i<_page; i++ )
-	{
-		KSpreadSheet *t = createSheet();
-		d->workbook->addSheet( t );
-	}
+  for( int i=0; i<_page; i++ )
+    map()->addNewSheet ();
 
 	resetURL();
 	setEmpty();
 	initConfig();
-        d->styleManager->createBuiltinStyles();
+        styleManager()->createBuiltinStyles();
 	return true;
     }
 
@@ -403,16 +413,6 @@ void KSpreadDoc::initConfig()
     setZoomAndResolution( m_zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 
-KSpreadMap* KSpreadDoc::workbook() const
-{
-  return d->workbook;
-}
-
-KSpreadStyleManager* KSpreadDoc::styleManager()
-{
-  return d->styleManager;
-}
-
 int KSpreadDoc::syntaxVersion() const
 {
   return d->syntaxVersion;
@@ -438,11 +438,6 @@ void KSpreadDoc::changePageBorderColor( const QColor  & _color)
   d->pageBorderColor = _color;
 }
 
-KLocale *KSpreadDoc::locale()
-{
-  return &d->locale;
-}
-
 KSContext& KSpreadDoc::context()
 {
   d->context.setException( 0 );
@@ -463,12 +458,12 @@ KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
 {
     if ( name == 0 )
         name = "View";
-    return new KSpreadView( parent, name, this );
+    return new KSpreadView( parent, name, d->docinfo );
 }
 
 bool KSpreadDoc::saveChildren( KoStore* _store )
 {
-  return d->workbook->saveChildren( _store );
+  return map()->saveChildren( _store );
 }
 
 QDomDocument KSpreadDoc::saveXML()
@@ -498,7 +493,7 @@ QDomDocument KSpreadDoc::saveXML()
        for the whole map as the map paper layout. */
     if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
     {
-        KSpreadSheetPrint* printObject = d->workbook->firstSheet()->print();
+        KSpreadSheetPrint* printObject = map()->firstSheet()->print();
 
         QDomElement paper = doc.createElement( "paper" );
         paper.setAttribute( "format", printObject->paperFormatString() );
@@ -552,7 +547,7 @@ QDomDocument KSpreadDoc::saveXML()
         }
     }
 
-    QDomElement dlocale = d->locale.save( doc );
+    QDomElement dlocale = ((KSpreadLocale *)locale())->save( doc );
     spread.appendChild( dlocale );
 
     if (d->refs.count() != 0 )
@@ -595,10 +590,10 @@ QDomDocument KSpreadDoc::saveXML()
         spread.appendChild( data );
     }
 
-    QDomElement s = d->styleManager->save( doc );
+    QDomElement s = styleManager()->save( doc );
     spread.appendChild( s );
 
-    QDomElement e = d->workbook->save( doc );
+    QDomElement e = map()->save( doc );
     spread.appendChild( e );
 
     setModified( false );
@@ -608,7 +603,7 @@ QDomDocument KSpreadDoc::saveXML()
 
 bool KSpreadDoc::loadChildren( KoStore* _store )
 {
-    return d->workbook->loadChildren( _store );
+    return map()->loadChildren( _store );
 }
 
 bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
@@ -642,8 +637,8 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.startElement( "office:body" );
 	contentTmpWriter.startElement( "office:spreadsheet" );
 
-    d->workbook->saveOasis( contentTmpWriter, mainStyles );
-    d->styleManager->saveOasis( mainStyles );
+    map()->saveOasis( contentTmpWriter, mainStyles );
+    styleManager()->saveOasis( mainStyles );
 
     saveOasisAreaName( contentTmpWriter );
     contentTmpWriter.endElement(); ////office:spreadsheet
@@ -789,7 +784,7 @@ void KSpreadDoc::loadOasisSettings( const QDomDocument&settingsDoc )
     {
         setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
     }
-    d->workbook->loadOasisSettings( settings );
+    map()->loadOasisSettings( settings );
     loadOasisIgnoreList( settings );
 }
 
@@ -798,7 +793,7 @@ void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
     settingsWriter.startElement("config:config-item-map-indexed");
     settingsWriter.addAttribute("config:name", "Views");
     settingsWriter.startElement( "config:config-item-map-entry" );
-    d->workbook->saveOasisSettings( settingsWriter );
+    map()->saveOasisSettings( settingsWriter );
     settingsWriter.endElement();
     settingsWriter.endElement();
 }
@@ -913,14 +908,14 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         return false;
     }
     //load in first
-    d->styleManager->loadOasisStyleTemplate( oasisStyles );
+    styleManager()->loadOasisStyleTemplate( oasisStyles );
 
     // TODO check versions and mimetypes etc.
     loadOasisAreaName( body );
     loadOasisCellValidation( body );
 
     // all <sheet:sheet> goes to workbook
-    if ( !d->workbook->loadOasis( body, oasisStyles ) )
+    if ( !map()->loadOasis( body, oasisStyles ) )
     {
         d->isLoading = false;
         deleteLoadingInfo();
@@ -974,9 +969,9 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   }
 
   // <locale>
-  QDomElement locale = spread.namedItem( "locale" ).toElement();
-  if ( !locale.isNull() )
-      d->locale.load( locale );
+  QDomElement loc = spread.namedItem( "locale" ).toElement();
+  if ( !loc.isNull() )
+      ((KSpreadLocale *) locale())->load( loc );
 
   emit sigProgress( 5 );
 
@@ -1021,12 +1016,12 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
   emit sigProgress( 40 );
   // In case of reload (e.g. from konqueror)
-  d->workbook->sheetList().clear(); // it's set to autoDelete
+  map()->sheetList().clear(); // it's set to autoDelete
 
   QDomElement styles = spread.namedItem( "styles" ).toElement();
   if ( !styles.isNull() )
   {
-    if ( !d->styleManager->loadXML( styles ) )
+    if ( !styleManager()->loadXML( styles ) )
     {
       setErrorMessage( i18n( "Styles cannot be loaded." ) );
       d->isLoading = false;
@@ -1042,7 +1037,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       d->isLoading = false;
       return false;
   }
-  if ( !d->workbook->loadXML( mymap ) )
+  if ( !map()->loadXML( mymap ) )
   {
       d->isLoading = false;
       return false;
@@ -1102,8 +1097,8 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
     float top = borders.attribute( "top" ).toFloat();
     float bottom = borders.attribute( "bottom" ).toFloat();
 
-    //apply to all sheets
-    QPtrListIterator<KSpreadSheet> it ( d->workbook->sheetList() );
+    //apply to all sheet
+    QPtrListIterator<KSpreadSheet> it ( map()->sheetList() );
     for( ; it.current(); ++it )
     {
       it.current()->print()->setPaperLayout( left, top, right, bottom,
@@ -1149,7 +1144,7 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
   fcenter = fcenter.replace( "<table>", "<sheet>" );
   fright  = fright.replace(  "<table>", "<sheet>" );
 
-  QPtrListIterator<KSpreadSheet> it ( d->workbook->sheetList() );
+  QPtrListIterator<KSpreadSheet> it ( map()->sheetList() );
   for( ; it.current(); ++it )
   {
     it.current()->print()->setHeadFootLine( hleft, hcenter, hright,
@@ -1163,7 +1158,7 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 
   d->isLoading = false;
 
-  //  d->workbook->update();
+  //  map()->update();
 
   QPtrListIterator<KoView> it( views() );
   for (; it.current(); ++it )
@@ -1411,16 +1406,6 @@ QStringList KSpreadDoc::spellListIgnoreAll() const
   return d->spellListIgnoreAll;
 }
 
-KSpreadSheet* KSpreadDoc::createSheet()
-{
-  QString s( i18n("Sheet%1") );
-  s = s.arg( d->sheetId++ );
-  //KSpreadSheet *t = new KSpreadSheet( d->workbook, s.latin1() );
-  KSpreadSheet *t = new KSpreadSheet( d->workbook, s,s.utf8() );
-  t->setSheetName( s, TRUE ); // huh? (Werner)
-  return t;
-}
-
 void KSpreadDoc::resetInterpreter()
 {
   destroyInterpreter();
@@ -1429,20 +1414,11 @@ void KSpreadDoc::resetInterpreter()
   // Update the cell content
   // TODO
   /* KSpreadSheet *t;
-  for ( t = d->workbook->firstSheet(); t != 0L; t = d->workbook->nextSheet() )
+  for ( t = map()->firstSheet(); t != 0L; t = map()->nextSheet() )
   t->initInterpreter(); */
 
   // Perhaps something changed. Lets repaint
   emit sig_updateView();
-}
-
-void KSpreadDoc::addSheet( KSpreadSheet *_sheet )
-{
-  d->workbook->addSheet( _sheet );
-
-  setModified( TRUE );
-
-  emit sig_addSheet( _sheet );
 }
 
 void KSpreadDoc::setZoomAndResolution( int zoom, int dpiX, int dpiY )
@@ -1590,7 +1566,7 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     // choose sheet: the first or the active
     KSpreadSheet* sheet = 0L;
     if ( !d->activeSheet )
-        sheet = d->workbook->firstSheet();
+        sheet = map()->firstSheet();
     else
         sheet = d->activeSheet;
     if ( !sheet )
@@ -1666,8 +1642,8 @@ void KSpreadDoc::paintUpdates()
     view->paintUpdates();
   }
 
-  for (sheet = d->workbook->firstSheet(); sheet != NULL;
-       sheet = d->workbook->nextSheet())
+  for (sheet = map()->firstSheet(); sheet != NULL;
+       sheet = map()->nextSheet())
   {
     sheet->clearPaintDirtyData();
   }
@@ -2332,7 +2308,7 @@ void KSpreadDoc::emitEndOperation()
    {
      d->numOperations = 0;
      d->delayCalculation = false;
-     for ( t = d->workbook->firstSheet(); t != NULL; t = d->workbook->nextSheet() )
+     for ( t = map()->firstSheet(); t != NULL; t = map()->nextSheet() )
      {
        //       ElapsedTime etm( "Updating table..." );
        t->update();

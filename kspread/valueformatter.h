@@ -20,6 +20,7 @@
 #ifndef KSPREAD_VALUEFORMATTER
 #define KSPREAD_VALUEFORMATTER
 
+#include "docbase.h"
 #include "kspread_global.h"
 #include "kspread_format.h"
 #include "kspread_value.h"
@@ -33,42 +34,39 @@ namespace KSpread {
 
 /**
 The ValueFormatter class generates a textual representation of
-data stored in a KSpreadValue, with a given formatting
-It follows the Singleton pattern.
+data stored in a KSpreadValue, with a given formatting.
 */
 
-class ValueFormatter {
+class ValueFormatter : public DocBase {
  public:
-   /** returns an instance of this class */
-  static ValueFormatter *self ();
-   /** destructor */
-   ~ValueFormatter ();
+  /** copnstructor */
+  ValueFormatter (DocInfo *docinfo);
 
   /** create a text representation of data in this cell */
   QString formatText (KSpreadCell *cell, FormatType fmtType);
 
   /** create a text representation of data in this KSpreadValue */
-  QString formatText (const KSpreadValue &value, KLocale *locale,
+  QString formatText (const KSpreadValue &value,
       FormatType fmtType, int precision = -1,
       KSpreadFormat::FloatFormat floatFormat = KSpreadFormat::OnlyNegSigned,
       const QString &prefix = QString::null,
       const QString &postfix = QString::null);
 
   /** create a date format */
-  QString dateFormat (KLocale* locale, const QDate &_date, FormatType fmtType);
+  QString dateFormat (const QDate &_date, FormatType fmtType);
   
   /** create a time format */
-  QString timeFormat (KLocale* locale, const QDateTime &_time,
-      FormatType fmtType);
+  QString timeFormat (const QDateTime &_time, FormatType fmtType);
   
  protected:
-  /** determine the formatting type that should be used to format this value in a cell with a given
-    format type */
-  FormatType determineFormatting (const KSpreadValue &value, FormatType fmtType);
+  /** determine the formatting type that should be used to format this value
+  in a cell with a given format type */
+  FormatType determineFormatting (const KSpreadValue &value,
+      FormatType fmtType);
 
   /** create a number format */
-  QString createNumberFormat (KLocale *locale, double value, int precision,
-      const QString &currencySymbol, FormatType fmt, bool alwaysSigned);
+  QString createNumberFormat (double value, int precision, FormatType fmt,
+      bool alwaysSigned);
   
   /** create a fraction format */
   QString fractionFormat (double value, FormatType fmtType);
@@ -77,11 +75,7 @@ class ValueFormatter {
 
   /** Remove trailing zeros and the decimal point if necessary
   unless the number has no decimal point */
-  void removeTrailingZeros (QString &str, KLocale *locale,
-      QChar decimal_point);
-  
-  ValueFormatter ();
-  static ValueFormatter *_self;
+  void removeTrailingZeros (QString &str, QChar decimal_point);
 };
 
 
