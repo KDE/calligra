@@ -682,6 +682,11 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
         int pgNum = pageNum();
         frameStyle.addProperty( "text:anchor-page-number", pgNum + 1 ); // OASIS starts at 1
     }
+    frameStyle.addProperty( "fo:border-left", m_borderLeft.saveFoBorder() );
+    frameStyle.addProperty( "fo:border-right", m_borderRight.saveFoBorder() );
+    frameStyle.addProperty( "fo:border-top", m_borderTop.saveFoBorder() );
+    frameStyle.addProperty( "fo:border-bottom", m_borderBottom.saveFoBorder() );
+
     return mainStyles.lookup( frameStyle, "fr" );
 }
 
