@@ -1169,3 +1169,24 @@ void KWJoinCellCommand::unexecute()
     doc->layout();
     doc->repaintAllViews();
 }
+
+
+KWChangeVariableSettingCommand::KWChangeVariableSettingCommand( const QString &name, KWDocument *_doc, int _oldVarOffset, int _newVarOffset):
+    KCommand(name),
+    m_doc(_doc),
+    oldVarOffset(_oldVarOffset),
+    newVarOffset(_newVarOffset)
+{
+}
+
+void KWChangeVariableSettingCommand::execute()
+{
+    m_doc->getVariableCollection()->variableSetting()->setNumberOffset(newVarOffset);
+    m_doc->recalcVariables( VT_PGNUM );
+}
+
+void KWChangeVariableSettingCommand::unexecute()
+{
+    m_doc->getVariableCollection()->variableSetting()->setNumberOffset(oldVarOffset);
+    m_doc->recalcVariables( VT_PGNUM );
+}

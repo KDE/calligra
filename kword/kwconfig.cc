@@ -42,6 +42,7 @@
 #include <float.h>
 #include <koVariable.h>
 #include <knumvalidator.h>
+#include <kwcommand.h>
 
 KWConfig::KWConfig( KWView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
@@ -426,9 +427,9 @@ void ConfigureMiscPage::apply()
     int newVarOffset=m_variableNumberOffset->text().toInt();
     if(newVarOffset!=m_oldVariableOffset)
     {
-        doc->getVariableCollection()->variableSetting()->setNumberOffset(newVarOffset);
-        doc->recalcVariables( VT_PGNUM );
-        doc->setModified(true);
+        KWChangeVariableSettingCommand *cmd = new KWChangeVariableSettingCommand( i18n("Change starting page number"), doc, m_oldVariableOffset,newVarOffset );
+        cmd->execute();
+        doc->addCommand(cmd);
     }
 }
 

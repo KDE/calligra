@@ -437,4 +437,21 @@ protected:
     QPtrList<KWFrame> m_copyFrame;
 };
 
+/**
+ * Command to change variable setting
+ */
+class KWChangeVariableSettingCommand : public KCommand
+{
+public:
+    KWChangeVariableSettingCommand( const QString &name, KWDocument *_doc, int _oldVarOffset, int _newVarOffset);
+    ~KWChangeVariableSettingCommand(){}
+
+    void execute();
+    void unexecute();
+protected:
+    KWDocument *m_doc;
+    int oldVarOffset;
+    int newVarOffset;
+};
+
 #endif
