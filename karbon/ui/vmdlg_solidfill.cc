@@ -30,6 +30,7 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	mColorSelector = new KHSSelector( mRGBWidget );
 	mColorSelector->setMinimumHeight(165);
 	mColorSelector->setMinimumWidth(165);
+	connect( mColorSelector, SIGNAL( valueChanged( int, int ) ), this, SLOT( slotHSChanged( int, int ) ) );
 	mainLayout->addMultiCellWidget (mColorSelector, 0, 2, 0, 0);
 
 	//Selector
@@ -37,6 +38,7 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	mSelector->setColors( QColor( "white" ), QColor( "black" ) );
 	mSelector->setMinimumWidth(12);
 	//TODO: Make it autochange color if the solid-filled object is selected (also for QSpinBoxes)
+	connect( mSelector, SIGNAL( valueChanged( int ) ), this, SLOT( slotVChanged( int ) ) );
 	mainLayout->addMultiCellWidget (mSelector, 0, 2, 1, 1);
 
 	//Reference
@@ -62,11 +64,8 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	QLabel *mGreenText = new QLabel(i18n("G:"), cgroupbox);
 	QLabel *mBlueText = new QLabel(i18n("B:"), cgroupbox);
 	mRed = new QSpinBox( 0, 255, 1, cgroupbox);
-	mRed->setValue( color.red() );
 	mGreen = new QSpinBox( 0, 255, 1, cgroupbox);
-	mGreen->setValue( color.green() );
 	mBlue = new QSpinBox( 0, 255, 1, cgroupbox);
-	mBlue->setValue( color.blue() );
 	connect( mRed, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mGreen, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
@@ -99,18 +98,64 @@ VMDlgSolidFill::VMDlgSolidFill( KarbonPart *part ) : QTabDialog ( 0L, 0, true ),
 	mainLayout->activate();
 	addTab(mRGBWidget, i18n("RGB"));
 	setFixedSize(baseSize());
+
+	mRed->setValue( color.red() );
+	mGreen->setValue( color.green() );
+	mBlue->setValue( color.blue() );
 }
 
 void VMDlgSolidFill::slotUpdateFromRGBSpinBoxes()
 {
-	mColorPreview->setColor( QColor( mRed->value(), mGreen->value(), mBlue->value(), QColor::Rgb ) );
+	QColor color( mRed->value(), mGreen->value(), mBlue->value(), QColor::Rgb );
+    mColorPreview->setColor( color );
 	mColorPreview->update();
+
+	// set HSV
+	mHue->blockSignals( true );
+	mSaturation->blockSignals( true );
+	mValue->blockSignals( true );
+
+	int h, s, v;
+	color.hsv( &h, &s, &v );
+	mHue->setValue( h );
+	mSaturation->setValue( s );
+	mValue->setValue( v );
+
+	// update gradient selector
+	mSelector->blockSignals( true );
+	mColorSelector->setValues( h, s );
+	slotHSChanged( h, s );
+	mSelector->setValue( ( float( mValue->value() ) / 255.0 ) * 99.0 );
+	mSelector->blockSignals( false );
+
+	mHue->blockSignals( false );
+	mSaturation->blockSignals( false );
+	mValue->blockSignals( false );
 }
 
 void VMDlgSolidFill::slotUpdateFromHSVSpinBoxes()
 {
-	mColorPreview->setColor( QColor( mHue->value(), mSaturation->value(), mValue->value(), QColor::Hsv ) );
+    QColor color( mHue->value(), mSaturation->value(), mValue->value(), QColor::Hsv );
+    mColorPreview->setColor( color );
 	mColorPreview->update();
+
+	// update gradient selector
+	mSelector->blockSignals( true );
+	mSelector->setValue( ( float( mValue->value() ) / 255.0 ) * 99.0 );
+	mSelector->blockSignals( false );
+
+	// set RGB
+	mRed->blockSignals( true );
+	mGreen->blockSignals( true );
+	mBlue->blockSignals( true );
+
+	mRed->setValue( color.red() );
+	mGreen->setValue( color.green() );
+	mBlue->setValue( color.blue() );
+
+	mRed->blockSignals( false );
+	mGreen->blockSignals( false );
+	mBlue->blockSignals( false );
 }
 
 void VMDlgSolidFill::slotApplyButtonPressed()
@@ -127,9 +172,25 @@ void VMDlgSolidFill::slotApplyButtonPressed()
 
 void VMDlgSolidFill::slotUpdate(QColor *color)
 {
-	mRed->setValue( color->red() );
+	/*mRed->setValue( color->red() );
 	mGreen->setValue( color->green() );
-	mBlue->setValue( color->blue() );
+	mBlue->setValue( color->blue() );*/
+}
+
+void VMDlgSolidFill::slotHSChanged( int h, int s )
+{
+	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
+	mHue->setValue( h );
+	mSaturation->setValue( s );
+	QColor color1( h, s, 255, QColor::Hsv );
+	QColor color2( h, s, 0, QColor::Hsv );
+	mSelector->setColors( color1, color2 );
+}
+
+void VMDlgSolidFill::slotVChanged( int newVal )
+{
+	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
+	mValue->setValue( float( newVal ) / 99.0 * 255.0 );
 }
 
 #include "vmdlg_solidfill.moc"

@@ -42,6 +42,8 @@ private slots:
 	void slotUpdateFromHSVSpinBoxes();
 	void slotApplyButtonPressed();
 	void slotUpdate(QColor *color = 0L);
+    void slotVChanged( int );
+	void slotHSChanged( int, int );
 };
 
 #endif

@@ -65,11 +65,8 @@ VMDlgStroke::VMDlgStroke( KarbonPart *part ) : QTabDialog ( 0L, 0, true ), m_par
 	QLabel *mGreenText = new QLabel( i18n("G:"), cgroupbox );
 	QLabel *mBlueText = new QLabel( i18n("B:"), cgroupbox );
 	mRed = new QSpinBox( 0, 255, 1, cgroupbox );
-	mRed->setValue( color.red() );
 	mGreen = new QSpinBox( 0, 255, 1, cgroupbox );
-	mGreen->setValue( color.green() );
 	mBlue = new QSpinBox( 0, 255, 1, cgroupbox);
-	mBlue->setValue( color.blue() );
 	connect( mRed, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes( int ) ) );
 	connect( mGreen, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes( int ) ) );
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes( int ) ) );
@@ -102,6 +99,10 @@ VMDlgStroke::VMDlgStroke( KarbonPart *part ) : QTabDialog ( 0L, 0, true ), m_par
 	mainLayout->activate();
 	addTab( mRGBWidget, i18n( "RGB" ) );
 	setFixedSize( baseSize() );
+
+	mRed->setValue( color.red() );
+	mGreen->setValue( color.green() );
+	mBlue->setValue( color.blue() );
 }
 
 void VMDlgStroke::slotUpdateFromRGBSpinBoxes( int newVal )
@@ -124,6 +125,8 @@ void VMDlgStroke::slotUpdateFromRGBSpinBoxes( int newVal )
 
 	// update gradient selector
 	mSelector->blockSignals( true );
+    mColorSelector->setValues( h, s );
+	slotHSChanged( h, s );
 	mSelector->setValue( ( float( mValue->value() ) / 255.0 ) * 99.0 );
 	mSelector->blockSignals( false );
 
