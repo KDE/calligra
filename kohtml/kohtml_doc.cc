@@ -138,7 +138,7 @@ void KoHTMLDoc::removeView(KoHTMLView *view)
 KoHTMLView *KoHTMLDoc::createKoHTMLView()
 {
   KoHTMLView *p = new KoHTMLView(0L, 0L, this);
-  //p->QWidget::show();
+  p->QWidget::show();
 
   m_lstViews.append(p);
 
