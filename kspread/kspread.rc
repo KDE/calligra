@@ -105,6 +105,8 @@
   <Action name="showArea"/>
  </Menu>
  <Menu name="tools"><text>&amp;Tools</text>
+  <Action name="spelling"/>
+  <Separator/>
   <Action name="sortlist"/>
   <Separator/>
   <Action name="RecalcWorkSheet"/>

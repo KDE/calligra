@@ -27,6 +27,9 @@
 #include <qtimer.h>
 #include <qcursor.h>
 
+#include <kprocio.h>
+#include <kspell.h>
+#include <kspelldlg.h>
 #include <kstdaction.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
@@ -88,6 +91,171 @@
 
 KSpreadScripts* KSpreadView::m_pGlobalScriptsDialog = 0L;
 
+// non flickering version of KSpell.
+class KSpreadSpell : public KSpell
+{
+ public:
+  KSpreadSpell(QWidget *parent, const QString &caption,
+               QObject *receiver, const char *slot, KSpellConfig *kcs=0,
+               bool progressbar = FALSE, bool modal = true )
+    : KSpell(parent, caption, receiver, slot, kcs, progressbar, modal)
+  {
+  }
+
+  // override check(...)
+  // mostly copied from kdelibs/kspell/kspell.cpp
+  // the dialog gets created but it gets only shown if something
+  // is misspelled. Otherwise for every cell the dialog would pop up 
+  // and disappear
+  bool check( const QString &_buffer, bool _usedialog = true )
+  {
+    QString qs;
+    
+    usedialog=_usedialog;
+    setUpDialog ();
+    //set the dialog signal handler
+    dialog3slot = SLOT (check3 ());
+    
+    kdDebug(750) << "KS: check" << endl;
+    origbuffer = _buffer;
+    if ( ( totalpos = origbuffer.length() ) == 0 )
+    {
+      emit done(origbuffer);
+      return FALSE;
+    }
+    
+    // Torben: I corrected the \n\n problem directly in the
+    //         origbuffer since I got errors otherwise
+    if ( origbuffer.right(2) != "\n\n" )
+    {
+      if (origbuffer.at(origbuffer.length() - 1) != '\n')
+      {
+        origbuffer += '\n';
+        origbuffer += '\n'; //shouldn't these be removed at some point?
+      }
+      else
+	origbuffer += '\n';
+    }
+    
+    newbuffer = origbuffer;
+    
+    // KProcIO calls check2 when read from ispell
+    connect(proc, SIGNAL (readReady(KProcIO *)), this, SLOT (check2(KProcIO *)));
+
+    proc->fputs ("!");
+    
+    //lastpos is a position in newbuffer (it has offset in it)
+    offset = lastlastline = lastpos = lastline = 0;
+    
+    emitProgress ();
+    
+    // send first buffer line
+    int i = origbuffer.find('\n', 0) + 1;
+    qs = origbuffer.mid (0, i);
+    cleanFputs(qs, FALSE);
+    
+    lastline = i; //the character position, not a line number
+    
+    ksdlg->hide();
+    
+    return TRUE;
+  }
+
+  // mostly copied from kdelibs/kspell/kspell.cpp
+  void check2 (KProcIO *)
+  {
+    int e, tempe;
+    QString word;
+    QString line;
+
+    do
+    {
+      tempe = proc->fgets (line); //get ispell's response
+
+      if (tempe > 0)
+      {
+        if ((e = parseOneResponse (line, word, sugg)) == 3 // mistake
+            || e == 2) // replace
+        {
+          dlgresult =- 1;
+          
+          // for multibyte encoding posinline needs correction
+          if (ksconfig->encoding() == KS_E_UTF8) 
+          {
+            // convert line to UTF-8, cut at pos, convert back to UCS-2
+            // and get string length
+            posinline = (QString::fromUtf8(origbuffer.mid(lastlastline,
+                                                          lastline - lastlastline).utf8(),
+                                           posinline)).length();
+          }
+
+          lastpos = posinline + lastlastline + offset;
+
+          //orig is set by parseOneResponse()
+
+          if (e == 2) // replace
+          {
+            dlgreplacement = word;
+            emit corrected (orig, replacement(), lastpos);
+            offset += replacement().length() - orig.length();
+            newbuffer.replace (lastpos, orig.length(), word);
+          }
+          else  //MISTAKE
+          {
+            cwword = word;
+            if ( usedialog ) 
+            {
+              // show the word in the dialog
+              ksdlg->show();
+              dialog (word, sugg, SLOT (check3()));
+            } 
+            else 
+            {
+              // No dialog, just emit misspelling and continue
+              emit misspelling (word, sugg, lastpos);
+              dlgresult = KS_IGNORE;
+              check3();
+            }
+            return;
+          }
+        }
+        
+      }
+      
+      emitProgress (); //maybe
+      
+    } while (tempe > 0);
+    
+    proc->ackRead();
+    
+    
+    if (tempe == -1) //we were called, but no data seems to be ready...
+      return;
+    
+    //If there is more to check, then send another line to ISpell.
+    if ((unsigned int)lastline < origbuffer.length())
+    {
+      int i;
+      QString qs;
+      
+      lastpos = (lastlastline = lastline) + offset; //do we really want this?
+      i = origbuffer.find('\n', lastline)+1;
+      qs = origbuffer.mid (lastline, i-lastline);
+      cleanFputs (qs, FALSE);
+      lastline = i;
+      return;
+    }
+    else
+      //This is the end of it all
+    {
+      ksdlg->hide();
+      newbuffer.truncate (newbuffer.length()-2);
+      emitProgress();
+      emit done (newbuffer);
+    }
+  }
+};
+
 KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc ) :
   KoView( doc, _parent, _name )
 {
@@ -103,6 +271,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_pPopupRow = 0;
     m_popupChild = 0;
     m_popupListChoose=0;
+    m_spell.kspell = 0;
 
     m_dcop = 0;
     dcopObject(); // build it
@@ -354,6 +523,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_cellLayout = new KAction( i18n("Cell Format..."),"cell_layout", CTRL + ALT + Key_F, this, SLOT( layoutDlg() ),
                                actionCollection(), "cellLayout" );
     m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
+    m_spellChecking = KStdAction::spelling( this, SLOT( extraSpelling() ), 
+                                            actionCollection(), "spelling" );
+    
     QStringList lst;
     lst.append( "sum");
     lst.append( "cos");
@@ -453,6 +625,12 @@ KSpreadView::~KSpreadView()
         disconnect(m_sbCalcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
 
         }*/
+
+    if(m_spell.kspell)
+    {
+        delete m_spell.kspell;
+    }
+
     m_pCanvas->endChoose();
     m_pTable = 0; // set the active table to 0L so that when during destruction
     // of embedded child documents possible repaints in KSpreadTable are not
@@ -578,14 +756,368 @@ void KSpreadView::slotRefreshLocale()
     }
 }
 
-void KSpreadView::RecalcWorkSheet(){
-
+void KSpreadView::RecalcWorkSheet()
+{
   if (m_pTable!= 0)
     m_pTable->recalc();
 
   //slotUpdateView( activeTable() );
-
 }
+
+
+void KSpreadView::extraSpelling()
+{
+  if (m_spell.kspell) 
+    return; // Already in progress
+  
+  if (m_pTable == 0L)
+    return;
+  
+  //  m_spell.macroCmdSpellCheck = 0L;
+  m_spell.firstSpellTable    = m_pTable;
+  m_spell.currentSpellTable  = m_spell.firstSpellTable;
+  
+  QRect selection = m_pTable->selectionRect();
+  
+  // if nothing is selected, check every cell
+  if (selection.left() == 0)
+  {
+    m_spell.spellStartCellX = 0;
+    m_spell.spellStartCellY = 0;
+    m_spell.spellEndCellX   = 0;
+    m_spell.spellEndCellY   = 0;
+    m_spell.spellCheckSelection = false;
+    m_spell.currentCell     = m_pTable->firstCell();
+  }
+  else
+  {
+    m_spell.spellStartCellX = selection.left();
+    m_spell.spellStartCellY = selection.top();
+    m_spell.spellEndCellX   = selection.right();
+    m_spell.spellEndCellY   = selection.bottom();
+    m_spell.spellCheckSelection = true;
+    m_spell.currentCell     = 0L;
+
+    // "-1" because X gets increased every time we go into spellCheckReady()
+    m_spell.spellCurrCellX = m_spell.spellStartCellX - 1;
+    m_spell.spellCurrCellY = m_spell.spellStartCellY;
+  }
+
+  startKSpell();
+}
+
+
+void KSpreadView::startKSpell()
+{
+  m_spell.kspell = new KSpreadSpell( this, i18n( "Spell Checking" ), this, 
+                                     SLOT( spellCheckerReady() ), 
+                                     m_pDoc->getKSpellConfig() );
+
+  // not implemented yet
+  //    m_spell.kspell->setIgnoreUpperWords(m_pDoc->dontCheckUpperWord());
+  //    m_spell.kspell->setIgnoreTitleCase(m_pDoc->dontCheckTitleCase());
+  
+  QObject::connect( m_spell.kspell, SIGNAL( death() ),
+                    this, SLOT( spellCheckerFinished() ) );
+  QObject::connect( m_spell.kspell, SIGNAL( misspelling( const QString &, 
+                                                         const QStringList &, 
+                                                         unsigned int) ),
+                    this, SLOT( spellCheckerMisspelling( const QString &, 
+                                                         const QStringList &, 
+                                                         unsigned int) ) );
+  QObject::connect( m_spell.kspell, SIGNAL( corrected( const QString &, 
+                                                       const QString &, 
+                                                       unsigned int) ),
+                    this, SLOT( spellCheckerCorrected( const QString &, 
+                                                       const QString &, 
+                                                       unsigned int ) ) );
+  QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
+                    this, SLOT( spellCheckerDone( const QString & ) ) );
+}
+
+
+void KSpreadView::spellCheckerReady()
+{
+  if (m_pCanvas)
+    m_pCanvas->setCursor( WaitCursor );
+
+  // go on to the next cell
+  if (!m_spell.spellCheckSelection)
+  { 
+    // if nothing is selected we have to check every cell
+    // we use a different way to make it faster
+    while ( m_spell.currentCell )
+    {
+      // check text only
+      if ( !m_spell.currentCell->isDefault() && m_spell.currentCell->isString() )
+      {
+        m_spell.kspell->check( m_spell.currentCell->text(), true );
+
+        return;
+      }
+
+      m_spell.currentCell = m_spell.currentCell->nextCell();
+    }
+
+    if (spellSwitchToOtherTable())
+      spellCheckerReady();
+    else
+      spellCleanup();
+
+    return;
+  }
+  
+  // if something is selected:
+
+  ++m_spell.spellCurrCellX;
+  if (m_spell.spellCurrCellX > m_spell.spellEndCellX)
+  {
+    m_spell.spellCurrCellX = m_spell.spellStartCellX;
+    ++m_spell.spellCurrCellY;
+  }
+
+  unsigned int y;
+  unsigned int x;
+
+  for ( y = m_spell.spellCurrCellY; y <= m_spell.spellEndCellY; ++y )
+  {
+    for ( x = m_spell.spellCurrCellX; x <= m_spell.spellEndCellX; ++x ) 
+    {
+      KSpreadCell * cell = m_spell.currentSpellTable->cellAt(x, y, true);
+
+      // check text only
+      if (cell->isDefault() || !cell->isString())
+        continue;
+
+      m_spell.spellCurrCellX = x;
+      m_spell.spellCurrCellY = y;
+
+      m_spell.kspell->check( cell->text(), true );
+
+      return;
+    }
+    m_spell.spellCurrCellX = m_spell.spellStartCellX;
+  }
+
+  // if the user selected something to be checked we are done
+  // otherwise ask for checking the next table if any
+  if (m_spell.spellCheckSelection)
+  {
+    // Done
+    spellCleanup();
+  }
+  else
+  {
+    if (spellSwitchToOtherTable())
+      spellCheckerReady();
+    else
+      spellCleanup();
+  }
+}
+
+
+void KSpreadView::spellCleanup()
+{
+  if (m_pCanvas)
+    m_pCanvas->setCursor( ArrowCursor );
+
+  m_spell.kspell->cleanUp();
+  delete m_spell.kspell;
+  m_spell.kspell            = 0L;
+  m_spell.firstSpellTable   = 0L;
+  m_spell.currentSpellTable = 0L;
+  m_spell.currentCell       = 0L;
+    
+  // not supported yet
+  //    if(m_spell.macroCmdSpellCheck)
+  //      m_pDoc->addCommand(m_spell.macroCmdSpellCheck);
+}
+
+
+bool KSpreadView::spellSwitchToOtherTable()
+{
+  // there is no other table
+  if(m_pDoc->map()->count()==1)
+    return false;
+
+  // for optimization
+  QPtrList<KSpreadTable> tableList = m_pDoc->map()->tableList();
+
+  unsigned int curIndex = tableList.findRef(m_spell.currentSpellTable);
+  ++curIndex;
+
+  // last table? then start at the beginning
+  if ( curIndex >= tableList.count() )
+    m_spell.currentSpellTable = tableList.first();
+  else
+    m_spell.currentSpellTable = tableList.at(curIndex);
+
+  // if the current table is the first one again, we are done.
+  if( m_spell.currentSpellTable == m_spell.firstSpellTable )
+  {
+    setActiveTable( m_spell.firstSpellTable );
+    return false;
+  }
+
+  if (m_spell.spellCheckSelection)
+  {
+    m_spell.spellEndCellX = m_spell.currentSpellTable->maxColumn();
+    m_spell.spellEndCellY = m_spell.currentSpellTable->maxRow();
+
+    m_spell.spellCurrCellX = m_spell.spellStartCellX - 1;
+    m_spell.spellCurrCellY = m_spell.spellStartCellY;
+  }
+  else
+  {
+    m_spell.currentCell = m_spell.currentSpellTable->firstCell();
+  }
+
+  if ( KMessageBox::questionYesNo( this,
+                                   i18n( "Do you want to check the spelling in the next table?") )
+       != KMessageBox::Yes )
+    return false;
+
+  setActiveTable(m_spell.currentSpellTable);
+
+  return true;
+}
+
+
+void KSpreadView::spellCheckerMisspelling( const QString &, 
+                                           const QStringList &,
+                                           unsigned int )
+{
+  // scroll to the cell
+  if (!m_spell.spellCheckSelection)
+  {
+    m_spell.spellCurrCellX = m_spell.currentCell->column();
+    m_spell.spellCurrCellY = m_spell.currentCell->row();
+  }
+
+  canvasWidget()->gotoLocation( m_spell.spellCurrCellX, m_spell.spellCurrCellY, activeTable() );
+}
+
+
+void KSpreadView::spellCheckerCorrected( const QString & old, const QString & corr, 
+                                         unsigned int pos )
+{
+  KSpreadCell * cell;
+  
+  if (m_spell.spellCheckSelection)
+  {
+    cell = m_spell.currentSpellTable->cellAt(m_spell.spellCurrCellX,
+                                             m_spell.spellCurrCellY, true);
+  }
+  else
+  {
+    cell = m_spell.currentCell;
+    m_spell.spellCurrCellX = cell->column();
+    m_spell.spellCurrCellY = cell->row();
+  }
+
+  Q_ASSERT( cell );
+  if ( !cell ) 
+    return;
+
+  QString content( cell->text() );
+
+  KSpreadUndoSetText* undo = new KSpreadUndoSetText( m_pDoc, m_pTable, 
+                                                     content, 
+                                                     m_spell.spellCurrCellX, 
+                                                     m_spell.spellCurrCellY, 
+                                                     cell->formatType());
+  m_pDoc->undoBuffer()->appendUndo( undo );
+
+  content.replace( pos, old.length(), corr );
+  cell->setCellText( content );
+  m_pEditWidget->setText( content );
+
+  // TODO ?:
+  //  if(!m_spell.macroCmdSpellCheck)
+  //    m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct misspelled word"));
+  //  m_spell.macroCmdSpellCheck->addCommand(textobj->textObject()->replaceSelectionCommand(&cursor, corr, KoTextObject::HighlightSelection, QString::null ));
+}
+
+void KSpreadView::spellCheckerDone( const QString & )
+{
+  int result = m_spell.kspell->dlgResult();
+
+  // store ignore word
+  m_spell.ignoreWord = m_spell.kspell->ksConfig().ignoreList();
+
+  m_spell.kspell->cleanUp();
+  delete m_spell.kspell;
+  m_spell.kspell = 0L;
+
+  if ( result != KS_CANCEL && result != KS_STOP )
+  {
+    if (m_spell.spellCheckSelection)
+    {
+      if ( (m_spell.spellCurrCellY <= m_spell.spellEndCellY)
+           && (m_spell.spellCurrCellX <= m_spell.spellEndCellX) )
+      {
+        startKSpell();
+        return;
+      }
+    }
+    else
+    {
+      if ( m_spell.currentCell )
+      {
+        m_spell.currentCell = m_spell.currentCell->nextCell();
+
+        startKSpell();
+        
+        return;
+      }
+    }
+  }
+
+  if (m_pCanvas)
+    m_pCanvas->setCursor( ArrowCursor );
+
+  // Not implemented yet
+  //        if(m_spell.macroCmdSpellCheck)
+  //            m_pDoc->addCommand(m_spell.macroCmdSpellCheck);
+}
+
+void KSpreadView::spellCheckerFinished()
+{
+  kdDebug() << " SpellCheck finished" << endl;
+
+  if (m_pCanvas)
+    m_pCanvas->setCursor( ArrowCursor );
+
+  KSpell::spellStatus status = m_spell.kspell->status();
+  m_spell.kspell->cleanUp();
+  delete m_spell.kspell;
+  m_spell.kspell = 0L;
+
+  bool kspellNotConfigured=false;
+
+  if (status == KSpell::Error)
+  {
+    KMessageBox::sorry(this, i18n("ISpell could not be started.\n"
+                                  "Please make sure you have ISpell properly configured and in your PATH."));
+    kspellNotConfigured=true;
+  }
+  else if (status == KSpell::Crashed)
+  {
+    KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
+  }
+
+  // Not implemented yet
+  //    if(m_spell.macroCmdSpellCheck)
+  //        m_pDoc->addCommand(m_spell.macroCmdSpellCheck);
+
+  if(kspellNotConfigured)
+  {
+    KSpreadpreference configDlg( this, 0 );
+    configDlg.openPage( KSpreadpreference::KS_SPELLING);
+    configDlg.exec();
+  }
+}
+
 void KSpreadView::initialPosition()
 {
     // Set the initial position for the marker as store in the XML file,

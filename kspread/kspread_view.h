@@ -53,6 +53,8 @@ class KFontAction;
 class KFontSizeAction;
 class KToggleAction;
 class KoPartSelectAction;
+class KSpreadSpell;
+//class KMacroCommand;
 
 class KActionMenu;
 
@@ -367,6 +369,15 @@ public slots:
     void slotTableActivated( KSpreadTable* table );
     void slotRefreshView( );
     void slotRefreshLocale();
+    void extraSpelling();
+
+    void spellCheckerReady();
+    void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int);
+    void spellCheckerCorrected( const QString &, const QString &, unsigned int);
+    void spellCheckerDone( const QString & );
+    void spellCheckerFinished( );
+    void startKSpell();
+
     virtual int leftBorder() const;
     virtual int rightBorder() const;
     virtual int topBorder() const;
@@ -518,6 +529,7 @@ private:
     KAction* m_increaseIndent;
     KAction* m_decreaseIndent;
     KAction* m_sortList;
+    KAction* m_spellChecking;
 
     KAction* m_insertChartFrame;
     
@@ -528,6 +540,27 @@ private:
     KToggleAction* m_menuCalcSum;
 
     KoPartSelectAction *m_insertPart;
+
+    // Spell-checking
+    struct 
+    {
+      KSpreadSpell *   kspell;
+      KSpreadTable *  firstSpellTable;
+      KSpreadTable *  currentSpellTable;
+      KSpreadCell  *  currentCell;
+      unsigned int    spellCurrCellX;
+      unsigned int    spellCurrCellY;
+      unsigned int    spellStartCellX;
+      unsigned int    spellStartCellY;
+      unsigned int    spellEndCellX;
+      unsigned int    spellEndCellY;
+      bool            spellCheckSelection;
+      QStringList     ignoreWord;
+      //      KMacroCommand * macroCmdSpellCheck;
+    } m_spell;
+
+    bool spellSwitchToOtherTable();
+    void spellCleanup();
 
     /**
      * Pointer to the last popup menu.
