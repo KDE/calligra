@@ -33,13 +33,39 @@
 #include "karbon_view.h"
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
+#include <karbon_drag.h>
 #include "vselection.h"
 #include "vfill.h"
 #include "vfillcmd.h"
+#include <commands/vtransformcmd.h>
 
 #include "vstyledocker.h"
 
-#include <koIconChooser.h>
+ClipartChooser::ClipartChooser( QSize iconSize, QWidget *parent, const char *name )
+	: KoIconChooser( iconSize, parent, name )
+{
+	setDragEnabled( true );
+}
+
+void
+ClipartChooser::startDrag()
+{
+	KoIconChooser::startDrag();
+	KarbonDrag* kd = new KarbonDrag( this );
+	VObjectList objects;
+	VClipartIconItem *selectedClipart = (VClipartIconItem *)currentItem();
+	double s = 128;//kMax( selectedClipart->originalWidth(), selectedClipart->originalHeight() );
+	VObject *clipart = selectedClipart->clipart()->clone();
+
+	QWMatrix mat( s, 0, 0, -s, -( s / 2 ), ( s / 2 ) );
+
+	VTransformCmd trafo( 0L, mat );
+	trafo.visit( *clipart );
+
+	objects.append( clipart );
+	kd->setObjectList( objects );
+	kd->dragCopy();
+}
 
 VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*name*/ )
 	: VDocker( parent->shell() ), m_part ( part ), m_view( parent )
@@ -57,7 +83,7 @@ VStyleDocker::VStyleDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mTabWidget->addTab( pPatternChooser, i18n( "Patterns" ) );
 
 	//Clipart
-	KoIconChooser *pClipartChooser = new KoIconChooser( QSize( 32,  32 ), mTabWidget );
+	ClipartChooser *pClipartChooser = new ClipartChooser( QSize( 32,  32 ), mTabWidget );
 	mTabWidget->addTab( pClipartChooser, i18n( "Clipart" ) );
 	pClipartChooser->setAutoDelete( false );
 	VClipartIconItem* item = 0L;

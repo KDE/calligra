@@ -50,6 +50,7 @@ public:
 
 	virtual bool mouseEvent( QMouseEvent* , const KoPoint & ) = 0;
 	virtual bool keyEvent( QEvent* ) = 0;
+	virtual void dropEvent( QDropEvent *e ) = 0;
 
 	virtual void setViewportRect( const KoRect &rect ) = 0;
 	virtual void setZoomAt( double zoom, const KoPoint & = KoPoint() ) = 0;

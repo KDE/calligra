@@ -42,6 +42,7 @@
 // Commands.
 #include "valigncmd.h"
 #include "vcleanupcmd.h"
+#include "vclipartcmd.h"
 #include "vdeletecmd.h"
 #include "vfillcmd.h"
 #include "vgroupcmd.h"
@@ -93,8 +94,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_documentDocker = 0L;
 
 	setInstance( KarbonFactory::instance(), true );
-
-	setAcceptDrops( true );
 
 	setClientBuilder( this );
 
@@ -283,17 +282,12 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 }
 
 void
-KarbonView::dragEnterEvent( QDragEnterEvent *event )
-{
-	event->accept( KColorDrag::canDecode( event ) );
-}
-
-void
 KarbonView::dropEvent( QDropEvent *e )
 {
 	//Accepts QColor - from Color Manager's KColorPatch
 	QColor color;
 	VColor realcolor;
+	VObjectList selection;
 
 	if( KColorDrag::decode( e, color ) )
 	{
@@ -305,6 +299,21 @@ KarbonView::dropEvent( QDropEvent *e )
 
 		if( part() )
 			part()->addCommand( new VFillCmd( &part()->document(), realcolor ), true );
+
+		selectionChanged();
+	}
+	else if( KarbonDrag::decode( e, selection, m_part->document() ) )
+	{
+		VObject *clipart = selection.first();
+		KoPoint p( e->pos() );
+		p = m_canvas->toContents( p );
+		QWMatrix mat( 1, 0, 0, 1, p.x(), p.y() );
+
+		VTransformCmd trafo( 0L, mat );
+		trafo.visit( *clipart );
+		VClipartCmd* cmd = new VClipartCmd( &m_part->document(), i18n( "Insert Clipart" ), clipart );
+
+		m_part->addCommand( cmd, true );
 
 		selectionChanged();
 	}

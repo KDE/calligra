@@ -23,6 +23,7 @@
 
 #include "karbon_view_base.h"
 #include "karbon_part_base.h"
+#include "karbon_drag.h"
 #include "vcanvas.h"
 #include "vdocument.h"
 #include "vpainter.h"
@@ -31,6 +32,8 @@
 #include "vselection.h"
 
 #include <kdebug.h>
+#include <klocale.h>
+#include <kcolordrag.h>
 
 int
 VCanvas::pageOffsetX() const
@@ -78,6 +81,8 @@ VCanvas::VCanvas( QWidget *parent, KarbonViewBase* view, KarbonPartBase* part )
 	setFocus();
 
 	m_bScrolling = false;
+
+	setAcceptDrops( true );
 }
 
 VCanvas::~VCanvas()
@@ -337,4 +342,17 @@ VCanvas::slotContentsMoving( int /*x*/, int /*y*/ )
 	emit viewportChanged();
 }
 
+void
+VCanvas::dragEnterEvent( QDragEnterEvent *e )
+{
+	e->accept( KarbonDrag::canDecode( e ) || KColorDrag::canDecode( e ) );
+}
+
+void
+VCanvas::dropEvent( QDropEvent *e )
+{
+	m_view->dropEvent( e );
+}
+
 #include <vcanvas.moc>
+

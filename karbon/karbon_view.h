@@ -177,8 +177,7 @@ signals:
 protected:
 	virtual void updateReadWrite( bool ) {}
 	virtual void resizeEvent( QResizeEvent* event );
-	void dragEnterEvent( QDragEnterEvent *e );
-	void dropEvent( QDropEvent *e );
+	virtual void dropEvent( QDropEvent *e );
 
 	//KXMLGUIBuilder
 	virtual QWidget *createContainer( QWidget *parent, int index, const QDomElement &element, int &id );

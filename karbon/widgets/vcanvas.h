@@ -70,6 +70,8 @@ public:
 	int pageOffsetY() const;
 
 protected:
+	virtual void dragEnterEvent( QDragEnterEvent * );
+	virtual void dropEvent( QDropEvent * );
 	virtual void focusInEvent( QFocusEvent * );
 	virtual void viewportPaintEvent( QPaintEvent* );
 	virtual void drawContents( QPainter* painter, int clipx, int clipy,

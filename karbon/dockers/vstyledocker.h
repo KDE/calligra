@@ -23,10 +23,19 @@
 
 #include <vdocker.h>
 
+#include <koIconChooser.h>
+
 class QTabWidget;
 class QWidget;
 class KarbonView;
 class KarbonPart;
+
+class ClipartChooser : public KoIconChooser
+{
+public:
+	ClipartChooser( QSize iconSize, QWidget *parent = 0L, const char *name = 0L );
+	virtual void startDrag();
+};
 
 class VStyleDocker : public VDocker
 {
