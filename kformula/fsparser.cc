@@ -562,7 +562,8 @@ ParserNode* FormulaStringParser::parsePrimary()
     }
     case SUB: {
         nextToken();
-        ParserNode* node = new UnaryMinus( parsePrimary() );
+        //ParserNode* node = new UnaryMinus( parsePrimary() );
+        ParserNode* node = new UnaryMinus( parseTerm() );
         return node;
     }
     case LP: {
@@ -664,7 +665,7 @@ QString FormulaStringParser::nextToken()
         currentType = EOL;
         return QString::null;
     }
-    if ( m_formula[pos].isDigit() ) {
+    if ( m_formula[pos].isDigit() || m_formula[pos] == '.' ) {
         uint begin = pos;
         readNumber();
         currentType = NUMBER;
@@ -748,6 +749,8 @@ QString FormulaStringParser::nextToken()
 
 void FormulaStringParser::readNumber()
 {
+    bool digitsBeforeDot = m_formula[pos] != '.';
+
     readDigits();
     if ( pos < m_formula.length()-1 ) {
         QChar ch = m_formula[pos];
@@ -760,9 +763,8 @@ void FormulaStringParser::readNumber()
             if ( ch.isDigit() ) {
                 readDigits();
             }
-            else {
-                pos--;
-                column--;
+            else if ( !digitsBeforeDot ) {
+                error( QString( i18n( "A single '.' is not a number at %1:%2" ) ).arg( line ).arg( column ) );
                 return;
             }
         }
