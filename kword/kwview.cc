@@ -1102,7 +1102,7 @@ void KWView::setupActions()
     actionApplyAutoFormat->setToolTip( i18n( "Manually force KWord to scan the entire document and apply autocorrection." ) );
     actionApplyAutoFormat->setWhatsThis( i18n( "Manually force KWord to scan the entire document and apply autocorrection." ) );
 
-    actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection" ), 0,
+    actionCreateStyleFromSelection = new KAction( i18n( "Create Style From Selection..." ), 0,
                                         this, SLOT( createStyleFromSelection()),
                                         actionCollection(), "create_style" );
     actionCreateStyleFromSelection->setToolTip( i18n( "Create a new style based on the currently selected text." ) );
