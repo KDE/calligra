@@ -2078,7 +2078,6 @@ void QTextDocument::removeSelectedText( int id, QTextCursor *cursor )
 	p = p->next();
     }
 
-    //qDebug("joining paragraphs %d and %d", c1.parag()->paragId(), c2.parag()->paragId());
     c1.parag()->join( c2.parag() );
 }
 
@@ -3096,7 +3095,7 @@ void QTextParag::remove( int index, int len )
 
 void QTextParag::join( QTextParag *s )
 {
-    //qDebug("QTextParag::join this=%d with %d",paragId(),s->paragId());
+    //qDebug("QTextParag::join this=%d (length %d) with %d (length %d)",paragId(),length(),s->paragId(),s->length());
     int oh = r.height() + s->r.height();
     n = s->n;
     if ( n )
@@ -3104,7 +3103,8 @@ void QTextParag::join( QTextParag *s )
     else if ( doc )
 	doc->setLastParag( this );
 
-  if ( s->length() > 1 )
+  // keep existing trailing space if joining non-empty parag to an empty parag
+  if ( length() == 0 || s->length() > 1 )
   {
     int start = str->length();
     if ( length() > 0 && at( length() - 1 )->c == ' ' ) {
@@ -3123,7 +3123,8 @@ void QTextParag::join( QTextParag *s )
 	    s->str->at( i ).loseCustomItem();
 	}
     }
-  }
+  }// else qDebug("join: empty parag -> not copying");
+
     if ( !extraData() && s->extraData() ) {
 	setExtraData( s->extraData() );
 	s->setExtraData( 0 );
@@ -3398,6 +3399,8 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 			int clipx, int clipy, int clipw, int cliph )
 {
     QTextStringChar *chr = at( 0 );
+    ASSERT( chr );
+    if (!chr) { qDebug("paragraph %p %d, can't paint, EMPTY !", this, paragId()); return; }
     int i = 0;
     int h = 0;
     int baseLine = 0, lastBaseLine = 0;
