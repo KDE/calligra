@@ -959,7 +959,10 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
     {
         if ( formatData.strikeout )
         {
-            strElement+="\\strike1";
+            if( formatData.strikeoutType == "double" )
+                strElement+="\\striked1";
+            else
+                strElement+="\\strike1";
         }
         else
         {
