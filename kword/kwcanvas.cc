@@ -1757,15 +1757,20 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
     if ( selectAllFrames( false ) )
         emit frameSelectedChanged();
 
-    bool emitChanged = false;
     KWTableFrameSet *table = fs->getGroupManager();
-    emitChanged = checkCurrentEdit( table ? table : fs );
+    bool emitChanged = checkCurrentEdit( table ? table : fs );
 
     if ( emitChanged ) { // emitted after mousePressEvent [for tables]
-        emit currentFrameSetEditChanged();
         if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet()->type()==FT_TEXT ) {
             static_cast<KWTextFrameSetEdit*>( m_currentFrameSetEdit )->setCursor( parag, index );
+
+            // This duplicates the code in `checkCurrentEdit', but the _new_ cursor
+            // position must be visible.
+            KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+            if ( textedit )
+                textedit->ensureCursorVisible();
         }
+        emit currentFrameSetEditChanged();
     }
     emit updateRuler();
 }

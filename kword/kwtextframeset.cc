@@ -2464,17 +2464,20 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
                         KWFrameSet* frameSet = anchor->frameSet();
                         if ( frameSet->type() == FT_FORMULA ) {
 
+                            // if `this' gets deleted it cannot be used any longer!
+                            KWCanvas* canvas = this->m_canvas;
+
                             // this will "delete this"!
                             m_canvas->editFrameSet( frameSet );
 
                             // Is it okay to assume success here?
-                            KWFrameSetEdit* edit = m_canvas->currentFrameSetEdit();
+                            KWFrameSetEdit* edit = canvas->currentFrameSetEdit();
                             static_cast<KWFormulaFrameSetEdit*>( edit )->moveEnd();
 
                             // A FormulaFrameSetEdit looks a little different from
                             // a FormulaFrameSet. (Colors)
                             static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
-                            m_canvas->repaintChanged( frameSet, true );
+                            canvas->repaintChanged( frameSet, true );
                             return;
                         }
                     }
@@ -2495,13 +2498,16 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent* e )
                         KWFrameSet* frameSet = anchor->frameSet();
                         if ( frameSet->type() == FT_FORMULA ) {
 
+                            // if `this' gets deleted it cannot be used any longer!
+                            KWCanvas* canvas = this->m_canvas;
+
                             // this will "delete this"!
                             m_canvas->editFrameSet( frameSet );
 
                             // A FormulaFrameSetEdit looks a little different from
                             // a FormulaFrameSet. (Colors)
                             static_cast<KWFormulaFrameSet*>( frameSet )->setChanged();
-                            m_canvas->repaintChanged( frameSet, true );
+                            canvas->repaintChanged( frameSet, true );
                             return;
                         }
                     }

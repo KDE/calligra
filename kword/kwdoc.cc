@@ -1880,7 +1880,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool trans
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
         if ( m_formulaDocument )
-            m_formulaDocument->setZoom( zoomX, zoomY, false, forPrint );
+            m_formulaDocument->setZoomAndResolution( m_zoom, zoomX, zoomY, false, forPrint );
     }
 
     QRect rect( _rect );
@@ -1922,6 +1922,9 @@ QPixmap KWDocument::generatePreview( const QSize& size )
     setResolution( oldZoomX, oldZoomY );
     newZoomAndResolution( false, false );
 
+    if ( m_formulaDocument ) {
+        m_formulaDocument->setZoomAndResolution( oldZoom, oldZoomX, oldZoomY );
+    }
     return pix;
 }
 
