@@ -1,7 +1,7 @@
 <!DOCTYPE KSpreadFunctions>
 <KSpreadFunctions>
   <Group>
-    <Name>Trigonometric</Name>
+    <GroupName>Trigonometric</GroupName>
 
     <Function>
       <Name>cos</Name>
@@ -240,7 +240,7 @@
 
   </Group>
   <Group>
-    <Name>Time and Date</Name>
+    <GroupName>Time and Date</GroupName>
 
     <Function>
       <Name>dayOfYear</Name>
@@ -369,7 +369,7 @@
 
   </Group>
   <Group>
-    <Name>Text</Name>
+    <GroupName>Text</GroupName>
 
     <Function>
       <Name>DECBIN</Name>
@@ -613,7 +613,7 @@
 
   </Group>
   <Group>
-    <Name>Analytic</Name>
+    <GroupName>Analytic</GroupName>
 
     <Function>
       <Name>pow</Name>
@@ -946,7 +946,7 @@
 
   </Group>
   <Group>
-    <Name>Logic</Name>
+    <GroupName>Logic</GroupName>
 
     <Function>
       <Name>AND</Name>
@@ -1156,7 +1156,7 @@
 
   </Group>
   <Group>
-    <Name>Statistic</Name>
+    <GroupName>Statistic</GroupName>
 
     <Function>
       <Name>BINO</Name>
@@ -1333,7 +1333,7 @@
 
   </Group>
   <Group>
-    <Name>Financial</Name>
+    <GroupName>Financial</GroupName>
 
     <Function>
       <Name>FV</Name>
