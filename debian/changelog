@@ -1,5 +1,6 @@
 koffice (1:1.2.0-2) unstable; urgency=low
 
+  * Built with g++-3.2.
   * Moved *.la files into koffice-dev.
   * Moved to Chris Cheney's style of debian/rules.
 
