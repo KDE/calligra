@@ -706,7 +706,6 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 
 	if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
 	     toolEditMode == TEM_MOUSE ) {
-	    setCursor( arrowCursor );
 	    if ( (int)objectList()->count() - 1 >= 0 ) {
 		for ( int i = static_cast<int>( objectList()->count() ) - 1; i >= 0; i-- ) {
 		    kpobject = objectList()->at( i );
@@ -720,6 +719,7 @@ void Page::mouseMoveEvent( QMouseEvent *e )
 		    }
 		}
 	    }
+	    setCursor( arrowCursor );
 	} else if ( mousePressed ) {
 	    int mx = e->x();
 	    int my = e->y();
