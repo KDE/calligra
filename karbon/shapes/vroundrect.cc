@@ -62,6 +62,6 @@ QString
 VRoundRect::name() const
 {
 	QString result = VObject::name();
-	return !result.isEmpty() ? result : "Round Rectangle";
+	return !result.isEmpty() ? result : i18n( "Rounded Rectangle" );
 }
 

@@ -38,8 +38,7 @@ VSelectionDescription::visitVSelection( VSelection& selection )
 void
 VSelectionDescription::visitVComposite( VComposite& composite )
 {
-	m_desc = QString( i18n( "1 composite path" ) );
-	m_shortdesc = !composite.name().isEmpty() ? composite.name() : QString( i18n( "path" ) );
+	m_desc = m_shortdesc = !composite.name().isEmpty() ? composite.name() : QString( i18n( "path" ) );
 }
 
 void
@@ -52,14 +51,12 @@ VSelectionDescription::visitVGroup( VGroup &group )
 void
 VSelectionDescription::visitVText( VText &text )
 {
-	m_desc = QString( i18n( "1 text object" ) );
-	m_shortdesc = !text.name().isEmpty() ? text.name() : QString( i18n( "text" ) );
+	m_desc = m_shortdesc = !text.name().isEmpty() ? text.name() : QString( i18n( "text" ) );
 }
 
 void
 VSelectionDescription::visitVImage( VImage &img )
 {
-	m_desc = QString( i18n( "1 image object" ) );
-	m_shortdesc = !img.name().isEmpty() ? img.name() : QString( i18n( "image" ) );
+	m_desc = m_shortdesc = !img.name().isEmpty() ? img.name() : QString( i18n( "image" ) );
 }
 
