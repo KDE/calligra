@@ -2177,8 +2177,13 @@ void KPresenterView::spacingOk( int _lineSpacing, int _distBefore, int _distAfte
 /*================================================================*/
 unsigned int KPresenterView::getCurrPgNum()
 {
-	return static_cast<int>( vert->value() + page->height() / 2 ) /
-		kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height() + 1;
+	if ( vert->value() == vert->minValue() )
+		return 1;
+	else if ( vert->value() == vert->maxValue() )
+		return m_pKPresenterDoc->getPageNums();
+	else
+		return static_cast<int>( vert->value() + page->height() / 2 ) /
+			kPresenterDoc()->getPageSize( 0, 0, 0, 1.0, false ).height() + 1;
 }
 
 /*================== scroll horizontal ===========================*/
@@ -3521,9 +3526,9 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
 	CORBA::WString_var toolTip;
 
-	///////
-	// Edit
-	///////
+	/****************
+	 * Edit
+	 ***************/
 	m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 	m_vToolBarEdit->setFullWidth( false );
 
@@ -3565,416 +3570,414 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
 	m_vToolBarEdit->enable( OpenPartsUI::Show );
 
-	///////
 	// Insert
-	//////
-		m_vToolBarInsert = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-		m_vToolBarInsert->setFullWidth( false );
+	m_vToolBarInsert = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+	m_vToolBarInsert->setFullWidth( false );
 
-		// page
-		pix = OPUIUtils::convertPixmap( ICON( "newslide.xpm" ) );
-		toolTip = Q2C( i18n( "Insert Page" ) );
-		m_idButtonInsert_Page = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPage", true, toolTip, -1 );
-		m_vToolBarInsert->insertSeparator( -1 );
+	// page
+	pix = OPUIUtils::convertPixmap( ICON( "newslide.xpm" ) );
+	toolTip = Q2C( i18n( "Insert Page" ) );
+	m_idButtonInsert_Page = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPage", true, toolTip, -1 );
+	m_vToolBarInsert->insertSeparator( -1 );
 
 		// picture
-		pix = OPUIUtils::convertPixmap( ICON( "picture.xpm" ) );
-		toolTip = Q2C( i18n( "Insert Picture" ) );
-		m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPicture", true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "picture.xpm" ) );
+	toolTip = Q2C( i18n( "Insert Picture" ) );
+	m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPicture", true, toolTip, -1 );
 
-		// clipart
-		pix = OPUIUtils::convertPixmap( ICON( "clipart.xpm" ) );
-		toolTip = Q2C( i18n( "Insert Clipart" ) );
-		m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, toolTip, -1 );
+	// clipart
+	pix = OPUIUtils::convertPixmap( ICON( "clipart.xpm" ) );
+	toolTip = Q2C( i18n( "Insert Clipart" ) );
+	m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, toolTip, -1 );
 
-		m_vToolBarInsert->enable( OpenPartsUI::Show );
+	m_vToolBarInsert->enable( OpenPartsUI::Show );
 
-		///////
-		// Tools
-		//////
-			m_vToolBarTools = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-			m_vToolBarTools->setFullWidth( false );
+	/******************
+	 * Tools
+	 *****************/
+	m_vToolBarTools = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+	m_vToolBarTools->setFullWidth( false );
 
 			// mouse
-			pix = OPUIUtils::convertPixmap( ICON( "mouse.xpm" ) );
-			toolTip = Q2C( i18n( "Mouse Tool" ) );
-			m_idButtonTools_Mouse = m_vToolBarTools->insertButton2( pix, ID_TOOL_MOUSE, SIGNAL( clicked() ), this, "toolsMouse",
-																	true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "mouse.xpm" ) );
+	toolTip = Q2C( i18n( "Mouse Tool" ) );
+	m_idButtonTools_Mouse = m_vToolBarTools->insertButton2( pix, ID_TOOL_MOUSE, SIGNAL( clicked() ), this, "toolsMouse",
+															true, toolTip, -1 );
 
-			m_vToolBarTools->setToggle( ID_TOOL_MOUSE, true );
-			m_vToolBarTools->setButton( ID_TOOL_MOUSE, true );
+	m_vToolBarTools->setToggle( ID_TOOL_MOUSE, true );
+	m_vToolBarTools->setButton( ID_TOOL_MOUSE, true );
 
-			// line
-			pix = OPUIUtils::convertPixmap( ICON( "line.xpm" ) );
-			toolTip = Q2C( i18n( "Create Line" ) );
-			m_idButtonTools_Line = m_vToolBarTools->insertButton2( pix, ID_TOOL_LINE, SIGNAL( clicked() ), this, "toolsLine",
-																   true, toolTip, -1 );
+	// line
+	pix = OPUIUtils::convertPixmap( ICON( "line.xpm" ) );
+	toolTip = Q2C( i18n( "Create Line" ) );
+	m_idButtonTools_Line = m_vToolBarTools->insertButton2( pix, ID_TOOL_LINE, SIGNAL( clicked() ), this, "toolsLine",
+														   true, toolTip, -1 );
 
-			m_vToolBarTools->setToggle( ID_TOOL_LINE, true );
-			m_vToolBarTools->setButton( ID_TOOL_LINE, false );
+	m_vToolBarTools->setToggle( ID_TOOL_LINE, true );
+	m_vToolBarTools->setButton( ID_TOOL_LINE, false );
 
-			// rectangle
-			pix = OPUIUtils::convertPixmap( ICON( "rectangle.xpm" ) );
-			toolTip = Q2C( i18n( "Create Rectangle" ) );
-			m_idButtonTools_Rectangle = m_vToolBarTools->insertButton2( pix, ID_TOOL_RECT, SIGNAL( clicked() ), this, "toolsRectangle",
-																		true, toolTip, -1 );
-			m_vToolBarTools->setToggle( ID_TOOL_RECT, true );
-			m_vToolBarTools->setButton( ID_TOOL_RECT, false );
+	// rectangle
+	pix = OPUIUtils::convertPixmap( ICON( "rectangle.xpm" ) );
+	toolTip = Q2C( i18n( "Create Rectangle" ) );
+	m_idButtonTools_Rectangle = m_vToolBarTools->insertButton2( pix, ID_TOOL_RECT, SIGNAL( clicked() ), this, "toolsRectangle",
+																true, toolTip, -1 );
+	m_vToolBarTools->setToggle( ID_TOOL_RECT, true );
+	m_vToolBarTools->setButton( ID_TOOL_RECT, false );
 
-			// circle or ellipse
-			pix = OPUIUtils::convertPixmap( ICON( "circle.xpm" ) );
-			toolTip = Q2C( i18n( "Create Circle or Ellipse" ) );
-			m_idButtonTools_Circle = m_vToolBarTools->insertButton2( pix, ID_TOOL_ELLIPSE, SIGNAL( clicked() ), this, "toolsCircleOrEllipse",
-																	 true, toolTip, -1 );
-			m_vToolBarTools->setToggle( ID_TOOL_ELLIPSE, true );
-			m_vToolBarTools->setButton( ID_TOOL_ELLIPSE, false );
+	// circle or ellipse
+	pix = OPUIUtils::convertPixmap( ICON( "circle.xpm" ) );
+	toolTip = Q2C( i18n( "Create Circle or Ellipse" ) );
+	m_idButtonTools_Circle = m_vToolBarTools->insertButton2( pix, ID_TOOL_ELLIPSE, SIGNAL( clicked() ), this, "toolsCircleOrEllipse",
+															 true, toolTip, -1 );
+	m_vToolBarTools->setToggle( ID_TOOL_ELLIPSE, true );
+	m_vToolBarTools->setButton( ID_TOOL_ELLIPSE, false );
 
-			// circle or ellipse
-			pix = OPUIUtils::convertPixmap( ICON( "pie.xpm" ) );
-			toolTip = Q2C( i18n( "Create Pie/Arc/Chord" ) );
-			m_idButtonTools_Pie = m_vToolBarTools->insertButton2( pix, ID_TOOL_PIE, SIGNAL( clicked() ), this, "toolsPie",
-																  true, toolTip, -1 );
-			m_vToolBarTools->setToggle( ID_TOOL_PIE, true );
-			m_vToolBarTools->setButton( ID_TOOL_PIE, false );
+	// circle or ellipse
+	pix = OPUIUtils::convertPixmap( ICON( "pie.xpm" ) );
+	toolTip = Q2C( i18n( "Create Pie/Arc/Chord" ) );
+	m_idButtonTools_Pie = m_vToolBarTools->insertButton2( pix, ID_TOOL_PIE, SIGNAL( clicked() ), this, "toolsPie",
+														  true, toolTip, -1 );
+	m_vToolBarTools->setToggle( ID_TOOL_PIE, true );
+	m_vToolBarTools->setButton( ID_TOOL_PIE, false );
 
-			// text
-			pix = OPUIUtils::convertPixmap( ICON( "text.xpm" ) );
-			toolTip = Q2C( i18n( "Create Text" ) );
-			m_idButtonTools_Text = m_vToolBarTools->insertButton2( pix, ID_TOOL_TEXT, SIGNAL( clicked() ), this, "toolsText",
-																   true, toolTip, -1 );
-			m_vToolBarTools->setToggle( ID_TOOL_TEXT, true );
-			m_vToolBarTools->setButton( ID_TOOL_TEXT, false );
+	// text
+	pix = OPUIUtils::convertPixmap( ICON( "text.xpm" ) );
+	toolTip = Q2C( i18n( "Create Text" ) );
+	m_idButtonTools_Text = m_vToolBarTools->insertButton2( pix, ID_TOOL_TEXT, SIGNAL( clicked() ), this, "toolsText",
+														   true, toolTip, -1 );
+	m_vToolBarTools->setToggle( ID_TOOL_TEXT, true );
+	m_vToolBarTools->setButton( ID_TOOL_TEXT, false );
 
-			// autoform
-			pix = OPUIUtils::convertPixmap( ICON( "autoform.xpm" ) );
-			toolTip = Q2C( i18n( "Create Autoform" ) );
-			m_idButtonTools_Autoform = m_vToolBarTools->insertButton2( pix, ID_TOOL_AUTOFORM, SIGNAL( clicked() ), this, "toolsAutoform",
-																	   true, toolTip, -1 );
-			m_vToolBarTools->setToggle( ID_TOOL_AUTOFORM, true );
-			m_vToolBarTools->setButton( ID_TOOL_AUTOFORM, false );
+	// autoform
+	pix = OPUIUtils::convertPixmap( ICON( "autoform.xpm" ) );
+	toolTip = Q2C( i18n( "Create Autoform" ) );
+	m_idButtonTools_Autoform = m_vToolBarTools->insertButton2( pix, ID_TOOL_AUTOFORM, SIGNAL( clicked() ), this, "toolsAutoform",
+															   true, toolTip, -1 );
+	m_vToolBarTools->setToggle( ID_TOOL_AUTOFORM, true );
+	m_vToolBarTools->setButton( ID_TOOL_AUTOFORM, false );
 
-			// diagramm
-			pix = OPUIUtils::convertPixmap( ICON( "chart.xpm" ) );
-			toolTip = Q2C( i18n( "Create Diagramm" ) );
-			m_idButtonTools_Diagramm = m_vToolBarTools->insertButton2( pix, ID_TOOL_DIAGRAMM, SIGNAL( clicked() ), this, "toolsDiagramm",
-																	   true, toolTip, -1 );
-			m_vToolBarTools->setToggle( ID_TOOL_DIAGRAMM, true );
-			m_vToolBarTools->setButton( ID_TOOL_DIAGRAMM, false );
+	// diagramm
+	pix = OPUIUtils::convertPixmap( ICON( "chart.xpm" ) );
+	toolTip = Q2C( i18n( "Create Diagramm" ) );
+	m_idButtonTools_Diagramm = m_vToolBarTools->insertButton2( pix, ID_TOOL_DIAGRAMM, SIGNAL( clicked() ), this, "toolsDiagramm",
+															   true, toolTip, -1 );
+	m_vToolBarTools->setToggle( ID_TOOL_DIAGRAMM, true );
+	m_vToolBarTools->setButton( ID_TOOL_DIAGRAMM, false );
 
-			// table
-			pix = OPUIUtils::convertPixmap( ICON( "table.xpm" ) );
-			toolTip = Q2C( i18n( "Create Table" ) );
-			m_idButtonTools_Table = m_vToolBarTools->insertButton2( pix, ID_TOOL_TABLE, SIGNAL( clicked() ), this, "toolsTable",
-																	true, toolTip, -1 );
-			m_vToolBarTools->setToggle( ID_TOOL_TABLE, true );
-			m_vToolBarTools->setButton( ID_TOOL_TABLE, false );
+	// table
+	pix = OPUIUtils::convertPixmap( ICON( "table.xpm" ) );
+	toolTip = Q2C( i18n( "Create Table" ) );
+	m_idButtonTools_Table = m_vToolBarTools->insertButton2( pix, ID_TOOL_TABLE, SIGNAL( clicked() ), this, "toolsTable",
+															true, toolTip, -1 );
+	m_vToolBarTools->setToggle( ID_TOOL_TABLE, true );
+	m_vToolBarTools->setButton( ID_TOOL_TABLE, false );
 
-			// formula
-			pix = OPUIUtils::convertPixmap( ICON( "formula.xpm" ) );
-			toolTip = Q2C( i18n( "Create Formula" ) );
-			m_idButtonTools_Formula = m_vToolBarTools->insertButton2( pix, ID_TOOL_FORMULA, SIGNAL( clicked() ), this, "toolsFormula",
-																	  true, toolTip, -1 );
-			m_vToolBarTools->setToggle( ID_TOOL_FORMULA, true );
-			m_vToolBarTools->setButton( ID_TOOL_FORMULA, false );
+	// formula
+	pix = OPUIUtils::convertPixmap( ICON( "formula.xpm" ) );
+	toolTip = Q2C( i18n( "Create Formula" ) );
+	m_idButtonTools_Formula = m_vToolBarTools->insertButton2( pix, ID_TOOL_FORMULA, SIGNAL( clicked() ), this, "toolsFormula",
+															  true, toolTip, -1 );
+	m_vToolBarTools->setToggle( ID_TOOL_FORMULA, true );
+	m_vToolBarTools->setButton( ID_TOOL_FORMULA, false );
 
-			// parts
-			pix = OPUIUtils::convertPixmap( ICON( "parts.xpm" ) );
-			toolTip = Q2C( i18n( "Create Object" ) );
-			m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_OBJECT, SIGNAL( clicked() ), this, "toolsObject",
-																   true, toolTip, -1 );
-			m_vToolBarTools->setToggle( ID_TOOL_OBJECT, true );
-			m_vToolBarTools->setButton( ID_TOOL_OBJECT, false );
+	// parts
+	pix = OPUIUtils::convertPixmap( ICON( "parts.xpm" ) );
+	toolTip = Q2C( i18n( "Create Object" ) );
+	m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_OBJECT, SIGNAL( clicked() ), this, "toolsObject",
+														   true, toolTip, -1 );
+	m_vToolBarTools->setToggle( ID_TOOL_OBJECT, true );
+	m_vToolBarTools->setButton( ID_TOOL_OBJECT, false );
 
-			m_vToolBarTools->enable( OpenPartsUI::Show );
+	m_vToolBarTools->enable( OpenPartsUI::Show );
 
-			/////////
-			// Text
-			/////////
-			m_vToolBarText = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-			m_vToolBarText->setFullWidth( false );
+			/****************
+			 * Text
+			 *************/
+	m_vToolBarText = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+	m_vToolBarText->setFullWidth( false );
 
 			// size combobox
-			OpenPartsUI::StrList sizelist;
-			sizelist.length( 97 );
-			for( int i = 4; i <= 100 ; i++ )
-			{
-				char buffer[ 10 ];
-				sprintf( buffer, "%i", i );
-				sizelist[ i-4 ] = CORBA::string_dup( buffer );
-			}
-			toolTip = Q2C( i18n( "Font Size" ) );
-			m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const QString & ) ),
-																  this, "sizeSelected", true,
-																  toolTip, 50, -1, OpenPartsUI::AtBottom );
-			m_vToolBarText->setCurrentComboItem( ID_FONT_SIZE, 16 );
-			tbFont.setPointSize( 20 );
+	OpenPartsUI::StrList sizelist;
+	sizelist.length( 97 );
+	for( int i = 4; i <= 100 ; i++ )
+	{
+		char buffer[ 10 ];
+		sprintf( buffer, "%i", i );
+		sizelist[ i-4 ] = CORBA::string_dup( buffer );
+	}
+	toolTip = Q2C( i18n( "Font Size" ) );
+	m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const QString & ) ),
+														  this, "sizeSelected", true,
+														  toolTip, 50, -1, OpenPartsUI::AtBottom );
+	m_vToolBarText->setCurrentComboItem( ID_FONT_SIZE, 16 );
+	tbFont.setPointSize( 20 );
 
-			// fonts combobox
-			getFonts( fontList );
-			OpenPartsUI::StrList fonts;
-			fonts.length( fontList.count() );
-			for( unsigned int i = 0; i < fontList.count(); i++ )
-				fonts[ i ] = CORBA::string_dup( fontList.at( i ) );
-			toolTip = Q2C( i18n( "Font List" ) );
-			m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const QString & ) ), this,
-																  "fontSelected", true, toolTip,
-																  200, -1, OpenPartsUI::AtBottom );
-			tbFont.setFamily( fontList.at( 0 ) );
-			m_vToolBarText->setCurrentComboItem( ID_FONT_LIST, 0 );
+	// fonts combobox
+	getFonts( fontList );
+	OpenPartsUI::StrList fonts;
+	fonts.length( fontList.count() );
+	for( unsigned int i = 0; i < fontList.count(); i++ )
+		fonts[ i ] = CORBA::string_dup( fontList.at( i ) );
+	toolTip = Q2C( i18n( "Font List" ) );
+	m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const QString & ) ), this,
+														  "fontSelected", true, toolTip,
+														  200, -1, OpenPartsUI::AtBottom );
+	tbFont.setFamily( fontList.at( 0 ) );
+	m_vToolBarText->setCurrentComboItem( ID_FONT_LIST, 0 );
 
-			m_vToolBarText->insertSeparator( -1 );
+	m_vToolBarText->insertSeparator( -1 );
 
 			// bold
-			pix = OPUIUtils::convertPixmap( ICON( "bold.xpm" ) );
-			toolTip = Q2C( i18n( "Bold" ) );
-			m_idButtonText_Bold = m_vToolBarText->insertButton2( pix, ID_BOLD, SIGNAL( clicked() ), this, "textBold", true, toolTip, -1 );
-			m_vToolBarText->setToggle( ID_BOLD, true );
-			m_vToolBarText->setButton( ID_BOLD, false );
-			tbFont.setBold( false );
+	pix = OPUIUtils::convertPixmap( ICON( "bold.xpm" ) );
+	toolTip = Q2C( i18n( "Bold" ) );
+	m_idButtonText_Bold = m_vToolBarText->insertButton2( pix, ID_BOLD, SIGNAL( clicked() ), this, "textBold", true, toolTip, -1 );
+	m_vToolBarText->setToggle( ID_BOLD, true );
+	m_vToolBarText->setButton( ID_BOLD, false );
+	tbFont.setBold( false );
 
 			// italic
-			pix = OPUIUtils::convertPixmap( ICON( "italic.xpm" ) );
-			toolTip = Q2C( i18n( "Italic" ) );
-			m_idButtonText_Italic = m_vToolBarText->insertButton2( pix, ID_ITALIC, SIGNAL( clicked() ), this, "textItalic", true, toolTip, -1 );
-			m_vToolBarText->setToggle( ID_ITALIC, true );
-			m_vToolBarText->setButton( ID_ITALIC, false );
-			tbFont.setItalic( false );
+	pix = OPUIUtils::convertPixmap( ICON( "italic.xpm" ) );
+	toolTip = Q2C( i18n( "Italic" ) );
+	m_idButtonText_Italic = m_vToolBarText->insertButton2( pix, ID_ITALIC, SIGNAL( clicked() ), this, "textItalic", true, toolTip, -1 );
+	m_vToolBarText->setToggle( ID_ITALIC, true );
+	m_vToolBarText->setButton( ID_ITALIC, false );
+	tbFont.setItalic( false );
 
 			// underline
-			pix = OPUIUtils::convertPixmap( ICON( "underl.xpm" ) );
-			toolTip = Q2C( i18n( "Underline" ) );
-			m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ), this, "textUnderline",
-																	  true, toolTip, -1 );
-			m_vToolBarText->setToggle( ID_UNDERLINE, true );
-			m_vToolBarText->setButton( ID_UNDERLINE, false );
-			tbFont.setUnderline( false );
+	pix = OPUIUtils::convertPixmap( ICON( "underl.xpm" ) );
+	toolTip = Q2C( i18n( "Underline" ) );
+	m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ), this, "textUnderline",
+															  true, toolTip, -1 );
+	m_vToolBarText->setToggle( ID_UNDERLINE, true );
+	m_vToolBarText->setButton( ID_UNDERLINE, false );
+	tbFont.setUnderline( false );
 
 			// color
-			OpenPartsUI::Pixmap* p = new OpenPartsUI::Pixmap;
-			p->data = CORBA::string_dup( colorToPixString( black ) );
-			pix = p;
-			toolTip = Q2C( i18n( "Color" ) );
-			m_idButtonText_Color = m_vToolBarText->insertButton2( pix, ID_TEXT_COLOR, SIGNAL( clicked() ), this, "textColor", true, toolTip, -1 );
-			tbColor = black;
+	OpenPartsUI::Pixmap* p = new OpenPartsUI::Pixmap;
+	p->data = CORBA::string_dup( colorToPixString( black ) );
+	pix = p;
+	toolTip = Q2C( i18n( "Color" ) );
+	m_idButtonText_Color = m_vToolBarText->insertButton2( pix, ID_TEXT_COLOR, SIGNAL( clicked() ), this, "textColor", true, toolTip, -1 );
+	tbColor = black;
 
-			m_vToolBarText->insertSeparator( -1 );
+	m_vToolBarText->insertSeparator( -1 );
 
-			// align left
-			pix = OPUIUtils::convertPixmap( ICON( "alignLeft.xpm" ) );
-			toolTip = Q2C( i18n( "Align Left" ) );
-			m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ), this, "textAlignLeft",
-																  true, toolTip, -1 );
-			m_vToolBarText->setToggle( ID_ALEFT, true );
-			m_vToolBarText->setButton( ID_ALEFT, true );
-			tbAlign = TxtParagraph::LEFT;
+	// align left
+	pix = OPUIUtils::convertPixmap( ICON( "alignLeft.xpm" ) );
+	toolTip = Q2C( i18n( "Align Left" ) );
+	m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ), this, "textAlignLeft",
+														  true, toolTip, -1 );
+	m_vToolBarText->setToggle( ID_ALEFT, true );
+	m_vToolBarText->setButton( ID_ALEFT, true );
+	tbAlign = TxtParagraph::LEFT;
 
 			// align center
-			pix = OPUIUtils::convertPixmap( ICON( "alignCenter.xpm" ) );
-			toolTip = Q2C( i18n( "Align Center" ) );
-			m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ), this, "textAlignCenter",
-																	true, toolTip, -1 );
-			m_vToolBarText->setToggle( ID_ACENTER, true );
-			m_vToolBarText->setButton( ID_ACENTER, false );
+	pix = OPUIUtils::convertPixmap( ICON( "alignCenter.xpm" ) );
+	toolTip = Q2C( i18n( "Align Center" ) );
+	m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ), this, "textAlignCenter",
+															true, toolTip, -1 );
+	m_vToolBarText->setToggle( ID_ACENTER, true );
+	m_vToolBarText->setButton( ID_ACENTER, false );
 
-			// align right
-			pix = OPUIUtils::convertPixmap( ICON( "alignRight.xpm" ) );
-			toolTip = Q2C( i18n( "Align Right" ) );
-			m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, ID_ARIGHT, SIGNAL( clicked() ), this, "textAlignRight",
-																   true, toolTip, -1 );
-			m_vToolBarText->setToggle( ID_ARIGHT, true );
-			m_vToolBarText->setButton( ID_ARIGHT, false );
+	// align right
+	pix = OPUIUtils::convertPixmap( ICON( "alignRight.xpm" ) );
+	toolTip = Q2C( i18n( "Align Right" ) );
+	m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, ID_ARIGHT, SIGNAL( clicked() ), this, "textAlignRight",
+														   true, toolTip, -1 );
+	m_vToolBarText->setToggle( ID_ARIGHT, true );
+	m_vToolBarText->setButton( ID_ARIGHT, false );
 
-			m_vToolBarText->insertSeparator( -1 );
+	m_vToolBarText->insertSeparator( -1 );
 
 			// enum list
-			pix = OPUIUtils::convertPixmap( ICON( "enumList.xpm" ) );
-			toolTip = Q2C( i18n( "Enumerated List" ) );
-			m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textEnumList",
-																	 true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "enumList.xpm" ) );
+	toolTip = Q2C( i18n( "Enumerated List" ) );
+	m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textEnumList",
+															 true, toolTip, -1 );
 
-			// unsorted list
-			pix = OPUIUtils::convertPixmap( ICON( "unsortedList.xpm" ) );
-			toolTip = Q2C( i18n( "Unsorted List" ) );
-			m_idButtonText_UnsortList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textUnsortList", true, toolTip, -1 );
+	// unsorted list
+	pix = OPUIUtils::convertPixmap( ICON( "unsortedList.xpm" ) );
+	toolTip = Q2C( i18n( "Unsorted List" ) );
+	m_idButtonText_UnsortList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textUnsortList", true, toolTip, -1 );
 
-			// normal text
-			pix = OPUIUtils::convertPixmap( ICON( "normalText.xpm" ) );
-			toolTip = Q2C( i18n( "Normal Text" ) );
-			m_idButtonText_NormalText = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textNormalText", true, toolTip, -1 );
+	// normal text
+	pix = OPUIUtils::convertPixmap( ICON( "normalText.xpm" ) );
+	toolTip = Q2C( i18n( "Normal Text" ) );
+	m_idButtonText_NormalText = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textNormalText", true, toolTip, -1 );
 
-			m_vToolBarText->enable( OpenPartsUI::Show );
+	m_vToolBarText->enable( OpenPartsUI::Show );
 
 			// depth plus
-			pix = OPUIUtils::convertPixmap( ICON( "depth+.xpm" ) );
-			toolTip = Q2C( i18n( "Increase Depth" ) );
-			m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthPlus", true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "depth+.xpm" ) );
+	toolTip = Q2C( i18n( "Increase Depth" ) );
+	m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthPlus", true, toolTip, -1 );
 
-			// depth minus
-			pix = OPUIUtils::convertPixmap( ICON( "depth-.xpm" ) );
-			toolTip = Q2C( i18n( "Decrease Depth" ) );
-			m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthMinus", true, toolTip, -1 );
+	// depth minus
+	pix = OPUIUtils::convertPixmap( ICON( "depth-.xpm" ) );
+	toolTip = Q2C( i18n( "Decrease Depth" ) );
+	m_idButtonText_DepthPlus = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textDepthMinus", true, toolTip, -1 );
 
-			// spacing
-			pix = OPUIUtils::convertPixmap( ICON( "spacing.xpm" ) );
-			toolTip = Q2C( i18n( "Paragraph Spacing" ) );
-			m_idButtonText_Spacing = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textSpacing", true, toolTip, -1 );
+	// spacing
+	pix = OPUIUtils::convertPixmap( ICON( "spacing.xpm" ) );
+	toolTip = Q2C( i18n( "Paragraph Spacing" ) );
+	m_idButtonText_Spacing = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textSpacing", true, toolTip, -1 );
 
-			m_vToolBarText->enable( OpenPartsUI::Show );
+	m_vToolBarText->enable( OpenPartsUI::Show );
 
-			/////////
-			// Extra
-			/////////
-			m_vToolBarExtra = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-			m_vToolBarExtra->setFullWidth( false );
+			/****************
+			 * Extra
+			 ************/
+	m_vToolBarExtra = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+	m_vToolBarExtra->setFullWidth( false );
 
 			// pen and brush
-			pix = OPUIUtils::convertPixmap( ICON( "style.xpm" ) );
-			toolTip = Q2C( i18n( "Pen & Brush" ) );
-			m_idButtonExtra_Style = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraPenBrush", true, toolTip, -1 );
-			m_vToolBarExtra->insertSeparator( -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "style.xpm" ) );
+	toolTip = Q2C( i18n( "Pen & Brush" ) );
+	m_idButtonExtra_Style = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraPenBrush", true, toolTip, -1 );
+	m_vToolBarExtra->insertSeparator( -1 );
 
 			// pie
-			pix = OPUIUtils::convertPixmap( ICON( "edit_pie.xpm" ) );
-			toolTip = Q2C( i18n( "Configure Pie" ) );
-			m_idButtonExtra_Pie = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigPie", true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "edit_pie.xpm" ) );
+	toolTip = Q2C( i18n( "Configure Pie" ) );
+	m_idButtonExtra_Pie = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigPie", true, toolTip, -1 );
 
-			// rect
-			pix = OPUIUtils::convertPixmap( ICON( "rectangle2.xpm" ) );
-			toolTip = Q2C( i18n( "Configure Rectangle" ) );
-			m_idButtonExtra_Rect = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigRect", true,
-																   toolTip, -1 );
-			m_vToolBarExtra->insertSeparator( -1 );
+	// rect
+	pix = OPUIUtils::convertPixmap( ICON( "rectangle2.xpm" ) );
+	toolTip = Q2C( i18n( "Configure Rectangle" ) );
+	m_idButtonExtra_Rect = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigRect", true,
+														   toolTip, -1 );
+	m_vToolBarExtra->insertSeparator( -1 );
 
 			// raise
-			pix = OPUIUtils::convertPixmap( ICON( "raise.xpm" ) );
-			toolTip = Q2C( i18n( "Raise object" ) );
-			m_idButtonExtra_Raise = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraRaise", true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "raise.xpm" ) );
+	toolTip = Q2C( i18n( "Raise object" ) );
+	m_idButtonExtra_Raise = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraRaise", true, toolTip, -1 );
 
-			// lower
-			pix = OPUIUtils::convertPixmap( ICON( "lower.xpm" ) );
-			toolTip = Q2C( i18n( "Lower object" ) );
-			m_idButtonExtra_Lower = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLower", true, toolTip, -1 );
-			m_vToolBarExtra->insertSeparator( -1 );
+	// lower
+	pix = OPUIUtils::convertPixmap( ICON( "lower.xpm" ) );
+	toolTip = Q2C( i18n( "Lower object" ) );
+	m_idButtonExtra_Lower = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLower", true, toolTip, -1 );
+	m_vToolBarExtra->insertSeparator( -1 );
 
 			// rotate
-			pix = OPUIUtils::convertPixmap( ICON( "rotate.xpm" ) );
-			toolTip = Q2C( i18n( "Rotate object" ) );
-			m_idButtonExtra_Rotate = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraRotate", true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "rotate.xpm" ) );
+	toolTip = Q2C( i18n( "Rotate object" ) );
+	m_idButtonExtra_Rotate = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraRotate", true, toolTip, -1 );
 
-			// shadow
-			pix = OPUIUtils::convertPixmap( ICON( "shadow.xpm" ) );
-			toolTip = Q2C( i18n( "Shadow object" ) );
-			m_idButtonExtra_Shadow = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraShadow", true, toolTip, -1 );
-			m_vToolBarExtra->insertSeparator( -1 );
+	// shadow
+	pix = OPUIUtils::convertPixmap( ICON( "shadow.xpm" ) );
+	toolTip = Q2C( i18n( "Shadow object" ) );
+	m_idButtonExtra_Shadow = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraShadow", true, toolTip, -1 );
+	m_vToolBarExtra->insertSeparator( -1 );
 
 			// align
-			pix = OPUIUtils::convertPixmap( ICON( "alignobjs.xpm" ) );
-			toolTip = Q2C( i18n( "Align object" ) );
-			m_idButtonExtra_Align = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraAlignObj", true, toolTip, -1 );
-			m_vToolBarExtra->insertSeparator( -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "alignobjs.xpm" ) );
+	toolTip = Q2C( i18n( "Align object" ) );
+	m_idButtonExtra_Align = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraAlignObj", true, toolTip, -1 );
+	m_vToolBarExtra->insertSeparator( -1 );
 
 			// line begin
-			pix = OPUIUtils::convertPixmap( ICON( "line_begin.xpm" ) );
-			toolTip = Q2C( i18n( "Line Begin" ) );
-			m_idButtonExtra_LineBegin = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineBegin",
-																		true, toolTip, -1 );
-			// line end
-			pix = OPUIUtils::convertPixmap( ICON( "line_end.xpm" ) );
-			toolTip = Q2C( i18n( "Line End" ) );
-			m_idButtonExtra_LineEnd = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineEnd",
-																	  true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "line_begin.xpm" ) );
+	toolTip = Q2C( i18n( "Line Begin" ) );
+	m_idButtonExtra_LineBegin = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineBegin",
+																true, toolTip, -1 );
+	// line end
+	pix = OPUIUtils::convertPixmap( ICON( "line_end.xpm" ) );
+	toolTip = Q2C( i18n( "Line End" ) );
+	m_idButtonExtra_LineEnd = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineEnd",
+															  true, toolTip, -1 );
 
-			m_vToolBarExtra->insertSeparator( -1 );
+	m_vToolBarExtra->insertSeparator( -1 );
 
 			// web presentation
-			pix = OPUIUtils::convertPixmap( ICON( "webpres.xpm" ) );
-			toolTip = Q2C( i18n( "Create HTML Slide show" ) );
-			m_idButtonExtra_WebPres = m_vToolBarExtra->insertButton2( pix, ID_TOOL_WEBPRES, SIGNAL( clicked() ), this, "extraWebPres",
-																	  true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "webpres.xpm" ) );
+	toolTip = Q2C( i18n( "Create HTML Slide show" ) );
+	m_idButtonExtra_WebPres = m_vToolBarExtra->insertButton2( pix, ID_TOOL_WEBPRES, SIGNAL( clicked() ), this, "extraWebPres",
+															  true, toolTip, -1 );
 
-			m_vToolBarExtra->enable( OpenPartsUI::Show );
+	m_vToolBarExtra->enable( OpenPartsUI::Show );
 
-			/////////
-			// Screen
-			/////////
-			m_vToolBarScreen = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
-			m_vToolBarScreen->setFullWidth( false );
+			/*************
+			 * Screen
+			 **********/
+	m_vToolBarScreen = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
+	m_vToolBarScreen->setFullWidth( false );
 
 			// start
-			pix = OPUIUtils::convertPixmap( ICON( "kpstart.xpm" ) );
-			toolTip = Q2C( i18n( "Start" ) );
-			m_idButtonScreen_Start = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenStart", true, toolTip, -1 );
-			m_vToolBarScreen->insertSeparator( -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "kpstart.xpm" ) );
+	toolTip = Q2C( i18n( "Start" ) );
+	m_idButtonScreen_Start = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenStart", true, toolTip, -1 );
+	m_vToolBarScreen->insertSeparator( -1 );
 
 			// first
-			pix = OPUIUtils::convertPixmap( ICON( "first.xpm" ) );
-			toolTip = Q2C( i18n( "First" ) );
-			m_idButtonScreen_First = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenFirst", true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "first.xpm" ) );
+	toolTip = Q2C( i18n( "First" ) );
+	m_idButtonScreen_First = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenFirst", true, toolTip, -1 );
 
-			// previous
-			pix = OPUIUtils::convertPixmap( ICON( "kpprev.xpm" ) );
-			toolTip = Q2C( i18n( "Previous" ) );
-			m_idButtonScreen_Prev = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenPrev", true, toolTip, -1 );
+	// previous
+	pix = OPUIUtils::convertPixmap( ICON( "kpprev.xpm" ) );
+	toolTip = Q2C( i18n( "Previous" ) );
+	m_idButtonScreen_Prev = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenPrev", true, toolTip, -1 );
 
-			// next
-			pix = OPUIUtils::convertPixmap( ICON( "kpnext.xpm" ) );
-			toolTip = Q2C( i18n( "Next" ) );
-			m_idButtonScreen_Next = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenNext", true, toolTip, -1 );
+	// next
+	pix = OPUIUtils::convertPixmap( ICON( "kpnext.xpm" ) );
+	toolTip = Q2C( i18n( "Next" ) );
+	m_idButtonScreen_Next = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenNext", true, toolTip, -1 );
 
-			// last
-			pix = OPUIUtils::convertPixmap( ICON( "last.xpm" ) );
-			toolTip = Q2C( i18n( "Last" ) );
-			m_idButtonScreen_Last = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenLast", true, toolTip, -1 );
-			m_vToolBarScreen->insertSeparator( -1 );
+	// last
+	pix = OPUIUtils::convertPixmap( ICON( "last.xpm" ) );
+	toolTip = Q2C( i18n( "Last" ) );
+	m_idButtonScreen_Last = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenLast", true, toolTip, -1 );
+	m_vToolBarScreen->insertSeparator( -1 );
 
 			// effect
-			pix = OPUIUtils::convertPixmap( ICON( "effect.xpm" ) );
-			toolTip = Q2C( i18n( "Assign Effect" ) );
-			m_idButtonScreen_Effect = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenAssignEffect", true, toolTip, -1 );
-			m_vToolBarScreen->insertSeparator( -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "effect.xpm" ) );
+	toolTip = Q2C( i18n( "Assign Effect" ) );
+	m_idButtonScreen_Effect = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenAssignEffect", true, toolTip, -1 );
+	m_vToolBarScreen->insertSeparator( -1 );
 
 			// pen
-			pix = OPUIUtils::convertPixmap( ICON( "pen.xpm" ) );
-			toolTip = Q2C( i18n( "choose Pen" ) );
-			m_idButtonScreen_Pen = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenPen", true, toolTip, -1 );
+	pix = OPUIUtils::convertPixmap( ICON( "pen.xpm" ) );
+	toolTip = Q2C( i18n( "choose Pen" ) );
+	m_idButtonScreen_Pen = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenPen", true, toolTip, -1 );
 
-			m_vToolBarScreen->enable( OpenPartsUI::Show );
+	m_vToolBarScreen->enable( OpenPartsUI::Show );
 
-			setTool( TEM_MOUSE );
+	setTool( TEM_MOUSE );
 
-			/*
+	/*
 			 * ColorBar
 			 */
 
-			m_vColorBar = _factory->createColorBar( OpenPartsUI::ToolBarFactory::Transient );
-			m_vColorBar->setFullWidth( false );
+	m_vColorBar = _factory->createColorBar( OpenPartsUI::ToolBarFactory::Transient );
+	m_vColorBar->setFullWidth( false );
 
-			int i = 0;
-			const QColor cpalette[] = {white, red, green, blue, cyan, magenta, yellow,
-									   darkRed, darkGreen, darkBlue, darkCyan,
-									   darkMagenta, darkYellow, white, lightGray,
-									   gray, darkGray, black};
+	int i = 0;
+	const QColor cpalette[] = {white, red, green, blue, cyan, magenta, yellow,
+							   darkRed, darkGreen, darkBlue, darkCyan,
+							   darkMagenta, darkYellow, white, lightGray,
+							   gray, darkGray, black};
 
-			for ( i = 0; i < 18; i++ )
-				m_vColorBar->insertRgbColor( i, cpalette[ i ].red(),
-											 cpalette[ i ].green(),
-											 cpalette[ i ].blue(),
-											 i != 0 );
+	for ( i = 0; i < 18; i++ )
+		m_vColorBar->insertRgbColor( i, cpalette[ i ].red(),
+									 cpalette[ i ].green(),
+									 cpalette[ i ].blue(),
+									 i != 0 );
 
-			m_vColorBar->addConnection( SIGNAL( fgColorSelected( int ) ), this,
-										"setPenColor" );
-			m_vColorBar->addConnection( SIGNAL( bgColorSelected( int ) ), this,
-										"setFillColor" );
+	m_vColorBar->addConnection( SIGNAL( fgColorSelected( int ) ), this,
+								"setPenColor" );
+	m_vColorBar->addConnection( SIGNAL( bgColorSelected( int ) ), this,
+								"setFillColor" );
 
-			m_vColorBar->setBarPos( OpenPartsUI::Right );
-			m_vColorBar->enable( OpenPartsUI::Show );
+	m_vColorBar->setBarPos( OpenPartsUI::Right );
+	m_vColorBar->enable( OpenPartsUI::Show );
 
-			m_vColorBar->enable( OpenPartsUI::Hide );
-			m_vColorBar->setBarPos( OpenPartsUI::Floating );
-			m_vColorBar->setBarPos( OpenPartsUI::Right );
-			m_vColorBar->enable( OpenPartsUI::Show );
+	m_vColorBar->enable( OpenPartsUI::Hide );
+	m_vColorBar->setBarPos( OpenPartsUI::Floating );
+	m_vColorBar->setBarPos( OpenPartsUI::Right );
+	m_vColorBar->enable( OpenPartsUI::Show );
 
-			return true;
+	return true;
 }
 
 /*======================= setup scrollbars =====================*/

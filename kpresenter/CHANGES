@@ -197,3 +197,5 @@ Reggie, 15.5.1999:
   - Fixed includes (Only really neccessary headers are included in the .h files)
 - Fixes for Unicode
 - Some focus handling fixes
+- Fix for loading pixmaps
+- Fixed calcutaion of current page number

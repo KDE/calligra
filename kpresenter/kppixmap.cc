@@ -37,14 +37,25 @@ KPPixmap::KPPixmap( QString _filename, KSize _size )
 	
 	QCString str;
 	QBuffer buf( str );
-	buf.open( IO_WriteOnly );
-	QImageIO io( &buf, "XPM" );
-	io.setImage( orig_pixmap.convertToImage() );
-	io.write();
-// 	QString fn= "/tmp/kpresenter.xpm";
-// 	pixmap.save( fn, "XPM" );
+ 	buf.open( IO_WriteOnly );
+// 	QImageIO io( &buf, "XPM" );
+// 	io.setImage( orig_pixmap.convertToImage() );
+// 	io.write();
+	
+// 	QImageIO io;
+// 	QImage img;
+// 	img = orig_pixmap;
+// 	io.setImage( img );
+// 	io.setIODevice( &buf );
+// 	io.setFormat( "XPM" );
+// 	io.write();
+	
+ 	QString fn= "/tmp/kpresenter.xpm";
+ 	pixmap.save( fn, "XPM" );
 
-	data = string_to_native_string( str.data() );
+//	printf( "%s\n", str.data() );
+	
+	data = load_pixmap_native_format( fn );
 
 	if ( _size != pixmap.size() && _size != orig_size && pixmap.width() != 0 && pixmap.height() != 0 )
     {
