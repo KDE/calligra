@@ -2059,6 +2059,8 @@ void KPresenterView::objectSelectedChanged()
     actionExtraAlignObjCenterV->setEnabled(state);
     actionExtraAlignObjBottom->setEnabled(state);
     actionEditDelete->setEnabled(state);
+    actionExtraRaise->setEnabled(state);
+    actionExtraLower->setEnabled(state);
 
     bool isText=page->isASelectedTextObj();
     actionTextFont->setEnabled(isText);
@@ -2079,8 +2081,10 @@ void KPresenterView::objectSelectedChanged()
     actionTextItalic->setEnabled(isText);
     actionTextUnderline->setEnabled(isText);
 
-    actionEditCopy->setEnabled(state || isText);
-    actionEditCut->setEnabled(state || isText);
+    state=state || isText;
+    actionEditCopy->setEnabled(state);
+    actionEditCut->setEnabled(state);
+    actionColorBar->setEnabled(state);
 
 }
 
