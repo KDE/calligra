@@ -525,7 +525,6 @@ KarbonView::textTool()
 void
 KarbonView::shearTool()
 {
-	kdDebug() << "KarbonView::shearTool()" << endl;
 	m_currentTool->deactivate();
 	m_currentTool = m_shearTool;
 	m_currentTool->activate();
@@ -668,8 +667,8 @@ KarbonView::zoomChanged()
 	}
 	setZoom( zoomFactor );
 	// TODO : I guess we should define a document size member at this point...
-	kdDebug() << "m_part->pageLayout().ptWidth :" << m_part->pageLayout().ptWidth << endl;
-	kdDebug() << "m_part->pageLayout().ptHeight :" << m_part->pageLayout().ptHeight << endl;
+	//kdDebug() << "m_part->pageLayout().ptWidth :" << m_part->pageLayout().ptWidth << endl;
+	//kdDebug() << "m_part->pageLayout().ptHeight :" << m_part->pageLayout().ptHeight << endl;
 	m_canvas->resizeContents( int( m_part->pageLayout().ptWidth * zoomFactor ),
 								int( m_part->pageLayout().ptHeight * zoomFactor ) );
 	m_canvas->repaintAll();
@@ -705,7 +704,6 @@ KarbonView::strokeClicked()
 void
 KarbonView::slotStrokeChanged( const VStroke &c )
 {
-	kdDebug() << "In KarbonView::slotStrokeColorChanged" << endl;
 	m_part->document().setDefaultStroke( c );
 
 	m_part->addCommand( new VStrokeCmd( &m_part->document(), &c ), true );
@@ -716,7 +714,6 @@ KarbonView::slotStrokeChanged( const VStroke &c )
 void
 KarbonView::slotFillChanged( const VFill &f )
 {
-	kdDebug() << "In KarbonView::slotFillColorChanged" << endl;
 	m_part->document().setDefaultFill( f );
 
 	m_part->addCommand( new VFillCmd( &m_part->document(), f ), true );
@@ -732,7 +729,6 @@ KarbonView::slotJoinStyleClicked()
 	{
 		VStroke stroke( *( itr.current()->stroke() ) );
 		stroke.setParent( itr.current() );
-		kdDebug() << "setting to : " << (VStroke::VLineJoin)m_joinStyle->getState() << endl;
 		stroke.setLineJoin( (VStroke::VLineJoin)m_joinStyle->getState() );
 		itr.current()->setStroke( stroke );
 	}
