@@ -939,14 +939,12 @@ void KWView::updateFrameStatusBarItem()
 
 void KWView::clipboardDataChanged()
 {
-    kdDebug() << "KWView::clipboardDataChanged" << endl;
     if ( !m_gui || !m_doc->isReadWrite() )
     {
         actionEditPaste->setEnabled(false);
         return;
     }
     KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
-    kdDebug() << "KWView::clipboardDataChanged checking for plain text" << endl;
     // Is there plain text in the clipboard ?
     if ( edit && !QApplication::clipboard()->text().isEmpty() )
     {
@@ -954,7 +952,6 @@ void KWView::clipboardDataChanged()
         return;
     }
     QMimeSource *data = QApplication::clipboard()->data();
-    kdDebug() << "KWView::clipboardDataChanged checking for image" << endl;
     //QTime dt;
     //dt.start();
     // if ( QImageDrag::canDecode( data ) )  is very very slow in Qt 2 (n*m roundtrips)
@@ -978,7 +975,6 @@ void KWView::clipboardDataChanged()
         actionEditPaste->setEnabled( true );
     else
     {
-        kdDebug() << "KWView::clipboardDataChanged checking for kword XML" << endl;
         // Is there kword XML in the clipboard ?
         actionEditPaste->setEnabled( ( edit &&
                                        formats.findIndex( KWTextDrag::selectionMimeType() ) != -1 )
