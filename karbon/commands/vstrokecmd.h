@@ -42,6 +42,8 @@ public:
 	virtual void execute();
 	virtual void unexecute();
 
+	virtual bool changesSelection() const { return true; }
+
 protected:
 	typedef enum
 	{
