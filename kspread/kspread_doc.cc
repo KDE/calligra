@@ -696,7 +696,7 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     styles = mainStyles.styles( KSpreadDoc::STYLE_PAGEMASTER );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:master-page", (*it).name, "style:page-master-page-properties" );
+        (*it).style->writeStyle( &stylesWriter, mainStyles, "style:master-page", (*it).name, "" );
     }
 
     stylesWriter.endElement(); // office:master-style
