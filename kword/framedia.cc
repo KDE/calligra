@@ -873,7 +873,7 @@ void KWFrameDia::enableRunAround()
 
 bool KWFrameDia::applyChanges()
 {
-    //kdDebug() << "KWFrameDia::applyChanges"<<endl;
+    //kdDebug() << "KWFrameDia::applyChanges************************"<<endl;
     Q_ASSERT(frame);
     if ( !frame )
         return false;

@@ -883,7 +883,7 @@ void KWView::fileStatistics()
               "</table></qt>",
 	dlg.plainPage() ) );
     dlg.setInitialSize( QSize( 400, 200 ) ); // not too good for long translations... -> use a real layout and 5 labels
-    dlg.show();
+    dlg.exec();
 }
 
 /*======================== create GUI ==========================*/
@@ -2037,7 +2037,7 @@ void KWView::formatFont()
         KWFontDia *fontDia = new KWFontDia( this, "", edit->textFont(),
                                             actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
                                             edit->textColor() );
-        fontDia->show();
+        fontDia->exec();
         int flags = fontDia->changedFlags();
         kdDebug() << "KWView::formatFont changedFlags = " << flags << endl;
         if ( flags )
@@ -2299,7 +2299,7 @@ void KWView::extraAutoFormat()
 {
     m_doc->getAutoFormat()->readConfig();
     KWAutoFormatDia dia( this, 0, m_doc->getAutoFormat() );
-    dia.show();
+    dia.exec();
 }
 
 void KWView::extraStylist()
@@ -2308,7 +2308,7 @@ void KWView::extraStylist()
     if ( edit )
         edit->hideCursor();
     KWStyleManager * styleManager = new KWStyleManager( this, m_doc );
-    styleManager->show();
+    styleManager->exec();
     delete styleManager;
     if ( edit )
         edit->showCursor();
@@ -2425,7 +2425,7 @@ void KWView::tableInsertRow()
     Q_ASSERT(table);
     KWInsertDia dia( this, "", table, m_doc, KWInsertDia::ROW, m_gui->canvasWidget() );
     dia.setCaption( i18n( "Insert Row" ) );
-    dia.show();
+    dia.exec();
 }
 
 void KWView::tableInsertCol()
@@ -2445,7 +2445,7 @@ void KWView::tableInsertCol()
     {
         KWInsertDia dia( this, "", table, m_doc, KWInsertDia::COL, m_gui->canvasWidget() );
         dia.setCaption( i18n( "Insert Column" ) );
-        dia.show();
+        dia.exec();
     }
 }
 
@@ -2474,7 +2474,7 @@ void KWView::tableDeleteRow()
     {
         KWDeleteDia dia( this, "", table, m_doc, KWDeleteDia::ROW, m_gui->canvasWidget() );
         dia.setCaption( i18n( "Delete Row" ) );
-        dia.show();
+        dia.exec();
     }
 
 }
@@ -2504,7 +2504,7 @@ void KWView::tableDeleteCol()
     {
         KWDeleteDia dia( this, "", table, m_doc, KWDeleteDia::COL, m_gui->canvasWidget() );
         dia.setCaption( i18n( "Delete Column" ) );
-        dia.show();
+        dia.exec();
     }
 }
 
@@ -3353,7 +3353,7 @@ void KWView::spellCheckerFinished()
 void KWView::configure()
 {
     KWConfig configDia( this );
-    configDia.show();
+    configDia.exec();
 }
 
 KWTextFrameSetEdit *KWView::currentTextEdit()
