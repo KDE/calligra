@@ -646,8 +646,10 @@ void KWTextFrameSet::updateFrames()
     {
         //kdDebug(32002) << "KWTextFrameSet::updateFrames " << this
         //               << " setWidth=" << frames.first()->width() << endl;
-        textdoc->setWidth( kWordDocument()->zoomItX( frames.first()->width() ) );
+        int width = kWordDocument()->zoomItX( frames.first()->width() );
         // ## we need support for variable width.... (could be done in adjustRMargin in fact)
+        if ( width != textdoc->width() )
+            textdoc->setWidth( width );
     } else
     {
         //kdDebug(32002) << "KWTextFrameSet::update no frames" << endl;
