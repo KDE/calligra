@@ -611,7 +611,7 @@ void
 KarbonView::setLineWidth()
 {
 	kdDebug() << "KarbonView::setLineWidth" << endl;
-	VSelection *selection = &( m_part->document().selection() );
+	VSelection *selection = m_part->document().selection();
 	VStroke stroke;
 	//if( selection->stroke() )
 	//{
