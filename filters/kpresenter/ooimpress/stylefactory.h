@@ -137,7 +137,8 @@ private:
 
     QString m_name, m_bg_visible, m_bg_objects_visible, m_fill, m_fill_color,
         m_fill_image_name, m_fill_image_width, m_fill_image_height,
-        m_fill_image_ref_point, m_fill_gradient_name, m_repeat, m_page_effect;
+        m_fill_image_ref_point, m_fill_gradient_name, m_repeat, m_page_effect,
+        m_page_duration;
 };
 
 class TextStyle
