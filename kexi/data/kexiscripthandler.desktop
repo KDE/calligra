@@ -4,7 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 Name=Kexi Script Handler
-Name[bg]=Kexi подръжка на скрипт
+Name[bg]=Обработка на скриптове в Kexi
 Name[ca]=Manejador d'scripts de Kexi
 Name[cs]=Ovladač skriptů Kexi
 Name[cy]=Trinydd Sgript Kexi
@@ -30,6 +30,7 @@ Name[sk]=Spracovanie skriptov pre Kexi
 Name[sl]=Ravnalnik skriptov za Kexi
 Name[sr]=Kexi-јев руковалац скриптама
 Name[sv]=Kexi-skripthantering
+Name[ta]=kexi  நிரல் கையாளி 
 Name[tr]=Kexi Betik İşleyicisi
 Name[xx]=xxKexi Script Handlerxx
 Name[zh_CN]=Kexi 脚本处理器
