@@ -138,7 +138,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
 
     tmpQLabel = new QLabel( tmpQButtonGroup, "Label_7" );
     tmpQLabel->setText(i18n("Message:" ));
-    grid1->addWidget(tmpQLabel,1,0);
+    grid1->addWidget(tmpQLabel,2,0);
 
      message =new QMultiLineEdit( tmpQButtonGroup);
      grid1->addMultiCellWidget(message,2,3,1,1);
@@ -155,12 +155,24 @@ void KSpreadDlgValidity::changeIndexType(int _index)
 switch(_index)
         {
         case 0:
+                message->setEnabled(false);
+                title->setEnabled(false);
+                val_max->setEnabled(false);
+                val_min->setEnabled(false);
+                edit1->setEnabled(false);
+                edit2->setEnabled(false);
+                choose->setEnabled(false);
+                chooseAction->setEnabled(false);
+                break;
         case 2:
                 val_max->setEnabled(false);
                 val_min->setEnabled(false);
                 edit1->setEnabled(false);
                 edit2->setEnabled(false);
                 choose->setEnabled(false);
+                message->setEnabled(true);
+                title->setEnabled(true);
+                chooseAction->setEnabled(true);
                 break;
         case 1:
                 val_max->setEnabled(true);
@@ -169,6 +181,9 @@ switch(_index)
                 edit2->setEnabled(true);
                 changeIndexCond(choose->currentItem());
                 choose->setEnabled(true);
+                message->setEnabled(true);
+                title->setEnabled(true);
+                chooseAction->setEnabled(true);
                 break;
         }
 }
