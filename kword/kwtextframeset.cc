@@ -733,6 +733,10 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
             undoRedoInfo.name = i18n("Delete text");
 	}
 	undoRedoInfo.text += parag->at( cursor->index() )->c;
+        if ( cursor->parag()->at( cursor->index() )->format() ) {
+ 	    cursor->parag()->at( cursor->index() )->format()->addRef();
+ 	    undoRedoInfo.text.at( undoRedoInfo.text.length() - 1 ).setFormat( cursor->parag()->at( cursor->index() )->format() );
+ 	}
 	if ( cursor->remove() )
 	    undoRedoInfo.text += "\n";
 	break;
@@ -755,6 +759,10 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	}
 	cursor->gotoLeft();
 	undoRedoInfo.text.prepend( QString( cursor->parag()->at( cursor->index() )->c ) );
+        if ( cursor->parag()->at( cursor->index() )->format() ) {
+ 	    cursor->parag()->at( cursor->index() )->format()->addRef();
+ 	    undoRedoInfo.text.at( 0 ).setFormat( cursor->parag()->at( cursor->index() )->format() );
+ 	}
 	undoRedoInfo.index = cursor->index();
 	if ( cursor->remove() ) {
 	    undoRedoInfo.text.remove( 0, 1 );
@@ -787,7 +795,12 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	}
 	if ( cursor->atParagEnd() ) {
 	    undoRedoInfo.text += cursor->parag()->at( cursor->index() )->c;
-	    if ( cursor->remove() )
+	    if ( cursor->parag()->at( cursor->index() )->format() ) {
+		cursor->parag()->at( cursor->index() )->format()->addRef();
+                undoRedoInfo.text.at( undoRedoInfo.text.length() - 1 ).setFormat( cursor->parag()->at( cursor->index() )->format() );
+	    }
+
+            if ( cursor->remove() )
 		undoRedoInfo.text += "\n";
 	} else {
 	    undoRedoInfo.text += cursor->parag()->string()->toString().mid( cursor->index() );
