@@ -3253,9 +3253,17 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint, int keyState )
         return Qt::sizeVerCursor;
     case MEANING_RESIZE_COLUMN:
         // Bug in (at least) Qt-3.1.1 : Qt::splitVCursor and Qt::splitHCursor are swapped!
-        return QCursor(SplitVCursor);
+#if QT_VERSION < 0x030200
+        return Qt::splitVCursor;
+#else
+        return Qt::splitHCursor;
+#endif
     case MEANING_RESIZE_ROW:
-        return QCursor(SplitHCursor);
+#if QT_VERSION < 0x030200
+        return Qt::splitHCursor;
+#else
+        return Qt::splitVCursor;
+#endif
     }
     return QCursor(); // default cursor !?!?
 }
