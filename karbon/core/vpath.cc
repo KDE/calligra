@@ -437,7 +437,7 @@ VPath::save( QDomElement& element ) const
 		me.setAttribute( "closed", m_closed );
 
 		// outline:
-		QDomElement outline = element.ownerDocument().createElement( "CONTOUR" );
+		QDomElement outline = element.ownerDocument().createElement( "SEGMENTS" );
 		me.appendChild( outline );
 
 		VSegmentListIterator itr( m_segments );
@@ -450,7 +450,7 @@ VPath::save( QDomElement& element ) const
 		QPtrListIterator<VSegmentList> holeItr( m_holes );
 		for( holeItr.toFirst(); holeItr.current(); ++holeItr )
 		{
-			QDomElement hole = element.ownerDocument().createElement( "HOLE" );
+			QDomElement hole = element.ownerDocument().createElement( "SEGMENTS" );
 			me.appendChild( hole );
 
 			VSegmentListIterator itr2( *( holeItr.current() ) );

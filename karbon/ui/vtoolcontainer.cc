@@ -2,7 +2,7 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include <qgroupbox.h>
+#include <qbuttongroup.h>
 #include <qstring.h>
 
 #include <ktoolbar.h>
@@ -23,7 +23,7 @@ VToolContainer::plug( QWidget* widget, int index )
 
 		int id = KAction::getToolButtonID();
 
-		QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, 0L, widget );
+		QGroupBox* group = new QButtonGroup( 2, Qt::Horizontal, 0L, widget );
 		static_cast<KActionCollection*>( parent() )->action( "tool_select" )->plug( group );
 		static_cast<KActionCollection*>( parent() )->action( "tool_polygon" )->plug( group );
 

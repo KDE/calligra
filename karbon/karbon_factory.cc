@@ -82,7 +82,7 @@ KarbonFactory::aboutData()
 			I18N_NOOP( "(c) 2001, 2002 The Karbon Developers" ) );
 		s_aboutData->addAuthor(
 			"Lennart Kudling",
-			I18N_NOOP( "Idea, current maintainer" ),
+			I18N_NOOP( "idea" ),
 			"kudling@kde.org",
 			0 );
 		s_aboutData->addAuthor(

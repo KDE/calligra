@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=Karbon EPS Export Filter
+X-KDE-Export=image/x-eps
+X-KDE-Import=application/x-karbon
+X-KDE-Weight=1
+X-KDE-Library=libkarbonepsexport
+ServiceTypes=KOfficeFilter

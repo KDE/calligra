@@ -5,7 +5,7 @@ INCLUDES = \
 	-I$(srcdir)/ui \
 	$(all_includes)
 
-SUBDIRS = core ui tools . data pics
+SUBDIRS = core ui tools filters . data pics
 
 bin_PROGRAMS = karbon
 lib_LTLIBRARIES = \
