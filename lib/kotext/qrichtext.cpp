@@ -4276,7 +4276,7 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 		bw = cw;
 	    } else {
 		if ( chr->customItem()->placement() == KoTextCustomItem::PlaceInline ) {
-		    chr->customItem()->draw( &painter, chr->x, cy, clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
+                   chr->customItem()->draw( &painter, chr->x, cy + lastBaseLine - chr->customItem()->ascent(), clipx - r.x(), clipy - r.y(), clipw, cliph, cg,
 					     nSels && selectionStarts[ 0 ] <= i && selectionEnds[ 0 ] > i );
 		    paintStart = i+1;
 		    paintEnd = -1;
