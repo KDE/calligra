@@ -1657,7 +1657,7 @@ QPicture* KTextObject::getPic(int _x,int _y,int _w,int _h,bool presMode=false,in
 void KTextObject::draw(QPainter &p,int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true)
 {
   p.save();
-  
+
   drawPic = true;
 
   if (_clip)
@@ -2485,7 +2485,7 @@ void KTextObject::openASCII(QString filename)
       f.close();
     }
 
-  addText(s,kapp->generalFont,kapp->windowTextColor,false,TxtParagraph::LEFT,false);
+  addText(s,kapp->generalFont(),colorGroup().text(),false,TxtParagraph::LEFT,false);
 
   doRepaints = true;
 
@@ -4728,7 +4728,7 @@ void KTextObject::keyPressEvent(QKeyEvent* e)
 void KTextObject::mousePressEvent(QMouseEvent *e)
 {
   setFocus();
-  
+
   if (e->button() != RightButton)
     {
       drawSelection = false;

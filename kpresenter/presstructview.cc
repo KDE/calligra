@@ -40,7 +40,7 @@ PVTimeTable::PVTimeTable(QWidget *parent,KPresenterDoc *_doc)
   setCellWidth(wid);
   setCellHeight(fm.height() * 2 + fm.height() / 2);
 
-  setBackgroundColor(kapp->windowColor);
+  setBackgroundColor(colorGroup().base());
   setNumCols(0);
   setNumRows(0);
   page = -1;
@@ -94,9 +94,9 @@ void PVTimeTable::paintCell(QPainter *painter,int row,int col)
       painter->setPen(QPen(black));
 
       if (row == 0 || col == 0)
-	painter->fillRect(0,0,cellWidth(),cellHeight(),kapp->backgroundColor);
+	painter->fillRect(0,0,cellWidth(),cellHeight(),colorGroup().background());
 
-      painter->setPen(kapp->textColor);
+      painter->setPen(colorGroup().text());
       QFontMetrics fm(font());
       QString obj_name;
 

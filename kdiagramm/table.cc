@@ -30,7 +30,7 @@ SheetTable::SheetTable( int cols, int rows, QWidget *parent,
 		       Tbl_snapToGrid| Tbl_cutCells );
     else
 	setTableFlags( flags );
- 
+
     setNumRows(rows);
     setNumCols(cols);
 
@@ -55,7 +55,7 @@ SheetTable::SheetTable( int cols, int rows, QWidget *parent,
 	connect( input, SIGNAL(returnPressed()), this, SLOT(nextInput()) );
       }
 	
-    setBackgroundColor(kapp->windowColor);
+    setBackgroundColor(colorGroup().base());
 }
 
 
@@ -71,7 +71,7 @@ void SheetTable::setText( int row, int col, QString s, bool paint )
   table.remove(index(row,col));
   table.insert(index(row,col),s);
   int x,y;
-    if ( paint && rowYPos( row, &y ) && colXPos( col, &x )) 
+    if ( paint && rowYPos( row, &y ) && colXPos( col, &x ))
 	repaint( x,y, cellWidth(col), cellHeight(row));
     if (row == inRow && col == inCol && editable)
       input->setText(s);
@@ -89,23 +89,23 @@ void SheetTable::placeInput()
     if ( colXPos(inCol,&x) && rowYPos(inRow,&y) ) {
 	input->move(x+1,y+1);
 	input->show();
-	if (!input->hasFocus()) 
+	if (!input->hasFocus())
 	    input->setFocus();
     } else
 	input->hide();
 }
 
-void SheetTable::paintCell( QPainter *p, int row, int col ) 
+void SheetTable::paintCell( QPainter *p, int row, int col )
 {
 
   int w = cellWidth( col );
-  int h = cellHeight( row );  
-  int x2 = w - 1;   
+  int h = cellHeight( row );
+  int x2 = w - 1;
   int y2 = h - 1;
 
   p->setPen(black);
-  p->drawLine( x2, 0, x2, y2 );   
-  p->drawLine( 0, y2, x2, y2 ); 
+  p->drawLine( x2, 0, x2, y2 );
+  p->drawLine( 0, y2, x2, y2 );
 
   if (row == topCell())
     p->drawLine(0,0,x2,0);
@@ -177,7 +177,7 @@ void SheetTable::makeVisible( int row, int col )
 	int r = topCell() + row - lastRowVisible();
 	setTopCell(r);
 	emit newRow(r);
-    } 
+    }
 }
 
 void SheetTable::mousePressEvent( QMouseEvent * e )

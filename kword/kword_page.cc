@@ -2653,7 +2653,7 @@ void KWPage::drawBorders(QPainter &_painter,KRect v_area)
 	      else
 		{
 		  _painter.restore();
-		  _painter.fillRect(frame.x(),frame.y(),frame.width() - 1,frame.height() - 1,kapp->selectColor);
+		  _painter.fillRect(frame.x(),frame.y(),frame.width() - 1,frame.height() - 1,colorGroup().highlight());
 		  _painter.fillRect(frame.x() + frame.width() - 6,frame.y() + frame.height() / 2 - 3,6,6,black);
 		  _painter.fillRect(frame.x() + frame.width() / 2 - 3,frame.y() + frame.height() - 6,6,6,black);
 		}	
@@ -3919,6 +3919,6 @@ void KWPage::insertVariable(VariableType type)
 
   recalcPage(0L);
   recalcCursor(true);
-  
+
   debug("void KWPage::insertVariable(VariableType type) ... successful");
 }

@@ -163,7 +163,7 @@ void Page::drawObjects(QPainter *painter,KRect rect)
 void Page::mousePressEvent(QMouseEvent *e)
 {
   setFocus();
-  
+
   KPObject *kpobject = 0;
 
   oldMx = e->x();
@@ -2680,7 +2680,7 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   view->setDiffY(-static_cast<int>(MM_TO_POINT(top_margin)));
 
   QColor c = kapp->winStyleHighlightColor();
-  kapp->setWinStyleHighlightColor(kapp->selectColor);
+  kapp->setWinStyleHighlightColor(colorGroup().highlight());
 
   QProgressBar progBar;
 

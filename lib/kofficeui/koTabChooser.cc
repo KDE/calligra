@@ -25,7 +25,7 @@ KoTabChooser::KoTabChooser(QWidget *parent,int _flags)
   flags = _flags;
 
   currType = 0;
-  
+
   if (flags & TAB_DEC_PNT) currType = TAB_DEC_PNT;
   if (flags & TAB_CENTER) currType = TAB_CENTER;
   if (flags & TAB_RIGHT) currType = TAB_RIGHT;
@@ -95,6 +95,7 @@ void KoTabChooser::mousePressEvent(QMouseEvent *e)
 
 	rb_menu->popup(pnt);
       } break;
+    default: break;
     }
 }
 

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -61,9 +61,9 @@ Ruler::Ruler (Orientation o, MeasurementUnit mu, QWidget *parent,
 void Ruler::initMarker (int w, int h) {
   Painter p;
   QPointArray pts (3);
-  static QCOORD hpoints [] = { 0,0, MARKER_WIDTH-1,0, 
+  static QCOORD hpoints [] = { 0,0, MARKER_WIDTH-1,0,
 			       (MARKER_WIDTH-1)/2,MARKER_HEIGHT-1 };
-  static QCOORD vpoints [] = { 0,0, MARKER_HEIGHT-1,(MARKER_WIDTH-1)/2, 
+  static QCOORD vpoints [] = { 0,0, MARKER_HEIGHT-1,(MARKER_WIDTH-1)/2,
 			       0,MARKER_WIDTH-1 };
 
   if (orientation == Horizontal)
@@ -75,14 +75,14 @@ void Ruler::initMarker (int w, int h) {
   p.begin (marker);
   p.setPen (black);
   p.setBrush (black);
-  p.setBackgroundColor (kapp->backgroundColor);
+  p.setBackgroundColor (colorGroup().background());
   p.eraseRect (0, 0, w, h);
   p.drawPolygon (pts);
   p.end ();
 
   bg = new QPixmap (w, h);
   p.begin (bg);
-  p.setBackgroundColor (kapp->backgroundColor);
+  p.setBackgroundColor (colorGroup().background());
   p.eraseRect (0, 0, w, h);
   p.end ();
 }
@@ -97,7 +97,7 @@ void Ruler::recalculateSize (QResizeEvent *e) {
     return;
 
   int w, h;
-  
+
   int maxsize = (int)(1000.0 * zoom);
 
   if (orientation == Horizontal) {
@@ -183,12 +183,12 @@ void Ruler::paintEvent (QPaintEvent *e) {
   const QRect& rect = e->rect ();
 
   if (orientation == Horizontal)
-    bitBlt (this, rect.x (), rect.y (), buffer, 
-	    rect.x () + firstVisible, rect.y (), 
+    bitBlt (this, rect.x (), rect.y (), buffer,
+	    rect.x () + firstVisible, rect.y (),
 	    rect.width (), rect.height ());
   else
-    bitBlt (this, rect.x (), rect.y (), buffer, 
-	    rect.x (), rect.y () + firstVisible, 
+    bitBlt (this, rect.x (), rect.y (), buffer,
+	    rect.x (), rect.y () + firstVisible,
 	    rect.width (), rect.height ());
   QFrame::paintEvent (e);
 }
@@ -221,7 +221,7 @@ void Ruler::drawRuler () {
 
   p.begin (buffer);
   //  p.setBackgroundColor (lightGray);
-  p.setBackgroundColor (kapp->backgroundColor);
+  p.setBackgroundColor (colorGroup().background());
   p.setPen (black);
   p.setFont (QFont ("times", 10));
   buffer->fill (backgroundColor ());
@@ -229,7 +229,7 @@ void Ruler::drawRuler () {
 
 #define MM_FACTOR 72.0 / 25.4
 #define INCH_FACTOR 7.2
-  
+
   if (orientation == Horizontal) {
     switch (munit) {
     case UnitPoint:

@@ -26,7 +26,7 @@ KCharSelect::KCharSelect(QWidget *parent,const char *name,QFont __font,int __c)
 
   currentC = KPoint(_c - 33 - ((_c - 33) / 28) * 28,(_c - 33) / 28);
 
-  setBackgroundColor(kapp->windowColor);
+  setBackgroundColor(colorGroup().base());
 
   setCellWidth(20);
   setCellHeight(25);
@@ -48,7 +48,7 @@ KSize KCharSelect::sizeHint()
 {
   int w = cellWidth();
   int h = cellHeight();
-  
+
   w *= numCols();
   h *= numRows();
 
@@ -68,13 +68,13 @@ void KCharSelect::paintCell(class QPainter* p,int row,int col)
   c = 33 + row * numCols() + col;
   sprintf(chr,"%c",c);
 
-  p->setPen(kapp->textColor);
+  p->setPen(colorGroup().text());
   if (currentC.x() == col && currentC.y() == row)
     {
-      p->setBrush(QBrush(kapp->selectColor));
+      p->setBrush(QBrush(colorGroup().highlight()));
       p->setPen(NoPen);
       p->drawRect(0,0,w,h);
-      p->setPen(kapp->selectTextColor);
+      p->setPen(colorGroup().highlightedText());
       _c = c;
     }
 
@@ -83,14 +83,14 @@ void KCharSelect::paintCell(class QPainter* p,int row,int col)
 
   p->setPen(black);
 
-  p->drawLine(x2,0,x2,y2);               
-  p->drawLine(0,y2,x2,y2); 
+  p->drawLine(x2,0,x2,y2);
+  p->drawLine(0,y2,x2,y2);
 
   if (row == 0)
     p->drawLine(0,0,x2,0);
   if (col == 0)
     p->drawLine(0,0,0,y2);
-  
+
 }
 
 /*======================== mouse move event =======================*/
@@ -99,10 +99,10 @@ void KCharSelect::mouseMoveEvent(QMouseEvent *e)
   if (findRow(e->y()) != -1 && findCol(e->x()) != -1)
     {
       KPoint oldC = currentC;
-      
+
       currentC.setX(findCol(e->x()));
       currentC.setY(findRow(e->y()));
-      
+
       updateCell(oldC.y(),oldC.x(),true);
       updateCell(currentC.y(),currentC.x(),true);
       emit activated(_c);
