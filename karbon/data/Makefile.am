@@ -1,5 +1,8 @@
 SUBDIRS = .
 
+predef_DATA = gradients.predef
+predefdir = $(kde_datadir)/karbon
+
 kdelnk_DATA = karbon.desktop
 kdelnkdir = $(kde_appsdir)/Office
 

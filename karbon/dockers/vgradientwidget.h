@@ -18,37 +18,42 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VGRADIENTTOOL_H__
-#define __VGRADIENTTOOL_H__
+#ifndef _VGRADIENTWIDGET_H_
+#define _VGRADIENTWIDGET_H_
 
-#include "vtool.h"
-#include "vgradient.h"
+#include <qwidget.h>
 
-class VGradientDocker;
+class VGradient;
+class QPainter;
+class VColor;
 
-class VGradientTool : public VTool
+class VGradientWidget : public QWidget
 {
-public:
-	VGradientTool( KarbonView* view );
-	virtual ~VGradientTool();
+	Q_OBJECT
 
-	virtual void activate();
+	public:
+		VGradientWidget( VGradient*& gradient, QWidget* parent = 0L, const char* name = 0L );
+		~VGradientWidget();
 
-	virtual void showDocker() const;
+		virtual void paintEvent( QPaintEvent* );
 
-protected:
-	virtual void draw();
+		signals:
+			void changed();
 
-	virtual void mouseButtonRelease();
-	virtual void mouseButtonPress();
-	virtual void mouseDragRelease();
-	virtual void mouseDrag();
+	protected:
+			/** mouse events... For color stops manipulation */
+		void mousePressEvent( QMouseEvent* );
+		void mouseReleaseEvent( QMouseEvent* );
+		void mouseDoubleClickEvent( QMouseEvent* );
+		void mouseMoveEvent( QMouseEvent* );
 
-private:
-	VGradientDocker* m_docker;
-	VGradient        m_gradient;
-	KoPoint          m_current;
-};
+		void paintColorStop( QPainter& p, int x, VColor& color );
+		void paintMidPoint( QPainter& p, int x );
 
-#endif
+			/** The gradient to modify. */
+		VGradient**             m_lpgradient;
+			/** The point to modify. */
+		int currentPoint;
+}; // VGradientWidget
 
+#endif /* _VGRADIENTWIDGET_H_ */

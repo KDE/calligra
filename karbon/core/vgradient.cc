@@ -21,9 +21,19 @@
 
 #include "vgradient.h"
 
+int VGradient::VColorStopList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )
+{
+	float r1 = ((VColorStop*)item1)->rampPoint;
+	float r2 = ((VColorStop*)item2)->rampPoint;
+	
+	return ( r1 == r2 ? 0 : r1 < r2 ? -1 : 1 );
+} // VGradient::VColorStopList::compareItems
+
 VGradient::VGradient( VGradientType type )
 	: m_type( type )
 {
+	m_colorStops.setAutoDelete(true);
+
 	// set up dummy gradient
 	VColor color;
 
@@ -38,6 +48,47 @@ VGradient::VGradient( VGradientType type )
 	setRepeatMethod( VGradient::reflect );
 }
 
+VGradient::VGradient( const VGradient& gradient )
+{
+	m_origin       = gradient.m_origin;
+	m_vector       = gradient.m_vector;
+	m_type         = gradient.m_type;
+	m_repeatMethod = gradient.m_repeatMethod;
+	
+	m_colorStops.clear();
+	QPtrVector<VColorStop> cs = gradient.colorStops();
+	for ( int i = 0; i < cs.count(); i++ )
+		m_colorStops.append( new VColorStop(*cs[i]) );
+	m_colorStops.sort();
+} // VGradient::VGradient
+
+VGradient& VGradient::operator=(const VGradient& gradient)
+{
+	if ( this == &gradient )
+		return *this;
+		
+	m_origin       = gradient.m_origin;
+	m_vector       = gradient.m_vector;
+	m_type         = gradient.m_type;
+	m_repeatMethod = gradient.m_repeatMethod;
+	
+	m_colorStops.clear();
+	QPtrVector<VColorStop> cs = gradient.colorStops();
+	for ( int i = 0; i < cs.count(); i++ )
+		m_colorStops.append( new VColorStop(*cs[i]) );
+	m_colorStops.sort();
+
+	return *this;	
+} // VGradient::operator=
+
+const QPtrVector<VColorStop> VGradient::colorStops() const
+{ 
+	QPtrVector<VColorStop>* v = new QPtrVector<VColorStop>();
+	m_colorStops.toVector(v);
+	v->setAutoDelete(false);
+	return *v; 
+} // VGradient::colorStops()
+
 void
 VGradient::clearStops()
 {
@@ -45,20 +96,28 @@ VGradient::clearStops()
 }
 
 void
+VGradient::addStop( const VColorStop& colorStop )
+{
+	 m_colorStops.inSort( new VColorStop(colorStop) );
+} // VGradient::addStop
+
+void
 VGradient::addStop( const VColor &color, float rampPoint, float midPoint )
 {
-	VColorStop stop;
-	stop.color = color;
 	// Clamping between 0.0 and 1.0
 	rampPoint = rampPoint < 0.0 ? 0.0 : rampPoint;
 	rampPoint = rampPoint > 1.0 ? 1.0 : rampPoint;
-	stop.rampPoint = rampPoint;
 	// Clamping between 0.0 and 1.0
 	midPoint = midPoint < 0.0 ? 0.0 : midPoint;
 	midPoint = midPoint > 1.0 ? 1.0 : midPoint;
-	stop.midPoint = midPoint;
-	m_colorStops.append( stop );
+	
+	m_colorStops.inSort( new VColorStop(rampPoint, midPoint, color) );
 }
+
+void VGradient::removeStop( const VColorStop& colorstop )
+{
+	m_colorStops.remove( &colorstop );
+} // VGradient::removeStop
 
 void
 VGradient::save( QDomElement& element ) const
@@ -73,13 +132,14 @@ VGradient::save( QDomElement& element ) const
 	me.setAttribute( "repeatMethod", m_repeatMethod );
 
 	// save stops
-	QValueListConstIterator<VColorStop> itr;
-	for( itr = m_colorStops.begin(); itr != m_colorStops.end(); ++itr )
+	VColorStop* colorstop;
+	QPtrList<VColorStop>& colorStops = const_cast<VColorStopList&>(m_colorStops);
+	for( colorstop = colorStops.first(); colorstop; colorstop = colorStops.next() )
 	{
 		QDomElement stop = element.ownerDocument().createElement( "COLORSTOP" );
-		(*itr).color.save( stop );
-		stop.setAttribute( "ramppoint", (*itr).rampPoint );
-		stop.setAttribute( "midpoint", (*itr).midPoint );
+		colorstop->color.save( stop );
+		stop.setAttribute( "ramppoint", colorstop->rampPoint );
+		stop.setAttribute( "midpoint", colorstop->midPoint );
 		me.appendChild( stop );
 	}
 
@@ -108,14 +168,13 @@ VGradient::load( const QDomElement& element )
 
 			if( colorstop.tagName() == "COLORSTOP" )
 			{
-				VColorStop stop;
-				stop.color.load( colorstop.firstChild().toElement() );
-				stop.rampPoint = colorstop.attribute( "ramppoint", "0.0" ).toDouble();
-				stop.midPoint = colorstop.attribute( "midpoint", "0.5" ).toDouble();
-				m_colorStops.append( stop );
+				VColor color;
+				color.load( colorstop.firstChild().toElement() );
+				addStop( color, colorstop.attribute( "ramppoint", "0.0" ).toDouble(), colorstop.attribute( "midpoint", "0.5" ).toDouble() );
 			}
 		}
 	}
+	m_colorStops.sort();
 }
 
 void

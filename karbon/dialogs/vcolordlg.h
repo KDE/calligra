@@ -18,37 +18,26 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VGRADIENTTOOL_H__
-#define __VGRADIENTTOOL_H__
+#ifndef __VCOLORDLG_H__
+#define __VCOLORDLG_H__
 
-#include "vtool.h"
-#include "vgradient.h"
+#include <kdialogbase.h>
 
-class VGradientDocker;
+class VColorTab;
+class VColor;
 
-class VGradientTool : public VTool
+class VColorDlg : public KDialogBase
 {
+	Q_OBJECT
+
 public:
-	VGradientTool( KarbonView* view );
-	virtual ~VGradientTool();
+	VColorDlg( VColor& color, QWidget* parent = 0L, const char* name = 0L );
 
-	virtual void activate();
-
-	virtual void showDocker() const;
-
-protected:
-	virtual void draw();
-
-	virtual void mouseButtonRelease();
-	virtual void mouseButtonPress();
-	virtual void mouseDragRelease();
-	virtual void mouseDrag();
-
+	VColor color();
+	
 private:
-	VGradientDocker* m_docker;
-	VGradient        m_gradient;
-	KoPoint          m_current;
-};
+	VColorTab* m_colortab;
+}; // VColorDlg
 
-#endif
+#endif /* _VCOLORDLG_H_ */
 

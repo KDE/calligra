@@ -1,0 +1,81 @@
+<!DOCTYPE PredefGradients>
+<predefGradients>
+ <GRADIENT originX="0" originY="0" repeatMethod="1" type="0" vectorX="0" vectorY="50" >
+  <COLORSTOP ramppoint="0" midpoint="0.5" >
+   <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="1" midpoint="0.5" >
+   <COLOR v2="1" v3="0" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+ </GRADIENT>
+ <GRADIENT originX="0" originY="0" repeatMethod="2" type="0" vectorX="0" vectorY="50" >
+  <COLORSTOP ramppoint="0" midpoint="0.5" >
+   <COLOR v2="0" v3="1" opacity="1" colorSpace="0" v1="0" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.504854" midpoint="0.5" >
+   <COLOR v2="1" v3="1" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="1" midpoint="0.5" >
+   <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+ </GRADIENT>
+ <GRADIENT originX="0" originY="0" repeatMethod="2" type="0" vectorX="0" vectorY="50" >
+  <COLORSTOP ramppoint="0" midpoint="0.5" >
+   <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="0" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.504854" midpoint="0.5" >
+   <COLOR v2="1" v3="0" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="1" midpoint="0.5" >
+   <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+ </GRADIENT>
+ <GRADIENT originX="0" originY="0" repeatMethod="2" type="1" vectorX="0" vectorY="50" >
+  <COLORSTOP ramppoint="0" midpoint="0.814815" >
+   <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="0" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.262136" midpoint="0.911767" >
+   <COLOR v2="0.584314" v3="0" opacity="1" colorSpace="0" v1="0.329412" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.427184" midpoint="0.84762" >
+   <COLOR v2="1" v3="1" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.936893" midpoint="0.5" >
+   <COLOR v2="0.6" v3="0.980392" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.975728" midpoint="0.5" >
+   <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="0" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.995146" midpoint="0.5" >
+   <COLOR v2="1" v3="1" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+ </GRADIENT>
+ <GRADIENT originX="0" originY="0" repeatMethod="0" type="0" vectorX="0" vectorY="50" >
+  <COLORSTOP ramppoint="0.00485437" midpoint="0.684211" >
+   <COLOR v2="0" v3="1" opacity="1" colorSpace="0" v1="0" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.145631" midpoint="0.5" >
+   <COLOR v2="1" v3="1" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.213592" midpoint="0.625" >
+   <COLOR v2="0.654902" v3="0" opacity="1" colorSpace="0" v1="0.121569" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.407767" midpoint="0.5" >
+   <COLOR v2="0.784314" v3="1" opacity="1" colorSpace="0" v1="0" />
+  </COLORSTOP>
+ </GRADIENT>
+ <GRADIENT originX="0" originY="0" repeatMethod="2" type="0" vectorX="0" vectorY="50" >
+  <COLORSTOP ramppoint="0.504854" midpoint="0.5" >
+   <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="0" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.713592" midpoint="0.5" >
+   <COLOR v2="0" v3="0" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.912621" midpoint="0.647059" >
+   <COLOR v2="1" v3="0" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+  <COLORSTOP ramppoint="0.995146" midpoint="0.5" >
+   <COLOR v2="1" v3="1" opacity="1" colorSpace="0" v1="1" />
+  </COLORSTOP>
+ </GRADIENT>
+</predefGradients>

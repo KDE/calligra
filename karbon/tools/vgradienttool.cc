@@ -28,25 +28,21 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vgradienttool.h"
-#include "vgradientdlg.h"
+#include "vgradientdocker.h"
 #include "vfillcmd.h"
 #include "vstrokecmd.h"
 
 #include <kdebug.h>
+
 VGradientTool::VGradientTool( KarbonView* view )
 	: VTool( view )
 {
-	m_dialog = new VGradientDlg();
-	m_dialog->setGradientRepeat( VGradient::none );
-	m_dialog->setGradientType( VGradient::linear );
-	m_dialog->setGradientFill( 1 );
-	m_dialog->setStartColor( Qt::red );
-	m_dialog->setEndColor( Qt::yellow );
+	m_docker = new VGradientDocker( m_gradient, (QWidget*)view->shell() );
 }
 
 VGradientTool::~VGradientTool()
 {
-	delete m_dialog;
+	delete m_docker;
 }
 
 void
@@ -91,22 +87,16 @@ VGradientTool::mouseButtonPress()
 void
 VGradientTool::mouseButtonRelease()
 {
-	VGradient gradient;
-	gradient.clearStops();
-	gradient.addStop( VColor( m_dialog->startColor() ), 0.0, 0.5 );
-	gradient.addStop( VColor( m_dialog->endColor() ), 1.0, 0.5 );
-	gradient.setOrigin( first() );
+	m_gradient.setOrigin( first() );
 	KoPoint p = last();
 	if(first().x() == last().x() && first().y() == last().y()) // workaround for a libart 2.3.10 bug
 		p.setX( first().x() + 1 );
-	gradient.setVector( p );
-	gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
-	gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
+	m_gradient.setVector( p );
 
-	if( m_dialog->gradientFill() )
+	if( m_docker->target() == VGradientDocker::FILL )
 	{
 		VFill fill;
-		fill.gradient() = gradient;
+		fill.gradient() = m_gradient;
 		fill.setType( VFill::grad );
 		view()->part()->addCommand(
 			new VFillCmd( &view()->part()->document(), fill ), true );
@@ -114,7 +104,7 @@ VGradientTool::mouseButtonRelease()
 	else
 	{
 		VStroke stroke;
-		stroke.gradient() = gradient;
+		stroke.gradient() = m_gradient;
 		stroke.setType( VStroke::grad );
 		view()->part()->addCommand(
 			new VStrokeCmd( &view()->part()->document(), &stroke ), true );
@@ -131,32 +121,26 @@ VGradientTool::mouseDragRelease()
 	//fp.setY( -fp.y() + view()->canvasWidget()->viewport()->height() );
 	KoPoint lp = last();
 	//lp.setY( -lp.y() + view()->canvasWidget()->viewport()->height() );
-	VGradient gradient;
-	gradient.clearStops();
-	gradient.addStop( VColor( m_dialog->startColor().rgb() ), 0.0, 0.5 );
-	gradient.addStop( VColor( m_dialog->endColor().rgb() ), 1.0, 0.5 );
-	gradient.setOrigin( fp );
-	gradient.setVector( lp );
-	gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
-	gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
+	m_gradient.setOrigin( fp );
+	m_gradient.setVector( lp );
 
-	if( m_dialog->gradientFill() )
+	if( m_docker->target() == VGradientDocker::FILL )
 	{
 		VFill fill;
-		fill.gradient() = gradient;
+		fill.gradient() = m_gradient;
 		fill.setType( VFill::grad );
 		view()->part()->addCommand(
 			new VFillCmd( &view()->part()->document(), fill ), true );
 	}
 	else
 		view()->part()->addCommand(
-			new VStrokeCmd( &view()->part()->document(), &gradient ), true );
+			new VStrokeCmd( &view()->part()->document(), &m_gradient ), true );
 
 	view()->selectionChanged();
 }
 
 void
-VGradientTool::showDialog() const
+VGradientTool::showDocker() const
 {
-	m_dialog->exec();
+	m_docker->show();
 }

@@ -656,7 +656,7 @@ KarbonView::gradTool()
 	//if( shell() && shell()->rootView() == this )
 	//{
 		if( m_currentTool == m_gradTool )
-			m_gradTool->showDialog();
+			m_gradTool->showDocker();
 		else
 		{
 			m_currentTool->deactivate();

@@ -20,7 +20,8 @@
 #ifndef __VGRADIENT_H__
 #define __VGRADIENT_H__
 
-#include <qvaluelist.h>
+#include <qptrlist.h>
+#include <qptrvector.h>
 #include <koPoint.h>
 #include "vcolor.h"
 
@@ -28,8 +29,31 @@
 class QDomElement;
 
 
+class VColorStop
+{
+	public:
+		VColorStop( double r, double m, VColor c )
+				{ rampPoint = r; midPoint = m; color = c; };
+		VColorStop( const VColorStop& colorStop )
+				{ rampPoint = colorStop.rampPoint; midPoint = colorStop.midPoint; color = colorStop.color; };
+
+		VColor color;
+
+		// relative position of color point (0.0-1.0):
+		float rampPoint;
+
+		// relative position of midpoint (0.0-1.0)
+		// between two ramp points. ignored for last VColorStop.
+		float midPoint;
+
+		friend inline bool operator== ( VColorStop& s1, VColorStop& s2 )
+				{ return s1.rampPoint == s2.rampPoint; };
+}; // VColorStop
+
 class VGradient
 {
+friend class VGradientWidget;
+
 public:
 	enum VGradientType
 	{
@@ -45,19 +69,16 @@ public:
 		repeat  = 2
 	};
 
-	struct VColorStop
+	class VColorStopList : public QPtrList<VColorStop>
 	{
-		VColor color;
-
-		// relative position of color point (0.0-1.0):
-		float rampPoint;
-
-		// relative position of midpoint (0.0-1.0)
-		// between two ramp points. ignored for last VColorStop.
-		float midPoint;
-	};
+		protected:
+			virtual int compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 );
+	}; // VColorStopList
 
 	VGradient( VGradientType type = linear );
+	VGradient( const VGradient& gradient );
+
+	VGradient& operator=(const VGradient& gradient);
 
 	VGradientType type() const { return m_type; }
 	void setType( VGradientType type ) { m_type = type; }
@@ -65,8 +86,10 @@ public:
 	VGradientRepeatMethod repeatMethod() const { return m_repeatMethod; }
 	void setRepeatMethod( VGradientRepeatMethod repeatMethod ) { m_repeatMethod = repeatMethod; }
 
-	const QValueList<VColorStop>& colorStops() const { return m_colorStops; }
+	const QPtrVector<VColorStop> colorStops() const;
+	void addStop( const VColorStop& colorStop );
 	void addStop( const VColor &color, float rampPoint, float midPoint );
+	void removeStop( const VColorStop& colorStop );
 	void clearStops();
 
 	KoPoint origin() const { return m_origin; }
@@ -80,11 +103,12 @@ public:
 
 	void transform( const QWMatrix& m );
 
+protected:
+	VColorStopList m_colorStops;
+  
 private:
 	VGradientType m_type;
 	VGradientRepeatMethod m_repeatMethod;
-
-	QValueList<VColorStop> m_colorStops;
 
 	// coordinates:
 	KoPoint m_origin;

@@ -18,37 +18,28 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef __VGRADIENTTOOL_H__
-#define __VGRADIENTTOOL_H__
+#include <klocale.h>
 
-#include "vtool.h"
-#include "vgradient.h"
+#include "vcolordlg.h"
+#include "vcolortab.h"
+#include "vselection.h"
 
-class VGradientDocker;
+#include "vfillcmd.h"
 
-class VGradientTool : public VTool
+VColorDlg::VColorDlg( VColor& color, QWidget* parent, const char* name )
+	: KDialogBase ( parent, name, true, i18n( "Choose color" ),
+		KDialogBase::Ok | KDialogBase::Cancel )
 {
-public:
-	VGradientTool( KarbonView* view );
-	virtual ~VGradientTool();
+	m_colortab = new VColorTab( color, this, name );
 
-	virtual void activate();
+	setMainWidget( m_colortab );
+	setFixedSize( baseSize() );
+} // VColorDlg::VColorDlg
 
-	virtual void showDocker() const;
+VColor VColorDlg::color()
+{
+	return m_colortab->getColor();
+} // VColorDlg::color
 
-protected:
-	virtual void draw();
-
-	virtual void mouseButtonRelease();
-	virtual void mouseButtonPress();
-	virtual void mouseDragRelease();
-	virtual void mouseDrag();
-
-private:
-	VGradientDocker* m_docker;
-	VGradient        m_gradient;
-	KoPoint          m_current;
-};
-
-#endif
+#include "vcolordlg.moc"
 

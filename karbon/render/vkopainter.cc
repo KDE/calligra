@@ -695,20 +695,20 @@ ArtGradientStop *
 VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 {
 	// TODO : make this generic
-	QValueList<VGradient::VColorStop> colorStops = gradient.colorStops();
-	offsets = colorStops.size();
+	QPtrVector<VColorStop> colorStops = gradient.colorStops();
+	offsets = colorStops.count();
 
 	QMemArray<ArtGradientStop> *stopArray = new QMemArray<ArtGradientStop>();
 	stopArray->resize( offsets * 2 - 1 );
 
 	for( int offset = 0 ; offset < offsets ; offset++ )
 	{
-		double ramp = colorStops[ offset ].rampPoint;
-		double mid  = colorStops[ offset ].midPoint;
+		double ramp = colorStops[ offset ]->rampPoint;
+		double mid  = colorStops[ offset ]->midPoint;
 		(*stopArray)[ offset * 2 ].offset = ramp;
 		//kdDebug() << " (*stopArray)[ offset * 2 ].offset : " <<  (*stopArray)[ offset * 2 ].offset << endl;
 
-		QColor qStopColor = colorStops[ offset ].color.toQColor();
+		QColor qStopColor = colorStops[ offset ]->color.toQColor();
 		int r = qRed( qStopColor.rgb() );
 		int g = qGreen( qStopColor.rgb() );
 		int b = qBlue( qStopColor.rgb() );
@@ -729,11 +729,11 @@ VKoPainter::buildStopArray( VGradient &gradient, int &offsets )
 		{
 			//kdDebug() << " colorStops[ offset ].midPoint : " <<  colorStops[ offset ].midPoint << endl;
 			//kdDebug() << " colorStops[ offset + 1 ].rampPoint : " <<  colorStops[ offset + 1 ].rampPoint << endl;
-			(*stopArray)[ offset * 2 + 1 ].offset = ramp + ( colorStops[ offset + 1 ].rampPoint - ramp ) * colorStops[ offset ].midPoint;
+			(*stopArray)[ offset * 2 + 1 ].offset = ramp + ( colorStops[ offset + 1 ]->rampPoint - ramp ) * colorStops[ offset ]->midPoint;
 			//kdDebug() << "(*stopArray)[ offset * 2  ].offset : " << (*stopArray)[ offset * 2  ].offset << endl;
 			//kdDebug() << "(*stopArray)[ offset * 2 + 1 ].offset : " << (*stopArray)[ offset * 2 + 1 ].offset << endl;
 
-			QColor qStopColor2 = colorStops[ offset + 1 ].color.toQColor();
+			QColor qStopColor2 = colorStops[ offset + 1 ]->color.toQColor();
 			stopColor = int(r + ((qRed(qStopColor2.rgb()) - r)) * 0.5) << 24 |
 						int(g + ((qGreen(qStopColor2.rgb()) - g)) * 0.5) << 16 |
 						int(b + ((qBlue(qStopColor2.rgb()) - b)) * 0.5) << 8 |
