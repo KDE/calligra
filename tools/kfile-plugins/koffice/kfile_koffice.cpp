@@ -101,7 +101,7 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint what)
 QString KOfficePlugin::stringFromNode(QDomNode node, QString name)
 {
     QString value = node.namedItem(name).toElement().text();
-    return value.isNull() || value == "" ? "*Unknown*" : value;
+    return value.isNull() || value == "" ? i18n("*Unknown*") : value;
 }
 
 
