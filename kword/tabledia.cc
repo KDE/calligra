@@ -141,6 +141,9 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
     cbIsFloating = new QCheckBox( i18n( "The table is floating" ), tab1 );
     cbIsFloating->resize( cbIsFloating->sizeHint() );
     cbIsFloating->setChecked( false );
+    //for the moment floating is not implemented
+    cbIsFloating->setEnabled(false);
+
     grid->addMultiCellWidget( cbIsFloating, 9, 9, 0, 2 );
 
     grid->addRowSpacing( 0, lRows->height() );
