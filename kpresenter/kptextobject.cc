@@ -112,6 +112,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     pen = QPen( Qt::black, 1, Qt::NoPen );
     drawEditRect = true;
     drawEmpty = true;
+    editingTextObj = false;
 
     connect( m_textobj, SIGNAL( newCommand( KCommand * ) ),
              SLOT( slotNewCommand( KCommand * ) ) );
@@ -275,17 +276,22 @@ void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
     _painter->setPen( pen2 );
 
     if ( !drawingShadow ) {
-        // Handle the rotation, draw the background/border, then call drawText()
-        if ( fillType == FT_BRUSH || !gradient ) {
-            _painter->setBrush( brush );
+        if ( editingTextObj ) { // editting text object
+            _painter->setBrush( QBrush( m_doc->txtBackCol(), Qt::SolidPattern ) );
         }
         else {
-            QSize size( _zoomHandler->zoomSize( ext ) );
-            gradient->setSize( size );
-            _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), gradient->pixmap(), 0, 0,
-                                  _zoomHandler->zoomItX( ow - 2 * pw ),
-                                  _zoomHandler->zoomItY( oh - 2 * pw ) );
-        }
+            // Handle the rotation, draw the background/border, then call drawText()
+            if ( fillType == FT_BRUSH || !gradient ) {
+                _painter->setBrush( brush );
+            }
+            else {
+                QSize size( _zoomHandler->zoomSize( ext ) );
+                gradient->setSize( size );
+                _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), gradient->pixmap(), 0, 0,
+                                      _zoomHandler->zoomItX( ow - 2 * pw ),
+                                      _zoomHandler->zoomItY( oh - 2 * pw ) );
+            }
+    }
         /// #### Port this to KoBorder, see e.g. kword/kwframe.cc:590
         // (so that the border gets drawn OUTSIDE of the object area)
         _painter->drawRect( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX(pw), _zoomHandler->zoomItX( ow - 2 * pw),
@@ -319,8 +325,12 @@ void KPTextObject::drawText( QPainter* _painter, KoZoomHandler *zoomHandler, boo
 {
     //kdDebug() << "KPTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     QColorGroup cg = QApplication::palette().active();
-    //// ### Transparent background - TODO use configuration ?
-    cg.setBrush( QColorGroup::Base, NoBrush );
+
+    if ( !editingTextObj )
+        cg.setBrush( QColorGroup::Base, NoBrush );
+    else
+        cg.setColor( QColorGroup::Base, m_doc->txtBackCol() );
+
     QRect r = zoomHandler->zoomRect( KoRect( 0, 0, ext.width(), ext.height() ) );
     bool editMode = false;
     if( m_doc->getKPresenterView() && m_doc->getKPresenterView()->getCanvas())
@@ -910,6 +920,7 @@ void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisi
 
     QPixmap *pix = 0;
     QColorGroup cg = QApplication::palette().active();
+    cg.setColor( QColorGroup::Base, m_doc->txtBackCol() );
 
     bool wasChanged = parag->hasChanged();
     parag->setChanged( TRUE );      // To force the drawing to happen
@@ -1052,6 +1063,7 @@ KPTextView::KPTextView( KPTextObject * txtObj,KPrCanvas *_canvas )
     txtObj->textObject()->setNeedSpellCheck(true);
     m_kptextobj->kPresenterDocument()->changeBackGroundSpellCheckTextObject(txtObj);
 
+    txtObj->setEditingTextObj( true );
     //m_kptextobj->kPresenterDocument()->startBackgroundSpellCheck();
 
 }

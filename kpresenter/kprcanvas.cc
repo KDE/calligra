@@ -1805,7 +1805,7 @@ void KPrCanvas::selectAllObj()
 /*==================== deselect all objects ======================*/
 void KPrCanvas::deSelectAllObj()
 {
-  if(m_activePage->numSelected()==0 && stickyPage()->numSelected()==0)
+    if( m_activePage->numSelected()==0 && stickyPage()->numSelected() == 0 )
         return;
 
     if ( !m_view->kPresenterDoc()->raiseAndLowerObject && selectedObjectPosition != -1 ) {
@@ -5437,8 +5437,12 @@ void KPrCanvas::exitEditMode()
 	      //hide cursor when we desactivate textObjectView
 	      m_currentTextObjectView->drawCursor( false );
 	      m_currentTextObjectView->terminate();
+              KPTextObject *kpTextObj = m_currentTextObjectView->kpTextObject();
+              kpTextObj->setEditingTextObj( false );
 	      delete m_currentTextObjectView;
 	      m_currentTextObjectView=0L;
+
+              _repaint( static_cast<KPObject*>( kpTextObj ) );
             }
 	  // Title of slide may have changed
 	  emit updateSideBarItem( currPgNum()-1 );

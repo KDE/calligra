@@ -120,6 +120,8 @@ public:
 
     KoTextFormat loadFormat( QDomElement &n );
 
+    void setEditingTextObj( bool _edit ) { editingTextObj = _edit; }
+
 signals:
     void repaintChanged( KPTextObject* );
 
@@ -155,6 +157,7 @@ private:
     KPresenterDoc *m_doc;
     bool drawEditRect, drawEmpty;
     KoParagLayout m_paragLayout;
+    bool editingTextObj;
 };
 
 
