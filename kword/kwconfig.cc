@@ -61,27 +61,27 @@ KWConfig::KWConfig( KWView* parent )
 		KDialogBase::Ok)
 
 {
-  QVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
-                        loadIcon("spellcheck") );
-  m_spellPage=new ConfigureSpellPage(parent, page);
-
   QVBox *page2 = addVBoxPage( i18n("Interface"), i18n("Interface Settings"),
                               loadIcon("configure") );
   m_interfacePage=new ConfigureInterfacePage(parent, page2);
-
-  QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc Settings"),
-                              loadIcon("misc") );
-  m_miscPage=new ConfigureMiscPage(parent, page3);
 
   QVBox *page4 = addVBoxPage( i18n("Document"), i18n("Document Settings"),
                               loadIcon("misc_doc") );
 
   m_defaultDocPage=new ConfigureDefaultDocPage(parent, page4);
 
+  QVBox *page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
+                        loadIcon("spellcheck") );
+  m_spellPage=new ConfigureSpellPage(parent, page);
+
   QVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula Defaults"),
                               loadIcon("kformula") );
   m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->getFormulaDocument(),
                                              this, KWFactory::global()->config(), page5 );
+
+  QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc Settings"),
+                              loadIcon("misc") );
+  m_miscPage=new ConfigureMiscPage(parent, page3);
 
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
 }
@@ -254,13 +254,13 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
         oldShowScrollBar = config->readBoolEntry("ShowScrollBar", true);
     }
 
-    showStatusBar = new QCheckBox(i18n("Show status bar"),gbInterfaceGroup);
+    showStatusBar = new QCheckBox(i18n("Show &status bar"),gbInterfaceGroup);
     showStatusBar->setChecked(oldShowStatusBar);
 
-    showScrollBar = new QCheckBox( i18n("Show Scrollbar"), gbInterfaceGroup);
+    showScrollBar = new QCheckBox( i18n("Show s&crollbar"), gbInterfaceGroup);
     showScrollBar->setChecked(oldShowScrollBar);
 
-    pgUpDownMovesCaret = new QCheckBox(i18n("PageUp/PageDown moves the caret"),gbInterfaceGroup);
+    pgUpDownMovesCaret = new QCheckBox(i18n("PageUp/PageDown &moves the caret"),gbInterfaceGroup);
     pgUpDownMovesCaret->setChecked(oldPgUpDownMovesCaret);
     QWhatsThis::add( pgUpDownMovesCaret, i18n(
                          "If this option is enabled, the PageUp and PageDown keys "
@@ -269,7 +269,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     recentFiles=new KIntNumInput( oldNbRecentFiles, gbInterfaceGroup );
     recentFiles->setRange(1, 20, 1);
-    recentFiles->setLabel(i18n("Number of recent files:"));
+    recentFiles->setLabel(i18n("Number of recent &files:"));
     QWhatsThis::add( recentFiles, i18n("The amount of files remembered in the file open dialog and in the "
                     "recent files menu item") );
 
@@ -278,14 +278,14 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     gridX->setRange(0.1, 50, 0.1);
     gridX->setPrecision (1);
     gridX->setSuffix( suffix );
-    gridX->setLabel(i18n("Horizontal grid size:"));
+    gridX->setLabel(i18n("&Horizontal grid size:"));
     QWhatsThis::add( gridX, i18n("The grid size on which frames, tabs and other content snaps while "
                     "moving and scaling") );
 
     gridY=new KDoubleNumInput( gridX, KoUnit::ptToUnit( ptGridY, unit ), gbInterfaceGroup );
     gridY->setRange(0.1, 50, 0.1);
     gridY->setPrecision(1);
-    gridY->setLabel(i18n("Vertical grid size:"));
+    gridY->setLabel(i18n("&Vertical grid size:"));
     QWhatsThis::add( gridY, i18n("The grid size on which frames and other content snaps while "
                     "moving and scaling") );
     gridY->setSuffix( suffix );
@@ -295,7 +295,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     indent->setRange(0.1, 50, 0.1);
     indent->setPrecision(1);
     indent->setSuffix( suffix );
-    indent->setLabel(i18n("Paragraph indent by toolbar buttons:"));
+    indent->setLabel(i18n("&Paragraph indent by toolbar buttons:"));
     QWhatsThis::add( indent, i18n("Configure the indent width used when using the Increase "
                     "or Decrease indentation buttons on a paragraph.<p>The lower the value "
                     "the more often the buttons will have to be pressed to gain the same "
@@ -303,7 +303,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     m_nbPagePerRow=new KIntNumInput( indent, nbPagePerRow, gbInterfaceGroup );
     m_nbPagePerRow->setRange(1, 10, 1);
-    m_nbPagePerRow->setLabel(i18n("Preview mode - Number of pages per row:"));
+    m_nbPagePerRow->setLabel(i18n("Preview mode - Number of pa&ges per row:"));
     QWhatsThis::add(m_nbPagePerRow , i18n("After selecting preview mode (via the \"View\" "
                     "menu, option \"Preview mode\") this is the amount of pages KWord will "
                     "position on one horizontal row") );
@@ -568,7 +568,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     columnSpacing->setRange(0.1, 50, 0.1);
     columnSpacing->setPrecision(1);
     columnSpacing->setSuffix( suffix );
-    columnSpacing->setLabel(i18n("Default Column Spacing:"));
+    columnSpacing->setLabel(i18n("Default column spacing:"));
     QWhatsThis::add( columnSpacing, i18n("When setting a document to use more then one column "
                 "This distance will be used to seperate the columns. This value is merely a default "
                 "setting as the column spacing can be changed per document") );
