@@ -64,6 +64,8 @@ private:
     QString pictureKey( QDomElement &element );
     void createHelpLine( QDomNode &helpline );
     void createAttribute( QDomNode &attributeValue );
+    void appendObjects(QDomDocument & doccontent, QDomNode &objects, QDomElement &drawPage);
+    void appendGroupObject( QDomDocument & doc, QDomElement & source, QDomElement & target );
 
     int m_currentPage;
     int m_objectIndex;
