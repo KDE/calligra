@@ -16,7 +16,7 @@
 typewriters.  They allow you to align text into columns quickly and
 easily.</para>
 
-<para>When a tab stop is in place, the can immediately jump to a
+<para>When a tab stop is in place, you can immediately jump to a
 horizontal position on the page by pressing the <keycap>Tab</keycap> key.  Tab stops
 are most commonly used to align columns in a table, or to automatically
 indent paragraphs.</para>
@@ -78,7 +78,7 @@ panel.</link></para>
 <sect3 id="tab-stop-setting-rulers">
 <title>Using the Ruler</title>
 
-<para>You can use the top ruler on &kword; to interactively insert tab
+<para>You can use the top ruler of &kword; to interactively insert tab
 stops.</para>
 
 <para>First, you should select the type of tab stop you want to
@@ -112,7 +112,8 @@ stop at that position.</para>
 
 <para>The fastest way to get to the tab stop dialog panel, is to select
 <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
-from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  This will bring up a dialog box with 5 tabs. Click on the tab
+from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  
+This will bring up a dialog box with 5 tabs. Click on the tab
 labeled <guilabel>Tabulators</guilabel>. </para>
 
 <screenshot>
@@ -137,7 +138,7 @@ are listed below the text box.</para>
 <para>Select the type of tab stop from the list of radio buttons labeled 
 <guilabel>Alignment</guilabel>.</para></listitem>
 <listitem>
-<para>Determine what you want to fill the white space of the tab stop.  
+<para>Determine what you want to fill the empty space to the tab stop with.  
 In most cases this should be left as <guilabel>Blank</guilabel>. For information on other options in this section, see 
 <link linkend="tab-fill">Tab filling</link>.</para></listitem>
 
@@ -192,12 +193,15 @@ button.</para>
 <sect3 id="tab-stop-move-dialog">
 <title>Using the Dialog Box</title>
 
-<para>The fastest way to get to the tab stop dialog panel, is to select
-<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
+<para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
 from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  
 This will bring up a dialog box with 5 tabs. </para>
 
 <para>Click on the tab labeled <guilabel>Tabulators</guilabel></para>
+
+<para>A very fast way to edit existing tab stops is to simply double click on the
+tab stop you want to edit in the top ruler of KWord.  This will also bring up
+the <guilabel>Tabulators</guilabel> dialog box with the desired tab stop already selected.</para>
 
 <screenshot>
 <mediaobject>
@@ -208,7 +212,7 @@ This will bring up a dialog box with 5 tabs. </para>
 <orderedlist numeration="arabic">
 <listitem>
 <para>Click on the tab stop you want moved.  The list of all tab stops
-is in the box on the left side of the dialog panel</para>
+is in the box on the left side of the dialog panel.</para>
 </listitem>
 <listitem>
 <para>Type the horizontal location of the tab stop in the space
@@ -218,7 +222,8 @@ are listed below the text box.</para>
 
 <listitem>
 <para>If you need to make changes, select the type of tab stop from the
-list labeled <guilabel>Alignment</guilabel> or change the white space character under <guilabel>Tab Leader</guilabel>.</para>
+list labeled <guilabel>Alignment</guilabel> or change the white space character
+under <guilabel>Tab Leader</guilabel>.</para>
 </listitem>
 <listitem>
 <para>Click <guibutton>OK</guibutton> when you are done moving all tab stops around.</para>
@@ -266,11 +271,15 @@ the mouse. A submenu will appear.  Select <guimenuitem>Remove Tabulator</guimenu
 <sect3 id="tab-stop-delete-dialog">
 <title>Using the Dialog Box</title>
 
-<para>The fastest way to get to the tab stop dialog panel, is to select
-<menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
-from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  This will bring up a dialog box with 6 tabs. </para>
+<para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph...</guimenuitem></menuchoice>
+from the menubar or type <keycombo action="simul">&Ctrl;&Alt;<keycap>P</keycap></keycombo>.  
+This will bring up a dialog box with 5 tabs. </para>
 
 <para>Click on the tab labeled <guilabel>Tabulators</guilabel></para>
+
+<para>A very fast way to edit existing tab stops is to simply double click on the
+tab stop you want to edit in the top ruler of KWord.  This will also bring up
+the <guilabel>Tabulators</guilabel> dialog box with the desired tab stop already selected.</para>
 
 <screenshot>
 <mediaobject>
