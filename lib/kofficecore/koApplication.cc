@@ -24,6 +24,7 @@
 #include <klocale.h>
 #include <kimgio.h>
 #include <kglobal.h>
+#include <kiconloader.h>
 #include <kstddirs.h>
 #include <qstringlist.h>
 #include <kcmdlineargs.h>
@@ -32,9 +33,10 @@
 KoApplication::KoApplication()
 	: KApplication()
 {
-    // Install some standard paths
+    // Install the libkoffice* translations
     KGlobal::locale()->insertCatalogue("koffice");
-    KGlobal::dirs()->addResourceType("icon", KStandardDirs::kde_default("data") + "/koffice/icons/");
+    // Tell the iconloader about share/apps/koffice/icons
+    KGlobal::instance()->iconLoader()->addAppDir("koffice");
 
     kimgioRegister();
 
