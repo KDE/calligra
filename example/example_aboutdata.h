@@ -28,6 +28,7 @@ static const char* version="0.1";
 
 KAboutData * newExampleAboutData()
 {
+    // Change this, of course
     KAboutData * aboutData=new KAboutData( "example", I18N_NOOP("Example"),
                                            version, description, KAboutData::License_GPL,
                                            "(c) 1998-2000, Torben Weis");

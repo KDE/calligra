@@ -68,7 +68,6 @@ KParts::Part* ExampleFactory::createPartObject( QWidget *parentWidget, const cha
 KAboutData* ExampleFactory::aboutData()
 {
     if ( !s_aboutData )
-        // Change this, of course
         s_aboutData = newExampleAboutData();
     return s_aboutData;
 }
