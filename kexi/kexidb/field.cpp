@@ -42,6 +42,7 @@ Field::Field()
 	,m_options(NoOptions)
 	,m_defaultValue( QVariant(QString::null) )
 	,m_order(-1)
+	,m_width(0)
 	,m_expr(0)
 {
 	setConstraints(NoConstraints);
@@ -57,14 +58,16 @@ Field::Field(TableSchema *tableSchema)
 	,m_options(NoOptions)
 	,m_defaultValue( QVariant(QString::null) )
 	,m_order(tableSchema->fieldCount())
+	,m_width(0)
 	,m_expr(0)
 {
 	setConstraints(NoConstraints);
 }
 
 Field::Field(const QString& name, Type ctype,
- int cconst, int options, int length, int precision,
- QVariant defaultValue, const QString& caption, const QString& helpText)
+ uint cconst, uint options, uint length, uint precision,
+ QVariant defaultValue, const QString& caption, const QString& helpText,
+ uint width)
 	: m_parent(0)
 	,m_name(name)
 	,m_type(ctype)
@@ -75,6 +78,7 @@ Field::Field(const QString& name, Type ctype,
 	,m_order(-1)
 	,m_caption(caption)
 	,m_help(helpText)
+	,m_width(width)
 	,m_expr(0)
 {
 	setConstraints(cconst);
@@ -84,7 +88,7 @@ Field::Field(const QString& name, Type ctype,
 	}
 }
 
-QVariant::Type Field::variantType(int type)
+QVariant::Type Field::variantType(uint type)
 {
 	switch(type)
 	{
@@ -147,48 +151,12 @@ public:
 
 Field::FieldTypeNames Field::m_typeNames;
 
-QString Field::typeName(int type)
+QString Field::typeName(uint type)
 {
 	return m_typeNames.at(type);
-#if 0	
-	switch(type)
-	{
-		case Byte:
-			return "Byte";
-		case ShortInteger:
-			return "Short integer number";
-		case Integer:
-			return "Integer number";
-		case BigInteger:
-			return "Big integer number";
-//		case AutoIncrement:
-//			return "Auto increment number";
-		case Boolean:
-			return "True/False value";
-		case Date:
-			return "Date";
-		case DateTime:
-			return "Date/Time";
-		case Time:
-			return "Time";
-		case Float:
-			return "Single precision number";
-		case Double:
-			return "Double precision number";
-		case Text:
-			return "Text";
-		case LongText:
-			return "Long text";
-		case BLOB:
-			return "Object";
-		default:
-			;
-	}
-	return QString::null;
-#endif
 }
 
-bool Field::isNumericType( int type )
+bool Field::isNumericType( uint type )
 {
 	switch (type) {
 	case Field::ShortInteger:
@@ -202,12 +170,24 @@ bool Field::isNumericType( int type )
 	return false;
 }
 
-bool Field::isFPNumericType( int type )
+bool Field::isFPNumericType( uint type )
 {
 	return type==Field::Float || type==Field::Double;
 }
 
-bool Field::isTextType( int type )
+bool Field::isDateTimeType(uint type)
+{
+	switch (type) {
+	case Field::Date:
+	case Field::DateTime:
+	case Field::Time:
+		return true;
+	default:;
+	}
+	return false;
+}
+
+bool Field::isTextType( uint type )
 {
 	switch (type) {
 	case Field::Text:
@@ -216,6 +196,29 @@ bool Field::isTextType( int type )
 	default:;
 	}
 	return false;
+}
+
+bool Field::hasEmptyProperty(uint type)
+{
+	return Field::isTextType(type) || type==BLOB;
+}
+
+Field::TypeGroup Field::typeGroup(uint type)
+{
+	if (Field::isTextType(type))
+		return TextGroup;
+	else if (Field::isFPNumericType(type))
+		return FloatGroup;
+	else if (Field::isNumericType(type))
+		return IntegerGroup;
+	else if (type==Boolean)
+		return BooleanGroup;
+	else if (Field::isDateTimeType(type))
+		return DateTimeGroup;
+	else if (type==BLOB)
+		return BLOBGroup;
+
+	return InvalidGroup; //unknown
 }
 
 TableSchema*
@@ -256,7 +259,7 @@ Field::setType(Type t)
 }
 
 void
-Field::setConstraints(int c)
+Field::setConstraints(uint c)
 {
 	m_constraints = c;
 	//pkey must be unique notnull
@@ -267,13 +270,13 @@ Field::setConstraints(int c)
 }
 
 void
-Field::setLength(int l)
+Field::setLength(uint l)
 {
 	m_length = l;
 }
 
 void
-Field::setPrecision(int p)
+Field::setPrecision(uint p)
 {
 	m_precision = p;
 }
@@ -413,66 +416,42 @@ Field::setDefaultValue(const QCString& def)
 void
 Field::setAutoIncrement(bool a)
 {
-	if(a)
-	{
-		m_constraints = static_cast<Field::Constraints>(m_constraints | Field::AutoInc);
-	}
-	else if(!a && (m_constraints & Field::AutoInc))
-	{
+	if (isAutoIncrement() != a)
 		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::AutoInc);
-	}
 }
 
 void
 Field::setPrimaryKey(bool p)
 {
-	if(p)
-	{
-		m_constraints = static_cast<Field::Constraints>(m_constraints | Field::PrimaryKey);
-	}
-	else if(!p && (m_constraints & Field::PrimaryKey))
-	{
+	if(isPrimaryKey() != p)
 		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::PrimaryKey);
-	}
 }
 
 void
 Field::setUniqueKey(bool u)
 {
-	if(u)
-	{
-		m_constraints = static_cast<Field::Constraints>(m_constraints | Field::Unique);
-	}
-	else if(!u && (m_constraints & Field::Unique))
-	{
+	if(isUniqueKey() != u)
 		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::Unique);
-	}
 }
 
 void
 Field::setForeignKey(bool f)
 {
-	if(f)
-	{
-		m_constraints = static_cast<Field::Constraints>(m_constraints | Field::ForeignKey);
-	}
-	else if(!f && (m_constraints & Field::ForeignKey))
-	{
+	if (isForeignKey() != f)
 		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::ForeignKey);
-	}
 }
 
 void
 Field::setNotNull(bool n)
 {
-	if(n)
-	{
-		m_constraints = static_cast<Field::Constraints>(m_constraints | Field::NotNull);
-	}
-	else if(!n && (m_constraints & Field::NotNull))
-	{
+	if (isNotNull() != n)
 		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::NotNull);
-	}
+}
+
+void Field::setNotEmpty(bool n)
+{
+	if (isNotEmpty() != n)
+		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::NotNull);
 }
 
 
@@ -497,6 +476,8 @@ QString Field::debugString() const
 		dbg += " FKEY";
 	if (m_constraints & Field::NotNull)
 		dbg += " NOTNULL";
+	if (m_constraints & Field::NotEmpty)
+		dbg += " NOTEMPTY";
 	return dbg;
 }
 

@@ -44,5 +44,8 @@
 #define ERR_INVALID_DRIVER_IMPL 180 //! driver's implementation is invalid
 #define ERR_INCOMPAT_DRIVER_VERSION 181 //!< driver's version is incompatible
 
+//errors related to data updating to server
+#define ERR_UPDATE_NULL_PKEY_FIELD 190 //!< null pkey field
+
 #define ERR_OTHER 0xffff //!< use this if you have not (yet?) the name for given error 
 #endif

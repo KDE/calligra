@@ -120,7 +120,8 @@ class KEXI_DB_EXPORT Field
 			Unique = 2,
 			PrimaryKey = 4,
 			ForeignKey = 8,
-			NotNull = 16
+			NotNull = 16,
+			NotEmpty = 32 //only legel for string-like and blob fields
  		};
 
 		enum Options
@@ -133,18 +134,19 @@ class KEXI_DB_EXPORT Field
 		Field();
 
 		Field(const QString& name, Type ctype,
-			int cconst=NoConstraints,
-			int options = NoOptions,
-			int length=0, int precision=0,
+			uint cconst=NoConstraints,
+			uint options = NoOptions,
+			uint length=0, uint precision=0,
 			QVariant defaultValue=QVariant(),
-			const QString& caption = QString::null, const QString& helpText = QString::null);
+			const QString& caption = QString::null, const QString& helpText = QString::null,
+			uint width = 0);
 
 		virtual ~Field();
 
 		//! Converts field \a type to QVariant equivalent as accurate as possible
-		static QVariant::Type variantType(int type);
+		static QVariant::Type variantType(uint type);
 		//! \return \a type name
-		static QString typeName(int type);
+		static QString typeName(uint type);
 
 		//! \return field name 
 		inline QString name() const { return m_name; }
@@ -167,31 +169,40 @@ class KEXI_DB_EXPORT Field
 		/*! @return true if the field is not allowed to be null */
 		inline bool isNotNull() const { return constraints() & NotNull; }
 
+		/*! @return true if the field is not allowed to be null */
+		inline bool isNotEmpty() const { return constraints() & NotEmpty; }
+
 		/*! @return true if the field is of any numeric type */
 		inline bool isNumericType() const { return Field::isNumericType(m_type); }
 		
 		/*! static version of isNumericType() method */
-		static bool isNumericType(int type);
+		static bool isNumericType(uint type);
 		
 		/*! @return true if the field is of any floating-point-numeric type */
-		inline bool isFPNumericType() const { return Field::isNumericType(m_type); }
+		inline bool isFPNumericType() const { return Field::isFPNumericType(m_type); }
 		
 		/*! static version of isFPNumericType() method */
-		static bool isFPNumericType( int type );
+		static bool isFPNumericType(uint type);
+
+		/*! @return true if the field is of any date or time-related type */
+		inline bool isDateTimeType() const { return Field::isDateTimeType(m_type); }
 		
+		/*! static version of isDateTimeType() method */
+		static bool isDateTimeType(uint type);
+
 		/*! @return true if the field is of any text type */
 		inline bool isTextType() const { return Field::isTextType(m_type); }
 		
 		/*! static version of isTextType() method */
-		static bool isTextType(int type);
+		static bool isTextType(uint type);
                         
 //js: we have m_table for this		/*!
 //		 *	@return the table.column that this field references or QString::null if !foreign_key()
 //		 */
 //		virtual QString		references() const;
 
-		int options() const { return m_options; }
-		void setOptions(int options) { m_options = options; }
+		uint options() const { return m_options; }
+		void setOptions(uint options) { m_options = options; }
 
 		inline QVariant::Type variantType() const
 		{
@@ -200,32 +211,44 @@ class KEXI_DB_EXPORT Field
 
 		inline Type type() const { return m_type; }
 		inline QString typeName() const { return Field::typeName(m_type); }
+		inline TypeGroup typeGroup() const { return Field::typeGroup(m_type); }
+		static TypeGroup typeGroup(uint type);
 		inline QVariant defaultValue() const { return m_defaultValue; }
 		
 		//! \return length of text is the field type is text
-		inline int length() const { return m_length; }
+		inline uint length() const { return m_length; }
 		//! \retrun precision for numeric and other fields that have both length and precision
-		inline int precision() const { return m_precision; } 
+		inline uint precision() const { return m_precision; } 
 		//! \return the constraints defined for this field
-		inline int constraints() const { return m_constraints; }
+		inline uint constraints() const { return m_constraints; }
 		//! \return order of this field in containing table (counting starts from 0)
 		//! (-1 if unspecified)
-		inline int order() const { return m_order; }
+		inline uint order() const { return m_order; }
 		//! \return caption of this field
 		inline QString caption() const { return m_caption; }
-		//! \return halp text for this field
+		//! \return caption of this field or - if empty - return its name
+		inline QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
+		//! \return help text for this field
 		inline QString helpText() const { return m_help; }
+		//! \return width of this field (usually in pixels or points)
+		//! 0 (the default) means there is no hint for the width
+		inline uint width() const { return m_width; }
 		
 		//! if the type has the unsigned attribute
 		inline bool isUnsigned() const { return m_options & Unsigned; }
 //		virtual bool isBinary() const;
 
+		//! \return true is this field has EMPTY propery (i.e. it is of type string-like or BLOB)
+		inline bool hasEmptyProperty() const { return Field::hasEmptyProperty(m_type); }
+		/*! static version of canBeEmpty() method */
+		static bool hasEmptyProperty(uint type);
+
 		void setType(Type t);
 		void setTable(TableSchema *table);
 		void setName(const QString& n);
-		void setConstraints(int c);
-		void setLength(int l);
-		void setPrecision(int p);
+		void setConstraints(uint c);
+		void setLength(uint l);
+		void setPrecision(uint p);
 		void setUnsigned(bool u);
 		void setBinary(bool b);
 		void setDefaultValue(const QVariant& def);
@@ -239,8 +262,10 @@ class KEXI_DB_EXPORT Field
 		void setUniqueKey(bool u);
 		void setForeignKey(bool f);
 		void setNotNull(bool n);
+		void setNotEmpty(bool n);
 		void setCaption(const QString& caption) { m_caption=caption; }
 		void setHelpText(const QString& helpText) { m_help=helpText; }
+		void setWidth(uint w) { m_width=w; }
 
 		/*! There can be added asterisks (QueryAsterisk objects) 
 		 to query schemas' field list. QueryAsterisk subclasses Field class,
@@ -274,14 +299,15 @@ class KEXI_DB_EXPORT Field
 		QString m_name;
 //		QString m_reference;
 		Type m_type;
-		int m_constraints;
-		int m_length;
-		int m_precision;
-		int m_options;
+		uint m_constraints;
+		uint m_length;
+		uint m_precision;
+		uint m_options;
 		QVariant m_defaultValue;
-		int m_order;
+		uint m_order;
 		QString m_caption;
 		QString m_help;
+		uint m_width;
 
 		Expression *m_expr;
 

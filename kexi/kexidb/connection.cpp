@@ -1575,8 +1575,14 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		for (Field::ListIterator it = pkey->fieldsIterator(); it.current(); i++, ++it) {
 			if (!sqlwhere.isEmpty())
 				sqlwhere+=" AND ";
+			QVariant val = data[ pkeyFieldsOrder[i] ];
+			if (val.isNull() || !val.isValid()) {
+				setError(ERR_UPDATE_NULL_PKEY_FIELD, i18n("Field cannot be empty"));
+//js todo: pass the field's name somewhere!
+				return false;
+			}
 			sqlwhere += ( it.current()->name() + "=" 
-				+ valueToSQL( it.current(), data[ pkeyFieldsOrder[i] ] ) );
+				+ valueToSQL( it.current(), val ) );
 		}
 	}
 	sql += (sqlset + " WHERE " + sqlwhere);
