@@ -70,7 +70,7 @@ KugarFactory::~KugarFactory()
 KAboutData *KugarFactory::aboutData()
 {
 	if (!s_aboutdata)
-	s_aboutdata=new KAboutData(PACKAGE,
+	s_aboutdata=new KAboutData("kugar",
                                                    I18N_NOOP("Kugar"),
                    	                               VERSION);
 	return s_aboutdata;
