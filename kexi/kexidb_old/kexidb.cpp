@@ -21,6 +21,7 @@
 #include <kdebug.h>
  
 #include "kexidbinterfacemanager.h"
+#include "kexidbrecord.h"
 #include "kexidb.h"
 
 KexiDB::KexiDB(QObject *parent, const char *name) : QObject(parent, name)
@@ -80,6 +81,13 @@ KexiDB::manager()
 
 // it's not worth reading behind that line :)
 
+KexiDBRecord*
+KexiDB::queryRecord(QString, bool)
+{
+	return 0;
+}
+
+
 bool
 KexiDB::connect(QString, QString, QString)
 {
@@ -120,10 +128,10 @@ KexiDB::databases()
 	return QStringList();
 }
 
-int
+bool
 KexiDB::query(QString)
 {
-	return -1;
+	return false;
 }
 
 QString

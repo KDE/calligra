@@ -26,6 +26,8 @@
 #include "kexicreateprojectpagedb.h"
 #include "kexicreateprojectpagefile.h"
 
+#include "kexiapplication.h"
+#include "kexitabbrowser.h"
 #include "kexicreateproject.h"
 
 KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool modal, WFlags f) : KWizard(parent,name,modal,f)
@@ -103,7 +105,10 @@ void
 KexiCreateProject::accept()
 {
 	if(static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB())
+	{
 		KWizard::accept();
+		kexi->mainWindow()->browser()->generateView();
+	}
 }
 
 void

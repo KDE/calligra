@@ -17,47 +17,84 @@ the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 */
 
+#include <kdebug.h>
+
+#include "../../kexiDB/kexidb.h"
+
+#include "mysqldb.h"
+#include "mysqlresult.h"
+#include "mysqlfield.h"
 #include "mysqlrecord.h"
 
-MySqlRecord::MySqlRecord(MySqlResult *result, unsigned int record, MySqlRecord *parent)
- : KexiDBRecord(result, record)
+MySqlRecord::MySqlRecord(MYSQL_RES *result, QObject *p, bool buffer, MySqlRecord *parent)
+ : KexiDBRecord(), MySqlResult(result, p)
 {
-	m_parent = parent;
+}
+
+bool
+MySqlRecord::findKey()
+{
+}
+
+bool
+MySqlRecord::readOnly()
+{
 }
 
 void
 MySqlRecord::reset()
 {
+	for(UpdateBuffer::Iterator it = m_updateBuffer.begin(); it != m_updateBuffer.end(); it++)
+	{
+		m_updateBuffer.remove(it);
+	}
 }
 
 bool
-MySqlRecord::commit(bool)
+MySqlRecord::commit(bool insertBuffer)
 {
-	return false;
+	if(!m_updateBuffer.empty())
+	{
+		QString query = QString("update " + m_table);
+		for(UpdateBuffer::Iterator it = m_updateBuffer.begin(); it != m_updateBuffer.end(); it++)
+		{
+			query += QString(QString(" set ") + it.key() + "='" + it.data().toString() + "'");
+		}
+		query += QString(" where " + m_keyField + "=" + value(m_keyField).toString());
+	}
 }
 
 QVariant
-MySqlRecord::value(unsigned int)
+MySqlRecord::value(unsigned int column)
 {
-	return QVariant();
+//	kdDebug() << "MySqlRecord::value(uint)" << endl;
+	return MySqlResult::value(column);
 }
 
 QVariant
-MySqlRecord::value(QString)
+MySqlRecord::value(QString column)
 {
-	return QVariant();
+	if(m_contentBuffer.count() > 0)
+	{
+		ContentBuffer::Iterator it = m_contentBuffer.find(column);
+		return it.data();
+	}
+	else
+	{
+		return MySqlResult::value(column);
+	}
 }
 
 QVariant::Type
-MySqlRecord::type(unsigned int)
+MySqlRecord::type(unsigned int column)
 {
-	return QVariant::Invalid;
+	return MySqlResult::fieldInfo(column)->type();
 }
 
 QVariant::Type
-MySqlRecord::type(QString)
+MySqlRecord::type(QString column)
 {
-	return QVariant::Invalid;
+	return MySqlResult::fieldInfo(column)->type();
 }
 
 KexiDBField::ColumnType
@@ -72,6 +109,7 @@ MySqlRecord::sqlType(QString)
 	return KexiDBField::SQLInvalid;
 }
 
+
 bool
 MySqlRecord::update(unsigned int, QVariant)
 {
@@ -84,34 +122,40 @@ MySqlRecord::update(QString, QVariant)
 	return false;
 }
 
+KexiDBRecord*
+MySqlRecord::insert()
+{
+	return 0;
+}
+
 bool
 MySqlRecord::deleteRecord()
 {
 	return false;
 }
 
-MySqlRecord*
+void
 MySqlRecord::gotoRecord(unsigned int)
 {
 	return 0;
 }
 
-MySqlRecord*
-MySqlRecord::insert()
+unsigned int
+MySqlRecord::fieldCount()
 {
-	return 0;
+	return MySqlResult::numFields();
 }
 
-MySqlRecord*
-MySqlRecord::operator++()
+QString
+MySqlRecord::fieldName(unsigned int field)
 {
-	return 0;
+	return MySqlResult::fieldInfo(field)->name();
 }
 
-MySqlRecord*
-MySqlRecord::operator--()
+bool
+MySqlRecord::next()
 {
-	return 0;
+	return MySqlResult::next();
 }
 
 MySqlRecord::~MySqlRecord()

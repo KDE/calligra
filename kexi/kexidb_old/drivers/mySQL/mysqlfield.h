@@ -31,7 +31,8 @@ class MySqlField : public KexiDBField
 		~MySqlField();
 
 		QString				name() const;
-		
+		QString				table() const;
+
 		//key section
 		bool				primary_key();
 		bool				unique_key();

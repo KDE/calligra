@@ -29,6 +29,7 @@ Boston, MA 02111-1307, USA.
 
 #include "mysqldb.h"
 #include "mysqlresult.h"
+#include "mysqlrecord.h"
 
 K_EXPORT_COMPONENT_FACTORY(keximysqlinterface, KGenericFactory<MySqlDB>( "mysqlinterface" ));
 
@@ -41,6 +42,21 @@ MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &) : KexiD
 	m_connected = false;
 	m_connectedDB = false;
 	
+}
+
+KexiDBRecord*
+MySqlDB::queryRecord(QString querystatement, bool buffer)
+{
+	if(query(querystatement))
+	{
+		MYSQL_RES *res = mysql_use_result(m_mysql);
+		if(res)
+		{
+			MySqlRecord *rec = new MySqlRecord(res, this, false);
+			return rec;
+		}
+		return 0;
+	}
 }
 
 bool
@@ -136,12 +152,20 @@ MySqlDB::tables()
 	return s;
 }
 
-int
+bool
 MySqlDB::query(QString statement)
 {
+//	if(!m_connected)
+//		return false;
 	const char *query = statement.latin1();
 	if(mysql_real_query(m_mysql, query, strlen(query)) == 0)
-		return 0;
+		return true;
+}
+
+KexiDBResult*
+MySqlDB::getResult()
+{
+	return useResult();
 }
 
 KexiDBResult*

@@ -21,11 +21,14 @@ Boston, MA 02111-1307, USA.
 #ifndef MYSQLDB_H
 #define MYSQLDB_H
 
+#include <qstringlist.h>
+
 #include "../../kexiDB/kexidb.h"
 #include "../../kexiDB/kexidbresult.h"
 
 typedef struct st_mysql MYSQL;
 
+class MySqlRecord;
 
 /*!
  * should overwrite kexiDB/kexiDB
@@ -50,6 +53,8 @@ class MySqlDB : public KexiDB
 
 		QString		driverName();
 
+		KexiDBRecord	*queryRecord(QString querystatement, bool buffer=false);
+
 		bool		connect(QString host, QString user, QString password);
 		bool		connect(QString host, QString user, QString password, QString db);
 
@@ -64,17 +69,23 @@ class MySqlDB : public KexiDB
 		/*!
 		 * execute a query
 		 */
-		int		query(QString statement);
-		int		realQuery(const char *statement, unsigned int length);
+		bool		query(QString statement);
+//		int		realQuery(const char *statement, unsigned int length);
 		
 		QString		realEscape(const QString &str);
 		QByteArray	realEscape(const QByteArray &a); 
+
+		/*!
+		 *  friendy mode
+		 */
+		KexiDBResult	*getResult();
 
 		/*!
 		 * mysql_store_result
 		 */
 		KexiDBResult	*storeResult();
 		KexiDBResult	*useResult();
+
 		KexiDBResult	*listProcesses();
 		
 		int		threadID();

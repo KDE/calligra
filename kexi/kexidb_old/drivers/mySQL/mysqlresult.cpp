@@ -18,6 +18,7 @@ Boston, MA 02111-1307, USA.
 */
 
 #include <qvariant.h>
+#include <qdatetime.h>
 
 #include <kdebug.h>
 
@@ -49,6 +50,12 @@ MySqlResult::MySqlResult(MYSQL_RES *result, QObject *parent) : KexiDBResult(pare
 }
 
 unsigned int
+MySqlResult::numFields()
+{
+	return m_numFields;
+}
+
+unsigned int
 MySqlResult::numRows()
 {
 	return mysql_num_rows(m_result);
@@ -68,8 +75,15 @@ MySqlResult::value(unsigned int field)
 {
 	if(!m_row)
 		return 0;
-	QVariant v((m_row)[field]);
-	return v;
+	switch(fieldInfo(field)->type())
+	{
+		case QVariant::Date:
+			return QVariant(QDate::fromString((m_row)[field], Qt::ISODate));
+		default:
+			return QVariant((m_row)[field]);
+	}
+
+	return 0;
 }
 
 QVariant

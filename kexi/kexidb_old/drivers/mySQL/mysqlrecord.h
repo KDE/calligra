@@ -23,26 +23,36 @@ Boston, MA 02111-1307, USA.
 #include <qvariant.h>
 #include <qptrlist.h>
 #include <qmap.h>
+#include <qvaluevector.h>
+#include <qobject.h>
+
+#include <mysql/mysql.h>
 
 #include "mysqlresult.h"
 
 #include "../../kexiDB/kexidbrecord.h"
 #include "../../kexiDB/kexidbfield.h"
 
+class KexiDB;
 class MySqlRecord;
 class MySqlResult;
 
 typedef QPtrList<MySqlRecord> InsertList;
 typedef QMap<unsigned int, QVariant> UpdateBuffer;
-typedef QMap<QString, unsigned int> FieldList;
+typedef QMap<QString , QVariant> ContentBuffer;
+typedef QValueVector<QString> FieldName;
 
-class MySqlRecord : KexiDBRecord
+class MySqlRecord : public KexiDBRecord, public MySqlResult
 {
 	public:
-		MySqlRecord(MySqlResult *result, unsigned int record, MySqlRecord *parent=0);
+		MySqlRecord(MYSQL_RES *result, QObject *p, bool buffer, MySqlRecord *parent=0);
 		~MySqlRecord();
 
 		//KexiDBRecord members
+//		MySqlRecord *query(KexiDB *db, QString query) static;
+
+		bool readOnly();
+
 		void reset();
 		bool commit(bool insertBuffer);
 
@@ -60,21 +70,38 @@ class MySqlRecord : KexiDBRecord
 
 		bool deleteRecord();
 
-		MySqlRecord *insert();
+		KexiDBRecord *insert();
 
 		MySqlRecord *operator++();
 		MySqlRecord *operator--();
 
-		MySqlRecord *gotoRecord(unsigned int record);
+		void gotoRecord(unsigned int record);
+
+		unsigned int fieldCount();
+		
+		QString fieldName(unsigned int field);
+
+		bool next();
 
 		//needed members
 		void takeInsertBuffer(MySqlRecord *buffer);
 
 	protected:
-		MySqlRecord	*m_parent;
+		bool		findKey(); /* finds the key for updateing */
 
-		InsertList	m_insertList;
-		UpdateBuffer	m_updateBuffer;
+		MySqlRecord	*m_parent; /* parent if current is a insert-buffer */
+		MySqlResult	*m_result; /* reult (will not be accessible always! */
+
+		QString		m_keyField; /* fieldname which contains primary/unique key */
+		QVariant	m_keyContent; /* the key is buffered so requeries are possible */
+		QString		m_table;    /* table for update table ... */
+		bool		m_readOnly; /* is that record read only? */
+
+		FieldName	m_fieldNames; /* field name vector */
+
+		InsertList	m_insertList;   /* insert-buffers, don't wan't to loose them */
+		UpdateBuffer	m_updateBuffer; /* update buffer */
+		ContentBuffer	m_contentBuffer; /* interesting if buffer was enabled */
 };
 
 #endif

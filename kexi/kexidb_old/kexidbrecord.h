@@ -37,14 +37,24 @@ class KexiDBRecord
 		 *  because the ANSI query hasn't to be translated into database native query!
 		 *
 		 *  this class will be subclassed, so the queries (caused by updates, inserts and deletes) are database-independend
+		 *  @param buffer use true if you have e.g. a form-desingner and don't want to save your own,
+		 *  but note, that it will be quite memory-consuming so use it with care
 		 */
-		KexiDBRecord(KexiDBResult *result, unsigned int record);
-		virtual ~KexiDBRecord();
+		KexiDBRecord() {};
+		virtual ~KexiDBRecord() {};
+
+//		virtual KexiDBRecord *query(KexiDB *db, QString query) static;
+
+		/*!
+		 *  returns true if we either don't have the right to update, delete and insert
+		 *  or no key (primary/unique) was found
+		 */
+		virtual bool readOnly() = 0;
 
 		/*!
 		 *  resets all updates to the database-defaults
 		 */
-		virtual void reset();
+		virtual void reset() = 0;
 
 		/*!
 		 *  commits updates
@@ -55,39 +65,39 @@ class KexiDBRecord
 		 *  and commit on the base-buffer won't work for the insertBuffer anymore!
 		 *
 		 */
-		virtual bool commit(bool insertBuffer=false);
+		virtual bool commit(bool insertBuffer=false) = 0;
 
 
 		/*!
 		 *  returns the value of the nth field
 		 */
-		virtual QVariant value(unsigned int field);
+		virtual QVariant value(unsigned int field) = 0;
 
 		/*!
 		 *  returns the value of the field "field"
 		 */
-		virtual QVariant value(QString field);
+		virtual QVariant value(QString field) = 0;
 
 
 		/*!
 		 *  returns QVariant::Type of the nth field
 		 */
-		virtual QVariant::Type type(unsigned int field);
+		virtual QVariant::Type type(unsigned int field) = 0;
 
 		/*!
 		 *  returns QVariant::Type of the field "field"
 		 */
-		virtual QVariant::Type type(QString field);
+		virtual QVariant::Type type(QString field) = 0;
 
 		/*!
 		 *  returns KexiDBField::ColumnType of the nth field
 		 */
-		virtual KexiDBField::ColumnType sqlType(unsigned int field);
+		virtual KexiDBField::ColumnType sqlType(unsigned int field) = 0;
 
 		/*!
 		 *  returns KexiDBField::ColumnType of the field "field"
 		 */
-		virtual KexiDBField::ColumnType sqlType(QString field);
+		virtual KexiDBField::ColumnType sqlType(QString field) = 0;
 
 
 		/*!
@@ -95,21 +105,21 @@ class KexiDBRecord
 		 *  the changes have to be commited in order to take effect
 		 *  returns true, if update is possible
 		 */
-		virtual bool update(unsigned int field, QVariant value);
+		virtual bool update(unsigned int field, QVariant value) = 0;
 
 		/*!
 		 *  sets the field "field" in the buffer to "value"
 		 *  the changes have to be commited in order to take effect
 		 *  returns true, if update is possible
 		 */
-		virtual bool update(QString field, QVariant value);
+		virtual bool update(QString field, QVariant value) = 0;
 
 		/*! 
 		 *  deletes the current record
 		 *  the changes have to be commited in order to take effect
 		 *  returns true, if delete is possible
 		 */
-		virtual bool deleteRecord();
+		virtual bool deleteRecord() = 0;
 
 		/*!
 		 * creates a buffer which enables nice updateing with like
@@ -119,27 +129,29 @@ class KexiDBRecord
 		 *
 		 *  returns 0, if insert isn't possible
 		 */
-		virtual KexiDBRecord *insert();
-
-		/*!
-		 * returns the next record (if exists)
-		 *  and updates, if needed
-		 *  returns 0 if there isn't any record after current
-		 */
-		virtual KexiDBRecord *operator++();
-
-		/*!
-		 *  returns the previous record (if exists)
-		 *  and updates, if needed
-		 *  returns 0 if there isn't any record before current
-		 */
-		virtual KexiDBRecord *operator--();
+		virtual KexiDBRecord *insert() = 0;
 
 		/*!
 		 *  directly changes to the nth record
 		 *  returns 0 if the record "record" doesn't exists
 		 */
-		virtual KexiDBRecord* gotoRecord(unsigned int record);
+		virtual void gotoRecord(unsigned int record) = 0;
+
+		/*!
+		 *  returns the number of avaible fields
+		 */
+		virtual unsigned int fieldCount() = 0;
+
+		/*!
+		 *  returns the name of field "field"
+		 */
+		virtual QString fieldName(unsigned int field) = 0;
+
+		/*!
+		 *  returns true if there is "yet another record"
+		 */
+		virtual bool next() = 0;
+		
 };
 
 #endif

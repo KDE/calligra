@@ -56,7 +56,8 @@ class KexiDBField
 		QVariant::Type sql2qt(ColumnType sqltype);
 
 		virtual QString		name() const;
-		
+		virtual QString		table() const;
+
 		//key section
 		virtual	bool		primary_key();
 		virtual bool		unique_key();

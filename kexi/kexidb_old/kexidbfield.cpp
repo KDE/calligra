@@ -65,6 +65,12 @@ KexiDBField::name() const
 	return QString::null;
 }
 
+QString
+KexiDBField::table() const
+{
+	return QString::null;
+}
+
 bool
 KexiDBField::primary_key()
 {

@@ -29,15 +29,13 @@ Boston, MA 02111-1307, USA.
 #include "../../kexiDB/kexidbfield.h"
 
 #include "mysqlfield.h"
-#include "mysqlrecord.h"
+//#include "mysqlrecord.h"
 
 typedef QMap<QString, int> FieldNames;
 typedef QIntDict<KexiDBField> FieldInfo;
 
 class MySqlResult : public KexiDBResult
 {
-	friend class MySqlRecord;
-
 	Q_OBJECT
 	
 	public:
@@ -49,6 +47,7 @@ class MySqlResult : public KexiDBResult
 		
 		bool		next();
 
+		unsigned int	numFields();
 		unsigned int	numRows();
 		
 		KexiDBField	*fieldInfo(unsigned int field);

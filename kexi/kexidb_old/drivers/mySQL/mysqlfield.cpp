@@ -34,6 +34,12 @@ MySqlField::name() const
 	return QString::fromLatin1(m_field->name);
 }
 
+QString
+MySqlField::table() const
+{
+	return QString::fromLatin1(m_field->table);
+}
+
 bool
 MySqlField::primary_key()
 {

@@ -26,6 +26,7 @@ Boston, MA 02111-1307, USA.
 
 class KexiDBInterfaceManager;
 class KexiDBDriver;
+class KexiDBRecord;
 
 class KexiDB : public QObject
 {
@@ -44,6 +45,8 @@ class KexiDB : public QObject
 
 		virtual QString driverName();
 
+		virtual KexiDBRecord* queryRecord(QString query, bool buffer=false);
+
 		/*! connect to database hope that is ansi-compatible */
 		virtual bool connect(QString host, QString user, QString password);
 		virtual bool connect(QString host, QString user, QString password, QString db);
@@ -54,7 +57,7 @@ class KexiDB : public QObject
 		virtual QStringList databases();
 		virtual QStringList tables();
 
-		virtual int query(QString statement);
+		virtual bool query(QString statement);
 		virtual QString escape(QString &str);
 		
 		virtual KexiDBResult	*getResult();

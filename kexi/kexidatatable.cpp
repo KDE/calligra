@@ -37,6 +37,9 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include "kexiDB/kexidb.h"
+#include "kexiDB/kexidbrecord.h"
+
 #include "kexiapplication.h"
 
 #include "kexidatatable.h" 
@@ -60,6 +63,26 @@ KexiDataTable::KexiDataTable(QWidget *parent, QString caption, const char *name)
 bool
 KexiDataTable::executeQuery(QString queryStatement)
 {
+	kdDebug() << "KexiDataTable::executeQuery(): executing query..." << endl;
+	KexiDBRecord *record = kexi->project()->db()->queryRecord(queryStatement, false);
+	
+	for(uint i = 0; i < record->fieldCount(); i++)
+	{
+		kdDebug() << "KexiDataTable::executeQuery(): adding columns" << endl;
+		m_tableView->addColumn(record->fieldName(i), record->type(i), false);
+	}
+
+	while(record->next())
+	{
+		KexiTableItem *it = new KexiTableItem(m_tableView);
+		for(uint i = 0; i < record->fieldCount(); i++)
+		{
+			it->setValue(i, record->value(i));
+		}
+	}
+
+	kdDebug() << "KexiDataTable::executeQuery(): query " << record->fieldCount() << " columns affected" << endl;
+
 /*	QTime t;
 	t.start();
 	QSqlDatabase *db = kexi->project()->db();
