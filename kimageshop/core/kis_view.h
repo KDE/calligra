@@ -62,7 +62,7 @@ class QButton;
 
 class KisView : public KoView
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   KisView( KisDoc* doc, QWidget* parent = 0, const char* name = 0 );

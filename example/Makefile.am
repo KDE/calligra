@@ -1,7 +1,8 @@
+
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
-example_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-example_LDADD = ../lib/kofficeui/libkofficeui.la
+example_LDFLAGS = $(KDE_RPATH) 
+example_LDADD = ../lib/kofficeui/libkofficeui.la 
 
 libexample_la_LDFLAGS = -module -avoid-version
 

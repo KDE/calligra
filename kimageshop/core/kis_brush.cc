@@ -108,7 +108,7 @@ void KisBrush::loadViaQImage(QString file)
   qDebug("Loading brush: %s",file.latin1());
 }
 
-QPixmap& KisBrush::pixmap(){
+QPixmap& KisBrush::pixmap() const {
   return *m_pPixmap;
 }
 

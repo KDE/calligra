@@ -30,13 +30,8 @@
 
 #include <qrect.h>
 #include <qpoint.h>
+#include <algorithm>
 
-#ifndef min
-#define min(a,b) ((a)<(b)?(a):(b))
-#endif
-#ifndef max
-#define max(a,b) ((a)>(b)?(a):(b))
-#endif
 
 class TxtObj;
 class TxtLine;

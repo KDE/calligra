@@ -2177,7 +2177,7 @@ void KWGroupManager::recalcRows()
 	for ( i = 0; i < cols; i++ ) {
 	    if ( getFrameSet( j, i )->getFrame( 0 )->isSelected() )
 		hei = getFrameSet( j, i )->getFrame( 0 )->height();
-	    _hei = min( getFrameSet( j, i )->getFrame( 0 )->height() , _hei );
+	    _hei = std::min( getFrameSet( j, i )->getFrame( 0 )->height() , _hei );
 	}
 	if ( hei != -1 ) {
 	    for ( i = 0; i < cols; i++ )

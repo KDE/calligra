@@ -29,7 +29,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
-
+#include <iostream.h>
 
 KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize re)
 	: QDialog( 0L, name )

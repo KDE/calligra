@@ -473,7 +473,9 @@ void KIllustratorView::resizeEvent (QResizeEvent* )
 
 void KIllustratorView::updateReadWrite( bool readwrite )
 {
+#ifdef __GNUC__
 #warning TODO 
+#endif
 } 
 
 void KIllustratorView::showTransformationDialog( int id )

@@ -162,7 +162,7 @@ public:
   KChartPart* chart();
 
 private:
-  bool loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttrib>& lst );
+  bool loadTag( KOMLParser& parser, const string& tag, std::vector<KOMLAttrib>& lst );
 
   ChartBinding *m_pBinding;
   KSpreadTable* m_table;

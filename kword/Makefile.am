@@ -7,10 +7,10 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 bin_PROGRAMS = kword
 lib_LTLIBRARIES = libkword.la
 
-kword_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kword_LDFLAGS = $(KDE_RPATH)
 kword_LDADD = libkword.la
 
-libkword_la_LDFLAGS = $(all_libraries) -avoid-version -module
+libkword_la_LDFLAGS = $(KDE_LDFLAGS) -avoid-version -module
 libkword_la_LIBADD = ../lib/kofficeui/libkofficeui.la -lkspell -lkformula
 
 libkword_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \

@@ -926,7 +926,9 @@ void KWordView::setParagBorders( KWParagLayout::Border _left, KWParagLayout::Bor
 
 void KWordView::updateReadWrite( bool readwrite )
 {
+#ifdef __GNUC__
 #warning TODO
+#endif
   QValueList<QAction*> actions = actionCollection()->actions();
   QValueList<QAction*>::ConstIterator aIt = actions.begin();
   QValueList<QAction*>::ConstIterator aEnd = actions.end();

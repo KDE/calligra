@@ -1,9 +1,9 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
-kimageshop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kimageshop_LDFLAGS = $(KDE_RPATH)
 kimageshop_LDADD = ../lib/kofficeui/libkofficeui.la
 
-libkimageshop_la_LDFLAGS = $(all_libraries) -avoid-version -module
+libkimageshop_la_LDFLAGS = -avoid-version -module
 libkimageshop_la_LIBADD =  core/libkiscore.la ui/libkisui.la tools/libkistools.la \
 	../lib/kofficeui/libkofficeui.la
 

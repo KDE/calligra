@@ -69,7 +69,7 @@ public:
     ConfRectDia( QWidget* parent, const char* );
     ~ConfRectDia();
 
-    void setRnds( int _rx, int _rx );
+    void setRnds( int _rx, int _ry );
 
     int getRndX()
     { return xRnd; }

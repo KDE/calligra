@@ -13,6 +13,7 @@
 #include <klocale.h>
 #include <kcursor.h>
 
+#include <cassert>
 #include <qlabel.h>
 #include <qpainter.h>
 

@@ -31,7 +31,7 @@ class KisBrush;
 
 class TopFrame : public QFrame
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   TopFrame( QWidget* parent = 0, const char* name = 0 );
@@ -42,7 +42,7 @@ class TopFrame : public QFrame
 
 class ControlFrame : public QFrame
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   ControlFrame( QWidget* parent = 0, const char* name = 0 );
@@ -90,7 +90,7 @@ class ControlFrame : public QFrame
 
 class KisSideBar : public QWidget
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   KisSideBar( QWidget* parent = 0, const char* name = 0 );

@@ -7,10 +7,10 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 bin_PROGRAMS = kpresenter
 lib_LTLIBRARIES = libkpresenter.la
 
-kpresenter_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kpresenter_LDFLAGS = $(KDE_RPATH)
 kpresenter_LDADD = libkpresenter.la
 
-libkpresenter_la_LDFLAGS = $(all_libraries) -avoid-version -module
+libkpresenter_la_LDFLAGS = -avoid-version -module
 libkpresenter_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la
 
 libkpresenter_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \

@@ -448,7 +448,9 @@ void KisView::resizeEvent(QResizeEvent*)
 
 void KisView::updateReadWrite( bool readwrite )
 {
+#ifdef __GNUC__
 #warning TODO 
+#endif
 } 
 
 void KisView::scrollH(int)

@@ -18,7 +18,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koDataTool.cc koFilter.cc \
 	koDocumentInfo.cc koFilterDialog.cc \
 	koView.cc koFrame.cc handler.cpp koDocumentChild.cc 
-libkofficecore_la_LDFLAGS = $(all_libraries)  -version-info 1:0:0 -no-undefined
+libkofficecore_la_LDFLAGS = $(KDE_LDFLAGS)  -version-info 1:0:0 -no-undefined
 
 include_HEADERS = koFilter.h \
 	koStream.h koDocument.h \

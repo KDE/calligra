@@ -20,10 +20,12 @@
  */
 
 #include <klocale.h>
-
+#include <iostream>
 #include "kis_tool_move.h"
 #include "kis_doc.h"
 #include "kis_cursor.h"
+
+using namespace std;
 
 MoveCommand::MoveCommand( KisDoc *_doc, int _layer, QPoint _oldpos, QPoint _newpos )
   : KisCommand( i18n( "Move layer" ), _doc )

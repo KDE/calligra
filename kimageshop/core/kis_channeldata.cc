@@ -460,7 +460,8 @@ void KisChannelData::mirrorX()
 
 void KisChannelData::mirrorY()
 {
-  uchar *tmp, buf[TILE_SIZE*channels];
+  uchar *tmp;
+  uchar *buf = new uchar[TILE_SIZE*channels];
   
   for(int y=0; y<=(yTilesNo-1)/2; y++) {
     for(int x=0; x<xTilesNo; x++) {
@@ -487,4 +488,7 @@ void KisChannelData::mirrorY()
   
   tilesRect.moveBy(0, imageRect.top()-tilesRect.top() -
 		   (tilesRect.bottom()-imageRect.bottom()));
+
+  delete [] buf;
+
 }

@@ -27,7 +27,7 @@ class KisBrush;
 
 class KisBrushWidget : public QFrame
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   KisBrushWidget( QWidget* parent = 0, const char* name = 0 );
@@ -43,7 +43,7 @@ class KisBrushWidget : public QFrame
   virtual void mousePressEvent ( QMouseEvent * );
 
  private:
-  KisBrush *m_pBrush; 
+  const KisBrush *m_pBrush; 
 };
 
 #endif

@@ -73,6 +73,27 @@ public:
     AttribStruct attrib;
   };
 
+  // structure of signs
+  struct Sign
+  {
+    char op;
+    int num;
+    char var;
+    int type;
+  };
+
+  // structure of values
+  struct Value
+  {
+    QList<Sign> var1;
+    QList<Sign> var2;
+    QList<Sign> var3;
+    QList<Sign> var4;
+    QList<Sign> var5;
+    QList<Sign> var6;
+    QList<Sign> result;
+  };
+
   // constructure - destructure
   ATFInterpreter(QObject* parent=0,const char* name=0);
   ~ATFInterpreter();
@@ -153,27 +174,6 @@ protected:
   static const char NUM_7      = '7';
   static const char NUM_8      = '8';
   static const char NUM_9      = '9';
-
-  // structure of signs
-  struct Sign
-  {
-    char op;
-    int num;
-    char var;
-    int type;
-  };
-
-  // structure of values
-  struct Value
-  {
-    QList<Sign> var1;
-    QList<Sign> var2;
-    QList<Sign> var3;
-    QList<Sign> var4;
-    QList<Sign> var5;
-    QList<Sign> var6;
-    QList<Sign> result;
-  };
 
   // structure of coordinates
   struct Coord

@@ -57,10 +57,10 @@ public:
     // Overloaded methods from KoDocument
 
     virtual bool saveChildren (KoStore* _store, const char *_path);
-    bool save (ostream& os, const char *fmt);
+    bool save (std::ostream& os, const char *fmt);
     bool completeSaving (KoStore* store);
 
-    bool load (istream& is, KoStore* store);
+    bool load (std::istream& is, KoStore* store);
     bool loadChildren (KoStore* store);
     bool hasToWriteMultipart ();
 

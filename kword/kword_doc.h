@@ -127,7 +127,7 @@ public:
     virtual QCString mimeType() const
     { return MIME_TYPE; }
 
-    virtual bool isModified()
+    virtual bool isModified() const
     { return m_bModified; }
 
     // C++

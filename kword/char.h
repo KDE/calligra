@@ -51,7 +51,7 @@ public:
 
     int getClassId()
     { return classId; }
-    virtual bool operator==( const KWCharAttribute &_attrib )
+    virtual bool operator==( const KWCharAttribute &_attrib ) const
     { return classId == static_cast<KWCharAttribute>( _attrib ).classId; }
 
     virtual void save( ostream & ) {}

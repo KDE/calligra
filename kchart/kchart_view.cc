@@ -90,7 +90,9 @@ void KChartView::paintEvent( QPaintEvent* /*ev*/ )
 
 void KChartView::updateReadWrite( bool readwrite )
 {
+#ifdef __GNUC__
 #warning TODO
+#endif
 }
 
 void KChartView::createTempData()

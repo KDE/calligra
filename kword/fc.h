@@ -53,7 +53,7 @@ public:
     enum LayoutError {COLUMN_TOO_TALL, PAPER_HEIGHT_TOO_SMALL, NO_ERROR};
 
     KWFormatContext( KWordDocument *_doc, unsigned int _frameSet );
-    KWFormatContext &operator=( const KWFormatContext &fc );
+    KWFormatContext &operator=( const KWFormatContext &fc ) const;
     virtual ~KWFormatContext() {}
 
     virtual bool operator>( const KWFormatContext &fc ) const;

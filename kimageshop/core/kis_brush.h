@@ -39,7 +39,7 @@ class KisBrush : public IconItem
   bool      isValid()   	      const { return m_valid;    }
   void      setHotSpot(QPoint);
   QPoint    hotSpot()   	      const { return m_hotSpot;  }
-  QPixmap&  pixmap();
+  QPixmap&  pixmap() const;
   QSize     size()                    const { return QSize(m_w, m_h); } 
   int       width()                   const { return m_w; }
   int       height()                  const { return m_h; }

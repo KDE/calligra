@@ -29,6 +29,7 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <qfiledialog.h>
+#include <cassert>
 
 #include "backdia.h"
 #include "autoformEdit/afchoose.h"
@@ -2659,7 +2660,9 @@ void KPresenterView::doAutomaticScreenPres()
 
 void KPresenterView::updateReadWrite( bool readwrite )
 {
+#ifdef __GNUC__
 #warning TODO 
+#endif
 } 
 
 /*========================= change undo =========================*/

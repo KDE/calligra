@@ -32,7 +32,7 @@ class KisLayer;
 typedef QList<KisLayer> LayerList;
 
 class KisLayer : public QObject {
-	Q_OBJECT;
+	Q_OBJECT
 
  public:
 	KisLayer(int ch);

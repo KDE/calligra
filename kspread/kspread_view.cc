@@ -19,9 +19,10 @@
 
 #include <qprinter.h> // has to be first
 
-#include <iostream.h>
-#include <stdlib.h>
-#include <time.h>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <cassert>
 
 #include <qpushbutton.h>
 #include <qmessagebox.h>
@@ -664,7 +665,9 @@ void KSpreadView::activateFormulaEditor()
 
 void KSpreadView::updateReadWrite( bool readwrite )
 {
+#ifdef __GNUC_
 #warning TODO 
+#endif
   m_pCancelButton->setEnabled( readwrite ); 
   m_pOkButton->setEnabled( readwrite );
   m_pEditWidget->setEnabled( readwrite );

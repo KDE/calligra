@@ -38,6 +38,9 @@ class KoDocumentChildPicture;
 class KoView;
 class KoDocumentPrivate;
 
+using std::istream;
+using std::ostream;
+
 /**
  *  The KOffice document class
  *
@@ -284,7 +287,7 @@ protected:
    *
    *  @param _store may be 0L.
    */
-  virtual bool load( std::istream& in, KoStore* _store );
+  virtual bool load( istream& in, KoStore* _store );
 
   /**
    *  This method loads a binary document. It is called by @ref #load.
@@ -370,7 +373,7 @@ protected:
   /**
    *  Saves only an OBJECT tag for this document.
    */
-  virtual bool save( std::ostream&, const char* format );
+  virtual bool save( ostream&, const char* format );
 
   /**
    *  Overload this function with your personal text.

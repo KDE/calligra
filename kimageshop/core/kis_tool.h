@@ -29,7 +29,7 @@ class KisView;
 
 class KisTool : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   KisTool(KisDoc *doc, KisView *view = 0L);

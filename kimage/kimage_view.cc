@@ -112,7 +112,9 @@ void KImageView::paintEvent( QPaintEvent* /* _event */ )
 
 void KImageView::updateReadWrite( bool readwrite )
 {
+#ifdef __GNUC__
 #warning TODO 
+#endif
 } 
 
 KImageDocument* KImageView::doc()

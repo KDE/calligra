@@ -25,7 +25,7 @@
 
 class KisCanvas : public QWidget
 {
-  Q_OBJECT;
+  Q_OBJECT
 
  public:
   KisCanvas( QWidget* parent = 0, const char* name = 0 );

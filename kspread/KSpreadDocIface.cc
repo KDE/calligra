@@ -30,11 +30,13 @@ bool KSpreadDocIface::isModified()
 bool KSpreadDocIface::save()
 {
     // TODO
+  return false;
 }
 
 bool KSpreadDocIface::saveAs( const QString& url )
 {
     // TODO
+  return false;
 }
 
 

@@ -31,6 +31,7 @@
 #include <qpushbutton.h>
 
 #include <kstddirs.h>
+#include <iostream>
 #include <klocale.h>
 #include <knuminput.h>
 
@@ -40,6 +41,8 @@
 #include "kis_factory.h"
 #include "kis_dlg_layer.h"
 #include "integerwidget.h"
+
+using namespace std;
 
 LayerView::LayerView( QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )

@@ -2855,11 +2855,11 @@ void KWordDocument::copySelectedText()
     }
     out << etag << "</PARAGRAPHS>" << endl;
 
-    KWordDrag *d = new KWordDrag;
-    d->setPlain( clipString );
-    d->setKWord( clip_string.c_str() );
+    KWordDrag *kd = new KWordDrag;
+    kd->setPlain( clipString );
+    kd->setKWord( clip_string.c_str() );
 
-    cb->setData( d );
+    cb->setData( kd );
 }
 
 /*================================================================*/
@@ -2932,7 +2932,7 @@ void KWordDocument::paste( KWFormatContext *_fc, QString _string, KWPage *_page,
 	if ( !_string.isEmpty() && !_string.simplifyWhiteSpace().isEmpty() )
 	    strList.append( QString( _string ) );
     } else if ( _mime == MIME_TYPE ) {     // -------------- MIME type application/x-kword
-	istrstream in( _string.ascii() );
+	std::istrstream in( _string.ascii() );
 	if ( !in )
 	    return;
 

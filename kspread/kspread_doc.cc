@@ -36,6 +36,7 @@
 #include <qmessagebox.h>
 #include <kurl.h>
 #include <kapp.h>
+#include <cassert>
 #include <qdatetime.h>
 #include <klocale.h>
 #include <sys/types.h>
@@ -45,6 +46,8 @@
 
 #include <kscript_context.h>
 #include <kstddirs.h>
+
+using namespace std;
 
 /*****************************************************************************
  *

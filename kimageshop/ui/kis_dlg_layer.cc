@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kstddirs.h>
-
+#include <iostream.h>
 #include "kis_dlg_layer.h"
 #include "layerview.h"
 #include "channelview.h"
