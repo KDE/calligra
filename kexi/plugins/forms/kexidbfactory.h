@@ -29,6 +29,7 @@ namespace KFormDesigner {
 
 using KFormDesigner::Form;
 
+//! A form embedded as a widget inside other form
 class KFORMEDITOR_EXPORT KexiSubForm : public QScrollView
 {
 	Q_OBJECT
@@ -38,6 +39,7 @@ class KFORMEDITOR_EXPORT KexiSubForm : public QScrollView
 		KexiSubForm(KFormDesigner::FormManager *manager, QWidget *parent, const char *name);
 		~KexiSubForm() {}
 
+		//! \return the name of the subform inside the db
 		QString   formName() const { return m_formName; }
 		void      setFormName(const QString &name);
 
@@ -48,7 +50,7 @@ class KFORMEDITOR_EXPORT KexiSubForm : public QScrollView
 		QString   m_formName;
 };
 
-
+//! Kexi Factory (DB widgets + subform)
 class KexiDBFactory : public KFormDesigner::WidgetFactory
 {
 	Q_OBJECT

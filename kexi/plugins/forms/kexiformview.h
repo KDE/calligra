@@ -31,6 +31,8 @@ class KexiDBForm;
 
 using KFormDesigner::Form;
 
+//! The scrollview which inlcudes KexiDBForm
+/*! It allows to resize its m_widget, following snapToGrid setting. Its contents is resized so the widget can always be resized. */
 class KexiFormScrollView : public QScrollView
 {
 	Q_OBJECT
@@ -43,6 +45,7 @@ class KexiFormScrollView : public QScrollView
 		void  setResizingEnabled(bool enabled) { m_enableResizing = enabled; }
 
 		void  setForm(Form *form) { m_form = form; }
+		/*! Make sure there is a 300 margin around the widget to allow its resizing. */
 		void  refreshContentsSize();
 
 	protected:
@@ -60,6 +63,8 @@ class KexiFormScrollView : public QScrollView
 		int    m_gridX, m_gridY;
 };
 
+//! The FormPart's view
+/*! This class takes care of saving/loading form, of enabling actions when needed. */
 class KexiFormView : public KexiViewBase
 {
 	Q_OBJECT

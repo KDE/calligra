@@ -26,9 +26,7 @@
 
 #include "form.h"
 
-/**
- * this class is a data-aware form
- */
+//! A DB-aware form widget
 class KexiDBForm : public QWidget, public KFormDesigner::FormWidget
 {
 	Q_OBJECT

@@ -139,11 +139,6 @@ KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 		QPixmap pix1 = QPixmap::grabWidget(from);
 		QPixmap pix2 = QPixmap::grabWidget(to);
 
-		/*if(from == this)
-			p.drawLine( point, mapFrom(to->parentWidget(), to->geometry().center()) );
-		else if(to == this)
-			p.drawLine( mapFrom(from->parentWidget(), from->geometry().center()), point);
-		else*/
 		if((from != this) && (to != this))
 			p.drawLine( from->parentWidget()->mapTo(this, from->geometry().center()), to->parentWidget()->mapTo(this, to->geometry().center()) );
 

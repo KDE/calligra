@@ -39,6 +39,8 @@ namespace KexiDB
 	class FieldList;
 }
 
+//! Kexi Form Plugin
+/*! It just creates a \ref KexiFormView. See there for most of code. */
 class KexiFormPart : public KexiPart::Part
 {
 	Q_OBJECT
