@@ -215,7 +215,7 @@ void KoGlobal::createListOfLanguages()
 
 QStringList KoGlobal::listOfLanguages()
 {
-    if ( s_languageList.count()==0 )
+    if ( s_languageList.empty() )
         createListOfLanguages();
     return s_languageList;
 }
