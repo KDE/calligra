@@ -143,7 +143,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
 
     if ( statusBar() )
     {
-        statusBar()->insertFixedItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
+        statusBar()->insertItem( QString(" ")+i18n("Page %1/%2").arg(1).arg(1)+' ', statusPage );
         // ...
     }
 }
