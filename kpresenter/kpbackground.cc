@@ -409,11 +409,24 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     case BT_BRUSH:
     case BT_CLIPART:
     case BT_PICTURE:
+        stylepageauto.addProperty("draw:fill", "bitmap" );
+        stylepageauto.addProperty("draw:fill-image-name", saveOasisPictureStyle( mainStyles ) );
         //todo
         break;
     }
 
     return mainStyles.lookup( stylepageauto, "dp" );
+}
+
+QString KPBackGround::saveOasisPictureStyle( KoGenStyles& mainStyles )
+{
+    //<draw:fill-image draw:name="Pattern" xlink:href="#Pictures/100000000000005E0000005E43C87AF2.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+    KoGenStyle pictureStyle( KPresenterDoc::STYLE_PICTURE /*no family name*/ );
+    pictureStyle.addAttribute( "xlink:show", "embed" );
+    pictureStyle.addAttribute( "xlink:actuate", "onLoad" );
+    pictureStyle.addAttribute( "xlink:type", "simple" );
+    pictureStyle.addAttribute( "xlink:href","#"+ pictureCollection()->getOasisFileName(backPicture ) );
+    return mainStyles.lookup( pictureStyle, "picture" );
 }
 
 QString KPBackGround::saveOasisGradientStyle( KoGenStyles& mainStyles )

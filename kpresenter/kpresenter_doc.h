@@ -141,7 +141,7 @@ class KPresenterDoc : public KoDocument
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
     void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
-    enum { STYLE_BACKGROUNDPAGE = 20, STYLE_BACKGROUNDPAGEAUTO,STYLE_GRAPHICAUTO, STYLE_HATCH, STYLE_GRADIENT,STYLE_OBJECTANIMATION, STYLE_STROKE, STYLE_MARKER };
+    enum { STYLE_BACKGROUNDPAGE = 20, STYLE_BACKGROUNDPAGEAUTO,STYLE_GRAPHICAUTO, STYLE_HATCH, STYLE_GRADIENT,STYLE_OBJECTANIMATION, STYLE_STROKE, STYLE_MARKER, STYLE_PICTURE };
 
     // load
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument&, KoStore* store );

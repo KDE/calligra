@@ -145,6 +145,7 @@ protected:
 
     QString saveOasisGradientStyle( KoGenStyles& mainStyles );
     QString saveOasisPageEffect() const;
+    QString saveOasisPictureStyle( KoGenStyles& mainStyles );
 
 private:
     BackType backType;

@@ -57,6 +57,7 @@ Done:
 -> save/load page layout
 -> save/load sound page effect
 -> save/load picture object
+-> save/load page background image
 
 Todo:
 -> save/load part element (necessary to modify koDocumentChild)
