@@ -1,39 +1,23 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>AlignDialog</class>
-<widget class="QDialog">
+<class>KivioAlignDialogWidget</class>
+<widget class="QWidget">
     <property name="name">
-        <cstring>AlignDialog</cstring>
+        <cstring>KivioAlignDialogWidget</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>467</width>
-            <height>289</height>
+            <width>450</width>
+            <height>240</height>
         </rect>
     </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>5</hsizetype>
-            <vsizetype>5</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
     <property name="caption">
-        <string>Align &amp; Distribute</string>
-    </property>
-    <property name="layoutMargin" stdset="0">
+        <string>KivioAlignDialogWidget</string>
     </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
-        </property>
-        <property name="margin">
-            <number>6</number>
-        </property>
-        <property name="spacing">
-            <number>6</number>
         </property>
         <widget class="QTabWidget">
             <property name="name">
@@ -596,58 +580,6 @@
                 </grid>
             </widget>
         </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>Layout1</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>Spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>okButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                    <property name="default">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>cancelButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Cancel</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
     </vbox>
 </widget>
 <images>
@@ -694,19 +626,10 @@
         <data format="XPM.GZ" length="409">789cd3d7528808f055d0d2e72a2e492cc94c5648ce482c52d04a29cdcdad8c8eb5ade6523234530022630543251d2e253d856405bffcbc54103b11c856360003105719c4b530b630b43006ab040365300201a8987222442c51192a9608062031080b973a1ce6618ac1cd43160332c816c3621edc5eb024ba18c81072c520e6d55a730100685452a2</data>
     </image>
 </images>
-<connections>
-    <connection>
-        <sender>okButton</sender>
-        <signal>clicked()</signal>
-        <receiver>AlignDialog</receiver>
-        <slot>accept()</slot>
-    </connection>
-    <connection>
-        <sender>cancelButton</sender>
-        <signal>clicked()</signal>
-        <receiver>AlignDialog</receiver>
-        <slot>reject()</slot>
-    </connection>
-</connections>
-<layoutdefaults spacing="6" margin="11"/>
+ <includes>
+     <include location="global" impldecl="in implementation">kdialog.h</include>
+ </includes>
+
+ <layoutdefaults spacing="6" margin="11"/>
+ <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

@@ -92,7 +92,7 @@
 #include "kivio_birdeye_panel.h"
 #include "export_page_dialog.h"
 
-#include "aligndialog.h"
+#include "kivioaligndialog.h"
 #include "kiviooptionsdialog.h"
 
 #include "stencilbardockmanager.h"
@@ -1533,58 +1533,12 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner )
 
 void KivioView::alignStencilsDlg()
 {
-  AlignDialog* dlg = new AlignDialog(0,"AlignDialog", true);
+  KivioAlignDialog* dlg = new KivioAlignDialog(this, "AlignDialog");
 
   if( dlg->exec() == QDialog::Accepted )
   {
-    AlignData ad;
-
-    ad.centerOfPage = dlg->aCenterPage->isChecked();
-    ad.v = AlignData::None;
-    if (dlg->avtop->isChecked())
-      ad.v = AlignData::Top;
-    if (dlg->avcenter->isChecked())
-      ad.v = AlignData::Center;
-    if (dlg->avbottom->isChecked())
-      ad.v = AlignData::Bottom;
-
-    ad.h = AlignData::None;
-    if (dlg->ahleft->isChecked())
-      ad.h = AlignData::Left;
-    if (dlg->ahcenter->isChecked())
-      ad.h = AlignData::Center;
-    if (dlg->ahright->isChecked())
-      ad.h = AlignData::Right;
-
-    DistributeData dd;
-
-    if (dlg->dselection->isChecked())
-      dd.extent = DistributeData::Selection;
-    if (dlg->dpage->isChecked())
-      dd.extent = DistributeData::Page;
-
-    dd.v = DistributeData::None;
-    if (dlg->dvtop->isChecked())
-      dd.v = DistributeData::Top;
-    if (dlg->dvcenter->isChecked())
-      dd.v = DistributeData::Center;
-    if (dlg->dvbottom->isChecked())
-      dd.v = DistributeData::Bottom;
-    if (dlg->dvspacing->isChecked())
-      dd.v = DistributeData::Spacing;
-
-    dd.h = DistributeData::None;
-    if (dlg->dhleft->isChecked())
-      dd.h = DistributeData::Left;
-    if (dlg->dhcenter->isChecked())
-      dd.h = DistributeData::Center;
-    if (dlg->dhright->isChecked())
-      dd.h = DistributeData::Right;
-    if (dlg->dhspacing->isChecked())
-      dd.h = DistributeData::Spacing;
-
-    m_pActivePage->alignStencils(ad);
-    m_pActivePage->distributeStencils(dd);
+    m_pActivePage->alignStencils(dlg->align());
+    m_pActivePage->distributeStencils(dlg->distribute());
 
     m_pCanvas->repaint();
   }
