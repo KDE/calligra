@@ -39,6 +39,7 @@ Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDo
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
         m_textHandler = new KWordTextHandler( m_parser );
+        m_parser->setSubDocumentHandler( this );
         m_parser->setTextHandler( m_textHandler );
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         prepareDocument();
@@ -119,7 +120,6 @@ void Document::processStyles()
 
 bool Document::parse()
 {
-    startBody(); ///////////// HACK, added here since it's not called by wv2 currently.
     if ( m_parser )
         return m_parser->parse();
     return false;
