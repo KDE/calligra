@@ -89,7 +89,7 @@ QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc )
 
     if ( !points.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
-	QPointArray::Iterator it;
+	QPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QDomElement elemPoint = doc.createElement( "Point" );
             QPoint point = (*it);
@@ -195,7 +195,7 @@ void KPPolygonObject::updatePoints( double _fx, double _fy )
 {
     int index = 0;
     QPointArray tmpPoints;
-    QPointArray::Iterator it;
+    QPointArray::ConstIterator it;
     for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
         QPoint point = (*it);
         int tmpX = (int)( (double)point.x() * _fx );
@@ -236,7 +236,7 @@ void KPPolygonObject::paint( QPainter* _painter )
 
         unsigned int index = 0;
         QPointArray tmpPoints;
-        QPointArray::Iterator it;
+        QPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QPoint point = (*it);
             int tmpX = (int)( (double)point.x() * fx );
@@ -347,7 +347,7 @@ void KPPolygonObject::drawPolygon()
 
     int _index = 0;
     QPointArray tmpPoints;
-    QPointArray::Iterator it;
+    QPointArray::ConstIterator it;
     for ( it = _points.begin(); it != _points.end(); ++it ) {
         QPoint point = (*it);
         int tmpX = (int)( ( (double)point.x() * fx ) + (int)_diffx );

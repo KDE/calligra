@@ -455,7 +455,7 @@ void EffectDia::slotRequesterClicked( KURLRequester *requester )
 	KURL soundURL;
 	QDir dir;
 	dir.setFilter( QDir::Files | QDir::Readable );
-	QStringList::Iterator it = soundDirs.begin();
+	QStringList::ConstIterator it = soundDirs.begin();
 	while ( it != soundDirs.end() ) {
 	    dir = *it;
 	    if ( dir.isReadable() && dir.count() > 2 ) {
@@ -540,7 +540,7 @@ QString EffectDia::getSoundFileFilter()
 
     bool comma = false;
     QString full, str;
-    for ( QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it ) {
+    for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it ) {
         if ( comma )
             str += '\n';
         comma = true;

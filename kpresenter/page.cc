@@ -2190,7 +2190,7 @@ bool Page::pNext( bool )
     // Then try to see if there is still one step to do in the current page
     if ( (int)currPresStep < *( --presStepList.end() ) )
     {
-        QValueList<int>::Iterator it = presStepList.find( currPresStep );
+        QValueList<int>::ConstIterator it = presStepList.find( currPresStep );
         currPresStep = *( ++it );
         //kdDebug(33001) << "Page::pNext setting currPresStep to " << currPresStep << endl;
 
@@ -2207,11 +2207,11 @@ bool Page::pNext( bool )
     }
 
     // No more steps in this page, try to go to the next page
-    QValueList<int>::Iterator test(  slideListIterator );
+    QValueList<int>::ConstIterator test(  slideListIterator );
     if ( ++test != slideList.end() )
     {
         if ( !spManualSwitch() && nextPageTimer ) {
-            QValueList<int>::Iterator it( slideListIterator );
+            QValueList<int>::ConstIterator it( slideListIterator );
             view->setCurrentTimer( backgroundList()->at( (*it) - 1 )->getPageTimer() );
             nextPageTimer = false;
 
@@ -2241,7 +2241,7 @@ bool Page::pNext( bool )
             yOffset -= ( height() - pageHeight ) / 2;
         drawPageInPix( _pix2, yOffset );
 
-        QValueList<int>::Iterator it( slideListIterator );
+        QValueList<int>::ConstIterator it( slideListIterator );
         --it;
 
         if ( !spManualSwitch() )
@@ -2279,7 +2279,7 @@ bool Page::pPrev( bool /*manual*/ )
     subPresStep = 0;
 
     if ( (int)currPresStep > *presStepList.begin() ) {
-        QValueList<int>::Iterator it = presStepList.find( currPresStep );
+        QValueList<int>::ConstIterator it = presStepList.find( currPresStep );
         currPresStep = *( --it );
         repaint( false );
         return false;
@@ -3731,7 +3731,7 @@ void Page::insertFreehand( const QPointArray &_pointArray )
 
     QPointArray points( _pointArray );
     QPointArray tmpPoints;
-    QPointArray::Iterator it;
+    QPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         QPoint point = (*it);
         int tmpX = point.x() - ox + diffx();
@@ -3758,7 +3758,7 @@ void Page::insertPolyline( const QPointArray &_pointArray )
 
     QPointArray points( _pointArray );
     QPointArray tmpPoints;
-    QPointArray::Iterator it;
+    QPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         QPoint point = (*it);
         int tmpX = point.x() - ox + diffx();
@@ -3808,7 +3808,7 @@ void Page::insertCubicBezierCurve( const QPointArray &_pointArray )
                 _cubicBezierPoint.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
                 _cubicBezierPoint = _cubicBezierPoint.cubicBezier();
 
-                QPointArray::Iterator it;
+                QPointArray::ConstIterator it;
                 for ( it = _cubicBezierPoint.begin(); it != _cubicBezierPoint.end(); ++it ) {
                     QPoint _point = (*it);
                     tmpPointArray.putPoints( _tmpIndex, 1, _point.x(), _point.y() );
@@ -3840,7 +3840,7 @@ void Page::insertCubicBezierCurve( const QPointArray &_pointArray )
 
     QPointArray points( _pointArray );
     QPointArray tmpPoints;
-    QPointArray::Iterator it;
+    QPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         QPoint point = (*it);
         int tmpX = point.x() - ox + diffx();
@@ -3883,7 +3883,7 @@ void Page::insertPolygon( const QPointArray &_pointArray )
     unsigned int index = 0;
 
     QPointArray tmpPoints;
-    QPointArray::Iterator it;
+    QPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         QPoint point = (*it);
         int tmpX = point.x() - ox + diffx();
@@ -4082,7 +4082,7 @@ void Page::dropEvent( QDropEvent *e )
         QStringList lst;
         QUriDrag::decodeToUnicodeUris( e, lst );
 
-        QStringList::Iterator it = lst.begin();
+        QStringList::ConstIterator it = lst.begin();
         for ( ; it != lst.end(); ++it ) {
             KURL url( *it );
 
@@ -4768,7 +4768,7 @@ QRect Page::getDrawRect( const QPointArray &_points )
     bool first = true;
 
     QPointArray points( _points );
-    QPointArray::Iterator it;
+    QPointArray::ConstIterator it;
     for ( it = points.begin(); it != points.end(); ++it ) {
         QPoint point = (*it);
         tmpX = point.x();

@@ -1627,8 +1627,8 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
     //kdDebug() << "KPrPasteTextCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
 
     uint count = listParagraphs.count();
-    QValueList<QDomElement>::Iterator it = listParagraphs.begin();
-    QValueList<QDomElement>::Iterator end = listParagraphs.end();
+    QValueList<QDomElement>::ConstIterator it = listParagraphs.begin();
+    QValueList<QDomElement>::ConstIterator end = listParagraphs.end();
     for ( uint item = 0 ; it != end ; ++it, ++item )
     {
         if (!parag)

@@ -4482,7 +4482,7 @@ void KPresenterView::insertVariable()
     if ( edit )
     {
         KAction * act = (KAction *)(sender());
-        VariableDefMap::Iterator it = m_variableDefMap.find( act );
+        VariableDefMap::ConstIterator it = m_variableDefMap.find( act );
         if ( it == m_variableDefMap.end() )
             kdWarning() << "Action not found in m_variableDefMap." << endl;
         else

@@ -127,7 +127,7 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
     // setup the Sound Effect stuff
     checkSoundEffect = new QCheckBox( i18n( "Sound Effect" ), grp );
     checkSoundEffect->setChecked( soundEffect );
-    QWhatsThis::add( checkSoundEffect, i18n("If you use sound effect, plaese do not select No Effect.") );
+    QWhatsThis::add( checkSoundEffect, i18n("If you use a sound effect, please do not select No Effect.") );
     grid->addWidget( checkSoundEffect, 3, 0 );
 
     if ( static_cast<int>( pageEffect ) == 0 )
@@ -321,7 +321,7 @@ void PgConfDia::slotRequesterClicked( KURLRequester *requester )
 	KURL soundURL;
 	QDir dir;
 	dir.setFilter( QDir::Files | QDir::Readable );
-	QStringList::Iterator it = soundDirs.begin();
+	QStringList::ConstIterator it = soundDirs.begin();
 	while ( it != soundDirs.end() ) {
 	    dir = *it;
 	    if ( dir.isReadable() && dir.count() > 2 ) {
@@ -375,7 +375,7 @@ QString PgConfDia::getSoundFileFilter()
 
     bool comma = false;
     QString full, str;
-    for ( QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it ) {
+    for ( QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it ) {
         if ( comma )
             str += '\n';
         comma = true;

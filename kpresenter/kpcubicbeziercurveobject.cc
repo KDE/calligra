@@ -69,7 +69,7 @@ QDomDocumentFragment KPCubicBezierCurveObject::save( QDomDocument& doc )
     fragment.appendChild( KPObject::createPenElement( "PEN", pen, doc ) );
     if ( !controlPoints.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
-	QPointArray::Iterator it;
+	QPointArray::ConstIterator it;
         for ( it = controlPoints.begin(); it != controlPoints.end(); ++it ) {
             QDomElement elemPoint = doc.createElement( "Point" );
             QPoint point = (*it);
@@ -270,7 +270,7 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter )
 
         unsigned int index = 0;
         QPointArray tmpPoints;
-        QPointArray::Iterator it;
+        QPointArray::ConstIterator it;
         for ( it = allPoints.begin(); it != allPoints.end(); ++it ) {
             QPoint point = (*it);
             int tmpX = (int)( (double)point.x() * fx );
@@ -293,7 +293,7 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter )
     if ( lineBegin != L_NORMAL ) {
         QPoint startPoint;
         bool first = true;
-        QPointArray::Iterator it1;
+        QPointArray::ConstIterator it1;
         for ( it1 = pointArray.begin(); it1 != pointArray.end(); ++it1 ) {
             if ( first ) {
                 startPoint = (*it1);
@@ -313,7 +313,7 @@ void KPCubicBezierCurveObject::paint( QPainter* _painter )
     if ( lineEnd != L_NORMAL ) {
         QPoint endPoint;
         bool last = true;
-        QPointArray::Iterator it2 = pointArray.end();
+        QPointArray::ConstIterator it2 = pointArray.end();
         for ( it2 = it2 - 1; it2 != pointArray.begin(); --it2 ) {
             if ( last ) {
                 endPoint = (*it2);
@@ -360,7 +360,7 @@ void KPCubicBezierCurveObject::updatePoints( double _fx, double _fy )
 {
     int index = 0;
     QPointArray tmpPoints;
-    QPointArray::Iterator it;
+    QPointArray::ConstIterator it;
     for ( it = origAllPoints.begin(); it != origAllPoints.end(); ++it ) {
         QPoint point = (*it);
         int tmpX = (int)( (double)point.x() * _fx );
@@ -418,7 +418,7 @@ QPointArray KPCubicBezierCurveObject::getCubicBezierPointsFrom( const QPointArra
                 _cubicBezierPoint.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
                 _cubicBezierPoint = _cubicBezierPoint.cubicBezier();
 
-                QPointArray::Iterator it;
+                QPointArray::ConstIterator it;
                 for ( it = _cubicBezierPoint.begin(); it != _cubicBezierPoint.end(); ++it ) {
                     QPoint _point = (*it);
                     tmpPointArray.putPoints( _tmpIndex, 1, _point.x(), _point.y() );

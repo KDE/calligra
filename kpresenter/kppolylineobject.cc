@@ -65,7 +65,7 @@ QDomDocumentFragment KPPolylineObject::save( QDomDocument& doc )
     fragment.appendChild( KPObject::createPenElement( "PEN", pen, doc ) );
     if ( !points.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
-	QPointArray::Iterator it;
+	QPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QDomElement elemPoint = doc.createElement( "Point" );
             QPoint point = (*it);
@@ -264,7 +264,7 @@ void KPPolylineObject::paint( QPainter* _painter )
 
         unsigned int index = 0;
         QPointArray tmpPoints;
-        QPointArray::Iterator it;
+        QPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QPoint point = (*it);
             int tmpX = (int)( (double)point.x() * fx );
@@ -287,7 +287,7 @@ void KPPolylineObject::paint( QPainter* _painter )
     if ( lineBegin != L_NORMAL ) {
         QPoint startPoint;
         bool first = true;
-        QPointArray::Iterator it1;
+        QPointArray::ConstIterator it1;
         for ( it1 = pointArray.begin(); it1 != pointArray.end(); ++it1 ) {
             if ( first ) {
                 startPoint = (*it1);
@@ -307,7 +307,7 @@ void KPPolylineObject::paint( QPainter* _painter )
     if ( lineEnd != L_NORMAL ) {
         QPoint endPoint;
         bool last = true;
-        QPointArray::Iterator it2 = pointArray.end();
+        QPointArray::ConstIterator it2 = pointArray.end();
         for ( it2 = it2 - 1; it2 != pointArray.begin(); --it2 ) {
             if ( last ) {
                 endPoint = (*it2);
@@ -354,7 +354,7 @@ void KPPolylineObject::updatePoints( double _fx, double _fy )
 {
     int index = 0;
     QPointArray tmpPoints;
-    QPointArray::Iterator it;
+    QPointArray::ConstIterator it;
     for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
         QPoint point = (*it);
         int tmpX = (int)( (double)point.x() * _fx );

@@ -435,7 +435,7 @@ QDomDocument KPresenterDoc::saveXML()
     if ( saveOnlyPage == -1 )
     {
         element=doc.createElement("SELSLIDES");
-        QValueList<bool>::Iterator sit = m_selectedSlides.begin();
+        QValueList<bool>::ConstIterator sit = m_selectedSlides.begin();
         for ( int i = 0; sit != m_selectedSlides.end(); ++sit, ++i ) {
             QDomElement slide=doc.createElement("SLIDE");
             slide.setAttribute("nr", i);
@@ -558,7 +558,7 @@ QDomElement KPresenterDoc::saveTitle( QDomDocument &doc )
     QDomElement titles=doc.createElement("PAGETITLES");
 
     if ( saveOnlyPage == -1 ) { // All page titles.
-        for ( QStringList::Iterator it = manualTitleList.begin(); it != manualTitleList.end(); ++it ) {
+        for ( QStringList::ConstIterator it = manualTitleList.begin(); it != manualTitleList.end(); ++it ) {
             QDomElement title=doc.createElement("Title");
             title.setAttribute("title", (*it));
             titles.appendChild(title);
@@ -579,7 +579,7 @@ QDomElement KPresenterDoc::saveNote( QDomDocument &doc )
     QDomElement notes=doc.createElement("PAGENOTES");
 
     if ( saveOnlyPage == -1 ) { // All page notes.
-        for ( QStringList::Iterator it = noteTextList.begin(); it != noteTextList.end(); ++it ) {
+        for ( QStringList::ConstIterator it = noteTextList.begin(); it != noteTextList.end(); ++it ) {
             QDomElement note=doc.createElement("Note");
             note.setAttribute("note", (*it));
             notes.appendChild(note);
@@ -1207,7 +1207,7 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
         m_pixmapMap = 0L;
 
 	QValueListIterator<KPClipartCollection::Key> it2 = clipartCollectionKeys.begin();
-	QStringList::Iterator nit2 = clipartCollectionNames.begin();
+	QStringList::ConstIterator nit2 = clipartCollectionNames.begin();
 
 	for ( ; it2 != clipartCollectionKeys.end(); ++it2, ++nit2 ) {
 	    QString u = QString::null;
