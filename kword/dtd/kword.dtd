@@ -317,11 +317,11 @@ don't put a </?xml...> at the end of the file!).
 
             frameInfo:      0...normal text (or non-text frame)
                             1...header for first page
-                            2...header for odd pages
-                            3...header for even pages
-                            4...footer for first pages
-                            5...footer for odd pages,
-                            6...footer for even pages
+                            2...header for even pages (user-wise, i.e. with pages starting at 1)
+                            3...header for odd pages (user-wise, i.e. with pages starting at 1)
+                            4...footer for first page
+                            5...footer for even pages (user-wise, i.e. with pages starting at 1)
+                            6...footer for odd pages (user-wise, i.e. with pages starting at 1)
                             7...footnote
 
             removable:      Whether the header-frame is removable or not:
