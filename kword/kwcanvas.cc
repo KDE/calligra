@@ -1085,6 +1085,7 @@ void KWCanvas::mrCreateText()
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) {
         KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
+        frame->setNewFrameBehavior(KWFrame::Reconnect);
         KWFrameDia frameDia( this, frame, m_doc, FT_TEXT );
         frameDia.setCaption(i18n("Connect frame"));
         frameDia.exec();
