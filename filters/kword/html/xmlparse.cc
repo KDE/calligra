@@ -463,7 +463,7 @@ static Er er_sequences[] = {
 static void ErInit(void){
   int h;  /* The hash on a entity */
 
-  for(uint i=0; i<sizeof(er_sequences)/sizeof(er_sequences[0]); i++){
+  for(unsigned int i=0; i<sizeof(er_sequences)/sizeof(er_sequences[0]); i++){
     h = ErHash(er_sequences[i].zName);
     er_sequences[i].pNext = apErHash[h];
     apErHash[h] = &er_sequences[i];
