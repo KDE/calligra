@@ -153,11 +153,13 @@ KexiCreateProject::accept()
 			 QString::null);
 		}
 		
-		project()->initDBConnection(c);
+		if(!project()->initDBConnection(c))
+			return;
 	}
 	else
 	{
-		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB();
+		if(!static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectDB())
+			return;
 	}
 	KWizard::accept();
 }

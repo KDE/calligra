@@ -354,8 +354,8 @@ void KexiFormBase::slotToggleFormMode(bool state)
 		if(p && !source.isNull())
 		{
 			kdDebug() << "KexiFormBase::slotToggleFormMode() Psource: " << source << endl;
-			KexiDBRecord *rec = p->records(m_source, QMap<QString,QString>());
-			if(rec);
+			KexiDBRecord *rec = p->records(source, QMap<QString,QString>());
+			if(rec)
 				topLevelEditor->setRecord(rec);
 		}
 	}

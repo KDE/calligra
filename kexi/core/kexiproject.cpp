@@ -87,7 +87,8 @@ bool KexiProject::completeSaving( KoStore* store )
 
 bool KexiProject::completeLoading( KoStore* store )
 {
-	initDBConnection(m_dbconnection, store);
+	if(!initDBConnection(m_dbconnection, store))
+		return false;
 
 	m_relationManager->loadRelations(store);
 	for (KexiProjectHandler *hand=m_parts->first();hand;hand=m_parts->next())

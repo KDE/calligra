@@ -49,6 +49,8 @@ void KexiTablePart::hookIntoView(KexiView *view)
 {
 	KexiTablePartProxy *prx=new KexiTablePartProxy(this,view);
 	insertIntoViewProxyMap(view,prx);
+
+	getTables();
 }
 
 QString

@@ -84,7 +84,7 @@ WidgetWatcher::store(WidgetContainer *parentC)
 
 	parent.appendChild(prop(&domDoc, "name", QVariant(parentC->className())));
 	parent.appendChild(prop(&domDoc, "geometry", parentC->property("geometry")));
-	parent.appendChild(prop(&domDoc, "dataSource", parentC->property("datasource")));
+	parent.appendChild(prop(&domDoc, "dataSource", parentC->property("dataSource")));
 
 
 	for(QMapIterator<char *, QObject *> it = begin(); it != end(); it++)
