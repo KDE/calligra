@@ -12,7 +12,7 @@
 <Menu name="view"><text>&amp;View</text>
   <Action name="view_newview"/>
   <ActionList name="view_closeallviews"/>
-  <Seperator/>
+  <Separator/>
   <Action name="show_nav"/>
   <Action name="show_contexthelp"/>
 </Menu>
