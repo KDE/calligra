@@ -1,5 +1,4 @@
 /****************************************************************************
-** $Id$
 **
 ** Definition of internal rich text classes
 **
@@ -127,7 +126,7 @@ public:
     void setCustomItem( QTextCustomItem *i );
     void loseCustomItem();
     QTextStringChar *clone() const;
-	    struct CustomData
+    struct CustomData
     {
 	QTextFormat *format;
 	QTextCustomItem *custom;
@@ -158,6 +157,7 @@ private:
 	//abort();
 	return *this;
     }
+    QTextStringChar( const QTextStringChar & ); // copy-constructor, forbidden
     friend class QComplexText;
     friend class QTextParag;
 };
@@ -496,13 +496,13 @@ public:
     virtual void registerFloatingItem( QTextCustomItem* item, bool right = FALSE );
     virtual void unregisterFloatingItem( QTextCustomItem* item );
     virtual void drawFloatingItems(QPainter* p, int cx, int cy, int cw, int ch, const QColorGroup& cg );
-    virtual void adjustFlow( int  &yp, int w, int h, bool pages = TRUE );
+    virtual void adjustFlow( int &yp, int w, int h, QTextParag * parag, bool pages = TRUE );
 
     virtual bool isEmpty() { return leftItems.isEmpty() && rightItems.isEmpty(); }
     virtual void updateHeight( QTextCustomItem *i );
 
     virtual void draw( QPainter *, int , int , int , int ) {}
-    virtual void eraseAfter( QTextParag *, QPainter * ) {}
+    virtual void eraseAfter( QTextParag *, QPainter *, const QColorGroup& ) {}
 
     void clear();
 
@@ -1081,7 +1081,7 @@ public:
 
     void invalidate( int chr );
 
-    void move( int dy );
+    void move( int &dy );
     void format( int start = -1, bool doMove = TRUE );
 
     bool isValid() const;
@@ -1120,6 +1120,8 @@ public:
     QTextParagData *extraData() const;
 
     QMap<int, QTextParagLineStart*> &lineStartList();
+
+    void setHeight( int h ) { r.setHeight( h ); }
 
     void setFormat( int index, int len, QTextFormat *f, bool useCollection = TRUE, int flags = -1 );
 
