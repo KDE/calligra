@@ -22,6 +22,7 @@
 
 #include <kdialogbase.h>
 #include <qstringlist.h>
+#include <koffice_export.h>
 class KEditListBox;
 class KURLRequester;
 class QCheckBox;
@@ -38,7 +39,7 @@ private:
     KURLRequester *urlReq;
 };
 
-class KoChangePathDia : public KDialogBase
+class KOFFICEUI_EXPORT KoChangePathDia : public KDialogBase
 {
     Q_OBJECT
 public:

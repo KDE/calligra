@@ -26,6 +26,7 @@
 #include <qfont.h>
 #include <koRuler.h> // for KoTabulatorList
 #include <kotextobject.h> // for KoTextView
+#include <koffice_export.h>
 class KoTextObject;
 class KoTextDocument;
 class KoTextParag;
@@ -48,7 +49,7 @@ class KoParagStyle;
  * It handles all the events for it (mouse, keyboard).
  * There can be several KoTextView instances for the same KoTextObject.
  */
-class KoTextView : public QObject, public KoTextFormatInterface
+class KOTEXT_EXPORT KoTextView : public QObject, public KoTextFormatInterface
 {
     Q_OBJECT
 public:

@@ -26,9 +26,10 @@
 #include <qstring.h>
 #include <qcolor.h>
 #include <korichtext.h>
+#include <koffice_export.h>
 class KoTextView;
 
-class KoTextViewIface :  public DCOPObject
+class KOTEXT_EXPORT KoTextViewIface :  public DCOPObject
 {
     K_DCOP
 public:

@@ -24,6 +24,7 @@
 #include "koChangeCaseDia.h"
 #include "kostyle.h"
 #include "kotextdocument.h"
+#include <koffice_export.h>
 
 class KoSavingContext;
 class KCommand;
@@ -42,7 +43,7 @@ class QProgressDialog;
  * it's possible to implement "setBold", "setItalic" etc. only once, whether it applies
  * to a text selection or to complete text objects.
  */
-class KoTextFormatInterface
+class KOTEXT_EXPORT KoTextFormatInterface
 {
 public:
     KoTextFormatInterface() {}
@@ -169,7 +170,7 @@ public:
  * the undo/redo commands).
  * Editing the text isn't done by KoTextObject but by KoTextView (document/view design).
  */
-class KoTextObject : public QObject, public KoTextFormatInterface
+class KOTEXT_EXPORT KoTextObject : public QObject, public KoTextFormatInterface
 {
     Q_OBJECT
 public:

@@ -83,6 +83,7 @@
 #include "qapplication.h"
 #endif // QT_H
 
+#include <koffice_export.h>
 class KoXmlWriter;
 class KoGenStyles;
 class KoTextParag;
@@ -270,7 +271,7 @@ template class QValueStack<bool>;
 // MOC_SKIP_END
 #endif
 
-class KoTextCursor
+class KOTEXT_EXPORT KoTextCursor
 {
 public:
     KoTextCursor( KoTextDocument *d );
@@ -860,7 +861,7 @@ public:
 class KoOasisContext;
 class KoSavingContext;
 class KoStyleCollection;
-class KoTextParag
+class KOTEXT_EXPORT KoTextParag
 {
     friend class KoTextDocument;
     friend class KoTextCursor;
