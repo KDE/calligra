@@ -1322,10 +1322,12 @@ void KWTextFrameSet::formatMore()
             {
                 lastPage = m_doc->getPages()-1;
                 if(m_doc->canRemovePage(lastPage, frames.last())) {
+kdDebug() << "Deleting page: " << lastPage<< "\n";
                     m_doc->removePage( lastPage );
-                } else {
+                } else if(m_doc->processingType() == KWDocument::WP && m_doc->getFrameSet(0) == this) {
+                    break;
+                } else 
                     delFrame(frames.last());
-                }
             }
         }
 

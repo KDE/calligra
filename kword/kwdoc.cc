@@ -1981,6 +1981,8 @@ bool KWDocument::canRemovePage( int num, KWFrame *f )
         KWFrameSet * frameSet = fit.current();
         if ( frameSet->getFrameInfo() != FI_BODY ) // if header/footer/footnote
             continue;
+        if ( processingType() == WP && frameSet == getFrameSet(0) )
+            continue;
         QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
