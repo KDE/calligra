@@ -226,6 +226,9 @@ public slots:
 
     void chPic();
 
+    void textSubScript();	
+    void textSuperScript(); 
+
 public:
     // create GUI
     virtual void createGUI();
@@ -386,6 +389,7 @@ protected slots:
     void search();
 
     void doAutomaticScreenPres();
+
 
 protected:
 
@@ -595,6 +599,9 @@ protected:
     SideBar *sidebar;
     QSplitter *splitter;
     PageBase *pageBase;
+
+    KToggleAction *actionFormatSuper;
+    KToggleAction *actionFormatSub;
 
 private:
     QTimer automaticScreenPresSpeed;

@@ -1311,7 +1311,7 @@ void KPresenterView::mtextFont()
         QColor col=edit->textBackgroundColor();
         col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
         KoFontDia *fontDia = new KoFontDia( this, "", edit->textFont(),
-                                            /*actionFormatSub->isChecked()*/false, /*actionFormatSuper->isChecked()*/false,
+                                            actionFormatSub->isChecked(), actionFormatSuper->isChecked(),
                                             edit->textColor(), col );
         fontDia->exec();
         int flags = fontDia->changedFlags();
@@ -2336,6 +2336,16 @@ void KPresenterView::setupActions()
                                  ,0,this,SLOT( chPic() ),
                      actionCollection(), "change_picture" );
 
+    actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
+                                              this, SLOT( textSuperScript() ),
+                                              actionCollection(), "format_super" );
+    actionFormatSuper->setExclusiveGroup( "valign" );
+    actionFormatSub = new KToggleAction( i18n( "Subscript" ), "sub", 0,
+                                              this, SLOT( textSubScript() ),
+                                              actionCollection(), "format_sub" );
+    actionFormatSub->setExclusiveGroup( "valign" );
+
+
 #if 0
     //code from page.cc
     //not implemented
@@ -2343,6 +2353,20 @@ void KPresenterView::setupActions()
     picResizeMenu->insertItem( i18n( "Enter Custom Factor..." ), this, SLOT( picViewOrigFactor() ) );
 #endif
 
+}
+
+void KPresenterView::textSubScript()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if(edit)
+        edit->setTextSubScript(actionFormatSub->isChecked());
+}
+
+void KPresenterView::textSuperScript()
+{
+    KPTextView *edit=page->currentTextObjectView();
+    if ( edit )
+        edit->setTextSuperScript(actionFormatSuper->isChecked());
 }
 
 
@@ -2386,6 +2410,8 @@ void KPresenterView::objectSelectedChanged()
     actionTextBold->setEnabled(isText);
     actionTextItalic->setEnabled(isText);
     actionTextUnderline->setEnabled(isText);
+    actionFormatSuper->setEnabled(isText);
+    actionFormatSub->setEnabled(isText);
     actionEditFind->setEnabled(isText && page->kTxtObj());
 
     state=state || isText;
