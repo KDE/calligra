@@ -289,8 +289,6 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 - 'criteria' and 'totals' are unused yet
 
 ==== SQL Editor TODO: =====
-- change font to courier
-- add syntax highlighting
 - intergrate editor's (KPart) actions with KexiMainWindow's Actions
 
 
@@ -325,11 +323,34 @@ CCPASTEUR:
 	 (not it's as in QtDesigner, and it's not intuitive)
 
 TODO:
-1. there 's just a problem with the dirty() flag
- if you switch to dataview then back to design, dirty() is restted
-2. add KexiViewBase::removeDataBlock() so we can use it in KexiFormPart::remove()
+add KexiViewBase::removeDataBlock() so we can use it in KexiFormPart::remove()
+
+TODO: Query designer: update query after change in Connection cache
+TODO: Kate Part: call qApp->processEvents() on highlighting schema loading, 
+ so 'wait' cursor can be visible on 1st loading.
+
+=== KexiDB Parser TODO ===
+- add clever query relatins parsing 
+      (needed for switching back to GUI editor from texdt mode)
+- remove single-char token names with chars (more readable + more effective)
 
 ===================== Kexi 0.1 Beta 4 =====================
+
+2004-07-12..13
+KexiDB
+- Connection: selectStatement(): "SELECT FROM ..." queries (ie. without columns) 
+  are allowed (needed for desiger); omitting "FROM" allowed
+KexiDB/Parser
+- "SELECT FROM " rule added
+Core
+- KexiPart::Part::openInstance(): now virtual KexiDialogBase::loadSchemaData() is called
+ what allows to reimplement stored schema data loading (reimpelemnted for queries)
+- KexiDialogBase::dirty() now is true if any view is dirty
+KexiTableView
+- If ensureCellVisible() is called before table view is visible, it's (col,row) arguments are
+ stored and ensureCellVisible() is called just after show event. This fixes invalid scrolling.
+Query editor, Table Editor
+- storage/ loading/ view switching/ dirty flag updating - improved
 
 2004-07-10
 TableView
@@ -363,7 +384,6 @@ KexiDB/SQL Parser
 - lexer: USER_DEFINED_NAME now accepts also [0-9] (after 1st char)
 - optional ';' is allowed at the end of top level statement
 - dummy table is removed from query after parsing
-TODO: remove single-char token names with chars (more readable + more effective)
 
 2004-07-07
 Core
