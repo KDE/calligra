@@ -23,7 +23,6 @@
 #include <kpgradient.h>
 #include <kparts/partmanager.h>
 
-#include <qpicture.h>
 #include <qpainter.h>
 #include <kdebug.h>
 using namespace std;
@@ -176,77 +175,6 @@ void KPPartObject::activate( QWidget *_widget )
 /*================================================================*/
 void KPPartObject::deactivate()
 {
-}
-
-/*================================================================*/
-QDomDocumentFragment KPPartObject::save( QDomDocument& doc, double offset )
-{
-    QDomDocumentFragment fragment=doc.createDocumentFragment();
-    QDomElement elem=doc.createElement("EFFECTS");
-    elem.setAttribute("effect", static_cast<int>( effect ));
-    elem.setAttribute("effect2", static_cast<int>( effect2 ));
-    fragment.appendChild(elem);
-    fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
-    fragment.appendChild(KPObject::createBrushElement("BRUSH", brush, doc));
-    fragment.appendChild(KPObject::createValueElement("PRESNUM", presNum, doc));
-    elem=doc.createElement("ANGLE");
-    elem.setAttribute("value", angle);
-    fragment.appendChild(elem);
-    fragment.appendChild(KPObject::createValueElement("FILLTYPE", static_cast<int>(fillType), doc));
-    fragment.appendChild(KPObject::createGradientElement("GRADIENT", gColor1, gColor2, static_cast<int>(gType),
-                                                         unbalanced, xfactor, yfactor, doc));
-    elem=doc.createElement("DISAPPEAR");
-    elem.setAttribute("effect", static_cast<int>( effect3 ));
-    elem.setAttribute("doit", static_cast<int>( disappear ));
-    elem.setAttribute("num", disappearNum);
-    fragment.appendChild(elem);
-
-    if(appearTimer!=1 || disappearTimer!=1) {
-        elem=doc.createElement("TIMER");
-        elem.setAttribute("appearTimer", appearTimer);
-        elem.setAttribute("disappearTimer", disappearTimer);
-        fragment.appendChild(elem);
-    }
-    if(appearSoundEffect || !a_fileName.isEmpty()) {
-        elem=doc.createElement("APPEARSOUNDEFFECT");
-        elem.setAttribute("appearSoundEffect", static_cast<int>(appearSoundEffect));
-        elem.setAttribute("appearSoundFileName", a_fileName);
-        fragment.appendChild(elem);
-    }
-    if(disappearSoundEffect || !d_fileName.isEmpty()) {
-        elem=doc.createElement("DISAPPEARSOUNDEFFECT");
-        elem.setAttribute("disappearSoundEffect", static_cast<int>(disappearSoundEffect));
-        elem.setAttribute("disappearSoundFileName", d_fileName);
-        fragment.appendChild(elem);
-    }
-
-    return fragment;
-}
-
-/*========================== load ================================*/
-double KPPartObject::load(const QDomElement &element)
-{
-    double offset=KPObject::load(element);
-    QDomElement e=element.namedItem("PEN").toElement();
-    if(!e.isNull())
-        setPen(KPObject::toPen(e));
-    e=element.namedItem("BRUSH").toElement();
-    if(!e.isNull())
-        setBrush(KPObject::toBrush(e));
-    e=element.namedItem("FILLTYPE").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        setFillType(static_cast<FillType>(tmp));
-    }
-    e=element.namedItem("GRADIENT").toElement();
-    if(!e.isNull()) {
-        KPObject::toGradient(e, gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
-        if(gradient)
-            gradient->setParameters(gColor1, gColor2, gType, unbalanced, xfactor, yfactor);
-    }
-    return offset;
 }
 
 #include <kppartobject.moc>

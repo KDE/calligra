@@ -39,10 +39,6 @@ public:
     virtual ~KPPartObject() {}
 
     KPPartObject &operator=( const KPPartObject & );
-
-    virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual double load(const QDomElement &element);
-
     virtual void rotate( float _angle );
 
     virtual ObjType getType() const { return OT_PART; }
