@@ -63,7 +63,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-06-15</date>
+<date>2002-06-18</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -210,7 +210,7 @@ limited to numbers or letters, you can define your own series for your
 special lists.--> </para>
 </listitem>
 <listitem>
-<para>Define paragraph layout styles, to shorten the editing time of
+<para>Define paragraph layout styles, frame layout styles and table layout styles, to shorten the editing time of
 your document, and ensure consistency throughout a long document.</para>
 </listitem>
 <listitem>
@@ -224,9 +224,9 @@ your search by specifying font, format, font size and many other
 features of the text. By adding wild-cards to your search, the search and
 replace functions can become very powerful.</para>
 </listitem>
-<!--<listitem>
-<para>Complete footnote and end-note support.</para>
-</listitem>-->
+<listitem>
+<para>Footnotes.  &kword; has all the tools necessary to manage footnotes.</para>
+</listitem>
 <listitem>
 <para>Tables. You can either use the table formatting capabilities of
 &kword;, or you can import any spreadsheet from &kspread;.</para>
@@ -262,9 +262,24 @@ formula editor.</para>
 <para>You can access an on-line thesaurus (English only) to find the exact word you are looking for.</para>
 </listitem><listitem>
 <para>&kword; can automatically create a table of contents, and keep it up to date.</para>
-</listitem><listitem>
+</listitem>
+<listitem>
 <para>&kword; has optional autocompletion for commonly used words.</para>
 </listitem>
+<listitem>
+<para>&kword; has support for document bookmarks, to easily navigate large documents..</para>
+</listitem>
+<listitem>
+<para>&kword; has support for internet hyperlinks and e-mail addresses.</para>
+</listitem>
+<listitem>
+<para>&kword; has the ability for proofreaders to make comments about portions of the text.  These 
+comments are stored in the &kword; file, and can be changed or deleted easily.</para>
+</listitem>
+<listitem>
+<para>&kword; can merge data from an outside database to create mailinglists, form letters, invoices, etc.</para>
+</listitem>
+
 </itemizedlist>
 
 <para>The best part about &kword;, is the effort that has been placed to
@@ -2027,7 +2042,11 @@ action="simul">&Ctrl;<keycap>Return</keycap></keycombo></entry>
 <title>KWord Technical details</title>
 
 &techstuff;
-
+<sect1 id="mimetype">
+<title>Kword mimetype</title>
+<para>&kword; is in the process of applying for a registered mime type with the <ulink url="www.iana.org">IANA</ulink>.</para>
+<para>The proposed &kword; mime type is :  application/x-kword</para>
+</sect1>
 </appendix>
 
 <!-- **************************************************************************************************** -->

@@ -1,14 +1,14 @@
 <sect1 id="kword-file-format">
 <title>&kword; file format</title>
-<para>&kword; uses two open source, independentaly developed standards
+<para>&kword; uses two open source, independently developed standards
 for its file format.  The combination was chosen for its balance between
-convienience and open development models.</para>
+convenience and open development models.</para>
 
-<para>First, it should be noted that all &kword; files are really text
+<para>First, it should be noted that all &kword; files are multiple &XML;
 files that are compressed to reduce their space requirements. </para>
 
 <sect2 id="kword-file-format-11"><title>&kword; 1.1 and earlier</title>
-<para>The text files are compressed into a single file using the same algorithm as used by <ulink url="http://www.gnu.org/software/tar/tar.html"><application>tar</application></ulink>.</para>
+<para>The &XML; files are compressed into a single file using the same algorithm as used by <ulink url="http://www.gnu.org/software/tar/tar.html"><application>tar</application></ulink>.</para>
 <para>You can uncompress the files with the following command:</para>
 
 <screen width="40">
@@ -29,7 +29,7 @@ files that are compressed to reduce their space requirements. </para>
 <term><filename>maindoc.xml</filename></term>
 <listitem><para>This file contains the bulk of the kword text, tables and formula information. It is marked with
 &XML; tags according to the official DTD.  A copy of the kword 1.1 DTD is located at:
-<ulink url="http://koffice.kde.org/DTD/kword-1.1.dtd">http://koffice.kde.org/DTD/kword-1.1.dtd</ulink>.
+<ulink url="http://www.koffice.org/DTD/kword-1.1.dtd">http://www.koffice.org/DTD/kword-1.1.dtd</ulink>.
 </para></listitem>
 </varlistentry>
 <varlistentry>
@@ -38,16 +38,23 @@ files that are compressed to reduce their space requirements. </para>
 boxes when selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem>
 </menuchoice>  from the menubar. This information is useful for tracking authors, contact information etc.</para>
 <para>The DTD for &koffice; 1.1 is located at:
-<ulink url="http://koffice.kde.org/DTD/document-info-1.1.dtd">http://koffice.kde.org/DTD/document-info-1.1.dtd</ulink>. </para></listitem>
+<ulink url="http://www.koffice.org/DTD/document-info-1.1.dtd">http://www.koffice.org/DTD/document-info-1.1.dtd</ulink>. </para></listitem>
 </varlistentry>
 </variablelist>
 
-<para>In addition, there may be other files included in the &kword; document file.  Pictures, images and other binary information are stored within the &kword; document as seperate files.</para>
-<para>For more specific information on &kword; file storage or other internal information, please see <ulink url="http://koffice.kde.org/developer">The KOffice API</ulink> and the <ulink url="http://developer.kde.org">General KDE developer information pages</ulink>.</para>
+<para>In addition, there may be other files included in the &kword; document file.  Pictures, embedded documents 
+and other binary information are stored within the &kword; document as separate files.</para>
+
+<para>For more specific information on &kword; file storage or other internal information,
+please see <ulink url="http://www.koffice.org/developer">The KOffice API</ulink> and
+the <ulink url="http://developer.kde.org">General KDE developer information pages</ulink>.</para>
 </sect2>
 
 <sect2 id="kword-file-format-12"><title>&kword; 1.2</title>
-<para>The text files are compressed into a single file using the same algorithm as used by <ulink url="http://www.info-zip.org/pub/infozip/Zip.html"><application>zip</application></ulink>.</para>
+<para>The text files are compressed into a single file using the same algorithm as used by 
+<ulink url="http://www.info-zip.org/pub/infozip/Zip.html"><application>zip</application></ulink>. 
+This change was made because of its broad use in other open source office suites and its improved performance with 
+lower memory requirements.</para>
 <para>You can uncompress the files with the following command:</para>
 
 <screen width="40">
@@ -62,14 +69,14 @@ boxes when selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Document In
 <member><ulink url="http://www.ucc.ie/xml/">The &XML; FAQ</ulink></member>
 </simplelist></para></note>
 
-<para>All &kword; documents consist of at least two &XML; files:</para>
+<para>All &kword; documents consist of at least three files:</para>
 <variablelist>
 <varlistentry>
 <term><filename>maindoc.xml</filename></term>
 <listitem><para>This file contains the bulk of the kword text, tables and formula information. It is marked with
 &XML; tags according to the official DTD.</para>
 <para>A copy of the &kword; 1.2 DTD is located at:
-<ulink url="http://koffice.kde.org/DTD/kword-1.2.dtd">http://koffice.kde.org/DTD/kword-1.2.dtd</ulink>. 
+<ulink url="http://www.koffice.org/DTD/kword-1.2.dtd">http://www.koffice.org/DTD/kword-1.2.dtd</ulink>.
 </para></listitem>
 </varlistentry>
 <varlistentry>
@@ -78,12 +85,22 @@ boxes when selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Document In
 boxes when selecting <menuchoice><guimenu>File</guimenu><guimenuitem>Document Information</guimenuitem>
 </menuchoice>  from the menubar. This information is useful for tracking authors, contact information etc.</para>
 <para>The DTD for &koffice; 1.2 is located at:
-<ulink url="http://koffice.kde.org/DTD/document-info-1.2.dtd">http://koffice.kde.org/DTD/document-info-1.2.dtd</ulink>.</para>
+<ulink url="http://www.koffice.org/DTD/document-info-1.2.dtd">http://koffice.kde.org/DTD/document-info-1.2.dtd</ulink>.</para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term><filename>mimetype</filename></term>
+<listitem><para>This file contains the mimetype for kword files.  This is information is used by &kde; to determine that this is a
+&kword; file.</para>
+<para>This file always contains:  <emphasis>application/x-kword</emphasis></para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 
-<para>In addition, there may be other files included in the &kword; document file.  Pictures, images and other binary information are stored within the &kword; document as seperate files.</para>
-<para>For more specific information on &kword; file storage or other internal information, please see <ulink url="http://koffice.kde.org/developer">The KOffice API</ulink> and the <ulink url="http://developer.kde.org">General KDE developer information pages</ulink>.</para>
+<para>In addition, there may be other files included in the &kword; document file.  Pictures, embedded documents and other binary information are stored within the &kword; document as separate files.</para>
+<para>For more specific information on &kword; file storage or other internal information, please see <ulink url="http://www.koffice.org/developer">The KOffice API</ulink> and the <ulink url="http://developer.kde.org">General KDE developer information pages</ulink>.</para>
 </sect2>
 </sect1>
+

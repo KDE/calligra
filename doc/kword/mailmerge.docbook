@@ -1,3 +1,16 @@
 <sect1 id="mail-merge"><title>Mail Merge</title>
 <para></para>
+<para></para>
+<para></para>
+
+<sect2 id="mail-merge-sql">
+<title>Using an outside database (SQL) to create documents</title>
+<para></para>
+</sect2>
+
+<sect2 id="mail-merge-internal">
+<title>Using an internal representation of tabular data to create documents</title>
+<para></para>
+</sect2>
+
 </sect1>

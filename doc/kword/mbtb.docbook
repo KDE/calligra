@@ -831,36 +831,6 @@ linkend="rulers">Using rulers</link>.</para>
 </varlistentry>
 
 <varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu><guimenuitem>Header</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Selecting this option will toggle headers on.</action>
-Selecting this option again will turn headers off.  A checkmark before
-the menu entry will show you the current status of this option.  More
-information on headers and footers can be found under <link
-linkend="headers-and-footers">Headers and Footers</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu><guimenuitem>Footer</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Selecting this option will toggle footers on.</action>
-Selecting this option again will turn footers off.  A checkmark before
-the menu entry will show you the current status of this option.  More
-information on headers and footers can be found under <link
-linkend="headers-and-footers">Headers and Footers</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term id="menu-zoom">
 <menuchoice>
 <guimenu>View</guimenu><guimenuitem>Zoom</guimenuitem>
@@ -1025,7 +995,7 @@ For more information refer to the section entitled
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Bookmark</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Add Bookmark</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1291,6 +1261,19 @@ information go to <link linkend="styles">Styles</link></para>
 <varlistentry>
 <term>
 <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Footnotes and Endnotes...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to change the look of your footnotes and endnotes.</action>
+For more information see <link linkend="endnotes-and-footnotes">
+Footnotes</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
 <guimenu>Format</guimenu><guimenuitem>Formula</guimenuitem>
 </menuchoice>
 </term>
@@ -1299,6 +1282,39 @@ information go to <link linkend="styles">Styles</link></para>
 more information go to <link linkend="formulas">Formulas</link></para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Header</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will toggle headers on.</action>
+Selecting this option again will turn headers off.  A checkmark before
+the menu entry will show you the current status of this option.  More
+information on headers and footers can be found under <link
+linkend="headers-and-footers">Headers and Footers</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Footer</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will toggle footers on.</action>
+Selecting this option again will turn footers off.  A checkmark before
+the menu entry will show you the current status of this option.  More
+information on headers and footers can be found under <link
+linkend="headers-and-footers">Headers and Footers</link>.</para>
+</listitem>
+</varlistentry>
+
+
+
 </variablelist>
 
 </sect2>
@@ -1410,6 +1426,18 @@ using the menubar. </para>
 </varlistentry>
 
 <varlistentry>
+<term id="menu-framestyle-create">
+<menuchoice>
+<guimenu>Frames</guimenu><guimenuitem>Create Framestyle from frame</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Create a new framestyle based on the currently selected frame.</action> For more information see the section entitled
+<link linkend="framestyles">Framestyle</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
 <term id="menu-framestyle">
 <menuchoice>
 <guimenu>Frames</guimenu><guimenuitem>Framestyle</guimenuitem>
@@ -1417,7 +1445,7 @@ using the menubar. </para>
 </term>
 <listitem>
 <para><action>Allows you to format the selected frame(s) with a pre-defined Framestyle.</action> For more information see the section entitled
-Framestyle.</para>
+<link linkend="framestyles">Framestyle</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1612,7 +1640,7 @@ find more about tables in the section entitled <link linkend="tables">Tables</li
 </term>
 <listitem>
 <para><action>Lets you edit tablestyles.</action>  You can
-find more about tables in the section entitled <link linkend="tables">Tables</link>.</para>
+find more about tables in the section entitled <link linkend="tablestyle">Tablestyle</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1624,7 +1652,7 @@ find more about tables in the section entitled <link linkend="tables">Tables</li
 </term>
 <listitem>
 <para><action>Lets you format the currently selected table using a preformatted template.</action>  You can
-find more about tables in the section entitled <link linkend="tables">Tables</link>.</para>
+find more about tables in the section entitled <link linkend="tablestyle">Tablestyle</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1664,7 +1692,7 @@ equivalent to using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autoformat</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1677,50 +1705,11 @@ For more information see the section entitled
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autoformat</guimenuitem><guimenuitem>Apply Autoformat</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem>
 </menuchoice>
 </term>
 <listitem><para><action>&kword; will format your document according to specific rules.</action>
 For more information see <link linkend="autoformat">Autoformating</link>.</para></listitem>
-</varlistentry>
-
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Autocorrection</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Allows you to modify the autocorrection options.</action>
-For more on Autocorrection, <link linkend="autocorrect">click
-here</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Completion</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Allows you to modify the autocompletion options.</action>
-For more see the section on <link linkend="autocomplete">Autocompletion</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Configure Footnote/Endnote</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Allows you to change the look of your footnotes and endnotes.</action>
-For more information see <link linkend="endnotes-and-footnotes">
-Footnotes</link>.</para>
-</listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1777,7 +1766,29 @@ refer to the section entitled <link linkend="variables">Document variables</link
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Mail Merge</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Show related words</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Uses &kword;s integrated <link linkend="thesaurus">thesaurus</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Check this words spelling</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Check the spelling of the specified word.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1793,7 +1804,7 @@ refer to the section entitled <link linkend="variables">Document variables</link
 <title>Settings</title>
 
 <variablelist>
-<!--<varlistentry>
+<varlistentry>
 <term>
 <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Show File Toolbar</guimenuitem>
@@ -1892,7 +1903,32 @@ Toolbar</guimenuitem>
 <para><action>Toggles whether the Formula Toolbar is
 visible.</action></para>
 </listitem>
-</varlistentry> -->
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Autocorrection</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to modify the autocorrection options.</action>
+For more on Autocorrection, <link linkend="autocorrect">click
+here</link>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Completion</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Allows you to modify the autocompletion options.</action>
+For more see the section on <link linkend="autocomplete">Autocompletion</link>.</para>
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term>

@@ -25,7 +25,7 @@ command line</link> by typing<screen><prompt>$</prompt><userinput><command>kword
 <listitem>
 <para>You can begin a new document in &kword; by selecting <menuchoice>
 <guimenu>File</guimenu><guimenuitem>New</guimenuitem></menuchoice> from
-the Menu bar</para>
+the menubar.</para>
 </listitem>
 
 <listitem>
