@@ -177,7 +177,7 @@ public:
         * where exactly is the table? if it's NONE, we are not in position to select rows/cols */
     enum TableToSelectPosition {TABLE_POSITION_NONE = 0, TABLE_POSITION_RIGHT = 1, TABLE_POSITION_BOTTOM = 2};
 
-    static const int DISTANCE_TABLE_SELECT_ROWCOL = 15;
+    static const int DISTANCE_TABLE_SELECT_ROWCOL = 5;
 
     static const int CURRENT_SYNTAX_VERSION;
 
