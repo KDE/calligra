@@ -208,13 +208,21 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
     QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
 
     int cur = m_pEdit->cursorPosition();
-    QString tmp( m_pEdit->text().left( cur ) );
-    QString tmp2( m_pEdit->text().right( m_pEdit->text().length() - cur ) );
+    QString tmp, tmp2;
+    int n = -1;
 
-    int n = exp.search(tmp);
+    // this is ugly, and sort of hack
+    // FIXME rewrite to use the real KSpreadTokenizer
+    for( unsigned i = 0; i < 10; i++ )
+    {
+      tmp =  m_pEdit->text().left( cur+i );
+      tmp2 = m_pEdit->text().right( m_pEdit->text().length() - cur - i );
 
-    if (n == -1)
-      return;
+      n = exp.search(tmp);
+      if( n >= 0 ) break;
+    }
+
+    if (n == -1) return;
 
     QString newPart;
     if ((exp.cap(1) == "$") && (exp.cap(3) == "$"))
@@ -228,7 +236,7 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
 
     QString newString = tmp.left(n);
     newString += newPart;
-    cur = newString.length();
+    cur = newString.length() - i;
     newString += tmp2;
 
     m_pEdit->setText(newString);

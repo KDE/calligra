@@ -1963,7 +1963,8 @@ void KSpreadCanvas::processF4Key(QKeyEvent* event)
   if ( m_pEditor )
   {
     m_pEditor->handleKeyPressEvent( event );
-    event->accept();
+    m_pView->editWidget()->setFocus();
+    m_pView->editWidget()->setCursorPosition( m_pEditor->cursorPosition() );
   }
   QPoint cursor;
 
