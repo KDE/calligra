@@ -2,11 +2,13 @@
 [KDE Desktop Entry]
 Name=KWordAsciiFilter
 Name[de]=KWord ASCII-Filter
+Name[es]=Filtro Ascii KWord
 Name[is]=ASCII sía fyrir ritvinnslu
 Exec=kword_ascii.bin --server
 Comment=Reggie's KWord Ascii Filter
 Comment[da]=Reggie's KWord Ascii filter
 Comment[de]=Reggies KWord ASCII-Filter
+Comment[es]=Filtro Ascii KWord de Reggie
 Comment[fr]=Filtre Ascii pour le KWord de Reggie
 Comment[is]=ASCII sía fyrir ritvinnslu
 Comment[pt_BR]=Filtro do KWord

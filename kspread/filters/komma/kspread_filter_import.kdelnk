@@ -2,6 +2,7 @@
 [KDE Desktop Entry]
 Name=KSpreadFilter
 Name[da]=Regnearksfilter
+Name[es]=Filtro KSpread
 Name[fr]=Filtre de KSpread
 Name[hu]=KSzámolótáblaSzûrõ
 Name[is]=Innflutningssíur fyrir töflureikni
@@ -13,6 +14,7 @@ Comment[ca]=El filtre de la fulla de càlcul de Torben
 Comment[cs]=Klient pro ètení diskusních skupin (NEWS)
 Comment[da]=Torbens regneark filter
 Comment[de]=Torbens KSpread-Filter
+Comment[es]=Filtro KSpread de Torben
 Comment[fi]=Torbenin taulukkolaskentasuodatin
 Comment[fr]=Filtre pour le tableur KSpread de Torben
 Comment[hr]=Torbenov KSpread filter
