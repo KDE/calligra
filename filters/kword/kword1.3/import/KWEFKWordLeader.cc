@@ -1198,8 +1198,26 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     if (!ProcessStoreFile (subFile, ProcessDocTag, this))
     {
         // ###TODO: May be the file is only raw XML
-        doAbortFile ();
-        return KoFilter::StupidError;
+
+        kdWarning(30520) << "Opening root has failed. Trying raw XML file!" << endl;
+
+        const QString filename( chain->inputFile() );
+        if (filename.isEmpty() )
+        {
+            kdError(30520) << "Could not open document as raw XML! Aborting!" << endl;
+            doAbortFile();
+            return KoFilter::StupidError;
+        }
+        else
+        {
+            QFile file( filename );
+            if ( ! ProcessStoreFile( &file, ProcessDocTag, this ) )
+            {
+                kdError(30520) << "Could not process document! Aborting!" << endl;
+                doAbortFile();
+                return KoFilter::StupidError;
+            }
+        }
     }
 
     doCloseDocument ();

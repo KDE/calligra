@@ -4,11 +4,11 @@ KFormula (frameType==4)
 <ATTRIBUTES>
 Generate Manifest file
 <style:wrap> with "none" for pictures?
-converting from raw XML KWord document (in KoStore?)
-Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?)
+Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?...)
 Tables
 <FOOTNOTESETTINGS>. <ENDNOTESETTINGS>
 Variables/fields
+Footnote line (section 2.3 esp. 2.3.6)
 ...
 
 === Abiword's rtftest.rtf test file ===
