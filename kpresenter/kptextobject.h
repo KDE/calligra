@@ -182,7 +182,7 @@ protected slots:
     void slotRepaintChanged();
 private:
     KPTextObject &operator=( const KPTextObject & );
-
+    void shadowCompatibility();
     static const QString &tagTEXTOBJ, &attrLineSpacing, &attrParagSpacing,
                            &attrMargin, &attrBulletType1, &attrBulletType2,
                            &attrBulletType3, &attrBulletType4, &attrBulletColor1,

@@ -252,10 +252,31 @@ double KPTextObject::load(const QDomElement &element)
         }
         loadKTextObject( e, t );
     }
+
+    shadowCompatibility();
+
     m_textobj->formatMore();
     resizeTextDocument(); // this will to formatMore()
     return offset;
 }
+
+void KPTextObject::shadowCompatibility()
+{
+    if ( shadowDistance != 0)
+    {
+        KoTextParag *parag = textDocument()->firstParag();
+        while ( parag ) {
+            // The double->int conversion for shadowDistance assumes pt=pixel. Bah.
+            static_cast<KoTextParag *>(parag)->setShadow( (int)shadowDistance, shadowDirection, shadowColor );
+            parag = parag->next();
+        }
+    }
+    //force to reset shadow compatibility between koffice 1.1 and 1.2
+    shadowDirection = SD_RIGHT_BOTTOM;
+    shadowDistance = 0;
+    shadowColor =Qt::gray;
+}
+
 
 // Standard paint method for KP2DObjects.
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
