@@ -1,3 +1,6 @@
+GUI:
+-	move the dialogs from "Edit->Transform" to a docker under "View"
+
 REAL BUGS:
 -	scale gradient coords while zooming as well
 -	fix i18n singular/plural
