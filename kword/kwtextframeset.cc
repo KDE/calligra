@@ -914,13 +914,17 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) con
             //kdDebug() << "ITN: iPoint.y=" << iPoint.y() << " internalY=" << frame->internalY() << endl;
             res = iPoint.y() - frame->internalY();
             //kdDebug() << "ITN: res=" << res << endl;
-            // Anything between this internalY and the next page's first frame's internalY is fine
-            if ( res >= 0 && ( mid == len - 1 ||
-                              iPoint.y() < m_framesInPage[mid+1]->first()->internalY() ) )
+            // Anything between this internalY (top) and internalY+height (bottom) is fine
+            // (Using the next page's first frame's internalY only works if there is a frame on the next page)
+            if ( res >= 0 )
             {
-                //kdDebug() << "ITN: found a match " << mid << endl;
-                found = true;
-                break;
+                int height = m_doc->zoomItY( frame->height() );
+                if ( iPoint.y() < frame->internalY() + height )
+                {
+                    //kdDebug() << "ITN: found a match " << mid << endl;
+                    found = true;
+                    break;
+                }
             }
         }
         ASSERT( res != 0 ); // this should have been already handled !
