@@ -47,12 +47,14 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & 
     {
         kdWarning(s_area) << dir.path() << " isn't writable" << endl;
         m_bGood = false;
+        m_currentDir = 0;
+        KoStore::init( _mode );
     }
     else
+#endif
     {
         m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
     }
-#endif
 }
 
 KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification )
