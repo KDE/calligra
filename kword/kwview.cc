@@ -2364,9 +2364,7 @@ void KWView::slotSpecialChar(QChar c, const QString &_font)
     KWTextFrameSetEdit *edit=currentTextEdit();
     if ( !edit )
         return;
-    edit->setFamily( _font );
-    edit->insertSpecialChar(c);
-
+    edit->insertSpecialChar(c, _font);
 }
 
 void KWView::insertFrameBreak()
@@ -2457,10 +2455,11 @@ void KWView::formatFont()
         if ( flags )
         {
             // The "change all the format" call
-            edit->setFont(fontDia->getNewFont(),
-                          fontDia->getSubScript(), fontDia->getSuperScript(),
-                          fontDia->color(),fontDia->backGroundColor(),
-                          flags);
+            KCommand* cmd = edit->setFontCommand(fontDia->getNewFont(),
+                                                 fontDia->getSubScript(), fontDia->getSuperScript(),
+                                                 fontDia->color(),fontDia->backGroundColor(),
+                                                 flags);
+            m_doc->addCommand( cmd );
         }
 
         delete fontDia;
@@ -3053,13 +3052,37 @@ void KWView::tableDelete()
 
 void KWView::textStyleSelected( int index )
 {
-    if(m_gui->canvasWidget()->currentFrameSetEdit())
+    if ( m_gui->canvasWidget()->currentFrameSetEdit() )
     {
         KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_gui->canvasWidget()->currentFrameSetEdit()->currentTextEdit());
         if ( edit )
             edit->applyStyle( m_doc->styleAt( index ) );
-        m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
     }
+    else
+    { // it might be that a frame (or several frames) are selected
+        QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+        if (selectedFrames.count() <= 0)
+            return; // nope, no frames are selected.
+        // yes, indeed frames are selected.
+        QPtrListIterator<KWFrame> it( selectedFrames );
+        KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply style to frame") : i18n("Apply style to frames"));
+        for ( ; it.current() ; ++it )
+        {
+            KWFrame *curFrame = it.current();
+            KWFrameSet *curFrameSet = curFrame->frameSet();
+            if (curFrameSet->type() == FT_TEXT)
+            {
+                KoTextObject *textObject = ((KWTextFrameSet*)curFrameSet)->textObject();
+                textObject->textDocument()->selectAll( KoTextDocument::Temp );
+                KCommand *cmd = textObject->applyStyle( 0L, m_doc->styleAt( index ), KoTextDocument::Temp, KoParagLayout::All, QTextFormat::Format, true, true );
+                textObject->textDocument()->removeSelection( KoTextDocument::Temp );
+                if (cmd)
+                    globalCmd->addCommand( cmd );
+            }
+        }
+        m_doc->addCommand( globalCmd );
+    }
+    m_gui->canvasWidget()->setFocus(); // the combo keeps focus...*/
 }
 
 void KWView::increaseFontSize()
@@ -3067,7 +3090,8 @@ void KWView::increaseFontSize()
     KWTextFrameSetEdit * edit = currentTextEdit();
     KoTextFormat *format = edit->currentFormat();
     if ( edit )
-        edit->setPointSize( format->font().pointSize() + 1 );
+        // ## HACK. Implement properly
+        textSizeSelected( format->font().pointSize() + 1 );
 }
 
 void KWView::decreaseFontSize()
@@ -3075,81 +3099,158 @@ void KWView::decreaseFontSize()
     KWTextFrameSetEdit * edit = currentTextEdit();
     KoTextFormat *format = edit->currentFormat();
     if ( edit && format->font().pointSize() > 1)
-        edit->setPointSize( format->font().pointSize() - 1 );
+        // ## HACK. Implement properly
+        textSizeSelected( format->font().pointSize() - 1 );
 }
 
 void KWView::textSizeSelected( int size )
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->setPointSize( size );
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand *globalCmd = new KMacroCommand(i18n("Change Text Size"));
+    for ( ; it.current() ; ++it )
+    {
+        KCommand *cmd = it.current()->setPointSizeCommand( size );
+        if (cmd)
+            globalCmd->addCommand(cmd);
+    }
+    m_doc->addCommand(globalCmd);
     m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
 }
 
 void KWView::textFontSelected( const QString & font )
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->setFamily( font );
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Change text font") );
+    for ( ; it.current() ; ++it )
+    {
+        KCommand *cmd = it.current()->setFamilyCommand( font );
+        if (cmd)
+            macroCmd->addCommand( cmd );
+    }
+    m_doc->addCommand( macroCmd );
     m_gui->canvasWidget()->setFocus(); // the combo keeps focus...
+}
+
+QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
+{
+    QPtrList<KoTextFormatInterface> lst;
+    if (currentTextEdit())
+        // simply return the current textEdit :
+        lst.append( currentTextEdit() );
+    else
+    {   // it might be that a frame (or several frames) are selected
+        // in that case, list the text framesets behind them
+        QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
+        QPtrListIterator<KWFrame> it( selectedFrames );
+        for ( ; it.current() ; ++it )
+        {
+            if ( it.current()->frameSet()->type() == FT_TEXT ) {
+                KWTextFrameSet* fs = static_cast<KWTextFrameSet *>( it.current()->frameSet() );
+                if ( !lst.contains( fs ) )
+                    lst.append( fs );
+            }
+        }
+    }
+    return lst;
 }
 
 void KWView::textBold()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->setBold(actionFormatBold->isChecked());
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Bold") );
+    for ( ; it.current() ; ++it )
+    {
+        KCommand *cmd = it.current()->setBoldCommand( actionFormatBold->isChecked() );
+        if (cmd)
+            macroCmd->addCommand(cmd);
+    }
+    m_doc->addCommand(macroCmd);
 }
 
 void KWView::textItalic()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->setItalic(actionFormatItalic->isChecked());
-
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Make Text Italic") );
+    for ( ; it.current() ; ++it )
+    {
+        KCommand *cmd = it.current()->setItalicCommand( actionFormatItalic->isChecked() );
+        if (cmd)
+            macroCmd->addCommand( cmd );
+    }
+    m_doc->addCommand( macroCmd );
 }
 
 void KWView::textUnderline()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->setUnderline(actionFormatUnderline->isChecked());
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Underline Text") );
+    for ( ; it.current() ; ++it )
+    {
+        KCommand *cmd = it.current()->setUnderlineCommand( actionFormatUnderline->isChecked() );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_doc->addCommand( macroCmd );
 }
 
 void KWView::textStrikeOut()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
-        edit->setStrikeOut(actionFormatStrikeOut->isChecked());
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Strike out Text") );
+    for ( ; it.current() ; ++it )
+    {
+        KCommand *cmd = it.current()->setStrikeOutCommand( actionFormatStrikeOut->isChecked() );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
+    }
+    m_doc->addCommand( macroCmd );
 }
 
 void KWView::textColor()
 {
-    KWTextFrameSetEdit * edit = currentTextEdit();
-    if ( edit )
+    /*        QColor color = edit->textColor();
+              if ( KColorDialog::getColor( color ) ) {
+              actionFormatColor->setColor( color );
+              edit->setTextColor( color );
+              }
+    */
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    if ( lst.isEmpty() ) return;
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = new KMacroCommand( i18n("Set Text Color") );
+    for ( ; it.current() ; ++it )
     {
-/*        QColor color = edit->textColor();
-        if ( KColorDialog::getColor( color ) ) {
-            actionFormatColor->setColor( color );
-            edit->setTextColor( color );
-        }
-*/
-        edit->setTextColor( actionFormatColor->color() );
+        KCommand *cmd = it.current()->setTextColorCommand( actionFormatColor->color() );
+        if ( cmd )
+            macroCmd->addCommand( cmd );
     }
+    m_doc->addCommand( macroCmd );
 }
 
 void KWView::textAlignLeft()
 {
     if ( actionFormatAlignLeft->isChecked() )
     {
-        KWTextFrameSetEdit * edit = currentTextEdit();
-        if ( edit )
+        QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+        QPtrListIterator<KoTextFormatInterface> it( lst );
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Left-align Text") );
+        for ( ; it.current() ; ++it )
         {
-            KCommand *cmd=edit->setAlignCommand(Qt::AlignLeft);
-            if(cmd)
-                m_doc->addCommand(cmd);
+            KCommand *cmd = it.current()->setAlignCommand( Qt::AlignLeft );
+            if (cmd)
+                macroCmd->addCommand( cmd );
         }
-    } else
+        m_doc->addCommand( macroCmd );
+    }
+    else
         actionFormatAlignLeft->setChecked( true );
 }
 
@@ -3157,14 +3258,18 @@ void KWView::textAlignCenter()
 {
     if ( actionFormatAlignCenter->isChecked() )
     {
-        KWTextFrameSetEdit * edit = currentTextEdit();
-        if ( edit )
+        QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+        QPtrListIterator<KoTextFormatInterface> it( lst );
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Center Text") );
+        for ( ; it.current() ; ++it )
         {
-            KCommand *cmd=edit->setAlignCommand(Qt::AlignCenter);
-            if(cmd)
-                m_doc->addCommand(cmd);
+            KCommand *cmd = it.current()->setAlignCommand( Qt::AlignCenter );
+            if (cmd)
+                macroCmd->addCommand( cmd );
         }
-    } else
+        m_doc->addCommand( macroCmd );
+    }
+    else
         actionFormatAlignCenter->setChecked( true );
 }
 
@@ -3172,14 +3277,18 @@ void KWView::textAlignRight()
 {
     if ( actionFormatAlignRight->isChecked() )
     {
-        KWTextFrameSetEdit * edit = currentTextEdit();
-        if ( edit )
+        QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+        QPtrListIterator<KoTextFormatInterface> it( lst );
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Right-align Text") );
+        for ( ; it.current() ; ++it )
         {
-            KCommand *cmd=edit->setAlignCommand(Qt::AlignRight);
-            if(cmd)
-                m_doc->addCommand(cmd);
+            KCommand *cmd = it.current()->setAlignCommand( Qt::AlignRight );
+            if ( cmd )
+                macroCmd->addCommand( cmd );
         }
-    } else
+        m_doc->addCommand( macroCmd );
+    }
+    else
         actionFormatAlignRight->setChecked( true );
 }
 
@@ -3187,14 +3296,18 @@ void KWView::textAlignBlock()
 {
     if ( actionFormatAlignBlock->isChecked() )
     {
-        KWTextFrameSetEdit * edit = currentTextEdit();
-        if ( edit )
+        QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+        QPtrListIterator<KoTextFormatInterface> it( lst );
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Justify Text") );
+        for ( ; it.current() ; ++it )
         {
-            KCommand *cmd=edit->setAlignCommand(Qt::AlignJustify);
-            if(cmd)
-                m_doc->addCommand(cmd);
+            KCommand *cmd = it.current()->setAlignCommand( Qt::AlignJustify );
+            if ( cmd )
+                macroCmd->addCommand( cmd );
         }
-    } else
+        m_doc->addCommand( macroCmd );
+    }
+    else
         actionFormatAlignBlock->setChecked( true );
 }
 
@@ -3224,14 +3337,14 @@ void KWView::textSuperScript()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->setTextSuperScript(actionFormatSuper->isChecked());
+        m_doc->addCommand( edit->setTextSuperScriptCommand(actionFormatSuper->isChecked()) );
 }
 
 void KWView::textSubScript()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->setTextSubScript(actionFormatSub->isChecked());
+        m_doc->addCommand( edit->setTextSubScriptCommand(actionFormatSub->isChecked()) );
 }
 
 void KWView::changeCaseOfText()
@@ -3297,7 +3410,7 @@ void KWView::textDefaultFormat()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
-        edit->setDefaultFormat();
+        m_doc->addCommand( edit->setDefaultFormatCommand() );
 }
 
 
@@ -3392,11 +3505,12 @@ void KWView::borderStyle( const QString &style )
 void KWView::backgroundColor()
 {
     QColor backColor = actionBackgroundColor->color();
+    // ### TODO port to applicableTextInterfaces ?
     KWTextFrameSetEdit *edit = currentTextEdit();
     if ( m_gui)
     {
         if(edit)
-            edit->setTextBackgroundColor(backColor);
+            m_doc->addCommand( edit->setTextBackgroundColorCommand(backColor) );
         else
             m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
     }
@@ -3820,7 +3934,7 @@ void KWView::configure()
     configDia.exec();
 }
 
-KWTextFrameSetEdit *KWView::currentTextEdit()
+KWTextFrameSetEdit *KWView::currentTextEdit() const
 {
     if (!m_gui)
         return 0L;
@@ -3854,19 +3968,19 @@ void KWView::slotFrameSetEditChanged()
     bool state = (edit != 0L) && rw;
     actionEditSelectAll->setEnabled(state);
     actionFormatDefault->setEnabled( state);
-    actionFormatFont->setEnabled(state);
-    actionFormatFontSize->setEnabled(state);
-    actionFormatFontFamily->setEnabled(state);
-    actionFormatStyle->setEnabled(state);
-    actionFormatBold->setEnabled(state);
-    actionFormatItalic->setEnabled(state);
-    actionFormatUnderline->setEnabled(state);
-    actionFormatStrikeOut->setEnabled(state);
-    actionFormatColor->setEnabled(state);
-    actionFormatAlignLeft->setEnabled(state);
-    actionFormatAlignCenter->setEnabled(state);
-    actionFormatAlignRight->setEnabled(state);
-    actionFormatAlignBlock->setEnabled(state);
+    actionFormatFont->setEnabled( rw );
+    actionFormatFontSize->setEnabled( rw );
+    actionFormatFontFamily->setEnabled( rw );
+    actionFormatStyle->setEnabled( rw );
+    actionFormatBold->setEnabled( rw );
+    actionFormatItalic->setEnabled( rw );
+    actionFormatUnderline->setEnabled( rw );
+    actionFormatStrikeOut->setEnabled( rw );
+    actionFormatColor->setEnabled( rw );
+    actionFormatAlignLeft->setEnabled( rw );
+    actionFormatAlignCenter->setEnabled( rw );
+    actionFormatAlignRight->setEnabled( rw );
+    actionFormatAlignBlock->setEnabled( rw );
     actionFormatIncreaseIndent->setEnabled(state);
     actionChangeCase->setEnabled( edit && hasSelection && state);
     actionInsertLink->setEnabled(state);

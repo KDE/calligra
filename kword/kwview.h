@@ -55,6 +55,7 @@ class KToggleAction;
 class KFontSizeAction;
 class KFontAction;
 class KWTextFrameSetEdit;
+class KoTextFormatInterface;
 class TKSelectColorAction;
 class KoPartSelectAction;
 class KoCharSelectDia;
@@ -332,7 +333,10 @@ protected:
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 
-    KWTextFrameSetEdit *currentTextEdit();
+    KWTextFrameSetEdit *currentTextEdit() const;
+    /** The current text-edit if there is one, otherwise the selected text objects
+     * This is what the "bold", "italic" etc. buttons apply to. */
+    QPtrList<KoTextFormatInterface> applicableTextInterfaces() const;
 
     void setupActions();
     void createKWGUI();

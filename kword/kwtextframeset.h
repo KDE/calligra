@@ -45,8 +45,12 @@ class KWordFrameSetIface;
 /**
  * Class: KWTextFrameSet
  * Contains text (KoTextObject) and frames to display that text.
+ *
+ * This class implements the KoTextFormatInterface methods for "apply to the
+ * whole text object". This is how "setBold", "setItalic" etc. can apply to
+ * a whole text frameset.
  */
-class KWTextFrameSet : public KWFrameSet, public QTextFlow
+class KWTextFrameSet : public KWFrameSet, public QTextFlow, public KoTextFormatInterface
 {
     Q_OBJECT
 public:
@@ -204,6 +208,19 @@ public:
     /** The frame that we are currently drawing in drawFrame. Stored here since we can't pass it
      * through QRT's drawing methods. Used by e.g. KWAnchor. */
     KWFrame * currentDrawnFrame() const { return m_currentDrawnFrame; }
+
+    /** Let KoTextFormatInterface access the current format */
+    virtual KoTextFormat * currentFormat() const;
+
+    /** Let KoTextFormatInterface set the modified format */
+    virtual KCommand *setFormatCommand( KoTextFormat * newFormat, int flags, bool zoomFont = false );
+
+    /** Let KoTextFormatInterface access the current parag layout */
+    virtual const KoParagLayout * currentParagLayoutFormat() const;
+
+    /** Let KoTextFormatInterface set a modified current parag layout */
+    virtual KCommand *setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1);
+
 
 signals:
     /** Tell the Edit object that this frame got deleted */
