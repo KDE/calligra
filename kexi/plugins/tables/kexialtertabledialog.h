@@ -21,7 +21,7 @@
 #define KEXIALTERTABLEDIALOG_H
 
 #include <qptrvector.h>
-#include <kexiviewbase.h>
+#include <kexidatatable.h>
 
 class KPopupMenu;
 class KexiMainWindow;
@@ -40,7 +40,7 @@ namespace KexiDB
 	class ResultInfo;
 }
 
-class KexiAlterTableDialog : public KexiViewBase
+class KexiAlterTableDialog : public KexiDataTable
 {
 	Q_OBJECT
 
@@ -54,11 +54,11 @@ class KexiAlterTableDialog : public KexiViewBase
 
 		~KexiAlterTableDialog();
 
-		virtual QWidget* mainWidget();
+//		virtual QWidget* mainWidget();
 //		KexiDataTableView* tableView() const { return m_view; }
 
-		virtual QSize minimumSizeHint() const;
-		virtual QSize sizeHint() const;
+//		virtual QSize minimumSizeHint() const;
+//		virtual QSize sizeHint() const;
 
 
 	protected:
@@ -110,7 +110,7 @@ class KexiAlterTableDialog : public KexiViewBase
 		void slotRowDeleted();
 
 	private:
-		KexiTableView *m_view;
+//		KexiTableView *m_view;
 		const KexiDB::TableSchema *m_table; //!< original table schema
 		KexiDB::TableSchema *m_newTable; //!< new table schema
 //		KexiPropertyEditor *m_properties;

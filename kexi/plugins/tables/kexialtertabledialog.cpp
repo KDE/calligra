@@ -50,7 +50,7 @@
 
 KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
 	KexiDB::TableSchema *table, const char *name)
- : KexiViewBase(win, parent, name)
+ : KexiDataTable(win, parent, name)
 {
 	m_table = table; //orig table
 	if (m_table) //deep copy of the original table
@@ -125,9 +125,11 @@ void KexiAlterTableDialog::init()
 
 	kdDebug() << "KexiAlterTableDialog::init(): vector contains " << m_fields.size() << " items" << endl;
 
-	m_view = new KexiTableView(data, this, "tableview");
-	QVBoxLayout *box = new QVBoxLayout(this);
-	box->addWidget(m_view);
+	m_view->setData(data);
+
+//	m_view = new KexiTableView(data, this, "tableview");
+//	QVBoxLayout *box = new QVBoxLayout(this);
+//	box->addWidget(m_view);
 
 	m_view->setNavigatorEnabled(false);
 	m_view->setSortingEnabled(false);//no, sorting is not good idea here
@@ -280,12 +282,12 @@ KexiAlterTableDialog::initActions()
 	*/
 }
 
-QWidget* KexiAlterTableDialog::mainWidget() 
+/*QWidget* KexiAlterTableDialog::mainWidget() 
 {
 	return m_view;
-}
+}*/
 
-QSize KexiAlterTableDialog::minimumSizeHint() const
+/*QSize KexiAlterTableDialog::minimumSizeHint() const
 {
 //	QWidget*const w= (QWidget*const)mainWidget();
 	return m_view->minimumSizeHint();
@@ -296,7 +298,7 @@ QSize KexiAlterTableDialog::sizeHint() const
 {
 	return m_view->sizeHint();
 }
-
+*/
 // update actions --------------
 
 
@@ -365,7 +367,8 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode)
 
 KexiPropertyBuffer *KexiAlterTableDialog::propertyBuffer()
 {
-	return m_fields.at(m_view->currentRow());
+	return (m_view->currentRow() >= 0) ? 
+		m_fields.at( m_view->currentRow() ) : 0;
 //	return m_currentBufferCleared ? 0 : m_fields.at(m_view->currentRow());
 }
 
@@ -572,7 +575,7 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 	KexiPropertyBuffer *b = 0;
 	bool no_fields = true;
 	int i;
-	QDict<char> names;
+	QDict<char> names(101, false);
 	char dummy;
 	for (i=0;i<(int)m_fields.size();i++) {
 		b = m_fields[i];
