@@ -481,6 +481,8 @@ KSpreadView::~KSpreadView()
 {
     if ( !m_transformToolBox.isNull() )
 	delete (&*m_transformToolBox);
+    disconnect(statusBar(),SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
+    statusBar()->removeItem(statusCalc);
     m_pCanvas->endChoose();
     m_pTable = 0; // set the active table to 0L so that when during destruction
     // of embedded child documents possible repaints in KSpreadTable are not
