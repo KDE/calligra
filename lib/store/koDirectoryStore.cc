@@ -27,6 +27,10 @@
 KoDirectoryStore::KoDirectoryStore( const QString& path, Mode _mode )
     : m_basePath( path )
 {
+    // The parameter must include "maindoc.xml"
+    int pos = m_basePath.findRev( '/' );
+    if ( pos != -1 && pos != (int)m_basePath.length()-1 )
+        m_basePath = m_basePath.left( pos );
     if ( !m_basePath.endsWith("/") )
         m_basePath += '/';
     //if ( !m_basePath.startsWith("/") )

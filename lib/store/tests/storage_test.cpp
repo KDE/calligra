@@ -208,7 +208,7 @@ int main( int argc, char **argv )
 
     if ( test( "Tar", KoStore::Tar, "test.tgz" ) != 0 )
       return 1;
-    if ( test( "Directory", KoStore::Directory, "testdir" ) != 0 )
+    if ( test( "Directory", KoStore::Directory, "testdir/maindoc.xml" ) != 0 )
       return 1;
     if ( test( "Zip", KoStore::Zip, "test.zip" ) != 0 )
       return 1;
