@@ -6,6 +6,7 @@ TODO before 0.8 final (KOffice 1.1)
 * Tabbar some fixes
 * More redrawing speed (complex rewriting canvas?)
 * Canvas color
+* Printing
 * Bug fixing and cleaning code
 
 TODO before 1.0 final
@@ -15,4 +16,4 @@ TODO before 1.0 final
 ...
 
 Last update:
-4.06.2001
+6.06.2001

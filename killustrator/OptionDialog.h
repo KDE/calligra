@@ -44,6 +44,7 @@ public:
 protected:
   void createGeneralWidget (QWidget* parent);
   void createEditWidget (QWidget* parent);
+  void createBGWidget (QWidget* parent);
   void createGridWidget (QWidget* parent);
   void createHorizLineWidget (QWidget* parent);
   void createVertLineWidget (QWidget* parent);
@@ -51,8 +52,9 @@ protected:
   void initHelplinesLists();
     
 protected slots:
+  void slotApply();
   void slotOk();
-  
+   
   void addHorizLine ();
   void updateHorizLine ();
   void deleteHorizLine ();
@@ -70,6 +72,9 @@ private:
   QComboBox* unit;
   UnitBox *horiz, *vert;
   UnitBox *smallStep, *bigStep;
+  
+  /*Background*/
+  KColorButton *bgbutton;
   
   /*Helplines*/
   UnitBox *horizValue, *vertValue;

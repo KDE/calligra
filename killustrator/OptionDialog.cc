@@ -40,12 +40,18 @@
 
 OptionDialog::OptionDialog (GDocument *adoc,QWidget* parent, const char* name) :
     KDialogBase(KDialogBase::TreeList, i18n("Option"),
-                KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok,
+                Ok|Apply|Cancel, Ok,
                 parent, name, true),doc(adoc)
 {
   QStringList list;
   createGeneralWidget(addPage(i18n("General")));
   createEditWidget(addPage(i18n("Edit")));
+  list.clear();
+  list << i18n("Document") << i18n("Grid");
+  createGridWidget(addPage(list));
+  list.clear();
+  list << i18n("Document") << i18n("Background");
+  createBGWidget(addPage(list));
   list.clear();
   list << i18n("Document") << i18n("Helplines") << i18n("Vertical");
   createVertLineWidget(addPage(list));
@@ -53,9 +59,7 @@ OptionDialog::OptionDialog (GDocument *adoc,QWidget* parent, const char* name) :
   list << i18n("Document") << i18n("Helplines") << i18n("Horizontal");
   createHorizLineWidget(addPage(list));
   list.clear();
-  list << i18n("Document") << i18n("Grid");
-  createGridWidget(addPage(list));
-
+  
   horizLines = doc->horizHelplines();
   vertLines = doc->vertHelplines();
   initHelplinesLists();
@@ -142,6 +146,17 @@ void OptionDialog::createEditWidget (QWidget* parent)
     bigStep->setValue (psm->bigStepSize ());
 }
 
+/*Background*/
+void OptionDialog::createBGWidget(QWidget* parent)
+{
+  QBoxLayout *layout=new QHBoxLayout(parent, KDialogBase::marginHint(), KDialogBase::spacingHint());
+  QLabel* clabel = new QLabel(i18n("Background Color"), parent);
+  bgbutton = new KColorButton(parent);
+  bgbutton->setColor(doc->bgColor());
+  layout->addWidget(clabel);
+  layout->addWidget(bgbutton);
+}
+
 /*Grid*/
 
 void OptionDialog::createGridWidget (QWidget* parent)
@@ -172,10 +187,15 @@ void OptionDialog::createGridWidget (QWidget* parent)
   vspinbox->setRange (0, 1000);
   grid->addWidget(vspinbox, 1, 1);
 
+  hspinbox->setValue(doc->horizGridDistance());
+  vspinbox->setValue(doc->vertGridDistance());
+
   gbutton = new QCheckBox(i18n("Snap To Grid"), parent);
+  gbutton->setDown(doc->snapToGrid());
   layout->addWidget(gbutton, 1, 0);
 
   sbutton = new QCheckBox(i18n("Show Grid"), parent);
+  sbutton->setDown(doc->showGrid());
   layout->addWidget(sbutton, 1, 1);
 
   cbutton = new KColorButton(parent);
@@ -379,21 +399,27 @@ void OptionDialog::vertLineSelected(int idx)
 }
 
 /**/
-void OptionDialog::slotOk()
+void OptionDialog::slotApply()
 {
   /*Document settings*/
   
+  /*Background*/
+  doc->bgColor(bgbutton->color());
+  /*Grid*/
+  doc->setGridDistance(hspinbox->getValue(), vspinbox->getValue());
+  doc->showGrid(sbutton->isOn());
+  doc->snapToGrid(gbutton->isOn());
+  doc->gridColor(cbutton->color());
   /*Helplines*/
   doc->setHorizHelplines(horizLines);
   doc->setVertHelplines(vertLines);
-  
-  /*Grid*/
-  doc->setGridDistance(hspinbox->getValue(), vspinbox->getValue());
-  doc->showGrid (sbutton->isOn());
-  doc->snapToGrid (gbutton->isOn());
-  doc->gridColor(cbutton->color());
-  
+    
   doc->emitChanged();
+}
+
+void OptionDialog::slotOk()
+{
+  slotApply();
   KDialogBase::slotOk();
 }
 
