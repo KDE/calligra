@@ -1326,7 +1326,7 @@ bool MathML2KFormulaPrivate::isSpaceLike( QDomNode node, bool oasisFormat )
 }
 
 
-MathML2KFormula::MathML2KFormula( QDomDocument mmldoc, const ContextStyle &contextStyle, bool _oasisFormat )
+MathML2KFormula::MathML2KFormula( const QDomDocument& mmldoc, const ContextStyle &contextStyle, bool _oasisFormat )
     : context( contextStyle )
 {
     done = false;
