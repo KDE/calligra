@@ -112,6 +112,8 @@ private slots:
     void slotSpellCheckerCorrected( const QString &, const QString &, unsigned int );
     void slotModalDone( const QString &/*_buffer*/ );
     void slotModalSpellCheckerFinished();
+    void slotEmitCheckerReady();
+
 };
 
 #endif

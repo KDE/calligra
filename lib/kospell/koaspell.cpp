@@ -46,6 +46,8 @@
 #include <kwin.h>
 #include <kprocio.h>
 
+#include <qtimer.h>
+
 #include <aspell.h>
 
 #define MAXLINELENGTH 10000
@@ -58,26 +60,12 @@ enum {
 };
 
 
-//TODO
-//Parse stderr output
-//e.g. -- invalid dictionary name
-
-/*
-  Things to put in KSpellConfigDlg:
-    make root/affix combinations that aren't in the dictionary (-m)
-    don't generate any affix/root combinations (-P)
-    Report  run-together  words   with   missing blanks as spelling errors.  (-B)
-    default dictionary (-d [dictionary])
-    personal dictionary (-p [dictionary])
-    path to ispell -- NO: ispell should be in $PATH
-    */
-
-
 KOASpell::KOASpell( KOSpellConfig *_ksc )
     :KOSpell(_ksc)
 {
     initSpell(_ksc);
     initConfig();
+    QTimer::singleShot( 0, this, SLOT( slotEmitCheckerReady() ) );
 }
 
 void KOASpell::initSpell(KOSpellConfig *_ksc)
@@ -100,7 +88,6 @@ void KOASpell::initSpell(KOSpellConfig *_ksc)
     caption=QString::null;
 
     parent=0L;
-    emit spellCheckerReady();
 }
 
 KOASpell::KOASpell (QWidget *_parent, const QString &_caption,
@@ -115,6 +102,12 @@ KOASpell::KOASpell (QWidget *_parent, const QString &_caption,
     parent=_parent;
 
     setUpDialog();
+    QTimer::singleShot( 0, this, SLOT( slotEmitCheckerReady() ) );
+}
+
+void KOASpell::slotEmitCheckerReady()
+{
+    emit spellCheckerReady();
 }
 
 bool KOASpell::initConfig(const QString & language)
