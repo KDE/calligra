@@ -82,12 +82,12 @@ KAboutData* ExampleFactory::aboutData()
     if ( !s_aboutData )
     {
     	// Change this, of course
-    	KAboutData *aboutData = new KAboutData( "example", I18N_NOOP("Example"),
+    	s_aboutData = new KAboutData( "example", I18N_NOOP("Example"),
             version, description, KAboutData::License_GPL,
             "(c) 1998-2000, Torben Weis");
-    	    aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+    	    s_aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
     }
-    return aboutData;
+    return s_aboutData;
 }
 
 KInstance* ExampleFactory::global()
