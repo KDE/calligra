@@ -3,6 +3,7 @@
   $Id$
 
   This file is part of KIllustrator.
+  Copyright (C) 1998-99 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
   Copyright (C) 2000-01 Igor Janssen (rm@linux.ru.net)
 
   This program is free software; you can redistribute it and/or modify
@@ -124,7 +125,10 @@ public:
 
   bool findContainingObjects (int x, int y, QList<GObject>& olist);
   bool findObjectsContainedIn (const Rect& r, QList<GObject>& olist);
-
+  
+/*
+   Load/Save Page.
+*/
   QDomDocument saveToXml();
   bool readFromXml (const QDomDocument &document);
   bool insertFromXml (const QDomDocument &document, QList<GObject>& newObjs);
@@ -138,12 +142,6 @@ public:
   KoPageLayout pageLayout ();
   void setPageLayout (const KoPageLayout& layout);
 
-  void setHelplines (const QValueList<float>& hlines,
-                     const QValueList<float>& vlines,
-                     bool snap);
-  void getHelplines (QValueList<float>& hlines, QValueList<float>& vlines,
-                     bool& snap);
-
 protected:
   void updateHandle ();
   bool parseBody (const QDomElement &element, QList<GObject>& newObjs, bool markNew);
@@ -152,7 +150,6 @@ public slots:
   void objectChanged ();
   void objectChanged (const Rect& r);
   void layerChanged ();
-  void helplineStatusChanged ();
 
 signals:
   void handleChanged();
@@ -160,7 +157,6 @@ signals:
   void changed (const Rect& r);
   void selectionChanged ();
   void sizeChanged ();
-  void gridChanged ();
 
   void wasModified (bool flag);
 
@@ -176,8 +172,6 @@ protected:
   Rect selBox;
   bool selBoxIsValid;
   KoPageLayout pLayout;
-  bool snapToGrid, snapToHelplines;
-  QValueList<float> hHelplines, vHelplines;
 };
 
 #endif
