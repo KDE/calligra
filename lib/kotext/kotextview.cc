@@ -907,4 +907,13 @@ void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags)
        textObject()->emitNewCommand( cmd );
 }
 
+void KoTextView::changeCaseOfText(KoChangeCaseDia::TypeOfCase _type)
+{
+    QString text;
+    if ( textObject()->hasSelection() )
+        text = textObject()->selectedText();
+    if(!text.isEmpty())
+        textObject()->changeCaseOfText(cursor(), _type);
+}
+
 #include "kotextview.moc"

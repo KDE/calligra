@@ -114,6 +114,7 @@ public:
     void insertSoftHyphen();
     void insertSpecialChar(QChar _c);
     void insertLink(const QString &_linkName, const QString & hrefName);
+    void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.

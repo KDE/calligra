@@ -26,6 +26,7 @@
 #include "kostyle.h"
 #include <klocale.h>
 #include <kdebug.h>
+#include <kotextformat.h>
 
 #define DEBUG_FORMATS
 
@@ -1408,6 +1409,151 @@ bool KoTextObject::textSelectedIsAnLink(QString & href)
     return true;
 }
 
+
+KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag)
+{
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
+    KoTextFormat *curFormat = static_cast<KoTextParag *>(parag)->paragraphFormat();
+    QString text = parag->string()->toString().mid(cursorPosStart , cursorPosEnd - cursorPosStart );
+    QString repl;
+    int posStart=cursorPosStart;
+    int posEnd=cursorPosStart;
+    QTextCursor c1( textDocument() );
+    QTextCursor c2( textDocument() );
+    for ( int i = cursorPosStart; i < cursorPosEnd; ++i )
+    {
+        QTextStringChar & ch = *(parag->at(i));
+        KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );
+        if( ch.isCustom())
+        {
+            posEnd=i;
+            c1.setParag(parag  );
+            c1.setIndex( posStart );
+            c2.setParag( parag );
+            c2.setIndex( posEnd );
+
+            repl=text.mid(posStart-cursorPosStart,posEnd-posStart);
+            textDocument()->setSelectionStart( QTextDocument::Temp, &c1 );
+            textDocument()->setSelectionEnd( QTextDocument::Temp, &c2 );
+            macroCmd->addCommand(replaceSelectionCommand(
+                                     cursor, textChangedCase(repl,_type),
+                                     QTextDocument::Temp, "" ));
+            do
+            {
+                ++i;
+            }
+            while( parag->at(i)->isCustom() && i != cursorPosEnd);
+            posStart=i;
+            posEnd=i;
+        }
+        else
+        {
+            if ( newFormat != curFormat )
+            {
+                posEnd=i;
+                c1.setParag(parag  );
+                c1.setIndex( posStart );
+                c2.setParag( parag );
+                c2.setIndex( posEnd );
+
+                repl=text.mid(posStart-cursorPosStart,posEnd-posStart);
+                textDocument()->setSelectionStart( QTextDocument::Temp, &c1 );
+                textDocument()->setSelectionEnd( QTextDocument::Temp, &c2 );
+                macroCmd->addCommand(replaceSelectionCommand(
+                                         cursor, textChangedCase(repl,_type),
+                                         QTextDocument::Temp, "" ));
+                posStart=i;
+                posEnd=i;
+                curFormat = newFormat;
+            }
+        }
+    }
+    //change last word
+    c1.setParag(parag  );
+    c1.setIndex( posStart );
+    c2.setParag(parag );
+    c2.setIndex( cursorPosEnd );
+
+    textDocument()->setSelectionStart( QTextDocument::Temp, &c1 );
+    textDocument()->setSelectionEnd( QTextDocument::Temp, &c2 );
+    repl=text.mid(posStart-cursorPosStart,cursorPosEnd-posStart);
+    macroCmd->addCommand(replaceSelectionCommand(
+                             cursor, textChangedCase(repl,_type),
+                             QTextDocument::Temp, "" ));
+    return macroCmd;
+
+}
+
+void KoTextObject::changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type)
+{
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Change case") );
+
+    QTextCursor start = textDocument()->selectionStartCursor( QTextDocument::Standard );
+    QTextCursor end = textDocument()->selectionEndCursor( QTextDocument::Standard );
+
+    if ( start.parag() == end.parag() )
+    {
+        macroCmd->addCommand(changeCaseOfTextParag(start.index(),end.index() , _type,cursor, static_cast<KoTextParag*>(start.parag()) ));
+    }
+    else
+    {
+        macroCmd->addCommand(changeCaseOfTextParag(start.index(), start.parag()->length() - 1 - start.index(), _type,cursor, static_cast<KoTextParag*>(start.parag()) ));
+        Qt3::QTextParag *p = start.parag()->next();
+        while ( p && p != end.parag() )
+        {
+            macroCmd->addCommand(changeCaseOfTextParag(0,p->length()-1 , _type,cursor, static_cast<KoTextParag*>(p) ));
+            p = p->next();
+        }
+        macroCmd->addCommand(changeCaseOfTextParag(0,end.index() , _type,cursor, static_cast<KoTextParag*>(end.parag()) ));
+    }
+
+    if (macroCmd)
+        emit newCommand( macroCmd );
+}
+
+QString KoTextObject::textChangedCase(const QString _text,KoChangeCaseDia::TypeOfCase _type)
+{
+    QString text(_text);
+    switch(_type)
+    {
+        case KoChangeCaseDia::UpperCase:
+            text=text.upper();
+            break;
+        case KoChangeCaseDia::LowerCase:
+            text=text.lower();
+            break;
+        case KoChangeCaseDia::TitleCase:
+            for(uint i=0;i<text.length();i++)
+            {
+                if(text.at(i)!=' ')
+                {
+                    QChar prev = text.at(QMAX(i-1,0));
+                    if(i==0 || prev  == ' ' || prev == '\n' || prev == '\t')
+                        text=text.replace(i, 1, text.at(i).upper() );
+                    else
+                        text=text.replace(i, 1, text.at(i).lower() );
+                }
+            }
+            break;
+        case KoChangeCaseDia::ToggleCase:
+            for(uint i=0;i<text.length();i++)
+            {
+                QString repl=QString(text.at(i));
+                if(text.at(i)!=text.at(i).upper())
+                    repl=repl.upper();
+                else if(text.at(i).lower()!=text.at(i))
+                    repl=repl.lower();
+                text=text.replace(i, 1, repl );
+            }
+            break;
+        default:
+            kdDebug()<<"Error in changeCaseOfText !\n";
+            break;
+
+    }
+    return text;
+}
+
 KoTextFormat * KoTextObject::currentFormat() const
 {
     // We use the formatting of the very first character
@@ -1601,6 +1747,7 @@ void KoTextFormatInterface::setTabList(const KoTabulatorList & tabList )
     format.setTabList(tabList);
     setParagLayoutFormat(&format,KoParagLayout::Tabulator);
 }
+
 
 
 #include "kotextobject.moc"

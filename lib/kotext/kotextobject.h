@@ -24,6 +24,7 @@
 using namespace Qt3;
 #include <kotextparag.h>
 #include <kotextdocument.h> // for CustomItemsMap
+#include <koChangeCaseDia.h>
 class KCommand;
 class KoTextFormat;
 
@@ -256,6 +257,10 @@ public:
     void selectionChangedNotify( bool enableActions = true );
 
     void emitNewCommand(KCommand *cmd);
+
+    void changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type);
+    QString textChangedCase(const QString _text,KoChangeCaseDia::TypeOfCase _type);	
+    KCommand *KoTextObject::changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag);
 
 signals:
     /** Emitted by availableHeight() when the available height hasn't been
