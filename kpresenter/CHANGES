@@ -363,3 +363,4 @@ Reggie, 14.7.1999:
 - Fixes with headers and footers
 - Implemented gap for text objects
 - Improved extending contents of a textobj to the object height
+- Dont't forget current URL (filename) when inserting a new page

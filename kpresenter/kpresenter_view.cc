@@ -457,10 +457,12 @@ void KPresenterView::insertPage()
 	insPageDia = 0;
     }
 
+    QString url = m_pKPresenterDoc->url();
     insPageDia = new InsPageDia( this, "", m_pKPresenterDoc, getCurrPgNum() );
     insPageDia->setCaption( i18n( "KPresenter - Insert Page" ) );
     QObject::connect( insPageDia, SIGNAL( insertPage( int, InsPageMode, InsertPos ) ), this, SLOT( insPageOk( int, InsPageMode, InsertPos ) ) );
     insPageDia->show();
+    m_pKPresenterDoc->setURL( url );
 }
 
 /*==============================================================*/
