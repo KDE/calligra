@@ -1,10 +1,12 @@
-## koffice/Makefile.am
+## koffice/Makefile.am.in
 ## (C) 1997 Stephan Kulow
 
 AUTOMAKE_OPTIONS = foreign 1.4
 COMPILE_FIRST = lib interfaces
 COMPILE_BEFORE_kexi = kword kugar
 COMPILE_BEFORE_kplato = kdgantt kugar
+# For kword/mailmerge/kspread
+COMPILE_BEFORE_kword = kspread
 COMPILE_LAST = filters
 DISTCLEANFILES = inst-apps
 
