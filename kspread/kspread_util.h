@@ -110,6 +110,15 @@ QString util_cellName( KSpreadTable*, int _col, int _row );
 QString util_cellName( int _col, int _row );
 QString util_rangeName( QRect _area );
 QString util_rangeName( KSpreadTable *_table, QRect _area );
+/**
+* Call this function to decode the column text to a integer
+* i.e. AA->27
+*/
+int util_decodeColumnText(QString _col);
+/**
+* Call this function to encode an integer to the column text
+* i.e. 27->AA
+*/
 QString util_columnLabel( int column );
 
 QString util_dateFormat( KLocale* locale, QDate _date, KSpreadCell::FormatType fmtType);

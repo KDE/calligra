@@ -447,20 +447,9 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
                     }
                     else // It must be a cell identifier
                     {
-                        int col = 0;
-                        //used when there is a lower reference cell
-                        //example =a1
                         //now calculate the row as integer value
-                        int offset='a'-'A';
-                        int counterColumn = 0;
-                        for ( uint i=0; i < buffer.length(); i++ )
-                        {
-                            counterColumn = (int) pow(26 , buffer.length() - i - 1);
-                            if(buffer[i] >= 'A' && buffer[i] <= 'Z')
-                                col += counterColumn * ( buffer[i].latin1() - 'A' + 1);  // okay here (Werner)
-                            else if( buffer[i] >= 'a' && buffer[i] <= 'z' )
-                                 col += counterColumn * ( buffer[i].latin1() - 'A' - offset + 1 );
-                        }
+                        int col = 0;
+                        col = util_decodeColumnText( buffer );
 
                         if ( fix1 )
                             erg += QString( "$%1" ).arg( col );

@@ -29,6 +29,8 @@
 #include <string>
 #include <math.h>
 
+#include <qregexp.h>
+
 #include <kdebug.h>
 
 QString
@@ -264,7 +266,23 @@ util_dateFormat(KLocale * locale, QDate m_Date,
 }
 
 
-
+int util_decodeColumnText(QString _col)
+{
+    int col = 0;
+    int offset='a'-'A';
+    int counterColumn = 0;
+    for ( uint i=0; i < _col.length(); i++ )
+    {
+        counterColumn = (int) pow(26 , _col.length() - i - 1);
+        if( _col[i] >= 'A' && _col[i] <= 'Z' )
+            col += counterColumn * ( _col[i].latin1() - 'A' + 1);  // okay here (Werner)
+        else if( _col[i] >= 'a' && _col[i] <= 'z' )
+            col += counterColumn * ( _col[i].latin1() - 'A' - offset + 1 );
+        else
+            kdDebug(36001) << "util_decodeColumnLabel: Wrong label text '" << _col << "'" << endl;
+    }
+    return col;
+}
 
 QString util_columnLabel(int column)
 {
@@ -361,28 +379,22 @@ void
 	if (_str[p] < 'a' || _str[p] > 'z')
 	    return;
     }
-    int offset = 'a' - 'A';
+
+    //default is error
     int x = -1;
-    if (_str[p] >= 'A' && _str[p] <= 'Z')
-	x = _str[p++] - 'A' + 1;
-    else if (_str[p] >= 'a' && _str[p] <= 'z')
-	x = _str[p++] - offset - 'A' + 1;
+    //search for the first character != text
+    int result = _str.find(QRegExp("[^A-Za-z]+"), p);
 
-    // Malformed ?
-    if (p == len)
-	return;
+    //get the colomn number for the character between actual position and the first non text charakter
+    if (result != -1)
+	x = util_decodeColumnText( _str.mid( p, result ) ); // x is defined now
 
-    while (p < len && ((_str[p] >= 'A' && _str[p] <= 'Z')
-		       || (_str[p] >= 'a' && _str[p] <= 'z'))) {
-	if (_str[p] >= 'A' && _str[p] <= 'Z')
-	    x = x * 26 + (char) _str[p++] - 'A' + 1;
-	else if (_str[p] >= 'a' && _str[p] <= 'z')
-	    x = x * 26 + (char) _str[p++] - 'A' + 1 - offset;
-    }
+    p += result;
 
     //limit is 26*26
     if (x > (26 * 26))
 	return;
+
     // Malformed ?
     if (p == len)
 	return;
