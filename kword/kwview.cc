@@ -336,7 +336,7 @@ void KWView::setupActions()
     actionExtraSpellCheck = KStdAction::spelling( this, SLOT( extraSpelling() ), actionCollection(), "extra_spellcheck" );
 
 
-    (void) new KAction( i18n( "Serial &Letter Database..." ), 0,
+    (void) new KAction( i18n( "Configure Mai&l Merge ..." ), 0,
                         this, SLOT( editSerialLetterDataBase() ),
                         actionCollection(), "edit_sldatabase" );
 

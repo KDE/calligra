@@ -786,7 +786,7 @@ QString KoSerialLetterVariable::text()
 
 QStringList KoSerialLetterVariable::actionTexts()
 {
-    return QStringList( i18n( "&Serial Letter..." ) );
+    return QStringList( i18n( "&Mail Merge ..." ) );
 }
 
 /******************************************************************/

@@ -34,7 +34,7 @@
  ******************************************************************/
 
 KWQTSQLSerialLetterOpen::KWQTSQLSerialLetterOpen( QWidget *parent, KWQTSQLSerialDataSourceBase *db_ )
-        :KDialogBase( Plain, i18n( "Serial Letter - Setup database connection" ), Ok | Cancel, Ok, parent, "", true ), db( db_ ){
+        :KDialogBase( Plain, i18n( "Mail Merge - Setup database connection" ), Ok | Cancel, Ok, parent, "", true ), db( db_ ){
         (new QVBoxLayout(plainPage()))->setAutoAdd(true);
         setMainWidget(widget=new KWQTSQLOpenWidget(plainPage()));
         widget->drivers->insertStringList(QSqlDatabase::drivers());

@@ -297,7 +297,7 @@ void KWSerialLetterDataBase::load( QDomElement& parentElem )
  ******************************************************************/
 
 KWSerialLetterChoosePluginDialog::KWSerialLetterChoosePluginDialog(KTrader::OfferList pluginOffers)
-    : KDialogBase(Plain, i18n( "Serial Letter - Configuration" ), Ok|Cancel, Ok, /*parent*/ 0, "", true )
+    : KDialogBase(Plain, i18n( "Mail Merge - Configuration" ), Ok|Cancel, Ok, /*parent*/ 0, "", true )
 {
 	QWidget *back = plainPage();
 	QVBoxLayout *layout=new QVBoxLayout(back);
@@ -333,7 +333,7 @@ KWSerialLetterChoosePluginDialog::~KWSerialLetterChoosePluginDialog()
  ******************************************************************/
 
 KWSerialLetterConfigDialog::KWSerialLetterConfigDialog(QWidget *parent,KWSerialLetterDataBase *db)
-    : KDialogBase(Plain, i18n( "Serial Letter - Configuration" ), Close, Close, parent, "", true )
+    : KDialogBase(Plain, i18n( "Mail Merge - Configuration" ), Close, Close, parent, "", true )
 {
     db_=db;
     QWidget *back = plainPage();
@@ -451,7 +451,7 @@ KWSerialLetterConfigDialog::~KWSerialLetterConfigDialog()
  ******************************************************************/
 
 KWSerialLetterVariableInsertDia::KWSerialLetterVariableInsertDia( QWidget *parent, KWSerialLetterDataBase *db )
-    : KDialogBase(Plain, i18n( "Serial Letter - Variable Name" ), Ok | Cancel, Ok, parent, "", true )
+    : KDialogBase(Plain, i18n( "Mail Merge - Variable Name" ), Ok | Cancel, Ok, parent, "", true )
 {
     QWidget *page = plainPage();
 

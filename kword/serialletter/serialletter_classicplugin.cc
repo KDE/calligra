@@ -308,7 +308,7 @@ void KWClassicSerialLetterEditorList::displayRecord( int i )
  ******************************************************************/
 
 KWClassicSerialLetterEditor::KWClassicSerialLetterEditor( QWidget *parent, KWClassicSerialDataSource *db_ )
-    : KDialogBase( Plain, i18n( "Serial Letter - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
+    : KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
 {
     QWidget *page = plainPage();
 

@@ -161,7 +161,7 @@ void KWQTSQLSerialDataSource::refresh(bool force)
 
 
 KWQTSQLDataSourceEditor::KWQTSQLDataSourceEditor( QWidget *parent, KWQTSQLSerialDataSource *db_ )
-        :KDialogBase( Plain, i18n( "Serial Letter - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
+        :KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
 {
 	tableName=db->tableName;
 	filter=db->filter;

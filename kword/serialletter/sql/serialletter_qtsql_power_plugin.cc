@@ -117,7 +117,7 @@ void KWQTSQLPowerSerialDataSource::addSampleRecordEntry(QString name)
  ******************************************************************/
 
 KWQTSQLPowerSerialLetterEditor::KWQTSQLPowerSerialLetterEditor( QWidget *parent, KWQTSQLPowerSerialDataSource *db_ )
-	:KDialogBase( Plain, i18n( "Serial Letter - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
+	:KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
 {
         (new QVBoxLayout(plainPage()))->setAutoAdd(true);
         setMainWidget(widget=new KWQTSQLPowerWidget(plainPage()));
