@@ -228,7 +228,7 @@ FormatAlignment& FormatAlignment::operator=( const FormatAlignment& align )
 // assign from another alignment
 FormatAlignment& FormatAlignment::assign( const FormatAlignment& align )
 {
-  d->null         = align.isNull();
+  d->null          = align.isNull();
   d->alignX        = align.alignX();
   d->alignY        = align.alignY();
   d->wrap          = align.wrap();
@@ -292,159 +292,99 @@ void FormatAlignment::setRotationAngle( unsigned r )
   d->null = false;
 }
 
-class FormatBorder::Private
+class FormatBorders::Private
 {
 public:
   bool null;
-  unsigned leftBorderStyle;
-  Color leftBorderColor;
-  unsigned rightBorderStyle;
-  Color rightBorderColor;
-  unsigned topBorderStyle;
-  Color topBorderColor;
-  unsigned bottomBorderStyle;
-  Color bottomBorderColor;
+  Pen leftBorder;
+  Pen rightBorder;
+  Pen topBorder;
+  Pen bottomBorder;
 };
 
 // constructor
-FormatBorder::FormatBorder()
+FormatBorders::FormatBorders()
 {
-  d                    = new FormatBorder::Private;
-  d->null              = true;
-  d->leftBorderStyle   = 0;
-  d->leftBorderColor   = Color( 0, 0, 0);
-  d->rightBorderStyle  = 0;
-  d->rightBorderColor  = Color( 0, 0, 0);
-  d->topBorderStyle    = 0;
-  d->topBorderColor    = Color( 0, 0, 0);
-  d->bottomBorderStyle = 0;
-  d->bottomBorderColor = Color( 0, 0, 0);
+  d = new FormatBorders::Private;
+  d->null = true;
 }
 
 // destructor
-FormatBorder::~FormatBorder()
+FormatBorders::~FormatBorders()
 {
   delete d;
 }
 
 // copy constructor
-FormatBorder::FormatBorder( const FormatBorder& border )
+FormatBorders::FormatBorders( const FormatBorders& border )
 {
-  d = new FormatBorder::Private;
+  d = new FormatBorders::Private;
   assign( border );
 }
 
 // assignment operator
-FormatBorder& FormatBorder::operator=( const FormatBorder& border )
+FormatBorders& FormatBorders::operator=( const FormatBorders& border )
 {
   return assign( border );
 }
 
 // assign from another alignment
-FormatBorder& FormatBorder::assign( const FormatBorder& border )
+FormatBorders& FormatBorders::assign( const FormatBorders& border )
 {
-  d->null              = border.isNull();
-  d->leftBorderStyle   = border.leftBorderStyle();
-  d->leftBorderColor   = border.leftBorderColor();
-  d->rightBorderStyle  = border.rightBorderStyle();
-  d->rightBorderColor  = border.rightBorderColor();
-  d->topBorderStyle    = border.topBorderStyle();
-  d->topBorderColor    = border.topBorderColor();
-  d->bottomBorderStyle = border.bottomBorderStyle();
-  d->bottomBorderColor = border.bottomBorderColor();
+  d->null         = border.isNull();
+  d->leftBorder   = border.leftBorder();
+  d->rightBorder  = border.rightBorder();
+  d->topBorder    = border.topBorder();
+  d->bottomBorder = border.bottomBorder();
   return *this;
 }
 
-bool FormatBorder::isNull() const
+bool FormatBorders::isNull() const
 {
   return d->null;
 }
 
-unsigned FormatBorder::leftBorderStyle() const
+const Pen& FormatBorders::leftBorder() const
 {
-  return d->leftBorderStyle;
+  return d->leftBorder;
 }
 
-void FormatBorder::setLeftBorderStyle( unsigned s )
+void FormatBorders::setLeftBorder( const Pen& pen )
 {
-  d->leftBorderStyle = s;
+  d->leftBorder = pen;
   d->null = false;
 }
 
-Color FormatBorder::leftBorderColor() const
+const Pen& FormatBorders::rightBorder() const
 {
-  return d->leftBorderColor;
+  return d->rightBorder;
 }
 
-void FormatBorder::setLeftBorderColor( const Color& color )
+void FormatBorders::setRightBorder( const Pen& pen )
 {
-  d->leftBorderColor = color;
+  d->rightBorder = pen;
   d->null = false;
 }
 
-unsigned FormatBorder::rightBorderStyle() const
+const Pen& FormatBorders::topBorder() const
 {
-  return d->rightBorderStyle;
+  return d->topBorder;
 }
 
-void FormatBorder::setRightBorderStyle( unsigned s )
+void FormatBorders::setTopBorder( const Pen& pen )
 {
-  d->rightBorderStyle = s;
+  d->topBorder = pen;
   d->null = false;
 }
 
-Color FormatBorder::rightBorderColor() const
+const Pen& FormatBorders::bottomBorder() const
 {
-  return d->rightBorderColor;
+  return d->bottomBorder;
 }
 
-void FormatBorder::setRightBorderColor( const Color& color )
+void FormatBorders::setBottomBorder( const Pen& pen )
 {
-  d->rightBorderColor = color;
-  d->null = false;
-}
-
-unsigned FormatBorder::topBorderStyle() const
-{
-  return d->topBorderStyle;
-}
-
-void FormatBorder::setTopBorderStyle( unsigned s )
-{
-  d->topBorderStyle = s;
-  d->null = false;
-}
-
-Color FormatBorder::topBorderColor() const
-{
-  return d->topBorderColor;
-}
-
-void FormatBorder::setTopBorderColor( const Color& color )
-{
-  d->topBorderColor = color;
-  d->null = false;
-}
-
-unsigned FormatBorder::bottomBorderStyle() const
-{
-  return d->bottomBorderStyle;
-}
-
-void FormatBorder::setBottomBorderStyle( unsigned s )
-{
-  d->bottomBorderStyle = s;
-  d->null = false;
-}
-
-Color FormatBorder::bottomBorderColor() const
-{
-  return d->bottomBorderColor;
-}
-
-void FormatBorder::setBottomBorderColor( const Color& color )
-{
-  d->bottomBorderColor = color;
+  d->bottomBorder = pen;
   d->null = false;
 }
 
@@ -452,10 +392,10 @@ void FormatBorder::setBottomBorderColor( const Color& color )
 class Format::Private
 {
 public:
-    FormatFont font;
-    FormatAlignment alignment;
+  FormatFont font;
+  FormatAlignment alignment;
+  FormatBorders borders;
 };
-
 
 // create an empty format
 Format::Format()
@@ -487,6 +427,7 @@ Format& Format::assign( const Format& f )
 {
   d->font = f.font();
   d->alignment = f.alignment();
+  d->borders = f.borders();
   return *this;
 }
 
@@ -515,6 +456,16 @@ FormatAlignment& Format::alignment() const
   return d->alignment;
 }
 
+FormatBorders& Format::borders() const
+{
+  return d->borders;
+}
+
+FormatBorders& Format::borders()
+{
+  return d->borders;
+}
+
 // merge f into current format
 Format& Format::apply( const Format& f )
 {
@@ -522,6 +473,8 @@ Format& Format::apply( const Format& f )
     alignment() = f.alignment();
   if( !f.font().isNull() )
     font() = f.font();
+  if( !f.borders().isNull() )
+    borders() = f.borders();
   
   return *this;
 }

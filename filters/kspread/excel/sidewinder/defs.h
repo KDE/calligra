@@ -54,6 +54,29 @@ public:
     { red = r; green = g; blue = b; }
 };
 
+class Pen
+{
+public:
+
+  unsigned style;
+  
+  unsigned width;
+  
+  Color color;
+  
+  enum {
+    NoLine,         // no line at all
+    SolidLine,      // a simple solid line
+    DashLine,       // dashes separated by a few pixels
+    DotLine,        // dots separated by a few pixels
+    DashDotLine,    // alternate dots and dashes
+    DashDotDotLine, // one dash, two dots, one dash, two dots
+  };
+  
+  Pen(): style( SolidLine ), width( 0 ){}
+  
+};
+
 
 }; // namespace Sidewinder
 

@@ -273,82 +273,104 @@ private:
 };
 
 /**
- * Defines border information for cell.
+ * Defines borders information for cell.
  * 
  */
 
-class FormatBorder
+class FormatBorders
 {
 public:
 
   /**
    * Creates a default border information.
    */
-  FormatBorder();
+  FormatBorders();
   
   /**
    * Destroys the border information
    */
-  ~FormatBorder();
+  ~FormatBorders();
   
   /**
    * Creates a copy of border information.
    */
-  FormatBorder( const FormatBorder& );
+  FormatBorders( const FormatBorders& );
   
   /**
    * Assigns from another border information.
    */
-  FormatBorder& operator=( const FormatBorder& );
+  FormatBorders& operator=( const FormatBorders& );
   
   /**
    * Assigns from another border information.
    */
-  FormatBorder& assign( const FormatBorder& );
+  FormatBorders& assign( const FormatBorders& );
   
   /**
    * Returns true if it is a default border information.
    */
   bool isNull() const;
   
-  unsigned leftBorderStyle() const;
+  /**
+   * Returns pen style, width and color for left border.
+   *
+   * \sa setLeftBorder
+   */
+  const Pen& leftBorder() const;
   
-  void setLeftBorderStyle( unsigned s );
+  /**
+   * Sets pen style, width and color for left border.
+   *
+   * \sa leftBorder
+   */
+  void setLeftBorder( const Pen& pen );
   
-  Color leftBorderColor() const;
+  /**
+   * Returns pen style, width and color for right border.
+   *
+   * \sa setRightBorder
+   */
+  const Pen& rightBorder() const;
   
-  void setLeftBorderColor( const Color& color );
+  /**
+   * Sets pen style, width and color for right border.
+   *
+   * \sa rightBorder
+   */
+  void setRightBorder( const Pen& pen );
   
-  unsigned rightBorderStyle() const;
+  /**
+   * Returns pen style, width and color for top border.
+   *
+   * \sa setTopBorder
+   */
+  const Pen& topBorder() const;
   
-  void setRightBorderStyle( unsigned s );
-    
-  Color rightBorderColor() const;
+  /**
+   * Sets pen style, width and color for top border.
+   *
+   * \sa topBorder
+   */
+  void setTopBorder( const Pen& pen );
   
-  void setRightBorderColor( const Color& color );
+  /**
+   * Returns pen style, width and color for bottom border.
+   *
+   * \sa setBottomBorder
+   */
+  const Pen& bottomBorder() const;
   
-  unsigned topBorderStyle() const;
-  
-  void setTopBorderStyle( unsigned s );
-  
-  Color topBorderColor() const;
-  
-  void setTopBorderColor( const Color& color );
-  
-  unsigned bottomBorderStyle() const;
-  
-  void setBottomBorderStyle( unsigned s );
-        
-  Color bottomBorderColor() const;
-  
-  void setBottomBorderColor( const Color& color );
+  /**
+   * Sets pen style, width and color for bottom border.
+   *
+   * \sa bottomBorder
+   */
+  void setBottomBorder( const Pen& pen );
   
 private:  
   class Private;
   Private *d;
 };  
-
-
 
 /**
  * Defines format of cell.
@@ -420,6 +442,16 @@ public:
    * Returns a constant reference to the alignment information of this format.
    */
   FormatAlignment& alignment() const;
+  
+  /** 
+   * Returns a constant reference to the borders information of this format.
+   */
+  FormatBorders& borders();
+  
+  /** 
+   * Returns a reference to the borders information of this format.
+   */
+  FormatBorders& borders() const;
   
   enum { Left, Center, Right };
   

@@ -3433,6 +3433,82 @@ void ExcelReader::handleSST( SSTRecord* record )
   
 }
 
+// convert border style, e.g MediumDashed to a Pen
+static Pen convertBorderStyle( unsigned style )
+{
+  Pen pen;
+  
+  switch( style )
+  {
+  case XFRecord::NoLine:
+    pen.width = 0;
+    pen.style = Pen::NoLine;
+    break;
+  case XFRecord::Thin:
+    pen.width = 2;
+    pen.style = Pen::SolidLine;
+    break;
+  case XFRecord::Medium:
+    pen.width = 3;
+    pen.style = Pen::SolidLine;
+    break;
+  case XFRecord::Dashed:
+    pen.width = 1;
+    pen.style = Pen::DashLine;
+    break;
+  case XFRecord::Dotted:
+    pen.width = 1;
+    pen.style = Pen::DotLine;
+    break;
+  case XFRecord::Thick:
+    pen.width = 4;
+    pen.style = Pen::SolidLine;
+    break;
+  case XFRecord::Double:
+    // FIXME no equivalent ?
+    pen.width = 4;
+    pen.style = Pen::SolidLine;
+    break;
+  case XFRecord::Hair:
+    // FIXME no equivalent ?
+    pen.width = 1;
+    pen.style = Pen::DotLine;
+    break;
+  case XFRecord::MediumDashed:
+    pen.width = 3;
+    pen.style = Pen::DashLine;
+    break;
+  case XFRecord::ThinDashDotted:
+    pen.width = 1;
+    pen.style = Pen::DashDotLine;
+    break;
+  case XFRecord::MediumDashDotted:
+    pen.width = 3;
+    pen.style = Pen::DashDotLine;
+    break;
+  case XFRecord::ThinDashDotDotted:
+    pen.width = 1;
+    pen.style = Pen::DashDotDotLine;
+    break;
+  case XFRecord::MediumDashDotDotted:
+    pen.width = 3;
+    pen.style = Pen::DashDotDotLine;
+    break;
+  case XFRecord::SlantedMediumDashDotted:
+    // FIXME no equivalent ?
+    pen.width = 3;
+    pen.style = Pen::DashDotLine;
+    break;
+  default:
+    // fallback, simple solid line
+    pen.width = 1;
+    pen.style = Pen::SolidLine;
+    break;    
+  };
+  
+  return pen;
+}
+
 // big task: convert Excel XFormat into Sidewinder::Format
 Format ExcelReader::convertFormat( unsigned xfIndex )
 {
@@ -3467,9 +3543,21 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
     default: break;
     // FIXME still unsupported: Repeat, Justified, Filled, Distributed
   };
+  
+  Pen pen;
+  
+  pen = convertBorderStyle( xf.leftBorderStyle() );
+  format.borders().setLeftBorder( pen );
+  pen = convertBorderStyle( xf.rightBorderStyle() );
+  format.borders().setRightBorder( pen );
+  pen = convertBorderStyle( xf.topBorderStyle() );
+  format.borders().setTopBorder( pen );
+  pen = convertBorderStyle( xf.bottomBorderStyle() );
+  format.borders().setBottomBorder( pen );
 
   return format;
 }
+
 
 
 void ExcelReader::handleXF( XFRecord* record )

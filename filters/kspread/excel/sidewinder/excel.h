@@ -2524,6 +2524,24 @@ public:
    */
   void setShrinkContent( bool s );
   
+  enum
+  {
+    NoLine = 0,
+    Thin = 1,
+    Medium = 2,
+    Dashed = 3,
+    Dotted = 4,
+    Thick = 5,
+    Double = 6,
+    Hair = 7,
+    MediumDashed = 8,
+    ThinDashDotted = 9,
+    MediumDashDotted = 10,
+    ThinDashDotDotted = 11,
+    MediumDashDotDotted = 12,
+    SlantedMediumDashDotted = 13    
+  };
+  
   /**
    * Returns the line style for left border.
    *
