@@ -243,16 +243,54 @@ void KprKword::convert()
                     e.setAttribute( "value", 1 );
                     outFormatElem.appendChild( e );
                 }
-                if ( textElem.attribute( "underline" ).toInt() )
+                QColor underlineColor;
+                if ( textElem.hasAttribute("underlinecolor" ))
+                {
+                    underlineColor =QColor(textElem.attribute("underlinecolor" ));
+                }
+                QString underlineStyleLine;
+                if ( textElem.hasAttribute("underlinestyleline"))
+                {
+                    underlineStyleLine = textElem.attribute("underlinestyleline");
+                }
+                if ( textElem.hasAttribute("underline" ))
                 {
                     QDomElement e = outdoc.createElement("UNDERLINE");
-                    e.setAttribute( "value", 1 );
-                    outFormatElem.appendChild( e );
+                    QString value = textElem.attribute( "underline" );
+                     if ( value == "double" )
+                     {
+                         e.setAttribute( "value", "double" );
+                     }
+                     else if ( value == "single" )
+                     {
+                         e.setAttribute( "value", "double" );
+                     }
+                     else
+                     {
+                         e.setAttribute( "value", (bool)value.toInt() ? "1" :"0" );
+                     }
+                     if ( underlineColor.isValid())
+                     {
+                         e.setAttribute("underlinecolor", underlineColor.name());
+                     }
+                     if ( !underlineStyleLine.isEmpty() )
+                         e.setAttribute("styleline", underlineStyleLine);
+                     outFormatElem.appendChild( e );
+
                 }
+
+                QString strikeOutStyleLine;
+                if ( textElem.hasAttribute("strikeoutstyleline"))
+                {
+                    strikeOutStyleLine = textElem.attribute("strikeoutstyleline");
+                }
+
                 if( textElem.attribute("strikeOut").toInt())
                 {
                     QDomElement e = outdoc.createElement("STRIKEOUT");
                     e.setAttribute( "value", 1 );
+                    if ( !strikeOutStyleLine.isEmpty())
+                        e.setAttribute("styleline", strikeOutStyleLine);
                     outFormatElem.appendChild( e );
                 }
                 /*if ( textElem.attribute( "bold" ).toInt() )
