@@ -1096,13 +1096,13 @@ void KPresenterDoc::loadOasisHeaderFooter(QDomNode & drawPage, KoOasisContext & 
     QDomNode tmp = drawPage.namedItem( "style:header" );
     if ( !tmp.isNull() )
     {
-        kdDebug()<<" there is a header \n";
+        //kdDebug()<<" there is a header \n";
         _header->textObject()->loadOasisContent( tmp.toElement(), context, styleCollection() );
     }
     tmp = drawPage.namedItem( "style:footer" );
     if ( !tmp.isNull() )
     {
-        kdDebug()<<" there is a footer \n";
+        //kdDebug()<<" there is a footer \n";
         _footer->textObject()->loadOasisContent( tmp.toElement(), context, styleCollection() );
     }
 }
@@ -1714,6 +1714,10 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
                 }
                 m_pageList.at(pos)->setNoteText(note );
             }
+        }
+        else if ( name == "style:header" || name == "style:footer" )
+        {
+            //nothing
         }
         else
         {
