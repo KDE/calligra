@@ -56,8 +56,7 @@ class ClassExportFilterBase
         ClassExportFilterBase(void) {}
         virtual ~ClassExportFilterBase(void) {}
     public: //Non-virtual
-        const bool filter(const QString  &filenameIn, const QString  &filenameOut,
-                          const QString  &from, const QString  &to, const QString& );
+        const bool filter(const QString  &filenameIn, const QString  &filenameOut);
         QString& escapeText(QString& str) const;
     public: //virtual
         virtual bool isXML(void) {return false;}
@@ -780,8 +779,7 @@ QString& ClassExportFilterBase::escapeText(QString& str) const
     return str;
 }
 
-const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &filenameOut,
-                                         const QString& , const QString& , const QString& )
+const bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &filenameOut)
 {
 
     KoStore koStoreIn (filenameIn, KoStore::Read);
@@ -938,18 +936,18 @@ const bool HTMLExport::filter(const QString  &filenameIn,
 
     ClassExportFilterBase* exportFilter=NULL;
 
-    if (1)
-    { //HTML 4.01 Transitional
-        exportFilter=new ClassExportFilterHtmlTransitional;
-    }
-    else if (0)
+    if (param=="XHTML")
     { //XHTML 1.0 Transitional
         exportFilter=new ClassExportFilterXHtmlTransitional;
+    }
+    else
+    { //HTML 4.01 Transitional
+        exportFilter=new ClassExportFilterHtmlTransitional;
     }
     //TODO memory failure recovery
 
     // Do the work!
-    const bool result = exportFilter->filter(filenameIn,filenameOut,from,to,param);
+    const bool result = exportFilter->filter(filenameIn,filenameOut);
 
     delete exportFilter;
 
