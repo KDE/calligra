@@ -619,10 +619,20 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             pageNumber++;
             pageBottom = pageNumber * m_doc->ptPaperHeight() - m_doc->ptBottomBorder();
             //kdDebug(32004) << " pageBottom: " << pageBottom << " pageNumber=" << pageNumber << endl;
-            if((int)pageNumber > m_doc->numPages()) {
-                int num = m_doc->appendPage();
+#ifdef SUPPORT_MULTI_PAGE_TABLES
+            // A few new pages may be necessary
+             while ( int( pageNumber ) > m_doc->numPages()) {
+                const int num = m_doc->appendPage();
+                kdDebug(32004) << "Have appended page: " << num << " (multi page mode)" << endl;
                 m_doc->afterAppendPage( num );
             }
+#else
+            if((int)pageNumber > m_doc->numPages()) {
+                int num = m_doc->appendPage();
+                kdDebug(32004) << "Have appended page: " << num << " (one page mode!)" << endl;
+                m_doc->afterAppendPage( num );
+            }
+#endif
         }
         //if(diff > 0)  kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;
         if(diff > 0)
