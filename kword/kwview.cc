@@ -1776,12 +1776,13 @@ void KWView::toolsCreatePix()
 /*===============================================================*/
 void KWView::insertTable()
 {
-    // TODO enable this action only when editing a text frameset [for the anchor]
-    KWTableDia *tableDia = new KWTableDia( this, "", gui->canvasWidget(), doc,
-                               gui->canvasWidget()->tableRows(),
-                               gui->canvasWidget()->tableCols(),
-                               gui->canvasWidget()->tableWidthMode(),
-                               gui->canvasWidget()->tableHeightMode() );
+    KWCanvas * canvas = gui->canvasWidget();
+    KWTableDia *tableDia = new KWTableDia( this, 0, canvas, doc,
+                                           canvas->tableRows(),
+                                           canvas->tableCols(),
+                                           canvas->tableWidthMode(),
+                                           canvas->tableHeightMode(),
+                                           canvas->tableIsFloating() );
     tableDia->setCaption( i18n( "Insert Table" ) );
     tableDia->show();
     delete tableDia;

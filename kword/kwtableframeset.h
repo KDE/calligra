@@ -46,9 +46,6 @@ class QPainter;
  * This class implements tables by acting as the manager for
  * the frame(set)s which make up the table cells.
  *
- * A table can be anchored, in which case its frame(set)s are
- * located relative to the Y position of the anchor.
- *
  * We have a cell structure which contains one frameset, because
  * of the nature of the table this frameset will always hold
  * exactly one frame. Therefore the terms cell, frameSet and frame
@@ -205,13 +202,16 @@ public:
 
     virtual void zoom();
 
-//    QString anchorType();
-//    QString anchorInstance();
+    /** Contribute to the document statistics */
     virtual void statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences );
 
     virtual void finalize();
 
     virtual void updateFrames();
+
+    virtual void moveFloatingFrame( int frameNum, const KoPoint &position );
+    virtual KoPoint floatingFrameSize( int frameNum );
+    virtual void addDeleteAnchorCommand( int frameNum, KMacroCommand * macroCmd );
 
 protected:
     unsigned int m_rows, m_cols;

@@ -55,7 +55,7 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     m_table.cols = 2;
     m_table.width = TblAuto;
     m_table.height = TblAuto;
-    m_table.useAnchor = false;
+    m_table.floating = true;
 
     curTable = 0L;
 
@@ -463,12 +463,25 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
                             KWTblCellSize wid, KWTblCellSize hei,
                             bool isFloating )
 {
+    // Remember for next time in any case
     m_table.rows = rows;
     m_table.cols = cols;
     m_table.width = wid;
     m_table.height = hei;
-    m_table.useAnchor = isFloating;
-    setMouseMode( MM_CREATE_TABLE );
+    m_table.floating = isFloating;
+
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
+
+    if ( isFloating && edit )
+    {
+        edit->textFrameSet()->clearUndoRedoInfo();
+        m_insRect = KoRect( 0, 0, rows * 30, doc->ptPaperWidth()-50 /*10*/ ); // ## check those values
+        KWTableFrameSet * table = createTable();
+        edit->insertFloatingFrameSet( table );
+        doc->addFrameSet( table ); // last since it triggers a redraw
+    }
+    else
+        setMouseMode( MM_CREATE_TABLE );
 }
 
 /*================================================================*/
@@ -912,44 +925,7 @@ void KWCanvas::mrCreateTable()
                                        "is not enough space available."));
         }
         else {
-            KWTableFrameSet *table = new KWTableFrameSet( doc );
-
-            /*if ( m_table.useAnchor )
-            {
-                KWTextFrameSet * fs = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
-                KWAnchor * anchor = new KWAnchor( fs->textDocument(), table );
-                table->setAnchor( anchor );
-                }*/
-
-            QString _name;
-            int numTables = 1;
-            bool same;
-            do { // need a new name for the new table.
-                same = false;
-                _name.sprintf( "table_%d", numTables);
-                QListIterator<KWFrameSet> fit = doc->framesetsIterator();
-                for ( ; fit.current(); ++fit )
-                    if ( fit.current()->getName() == _name ) {
-                        same = true;
-                        break;
-                    }
-                numTables++;
-            } while (same);
-            table->setName( _name );
-
-            // Create a set of cells with random-size frames.
-            for ( unsigned int i = 0; i < m_table.rows; i++ ) {
-                for ( unsigned int j = 0; j < m_table.cols; j++ ) {
-                    KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j );
-                    KWFrame *frame = new KWFrame(cell, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
-                    cell->addFrame( frame, false );
-                    frame->setFrameBehaviour(AutoExtendFrame);
-                    frame->setNewFrameBehaviour(NoFollowup);
-                }
-            }
-            table->setHeightMode( m_table.height );
-            table->setWidthMode( m_table.width );
-            table->setBoundingRect( m_insRect );
+            KWTableFrameSet * table = createTable();
             // Done at the end so that finalize is called
             doc->addFrameSet( table );
         }
@@ -958,7 +934,43 @@ void KWCanvas::mrCreateTable()
         repaintAll();
     }
     setMouseMode( MM_EDIT );
-    m_table.useAnchor = false;
+}
+
+KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to create the table
+{
+    // ## TODO undo/redo support. KWCreateFrameCommand won't do it, we need a new command.
+    KWTableFrameSet *table = new KWTableFrameSet( doc );
+
+    QString _name;
+    int numTables = 1;
+    bool same;
+    do { // need a new name for the new table.
+        same = false;
+        _name.sprintf( "table_%d", numTables);
+        QListIterator<KWFrameSet> fit = doc->framesetsIterator();
+        for ( ; fit.current(); ++fit )
+            if ( fit.current()->getName() == _name ) {
+                same = true;
+                break;
+            }
+        numTables++;
+    } while (same);
+    table->setName( _name );
+
+    // Create a set of cells with random-size frames.
+    for ( unsigned int i = 0; i < m_table.rows; i++ ) {
+        for ( unsigned int j = 0; j < m_table.cols; j++ ) {
+            KWTableFrameSet::Cell *cell = new KWTableFrameSet::Cell( table, i, j );
+            KWFrame *frame = new KWFrame(cell, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
+            cell->addFrame( frame, false );
+            frame->setFrameBehaviour(AutoExtendFrame);
+            frame->setNewFrameBehaviour(NoFollowup);
+        }
+    }
+    table->setHeightMode( m_table.height );
+    table->setWidthMode( m_table.width );
+    table->setBoundingRect( m_insRect );
+    return table;
 }
 
 void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )

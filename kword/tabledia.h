@@ -67,11 +67,11 @@ class KWTableDia : public KDialogBase
 
 public:
     KWTableDia( QWidget *parent, const char *name, KWCanvas *_canvas, KWDocument *_doc,
-		int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
+		int rows, int cols, KWTblCellSize wid, KWTblCellSize hei, bool floating );
 
 protected:
     void readTableStyles();
-    void setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei );
+    void setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei, bool floating );
     void setupTab2();
 
     QWidget *tab1;

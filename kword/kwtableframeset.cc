@@ -89,6 +89,28 @@ void KWTableFrameSet::updateFrames()
     KWFrameSet::updateFrames();
 }
 
+void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &position )
+{
+    KoPoint currentPos = getCell( 0, 0 )->getFrame( 0 )->topLeft();
+    KoPoint offset = position - currentPos;
+    moveBy( offset.x(), offset.y() );
+    // ## TODO apply page breaking
+}
+
+KoPoint KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
+{
+    // ## TODO cut into one rectangle per page
+    KoRect r = boundingRect();
+    return KoPoint( r.width(), r.height() );
+}
+
+void KWTableFrameSet::addDeleteAnchorCommand( int /*unused*/, KMacroCommand * /*macroCmd*/ )
+{
+    // Do we really want to delete the whole table with a single 'Del' keystroke ? (honest question)
+    // If yes, implement this method
+    // If not, we need an "allowed to delete" bool in KWAnchor and test for it in KWTextFrameSet.
+}
+
 /*================================================================*/
 void KWTableFrameSet::addCell( Cell *cell )
 {
@@ -100,16 +122,6 @@ void KWTableFrameSet::addCell( Cell *cell )
     // Find the insertion point in the list.
     for ( i = 0; i < m_cells.count() && m_cells.at( i )->isAboveOrLeftOf( cell->m_row, cell->m_col ); i++ ) ;
     cell->setName( m_name + ' ' + cell->m_col + ',' + cell->m_row );
-
-    // If the group is anchored, we must adjust the incoming frameset.
-#if 0
-    if ( anchored ) {
-        KWFrame *newFrame = fs->getFrame( 0 );
-
-        if (newFrame)
-            newFrame->moveBy( origin.x(), origin.y() );
-    }
-#endif
     m_cells.insert( i, cell );
 }
 
@@ -547,8 +559,10 @@ bool KWTableFrameSet::hasSelectedFrame()
 /*================================================================*/
 void KWTableFrameSet::moveBy( double dx, double dy )
 {
-    dx = 0; // Ignore the x-offset.
-    if(dy==0) return;
+    // Hmm, don't want that I think....
+//    dx = 0; // Ignore the x-offset.
+
+    if(dx==0 && dy==0) return;
     for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
         m_cells.at( i )->getFrame( 0 )->moveBy( dx, dy );
         m_cells.at( i )->setVisible(true);
@@ -744,17 +758,6 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         newCell->setIsRemoveableHeader( isAHeader );
         newCell->addFrame( frame, _recalc );
 
-        // If the group is anchored, we must avoid double-application of
-        // the anchor offset.
-#if 0
-        if ( anchored ) {
-            KWFrame *newFrame = newCell->getFrame( 0 );
-
-            if (newFrame)
-                newFrame->moveBy( -origin.x(), -origin.y() );
-        }
-#endif
-
         nCells.append( newCell );
 
         newCell->m_cols = getCell(copyFromRow,i)->m_cols;
@@ -818,14 +821,6 @@ void KWTableFrameSet::insertCol( unsigned int col )
             newCell->m_rows = cell->m_rows;
             i+=cell->m_rows -1;
         }
-
-        // If the group is anchored, we must avoid double-application of
-        // the anchor offset.
-#if 0
-        if ( anchored ) {
-            frame->moveBy( -origin.x(), -origin.y() );
-        }
-#endif
     }
 
     if(col < m_cols-1) m_cols++;
@@ -1087,14 +1082,6 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
             frame->setFrameBehaviour(AutoExtendFrame);
             frame->setNewFrameBehaviour(NoFollowup);
             lastFrameSet->addFrame( frame );
-#if 0
-            if ( anchored ) { // is this needed?
-                KWFrame *aFrame = lastFrameSet->getFrame( 0 );
-
-                if (aFrame)
-                    aFrame->moveBy( -origin.x(), -origin.y() );
-            }
-#endif
 
             lastFrameSet->m_rows = 1;
             lastFrameSet->m_cols = 1;
@@ -1117,28 +1104,8 @@ bool KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols)
 }
 
 /*================================================================*/
-/*QString KWTableFrameSet::anchorType()
-{
-    return "grpMgr";
-}
-
-QString KWTableFrameSet::anchorInstance()
-{
-    return name;
-}*/
-
-/*================================================================*/
 void KWTableFrameSet::viewFormatting( QPainter &/*painter*/, int )
 {
-    KWFrame *frame;
-
-    // If we have been populated, then draw a line from the origin to the
-    // top left corner.
-    if ( m_cells.count() > 0 )
-    {
-        frame = m_cells.at( 0 )->getFrame( 0 );
-       // painter.drawLine( origin.x(), origin.y(), frame->x(), frame->y());
-    }
 }
 
 /*================================================================*/
@@ -1225,14 +1192,6 @@ void KWTableFrameSet::validate()
                 frame->setFrameBehaviour(AutoExtendFrame);
                 frame->setNewFrameBehaviour(NoFollowup);
                 _frameSet->addFrame( frame );
-#if 0
-                if ( anchored ) {
-                    KWFrame *newFrame = _frameSet->getFrame( 0 );
-
-                    if (newFrame)
-                        newFrame->moveBy( -origin.x(), -origin.y() );
-                }
-#endif
                 _frameSet->m_rows = 1;
                 _frameSet->m_cols = 1;
             }
@@ -1464,7 +1423,8 @@ void KWTableFrameSetEdit::mousePressEvent( QMouseEvent * e )
     int mx = e->pos().x();
     int my = e->pos().y();
     setCurrentCell( mx,  my );
-    m_currentCell->mousePressEvent( e );
+    if ( m_currentCell )
+        m_currentCell->mousePressEvent( e );
 }
 
 void KWTableFrameSetEdit::setCurrentCell( int mx, int my )

@@ -74,20 +74,20 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 
 /*================================================================*/
 KWTableDia::KWTableDia( QWidget* parent, const char* name, KWCanvas *_canvas, KWDocument *_doc,
-			int rows, int cols, KWTblCellSize wid, KWTblCellSize hei )
+			int rows, int cols, KWTblCellSize wid, KWTblCellSize hei, bool floating )
     : KDialogBase( Tabbed, i18n("Table settings"), Ok | Cancel, Ok, parent, name, true)
 {
     canvas = _canvas;
     doc = _doc;
 
-    setupTab1( rows, cols, wid, hei );
+    setupTab1( rows, cols, wid, hei, floating );
     //setupTab2();
 
     setInitialSize( QSize(500, 400) );
 }
 
 /*================================================================*/
-void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei )
+void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize hei, bool floating )
 {
     tab1 = addPage( i18n( "Geometry" ) );
 
@@ -131,8 +131,8 @@ void KWTableDia::setupTab1( int rows, int cols, KWTblCellSize wid, KWTblCellSize
 
     // Checkbox for floating/fixed location. The default is [will be] floating.
     cbIsFloating = new QCheckBox( i18n( "The table is floating" ), tab1 );
-    cbIsFloating->setEnabled(false);
-    //cbIsFloating->setChecked( true );
+    //cbIsFloating->setEnabled(false);
+    cbIsFloating->setChecked( floating );
 
     grid->addMultiCellWidget( cbIsFloating, 9, 9, 0, 2 );
 

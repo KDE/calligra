@@ -117,13 +117,12 @@ public:
 
     void updateFrameFormat();
 
-
-    // Table creation support.
+    // Table creation support - methods used by KWView to reuse the last settings
     unsigned int tableRows() { return m_table.rows; }
     unsigned int tableCols() { return m_table.cols; }
     KWTblCellSize tableWidthMode() { return m_table.width; }
     KWTblCellSize tableHeightMode() { return m_table.height; }
-    bool tableIsFloating() { return m_table.useAnchor; }
+    bool tableIsFloating() { return m_table.floating; }
 
     void createTable( unsigned int rows, unsigned int cols,
                       KWTblCellSize wid, KWTblCellSize hei,
@@ -172,6 +171,8 @@ protected:
 
     void selectAllFrames( bool select );
     void selectFrame( double mx, double my, bool select );
+
+    KWTableFrameSet * createTable(); // uses m_insRect and m_table to create the table
 
 signals:
     // Emitted when the current frameset edit changes
@@ -223,7 +224,7 @@ private:
         unsigned int rows;
         KWTblCellSize width;
         KWTblCellSize height;
-        bool useAnchor;
+        bool floating;
     } m_table;
     KWTableFrameSet *curTable;
     KWFrameMoveCommand *cmdMoveFrame;
