@@ -497,9 +497,10 @@ KexiMainWindowImpl::initActions()
 	KStdAction::tipOfDay( this, SLOT( slotTipOfTheDayAction() ), actionCollection() )
 		->setWhatsThis(i18n("This shows useful tips on the use of this application."));
 #endif
+#if 0 //we don't have a time for updating info text for each new version
 	new KAction(i18n("Important Information"), "messagebox_info", 0,
 		this, SLOT(slotImportantInfo()), actionCollection(), "help_show_important_info");
-
+#endif
 //TODO: UNCOMMENT TO REMOVE MDI MODES SETTING	m_pMdiModeMenu->hide();
 
 //	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
@@ -593,6 +594,7 @@ void KexiMainWindowImpl::invalidateViewModeActions()
 
 void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 {
+#if 0
 	kdDebug() << "KexiMainWindowImpl::startup()..." << endl;
 	if (!projectData) {
 		importantInfo(true);
@@ -675,6 +677,7 @@ void KexiMainWindowImpl::startup(KexiProjectData *projectData)
 
 	//show if wasn't show yet
 	importantInfo(true);
+#endif
 }
 
 static QString internalReason(KexiDB::Object *obj)
