@@ -21,6 +21,8 @@
 
 #include <kdebug.h>
 
+#include <qdatetime.h>
+
 #include "kexipropertybuffer.h"
 
 KexiPropertyBuffer::KexiPropertyBuffer(QObject *parent, const QString &type_name)
@@ -46,8 +48,24 @@ KexiPropertyBuffer::changeProperty(const QString &property, const QVariant &valu
 		<< " from '" << (prop->value().toString().isNull() ? QString("NULL") : prop->value().toString())
 		<< "' to '" << (value.toString().isNull() ? QString("NULL") : value.toString()) << "'" << endl;
 
-	if (prop->value() != value 
-	 && !(prop->value().type()==QVariant::String && prop->value().toString().isEmpty() && value.toString().isEmpty())) {
+	bool ch = false;
+	if (prop->value().type()==QVariant::DateTime
+		|| prop->value().type()==QVariant::Time) {
+		//for date and datetime types: compare with strings, because there 
+		//can be miliseconds difference
+		ch = prop->value().toString() != value.toString();
+	}
+	else {
+		ch = prop->value() != value;
+	}
+
+	if (prop->value().type()==QVariant::String) {
+		//property is also changed for string type, if one of value is empty and other isn't
+		if (prop->value().toString().isEmpty() != value.toString().isEmpty())
+			ch = true;
+	}
+
+	if (ch) {
 		prop->setValue(value);
 		emit propertyChanged(*this, *prop);
 	}
