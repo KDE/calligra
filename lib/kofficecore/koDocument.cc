@@ -97,7 +97,13 @@ class KoViewWrapperWidget : public QWidget
 {
 public:
   KoViewWrapperWidget( QWidget *parent, const char *name )
-    : QWidget( parent, name ) {};
+    : QWidget( parent, name )
+  {
+    KGlobal::locale()->insertCatalogue("koffice");
+    // Tell the iconloader about share/apps/koffice/icons
+    KGlobal::iconLoader()->addAppDir("koffice");
+  }
+
   virtual ~KoViewWrapperWidget() {}
 
   virtual void resizeEvent( QResizeEvent * )
