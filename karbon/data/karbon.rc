@@ -79,7 +79,7 @@
 	<ToolBar name="Toolbox" position="left">
 		<Text>Toolbox</Text>
 		<Action name="tool_select"/>
-		<Action name="tool_editnode"/>
+		<Action name="tool_selectnodes"/>
 		<Action name="tool_rotate"/>
 		<Action name="tool_shear"/>
 		<Action name="tool_ellipse"/>

@@ -1011,65 +1011,6 @@ KarbonView::initActions()
 #endif
 	connect( m_joinStyle, SIGNAL(clicked()), this, SLOT(slotJoinStyleClicked()) );
 
-	// toolbox ---->
-<<<<<<< karbon_view.cc
-	m_toolbox = VToolContainer::instance( m_part, this );
-	m_toolbox->strokeFillPreview()->update( part()->document().defaultStroke(), part()->document().defaultFill() );
-
-	connect(
-		m_toolbox, SIGNAL( selectToolActivated() ),
-		this, SLOT( selectTool() ) );
-	connect(
-		m_toolbox, SIGNAL( selectNodesToolActivated() ),
-		this, SLOT( selectNodesTool() ) );
-	connect(
-		m_toolbox, SIGNAL( rotateToolActivated() ),
-		this, SLOT( rotateTool() ) );
-	connect(
-		m_toolbox, SIGNAL( shearToolActivated() ),
-		this, SLOT( shearTool() ) );
-	connect(
-		m_toolbox, SIGNAL( ellipseToolActivated() ),
-		this, SLOT( ellipseTool() ) );
-	connect(
-		m_toolbox, SIGNAL( rectangleToolActivated() ),
-		this, SLOT( rectangleTool() ) );
-	connect(
-		m_toolbox, SIGNAL( roundRectToolActivated() ),
-		this, SLOT( roundRectTool() ) );
-	connect(
-		m_toolbox, SIGNAL( polygonToolActivated() ),
-		this, SLOT( polygonTool() ) );
-	connect(
-		m_toolbox, SIGNAL( starToolActivated() ),
-		this, SLOT( starTool() ) );
-	connect(
-		m_toolbox, SIGNAL( gradToolActivated() ),
-		this, SLOT( gradTool() ) );
-	connect(
-		m_toolbox, SIGNAL( sinusToolActivated() ),
-		this, SLOT( sinusTool() ) );
-	connect(
-		m_toolbox, SIGNAL( spiralToolActivated() ),
-		this, SLOT( spiralTool() ) );
-	connect(
-		m_toolbox, SIGNAL( textToolActivated() ),
-		this, SLOT( textTool() ) );
-	connect(
-		m_toolbox, SIGNAL( solidFillActivated() ),
-		this, SLOT( solidFillClicked() ) );
-	connect(
-		m_toolbox, SIGNAL( strokeActivated() ),
-		this, SLOT( strokeClicked() ) );
-	connect(
-		m_toolbox, SIGNAL( strokeChanged( const VStroke & ) ),
-		this, SLOT( slotStrokeChanged( const VStroke & ) ) );
-	connect( m_toolbox, SIGNAL( fillChanged( const VFill & ) ),
-		this, SLOT( slotFillChanged( const VFill & ) ) );
-
-	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
-	m_toolbox->show();
-=======
 	if( !m_strokeFillPreview )
 	{
 		m_strokeFillPreview = new VStrokeFillPreview( m_part, shell()->toolBar( "Toolbox" ) );
@@ -1083,7 +1024,6 @@ KarbonView::initActions()
 		shell()->toolBar( "Toolbox" )->insertWidget( 10, 30, m_strokeFillPreview );
 		m_strokeFillPreview->update( part()->document().defaultStroke(), part()->document().defaultFill() );
 	}
->>>>>>> 1.188
 
 	m_configureAction = new KAction(
 		i18n( "Configure Karbon..." ), "configure", 0, this,
