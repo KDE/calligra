@@ -57,7 +57,6 @@ PgConfDia::PgConfDia( QWidget* parent, const char* name,
 
     manualSwitch = new QCheckBox( i18n( "&Manual switch to next step" ), general );
     manualSwitch->setChecked( swMan );
-    connect( manualSwitch, SIGNAL( clicked() ), this, SLOT( slotManualSwitch() ) );
 
     presentationDuration = new QCheckBox( i18n( "&Show presentation duration" ), general );
     presentationDuration->setChecked( showPresentationDuration );
