@@ -107,14 +107,14 @@ QString KisUtil::channelIdtoString(cId cid)
 	  return "b";
 	  break;
 	default:
-	  return "unknown";
+	  return i18n("unknown color", "unknown");
 	  break;
 	}
 }
 
 QString KisUtil::readFilters()
 {
-    return KImageIO::pattern( KImageIO::Reading ) + "\n*.kis|KImageShop picture\n";
+    return KImageIO::pattern( KImageIO::Reading ) + i18n("\n*.kis|KImageShop picture\n");
 }
 
 QString KisUtil::writeFilters()
