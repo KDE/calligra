@@ -1883,9 +1883,9 @@ const KoParagLayout * KoTextObject::currentParagLayoutFormat() const
     return &(parag->paragLayout());
 }
 
-KoTextParag * KoTextObject::currentParag() const
+bool KoTextObject::rtl() const
 {
-    return textDocument()->firstParag();
+    return textDocument()->firstParag()->string()->isRightToLeft();
 }
 
 KCommand *KoTextObject::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags,int marginIndex)

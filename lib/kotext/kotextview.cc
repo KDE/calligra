@@ -1072,11 +1072,10 @@ const KoParagLayout * KoTextView::currentParagLayoutFormat() const
     return &(parag->paragLayout());
 }
 
-KoTextParag * KoTextView::currentParag() const
+bool KoTextView::rtl() const
 {
-    return m_cursor->parag();
+    return m_cursor->parag()->string()->isRightToLeft();
 }
-
 
 //void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex)
 KCommand* KoTextView::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags,int marginIndex)

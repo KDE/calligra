@@ -83,7 +83,7 @@ public:
      */
     virtual const KoParagLayout * currentParagLayoutFormat() const;
 
-    virtual KoTextParag * currentParag() const;
+    virtual bool rtl() const;
 
     virtual KCommand *setChangeCaseOfTextCommand(KoChangeCaseDia::TypeOfCase _type);
 

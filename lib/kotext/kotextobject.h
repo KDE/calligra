@@ -45,9 +45,7 @@ public:
     /** Interface for accessing the current format */
     virtual KoTextFormat * currentFormat() const = 0;
 
-    /** Interface for accessing the current format */
-    virtual KoTextParag * currentParag() const = 0;
-
+    virtual bool rtl() const = 0;
 
     /** Interface for setting the modified format */
     virtual KCommand *setFormatCommand( KoTextFormat *format, int flags, bool zoomFont = false ) = 0;
@@ -294,7 +292,7 @@ public:
      */
     virtual const KoParagLayout * currentParagLayoutFormat() const;
 
-    virtual KoTextParag * currentParag() const;
+    virtual bool rtl() const;
 
     /**
      * Support for changing the format in the whole textobject
