@@ -399,6 +399,7 @@ void KSpreadSortDlg::slotOk()
     KMessageBox::error( this, i18n("The selected output table doesn't exist!") );
     m_outputTable->setFocus();
     m_tabWidget->setTabEnabled(m_page2, true);
+    m_pView->slotUpdateView( m_pView->activeTable() );
     return;
   }
 
@@ -408,6 +409,7 @@ void KSpreadSortDlg::slotOk()
     KMessageBox::error( this, i18n("The output cell is invalid!") );
     m_outputCell->setFocus();
     m_tabWidget->setTabEnabled(m_page2, true);
+    m_pView->slotUpdateView( m_pView->activeTable() );
     return;
   }
   outputPoint.table = table;
@@ -424,6 +426,7 @@ void KSpreadSortDlg::slotOk()
     {
       KMessageBox::error( this, i18n("The output region must not overlapp with the source region!") );
       m_outputCell->setFocus();
+      m_pView->slotUpdateView( m_pView->activeTable() );
       // TODO: set right tab
       return;
     }
