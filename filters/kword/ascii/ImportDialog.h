@@ -2,7 +2,7 @@
 
 /*
    This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2001, 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,11 +24,6 @@
 #define _IMPORT_DIALOG_H
 
 #include <qwidget.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qradiobutton.h>
-#include <qvbuttongroup.h>
-#include <qcombobox.h>
 
 #include <kdialogbase.h>
 
@@ -44,8 +39,6 @@ public:
     int getParagraphStrategy(void) const;
 private:
     ImportDialogUI* m_dialog;
-private slots:
-    void comboBoxEncodingActivated(int);
 };
 
 #endif /* _IMPORT_DIALOG_H */
