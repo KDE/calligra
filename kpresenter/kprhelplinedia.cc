@@ -67,7 +67,8 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
     QLabel *lab=new QLabel(i18n("Position:(%1)").arg(m_doc->getUnitName()), page);
     position = new KLineEdit(page);
     position->setText( KoUnit::userValue( 0.00, m_doc->getUnit() ) );
-    position->setValidator(new KFloatValidator( 0,9999,true,position ) );
+    floatValidator = new KFloatValidator( limitOfPage.top(), limitOfPage.bottom() ,true,position );
+    position->setValidator( floatValidator );
 
     m_rbHoriz->setChecked( true );
     resize( 300,100 );
@@ -88,11 +89,11 @@ void KPrInsertHelpLineDia::slotRadioButtonClicked()
 {
     if ( m_rbHoriz->isChecked() )
     {
-        // position->setRange( limitOfPage.top(), limitOfPage.bottom(), 1, false);
+        floatValidator->setRange( limitOfPage.top(), limitOfPage.bottom());
     }
     else if ( m_rbVert->isChecked() )
     {
-        //position->setRange( limitOfPage.left(), limitOfPage.right(), 1, false);
+        floatValidator->setRange( limitOfPage.left(), limitOfPage.right());
     }
 }
 

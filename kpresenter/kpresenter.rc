@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="47">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="48">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -264,6 +264,8 @@
   <Action name="extra_background"/>
   <Separator/>
   <Action name="add_helpline"/>
+  <Separator/>
+  <Action name="view_helplines"/>
   <Separator/>
   <Action name="screen_configpages"/>
   <Action name="screen_presstruct"/>
@@ -574,6 +576,7 @@
 </Menu>
 <Menu name="helpline_popup">
  <Action name="remove_helpline"/>
+ <Separator/>
  <Action name="change_helplinepos"/>
 </Menu>
 </kpartgui>

@@ -26,6 +26,7 @@
 class QRadioButton;
 class KPresenterDoc;
 class KLineEdit;
+class KFloatValidator;
 
 class KPrMoveHelpLineDia : public KDialogBase
 {
@@ -59,6 +60,7 @@ protected:
     QRadioButton *m_rbHoriz;
     QRadioButton *m_rbVert;
     KPresenterDoc *m_doc;
+    KFloatValidator *floatValidator;
 };
 
 
