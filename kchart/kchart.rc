@@ -1,7 +1,6 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="10">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart" version="11">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="wizard"/>
   <Action name="edit"/>
   <Action name="config"/>
   <Separator />
@@ -15,7 +14,6 @@
  </Menu>
 </MenuBar>
 <ToolBar name="KChartToolBar"><Text>Chart</Text>
- <Action name="wizard"/>
  <Action name="edit"/>
  <Action name="config"/>
  <Action name="piechart"/>
