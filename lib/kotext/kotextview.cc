@@ -820,11 +820,11 @@ QPtrList<KAction> KoTextView::dataToolActionList(KInstance * instance)
 
     // Any tool that works on plain text is relevant
     QValueList<KDataToolInfo> tools;
+    tools +=KDataToolInfo::query( "QString", "text/plain", instance );
 
     // Add tools that work on a single word if that is the case
     if ( m_singleWord )
     {
-        tools +=KDataToolInfo::query( "QString", "text/plain", instance );
         tools += KDataToolInfo::query( "QString", "application/x-singleword", instance );
     }
     // Maybe one day we'll have tools that use libkotext (or qt3's qrt), to act on formatted text
