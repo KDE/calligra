@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001 David Faure <faure@kde.org>
+   Copyright (C) 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,19 +19,20 @@
 */
 
 #include "kwinsertpicdia.h"
-#include <koPictureFilePreview.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <qpainter.h>
 #include <qpushbutton.h>
-#include <qpicture.h>
 #include <qbitmap.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
+
 #include <kimageio.h>
 #include <kio/netaccess.h>
-#include <koClipartCollection.h>
 #include <kdebug.h>
+
+#include <koPicture.h>
+#include <koPictureFilePreview.h>
 
 /**
  * This is the preview that appears on the right of the "Insert picture" dialog.
@@ -65,24 +67,28 @@ public:
         return false;
     }
 
-    QSize pixmapSize() const { return m_type == IPD_IMAGE ? m_pixmap.size() : QSize(); }
+    QSize pixmapSize() const { return m_pixmap.size(); }
 
     bool setClipart( const QString & filename )
     {
         m_type = IPD_CLIPART;
-        m_pixmap = QPixmap();
-        
-        // We open the file by "hand" and not by KoPicture, as it would be too complicate
-        QFile file( filename );
-        bool ret;
-        const int pos = filename.findRev( '.' );
-        const QString extension = filename.mid( pos+1 ).lower(); // We do not mind if pos==-1
-        if ( extension == "svg" )
-            ret = m_picture.load ( &file, "svg" );
+        KoPicture picture;
+        if (picture.loadFromFile( filename ))
+        {
+            m_pixmap = QPixmap( 200, 200 );
+            m_pixmap.fill( Qt::white );
+
+            QPainter p;
+            p.begin( &m_pixmap );
+            p.setBackgroundColor( Qt::white );
+
+            picture.draw(p, 0, 0, m_pixmap.width(), m_pixmap.height());
+            p.end();
+            repaint( false );
+            return true;
+        }
         else
-            ret = m_picture.load ( &file, NULL ); // Probably in QPicture format
-        repaint(false);
-        return ret;
+            return false;
     }
 
     void drawContents( QPainter *p )
@@ -90,23 +96,12 @@ public:
         QFrame::drawContents( p );
         p->save();
         p->translate( contentsRect().x(), contentsRect().y() );
-        if ( m_type == IPD_IMAGE )
-        {
-            p->drawPixmap( QPoint( 0, 0 ), m_pixmap );
-        }
-        else
-        {
-            QRect br = m_picture.boundingRect();
-            if ( br.width() && br.height() )
-                p->scale( (double)width() / (double)br.width(), (double)height() / (double)br.height() );
-            p->drawPicture( m_picture );
-        }
+        p->drawPixmap( QPoint( 0, 0 ), m_pixmap );
         p->restore();
     }
 private:
     enum { IPD_IMAGE, IPD_CLIPART } m_type;
     QPixmap m_pixmap;
-    QPicture m_picture;
 };
 
 //////////////

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,8 +20,9 @@
 
 #include <qimage.h>
 #include <qpainter.h>
-#include <qpicture.h>
-#include <koClipartCollection.h>
+#include <qfile.h>
+
+#include <koPicture.h>
 
 #include "clipartcreator.h"
 
@@ -35,20 +37,17 @@ extern "C"
 bool ClipartCreator::create(const QString &path, int width, int height, QImage &img)
 {
     QPixmap pixmap;
-    QPicture pic;
-    if ( KoClipartCollection::loadFromFile( path, &pic ) )
+    KoPicture picture;
+    if (picture.loadFromFile( path ))
     {
-        pixmap = QPixmap( width, height );
-        QPainter p;
-
-        p.begin( &pixmap );
-        p.setBackgroundColor( Qt::white );
+        pixmap = QPixmap( 200, 200 );
         pixmap.fill( Qt::white );
 
-        QRect br = pic.boundingRect();
-        if ( br.width() && br.height() )
-            p.scale( (double)pixmap.width() / (double)br.width(), (double)pixmap.height() / (double)br.height() );
-        p.drawPicture( pic );
+        QPainter p;
+        p.begin( &pixmap );
+        p.setBackgroundColor( Qt::white );
+
+        picture.draw(p, 0, 0, pixmap.width(), pixmap.height());
         p.end();
         img = pixmap.convertToImage();
         return true;
