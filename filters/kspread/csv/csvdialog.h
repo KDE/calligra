@@ -44,12 +44,13 @@ private:
     void setText(int row, int col, const QString& text);
     void adjustRows(int iRows);
 
-    int m_adjustRows;
-    int m_startline;
-    QChar m_textquote;
+    int     m_adjustRows;
+    int     m_startline;
+    QChar   m_textquote;
     QString m_delimiter;
+    bool    m_ignoreDups;
     QByteArray m_fileArray;
-    DialogUI *m_dialog;
+    DialogUI * m_dialog;
 
 private slots:
     void returnPressed();
@@ -59,6 +60,7 @@ private slots:
     void textquoteSelected(const QString& mark);
     void currentCellChanged(int, int col);
     void textChanged ( const QString & );
+    void ignoreDuplicatesChanged( int );
 };
 
 #endif

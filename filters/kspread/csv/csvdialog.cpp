@@ -21,6 +21,7 @@
 #include <csvdialog.h>
 
 #include <qtable.h>
+#include <qcheckbox.h>
 #include <qcursor.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
@@ -37,6 +38,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
       m_startline(0),
       m_textquote('"'),
       m_delimiter(","),
+      m_ignoreDups(false),
       m_fileArray(fileArray),
       m_dialog(new DialogUI(this))
 {
@@ -58,12 +60,14 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
             this, SLOT(returnPressed()));
     connect(m_dialog->m_delimiterEdit, SIGNAL(textChanged ( const QString & )),
             this, SLOT(textChanged ( const QString & ) ));
-    connect(m_dialog->m_comboLine, SIGNAL(activated(const QString&)),
-            this, SLOT(lineSelected(const QString&)));
-    connect(m_dialog->m_comboQuote, SIGNAL(activated(const QString&)),
-            this, SLOT(textquoteSelected(const QString&)));
+    connect(m_dialog->m_comboLine, SIGNAL(activated(const QString &)),
+            this, SLOT(lineSelected(const QString &)));
+    connect(m_dialog->m_comboQuote, SIGNAL(activated(const QString &)),
+            this, SLOT(textquoteSelected(const QString &)));
     connect(m_dialog->m_table, SIGNAL(currentChanged(int, int)),
             this, SLOT(currentCellChanged(int, int)));
+    connect(m_dialog->m_ignoreDuplicates, SIGNAL(stateChanged(int)),
+            this, SLOT(ignoreDuplicatesChanged(int)));
 }
 
 CSVDialog::~CSVDialog()
@@ -74,6 +78,7 @@ CSVDialog::~CSVDialog()
 void CSVDialog::fillTable()
 {
     int row, column;
+    bool lastCharDelimiter = false;
     enum { S_START, S_QUOTED_FIELD, S_MAYBE_END_OF_QUOTED_FIELD, S_END_OF_QUOTED_FIELD,
            S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD } state = S_START;
 
@@ -93,7 +98,8 @@ void CSVDialog::fillTable()
     while (!inputStream.atEnd()) {
         inputStream >> x; // read one char
 
-        if (x == '\r') inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
+        if (x == '\r') 
+            inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
 
         switch (state)
         {
@@ -104,7 +110,9 @@ void CSVDialog::fillTable()
             }
             else if (x == m_delimiter)
             {
-                ++column;
+                if ((m_ignoreDups == false) || (lastCharDelimiter == false))
+                    ++column;
+                lastCharDelimiter = true;
             }
             else if (x == '\n')
             {
@@ -126,15 +134,10 @@ void CSVDialog::fillTable()
             {
                 setText(row - m_startline, column, field);
                 field = "";
-                if (x == '\n')
-                {
-                    ++row;
-                    column = 1;
-                }
-                else
-                {
-                    ++column;
-                }
+
+                ++row;
+                column = 1;
+
                 state = S_START;
             }
             else
@@ -159,7 +162,9 @@ void CSVDialog::fillTable()
                 }
                 else
                 {
-                    ++column;
+                    if ((m_ignoreDups == false) || (lastCharDelimiter == false))
+                        ++column;
+                    lastCharDelimiter = true;
                 }
                 state = S_START;
             }
@@ -180,7 +185,9 @@ void CSVDialog::fillTable()
                 }
                 else
                 {
-                    ++column;
+                    if ((m_ignoreDups == false) || (lastCharDelimiter == false))
+                        ++column;
+                    lastCharDelimiter = true;
                 }
                 state = S_START;
             }
@@ -208,7 +215,9 @@ void CSVDialog::fillTable()
                 }
                 else
                 {
-                    ++column;
+                    if ((m_ignoreDups == false) || (lastCharDelimiter == false))
+                        ++column;
+                    lastCharDelimiter = true;
                 }
                 state = S_START;
             }
@@ -217,6 +226,8 @@ void CSVDialog::fillTable()
                 field += x;
             }
         }
+        if (x != m_delimiter)
+          lastCharDelimiter = false;
     }
 
     // file with only one line without '\n'
@@ -399,4 +410,14 @@ void CSVDialog::currentCellChanged(int, int col)
 
     m_dialog->m_formatBox->setButton(id);
 }
+
+void CSVDialog::ignoreDuplicatesChanged(int)
+{
+  if (m_dialog->m_ignoreDuplicates->isChecked())
+    m_ignoreDups = true;
+  else
+    m_ignoreDups = false;
+  fillTable();
+}
+
 #include <csvdialog.moc>

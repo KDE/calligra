@@ -30,6 +30,8 @@
 #include <kspread_table.h>
 #include <kspread_doc.h>
 
+#include <csvexportdialog.h>
+
 typedef KGenericFactory<CSVExport, KoFilter> CSVExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libcsvexport, CSVExportFactory( "csvfilter" ) );
 
@@ -81,42 +83,74 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString& from, const QCStr
         return KoFilter::NotImplemented;
     }
 
+    CSVExportDialog expDialog( 0 );
+    expDialog.fillTable( ksdoc->map() );
+
+    if ( !expDialog.exec() )
+      return KoFilter::UserCancelled;
+
     QChar csv_delimiter;
-    QString config; // ###### FIXME: For now we don't have a config parameter
-    if(config.isEmpty())
-        csv_delimiter = ',';
-    else
-        csv_delimiter = config[0];
+
+    csv_delimiter = expDialog.getDelimiter();
 
     // Now get hold of the table to export
     // (Hey, this could be part of the dialog too, choosing which table to export....
     //  It's great to have parametrable filters... IIRC even MSOffice doesn't have that)
     // Ok, for now we'll use the first table - my document has only one table anyway ;-)))
-    KSpreadTable * table = ksdoc->displayTable();
-    if( !table ) table = ksdoc->map()->firstTable();
 
-    // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
-
+    bool first = true;
     QString str;
+    QChar textQuote = expDialog.getTextQuote();
 
-    // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
-    // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
-    int iMaxColumn = table->maxColumn();
-    int iMaxRow = table->maxRow();
-
-    // this is just a bad approximation which fails for documents with less than 50 rows, but
-    // we don't need any progress stuff there anyway :) (Werner)
-    int value=0;
-    int step=iMaxRow > 50 ? iMaxRow/50 : 1;
-    int i=1;
-
-    QString emptyLines;
-    for ( int currentrow = 1 ; currentrow < iMaxRow ; ++currentrow, ++i )
+    QPtrListIterator<KSpreadTable> it( ksdoc->map()->tableList() );
+    for( ; it.current(); ++it )
     {
-        if(i>step) {
-            value+=2;
-            emit sigProgress(value);
-            i=0;
+      KSpreadTable * table = it.current();
+
+      if ( !expDialog.exportTable( table->tableName() ) )
+      {
+        continue;
+      }
+
+      if ( !first || expDialog.printAlwaysTableDelimiter() )
+      {
+        if ( !first)
+          str += "\n";
+
+        QString name( expDialog.getTableDelimiter() );
+        QString tname( i18n("<TABLENAME>") );
+        int pos = name.find( tname );
+        if ( pos != -1 )
+        {
+          name.replace( pos, tname.length(), table->tableName() );
+        }
+        str += name;
+        str += "\n\n";
+      }
+
+      first = false;
+
+      // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
+            
+      // Either we get hold of KSpreadTable::m_dctCells and apply the old method below (for sorting)
+      // or, cleaner and already sorted, we use KSpreadTable's API (slower probably, though)
+      int iMaxColumn = table->maxColumn();
+      int iMaxRow = table->maxRow();
+      
+      // this is just a bad approximation which fails for documents with less than 50 rows, but
+      // we don't need any progress stuff there anyway :) (Werner)
+      int value = 0;
+      int step = iMaxRow > 50 ? iMaxRow/50 : 1;
+      int i = 1;
+      
+      QString emptyLines;
+      for ( int currentrow = 1 ; currentrow < iMaxRow ; ++currentrow, ++i )
+      {
+        if ( i > step ) 
+        {
+          value += 2;
+          emit sigProgress(value);
+          i = 0;
         }
 
         QString separators;
@@ -127,28 +161,31 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString& from, const QCStr
             QString text;
             if ( !cell->isDefault() && !cell->isEmpty() )
             {
-              switch( cell->content() ) {
-                case KSpreadCell::Text:
-                  text = cell->text();
-                  break;
-                case KSpreadCell::RichText:
-                case KSpreadCell::VisualFormula:
-                  text = cell->text(); // untested
-                  break;
-                case KSpreadCell::Formula:
-                  cell->setCalcDirtyFlag();
-                  cell->calc(); // Incredible, cells are not calculated if the document was just opened
-                  text = cell->valueString();
-                  break;
+              switch( cell->content() ) 
+              {
+               case KSpreadCell::Text:
+                text = cell->text();
+                break;
+               case KSpreadCell::RichText:
+               case KSpreadCell::VisualFormula:
+                text = cell->text(); // untested
+                break;
+               case KSpreadCell::Formula:
+                cell->setCalcDirtyFlag();
+                cell->calc(); // Incredible, cells are not calculated if the document was just opened
+                text = cell->valueString();
+                break;
               }
             }
             if ( !text.isEmpty() )
             {
-                line += separators;
-		if(text.find(csv_delimiter)!=-1)
-		  text="\""+text+"\"";
-                line += text;
-                separators = QString::null;
+              line += separators;
+              if (text.find( csv_delimiter ) != -1)
+              {
+                text = textQuote + text + textQuote;
+              }
+              line += text;
+              separators = QString::null;
             }
             // Append a delimiter, but in a temp string -> if no other real cell in this line,
             // then those will be dropped
@@ -156,14 +193,16 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString& from, const QCStr
         }
         if ( !line.isEmpty() )
         {
-            str += emptyLines;
-            str += line;
-            emptyLines = QString::null;
+          str += emptyLines;
+          str += line;
+          emptyLines = QString::null;
         }
         // Append a CR, but in a temp string -> if no other real line,
         // then those will be dropped
         emptyLines += "\n";
+      }
     }
+
     str += "\n"; // Last CR
     emit sigProgress(100);
 
