@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Norbert Andres <nandres@web.de>
+   Copyright (C) 2004 - 2005  Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -2253,15 +2254,13 @@ void OpenCalcImport::readInStyle( KSpreadFormat * layout, QDomElement const & st
     }
   }
 
-  QDomElement property = style.firstChild().toElement();
-  while( !property.isNull() )
+  QDomElement property;
+  forEachElement( property, style )
   {
     if ( property.localName() == "properties" && property.namespaceURI() == ooNS::style )
       loadStyleProperties( layout, property );
 
     kdDebug(30518) << layout->textFontFamily( 0, 0 ) << endl;
-
-    property = property.nextSibling().toElement();
   }
 }
 
@@ -2525,7 +2524,6 @@ void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& v
         //todo what is it ?
     }
 
-    //help is not implemented into kspread
     QDomElement help = KoDom::namedItemNS( element, ooNS::table, "help-message" );
     if ( !help.isNull() )
     {
@@ -2679,7 +2677,6 @@ void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString 
 
 int OpenCalcImport::readMetaData()
 {
-    //kdDebug()<<" OpenCalcImport::readMetaData() !!!!!!!!!!!!!!!\n";
   int result = 5;
   KoDocumentInfo * docInfo          = m_doc->documentInfo();
   KoDocumentInfoAbout  * aboutPage  = static_cast<KoDocumentInfoAbout *>(docInfo->page( "about" ));
@@ -2688,7 +2685,6 @@ int OpenCalcImport::readMetaData()
   QDomNode meta   = KoDom::namedItemNS( m_meta, ooNS::office, "document-meta" );
   QDomNode office = KoDom::namedItemNS( meta, ooNS::office, "meta" );
 
-  //kdDebug()<<"  office.isNull():::::::::::::::::::::::::::::::::::::: :"<<office.isNull()<<endl;
   if ( office.isNull() )
     return 2;
 
@@ -2715,15 +2711,6 @@ int OpenCalcImport::readMetaData()
       if ( !e.isNull() && !e.text().isEmpty() )
           aboutPage->setKeywords( e.text() );
   }
-  /*
-   * TODO:
-   *
-   * dc:subject
-   * <meta:keywords>
-   *   <meta:keyword>Borders</meta:keyword>
-   *   <meta:keyword>Fonts</meta:keyword>
-   * </meta:keywords>
-   */
 
   e = KoDom::namedItemNS( office, ooNS::meta, "document-statistic" );
   if ( !e.isNull() && e.hasAttributeNS( ooNS::meta, "table-count" ) )
