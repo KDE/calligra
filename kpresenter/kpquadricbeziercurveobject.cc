@@ -151,7 +151,7 @@ double KPQuadricBezierCurveObject::load(const QDomElement &element)
 void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler,
 					bool drawingShadow, bool drawContour )
 {
-    int _w =_zoomHandler->zoomItX( pen.width() );
+    int _w = _zoomHandler->zoomItX( pen.width() );
 
     QPen pen2;
     if ( drawContour )
@@ -198,7 +198,7 @@ void KPQuadricBezierCurveObject::paint( QPainter* _painter,KoZoomHandler*_zoomHa
             QPoint point = (*it2);
             if ( endPoint != point ) {
                 float angle = KoPoint::getAngle( endPoint, point );
-                drawFigure( lineEnd, _painter, _zoomHandler->unzoomPoint( endPoint ), pen.color(), _w, angle,_zoomHandler );
+                drawFigure( lineEnd, _painter, _zoomHandler->unzoomPoint( endPoint ), pen.color(), _w, angle, _zoomHandler );
 
                 break;
             }

@@ -1045,6 +1045,8 @@ void KPTextView::copy()
 
 void KPTextView::paste()
 {
+    kdDebug() << "KPTextView::paste()" << endl;
+
     QMimeSource *data = QApplication::clipboard()->data();
     if ( data->provides( KPrTextDrag::selectionMimeType() ) )
     {
