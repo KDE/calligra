@@ -85,7 +85,7 @@ public:
     KSpreadLayout( KSpreadTable *_table );
     virtual ~KSpreadLayout();
 
-    void copy( KSpreadLayout &_l );
+    void copy( const KSpreadLayout &_l );
 
     void defaultStyleLayout();
 
@@ -402,7 +402,7 @@ protected:
     QBrush m_backGroundBrush;
 
     /**
-     * The precision of the floatinf point representation
+     * The precision of the floating point representation
      * If precision is -1, this means that no precision is specified.
      */
     int m_iPrecision;
@@ -486,7 +486,7 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-    virtual QDomElement save( QDomDocument&, int yshift = 0 );
+    virtual QDomElement save( QDomDocument&, int yshift = 0 ) const;
     virtual bool load( const QDomElement& row, int yshift = 0, PasteMode sp=Normal );
 
     /**
@@ -494,25 +494,25 @@ public:
      *
      * @return the height in zoomed pixels as integer value.
      */
-    int height( KSpreadCanvas *_canvas = 0L );
+    int height( const KSpreadCanvas *_canvas = 0L ) const;
     /**
      * @param _canvas is needed to get information about the zooming factor.
      *
      * @return the height in zoomed pixels as double value.
      * Use this function, if you want to work with height without having rounding problems.
      */
-    double dblHeight( KSpreadCanvas *_canvas = 0L );
+    double dblHeight( const KSpreadCanvas *_canvas = 0L ) const;
     /**
      * @return the height in millimeters.
      */
-    double mmHeight();
+    double mmHeight() const;
     /**
      * Sets the height to _h zoomed pixels.
      *
      * @param _h is calculated in display pixels as integer value. The function cares for zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setHeight( int _h, KSpreadCanvas *_canvas = 0L );
+    void setHeight( int _h, const KSpreadCanvas *_canvas = 0L );
     /**
      * Sets the height to _h zoomed pixels.
      *
@@ -520,7 +520,7 @@ public:
      * Use this function when setting the height, to not get rounding problems.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setDblHeight( double _h, KSpreadCanvas *_canvas = 0L );
+    void setDblHeight( double _h, const KSpreadCanvas *_canvas = 0L );
     /**
      * Sets the height.
      *
@@ -542,15 +542,15 @@ public:
      *
      * @see #row
      */
-    int row() { return m_iRow; }
+    int row() const { return m_iRow; }
 
     void setRow( int _r ) { m_iRow = _r; }
 
     void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
     void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
 
-    RowLayout* next() { return m_next; }
-    RowLayout* previous() { return m_prev; }
+    RowLayout* next() const { return m_next; }
+    RowLayout* previous() const { return m_prev; }
     void setNext( RowLayout* c ) { m_next = c; }
     void setPrevious( RowLayout* c ) { m_prev = c; }
 
@@ -622,7 +622,7 @@ public:
     ColumnLayout( KSpreadTable *_table, int _column );
     ~ColumnLayout();
 
-    virtual QDomElement save( QDomDocument&, int xshift = 0 );
+    virtual QDomElement save( QDomDocument&, int xshift = 0 ) const;
     virtual bool load( const QDomElement& row, int xshift = 0,PasteMode sp=Normal );
     virtual DCOPObject* dcopObject();
 
@@ -631,7 +631,7 @@ public:
      *
      * @return the width in zoomed pixels as integer.
      */
-    int width( KSpreadCanvas *_canvas = 0L );
+    int width( const KSpreadCanvas *_canvas = 0L ) const;
     /**
      * @param _canvas is needed to get information about the zooming factor.
      *
@@ -639,11 +639,11 @@ public:
      * Use this function, if you want to use the width and later restore it back,
      * so you don't get rounding problems
      */
-    double dblWidth( KSpreadCanvas *_canvas = 0L );
+    double dblWidth( const KSpreadCanvas *_canvas = 0L ) const;
     /**
      * @return the width in millimeters.
      */
-    double mmWidth();
+    double mmWidth() const;
     /**
      * Sets the width to _w zoomed pixels.
      *
@@ -651,7 +651,7 @@ public:
      *           zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setWidth( int _w, KSpreadCanvas *_canvas = 0L );
+    void setWidth( int _w, const KSpreadCanvas *_canvas = 0L );
     /**
      * Sets the width to _w zoomed pixels as double value.
      * Use this function to set the width without getting rounding problems.
@@ -660,7 +660,7 @@ public:
      *           zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setDblWidth( double _w, KSpreadCanvas *_canvas = 0L );
+    void setDblWidth( double _w, const KSpreadCanvas *_canvas = 0L );
     /**
      * Sets the width.
      *
@@ -682,15 +682,15 @@ public:
      *
      * @see #column
      */
-    int column() { return m_iColumn; }
+    int column() const { return m_iColumn; }
 
     void setColumn( int _c ) { m_iColumn = _c; }
 
     void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
     void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
 
-    ColumnLayout* next() { return m_next; }
-    ColumnLayout* previous() { return m_prev; }
+    ColumnLayout* next() const { return m_next; }
+    ColumnLayout* previous() const { return m_prev; }
     void setNext( ColumnLayout* c ) { m_next = c; }
     void setPrevious( ColumnLayout* c ) { m_prev = c; }
 

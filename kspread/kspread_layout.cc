@@ -105,7 +105,7 @@ void KSpreadLayout::defaultStyleLayout()
   setDontPrintText(false);
 }
 
-void KSpreadLayout::copy( KSpreadLayout &_l )
+void KSpreadLayout::copy( const KSpreadLayout &_l )
 {
     m_mask = _l.m_mask;
     m_flagsMask = _l.m_flagsMask;
@@ -1730,18 +1730,14 @@ void RowLayout::setMMHeight( double _h )
   setDblHeight( MM_TO_POINT ( _h ) );
 }
 
-void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
+void RowLayout::setHeight( int _h, const KSpreadCanvas *_canvas )
 {
   setDblHeight( (double)_h, _canvas );
 }
 
-void RowLayout::setDblHeight( double _h, KSpreadCanvas *_canvas )
+void RowLayout::setDblHeight( double _h, const KSpreadCanvas *_canvas )
 {
-  KSpreadTable *_table;
-  if ( _canvas )
-      _table = _canvas->activeTable();
-  else
-      _table = m_pTable;
+  KSpreadTable *_table = _canvas ? _canvas->activeTable() : m_pTable;
 
   UPDATE_BEGIN;
 
@@ -1761,12 +1757,12 @@ void RowLayout::setDblHeight( double _h, KSpreadCanvas *_canvas )
   UPDATE_END;
 }
 
-int RowLayout::height( KSpreadCanvas *_canvas )
+int RowLayout::height( const KSpreadCanvas *_canvas ) const
 {
   return (int) dblHeight( _canvas );
 }
 
-double RowLayout::dblHeight( KSpreadCanvas *_canvas )
+double RowLayout::dblHeight( const KSpreadCanvas *_canvas ) const
 {
   if( m_bHide )
     return 0.0;
@@ -1777,12 +1773,12 @@ double RowLayout::dblHeight( KSpreadCanvas *_canvas )
     return m_fHeight;
 }
 
-double RowLayout::mmHeight()
+double RowLayout::mmHeight() const
 {
   return POINT_TO_MM ( dblHeight() );
 }
 
-QDomElement RowLayout::save( QDomDocument& doc, int yshift )
+QDomElement RowLayout::save( QDomDocument& doc, int yshift ) const
 {
     QDomElement row = doc.createElement( "row" );
     row.setAttribute( "height", m_fHeight );
@@ -1966,18 +1962,14 @@ void ColumnLayout::setMMWidth( double _w )
   setDblWidth( MM_TO_POINT ( _w ) );
 }
 
-void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
+void ColumnLayout::setWidth( int _w, const KSpreadCanvas *_canvas )
 {
   setDblWidth( (double)_w, _canvas );
 }
 
-void ColumnLayout::setDblWidth( double _w, KSpreadCanvas *_canvas )
+void ColumnLayout::setDblWidth( double _w, const KSpreadCanvas *_canvas )
 {
-  KSpreadTable *_table;
-  if ( _canvas )
-      _table = _canvas->activeTable();
-  else
-      _table = m_pTable;
+  KSpreadTable *_table = _canvas ? _canvas->activeTable() : m_pTable;
 
   UPDATE_BEGIN;
 
@@ -1997,12 +1989,12 @@ void ColumnLayout::setDblWidth( double _w, KSpreadCanvas *_canvas )
   UPDATE_END;
 }
 
-int ColumnLayout::width( KSpreadCanvas *_canvas )
+int ColumnLayout::width( const KSpreadCanvas *_canvas ) const
 {
   return (int) dblWidth( _canvas );
 }
 
-double ColumnLayout::dblWidth( KSpreadCanvas *_canvas )
+double ColumnLayout::dblWidth( const KSpreadCanvas *_canvas ) const
 {
   if( m_bHide )
     return 0.0;
@@ -2013,13 +2005,13 @@ double ColumnLayout::dblWidth( KSpreadCanvas *_canvas )
     return m_fWidth;
 }
 
-double ColumnLayout::mmWidth()
+double ColumnLayout::mmWidth() const
 {
   return POINT_TO_MM( dblWidth() );
 }
 
 
-QDomElement ColumnLayout::save( QDomDocument& doc, int xshift )
+QDomElement ColumnLayout::save( QDomDocument& doc, int xshift ) const
 {
   QDomElement col = doc.createElement( "column" );
   col.setAttribute( "width", m_fWidth );

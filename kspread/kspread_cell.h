@@ -201,24 +201,9 @@ public:
      * @param cellRef the column/row coordinates of the cell.
      * @param drawCursor whether to draw the cursor and selection or not
      */
-    void paintCell( const QRect& rect, QPainter &painter, KSpreadView* view,
-                    QPoint corner, QPoint cellRef, bool drawCursor=true );
-
-    /**
-     * Paints the cell.
-     *
-     * @param rect the portion of the canvas that is actually in view
-     * @param painter the painter object to paint on
-     * @param the view of this data.  This may be NULL, but no selection
-     *        will be included with the painting.
-     * @param corner coordinates on the painter where the top left corner
-     *               of the cell should be painted
-     * @param size size of the cell (width, height) in points
-     * @param cellRef the column/row coordinates of the cell.
-     * @param drawCursor whether to draw the cursor and selection or not
-     */
-    void paintCell( const QRect& rect, QPainter &painter, KSpreadView* view,
-                    QPoint corner, QPoint size, QPoint cellRef, bool drawCursor=true );
+    void paintCell( const QRect& rect, QPainter &painter,
+		    KSpreadView* view, const QPoint &corner,
+		    const QPoint &cellRef, bool drawCursor=true );
 
   /**
      * @return the column this cell is in. May return 0 if the cell is the default cell.
@@ -235,14 +220,14 @@ public:
      *
      * @return the width of this cell
      */
-    int width( int _col = -1, KSpreadCanvas *_canvas = 0L );
+    int width( int _col = -1, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
      *
      * @return the height of this cell
      */
-    int height( int _row = -1, KSpreadCanvas *_canvas = 0L );
+    int height( int _row = -1, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
      * @reimp
@@ -635,12 +620,12 @@ public:
     /**
      * Gets a copy of the list of current conditions
      */
-    QValueList<KSpreadConditional> GetConditionList();
+    QValueList<KSpreadConditional> conditionList() const;
 
     /**
      * Replace the old set of conditions with a new one
      */
-    void SetConditionList(QValueList<KSpreadConditional> newList);
+    void setConditionList(const QValueList<KSpreadConditional> &newList);
 
     void verifyValidity();
     KSpreadValidity * getValidity(int newStruct=-1)
@@ -659,7 +644,7 @@ public:
      * return true if value is good
      * else show a messagebox
      */
-     bool  testValidity();
+    bool testValidity() const;
 
     void conditionAlign(QPainter &painter,int _col,int _row);
 

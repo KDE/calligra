@@ -413,37 +413,32 @@ void KSpreadCanvas::endChoose()
   m_chooseStartTable = 0;
 }
 
-KSpreadHBorder* KSpreadCanvas::hBorderWidget()
+KSpreadHBorder* KSpreadCanvas::hBorderWidget() const
 {
   return m_pView->hBorderWidget();
 }
 
-KSpreadVBorder* KSpreadCanvas::vBorderWidget()
+KSpreadVBorder* KSpreadCanvas::vBorderWidget() const
 {
   return m_pView->vBorderWidget();
 }
 
-QScrollBar* KSpreadCanvas::horzScrollBar()
+QScrollBar* KSpreadCanvas::horzScrollBar() const
 {
   return m_pView->horzScrollBar();
 }
 
-QScrollBar* KSpreadCanvas::vertScrollBar()
+QScrollBar* KSpreadCanvas::vertScrollBar() const
 {
   return m_pView->vertScrollBar();
 }
 
-KSpreadTable* KSpreadCanvas::findTable( const QString& _name )
+KSpreadTable* KSpreadCanvas::findTable( const QString& _name ) const
 {
   return m_pDoc->map()->findTable( _name );
 }
 
-const KSpreadTable* KSpreadCanvas::activeTable() const
-{
-  return m_pView->activeTable();
-}
-
-KSpreadTable* KSpreadCanvas::activeTable()
+KSpreadTable* KSpreadCanvas::activeTable() const
 {
   return m_pView->activeTable();
 }
@@ -1109,21 +1104,13 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   if ( m_pDoc->isLoading() )
     return;
 
-  if ( !activeTable() )
+  const KSpreadTable* table = activeTable();
+  if ( !table )
     return;
 
-  KSpreadTable* table = activeTable();
   // printf("PAINT EVENT %i %i %i %i\n", _ev->rect().x(), _ev->rect().y(), _ev->rect().width(), _ev->rect().height() );
 
-  QRect rect( _ev->rect() );
-  if ( rect.left() < 0 )
-      rect.rLeft() = 0;
-  if ( rect.right() > width() )
-      rect.rRight() = width();
-  if ( rect.top() < 0 )
-      rect.rTop() = 0;
-  if ( rect.bottom() > height() )
-      rect.rBottom() = height();
+  QRect rect = _ev->rect() & QWidget::rect();
 
   // printf("PAINT EVENT %i %i %i %i\n", rect.x(), rect.y(), rect.width(), rect.height() );
 
@@ -2566,7 +2553,7 @@ void KSpreadCanvas::updateSelection( const QRect & oldSelection,
 
 void KSpreadCanvas::paintSelectionChange(QRect area1, QRect area2)
 {
-  KSpreadTable *table = activeTable();
+  const KSpreadTable *table = activeTable();
   if ( !table )
     return;
 
@@ -2790,11 +2777,8 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
 void KSpreadCanvas::equalizeRow()
 {
   QRect selection( selection() );
-  RowLayout *rl;
-  int size;
-
-  rl = m_pView->activeTable()->rowLayout(selection.top());
-  size=rl->height(this);
+  RowLayout *rl = m_pView->activeTable()->rowLayout(selection.top());
+  int size=rl->height(this);
   if ( selection.top() == selection.bottom() )
       return;
   for(int i=selection.top()+1;i<=selection.bottom();i++)
@@ -2809,12 +2793,9 @@ void KSpreadCanvas::equalizeRow()
 
 void KSpreadCanvas::equalizeColumn()
 {
-  ColumnLayout *cl;
   QRect selection( selection() );
-  int size;
-
-  cl = m_pView->activeTable()->columnLayout(selection.left());
-  size=cl->width(this);
+  ColumnLayout *cl = m_pView->activeTable()->columnLayout(selection.left());
+  int size=cl->width(this);
   if ( selection.left() == selection.right() )
       return;
 
@@ -2852,7 +2833,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   if(!m_pView->koDocument()->isReadWrite())
     return;
 
-  KSpreadTable *table = m_pCanvas->activeTable();
+  const KSpreadTable *table = m_pCanvas->activeTable();
   assert( table );
   // We were editing a cell -> save value and get out of editing mode
   if ( m_pCanvas->editor() )

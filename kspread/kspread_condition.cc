@@ -26,7 +26,7 @@
 #include <float.h>
 
 
-KSpreadConditions::KSpreadConditions(KSpreadCell *ownerCell)
+KSpreadConditions::KSpreadConditions(const KSpreadCell *ownerCell)
 {
   Q_ASSERT(ownerCell != NULL);
 
@@ -35,20 +35,20 @@ KSpreadConditions::KSpreadConditions(KSpreadCell *ownerCell)
 
 KSpreadConditions::~KSpreadConditions()
 {
-    conditionList.clear();
+    condList.clear();
 }
 
-bool KSpreadConditions::GetCurrentCondition(KSpreadConditional& condition)
+bool KSpreadConditions::currentCondition(KSpreadConditional& condition)
 {
   /* for now, the first condition that is true is the one that will be used */
 
-  QValueList<KSpreadConditional>::iterator it;
+  QValueList<KSpreadConditional>::const_iterator it;
   double value = cell->valueDouble() * cell->factor(cell->column(),
 						    cell->row());
 
   if (cell->isNumeric() && !cell->table()->getShowFormula())
   {
-    for (it = conditionList.begin(); it != conditionList.end(); it++)
+    for (it = condList.begin(); it != condList.end(); it++)
     {
       condition = *it;
       switch (condition.m_cond)
@@ -113,40 +113,26 @@ bool KSpreadConditions::GetCurrentCondition(KSpreadConditional& condition)
   return false;
 }
 
-QValueList<KSpreadConditional> KSpreadConditions::GetConditionList()
+QValueList<KSpreadConditional> KSpreadConditions::conditionList() const
 {
-  QValueList<KSpreadConditional> list;
-  QValueList<KSpreadConditional>::iterator it;
-
-  for (it = conditionList.begin(); it != conditionList.end(); it++)
-  {
-    list.append(*it);
-  }
-
-  return list;
+  return condList;
 }
 
-void KSpreadConditions::SetConditionList(QValueList<KSpreadConditional> list)
+void KSpreadConditions::setConditionList(const QValueList<KSpreadConditional> &list)
 {
-  conditionList.clear();
-  QValueList<KSpreadConditional>::iterator it;
-
-  for (it = list.begin(); it != list.end(); it++)
-  {
-    conditionList.append(*it);
-  }
+  condList = list;
 }
 
-QDomElement KSpreadConditions::SaveConditions(QDomDocument& doc)
+QDomElement KSpreadConditions::saveConditions(QDomDocument& doc) const
 {
   QDomElement conditions = doc.createElement("condition");
-  KSpreadConditional condition = conditionList.first();
-  QValueList<KSpreadConditional>::iterator it;
+  KSpreadConditional condition = condList.first();
+  QValueList<KSpreadConditional>::const_iterator it;
   QDomElement child;
   int num = 0;
   QString name;
 
-  for (it = conditionList.begin(); it != conditionList.end(); it++)
+  for (it = condList.begin(); it != condList.end(); it++)
   {
     condition = *it;
 
@@ -180,7 +166,7 @@ QDomElement KSpreadConditions::SaveConditions(QDomDocument& doc)
   }
 }
 
-void KSpreadConditions::LoadConditions(const QDomElement &element)
+void KSpreadConditions::loadConditions(const QDomElement &element)
 {
   QDomNodeList nodeList = element.childNodes();
   KSpreadConditional newCondition;
@@ -216,7 +202,7 @@ void KSpreadConditions::LoadConditions(const QDomElement &element)
 
     if (ok)
     {
-      conditionList.append(newCondition);
+      condList.append(newCondition);
     }
     else
     {

@@ -72,8 +72,7 @@ public:
     KSpreadCluster();
     ~KSpreadCluster();
 
-    const KSpreadCell* lookup( int x, int y ) const;
-    KSpreadCell* lookup( int x, int y );
+    KSpreadCell* lookup( int x, int y ) const;
 
     /**
      * Removes all cells from the table and frees memory that
@@ -94,7 +93,7 @@ public:
     void setAutoDelete( bool );
     bool autoDelete() const;
 
-    KSpreadCell* firstCell();
+    KSpreadCell* firstCell() const;
 
     bool shiftRow( const QPoint& marker );
     /**
@@ -148,7 +147,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpreadCell* getFirstCellColumn(int col);
+  KSpreadCell* getFirstCellColumn(int col) const;
 
   /**
    * Retrieve the last used cell in a given column.  Can be used in conjunction
@@ -159,7 +158,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpreadCell* getLastCellColumn(int col);
+  KSpreadCell* getLastCellColumn(int col) const;
 
   /**
    * Retrieve the first used cell in a given row.  Can be used in conjunction
@@ -170,7 +169,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpreadCell* getFirstCellRow(int row);
+  KSpreadCell* getFirstCellRow(int row) const;
 
   /**
    * Retrieve the last used cell in a given row.  Can be used in conjunction
@@ -181,7 +180,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpreadCell* getLastCellRow(int row);
+  KSpreadCell* getLastCellRow(int row) const;
 
   /**
    * Retrieves the next used cell above the given col/row pair.  The given
@@ -192,7 +191,7 @@ public:
    *
    * @return Returns the next used cell above this one, or NULL if there are none
    */
-  KSpreadCell* getNextCellUp(int col, int row);
+  KSpreadCell* getNextCellUp(int col, int row) const;
 
   /**
    * Retrieves the next used cell below the given col/row pair.  The given
@@ -203,7 +202,7 @@ public:
    *
    * @return Returns the next used cell below this one, or NULL if there are none
    */
-  KSpreadCell* getNextCellDown(int col, int row);
+  KSpreadCell* getNextCellDown(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the right of the given col/row pair.
@@ -215,7 +214,7 @@ public:
    * @return Returns the next used cell to the right of this one, or NULL if
    * there are none
    */
-  KSpreadCell* getNextCellLeft(int col, int row);
+  KSpreadCell* getNextCellRight(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the left of the given col/row pair.
@@ -227,7 +226,7 @@ public:
    * @return Returns the next used cell to the left of this one, or NULL if
    * there are none
    */
-  KSpreadCell* getNextCellRight(int col, int row);
+  KSpreadCell* getNextCellLeft(int col, int row) const;
 
 private:
     /**

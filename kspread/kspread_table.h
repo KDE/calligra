@@ -230,7 +230,7 @@ public:
     KSpreadTable( KSpreadMap *_map, const QString &tableName, const char *_name=0L );
     ~KSpreadTable();
 
-    virtual bool isEmpty( unsigned long int x, unsigned long int y );
+    virtual bool isEmpty( unsigned long int x, unsigned long int y ) const;
 
     /**
      * @return the name of this table.
@@ -302,13 +302,13 @@ public:
      * @return the first cell of this table. Next cells can
      * be retrieved by calling @ref KSpreadCell::nextCell.
      */
-    KSpreadCell* firstCell();
+    KSpreadCell* firstCell() const;
 
-    RowLayout* firstRow();
+    RowLayout* firstRow() const;
 
-    ColumnLayout* firstCol();
+    ColumnLayout* firstCol() const;
 
-    const KSpreadCell* cellAt( int _column, int _row ) const;
+    KSpreadCell* cellAt( int _column, int _row ) const;
     /**
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
@@ -350,34 +350,34 @@ public:
     KSpreadLayout* defaultLayout() { return m_defaultLayout; };
     const KSpreadLayout* defaultLayout() const { return m_defaultLayout; }
 
-    int topRow( int _ypos, int &_top, KSpreadCanvas *_canvas = 0L );
-    int bottomRow( int _ypos, KSpreadCanvas *_canvas = 0L );
-    int leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas = 0L );
-    int rightColumn( int _xpos, KSpreadCanvas *_canvas = 0L );
+    int topRow( int _ypos, int &_top, const KSpreadCanvas *_canvas = 0L ) const;
+    int bottomRow( int _ypos, const KSpreadCanvas *_canvas = 0L ) const;
+    int leftColumn( int _xpos, int &_left, const KSpreadCanvas *_canvas = 0L ) const;
+    int rightColumn( int _xpos, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
-     * @retrun the left corner of the column.
+     * @return the left corner of the column.
      *
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                left corner of the table.
      */
-    int columnPos( int _col, KSpreadCanvas *_canvas = 0L );
+    int columnPos( int _col, const KSpreadCanvas *_canvas = 0L ) const;
     /**
-     * @retrun the top corner of the row.
+     * @return the top corner of the row.
      *
      * @param _canvas If not 0 then the returned position is in screen
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                top corner of the table.
      */
-    int rowPos( int _row, KSpreadCanvas *_canvas = 0L );
+    int rowPos( int _row, const KSpreadCanvas *_canvas = 0L ) const;
 
     /**
-     * @retrun the maximum size of the column range
+     * @return the maximum size of the column range
      */
     unsigned long sizeMaxX()const { return m_ulSizeMaxX; }
     /**
-     * @retrun the maximum size of the row range
+     * @return the maximum size of the row range
      */
     unsigned long sizeMaxY()const { return m_ulSizeMaxY; }
 
@@ -407,7 +407,6 @@ public:
 
     /**
      * Calculates all cells in the table with the CalcDirtyFlag.
-     * @param m_depend set to false to disable updating the dependencies (why would you want to do that?)
      */
     void calc();
 
@@ -989,7 +988,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpreadCell* getFirstCellColumn(int col);
+  KSpreadCell* getFirstCellColumn(int col) const;
 
   /**
    * Retrieve the last used cell in a given column.  Can be used in conjunction
@@ -1000,7 +999,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpreadCell* getLastCellColumn(int col);
+  KSpreadCell* getLastCellColumn(int col) const;
 
   /**
    * Retrieve the first used cell in a given row.  Can be used in conjunction
@@ -1011,7 +1010,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpreadCell* getFirstCellRow(int row);
+  KSpreadCell* getFirstCellRow(int row) const;
 
   /**
    * Retrieve the last used cell in a given row.  Can be used in conjunction
@@ -1022,7 +1021,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpreadCell* getLastCellRow(int row);
+  KSpreadCell* getLastCellRow(int row) const;
 
   /**
    * Retrieves the next used cell above the given col/row pair.  The given
@@ -1033,7 +1032,7 @@ public:
    *
    * @return Returns the next used cell above this one, or NULL if there are none
    */
-  KSpreadCell* getNextCellUp(int col, int row);
+  KSpreadCell* getNextCellUp(int col, int row) const;
 
   /**
    * Retrieves the next used cell below the given col/row pair.  The given
@@ -1044,7 +1043,7 @@ public:
    *
    * @return Returns the next used cell below this one, or NULL if there are none
    */
-  KSpreadCell* getNextCellDown(int col, int row);
+  KSpreadCell* getNextCellDown(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the right of the given col/row pair.
@@ -1056,7 +1055,7 @@ public:
    * @return Returns the next used cell to the right of this one, or NULL if
    * there are none
    */
-  KSpreadCell* getNextCellLeft(int col, int row);
+  KSpreadCell* getNextCellLeft(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the left of the given col/row pair.
@@ -1068,7 +1067,7 @@ public:
    * @return Returns the next used cell to the left of this one, or NULL if
    * there are none
    */
-  KSpreadCell* getNextCellRight(int col, int row);
+  KSpreadCell* getNextCellRight(int col, int row) const;
 
 signals:
     void sig_updateView( KSpreadTable *_table );
@@ -1277,7 +1276,7 @@ public:
     /**
      * @return the ascii name of the paper orientation ( like Portrait, Landscape )
      */
-    const char* orientationString();
+    const char* orientationString() const;
 
     /**
      * @return the paper format.

@@ -111,7 +111,7 @@ public:
      */
     void init();
 
-    KSpreadCellEditor* editor() { return m_pEditor ; }
+    KSpreadCellEditor* editor() const { return m_pEditor ; }
 
 
   /**
@@ -122,7 +122,7 @@ public:
      */
     int chooseTextLen() const { return length_namecell; }
 
-    KSpreadSelection* selectionInfo() {return m_pView->selectionInfo();}
+    KSpreadSelection* selectionInfo() const {return m_pView->selectionInfo();}
     QRect selection() const;
     QPoint marker() const;
     int markerColumn() const;
@@ -131,22 +131,21 @@ public:
     void updateCellRect( const QRect &_rect );
     void updateSelection( const QRect& oldSelection, const QPoint& oldMarker );
 
-    const QPen& defaultGridPen() { return m_defaultGridPen; }
+    const QPen& defaultGridPen() const { return m_defaultGridPen; }
 
-    double zoom() { return m_pView->zoom(); }
+    double zoom() const { return m_pView->zoom(); }
 
     /**
      * Returns the width of the columns before the current screen
      */
-    int xOffset() { return m_iXOffset; }
+    int xOffset() const { return m_iXOffset; }
     /**
      * Returns the height of the rows before the current screen
      */
-    int yOffset() { return m_iYOffset; }
+    int yOffset() const { return m_iYOffset; }
 
-    const KSpreadTable* activeTable() const;
-    KSpreadTable* activeTable();
-    KSpreadTable* findTable( const QString& _name );
+    KSpreadTable* activeTable() const;
+    KSpreadTable* findTable( const QString& _name ) const;
 
     /**
      * A convenience function.
@@ -291,11 +290,11 @@ private:
 
     virtual bool eventFilter( QObject *o, QEvent *e );
 
-    KSpreadHBorder* hBorderWidget();
-    KSpreadVBorder* vBorderWidget();
-    QScrollBar* horzScrollBar();
-    QScrollBar* vertScrollBar();
-    KSpreadEditWidget* editWidget() { return m_pEditWidget; }
+    KSpreadHBorder* hBorderWidget() const;
+    KSpreadVBorder* vBorderWidget() const;
+    QScrollBar* horzScrollBar() const;
+    QScrollBar* vertScrollBar() const;
+    KSpreadEditWidget* editWidget() const { return m_pEditWidget; }
 
     void drawChooseMarker( );
     void drawChooseMarker( const QRect& );
@@ -478,7 +477,7 @@ class KSpreadHBorder : public QWidget
 public:
     KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view  );
 
-    int markerColumn() { return  m_iSelectionAnchor; }
+    int markerColumn() const { return  m_iSelectionAnchor; }
     void resizeColumn( double resize, int nb = -1, bool makeUndo=true );
     void adjustColumn( int _col = -1, bool makeUndo=true );
     void equalizeColumn( int resize );
@@ -544,7 +543,7 @@ class KSpreadVBorder : public QWidget
 public:
     KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view );
 
-    int markerRow() { return  m_iSelectionAnchor; }
+    int markerRow() const { return  m_iSelectionAnchor; }
     void resizeRow( double resize, int nb = -1, bool makeUndo=true );
     void adjustRow( int _row = -1, bool makeUndo=true );
     void equalizeRow( int resize );

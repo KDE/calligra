@@ -325,7 +325,7 @@ void KSpreadconditional::init()
   KSpreadCell *obj = m_pView->activeTable()->cellAt( marker.left(),
 						     marker.top() );
 
-  conditionList = obj->GetConditionList();
+  conditionList = obj->conditionList();
   /* this is the list, but only display the conditions common to all selected
      cells*/
 
@@ -334,7 +334,7 @@ void KSpreadconditional::init()
     for ( int y = marker.top(); y <= marker.bottom(); y++ )
     {
       KSpreadCell *obj2 = m_pView->activeTable()->cellAt( x, y );
-      otherList = obj2->GetConditionList();
+      otherList = obj2->conditionList();
 
       it1 = conditionList.begin();
       while(it1 != conditionList.end())

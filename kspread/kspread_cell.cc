@@ -112,7 +112,7 @@ void KSpreadCell::copyLayout( KSpreadCell *_cell )
 
 void KSpreadCell::copyLayout( int _column, int _row )
 {
-    KSpreadCell * cell = m_pTable->cellAt( _column, _row );
+    const KSpreadCell * cell = m_pTable->cellAt( _column, _row );
 
     setAlign( cell->align( _column, _row ) );
     setAlignY( cell->alignY( _column, _row ) );
@@ -139,8 +139,8 @@ void KSpreadCell::copyLayout( int _column, int _row )
     setDontPrintText(cell->getDontprintText(_column, _row ) );
     setIndent( cell->getIndent(_column, _row ) );
 
-    QValueList<KSpreadConditional> conditionList = cell->GetConditionList();
-    conditions.SetConditionList(conditionList);
+    QValueList<KSpreadConditional> conditionList = cell->conditionList();
+    conditions.setConditionList(conditionList);
 
     setComment( cell->comment(_column, _row) );
     setAngle( cell->getAngle(_column, _row) );
@@ -181,7 +181,7 @@ void KSpreadCell::defaultStyle()
   defaultStyleLayout();
 
   QValueList<KSpreadConditional> emptyList;
-  conditions.SetConditionList(emptyList);
+  conditions.setConditionList(emptyList);
 
   delete m_Validity;
   m_Validity = 0L;
@@ -808,7 +808,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     // Determine the correct font
     //
     KSpreadConditional condition;
-    if( conditions.GetCurrentCondition(condition) &&
+    if( conditions.currentCondition(condition) &&
 	!m_pTable->getShowFormula() )
     {
         _painter.setFont( condition.fontcond );
@@ -1414,7 +1414,7 @@ void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
 {
     KSpreadConditional condition;
 
-    if( conditions.GetCurrentCondition(condition) &&
+    if( conditions.currentCondition(condition) &&
 	!m_pTable->getShowFormula() )
     {
         _paint.setFont( condition.fontcond );
@@ -1752,8 +1752,9 @@ QString KSpreadCell::valueString() const
   return m_strText;
 }
 
-void KSpreadCell::paintCell( const QRect& rect, QPainter &painter, KSpreadView* view,
-                             QPoint corner, QPoint cellRef, bool drawCursor )
+void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
+			     KSpreadView* view, const QPoint &corner,
+			     const QPoint &cellRef, bool drawCursor )
 {
   static int paintingObscured = 0;
   /* this flag indicates that we are working on drawing the cells that a cell
@@ -2276,7 +2277,7 @@ void KSpreadCell::paintText(QPainter& painter, KSpreadView* /*view*/,
 
   KSpreadConditional condition;
 
-  if(conditions.GetCurrentCondition(condition) &&
+  if(conditions.currentCondition(condition) &&
      !m_pTable->getShowFormula())
   {
     painter.setFont( condition.fontcond );
@@ -2984,7 +2985,7 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
 }
 */
 
-int KSpreadCell::width( int _col, KSpreadCanvas *_canvas )
+int KSpreadCell::width( int _col, const KSpreadCanvas *_canvas ) const
 {
   if ( _col < 0 )
     _col = m_iColumn;
@@ -2994,18 +2995,18 @@ int KSpreadCell::width( int _col, KSpreadCanvas *_canvas )
     if ( testFlag(Flag_ForceExtra) )
       return (int)( m_iExtraWidth );
 
-    ColumnLayout *cl = m_pTable->columnLayout( _col );
+    const ColumnLayout *cl = m_pTable->columnLayout( _col );
     return cl->width( _canvas );
   }
 
   if ( testFlag(Flag_ForceExtra) )
     return m_iExtraWidth;
 
-  ColumnLayout *cl = m_pTable->columnLayout( _col );
+  const ColumnLayout *cl = m_pTable->columnLayout( _col );
   return cl->width();
 }
 
-int KSpreadCell::height( int _row, KSpreadCanvas *_canvas )
+int KSpreadCell::height( int _row, const KSpreadCanvas *_canvas ) const
 {
   if ( _row < 0 )
     _row = m_iRow;
@@ -3015,14 +3016,14 @@ int KSpreadCell::height( int _row, KSpreadCanvas *_canvas )
     if ( testFlag(Flag_ForceExtra) )
       return (int)( m_iExtraHeight );
 
-    RowLayout *rl = m_pTable->rowLayout( _row );
+    const RowLayout *rl = m_pTable->rowLayout( _row );
     return rl->height( _canvas );
   }
 
   if ( testFlag(Flag_ForceExtra) )
     return m_iExtraHeight;
 
-  RowLayout *rl = m_pTable->rowLayout( _row );
+  const RowLayout *rl = m_pTable->rowLayout( _row );
   return rl->height();
 }
 
@@ -3046,7 +3047,7 @@ const QBrush& KSpreadCell::backGroundBrush( int _col, int _row ) const
 
 const QColor& KSpreadCell::bgColor( int _col, int _row ) const
 {
-  KSpreadCell* cell = m_ObscuringCells.getFirst();
+  const KSpreadCell* cell = m_ObscuringCells.getFirst();
   if ( cell != NULL )
   {
     return cell->bgColor( cell->column(), cell->row() );
@@ -3121,7 +3122,7 @@ const QPen& KSpreadCell::leftBorderPen( int _col, int _row ) const
 {
     if ( !hasProperty( PLeftBorder ) )
     {
-        KSpreadCell * cell = m_pTable->cellAt( _col - 1, _row );
+        const KSpreadCell * cell = m_pTable->cellAt( _col - 1, _row );
         if ( cell->hasProperty( PRightBorder ) )
             return cell->rightBorderPen( _col - 1, _row );
     }
@@ -3133,7 +3134,7 @@ const QPen& KSpreadCell::bottomBorderPen( int _col, int _row ) const
 {
     if ( !hasProperty( PBottomBorder ) && ( _row < KS_rowMax ) )
     {
-        KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
+        const KSpreadCell * cell = m_pTable->cellAt( _col, _row + 1 );
         if ( cell->hasProperty( PTopBorder ) )
             return cell->topBorderPen( _col, _row + 1 );
     }
@@ -3146,7 +3147,7 @@ const QPen& KSpreadCell::topBorderPen( int _col, int _row ) const
 
     if ( !hasProperty( PTopBorder ) )
     {
-        KSpreadCell * cell = m_pTable->cellAt( _col, _row - 1 );
+        const KSpreadCell * cell = m_pTable->cellAt( _col, _row - 1 );
         if ( cell->hasProperty( PBottomBorder ) )
             return cell->bottomBorderPen( _col, _row - 1 );
     }
@@ -3335,7 +3336,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
 
 }
 
-bool KSpreadCell::testValidity()
+bool KSpreadCell::testValidity() const
 {
     bool valid = false;
     if( m_Validity != NULL )
@@ -3939,7 +3940,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset, 
         format.setAttribute( "style", (int)m_style );
 
 
-    QDomElement conditionElement = conditions.SaveConditions(doc);
+    QDomElement conditionElement = conditions.saveConditions(doc);
 
     if ( !conditionElement.isNull() )
     {
@@ -4167,7 +4168,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
     QDomElement conditionsElement = cell.namedItem( "condition" ).toElement();
     if ( !conditionsElement.isNull())
     {
-      conditions.LoadConditions( conditionsElement );
+      conditions.loadConditions( conditionsElement );
     }
 
     QDomElement validity = cell.namedItem( "validity" ).toElement();
@@ -4787,14 +4788,14 @@ void KSpreadCell::NotifyDependancyList(QPtrList<KSpreadDependency> lst, bool isD
   }
 }
 
-QValueList<KSpreadConditional> KSpreadCell::GetConditionList()
+QValueList<KSpreadConditional> KSpreadCell::conditionList() const
 {
-  return conditions.GetConditionList();
+  return conditions.conditionList();
 }
 
-void KSpreadCell::SetConditionList(QValueList<KSpreadConditional> newList)
+void KSpreadCell::setConditionList(const QValueList<KSpreadConditional> &newList)
 {
-  conditions.SetConditionList(newList);
+  conditions.setConditionList(newList);
 }
 
 bool KSpreadCell::hasError() const

@@ -289,9 +289,9 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
 
 }
 
-bool KSpreadTable::isEmpty( unsigned long int x, unsigned long int y )
+bool KSpreadTable::isEmpty( unsigned long int x, unsigned long int y ) const
 {
-  KSpreadCell* c = cellAt( x, y );
+  const KSpreadCell* c = cellAt( x, y );
   if ( !c || c->isEmpty() )
     return true;
 
@@ -334,7 +334,8 @@ RowLayout* KSpreadTable::rowLayout( int _row )
     return m_pDefaultRowLayout;
 }
 
-int KSpreadTable::leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas )
+int KSpreadTable::leftColumn( int _xpos, int &_left,
+                              const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
     {
@@ -365,7 +366,7 @@ int KSpreadTable::leftColumn( int _xpos, int &_left, KSpreadCanvas *_canvas )
     return col;
 }
 
-int KSpreadTable::rightColumn( int _xpos, KSpreadCanvas *_canvas )
+int KSpreadTable::rightColumn( int _xpos, const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
         _xpos += _canvas->xOffset();
@@ -387,7 +388,8 @@ int KSpreadTable::rightColumn( int _xpos, KSpreadCanvas *_canvas )
     return col - 1;
 }
 
-int KSpreadTable::topRow( int _ypos, int & _top, KSpreadCanvas *_canvas )
+int KSpreadTable::topRow( int _ypos, int & _top,
+                          const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
     {
@@ -418,7 +420,7 @@ int KSpreadTable::topRow( int _ypos, int & _top, KSpreadCanvas *_canvas )
     return row;
 }
 
-int KSpreadTable::bottomRow( int _ypos, KSpreadCanvas *_canvas )
+int KSpreadTable::bottomRow( int _ypos, const KSpreadCanvas *_canvas ) const
 {
     if ( _canvas )
         _ypos += _canvas->yOffset();
@@ -440,7 +442,7 @@ int KSpreadTable::bottomRow( int _ypos, KSpreadCanvas *_canvas )
     return row - 1;
 }
 
-int KSpreadTable::columnPos( int _col, KSpreadCanvas *_canvas )
+int KSpreadTable::columnPos( int _col, const KSpreadCanvas *_canvas ) const
 {
     double x = 0.0;
     if ( _canvas )
@@ -460,7 +462,7 @@ int KSpreadTable::columnPos( int _col, KSpreadCanvas *_canvas )
     return (int)x;
 }
 
-int KSpreadTable::rowPos( int _row, KSpreadCanvas *_canvas )
+int KSpreadTable::rowPos( int _row, const KSpreadCanvas *_canvas ) const
 {
     double y = 0.0;
     if ( _canvas )
@@ -525,24 +527,24 @@ KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _scrollbar
   return obscuring == NULL ? cell : obscuring;
 }
 
-KSpreadCell* KSpreadTable::firstCell()
+KSpreadCell* KSpreadTable::firstCell() const
 {
     return m_cells.firstCell();
 }
 
-RowLayout* KSpreadTable::firstRow()
+RowLayout* KSpreadTable::firstRow() const
 {
     return m_rows.first();
 }
 
-ColumnLayout* KSpreadTable::firstCol()
+ColumnLayout* KSpreadTable::firstCol() const
 {
     return m_columns.first();
 }
 
-const KSpreadCell* KSpreadTable::cellAt( int _column, int _row ) const
+KSpreadCell* KSpreadTable::cellAt( int _column, int _row ) const
 {
-    const KSpreadCell *p = m_cells.lookup( _column, _row );
+    KSpreadCell *p = m_cells.lookup( _column, _row );
     if ( p != 0L )
         return p;
 
@@ -4122,9 +4124,9 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2, bool cpLayout )
     ref1->setIndent( ref2->getIndent( ref2->column(), ref2->row() ) );
     ref2->setIndent(ind);
 
-    QValueList<KSpreadConditional> conditionList = ref1->GetConditionList();
-    ref1->SetConditionList(ref2->GetConditionList());
-    ref2->SetConditionList(conditionList);
+    QValueList<KSpreadConditional> conditionList = ref1->conditionList();
+    ref1->setConditionList(ref2->conditionList());
+    ref2->setConditionList(conditionList);
 
     QString com = ref1->comment( ref1->column(), ref1->row() );
     ref1->setComment( ref2->comment( ref2->column(), ref2->row() ) );
@@ -4751,7 +4753,7 @@ struct ClearConditionalSelectionWorker : public KSpreadTable::CellWorker
   void doWork( KSpreadCell* cell, bool, int, int )
   {
     QValueList<KSpreadConditional> emptyList;
-    cell->SetConditionList(emptyList);
+    cell->setConditionList(emptyList);
   }
 };
 
@@ -4829,7 +4831,7 @@ struct SetConditionalWorker : public KSpreadTable::CellWorker
   {
     if ( !cell->isObscured() ) // TODO: isObscuringForced()???
     {
-      cell->SetConditionList(conditionList);
+      cell->setConditionList(conditionList);
       cell->setDisplayDirtyFlag();
     }
   }
@@ -4857,7 +4859,7 @@ void KSpreadTable::setConditional( KSpreadSelection* selectionInfo,
     for (int y = t; y <= b; ++y)
     {
       cell = nonDefaultCell( x, y );
-      cell->SetConditionList(newConditions);
+      cell->setConditionList(newConditions);
       cell->setDisplayDirtyFlag();
     }
   }
@@ -7214,28 +7216,28 @@ void KSpreadTable::updateLocale()
   recalc();
 }
 
-KSpreadCell* KSpreadTable::getFirstCellColumn(int col)
+KSpreadCell* KSpreadTable::getFirstCellColumn(int col) const
 { return m_cells.getFirstCellColumn(col); }
 
-KSpreadCell* KSpreadTable::getLastCellColumn(int col)
+KSpreadCell* KSpreadTable::getLastCellColumn(int col) const
 { return m_cells.getLastCellColumn(col); }
 
-KSpreadCell* KSpreadTable::getFirstCellRow(int row)
+KSpreadCell* KSpreadTable::getFirstCellRow(int row) const
 { return m_cells.getFirstCellRow(row); }
 
-KSpreadCell* KSpreadTable::getLastCellRow(int row)
+KSpreadCell* KSpreadTable::getLastCellRow(int row) const
 { return m_cells.getLastCellRow(row); }
 
-KSpreadCell* KSpreadTable::getNextCellUp(int col, int row)
+KSpreadCell* KSpreadTable::getNextCellUp(int col, int row) const
 { return m_cells.getNextCellUp(col, row); }
 
-KSpreadCell* KSpreadTable::getNextCellDown(int col, int row)
+KSpreadCell* KSpreadTable::getNextCellDown(int col, int row) const
 { return m_cells.getNextCellDown(col, row); }
 
-KSpreadCell* KSpreadTable::getNextCellLeft(int col, int row)
+KSpreadCell* KSpreadTable::getNextCellLeft(int col, int row) const
 { return m_cells.getNextCellLeft(col, row); }
 
-KSpreadCell* KSpreadTable::getNextCellRight(int col, int row)
+KSpreadCell* KSpreadTable::getNextCellRight(int col, int row) const
 { return m_cells.getNextCellRight(col, row); }
 
 void KSpreadTable::convertObscuringBorders()
@@ -7513,7 +7515,7 @@ QString KSpreadTable::paperFormatString()const
     return KoPageFormat::formatString( m_paperFormat );
 }
 
-const char* KSpreadTable::orientationString()
+const char* KSpreadTable::orientationString() const
 {
     switch( m_orientation )
     {

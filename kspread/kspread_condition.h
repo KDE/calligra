@@ -55,7 +55,7 @@ public:
    * Constructor.  There is no default constructor - you must use this one
    * with the owner cell as a parameter
    */
-  KSpreadConditions(KSpreadCell *ownerCell);
+  KSpreadConditions(const KSpreadCell *ownerCell);
   virtual ~KSpreadConditions();
 
   /**
@@ -68,33 +68,33 @@ public:
    *
    * @return true if one of the conditions is true, false if not.
    */
-  bool GetCurrentCondition(KSpreadConditional& condition);
+  bool currentCondition(KSpreadConditional& condition);
 
   /**
    * Retrieve the current list of conditions we're checking
    */
-  QValueList<KSpreadConditional> GetConditionList();
+  QValueList<KSpreadConditional> conditionList() const;
 
   /**
    * Replace the current list of conditions with this new one
    */
-  void SetConditionList(QValueList<KSpreadConditional> list);
+  void setConditionList(const QValueList<KSpreadConditional> &list);
 
   /**
    * Saves the conditions to a DOM tree structure.
    * @return the DOM element for the conditions.
    */
-  QDomElement SaveConditions(QDomDocument& doc);
+  QDomElement saveConditions(QDomDocument& doc) const;
 
   /**
    * Takes a parsed DOM element and recreates the conditions structure out of
    * it
    */
-  void LoadConditions(const QDomElement &element);
+  void loadConditions(const QDomElement &element);
 private:
 
-  KSpreadCell *cell;
-  QValueList<KSpreadConditional> conditionList;
+  const KSpreadCell *cell;
+  QValueList<KSpreadConditional> condList;
 };
 
 

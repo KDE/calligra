@@ -189,8 +189,8 @@ public:
    *                   marker
    */
   void paintCellRegions(QPainter& painter, QRect viewRect, KSpreadView* view,
-                        QValueList<QRect> cellRegions, KSpreadTable* table,
-                        bool drawCursor);
+                        QValueList<QRect> cellRegions,
+                        const KSpreadTable* table, bool drawCursor);
 
 
   virtual DCOPObject* dcopObject();
@@ -526,12 +526,13 @@ protected:
 private:
 
   /* helper functions for painting */
-  void PaintRegion(QPainter& painter, QRect viewRegion, KSpreadView* view,
-                   QRect paintRegion, KSpreadTable* table);
-  void PaintChooseRect(QPainter& painter, QRect viewRect, KSpreadTable* table,
-                       QRect chooseRect);
-  void PaintNormalMarker(QPainter& painter, QRect viewRect, KSpreadTable* table,
-                         QRect selection);
+  void PaintRegion(QPainter& painter, const QRect &viewRegion,
+		   KSpreadView* view, const QRect &paintRegion,
+		   const KSpreadTable* table);
+  void PaintChooseRect(QPainter& painter, const QRect &viewRect,
+		       const KSpreadTable* table, const QRect &chooseRect);
+  void PaintNormalMarker(QPainter& painter, const QRect &viewRect,
+			 const KSpreadTable* table, const QRect &selection);
 
   /**
    * helper function in drawing the marker and choose marker.
@@ -548,7 +549,8 @@ private:
    *                   Again, these are in the order left, top, right, bottom.
    *                   This should be preallocated with a size of at least 4.
    */
-  void RetrieveMarkerInfo(const QRect &marker, KSpreadTable* table, const QRect &viewRect,
+  void RetrieveMarkerInfo(const QRect &marker, const KSpreadTable* table,
+			  const QRect &viewRect,
                           int positions[], bool paintSides[]);
 };
 

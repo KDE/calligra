@@ -187,8 +187,8 @@ public:
     QColor borderColor() const;
 
   KSpreadSelection* selectionInfo()const { return m_selectionInfo; }
-  QRect selection() { return selectionInfo()->selection(); }
-  QPoint marker() { return selectionInfo()->marker(); }
+  QRect selection() const { return selectionInfo()->selection(); }
+  QPoint marker() const { return selectionInfo()->marker(); }
 public slots:
     void initialPosition();
     /**
