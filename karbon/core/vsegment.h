@@ -102,7 +102,7 @@ public:
 	 */
 	VSegmentType type() const
 	{
-		return m_type;
+		return !prev() ? begin : ( degree() == 1 ? line : curve);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public:
 	 */
 	void setType( VSegmentType type )
 	{
-		m_type = type;
+		setDegree( type == curve ? 3 : 1 );
 	}
 
 
@@ -377,12 +377,6 @@ private:
 	 * The segment state.
 	 */
 	VState m_state : 2;
-
-	/**
-	 * The segment type.
-	 */
-	VSegmentType m_type;
-
 
 	/**
 	 * Node data.

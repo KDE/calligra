@@ -67,7 +67,6 @@ VSegment::VSegment( unsigned short degree )
 	for( unsigned short i = 0; i < m_degree; ++i )
 		selectPoint( i );
 
-	m_type = begin;
 	m_state = normal;
 
 	m_prev = 0L;
@@ -81,7 +80,6 @@ VSegment::VSegment( const VSegment& segment )
 
 	m_nodes = new VNodeData[ m_degree ];
 
-	m_type = segment.m_type;
 	m_state = segment.m_state;
 
 	// Copying the pointers m_prev/m_next has some advantages (see VSegment::length()).
@@ -109,7 +107,7 @@ VSegment::setDegree( unsigned short degree )
 	if( m_degree == degree )
 		return;
 
-
+	KoPoint oldknot = knot();
 	// Delete old node data.
 	delete[]( m_nodes );
 
@@ -117,12 +115,14 @@ VSegment::setDegree( unsigned short degree )
 	m_nodes = new VNodeData[ degree ];
 
 	m_degree = degree;
+
+	setKnot( oldknot );
 }
 
 void
 VSegment::draw( VPainter* painter ) const
 {
-	if( state() == deleted && !type() == curve )
+	if( state() == deleted )
 		return;
 
 
@@ -143,30 +143,24 @@ VSegment::draw( VPainter* painter ) const
 bool
 VSegment::isFlat( double flatness ) const
 {
-	if(
-		!prev() ||
-		m_type == begin ||
-		m_type == line )
+	if( !prev() || m_degree == 1 )
 	{
 		return true;
 	}
 
-	if( m_type == curve )
+	bool flat = false;
+
+	for( unsigned short i = 0; i < degree() - 1; ++i )
 	{
-		bool flat = false;
+		flat =
+			height( prev()->knot(), point( i ), knot() ) / chordLength()
+			< flatness;
 
-		for( unsigned short i = 0; i < degree() - 1; ++i )
-		{
-			flat =
-				height( prev()->knot(), point( i ), knot() ) / chordLength()
-				< flatness;
-
-			if( !flat )
-				break;
-		}
-
-		return flat;
+		if( !flat )
+			break;
 	}
+
+	return flat;
 
 	return false;
 }
@@ -185,16 +179,12 @@ void
 VSegment::pointDerivativesAt( double t, KoPoint* p,
 							  KoPoint* d1, KoPoint* d2 ) const
 {
-	if(
-		!prev() ||
-		m_type == begin )
-	{
+	if( !prev() )
 		return;
-	}
 
 
 	// Lines.
-	if( m_type == line )
+	if( degree() == 1 )
 	{
 		const KoPoint diff = knot() - prev()->knot();
 
@@ -304,24 +294,21 @@ VSegment::pointTangentNormalAt( double t, KoPoint* p,
 double
 VSegment::length( double t ) const
 {
-	if(
-		!prev() ||
-		m_type == begin ||
-		t == 0.0 )
+	if( !prev() || t == 0.0 )
 	{
 		return 0.0;
 	}
 
 
 	// Length of a line.
-	if( m_type == line )
+	if( degree() == 1 )
 	{
 		return
 			t * chordLength();
 	}
 
 	// Length of a bezier.
-	else if( m_type == curve )
+	else if( degree() > 1 )
 	{
 		/* The idea for this algortihm is by Jens Gravesen <gravesen@mat.dth.dk>.
 		 * We calculate the chord length "chord"=|P0P3| and the length of the control point
@@ -381,13 +368,8 @@ VSegment::length( double t ) const
 double
 VSegment::chordLength() const
 {
-	if(
-		!prev() ||
-		m_type == begin )
-	{
+	if( !prev() )
 		return 0.0;
-	}
-
 
 	KoPoint d = knot() - prev()->knot();
 
@@ -397,13 +379,8 @@ VSegment::chordLength() const
 double
 VSegment::polyLength() const
 {
-	if(
-		!prev() ||
-		m_type == begin )
-	{
+	if( !prev() )
 		return 0.0;
-	}
-
 
 	// Start with distance |first point - previous knot|.
 	KoPoint d = point( 0 ) - prev()->knot();
@@ -426,21 +403,20 @@ VSegment::lengthParam( double len ) const
 {
 	if(
 		len == 0.0 ||		// We divide by len below.
-		!prev() ||
-		m_type == begin )
+		!prev() )
 	{
 		return 0.0;
 	}
 
 
 	// Line.
-	if( m_type == line )
+	if( degree() == 1 )
 	{
 		return
 			len / chordLength();
 	}
 	// Bezier.
-	else if( m_type == curve )
+	else
 	{
 		// Perform a successive interval bisection.
 		double param1 = 0.0;
@@ -470,9 +446,7 @@ VSegment::lengthParam( double len ) const
 double
 VSegment::nearestPointParam( const KoPoint& p ) const
 {
-	if(
-		!prev() ||
-		m_type == begin )
+	if( !prev() )
 	{
 		return 1.0;
 	}
@@ -633,9 +607,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 void
 VSegment::roots( QValueList<double>& params ) const
 {
-	if(
-		!prev() ||
-		m_type == begin )
+	if( !prev() )
 	{
 		return;
 	}
@@ -673,9 +645,7 @@ VSegment::roots( QValueList<double>& params ) const
 int
 VSegment::signChanges() const
 {
-	if(
-		!prev() ||
-		m_type == begin )
+	if( !prev() )
 	{
 		return 0;
 	}
@@ -772,9 +742,7 @@ VSegment::boundingBox() const
 VSegment*
 VSegment::splitAt( double t )
 {
-	if(
-		!prev() ||
-		m_type == begin )
+	if( !prev() )
 	{
 		return 0L;
 	}
@@ -788,23 +756,17 @@ VSegment::splitAt( double t )
 
 
 	// Lines are easy: no need to modify the current segment.
-	if( m_type == line )
+	if( degree() == 1 )
 	{
 		segment->setKnot(
 			prev()->knot() +
 			( knot() - prev()->knot() ) * t );
-
-		segment->m_type = line;
 
 		return segment;
 	}
 
 
 	// Beziers.
-
-	// Set segment type.
-	segment->m_type = curve;
-
 
 	// Copy points.
 	KoPoint* q = new KoPoint[ degree() + 1 ];
@@ -911,18 +873,12 @@ VSegment::nodeNear( const KoPoint& p, double isNearRange ) const
 VSegment*
 VSegment::revert() const
 {
-	if(
-		!prev() ||
-		m_type == begin )
-	{
+	if( !prev() )
 		return 0L;
-	}
-
 
 	// Create new segment.
 	VSegment* segment = new VSegment( m_degree );
 
-	segment->m_type = m_type;
 	segment->m_state = m_state;
 
 
@@ -1009,8 +965,6 @@ VSegment::load( const QDomElement& element )
 
 	if( element.tagName() == "CURVE" )
 	{
-		m_type = curve;
-
 		setDegree( 3 );
 
 		setPoint(
@@ -1032,8 +986,6 @@ VSegment::load( const QDomElement& element )
 	}
 	else if( element.tagName() == "LINE" )
 	{
-		m_type = line;
-
 		setDegree( 1 );
 
 		setKnot(
@@ -1043,8 +995,6 @@ VSegment::load( const QDomElement& element )
 	}
 	else if( element.tagName() == "MOVE" )
 	{
-		m_type = begin;
-
 		setDegree( 1 );
 
 		setKnot(
