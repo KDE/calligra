@@ -42,6 +42,7 @@
 #include <qtooltip.h>
 #include <qstring.h>
 #include <kcolordlg.h>
+#include <kcolorbtn.h>
 
 class CellLayoutDlg;
 class KSpreadTable;
@@ -65,16 +66,16 @@ public:
     void setPattern( const QColor &_color, int _width, PenStyle _style );
     void setUndefined();
     void setDefined() { undefined = FALSE; repaint(); }
-    
+
     bool isDefined() { return !undefined; }
-    
+
 signals:
     void clicked( KSpreadPatternSelect *_this );
-    
+
 public slots:
     void slotUnselect();
     void slotSelect();
-    
+
 protected:
     virtual void paintEvent( QPaintEvent *_ev );
     virtual void mousePressEvent( QMouseEvent *_ev );
@@ -82,7 +83,7 @@ protected:
     PenStyle penStyle;
     QColor penColor;
     int penWidth;
-    
+
     bool selected;
     bool undefined;
 };
@@ -155,20 +156,23 @@ public:
     void apply( KSpreadCell *_cell );
 
 public slots:
-    void slotTextColor();
-    void slotBackgroundColor();
+    //void slotTextColor();
+    //void slotBackgroundColor();
     void slotStyle( int );
-
+    void slotSetTextColor( const QColor &_color );
+    void slotSetBackgroundColor( const QColor &_color );
 protected:
-    void setColor( QPushButton *_button, const QColor &_color );
+    //void setColor( QPushButton *_button, const QColor &_color );
 
     QColor textColor;
     bool bTextColorUndefined;
     QColor bgColor;
     bool bBgColorUndefined;
 
-    QPushButton *textColorButton;
-    QPushButton *bgColorButton;
+    //QPushButton *textColorButton;
+    //QPushButton *bgColorButton;
+    KColorButton *textColorButton;
+    KColorButton *bgColorButton;
 
     QComboBox* styleButton;
     int idStyleNormal;
@@ -220,7 +224,7 @@ public slots:
     void slotUnselect1( KSpreadPatternSelect *_select );
     void slotUnselect2( KSpreadPatternSelect *_select );
 
-    void slotColorButton();
+    //void slotColorButton();
     void slotSetColorButton( const QColor &_color );
 
 protected:
@@ -241,7 +245,10 @@ protected:
     KSpreadPatternSelect* pattern6;
     KSpreadPatternSelect* pattern7;
     KSpreadPatternSelect* pattern8;
-    QPushButton* color;
+    KSpreadPatternSelect* pattern9;
+    KSpreadPatternSelect* pattern10;
+    //QPushButton* color;
+    KColorButton* color;
 
     QColor currentColor;
 

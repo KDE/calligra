@@ -232,3 +232,10 @@ Summary 1999-12-03 ->1999-12-16
 1999-12-15 KRASH release.
 
 
+1999-12-22 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Replace   QPushButton by   KColorButton
+because when you insert a style (a theme) in kde you can't change color
+in a QPushButton (use color of theme).
+
+-Add new style of line   DashDotLine and  DashDotDotLine
