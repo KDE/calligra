@@ -35,6 +35,7 @@ KSpreadConditions::KSpreadConditions(KSpreadCell *ownerCell)
 
 KSpreadConditions::~KSpreadConditions()
 {
+    conditionList.clear();
 }
 
 bool KSpreadConditions::GetCurrentCondition(KSpreadConditional& condition)
@@ -42,7 +43,7 @@ bool KSpreadConditions::GetCurrentCondition(KSpreadConditional& condition)
   /* for now, the first condition that is true is the one that will be used */
 
   QValueList<KSpreadConditional>::iterator it;
-  double value = cell->valueDouble() * cell->factor(cell->column(), 
+  double value = cell->valueDouble() * cell->factor(cell->column(),
 						    cell->row());
 
   if (cell->isNumeric() && !cell->table()->getShowFormula())
@@ -53,13 +54,13 @@ bool KSpreadConditions::GetCurrentCondition(KSpreadConditional& condition)
       switch (condition.m_cond)
       {
       case Equal :
-	if (value - condition.val1 < DBL_EPSILON && 
+	if (value - condition.val1 < DBL_EPSILON &&
 	    value - condition.val1 > (0.0 - DBL_EPSILON))
 	{
 	  return true;
 	}
 	break;
-	
+
       case Superior :
 	if( value > condition.val1 )
 	{
@@ -95,7 +96,7 @@ bool KSpreadConditions::GetCurrentCondition(KSpreadConditional& condition)
 	  return true;
 	}
 	break;
-	
+
       case Different :
 	if( ( value < QMIN(condition.val1, condition.val2 ) ) ||
 	    ( value > QMAX(condition.val1, condition.val2) ) )
@@ -149,7 +150,7 @@ QDomElement KSpreadConditions::SaveConditions(QDomDocument& doc)
   {
     condition = *it;
 
-    /* the name of the element will be "condition<n>" 
+    /* the name of the element will be "condition<n>"
      * This is unimportant now but in older versions three conditions were
      * hardcoded with names "first" "second" and "third"
      */
@@ -166,8 +167,8 @@ QDomElement KSpreadConditions::SaveConditions(QDomDocument& doc)
     conditions.appendChild(child);
 
     num++;
-  } 
-  
+  }
+
   if (num == 0)
   {
     /* there weren't any real conditions -- return a null dom element */
@@ -189,22 +190,22 @@ void KSpreadConditions::LoadConditions(QDomElement element)
   {
     QDomElement conditionElement = nodeList.item(i).toElement();
     ok = true;
-    
+
     ok = conditionElement.hasAttribute( "cond" ) &&
          conditionElement.hasAttribute( "val1" ) &&
          conditionElement.hasAttribute( "val2" ) &&
          conditionElement.hasAttribute( "color" );
 
-    if (ok) newCondition.m_cond = 
+    if (ok) newCondition.m_cond =
 	      (Conditional) conditionElement.attribute("cond").toInt( &ok );
 
-    if (ok) newCondition.val1 = 
+    if (ok) newCondition.val1 =
 	      conditionElement.attribute("val1").toDouble( &ok );
 
-    if (ok) newCondition.val2 = 
+    if (ok) newCondition.val2 =
 	      conditionElement.attribute("val2").toDouble( &ok );
 
-    if (ok) newCondition.colorcond = 
+    if (ok) newCondition.colorcond =
 	      QColor(conditionElement.attribute("color"));
 
     QDomElement font = conditionElement.namedItem( "font" ).toElement();

@@ -96,9 +96,9 @@ public:
     virtual void undo() = 0;
     virtual void redo() = 0;
 
-    KSpreadDoc* doc() { return m_pDoc; }
+    KSpreadDoc* doc()const { return m_pDoc; }
 
-    QString getName() {return name ;}
+    QString getName()const {return name ;}
 
 // #### To be private
 
@@ -273,7 +273,7 @@ protected:
     KoPageLayout m_plRedo;
     KoHeadFoot m_hf;
     KoHeadFoot m_hfRedo;
-    KoUnit::Unit m_unit;   
+    KoUnit::Unit m_unit;
     KoUnit::Unit m_unitRedo;
     bool m_printGrid;
     bool m_printGridRedo;
@@ -324,7 +324,7 @@ protected:
 class KSpreadUndoCellLayout : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection, QString &_title );
+    KSpreadUndoCellLayout( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_selection, const QString &_title );
     virtual ~KSpreadUndoCellLayout();
 
     virtual void undo();
@@ -347,7 +347,7 @@ protected:
 class KSpreadUndoDelete : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_rect );
+    KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
     virtual ~KSpreadUndoDelete();
 
     virtual void undo();
@@ -384,7 +384,7 @@ protected:
 class KSpreadUndoResizeColRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoResizeColRow( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection );
+    KSpreadUndoResizeColRow( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_selection );
     virtual ~KSpreadUndoResizeColRow();
 
     virtual void undo();
@@ -404,7 +404,7 @@ protected:
 class KSpreadUndoChangeAreaTextCell : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection );
+    KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_selection );
     virtual ~KSpreadUndoChangeAreaTextCell();
 
     virtual void undo();
@@ -422,7 +422,7 @@ protected:
 class KSpreadUndoSort : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoSort( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection);
+    KSpreadUndoSort( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_selection);
     virtual ~KSpreadUndoSort();
 
     virtual void undo();
@@ -466,7 +466,7 @@ protected:
 class KSpreadUndoAutofill : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoAutofill( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_rect );
+    KSpreadUndoAutofill( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
     virtual ~KSpreadUndoAutofill();
 
     virtual void undo();
@@ -482,7 +482,7 @@ protected:
 class KSpreadUndoInsertCellCol : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadTable *_table, QRect _rect );
+    KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
     virtual ~KSpreadUndoInsertCellCol();
 
     virtual void undo();
@@ -496,7 +496,7 @@ protected:
 class KSpreadUndoInsertCellRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadTable *_table,QRect _rect );
+    KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadTable *_table,const QRect &_rect );
     virtual ~KSpreadUndoInsertCellRow();
 
     virtual void undo();
@@ -510,7 +510,7 @@ protected:
 class KSpreadUndoRemoveCellCol : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadTable *_table, QRect _rect );
+    KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
     virtual ~KSpreadUndoRemoveCellCol();
 
     virtual void undo();
@@ -525,7 +525,7 @@ protected:
 class KSpreadUndoRemoveCellRow : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadTable *_table, QRect _rect );
+    KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
     virtual ~KSpreadUndoRemoveCellRow();
 
     virtual void undo();
@@ -611,7 +611,7 @@ protected:
 class KSpreadUndoStyleCell : public KSpreadUndoAction
 {
 public:
-    KSpreadUndoStyleCell( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_rect );
+    KSpreadUndoStyleCell( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_rect );
     virtual ~KSpreadUndoStyleCell();
 
     virtual void undo();
@@ -662,10 +662,10 @@ public:
 
     void lock() { m_bLocked = TRUE; }
     void unlock() { m_bLocked = FALSE; }
-    bool isLocked() { return m_bLocked; }
+    bool isLocked() const { return m_bLocked; }
 
-    bool hasUndoActions() { return !m_stckUndo.isEmpty(); }
-    bool hasRedoActions() { return !m_stckRedo.isEmpty(); }
+    bool hasUndoActions()const { return !m_stckUndo.isEmpty(); }
+    bool hasRedoActions()const { return !m_stckRedo.isEmpty(); }
 
     void appendUndo( KSpreadUndoAction *_action );
 
