@@ -573,11 +573,9 @@ QpRecFormulaCell::formulaReferences()
 
 // -----------------------------------------------------------------------
 
-QpRecUnknown::QpRecUnknown(QP_INT16 /*pType*/, QP_INT16 pLen, QpIStream& pIn)
+QpRecUnknown::QpRecUnknown(QP_INT16 pType, QP_INT16 pLen, QpIStream& pIn)
    : QpRec( QpUnknown )
 {
-// ?? what do we do with pType ???
-
    QP_DEBUG("Unknown Type " << pType << ", len " << pLen << endl);
 
    if( pLen > 0 )

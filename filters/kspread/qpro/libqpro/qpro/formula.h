@@ -76,6 +76,9 @@ public:
    static inline void func3(QpFormula& pThis, const char* pFunc)
                       {pThis.func3Real(pFunc);}
 
+   static inline void func4(QpFormula& pThis, const char* pFunc)
+                      {pThis.func4Real(pFunc);}
+
    static inline void funcV(QpFormula& pThis, const char* pFunc)
                       {pThis.funcVReal(pFunc);}
 
@@ -114,6 +117,7 @@ protected:
    void func1Real(const char* pFunc);
    void func2Real(const char* pFunc);
    void func3Real(const char* pFunc);
+   void func4Real(const char* pFunc);
    void funcVReal(const char* pFunc);
    void intFuncReal(const char* pFunc);
    void refReal(const char* pFunc);

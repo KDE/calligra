@@ -214,7 +214,7 @@ static const QpFormulaConv gConv[] =
    {73,  QpFormula::func3,         "@mid("},
    {74,  QpFormula::func1,         "@char("},
    {75,  QpFormula::func1,         "@code("},
-   {76,  QpFormula::func1,         "@find("},
+   {76,  QpFormula::func3,         "@find("},
    {77,  QpFormula::func1,         "@dateVal("},
    {78,  QpFormula::func1,         "@timeVal("},
    {79,  QpFormula::func1,         "@cellPtr("},
@@ -223,14 +223,14 @@ static const QpFormulaConv gConv[] =
    {82,  QpFormula::funcV,         "@count("},
    {83,  QpFormula::funcV,         "@min("},
    {84,  QpFormula::funcV,         "@max("},
-   {85,  QpFormula::func1,         "@vlookup("},
-   {86,  QpFormula::func1,         "@npv("},
+   {85,  QpFormula::func3,         "@vlookup("},  // would have expected func4 ???
+   {86,  QpFormula::func2,         "@npv("},
    {87,  QpFormula::funcV,         "@var("},
    {88,  QpFormula::funcV,         "@std("},
-   {89,  QpFormula::func1,         "@irr("},
-   {90,  QpFormula::func1,         "@hlookup("},
-   {91,  QpFormula::func1,         "@dsum("},
-   {92,  QpFormula::func1,         "@davg("},
+   {89,  QpFormula::func2,         "@irr("},
+   {90,  QpFormula::func3,         "@hlookup("},  // would have expected func4 ???
+   {91,  QpFormula::func3,         "@dsum("},
+   {92,  QpFormula::func3,         "@davg("},
    {93,  QpFormula::func1,         "@dcount("},
    {94,  QpFormula::func1,         "@dmin("},
    {95,  QpFormula::func1,         "@dmax("},
@@ -281,7 +281,7 @@ static const QpFormulaConv gConv[] =
    {140, QpFormula::func1,         "@hextonum("},
    {141, QpFormula::func1,         "@numtohex("},
    {142, QpFormula::func1,         "@today("},
-// ??? with optional 3rd arg???   {143, QpFormula::funcV,         "Npv("},
+   {143, QpFormula::func3,         "@npv("},
    {144, QpFormula::func1,         "@cellindex2d("},
    {145, QpFormula::func1,         "@version("},
    {154, QpFormula::func1,         "@sheets("},
@@ -349,6 +349,7 @@ QpFormula::formula()
             if( cReplaceFunc[lIdx].cOperand == lOperand )
             {
                lFound = -1;
+               QP_DEBUG("Processing " << (int)lOperand << endl);
                (*cReplaceFunc[lIdx].cFunc)(*this, cReplaceFunc[lIdx].cArg);
             }
          }
@@ -363,9 +364,12 @@ QpFormula::formula()
          if( gConv[lIdx].cOperand == lOperand )
          {
             lFound = -1;
+            QP_DEBUG("Processing " << (int)lOperand << endl);
             (*gConv[lIdx].cFunc)(*this, gConv[lIdx].cArg);
          }
       }
+
+      QP_DEBUG("Top = " << cStack.top() << endl);
    }
 
    cStack.join(2, "");
@@ -446,6 +450,15 @@ QpFormula::func3Real(const char* pFunc)
 }
 
 void
+QpFormula::func4Real(const char* pFunc)
+{
+   const char* lFunc = (cDropLeadingAt && pFunc[0] == '@' ? &pFunc[1] : pFunc);
+
+   cStack.join( 4, cArgSeparator );
+   cStack.bracket( lFunc );
+}
+
+void
 QpFormula::funcVReal(const char* pFunc)
 {
    QP_INT8     lCnt;
@@ -516,7 +529,7 @@ QpFormula::stringFuncReal(const char*)
 
    cFormula >> lString;
 
-   char* lQuoteString = new char[strlen(lString)+2];
+   char* lQuoteString = new char[strlen(lString)+3];
 
    lQuoteString[0] = '"';
    strcpy(&lQuoteString[1], lString);

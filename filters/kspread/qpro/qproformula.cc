@@ -38,6 +38,9 @@ static QpFormulaConv gOverride[] =
    {68,  QpFormula::func1,         "ISNUM("},  // @isnumber => ISNUM
    {69,  QpFormula::func1,         "ISTEXT("}, // @isstring => ISTEXT
    {70,  QpFormula::func1,         "len("},    // @length   => len
+   {81,  QpFormula::funcV,         "average("}, // @avg    => average
+   {87,  QpFormula::funcV,         "variance("},// @var    => variance
+   {88,  QpFormula::funcV,         "stddev("},  // @std    => stddev
    {0,   0,                        0}
 };
 
