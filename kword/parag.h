@@ -2,7 +2,7 @@
 #define parag_h
 
 class KWParag;
-class KWordDocument_impl;
+class KWordDocument;
 
 #include "defs.h"
 #include "paraglayout.h"
@@ -34,7 +34,7 @@ public:
      *
      * @see KWParagraphLayout
      */
-    KWParag(KWTextFrameSet *_frameSet, KWordDocument_impl *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout );
+    KWParag(KWTextFrameSet *_frameSet, KWordDocument *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout );
     /**
      * Desctructor
      *
@@ -163,7 +163,7 @@ protected:
     /**
      * The document this paragraph is belonging to.
      */
-    KWordDocument_impl *document;
+    KWordDocument *document;
     /**
      * The page this paragraph starts on. This value is only valid if this paragraph is
      * in front of the last modified paragraph. The value is zoomed.

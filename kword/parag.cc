@@ -11,7 +11,7 @@
 #include <fstream>
 #include <unistd.h>
 
-KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument_impl *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout )
+KWParag::KWParag(KWTextFrameSet *_frameSet,KWordDocument *_doc, KWParag* _prev, KWParag* _next, KWParagLayout* _paragLayout )
 {
     prev = _prev;
     next = _next;

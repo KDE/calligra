@@ -21,7 +21,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWImageCollection::KWImageCollection(KWordDocument_impl *_doc)
+KWImageCollection::KWImageCollection(KWordDocument *_doc)
   : images(1999,true,true)
 {
   images.setAutoDelete(true);

@@ -216,7 +216,7 @@ void KWString::saveFormat(ostream &out)
     }
 }
 
-void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument_impl *_doc,KWTextFrameSet *_frameset)
+void KWString::loadFormat(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_doc,KWTextFrameSet *_frameset)
 {
   string tag;
   string name;

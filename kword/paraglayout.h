@@ -37,7 +37,7 @@ public:
       }
     };
 
-    KWParagLayout( KWordDocument_impl *_doc );
+    KWParagLayout( KWordDocument *_doc );
     ~KWParagLayout();
     
     KWParagLayout& operator=(KWParagLayout &_layout);
@@ -207,7 +207,7 @@ protected:
     /**
      * The document this parag layout belongs to
      */
-    KWordDocument_impl *document;
+    KWordDocument *document;
 };
 
 #endif

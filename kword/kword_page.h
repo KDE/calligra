@@ -38,7 +38,7 @@
 #include <kapp.h>
 
 class KWordGUI;
-class KWordDocument_impl;
+class KWordDocument;
 
 enum MouseMode {MM_EDIT = 0,MM_EDIT_FRAME = 1,MM_CREATE_TEXT = 2,MM_CREATE_PIX = 3};
 
@@ -51,9 +51,9 @@ class KWPage : public QWidget
   Q_OBJECT
   
 public:
-  KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui);
+  KWPage(QWidget *parent,KWordDocument *_doc,KWordGUI *_gui);
 
-  void setDocument(KWordDocument_impl *_doc)
+  void setDocument(KWordDocument *_doc)
     { doc = _doc; }
 
   void mousePressEvent(QMouseEvent* e);
@@ -197,7 +197,7 @@ protected:
   void setupMenus();
   void mmUncheckAll();
 
-  KWordDocument_impl *doc;
+  KWordDocument *doc;
   bool markerIsVisible;
   bool paint_directly,has_to_copy;
 

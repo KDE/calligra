@@ -7,7 +7,7 @@
 #include <fstream>
 #include <unistd.h>
 
-KWParagLayout::KWParagLayout( KWordDocument_impl *_doc )
+KWParagLayout::KWParagLayout( KWordDocument *_doc )
   : format(_doc), counterFormat(_doc)
 {
     flow = LEFT;

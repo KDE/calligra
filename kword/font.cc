@@ -6,7 +6,7 @@ char s_FONT_CCId[]="$Id$";
 #include <qpainter.h>
 #include <qfontmetrics.h>
 
-KWUserFont::KWUserFont( KWordDocument_impl *_doc, const char *_name )
+KWUserFont::KWUserFont( KWordDocument *_doc, const char *_name )
 {
     fontName = _name;
     fontName.detach();
@@ -20,7 +20,7 @@ KWUserFont::~KWUserFont()
     document->userFontList.removeRef( this );
 }
 
-KWDisplayFont::KWDisplayFont( KWordDocument_impl *_doc, KWUserFont *_font, unsigned int _size,
+KWDisplayFont::KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned int _size,
 			      int _weight, bool _italic, bool _underline ) :
     QFont( _font->getFontName(), ZOOM(_size), _weight, _italic ), fm(*this)
 {

@@ -2,10 +2,11 @@
 INCLUDES = -I../lib/kofficecore -I../lib/kofficeui \
 	-I../lib/koml $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ../lib/kofficeui/libkofficeui.la \
+LDADD = ../lib/store/libkstore.la \
+	../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	-lop -lkfile -lkfm -lkdeui -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
-	-lkom  -ljpeg $(LIBSOCKET) -ldl
+	-lkparts -lkpartsui -lkom -lkfile -lkfm -lkdeui -lkdeutil -lkdecore $(LIBMICO) -lqt -lXext -lX11 \
+	-ljpeg $(LIBSOCKET) -ldl
 
 ####### Files
 
@@ -51,7 +52,7 @@ messages:
 
 kword.h: kword.idl
 	rm -f kword.h
-	$(IDL) --query-server-for-narrow -I$(idldir) kword.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) kword.idl
 
 kword.cc: kword.h
 kword_view.h: kword.h

@@ -2,7 +2,7 @@
 #define format_h
 
 class KWFormat;
-class KWordDocument_impl;
+class KWordDocument;
 
 #include "defs.h"
 #include "font.h"
@@ -38,14 +38,14 @@ public:
      *
      * @see KWUserFont
      */
-    KWFormat( KWordDocument_impl *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
+    KWFormat( KWordDocument *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
 	      char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 );
     
     /**
      * Creates a new KWFormat instance. This instance has set all values to
      * 'dont change'.
      */
-    KWFormat(KWordDocument_impl *_doc);
+    KWFormat(KWordDocument *_doc);
     KWFormat() { doc = 0L; ref = 0; userFont = 0L; }
     
     /**
@@ -53,7 +53,7 @@ public:
      *
      * @param _format It copies its state from this KWFormat instance.
      */
-    KWFormat(KWordDocument_impl *_doc, const KWFormat& _format );
+    KWFormat(KWordDocument *_doc, const KWFormat& _format );
 
     KWFormat& operator=( const KWFormat& _format );
   
@@ -73,7 +73,7 @@ public:
      */
     KWUserFont* getUserFont() const { return userFont; }
 
-    KWDisplayFont* loadFont( KWordDocument_impl *_doc );
+    KWDisplayFont* loadFont( KWordDocument *_doc );
     
     /**
      * @return The font size to use in points. The return value may be -1 if the size should not change.
@@ -104,9 +104,9 @@ public:
      * @param _doc is the document this format belongs to. The document provides information
      *             on the default font for example.
      *
-     * @see KWordDocument_impl
+     * @see KWordDocument
      */
-    void setDefaults( KWordDocument_impl *_doc );
+    void setDefaults( KWordDocument *_doc );
     
     /**
      * Set the color to use.
@@ -163,10 +163,10 @@ public:
     int refCount()
     { return ref; }
 
-    KWordDocument_impl *getDocument() { return doc; }
+    KWordDocument *getDocument() { return doc; }
 
     void save(ostream &out);
-    void load(KOMLParser&,vector<KOMLAttrib>&,KWordDocument_impl*);
+    void load(KOMLParser&,vector<KOMLAttrib>&,KWordDocument*);
     
 protected:
     /**
@@ -213,7 +213,7 @@ protected:
     VertAlign vertAlign;
 
     int ref;
-    KWordDocument_impl *doc;
+    KWordDocument *doc;
 
 private:
     // disabe normal copy constructor

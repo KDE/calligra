@@ -52,7 +52,7 @@ void KWImage::save(ostream &out)
 }
 
 /*================================================================*/
-void KWImage::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument_impl *_doc)
+void KWImage::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_doc)
 {
   doc = _doc;
   ref = 0;

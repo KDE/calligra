@@ -14,22 +14,31 @@
 /******************************************************************/
 
 #include "kword_main.h"
+#include "kword_doc.h"
 #include <string.h>
-#include <factory_impl.h>
+#include <koFactory.h>
 #include <koScanParts.h>
+#include <koIMR.h>
+#include <koDocument.h>
+#include <opAutoLoader.h>
 #include "kword_main.moc"
+
+#include <list>
 
 bool g_bWithGUI = true;
 
-FACTORY(KWordDocument_impl,KWord::Factory_skel,KWordFactory)
-typedef AutoLoader<KWordFactory> KWordAutoLoader;
+list<string> g_openFiles;
+
+KOFFICE_DOCUMENT_FACTORY( KWordDocument, KWordFactory )
+typedef OPAutoLoader<KWordFactory> KWordAutoLoader;
+
 
 /******************************************************************/
 /* Class: KWordApp                                                */
 /******************************************************************/
 
 /*================================================================*/
-KWordApp::KWordApp(int argc,char** argv) 
+KWordApp::KWordApp(int &argc,char** argv) 
   : OPApplication(argc,argv,"kword")
 {
   getLocale()->insertCatalogue("koffice");
@@ -43,21 +52,29 @@ KWordApp::~KWordApp()
 /*================================================================*/
 void KWordApp::start()
 {
-  koScanParts();
-
   // Are we going to create a GUI ?
-  if (g_bWithGUI)
+  if ( g_bWithGUI )
+  {
+    imr_init();
+    koScanParts();
+
+    if ( g_openFiles.size() == 0 )
     {
-      KWordShell_impl* m_pShell;
-      // Create a GUI
-      m_pShell = new KWordShell_impl;
-      // Allow status/menu/toolbars
-      m_pShell->enableMenuBar();
-      m_pShell->PartShell_impl::enableStatusBar();
-      m_pShell->enableToolBars();
-      // Display
+      KWordShell* m_pShell = new KWordShell;
       m_pShell->show();
+      m_pShell->newDocument();
     }
+    else
+    {
+      list<string>::iterator it = g_openFiles.begin();
+      for( ; it != g_openFiles.end(); ++it )
+      {
+	KWordShell* m_pShell = new KWordShell;
+	m_pShell->show();
+	m_pShell->openDocument( it->c_str(), "" );
+      }
+    }
+  }
 }
 
 /*================================================================*/
@@ -65,21 +82,23 @@ int main(int argc,char **argv)
 {
   FormatManager *formatMngr;
   formatMngr = new FormatManager();
-
-  // Parse command line parameters.
-  for(int i = 1;i < argc;i++)
-    {
-      // Are we started as server? => Someones wants to embed us
-      // => We dont create a shell
-      if (strcmp(argv[i],"-s") == 0 || strcmp(argv[i],"--server") == 0)
-	g_bWithGUI = false;
-    }
   
   // Publish our factory
-  KWordAutoLoader loader("IDL:KWord/Factory:1.0");
+  KWordAutoLoader loader("IDL:KOffice/DocumentFactory:1.0");
 
   // Lets rock
   KWordApp app(argc,argv);
+
+  int i = 1;
+  if ( strcmp( argv[i], "-s" ) == 0 || strcmp( argv[i], "--server" ) == 0 )
+  {
+    i++;
+    g_bWithGUI = false;
+  }
+
+  for( ; i < argc; i++ )
+    g_openFiles.push_back( (const char*)argv[i] );
+
   app.exec();
   
   return 0;

@@ -24,7 +24,7 @@
 #include <komlStreamFeed.h>
 #include <komlWriter.h>
 
-#include <kurl.h>
+#include <k2url.h>
 
 #include <qmsgbox.h>
 #include <qcolor.h>
@@ -40,14 +40,14 @@
 /******************************************************************/
 
 /*================================================================*/
-KWordChild::KWordChild(KWordDocument_impl *_wdoc,const QRect& _rect,OPParts::Document_ptr _doc)
+KWordChild::KWordChild( KWordDocument *_wdoc, const QRect& _rect, KOffice::Document_ptr _doc )
   : KoDocumentChild(_rect,_doc)
 {
   m_pKWordDoc = _wdoc;
 }
 
 /*================================================================*/
-KWordChild::KWordChild(KWordDocument_impl *_wdoc ) 
+KWordChild::KWordChild(KWordDocument *_wdoc ) 
   : KoDocumentChild()
 {
   m_pKWordDoc = _wdoc;
@@ -60,14 +60,14 @@ KWordChild::~KWordChild()
 
 
 /******************************************************************/
-/* Class: KWordDocument_impl                                      */
+/* Class: KWordDocument                                      */
 /******************************************************************/
 
 /*================================================================*/
-KWordDocument_impl::KWordDocument_impl()
+KWordDocument::KWordDocument()
   : formatCollection(this), imageCollection(this), selStart(this,1), selEnd(this,1)
 {
-  ADD_INTERFACE("IDL:OPParts/Print:1.0");
+  ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
   // Use CORBA mechanism for deleting views
   m_lstViews.setAutoDelete(false);
@@ -77,10 +77,12 @@ KWordDocument_impl::KWordDocument_impl()
   hasSelection = false;
 
   rastX = rastY = 10;
+
+  m_bEmpty = true;
 }
 
 /*================================================================*/
-CORBA::Boolean KWordDocument_impl::init()
+CORBA::Boolean KWordDocument::init()
 {
   pageLayout.format = PG_DIN_A4;
   pageLayout.orientation = PG_PORTRAIT;
@@ -124,9 +126,9 @@ CORBA::Boolean KWordDocument_impl::init()
 }
 
 /*================================================================*/
-bool KWordDocument_impl::loadTemplate(const char *_url)
+bool KWordDocument::loadTemplate(const char *_url)
 {
-  KURL u(_url);
+  K2URL u(_url);
   if (u.isMalformed())
     return false;
   
@@ -146,15 +148,16 @@ bool KWordDocument_impl::loadTemplate(const char *_url)
   KOMLStreamFeed feed(in);
   KOMLParser parser(&feed);
   
-  if (!load(parser))
+  if ( !loadXML( parser, 0L ) )
     return false;
  
-  m_bModified = true;
+  setModified( true );
+
   return true;
 }
 
 /*================================================================*/
-void KWordDocument_impl::setPageLayout(KoPageLayout _layout,KoColumns _cl)
+void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl)
 { 
   if (processingType == WP)
     {
@@ -182,7 +185,7 @@ void KWordDocument_impl::setPageLayout(KoPageLayout _layout,KoColumns _cl)
 }
 
 /*================================================================*/
-void KWordDocument_impl::recalcFrames()
+void KWordDocument::recalcFrames()
 {
   pages = 1;
   KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet*>(frames.at(0));
@@ -200,15 +203,15 @@ void KWordDocument_impl::recalcFrames()
 }
 
 /*================================================================*/
-KWordDocument_impl::~KWordDocument_impl()
+KWordDocument::~KWordDocument()
 {
-  sdeb("KWordDocument_impl::~KWordDocument_impl()\n");
+  cerr << "KWordDocument::~KWordDocument()" << endl;
   cleanUp();
-  edeb("...KWordDocument_impl::~KWordDocument_impl()\n");
+  cerr << "...KWordDocument::~KWordDocument()" << endl;
 }
 
 /*================================================================*/
-void KWordDocument_impl::cleanUp()
+void KWordDocument::cleanUp()
 {
   if (m_bIsClean) return;
 
@@ -216,11 +219,11 @@ void KWordDocument_impl::cleanUp()
   
   m_lstChildren.clear();
 
-  Document_impl::cleanUp();
+  KoDocument::cleanUp();
 }
 
 /*================================================================*/
-bool KWordDocument_impl::hasToWriteMultipart()
+bool KWordDocument::hasToWriteMultipart()
 {  
   if (m_lstChildren.count() == 0) return false;
   
@@ -228,15 +231,15 @@ bool KWordDocument_impl::hasToWriteMultipart()
 }
 
 /*================================================================*/
-bool KWordDocument_impl::loadChildren(OPParts::MimeMultipartDict_ptr _dict)
+bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
 {
-  cerr << "bool KWordDocument_impl::loadChildren( OPParts::MimeMultipartDict_ptr _dict )" << endl;
+  cerr << "bool KWordDocument::loadChildren( OPParts::MimeMultipartDict_ptr _dict )" << endl;
   
   QListIterator<KWordChild> it(m_lstChildren);
   for(;it.current();++it)
     {
       cerr << "Loading child" << endl;
-      if (!it.current()->loadDocument(_dict))
+      if (!it.current()->loadDocument( _store, it.current()->mimeType() ) )
 	return false;
     }
 
@@ -246,7 +249,7 @@ bool KWordDocument_impl::loadChildren(OPParts::MimeMultipartDict_ptr _dict)
 }
 
 /*================================================================*/
-bool KWordDocument_impl::load(KOMLParser& parser)
+bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
   pageLayout.format = PG_DIN_A4;
   pageLayout.orientation = PG_PORTRAIT;
@@ -428,7 +431,7 @@ bool KWordDocument_impl::load(KOMLParser& parser)
 }
 
 /*================================================================*/
-void KWordDocument_impl::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
+void KWordDocument::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
   string name;
@@ -478,8 +481,9 @@ void KWordDocument_impl::loadFrameSets(KOMLParser& parser,vector<KOMLAttrib>& ls
 }
 
 /*================================================================*/
-bool KWordDocument_impl::save(ostream &out)
+bool KWordDocument::save( ostream &out, const char* /* _format */ )
 {
+  out << "<?xml version=\"1.0\"?>" << endl;
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer and Torben Weis" << "\" email=\"" << "reggie@kde.org and weis@kde.org" 
       << "\" editor=\"" << "KWord" << "\" mime=\"" << "application/x-kword" << "\">" << endl;
   
@@ -513,9 +517,9 @@ bool KWordDocument_impl::save(ostream &out)
 }
 
 /*================================================================*/
-void KWordDocument_impl::makeChildListIntern(OPParts::Document_ptr _doc,const char *_path)
+void KWordDocument::makeChildListIntern( KOffice::Document_ptr _doc,const char *_path)
 {
-  cerr << "void KWordDocument_impl::makeChildList( OPParts::Document_ptr _doc, const char *_path )" << endl;
+  cerr << "void KWordDocument::makeChildList( OPParts::Document_ptr _doc, const char *_path )" << endl;
   
   int i = 0;
   
@@ -528,44 +532,44 @@ void KWordDocument_impl::makeChildListIntern(OPParts::Document_ptr _doc,const ch
       path += tmp.data();
       cerr << "SETTING NAME To " << path.data() << endl;
     
-      OPParts::Document_var doc = it.current()->document();    
+      KOffice::Document_var doc = it.current()->document();    
       doc->makeChildList(_doc,path);
     }
 }
 
 /*================================================================*/
-QStrList KWordDocument_impl::outputFormats()
+QStrList KWordDocument::outputFormats()
 {
   return QStrList();
 }
 
 /*================================================================*/
-QStrList KWordDocument_impl::inputFormats()
+QStrList KWordDocument::inputFormats()
 {
   return QStrList();
 }
 
 /*================================================================*/
-void KWordDocument_impl::viewList(OPParts::Document::ViewList*& _list)
+void KWordDocument::viewList(OpenParts::Document::ViewList*& _list)
 {
   (*_list).length(m_lstViews.count());
 
   int i = 0;
-  QListIterator<KWordView_impl> it(m_lstViews);
+  QListIterator<KWordView> it(m_lstViews);
   for(;it.current();++it)
     {
-      (*_list)[i++] = OPParts::View::_duplicate(it.current());
+      (*_list)[i++] = OpenParts::View::_duplicate(it.current());
     }
 }
 
 /*================================================================*/
-void KWordDocument_impl::addView(KWordView_impl *_view)
+void KWordDocument::addView(KWordView *_view)
 {
   m_lstViews.append(_view);
 }
 
 /*================================================================*/
-void KWordDocument_impl::removeView(KWordView_impl *_view)
+void KWordDocument::removeView(KWordView *_view)
 {
   m_lstViews.setAutoDelete(false);
   m_lstViews.removeRef(_view);
@@ -573,18 +577,25 @@ void KWordDocument_impl::removeView(KWordView_impl *_view)
 }
 
 /*================================================================*/
-OPParts::View_ptr KWordDocument_impl::createView()
+KWordView* KWordDocument::createWordView()
 {
-  KWordView_impl *p = new KWordView_impl(0L);
-  p->setDocument(this);
-
-  return OPParts::View::_duplicate(p);
+  KWordView *p = new KWordView( 0L, 0L, this );
+  p->QWidget::show();
+  m_lstViews.append( p );
+  
+  return p;
 }
 
 /*================================================================*/
-void KWordDocument_impl::insertObject(const QRect& _rect,const char *_server_name)
+OpenParts::View_ptr KWordDocument::createView()
 {
-  OPParts::Document_var doc = imr_createDocByServerName(_server_name);
+  return OpenParts::View::_duplicate( createWordView() );
+}
+
+/*================================================================*/
+void KWordDocument::insertObject(const QRect& _rect,const char *_server_name)
+{
+  KOffice::Document_var doc = imr_createDocByServerName(_server_name);
   if (CORBA::is_nil(doc)) return;
 
   if (!doc->init())
@@ -599,7 +610,7 @@ void KWordDocument_impl::insertObject(const QRect& _rect,const char *_server_nam
 }
 
 /*================================================================*/
-void KWordDocument_impl::insertChild(KWordChild *_child)
+void KWordDocument::insertChild(KWordChild *_child)
 {
   m_lstChildren.append(_child);
   
@@ -607,7 +618,7 @@ void KWordDocument_impl::insertChild(KWordChild *_child)
 }
 
 /*================================================================*/
-void KWordDocument_impl::changeChildGeometry(KWordChild *_child,const QRect& _rect)
+void KWordDocument::changeChildGeometry(KWordChild *_child,const QRect& _rect)
 {
   _child->setGeometry(_rect);
 
@@ -615,18 +626,18 @@ void KWordDocument_impl::changeChildGeometry(KWordChild *_child,const QRect& _re
 }
 
 /*================================================================*/
-QListIterator<KWordChild> KWordDocument_impl::childIterator()
+QListIterator<KWordChild> KWordDocument::childIterator()
 {
   return QListIterator<KWordChild> (m_lstChildren);
 }
 
 /*================================================================*/
-void KWordDocument_impl::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _height)
+void KWordDocument::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _height)
 {
 }
 
 /*================================================================*/
-QPen KWordDocument_impl::setBorderPen(KWParagLayout::Border _brd)
+QPen KWordDocument::setBorderPen(KWParagLayout::Border _brd)
 {
   QPen pen(black,1,SolidLine);
 
@@ -656,7 +667,7 @@ QPen KWordDocument_impl::setBorderPen(KWParagLayout::Border _brd)
 }
 
 /*================================================================*/
-KWUserFont* KWordDocument_impl::findUserFont(char* _userfontname)
+KWUserFont* KWordDocument::findUserFont(char* _userfontname)
 {
   KWUserFont* font;
   for (font = userFontList.first();font != 0L;font = userFontList.next())
@@ -667,7 +678,7 @@ KWUserFont* KWordDocument_impl::findUserFont(char* _userfontname)
 }
 
 /*================================================================*/
-KWDisplayFont* KWordDocument_impl::findDisplayFont(KWUserFont* _font,unsigned int _size,int _weight,bool _italic,bool _underline)
+KWDisplayFont* KWordDocument::findDisplayFont(KWUserFont* _font,unsigned int _size,int _weight,bool _italic,bool _underline)
 {
   KWDisplayFont* font;
   for (font = displayFontList.first();font != 0L;font = displayFontList.next())
@@ -681,7 +692,7 @@ KWDisplayFont* KWordDocument_impl::findDisplayFont(KWUserFont* _font,unsigned in
 }
 
 /*================================================================*/
-KWParagLayout* KWordDocument_impl::findParagLayout(const char *_name)
+KWParagLayout* KWordDocument::findParagLayout(const char *_name)
 {
   KWParagLayout* p;
   for (p = paragLayoutList.first();p != 0L;p = paragLayoutList.next())
@@ -692,13 +703,13 @@ KWParagLayout* KWordDocument_impl::findParagLayout(const char *_name)
 }
 
 /*================================================================*/
-bool KWordDocument_impl::isPTYInFrame(unsigned int _frameSet,unsigned int _frame,unsigned int _ypos)
+bool KWordDocument::isPTYInFrame(unsigned int _frameSet,unsigned int _frame,unsigned int _ypos)
 {
   return frames.at(_frameSet)->isPTYInFrame(_frame,_ypos);
 }
 
 /*================================================================*/
-KWParag* KWordDocument_impl::findFirstParagOfPage(unsigned int _page,unsigned int _frameset)
+KWParag* KWordDocument::findFirstParagOfPage(unsigned int _page,unsigned int _frameset)
 {
   if (frames.at(_frameset)->getFrameType() != FT_TEXT) return 0L;
 
@@ -714,7 +725,7 @@ KWParag* KWordDocument_impl::findFirstParagOfPage(unsigned int _page,unsigned in
 }
 
 /*================================================================*/
-void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h )
+void KWordDocument::printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h )
 {
   _painter.save();
 
@@ -922,7 +933,7 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 }
 
 /*================================================================*/
-void KWordDocument_impl::drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset)
+void KWordDocument::drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset)
 {
   RasterOp rop = _painter->rasterOp();
     
@@ -952,9 +963,9 @@ void KWordDocument_impl::drawMarker(KWFormatContext &_fc,QPainter *_painter,int 
 }
 
 /*================================================================*/
-void KWordDocument_impl::updateAllViews(KWordView_impl *_view)
+void KWordDocument::updateAllViews(KWordView *_view)
 {
-  KWordView_impl *viewPtr;
+  KWordView *viewPtr;
 
   if (!m_lstViews.isEmpty())
     {
@@ -964,9 +975,9 @@ void KWordDocument_impl::updateAllViews(KWordView_impl *_view)
 }
 
 /*================================================================*/
-void KWordDocument_impl::updateAllRanges()
+void KWordDocument::updateAllRanges()
 {
-  KWordView_impl *viewPtr;
+  KWordView *viewPtr;
 
   if (!m_lstViews.isEmpty())
     {
@@ -979,9 +990,9 @@ void KWordDocument_impl::updateAllRanges()
 }
 
 /*================================================================*/
-void KWordDocument_impl::updateAllCursors()
+void KWordDocument::updateAllCursors()
 {
-  KWordView_impl *viewPtr;
+  KWordView *viewPtr;
 
   if (!m_lstViews.isEmpty())
     {
@@ -997,9 +1008,9 @@ void KWordDocument_impl::updateAllCursors()
 }
 
 /*================================================================*/
-void KWordDocument_impl::drawAllBorders(QPainter *_painter = 0)
+void KWordDocument::drawAllBorders(QPainter *_painter = 0)
 {
-  KWordView_impl *viewPtr;
+  KWordView *viewPtr;
   QPainter p;
 
   if (!m_lstViews.isEmpty())
@@ -1022,13 +1033,13 @@ void KWordDocument_impl::drawAllBorders(QPainter *_painter = 0)
 }
 
 /*================================================================*/
-void KWordDocument_impl::insertPicture(QString _filename,KWPage *_paperWidget)
+void KWordDocument::insertPicture(QString _filename,KWPage *_paperWidget)
 {
   _paperWidget->insertPictureAsChar(_filename);
 }
 
 /*================================================================*/
-void KWordDocument_impl::drawSelection(QPainter &_painter,int xOffset,int yOffset)
+void KWordDocument::drawSelection(QPainter &_painter,int xOffset,int yOffset)
 {
   _painter.save();
   RasterOp rop = _painter.rasterOp();
@@ -1100,7 +1111,7 @@ void KWordDocument_impl::drawSelection(QPainter &_painter,int xOffset,int yOffse
 }
 
 /*================================================================*/
-void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_painter)
+void KWordDocument::deleteSelectedText(KWFormatContext *_fc,QPainter &_painter)
 {
   KWFormatContext tmpFC2(this,selStart.getFrameSet() - 1);
   KWFormatContext tmpFC1(this,selStart.getFrameSet() - 1);
@@ -1194,7 +1205,7 @@ void KWordDocument_impl::deleteSelectedText(KWFormatContext *_fc,QPainter &_pain
 }
 
 /*================================================================*/
-void KWordDocument_impl::copySelectedText()
+void KWordDocument::copySelectedText()
 {
   KWFormatContext tmpFC2(this,selStart.getFrameSet() - 1);
   KWFormatContext tmpFC1(this,selStart.getFrameSet() - 1);
@@ -1257,7 +1268,7 @@ void KWordDocument_impl::copySelectedText()
 }
 
 /*================================================================*/
-void KWordDocument_impl::setFormat(KWFormat &_format)
+void KWordDocument::setFormat(KWFormat &_format)
 {
   KWFormatContext tmpFC2(this,selStart.getFrameSet() - 1);
   KWFormatContext tmpFC1(this,selStart.getFrameSet() - 1);
@@ -1309,7 +1320,7 @@ void KWordDocument_impl::setFormat(KWFormat &_format)
 }
 
 /*================================================================*/
-void KWordDocument_impl::paste(KWFormatContext *_fc,QString _string,KWPage *_page)
+void KWordDocument::paste(KWFormatContext *_fc,QString _string,KWPage *_page)
 {
   QStrList strList;
   int index;
@@ -1417,7 +1428,7 @@ void KWordDocument_impl::paste(KWFormatContext *_fc,QString _string,KWPage *_pag
 }
 
 /*================================================================*/
-void KWordDocument_impl::appendPage(unsigned int _page,QPainter &_painter)
+void KWordDocument::appendPage(unsigned int _page,QPainter &_painter)
 {
   pages++;
   QRect pageRect(0,_page * getPTPaperHeight(),getPTPaperWidth(),getPTPaperHeight());
@@ -1454,7 +1465,7 @@ void KWordDocument_impl::appendPage(unsigned int _page,QPainter &_painter)
 }
 
 /*================================================================*/
-int KWordDocument_impl::getFrameSet(unsigned int mx,unsigned int my)
+int KWordDocument::getFrameSet(unsigned int mx,unsigned int my)
 {
   KWFrameSet *frameSet = 0L;
 
@@ -1468,7 +1479,7 @@ int KWordDocument_impl::getFrameSet(unsigned int mx,unsigned int my)
 }
 
 /*================================================================*/
-int KWordDocument_impl::selectFrame(unsigned int mx,unsigned int my)
+int KWordDocument::selectFrame(unsigned int mx,unsigned int my)
 {
   KWFrameSet *frameSet = 0L;
 
@@ -1486,7 +1497,7 @@ int KWordDocument_impl::selectFrame(unsigned int mx,unsigned int my)
 }
 
 /*================================================================*/
-void KWordDocument_impl::deSelectFrame(unsigned int mx,unsigned int my)
+void KWordDocument::deSelectFrame(unsigned int mx,unsigned int my)
 {
   KWFrameSet *frameSet = 0L;
 
@@ -1499,7 +1510,7 @@ void KWordDocument_impl::deSelectFrame(unsigned int mx,unsigned int my)
 }
 
 /*================================================================*/
-void KWordDocument_impl::deSelectAllFrames()
+void KWordDocument::deSelectAllFrames()
 {
   KWFrameSet *frameSet = 0L;
 
@@ -1512,7 +1523,7 @@ void KWordDocument_impl::deSelectAllFrames()
 }
 
 /*================================================================*/
-QCursor KWordDocument_impl::getMouseCursor(unsigned int mx,unsigned int my)
+QCursor KWordDocument::getMouseCursor(unsigned int mx,unsigned int my)
 {
   KWFrameSet *frameSet = 0L;
 
@@ -1529,7 +1540,7 @@ QCursor KWordDocument_impl::getMouseCursor(unsigned int mx,unsigned int my)
 }
 
 /*================================================================*/
-KWFrame *KWordDocument_impl::getFirstSelectedFrame()
+KWFrame *KWordDocument::getFirstSelectedFrame()
 {
   KWFrameSet *frameSet = 0L;
 
@@ -1547,7 +1558,7 @@ KWFrame *KWordDocument_impl::getFirstSelectedFrame()
 }
 
 /*================================================================*/
-void KWordDocument_impl::print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin)
+void KWordDocument::print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin)
 {
   QList<KWFormatContext> fcList;
   fcList.setAutoDelete(true);
@@ -1583,7 +1594,7 @@ void KWordDocument_impl::print(QPainter *painter,QPrinter *printer,float left_ma
 }
 
 /*================================================================*/
-void KWordDocument_impl::updateAllFrames()
+void KWordDocument::updateAllFrames()
 {
   QList<KWFrame> _frames;
   _frames.setAutoDelete(false);

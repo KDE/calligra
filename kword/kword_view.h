@@ -16,17 +16,17 @@
 #ifndef kword_view_h
 #define kword_view_h
 
-class KWordView_impl;
-class KWordDocument_impl;
+class KWordView;
+class KWordDocument;
 class KWordChild;
 class KWordGUI;
 class KWPaintWindow;
 
-#include <view_impl.h>
-#include <document_impl.h>
-#include <part_frame_impl.h>
-#include <menu_impl.h>
-#include <toolbar_impl.h>
+#include <koView.h>
+#include <koDocument.h>
+#include <koFrame.h>
+#include <opMenuIf.h>
+#include <opToolBarIf.h>
 
 #include <qpixmap.h>
 #include <qwidget.h>
@@ -55,38 +55,38 @@ class KWPaintWindow;
 /* Class: KWordFrame                                              */
 /******************************************************************/
 
-class KWordFrame : public PartFrame_impl
+class KWordFrame : public KoFrame
 {
   Q_OBJECT
 
 public:
-  KWordFrame(KWordView_impl*,KWordChild*);
+  KWordFrame(KWordView*,KWordChild*);
   
   KWordChild* child() 
     { return m_pKWordChild; }
-  KWordView_impl* view() 
+  KWordView* wordView() 
     { return m_pKWordView; }
   
 protected:
   KWordChild *m_pKWordChild;
-  KWordView_impl *m_pKWordView;
+  KWordView *m_pKWordView;
 
 };
 
 /******************************************************************/
-/* Class: KWordView_impl                                          */
+/* Class: KWordView                                               */
 /******************************************************************/
 
-class KWordView_impl : public QWidget,
-		       virtual public View_impl,
-		       virtual public KWord::KWordView_skel
+class KWordView : public QWidget,
+		  virtual public KoViewIf,
+		  virtual public KWord::KWordView_skel
 {
   Q_OBJECT
 
 public:
   // C++
-  KWordView_impl(QWidget *_parent = 0L,const char *_name = 0L);
-  virtual ~KWordView_impl();
+  KWordView( QWidget *_parent, const char *_name, KWordDocument *_doc );
+  virtual ~KWordView();
 
   // IDL  
   virtual void editUndo();
@@ -144,15 +144,12 @@ public:
   virtual void textBorderWidth(const char *width);
   virtual void textBorderStyle(const char *style);
   
-  virtual void setMode(OPParts::Part::Mode _mode);
+  virtual void setMode( KOffice::View::Mode _mode);
   virtual void setFocus(CORBA::Boolean mode);
 
   // C++
-  virtual void setDocument(KWordDocument_impl *_doc);
-  virtual CORBA::Boolean KWordView_impl::printDlg();
+  virtual CORBA::Boolean printDlg();
 
-  virtual void createGUI();
-  virtual void construct();
   virtual void setFormat(KWFormat &_format,bool _check = true,bool _update_page = true);
   virtual void setFlow(KWParagLayout::Flow _flow);
   virtual void setParagBorders(KWParagLayout::Border _left,KWParagLayout::Border _right,
@@ -163,14 +160,22 @@ public:
 public slots:
   void slotInsertObject(KWordChild *_child);
   void slotUpdateChildGeometry(KWordChild *_child);
-  void slotGeometryEnd(PartFrame_impl*);
-  void slotMoveEnd(PartFrame_impl*);
+  void slotGeometryEnd( KoFrame*);
+  void slotMoveEnd( KoFrame*);
   void paragDiaOk();
   void openPageLayoutDia()
     { formatPage(); }
   void newPageLayout(KoPageLayout _layout);
   
 protected:
+  // C++
+  virtual void init();
+  // IDL
+  virtual bool event( const char* _event, const CORBA::Any& _value );
+  // C++
+  bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
+  bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
+
   virtual void cleanUp();
   
   void resizeEvent(QResizeEvent *e);
@@ -179,25 +184,16 @@ protected:
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
 
-  void setupMenu();
-  void setupEditToolbar();
-  void setupInsertToolbar();
-  void setupTextToolbar();
-
   char* colorToPixString(QColor);
   void getFonts();
   void setParagBorderValues();
 
-
-  KWordDocument_impl *m_pKWordDoc;
+  KWordDocument *m_pKWordDoc;
 
   bool m_bUnderConstruction;
   
-  OPParts::MenuBarFactory_var m_vMenuBarFactory;
-  MenuBar_ref m_rMenuBar;
-  
   // edit menu
-  CORBA::Long m_idMenuEdit;
+  OpenPartsUI::Menu_var m_vMenuEdit;
   CORBA::Long m_idMenuEdit_Undo;
   CORBA::Long m_idMenuEdit_Redo;
   CORBA::Long m_idMenuEdit_Cut;
@@ -208,18 +204,18 @@ protected:
   CORBA::Long m_idMenuEdit_FindReplace;
 
   // view menu
-  CORBA::Long m_idMenuView;
+  OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_NewView;
  
   // insert menu
-  CORBA::Long m_idMenuInsert;
+  OpenPartsUI::Menu_var m_vMenuInsert;
   CORBA::Long m_idMenuInsert_Picture;
   CORBA::Long m_idMenuInsert_Clipart;
   CORBA::Long m_idMenuInsert_Table;
   CORBA::Long m_idMenuInsert_Part;
  
   // format menu
-  CORBA::Long m_idMenuFormat;
+  OpenPartsUI::Menu_var m_vMenuFormat;
   CORBA::Long m_idMenuFormat_Font;
   CORBA::Long m_idMenuFormat_Color;
   CORBA::Long m_idMenuFormat_Paragraph;
@@ -228,24 +224,17 @@ protected:
   CORBA::Long m_idMenuFormat_Style;
 
   // extra menu
-  CORBA::Long m_idMenuExtra;
+  OpenPartsUI::Menu_var m_vMenuExtra;
   CORBA::Long m_idMenuExtra_Spelling;
   CORBA::Long m_idMenuExtra_Stylist;
   CORBA::Long m_idMenuExtra_Options;
 
   // help menu
-  CORBA::Long m_idMenuHelp;
+  OpenPartsUI::Menu_var m_vMenuHelp;
   CORBA::Long m_idMenuHelp_Contents;
-  CORBA::Long m_idMenuHelp_About;
-  CORBA::Long m_idMenuHelp_AboutKOffice;
-  CORBA::Long m_idMenuHelp_AboutKDE;
-
-  OPParts::ToolBarFactory_var m_vToolBarFactory;
-  ToolBar_ref m_rToolBarFile;
-  QList<KWordFrame> m_lstFrames;
 
   // edit toolbar
-  ToolBar_ref m_rToolBarEdit;
+  OpenPartsUI::ToolBar_var m_vToolBarEdit;
   CORBA::Long m_idButtonEdit_Undo;
   CORBA::Long m_idButtonEdit_Redo;
   CORBA::Long m_idButtonEdit_Cut;
@@ -253,14 +242,14 @@ protected:
   CORBA::Long m_idButtonEdit_Paste;
 
   // insert toolbar
-  ToolBar_ref m_rToolBarInsert;
+  OpenPartsUI::ToolBar_var m_vToolBarInsert;
   CORBA::Long m_idButtonInsert_Picture;
   CORBA::Long m_idButtonInsert_Clipart;
   CORBA::Long m_idButtonInsert_Table;
   CORBA::Long m_idButtonInsert_Part;
 
   // text toolbar
-  ToolBar_ref m_rToolBarText;
+  OpenPartsUI::ToolBar_var m_vToolBarText;
   CORBA::Long m_idComboText_Style;
   CORBA::Long m_idComboText_FontSize;
   CORBA::Long m_idComboText_FontList;
@@ -283,6 +272,8 @@ protected:
   CORBA::Long m_idButtonText_BorderColor;
   CORBA::Long m_idComboText_BorderWidth;
   CORBA::Long m_idComboText_BorderStyle;
+
+  QList<KWordFrame> m_lstFrames;
 
   // text toolbar values
   QFont tbFont;
@@ -310,19 +301,21 @@ class KWordGUI : public QWidget
   Q_OBJECT
 
 public:
-  KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordView_impl *_view);
+  KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView *_view );
   
-  void showGUI(bool __show);
-  KWordDocument_impl *getDocument()
+  KWordDocument *getDocument()
     { return doc; }
-  void setDocument(KWordDocument_impl *_doc)
+
+  void showGUI(bool __show);
+
+  void setDocument( KWordDocument *_doc )
     { doc = _doc; paperWidget->setDocument(doc); }
 
   QScrollBar *getVertScrollBar()
     { return s_vert; }
   QScrollBar *getHorzScrollBar()
     { return s_horz; }
-  KWordView_impl *getView()
+  KWordView *getView()
     { return view; }
   KWPage *getPaperWidget()
     { return paperWidget; }
@@ -358,10 +351,9 @@ protected:
   QScrollBar *s_vert,*s_horz;
   KoRuler *r_vert,*r_horz; 
   KWPage *paperWidget;
-  KWordDocument_impl *doc;
-  KWordView_impl *view;
+  KWordDocument *doc;
+  KWordView *view;
   KoTabChooser *tabChooser;
-  
 };
 
 #endif

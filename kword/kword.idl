@@ -1,11 +1,13 @@
 #ifndef kword_idl
 #define kword_idl
 
-#include <parts.idl>
+#include <openparts.idl>
+#include <koffice.idl>
+#include <openparts_ui.idl>
 
 module KWord
 {
-  interface KWordView : OPParts::View
+  interface KWordView : KOffice::View
     {
       slot void editUndo();
       slot void editRedo();
@@ -63,11 +65,7 @@ module KWord
       slot void textBorderStyle(in string style);
     };
 
-  interface KWordDocument : OPParts::Document, OPParts::Print
-    {
-    };
-
-  interface Factory : OPParts::Factory
+  interface KWordDocument : KOffice::Document, KOffice::Print
     {
     };
 };

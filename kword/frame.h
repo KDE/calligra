@@ -27,7 +27,7 @@
 #include <iostream>
 #include <koStream.h>
 
-class KWordDocument_impl;
+class KWordDocument;
 
 enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2};
 enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
@@ -92,7 +92,7 @@ private:
 class KWFrameSet
 {
 public:
-  KWFrameSet(KWordDocument_impl *_doc);
+  KWFrameSet(KWordDocument *_doc);
   virtual ~KWFrameSet() 
     {;}
 
@@ -130,7 +130,7 @@ protected:
     {;}
 
   // document
-  KWordDocument_impl *doc;
+  KWordDocument *doc;
 
   // frames
   QList<KWFrame> frames;
@@ -144,7 +144,7 @@ protected:
 class KWTextFrameSet : public KWFrameSet
 {
 public:
-  KWTextFrameSet(KWordDocument_impl *_doc)
+  KWTextFrameSet(KWordDocument *_doc)
     : KWFrameSet(_doc) 
     {;}
   virtual ~KWTextFrameSet() 

@@ -16,14 +16,12 @@
 #ifndef kword_doc_h
 #define kword_doc_h
 
-class KWordDocument_impl;
+class KWordDocument;
 class KWPage;
 class QPrinter;
 
 #include <koDocument.h>
 #include <koPrintExt.h>
-#include <document_impl.h>
-#include <view_impl.h>
 
 #include <iostream>
 
@@ -65,38 +63,38 @@ class QPrinter;
 class KWordChild : public KoDocumentChild
 {
 public:
-  KWordChild(KWordDocument_impl *_wdoc,const QRect& _rect,OPParts::Document_ptr _doc);
-  KWordChild(KWordDocument_impl *_wdoc);
+  KWordChild( KWordDocument *_wdoc,const QRect& _rect,KOffice::Document_ptr _doc);
+  KWordChild( KWordDocument *_wdoc);
   ~KWordChild();
   
-  KWordDocument_impl* parent() 
+  KWordDocument* parent() 
     { return m_pKWordDoc; }
   
 protected:
-  KWordDocument_impl *m_pKWordDoc;
+  KWordDocument *m_pKWordDoc;
 
 };
 
 /******************************************************************/
-/* Class: KWordDocument_impl                                      */
+/* Class: KWordDocument                                           */
 /******************************************************************/
 
-class KWordDocument_impl : public QObject,
-			   virtual public KoDocument,
-			   virtual public KoPrintExt,
-			   virtual public KWord::KWordDocument_skel
+class KWordDocument : public QObject,
+		      virtual public KoDocument,
+		      virtual public KoPrintExt,
+		      virtual public KWord::KWordDocument_skel
 {
   Q_OBJECT
 
 public:
-  KWordDocument_impl();
-  ~KWordDocument_impl();
+  KWordDocument();
+  ~KWordDocument();
+
+  virtual void cleanUp();
 
   enum ProcessingType {WP = 0,DTP = 1};
   
 protected:
-  virtual void cleanUp();
-
   virtual bool hasToWriteMultipart();
   
 public:
@@ -104,31 +102,37 @@ public:
   virtual CORBA::Boolean init();
 
   // C++
+  virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
+  virtual bool loadChildren( KOStore::Store_ptr _store );
+  virtual bool save( ostream& out, const char *_format );
+
   virtual bool loadTemplate(const char *_url);
-  virtual bool load(KOMLParser& parser);
-  virtual bool loadChildren(OPParts::MimeMultipartDict_ptr _dict);
-  virtual bool save(ostream& out);
   
   // IDL
-  virtual OPParts::View_ptr createView();
+  virtual OpenParts::View_ptr createView();
+  // C++
+  KWordView* createWordView();
 
-  virtual void viewList(OPParts::Document::ViewList*& _list);
+  // IDL
+  virtual void viewList(KOffice::Document::ViewList*& _list);
 
   virtual char* mimeType() 
     { return CORBA::string_dup(MIME_TYPE); }
   
   virtual CORBA::Boolean isModified() 
     { return m_bModified; }
-  
-  // C++
 
-  unsigned int getNumViews() { return m_lstViews.count(); }
+  // C++
+  virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
+  virtual bool isEmpty() { return m_bEmpty; }
+
+  unsigned int viewCount() { return m_lstViews.count(); }
 
   virtual QStrList outputFormats();
   virtual QStrList inputFormats();
 
-  virtual void addView(KWordView_impl *_view);
-  virtual void removeView(KWordView_impl *_view);
+  virtual void addView(KWordView *_view);
+  virtual void removeView(KWordView *_view);
 
   virtual void insertObject(const QRect& _rect,const char *_part_name);
   virtual void changeChildGeometry(KWordChild *_child,const QRect&);
@@ -237,7 +241,7 @@ public:
   
   void drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset);
 
-  void updateAllViews(KWordView_impl *_view);
+  void updateAllViews(KWordView *_view);
   void updateAllRanges();
   void updateAllCursors();
   void drawAllBorders(QPainter *_painter = 0);
@@ -306,7 +310,7 @@ signals:
 
 protected:
   virtual void insertChild(KWordChild*);
-  virtual void makeChildListIntern(OPParts::Document_ptr _doc,const char *_path);
+  virtual void makeChildListIntern(KOffice::Document_ptr _doc,const char *_path);
   
   virtual void draw(QPaintDevice*,CORBA::Long _width,CORBA::Long _height);
   QPen setBorderPen(KWParagLayout::Border _brd);
@@ -314,7 +318,7 @@ protected:
   void loadFrameSets(KOMLParser&,vector<KOMLAttrib>&);
   void recalcFrames();
 
-  QList<KWordView_impl> m_lstViews;
+  QList<KWordView> m_lstViews;
   QList<KWordChild> m_lstChildren;
 
   bool m_bModified;
@@ -369,6 +373,7 @@ protected:
   ProcessingType processingType;
   int rastX,rastY;
 
+  bool m_bEmpty;
 };
 
 #endif

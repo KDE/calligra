@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qcolor.h>
 
-class KWordDocument_impl;
+class KWordDocument;
 
 /******************************************************************/
 /* Class: KWFormatCollection                                      */
@@ -32,7 +32,7 @@ class KWordDocument_impl;
 class KWFormatCollection
 {
 public:
-  KWFormatCollection(KWordDocument_impl *_doc);
+  KWFormatCollection(KWordDocument *_doc);
   ~KWFormatCollection();
 
   KWFormat *getFormat(const KWFormat &_format);
@@ -47,7 +47,7 @@ protected:
   KWFormat *insertFormat(QString _key,const KWFormat &_format);
 
   QDict<KWFormat> formats;
-  KWordDocument_impl *doc;
+  KWordDocument *doc;
 };
 
 #endif

@@ -23,7 +23,7 @@
 #include <qstring.h>
 #include <qcolor.h>
 
-class KWordDocument_impl;
+class KWordDocument;
 
 /******************************************************************/
 /* Class: KWImageCollection                                       */
@@ -32,7 +32,7 @@ class KWordDocument_impl;
 class KWImageCollection
 {
 public:
-  KWImageCollection(KWordDocument_impl *_doc);
+  KWImageCollection(KWordDocument *_doc);
   ~KWImageCollection();
 
   KWImage *getImage(KWImage &_image,QString &key);
@@ -48,7 +48,7 @@ protected:
   KWImage *insertImage(QString _key,KWImage &_format);
 
   QDict<KWImage> images;
-  KWordDocument_impl *doc;
+  KWordDocument *doc;
 
 };
 

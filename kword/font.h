@@ -3,7 +3,7 @@
 
 class KWUserFont;
 class KWDisplayFont;
-class KWordDocument_impl;
+class KWordDocument;
 
 #include "defs.h"
 
@@ -17,7 +17,7 @@ class KWordDocument_impl;
 class KWUserFont
 {
  public:
-    KWUserFont( KWordDocument_impl *_doc, const char *_name );
+    KWUserFont( KWordDocument *_doc, const char *_name );
     ~KWUserFont();
     
     const char *getFontName() {	return fontName.data(); }
@@ -30,13 +30,13 @@ class KWUserFont
 protected:
     QString fontName;
     
-    KWordDocument_impl *document;
+    KWordDocument *document;
 };
 
 class KWDisplayFont : public QFont
 {
 public:
-    KWDisplayFont( KWordDocument_impl *_doc, KWUserFont *_font, unsigned int _size,
+    KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned int _size,
 		   int _weight, bool _italic, bool _underline );
     ~KWDisplayFont();
     
@@ -70,7 +70,7 @@ protected:
     /**
      * Poiner to the document this font belongs to.
      */
-    KWordDocument_impl *document;
+    KWordDocument *document;
 
 };
 

@@ -2,7 +2,7 @@
 #define line_h
 
 class KWFormatContext;
-class KWordDocument_impl;
+class KWordDocument;
 
 #include <qpainter.h>
 
@@ -13,7 +13,7 @@ class KWordDocument_impl;
  * @short The context of the cursors position in the text.
  *
  * A format context ( fc ) is used to represent the font, position, layout etc. of
- * the cursors position. Every @ref KWordDocument_impl has at least one @ref KWFormatContext.
+ * the cursors position. Every @ref KWordDocument has at least one @ref KWFormatContext.
  * Whenever the cursor moves, the fc is updated. This way we always know in
  * which line we are, what the current font is, etc. This class does not print or
  * display the cursor. It just represents the context of the cursors position.
@@ -26,7 +26,7 @@ class KWFormatContext : public KWFormat
 public:
     enum LayoutError { COLUMN_TOO_TALL, PAPER_HEIGHT_TOO_SMALL, NO_ERROR };
 
-    KWFormatContext(KWordDocument_impl *_doc,unsigned int _frameSet);
+    KWFormatContext(KWordDocument *_doc,unsigned int _frameSet);
     ~KWFormatContext();
 
     void init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true, bool _fromStart = true );
@@ -221,7 +221,7 @@ protected:
     /**
      * The document we are in right now.
      */
-    KWordDocument_impl *document;    
+    KWordDocument *document;    
 
     LayoutError error;
 

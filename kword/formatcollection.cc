@@ -21,7 +21,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWFormatCollection::KWFormatCollection(KWordDocument_impl *_doc)
+KWFormatCollection::KWFormatCollection(KWordDocument *_doc)
   : formats(1999,true,true)
 {
   formats.setAutoDelete(true);

@@ -9,7 +9,7 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
-KWFormatContext::KWFormatContext(KWordDocument_impl *_doc,unsigned int _frameSet) 
+KWFormatContext::KWFormatContext(KWordDocument *_doc,unsigned int _frameSet) 
   : KWFormat()
 {
   displayFont = 0;

@@ -22,7 +22,7 @@
 #include <iostream>
 #include <koStream.h>
 
-class KWordDocument_impl;
+class KWordDocument;
 
 /******************************************************************/
 /* Class: KWImage                                                 */
@@ -31,14 +31,14 @@ class KWordDocument_impl;
 class KWImage : public QImage
 {
 public:
-  KWImage(KWordDocument_impl *_doc,QString _filename) : QImage(_filename)
+  KWImage(KWordDocument *_doc,QString _filename) : QImage(_filename)
     { ref = 0; doc = _doc; filename = _filename; }
-  KWImage(KWordDocument_impl *_doc,KWImage _image) : QImage((QImage)_image)
+  KWImage(KWordDocument *_doc,KWImage _image) : QImage((QImage)_image)
     { ref = 0; filename = _image.getFilename(); doc = _doc; }
   KWImage() : QImage()
     { ref = 0; doc = 0L; }
 
-  void setDocument(KWordDocument_impl *_doc)
+  void setDocument(KWordDocument *_doc)
     { doc = _doc; }
 
   void incRef();
@@ -50,11 +50,11 @@ public:
     { return filename; }
 
   void save(ostream &out);
-  void load(KOMLParser&,vector<KOMLAttrib>&,KWordDocument_impl*);
+  void load(KOMLParser&,vector<KOMLAttrib>&,KWordDocument*);
   
 protected:
   int ref;
-  KWordDocument_impl *doc;
+  KWordDocument *doc;
   QString filename;
 
 };

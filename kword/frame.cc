@@ -161,7 +161,7 @@ QCursor KWFrame::getMouseCursor(int mx,int my)
 /******************************************************************/
 
 /*================================================================*/
-KWFrameSet::KWFrameSet(KWordDocument_impl *_doc)
+KWFrameSet::KWFrameSet(KWordDocument *_doc)
   : frames()
 { 
   doc = _doc; 

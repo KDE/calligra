@@ -7,7 +7,7 @@
 #include <fstream>
 #include <unistd.h>
 
-KWFormat::KWFormat( KWordDocument_impl *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
+KWFormat::KWFormat( KWordDocument *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
 		    char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 )
 {
     doc = _doc;
@@ -23,14 +23,14 @@ KWFormat::KWFormat( KWordDocument_impl *_doc, const QColor& _color, KWUserFont *
     ref = 0;
 }
 
-KWFormat::KWFormat(KWordDocument_impl *_doc)
+KWFormat::KWFormat(KWordDocument *_doc)
 {
     doc = _doc;
     setDefaults(_doc);
     ref = 0;
 }
 
-KWFormat::KWFormat( KWordDocument_impl *_doc,const KWFormat &_format )
+KWFormat::KWFormat( KWordDocument *_doc,const KWFormat &_format )
 {
     userFont = _format.getUserFont();
     ptFontSize = _format.getPTFontSize();
@@ -84,7 +84,7 @@ bool KWFormat::operator!=(const KWFormat & _format)
 	  vertAlign != _format.getVertAlign());
 }
 
-void KWFormat::setDefaults( KWordDocument_impl *_doc )
+void KWFormat::setDefaults( KWordDocument *_doc )
 {
     userFont = _doc->getDefaultUserFont();
     ptFontSize = 12;
@@ -97,7 +97,7 @@ void KWFormat::setDefaults( KWordDocument_impl *_doc )
     direct = -1;
 }
 
-KWDisplayFont* KWFormat::loadFont( KWordDocument_impl *_doc )
+KWDisplayFont* KWFormat::loadFont( KWordDocument *_doc )
 {
     KWDisplayFont *font = _doc->findDisplayFont( userFont, ptFontSize, weight, italic, underline );
     if ( font )
@@ -166,7 +166,7 @@ void KWFormat::save(ostream &out)
   out << indent << "<VERTALIGN value=\"" << static_cast<int>(vertAlign) << "\"/>" << endl;
 }
 
-void KWFormat::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument_impl *_doc)
+void KWFormat::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_doc)
 {
   doc = _doc;
   ref = 0;

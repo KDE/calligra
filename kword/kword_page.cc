@@ -23,7 +23,7 @@
 /******************************************************************/
 
 /*================================================================*/
-KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
+KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   : QWidget(parent,""), buffer(width(),height()), format(_doc)
 { 
   setBackgroundColor(white);
@@ -127,7 +127,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 		    doc->drawSelection(_painter,xOffset,yOffset);
 		    _painter.end();
 		    
-		    if (doc->getProcessingType() == KWordDocument_impl::DTP)
+		    if (doc->getProcessingType() == KWordDocument::DTP)
 		      setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
 		    
 		    gui->getVertRuler()->setOffset(0,-getVertRulerPos());
@@ -152,7 +152,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 	    int mx = e->x() + xOffset;
 	    int my = e->y() + yOffset;
 
-	    if (doc->getProcessingType() == KWordDocument_impl::WP && doc->getFrameSet(mx,my) < 1)
+	    if (doc->getProcessingType() == KWordDocument::WP && doc->getFrameSet(mx,my) < 1)
 	      break;
 
 	    mx = (mx / doc->getRastX()) * doc->getRastX();
@@ -462,7 +462,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 		  doc->setSelEnd(*fc);
 		  doc->setSelection(false);
 		  
-		  if (doc->getProcessingType() == KWordDocument_impl::DTP)
+		  if (doc->getProcessingType() == KWordDocument::DTP)
 		    setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
 		  
 		  gui->getVertRuler()->setOffset(0,-getVertRulerPos());
@@ -632,7 +632,7 @@ void KWPage::mouseDoubleClickEvent(QMouseEvent *e)
       doc->setSelection(true);
       doc->drawSelection(_painter,xOffset,yOffset);
 
-      if (doc->getProcessingType() == KWordDocument_impl::DTP)
+      if (doc->getProcessingType() == KWordDocument::DTP)
 	setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
       
       gui->getVertRuler()->setOffset(0,-getVertRulerPos());
@@ -1101,7 +1101,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	    gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 	    gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
 	  }
-	if (doc->getProcessingType() == KWordDocument_impl::DTP && oldFrame != fc->getFrame())
+	if (doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame())
 	  setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
 
 	inKeyEvent = false;
@@ -1228,7 +1228,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
 		gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
 	      }
-	    if (doc->getProcessingType() == KWordDocument_impl::DTP && oldFrame != fc->getFrame())
+	    if (doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame())
 	      setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
 
 	    inKeyEvent = false;
@@ -1466,7 +1466,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
       gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
     }
-  if (doc->getProcessingType() == KWordDocument_impl::DTP && oldFrame != fc->getFrame())
+  if (doc->getProcessingType() == KWordDocument::DTP && oldFrame != fc->getFrame())
     setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
 
   inKeyEvent = false;
